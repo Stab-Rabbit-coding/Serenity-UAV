@@ -86,7 +86,7 @@ found in this work.
 2. **"Most outboard vertex" finds the hull's widest point (Z ≈ 78)**, not the
    bay station (Z 38). Constrain height as well as plan position.
 3. **`nx > 0.7` for "port outward" also catches the starboard INNER wall**
-   (its normal points toward +X). Always add an X-vs-centreline constraint.
+   (its normal points toward +X). Always add an X-vs-centerline constraint.
 4. Run mesh/boolean tooling with **`/usr/bin/python3`**; the repo `.venv` hides
    `manifold3d`, `sympy` and `matplotlib`. **pip is not permitted.** There is
    no `rtree`/`embree`, so `trimesh.ray` and `proximity.closest_point` are

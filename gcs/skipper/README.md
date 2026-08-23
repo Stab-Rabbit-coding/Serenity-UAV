@@ -27,8 +27,9 @@ sources (commercial antenna towers, broadcast facilities).
 
 ### Host Computer
 
-Debian Linux PC (x86\_64).  Minimum specification documented in
-`hardware/docs/skipper_host_spec.md`.  Runs QGroundControl and the tracking software stack.
+Debian Linux PC (x86\_64).  Minimum specification to be documented in
+`hardware/docs/skipper_host_spec.md` (planned, not yet created).  Runs QGroundControl and the
+tracking software stack.
 
 ### Skipper Comms Node
 
@@ -69,7 +70,7 @@ skipper/
 ├── README.md                         — This file
 ├── hardware/
 │   ├── docs/
-│   │   ├── skipper_host_spec.md      — GCS host computer minimum specification
+│   │   ├── skipper_host_spec.md      — (planned — not yet created)
 │   │   ├── skipper_wiring.md         — Wiring and connector diagram
 │   │   ├── skipper_antenna_spec.md   — Antenna gain budget and FCC EIRP compliance
 │   │   └── skipper_power_budget.md   — Field power consumption breakdown
@@ -90,7 +91,7 @@ skipper/
 │       │   └── k3-am6254-pocketbeagle2-skipper-cape-b2.dts
 │       └── src/
 │           ├── skipper_config.h          — Compile-time configuration
-│           ├── skipper_comms.h/c         — USB serial link to host PC + radio bridge
+│           ├── skipper_comms.h/c         — (planned, Phase Skipper-2 — not yet implemented; see CMakeLists.txt) USB serial link to host PC + radio bridge
 │           ├── skipper_gimbal.h/c        — Antenna tracking servo controller
 │           └── skipper_telemetry.h/c     — MAVLink telemetry parser / forwarder
 └── software/
@@ -108,8 +109,7 @@ skipper/
         │   ├── tracker.py            — Bearing/elevation calculator
         │   └── gimbal_ctrl.py        — Servo command output to PB2-I
         └── tests/
-            ├── test_tracker.py
-            └── test_gimbal.py
+            └── test_tracker.py
 ```
 
 ---
@@ -160,6 +160,6 @@ Skipper participates in the Serenity NIST SP 800-207 Zero Trust architecture.
 
 ## License
 
-Published under **Creative Commons Attribution 4.0 International** by Steve Griffing,
+Published under **Creative Commons Attribution-ShareAlike 4.0 International** by Steve Griffing,
 PE(CSE), CISSP-ISSEP, CPP.
-[creativecommons.org/licenses/by/4.0](https://creativecommons.org/licenses/by/4.0)
+[creativecommons.org/licenses/by-sa/4.0](https://creativecommons.org/licenses/by-sa/4.0)

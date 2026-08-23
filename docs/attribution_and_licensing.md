@@ -1,304 +1,177 @@
-# Serenity UAV — Licensing & Attribution
+# Serenity UAV — Attribution and Licensing Policy
 
-**Document Status:** Current  
-**Date:** 2026-08-01  
-**License:** CC BY 4.0 / CERN-OHL-W (dual)
+**Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+**Scope:** Project-wide licensing split, subsystem `LICENSE` federation, and the CERN-OHL-W
+2.0 "Available Component" IP boundary around upstream canonical-reference geometry.
+**Status:** Rev 1 — 2026-08-01 (closes TODO.md §0.9 "Licensing Updates" items 1–6)
 
----
-
-## Overview
-
-Serenity UAV uses a **dual-licensing strategy** to accommodate different classes of deliverables:
-
-| Category | License | Scope | Rationale |
-|----------|---------|-------|-----------|
-| **Hardware design** | CERN-OHL-W (Weakly Reciprocal) | CAD files, STLs, schematics, PCB layouts, bill of materials | Open hardware; improvements must be shared |
-| **Documentation** | CC BY 4.0 (Creative Commons Attribution) | READMEs, build guides, specifications, design docs, verification reports | Permissive attribution model |
-| **Software/Firmware** | (See individual files) | Embedded C/C++, Python scripts, firmware, GCS code | Currently MIT/GPL per file; see `firmware/LICENSE` and `tools/LICENSE` |
-| **Graphical assets** | CC BY 4.0 | SVG diagrams, photos, render images | Permissive; creator attribution required |
+> This file is the **policy** document — the split, the reasoning, and the federation map.
+> For the full **per-asset** remix/attribution chain (every upstream model, author, and
+> license, with remix-attribution text blocks), see
+> [`current-specification/LICENSE_AND_ATTRIBUTION.md`](../current-specification/LICENSE_AND_ATTRIBUTION.md).
+> For the standards-catalog entries, see `REFERENCES.md` REF-LIC-001/002 and Part XIV
+> (REF-CAD-002/003/004).
 
 ---
 
-## Canonical License Files
+## 1. The dual-license split
 
-### Root License
+All original work in this repository is © Steve Griffing, PE(CSE), CISSP-ISSEP, CPP, released
+under **two** licenses depending on content type — there is no single project-wide license:
 
-**File:** [`LICENSE`](../LICENSE) (CERN-OHL-W v2)
+| Content type | License | Full text |
+|---|---|---|
+| Hardware / CAD / PCB design files — airframe SCAD/STL/FCStd (wings, nacelles, landing gear, cargo system, fuselage, all other original airframe components), avionics KiCad schematics/PCB layouts/Gerbers (Pilot, XO, Flight Engineer, Commo, Observer, CAN-PERIPH-GW-1) | **CERN-OHL-W 2.0** (CERN Open Hardware Licence v2, Weakly Reciprocal) | `LICENSE` (root), `LICENSES/CERN-OHL-W 2.0` |
+| Documentation, code, scripts, drawings, and all other non-hardware items — build guides, firmware/tooling source, SVG diagrams, specifications, this file | **CC BY-SA 4.0** (Creative Commons Attribution-ShareAlike 4.0 International) | `LICENSES/CC-BY-SA 4.0`, <https://creativecommons.org/licenses/by-sa/4.0/> |
 
-This is the **primary license** for the Serenity UAV hardware design. All CAD, STL, schematic, and PCB files are covered under CERN-OHL-W unless explicitly marked otherwise.
+Rationale: CERN-OHL-W is purpose-built for hardware design files (it defines "Source,"
+"Product," "Make," and "Available Component" in hardware terms that CC licenses don't
+address), and its weak-reciprocity means using an unmodified board or part in a larger
+product does not pull the whole product under the license — appropriate for PCBs and
+airframe components others may want to integrate into different builds. CC BY-SA keeps
+documentation, firmware specs, and build guides under the same share-alike terms the
+project's upstream CC BY-SA source (the misubisu hull model, REF-CAD-004) already carries,
+which also resolves the license-compatibility question in §3 below.
 
-**Key obligations under CERN-OHL-W:**
-- Modifications must make source available
-- Derivative designs must indicate changes (date + brief description)
-- Documentation of changes required if product is conveyed
-- Weak reciprocity: allows use of proprietary components/External Material with compatible interfaces
+This supersedes the plain "CC BY 4.0, all original work" statement that appeared in earlier
+`AGENTS.md`/`README.md`/`REFERENCES.md` revisions — root `LICENSE` and `avionics/LICENSE`
+already carried the full CERN-OHL-W 2.0 text before this policy document was written; §1
+here documents that state rather than changing it, and the other files have been corrected
+to match (root `AGENTS.md` §3, `README.md` "License", `REFERENCES.md` "Project license (this
+work)").
 
-### Documentation & Graphics
-
-Most documentation is covered under **CC BY 4.0**. See:
-- [`docs/attribution_and_licensing.md`](attribution_and_licensing.md) — This file
-- Individual file headers (e.g., READMEs, specifications)
-
-**Key permissions under CC BY 4.0:**
-- Free use, remix, and redistribution
-- Commercial use allowed
-- Must provide attribution to original author/licensor
-- No trademark rights transferred
-
----
-
-## Subsystem-Specific Licensing
-
-### Airframe (`airframe/`)
-
-| File Type | License | Notes |
-|-----------|---------|-------|
-| STL, FreeCAD, SCAD | CERN-OHL-W | Hardware design; reciprocal obligations apply |
-| README.md, docs | CC BY 4.0 | Documentation attribution model |
-| LICENSE | CERN-OHL-W | Pointer to root LICENSE |
-
-**Key files:**
-- `airframe/SerenityAssembly.FCStd` — Main CAD assembly (CERN-OHL-W)
-- `airframe/AGENTS.md` — Design policy & standards (CC BY 4.0)
-- `airframe/README.md` — Airframe design philosophy (CC BY 4.0)
+**Not covered by either license** (third-party terms apply, see
+`current-specification/LICENSE_AND_ATTRIBUTION.md` "Third-Party Software and Firmware" for
+the full list): third-party commercial hardware (EDFs, ESCs, PocketBeagle 2, etc.), SiK radio
+firmware (GPL-3.0), ArduPilot/QGroundControl/Mission Planner (GPL-3.0), tpm2-tools/tpm2-tss
+(BSD-2-Clause), the CPLD write-blocker Verilog RTL (separately MIT licensed).
 
 ---
 
-### Avionics (`avionics/`)
+## 2. Subsystem `LICENSE` federation map
 
-| File Type | License | Notes |
-|-----------|---------|-------|
-| KiCad schematics (.sch, .kicad_pcb) | CERN-OHL-W | PCB designs; reciprocal obligations |
-| Gerber files | CERN-OHL-W | Fabrication output; derived from schematics |
-| README.md, docs | CC BY 4.0 | Documentation |
-| Firmware source code | See `firmware/LICENSE` | C code; separate licensing (typically MIT/GPL) |
-| LICENSE | CERN-OHL-W | Pointer to root LICENSE |
+Every subsystem folder carries its own `LICENSE` file so a reader who clones or copies just
+that folder still has correct terms without needing the repo root. Each subsystem file is a
+**short header naming its scope**, followed by the applicable license's full text (mirroring
+the pattern `avionics/LICENSE` already established) — never a bare pointer, so the file is
+self-contained and license-scanner-friendly.
 
-**Key files:**
-- `avionics/wash-cape-r-s1.kicad_sch` — Wash PCB (CERN-OHL-W)
-- `avionics/zoe-cape-r-s1.kicad_sch` — Zoë PCB (CERN-OHL-W)
-- `avionics/kaylee-pdb-r-s1.kicad_sch` — Kaylee power distribution (CERN-OHL-W)
-- `avionics/README.md` — Avionics architecture (CC BY 4.0)
-- `avionics/AGENTS.md` — PCB policy & pinout standards (CC BY 4.0)
+| Folder | License | Basis |
+|---|---|---|
+| `airframe/` | CERN-OHL-W 2.0 | Wings, nacelles, landing gear, cargo system, fuselage — all original hardware/CAD |
+| `avionics/` | CERN-OHL-W 2.0 | PCB schematics/layouts/Gerbers (already in place; header added 2026-08-01 for consistency) |
+| `docs/` | CC BY-SA 4.0 | Documentation, standards references, build/compliance records |
+| `gcs/` | **Mixed** — CERN-OHL-W 2.0 (Skipper enclosure/gimbal STLs, comms-node hardware) + CC BY-SA 4.0 (firmware, Python control scripts, docs) — both stated in one `LICENSE` file since the folder is genuinely mixed | `gcs/skipper/` contains both hardware and software |
+| `tools/` | CC BY-SA 4.0 | Build-automation Python/Blender/FreeCAD scripts — code, not hardware |
+| `current-specification/` | CC BY-SA 4.0 | Active specs, BOM, revision `.jsx` design documents |
+| `graphical-build-guide/` | CC BY-SA 4.0 | Build guide, SVG fabrication diagrams |
+| `deferred/` | **Mixed** — CERN-OHL-W 2.0 (Phase 11 aft-EDF SCAD/STL hardware) + CC BY-SA 4.0 (docs) | `deferred/aft-edf/` contains hardware design files alongside its README |
 
----
-
-### Firmware & Software (`firmware/`, `tools/`)
-
-| File Type | License | Notes |
-|-----------|---------|-------|
-| C/C++ source | MIT or GPL v3 (per file) | See `firmware/LICENSE` for details |
-| Python scripts | MIT (typical) | See `tools/LICENSE` for details |
-| Shell/build scripts | MIT or GPL v3 | Per file header |
-| docs | CC BY 4.0 | Documentation |
-
-**Key files:**
-- `firmware/LICENSE` — Software licensing policy
-- `tools/LICENSE` — Tools & scripts licensing policy
-- Individual files carry `// SPDX-License-Identifier: MIT` or similar headers
+Root `LICENSE` (CERN-OHL-W 2.0 full text, unmodified for license-scanner detection) plus this
+file together are the parents every subsystem `LICENSE` federates from — per subsystem file,
+a one-line pointer back to both (see §4 for the exact header template used).
 
 ---
 
-### Ground Control Station (`gcs/`)
+## 3. Available Component boundary (CERN-OHL-W 2.0 §1.6)
 
-| File Type | License | Notes |
-|-----------|---------|-------|
-| Hardware (schematics, PCBs) | CERN-OHL-W | GCS-specific capes and carrier boards |
-| Software (Malcolm firmware, UI) | MIT or GPL v3 | See `gcs/LICENSE` |
-| Documentation | CC BY 4.0 | READMEs, guides, interfaces |
-| Gimbal CAD | CERN-OHL-W | Mechanical gimbal design |
+The airframe's hull/nacelle/wing/landing-gear geometry traces back to three external
+canonical-accuracy sources (full detail: `REFERENCES.md` Part XIV, "Canonical-accuracy
+reference hierarchy"; `current-specification/LICENSE_AND_ATTRIBUTION.md` §1a/§2/§2c). Each
+sits in a different position relative to the project's CERN-OHL-W 2.0 Covered Source, and
+mixing them up would blur the IP boundary — so each is classified explicitly:
 
-**Key files:**
-- `gcs/README.md` — GCS overview (CC BY 4.0)
-- `gcs/AGENTS.md` — GCS design policy (CC BY 4.0)
-- `gcs/LICENSE` — Pointer and software-specific notes
+| Source | REF-ID | License | Boundary treatment |
+|---|---|---|---|
+| misubisu — "Serenity Firefly with landing gear and swivel engines" (Thingiverse Thing 7330462) | REF-CAD-004 | **CC BY-SA 4.0** | **Available Component**, CERN-OHL-W 2.0 §1.6 — a component not itself licensed under CERN-OHL that is legitimately referenced/incorporated without relicensing. This is the actual geometric origin of the project's `s_*`-lineage STLs (hull, nacelle, wing, landing-gear shells). The project's own adaptation (scaling, hollowing, CF skeleton/foam-fill, structural redesign) is original CERN-OHL-W 2.0 Covered Source; the upstream mesh keeps its own CC BY-SA 4.0 terms, and any redistribution of the *upstream* geometry itself (not the project's derivative Covered Source) must stay CC BY-SA 4.0 share-alike. |
+| Nick Henning render collection | REF-CAD-002 | Permission-based (not CC-licensed) | **Reference-only — outside the Covered Source boundary entirely.** No mesh, CAD model, or proprietary geometry from the author is redistributed; used only as visual reference imagery for wing/landing-gear surface detail, under a direct email permission grant (2026-07-06), not as an Available Component. |
+| QMx *Official Serenity Blueprints Reference Pack* (2007) | REF-CAD-003 | Copyrighted commercial product — NOT CC-licensed, NOT open | **Reference-only — outside the Covered Source boundary entirely.** Retained in-repo for internal design reference only; no page, image, or derivative is redistributed under any open license or treated as an Available Component. Most-authoritative canonical-accuracy source, but never incorporated into Covered Source. |
+| BamJr — "Variable Area EDF Nozzles" (Thingiverse Thing 2991269) | — | CC BY 4.0 | **Available Component**, CERN-OHL-W 2.0 §1.6, same treatment as REF-CAD-004 — nozzle mechanism concept incorporated into original nacelle/fuselage nozzle Covered Source; upstream concept keeps CC BY 4.0 terms. |
+
+**Clean IP boundary rule:** only sources that are themselves openly licensed (CC BY / CC
+BY-SA) are ever integrated as Available Components into CERN-OHL-W Covered Source. The two
+copyrighted/permission-only sources (QMx, Nick Henning) never cross that boundary — they
+inform design decisions and geometry verification, but no line of their content is
+redistributed, referenced as a component, or claimed as licensed material in this project.
 
 ---
 
-### Graphical Build Guide (`graphical-build-guide/`)
+## 4. Subsystem `LICENSE` header template
 
-**All SVG files and diagrams:** CC BY 4.0
+Each subsystem `LICENSE` file (§2) opens with a short header before the full license text:
 
-SVG diagrams are **not** hardware source per se (they are derivative documentation), so CC BY 4.0 is appropriate. Attribution to the designer (embedded in SVG metadata) is required.
+```text
+Serenity UAV — <folder> — License
 
-**Required attribution format in SVG files:**
-```xml
-<!-- Design by Serenity UAV Project; CC BY 4.0 -->
-<!-- See docs/attribution_and_licensing.md for details -->
+Scope: <one-line description of what this folder's original content is>.
+License: <CERN-OHL-W 2.0 | CC BY-SA 4.0 | Mixed, see below>.
+
+This file federates from the project root LICENSE and
+docs/attribution_and_licensing.md (the dual-license policy and the
+CERN-OHL-W 2.0 Available Component boundary for upstream reference
+geometry). Third-party components and Available Components referenced
+from this folder keep their own terms — see REFERENCES.md and
+current-specification/LICENSE_AND_ATTRIBUTION.md for the full chain.
+
+---
+
+<full license text>
 ```
 
 ---
 
-### Deferred Design (`deferred/`)
+## 5. Open Source Hardware certification
 
-**Phase 11+ design documents:** CERN-OHL-W (same as main airframe)
+Preparing this project for OSHWA self-certification is tracked separately in
+[`docs/OSHW_CERTIFICATION.md`](OSHW_CERTIFICATION.md) (TODO.md §0.9 item 7) — see REF-LIC-002.
+Certification itself requires the human maintainer (Steve Griffing) to submit the
+Certification Mark License Agreement; this repository can only get the documentation ready.
 
-Deferred-phase CAD and schematics follow the same licensing as the baseline hardware. Phase 11 aft EDF integration, Phase 12 cargo-bay battery module, and speculative future designs are all CERN-OHL-W.
+## 6. Board naming (resolved 2026-08-01)
 
-**Documentation:** CC BY 4.0
+TODO.md §0.9 item 8, "Rename avionics boards to non-trademarked names," was initially flagged
+open (2026-08-01) because it conflicted with the then-canonical Firefly-character naming table
+in root `AGENTS.md` §9, referenced across ~284 files. The user subsequently supplied
+replacement role names and directed the rename to proceed, including the physical KiCad
+project files/folders (unverified in this environment — no `kicad-cli` available; the
+maintainer should confirm ERC/DRC on each board before trusting it for fabrication).
 
----
+The six boards are now named **Skipper** (GCS), **Pilot** (flight control/sensor cape), **XO**
+(comms/logging/payload cape), **Flight Engineer** (power distribution board), **Commo** (49 MHz
++ LoRa transceiver cape), and **Observer** (cargo-handling/vision/ToF/laser board) — generic
+role names, no longer Firefly character names. The four avionics bay names (Shepherd's Room,
+Inara's Shuttle, River's Room, Simon's Medbay) were **not** renamed. See root `AGENTS.md` §9
+for the live naming/role table and `docs/WBS.md` §0.9 for the work item.
 
-### Current Specification & BOM (`current-specification/`)
+### 6.1 Naming history (TODO.md §0.9, closed 2026-08-01)
 
-| File Type | License | Notes |
-|----------|---------|-------|
-| bom_revS.json, CSV | CC BY 4.0 | Bill of materials; data documentation |
-| Viewer code (JSX) | MIT | Interactive BOM viewer |
-| README.md, docs | CC BY 4.0 | Specification documentation |
+Relocated here from root `AGENTS.md` §9, which points at this subsection.
 
-**Key files:**
-- `current-specification/bom_revS.json` — Primary BOM source (CC BY 4.0)
-- `current-specification/bom_revS.csv` — Flat-file export (CC BY 4.0)
-- `current-specification/serenity-rev-s.jsx` — BOM viewer (MIT)
+The six board names above (Skipper, Pilot, XO, Flight Engineer, Commo, Observer) are
+**generic role names**, chosen 2026-08-01 to replace the project's original Firefly-character
+board names (TODO.md §0.9 item 8 — avoiding trademark exposure on hardware that "may be
+offered commercially beyond this project," root `AGENTS.md` §3). The four bay names (Shepherd's
+Room, Inara's Shuttle, River's Room, Simon's Medbay) were **not** part of that rename and are
+unchanged.
 
----
+For attribution completeness (root `AGENTS.md` §3 — "derivative files carry the full
+attribution chain"), the original names and their inspiration are recorded here rather than on
+the live table in root `AGENTS.md` §9, since restating the character quotes next to the new
+generic names would just re-attach the same recognizable Firefly branding the rename was meant
+to remove:
 
-### Tools & Validation (`tools/`)
+| Current name | Former name | Inspiration | Firefly line |
+|---|---|---|---|
+| Skipper | Malcolm ("Mal") | Malcolm Reynolds, captain | "I aim to misbehave." |
+| Pilot | Wash | Hoban "Wash" Washburne, pilot | "I'm a leaf on the wind." |
+| XO | Zoë | Zoë Washburne, first mate | "Big Damn Heroes, sir." |
+| Flight Engineer | Kaylee | Kaylee Frye, ship's mechanic | "Everything is shiny." |
+| Commo | Emma | — (not a character name) | — |
+| Observer | Jayne | Jayne Cobb, hired muscle | "She's a good gun." |
 
-| File Type | License | Notes |
-|----------|---------|-------|
-| Python scripts (validate_*.py, update_*.py) | MIT | Validation and maintenance scripts |
-| Bash/shell scripts | MIT | Build and test automation |
-| FreeCAD/Blender scripts | MIT | CAD model generation and export |
-| Documentation | CC BY 4.0 | Tool usage and CI/CD guides |
-
----
-
-## Attribution Requirements
-
-### For Hardware Designs (CERN-OHL-W)
-
-When creating derivative or built products based on Serenity UAV, you must:
-
-1. **Retain license notice** — Include "Licensed under CERN-OHL-W v2" on or in the product design
-2. **Document modifications** — If you modify a design, add a notice stating:
-   - Date of modification
-   - Brief description of changes
-   - Your name or identifier as modifier
-3. **Make source available** — Modifications to the design source must be made available to others under the same license
-4. **Retain this documentation** — Preserve links to this file and the root LICENSE
-
-**Example modification notice (in KiCad schematic or SCAD comment):**
-```
-Modified 2026-09-15 by [Your Name]: Changed capacitor footprint from 0805 to 1206
-for improved thermal stability. Licensed under CERN-OHL-W v2.
-See https://github.com/[repo]/docs/attribution_and_licensing.md
-```
-
-### For Documentation (CC BY 4.0)
-
-When reproducing or adapting documentation:
-
-1. **Credit the author** — "Serenity UAV Project" or similar attribution
-2. **Link to license** — Include link to CC BY 4.0 summary (https://creativecommons.org/licenses/by/4.0/)
-3. **Indicate changes** — If you modify the documentation, note what was changed
-4. **Preserve notices** — Keep license notices visible
-
-**Example attribution (footer of adapted document):**
-```
-Based on Serenity UAV documentation (https://github.com/[repo]).
-Original work by Serenity UAV Project, licensed under CC BY 4.0.
-Modifications: [brief description], [date].
-```
+This table is historical only — do not use the former names anywhere in new work. See
+`docs/WBS.md` §0.9 for the full renaming record.
 
 ---
 
-## Third-Party Components & External Material
-
-### Procured Parts (BOM)
-
-Purchased components (EDFs, servos, batteries, connectors, etc.) retain their manufacturers' licenses and warranties. Serenity UAV licensing does **not** apply to third-party parts.
-
-**References:**
-- `current-specification/bom_revS.json` — Supplier links and part numbers
-- Individual component datasheets — Manufacturer copyright and license terms
-
-### Embedded Libraries & Frameworks
-
-- **FreeCAD** (CAD): LGPL v2+ (not linked; CAD file format is open)
-- **Inkscape** (SVG editor): GPL v3 (not linked; SVG is open format)
-- **KiCad** (EDA): CERN-OHL-W, GPL v3+ (EDA tool; schematic is open format)
-- **Zephyr RTOS** (firmware base, if used): Apache 2.0 / MIT (specific file headers; see `firmware/LICENSE`)
-
-### Documentation Sources
-
-External references cited in [`docs/REFERENCES.md`](REFERENCES.md) are:
-- Third-party academic papers (copyright holders retain rights; fair use applied)
-- Datasheets and technical notes (supplier copyright; educational use permitted)
-- Standards documents (IEC, IEEE, FAA) (purchased or public versions; limited reproduction)
-
-**All citations include attribution and source URLs** per [`docs/REFERENCES.md`](REFERENCES.md).
-
----
-
-## Compliance & Verification
-
-### License Headers
-
-All source files should carry appropriate headers:
-
-**Hardware (CAD, schematics):**
-```
-Licensed under CERN-OHL-W v2
-See root LICENSE file and docs/attribution_and_licensing.md
-```
-
-**Documentation (Markdown):**
-```markdown
-**License:** CC BY 4.0
-See root LICENSE and docs/attribution_and_licensing.md
-```
-
-**Software (C/C++, Python):**
-```c
-// SPDX-License-Identifier: MIT
-// See firmware/LICENSE (or tools/LICENSE) for details
-```
-
-### Verification Checklist
-
-- ✅ Root LICENSE file (CERN-OHL-W) present and current
-- ✅ Subsystem LICENSE files reference root LICENSE
-- ✅ READMEs carry CC BY 4.0 notices
-- ✅ CAD/schematic files documented as CERN-OHL-W (AGENTS.md)
-- ⚠️ Software license headers need audit (firmware/LICENSE and tools/LICENSE to be verified)
-- ✅ REFERENCES.md citations attributed and sourced
-- 🔲 GitHub releases to include complete LICENSE text (pending CI/CD update)
-
----
-
-## Legal Disclaimer
-
-**This document is informational.** For authoritative legal interpretation of CERN-OHL-W or CC BY 4.0, consult:
-
-- **CERN-OHL-W:** https://ohwr.org/cern_ohl_w_v2
-- **CC BY 4.0:** https://creativecommons.org/licenses/by/4.0/legalcode
-
-The authors of Serenity UAV provide this project "as-is" under the chosen licenses, with no warranty of fitness for a particular purpose. See LICENSE file for full disclaimer.
-
----
-
-## Questions & Support
-
-- **License interpretation:** See [`LICENSE`](../LICENSE) and https://ohwr.org/
-- **CC BY 4.0 guidance:** https://creativecommons.org/licenses/by/4.0/
-- **Contributing:** See root [`CONTRIBUTING.md`](../CONTRIBUTING.md) (if present) or open an issue
-
----
-
-## Revision History
-
-| Date | Rev | Change |
-|------|-----|--------|
-| 2026-08-01 | 1.0 | Initial comprehensive licensing & attribution guide (Task 0.6.2) |
-
----
-
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-
-See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](attribution_and_licensing.md) for details.
-
----
-
-*"The work is done in the open, so anyone can see how it's made." — Serenity UAV Project*
+*This document is released under CC BY-SA 4.0.*

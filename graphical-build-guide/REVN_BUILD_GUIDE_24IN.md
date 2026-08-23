@@ -158,7 +158,7 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
 | Part | Material | Dimension | Notes |
 |------|----------|-----------|-------|
-| Keel | CF flat bar 6×3mm, 2 lap-spliced segments | Cargo 8.0 in (203 mm) + Rear 7.1 in (181 mm); spans hull Y −71..+384 mm (17.9 in / 455 mm) — head and middle sections are keelless (docs/structural_analysis.md §4.1–§4.2) | Bar oriented 3mm lateral (X) × 6mm vertical (Z), strong axis vertical; 100 mm (3.9 in) lap-splice overlap centred at the middle/rear joint (hull Y ≈ +203 mm); ring-notch positions at hull Y = +30 mm and +290 mm (replaces stale 91/165/251/320/388 mm nose-station marks) |
+| Keel | CF flat bar 6×3mm, 2 lap-spliced segments | Cargo 8.0 in (203 mm) + Rear 7.1 in (181 mm); spans hull Y −71..+384 mm (17.9 in / 455 mm) — head and middle sections are keelless (docs/structural_analysis.md §4.1–§4.2) | Bar oriented 3mm lateral (X) × 6mm vertical (Z), strong axis vertical; 100 mm (3.9 in) lap-splice overlap centered at the middle/rear joint (hull Y ≈ +203 mm); ring-notch positions at hull Y = +30 mm and +290 mm (replaces stale 91/165/251/320/388 mm nose-station marks) |
 | Wing spars | CF tube 12mm OD / 1.5mm wall | 2× 14.96 in (380 mm) | Sand spar ends to fit wing-root spar pockets |
 | Pivot rods | CF solid rod 4mm OD | 2× cut to length per pivot housing drawing | Deburr ends; press-fit into MF104ZZ bearings |
 | Ring frames | CF plate 2mm | 2 profiles: hull Y = +30 mm (cargo) and +290 mm (rear) — down from 5 pre-Rev N stations; see airframe/diagrams/ring_frames/*.dxf | Fit to keel slot-notches; cargo profile is PROVISIONAL pending cargo-mesh fix (TODO §1.1.1) |
@@ -211,7 +211,7 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 keelless — see docs/structural_analysis.md §4.1–§4.2). Keel spans hull Y −71 mm → +384 mm
 (455 mm / 17.9 in) as two lap-spliced CF-BAR-6X3 segments: cargo (hull Y −71..+132 mm) and rear
 (hull Y +203..+384 mm), bar oriented 3 mm lateral (X) × 6 mm vertical (Z). Lap-splice the two
-segments with a 100 mm (3.9 in) overlap centred on the middle/rear joint (hull Y ≈ +203 mm),
+segments with a 100 mm (3.9 in) overlap centered on the middle/rear joint (hull Y ≈ +203 mm),
 bonded with West System 105/206 + peel-ply prep. Ring-notch datum marks at hull Y = +30 mm and
 +290 mm (supersedes the stale 91/165/251/320/388 mm nose-station marks, which were tied to the
 pre-Rev N ring-plate layout). Cure 2 h minimum.
@@ -597,13 +597,13 @@ hover rather than losing one nacelle entirely.
 
 **Goal:** All 8 nodes installed, full ring redundancy, obstacle avoidance operational.
 
-Install **CN3 + FC3** in River's room / Bay D (dorsal aft), **CN4 + FC4** in Simon's medbay / Bay E (aft service). Same procedure as Phase 6 for each bay.
+Install **CN3 + FC3** in River's room / Bay C (dorsal aft), **CN4 + FC4** in Simon's medbay / Bay D (aft service). Same procedure as Phase 6 for each bay.
 
 Connect remaining CAN FD / RS-485 / 1553 / ETH ring segments (CN3→FC3→CN4→FC4). Terminate CAN FD bus at FC4 (120Ω).
 
 Install 12× ToF sensor array:
 
-- Array A sensors on FC3 (River's room / Bay D): S1A, S3A, S4A, S5A, S6A, S2A
+- Array A sensors on FC3 (River's room / Bay C): S1A, S3A, S4A, S5A, S6A, S2A
 - Array B sensors on FC1 (Shepherd's room / Bay A): S1B, S3B, S4B, S5B, S6B, S2B
 
 Verify full obstacle avoidance in firmware (dual-redundant arrays — A and B cover identical fields, any single FC failure leaves full coverage on the other).
@@ -636,7 +636,7 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 | Component | Spec | Analysis |
 |-----------|------|----------|
 | Wing spar | CF tube 12mm OD / 1.5mm wall | Bending stress at full nacelle torque (~0.13 Nm) ≈ 18 MPa — allowable CF ≥600 MPa |
-| Keel | CF flat bar 6×3mm | Carries fuselage bending; adequate for 24-inch hull at <5g manoeuvre |
+| Keel | CF flat bar 6×3mm | Carries fuselage bending; adequate for 24-inch hull at <5g maneuver |
 | Pivot rod | 4mm OD solid CF | Shear stress at 0.749 lbm (340 g) nacelle weight ≈ 27 MPa — allowable CF ≥300 MPa shear |
 | Pivot bearings | MF104ZZ 4×10×4mm × 2 per nacelle | Static capacity 110 lbf (490 N) >> 0.74 lbf (3.3 N) nacelle weight — fine |
 | Foam fill | 2 lb/ft³ closed-cell PU | Provides hull rigidity, crash absorption; adds ~0.397 lbm (~180 g) to total AUW |
@@ -811,7 +811,7 @@ geometry must be regenerated for the 55mm fan, the canonical nozzle, and the RCS
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verification
 - [ ] Intake frame tongues fully seated; shoulder flanges bonded flush; no gaps
 - [ ] Plenum + RCS manifold pressure-test passed — draft at EDF inlet and all 4 RCS jets; no leakage
-- [ ] EDF at station ~430mm, centreline ±2mm; rotation verified before sealing
+- [ ] EDF at station ~430mm, centerline ±2mm; rotation verified before sealing
 - [ ] 50A ESC installed; ESC5 DSHOT signal to FC2 PRU Ch.2
 - [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.06×1.76 in verified
 - [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on bench

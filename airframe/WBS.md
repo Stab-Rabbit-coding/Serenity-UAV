@@ -103,9 +103,9 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     `s_cargo_sect_shell24_2mm_repaired.stl` and verify the belly faces hull −Z.
     **DONE 2026-06-16**: `generate_cargo_doors.py` rewritten for hull frame (Rev R1a).
     Belly faces detected by normal Z < −0.5.  Both doors watertight.
-- [x] **Correct hinge location: outboard flank, not centreline.** Rev R1a (above)
-    placed both doors' piano-hinge knuckles at the ship centreline X_CL (≈ −169.85 mm)
-    with the free edges at the hull sides — backwards from the door behaviour already
+- [x] **Correct hinge location: outboard flank, not centerline.** Rev R1a (above)
+    placed both doors' piano-hinge knuckles at the ship centerline X_CL (≈ −169.85 mm)
+    with the free edges at the hull sides — backwards from the door behavior already
     documented everywhere else in the repository (TODO.md §1.4.2, README.md, `rcrs49_wire_post.scad`),
     all of which describe the doors hinging at the **outboard flank/belly edge** and
     swinging **down and out from the aircraft, full 180° range of motion**, to open the
@@ -114,7 +114,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     outboard belly edge with its free edge at X_CL — see corner-curvature note below
     for why the hinge X is NOT the cargo-section bounding box (X_SHELL_MIN/MAX). Removed
     the port/stbd knuckle Y-interleaving (no longer meaningful — each door is now its
-    own independent piano hinge pinned to the fuselage, not a shared centreline hinge
+    own independent piano hinge pinned to the fuselage, not a shared centerline hinge
     joining the two panels). Knuckle Z is now sampled from the belly interpolator at
     each hinge X rather than a bare literal.
     - [x] **Fix door-surface discontinuity found during verification.** First Rev R1b
@@ -165,7 +165,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
             bosses once those are finalized in the cargo shell (§1.1.4).
     - [ ] **Piano-hinge CF rod (×2, independent)** — verify 3 mm CF rod passes through
         each door's own 4 knuckle bores (3.15 mm bore) — port and stbd are now two
-        separate pins/rods, not one shared centreline pin; test in printed prototype
+        separate pins/rods, not one shared centerline pin; test in printed prototype
         before final assembly.
         - **Geometry cross-check DONE 2026-06-29:** each door's 4 knuckle bores (Ø3.15)
             and the two Rev R1c shell-side retention-block bores (Ø3.3,

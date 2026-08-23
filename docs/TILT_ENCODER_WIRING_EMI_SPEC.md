@@ -160,18 +160,18 @@ Each CAN-PERIPH-GW-1 gateway (port and starboard nacelles) publishes tilt-angle 
                               ↑
               [Stbd Nacelle Gateway] ──CAN_H/L──→ [Shielded pair in ferrite conduit]
               Stbd AK7455 tilt data                        ↓
-              [ISOW1044BDFMR on gateway]           River's Room (Bay D)
+              [ISOW1044BDFMR on gateway]           River's Room (Bay C)
                                                   ├─ CN3 XO
                                                   ├─ FC3 Pilot
                                                   └─ No termination
                                                            ↓
-                                                  Simon's Medbay (Bay E)
+                                                  Simon's Medbay (Bay D)
                                                   ├─ CN4 XO
                                                   ├─ FC4 Pilot
                                                   └─ 120 Ω termination (SOLDERED)
 ```
 
-**Rule:** CAN terminations soldered at Bay A and Bay E only (first and last nodes in the daisy-chain); port and starboard encoder gateways **do not** provide termination (they are intermediate nodes on the ring).
+**Rule:** CAN terminations soldered at Bay A and Bay D only (first and last nodes in the daisy-chain); port and starboard encoder gateways **do not** provide termination (they are intermediate nodes on the ring).
 
 ### 5.2 RS-485 Daisy-Chain Configuration
 
@@ -179,8 +179,8 @@ Each CAN-PERIPH-GW-1 gateway (port and starboard nacelles) publishes tilt-angle 
      Shepherd's Room (Bay A)
      ├─ 120 Ω termination (SOLDERED, Bay A end)
               ↓
-     Inara's Shuttle (Bay B) → River's Room (Bay D) → Simon's Medbay (Bay E)
-     ├─ No termination          ├─ No termination     ├─ 120 Ω termination (SOLDERED, Bay E end)
+     Inara's Shuttle (Bay B) → River's Room (Bay C) → Simon's Medbay (Bay D)
+     ├─ No termination          ├─ No termination     ├─ 120 Ω termination (SOLDERED, Bay D end)
 ```
 
 **Port and Stbd Nacelle Gateways:** Each gateway provides RS-485_A/B output that joins the daisy-chain at Bay A; same termination rule applies (ends only).

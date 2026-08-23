@@ -5,8 +5,8 @@
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** S1 (SoM end-state — PCM-071 carrier, real symbols/footprints)
 **Date:** 2026-07-13
-**Status:** **SoM end-state built** by `scripts/gen_Observer_carrier_sch.py` +
-`gen_Observer_carrier_pcb.py`. Schematic uses REAL clean-room symbols (PCM-071 SoM + KSZ9477 +
+**Status:** **SoM end-state built** by `scripts/gen_observer_carrier_sch.py` +
+`gen_observer_carrier_pcb.py`. Schematic uses REAL clean-room symbols (PCM-071 SoM + KSZ9477 +
 MSPM0G3507 + ISOW1044BDFMR + SLB9672) wired by signal name — **ERC = 0 errors**. PCB has REAL
 footprints (240-pad 2×BTH-060 SoM on the back, TQFP-128-1EP switch, QFN/SOIC/SOT carrier),
 **0 placeholder footprints**, all pad nets injected, sch↔pcb parity clean (bar 4 mounting-holes
@@ -46,7 +46,7 @@ other physical or electrical dependency on any other avionics board.
 **Power (added 2026-07-05):** each Observer board draws ≈ **1.2 A typ / ~2.1–2.7 A peak at 5 V**
 (AM62A7 SoC + KSZ9477 switch + camera + ToF + laser; full budget in
 `docs/POWER_DISTRIBUTION.md §3.2.1`). The two boards (≈ 2.4 A typ / ~4.8 A peak combined) are
-fed from a **dedicated Flight Engineer 5 V payload rail (U_BEC_JAYNE → J_JAYNE)** — NOT the shared 5 V
+fed from a **dedicated Flight Engineer 5 V payload rail (U_BEC_OBS → J_OBS)** — NOT the shared 5 V
 avionics bus, which is already near its dual-BEC capacity — keeping the switching video-SoC
 load off the avionics rail and preserving its margin. Observer's own TPS65219 PMIC regulates this
 5 V input to the SoC core rails. `J_PWR` is the board-side 5 V/GND entry.
@@ -195,7 +195,7 @@ starboard→port, +Z = ventral→dorsal.** On the as-built board the camera/ToF/
 connectors **and** their direct-solder lands (`J_CAM_DS`/`J_TOF_DS`/`J_LASER_DS`) are at the
 **high-X end (~62–67 mm)**; the Ethernet-ring, CAN-FD, and power connectors are at the
 **low-X end (~6–11 mm)**. The three sensor apertures differ in the **port-starboard (Y)** axis
-— **camera = port (high Y), ToF = starboard (low Y), laser = centreline** — so the DS lands are
+— **camera = port (high Y), ToF = starboard (low Y), laser = centerline** — so the DS lands are
 spread along **Y** to match `airframe/openscad/fuselage/bow_sensor_pod.scad`
 (`CAM_POS`/`TOF_POS`, ToF··laser 8.2 mm, ToF··camera 16.5 mm). Board and DS-land placement are
 correct as-built; an earlier "fore/aft mismatch" note was a high-vs-low-X mix-up, now resolved.
@@ -443,19 +443,21 @@ avionics-bay-to-bay ring cable run planning, not fabricated here.
 
 ## Generator Scripts
 
-- `avionics/kicad/gen_jayne.py` — generates `Observer.kicad_pro` + `Observer.kicad_sch`.
-- `avionics/kicad/gen_jayne_pcb.py` — generates `Observer.kicad_pcb`: footprint placement, nets,
-  and the rounded-corner board outline, all built into the script (not a manual post-pass).
+- `avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py` — generates
+  `Observer.kicad_pro` + `Observer.kicad_sch` (SoM end-state, current).
+- `avionics/kicad/Observer/scripts/gen_observer_carrier_pcb.py` — generates `Observer.kicad_pcb`:
+  footprint placement, nets, and the rounded-corner board outline, all built into the script
+  (not a manual post-pass).
 
-**Note on regeneration:** `gen_jayne_pcb.py` generates a net-correct 78×80mm layout (with
-`rounded_board_outline()` for the corner rounding/mounting holes) — this was the state as of
-the EMI-hardening pass. `Observer.kicad_pcb` has since been **manually compacted further to
+**Note on regeneration:** `gen_observer_carrier_pcb.py` generates a net-correct 78×80mm layout
+(with `rounded_board_outline()` for the corner rounding/mounting holes) — this was the state as
+of the EMI-hardening pass. `Observer.kicad_pcb` has since been **manually compacted further to
 1.0 × 2.75 in (25.4 × 69.85 mm) in the KiCad GUI** (see "PCB" section above); the generator script was not updated to
-match. **Re-running `gen_jayne_pcb.py` will overwrite the 1.0 × 2.75 in (25.4 × 69.85 mm) hand-compaction back to the
-78×80mm script layout** — do not run it without confirming that's intended, per this
+match. **Re-running `gen_observer_carrier_pcb.py` will overwrite the 1.0 × 2.75 in (25.4 × 69.85 mm) hand-compaction
+back to the 78×80mm script layout** — do not run it without confirming that's intended, per this
 project's established FlightEngineer/Pilot script-then-manual-placement convention. If the
 hand-compacted layout is to remain the baseline going forward, the positions in this section
-should be back-ported into `gen_jayne_pcb.py` so the script and file stay in sync.
+should be back-ported into `gen_observer_carrier_pcb.py` so the script and file stay in sync.
 
 ---
 
@@ -501,7 +503,7 @@ For project-wide standards see the root `AGENTS.md`; for avionics-specific conve
 The trust module on this board now uses **TI MSPM0G3519-Q1 (`M0G3519QRGZRQ1`)** (48-pin RGZ VQFN, 512 KB flash / 128 KB SRAM) and the
 **Infineon SLB 9672AU2.0** TPM (PG-UQFN-32-1,-2, extended −40 to +105 °C), superseding the
 MSPM0G3507 and SLB9670VQ2.0.  Parts and the specifications applied are catalogued as
-REF-SENSOR-013 and REF-SEC-002 in `REFERENCES.md`; the change was applied by
+REF-SENSOR-017 and REF-SEC-002 in `REFERENCES.md`; the change was applied by
 `avionics/kicad/retarget_mspm0g351x_slb9672.py` and `avionics/kicad/retarget_pcb_footprints.py`,
 which also wrote `.pre-g351x` backups beside each edited file.
 

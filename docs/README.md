@@ -32,21 +32,21 @@
 - **[avionics/README.md](../avionics/README.md)** — 8-node PACE failover, PCB boards, firmware
   architecture
 - **[avionics/AGENTS.md](../avionics/AGENTS.md)** — PCB design standards, security, EMI hardening
-- **[avionics/kicad/Wash/Wash.md](../avionics/kicad/Wash/)** — Flight control cape (IMU, ESC
+- **[avionics/kicad/Pilot/Pilot.md](../avionics/kicad/Pilot/)** — Flight control cape (IMU, ESC
   drive, servo outputs)
-- **[avionics/kicad/Zoë/Zoë.md](../avionics/kicad/Zoë/)** — Comms/logging cape (radios, μSD,
+- **[avionics/kicad/XO/XO.md](../avionics/kicad/XO/)** — Comms/logging cape (radios, μSD,
   payload GPIO)
-- **[avionics/kicad/Kaylee/Kaylee.md](../avionics/kicad/Kaylee/)** — Power distribution board
-  (fuses, 5V BEC, main bus)
-- **[avionics/kicad/Emma/Emma.md](../avionics/kicad/Emma/)** — 49 MHz + LoRa transceiver cape
+- **[avionics/kicad/FlightEngineer/FlightEngineer.md](../avionics/kicad/FlightEngineer/)** —
+  Power distribution board (fuses, 5V BEC, main bus)
+- **[avionics/kicad/Commo/Commo.md](../avionics/kicad/Commo/)** — 49 MHz + LoRa transceiver cape
   (optional Phase 10+)
-- **[avionics/kicad/Jayne/Jayne.md](../avionics/kicad/Jayne/)** — Vision/ToF/laser board (nose +
-  cargo sensors)
-- **[JAYNE_LASER_ANALYSIS.md](./JAYNE_LASER_ANALYSIS.md)** — Laser indicator class, safety
+- **[avionics/kicad/Observer/Observer.md](../avionics/kicad/Observer/)** — Vision/ToF/laser board
+  (nose + cargo sensors)
+- **[OBSERVER_LASER_ANALYSIS.md](./OBSERVER_LASER_ANALYSIS.md)** — Laser indicator class, safety
   interlocks, eye-safety compliance
 
 ### Ground Control Station
-- **[gcs/README.md](../gcs/README.md)** — Malcolm hardware spec, 5-radio comms, antenna gimbal
+- **[gcs/README.md](../gcs/README.md)** — Skipper hardware spec, multi-radio comms, antenna gimbal
 - **[gcs/AGENTS.md](../gcs/AGENTS.md)** — GCS firmware, QGroundControl integration, tracking
 
 ### Build Tools & Automation
@@ -64,7 +64,7 @@
 
 ## 📊 Regulatory & Compliance
 
-- **[attribution_and_licensing.md](./attribution_and_licensing.md)** — CC BY 4.0 / CERN-OHL-W 2.0
+- **[attribution_and_licensing.md](./attribution_and_licensing.md)** — CC BY-SA 4.0 / CERN-OHL-W 2.0
   licensing strategy; third-party attribution chains
 - **Regulatory checklist** (under development):
   - FAA Part 48 (sUAS registration)
@@ -77,7 +77,7 @@
 
 | Rev | Hull | Nacelle EDFs | Avionics | Build Status | Archive |
 |-----|------|--------------|----------|--------------|---------|
-| S | 24" | 50mm X-Fly tandem | 8-node Wash/Zoë/Kaylee/Emma/Jayne (Rev S1) | Current baseline (Phase 5 ready) | — |
+| S | 24" | 50mm X-Fly tandem | 8-node Pilot/XO/Flight Engineer/Commo/Observer (Rev S1) | Current baseline (Phase 5 ready) | — |
 | R1 | 24" | 50mm X-Fly tandem | 8-node (pre-S1) + hull-frame baking | Design complete | `git log` |
 | R | 24" | 50mm X-Fly tandem | 8-node (first 24" iteration) | Archived | `git log` |
 | Q | 24" | 50mm X-Fly tandem | 8-node architecture finalized | Archived | `git log` |
@@ -85,7 +85,7 @@
 | M & earlier | 18" | Various | 2–4 node prototypes | Archived | `git log` |
 
 **⚠ SUPERSEDED for builds:** Rev M (18", dual 80mm EDFs) and earlier are **not** the current
-design baseline. All new work targets Rev S (24", 50mm tandem EDFs, 8-node Wash/Zoë). The Rev M
+design baseline. All new work targets Rev S (24", 50mm tandem EDFs, 8-node Pilot/XO). The Rev M
 design documents are retained for historical reference only; see links below.
 
 **Author:** Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP

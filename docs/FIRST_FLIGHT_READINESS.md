@@ -6,12 +6,21 @@
 
 > **First flight = master WBS Phase 5, "Minimum Viable Flyer."**
 > Goal: CN1+FC1 (Shepherd's room / Bay A) and CN2+FC2 (Inara's shuttle / Bay B)
-> installed and flying — a 4-node VTOL hover (nacelle T/W ~1.61). The aft EDF
+> installed and flying — a 4-node VTOL hover (nacelle T/W ~1.14, corrected 2026-08-22, see TODO.md §0.10.1). The aft EDF
 > (Phase 11), the remaining 4 nodes (Phase 6), cargo (Phase 7), and Observer vision
 > (Phase 6+) are **not** first-flight gates. This report rolls up every open item
 > on the critical path to that milestone.
 
 *"Define 'interesting.'" / "Oh God, oh God, we're all gonna die?" — Pilot & Skipper*
+
+> **Stale mechanism warning (added 2026-08-22, TODO.md §0.10.1):** the Phase 2/3
+> checklist items below (tilt-to-nozzle gear train, fixed 4 mm CF pivot rod) describe
+> a mechanism `docs/NOZZLE_DRIVE_TRADE.md` and `docs/TILT_SPAR_ANALYSIS.md` superseded
+> on 2026-07-18/19 — see those documents for the adopted design (rotating 8 mm steel
+> spar, cargo-bay servo, wingtip-gear + pushrod nozzle drive). This report is a
+> point-in-time rollup (see disclaimer below) and was never regenerated after that
+> decision; **do not fabricate from the Phase 2/3 steps below without cross-checking
+> against the current mechanism.**
 
 
 ---
@@ -168,7 +177,7 @@ Not every prerequisite item is strictly Phase-5 scoped (e.g. §1.1 and §4.5 car
 - [ ] Daisy-chain CAN FD: 120Ω (soldered) → CN1 → FC1 → exit Shepherd's room (Bay A) toward Inara's shuttle (Bay B).
 - [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Inara's shuttle (Bay B).
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT 0x01.
-- [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
+- [ ] Cap Simon's medbay (Bay D) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
 - [ ] Mount CN2 XO on Inara's shuttle (Bay B) floor standoffs; insert PB2-I; mount FC2 Pilot above.
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: **CN2-LOG**.
@@ -177,7 +186,7 @@ Not every prerequisite item is strictly Phase-5 scoped (e.g. §1.1 and §4.5 car
 - [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle: CN2 → FC2 + temporary 120Ω at FC2 (remove Phase 7).
 - [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's shuttle (Bay B).
 - [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Pilot ETH-1 → CN2 XO ETH-B (FC1↔CN2 Ethernet ring link).
-- [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in Phase 7).
+- [ ] Cap River's room (Bay C) end of ETH-BD (will connect to CN3 in Phase 7).
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
 - [ ] Provision TPM 2.0 (SLB9672) on CN1, FC1, CN2, FC2 — unique key material per node.
 - [ ] Verify CPLD write-blocker on CN1 and CN2: `echo test > /mnt/flightlog/test.txt` must return read-only error.

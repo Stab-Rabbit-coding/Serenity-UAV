@@ -1,4 +1,4 @@
-# Nozzle-Drive Mechanism Trade Study (Rev R1a, 2026-07-07)
+# Nozzle-Drive Mechanism Trade Study (Rev T, 2026-07-19)
 
 > *"It's the tilt-nozzle. Passive. Elegant. Right up until a gear's hanging off
 > the side of the ship." — design review, this session.*
@@ -164,5 +164,6 @@ the selected option is pending user decision — see TODO.md §1.1.3.3.
   derivation, 44T/15T tooth counts.
 - `airframe/openscad/nacelles/nacelle_sector_gear.scad` — sector R22, 420° Pinion A.
 - `airframe/openscad/nacelles/nacelle_bevel_pair.scad` — 1:1 90° redirect.
-- `airframe/AGENTS.md` "Nacelle Nozzle Drive" — variable diameter exhaust nozzle, driven passively by gear
-  train, based on nacelle tilt."
+- `airframe/AGENTS.md` "Nacelle Nozzle Drive" — states the fixed nozzle-diameter functional
+  requirement; the drive mechanism that achieves it is an open trade study and must not be
+  assumed to be a fixed "gear train" (see this document's adopted hybrid design above).

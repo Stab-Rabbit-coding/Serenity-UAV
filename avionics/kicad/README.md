@@ -53,7 +53,7 @@ what is still open, so the thread can be picked up cleanly.
 - **Wired the floating field connectors to their signals (2026-06-12).** Every
   JST field connector was placed but had no nets. Using each footprint's
   Description pinout: SERVO-PWM pads 1–6 → `SERVO0–5` (servo PWM); ESC-TLM →
-  `UART_ESC_TX`/`RX`; GPIO-A…F → `GND`/`+3V3` (+ labelled `GPIO_EXP_*` signal);
+  `UART_ESC_TX`/`RX`; GPIO-A…F → `GND`/`+3V3` (+ labeled `GPIO_EXP_*` signal);
   CAN-FD → `CAN_H`/`CAN_L`; RS-485 → `RS485_A`/`B`; PWR-IN → `+5V`/`GND`. The
   new connector shorts that DRC now reports are all against `TMESH_*` (the
   pre-existing tamper-mesh overlap, resolved by the mesh rework below) — not the
@@ -135,8 +135,8 @@ These are recorded so the next person does not re-derive them:
   Specctra DSN export and the interactive/auto routers are reliable), with
   the Ethernet pairs routed by hand. The deterministic, non-routing work
   (per-domain tamper-mesh zones, cosmetic/footprint DRC, the Commo/Flight Engineer
-  link tamper signalling) can still be scripted headless via the board API.
+  link tamper signaling) can still be scripted headless via the board API.
 
 ---
 
-*Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · License: CC BY 4.0*
+*Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · License: CC BY-SA 4.0*

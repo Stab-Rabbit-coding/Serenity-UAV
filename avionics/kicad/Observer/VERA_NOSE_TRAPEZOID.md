@@ -18,7 +18,7 @@
 > **Rev B update — measured, not estimated.** Slicing the baked head STL
 > (`airframe/stls/fuselage/head_shell24_2mm_repaired.stl`, hull frame) at the board
 > Z-band shows the **blunt** nose widens fast, so the §4 pessimism (based on a linear
-> taper) is **resolved in the SoM's favour** — see §4.1. The SoM fits the nose.
+> taper) is **resolved in the SoM's favor** — see §4.1. The SoM fits the nose.
 
 Derives the Vera nose-carrier trapezoid from the airframe SCAD geometry
 (`airframe/openscad/fuselage/head_shell24.scad`, `bow_sensor_faceplate.scad`,

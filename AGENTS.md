@@ -71,7 +71,7 @@ pick one silently — see §11.
 
 ## 3. Attribution and Licensing
 
-Work is **dual-licensed** by content type — see `docs/attribution_and_licencing.md` for the
+Work is **dual-licensed** by content type — see `docs/attribution_and_licensing.md` for the
 full policy and the per-subsystem `LICENSE` federation map:
 
 - **Hardware/CAD/PCB design files** (airframe SCAD/STL/FCStd, avionics KiCad
@@ -95,7 +95,7 @@ boards are marked with his personally owned LLC name).
 - **Before committing any model, image, KiCad symbol, SCAD file, STL, or code snippet**,
   confirm its license is compatible with the applicable project license — CERN-OHL-W 2.0 for
   hardware/CAD/PCB files, CC BY-SA 4.0 for documentation/code/scripts/drawings (see
-  `docs/attribution_and_licencing.md`). Only license-compatible items are integrated.
+  `docs/attribution_and_licensing.md`). Only license-compatible items are integrated.
 
 ## 4. Standards Vetting
 
@@ -210,7 +210,7 @@ The six board names (Skipper, Pilot, XO, Flight Engineer, Commo, Observer) are *
 names**, chosen 2026-08-01 to replace the project's original Firefly-character board names
 (TODO.md §0.9 item 8 — avoiding trademark exposure, §3 above). The four bay names were **not**
 renamed. The former-name/inspiration table and the full renaming record live in
-`docs/attribution_and_licencing.md` §6 (also `docs/WBS.md` §0.9) — historical only; never use a
+`docs/attribution_and_licensing.md` §6 (also `docs/WBS.md` §0.9) — historical only; never use a
 former name in new work.
 
 Flight Engineer's room sits in the middle-section inner neck (open ventral face of the horseshoe ring),

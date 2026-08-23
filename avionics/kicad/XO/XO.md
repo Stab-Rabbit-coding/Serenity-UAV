@@ -372,14 +372,17 @@ All field connectors are shielded JST-GH (or SMA/U.FL for RF). SHIELD pins conne
 | J_CAN | SM03B-GHS-TB-1MP | 1=CAN_B_H, 2=CAN_B_L, 3=GND, MP=PGND | CAN FD bus |
 | J_485 | SM03B-GHS-TB-1MP | 1=RS485_B_P, 2=RS485_B_N, 3=GND, MP=PGND | RS-485 |
 | J_1553 | SM04B-GHS-TB-1MP | 1=BUS_1553_B_P, 2=BUS_1553_B_N, 3=GND, 4=PGND, MP=PGND | MIL-STD-1553B |
-| J_ETH_B | SM06B-GHS-TB-1MP | 1=GND, 2=ETHB_TX+, 3=ETHB_TX-, 4=ETHB_RX+, 5=ETHB_RX-, 6=GND, MP=PGND | Ethernet PHY |
-| J_XCVR | SM06B-GHS-TB-1MP | 1=GND, 2=+5V, 3=UART_49MHZ_XCVR_TX, 4=XCVR_RX_RAW, 5=XCVR_PTT_N, 6=+3V3, MP=PGND | Commo header |
 | J_FAN | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=FAN_PWM_B, MP=PGND | Bay ventilation fan |
 | J_SD | MicroSD (Molex 503182-1852) | SDIO: CLK/CMD/D0-D3/CD/WP | Logging microSD |
 | J_SMA_LORA | SMA (50 Ω) | RF center conductor = LORA_ANT; shell = PGND | LoRa 915 MHz antenna |
 | J_SMA_WIFI | SMA (50 Ω) | RF center = WIFI_ANT; shell = PGND | WiFi 2.4/5 GHz antenna |
 | J_SIK_ANT | Hirose U.FL | RF center = SIK_ANT; shell = PGND | SiK 915 MHz module pigtail |
 | J_SMA_SIK | SMA (50 Ω) | RF center via FL_SIK; shell = PGND | SiK 915 MHz antenna output |
+
+Note: J_ETH_B and J_XCVR are absent from this table — confirmed removed from the as-placed
+PCB (`XO.kicad_pcb`) even though both still appear in the lagging schematic (`XO.kicad_sch`,
+see status note above and TODO.md §1.2b); this table reflects the as-built board, not the
+schematic.
 
 Note: XO uses `_B_` net name suffixes on CAN, RS-485, and 1553 bus signals
 (CAN_B_H/CAN_B_L, RS485_B_P/RS485_B_N, BUS_1553_B_P/BUS_1553_B_N) to distinguish

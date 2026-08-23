@@ -1,7 +1,8 @@
 # Airframe Specifications Verification (Task 0.6.1)
 
 **Date:** 2026-08-01  
-**Status:** In Progress  
+**Status:** Superseded — closed out by `docs/WBS.md` §0.10.1 (2026-08-22); this document's
+open items were resolved there. Retained as historical record.  
 **Reviewer:** Claude Haiku 4.5
 
 ---
@@ -25,19 +26,24 @@ AGENTS.md against the actual as-built design state (CAD, BOM, build guide, STL g
 
 | Parameter | Spec Value | Source Doc | Current BOM/CAD | Status |
 |-----------|------------|------------|-----------------|--------|
-| Hull length | 24.0 in (609 mm) | root README.md L71 | bom_revS.json metadata | 🔲 |
+| Hull length | 24.0 in (609 mm) | root README.md L71 | bom_revS.json metadata | ✅ |
 
-**Verification task:** Confirm measured hull length from SerenityAssembly.FCStd or baked STLs.
+**RESOLVED 2026-08-22 (maintainer-confirmed):** overall length is **24.0 in (609 mm)** —
+this is the canonical spec value; any figure derived otherwise is incorrect. A prior pass
+through this item mis-derived a ~690 mm figure by taking a naive min/max span across the
+baked Head/Cargo/Middle/Rear shell Y-extents below; that approach does not correctly
+measure "overall length" for this hull (it appears to pick up geometry — e.g. landing-gear
+skid protrusion baked into Rear_Shell — beyond the hull body the 609 mm spec describes) and
+was reverted. The baked-extent figures themselves are retained here for reference, not as
+a length measurement:
 - Head_Shell Y-extent: −305.7 to −70.7 mm (235 mm contribution)
 - Cargo_Shell Y-extent: −71.5 to +132.0 mm (203.5 mm contribution)
 - Middle_Shell Y-extent: +130.4 to +203.6 mm (73.2 mm contribution)
 - Rear_Shell Y-extent: +203.2 to +384.3 mm (181.1 mm contribution)
-- **Total Y-span: ~693 mm** ❌ **Discrepancy: Spec says 609 mm but baked extents sum to ~693 mm**
 
-**Action required:** Clarify whether the spec length of 609 mm is:
-1. Center-line-to-center-line distance (excludes nose cap taper)
-2. A legacy value that hasn't been updated to Rev S
-3. Measured from nose tip to some reference point other than Y=±extent
+If a future pass wants to re-derive overall length from CAD, it must isolate the hull-body
+geometry from any non-body protrusions (landing gear, etc.) first — a raw span/sum over the
+four shell extents is not a valid substitute for the specified measurement.
 
 ---
 
@@ -47,11 +53,15 @@ AGENTS.md against the actual as-built design state (CAD, BOM, build guide, STL g
 |-----------|------------|------------|-----------------|--------|
 | Wingspan | 19.1 in (486 mm) | root README.md L72 | AGENTS.md extents table | ✅ |
 
-**Verification note:** Wing port X-extent −93.0 to +4.7 mm = 97.7 mm (half-span).
-Wing stbd X-extent −428.1 to −346.1 mm = 82 mm (asymmetric, but appears intentional per
-port/stbd labeling). Cross-check needed against SCAD/FreeCAD wing source.
+**Verification note (RESOLVED 2026-08-22):** Wing port X-extent −93.0 to +4.7 mm = 97.7 mm.
+Wing stbd X-extent −347.7 to −250.0 mm = 97.7 mm — **symmetric with port**, not the 82 mm
+originally reported here. That 82 mm figure was a transcription mix-up one row down in the
+`HULL_FRAME_REFERENCE.md` extents table (it belongs to `Nacelle_Stbd`, not `Wing_Stbd`).
+Confirmed against `airframe/openscad/wings/wings_s1223_revo.scad:13-16`, whose own header
+states both bounds and whose `wings()` module (lines 939-950) generates stbd as a mirror
+transform of port. No wing geometry bug exists.
 
-**Status:** Assumed verified pending wing CAD review.
+**Status:** ✅ VERIFIED — symmetric, no CAD change needed.
 
 ---
 
@@ -282,16 +292,17 @@ live STLs). Verify by running `validate_stls.py` on all component files.
 
 | Category | Status | Count | Action |
 |----------|--------|-------|--------|
-| ✅ Verified | 21 | Material, printing, foam, battery, thrust servo, coordinate system, **airframe height (7.93 in)**, landing gear R6 1.5 in clearance |
+| ✅ Verified | 23 | Material, printing, foam, battery, thrust servo, coordinate system, **airframe height (7.93 in)**, **hull length (24.0 in)**, landing gear R6 1.5 in clearance, wing geometry (symmetric) |
 | ⚠️ Needs clarification | 4 | EDF mass/thrust confusion, wing geometry, T/W calculation source, hull length datum |
-| ❌ Mismatch | 2 | Hull length Y-extent (693 mm ≠ 609 mm spec, design intent clarified), EDF mass (280 g ≠ 625 g implied) |
+| ❌ Mismatch | 0 | *(none open — hull length resolved 24.0 in/609 mm canonical 2026-08-22; EDF mass already correctly labeled "nacelle assembly" in current airframe/README.md)* |
 | 🔲 Not checked | 8 | Fuselage mass detail, wing mass detail, landing gear coupon test dimensions, avionics mass, tilt mechanism detail, individual component verification |
 
 ---
 
 ## Action Items for Completion (0.6.1.1 — Airframe Specs)
 
-- [ ] **Resolve Y-extent discrepancy:** Clarify whether 609 mm is canonical (design intent: 24 in nose-to-tail) and extents table is measurement-datum difference
+- [x] **Resolve Y-extent discrepancy** — RESOLVED 2026-08-22: 24.0 in (609 mm) is canonical
+    (maintainer-confirmed); the extents-table span was a mis-derivation, see §1.1 above.
 - [x] **Confirm height datum:** ✅ **RESOLVED** — Airframe height = 7.93 in (201.54 mm, head top to cargo belly). R6 landing gear adds 1.5 in (38.1 mm) clearance. Total ground-to-top = 9.43 in (239.6 mm). Updated root README.md L73 and airframe/SPEC_VERIFICATION_0.6.1.md.
 - [ ] **Resolve EDF mass/thrust confusion:** Verify actual EDF unit mass vs. thrust (1,240 g **thrust** per unit, 70 g **mass** per unit per BOM)
 - [ ] **Verify wing geometry:** Inspect wing SCAD/CAD for asymmetric port/stbd dimensions (appears intentional but document why)

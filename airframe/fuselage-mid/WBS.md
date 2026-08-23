@@ -77,13 +77,13 @@
             clearance bore"; clears the Ø36 GPS body). Rendered + verified watertight, single
             body. **ANTENNAS MOVED OUTBOARD 2026-07-06 (user directive):** `GPS_SEP` 30 → 37.5
             mm in both `cargo_sect_shell24.scad` and `access_panels_24in.scad`, co-locating
-            each GPS with its bay/cover centre (= `BAY_SEP_X`/2). The ~46 mm-wide (OML-trimmed)
+            each GPS with its bay/cover center (= `BAY_SEP_X`/2). The ~46 mm-wide (OML-trimmed)
             cover only keeps a Ø38 bore fully enclosed if the antenna is within ~±4 mm of the
-            cover centre; at the old 30 mm it sat 7.5 mm inboard and the bore broke the cover's
+            cover center; at the old 30 mm it sat 7.5 mm inboard and the bore broke the cover's
             inboard edge (scallop). Re-rendered + verified: GPS bore is now a **fully-enclosed
             interior hole** (6 section loops = outer + 4 M3 + 1 GPS; single watertight body;
             `inara_access_cover.stl` 4604 mm³, `river_access_cover.stl` 4456 mm³; 26 mm to each
-            cover edge, 7 mm bore margin). New GPS centre-to-centre = 75 mm; Ø44 retention rings
+            cover edge, 7 mm bore margin). New GPS center-to-center = 75 mm; Ø44 retention rings
             still clear (31 mm gap). VERIFY-in-slicer: confirm each antenna still lands on flat
             enough dorsal skin at the outboard station and the SMA pocket clears the Faraday
             tray below.
@@ -91,14 +91,14 @@
             The dorsal-Z covers cut their 4× M3 bores at ±`AVZ_SCREW_DX`(15, X) ×
             `AVZ_SCREW_DY`(25, Y) = `cargo_sect_shell24.scad` `AVINICS_BOSS_DX/DY` exactly
             (was mismatched 25/15 in the wrong X-Z axes). Verified geometrically from the
-            rendered STL: bore centres at (±15, ±25) mm, Ø3.3 M3 clearance. (Shepherd/Simon
+            rendered STL: bore centers at (±15, ±25) mm, Ø3.3 M3 clearance. (Shepherd/Simon
             covers stay on the legacy Y-normal `av_cover_dorsal` until the head/middle
             avionics bays get the same dorsal-axis fix — the still-open head/middle
             axis-bug items in this section.)
 
 - [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11.
     Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top.
-    **Relocated 2026-06-22 (§1.4.2):** dorsal-centreline mount superseded — print FOUR posts (two antennas, two posts each):
+    **Relocated 2026-06-22 (§1.4.2):** dorsal-centerline mount superseded — print FOUR posts (two antennas, two posts each):
     River's antenna forward (sta ≈ 120 mm) + aft (sta ≈ 580 mm) on the **port flank**, Simon's antenna forward + aft (same
     stations) on the **starboard flank**, both at shoulder height.
     Reasons: (a) a single shared dorsal run put River's and Simon's independent 49 MHz antennas (§1.4.2) too close together;
@@ -207,7 +207,7 @@
     colocated for minimal SMA routing. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
     Panel cuts enlarged 55×35 → 62×42 mm; boss offsets updated ±40×±25 → [TBD pending PCB layout — hole pattern must be derived from Pilot.kicad_pcb / XO.kicad_pcb once layout is complete] to match
-    Faraday tray corner mounts; bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
+    Faraday tray corner mounts; bay Z centers adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
     inter-bay gap; FARADAY_* envelope parameters (95×65×65 mm, 1.5 mm Al wall, 25 mm fan) added.
     *(done 2026-06-08, PR #42)*
 - [x] **`nacelle_servo_bracket.scad`** — U-channel saddle clamp for DS3218MG nacelle tilt servo;
@@ -227,8 +227,8 @@
     Create `inara_access_cover.scad` and `river_access_cover.scad` (or a single parametric SCAD):
     Cover footprint 105×75 mm with 5 mm shoulder lip seating on hull skin around 95×65 mm opening.
     Copper-foil-lined PETG or 0.5 mm Al sheet; Ø38 mm GPS clearance bore at GPS offset from cover
-    centre (Inara: offset −13.3 mm in Z from bay centre; River: offset +0.7 mm in Z from bay centre).
-    4× M2 flathead captive screws at ±40 mm (X) × ±25 mm (Z) from cover centre for EMI-seal clamping.
+    center (Inara: offset −13.3 mm in Z from bay center; River: offset +0.7 mm in Z from bay center).
+    4× M2 flathead captive screws at ±40 mm (X) × ±25 mm (Z) from cover center for EMI-seal clamping.
     Must be removable with common hand tools per CLAUDE.md field disassembly requirement.
     Ref: FARADAY_* parameters in cargo_sect_shell24.scad Rev S3; CLAUDE.md §1.4.1.
     Add to Phase 0 print schedule.
@@ -301,7 +301,7 @@ do not restate its dimensions here.
     - **FM2** continuous steel sleeve through the hub bore, bearings pressed into
       the sleeve rather than into printed plastic — total loss of the printed
       material still leaves sleeve + bearings captive on the axle.
-    - **FM3** pedestal through-bolts + aluminium backing plates, replacing
+    - **FM3** pedestal through-bolts + aluminum backing plates, replacing
       heat-set inserts in printed shell.
     - **FM4** keeper bar spanning both pedestals — independent secondary capture
       that holds even if FM1–FM3 all fail or a retainer is omitted at assembly.
@@ -321,10 +321,10 @@ do not restate its dimensions here.
 - [ ] **Containment checks on the assembly and pre-flight cards** — circlips
     seated, keeper bar fitted and torqued, backing plates present, slip-collar
     witness-mark intact. Doors-open inspection.
-- [ ] **★ Flight-envelope decision — shed threshold vs manoeuvre envelope.** At
-    `F_shed` = 8.0 N a **2.0 g** manoeuvre on the slung payload reaches **0.98×**
+- [ ] **★ Flight-envelope decision — shed threshold vs maneuver envelope.** At
+    `F_shed` = 8.0 N a **2.0 g** maneuver on the slung payload reaches **0.98×**
     the threshold and **2.5 g sheds the load**. Choose: declare a ≈1.5 g slung-load
-    manoeuvre limit (recommended — free, and matches crewed-rotorcraft practice),
+    maneuver limit (recommended — free, and matches crewed-rotorcraft practice),
     raise `F_shed` to ~12 N (3.06× static, still only 72 % of the 16.64 N excess
     lift), or reduce payload. **A flight-envelope call, not a winch call** — refer
     to `docs/flight_envelope.md`. Blocks the pawl-spring calibration target.
@@ -357,7 +357,7 @@ do not restate its dimensions here.
     interval, slip witness-mark, spare in the field kit; hand-tool replacement per
     root `AGENTS.md` §7.
 - [ ] **AK7455 spool encoder integration (spec §3.7.3).** Diametric-magnet pocket in
-    the port flange hub, off-axis (the fixed axle occupies the centreline); mates the
+    the port flange hub, off-axis (the fixed axle occupies the centerline); mates the
     gateway's existing `J_ENC` pigtail on its dedicated SPI bus — no board change and
     no new part number [REF-SENSOR-008]. Confirm flux at the IC for the chosen
     magnet/gap (same bench item already open for the nacelle encoders). Firmware:
@@ -470,7 +470,7 @@ The middle section is defined by `airframe/blender-scripts/files-hollowed-24in/m
 It is **ONE printed piece** comprising two distinct structural elements:
 1. **Outer horseshoe ring** — the U-shaped exterior frame surrounding the middle section, open at −Z (ventral).
     The two lower arms of the horseshoe continue aft as the landing skids into the rear section.
-2. **Inner neck** — a tube-like enclosed passage running through the centre of the horseshoe,
+2. **Inner neck** — a tube-like enclosed passage running through the center of the horseshoe,
     connecting the cargo bay interior to the rear engine room interior within the hull skin.
     Canonically this is a pressurised passage within the ship; in the UAV context it provides
     structural continuity and a wiring/keel routing path through the narrowest hull section.
@@ -495,7 +495,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     through the open ventral face of the horseshoe ring.  The inner neck central location
     minimises power run lengths to all four nacelles, all four avionics stacks, and the battery.
     Required additions to the Blender middle mesh (or as bonded inserts):
-    - 4× M3 standoff boss posts for Flight Engineer PCB (55×35 mm board; ±20×±12.5 mm pattern from bore centre)
+    - 4× M3 standoff boss posts for Flight Engineer PCB (55×35 mm board; ±20×±12.5 mm pattern from bore center)
     - Power cable exit notches (6 AWG leads, 4× nacelle ESC runs + avionics BEC tap)
     - Ventilation opening or clearance to allow heat dissipation from TPS54620 regulators
     - Access clearance from horseshoe ventral opening (confirm Flight Engineer can be inserted and removed

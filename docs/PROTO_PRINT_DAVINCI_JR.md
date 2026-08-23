@@ -178,7 +178,7 @@ Mirror of Batch B. Settings and checks identical.
 
 Settings: same as Batch B.
 
-**Additional check:** Port and starboard doors should mate symmetrically along centre seam
+**Additional check:** Port and starboard doors should mate symmetrically along center seam
 with ≤1 mm gap when held together.
 
 ---
@@ -329,7 +329,7 @@ Remaining space for pivot arms and pistons below.
 ## Verify after print
 
 - [ ] MF104ZZ bearing (OD=10 mm) presses into pivot housing bore — should be snug
-- [ ] 4 mm CF rod passes through pivot housing centreline freely
+- [ ] 4 mm CF rod passes through pivot housing centerline freely
 - [ ] Pivot arm pushrod bore size correct (2 mm dia for steel pushrod)
 
 ---
@@ -642,8 +642,8 @@ surface finish matters for the fit check.
 - [ ] SG90 servo fits both servo brackets (no binding)
 - [ ] DRV8833 PCB fits tray, connector cutout aligns with JST-PH connector
 - [ ] Winch spool free-spins on 3 mm shaft; no wobble
-- [ ] GPS retention ring lies flat against door inner face; 25 mm opening centred
-- [ ] FPV bezel 28 mm dia opening centred and round
+- [ ] GPS retention ring lies flat against door inner face; 25 mm opening centered
+- [ ] FPV bezel 28 mm dia opening centered and round
 
 ### Nozzle Iris — Nacelle (Batches E–F)
 
@@ -677,7 +677,7 @@ surface finish matters for the fit check.
 ### Hull Assembly Mock-up
 
 - [ ] Head + Mid + Cargo + Rear sections align at seam faces (scaled versions)
-- [ ] Nacelle pods sit visually centred above wing attachment zones
+- [ ] Nacelle pods sit visually centered above wing attachment zones
 - [ ] Wing planform matches canonical Serenity profile reference images
 
 ---

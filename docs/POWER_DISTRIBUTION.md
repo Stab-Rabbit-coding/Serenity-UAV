@@ -150,7 +150,7 @@ avionics bus. Therefore Observer is powered from its **own** Flight Engineer rai
   standalone rail, RAIL-2 is **diode-OR cross-tied to the avionics RAIL-1** so the two rails
   back each other up while staying fault-isolated — full topology, drop budget, and fault-mode
   table in **§11.1**.
-- **J_JAYNE:** new Molex Nano-Fit 4-pin (matches `J_5V`) 5 V payload output on Flight Engineer, harnessed
+- **J_OBS:** new Molex Nano-Fit 4-pin (matches `J_5V`) 5 V payload output on Flight Engineer, harnessed
   to both Observer `J_PWR` inputs.
 - **Fuse/limit:** the TPS54620 internal current limit plus a 3 A resettable polyfuse per Observer
   drop (each board ≤ 2.72 A peak).
@@ -160,7 +160,7 @@ avionics bus. Therefore Observer is powered from its **own** Flight Engineer rai
   comparable length to the existing avionics 5 V bay runs. Route with the Ethernet-ring / CAN
   harness Observer already shares to each bay.
 
-Implementing the RAIL-2 channel (`U_BEC_5V_3`) + cross-tie + `J_JAYNE` on Flight Engineer is a Flight Engineer
+Implementing the RAIL-2 channel (`U_BEC_5V_3`) + cross-tie + `J_OBS` on Flight Engineer is a Flight Engineer
 revision change (sibling to the planned Rev S1 servo-rail change); full design in **§11.1**,
 tracked in TODO.md §1.2c.4. Until implemented, a Observer board may be bench-fed from the shared
 5 V bus **only** with active load-management (accept that it consumes the remaining avionics
@@ -620,7 +620,7 @@ BEC-1 ─D_OR1─┐
 BEC-2 ─D_OR2─┘        │
                  D_X1 ▼  ▲ D_X2   ── F_X (3 A, cross-tie)          [mutual backup path]
                       │  │
-BEC-3 ─D_OR3──────────┴──┴──────── RAIL-2 (5V_JAYNE) ── F_VERA (3 A) ── J_JAYNE   [1 channel, 6 A]
+BEC-3 ─D_OR3──────────┴──┴──────── RAIL-2 (5V_OBS) ── F_OBS (3 A) ── J_OBS   [1 channel, 6 A]
 ```
 
 - **`D_X1` (RAIL-1→RAIL-2)** and **`D_X2` (RAIL-2→RAIL-1)** are two more MBRD1045CT (reused
@@ -647,14 +647,14 @@ minimal-parts goal, so plain Schottky + a modest set-point bump is the recommend
 |---|---|
 | BEC-3 (Observer) regulator fails | RAIL-2 droops → `D_X1` feeds Observer from the RAIL-1 pair (2.4 A ≪ 12 A spare); avionics unaffected |
 | One avionics BEC fails | survivor (6 A) + BEC-3 via `D_X2` back up RAIL-1; §8.3 load-shed trims to fit |
-| Short on the RAIL-2 node (upstream of `F_VERA`) | `F_X` blows → RAIL-2 isolated from RAIL-1; BEC-3 OCP limits; **RAIL-1 keeps running** |
-| Short at J_JAYNE (downstream) | `F_VERA` clears; RAIL-1 unaffected |
+| Short on the RAIL-2 node (upstream of `F_OBS`) | `F_X` blows → RAIL-2 isolated from RAIL-1; BEC-3 OCP limits; **RAIL-1 keeps running** |
+| Short at J_OBS (downstream) | `F_OBS` clears; RAIL-1 unaffected |
 | Short at J_5V (downstream) | `F_5V` clears; RAIL-2 unaffected |
 | A BEC output fails *short* | its `D_OR` reverse-blocks, keeping the shorted channel off its rail so the cross-tie can carry the rail |
 
 **Delta vs. today (no new part numbers):** +1 TPS54620 channel (`U_BEC_5V_3` + `L_5V3` +
 `R_FB3` + `C_BEC3_IN` + `C_BEC3_OUT` + `FB_5V3` + `D_OR3`); +2 MBRD1045CT (`D_X1`/`D_X2`);
-+2 fuses (`F_X`, `F_VERA`) and re-use/add `F_5V`; +1 output connector (`J_JAYNE`, Molex
++2 fuses (`F_X`, `F_OBS`) and re-use/add `F_5V`; +1 output connector (`J_OBS`, Molex
 Nano-Fit 4-pin, matching `J_5V`); the two existing `R_FB` dividers re-valued for 5.4 V. Mass
 ≈ +5 g. Interchangeability is at the **channel** level: all three BEC channels are the identical
 block, and any channel can be built or swapped identically.
@@ -864,7 +864,7 @@ All nacelle ESCs (ESC1–ESC4) shall be programmed identically to:
 <!-- ESC5 is DNP (Do Not Populate) for all Phases 5–10.
      When Phase 11 commences, populate J_ESC5 and F_ESC5 on the Flight Engineer board
      per the FlightEngineer.md §Phase 11 bring-up procedure.
-     Signal routing: Simon's medbay (Bay E, FC4 node), UART1-TX.
+     Signal routing: Simon's medbay (Bay D, FC4 node), UART1-TX.
      The 55 mm rear EDF is a forward-thrust (cruise) device and also feeds 4 RCS bleed jets
        via proportional valves on the 6 V servo rail (see §3.3). -->
 
@@ -874,7 +874,7 @@ When the 55 mm fuselage EDF is integrated (Phase 11):
    with the 50 A BLHeli32 ESC harness.
 2. Install **F_ESC5** (60 A MIDI blade fuse, Littelfuse 0299060.ZXNV)
    in the corresponding MIDI fuse holder on Flight Engineer (see §5.2).
-3. Route the ESC5 DSHOT600 signal cable to **Simon's medbay (Bay E, FC4 node),
+3. Route the ESC5 DSHOT600 signal cable to **Simon's medbay (Bay D, FC4 node),
    UART1-TX** — Simon is the primary EDF5 controller per the PACE task matrix
    in AGENTS.md.
 4. Connect the 4 RCS proportional-valve servos to the 6 V servo bus; map to the
@@ -979,4 +979,4 @@ build — use fine (5 mm) increments when trimming with the minimum-viable build
 
 ---
 
-*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*
+*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY-SA 4.0*

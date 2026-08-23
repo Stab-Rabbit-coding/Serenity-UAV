@@ -27,7 +27,7 @@ the verification section.
   chordwise ±2.5 mm would land on the QFN side pads). **The wing pocket was sized for
   the old 3×3 MT6701 and is already flagged for re-bake (WBS §1.1.3.6) — extend the
   pocket to 7×14 and move the two M2 pilots to the board's new hole pattern:
-  (±2.1, +4.3) mm from the IC centre** (KiCad (21.4, 32.2)/(25.6, 32.2), IC at
+  (±2.1, +4.3) mm from the IC center** (KiCad (21.4, 32.2)/(25.6, 32.2), IC at
   (23.5, 27.9)).
 - **Stack-up/zones:** GND pour on BOTH layers; SPI fan-out on F.Cu; +3V3 spine and the
   ERROR return run on B.Cu (B side has no pads); 11 vias 0.6/0.3.
@@ -104,7 +104,7 @@ the lead does not twist with tilt (no slip ring).
 | Temp | −40 to +125 °C | §3 |
 
 The anomaly-field detection + error-reduction functions are the decisive feature: the
-tilt-spar is ferromagnetic (AISI 4130 / 17-4 PH) and runs through the ring-magnet centre,
+tilt-spar is ferromagnetic (AISI 4130 / 17-4 PH) and runs through the ring-magnet center,
 so a stray-field-hardened sensor with in-situ INL calibration is exactly what the joint
 needs.
 
@@ -180,7 +180,7 @@ wing-tip pad, reading the ring across a small gap.
 
 ## Ferromagnetic-spar handling
 
-The spar is ferromagnetic (AISI 4130 / 17-4 PH) through the ring centre. Mitigation:
+The spar is ferromagnetic (AISI 4130 / 17-4 PH) through the ring center. Mitigation:
 
 1. **Non-ferrous stand-off** — CF-PETG hub holds the ring off the steel and proud of the
    steel F688ZZ bearing.

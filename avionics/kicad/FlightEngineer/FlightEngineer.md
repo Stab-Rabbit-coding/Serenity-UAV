@@ -90,14 +90,14 @@ requirements.
 | J_6V | Molex Nano-Fit 4-pin (pitch 2.50 mm) | 6 V / 5 A | Servo bus (tilt servos + nozzle servos) |
 | J_SHLD_5V | PGND via-pad 1.2 mm hole (adjacent to J_5V) | 5 V avionics cable shield drain → PGND plane |
 | J_SHLD_6V | PGND via-pad 1.2 mm hole (adjacent to J_6V) | 6 V servo cable shield drain → PGND plane |
-| **J_JAYNE** (planned, not yet in KiCad) | Molex Nano-Fit 4-pin (matches J_5V) | 5 V / 6 A (RAIL-2, own BEC) | **Observer/payload** (nose + cargo), ≈ 2.4 A typ / ~4.2 A peak; cross-tied to the avionics rail for mutual backup — see `docs/POWER_DISTRIBUTION.md §11.1` |
+| **J_OBS** (planned, not yet in KiCad) | Molex Nano-Fit 4-pin (matches J_5V) | 5 V / 6 A (RAIL-2, own BEC) | **Observer/payload** (nose + cargo), ≈ 2.4 A typ / ~4.2 A peak; cross-tied to the avionics rail for mutual backup — see `docs/POWER_DISTRIBUTION.md §11.1` |
 
 > **Planned second 5 V rail — cross-tied, mutually fault-tolerant (not yet in KiCad):** add a
 > **third identical TPS54620 BEC channel** (`U_BEC_5V_3` + `L_5V3` + `R_FB3` + `C_BEC3_IN/OUT` +
-> `FB_5V3` + `D_OR3`, a copy of `U_BEC_5V_1`) feeding **RAIL-2 (5V_VERA) → `J_JAYNE`**. The
+> `FB_5V3` + `D_OR3`, a copy of `U_BEC_5V_1`) feeding **RAIL-2 (5V_OBS) → `J_OBS`**. The
 > existing dual-BEC avionics pair stays as **RAIL-1 (5V_AVIONICS) → `J_5V`**. The two rails are
 > **diode-OR cross-tied** (`D_X1`/`D_X2`, two more MBRD1045CT — same part) through a cross-tie
-> fuse `F_X`, with per-rail fuses `F_5V`/`F_VERA`, so each rail is **fault-tolerant of the
+> fuse `F_X`, with per-rail fuses `F_5V`/`F_OBS`, so each rail is **fault-tolerant of the
 > other** (regulator-failure backup + short-isolation). All three BEC channels are the identical
 > part chain → **interchangeable**; no new part numbers. **Set-point rises 5.3 V → 5.4 V** so a
 > backed-up rail (two Schottky drops) stays > the 4.75 V PB2-I minimum. Full topology, drop
@@ -309,9 +309,9 @@ any nacelle — thrust and directional control are degraded but not lost.
 | EDF position | ESC ref | Flight Engineer power conn | Controlling FC node | Pilot bay | Signal pin |
 |---|---|---|---|---|---|
 | Port Fwd (EDF0) | ESC1 | J_ESC1 | FC3 (Node 3) | River's room (Bay D) | UART2-TX (DSHOT600) |
-| Port Aft (EDF1) | ESC2 | J_ESC2 | FC4 (Node 4) | Simon's medbay (Bay E) | UART2-TX (DSHOT600) |
+| Port Aft (EDF1) | ESC2 | J_ESC2 | FC4 (Node 4) | Simon's medbay (Bay D) | UART2-TX (DSHOT600) |
 | Stbd Fwd (EDF2) | ESC3 | J_ESC3 | FC3 (Node 3) | River's room (Bay D) | UART3-TX (DSHOT600) |
-| Stbd Aft (EDF3) | ESC4 | J_ESC4 | FC4 (Node 4) | Simon's medbay(Bay E) | UART2-TX (DSHOT600) |
+| Stbd Aft (EDF3) | ESC4 | J_ESC4 | FC4 (Node 4) | Simon's medbay(Bay D) | UART2-TX (DSHOT600) |
 
 ### Single-FC-Node Failure Matrix
 
@@ -532,7 +532,7 @@ of all ICs on the board.
 | EMI gasket | Parker Chomerics CHO-SEAL 1217 silver-aluminum conductive elastomer strip (or Laird Techspray BER-13 beryllium-copper finger strip) on all four lid seam faces; minimum 50 % compression at closure |
 | Gasket goal | Seam impedance < 0.1 mΩ at 1 GHz; ensures SE contribution from seam > 80 dB |
 | Ventilation | Waveguide honeycomb panel, 18 × 18 mm active area, hexagonal cells ≤ 2 mm inscribed diameter (λ/20 at 7.5 GHz, safe to 6 GHz cellular band); adhesive-bonded to ventilation aperture in enclosure floor |
-| Lid fasteners | 8× M3 × 6 mm stainless SHCS on 25 mm centres; torque 0.3 N·m (maintains gasket compression) |
+| Lid fasteners | 8× M3 × 6 mm stainless SHCS on 25 mm centers; torque 0.3 N·m (maintains gasket compression) |
 | Mass estimate | ~90 g (enclosure + lid + gasket + hardware) |
 
 ### Cable Entry — EMC Glands
@@ -715,7 +715,7 @@ mandatory cost of 500 W/m² immunity — a deliberate design trade documented in
 
 ---
 
-*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*
+*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY-SA 4.0*
 
 ---
 
@@ -724,7 +724,7 @@ mandatory cost of 500 W/m² immunity — a deliberate design trade documented in
 The trust module on this board now uses **TI MSPM0G3518-Q1 (`M0G3518QRHBRQ1`)** (32-pin RHB VQFN 5×5 mm, 256 KB flash / 128 KB SRAM) and the
 **Infineon SLB 9672AU2.0** TPM (PG-UQFN-32-1,-2, extended −40 to +105 °C), superseding the
 MSPM0G3507 and SLB9670VQ2.0.  Parts and the specifications applied are catalogued as
-REF-SENSOR-013 and REF-SEC-002 in `REFERENCES.md`; the change was applied by
+REF-SENSOR-017 and REF-SEC-002 in `REFERENCES.md`; the change was applied by
 `avionics/kicad/retarget_mspm0g351x_slb9672.py` and `avionics/kicad/retarget_pcb_footprints.py`,
 which also wrote `.pre-g351x` backups beside each edited file.
 
@@ -745,7 +745,7 @@ drawn on top of each other: seventeen MCU pads sat on the exact coordinate of a 
 a single global label served both symbols. That shorted the whole TPM SPI bus to a second
 set of MCU pins and tied MCU `VCORE` to TPM `GND`. `U_TPM` has been moved +34.29 mm clear
 and its labels re-emitted from the authoritative pin map in
-`scripts/inject_kaylee_trust_module.py`; labels belonging to `U_ISOCAN`, which is stacked at
+`scripts/inject_flight_engineer_trust_module.py`; labels belonging to `U_ISOCAN`, which is stacked at
 some of the same coordinates, were preserved. ERC pin-to-pin errors dropped by 7.
 
 The MCU is still **schematic-only on this board** — it is not placed on `Kaylee.kicad_pcb`,

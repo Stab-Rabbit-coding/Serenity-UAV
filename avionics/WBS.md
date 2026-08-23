@@ -88,7 +88,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - [x] **Wire the field-connector pins to their signals on Pilot** (connectors were
     all floating). Done per each footprint's Description pinout: SERVO-PWM pads 1–6
     → SERVO0–5 (PWM); ESC-TLM → UART_ESC_TX/RX; GPIO-A…F → GND/+3V3 (+ `GPIO_EXP_*`
-    signal pin labelled); CAN-FD → CAN_H/CAN_L; RS-485 → RS485_A/B; PWR-IN → +5V/GND.
+    signal pin labeled); CAN-FD → CAN_H/CAN_L; RS-485 → RS485_A/B; PWR-IN → +5V/GND.
     *(2026-06-12)*
 - [x] **Source the 6 `GPIO_EXP_A…F` signals via an I2C GPIO expander.** Added
     `U-GPIO` (PCA9555DB, SSOP-24, addr 0x20) on the existing I2C1 bus with a
@@ -229,7 +229,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - [ ] **Pilot footprint-vs-datasheet verification — DONE 2026-07-13 (Claude Opus 4.8);
     7 footprints are NOT manufacturable, must be rebuilt before fab.** Full report:
-    `avionics/kicad/Pilot/WASH_FOOTPRINT_VERIFICATION.md`. Fixing any of these remaps
+    `avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md`. Fixing any of these remaps
     pin→net on flight hardware, so each needs the confirmed schematic pinout first (ERC
     is not clean — see below) and MUST NOT be guessed.
     - [ ] **CAN-TR (ISOW1044BDFMR): wrong land — has 16-pad `SOIC-16W`, part is a
@@ -288,7 +288,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
         (BMP388, 10-pin), compass (MMC5983MA/QMC5883L), INA226, PCA9555, 74LVC1G14.
     - [ ] Add PB2-P1/P2 (2×36) SoC headers + connectors + passives (TVS/CMC/X2Y-Syfer-0805/
         Nano-Fit); tie the off-sheet global labels; drive GND/power (PWR_FLAG) to clear ERC.
-    - [ ] Associate corrected footprints (per WASH_FOOTPRINT_VERIFICATION.md) to each symbol;
+    - [ ] Associate corrected footprints (per PILOT_FOOTPRINT_VERIFICATION.md) to each symbol;
         regenerate/re-sync the PCB; ERC + DRC --schematic-parity to zero.
     - [ ] Once approved, promote `Wash_rebuild.kicad_sch` → `Pilot.kicad_sch` (archive old).
 - [ ] **Finish Pilot PCB (CAPE-A-2) close-out pass:**
@@ -324,7 +324,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - [x] The third avionics bay is named "River's room" (Bay D) - "Also, I can kill you with my mind." *(implemented 2026-06-07)*
 
-- [x] The aft avionics bay is named "Simon's medbay" (Bay E) - "What did they do to you?" *(implemented 2026-06-07)*
+- [x] The aft avionics bay is named "Simon's medbay" (Bay D) - "What did they do to you?" *(implemented 2026-06-07)*
 
 ## §1.9 — Avionics Workload Balancing
 
@@ -645,8 +645,8 @@ REFERENCES.md Removed/Superseded Citations).
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | ~$204 | CN3, FC3, CN4, FC4 |
-| Pilot (Pilot) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/River's room (Bay D) + FC4/Simon's medbay (Bay E) (v2) |
-| XO (XO) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/River's room (Bay D) + CN4/Simon's medbay (Bay E) (v2) |
+| Pilot (Pilot) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/River's room (Bay C) + FC4/Simon's medbay (Bay D) (v2) |
+| XO (XO) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/River's room (Bay C) + CN4/Simon's medbay (Bay D) (v2) |
 | Commo PCB (assembled) | 2× | ~$50 | CN3, CN4 (v2 EMI-hardened) |
 | microSD 64GB (log) | 2× | ~$20 | CN3-LOG, CN4-LOG |
 | VL53L5CX 8×8 ToF sensor | 12× | ~$84 | Dual OA arrays |

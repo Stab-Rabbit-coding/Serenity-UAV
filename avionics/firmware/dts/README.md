@@ -14,8 +14,11 @@ and Cape-B expansion boards.
 
 | Overlay | Cape | Node | Peripherals |
 | --------- | ------ | ------ | ------------- |
-| `cape-a/k3-am6254-pocketbeagle2-serenity-cape-a.dtbo` | Cape-A | FC nodes (4×) | IMU, barometer, TPM, ToF, GNSS, RS-485, CAN FD, Ethernet, EHRPWM, MIL-STD-1553 |
-| `cape-b/k3-am6254-pocketbeagle2-serenity-cape-b.dtbo` | Cape-B | CN nodes (4×) | TPM, LoRa, NOR flash, logging SD, SiK radio, RS-485, 49 MHz (Part 15 §15.235), CAN FD, Ethernet, WiFi, cargo servo, MIL-STD-1553 |
+| `cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dtbo` | Cape-A-2 (Pilot) | FC nodes (4×) | IMU, barometer, TPM, ToF, GNSS, RS-485, CAN FD, Ethernet, EHRPWM, MIL-STD-1553 |
+| `cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dtbo` | Cape-B-2 (XO) | CN nodes (4×) | TPM, LoRa, NOR flash, logging SD, SiK radio, RS-485, 49 MHz (Part 15 §15.235), CAN FD, Ethernet, WiFi, cargo servo, MIL-STD-1553 |
+
+The non-"2" `cape-a`/`cape-b` (Rev Q, Cape-A-1/Cape-B-1) overlays are archived under
+`cape-a/archive/` and `cape-b/archive/` — superseded, not built by default.
 
 ## Prerequisites
 
@@ -34,7 +37,7 @@ sudo apt install device-tree-compiler    # provides dtc 1.7.x
 
 ```bash
 
-cd serenity/firmware/dts
+cd avionics/firmware/dts
 make
 
 ```
@@ -139,7 +142,7 @@ sudo cp pru1-cargo-servo.out /lib/firmware/serenity/  # Cape-B PRU1
 
 ```
 
-PRU firmware source is in `serenity/firmware/pru/` (Phase 7).
+PRU firmware source is in `avionics/firmware/pru/` (Phase 7).
 
 ## References
 

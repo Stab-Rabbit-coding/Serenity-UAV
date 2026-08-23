@@ -328,11 +328,11 @@ DRC violations. All four were repositioned to clear positions with > 0.1 mm gap.
 | Via old pos | Net | Conflict | Via new pos | Min gap |
 | --- | --- | --- | --- | --- |
 | (132, 109.5) | +5V_FILT | PA Rc1 courtyard (−0.33 mm gap) | (131.5, 109.5) | +0.37 mm |
-| (136, 109.5) | PA_INT | PA Rb2 courtyard (−0.40 mm; dead-centre) | (136, 107) | +0.63 mm |
+| (136, 109.5) | PA_INT | PA Rb2 courtyard (−0.40 mm; dead-center) | (136, 107) | +0.63 mm |
 | (140, 109.5) | GND | PA By2 courtyard (−0.35 mm gap) | (140.5, 109.5) | +0.54 mm |
 | (143, 124.5) | GND | LNA pad 3 RF_RX (cross-net short; −0.17 mm gap) | (143, 125.5) | +0.75 mm |
 
-The via at (136, 109.5) was dead-centred on the PA Rb2 courtyard because the via
+The via at (136, 109.5) was dead-centered on the PA Rb2 courtyard because the via
 sits between PA Rb2 (PA_INT both pads) and PA Cb2 (PA_INT pad 1) — the same net, but
 the courtyard boundary still flags a DRC error. No trace segments connect to any of
 these four vias; they connect through copper pours or the inner GND/+5V planes.
@@ -661,16 +661,16 @@ declared; the functional distinction is physical placement only.
 | J1 | 4 | PTT_N |
 | J1 | 5 | RSSI_ANA |
 | J1 | 6 | +3V3 | Right-most pin |
-| J2 | 1 | ANT | RP-SMA centre pin, 0.9 mm drill, thru-hole circle |
+| J2 | 1 | ANT | RP-SMA center pin, 0.9 mm drill, thru-hole circle |
 | J2 | 2 | GND | Upper GND tab, 1.0 mm drill |
 | J2 | 3 | GND | Lower GND tab, 1.0 mm drill |
 | CMC_CAN | 1 | ANT | Input from RF section; left pad, silkscreen notch marks pin 1 |
 | CMC_CAN | 2 | ANT | Output to J2; right pad |
 | D_TVS | 1 | GND | Left column bottom — SOT-363 pin 1 per NXP PRTR5V0U2X pinout |
-| D_TVS | 2 | ANT | Left column centre — TVS anode A1 |
+| D_TVS | 2 | ANT | Left column center — TVS anode A1 |
 | D_TVS | 3 | GND | Left column top |
 | D_TVS | 4 | GND | Right column top |
-| D_TVS | 5 | RF_TX | Right column centre — TVS anode A2 |
+| D_TVS | 5 | RF_TX | Right column center — TVS anode A2 |
 | D_TVS | 6 | GND | Right column bottom |
 | FB1 | 1 | +5V | Input — raw +5V from J1 before filtering |
 | FB1 | 2 | +5V_FILT | Output — clean supply to on-board ICs; 0805 pad reused for bead |
@@ -693,7 +693,7 @@ declared; the functional distinction is physical placement only.
 
 | Ref | Courtyard (mm) | Fab body (mm) | Notes |
 | ----- | ---------------- | --------------- | ------- |
-| CMC_CAN | 2.4 × 1.4, centred | 2.0 × 1.25 | Silkscreen notch on left edge for pin 1 |
+| CMC_CAN | 2.4 × 1.4, centered | 2.0 × 1.25 | Silkscreen notch on left edge for pin 1 |
 | D_TVS | 2.1 × 2.4 | 1.3 × 2.0 (SOT-363) | Filled triangle poly marks pin 1 |
 | FB1 | 3.4 × 2.0 | 2.0 × 1.2 | Silkscreen tick on left edge for pin 1 |
 | C_X2Y | 1.4 × 0.9 | 1.0 × 0.5 | 0402 metric |

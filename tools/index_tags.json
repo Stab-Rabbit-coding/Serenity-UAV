@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-17",
+  "generated": "2026-08-23",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -217,8 +217,7 @@
       "tags": [
         "documentation",
         "emi-hardening",
-        "project-tracking",
-        "security"
+        "project-tracking"
       ],
       "archived": false
     },
@@ -4704,8 +4703,24 @@
       ],
       "archived": true
     },
+    "archives/bom_revP.json": {
+      "description": "Bill of materials, JSON (0 items)",
+      "tags": [
+        "archive",
+        "bom"
+      ],
+      "archived": true
+    },
     "archives/bom_revQ.csv": {
       "description": "Bill of materials, CSV (125 items)",
+      "tags": [
+        "archive",
+        "bom"
+      ],
+      "archived": true
+    },
+    "archives/bom_revQ.json": {
+      "description": "Bill of materials, JSON (0 items)",
       "tags": [
         "archive",
         "bom"
@@ -4959,6 +4974,15 @@
       "archived": true
     },
     "archives/serenity-rev-q.jsx": {
+      "description": "React/JSX specification component",
+      "tags": [
+        "archive",
+        "emi-hardening",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/serenity-rev-r.jsx": {
       "description": "React/JSX specification component",
       "tags": [
         "archive",
@@ -7720,16 +7744,6 @@
       ],
       "archived": false
     },
-    "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md": {
-      "description": "pcbnew 9.0.2 Python (SWIG) Binding Defects \u2014 PCB-Build Crash Report",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "pcb-design",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
     "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md": {
       "description": "Observer \u2194 phyCORE-AM62A SoM \u2014 Pad-Level Net Map",
       "tags": [
@@ -7815,6 +7829,15 @@
       "tags": [
         "avionics-hardware",
         "bom",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md": {
+      "description": "pcbnew 9.0.2 Python (SWIG) Binding Defects \u2014 PCB-Build Crash Report",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
         "pcb-design"
       ],
       "archived": false
@@ -9341,7 +9364,7 @@
       "archived": false
     },
     "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (167 items)",
+      "description": "Bill of materials, CSV (168 items)",
       "tags": [
         "bom",
         "specification"
@@ -9352,15 +9375,6 @@
       "description": "Bill of materials, JSON (168 items)",
       "tags": [
         "bom",
-        "specification"
-      ],
-      "archived": false
-    },
-    "current-specification/serenity-rev-r.jsx": {
-      "description": "React/JSX specification component",
-      "tags": [
-        "emi-hardening",
-        "security",
         "specification"
       ],
       "archived": false
@@ -9724,7 +9738,7 @@
       "archived": false
     },
     "docs/NOZZLE_DRIVE_TRADE.md": {
-      "description": "Nozzle-Drive Mechanism Trade Study (Rev R1a, 2026-07-07)",
+      "description": "Nozzle-Drive Mechanism Trade Study (Rev T, 2026-07-19)",
       "tags": [
         "documentation",
         "propulsion"
@@ -9870,35 +9884,11 @@
       ],
       "archived": false
     },
-    "docs/attribution_and_licencing.md": {
+    "docs/attribution_and_licensing.md": {
       "description": "Serenity UAV \u2014 Attribution and Licensing Policy",
       "tags": [
         "documentation",
         "licensing"
-      ],
-      "archived": false
-    },
-    "docs/attribution_and_licensing.md": {
-      "description": "Serenity UAV \u2014 Licensing & Attribution",
-      "tags": [
-        "documentation",
-        "licensing"
-      ],
-      "archived": false
-    },
-    "docs/bom_revP.json": {
-      "description": "Bill of materials, JSON (0 items)",
-      "tags": [
-        "bom",
-        "documentation"
-      ],
-      "archived": false
-    },
-    "docs/bom_revQ.json": {
-      "description": "Bill of materials, JSON (0 items)",
-      "tags": [
-        "bom",
-        "documentation"
       ],
       "archived": false
     },
@@ -10649,11 +10639,10 @@
       "archived": false
     },
     "gcs/README.md": {
-      "description": "Serenity UAV \u2014 Ground Control Station (Malcolm)",
+      "description": "Serenity UAV \u2014 Ground Control Station (Skipper)",
       "tags": [
         "documentation",
         "ground-control",
-        "redundancy-failover",
         "security"
       ],
       "archived": false
@@ -12348,9 +12337,9 @@
       "avionics/kicad/ENC-NACELLE-1.md",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
-      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
+      "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
@@ -12403,10 +12392,7 @@
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "docs/WBS_FEDERATION.md",
-      "docs/attribution_and_licencing.md",
       "docs/attribution_and_licensing.md",
-      "docs/bom_revP.json",
-      "docs/bom_revQ.json",
       "docs/bom_revR.json",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
@@ -12545,6 +12531,7 @@
       "archives/docs-superseded/serenity-rev-q.jsx",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity-rev-q.jsx",
+      "archives/serenity-rev-r.jsx",
       "avionics/AGENTS.md",
       "avionics/README.md",
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
@@ -12573,7 +12560,6 @@
       "avionics/kicad/fix_xcvr_labels.py",
       "avionics/observer/WBS.md",
       "avionics/rev-s1/WBS.md",
-      "current-specification/serenity-rev-r.jsx",
       "current-specification/serenity-rev-s.jsx",
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/BATTERY_MOUNT.md",
@@ -12622,7 +12608,6 @@
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
       "gcs/AGENTS.md",
-      "gcs/README.md",
       "gcs/SKIPPER_SPEC.md",
       "gcs/WBS.md",
       "gcs/skipper/hardware/docs/skipper_antenna_spec.md",
@@ -12641,7 +12626,6 @@
       "REFERENCES.md",
       "SECURITY.md",
       "TODO.md",
-      "WBS.md",
       "airframe/FreeCAD-scripts/serenity_assembly.py",
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
@@ -12670,6 +12654,7 @@
       "archives/serenity-rev-f.jsx",
       "archives/serenity-rev-p.jsx",
       "archives/serenity-rev-q.jsx",
+      "archives/serenity-rev-r.jsx",
       "archives/stale-20260601/files-revF/LICENSE_AND_ATTRIBUTION.md",
       "archives/stale-20260601/files-revF/serenity-drone-revF/docs/LICENSE_AND_ATTRIBUTION.md",
       "archives/stale-20260601/pico2-hat.jsx",
@@ -12717,7 +12702,6 @@
       "avionics/rev-s1/WBS.md",
       "current-specification/LICENSE_AND_ATTRIBUTION.md",
       "current-specification/README.md",
-      "current-specification/serenity-rev-r.jsx",
       "current-specification/serenity-rev-s.jsx",
       "docs/AGENTS.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
@@ -12773,7 +12757,6 @@
       "current-specification/LICENSE_AND_ATTRIBUTION.md",
       "deferred/LICENSE",
       "docs/LICENSE",
-      "docs/attribution_and_licencing.md",
       "docs/attribution_and_licensing.md",
       "docs/references/thingverse-serenity/LICENSE.txt",
       "gcs/LICENSE",
@@ -12791,7 +12774,6 @@
       "current-specification/TODO.md",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
-      "current-specification/serenity-rev-r.jsx",
       "current-specification/serenity-rev-s.jsx",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -13796,7 +13778,9 @@
       "airframe/diagrams/ring_frames/ring_rear_Y290_inner.csv",
       "archives/bom_revH1.json",
       "archives/bom_revP.csv",
+      "archives/bom_revP.json",
       "archives/bom_revQ.csv",
+      "archives/bom_revQ.json",
       "archives/bom_revR.csv",
       "archives/docs-superseded/bom_revQ.csv",
       "avionics/kicad/Observer/Observer_som_pinmap.csv",
@@ -13807,8 +13791,6 @@
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
-      "docs/bom_revP.json",
-      "docs/bom_revQ.json",
       "docs/bom_revR.json",
       "tools/compact_bom_entries.py"
     ],
@@ -13891,7 +13873,6 @@
       "airframe/openscad/fuselage/bow_sensor_faceplate.scad",
       "airframe/openscad/fuselage/bow_sensor_pod.scad",
       "airframe/stls/fuselage/bow_sensor_faceplate.stl",
-      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/DS_Laser_2P.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/DS_ToF_4P.kicad_mod",
@@ -14272,7 +14253,9 @@
       "archives/avionics-archives/kicad-archives/archive/gen_cape_b2_pcb.py",
       "archives/bom_revH1.json",
       "archives/bom_revP.csv",
+      "archives/bom_revP.json",
       "archives/bom_revQ.csv",
+      "archives/bom_revQ.json",
       "archives/bom_revR.csv",
       "archives/build_guide_00_cover.svg",
       "archives/build_guide_20_node_placement.svg",
@@ -14306,6 +14289,7 @@
       "archives/serenity-rev-o.jsx",
       "archives/serenity-rev-p.jsx",
       "archives/serenity-rev-q.jsx",
+      "archives/serenity-rev-r.jsx",
       "archives/serenity/.gitignore",
       "archives/serenity/MANIFEST.json",
       "archives/serenity/README.md",
@@ -14719,7 +14703,6 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
-      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -14730,6 +14713,7 @@
       "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
       "avionics/kicad/Observer/Observer_som_pinmap.csv",
+      "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
       "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
@@ -15108,7 +15092,6 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
-      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -15119,6 +15102,7 @@
       "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
       "avionics/kicad/Observer/Observer_som_pinmap.csv",
+      "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
       "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",

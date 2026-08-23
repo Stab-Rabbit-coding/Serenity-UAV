@@ -45,7 +45,7 @@ numeric order.)*
 
 #### 0.10.1 Systems
 
-→ detail: `docs/WBS.md` §1.10.1
+→ detail: `docs/WBS.md` §0.10.1
 
 - [ ] Verify and update airframe specifications vs as built for each component.
 - [ ] Verify avionics specifications vs as- built.
@@ -56,11 +56,8 @@ numeric order.)*
 
 → detail: `docs/WBS.md` §0.10.2
 
-- [ ] Verify and update all compliance and licensing documents.
-- [ ] Verify and update all README files and the starting with subsystem ones and correcting the root README to match.
 - [ ] Verify and update the system specification files and BOM.
 - [ ] Verify and update the WBS and TODO files.
-- [ ] Verify and update the REFERENCES.md file.
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
@@ -104,7 +101,7 @@ numeric order.)*
 - [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
 - [ ] Verify Part 107 dropped-object section number
 - [ ] Containment checks on assembly + pre-flight cards
-- [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
+- [ ] ★ Shed threshold vs maneuver envelope (2.0g = 0.98x)
 - [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
 - [ ] Set servo torque ceiling below T_slip (wear protection)
 - [ ] Servo mode: continuous rotation by construction (pin removed); confirm LibreServo v2 protocol commands
@@ -134,8 +131,6 @@ numeric order.)*
 
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
 
-- [ ] wing_nacelle_pylon_revo.stl
-- [ ] wings_s1223_revo.stl
 - [ ] Re-render + re-bake both wings — Rev S1b tip OML change
     (THICKNESS_SCALE_TIP 1.25→1.45, thickness-only section scaling); baked wing
     STLs and docs/img/wing_rev_r1a_sections.png are stale
@@ -206,13 +201,13 @@ numeric order.)*
         (current drive is a pushrod/bellcrank to one ring lever; 2 nozzles).
     - [x] Harden `tools/precommit_index.py`: `collect_files()` indexed every
         root-level loose FILE, and inside a git worktree `.git` IS a file, so a
-        regeneration from a worktree re-injected a bare `.git` entry (the artefact
+        regeneration from a worktree re-injected a bare `.git` entry (the artifact
         removed in 48eae05; it recurred via the `.githooks` pre-commit hook on
         2026-08-08). **RESOLVED 2026-08-09** — `collect_files()` now filters the
         walk through `git_tracked_paths()` (`git ls-files`), so the index is a
         deterministic function of the COMMIT rather than the working directory.
         Kills both failure modes at once: the worktree `.git` entry (git never
-        lists it in any checkout topology) and untracked local artefacts leaking
+        lists it in any checkout topology) and untracked local artifacts leaking
         in (154 of them — KiCad `*-backups/*.zip`, `~*.lck`, `fp-info-cache`,
         sliced gcode, `*.FCStd` — which CI's fresh clone never had, the actual
         cause of the "random" index-sync failures). Falls back to the plain walk
@@ -221,7 +216,7 @@ numeric order.)*
         excluded. The pre-commit hook is now safe to run anywhere, so `--no-verify`
         is no longer needed when committing index changes from a worktree.
     - [x] DevSkim `DS176209` false positives on the generated indexes —
-        **RESOLVED 2026-08-09**: excluded the three generated artefacts by PATH via
+        **RESOLVED 2026-08-09**: excluded the three generated artifacts by PATH via
         `ignore-globs` in `.github/workflows/devskim.yml` rather than disabling the
         rule repo-wide, so leftover-TODO detection stays active in real source. The
         alerts flagged the substring "TODO" inside indexed *filenames*
@@ -315,7 +310,7 @@ numeric order.)*
 ### 1.2d — Trust-Module MCU/TPM Retarget (MSPM0G351x-Q1 + SLB 9672)
 
 Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematics) and
-`avionics/kicad/retarget_pcb_footprints.py` (PCBs).  Parts per REF-SENSOR-013 and REF-SEC-002.
+`avionics/kicad/retarget_pcb_footprints.py` (PCBs).  Parts per REF-SENSOR-017 and REF-SEC-002.
 
 | Board | MCU | Package | TPM |
 |---|---|---|---|
@@ -347,7 +342,7 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] **Confirm MSPM0G351x-Q1 errata and TRM applicability.** SLAZ742G covers MSPM0G3x0x /
       G1x0x / G3x0x-Q1 and does not enumerate MSPM0G3518/3519; SLAU846E contains no
       occurrence of either part number. Obtain the correct errata/TRM for MSPM0G351x-Q1
-      before firmware sign-off (REF-SENSOR-014 "requires verification").
+      before firmware sign-off (REF-SENSOR-018 "requires verification").
 - [ ] **Update firmware pinmux constants for the new family.** CAN moves from
       `CAN_TX`/`CAN_RX` PF5/PF6 to `CAN0_TX`/`CAN0_RX` **PF12**; PA15 offers `SPI1_CS2`
       (PF3) rather than `SPI1_CS0`; PB15/PB16 offered UART2 on the old part and UART7 on the
@@ -456,7 +451,7 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Epoxy keel through all hull sections; cure 2h. Datum marks at 9…
 - [ ] Bond ring frames at all 5 station notches; cure 1h.
 - [ ] Bond access panel frames A–F into hull sections (5-min epoxy, 3…
-- [ ] Install M2.5 nylon standoffs in bays A, B, D, E (floor 6mm + in…
+- [ ] Install M2.5 nylon standoffs in bays A, B, C, D (floor 6mm + in…
 - [ ] Bond wing spar pocket inserts at wing root stations, both sides.
 - [ ] Bond tilt servo mount brackets at wing root bay interior (one p…
 - [ ] Install M3 heat-set inserts ×4 at belly cargo hard-point locati…
@@ -558,7 +553,7 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Daisy-chain CAN FD: 120Ω (soldered) → CN1 → FC1 → exit Shepherd…
 - [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Inara's shuttle (Ba…
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT…
-- [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect…
+- [ ] Cap Simon's medbay (Bay D) end of ETH-EA conduit (will connect…
 - [ ] Mount CN2 XO on Inara's shuttle (Bay B) floor standoffs; inser…
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] CN2-LOG
@@ -567,7 +562,7 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle: CN…
 - [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's s…
 - [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Pilot ET…
-- [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in…
+- [ ] Cap River's room (Bay C) end of ETH-BD (will connect to CN3 in…
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR con…
 - [ ] Provision TPM 2.0 (SLB9672) on CN1, FC1, CN2, FC2 — unique key…
 - [ ] Verify CPLD write-blocker on CN1 and CN2: echo test > /mnt/flig…
@@ -609,22 +604,22 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase6
 
 - [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Pilot in Inara's s…
-- [ ] Mount CN3 XO on River's room (Bay D) floor standoffs; insert P…
+- [ ] Mount CN3 XO on River's room (Bay C) floor standoffs; insert P…
 - [ ] CN3-LOG
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 XO J_XCVR…
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mou…
 - [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's ro…
 - [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (B…
 - [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Pilot ETH-1…
-- [ ] Power tap River's room (Bay D); verify 5V ±0.05V.
-- [ ] Mount CN4 XO on Simon's medbay (Bay E) standoffs; insert PB2-I…
+- [ ] Power tap River's room (Bay C); verify 5V ±0.05V.
+- [ ] Mount CN4 XO on Simon's medbay (Bay D) standoffs; insert PB2-I…
 - [ ] CN4-LOG
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN4 header.
 - [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mou…
 - [ ] 120Ω PERMANENT
 - [ ] Connect ETH-DE (River's room → Simon's medbay): FC3 Cape-A ETH-…
 - [ ] Connect ETH-EA ring-close (Simon's medbay → Shepherd's room): F…
-- [ ] Power tap Simon's medbay (Bay E); verify 5V ±0.05V.
+- [ ] Power tap Simon's medbay (Bay D); verify 5V ±0.05V.
 - [ ] TPM 2.0 on CN3, FC3, CN4, FC4 — unique key material per node.
 - [ ] CPLD write-blocker verification on CN3 and CN4.
 - [ ] Verify RSTP ring: bridge vlan show; disconnect one ETH cable →…
@@ -746,7 +741,7 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verifica…
 - [ ] Intake frame tongues fully seated in the resized scoop windows
 - [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet…
-- [ ] EDF seated at station ~430mm, centreline ±2mm; rotation verifie…
+- [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verifie…
 - [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
 - [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.0…
 - [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on b…
@@ -916,9 +911,9 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 
 ### 5.4 - Open Source Hardware Certification
 
-→ detail: §0.9, `docs/WBS.md` §0.9, & `docs/WBS.md` §5.4
+→ detail: `docs/WBS.md` §0.9
 
-- [ ] Get OSHW certification
+- [ ] Submit OSHW self-certification — requires the human maintainer to act
 
 ### 6.1 — Branch Reconciliation (2026-06-09)
 

@@ -272,7 +272,7 @@ here.
 |---|---|---|
 | V_min at 0° (cruise) | 66.3 kt | Computed from design data |
 | V_min at θ_hover ≈ 38.3° and above | 0 kt (thrust-borne) | Computed from design data |
-| V_NE (never-exceed) | 87 kt | Regulatory ceiling (§107.51(a)); actual top speed TBD, Phase 9 |
+| V_NE (never-exceed) | 87 kt | Regulatory ceiling (§107.51(a)); actual top speed pending flight test (Phase 9) |
 | AGL ceiling | 400 ft | Regulatory (§107.51(b)) |
 | MSL / density-altitude margin | ≈ 15,000 ft density altitude before T/W < 1.0 | Computed, first-order estimate |
 | Max demonstrated crosswind | Pending flight test | Phase 9 WBS acceptance target ≥ 10 kt (hover) |

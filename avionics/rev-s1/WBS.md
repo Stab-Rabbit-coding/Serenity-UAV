@@ -253,7 +253,7 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
         Molex Nano-Fit 6 V output connector).
     - Add third TPS54620 5 V/3 A instance for dedicated servo rail (shares 5 V feedback
         reference with avionics BECs; separate output capacitor bank; Molex Nano-Fit
-        connector labelled SERVO-5V).
+        connector labeled SERVO-5V).
     - Verify 5 V servo current budget: 2× DS3218MG = 2× 500 mA stall = 1.0 A peak;
         3 A rated output provides 3× headroom — adequate.
     - Update silk/fab: "Flight Engineer Rev S1"; update schematic title block.

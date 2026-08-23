@@ -77,7 +77,7 @@ Task 1.9 Avionics Workload Balancing encompasses two subtasks with a total of 44
 
 14. [x] **Pilot TPM symbol pin numbers** (✅ DOCUMENTED 2026-08-01)
     - **Issue:** Pilot.kicad_sch TPM symbol has incorrect pin numbers vs. datasheet Rev 1.4
-    - **Resolution:** Documented in `WASH_FOOTPRINT_VERIFICATION.md` §TPM
+    - **Resolution:** Documented in `PILOT_FOOTPRINT_VERIFICATION.md` §TPM
     - **Recommendation:** Substitute with verified `SLB9672_TPM` symbol at next Pilot schematic rebuild
     - **Blocking:** None — PCB unaffected if not re-spun
 
@@ -138,7 +138,7 @@ Task 1.9 Avionics Workload Balancing encompasses two subtasks with a total of 44
 |----------|---------|--------|
 | `AK7455_CALIBRATION_SPECIFICATION.md` | AK7455 firmware spec + test plan | ✅ Complete |
 | `TILT_ENCODER_WIRING_EMI_SPEC.md` | EMI wiring routing + validation | ✅ Complete |
-| `WASH_FOOTPRINT_VERIFICATION.md` (updated) | Pilot board footprint audit + fixes | ✅ Referenced |
+| `PILOT_FOOTPRINT_VERIFICATION.md` (updated) | Pilot board footprint audit + fixes | ✅ Referenced |
 | `GENERATOR_DRIFT_ANALYSIS.md` | Flight Engineer gen_flight_engineer.py analysis | ✅ Complete |
 
 ---
