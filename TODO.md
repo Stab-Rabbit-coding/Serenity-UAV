@@ -134,8 +134,6 @@ numeric order.)*
 
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
 
-- [ ] wing_nacelle_pylon_revo.stl
-- [ ] wings_s1223_revo.stl
 - [ ] Re-render + re-bake both wings — Rev S1b tip OML change
     (THICKNESS_SCALE_TIP 1.25→1.45, thickness-only section scaling); baked wing
     STLs and docs/img/wing_rev_r1a_sections.png are stale
@@ -916,9 +914,9 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 
 ### 5.4 - Open Source Hardware Certification
 
-→ detail: §0.9, `docs/WBS.md` §0.9, & `docs/WBS.md` §5.4
+→ detail: `docs/WBS.md` §0.9
 
-- [ ] Get OSHW certification
+- [ ] Submit OSHW self-certification — requires the human maintainer to act
 
 ### 6.1 — Branch Reconciliation (2026-06-09)
 

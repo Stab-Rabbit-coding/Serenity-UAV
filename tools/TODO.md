@@ -22,7 +22,7 @@
 Build-automation conventions (hull-frame bake, Blender hollowing pipeline, mesh verification, SCAD/STL generation) are governed by [`tools/AGENTS.md`](AGENTS.md) and the root `AGENTS.md` pipeline rules.
 
 
-## Automation tasks embedded in other branches (20 open, tracked there)
+## Automation tasks embedded in other branches (17 open, tracked there)
 
 These are **owned** as checkboxes under airframe §1.1 (geometry, now split across several
 detail files — see below) and the physical-build Phase 0 (`graphical-build-guide/WBS.md`).
@@ -40,10 +40,7 @@ Close them in `WBS.md` there; this list is a read-only convenience view for the 
 - (`airframe/fuselage-mid/WBS.md` §1.1.1) **Slicer verification** — open baked `middle_shell24_2mm_repaired.stl`
 - (`airframe/fuselage-mid/WBS.md` §1.1.1) **neck_intake_frame.stl (Phase 11)**
 - (`airframe/fuselage-mid/WBS.md` §1.1.1) **aft_edf_plenum.stl**
-- (`airframe/wings-nacelles/WBS.md` §1.1.3) **wing_nacelle_pylon_revo.stl**
-- (`airframe/fuselage-joints/WBS.md` §1.1.1) **wings_s1223_revo.stl** — Rev R1 planform
 - (`airframe/landing-gear/WBS.md` §1.1.4) **LG-10 Finalize the 4 corner post placements**
-- (`airframe/landing-gear/WBS.md` §1.1.4) **`landing_legs_hull_r1.stl` is orphaned** *(resolved 2026-07-12)*
 - (`airframe/landing-gear/WBS.md` §1.1.4) **Render overview SVGs using FreeCAD TechDraw**
 - (`airframe/WBS.md` §1.1.5) **Run FreeCAD catalog** — execute `serenity_placeholders_assembly.py`
 - (`airframe/WBS.md` §1.1.5) **Add Phase-11 (deferred) items to catalog**

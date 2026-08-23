@@ -267,8 +267,8 @@ Updates" item above. See docs/WBS.md §0.9 for the note.)*
 #### 1.1.2 — Wings
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
 
-- [ ] wing_nacelle_pylon_revo.stl
-- [ ] wings_s1223_revo.stl
+- [x] wing_nacelle_pylon_revo.stl
+- [x] wings_s1223_revo.stl
 - [x] Spar bore de-skewed
 - [x] Tip thickened for spar fit
 - [x] EDF cableway added
@@ -311,7 +311,7 @@ Updates" item above. See docs/WBS.md §0.9 for the note.)*
 - [ ] VERIFY Rev T CG (first-pass, band ≈109–112 mm)
 - [ ] Re-solve single-straight-spar alignment for +7 mm pivot move
 - [ ] Nozzle drive: replace invalid spar-crank w/ wing-referenced sync…
-- [ ] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
+- [x] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
 - [ ] Stator spar crossing (Rev T2): 11 vanes, coprime w/ 12-blade rotor
 - [ ] Ø72 nozzle-pocket eats the aft cowl tail…
 - [x] Re-derive rotating-assembly CG for Rev T pushrod/cam drive…

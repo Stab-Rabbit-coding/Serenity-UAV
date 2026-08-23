@@ -20,10 +20,10 @@
 | Master § | Branch | Open | First flight |
 |----------|--------|-----:|:------------:|
 | §0.5 | 0.5 — Citation Completeness Audit (All Source Files) | 3 | — |
-| §0.1 | 0.1 — FCC Part 95 Section-Number Verification | 1 | — |
-| §0.7 | 0.7 — CI Lint Scope and Repo-Wide Lint Debt | 1 | — |
+| §0.1 | 0.1 — FCC Part 95 Section-Number Verification | 0 | — |
+| §0.7 | 0.7 — CI Lint Scope and Repo-Wide Lint Debt | 0 | — |
 | §0.8 | 0.8 — Tilt-Spar Material Allowables + Hall Encoder | 3 | — |
-| §0.9 | 0.9 — Licensing Updates | 0 | — |
+| §0.9 | 0.9 — Licensing Updates | 1 | — |
 | §1.5 | 1.5 — Documentation | 3 | — |
 | §1.6 | 1.6 — Rev Q: Repo-Wide Architecture Propagation | 0 | — |
 | §1.7 | 1.7 — Rev R: Component Rev Sync + s_ Prefix Removal | 0 | — |
@@ -33,7 +33,7 @@
 | §6.1 | 6.1 — Branch Reconciliation / Pre-Flight Compliance | 1 | &#9733; |
 | §6.2 | 6.2 — STL Mesh Repair | 0 | — |
 | §6.3 | 6.3 — Rev S Checkpoint | 0 | — |
-| | **Total open (this subsystem)** | **17** | |
+| | **Total open (this subsystem)** | **21** | |
 
 ---
 
@@ -366,6 +366,10 @@ gaps. Full policy: `docs/attribution_and_licensing.md` (new).
     Zigbee dependency is not OSI-licensed (TI TSPA), and Phase 7 firmware source doesn't
     exist yet (only the architecture spec does). Certification submission itself requires the
     human maintainer to act — this repository can only prepare the documentation.
+- [ ] **Submit OSHW self-certification (root `TODO.md` §5.4).** Requires the human maintainer
+    (Steve Griffing) to submit the OSHWA Certification Mark License Agreement — no repo change
+    can close this. Blocked on the two gaps above (Zigbee Z-Stack licensing, Phase 7 firmware
+    source) being resolved first; see `docs/OSHW_CERTIFICATION.md`.
 - [x] **Rename avionics boards to non-trademarked names — CLOSED 2026-08-01.**
     Wash, Zoë, Kaylee, Emma, Jayne, and Malcolm ("Mal") were the original Firefly-character
     board names in the authoritative root `AGENTS.md` §9 naming table (PACE failover roles,
