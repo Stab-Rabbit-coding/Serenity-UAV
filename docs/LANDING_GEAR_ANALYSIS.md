@@ -141,8 +141,8 @@ The landing gear does NOT need to be reusable after a worst-case drop
 
 Measured from [REF-CAD-003] Sheet 5 "Ventral Surface Plan View": fore feet
 at **39.2%** of hull length, aft feet at **63.9%**, feet **≈1.45× hull
-half-width** off centreline. Mapped to the baked 24-in hull (Y −305.7 …
-+384.3 mm, centreline X = −169.9, cargo belly Z = 0). **Bay hip height is
+half-width** off centerline. Mapped to the baked 24-in hull (Y −305.7 …
++384.3 mm, centerline X = −169.9, cargo belly Z = 0). **Bay hip height is
 identical for both leg-length variants** (Z +38 above the belly on the
 cargo flank) — only the leg below the hip changes length:
 
@@ -154,7 +154,7 @@ cargo flank) — only the leg below the hip changes length:
 | Aft-stbd | −260.8, +107.0, +38 | +152.0° | −318.2, +137.5 |
 
 Feet land within 5 mm of the exact canonical stations (Y −35.2 / +135.2,
-X ±144 from centreline); the small shift unifies the hip→foot moment arm
+X ±144 from centerline); the small shift unifies the hip→foot moment arm
 (41.9 mm or 65 mm, per variant) on all four corners so **one leg part
 serves every corner**. All four bays sit on the **cargo-shell flanks**
 (fore: pod nose slope at Y ≈ −7; aft: pod aft flank at Y ≈ +107; flank
@@ -166,7 +166,7 @@ variants (unchanged by leg length).
 ### 2.3 Load Share — the CG Correction
 
 Build CG is at hull-frame **Y = +111.5 mm** (nacelle pivot = canonical
-"Engine Pivots 360°" balance centre). Against the canonical wheelbase this
+"Engine Pivots 360°" balance center). Against the canonical wheelbase this
 is **86% aft**:
 
 ```text
@@ -254,16 +254,16 @@ proportion and detail.
    why they measure 5.6-64.1° off the local normal. Relocate them to the
    aperture and aim each along its own local surface normal.
 
-   **RESOLVED (owner, 2026-08-09): the sponsons are already modelled in the
+   **RESOLVED (owner, 2026-08-09): the sponsons are already modeled in the
    cargo section STLs.** No new envelope is needed and there is no
    double-walling risk. Owner's description of the lower front of the cargo
-   section: the rectangular canonical cargo door in the centre, then vertical
+   section: the rectangular canonical cargo door in the center, then vertical
    corners, then vertical sides running back to an internal corner each side,
    then a trapezoidal flat that runs into a sloped side — and the run with the
    **trapezoidal cross-section is the sponson**.
 
    Measured on the baked `cargo_sect_shell24_2mm_repaired.stl`, port side
-   (half-width = X − centreline −169.9):
+   (half-width = X − centerline −169.9):
 
    | Station | Face | Z span | half-width | outer X |
    | --- | --- | --- | --- | --- |
@@ -280,7 +280,7 @@ proportion and detail.
    - The **vertical walls** squared to port/starboard (Y −7: Z 10–40 at
      half-width 56.04) are the **hull sides forward of the sponson**. They are
      NOT the sponson and NOT a mounting face.
-   - The **angled trapezoidal flats** are the **modelled landing-gear
+   - The **angled trapezoidal flats** are the **modeled landing-gear
      openings** — this is where the gear mounts. At Y −7 the fore flat measures
      Z 45–48, half-width 67.1→67.7, outer X −102.8→−102.2.
    - The **sponson** is the volume **between the two trapezoidal flats on each
@@ -319,7 +319,7 @@ proportion and detail.
    opening outline on each, and re-derive the §2.2 hip stations onto those
    faces.
 2. **The bay "recess" is a hinged DOOR**, a separate gridded panel, not a rim
-   moulded into the skin. Its outline is an irregular pentagon with one clipped
+   molded into the skin. Its outline is an irregular pentagon with one clipped
    corner — not the symmetric trapezoid currently in `bay_cowl()`. The
    trapezoid is a fair first approximation of the aperture but the door itself
    is a distinct part that Rev R6 does not model at all.
@@ -469,7 +469,7 @@ expansion of the exact chord `2√(ℓ² − h²)` about `h = 0`, with `ℓ = B/
 
 The implemented form divides by `2B` where the mechanism divides by `B/2`. The
 ratio `Δ_approx / Δ_script` is exactly **4.00** at every bow rise, confirming an
-algebra slip rather than a modelling choice. At the ductile design point
+algebra slip rather than a modeling choice. At the ductile design point
 (B = 55 mm, h₀ = 3.5 mm):
 
 | h (mm) | 2-hinge exact | 2-hinge approx | parabola, const. arc | script |
@@ -612,7 +612,7 @@ the build's analog of canon's "Cargo Bay Landing Pad".
 
 | Parameter | 1.5in (default) | 3.0in (extended) |
 | --- | --- | --- |
-| Geometry | One-piece: hip hub + bellcrank sockets + stop tab, twin-Ø14 mm cylinder thigh @ 18 mm centres + web (canonical telescope collars + piston rods), knee/ankle styling discs, slotted shin, square foot spigot | Same geometry family, longer thigh/shin |
+| Geometry | One-piece: hip hub + bellcrank sockets + stop tab, twin-Ø14 mm cylinder thigh @ 18 mm centers + web (canonical telescope collars + piston rods), knee/ankle styling discs, slotted shin, square foot spigot | Same geometry family, longer thigh/shin |
 | Infill / layers | 100%, 0.15 mm, print lying on −Y face | Same |
 | Mass (STL volume) | 27.65 cm³ → ≈36.0 g each × 4 = 144 g | 40.64 cm³ → ≈52.8 g each × 4 = 211 g |
 

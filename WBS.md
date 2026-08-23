@@ -152,7 +152,7 @@ Updates" item above. See docs/WBS.md §0.9 for the note.)*
 - [x] Resolve nacelle port/stbd label swap.
 - [ ] Re-verify head↔cargo joint bosses in hull Y.
 - [x] Regenerate cargo doors from the baked shell.
-- [x] Correct hinge location: outboard flank, not centreline.
+- [x] Correct hinge location: outboard flank, not centerline.
 - [x] Consolidate duplicate cargo shell copies.
 - [ ] Hull-frame placements for VERIFY parts
 - [x] Generate battery_tray.stl and belly_panel.stl
@@ -236,7 +236,7 @@ Updates" item above. See docs/WBS.md §0.9 for the note.)*
 - [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
 - [ ] Verify Part 107 dropped-object section number
 - [ ] Containment checks on assembly + pre-flight cards
-- [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
+- [ ] ★ Shed threshold vs maneuver envelope (2.0g = 0.98x)
 - [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
 - [ ] Set servo torque ceiling below T_slip (wear protection)
 - [ ] Servo mode: continuous rotation by construction (pin removed); confirm LibreServo v2 protocol commands
@@ -846,7 +846,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verifica…
 - [ ] Intake frame tongues fully seated in the resized scoop windows
 - [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet…
-- [ ] EDF seated at station ~430mm, centreline ±2mm; rotation verifie…
+- [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verifie…
 - [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
 - [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.0…
 - [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on b…

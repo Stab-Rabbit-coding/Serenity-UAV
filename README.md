@@ -5,7 +5,7 @@
 ### A flight-worthy, security-hardened EDF tilt-rotor replica of the Firefly-class ship *Serenity*
 
 [![Hardware License: CERN-OHL-W 2.0](https://img.shields.io/badge/hardware-CERN--OHL--W%202.0-004488)](LICENSE)
-[![Docs/Code License: CC BY-SA 4.0](https://img.shields.io/badge/docs%2Fcode-CC%20BY--SA%204.0-8250df)](docs/attribution_and_licencing.md)
+[![Docs/Code License: CC BY-SA 4.0](https://img.shields.io/badge/docs%2Fcode-CC%20BY--SA%204.0-8250df)](docs/attribution_and_licensing.md)
 [![CAD: FreeCAD | OpenSCAD | Blender](https://img.shields.io/badge/CAD-FreeCAD%20%7C%20OpenSCAD%20%7C%20Blender-fe7d37)](airframe/README.md)
 [![PCB: KiCad 9](https://img.shields.io/badge/PCB-KiCad%209-1BA94C)](avionics/README.md)
 [![Firmware: C | Python](https://img.shields.io/badge/firmware-C%20%7C%20Python-2f81f7)](avionics/firmware/)
@@ -69,7 +69,7 @@ Throughout the mission, the aircraft must also:
 
 | Parameter | Value |
 |-----------|-------|
-| Length | 27.17 in (690 mm) |
+| Length | 24.0 in (609 mm) |
 | Wingspan | 19.1 in (486 mm) |
 | Height | 7.93 in (201.5 mm) |
 | AUW — Phases 5–10 (nacelles only) | ~8.62 lbm (3,911 g) |
@@ -230,7 +230,7 @@ Dual-licensed by Steve Griffing, PE(CSE), CISSP-ISSEP, CPP:
   firmware/tooling source, build guides, and SVG diagrams. Full text:
   `LICENSES/CC-BY-SA 4.0`, [creativecommons.org/licenses/by-sa/4.0](https://creativecommons.org/licenses/by-sa/4.0).
 
-See `docs/attribution_and_licencing.md` for the full policy, the per-subsystem `LICENSE`
+See `docs/attribution_and_licensing.md` for the full policy, the per-subsystem `LICENSE`
 federation map, and the CERN-OHL-W "Available Component" treatment of upstream
 canonical-reference geometry. Revision S, July 2026.
 
@@ -258,7 +258,7 @@ Covered under **CERN-OHL-W 2.0** (hardware):
 - PCB schematics and Gerber files for Pilot, XO, Flight Engineer, and Commo
 - Circuit diagrams, pinout tables, and wiring specifications
 - Mechanical drawings and assembly specifications
-- Any derived hardware must carry CERN-OHL-W 2.0 (or a compatible licence) and attribute
+- Any derived hardware must carry CERN-OHL-W 2.0 (or a compatible license) and attribute
   all upstream authors
 
 Covered under **CC BY-SA 4.0** (documentation, code, scripts, non-hardware drawings):

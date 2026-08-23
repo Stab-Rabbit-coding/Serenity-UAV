@@ -5,7 +5,7 @@
 **Current design revision:** Rev S (2026-07-04)
 
 > **Reference index — not a checkbox owner.** Current Specification has no WBS branch that it owns
-> exclusively; its work is embedded in other subsystems' branches. To honour the
+> exclusively; its work is embedded in other subsystems' branches. To honor the
 > "close an item in exactly one place" rule, this file does **not** re-list open
 > checkboxes. It is a curated pointer index into the master [`WBS.md`](../WBS.md)
 > and the owning subsystem `WBS.md`/`TODO.md` files. **&#9733; = on the critical path to

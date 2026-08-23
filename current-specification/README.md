@@ -24,7 +24,7 @@
   "metadata": {
     "revision": "Rev S",
     "date": "2026-07-04",
-    "hull_length": "690.0 mm (27.17 in)",
+    "hull_length": "609.6 mm (24 in)",
     "auw": "3911 g (Phase 5-10, nacelles only)",
     "design_phase": 5
   },
@@ -212,7 +212,7 @@ Every part in the BOM has a cross-reference to:
 
 All BOM files are **CC BY 4.0**.
 
-See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licencing.md`](../docs/attribution_and_licencing.md)
+See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md)
 for full details.
 
 ---

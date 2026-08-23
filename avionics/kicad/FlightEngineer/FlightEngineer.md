@@ -532,7 +532,7 @@ of all ICs on the board.
 | EMI gasket | Parker Chomerics CHO-SEAL 1217 silver-aluminum conductive elastomer strip (or Laird Techspray BER-13 beryllium-copper finger strip) on all four lid seam faces; minimum 50 % compression at closure |
 | Gasket goal | Seam impedance < 0.1 mΩ at 1 GHz; ensures SE contribution from seam > 80 dB |
 | Ventilation | Waveguide honeycomb panel, 18 × 18 mm active area, hexagonal cells ≤ 2 mm inscribed diameter (λ/20 at 7.5 GHz, safe to 6 GHz cellular band); adhesive-bonded to ventilation aperture in enclosure floor |
-| Lid fasteners | 8× M3 × 6 mm stainless SHCS on 25 mm centres; torque 0.3 N·m (maintains gasket compression) |
+| Lid fasteners | 8× M3 × 6 mm stainless SHCS on 25 mm centers; torque 0.3 N·m (maintains gasket compression) |
 | Mass estimate | ~90 g (enclosure + lid + gasket + hardware) |
 
 ### Cable Entry — EMC Glands

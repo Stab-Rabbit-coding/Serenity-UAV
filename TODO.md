@@ -104,7 +104,7 @@ numeric order.)*
 - [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
 - [ ] Verify Part 107 dropped-object section number
 - [ ] Containment checks on assembly + pre-flight cards
-- [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
+- [ ] ★ Shed threshold vs maneuver envelope (2.0g = 0.98x)
 - [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
 - [ ] Set servo torque ceiling below T_slip (wear protection)
 - [ ] Servo mode: continuous rotation by construction (pin removed); confirm LibreServo v2 protocol commands
@@ -206,13 +206,13 @@ numeric order.)*
         (current drive is a pushrod/bellcrank to one ring lever; 2 nozzles).
     - [x] Harden `tools/precommit_index.py`: `collect_files()` indexed every
         root-level loose FILE, and inside a git worktree `.git` IS a file, so a
-        regeneration from a worktree re-injected a bare `.git` entry (the artefact
+        regeneration from a worktree re-injected a bare `.git` entry (the artifact
         removed in 48eae05; it recurred via the `.githooks` pre-commit hook on
         2026-08-08). **RESOLVED 2026-08-09** — `collect_files()` now filters the
         walk through `git_tracked_paths()` (`git ls-files`), so the index is a
         deterministic function of the COMMIT rather than the working directory.
         Kills both failure modes at once: the worktree `.git` entry (git never
-        lists it in any checkout topology) and untracked local artefacts leaking
+        lists it in any checkout topology) and untracked local artifacts leaking
         in (154 of them — KiCad `*-backups/*.zip`, `~*.lck`, `fp-info-cache`,
         sliced gcode, `*.FCStd` — which CI's fresh clone never had, the actual
         cause of the "random" index-sync failures). Falls back to the plain walk
@@ -221,7 +221,7 @@ numeric order.)*
         excluded. The pre-commit hook is now safe to run anywhere, so `--no-verify`
         is no longer needed when committing index changes from a worktree.
     - [x] DevSkim `DS176209` false positives on the generated indexes —
-        **RESOLVED 2026-08-09**: excluded the three generated artefacts by PATH via
+        **RESOLVED 2026-08-09**: excluded the three generated artifacts by PATH via
         `ignore-globs` in `.github/workflows/devskim.yml` rather than disabling the
         rule repo-wide, so leftover-TODO detection stays active in real source. The
         alerts flagged the substring "TODO" inside indexed *filenames*
@@ -746,7 +746,7 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verifica…
 - [ ] Intake frame tongues fully seated in the resized scoop windows
 - [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet…
-- [ ] EDF seated at station ~430mm, centreline ±2mm; rotation verifie…
+- [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verifie…
 - [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
 - [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.0…
 - [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on b…

@@ -110,7 +110,7 @@ The bore (nav wires, §5) and the keyway wall (§3, §8) are **functional
 requirements**, so the *section* is held fixed and only the material is traded.
 With geometry fixed, bending σ = 35.9 MPa and torsion τ = 28.8 MPa are identical
 for every candidate (§3.1–3.2); only the allowables, moduli, and fatigue/joint
-behaviour move.
+behavior move.
 
 > Allowables below are **typical handbook values — require MMPDS-2023 / AMS /
 > mill-cert verification before release** (REFERENCES.md requires-verification
@@ -154,7 +154,7 @@ the discriminators.**
 - **CF (either form)** — fails the functional gate: cannot take a keyed torque
   joint (delaminates) and abrades the bearing journals. Out regardless of its
   mass advantage. Confirms §3.4.
-- **6061 / 7075 aluminium & 316 SS** — **no fatigue endurance limit** → a
+- **6061 / 7075 aluminum & 316 SS** — **no fatigue endurance limit** → a
   rotating, gust-cycled, keyed shaft in these is a finite-life, inspection-
   interval part. **7075-T6** is the honest lightweight fallback (−63 g/pair,
   static FOS 14/10) now that the Hall sensor removes the wind-up penalty; 6061
@@ -232,7 +232,7 @@ existing shell, no OML change.
 housing is **unchanged**; the sector simply relocates from the retired pylon to
 the fixed wingtip (coaxial with the spar), and Pinion A meshes it as before.
 Reason: shrinking to R14 breaks the one-shaft nozzle drive (`PINION_A_Y = 30.5`
-does double duty as the sector-mesh AND internal-ring-mesh centre distance), so
+does double duty as the sector-mesh AND internal-ring-mesh center distance), so
 it would need a reintroduced idler for marginal gain. The shell-overlay study
 (`airframe/openscad/nacelles/gear_option_compare.scad`) confirmed R22's Pinion A
 stays within the existing nacelle housing blister, while R14 only fits by adding
@@ -321,7 +321,7 @@ Dependencies opened by adopting 8 mm:
 
 ### 8.1 Rev R2d implementation notes (2026-07-19)
 
-The wingtip interface has since been modelled in `wings_s1223_revo.scad`, and three
+The wingtip interface has since been modeled in `wings_s1223_revo.scad`, and three
 geometry issues were found and fixed **using the parametric numbers** (no STL guesswork):
 
 - **Wingtip bearing downsized F688ZZ → MF128ZZ (Ø16 → Ø12).** The Ø16 seat radius
@@ -362,7 +362,7 @@ It clears all three gates:
 (zinc/cadmium plate, journals ground) — the bare tube rusts at the bearing
 journals; add it to the BOM finish spec. **17-4 PH H1075 stainless is the
 qualified plating-free alternative** (same section/mass/stiffness, higher FOS, no
-plating; higher cost + make-from-bar). **7075-T6 aluminium** is the mass-critical
+plating; higher cost + make-from-bar). **7075-T6 aluminum** is the mass-critical
 fallback (−63 g/pair) now that the joint Hall sensor (§1, §3.5) removes the
 torsional-wind-up penalty — but with no fatigue endurance limit it is a
 life-limited, inspected part. All allowables pending MMPDS/AMS verification (§7,

@@ -38,7 +38,7 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
 - [x] **Built `tools/verify_bow_pod.py`** — ray-casts each bore against the baked
     `head_shell24_2mm_repaired.stl` and reports skin-landing, wall thickness, interior-pocket
     clearance, and aperture-row fit.  Reproducible; supersedes the eyeball-in-slicer checks.
-- [x] **Located the canonical bow mounting flat** — centre hull (−167, −301, 120), normal
+- [x] **Located the canonical bow mounting flat** — center hull (−167, −301, 120), normal
     (0, −0.766, −0.643) = 39.8° about X, ~26.4 × 15 mm (matches the 1.04 × 0.59 in spec).
 - [x] **Placed + skin-verified all three apertures on the flat (3/3 PASS):** camera hull
     (−161.2, −300.7, 116.0) Ø10; ToF hull (−177.7, −301.0, 116.6) Ø8; laser hull
@@ -96,7 +96,7 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
     did: 3/3 PASS, 2026-06-30). Run *after* the cut, the intended spot is now a hole, so the
     ray correctly sails through and reports hitting the *far* wall instead — an expected
     consequence of the tool's pre-cut design, not a regression. The actually meaningful
-    post-cut check — `mesh.contains()` at each of the three aperture-centre hull points —
+    post-cut check — `mesh.contains()` at each of the three aperture-center hull points —
     confirms all three are void (outside the solid), i.e. the cuts landed exactly where
     intended: camera (−161.20,−300.68,+116.01), ToF (−177.67,−300.98,+116.61), laser
     (−170.67,−299.94,+117.14) — all `contains=False` ✓.

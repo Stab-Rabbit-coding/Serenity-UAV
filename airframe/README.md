@@ -152,7 +152,7 @@ See root [`REFERENCES.md`](../REFERENCES.md) for complete reference catalog.
 **Documentation:** CC BY 4.0  
 **Third-party CAD references:** [REF-CAD-002] [REF-CAD-003] (see REFERENCES.md for license chains)
 
-See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licencing.md`](../docs/attribution_and_licencing.md)
+See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md)
 for full licensing details.
 
 ---

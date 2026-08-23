@@ -51,7 +51,7 @@ Passing STLs are reported with their Z-range and vertex count (for tracking phys
 **Usage:**
 
 ```bash
-python3 tools/validate_kicad.py --boards "Wash,Zoë,Kaylee,Jayne" --output report.json
+python3 tools/validate_kicad.py --boards "Pilot,XO,FlightEngineer,Observer" --output report.json
 ```
 
 **Requires:** KiCad ≥9.0 (`kicad-cli` available on PATH)
@@ -156,26 +156,51 @@ Located in subsystem directories:
 
 ### Airframe Scripts
 
-- **`freecad-scripts/serenity_assembly.py`** — FreeCAD Python macro to regenerate the master
-  assembly from component STLs
-- **`blender-scripts/serenity_render_views.py`** — Blender headless renderer for isometric/
-  cardinal silhouettes (used in build-guide SVG generation)
+- **`airframe/FreeCAD-scripts/serenity_assembly.py`** — FreeCAD Python macro to regenerate the
+  master assembly from component STLs
+- **`airframe/blender-scripts/serenity_render_views.py`** — Blender headless renderer for
+  isometric/cardinal silhouettes (used in build-guide SVG generation)
 - **`airframe/stls/fuselage/generate_*.py`** — Per-component generators (head shell, cargo
   doors, access panels)
+- **`landing_gear_*.py`** (`_r6_sizing`, `_bay_pad_fit`, `_bay_seat_fit`, `_bay_station_fit`,
+  `_cowl_clearance`, `_foot_stance`, `_opening_fit`, `_wing_clearance`) — landing-gear geometry
+  fit/clearance checks against the current CAD, one script per constraint
+- **`wing_airfoil_variants.py`**, **`wing_cfd_openfoam.py`**, **`wing_spar_station_fit.py`** —
+  wing airfoil/CFD/spar-fit tooling
+- **`add_landing_gear_bosses.py`**, **`build_head_shell.py`**, **`build_landing_gear_views.py`**,
+  **`export_landing_gear_stls.py`**, **`open_mating_faces.py`**,
+  **`purge_stale_fcstd_objects.py`**, **`verify_bow_pod.py`** — additional airframe CAD
+  generation/maintenance scripts; see each script's own docstring for usage
 
 ### Avionics Scripts
 
-- **`avionics/kicad/gen_emma_sch.py`** — Parametric KiCad schematic generator for Emma board
-  (49 MHz + LoRa variants)
-- **`avionics/kicad/mod_*_pcb.py`** — PCB layout modification scripts (footprint placement,
-  net routing templates)
+- **`avionics/kicad/<Board>/scripts/gen_<board>_sch.py`** — Parametric KiCad schematic
+  generator, one per board (e.g. `avionics/kicad/Commo/scripts/gen_commo_sch.py`)
+- **`avionics/kicad/<Board>/scripts/mod_<board>_pcb*.py`** — PCB layout modification scripts
+  (footprint placement, net routing templates), e.g.
+  `avionics/kicad/Commo/scripts/mod_commo_pcb.py`,
+  `avionics/kicad/Pilot/scripts/mod_pilot_pcb_reconcile.py`,
+  `avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py`
+- **`avionics/kicad/export-specctra-dsn.py`** / **`import-specctra-ses.py`** — Specctra DSN/SES
+  export/import for external autorouters
+- **`avionics/kicad/precommit_kicad_load.py`** — pre-commit KiCad file load/sanity check
 
 ### GCS Scripts
 
-- **`gcs/firmware/host/telemetry_feed.py`** — Telemetry decoder for QGroundControl
-- **`gcs/firmware/host/gimbal_ctrl.py`** — Antenna gimbal servo control
-- **`gcs/firmware/host/tracker.py`** — Visual tracking algorithm (bearing/elevation from
-  aircraft position)
+- **`gcs/skipper/software/tracking/src/telemetry_feed.py`** — Telemetry decoder for
+  QGroundControl
+- **`gcs/skipper/software/tracking/src/gimbal_ctrl.py`** — Antenna gimbal servo control
+- **`gcs/skipper/software/tracking/src/tracker.py`** — Visual tracking algorithm
+  (bearing/elevation from aircraft position)
+
+### Other Maintenance Scripts
+
+- **`compact_bom_entries.py`** — re-compacts `docs/bom_*.json` files
+- **`export-specctra-dsn.py`**, **`import-specctra-ses.py`** — see Avionics Scripts above
+- **`mirror_claude_memory.py`** — mirrors the AI assistant's memory directory to
+  `CLAUDE-MEMORY.md`
+- **`precommit_index.py`** — regenerates `PROJECT_INDEX.md`/`ARCHIVE_INDEX.md` (see
+  `tools/TOOL_REFERENCE.md`)
 
 ## Documentation & References
 

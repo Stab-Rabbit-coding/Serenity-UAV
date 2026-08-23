@@ -107,7 +107,7 @@ Scope: <one-line description of what this folder's original content is>.
 License: <CERN-OHL-W 2.0 | CC BY-SA 4.0 | Mixed, see below>.
 
 This file federates from the project root LICENSE and
-docs/attribution_and_licencing.md (the dual-license policy and the
+docs/attribution_and_licensing.md (the dual-license policy and the
 CERN-OHL-W 2.0 Available Component boundary for upstream reference
 geometry). Third-party components and Available Components referenced
 from this folder keep their own terms — see REFERENCES.md and

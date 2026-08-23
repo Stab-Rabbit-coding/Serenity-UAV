@@ -44,7 +44,7 @@
 - [ ] Verify aerodynamic orientation: intake lips face forward (−Y / nose-ward).
 - [ ] Apply structural epoxy to tongues + shoulder flanges; press frame into position; clamp; cure 24h.
 - [ ] Fillet all gaps between flange and hull; cure 2h.
-- [ ] Dry-fit `aft_edf_plenum.stl`; verify intake arm alignment and 55mm EDF inlet centred.
+- [ ] Dry-fit `aft_edf_plenum.stl`; verify intake arm alignment and 55mm EDF inlet centered.
 - [ ] Bond plenum forward arms to intake frame exits; fillet joints; cure 2h.
 - [ ] Bond `rcs_distribution_manifold.stl` to the 4 plenum bleed taps; route 4 bleed ducts to the RCS jet locations.
 - [ ] Pressure-test: seal EDF face with tape; cover all but one scoop; shop-vac — confirm draft at EDF inlet and at all 4 RCS jets, no joint leakage.
@@ -68,7 +68,7 @@
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verification
 - [ ] Intake frame tongues fully seated in the resized scoop windows
 - [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet and all 4 RCS jets; no leakage)
-- [ ] EDF seated at station ~430mm, centreline ±2mm; rotation verified before sealing
+- [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verified before sealing
 - [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
 - [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.06×1.76 in verified
 - [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on bench

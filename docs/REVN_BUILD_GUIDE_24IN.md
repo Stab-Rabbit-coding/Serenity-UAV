@@ -327,7 +327,7 @@ Compare actual build weight at each phase milestone.
 
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 
-See [`LICENSE`](../LICENSE) and [`docs/attribution_and_licencing.md`](attribution_and_licencing.md) for details.
+See [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](attribution_and_licensing.md) for details.
 
 ---
 

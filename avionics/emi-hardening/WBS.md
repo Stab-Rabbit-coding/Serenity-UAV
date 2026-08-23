@@ -122,7 +122,7 @@
     - [x] **River's Room** (Bay D, dorsal aft, sta ≈ 275 mm) — 49 MHz top-wire antenna
         (existing `WIRE-49MHZ`/`POST-FWD-49`/`POST-AFT-49`, §1.1.1.0b; primary) + LoRa
         915 MHz RP-SMA whip (secondary, fed from XO `J_SMA_LORA`). **Relocated
-        2026-06-22 (with user): the 49 MHz top wire moves from the dorsal centreline to
+        2026-06-22 (with user): the 49 MHz top wire moves from the dorsal centerline to
         the PORT flank, shoulder height** — see the port/starboard sub-task below;
         LoRa whip stays dorsal.
     - [x] **Simon's Medbay** (Bay D, aft service, sta ≈ 350 mm) — **independent** 49 MHz
@@ -135,7 +135,7 @@
         FC3 sta ≈ 275 mm, FC4 sta ≈ 350 mm. ≥ 3 mm clearance from the 49 MHz wire posts
         (already a documented constraint on `POST-FWD-49`) — now a flank-to-dorsal
         clearance check rather than a same-surface one, since the 49 MHz posts moved
-        off the dorsal centreline (below); re-verify the 3 mm figure still applies once
+        off the dorsal centerline (below); re-verify the 3 mm figure still applies once
         the shoulder-height mount line is fixed.
     - [ ] **Zigbee 2.4 GHz antenna mount — BLOCKED, hardware gap confirmed; antenna
         strategy decided 2026-06-22 (with user).** XO (Cape-B-2) Rev S has no Zigbee
@@ -216,7 +216,7 @@
         crossing — same component set as `POST-FWD-49`/`WIRE-49MHZ`/`POST-AFT-49`/
         `WIRE-COUNTERPOISE-49MHZ`, new reference IDs (see BOM).
     - [x] **Route on the STARBOARD flank, shoulder height — not ventral, not dorsal
-        centreline** *(corrected 2026-06-22, with user)* — two routings were rejected:
+        centerline** *(corrected 2026-06-22, with user)* — two routings were rejected:
         (1) a second full-length wire parallel to River's on the same dorsal ridge would
         sit well under one wavelength (λ = 6.12 m at 49 MHz) from the first, risking
         mutual coupling/detuning of both antennas; (2) a ventral/keel-line run (the
@@ -224,7 +224,7 @@
         was checked — the cargo bay clamshell doors hinge at the **outboard flank/belly
         edge** and swing up to **180°**, sweeping the lower flank and belly through the
         door's full Y-span; any exterior wire post mounted there is in the door's path.
-        **Resolution: both antennas move off the dorsal centreline entirely.** River's
+        **Resolution: both antennas move off the dorsal centerline entirely.** River's
         existing antenna relocates to the **port** flank, shoulder height; Simon's new
         antenna goes on the **starboard** flank, shoulder height, same sta ≈ 120–580 mm
         span and full ~470 mm length as River's. Shoulder height is chosen specifically
@@ -311,24 +311,24 @@ The keel datum at 190 mm from nose falls within the **middle ring section** (bet
 Battery is placed on the keel floor of the middle section, oriented longitudinally, secured by:
 - Two M3 boss standoffs at X≈−190 mm (CG station) on the keel face
 - Velcro retention strap through keel slot (safety tether, not sole retention)
-- Slide-in rail guides on keel face prevent lateral shift at 3g manoeuvre
+- Slide-in rail guides on keel face prevent lateral shift at 3g maneuver
 
 **Flight Engineer (PDB) placement decision (2026-06-08):**
 Flight Engineer (XT90 PDB, 4× XT30 outputs, ~80×60 mm) mounts adjacent to the battery in the middle
 section keel area (X≈−165..−245 mm station range) to minimise high-current 14 AWG wire length
 to the four nacelle ESC feeds (fed through PTFE conduits in the wing spar channel and to the
 cargo gondola lateral walls).
-Battery swap access via a **ventral hatch** in the middle section belly skin (hatch centred at
+Battery swap access via a **ventral hatch** in the middle section belly skin (hatch centered at
 X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
 **Open items — BLOCKS Phase 1 foam pour:**
 - [ ] **Add FlightEngineer/battery boss pattern to `middle_canonical_shell24.scad`.**
-    Boss posts: 4× M3 at (±55 mm X) × (±25 mm Z) from X=−190 mm keel centre for battery tray.
+    Boss posts: 4× M3 at (±55 mm X) × (±25 mm Z) from X=−190 mm keel center for battery tray.
     Flight Engineer PDB: 4× M3 boss posts at X≈−205 mm, Z=CZ±25 mm. Both on keel interior face (+Y rail).
     Verify boss positions clear keel CF flat bar (6×3 mm) and ring frame station notches in slicer.
 
 - [ ] **Add ventral battery-swap hatch cut to `middle_canonical_shell24.scad`.**
-    120×60 mm belly cut centred at X=−190 mm; 2 mm shoulder lip; same pattern as avionics panels.
+    120×60 mm belly cut centered at X=−190 mm; 2 mm shoulder lip; same pattern as avionics panels.
     **BLOCKS Phase 1 foam pour** (void former must clear hatch zone before foam pour).
 
 - [ ] **Create `flight_engineer_battery_tray.scad`.**
@@ -381,7 +381,7 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
 The rotating tilt-spar (`SPAR-TILT-4130`, and its `17-4 PH` alternative) is
 **ferromagnetic steel** — a departure from the otherwise non-ferrous airframe
-(CF-PETG / PETG / carbon-fibre / aluminium). Two magnetic-interference concerns
+(CF-PETG / PETG / carbon-fiber / aluminum). Two magnetic-interference concerns
 follow from putting a magnetic material into a rotating, servo-driven joint, plus
 the servo's own motor and the F688ZZ steel bearings. Captured here so it is not
 re-discovered at bring-up. Material selection rationale: docs/TILT_SPAR_ANALYSIS.md

@@ -282,12 +282,12 @@ Insert PTFE sleeves in all 4 holes, seal each with silicone. Mount GPS patch ant
 | -------- | -------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | CAN-FD   | Port keel rail, full length                  | CAN FD — CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4; 120Ω at CN1 and FC4                            |
 | RS-485   | Starboard keel rail, full length             | RS-485 — CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 multidrop; 120Ω at CN1 and FC4                  |
-| MIL-1553 | Dorsal centre spine, full length             | 1553B twisted shielded pair (78Ω) — FC1=BC, FC2=standby BC                               |
+| MIL-1553 | Dorsal center spine, full length             | 1553B twisted shielded pair (78Ω) — FC1=BC, FC2=standby BC                               |
 | ETH-AB   | Port forward section: Bay A → Bay B          | Ethernet — FC1↔CN2 ring link                                                             |
 | ETH-BD   | Port mid-section: Bay B → Bay D (skip Bay C) | Ethernet — FC2↔CN3 ring link                                                             |
 | ETH-DE   | Starboard aft: Bay D → Bay E                 | Ethernet — FC3↔CN4 ring link                                                             |
 | ETH-EA   | Starboard full length: Bay E → Bay A         | Ethernet — FC4↔CN1 ring-close link                                                       |
-| PWR      | Belly centre: battery → BEC → bay taps       | 14AWG power + 20AWG servo bundle; one power tap per bay — each tap feeds one CN + one FC |
+| PWR      | Belly center: battery → BEC → bay taps       | 14AWG power + 20AWG servo bundle; one power tap per bay — each tap feeds one CN + one FC |
 
 Label each conduit at BOTH ends with permanent marker. Immediately thread pull string through each tube and tie off at both ends.
 
@@ -875,7 +875,7 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 1. Epoxy cargo gondola shell into belly void at 4× M3 hard points (installed Phase 1). Shell protrudes 18mm below hull line — matches Serenity canonical cargo module profile. Cure 24h before proceeding.
 
-- Step 2: Install 3mm CF door hinge pins at gondola centreline. Attach clamshell door halves (2× mirrored). Doors must open freely (spring-loaded to open) and close to flush fit.
+- Step 2: Install 3mm CF door hinge pins at gondola centerline. Attach clamshell door halves (2× mirrored). Doors must open freely (spring-loaded to open) and close to flush fit.
 
 - Step 3: Install the DRV8833 board (door + payload-release servos only) and the STS3215 winch train in the gondola top: both winch pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. The spool is supported at both pedestals — it is never hung off the servo output. Wind 1.5 m Dyneema SK75 onto the spool; reserve 0.5 m slack. **Do not anchor the inboard end** — it is friction-retained so the line sheds at overload. Attach the cargo cradle (cargo_cradle_autolatch.stl) to the Dyneema via a double-bowline knot. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
 
@@ -1128,12 +1128,12 @@ The phased approach reaches first flight at **~$1,030** and defers the $590 moto
 | -------- | -------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | CAN-FD   | Port keel rail, full length      | 4-pin JST-GH (CANH/CANL/GND/VCC) — 120Ω at CN1 (start, Bay A) and FC4 (end, Bay E) | 3 (CN1+FC1+CN2+FC2), 4 (full ring)                   |
 | RS-485   | Stbd keel rail, full length      | 4-pin JST-GH (A/B/GND/VCC) — 120Ω at CN1 (start, Bay A) and FC4 (end, Bay E)       | 3 (CN1+FC1+CN2+FC2), 4 (full ring)                   |
-| MIL-1553 | Dorsal centre spine, full length | 4-pin shielded JST-GH, 78Ω — FC1=BC, FC2=standby BC                                | 3 (CN1+FC1+CN2+FC2), 4 (full ring)                   |
+| MIL-1553 | Dorsal center spine, full length | 4-pin shielded JST-GH, 78Ω — FC1=BC, FC2=standby BC                                | 3 (CN1+FC1+CN2+FC2), 4 (full ring)                   |
 | ETH-AB   | Port forward: Bay A → Bay B      | 8-pin JST-GH Cat5e — FC1↔CN2 ring link                                             | 3 (connected Phase 3 Step 27)                        |
 | ETH-BD   | Port mid: Bay B → Bay D          | 8-pin JST-GH Cat5e — FC2↔CN3 ring link                                             | 3 (Bay B end connected, Bay D capped), 4 (connected) |
 | ETH-DE   | Stbd aft: Bay D → Bay E          | 8-pin JST-GH Cat5e — FC3↔CN4 ring link                                             | 4 (CN3+FC3+CN4+FC4 install)                          |
 | ETH-EA   | Stbd full: Bay E → Bay A         | 8-pin JST-GH Cat5e — FC4↔CN1 ring-close link                                       | 3 (Bay A end connected, Bay E capped), 4 (connected) |
-| PWR      | Belly centre                     | 14AWG power + 20AWG servo bundle; one tap per bay, each tap feeds one CN + one FC  | 3 (ESCs, BEC, nav lights)                            |
+| PWR      | Belly center                     | 14AWG power + 20AWG servo bundle; one tap per bay, each tap feeds one CN + one FC  | 3 (ESCs, BEC, nav lights)                            |
 
 ---
 

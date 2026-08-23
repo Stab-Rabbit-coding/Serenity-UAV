@@ -103,7 +103,7 @@ The authoritative, full attribution chain — original creators, cast/crew, upst
 and third-party software licenses — is
 [`current-specification/LICENSE_AND_ATTRIBUTION.md`](current-specification/LICENSE_AND_ATTRIBUTION.md);
 the project's dual-license policy and subsystem federation map is
-[`docs/attribution_and_licencing.md`](docs/attribution_and_licencing.md). This section is a
+[`docs/attribution_and_licensing.md`](docs/attribution_and_licensing.md). This section is a
 **summary with cross-references**, recorded here so that the creative-universe rights holders — never
 previously named in this file — are acknowledged wherever this catalog is read.
 
@@ -122,7 +122,7 @@ All original work in this repository is © 2025 Steve Griffing, PE(CSE), CISSP-I
 You may share and adapt either under its own terms, including commercially, with appropriate
 credit, a link to the license, and an indication of changes; attribution must not imply
 endorsement by the licensor or by any rights holder named below. See
-[`docs/attribution_and_licencing.md`](docs/attribution_and_licencing.md) for the full split and
+[`docs/attribution_and_licensing.md`](docs/attribution_and_licensing.md) for the full split and
 the per-subsystem `LICENSE` federation.
 
 ### *Firefly* / *Serenity* creative universe (underlying IP)
@@ -1173,7 +1173,7 @@ active revision even after superseding) — do not delete.
 |---|---|---|
 | Body dimensions | 19×19×19 mm | RunCam Nano 4 data sheet |
 | Lens aperture (clear) | 12 mm diameter | RunCam Nano 4 data sheet |
-| Mount hole pattern | 4× M2 on 14×14 mm pitch (±7 mm from lens centre) | Industry-standard 19 mm Nano mount |
+| Mount hole pattern | 4× M2 on 14×14 mm pitch (±7 mm from lens center) | Industry-standard 19 mm Nano mount |
 | Operating voltage | 5 V (nominal) | RunCam Nano 4 data sheet |
 | Weight | 3.6 g | RunCam Nano 4 data sheet |
 
@@ -1664,7 +1664,7 @@ REF-SENSOR-013/014/015 below for the individual part records, and
 | **⚠ Not yet independently verified** | Stall current draw (needed for the RAIL-2 budget, `docs/POWER_DISTRIBUTION.md` §3.2.1) is not published in either source above; carried forward as "requires verification" rather than assumed. |
 
 **Why this part, not a bus servo:** SPT5425LV is a standard hobby PWM/analog servo body,
-not a native serial-bus servo like the STS3215 it replaces. The serial-bus behaviour comes
+not a native serial-bus servo like the STS3215 it replaces. The serial-bus behavior comes
 entirely from swapping its internal control PCB for LibreServo v2 (REF-SENSOR-014), which
 is explicitly designed to convert "any standard servo motor" without modifying the
 mechanical body or bottom cover. Selecting a standard-body servo (rather than staying on a
@@ -1948,7 +1948,7 @@ REF-CAD-004 and by `current-specification/LICENSE_AND_ATTRIBUTION.md`.
 | **Official URL** | <https://www.thingiverse.com/thing:7330462> |
 | **License** | Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0) — <https://creativecommons.org/licenses/by-sa/4.0/> (corrected 2026-08-01 from an earlier "CC BY 4.0" mis-citation in this catalog and in `current-specification/LICENSE_AND_ATTRIBUTION.md`/`README.md` — the upstream Thingiverse license page states CC BY-SA 4.0, not plain CC BY) |
 | **Repository copy** | `docs/references/thingverse-serenity/` (source STLs in `files/`, renders in `images/`, upstream `LICENSE.txt` + `README.txt`) |
-| **CERN-OHL-W integration** | Incorporated into the project's CERN-OHL-W 2.0-licensed airframe Covered Source as an **Available Component** [REF-LIC-001 §1.6] — the upstream geometry keeps its own CC BY-SA 4.0 terms (share-alike applies to redistributions of the upstream model itself; the project's original adaptation work is separately licensed CERN-OHL-W 2.0 per `airframe/LICENSE`). See `docs/attribution_and_licencing.md` "Available Component Boundary." |
+| **CERN-OHL-W integration** | Incorporated into the project's CERN-OHL-W 2.0-licensed airframe Covered Source as an **Available Component** [REF-LIC-001 §1.6] — the upstream geometry keeps its own CC BY-SA 4.0 terms (share-alike applies to redistributions of the upstream model itself; the project's original adaptation work is separately licensed CERN-OHL-W 2.0 per `airframe/LICENSE`). See `docs/attribution_and_licensing.md` "Available Component Boundary." |
 | **Note** | This is the **origin of the project's `s_*.stl` geometry** — every hull/nacelle/wing/gear STL in the build traces back to this model (adapted: scaled to 24 in (609 mm), hollowed to 2.0 mm CF-PETG, CF skeleton + foam fill added). It is the **lowest** of the three canonical references in authority: **verify its detail against REF-CAD-003 (QMx) and REF-CAD-002 (Nick Henning) before treating any feature as canonical** — but it remains a usable, license-clean geometry starting point. Do not confuse Thing 7330462 with the separate low-poly orientation guide Thing 4677565 (`current-specification/LICENSE_AND_ATTRIBUTION.md` §2b). |
 
 **Applied to:** base hull/section geometry for the entire fuselage and nacelle build; the four
@@ -1970,7 +1970,7 @@ dropped Rev R1); full remix attribution in
 | **Filed / Granted** | Filed 1977-07-11; granted 1978-12-05 |
 | **Legal status** | **Expired — lifetime.** Verified 2026-08-09 via the Google Patents record above. The disclosure is in the public domain; nothing in this project practises a live claim. |
 | **License** | Not applicable — an expired US patent is public-domain technical disclosure, cited here as prior-art/technique literature. No text, figure, or geometry from the patent is copied or redistributed. |
-| **Note** | Cited for the **master-flap / seal-flap principle only**: in a variable-area nozzle whose flaps overlap circumferentially, the overlap is only realisable if alternate members sit at different radii, so one set laps over its neighbours and closes the inter-flap gap from outside rather than occupying the same material. Serenity-UAV's implementation (tangential-hinge conical flaps, `FLAP_SHINGLE_GAP` running clearance, spiral-cam unison ring) is original work; the patent's own bellcrank-centred seal linkage is **not** used — this design carries the seal on its own hinge, identical to the master flap. |
+| **Note** | Cited for the **master-flap / seal-flap principle only**: in a variable-area nozzle whose flaps overlap circumferentially, the overlap is only realisable if alternate members sit at different radii, so one set laps over its neighbours and closes the inter-flap gap from outside rather than occupying the same material. Serenity-UAV's implementation (tangential-hinge conical flaps, `FLAP_SHINGLE_GAP` running clearance, spiral-cam unison ring) is original work; the patent's own bellcrank-centered seal linkage is **not** used — this design carries the seal on its own hinge, identical to the master flap. |
 
 **Concept applied in this project:** Rev T3 (2026-08-09) of the nacelle variable nozzle.  All eight
 flaps had been carved from one radial band, so the deliberate 5° circumferential overlap
@@ -2001,11 +2001,11 @@ inner surface as the flow-facing boundary.  The master flaps are geometrically u
 | **Designation** | CERN-OHL-W-2.0 |
 | **Official URL** | <https://ohwr.org/licences/> (license text + user guide), SPDX record <https://spdx.org/licenses/CERN-OHL-W-2.0.html> |
 | **Applied sections** | §1.6 "Available Component" (upstream hardware not itself licensed under CERN-OHL but legitimately referenced/incorporated without relicensing); §4 (distribution obligations); §5 ("weakly reciprocal" scope — modifications to Covered Source must stay CERN-OHL, but a design that merely *uses* Covered Source without modifying it is not itself pulled under the license) |
-| **Note** | Selected 2026-08-01 (TODO.md §0.9 licensing audit) as the license for this project's original hardware/CAD/PCB design work — airframe (wings, nacelles, landing gear, cargo system, fuselage) and avionics (Pilot/XO/FlightEngineer/Commo/Observer PCB schematics, layouts, Gerbers). Documentation, code, scripts, and non-hardware drawings remain CC BY-SA 4.0 — see `docs/attribution_and_licencing.md`. |
+| **Note** | Selected 2026-08-01 (TODO.md §0.9 licensing audit) as the license for this project's original hardware/CAD/PCB design work — airframe (wings, nacelles, landing gear, cargo system, fuselage) and avionics (Pilot/XO/FlightEngineer/Commo/Observer PCB schematics, layouts, Gerbers). Documentation, code, scripts, and non-hardware drawings remain CC BY-SA 4.0 — see `docs/attribution_and_licensing.md`. |
 
 **Applied to:** `LICENSE` (root), `avionics/LICENSE`, `airframe/LICENSE`; the CERN-OHL-W
 "Available Component" concept is used to define the IP boundary around the three canonical
-airframe reference sources (REF-CAD-002/003/004) — see `docs/attribution_and_licencing.md`
+airframe reference sources (REF-CAD-002/003/004) — see `docs/attribution_and_licensing.md`
 "Available Component Boundary."
 
 **Used in:** all KiCad/SCAD/STL/FCStd original design files in `airframe/` and `avionics/`.

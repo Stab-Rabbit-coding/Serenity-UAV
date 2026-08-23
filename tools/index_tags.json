@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-22",
+  "generated": "2026-08-23",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -9724,7 +9724,7 @@
       "archived": false
     },
     "docs/NOZZLE_DRIVE_TRADE.md": {
-      "description": "Nozzle-Drive Mechanism Trade Study (Rev R1a, 2026-07-07)",
+      "description": "Nozzle-Drive Mechanism Trade Study (Rev T, 2026-07-19)",
       "tags": [
         "documentation",
         "propulsion"
@@ -9870,7 +9870,7 @@
       ],
       "archived": false
     },
-    "docs/attribution_and_licencing.md": {
+    "docs/attribution_and_licensing.md": {
       "description": "Serenity UAV \u2014 Attribution and Licensing Policy",
       "tags": [
         "documentation",
@@ -10641,11 +10641,10 @@
       "archived": false
     },
     "gcs/README.md": {
-      "description": "Serenity UAV \u2014 Ground Control Station (Malcolm)",
+      "description": "Serenity UAV \u2014 Ground Control Station (Skipper)",
       "tags": [
         "documentation",
         "ground-control",
-        "redundancy-failover",
         "security"
       ],
       "archived": false
@@ -12395,7 +12394,7 @@
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "docs/WBS_FEDERATION.md",
-      "docs/attribution_and_licencing.md",
+      "docs/attribution_and_licensing.md",
       "docs/bom_revP.json",
       "docs/bom_revQ.json",
       "docs/bom_revR.json",
@@ -12613,7 +12612,6 @@
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
       "gcs/AGENTS.md",
-      "gcs/README.md",
       "gcs/SKIPPER_SPEC.md",
       "gcs/WBS.md",
       "gcs/skipper/hardware/docs/skipper_antenna_spec.md",
@@ -12764,7 +12762,7 @@
       "current-specification/LICENSE_AND_ATTRIBUTION.md",
       "deferred/LICENSE",
       "docs/LICENSE",
-      "docs/attribution_and_licencing.md",
+      "docs/attribution_and_licensing.md",
       "docs/references/thingverse-serenity/LICENSE.txt",
       "gcs/LICENSE",
       "graphical-build-guide/LICENSE",

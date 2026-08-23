@@ -29,7 +29,7 @@ Serenity gear. Rev R6 rebuilds the leg to the canonical articulated form —
 cylinder-cluster thigh (~53°), disc knee and ankle joints, slotted shin, tri-pad
 arrowhead foot — and mounts it in the **four canonical bay stations** measured
 from the QMx blueprints ventral view (fore feet 39.2% / aft feet 63.9% of hull
-length, ~1.45× hull half-width off centreline; REF-CAD-003 Sheet 5, cross-checked
+length, ~1.45× hull half-width off centerline; REF-CAD-003 Sheet 5, cross-checked
 against the Nick Henning renders, REF-CAD-002).
 
 **The Rev R5 energy mechanism is kept intact:** 2 **spring** bowed wires
@@ -265,7 +265,7 @@ the lowest.
         `foot_1..4_scaled24` (misubisu Thingiverse single-blade legs and pads,
         CC BY 4.0, retired by Rev R6) plus `nacelle_{port,stbd}_revq` (retired
         by Rev S). 16 → 6 objects, 10 → 8.0 MB; what remains is exactly the set
-        `bake_hull_frame.py` recognises — four shells and two wings. Scripted
+        `bake_hull_frame.py` recognizes — four shells and two wings. Scripted
         and idempotent as `tools/purge_stale_fcstd_objects.py`. The
         `Union`…`Union003` Strong-Leg booleans were already gone.
 

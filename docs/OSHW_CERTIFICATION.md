@@ -49,7 +49,7 @@ root `AGENTS.md` §4 ("never guess a section number").
 |---|---|---|
 | Third-party commercial components distinguished from original design | ✅ Done | `current-specification/LICENSE_AND_ATTRIBUTION.md` "Third-Party Software and Firmware" table + "Not covered / separate terms" in `README.md` |
 | Third-party chip datasheets accessible | ⚠ Partial | Most key ICs cited with validated datasheet URLs in `REFERENCES.md` Part XII (Sensor and Component Specifications); a handful remain in the "Open Standards Verification Items" table (e.g. RSSI comparator, STS3215 winch servo — datasheet in repo but not yet text-extracted) — resolve those before submission |
-| Upstream CAD/reference sources' own licenses distinguished from project's license | ✅ Done | `docs/attribution_and_licencing.md` §3 "Available Component boundary" — REF-CAD-002/003/004 explicitly classified (Available Component vs. reference-only) |
+| Upstream CAD/reference sources' own licenses distinguished from project's license | ✅ Done | `docs/attribution_and_licensing.md` §3 "Available Component boundary" — REF-CAD-002/003/004 explicitly classified (Available Component vs. reference-only) |
 
 ## 4. Readiness checklist against requirement 3 — necessary software OSI-approved
 

@@ -290,7 +290,7 @@ study and the wing/nacelle Hall tilt-feedback sensor. Both carry
     `SKIPPER-TILT-ENC-PCB` (Magntek MT6701, I²C, off-axis; MA732/SPI fallback). Confirm
     against the MT6701 datasheet: pinout/protocol, off-axis air-gap (assumed
     1.5 mm), ring OD/ID, IC radial offset (R = 12 mm), and ferrous-through-shaft
-    behaviour; add a `REF-SENSOR-*` entry with a validated URL before PCB/harness
+    behavior; add a `REF-SENSOR-*` entry with a validated URL before PCB/harness
     sign-off. Bench-cal tracked in `avionics/emi-hardening/WBS.md` §1.4.6 and
     `avionics/WBS.md` §1.9.1.
 
@@ -311,7 +311,7 @@ full CERN-OHL-W 2.0 text before this audit — a stale-documentation gap (root `
 §11.4: "actual code/model state outranks stale documentation"). This item formalizes and
 completes the dual-license split those two files already implied, corrects a real
 misattribution (misubisu hull license), and closes out the remaining structural/documentation
-gaps. Full policy: `docs/attribution_and_licencing.md` (new).
+gaps. Full policy: `docs/attribution_and_licensing.md` (new).
 
 - [x] **Correct misubisu Thingiverse model [REF-CAD-004] license to CC-BY-SA 4.0.** The
     upstream Thingiverse listing for Thing 7330462 is CC BY-SA 4.0, not the "CC BY 4.0" (and,
@@ -322,7 +322,7 @@ gaps. Full policy: `docs/attribution_and_licencing.md` (new).
     Thingiverse ID, 482910 instead of 7330462 — fixed in the same pass). Logged in
     `REFERENCES.md` "Removed / Superseded Citations."
 - [x] **Integrate REF-CAD-002/003/004 as Available Components under CERN-OHL-W 2.0 with
-    clean IP boundaries.** `docs/attribution_and_licencing.md` §3 classifies each of the
+    clean IP boundaries.** `docs/attribution_and_licensing.md` §3 classifies each of the
     three canonical airframe references explicitly: misubisu (REF-CAD-004, CC BY-SA 4.0) and
     the BamJr nozzle concept are **Available Components** (CERN-OHL-W 2.0 §1.6) — openly
     licensed geometry actually incorporated into the project's Covered Source, keeping its
@@ -352,12 +352,12 @@ gaps. Full policy: `docs/attribution_and_licencing.md` (new).
     CC BY-SA subsections), and "Suggested Full Attribution Block" example, which all still
     stated a single project-wide CC BY 4.0 license.
 - [x] **Create License files for each subsystem folder with clear, unambiguous federation
-    from root License and `docs/attribution_and_licencing.md`.** All seven subsystem folders
+    from root License and `docs/attribution_and_licensing.md`.** All seven subsystem folders
     (`airframe/`, `avionics/`, `docs/`, `gcs/`, `tools/`, `current-specification/`,
     `graphical-build-guide/`, `deferred/` — eight, `avionics/` already existed) now carry a
     `LICENSE` file with a short scope header plus the full applicable license text(s),
     self-contained per folder rather than a bare pointer. Header template documented in
-    `docs/attribution_and_licencing.md` §4.
+    `docs/attribution_and_licensing.md` §4.
 - [x] **Create all other supporting documents for OSHW certification.** Created
     `docs/OSHW_CERTIFICATION.md` — a readiness checklist against the verified OSHWA
     self-certification requirements [REF-LIC-002] (own contributions open-sourced,
@@ -426,7 +426,7 @@ gaps. Full policy: `docs/attribution_and_licencing.md` (new).
 in place per root `AGENTS.md` §11.4):**
 
 - Root `AGENTS.md` §3 said "All work is published under CC BY 4.0" — corrected to state the
-  dual-license split and point to `docs/attribution_and_licencing.md`.
+  dual-license split and point to `docs/attribution_and_licensing.md`.
 - `README.md` "License" section, Component License Map, and "What This License Covers" all
   restated a single CC BY 4.0 project license — corrected to the CERN-OHL-W 2.0 /
   CC BY-SA 4.0 split.
@@ -436,7 +436,7 @@ in place per root `AGENTS.md` §11.4):**
   `/licenses/by/4.0` (mismatched slug) — corrected to CC BY-SA 4.0 with the matching URL.
 - Root `WBS.md` §0.9/`TODO.md` §0.6 numbering collision (see "Numbering note" above).
 
-**Used in:** `docs/attribution_and_licencing.md`, `docs/OSHW_CERTIFICATION.md`,
+**Used in:** `docs/attribution_and_licensing.md`, `docs/OSHW_CERTIFICATION.md`,
 `REFERENCES.md` Part XV, `airframe/LICENSE`, `avionics/LICENSE`, `docs/LICENSE`,
 `gcs/LICENSE`, `tools/LICENSE`, `current-specification/LICENSE`,
 `graphical-build-guide/LICENSE`, `deferred/LICENSE`.

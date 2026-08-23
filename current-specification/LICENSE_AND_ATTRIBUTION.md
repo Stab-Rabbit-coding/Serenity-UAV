@@ -5,14 +5,14 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Project:** Serenity-Class Tri-Fan Tiltrotor Unmanned Aerial Vehicle
 **Revision:** R1 (current — hull/nozzle source citations below updated 2026-06-16; full Rev O–R1 design changelog lives in TODO.md and REFERENCES.md)
-**License:** Dual-licensed — CERN-OHL-W 2.0 (hardware/CAD/PCB) / CC BY-SA 4.0 (docs/code/scripts/drawings). See `docs/attribution_and_licencing.md` for the full policy (corrected 2026-08-01, TODO.md §0.9 — this document previously stated a single "CC BY 4.0" project-wide license, which was stale).
+**License:** Dual-licensed — CERN-OHL-W 2.0 (hardware/CAD/PCB) / CC BY-SA 4.0 (docs/code/scripts/drawings). See `docs/attribution_and_licensing.md` for the full policy (corrected 2026-08-01, TODO.md §0.9 — this document previously stated a single "CC BY 4.0" project-wide license, which was stale).
 
 ---
 
 ## License
 
 This project is **dual-licensed by content type** — full policy and rationale in
-[`docs/attribution_and_licencing.md`](../docs/attribution_and_licencing.md):
+[`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md):
 
 - **Hardware/CAD/PCB design files** — CERN-OHL-W 2.0. Full text: root
   [`LICENSE`](../LICENSE), `airframe/LICENSE`, `avionics/LICENSE`.
@@ -49,7 +49,7 @@ mark's presence on a given board.
 ## Original Creative Work Covered by This License
 
 The following elements are original work by Steve Griffing, dual-licensed per
-`docs/attribution_and_licencing.md`:
+`docs/attribution_and_licensing.md`:
 
 **CERN-OHL-W 2.0** (hardware/CAD/PCB design files):
 
@@ -140,7 +140,7 @@ rights holders before using the Serenity name or likeness in trade.
 | **Author** | misubisu |
 | **Source** | [thingiverse.com/thing:7330462](https://www.thingiverse.com/thing:7330462) |
 | **License** | CC BY-SA 4.0 (corrected 2026-08-01 — see REFERENCES.md "Removed / Superseded Citations") |
-| **Use** | Hull outer geometry adapted; retains the four canonical sections (head, cargo, middle, rear); scaled to 24 in (609 mm) overall length; hollowed to 2.0 mm watertight CF-PETG shell; structurally redesigned with CF skeleton and foam fill for UAV flight loads. Incorporated into the project's CERN-OHL-W 2.0 airframe Covered Source as an **Available Component** — see `docs/attribution_and_licencing.md` "Available Component Boundary." |
+| **Use** | Hull outer geometry adapted; retains the four canonical sections (head, cargo, middle, rear); scaled to 24 in (609 mm) overall length; hollowed to 2.0 mm watertight CF-PETG shell; structurally redesigned with CF skeleton and foam fill for UAV flight loads. Incorporated into the project's CERN-OHL-W 2.0 airframe Covered Source as an **Available Component** — see `docs/attribution_and_licensing.md` "Available Component Boundary." |
 
 ## Remix attribution template
 
@@ -391,7 +391,7 @@ Docs/code/scripts: CC BY-SA 4.0.
 Incorporates:
 • Hull: "Serenity Firefly with landing gear and swivel engines" by misubisu
   thingiverse.com/thing:7330462 · CC BY-SA 4.0
-  (Available Component under CERN-OHL-W 2.0 — see docs/attribution_and_licencing.md §3)
+  (Available Component under CERN-OHL-W 2.0 — see docs/attribution_and_licensing.md §3)
 • Nozzle: "Variable Area EDF Nozzles" by BamJr
   thingiverse.com/thing:2991269 · CC BY 4.0
   (Available Component under CERN-OHL-W 2.0)
@@ -404,7 +404,7 @@ Incorporates:
 
 ---
 
-*This document is itself released under CC BY-SA 4.0 (see `docs/attribution_and_licencing.md`).*
+*This document is itself released under CC BY-SA 4.0 (see `docs/attribution_and_licensing.md`).*
 *Last updated: 2026-08-01 — corrected §2 misubisu hull license from a garbled "CC BY 4.0 SA" to
 CC BY-SA 4.0 and documented its CERN-OHL-W 2.0 Available Component treatment (TODO.md §0.9
 licensing audit; see REFERENCES.md "Removed / Superseded Citations"). Previously, 2026-07-20 —

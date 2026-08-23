@@ -195,7 +195,7 @@ starboard→port, +Z = ventral→dorsal.** On the as-built board the camera/ToF/
 connectors **and** their direct-solder lands (`J_CAM_DS`/`J_TOF_DS`/`J_LASER_DS`) are at the
 **high-X end (~62–67 mm)**; the Ethernet-ring, CAN-FD, and power connectors are at the
 **low-X end (~6–11 mm)**. The three sensor apertures differ in the **port-starboard (Y)** axis
-— **camera = port (high Y), ToF = starboard (low Y), laser = centreline** — so the DS lands are
+— **camera = port (high Y), ToF = starboard (low Y), laser = centerline** — so the DS lands are
 spread along **Y** to match `airframe/openscad/fuselage/bow_sensor_pod.scad`
 (`CAM_POS`/`TOF_POS`, ToF··laser 8.2 mm, ToF··camera 16.5 mm). Board and DS-land placement are
 correct as-built; an earlier "fore/aft mismatch" note was a high-vs-low-X mix-up, now resolved.

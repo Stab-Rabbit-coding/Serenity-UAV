@@ -88,7 +88,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - [x] **Wire the field-connector pins to their signals on Pilot** (connectors were
     all floating). Done per each footprint's Description pinout: SERVO-PWM pads 1–6
     → SERVO0–5 (PWM); ESC-TLM → UART_ESC_TX/RX; GPIO-A…F → GND/+3V3 (+ `GPIO_EXP_*`
-    signal pin labelled); CAN-FD → CAN_H/CAN_L; RS-485 → RS485_A/B; PWR-IN → +5V/GND.
+    signal pin labeled); CAN-FD → CAN_H/CAN_L; RS-485 → RS485_A/B; PWR-IN → +5V/GND.
     *(2026-06-12)*
 - [x] **Source the 6 `GPIO_EXP_A…F` signals via an I2C GPIO expander.** Added
     `U-GPIO` (PCA9555DB, SSOP-24, addr 0x20) on the existing I2C1 bus with a

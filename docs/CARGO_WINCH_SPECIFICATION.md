@@ -420,7 +420,7 @@ and of whichever coupling §3.7.1 resolves to:
 | Sensor | **AKM AK7455** off-axis magnetic angle sensor [REF-SENSOR-008] |
 | Why this part | Already fleet-standard for nacelle tilt; clean-room symbol and footprint exist; **no new part number** |
 | Interface | SPI → the gateway's **existing `J_ENC`** 7-pad header, on a dedicated SPI bus separate from the TPM's — **no board change** |
-| Target | Diametric magnet in a pocket in the port spool flange hub, off-axis (the axle is fixed and occupies the centreline) |
+| Target | Diametric magnet in a pocket in the port spool flange hub, off-axis (the axle is fixed and occupies the centerline) |
 | Sample rate | **≥ 1 kHz** (covers the 840 Hz wrap-tracking floor with margin) |
 | Multi-turn | Accumulated in gateway firmware; `turns` invalidated, not guessed, if `|Δθ|` between samples exceeds half a revolution |
 
@@ -586,7 +586,7 @@ asserted here because it is not yet verified in `REFERENCES.md`.
 |---|---|---|---|
 | **FM1** | Axle slides out of a pedestal | **Friction only** (M3 pinch screw) | **Circlip groove + external circlip immediately outboard of each pedestal.** The axle cannot translate more than groove clearance even at zero clamp force. The pinch screw is demoted to locating/anti-rotation — it is no longer the retention. |
 | **FM2** | Printed hub cracks; spool leaves the axle in pieces | Bearings pressed **into printed plastic** | **Continuous steel sleeve through the full hub bore**, bearings pressed into the *sleeve*. Total loss of the printed material still leaves sleeve + bearings captive on the axle. Also better practice regardless: printed press-fits creep. |
-| **FM3** | Pedestal tears out of the hull | M3 heat-set inserts in printed shell | **Through-bolts with an aluminium backing plate** on the far side of the bay floor. Positive, and inspectable without disassembly. |
+| **FM3** | Pedestal tears out of the hull | M3 heat-set inserts in printed shell | **Through-bolts with an aluminum backing plate** on the far side of the bay floor. Positive, and inspectable without disassembly. |
 | **FM4** | Any single retention omitted at assembly, or a pedestal cracks | *(nothing)* | **Keeper bar** spanning both pedestals over the spool, bolted at both ends. Independent secondary capture — the assembly cannot fall clear even if FM1–FM3 all fail. |
 | **FM5** | Slip-adjust collar backs off and departs | Thread-lock only | Collar **captive on the axle** — retained by the FM1 circlip, so a fully-backed-off collar still cannot leave. |
 
@@ -674,7 +674,7 @@ All exceed the AUVSI 4.0 target used elsewhere in this project.
 
 ### 4.4 ⚠ Unresolved: the shed threshold sits inside the maneuver envelope
 
-Checking `F_slip` against manoeuvre loads on the suspended payload surfaces a
+Checking `F_slip` against maneuver loads on the suspended payload surfaces a
 conflict this specification does **not** resolve:
 
 | Condition | Line tension | vs. 8.0 N threshold |
@@ -686,19 +686,19 @@ conflict this specification does **not** resolve:
 
 The 2.5 g factor is the cargo dynamic factor this document already uses for the
 axle and bearings (§4.3, from `docs/structural_analysis.md` §6). Applied to the
-*line*, it means **a 2.5 g manoeuvre with a slung load drops the payload**, and a
-2 g manoeuvre is within 2 % of doing so.
+*line*, it means **a 2.5 g maneuver with a slung load drops the payload**, and a
+2 g maneuver is within 2 % of doing so.
 
-That may well be the correct behaviour — hard manoeuvring with a slung load is
+That may well be the correct behavior — hard maneuvering with a slung load is
 poor airmanship, and shedding beats losing the aircraft. But it is currently an
 **accident of where the threshold landed**, not a stated decision, and it needs
 one. Three options:
 
-1. **Accept and document** — declare a manoeuvre limit (≈1.5 g) whenever a
+1. **Accept and document** — declare a maneuver limit (≈1.5 g) whenever a
    payload is slung, and put it in the flight envelope. Costs nothing mechanical.
 2. **Raise the threshold to ~12 N** — 3.06× static payload, still only 72 % of
    the 16.64 N excess lift, leaving 4.6 N of margin at the moment of shed. Buys
-   manoeuvre headroom; spends lift margin.
+   maneuver headroom; spends lift margin.
 3. **Reduce slung payload mass** — moves both numbers, but 400 g is a
    requirement input, not a free variable.
 
@@ -874,7 +874,7 @@ Excess lift : 16.64 N → 15.48 N
 Slip threshold as fraction of excess : 48 % → 52 %   (still conservative)
 ```
 
-T/W stays above 1.5 and the winch remains a cargo-bay-centred mass, so the
+T/W stays above 1.5 and the winch remains a cargo-bay-centered mass, so the
 longitudinal CG shift is small. **The converted servo's real mass dominates
 this table** — the SPT5425LV body alone (~57 g) is close to the 60 g carried
 here, but the LibreServo v2 PCB adds an unweighed increment; re-run this
@@ -935,10 +935,10 @@ See §3.3. All six are new STLs from
    seated (visual), keeper bar fitted and torqued, backing plates present, slip
    collar witness-mark intact. Doors-open inspection, since that is the geometry
    in which a release escapes.
-4. **★ FLIGHT-ENVELOPE DECISION — the shed threshold sits inside the manoeuvre
-   envelope (§4.4).** At 8.0 N, a 2.0 g manoeuvre on the slung payload reaches
+4. **★ FLIGHT-ENVELOPE DECISION — the shed threshold sits inside the maneuver
+   envelope (§4.4).** At 8.0 N, a 2.0 g maneuver on the slung payload reaches
    0.98× the threshold and 2.5 g sheds the load. Choose: declare a ≈1.5 g
-   slung-load manoeuvre limit (recommended, free), raise the threshold to ~12 N
+   slung-load maneuver limit (recommended, free), raise the threshold to ~12 N
    (spends lift margin), or reduce payload. **Referred to the flight envelope,
    not decided here.** Blocks the pawl-spring calibration target.
 5. **Calibrate `T_slip` to 0.060 N·m (0.61 kgf·cm)** at the spool hub collar, and
@@ -972,7 +972,7 @@ See §3.3. All six are new STLs from
 13. **DRV8833 consolidation (optional)** — door/release servos could move to the
     gateway's spare `FLEX_PWM_IO`, retiring `DRV8833-CARGO` and its tray.
 14. **AK7455 spool-encoder integration (§3.7.3)** — magnet pocket in the port
-    flange hub, off-axis (the fixed axle occupies the centreline); confirm flux
+    flange hub, off-axis (the fixed axle occupies the centerline); confirm flux
     at the IC for the chosen magnet and gap, the same bench item already open for
     the nacelle encoders; ≥ 1 kHz sampling; firmware turn-accumulation with the
     `turns_invalid` guard rather than a guessed count.
@@ -1019,4 +1019,4 @@ See §3.3. All six are new STLs from
 
 ---
 
-*"Takes a man of honour to sit a winch that won't let go until you tell it to."*
+*"Takes a man of honor to sit a winch that won't let go until you tell it to."*

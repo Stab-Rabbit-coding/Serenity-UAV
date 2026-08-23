@@ -265,7 +265,7 @@ centroid placement (`airframe/CLAUDE.md` "Assembly and Placement").
 - [x] **Observer mounting bosses added to `head_shell24.scad`** — **DONE 2026-07-03.** New
     `jayne_board_bosses()` module (4× M3 heat-set bosses, Observer's real (4,4)/(42,4)/(4,44)/
     (42,44) hole pattern, ±19mm×±20mm about a station 20mm aft of `bow_sensor_pod.scad`'s
-    `FACEPLATE_CTR`, centred on `BOW_CX`), wired into the shell's main boss union alongside
+    `FACEPLATE_CTR`, centered on `BOW_CX`), wired into the shell's main boss union alongside
     `book_dorsal_boss`. **Explicitly marked PROPOSED in the SCAD comments — not FreeCAD-
     verified.** Could not render/mesh-check this session (OpenSCAD CGAL render was blocked
     by a permission gate partway through this task; verified only by static review —
