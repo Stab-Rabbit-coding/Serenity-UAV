@@ -249,7 +249,7 @@ kicad-cli version
 blender --background --python airframe/blender-scripts/serenity_render_views.py
 
 # FreeCAD (for assembly and component placement)
-freecadcmd airframe/freecad-scripts/serenity_assembly.py
+freecadcmd airframe/FreeCAD-scripts/serenity_assembly.py
 ```
 
 ## Common Tasks
@@ -294,9 +294,9 @@ clang-format -i avionics/firmware/cn/src/*.c
 # Edit the JSON source
 nano current-specification/bom_revS.json
 
-# Sync to CSV
-python3 tools/update_bom.py --input current-specification/bom_revS.json \
-                            --output current-specification/bom_revS.csv
+# Sync to CSV -- no automated sync script exists yet (tools/update_bom.py is
+# not implemented); edit current-specification/bom_revS.csv by hand to match,
+# field-for-field, until one is written.
 
 # Commit both
 git add current-specification/bom_revS.*

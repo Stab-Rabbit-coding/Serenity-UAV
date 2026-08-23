@@ -315,7 +315,7 @@ numeric order.)*
 ### 1.2d — Trust-Module MCU/TPM Retarget (MSPM0G351x-Q1 + SLB 9672)
 
 Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematics) and
-`avionics/kicad/retarget_pcb_footprints.py` (PCBs).  Parts per REF-SENSOR-013 and REF-SEC-002.
+`avionics/kicad/retarget_pcb_footprints.py` (PCBs).  Parts per REF-SENSOR-017 and REF-SEC-002.
 
 | Board | MCU | Package | TPM |
 |---|---|---|---|
@@ -347,7 +347,7 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] **Confirm MSPM0G351x-Q1 errata and TRM applicability.** SLAZ742G covers MSPM0G3x0x /
       G1x0x / G3x0x-Q1 and does not enumerate MSPM0G3518/3519; SLAU846E contains no
       occurrence of either part number. Obtain the correct errata/TRM for MSPM0G351x-Q1
-      before firmware sign-off (REF-SENSOR-014 "requires verification").
+      before firmware sign-off (REF-SENSOR-018 "requires verification").
 - [ ] **Update firmware pinmux constants for the new family.** CAN moves from
       `CAN_TX`/`CAN_RX` PF5/PF6 to `CAN0_TX`/`CAN0_RX` **PF12**; PA15 offers `SPI1_CS2`
       (PF3) rather than `SPI1_CS0`; PB15/PB16 offered UART2 on the old part and UART7 on the

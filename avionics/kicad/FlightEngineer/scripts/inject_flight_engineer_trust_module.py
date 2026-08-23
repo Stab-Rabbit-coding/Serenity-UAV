@@ -38,7 +38,7 @@ License: CC BY 4.0
 #     MSPM0G3507  ->  MSPM0G3519-Q1 (M0G3519QRGZRQ1, RGZ-48)   on Jayne
 #                 ->  MSPM0G3518-Q1 (M0G3518QRHBRQ1, RHB-32)   on the gateway and Kaylee
 #     SLB9670VQ2.0 -> SLB 9672AU2.0 (PG-UQFN-32-1,-2)          on all three
-# See REFERENCES.md REF-SENSOR-013 / REF-SEC-002 and TODO.md 1.2d.
+# See REFERENCES.md REF-SENSOR-017 / REF-SEC-002 and TODO.md 1.2d.
 #
 # Do NOT re-run this script against the committed schematic: it has drifted
 # from the as-placed design and regenerating would revert the retarget.  Apply

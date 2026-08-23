@@ -133,7 +133,7 @@ hook overwrites hand edits.
 | SCAD sources | `airframe/openscad/` | OpenSCAD `.scad` |
 | Blender sources | `airframe/blender-scripts/files-hollowed-24in/` | Blender `.blend` |
 | FreeCAD assembly | `airframe/freecad/assembly/` | FreeCAD `.FCStd` |
-| PCB Gerbers | `avionics/gerbers/` | Gerber RS-274X format |
+| PCB Gerbers | `avionics/kicad/<board>/gerbers/` | Gerber RS-274X format |
 | Documentation | `docs/` | Markdown `.md` or PDF |
 
 ## Pre-Commit Checklist

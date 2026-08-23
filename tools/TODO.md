@@ -53,5 +53,6 @@ Close them in `WBS.md` there; this list is a read-only convenience view for the 
 
 - `tools/bake_hull_frame.py` — hull-frame bake (idempotent; `--check`, `--report`)
 - `airframe/blender-scripts/` — canonical fuselage hollowing pipeline
-- `airframe/kicad/*.py` (e.g. `gen_commo_sch.py`, `mod_commo_pcb.py`) — avionics schematic/PCB
-  generators (see [`avionics/WBS.md`](../avionics/WBS.md), [`avionics/rev-s1/WBS.md`](../avionics/rev-s1/WBS.md))
+- `avionics/kicad/<Board>/scripts/*.py` (e.g. `gen_commo_sch.py`, `mod_commo_pcb.py`) —
+  avionics schematic/PCB generators (see [`avionics/WBS.md`](../avionics/WBS.md),
+  [`avionics/rev-s1/WBS.md`](../avionics/rev-s1/WBS.md))

@@ -40,7 +40,7 @@ the script refuses to modify a board whose labels do not line up.
 Port remap rationale (32-pin RHB)
 ---------------------------------
 The RHB-32 package bonds out PA0-PA27 only - none of the PBx ports exist
-(TI SLASFA6B Figure 6-6).  The five (gateway) / four (Kaylee) signals that
+(TI SLASFA6B Figure 6-6).  The five (gateway) / four (FlightEngineer) signals that
 were on PBx are therefore rehomed onto free PA pins, choosing pins that still
 offer the required peripheral function per SLASFA6B Table 6-2:
 
@@ -59,7 +59,7 @@ SPI1_CS2 rather than SPI1_CS0) - a firmware pinmux change, not a wiring one.
 
 References
 ----------
-    [REF-SENSOR-004R] TI SLASFA6B  MSPM0G351x-Q1 datasheet, Fig 6-5/6-6, Table 6-2
+    [REF-SENSOR-017] TI SLASFA6B  MSPM0G351x-Q1 datasheet, Fig 6-5/6-6, Table 6-2
     [REF-SEC-002]     Infineon SLB9672 FW16.xx datasheet Rev 1.3, Fig 6, Tables 11-13
 """
 

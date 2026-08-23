@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** S
-**Last updated:** 2026-08-01
+**Last updated:** 2026-08-22
 **Revision history:** Rev R (2026-06-10) → Rev R1 (2026-06-11, hull-frame bake) → Rev S
 (2026-07-04, comprehensive checkpoint — integrates all Rev R1/R1c/R1d/R2 modifications;
 see TODO.md "Rev S Checkpoint" for the full consolidated changelog) → 2026-07-20 (added the
@@ -71,8 +71,8 @@ CERN-OHL-W 2.0 / CC BY-SA 4.0 dual-license split)
     - [REF-SENSOR-002: Benewake TFmini-S — Long-Range Time-of-Flight Ranging Module Specification](#ref-sensor-002-benewake-tfmini-s--long-range-time-of-flight-ranging-module-specification)
     - [REF-SENSOR-003: TI AM62Ax Sitara Processors — Vision SoC Datasheet](#ref-sensor-003-ti-am62ax-sitara-processors--vision-soc-datasheet)
     - [REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface (SUPERSEDED)](#ref-sensor-004-ti-mspm0g3507--mixed-signal-mcu-with-can-fd-interface-superseded)
-    - [REF-SENSOR-013: TI MSPM0G351x-Q1 — Automotive Mixed-Signal MCU with CAN-FD](#ref-sensor-013-ti-mspm0g351x-q1--automotive-mixed-signal-mcu-with-can-fd)
-    - [REF-SENSOR-014: TI MSPM0 G-Series Design and Support Literature](#ref-sensor-014-ti-mspm0-g-series-design-and-support-literature)
+    - [REF-SENSOR-017: TI MSPM0G351x-Q1 — Automotive Mixed-Signal MCU with CAN-FD](#ref-sensor-017-ti-mspm0g351x-q1--automotive-mixed-signal-mcu-with-can-fd)
+    - [REF-SENSOR-018: TI MSPM0 G-Series Design and Support Literature](#ref-sensor-018-ti-mspm0-g-series-design-and-support-literature)
     - [REF-SEC-002: Infineon OPTIGA TPM SLB 9672 — SPI TPM 2.0](#ref-sec-002-infineon-optiga-tpm-slb-9672--spi-tpm-20)
     - [REF-SENSOR-005: Microchip KSZ9477 — Ethernet Switch with HSR/PRP Hardware Redundancy](#ref-sensor-005-microchip-ksz9477--ethernet-switch-with-hsrprp-hardware-redundancy)
     - [REF-SENSOR-006: TI TCAN1042HG-Q1 — CAN-FD Transceiver](#ref-sensor-006-ti-tcan1042hg-q1--can-fd-transceiver)
@@ -1310,7 +1310,7 @@ package must be confirmed before board layout (tracked in TODO.md §1.2c).
 | CAN interface | Native hardware MCAN peripheral (CAN-FD capable) | MSPM0G3507 datasheet title: "Mixed-Signal Microcontrollers With CAN-FD Interface" |
 | Package options | 48-pin LQFP (PT), 48-pin VQFN (RGZ), 32-pin VQFN (RHB), 32-/28-pin VSSOP | MSPM0G3507 datasheet |
 
-> **Superseded 2026-08-03 by REF-SENSOR-013 (MSPM0G351x-Q1)** on all three trust-module
+> **Superseded 2026-08-03 by REF-SENSOR-017 (MSPM0G351x-Q1)** on all three trust-module
 > boards. Retained here because the clean-room RGZ-48 symbol geometry used by the
 > MSPM0G3519-Q1 symbol was originally derived from this part's datasheet (SLASEX6C).
 
@@ -1325,7 +1325,7 @@ synthesis that a non-TI MCU (e.g. RP2350) would require.
 
 ---
 
-### REF-SENSOR-013: TI MSPM0G351x-Q1 — Automotive Mixed-Signal MCU with CAN-FD
+### REF-SENSOR-017: TI MSPM0G351x-Q1 — Automotive Mixed-Signal MCU with CAN-FD
 
 | Field | Value |
 |---|---|
@@ -1360,14 +1360,14 @@ synthesis that a non-TI MCU (e.g. RP2350) would require.
 REF-SENSOR-004 (MSPM0G3507) at the 2026-08-03 retarget — `MSPM0G3519-Q1` in RGZ-48 on Jayne,
 `MSPM0G3518-Q1` in RHB-32 on `CAN-PERIPH-GW-1` and Kaylee.
 
-**Used in:** `avionics/kicad/symbols/Jayne_MSPM0G3519_Q1_RGZ.kicad_sym`,
-`avionics/kicad/symbols/Jayne_MSPM0G3518_Q1_RHB.kicad_sym`,
-`avionics/kicad/retarget_mspm0g351x_slb9672.py`, `avionics/kicad/Jayne/Jayne.md`,
-`avionics/kicad/Kaylee/Kaylee.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`, `TODO.md`
+**Used in:** `avionics/kicad/symbols/MSPM0G3519_Q1_RGZ.kicad_sym`,
+`avionics/kicad/symbols/MSPM0G3518_Q1_RHB.kicad_sym`,
+`avionics/kicad/retarget_mspm0g351x_slb9672.py`, `avionics/kicad/Observer/Observer.md`,
+`avionics/kicad/FlightEngineer/FlightEngineer.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`, `TODO.md`
 
 ---
 
-### REF-SENSOR-014: TI MSPM0 G-Series Design and Support Literature
+### REF-SENSOR-018: TI MSPM0 G-Series Design and Support Literature
 
 | Field | Value |
 |---|---|
@@ -1580,8 +1580,8 @@ retained here per project revision policy (components are referenced as of their
 revision even after superseding) and because it explains *why* the winch briefly specified a
 TTL bus servo before the fleet-wide standardisation. Do not delete; do not cite as active.
 
-> **⚠ REQUIRES VERIFICATION (root `AGENTS.md` §4).** The archived datasheet is a
-> **scanned/CID-encoded PDF**, and no OCR toolchain is available in the current build
+> **⚠ REQUIRES VERIFICATION — MOOT (superseded, not pursued further).** The archived
+> datasheet is a **scanned/CID-encoded PDF**, and no OCR toolchain is available in the current build
 > environment (`pdftotext`, `tesseract`, `mutool`, `poppler-utils` absent; `pypdf` fails on a
 > broken `cryptography` build). **No performance figure below is quoted from that datasheet.**
 > Nothing in this entry may be cited as a verified value until the gaps are read off the
@@ -2073,4 +2073,7 @@ Add verified section numbers to the relevant files and update this table.
 | Pilot's own inline "SLB9672" TPM symbol pin numbers | `avionics/kicad/Pilot/kicads/Pilot.kicad_sch` | Found 2026-07-26 while building Commo's TPM addition (which deliberately reused the separately-verified `Observer_SLB9670_TPM` clean-room symbol instead, precisely to avoid this defect): Pilot's own, independently-authored inline "SLB9670" symbol had pin numbers that did not match datasheet Revision 1.4 Tables 3–5. Not fixed at the time — out of scope for the CAN-FD/RS-485 trust-module task. **2026-08-01 SLB9670→SLB9672 migration:** the symbol/lib_id/value text was renamed to "SLB9672" (its pin *numbers* were left exactly as they were — this defect predates and is independent of the chip migration) so it now carries the same wrong-pin-number defect under the new chip's name (REF-SENSOR-011). Still not fixed — still out of scope. | Rebuild Pilot's TPM symbol from REF-SENSOR-011 using the same clean-room `parse_real_symbol`/pin-table method as `SLB9672_TPM`, or replace the instance with that verified symbol outright; re-run `kicad-cli sch erc` to confirm no regression against Pilot's existing 48-violation baseline. |
 | VimDrones `ap_periph_pico` / ESC S50 concept-only inspiration, `CAN-PERIPH-GW-1` and CAN-PERIPH-GW-1's ESC-gateway deployment mode | `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` | **Not a citation defect — documented here for license-boundary auditability.** `CAN-PERIPH-GW-1` was built as a fleet-integrated remix of the *publicly documented product concept* at <https://dev.vimdrones.com/products/vimdrones_can_periph_pico/> and <https://dev.vimdrones.com/products/vimdrones_esc_s50/> (peripheral-bus CAN/servo gateway; per-ESC CAN telemetry). VimDrones' own KiCad source (`VimDrones/AM32_esc_development_board` on GitHub) is licensed GPL-3.0, which is incompatible with this project's CC-BY-4.0-or-better attribution baseline for derivative files — no VimDrones schematic, footprint, or geometry was copied; only the public product specification was used as design inspiration, and the entire trust-module implementation (MCU, TPM, isolators, netlist) is original clean-room work against TI/Infineon datasheets. | N/A — informational; see `CAN-PERIPH-GW-1.md` "Why VimDrones' concept but not VimDrones' hardware" |
 | REF-CAD-004 misubisu hull model license stated as "CC BY 4.0" | REFERENCES.md REF-CAD-004, `current-specification/LICENSE_AND_ATTRIBUTION.md` §2, `README.md` Component License Map + Attribution quote, `docs/references/thingverse-serenity/LICENSE.txt` | **Incorrect attribution, found during TODO.md §0.9 licensing audit (2026-08-01).** The Thingiverse listing for Thing 7330462 is licensed **CC BY-SA 4.0** (ShareAlike), not plain CC BY 4.0 — the two earlier docs that had it right (`current-specification/LICENSE_AND_ATTRIBUTION.md` §2 "CC BY 4.0 SA", `docs/references/thingverse-serenity/LICENSE.txt`) used a garbled/non-standard label that also needed correcting. All four locations corrected to read "CC BY-SA 4.0". | REF-CAD-004 (corrected), REF-LIC-001 (CERN-OHL-W 2.0 Available Component treatment) |
+| REF-AMS-001 (AMS 2301 electroplating standard) — cited, no catalog entry | `airframe/README.md` §Printing Specifications (hardened-steel nozzle plating context) | Found 2026-08-22 during TODO.md §0.10.2 documentation audit: `[REF-AMS-001]` is cited but `REFERENCES.md` has no matching entry — never guess a section/spec number (root `AGENTS.md` §4). | Look up SAE AMS2301 (or confirm the intended AMS spec number) via a validated URL and add a full `REF-AMS-001` catalog entry before citing it further. (`TODO.md` §0.x) |
+| REF-WGS84-001 (WGS84 geodetic datum) — cited, no catalog entry | `gcs/README.md` §References (GPS navigation) | Found 2026-08-22, same audit pass. | Add a `REF-WGS84-001` entry citing NGA's WGS 84 standard (NGA.STND.0036) with a validated URL. (`TODO.md` §0.x) |
+| REF-HAVERSINE-001 (Haversine great-circle distance formula) — cited, no catalog entry | `gcs/README.md` §References (`gcs/skipper/software/tracking/src/tracker.py` bearing/range calculation) | Found 2026-08-22, same audit pass. | Add a `REF-HAVERSINE-001` entry citing the formula's standard reference (e.g. Sinnott 1984, "Virtues of the Haversine," Sky & Telescope) with a validated URL. (`TODO.md` §0.x) |
 | XO's own local TPM footprint (`QFN-32-1EP_4x4mm_P0.4mm_EP2.65x2.65mm`) | `avionics/kicad/XO/kicads/XO.kicad_pcb` (TPM footprint, renamed SLB9670→SLB9672 in the 2026-08-01 migration) | Found 2026-08-01 while migrating SLB9670→SLB9672: XO's placed TPM footprint uses a generic Renesas-sourced KiCad standard-library QFN-32 land pattern (4x4mm body, 0.4mm pitch, 2.65x2.65mm EP) that does not match either TPM's real package (both SLB9670 and SLB9672 are 5x5mm body, 0.5mm pitch, per their respective datasheets' Fig 6/Fig 3 recommended footprints) — i.e. `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm`, the footprint used everywhere else this part appears (Observer, Commo, Flight Engineer, CAN-PERIPH-GW-1, Pilot). A separate, pre-existing defect from the wrong-pin-number one already tracked above; not fixed this session — out of scope for the chip-migration task (renamed text only; root `AGENTS.md` §5 requires footprint-position/DRC-driven moves to be referred to the user). | Replace XO's TPM footprint with `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm` (refer the footprint swap to the user per `avionics/AGENTS.md` "Footprint and Component Placement"); re-run `kicad-cli pcb drc` to confirm no regression against XO's existing DRC baseline. |

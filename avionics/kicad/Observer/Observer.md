@@ -503,7 +503,7 @@ For project-wide standards see the root `AGENTS.md`; for avionics-specific conve
 The trust module on this board now uses **TI MSPM0G3519-Q1 (`M0G3519QRGZRQ1`)** (48-pin RGZ VQFN, 512 KB flash / 128 KB SRAM) and the
 **Infineon SLB 9672AU2.0** TPM (PG-UQFN-32-1,-2, extended −40 to +105 °C), superseding the
 MSPM0G3507 and SLB9670VQ2.0.  Parts and the specifications applied are catalogued as
-REF-SENSOR-013 and REF-SEC-002 in `REFERENCES.md`; the change was applied by
+REF-SENSOR-017 and REF-SEC-002 in `REFERENCES.md`; the change was applied by
 `avionics/kicad/retarget_mspm0g351x_slb9672.py` and `avionics/kicad/retarget_pcb_footprints.py`,
 which also wrote `.pre-g351x` backups beside each edited file.
 

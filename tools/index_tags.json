@@ -7720,16 +7720,6 @@
       ],
       "archived": false
     },
-    "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md": {
-      "description": "pcbnew 9.0.2 Python (SWIG) Binding Defects \u2014 PCB-Build Crash Report",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "pcb-design",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
     "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md": {
       "description": "Observer \u2194 phyCORE-AM62A SoM \u2014 Pad-Level Net Map",
       "tags": [
@@ -7815,6 +7805,15 @@
       "tags": [
         "avionics-hardware",
         "bom",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md": {
+      "description": "pcbnew 9.0.2 Python (SWIG) Binding Defects \u2014 PCB-Build Crash Report",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
         "pcb-design"
       ],
       "archived": false
@@ -12339,9 +12338,9 @@
       "avionics/kicad/ENC-NACELLE-1.md",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
-      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
+      "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
@@ -13879,7 +13878,6 @@
       "airframe/openscad/fuselage/bow_sensor_faceplate.scad",
       "airframe/openscad/fuselage/bow_sensor_pod.scad",
       "airframe/stls/fuselage/bow_sensor_faceplate.stl",
-      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/DS_Laser_2P.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/DS_ToF_4P.kicad_mod",
@@ -14707,7 +14705,6 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
-      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -14718,6 +14715,7 @@
       "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
       "avionics/kicad/Observer/Observer_som_pinmap.csv",
+      "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
       "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
@@ -15096,7 +15094,6 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
-      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -15107,6 +15104,7 @@
       "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
       "avionics/kicad/Observer/Observer_som_pinmap.csv",
+      "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
       "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
