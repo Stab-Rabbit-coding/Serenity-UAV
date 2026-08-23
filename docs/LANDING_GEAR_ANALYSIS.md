@@ -5,12 +5,12 @@
 Fable 5, Anthropic) under the author's direction, 2026-07-21; extended for
 the 1.5in/3.0in leg-length variant split 2026-07-23, per `AGENTS.md`
 AI-attribution policy.
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** R6 (2026-07-21, design point; 1.5in/3.0in leg-length variant
 split 2026-07-23) — Canonical articulated hip-pivot leg, spring + ductile
 bowed-wire energy absorption retained
 
-*"She's tore up plenty, but she'll fly true." — Mal, on a ship that's seen worse landings than this one's rated for.*
+*"She's tore up plenty, but she'll fly true." — Skipper, on a ship that's seen worse landings than this one's rated for.*
 
 > **Rev R5** (vertical post + 4-wire brace) **superseded 2026-07-21.** The
 > R5 post geometry — like every revision before it — descended from the
@@ -141,8 +141,8 @@ The landing gear does NOT need to be reusable after a worst-case drop
 
 Measured from [REF-CAD-003] Sheet 5 "Ventral Surface Plan View": fore feet
 at **39.2%** of hull length, aft feet at **63.9%**, feet **≈1.45× hull
-half-width** off centreline. Mapped to the baked 24-in hull (Y −305.7 …
-+384.3 mm, centreline X = −169.9, cargo belly Z = 0). **Bay hip height is
+half-width** off centerline. Mapped to the baked 24-in hull (Y −305.7 …
++384.3 mm, centerline X = −169.9, cargo belly Z = 0). **Bay hip height is
 identical for both leg-length variants** (Z +38 above the belly on the
 cargo flank) — only the leg below the hip changes length:
 
@@ -154,7 +154,7 @@ cargo flank) — only the leg below the hip changes length:
 | Aft-stbd | −260.8, +107.0, +38 | +152.0° | −318.2, +137.5 |
 
 Feet land within 5 mm of the exact canonical stations (Y −35.2 / +135.2,
-X ±144 from centreline); the small shift unifies the hip→foot moment arm
+X ±144 from centerline); the small shift unifies the hip→foot moment arm
 (41.9 mm or 65 mm, per variant) on all four corners so **one leg part
 serves every corner**. All four bays sit on the **cargo-shell flanks**
 (fore: pod nose slope at Y ≈ −7; aft: pod aft flank at Y ≈ +107; flank
@@ -166,7 +166,7 @@ variants (unchanged by leg length).
 ### 2.3 Load Share — the CG Correction
 
 Build CG is at hull-frame **Y = +111.5 mm** (nacelle pivot = canonical
-"Engine Pivots 360°" balance centre). Against the canonical wheelbase this
+"Engine Pivots 360°" balance center). Against the canonical wheelbase this
 is **86% aft**:
 
 ```text
@@ -239,7 +239,8 @@ proportion and detail.
    - **Load path.** Each leg delivers 827 N (4 ft schedule) plus a 34.7 N·m
      hip moment. If the bay were carried on the wing root, all of that would
      pass through the wing attachment — the Ø12.3 mm spar and the two root
-     mortises at Y +31.7 / +57.5 — which are sized for *flight* loads, not
+     mortises at Y +38.15 / +57.5 (spar moved 30 % → 35 % root chord, Rev S1b
+     2026-08-16) — which are sized for *flight* loads, not
      landing impact. That inserts a joint directly into the impact path and
      creates the weak point the merged design avoids.
    - **Mass.** Splitting duplicates the bay walls, adds a structural joint and
@@ -253,16 +254,16 @@ proportion and detail.
    why they measure 5.6-64.1° off the local normal. Relocate them to the
    aperture and aim each along its own local surface normal.
 
-   **RESOLVED (owner, 2026-08-09): the sponsons are already modelled in the
+   **RESOLVED (owner, 2026-08-09): the sponsons are already modeled in the
    cargo section STLs.** No new envelope is needed and there is no
    double-walling risk. Owner's description of the lower front of the cargo
-   section: the rectangular canonical cargo door in the centre, then vertical
+   section: the rectangular canonical cargo door in the center, then vertical
    corners, then vertical sides running back to an internal corner each side,
    then a trapezoidal flat that runs into a sloped side — and the run with the
    **trapezoidal cross-section is the sponson**.
 
    Measured on the baked `cargo_sect_shell24_2mm_repaired.stl`, port side
-   (half-width = X − centreline −169.9):
+   (half-width = X − centerline −169.9):
 
    | Station | Face | Z span | half-width | outer X |
    | --- | --- | --- | --- | --- |
@@ -279,7 +280,7 @@ proportion and detail.
    - The **vertical walls** squared to port/starboard (Y −7: Z 10–40 at
      half-width 56.04) are the **hull sides forward of the sponson**. They are
      NOT the sponson and NOT a mounting face.
-   - The **angled trapezoidal flats** are the **modelled landing-gear
+   - The **angled trapezoidal flats** are the **modeled landing-gear
      openings** — this is where the gear mounts. At Y −7 the fore flat measures
      Z 45–48, half-width 67.1→67.7, outer X −102.8→−102.2.
    - The **sponson** is the volume **between the two trapezoidal flats on each
@@ -293,17 +294,32 @@ proportion and detail.
    82 × 40 flank footprint instead of to the actual opening.
 
    **Wing interference is a hard constraint.** The wings attach to the cargo
-   lateral walls with the Ø12.3 spar at Y +31.7 and the root mortises at
-   Y +57.5, Z 62.5. Any hollowing or reinforcement of the sponson must clear
-   those, and the sponson sits between the fore and aft openings — i.e. spanning
-   the wing-root station. Check before cutting.
+   lateral walls with the Ø12.3 spar and the two root mortises, and the sponson
+   sits between the fore and aft openings — i.e. spanning the wing-root
+   station. Any hollowing or reinforcement of the sponson must clear those.
+
+   **Stations (Rev S1b, 2026-08-16).** Spar **Y +38.15, Z 68.42**; mortises
+   **Y +57.5, Z 62.5**. Two corrections to the figures previously carried here:
+   the spar moved from 30 % to 35 % root chord (Y +31.7 → +38.15), and its
+   height is **not** the mortise height — the bore rides the S1223 camber
+   midline, so Z is 68.42, not 62.5. Conflating the two is why the fuselage
+   bore never lined up with the wing (`airframe/wings-nacelles/WBS.md` §1.1.2).
+
+   **This was not merely a caution — it was violated.** When the sponson work
+   was first treated as complete, measurement found the bay collars intruding
+   347/349 mm³ into the mortises across their full height, a collar blocking
+   the spar bore by 0.84 mm, and the flange rebate thinning the Ø22 spar
+   bearing wall from 4.85 mm to 2.59 mm. Do not take "check before cutting" on
+   trust: run `tools/landing_gear_wing_clearance.py --proud`, which certifies
+   this by boolean intersection against the same solids the hull is built
+   with, and exits non-zero on any unbudgeted overlap.
 
    Still to do: re-measure both trapezoidal flats properly (the aft station's
    outline is noisier than the fore and was not cleanly segmented), fit the
    opening outline on each, and re-derive the §2.2 hip stations onto those
    faces.
 2. **The bay "recess" is a hinged DOOR**, a separate gridded panel, not a rim
-   moulded into the skin. Its outline is an irregular pentagon with one clipped
+   molded into the skin. Its outline is an irregular pentagon with one clipped
    corner — not the symmetric trapezoid currently in `bay_cowl()`. The
    trapezoid is a fair first approximation of the aperture but the door itself
    is a distinct part that Rev R6 does not model at all.
@@ -322,7 +338,8 @@ proportion and detail.
 
 **Status: NOT YET IMPLEMENTED.** Item 1 gates the rest — if the bays move to a
 ventral overhang, the corner stations, the bolt-normal fix (LG-02), the
-conforming hull patches (LG-10) and the pad-fit study all get re-derived
+bay seat datum (LG-10.6 — the conforming hull patch it originally called
+for was retired) and the pad-fit study all get re-derived
 against the new surface. Do not re-aim the bay bolts before settling it.
 
 ---
@@ -452,7 +469,7 @@ expansion of the exact chord `2√(ℓ² − h²)` about `h = 0`, with `ℓ = B/
 
 The implemented form divides by `2B` where the mechanism divides by `B/2`. The
 ratio `Δ_approx / Δ_script` is exactly **4.00** at every bow rise, confirming an
-algebra slip rather than a modelling choice. At the ductile design point
+algebra slip rather than a modeling choice. At the ductile design point
 (B = 55 mm, h₀ = 3.5 mm):
 
 | h (mm) | 2-hinge exact | 2-hinge approx | parabola, const. arc | script |
@@ -595,7 +612,7 @@ the build's analog of canon's "Cargo Bay Landing Pad".
 
 | Parameter | 1.5in (default) | 3.0in (extended) |
 | --- | --- | --- |
-| Geometry | One-piece: hip hub + bellcrank sockets + stop tab, twin-Ø14 mm cylinder thigh @ 18 mm centres + web (canonical telescope collars + piston rods), knee/ankle styling discs, slotted shin, square foot spigot | Same geometry family, longer thigh/shin |
+| Geometry | One-piece: hip hub + bellcrank sockets + stop tab, twin-Ø14 mm cylinder thigh @ 18 mm centers + web (canonical telescope collars + piston rods), knee/ankle styling discs, slotted shin, square foot spigot | Same geometry family, longer thigh/shin |
 | Infill / layers | 100%, 0.15 mm, print lying on −Y face | Same |
 | Mass (STL volume) | 27.65 cm³ → ≈36.0 g each × 4 = 144 g | 40.64 cm³ → ≈52.8 g each × 4 = 211 g |
 
@@ -675,7 +692,7 @@ Dyneema SK75 2 mm, ≥750 N — one per leg, foot hub → bay → hull anchor
 | M3 × 30 SS pin | 8 | Hip pin + stop pin, 2 per corner |
 | M3 × 12 SS bolt + backing | 16 | Bay-to-shell mounts, 4 per bay (LG-02) |
 | M2.5 × 30 SS bolt | 4 | Foot retention |
-| Wire retention (LG-13, TBD) | 16 | Pin / set screw / adhesive at bay bosses |
+| Wire retention (LG-13, pending sign-off) | 16 | Nylon-tipped M2 drag screw at bay bosses (candidate, §4.5a) |
 | Dyneema SK75 2 mm | 1.6 m | Safety cords |
 
 ---
@@ -713,13 +730,13 @@ Dyneema SK75 2 mm, ≥750 N — one per leg, foot hub → bay → hull anchor
 
 ## 15. Open Items and Verification Requirements
 
+*Closed since the last revision: **LG-17** (2026-08-09, 4 ft adopted) and **LG-10** (2026-08-17, all eight sub-items — see `airframe/landing-gear/WBS.md` §1.1.4.1). LG-10's "flank conforming" clause was **retired** rather than built: the hull-side flange rebate presents a flat seat, so the printed bay keeps a flat back face and the two are held together by a shared datum instead (`tools/landing_gear_bay_seat_fit.py`). Its "Z-level rule" turned out not to be about the four feet, which were always level — see §1.1.4.1 LG-10.8.*
+
 | ID | Item | Blocks |
 | --- | --- | --- |
-| LG-17 | **Drop-height decision: 6 ft vs 4 ft schedule** (§4.4 — wire Ø only, both variants) | LG-15 procurement |
 | LG-15 | Procure both wire grades to the §11.2/11.3 schedule; re-check Ø against as-weighed AUW; coupon test | Leg fabrication |
 | LG-16 | Confirm ductile temper survives jig-forming without cracking | Leg fabrication |
 | LG-13 | Wire-end retention detail at bay bosses (pin/set screw/adhesive) vs §4.6/§4.7 lateral load — extra weight for the 1.5in variant's tighter single-wire-fallback margin | First flight |
-| LG-10 | Finalize 4 bay placements in `SerenityAssembly.FCStd` (flank conforming, Z-level rule); remove retired Strong-Leg `Union…003` objects; bake | LG-02, printing |
 | LG-02 | Bay mounting integration: internal backing plates, through-bolts, flank conforming spacer or shell recess; DRC mesh check | Hull print |
 | LG-03 | Rear-skid CF rod channel (unchanged, unrelated) | Taxi test |
 | LG-06 | **Revised elastic bench check:** quarter-AUW fixture **1.73 lbm (783 g)** dropped 1.5 ft onto one corner = 3.51 J → zero permanent set anywhere, either variant. (R5 protocol used full AUW = 14 J — it would fire the fuses; superseded.) | First flight |

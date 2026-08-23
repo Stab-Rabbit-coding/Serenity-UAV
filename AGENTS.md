@@ -13,6 +13,7 @@ fabricated or procured. Never leave a spec as "TBD"; quote real masses, CG, and 
 `README.md` for the mission profile.
 
 Non-negotiable, project-wide requirements:
+
 - **Redundancy/failover** in every system where feasible (dual ESCs, independent battery
   rails, manual override).
 - **Security**: every message, internal and external, is digitally signed, authenticated, and
@@ -24,6 +25,7 @@ Non-negotiable, project-wide requirements:
   not just this airframe.
 
 **Propulsion baseline** (use for all thrust calculations):
+
 - Nacelle EDF: 50 mm 6S, x-fly 2627-3200kv, 12-fin rotor / 11-fin stator, 1240 g thrust each;
   2 EDFs in series per nacelle, 90% stator efficiency → **2232 g per nacelle**.
 - Fuselage EDF (Phase 11, optional/deferred): 55 mm 6S, feeds the **fixed** canonical
@@ -36,14 +38,16 @@ Non-negotiable, project-wide requirements:
 implementation/PCB status see `avionics/AGENTS.md` and each board's own `.md` under
 `avionics/kicad/<board>/`, which is updated more often than this file and is authoritative for
 as-built state):
+
 - 8× PocketBeagle2 Industrial SBC nodes, each carrying **Pilot** (flight control/sensor cape) +
-  **TACCO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
-- **COMMO** (49 MHz + LoRa transceiver cape) is installed only in River's Room and Simon's
+  **XO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
+- **Commo** (49 MHz + LoRa transceiver cape) is installed only in River's Room and Simon's
   Medbay.
 - Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected.
 - External C2, all 4 usable for command and control: Wi-Fi 5 GHz, Zigbee 2.4 GHz, MAVLink/SiK
   915 MHz, AX.25 49 MHz (47 CFR Part 15 §15.235 — unlicensed, **not** Part 95 RCRS
-  [REF-FCC-003]). S-Bus is supported by the capes but unused.
+  [REF-FCC-003]). S-Bus is supported by the capes but unused. Band-by-band FCC citations:
+  `avionics/AGENTS.md` "External Communications Regulations Compliance".
 - Each nacelle has 2 EDFs in series, independently PID-controlled by two different SBCs. Any
   of the 4 flight-control nodes can take over any EDF.
 
@@ -52,11 +56,11 @@ as-built state):
 Read this file plus the one matching your task's scope:
 
 | File | Scope |
-|---|---|
+| --- | --- |
 | `airframe/AGENTS.md` | Structural/CAD/3D design, hull-frame coordinates, fabrication, STL/SCAD, FreeCAD |
 | `avionics/AGENTS.md` | KiCad PCB design, capes, security/crypto, comms protocols |
 | `docs/AGENTS.md` | Documentation standards, standards vetting, references |
-| `gcs/AGENTS.md` | Ground Control Station (Malcolm) |
+| `gcs/AGENTS.md` | Ground Control Station (Skipper) |
 | `tools/AGENTS.md` | Build automation, bake tool, Blender pipeline |
 | `current-specification/AGENTS.md` | Active specs, revision numbering, traceability |
 | `graphical-build-guide/AGENTS.md` | Build guide, fabrication checklists |
@@ -67,8 +71,17 @@ pick one silently — see §11.
 
 ## 3. Attribution and Licensing
 
-All work is published under **CC BY 4.0**. Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-(personal copyright retained; avionics boards are marked with his personally owned LLC name).
+Work is **dual-licensed** by content type — see `docs/attribution_and_licensing.md` for the
+full policy and the per-subsystem `LICENSE` federation map:
+
+- **Hardware/CAD/PCB design files** (airframe SCAD/STL/FCStd, avionics KiCad
+  schematics/layouts/Gerbers) — **CERN-OHL-W 2.0**. Root `LICENSE`, `airframe/LICENSE`,
+  `avionics/LICENSE`.
+- **Documentation, code, scripts, and non-hardware drawings** — **CC BY-SA 4.0**.
+  `docs/LICENSE`, `tools/LICENSE`, and other subsystem `LICENSE` files.
+
+Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (personal copyright retained; avionics
+boards are marked with his personally owned LLC name).
 
 - **Never fabricate a reference, citation, standard, or other resource.**
 - Cite every resource used, whether or not the license requires it.
@@ -80,30 +93,31 @@ All work is published under **CC BY 4.0**. Author: Steve Griffing, PE(CSE), CISS
   **must** be cited in the source file's docstring/comment block and in the commit message.
 - Derivative files carry the **full attribution chain** back to upstream sources.
 - **Before committing any model, image, KiCad symbol, SCAD file, STL, or code snippet**,
-  confirm its license is compatible with CC BY 4.0. Only license-compatible items are
-  integrated.
+  confirm its license is compatible with the applicable project license — CERN-OHL-W 2.0 for
+  hardware/CAD/PCB files, CC BY-SA 4.0 for documentation/code/scripts/drawings (see
+  `docs/attribution_and_licensing.md`). Only license-compatible items are integrated.
 
 ## 4. Standards Vetting
 
 Every design decision with any effect beyond cosmetic appearance must be vetted against
-applicable standards/regulations before implementation.
+applicable standards/regulations before implementation. Every citation is cataloged in
+`REFERENCES.md` and written as `[REF-ID §section.subsection.paragraph]`. **Never guess or
+invent a section number.** If a citation can't be verified, mark it "requires verification" in
+`REFERENCES.md` and add a `TODO.md §0.x` item.
 
-- Catalog every citation in `REFERENCES.md`: designation + full title, a validated URL,
-  the exact chapter/section/paragraph applied, and every file that cites it.
-- Cite in code and docs as `[REF-ID §section.subsection.paragraph]`.
-- **Never guess or invent a section number.** If a citation can't be verified, mark it
-  "requires verification" in `REFERENCES.md` and add a `TODO.md §0.x` item.
-- Applicable bodies: FAA, FCC, NIST, DoD/DLA, ISO, IEC, VDE, IEEE, ISA/IEC 62443,
-  AUVSI/ASTM F38, ICAO. All legal/regulatory matters are US jurisdiction.
+`docs/AGENTS.md` ("Standards Vetting Policy", "Applicable Standards Bodies") owns the required
+`REFERENCES.md` catalog fields, the citation-audit and reference-lifecycle procedures, and the
+list of applicable standards bodies — read it there, do not restate it here. All
+legal/regulatory matters are US jurisdiction.
 
 ## 5. Engineering Requirements
 
 - Account for real weight, balance, power, space, and component capability on every change;
   quote actual masses/CG shifts — never leave them "TBD."
 - **Units — imperial-primary, metric in parentheses**: `10 in (254 mm)`, `2.5 lbm (1.13 kg)`,
-  `4.8 lbf (21.4 N)`. Use **lbm** for mass, **lbf** for force — never bare "lb." Thrust/lift/
-  aerodynamic loads are forces (lbf/N); component weight and payload capacity are masses
-  (lbm/kg). Airspeed and wind speed are always **kt** (never mph/km/h).
+  `4.8 lbf (21.4 N)`, `25 kt (12.8 m/s)`. Use **lbm** for mass, **lbf** for force — never bare
+  "lb." Thrust/lift/aerodynamic loads are forces (lbf/N); component weight and payload capacity
+  are masses (lbm/kg). Airspeed and wind speed are always **kt** (never mph/km/h).
 - Failover: every system needs a fallback or redundant path where feasible.
 - EDF housings are structural, printed as part of the build — specify wall thickness, infill,
   and material for each.
@@ -113,25 +127,22 @@ applicable standards/regulations before implementation.
 
 ### Airframe geometry
 
-Serenity's hull is complex — bounding-box/centroid math is inadequate for part placement. Use
-the validated hull-frame positions in `airframe/AGENTS.md`, or request manual FreeCAD
-placement from the user when uncertain. Keep the canonical outer mold line intact; interior
-modifications must blend into it and never alter the exterior unless structurally required. The
-`docs/references/` library is the ground truth for what "canonical" shape means — authority order
-QMx 2007 blueprints (most authoritative) → Nick Henning renders → misubisu Thingiverse model
-(the `s_*.stl` origin; verify against the two above). See `airframe/AGENTS.md` "Canonical Accuracy
-References" and `REFERENCES.md` REF-CAD-002/003/004.
-Four fuselage sections (head, cargo, middle-neck/horseshoe ring, rear) plus wings and tilting
-nacelles — see `airframe/AGENTS.md` for the qualitative layout, the hull-frame coordinate
-standard, and the validated extents table (do not duplicate that table here).
+Serenity's hull is complex — bounding-box/centroid math is inadequate for part placement, and
+the canonical outer mold line must stay intact: interior modifications blend into it and never
+alter the exterior unless structurally required. When uncertain, request manual FreeCAD
+placement from the user. `airframe/AGENTS.md` ("Canonical Geometry and Coordinate System",
+"Geometry Reference Points", "Geometry Integrity — Keep Skin True to Canon") and
+`airframe/HULL_FRAME_REFERENCE.md` ("Canonical Accuracy References" plus the validated extents
+table) own the hull-frame coordinate standard, the four-section layout, and the
+canonical-accuracy authority order over `docs/references/` (`REFERENCES.md`
+REF-CAD-002/003/004) — do not duplicate any of it here.
 
-Landing-gear and nacelle-nozzle-drive implementation details change as the design matures —
-do not restate their specifics in this file. Canonical sources: `docs/LANDING_GEAR_ANALYSIS.md`
-(landing gear, current revision) and `docs/NOZZLE_DRIVE_TRADE.md` (nozzle drive mechanism,
-current revision); see `airframe/AGENTS.md` for both. Each nacelle nozzle is variable-diameter,
-driven by nacelle tilt, sized 75% of bore at 0° (forward) to 105% of bore at ≥90° (vertical/
-backing) — that ratio is a fixed functional requirement; the drive mechanism that achieves it
-is under active trade study and must not be assumed.
+Landing-gear and nacelle-nozzle-drive implementation details change as the design matures — do
+not restate their specifics in this file. Canonical sources: `docs/LANDING_GEAR_ANALYSIS.md`
+(landing gear) and `docs/NOZZLE_DRIVE_TRADE.md` (nozzle drive), both at current revision,
+routed from `airframe/AGENTS.md` "Landing Gear" and "Nacelle Nozzle Drive" — which also state
+the fixed nozzle-diameter functional requirement. The drive mechanism that achieves it is under
+active trade study and must not be assumed.
 
 ## 6. Coding Standards
 
@@ -155,8 +166,9 @@ is under active trade study and must not be assumed.
   25% non-structural. Replace any stray "PETG" reference with CF-PETG when found; verify any
   other material mentioned in the repo. (The DaVinci Jr prototype is exempt — not expected to
   meet full-build spec.)
-- Exterior shell: hollow to 2.0 mm, watertight, no voids; fill with 2 lb/ft³ low-density foam;
-  inter-section mating faces stay open for build access.
+- Exterior shell: hollow to 2.0 mm (0.079 in), watertight, no voids; fill with 2 lb/ft³
+  (32 kg/m³) low-density closed-cell foam; inter-section mating faces stay open for build
+  access and inter-compartment cable routing.
 - Integrate mounting brackets/bosses/ribs into the shell print wherever feasible.
 - Load-bearing mating joints require a minimum 2-wall contact annulus **and** a positive-stop
   shoulder — friction fit alone is never acceptable for a flight-critical joint.
@@ -181,31 +193,38 @@ is under active trade study and must not be assumed.
 
 ## 9. Naming and Roles
 
-| Name | Role | Firefly line |
-|---|---|---|
-| Malcolm | Ground control station | "I aim to misbehave." |
-| Pilot | Flight Control + Sensor cape | "I'm a leaf on the wind." |
-| TACCO | Comms/Logging/Payload cape | "Big Damn Heroes, sir." |
-| FlightEngineer | Power Distribution Board | "Everything is shiny." |
-| COMMO | 49 MHz + LoRa transceiver cape | — |
-| Observer | Cargo-handling + nose/cargo-bay vision/ToF/laser board | "She's a good gun." |
-| Shepherd's Room | Bay A — forward avionics | "I have heathens enough right here." |
-| Inara's Shuttle | Bay B — port avionics | "Mal, I will never understand you." |
-| River's Room | Bay C — starboard avionics | "I can kill you with my mind." |
-| Simon's Medbay | Bay D — aft avionics | "What did they do to you?" |
+| Name | Role |
+| --- | --- |
+| Skipper | Ground control station |
+| Pilot | Flight Control + Sensor cape |
+| XO | Comms/Logging/Payload cape |
+| Flight Engineer | Power Distribution Board |
+| Commo | 49 MHz + LoRa transceiver cape |
+| Observer | Cargo-handling + nose/cargo-bay vision/ToF/laser board |
+| Shepherd's Room | Bay A — forward avionics |
+| Inara's Shuttle | Bay B — port avionics |
+| River's Room | Bay C — starboard avionics |
+| Simon's Medbay | Bay D — aft avionics |
 
-FlightEngineer's room sits in the middle-section inner neck (open ventral face of the horseshoe ring),
+The six board names (Skipper, Pilot, XO, Flight Engineer, Commo, Observer) are **generic role
+names**, chosen 2026-08-01 to replace the project's original Firefly-character board names
+(TODO.md §0.9 item 8 — avoiding trademark exposure, §3 above). The four bay names were **not**
+renamed. The former-name/inspiration table and the full renaming record live in
+`docs/attribution_and_licensing.md` §6 (also `docs/WBS.md` §0.9) — historical only; never use a
+former name in new work.
+
+Flight Engineer's room sits in the middle-section inner neck (open ventral face of the horseshoe ring),
 minimizing power-run length to all four nacelles/stacks/battery. Observer is a standalone board
-(not a PB2-I cape) installed at two locations — bow sensor pod and cargo nadir FPV mount —
-connected only via the shielded Ethernet ring + CAN-FD trunk. **Observer's laser-indicator specs
-(class, spread angle, per-site optics) change as the design matures — do not restate them
-here; canonical source is `docs/JAYNE_LASER_ANALYSIS.md` (current revision) and
-`avionics/kicad/Observerver/Observer.md`.**
+(not a PB2-I cape) — `avionics/AGENTS.md` "Observer — Cargo-Handling System and Nose/Cargo-Bay
+Vision, ToF & Laser Board" owns its install sites and interfaces. **Observer's laser-indicator
+specs (class, spread angle, per-site optics) change as the design matures — do not restate them
+here; canonical source is `docs/OBSERVER_LASER_ANALYSIS.md` (current revision) and
+`avionics/kicad/Observer/Observer.md`.**
 
 **PACE per stack** (Primary / Alternative / Contingency / Emergency):
 
 | Stack | Watchdog | Comms | Flight Control | Payload |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | Shepherd | P | A | C | E |
 | Inara | A | P | E | C |
 | River | C | E | P | A |
@@ -215,9 +234,9 @@ Shepherd: watchdog/fault-detect/failover/auth; SiK primary, Wi-Fi secondary.
 Inara: camera/external sensors/high-bandwidth ground link; Wi-Fi primary, SiK-MAVLink
 secondary.
 River: forward EDF + nacelle tilt sync + most resilient comms; 49 MHz primary, LoRa secondary,
-both via COMMO.
-Simon: aft EDF + alternate watchdog + Jayne/cargo oversight; 49 MHz primary, SiK secondary,
-both via COMMO.
+both via Commo.
+Simon: aft EDF + alternate watchdog + Observer/cargo oversight; 49 MHz primary, SiK secondary,
+both via Commo.
 
 ## 10. Workflow
 
@@ -242,31 +261,16 @@ Every subsystem that owns WBS branches keeps **two files, not one**:
   `WBS.md`. This is the "what's actually left" view. Close an item in `WBS.md` first;
   `TODO.md` is regenerated/pruned from there, never edited as the source of truth.
 
-Governance stays with the `AGENTS.md` files listed in §2; several subsystems keep `WBS.md`
-detail split across more than one file so none exceeds ~500 lines (the threshold at which a
-subsystem gets a new detail file rather than an ever-growing one):
-
-- **avionics/** — `avionics/{TODO,WBS}.md` (Pilot/TACCO/COMMO cape hardware, names, workload),
-  `avionics/rev-s1/{TODO,WBS}.md` (COMMO/TACCO/FlightEngineer Rev S1 redesign),
-  `avionics/emi-hardening/{TODO,WBS}.md` (§0.6, §1.4 EMI hardening beyond the PCBs),
-  `avionics/jayne/{TODO,WBS}.md` (Observer board + firmware), `avionics/firmware/{TODO,WBS}.md`
-  (Pilot/TACCO node firmware)
-- **airframe/** — `airframe/{TODO,WBS}.md` (hull-frame standard, non-printable placeholders,
-  procurement), `airframe/fuselage-joints/{TODO,WBS}.md`, `airframe/fuselage-covers/{TODO,WBS}.md`,
-  `airframe/fuselage-mid/{TODO,WBS}.md` (fuselage §1.1.1, split 3 ways),
-  `airframe/wings-nacelles/{TODO,WBS}.md`, `airframe/landing-gear/{TODO,WBS}.md`
-- **graphical-build-guide/** — `graphical-build-guide/{TODO,WBS}.md` (Phases 0-4 + SVG rebuild
-  pipeline), `graphical-build-guide/flight-phases/{TODO,WBS}.md` (Phases 5-10)
-- **docs/**, **gcs/**, **deferred/** — a single `{TODO,WBS}.md` pair each (well under the cap)
-- **tools/**, **current-specification/** — reference-index `TODO.md` files only, no `WBS.md`
-  (own no WBS branch and no checkboxes of their own; pointer views into the owning
-  subsystem's `WBS.md`/`TODO.md`)
-
-Split detail files are governed by their parent folder's `AGENTS.md` (no separate federated
-`AGENTS.md` per split — e.g. `avionics/jayne/` follows `avionics/AGENTS.md`).
+Governance stays with the `AGENTS.md` files listed in §2. Several subsystems split `WBS.md`
+detail across more than one file so none exceeds ~500 lines (the threshold at which a subsystem
+gets a new detail file); the full per-subsystem inventory of those `{TODO,WBS}.md` pairs — for
+`avionics/`, `airframe/`, `graphical-build-guide/`, `docs/`, `gcs/`, `deferred/`, `tools/`, and
+`current-specification/` — is in **`docs/WBS_FEDERATION.md`**. Split detail files are governed
+by their parent folder's `AGENTS.md` (no separate federated `AGENTS.md` per split).
 
 New work: close it in the owning `WBS.md` first (full notes there), then prune/regenerate the
 matching `TODO.md` line from it. Sync root and subsystem `WBS.md`/`TODO.md` before committing.
+
 - Prefer editing existing files. No speculative abstractions, feature flags, or unused
   scaffolding — build only what the task needs.
 - Blender: run headless — `blender --background --python <script>.py`. FreeCAD:

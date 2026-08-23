@@ -12,14 +12,14 @@
 ### Automation Scripts
 - **`avionics/kicad/complete_1_2b.py`** (executable)
   - Master orchestration script for todo 1.2b
-  - Guides through 13 sequential steps across Emma, TACCO, FlightEngineer
+  - Guides through 13 sequential steps across Commo, XO, Flight Engineer
   - Auto-detects KiCad environment; runs DRC/gerber generation
   - Handles manual steps (GUI routing, schematic edits) with clear prompts
-  - Usage: `python3 complete_1_2b.py --board emma --verbose`
+  - Usage: `python3 complete_1_2b.py --board commo --verbose`
 
 ### Reference Mappings
-- **`avionics/kicad/TACCO/ref_remap_2026-07-18.json`**
-  - TACCO schematic→PCB reference-designator remapping
+- **`avionics/kicad/XO/ref_remap_2026-07-18.json`**
+  - XO schematic→PCB reference-designator remapping
   - 9 critical renames (CMC_CAN → CMC-CAN, WIFI-BT → WIFI & BT, etc.)
   - Components to remove (LoRa, SBUS, XCVR blocks)
   - Step-by-step procedure for Find&Replace
@@ -51,14 +51,14 @@ python3 -c "import pcbnew"   # Should succeed
 
 ### 2. Run Orchestration Script
 ```bash
-# Start with Emma board
-python3 avionics/kicad/complete_1_2b.py --board emma --verbose
+# Start with Commo board
+python3 avionics/kicad/complete_1_2b.py --board commo --verbose
 
-# Then TACCO
-python3 avionics/kicad/complete_1_2b.py --board zoë --verbose
+# Then XO
+python3 avionics/kicad/complete_1_2b.py --board xo --verbose
 
-# Then FlightEngineer
-python3 avionics/kicad/complete_1_2b.py --board flightengineer --verbose
+# Then Flight Engineer
+python3 avionics/kicad/complete_1_2b.py --board flight_engineer --verbose
 ```
 
 The script will:
@@ -72,9 +72,9 @@ If you want more granular control, follow:
 ```
 TODO-1.2b-CHECKLIST.md
 
-├─ Phase 1: Emma Rev S1 (sections 1.A–1.F)
-├─ Phase 2: TACCO Rev S1 (sections 2.A–2.F)
-└─ Phase 3: FlightEngineer Rev S1 (sections 3.A–3.D)
+├─ Phase 1: Commo Rev S1 (sections 1.A–1.F)
+├─ Phase 2: XO Rev S1 (sections 2.A–2.F)
+└─ Phase 3: Flight Engineer Rev S1 (sections 3.A–3.D)
 ```
 
 Each section includes:
@@ -86,12 +86,12 @@ Each section includes:
 ### 4. Commit Results
 After all three boards are complete:
 ```bash
-git add avionics/kicad/Emma/kicads/*.kicad_* avionics/kicad/TACCO/kicads/*.kicad_* avionics/kicad/FlightEngineer/kicads/*.kicad_*
-git add avionics/kicad/gerbers/Emma-S1/ avionics/kicad/gerbers/CAPE-B-2-S1/ avionics/kicad/gerbers/FlightEngineer-S1/
+git add avionics/kicad/Commo/kicads/*.kicad_* avionics/kicad/XO/kicads/*.kicad_* avionics/kicad/FlightEngineer/kicads/*.kicad_*
+git add avionics/kicad/gerbers/Commo-S1/ avionics/kicad/gerbers/CAPE-B-2-S1/ avionics/kicad/gerbers/FlightEngineer-S1/
 git add avionics/rev-s1/WBS.md TODO.md
-git add avionics/kicad/Emma/Emma.md avionics/kicad/TACCO/TACCO.md avionics/kicad/FlightEngineer/FlightEngineer.md
+git add avionics/kicad/Commo/Commo.md avionics/kicad/XO/XO.md avionics/kicad/FlightEngineer/FlightEngineer.md
 
-git commit -m "Complete todo 1.2b: Emma/TACCO/FlightEngineer Rev S1 PCB redesigns (per checklist)"
+git commit -m "Complete todo 1.2b: Commo/XO/Flight Engineer Rev S1 PCB redesigns (per checklist)"
 git push -u origin claude/todo-item-1-2b-e89qrb
 ```
 
@@ -99,19 +99,19 @@ git push -u origin claude/todo-item-1-2b-e89qrb
 
 ## Board-Specific Summary
 
-### Emma Rev S1 — Add LoRa, Replace JST with P1+P2 Socket Rails
+### Commo Rev S1 — Add LoRa, Replace JST with P1+P2 Socket Rails
 
 **Current Status:** ~95% complete (schematic/PCB done, routing 90%, gerbers blocked)
 
 **What's Done:**
-- ✓ Schematic generated (gen_emma_sch.py, 2026-07-04)
-- ✓ PCB rework applied (mod_emma_pcb.py, 2026-07-04)
-- ✓ RSSI sub-circuit routed (route_emma_rssi.py, 2026-07-05)
+- ✓ Schematic generated (gen_commo_sch.py, 2026-07-04)
+- ✓ PCB rework applied (mod_commo_pcb.py, 2026-07-04)
+- ✓ RSSI sub-circuit routed (route_commo_rssi.py, 2026-07-05)
 - ✓ DRC hard violations cleared (0 errors)
 
 **What's Left:** ~4–5 hours
 1. Route RSSI_DCD (1 net, ~28 mm cross-board run)
-   - Start: `python3 avionics/kicad/Emma/scripts/route_emma_rssi.py dcd`
+   - Start: `python3 avionics/kicad/Commo/scripts/route_commo_rssi.py dcd`
    - Finish: Interactive push-shove routing in KiCad GUI (Ctrl+Shift+R)
 
 2. Route remaining 13 nets (RF_TX, AFSK_*, DDS_*, TCXO_OUT, RX_LNA, etc.)
@@ -125,16 +125,16 @@ git push -u origin claude/todo-item-1-2b-e89qrb
 4. Address 3 pre-existing in-circuit stubs (RF_ANT_SW, PA_EMIT, DDS_FSYNC)
    - Route to appropriate pads or document as intentionally unconnected
 
-5. Generate gerbers: `python3 avionics/kicad/generate_gerbers.py emma`
+5. Generate gerbers: `python3 avionics/kicad/generate_gerbers.py commo`
 
 **Key Scripts:**
-- `avionics/kicad/Emma/scripts/route_emma_rssi.py` (RSSI routing)
-- `avionics/kicad/Emma/scripts/cleanup_emma_drc.py` (DRC fix history)
+- `avionics/kicad/Commo/scripts/route_commo_rssi.py` (RSSI routing)
+- `avionics/kicad/Commo/scripts/cleanup_commo_drc.py` (DRC fix history)
 - `avionics/kicad/generate_gerbers.py` (gerber generation)
 
 ---
 
-### TACCO (Cape-B-2) Rev S1 — Remove LoRa, Add P1+P2 Passthrough Rails
+### XO (Cape-B-2) Rev S1 — Remove LoRa, Add P1+P2 Passthrough Rails
 
 **Current Status:** 65% complete (PCB done, schematic 30 days behind, major rework needed)
 
@@ -145,31 +145,31 @@ git push -u origin claude/todo-item-1-2b-e89qrb
 **What's Left:** ~1–2 hours (mostly manual GUI work)
 1. Remap reference designators (9 renames: CMC_CAN → CMC-CAN, etc.)
    - Tool: Find & Replace (Ctrl+H) in KiCad GUI
-   - Reference file: `avionics/kicad/TACCO/ref_remap_2026-07-18.json`
+   - Reference file: `avionics/kicad/XO/ref_remap_2026-07-18.json`
    - Validate: Run ERC after each rename
 
 2. Remove obsolete components:
    - LoRa block (LORA, D_ANT_LORA, FL_LORA, J_SMA_LORA, BPF_915×2)
    - SBUS block (U_SBUS_B, R_SBUS_RX, SW1)
-   - XCVR block (J_XCVR, R_XCVR_RX, D_XCVR_TVS) — Emma cable now obsolete
+   - XCVR block (J_XCVR, R_XCVR_RX, D_XCVR_TVS) — Commo cable now obsolete
    - Deprecated items (CM_ETH_B, U_ETH_B_1V8, TVS_ETHB_*)
 
 3. Add P1/P2-TOP (upper-face passthrough headers)
    - Copy from existing P1/P2 lower headers
    - Wire: lower pin N ↔ upper pin N (passthrough)
-   - Add 0Ω jumpers on signals used by TACCO (Wi-Fi, SiK, I²C, UART)
+   - Add 0Ω jumpers on signals used by XO (Wi-Fi, SiK, I²C, UART)
 
-4. Run ERC: `kicad-cli sch erc TACCO.kicad_sch`
+4. Run ERC: `kicad-cli sch erc XO.kicad_sch`
    - Target: 0 new errors (pre-existing 564 warnings acceptable)
 
-5. Generate gerbers: `python3 avionics/kicad/generate_gerbers.py zoë`
+5. Generate gerbers: `python3 avionics/kicad/generate_gerbers.py xo`
 
 **Key File:**
-- `avionics/kicad/TACCO/ref_remap_2026-07-18.json` (remapping guide)
+- `avionics/kicad/XO/ref_remap_2026-07-18.json` (remapping guide)
 
 ---
 
-### FlightEngineer Rev S1 — Remove 6 V BEC, Add 5 V Servo Output
+### Flight Engineer Rev S1 — Remove 6 V BEC, Add 5 V Servo Output
 
 **Current Status:** 0% (not yet started; design straightforward, low risk)
 
@@ -191,7 +191,7 @@ git push -u origin claude/todo-item-1-2b-e89qrb
 3. Run DRC: `kicad-cli pcb drc --schematic-parity FlightEngineer.kicad_pcb`
    - Target: 0 hard errors
 
-4. Generate gerbers: `python3 avionics/kicad/generate_gerbers.py flightengineer`
+4. Generate gerbers: `python3 avionics/kicad/generate_gerbers.py flight_engineer`
 
 **Key Documents:**
 - Current schematic: `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch`
@@ -203,27 +203,27 @@ git push -u origin claude/todo-item-1-2b-e89qrb
 
 ### Gerber Files (Ready for Fabrication)
 ```
-avionics/kicad/gerbers/Emma-S1/
-  ├─ Emma-F_Cu.gbr
-  ├─ Emma-B_Cu.gbr
-  ├─ Emma-F_Mask.gbr
-  ├─ Emma-B_Mask.gbr
-  ├─ Emma-F_Silkscreen.gbr
-  ├─ Emma-B_Silkscreen.gbr
-  ├─ Emma-Edge_Cuts.gbr
-  ├─ Emma-In1_Cu.gbr (GND plane)
-  ├─ Emma-In2_Cu.gbr (power plane)
-  ├─ Emma.drl (drill file)
-  └─ Emma-job.gbrjob (KiCad job file)
+avionics/kicad/gerbers/Commo-S1/
+  ├─ Commo-F_Cu.gbr
+  ├─ Commo-B_Cu.gbr
+  ├─ Commo-F_Mask.gbr
+  ├─ Commo-B_Mask.gbr
+  ├─ Commo-F_Silkscreen.gbr
+  ├─ Commo-B_Silkscreen.gbr
+  ├─ Commo-Edge_Cuts.gbr
+  ├─ Commo-In1_Cu.gbr (GND plane)
+  ├─ Commo-In2_Cu.gbr (power plane)
+  ├─ Commo.drl (drill file)
+  └─ Commo-job.gbrjob (KiCad job file)
 
 [Same structure for CAPE-B-2-S1/ and FlightEngineer-S1/]
 ```
 
 ### Updated Documentation
 - `avionics/rev-s1/WBS.md` — §1.2b fully checked (all items complete)
-- `TODO.md` — 3 items removed from §1.2b (Emma, TACCO, FlightEngineer marked done)
-- `avionics/kicad/Emma/Emma.md` — status updated to "Rev S1 complete, ready for fabrication"
-- `avionics/kicad/TACCO/TACCO.md` — status updated to "Rev S1 complete, ready for fabrication"
+- `TODO.md` — 3 items removed from §1.2b (Commo, XO, Flight Engineer marked done)
+- `avionics/kicad/Commo/Commo.md` — status updated to "Rev S1 complete, ready for fabrication"
+- `avionics/kicad/XO/XO.md` — status updated to "Rev S1 complete, ready for fabrication"
 - `avionics/kicad/FlightEngineer/FlightEngineer.md` — status updated to "Rev S1 complete, ready for fabrication"
 
 ---
@@ -248,9 +248,9 @@ sudo apt install python3-kicad
 
 **Issue: DRC reports unexpected violations**
 - Review `avionics/rev-s1/WBS.md` for **pre-existing backlog**
-  - Emma: 174 silk warnings, 15 clearance errors (0.5mm IC pitches, unfixable)
-  - TACCO: 564 ERC warnings (pre-existing, not caused by recent work)
-  - FlightEngineer: 701 open items (pre-existing, CI ignores via --changed-since)
+  - Commo: 174 silk warnings, 15 clearance errors (0.5mm IC pitches, unfixable)
+  - XO: 564 ERC warnings (pre-existing, not caused by recent work)
+  - Flight Engineer: 701 open items (pre-existing, CI ignores via --changed-since)
 - Accept SOFT violations; only fix HARD violations (shorts, clearance, courtyard)
 
 **Issue: Routing too tight (cannot fit 0.2mm traces)**
@@ -269,15 +269,15 @@ sudo apt install python3-kicad
 
 When you reach this state, todo 1.2b is **complete**:
 
-- [ ] **Emma Rev S1**
+- [ ] **Commo Rev S1**
   - [ ] All 13 unrouted nets completed
   - [ ] RSSI_DCD routed from CMP.5 to PB2-P2 pad 2
   - [ ] Differential pairs length-matched (Ethernet, LoRa SPI)
   - [ ] DRC: 0 hard errors
-  - [ ] Gerbers generated to `avionics/kicad/gerbers/Emma-S1/`
+  - [ ] Gerbers generated to `avionics/kicad/gerbers/Commo-S1/`
   - [ ] Board markdown updated, status = "Rev S1 complete, ready for fabrication"
 
-- [ ] **TACCO Rev S1**
+- [ ] **XO Rev S1**
   - [ ] Schematic reference-designators remapped (9 critical renames)
   - [ ] LoRa, SBUS, XCVR blocks removed from schematic
   - [ ] P1/P2-TOP passthrough sockets added to schematic
@@ -285,7 +285,7 @@ When you reach this state, todo 1.2b is **complete**:
   - [ ] Gerbers generated to `avionics/kicad/gerbers/CAPE-B-2-S1/`
   - [ ] Board markdown updated, status = "Rev S1 complete, ready for fabrication"
 
-- [ ] **FlightEngineer Rev S1**
+- [ ] **Flight Engineer Rev S1**
   - [ ] TPS54540 (6V BEC) removed, TPS54620 (5V servo BEC) added to schematic
   - [ ] PCB layout updated (5V servo section routed)
   - [ ] DRC: 0 hard errors
@@ -314,8 +314,8 @@ When you reach this state, todo 1.2b is **complete**:
 
 3. **Firmware Integration**
    - Notify firmware team of electrical changes
-   - Emma: PTT_N / RSSI_DCD presence-gated pinmux (Simon vs River nodes)
-   - FlightEngineer: 5V servo rail replacement in firmware servo mappings
+   - Commo: PTT_N / RSSI_DCD presence-gated pinmux (Simon vs River nodes)
+   - Flight Engineer: 5V servo rail replacement in firmware servo mappings
 
 4. **Assembly Planning**
    - Print build guide with updated component placements
@@ -334,9 +334,9 @@ When you reach this state, todo 1.2b is **complete**:
 
 **External (Verification Only):**
 - KiCad 9.0.2 Documentation: https://kicad.org/help/9.0.2/
-- FCC Part 15 §15.235 (Emma 49 MHz): 47 CFR §15.235
-- MIL-STD-1553B (TACCO bus): Military Standard
-- Firefly Servo (FlightEngineer): DS3218MG specification
+- FCC Part 15 §15.235 (Commo 49 MHz): 47 CFR §15.235
+- MIL-STD-1553B (XO bus): Military Standard
+- Firefly Servo (Flight Engineer): DS3218MG specification
 
 ---
 
@@ -351,7 +351,7 @@ When you reach this state, todo 1.2b is **complete**:
 - pcbnew Python module (part of KiCad package)
 - kicad-cli (command-line tool)
 
-**License:** CC BY 4.0 (Creative Commons Attribution)
+**License:** CC BY-SA 4.0 (Creative Commons Attribution)
 
 ---
 

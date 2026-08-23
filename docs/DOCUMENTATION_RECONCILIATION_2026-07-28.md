@@ -29,7 +29,7 @@ A systematic documentation audit identified 11 categories of stale, incomplete, 
 **Issues Resolved:**
 - ✅ **Created `/current-specification/serenity-rev-s.jsx`**
   - Specification file now reflects Rev S comprehensive checkpoint
-  - Updated header with Rev S key changes (Wash/TACCO EMI hardening, COMMO LoRa, FlightEngineer v2, Observer vision system, STS3215 winch)
+  - Updated header with Rev S key changes (Pilot/XO EMI hardening, Commo LoRa, Flight Engineer v2, Observer vision system, STS3215 winch)
   - Established Rev S as the canonical current specification document
 
 - ✅ **Created `/current-specification/bom_revS.json`**
@@ -169,7 +169,7 @@ All reconciliation changes follow established Serenity UAV policies:
 The audit also identified items that are intentionally retained or deferred:
 
 1. **Historical references in design-decision documents** — TILT_SPAR_ANALYSIS.md, NOZZLE_DRIVE_TRADE.md intentionally preserve Rev R/R2d history for design-progression tracking
-2. **[PENDING AI CLASSIFICATION] tags** — ~20 items in PROJECT_INDEX.md marked for AI categorization; recommend separate task
+2. ~~**[PENDING AI CLASSIFICATION] tags** — ~20 items in PROJECT_INDEX.md marked for AI categorization; recommend separate task~~ **Resolved 2026-08-01:** `tools/precommit_index.py` rewritten as a fully-regenerating index agent (no more append-only patching, no more orphaned lines); both index files now carry auto-classified cross-functional tags (`security`, `emi-hardening`, `redundancy-failover`, `comms-protocol`, etc.) plus a machine-readable `tools/index_tags.json`. See `tools/AGENTS.md` "Project/Archive Index Agent".
 3. **Zigbee RF scope gap** — Marked deferred in avionics/TODO.md (planned but deprioritized)
 4. **Tilt-spar material selection** — Still open; candidates (4130, 17-4 PH, 7075) await testing
 5. **Phase 11 systems** (rear EDF, RCS thrusters) — Deferred until Phase 5-10 proven; documented in deferred/AGENTS.md

@@ -2,9 +2,20 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Drafted by:** Claude Haiku 4.5 (Anthropic), 2026-07-27
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** B (2026-07-27)
-**Supersedes:** the Rev P/Q/R N20 winch train (see "Superseded Hardware" below)
+**Rev C drafted by:** Claude Sonnet 5 (Anthropic), 2026-08-02
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**Revision:** C (2026-08-02)
+**Supersedes:** the Rev P/Q/R N20 winch train (see "Superseded Hardware" below); Rev C
+additionally supersedes Rev B's servo selection (STS3215 → SPT5425LV + LibreServo v2)
+
+> **Rev C replaces the winch's servo — STS3215 → SPT5425LV + LibreServo v2 —
+> as part of a fleet-wide standardisation across all three high-torque servos on
+> the airframe** (this winch, plus the 2× nacelle tilt servos, previously
+> DS3218MG). See §3.1/§3.1.1/§3.9/§5.1/§6/§7 below for what changed and why;
+> everything else in Rev B (spool support architecture, ratchet, line-shed,
+> containment) is carried forward unchanged. See
+> `REFERENCES.md` "Servo Fleet Standardisation, 2026-08-02" for the fleet-wide
+> rationale and REF-SENSOR-013/014/015 for the individual part records.
 
 > **Rev B corrects four substantive errors in Rev A** (same date, first pass):
 > Rev A specified PWM servo control (the STS3215 is a **TTL serial-bus** servo);
@@ -23,7 +34,7 @@ Ten requirements drive this revision:
 
 | # | Requirement | Where satisfied |
 |---|---|---|
-| R1 | Cargo winch motor is an **STS3215** | §3.1 |
+| R1 | Cargo winch motor is a **SPT5425LV servo converted with LibreServo v2** (Rev C; was STS3215 under Rev B) | §3.1 |
 | R2 | **Normally-engaged** safety ratchet on the spool | §3.4 |
 | R3 | Spool supported at **both ends**, not cantilevered on the motor axle | §3.2 |
 | R4 | No power → spool may **retract**; power required to retract the catch and permit **pay-out** | §3.4, §5.2 |
@@ -34,7 +45,7 @@ Ten requirements drive this revision:
 | R9 | Servo operating mode suits multi-turn travel **and** a slipping spool | §3.9 |
 | R10 | **The spool can never leave the cargo bay.** No failure — including its own designed wear — may release it as a projectile | §3.10 |
 
-*"Everything is shiny." — FlightEngineer Frye*
+*"Everything is shiny." — Flight Engineer Frye*
 
 ---
 
@@ -83,43 +94,98 @@ payload hanging under the aircraft. This is the concrete reason R3 exists.
 
 ## 3. Mechanical Design
 
-### 3.1 Motor — STS3215
+### 3.1 Motor — SPT5425LV + LibreServo v2 (Rev C; supersedes the Rev B STS3215 selection)
+
+**Rev C change.** The winch servo is now an **SPT5425LV** standard hobby servo body
+with its factory control PCB replaced by **LibreServo v2** (the
+`stab-rabbit-coding` fork), converting it into a serial-bus servo with a 360°
+absolute magnetic position sensor. This is one of the three high-torque servos
+on the airframe (the other two are the nacelle tilt servos, also converted —
+`REFERENCES.md` "Servo Fleet Standardisation, 2026-08-02"), standardised onto
+one physical servo/board combination. Unlike the STS3215 it replaces, the
+SPT5425LV + LibreServo v2 combination has **published, sourced specifications**
+(REF-SENSOR-013/014) — the STS3215's never-resolved scanned-PDF datasheet gate
+does not carry forward.
 
 | Parameter | Value | Provenance |
 |---|---|---|
-| Part | STS3215 serial-bus servo | User-directed (R1) |
-| Datasheet | `docs/references/108090023_STS3215-C001_Datasheet.pdf` | In repo |
-| Interface | **TTL half-duplex serial bus**, ID-addressable, daisy-chainable | §3.1.1 |
-| Supply | 5.4 V nominal, from FlightEngineer RAIL-2 `5V_JAYNE` | `docs/POWER_DISTRIBUTION.md` §3.2.1 |
-| **Required** output torque | **≥ 3.2 kgf·cm (0.31 N·m)** at the coupler | Derived, §4.2 |
-| **Required** side load on output | **0 N** — see §3.3 | Derived, R3 |
+| Servo body | SPT5425LV (Shantou SiPaiTe / "SPT Servo") | REF-SENSOR-013 |
+| Control board | LibreServo v2 (`stab-rabbit-coding` fork), <https://github.com/Stab-Rabbit-coding/LibreServo_v2> | REF-SENSOR-014 |
+| Mechanical mod | Internal rotation-limiting pin **removed** — §3.1.2 | REF-SENSOR-013 |
+| Interface | **RS-485 half-duplex serial bus**, daisy-chainable, CRC-16 | §3.1.1 |
+| Supply | LibreServo v2 accepts 4.5–18 V (recommended 5–14 V); driven at 5.4 V nominal from Flight Engineer RAIL-2 `5V_OBS`, unchanged from Rev B | `docs/POWER_DISTRIBUTION.md` §3.2.1; REF-SENSOR-014 |
+| Stall torque (servo body, native) | 24 kgf·cm (2.35 N·m) @ 4.8 V, 26 kgf·cm (2.55 N·m) @ 6.0 V | REF-SENSOR-013 — comfortably clears the §4.2 requirement below |
+| Mass | ~57 g (servo body) + LibreServo v2 PCB (not separately published; treat as included in the ~57 g class figure pending a bench weigh-in) | REF-SENSOR-013 |
+| Case envelope | 40.5 × 20 × 40.5 mm | REF-SENSOR-013 — resolves the §3.3 `PEDESTAL_PORT` case-envelope gate that blocked pedestal generation under Rev B |
+| **Required** output torque | **≥ 3.2 kgf·cm (0.31 N·m)** at the coupler (unchanged) | Derived, §4.2 |
+| **Required** side load on output | **0 N** — see §3.3 (unchanged) | Derived, R3 |
+| **⚠ Not yet verified** | Stall/running current at 5.4 V (needed to finalize the §5.4 RAIL-2 budget) and the exact pin-removal procedure (§3.1.2) — neither figure is published by the sources above | REFERENCES.md "Open Standards Verification Items" |
 
-> **⚠ VERIFICATION GATE — `TODO §0.x`.** The STS3215 datasheet in the repo is a
-> **scanned/CID-encoded PDF**, and this environment has no OCR tooling
-> (`pdftotext`, `tesseract`, `mutool`, `poppler-utils` all absent; `pypdf` fails
-> on a broken `cryptography` build). **No performance figure in this document is
-> quoted from that datasheet.** Three inputs must be read off it and confirmed
-> before any STL is generated or any part is ordered:
-> 1. **Case envelope + mounting-boss pattern** — `PEDESTAL_PORT` (§3.3) is
->    parameterised on these; the generator will not produce a correct bracket
->    without them.
-> 2. **Stall/continuous torque** — must meet the ≥ 3.2 kgf·cm requirement above.
-> 3. **Mass and stall current** — the mass drives the CG/T-W figures in §6, and
->    the stall current drives the RAIL-2 budget in §5.4.
->
-> Per root `AGENTS.md` §4 ("if a citation can't be verified, mark it 'requires
-> verification'") this is logged in `REFERENCES.md` REF-SENSOR-012 and in the
-> Open Standards Verification Items table. **Do not fabricate these numbers.**
+> **Gate resolved, one gate remains.** Rev B's blocking issue was the STS3215's
+> unreadable scanned datasheet — case envelope, torque, mass and stall current
+> were all unverifiable. The SPT5425LV's envelope, stall torque and mass are
+> published on the manufacturer's own product page and an independent servo
+> database (REF-SENSOR-013), which **unblocks pedestal/mounting-hardware
+> generation** (§3.3). Stall current is still not published anywhere sourced,
+> so the RAIL-2 budget in §5.4 below carries the old STS3215-era 1.2 A figure
+> forward as a placeholder — bench-measure before final sizing. Per root
+> `AGENTS.md` §4, this is logged in `REFERENCES.md` REF-SENSOR-013 and the Open
+> Standards Verification Items table. **Do not fabricate the current figure.**
 
-#### 3.1.1 Interface — serial bus, not PWM
+#### 3.1.1 Interface — RS-485 differential serial bus, not single-wire TTL
 
-The STS3215 is commanded over a **half-duplex TTL serial bus**, not a
-1000–2000 µs PWM pulse train. This is architecturally load-bearing and is why
-`CAN-PERIPH-GW-1` needs no new hardware: its `J_FLEX` header already carries
-`FLEX_TTL_GPIO`, documented in `avionics/kicad/CAN-PERIPH-GW-1.md` §G as
-covering *"a TTL-level digital servo protocol (e.g. a serial-bus servo)."*
-A half-duplex bus needs the MCU's TX and RX tied through a direction-steering
-resistor/buffer at the header — see §5.1.
+LibreServo v2's daisy-chain bus is **genuine differential RS-485** (an A/B
+pair driven by an onboard transceiver — SIT3485 on the shipped v2.3.1 board,
+being upgraded upstream to an isolated ADM2587E), at up to 9 Mbps with CRC-16
+framing. This is a materially different electrical scheme from the STS3215's
+**single-wire half-duplex TTL** bus that Rev B designed around, and it changes
+the electrical integration story in §5.1 below:
+
+- Rev B's plan reused `CAN-PERIPH-GW-1`'s `J_FLEX.FLEX_TTL_GPIO` — a single
+  bidirectional MCU GPIO pin — with an open item to add direction-steering
+  hardware for the STS3215's single-wire half-duplex protocol (§5.1.1, now
+  historical).
+- Rev C's SPT5425LV/LibreServo v2 servo instead needs a true differential
+  RS-485 link. `J_FLEX` exposes a bare `FLEX_UART_TX/RX` pair but **no RS-485
+  transceiver of its own for this local servo drop** — the gateway's onboard
+  ISOW1412 (`RS485_A`/`RS485_B`) is dedicated to the board's own isolated
+  uplink trunk to Pilot/XO, not intended as a shared local servo sub-bus
+  without further isolation/topology review.
+- **This is an open item, not resolved here** — see §5.1 and
+  `REFERENCES.md` "Open Standards Verification Items" ("LibreServo v2 fork —
+  RS-485 differential bus electrical integration").
+
+#### 3.1.2 Mechanical mod — rotation-limiting pin removed for continuous rotation
+
+Like most analog/digital hobby servos, the SPT5425LV's output gear/potentiometer
+assembly includes a small internal mechanical stop that limits the output shaft
+to roughly one physical turn, matched to the servo's stock potentiometer. This
+is the "rotation blocking pin" the migration removes. Two things make removal
+safe here, where it would not be on an un-converted servo:
+
+1. **LibreServo v2 replaces the potentiometer with a 360° absolute magnetic
+   encoder** (AEAT-8800, 16-bit) — the pin's only job, protecting the
+   potentiometer wiper from over-travel, no longer applies once the
+   potentiometer itself is gone.
+2. **Position feedback and range limiting move from mechanical to firmware.**
+   With the pin removed the servo can rotate continuously; whether a given
+   installation actually *uses* that continuous range is a firmware/mode
+   choice, not a hardware one (§3.9 for the winch's own mode).
+
+The same physical mod is applied to all three high-torque servos for
+commonality (one spare part, one firmware image with per-application
+configuration) — see `REFERENCES.md` "Servo Fleet Standardisation,
+2026-08-02" for why this is safe for the nacelle-tilt application too (its
+real range limit is the external CF-PETG hard-stop blocks in the gear train,
+not the servo's own internal pin).
+
+**⚠ Not yet verified:** the exact pin location and removal procedure for this
+specific part number. "Remove the limit pin/tab for continuous rotation" is a
+well-documented technique on hobby servos generally, but has not been
+confirmed by teardown of an actual SPT5425LV unit. Document the verified
+procedure (with photos) in `graphical-build-guide/` before it is added to the
+build guide as a build step — do not assume it matches a different
+manufacturer's servo internals.
 
 ### 3.2 Spool support architecture — supported at both ends (R3)
 
@@ -129,7 +195,7 @@ clamped at **both** pedestals:
 
 ```text
         PORT pedestal                                  STBD pedestal
-     (bearing seat + STS3215)                   (bearing seat + pawl + solenoid)
+   (bearing seat + SPT5425LV/LS2)                (bearing seat + pawl + solenoid)
               │                                            │
       ┌───────┴────────┐                          ┌────────┴────────┐
       │  axle clamp    │                          │   axle clamp    │
@@ -141,7 +207,7 @@ clamped at **both** pedestals:
       │   │            │        ▲                  │  ▲        │    │
       └───┼────────────┘        │                  │  │        │    │
           │                  Dyneema            ratchet ring   │    │
-     STS3215 ──dog coupler──►  line             (24 sawtooth)  │    │
+ SPT5425LV/LS2 ─dog coupler──►  line             (24 sawtooth)  │    │
      (torque only,            pays out              ▲         pawl  │
       no radial load)                               └──────────┘    │
 ```
@@ -151,8 +217,9 @@ clamped at **both** pedestals:
 - **Bearings:** 2× MR84ZZ (4 × 8 × 3 mm), pressed into counterbores in the
   spool's two flange hubs — one at each end of the drum, so the line load is
   reacted symmetrically.
-- **Drive:** the STS3215 transmits **torque only** through a lost-motion dog
-  coupler (§3.3). No radial or moment load reaches the servo output spline.
+- **Drive:** the SPT5425LV (LibreServo v2-converted) transmits **torque only**
+  through a lost-motion dog coupler (§3.3). No radial or moment load reaches
+  the servo output spline.
   The coupler isolates the servo from *radial* load but **not** from spool
   *rotation* — see §3.7, which is the governing constraint on whether the
   powerless shed works at all.
@@ -170,7 +237,7 @@ positive-stop shoulder — no friction-only fits.
 
 | Part (new STL) | Material | Mass | Function |
 |---|---|---|---|
-| `cargo_winch_pedestal_port.stl` | CF-PETG | 18 g | Port axle clamp + bearing seat + **STS3215 case cradle** (envelope parameterised — see gate in §3.1) |
+| `cargo_winch_pedestal_port.stl` | CF-PETG | 18 g | Port axle clamp + bearing seat + **SPT5425LV case cradle**, 40.5×20×40.5 mm envelope (REF-SENSOR-013 — resolves the §3.1 case-envelope gate) |
 | `cargo_winch_pedestal_stbd.stl` | CF-PETG | 20 g | Stbd axle clamp + bearing seat + pawl pivot boss + solenoid mount + spring seat |
 | `cargo_winch_spool_r2.stl` | **CF-PETG** (was PETG) | 16 g | Drum + twin bearing counterbores + **integral ratchet ring**; **no anchor slot** |
 | `cargo_winch_pawl.stl` | CF-PETG | 2 g | Sawtooth pawl lever |
@@ -292,9 +359,9 @@ r_line = 10.3 mm that entire tolerance is:
 ±1.0 N × 0.0103 m = ±0.0103 N·m = ±0.105 kgf·cm
 ```
 
-**0.105 kgf·cm is the whole error budget.** A high-ratio geared serial-bus servo
-of the STS3215's class will typically resist back-drive by *several* kgf·cm —
-one to two orders of magnitude more. If that holds here, then:
+**0.105 kgf·cm is the whole error budget.** A high-ratio geared servo of the
+SPT5425LV's 25 kgf·cm class will typically resist back-drive by *several*
+kgf·cm — one to two orders of magnitude more. If that holds here, then:
 
 - the ratchet cams out at 8.0 N exactly as designed, **and the spool still does
   not turn**, because the servo gearbox holds it;
@@ -353,7 +420,7 @@ and of whichever coupling §3.7.1 resolves to:
 | Sensor | **AKM AK7455** off-axis magnetic angle sensor [REF-SENSOR-008] |
 | Why this part | Already fleet-standard for nacelle tilt; clean-room symbol and footprint exist; **no new part number** |
 | Interface | SPI → the gateway's **existing `J_ENC`** 7-pad header, on a dedicated SPI bus separate from the TPM's — **no board change** |
-| Target | Diametric magnet in a pocket in the port spool flange hub, off-axis (the axle is fixed and occupies the centreline) |
+| Target | Diametric magnet in a pocket in the port spool flange hub, off-axis (the axle is fixed and occupies the centerline) |
 | Sample rate | **≥ 1 kHz** (covers the 840 Hz wrap-tracking floor with margin) |
 | Multi-turn | Accumulated in gateway firmware; `turns` invalidated, not guessed, if `|Δθ|` between samples exceeds half a revolution |
 
@@ -438,22 +505,40 @@ Layer 1 matters: with the servo's own torque ceiling set below `T_slip`, ordinar
 operation never reaches the friction interface, so the sacrificial part is
 consumed only by genuine overload events rather than by every lift.
 
-### 3.9 Servo operating mode (R9)
+### 3.9 Servo operating mode (R9) — Rev C: continuous rotation by construction, not by register
 
-The STS3215 offers three modes — position/servo, stepper, and encoded
-continuous-rotation. **Encoded continuous rotation is the right one**, with the
-gateway closing the position loop on the AK7455.
+**Rev B context (historical).** The STS3215 exposed position/servo, stepper,
+and encoded-continuous-rotation as **register-selected modes** on otherwise
+identical hardware, and Rev B selected encoded continuous rotation.
 
-| Mode | Verdict for this winch |
+**Rev C.** SPT5425LV + LibreServo v2 does not have a mode register in the same
+sense — with the rotation-limiting pin physically removed (§3.1.2) and the
+stock potentiometer replaced by the AEAT-8800 360° absolute magnetic encoder,
+the servo is a continuous-rotation actuator **by construction**, not by a
+selectable mode. The same three failure modes Rev B rejected the other two
+STS3215 modes for still apply, so the winch's control architecture is
+unchanged in substance — only the mechanism by which continuous rotation is
+achieved has changed:
+
+| Requirement | Why it still holds under LibreServo v2 |
 |---|---|
-| **Position / servo** | **Rejected outright.** Single-turn absolute over ~360°. A 1500 mm pay-out is **23.2 spool turns** (§3.7.2) — the mode cannot express the travel. |
-| **Stepper** | **Rejected.** It would work for multi-turn travel, but its internal step count is an *open-loop assumption about the spool*, and §3.8 deliberately allows the spool to slip. After any slip the count is fiction while still reading as valid — the worst kind of wrong. |
-| **Encoded continuous rotation** | **Selected.** Gives closed-loop *speed* control and a settable torque ceiling (protection layer 1). Commanded in rate; the gateway closes position on the AK7455, which is the only sensor that survives a slip. |
+| Must express 23.2 spool turns (§3.7.2) | The physical rotation limit is gone (§3.1.2); LibreServo's own position tracking is continuous relative to its own boot reference, not single-turn absolute — firmware still must not rely on the servo's own turn count as spool position |
+| Must not go fictional after a hub slip (§3.8) | Unchanged reasoning: whatever the servo reports about its own shaft position, only the **AK7455 on the spool itself** reads true spool angle through a slip (§3.7.3) — the servo's own sensor is a cross-check, never authoritative, exactly as under Rev B |
+| Needs closed-loop *speed* control + a settable torque ceiling (protection layer 1, §3.8.3) | LibreServo v2 "generates their own curves (sine ramps, trapezoidal ramps, hermitian curves...)" and has current sensing (ACS711, ±15 A) on-board — rate/torque commanding is a firmware-protocol question for the winch state machine (`avionics/firmware/WBS.md`), not resolved here |
 
-This yields a conventional cascaded loop — outer position on true spool angle,
-inner speed in the servo — and it degrades sensibly: if the AK7455 fails, the
-winch still has commanded-rate control and the ratchet still protects the
-aircraft; it simply loses payload-height readout (`encoder_fail`, §5.3).
+The cascaded-loop architecture is unchanged: outer position on true spool
+angle (AK7455), inner rate/torque in the servo. Degradation is unchanged too —
+if the AK7455 fails, the winch still has commanded-rate control and the
+ratchet still protects the aircraft; it simply loses payload-height readout
+(`encoder_fail`, §5.3).
+
+**⚠ Open item.** LibreServo v2's own wire protocol (`LibreServo Commands`,
+linked from REF-SENSOR-014) has not yet been reviewed against the winch state
+machine's requirements (rate command, torque-ceiling set, position readback).
+This replaces Rev B's "confirm STS3215 mode indices/register" open item —
+same category of gap, different part. Do not invent LibreServo command/register
+values here; read them from the protocol documentation linked in REF-SENSOR-014
+when the firmware task starts.
 
 > **⚠ Mode semantics are part of the §3.1 datasheet gate.** The three modes are
 > as described by the user; exact mode indices, the register that selects them,
@@ -501,7 +586,7 @@ asserted here because it is not yet verified in `REFERENCES.md`.
 |---|---|---|---|
 | **FM1** | Axle slides out of a pedestal | **Friction only** (M3 pinch screw) | **Circlip groove + external circlip immediately outboard of each pedestal.** The axle cannot translate more than groove clearance even at zero clamp force. The pinch screw is demoted to locating/anti-rotation — it is no longer the retention. |
 | **FM2** | Printed hub cracks; spool leaves the axle in pieces | Bearings pressed **into printed plastic** | **Continuous steel sleeve through the full hub bore**, bearings pressed into the *sleeve*. Total loss of the printed material still leaves sleeve + bearings captive on the axle. Also better practice regardless: printed press-fits creep. |
-| **FM3** | Pedestal tears out of the hull | M3 heat-set inserts in printed shell | **Through-bolts with an aluminium backing plate** on the far side of the bay floor. Positive, and inspectable without disassembly. |
+| **FM3** | Pedestal tears out of the hull | M3 heat-set inserts in printed shell | **Through-bolts with an aluminum backing plate** on the far side of the bay floor. Positive, and inspectable without disassembly. |
 | **FM4** | Any single retention omitted at assembly, or a pedestal cracks | *(nothing)* | **Keeper bar** spanning both pedestals over the spool, bolted at both ends. Independent secondary capture — the assembly cannot fall clear even if FM1–FM3 all fail. |
 | **FM5** | Slip-adjust collar backs off and departs | Thread-lock only | Collar **captive on the axle** — retained by the FM1 circlip, so a fully-backed-off collar still cannot leave. |
 
@@ -589,7 +674,7 @@ All exceed the AUVSI 4.0 target used elsewhere in this project.
 
 ### 4.4 ⚠ Unresolved: the shed threshold sits inside the maneuver envelope
 
-Checking `F_slip` against manoeuvre loads on the suspended payload surfaces a
+Checking `F_slip` against maneuver loads on the suspended payload surfaces a
 conflict this specification does **not** resolve:
 
 | Condition | Line tension | vs. 8.0 N threshold |
@@ -601,19 +686,19 @@ conflict this specification does **not** resolve:
 
 The 2.5 g factor is the cargo dynamic factor this document already uses for the
 axle and bearings (§4.3, from `docs/structural_analysis.md` §6). Applied to the
-*line*, it means **a 2.5 g manoeuvre with a slung load drops the payload**, and a
-2 g manoeuvre is within 2 % of doing so.
+*line*, it means **a 2.5 g maneuver with a slung load drops the payload**, and a
+2 g maneuver is within 2 % of doing so.
 
-That may well be the correct behaviour — hard manoeuvring with a slung load is
+That may well be the correct behavior — hard maneuvering with a slung load is
 poor airmanship, and shedding beats losing the aircraft. But it is currently an
 **accident of where the threshold landed**, not a stated decision, and it needs
 one. Three options:
 
-1. **Accept and document** — declare a manoeuvre limit (≈1.5 g) whenever a
+1. **Accept and document** — declare a maneuver limit (≈1.5 g) whenever a
    payload is slung, and put it in the flight envelope. Costs nothing mechanical.
 2. **Raise the threshold to ~12 N** — 3.06× static payload, still only 72 % of
    the 16.64 N excess lift, leaving 4.6 N of margin at the moment of shed. Buys
-   manoeuvre headroom; spends lift margin.
+   maneuver headroom; spends lift margin.
 3. **Reduce slung payload mass** — moves both numbers, but 400 g is a
    requirement input, not a free variable.
 
@@ -628,34 +713,65 @@ than taken. Cross-reference `docs/flight_envelope.md` when resolved.
 
 ## 5. Electrical Integration — one CAN-PERIPH-GW (R6)
 
-One `MAL-CAN-PERIPH-GW-PCB` at `N_STACKS=1`, mounted in the cargo bay, drives
+One `SKIPPER-CAN-PERIPH-GW-PCB` at `N_STACKS=1`, mounted in the cargo bay, drives
 **both** the servo and the catch. **No board respin is required** — every signal
 lands on the existing `J_FLEX` header.
 
 ### 5.1 Signal assignment
 
+**Rev C change.** The STS3215's single-wire half-duplex TTL bus (Rev B,
+historical — see §5.1.1) is replaced by LibreServo v2's genuine differential
+RS-485 bus (§3.1.1). `J_FLEX` was designed for the former, not the latter —
+see the open item below.
+
 | Gateway net (`J_FLEX`) | Direction | Connects to | Function |
 |---|---|---|---|
-| `FLEX_TTL_GPIO` | bidirectional | STS3215 signal | Half-duplex TTL servo bus (**§5.1.1**) |
+| `FLEX_UART_TX/RX` | bidirectional | SPT5425LV/LS2 servo, via an RS-485 transceiver — **§5.1.1, open item** | Servo command/telemetry bus |
 | `FLEX_PWM_IO` | output | AO3400 N-FET gate | Solenoid enable — high = catch retracted |
-| `FLEX_UART_TX/RX` | input | HX711 | Line-tension ADC (clock/data) |
+| `FLEX_TTL_GPIO` | — | HX711 (moved here from the now-vacated `FLEX_UART_TX/RX` role) | Line-tension ADC (clock/data), bit-banged on a plain GPIO pair |
 | `ENC_SPI_*` (`J_ENC`) | input | **AK7455 on the spool** | Spool angle (§3.7.3) — existing header, dedicated SPI bus, no board change |
-| `+5V`, `GND` | power | Servo, solenoid, HX711 | RAIL-2 `5V_JAYNE` |
+| `+5V`, `GND` | power | Servo, solenoid, HX711 | RAIL-2 `5V_OBS` |
 
 **Solenoid drive** — AO3400 SOT-23 N-FET (already a project-standard part; see
-`avionics/kicad/Jayne/Jayne.md` Q1), 100 Ω gate resistor, 10 kΩ gate pull-down
+`avionics/kicad/Observer/Observer.md` Q1), 100 Ω gate resistor, 10 kΩ gate pull-down
 so an un-driven or resetting MCU leaves the catch **engaged**, and an SS34
 flyback diode across the coil.
 
-#### 5.1.1 Half-duplex bus note — **open item**
+#### 5.1.1 RS-485 bus note — **open item** (supersedes the Rev B half-duplex-TTL open item)
 
-`FLEX_TTL_GPIO` is a single pin. A half-duplex TTL servo bus needs the MCU's
-UART TX and RX joined with direction steering — typically a series resistor plus
-a pull-up, or a small buffer. Whether the MSPM0G3507's UART can be configured
-single-wire on this pin, or whether a resistor/buffer must be added at the
-harness end, **must be confirmed against the MSPM0G3507 pinmux tables**. This is
-the same pinmux caveat already open on that board
-(`CAN-PERIPH-GW-1.md` open item 4). Filed in `avionics/WBS.md`.
+Rev B's open item here was whether the MSPM0G3507 could drive a single-wire
+half-duplex UART on `FLEX_TTL_GPIO` for the STS3215. That is moot under Rev C:
+LibreServo v2 needs genuine **differential RS-485** (an A/B pair through a
+transceiver), which `J_FLEX`'s bare `FLEX_UART_TX/RX` pins do not provide by
+themselves. Two interim ways to close this, **neither selected here**:
+
+1. **Add a local RS-485 transceiver at the gateway or in the servo harness**,
+   fed from `FLEX_UART_TX/RX`, dedicated to this one servo drop.
+2. **Reuse the gateway's own isolated RS-485 trunk** (`RS485_A`/`RS485_B` via
+   ISOW1412) if it can be shared with a local servo sub-bus without
+   compromising the isolation/topology that trunk exists for — this needs
+   deliberate review, not an assumption.
+
+**Intended end state (per the LibreServo v2 fork maintainer, 2026-08-02,
+not yet shipped):** the fork's in-progress isolated-RS-485 + isolated-CAN-FD +
+SLB9672 TPM upgrade (`PCB/RS485-CANFD-TPM-upgrade.md`, schematic-only as of
+this writing — see REF-SENSOR-014) is intended to let a converted servo **drop
+directly onto the airframe's isolated CAN-FD and RS-485 trunks as a
+self-signing bus node, with no `CAN-PERIPH-GW-1` bridge required for this
+application at all.** If and when that lands, options 1/2 above become moot —
+the servo attaches to the same isolated trunks Pilot/XO/Observer/the gateway
+boards already use, TPM-signs its own frames, and `CAN-PERIPH-GW-1`'s role for
+the winch/nacelle-tilt servos (bridging RS-485 command traffic onto the
+CAN-FD/RS-485 trunk) goes away. **Not yet true** — the fork's TPM work has not
+started, the RS-485/CAN-FD work is schematic-only (no footprints, no board,
+no firmware port), so options 1/2 remain the near-term path until it ships.
+Tracked for re-check; see `avionics/WBS.md`.
+
+Filed in `avionics/WBS.md` and `REFERENCES.md` "Open Standards Verification
+Items" ("LibreServo v2 fork — RS-485 differential bus electrical
+integration"). Do not wire either interim option as a permanent architecture
+decision; it changes the gateway's BOM and possibly its schematic, and may be
+short-lived once the fork's direct-bus-attach capability ships.
 
 ### 5.2 Failsafe state table
 
@@ -681,8 +797,8 @@ buses, per NIST SP 800-207 [REF-NIST-001 §2.1].
 WINCH_STATUS   (10 Hz, gateway → bus)
   state        : 0 STOWED │ 1 UNLOCKING │ 2 PAYING_OUT │ 3 RETRACTING
                  4 OVERLOAD │ 5 LINE_SHED │ 6 FAULT
-  servo_pos    : STS3215 reported position
-  servo_load   : STS3215 reported load
+  servo_pos    : SPT5425LV/LS2 reported position
+  servo_load   : SPT5425LV/LS2 reported load
   line_tension : HX711, mN
   spool_angle  : AK7455, 0-4095 (single-turn absolute)
   spool_turns  : accumulated in firmware; INVALID if |dtheta| > half a rev
@@ -703,11 +819,11 @@ WINCH_COMMAND  (event, Simon → gateway)
 engaged. Message IDs are assigned in the firmware task, not here — this document
 does not invent bus IDs.
 
-### 5.4 Power budget — RAIL-2 `5V_JAYNE`
+### 5.4 Power budget — RAIL-2 `5V_OBS`
 
 | Load | Current @ 5.4 V | Power |
 |---|---|---|
-| STS3215, moving | **⚠ gate §3.1** — budget 1.2 A | 6.5 W |
+| SPT5425LV/LS2, moving | **⚠ stall current not yet published — §3.1** — 1.2 A carried forward from the STS3215-era budget as a placeholder | 6.5 W |
 | Solenoid, hold (pay-out only) | 0.20 A | 1.1 W |
 | Gateway (MSPM0 + TPM + 2 isolators) | 0.10 A | 0.5 W |
 | HX711 | 0.01 A | 0.1 W |
@@ -716,8 +832,12 @@ does not invent bus IDs.
 
 RAIL-2 is planned at ~2.4 A typical / ~4.2 A peak
 (`docs/POWER_DISTRIBUTION.md` §3.2.1), so the winch fits with margin — **subject
-to the STS3215 stall current in the §3.1 gate.** If stall exceeds ~2.5 A the
-RAIL-2 sizing must be revisited.
+to the SPT5425LV/LS2 stall current, still not published by either sourced
+listing (REF-SENSOR-013).** If bench-measured stall exceeds ~2.5 A the RAIL-2
+sizing must be revisited. LibreServo v2's own motor driver is rated for up to
+16 A continuous (WSD3069DN56 MOSFETs, REF-SENSOR-014) — that is a board
+capability ceiling, not a prediction of what this particular servo motor will
+actually draw.
 
 ---
 
@@ -741,7 +861,7 @@ Per root `AGENTS.md` §5, real masses — no TBD.
 | **+** | Keeper bar, 1 mm Al — FM4 | +5 g |
 | **+** | 2× pedestal backing plates — FM3 | +4 g |
 | **+** | Pull solenoid | +15 g |
-| **+** | STS3215 *(**⚠ gate §3.1** — 60 g assumed)* | +60 g |
+| **+** | SPT5425LV + LibreServo v2 board *(~57 g servo body, REF-SENSOR-013; LibreServo v2 PCB mass not separately published — carried at the same ~60 g class total pending a bench weigh-in of the converted unit)* | +60 g |
 | | **Added** | **+167.4 g** |
 | | **NET** | **+117.4 g (+0.26 lbm)** |
 
@@ -754,9 +874,11 @@ Excess lift : 16.64 N → 15.48 N
 Slip threshold as fraction of excess : 48 % → 52 %   (still conservative)
 ```
 
-T/W stays above 1.5 and the winch remains a cargo-bay-centred mass, so the
-longitudinal CG shift is small. **The STS3215's real mass dominates this table**
-— if it differs materially from 60 g, re-run this section.
+T/W stays above 1.5 and the winch remains a cargo-bay-centered mass, so the
+longitudinal CG shift is small. **The converted servo's real mass dominates
+this table** — the SPT5425LV body alone (~57 g) is close to the 60 g carried
+here, but the LibreServo v2 PCB adds an unweighed increment; re-run this
+section once a converted unit has been bench-weighed.
 
 ---
 
@@ -772,7 +894,7 @@ See §3.3. All six are new STLs from
 
 | Ref | Description | Qty | Notes |
 |---|---|---|---|
-| `STS3215-WINCH` | STS3215 serial-bus servo | 1 | ⚠ gate §3.1 |
+| `SPT5425LV-WINCH-LS2` | SPT5425LV servo, converted with LibreServo v2 (rotation-limiting pin removed) | 1 | REF-SENSOR-013/014; ⚠ stall current not yet published — §3.1 |
 | `SOL-CATCH-5V` | Pull solenoid, ≥ 2.5 N @ 3 mm, 5 V | 1 | De-energised = engaged |
 | `BRG-MR84ZZ` | MR84ZZ bearing, 4 × 8 × 3 mm | 2 | Pressed into spool hubs |
 | `SHAFT-SS-4MM` | Ø4 mm A2 stainless rod, 46 mm | 1 | **New stock item** (project stocks 3 mm CF; CF is unsuitable in a press-fit race) |
@@ -813,10 +935,10 @@ See §3.3. All six are new STLs from
    seated (visual), keeper bar fitted and torqued, backing plates present, slip
    collar witness-mark intact. Doors-open inspection, since that is the geometry
    in which a release escapes.
-4. **★ FLIGHT-ENVELOPE DECISION — the shed threshold sits inside the manoeuvre
-   envelope (§4.4).** At 8.0 N, a 2.0 g manoeuvre on the slung payload reaches
+4. **★ FLIGHT-ENVELOPE DECISION — the shed threshold sits inside the maneuver
+   envelope (§4.4).** At 8.0 N, a 2.0 g maneuver on the slung payload reaches
    0.98× the threshold and 2.5 g sheds the load. Choose: declare a ≈1.5 g
-   slung-load manoeuvre limit (recommended, free), raise the threshold to ~12 N
+   slung-load maneuver limit (recommended, free), raise the threshold to ~12 N
    (spends lift margin), or reduce payload. **Referred to the flight envelope,
    not decided here.** Blocks the pawl-spring calibration target.
 5. **Calibrate `T_slip` to 0.060 N·m (0.61 kgf·cm)** at the spool hub collar, and
@@ -827,10 +949,15 @@ See §3.3. All six are new STLs from
 6. **Set the servo torque ceiling below `T_slip`** (protection layer 1, §3.8.3)
    so routine lifting never reaches the friction interface and the sacrificial
    hub is consumed only by genuine overloads.
-7. **⚠ STS3215 datasheet gate (§3.1)** — envelope, torque, mass, stall current.
-   Blocks STL generation, BOM order, and the §6 mass figures. `TODO §0.x`.
-8. **Half-duplex bus wiring (§5.1.1)** — confirm MSPM0G3507 single-wire UART on
-   `FLEX_TTL_GPIO`, or add a steering resistor/buffer at the harness.
+7. **⚠ SPT5425LV/LibreServo v2 stall-current + pin-removal verification (§3.1/§3.1.2).**
+   Envelope, torque and mass are now published/sourced (REF-SENSOR-013) and no longer
+   block STL generation or the §6 mass figures; stall current and the exact
+   pin-removal procedure are still unverified. `TODO §0.x`. (Historical: this item
+   was "STS3215 datasheet gate" under Rev B, superseded 2026-08-02.)
+8. **RS-485 bus wiring (§5.1.1)** — decide and implement the gateway-side RS-485
+   transceiver for LibreServo v2's differential bus (`J_FLEX.FLEX_UART_TX/RX` has
+   no transceiver of its own for this drop). Historical: this item was "half-duplex
+   TTL bus wiring on `FLEX_TTL_GPIO`" under the Rev B STS3215 selection.
 9. **Pawl-spring calibration — distinct from item 5.** This sets `F_shed` (the
    ratchet cam-out, 8.0 N ± 1.0 N at the line); item 5 sets `T_slip` (the hub
    friction interface). Two independent thresholds, two separate adjustments.
@@ -845,7 +972,7 @@ See §3.3. All six are new STLs from
 13. **DRV8833 consolidation (optional)** — door/release servos could move to the
     gateway's spare `FLEX_PWM_IO`, retiring `DRV8833-CARGO` and its tray.
 14. **AK7455 spool-encoder integration (§3.7.3)** — magnet pocket in the port
-    flange hub, off-axis (the fixed axle occupies the centreline); confirm flux
+    flange hub, off-axis (the fixed axle occupies the centerline); confirm flux
     at the IC for the chosen magnet and gap, the same bench item already open for
     the nacelle encoders; ≥ 1 kHz sampling; firmware turn-accumulation with the
     `turns_invalid` guard rather than a guessed count.
@@ -853,10 +980,23 @@ See §3.3. All six are new STLs from
     item in the build guide, define an inspection interval and a slip-witness
     mark, and keep a spare in the field kit. Hand-tool replacement per
     `AGENTS.md` §7.
-16. **Confirm STS3215 mode semantics** (§3.9) — mode indices, the selecting
-    register, and whether the torque ceiling is settable in encoded
-    continuous-rotation mode. Part of the §3.1 datasheet gate; no register
-    number is invented in this document.
+16. **Confirm LibreServo v2 wire-protocol commands** (§3.9) — rate command,
+    torque-ceiling set, position/telemetry readback, against the protocol
+    documentation linked in REF-SENSOR-014. Supersedes the Rev B "confirm
+    STS3215 mode semantics" item (that register-based mode scheme does not
+    apply to LibreServo v2); no command/register value is invented in this
+    document.
+18. **★ Bench-verify the SPT5425LV/LibreServo v2 conversion** (§3.1) — stall
+    current at 5.4 V (for RAIL-2 sizing), converted-unit mass (for §6), and the
+    rotation-limiting-pin removal procedure (photograph and document before it
+    becomes a build-guide step). None of these three figures is published by
+    the sources cited in REF-SENSOR-013/014.
+19. **Nacelle-tilt servo migration (out of scope for this document)** — the 2×
+    nacelle tilt servos are migrating from DS3218MG to the same SPT5425LV +
+    LibreServo v2 combination as this winch, per `REFERENCES.md` "Servo Fleet
+    Standardisation, 2026-08-02". That migration's own mounting-hardware and
+    firmware items are tracked in `airframe/wings-nacelles/WBS.md` and
+    `avionics/WBS.md`, not here — this document is the winch's own spec.
 17. **Accept that a powerless shed is un-telemetered** (§3.7.2) — no power means
     no encoder and no CAN frame. If post-event knowledge of a shed is required,
     that needs a separate mechanism (e.g. a latching mechanical indicator), not
@@ -866,9 +1006,10 @@ See §3.3. All six are new STLs from
 
 ## 9. References
 
-- `docs/references/108090023_STS3215-C001_Datasheet.pdf` — REF-SENSOR-012 (**requires verification**, §3.1)
+- REF-SENSOR-013 (SPT5425LV), REF-SENSOR-014 (LibreServo v2) — §3.1, current servo spec
+- `docs/references/108090023_STS3215-C001_Datasheet.pdf` — REF-SENSOR-012 (**superseded, historical**, §3.1)
 - `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` — gateway, `J_FLEX`, `N_STACKS`
-- `docs/POWER_DISTRIBUTION.md` §3.2.1, §11.1 — RAIL-2 `5V_JAYNE`
+- `docs/POWER_DISTRIBUTION.md` §3.2.1, §11.1 — RAIL-2 `5V_OBS`
 - `docs/flight_envelope.md` — AUW 2,768 g / 27.15 N
 - `docs/structural_analysis.md` §6 — 2.5 g cargo dynamic factor
 - `docs/bom_revR.json` — superseded winch entries (§2)
@@ -878,4 +1019,4 @@ See §3.3. All six are new STLs from
 
 ---
 
-*"Takes a man of honour to sit a winch that won't let go until you tell it to."*
+*"Takes a man of honor to sit a winch that won't let go until you tell it to."*

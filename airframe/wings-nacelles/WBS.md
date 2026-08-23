@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Wings and Nacelles Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
@@ -25,18 +25,18 @@
     - Verify WING_SLOT_W and WING_SLOT_H against tip chord 93 mm (Rev R1 planform) before printing — pocket 50×40 mm uses 54 % of tip chord; confirm pylon block clears airfoil walls
     - Verify WING_BOLT_R (16 mm) does not exceed S1223 half-thickness at 50 % tip chord (≈ 9.6 mm above chord line at 93 mm chord); reduce to ≤ 12 mm if pylon block geometry requires it
 - [x] **wings_s1223_revo.stl** — Rev R1 planform (2026-06-14): root 129 mm, tip 93 mm, zero LE sweep; STLs regenerated and baked ✓
-    - **[x]** Verify cargo-section wing-root mortise dimensions against new root chord 129 mm (was 161 mm); `cargo_sect_shell24.scad` mortise slot (currently 30.8×20.8×15 mm) may need resizing and re-centring
-    - **[x]** Re-check root-tab centre position: with 129 mm chord the tab centres at hull Y ≈ +57.5 mm (was +73.5 mm); confirm mortise centre in cargo SCAD matches
+    - **[x]** Verify cargo-section wing-root mortise dimensions against new root chord 129 mm (was 161 mm); `cargo_sect_shell24.scad` mortise slot (currently 30.8×20.8×15 mm) may need resizing and re-centering
+    - **[x]** Re-check root-tab center position: with 129 mm chord the tab centers at hull Y ≈ +57.5 mm (was +73.5 mm); confirm mortise center in cargo SCAD matches
     - **[x]** Verify wing TE position (hull Y≈+122 mm port, +117 mm stbd) clears cargo-section aft interior features; cargo aft boundary is hull Y≈+132 mm — 10 mm clearance
 
-##### 1.1.2.1 *Rev R1a — spar straightened + camber-centred + EDF cableway (2026-07-07)*
+##### 1.1.2.1 *Rev R1a — spar straightened + camber-centered + EDF cableway (2026-07-07)*
 
 - [x] **Spar bore de-skewed** — `wings_s1223_revo.scad`: replaced the constant-30%-
     chord-fraction bore (which walked 10.8 mm / 7.2° forward over span under the
     straight LE — the "swept" cutout) with a bore at a **constant chordwise station
-    (`SPAR_BORE_STATION` = 22 mm)** → parallel to the LE. Bore centre height now
+    (`SPAR_BORE_STATION` = 22 mm)** → parallel to the LE. Bore center height now
     reads the **actual S1223 camber midline at each station** (`midline_frac()`),
-    fixing the Rev R1 chord-line centring that broke out the lower surface AND the
+    fixing the Rev R1 chord-line centering that broke out the lower surface AND the
     single-constant estimate that clipped the upper surface at the root.
 - [x] **Tip thickened for spar fit** — `THICKNESS_SCALE_TIP` = 1.25 (root unchanged);
     tip t/c 12.14 % → ≈ 15.2 %. Needed because the tip section (11.3 mm max) is
@@ -47,17 +47,86 @@
     (`cableway_bore()`): 40 A EDF ESC power + ESC signal split across the two;
     nav-light 3-core routes through the hollow spar (Ø9 mm tube ID). Section
     figure: `docs/img/wing_rev_r1a_sections.png`.
-- [ ] **[OPEN — BLOCKER] Fuselage spar-interface now mismatched.** §1.1.1.3 cuts the
-    cargo-shell mating Ø12.3 spar bore + Ø22 bearing bosses at the **old** 30 %-chord
-    line (hull **Y ≈ +31.7, Z ≈ 62.5**). The Rev R1a wing spar now sits at the 22 mm
-    station on the camber midline → root ≈ hull **Y ≈ +15, Z ≈ +71** (~16 mm fwd,
-    ~8 mm up). The spar can no longer pass through both parts. **User decision
-    required:** (a) relocate the cargo-shell bore + bosses to the new spar line
-    (cargo-shell / Blender-canonical change + re-merge + re-bake), or (b) keep the
-    fuselage bore and instead thicken the tip further (~1.6×) so a straight spar at
-    the 38.7 mm station fits — fatter wingtip OML. **Do not print either wing or
-    cargo shell until reconciled.** Consider whether `THICKNESS_SCALE_TIP` /
-    `SPAR_BORE_STATION` should be canon-checked against the Serenity wing silhouette.
+- [x] **Fuselage spar-interface mismatch — RESOLVED 2026-08-16 (Rev S1b), owner
+    decision: move the spar aft to 35 % root chord.** §1.1.1.3 cut the cargo-shell
+    Ø12.3 spar bore + Ø22 bearing bosses at the **old** 30 %-chord line while the
+    Rev R1a wing spar sat at the 22 mm station, so the spar could not pass through
+    both parts. Neither original option was taken: (a) relocating the fuselage bore
+    to the 22 mm line would have left the nacelle slid forward to hull Y +15 to
+    reach it, and (b) keeping the fuselage bore needed a ~1.6× tip. Instead **both**
+    parts moved onto one station, **45.15 mm = 35.0 % root chord**, which also
+    brings the nacelle tilt axis back toward its canonical station instead of
+    dragging the pod forward to meet the spar (the 2026-07-19 "slide the nacelle
+    forward to Y = 15" reconciliation is hereby superseded).
+
+    Applied:
+    - `wings_s1223_revo.scad`: `SPAR_BORE_STATION` 22.0 → **45.15**;
+        `THICKNESS_SCALE_TIP` 1.25 → **1.45**.
+    - `merge_cargo_interior.py`: `WING_SPAR_Y` 0.30 → **0.35** of root chord
+        (hull Y +31.7 → **+38.15**), and the spar bore + both bearing bosses moved
+        off the mortise height onto a new `WING_SPAR_Z` = **68.42**.
+
+    **Corrections to the original text of this item** (`AGENTS.md` §11.4 — model
+    state outranks stale documentation):
+    - "root ≈ hull **Z ≈ +71** (~8 mm up)" was a prose estimate and is **wrong**.
+        The wing chord line sits at hull Z **58.01** — confirmed two independent
+        ways: `port_tilt_spar_assembly.scad` states `SPAR_Z` is the camber
+        midline plus 58, and solving this file's own recorded baked bound
+        (Z max +76.99) against the root section top (+18.99 above the chord
+        line) gives 58.01.
+        The spar at the **old** 22 mm station was therefore at Z **66.52**,
+        not 71; at the new station it is **68.42**.
+    - The fuselage previously cut the spar at `WING_ROOT_Z` = 62.5, i.e. on the
+        **mortise** height rather than the camber midline. That conflation is why
+        the bore never lined up; the two are now separate constants.
+
+    Verified: `tools/wing_spar_station_fit.py` (root wall 3.78 mm, tip wall
+    1.17 mm ≥ the 1.16 mm the root already runs at);
+    `tools/landing_gear_wing_clearance.py --proud` (all 4 checks clear).
+
+    **Still gated on the re-bake — do not print either wing or cargo shell yet.**
+    See the two open items directly below.
+
+- [ ] **[OPEN] Re-render and re-bake both wings (Rev S1b OML change).** The tip
+    OML changed twice over: `THICKNESS_SCALE_TIP` 1.25 → 1.45, and
+    `s1223_section()` now scales **thickness only** about the camber line instead
+    of scaling all of y (see §1.1.2 note below). The baked wing STLs and
+    `docs/img/wing_rev_r1a_sections.png` are therefore **stale**. Re-render port
+    and stbd, then `python3 tools/bake_hull_frame.py Wing_Port Wing_Stbd`, then
+    `tools/validate_stls.py`. Expected envelope: Z max stays **+76.99** (set
+    by the root section, which is unchanged); the tip top drops to ≈ +74.51.
+
+- [ ] **[OPEN] Re-merge the cargo shell.** `merge_cargo_interior.py` carries the
+    new spar station/height **and** the LG-10.4 wing keep-outs, but the published
+    `cargo_sect_shell24_2mm_repaired.stl` predates both. One re-merge covers both
+    changes; re-run `tools/validate_stls.py` and
+    `tools/landing_gear_wing_clearance.py` after.
+
+- [x] **`s1223_section()` scales THICKNESS ONLY (Rev S1b, 2026-08-16).** It
+    previously did `scale([chord, chord * t_scale])`, which multiplies camber and
+    thickness together, and its own comment conceded this was "acceptable for
+    t_scale in [0.85, 1.0]" — a range `THICKNESS_SCALE_TIP` left at 1.25 and would
+    have left far behind at 1.45. Uniform scaling at that factor drives S1223's
+    camber from **8.12 % to 11.75 %**, i.e. a number chosen purely to fit a spar
+    would have silently re-cambered a section whose whole value is its camber.
+    Decomposing into camber + thickness and scaling only the thickness gives the
+    **identical** section depth and the **identical** +1.17 mm of skin over the
+    bore, with the camber line left exactly where Selig put it
+    (`tools/wing_airfoil_variants.py`). Consequential fix: the bore-center
+    expressions (`spar_tip_y()`, `spar_bore()`, cableway, Hall-cable) no longer
+    multiply `midline_frac()` by the thickness scale — doing so would now lift
+    each bore off the camber line it is meant to be centered on.
+
+    **Not CFD-verified.** Tip t/c rises 13.45 % → 19.47 %, and the drag
+    penalty of a 19.5 % t/c tip at Re ≈ 2.1 × 10⁵ is **not** quantified: the
+    OpenFOAM study
+    built for it (`tools/wing_cfd_openfoam.py`) is blocked on mesh generation and
+    is committed WIP. The camber-preservation argument above does not depend on
+    CFD; the absolute penalty of the thicker tip does.
+
+- [ ] **[OPEN] Canon-check `THICKNESS_SCALE_TIP` / `SPAR_BORE_STATION` against the
+    Serenity wing silhouette** before print — carried over from the resolved item
+    above, and now more pointed, since the tip is thicker than when it was raised.
 
 
 ## §1.1.3 — Nacelles
@@ -85,6 +154,59 @@
 
 ##### 1.1.3.1 *Nozzle*
 
+- **Rev T3 (2026-08-09) — flap SHINGLE implemented (master/seal)** (user decision
+  2026-08-09; found by CI "STL Validation", not by inspection).
+    - [x] **Root cause** — `N_FLAPS` 8 × `FLAP_SPAN_DEG` 50° = 400° of arc on a
+        360° circle, i.e. the deliberate 5° inter-flap overlap documented since
+        Rev R2. But every flap was carved from the SAME radial band
+        (`R_HINGE−FLAP_THICKNESS`..`R_HINGE`) at the same radius, so that overlap
+        was a solid INTERPENETRATION, not a lap joint — physically unbuildable.
+        Adjacent flaps therefore shared exactly coincident cylindrical surfaces,
+        which exported as edges belonging to four facets (17 on the closed asm,
+        12 on the open). `trimesh` reported the mesh non-watertight AND
+        `mesh.split()` returned **zero** bodies, so the multi-body fallback in
+        `tools/validate_stls.py` could not rescue it either. Confirmed in source,
+        not inferred: re-rendering the committed SCAD reproduced the published
+        mesh face-for-face (25 716).
+    - [x] **Fix** — alternate flaps are now SEAL flaps lapped
+        `FLAP_SHINGLE_GAP` = 0.2 mm (0.008 in) radially OUTBOARD of the MASTER
+        flaps, closing the gap between adjacent masters from outside. Principle
+        per REFERENCES.md **[REF-CAD-005]** (US 4,128,208, GE, expired). Both
+        types keep an identical clevis on the hinge line, so all 8 still pivot on
+        the same `R_HINGE` circle and straddle the same UNMODIFIED hinge bosses —
+        housing, throat, ring and cam untouched.
+    - [x] **Kinematics preserved** — the master band is unchanged, so
+        `exit_r(φ) = R_HINGE − FLAP_LENGTH·sin φ` and the 75 %/105 % bore targets
+        are numerically unaffected. Verified against the mesh: flow-boundary min
+        radius 16.311 mm (0.642 in) and overall max radius 35.600 mm (1.402 in)
+        identical before and after; the print-ready master STL renders
+        byte-identical geometry (1 702 facets, 2 636.5722 mm³).
+    - [x] **`FLAP_PHI` exposed** so each published assembly STL is reproducible
+        from source instead of by hand-editing the tilt.
+    - [x] **5° variant DISCARDED** (user 2026-08-09) —
+        `nacelle_nozzle_iris-closed-5deg.stl` was an earlier, abandoned attempt at
+        shingling the petals, exported from a source revision no longer in the
+        tree (rendering the current file at φ = 5° reproduced neither its facet
+        count nor its volume). Superseded by this revision; file deleted.
+    - [x] **BOM/print split** — `PRINT-NACELLE-FLAP` (16) →
+        `PRINT-NACELLE-FLAP-MASTER` (8) + `PRINT-NACELLE-FLAP-SEAL` (8), i.e.
+        4 + 4 per nozzle. New print part `nacelle_nozzle_flap_seal.stl`. Masses
+        re-measured from the rendered solids (master 2.637 cm³ → 3.4 g, seal
+        2.874 cm³ → 3.7 g at 1.27 g/cm³ PETG); at 2.5 mm wall with 3 × 0.4 mm
+        perimeters the section is effectively solid, so the previous 2 g/flap
+        figure was an under-estimate.
+    - [ ] **[OPEN — VERIFY] Mass/CG impact of the shingle.** Flap-set mass rises
+        32.0 g → 56.8 g (1.13 oz → 2.00 oz), i.e. **+24.8 g (+0.87 oz) total,
+        +12.4 g (+0.44 oz) per nacelle**, all of it aft of and outboard of the
+        tilt pivot. Re-check the Rev T CG band (≈109–112 mm) and the tilt-servo
+        torque margin against this before flight — see §1.1.3 "VERIFY Rev T CG".
+    - [ ] **[OPEN — VERIFY] Seal-flap aerodynamic step.** The seal sits 0.2 mm
+        proud of the masters' outer surface, so the flow boundary is no longer a
+        single continuous cone: masters bound it over 4 × 50° of arc, seals over
+        the intervening gaps at +2.7 mm radius. Confirm the residual step is
+        acceptable for the "smooth, low-turbulence exit" goal by bench/CFD before
+        flight; if not, the alternative is a scarfed (tapering-thickness) seal.
+
 - **Rev T (2026-07-18) — Option B pushrod drive adopted** (user decision;
   `docs/NOZZLE_DRIVE_TRADE.md`). Supersedes the Rev S1 internal-ring gear drive.
     - [x] **Rev S2 bug fix** — corrected the `TAB_X`/`TAB_Z` follower-offset SIGN
@@ -97,7 +219,7 @@
         removed *(nacelle_nozzle_iris.scad Rev T)*.
     - [x] **Rev T2 — flaps doubled** 20→40 mm (user direction): swing arc halved
         (PHI 1.79→12.64° vs 3.58→25.94°); bore stays clean, exit continuous.
-    - [x] **Housing aft taper** (Stage 2) toward the cowl mould line; binding
+    - [x] **Housing aft taper** (Stage 2) toward the cowl mold line; binding
         envelope is now the hinge bosses (≈Ø69.4), not the ring.
     - [x] **Pushrod drive part** (Stage 3) — `nacelle_nozzle_pushrod.scad`
         (spar crank + COTS ball-link pushrod); Makefile target added.
@@ -113,7 +235,7 @@
     - [ ] **[OPEN — VERIFY] Re-bake the pod shells** (`nacelle_port_revs.stl` /
         `nacelle_stbd_revs.stl`) for the grown Ø72 nozzle pocket; the canonical-
         shell bake needs review before regenerating.
-    - [ ] **[OPEN — VERIFY] Full housing ovalisation** to the cowl mould line +
+    - [ ] **[OPEN — VERIFY] Full housing ovalization** to the cowl mold line +
         hinge-boss vs aft-cowl clearance — needs the assembly part-local→hull
         transform (serenity_assembly.py).
     - [ ] **[OPEN] Spar-crank placement** in serenity_assembly.py is first-pass
@@ -224,9 +346,9 @@
     incompatible with a direct mesh at that offset. **Fix: added a compound
     idler gear stage** (`nacelle_nozzle_idler.scad`, new file) between the
     Crown Pinion and the nozzle ring — Idler-In (44T, R=22mm) meshes the
-    Crown Pinion at the fixed 28.1 mm centre distance; Idler-Out (15T,
+    Crown Pinion at the fixed 28.1 mm center distance; Idler-Out (15T,
     R=7.5mm) meshes the new full-circle ring gear (72T, R=36mm) at a
-    43.6 mm centre distance. A valid idler-shaft position exists per the
+    43.6 mm center distance. A valid idler-shaft position exists per the
     triangle inequality (|28.1-43.6|=15.5mm ≤ 28mm ≤ 28.1+43.6=71.7mm).
     Also replaced the old partial rack with a full-circle ring gear,
     eliminating the arc-coverage sizing problem entirely. Also fixed a
@@ -246,7 +368,7 @@
     non-manifold edge out of 26,381 from the petals' designed overlap —
     see §1.1.3.1 finding above; not a print-file defect.
 - [x] **Idler angular position about the nozzle axis** *(resolved
-    2026-06-22)* — solved the two simultaneous centre-distance constraints
+    2026-06-22)* — solved the two simultaneous center-distance constraints
     (28.1 mm from Crown Pinion at local (X=0, Y=PINION_A_Y=28); 43.6 mm
     from the nozzle/ring axis (0,0)): shaft position (X=+27.485, Y=33.846),
     i.e. 50.92° from the local +X axis (rounded to 50.9°). The other valid
@@ -256,7 +378,7 @@
     `serenity_assembly.py` at this (X, Y).
 - [x] **idler axial mesh-band mismatch — RESOLVED 2026-07-04** (user decision:
     offset the Crown Pinion, accounting for CG).  The idler's two gear sections
-    are 10 mm apart axially (Idler-In band centre at local Z=6, Idler-Out at
+    are 10 mm apart axially (Idler-In band center at local Z=6, Idler-Out at
     Z=16), but Crown Pinion and the Nozzle Ring both sat at the same station
     (`CROWN_Z = NOZZLE_RING_Z = 166.25`), 0 mm apart — unmeshable by one idler
     shaft.  **Fix:** decoupled the two and moved the Crown Pinion 10 mm toward the
@@ -329,7 +451,7 @@
     bad) — bounds X −204.0..−7.4, Y −415.6..−211.3, Z 0.0..163.2 mm, matching
     the file's own documented STL bounding box. Root cause confirmed: the wing
     subsystem (`wing_root_mortise()`, `wing_spar_bore()`,
-    `spar_bearing_block()`, `nacelle_servo_mount_block()`) had been modelled
+    `spar_bearing_block()`, `nacelle_servo_mount_block()`) had been modeled
     using the WING's own internal pre-permutation convention
     (`wings_s1223_revo.scad`: "X: chordwise, Y: thickness, Z: spanwise")
     without ever applying that file's own `X<-Z, Y<-X, Z<-Y` permutation to
@@ -405,7 +527,7 @@
     baked both nacelles; the trimmed nose shifted the baked Y extent by ≈5.8 mm
     (Port −64→−58.2, Stbd −70→−64.2 — CLAUDE.md extent tables updated). Both
     watertight. **VERIFY the exact crossover station in FreeCAD** against the
-    canonical mould line.
+    canonical mold line.
 
 ##### 1.1.3.5 *Nacelle Lighting*
 
@@ -423,7 +545,7 @@
     skin with an OPEN snap-in U-groove (no trapped/enclosed void — prints cleanly and
     is field-serviceable), running from the emitter down to the existing
     `harness_exit_port()` where the wire joins the ESC/harness bundle to the pylon
-    (reuses the EDF cableway). Never breaks the exterior mould line.
+    (reuses the EDF cableway). Never breaks the exterior mold line.
 - [x] **Remove the exhaust WS2812B LED rings + harnesses from the design completely**
     *(done 2026-07-04)* — all 3 (2 nacelle + 1 rear) removed across every ACTIVE
     file: `current-specification/bom_revS.csv`, `README.md`, `docs/POWER_DISTRIBUTION.md`
@@ -449,7 +571,7 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
     (7.80 mm) and cut ~0.21 mm through **both** airfoil skins. `TIP_BRG_*` now
     MF128ZZ (Ø12, flange Ø13.5): seat clears with **+1.79 mm** margin (echo-verified).
     Reaction ≈19 N (dyn) ≪ MF128 capacity. Root bearing stays F688ZZ. BOM split.
-- [x] **Wing (fixed sensor) mount modelled + relocated** *(Rev R2d)* — added
+- [x] **Wing (fixed sensor) mount modeled + relocated** *(Rev R2d)* — added
     `wing_tip_hall_sensor_pocket()` (MT6701 9×7 PCB recess + 2× M2 non-ferrous
     pilots) with the IC **relocated to HALL_SENS_R = 12 mm** (chordwise-aft, clear
     of the Ø13.5 flange keep-out — the initial R = 6 mm pocket collided with the
@@ -461,7 +583,7 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
     root end extended Z −1 → −13 so the Ø7 EDF feeds pass through the
     `fuselage_root_tab` (was dead-ended 1 mm in). Soundness echo-verified: bores
     groove only the tenon crown; solid **15.4 mm lower spine** retained.
-- [x] **Nacelle (rotating magnet) hub modelled** *(Rev R2d)* — `nacelle_hall_ring_hub()`
+- [x] **Nacelle (rotating magnet) hub modeled** *(Rev R2d)* — `nacelle_hall_ring_hub()`
     (non-ferrous CF-PETG carrier, OD 24 for the Ø22 ring — Rev R2e ring downsize, keyed
     to the spar, ring ID ≥1 mm off the ferrous spar) in `_export_pivot_slab.scad`
     (dev sandbox).
@@ -477,22 +599,22 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
     (side-of-shaft)** configuration and adds **anomaly-magnetic-field detection + dynamic
     error reduction + EEPROM INL calibration** — purpose-built for the ferromagnetic
     (4130/17-4) through-shaft. Both KiCad files rebuilt around the AK7455
-    (`MAL-TILT-ENC-PCB`, **QFN24 4×4**, **SPI** 4-wire + ERROR on a **7-wire** direct-
+    (`SKIPPER-TILT-ENC-PCB`, **QFN24 4×4**, **SPI** 4-wire + ERROR on a **7-wire** direct-
     solder pigtail; both nacelles share the SPI bus via separate **CSN** → the I²C
     fixed-address problem is gone). Pinout **verified** vs the datasheet (TEST2→VSS,
     TEST1 open, NC pins + back-tab/EP open); `kicad-cli` (9.0.2) ERC **0 errors**.
-    `bom_revS.csv` (`MAL-TILT-ENC-PCB` + `HALL-RING-MAG`) and `REFERENCES.md`
+    `bom_revS.csv` (`SKIPPER-TILT-ENC-PCB` + `HALL-RING-MAG`) and `REFERENCES.md`
     (REF-SENSOR-008 + pending row) updated. (A KiCad symbol Y-inversion wiring bug —
     library Y-up vs sheet Y-down — was found and fixed during the rebuild.)
-- [ ] **[OPEN — cross-subsystem, rescoped 2026-07-26] `Wash.md` §13 / `Wash.kicad_sch` still
+- [ ] **[OPEN — cross-subsystem, rescoped 2026-07-26] `Pilot.md` §13 / `Pilot.kicad_sch` still
     have a `J_ENC` connector row (SM04B-GHS-TB, `ENC_SDA`/`ENC_SCL`, "AS5600 nacelle tilt angle
     encoder (I2C)")** — this is now **obsolete, not merely stale**: the architecture moved to
     AK7455 read locally in-nacelle by a `CAN-PERIPH-GW-1` trust-module gateway (own
     MSPM0G3507, SPI 4-wire + ERROR direct to the gateway MCU), published as a signed message on
     isolated CAN-FD + isolated RS-485. River (primary) and Simon (failover) subscribe to the
-    bus message rather than Wash owning a dedicated I²C/SPI bus to each nacelle. **Action:**
-    remove the `J_ENC` connector + `ENC_SDA`/`ENC_SCL` net from `Wash.kicad_sch` and the §13
-    table row (not a SPI reconciliation — the connector's function no longer belongs on Wash at
+    bus message rather than Pilot owning a dedicated I²C/SPI bus to each nacelle. **Action:**
+    remove the `J_ENC` connector + `ENC_SDA`/`ENC_SCL` net from `Pilot.kicad_sch` and the §13
+    table row (not a SPI reconciliation — the connector's function no longer belongs on Pilot at
     all). See `avionics/WBS.md` §1.9.1/§1.9.2 and
     `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` deployment mode 1.
 - [ ] **[OPEN — airframe] Resize the wing sensor pocket for the AK7455 QFN24 4×4**

@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Landing Gear TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 
 > **This file lists only currently-open (unchecked) top-level tasks for
 > this subsystem — one line each, <=70 chars, no prose.** Full detail
@@ -9,21 +9,13 @@
 > [`WBS.md`](WBS.md), the full historical record for project-progression
 > tracking. Close an item in `WBS.md` first, then delete its line here.
 
-*"We're still flying. That's not nothing. — Mal"*
+*"We're still flying. That's not nothing. — Skipper"*
 
 ---
 
 ## §1.1.4 — Landing Gear
 → full detail: `WBS.md` §1.1.4
 
-- [ ] LG-10.1 Re-measure the aft trapezoidal opening flat (blocker)
-- [ ] LG-10.2 Re-derive hip stations onto the opening flats
-- [ ] LG-10.3 Re-aim bay bolts normal to the flat; re-enable bosses
-- [ ] LG-10.4 Hollow/reinforce sponson; clear the wing spar + mortises
-- [ ] LG-10.5 Re-run cargo merge; publish the shell
-- [ ] LG-10.6 Generate hull patches; enable BAY_CONFORM
-- [ ] LG-10.7 Purge stale FCStd objects; bake, re-export
-- [ ] LG-10.8 Z-level all 4 feet to the most negative Z
 - [ ] LG-15 Procure wire to the 4 ft schedule; coupon test
 - [ ] LG-16 Confirm ductile wire temper survives jig-forming
 - [ ] LG-02 Backing plate part (optional at 4 ft; FOS 4.56 unaided)

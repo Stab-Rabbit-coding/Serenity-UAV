@@ -1,7 +1,7 @@
 # Serenity UAV — Deferred Work (Phase 11+) TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 
 > **This file lists only currently-open (unchecked) top-level tasks for
 > this subsystem — one line each, <=70 chars, no prose.** Full detail
@@ -51,7 +51,7 @@
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verifica…
 - [ ] Intake frame tongues fully seated in the resized scoop windows
 - [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet…
-- [ ] EDF seated at station ~430mm, centreline ±2mm; rotation verifie…
+- [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verifie…
 - [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
 - [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.0…
 - [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on b…
@@ -63,7 +63,7 @@
 → full detail: `WBS.md` §Phase12
 
 - [ ] RBM module:
-- [ ] FlightEngineer input:
+- [ ] Flight Engineer input:
 - [ ] Current sharing:
 - [ ] Firmware (`pwr_fault`):
 - [ ] W&B:

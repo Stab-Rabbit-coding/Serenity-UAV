@@ -51,7 +51,7 @@
 //   All bow positions marked VERIFY in slicer before printing.
 // Rev R (2026-06-11): Rev R baseline checkpoint — no geometry changes.
 // Rev S1 (2026-06-09): Shepherd Book avionics bay (Faraday enclosure) on
-//   interior dorsal face.  Book bay: Cape-B-2 (TACCO) + Cape-A-2 (Wash) stack,
+//   interior dorsal face.  Book bay: Cape-B-2 (XO) + Cape-A-2 (Pilot) stack,
 //   60×40×55 mm Faraday tray, 4× M3 bosses + 62×42 mm dorsal access panel.
 //   Ductwork parameters shared with cargo SCAD spec (DUCT_* constants).
 //   Ref: cargo_sect_shell24.scad Rev S4; CLAUDE.md Book bay; CAPE-B-2.kicad_pcb.
@@ -277,7 +277,7 @@ BOSS_AFT_6 = [  99, CY + 38, CZ - 52  ];  // VERIFY: dorsal-stbd quadrant
 //
 // Book is the primary watchdog / fault-detection / authentication SBC stack
 // (CLAUDE.md: Book bay = "Shepherd Book" = forward avionics bay).
-// Cape stack: Cape-B-2 (TACCO) + PB2-I + Cape-A-2 (Wash) + PB2-I, 55×35 mm each.
+// Cape stack: Cape-B-2 (XO) + PB2-I + Cape-A-2 (Pilot) + PB2-I, 55×35 mm each.
 // Faraday enclosure: 5-walled aluminium-sheet tray, 60×40×55 mm external.
 // Hull dorsal skin IS the 6th wall; access cover (72×52 mm) is the EMI lid.
 //
@@ -361,14 +361,14 @@ module book_dorsal_boss(x_pos, z_pos) {
 //   Ref: avionics/kicad/Observer.md "Mechanical Mounting and Wiring"; TODO.md
 //   §1.2c.3; bow_sensor_pod.scad FACEPLATE_CTR/BOW_CX.
 // ----------------------------------------------------------------------------
-JAYNE_NOSE_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Observer's mounting-hole pattern
-JAYNE_NOSE_HOLE_DZ = 20.0;   // mm, +/-Z half-spacing of Observer's mounting-hole pattern
-JAYNE_NOSE_STATION_Y = FACEPLATE_CTR[1] + 20.0;   // mm, ~20 mm aft (into hull) of the faceplate
-JAYNE_NOSE_STATION_Z = FACEPLATE_CTR[2];          // mm, level with the sensor cluster
+OBSERVER_NOSE_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Observer's mounting-hole pattern
+OBSERVER_NOSE_HOLE_DZ = 20.0;   // mm, +/-Z half-spacing of Observer's mounting-hole pattern
+OBSERVER_NOSE_STATION_Y = FACEPLATE_CTR[1] + 20.0;   // mm, ~20 mm aft (into hull) of the faceplate
+OBSERVER_NOSE_STATION_Z = FACEPLATE_CTR[2];          // mm, level with the sensor cluster
 module jayne_board_bosses() {
-    for (dx = [-JAYNE_NOSE_HOLE_DX, JAYNE_NOSE_HOLE_DX])
-    for (dz = [-JAYNE_NOSE_HOLE_DZ, JAYNE_NOSE_HOLE_DZ])
-        m3_boss([BOW_CX + dx, JAYNE_NOSE_STATION_Y, JAYNE_NOSE_STATION_Z + dz], [0, 0, 0]);
+    for (dx = [-OBSERVER_NOSE_HOLE_DX, OBSERVER_NOSE_HOLE_DX])
+    for (dz = [-OBSERVER_NOSE_HOLE_DZ, OBSERVER_NOSE_HOLE_DZ])
+        m3_boss([BOW_CX + dx, OBSERVER_NOSE_STATION_Y, OBSERVER_NOSE_STATION_Z + dz], [0, 0, 0]);
 }
 
 // ----------------------------------------------------------------------------

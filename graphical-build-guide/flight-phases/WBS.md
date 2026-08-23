@@ -1,7 +1,7 @@
 # Serenity UAV — Phased Physical Build — Flight Phases (Phases 5-10) Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
@@ -11,7 +11,7 @@
 > the root index as a commit prerequisite (root `AGENTS.md` "Revisions and Version
 > Control").
 
-*"Love keeps her in the air when she oughta fall down. — Capt. Malcolm Reynolds"*
+*"Love keeps her in the air when she oughta fall down. — Capt. Skipper Reynolds"*
 
 ---
 
@@ -53,14 +53,14 @@
 | ESC4 | EDF2 (aft) | Stbd | FC2 Cape-A PRU Ch.1 |
 | ESC5 | 55mm rear | Fuselage | **DEFERRED — Phase 11** |
 
-**CN1+FC1 installation — Shepherd's room (Bay A, nose) — TACCO / Wash (v2 EM-hardened):**
-> Shepherd's room (Bay A) is the CAN FD / RS-485 / 1553B bus start termination node.  Use TACCO (ADM2795E
-> RS-485, ISOW1044 CAN FD, ADIN1300 Ethernet) and Wash for 5 kV isolated transceivers at
+**CN1+FC1 installation — Shepherd's room (Bay A, nose) — XO / Pilot (v2 EM-hardened):**
+> Shepherd's room (Bay A) is the CAN FD / RS-485 / 1553B bus start termination node.  Use XO (ADM2795E
+> RS-485, ISOW1044 CAN FD, ADIN1300 Ethernet) and Pilot for 5 kV isolated transceivers at
 > this end of the bus.  v2 placement is mandatory here (see TODO §1.2a node placement note).
 
-- [ ] Mount CN1 TACCO on Shepherd's room (Bay A) floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
+- [ ] Mount CN1 XO on Shepherd's room (Bay A) floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
 
-- [ ] Mount FC1 Wash on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
+- [ ] Mount FC1 Pilot on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
 
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 
@@ -78,18 +78,18 @@
 
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT 0x01.
 
-- [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
+- [ ] Cap Simon's medbay (Bay D) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
 
-**CN2+FC2 installation — Inara's shuttle (Bay B, dorsal fwd) — TACCO / Wash (Rev R):**
-> Rev R: Inara's shuttle (Bay B) also uses v2 EMI-hardened capes (same as Shepherd's room). All four bays use Wash + TACCO.
+**CN2+FC2 installation — Inara's shuttle (Bay B, dorsal fwd) — XO / Pilot (Rev R):**
+> Rev R: Inara's shuttle (Bay B) also uses v2 EMI-hardened capes (same as Shepherd's room). All four bays use Pilot + XO.
 
-- [ ] Mount CN2 TACCO on Inara's shuttle (Bay B) floor standoffs; insert PB2-I; mount FC2 Wash above.
+- [ ] Mount CN2 XO on Inara's shuttle (Bay B) floor standoffs; insert PB2-I; mount FC2 Pilot above.
 
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 
 - [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: **CN2-LOG**.
 
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 TACCO J_XCVR header.
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 XO J_XCVR header.
 
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mount GPS patch on dorsal hull, face UP.
 
@@ -97,15 +97,15 @@
 
 - [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's shuttle (Bay B).
 
-- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Wash ETH-1 → CN2 TACCO ETH-B (FC1↔CN2 Ethernet ring link).
+- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Pilot ETH-1 → CN2 XO ETH-B (FC1↔CN2 Ethernet ring link).
 
-- [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in Phase 7).
+- [ ] Cap River's room (Bay C) end of ETH-BD (will connect to CN3 in Phase 7).
 
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
 
 **Security provisioning (before first flight):**
 
-- [ ] Provision TPM 2.0 (SLB9670) on CN1, FC1, CN2, FC2 — unique key material per node.
+- [ ] Provision TPM 2.0 (SLB9672) on CN1, FC1, CN2, FC2 — unique key material per node.
 
 - [ ] Verify CPLD write-blocker on CN1 and CN2: `echo test > /mnt/flightlog/test.txt` must return read-only error.
 
@@ -187,33 +187,33 @@
 
 **Goal:** All 8 nodes installed, full ring redundancy, 12× VL53L5CX dual-redundant obstacle avoidance operational.
 
-**CN3+FC3 installation — River's room (Bay D, dorsal aft) — TACCO / Wash (Rev R):**
-> Rev R: River's room (Bay D) also uses v2 EMI-hardened capes. All four bays uniform.
+**CN3+FC3 installation — River's room (Bay C, dorsal aft) — XO / Pilot (Rev R):**
+> Rev R: River's room (Bay C) also uses v2 EMI-hardened capes. All four bays uniform.
 
-- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash in Inara's shuttle (Bay B).
+- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Pilot in Inara's shuttle (Bay B).
 
-- [ ] Mount CN3 TACCO on River's room (Bay D) floor standoffs; insert PB2-I; mount FC3 Wash above.
+- [ ] Mount CN3 XO on River's room (Bay C) floor standoffs; insert PB2-I; mount FC3 Pilot above.
 
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN3-LOG**.
 
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 TACCO J_XCVR header.
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 XO J_XCVR header.
 
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mount GPS patch, face UP.
 
-- [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's room (Bay D) CN3 → FC3 → exit toward Simon's medbay (Bay E).
+- [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's room (Bay C) CN3 → FC3 → exit toward Simon's medbay (Bay D).
 
-- [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (Bay D) → Simon's medbay (Bay E).
+- [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (Bay C) → Simon's medbay (Bay D).
 
-- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Wash ETH-1 → CN3 TACCO ETH-B.
+- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Pilot ETH-1 → CN3 XO ETH-B.
 
-- [ ] Power tap River's room (Bay D); verify 5V ±0.05V.
+- [ ] Power tap River's room (Bay C); verify 5V ±0.05V.
 
-**CN4+FC4 installation — Simon's medbay (Bay E, aft service) — TACCO / Wash (v2 EM-hardened):**
-> Simon's medbay (Bay E) is the CAN FD / RS-485 / 1553B bus end termination node and is physically closest to the
-> nacelle motor wiring and rear 55mm EDF.  Use TACCO / Wash for 5 kV isolated
+**CN4+FC4 installation — Simon's medbay (Bay D, aft service) — XO / Pilot (v2 EM-hardened):**
+> Simon's medbay (Bay D) is the CAN FD / RS-485 / 1553B bus end termination node and is physically closest to the
+> nacelle motor wiring and rear 55mm EDF.  Use XO / Pilot for 5 kV isolated
 > transceivers at this end of the bus.  v2 placement is mandatory here.
 
-- [ ] Mount CN4 TACCO on Simon's medbay (Bay E) standoffs; insert PB2-I; mount FC4 Wash above.
+- [ ] Mount CN4 XO on Simon's medbay (Bay D) standoffs; insert PB2-I; mount FC4 Pilot above.
 
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN4-LOG**.
 
@@ -227,7 +227,7 @@
 
 - [ ] Connect ETH-EA ring-close (Simon's medbay → Shepherd's room): FC4 Cape-A ETH-1 → [Shepherd's room CN1 Cape-B ETH-2 already connected]. Closes the 8-node RSTP ring.
 
-- [ ] Power tap Simon's medbay (Bay E); verify 5V ±0.05V.
+- [ ] Power tap Simon's medbay (Bay D); verify 5V ±0.05V.
 
 **Security provisioning — remaining 4 nodes:**
 
@@ -258,7 +258,7 @@ Array B (hosted by FC1, Shepherd's room / Bay A):
 
 - [ ] Install 6× VL53L5CX in Array B flush-mount frames; wire to TCA9548A ch.0–5 in Shepherd's room (Bay A); MCP23008 GP0–GP5 → XSHUT; I²C to FC1 Cape-A.
 
-Array A (hosted by FC3, River's room / Bay D):
+Array A (hosted by FC3, River's room / Bay C):
 
 | Sensor | Station | Position |
 |--------|---------|----------|
@@ -269,7 +269,7 @@ Array A (hosted by FC3, River's room / Bay D):
 | S5A | 215mm | Dorsal keel |
 | S6A | 195mm | Belly blister |
 
-- [ ] Install 6× VL53L5CX in Array A flush-mount frames; wire to TCA9548A ch.0–5 in River's room (Bay D); separate I²C bus (electrically isolated from Array B).
+- [ ] Install 6× VL53L5CX in Array A flush-mount frames; wire to TCA9548A ch.0–5 in River's room (Bay C); separate I²C bus (electrically isolated from Array B).
 - [ ] Apply 0.5mm PMMA disc over each sensor aperture with UV adhesive.
 - [ ] Configure OA fusion in firmware: halt at 1.0m obstacle clearance; either array independent on single-FC failure.
 - [ ] GPS clearance check for 49MHz wire post proximity: bench-verify HDOP ≤1.5 with the 49 MHz (Part 15 §15.235) link transmitting; if GPS degrades, move GPS patch to ≥165mm from forward post.

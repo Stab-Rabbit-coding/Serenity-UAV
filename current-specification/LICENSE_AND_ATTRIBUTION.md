@@ -5,35 +5,26 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Project:** Serenity-Class Tri-Fan Tiltrotor Unmanned Aerial Vehicle
 **Revision:** R1 (current — hull/nozzle source citations below updated 2026-06-16; full Rev O–R1 design changelog lives in TODO.md and REFERENCES.md)
-**License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
+**License:** Dual-licensed — CERN-OHL-W 2.0 (hardware/CAD/PCB) / CC BY-SA 4.0 (docs/code/scripts/drawings). See `docs/attribution_and_licensing.md` for the full policy (corrected 2026-08-01, TODO.md §0.9 — this document previously stated a single "CC BY 4.0" project-wide license, which was stale).
 
 ---
 
 ## License
 
-```text
+This project is **dual-licensed by content type** — full policy and rationale in
+[`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md):
 
-Creative Commons Attribution 4.0 International
+- **Hardware/CAD/PCB design files** — CERN-OHL-W 2.0. Full text: root
+  [`LICENSE`](../LICENSE), `airframe/LICENSE`, `avionics/LICENSE`.
+- **Documentation, code, scripts, and non-hardware drawings** (including this document) —
+  CC BY-SA 4.0. Full text: `LICENSES/CC-BY-SA 4.0`,
+  <https://creativecommons.org/licenses/by-sa/4.0/legalcode>.
 
-Copyright © 2025 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-
-You are free to:
-  Share  — copy and redistribute the material in any medium or format
-  Adapt  — remix, transform, and build upon the material for any purpose,
-            even commercially
-
-Under the following terms:
-  Attribution — You must give appropriate credit, provide a link to the
-                license, and indicate if changes were made. You may do so
-                in any reasonable manner, but not in any way that suggests
-                the licensor endorses you or your use.
-
-No additional restrictions — You may not apply legal terms or technological
-measures that legally restrict others from doing anything the license permits.
-
-Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
-
-```
+Under both: you are free to share and adapt (including commercially) with attribution, a
+link to the applicable license, and an indication of changes made; CC BY-SA additionally
+requires derivative works to carry the same license (share-alike). Neither license lets you
+apply legal or technological measures that restrict others from doing what the license
+permits.
 
 ---
 
@@ -48,7 +39,7 @@ Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
 | **Physical Sec.** | CPP — Certified Protection Professional (ASIS International) |
 
 Steve Griffing is the sole proprietor of **Griffing Technology LLC**. PCB silkscreens and title
-blocks (Wash, TACCO, FlightEngineer, COMMO/XCVR-49MHZ-2, and their predecessors) carry both the personal
+blocks (Pilot, XO, Flight Engineer, Commo/XCVR-49MHZ-2, and their predecessors) carry both the personal
 copyright/license line and the "Griffing Technology LLC" company mark, since these boards may be
 offered commercially beyond this project. Personal copyright is retained regardless of the company
 mark's presence on a given board.
@@ -57,20 +48,30 @@ mark's presence on a given board.
 
 ## Original Creative Work Covered by This License
 
-The following elements are original work by Steve Griffing, released under CC BY 4.0:
+The following elements are original work by Steve Griffing, dual-licensed per
+`docs/attribution_and_licensing.md`:
+
+**CERN-OHL-W 2.0** (hardware/CAD/PCB design files):
 
 - All flight system PCB schematics and layouts (TRIHAT-1, CM4-CARRIER-1 Rev E, COMMS-HAT-1 Rev E)
-- CPLD write-blocker Verilog RTL (`write_blocker.v`)
-- STM32 NX-enforcement proxy firmware (`nx_proxy.c`)
 - Variable-area nozzle gear-coupling design (sector gear · bevel pair · crown pinion · ring rack)
 - Nacelle nozzle gear geometry and STL files
 - All KiCad PCB source files in this repository
+
+**CC BY-SA 4.0** (documentation, code, scripts, non-hardware drawings):
+
+- CPLD write-blocker Verilog RTL (`write_blocker.v`) — see note below on the separate MIT dual-license
+- STM32 NX-enforcement proxy firmware (`nx_proxy.c`)
 - Flight controller firmware architecture and algorithm specifications
 - 49 MHz (47 CFR Part 15 §15.235) AX.25/KISS PTT-sequenced link implementation
 - All SVG engineering diagrams in `diagrams/`
 - All wiring diagrams, pin-out tables, and system integration specifications
 - Build guide and assembly documentation
 - This license and attribution document
+
+Note: the CPLD write-blocker Verilog RTL is also separately released under MIT (see
+`README.md` "What This License Covers" — Not covered / separate terms); where the two
+notices differ, the more permissive MIT terms apply to that specific file.
 
 ---
 
@@ -138,17 +139,19 @@ rights holders before using the Serenity name or likeness in trade.
 | **Title** | Serenity Firefly with landing gear and swivel engines |
 | **Author** | misubisu |
 | **Source** | [thingiverse.com/thing:7330462](https://www.thingiverse.com/thing:7330462) |
-| **License** | CC BY 4.0 SA|
-| **Use** | Hull outer geometry adapted; retains the four canonical sections (head, cargo, middle, rear); scaled to 24 in (609 mm) overall length; hollowed to 2.0 mm watertight CF-PETG shell; structurally redesigned with CF skeleton and foam fill for UAV flight loads. |
+| **License** | CC BY-SA 4.0 (corrected 2026-08-01 — see REFERENCES.md "Removed / Superseded Citations") |
+| **Use** | Hull outer geometry adapted; retains the four canonical sections (head, cargo, middle, rear); scaled to 24 in (609 mm) overall length; hollowed to 2.0 mm watertight CF-PETG shell; structurally redesigned with CF skeleton and foam fill for UAV flight loads. Incorporated into the project's CERN-OHL-W 2.0 airframe Covered Source as an **Available Component** — see `docs/attribution_and_licensing.md` "Available Component Boundary." |
 
 ## Remix attribution template
 
 ```text
 
 Hull: "Serenity Firefly with landing gear and swivel engines" by misubisu
-thingiverse.com/thing:7330462 · CC BY 4.0 SA
+thingiverse.com/thing:7330462 · CC BY-SA 4.0
 Remixed by Steve Griffing: scaled 24 in (609 mm), hollowed to 2.0 mm
-watertight CF-PETG shell, CF skeleton and foam fill added. CC BY 4.0.
+watertight CF-PETG shell, CF skeleton and foam fill added. Redistributed
+derivatives of the upstream hull geometry itself remain CC BY-SA 4.0;
+the project's original CERN-OHL-W 2.0 work is separately licensed.
 
 ```
 
@@ -382,13 +385,16 @@ serenity-drone/
 
 Serenity-Class Tiltrotor UAV
 © 2025 Steve Griffing, PE(CSE) [Control Systems Engineering],
-CISSP-ISSEP, CPP. CC BY 4.0.
+CISSP-ISSEP, CPP. Hardware/CAD/PCB: CERN-OHL-W 2.0.
+Docs/code/scripts: CC BY-SA 4.0.
 
 Incorporates:
-• Hull: "Serenity, Firefly Class" by Peter Farell
-  printables.com/model/548545 · CC BY 4.0
+• Hull: "Serenity Firefly with landing gear and swivel engines" by misubisu
+  thingiverse.com/thing:7330462 · CC BY-SA 4.0
+  (Available Component under CERN-OHL-W 2.0 — see docs/attribution_and_licensing.md §3)
 • Nozzle: "Variable Area EDF Nozzles" by BamJr
   thingiverse.com/thing:2991269 · CC BY 4.0
+  (Available Component under CERN-OHL-W 2.0)
 • Visual inspiration: Firefly (Fox/Mutant Enemy, 2002) /
   Serenity (Universal Pictures, 2005)
   © Joss Whedon · Non-commercial fan engineering work.
@@ -398,7 +404,10 @@ Incorporates:
 
 ---
 
-*This document is itself released under CC BY 4.0.*
-*Last updated: 2026-07-20 — added §1a (QMx Official Serenity Blueprints Reference Pack) and §2c
-(Nick Henning render collection) as canonical-accuracy reference sources; both mirror REFERENCES.md
-REF-CAD-003 / REF-CAD-002.*
+*This document is itself released under CC BY-SA 4.0 (see `docs/attribution_and_licensing.md`).*
+*Last updated: 2026-08-01 — corrected §2 misubisu hull license from a garbled "CC BY 4.0 SA" to
+CC BY-SA 4.0 and documented its CERN-OHL-W 2.0 Available Component treatment (TODO.md §0.9
+licensing audit; see REFERENCES.md "Removed / Superseded Citations"). Previously, 2026-07-20 —
+added §1a (QMx Official Serenity Blueprints Reference Pack) and §2c (Nick Henning render
+collection) as canonical-accuracy reference sources; both mirror REFERENCES.md REF-CAD-003 /
+REF-CAD-002.*

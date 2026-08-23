@@ -8,7 +8,7 @@
  *
  * Implements the power fault state machine described in pwr_fault.h.
  *
- * INA226 I2C address layout on FlightEngineer (all on i2c_dev_pdb bus):
+ * INA226 I2C address layout on Flight Engineer (all on i2c_dev_pdb bus):
  *   0x40 — ESC1 (Port Fwd, EDF0)
  *   0x41 — ESC2 (Port Aft,  EDF1)
  *   0x42 — ESC3 (Stbd Fwd,  EDF2)
@@ -202,7 +202,7 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out) {
         return -EINVAL;
     }
 
-    ctx = calloc(1U, sizeof(*ctx));
+    ctx = (pwr_fault_ctx_t *)calloc(1U, sizeof(*ctx));
     if (ctx == NULL) {
         return -ENOMEM;
     }
@@ -210,9 +210,9 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out) {
     /* Open INA226 contexts for each ESC channel. */
     for (i = 0U; i < PWR_FAULT_ESC_COUNT; i++) {
         /*
-         * Each INA226 on the FlightEngineer shares the same I2C bus but has a distinct
-         * address (0x40–0x43 for ESC1–ESC4).  Each bmon_ina2xx_open() call
-         * opens a separate file descriptor and programs the address via
+         * Each INA226 on the Flight Engineer shares the same I2C bus but has a
+         * distinct address (0x40–0x43 for ESC1–ESC4).  Each bmon_ina2xx_open()
+         * call opens a separate file descriptor and programs the address via
          * ioctl I2C_SLAVE, so all contexts are fully independent.
          */
         rc = bmon_ina2xx_open(i2c_dev_pdb, ESC_I2C_ADDR[i], BMON_INA_INA226,
@@ -436,7 +436,12 @@ int pwr_fault_get_snapshot(const pwr_fault_ctx_t *ctx,
     if (ctx == NULL || snap == NULL) {
         return -EINVAL;
     }
-    memcpy(snap, &ctx->snap, sizeof(*snap));
+    /* Plain struct assignment rather than memcpy(): source and destination are
+     * the same complete type, so the compiler emits the copy with full type
+     * checking and no dependence on the size argument matching the pointee.  A
+     * mismatched sizeof() in a memcpy() here would silently over- or under-copy
+     * the snapshot; this form cannot. */
+    *snap = ctx->snap;
     return 0;
 }
 

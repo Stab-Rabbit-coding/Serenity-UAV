@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate ENC-NACELLE-1.kicad_pcb — AK7455 off-axis nacelle tilt-encoder board.
 
-Serenity UAV — MAL-TILT-ENC-PCB (see ENC-NACELLE-1.md for the design record).
+Serenity UAV — SKIPPER-TILT-ENC-PCB (see ENC-NACELLE-1.md for the design record).
 
 Board summary (all dimensions mm; KiCad canvas coordinates, Y grows downward):
     * Outline: 7.0 x 14.0 rounded-rect (r = 1.0), X 20..27, Y 20..34.
@@ -260,7 +260,7 @@ def base_board_text():
 \t)
 \t(paper "A4")
 \t(title_block
-\t\t(title "ENC-NACELLE-1 / MAL-TILT-ENC-PCB")
+\t\t(title "ENC-NACELLE-1 / SKIPPER-TILT-ENC-PCB")
 \t\t(date "2026-07-21")
 \t\t(rev "S")
 \t\t(comment 1 "Serenity UAV — nacelle tilt-angle encoder (AKM AK7455, off-axis)")

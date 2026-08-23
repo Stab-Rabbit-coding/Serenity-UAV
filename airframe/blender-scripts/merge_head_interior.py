@@ -25,7 +25,7 @@ fragmentation class of defect).
 
 Observer nose-mount bosses (head_shell24.scad jayne_board_bosses()) are
 DELIBERATELY EXCLUDED — those are explicitly flagged PROPOSED / not
-FreeCAD-verified (see TODO.md §1.2c.3, avionics/kicad/Observer/Observerver.md); merging them
+FreeCAD-verified (see TODO.md §1.2c.3, avionics/kicad/Observer/Observer.md); merging them
 here would falsely certify an unverified placement.  Likewise
 book_dorsal_boss() (Shepherd's Book bay) is excluded — it carries a known,
 not-yet-fixed legacy axis bug (see TODO.md §1.1.1.0a).

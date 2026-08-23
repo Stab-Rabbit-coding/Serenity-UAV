@@ -8,7 +8,7 @@
 2026-07-27T00:05:40.0703632Z --changed-since origin/main: 6 schematic(s), 5 PCB(s) touched
 2026-07-27T00:05:40.0704762Z [PASS] ERC avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch: 0 hard, 103 soft (accepted-class)
 2026-07-27T00:05:40.0705538Z [PASS] ERC avionics/kicad/ENC-NACELLE-1.kicad_sch: 0 hard, 54 soft (accepted-class)
-2026-07-27T00:05:40.0706216Z [PASS] ERC avionics/kicad/Emma/kicads/Emma.kicad_sch: 0 hard, 136 soft (accepted-class)
+2026-07-27T00:05:40.0706216Z [PASS] ERC avionics/kicad/Commo/kicads/Commo.kicad_sch: 0 hard, 136 soft (accepted-class)
 2026-07-27T00:05:40.0706914Z [PASS] ERC avionics/kicad/Observer/kicads/Observer.kicad_sch: 0 hard, 214 soft (accepted-class)
 2026-07-27T00:05:40.0707715Z [PASS] ERC avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch: 0 hard, 567 soft (accepted-class)
 2026-07-27T00:05:40.0708283Z     HARD (ERC pin_not_connected): Pin not connected
@@ -105,7 +105,7 @@
 2026-07-27T00:05:40.0741724Z     HARD (clearance): Clearance violation ( clearance 0.1000 mm; actual 0.0000 mm)
 2026-07-27T00:05:40.0742168Z     HARD (hole_clearance): Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)
 2026-07-27T00:05:40.0742602Z     HARD (shorting_items): Items shorting two nets (nets +5V and RSSI_DCD)
-2026-07-27T00:05:40.0742990Z [FAIL] DRC avionics/kicad/Emma/kicads/Emma.kicad_pcb: 22 hard, 229 soft (accepted-class)
+2026-07-27T00:05:40.0742990Z [FAIL] DRC avionics/kicad/Commo/kicads/Commo.kicad_pcb: 22 hard, 229 soft (accepted-class)
 2026-07-27T00:05:40.0743327Z     HARD (courtyards_overlap): Courtyards overlap
 2026-07-27T00:05:40.0743572Z     HARD (courtyards_overlap): Courtyards overlap
 2026-07-27T00:05:40.0743802Z     HARD (courtyards_overlap): Courtyards overlap

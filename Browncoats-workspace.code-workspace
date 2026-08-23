@@ -1,10 +1,29 @@
 {
-    "folders": [
-        {
-            "path": "."
-        },
-        {
-            "path": "../SecureControllers"
-        }
-    ]
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../LibreServo_v4"
+		},
+		{
+			"path": "../open-servo-core-secure"
+		},
+		{
+			"path": "../Open-Secure-ESC"
+		},
+		{
+			"path": "../SecureControllers"
+		},
+		{
+			"path": "../dasGoat-USV"
+		},
+		{
+			"path": "../Tactical-WX-RX"
+		}
+	],
+	"settings": {
+		"debug.allowBreakpointsEverywhere": true,
+		"debug.closeReadonlyTabsOnEnd": true
+	}
 }

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-generate_gerbers_rev_s1.py — Generate Gerber files for Rev S1 boards (Emma, TACCO, FlightEngineer)
+generate_gerbers_rev_s1.py — Generate Gerber files for Rev S1 boards (Commo, XO, Flight Engineer)
 
 Usage:
-    python3 generate_gerbers_rev_s1.py [emma|zoë|flightengineer]
+    python3 generate_gerbers_rev_s1.py [commo|xo|flight_engineer]
 
 Generates production Gerber and drill files to:
-  - avionics/kicad/gerbers/Emma-S1/
+  - avionics/kicad/gerbers/Commo-S1/
   - avionics/kicad/gerbers/CAPE-B-2-S1/
   - avionics/kicad/gerbers/FlightEngineer-S1/
 
@@ -20,23 +20,23 @@ import subprocess
 from pathlib import Path
 
 BOARDS = {
-    "emma": {
-        "pcb": "avionics/kicad/Emma/kicads/Emma.kicad_pcb",
-        "pro": "avionics/kicad/Emma/kicads/Emma.kicad_pro",
-        "gerber_dir": "avionics/kicad/gerbers/Emma-S1",
-        "name": "Emma Rev S1",
+    "commo": {
+        "pcb": "avionics/kicad/Commo/kicads/Commo.kicad_pcb",
+        "pro": "avionics/kicad/Commo/kicads/Commo.kicad_pro",
+        "gerber_dir": "avionics/kicad/gerbers/Commo-S1",
+        "name": "Commo Rev S1",
     },
-    "zoë": {
-        "pcb": "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
-        "pro": "avionics/kicad/TACCO/kicads/TACCO.kicad_pro",
+    "xo": {
+        "pcb": "avionics/kicad/XO/kicads/XO.kicad_pcb",
+        "pro": "avionics/kicad/XO/kicads/XO.kicad_pro",
         "gerber_dir": "avionics/kicad/gerbers/CAPE-B-2-S1",
-        "name": "TACCO Rev S1",
+        "name": "XO Rev S1",
     },
-    "flightengineer": {
+    "flight_engineer": {
         "pcb": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb",
         "pro": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro",
         "gerber_dir": "avionics/kicad/gerbers/FlightEngineer-S1",
-        "name": "FlightEngineer Rev S1",
+        "name": "Flight Engineer Rev S1",
     },
 }
 

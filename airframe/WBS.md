@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe (Hull-Frame Standard + Placeholders) Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
@@ -16,9 +16,9 @@
 ---
 
 **Cross-cutting system: Observer (cargo handling)** — doors/winch/latch/gondola geometry is
-in [fuselage-mid/TODO.md](fuselage-mid/TODO.md) §1.1.1; the full Observerver subsystem map
+in [fuselage-mid/TODO.md](fuselage-mid/TODO.md) §1.1.1; the full Observer subsystem map
 (vision/ToF/laser board, firmware, assembly, deferred range-extender battery) is in
-[avionics/jayne/TODO.md](../avionics/jayne/TODO.md).
+[avionics/observer/TODO.md](../avionics/observer/TODO.md).
 
 ---
 
@@ -103,9 +103,9 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     `s_cargo_sect_shell24_2mm_repaired.stl` and verify the belly faces hull −Z.
     **DONE 2026-06-16**: `generate_cargo_doors.py` rewritten for hull frame (Rev R1a).
     Belly faces detected by normal Z < −0.5.  Both doors watertight.
-- [x] **Correct hinge location: outboard flank, not centreline.** Rev R1a (above)
-    placed both doors' piano-hinge knuckles at the ship centreline X_CL (≈ −169.85 mm)
-    with the free edges at the hull sides — backwards from the door behaviour already
+- [x] **Correct hinge location: outboard flank, not centerline.** Rev R1a (above)
+    placed both doors' piano-hinge knuckles at the ship centerline X_CL (≈ −169.85 mm)
+    with the free edges at the hull sides — backwards from the door behavior already
     documented everywhere else in the repository (TODO.md §1.4.2, README.md, `rcrs49_wire_post.scad`),
     all of which describe the doors hinging at the **outboard flank/belly edge** and
     swinging **down and out from the aircraft, full 180° range of motion**, to open the
@@ -114,7 +114,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     outboard belly edge with its free edge at X_CL — see corner-curvature note below
     for why the hinge X is NOT the cargo-section bounding box (X_SHELL_MIN/MAX). Removed
     the port/stbd knuckle Y-interleaving (no longer meaningful — each door is now its
-    own independent piano hinge pinned to the fuselage, not a shared centreline hinge
+    own independent piano hinge pinned to the fuselage, not a shared centerline hinge
     joining the two panels). Knuckle Z is now sampled from the belly interpolator at
     each hinge X rather than a bare literal.
     - [x] **Fix door-surface discontinuity found during verification.** First Rev R1b
@@ -165,7 +165,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
             bosses once those are finalized in the cargo shell (§1.1.4).
     - [ ] **Piano-hinge CF rod (×2, independent)** — verify 3 mm CF rod passes through
         each door's own 4 knuckle bores (3.15 mm bore) — port and stbd are now two
-        separate pins/rods, not one shared centreline pin; test in printed prototype
+        separate pins/rods, not one shared centerline pin; test in printed prototype
         before final assembly.
         - **Geometry cross-check DONE 2026-06-29:** each door's 4 knuckle bores (Ø3.15)
             and the two Rev R1c shell-side retention-block bores (Ø3.3,
@@ -268,16 +268,16 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Servos (DS3218MG, SG90) | 2 | `airframe/placeholders/servos/` |
 | Bearings (MF104ZZ, MR63ZZ, 6804) | 3 | `airframe/placeholders/bearings/` |
 | Structural CF (rods, tube, bar, plate, PTFE) | 6 | `airframe/placeholders/structural/` |
-| Avionics PCBs (PB2-I, Cape-A-2/B-2, COMMO, FlightEngineer, microSD) | 6 | `airframe/placeholders/avionics/` |
+| Avionics PCBs (PB2-I, Cape-A-2/B-2, Commo, Flight Engineer, microSD) | 6 | `airframe/placeholders/avionics/` |
 | Power (LiPos, fuses, shunt) | 7 | `airframe/placeholders/power/` |
 | Cargo (STS3215, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` — N20 placeholder retired, STS3215 placeholder pending envelope |
 | Gears M=1.0 (sector, pinion, bevel, housing) | 4 | `airframe/placeholders/gears/` |
 | Hardware (pins, inserts, screws, straps, wire ring) | 6 | `airframe/placeholders/hardware/` |
 | Lighting (WS2812C SMD nav LED) | 1 | `airframe/placeholders/lighting/` |
 | Wiring (conduit, harnesses, antenna wire, posts) | 6 | `airframe/placeholders/wiring/` |
-| GCS / Malcolm (enclosure, BECs, antennas, tripod, encoders) | 15 | `airframe/placeholders/gcs/` |
+| GCS / Skipper (enclosure, BECs, antennas, tripod, encoders) | 15 | `airframe/placeholders/gcs/` |
 | Foam fill + interior voids (head/cargo/middle/rear fill; avbay, cargo bay, wiring trunk, power bus, ventilation, pylon pockets; Faraday cage pockets + vent duct spurs) | 13 | `airframe/placeholders/foam/` |
-| EMC / Faraday shielding (cage, gasket, fan, EMI vent, bond strap, feed-through panel, ferrite; Malcolm fan + gasket) | 9 (×2 STL files share gen_far_fan_40) | `airframe/placeholders/faraday/` |
+| EMC / Faraday shielding (cage, gasket, fan, EMI vent, bond strap, feed-through panel, ferrite; Skipper fan + gasket) | 9 (×2 STL files share gen_far_fan_40) | `airframe/placeholders/faraday/` |
 
 **Completed (2026-06-12):**
 - [x] **Generate all 65 component placeholder STLs** — `generate_placeholders.py` created;
@@ -286,7 +286,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
     component grid layout; run with `freecadcmd`. *(done 2026-06-12)*
 - [x] **Faraday shielding hardware** — 9 new generators; 11 new STL files in `airframe/placeholders/faraday/`:
     FAR-CAGE-AV (cage), FAR-GASKET-AV, FAR-FAN-40, FAR-EMI-VENT-40, FAR-BOND-STRAP,
-    FAR-FT-PANEL, FAR-FERRITE-4MM; MAL-FAR-FAN, MAL-FAR-GASKET (GCS).
+    FAR-FT-PANEL, FAR-FERRITE-4MM; SKIPPER-FAR-FAN, SKIPPER-FAR-GASKET (GCS).
     BOM entries added to `current-specification/bom_revR.csv`.
     **⚠ MASS NOTICE: Faraday aircraft system now 364 g (0.80 lbm) after
     ferrite reduction to 4/cage and 1 bond strap/cage. Full Rev R1 weight

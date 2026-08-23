@@ -7,7 +7,7 @@ Runs `kicad-cli sch erc` and `kicad-cli pcb drc --schematic-parity` on every
 violation is found.
 
 Severity policy (matches the standard already applied by hand to every KiCad
-board in this project this session -- Wash/Zoe/FlightEngineer/Emma/Observer):
+board in this project this session -- Pilot/XO/FlightEngineer/Commo/Observer):
 
   HARD (any occurrence fails the build) -- these mean the board is
   electrically wrong: shorts, schematic/PCB net mismatches, overlapping
@@ -16,7 +16,7 @@ board in this project this session -- Wash/Zoe/FlightEngineer/Emma/Observer):
 
   SOFT (reported, does not fail the build) -- cosmetic / informational only,
   and already an accepted, tracked class of finding across every board in
-  this repo (see e.g. avionics/kicad/Observer/Observer.md "EMI Hardening Status", FlightEngineer's
+  this repo (see e.g. avionics/kicad/Observer/Observer.md "EMI Hardening Status", Flight Engineer's
   701 open ERC/DRC items): footprint-library mismatches on intentionally
   simplified/placeholder footprints, silkscreen overlap/clearance, and the
   schematic-parity "extra footprint" / "footprint symbol mismatch" categories
@@ -25,10 +25,10 @@ board in this project this session -- Wash/Zoe/FlightEngineer/Emma/Observer):
 Scope: by default checks every .kicad_sch/.kicad_pcb in the repo EXCEPT
 archive/archives directories (frozen historical boards, e.g. the pre-Rev-Q
 CAPE-A-1 family, are not held to ongoing standards -- see root CLAUDE.md
-revision/archival policy). Several currently-active boards (Wash, FlightEngineer,
-Emma) predate this validator and carry a large pre-existing backlog of real
+revision/archival policy). Several currently-active boards (Pilot, Flight Engineer,
+Commo) predate this validator and carry a large pre-existing backlog of real
 DRC findings (matching this project's own long-standing practice of tracking
-open ERC/DRC items rather than blocking on them, e.g. FlightEngineer's 701 open
+open ERC/DRC items rather than blocking on them, e.g. Flight Engineer's 701 open
 items) -- retroactively fixing that backlog is a separate, large hardware
 task, not something a CI script should silently paper over or suddenly
 block on. So in CI, pass --changed-since <base-ref> to scope the HARD check

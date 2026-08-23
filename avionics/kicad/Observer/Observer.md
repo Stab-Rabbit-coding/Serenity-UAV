@@ -2,12 +2,12 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Callsign:** Observer (Observer's rifle — "she's a good gun.")
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** S1 (SoM end-state — PCM-071 carrier, real symbols/footprints)
 **Date:** 2026-07-13
-**Status:** **SoM end-state built** by `scripts/gen_Jayne_carrier_sch.py` +
-`gen_Jayne_carrier_pcb.py`. Schematic uses REAL clean-room symbols (PCM-071 SoM + KSZ9477 +
-MSPM0G3507 + ISOW1044BDFMR + SLB9670) wired by signal name — **ERC = 0 errors**. PCB has REAL
+**Status:** **SoM end-state built** by `scripts/gen_observer_carrier_sch.py` +
+`gen_observer_carrier_pcb.py`. Schematic uses REAL clean-room symbols (PCM-071 SoM + KSZ9477 +
+MSPM0G3507 + ISOW1044BDFMR + SLB9672) wired by signal name — **ERC = 0 errors**. PCB has REAL
 footprints (240-pad 2×BTH-060 SoM on the back, TQFP-128-1EP switch, QFN/SOIC/SOT carrier),
 **0 placeholder footprints**, all pad nets injected, sch↔pcb parity clean (bar 4 mounting-holes
 + the TPM thermal-EP GND tie). Placement is an initial shelf-pack (no shorts; user reserves
@@ -26,7 +26,7 @@ items (regulator value verification, RGMII strap sign-off, MSPM0 pinmux, routing
 
 ## Purpose
 
-Observer is a **standalone PCB — not a PocketBeagle 2 Industrial cape.** Unlike Wash/TACCO/COMMO it
+Observer is a **standalone PCB — not a PocketBeagle 2 Industrial cape.** Unlike Pilot/XO/Commo it
 does not use the P1+P2 header stack and does not mount onto a PB2-I node. It is installed at
 **two physical locations** using one shared board design:
 
@@ -46,7 +46,7 @@ other physical or electrical dependency on any other avionics board.
 **Power (added 2026-07-05):** each Observer board draws ≈ **1.2 A typ / ~2.1–2.7 A peak at 5 V**
 (AM62A7 SoC + KSZ9477 switch + camera + ToF + laser; full budget in
 `docs/POWER_DISTRIBUTION.md §3.2.1`). The two boards (≈ 2.4 A typ / ~4.8 A peak combined) are
-fed from a **dedicated FlightEngineer 5 V payload rail (U_BEC_JAYNE → J_JAYNE)** — NOT the shared 5 V
+fed from a **dedicated Flight Engineer 5 V payload rail (U_BEC_OBS → J_OBS)** — NOT the shared 5 V
 avionics bus, which is already near its dual-BEC capacity — keeping the switching video-SoC
 load off the avionics rail and preserving its margin. Observer's own TPS65219 PMIC regulates this
 5 V input to the SoC core rails. `J_PWR` is the board-side 5 V/GND entry.
@@ -68,8 +68,8 @@ or wrong and were caught before being committed to any citation-tracked file —
 - **"LAN9355 / KSZ9563 for MRP ring redundancy"** — neither chip implements HSR/PRP/MRP.
   Replaced with **Microchip KSZ9477**, confirmed via Microchip's own AN3474 application note
   to hardware-offload HSR/PRP per IEC 62439-3.
-- **"ST33GTPMISPI" TPM part** — does not exist. Replaced with **Infineon SLB9670**, the same
-  SPI TPM 2.0 part already standardized fleet-wide on all 8 Wash/TACCO nodes.
+- **"ST33GTPMISPI" TPM part** — does not exist. Replaced with **Infineon SLB9672**, the same
+  SPI TPM 2.0 part already standardized fleet-wide on all 8 Pilot/XO nodes.
 
 ## Architecture
 
@@ -90,11 +90,11 @@ or wrong and were caught before being committed to any citation-tracked file —
 
 - **U3 — TI MSPM0G3507** MCU. Native hardware MCAN (CAN-FD) peripheral — no software PIO
   synthesis needed (an RP2350-based design would have required this). Shares TI toolchain
-  with the AM6254 real-time domain on Wash/TACCO. Two independent UART instances: UART0 to
+  with the AM6254 real-time domain on Pilot/XO. Two independent UART instances: UART0 to
   U1 (AM62A7, crossed TX↔RX), UART1 dedicated to the TFmini-S ToF sensor (no net-sharing
   between the two links).
-- **U5 — Infineon SLB9670** SPI TPM 2.0 — the exact part already used fleet-wide on all 8
-  Wash/TACCO nodes, reused here rather than introducing a new TPM part number.
+- **U5 — Infineon SLB9672** SPI TPM 2.0 — the exact part already used fleet-wide on all 8
+  Pilot/XO nodes, reused here rather than introducing a new TPM part number.
 - **U2 — Microchip KSZ9477** 7-port Ethernet switch. Port 1 (RGMII) to U1 for video egress;
   Ports 2/3 (integrated PHY, full TX+/TX-/RX+/RX- differential pairs each) feed the
   EMI-hardening chain below; SPI host interface to U3 for ToF/laser-state telemetry and
@@ -103,7 +103,7 @@ or wrong and were caught before being committed to any citation-tracked file —
   5 kV reinforced insulation — the part is 20-pin DFM per TI SLLSFF7A, NOT the "SOIC-16W" earlier
   docs claimed; the Observer U4 footprint must be 20-pad DFM) — replaces an earlier non-isolated
   TCAN1042HG-Q1 to match the
-  Wash/TACCO Rev R EMI-hardening standard (see below).
+  Pilot/XO Rev R EMI-hardening standard (see below).
 - **U6 — TI ISOW1412** galvanically-isolated RS-485 transceiver (20-pin DFM,
   `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm`, REFERENCES.md REF-SENSOR-010), added 2026-07-26
   as part of the fleet-wide trust-module rollout (schematic "Section H: ISOW1412 Isolated
@@ -115,14 +115,14 @@ or wrong and were caught before being committed to any citation-tracked file —
 
 ### EMI hardening (added 2026-07-03 — see "EMI Hardening Status" below)
 
-Matches the Wash/TACCO Rev R baseline (TODO.md §1.2a) using the SAME real, already-verified
+Matches the Pilot/XO Rev R baseline (TODO.md §1.2a) using the SAME real, already-verified
 parts and footprints from this project's own `gen_cape_a2.py`/`gen_cape_a2_pcb.py`:
 
 - **Each Ethernet port** (ring in, ring out): KSZ9477 port → **Wurth 749010012A** SMD
   10/100BASE-TX transformer (T1/T2, real 8-pin footprint) → 2× **Bourns SRF2012-100Y**
   common-mode choke (CMC1-4, one per differential pair) → 2× **Nexperia PRTR5V0U2X** TVS
   array (D1-4, shunt to GND) → JST-GH 5-pin connector (J_ETH_IN/J_ETH_OUT — GND + 4 signal,
-  matching Wash's real `JST_GH_SM05B-GHS-TB` footprint, not a fabricated 6-pin).
+  matching Pilot's real `JST_GH_SM05B-GHS-TB` footprint, not a fabricated 6-pin).
 - **CAN-FD bus**: U4 (ISOW1044BDFMR, isolated) → **SRF2012-100Y** CMC (CMC5) → **PRTR5V0U2X**
   TVS (D5, shunt to chassis PGND) → J_CANFD.
 - Each Ethernet port previously modeled only ONE differential pair (a real bug — 10/100BASE-TX
@@ -137,17 +137,17 @@ parts and footprints from this project's own `gen_cape_a2.py`/`gen_cape_a2_pcb.p
 ### Laser driver — single green source, location-specific optic + current limit
 
 One shared driver circuit (Q1 AO3400 logic-level N-MOSFET, R1 100Ω gate resistor, R2 10kΩ
-pulldown, J_LASER JST-SH 2P) serves both install locations. **Per `docs/JAYNE_LASER_ANALYSIS.md`
+pulldown, J_LASER JST-SH 2P) serves both install locations. **Per `docs/OBSERVER_LASER_ANALYSIS.md`
 (Rev A, 2026-07-05), both installs now use ONE shared 520 nm green laser diode + driver**; the
 two sites differ only in (1) a per-location terminal optic that sets the spread angle and (2) a
 per-location hardware current limit that sets the optical power / IEC 60825-1 class. This
 retires the previous split (green nose + separate 650 nm red cargo module) and unifies the
-laser BOM to a single green diode family. Rationale in full: `docs/JAYNE_LASER_ANALYSIS.md`.
+laser BOM to a single green diode family. Rationale in full: `docs/OBSERVER_LASER_ANALYSIS.md`.
 
 - **Pattern is a thin-line CROSSHAIR (not a bare dot) — a projected metrology reference.** A
   PB2-I computes a detected object's **size and relative orientation** from ToF range + the
   crosshair's known projected angle + trigonometry (size = (obj_px/cross_px)·2R·tan(θ/2); tilt
-  from arm foreshortening — `docs/JAYNE_LASER_ANALYSIS.md §4.4`). The binding constraint is
+  from arm foreshortening — `docs/OBSERVER_LASER_ANALYSIS.md §4.4`). The binding constraint is
   camera pixel coverage: the nominal 2" @ 50 ft crosshair is too small (≈6 px on a wide lens);
   size the fan angle for **N ≈ 24–48 px** (nose ≈ 4–8" at 50 ft, or a narrower FOV). Cargo's
   3" @ 5 ft is already ample.
@@ -159,7 +159,7 @@ laser BOM to a single green diode family. Rationale in full: `docs/JAYNE_LASER_A
   naked eye) needs only **~0.2–0.8 mW → Class 2**; the earlier "nose = Class 3B" was the
   worst-case spread-crosshair + naked-eye-in-full-sun corner (~82 mW). Cargo is likewise
   Class 2 (green's 6.64× photopic advantage over the retired 650 nm red). Full derivation:
-  `docs/JAYNE_LASER_ANALYSIS.md`.
+  `docs/OBSERVER_LASER_ANALYSIS.md`.
 - **Class 2 at both sites drops the Class 3B key-interlock and mechanical shutter.** The
   `LASER_KEY_IN`/`LASER_IND` lines already on Observer become optional defense-in-depth. Keep each
   ≤ 1 mW cap **HARDWARE-enforced** (fixed current limit), not firmware-only.
@@ -186,7 +186,7 @@ laser BOM to a single green diode family. Rationale in full: `docs/JAYNE_LASER_A
 
 ## PCB
 
-**1.0 × 2.75 in (25.4 × 69.85 mm), double-sided, 4-layer FR4, rounded corners (3 mm radius, matching Wash/FlightEngineer
+**1.0 × 2.75 in (25.4 × 69.85 mm), double-sided, 4-layer FR4, rounded corners (3 mm radius, matching Pilot/Flight Engineer
 convention).** - **Changed 7-7-2026** updated Observer dimensions to 1.0 × 2.75 in (25.4 × 69.85 mm) to allow it to sit flush against the camera/ToF/laser faceplate within the nose. Camera, ToF, and laser connectors are moved to the board's forward end and Ethernet, power, and CAN-FD connectors are at the other end. Four mounting holes are still present. Design should work in both nose and cargo bay.
     - This allows for direct pcb soldering of sensors in nose or via jst connectors in cargo bay. (needs feasibilty review)
 
@@ -195,7 +195,7 @@ starboard→port, +Z = ventral→dorsal.** On the as-built board the camera/ToF/
 connectors **and** their direct-solder lands (`J_CAM_DS`/`J_TOF_DS`/`J_LASER_DS`) are at the
 **high-X end (~62–67 mm)**; the Ethernet-ring, CAN-FD, and power connectors are at the
 **low-X end (~6–11 mm)**. The three sensor apertures differ in the **port-starboard (Y)** axis
-— **camera = port (high Y), ToF = starboard (low Y), laser = centreline** — so the DS lands are
+— **camera = port (high Y), ToF = starboard (low Y), laser = centerline** — so the DS lands are
 spread along **Y** to match `airframe/openscad/fuselage/bow_sensor_pod.scad`
 (`CAM_POS`/`TOF_POS`, ToF··laser 8.2 mm, ToF··camera 16.5 mm). Board and DS-land placement are
 correct as-built; an earlier "fore/aft mismatch" note was a high-vs-low-X mix-up, now resolved.
@@ -210,7 +210,7 @@ dimensions. Several things brought it down to the current 1.0 × 2.75 in (25.4 �
 2. **Real component body sizes** (2026-07-03 datasheet research pass) replaced rough
    estimates — most significantly MSPM0G3507 turned out to have a real VSSOP-28 package
    option (7.1×4.9mm) far smaller than the VQFN-48 (7×7mm) first assumed, and AM62A7/KSZ9477/
-   SLB9670/TPS65219 all have smaller real bodies (18×18mm, 14×14mm, 5×5mm, 5×5mm
+   SLB9672/TPS65219 all have smaller real bodies (18×18mm, 14×14mm, 5×5mm, 5×5mm
    respectively) than the placeholder generator's original guesses.
 3. **Adding the full EMI-hardening chain** (12 new small parts: 2 magnetics, 4 CMC, 4 TVS,
    plus the isolated CAN transceiver and its own CMC/TVS) grew the script-generated layout
@@ -271,7 +271,7 @@ Mounting holes: 4× M3, symmetric 4 mm margin from each edge — (4,4), (65.85,4
 - All net-level architecture/interconnect (which pin talks to which pin, UART crossing,
   CAN-FD, SPI buses, PGND/GND single-point isolation — verified via netlist export, only one
   bridge point between GND and PGND).
-- TI ISOW1044BDFMR's SOIC-16W pinout (reused from Wash's own verified `gen_cape_a2.py`).
+- TI ISOW1044BDFMR's SOIC-16W pinout (reused from Pilot's own verified `gen_cape_a2.py`).
 - AO3400 SOT-23 N-FET pinout.
 - TPS65219 as the correct PMIC family for AM62A power (per TI's own SLVAFD0 app note),
   VQFN-32/RSM 5×5mm real body size.
@@ -280,14 +280,14 @@ Mounting holes: 4× M3, symmetric 4 mm margin from each edge — (4,4), (65.85,4
 - AM62A7 real body size 18×18mm (484-ball FCBGA/FCCSP, AMB/ANF package).
 - MSPM0G3507 real VSSOP-28 (DGS) package option, body ~7.1×4.9mm — smaller than the VQFN-48
   first assumed.
-- SLB9670 real PG-VQFN-32 package, body ~5×5mm.
+- SLB9672 real PG-UQFN-32 package, body ~5×5mm.
 - Wurth 749010012A magnetics, Bourns SRF2012-100Y CMC, Nexperia PRTR5V0U2X TVS — all reused
-  verbatim (pinout + footprint reference) from this project's own working Wash/TACCO generator.
+  verbatim (pinout + footprint reference) from this project's own working Pilot/XO generator.
 
 **Placeholder / NOT real — must be replaced before fabrication:**
 
 - *(Resolved)* Placeholder ICs have been removed. U1 (AM62A) and U_PMIC are now integrated onto the real `phyCORE-AM62x_PCM071` SoM footprint. U2, U3, U4, and U5 now utilize verified, datasheet-accurate TQFP, QFN, and SOIC footprints.
-- The JST-GH 5-pin Ethernet connector footprint is an untuned approximation of Wash's real
+- The JST-GH 5-pin Ethernet connector footprint is an untuned approximation of Pilot's real
   `JST_GH_SM05B-GHS-TB_1x05-1MP_P1.25mm_Horizontal` part (pin count/pitch match; exact pad
   geometry not independently re-verified).
 - Only 1 of 4 real MIPI CSI-2 data lanes is modeled on the camera interface.
@@ -296,15 +296,15 @@ Mounting holes: 4× M3, symmetric 4 mm margin from each edge — (4,4), (65.85,4
 
 ## EMI Hardening Status: MATCHES PROJECT STANDARD (added 2026-07-03)
 
-This project's EMI-hardening baseline (established on Wash/TACCO Rev R, TODO.md §1.2a) for any
+This project's EMI-hardening baseline (established on Pilot/XO Rev R, TODO.md §1.2a) for any
 board with external Ethernet or CAN-FD connectors is now matched:
 
-| Bus | Wash/TACCO Rev R standard | Observer (this design) |
+| Bus | Pilot/XO Rev R standard | Observer (this design) |
 |---|---|---|
 | Ethernet | LAN magnetics (isolation) + SRF2012-100Y CMC + PRTR5V0U2X TVS array, per port | **Wurth 749010012A magnetics + 2× SRF2012-100Y CMC + 2× PRTR5V0U2X TVS, per port** (both ring in and ring out) |
 | CAN-FD | ISOW1044BDFMR — galvanically isolated transceiver, 5 kV reinforced insulation (IEC 62368-1 / VDE 0884-11) | **ISOW1044BDFMR** (same part) + SRF2012-100Y CMC + PRTR5V0U2X TVS |
 
-Note: an earlier pass of this document cited "HX1188NL" as the Wash/TACCO magnetics part per a
+Note: an earlier pass of this document cited "HX1188NL" as the Pilot/XO magnetics part per a
 stale TODO.md reference — the actual working `gen_cape_a2.py`/`add_eth_phy.py` generator
 uses **Wurth 749010012A**, confirmed by reading that file directly; Observer now cites and reuses
 that same real part, not the stale one.
@@ -319,7 +319,7 @@ class of KiCad lib_symbol Y-up/Y-down bug caught earlier in this session) — fi
 all of them through the same `glabel_pin`/`pwr_pin` helpers used everywhere else in the file.
 
 **Still open:** the JST-GH 5-pin Ethernet connector footprint (`comp_jst_gh_5p`) is an
-approximation of Wash's real `JST_GH_SM05B-GHS-TB_1x05-1MP_P1.25mm_Horizontal` footprint —
+approximation of Pilot's real `JST_GH_SM05B-GHS-TB_1x05-1MP_P1.25mm_Horizontal` footprint —
 pad geometry was not independently re-verified against the real part this session, only the
 pin count/pitch. Verify before fabrication.
 
@@ -435,7 +435,7 @@ cut, so runs should be comparably short, <75mm).
 avionics bay through the cargo section's own open mating faces (to the head section forward,
 or the middle section's inner-neck aft) — **open item:** determine whether **River's Room**
 or **Simon's Medbay** is the shorter/more appropriate ring-insertion point for the cargo
-install (both carry COMMO boards and sit along the cargo/middle boundary per the Node Variant
+install (both carry Commo boards and sit along the cargo/middle boundary per the Node Variant
 Placement table in the root `AGENTS.md`); this should be decided alongside the general
 avionics-bay-to-bay ring cable run planning, not fabricated here.
 
@@ -443,19 +443,21 @@ avionics-bay-to-bay ring cable run planning, not fabricated here.
 
 ## Generator Scripts
 
-- `avionics/kicad/gen_jayne.py` — generates `Observer.kicad_pro` + `Observer.kicad_sch`.
-- `avionics/kicad/gen_jayne_pcb.py` — generates `Observer.kicad_pcb`: footprint placement, nets,
-  and the rounded-corner board outline, all built into the script (not a manual post-pass).
+- `avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py` — generates
+  `Observer.kicad_pro` + `Observer.kicad_sch` (SoM end-state, current).
+- `avionics/kicad/Observer/scripts/gen_observer_carrier_pcb.py` — generates `Observer.kicad_pcb`:
+  footprint placement, nets, and the rounded-corner board outline, all built into the script
+  (not a manual post-pass).
 
-**Note on regeneration:** `gen_jayne_pcb.py` generates a net-correct 78×80mm layout (with
-`rounded_board_outline()` for the corner rounding/mounting holes) — this was the state as of
-the EMI-hardening pass. `Observer.kicad_pcb` has since been **manually compacted further to
+**Note on regeneration:** `gen_observer_carrier_pcb.py` generates a net-correct 78×80mm layout
+(with `rounded_board_outline()` for the corner rounding/mounting holes) — this was the state as
+of the EMI-hardening pass. `Observer.kicad_pcb` has since been **manually compacted further to
 1.0 × 2.75 in (25.4 × 69.85 mm) in the KiCad GUI** (see "PCB" section above); the generator script was not updated to
-match. **Re-running `gen_jayne_pcb.py` will overwrite the 1.0 × 2.75 in (25.4 × 69.85 mm) hand-compaction back to the
-78×80mm script layout** — do not run it without confirming that's intended, per this
-project's established FlightEngineer/Wash script-then-manual-placement convention. If the
+match. **Re-running `gen_observer_carrier_pcb.py` will overwrite the 1.0 × 2.75 in (25.4 × 69.85 mm) hand-compaction
+back to the 78×80mm script layout** — do not run it without confirming that's intended, per this
+project's established FlightEngineer/Pilot script-then-manual-placement convention. If the
 hand-compacted layout is to remain the baseline going forward, the positions in this section
-should be back-ported into `gen_jayne_pcb.py` so the script and file stay in sync.
+should be back-ported into `gen_observer_carrier_pcb.py` so the script and file stay in sync.
 
 ---
 
@@ -465,7 +467,7 @@ should be back-ported into `gen_jayne_pcb.py` so the script and file stay in syn
 |---|---|---|---|---|
 | U1 | TI AM62A7 | 484-ball BGA, 18×18mm real body (placeholder footprint) | Front | Vision SoC |
 | U_PMIC | TI TPS65219 | VQFN-32/RSM, 5×5mm real body (placeholder footprint) | Back | Power management |
-| U5 | Infineon SLB9670 | PG-VQFN-32, 5×5mm real body (placeholder footprint) | Back | TPM 2.0 |
+| U5 | Infineon SLB9672 | PG-UQFN-32, 5×5mm real body (placeholder footprint) | Back | TPM 2.0 |
 | U3 | TI MSPM0G3507 | VSSOP-28/DGS, 7.1×4.9mm real body (placeholder footprint) | Back | Control MCU |
 | U2 | Microchip KSZ9477 | 128-TQFP-EP, 14×14mm real body (placeholder footprint) | Back | Ethernet switch |
 | U4 | TI ISOW1044BDFMR | SOIC-16W_7.5x10.3mm (real footprint) | Front | Isolated CAN-FD transceiver |
@@ -484,7 +486,7 @@ should be back-ported into `gen_jayne_pcb.py` so the script and file stay in syn
 | J_PWR | JST-GH 2P (shielded) | — | Front | +5V/GND power input |
 | J_CAM1/J_CAM2 | JST-GH 4P (shielded) | — | Front | Camera module interface |
 | J_CANFD | JST-GH 4P (shielded) | — | Front | CAN-FD trunk |
-| J_ETH_IN/J_ETH_OUT | JST-GH 5P (shielded, real Wash-style footprint approximated) | — | Front | Ethernet ring (GND + TX+/TX-/RX+/RX-) |
+| J_ETH_IN/J_ETH_OUT | JST-GH 5P (shielded, real Pilot-style footprint approximated) | — | Front | Ethernet ring (GND + TX+/TX-/RX+/RX-) |
 | J_TOF | JST-GH 4P | — | Front | TFmini-S ToF sensor |
 | J_LASER | JST-SH 2P | — | Front | Laser module (location-specific population) |
 
@@ -493,3 +495,54 @@ should be back-ported into `gen_jayne_pcb.py` so the script and file stay in syn
 For project-wide standards see the root `AGENTS.md`; for avionics-specific conventions see
 `avionics/AGENTS.md` "Observer" section; for the full task breakdown see `TODO.md` §1.2c
 (hardware) and §4.6 (firmware).
+
+---
+
+## 2026-08-03 — Trust-module MCU/TPM retarget
+
+The trust module on this board now uses **TI MSPM0G3519-Q1 (`M0G3519QRGZRQ1`)** (48-pin RGZ VQFN, 512 KB flash / 128 KB SRAM) and the
+**Infineon SLB 9672AU2.0** TPM (PG-UQFN-32-1,-2, extended −40 to +105 °C), superseding the
+MSPM0G3507 and SLB9670VQ2.0.  Parts and the specifications applied are catalogued as
+REF-SENSOR-017 and REF-SEC-002 in `REFERENCES.md`; the change was applied by
+`avionics/kicad/retarget_mspm0g351x_slb9672.py` and `avionics/kicad/retarget_pcb_footprints.py`,
+which also wrote `.pre-g351x` backups beside each edited file.
+
+**No net or pin assignment changed.** The MSPM0G351x-Q1 RGZ-48 pin map was verified pad
+for pad against the MSPM0G350x it replaces (SLASFA6B Fig 6-5 vs SLASEX6C Fig 6-4) and is
+identical, so U3 keeps every one of its 29 connections exactly as they were.
+
+Two corrections did land on the PCB:
+
+- **U3 land pattern.** The footprint was `QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm`, which
+  KiCad's own `descr` field identifies as an *Analog Devices LTC legacy* QFN outline. TI's
+  RGZ0048F exposed thermal pad is 4.1 mm square, so that land overhung the package's
+  thermal pad by 0.525 mm on every side. Now `VQFN-48-1EP_7x7mm_P0.5mm_EP4.1x4.1mm`; the
+  48 lead pads are identical between the two, so only pad 49 changed.
+- **U5 exposed pad.** The SLB9670 symbol stopped at pin 32 and never netted the package's
+  thermal pad. It is now pad 33 tied to GND, as Infineon requires.
+
+Firmware note: the CAN pins do not move, but their IOMUX changes — `CAN0_TX`/`CAN0_RX` on
+PA12/PA13 are **PF12** on this family, and PA15 offers `SPI1_CS2` rather than `SPI1_CS0`.
+
+Open items from this pass are tracked in `TODO.md` §1.2d — read those before ordering
+anything from this board.
+
+### DRC status after the retarget
+
+Measured in place (a `.kicad_pcb` copied away from its project directory loses the
+sibling `.kicad_pro` custom rules and netclasses, and the counts become meaningless):
+
+| Board | before | after |
+|---|---|---|
+| Observer | 289 | 289 — unchanged |
+| CAN-PERIPH-GW-1 | 743 | 804 |
+
+The gateway's +61 are `clearance` violations in the MCU area, where the 48-pin traces
+still run to a footprint that is now 32 pads at 5 x 5 mm. They clear with the manual
+re-route tracked in TODO.md 1.2d.
+
+The exposed-pad corrections are applied as an in-place edit of the placed footprint
+(library reference, Value and the thermal pad only). Rebuilding the footprint from the
+library instead would discard whatever the board author tuned on that instance — mask
+margins, pad clearance overrides, zone connections — which showed up as ~180 spurious
+clearance / solder-mask-bridge / shorting violations on Observer before this was fixed.

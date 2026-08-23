@@ -22,7 +22,8 @@
  *
  * References:
  *   [1] BQ76930 Datasheet SLUSBB2C, Texas Instruments.
- *   [2] FlightEngineer.md — Serenity UAV Power Distribution Board specification.
+ *   [2] FlightEngineer.md — Serenity UAV Power Distribution Board
+ * specification.
  *
  * Target platform: PocketBeagle 2 Industrial (AM6254), Debian Trixie.
  */

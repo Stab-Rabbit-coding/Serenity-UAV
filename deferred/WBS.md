@@ -1,7 +1,7 @@
 # Serenity UAV — Deferred Work (Phase 11+) Work Breakdown Structure
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
@@ -26,7 +26,7 @@
 ---
 
 
-> **Phase 12 (Range-Extender Battery Module)** rides in the cargo bay on the same Jayne hooks/release and adds a `J_BATT2` input to FlightEngineer — a cruise-range, not hover, enhancement. See the Jayne cross-cutting map in [avionics/jayne/TODO.md](../avionics/jayne/TODO.md).
+> **Phase 12 (Range-Extender Battery Module)** rides in the cargo bay on the same Observer hooks/release and adds a `J_BATT2` input to Flight Engineer — a cruise-range, not hover, enhancement. See the Observer cross-cutting map in [avionics/observer/TODO.md](../avionics/observer/TODO.md).
 
 
 ## §Phase11 — Aft EDF Integration (Deferred)
@@ -44,7 +44,7 @@
 - [ ] Verify aerodynamic orientation: intake lips face forward (−Y / nose-ward).
 - [ ] Apply structural epoxy to tongues + shoulder flanges; press frame into position; clamp; cure 24h.
 - [ ] Fillet all gaps between flange and hull; cure 2h.
-- [ ] Dry-fit `aft_edf_plenum.stl`; verify intake arm alignment and 55mm EDF inlet centred.
+- [ ] Dry-fit `aft_edf_plenum.stl`; verify intake arm alignment and 55mm EDF inlet centered.
 - [ ] Bond plenum forward arms to intake frame exits; fillet joints; cure 2h.
 - [ ] Bond `rcs_distribution_manifold.stl` to the 4 plenum bleed taps; route 4 bleed ducts to the RCS jet locations.
 - [ ] Pressure-test: seal EDF face with tape; cover all but one scoop; shop-vac — confirm draft at EDF inlet and at all 4 RCS jets, no joint leakage.
@@ -68,7 +68,7 @@
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verification
 - [ ] Intake frame tongues fully seated in the resized scoop windows
 - [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet and all 4 RCS jets; no leakage)
-- [ ] EDF seated at station ~430mm, centreline ±2mm; rotation verified before sealing
+- [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verified before sealing
 - [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
 - [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.06×1.76 in verified
 - [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on bench
@@ -82,12 +82,12 @@
 *(root `WBS.md` §Phase12)*
 
 - [ ] **RBM module:** 6S LiPo (matched 4000 mAh recommended) + BQ76930-class BMS + ideal-diode
-    ORing output, in a tray retained by the same Jayne cargo hooks/release (jettisonable),
+    ORing output, in a tray retained by the same Observer cargo hooks/release (jettisonable),
     with a keyed XT60 pigtail.
-- [ ] **FlightEngineer input:** add `J_BATT2` (XT60) + `F_BATT2` + an ideal-diode / current-share
+- [ ] **Flight Engineer input:** add `J_BATT2` (XT60) + `F_BATT2` + an ideal-diode / current-share
     combiner (LTC4359- or LTC4370-class — a NEW part family) OR-combining `J_BATT`/`J_BATT2`
     into VBAT: hot-swap-safe across SoC mismatch, reverse-blocking so a faulted/absent RBM
-    can't drain or back-feed the main pack. (FlightEngineer board revision — not yet in KiCad.)
+    can't drain or back-feed the main pack. (Flight Engineer board revision — not yet in KiCad.)
 - [ ] **Current sharing:** same pack model + matched-SoC at takeoff (or LTC4370 to force
     balanced sharing); simple diode-ORing alone lets the higher-SoC pack hog.
 - [ ] **Firmware (`pwr_fault`):** add a second-pack context (V/I/SoC over the existing

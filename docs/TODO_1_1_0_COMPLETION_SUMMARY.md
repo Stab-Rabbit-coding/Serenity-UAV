@@ -165,4 +165,4 @@ Once you approve the placements and we complete Phase 2 (precision alignment), m
 
 ---
 
-*"That's what I like: a challenge."* — Capt. Malcolm Reynolds
+*"That's what I like: a challenge."* — Capt. Skipper Reynolds

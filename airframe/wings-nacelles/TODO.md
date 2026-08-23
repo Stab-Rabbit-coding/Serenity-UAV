@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Wings and Nacelles TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 
 > **This file lists only currently-open (unchecked) top-level tasks for
 > this subsystem — one line each, <=70 chars, no prose.** Full detail
@@ -18,7 +18,9 @@
 
 - [ ] wing_nacelle_pylon_revo.stl
 - [ ] wings_s1223_revo.stl
-- [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
+- [ ] Re-render + re-bake both wings (Rev S1b tip OML change)
+- [ ] Re-merge cargo shell (Rev S1b spar + LG-10.4 keep-outs)
+- [ ] Canon-check tip thickness/spar station vs silhouette
 
 ## §1.1.3 — Nacelles
 → full detail: `WBS.md` §1.1.3

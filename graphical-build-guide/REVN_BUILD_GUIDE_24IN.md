@@ -15,7 +15,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 # Serenity-Class Tiltrotor UAV — Build Guide Rev P baseline (24-inch)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
 **Year:** 2026 | **Status:** Public release — Rev S baseline (2026-07-04, integrates all Rev
 R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
@@ -37,11 +37,12 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
 | Work | Author | License | Source |
 |------|--------|---------|--------|
-| Hull geometry | misubisu | CC BY 4.0 | thingiverse.com/thing:7330462 |
+| Hull geometry | misubisu | CC BY-SA 4.0 | thingiverse.com/thing:7330462 |
 | Hull geometry (historical, Rev M and earlier 18") | Peter Farell | CC BY 4.0 | printables.com/model/548545 |
 | Iris nozzle concept (nacelle) | BamJr | CC BY 4.0 | thingiverse.com/thing:2991269 |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269 ft × 170 ft × 79 ft ratios |
-| All other design | Steve Griffing | CC BY 4.0 | This project |
+| All other design (hardware/CAD/PCB) | Steve Griffing | CERN-OHL-W 2.0 | This project |
+| All other design (docs/code/scripts) | Steve Griffing | CC BY-SA 4.0 | This project |
 
 ---
 
@@ -157,7 +158,7 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
 | Part | Material | Dimension | Notes |
 |------|----------|-----------|-------|
-| Keel | CF flat bar 6×3mm, 2 lap-spliced segments | Cargo 8.0 in (203 mm) + Rear 7.1 in (181 mm); spans hull Y −71..+384 mm (17.9 in / 455 mm) — head and middle sections are keelless (docs/structural_analysis.md §4.1–§4.2) | Bar oriented 3mm lateral (X) × 6mm vertical (Z), strong axis vertical; 100 mm (3.9 in) lap-splice overlap centred at the middle/rear joint (hull Y ≈ +203 mm); ring-notch positions at hull Y = +30 mm and +290 mm (replaces stale 91/165/251/320/388 mm nose-station marks) |
+| Keel | CF flat bar 6×3mm, 2 lap-spliced segments | Cargo 8.0 in (203 mm) + Rear 7.1 in (181 mm); spans hull Y −71..+384 mm (17.9 in / 455 mm) — head and middle sections are keelless (docs/structural_analysis.md §4.1–§4.2) | Bar oriented 3mm lateral (X) × 6mm vertical (Z), strong axis vertical; 100 mm (3.9 in) lap-splice overlap centered at the middle/rear joint (hull Y ≈ +203 mm); ring-notch positions at hull Y = +30 mm and +290 mm (replaces stale 91/165/251/320/388 mm nose-station marks) |
 | Wing spars | CF tube 12mm OD / 1.5mm wall | 2× 14.96 in (380 mm) | Sand spar ends to fit wing-root spar pockets |
 | Pivot rods | CF solid rod 4mm OD | 2× cut to length per pivot housing drawing | Deburr ends; press-fit into MF104ZZ bearings |
 | Ring frames | CF plate 2mm | 2 profiles: hull Y = +30 mm (cargo) and +290 mm (rear) — down from 5 pre-Rev N stations; see airframe/diagrams/ring_frames/*.dxf | Fit to keel slot-notches; cargo profile is PROVISIONAL pending cargo-mesh fix (TODO §1.1.1) |
@@ -210,7 +211,7 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 keelless — see docs/structural_analysis.md §4.1–§4.2). Keel spans hull Y −71 mm → +384 mm
 (455 mm / 17.9 in) as two lap-spliced CF-BAR-6X3 segments: cargo (hull Y −71..+132 mm) and rear
 (hull Y +203..+384 mm), bar oriented 3 mm lateral (X) × 6 mm vertical (Z). Lap-splice the two
-segments with a 100 mm (3.9 in) overlap centred on the middle/rear joint (hull Y ≈ +203 mm),
+segments with a 100 mm (3.9 in) overlap centered on the middle/rear joint (hull Y ≈ +203 mm),
 bonded with West System 105/206 + peel-ply prep. Ring-notch datum marks at hull Y = +30 mm and
 +290 mm (supersedes the stale 91/165/251/320/388 mm nose-station marks, which were tied to the
 pre-Rev N ring-plate layout). Cure 2 h minimum.
@@ -242,11 +243,11 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
 **8. Install antenna posts and SMA bulkhead pass-throughs:**
 - Belly port, X≈**260mm**: SiK 915MHz SMA-RP bulkhead *(relocated forward from 310mm — station 310mm is now the neck intake ring; 260mm is in cargo bay belly, Panel C, clear of intake frame)*
 - Belly stbd, X≈260mm: LoRa RFM95W 915MHz SMA-RP bulkhead
-- Dorsal, X≈**120mm**: **49MHz (Part 15 §15.235) forward wire post** — PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A Emma (XCVR-49MHZ-2) module *(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
+- Dorsal, X≈**120mm**: **49MHz (Part 15 §15.235) forward wire post** — PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A Commo (XCVR-49MHZ-2) module *(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
 - Aft dorsal hull, X≈580mm: **49MHz (Part 15 §15.235) temporary aft wire post** — PETG hook post (~10mm tall) bonded to aft dorsal hull skin near station ~580mm with 5-min epoxy; electrically open (insulated end). *(Note: the permanent aft post on the canonical tail nozzle (`rear_nozzle_canonical.stl`) is a Phase 11 item. This temporary post is removed and replaced in Phase 11.)*
 - Dorsal fwd, X≈140mm: Wi-Fi 2.4/5GHz antenna
-- **49MHz top wire**: 0.3mm stainless steel wire or 22AWG enamelled copper, strung from forward post hook (~120mm) to temporary aft post hook (~580mm) with light tension (~20g); CF keel bar connected to Emma (XCVR-49MHZ-2) GND as counterpoise
-- **⚠ GPS clearance check**: forward wire post at ~120mm is ~43mm from GPS patch (both dorsal face). Bench-verify GPS HDOP ≤1.5 with Emma (49 MHz) transmitting before flight. If GPS degrades, move GPS patch to ≥165mm from nose.
+- **49MHz top wire**: 0.3mm stainless steel wire or 22AWG enamelled copper, strung from forward post hook (~120mm) to temporary aft post hook (~580mm) with light tension (~20g); CF keel bar connected to Commo (XCVR-49MHZ-2) GND as counterpoise
+- **⚠ GPS clearance check**: forward wire post at ~120mm is ~43mm from GPS patch (both dorsal face). Bench-verify GPS HDOP ≤1.5 with Commo (49 MHz) transmitting before flight. If GPS degrades, move GPS patch to ≥165mm from nose.
 
 **9. Install 12× ToF sensor flush-mount PETG frames** (6.5mm hull cutouts):
 
@@ -596,13 +597,13 @@ hover rather than losing one nacelle entirely.
 
 **Goal:** All 8 nodes installed, full ring redundancy, obstacle avoidance operational.
 
-Install **CN3 + FC3** in River's room / Bay D (dorsal aft), **CN4 + FC4** in Simon's medbay / Bay E (aft service). Same procedure as Phase 6 for each bay.
+Install **CN3 + FC3** in River's room / Bay C (dorsal aft), **CN4 + FC4** in Simon's medbay / Bay D (aft service). Same procedure as Phase 6 for each bay.
 
 Connect remaining CAN FD / RS-485 / 1553 / ETH ring segments (CN3→FC3→CN4→FC4). Terminate CAN FD bus at FC4 (120Ω).
 
 Install 12× ToF sensor array:
 
-- Array A sensors on FC3 (River's room / Bay D): S1A, S3A, S4A, S5A, S6A, S2A
+- Array A sensors on FC3 (River's room / Bay C): S1A, S3A, S4A, S5A, S6A, S2A
 - Array B sensors on FC1 (Shepherd's room / Bay A): S1B, S3B, S4B, S5B, S6B, S2B
 
 Verify full obstacle avoidance in firmware (dual-redundant arrays — A and B cover identical fields, any single FC failure leaves full coverage on the other).
@@ -617,14 +618,14 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 
 ## Phase 8 — Finishing
 
-1. **Decals and paint.** Airbrush or hand-paint hull sections in Serenity's distinctive brown. Panel lines with thin wash.
+1. **Decals and paint.** Airbrush or hand-paint hull sections in Serenity's distinctive brown. Panel lines with thin pilot.
 2. **NAV lights.** Port = red, starboard = green, aft/top = white strobe
    [REF-FAA-003 §91.209(a)] / [REF-ICAO-001 Ch.3 §3.1.9]. Wire to Cape-B CN4 GPIO.
 3. **FAA registration.** Display on hull exterior per 14 CFR Part 48 §48.205(b)(1)
    [REF-FAA-001 §48.205] — minimum 3 in (76 mm) characters, clearly visible.
    Replace N00000 on decal sheet with your FAA-issued number.
    Note: 14 CFR Part 47 applies to manned aircraft; the applicable UAS regulation is Part 48.
-4. **Firmware security provisioning.** Program Cape-B CPLD write-blocker (ATF16V8BQL). Provision SLB9670 TPM 2.0 endorsement keys on all 8 nodes. Keys cannot be regenerated without physical node replacement.
+4. **Firmware security provisioning.** Program Cape-B CPLD write-blocker (ATF16V8BQL). Provision SLB9672 TPM 2.0 endorsement keys on all 8 nodes. Keys cannot be regenerated without physical node replacement.
 5. **Weight and balance.** Measure actual AUW with battery. CG should be at 40–45% of hull length from nose. Adjust battery position in cargo bay for trim if needed.
 6. **Documentation.** Log all configuration in `governor_config.h`. Archive MAVLink parameter file. Photograph completed build for insurance / forensic baseline.
 
@@ -635,7 +636,7 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 | Component | Spec | Analysis |
 |-----------|------|----------|
 | Wing spar | CF tube 12mm OD / 1.5mm wall | Bending stress at full nacelle torque (~0.13 Nm) ≈ 18 MPa — allowable CF ≥600 MPa |
-| Keel | CF flat bar 6×3mm | Carries fuselage bending; adequate for 24-inch hull at <5g manoeuvre |
+| Keel | CF flat bar 6×3mm | Carries fuselage bending; adequate for 24-inch hull at <5g maneuver |
 | Pivot rod | 4mm OD solid CF | Shear stress at 0.749 lbm (340 g) nacelle weight ≈ 27 MPa — allowable CF ≥300 MPa shear |
 | Pivot bearings | MF104ZZ 4×10×4mm × 2 per nacelle | Static capacity 110 lbf (490 N) >> 0.74 lbf (3.3 N) nacelle weight — fine |
 | Foam fill | 2 lb/ft³ closed-cell PU | Provides hull rigidity, crash absorption; adds ~0.397 lbm (~180 g) to total AUW |
@@ -717,7 +718,7 @@ regulatory readiness for real-world deployment.
 **Dependency:** Phase 9 complete.
 
 1. **Multi-link failover mission** — fly 5-waypoint mission; disable each radio link in sequence
-   (SiK → LoRa → Wi-Fi → 49 MHz Emma); verify mission continues on surviving link.
+   (SiK → LoRa → Wi-Fi → 49 MHz Commo); verify mission continues on surviving link.
 2. **10-waypoint autonomous mission** — full mission at ≤120m AGL including obstacle avoidance halts.
 3. **Autonomous cargo delivery** — takeoff → transit → deploy payload at waypoint → return → land;
    cradle auto-latched on return.
@@ -810,7 +811,7 @@ geometry must be regenerated for the 55mm fan, the canonical nozzle, and the RCS
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verification
 - [ ] Intake frame tongues fully seated; shoulder flanges bonded flush; no gaps
 - [ ] Plenum + RCS manifold pressure-test passed — draft at EDF inlet and all 4 RCS jets; no leakage
-- [ ] EDF at station ~430mm, centreline ±2mm; rotation verified before sealing
+- [ ] EDF at station ~430mm, centerline ±2mm; rotation verified before sealing
 - [ ] 50A ESC installed; ESC5 DSHOT signal to FC2 PRU Ch.2
 - [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.06×1.76 in verified
 - [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on bench

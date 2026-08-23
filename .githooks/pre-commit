@@ -19,4 +19,4 @@ python3 "$TOPDIR/tools/precommit_sanitize.py" || exit 1
 python3 "$TOPDIR/tools/precommit_index.py" || exit 1
 
 # Automatically stage the updated index files
-git add "$TOPDIR/PROJECT_INDEX.md" "$TOPDIR/ARCHIVE_INDEX.md"
+git add "$TOPDIR/PROJECT_INDEX.md" "$TOPDIR/ARCHIVE_INDEX.md" "$TOPDIR/tools/index_tags.json"

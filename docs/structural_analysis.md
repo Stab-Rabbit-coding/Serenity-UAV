@@ -2,7 +2,7 @@
 
 **Revision:** R1 (2026-06-14)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 
 **Standards and regulatory references:**
 
@@ -13,7 +13,7 @@
 | 14 CFR Part 107 | FAA Small UAS operating rules. Defines the legal operational envelope (altitude, VLOS, pilot certification, registration, lighting). Structural requirements are not in Part 107; this is cited for operational context only. |
 | ISO 21384-1:2022 | UAS general requirements standard. Cited as design intent; ISO 21384-1 compliance review is a pre-certification task. |
 | IEEE 1936.1-2021 | Drone applications framework (operational category classification). Referenced for operational envelope classification; does not provide structural load data. |
-| Commercial CF product data | CF structural members (keel bar, boss pins, ring frames, skid rods) are commercial pultruded carbon fibre stock. σ_u ≈ 1 500 N/mm² (1 500 MPa) used here is a conservative estimate typical of unidirectional pultruded CF rod/flat bar. **Supplier test certificates (ASTM D3039 tensile, ASTM D695 compressive) must be obtained and verified before fabrication.** |
+| Commercial CF product data | CF structural members (keel bar, boss pins, ring frames, skid rods) are commercial pultruded carbon fiber stock. σ_u ≈ 1 500 N/mm² (1 500 MPa) used here is a conservative estimate typical of unidirectional pultruded CF rod/flat bar. **Supplier test certificates (ASTM D3039 tensile, ASTM D695 compressive) must be obtained and verified before fabrication.** |
 | West System 105/206 TDS | Epoxy bond properties. Specific values (bond shear strength, cure time, mix ratio) from the published West System technical data sheet. |
 
 ---
@@ -31,8 +31,21 @@ All measurements are imperial-primary with metric in parentheses per AGENTS.md c
 
 ## 2. Aircraft Mass Budget (Phase 5–10)
 
-Total static thrust: 4× nacelle × 2232 gf = 8928 gf = **19.68 lbf (87.5 N)**.
-Design T/W = 1.19 → AUW = 87.5 / 1.19 = **73.5 N (7.49 kgf / 16.5 lbm)**.
+> **Correction (2026-08-22, TODO.md §0.10.1):** this section previously double-counted
+> thrust — there are **2** nacelles (port + starboard), each already representing the
+> 2232 gf tandem-EDF-pair figure, not 4. The corrected total below drops AUW from a
+> fabricated 16.5 lbm to ≈8.27 lbm — closer to, but not identical to, the BOM-derived
+> Phase 5–10 AUW of ~8.62 lbm (3,911 g) established in `README.md`/`airframe/README.md`
+> (this section's AUW is a design-margin back-calculation, not a BOM sum — the two
+> should agree within rounding once both are current). **Every load case, margin, and
+> FOS number in §3 through §7 below was computed from the old, doubled mass budget and
+> has not yet been re-derived from the corrected baseline — treat them as stale until
+> re-verified.** Since the true mass is lower than what was analyzed, the existing
+> numbers are likely conservative (understating margin), not unsafe, but they should
+> not be cited as current until recomputed.
+
+Total static thrust: 2× nacelle × 2232 gf = 4464 gf = **9.84 lbf (43.79 N)**.
+Design T/W = 1.19 → AUW = 43.79 / 1.19 = **36.8 N (3.75 kgf / 8.27 lbm)**.
 
 Shell material volume and mass (CF-PETG, ρ = 1.27 g/cm³):
 
@@ -97,7 +110,7 @@ Vertices sampled at X = −170 ± 3 mm (hull centerline):
 The middle section's outer *horseshoe ring* is open at −Z (ventral) for 73 mm (hull
 Y +130 → +203 mm), so there is no belly floor at the keel's low-Z level to bond to.
 **Note (2026-06-29):** the middle is NOT only the open horseshoe — it also carries the
-**closed inner-neck tube** running the full length along the centreline (X ≈ −170 mm),
+**closed inner-neck tube** running the full length along the centerline (X ≈ −170 mm),
 connecting the cargo-bay interior to the rear engine-room interior (see §7.3 and AGENTS.md).
 The keel passes *through* this closed neck, so "held by foam alone" is a worst-case
 assumption: **bonding the keel to the inner-neck wall is an available hard load path**
@@ -120,7 +133,7 @@ mid-span attachment needed.
 
 **Selected: segmented lap-splice flat bar.**
 
-Two straight segments of CF-BAR-6X3 (carbon fibre flat bar, 6 mm wide × 3 mm thick):
+Two straight segments of CF-BAR-6X3 (carbon fiber flat bar, 6 mm wide × 3 mm thick):
 
 | Segment | Hull Y range | Length |
 | --- | --- | --- |
@@ -145,7 +158,7 @@ Y ≈ +30 mm to head/cargo joint Y ≈ −71 mm, arm L = 101 mm):
 Head section mass (forward of wing station):  m_fwd ≈ 237 g (shell) + ~300 g (avionics, wiring) ≈ 537 g
 2g load:  F = 2 × 0.537 × 9.81 = 10.5 N
 Bending moment at wing station:  M = F × L = 10.5 × 101 = 1061 N·mm
-Extreme fibre stress:  σ = M × c / I = 1061 × 3 / 54 = 58.9 N/mm²
+Extreme fiber stress:  σ = M × c / I = 1061 × 3 / 54 = 58.9 N/mm²
 CF tensile strength:  σ_u = 1500 N/mm²
 FOS = 1500 / 58.9 = 25.5  ✓  PASS (>1.5 required)
 ```
@@ -167,7 +180,7 @@ At 49 MHz (λ = 6.12 m), a 455 mm bar is λ/13 — well below a useful counterpo
 
 Counterpoise: WIRE-COUNTERPOISE-49MHZ, AWG 22 stranded copper (< 2 g), λ/4 = 1.53 m,
 dressed alongside the keel in the wiring trunk (PTFE conduit), bent and routed as needed.
-Emma/XCVR antenna designs should reference this counterpoise wire, not the CF bar.
+Commo/XCVR antenna designs should reference this counterpoise wire, not the CF bar.
 
 ### 4.5 Keel Locating Channel (implemented in shells)
 
@@ -250,9 +263,9 @@ plate DXF:
 1. Import CSV into FreeCAD (Spreadsheet workbench → Draft → Import Points).
 2. Create a closed wire from the points (BSpline or polyline).
 3. Add 3 mm clearance offset outward (so ring can be inserted without force-fitting).
-4. Add keel-bar notch: 3.5 mm wide × 6 mm deep slot centred at X = −170 mm, Z_bottom.
+4. Add keel-bar notch: 3.5 mm wide × 6 mm deep slot centered at X = −170 mm, Z_bottom.
 5. Export as DXF to `airframe/diagrams/ring_frames/`.
-6. Water-jet or CNC-cut from 2 mm carbon fibre plate stock (CF-PLATE-2MM BOM item).
+6. Water-jet or CNC-cut from 2 mm carbon fiber plate stock (CF-PLATE-2MM BOM item).
 
 ### 5.5 Ring Pocket Features (implemented in shells)
 
@@ -352,7 +365,7 @@ FOS = 205  ✓  PASS  (extreme margin; CF-ROD-4MM is more than adequate as tie-r
 Bore depth: 30 mm into EACH section (middle + rear) = 60 mm total rod engagement.
 CF rod length: 62 mm per skid arm (allowing 1 mm insertion clearance each end).
 
-Bore centres (hull frame, Y-axis aligned):
+Bore centers (hull frame, Y-axis aligned):
 
 | Skid | X_bore (mm) | Z_bore (mm) | Y range (mm) |
 | --- | --- | --- | --- |
@@ -385,7 +398,7 @@ Boss pin specification:
 
 ### 7.2 Boss Pin Positions (hull frame)
 
-Pins are positioned on an r = 35 mm circle centred on the joint cross-section centroid,
+Pins are positioned on an r = 35 mm circle centered on the joint cross-section centroid,
 at 0°/120°/240° (top / lower-stbd / lower-port pattern).
 
 **Joint 1: Head/Cargo — hull Y = −71 mm**
@@ -456,7 +469,7 @@ hull Y = −71, arm to head CG = 86 mm, ultimate = limit × joint-FOS 4.0:
 | 9g crash × 1.5 | 13.5g | 78 N | 6 712 N·mm |
 
 The joint ring (perimeter ≈ 350 mm, t = 2 mm) has S_x ≈ 7 000–10 000 mm³, so even the
-9 g crash moment gives a peak fibre stress **M/S ≈ 0.7 MPa** — far below the CF-PETG and
+9 g crash moment gives a peak fiber stress **M/S ≈ 0.7 MPa** — far below the CF-PETG and
 epoxy allowables (≈ 5 MPa for the PETG-bond-limited case).  **The joint is not
 strength-limited.**  What is actually required is peel resistance, alignment, and
 anti-ovalisation of the thin section, plus the AGENTS.md fabrication standard's
@@ -464,7 +477,7 @@ anti-ovalisation of the thin section, plus the AGENTS.md fabrication standard's
 
 **Design — internal bonded splice collar (`PRINT-HEAD-CARGO-COLLAR`).**  A printed
 CF-PETG ring, profile = the head inner-wall contour at Y = −79 mm inset 2 mm, 2 mm wall,
-L = 16 mm (8 mm into each section), centred on the joint (hull Y −79..−63).  It:
+L = 16 mm (8 mm into each section), centered on the joint (hull Y −79..−63).  It:
 
 - turns the peel-loaded butt joint into a **shear-loaded bonded double-lap** — the head
   skin, the collar, and the cargo skin form a continuous 2-wall contact annulus over the
@@ -519,13 +532,13 @@ Arm = half the aft-of-joint fuselage length (uniform-distributed-load convention
 
 Real section modulus computed from the digitized middle profile at Y = +137 mm (thin-wall
 line integral about the lateral bending axis, wall t = 2 mm): perimeter 454 mm,
-S_x = 31 984 mm³.  Peak fibre stress at 9g crash = 20 260 / 31 984 = **0.63 MPa** — well
+S_x = 31 984 mm³.  Peak fiber stress at 9g crash = 20 260 / 31 984 = **0.63 MPa** — well
 below the ~5 MPa CF-PETG/epoxy allowable.  **Not strength-limited**, same conclusion as
 Joint 1; governing requirements are peel resistance, alignment, and anti-ovalisation.
 
 **Design — internal bonded splice collar (`PRINT-CARGO-MIDDLE-COLLAR`).**  Profile = MIDDLE
 inner-wall contour at hull Y = +137 mm (clean, 5.9 mm aft of the joint), inset by a 2 mm
-bond gap, 2 mm wall.  L = 16 mm (8 mm into each section), centred on hull Y = +131.1 mm
+bond gap, 2 mm wall.  L = 16 mm (8 mm into each section), centered on hull Y = +131.1 mm
 (midpoint of the measured cargo aft face, +131.74 mm, and middle fwd face, +130.40 mm).
 Middle is the narrower section here (inner area ≈ 14 300 mm² vs cargo's ≈ 19 000 mm² at the
 nearest clean cargo station), so the collar slips into cargo with a larger, epoxy-filled
@@ -571,13 +584,13 @@ itself, mirroring §7.1's "form, not strength" framing.  Mass aft of this joint 
 | 9g crash × 1.5 | 13.5g | 81.3 N | 7 362 N·mm |
 
 Real section modulus computed from the digitized middle profile at Y = +195 mm: perimeter
-442 mm, S_x = 27 713 mm³.  Peak fibre stress at 9g crash = 7 362 / 27 713 =
+442 mm, S_x = 27 713 mm³.  Peak fiber stress at 9g crash = 7 362 / 27 713 =
 **0.27 MPa** — even lower than Joint 2, well below the ~5 MPa allowable.  **Not
 strength-limited.**
 
 **Design — internal bonded splice collar (`PRINT-MIDDLE-REAR-COLLAR`).**  Profile = MIDDLE
 inner-wall contour at hull Y = +195 mm (clean, 8.4 mm forward of the joint), inset by a
-2 mm bond gap, 2 mm wall.  L = 16 mm (8 mm into each section), centred on hull
+2 mm bond gap, 2 mm wall.  L = 16 mm (8 mm into each section), centered on hull
 Y = +203.4 mm (midpoint of the measured middle aft face, +203.62 mm, and rear fwd face,
 +203.20 mm).  Middle is again the narrower section (inner area ≈ 11 400 mm² at Y = +195 mm
 vs the rear's ≈ 13 600–13 800 mm² at the nearest clean rear stations), so the collar slips

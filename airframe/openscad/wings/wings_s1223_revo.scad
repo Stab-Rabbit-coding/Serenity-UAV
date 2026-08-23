@@ -160,13 +160,30 @@ THICKNESS_SCALE =   1.0;  // [1.0 = full S1223 t/c; 0.85–1.0 recommended range
 // max thickness (12.14% × 93) — LESS than the 12.3 mm spar bore, so a straight
 // full-span 12 mm spar cannot be skinned at the tip without local thickening.
 // THICKNESS_SCALE_TIP fattens ONLY the tip station (root OML unchanged); the
-// loft tapers linearly between root and tip.  At 1.25 the tip vertical section
-// at the spar station (≈24% chord) grows to ≈ 15.6 mm — the 12.3 mm bore then
-// carries ≈ 1.7 mm of section each side.  Tip t/c rises 12.14% → ≈ 15.2%.
-// CANON NOTE: this is a small outer-mold-line change local to the wingtip;
-// verify against the canonical Serenity wing silhouette before committing to
-// print (see TODO.md §1.1.2).  Lower the value only if the bore stays skinned.
-THICKNESS_SCALE_TIP = 1.25; // [tip thickness multiplier; root stays THICKNESS_SCALE]
+// loft tapers linearly between root and tip.
+//
+// REV S1b (2026-08-16): 1.25 → 1.447, forced by the SPAR_BORE_STATION move to
+// 45.15 mm.  That station is 48.5 % of the tip chord, where the baseline
+// section is only 7.34 mm deep — at 1.25 the Ø8.3 bore would carry just
+// 0.44 mm of skin, below the 1.16 mm the root already runs at.  1.447 is the
+// exact figure; 1.45 is used so the wall is not sitting on its own limit
+// (gives 1.17 mm).  Measured by tools/wing_spar_station_fit.py; do not
+// hand-tune it.
+//
+// This is now a THICKNESS-only multiplier in fact as well as in name — see
+// s1223_section() below.  It no longer stretches the camber line, so the tip
+// keeps S1223's canonical 8.12 % camber instead of being driven to 11.75 %.
+// Tip t/c rises 13.45 % → 19.47 % (thickness only).
+//
+// CANON NOTE: this is an outer-mold-line change local to the wingtip; verify
+// against the canonical Serenity wing silhouette before committing to print
+// (see TODO.md §1.1.2).  Lower the value only if the bore stays skinned.
+// UNVERIFIED BY CFD: the OpenFOAM study intended to quantify the drag penalty
+// of a 19.5 % t/c tip at Re ≈ 2.1e5 is blocked on mesh generation
+// (tools/wing_cfd_openfoam.py, WIP).  The camber-preservation argument does
+// not depend on it, but the absolute penalty of the thicker tip is not yet
+// quantified.
+THICKNESS_SCALE_TIP = 1.45;  // [tip thickness multiplier; root stays THICKNESS_SCALE]
 
 // ── Rotating tilt-spar bore (Rev R2 — unified 8 mm rotating spar) ────────────
 // UNIFIED ROTATING SPAR (2026-07-18): the wing's single spar is now the 8 mm
@@ -182,9 +199,29 @@ THICKNESS_SCALE_TIP = 1.25; // [tip thickness multiplier; root stays THICKNESS_S
 // docs/TILT_SPAR_ANALYSIS.md.  (The nav-light 3-core routes INSIDE the hollow
 // spar's 5 mm ID; the EDF power/signal keep the separate double-D cableway.)
 SPAR_BORE_OD      =   8.3;  // [mm] rotating-spar clearance bore = 8 mm OD + 0.15 mm/side
-SPAR_BORE_STATION =  22.0;  // [mm] chordwise station aft of LE — CONSTANT over the
-                            //      span (≈ tip 23.7% / root 17.1% chord; near tip
-                            //      max-thickness).  Constant ⇒ bore ∥ leading edge.
+// REV S1b (2026-08-16): station moved 22.0 → 45.15 mm = 35 % ROOT chord, by
+// owner decision, to bring the nacelle tilt axis back toward its canonical
+// station.  The 2026-07-19 reconciliation had slid the NACELLE forward to
+// hull Y = +15 to reach a spar that sat too far forward; this moves the spar
+// aft instead, so the pod sits where canon puts it.  It also closes the
+// §1.1.2 spar-interface blocker — wing (22.0) and cargo shell (38.7) had
+// disagreed — by putting BOTH on one station, and it lifts the wing-spar
+// bearing boss clear of the Rev R6 landing-gear bay flange (LG-10.4: at
+// ≥ 32.5 % root chord the boss/flange conflict disappears entirely;
+// tools/landing_gear_wing_clearance.py --spar-station).
+//
+// Constant in MILLIMETRES, not chord fraction: the LE is straight
+// (WING_SWEEP_LE = 0), so a constant-mm station is simultaneously parallel to
+// the LE and perpendicular to the aircraft centreline, which is what the
+// rotating spar requires.  A chord-fraction bore rakes and was already
+// rejected once (the "swept" cutout).
+//
+// Cost, and why THICKNESS_SCALE_TIP moves with it: 45.15 mm is 35.0 % of root
+// chord but 48.5 % of TIP chord, well aft of S1223's ~20 % max-thickness
+// point.  Verify any change with tools/wing_spar_station_fit.py.
+SPAR_BORE_STATION =  45.15; // [mm] chordwise station aft of LE — CONSTANT over the
+                            //      span (35.0 % root / 48.5 % tip chord).
+                            //      Constant ⇒ bore ∥ leading edge ⊥ centreline.
                             // The bore-centre thickness height is taken from the
                             // ACTUAL S1223 camber midline at each station's own
                             // chord fraction (midline_frac(), below) — NOT a single
@@ -340,8 +377,12 @@ HALL_CABLE_XFR  =   0.33; // [chord fraction] conduit chordwise centre — betwe
 // spar_bore().  Defined as a FUNCTION (not a top-level variable) so it is
 // evaluated at module-instantiation time, after the S1223_UPPER/LOWER point
 // lists exist — same expression spar_bore() uses for its tip disc.
+// REV S1b: no THICKNESS_SCALE_TIP factor.  s1223_section() now scales the
+// thickness envelope about the camber line and leaves the camber unscaled, so
+// multiplying the midline by the thickness scale would put the bore ABOVE the
+// section it is supposed to be centred in.
 function spar_tip_y() = midline_frac(SPAR_BORE_STATION / WING_CHORD_TIP)
-                        * WING_CHORD_TIP * THICKNESS_SCALE_TIP;
+                        * WING_CHORD_TIP;
 
 // ── Wing root fuselage tab ────────────────────────────────────────────────────
 // The root face (Z=0) must interface with the fuselage wing slot.
@@ -488,15 +529,38 @@ function midline_frac(xq) =
 // Parameters:
 //   chord          [mm] chord length for this span station
 //   t_scale        [1.0] vertical scale factor for thickness (see THICKNESS_SCALE)
+// REV S1b (2026-08-16): this now scales THICKNESS ONLY, about the camber line.
+//
+// It previously did `scale([chord, chord * t_scale])`, which multiplies camber
+// and thickness by the same factor, and conceded as much: "scaling y uniformly
+// scales both camber and thickness ... a minor approximation acceptable for
+// t_scale in [0.85,1.0]".  THICKNESS_SCALE_TIP left that range long ago (1.25),
+// and the Rev S1b spar move needs 1.447 — where the approximation is not minor.
+// Uniform scaling at 1.447 drives S1223's camber from 8.12 % to 11.75 %, i.e. a
+// factor picked purely to fit a spar would silently re-camber the aerofoil, and
+// S1223 is a high-lift section that earns its Cl from exactly that camber.
+//
+// Decomposing into camber + thickness and scaling only the thickness gives the
+// IDENTICAL section depth at the spar station (so the same +1.16 mm of skin
+// over the bore) while leaving the camber line exactly where Selig put it.
+// The two are compared in tools/wing_airfoil_variants.py.
+//
+// The parameter block above already claimed "Camber line is NOT affected — only
+// thickness offset"; this makes the code true to that.
+function s1223_half_thk(p) = p[1] - midline_frac(p[0]);
+
+function s1223_scaled_pts(t_scale) = [
+    for (p = S1223_UPPER)
+        [p[0], midline_frac(p[0]) + s1223_half_thk(p) * t_scale],
+    for (p = S1223_LOWER)
+        [p[0], midline_frac(p[0]) + s1223_half_thk(p) * t_scale]
+];
+
 module s1223_section(chord = 65.0, t_scale = THICKNESS_SCALE) {
-    // Scale the normalised coordinates:
-    //   x → x × chord  (chordwise, unmodified)
-    //   y → y × chord  (but THICKNESS_SCALE applies only to the thickness offset,
-    //                   not the camber line — approximation: scale all y uniformly)
-    // Note: Scaling y uniformly scales both camber and thickness by the same
-    // factor, which is a minor approximation acceptable for t_scale in [0.85,1.0].
-    scale([chord, chord * t_scale])
-        polygon(S1223_POLY);
+    // x → x × chord (chordwise, unmodified); y → y × chord with the thickness
+    // envelope opened by t_scale about the unscaled camber line.
+    scale([chord, chord])
+        polygon(s1223_scaled_pts(t_scale));
 }
 
 
@@ -556,11 +620,14 @@ module spar_bore() {
     // fraction at root (22/129 = 17.1%) vs tip (22/93 = 23.7%); the midline
     // height is evaluated at each station's own fraction so the bore stays
     // centred in both sections (root-camber breakout of the single-constant
-    // version fixed).  y = midline(t/c) × local chord × local thickness-scale.
+    // version fixed).  y = midline(t/c) × local chord.
+    // REV S1b: the local thickness-scale factor is GONE from these — camber is
+    // no longer scaled by s1223_section(), so re-applying the thickness scale
+    // here would lift the bore off the camber line it is centred on.
     root_y_ctr = midline_frac(SPAR_BORE_STATION / WING_CHORD_ROOT)
-                 * WING_CHORD_ROOT * THICKNESS_SCALE;
+                 * WING_CHORD_ROOT;
     tip_y_ctr  = midline_frac(SPAR_BORE_STATION / WING_CHORD_TIP)
-                 * WING_CHORD_TIP  * THICKNESS_SCALE_TIP;
+                 * WING_CHORD_TIP;
 
     hull() {
         translate([SPAR_BORE_STATION, root_y_ctr, -1.0])       // root disc (1 mm below root face)
@@ -585,8 +652,9 @@ module cableway_bore() {
     // Chordwise conduit centres at root and tip (constant fraction → tapered).
     root_xc = WING_CHORD_ROOT * CABLE_BORE_XFR;
     tip_xc  = WING_CHORD_TIP  * CABLE_BORE_XFR;
-    root_yc = midline_frac(CABLE_BORE_XFR) * WING_CHORD_ROOT * THICKNESS_SCALE;
-    tip_yc  = midline_frac(CABLE_BORE_XFR) * WING_CHORD_TIP  * THICKNESS_SCALE_TIP;
+    // REV S1b: thickness-scale factors dropped -- camber is no longer scaled.
+    root_yc = midline_frac(CABLE_BORE_XFR) * WING_CHORD_ROOT;
+    tip_yc  = midline_frac(CABLE_BORE_XFR) * WING_CHORD_TIP;
 
     // DRILL THROUGH THE ROOT TENON (Rev R2d, 2026-07-19; STRAIGHT, Rev R2e): the
     // fuselage_root_tab spans Z −WING_ROOT_TAB_L..0 at X 49.5..79.5, Y ±10 and
@@ -755,8 +823,9 @@ module wing_tip_hall_sensor_pocket() {
 module hall_sensor_cableway() {
     root_xc = WING_CHORD_ROOT * HALL_CABLE_XFR;
     tip_xc  = WING_CHORD_TIP  * HALL_CABLE_XFR;
-    root_yc = midline_frac(HALL_CABLE_XFR) * WING_CHORD_ROOT * THICKNESS_SCALE;
-    tip_yc  = midline_frac(HALL_CABLE_XFR) * WING_CHORD_TIP  * THICKNESS_SCALE_TIP;
+    // REV S1b: thickness-scale factors dropped -- camber is no longer scaled.
+    root_yc = midline_frac(HALL_CABLE_XFR) * WING_CHORD_ROOT;
+    tip_yc  = midline_frac(HALL_CABLE_XFR) * WING_CHORD_TIP;
 
     // Spanwise run: root face (into fuselage) → wing tip.
     hull() {

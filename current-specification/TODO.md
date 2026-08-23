@@ -1,11 +1,11 @@
 # Serenity UAV — Current Specification Work Breakdown Structure
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Reference index — not a checkbox owner.** Current Specification has no WBS branch that it owns
-> exclusively; its work is embedded in other subsystems' branches. To honour the
+> exclusively; its work is embedded in other subsystems' branches. To honor the
 > "close an item in exactly one place" rule, this file does **not** re-list open
 > checkboxes. It is a curated pointer index into the master [`WBS.md`](../WBS.md)
 > and the owning subsystem `WBS.md`/`TODO.md` files. **&#9733; = on the critical path to

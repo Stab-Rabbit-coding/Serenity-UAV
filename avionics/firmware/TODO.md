@@ -1,7 +1,7 @@
 # Serenity UAV — Avionics Node Firmware TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 
 > **This file lists only currently-open (unchecked) top-level tasks for
 > this subsystem — one line each, <=70 chars, no prose.** Full detail
@@ -9,11 +9,11 @@
 > [`WBS.md`](WBS.md), the full historical record for project-progression
 > tracking. Close an item in `WBS.md` first, then delete its line here.
 
-*"That's a real shame, doctor. — Wash"*
+*"That's a real shame, doctor. — Pilot"*
 
 ---
 
-### 4.2 — FC Node (Wash) — Phase 7 Firmware
+### 4.2 — FC Node (Pilot) — Phase 7 Firmware
 
 - [ ] EDF ESC PID governor
 - [ ] Nacelle tilt servo PWM generation
@@ -23,7 +23,7 @@
 - [ ] MIL-STD-1553B RT implementation
 - [ ] TPM-bound attestation
 
-### 4.3 — CN Node (TACCO) — Phase 7 Firmware
+### 4.3 — CN Node (XO) — Phase 7 Firmware
 
 - [ ] CAN FD heartbeat and telemetry forwarding
 - [ ] MIL-STD-1553B BC/RT tasks

@@ -63,7 +63,7 @@ Cargo bay interior mounts:
 - **Design intent:** Piano-hinge port-side door, belly (−Z face), swings down and outboard.
 - **Current state:** Unplaced (at origin).
 - **Placement:** Hull-frame position already baked into the door STL during `generate_cargo_doors.py` (Rev R1b/R1c). Door should align with cargo belly cutout.
-- **Verification:** Does port door hinge knuckle align at hull X ≈ −117.6 mm? Free edge (starboard side) at hull X ≈ −169.85 mm (cargo centreline)? Z ≈ 5.1 mm (hinge height)?
+- **Verification:** Does port door hinge knuckle align at hull X ≈ −117.6 mm? Free edge (starboard side) at hull X ≈ −169.85 mm (cargo centerline)? Z ≈ 5.1 mm (hinge height)?
 - **User action in FreeCAD:** Confirm visual alignment; if door interpenetrates cargo shell, flag for investigation.
 - **Status:** [ ] Visually verified
 - **Notes:** Door panels span Y ≈ 2..108 mm; aft-outboard corner (Y → 108) previously required manual despike inspection — confirm it doesn't flatten against the hull.
@@ -90,7 +90,7 @@ Cargo bay interior mounts:
 - **Part:** `cargo_cradle_autolatch.stl`
 - **Design intent:** Spring-loaded cargo frame locator; sits on cargo-bay floor to center payload and provide friction/positive stop.
 - **Current state:** Unplaced (at origin).
-- **Placement estimate:** Cargo bay floor (belly −Z face), centred on cargo area. Nominal belly centroid ≈ X ≈ −170 mm, Y ≈ 30..60 mm (middle of bay), Z ≈ 0..2 mm (resting on shell floor).
+- **Placement estimate:** Cargo bay floor (belly −Z face), centered on cargo area. Nominal belly centroid ≈ X ≈ −170 mm, Y ≈ 30..60 mm (middle of bay), Z ≈ 0..2 mm (resting on shell floor).
 - **User action:** Rough placement near cargo floor; will refine after initial inspection.
 - **Status:** [ ] Positioned for inspection
 - **Notes:** No active SCAD source — VERIFY placement is by visual fit in FreeCAD.
@@ -99,16 +99,16 @@ Cargo bay interior mounts:
 - **Part:** `cargo_fpv_bezel.stl`
 - **Design intent:** Nadir-facing FPV camera mount pod + Observer cape co-location. Hangs from cargo-bay roof (dorsal face), pointing down for ground/target imagery.
 - **Current state:** Unplaced.
-- **Placement estimate:** Cargo-section dorsal interior ceiling, aft of the GPS antenna. Nominal: X ≈ −170 mm (centred), Y ≈ 40..80 mm, Z ≈ 160..163 mm (touching roof interior).
+- **Placement estimate:** Cargo-section dorsal interior ceiling, aft of the GPS antenna. Nominal: X ≈ −170 mm (centered), Y ≈ 40..80 mm, Z ≈ 160..163 mm (touching roof interior).
 - **User action:** Confirm orientation (camera lens points −Z / downward); adjust Y if needed to clear other mounts.
 - **Status:** [ ] Positioned for inspection
-- **Notes:** Observerver board (TI AM62A vision SoC + stepper/laser driver) mounts here; full harness routing is Phase 11 (deferred).
+- **Notes:** Observer board (TI AM62A vision SoC + stepper/laser driver) mounts here; full harness routing is Phase 11 (deferred).
 
 ### 1.6 Cargo GPS Retention Ring
 - **Part:** `cargo_gps_retention_ring.stl`
 - **Design intent:** u-blox M10Q GNSS antenna clip; mounts to dorsal cargo roof; antenna thru-hull or up into the head for roof clearance.
 - **Current state:** Unplaced.
-- **Placement estimate:** Cargo-section dorsal interior roof, forward of FPV bezel. Nominal: X ≈ −170 mm (centred), Y ≈ 10..30 mm, Z ≈ 160..163 mm.
+- **Placement estimate:** Cargo-section dorsal interior roof, forward of FPV bezel. Nominal: X ≈ −170 mm (centered), Y ≈ 10..30 mm, Z ≈ 160..163 mm.
 - **User action:** Confirm it doesn't interfere with FPV bezel or internal structure.
 - **Status:** [ ] Positioned for inspection
 - **Notes:** Antenna lead routes via PTFE conduit to FC node GPS input. Final antenna feedthru location TBD per CLAUDE.md Phase 5 task.
@@ -163,7 +163,7 @@ Cargo bay interior mounts:
 
 ## §2 — BATTERY TRAY & BELLY PANEL (Fuselage Interior Accessories)
 
-Located in the middle section's ventral interior (inner-neck/FlightEngineer's room).
+Located in the middle section's ventral interior (inner-neck/Flight Engineer's room).
 
 ### 2.1 Battery Tray
 - **Part:** `battery_tray.stl`
@@ -173,12 +173,12 @@ Located in the middle section's ventral interior (inner-neck/FlightEngineer's ro
   ```
   X: 172.0 (fore edge at station 112 mm)
   Y: −263.0 (keel underside ≈ CY_head − TRAY_H)
-  Z: 41.0 (centred: CZ_hull − TRAY_W/2)
+  Z: 41.0 (centered: CZ_hull − TRAY_W/2)
   ```
-- **CLAUDE.md reference:** FlightEngineer's room (battery bay) is in the inner neck of the middle section, accessible through the open ventral face (−Z). Central location minimises power run lengths to all 4 nacelles and avionics stacks.
+- **CLAUDE.md reference:** Flight Engineer's room (battery bay) is in the inner neck of the middle section, accessible through the open ventral face (−Z). Central location minimises power run lengths to all 4 nacelles and avionics stacks.
 - **Verification needed:** 
   - Does tray fore edge sit at ship station ≈ 112 mm (roughly mid-cargo)?
-  - Is tray CG centred on the FCOG (forward CG)?
+  - Is tray CG centered on the FCOG (forward CG)?
   - Does battery mass (≈ 600 g / 1.32 lbm) sit safely on the keel?
 - **User action:** 
   - Slide tray along the keel (Y axis) until the battery CG aligns with the calculated FCOG. 
@@ -194,7 +194,7 @@ Located in the middle section's ventral interior (inner-neck/FlightEngineer's ro
   ```
   X: 172.0 (aligns with tray opening)
   Y: −267.0 (flush with belly skin)
-  Z: 41.0 (centred under tray)
+  Z: 41.0 (centered under tray)
   ```
 - **Verification needed:**
   - Does panel align with tray fore/aft edges?
@@ -239,7 +239,7 @@ Located in the middle section's ventral interior (inner-neck/FlightEngineer's ro
 - **Part:** `nacelle_servo_bracket.stl` (instance 1 for port nacelle)
 - **Design intent:** SG90-class digital servo mount bracket. Bolts to the fuselage (likely on the cargo-section interior wall); pushrod connects servo arm to the port-nacelle tilt pivot.
 - **Current state:** Unplaced (see assembly lines 684–689; noted as pending manual FreeCAD placement per TODO.md §1.1.3).
-- **Known issue:** The servo-mount pad in `cargo_sect_shell24.scad` has ambiguous Z-axis labelling ("port wall" vs "stbd wall") predating the hull-frame standard. The mount location is in cargo interior walls (around Y ≈ −288 mm per SCAD comments), but Z placement is not validated.
+- **Known issue:** The servo-mount pad in `cargo_sect_shell24.scad` has ambiguous Z-axis labeling ("port wall" vs "stbd wall") predating the hull-frame standard. The mount location is in cargo interior walls (around Y ≈ −288 mm per SCAD comments), but Z placement is not validated.
 - **Placement estimate:** 
   - Cargo-section interior wall (likely port-facing, Y ≈ −288 mm near the wing root).
   - Servo arm should reach the port pylon's tilt pivot arm (estimated Y ≈ 0..50 mm, Z ≈ 100..140 mm).
@@ -353,4 +353,4 @@ Print or reference this section after all sections are reviewed:
 
 ---
 
-*"You can't take the sky from me." — Capt. Malcolm Reynolds*
+*"You can't take the sky from me." — Capt. Skipper Reynolds*

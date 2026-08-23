@@ -1,0 +1,59 @@
+SERENITY UAV — AVIONICS SUBSYSTEM LICENSING
+=============================================
+
+**Hardware License:** CERN Open Hardware License v2 — Weakly Reciprocal (CERN-OHL-W)
+
+See the root LICENSE file for the full text:
+  ../LICENSE
+
+**Software/Firmware License:** MIT and/or GPL v3 (see firmware/LICENSE for details)
+
+**Documentation License:** CC BY 4.0
+
+See docs/attribution_and_licensing.md for complete licensing strategy and subsystem details:
+  ../docs/attribution_and_licensing.md
+
+---
+
+SUMMARY (Avionics)
+
+PCB designs (KiCad schematics, layouts, Gerber files) are licensed under CERN-OHL-W v2.
+Embedded firmware and software modules follow separate licensing per file header
+(typically MIT or GPL v3; see firmware/LICENSE).
+
+Documentation (READMEs, design guides, pinout specifications) is licensed under CC BY 4.0.
+
+For attribution and contribution guidelines, see:
+  ../docs/attribution_and_licensing.md
+  ../CONTRIBUTING.md (if present)
+
+---
+
+KEY FILES & LICENSING
+
+  wash-cape-r-s1.kicad_sch     — PCB schematic (CERN-OHL-W)
+  zoe-cape-r-s1.kicad_sch      — PCB schematic (CERN-OHL-W)
+  emma-cape-r-s1.kicad_sch     — PCB schematic (CERN-OHL-W)
+  kaylee-pdb-r-s1.kicad_sch    — PCB schematic (CERN-OHL-W)
+  jayne-compute-r-s1.kicad_sch — PCB schematic (CERN-OHL-W)
+
+  firmware/                     — Embedded software (MIT/GPL v3; see firmware/LICENSE)
+
+  README.md                     — Documentation (CC BY 4.0)
+  AGENTS.md                     — Design policy (CC BY 4.0)
+
+---
+
+MODIFICATION NOTICE TEMPLATE
+
+If you modify PCB designs, add a comment like this to your schematic:
+
+  Modified [DATE] by [YOUR NAME]: [brief description of changes]
+  Licensed under CERN-OHL-W v2
+  See ../docs/attribution_and_licensing.md
+
+---
+
+Questions?
+  CERN-OHL-W: https://ohwr.org/cern_ohl_w_v2
+  CC BY 4.0: https://creativecommons.org/licenses/by/4.0/

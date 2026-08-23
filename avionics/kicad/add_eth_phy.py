@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-add_eth_phy.py — Add one EM-hardened Ethernet port to Wash and TACCO.
+add_eth_phy.py — Add one EM-hardened Ethernet port to Pilot and XO.
 
 Components added:
   ADIN1300BCPZ  : ADI industrial 10/100/1000BASE-T PHY, IEC 61000-4 hardened,
@@ -22,11 +22,11 @@ were placed by gen_cape_a2.py / gen_cape_b2.py) through two ISO7642FDWRR isolato
 to the ADIN1300 PHY.  RMII1 signals and PHY2 control remain as no_connect (only
 one PHY per cape).
 
-For TACCO also removes orphaned PHY-side global_labels left by gen_cape_b2.py.
+For XO also removes orphaned PHY-side global_labels left by gen_cape_b2.py.
 
 Usage:
-    python3 add_eth_phy.py Wash.kicad_sch
-    python3 add_eth_phy.py TACCO.kicad_sch
+    python3 add_eth_phy.py Pilot.kicad_sch
+    python3 add_eth_phy.py XO.kicad_sch
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0
@@ -62,7 +62,7 @@ RMII0_RESTORE = {
     438.89: "PHY1_RSTN",
 }
 
-# Orphaned PHY-side labels in TACCO (left by gen_cape_b2.py).
+# Orphaned PHY-side labels in XO (left by gen_cape_b2.py).
 # These are at X=197.30/222.70/347.30/372.70, Y=447-465.
 CAPE_B2_ORPHAN_X = {197.30, 222.70, 347.30, 372.70}
 CAPE_B2_ORPHAN_Y_RANGE = (440.0, 470.0)
@@ -578,7 +578,7 @@ def transform(path: str) -> None:
     with open(path, "r", encoding="utf-8") as fh:
         content = fh.read()
 
-    is_cape_b = "TACCO" in path or "cape_b2" in path.lower()
+    is_cape_b = "XO" in path or "cape_b2" in path.lower()
 
     # Determine UUID prefix from existing content.
     if "a2000000" in content:
@@ -603,7 +603,7 @@ def transform(path: str) -> None:
     content = remove_noconnects_at_y(content, set(RMII0_RESTORE.keys()))
 
     # -----------------------------------------------------------------------
-    # Step 3: For TACCO, remove orphaned PHY-side labels.
+    # Step 3: For XO, remove orphaned PHY-side labels.
     # -----------------------------------------------------------------------
     if is_cape_b:
         content = remove_orphan_labels_cape_b2(content)

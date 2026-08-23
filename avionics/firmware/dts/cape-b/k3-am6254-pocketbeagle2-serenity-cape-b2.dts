@@ -41,7 +41,7 @@
  * EMI-hardened -2 variant: ISOW1044BDFMR CAN FD; ADM2795EBRWZ RS-485; ADIN1300BCPZ PHY
  *
  * Cape-B-2 peripheral map:
- *   SPI1      — SLB9670 TPM 2.0, RFM95W LoRa 915 MHz, W25Q128JV NOR flash,
+ *   SPI1      — SLB9672 TPM 2.0, RFM95W LoRa 915 MHz, W25Q128JV NOR flash,
  *               microSD (SPI mode, logging-only non-executable card)
  *   UART2     — RFD900x SiK 915 MHz (hardware CTS/RTS flow control)
  *   UART4     — ADM2795EBRWZ RS-485 half-duplex (DE / RE# GPIOs)
@@ -60,7 +60,7 @@
  *   Link C: LoRa 915 MHz (OOB)   (RFM95W, SPI1, DIO0-DIO3 IRQs)
  *   Link D: 5 GHz 802.11ac       (WL1837MOD, SDIO)
  *
- * All transmitted frames carry a TPM-bound SHA-256 HMAC (SLB9670, SPI1).
+ * All transmitted frames carry a TPM-bound SHA-256 HMAC (SLB9672, SPI1).
  * The ATF16V8BQL CPLD provides hardware-enforced write-protect to the
  * logging microSD and latching logic for latch sensors.
  *
@@ -75,7 +75,7 @@
  *   [5]  47 CFR §15.247, Operation in 902-928 MHz ISM band (LoRa 915 MHz, unlicensed)
  *        [REF-FCC-001 §15.247(a)(1), §15.247(b)(3)(i)] — 30 dBm EIRP limit
  *   [6]  Si5351A/B/C-B Datasheet, Skyworks, Rev 1.4
- *   [7]  Infineon SLB9670 TPM 2.0 Datasheet
+ *   [7]  Infineon SLB9672 TPM 2.0 Datasheet
  *   [8]  WL1837MOD (TI WL1837) Integration Guide
  *   [9]  MIL-STD-1553B with Notice 2, DoD Interface Standard, 30 Sep 1996
  *        [REF-MIL-001 §4.1 bus characteristics, §4.3 word formats, §4.6 coupling,
@@ -108,14 +108,14 @@
  * ─────────────────────────────────────────────────────────────────────────*/
 
 /* SPI1 chip-selects (GPIO-driven; SPI1 nCS lines not used in hardware). */
-#define CAPE_B_GPIO_TPM_CS          10  /* SPI1 CS — SLB9670 TPM 2.0        [ESTIMATE] */
+#define CAPE_B_GPIO_TPM_CS          10  /* SPI1 CS — SLB9672 TPM 2.0        [ESTIMATE] */
 #define CAPE_B_GPIO_LORA_CS         11  /* SPI1 CS — RFM95W LoRa            [ESTIMATE] */
 #define CAPE_B_GPIO_FLASH_CS        12  /* SPI1 CS — W25Q128JV NOR flash     [ESTIMATE] */
 #define CAPE_B_GPIO_SD_CS           13  /* SPI1 CS — logging microSD         [ESTIMATE] */
 
-/* SLB9670 TPM 2.0 control lines. */
-#define CAPE_B_GPIO_TPM_IRQ         14  /* SLB9670 interrupt (active-low)    [ESTIMATE] */
-#define CAPE_B_GPIO_TPM_RST         15  /* SLB9670 reset (active-low)        [ESTIMATE] */
+/* SLB9672 TPM 2.0 control lines. */
+#define CAPE_B_GPIO_TPM_IRQ         14  /* SLB9672 interrupt (active-low)    [ESTIMATE] */
+#define CAPE_B_GPIO_TPM_RST         15  /* SLB9672 reset (active-low)        [ESTIMATE] */
 
 /* RFM95W LoRa DIO interrupt lines (DIO0 = TX done / RX done). */
 #define CAPE_B_GPIO_LORA_DIO0       16  /* RFM95W DIO0 — TX/RX done         [ESTIMATE] */
@@ -188,7 +188,7 @@
  * ─────────────────────────────────────────────────────────────────────────*/
 &main_pmx0 {
 
-    /* SPI1: SLB9670 TPM, RFM95W LoRa, W25Q128JV NOR flash, logging microSD.
+    /* SPI1: SLB9672 TPM, RFM95W LoRa, W25Q128JV NOR flash, logging microSD.
      * All four chip-selects are GPIO-controlled for independent sequencing.
      * Only the four-wire bus (CLK, D0/MOSI, D1/MISO) pins appear here.    */
     cape_b_spi1_pins: cape-b-spi1-pins {
@@ -347,12 +347,12 @@
     #address-cells = <1>;
     #size-cells = <0>;
 
-    /* SLB9670 TPM 2.0 — Infineon, SPI mode 0, 33 MHz max.
+    /* SLB9672 TPM 2.0 — Infineon, SPI mode 0, 33 MHz max.
      * Provides TPM-bound SHA-256 HMAC keys for all outbound radio frames.
      * PCR measurements seeded from U-Boot measured-boot chain.
-     * Reference: Infineon SLB9670 datasheet, TPM 2.0 Part 3 commands.    */
-    tpm_slb9670: tpm@0 {
-        compatible = "infineon,slb9670";
+     * Reference: Infineon SLB9672 datasheet, TPM 2.0 Part 3 commands.    */
+    tpm_slb9672: tpm@0 {
+        compatible = "infineon,slb9672";
         reg = <0>;                           /* CS index 0 (TPM_CS GPIO)    */
         spi-max-frequency = <33000000>;
         interrupt-parent = <&main_gpio0>;

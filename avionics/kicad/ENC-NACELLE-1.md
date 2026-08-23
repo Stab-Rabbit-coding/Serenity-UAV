@@ -2,8 +2,8 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Rev S reconciliation drafted by:** Claude Opus 4.8 (2026-07-19)
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**BOM designator:** `MAL-TILT-ENC-PCB` (`current-specification/bom_revS.csv`)
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**BOM designator:** `SKIPPER-TILT-ENC-PCB` (`current-specification/bom_revS.csv`)
 **Revision:** S (2026-07-19) — AKM **AK7455** off-axis sensor selected; pinout verified
 against the AK7455 datasheet (doc 200800064-E-00, `avionics/datasheets/ak7455-en-datasheet-myakm.pdf`)
 **Status:** Schematic complete + `kicad-cli` ERC 0-error. PCB complete (2026-07-21,
@@ -27,7 +27,7 @@ the verification section.
   chordwise ±2.5 mm would land on the QFN side pads). **The wing pocket was sized for
   the old 3×3 MT6701 and is already flagged for re-bake (WBS §1.1.3.6) — extend the
   pocket to 7×14 and move the two M2 pilots to the board's new hole pattern:
-  (±2.1, +4.3) mm from the IC centre** (KiCad (21.4, 32.2)/(25.6, 32.2), IC at
+  (±2.1, +4.3) mm from the IC center** (KiCad (21.4, 32.2)/(25.6, 32.2), IC at
   (23.5, 27.9)).
 - **Stack-up/zones:** GND pour on BOTH layers; SPI fan-out on F.Cu; +3V3 spine and the
   ERROR return run on B.Cu (B side has no pads); 11 vias 0.6/0.3.
@@ -71,14 +71,14 @@ shaft end), so the sensor IC must sit **off-axis** beside a ring magnet on the s
    and EEPROM **INL calibration** — purpose-built for exactly this off-axis, stray-field
    (ferromagnetic through-shaft) situation.
 
-> The **AS5600 is retained elsewhere** (Malcolm GCS antenna gimbal, `MAL-GIMBAL-ENC`,
+> The **AS5600 is retained elsewhere** (Skipper GCS antenna gimbal, `SKIPPER-GIMBAL-ENC`,
 > on-axis with a free shaft end). Only this board changed.
 
 ---
 
 ## Purpose
 
-`MAL-TILT-ENC-PCB` is a compact in-house magnetic rotary-encoder board that measures the
+`SKIPPER-TILT-ENC-PCB` is a compact in-house magnetic rotary-encoder board that measures the
 **true tilt angle of each nacelle** at the wing/nacelle joint (`wing_tip_hall_sensor_pocket()`
 in `airframe/openscad/wings/wings_s1223_revo.scad`). One board per nacelle (port + stbd).
 
@@ -104,7 +104,7 @@ the lead does not twist with tilt (no slip ring).
 | Temp | −40 to +125 °C | §3 |
 
 The anomaly-field detection + error-reduction functions are the decisive feature: the
-tilt-spar is ferromagnetic (AISI 4130 / 17-4 PH) and runs through the ring-magnet centre,
+tilt-spar is ferromagnetic (AISI 4130 / 17-4 PH) and runs through the ring-magnet center,
 so a stray-field-hardened sensor with in-situ INL calibration is exactly what the joint
 needs.
 
@@ -180,7 +180,7 @@ wing-tip pad, reading the ring across a small gap.
 
 ## Ferromagnetic-spar handling
 
-The spar is ferromagnetic (AISI 4130 / 17-4 PH) through the ring centre. Mitigation:
+The spar is ferromagnetic (AISI 4130 / 17-4 PH) through the ring center. Mitigation:
 
 1. **Non-ferrous stand-off** — CF-PETG hub holds the ring off the steel and proud of the
    steel F688ZZ bearing.
@@ -207,7 +207,7 @@ Wing-tip radial reaction ≈ 19 N (4.3 lbf) dynamic — geometry-limited, not lo
 
 | Ref | BOM ID | Value / MPN | Package |
 | --- | --- | --- | --- |
-| U1 | `MAL-TILT-ENC-PCB` | AKM **AK7455** | QFN24 4×4 |
+| U1 | `SKIPPER-TILT-ENC-PCB` | AKM **AK7455** | QFN24 4×4 |
 | C1 | (on-board) | 0.1 µF (VDD decouple) | 0402 |
 | C2 | (on-board) | 1 µF (VDD bulk) | 0402 |
 | P1 | (on-board) | 7-wire direct-solder pigtail (no connector) | wire pads |
@@ -221,9 +221,9 @@ Wing-tip radial reaction ≈ 19 N (4.3 lbf) dynamic — geometry-limited, not lo
 
 - Port + stbd read by **River** (primary nacelle control/sync), **Simon** (alternate).
 - **SPI, shared bus, per-nacelle CSN** — no address programming, no mux needed.
-- **Cross-subsystem (avionics, out of scope here):** `Wash/Wash.md` §13 still lists a
+- **Cross-subsystem (avionics, out of scope here):** `Pilot/Pilot.md` §13 still lists a
   legacy AS5600 `J_ENC` (I²C). The host moved to River/Simon and the interface to SPI;
-  reconcile Wash + `avionics/WBS.md` §1.9.1 on the avionics side.
+  reconcile Pilot + `avionics/WBS.md` §1.9.1 on the avionics side.
 
 ---
 
@@ -246,7 +246,7 @@ Wing-tip radial reaction ≈ 19 N (4.3 lbf) dynamic — geometry-limited, not lo
   `hall_sensor_cableway()`, `HALL_*` (comments still name MT6701 — to update).
 - `airframe/openscad/nacelles/_export_pivot_slab.scad` — `nacelle_hall_ring_hub()` (ring + hub).
 - `airframe/openscad/fuselage/cargo/cargo_spar_drive.scad` — cargo-bay spar drive (the
-  DS3218MG actuator whose wind-up this true-tilt feedback rejects).
+  SPT5425LV/LibreServo v2 actuator, was DS3218MG, whose wind-up this true-tilt feedback rejects).
 - `docs/TILT_SPAR_ANALYSIS.md` §1 / §3.5 — tilt-feedback rationale, ferrous-spar mitigation.
 - `avionics/WBS.md` §1.9.1 ; `avionics/emi-hardening/WBS.md` §1.4.4 / §1.4.6.
 - `airframe/wings-nacelles/WBS.md` §1.1.3.6 — airframe-side task detail.

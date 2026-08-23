@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Fuselage — Access Covers, Antenna Mounts, Nacelle Bracket Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
@@ -11,7 +11,7 @@
 > the root index as a commit prerequisite (root `AGENTS.md` "Revisions and Version
 > Control").
 
-*"Love keeps her in the air. — Capt. Malcolm Reynolds"*
+*"Love keeps her in the air. — Capt. Skipper Reynolds"*
 
 ---
 
@@ -101,7 +101,7 @@
     the rear's large hull-frame Y (≈+203..+384)**: it splits coincident vertices
     just enough that the reloaded published STL no longer welds watertight, and
     manifold3d then mis-resolves it to ~357 k — so every subsequent cut was built
-    on a wrong base. `regen_rear_interior.py` (rear analogue of
+    on a wrong base. `regen_rear_interior.py` (rear analog of
     `merge_cargo_interior.py`) fixes it by baking the clean source **in memory
     (float64)** and cutting before any float32 round-trip, then doing a single
     manifold3d boolean of the rear features (lofted bore-open fwd joint, keel
@@ -178,7 +178,7 @@
         geometry pipeline (Shapely polygon offset/boolean + a hand-written DXF R12 writer)
         was used instead. Built the ring plate outer profile from each inner-skin CSV, added
         a 3 mm outward clearance offset, and cut the keel-bar notch. **Notch corrected to
-        3.5 mm wide (X) × 6 mm deep (Z)**, centred at hull X = −170 mm — the "6 mm wide ×
+        3.5 mm wide (X) × 6 mm deep (Z)**, centered at hull X = −170 mm — the "6 mm wide ×
         3 mm deep" figure previously here transposed the keel bar's own 3 mm(X) × 6 mm(Z)
         cross-section (structural_analysis.md §4.3/§4.5/§5.4 already specifies 3.5×6 mm;
         that figure is authoritative). Exported:
@@ -220,7 +220,7 @@
         `NSVMT_X_CEN` or equivalent — note SCAD uses part-local frame; convert to hull Y).
     - Skid landing-impact loads (aft section; CF rod reinforcement already handles skid-arm
         bending; determine if tail-cone ovalisation under landing shock still warrants a ring).
-    - Fuselage bending under 2g manoeuvre (keel bar + foam carry primary moment; rings
+    - Fuselage bending under 2g maneuver (keel bar + foam carry primary moment; rings
         provide shear-web anti-ovalisation — evaluate whether skin thickness + foam elastic
         foundation make rings unnecessary in lightly-loaded sections).
 
@@ -267,7 +267,7 @@
     - Keel locating channels cut into cargo and rear shells by `add_structural_features.py`.
     **SUB-TASKS OPEN:**
     - [x] Add WIRE-COUNTERPOISE-49MHZ to BOM: AWG 22 stranded tinned copper, 460 mm,
-        2 g, routed alongside keel inside foam from cargo to rear, terminated at Emma
+        2 g, routed alongside keel inside foam from cargo to rear, terminated at Commo
         antenna feed on River's Room stack. *(done 2026-06-22 — was referenced here since
         Rev R1 but never actually added; backfilled as part of §1.4.2 antenna work, which
         also added a second counterpoise wire, WIRE-COUNTERPOISE-49MHZ-2, for Simon's
@@ -288,7 +288,7 @@
         ("stations 60–130mm inside head/bridge section") conflicts with (a) the Rev R1
         keel decision, which is headless in that section, and (b) other TODO.md entries
         ("battery tray in cargo section") — while a separate, older note (~line 2818–2830,
-        2026-06-08 FlightEngineer placement decision) instead places a battery boss pattern in the
+        2026-06-08 Flight Engineer placement decision) instead places a battery boss pattern in the
         MIDDLE section keel face, which itself conflicts with the Rev R1 finding that the
         middle-section keel span is unsupported (foam only, no hard attachment). This
         three-way placement conflict (head / cargo / middle) needs a user decision before

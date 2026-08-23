@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Fuselage — Joints, Bow Pod, Interior Bosses Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
@@ -38,7 +38,7 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
 - [x] **Built `tools/verify_bow_pod.py`** — ray-casts each bore against the baked
     `head_shell24_2mm_repaired.stl` and reports skin-landing, wall thickness, interior-pocket
     clearance, and aperture-row fit.  Reproducible; supersedes the eyeball-in-slicer checks.
-- [x] **Located the canonical bow mounting flat** — centre hull (−167, −301, 120), normal
+- [x] **Located the canonical bow mounting flat** — center hull (−167, −301, 120), normal
     (0, −0.766, −0.643) = 39.8° about X, ~26.4 × 15 mm (matches the 1.04 × 0.59 in spec).
 - [x] **Placed + skin-verified all three apertures on the flat (3/3 PASS):** camera hull
     (−161.2, −300.7, 116.0) Ø10; ToF hull (−177.7, −301.0, 116.6) Ø8; laser hull
@@ -96,7 +96,7 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
     did: 3/3 PASS, 2026-06-30). Run *after* the cut, the intended spot is now a hole, so the
     ray correctly sails through and reports hitting the *far* wall instead — an expected
     consequence of the tool's pre-cut design, not a regression. The actually meaningful
-    post-cut check — `mesh.contains()` at each of the three aperture-centre hull points —
+    post-cut check — `mesh.contains()` at each of the three aperture-center hull points —
     confirms all three are void (outside the solid), i.e. the cuts landed exactly where
     intended: camera (−161.20,−300.68,+116.01), ToF (−177.67,−300.98,+116.61), laser
     (−170.67,−299.94,+117.14) — all `contains=False` ✓.
@@ -127,14 +127,14 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
     brainstorm, fact-checked and corrected against real datasheets — see REFERENCES.md
     "Removed / Superseded Citations" for what was fabricated in the original brainstorm) into
     the **Observer** standalone board (not a PB2-I cape — its own board, peer network node via
-    Ethernet ring/CAN-FD only): TI MSPM0G3507 (native CAN-FD) + Infineon SLB9670 TPM
+    Ethernet ring/CAN-FD only): TI MSPM0G3507 (native CAN-FD) + Infineon SLB9672 TPM
     (fleet-standard part, not a new one) + Microchip KSZ9477 Ethernet switch, plus a TI AM62Ax
     digital vision SoC replacing the RunCam Nano 4 analog camera. One board design, installed
     at both the bow sensor pod (nose) and the cargo bay nadir FPV mount.
 
 - [x] **Wire TFmini-S UART to bow sensor MCU.** — **SUPERSEDED by Observer (2026-07-06).**
     The pre-Observer plan ran a 28 AWG loom from the bow pod all the way to Shepherd's Room and
-    read the TFmini-S on the Shepherd (Wash) node. Observer is now the board *at* the bow pod, so
+    read the TFmini-S on the Shepherd (Pilot) node. Observer is now the board *at* the bow pod, so
     the TFmini-S is a short local run (<75 mm) on Observer's dedicated `J_TOF`/UART1, read by Observer's
     MSPM0G3507 — no head-section loom to Shepherd's, no Shepherd `serenity-fc` UART driver.
     Replaced by the Observer local sensor harness (§1.2c) and Observer node firmware (§4.6).
@@ -144,18 +144,18 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
     (flex/FPC, ~20–30 mm), encoded on-board by the AM62A7 and published over the Ethernet ring —
     no analog coax to a separate MCU. Tracked as the Observer local sensor harness (§1.2c).
 - [x] **Wire laser GPIO enable bow sensor MCU** — **SUPERSEDED by Observer (2026-07-06).**
-    This discrete 2N7002-from-Wash-GPIO driver plus a Class-3B-style physical key-switch
+    This discrete 2N7002-from-Pilot-GPIO driver plus a Class-3B-style physical key-switch
     ([REF-FDA-001 §1040.10(f)(1)]) is replaced by Observer's own on-board laser driver (Q1 AO3400
     logic-level N-FET, R1 100 Ω gate, R2 10 kΩ pulldown-default-off, `J_LASER`), enabled by
-    Observer's MSPM0G3507 — not a Wash GPIO. Per `docs/JAYNE_LASER_ANALYSIS.md` Rev A2 the nose is
+    Observer's MSPM0G3507 — not a Pilot GPIO. Per `docs/OBSERVER_LASER_ANALYSIS.md` Rev A2 the nose is
     **Class 2 (≤ 1 mW green), NOT Class 3B**, so the mandatory key-interlock/shutter is dropped
     and the ≤ 1 mW cap is hardware-enforced (fixed current limit). Tracked at §1.2c (driver) and
     §4.6 (GPIO firmware + interlock).
 - [x] **Add laser enable command to MAVLink C2 interface** [REF-PROTO-002] — **SUPERSEDED /
     RELOCATED to Observer (2026-07-06).** The laser is now Observer-owned (commanded by Observer's
-    MSPM0G3507, published/gated over the CAN-FD + Ethernet ring), not the Wash MAVLink path. The
+    MSPM0G3507, published/gated over the CAN-FD + Ethernet ring), not the Pilot MAVLink path. The
     surviving C2-enable requirement is folded into the Observer "Laser GPIO driver" firmware task
-    (§4.6). Because the nose is now Class 2 (`docs/JAYNE_LASER_ANALYSIS.md` Rev A2), the previously
+    (§4.6). Because the nose is now Class 2 (`docs/OBSERVER_LASER_ANALYSIS.md` Rev A2), the previously
     **mandatory** operator acknowledgement is downgraded to **optional** defense-in-depth rather
     than a Class-3B requirement.
 - [ ] **Add standards REF-IDs to bow_sensor_pod.scad firmware integration notes** once driver
@@ -211,7 +211,9 @@ and baked to hull frame.  SCAD fuselage shell files are secondary references onl
         pocket — single-sourced from `add_structural_features.py`.
     - **Wing mortices** — Ø12.3 spar bore (full lateral span, both walls), 2 root mortises,
         and 2× Ø22 spar-bearing bosses, at the **re-derived** chordwise stations (129 mm Rev
-        R1 root chord, LE root hull Y=−7: spar 30% → Y=+31.7; mortise 50% → Y=+57.5; Z=62.5).
+        R1 root chord, LE root hull Y=−7: spar 35% → Y=+38.15 at Z=68.42 on the
+        S1223 camber midline (Rev S1b 2026-08-16, was 30% → Y=+31.7 at the
+        mortise height Z=62.5); mortise 50% → Y=+57.5, Z=62.5).
         Supersedes the SCAD `WING_ROOT_Y_CEN=CY+40` (hull Y≈+6) stale-161mm-chord stand-in
         (§1.1.2).  All lateral-wall/dorsal features are seated against the wall position
         **sampled from the real baked mesh** at each feature's (Y,Z) — the walls curve

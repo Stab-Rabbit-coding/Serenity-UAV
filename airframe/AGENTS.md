@@ -17,15 +17,11 @@ All design artifacts in this folder — SCAD sources, STLs, Blender/FreeCAD scri
 - **Z** — positive dorsal (up)
 - **Origin** — the `airframe/freecad/assembly/SerenityAssembly.FCStd` world origin
 
-As of R1 (2026-06-11), validated component placements are **baked into the published STL vertex data** by `tools/bake_hull_frame.py` (binary header marker: `SerenityUAV HULL-FRAME R1`). Every primary STL in `airframe/stls/` is stored **directly in hull-frame coordinates** and imports into FreeCAD with **identity placement**. Do not apply per-part transforms when positioning these components.
-
-**Bake workflow (if you regenerate primary STLs):**
-```sh
-python3 tools/bake_hull_frame.py            # all components (idempotent)
-python3 tools/bake_hull_frame.py --check    # report baked state only
-```
-
-Never bake a mesh *derived from* an already-baked file (e.g. a Blender repair of a baked STL loses the header marker).
+Primary STLs in `airframe/stls/` are stored directly in hull-frame coordinates and import into
+FreeCAD with **identity placement** — do not apply per-part transforms. **`airframe/HULL_FRAME_REFERENCE.md`**
+holds the bake workflow and `tools/bake_hull_frame.py` usage, the canonical-accuracy authority
+order (REF-CAD-002/003/004, `docs/references/`), and the validated baked-extents table for all
+eight primary components. Read it before regenerating or placing any primary STL.
 
 ## Geometry Reference Points
 
@@ -33,78 +29,30 @@ The fuselage has four canonical sections, each with specific spatial properties:
 
 - **Head** — forwardmost; tapers to a narrow nose (most negative Y extent, Y ≈ −305.6 mm)
 - **Cargo** — immediately aft of head; largest cross-section; wing attachment flanges on upper outer edges; bay door opens toward −Z (ventral)
-- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); houses the inner-neck tube and FlightEngineer's room (power distribution); aft EDF intake scoops deferred to Phase 11
+- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); houses the inner-neck tube and Flight Engineer's room (power distribution); aft EDF intake scoops deferred to Phase 11
 - **Rear** — aftmost; houses engine room, dorsal pod, and two landing skids extending aft
 
 **Wings and nacelles:**
+
 - Wings attach to the cargo section lateral walls
 - Nacelles are at the pylon tips, outboard of the wings; stored in forward-flight attitude; in hover they tilt to vertical thrust
 
-See "Validated baked extents" and "Geometry Integrity" below for full spatial bounds and qualitative relationships.
-
-## Canonical Accuracy References (Ground Truth)
-
-When judging whether hull/exterior geometry is faithful to the real ship, treat the
-`docs/references/` library as ground truth, in this authority order (highest first):
-
-1. **QMx *Official Serenity Blueprints Reference Pack* (2007)** —
-   `docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf` (REFERENCES.md
-   REF-CAD-003). **Most authoritative** — officially licensed, production-derived canon. Where it
-   disagrees with any other reference on canonical shape/proportion, **it wins.** Drawn at line-art
-   fidelity, so it lacks fine mechanical detail. Copyrighted commercial product — reference only;
-   never redistribute or relicense it.
-2. **Nick Henning render collection** — `docs/references/nick-henning/` (REF-CAD-002). Derived from
-   the show/QMx canon; carries **more mechanical/surface detail** than the blueprints. Use it where
-   the blueprints are ambiguous. Used by email permission (2026-07-06).
-3. **misubisu Thingiverse model, Thing 7330462** — `docs/references/thingverse-serenity/`
-   (REF-CAD-004, CC BY 4.0). The **origin of the `s_*.stl` geometry** in `airframe/stls/`. It is the
-   working starting point, but **verify any detail against the two sources above before treating it
-   as canonical** — it is the lowest-authority of the three.
-
-This ranking is mirrored in `REFERENCES.md` ("Creative-Universe Attribution and Fan-Engineering
-Terms" → "Canonical-Accuracy Reference Hierarchy") and `docs/AGENTS.md`. These references are the
-arbiter of what "canonical" means; keep the canonical outer mold line intact per "Geometry
-Integrity" below.
-
 ## Fabrication Standards
 
-### Material and Print Parameters
+Root `AGENTS.md` §7 "Fabrication Standards" is authoritative for material, print parameters,
+shell wall and foam fill, integrated bosses/ribs/brackets, and the open inter-section mating
+faces — read it there and do not restate it here.
 
-**CF-PETG** is the standard material:
-- Layer height: 0.15 mm
-- Perimeters: 4 minimum
-- Infill: ≥40% for load-bearing regions; 25% for non-structural fill
-
-(The DaVinci Jr prototype is exempt from these standards; it is not expected to meet full-build specifications.)
-
-### Shell Specifications
-
-- **Exterior shell walls:** hollowed to 2.0 mm (0.079 in) CF-PETG while maintaining a **watertight mesh surface** with no voids or holes
-- **Interior fill:** 2 lb/ft³ (32 kg/m³) low-density closed-cell foam to provide internal structure and support
-- **Bosses and ribs:** added to the interior as needed for mounting hardware, components, or structural flight requirements
-- **Mating faces:** left open between the four fuselage sections to allow construction access and inter-compartment cable routing
-- **Mounting brackets:** integrated and printed as part of the shell where feasible
-
-### Structural Joints
-
-All load-bearing mating surfaces must comply with:
-- **Minimum 2-wall contact annulus** to ensure adequate surface area
-- **Positive-stop shoulder** to prevent sliding under load
-- **Friction fits alone are not acceptable** for flight-critical joints
-
-### Mesh Validation
-
-Every 3D model modification **must** be verified to produce clean, watertight surfaces:
-
-1. Run mesh verification tools after every modification
-2. Report all findings in `TODO.md`
-3. Resolve all violations before committing
-
-Models shall be **ready to slice for printing** immediately after generation.
+Airframe-specific application: root §7's structural-joint rule (minimum 2-wall contact annulus
+**and** positive-stop shoulder — never a friction fit alone on a flight-critical joint) and its
+mandatory post-edit mesh validation apply to every model in this folder. Additionally, models
+shall be **ready to slice for printing** immediately after generation; report validation findings
+in `TODO.md` and resolve all violations before committing.
 
 ## STL and SCAD Conventions
 
 ### File Naming
+
 - **Legacy `s_` prefix dropped (Rev R1):** Historical shell/STL/SCAD files used the prefix `s_` (e.g., `s_cargo_sect_shell24_2mm_repaired.stl`). This prefix is no longer used in active files. When you encounter an `s_`-prefixed reference in active code or docs, drop the prefix and correct the string in place.
 - Active files use unprefixed names: `cargo_sect_shell24_2mm_repaired.stl`
 
@@ -113,75 +61,46 @@ Models shall be **ready to slice for printing** immediately after generation.
 Generator scripts may model parts in a convenient part-local frame, but any **regenerated primary-component STL must be re-baked before publishing**.
 
 **SCAD best practices:**
+
 - 4-space indenting
 - Verbose comments conforming to OpenSCAD style
 - Validation: render and verify bore diameters and Z-range in console output before committing
 
 ## Blender Pipeline
 
-The canonical fuselage source is the Blender hollowing pipeline:
+**Blender-canonical source directory:** `airframe/blender-scripts/files-hollowed-24in/`
+These are the **authoritative canonical sources** for all fuselage geometry. Any future geometry
+change must start from the corresponding Blender source file in this directory. SCAD files for
+fuselage shells are secondary references only.
 
-**Blender-canonical source directory:** `airframe/blender-scripts/files-hollowed-24in/`  
-These are the **authoritative canonical sources** for all fuselage geometry. Any future geometry change must start from the corresponding Blender source file in this directory. SCAD files for fuselage shells are secondary references only.
-
-**Bake pipeline for fuselage sections:**
-1. Update source in `airframe/blender-scripts/files-hollowed-24in/`
-2. Copy updated file to `airframe/stls/fuselage/` (or `fuselage/cargo/` for cargo)
-3. Run bake tool: `python3 tools/bake_hull_frame.py`
-
-**Blender script execution:**
-```sh
-blender --background --python <script>.py
-```
-
-After running scripts:
-- Verify Z-range and bore-diameter in console output before committing
-- Output STLs go to `airframe/stls/` (subdirectories: `fuselage/`, `nacelles/`, `wings/`)
+The headless invocation, the fuselage bake pipeline (update source → copy into
+`airframe/stls/fuselage/`, or `fuselage/cargo/` for cargo → run `tools/bake_hull_frame.py`), and
+the pre-commit checklists are in `tools/TOOL_REFERENCE.md` "Blender Hollowing Pipeline" — do not
+restate them here. After running any script, verify Z-range and bore-diameter in console output
+before committing; output STLs go to `airframe/stls/` (subdirectories: `fuselage/`, `nacelles/`,
+`wings/`).
 
 ## Engineering Requirements — Weight, Balance, Power, Space
 
-Every structural modification must account for real loads and mass budgets:
-
-- **Size fasteners, walls, and structural members** for actual loads
-- **Quote actual masses** and center-of-gravity (CG) shifts when adding or removing geometry
-- **Do not leave these values as "TBD"**
-- Use **imperial-primary with metric in parentheses** for all measurements (e.g., 10 in (254 mm))
-
-For mass and force units:
-- **lbm** for mass (pounds-mass)
-- **lbf** for force (pounds-force)
-- **kg** for metric mass; **N** for metric force
-- **kt** (knots) for airspeed and wind speed
+Every structural modification must account for real loads and mass budgets: size fasteners,
+walls, and structural members for actual loads; quote actual masses and center-of-gravity (CG)
+shifts when adding or removing geometry; **do not leave these values as "TBD."** Units follow
+root `AGENTS.md` §5 "Engineering Requirements".
 
 ## Assembly and Placement
 
-The canonical assembly document is `airframe/freecad/assembly/SerenityAssembly.FCStd`.  
+The canonical assembly document is `airframe/freecad/assembly/SerenityAssembly.FCStd`.
 The headless assembly script is `airframe/FreeCAD-scripts/serenity_assembly.py` (run with `freecadcmd`).
 
-**PCBs and avionics placement:**
-- PCBs are tightly packed; final component footprint positions will be placed manually after PCBs are populated and nets are built by script
-- If a KiCad DRC violation requires repositioning a component footprint, refer the action to the user; other modifications are allowed
-
-**Validated baked extents (hull frame, mm — updated 2026-06-13):**
-
-| Component | X min..max | Y min..max | Z min..max |
-| --- | --- | --- | --- |
-| Head_Shell | −232.9..−103.5 | −305.7..−70.7 | +61.1..+201.5 |
-| Cargo_Shell | −267.0..−72.7 | −71.5..+132.0 | 0.0..+163.2 |
-| Middle_Shell | −258.5..−81.6 | +130.4..+203.6 | +1.3..+166.1 |
-| Rear_Shell | −246.1..−105.5 | +203.2..+384.3 | +3.3..+161.1 |
-| Wing_Port | −93.0..+4.7 | −7.0..+122.0 | +48.0..+77.0 |
-| Wing_Stbd | −347.7..−250.0 | −12.0..+117.0 | +48.0..+77.0 |
-| Nacelle_Port | +4.0..+86.0 | −58.2..+108.3 | +21.4..+104.7 |
-| Nacelle_Stbd | −428.1..−346.1 | −64.2..+102.3 | +23.3..+106.6 |
+PCB and avionics footprint placement is governed by root `AGENTS.md` §5 and
+`avionics/AGENTS.md` "Footprint and Component Placement" — not by this file.
 
 ## Geometry Integrity — Keep Skin True to Canon
 
 - **Retain the outer mold line** of Serenity's canonical hull to the greatest extent possible
 - **Interior modifications** (bore carving, sleeve insertion, boss protrusions) must blend into the canonical exterior hull
 - **Do not alter the outer mold line unless structurally required**
-- Because Serenity's geometry is complex, **bounding boxes and centroid calculations are inadequate** for positioning and orienting parts
-- **Use the validated orientation and positions listed above** for determining where parts fit in space
+- Because Serenity's geometry is complex, **bounding boxes and centroid calculations are inadequate** for positioning and orienting parts — use the validated extents in `airframe/HULL_FRAME_REFERENCE.md`
 - If there is uncertainty about placement, request manual placement in FreeCAD by the user
 
 ## Work Tracking and Documentation
@@ -189,7 +108,7 @@ The headless assembly script is `airframe/FreeCAD-scripts/serenity_assembly.py` 
 - When adding a new structure or modifying an existing one, record load calculations, mass budgets, and CG shifts in a design note or commit message
 - Update `TODO.md` with any unresolved mesh validation issues, deferred design work, or fabrication notes
 - When a script regenerates STLs, verify Z-range and bore-diameter in console output **before committing**
-- Keep `PROJECT_INDEX.md` up to date: add new active files, move archived files to `ARCHIVE_INDEX.md`
+- Index and archive upkeep (`PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`) follows root `AGENTS.md` §10
 
 ## Landing Gear
 
@@ -211,7 +130,3 @@ do not assume a specific mechanism here. Read the current state directly:
 - **Trade study and current recommendation:** `docs/NOZZLE_DRIVE_TRADE.md`
 - **SCAD source:** `nacelle_nozzle_iris.scad`
 - **Open work:** `TODO.md` §1.1.3.1
-
----
-
-For project-wide standards, see the root `AGENTS.md`.

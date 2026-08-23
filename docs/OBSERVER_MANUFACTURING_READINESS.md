@@ -2,8 +2,8 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — gap analysis, 2026-07-06
-**License:** CC BY 4.0
-**Revision:** Rev B (2026-07-06)
+**License:** CC BY-SA 4.0
+**Revision:** Rev C (2026-07-11)
 **Status:** Analysis + recommended resolution — the raw-SoC gap, and the SoM-carrier path
 that closes most of it.
 
@@ -51,7 +51,7 @@ and therefore *owns* the LPDDR4, boot flash, power sequencing, and impedance-con
 routing. **The simplest, most reliable fix is not to own any of that:** mount the AM62A on a
 vendor **system-on-module (SoM)** where the SoC + LPDDR4 + boot flash + PMIC are already
 integrated **and validated by the vendor**, and rebuild Observer as a **carrier board** carrying
-only the parts it already has as real footprints (KSZ9477 switch, ISOW1044 CAN, SLB9670 TPM,
+only the parts it already has as real footprints (KSZ9477 switch, ISOW1044 CAN, SLB9672 TPM,
 Ethernet magnetics/EMI, laser driver, camera/ToF connectors) plus the SoM's board-to-board
 connector.
 
@@ -84,7 +84,7 @@ remains the fallback if the phyCORE-AM62A is disqualified on fit.
 | Class | Refs | Footprint status |
 |---|---|---|
 | **Real / verifiable** | T1/T2 (749010012A), J_ETH_IN/OUT, J_CANFD, J_PWR, J_TOF, J_CAM1/2, J_LASER, U4 (ISOW1044 SOIC-16W), CMC1-5, D1-5, Q1, Y1, R1/R2, C_MCU1, H1-4 | OK (see §5 for two minor fixes) |
-| **Placeholder — needs datasheet** | **U1 AM62A7** (BGA-484), **U2 KSZ9477** (QFN-128), **U3 MSPM0G3507** (VSSOP-28), **U5 SLB9670** (VQFN-32), **U_PMIC TPS65219** (VQFN-32) | Land pattern *and* pin map both placeholder |
+| **Placeholder — needs datasheet** | **U1 AM62A7** (BGA-484), **U2 KSZ9477** (QFN-128), **U3 MSPM0G3507** (VSSOP-28), **U5 SLB9672** (UQFN-32), **U_PMIC TPS65219** (VQFN-32) | Land pattern *and* pin map both placeholder |
 | **MISSING entirely** | LPDDR4 DRAM, boot flash (eMMC/OSPI NOR), DDR termination, full PMIC power-sequencing net, SoC PLL/loop-filter passives | Not in schematic |
 
 ---
@@ -136,7 +136,7 @@ Observer becomes a **carrier** for an AM62A SoM. What lives where:
 - **SoM board-to-board connector(s)** — the one new footprint; its exact P/N + pitch + pin count
   come from the selected module's carrier-design guide (datasheet-gated, §3A selection below).
 - **KSZ9477** Ethernet switch (HSR/PRP ring) — RGMII/MDIO from the SoM.
-- **ISOW1044** isolated CAN-FD, **SLB9670** TPM (SPI from SoM), **MSPM0G3507** CAN-FD
+- **ISOW1044** isolated CAN-FD, **SLB9672** TPM (SPI from SoM), **MSPM0G3507** CAN-FD
   coprocessor (as today).
 - Ethernet magnetics + SRF2012 CMC + PRTR5V0U2X TVS (EMI, as today).
 - Camera **MIPI CSI-2** route from the SoM to the camera connector / direct-solder land (§4);
@@ -180,7 +180,7 @@ build this trade strongly favors the SoM.
 This is the wiring the carrier schematic implements. Every carrier-side part below has a
 **verified pinout already in this repo** (reused from `gen_cape_a2*.py` / existing Observer files) —
 only the **SoM-side pad numbers** are datasheet-gated. The generator (a `gen_vera_sch.py`, in
-the COMMO pattern) can wire all of this the moment the phyCORE-AM62A pad map is available.
+the Commo pattern) can wire all of this the moment the phyCORE-AM62A pad map is available.
 
 **Interface map (SoM function → carrier net → destination):**
 
@@ -188,7 +188,7 @@ the COMMO pattern) can wire all of this the moment the phyCORE-AM62A pad map is 
 | --- | --- | --- |
 | RGMII (1×, to-connector) + MDIO | RGMII_TXD[0:3]/RXD[0:3]/TXC/RXC/TXCTL/RXCTL, MDC/MDIO | KSZ9477 switch (HSR/PRP ring) |
 | MIPI CSI-2 (4-lane + CLK) | CSI_D[0:3]±, CSI_CLK± | Camera connector / direct-solder land (§4) |
-| SPI (1×) | SPI_TPM_SCLK/MOSI/MISO/CS_N | SLB9670 TPM |
+| SPI (1×) | SPI_TPM_SCLK/MOSI/MISO/CS_N | SLB9672 TPM |
 | CAN-FD (1×) | MCU_CANL/CANH domain | MSPM0G3507 → ISOW1044 isolated CAN → J_CANFD |
 | UART (1–2×) | ToF_UART_TX/RX; console UART | MSPM0G3507 / TFmini-S ToF; debug header |
 | GPIO/PWM | LASER_EN, LASER_PWM, LASER_KEY (opt.) | Laser driver (Q1 + hardware current limit) |
@@ -196,7 +196,7 @@ the COMMO pattern) can wire all of this the moment the phyCORE-AM62A pad map is 
 | Power in | +5V, GND, PGND | 5 V feed (POWER_DISTRIBUTION.md §3.2.1); SoM makes its own rails |
 
 **Power tree:** 5 V in → phyCORE-AM62A VIN (module hosts its own PMIC/sequencing). Carrier-only
-loads (KSZ9477, SLB9670, MSPM0G3507, magnetics) draw from either the SoM's exposed 3V3/1V8 rails
+loads (KSZ9477, SLB9672, MSPM0G3507, magnetics) draw from either the SoM's exposed 3V3/1V8 rails
 *or* a small carrier LDO — **which, is datasheet-gated** on what rails the module brings out to
 the 270 pads (HW manual). Ethernet EMI chain unchanged: Wurth 749010012A + 2× SRF2012 CMC + 2×
 PRTR5V0U2X TVS per port; same CMC+TVS on the CAN bus after ISOW1044.
@@ -242,7 +242,7 @@ the pod). Recommended implementation — **co-located dual footprint, populate o
 
 - **CMC1–5 (SRF2012-100Y)** currently use `Inductor_SMD:L_Taiyo-Yuden_NR-20xx` — a 2-pin power
   inductor land, **not** the 4-pin 2012-metric common-mode-choke land the SRF2012 needs. Swap to
-  the `Bourns_SRF2012` (4-pad) footprint used on Wash/TACCO/Observer elsewhere.
+  the `Bourns_SRF2012` (4-pad) footprint used on Pilot/XO/Observer elsewhere.
 - **C_ISO (100 nF / 500 V)** is on an `R_0402` land — a 500 V cap will not fit an 0402. Use a
   proper HV MLCC footprint (≥ 1206/1210 for 500 V) or drop the voltage rating to what the
   isolation actually needs.
@@ -263,7 +263,7 @@ recurring GUI-corruption risk now guarded by `tools/precommit_kicad_load.py`.)
    (`bow_sensor_pod.scad`) and the 1.0 in carrier width.
 3. **Schematic-first (carrier):** replace the raw AM62A + placeholder DRAM/flash/PMIC nets with
    the SoM connector symbol; wire SoM↔KSZ9477 (RGMII/MDIO), SoM↔camera (CSI-2), SoM↔TPM (SPI),
-   SoM↔MSPM0G3507, power-in per the design guide. Keep KSZ9477/ISOW1044/SLB9670/MSPM0G3507
+   SoM↔MSPM0G3507, power-in per the design guide. Keep KSZ9477/ISOW1044/SLB9672/MSPM0G3507
    pin maps datasheet-correct (still §G3 for *these* parts — but no 484-ball SoC map needed).
 4. **Footprints:** SoM connector land + real land patterns for the remaining ICs; apply §5 fixes.
 5. **Place + route (ordinary ~4-layer):** SoM connector, KSZ9477 RGMII pairs, CSI-2 pairs,
@@ -272,7 +272,7 @@ recurring GUI-corruption risk now guarded by `tools/precommit_kicad_load.py`.)
 
 **Why this is tractable:** no LPDDR4 fly-by routing, no 484-ball BGA escape, no power
 sequencing — those ship on the module. Steps 3–6 are ordinary carrier work I can do
-schematic-first (as with COMMO) once the module + connector P/N are chosen.
+schematic-first (as with Commo) once the module + connector P/N are chosen.
 
 ### 6.2 Fallback — raw-SoC path (only if no AM62A SoM qualifies)
 
@@ -289,4 +289,4 @@ nothing above is forgotten.
 
 ---
 
-*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*
+*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY-SA 4.0*

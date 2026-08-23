@@ -1,7 +1,7 @@
 # Serenity UAV — Power Distribution & Battery Management
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** Rev R
 **Date:** 2026-06-11
 
@@ -11,7 +11,7 @@
 
 ```text
                          ┌───────────────────────────────────────────┐
-  6S 4000 mAh LiPo       │                 FlightEngineer                     │
+  6S 4000 mAh LiPo       │                 Flight Engineer                     │
   (22.2 V nominal)        │                                           │
   XT60 ──────────────────►│ J_BATT (XT60)                            │
                           │   │                                       │
@@ -90,11 +90,11 @@ over-current threshold in governor_config.h: `EDF_ESC_OVERCURRENT_A = 80 A`).
 | Load | Qty | Nom. (mA ea.) | Peak (mA ea.) | Total nom. (mA) | Total peak (mA) |
 |------|-----|--------------|---------------|-----------------|-----------------|
 | PocketBeagle 2 Industrial (SoC active) | 8 | 500 | 1 200 | 4 000 | 9 600 |
-| Wash (sensor suite + CAN/RS-485) | 4 | 700 | 1 400 | 2 800 | 5 600 |
-| TACCO (radios TX simultaneous) | 4 | 1 500 | 2 500 | 6 000 | 10 000 |
-| COMMO sub-modules | 4 | 100 | 250 | 400 | 1 000 |
+| Pilot (sensor suite + CAN/RS-485) | 4 | 700 | 1 400 | 2 800 | 5 600 |
+| XO (radios TX simultaneous) | 4 | 1 500 | 2 500 | 6 000 | 10 000 |
+| Commo sub-modules | 4 | 100 | 250 | 400 | 1 000 |
 | HX711 + load cell | 1 | 10 | 10 | 10 | 10 |
-| STS3215 winch servo (via CAN-PERIPH-GW, RAIL-2) | 1 | 200 | 1200 | 200 | 1200 |
+| SPT5425LV/LibreServo v2 winch servo (via CAN-PERIPH-GW, RAIL-2) ⚠ current not yet bench-verified, STS3215-era figure carried forward | 1 | 200 | 1200 | 200 | 1200 |
 | **5 V subtotal** | — | — | — | **13 410** | **26 710** |
 
 At 5 V / 22.2 V conversion: 26.7 A × 5 V / 22.2 V ≈ **6.0 A from VBAT** at peak.
@@ -107,14 +107,14 @@ from the design; see TODO §1.1.3.5.)
 
 The §3.2 table does **not** include the two **Observer** vision boards (nose + cargo). Observer is
 a standalone board (not a PB2-I cape) with its own 5 V input (`J_PWR`); its load is budgeted
-separately in §3.2.1 below and is fed from a **dedicated FlightEngineer 5 V payload rail**, not the
+separately in §3.2.1 below and is fed from a **dedicated Flight Engineer 5 V payload rail**, not the
 shared avionics bus.
 
 ### 3.2.1 Observer Vision-Board Loads (dedicated 5 V payload rail)
 
 Two Observer boards are installed (bow sensor pod + cargo-bay nadir mount). Each carries a TI
 AM62A7 vision SoC (via TPS65219 PMIC), a KSZ9477 Ethernet switch, an MSPM0G3507 MCU, an
-SLB9670 TPM, an ISOW1044 isolated CAN-FD, plus the camera module, TFmini-S ToF, and a laser.
+SLB9672 TPM, an ISOW1044 isolated CAN-FD, plus the camera module, TFmini-S ToF, and a laser.
 Figures are **datasheet-typical** at the 5 V board input (PMIC/buck-fed items divided by
 0.88 efficiency); refine when the placeholder SoC/switch footprints are replaced with sourced
 silicon (Observer.md "Verified vs. Placeholder").
@@ -123,13 +123,13 @@ silicon (Observer.md "Verified vs. Placeholder").
 |---|---|---|---|
 | AM62A7 SoC (quad-A53 + VPAC/ISP + H.264/H.265 encode) | 0.57 | 1.02 | via TPS65219 PMIC |
 | KSZ9477 7-port Ethernet switch (3 ports active) | 0.27 | 0.46 | |
-| MSPM0G3507 MCU + SLB9670 TPM | 0.02 | 0.03 | |
+| MSPM0G3507 MCU + SLB9672 TPM | 0.02 | 0.03 | |
 | ISOW1044 isolated CAN-FD (integrated iso DC-DC) | 0.05 | 0.10 | |
 | Camera module (MIPI CSI-2, via J_CAM) | 0.11 | 0.18 | |
 | TFmini-S ToF (140 mA typ / 200 mA peak @5 V) | 0.14 | 0.20 | REF-SENSOR-002 |
 | Ethernet magnetics + passives + LDO overhead | 0.04 | 0.07 | |
 | **Core subtotal (no laser)** | **1.20** | **2.06** | |
-| Laser — both sites (Class 2 green, ≤ 1 mW optical) | +0.02 | +0.02 | negligible; see `docs/JAYNE_LASER_ANALYSIS.md` (nose is Class 2, not 3B) |
+| Laser — both sites (Class 2 green, ≤ 1 mW optical) | +0.02 | +0.02 | negligible; see `docs/OBSERVER_LASER_ANALYSIS.md` (nose is Class 2, not 3B) |
 
 **Per board:** ≈ **1.22 A** typ / **2.08 A** peak (both boards are now Class 2 laser — the nose
 is a concentrated dot + camera strobe-difference detection, ~0.45 mW, not a 500 mW Class 3B
@@ -137,30 +137,30 @@ module, so its laser draw is negligible like the cargo unit).
 **Both boards (2×):** ≈ **2.4 A** typ / **~4.2 A** peak at 5 V →
 ≈ **0.6 A** typ / **~1.0 A** peak at VBAT (5 V ÷ 22.2 V ÷ 0.92 BEC eff).
 
-**Feed decision — dedicated FlightEngineer 5 V payload rail (recommended over sharing the avionics
+**Feed decision — dedicated Flight Engineer 5 V payload rail (recommended over sharing the avionics
 bus).** The shared 5 V avionics rail is already tight: realistic sustained load ≈ 10 A (§3.2)
 against a dual-TPS54620 BEC whose **single-fault** capacity is only 6 A (both healthy ≈ 12 A;
 §11). Adding Observer's ~2.4 A nom to that rail pushes nominal to ≈ 12.4 A — at/over the healthy
 BEC ceiling and well past the 6 A single-fault floor, worsening the existing brown-out
 exposure. Observer is also a switching video-SoC load whose noise should not sit on the shared
-avionics bus. Therefore Observer is powered from its **own** FlightEngineer rail:
+avionics bus. Therefore Observer is powered from its **own** Flight Engineer rail:
 
 - **U_BEC_5V_3 (RAIL-2):** a third identical TPS54620RGYT (6 A) BEC channel, VDIS input →
   5.4 V set-point. 6 A rating vs 2.4 A nom / 4.2 A peak = comfortable margin. Rather than a
   standalone rail, RAIL-2 is **diode-OR cross-tied to the avionics RAIL-1** so the two rails
   back each other up while staying fault-isolated — full topology, drop budget, and fault-mode
   table in **§11.1**.
-- **J_JAYNE:** new Molex Nano-Fit 4-pin (matches `J_5V`) 5 V payload output on FlightEngineer, harnessed
+- **J_OBS:** new Molex Nano-Fit 4-pin (matches `J_5V`) 5 V payload output on Flight Engineer, harnessed
   to both Observer `J_PWR` inputs.
 - **Fuse/limit:** the TPS54620 internal current limit plus a 3 A resettable polyfuse per Observer
   drop (each board ≤ 2.72 A peak).
 - **Wire gauge:** 18 AWG shielded twisted pair (7 A rated) per drop — ≫ the ≤ 2.7 A per-board
   load; consistent with §4 "Avionics bay intra-bay".
-- **Runs:** FlightEngineer (middle-section inner neck) → nose (bow pod) and → cargo nadir mount;
+- **Runs:** Flight Engineer (middle-section inner neck) → nose (bow pod) and → cargo nadir mount;
   comparable length to the existing avionics 5 V bay runs. Route with the Ethernet-ring / CAN
   harness Observer already shares to each bay.
 
-Implementing the RAIL-2 channel (`U_BEC_5V_3`) + cross-tie + `J_JAYNE` on FlightEngineer is a FlightEngineer
+Implementing the RAIL-2 channel (`U_BEC_5V_3`) + cross-tie + `J_OBS` on Flight Engineer is a Flight Engineer
 revision change (sibling to the planned Rev S1 servo-rail change); full design in **§11.1**,
 tracked in TODO.md §1.2c.4. Until implemented, a Observer board may be bench-fed from the shared
 5 V bus **only** with active load-management (accept that it consumes the remaining avionics
@@ -170,16 +170,18 @@ margin and worsens single-fault brown-out) — not the flight configuration.
 
 | Load | Qty | Stall (mA) | Running (mA) | Total run (mA) |
 |------|-----|-----------|--------------|----------------|
-| Nacelle tilt servos (DS3218MG, ≥25 kg·cm @ 6 V) | 2 | 1 500 | 150 | 300 |
-| RCS proportional valve servos (SG90 class, Phase 11) | 4 | 700 | 70 | 280 |
-| Cargo door servo (SG90) | 1 | 700 | 70 | 70 |
-| Cargo release servo (SG90) | 1 | 700 | 70 | 70 |
+| Nacelle tilt servos (SPT5425LV/LibreServo v2, 25-26 kgf·cm @ 6 V — was DS3218MG) ⚠ current not yet bench-verified, DS3218MG-era figure carried forward | 2 | 1 500 | 150 | 300 |
+| RCS proportional valve servos (SG90 class + OpenServoCore, Phase 11) | 4 | 700 | 70 | 280 |
+| Cargo door servo (SG90 + OpenServoCore) | 1 | 700 | 70 | 70 |
+| Cargo release servo (SG90 + OpenServoCore) | 1 | 700 | 70 | 70 |
 | **6 V subtotal (running)** | — | — | — | **720** |
 | **6 V subtotal (all stalled simultaneously)** | — | — | — | **7 400** |
 
-All-servo stall is a transient; the BEC is sized for 5 A continuous (stall of 2×DS3218MG
-+ 3×SG90 ≈ 5.1 A — marginal; the 6 V BEC is sized at 5 A with up to 7 A burst for
-≤100 ms, which covers brief simultaneous stall events).
+All-servo stall is a transient; the BEC is sized for 5 A continuous (stall of 2×SPT5425LV
++ 3×SG90 ≈ 5.1 A, carrying forward the DS3218MG-era current figure — marginal; the 6 V BEC
+is sized at 5 A with up to 7 A burst for ≤100 ms, which covers brief simultaneous stall
+events). Re-check once the SPT5425LV is bench-measured (REFERENCES.md Open Standards
+Verification Items).
 
 At 6 V / 22.2 V: 5.3 A × 6 V / 22.2 V ≈ **1.4 A from VBAT** at stall.
 
@@ -298,10 +300,10 @@ environment exceeds RS103 by a factor of 2.2× in field strength, or 7 dB.
 
 **Required protection strategy:**
 
-1. **Enclosure shielding (first line):** The FlightEngineer PCB is housed in a 1.5 mm 6061-T6
+1. **Enclosure shielding (first line):** The Flight Engineer PCB is housed in a 1.5 mm 6061-T6
    aluminum enclosure with conductive EMI gasket providing ≥ 60 dB SE from 1 MHz
    to 6 GHz. At 434 V/m external, 60 dB reduces the internal field to ≤ 0.4 V/m —
-   below the tested susceptibility of all ICs. See `FlightEngineer.md §FlightEngineer Shielded Enclosure`.
+   below the tested susceptibility of all ICs. See `FlightEngineer.md §Flight Engineer Shielded Enclosure`.
 
 2. **Cable-conducted path (second line):** Cables act as antennas, injecting RF energy
    into the enclosure even when the enclosure shell itself is intact. Three layers of
@@ -320,7 +322,7 @@ switching at 40–100 kHz) onto the VBAT bus, propagating to avionics via the BE
 The 500 W/m² external RF environment adds a second conducted coupling path via the
 battery cable acting as a receiving antenna.
 
-**Full mitigation stack (FlightEngineer):**
+**Full mitigation stack (Flight Engineer):**
 
 | Stage | Component | Purpose |
 |---|---|---|
@@ -345,20 +347,20 @@ Avionics EMI coupling from motor noise is a serious concern.
 
 **Mitigation:**
 
-- FlightEngineer SMPS switching frequency is ≥ 300 kHz (TPS54620) — keeps switching noise
+- Flight Engineer SMPS switching frequency is ≥ 300 kHz (TPS54620) — keeps switching noise
   above the EDF modulation frequencies but below the BLHeli32 DSHOT harmonics.
 - Each avionics bay has a local 47 µF + 100 nF + 10 nF bypass cap stack at the
-  5 V entry (J-PWR on Wash and TACCO).
-- Wash power entry π-filter (FB1 Würth 742792512 + C11/C12) provides additional
-  conducted immunity per Wash.md §6.
+  5 V entry (J-PWR on Pilot and XO).
+- Pilot power entry π-filter (FB1 Würth 742792512 + C11/C12) provides additional
+  conducted immunity per Pilot.md §6.
 - 5 V bus wire is twisted pair (18 AWG), shielded, drain wire grounded at FlightEngineer.
 
 ### 6.3 Grounding Architecture
 
-**Star ground:** All power grounds return to a single point at the FlightEngineer PGND bar.
+**Star ground:** All power grounds return to a single point at the Flight Engineer PGND bar.
 
 ```text
-FlightEngineer PGND bar (star point)
+Flight Engineer PGND bar (star point)
 ├── Battery negative (XT60 GND)
 ├── ESC GND returns (each ESC GND to PGND via 10 AWG return wire)
 ├── 5 V BEC GND output (to avionics 5 V GND bus)
@@ -374,19 +376,19 @@ noise into the avionics ground. Single-point; no ground loops.
 
 ## 7. Battery Monitoring Architecture
 
-### 7.1 Pack-Level Voltage (INA226 on Wash)
+### 7.1 Pack-Level Voltage (INA226 on Pilot)
 
-Each Wash has one INA226AIDGSR wired to J_VBAT (direct VBAT tap), configured
+Each Pilot has one INA226AIDGSR wired to J_VBAT (direct VBAT tap), configured
 in voltage-only mode (no shunt). Provides coarse pack voltage at 1.25 mV/LSB.
 
 - I2C address: 0x40 (on Cape-A internal I2C bus)
 - Driver: `bmon_ina2xx` (bmon_ina2xx.h / bmon_ina2xx.c)
 - Poll rate: 10 Hz (via FC node pwr_fault task)
 
-### 7.2 Main Bus + Per-ESC Current (INA226 on FlightEngineer)
+### 7.2 Main Bus + Per-ESC Current (INA226 on Flight Engineer)
 
-Five INA226 devices on the FlightEngineer, connected to FC1 (Shepherd's room / Bay A, Wash) via a dedicated
-I2C bus (I2C-PDB, JST-GH 4-pin to J_EXT_I2C on Wash).
+Five INA226 devices on the Flight Engineer, connected to FC1 (Shepherd's room / Bay A, Pilot) via a dedicated
+I2C bus (I2C-PDB, JST-GH 4-pin to J_EXT_I2C on Pilot).
 
 | Device | Location | Shunt R | I2C Addr | Full-scale I |
 |--------|----------|---------|----------|-------------|
@@ -418,10 +420,10 @@ at 10 Hz. Driver: `bmon_ina2xx` extended current-sensing mode.
   At 40 A: P = 40² × 0.001 = 1.6 W — within 3 W rating. ✓
   At 55 A burst: P = 55² × 0.001 = 3.0 W — at rating limit; acceptable for ≤10 s.
 
-### 7.3 Cell-Level Monitoring (BQ76930 on FlightEngineer)
+### 7.3 Cell-Level Monitoring (BQ76930 on Flight Engineer)
 
 The Texas Instruments BQ76930 is a 6–10 series cell frontend monitor IC mounted on
-FlightEngineer and connected to the JST-XH-7P balance lead.
+Flight Engineer and connected to the JST-XH-7P balance lead.
 
 | Parameter | Value |
 |-----------|-------|
@@ -435,10 +437,10 @@ FlightEngineer and connected to the JST-XH-7P balance lead.
 | Temperature input | 10 kΩ NTC on BAT exterior, TS1 input |
 | Over-temp limit | 60 °C (PROTECT3 OT threshold) |
 | I2C address | 0x08 (CHEM pin tied high; CRC mode enabled) |
-| Alert output | Open-drain ALERT → Wash GPIO (J_EXT_I2C SCL-side, 2.2 kΩ pull-up) |
+| Alert output | Open-drain ALERT → Pilot GPIO (J_EXT_I2C SCL-side, 2.2 kΩ pull-up) |
 | Driver | `cell_mon_bq769x0` (cell_mon_bq769x0.h / cell_mon_bq769x0.c) |
 
-The BQ76930 also drives CHG and DSG FET-enable outputs. On the FlightEngineer battery input,
+The BQ76930 also drives CHG and DSG FET-enable outputs. On the Flight Engineer battery input,
 the CHG/DSG outputs drive the gate of an integrated power path switch
 (AON6556 N-MOSFET pair), enabling the BQ76930 to disconnect the battery in a
 hardware-level fault event independent of firmware.
@@ -536,7 +538,7 @@ Minimum PocketBeagle 2 Industrial VIN: 4.75 V (AM6254 VIN absolute minimum 4.5 V
 ### 9.3 Servo BEC Brown-Out
 
 6 V BEC (TPS54540 configured for 6.0 V ±1 %): minimum output 5.94 V.
-DS3218MG servo minimum operating voltage: 4.8 V.
+SPT5425LV servo minimum operating voltage: 4.8 V (was DS3218MG, same rating — REF-SENSOR-013).
 SG90 minimum operating voltage: 4.8 V.
 Margin: 5.94 V − 4.8 V = **1.14 V** — safe; brown-out requires catastrophic BEC failure.
 
@@ -577,12 +579,12 @@ ramps from idle RPM at `EDF_GOV_RPM_RAMP_RATE` = 50 RPM/ms to prevent inrush cur
 All 8 avionics nodes share one 5 V bus from FlightEngineer. This is a single rail, not
 redundant in the hardware-failure sense. Redundancy provisions:
 
-- **SMPS redundancy (FlightEngineer):** Two independent 5 V SMPS (TPS54620 × 2) with outputs
+- **SMPS redundancy (Flight Engineer):** Two independent 5 V SMPS (TPS54620 × 2) with outputs
   Schottky diode-OR'd (MBRD1045CT × 2, each sharing 50 % load). If one SMPS fails,
   the other carries the full 5 V load up to 6 A (limiting; some nodes may brown out
   if peak load exceeds 6 A — load shedding handles this).
 
-- **Node-level isolation:** Each Wash bay power connector (J-PWR, Molex Nano-Fit)
+- **Node-level isolation:** Each Pilot bay power connector (J-PWR, Molex Nano-Fit)
   can be individually disconnected. Any node pair (FC + CN) in one bay can be removed
   from service without affecting other bays.
 
@@ -618,7 +620,7 @@ BEC-1 ─D_OR1─┐
 BEC-2 ─D_OR2─┘        │
                  D_X1 ▼  ▲ D_X2   ── F_X (3 A, cross-tie)          [mutual backup path]
                       │  │
-BEC-3 ─D_OR3──────────┴──┴──────── RAIL-2 (5V_JAYNE) ── F_VERA (3 A) ── J_JAYNE   [1 channel, 6 A]
+BEC-3 ─D_OR3──────────┴──┴──────── RAIL-2 (5V_OBS) ── F_OBS (3 A) ── J_OBS   [1 channel, 6 A]
 ```
 
 - **`D_X1` (RAIL-1→RAIL-2)** and **`D_X2` (RAIL-2→RAIL-1)** are two more MBRD1045CT (reused
@@ -645,14 +647,14 @@ minimal-parts goal, so plain Schottky + a modest set-point bump is the recommend
 |---|---|
 | BEC-3 (Observer) regulator fails | RAIL-2 droops → `D_X1` feeds Observer from the RAIL-1 pair (2.4 A ≪ 12 A spare); avionics unaffected |
 | One avionics BEC fails | survivor (6 A) + BEC-3 via `D_X2` back up RAIL-1; §8.3 load-shed trims to fit |
-| Short on the RAIL-2 node (upstream of `F_VERA`) | `F_X` blows → RAIL-2 isolated from RAIL-1; BEC-3 OCP limits; **RAIL-1 keeps running** |
-| Short at J_JAYNE (downstream) | `F_VERA` clears; RAIL-1 unaffected |
+| Short on the RAIL-2 node (upstream of `F_OBS`) | `F_X` blows → RAIL-2 isolated from RAIL-1; BEC-3 OCP limits; **RAIL-1 keeps running** |
+| Short at J_OBS (downstream) | `F_OBS` clears; RAIL-1 unaffected |
 | Short at J_5V (downstream) | `F_5V` clears; RAIL-2 unaffected |
 | A BEC output fails *short* | its `D_OR` reverse-blocks, keeping the shorted channel off its rail so the cross-tie can carry the rail |
 
 **Delta vs. today (no new part numbers):** +1 TPS54620 channel (`U_BEC_5V_3` + `L_5V3` +
 `R_FB3` + `C_BEC3_IN` + `C_BEC3_OUT` + `FB_5V3` + `D_OR3`); +2 MBRD1045CT (`D_X1`/`D_X2`);
-+2 fuses (`F_X`, `F_VERA`) and re-use/add `F_5V`; +1 output connector (`J_JAYNE`, Molex
++2 fuses (`F_X`, `F_OBS`) and re-use/add `F_5V`; +1 output connector (`J_OBS`, Molex
 Nano-Fit 4-pin, matching `J_5V`); the two existing `R_FB` dividers re-valued for 5.4 V. Mass
 ≈ +5 g. Interchangeability is at the **channel** level: all three BEC channels are the identical
 block, and any channel can be built or swapped identically.
@@ -664,7 +666,7 @@ option but adds a 4th channel — recommended only if the payload rail later gro
 needs its own single-fault redundancy. The N+1 (2 + 1) plan above is the minimal choice that
 still makes the two rails fault-tolerant of each other.
 
-**Status: PLAN.** Not yet in KiCad — this is a **FlightEngineer board revision** (schematic-first, then
+**Status: PLAN.** Not yet in KiCad — this is a **Flight Engineer board revision** (schematic-first, then
 PCB placement/routing; place `U_BEC_5V_3` near the existing BEC pair, keep its SW node in a
 GND-pour keepout per §PCB Layout Constraints). Sibling to the planned Rev S1 servo-rail change.
 Tracked in `avionics/kicad/FlightEngineer.md` and `TODO.md §1.2c.4`.
@@ -679,7 +681,7 @@ paid only on range missions. The two uses are **mutually exclusive** (cargo *or*
 
 **Electrical — self-contained module, OR-combined into VBAT (hot-swap-safe, fault-isolated).**
 The intelligence lives on the RBM so the cargo payload path stays a dumb mechanical swap and
-FlightEngineer gains only one input:
+Flight Engineer gains only one input:
 
 ```text
 RBM (in cargo bay):
@@ -689,7 +691,7 @@ RBM (in cargo bay):
                                                                         ▼
                                             RBM XT60 out ───────────────┘
                                                     │
-FlightEngineer:  J_BATT2 (new XT60 in) ── F_BATT2 ── ideal-diode / current-share combiner ── VBAT rail
+Flight Engineer:  J_BATT2 (new XT60 in) ── F_BATT2 ── ideal-diode / current-share combiner ── VBAT rail
                                               (with the main pack's J_BATT path)
 ```
 
@@ -734,7 +736,7 @@ target 190 mm, §14) — a second ~750 g mass in the bay shifts CG and must be r
 keel rail; check on the physical CG rig per §14.1 before flight (a full moment-table entry is a
 follow-on to this plan).
 
-**Delta parts (FlightEngineer):** +1 `J_BATT2` (XT60) input, +`F_BATT2` fuse, + the ideal-diode/
+**Delta parts (Flight Engineer):** +1 `J_BATT2` (XT60) input, +`F_BATT2` fuse, + the ideal-diode/
 current-share combiner (LTC4359- or LTC4370-class — a *new* part family, unlike the §11.1 rail
 which reused existing parts) + its FETs/passives. Plus the RBM assembly (pack + BMS + ORing +
 tray). **Status: PLAN, Phase 12 enhancement** — supersedes the §11 "dual-battery Phase 12
@@ -821,7 +823,7 @@ by this document as of Rev Q (2026-06-07).
 
 <!-- ============================================================
      ESC SELECTION — Phases 5–10 and Phase 11
-     FlightEngineer board footprints: J_ESC1–J_ESC4 (XT30PW-F, populated);
+     Flight Engineer board footprints: J_ESC1–J_ESC4 (XT30PW-F, populated);
        J_ESC5 (XT60PW-F, DNP Phases 5–10, populate Phase 11).
      Fuses: F_ESC1–F_ESC4 (40 A mini blade, populated);
        F_ESC5 (100 A MIDI blade, DNP Phases 5–10, see §5.2).
@@ -839,7 +841,7 @@ by this document as of Rev Q (2026-06-07).
 ### 13.2 Nacelle ESC Firmware Configuration (All Four Units)
 
 <!-- All four nacelle ESCs (ESC1–ESC4) share identical BLHeli32 programming.
-     Governor mode provides closed-loop RPM control with Wash UART2/3 as
+     Governor mode provides closed-loop RPM control with Pilot UART2/3 as
      the DSHOT600 command source. INA226 cross-validation catches ESC
      current reporting faults. Settings stored in governor_config.h. -->
 
@@ -848,9 +850,9 @@ All nacelle ESCs (ESC1–ESC4) shall be programmed identically to:
 - **Demag compensation:** high
   *(prevents demagnetization stall at high RPM commutation transitions)*
 - **BDSHOT telemetry:** enabled
-  *(FlightEngineer INA226 current monitors cross-validate RPM and current data from each ESC)*
-- **Governor mode:** closed-loop RPM; setpoint sourced from Wash UART2/3 DSHOT600 frame
-  *(each Wash FC cape issues DSHOT600 to its primary ESC; FlightEngineer INA226 validates
+  *(Flight Engineer INA226 current monitors cross-validate RPM and current data from each ESC)*
+- **Governor mode:** closed-loop RPM; setpoint sourced from Pilot UART2/3 DSHOT600 frame
+  *(each Pilot FC cape issues DSHOT600 to its primary ESC; Flight Engineer INA226 validates
   reported current against actual measured current at the shunt)*
 - **Software over-current threshold:** 80 A
   *(set via `governor_config.h` constant `EDF_ESC_OVERCURRENT_A`; mirrors the
@@ -860,24 +862,24 @@ All nacelle ESCs (ESC1–ESC4) shall be programmed identically to:
 ### 13.3 Phase 11 ESC5 — Rear Fuselage 55 mm EDF
 
 <!-- ESC5 is DNP (Do Not Populate) for all Phases 5–10.
-     When Phase 11 commences, populate J_ESC5 and F_ESC5 on the FlightEngineer board
+     When Phase 11 commences, populate J_ESC5 and F_ESC5 on the Flight Engineer board
      per the FlightEngineer.md §Phase 11 bring-up procedure.
-     Signal routing: Simon's medbay (Bay E, FC4 node), UART1-TX.
+     Signal routing: Simon's medbay (Bay D, FC4 node), UART1-TX.
      The 55 mm rear EDF is a forward-thrust (cruise) device and also feeds 4 RCS bleed jets
        via proportional valves on the 6 V servo rail (see §3.3). -->
 
 When the 55 mm fuselage EDF is integrated (Phase 11):
 
-1. Populate **J_ESC5** (XT60PW-F footprint on FlightEngineer, DNP in Phases 5–10)
+1. Populate **J_ESC5** (XT60PW-F footprint on Flight Engineer, DNP in Phases 5–10)
    with the 50 A BLHeli32 ESC harness.
 2. Install **F_ESC5** (60 A MIDI blade fuse, Littelfuse 0299060.ZXNV)
-   in the corresponding MIDI fuse holder on FlightEngineer (see §5.2).
-3. Route the ESC5 DSHOT600 signal cable to **Simon's medbay (Bay E, FC4 node),
+   in the corresponding MIDI fuse holder on Flight Engineer (see §5.2).
+3. Route the ESC5 DSHOT600 signal cable to **Simon's medbay (Bay D, FC4 node),
    UART1-TX** — Simon is the primary EDF5 controller per the PACE task matrix
    in AGENTS.md.
 4. Connect the 4 RCS proportional-valve servos to the 6 V servo bus; map to the
    FC attitude mixer (2 pitch + 2 yaw).
-5. Re-run FlightEngineer DRC and verify no connector spacing violations after population.
+5. Re-run Flight Engineer DRC and verify no connector spacing violations after population.
 
 ---
 
@@ -887,7 +889,7 @@ When the 55 mm fuselage EDF is integrated (Phase 11):
      WEIGHT AND BALANCE — Power System Components
      CG target: 190 mm aft of nose tip (from build guides).
      Battery rail: ±25 mm adjustable on keel → ±5 mm CG travel.
-     FlightEngineer mass: 278 g installed (PCB + enclosure + hardware).
+     Flight Engineer mass: 278 g installed (PCB + enclosure + hardware).
      AUW reference: Phase 5–10 = ~2,768 g (TODO.md authoritative);
        Phase 11 full build = ~3,130 g (Phase 5–10 + ~360 g 55 mm rear-EDF + RCS system).
      All stations measured from nose tip (Serenity bow) along
@@ -909,13 +911,13 @@ When the 55 mm fuselage EDF is integrated (Phase 11):
 
 <!-- Moments calculated as: Moment (g·mm) = Mass (g) × Station (mm from nose).
      Subtotal CG = Sum of moments / Sum of mass (excluding Phase 11 DNP items).
-     FlightEngineer 278 g = PCB assembly 198 g + 1.5 mm Al enclosure 60 g + standoffs/hardware 20 g.
+     Flight Engineer 278 g = PCB assembly 198 g + 1.5 mm Al enclosure 60 g + standoffs/hardware 20 g.
      4× nacelle ESCs 220 g total = 55 g each (generic BLHeli32 60 A 6S with heatsink). -->
 
 | Component | Mass (g) | Station (mm from nose) | Moment (g·mm) |
 |---|---|---|---|
 | 6S 4,000 mAh LiPo (hover battery) | 750 | 190 (adjustable) | 142,500 |
-| FlightEngineer PDB — Phases 5–10 (PCB + enclosure) | 278 | 200 (fixed, keel mid) | 55,600 |
+| Flight Engineer PDB — Phases 5–10 (PCB + enclosure) | 278 | 200 (fixed, keel mid) | 55,600 |
 | 4× nacelle ESCs (BLHeli32 60 A 6S, ×4) | 220 | 90 (wing root) | 19,800 |
 | 1× rear EDF ESC — Phase 11, DNP (BLHeli32 50 A 6S) | 40 | 490 (aft bay) | 19,600 |
 | Keel bonding strap (MIL-B-5087B 19 mm Cu braid) | 35 | 250 | 8,750 |
@@ -977,4 +979,4 @@ build — use fine (5 mm) increments when trimming with the minimum-viable build
 
 ---
 
-*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*
+*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY-SA 4.0*

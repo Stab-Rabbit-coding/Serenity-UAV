@@ -1,7 +1,7 @@
 # Serenity UAV — Device Tree Overlays
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Status:** Phase 6 — Minimum Viable Firmware for First Flight
 
 ---
@@ -14,8 +14,11 @@ and Cape-B expansion boards.
 
 | Overlay | Cape | Node | Peripherals |
 | --------- | ------ | ------ | ------------- |
-| `cape-a/k3-am6254-pocketbeagle2-serenity-cape-a.dtbo` | Cape-A | FC nodes (4×) | IMU, barometer, TPM, ToF, GNSS, RS-485, CAN FD, Ethernet, EHRPWM, MIL-STD-1553 |
-| `cape-b/k3-am6254-pocketbeagle2-serenity-cape-b.dtbo` | Cape-B | CN nodes (4×) | TPM, LoRa, NOR flash, logging SD, SiK radio, RS-485, 49 MHz (Part 15 §15.235), CAN FD, Ethernet, WiFi, cargo servo, MIL-STD-1553 |
+| `cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dtbo` | Cape-A-2 (Pilot) | FC nodes (4×) | IMU, barometer, TPM, ToF, GNSS, RS-485, CAN FD, Ethernet, EHRPWM, MIL-STD-1553 |
+| `cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dtbo` | Cape-B-2 (XO) | CN nodes (4×) | TPM, LoRa, NOR flash, logging SD, SiK radio, RS-485, 49 MHz (Part 15 §15.235), CAN FD, Ethernet, WiFi, cargo servo, MIL-STD-1553 |
+
+The non-"2" `cape-a`/`cape-b` (Rev Q, Cape-A-1/Cape-B-1) overlays are archived under
+`cape-a/archive/` and `cape-b/archive/` — superseded, not built by default.
 
 ## Prerequisites
 
@@ -34,7 +37,7 @@ sudo apt install device-tree-compiler    # provides dtc 1.7.x
 
 ```bash
 
-cd serenity/firmware/dts
+cd avionics/firmware/dts
 make
 
 ```
@@ -93,7 +96,7 @@ be verified against the PocketBeagle 2 expansion header pin map.
 | ------------ | ----------- | -------------- | ------- |
 | ICM-42688-P IMU | SPI0 CS0 | `invensense,icm42688p` | SPI mode 3, 24 MHz |
 | BMP388 barometer | SPI0 CS1 | `bosch,bmp388` | SPI mode 0, 10 MHz |
-| SLB9670 TPM 2.0 | SPI0 CS2 | `infineon,slb9670` | 33 MHz, IRQ + RST GPIO |
+| SLB9672 TPM 2.0 | SPI0 CS2 | `infineon,slb9670` | 33 MHz, IRQ + RST GPIO |
 | TCA9548A I²C mux | I2C2 0x70 | `nxp,pca9548` | 8-ch, 400 kHz |
 | VL53L5CX ToF ×2 | I2C2 mux ch0/1 | `st,vl53l5cx` | 0x29, share addr |
 | MS4525DO airspeed | I2C2 mux ch2 | `ms4525do` | FC1 only |
@@ -111,7 +114,7 @@ be verified against the PocketBeagle 2 expansion header pin map.
 
 | Peripheral | Interface | Linux Driver | Notes |
 | ------------ | ----------- | -------------- | ------- |
-| SLB9670 TPM 2.0 | SPI1 CS0 | `infineon,slb9670` | HMAC keys for radio frames |
+| SLB9672 TPM 2.0 | SPI1 CS0 | `infineon,slb9670` | HMAC keys for radio frames |
 | RFM95W LoRa 915 | SPI1 CS1 | `semtech,sx1276` | 47 CFR Part 15 Subpart C |
 | W25Q128JV NOR flash | SPI1 CS2 | `jedec,spi-nor` | 16 MiB, 3 partitions |
 | Logging microSD | SPI1 CS3 | `mmc-spi-slot` | ext4, noexec, CPLD WP |
@@ -139,7 +142,7 @@ sudo cp pru1-cargo-servo.out /lib/firmware/serenity/  # Cape-B PRU1
 
 ```
 
-PRU firmware source is in `serenity/firmware/pru/` (Phase 7).
+PRU firmware source is in `avionics/firmware/pru/` (Phase 7).
 
 ## References
 

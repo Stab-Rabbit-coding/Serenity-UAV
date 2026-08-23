@@ -3,7 +3,7 @@
 	(generator "pcbnew")
 	(generator_version "9.0")
 	(layer "F.Cu")
-	(descr "PHYTEC phyCORE-AM62x PCM-071 carrier footprint: 2x Samtec BTH-060-01-L-D-A (0.5mm, 2x60) + 2x M2.5 holes. Land pattern from Samtec BTH-XXX-XX-X-D-XX Rev D; module dims from PHYTEC L-1038e.A5. Pad names A1..D60 match Jayne_SoM_PCM071. Verify row<->column + pin-1 vs Fig 6.")
+	(descr "PHYTEC phyCORE-AM62x PCM-071 carrier footprint: 2x Samtec BTH-060-01-L-D-A (0.5mm, 2x60) + 2x M2.5 holes. Land pattern from Samtec BTH-XXX-XX-X-D-XX Rev D; module dims from PHYTEC L-1038e.A5. Pad names A1..D60 match Observer_SoM_PCM071. Verify row<->column + pin-1 vs Fig 6.")
 	(property "Reference" "U**"
 		(at 0 -23 0)
 		(layer "F.SilkS")

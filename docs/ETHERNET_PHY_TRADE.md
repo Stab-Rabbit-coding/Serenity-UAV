@@ -24,9 +24,9 @@ runs HSR/PRP hardware redundancy per IEC 62439-3.
 
 | Board | Ethernet front end | Host attach | Ring role |
 | --- | --- | --- | --- |
-| **Wash** | 2× TI DP83825I 10/100 PHY | RMII0 + RMII1 to AM6254 CPSW | Two ports = one ring node (in + out) |
-| **TACCO** | PHY deleted (Rev R1); rides the stack's Wash/COMMO ports | P1/P2 rails | Shares node ring ports |
-| **COMMO** | 1× ADIN1300 gigabit PHY | RMII to the TACCO stack | Adds the stack's 2nd port; also lets COMMO run Ethernet standalone |
+| **Pilot** | 2× TI DP83825I 10/100 PHY | RMII0 + RMII1 to AM6254 CPSW | Two ports = one ring node (in + out) |
+| **XO** | PHY deleted (Rev R1); rides the stack's Pilot/Commo ports | P1/P2 rails | Shares node ring ports |
+| **Commo** | 1× ADIN1300 gigabit PHY | RMII to the XO stack | Adds the stack's 2nd port; also lets Commo run Ethernet standalone |
 | **Observer** | Microchip KSZ9477 7-port managed switch | RGMII to AM62A7 | Hardware **HSR/PRP** ring switching per IEC 62439-3 |
 
 Both host SoCs (PB2-I AM6254, Observer AM62A7) ship a **native Ethernet MAC** already.
@@ -104,7 +104,7 @@ bridges.** The two things a bridge buys here (fewer support parts per port, easi
 routing) are small next to what it costs: the redundant ring, timing determinism,
 cheap isolation, and EM robustness — all explicit, load-bearing requirements.
 
-If the underlying motivation resurfaces as *"reduce the per-PHY glue on Wash,"* the
+If the underlying motivation resurfaces as *"reduce the per-PHY glue on Pilot,"* the
 on-architecture answer is to consolidate each PB2 node's two ports behind a small
 **managed switch with integrated PHYs and HSR/PRP** (the same KSZ9477/KSZ9567 family
 already vetted for Observer), which keeps the ring and the isolation while cutting
@@ -116,9 +116,9 @@ discrete parts. That is a separate trade, not a reason to adopt USB.
   isolation on CAN FD, RS-485, and Ethernet at every node; 500 W/m² operating
   objective.
 - `avionics/AGENTS.md` — Ethernet ring topology; KSZ9477 selected over LAN9355/
-  KSZ9563 for HSR/PRP hardware offload (AN3474); Wash 2× PHY, TACCO PHY-on-stack, COMMO
+  KSZ9563 for HSR/PRP hardware offload (AN3474); Pilot 2× PHY, XO PHY-on-stack, Commo
   ADIN1300, Observer KSZ9477.
-- `avionics/kicad/Wash.md` §1 — EMI-hardened dual DP83825I PHY (RMII0/RMII1).
+- `avionics/kicad/Pilot.md` §1 — EMI-hardened dual DP83825I PHY (RMII0/RMII1).
 - `avionics/kicad/Observer/Observer.md` — KSZ9477 7-port switch, HSR/PRP per IEC 62439-3.
 - [REF-MIL-002] MIL-STD-461G — RE102 radiated emissions / RS103 radiated
   susceptibility (200 V/m).

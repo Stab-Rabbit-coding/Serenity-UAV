@@ -2,8 +2,8 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Drafted by:** Claude Fable 5 (Anthropic), 2026-07-25/26
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**BOM designator:** `MAL-CAN-PERIPH-GW-PCB`
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**BOM designator:** `SKIPPER-CAN-PERIPH-GW-PCB`
 **Revision:** 2 (2026-07-26) — promoted to `N_STACKS=4` (deployed configuration)
 **Status:** Schematic + PCB regenerated at the deployed configuration, **`N_STACKS=4`**
 (one board per nacelle side — GW-PORT / GW-STBD — covering 2× ESC + 1× tilt servo +
@@ -14,7 +14,7 @@ captured into `gen_can_periph_gw_pcb.py` as a real per-stack template (not an
 invented grid) and mechanically tiled ×4 along a 50 mm lane pitch — verified via a
 sandboxed dry run that this placement logic is DRC-clean (0 shorts/clearance/
 courtyard from placement) at both N=1 (exact match to the real board) and N=4.
-Back-silkscreen attribution block added, matching the Wash/TACCO pattern.
+Back-silkscreen attribution block added, matching the Pilot/XO pattern.
 **Routing: freerouted via the Specctra DSN/freerouting 2.2.4 bridge**, 20-pass
 autorouter session, 296 → 47 unrouted nets (~84% routed), session self-terminated
 cleanly (this is the fixed 2.2.4 behavior — the earlier "never self-exits" finding
@@ -28,7 +28,7 @@ this ~84%-routed state; the remaining 47 nets are open manual/GUI routing work.
 
 ## Purpose
 
-`MAL-CAN-PERIPH-GW-PCB` is a standalone, TPM-secured gateway node that bridges a
+`SKIPPER-CAN-PERIPH-GW-PCB` is a standalone, TPM-secured gateway node that bridges a
 sensor or actuator onto **both** of this project's onboard digital buses — CAN-FD
 and RS-485, both galvanically isolated — signing every republished message with
 its on-board TPM. It is a clean-room remix of the *concept* behind VimDrones'
@@ -38,7 +38,7 @@ the three components requested for this task:
 
 | Addition | Part | Datasheet in repo |
 | --- | --- | --- |
-| Trusted platform module | Infineon OPTIGA™ TPM SLB 9670 TPM2.0 | `avionics/datasheets/SLB_9670VQ20_Infineon.pdf` |
+| Trusted platform module | Infineon OPTIGA™ TPM SLB 9672 TPM2.0 | `avionics/datasheets/SLB_9672XU20_Infineon.pdf` |
 | Isolated CAN-FD transceiver | TI ISOW1044BDFMR | `avionics/datasheets/isow1044.pdf` |
 | Isolated RS-485 transceiver | ADI ADM2795E | `avionics/datasheets/adm2795e.pdf` |
 
@@ -85,7 +85,7 @@ GPL-licensed VimDrones schematic content needs to be touched at all.
                                           SPI0    │        │  UART0 + GPIO
                                      ┌────────────┘        └────────────┐
                                      ▼                                  ▼
-                          U2 SLB9670 TPM                    U3 ISOW1044 ── U4 ADM2795E
+                          U2 SLB9672 TPM                    U3 ISOW1044 ── U4 ADM2795E
                           (signs every                      (isolated      (isolated
                            republished                       CAN-FD)       RS-485)
                            message)                             │              │
@@ -96,7 +96,7 @@ GPL-licensed VimDrones schematic content needs to be touched at all.
 
 U1 reads the local sensor/actuator (AK7455 SPI, or ESC UART/TTL/PWM/BSHOT), has
 the TPM sign the outgoing telemetry/command frame, and republishes it on **both**
-isolated buses so every other node on the airframe (River, Simon, Wash/TACCO at
+isolated buses so every other node on the airframe (River, Simon, Pilot/XO at
 every stack, etc.) can see it without trusting an unsigned local link.
 
 ## Deployment (3 use cases, same board type)
@@ -104,7 +104,7 @@ every stack, etc.) can see it without trusting an unsigned local link.
 ### 1. Nacelle tilt-encoder gateway (ENC-PORT / ENC-STBD, 2×)
 
 Reads the local **AK7455** off-axis tilt encoder (`ENC-NACELLE-1.md`,
-`MAL-TILT-ENC-PCB`) over its **existing, unmodified** 7-wire SPI+ERROR pigtail —
+`SKIPPER-TILT-ENC-PCB`) over its **existing, unmodified** 7-wire SPI+ERROR pigtail —
 `J_ENC` on this board uses the identical `Serenity-Custom:Pigtail_7W_DirectSolder`
 footprint with the same pad 1–7 assignment as ENC-NACELLE-1's own P1
 (GND, CSN, SCLK, MOSI, MISO, +3V3, ERROR), so the existing pigtail plugs in
@@ -113,12 +113,12 @@ unchanged.
 **This resolves the open cross-subsystem item recorded in `ENC-NACELLE-1.md`
 "Host assignment" and `airframe/wings-nacelles/WBS.md`**: previously, River
 (primary) / Simon (alternate) were expected to read the AK7455 SPI bus directly
-over a long wire run through the airframe, and `Wash.md` §13 still listed a
+over a long wire run through the airframe, and `Pilot.md` §13 still listed a
 legacy AS5600 I²C `J_ENC`. With this gateway in place, **River/Simon no longer
 read the encoder directly at all** — they receive the TPM-signed tilt angle over
-CAN-FD/RS-485 like every other piece of telemetry on the airframe. `Wash.md` §13
+CAN-FD/RS-485 like every other piece of telemetry on the airframe. `Pilot.md` §13
 still needs a documentation pass to drop the stale `J_ENC` I²C line (flagged in
-TODO.md; not edited here since it is Wash's own file, out of this board's scope).
+TODO.md; not edited here since it is Pilot's own file, out of this board's scope).
 
 ### 2. Per-EDF ESC gateway (ESC-{PORT,STBD}-{FWD,AFT}, 4×)
 
@@ -156,6 +156,29 @@ designs) matches root `AGENTS.md`'s explicit goal: *"Avionics, comms, and
 software are designed for reuse on other UAV/UGV/USV/robot platforms, not just
 this airframe."*
 
+**⚠ Open item, added 2026-08-02 — LibreServo v2 needs differential RS-485, not
+single-wire TTL.** The nacelle tilt servos and the cargo winch servo are all
+migrating to SPT5425LV converted with LibreServo v2 (`REFERENCES.md`
+"Servo Fleet Standardisation, 2026-08-02"; `docs/CARGO_WINCH_SPECIFICATION.md`
+Rev C §3.1.1). LibreServo v2's daisy-chain bus is genuine differential RS-485
+(an A/B pair through an onboard transceiver), not the single-wire half-duplex
+TTL scheme `FLEX_TTL_GPIO` was designed for above. `J_FLEX` exposes a bare
+`FLEX_UART_TX/RX` pair but no RS-485 transceiver of its own for this local
+servo drop — this board's own isolated RS-485 trunk (Section E, ISOW1412,
+`RS485_A`/`RS485_B`) is dedicated to the board-to-board uplink to Pilot/XO,
+not intended as a shared local servo sub-bus without further isolation/
+topology review. **Not resolved here.** Two interim options, neither selected:
+(1) add a local RS-485 transceiver fed from `FLEX_UART_TX/RX`, dedicated to
+the servo drop; or (2) extend the existing isolated RS-485 trunk to also
+carry the local servo traffic, if that can be done without compromising the
+isolation/topology it exists for. **Longer-term:** per the LibreServo v2 fork
+maintainer, the fork's in-progress isolated-RS-485/isolated-CAN-FD/SLB9672-TPM
+upgrade is intended so a converted servo can attach *directly* to the
+airframe's isolated CAN-FD/RS-485 trunks and sign its own frames — no gateway
+bridge needed for this application once that ships (not yet — schematic-only,
+TPM not started as of 2026-08-02). Filed in `airframe/fuselage-mid/WBS.md`
+§1.1.1.2.1b and `avionics/WBS.md`.
+
 ## Stackable: N complete trust modules on one PCB
 
 Set `N_STACKS` at the top of `scripts/gen_can_periph_gw_sch.py` (and the PCB
@@ -190,7 +213,7 @@ physical infrastructure is generated once for the whole board:
 | Shared once per board | Per-stack (own copy each) |
 | --- | --- |
 | +5V input connector + TLV62569 3V3 buck | U1 MSPM0G3507 MCU |
-| CAN-FD bus connectors (IN/OUT) + 120 Ω term | U2 SLB9670 TPM |
+| CAN-FD bus connectors (IN/OUT) + 120 Ω term | U2 SLB9672 TPM |
 | RS-485 bus connectors (IN/OUT) + 120 Ω term | U3 ISOW1044BDFMR (+ its own integrated isolated DC-DC) |
 | `CAN_H` / `CAN_L` / `ISO_GND_CAN` nets | U4 **ISOW1412** (+ its own integrated isolated DC-DC — REF-SENSOR-010) |
 | `RS485_A` / `RS485_B` / `ISO_GND_485` nets | `J_ENC`, `J_FLEX`, `J_SWD` (independent programming/debug per MCU) |
@@ -227,14 +250,36 @@ the schematic generator so the two can never drift out of sync.
 - **A — Power:** JST-GH 2P +5V/GND in → TI TLV62569 buck → +3V3 (identical
   topology to Observer's own Section A, reused verbatim — already-verified
   regulator circuit).
-- **B — MCU (U1, TI MSPM0G3507):** `Jayne_MSPM0G3507_RGZ` clean-room symbol
+- **B — MCU (U1, TI MSPM0G3507):** `Observer_MSPM0G3507_RGZ` clean-room symbol
   reused verbatim (QFN-48-1EP 7×7 mm, ERC-0-proven on Observer). NRST 10 kΩ
   pull-up, VCORE 1 µF decouple, SWD 4-pin program header.
-- **C — TPM (U2, Infineon SLB9670):** `Jayne_SLB9670_TPM` clean-room symbol
+- **C — TPM (U2, Infineon SLB9672):** `SLB9672_TPM` clean-room symbol
   reused verbatim (QFN-32-1EP 5×5 mm). RST# gets an explicit 10 kΩ pull-up
   (datasheet notes only a *weak* internal pull-up); pin 1 and pin 14 tied to
   VDD and pin 16 to GND per the datasheet's own TCG-compliance notes (Table 5).
-- **D — Isolated CAN-FD (U3, TI ISOW1044BDFMR):** `Jayne_ISOW1044BDFMR`
+  **This is current as-built** — see the planned-but-not-implemented change
+  immediately below before assuming U2 stays an SLB9672.
+
+> **⚠ Planned change, NOT implemented (2026-08-06): SLB9672 → OPTIGA™ Trust M.**
+> At the user's direction, U2 on this board is slated to move from the SPI
+> SLB9672 TPM to the Infineon OPTIGA™ Trust M I²C secure element, citing the
+> SLB9672's TPM-2.0 startup/self-test sequence as a boot-latency concern —
+> see REF-SENSOR-016. **Nothing in this section, or `.kicad_sch`, has been
+> edited to reflect that yet.** Two things block it: (1) the primary OPTIGA
+> Trust M datasheet was unreachable in the session that recorded this
+> decision (`infineon.com` blocked by network egress policy), so there is no
+> verified pin-to-pad table to build a clean-room symbol from — exactly the
+> same category of gate the STS3215 servo datasheet hit (`docs/CARGO_WINCH_SPECIFICATION.md`
+> §3.1, historical); (2) `kicad-cli` was not available in that session, so
+> even a verified edit could not be ERC-checked before committing, and this
+> board's own `N_STACKS` templating makes a per-stack part swap higher-risk
+> than a single-instance edit. Because OPTIGA Trust M is I²C rather than
+> SPI, this is not a drop-in pin-for-pin substitution: it removes the
+> dedicated TPM SPI bus (freeing those MCU pins) and needs an I²C bus
+> assignment instead — a real design decision, not just a part-number
+> change. Tracked in `avionics/WBS.md` §1.9.2. **Until this is resolved, U2
+> is an SLB9672 in every design artifact on this board.**
+- **D — Isolated CAN-FD (U3, TI ISOW1044BDFMR):** `Observer_ISOW1044BDFMR`
   clean-room symbol reused verbatim. STB tied to GND (normal mode); EN/FLT
   routed to a spare MCU GPIO (`CANFD_FLT_N`) for fault visibility rather than
   left floating — a real, datasheet-supported feature of the part, not
@@ -266,11 +311,11 @@ the schematic generator so the two can never drift out of sync.
 **This board no longer uses ADM2795E or the `GW_ADM2795E` symbol at all** — RS-485
 is TI **ISOW1412** fleet-wide as of 2026-07-26 (REFERENCES.md REF-SENSOR-010; see
 "Stackable" above). Kept below as the historical record of the defect that was
-found and fixed in Wash/TACCO while this board was still being designed against
+found and fixed in Pilot/XO while this board was still being designed against
 ADM2795E; that fix (`avionics/kicad/fix_wash_zoe_isolators.py`) has since shipped.
 
-**The `ADM2795EBRWZ` symbol already embedded in `Wash.kicad_sch` and
-`TACCO.kicad_sch` has incorrect pin numbers** — found while researching this
+**The `ADM2795EBRWZ` symbol already embedded in `Pilot.kicad_sch` and
+`XO.kicad_sch` has incorrect pin numbers** — found while researching this
 board. Its pin list assigns a pin **17** to a 16-pin part and a duplicate pin
 number **20** to two different pin names (`VCC1` and `GND2`), inconsistent with
 the real ADM2795E datasheet (Analog Devices Rev D, 16-lead SOIC_W / RW-16
@@ -291,7 +336,7 @@ authored fresh from Table 10 ("Pin Function Descriptions") of
 | 8 | GND1 | 16 | VDD2 |
 
 Footprint: `Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm` (real KiCad system
-footprint, matches the datasheet's RW-16 package body). **The Wash/TACCO defect
+footprint, matches the datasheet's RW-16 package body). **The Pilot/XO defect
 has since been fixed** (`avionics/kicad/fix_wash_zoe_isolators.py`, 2026-07-26)
 as part of the same fleet-wide swap to ISOW1412 — see REFERENCES.md
 REF-SENSOR-010 and "Removed / Superseded Citations".
@@ -332,9 +377,29 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
    Firmware in ArduPilot's AP_Periph is GPLv3 — a separate licensing domain
    from this CC-BY-4.0 hardware design (same relationship every ArduPilot-based
    board in this project already has).
-6. **`Wash.md` §13** still lists a legacy AS5600 I²C `J_ENC` — needs a
+6. **`Pilot.md` §13** still lists a legacy AS5600 I²C `J_ENC` — needs a
    documentation-only edit to note the encoder is now read via this gateway,
-   not directly. Flagged, not edited here (Wash's own file).
+   not directly. Flagged, not edited here (Pilot's own file).
+7. **LibreServo v2 RS-485 servo bus (added 2026-08-02), not resolved.** See
+   "Servo actuator gateway" above — `J_FLEX` has no local RS-485 transceiver
+   for the differential bus the SPT5425LV/LibreServo v2 servos now need.
+   Decide the interim transceiver approach (dedicated part fed from
+   `FLEX_UART_TX/RX`, or extend the existing isolated RS-485 trunk) before
+   winch or nacelle-tilt firmware bring-up. **Watch for a bigger change:**
+   per the LibreServo v2 fork maintainer, the fork's in-progress isolated
+   RS-485 + isolated CAN-FD + SLB9672 TPM upgrade is intended to let a
+   converted servo attach **directly** to the airframe's isolated CAN-FD/
+   RS-485 trunks as its own self-signing bus node — no gateway bridge at all
+   for that application. Not shipped yet (schematic-only, no firmware port,
+   TPM not started as of 2026-08-02); if/when it lands, this board's role for
+   the winch/nacelle-tilt servos may be eliminated rather than just rewired.
+   Re-check before committing to either interim transceiver option above.
+8. **SLB9672 → OPTIGA™ Trust M (added 2026-08-06), not resolved.** See the
+   callout in "Section-by-section design" §C above and REF-SENSOR-016.
+   Blocked on primary-datasheet access (network egress) and `kicad-cli`
+   availability (ERC verification) — do not edit `U2`'s symbol/footprint
+   until both are available and a real pin-to-pad table is in hand. Also
+   needs an I²C bus assignment decision (this is not a pin-for-pin swap).
 
 ## Verification
 
@@ -355,7 +420,7 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
 | Ref | Part | Package | Datasheet |
 | --- | --- | --- | --- |
 | U1 | TI MSPM0G3507 | QFN-48-1EP 7×7 mm | REF-SENSOR-004 |
-| U2 | Infineon SLB9670VQ2.0 | PG-VQFN-32-13 | `SLB_9670VQ20_Infineon.pdf` |
+| U2 | Infineon SLB9672XU2.0 | PG-UQFN-32-1,-2 | `SLB_9672XU20_Infineon.pdf` |
 | U3 | TI ISOW1044BDFMR | SOIC-20W 7.5×12.8 mm | `isow1044.pdf` |
 | U4 | ADI ADM2795EBRWZ | SOIC-16W 7.5×10.3 mm | `adm2795e.pdf` |
 | U_REG_3V3 | TI TLV62569DBVR | SOT-23-6 | ti.com/lit/ds/symlink/tlv62569.pdf |
@@ -365,11 +430,69 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
 
 - `avionics/kicad/ENC-NACELLE-1.md` — the AK7455 tilt-encoder board this
   gateway's `J_ENC` mates with.
-- `avionics/kicad/Observer/Observer.md` — source of the MSPM0G3507/SLB9670/ISOW1044
+- `avionics/kicad/Observer/Observer.md` — source of the MSPM0G3507/SLB9672/ISOW1044
   clean-room symbols reused here.
 - `docs/references/vimdrones_can_periph_pico_v1.0.stl`,
   `docs/references/vimdrones_esc_s50_v1.0.step` — mechanical reference models
   already in the repo for the two VimDrones products this board's concept
   draws on (informational/fit reference only, not electrically reused).
 - `REFERENCES.md` — REF-SENSOR entries for ISOW1044/ADM2795E/SLB9670, and the
-  Wash/TACCO ADM2795E pin-numbering defect note.
+  Wash/Zoë ADM2795E pin-numbering defect note.
+
+---
+
+## 2026-08-03 — Trust-module MCU/TPM retarget
+
+The trust module on this board now uses **TI MSPM0G3518-Q1 (`M0G3518QRHBRQ1`)** (32-pin RHB VQFN 5×5 mm, 256 KB flash / 128 KB SRAM) and the
+**Infineon SLB 9672AU2.0** TPM (PG-UQFN-32-1,-2, extended −40 to +105 °C), superseding the
+MSPM0G3507 and SLB9670VQ2.0.  Parts and the specifications applied are catalogued as
+REF-SENSOR-017 and REF-SEC-002 in `REFERENCES.md`; the change was applied by
+`avionics/kicad/retarget_mspm0g351x_slb9672.py` and `avionics/kicad/retarget_pcb_footprints.py`,
+which also wrote `.pre-g351x` backups beside each edited file.
+
+Each of the four tiled lanes drops from the 48-pin RGZ to the 32-pin RHB package. The
+RHB-32 bonds out **PA0–PA27 only** — no PBx port exists (SLASFA6B Fig 6-6) — so the five
+signals that were on PBx were rehomed onto free PA pins that still carry the required
+function:
+
+| Signal | was | now | function |
+|---|---|---|---|
+| `RS485_TX` | PB15 pad 25 | PA8 pad 12 | `UART1_TX` PF2 |
+| `RS485_RX` | PB16 pad 26 | PA9 pad 13 | `UART1_RX` PF2 |
+| `RS485_DE` | PB2 pad 14 | PA21 pad 25 | GPIO |
+| `RS485_FLT_N` | PA8 pad 16 | PA22 pad 26 | GPIO |
+| `FLEX_PWM_IO` | PB3 pad 15 | PA25 pad 29 | `TIMA0_C3` PF5 |
+| `FLEX_BSHOT_IO` | PB6 pad 20 | PA26 pad 30 | `TIMG8_C0` PF4 |
+
+PA10, PA11 and PA27 are left spare. All 30 connections per lane are accounted for; the
+schematic netlist was verified pad-for-pad against this table after the change.
+
+**The PCB needs re-routing.** `U1_1` and `U1_2` were re-anchored on their original origins
+and rotations, but going from 48 pads at 7×7 mm to 32 pads at 5×5 mm leaves every trace
+into them dangling. `U1_3`/`U1_4` are in the schematic but were never placed, so only two
+lanes exist on the board today.
+
+Open items from this pass are tracked in `TODO.md` §1.2d — read those before ordering
+anything from this board.
+- `REFERENCES.md` — REF-SENSOR entries for ISOW1044/ADM2795E/SLB9672, and the
+  Pilot/XO ADM2795E pin-numbering defect note.
+
+### DRC status after the retarget
+
+Measured in place (a `.kicad_pcb` copied away from its project directory loses the
+sibling `.kicad_pro` custom rules and netclasses, and the counts become meaningless):
+
+| Board | before | after |
+|---|---|---|
+| Observer | 289 | 289 — unchanged |
+| CAN-PERIPH-GW-1 | 743 | 804 |
+
+The gateway's +61 are `clearance` violations in the MCU area, where the 48-pin traces
+still run to a footprint that is now 32 pads at 5 x 5 mm. They clear with the manual
+re-route tracked in TODO.md 1.2d.
+
+The exposed-pad corrections are applied as an in-place edit of the placed footprint
+(library reference, Value and the thermal pad only). Rebuilding the footprint from the
+library instead would discard whatever the board author tuned on that instance — mask
+margins, pad clearance overrides, zone connections — which showed up as ~180 spurious
+clearance / solder-mask-bridge / shorting violations on Observer before this was fixed.

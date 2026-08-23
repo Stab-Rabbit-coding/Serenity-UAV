@@ -6,8 +6,9 @@
  * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
- * Integrates the INA226 current monitors on FlightEngineer and the BQ76930 cell
- * monitor to provide a unified power fault state machine for the Serenity UAV.
+ * Integrates the INA226 current monitors on Flight Engineer and the BQ76930
+ * cell monitor to provide a unified power fault state machine for the Serenity
+ * UAV.
  *
  * The fault manager runs as a periodic task on the primary FC node (FC1).
  * It polls all INA226 current sensors and the BQ76930 at the rates defined
@@ -64,10 +65,11 @@ extern "C" {
 #endif
 
 /* ---------------------------------------------------------------------------
- * Number of FlightEngineer ESC current monitor channels
+ * Number of Flight Engineer ESC current monitor channels
  * ---------------------------------------------------------------------------*/
 
-/** Number of ESC current channels on FlightEngineer (Phases 5–10; ESC5 is Phase 11). */
+/** Number of ESC current channels on Flight Engineer (Phases 5–10; ESC5 is
+ * Phase 11). */
 #define PWR_FAULT_ESC_COUNT                (4U)
 
 /* ---------------------------------------------------------------------------
@@ -222,9 +224,8 @@ typedef struct pwr_fault_ctx pwr_fault_ctx_t;
  * ESC INA226 devices are at I2C addresses 0x40–0x43 (ESC1–ESC4).
  * Main bus INA226 is at 0x44.  BQ76930 is at 0x08.
  *
- * @param[in]  i2c_dev_pdb  Path to the I2C bus connected to FlightEngineer monitors
- *                          (e.g. "/dev/i2c-2"; Wash Shepherd's room / Bay A
- * J_EXT_I2C).
+ * @param[in]  i2c_dev_pdb  Path to the I2C bus connected to Flight Engineer
+ * monitors (e.g. "/dev/i2c-2"; Pilot Shepherd's room / Bay A J_EXT_I2C).
  * @param[out] ctx_out      Set to the manager context on success.
  * @return 0 on success, negative errno on error.
  */

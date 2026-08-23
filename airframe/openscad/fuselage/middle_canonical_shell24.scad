@@ -24,15 +24,15 @@
 //
 // Rev R (2026-06-11): Rev R baseline checkpoint — no geometry changes.
 // Rev S1 (2026-06-09): Simon avionics bay (Faraday enclosure) on dorsal interior;
-//   FlightEngineer power distribution board and 6S battery tray on ventral interior.
+//   Flight Engineer power distribution board and 6S battery tray on ventral interior.
 //   Simon is the aft avionics SBC stack (CLAUDE.md: aft EDF control, alternate
 //   nacelle/watchdog, Observer cargo control, 49 MHz primary, SiK backup).
-//   FlightEngineer is the power distribution board (CLAUDE.md: "Everything is shiny.").
-//   Simon bay: Cape-B-2 (TACCO) + PB2-I + Cape-A-2 (Wash) + PB2-I; 55×35 mm PCBs.
+//   Flight Engineer is the power distribution board (CLAUDE.md: "Everything is shiny.").
+//   Simon bay: Cape-B-2 (XO) + PB2-I + Cape-A-2 (Pilot) + PB2-I; 55×35 mm PCBs.
 //   Faraday tray: 60×40×55 mm external, same spec as cargo Rev S4 and head Rev S1.
 //   4× M3 dorsal boss anchors (±25×±15 mm); 62×42 mm dorsal access panel.
 //   Fan (25×25×7 mm) exhausts into fuselage interior; 22×22 mm honeycomb intake.
-//   FlightEngineer tray: 100×60 mm footprint, ventral keel at station 190 mm.
+//   Flight Engineer tray: 100×60 mm footprint, ventral keel at station 190 mm.
 //     4× M3 boss anchors; 110×70 mm ventral access hatch.
 //   Battery: 6S 4000 mAh LiPo ≈ 145×44×50 mm; ventral, station 190 mm, keel.
 //     Battery tray boss pattern: ±60 mm (X) × ±20 mm (Z) from tray centre.
@@ -353,7 +353,7 @@ DUCT_CELL_D    =   6.0;   // mm, honeycomb cell diameter (λ/2 cutoff > 25 GHz)
 // ── Simon avionics bay — dorsal interior, mid-fuselage (Rev S1) ──────────────
 //
 // Simon (CLAUDE.md: aft avionics bay) is the primary aft-EDF and alternate
-// watchdog SBC.  Cape-B-2 (TACCO) + PB2-I + Cape-A-2 (Wash) + PB2-I stack.
+// watchdog SBC.  Cape-B-2 (XO) + PB2-I + Cape-A-2 (Pilot) + PB2-I stack.
 //
 // DORSAL INTERIOR FACE Y:
 //   Dorsal exterior ≈ CY + 62 = -5 mm.  Interior face ≈ -5 - 2.5 = -7.5 mm.
@@ -381,9 +381,9 @@ SIMON_BOSS_DZ     =  15.0;         // mm, ±Z boss offset
 SIMON_PANEL_X     =  62.0;         // mm, dorsal access panel opening X
 SIMON_PANEL_Z     =  42.0;         // mm, dorsal access panel opening Z
 
-// ── FlightEngineer power distribution board + battery — ventral keel (Rev S1) ────────
+// ── Flight Engineer power distribution board + battery — ventral keel (Rev S1) ────────
 //
-// FlightEngineer (CLAUDE.md: PDB, "Everything is shiny") and the main 6S 4000 mAh
+// Flight Engineer (CLAUDE.md: PDB, "Everything is shiny") and the main 6S 4000 mAh
 // flight battery are mounted at the ventral keel of the mid-fuselage section.
 //
 // Battery: 6S 4000 mAh LiPo (e.g., Tattu R-Line 6S 4000 mAh):
@@ -392,7 +392,7 @@ SIMON_PANEL_Z     =  42.0;         // mm, dorsal access panel opening Z
 //   Tray boss pattern: ±70 mm (X) × ±24 mm (Z) from tray centre.
 //   Access hatch: 150×50 mm opening on ventral face.
 //
-// FlightEngineer PDB: 100×80 mm (estimate — verify against actual FlightEngineer layout).
+// Flight Engineer PDB: 100×80 mm (estimate — verify against actual Flight Engineer layout).
 //   Station 255 mm from nose → X_stl = 284 - 255 = 29 mm.
 //   Place AFT (lower X) of battery; adjacent in X with 10 mm gap.
 //   Tray boss pattern: ±45 mm (X) × ±35 mm (Z) from tray centre.
@@ -401,7 +401,7 @@ SIMON_PANEL_Z     =  42.0;         // mm, dorsal access panel opening Z
 // VENTRAL INTERIOR FACE Y:
 //   Ventral exterior ≈ CY - 62 = -129 mm.  Interior ≈ -129 + 2.5 = -126.5 mm.
 //   KAYLEE_VENTRAL_Y = VENTRAL_Y + WALL_MM ≈ -126.5 mm.  VERIFY in slicer.
-//   Ref: CLAUDE.md FlightEngineer / battery placement; TODO §1.4.5; bom_revO.csv 6S cell.
+//   Ref: CLAUDE.md Flight Engineer / battery placement; TODO §1.4.5; bom_revO.csv 6S cell.
 KAYLEE_VENTRAL_Y    = VENTRAL_Y + WALL_MM;  // mm, interior ventral face Y (VERIFY slicer)
 KAYLEE_BOSS_ROT     = [-90, 0, 0];          // rotate cylinder: +Z → +Y (protrudes up into interior)
 
@@ -413,9 +413,9 @@ BATT_BOSS_DZ        =  24.0;   // mm, ±Z boss offset (battery 44 mm / 2 + 2 mm 
 BATT_HATCH_X        = 150.0;   // mm, ventral hatch opening X (battery 145 mm + 5 mm)
 BATT_HATCH_Z        =  50.0;   // mm, ventral hatch opening Z (battery 44 mm + 6 mm)
 
-// FlightEngineer PDB tray
-KAYLEE_X_CEN        =  29.0;   // mm, FlightEngineer tray X centre (sta 255 mm from nose)
-KAYLEE_Z_CEN        = MID_Z;   // mm, FlightEngineer tray Z centre = CZ = 36.47 mm
+// Flight Engineer PDB tray
+KAYLEE_X_CEN        =  29.0;   // mm, Flight Engineer tray X centre (sta 255 mm from nose)
+KAYLEE_Z_CEN        = MID_Z;   // mm, Flight Engineer tray Z centre = CZ = 36.47 mm
 KAYLEE_BOSS_DX      =  45.0;   // mm, ±X boss offset (PDB 100 mm / 2 - 5 mm)
 KAYLEE_BOSS_DZ      =  35.0;   // mm, ±Z boss offset (PDB 80 mm / 2 - 5 mm)
 KAYLEE_HATCH_X      = 105.0;   // mm, ventral hatch opening X (PDB 100 mm + 5 mm)
@@ -450,7 +450,7 @@ module simon_dorsal_panel_cut() {
 // ----------------------------------------------------------------------------
 // Module: ventral_boss
 //   Single M3 heat-set insert boss on interior ventral face, protruding +Y
-//   (upward into mid-fuselage interior).  Used for both FlightEngineer and battery trays.
+//   (upward into mid-fuselage interior).  Used for both Flight Engineer and battery trays.
 // ----------------------------------------------------------------------------
 module ventral_boss(x_pos, z_pos) {
     translate([x_pos, KAYLEE_VENTRAL_Y, z_pos])
@@ -463,7 +463,7 @@ module ventral_boss(x_pos, z_pos) {
 
 // ----------------------------------------------------------------------------
 // Module: ventral_hatch_cut
-//   Rectangular through-cut in ventral skin for battery/FlightEngineer tray access.
+//   Rectangular through-cut in ventral skin for battery/Flight Engineer tray access.
 //   Y span: KAYLEE_VENTRAL_Y − WALL_MM − 1.0 through KAYLEE_VENTRAL_Y + 1.0.
 //   Hatch cover is a separate PETG part with 5 mm shoulder lip.
 // ----------------------------------------------------------------------------
@@ -485,14 +485,14 @@ module ventral_hatch_cut(x_cen, z_cen, hatch_x, hatch_z) {
 //   │  ├─ ant49_boss            ← 49 MHz antenna post (only external protrusion)
 //   │  ├─ simon_dorsal_boss ×4  ← Simon Faraday tray anchor bosses on dorsal face
 //   │  ├─ ventral_boss ×4       ← battery tray anchors on ventral keel face
-//   │  └─ ventral_boss ×4       ← FlightEngineer PDB tray anchors on ventral keel face
+//   │  └─ ventral_boss ×4       ← Flight Engineer PDB tray anchors on ventral keel face
 //   ├─ vlsensor_cut ×8          ← ToF sensor apertures
 //   ├─ gps_cut                  ← GPS patch recess + dome-cover holes
 //   ├─ ant49_cut                ← 49 MHz M4 bore + flange recess
 //   ├─ sma_cut ×3               ← SiK, ZigBee, WiFi SMA bulkheads
 //   ├─ simon_dorsal_panel_cut   ← 62×42 mm Simon Faraday tray access opening
 //   ├─ ventral_hatch_cut        ← 150×50 mm battery tray access hatch
-//   └─ ventral_hatch_cut        ← 105×90 mm FlightEngineer PDB access hatch
+//   └─ ventral_hatch_cut        ← 105×90 mm Flight Engineer PDB access hatch
 //
 difference() {
     union() {
@@ -532,12 +532,12 @@ difference() {
         for (dz = [-BATT_BOSS_DZ, BATT_BOSS_DZ])
             ventral_boss(BATT_X_CEN + dx, BATT_Z_CEN + dz);
 
-        // FlightEngineer PDB tray anchor bosses — 4× M3 on ventral keel face.
+        // Flight Engineer PDB tray anchor bosses — 4× M3 on ventral keel face.
         //   Station 255 mm: X_stl = 29 mm.  Boss X: 29 ± 45 = -16..74 mm.
         //   NOTE: -16 mm is AFT of middle section fore edge; VERIFY in slicer.
         //   Boss Z: CZ ± 35 = 1.47..71.47 mm — verify within section Z bounds.
-        //   VERIFY boss positions in slicer — PDB footprint TBD after FlightEngineer layout.
-        //   Ref: CLAUDE.md FlightEngineer PDB; TODO §1.4.5.
+        //   VERIFY boss positions in slicer — PDB footprint TBD after Flight Engineer layout.
+        //   Ref: CLAUDE.md Flight Engineer PDB; TODO §1.4.5.
         for (dx = [-KAYLEE_BOSS_DX, KAYLEE_BOSS_DX])
         for (dz = [-KAYLEE_BOSS_DZ, KAYLEE_BOSS_DZ])
             ventral_boss(KAYLEE_X_CEN + dx, KAYLEE_Z_CEN + dz);
@@ -580,7 +580,7 @@ difference() {
     //   VERIFY hatch bounds and battery fit in slicer — 6S cell dims TBD.
     ventral_hatch_cut(BATT_X_CEN, BATT_Z_CEN, BATT_HATCH_X, BATT_HATCH_Z);
 
-    // FlightEngineer PDB ventral access hatch (Rev S1).
+    // Flight Engineer PDB ventral access hatch (Rev S1).
     //   105×90 mm hatch at (KAYLEE_X_CEN, KAYLEE_Z_CEN) on ventral skin.
     //   Provides field access to PDB connectors, fuses, and current sensors.
     //   Hatch cover: 115×100 mm PETG, 5 mm shoulder, 4× M2.5 flush-head screws.

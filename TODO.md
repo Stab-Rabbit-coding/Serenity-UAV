@@ -1,8 +1,8 @@
 # Serenity UAV — TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY SA 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-07-31
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
+**Last updated:** 2026-08-01
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -22,37 +22,9 @@
 
 *(All items completed 2026-07-18)*
 
-
-### 0.6 Update and correct documentation touching every non-archived file.
-
-→ detail: `docs/WBS.md` §0.6
-
-
-#### 0.6.1 Systems
-
-→ detail: `docs/WBS.md` §1.6.1
-
-- [ ] Verify and update airframe specifications vs as built for each component.
-- [ ] Verify avionics specifications vs as- built.
-- [ ] Verify and update all assessment and engineering documents.
-- [ ] Verify and update all software, firmware, and scripts, along with their documentation.
-
-
-#### 0.6.2 Documentation
-
-→ detail: `docs/WBS.md` §0.6.2
-
-- [ ] Verify and update all compliance and licensing documents.
-- [ ] Verify and update all READM1E files and the starting with subsystem ones and correcting the root README to match.
-- [ ] Verify and update the system specification files and BOM.
-- [ ] Verify and update the WBS and TODO files. 
-- [ ] Verify and update the REFERENCES.md file.
-
-
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
 
 → detail: `docs/WBS.md` §0.7
-
 
 ### 0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
 
@@ -62,20 +34,30 @@
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
 - [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 
+### 0.10 Update and correct documentation touching every non-archived file.
 
-### 0.9 Licensing Updates
+→ detail: `docs/WBS.md` §0.10
 
-→ detail: `docs/WBS.md` §0.9
+*(Renumbered 2026-08-01 from a colliding "0.6" — root `WBS.md` §0.6 was already the distinct,
+completed "IEC 62368-1 PCB Layout Isolation Verification" item, so the old label here was not
+a valid cross-reference. Renumbered in both files, and moved after §0.9 here for ascending
+numeric order.)*
 
-- [ ] Correct Thingiverse model license to CC-BY-SA 4.0.
-- [ ] Do a clean-room derivation of the nacelle shells from QMX blueprints and nick henning drawings.
-- [ ] License wings, nacelles, landing gear, cargo system, and all other original airframe components under CERN-OHL-W.
-- [ ] License all avionics under CERN-OHL-W.
-- [ ] License all documentation,code, scripts, drawings, and other non-hardware items under CC-BY-SA.
-- [ ] Create License files for each subsystem  folder with clear, unambiguous federation from root License and docs/attribution_and_licencing.md
-- [ ] Create all other supporting documents for OSHW certification 
-- [ ] Apply
+#### 0.10.1 Systems
 
+→ detail: `docs/WBS.md` §0.10.1
+
+- [ ] Verify and update airframe specifications vs as built for each component.
+- [ ] Verify avionics specifications vs as- built.
+- [ ] Verify and update all assessment and engineering documents.
+- [ ] Verify and update all software, firmware, and scripts, along with their documentation.
+
+#### 0.10.2 Documentation
+
+→ detail: `docs/WBS.md` §0.10.2
+
+- [ ] Verify and update the system specification files and BOM.
+- [ ] Verify and update the WBS and TODO files.
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
@@ -115,29 +97,29 @@
 - [ ] Regenerate cargo_sect_shell24.stl
 - [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
 - [ ] Add SG90 bell-crank boss to inner face of each door panel
-- [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
+- [ ] ★ Bench-verify SPT5425LV stall current + pin-removal procedure (was: STS3215 datasheet gate)
 - [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
 - [ ] Verify Part 107 dropped-object section number
 - [ ] Containment checks on assembly + pre-flight cards
-- [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
+- [ ] ★ Shed threshold vs maneuver envelope (2.0g = 0.98x)
 - [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
 - [ ] Set servo torque ceiling below T_slip (wear protection)
-- [ ] Servo mode: encoded continuous rotation (not stepper)
+- [ ] Servo mode: continuous rotation by construction (pin removed); confirm LibreServo v2 protocol commands
 - [ ] Mark winch spool a consumable (wear item + spare)
 - [ ] AK7455 spool encoder on gateway J_ENC (spec §3.7.3)
 - [ ] Implement the six Rev S winch STLs
 - [ ] Winch pedestal M3 boss stations in cargo_sect_shell24.scad
-- [ ] Half-duplex TTL bus wiring on FLEX_TTL_GPIO
+- [ ] RS-485 differential bus wiring for LibreServo v2 (was: half-duplex TTL on FLEX_TTL_GPIO)
 - [ ] Catch solenoid drive (AO3400 + pull-down + SS34)
 - [ ] Bench-calibrate ratchet slip to 8.0 N ± 1.0 N
 - [ ] Line-shed test (inboard end must NOT be anchored)
 - [ ] Winch state machine firmware (Simon + gateway)
-- [ ] Re-run winch mass/CG once STS3215 mass is known
+- [ ] Re-run winch mass/CG once SPT5425LV+LibreServo v2 mass is bench-weighed
 - [ ] Slicer verification
-- [ ] FlightEngineer's room — PDB mounting in inner neck
+- [ ] Flight Engineer's room — PDB mounting in inner neck
 - [ ] CF skid rod channels
 - [ ] Simon bay — define avionics bay in the MIDDLE section (moved he…
-- [ ] FlightEngineer room — PDB + battery bay, middle VENTRAL (2026-06-13).
+- [ ] Flight Engineer room — PDB + battery bay, middle VENTRAL (2026-06-13).
 - [ ] Avionics-bay interior name marks (DEFERRED, 2026-06-13).
 - [ ] Phase 11 — aft EDF intake scoop cuts
 - [ ] neck_intake_frame.stl (Phase 11)
@@ -149,11 +131,11 @@
 
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
 
-- [ ] wing_nacelle_pylon_revo.stl
-- [ ] wings_s1223_revo.stl
-- [ ] [OPEN — BLOCKER] Fuselage spar-interface mismatched: cargo bore at old 30%
-    chord (Y≈+31.7), wing spar now at 22mm station (Y≈+15); bore axis must move
-    fwd ~16mm; see airframe/wings-nacelles/WBS.md for full detail & resolution
+- [ ] Re-render + re-bake both wings — Rev S1b tip OML change
+    (THICKNESS_SCALE_TIP 1.25→1.45, thickness-only section scaling); baked wing
+    STLs and docs/img/wing_rev_r1a_sections.png are stale
+- [ ] Re-merge the cargo shell — carries the Rev S1b spar station/height AND
+    the LG-10.4 wing keep-outs; published STL predates both
 
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
@@ -195,9 +177,61 @@
     - [ ] Motion study: 1:1-mesh + crank/pushrod transmission angle, monotonic
         0..90° tilt → 0..23.9° ring; verify joint-gap width vs. the coaxial
         bearing + sun-gear + Hall-magnet/AK7455 stack.
-- [ ] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
-    uses `rotate([0, PHI_CLOSED, 0])` → petals DIVERGE at "closed"; must be
+- [x] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
+    used `rotate([0, PHI_CLOSED, 0])` → petals DIVERGE at "closed"; must be
     `−PHI_CLOSED` to converge to 75 % bore. Preview-only (print parts unaffected).
+    **RESOLVED 2026-07-20** (sign-bug fix in the asm loop); the loop now reads
+    `rotate([0, −FLAP_PHI, 0])` after the Rev T3 parameterisation.
+- [x] Iris flap shingle (Rev T3, 2026-08-09) — the documented 5° inter-flap…
+    overlap was a solid INTERPENETRATION: all 8 flaps sat in one radial band, so
+    adjacent flaps shared coincident surfaces (17/12 non-manifold edges) and CI
+    "STL Validation" failed. Alternate flaps are now SEAL flaps lapped
+    `FLAP_SHINGLE_GAP` 0.2 mm (0.008 in) outboard of the MASTER flaps
+    [REF-CAD-005]. Masters unchanged → `exit_r(φ)` and the 75 %/105 % bore
+    targets unaffected. Print split 8 → 4 master + 4 seal per nozzle; the
+    abandoned `-closed-5deg.stl` shingling attempt was discarded (user).
+    → detail: `airframe/wings-nacelles/WBS.md` §1.1.3.1. SUB-TASKS:
+    - [ ] VERIFY mass/CG: flap set 32.0 → 56.8 g (+24.8 g / +0.87 oz total,
+        +12.4 g / +0.44 oz per nacelle), all aft/outboard of the tilt pivot —
+        re-check the Rev T CG band (≈109–112 mm) and tilt-servo torque margin.
+    - [ ] VERIFY the 0.2 mm seal step against the "smooth, low-turbulence exit"
+        goal by bench/CFD; fall back to a scarfed seal if the step is material.
+    - [ ] Rewrite `docs/PHASED_BUILD_GUIDE.md` §7 for Rev T — it still describes
+        the deleted sector/bevel/crown gear chain and a third fuselage nozzle
+        (current drive is a pushrod/bellcrank to one ring lever; 2 nozzles).
+    - [x] Harden `tools/precommit_index.py`: `collect_files()` indexed every
+        root-level loose FILE, and inside a git worktree `.git` IS a file, so a
+        regeneration from a worktree re-injected a bare `.git` entry (the artifact
+        removed in 48eae05; it recurred via the `.githooks` pre-commit hook on
+        2026-08-08). **RESOLVED 2026-08-09** — `collect_files()` now filters the
+        walk through `git_tracked_paths()` (`git ls-files`), so the index is a
+        deterministic function of the COMMIT rather than the working directory.
+        Kills both failure modes at once: the worktree `.git` entry (git never
+        lists it in any checkout topology) and untracked local artifacts leaking
+        in (154 of them — KiCad `*-backups/*.zip`, `~*.lck`, `fp-info-cache`,
+        sliced gcode, `*.FCStd` — which CI's fresh clone never had, the actual
+        cause of the "random" index-sync failures). Falls back to the plain walk
+        when git cannot answer (source tarball). Verified output-neutral: a clean
+        worktree regenerates byte-identically, and planted untracked strays are
+        excluded. The pre-commit hook is now safe to run anywhere, so `--no-verify`
+        is no longer needed when committing index changes from a worktree.
+    - [x] DevSkim `DS176209` false positives on the generated indexes —
+        **RESOLVED 2026-08-09**: excluded the three generated artifacts by PATH via
+        `ignore-globs` in `.github/workflows/devskim.yml` rather than disabling the
+        rule repo-wide, so leftover-TODO detection stays active in real source. The
+        alerts flagged the substring "TODO" inside indexed *filenames*
+        (`tools/TODO.md`) and document titles, which cannot be reworded because the
+        files are generator output asserted byte-equal by CI (PR #180, alerts
+        942/945).
+    - [ ] **[OPEN — needs a credential decision]** Auto-commit a stale index from
+        CI instead of failing. Drafted and deliberately NOT shipped: the push would
+        use `GITHUB_TOKEN`, and GitHub does not trigger workflow runs for
+        `GITHUB_TOKEN` pushes, so the corrected head commit would arrive without the
+        ruleset's required checks ("Python lint", "STL Validation") and the PR would
+        be unmergeable — worse than a clear failure. Needs a PAT or GitHub App token
+        in repository secrets to do safely. Meanwhile the determinism fix above
+        removes the failure class that actually kept firing, and the job now prints
+        a one-command fix plus uploads the corrected files as an artifact.
 - [ ] Stator spar crossing (Rev T2): 11 vanes, coprime w/ 12-blade rotor
     rotor — Tyler–Sofrin); spar carried in a streamlined teardrop strut (tail
     aft, TE ≈ vane TE) + 0° anti-rotation key drilled through. VERIFY strut
@@ -217,8 +251,6 @@
 
 → detail: `airframe/landing-gear/WBS.md` §1.1.4
 
-- [ ] LG-10 Finalize the 4 bay placements in SerenityAssembly.FCStd
-- [ ] LG-17 Drop-height decision: 6 ft vs 4 ft ductile wire schedule
 - [ ] LG-15 Procure both wire grades/tempers; coupon test
 - [ ] LG-16 Confirm ductile wire temper survives jig-forming
 - [ ] LG-13 Define wire-end retention detail at bay bosses
@@ -249,17 +281,17 @@
 - [ ] FAR-FT-PANEL PCB design
 - [ ] Link placeholders to BOM entries
 
-### 1.2b — PCB Redesigns: COMMO Rev S1 / Zoe Rev S1 / FlightEngineer Rev S1
+### 1.2b — PCB Redesigns: Commo Rev S1 / XO Rev S1 / Flight Engineer Rev S1
 
 → detail: `avionics/rev-s1/WBS.md` §1.2b
 
-- [ ] COMMO Rev S1 — add LoRa, replace JST with P1+P2 socket rails
-- [ ] TACCO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
-- [ ] FlightEngineer Rev S1 — remove 6 V BEC, add 5 V servo output
+- [ ] Commo Rev S1 — add LoRa, replace JST with P1+P2 socket rails
+- [ ] XO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
+- [ ] Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output
 
 ### 1.2c — PCB Design: Observer (Nose/Cargo-Bay Vision, ToF & Laser)
 
-→ detail: `avionics/jayne/WBS.md` §1.2c
+→ detail: `avionics/observer/WBS.md` §1.2c
 
 - [ ] Final component placement (user-reserved) + impedance-controlle…
 - [ ] Generate production-ready Gerber files to avionics/kicad/Observer/…
@@ -268,42 +300,111 @@
 - [ ] Local sensor harness (both sites):
 - [ ] External ring harness — nose:
 - [ ] External ring harness — cargo:
-- [ ] FlightEngineer second 5 V rail — cross-tied, mutually fault-tolerant…
+- [ ] Flight Engineer second 5 V rail — cross-tied, mutually fault-tolerant…
 - [ ] Observer 5 V harness:
 - [ ] Laser — unify to a single 520 nm green source, Class 2 both sit…
 - [ ] Both Class 2 caps must be hardware-enforced
 - [ ] Nose camera strobe + frame-difference detection
 - [ ] Do not source
 
-### 1.2a — PCB Design: Wash, Zoe, and COMMO (EMI-Hardened Variants)
+### 1.2d — Trust-Module MCU/TPM Retarget (MSPM0G351x-Q1 + SLB 9672)
+
+Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematics) and
+`avionics/kicad/retarget_pcb_footprints.py` (PCBs).  Parts per REF-SENSOR-017 and REF-SEC-002.
+
+| Board | MCU | Package | TPM |
+|---|---|---|---|
+| Observer (observer) | `M0G3519QRGZRQ1` | 48-pin RGZ VQFN 7×7 | `SLB 9672AU2.0` |
+| `CAN-PERIPH-GW-1` (gateway) | `M0G3518QRHBRQ1` | 32-pin RHB VQFN 5×5 | `SLB 9672AU2.0` |
+| FlightEngineer (flight engineer) | `M0G3518QRHBRQ1` | 32-pin RHB VQFN 5×5 | `SLB 9672AU2.0` |
+
+- [x] Verify the MSPM0G351x-Q1 RGZ-48 pin map against the MSPM0G350x it replaces —
+      identical for all 48 pads plus the exposed pad (SLASFA6B Fig 6-5 vs SLASEX6C Fig 6-4).
+- [x] Re-pinmux the gateway and FlightEngineer onto RHB-32, which bonds out PA0–PA27 only and has
+      no PBx ports: RS485_TX→PA8 (UART1_TX PF2), RS485_RX→PA9 (UART1_RX PF2),
+      RS485_DE→PA21, RS485_FLT_N→PA22, CANFD_FLT_N→PA23 (FlightEngineer),
+      FLEX_PWM_IO→PA25 (TIMA0_C3 PF5), FLEX_BSHOT_IO→PA26 (TIMG8_C0 PF4).
+- [x] Swap and re-anchor the PCB footprints on the gateway (U1_1/U1_2) and Observer (U3).
+- [x] Tie the TPM exposed pad to GND on all three boards — the SLB9670 symbol omitted pad 33
+      entirely, so it was floating (Infineon SLB9672 datasheet rev 1.3 §2.1.2 requires it).
+- [x] Correct the MCU land pattern: the design used
+      `QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm`, which KiCad's own `descr` identifies as an
+      **Analog Devices LTC legacy** outline. TI's RGZ0048F exposed pad is 4.1 mm square, so
+      the old land overhung the package thermal pad by 0.525 mm per side.
+- [x] Separate FlightEngineer's overlapping `U_MCU` / `U_TPM` symbols (17 pads shared a coordinate,
+      shorting the SPI bus and tying MCU VCORE to TPM GND); `U_TPM` moved +34.29 mm.
+
+**Open — blocks fabrication:**
+
+- [ ] **Re-route the gateway MCU area.** U1_1/U1_2 went from 48 pads at 7×7 mm to 32 pads at
+      5×5 mm, so every trace into them is dangling. Needs a manual placement/routing pass and
+      a DRC sign-off before gerbers.
+- [ ] **Confirm MSPM0G351x-Q1 errata and TRM applicability.** SLAZ742G covers MSPM0G3x0x /
+      G1x0x / G3x0x-Q1 and does not enumerate MSPM0G3518/3519; SLAU846E contains no
+      occurrence of either part number. Obtain the correct errata/TRM for MSPM0G351x-Q1
+      before firmware sign-off (REF-SENSOR-018 "requires verification").
+- [ ] **Update firmware pinmux constants for the new family.** CAN moves from
+      `CAN_TX`/`CAN_RX` PF5/PF6 to `CAN0_TX`/`CAN0_RX` **PF12**; PA15 offers `SPI1_CS2`
+      (PF3) rather than `SPI1_CS0`; PB15/PB16 offered UART2 on the old part and UART7 on the
+      new one (moot on the 32-pin boards, which now use UART1 on PA8/PA9). See §4.6.2.
+- [ ] **Add the missing MCU support parts per SLAAE76E Table 1-1.** No board has the
+      10 µF bulk C(VDD) local to the MCU (the gateway shares one 22 µF at the regulator and
+      FlightEngineer's MCU has no local 100 nF at all), and none has the recommended NRST network —
+      all three use a 10 kΩ pull-up with no 10 nF pull-down capacitor against the
+      recommended 47 kΩ + 10 nF.
+- [ ] **Add a pull-up on the gateway's PA0/PA1 FLEX UART.** PA0/PA1 are 5 V-tolerant
+      open-drain on this family with no internal pull-up available, so `FLEX_UART_TX` cannot
+      drive high without an external pull-up (SLASFA6B §9.1.1; SLAAE76E §8.5).
+- [ ] **Pull PA18 down on the gateway and Observer.** PA18 is the default BSL invoke pin and is
+      used as SPI MOSI on both boards; it floats during reset, so the part can enter BSL
+      (SLAAE76E Table 1-1).
+- [ ] **Add thermal vias under the MCU exposed pad.** Only gateway U1_1 has any (3);
+      U1_2 and Observer U3 have none. TI requires the pad be soldered to a board thermal pad
+      and recommends the 3×3 via pattern in the land-pattern drawing.
+- [ ] **Resolve FlightEngineer's ground-net naming.** FlightEngineer's board ground carries the name
+      `CM2_OUT_N` (108 nodes, including every MCU/TPM ground pin), i.e. a current-monitor
+      output label is shorted into, or mis-merged with, `PGND`. Pre-existing; not introduced
+      by this retarget.
+- [ ] **Clean up FlightEngineer's dangling no-connect flags.** The retarget left ~30 `no_connect`
+      markers that no longer sit on a pin (ERC warnings only; error count is unchanged at 0).
+- [ ] **Close the Observer sch↔pcb parity gap.** `RS485_DE`, `RS485_TX` and `RS485_RX` exist on
+      U3 in the schematic but not in the PCB net table; those pads were left unconnected
+      rather than inventing net entries.
+- [ ] **Place gateway lanes 3 and 4.** `U1_3`/`U1_4` and `U2_3`/`U2_4` exist in the
+      schematic but are not on the PCB, so only two of the four tiled lanes were retargeted
+      on the board.
+- [ ] **Decide whether Emma, Wash and Zoë follow to the SLB 9672.** They still carry the
+      SLB9670; this retarget deliberately did not touch them.
+
+### 1.2a — PCB Design: Pilot, XO, and Commo (EMI-Hardened Variants)
 
 → detail: `avionics/WBS.md` §1.2a
 
-- [ ] Reconcile Wash.md §14 field-connector table with the actual P…
+- [ ] Reconcile Pilot.md §14 field-connector table with the actual P…
 - [ ] Wire the MIL-1553 connector + transformer.
 - [ ] Redesign the tamper mesh as a per-domain anti-tamper mesh (all…
 - [ ] Carry the tamper signal over the link for the TPM-less boards.
 - [ ] Route the rearranged capes.
 - [ ] Clear residual DRC after mesh + routing
-- [ ] Finish Wash PCB (CAPE-A-2) close-out pass:
-- [ ] Add SBUS/UART DIP switch to Wash
-- [ ] Generate Wash gerbers
-- [ ] Generate TACCO gerbers
-- [ ] Zigbee RF chain was never actually added to TACCO — PCB scope g…
-- [ ] FCC Part 15 §15.235 pre-compliance checklist for COMMO
+- [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
+- [ ] Add SBUS/UART DIP switch to Pilot
+- [ ] Generate Pilot gerbers
+- [ ] Generate XO gerbers
+- [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
+- [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
 - [ ] EMI isolation validation checklist
 - [ ] Merge claude/cape-em-harsh-variants-9Yfr1 → master
 - [ ] Design Faraday cages / boxes to protect all PCBs
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
 
-→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Wash PB2-P2 unwired-header finding, Wash/TACCO/FlightEngineer/Observer DRC clean-out, CAN-PERIPH-GW-1 N=4 routing all still open.
+→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Pilot PB2-P2 unwired-header finding, Pilot/XO/FlightEngineer/Observer DRC clean-out, CAN-PERIPH-GW-1 N=4 routing all still open.
 
 ### 1.4 — EMI Hardening Beyond the PCBs (500 W/m^2 environment)
 
 → detail: `avionics/emi-hardening/WBS.md` §1.4
 
-- [ ] PB2-I + Wash Enclosure
-- [ ] PB2-I + TACCO Enclosure
+- [ ] PB2-I + Pilot Enclosure
+- [ ] PB2-I + XO Enclosure
 - [ ] CAN FD
 - [ ] RS-485
 - [ ] MIL-STD-1553B
@@ -314,8 +415,8 @@
 - [ ] PWM
 - [ ] Add FlightEngineer/battery boss pattern to middle_canonical_shell24.sca…
 - [ ] Add ventral battery-swap hatch cut to middle_canonical_shell24.…
-- [ ] Create kaylee_battery_tray.scad.
-- [ ] Create kaylee_pdb_tray.scad.
+- [ ] Create flight_engineer_battery_tray.scad.
+- [ ] Create flight_engineer_pdb_tray.scad.
 - [ ] Update REVN_BUILD_GUIDE_24IN.md Phase 1
 
 ### 1.5 — Documentation
@@ -350,7 +451,7 @@
 - [ ] Epoxy keel through all hull sections; cure 2h. Datum marks at 9…
 - [ ] Bond ring frames at all 5 station notches; cure 1h.
 - [ ] Bond access panel frames A–F into hull sections (5-min epoxy, 3…
-- [ ] Install M2.5 nylon standoffs in bays A, B, D, E (floor 6mm + in…
+- [ ] Install M2.5 nylon standoffs in bays A, B, C, D (floor 6mm + in…
 - [ ] Bond wing spar pocket inserts at wing root stations, both sides.
 - [ ] Bond tilt servo mount brackets at wing root bay interior (one p…
 - [ ] Install M3 heat-set inserts ×4 at belly cargo hard-point locati…
@@ -442,8 +543,8 @@
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 - [ ] Pull motor phase leads through conduit to ESCs; solder (verify…
 - [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Shepherd's r…
-- [ ] Mount CN1 TACCO on Shepherd's room (Bay A) floor standoffs (M2.5…
-- [ ] Mount FC1 Wash on inter-cape standoffs (M2.5 nylon 20mm) above…
+- [ ] Mount CN1 XO on Shepherd's room (Bay A) floor standoffs (M2.5…
+- [ ] Mount FC1 Pilot on inter-cape standoffs (M2.5 nylon 20mm) above…
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 - [ ] CN1-LOG
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN1 Cape-B head…
@@ -452,18 +553,18 @@
 - [ ] Daisy-chain CAN FD: 120Ω (soldered) → CN1 → FC1 → exit Shepherd…
 - [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Inara's shuttle (Ba…
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT…
-- [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect…
-- [ ] Mount CN2 TACCO on Inara's shuttle (Bay B) floor standoffs; inser…
+- [ ] Cap Simon's medbay (Bay D) end of ETH-EA conduit (will connect…
+- [ ] Mount CN2 XO on Inara's shuttle (Bay B) floor standoffs; inser…
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] CN2-LOG
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 TACCO J_XCVR…
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 XO J_XCVR…
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mou…
 - [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle: CN…
 - [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's s…
-- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Wash ET…
-- [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in…
+- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Pilot ET…
+- [ ] Cap River's room (Bay C) end of ETH-BD (will connect to CN3 in…
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR con…
-- [ ] Provision TPM 2.0 (SLB9670) on CN1, FC1, CN2, FC2 — unique key…
+- [ ] Provision TPM 2.0 (SLB9672) on CN1, FC1, CN2, FC2 — unique key…
 - [ ] Verify CPLD write-blocker on CN1 and CN2: echo test > /mnt/flig…
 - [ ] Configure forensic log mount in /etc/fstab (noexec, nodev, nosu…
 - [ ] Flash serenity-cn Phase 6 daemon to CN1 and CN2.
@@ -502,23 +603,23 @@
 
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase6
 
-- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash in Inara's s…
-- [ ] Mount CN3 TACCO on River's room (Bay D) floor standoffs; insert P…
+- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Pilot in Inara's s…
+- [ ] Mount CN3 XO on River's room (Bay C) floor standoffs; insert P…
 - [ ] CN3-LOG
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 TACCO J_XCVR…
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 XO J_XCVR…
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mou…
 - [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's ro…
 - [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (B…
-- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Wash ETH-1…
-- [ ] Power tap River's room (Bay D); verify 5V ±0.05V.
-- [ ] Mount CN4 TACCO on Simon's medbay (Bay E) standoffs; insert PB2-I…
+- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Pilot ETH-1…
+- [ ] Power tap River's room (Bay C); verify 5V ±0.05V.
+- [ ] Mount CN4 XO on Simon's medbay (Bay D) standoffs; insert PB2-I…
 - [ ] CN4-LOG
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN4 header.
 - [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mou…
 - [ ] 120Ω PERMANENT
 - [ ] Connect ETH-DE (River's room → Simon's medbay): FC3 Cape-A ETH-…
 - [ ] Connect ETH-EA ring-close (Simon's medbay → Shepherd's room): F…
-- [ ] Power tap Simon's medbay (Bay E); verify 5V ±0.05V.
+- [ ] Power tap Simon's medbay (Bay D); verify 5V ±0.05V.
 - [ ] TPM 2.0 on CN3, FC3, CN4, FC4 — unique key material per node.
 - [ ] CPLD write-blocker verification on CN3 and CN4.
 - [ ] Verify RSTP ring: bridge vlan show; disconnect one ETH cable →…
@@ -544,7 +645,7 @@
 
 - [ ] Bond cargo gondola shell into belly void at 4× M3 hard points (…
 - [ ] Install 3mm CF door hinge pins; attach clamshell door halves (s…
-- [ ] Install STS3215 winch + twin-pedestal spool + ratchet; wind Dy…
+- [ ] Install SPT5425LV/LibreServo v2 winch + twin-pedestal spool + ratchet; wind Dy…
 - [ ] Install SG90 door-actuator servo (spring-assist open, servo pul…
 - [ ] Install SG90 payload-release servo; connect to DRV8833 IN1/IN2…
 - [ ] Route control leads through PWR conduit belly tap to CN master…
@@ -640,7 +741,7 @@
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verifica…
 - [ ] Intake frame tongues fully seated in the resized scoop windows
 - [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet…
-- [ ] EDF seated at station ~430mm, centreline ±2mm; rotation verifie…
+- [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verifie…
 - [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
 - [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.0…
 - [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on b…
@@ -653,25 +754,25 @@
 → detail: `deferred/WBS.md` §Phase12
 
 - [ ] RBM module:
-- [ ] FlightEngineer input:
+- [ ] Flight Engineer input:
 - [ ] Current sharing:
 - [ ] Firmware (pwr_fault):
 - [ ] W&B:
 - [ ] CAD:
 
-### 4.2 — FC Node (Wash) - Phase 7 Firmware
+### 4.2 — FC Node (Pilot) - Phase 7 Firmware
 
 → detail: `avionics/firmware/WBS.md` §4.2
 
 - [ ] EDF ESC PID governor
-- [ ] Nacelle tilt servo PWM generation
+- [ ] Nacelle tilt servo command generation (RS-485/LibreServo v2, was PWM)
 - [ ] IMU / barometer sensor fusion
 - [ ] ToF sensor array management
 - [ ] u-blox M10Q GNSS integration
 - [ ] MIL-STD-1553B RT implementation
 - [ ] TPM-bound attestation
 
-### 4.3 — CN Node (Zoe) - Phase 7 Firmware
+### 4.3 — CN Node (XO) - Phase 7 Firmware
 
 → detail: `avionics/firmware/WBS.md` §4.3
 
@@ -694,32 +795,32 @@
 - [ ] GPS cross-check
 - [ ] Security message signing
 
-#### 4.5.1 — Malcolm Hardware Design
+#### 4.5.1 — Skipper Hardware Design
 
 → detail: `gcs/WBS.md` §4.5
 
-- [ ] Create Malcolm host computer specification
-- [ ] Malcolm field enclosure — print and fit-check
+- [ ] Create Skipper host computer specification
+- [ ] Skipper field enclosure — print and fit-check
 - [ ] Gimbal STL generation and mesh verification
 - [ ] Gimbal servo wind-load torque check
-- [ ] Procure Malcolm comms node hardware:
+- [ ] Procure Skipper comms node hardware:
 - [ ] Procure antenna hardware
 - [ ] Procure gimbal hardware:
 
-#### 4.5.2 — Malcolm Comms Node Setup (Phase Malcolm-2)
+#### 4.5.2 — Skipper Comms Node Setup (Phase Skipper-2)
 
 → detail: `gcs/WBS.md` §4.5
 
-- [ ] Flash Debian Linux to Malcolm PB2-I eMMC
-- [ ] Apply Cape-B-2 device tree overlay for Malcolm
-- [ ] Provision TPM 2.0 (SLB9670) on Malcolm's PB2-I
-- [ ] Verify CPLD write-blocker on Malcolm's log μSD
-- [ ] Build and install Malcolm PB2-I firmware:
-- [ ] Install and configure mavlink-router on Malcolm's PB2-I
-- [ ] Enable all 5 radio interfaces on Malcolm's PB2-I
+- [ ] Flash Debian Linux to Skipper PB2-I eMMC
+- [ ] Apply Cape-B-2 device tree overlay for Skipper
+- [ ] Provision TPM 2.0 (SLB9672) on Skipper's PB2-I
+- [ ] Verify CPLD write-blocker on Skipper's log μSD
+- [ ] Build and install Skipper PB2-I firmware:
+- [ ] Install and configure mavlink-router on Skipper's PB2-I
+- [ ] Enable all 5 radio interfaces on Skipper's PB2-I
 - [ ] Configure Wi-Fi transmit power
 
-#### 4.5.3 — Malcolm Host PC Software Setup (Phase Malcolm-3)
+#### 4.5.3 — Skipper Host PC Software Setup (Phase Skipper-3)
 
 → detail: `gcs/WBS.md` §4.5
 
@@ -728,9 +829,9 @@
 - [ ] Configure QGroundControl:
 - [ ] Configure Wi-Fi Tx power on host PC
 - [ ] Run tracking software tests:
-- [ ] Implement gcs/malcolm/firmware/pb2i/src/mal_comms.c and mal_com…
+- [ ] Implement gcs/skipper/firmware/pb2i/src/skipper_comms.c and skipper_com…
 
-#### 4.5.4 — Tracking and Gimbal Integration (Phase Malcolm-3)
+#### 4.5.4 — Tracking and Gimbal Integration (Phase Skipper-3)
 
 → detail: `gcs/WBS.md` §4.5
 
@@ -741,7 +842,7 @@
 - [ ] Run gimbal_ctrl.py bench test
 - [ ] End-to-end tracking test (outdoor):
 
-#### 4.5.5 — Malcolm Integration Testing (Phase Malcolm-4)
+#### 4.5.5 — Skipper Integration Testing (Phase Skipper-4)
 
 → detail: `gcs/WBS.md` §4.5
 
@@ -751,11 +852,11 @@
 - [ ] 49 MHz (Part 15 §15.235) link test (1 km):
 - [ ] Gimbal pointing accuracy test (outdoor, aircraft at 200–500 m):
 - [ ] MAVLink authentication test:
-- [ ] Node loss with Malcolm active:
+- [ ] Node loss with Skipper active:
 
 #### 4.6.1 — TI AM62Ax Vision Pipeline Bring-Up
 
-→ detail: `avionics/jayne/WBS.md` §4.6.1
+→ detail: `avionics/observer/WBS.md` §4.6.1
 
 - [ ] MIPI CSI-2 camera sensor bring-up
 - [ ] VPAC/ISP pipeline configuration
@@ -765,19 +866,19 @@
 
 #### 4.6.2 — TI MSPM0G3507 Control Firmware
 
-→ detail: `avionics/jayne/WBS.md` §4.6.2
+→ detail: `avionics/observer/WBS.md` §4.6.2
 
 - [ ] MCAN (CAN-FD) driver bring-up
 - [ ] TFmini-S UART driver
 - [ ] KSZ9477 Ethernet switch management driver
-- [ ] Laser GPIO driver (both sites Class 2 — docs/JAYNE_LASER_ANALYS…
+- [ ] Laser GPIO driver (both sites Class 2 — docs/OBSERVER_LASER_ANALYS…
 - [ ] Laser strobe + crosshair-metrology routine (AM62A7 ISP):
-- [ ] SPI driver to Infineon SLB9670 TPM
+- [ ] SPI driver to Infineon SLB9672 TPM
 - [ ] Signed telemetry:
 
 #### 4.6.3 — Integration Testing
 
-→ detail: `avionics/jayne/WBS.md` §4.6.3
+→ detail: `avionics/observer/WBS.md` §4.6.3
 
 - [ ] Bench test:
 - [ ] Ring failure test:
@@ -810,9 +911,9 @@
 
 ### 5.4 - Open Source Hardware Certification
 
-→ detail: §0.9, `docs/WBS.md` §0.9, & `docs/WBS.md` §5.4
+→ detail: `docs/WBS.md` §0.9
 
-- [ ] Get OSHW certification
+- [ ] Submit OSHW self-certification — requires the human maintainer to act
 
 ### 6.1 — Branch Reconciliation (2026-06-09)
 
@@ -822,4 +923,4 @@
 
 ---
 
-*"Get on with it, Wash." — Capt. Malcolm Reynolds*
+*"Get on with it, Pilot." — Capt. Skipper Reynolds*
