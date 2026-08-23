@@ -217,8 +217,7 @@
       "tags": [
         "documentation",
         "emi-hardening",
-        "project-tracking",
-        "security"
+        "project-tracking"
       ],
       "archived": false
     },
@@ -12627,7 +12626,6 @@
       "REFERENCES.md",
       "SECURITY.md",
       "TODO.md",
-      "WBS.md",
       "airframe/FreeCAD-scripts/serenity_assembly.py",
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",

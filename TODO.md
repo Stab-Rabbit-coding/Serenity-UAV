@@ -45,7 +45,7 @@ numeric order.)*
 
 #### 0.10.1 Systems
 
-→ detail: `docs/WBS.md` §1.10.1
+→ detail: `docs/WBS.md` §0.10.1
 
 - [ ] Verify and update airframe specifications vs as built for each component.
 - [ ] Verify avionics specifications vs as- built.
@@ -56,11 +56,8 @@ numeric order.)*
 
 → detail: `docs/WBS.md` §0.10.2
 
-- [ ] Verify and update all compliance and licensing documents.
-- [ ] Verify and update all README files and the starting with subsystem ones and correcting the root README to match.
 - [ ] Verify and update the system specification files and BOM.
 - [ ] Verify and update the WBS and TODO files.
-- [ ] Verify and update the REFERENCES.md file.
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 

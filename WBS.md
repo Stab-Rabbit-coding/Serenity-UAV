@@ -118,7 +118,11 @@ files are renumbered here to §0.10, which frees "0.9" cleanly for the new §0.9
 Updates" item above. See docs/WBS.md §0.9 for the note.)*
 
 #### 0.10.1 Systems
-→ detail: docs/WBS.md §1.10.1
+→ detail: docs/WBS.md §0.10.1
+
+*(Audited 2026-08-22 — substantial fixes applied to all four; none fully closed, each has a
+short honestly-scoped residual list. See docs/WBS.md §0.10.1 for exactly what was verified,
+what was fixed, and what remains open per item.)*
 
 - [ ] Verify and update airframe specifications vs as built for each component.
 - [ ] Verify avionics specifications vs as- built.
@@ -129,10 +133,19 @@ Updates" item above. See docs/WBS.md §0.9 for the note.)*
 
 → detail: docs/WBS.md §0.10.2
 
-- [ ] Verify and update all compliance and licensing documents.
-- [ ] Verify and update all README files and the starting with subsystem ones and correcting the root README to match.
+*(Audited 2026-08-22 — items 1, 2, and 5 closed below; items 3 and 4 have real residual work,
+see docs/WBS.md §0.10.2.)*
+
+- [x] Verify and update all compliance and licensing documents. *(closed 2026-08-22 — found
+    and fixed a stale duplicate policy doc with materially wrong license terms; see
+    docs/WBS.md §0.10.2 item 1.)*
+- [x] Verify and update all README files and the starting with subsystem ones and correcting
+    the root README to match. *(closed 2026-08-22 — see docs/WBS.md §0.10.2 item 2.)*
 - [ ] Verify and update the system specification files and BOM.
 - [ ] Verify and update the WBS and TODO files.
+- [x] Verify and update the REFERENCES.md file. *(closed 2026-08-22 — fixed a duplicate
+    REF-ID bug, added 3 missing catalog entries, updated the timestamp; see docs/WBS.md
+    §0.10.2 item 5.)*
 - [ ] Verify and update the REFERENCES.md file.
 
 ---
