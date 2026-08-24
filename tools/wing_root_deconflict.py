@@ -448,10 +448,19 @@ def penetration_check(shell_man, findings):
          box(-130.0, -60.0, y0, y1, z0, z1)),
         ("wing root mortise, stbd", (mci.STBD_OUTB + 8.0, mci.STBD_INB - 1.0),
          box(-280.0, -210.0, y0, y1, z0, z1)),
-        ("spar bore, port", (-270.0, -70.0),
+        # Print labels below MUST match the swept-corridor bounds actually
+        # passed to xcyl() just beneath them.  They used to both read the
+        # copy-pasted placeholder (-270.0, -70.0) -- identical for port AND
+        # stbd, and matching neither the per-side sweep nor PORT_INB/OUTB /
+        # STBD_INB/OUTB (-100/-60 and -240/-278).  That was purely a label
+        # bug (the sweep itself always used the real -130..-55 / -285..-210
+        # bounds below), but a stale label defeats the whole point of
+        # printing the cut span for a human to sanity-check against the
+        # wall brackets, so it is corrected to the real sweep bounds here.
+        ("spar bore, port", (-130.0, -55.0),
          xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, -130.0, -55.0,
               mci.WING_SPAR_BORE_D / 2.0)),
-        ("spar bore, stbd", (-270.0, -70.0),
+        ("spar bore, stbd", (-285.0, -210.0),
          xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, -285.0, -210.0,
               mci.WING_SPAR_BORE_D / 2.0)),
     ]
