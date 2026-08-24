@@ -350,55 +350,53 @@ STBD_OUTB, STBD_INB = -278.0, -240.0  # stbd wall bracket (skin ≈ −250..−2
 # (tools/wing_root_deconflict.py, SPAR-02).  A servo overhanging its pad lands on
 # raw 2 mm skin, which is not a mounting surface for a 2+ N.m actuator.
 #
-# DIMENSIONAL BASIS, AND WHAT IS NOT VERIFIED
+# DIMENSIONAL BASIS -- NOW FROM THE DATASHEET
 # -------------------------------------------
-# DS3218MG has **no cited dimensional source in this repository** -- bom_revS.csv
-# recorded it as "(uncited)" when it was superseded on 2026-08-02.  The one cited
-# standard-size servo figure the repo does hold is REF-SENSOR-013 (SPT5425LV,
-# 40.5 x 20 x 40.5 mm), and the BOM itself treats the two as interchangeable
-# ("DS3218MG-class bodies were already qualified").  The pad is therefore sized to
-# the **standard-size servo class** with margin, not to one part number, so it
-# accepts either body.  The DS3218MG figures are logged in REFERENCES.md as
-# requiring verification.
-NSVMT_BODY_H = 40.5   # servo body height (Z), standard-size class
-NSVMT_BODY_W = 40.5   # servo body length (Y), standard-size class
-NSVMT_EAR_W = 7.0     # mounting-ear reach per end -- ALLOWANCE, not a datasheet
-NSVMT_MARGIN = 3.5    # pad relief all round the flange footprint
+# `avionics/datasheets/DS3218 datasheet.pdf` (Dongguan City Dsservo Technology
+# Co. Ltd, "6V 20kg RC Digital Servo") is authoritative for the servo envelope as
+# of 2026-08-23 (owner).  It supersedes the standard-size-class estimate this
+# block previously carried, and it CORRECTED the mounting orientation:
+#
+#   size (SS2-1)         40 x 20 x 40.5 mm        weight (SS2-2)  60 g
+#   ear span (drawing)   54.5 mm overall          shaft from end  24 mm
+#   bolt pattern         49.5 x 10 mm             flange above base  27.7 mm
+#
+# ORIENTATION.  A standard servo's four screws run PARALLEL TO THE OUTPUT SHAFT,
+# through a flange that is perpendicular to it.  The tilt drive needs the shaft
+# along hull X (so the horn sweeps the Y-Z plane, in line with the spar crank),
+# which puts the FLANGE in the Y-Z plane -- flat on the bulkhead -- and the
+# 40.5 mm HEIGHT along X, into the bay.  So the pad footprint is the flange,
+# 54.5 (Y) x 20 (Z), NOT 54.5 x 40.5: the 40.5 is depth, not footprint.  The
+# pre-datasheet estimate had the wrong face on the wall and oversized the pad in
+# Z by 20.5 mm.
+NSVMT_BODY_L = 40.0     # servo body length, datasheet SS2-1 -> hull Y
+NSVMT_BODY_W = 20.0     # servo body width,  datasheet SS2-1 -> hull Z
+NSVMT_BODY_H = 40.5     # servo body height, datasheet SS2-1 -> hull X (inboard)
+NSVMT_EAR_SPAN = 54.5   # flange overall length, datasheet drawing -> hull Y
+NSVMT_FLANGE_H = 27.7   # flange face above the body base, datasheet drawing
+NSVMT_MARGIN = 3.5      # pad relief all round the flange footprint
 
 # Pad centre.  Kept SPAR-RELATIVE (Rev S1b) so a spar move carries the pad and the
 # linkage with it instead of silently breaking them.
 NSVMT_DY = 13.3   # pad centre, chordwise aft of the spar axis
-# Rev S1d: 30.5 -> 38.5.  The pad grew in Z to hold the taller footprint, and it
-# had to grow UPWARD: the spar bearing boss crown is Z +79.42 and the pad floor
-# must stay above it.  Downward growth eats that clearance; upward is unobstructed
-# to the Inara/River bays at Z +145.
-#
-# The binding constraint on the floor is NOT the spar boss.  Measured, the Rev R6
-# landing-gear bay seats top out at Z +82.39 -- 2.97 mm ABOVE the boss crown at
-# Z +79.42 -- and the pad overlaps both bays in Y (pad Y +20.70..+82.20 against
-# fore bay ..+25.87 and aft bay +68.89..), so Z separation is the entire margin.
-# Sizing the floor off the boss, as the pre-Rev-S1b design did, left only 1.53 mm
-# over the bays.  DZ is therefore set from the BAY tops plus the 3.0 mm clearance
-# budget: floor Z +85.39, centre Z +109.14, crown Z +132.89, which still leaves
-# 12.1 mm to the avionics bay floor and 5.97 mm over the spar boss.
-NSVMT_DZ = 40.72  # pad centre, above the spar axis
+# Rev S1d: the floor is datumed off the Rev R6 landing-gear bay seats, which top
+# out at Z +82.39 -- 2.97 mm ABOVE the spar boss crown at Z +79.42 -- and the pad
+# overlaps both bays in Y, so Z separation is the entire margin.  Floor set to the
+# bay tops + the 3.0 mm clearance budget = Z +85.39; with the datasheet flange
+# footprint (27.0 mm tall pad) that puts the centre at Z +98.89.
+NSVMT_DZ = 30.47  # pad centre, above the spar axis
 NSVMT_Y = WING_SPAR_Y + NSVMT_DY   # = 51.45
-NSVMT_Z = WING_SPAR_Z + NSVMT_DZ   # = 109.14
-NSVMT_PAD_W = NSVMT_BODY_W + 2 * NSVMT_EAR_W + 2 * NSVMT_MARGIN   # = 61.5, Y span
-NSVMT_PAD_H = NSVMT_BODY_H + 2 * NSVMT_MARGIN                     # = 47.5, Z span
+NSVMT_Z = WING_SPAR_Z + NSVMT_DZ   # = 98.89
+NSVMT_PAD_W = NSVMT_EAR_SPAN + 2 * NSVMT_MARGIN   # = 61.5, Y span
+NSVMT_PAD_H = NSVMT_BODY_W + 2 * NSVMT_MARGIN     # = 27.0, Z span
 
-# Mounting-ear bolt pattern -- GATED OFF, deliberately.
-# The 35 x 16 mm pattern this file used to drill was inherited from the servo the
-# BOM replaced in 2026-08-02 and matches no published DS3218MG or SPT5425LV ear
-# spacing; neither part publishes one that has been obtained (REFERENCES.md
-# "requires verification").  Cutting four M3 bores on an unverified pattern into a
-# published shell is worse than leaving the pad solid: a wrong hole cannot be
-# un-drilled, and the pad is usable as a bonded/tapped landing without them.
-# Measure the ears on a real servo, set the two spacings, then flip this True --
-# same gate pattern as LG_BAY_ENABLED.
-NSVMT_HOLES_ENABLED = False
-NSVMT_HOLE_S_Y = 17.5   # UNVERIFIED -- do not cut until measured
-NSVMT_HOLE_S_Z = 8.0    # UNVERIFIED -- do not cut until measured
+# Mounting-ear bolt pattern -- now datasheet-backed, so the bores are LIVE.
+# 49.5 mm along the body length (hull Y) x 10 mm across its width (hull Z),
+# DS3218 datasheet drawing.  This replaces the 35 x 16 mm pattern inherited from
+# a servo the BOM had already replaced, which matched nothing.
+NSVMT_HOLES_ENABLED = True
+NSVMT_HOLE_S_Y = 49.5 / 2.0   # = 24.75, datasheet
+NSVMT_HOLE_S_Z = 10.0 / 2.0   # =  5.00, datasheet
 NSVMT_M3_D = 4.1
 
 # Inara avionics-bay standoff bosses (dorsal port half, additive only).

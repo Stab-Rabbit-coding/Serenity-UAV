@@ -75,13 +75,16 @@ sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
 import merge_cargo_interior as mci          # noqa: E402
 import wing_spar_station_fit as wsf         # noqa: E402
 
-# --- servo envelope, REF-SENSOR-013 ---------------------------------------
-SERVO_L, SERVO_W, SERVO_H = 40.5, 20.0, 40.5
-SERVO_MASS_G = 57.0
-# Ear allowance.  REF-SENSOR-013 does NOT publish the ear span; 6 mm/end is an
-# explicitly conservative stand-in so the result is not optimistic.  It is not a
-# datasheet figure -- logged in REFERENCES.md "requires verification".
-EAR_ALLOW = 6.0
+# --- servo envelope, DS3218 datasheet (authoritative, owner 2026-08-23) ------
+# avionics/datasheets/DS3218 datasheet.pdf, Dongguan City Dsservo Technology.
+# The four screws run parallel to the output shaft, so with the shaft along hull
+# X the FLANGE lies in the Y-Z plane on the bulkhead and the 40.5 mm height is
+# the INBOARD DEPTH.  Footprint on the wall is the flange: 54.5 (Y) x 20 (Z).
+SERVO_L = mci.NSVMT_BODY_L          # 40.0  body length   -> hull Y
+SERVO_W = mci.NSVMT_BODY_W          # 20.0  body width    -> hull Z
+SERVO_DEPTH = mci.NSVMT_BODY_H      # 40.5  body height   -> hull X, inboard
+SERVO_EAR_SPAN = mci.NSVMT_EAR_SPAN  # 54.5 flange overall, hull Y
+SERVO_MASS_G = 60.0                 # datasheet SS2-2
 HORN_SWING_R = 22.0
 
 WING_CHORD_LINE_Z = 58.01       # hull Z of the wing chord line at the root
@@ -323,13 +326,19 @@ def tenon_fit_check(findings):
 
 
 def servo_body(side):
+    """Servo envelope on the bulkhead: flange footprint, body depth inboard.
+
+    Uses the flange span in Y (54.5) rather than the bare body (40.0), because the
+    ears are what the pad has to carry.  Depth is the 40.5 mm HEIGHT -- the axis
+    the output shaft runs along -- not the 20 mm width.
+    """
     inboard = mci.PORT_INB if side == "port" else mci.STBD_INB
     sign = -1.0 if side == "port" else +1.0
-    x0, x1 = sorted((inboard, inboard + sign * SERVO_W))
+    x0, x1 = sorted((inboard, inboard + sign * SERVO_DEPTH))
     return box(x0, x1,
-               mci.NSVMT_Y - (SERVO_L + 2 * EAR_ALLOW) / 2.0,
-               mci.NSVMT_Y + (SERVO_L + 2 * EAR_ALLOW) / 2.0,
-               mci.NSVMT_Z - SERVO_H / 2.0, mci.NSVMT_Z + SERVO_H / 2.0)
+               mci.NSVMT_Y - SERVO_EAR_SPAN / 2.0,
+               mci.NSVMT_Y + SERVO_EAR_SPAN / 2.0,
+               mci.NSVMT_Z - SERVO_W / 2.0, mci.NSVMT_Z + SERVO_W / 2.0)
 
 
 def servo_pad(side):
@@ -440,8 +449,8 @@ def pad_fit_check():
     print("\nPad fit (servo footprint vs the pad the shell provides)")
     print(f"  {'axis':>6s} {'servo needs':>12s} {'pad has':>9s} {'margin':>9s}")
     bad = []
-    for axis, need, has in (("Y", SERVO_L + 2 * EAR_ALLOW, mci.NSVMT_PAD_W),
-                            ("Z", SERVO_H, mci.NSVMT_PAD_H)):
+    for axis, need, has in (("Y", SERVO_EAR_SPAN, mci.NSVMT_PAD_W),
+                            ("Z", SERVO_W, mci.NSVMT_PAD_H)):
         margin = has - need
         if margin < 0:
             bad.append(axis)
@@ -534,11 +543,11 @@ def check_solids(side, findings):
 
 def main():
     print("=== wing_root_deconflict.py ===")
-    print(f"servo: SPT5425LV {SERVO_L} x {SERVO_W} x {SERVO_H} mm, "
-          f"{SERVO_MASS_G:.0f} g, 26 kgf.cm @ 6 V  [REF-SENSOR-013]")
-    print(f"  ear allowance {EAR_ALLOW} mm/end (NOT a datasheet figure)")
-    print(f"  bolt pattern {2 * mci.NSVMT_HOLE_S_Y:.0f} x {2 * mci.NSVMT_HOLE_S_Z:.0f} mm "
-          f"(UNVERIFIED against the servo)")
+    print(f"servo: DS3218 {SERVO_L} x {SERVO_W} x {SERVO_DEPTH} mm, "
+          f"{SERVO_MASS_G:.0f} g, 21.5 kgf.cm @ 6.8 V  [datasheet]")
+    print(f"  flange span {SERVO_EAR_SPAN} mm (Y); body depth {SERVO_DEPTH} mm inboard (X)")
+    print(f"  bolt pattern {2 * mci.NSVMT_HOLE_S_Y:.1f} x {2 * mci.NSVMT_HOLE_S_Z:.1f} mm "
+          f"(datasheet; bores {'LIVE' if mci.NSVMT_HOLES_ENABLED else 'gated off'})")
 
     mid = midline_mm()
     print("\nProtected routes at the wing root (hull frame)")

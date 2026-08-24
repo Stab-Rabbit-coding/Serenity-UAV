@@ -215,6 +215,47 @@
     missed this entirely, since the pad is wider than the servo by design and it is
     the pad, not the servo, that reaches toward the gear bays.
 
+    **UPDATE 2026-08-23 — the DS3218 datasheet arrived, and it corrected the
+    mounting orientation as well as the numbers.**
+    `avionics/datasheets/DS3218 datasheet.pdf` (Dongguan City Dsservo Technology)
+    is now authoritative: **40 × 20 × 40.5 mm, 60 g, 54.5 mm flange span,
+    49.5 × 10 mm bolt pattern**, flange 27.7 mm above the body base.
+
+    The correction that mattered: a standard servo's four screws run **parallel to
+    the output shaft**, through a flange perpendicular to it.  The tilt drive needs
+    the shaft along hull X, so the **flange** lies in the Y-Z plane on the bulkhead
+    and the **40.5 mm height is the inboard depth, not the footprint**.  The pad
+    footprint is therefore **54.5 (Y) × 20 (Z)**, not 54.5 × 40.5 — my
+    standard-size-class estimate had the wrong face on the wall and oversized the
+    pad in Z by 20.5 mm.  Rebuilt again:
+
+    | Constant | Class estimate | Datasheet |
+    | --- | --- | --- |
+    | `NSVMT_PAD_H` (Z) | 47.5 | **27.0** |
+    | `NSVMT_DZ` | 40.72 | **30.47** |
+    | `NSVMT_Z` | +109.14 | **+98.89** |
+    | bolt pattern | 35 × 16 (unverified) | **49.5 × 10** |
+    | `NSVMT_HOLES_ENABLED` | False | **True** |
+
+    Pad fit is **+7.0 mm on both axes**; the floor still holds the 3.00 mm budget
+    over the landing-gear bay tops.  The bores are now live, because the pattern is
+    sourced.
+
+    **Two things the datasheet exposed that are NOT geometry:**
+
+    1. **Torque shortfall.**  DS3218 stall is **18 kgf·cm @ 5 V / 21.5 kgf·cm @
+       6.8 V**, against the tilt-drive requirement of **≥ 25 kgf·cm (2.45 N·m)**
+       (`docs/TILT_SPAR_ANALYSIS.md` §2, from `serenity-rev-r.jsx` L383).  At its
+       own maximum rated voltage the part is ~14 % short.  LibreServo_v4 re-drives
+       the motor from its own 4.5–18 V input so the converted unit may exceed the
+       native figure, but **no torque number for the converted servo exists on
+       file** — this cannot be assumed closed.  Logged in `REFERENCES.md`.
+    2. **Stall current is now cited, and it is higher than the budget.**  1.8 A @
+       5 V / **2.2 A @ 6.8 V**, against the 1.2 A placeholder RAIL-2 was sized on —
+       about 1.8×.  RAIL-2 must be re-checked per tilt servo.
+
+    Original open item, now partly closed:
+
     **Still open — the bolt pattern, and now the body dimensions too.**  DS3218MG
     has *no* cited dimensional source in this repository (the BOM recorded it as
     "(uncited)" when it was superseded on 2026-08-02).  The pad is therefore sized
