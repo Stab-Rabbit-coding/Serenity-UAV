@@ -137,21 +137,31 @@ def midline_mm():
 
 
 def route_stations():
-    """(label, chord_fraction, [(y_offset, diameter), ...]) for each protected route."""
+    """(label, chord_fraction, [(y_offset, diameter), ...]) for each protected route.
+
+    Rev S1c (feat/wing-spar-s1c-cableway-reroute) converted BOTH conduits from
+    constant chord FRACTIONS to constant-mm STATIONS, matching the spar's own law:
+    with a straight LE, two constant-mm bores hold the same separation at every
+    span station, so taper cannot erode the web between them.  That is why the
+    old `*_XFR` names are gone.  This reader takes the station constants and
+    divides by the ROOT chord only to keep the rest of this tool -- which works at
+    the root -- on one representation.
+    """
     with open(wsf.WING_SCAD, encoding="utf-8") as fh:
         src = fh.read()
+    chord = mci.WING_ROOT_CHORD
     cable_d = wsf.scad_scalar(src, "CABLE_BORE_D")
     cable_sep = wsf.scad_scalar(src, "CABLE_BORE_SEP")
-    cable_xfr = wsf.scad_scalar(src, "CABLE_BORE_XFR")
+    cable_stn = wsf.scad_scalar(src, "CABLE_BORE_STATION")
     hall_d = wsf.scad_scalar(src, "HALL_CABLE_D")
-    hall_xfr = wsf.scad_scalar(src, "HALL_CABLE_XFR")
+    hall_stn = wsf.scad_scalar(src, "HALL_CABLE_STATION")
     spar_bore = wsf.scad_scalar(src, "SPAR_BORE_OD")
-    spar_xfr = wsf.scad_scalar(src, "SPAR_BORE_STATION") / mci.WING_ROOT_CHORD
+    spar_stn = wsf.scad_scalar(src, "SPAR_BORE_STATION")
     return [
-        ("EDF ESC conduit (40 A feeds)", cable_xfr,
+        ("EDF ESC conduit (40 A feeds)", cable_stn / chord,
          [(-cable_sep / 2, cable_d), (+cable_sep / 2, cable_d)]),
-        ("Hall/encoder conduit", hall_xfr, [(0.0, hall_d)]),
-        ("spar bore / nav-light 3-core", spar_xfr, [(0.0, spar_bore)]),
+        ("Hall/encoder conduit", hall_stn / chord, [(0.0, hall_d)]),
+        ("spar bore / nav-light 3-core", spar_stn / chord, [(0.0, spar_bore)]),
     ]
 
 

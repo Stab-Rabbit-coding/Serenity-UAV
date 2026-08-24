@@ -224,7 +224,7 @@ see docs/WBS.md §0.10.2.)*
 - [ ] ★ CARGO-03 wing root mortise does not penetrate the bulkhead
 - [ ] ★ CARGO-03b tenon/mortise datum mismatch (4.49 mm in Z)
 - [ ] ★ CARGO-03c coupon gates tenon vs second spar (15 MPa)
-- [ ] CARGO-04 aft ESC conduit blocked by the uncut bulkhead wall
+- [ ] CARGO-04 Hall needs a tenon pass-through; EDF needs wall holes
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
 - [x] Mounting hardware — 8 STLs
@@ -295,7 +295,7 @@ see docs/WBS.md §0.10.2.)*
   (spar DIAMETER Ø12.3 vs 8.3 still open — see §1.1.1 CARGO-02)
 - [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
 - [ ] SPAR-02 DS3218 torque 21.5 vs 25 kgf·cm required; RAIL-2 2.2A
-- [ ] SPAR-04 Hall tip jog crosses the spar bore (pre-existing)
+- [x] SPAR-04 Hall tip jog crosses the spar bore — CLOSED
 
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3

@@ -21,7 +21,7 @@
 - [ ] ★ CARGO-03 wing root mortise does not penetrate the bulkhead
 - [ ] ★ CARGO-03b tenon on chord line, mortise on WING_ROOT_Z (4.5mm)
 - [ ] ★ CARGO-03c coupon-test CF-PETG: >=15MPa tenon, else 2nd spar
-- [ ] CARGO-04 aft ESC conduit blocked by the uncut bulkhead wall
+- [ ] CARGO-04 Hall needs a tenon pass-through; EDF needs wall holes
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
 - [ ] Cargo gondola shell

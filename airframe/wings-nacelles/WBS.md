@@ -344,8 +344,8 @@
     - [ ] Re-tune the horn/pushrod throw against the new servo height (§1.1.3).
     - [ ] Confirm the 4.4 mm fore-gear-bay gap survives the final pad outline.
 
-- [ ] **SPAR-04 — the Hall cable's wingtip jog runs straight through the spar
-    bore.** *(found 2026-08-23 while applying the Rev S1c Hall station; measured
+- [x] **SPAR-04 — the Hall cable's wingtip jog runs straight through the spar
+    bore. CLOSED 2026-08-23 by the Rev S1c merge — see the closure note below.** *(found 2026-08-23 while applying the Rev S1c Hall station; measured
     from the SCAD constants.)*  **BLOCKS the tilt-encoder harness.**
 
     `hall_sensor_cableway()` ends with a chordwise jog at the tip, from the
@@ -372,7 +372,20 @@
     (it carries an explicit `rotating spar tube` obstruction); it does **not** yet
     model the tip jog.  Extend it before this is called closed.
 
-    **Fix options** (owner's call — all three change wingtip geometry):
+    **CLOSED 2026-08-23 — fixed as a side effect of the Rev S1c reroute.**  None of
+    the three options below was needed.  `feat/wing-spar-s1c-cableway-reroute`
+    converted the Hall conduit from a chord FRACTION to a **constant 54.0 mm
+    station**, so its tip end no longer walks forward as the chord tapers: it stays
+    at 54.0 mm, against a sensor pocket at 56.15 mm.  The jog is now **2.15 mm**
+    (was 34.52), and it **does not reach the spar bore at all** (41.00…49.30 mm) —
+    the conduit already emerges aft of it.
+
+    Worth keeping as a lesson: the jog was long only because the conduit's law
+    (chord fraction) differed from the spar's (constant mm), so the two diverged
+    outboard.  Putting both on the same law removed the divergence and the jog with
+    it.  The same mismatch is what caused the original conduit-in-spar collisions.
+
+    Fix options as originally tabled, retained for the record:
     1. Route the jog **around** the spar in thickness, over or under the bore.  The
         tip section is thin (t/c 19.47 % of a 93 mm chord after Rev S1b), so check
         the skin wall before assuming there is room.

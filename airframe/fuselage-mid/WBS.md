@@ -415,100 +415,47 @@
     among them.  Its own comment still reads "HALL_CABLE_XFR = 0.30c", which also
     disagrees with the 0.33 in force — fix the comment with the station.
 
-    **OWNER DIRECTION 2026-08-23 — and one point needs adjudication before it can
-    be applied.**  Direction given: route the Hall 4-core **aft of the spar**; the
-    sensor sits at the wingtip/nacelle joint and does not rotate with the nacelle,
-    the run terminates there, so there is no wire twist and no need to share the
-    spar bore.  Rationale added: *"having them aft of the steel spar protects them
-    from power emf."*  The no-twist half is settled and correct.  **The shielding
-    half does not work at the stated position, because the power pair is already
-    aft of the spar.**  Measured chordwise ordering at the root:
+    **RESOLVED 2026-08-23 by merging `feat/wing-spar-s1c-cableway-reroute`.**
+    The owner's instruction — route the Hall 4-core **aft of the spar**, because
+    the steel spar then shields it from the power feeds — was correct, and my
+    analysis of it was wrong.  I evaluated "aft of the spar" against the EDF pair
+    where it *then* sat (0.48 c, aft of the spar) and concluded the shielding could
+    only work forward.  That branch had already moved the EDF pair **forward**, and
+    with both moves applied the ordering is:
 
-    | Feature | Chordwise (mm from LE) | Chord fraction |
+    | Feature | Station (mm from LE) | Hull Y |
     | --- | --- | --- |
-    | spar bore | 41.00…49.30 | 0.350 c |
-    | **EDF #1 — 40 A POWER** | 54.42…61.42 | 0.449 c |
-    | EDF #2 — signal/telemetry | 62.42…69.42 | 0.511 c |
-    | Hall, as built | 40.82…44.32 | 0.330 c (collides with the spar) |
+    | EDF #1 — 40 A POWER | 22.75 | +15.75 |
+    | EDF #2 — signal | 32.25 | +25.25 |
+    | **spar bore** | **41.00…49.30** | **+38.15** |
+    | Hall/encoder | 54.00 | +47.00 |
 
-    For the steel spar to sit **between** the encoder line and the power pair, the
-    Hall conduit has to be **forward** of the spar — aft of it puts the encoder on
-    the same side as the power, with nothing interposed.  So the directive's words
-    and its purpose point in opposite directions, and the purpose is the one worth
-    serving.  Forward stations, which must also clear the Ø22 spar **bearing boss**
-    in the wall (that boss is the reason the answer is not simply "just forward of
-    the spar bore"):
+    The ferromagnetic spar now sits **between** the power pair and the sensor line,
+    exactly as intended, and the Hall conduit is aft of it exactly as instructed.
+    My Rev S1c edit (`HALL_CABLE_XFR` → 0.23256, 30 mm **forward**) is superseded
+    and was dropped in the merge.
 
-    | Station | Chord frac | Gap to boss | Gap to spar bore | Separation from POWER | Root skin wall |
-    | --- | --- | --- | --- | --- | --- |
-    | 28.0 mm | 0.217 | 4.42 mm | 11.25 mm | 29.92 mm | 6.74 mm |
-    | **30.0 mm** | **0.233** | **2.41 mm** | **9.25 mm** | **27.92 mm** | **6.85 mm** |
-    | 32.0 mm | 0.248 | 0.40 mm | 7.25 mm | 25.92 mm | 6.92 mm |
-    | 34.0 mm | 0.264 | **−1.60 mm** | 5.25 mm | 23.92 mm | 6.92 mm |
-    | *(aft option, for comparison)* 72.7 mm | 0.564 | n/a | n/a | 14.78 mm | 1.52 mm |
+    The branch's reasoning is also better than mine on a point I missed entirely:
+    both conduits are now **constant-mm stations**, matching the spar's own law.
+    As chord-fraction bores they converged on the constant-mm spar as the chord
+    tapered 129 → 93 mm, so the EDF pair entered the spar bore from 29.6 % span
+    outboard and merged with it at the tip — a defect invisible at the root, which
+    is the only station I checked.  `tools/wing_internal_clearance.py` (from that
+    branch) samples the whole span and reports **PASS** on the merged source.
 
-    **Recommend 30.0 mm (0.233 c), forward of the spar.**  It beats the aft station
-    on every metric that matters here — the spar is interposed as intended, the
-    separation from the 40 A pair is **27.9 mm against 14.8 mm**, and the skin wall
-    is **6.85 mm against 1.52 mm**.  It also restores roughly the "0.30 c" the
-    `HALL_CABLE_XFR` comment still claims, which the 0.33 c value in force has
-    disagreed with for some time.
+    **Two consequences the merge creates, both open:**
 
-    **The one cost:** at hull Y +23.00 the conduit sits **forward of the mortise**
-    (Y +42.10…+72.90), so unlike the EDF pair it cannot ride the mortise into the
-    fuselage and needs its own small penetration — a Ø≈4 mm hole through a 2 mm
-    wall, which is trivial to cut but must be added deliberately, and must be
-    re-checked once CARGO-03 re-derives where the wall actually is.  It clears the
-    servo comfortably (Z +67.85 against the servo's Z +78.67 floor, 9.07 mm).
-
-    **RESOLVED 2026-08-23 (owner): use the 30.0 mm mark.**  Applied to
-    `airframe/openscad/wings/wings_s1223_revo.scad` as Rev S1c —
-    `HALL_CABLE_XFR` 0.33 → **0.23256** (30.0 mm at the 129 mm root chord), written
-    as a literal because the SCAD-parsing tools read these constants with a
-    numeric-literal regex and cannot evaluate `30.0 / WING_CHORD_ROOT`.  The stale
-    "0.30c" comment in `hall_sensor_cableway()` is corrected in the same edit — it
-    and the 0.33 constant had disagreed for some time.
-
-    Verified root → tip after the change (constant chord fraction, so it diverges
-    from the constant-mm spar station outboard and clearance only improves):
-
-    | Span | 0 % | 25 % | 50 % | 75 % | 100 % |
-    | --- | --- | --- | --- | --- | --- |
-    | gap to spar bore | 9.25 | 11.34 | 13.44 | 15.53 | 17.62 mm |
-    | separation from EDF POWER | 27.92 | 25.69 | 23.47 | 21.24 | 19.01 mm |
-    | min skin wall | 6.85 | 7.15 | 7.32 | 7.35 | 7.24 mm |
-
-    `tools/wing_root_deconflict.py` now reports the Hall conduit **clear of the
-    rotating spar** (was 468.1 mm³ of interference), clear of the servo, its horn
-    and the tenon.  It still reports **66.6 mm³ blocked by the shell** — that is
-    the missing Ø≈4 mm wall penetration, which is correct until the shell edit adds
-    it, and is part of the CARGO-03 re-cut rather than a separate defect.
-
-    Two stations satisfy "aft of the spar".  Both were measured against the S1223
-    root and tip sections (`tools/wing_spar_station_fit.py` machinery, so the
-    airfoil table has one definition):
-
-    | Candidate | Chord frac | Gap to spar bore | Gap to EDF conduit | Root skin wall | Tip skin wall |
-    | --- | --- | --- | --- | --- | --- |
-    | 51.9 mm (between spar and EDF #1) | 0.402 | 0.81 mm | 0.81 mm | 5.30 mm | 5.62 mm |
-    | **72.7 mm (aft of EDF #2)** | **0.564** | **21.7 mm** | **1.53 mm** | **1.53 mm** | **1.68 mm** |
-
-    **Recommend 72.7 mm.**  The forward pocket has the better skin wall but only
-    0.81 mm of web on each side — below one 4-perimeter wall pair at 0.4 mm nozzle,
-    so those bores would merge in the slicer, and the one it would merge with is
-    **EDF #1, the 40 A power pair**.  Merging the encoder conduit into the power
-    conduit is the worst available outcome for a quadrature feedback line, and it
-    defeats the split the cableway exists to provide.  The aft station sits next to
-    EDF #2 (signal/telemetry) instead, holds ~1.5 mm on both the web and the skin,
-    and that matches the accepted precedent already in the wing — the spar bore
-    itself runs at 1.16–1.44 mm minimum wall.
-
-    Either way: fix the stale "HALL_CABLE_XFR = 0.30c" comment to match whatever
-    station is chosen, and re-run `tools/wing_root_deconflict.py` — the Hall row
-    must go to clear.  Note that only the *aft* option lands inside the tenon's
-    chordwise span (49.5…79.5 mm) and would therefore need its own **tenon
-    pass-through**, cut the way `wing_one_side()` already cuts the EDF pair; the
-    forward option needs a wall penetration instead.
+    1. **The Hall conduit now needs a tenon pass-through.**  At 54.0 mm it lands
+        inside the tenon's chordwise span (49.5…79.5), and `wing_one_side()` cuts
+        pass-throughs only for the EDF pair — `tools/wing_root_deconflict.py`
+        reports the tenon blocking it by **65.0 mm³**.  Cut it the same way the
+        EDF bores are cut.  (This is the consequence flagged when the aft option
+        was first tabled; it has now materialised.)
+    2. **The EDF pair no longer rides the mortise.**  At 22.75/32.25 mm they sit
+        **forward** of the mortise (hull Y +42.10…+72.90), so they need their own
+        wall penetrations.  Residual shell blockage is now small — **10.4 mm³ and
+        0.5 mm³**, against 172.3 mm³ before — so they very nearly clear the wall
+        already; size the penetrations with the CARGO-03 re-cut.
 
 ##### 1.1.1.2 *Cargo*
 

@@ -172,7 +172,7 @@
 //   aft move from the 104.5 mm gear-train pivot.  Drivers: the 40 mm flaps and
 //   the discrete Ø71 housing at the far aft, only partly offset by the 19 g
 //   steel spar sitting on the pivot; the deleted gear train and the ring-gear→
-//   cam swap are ~a pilot.  FIRST-PASS estimate (credible band ≈109–112 mm):
+//   cam swap are ~a wash.  FIRST-PASS estimate (credible band ≈109–112 mm):
 //   effective printed densities pending printer-sliced masses, and the discrete
 //   housing vs. cowl-skin overlap pending the Ø72 nozzle-pocket shell re-bake
 //   (see NOZZLE_RING_OD note + WBS §1.1.3).  First-article verification against
@@ -460,9 +460,34 @@ NAV_CHAN_Z_LO   = NAV_LIGHT_Z;                    // [mm] channel start (at emit
 NAV_CHAN_Z_HI   = PIVOT_Z - PIVOT_BOSS_DEPTH - 1.0;  // [mm] end below pivot boss root
 NAV_CHAN_INSET  =  3.0;    // [mm] channel wall sits this far inboard of the outer face
 
-HARNESS_PORT_W   = 14.0;   // [mm] slot width in Y
-HARNESS_PORT_H   =   8.0;  // [mm] slot height in Z
-HARNESS_PORT_Z   = 107.5;  // [mm] slot centre Z (was 86.0 × 1.25)
+// ── EDF harness entry from the wing (Rev S1c, 2026-08-18) ────────────────────
+// This slot must line up with the wing's EDF double-D where it breaks out of
+// the wing TIP face, because that is the only path the 40 A feeds take into the
+// pod.  It did not: at HARNESS_PORT_Z = 107.5 the slot sat at hull Y ≈ +11.0
+// while the old 0.48c cableway exited the tip at hull Y ≈ +37.6 — about 26 mm
+// adrift, and adrift before Rev S1b as well, so this is a long-standing
+// mismatch that the cableway reroute merely makes measurable.
+//
+// Mapping (see airframe/openscad/port_tilt_spar_assembly.scad): nacelle-LOCAL
+// z maps to hull Y as  hull_Y = local_z + NAC_BAKE.y + NAC_D.y, with
+// NAC_BAKE.y = −64 and NAC_D.y = SPAR_Y − (PIVOT_ZLOC + NAC_BAKE.y)
+//            = 38.15 − 47.5 = −9.35,  so  hull_Y = local_z − 73.35.
+//
+// The wing conduits (CABLE_BORE_STATION 27.5, CABLE_BORE_SEP 9.5, straight LE
+// with the root LE at hull Y −7) exit at hull Y +15.75 and +25.25, so their
+// centre is hull Y +20.50  ->  local z = 20.50 + 73.35 = 93.85.
+//
+// H (local Z ⇒ hull Y) must span both Ø7 conduits plus wall: 15.75 − 4 to
+// 25.25 + 4 = 17.5 mm, so 18.0.  W (local Y ⇒ hull Z) must span their camber
+// heights, hull Z 66.70 and 68.10, plus wall: ≈ 9.4 mm, so 14.0 still covers it.
+//
+// NOTE: the published nacelle STL is baked at the pre-Rev-T CG and is already
+// flagged for re-bake (wings-nacelles WBS §1.1.3); this parameter is correct
+// as of Rev S1c and takes effect on that re-render.
+HARNESS_PORT_W   = 14.0;   // [mm] slot width in Y (⇒ hull Z; spans the double-D camber spread)
+HARNESS_PORT_H   =  18.0;  // [mm] slot height in Z (⇒ hull Y; spans both Ø7 conduits)
+HARNESS_PORT_Z   =  93.85; // [mm] slot centre Z — aligned to the wing EDF double-D
+                           //      (was 107.5, ≈26 mm adrift of the wing exit)
 
 // ── Global facet resolution ───────────────────────────────────────────────────
 $fn = 72;
