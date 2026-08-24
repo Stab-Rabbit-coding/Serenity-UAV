@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-18",
+  "generated": "2026-08-23",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -9994,6 +9994,13 @@
       ],
       "archived": false
     },
+    "docs/img/wing_rev_s1c_sections.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -12274,6 +12281,13 @@
       ],
       "archived": false
     },
+    "tools/wing_section_figure.py": {
+      "description": "Draw the wing's root and tip sections with every internal bore, to scale.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/wing_spar_station_fit.py": {
       "description": "Size the wing spar's chordwise station against the S1223 section it lives in.",
       "tags": [
@@ -12427,6 +12441,7 @@
       "docs/img/starboard-nacelle-vert.png",
       "docs/img/transparent-nacelle.png",
       "docs/img/wing_rev_r1a_sections.png",
+      "docs/img/wing_rev_s1c_sections.png",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -15571,6 +15586,7 @@
       "tools/wing_airfoil_variants.py",
       "tools/wing_cfd_openfoam.py",
       "tools/wing_internal_clearance.py",
+      "tools/wing_section_figure.py",
       "tools/wing_spar_station_fit.py"
     ]
   }
