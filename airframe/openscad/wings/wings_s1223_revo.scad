@@ -675,9 +675,30 @@ module s1223_section(chord = 65.0, t_scale = THICKNESS_SCALE) {
 // =============================================================================
 // ── Module: wing_solid ────────────────────────────────────────────────────────
 // =============================================================================
-// Lofted tapered wing solid using hull() of root and tip cross-sections.
-// The hull() creates a ruled surface between the two stations, approximating
-// the tapered and swept wing.  Valid for taper ratios > 0.4 (Serenity ≈ 0.65).
+// REV S1d (2026-08-24, KTD4): true vertex-matched loft, NOT hull().
+//
+// Why hull() was replaced: hull() takes the CONVEX HULL of the root and tip
+// cross-section point clouds.  With the corrected UIUC S1223 table
+// (REF-CAD-006, see S1223_UPPER/S1223_LOWER above) the real section has a
+// genuinely reflexed/concave lower surface aft of ~65% chord -- that is real
+// S1223 geometry, not a table defect.  `tools/wing_airfoil_integrity.py`
+// reports the convex hull of the tabulated outline is 1.612x the true
+// outline's area, over its 1.10x tolerance -- so a hull()-lofted solid would
+// be measurably not the S1223 section the aero/mass analysis assumes (the
+// reflex is filled in solid, changing wetted area, internal clearance, and
+// mass).
+//
+// Replacement: a manual polyhedron() built from the two end-station point
+// lists returned by s1223_scaled_pts() (the same list `s1223_section()`
+// polygon()s).  s1223_scaled_pts() always returns the SAME point count in
+// the SAME order (46 upper + 35 lower = 81 pts, upper LE->TE then lower
+// TE->LE) regardless of chord or t_scale -- only the scaled coordinate
+// values differ between root and tip -- so root and tip are vertex-matched
+// by construction and a straight quad-strip side wall between them is a
+// faithful ruled loft of the TRUE (non-convex) outline, not its hull.
+// Span-wise the loft is still linear between just the two stations (root,
+// tip), same as the old hull() version -- only the per-station CHORDWISE
+// cross-section fidelity changes, from convex-hull-approximated to exact.
 //
 // Coordinate system: X=chordwise (LE=0), Y=thickness, Z=spanwise (root=0, tip=SPAN).
 // The LE sweeps in +X by WING_SWEEP_LE over the span (aft sweep).
@@ -689,21 +710,47 @@ module wing_solid() {
     sweep      = WING_SWEEP_LE;    // LE moves aft (+X) by this amount over span
     dihedral   = WING_DIHEDRAL;    // tip rises (+Y) by this amount over span
 
-    hull() {
-        // ── Root cross-section at Z = 0 ───────────────────────────────────
-        // Extruded to 0.01 mm thin disc for hull input
-        translate([0, 0, 0])
-            linear_extrude(height = 0.01)
-                s1223_section(chord = root_chord);
+    // Normalized (chord-fraction) section point lists -- SAME topology
+    // (point count + winding order) at root and tip; only t_scale differs
+    // (THICKNESS_SCALE at root, THICKNESS_SCALE_TIP at tip, per the Rev S1b
+    // camber-preserving decomposition above).
+    root_pts2d = s1223_scaled_pts(THICKNESS_SCALE);
+    tip_pts2d  = s1223_scaled_pts(THICKNESS_SCALE_TIP);
+    n = len(root_pts2d);   // == len(tip_pts2d) by construction; asserted below
 
-        // ── Tip cross-section at Z = span (swept + tapered + dihedral) ────
-        // Leading edge swept aft by WING_SWEEP_LE; tip centred on same LE sweep.
-        // Tip uses THICKNESS_SCALE_TIP (local thickening for the spar bore — see
-        // parameter block); root uses THICKNESS_SCALE, so the loft tapers between.
-        translate([sweep, dihedral, span])
-            linear_extrude(height = 0.01)
-                s1223_section(chord = tip_chord, t_scale = THICKNESS_SCALE_TIP);
-    }
+    assert(n == len(tip_pts2d),
+        "wing_solid(): root/tip section point counts diverged -- vertex-matched loft requires identical topology");
+
+    // Scale each normalized point to its station's chord and place it in 3D.
+    root_pts3d = [ for (p = root_pts2d) [ p[0] * root_chord, p[1] * root_chord, 0 ] ];
+    tip_pts3d  = [ for (p = tip_pts2d)
+                     [ p[0] * tip_chord + sweep, p[1] * tip_chord + dihedral, span ] ];
+
+    pts = concat(root_pts3d, tip_pts3d);
+
+    // Root cap (Z=0): reversed winding so its outward normal points -Z (away
+    // from the solid, toward the fuselage).  Tip cap (Z=span): original CCW
+    // winding so its outward normal points +Z (toward the wingtip).  This is
+    // the standard prism-cap convention for a manually-built polyhedron().
+    root_cap = [ for (i = [n - 1 : -1 : 0]) i ];
+    tip_cap  = [ for (i = [0 : n - 1]) n + i ];
+
+    // Side wall: two triangles per matched root/tip vertex pair, wound
+    // outward.  Explicit triangulation (not a quad) because the root and
+    // tip outlines differ (taper + the S1223 reflex), so the quad
+    // [i, i2, n+i2, n+i] is not guaranteed planar -- OpenSCAD's own
+    // nonplanar-quad fallback triangulator was found to produce a
+    // non-watertight mesh (Volumes: 3, trimesh is_watertight: False) on
+    // this section, so the diagonal split is done here explicitly instead.
+    side_faces = [ for (i = [0 : n - 1])
+        let (i2 = (i + 1) % n)
+        each [
+            [ i, i2, n + i ],
+            [ i2, n + i2, n + i ],
+        ]
+    ];
+
+    polyhedron(points = pts, faces = concat([root_cap], [tip_cap], side_faces), convexity = 6);
 }
 
 
