@@ -3,7 +3,7 @@
 
 Why this tool exists
 --------------------
-Root `TODO.md` SS1.1.0 "Hull-frame placements for VERIFY parts" asks for the
+The root work-tracking file SS1.1.0 "Hull-frame placements for VERIFY parts" asks
 eleven cargo-bay accessories to be placed against the *baked* hull rather than
 by estimate.  Placement needs three numbers the repository did not previously
 carry anywhere: the free X span, the free Z span, and the obstruction list at

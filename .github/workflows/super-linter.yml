@@ -40,6 +40,21 @@ jobs:
           # it a second time here via super-linter was a pure duplicate check.
           # super-linter still covers Python via black/isort/mypy/pylint, which
           # ci.yml does not.
+          # docs/references/ holds VENDOR REFERENCE MATERIAL captured verbatim --
+          # saved product pages, datasheets, screenshots -- kept so a cited source
+          # stays readable after the vendor's site changes.  It is third-party
+          # artefact, not this project's code: a saved page brings its own minified
+          # CSS/JS/HTML, which stylelint, htmlhint and eslint reject on sight
+          # (CssSyntaxError on minified rules, and so on).  Reformatting a vendor's
+          # captured page would also destroy the fidelity that makes keeping it
+          # worthwhile.  Excluded by PATH, so those linters stay fully active on the
+          # project's own front-end code.
+          #
+          # Belt and braces on purpose: `.super-lintignore` carries the same path,
+          # but this workflow already records (see the style-linter block below)
+          # that .super-lintignore exclusions proved insufficient for `archives/`,
+          # so the documented FILTER_REGEX_EXCLUDE is set as the reliable mechanism.
+          FILTER_REGEX_EXCLUDE: '.*docs/references/.*'
           VALIDATE_PYTHON_FLAKE8: false
           # CLANG_FORMAT disabled: ci.yml's dedicated "C/C++ format" job already
           # runs clang-format against a version-pinned, authoritative release

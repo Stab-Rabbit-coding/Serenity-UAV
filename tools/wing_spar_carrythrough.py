@@ -93,7 +93,9 @@ ULTIMATE_FACTOR = 1.5
 SPAR_OD, SPAR_ID = 8.0, 5.0
 SPAR_I = math.pi * (SPAR_OD ** 4 - SPAR_ID ** 4) / 64.0    # mm^4
 SPAR_Z = SPAR_I / (SPAR_OD / 2.0)                          # mm^3
-STEEL_YIELD = 460.0                 # MPa, 4130 normalized (typical -- MMPDS TODO SS0.8)
+# MPa, 4130 normalized (typical -- MMPDS; tracked in the root work-tracking
+# file SS0.8).
+STEEL_YIELD = 460.0
 
 # --- candidate thwart section ---------------------------------------------
 THWART_T = 2.0                      # mm, CF-PLATE-2MM (already in the BOM)
@@ -104,7 +106,8 @@ THWART_H = 25.0                     # mm, depth in the plane of the section
 # verified before fabrication".  A cross-ply plate loaded in bending across the
 # ship is NOT that layup, so 300 MPa is used here as a deliberately conservative
 # stand-in, a factor of 5 below the unidirectional figure.  It is NOT a verified
-# allowable: see REFERENCES.md "requires verification" and root TODO SS0.8.
+# allowable: see REFERENCES.md "requires verification" and the root
+# work-tracking file SS0.8.
 CF_ALLOW = 300.0                    # MPa -- REQUIRES VERIFICATION
 CF_ALLOW_UNI = 1500.0               # MPa -- structural_analysis.md SS1, also unverified
 
@@ -324,7 +327,8 @@ def report_thwart(m_ultimate):
     print("\n  FOS column uses the conservative 300 MPa cross-ply stand-in;")
     print("  FOS uni uses structural_analysis.md SS1's 1500 MPa unidirectional")
     print("  figure.  NEITHER is a verified allowable -- obtain ASTM D3039/D695")
-    print("  certificates for the actual plate before fabrication (TODO SS0.8).")
+    print("  certificates for the actual plate before fabrication"
+          " -- root work-tracking file SS0.8).")
     return z_thwart
 
 
