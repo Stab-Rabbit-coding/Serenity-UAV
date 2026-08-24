@@ -1989,6 +1989,26 @@ inner surface as the flow-facing boundary.  The master flaps are geometrically u
 `docs/PHASED_BUILD_GUIDE.md` (nozzle flap print quantities), `current-specification/bom_revS.json`
 (`PRINT-NACELLE-FLAP-MASTER` / `PRINT-NACELLE-FLAP-SEAL`), `TODO.md` §1.1.3.
 
+### REF-CAD-006: Selig, M.S. — S1223 airfoil coordinates (UIUC Airfoil Coordinates Database)
+
+| Field | Value |
+|---|---|
+| **Author** | Michael S. Selig (University of Illinois at Urbana-Champaign, Department of Aerospace Engineering) |
+| **Work** | S1223 airfoil — tabulated (x, y) surface coordinates, normalised to unit chord, Selig convention (single closed loop starting/ending at the trailing edge, upper surface TE→LE followed by lower surface LE→TE) |
+| **Designation** | UIUC Airfoil Coordinates Database, entry `s1223.dat` |
+| **Official URL** | <https://m-selig.ae.illinois.edu/ads/coord_database.html> (database index); direct file <https://m-selig.ae.illinois.edu/ads/coord/s1223.dat> |
+| **Retrieved** | 2026-08-24, fetched live via HTTP GET against the direct file URL above; content verified against the published S1223 plots at <https://m-selig.ae.illinois.edu/ads/afplots/s1223.gif> (same database) |
+| **License** | UIUC Applied Aerodynamics Group airfoil data is published for open engineering/research use; cited here per this project's citation policy (root `AGENTS.md` §4) regardless of whether a formal license notice accompanies the file. No coordinate value is altered — the table below is a verbatim re-split of the published 81-point loop into the two ordered surface lists (`S1223_UPPER` LE→TE, `S1223_LOWER` TE→LE) that `wings_s1223_revo.scad`'s existing `s1223_section()`/`midline_frac()` decomposition expects; no interpolation, smoothing, or invented points were introduced. |
+| **Note** | Supersedes the placeholder table that shipped with `wings_s1223_revo.scad` since Rev R1 — that table was a hand-typed approximation that crossed to negative thickness at x/c ≈ 0.742 (WING-01, `tools/wing_airfoil_integrity.py`). This entry is the actual source data; the placeholder's origin was never traceable to a fetch and is not cited as a source. |
+
+**Applied to:** `S1223_UPPER` / `S1223_LOWER` coordinate tables — the wing outer-mold-line section
+used by `s1223_section()`, `wing_solid()`, and every bore/pad module in
+`wings_s1223_revo.scad` that reads `midline_frac()`.
+
+**Used in:** `airframe/openscad/wings/wings_s1223_revo.scad` (`S1223_UPPER`, `S1223_LOWER`),
+`tools/wing_airfoil_integrity.py` (validates this table), `airframe/wings-nacelles/WBS.md` §1.1.2
+(WING-01).
+
 ---
 
 ## Part XV — Open Hardware / Software Licensing Standards

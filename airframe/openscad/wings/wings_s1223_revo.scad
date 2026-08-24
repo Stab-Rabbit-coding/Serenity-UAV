@@ -481,85 +481,118 @@ $fn = 72;
 // =============================================================================
 // ── S1223 Airfoil Coordinate Data ─────────────────────────────────────────────
 // =============================================================================
-// Normalised coordinates from UIUC Airfoil Database (Selig & Guglielmo 1997).
-// x ∈ [0,1], y = local thickness ratio (positive = upper surface toward sky).
+// Coordinates fetched live from the UIUC Airfoil Coordinates Database,
+// `s1223.dat` (Selig), 2026-08-24 — REFERENCES.md REF-CAD-006.  This is a
+// VERBATIM re-split of the published 81-point Selig-format loop (one closed
+// list, upper TE->LE then lower LE->TE) into the two ordered lists this
+// file's s1223_section()/midline_frac() decomposition expects (upper LE->TE,
+// lower TE->LE).  No coordinate value, interpolation, or invented point was
+// introduced — every (x, y) pair below appears verbatim in the fetched file.
+// x in [0,1], y = local thickness ratio (positive = upper surface toward sky).
 //
-// Format: closed polygon, upper surface LE→TE then lower surface TE→LE.
+// This table REPLACES the Rev R1 placeholder table, which was never traced to
+// an actual fetch and crossed to negative thickness at x/c ~= 0.742
+// (WING-01, tools/wing_airfoil_integrity.py) -- a fabricated/reconstructed
+// table, prohibited by root AGENTS.md SS4.
+//
+// Format: closed polygon, upper surface LE->TE then lower surface TE->LE.
 // OpenSCAD polygon() uses counterclockwise winding (positive fill).
-//
-// Accuracy note: interpolated from published data; matches database to ±0.001
-// chord units.  Download s1223.dat from UIUC for production verification:
-//   https://m-selig.ae.illinois.edu/ads/coord/s1223.dat
+// The two surfaces do not share an exact (0,0) leading-edge point -- neither
+// does the source data, which is normal for a discretely sampled finite-
+// radius leading edge (upper's LE-most point is [0.00005, 0.00178]; lower's
+// is [0.00044, -0.00561]).  tools/wing_airfoil_integrity.py excludes a
+// LE_EXCLUDE = 0.005 band from the thickness check for exactly this reason.
 // =============================================================================
 
-// ── Upper surface points (LE x=0 → TE x=1) ───────────────────────────────────
+// ── Upper surface points (LE x=0 -> TE x=1) ──────────────────────────────────
+// REF-CAD-006, s1223.dat rows 46 down to 1 (reversed to LE->TE order).
 S1223_UPPER = [
-    [ 0.0000,  0.0000 ],   // leading edge
-    [ 0.0050,  0.0163 ],
-    [ 0.0100,  0.0231 ],
-    [ 0.0150,  0.0284 ],
-    [ 0.0250,  0.0381 ],
-    [ 0.0350,  0.0472 ],
-    [ 0.0500,  0.0594 ],
-    [ 0.0650,  0.0706 ],
-    [ 0.0800,  0.0810 ],
-    [ 0.1000,  0.0936 ],
-    [ 0.1250,  0.1073 ],
-    [ 0.1500,  0.1189 ],
-    [ 0.1750,  0.1285 ],
-    [ 0.2000,  0.1362 ],
-    [ 0.2250,  0.1419 ],
-    [ 0.2500,  0.1455 ],   // ← approx max thickness station (half-thickness perp. to camber)
-    [ 0.2750,  0.1472 ],
-    [ 0.3000,  0.1471 ],
-    [ 0.3250,  0.1454 ],
-    [ 0.3500,  0.1422 ],
-    [ 0.3750,  0.1378 ],
-    [ 0.4000,  0.1323 ],
-    [ 0.4250,  0.1260 ],
-    [ 0.4500,  0.1189 ],
-    [ 0.5000,  0.1033 ],
-    [ 0.5500,  0.0866 ],
-    [ 0.6000,  0.0696 ],
-    [ 0.6500,  0.0526 ],
-    [ 0.7000,  0.0361 ],
-    [ 0.7500,  0.0210 ],
-    [ 0.8000,  0.0082 ],
-    [ 0.8500, -0.0020 ],
-    [ 0.9000, -0.0089 ],
-    [ 0.9500, -0.0109 ],
-    [ 1.0000,  0.0000 ],   // trailing edge
+    [ 0.00005,  0.00178 ],   // leading-edge-most upper sample (source data; see note above)
+    [ 0.00155,  0.01033 ],
+    [ 0.00495,  0.01969 ],
+    [ 0.01028,  0.02954 ],
+    [ 0.01755,  0.03961 ],
+    [ 0.02694,  0.04966 ],
+    [ 0.03855,  0.05968 ],
+    [ 0.05223,  0.06965 ],
+    [ 0.06789,  0.07940 ],
+    [ 0.08545,  0.08879 ],
+    [ 0.10482,  0.09770 ],
+    [ 0.12591,  0.10598 ],
+    [ 0.14863,  0.11355 ],
+    [ 0.17286,  0.12026 ],
+    [ 0.19846,  0.12594 ],
+    [ 0.22541,  0.13037 ],
+    [ 0.25370,  0.13346 ],
+    [ 0.28347,  0.13505 ],
+    [ 0.31488,  0.13526 ],   // <- max thickness station (source data)
+    [ 0.34777,  0.13447 ],
+    [ 0.38193,  0.13271 ],
+    [ 0.41721,  0.13011 ],
+    [ 0.45340,  0.12683 ],
+    [ 0.49025,  0.12303 ],
+    [ 0.52744,  0.11881 ],
+    [ 0.56465,  0.11425 ],
+    [ 0.60158,  0.10935 ],
+    [ 0.63798,  0.10412 ],
+    [ 0.67360,  0.09859 ],
+    [ 0.70823,  0.09277 ],
+    [ 0.74166,  0.08671 ],
+    [ 0.77369,  0.08044 ],
+    [ 0.80412,  0.07402 ],
+    [ 0.83277,  0.06749 ],
+    [ 0.85947,  0.06089 ],
+    [ 0.88406,  0.05427 ],
+    [ 0.90641,  0.04768 ],
+    [ 0.92639,  0.04116 ],
+    [ 0.94389,  0.03476 ],
+    [ 0.95884,  0.02853 ],
+    [ 0.97111,  0.02250 ],
+    [ 0.98075,  0.01646 ],
+    [ 0.98825,  0.01037 ],
+    [ 0.99417,  0.00494 ],
+    [ 0.99838,  0.00126 ],
+    [ 1.00000,  0.00000 ],   // trailing edge
 ];
 
-// ── Lower surface points (TE x=1 → LE x=0) ───────────────────────────────────
+// ── Lower surface points (TE x=1 -> LE x=0) ──────────────────────────────────
+// REF-CAD-006, s1223.dat rows 81 down to 47 (reversed to TE->LE order).
 S1223_LOWER = [
-    [ 1.0000,  0.0000 ],   // trailing edge
-    [ 0.9500,  0.0021 ],
-    [ 0.9000,  0.0063 ],
-    [ 0.8500,  0.0117 ],
-    [ 0.8000,  0.0175 ],
-    [ 0.7500,  0.0228 ],
-    [ 0.7000,  0.0270 ],
-    [ 0.6500,  0.0299 ],
-    [ 0.6000,  0.0313 ],
-    [ 0.5500,  0.0312 ],
-    [ 0.5000,  0.0297 ],
-    [ 0.4500,  0.0270 ],
-    [ 0.4000,  0.0233 ],
-    [ 0.3500,  0.0192 ],
-    [ 0.3000,  0.0149 ],
-    [ 0.2500,  0.0109 ],
-    [ 0.2000,  0.0073 ],
-    [ 0.1500,  0.0040 ],
-    [ 0.1000,  0.0012 ],
-    [ 0.0750, -0.0003 ],
-    [ 0.0500, -0.0022 ],
-    [ 0.0350, -0.0038 ],
-    [ 0.0250, -0.0053 ],
-    [ 0.0150, -0.0067 ],
-    [ 0.0100, -0.0074 ],
-    [ 0.0050, -0.0073 ],
-    [ 0.0000,  0.0000 ],   // leading edge (closes polygon)
+    [ 1.00000,  0.00000 ],   // trailing edge
+    [ 0.99825,  0.00115 ],
+    [ 0.99268,  0.00468 ],
+    [ 0.98255,  0.01060 ],
+    [ 0.96693,  0.01822 ],
+    [ 0.94573,  0.02624 ],
+    [ 0.91966,  0.03387 ],
+    [ 0.88928,  0.04088 ],
+    [ 0.85500,  0.04706 ],
+    [ 0.81729,  0.05219 ],
+    [ 0.77660,  0.05612 ],
+    [ 0.73344,  0.05872 ],
+    [ 0.68832,  0.05994 ],
+    [ 0.64176,  0.05976 ],
+    [ 0.59428,  0.05820 ],
+    [ 0.54639,  0.05534 ],
+    [ 0.49860,  0.05129 ],
+    [ 0.45139,  0.04618 ],
+    [ 0.40519,  0.04021 ],
+    [ 0.36044,  0.03358 ],
+    [ 0.31750,  0.02652 ],
+    [ 0.27673,  0.01928 ],
+    [ 0.23840,  0.01213 ],
+    [ 0.20278,  0.00535 ],
+    [ 0.17006, -0.00075 ],
+    [ 0.14020, -0.00563 ],
+    [ 0.11282, -0.00925 ],
+    [ 0.08787, -0.01202 ],
+    [ 0.06561, -0.01404 ],
+    [ 0.04627, -0.01532 ],
+    [ 0.03006, -0.01584 ],
+    [ 0.01718, -0.01550 ],
+    [ 0.00789, -0.01427 ],
+    [ 0.00264, -0.01120 ],
+    [ 0.00044, -0.00561 ],   // leading-edge-most lower sample (source data; see note above)
 ];
 
 // ── Combined polygon (counterclockwise: upper LE→TE, lower TE→LE) ─────────────
