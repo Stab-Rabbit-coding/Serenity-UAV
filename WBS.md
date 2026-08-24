@@ -221,10 +221,10 @@ see docs/WBS.md §0.10.2.)*
 - [x] Verify head-cargo mating boss positions in slicer — SUPERSEDED,…
 - [ ] ★ CARGO-01 payload won't fit past the wing spar (BLOCKER)
 - [ ] CARGO-02 shell bores Ø12.3 for a spar the wing retired (8.3)
-- [ ] ★ CARGO-03 wing root mortise does not penetrate the bulkhead
-- [ ] ★ CARGO-03b tenon/mortise datum mismatch (4.49 mm in Z)
+- [x] ★ CARGO-03 wing root mortise now penetrates — CLOSED
+- [x] ★ CARGO-03b tenon/mortise on one datum — CLOSED
 - [ ] ★ CARGO-03c coupon gates tenon vs second spar (15 MPa)
-- [ ] CARGO-04 Hall needs a tenon pass-through; EDF needs wall holes
+- [x] CARGO-04 conduits clear through the re-cut shell — CLOSED
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
 - [x] Mounting hardware — 8 STLs
@@ -293,6 +293,7 @@ see docs/WBS.md §0.10.2.)*
 - [x] EDF cableway added
 - [x] Fuselage spar-interface mismatched — station RESOLVED (Rev S1b)
   (spar DIAMETER Ø12.3 vs 8.3 still open — see §1.1.1 CARGO-02)
+- [ ] ★ WING-01 S1223 section self-intersects at x/c 0.742 (BLOCKER)
 - [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
 - [ ] SPAR-02 DS3225 24.5 vs 25 kgf·cm req (re-derive); RAIL-2 2.3A
 - [x] SPAR-04 Hall tip jog crosses the spar bore — CLOSED

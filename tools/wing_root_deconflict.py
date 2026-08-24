@@ -159,11 +159,16 @@ def route_stations():
     hall_stn = wsf.scad_scalar(src, "HALL_CABLE_STATION")
     spar_bore = wsf.scad_scalar(src, "SPAR_BORE_OD")
     spar_stn = wsf.scad_scalar(src, "SPAR_BORE_STATION")
+    # Each bore is camber-centred at ITS OWN chordwise station, so the two EDF
+    # bores do not share a midline: at 22.75 and 32.25 mm the S1223 camber line
+    # differs by ~0.8 mm.  Evaluating one midline for the pair puts both bores
+    # off the shell's matching harness ports and reports phantom blockage.
     return [
-        ("EDF ESC conduit (40 A feeds)", cable_stn / chord,
-         [(-cable_sep / 2, cable_d), (+cable_sep / 2, cable_d)]),
-        ("Hall/encoder conduit", hall_stn / chord, [(0.0, hall_d)]),
-        ("spar bore / nav-light 3-core", spar_stn / chord, [(0.0, spar_bore)]),
+        ("EDF ESC conduit (40 A feeds)",
+         [((cable_stn - cable_sep / 2) / chord, cable_d),
+          ((cable_stn + cable_sep / 2) / chord, cable_d)]),
+        ("Hall/encoder conduit", [(hall_stn / chord, hall_d)]),
+        ("spar bore / nav-light 3-core", [(spar_stn / chord, spar_bore)]),
     ]
 
 
@@ -174,10 +179,10 @@ def routes(side):
     outb = mci.PORT_OUTB if side == "port" else mci.STBD_OUTB
     lo, hi = min(inb, outb), max(inb, outb)
     out = []
-    for label, xfr, bores in route_stations():
-        z = WING_CHORD_LINE_Z + mid(xfr)
-        for i, (dy, d) in enumerate(bores):
-            y = mci.WING_LE_ROOT_Y + xfr * mci.WING_ROOT_CHORD + dy
+    for label, bores in route_stations():
+        for i, (xfr, d) in enumerate(bores):
+            z = WING_CHORD_LINE_Z + mid(xfr)
+            y = mci.WING_LE_ROOT_Y + xfr * mci.WING_ROOT_CHORD
             tag = label if len(bores) == 1 else f"{label} #{i + 1}"
             out.append((tag, xcyl(y, z, lo - 12.0, hi + 12.0, d / 2.0)))
     return out
@@ -214,20 +219,27 @@ def tenon(side):
     x0, x1 = sorted((face, face + sign * ln))
     solid = box(x0, x1, y_c - w / 2, y_c + w / 2, z_c - h / 2, z_c + h / 2)
 
-    # The tenon is NOT a plain block: `wing_one_side()` drills the EDF ESC
-    # conduits straight through it, axially, at the same chordwise/thickness
-    # station as the spanwise conduit -- the SCAD calls this the "tenon
-    # pass-through", and notes the bores groove the tenon crown while the lower
-    # ~30 x 15 mm stays solid.  Modelling the tenon without them reports the
-    # cableway as blocked by its own wing, which is wrong.
+    # The tenon is NOT a plain block: `wing_one_side()` drills a "tenon
+    # pass-through" for any conduit whose chordwise station falls inside the
+    # tenon, so the wire exits the inboard face instead of dead-ending in solid
+    # material.  Modelling the tenon without those bores reports a cableway as
+    # blocked by its own wing, which is wrong.
+    #
+    # Which conduit needs one is NOT fixed, so it must not be hardcoded.  Before
+    # Rev S1c the EDF double-D sat at 0.48c, inside the tenon, and got the
+    # pass-through; the reroute moved it forward to 22.75/32.25 mm -- clear of
+    # the tenon -- and moved the sensor conduit to 54.0 mm, which is inside it.
+    # The bore now follows the station, so a later reroute cannot silently
+    # invert this again.
     man = to_man(solid)
     mid = midline_mm()
-    for label, xfr, bores in route_stations():
-        if not label.startswith("EDF"):
-            continue
-        z = WING_CHORD_LINE_Z + mid(xfr)
-        for dy, d in bores:
-            y = mci.WING_LE_ROOT_Y + xfr * mci.WING_ROOT_CHORD + dy
+    y_lo, y_hi = y_c - w / 2.0, y_c + w / 2.0
+    for _label, bores in route_stations():
+        for xfr, d in bores:
+            y = mci.WING_LE_ROOT_Y + xfr * mci.WING_ROOT_CHORD
+            if not (y_lo - d / 2.0 < y < y_hi + d / 2.0):
+                continue        # clear of the tenon; no pass-through cut
+            z = WING_CHORD_LINE_Z + mid(xfr)
             man = man - to_man(xcyl(y, z, x0 - 2.0, x1 + 2.0, d / 2.0))
     g = man.to_mesh()
     return trimesh.Trimesh(
@@ -564,10 +576,10 @@ def main():
     mid = midline_mm()
     print("\nProtected routes at the wing root (hull frame)")
     print(f"  {'route':>30s} {'chord frac':>11s} {'Y':>8s} {'Z':>8s}")
-    for label, xfr, bores in route_stations():
-        z = WING_CHORD_LINE_Z + mid(xfr)
-        for i, (dy, d) in enumerate(bores):
-            y = mci.WING_LE_ROOT_Y + xfr * mci.WING_ROOT_CHORD + dy
+    for label, bores in route_stations():
+        for i, (xfr, d) in enumerate(bores):
+            z = WING_CHORD_LINE_Z + mid(xfr)
+            y = mci.WING_LE_ROOT_Y + xfr * mci.WING_ROOT_CHORD
             tag = label if len(bores) == 1 else f"{label} #{i + 1}"
             print(f"  {tag:>30s} {xfr:11.3f} {y:+8.2f} {z:+8.2f}   D{d:.1f}")
 

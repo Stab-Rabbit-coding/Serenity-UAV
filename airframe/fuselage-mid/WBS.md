@@ -176,7 +176,8 @@
     - [ ] create mounting bracket for camera/tof/laser control pcb
     - Verify Faraday tray cutout and all other non-boss geometry unchanged after SCAD re-render.
 
-- [ ] **★ CARGO-03 — the wing root mortise does not penetrate the bulkhead.**
+- [x] **★ CARGO-03 — the wing root mortise does not penetrate the bulkhead.**
+    **CLOSED 2026-08-24.**
     *(found 2026-08-23 while checking that the nacelle ESC cableway is not blocked,
     owner direction; gated by `tools/wing_root_deconflict.py`)*  **BLOCKS wing
     attachment, the ESC cableway, and the cargo shell print.**
@@ -209,13 +210,23 @@
     `WING_MORT_Y` (0.50 chord) and `WING_ROOT_Z` were untouched by that change, so
     the defect has been latent since the mortises were first cut.
 
-    **Fix:** re-derive both mortise X spans from the *measured* wall position at the
-    mortise station rather than from the `PORT_INB`/`PORT_OUTB` bracket constants,
-    which are deep-embed spans for bosses and were never the wall.  Re-run
-    `tools/wing_root_deconflict.py` — all four rows must read THROUGH.  Do it in the
-    same shell edit as CARGO-01/CARGO-02.
+    **FIXED 2026-08-24.**  Both mortise cutters now span the same inboard
+    references the Rev S1c harness ports already derived for this wall
+    (`WING_HARNESS_INB_PORT` −125.0 / `WING_HARNESS_INB_STBD` −213.0, "past the
+    −115.2 encoder-line wall") out to `PORT_OUTB` / `STBD_OUTB`.  One measured
+    fact now drives every wing-root penetration instead of three different
+    guesses.  Re-merged and published; swept-corridor test on the published shell:
 
-    **CARGO-03b — and the tenon that enters it is on a different datum.**
+    | Penetration | Material left in the corridor | Verdict |
+    | --- | --- | --- |
+    | wing root mortise, port | **0.0 mm³** (was 1 682.8) | **THROUGH** |
+    | wing root mortise, stbd | **0.0 mm³** (was 1 643.8) | **THROUGH** |
+
+    `PORT_INB`/`PORT_OUTB` are deep-embed spans for **bosses** and were never the
+    wall; treating them as the wall is what caused this, and the fix removes that
+    conflation rather than patching the numbers.
+
+    **CARGO-03b — and the tenon that enters it is on a different datum. CLOSED 2026-08-24.**
     *(owner direction 2026-08-23: the wing root tenon has to be accounted for
     alongside the bearing seat.)*  The mortise is only half the joint;
     `wings_s1223_revo.scad` `fuselage_root_tab()` is the other half.  It fits in Y
@@ -235,6 +246,22 @@
     All three `WING_ROOT_TAB_*` constants still carry their original `VERIFY`
     comments in the SCAD; they were flagged as unchecked when written and never
     were.  Pick **one** datum for the joint and drive both files from it.
+
+    **FIXED 2026-08-24 — the chord line is now the single datum.**
+    `WING_ROOT_Z` 62.5 → `WING_CHORD_LINE_Z` (58.01), so the mortise is centred
+    where `fuselage_root_tab()` already centres the tenon.  The chord line won
+    because the tenon is a *wing* feature and the chord line is the wing's own
+    datum; `WING_ROOT_Z` was a fuselage-side number with no geometric claim on the
+    joint.  Nothing else reads it — the spar bore and the servo pad are both
+    spar-relative — so the move disturbs nothing.  Measured after the re-cut:
+
+    | Axis | Tenon span | Mortise span | Clearance each side |
+    | --- | --- | --- | --- |
+    | Y | +42.50…+72.50 | +42.10…+72.90 | +0.40 / +0.40 |
+    | Z | +48.01…+68.01 | +47.61…+68.41 | **+0.40 / +0.40** |
+
+    The joint now has the symmetric 0.4 mm/side fit its sizes were always chosen
+    for.
 
     **Tenon depth is fine.**  Measured wall face at the mortise station is hull
     X −99.0 (port); a 12 mm `WING_ROOT_TAB_L` reaches X −111.0, still inside the
@@ -385,8 +412,8 @@
     the table; < 15 MPa → second spar at 14 mm.**  Re-run
     `tools/wing_spar_carrythrough.py` either way.
 
-- [ ] **CARGO-04 — the aft EDF ESC conduit is blocked, and the Hall conduit runs
-    inside the rotating spar.** *(found 2026-08-23 with CARGO-03; same tool)*
+- [x] **CARGO-04 — the aft EDF ESC conduit is blocked, and the Hall conduit runs
+    inside the rotating spar. CLOSED 2026-08-24.** *(found 2026-08-23 with CARGO-03; same tool)*
     **BLOCKS the nacelle ESC harness and the tilt-encoder harness.**
 
     Owner requirement: the nacelle ESC and nav-light cableways must stay open.  The
@@ -453,9 +480,29 @@
         was first tabled; it has now materialised.)
     2. **The EDF pair no longer rides the mortise.**  At 22.75/32.25 mm they sit
         **forward** of the mortise (hull Y +42.10…+72.90), so they need their own
-        wall penetrations.  Residual shell blockage is now small — **10.4 mm³ and
-        0.5 mm³**, against 172.3 mm³ before — so they very nearly clear the wall
-        already; size the penetrations with the CARGO-03 re-cut.
+        wall penetrations.
+
+    **BOTH CLOSED 2026-08-24, and one of them was never a defect.**
+
+    * The **wall penetrations already existed** — the Rev S1c branch added
+      `wing_harness_ports()` (2 × Ø8.0 EDF + 1 × Ø4.5 encoder per side) and wires
+      them into `build_negatives()` through `wing_keepout_negatives()`, so the
+      same solids the gear bay is trimmed against are the ones the hull is cut
+      with.  The 10.4 / 0.5 mm³ residuals reported here were **a bug in
+      `tools/wing_root_deconflict.py`, not in the shell**: it evaluated one camber
+      midline for both EDF bores, when each is camber-centred at its own station
+      and the two differ by ~0.8 mm in Z.  Fixed; both now read 0.0 mm³.
+    * The **Hall tenon pass-through already existed too** — `wing_one_side()`
+      cuts it at the 54.0 mm station.  The same tool was hardcoded to subtract
+      *EDF* pass-throughs from its tenon model, which was correct before Rev S1c
+      and wrong after it: the reroute moved the EDF pair clear of the tenon and
+      moved the sensor conduit into it.  The model is now **station-driven** — it
+      cuts a pass-through for whichever conduit actually falls inside the tenon —
+      so a future reroute cannot invert it again.
+
+    Verified against the re-cut published shell: all four routes read **0.0 mm³**
+    on both sides, and `tools/wing_root_deconflict.py` reports
+    **"CLEAR — servo mounts deconflict and every cableway stays open"**.
 
 ##### 1.1.1.2 *Cargo*
 

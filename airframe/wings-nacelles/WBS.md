@@ -413,6 +413,78 @@
     3. Take the lead out through the **nacelle** side instead of back down the
         wing, if the encoder can be read from a harness that stays outboard.
 
+- [ ] **★ WING-01 — the tabulated S1223 section is not a valid airfoil: the
+    surfaces cross at x/c 0.742 and the outline self-intersects.**
+    *(owner asked 2026-08-23: "verify that the airfoil doesn't create a zero
+    thickness point that would cause a gap partway toward the trailing edge, as
+    some of the drawings show."  It does.  Gated by
+    `tools/wing_airfoil_integrity.py`, which fails closed.)*
+    **BLOCKS wing fabrication, the mass budget, and any aero claim.**
+
+    `S1223_UPPER` falls below `S1223_LOWER` over the aft quarter of the chord, so
+    section thickness goes **negative from x/c ≈ 0.742**, bottoming at
+    **t/c −0.0152 (−1.96 mm root / −2.05 mm tip) at x/c 0.90**, before both
+    surfaces return to zero at the TE.  Shapely reports the outline invalid with a
+    self-intersection at (0.7417, 0.0235).  A drawing that renders the outline
+    shows exactly what the owner saw: the surfaces pinch to zero partway back and
+    cross into a bowtie.
+
+    **Why nothing caught it.**  Two independent reasons, and both are worth
+    fixing as process:
+
+    1. `wing_spar_station_fit.py` and `wing_internal_clearance.py` both ask "does
+        a **bore** fit inside this section?".  Neither asks whether the section is
+        a valid simple polygon to begin with.
+    2. `wing_solid()` lofts with OpenSCAD **`hull()`**, which takes the CONVEX
+        HULL of each section.  The convex hull of a self-intersecting outline is
+        still a clean convex region, so the exported STL is watertight, single-
+        bodied, and passes `tools/validate_stls.py`.  **The exported STL is not
+        evidence here** — measured on the built wing, thickness runs a healthy
+        12.7 mm at 0.60 c down to 1.5 mm at 0.975 c with no gap at all.
+
+    **The masking is not free.**  Convex hull area is **1.647×** the tabulated
+    outline's — it fills the airfoil's concavity *and* swallows the bowtie — so
+    **39.3 % of the built section's area is material the section does not call
+    for**.  The built wing is therefore materially not an S1223, which propagates
+    into wing mass, into every aero figure, and into the Rev S1b camber-
+    preservation work (thickness-only scaling preserves a camber line that
+    `hull()` then discards).
+
+    **What is NOT affected.**  Internal-clearance results are *conservative*, not
+    wrong: the hull is strictly larger than the outline, so a bore that clears
+    inside the tabulated section has at least as much material around it in the
+    built part.  `wing_internal_clearance.py`'s PASS and the Rev S1c conduit
+    stations stand as lower bounds.
+
+    **Comparison against published Selig S1223** — the aft upper surface is the
+    part that is wrong, by a roughly constant offset that grows from x/c 0.8:
+
+    | x/c | repo `S1223_UPPER` | Selig S1223 | delta |
+    | --- | --- | --- | --- |
+    | 0.80 | +0.0082 | +0.0431 | −0.0349 |
+    | 0.85 | −0.0020 | +0.0318 | −0.0338 |
+    | 0.90 | −0.0089 | +0.0210 | −0.0299 |
+    | 0.95 | −0.0109 | +0.0109 | −0.0218 |
+    | 1.00 | 0.0000 | 0.0000 | 0.0000 |
+
+    **This item is NOT closed by a fix, deliberately.**  Correcting it means
+    replacing the coordinate table, and root `AGENTS.md` §4 forbids sourcing that
+    from memory — the Selig column above is a comparison, not a transcription to
+    paste in.  The table must come from a validated source (UIUC Airfoil
+    Coordinates Database), be added to `REFERENCES.md` with a validated URL, and
+    only then replace `S1223_UPPER`/`S1223_LOWER`.
+
+    **Open sub-steps:**
+    - [ ] Obtain S1223 coordinates from the UIUC database; add a `REF-CAD-*`
+        entry with a validated URL and the retrieval date.
+    - [ ] Replace both tables; `tools/wing_airfoil_integrity.py` must reach PASS.
+    - [ ] Decide `hull()` vs a true loft.  Even with a correct table, `hull()`
+        convexifies away S1223's concavity — check the ratio the gate reports and
+        move to a swept/lofted solid if it stays above tolerance.
+    - [ ] Re-render and re-bake both wings; re-run `wing_internal_clearance.py`
+        and `wing_root_deconflict.py` against the corrected section.
+    - [ ] Re-derive wing mass and re-check the §1.1.2 aero figures.
+
 ##### 1.1.2.1 *Rev R1a — spar straightened + camber-centered + EDF cableway (2026-07-07)*
 
 - [x] **Spar bore de-skewed** — `wings_s1223_revo.scad`: replaced the constant-30%-

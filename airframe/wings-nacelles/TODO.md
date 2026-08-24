@@ -19,6 +19,7 @@
 - [ ] wing_nacelle_pylon_revo.stl
 - [ ] wings_s1223_revo.stl
 - [ ] Re-render + re-bake both wings (Rev S1b OML + S1c Hall)
+- [ ] ★ WING-01 S1223 section self-intersects at x/c 0.742 (BLOCKER)
 - [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
 - [ ] SPAR-02 DS3225 24.5 vs 25 kgf·cm req (re-derive); RAIL-2 2.3A
 - [ ] Canon-check tip thickness/spar station vs silhouette

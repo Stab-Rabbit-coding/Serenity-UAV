@@ -289,7 +289,6 @@ WING_SPAR_Y = WING_LE_ROOT_Y + 0.35 * WING_ROOT_CHORD  # = +38.15
 WING_MORT_Y = WING_LE_ROOT_Y + 0.50 * WING_ROOT_CHORD  # = +57.5
 
 # Mortise / nacelle-servo reference height.  NOT the spar height -- see below.
-WING_ROOT_Z = 62.5
 
 # Spar axis height, hull frame.  The bore is centred on the S1223 CAMBER
 # MIDLINE, not on the chord line, so moving the station chordwise also moves it
@@ -310,6 +309,15 @@ WING_ROOT_Z = 62.5
 # the mortise height rather than on the camber midline, which is why they never
 # lined up with the wing.
 WING_CHORD_LINE_Z = 58.01
+
+# CARGO-03b (2026-08-24): the wing root joint now has ONE datum.
+# The tenon (`fuselage_root_tab()`) is centred on the wing CHORD LINE; this
+# constant used to sit at 62.5, so the mortise was cut 4.49 mm above the tenon
+# that enters it -- against a 0.4 mm/side design clearance, which put the tenon's
+# lower 4.09 mm onto solid wall.  Both halves are now driven from the chord line.
+# Only the mortise reads this (the spar and the servo pad are spar-relative), so
+# moving it does not disturb anything else.
+WING_ROOT_Z = WING_CHORD_LINE_Z
 WING_SPAR_MIDLINE = 10.41   # midline_frac(45.15/129) * 129, from the wing SCAD
 WING_SPAR_Z = WING_CHORD_LINE_Z + WING_SPAR_MIDLINE  # = 68.42
 WING_SPAR_BORE_D = 12.3
@@ -686,10 +694,21 @@ def wing_keepout_negatives():
     return [
         ("spar bore", x_cylinder(
             WING_SPAR_Y, WING_SPAR_Z, -270.0, -70.0, WING_SPAR_BORE_D / 2.0)),
+        # CARGO-03 (2026-08-24): these used to span PORT_INB+1 .. PORT_OUTB-10
+        # (X -99..-70), described as cutting "through each wall".  They did not:
+        # at the mortise station the wall lies at X -115..-99, so the cut began
+        # exactly where the wall ENDS and removed only free air outboard of it,
+        # leaving ~1700 mm^3 of uncut wall behind on each side.  The wing tenon
+        # could not enter.  PORT_INB/PORT_OUTB are deep-embed spans for BOSSES,
+        # never the wall, and treating them as the wall is what caused this.
+        #
+        # They now use the same inboard references the Rev S1c harness ports
+        # derived for this exact wall ("past the -115.2 encoder-line wall"),
+        # so one measured fact drives every wing-root penetration.
         ("mortise port", box(
-            PORT_INB + 1.0, PORT_OUTB - 10.0, my0, my1, mz0, mz1)),
+            WING_HARNESS_INB_PORT, PORT_OUTB, my0, my1, mz0, mz1)),
         ("mortise stbd", box(
-            STBD_OUTB + 8.0, STBD_INB - 1.0, my0, my1, mz0, mz1)),
+            STBD_OUTB, WING_HARNESS_INB_STBD, my0, my1, mz0, mz1)),
         # Rev S1c: the harness entries join the keep-out set for the same
         # reason the spar bore is in it -- "on the HULL the wing always wins".
         # A gear-bay flange that plugs a harness port is the same class of
