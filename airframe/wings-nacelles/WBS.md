@@ -215,10 +215,11 @@
     missed this entirely, since the pad is wider than the servo by design and it is
     the pad, not the servo, that reaches toward the gear bays.
 
-    **UPDATE 2026-08-23 — the DS3218 datasheet arrived, and it corrected the
-    mounting orientation as well as the numbers.**
-    `avionics/datasheets/DS3218 datasheet.pdf` (Dongguan City Dsservo Technology)
-    is now authoritative: **40 × 20 × 40.5 mm, 60 g, 54.5 mm flange span,
+    **UPDATE 2026-08-23 — the datasheet arrived, and it corrected the mounting
+    orientation as well as the numbers.**  Sized on
+    `avionics/datasheets/DS3218 datasheet.pdf`, then confirmed unchanged against
+    `DS3225 datasheet.pdf` when the part moved for torque (same drawing, same
+    size).  Authoritative figures: **40 × 20 × 40.5 mm, 60 g, 54.5 mm flange span,
     49.5 × 10 mm bolt pattern**, flange 27.7 mm above the body base.
 
     The correction that mattered: a standard servo's four screws run **parallel to
@@ -243,16 +244,33 @@
 
     **Two things the datasheet exposed that are NOT geometry:**
 
-    1. **Torque shortfall.**  DS3218 stall is **18 kgf·cm @ 5 V / 21.5 kgf·cm @
-       6.8 V**, against the tilt-drive requirement of **≥ 25 kgf·cm (2.45 N·m)**
-       (`docs/TILT_SPAR_ANALYSIS.md` §2, from `serenity-rev-r.jsx` L383).  At its
-       own maximum rated voltage the part is ~14 % short.  LibreServo_v4 re-drives
-       the motor from its own 4.5–18 V input so the converted unit may exceed the
-       native figure, but **no torque number for the converted servo exists on
-       file** — this cannot be assumed closed.  Logged in `REFERENCES.md`.
-    2. **Stall current is now cited, and it is higher than the budget.**  1.8 A @
-       5 V / **2.2 A @ 6.8 V**, against the 1.2 A placeholder RAIL-2 was sized on —
-       about 1.8×.  RAIL-2 must be re-checked per tilt servo.
+    1. **Torque — part changed to DS3225 the same day; still marginal.**  The
+       owner supplied the 25 kg variant's datasheet after the DS3218 shortfall was
+       raised.  **DS3225 is dimensionally identical** (same drawing, same §2-1
+       size), so **the pads above are unchanged by the swap** — a useful property:
+       the pad is common to this whole body family.  Torque against the
+       **≥ 25 kgf·cm (2.45 N·m)** requirement (`docs/TILT_SPAR_ANALYSIS.md` §2,
+       from `serenity-rev-r.jsx` L383):
+
+       | Rail | DS3218 | DS3225 | % of requirement |
+       | --- | --- | --- | --- |
+       | 5.0 V | 18.0 kgf·cm | 21.0 kgf·cm | 84 % |
+       | 6.0 V (interp.) | ~19.7 | ~22.9 | 92 % |
+       | 6.8 V | 21.5 | **24.5** | **98 %** |
+
+       The "25kg" in the product name is the marketing figure; the spec table maxes
+       at 24.5.  So DS3225 nearly clears it and DS3218 did not, but neither clears
+       it on datasheet figures alone.  LibreServo_v4 re-drives from 4.5–18 V and
+       may close the last 2 %, though no converted-unit figure exists.
+
+       **Before buying a larger servo, re-derive the requirement.**  ≥ 25 kgf·cm is
+       cited to `serenity-rev-r.jsx` L383 as a spec pick, not a derivation, and
+       §2 of the same analysis records the pivot as being **at the nacelle CG** —
+       which nulls the gravity moment by design and leaves only aero and inertia.
+       A 2 % gap against a possibly-stale requirement is not worth a part change.
+    2. **Stall current is now cited, and it is higher than the budget.**  1.9 A @
+       5 V / **2.3 A @ 6.8 V** (DS3225), against the 1.2 A placeholder RAIL-2 was
+       sized on — about 1.9×.  RAIL-2 must be re-checked per tilt servo.
 
     Original open item, now partly closed:
 

@@ -137,7 +137,7 @@ numeric order.)*
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
 
 - [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
-- [ ] SPAR-02 DS3218 torque 21.5 vs 25 kgf·cm required; RAIL-2 2.2A
+- [ ] SPAR-02 DS3225 24.5 vs 25 kgf·cm req (re-derive); RAIL-2 2.3A
 - [ ] Re-render + re-bake both wings — Rev S1b tip OML + Rev S1c Hall
     (THICKNESS_SCALE_TIP 1.25→1.45, thickness-only section scaling); baked wing
     STLs and docs/img/wing_rev_r1a_sections.png are stale

@@ -6172,6 +6172,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/DS3225 datasheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf": {
       "description": "PDF document",
       "tags": [
@@ -15537,6 +15544,7 @@
       "avionics/datasheets/749010012A.pdf",
       "avionics/datasheets/987651-1223.pdf",
       "avionics/datasheets/DS3218 datasheet.pdf",
+      "avionics/datasheets/DS3225 datasheet.pdf",
       "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf",
       "avionics/datasheets/KSZ9477S-Data-Sheet-DS00002392C.pdf",
       "avionics/datasheets/L-1038e.A5_phyCORE-AM62x_HW Manual.pdf",

@@ -57,16 +57,16 @@
     },
     {
       "Ref": "SERVO-TILT",
-      "Description": "Nacelle tilt servo — DS3218 converted with LibreServo_v4, 18-21.5 kgf·cm stall (4.8-6.8V), rotation-limit pin removed",
+      "Description": "Nacelle tilt servo — DS3225 converted with LibreServo_v4, 21-24.5 kgf·cm stall (4.8-6.8V), rotation-limit pin removed",
       "Category": "Servo",
       "Qty": "2",
       "Unit_Mass_g": "60",
       "Total_Mass_g": "120",
       "Supplier": "Amazon / AliExpress (servo) + github.com/Stab-Rabbit-coding/LibreServo_v4 (board, self-build)",
-      "Supplier_PN_or_Search": "DS3218 20kg digital servo metal gear",
+      "Supplier_PN_or_Search": "DS3225 25kg digital servo metal gear",
       "Est_Unit_Price_USD": "13.00",
       "Est_Total_Price_USD": "26.00",
-      "Notes": "2026-08-23 (Rev S1d, owner): DS3218 bodies + LibreServo_v4 PCB (TI MSPM0G3518-Q1 + OPTIGA Trust M), superseding the 2026-08-02 SPT5425LV+LibreServo v2 selection. DIMENSIONS NOW AUTHORITATIVE from avionics/datasheets/DS3218 datasheet.pdf (Dongguan City Dsservo): 40x20x40.5 mm, 60 g, 54.5 mm flange span, 49.5x10 mm bolt pattern, flange 27.7 mm above base, IP66, double bearing, 275:1. LibreServo_v4 keeps the stock case (README: no bottom-cover change; 3D/LS_body.stl is an internal 13x13x8.45 mm encoder part), so the external envelope is unchanged. Cargo-shell pads built to the datasheet flange footprint: merge_cargo_interior.py NSVMT pad 61.5x27.0 mm at hull Z +98.89, bolt bores live at 49.5x10. ** TWO OPEN ISSUES ** (1) TORQUE: datasheet stall is 18 kgf·cm @5V / 21.5 @6.8V against the >=25 kgf·cm (2.45 N·m) tilt requirement in docs/TILT_SPAR_ANALYSIS.md §2 — ~14% short at max rated volts; LibreServo_v4 re-drives the motor from 4.5-18V and may close it, but no converted-unit figure exists. (2) CURRENT: datasheet stall 1.8A @5V / 2.2A @6.8V vs the 1.2A placeholder RAIL-2 was sized on — resize RAIL-2. See REFERENCES.md and airframe/wings-nacelles/WBS.md SPAR-02."
+      "Notes": "2026-08-23 (Rev S1d, owner): DS3225 bodies + LibreServo_v4 PCB (TI MSPM0G3518-Q1 + OPTIGA Trust M). Supersedes DS3218 (same session) and the 2026-08-02 SPT5425LV+LibreServo v2. DIMENSIONS AUTHORITATIVE from avionics/datasheets/DS3225 datasheet.pdf (Dongguan City Dsservo): 40x20x40.5 mm, 60 g, 54.5 mm flange span, 49.5x10 mm bolt pattern, flange 27.7 mm above base, IP66, double bearing, 275:1 — DIMENSIONALLY IDENTICAL to the DS3218 datasheet, so the Rev S1d cargo-shell pads (61.5x27.0 mm at hull Z +98.89, bores 49.5x10) are unchanged by this swap. LibreServo_v4 keeps the stock case, so the external envelope is unchanged. ** TORQUE, still marginal ** datasheet stall 21 kgf·cm @5V / 24.5 @6.8V — the '25kg' in the product name is the marketing figure, the spec table maxes at 24.5. Against the >=25 kgf·cm (2.45 N·m) tilt requirement (docs/TILT_SPAR_ANALYSIS.md §2, from serenity-rev-r.jsx L383) that is 98% at 6.8V, ~92% at a 6V rail, 84% at 5V. Much closer than DS3218's 86%, but not cleared on datasheet figures alone. LibreServo_v4 re-drives the motor from 4.5-18V and may close it; no converted-unit figure exists. NOTE the requirement itself may be stale — the pivot is AT the nacelle CG (TILT_SPAR_ANALYSIS §2), so the gravity moment is nulled by design and only aero + inertia remain; re-derive before buying a bigger servo. ** CURRENT ** stall 1.9A @5V / 2.3A @6.8V vs the 1.2A placeholder RAIL-2 was sized on. See REFERENCES.md and airframe/wings-nacelles/WBS.md SPAR-02."
     },
     {
       "Ref": "SERVO-RCS-VALVE",

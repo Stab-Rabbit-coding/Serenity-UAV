@@ -294,7 +294,7 @@ see docs/WBS.md §0.10.2.)*
 - [x] Fuselage spar-interface mismatched — station RESOLVED (Rev S1b)
   (spar DIAMETER Ø12.3 vs 8.3 still open — see §1.1.1 CARGO-02)
 - [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
-- [ ] SPAR-02 DS3218 torque 21.5 vs 25 kgf·cm required; RAIL-2 2.2A
+- [ ] SPAR-02 DS3225 24.5 vs 25 kgf·cm req (re-derive); RAIL-2 2.3A
 - [x] SPAR-04 Hall tip jog crosses the spar bore — CLOSED
 
 #### 1.1.3 — Nacelles

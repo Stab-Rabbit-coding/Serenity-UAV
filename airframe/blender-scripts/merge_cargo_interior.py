@@ -412,10 +412,15 @@ STBD_OUTB, STBD_INB = -278.0, -240.0  # stbd wall bracket (skin ≈ −250..−2
 #
 # DIMENSIONAL BASIS -- NOW FROM THE DATASHEET
 # -------------------------------------------
-# `avionics/datasheets/DS3218 datasheet.pdf` (Dongguan City Dsservo Technology
-# Co. Ltd, "6V 20kg RC Digital Servo") is authoritative for the servo envelope as
+# `avionics/datasheets/DS3225 datasheet.pdf` (Dongguan City Dsservo Technology
+# Co. Ltd, "6V 25kg RC Digital Servo") is authoritative for the servo envelope as
 # of 2026-08-23 (owner).  It supersedes the standard-size-class estimate this
-# block previously carried, and it CORRECTED the mounting orientation:
+# block previously carried, and it CORRECTED the mounting orientation.
+#
+# The part moved DS3218 -> DS3225 the same day, for torque.  The two datasheets
+# carry the SAME drawing and the same SS2-1 size, so nothing below changes with the
+# swap -- which is the useful fact: the pad is common to both, and a later move
+# within this body family will not disturb it.
 #
 #   size (SS2-1)         40 x 20 x 40.5 mm        weight (SS2-2)  60 g
 #   ear span (drawing)   54.5 mm overall          shaft from end  24 mm

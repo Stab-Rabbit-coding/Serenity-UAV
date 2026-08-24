@@ -75,8 +75,10 @@ sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
 import merge_cargo_interior as mci          # noqa: E402
 import wing_spar_station_fit as wsf         # noqa: E402
 
-# --- servo envelope, DS3218 datasheet (authoritative, owner 2026-08-23) ------
-# avionics/datasheets/DS3218 datasheet.pdf, Dongguan City Dsservo Technology.
+# --- servo envelope, DS3225 datasheet (authoritative, owner 2026-08-23) ------
+# avionics/datasheets/DS3225 datasheet.pdf, Dongguan City Dsservo Technology.
+# DS3225 supersedes DS3218 for torque; both datasheets carry the same drawing
+# and the same SS2-1 size, so this envelope is common to the body family.
 # The four screws run parallel to the output shaft, so with the shaft along hull
 # X the FLANGE lies in the Y-Z plane on the bulkhead and the 40.5 mm height is
 # the INBOARD DEPTH.  Footprint on the wall is the flange: 54.5 (Y) x 20 (Z).
@@ -553,8 +555,8 @@ def check_solids(side, findings):
 
 def main():
     print("=== wing_root_deconflict.py ===")
-    print(f"servo: DS3218 {SERVO_L} x {SERVO_W} x {SERVO_DEPTH} mm, "
-          f"{SERVO_MASS_G:.0f} g, 21.5 kgf.cm @ 6.8 V  [datasheet]")
+    print(f"servo: DS3225 {SERVO_L} x {SERVO_W} x {SERVO_DEPTH} mm, "
+          f"{SERVO_MASS_G:.0f} g, 24.5 kgf.cm @ 6.8 V  [datasheet]")
     print(f"  flange span {SERVO_EAR_SPAN} mm (Y); body depth {SERVO_DEPTH} mm inboard (X)")
     print(f"  bolt pattern {2 * mci.NSVMT_HOLE_S_Y:.1f} x {2 * mci.NSVMT_HOLE_S_Z:.1f} mm "
           f"(datasheet; bores {'LIVE' if mci.NSVMT_HOLES_ENABLED else 'gated off'})")
