@@ -57,16 +57,16 @@
     },
     {
       "Ref": "SERVO-TILT",
-      "Description": "Nacelle tilt servo — SPT5425LV converted with LibreServo v2, 25-26 kgf·cm @ 6V, rotation-limit pin removed",
+      "Description": "Nacelle tilt servo — DS3218MG converted with LibreServo_v4, 20-25 kgf·cm class, rotation-limit pin removed",
       "Category": "Servo",
       "Qty": "2",
       "Unit_Mass_g": "60",
       "Total_Mass_g": "120",
-      "Supplier": "Amazon / AliExpress (servo) + github.com/Stab-Rabbit-coding/LibreServo_v2 (board, self-build)",
-      "Supplier_PN_or_Search": "SPT5425LV 25kg digital servo metal gear",
+      "Supplier": "Amazon / AliExpress (servo) + github.com/Stab-Rabbit-coding/LibreServo_v4 (board, self-build)",
+      "Supplier_PN_or_Search": "DS3218MG 20kg digital servo metal gear",
       "Est_Unit_Price_USD": "13.00",
       "Est_Total_Price_USD": "26.00",
-      "Notes": "2026-08-02: was DS3218MG (uncited); migrated to SPT5425LV+LibreServo v2 as part of servo fleet standardisation (REFERENCES.md REF-SENSOR-013/014, Servo Fleet Standardisation 2026-08-02) — same physical part/board as the cargo winch servo below. Rotation-limit pin removed for fleet commonality; real range limit is the external CF-PETG hard-stop blocks in the gear train (-5°/140°), enforced in firmware, not by the servo's own (now-removed) pin. Rev O: servo torque demand reduced by CG-pivot at Z=83mm; only aero + inertia moments remain. Unit mass 60g is a placeholder (57g servo body, REF-SENSOR-013, + unweighed LibreServo v2 PCB) pending bench weigh-in — see REFERENCES.md Open Standards Verification Items."
+      "Notes": "2026-08-23 (Rev S1d, owner): reverted to DS3218MG bodies, now fitted with the LibreServo_v4 control PCB (TI MSPM0G3518-Q1 + OPTIGA Trust M). Supersedes the 2026-08-02 SPT5425LV+LibreServo v2 selection. LibreServo_v4's README states the board is compatible with standard servo bodies with NO change to the bottom cover, and its only mechanical addition (3D/LS_body.stl, 13x13x8.45 mm encoder part) sits inside the case — so the EXTERNAL ENVELOPE IS UNCHANGED and the airframe mount sizes to the bare DS3218MG body. Cargo-shell pads rebuilt to suit: merge_cargo_interior.py NSVMT_PAD_W/H 52x30 -> 61.5x47.5 mm, pad centre raised to hull Z +109.14, datumed off the Rev R6 landing-gear bay tops at Z +82.39 which bind before the spar boss does. ** DS3218MG HAS NO CITED DIMENSIONAL SOURCE ** — the pad is sized to the standard-size servo class using REF-SENSOR-013's 40.5x20x40.5 mm as the dimensional basis, and the mounting-ear bolt pattern is GATED OFF (NSVMT_HOLES_ENABLED=False) until measured. See REFERENCES.md 'requires verification' and airframe/wings-nacelles/WBS.md SPAR-02."
     },
     {
       "Ref": "SERVO-RCS-VALVE",

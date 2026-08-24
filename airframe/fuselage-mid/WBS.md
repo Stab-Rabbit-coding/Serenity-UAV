@@ -176,7 +176,446 @@
     - [ ] create mounting bracket for camera/tof/laser control pcb
     - Verify Faraday tray cutout and all other non-boss geometry unchanged after SCAD re-render.
 
+- [ ] **★ CARGO-03 — the wing root mortise does not penetrate the bulkhead.**
+    *(found 2026-08-23 while checking that the nacelle ESC cableway is not blocked,
+    owner direction; gated by `tools/wing_root_deconflict.py`)*  **BLOCKS wing
+    attachment, the ESC cableway, and the cargo shell print.**
+
+    `merge_cargo_interior.py` cuts the two wing root mortises as
+    `box(PORT_INB + 1.0, PORT_OUTB - 10.0, …)` = hull **X −99…−70** port and
+    **X −270…−241** starboard, described in the source as cutting "through each
+    wall".  It does not.  At the mortise station (Y +57.5, Z +62.5) the port wall
+    material actually lies at **X −115…−99** — the cut begins exactly where the
+    wall *ends* and runs outboard into free air.  Swept corridor test, from well
+    inboard of the wall to well outboard of it:
+
+    | Penetration | Cut X span | Material left in the corridor | Verdict |
+    | --- | --- | --- | --- |
+    | wing root mortise, port | −99.0…−70.0 | **1 781.7 mm³** | **BLIND** |
+    | wing root mortise, stbd | −270.0…−241.0 | **1 676.0 mm³** | **BLIND** |
+    | spar bore, port | −270.0…−70.0 | 0.0 mm³ | THROUGH |
+    | spar bore, stbd | −270.0…−70.0 | 0.0 mm³ | THROUGH |
+
+    The spar bore is cut across the **full** lateral span, so it does pass through;
+    the mortise is the only wing-root penetration sized to a local X band, and that
+    band is wrong.  Note the trap this hid behind: probing *inside* the cut region
+    reports 0 mm³ of material and looks correct — emptiness proves nothing when the
+    cut is outboard of the wall.  Only the swept corridor exposes it, which is why
+    the check now lives in a tool rather than a one-off probe.
+
+    **Consequences.**  The wing root tenon cannot enter; the 40 A EDF ESC conduit
+    has no path into the fuselage (CARGO-04); and any prior "mortise cut verified"
+    claim rests on a region test, not a through test.  This predates Rev S1b —
+    `WING_MORT_Y` (0.50 chord) and `WING_ROOT_Z` were untouched by that change, so
+    the defect has been latent since the mortises were first cut.
+
+    **Fix:** re-derive both mortise X spans from the *measured* wall position at the
+    mortise station rather than from the `PORT_INB`/`PORT_OUTB` bracket constants,
+    which are deep-embed spans for bosses and were never the wall.  Re-run
+    `tools/wing_root_deconflict.py` — all four rows must read THROUGH.  Do it in the
+    same shell edit as CARGO-01/CARGO-02.
+
+    **CARGO-03b — and the tenon that enters it is on a different datum.**
+    *(owner direction 2026-08-23: the wing root tenon has to be accounted for
+    alongside the bearing seat.)*  The mortise is only half the joint;
+    `wings_s1223_revo.scad` `fuselage_root_tab()` is the other half.  It fits in Y
+    and fouls in Z:
+
+    | Axis | Tenon span | Mortise span | Clearance each side |
+    | --- | --- | --- | --- |
+    | Y (chordwise) | +42.50…+72.50 | +42.10…+72.90 | +0.40 / +0.40 — correct |
+    | Z (thickness) | +48.01…+68.01 | +52.10…+72.90 | **−4.09** / +4.89 — **FOULS** |
+
+    Root cause is a **datum disagreement, not a size error**: `fuselage_root_tab()`
+    centres the tenon on the wing **chord line** (hull Z **+58.01**), while
+    `merge_cargo_interior.py` centres the mortise on **`WING_ROOT_Z`** (hull Z
+    **+62.50**).  The two are 4.49 mm apart, against a 0.4 mm design clearance, so
+    the tenon's lower 4.09 mm lands on solid wall.  The sizes themselves are right
+    — 30.0 × 20.0 tenon in a 30.8 × 20.8 mortise is a sensible 0.4 mm/side fit.
+    All three `WING_ROOT_TAB_*` constants still carry their original `VERIFY`
+    comments in the SCAD; they were flagged as unchecked when written and never
+    were.  Pick **one** datum for the joint and drive both files from it.
+
+    **Tenon depth is fine.**  Measured wall face at the mortise station is hull
+    X −99.0 (port); a 12 mm `WING_ROOT_TAB_L` reaches X −111.0, still inside the
+    wall band (−115…−99), so the tenon does **not** protrude into the cargo bay and
+    clears the servo body by 10.66 mm and its horn swing by 12.66 mm.
+
+    **Tenon vs the spar bearing seat — 0.23 mm, and that is the real number.**
+    The tenon's forward face sits at 49.5 mm chordwise; the Rev S1b spar bore's aft
+    edge sits at 45.15 + 4.15 = 49.3 mm.  Measured gap **0.226 mm** to the bore and
+    **0.376 mm** to the spar tube itself.  Before Rev S1b the spar was at 0.171 c
+    and the gap was ~23 mm; moving it to 0.35 c closed it to nothing.  At that
+    spacing there is no material between the rotating bearing seat and the tenon's
+    load-bearing face — treat it as zero and resolve it with the datum fix, because
+    any correction that moves the tenon aft or the seat forward consumes it.
+
+    **The tenon is not a plain block** — `wing_one_side()` drills the EDF ESC
+    conduits straight through it axially ("tenon pass-through"), grooving its crown
+    while the lower ~30 × 15 mm stays solid.  With those modelled, both ESC conduits
+    pass the tenon cleanly (0.0 mm³); the blockage in CARGO-04 is the wall, not the
+    wing.
+
+    **CARGO-03c — the tenon is a STRUCTURAL joint element, and it has never been
+    sized as one.** *(owner, 2026-08-23: "that mortise/tenon joint provides part of
+    the structural joint at the wing root, since the wings don't rotate with the
+    nacelles.")*  This contradicts `fuselage_root_tab()`'s own comment — "The tab
+    provides radial restraint; the CF spar carries spanwise load" — which was
+    written when the spar carried through.  Under SPAR-01 it does not: spanwise
+    load terminates at the wall, and the tenon is part of how it gets there.
+    **Correct that comment when the tenon is re-datumed.**
+
+    Quantified by `tools/wing_spar_carrythrough.py` (tip bearing to root face
+    88.0 mm; the wing is supported at the tenon and at the wingtip bearing, so
+    whatever the spar hands the wing at the tip, the tenon reacts at the root):
+
+    | Case | R_tip | Tenon shear | Tenon moment | Bearing stress |
+    | --- | --- | --- | --- | --- |
+    | limit (4 g) | 110.6 N | 110.6 N (24.9 lbf) | 9.74 N·m | 6.76 MPa |
+    | ultimate | 165.9 N | 165.9 N (37.3 lbf) | 14.60 N·m | **10.14 MPa** |
+
+    Bearing stress assumes the moment is reacted as a couple on the tenon's top and
+    bottom faces over the 12 mm insertion, effective arm ⅔ of depth, bearing area
+    = width × half depth.
+
+    **The problem is that no CF-PETG bearing allowable exists in this repository.**
+    The only CF-PETG number it carries is ≈5 MPa, and that is **bond**-limited
+    (`docs/structural_analysis.md` §7.3), not bearing — against it the tenon is
+    under-strength at FOS 0.49.  Bearing on a printed tenon in a printed slot is a
+    different mode and almost certainly a higher allowable, but inventing one is
+    exactly what root `AGENTS.md` §4 forbids.  So the sizing is inverted instead:
+    for the §3 joint FOS target of **4.0** at the present 12 mm insertion the
+    bearing allowable must be **≥ 40.6 MPa**; otherwise the depth has to grow:
+
+    Bearing stress falls as **1/(W · L²)** — insertion depth is a *quadratic*
+    lever, width only a *linear* one.  Both are capped by what the airframe will
+    physically accept, measured by bisection against real parts in
+    `tools/wing_root_deconflict.py` `max_tenon_envelope()`:
+
+    - **Max width 39.2 mm.**  The forward face cannot move at all — the spar bore's
+      aft edge leaves **0.20 mm** — so every millimetre of width has to be taken
+      aft, and aft runs out at hull Y +81.7 against the **aft landing-gear bay**.
+    - **Max insertion 20.1 mm.**  Past the ~16 mm wall band the tenon protrudes
+      into the bay; it stays clear of the servo, both gear bays and the avionics
+      bay, and what finally stops it is the **CARGO-01 payload envelope** at
+      X −119.1.  Staying buried in the wall instead caps it at 16.0 mm.
+
+    | If the coupon test returns | Depth @ W = 30 (present) | Depth @ W = 39.2 (max) | Verdict |
+    | --- | --- | --- | --- |
+    | 5 MPa | 34.2 mm | 29.9 mm | **impossible** — over max depth even at max width |
+    | 10 MPa | 24.2 mm | 21.1 mm | **impossible** — over max depth even at max width |
+    | 15 MPa | 19.7 mm | 17.3 mm | fits, deeper tenon |
+    | 20 MPa | 17.1 mm | 14.9 mm | fits, deeper tenon |
+    | 30 MPa | 14.0 mm | 12.2 mm | fits, deeper tenon |
+    | 40.6 MPa | 12.0 mm | 10.5 mm | fits as-built |
+    | 60 MPa | 9.9 mm | 8.6 mm | fits as-built |
+
+    **The maximum tenon this airframe accepts is 39.2 × 20.1 mm (width ×
+    insertion).**  At that size the joint reaches FOS 4.0 only if the measured
+    bearing allowable is **≥ 11.1 MPa** — that number is the hard floor the coupon
+    test has to clear.  Below it the tenon cannot be grown into compliance at all
+    and the joint needs a different answer: a bonded doubler, a second tenon
+    forward of the spar, or a metal insert.
+
+    Note how little the width buys: going from 30 → 39.2 mm, the entire aft room
+    available, takes only **13 %** off the required depth, because width enters
+    linearly while depth enters squared.  Width is the lever to reach for only when
+    depth is already against the payload envelope — i.e. between roughly 11 and
+    15 MPa, where it is the difference between feasible and not.
+
+    **DECISION RULE (owner, 2026-08-23): if CF-PETG cannot be sourced at ≥ 15 MPa
+    fusion strength, the joint gets a second spar instead of a bigger tenon.**
+    "Fusion strength" is the right property to name — the tenon reacts its couple
+    on faces loaded across the print layers, so interlayer fusion governs, not bulk
+    compressive.  15 MPa is a sound threshold: it is the first row in the table
+    above that fits (19.7 mm at the present width, 17.3 mm at maximum width, both
+    inside the 20.1 mm cap), and it sits above the 11.1 mm-floor with enough room
+    that the joint is not built on the last millimetre of envelope.
+
+    **The fallback is feasible, and it must go FORWARD of the main spar.**  First
+    pass, Ø6 assumed, ultimate root moment 14.60 N·m, couple force = M / separation:
+
+    | Station (mm from LE) | Separation from main spar | Couple force | Min bore wall | Nearest feature |
+    | --- | --- | --- | --- | --- |
+    | **14.0** | 31.15 mm | **469 N** | **3.23 mm** | Hall conduit, +11.25 mm |
+    | 18.0 | 27.15 mm | 538 N | 4.14 mm | Hall conduit, +7.25 mm |
+    | 20.0 | 25.15 mm | 581 N | 4.51 mm | Hall conduit, +5.25 mm |
+    | 24.0 | 21.15 mm | 690 N | 5.10 mm | Hall conduit, +1.25 mm |
+    | 85.0 | 39.85 mm | 366 N | **−1.69 mm** | tenon, +2.50 mm |
+    | 90.0 | 44.85 mm | 326 N | **−2.37 mm** | tenon, +7.50 mm |
+
+    Aft stations are **not available at any separation** — the section is too thin
+    behind the tenon and the bore breaks out of the skin (negative wall).  Forward
+    works, and further forward is better because separation grows and the force
+    falls; **14.0 mm** is the pick, giving the largest separation still on a healthy
+    3.23 mm bore wall and 11 mm of room to the Hall conduit at its new 30 mm
+    station.
+
+    **Why this actually fixes the problem, where a bigger tenon does not.**  The
+    tenon reacts a couple on shallow faces; a rod reacts shear along an embedded
+    length, and the wall can give it the same deep boss the main spar already has
+    (`PORT_INB` −100 to `PORT_OUTB` −60 = 40 mm of embed):
+
+    | Rod | Embed | Bearing | vs the tenon's 10.14 MPa |
+    | --- | --- | --- | --- |
+    | Ø6 | 16 mm | 4.88 MPa | 2.1× better |
+    | Ø6 | 40 mm | 1.95 MPa | 5.2× better |
+    | Ø8 | 25 mm | 2.34 MPa | 4.3× better |
+    | **Ø8** | **40 mm** | **1.46 MPa** | **6.9× better** |
+
+    At Ø8 × 40 mm embed the FOS 4.0 target needs an allowable of only **≈5.9 MPa**,
+    against 40.6 MPa for the present tenon — so the second spar takes the joint out
+    of the fusion-strength question almost entirely, and would clear even the
+    repository's pessimistic 5 MPa bond-limited figure at FOS 3.4.
+
+    It also **restores the tenon to the job its own comment already claims** —
+    radial restraint and location, not moment reaction — which means
+    `fuselage_root_tab()`'s wording becomes correct again rather than needing the
+    CARGO-03c correction.
+
+    **Costs to carry if this branch is taken:** 2 × 4130 rod (~24 g each at 100 mm
+    of Ø8 × 1.5, so ≈**48 g / 0.106 lbm** added), 2 more wall bosses, 2 more wing
+    bores, and a second bore through the tenon region — and the rod length and
+    embed both still need sizing, since the table above assumes 40 mm by analogy
+    with the main spar rather than deriving it.
+
+    **Open:** add CF-PETG **fusion/bearing** coupons to the LG-11 coupon-test
+    schedule (root `TODO.md` §1.1.4 already carries "Coupon-test CF-PETG"),
+    printed in the tenon's own layer orientation.  **≥ 15 MPa → grow the tenon per
+    the table; < 15 MPa → second spar at 14 mm.**  Re-run
+    `tools/wing_spar_carrythrough.py` either way.
+
+- [ ] **CARGO-04 — the aft EDF ESC conduit is blocked, and the Hall conduit runs
+    inside the rotating spar.** *(found 2026-08-23 with CARGO-03; same tool)*
+    **BLOCKS the nacelle ESC harness and the tilt-encoder harness.**
+
+    Owner requirement: the nacelle ESC and nav-light cableways must stay open.  The
+    nav light is satisfied — it routes through the spar's ~5 mm ID and the spar bore
+    is verified THROUGH (above).  The other two are not:
+
+    | Route | Station (hull) | Obstruction | Blocked |
+    | --- | --- | --- | --- |
+    | EDF ESC conduit #1 (fwd) | Y +50.92, Z +66.92, Ø7 | — | clear |
+    | EDF ESC conduit #2 (aft) | Y +58.92, Z +66.92, Ø7 | published shell | **172.3 / 172.9 mm³** |
+    | Hall/encoder conduit | Y +35.57, Z +68.47, Ø3.5 | **rotating spar tube** | **468.1 / 450.1 mm³** |
+    | spar bore / nav-light | Y +38.15, Z +68.42, Ø8.3 | — | clear |
+
+    **EDF #2** is blocked by the same uncut wall as CARGO-03 (the blockage sits at
+    X −112…−99 port, inboard of where the mortise cut starts), so fixing CARGO-03
+    should clear it — **re-verify, do not assume**.  Both conduits lie inside the
+    mortise footprint in Y and Z, so a correctly-cut mortise is their intended path
+    and no separate penetration is needed.
+
+    **The Hall conduit is a genuine Rev S1b regression.**  `HALL_CABLE_XFR` = 0.33 c
+    and the spar moved to `SPAR_BORE_STATION` = 45.15 mm = 0.35 c — 2.58 mm apart,
+    against a 4.15 mm spar radius plus 1.75 mm conduit radius, so the conduit lies
+    **entirely inside the spar bore** and the rotating spar occupies it.  Before
+    Rev S1b the spar sat at 0.171 c and the two were well separated; the S1b note in
+    `wings_s1223_revo.scad` lists its consequential fixes but the Hall conduit is not
+    among them.  Its own comment still reads "HALL_CABLE_XFR = 0.30c", which also
+    disagrees with the 0.33 in force — fix the comment with the station.
+
+    **OWNER DIRECTION 2026-08-23 — and one point needs adjudication before it can
+    be applied.**  Direction given: route the Hall 4-core **aft of the spar**; the
+    sensor sits at the wingtip/nacelle joint and does not rotate with the nacelle,
+    the run terminates there, so there is no wire twist and no need to share the
+    spar bore.  Rationale added: *"having them aft of the steel spar protects them
+    from power emf."*  The no-twist half is settled and correct.  **The shielding
+    half does not work at the stated position, because the power pair is already
+    aft of the spar.**  Measured chordwise ordering at the root:
+
+    | Feature | Chordwise (mm from LE) | Chord fraction |
+    | --- | --- | --- |
+    | spar bore | 41.00…49.30 | 0.350 c |
+    | **EDF #1 — 40 A POWER** | 54.42…61.42 | 0.449 c |
+    | EDF #2 — signal/telemetry | 62.42…69.42 | 0.511 c |
+    | Hall, as built | 40.82…44.32 | 0.330 c (collides with the spar) |
+
+    For the steel spar to sit **between** the encoder line and the power pair, the
+    Hall conduit has to be **forward** of the spar — aft of it puts the encoder on
+    the same side as the power, with nothing interposed.  So the directive's words
+    and its purpose point in opposite directions, and the purpose is the one worth
+    serving.  Forward stations, which must also clear the Ø22 spar **bearing boss**
+    in the wall (that boss is the reason the answer is not simply "just forward of
+    the spar bore"):
+
+    | Station | Chord frac | Gap to boss | Gap to spar bore | Separation from POWER | Root skin wall |
+    | --- | --- | --- | --- | --- | --- |
+    | 28.0 mm | 0.217 | 4.42 mm | 11.25 mm | 29.92 mm | 6.74 mm |
+    | **30.0 mm** | **0.233** | **2.41 mm** | **9.25 mm** | **27.92 mm** | **6.85 mm** |
+    | 32.0 mm | 0.248 | 0.40 mm | 7.25 mm | 25.92 mm | 6.92 mm |
+    | 34.0 mm | 0.264 | **−1.60 mm** | 5.25 mm | 23.92 mm | 6.92 mm |
+    | *(aft option, for comparison)* 72.7 mm | 0.564 | n/a | n/a | 14.78 mm | 1.52 mm |
+
+    **Recommend 30.0 mm (0.233 c), forward of the spar.**  It beats the aft station
+    on every metric that matters here — the spar is interposed as intended, the
+    separation from the 40 A pair is **27.9 mm against 14.8 mm**, and the skin wall
+    is **6.85 mm against 1.52 mm**.  It also restores roughly the "0.30 c" the
+    `HALL_CABLE_XFR` comment still claims, which the 0.33 c value in force has
+    disagreed with for some time.
+
+    **The one cost:** at hull Y +23.00 the conduit sits **forward of the mortise**
+    (Y +42.10…+72.90), so unlike the EDF pair it cannot ride the mortise into the
+    fuselage and needs its own small penetration — a Ø≈4 mm hole through a 2 mm
+    wall, which is trivial to cut but must be added deliberately, and must be
+    re-checked once CARGO-03 re-derives where the wall actually is.  It clears the
+    servo comfortably (Z +67.85 against the servo's Z +78.67 floor, 9.07 mm).
+
+    **RESOLVED 2026-08-23 (owner): use the 30.0 mm mark.**  Applied to
+    `airframe/openscad/wings/wings_s1223_revo.scad` as Rev S1c —
+    `HALL_CABLE_XFR` 0.33 → **0.23256** (30.0 mm at the 129 mm root chord), written
+    as a literal because the SCAD-parsing tools read these constants with a
+    numeric-literal regex and cannot evaluate `30.0 / WING_CHORD_ROOT`.  The stale
+    "0.30c" comment in `hall_sensor_cableway()` is corrected in the same edit — it
+    and the 0.33 constant had disagreed for some time.
+
+    Verified root → tip after the change (constant chord fraction, so it diverges
+    from the constant-mm spar station outboard and clearance only improves):
+
+    | Span | 0 % | 25 % | 50 % | 75 % | 100 % |
+    | --- | --- | --- | --- | --- | --- |
+    | gap to spar bore | 9.25 | 11.34 | 13.44 | 15.53 | 17.62 mm |
+    | separation from EDF POWER | 27.92 | 25.69 | 23.47 | 21.24 | 19.01 mm |
+    | min skin wall | 6.85 | 7.15 | 7.32 | 7.35 | 7.24 mm |
+
+    `tools/wing_root_deconflict.py` now reports the Hall conduit **clear of the
+    rotating spar** (was 468.1 mm³ of interference), clear of the servo, its horn
+    and the tenon.  It still reports **66.6 mm³ blocked by the shell** — that is
+    the missing Ø≈4 mm wall penetration, which is correct until the shell edit adds
+    it, and is part of the CARGO-03 re-cut rather than a separate defect.
+
+    Two stations satisfy "aft of the spar".  Both were measured against the S1223
+    root and tip sections (`tools/wing_spar_station_fit.py` machinery, so the
+    airfoil table has one definition):
+
+    | Candidate | Chord frac | Gap to spar bore | Gap to EDF conduit | Root skin wall | Tip skin wall |
+    | --- | --- | --- | --- | --- | --- |
+    | 51.9 mm (between spar and EDF #1) | 0.402 | 0.81 mm | 0.81 mm | 5.30 mm | 5.62 mm |
+    | **72.7 mm (aft of EDF #2)** | **0.564** | **21.7 mm** | **1.53 mm** | **1.53 mm** | **1.68 mm** |
+
+    **Recommend 72.7 mm.**  The forward pocket has the better skin wall but only
+    0.81 mm of web on each side — below one 4-perimeter wall pair at 0.4 mm nozzle,
+    so those bores would merge in the slicer, and the one it would merge with is
+    **EDF #1, the 40 A power pair**.  Merging the encoder conduit into the power
+    conduit is the worst available outcome for a quadrature feedback line, and it
+    defeats the split the cableway exists to provide.  The aft station sits next to
+    EDF #2 (signal/telemetry) instead, holds ~1.5 mm on both the web and the skin,
+    and that matches the accepted precedent already in the wing — the spar bore
+    itself runs at 1.16–1.44 mm minimum wall.
+
+    Either way: fix the stale "HALL_CABLE_XFR = 0.30c" comment to match whatever
+    station is chosen, and re-run `tools/wing_root_deconflict.py` — the Hall row
+    must go to clear.  Note that only the *aft* option lands inside the tenon's
+    chordwise span (49.5…79.5 mm) and would therefore need its own **tenon
+    pass-through**, cut the way `wing_one_side()` already cuts the EDF pair; the
+    forward option needs a wall penetration instead.
+
 ##### 1.1.1.2 *Cargo*
+
+- [ ] **★ CARGO-01 — the mission payload does not fit past the wing spar.**
+    *(found 2026-08-23 while placing the VERIFY-tier cargo accessories against the
+    baked hull, root `WBS.md` §1.1.0; measured by `tools/cargo_bay_envelope.py`)*
+    **BLOCKS the cargo mission, the cradle/winch placements, and the §1.1.1.2.1
+    winch build.  Needs an owner decision — do not resolve unilaterally.**
+
+    `README.md` mission steps 6 and 9 require a **4 in × 3 in × 3 in
+    (101.6 × 76.2 × 76.2 mm)** payload to be winched up through the clamshell
+    aperture and carried inside the bay.  The wing spar crosses the bay laterally
+    at the Rev S1b station (`merge_cargo_interior.WING_SPAR_Y` = **+38.15 mm**,
+    `WING_SPAR_Z` = **+68.42 mm**), and its bore is cut the **full lateral span**
+    (hull X −270…−70), so it sits directly across the payload's vertical path.
+    The spar is continuous through the fuselage by design — `wings_s1223_revo.scad`
+    Rev R2 makes it the unified rotating tilt-spar serving *both* nacelles, with
+    "the second bearing … in the cargo bay" — so it cannot simply be routed around.
+    Clearances below use the **wing's Ø8.0 mm** spar (the generous case; see
+    CARGO-02 — the cargo shell still bores Ø12.3, which is worse), measured against
+    the published shell and the baked door STLs (bay floor = closed-door crown,
+    hull Z **+8.72**; aperture `merge_cargo_interior.APERTURE` = Y +2…+108):
+
+    | Path into the bay | Clear | Needed | Result |
+    | --- | --- | --- | --- |
+    | Under the spar (Z +8.72 → +64.42) | 55.7 mm (2.19 in) | 76.2 mm (3.00 in) | short 20.5 mm |
+    | Forward of the spar (Y +2 → +34.2) | 32.1 mm (1.27 in) | 76.2 mm (3.00 in) | short 44.1 mm |
+    | Aft of the spar (Y +42.2 → +108) | 65.8 mm (2.59 in) | 76.2 mm (3.00 in) | short 10.4 mm |
+
+    Every orientation is blocked; the **best case is 10.4 mm short**.  Rotating the
+    payload does not help — its two smaller dimensions are equal, so 76.2 mm is the
+    smallest face it can ever present.  This is **not** a Rev S1b regression: the
+    pre-S1b spar (Y +31.7, Z ≈ +66.5) also crossed the bay, so the conflict has been
+    latent since the spar was first routed through the cargo section.
+
+    **RESOLUTION SELECTED 2026-08-23 (owner) — resolution 1, in the stronger
+    form.**  The spars now **terminate at the fuselage wall** on a bearing in the
+    side, rotate independently, and are driven by the nacelle servos; the couple
+    they used to carry across is closed by a **CF thwart fore and aft of the bay**
+    instead.  Verified adequate in `airframe/wings-nacelles/WBS.md` §1.1.2
+    **SPAR-01** (`tools/wing_spar_carrythrough.py`).  With the spar stopping at
+    X −100 / −240 the bay clear span is **X −240…−100 = 140 mm** at full bay
+    height, and the 4 × 3 × 3 in payload fits.  **This item stays open until the
+    shell is re-cut** — `tools/cargo_bay_envelope.py` still fails against the
+    published STL, which is correct until the geometry changes.  Close it together
+    with **CARGO-02**, which is the same shell edit.
+
+    Candidate resolutions as originally tabled, retained for the record (the owner
+    took 1; each of the others trades against a requirement that is currently
+    fixed):
+
+    1. **Split the spar at the centreline** into two stub spars landing on a
+        centre rib, clearing the bay volume.  Cost: the continuous through-member
+        that today carries nacelle tilt loads across the fuselage is lost, so the
+        rib must take the full spar bending moment; re-opens the
+        `CF-PLATE-2MM` cargo Y +30 ring sizing and `docs/structural_analysis.md` §3.
+    2. **Move the spar station** clear of the aperture (forward of Y +2 or aft of
+        Y +108).  Cost: breaks the 35 %-root-chord station that Rev S1b just fixed
+        to match `wings_s1223_revo.scad` `SPAR_BORE_STATION`; both parts move.
+    3. **Raise the spar** above the payload.  Requires spar Z ≥ +8.72 + 76.2 + 6.0
+        = **+90.9 mm**, i.e. +22.5 mm above today's axis — well off the S1223
+        camber midline, so the wing structure changes, not just the fuselage.
+    4. **Re-scope the payload** to ≤ 63.9 mm (2.51 in) in its two smaller
+        dimensions, carried aft of the spar.  Cost: amends `README.md` mission
+        steps 6 and 9 and the `docs/CARGO_WINCH_SPECIFICATION.md` envelope.
+    5. **Carry the payload slung below the hull** rather than inside it.  Cost:
+        contradicts README step 9 ("pull the payload into the cargo bay and close
+        the clamshells") and re-opens the drag/CG case.
+
+    Until this is settled the cargo cradle cannot be placed: `cargo_cradle_autolatch`
+    (110 × 80 × 72 mm) is sized for the 4 × 3 × 3 in payload and inherits the same
+    obstruction.
+
+- [ ] **CARGO-02 — the cargo shell bores for a spar the wing retired.**
+    *(found 2026-08-23 alongside CARGO-01; gated by `tools/cargo_bay_envelope.py`,
+    which fails loudly on the mismatch)*  **BLOCKS cargo shell print.**
+
+    `airframe/openscad/wings/wings_s1223_revo.scad` Rev R2 (2026-07-18) states
+    plainly that **"the 12 mm fixed CF tube is retired"**: the wing's single spar
+    is now an **8 mm rotating AISI 4130 tilt-spar** (hollow ≈5 mm ID, carrying the
+    nav-light 3-core), which is simultaneously the wing structural spar and the
+    nacelle tilt axis, and it declares `SPAR_BORE_OD = 8.3` (8.0 mm OD + 0.15
+    mm/side rotating clearance).  Three places still carry the retired 12 mm part:
+
+    | File | Constant | Carries | Should be |
+    | --- | --- | --- | --- |
+    | `airframe/blender-scripts/merge_cargo_interior.py` | `WING_SPAR_BORE_D` | 12.3 | 8.3 |
+    | `airframe/blender-scripts/merge_cargo_interior.py` | `WING_SPAR_BOSS_OD` | 22.0 | re-derive for a bearing seat, not a press-fit |
+    | `current-specification/bom_revS.csv` | `CF-TUBE-12MM` | 12 mm OD CF tube ×2 | 8 mm OD AISI 4130, hollow 5 mm ID |
+
+    A 4.0 mm diametral over-bore on a **rotating** spar is not a slip fit, it is a
+    missing bearing: the Rev R2 note is explicit that the cargo-bay end carries the
+    **second bearing** of the tilt axis, so the shell needs a bearing seat sized to
+    the chosen bearing, not a clearance hole.  Rev S1b reconciled the spar
+    **station** across the wing and the cargo shell (that was the §1.1.2
+    spar-interface blocker) but left the **diameter** unreconciled, so this is the
+    same defect class re-appearing on the other dimension.
+
+    Sequencing — **settled 2026-08-23.**  CARGO-01 took resolution 1 (spars stop
+    at the wall, independently rotating, nacelle-servo driven; see
+    `airframe/wings-nacelles/WBS.md` §1.1.2 **SPAR-01**), so the shell edit is now
+    fully specified and CARGO-01/CARGO-02 close together in it.  The bore is no
+    longer a full-span clearance hole at all: it becomes a **bearing seat in the
+    lateral wall** sized to the chosen bearing for an 8 mm rotating spar, and it
+    stops at the wall (inboard end X −100 port / −240 starboard) instead of
+    crossing the bay.  `WING_SPAR_BOSS_OD` is re-derived from that bearing's OD
+    rather than from the retired Ø12 press fit.
 
 **Rev R shell updates (sensor/antenna mounts; carried fwd from Rev O, 2026-05-24):**
 

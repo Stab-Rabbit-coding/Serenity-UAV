@@ -43,12 +43,40 @@
     near-closes by Y≈−71.5; a clean full-perimeter rim wants the cut ~Y=−64 ≈ 7 mm shorter, OR
     an accepted tapered rim at −71.5). Same fix applies to `add_structural_features.py`
     `_bore_open_cutter` (head/middle/rear). **Refer mating-plane choice to user before rework.**
-- [ ] **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
-    shells on cargo, middle, and rear** *(found 2026-06-16, reviewing 03_top.png render)* —
+- [x] **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
+    shells on cargo, middle, and rear** *(found 2026-06-16, reviewing 03_top.png render;
+    **CLOSED 2026-08-23** — see the closure verification immediately below)* —
     **ROOT CAUSE FIXED IN CODE. RESOLVED FOR CARGO 2026-06-30. RESOLVED FOR MIDDLE
     2026-07-03. REAR RESOLVED 2026-07-06 (new `regen_rear_interior.py`; see the
     "Rear" note below — its root cause was the bake's float32 STL round-trip
     damaging the delicate 3-body rear source, not a source-mesh defect).**
+    - **CLOSURE VERIFICATION 2026-08-23.** The item had been left unchecked after all
+        four sections were individually resolved, so it was re-verified end to end
+        against the *published* STLs before closing.  `airframe/blender-scripts/
+        verify_shells.py --published` — whose gate now hard-requires
+        `mesh.is_watertight`, the tightening this item's own "Fix path" called for —
+        returns **ALL PASS** on all four sections, and `tools/validate_stls.py`
+        passes **62/62** STLs repository-wide.  Per-section, as published:
+
+        | Section | Facets | Watertight | Boundary | Non-manifold | Bodies | Volume mm³ | Mass g (print / solid) |
+        | --- | --- | --- | --- | --- | --- | --- | --- |
+        | Head | 739 288 | True | 0 | 0 | 1 | 169 125 | 177.6 / 216.5 |
+        | Cargo | 908 106 | True | 0 | 0 | 1 | 295 931 | 310.7 / 378.8 |
+        | Middle | 716 310 | True | 0 | 0 | 1 | 181 847 | 190.9 / 232.8 |
+        | Rear | 1 052 082 | True | 0 | 0 | 1 | 231 589 | 243.2 / 296.4 |
+        | **Total** | 3 415 786 | — | 0 | 0 | 4 | **878 492** | **922.4 / 1124.5** |
+
+        Fuselage shell mass is therefore **2.03 lbm (0.922 kg)** as-printed
+        (CF-PETG, 4 perimeters + ≥40 % infill, ρ = 1.05 g/cm³) and **2.48 lbm
+        (1.125 kg)** fully dense (ρ = 1.28 g/cm³) — these bracket the true printed
+        mass and supersede every earlier per-section figure quoted in this item,
+        all of which predate the current regenerations.  The residual non-manifold
+        edges recorded above as an accepted float32 artifact are **no longer
+        present**: all four sections now reload at 0 boundary and 0 non-manifold
+        edges, so the "slicers weld them" caveat is retired.  Only cosmetic
+        zero-area faces remain (cargo 44, middle 3, rear 3), which carry no volume
+        and do not affect slicing.  **The blocker on cargo/middle/rear printing and
+        on FEA from these STLs is lifted.**
     - **2026-07-06 REGEN + HULL AUDIT (this session).** Head, cargo, and middle
         regenerated from the clean Blender sources with the joint boss-pins REMOVED
         (splice collars supersede — see §1.1.0 note above) and independently

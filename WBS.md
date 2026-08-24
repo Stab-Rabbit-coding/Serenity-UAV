@@ -163,7 +163,7 @@ see docs/WBS.md §0.10.2.)*
 - [x] 48 generator/analysis scripts stamped
 - [x] Docs updated
 - [x] Resolve nacelle port/stbd label swap.
-- [ ] Re-verify head↔cargo joint bosses in hull Y.
+- [x] Re-verify head↔cargo joint bosses in hull Y.
 - [x] Regenerate cargo doors from the baked shell.
 - [x] Correct hinge location: outboard flank, not centerline.
 - [x] Consolidate duplicate cargo shell copies.
@@ -209,7 +209,7 @@ see docs/WBS.md §0.10.2.)*
 #### 1.1.1 — Fuselage (continued)
 → detail: `airframe/fuselage-covers/WBS.md` §1.1.1 (2/3)
 
-- [ ] MESH-01 add_structural_features.py boolean cuts left non-wate…
+- [x] MESH-01 add_structural_features.py boolean cuts left non-wate…
 - [x] CF ring plate (CF-PLATE-2MM) — complete first-principles re-eva…
 - [x] Hull keel (CF-BAR-6X3) — complete first-principles re-evaluatio…
 
@@ -219,6 +219,12 @@ see docs/WBS.md §0.10.2.)*
 - [x] Access panel frames + covers (24" Rev R)
 - [x] 49 MHz (Part 15 §15.235) wire posts
 - [x] Verify head-cargo mating boss positions in slicer — SUPERSEDED,…
+- [ ] ★ CARGO-01 payload won't fit past the wing spar (BLOCKER)
+- [ ] CARGO-02 shell bores Ø12.3 for a spar the wing retired (8.3)
+- [ ] ★ CARGO-03 wing root mortise does not penetrate the bulkhead
+- [ ] ★ CARGO-03b tenon/mortise datum mismatch (4.49 mm in Z)
+- [ ] ★ CARGO-03c coupon gates tenon vs second spar (15 MPa)
+- [ ] CARGO-04 aft ESC conduit blocked by the uncut bulkhead wall
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
 - [x] Mounting hardware — 8 STLs
@@ -285,7 +291,11 @@ see docs/WBS.md §0.10.2.)*
 - [x] Spar bore de-skewed
 - [x] Tip thickened for spar fit
 - [x] EDF cableway added
-- [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
+- [x] Fuselage spar-interface mismatched — station RESOLVED (Rev S1b)
+  (spar DIAMETER Ø12.3 vs 8.3 still open — see §1.1.1 CARGO-02)
+- [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
+- [ ] SPAR-02 servo bolt pattern unverified (pad rebuilt Rev S1d)
+- [ ] SPAR-04 Hall tip jog crosses the spar bore (pre-existing)
 
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3

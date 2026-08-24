@@ -117,8 +117,10 @@ matures — do not restate its specifics here or in any other file; they will go
 the current revision directly:
 
 - **Canonical design and structural analysis:** `docs/LANDING_GEAR_ANALYSIS.md`
-- **SCAD source:** `airframe/openscad/fuselage/wire_brace_leg.scad`
-- **Open work:** `TODO.md` §1.1.4
+- **SCAD source:** `airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad` (default)
+  and `canonical_leg_r6_3_0in.scad` (extended, kept). The Rev R5 `wire_brace_leg.scad`
+  this file used to name is superseded — corrected 2026-08-23.
+- **Open work:** `airframe/landing-gear/TODO.md` §1.1.4
 
 ## Nacelle Nozzle Drive
 

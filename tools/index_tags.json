@@ -2472,7 +2472,6 @@
         "documentation",
         "project-tracking",
         "propulsion",
-        "security",
         "structural"
       ],
       "archived": false
@@ -6990,6 +6989,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x": {
+      "description": "(kicad_pcb",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_prl": {
       "description": "KiCad project-local settings",
       "tags": [
@@ -7008,6 +7015,14 @@
     },
     "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch": {
       "description": "KiCad schematic",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x": {
+      "description": "(kicad_sch (version 20240101) (generator eeschema)",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -7678,6 +7693,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x": {
+      "description": "(kicad_sch (version 20240101) (generator eeschema)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "power"
+      ],
+      "archived": false
+    },
     "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_pin_snap.py": {
       "description": "Snap power-symbol instances onto the pins they were meant to touch.",
       "tags": [
@@ -7919,6 +7943,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x": {
+      "description": "(kicad_sch (version 20240101) (generator eeschema)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "sensors-vision"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Observer/kicads/Observer.kicad_dru": {
       "description": "KiCad custom design-rules file",
       "tags": [
@@ -7929,6 +7962,14 @@
     },
     "avionics/kicad/Observer/kicads/Observer.kicad_pcb": {
       "description": "KiCad PCB layout",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Observer/kicads/Observer.kicad_pcb.pre-g351x": {
+      "description": "(kicad_pcb",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -9307,6 +9348,13 @@
         "emi-hardening",
         "project-tracking",
         "security"
+      ],
+      "archived": false
+    },
+    "code-scanning-files-extracted.csv": {
+      "description": "Tabular data (CSV)",
+      "tags": [
+        "bom"
       ],
       "archived": false
     },
@@ -12075,6 +12123,13 @@
       ],
       "archived": false
     },
+    "tools/cargo_bay_envelope.py": {
+      "description": "Measure the cargo bay's usable interior envelope, and gate the mission payload.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/compact_bom_entries.py": {
       "description": "compact_bom_entries.py",
       "tags": [
@@ -12250,6 +12305,21 @@
     },
     "tools/wing_cfd_openfoam.py": {
       "description": "2D RANS comparison of S1223 thickening strategies, via OpenFOAM. **WIP.**",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/wing_root_deconflict.py": {
+      "description": "Deconflict everything crowded into the wing-root zone of the cargo bulkhead.",
+      "tags": [
+        "build-tooling",
+        "security"
+      ],
+      "archived": false
+    },
+    "tools/wing_spar_carrythrough.py": {
+      "description": "Does the rotating wing spar have to span the fuselage? First-principles check.",
       "tags": [
         "build-tooling"
       ],
@@ -12639,7 +12709,6 @@
       "airframe/openscad/port_tilt_spar_assembly.scad",
       "airframe/placeholders/generate_placeholders.py",
       "airframe/stls/fuselage/cargo/generate_cargo_hinge_retention.py",
-      "airframe/wings-nacelles/WBS.md",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Assemble.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Subsystem-Assembly.py",
       "archives/airframe-archives/archive/openscad/wings/wing_nacelle_pylon_revo.scad",
@@ -12742,7 +12811,8 @@
       "tools/build_landing_gear_views.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/open_mating_faces.py",
-      "tools/precommit_index.py"
+      "tools/precommit_index.py",
+      "tools/wing_root_deconflict.py"
     ],
     "licensing": [
       "LICENSE",
@@ -13789,6 +13859,7 @@
       "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
       "avionics/kicad/symbols/SLB9672XU2_0_pinmap.csv",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
+      "code-scanning-files-extracted.csv",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
       "docs/bom_revR.json",
@@ -13861,6 +13932,7 @@
       "airframe/stls/fuselage/battery_tray.stl",
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
       "archives/serenity-esc-telem-revH1.jsx",
+      "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "docs/BATTERY_MOUNT.md",
       "docs/POWER_DISTRIBUTION.md",
       "docs/references/vimdrones_esc_s50_v1.0.step",
@@ -13879,6 +13951,7 @@
       "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
       "avionics/kicad/Observer/Vera.pretty/DS_ToF_4P.kicad_mod",
+      "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x",
       "avionics/kicad/add_sensors_sbus.py",
       "docs/OBSERVER_LASER_ANALYSIS.md",
       "graphical-build-guide/build_guide_25_obstacle_sensors.svg"
@@ -14613,9 +14686,11 @@
       "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1.drl",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.dsn",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb",
+      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_prl",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pro",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch",
+      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.net",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1_v2.ses",
@@ -14695,6 +14770,7 @@
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_prl",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch",
+      "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_pin_snap.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_revs1_cleanup.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_yinv.py",
@@ -14723,8 +14799,10 @@
       "avionics/kicad/Observer/gen_vera_bth060_footprint.py",
       "avionics/kicad/Observer/gen_vera_ds_footprints.py",
       "avionics/kicad/Observer/gen_vera_som_pcm071.py",
+      "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x",
       "avionics/kicad/Observer/kicads/Observer.kicad_dru",
       "avionics/kicad/Observer/kicads/Observer.kicad_pcb",
+      "avionics/kicad/Observer/kicads/Observer.kicad_pcb.pre-g351x",
       "avionics/kicad/Observer/kicads/Observer.kicad_prl",
       "avionics/kicad/Observer/kicads/Observer.kicad_pro",
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
@@ -15002,9 +15080,11 @@
       "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1.drl",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.dsn",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb",
+      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_prl",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pro",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch",
+      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.net",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1_v2.ses",
@@ -15084,6 +15164,7 @@
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_prl",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch",
+      "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_pin_snap.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_revs1_cleanup.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_yinv.py",
@@ -15112,8 +15193,10 @@
       "avionics/kicad/Observer/gen_vera_bth060_footprint.py",
       "avionics/kicad/Observer/gen_vera_ds_footprints.py",
       "avionics/kicad/Observer/gen_vera_som_pcm071.py",
+      "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x",
       "avionics/kicad/Observer/kicads/Observer.kicad_dru",
       "avionics/kicad/Observer/kicads/Observer.kicad_pcb",
+      "avionics/kicad/Observer/kicads/Observer.kicad_pcb.pre-g351x",
       "avionics/kicad/Observer/kicads/Observer.kicad_prl",
       "avionics/kicad/Observer/kicads/Observer.kicad_pro",
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
@@ -15522,6 +15605,7 @@
       "tools/bake_hull_frame.py",
       "tools/build_head_shell.py",
       "tools/build_landing_gear_views.py",
+      "tools/cargo_bay_envelope.py",
       "tools/compact_bom_entries.py",
       "tools/export-specctra-dsn.py",
       "tools/export_landing_gear_stls.py",
@@ -15545,6 +15629,8 @@
       "tools/verify_bow_pod.py",
       "tools/wing_airfoil_variants.py",
       "tools/wing_cfd_openfoam.py",
+      "tools/wing_root_deconflict.py",
+      "tools/wing_spar_carrythrough.py",
       "tools/wing_spar_station_fit.py"
     ]
   }

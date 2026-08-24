@@ -364,12 +364,40 @@ HALL_PCB_SCR_D  =   1.7;  // [mm] M2 self-tap pilot (2×, chordwise ±HALL_PCB_S
 HALL_PCB_SCR_S  =   2.5;  // [mm] screw pilot half-spacing (chordwise) — within W/2 span
 HALL_KEEPOUT_R  =  10.0;  // [mm] NON-FERROUS keep-out radius around the IC
 HALL_CABLE_D    =   3.5;  // [mm] 4-wire I²C sensor conduit (VCC/GND/SDA/SCL, shielded)
-HALL_CABLE_XFR  =   0.33; // [chord fraction] conduit chordwise centre — between the
-                          //      spar (0.237c) and the 0.48c EDF double-D so the
-                          //      low-level sensor lines stay separated from the 40 A
-                          //      EDF feeds (EMI — EMI WBS §1.4.4/§1.4.6) while its
-                          //      tip end (X≈30.7) sits just aft of the bearing seat,
-                          //      shortening the jog to the R=11 pocket (X≈33).
+// REV S1c (2026-08-23, owner): 0.33 → 30.0 mm of root chord = 0.23256c.
+// Two reasons, and the first is a defect fix:
+//   1. At 0.33c the conduit CENTRE sat 2.58 mm from the Rev S1b spar axis, so the
+//      Ø3.5 conduit lay ENTIRELY INSIDE the Ø8.3 spar bore — the rotating spar
+//      occupied it (468 mm³ of interference, tools/wing_root_deconflict.py).  That
+//      is a Rev S1b regression: the spar moved 22.0 → 45.15 mm (0.171c → 0.350c)
+//      and this conduit was not moved with it.  The old comment below also
+//      described the spar as being at "0.237c", which no station in force matches.
+//   2. EMI (owner): the steel spar must sit BETWEEN this sensor line and the 40 A
+//      EDF feeds.  The EDF double-D is at 0.449c/0.511c — AFT of the spar — so the
+//      shielding only works with the sensor line FORWARD of the spar, not aft of
+//      it.  At 30.0 mm the spar is interposed and the separation from the EDF
+//      POWER bore is 27.9 mm at the root (was 14.8 mm for an aft station).
+// The station also had to clear the Ø22 spar BEARING SEAT boss in the fuselage
+// wall, which is what rules out 34 mm and further aft (boss gap goes negative).
+// Verified root → tip (constant chord FRACTION, so it diverges from the
+// constant-mm spar station outboard — clearance only improves):
+//   span   0%   25%   50%   75%  100%
+//   gap to spar bore   9.25 11.34 13.44 15.53 17.62 mm
+//   sep from EDF POWER 27.92 25.69 23.47 21.24 19.01 mm
+//   min skin wall       6.85  7.15  7.32  7.35  7.24 mm   (MIN_WALL_MM = 1.16)
+// Root is the governing station on every metric.
+// Written as a literal, not as `30.0 / WING_CHORD_ROOT`: the SCAD-parsing tools
+// (tools/wing_spar_station_fit.py `scad_scalar`, and wing_root_deconflict.py
+// through it) read these constants with a numeric-literal regex and cannot
+// evaluate an expression.  Same reason `SPAR_BORE_STATION` is a literal 45.15.
+HALL_CABLE_XFR  = 0.23256; // [chord fraction] = 30.0 mm at the 129 mm root chord.
+                          // FORWARD of the spar (0.350c) so the steel spar shields
+                          // the 4-wire sensor lead from the 0.449c EDF 40 A feeds
+                          // (EMI — EMI WBS §1.4.4/§1.4.6).  NOTE this is forward of
+                          // the wing root MORTISE (hull Y +42.1…+72.9) as well, so
+                          // unlike the EDF pair it does NOT ride the mortise into
+                          // the fuselage — it needs its own Ø≈4 mm wall
+                          // penetration; see airframe/fuselage-mid/WBS.md CARGO-04.
 
 // Spar-axis thickness (internal Y) height at the TIP station — the spar exits on
 // the camber midline, NOT the chord line, so all wingtip spar features (pad,
@@ -816,10 +844,14 @@ module wing_tip_hall_sensor_pocket() {
 // Dedicated spanwise conduit for the Hall sensor's 4-wire I²C lead (VCC/GND/
 // SDA/SCL, shielded).  Because the SENSOR is on the FIXED wing (only the magnet
 // rotates), this lead does NOT twist with tilt — no slip ring.  It runs a
-// separate chord fraction (HALL_CABLE_XFR = 0.30c) FORWARD of the 0.48c EDF
-// double-D so the low-level sensor lines stay clear of the 40 A EDF feeds
+// separate chord fraction (HALL_CABLE_XFR = 0.23256c = 30.0 mm root) FORWARD of
+// BOTH the 0.350c spar and the 0.449c/0.511c EDF double-D, so the steel spar sits
+// between the low-level sensor lines and the 40 A EDF feeds and shields them
 // (EMI — EMI-hardening WBS §1.4.4/§1.4.6), camber-centred at each station.  A
-// short chordwise jog links the tip end of the conduit to the sensor pocket.
+// chordwise jog links the tip end of the conduit to the sensor pocket.
+// (Rev S1c, 2026-08-23: was 0.30c in this comment and 0.33c in the constant —
+// they had disagreed for some time, and 0.33c put the conduit inside the Rev S1b
+// spar bore.  See the HALL_CABLE_XFR block above.)
 module hall_sensor_cableway() {
     root_xc = WING_CHORD_ROOT * HALL_CABLE_XFR;
     tip_xc  = WING_CHORD_TIP  * HALL_CABLE_XFR;

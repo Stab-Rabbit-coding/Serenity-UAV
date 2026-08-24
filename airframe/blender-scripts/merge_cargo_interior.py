@@ -334,17 +334,71 @@ STBD_OUTB, STBD_INB = -278.0, -240.0  # stbd wall bracket (skin ≈ −250..−2
 # The offsets below are exactly those in force before the move
 # (spar Y 31.7 -> pad Y 45.0; spar Z 62.5 -> pad Z 93.0), so the linkage
 # geometry is carried across unchanged.
+# --- Rev S1d (2026-08-23, owner): pads rebuilt for LibreServo_v4 servos --------
+#
+# The nacelle tilt servos are now **DS3218MG bodies fitted with the LibreServo_v4
+# control PCB** (owner direction).  That fork's README is explicit that the board
+# is "compatible with standard servo motors (No need to change the bottom cover of
+# them!)" and its only mechanical addition, `3D/LS_body.stl`, is a 13 x 13 x
+# 8.45 mm encoder part that replaces the potentiometer INSIDE the case.  So the
+# conversion does not change the servo's external envelope, and the pad sizes to
+# the bare DS3218MG body.
+#
+# WHY THE OLD PAD DID NOT FIT
+# ---------------------------
+# The 52 x 30 mm pad was 10.5 mm short in Z against a 40.5 mm-tall servo body
+# (tools/wing_root_deconflict.py, SPAR-02).  A servo overhanging its pad lands on
+# raw 2 mm skin, which is not a mounting surface for a 2+ N.m actuator.
+#
+# DIMENSIONAL BASIS, AND WHAT IS NOT VERIFIED
+# -------------------------------------------
+# DS3218MG has **no cited dimensional source in this repository** -- bom_revS.csv
+# recorded it as "(uncited)" when it was superseded on 2026-08-02.  The one cited
+# standard-size servo figure the repo does hold is REF-SENSOR-013 (SPT5425LV,
+# 40.5 x 20 x 40.5 mm), and the BOM itself treats the two as interchangeable
+# ("DS3218MG-class bodies were already qualified").  The pad is therefore sized to
+# the **standard-size servo class** with margin, not to one part number, so it
+# accepts either body.  The DS3218MG figures are logged in REFERENCES.md as
+# requiring verification.
+NSVMT_BODY_H = 40.5   # servo body height (Z), standard-size class
+NSVMT_BODY_W = 40.5   # servo body length (Y), standard-size class
+NSVMT_EAR_W = 7.0     # mounting-ear reach per end -- ALLOWANCE, not a datasheet
+NSVMT_MARGIN = 3.5    # pad relief all round the flange footprint
+
+# Pad centre.  Kept SPAR-RELATIVE (Rev S1b) so a spar move carries the pad and the
+# linkage with it instead of silently breaking them.
 NSVMT_DY = 13.3   # pad centre, chordwise aft of the spar axis
-NSVMT_DZ = 30.5   # pad centre, above the spar axis
+# Rev S1d: 30.5 -> 38.5.  The pad grew in Z to hold the taller footprint, and it
+# had to grow UPWARD: the spar bearing boss crown is Z +79.42 and the pad floor
+# must stay above it.  Downward growth eats that clearance; upward is unobstructed
+# to the Inara/River bays at Z +145.
+#
+# The binding constraint on the floor is NOT the spar boss.  Measured, the Rev R6
+# landing-gear bay seats top out at Z +82.39 -- 2.97 mm ABOVE the boss crown at
+# Z +79.42 -- and the pad overlaps both bays in Y (pad Y +20.70..+82.20 against
+# fore bay ..+25.87 and aft bay +68.89..), so Z separation is the entire margin.
+# Sizing the floor off the boss, as the pre-Rev-S1b design did, left only 1.53 mm
+# over the bays.  DZ is therefore set from the BAY tops plus the 3.0 mm clearance
+# budget: floor Z +85.39, centre Z +109.14, crown Z +132.89, which still leaves
+# 12.1 mm to the avionics bay floor and 5.97 mm over the spar boss.
+NSVMT_DZ = 40.72  # pad centre, above the spar axis
 NSVMT_Y = WING_SPAR_Y + NSVMT_DY   # = 51.45
-NSVMT_PAD_W = 52.0  # Y span
-NSVMT_PAD_H = 30.0  # Z span
-# = 98.92.  Tracking the spar also restores the spar-boss clearance the old
-# absolute value had: boss top is Z 79.42 and the pad now starts at 83.92,
-# a 4.5 mm gap (the pre-move design intent was ~4 mm).
-NSVMT_Z = WING_SPAR_Z + NSVMT_DZ
-NSVMT_HOLE_S_Y = 17.5
-NSVMT_HOLE_S_Z = 8.0
+NSVMT_Z = WING_SPAR_Z + NSVMT_DZ   # = 109.14
+NSVMT_PAD_W = NSVMT_BODY_W + 2 * NSVMT_EAR_W + 2 * NSVMT_MARGIN   # = 61.5, Y span
+NSVMT_PAD_H = NSVMT_BODY_H + 2 * NSVMT_MARGIN                     # = 47.5, Z span
+
+# Mounting-ear bolt pattern -- GATED OFF, deliberately.
+# The 35 x 16 mm pattern this file used to drill was inherited from the servo the
+# BOM replaced in 2026-08-02 and matches no published DS3218MG or SPT5425LV ear
+# spacing; neither part publishes one that has been obtained (REFERENCES.md
+# "requires verification").  Cutting four M3 bores on an unverified pattern into a
+# published shell is worse than leaving the pad solid: a wrong hole cannot be
+# un-drilled, and the pad is usable as a bonded/tapped landing without them.
+# Measure the ears on a real servo, set the two spacings, then flip this True --
+# same gate pattern as LG_BAY_ENABLED.
+NSVMT_HOLES_ENABLED = False
+NSVMT_HOLE_S_Y = 17.5   # UNVERIFIED -- do not cut until measured
+NSVMT_HOLE_S_Z = 8.0    # UNVERIFIED -- do not cut until measured
 NSVMT_M3_D = 4.1
 
 # Inara avionics-bay standoff bosses (dorsal port half, additive only).
@@ -843,19 +897,23 @@ def build_negatives(shell_tm, envelope_tm=None):
         notes.append(f"wing {label}")
 
     # Nacelle-servo M3 heat-set pilot bores (into the cavity face of each pad).
-    for x_in, x_out in ((PORT_INB, PORT_INB + 8.0), (STBD_INB, STBD_INB - 8.0)):
-        for dy in (-NSVMT_HOLE_S_Y, NSVMT_HOLE_S_Y):
-            for dz in (-NSVMT_HOLE_S_Z, NSVMT_HOLE_S_Z):
-                cutters.append(
-                    x_cylinder(
-                        NSVMT_Y + dy,
-                        NSVMT_Z + dz,
-                        min(x_in, x_out),
-                        max(x_in, x_out),
-                        NSVMT_M3_D / 2.0,
+    if NSVMT_HOLES_ENABLED:
+        for x_in, x_out in ((PORT_INB, PORT_INB + 8.0), (STBD_INB, STBD_INB - 8.0)):
+            for dy in (-NSVMT_HOLE_S_Y, NSVMT_HOLE_S_Y):
+                for dz in (-NSVMT_HOLE_S_Z, NSVMT_HOLE_S_Z):
+                    cutters.append(
+                        x_cylinder(
+                            NSVMT_Y + dy,
+                            NSVMT_Z + dz,
+                            min(x_in, x_out),
+                            max(x_in, x_out),
+                            NSVMT_M3_D / 2.0,
+                        )
                     )
-                )
-    notes.append("servo M3 pilot bores")
+        notes.append("servo M3 pilot bores")
+    else:
+        notes.append("servo M3 pilot bores GATED OFF "
+                     "(ear pattern unverified -- Rev S1d; see NSVMT_HOLES_ENABLED)")
 
     _lg_pos, lg_neg, lg_note = lg_bay_features(shell_tm, envelope_tm)
     cutters.extend(lg_neg)

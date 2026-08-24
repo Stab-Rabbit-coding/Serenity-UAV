@@ -18,8 +18,10 @@
 
 - [ ] wing_nacelle_pylon_revo.stl
 - [ ] wings_s1223_revo.stl
-- [ ] Re-render + re-bake both wings (Rev S1b tip OML change)
-- [ ] Re-merge cargo shell (Rev S1b spar + LG-10.4 keep-outs)
+- [ ] Re-render + re-bake both wings (Rev S1b OML + S1c Hall)
+- [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
+- [ ] SPAR-02 servo bolt pattern unverified (pad rebuilt Rev S1d)
+- [ ] SPAR-04 Hall tip jog crosses the spar bore (pre-existing)
 - [ ] Canon-check tip thickness/spar station vs silhouette
 
 ## §1.1.3 — Nacelles
