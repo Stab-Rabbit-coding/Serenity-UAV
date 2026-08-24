@@ -63,7 +63,6 @@ numeric order.)*
 
 → detail: `airframe/WBS.md` §1.1.0
 
-- [ ] Re-verify head↔cargo joint bosses in hull Y.
 - [ ] Hull-frame placements for VERIFY parts
 
 #### 1.1.1 — Fuselage
@@ -81,12 +80,15 @@ numeric order.)*
 
 → detail: `airframe/fuselage-covers/WBS.md` §1.1.1 (2/3)
 
-- [ ] MESH-01 `add_structural_features.py` boolean cuts left non-watertight hull
+*No open items. MESH-01 closed 2026-08-23 — all four shells verify watertight.*
 
 #### 1.1.1 — Fuselage (continued)
 
 → detail: `airframe/fuselage-mid/WBS.md` §1.1.1 (3/3)
 
+- [ ] ★ CARGO-01 payload won't fit past the wing spar (BLOCKER)
+- [ ] CARGO-02 shell bores Ø12.3 for a spar the wing retired (8.3)
+- [ ] ★ CARGO-03c coupon-test CF-PETG: >=15MPa tenon, else 2nd spar
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
 - [ ] Cargo gondola shell
@@ -131,11 +133,12 @@ numeric order.)*
 
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
 
-- [ ] Re-render + re-bake both wings — Rev S1b tip OML change
+- [ ] ★ WING-01 S1223 section self-intersects at x/c 0.742 (BLOCKER)
+- [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
+- [ ] SPAR-02 DS3225 24.5 vs 25 kgf·cm req (re-derive); RAIL-2 2.3A
+- [ ] Re-render + re-bake both wings — Rev S1b tip OML + Rev S1c Hall
     (THICKNESS_SCALE_TIP 1.25→1.45, thickness-only section scaling); baked wing
     STLs and docs/img/wing_rev_r1a_sections.png are stale
-- [ ] Re-merge the cargo shell — carries the Rev S1b spar station/height AND
-    the LG-10.4 wing keep-outs; published STL predates both
 
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3

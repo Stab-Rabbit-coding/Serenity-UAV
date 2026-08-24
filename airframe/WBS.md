@@ -53,11 +53,19 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     comment updated, SCAD build commands corrected (port: SWIRL_DIR=−1/PYLON_SIDE=−1,
     stbd: SWIRL_DIR=+1/PYLON_SIDE=+1), CLAUDE.md extents table corrected.
     *(done 2026-06-11)*
-- [ ] **Re-verify head↔cargo joint bosses in hull Y.** The 2026-06-10 joint analysis
-    used hull X as the longitudinal mating axis; in the validated frame the longitudinal
-    axis is Y (sections mate at hull Y ≈ −71 mm; X is lateral). Re-check
+- [x] **Re-verify head↔cargo joint bosses in hull Y.** **CLOSED 2026-08-23** — the
+    verification below completed 2026-06-29 and the underlying design was superseded
+    2026-07-06 (boss-pins removed entirely in favour of the splice collar), so the
+    checkbox was stale; the sub-notes already said so.  Re-confirmed before closing:
+    `verify_shells.py --published` returns ALL PASS on head and cargo (both watertight,
+    0 boundary, 0 non-manifold, 1 body), and no boss-pin bore is cut by either
+    `add_structural_features.py` or `merge_cargo_interior.py`.  The **head/cargo
+    printing blocker is lifted** — head/cargo alignment is carried by
+    `head_cargo_splice_collar.stl`, not by pins.  Original text: the 2026-06-10 joint
+    analysis used hull X as the longitudinal mating axis; in the validated frame the
+    longitudinal axis is Y (sections mate at hull Y ≈ −71 mm; X is lateral). Re-check
     BOSS_FORE/BOSS_AFT positions in `head_shell24.scad` / `cargo_sect_shell24.scad`
-    against the baked meshes. **BLOCKS head/cargo printing.**
+    against the baked meshes.
     - **Verification DONE 2026-06-29 (trimesh Y-cross-sections of the baked shells).**
         The SCAD `BOSS_FORE`/`BOSS_AFT` parameters are **obsolete** — the canonical joint
         bosses now come from `add_structural_features.py` `BOSS_PIN_BORES["joint1"]`
@@ -223,11 +231,44 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
         (battery_tray, belly_panel) and `nacelles/nacelle_servo_bracket.stl`; corrected
         the landing-gear feet/legs paths to the `landing-gear/` subdir (flagged RETIRED —
         Rev R5 wire-brace supersedes; hull placement is §1.1.4).
+    - **2026-08-23 — the cargo-bay envelope is now MEASURED, and placing the eight
+        cargo accessories is BLOCKED by a design conflict, not by missing data.**
+        New tool `tools/cargo_bay_envelope.py` measures the usable interior directly
+        from the published shell (per-station free X and Z spans, floor taken as the
+        crown of the *closed* clamshell doors, hull Z **+8.72**).  Two results:
+
+        1. **Usable envelope, hull frame.** Through the bay (Y +14…+116) the interior
+            is roughly **X −240…−100 (140 mm wide)** narrowing to ~123 mm at the aft
+            rim, **Z +10 up to +150…+161**.  The 140 mm lateral limit is set by the
+            interior wing-spar bosses and nacelle-servo pads at `PORT_INB` = −100 and
+            `STBD_INB` = −240, not by the skin — the skin is 170 mm apart there.  Any
+            accessory wider than 140 mm cannot sit at the spar station at all.
+        2. **The bay is crossed by the wing spar**, so the cradle and winch cannot be
+            placed until that is resolved — logged as **CARGO-01** in
+            `airframe/fuselage-mid/WBS.md` §1.1.1.2 with the measured clearances.
+            `cargo_cradle_autolatch` (110 × 80 × 72 mm), `cargo_winch_motor_mount`
+            and `cargo_winch_spool` all depend on the outcome, because CARGO-01's
+            candidate resolutions change the bay's clear volume.  The five remaining
+            accessories (FPV bezel, GPS ring, DRV8833 tray, two servo brackets) are
+            roof/wall-mounted, do not depend on CARGO-01, and are the ones to place
+            once it is settled.
+
+        Method note for whoever picks this up: a closed cavity solid does **not**
+        work here.  The bay is open at the belly aperture and at both mating rims, so
+        `outer − shell` returns a single region spanning the inside and the outside of
+        the ship; plugging the apertures one at a time does not converge, because the
+        spar bore, both wing mortises, the ring pockets and the four landing-gear bay
+        apertures are all through-holes as well.  Section-and-probe, as the tool does
+        it, is the approach that works.  Second trap: `trimesh` `Path3D.to_2D()`
+        returns the **2-D → 3-D** matrix; applying its inverse yields zero-area
+        polygons that read as "this shell has no cavity" rather than as an error.
+
     - **REMAINING (FreeCAD-manual, user step per CLAUDE.md):** visual fit-validation of
         the part-local items still placed by estimate (cargo mounts ×8, pylons, tip caps,
         dorsal antenna fin, battery tray/belly panel transforms) against the baked hull,
         then bake or commit final placements.  The assembly loading cleanly is the
-        prerequisite that was blocking this.
+        prerequisite that was blocking this; **CARGO-01 is now the second prerequisite
+        for the cargo-bay subset.**
 - [x] **Generate `battery_tray.stl` and `belly_panel.stl`** from their SCAD sources —
     **DONE 2026-06-29.**  Rendered from `airframe/openscad/fuselage/battery_tray.scad`
     and `belly_panel.scad` to `airframe/stls/fuselage/`.  Both watertight, single body

@@ -115,14 +115,39 @@ COMPONENTS = {
     # Wings: identity rotation, translation only.
     # Filenames use the no-"s_"-prefix convention (Rev R1, 2026-06-11).
     # Chord updated to 129/93 mm (root/tip) and LE sweep zeroed in Rev R1
-    # 2026-06-14; bake translation unchanged (LE root stays at hull Y=-7).
+    # 2026-06-14; PORT bake translation unchanged (LE root stays at hull Y=-7).
+    #
+    # REV S1c (2026-08-18) — Wing_Stbd MIRROR-CORRECTED.  It had been baked
+    # 5.00 mm AFT-of-mirror in Y (-12.0 vs the port -7.0) and 4.52 mm outboard
+    # in X, so the two wings were not mirror images of each other.  That is not
+    # canonical asymmetry -- Serenity is symmetric here -- and it broke the spar
+    # interface: airframe/blender-scripts/merge_cargo_interior.py derives ONE
+    # WING_SPAR_Y (+38.15) from ONE WING_LE_ROOT_Y (-7.0) and cuts BOTH spar
+    # bores, BOTH bearing bosses and BOTH nacelle-servo pads on it, so the
+    # starboard spar was 5 mm out of line with its own wing.  Correcting the
+    # bake is what lets that single constant stay correct for both sides.
+    #
+    #   Y: -11.9999760 -> -6.9999860, i.e. identical to port.  Y is the
+    #      fore/aft axis and is NOT mirrored; both wings share one station.
+    #   X: -261.9994760 -> -257.4822.  Derived, not guessed: mirrored about the
+    #      hull's own symmetry plane MEASURED on the baked cargo shell at the
+    #      spar station (trimesh Y-sections over hull Y 37..41 at Z 55/58/62.5
+    #      give centreline X = -169.241, sd 0.03), as
+    #        Px_stbd = 2 * (-169.241) - (-80.9998380).
+    #      Check: this puts the starboard root face 2.28 mm outboard of the
+    #      starboard skin, against 2.24 mm for port -- symmetric.  The cargo
+    #      shell is the right reference because the wing root is a mortise/tenon
+    #      plus spar-bore joint into it; the nacelle-pair midpoint (-171.05)
+    #      disagrees by 1.8 mm, but that bake is itself known-stale pending the
+    #      Rev T CG re-bake (wings-nacelles WBS SS1.1.3), so it is not used here.
+    #   Z: unchanged -- both wings already shared 57.9998840.
     "Wing_Port": (
         "wings/wing_port_s1223_revo.stl",
         (-80.9998380, -6.9999860, 57.9998840, 0.0, 0.0, 0.0, 1.0),
     ),
     "Wing_Stbd": (
         "wings/wing_stbd_s1223_revo.stl",
-        (-261.9994760, -11.9999760, 57.9998840, 0.0, 0.0, 0.0, 1.0),
+        (-257.4822000, -6.9999860, 57.9998840, 0.0, 0.0, 0.0, 1.0),
     ),
     # Nacelles: 270 deg about +X = cruise / forward-flight attitude.
     # This is the canonical stored attitude; hover tilt is applied

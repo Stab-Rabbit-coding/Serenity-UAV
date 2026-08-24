@@ -289,7 +289,6 @@ WING_SPAR_Y = WING_LE_ROOT_Y + 0.35 * WING_ROOT_CHORD  # = +38.15
 WING_MORT_Y = WING_LE_ROOT_Y + 0.50 * WING_ROOT_CHORD  # = +57.5
 
 # Mortise / nacelle-servo reference height.  NOT the spar height -- see below.
-WING_ROOT_Z = 62.5
 
 # Spar axis height, hull frame.  The bore is centred on the S1223 CAMBER
 # MIDLINE, not on the chord line, so moving the station chordwise also moves it
@@ -310,10 +309,79 @@ WING_ROOT_Z = 62.5
 # the mortise height rather than on the camber midline, which is why they never
 # lined up with the wing.
 WING_CHORD_LINE_Z = 58.01
+
+# CARGO-03b (2026-08-24): the wing root joint now has ONE datum.
+# The tenon (`fuselage_root_tab()`) is centred on the wing CHORD LINE; this
+# constant used to sit at 62.5, so the mortise was cut 4.49 mm above the tenon
+# that enters it -- against a 0.4 mm/side design clearance, which put the tenon's
+# lower 4.09 mm onto solid wall.  Both halves are now driven from the chord line.
+# Only the mortise reads this (the spar and the servo pad are spar-relative), so
+# moving it does not disturb anything else.
+WING_ROOT_Z = WING_CHORD_LINE_Z
 WING_SPAR_MIDLINE = 10.41   # midline_frac(45.15/129) * 129, from the wing SCAD
 WING_SPAR_Z = WING_CHORD_LINE_Z + WING_SPAR_MIDLINE  # = 68.42
 WING_SPAR_BORE_D = 12.3
 WING_SPAR_BOSS_OD = 22.0
+
+# Wing harness entry ports (Rev S1c, 2026-08-18) — NEW.
+#
+# Until now the shell had NO harness entry at all: the wing's spanwise conduits
+# ran to the wing root face and stopped against solid cargo skin.  That was
+# survivable only while the EDF double-D was routed through the wing-root tenon
+# (which enters the mortise), and Rev S1c moves it off the tenon entirely, so
+# the entry has to be cut explicitly.
+#
+# Stations come from the wing SCAD and MUST be kept in step with it — there is
+# no other link between the two files, exactly as for WING_SPAR_Y:
+#   CABLE_BORE_STATION 27.5 mm, CABLE_BORE_SEP 9.5  -> conduits at 22.75 / 32.25
+#   HALL_CABLE_STATION 54.0 mm                      -> encoder lead
+# Midline heights are midline_frac(station / 129) * 129 evaluated on the same
+# S1223 tables the wing uses; the identical derivation reproduces WING_SPAR_Y
+# +38.150 and WING_SPAR_Z +68.420 exactly, which is the cross-check that these
+# three are on the same footing as the spar.
+#
+# Both wings now share WING_LE_ROOT_Y, so one set of stations serves both sides
+# — that is only true since the Wing_Stbd bake was mirror-corrected at Rev S1c
+# (tools/bake_hull_frame.py).  Before that the starboard wing sat 5 mm aft of
+# these ports.
+WING_EDF_STATION_FWD = 22.75
+WING_EDF_STATION_AFT = 32.25
+WING_ENC_STATION = 54.0
+WING_EDF_MIDLINE_FWD = 8.685
+WING_EDF_MIDLINE_AFT = 10.088
+WING_ENC_MIDLINE = 9.823
+
+WING_EDF_Y_FWD = WING_LE_ROOT_Y + WING_EDF_STATION_FWD   # = +15.75
+WING_EDF_Y_AFT = WING_LE_ROOT_Y + WING_EDF_STATION_AFT   # = +25.25
+WING_ENC_Y = WING_LE_ROOT_Y + WING_ENC_STATION           # = +47.00
+
+# Bore diameters are the wing conduit + 1.0 mm.  The oversize is deliberate:
+# the root joint carries assembly tolerance in Y and Z, and a harness port that
+# is merely flush leaves the wire pinched on the skin edge at the transition.
+# It costs nothing structurally — these are through-skin holes in a 2 mm shell,
+# not load paths.
+WING_EDF_ENTRY_D = 8.0   # wing conduit Ø7.0 + 1.0
+WING_ENC_ENTRY_D = 4.5   # wing conduit Ø3.5 + 1.0
+
+# Inboard end of the harness bores.  The lateral wall brackets used for the
+# spar boss (PORT_INB -100 / STBD_INB -240) are NOT deep enough here: ray-tracing
+# the merged shell showed a ~2.2 mm internal wall immediately inboard of them,
+# whose outboard face sits at exactly -100.0 / -240.0 on the EDF-forward line and
+# at -113.1 / -223.2 on the encoder line.  A bore that stops flush against that
+# wall passes the skin and then dead-ends, which is the same failure this whole
+# feature exists to remove -- just moved 17 mm inboard where it is harder to see.
+#
+# These values carry each bore past the deepest observed obstruction with margin,
+# into open cargo cavity.  The spar bore already crosses the same region (it spans
+# the full -270..-70 lateral run, because it is a continuous rod), so punching a
+# harness bore through it is not a new intrusion into that wall.
+WING_HARNESS_INB_PORT = -125.0   # past the -115.2 encoder-line wall
+WING_HARNESS_INB_STBD = -213.0   # past the -225.2 encoder-line wall (stbd inboard is +X)
+
+# Entry heights — same camber-midline rule as the spar.
+WING_EDF_Z_FWD = WING_CHORD_LINE_Z + WING_EDF_MIDLINE_FWD   # = +66.695
+WING_EDF_Z_AFT = WING_CHORD_LINE_Z + WING_EDF_MIDLINE_AFT   # = +68.098
+WING_ENC_Z = WING_CHORD_LINE_Z + WING_ENC_MIDLINE           # = +67.833
 MORT_W = 30.8  # mortise Y span
 MORT_H = 20.8  # mortise Z span
 
@@ -334,17 +402,74 @@ STBD_OUTB, STBD_INB = -278.0, -240.0  # stbd wall bracket (skin ≈ −250..−2
 # The offsets below are exactly those in force before the move
 # (spar Y 31.7 -> pad Y 45.0; spar Z 62.5 -> pad Z 93.0), so the linkage
 # geometry is carried across unchanged.
+# --- Rev S1d (2026-08-23, owner): pads rebuilt for LibreServo_v4 servos --------
+#
+# The nacelle tilt servos are now **DS3218MG bodies fitted with the LibreServo_v4
+# control PCB** (owner direction).  That fork's README is explicit that the board
+# is "compatible with standard servo motors (No need to change the bottom cover of
+# them!)" and its only mechanical addition, `3D/LS_body.stl`, is a 13 x 13 x
+# 8.45 mm encoder part that replaces the potentiometer INSIDE the case.  So the
+# conversion does not change the servo's external envelope, and the pad sizes to
+# the bare DS3218MG body.
+#
+# WHY THE OLD PAD DID NOT FIT
+# ---------------------------
+# The 52 x 30 mm pad was 10.5 mm short in Z against a 40.5 mm-tall servo body
+# (tools/wing_root_deconflict.py, SPAR-02).  A servo overhanging its pad lands on
+# raw 2 mm skin, which is not a mounting surface for a 2+ N.m actuator.
+#
+# DIMENSIONAL BASIS -- NOW FROM THE DATASHEET
+# -------------------------------------------
+# `avionics/datasheets/DS3225 datasheet.pdf` (Dongguan City Dsservo Technology
+# Co. Ltd, "6V 25kg RC Digital Servo") is authoritative for the servo envelope as
+# of 2026-08-23 (owner).  It supersedes the standard-size-class estimate this
+# block previously carried, and it CORRECTED the mounting orientation.
+#
+# The part moved DS3218 -> DS3225 the same day, for torque.  The two datasheets
+# carry the SAME drawing and the same SS2-1 size, so nothing below changes with the
+# swap -- which is the useful fact: the pad is common to both, and a later move
+# within this body family will not disturb it.
+#
+#   size (SS2-1)         40 x 20 x 40.5 mm        weight (SS2-2)  60 g
+#   ear span (drawing)   54.5 mm overall          shaft from end  24 mm
+#   bolt pattern         49.5 x 10 mm             flange above base  27.7 mm
+#
+# ORIENTATION.  A standard servo's four screws run PARALLEL TO THE OUTPUT SHAFT,
+# through a flange that is perpendicular to it.  The tilt drive needs the shaft
+# along hull X (so the horn sweeps the Y-Z plane, in line with the spar crank),
+# which puts the FLANGE in the Y-Z plane -- flat on the bulkhead -- and the
+# 40.5 mm HEIGHT along X, into the bay.  So the pad footprint is the flange,
+# 54.5 (Y) x 20 (Z), NOT 54.5 x 40.5: the 40.5 is depth, not footprint.  The
+# pre-datasheet estimate had the wrong face on the wall and oversized the pad in
+# Z by 20.5 mm.
+NSVMT_BODY_L = 40.0     # servo body length, datasheet SS2-1 -> hull Y
+NSVMT_BODY_W = 20.0     # servo body width,  datasheet SS2-1 -> hull Z
+NSVMT_BODY_H = 40.5     # servo body height, datasheet SS2-1 -> hull X (inboard)
+NSVMT_EAR_SPAN = 54.5   # flange overall length, datasheet drawing -> hull Y
+NSVMT_FLANGE_H = 27.7   # flange face above the body base, datasheet drawing
+NSVMT_MARGIN = 3.5      # pad relief all round the flange footprint
+
+# Pad centre.  Kept SPAR-RELATIVE (Rev S1b) so a spar move carries the pad and the
+# linkage with it instead of silently breaking them.
 NSVMT_DY = 13.3   # pad centre, chordwise aft of the spar axis
-NSVMT_DZ = 30.5   # pad centre, above the spar axis
+# Rev S1d: the floor is datumed off the Rev R6 landing-gear bay seats, which top
+# out at Z +82.39 -- 2.97 mm ABOVE the spar boss crown at Z +79.42 -- and the pad
+# overlaps both bays in Y, so Z separation is the entire margin.  Floor set to the
+# bay tops + the 3.0 mm clearance budget = Z +85.39; with the datasheet flange
+# footprint (27.0 mm tall pad) that puts the centre at Z +98.89.
+NSVMT_DZ = 30.47  # pad centre, above the spar axis
 NSVMT_Y = WING_SPAR_Y + NSVMT_DY   # = 51.45
-NSVMT_PAD_W = 52.0  # Y span
-NSVMT_PAD_H = 30.0  # Z span
-# = 98.92.  Tracking the spar also restores the spar-boss clearance the old
-# absolute value had: boss top is Z 79.42 and the pad now starts at 83.92,
-# a 4.5 mm gap (the pre-move design intent was ~4 mm).
-NSVMT_Z = WING_SPAR_Z + NSVMT_DZ
-NSVMT_HOLE_S_Y = 17.5
-NSVMT_HOLE_S_Z = 8.0
+NSVMT_Z = WING_SPAR_Z + NSVMT_DZ   # = 98.89
+NSVMT_PAD_W = NSVMT_EAR_SPAN + 2 * NSVMT_MARGIN   # = 61.5, Y span
+NSVMT_PAD_H = NSVMT_BODY_W + 2 * NSVMT_MARGIN     # = 27.0, Z span
+
+# Mounting-ear bolt pattern -- now datasheet-backed, so the bores are LIVE.
+# 49.5 mm along the body length (hull Y) x 10 mm across its width (hull Z),
+# DS3218 datasheet drawing.  This replaces the 35 x 16 mm pattern inherited from
+# a servo the BOM had already replaced, which matched nothing.
+NSVMT_HOLES_ENABLED = True
+NSVMT_HOLE_S_Y = 49.5 / 2.0   # = 24.75, datasheet
+NSVMT_HOLE_S_Z = 10.0 / 2.0   # =  5.00, datasheet
 NSVMT_M3_D = 4.1
 
 # Inara avionics-bay standoff bosses (dorsal port half, additive only).
@@ -528,6 +653,40 @@ def wing_keepout_positives(envelope_tm=None):
     return clipped
 
 
+def wing_harness_ports():
+    """Wing harness entry bores through each lateral wall.  (label, solid).
+
+    Rev S1c.  Three per side: the EDF double-D (two Ø8.0) and the AK7455
+    encoder lead (one Ø4.5), each coaxial with the matching spanwise conduit in
+    wings_s1223_revo.scad so the wire runs straight from the wing into the
+    cargo cavity instead of dead-ending on the skin.
+
+    These are cut through the same wall brackets the spar bore uses, so the
+    outboard end is clipped to the real skin by the envelope exactly as the
+    spar bore is.
+    """
+    return [
+        ("EDF entry fwd", x_cylinder(
+            WING_EDF_Y_FWD, WING_EDF_Z_FWD, WING_HARNESS_INB_PORT, PORT_OUTB,
+            WING_EDF_ENTRY_D / 2.0)),
+        ("EDF entry aft", x_cylinder(
+            WING_EDF_Y_AFT, WING_EDF_Z_AFT, WING_HARNESS_INB_PORT, PORT_OUTB,
+            WING_EDF_ENTRY_D / 2.0)),
+        ("encoder entry", x_cylinder(
+            WING_ENC_Y, WING_ENC_Z, WING_HARNESS_INB_PORT, PORT_OUTB,
+            WING_ENC_ENTRY_D / 2.0)),
+        ("EDF entry fwd stbd", x_cylinder(
+            WING_EDF_Y_FWD, WING_EDF_Z_FWD, STBD_OUTB, WING_HARNESS_INB_STBD,
+            WING_EDF_ENTRY_D / 2.0)),
+        ("EDF entry aft stbd", x_cylinder(
+            WING_EDF_Y_AFT, WING_EDF_Z_AFT, STBD_OUTB, WING_HARNESS_INB_STBD,
+            WING_EDF_ENTRY_D / 2.0)),
+        ("encoder entry stbd", x_cylinder(
+            WING_ENC_Y, WING_ENC_Z, STBD_OUTB, WING_HARNESS_INB_STBD,
+            WING_ENC_ENTRY_D / 2.0)),
+    ]
+
+
 def wing_keepout_negatives():
     """Wing voids the gear bay's added material must not intrude into."""
     my0, my1 = WING_MORT_Y - MORT_W / 2, WING_MORT_Y + MORT_W / 2
@@ -535,11 +694,27 @@ def wing_keepout_negatives():
     return [
         ("spar bore", x_cylinder(
             WING_SPAR_Y, WING_SPAR_Z, -270.0, -70.0, WING_SPAR_BORE_D / 2.0)),
+        # CARGO-03 (2026-08-24): these used to span PORT_INB+1 .. PORT_OUTB-10
+        # (X -99..-70), described as cutting "through each wall".  They did not:
+        # at the mortise station the wall lies at X -115..-99, so the cut began
+        # exactly where the wall ENDS and removed only free air outboard of it,
+        # leaving ~1700 mm^3 of uncut wall behind on each side.  The wing tenon
+        # could not enter.  PORT_INB/PORT_OUTB are deep-embed spans for BOSSES,
+        # never the wall, and treating them as the wall is what caused this.
+        #
+        # They now use the same inboard references the Rev S1c harness ports
+        # derived for this exact wall ("past the -115.2 encoder-line wall"),
+        # so one measured fact drives every wing-root penetration.
         ("mortise port", box(
-            PORT_INB + 1.0, PORT_OUTB - 10.0, my0, my1, mz0, mz1)),
+            WING_HARNESS_INB_PORT, PORT_OUTB, my0, my1, mz0, mz1)),
         ("mortise stbd", box(
-            STBD_OUTB + 8.0, STBD_INB - 1.0, my0, my1, mz0, mz1)),
-    ]
+            STBD_OUTB, WING_HARNESS_INB_STBD, my0, my1, mz0, mz1)),
+        # Rev S1c: the harness entries join the keep-out set for the same
+        # reason the spar bore is in it -- "on the HULL the wing always wins".
+        # A gear-bay flange that plugs a harness port is the same class of
+        # failure as one that plugs the spar bore: it is found at assembly,
+        # with the wire in hand, and it cannot be relieved from outside.
+    ] + wing_harness_ports()
 
 
 def _subtract_all(solid, keepouts):
@@ -843,19 +1018,23 @@ def build_negatives(shell_tm, envelope_tm=None):
         notes.append(f"wing {label}")
 
     # Nacelle-servo M3 heat-set pilot bores (into the cavity face of each pad).
-    for x_in, x_out in ((PORT_INB, PORT_INB + 8.0), (STBD_INB, STBD_INB - 8.0)):
-        for dy in (-NSVMT_HOLE_S_Y, NSVMT_HOLE_S_Y):
-            for dz in (-NSVMT_HOLE_S_Z, NSVMT_HOLE_S_Z):
-                cutters.append(
-                    x_cylinder(
-                        NSVMT_Y + dy,
-                        NSVMT_Z + dz,
-                        min(x_in, x_out),
-                        max(x_in, x_out),
-                        NSVMT_M3_D / 2.0,
+    if NSVMT_HOLES_ENABLED:
+        for x_in, x_out in ((PORT_INB, PORT_INB + 8.0), (STBD_INB, STBD_INB - 8.0)):
+            for dy in (-NSVMT_HOLE_S_Y, NSVMT_HOLE_S_Y):
+                for dz in (-NSVMT_HOLE_S_Z, NSVMT_HOLE_S_Z):
+                    cutters.append(
+                        x_cylinder(
+                            NSVMT_Y + dy,
+                            NSVMT_Z + dz,
+                            min(x_in, x_out),
+                            max(x_in, x_out),
+                            NSVMT_M3_D / 2.0,
+                        )
                     )
-                )
-    notes.append("servo M3 pilot bores")
+        notes.append("servo M3 pilot bores")
+    else:
+        notes.append("servo M3 pilot bores GATED OFF "
+                     "(ear pattern unverified -- Rev S1d; see NSVMT_HOLES_ENABLED)")
 
     _lg_pos, lg_neg, lg_note = lg_bay_features(shell_tm, envelope_tm)
     cutters.extend(lg_neg)

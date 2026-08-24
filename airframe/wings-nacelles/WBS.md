@@ -29,6 +29,462 @@
     - **[x]** Re-check root-tab center position: with 129 mm chord the tab centers at hull Y ≈ +57.5 mm (was +73.5 mm); confirm mortise center in cargo SCAD matches
     - **[x]** Verify wing TE position (hull Y≈+122 mm port, +117 mm stbd) clears cargo-section aft interior features; cargo aft boundary is hull Y≈+132 mm — 10 mm clearance
 
+- [ ] **SPAR-01 — spars do NOT carry through the fuselage; adopt the two-bearing
+    overhung shaft + CF thwart pair.** *(owner direction 2026-08-23: the 8 mm steel
+    spars rotate **independently**, driven by the nacelle servos, on a wingtip
+    bearing and a fuselage-side bearing.  Verified by
+    `tools/wing_spar_carrythrough.py`.)*  **Resolves CARGO-01.**
+
+    Relationship to `docs/TILT_SPAR_ANALYSIS.md` §1: the drive servo stays **inside
+    the fuselage** as §1 has it — what changes is that there are now **two
+    independent servos, one per side, mounted on the port and starboard bulkheads**
+    (owner, 2026-08-23), and that the root bearing moves from "inside the cargo bay"
+    to **in the fuselage side wall**.  §1's single spar running "cargo bay → wing →
+    nacelle" and its single cargo-bay root bearing are superseded; its servo
+    *location* is not.  Servo mount deconfliction is **SPAR-02** below.
+
+    **1. Carry-through is not required, and independent rotation forbids it.**
+    Two coaxial shafts cannot be one rigid beam and still rotate independently, so
+    a continuous carry-through spar is ruled out by the mechanism before any
+    structural argument.  It is also not needed.  Per side the spar is a
+    determinate **overhung shaft** — fuselage-side bearing and wingtip bearing,
+    with the nacelle on the overhang — so its statics never reach the far side.
+    Measured from the baked STLs (hull frame, port; X positive = port):
+
+    | Station | X |
+    | --- | --- |
+    | fuselage wall skin at the spar station | −81.33 |
+    | spar bearing seat (existing boss mid-span) | −80.00 |
+    | spar inboard end if it stops at the boss | −100.00 |
+    | wing tip face (wingtip bearing) | +6.70 |
+    | nacelle duct axis (load line) | +45.00 |
+
+    → span **L = 86.7 mm**, overhang **a = 38.3 mm**, wall-to-load arm
+    **d = 126.3 mm**.  Loads per side from AUW 3.911 kg (8.62 lbm, `README.md`
+    Phase 5–10) over 2 nacelles, at the `docs/structural_analysis.md` §3 factors
+    (4 g limit = 3 g gust + 1 g maneuver, ×1.5 ultimate).  Spar section 8 mm OD ×
+    1.5 mm wall 4130, **I = 170 mm⁴, Z = 42.6 mm³**:
+
+    | Case | Load | R_tip | R_fus | M_spar | σ | FOS on yield |
+    | --- | --- | --- | --- | --- | --- | --- |
+    | 1 g | 19.2 N (4.31 lbf) | 27.6 N | −8.5 N | 0.73 N·m | 17.2 MPa | 26.7 |
+    | limit (4 g) | 76.7 N (17.24 lbf) | 110.6 N | −33.9 N | 2.94 N·m | 69.0 MPa | 6.7 |
+    | ultimate | 115.1 N (25.87 lbf) | 165.9 N | −50.8 N | 4.41 N·m | 103.5 MPa | **4.4** |
+
+    The fuselage-side bearing sees only **50.8 N (11.4 lbf)** at ultimate, and it
+    acts *downward* (the nacelle overhang levers the inboard end down).  Note the
+    4130 yield used is the 460 MPa "typical" figure — MMPDS verification is still
+    open as root `TODO.md` §0.8.
+
+    **2. What DOES have to cross the ship is the couple, not the spar.** Each side
+    hands its wall **V = 115.1 N with M = 14.54 N·m (128.7 lbf·in)** at ultimate,
+    and in symmetric flight the port and starboard couples are equal and opposite.
+    A carry-through spar would short-circuit that pair through a straight member;
+    with the spar stopping at the wall the **section** must close it instead.
+
+    **3. The stiffener the design already assumes is not closed.** The
+    `CF-PLATE-2MM` ring at cargo Y +30 is specified as a "full closed ring —
+    anti-ovalisation at spar pin load introduction" (`docs/structural_analysis.md`
+    §5), but its **bottom chord (Z +1.5…+3.0, X −256.1…−82.6) is cut away by the
+    clamshell aperture**; only the top and two side chords survive.  It is a
+    three-sided frame, not a ring, and a three-sided frame is exactly the wrong
+    shape for a spreading couple.  It is also now **8.15 mm forward of the Rev S1b
+    spar station** and its DXF is still flagged PROVISIONAL in `bom_revS.csv`.
+    **No closed ring is possible anywhere between Y +2 and +108** — that is the
+    door.
+
+    **4. Therefore: CF thwarts fore and aft of the bay, as the owner proposed.**
+    Sited on measured-intact structure (belly and both flanks present; the fore
+    gear bays open the flanks ≈ Y −26…+18 and the aft bays ≈ Y +86…+106, so the
+    only clear bands are **Y −66…−32**, **Y +56…+86** and **Y +110…+125**).
+    Recommend **Y −40 fore** and **Y +118 aft**, which straddle the spar station
+    almost evenly:
+
+    | Thwart | Share of the couple | M | σ | FOS |
+    | --- | --- | --- | --- | --- |
+    | fore, Y −40 | 0.51 | 7.35 N·m | 35.3 MPa | **8.5** |
+    | aft, Y +118 | 0.49 | 7.19 N·m | 34.5 MPa | **8.7** |
+
+    Section: **2 mm × 25 mm CF plate** (existing `CF-PLATE-2MM` stock, Z = 208 mm³).
+    The FOS column above uses a deliberately conservative **300 MPa** cross-ply
+    bending stand-in — a factor of 5 below the only CF figure this repository
+    carries (`docs/structural_analysis.md` §1, ≈1 500 MPa **unidirectional**
+    pultruded, itself marked as needing supplier certificates).  Against that
+    unidirectional figure the FOS would be 42.5.  **Neither is a verified allowable
+    for a plate in bending**; logged in `REFERENCES.md` "requires verification" with
+    an ASTM D3039/D695 action before the thwarts are cut (root `TODO.md` §0.8).
+    Even at the conservative end the margin is 8.5, so the *sizing conclusion* does
+    not hinge on which figure is right — only the final certification does.
+    Mass ≈ 2 × 25 × 175 mm ×
+    1.6 g/cm³ ≈ **14 g (0.031 lbm) each, 28 g (0.062 lbm) the pair** — against the
+    ≈78 g the provisional Y +30 ring would have cost, so this is a **net saving of
+    ≈50 g (0.11 lbm)** as well as a stiffer load path.
+
+    **5. Consequences to carry.**
+    - **CARGO-01 is resolved by this.** With the spar terminating at the boss
+      (X −100 port, −240 starboard) the bay clear span is **X −240…−100 = 140 mm**
+      and the full bay height is available — the 4 × 3 × 3 in payload fits.
+      Re-run `tools/cargo_bay_envelope.py` once the shell is re-cut; it will still
+      fail until then, which is the intended behaviour.
+    - **CARGO-02** (shell bores Ø12.3 for the retired 12 mm tube) must be closed in
+      the same shell edit: the bore becomes a **bearing seat**, not a clearance
+      hole, and it no longer runs the full lateral span.
+    - `docs/TILT_SPAR_ANALYSIS.md` §1 still describes a **cargo-bay servo** driving
+      the spar and a **root bearing inside the cargo bay**; both are superseded by
+      the nacelle-servo drive and the in-wall bearing.  Update it, and re-check §3.2
+      torsion — the torque path is now short (nacelle servo to nacelle) instead of
+      running the length of the spar, which can only reduce wind-up.
+    - Retire or re-scope the Y +30 cargo ring in `bom_revS.csv` and
+      `docs/structural_analysis.md` §5 rather than finalising its PROVISIONAL DXF.
+
+    **Open sub-steps:**
+    - [ ] Owner confirms the thwart stations (Y −40 / +118) before geometry work.
+    - [ ] Re-cut the shell: spar bore → bearing seat, terminate at the wall.
+    - [ ] Author the two thwarts + their landing pads; re-run the cargo merge.
+    - [ ] Re-verify with `cargo_bay_envelope.py` and `wing_spar_carrythrough.py`.
+    - [ ] Update `TILT_SPAR_ANALYSIS.md` §1/§3.2 and `structural_analysis.md` §5.
+
+- [ ] **SPAR-02 — bulkhead servo mounts: deconflicted, but the pad is undersized.**
+    *(owner direction 2026-08-23: 25 kgf·cm+ servos inside the fuselage, against the
+    port and starboard bulkheads, each driving one spar and its nacelle.  Checked by
+    `tools/nacelle_servo_deconflict.py`, which pulls every neighbour live from
+    `merge_cargo_interior.py` so it cannot drift from the shell it checks.)*
+
+    **Deconfliction result — all four named conflicts CLEAR.**  Servo body envelope
+    (SPT5425LV 40.5 × 20 × 40.5 mm, 57 g, 26 kgf·cm @ 6 V, [REF-SENSOR-013], plus a
+    6 mm/end ear allowance) seated on the pad's inboard face at
+    X −100 (port) / −220 (starboard), spanning Y +25.20…+77.70, Z +78.67…+119.17;
+    horn swing taken as R22 for the −5°…140° throw:
+
+    | Neighbour | Body gap | Horn gap |
+    | --- | --- | --- |
+    | spar bearing seat | flush at the mounting plane (0 mm³ overlap) | 20.00 mm |
+    | wing root mortise | 5.77 mm | 20.40 mm |
+    | LG bay fore (port / stbd) | 4.55 / 4.36 mm | 27.20 / 27.02 mm |
+    | LG bay aft (port / stbd) | 8.06 / 7.89 mm | 30.49 / 30.31 mm |
+    | avionics bay Inara / River | 25.83 mm | 24.87 mm |
+
+    The zero gap to the spar bearing seat is a **coplanar face-touch, not a
+    collision** — the pad and the spar boss are both placed off the same
+    `PORT_INB`/`STBD_INB` datum, so meeting exactly at that plane is by
+    construction, and the boolean overlap is 0.0 mm³.  The tool distinguishes the
+    two cases explicitly so this is not re-raised as a defect later.
+
+    **RESOLVED 2026-08-23 (Rev S1d, owner): pads rebuilt for LibreServo_v4.**  The
+    tilt servos are now **DS3218MG bodies fitted with the LibreServo_v4 PCB**.
+    That fork does not change the envelope — its README states no bottom-cover
+    change is needed, and its only mechanical part (`3D/LS_body.stl`,
+    13 × 13 × 8.45 mm) replaces the potentiometer *inside* the case — so the pad
+    sizes to the bare servo body, and Findings 1 and 2 below are what had to change.
+
+    Rebuilt in `merge_cargo_interior.py`:
+
+    | Constant | Was | Now | Why |
+    | --- | --- | --- | --- |
+    | `NSVMT_PAD_W` (Y) | 52.0 | **61.5** | 40.5 body + 2 × 7.0 ear allowance + 2 × 3.5 relief |
+    | `NSVMT_PAD_H` (Z) | 30.0 | **47.5** | 40.5 body + 2 × 3.5 relief |
+    | `NSVMT_DZ` | 30.5 | **40.72** | floor datumed off the gear-bay tops — see below |
+    | `NSVMT_Z` | +98.92 | **+109.14** | derived |
+    | `NSVMT_HOLES_ENABLED` | (always cut) | **False** | ear pattern still unverified |
+
+    **The floor datum was wrong, and not in the way Finding 1 assumed.**  My first
+    pass said to grow upward off the spar boss crown (Z +79.42).  Measured, the
+    **Rev R6 landing-gear bay seats top out at Z +82.39 — 2.97 mm above the boss**
+    — and the pad overlaps both bays in Y (pad Y +20.70…+82.20 against the fore bay
+    to +25.87 and the aft bay from +68.89), so Z separation is the entire margin.
+    Datuming off the boss left only **1.53 mm** over the bays.  The floor is now set
+    from the bay tops plus the 3.0 mm budget: floor Z +85.39, crown Z +132.89.
+
+    Result — every clearance now passes, and most improved:
+
+    | Neighbour | Servo body | Servo **pad** |
+    | --- | --- | --- |
+    | spar bearing seat | 9.47 mm (was flush) | 5.97 mm |
+    | wing root mortise | 15.99 mm | 12.49 mm |
+    | wing root tenon | 20.88 mm | 17.38 mm |
+    | LG bay fore | 8.45 mm (was 4.55) | **3.00 mm** |
+    | LG bay aft | 11.09 mm | **3.00 mm** |
+    | avionics bay | 15.61 mm | 12.11 mm |
+
+    Pad fit is now **+9.0 mm in Y and +7.0 mm in Z** (was −0.5 and −10.5).  The
+    gate's servo-pad findings are gone; what remains in its output is all
+    shell-side (CARGO-03/03b/04).
+
+    `tools/wing_root_deconflict.py` gained a **`servo PAD`** probe in the same
+    edit — it previously checked only the servo body and its horn, which would have
+    missed this entirely, since the pad is wider than the servo by design and it is
+    the pad, not the servo, that reaches toward the gear bays.
+
+    **UPDATE 2026-08-23 — the datasheet arrived, and it corrected the mounting
+    orientation as well as the numbers.**  Sized on
+    `avionics/datasheets/DS3218 datasheet.pdf`, then confirmed unchanged against
+    `DS3225 datasheet.pdf` when the part moved for torque (same drawing, same
+    size).  Authoritative figures: **40 × 20 × 40.5 mm, 60 g, 54.5 mm flange span,
+    49.5 × 10 mm bolt pattern**, flange 27.7 mm above the body base.
+
+    The correction that mattered: a standard servo's four screws run **parallel to
+    the output shaft**, through a flange perpendicular to it.  The tilt drive needs
+    the shaft along hull X, so the **flange** lies in the Y-Z plane on the bulkhead
+    and the **40.5 mm height is the inboard depth, not the footprint**.  The pad
+    footprint is therefore **54.5 (Y) × 20 (Z)**, not 54.5 × 40.5 — my
+    standard-size-class estimate had the wrong face on the wall and oversized the
+    pad in Z by 20.5 mm.  Rebuilt again:
+
+    | Constant | Class estimate | Datasheet |
+    | --- | --- | --- |
+    | `NSVMT_PAD_H` (Z) | 47.5 | **27.0** |
+    | `NSVMT_DZ` | 40.72 | **30.47** |
+    | `NSVMT_Z` | +109.14 | **+98.89** |
+    | bolt pattern | 35 × 16 (unverified) | **49.5 × 10** |
+    | `NSVMT_HOLES_ENABLED` | False | **True** |
+
+    Pad fit is **+7.0 mm on both axes**; the floor still holds the 3.00 mm budget
+    over the landing-gear bay tops.  The bores are now live, because the pattern is
+    sourced.
+
+    **Two things the datasheet exposed that are NOT geometry:**
+
+    1. **Torque — part changed to DS3225 the same day; still marginal.**  The
+       owner supplied the 25 kg variant's datasheet after the DS3218 shortfall was
+       raised.  **DS3225 is dimensionally identical** (same drawing, same §2-1
+       size), so **the pads above are unchanged by the swap** — a useful property:
+       the pad is common to this whole body family.  Torque against the
+       **≥ 25 kgf·cm (2.45 N·m)** requirement (`docs/TILT_SPAR_ANALYSIS.md` §2,
+       from `serenity-rev-r.jsx` L383):
+
+       | Rail | DS3218 | DS3225 | % of requirement |
+       | --- | --- | --- | --- |
+       | 5.0 V | 18.0 kgf·cm | 21.0 kgf·cm | 84 % |
+       | 6.0 V (interp.) | ~19.7 | ~22.9 | 92 % |
+       | 6.8 V | 21.5 | **24.5** | **98 %** |
+
+       The "25kg" in the product name is the marketing figure; the spec table maxes
+       at 24.5.  So DS3225 nearly clears it and DS3218 did not, but neither clears
+       it on datasheet figures alone.  LibreServo_v4 re-drives from 4.5–18 V and
+       may close the last 2 %, though no converted-unit figure exists.
+
+       **Before buying a larger servo, re-derive the requirement.**  ≥ 25 kgf·cm is
+       cited to `serenity-rev-r.jsx` L383 as a spec pick, not a derivation, and
+       §2 of the same analysis records the pivot as being **at the nacelle CG** —
+       which nulls the gravity moment by design and leaves only aero and inertia.
+       A 2 % gap against a possibly-stale requirement is not worth a part change.
+    2. **Stall current is now cited, and it is higher than the budget.**  1.9 A @
+       5 V / **2.3 A @ 6.8 V** (DS3225), against the 1.2 A placeholder RAIL-2 was
+       sized on — about 1.9×.  RAIL-2 must be re-checked per tilt servo.
+
+    Original open item, now partly closed:
+
+    **Still open — the bolt pattern, and now the body dimensions too.**  DS3218MG
+    has *no* cited dimensional source in this repository (the BOM recorded it as
+    "(uncited)" when it was superseded on 2026-08-02).  The pad is therefore sized
+    to the **standard-size servo class** off REF-SENSOR-013's 40.5 × 20 × 40.5 mm,
+    which the BOM itself says is interchangeable, and the four M3 bores are
+    **gated off** (`NSVMT_HOLES_ENABLED = False`, the same gate pattern as
+    `LG_BAY_ENABLED`).  A pad that is 9 mm oversized is harmless; four bores on a
+    guessed pattern are not, and a wrong hole cannot be un-drilled.  Logged in
+    `REFERENCES.md` "requires verification".
+
+    Original findings, retained for the record:
+
+    **Finding 1 — the pad does not fit the servo.**  `NSVMT_PAD_W` × `NSVMT_PAD_H`
+    is 52 × 30 mm against a servo footprint of 52.5 × 40.5 mm:
+
+    | Axis | Servo needs | Pad has | Margin |
+    | --- | --- | --- | --- |
+    | Y | 52.5 mm | 52.0 mm | **−0.5 mm** |
+    | Z | 40.5 mm | 30.0 mm | **−10.5 mm** |
+
+    A servo overhanging its pad lands on raw 2 mm skin, which is not a mounting
+    surface for a 2.55 N·m actuator.  **Grow the pad upward, not downward:** the
+    spar boss crown is at Z +79.42 and the pad floor is at +83.92 (the documented
+    4.5 mm boss clearance), so downward growth eats that gap, while upward growth
+    is unobstructed to Inara/River at Z +145 — 20.6 mm of room after a 40.5 mm pad.
+    That means `NSVMT_PAD_H` 30 → ≈46 and `NSVMT_Z` +98.92 → ≈+104.17
+    (`NSVMT_DZ` 30.5 → 35.75).  **Consequence to carry:** raising the servo 5.25 mm
+    changes the horn/pushrod geometry, so it re-opens the open §1.1.3 item "Tune
+    servo→spar horn/pushrod linkage throw (−5°…140°)" — settle the pad first, then
+    the linkage, not the other way round.
+
+    In Y the shortfall is 0.5 mm and rests entirely on the 6 mm/end **ear
+    allowance**, which is this tool's own conservative number, not a datasheet
+    figure — see Finding 2.  Do not grow the pad in Y on the strength of it: the
+    fore landing-gear bay is only 4.4 mm away, and that is the tightest real
+    clearance on the whole mount.
+
+    **Finding 2 — the bolt pattern is unvalidated.**  The shell drills
+    `2 × NSVMT_HOLE_S_Y` × `2 × NSVMT_HOLE_S_Z` = **35 × 16 mm**.  [REF-SENSOR-013]
+    publishes the SPT5425LV body as 40.5 × 20 × 40.5 mm but **does not publish the
+    ear span or the hole spacing**, and root `AGENTS.md` §4 forbids guessing one.
+    The 35 × 16 pattern predates this servo — it was drawn for the uncited DS3218MG
+    the BOM replaced on 2026-08-02 — so it is very unlikely to be right and must not
+    be cut on faith.  Logged in `REFERENCES.md` "requires verification".
+
+    **Finding 3 — the cableways are clear of the servo, but not of everything.**
+    Owner requirement: the nacelle ESC and nav-light cableways must not be blocked.
+    Against the servo they are — the EDF ESC conduit, the Hall/encoder conduit and
+    the spar bore all clear the servo body and its horn swing entirely.  Two are
+    blocked by *other* things, tracked in `airframe/fuselage-mid/WBS.md` §1.1.1.2
+    as **CARGO-03** (the wing root mortise never penetrates the bulkhead, so the
+    aft ESC conduit has no path) and **CARGO-04** (the Hall conduit at 0.33 c lies
+    inside the rotating spar at 0.35 c — a Rev S1b regression).  The nav light is
+    satisfied as the owner expected: it rides the spar's ~5 mm ID and that bore is
+    verified THROUGH.
+
+    **Finding 4 — the wing root tenon is on a different datum from its mortise,
+    and it is 0.23 mm from the spar bearing seat.**  `fuselage_root_tab()` centres
+    the tenon on the wing **chord line** (hull Z +58.01); the shell centres the
+    mortise on **`WING_ROOT_Z`** (hull Z +62.50).  4.49 mm apart against a 0.4 mm
+    design clearance, so the tenon's lower 4.09 mm lands on solid wall — the sizes
+    are right (30.0 × 20.0 in 30.8 × 20.8), only the datum is wrong.  Separately,
+    the tenon's forward face (49.5 mm chordwise) now sits **0.226 mm** from the
+    Rev S1b spar bore and 0.376 mm from the spar tube; before S1b that gap was
+    ~23 mm.  Both are tracked with the fix in `airframe/fuselage-mid/WBS.md`
+    §1.1.1.2 **CARGO-03b**, because the mortise and the tenon are one joint and
+    must be re-datumed in a single coordinated edit across the two files.
+
+    **Correction to the first pass:** the tenon depth is *not* simply "fine".  It
+    clears geometrically — 12 mm insertion into a ~16 mm wall, 10.66 mm from the
+    servo — but the owner has since established (2026-08-23) that the mortise/tenon
+    joint **carries structural load**, because the wings do not rotate with the
+    nacelles and, under SPAR-01, spanwise load now terminates at the wall.  The
+    tenon therefore takes **165.9 N shear and 14.60 N·m at ultimate**, developing
+    10.14 MPa bearing on its mortise faces, and it has never been sized against
+    any of that.  `fuselage_root_tab()`'s comment ("The tab provides radial
+    restraint; the CF spar carries spanwise load") is now wrong and must be
+    corrected with the datum fix.  Full sizing, and the missing CF-PETG bearing
+    allowable that blocks it, are **CARGO-03c**.
+
+    **Open sub-steps:**
+    - [ ] Measure ear span + hole spacing on a real SPT5425LV, or obtain a
+        dimensioned drawing; add it to [REF-SENSOR-013].
+    - [ ] Resize the pad (Z first) and re-site `NSVMT_Z`; re-run
+        `tools/nacelle_servo_deconflict.py` — it must reach CLEAR.
+    - [ ] Re-tune the horn/pushrod throw against the new servo height (§1.1.3).
+    - [ ] Confirm the 4.4 mm fore-gear-bay gap survives the final pad outline.
+
+- [x] **SPAR-04 — the Hall cable's wingtip jog runs straight through the spar
+    bore. CLOSED 2026-08-23 by the Rev S1c merge — see the closure note below.** *(found 2026-08-23 while applying the Rev S1c Hall station; measured
+    from the SCAD constants.)*  **BLOCKS the tilt-encoder harness.**
+
+    `hall_sensor_cableway()` ends with a chordwise jog at the tip, from the
+    spanwise conduit across to the sensor pocket at `SPAR_BORE_STATION +
+    HALL_SENS_R`.  The sensor reads a diametric magnet **off-axis**, 11 mm aft of
+    the spar axis, so the pocket is at chordwise **56.15 mm** — and the spar bore
+    spans **41.00…49.30 mm**.  The jog therefore crosses the bore:
+
+    | Hall station | Tip conduit x | Sensor pocket x | Jog length | Crosses the spar bore? |
+    | --- | --- | --- | --- | --- |
+    | 0.33 c (before Rev S1c) | 30.69 mm | 56.15 mm | 25.46 mm | **yes** |
+    | 0.23256 c (Rev S1c) | 21.63 mm | 56.15 mm | 34.52 mm | **yes** |
+
+    **This is pre-existing, not caused by the Rev S1c move** — the jog crossed the
+    bore at the old station too.  What the move changes is its length, 25.46 →
+    34.52 mm, so it crosses over a longer run.  Both the jog and the bore are cut
+    as voids, which is why no boolean ever complained: two voids simply merge.  The
+    physical consequence is what matters — at that station the **rotating spar
+    occupies the bore**, and a cable cannot pass through a turning shaft.
+
+    Note this is the same defect class as CARGO-04's: a route checked against
+    *material* looks fine, because the thing blocking it is another moving part
+    rather than plastic.  `tools/wing_root_deconflict.py` catches that at the root
+    (it carries an explicit `rotating spar tube` obstruction); it does **not** yet
+    model the tip jog.  Extend it before this is called closed.
+
+    **CLOSED 2026-08-23 — fixed as a side effect of the Rev S1c reroute.**  None of
+    the three options below was needed.  `feat/wing-spar-s1c-cableway-reroute`
+    converted the Hall conduit from a chord FRACTION to a **constant 54.0 mm
+    station**, so its tip end no longer walks forward as the chord tapers: it stays
+    at 54.0 mm, against a sensor pocket at 56.15 mm.  The jog is now **2.15 mm**
+    (was 34.52), and it **does not reach the spar bore at all** (41.00…49.30 mm) —
+    the conduit already emerges aft of it.
+
+    Worth keeping as a lesson: the jog was long only because the conduit's law
+    (chord fraction) differed from the spar's (constant mm), so the two diverged
+    outboard.  Putting both on the same law removed the divergence and the jog with
+    it.  The same mismatch is what caused the original conduit-in-spar collisions.
+
+    Fix options as originally tabled, retained for the record:
+    1. Route the jog **around** the spar in thickness, over or under the bore.  The
+        tip section is thin (t/c 19.47 % of a 93 mm chord after Rev S1b), so check
+        the skin wall before assuming there is room.
+    2. Move the sensor pocket so the jog no longer has to cross — but
+        `HALL_SENS_R` = 11 mm is set by the magnet ring's mean radius, so this
+        means re-siting the magnet, not just the pocket.
+    3. Take the lead out through the **nacelle** side instead of back down the
+        wing, if the encoder can be read from a harness that stays outboard.
+
+- [ ] **★ WING-01 — the tabulated S1223 section is not a valid airfoil: the
+    surfaces cross at x/c 0.742 and the outline self-intersects.**
+    *(owner asked 2026-08-23: "verify that the airfoil doesn't create a zero
+    thickness point that would cause a gap partway toward the trailing edge, as
+    some of the drawings show."  It does.  Gated by
+    `tools/wing_airfoil_integrity.py`, which fails closed.)*
+    **BLOCKS wing fabrication, the mass budget, and any aero claim.**
+
+    `S1223_UPPER` falls below `S1223_LOWER` over the aft quarter of the chord, so
+    section thickness goes **negative from x/c ≈ 0.742**, bottoming at
+    **t/c −0.0152 (−1.96 mm root / −2.05 mm tip) at x/c 0.90**, before both
+    surfaces return to zero at the TE.  Shapely reports the outline invalid with a
+    self-intersection at (0.7417, 0.0235).  A drawing that renders the outline
+    shows exactly what the owner saw: the surfaces pinch to zero partway back and
+    cross into a bowtie.
+
+    **Why nothing caught it.**  Two independent reasons, and both are worth
+    fixing as process:
+
+    1. `wing_spar_station_fit.py` and `wing_internal_clearance.py` both ask "does
+        a **bore** fit inside this section?".  Neither asks whether the section is
+        a valid simple polygon to begin with.
+    2. `wing_solid()` lofts with OpenSCAD **`hull()`**, which takes the CONVEX
+        HULL of each section.  The convex hull of a self-intersecting outline is
+        still a clean convex region, so the exported STL is watertight, single-
+        bodied, and passes `tools/validate_stls.py`.  **The exported STL is not
+        evidence here** — measured on the built wing, thickness runs a healthy
+        12.7 mm at 0.60 c down to 1.5 mm at 0.975 c with no gap at all.
+
+    **The masking is not free.**  Convex hull area is **1.647×** the tabulated
+    outline's — it fills the airfoil's concavity *and* swallows the bowtie — so
+    **39.3 % of the built section's area is material the section does not call
+    for**.  The built wing is therefore materially not an S1223, which propagates
+    into wing mass, into every aero figure, and into the Rev S1b camber-
+    preservation work (thickness-only scaling preserves a camber line that
+    `hull()` then discards).
+
+    **What is NOT affected.**  Internal-clearance results are *conservative*, not
+    wrong: the hull is strictly larger than the outline, so a bore that clears
+    inside the tabulated section has at least as much material around it in the
+    built part.  `wing_internal_clearance.py`'s PASS and the Rev S1c conduit
+    stations stand as lower bounds.
+
+    **Comparison against published Selig S1223** — the aft upper surface is the
+    part that is wrong, by a roughly constant offset that grows from x/c 0.8:
+
+    | x/c | repo `S1223_UPPER` | Selig S1223 | delta |
+    | --- | --- | --- | --- |
+    | 0.80 | +0.0082 | +0.0431 | −0.0349 |
+    | 0.85 | −0.0020 | +0.0318 | −0.0338 |
+    | 0.90 | −0.0089 | +0.0210 | −0.0299 |
+    | 0.95 | −0.0109 | +0.0109 | −0.0218 |
+    | 1.00 | 0.0000 | 0.0000 | 0.0000 |
+
+    **This item is NOT closed by a fix, deliberately.**  Correcting it means
+    replacing the coordinate table, and root `AGENTS.md` §4 forbids sourcing that
+    from memory — the Selig column above is a comparison, not a transcription to
+    paste in.  The table must come from a validated source (UIUC Airfoil
+    Coordinates Database), be added to `REFERENCES.md` with a validated URL, and
+    only then replace `S1223_UPPER`/`S1223_LOWER`.
+
+    **Open sub-steps:**
+    - [ ] Obtain S1223 coordinates from the UIUC database; add a `REF-CAD-*`
+        entry with a validated URL and the retrieval date.
+    - [ ] Replace both tables; `tools/wing_airfoil_integrity.py` must reach PASS.
+    - [ ] Decide `hull()` vs a true loft.  Even with a correct table, `hull()`
+        convexifies away S1223's concavity — check the ratio the gate reports and
+        move to a swept/lofted solid if it stays above tolerance.
+    - [ ] Re-render and re-bake both wings; re-run `wing_internal_clearance.py`
+        and `wing_root_deconflict.py` against the corrected section.
+    - [ ] Re-derive wing mass and re-check the §1.1.2 aero figures.
+
 ##### 1.1.2.1 *Rev R1a — spar straightened + camber-centered + EDF cableway (2026-07-07)*
 
 - [x] **Spar bore de-skewed** — `wings_s1223_revo.scad`: replaced the constant-30%-
@@ -96,11 +552,30 @@
     `tools/validate_stls.py`. Expected envelope: Z max stays **+76.99** (set
     by the root section, which is unchanged); the tip top drops to ≈ +74.51.
 
-- [ ] **[OPEN] Re-merge the cargo shell.** `merge_cargo_interior.py` carries the
-    new spar station/height **and** the LG-10.4 wing keep-outs, but the published
-    `cargo_sect_shell24_2mm_repaired.stl` predates both. One re-merge covers both
-    changes; re-run `tools/validate_stls.py` and
-    `tools/landing_gear_wing_clearance.py` after.
+- [x] **Re-merge the cargo shell.** **CLOSED 2026-08-23 — the re-merge has already
+    happened; this item was stale.**  `merge_cargo_interior.py` carries the new spar
+    station/height **and** the LG-10.4 wing keep-outs, and the published
+    `cargo_sect_shell24_2mm_repaired.stl` now carries both.  Verified three ways
+    against the published STL, not against the script:
+    - **Spar station.** A Ø10 probe rod placed on each candidate axis and
+        intersected with the shell: the **Rev S1b axis (Y +38.15, Z +68.42) is
+        clear — 0.0 mm³**, i.e. the bore is cut there; the **pre-S1b axis
+        (Y +31.70, Z +66.53) is solid — 1 500.3 mm³** of wall, i.e. the old bore is
+        gone.  Controls through undisturbed 2 mm wall read 333–369 mm³, which is
+        the expected 2 × π × 25 × 2 ≈ 314 mm³, so the probe is calibrated.
+    - **LG-10.4 wing keep-outs.** `tools/landing_gear_wing_clearance.py` → **CLEAR**
+        on all four checks (aperture/rebate vs wing material, bay material vs wing
+        voids, 64 bolt-bore pairs, 128 bolt-vs-servo-pilot pairs — no intersection
+        anywhere).
+    - **Mesh health.** `tools/validate_stls.py` passes **62/62**; the shell is
+        watertight, 0 boundary, 0 non-manifold, 1 body, 908 106 faces,
+        295 931 mm³.  `tools/landing_gear_bay_seat_fit.py` also reports **CLEAR**
+        (datum drift 0.00 mm both stations, 0.000 mm³ interference at all four
+        corners, worst shim 1.14 mm against a 1.5 mm budget).
+
+    **Carried forward, not closed by this:** the shell's spar bore **diameter** is
+    still the retired 12.3 mm, not the wing's 8.3 mm — tracked separately as
+    **CARGO-02** in `airframe/fuselage-mid/WBS.md` §1.1.1.2.
 
 - [x] **`s1223_section()` scales THICKNESS ONLY (Rev S1b, 2026-08-16).** It
     previously did `scale([chord, chord * t_scale])`, which multiplies camber and

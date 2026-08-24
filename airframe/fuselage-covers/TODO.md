@@ -16,6 +16,6 @@
 ## §1.1.1 — Fuselage: Access Covers, Antenna Mounts, Nacelle Bracket (part 2/3)
 → full detail: `WBS.md` §1.1.1
 
-- [ ] MESH-01 `add_structural_features.py` boolean cuts left non-watertight hull
+*No open items. MESH-01 closed 2026-08-23 — all four shells verify watertight.*
 
 ---

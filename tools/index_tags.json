@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-23",
+  "generated": "2026-08-24",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -684,7 +684,7 @@
       "archived": false
     },
     "airframe/blender-scripts/merge_cargo_interior.py": {
-      "description": "merge_cargo_interior.py \u2014 Rev R1 (2026-06-30)",
+      "description": "Python script",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2472,7 +2472,6 @@
         "documentation",
         "project-tracking",
         "propulsion",
-        "security",
         "structural"
       ],
       "archived": false
@@ -6166,6 +6165,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/DS3218 datasheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/DS3225 datasheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf": {
       "description": "PDF document",
       "tags": [
@@ -6990,6 +7003,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x": {
+      "description": "(kicad_pcb",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_prl": {
       "description": "KiCad project-local settings",
       "tags": [
@@ -7008,6 +7029,14 @@
     },
     "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch": {
       "description": "KiCad schematic",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x": {
+      "description": "(kicad_sch (version 20240101) (generator eeschema)",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -7678,6 +7707,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x": {
+      "description": "(kicad_sch (version 20240101) (generator eeschema)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "power"
+      ],
+      "archived": false
+    },
     "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_pin_snap.py": {
       "description": "Snap power-symbol instances onto the pins they were meant to touch.",
       "tags": [
@@ -7919,6 +7957,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x": {
+      "description": "(kicad_sch (version 20240101) (generator eeschema)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "sensors-vision"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Observer/kicads/Observer.kicad_dru": {
       "description": "KiCad custom design-rules file",
       "tags": [
@@ -7929,6 +7976,14 @@
     },
     "avionics/kicad/Observer/kicads/Observer.kicad_pcb": {
       "description": "KiCad PCB layout",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Observer/kicads/Observer.kicad_pcb.pre-g351x": {
+      "description": "(kicad_pcb",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -9310,6 +9365,13 @@
       ],
       "archived": false
     },
+    "code-scanning-files-extracted.csv": {
+      "description": "Tabular data (CSV)",
+      "tags": [
+        "bom"
+      ],
+      "archived": false
+    },
     "current-specification/AGENTS.md": {
       "description": "Current Specification \u2014 Agent Instructions",
       "tags": [
@@ -9984,6 +10046,13 @@
       ],
       "archived": false
     },
+    "docs/img/wing_rev_s1c_sections.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -10004,6 +10073,393 @@
       "description": "PDF document",
       "tags": [
         "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html": {
+      "description": "HTML document",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37110-cart_default.webp": {
+      "description": "RIFF\u0016\u0004\u0000\u0000WEBPVP8",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37111-cart_default.webp": {
+      "description": "RIFF\u0002\u0000\u0000WEBPVP8 \u0002\u0000\u0000\u0010\u000e\u0000\u0001*P\u0000P\u0000>Q(E#\u06ac8\u0005\u0004\u000eyq<<a\u01af\u007fN\u0017\u0015[\u0000S\u0019=X2\uda3d\udfadvP~]\u0016-\u00acy&D",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37112-cart_default.webp": {
+      "description": "RIFF\\\u0002\u0000\u0000WEBPVP8 P\u0002\u0000\u0000\u0010",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37113-cart_default.webp": {
+      "description": "RIFF\u0002\u0000\u0000WEBPVP8 \u0002\u0000\u0000\u000f\u0000\u0001*P\u0000P\u0000>Q$E#!\u0014|8\u0005\u0004k\u0000\b\u0004\u0017",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37113-large_default.webp": {
+      "description": "RIFF$\u0000\u0000WEBPVP8 $\u0000\u00000\u0018\u0001\u0001*\u0002\u0002>Q&F!\u0012 \u00010",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37114-cart_default.webp": {
+      "description": "so\u0396\u055f` DS}V(w\u1aaa<E\u0000w=\u0017\u0004\u001ao<^2;@",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37115-cart_default.webp": {
+      "description": "RIFF\u0002\u0000\u0000WEBPVP8 \u0002\u0000\u0000\u000e\u0000\u0001*P\u0000P\u0000>Q&E!\u0012\u00058\u0005\u0004\u000e",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/76a8e5b0fe9140cf057b953efbc49a1f.webp": {
+      "description": "RIFF,+\u0000\u0000WEBPVP8X",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/EDF50mm-02.webp": {
+      "description": "JtJM4dF)\u0007q\u00039PUd9/|\u007f]#Ad7&\u04d3\u04cdM9LZz{\u001aG2\u0012",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/analytics.js": {
+      "description": "JavaScript source",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/css.css": {
+      "description": "Stylesheet (CSS)",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/css_002.css": {
+      "description": "Stylesheet (CSS)",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x3-xfly-model-30mm-12-blades-3s-.webp": {
+      "description": ".GT\u000e$Y}i\u0015s=5=\u0004\u007f\u0366\u0003\u53a9d_nO\u0003#E|\u0000]q/\u0783+\u0004X'GNY\"+Pw(Q#%\u007f/6\u001aW\u0002\u0001\u00009Wfy\u0349\u0014X(M@`?O",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x3-xfly-model-30mm-12-blades-4s-.webp": {
+      "description": "RIFF\u0007\u0000\u0000WEBPVP8 \u0007\u0000\u00008\u0000\u0001*\u0000\u0000>m6I$\",I)",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x4-xfly-model-40mm-12-blades-3s4.webp": {
+      "description": "RIFF\u0014\u0000\u0000WEBPVP8 \u0014\u0000\u00000b\u0000\u0001*\u0000\u0000>Q$F#!#$RjXp",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x4-xfly-model-40mm-12-blades_002.webp": {
+      "description": "RIFF\b\u000f\u0000\u0000WEBPVP8 \u000e\u0000\u00000K\u0000\u0001*\u0000\u0000>Q&F#!\"Ip",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-3s-.webp": {
+      "description": "OF\u01b7;\u05c7\u0013*y\u007f\u0003g\u0000",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-4s-.webp": {
+      "description": "OF\u01b7;\u05c7\u0013*y\u007f\u0003g\u0000",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-6s-.webp": {
+      "description": "RIFF\\\u0002\u0000\u0000WEBPVP8 P\u0002\u0000\u0000\u0010",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_002.webp": {
+      "description": "RIFF\u0002\u0000\u0000WEBPVP8 \u0002\u0000\u0000\u0010\u000e\u0000\u0001*P\u0000P\u0000>Q(E#\u06ac8\u0005\u0004\u000eyq<<a\u01af\u007fN\u0017\u0015[\u0000S\u0019=X2\uda3d\udfadvP~]\u0016-\u00acy&D",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_003.webp": {
+      "description": "RIFF\u0016\u0004\u0000\u0000WEBPVP8",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_004.webp": {
+      "description": "RIFF\u0002\u0000\u0000WEBPVP8 \u0002\u0000\u0000\u000e\u0000\u0001*P\u0000P\u0000>Q&E!\u0012\u00058\u0005\u0004\u000e",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_005.webp": {
+      "description": "RIFF$\u0000\u0000WEBPVP8 $\u0000\u00000\u0018\u0001\u0001*\u0002\u0002>Q&F!\u0012 \u00010",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_006.webp": {
+      "description": "so\u0396\u055f` DS}V(w\u1aaa<E\u0000w=\u0017\u0004\u001ao<^2;@",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_007.webp": {
+      "description": "RIFF\u0002\u0000\u0000WEBPVP8 \u0002\u0000\u0000\u000f\u0000\u0001*P\u0000P\u0000>Q$E#!\u0014|8\u0005\u0004k\u0000\b\u0004\u0017",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-3s-.webp": {
+      "description": "RIFF\\ \u0000\u0000WEBPVP8 P \u0000\u0000P?\u0000\u0001*\u0000\u0000>m4I$\"$!\u0019P",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-4s-.webp": {
+      "description": "RIFF8 \u0000\u0000WEBPVP8 , \u0000\u00000>\u0000\u0001*\u0000\u0000>m6I$\"\"\u0012 H",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-6s-.webp": {
+      "description": "M\u0015bnM{\u0007\u9c93:s5>\u00054 ~\u00174'",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x7-xfly-model-70mm-12-blades-6s-.webp": {
+      "description": "n\u0007// m\u00118DL&I\u015dN#",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x7-xfly-model-70mm-12-blades_002.webp": {
+      "description": "RIFF\u0004",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x8-xfly-model-80mm-12-blades-6s-.webp": {
+      "description": "RIFF \u0011\u0000\u0000WEBPVP8 \u0014\u0011\u0000\u0000g\u0000\u0001*\u0000\u0000>m4H\"!\u051bp",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x8-xfly-model-80mm-12-blades_002.webp": {
+      "description": "RIFF\u0010\u0000\u0000WEBPVP8 \u0010\u0000\u0000Y\u0000\u0001*\u0000\u0000>Q&F#%3:0",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/ga.js": {
+      "description": "JavaScript source",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/mollie.js": {
+      "description": "JavaScript source",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_114_a4444adaf1056832dd63b28b928b74e6.js": {
+      "description": "JavaScript source",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_138_03a718a060cf48c0e5393bbea5cb1aa7_all.css": {
+      "description": "Stylesheet (CSS)",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_138_c1bb31e2f03fadfdc659940cc14955dc_print.css": {
+      "description": "Stylesheet (CSS)",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-64mm-edf-glider-nacelle-for-swift-2100.webp": {
+      "description": "RIFF",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-edf-glider-nacelle-for-swift-2100-827-50mm.webp": {
+      "description": "RIFF",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-model-logo-16966716258.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion",
         "specification"
       ],
       "archived": false
@@ -10036,6 +10492,15 @@
       "description": "Archived snapshot bundle",
       "tags": [
         "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/Screenshot 2026-08-18 at 09-50-31 EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades 6S Motor 3200KV - Xfly-Model.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion",
         "specification"
       ],
       "archived": false
@@ -12075,6 +12540,13 @@
       ],
       "archived": false
     },
+    "tools/cargo_bay_envelope.py": {
+      "description": "Measure the cargo bay's usable interior envelope, and gate the mission payload.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/compact_bom_entries.py": {
       "description": "compact_bom_entries.py",
       "tags": [
@@ -12241,6 +12713,13 @@
       ],
       "archived": false
     },
+    "tools/wing_airfoil_integrity.py": {
+      "description": "Fail-closed check that the wing's tabulated airfoil is a valid closed section.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/wing_airfoil_variants.py": {
       "description": "Generate and compare S1223 thickening strategies for the Rev S1b spar move.",
       "tags": [
@@ -12250,6 +12729,36 @@
     },
     "tools/wing_cfd_openfoam.py": {
       "description": "2D RANS comparison of S1223 thickening strategies, via OpenFOAM. **WIP.**",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/wing_internal_clearance.py": {
+      "description": "Check every internal bore in the wing against its neighbours and the skin.",
+      "tags": [
+        "build-tooling",
+        "security"
+      ],
+      "archived": false
+    },
+    "tools/wing_root_deconflict.py": {
+      "description": "Deconflict everything crowded into the wing-root zone of the cargo bulkhead.",
+      "tags": [
+        "build-tooling",
+        "security"
+      ],
+      "archived": false
+    },
+    "tools/wing_section_figure.py": {
+      "description": "Draw the wing's root and tip sections with every internal bore, to scale.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/wing_spar_carrythrough.py": {
+      "description": "Does the rotating wing spar have to span the fuselage? First-principles check.",
       "tags": [
         "build-tooling"
       ],
@@ -12405,13 +12914,58 @@
       "docs/img/starboard-nacelle-vert.png",
       "docs/img/transparent-nacelle.png",
       "docs/img/wing_rev_r1a_sections.png",
+      "docs/img/wing_rev_s1c_sections.png",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37110-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37111-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37112-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37113-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37113-large_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37114-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37115-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/76a8e5b0fe9140cf057b953efbc49a1f.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/EDF50mm-02.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/analytics.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/css.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/css_002.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x3-xfly-model-30mm-12-blades-3s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x3-xfly-model-30mm-12-blades-4s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x4-xfly-model-40mm-12-blades-3s4.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x4-xfly-model-40mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-3s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-4s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_003.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_004.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_005.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_006.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_007.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-3s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-4s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x7-xfly-model-70mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x7-xfly-model-70mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x8-xfly-model-80mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x8-xfly-model-80mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/ga.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/mollie.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_114_a4444adaf1056832dd63b28b928b74e6.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_138_03a718a060cf48c0e5393bbea5cb1aa7_all.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_138_c1bb31e2f03fadfdc659940cc14955dc_print.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-64mm-edf-glider-nacelle-for-swift-2100.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-edf-glider-nacelle-for-swift-2100-827-50mm.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-model-logo-16966716258.jpg",
       "docs/references/POCKETBEAGLE2 V10_241220.DSN",
       "docs/references/ST3215 memory register map-EN.xls",
       "docs/references/ST3215-2D.zip",
       "docs/references/ST3215-3D.zip",
+      "docs/references/Screenshot 2026-08-18 at 09-50-31 EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades 6S Motor 3200KV - Xfly-Model.png",
       "docs/references/Servo_Driver_with_ESP32_3D.zip",
       "docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf",
       "docs/references/nick-henning/Re: Contact got a new submission - Nick Henning <nickhenning3d@gmail.com> - 2026-07-06 1421.txt",
@@ -12639,7 +13193,6 @@
       "airframe/openscad/port_tilt_spar_assembly.scad",
       "airframe/placeholders/generate_placeholders.py",
       "airframe/stls/fuselage/cargo/generate_cargo_hinge_retention.py",
-      "airframe/wings-nacelles/WBS.md",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Assemble.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Subsystem-Assembly.py",
       "archives/airframe-archives/archive/openscad/wings/wing_nacelle_pylon_revo.scad",
@@ -12742,7 +13295,9 @@
       "tools/build_landing_gear_views.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/open_mating_faces.py",
-      "tools/precommit_index.py"
+      "tools/precommit_index.py",
+      "tools/wing_internal_clearance.py",
+      "tools/wing_root_deconflict.py"
     ],
     "licensing": [
       "LICENSE",
@@ -12778,10 +13333,54 @@
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37110-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37111-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37112-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37113-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37113-large_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37114-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37115-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/76a8e5b0fe9140cf057b953efbc49a1f.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/EDF50mm-02.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/analytics.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/css.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/css_002.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x3-xfly-model-30mm-12-blades-3s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x3-xfly-model-30mm-12-blades-4s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x4-xfly-model-40mm-12-blades-3s4.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x4-xfly-model-40mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-3s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-4s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_003.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_004.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_005.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_006.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_007.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-3s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-4s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x7-xfly-model-70mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x7-xfly-model-70mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x8-xfly-model-80mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x8-xfly-model-80mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/ga.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/mollie.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_114_a4444adaf1056832dd63b28b928b74e6.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_138_03a718a060cf48c0e5393bbea5cb1aa7_all.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_138_c1bb31e2f03fadfdc659940cc14955dc_print.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-64mm-edf-glider-nacelle-for-swift-2100.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-edf-glider-nacelle-for-swift-2100-827-50mm.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-model-logo-16966716258.jpg",
       "docs/references/POCKETBEAGLE2 V10_241220.DSN",
       "docs/references/ST3215 memory register map-EN.xls",
       "docs/references/ST3215-2D.zip",
       "docs/references/ST3215-3D.zip",
+      "docs/references/Screenshot 2026-08-18 at 09-50-31 EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades 6S Motor 3200KV - Xfly-Model.png",
       "docs/references/Servo_Driver_with_ESP32_3D.zip",
       "docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf",
       "docs/references/nick-henning/Re: Contact got a new submission - Nick Henning <nickhenning3d@gmail.com> - 2026-07-06 1421.txt",
@@ -13767,6 +14366,50 @@
       "docs/img/port-nacelle-horizontal.png",
       "docs/img/starboard-nacelle-vert.png",
       "docs/img/transparent-nacelle.png",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37110-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37111-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37112-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37113-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37113-large_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37114-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/37115-cart_default.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/76a8e5b0fe9140cf057b953efbc49a1f.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/EDF50mm-02.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/analytics.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/css.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/css_002.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x3-xfly-model-30mm-12-blades-3s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x3-xfly-model-30mm-12-blades-4s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x4-xfly-model-40mm-12-blades-3s4.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x4-xfly-model-40mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-3s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-4s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_003.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_004.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_005.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_006.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades_007.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-3s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-4s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x6-xfly-model-64mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x7-xfly-model-70mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x7-xfly-model-70mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x8-xfly-model-80mm-12-blades-6s-.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/edf-ducted-fan-xfly-galaxy-x8-xfly-model-80mm-12-blades_002.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/ga.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/mollie.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_114_a4444adaf1056832dd63b28b928b74e6.js",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_138_03a718a060cf48c0e5393bbea5cb1aa7_all.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/v_138_c1bb31e2f03fadfdc659940cc14955dc_print.css",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-64mm-edf-glider-nacelle-for-swift-2100.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-edf-glider-nacelle-for-swift-2100-827-50mm.webp",
+      "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-model-logo-16966716258.jpg",
+      "docs/references/Screenshot 2026-08-18 at 09-50-31 EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades 6S Motor 3200KV - Xfly-Model.png",
       "graphical-build-guide/build_guide_03_print_nacelle.svg",
       "graphical-build-guide/build_guide_06_nacelle_pivot.svg",
       "graphical-build-guide/build_guide_07_edf_install.svg",
@@ -13789,6 +14432,7 @@
       "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
       "avionics/kicad/symbols/SLB9672XU2_0_pinmap.csv",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
+      "code-scanning-files-extracted.csv",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
       "docs/bom_revR.json",
@@ -13861,6 +14505,7 @@
       "airframe/stls/fuselage/battery_tray.stl",
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
       "archives/serenity-esc-telem-revH1.jsx",
+      "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "docs/BATTERY_MOUNT.md",
       "docs/POWER_DISTRIBUTION.md",
       "docs/references/vimdrones_esc_s50_v1.0.step",
@@ -13879,6 +14524,7 @@
       "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
       "avionics/kicad/Observer/Vera.pretty/DS_ToF_4P.kicad_mod",
+      "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x",
       "avionics/kicad/add_sensors_sbus.py",
       "docs/OBSERVER_LASER_ANALYSIS.md",
       "graphical-build-guide/build_guide_25_obstacle_sensors.svg"
@@ -14613,9 +15259,11 @@
       "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1.drl",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.dsn",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb",
+      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_prl",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pro",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch",
+      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.net",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1_v2.ses",
@@ -14695,6 +15343,7 @@
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_prl",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch",
+      "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_pin_snap.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_revs1_cleanup.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_yinv.py",
@@ -14723,8 +15372,10 @@
       "avionics/kicad/Observer/gen_vera_bth060_footprint.py",
       "avionics/kicad/Observer/gen_vera_ds_footprints.py",
       "avionics/kicad/Observer/gen_vera_som_pcm071.py",
+      "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x",
       "avionics/kicad/Observer/kicads/Observer.kicad_dru",
       "avionics/kicad/Observer/kicads/Observer.kicad_pcb",
+      "avionics/kicad/Observer/kicads/Observer.kicad_pcb.pre-g351x",
       "avionics/kicad/Observer/kicads/Observer.kicad_prl",
       "avionics/kicad/Observer/kicads/Observer.kicad_pro",
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
@@ -14899,6 +15550,8 @@
       "avionics/datasheets/6391731564544371956530548.pdf",
       "avionics/datasheets/749010012A.pdf",
       "avionics/datasheets/987651-1223.pdf",
+      "avionics/datasheets/DS3218 datasheet.pdf",
+      "avionics/datasheets/DS3225 datasheet.pdf",
       "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf",
       "avionics/datasheets/KSZ9477S-Data-Sheet-DS00002392C.pdf",
       "avionics/datasheets/L-1038e.A5_phyCORE-AM62x_HW Manual.pdf",
@@ -15002,9 +15655,11 @@
       "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1.drl",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.dsn",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb",
+      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_prl",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pro",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch",
+      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.net",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses",
       "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1_v2.ses",
@@ -15084,6 +15739,7 @@
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_prl",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch",
+      "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_pin_snap.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_revs1_cleanup.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_yinv.py",
@@ -15112,8 +15768,10 @@
       "avionics/kicad/Observer/gen_vera_bth060_footprint.py",
       "avionics/kicad/Observer/gen_vera_ds_footprints.py",
       "avionics/kicad/Observer/gen_vera_som_pcm071.py",
+      "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x",
       "avionics/kicad/Observer/kicads/Observer.kicad_dru",
       "avionics/kicad/Observer/kicads/Observer.kicad_pcb",
+      "avionics/kicad/Observer/kicads/Observer.kicad_pcb.pre-g351x",
       "avionics/kicad/Observer/kicads/Observer.kicad_prl",
       "avionics/kicad/Observer/kicads/Observer.kicad_pro",
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
@@ -15522,6 +16180,7 @@
       "tools/bake_hull_frame.py",
       "tools/build_head_shell.py",
       "tools/build_landing_gear_views.py",
+      "tools/cargo_bay_envelope.py",
       "tools/compact_bom_entries.py",
       "tools/export-specctra-dsn.py",
       "tools/export_landing_gear_stls.py",
@@ -15543,8 +16202,13 @@
       "tools/validate_kicad.py",
       "tools/validate_stls.py",
       "tools/verify_bow_pod.py",
+      "tools/wing_airfoil_integrity.py",
       "tools/wing_airfoil_variants.py",
       "tools/wing_cfd_openfoam.py",
+      "tools/wing_internal_clearance.py",
+      "tools/wing_root_deconflict.py",
+      "tools/wing_section_figure.py",
+      "tools/wing_spar_carrythrough.py",
       "tools/wing_spar_station_fit.py"
     ]
   }

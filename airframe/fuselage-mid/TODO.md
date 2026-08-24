@@ -16,6 +16,9 @@
 ## §1.1.1 — Fuselage: Shell Regeneration, Middle-Section Bays (part 3/3)
 → full detail: `WBS.md` §1.1.1
 
+- [ ] ★ CARGO-01 payload won't fit past the wing spar (BLOCKER)
+- [ ] CARGO-02 shell bores Ø12.3 for a spar the wing retired (8.3)
+- [ ] ★ CARGO-03c coupon-test CF-PETG: >=15MPa tenon, else 2nd spar
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
 - [ ] Cargo gondola shell
@@ -26,7 +29,7 @@
 - [ ] Regenerate `cargo_sect_shell24.stl`
 - [ ] Add DRV8833-tray boss locations to `cargo_sect_shell24.scad`
 - [ ] Add SG90 bell-crank boss to inner face of each door panel
-- [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall (BLOCKER)
+- [ ] ★ Bench-verify SPT5425LV stall current + pin-removal (BLOCKER)
 - [ ] ★ Winch containment: 5 positive fixes (spool must stay in bay)
 - [ ] Verify Part 107 dropped-object section number
 - [ ] Containment checks on assembly + pre-flight cards
@@ -43,7 +46,7 @@
 - [ ] Bench-calibrate ratchet slip to 8.0 N ± 1.0 N
 - [ ] Line-shed test (inboard end must NOT be anchored)
 - [ ] Winch state machine firmware (Simon + gateway)
-- [ ] Re-run winch mass/CG once STS3215 mass is known
+- [ ] Re-run winch mass/CG once SPT5425LV+LibreServo v2 is weighed
 - [ ] Slicer verification
 - [ ] Flight Engineer's room — PDB mounting in inner neck
 - [ ] CF skid rod channels
