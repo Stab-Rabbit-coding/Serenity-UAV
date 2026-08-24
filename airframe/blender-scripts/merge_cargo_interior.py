@@ -51,7 +51,11 @@ NEGATIVE (removed):
   * OPEN fwd + aft joint faces (cavity-plug cap removal).
   * Boss-pin bores (Joint 1 + Joint 2 — collar alignment dowels), keel channel,
     Y=+30 ring-frame pocket — single-sourced from add_structural_features.py.
-  * Wing spar bore (Ø12.3, full lateral span) + 2 wing-root mortises (through
+  * Wing spar F688ZZ bearing seat (Ø15.95 press-fit + Ø18.0 flange counterbore,
+    REF-SENSOR-019) + Ø8.3 rotating-spar clearance, PER SIDE, terminating at
+    the fuselage wall station (X −100 port / −240 stbd) instead of a full
+    lateral-span bore -- CARGO-01/CARGO-02, closed 2026-08-24 per SPAR-01
+    (airframe/wings-nacelles/WBS.md §1.1.2) -- + 2 wing-root mortises (through
     each lateral wall), at the RE-DERIVED chord stations (129 mm root chord, LE
     root hull Y=−7: spar 35% → Y=+38.15 at Z=68.42 (camber midline, Rev S1b);
     mortise 50% → Y=+57.5 at Z=62.5).
@@ -59,7 +63,9 @@ NEGATIVE (removed):
 
 POSITIVE (added, envelope-clipped so they conform + fuse to the curved wall):
   * 4 clamshell hinge-pin retention blocks (from generate_cargo_hinge_retention).
-  * 2 wing-spar bearing bosses (Ø22, coaxial with the spar bore).
+  * 2 wing-spar bearing bosses (Ø27.7, coaxial with the spar bore -- re-derived
+    2026-08-24 from the F688ZZ flange OD, REF-SENSOR-019, not the retired
+    Ø22 press-fit figure).
   * 2 nacelle-servo mount pads (one per lateral wall).
   * Inara avionics-bay standoff bosses (4, dorsal port).  The dorsal Faraday
     access-panel CUT and the River (stbd) bay are DEFERRED (SCAD avionics
@@ -320,8 +326,39 @@ WING_CHORD_LINE_Z = 58.01
 WING_ROOT_Z = WING_CHORD_LINE_Z
 WING_SPAR_MIDLINE = 10.41   # midline_frac(45.15/129) * 129, from the wing SCAD
 WING_SPAR_Z = WING_CHORD_LINE_Z + WING_SPAR_MIDLINE  # = 68.42
-WING_SPAR_BORE_D = 12.3
-WING_SPAR_BOSS_OD = 22.0
+
+# CARGO-01/CARGO-02 (2026-08-24): the wing's single spar is now an 8 mm OD
+# rotating AISI 4130 tube per side (wings_s1223_revo.scad TILT_SPAR_OD = 8.0,
+# TILT_SPAR_BORE_CLEAR = 8.3), NOT the retired 12 mm fixed CF tube this file
+# used to bore for.  Per SPAR-01 (airframe/wings-nacelles/WBS.md §1.1.2,
+# owner 2026-08-23) each spar terminates at the fuselage wall on its own
+# bearing -- it no longer crosses the bay -- so this is a SEAT for that
+# bearing, not a full-lateral-span clearance bore.  "Root bearing stays
+# F688ZZ" (WBS.md, Rev R2d 2026-07-19 wingtip-downsize note): dimensions
+# from REF-SENSOR-019 (SMB Bearings F688ZZ datasheet, fetched 2026-08-24).
+WING_SPAR_BORE_D = 8.3   # mm, rotating-spar clearance = 8.0 mm OD + 0.15 mm/side
+                         # (matches wings_s1223_revo.scad TILT_SPAR_BORE_CLEAR
+                         # exactly -- same physical shaft, same clearance law)
+
+# F688ZZ (REF-SENSOR-019): bore 8 / OD 16 / width 5 mm, flange OD 18 / flange
+# width 1.1 mm.  Seat interference (0.025 mm/side -> seat bore = OD - 0.05 mm)
+# mirrors wings_s1223_revo.scad's own TIP_BRG_SEAT_D convention for the
+# wingtip MF128ZZ bearing, so both bearing seats in this airframe are sized
+# by the same rule.
+ROOT_BRG_OD = 16.0          # mm, F688ZZ outer diameter (REF-SENSOR-019)
+ROOT_BRG_SEAT_D = 15.95     # mm, press-fit seat bore, 0.025 mm/side interference
+ROOT_BRG_W = 5.0            # mm, bearing width = seat depth
+ROOT_BRG_FLANGE_OD = 18.0   # mm, flange OD -> shallow counterbore at the boss face
+ROOT_BRG_FLANGE_T = 1.1     # mm, flange counterbore depth (= flange width)
+
+# Boss OD re-derived from the F688ZZ FLANGE OD (18.0 mm, the largest feature
+# the boss must enclose) using the SAME 4.85 mm radial wall margin the Rev S1
+# boss originally carried around its old 12.3 mm bore ((22.0-12.3)/2 = 4.85):
+# 18.0 + 2*4.85 = 27.7 mm.  Explicitly NOT the retired Ø22 press-fit figure --
+# that sized a 12.3 mm bore with no bearing at all, and 22 mm does not clear
+# an 18 mm flange with any wall left (22-18)/2 = 2.0 mm, under this boss's own
+# established 4.85 mm margin.
+WING_SPAR_BOSS_OD = 27.7
 
 # Wing harness entry ports (Rev S1c, 2026-08-18) — NEW.
 #
@@ -687,13 +724,54 @@ def wing_harness_ports():
     ]
 
 
+def spar_bearing_seat_cuts(outb_x, inb_x, label):
+    """CARGO-01/CARGO-02 (2026-08-24): one side's F688ZZ bearing seat +
+    rotating-spar clearance bore, coaxial with the spar boss, STOPPING at the
+    wall station `inb_x` instead of crossing the bay.  `outb_x` is the
+    wing-facing (outboard) end of the boss, where the bearing's flange seats
+    flush; `inb_x` is the bay-facing (inboard) end -- the spar's inboard tip,
+    per SPAR-01's measured "spar inboard end if it stops at the boss" station
+    (X -100 port / -240 stbd).  Three coaxial cylinders, outboard to inboard:
+      1. flange counterbore (ROOT_BRG_FLANGE_OD, ROOT_BRG_FLANGE_T deep) --
+         seats the F688ZZ flange flush with the boss face.
+      2. bearing seat (ROOT_BRG_SEAT_D, ROOT_BRG_W deep) -- press-fit for the
+         bearing's outer race.
+      3. rotating-spar clearance (WING_SPAR_BORE_D) for the remainder of the
+         boss depth, down to `inb_x` -- the spar's shaft, NOT a through-bore
+         to the opposite wall.
+    Returns a list of (label, solid) tuples, matching the module's convention.
+    """
+    span = abs(outb_x - inb_x)
+    depth = ROOT_BRG_FLANGE_T + ROOT_BRG_W
+    assert depth < span, (
+        f"{label}: flange+seat depth {depth} mm exceeds boss span {span} mm"
+    )
+    # Walk inward from outb_x toward inb_x by a signed step (handles both the
+    # port boss, where inb_x < outb_x, and the stbd boss, where inb_x > outb_x).
+    step = -1.0 if inb_x < outb_x else 1.0
+    x0 = outb_x
+    x1 = outb_x + step * ROOT_BRG_FLANGE_T
+    x2 = x1 + step * ROOT_BRG_W
+    return [
+        (f"{label} bearing flange counterbore", x_cylinder(
+            WING_SPAR_Y, WING_SPAR_Z, min(x0, x1), max(x0, x1),
+            ROOT_BRG_FLANGE_OD / 2.0)),
+        (f"{label} bearing seat", x_cylinder(
+            WING_SPAR_Y, WING_SPAR_Z, min(x1, x2), max(x1, x2),
+            ROOT_BRG_SEAT_D / 2.0)),
+        (f"{label} spar clearance", x_cylinder(
+            WING_SPAR_Y, WING_SPAR_Z, min(x2, inb_x), max(x2, inb_x),
+            WING_SPAR_BORE_D / 2.0)),
+    ]
+
+
 def wing_keepout_negatives():
     """Wing voids the gear bay's added material must not intrude into."""
     my0, my1 = WING_MORT_Y - MORT_W / 2, WING_MORT_Y + MORT_W / 2
     mz0, mz1 = WING_ROOT_Z - MORT_H / 2, WING_ROOT_Z + MORT_H / 2
     return [
-        ("spar bore", x_cylinder(
-            WING_SPAR_Y, WING_SPAR_Z, -270.0, -70.0, WING_SPAR_BORE_D / 2.0)),
+        *spar_bearing_seat_cuts(PORT_OUTB, PORT_INB, "port"),
+        *spar_bearing_seat_cuts(STBD_OUTB, STBD_INB, "stbd"),
         # CARGO-03 (2026-08-24): these used to span PORT_INB+1 .. PORT_OUTB-10
         # (X -99..-70), described as cutting "through each wall".  They did not:
         # at the mortise station the wall lies at X -115..-99, so the cut began
@@ -1010,7 +1088,9 @@ def build_negatives(shell_tm, envelope_tm=None):
         cutters.append(box(xm, xx, ym, yx, zm, zx))
     notes.append("ring pocket Y=30")
 
-    # Wing spar bore (full lateral span) + 2 root mortises (through each wall).
+    # Wing spar F688ZZ bearing seat + rotating-spar clearance (per side,
+    # terminating at the wall -- CARGO-01/CARGO-02) + 2 root mortises (through
+    # each wall).
     # Built by wing_keepout_negatives() so the solids the gear bay is trimmed
     # against are the SAME solids the hull is actually cut with (LG-10.4).
     for label, solid in wing_keepout_negatives():
@@ -1052,7 +1132,7 @@ def build_positives(shell_tm, envelope_tm=None):
             feats.append(hinge._block(side, station))
     notes.append("4 hinge retention blocks")
 
-    # Wing-spar bearing bosses (Ø22, coaxial with the spar) and the two
+    # Wing-spar bearing bosses (Ø27.7, coaxial with the spar) and the two
     # nacelle-servo mount pads -- deep boxes/cylinders, envelope-clipped.
     # Built by wing_keepout_positives() so the solids the gear bay is trimmed
     # against are the SAME solids the hull actually carries (LG-10.4).

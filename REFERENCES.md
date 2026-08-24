@@ -85,6 +85,7 @@ CERN-OHL-W 2.0 / CC BY-SA 4.0 dual-license split)
     - [REF-SENSOR-014: LibreServo v2 (stab-rabbit-coding fork) — Open-Source Smart-Servo Control Board](#ref-sensor-014-libreservo-v2-stab-rabbit-coding-fork--open-source-smart-servo-control-board)
     - [REF-SENSOR-015: OpenServoCore — Open-Source SG90/MG90-Class Smart-Servo Control Board](#ref-sensor-015-openservocore--open-source-sg90mg90-class-smart-servo-control-board)
     - [REF-SENSOR-016: Infineon OPTIGA™ Trust M — I2C Secure Element (planned, CAN-PERIPH-GW-1 + Flight Engineer only)](#ref-sensor-016-infineon-optiga-trust-m--i2c-secure-element-planned-can-periph-gw-1--flight-engineer-only)
+    - [REF-SENSOR-019: SMB Bearings F688ZZ — 8x16x5 mm Flanged Miniature Radial Ball Bearing (wing-root tilt-spar bearing)](#ref-sensor-019-smb-bearings-f688zz--8x16x5-mm-flanged-miniature-radial-ball-bearing-wing-root-tilt-spar-bearing)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -1823,6 +1824,49 @@ those boards keep the SLB9672 (REF-SENSOR-011).
 
 **Used in:** `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` (open item),
 `avionics/kicad/FlightEngineer/FlightEngineer.md` (open item), `avionics/WBS.md` §1.9.2
+
+---
+
+### REF-SENSOR-019: SMB Bearings F688ZZ — 8x16x5 mm Flanged Miniature Radial Ball Bearing (wing-root tilt-spar bearing)
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | SMB Bearings |
+| **Product** | F688ZZ — flanged, double-metal-shielded miniature radial ball bearing |
+| **Datasheet (fetched and read this session)** | <https://www.smbbearings.com/firebrick/ckeditor/plugins/upload/Uploads/Documents/bearingpdfs/F688ZZ-flanged-miniature-bearing-8x16x5mm.pdf> |
+| **Bore (ID)** | 8 mm (0.3150 in) |
+| **Outside diameter (OD)** | 16 mm (0.6299 in) |
+| **Width** | 5 mm |
+| **Flange OD** | 18 mm |
+| **Flange width** | 1.1 mm |
+| **Flange step height** | 0.2 mm (min.) |
+| **Rings/balls material** | SAE 52100 chrome steel |
+| **Cage material** | Pressed steel |
+| **Closures** | Metal shields (ZZ) |
+| **Static load rating** | 59 kgf (579 N) |
+| **Dynamic load rating** | 125 kgf (1,226 N) |
+| **Speed limit** | 36,000 rpm (with adequate lubrication) |
+| **Standard lubrication** | Kyodo Yushi Multemp SRL grease |
+| **Bore/OD tolerance (P0, as-supplied grade)** | +0 / −0.008 mm each |
+| **Compliance** | EU RoHS and REACH |
+
+**Applied to:** the wing-root (fuselage-wall) end of each 8 mm OD AISI 4130 rotating
+tilt-spar, per `airframe/wings-nacelles/WBS.md` §1.1.2 **SPAR-01** ("Root bearing
+stays F688ZZ" — the tip end uses the downsized MF128ZZ, not this part; see the
+2026-07-19 Rev R2d note in the same section). The bearing seat cut into the cargo
+shell (`airframe/fuselage-mid/WBS.md` CARGO-02) is sized from this datasheet's OD —
+**16 mm nominal, +0/−0.008 mm** — plus a light interference allowance for a
+printed-plastic seat (outer race stationary in the shell; inner race rotates with
+the spar), not from the retired Ø22 mm press-fit figure that sized the old fixed
+12 mm CF tube boss. The 8 mm bore matches the spar's 8 mm OD directly (line-to-line
+on the rotating inner race, per the manufacturer's P0 bore tolerance above; no
+added clearance is applied on the *bearing* bore itself — the 8.3 mm figure in
+`WING_SPAR_BORE_D` is a separate, non-bearing rotating clearance elsewhere along
+the spar's run, not this seat).
+
+**Used in:** `airframe/blender-scripts/merge_cargo_interior.py`
+(`WING_SPAR_BOSS_OD`), `airframe/wings-nacelles/WBS.md` §1.1.2,
+`airframe/fuselage-mid/WBS.md` §1.1.1.2 CARGO-02, `current-specification/bom_revS.csv`
 
 ---
 
