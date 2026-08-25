@@ -58,6 +58,165 @@ SCAD is reworked.
 Nacelle spanwise half-width ≈ OD_X/2 = 30.25 mm; the duct axis (thrust resultant)
 sits ≈ 30 mm outboard of the wingtip bearing. Add ~5 mm mount gap →
 **cantilever arm a ≈ 35 mm (1.38 in)** from wingtip bearing to nacelle load line.
+(Superseded for the exact figure by the measured `tools/wing_spar_carrythrough.py`
+overhang `a` = 38.3 mm used in §2.1 below; kept here as the original hand estimate.)
+
+---
+
+## 2.1 Torque Requirement Re-Derivation (2026-08-25, SPAR-02, KTD5)
+
+**Why re-derive.** The ≥ 25 kgf·cm figure in §2 above is cited only to
+`serenity-rev-r.jsx` L383 (a spec-pick table: *"Servo, ≥25 kg·cm @ 6V digital
+metal-gear, 2×, Fuselage-mounted, one per nacelle"*, `archives/serenity-rev-r.jsx`
+line 383) — it carries no load derivation. Per the owner's direction
+(`airframe/wings-nacelles/WBS.md` §1.1.2 SPAR-02), the tilt pivot is sited at the
+nacelle CG specifically to null the gravity moment, so the true torque
+requirement is aero + inertia only. This section re-derives it and compares
+against DS3225's own cleared figure (24.5 kgf·cm at 6.8 V, `REFERENCES.md`
+"Open Standards Verification Items" DS3225 row).
+
+**Load-factor convention (reused, not invented):** `docs/structural_analysis.md`
+§3 — 4 g limit factor (3 g gust + 1 g maneuver) × 1.5 ultimate factor, the same
+convention `tools/wing_spar_carrythrough.py` already applies to this exact
+nacelle/pivot geometry.
+
+### 2.1.1 Gravity term — verify the nulling claim algebraically, not by assertion
+
+The tilt pivot is the spar's own axis: a line through the nacelle at duct
+station `PIVOT_Z = 111.5 mm`, transverse offset `Y ≈ 0`
+(`nacelle_pod_50mm_tandem.scad` header + line 243), running spanwise (the
+repo's hull-frame X). Gravity produces zero moment about a line L if and only
+if the body's CG lies *on* L (the position vector from any point on L to the
+CG is then the zero vector, so `τ = r × F = 0` for any F, at any orientation of
+the body about L — this holds for **all** tilt angles, not just the neutral
+position, since rotating a zero vector about any axis is still zero).
+
+The nacelle assembly's own mass table (`nacelle_pod_50mm_tandem.scad` header,
+Rev T, 11 components, 393.4 g) gives axial CG:
+
+```text
+CG_Z = Σ(m_i · Z_i) / Σm_i = 43,879 g·mm / 393.4 g = 111.5 mm = PIVOT_Z
+```
+
+— exact by construction: `PIVOT_Z` was *set* to this computed CG_Z (line 383's
+comment: "pivot axial centre = full-assembly CG station"), so the axial
+(duct-length) coordinate is nulled by definition, not approximation, provided
+the underlying 11-item mass/CG table is accurate.
+
+**Residual term — the transverse (Y) coordinate is not tabulated.** The mass
+table only reports each component's axial (Z) position; it does not report a
+transverse (Y) CG offset. Most components (both EDFs, ESC1/2, shell+stator,
+nozzle throat/housing, unison ring, 8× flaps) are nominally axisymmetric about
+the duct centerline, so their individual Y-contribution is ≈0 by geometry. Two
+components are **not** axisymmetric — they exist at a single clock position to
+drive the nozzle unison ring: the **spar crank (1.4 g)** and **pushrod
+(3.6 g)**, both cited in the same mass table. Their exact transverse offset is
+not measured in the repo. Bounding it conservatively at the full nacelle
+half-width (`NACELLE_OD_X/2 = 37.7 mm`, `nacelle_pod_50mm_tandem.scad` line
+~229) as a worst case:
+
+```text
+M_residual ≤ (1.4 + 3.6) g × 9.80665 m/s² × 0.0377 m ≈ 0.00185 N·m (0.016 lbf·in)
+```
+
+This is ≈ 0.08 % of the DS3225's 6.8 V stall torque (2.402 N·m) — negligible,
+but it is a **bound on an unmeasured offset, not a verified-zero figure**. The
+"pivot at CG nulls gravity" claim holds to within this bound; the exact
+transverse CG position is an open item (flag, not a fabricated coincidence).
+
+### 2.1.2 Inertia term — mass moment of inertia about the pivot, from the same table
+
+Treating each of the 11 mass-table items as a point mass at its axial offset
+`r_i = |Z_i − PIVOT_Z|` from the pivot line (a lumped/point-mass
+approximation — it omits each part's own moment of inertia about its own
+centroid, which understates I for extended parts like the rotating spar span
+and the 8× flap ring; conservative in the sense that it is the minimum bound
+consistent with the tabulated masses and positions, not a full rigid-body
+tensor):
+
+```text
+I = Σ m_i · r_i²  = 718,861 g·mm² = 7.189 × 10⁻⁴ kg·m²
+```
+
+(component-by-component: EDF1 70 g @ r=52.1mm, EDF2 70 g @ r=39.1mm, ESC1
+25 g @ r=52.1mm, ESC2 25 g @ r=39.1mm, shell/stator/cowl 130 g @ r=18.7mm,
+nozzle throat/housing 21.4 g @ r=63.3mm, unison ring 6.7 g @ r=58.4mm, 8×
+flaps 21.1 g @ r=86.7mm, spar crank 1.4 g @ r=0, pushrod 3.6 g @ r=29.3mm,
+rotating spar span 19.2 g @ r=0 — spar crank and rotating spar span sit at the
+pivot itself, r=0, contributing nothing to I about this axis).
+
+**Angular acceleration — no cited design profile exists.** The repo has two
+tilt-rate figures, neither a design acceleration spec: a bench **monitoring**
+rate (`docs/TILT_ENCODER_WIRING_EMI_SPEC.md` §7.3, "Nacelle sweep at 10°/s"
+during a tethered-hover CAN-message-rate test — an instrumentation check, not
+a commanded transition profile) and a **stale** Phase-3 build-guide test step
+(`docs/REVN_BUILD_GUIDE_24IN.md` "Test servo response time (<500 ms slew)"
+over the −5°→140° = 145° range, written against the pre-Rev-T DS3218MG/Z=83mm
+pivot). Using the 145°/500 ms figure with a triangular (accelerate-then-
+decelerate, no cruise) velocity-profile assumption — a standard kinematic
+model applied to the repo's own cited angle/time pair, not a fabricated
+physical constant — bounds the worst-case (highest-α) case:
+
+```text
+θ = 145° = 2.531 rad,  t = 0.5 s
+α = θ / (t/2)² = 40.49 rad/s²   (peak ω = 10.12 rad/s = 580°/s)
+T_inertia = I·α = 7.189×10⁻⁴ kg·m² × 40.49 rad/s² = 0.0291 N·m (0.257 lbf·in)
+```
+
+At the repo's own 4 g / 1.5× ultimate convention applied as a margin multiplier
+(×6): **T_inertia,ultimate ≈ 0.175 N·m (1.78 kgf·cm, 1.55 lbf·in)** — about
+7 % of DS3225's 24.5 kgf·cm 6.8 V stall figure, and the α input itself is
+already the *highest* cited tilt rate in the repo (the 10°/s bench-monitoring
+rate would give an α roughly two orders of magnitude smaller). **This θ/t
+figure is stale (pre-Rev-T geometry) and not a confirmed commanded design
+profile — flag for owner confirmation of the actual intended transition
+time**, but given the 14× margin already present, only a ~14× faster
+transition would put inertia alone at risk of the requirement.
+
+### 2.1.3 Aero term — cannot be grounded; explicitly out of scope, not fabricated
+
+No nacelle drag coefficient, frontal area, or dynamic-pressure figure for the
+tilting assembly exists anywhere in `docs/` or `airframe/` (searched for
+`drag`, `Cd`, `dynamic pressure`, `frontal area` near "nacelle" — no hits
+besides an unrelated wing-airfoil drag note). Per root `AGENTS.md` §4, this
+term is **not fabricated**. It is left as an explicit open item: aero moment
+about the tilt axis during a transition (cross-flow load on the duct's
+frontal/side area, not the axial thrust component — thrust itself acts along
+the duct centerline, which passes through the pivot point by the same
+CG-pivot geometry, so it contributes ~zero moment about the tilt axis at the
+static condition) requires real repo aero data (a wind-tunnel figure, a CFD
+result once `tools/wing_cfd_openfoam.py` is unblocked, or a bench thrust-stand
+measurement at an angled inflow) before it can be added to this derivation.
+**This bounds the analysis to inertia + the residual gravity term only, per
+the owner's Scope Boundaries direction** — it is not asserted that aero is
+negligible, only that no repo data exists to quantify it.
+
+### 2.1.4 Comparison against DS3225
+
+| Term | Value (ultimate, ×6 margin where applicable) | Basis |
+|---|---|---|
+| Gravity | ≤ 0.00185 N·m (0.019 kgf·cm) | §2.1.1, unmeasured-transverse-CG bound |
+| Inertia | ≈ 0.175 N·m (1.78 kgf·cm) | §2.1.2, triangular-profile bound on stale 145°/500ms figure |
+| Aero | **not grounded — open item** | §2.1.3 |
+| **Grounded total** | **≈ 0.177 N·m (1.80 kgf·cm)** | sum of the two grounded terms |
+| DS3225 stall (6.8 V, cited) | 24.5 kgf·cm (2.402 N·m) | REFERENCES.md DS3225 row |
+
+The grounded requirement (gravity + inertia) is **≈ 7.3 % of DS3225's cited
+24.5 kgf·cm** — a wide margin, not the 98 % the uncorrected ≥25 kgf·cm spec
+pick implied. **Conclusion: DS3225 stands.** The 2 % shortfall against the
+old ≥25 kgf·cm figure that motivated the servo-swap conversation
+(`airframe/wings-nacelles/WBS.md` §1.1.2) is not a real structural shortfall —
+it was measured against an undermined requirement. No servo change is needed
+on load grounds. The aero term remains an explicit, unquantified open item
+(§2.1.3); if a future aero figure is obtained and is large enough to erode the
+~14× margin above, this conclusion would need revisiting — but nothing in the
+repo today supports assuming that.
+
+**Author's note:** this re-derivation reuses `docs/structural_analysis.md` §3's
+load-factor convention and `tools/wing_spar_carrythrough.py`'s measured pivot/
+overhang geometry (run 2026-08-25: `L=86.7mm`, `a=38.3mm`, `d=126.3mm`) rather
+than re-deriving them; those tools remain the source of record for the
+underlying spar/overhang geometry.
 
 ---
 

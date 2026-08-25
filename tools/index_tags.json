@@ -9847,7 +9847,6 @@
       "description": "Serenity UAV \u2014 Power Distribution & Battery Management",
       "tags": [
         "documentation",
-        "emi-hardening",
         "power",
         "security"
       ],
@@ -13123,7 +13122,6 @@
       "docs/FIRST_FLIGHT_READINESS.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/PHASED_BUILD_GUIDE.md",
-      "docs/POWER_DISTRIBUTION.md",
       "docs/README.md",
       "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/TILT_ENCODER_WIRING_EMI_SPEC.md",

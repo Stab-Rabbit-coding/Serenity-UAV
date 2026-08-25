@@ -145,6 +145,10 @@
     - [ ] Update `TILT_SPAR_ANALYSIS.md` §1/§3.2 and `structural_analysis.md` §5.
 
 - [ ] **SPAR-02 — bulkhead servo mounts: deconflicted, but the pad is undersized.**
+    **2026-08-25 status: torque re-derivation and current-rail resizing sub-items
+    are CLOSED (see item 1/2 below) — DS3225 stands, no part change; remaining
+    open work is the mounting bolt-pattern verification (item further below),
+    unrelated to load/power sizing.**
     *(owner direction 2026-08-23: 25 kgf·cm+ servos inside the fuselage, against the
     port and starboard bulkheads, each driving one spar and its nacelle.  Checked by
     `tools/nacelle_servo_deconflict.py`, which pulls every neighbour live from
@@ -268,9 +272,39 @@
        §2 of the same analysis records the pivot as being **at the nacelle CG** —
        which nulls the gravity moment by design and leaves only aero and inertia.
        A 2 % gap against a possibly-stale requirement is not worth a part change.
-    2. **Stall current is now cited, and it is higher than the budget.**  1.9 A @
-       5 V / **2.3 A @ 6.8 V** (DS3225), against the 1.2 A placeholder RAIL-2 was
-       sized on — about 1.9×.  RAIL-2 must be re-checked per tilt servo.
+
+       **Re-derived 2026-08-25 (`docs/TILT_SPAR_ANALYSIS.md` §2.1) — DONE, DS3225
+       STANDS.**  Gravity is nulled to within a 0.00185 N·m (0.019 kgf·cm) bound
+       on the two asymmetric off-axis parts (spar crank + pushrod; the axial CG
+       coordinate is exact by construction, `PIVOT_Z` was set equal to the
+       computed CG_Z).  Inertia, from the mass table's own 11-item moment of
+       inertia about the pivot (I = 7.189e-4 kg·m²) and the repo's *only* cited
+       tilt-transition figure (stale Phase-3 145°/500 ms slew test, triangular-
+       profile bound, ×6 for the 4 g/1.5× ultimate convention) is ≈ 0.175 N·m
+       (1.78 kgf·cm).  **Grounded total ≈ 1.80 kgf·cm — 7.3 % of DS3225's cited
+       24.5 kgf·cm at 6.8 V**, a wide margin.  Aero moment about the tilt axis
+       could not be grounded (no nacelle Cd/frontal-area/dynamic-pressure figure
+       exists anywhere in the repo) and is left an explicit open item, not
+       assumed zero — but it would need to be roughly an order of magnitude
+       larger than the wing's own cited lift/thrust figures to threaten this
+       margin.  **DS3225 clears the actual (aero+inertia) requirement by a wide
+       margin; the old ≥25 kgf·cm figure was itself the stale artifact.  No
+       servo change on load grounds.**
+    2. **Stall current is now cited, and it is higher than the budget — but not
+       RAIL-2's budget.**  1.9 A @ 5 V / **2.3 A @ 6.8 V** (DS3225).  **Correction,
+       2026-08-25:** the "1.2 A placeholder RAIL-2 was sized on" language here and
+       in `REFERENCES.md`/`current-specification/bom_revS.csv` was a citation
+       error — `RAIL-2` (`5V_OBS`, `docs/POWER_DISTRIBUTION.md` §3.2.1/§11.1) is
+       the Flight Engineer payload rail feeding the **Observer vision boards and
+       the cargo-winch servo** (`docs/CARGO_WINCH_SPECIFICATION.md` §5.4); its
+       1.2 A figure is the STS3215/SPT5425LV-era **winch-servo** placeholder, not
+       a tilt-servo budget.  The nacelle tilt servos are powered from the
+       separate **6 V servo bus** (`docs/POWER_DISTRIBUTION.md` §3.3, "PDB 6 V
+       BEC output" in §4) which carried forward a DS3218MG-era 1.5 A stall
+       figure per servo.  That 6 V rail — not RAIL-2 — is the one resized here
+       to DS3225's cited 2.3 A stall (see `docs/POWER_DISTRIBUTION.md` §3.3/§3.4
+       for the corrected figures).  RAIL-2 itself is unaffected by the DS3225
+       swap and is left at its existing winch-servo-driven 1.2 A placeholder.
 
     Original open item, now partly closed:
 

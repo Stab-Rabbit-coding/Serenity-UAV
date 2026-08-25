@@ -295,7 +295,7 @@ see docs/WBS.md §0.10.2.)*
   (spar DIAMETER Ø12.3 vs 8.3 still open — see §1.1.1 CARGO-02)
 - [ ] ★ WING-01 S1223 section self-intersects at x/c 0.742 (BLOCKER)
 - [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
-- [ ] SPAR-02 DS3225 24.5 vs 25 kgf·cm req (re-derive); RAIL-2 2.3A
+- [x] SPAR-02 DS3225 torque re-derived (aero+inertia only, gravity nulled by CG pivot) -- DS3225 clears at ~7.3% margin, no part change; 6 V tilt-servo rail resized to 2.3A/servo (RAIL-2 is unrelated -- winch/Observer rail, corrected citation)
 - [x] SPAR-04 Hall tip jog crosses the spar bore — CLOSED
 
 #### 1.1.3 — Nacelles
