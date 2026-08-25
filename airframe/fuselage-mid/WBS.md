@@ -443,6 +443,16 @@
     embed bumped from the WBS-convention 40 mm to 42 mm to clear (at 40 mm,
     FOS is 3.945, just under target).  No new coupon data required.
 
+    **REF-MAT-001 added 2026-08-25** (`REFERENCES.md`) — the first peer-
+    reviewed data point for CF-PETG in this repository (Batista et al. 2023,
+    *Appl. Sci.* 13(23), 12701, ASTM D695 bulk compressive strength on 20%
+    short-CF-reinforced PETG, ≈47–60 MPa).  It does not change anything
+    above — bulk unnotched compression is not the bearing-in-a-hole mode
+    either the tenon or the tie rods actually see, so it is not substituted
+    into the FOS figures here — but it is real evidence the `enlarged_tenon`
+    alternative's ≥11.1–40.6 MPa bar is plausibly clearable, which the
+    coupon-test decision is still the correct way to confirm.
+
     **The tenon is traded out of the load path entirely** (not merely
     "restored" pending a coupon result, as the single-rod branch above
     described) — `fuselage_root_tab()` is now a pure locating/index feature,

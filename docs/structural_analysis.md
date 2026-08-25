@@ -470,8 +470,13 @@ hull Y = −71, arm to head CG = 86 mm, ultimate = limit × joint-FOS 4.0:
 
 The joint ring (perimeter ≈ 350 mm, t = 2 mm) has S_x ≈ 7 000–10 000 mm³, so even the
 9 g crash moment gives a peak fiber stress **M/S ≈ 0.7 MPa** — far below the CF-PETG and
-epoxy allowables (≈ 5 MPa for the PETG-bond-limited case).  **The joint is not
-strength-limited.**  What is actually required is peel resistance, alignment, and
+epoxy allowables (≈ 5 MPa for the PETG-bond-limited case; this figure predates any cited
+source and is carried here as the repository's conservative working placeholder for a
+bonded/adhesive-limited joint — **REF-MAT-001** (`REFERENCES.md`) now provides a real,
+peer-reviewed ASTM D695 *bulk compressive* figure for 20 %-CF-PETG, ≈47–60 MPa, an order
+of magnitude above this placeholder, but bulk compression is not the bond/peel mode this
+figure is meant to bound, so it does not replace it here — see REF-MAT-001's own entry for
+what it does and does not cover).  **The joint is not strength-limited.**  What is actually required is peel resistance, alignment, and
 anti-ovalisation of the thin section, plus the AGENTS.md fabrication standard's
 "minimum 2-wall contact annulus and positive-stop shoulder."
 
