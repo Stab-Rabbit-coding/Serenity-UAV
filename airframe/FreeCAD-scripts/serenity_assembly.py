@@ -1,9 +1,36 @@
 """
 serenity_assembly.py — Serenity UAV full-airframe FreeCAD assembly.
-Revision: R1.2 (2026-07-18)
+Revision: R1.3 (2026-08-25)
 
-Imports all printed airframe STL components and saves a single
-Serenity-Assembled.FCStd for review in FreeCAD.
+Imports all printed airframe STL components and saves a single assembly
+file for review in FreeCAD.
+
+R1.3 Changes (2026-08-25):
+    - OUTPUT now targets airframe/freecad/assembly/SerenityAssembly.FCStd
+      directly (was airframe/Serenity-Assembled.FCStd). That file was
+      previously a hand-built, manually-placed reference (17 objects, several
+      stale/duplicated across revisions — e.g. both the current
+      nacelle_port_revs and the superseded nacelle_port_revq were present)
+      that this script's own docstring cited as the historical SOURCE for
+      the baked hull-frame placements. This script is now the maintained,
+      single source of truth for that file instead: it already imports every
+      current canonical STL (shells, wings, nacelles, splice collars, cargo
+      interior accessories, EDF sleeves, nozzle iris, landing gear, dorsal
+      fin, bow sensor faceplate) with validated or explicitly-marked-VERIFY
+      hull-frame placements. The old hand-built file's content is preserved
+      in git history and in the pre-existing `.FCStd.bak2`/`.FCBak` files
+      alongside it; nothing is lost by this switch.
+    - Added a NACELLE TILT CONFIGURATION block (see NACELLE_TILT_PORT_DEG /
+      NACELLE_TILT_STBD_DEG below): each side's nacelle body, EDF stator
+      sleeve, EDF aft spider sleeve, and nozzle iris now rotate together as
+      one rigid group about that side's tilt pivot (hull +X axis, through
+      the nacelle's own CG/pivot station), driven by that one per-side
+      degree value. 0 deg = forward/cruise (the stored/baked attitude);
+      90 deg = vertical/hover (duct axis vertical, nozzle exit facing -Z/
+      down, for lift). The rotation SIGN was reverse-engineered from the old
+      hand-built file's own Nacelle_Stbd placement (axis (-1,0,0), angle
+      90 deg = -90 deg about hull +X) rather than assumed, and reproduces
+      that file's stbd-vertical/port-forward configuration by default.
 
 R1.2 Changes (2026-07-18):
     Initial hull-frame VERIFY-tier placements added for all unpositioned parts:
@@ -30,7 +57,7 @@ you try), and prefer `freecadcmd` over `freecad --background --python`:
 the latter starts the GUI event loop, which on some platforms does not exit
 cleanly after the script finishes, so the command appears to hang.
 
-Output: <repo>/airframe/Serenity-Assembled.FCStd
+Output: <repo>/airframe/freecad/assembly/SerenityAssembly.FCStd
         (overwrites any existing file)
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
@@ -66,8 +93,9 @@ EDF sleeves, nozzles, pylons, tip caps) are approximations and carry
 a VERIFY marker indicating they require confirmation in FreeCAD.
 
 References:
-    [1] airframe/freecad/assembly/SerenityAssembly.FCStd — validated
-        positions (pre-bake; placements now identity after R1).
+    [1] airframe/freecad/assembly/SerenityAssembly.FCStd — this script's own
+        output (R1.3+); pre-bake it was the hand-placed source the R1 bake
+        extracted from (see git history for that revision).
     [2] tools/bake_hull_frame.py — canonical bake transforms.
     [3] airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad
     [4] CLAUDE.md — project standards.
@@ -97,7 +125,7 @@ except ModuleNotFoundError as exc:  # not inside FreeCAD's interpreter
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 AIRFRAME = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 STL_DIR = os.path.join(AIRFRAME, "stls")
-OUTPUT = os.path.join(AIRFRAME, "Serenity-Assembled.FCStd")
+OUTPUT = os.path.join(AIRFRAME, "freecad", "assembly", "SerenityAssembly.FCStd")
 
 
 # ---------------------------------------------------------------------------
@@ -289,6 +317,93 @@ def nacelle_rows(side, r_local, t_local):
     ]
 
 
+# Nacelle local-frame Z stations, mm (nacelle_pod_50mm_tandem.scad):
+#   intake Z=0 .. STATOR_SLV_Z_START=90.0 .. AFT_SLV_Z_START=122.5 ..
+#   NOZZLE_RING_Z(=CROWN_Z)=166.25 .. NACELLE_L=185.2 (nozzle exit).
+#   PIVOT_Z is the spar-crank / CG station, inside the sleeve span.
+# Hoisted to module level (was local to assemble()) so nacelle_pivot_hull()
+# can use PIVOT_Z; kept together since they share one source (the SCAD).
+STATOR_SLV_Z_START = 90.0
+AFT_SLV_Z_START = 122.5
+# PIVOT_Z re-derived 2026-07-19 for the Rev T rotating assembly: CG_Z =
+# 111.5 mm.  See nacelle_pod_50mm_tandem.scad header mass breakdown.  The
+# earlier 104.5 mm figure predates the Rev T nozzle changes: deleting the
+# gear train alone left the pivot CG ~unchanged, but doubling the flaps
+# 20→40 mm (CG ~198 mm), making the Ø71 throat+housing a discrete pocket
+# part (~175 mm), and adding the ~19 g steel spar (on the pivot) net-move
+# the CG +7.0 mm aft to 111.5 mm.  The spar crank clamps at this station.
+PIVOT_Z = 111.5  # pivot / spar-crank station = full-assembly nacelle CG
+NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
+
+
+# ---------------------------------------------------------------------------
+# NACELLE TILT CONFIGURATION (R1.3, 2026-08-25)
+#
+# Set each side's tilt angle here. 0 deg = forward/cruise (the stored/baked
+# attitude every nacelle STL and every nacelle_rows() placement below is
+# modelled in). 90 deg = vertical/hover: duct axis vertical, nozzle exit
+# (the local +Z end, NACELLE_L = 185.2 mm) facing hull -Z (down), pushing
+# air down for lift.
+#
+# The rotation SIGN below (TILT_SIGN = -1, i.e. rotate -tilt_deg about hull
+# +X) was reverse-engineered from the pre-R1.3 hand-built
+# airframe/freecad/assembly/SerenityAssembly.FCStd, whose Nacelle_Stbd
+# object carried Placement.Rotation = (axis (-1,0,0), angle 90 deg) — the
+# same rotation as (axis (1,0,0), angle -90 deg). Reproduced here as the
+# STBD default so this script's default output matches that file's own
+# configuration (stbd vertical, port forward) rather than an assumed
+# convention. Confirmed to point the nozzle exit down (not up) via
+# R_BAKE's own local->hull mapping (hull_y = local_z at cruise; a -90 deg
+# rotation about hull +X sends hull_z' = -hull_y = -local_z, so the +Z/exit
+# end ends up at negative hull Z).
+NACELLE_TILT_PORT_DEG = 0.0     # port: forward / cruise
+NACELLE_TILT_STBD_DEG = 90.0    # stbd: vertical / hover
+NACELLE_TILT_DEG = {"port": NACELLE_TILT_PORT_DEG, "stbd": NACELLE_TILT_STBD_DEG}
+TILT_SIGN = -1.0
+
+
+def nacelle_pivot_hull(side):
+    """Hull-frame tilt pivot for `side`: local (0, 0, PIVOT_Z) through the
+    same R_BAKE/T_BAKE composition nacelle_rows() uses for every other
+    nacelle-local point. PIVOT_Z (the spar-crank / nacelle CG station) is
+    defined in the Main assembly section below and read here as a module
+    global set before assemble() runs."""
+    off = _mat3_vec(R_BAKE, (0.0, 0.0, PIVOT_Z))
+    t_bake = T_BAKE[side]
+    return tuple(t_bake[i] + off[i] for i in range(3))
+
+
+def tilt_rotation(side):
+    """FreeCAD Rotation for this side's configured tilt, about hull +X."""
+    return App.Rotation(App.Vector(1.0, 0.0, 0.0), TILT_SIGN * NACELLE_TILT_DEG[side])
+
+
+def tilt_placement(side):
+    """Placement rotating a hull-frame-native (cruise/identity) mesh by this
+    side's configured tilt about its own pivot -- identity when the
+    configured tilt is 0 deg, so untilted sides are visually unchanged."""
+    piv = App.Vector(*nacelle_pivot_hull(side))
+    rot = tilt_rotation(side)
+    base = piv - rot.multVec(piv)
+    return App.Placement(base, rot)
+
+
+def apply_tilt_to_rows(rows, side):
+    """Compose this side's configured tilt (about its own pivot) onto
+    nacelle_rows()'s local->hull-cruise transform, for transform_mesh()
+    callers (the EDF sleeves and nozzle iris -- rigidly attached to the
+    nacelle body, so they must tilt with it as one group)."""
+    flat = [v for row in rows for v in row]
+    base_m = App.Matrix(*flat, 0.0, 0.0, 0.0, 1.0)
+    total = tilt_placement(side).multiply(App.Placement(base_m))
+    tm = total.Matrix
+    return [
+        [tm.A11, tm.A12, tm.A13, tm.A14],
+        [tm.A21, tm.A22, tm.A23, tm.A24],
+        [tm.A31, tm.A32, tm.A33, tm.A34],
+    ]
+
+
 # ---------------------------------------------------------------------------
 # Main assembly
 # ---------------------------------------------------------------------------
@@ -470,11 +585,16 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Nacelle pods ...", flush=True)
 
+    # PL_IDENTITY at 0 deg tilt (tilt_placement() reduces to identity there),
+    # rotated about the per-side pivot by NACELLE_TILT_PORT_DEG/STBD_DEG
+    # otherwise -- see the NACELLE TILT CONFIGURATION block above.
     port_nac = add_mesh(doc, _stl("nacelles/nacelle_port_revs.stl"), "Nacelle_Port")
-    place_mesh(port_nac, PL_IDENTITY)
+    if port_nac is not None:
+        port_nac.Placement = tilt_placement("port")
 
     stbd_nac = add_mesh(doc, _stl("nacelles/nacelle_stbd_revs.stl"), "Nacelle_Stbd")
-    place_mesh(stbd_nac, PL_IDENTITY)
+    if stbd_nac is not None:
+        stbd_nac.Placement = tilt_placement("stbd")
 
     # -------------------------------------------------------------------
     # NACELLE INTERNAL COMPONENTS (gear train, nozzle iris, EDF sleeves)
@@ -493,21 +613,10 @@ def assemble():
         flush=True,
     )
 
-    # Nacelle local-frame Z stations, mm (nacelle_pod_50mm_tandem.scad):
-    #   intake Z=0 .. STATOR_SLV_Z_START=90.0 .. AFT_SLV_Z_START=122.5 ..
-    #   NOZZLE_RING_Z(=CROWN_Z)=166.25 .. NACELLE_L=185.2 (nozzle exit).
-    #   PIVOT_Z is the spar-crank / CG station, inside the sleeve span.
-    STATOR_SLV_Z_START = 90.0
-    AFT_SLV_Z_START = 122.5
-    # PIVOT_Z re-derived 2026-07-19 for the Rev T rotating assembly: CG_Z =
-    # 111.5 mm.  See nacelle_pod_50mm_tandem.scad header mass breakdown.  The
-    # earlier 104.5 mm figure predates the Rev T nozzle changes: deleting the
-    # gear train alone left the pivot CG ~unchanged, but doubling the flaps
-    # 20→40 mm (CG ~198 mm), making the Ø71 throat+housing a discrete pocket
-    # part (~175 mm), and adding the ~19 g steel spar (on the pivot) net-move
-    # the CG +7.0 mm aft to 111.5 mm.  The spar crank clamps at this station.
-    PIVOT_Z = 111.5  # pivot / spar-crank station = full-assembly nacelle CG
-    NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
+    # Nacelle local-frame Z stations -- module-level (STATOR_SLV_Z_START,
+    # AFT_SLV_Z_START, PIVOT_Z, NOZZLE_RING_Z; see their definitions above,
+    # near the NACELLE TILT CONFIGURATION block -- PIVOT_Z is hoisted there
+    # because nacelle_pivot_hull() needs it before assemble() runs).
 
     for side in ("port", "stbd"):
         label = "Port" if side == "port" else "Stbd"
@@ -523,7 +632,10 @@ def assemble():
             f"Nacelle_{label}_Stator_Sleeve",
         )
         transform_mesh(
-            sleeve, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, STATOR_SLV_Z_START))
+            sleeve,
+            apply_tilt_to_rows(
+                nacelle_rows(side, _IDENTITY3, (0.0, 0.0, STATOR_SLV_Z_START)), side
+            ),
         )
 
         # ── EDF2 aft spider sleeve ────────────────────────────────────────
@@ -535,7 +647,10 @@ def assemble():
             f"Nacelle_{label}_Aft_Spider_Sleeve",
         )
         transform_mesh(
-            aft_sleeve, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, AFT_SLV_Z_START))
+            aft_sleeve,
+            apply_tilt_to_rows(
+                nacelle_rows(side, _IDENTITY3, (0.0, 0.0, AFT_SLV_Z_START)), side
+            ),
         )
 
         # ── Nozzle pushrod drive — Rev T (Option B) ───────────────────────
@@ -583,7 +698,10 @@ def assemble():
             f"Nacelle_{label}_Nozzle_Iris",
         )
         transform_mesh(
-            nozzle, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, NOZZLE_RING_Z))
+            nozzle,
+            apply_tilt_to_rows(
+                nacelle_rows(side, _IDENTITY3, (0.0, 0.0, NOZZLE_RING_Z)), side
+            ),
         )
 
         # Tip cap (outboard X-face end cap) — ARCHIVED 2026-06-22, legacy
