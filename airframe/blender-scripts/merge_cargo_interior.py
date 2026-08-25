@@ -127,6 +127,38 @@ import add_structural_features as asf  # noqa: E402
 sys.path.insert(0, CARGO_DIR)
 import generate_cargo_hinge_retention as hinge  # noqa: E402
 
+# Reuse the wing SCAD's own S1223 table parser so this file's camber-midline
+# figures are DERIVED, not hand-copied.  U6 (2026-08-25) root cause: the
+# WING_*_MIDLINE constants below used to be one-time hand-computed snapshots
+# ("midline_frac(45.15/129) * 129, from the wing SCAD") taken against the
+# PRE-U1 S1223 table.  When U1 replaced that table with validated UIUC
+# coordinates the wing's actual camber line moved (up to ~1.3 mm at some
+# stations) but these constants were never refreshed, so the cargo shell's
+# harness entry ports and spar bore were cut ~0.3-1.3 mm off the wing's real
+# conduit centrelines -- tools/wing_root_deconflict.py caught this as
+# "published cargo shell blocks <route>" and "spar bore does not penetrate
+# the bulkhead".  Computing the midline here the same way
+# tools/wing_root_deconflict.py does (via wing_spar_station_fit.surf_y()
+# against the live SCAD table) makes drift like this structurally impossible.
+TOOLS_DIR = os.path.join(REPO_ROOT, "tools")
+sys.path.insert(0, TOOLS_DIR)
+import wing_spar_station_fit as wsf  # noqa: E402
+
+
+def _wing_midline_mm(chord_fraction):
+    """S1223 camber midline (mm, at WING_ROOT_CHORD) at a chord fraction.
+
+    Parsed live from wings_s1223_revo.scad's S1223_UPPER/S1223_LOWER tables,
+    so this file and tools/wing_root_deconflict.py can never disagree about
+    where the wing's own airfoil puts a station -- see note above.
+    """
+    with open(wsf.WING_SCAD, encoding="utf-8") as fh:
+        src = fh.read()
+    upper = wsf.scad_points(src, "S1223_UPPER")
+    lower = wsf.scad_points(src, "S1223_LOWER")
+    mid = (wsf.surf_y(upper, chord_fraction) + wsf.surf_y(lower, chord_fraction)) / 2.0
+    return mid * WING_ROOT_CHORD
+
 MARKER = b"SerenityUAV HULL-FRAME R1"
 
 # Cargo_Shell bake transform — MUST match tools/bake_hull_frame.py COMPONENTS.
@@ -324,8 +356,12 @@ WING_CHORD_LINE_Z = 58.01
 # Only the mortise reads this (the spar and the servo pad are spar-relative), so
 # moving it does not disturb anything else.
 WING_ROOT_Z = WING_CHORD_LINE_Z
-WING_SPAR_MIDLINE = 10.41   # midline_frac(45.15/129) * 129, from the wing SCAD
-WING_SPAR_Z = WING_CHORD_LINE_Z + WING_SPAR_MIDLINE  # = 68.42
+# U6 (2026-08-25): was a hand-copied snapshot (10.41 mm) taken against the
+# pre-U1 S1223 table; now derived live from the SCAD's own table via
+# _wing_midline_mm() so it tracks the corrected airfoil automatically -- see
+# the note above _wing_midline_mm's definition.
+WING_SPAR_MIDLINE = _wing_midline_mm(45.15 / WING_ROOT_CHORD)  # ~= 10.72 (post-U1)
+WING_SPAR_Z = WING_CHORD_LINE_Z + WING_SPAR_MIDLINE  # = 68.42 (pre-U1) / re-derived post-U1
 
 # CARGO-01/CARGO-02 (2026-08-24): the wing's single spar is now an 8 mm OD
 # rotating AISI 4130 tube per side (wings_s1223_revo.scad TILT_SPAR_OD = 8.0,
@@ -441,9 +477,12 @@ ROD_AFT_STBD_OUTB, ROD_AFT_STBD_INB = -278.0, -278.0 + ROD_AFT_EMBED  # -278 / -
 WING_EDF_STATION_FWD = 22.75
 WING_EDF_STATION_AFT = 32.25
 WING_ENC_STATION = 54.0
-WING_EDF_MIDLINE_FWD = 8.685
-WING_EDF_MIDLINE_AFT = 10.088
-WING_ENC_MIDLINE = 9.823
+# U6 (2026-08-25): these three were hand-copied pre-U1 snapshots (8.685,
+# 10.088, 9.823) that drifted up to ~1.3 mm from the corrected S1223 table --
+# same root cause as WING_SPAR_MIDLINE above.  Now derived live.
+WING_EDF_MIDLINE_FWD = _wing_midline_mm(WING_EDF_STATION_FWD / WING_ROOT_CHORD)
+WING_EDF_MIDLINE_AFT = _wing_midline_mm(WING_EDF_STATION_AFT / WING_ROOT_CHORD)
+WING_ENC_MIDLINE = _wing_midline_mm(WING_ENC_STATION / WING_ROOT_CHORD)
 
 WING_EDF_Y_FWD = WING_LE_ROOT_Y + WING_EDF_STATION_FWD   # = +15.75
 WING_EDF_Y_AFT = WING_LE_ROOT_Y + WING_EDF_STATION_AFT   # = +25.25
@@ -795,7 +834,7 @@ def wing_harness_ports():
     ]
 
 
-def spar_bearing_seat_cuts(outb_x, inb_x, label):
+def spar_bearing_seat_cuts(outb_x, inb_x, label, harness_inb=None):
     """CARGO-01/CARGO-02 (2026-08-24): one side's F688ZZ bearing seat +
     rotating-spar clearance bore, coaxial with the spar boss, STOPPING at the
     wall station `inb_x` instead of crossing the bay.  `outb_x` is the
@@ -810,6 +849,22 @@ def spar_bearing_seat_cuts(outb_x, inb_x, label):
       3. rotating-spar clearance (WING_SPAR_BORE_D) for the remainder of the
          boss depth, down to `inb_x` -- the spar's shaft, NOT a through-bore
          to the opposite wall.
+
+    U6 (2026-08-25): a 4th cut, "nav-light wire exit", was added when
+    tools/wing_root_deconflict.py's bulkhead-penetration sweep found 7.4 mm^3
+    of uncut material on the STBD side only, 15-45 mm inboard of `inb_x`.
+    Root cause: the spar's rotating tube physically ends at `inb_x` (the
+    boss's own inboard tip), so cut #3 above stops there too -- but the
+    nav-light 3-core wire that rides inside the spar's hollow ID does NOT
+    stop there.  It has to keep going, loose, to the same deep interior wall
+    the EDF/Hall harness ports were already cut through
+    (`WING_HARNESS_INB_PORT`/`_STBD`, "past the ... encoder-line wall").  On
+    port that wall sits close enough to `inb_x` (-100 -> harness limit -125)
+    that no separate cut was needed by coincidence; on stbd the gap is wider
+    (-240 -> -213) and the wire path was left uncut.  Pass `harness_inb` (the
+    same constant `wing_harness_ports()`/`wing_keepout_negatives()` already
+    use for that side) to extend the wire-clearance bore the rest of the way;
+    omit it to keep the old 3-cut behaviour (there is no other caller).
     Returns a list of (label, solid) tuples, matching the module's convention.
     """
     span = abs(outb_x - inb_x)
@@ -823,7 +878,7 @@ def spar_bearing_seat_cuts(outb_x, inb_x, label):
     x0 = outb_x
     x1 = outb_x + step * ROOT_BRG_FLANGE_T
     x2 = x1 + step * ROOT_BRG_W
-    return [
+    cuts = [
         (f"{label} bearing flange counterbore", x_cylinder(
             WING_SPAR_Y, WING_SPAR_Z, min(x0, x1), max(x0, x1),
             ROOT_BRG_FLANGE_OD / 2.0)),
@@ -834,6 +889,11 @@ def spar_bearing_seat_cuts(outb_x, inb_x, label):
             WING_SPAR_Y, WING_SPAR_Z, min(x2, inb_x), max(x2, inb_x),
             WING_SPAR_BORE_D / 2.0)),
     ]
+    if harness_inb is not None and abs(harness_inb - inb_x) > 0.01:
+        cuts.append((f"{label} nav-light wire exit", x_cylinder(
+            WING_SPAR_Y, WING_SPAR_Z, min(inb_x, harness_inb),
+            max(inb_x, harness_inb), WING_SPAR_BORE_D / 2.0)))
+    return cuts
 
 
 def wing_keepout_negatives():
@@ -841,8 +901,10 @@ def wing_keepout_negatives():
     my0, my1 = WING_MORT_Y - MORT_W / 2, WING_MORT_Y + MORT_W / 2
     mz0, mz1 = WING_ROOT_Z - MORT_H / 2, WING_ROOT_Z + MORT_H / 2
     return [
-        *spar_bearing_seat_cuts(PORT_OUTB, PORT_INB, "port"),
-        *spar_bearing_seat_cuts(STBD_OUTB, STBD_INB, "stbd"),
+        *spar_bearing_seat_cuts(PORT_OUTB, PORT_INB, "port",
+                                 harness_inb=WING_HARNESS_INB_PORT),
+        *spar_bearing_seat_cuts(STBD_OUTB, STBD_INB, "stbd",
+                                 harness_inb=WING_HARNESS_INB_STBD),
         # CARGO-03 (2026-08-24): these used to span PORT_INB+1 .. PORT_OUTB-10
         # (X -99..-70), described as cutting "through each wall".  They did not:
         # at the mortise station the wall lies at X -115..-99, so the cut began

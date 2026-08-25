@@ -170,20 +170,36 @@ THICKNESS_SCALE =   1.0;  // [1.0 = full S1223 t/c; 0.85–1.0 recommended range
 // (gives 1.17 mm).  Measured by tools/wing_spar_station_fit.py; do not
 // hand-tune it.
 //
+// U6 (2026-08-25): 1.45 → 1.56.  The 1.447 figure above was measured against
+// the PRE-U1 S1223 table (a hand-approximated set of coordinates).  U1
+// replaced that table with the validated UIUC S1223 points, which are a
+// genuinely different shape at 48.5 % tip chord — deeper near mid-chord,
+// shallower aft, where this bore sits.  Re-measuring wall-over-spar with
+// tools/wing_internal_clearance.py against the corrected table found the tip
+// wall had dropped to 0.82 mm (below the 1.16 mm floor) at the old 1.45
+// scale.  1.5505 is the new exact figure (verified: `Section(chord_tip,
+// t_scale).depth(SPAR_BORE_STATION)/2 - SPAR_BORE_OD/2 == 1.16` at that
+// scale); 1.56 is used for the same "not sitting on its own limit" margin
+// (gives 1.19 mm).  Root is unaffected (unchanged THICKNESS_SCALE, 2.46 mm
+// wall there) -- this is purely a tip-airfoil-correction consequence.
+//
 // This is now a THICKNESS-only multiplier in fact as well as in name — see
 // s1223_section() below.  It no longer stretches the camber line, so the tip
-// keeps S1223's canonical 8.12 % camber instead of being driven to 11.75 %.
-// Tip t/c rises 13.45 % → 19.47 % (thickness only).
+// keeps S1223's canonical camber instead of being driven up.
+// Tip t/c is now ≈ 11.5 % at 1.56 (thickness only) -- see U6 note above;
+// the "13.45 % → 19.47 %" figure below predates the U1 airfoil correction and
+// is stale (kept in the historical record, not restated as current).
 //
 // CANON NOTE: this is an outer-mold-line change local to the wingtip; verify
 // against the canonical Serenity wing silhouette before committing to print
-// (see TODO.md §1.1.2).  Lower the value only if the bore stays skinned.
+// (see TODO.md §1.1.2, U8 canon-check). Lower the value only if the bore
+// stays skinned per tools/wing_internal_clearance.py.
 // UNVERIFIED BY CFD: the OpenFOAM study intended to quantify the drag penalty
-// of a 19.5 % t/c tip at Re ≈ 2.1e5 is blocked on mesh generation
+// of the thicker tip at Re ≈ 2.1e5 is blocked on mesh generation
 // (tools/wing_cfd_openfoam.py, WIP).  The camber-preservation argument does
 // not depend on it, but the absolute penalty of the thicker tip is not yet
 // quantified.
-THICKNESS_SCALE_TIP = 1.45;  // [tip thickness multiplier; root stays THICKNESS_SCALE]
+THICKNESS_SCALE_TIP = 1.56;  // [tip thickness multiplier; root stays THICKNESS_SCALE]
 
 // ── Rotating tilt-spar bore (Rev R2 — unified 8 mm rotating spar) ────────────
 // UNIFIED ROTATING SPAR (2026-07-18): the wing's single spar is now the 8 mm

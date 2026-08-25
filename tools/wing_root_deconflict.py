@@ -92,6 +92,18 @@ HORN_SWING_R = 22.0
 
 WING_CHORD_LINE_Z = 58.01       # hull Z of the wing chord line at the root
 GAP_BUDGET = 3.0                # mm, minimum acceptable edge-to-edge clearance
+
+# U6 (2026-08-25): boolean/mesh noise tolerance for intersection-volume tests.
+# The published shell round-trips through a float32 binary STL (repair_exported
+# in merge_cargo_interior.py), so a coincident boolean seam that is genuinely
+# open can still report a sub-1e-5 mm^3 sliver on reload -- observed directly
+# on the spar-bore route check post-U6-rebake (port 1.4e-06, stbd 1.0e-05
+# mm^3).  `check_bulkhead_penetration()` already carries this exact tolerance
+# (1.0 mm^3, "far below the ~1700 mm^3 an uncut wall leaves, and far above the
+# noise"); `check_routes()`'s old bare `> 1e-6` had no such margin and flagged
+# those slivers as BLOCKED.  One constant for both keeps them from disagreeing
+# on what counts as noise.
+BOOL_NOISE_TOL = 1.0            # mm^3, see note above
 X_CL = -169.9                   # cargo centreline
 PAYLOAD_W = 101.6               # mission payload width, CARGO-01
 
@@ -477,7 +489,8 @@ def penetration_check(shell_man, findings):
     # Boolean noise on a ~900 k-face shell leaves sub-mm^3 slivers in a corridor
     # that is genuinely open, so a hard zero is the wrong test.  1 mm^3 is far
     # below the ~1700 mm^3 an uncut 2 mm wall leaves, and far above the noise.
-    open_tol = 1.0
+    # Same constant check_routes() uses, so the two checks can't disagree.
+    open_tol = BOOL_NOISE_TOL
     for label, (cx0, cx1), corridor in cases:
         left = volume_of(to_man(corridor) ^ shell_man)
         verdict = "THROUGH" if left <= open_tol else "BLIND -- wall not cut"
@@ -550,7 +563,7 @@ def check_routes(side, findings, shell_man):
             if olabel == "rotating spar tube" and rlabel.startswith("spar bore"):
                 continue          # the spar is supposed to be in its own bore
             inter = volume_of(rman ^ oman)
-            if inter > 1e-6:
+            if inter > BOOL_NOISE_TOL:
                 verdict = "BLOCKED"
                 findings.append((side, f"{olabel} blocks {rlabel}", inter))
             else:
