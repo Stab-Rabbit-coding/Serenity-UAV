@@ -199,11 +199,14 @@ the lowest.
         conflict; at the old 30 % station the boss fouled the fore flange at
         every setting. Re-verify with that tool after any spar move.
 
-        **STALE as of 2026-08-24 (U5/KTD1) — see LG-25.** The "no proud
-        material at all" result above was against the pre-U5 wing, which had
-        no fwd/aft tie-rod bosses. Adding `ROD_FWD_BOSS_OD`/`ROD_AFT_BOSS_OD`
-        (U5, the two-rod wing-root couple) reopened proud material at the fore
-        bay corners — tracked, not silently re-closed, at **LG-25** below.
+        **STALE as of 2026-08-24 (U5/KTD1), RE-CLOSED 2026-08-25 (LG-25).**
+        The "no proud material at all" result above was against the pre-U5
+        wing, which had no fwd/aft tie-rod bosses. Adding
+        `ROD_FWD_BOSS_OD`/`ROD_AFT_BOSS_OD` (U5, the two-rod wing-root
+        couple) reopened proud material at the fore bay corners — tracked,
+        not silently re-closed, at **LG-25** below, and closed there by a
+        local boss relief (`ROD_FWD_BOSS_OD_RELIEF`). "No proud material at
+        all" is accurate again as of that fix.
     - [x] **LG-10.5 — DONE 2026-08-17.** Cargo merge re-run against the
         LG-10.4 wing keep-outs and the Rev S1b spar, and published to
         `cargo_sect_shell24_2mm_repaired.stl`: 908,106 faces, 1 body,
@@ -437,12 +440,12 @@ the lowest.
 - [ ] **LG-19 Styling refinement vs REF-CAD-002** (slimmer telescope collars,
     piston detail, bay recess depth) — cosmetic only, no structural change.
 
-- [ ] **LG-25 — fwd wing-root tie-rod boss stands proud of the fore bay's
-    flange rebate; carried forward, NOT print-blocking today.** *(found
+- [x] **LG-25 — fwd wing-root tie-rod boss stands proud of the fore bay's
+    flange rebate. CLOSED 2026-08-25 (owner-selected option 1).** *(found
     2026-08-25, U8 closeout of `docs/plans/2026-08-24-001-fix-wing-repair-
     root-joint-plan.md`, while re-running
     `tools/landing_gear_wing_clearance.py --proud` against the final U5–U7
-    geometry.)* Re-opens the "no proud material at all" claim closed under
+    geometry.)* Re-opened the "no proud material at all" claim closed under
     **LG-10.4** — see the stale-claim note there.
 
     **Root cause.** U5/KTD1 added the forward wing-root tie-rod's fuselage-
@@ -486,17 +489,15 @@ the lowest.
     shim-able manufacturing tolerance, it is a design conflict between the
     U5 rod boss and the LG-10.6 flange-rebate/seat-collar scheme.
 
-    **Candidate resolutions, not yet selected (owner decision, since it
-    trades against either the tie-rod couple's structural margin or the
-    fore bay's bolt pattern):**
+    **Candidate resolutions tabled, retained for the record (owner selected
+    option 1):**
     1. **Locally relieve `ROD_FWD_BOSS_OD`** over just the u/v patch the
         rebate needs (a stepped or tapered boss, full 17.9 mm OD outside the
         fore-bay footprint, reduced within it). Feasible on margin: the fwd
         rod's bearing check (`wing_spar_carrythrough.py`, this unit's
         verification sweep) runs at **FOS 5.26 against the 5 MPa target of
         4.0**, so there is headroom to shave the boss locally without
-        reopening that gate — but the taper geometry itself is unmodelled
-        and would need its own manifold/clearance re-verification.
+        reopening that gate.
     2. **Move the fore bay's flange rebate outboard of the boss** by
         re-siting `BAY_STANDOFF['fore']` (currently 4.91 mm, LG-10.6) —
         constrained by the same yawed panel-normal geometry LG-10.3/LG-10.6
@@ -507,12 +508,52 @@ the lowest.
         change, not just a pocket change, so it is a fore-bay redesign, not
         a tweak.
 
-    None of these is implemented here — this finding is logged and carried
-    forward per this repo's stale-item rule (never leave a defect found and
-    then silently reopen the item it lives under without a note), not
-    resolved unilaterally, matching how LG-10.3/LG-10.6 handled the earlier
-    yaw/datum conflicts in this same bay family. **Do not print the fore
-    landing-gear bay frame until this is closed.**
+    **Implemented (option 1), `airframe/blender-scripts/merge_cargo_interior.py`
+    `ROD_FWD_BOSS_OD_RELIEF`/`ROD_FWD_BOSS_RELIEF_LEN`.** A stepped, not
+    tapered, boss (a plain boolean union of two coaxial cylinders — a taper
+    would need a manifold-safe cone-frustum join this repo has no existing
+    helper for): full 17.9 mm OD along most of the fwd rod's 41 mm
+    fuselage-side embed, stepped down to a reduced OD for the last 25 mm
+    nearest the *_INB end of each side's boss.
+
+    **The overlap sits at the *_INB end, not *_OUTB (the wall-facing end) as
+    the bay's canted plate frame might suggest at a glance** — measured
+    directly (boolean intersection of the unrelieved boss against the bay's
+    own rebate volume, both corners), it is at hull X [−98.7‥−77.1] (port) /
+    [−259.5‥−237.9] (stbd), against `ROD_FWD_PORT_INB`/`ROD_FWD_STBD_INB`
+    (−100 / −237), not `_OUTB` (−60 / −278).
+
+    **The reduced OD needed was found empirically, not derived in closed
+    form** (the interference lives in the bay's own canted plate frame, not
+    this file's hull frame, and the relationship between OD and the tool's
+    reported "proud depth" was not monotonic in the way a first guess
+    suggests):
+
+    | `ROD_FWD_BOSS_OD_RELIEF` | Worst proud depth | Worst volume |
+    | --- | --- | --- |
+    | 17.9 mm (unrelieved) | 12.000 mm | 1 909.15 mm³ |
+    | 12.0 mm | 12.000 mm (same depth, less volume) | 718.28 mm³ |
+    | **10.6 mm (selected)** | **cleared — "none: the rebate shaves the whole footprint"** | **0 mm³** |
+
+    A partial reduction (12.0 mm) cut the interference *volume* by over half
+    but left the same 12.0 mm *depth* reading — the rod's own bore has to
+    run continuously through this station, so a boss that still reaches the
+    rebate's full depth anywhere along its centerline keeps reporting that
+    depth regardless of radius, until the OD shrinks enough that the whole
+    cross-section clears the footprint. 10.6 mm does: radial margin over the
+    8.2 mm bore drops from 4.85 mm (spar-boss convention) to 1.2 mm — thinner,
+    but at this repo's own cited 1.16 mm minimum-wall figure (Rev R1a) plus a
+    hair of margin, and only over the 25 mm relieved length, not the rod's
+    full structural embed.
+
+    **Re-verified 2026-08-25, final geometry:** `tools/landing_gear_wing_
+    clearance.py --proud` reports zero proud material at both fore corners;
+    all 4 named CLEAR checks still pass; `tools/wing_root_deconflict.py` and
+    `tools/wing_spar_carrythrough.py` (fwd rod FOS unaffected — the bearing
+    check uses the rod's own diameter/embed, not the boss OD) both re-run
+    clean; `tools/validate_stls.py` passes on the re-merged shell. The fore
+    landing-gear bay frame is no longer blocked from printing on this
+    finding.
 
 **Remaining parts needing SCAD source creation then STL export:**
 

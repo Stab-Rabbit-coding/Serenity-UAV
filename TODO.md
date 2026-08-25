@@ -262,7 +262,6 @@ numeric order.)*
 - [ ] LG-14 Instrumented drop test (load cell + high-speed video) at…
 - [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
 - [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
-- [ ] LG-25 Fore bay frame vs U5 tie-rod boss: 12mm proud, no fix chosen
 - [ ] Reconcile the remaining-parts list
 - [ ] Combine all airframe STLs
 - [ ] Render overview SVGs using FreeCAD TechDraw

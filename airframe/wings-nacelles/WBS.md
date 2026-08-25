@@ -155,7 +155,7 @@
     | `tools/cargo_bay_envelope.py` | PASS — 4×3×3 in payload fits |
     | `tools/wing_spar_carrythrough.py` | fore FOS 8.5, aft FOS 8.7 (unchanged from the analysis above) |
     | `tools/wing_root_deconflict.py` | CLEAR |
-    | `tools/landing_gear_wing_clearance.py --proud` | CLEAR (4/4); LG-25 proud-material finding still open, tracked separately |
+    | `tools/landing_gear_wing_clearance.py --proud` | CLEAR (4/4); LG-25 proud-material finding closed (`airframe/landing-gear/WBS.md`) |
 
     `docs/TILT_SPAR_ANALYSIS.md` §1/§3.2 and `docs/structural_analysis.md` §5
     updated to point at the two-thwart closure instead of the single Y+30
@@ -756,14 +756,16 @@
     | `tools/wing_spar_carrythrough.py` | fwd rod FOS 5.26, aft rod FOS 4.14 (both ≥ 4.0 target); thwart FOS 8.5/8.7 |
     | `tools/cargo_bay_envelope.py` | PASS — 101.6×76.2×76.2 mm payload fits (170.6×106.0×150.7 mm measured bay) |
     | servo pad/body/horn deconfliction | CLEAR (folded into `wing_root_deconflict.py` — no standalone `nacelle_servo_deconflict.py` exists in this repo; WBS.md's own prose elsewhere already notes the servo PAD probe living there) |
-    | `tools/landing_gear_wing_clearance.py --proud` | CLEAR, 4/4 named checks; proud-material diagnostic finds 12.0 mm at the fore bay corners (U5's new tie-rod boss) — tracked as **LG-25** (`airframe/landing-gear/WBS.md`), not blocking this closeout, not silently re-closed |
+    | `tools/landing_gear_wing_clearance.py --proud` | CLEAR, 4/4 named checks, zero proud material — see **LG-25** (`airframe/landing-gear/WBS.md`) |
     | `tools/validate_stls.py` | 62/62 PASS, all watertight |
 
     All gates PASS/CLEAR against the final, published, re-merged geometry
     (not against source scripts alone, per this unit's own verification
-    contract). LG-25 is a genuine open finding from this sweep, not a
-    regression hidden by it — see that WBS.md entry for the candidate
-    resolutions, none yet selected.
+    contract). The `--proud` diagnostic first found 12.0 mm of proud material
+    at the fore bay corners (U5's new tie-rod boss standing into the LG bay's
+    flange rebate footprint) — tracked and closed as **LG-25** in the same
+    session, via a local boss relief (`ROD_FWD_BOSS_OD_RELIEF`), not silently
+    re-closed without a note.
 
 
 ## §1.1.3 — Nacelles

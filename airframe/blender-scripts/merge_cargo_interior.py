@@ -428,6 +428,40 @@ ROD_FWD_BOSS_OD = 17.9      # [mm] bore + 2 x 4.85 mm radial margin (spar-boss c
 # is already 5.26 at 40 mm, so the extra mm only helps.
 ROD_FWD_EMBED = 41.0        # [mm] fuselage-side embed depth
 
+# LG-25 (2026-08-25, airframe/landing-gear/WBS.md, option 1 selected by
+# owner): the fwd boss at full 17.9 mm OD stands up to 12.0 mm proud of the
+# fore landing-gear bay's flange-rebate pocket (5 mm deep) at both fore
+# corners -- lg_bay_features() protects this boss from the bay's own cuts
+# (LG-10.4), so the boss itself must relieve locally instead. Stepped, not
+# tapered (a taper needs a manifold-safe cone-frustum join this repo has no
+# existing helper for; a step is a plain trimesh boolean union, same pattern
+# as every other keep-out here).
+#
+# The overlap is NOT near the boss's wall-facing (OUTB) end as the bay's
+# canted plate frame might suggest at a glance -- measured directly (boolean
+# intersection of the unrelieved boss against the bay's own rebate volume,
+# both corners), the actual overlap sits at hull X [-98.7..-77.1] (port) /
+# [-259.5..-237.9] (stbd), i.e. against the *_INB end of each boss (X -100 /
+# -237), not *_OUTB (-60 / -278). Relieve there instead: full 17.9 mm OD for
+# most of the embed, stepped down to `ROD_FWD_BOSS_OD_RELIEF` for the last
+# `ROD_FWD_BOSS_RELIEF_LEN` mm nearest the INB end (25 mm covers the
+# measured ~21.6 mm overlap depth with margin).
+# Radial margin over the 8.2 mm bore drops from 4.85 mm to 1.2 mm there --
+# thinner than the spar-boss convention, right at this repo's cited 1.16 mm
+# minimum-wall figure (Rev R1a) plus a hair of margin, and only over a short
+# local length, not along the rod's full structural embed. Value tuned
+# empirically against `tools/landing_gear_wing_clearance.py --proud` (12.0
+# mm proud/1632-1909 mm^3 at 17.9 mm OD -> still 12.0 mm/691-718 mm^3 at
+# 12.0 mm OD -> fully clear, "none -- the rebate shaves the whole footprint",
+# at 10.6 mm OD) -- not derived in closed form, because the interference is
+# measured in the bay's own canted plate frame, not this file's hull frame,
+# and the reported "proud depth" turned out to depend on OD in a way that
+# wasn't obvious from the plate-frame geometry alone (a partial reduction
+# left the same 12.0 mm depth reading with much less volume; only the full
+# reduction to 10.6 mm actually cleared the check).
+ROD_FWD_BOSS_OD_RELIEF = 10.6    # [mm] stepped-down OD at the relieved end
+ROD_FWD_BOSS_RELIEF_LEN = 25.0   # [mm] length of the relief, from the INB face
+
 ROD_AFT_STATION = 62.0    # [mm] chordwise station aft of LE (wings_s1223_revo.scad ROD_AFT_STATION)
 ROD_AFT_MIDLINE = 11.182  # [mm] S1223 camber midline at 62.0 mm, root chord
 ROD_AFT_Y = WING_LE_ROOT_Y + ROD_AFT_STATION       # = +55.00
@@ -757,6 +791,23 @@ LG_BAY_ENABLED = True
 # edge by 7.7-14.5 mm^3, which is accepted and recorded here.
 
 
+def _stepped_x_cylinder(y_cen, z_cen, x_far, x_near, od_full, od_relief,
+                        relief_len):
+    """Boss stepped down to `od_relief` for `relief_len` mm nearest x_near
+    (the end to relieve), full `od_full` for the rest (LG-25, see
+    ROD_FWD_BOSS_OD_RELIEF above). Booleans the two segments into one
+    manifold rather than concatenating them raw -- to_man() requires a
+    genuinely manifold input, and two abutting cylinders are not that until
+    unioned."""
+    direction = 1.0 if x_far > x_near else -1.0
+    x_step = x_near + direction * relief_len
+    lo, hi = sorted([x_far, x_step])
+    full = x_cylinder(y_cen, z_cen, lo, hi, od_full / 2.0)
+    lo2, hi2 = sorted([x_step, x_near])
+    relief = x_cylinder(y_cen, z_cen, lo2, hi2, od_relief / 2.0)
+    return from_man(to_man(full) + to_man(relief))
+
+
 def wing_keepout_positives(envelope_tm=None):
     """Wing material the gear bay's cuts must not remove.  (label, solid).
 
@@ -784,12 +835,17 @@ def wing_keepout_positives(envelope_tm=None):
             NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2)),
         # U5/KTD1 (2026-08-24): wing-root tie-rod bosses, mirroring the spar
         # boss's own embed-boss pattern exactly.
-        ("rod fwd boss port", x_cylinder(
-            ROD_FWD_Y, ROD_FWD_Z, ROD_FWD_PORT_INB, ROD_FWD_PORT_OUTB,
-            ROD_FWD_BOSS_OD / 2.0)),
-        ("rod fwd boss stbd", x_cylinder(
+        # LG-25 (owner-selected option 1): stepped down near the INB end,
+        # where the fore landing-gear bay's flange rebate footprint left the
+        # boss standing up to 12.0 mm proud (measured overlap, see the
+        # ROD_FWD_BOSS_OD_RELIEF comment above -- NOT the OUTB/wall-facing
+        # end intuition would suggest).
+        ("rod fwd boss port", _stepped_x_cylinder(
+            ROD_FWD_Y, ROD_FWD_Z, ROD_FWD_PORT_OUTB, ROD_FWD_PORT_INB,
+            ROD_FWD_BOSS_OD, ROD_FWD_BOSS_OD_RELIEF, ROD_FWD_BOSS_RELIEF_LEN)),
+        ("rod fwd boss stbd", _stepped_x_cylinder(
             ROD_FWD_Y, ROD_FWD_Z, ROD_FWD_STBD_OUTB, ROD_FWD_STBD_INB,
-            ROD_FWD_BOSS_OD / 2.0)),
+            ROD_FWD_BOSS_OD, ROD_FWD_BOSS_OD_RELIEF, ROD_FWD_BOSS_RELIEF_LEN)),
         ("rod aft boss port", x_cylinder(
             ROD_AFT_Y, ROD_AFT_Z, ROD_AFT_PORT_INB, ROD_AFT_PORT_OUTB,
             ROD_AFT_BOSS_OD / 2.0)),
