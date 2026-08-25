@@ -412,6 +412,53 @@
     the table; < 15 MPa → second spar at 14 mm.**  Re-run
     `tools/wing_spar_carrythrough.py` either way.
 
+    **BUILT 2026-08-24, U5/KTD1: two-rod system, not a single rod vs. the
+    tenon.** A feasibility pass against the corrected S1223 geometry (WING-01
+    fix) found a matching Ø8.2 mm AFT rod does not fit anywhere aft of the
+    main spar (spar bore aft edge 49.30 mm and the Hall conduit's fixed
+    52.25..55.75 mm span leave no room); a smaller **Ø6.2 mm aft rod** fits
+    **root-only** at **62.0 mm from LE** (picked within the 60..62 mm feasible
+    band for maximum clearance margin to the Hall conduit's trailing edge —
+    `tools/wing_spar_station_fit.py`), with the forward Ø8.2 mm rod unchanged
+    at 14.0 mm. Both rods are root-only embeds (not full-span like the main
+    spar — a root-reacting tie rod has no structural reason to reach the
+    tip).
+
+    The couple-force split is **not** the single-rod `F = M / separation from
+    spar` method above: with two dedicated rods and no third reaction (the
+    main spar rides in a rotating CLEARANCE bore at the wing root and reacts
+    no moment about this axis), pure statics for two pin reactions gives
+    **equal-magnitude forces**, `F = M / (rod-to-rod separation)`, independent
+    of the spar's position — `tools/wing_spar_carrythrough.py
+    report_two_rod_couple()`:
+
+    | Rod | Station | D (nominal) | Embed | F (ultimate) | Bearing | FOS vs 5 MPa |
+    | --- | --- | --- | --- | --- | --- | --- |
+    | fwd | 14.0 mm | 8 mm | 40 mm | 304.3 N | 0.951 MPa | **5.26** |
+    | aft | 62.0 mm | 6 mm | 42 mm | 304.3 N | 1.207 MPa | **4.14** |
+
+    (48.00 mm rod-to-rod separation; ultimate root moment 14.60 N·m unchanged
+    from the table above.) Both clear the §3 FOS 4.0 target against the
+    existing 5 MPa bond-limited CF-PETG allowable — the aft rod needed its
+    embed bumped from the WBS-convention 40 mm to 42 mm to clear (at 40 mm,
+    FOS is 3.945, just under target).  No new coupon data required.
+
+    **The tenon is traded out of the load path entirely** (not merely
+    "restored" pending a coupon result, as the single-rod branch above
+    described) — `fuselage_root_tab()` is now a pure locating/index feature,
+    gated behind `TENON_LOAD_PATH = "two_rod"` in
+    `wings_s1223_revo.scad` (default); the enlarged-tenon sizing above stays
+    documented and buildable under `TENON_LOAD_PATH = "enlarged_tenon"` if a
+    future coupon clears ≥ 15 MPa. Geometry: `wings_s1223_revo.scad`
+    (`ROD_FWD_*`/`ROD_AFT_*`, `wing_root_tie_rod_fwd_bore()`/
+    `_aft_bore()`), `merge_cargo_interior.py` (`ROD_FWD_*`/`ROD_AFT_*`
+    wall bosses, mirroring the `PORT_INB`/`PORT_OUTB` main-spar-boss embed
+    pattern — the forward boss's fuselage-side embed is 41 mm, not 40, to
+    avoid an exact end-cap coincidence with the main spar boss that produced
+    a non-manifold seam in the merged shell). CARGO-03c is CLOSED under this
+    branch; the coupon test remains open only to *enable* the
+    `enlarged_tenon` alternative, not to close this one.
+
 - [x] **CARGO-04 — the aft EDF ESC conduit is blocked, and the Hall conduit runs
     inside the rotating spar. CLOSED 2026-08-24.** *(found 2026-08-23 with CARGO-03; same tool)*
     **BLOCKS the nacelle ESC harness and the tilt-encoder harness.**

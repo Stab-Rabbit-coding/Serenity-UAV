@@ -63,6 +63,7 @@ License: CC BY-SA 4.0 - creativecommons.org/licenses/by-sa/4.0
 """
 
 import os
+import re
 import sys
 
 import numpy as np
@@ -195,12 +196,21 @@ def tenon_params():
     LINE), Z = spanwise.  `fuselage_root_tab()` centres the tenon at 50 % root
     chord and at local Y = 0 -- i.e. on the chord line, NOT on `WING_ROOT_Z`.
     That distinction is the whole point of the fit check below.
+
+    U5/KTD1 (2026-08-24): `WING_ROOT_TAB_W/H/L` are now a
+    `TENON_LOAD_PATH`-conditional expression in the SCAD (locating-only under
+    the default "two_rod" path, the original structural size under
+    "enlarged_tenon"), not a plain literal `wsf.scad_scalar()` can parse.
+    Read whichever branch's `_LOCATING`/`_ENLARGED` constants are actually
+    active instead.
     """
     with open(wsf.WING_SCAD, encoding="utf-8") as fh:
         src = fh.read()
-    return (wsf.scad_scalar(src, "WING_ROOT_TAB_W"),      # chordwise -> hull Y
-            wsf.scad_scalar(src, "WING_ROOT_TAB_H"),      # thickness -> hull Z
-            wsf.scad_scalar(src, "WING_ROOT_TAB_L"))      # insertion -> hull X
+    m = re.search(r'^TENON_LOAD_PATH\s*=\s*"([^"]+)"\s*;', src, re.M)
+    suffix = "_LOCATING" if (m and m.group(1) == "two_rod") else "_ENLARGED"
+    return (wsf.scad_scalar(src, "WING_ROOT_TAB_W" + suffix),  # chordwise -> hull Y
+            wsf.scad_scalar(src, "WING_ROOT_TAB_H" + suffix),  # thickness -> hull Z
+            wsf.scad_scalar(src, "WING_ROOT_TAB_L" + suffix))  # insertion -> hull X
 
 
 def tenon(side):

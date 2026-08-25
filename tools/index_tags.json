@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-24",
+  "generated": "2026-08-25",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -684,7 +684,7 @@
       "archived": false
     },
     "airframe/blender-scripts/merge_cargo_interior.py": {
-      "description": "Python script",
+      "description": "merge_cargo_interior.py \u2014 Rev R1 (2026-06-30)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -9426,7 +9426,7 @@
       "archived": false
     },
     "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (168 items)",
+      "description": "Bill of materials, CSV (170 items)",
       "tags": [
         "bom",
         "specification"
@@ -12760,7 +12760,8 @@
     "tools/wing_spar_carrythrough.py": {
       "description": "Does the rotating wing spar have to span the fuselage? First-principles check.",
       "tags": [
-        "build-tooling"
+        "build-tooling",
+        "security"
       ],
       "archived": false
     },
@@ -13297,7 +13298,8 @@
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
       "tools/wing_internal_clearance.py",
-      "tools/wing_root_deconflict.py"
+      "tools/wing_root_deconflict.py",
+      "tools/wing_spar_carrythrough.py"
     ],
     "licensing": [
       "LICENSE",

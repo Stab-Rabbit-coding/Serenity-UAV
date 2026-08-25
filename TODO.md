@@ -88,7 +88,10 @@ numeric order.)*
 
 - [ ] ★ CARGO-01 payload won't fit past the wing spar (BLOCKER)
 - [ ] CARGO-02 shell bores Ø12.3 for a spar the wing retired (8.3)
-- [ ] ★ CARGO-03c coupon-test CF-PETG: >=15MPa tenon, else 2nd spar
+- [ ] CARGO-03c follow-up: coupon-test CF-PETG fusion/bearing (>=15MPa unlocks
+      the `enlarged_tenon` alternative) — the default two-rod tie-rod couple
+      is BUILT and does not block on this (`airframe/fuselage-mid/WBS.md`
+      §1.1.1.2 CARGO-03c, 2026-08-24)
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
 - [ ] Cargo gondola shell

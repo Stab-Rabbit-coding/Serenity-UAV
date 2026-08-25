@@ -191,19 +191,21 @@ def report_couple(geom, limit, ultimate):
 
 
 def report_root_joint(geom, limit, ultimate):
-    """Split the wing-root reaction between the tenon and the spar bearing.
+    """Wing-root joint: two-rod couple (U5/KTD1 default) or enlarged tenon.
 
     Owner, 2026-08-23: "that mortise/tenon joint provides part of the structural
-    joint at the wing root, since the wings don't rotate with the nacelles."  That
-    is a load-path statement, and it contradicts `fuselage_root_tab()`'s own
-    comment ("The tab provides radial restraint; the CF spar carries spanwise
-    load") -- with SPAR-01 the spar no longer carries through, so spanwise load
-    terminates at the wall and the tenon is part of how it gets there.
-
-    The wing is supported at two points: the root tenon and the wingtip bearing on
-    the spar.  Whatever the spar hands the wing at the tip, the tenon reacts at the
-    root, and the spar's own fuselage-side bearing pushes back the other way.  The
-    two are a couple, not a shared load.
+    joint at the wing root, since the wings don't rotate with the nacelles."
+    That started the CARGO-03c investigation, which found the tenon
+    under-strength as a structural joint (FOS 0.49 against the repo's only
+    CF-PETG figure) and, per the owner's <15 MPa decision rule, routed the
+    load to bonded CF rods instead.  A further 2026-08-24 refinement found a
+    single rod insufficient (an aft rod matching the forward rod's diameter
+    does not fit anywhere) and settled on a TWO-ROD couple, asymmetric
+    diameter, with the tenon traded OUT of the load path entirely and
+    restored to its original locating-only role.  This function now reports
+    that two-rod couple under `TENON_LOAD_PATH = "two_rod"` (the wing SCAD's
+    default), and falls back to the superseded single-tenon sizing sweep
+    under `"enlarged_tenon"` so that alternate path stays reportable too.
     """
     import re
     wing_scad = os.path.join(REPO_ROOT, "airframe", "openscad", "wings",
@@ -215,55 +217,158 @@ def report_root_joint(geom, limit, ultimate):
         m = re.search(rf"^{name}\s*=\s*(-?[\d.]+)\s*;", src, re.M)
         return float(m.group(1))
 
-    tab_w, tab_h, tab_l = (scad("WING_ROOT_TAB_W"), scad("WING_ROOT_TAB_H"),
-                           scad("WING_ROOT_TAB_L"))
+    def scad_str(name):
+        m = re.search(rf'^{name}\s*=\s*"([^"]+)"\s*;', src, re.M)
+        return m.group(1)
+
+    load_path = scad_str("TENON_LOAD_PATH")
     arm = geom["wing_tip_x"] - geom["wall_x"]        # tip bearing -> root face
 
-    print("\nWing root joint -- how the reaction splits (per side)")
-    print(f"  tenon {tab_w:.0f} (Y) x {tab_h:.0f} (Z) x {tab_l:.0f} (insertion) mm"
-          f"   [all three still marked VERIFY in the wing SCAD]")
+    print("\nWing root joint (per side)")
+    print(f"  TENON_LOAD_PATH = \"{load_path}\"")
     print(f"  tip bearing to root face  {arm:6.1f} mm")
-    print(f"\n{'case':>10s} {'R_tip N':>9s} {'tenon V N':>10s} "
-          f"{'tenon M N.m':>12s} {'bearing MPa':>12s} {'FOS vs 5':>9s}")
+    print(f"\n{'case':>10s} {'R_tip N':>9s} {'root M N.m':>11s}")
     for tag, f in (("limit", limit), ("ultimate", ultimate)):
-        r_tip, r_fus, _m, _s = spar_case(f, geom)
-        m_tenon = r_tip * arm / 1000.0
-        # Moment reacted as a couple on the tenon's top/bottom faces over the
-        # insertion depth; effective arm taken as 2/3 of the depth (triangular
-        # bearing distribution), bearing area = width x half the depth.
-        couple_arm = (2.0 / 3.0) * tab_l / 1000.0
-        f_bear = m_tenon / couple_arm
-        area = tab_w * (tab_l / 2.0)                 # mm^2
-        sigma = f_bear / area
-        print(f"{tag:>10s} {r_tip:9.1f} {r_tip:10.1f} {m_tenon:12.2f} "
-              f"{sigma:12.2f} {5.0 / sigma:9.2f}")
+        r_tip, _rf, _m, _s = spar_case(f, geom)
+        m_root = r_tip * arm / 1000.0
+        print(f"{tag:>10s} {r_tip:9.1f} {m_root:11.2f}")
 
-    print("\n  The 5 MPa column is the repository's own BOND-limited CF-PETG/epoxy")
-    print("  allowable (structural_analysis.md SS7.3).  A CF-PETG **bearing**")
-    print("  allowable is NOT established anywhere in this repository, and bearing")
-    print("  is the mode that governs a tenon in a slot -- so treat the FOS column")
-    print("  as an order-of-magnitude screen, not a margin.  structural_analysis.md")
-    print("  SS3 sets the joint FOS target at 4.0 (design-team judgment; no published")
-    print("  FDM knockdown standard exists for CF-PETG).")
+    r_tip_ult, _rf, _m, _s = spar_case(ultimate, geom)
+    m_ult = r_tip_ult * arm / 1000.0                  # N.m, ultimate root moment
 
-    # Invert the sizing so the answer does not depend on inventing an allowable:
-    # bearing stress falls as 1/depth^2 (the couple arm and the bearing area both
-    # grow with depth), so the depth needed for FOS 4.0 follows from whatever
-    # allowable the coupon test eventually returns.
-    r_tip, _rf, _m, _s = spar_case(ultimate, geom)
-    sigma_ult = (r_tip * arm / 1000.0) / ((2.0 / 3.0) * tab_l / 1000.0) \
-        / (tab_w * tab_l / 2.0)
-    need = 4.0 * sigma_ult
+    if load_path == "two_rod":
+        report_two_rod_couple(src, m_ult)
+        return
+
+    report_enlarged_tenon(src, scad, m_ult)
+
+
+def report_two_rod_couple(src, m_ult):
+    """U5/KTD1 default: two bonded CF rods react the root moment as a couple.
+
+    Each rod is idealised as a simple bonded PIN -- shear-transferring only,
+    no moment restraint credited (conservative; the bond's rotational
+    stiffness at the wing root is not characterised).  The main spar bearing
+    does NOT participate in this reaction: the wing rides on a rotating
+    CLEARANCE bore around the tilt spar there (wing_tip_spar_through_bore()/
+    the fuselage-side spar clearance bore), so it transmits no moment back to
+    the wing about this axis.  The only two reaction points for the applied
+    moment are therefore the forward and aft rods.
+
+    Pure statics for a moment M reacted by exactly two point forces (no
+    third reaction, pin supports only) requires the forces to be EQUAL in
+    magnitude and opposite in sign, regardless of where either rod sits
+    relative to the main spar:
+
+        F_fwd + F_aft = 0                      (sum of forces = 0)
+        M + F_aft . (x_aft - x_fwd) = 0         (sum of moments = 0, about x_fwd)
+        => |F_fwd| = |F_aft| = M / (x_aft - x_fwd)
+
+    This supersedes the single-rod method (`couple force = M / separation
+    from the main spar`) that WBS.md's CARGO-03c first-pass table used: that
+    formula implicitly treated the SPAR ITSELF as the second reaction point
+    for a lone rod.  With two dedicated rods and a spar that does not react
+    this moment, the spar drops out of the force balance entirely and the
+    two rods alone carry it, in equal and opposite shares -- not a 50/50
+    split by "share of the moment" (bearing stress still differs sharply
+    between the two, because the rods differ in diameter and embed), but an
+    equal split of FORCE, which is what the physics actually gives for two
+    pin reactions.
+    """
+    import re
+
+    def scad(name):
+        m = re.search(rf"^{name}\s*=\s*(-?[\d.]+)\s*;", src, re.M)
+        return float(m.group(1))
+
+    x_fwd, d_fwd, l_fwd = (scad("ROD_FWD_STATION"), scad("ROD_FWD_D"),
+                           scad("ROD_FWD_EMBED"))
+    x_aft, d_aft, l_aft = (scad("ROD_AFT_STATION"), scad("ROD_AFT_D"),
+                           scad("ROD_AFT_EMBED"))
+    x_spar = scad("SPAR_BORE_STATION")
+    sep = x_aft - x_fwd                               # mm, rod-to-rod lever arm
+
+    print("\nTwo-rod couple (bonded CF tie rods, U5/KTD1) -- ultimate case")
+    print(f"  forward rod: station {x_fwd:.1f} mm from LE, D {d_fwd:.1f} mm "
+          f"(nominal {d_fwd - 0.2:.0f} mm CF rod), embed {l_fwd:.1f} mm")
+    print(f"  aft rod:     station {x_aft:.1f} mm from LE, D {d_aft:.1f} mm "
+          f"(nominal {d_aft - 0.2:.0f} mm CF rod), embed {l_aft:.1f} mm")
+    print(f"  main spar station {x_spar:.2f} mm (reference only -- the spar "
+          f"bearing does not react this moment, see docstring)")
+    print(f"  rod-to-rod separation (couple lever arm)  {sep:.2f} mm")
+
+    m_ult_mm = m_ult * 1000.0                         # N.mm
+    f_couple = m_ult_mm / sep                         # N, equal at both rods
+
+    print(f"\n  ultimate root moment M = {m_ult:.2f} N.m")
+    print(f"  F = M / separation = {m_ult_mm:.0f} / {sep:.2f} "
+          f"= {f_couple:.1f} N  (equal magnitude, both rods)")
+
+    # Bearing stress = force / projected bearing area (diameter x embed),
+    # using the NOMINAL rod OD (the actual bearing surface), not the
+    # clearance bore.  Matches the WBS.md CARGO-03c table's own convention
+    # (verified: 469 N / (8 mm x 40 mm) = 1.47 MPa there).
+    allow = 5.0   # MPa, structural_analysis.md SS7.3 bond-limited CF-PETG/epoxy
+    target_fos = 4.0   # structural_analysis.md SS3 joint FOS target
+    print(f"\n{'rod':>6s} {'D nom':>6s} {'embed':>7s} {'F N':>8s} "
+          f"{'sigma MPa':>10s} {'FOS vs {:.0f} MPa'.format(allow):>14s}   verdict")
+    for tag, d, embed in (("fwd", d_fwd - 0.2, l_fwd), ("aft", d_aft - 0.2, l_aft)):
+        sigma = f_couple / (d * embed)
+        fos = allow / sigma
+        verdict = "PASS" if fos >= target_fos else "MARGINAL/FAIL"
+        print(f"{tag:>6s} {d:6.1f} {embed:7.1f} {f_couple:8.1f} "
+              f"{sigma:10.3f} {fos:14.2f}   {verdict}  "
+              f"(target FOS {target_fos:.1f})")
+
+    print("\n  Both figures use the projected-bearing convention sigma = F / (D . L),")
+    print("  the repo's own CARGO-03c method, against the cited 5 MPa bond-limited")
+    print("  CF-PETG/epoxy allowable (structural_analysis.md SS7.3) -- the socket")
+    print("  wall is CF-PETG hull skin, so this is the correct allowable to cite,")
+    print("  not a plain-PETG datasheet figure.")
+
+    f_single = m_ult_mm / (x_spar - x_fwd)
+    print(f"\n  Sanity check vs. the superseded single-rod method (rod alone reacting")
+    print(f"  the full moment against the spar, F = M / (spar - rod station)): that")
+    print(f"  gives F = {f_single:.1f} N at the forward station alone -- the two-rod")
+    print(f"  couple's shared {f_couple:.1f} N is lower, as expected once a second")
+    print(f"  rod actually shares the load instead of being checked in isolation.")
+
+
+def report_enlarged_tenon(src, scad, m_ult):
+    """Superseded path: TENON_LOAD_PATH = "enlarged_tenon".
+
+    Preserves the original CARGO-03c single-tenon sizing sweep (couple
+    reacted internally on the tenon's own top/bottom faces over its
+    insertion depth) so the alternate, coupon-gated path stays reportable,
+    per KTD1 ("keep the enlarged-tenon sizing documented/available, not
+    deleted").
+    """
+    # WING_ROOT_TAB_W/H/L are now a TENON_LOAD_PATH-conditional expression in
+    # the SCAD, not a plain literal -- read the underlying "_ENLARGED" values
+    # this path actually resolves to instead.
+    tab_w, tab_h, tab_l = (scad("WING_ROOT_TAB_W_ENLARGED"),
+                           scad("WING_ROOT_TAB_H_ENLARGED"),
+                           scad("WING_ROOT_TAB_L_ENLARGED"))
+
+    print(f"\nEnlarged-tenon path (superseded default; coupon-gated, >= 15 MPa)")
+    print(f"  tenon {tab_w:.0f} (Y) x {tab_h:.0f} (Z) x {tab_l:.0f} (insertion) mm")
+
+    m_tenon = m_ult
+    couple_arm = (2.0 / 3.0) * tab_l / 1000.0
+    f_bear = m_tenon / couple_arm
+    area = tab_w * (tab_l / 2.0)
+    sigma = f_bear / area
+    print(f"  ultimate: M {m_tenon:.2f} N.m  bearing {sigma:.2f} MPa  "
+          f"FOS vs 5 MPa {5.0 / sigma:.2f}")
+
+    need = 4.0 * sigma
     print(f"\n  For the SS3 FOS 4.0 target at the present {tab_l:.0f} mm insertion the")
     print(f"  bearing allowable would have to be >= {need:.1f} MPa.")
 
-    # Bearing stress goes as 1/(W . L^2): depth is a QUADRATIC lever, width only a
-    # linear one.  Both are capped by what the airframe will physically accept --
-    # measured, not assumed, by wing_root_deconflict.max_tenon_envelope().
     sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
     import wing_root_deconflict as wrd
     max_w, max_l, notes = wrd.max_tenon_envelope()
-    k = need * tab_w * tab_l ** 2            # = 4 * 3000 * M, the sizing constant
+    k = need * tab_w * tab_l ** 2
 
     print("\n  Airframe limits on the tenon (measured, port side):")
     print(f"    max width  {max_w:5.1f} mm  (forward face is capped by the spar bore --")

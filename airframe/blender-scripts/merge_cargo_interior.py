@@ -360,6 +360,63 @@ ROOT_BRG_FLANGE_T = 1.1     # mm, flange counterbore depth (= flange width)
 # established 4.85 mm margin.
 WING_SPAR_BOSS_OD = 27.7
 
+# ---------------------------------------------------------------------------
+# Wing root tie-rod couple (U5/KTD1, 2026-08-24) — two bonded CF rods that
+# react the wing-root moment as a couple, replacing the tenon's former
+# structural role (airframe/fuselage-mid/WBS.md §1.1.1.2 CARGO-03c).  Mirrors
+# the spar bearing boss's own embed pattern (PORT_INB/PORT_OUTB) exactly, at
+# each rod's own chordwise station.  Stations/diameters/embeds MUST be kept in
+# step with wings_s1223_revo.scad's ROD_FWD_*/ROD_AFT_* -- same physical rods,
+# no other link between the two files (same convention as WING_SPAR_Y above).
+#
+# Y/Z stations use the same midline-tracking derivation as WING_SPAR_Y/Z:
+# Y = WING_LE_ROOT_Y + station (mm from LE); Z = WING_CHORD_LINE_Z + the
+# S1223 camber-midline height at that station, at the ROOT chord (both rods
+# are ROOT-ONLY -- see the wing SCAD's ROD_FWD_*/ROD_AFT_* comment for why
+# full-span is not needed for a root-reacting tie rod).  Midline heights
+# below are freshly measured against the CORRECTED (WING-01-fixed) S1223
+# table via tools/wing_spar_station_fit.py, since the WING_SPAR_MIDLINE
+# constant above predates that fix and is not re-derived here.
+ROD_FWD_STATION = 14.0    # [mm] chordwise station aft of LE (wings_s1223_revo.scad ROD_FWD_STATION)
+ROD_FWD_MIDLINE = 5.768   # [mm] S1223 camber midline at 14.0 mm, root chord
+ROD_FWD_Y = WING_LE_ROOT_Y + ROD_FWD_STATION       # = +7.00
+ROD_FWD_D = 8.2            # [mm] clearance bore = 8 mm CF rod + 0.1 mm/side
+ROD_FWD_BOSS_OD = 17.9      # [mm] bore + 2 x 4.85 mm radial margin (spar-boss convention)
+# 41 mm, not the round 40: an exact 40 mm embed puts this boss's inboard end
+# cap exactly coplanar with the main spar boss's own end cap (both at
+# PORT_INB = -100.0), which produced a degenerate near-zero-length
+# non-manifold edge in the boolean-merged, float32-repaired shell (found by
+# tools/validate_stls.py-style verify() during U5 verification -- 1
+# nonmanifold edge at X ~ -99.2, on this boss's end-cap rim).  1 mm of
+# separation from that coincident plane clears it; forward-rod bearing FOS
+# is already 5.26 at 40 mm, so the extra mm only helps.
+ROD_FWD_EMBED = 41.0        # [mm] fuselage-side embed depth
+
+ROD_AFT_STATION = 62.0    # [mm] chordwise station aft of LE (wings_s1223_revo.scad ROD_AFT_STATION)
+ROD_AFT_MIDLINE = 11.182  # [mm] S1223 camber midline at 62.0 mm, root chord
+ROD_AFT_Y = WING_LE_ROOT_Y + ROD_AFT_STATION       # = +55.00
+ROD_AFT_D = 6.2             # [mm] clearance bore = 6 mm CF rod + 0.1 mm/side
+ROD_AFT_BOSS_OD = 15.9      # [mm] bore + 2 x 4.85 mm radial margin (spar-boss convention)
+# 42 mm, not 40: at 40 mm the two-rod couple-force split gives the aft rod
+# FOS 3.945 against the 5 MPa bond-limited CF-PETG allowable -- just under
+# the §3 FOS 4.0 target (see the derivation in wings_s1223_revo.scad and
+# tools/wing_spar_carrythrough.py report_root_joint()).  42 mm clears at
+# FOS 4.14.
+ROD_AFT_EMBED = 42.0        # [mm] fuselage-side embed depth
+
+ROD_FWD_Z = WING_CHORD_LINE_Z + ROD_FWD_MIDLINE    # = +63.778
+ROD_AFT_Z = WING_CHORD_LINE_Z + ROD_AFT_MIDLINE    # = +69.192
+
+# Lateral-wall X brackets, mirroring PORT_INB/PORT_OUTB and STBD_INB/STBD_OUTB
+# exactly (same outboard reference, -60/-278; inboard walked to the rod's own
+# embed depth).  Envelope-clipped to real skin by main(), same as the spar
+# boss, so only rough bracketing is needed -- the outboard end is clipped to
+# whatever material actually exists.
+ROD_FWD_PORT_OUTB, ROD_FWD_PORT_INB = -60.0, -60.0 - ROD_FWD_EMBED    # -60 / -100
+ROD_FWD_STBD_OUTB, ROD_FWD_STBD_INB = -278.0, -278.0 + ROD_FWD_EMBED  # -278 / -238
+ROD_AFT_PORT_OUTB, ROD_AFT_PORT_INB = -60.0, -60.0 - ROD_AFT_EMBED    # -60 / -102
+ROD_AFT_STBD_OUTB, ROD_AFT_STBD_INB = -278.0, -278.0 + ROD_AFT_EMBED  # -278 / -236
+
 # Wing harness entry ports (Rev S1c, 2026-08-18) — NEW.
 #
 # Until now the shell had NO harness entry at all: the wing's spanwise conduits
@@ -678,6 +735,20 @@ def wing_keepout_positives(envelope_tm=None):
             STBD_OUTB, STBD_INB,
             NSVMT_Y - NSVMT_PAD_W / 2, NSVMT_Y + NSVMT_PAD_W / 2,
             NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2)),
+        # U5/KTD1 (2026-08-24): wing-root tie-rod bosses, mirroring the spar
+        # boss's own embed-boss pattern exactly.
+        ("rod fwd boss port", x_cylinder(
+            ROD_FWD_Y, ROD_FWD_Z, ROD_FWD_PORT_INB, ROD_FWD_PORT_OUTB,
+            ROD_FWD_BOSS_OD / 2.0)),
+        ("rod fwd boss stbd", x_cylinder(
+            ROD_FWD_Y, ROD_FWD_Z, ROD_FWD_STBD_OUTB, ROD_FWD_STBD_INB,
+            ROD_FWD_BOSS_OD / 2.0)),
+        ("rod aft boss port", x_cylinder(
+            ROD_AFT_Y, ROD_AFT_Z, ROD_AFT_PORT_INB, ROD_AFT_PORT_OUTB,
+            ROD_AFT_BOSS_OD / 2.0)),
+        ("rod aft boss stbd", x_cylinder(
+            ROD_AFT_Y, ROD_AFT_Z, ROD_AFT_STBD_OUTB, ROD_AFT_STBD_INB,
+            ROD_AFT_BOSS_OD / 2.0)),
     ]
     if envelope_tm is None:
         return raw
@@ -792,6 +863,22 @@ def wing_keepout_negatives():
         # A gear-bay flange that plugs a harness port is the same class of
         # failure as one that plugs the spar bore: it is found at assembly,
         # with the wire in hand, and it cannot be relieved from outside.
+        #
+        # U5/KTD1 (2026-08-24): wing-root tie-rod clearance bores, same
+        # treatment as the spar bore -- deep bonded holes that must stay
+        # open for the CF rod to seat, not be plugged by the gear bay.
+        ("rod fwd bore port", x_cylinder(
+            ROD_FWD_Y, ROD_FWD_Z, ROD_FWD_PORT_INB, ROD_FWD_PORT_OUTB,
+            ROD_FWD_D / 2.0)),
+        ("rod fwd bore stbd", x_cylinder(
+            ROD_FWD_Y, ROD_FWD_Z, ROD_FWD_STBD_OUTB, ROD_FWD_STBD_INB,
+            ROD_FWD_D / 2.0)),
+        ("rod aft bore port", x_cylinder(
+            ROD_AFT_Y, ROD_AFT_Z, ROD_AFT_PORT_INB, ROD_AFT_PORT_OUTB,
+            ROD_AFT_D / 2.0)),
+        ("rod aft bore stbd", x_cylinder(
+            ROD_AFT_Y, ROD_AFT_Z, ROD_AFT_STBD_OUTB, ROD_AFT_STBD_INB,
+            ROD_AFT_D / 2.0)),
     ] + wing_harness_ports()
 
 
@@ -1132,14 +1219,16 @@ def build_positives(shell_tm, envelope_tm=None):
             feats.append(hinge._block(side, station))
     notes.append("4 hinge retention blocks")
 
-    # Wing-spar bearing bosses (Ø27.7, coaxial with the spar) and the two
-    # nacelle-servo mount pads -- deep boxes/cylinders, envelope-clipped.
-    # Built by wing_keepout_positives() so the solids the gear bay is trimmed
-    # against are the SAME solids the hull actually carries (LG-10.4).
+    # Wing-spar bearing bosses (Ø27.7, coaxial with the spar), the two
+    # nacelle-servo mount pads, and (U5/KTD1) the two wing-root tie-rod
+    # bosses -- deep boxes/cylinders, envelope-clipped.  Built by
+    # wing_keepout_positives() so the solids the gear bay is trimmed against
+    # are the SAME solids the hull actually carries (LG-10.4).
     for _label, solid in wing_keepout_positives():  # raw: main() clips
         feats.append(solid)
     notes.append("2 wing-spar bearing bosses")
     notes.append("2 nacelle-servo mount pads")
+    notes.append("2 wing-root tie-rod bosses (fwd+aft, port+stbd)")
 
     # Inara avionics-bay standoff bosses (dorsal port, deep Z-cyl, clipped).
     n = 0
@@ -1255,6 +1344,56 @@ def verify(mesh):
     return ok
 
 
+DEGENERATE_EDGE_MM = 0.05   # mm; see collapse_degenerate_edges() -- far below
+                            # any FDM manufacturing tolerance (~0.1-0.2 mm), so
+                            # collapsing an edge this short cannot be a real
+                            # design feature.
+
+
+def collapse_degenerate_edges(mesh, max_len=DEGENERATE_EDGE_MM):
+    """Collapse near-zero-length NON-MANIFOLD edges (>2 incident faces).
+
+    U5/KTD1 (2026-08-24): the wing-root tie-rod bosses (ROD_FWD_*/ROD_AFT_*)
+    graze the fore landing-gear bay's aperture/rebate cutters by a genuinely
+    tiny amount (< 0.004 mm^3 measured) -- well below any manufacturing
+    tolerance, but manifold3d's boolean kernel can leave a near-duplicate
+    vertex pair at exactly that graze instead of merging it, producing an
+    edge so short (~0.001-0.002 mm observed) that it is a mesh-processing
+    artifact, not a real feature -- yet it is NON-MANIFOLD (3+ incident
+    faces), which `close_zero_area_slits()` above does not touch (that
+    targets boundary LOOPS, not this).
+
+    A GLOBAL coarser `merge_vertices(digits_vertex=...)` pass was tried and
+    rejected: at 0.01 mm resolution it merges unrelated, legitimately close
+    (but distinct) vertices elsewhere in this ~900k-face shell, trading one
+    non-manifold edge for dozens more.  This is deliberately LOCAL instead:
+    it only touches edges that are BOTH non-manifold AND shorter than
+    `max_len`, so it cannot affect any edge that is a real design feature at
+    printable scale.  Verified 2026-08-24: collapses the one edge found,
+    volume unchanged to 5 significant figures, 0 new defects.
+    """
+    ec = np.bincount(mesh.edges_unique_inverse, minlength=len(mesh.edges_unique))
+    nonman = np.where(ec > 2)[0]
+    if not len(nonman):
+        return mesh, 0
+    remap = np.arange(len(mesh.vertices))
+    collapsed = 0
+    for i in nonman:
+        v0, v1 = mesh.edges_unique[i]
+        d = np.linalg.norm(mesh.vertices[v0] - mesh.vertices[v1])
+        if d < max_len:
+            remap[remap == remap[v1]] = remap[v0]
+            collapsed += 1
+    if not collapsed:
+        return mesh, 0
+    out = trimesh.Trimesh(vertices=mesh.vertices.copy(),
+                          faces=remap[mesh.faces], process=False)
+    out.update_faces(out.nondegenerate_faces())
+    out.update_faces(out.unique_faces())
+    out.remove_unreferenced_vertices()
+    return out, collapsed
+
+
 def close_zero_area_slits(mesh, flat_mm=SLIT_FLAT_MM):
     """Close boundary loops that enclose no area, and report how many.
 
@@ -1342,6 +1481,16 @@ def finalize_watertight(mesh):
         mesh, n_slit = close_zero_area_slits(mesh)
         if n_slit:
             print(f"  finalize: closed {n_slit} zero-area collinear slit(s)")
+    # U5/KTD1: a residual NON-MANIFOLD (not boundary) edge -- e.g. the wing-
+    # root tie-rod boss grazing an LG-bay cutter by a sub-manufacturing-
+    # tolerance sliver -- is neither a hole (close_zero_area_slits) nor
+    # something fill_holes touches (it only adds faces to open boundary
+    # loops).  Try collapsing it before falling back to fill_holes.
+    if not mesh.is_watertight:
+        mesh, n_collapsed = collapse_degenerate_edges(mesh)
+        if n_collapsed:
+            print(f"  finalize: collapsed {n_collapsed} degenerate "
+                  f"(< {DEGENERATE_EDGE_MM} mm) non-manifold edge(s)")
     if not mesh.is_watertight:
         trimesh.repair.fill_holes(mesh)
     trimesh.repair.fix_normals(mesh)

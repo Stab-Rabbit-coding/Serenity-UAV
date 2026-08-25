@@ -459,12 +459,122 @@ HALL_CABLE_STATION = 54.0; // [mm] chordwise station aft of LE — CONSTANT over
 function spar_tip_y() = midline_frac(SPAR_BORE_STATION / WING_CHORD_TIP)
                         * WING_CHORD_TIP;
 
-// ── Wing root fuselage tab ────────────────────────────────────────────────────
+// ── Wing root joint load path (KTD1/U5, 2026-08-24 refinement) ───────────────
+// CARGO-03c found the tenon under-strength as a STRUCTURAL joint (10.14 MPa
+// bearing at ultimate vs. the repo's only CF-PETG figure, 5 MPa bond-limited,
+// docs/structural_analysis.md §7.3 — FOS 0.49) and, per the owner's
+// <15 MPa-fusion-strength decision rule, routed the load to a bonded CF rod
+// instead of growing the tenon.  A feasibility pass then found a SINGLE rod
+// forward of the main spar works (Ø8.2 mm at 14 mm from LE) but a matching
+// Ø8.2 mm AFT rod does not fit anywhere aft of the spar (the main spar bore's
+// aft edge at 49.30 mm and the Hall/encoder conduit's fixed Rev S1c span
+// 52.25..55.75 mm leave no room at any station without breaking the wall or
+// the skin).  A smaller Ø6.2 mm aft rod DOES fit, aft of the Hall conduit —
+// see ROD_AFT_* below.  So the tenon is now traded out of the load path
+// entirely and replaced by a TWO-ROD couple (not a single rod vs. the tenon).
+//
+// TENON_LOAD_PATH selects which joint reacts the wing-root couple:
+//   "two_rod"       (DEFAULT) — two bonded CF rods (below) react the couple;
+//                     the tenon is reduced to a locating/index feature only.
+//   "enlarged_tenon" — the tenon alone reacts the couple, grown to the
+//                     airframe's measured maximum envelope (39.2 x 20.1 mm,
+//                     tools/wing_root_deconflict.py max_tenon_envelope()).
+//                     Requires a CF-PETG fusion/bearing coupon test clearing
+//                     >= 15 MPa (root TODO.md §1.1.4 LG-11) — NOT yet
+//                     available, so this path is documented but NOT default.
+// Kept as a named constant, not deleted, per KTD1: a future coupon result
+// >= 15 MPa can swap the joint back to the tenon without re-deriving the
+// sizing table.
+TENON_LOAD_PATH = "two_rod";  // ["two_rod" | "enlarged_tenon"]
+
+// ── Wing root fuselage tab (locating/index feature under "two_rod"; full
+//    structural tenon under "enlarged_tenon") ────────────────────────────────
 // The root face (Z=0) must interface with the fuselage wing slot.
 // VERIFY slot dimensions in fuselage hull STL before printing.
-WING_ROOT_TAB_W =  30.0;  // [mm] VERIFY — fuselage slot width in X
-WING_ROOT_TAB_H =  20.0;  // [mm] VERIFY — fuselage slot height in Y
-WING_ROOT_TAB_L =  12.0;  // [mm] VERIFY — insertion depth into fuselage slot
+//
+// "two_rod" (default): the two CF rods below react the entire wing-root
+// couple, so the tab reverts to ITS OWN documented job — radial restraint
+// and rotational location, not moment reaction.  Only W and L shrink: those
+// are the two dimensions that actually appear in the bearing-stress formula
+// (sigma = F / (W . L/2), tools/wing_spar_carrythrough.py report_root_joint())
+// — H never did, it only sets the tab's vertical reach.  W/L are sized like
+// this repo's other non-structural locating dowels/bosses
+// (docs/structural_analysis.md §7.1 boss-pin convention: 8 mm depth is the
+// established "positive stop / 3-point kinematic location" figure for a
+// joint that "carries no structural flight load").
+//
+// H is DELIBERATELY left at its enlarged-tenon value, not shrunk: the S1223
+// section at this chordwise band is centred well ABOVE the chord line (the
+// tab is centred ON the chord line, Y=0, per CARGO-03b's fixed datum) — real
+// wing material at x=64.5 spans only Y +6.6..+15.7 mm
+// (tools/wing_spar_station_fit.py), so a tab shorter than ~H=13 mm never
+// reaches material at all and unions as a disconnected floating solid (found
+// by trimesh body-count during verification: bodies=2, not 1).  H=20 keeps
+// the ~3.4 mm structural-era overlap into that material band that already
+// made this connect cleanly; shrinking it would break the union, not the
+// bearing stress (H was already not part of that calculation).
+WING_ROOT_TAB_W_LOCATING =  12.0;  // [mm] locating-tab width in X
+WING_ROOT_TAB_H_LOCATING =  20.0;  // [mm] locating-tab height in Y — see note above
+WING_ROOT_TAB_L_LOCATING =   8.0;  // [mm] insertion depth (§7.1 boss-pin depth)
+
+// "enlarged_tenon" (documented, gated off): the AS-BUILT structural sizing
+// from CARGO-03c's first pass — 30 x 20 x 12 mm, FOS 0.49 against the 5 MPa
+// bond-limited figure at that size.  Retained verbatim (not the 39.2 x 20.1
+// mm envelope maximum, which needs the >=15 MPa fusion-strength coupon
+// before it can be built) so the alternate branch still renders a real,
+// previously-verified solid if selected.
+WING_ROOT_TAB_W_ENLARGED = 30.0;  // [mm] VERIFY — fuselage slot width in X
+WING_ROOT_TAB_H_ENLARGED = 20.0;  // [mm] VERIFY — fuselage slot height in Y
+WING_ROOT_TAB_L_ENLARGED = 12.0;  // [mm] VERIFY — insertion depth into slot
+
+WING_ROOT_TAB_W = (TENON_LOAD_PATH == "two_rod") ?
+                   WING_ROOT_TAB_W_LOCATING : WING_ROOT_TAB_W_ENLARGED;
+WING_ROOT_TAB_H = (TENON_LOAD_PATH == "two_rod") ?
+                   WING_ROOT_TAB_H_LOCATING : WING_ROOT_TAB_H_ENLARGED;
+WING_ROOT_TAB_L = (TENON_LOAD_PATH == "two_rod") ?
+                   WING_ROOT_TAB_L_LOCATING : WING_ROOT_TAB_L_ENLARGED;
+
+// ── Wing root tie-rod couple (U5, "two_rod" path) ─────────────────────────────
+// Two bonded CF rods react the ultimate root moment (14.60 N.m,
+// airframe/fuselage-mid/WBS.md §1.1.1.2 CARGO-03c) as a couple.  Each rod is a
+// simple bonded pin (shear only, no moment restraint credited — the
+// conservative idealisation, since the bond's rotational stiffness is not
+// characterised) — see the couple-force derivation in that WBS.md section and
+// tools/wing_spar_carrythrough.py report_root_joint().  Clearance bore = rod
+// OD + 0.1 mm/side, matching the CF-ROD bonding convention already
+// established for CF-ROD-4MM (docs/structural_analysis.md §6/§7: same
+// pultruded-CF-rod-stock citation, West System 105/206 epoxy, cure 24 h
+// before foam pour).
+//
+// Both rods are ROOT-ONLY embeds, not full-span like the main spar: the main
+// spar must run full-span because it is ALSO the rotating tilt axis reaching
+// the wingtip bearing — these tie rods only react the ROOT joint, so running
+// them to the tip would add mass and risk fouling the tip bearing/gear/Hall
+// pocket for no structural benefit.  Same reasoning applied to both rods for
+// consistency.
+//
+// FWD rod: Ø8.2 mm (8 mm CF rod + 0.1 mm/side), station 14 mm from LE
+// (largest separation from the main spar on a healthy bore wall — measured
+// 2.92 mm at Ø8.2, tools/wing_spar_station_fit.py).  40 mm wing-side embed.
+ROD_FWD_D       =  8.2;   // [mm] fwd tie-rod clearance bore
+ROD_FWD_STATION = 14.0;   // [mm] chordwise station aft of LE
+ROD_FWD_EMBED   = 40.0;   // [mm] wing-side embed depth (root face inward)
+
+// AFT rod: Ø6.2 mm (6 mm CF rod + 0.1 mm/side).  A matching Ø8.2 mm aft rod
+// does not fit at ANY aft station (main spar bore aft edge 49.30 mm and the
+// Hall conduit's fixed 52.25..55.75 mm span leave no room); Ø6.2 mm fits aft
+// of the Hall conduit.  Station 62.0 mm from LE is the pick WITHIN the
+// feasible 60..62 mm band: it maximises clearance margin to the Hall
+// conduit's trailing edge (3.15 mm vs 1.15 mm at 60 mm) while the spar-bore
+// margin stays ample throughout that band (7.6..9.6 mm) and root wall stays
+// well above the repo's 1.16 mm floor (measured 1.72 mm at 62 mm,
+// tools/wing_spar_station_fit.py --station 62 --bore 6.2).  40 mm embed
+// alone gives FOS 3.945 against the 5 MPa allowable (just under the §3 FOS
+// 4.0 target — see the couple-force derivation) so the embed is bumped to
+// 42 mm, which clears at FOS 4.14.
+ROD_AFT_D       =  6.2;   // [mm] aft tie-rod clearance bore
+ROD_AFT_STATION = 62.0;   // [mm] chordwise station aft of LE
+ROD_AFT_EMBED   = 42.0;   // [mm] wing-side embed depth (root face inward)
 
 // ── Print chirality ───────────────────────────────────────────────────────────
 // RENDER_SIDE = +1 → port (left) wing; RENDER_SIDE = -1 → starboard (right).
@@ -1040,7 +1150,20 @@ module wing_tip_fixed_gear_inserts() { }
 // =============================================================================
 // A positive protrusion at the root face (Z = 0) that inserts into the fuselage
 // wing slot.  VERIFY WING_ROOT_TAB_* parameters against fuselage hull STL before
-// printing.  The tab provides radial restraint; the CF spar carries spanwise load.
+// printing.
+//
+// CORRECTED 2026-08-24 (U5/KTD1): under TENON_LOAD_PATH = "two_rod" (default)
+// the tab is RESTORED to its originally-intended, correct role — radial
+// restraint and rotational location only.  It does NOT react the wing-root
+// couple; the two CF tie rods (wing_root_tie_rod_fwd_bore() /
+// wing_root_tie_rod_aft_bore(), cut in wing_one_side()) do that.  This
+// corrects the stale comment that used to read "The tab provides radial
+// restraint; the CF spar carries spanwise load" — that was written when the
+// spar carried through the fuselage; under SPAR-01 it terminates at the wall
+// on its own bearing and never touched this joint anyway, and CARGO-03c then
+// (temporarily, before this fix) made the tab itself react the moment. Under
+// TENON_LOAD_PATH = "enlarged_tenon" the tab reverts to that structural role
+// at its documented AS-BUILT size — see the WING_ROOT_TAB_* selection above.
 //
 // The tab is centred chordwise at 50% root chord, at Y = 0 (chord line).
 module fuselage_root_tab() {
@@ -1050,6 +1173,35 @@ module fuselage_root_tab() {
                -WING_ROOT_TAB_H / 2,
                -WING_ROOT_TAB_L])
         cube([WING_ROOT_TAB_W, WING_ROOT_TAB_H, WING_ROOT_TAB_L + 0.1]);
+}
+
+
+// =============================================================================
+// ── Module: wing_root_tie_rod_fwd_bore / wing_root_tie_rod_aft_bore ──────────
+// =============================================================================
+// U5 (KTD1 "two_rod" path): bonded CF tie-rod clearance bores that react the
+// wing-root couple as a two-point system, replacing the tenon's former
+// structural role.  Each is a straight, ROOT-ONLY bore (does NOT run to the
+// tip — see the rationale in the ROD_FWD_*/ROD_AFT_* parameter block above),
+// centred on the S1223 camber midline at its own chordwise station exactly
+// like spar_bore()/cableway_bore(), running from just outboard of the root
+// face inward (+Z) by the rod's own embed depth.
+//
+// Matching bosses/bores on the fuselage side live in
+// airframe/blender-scripts/merge_cargo_interior.py (ROD_FWD_*/ROD_AFT_*),
+// mirroring the PORT_INB/PORT_OUTB main-spar-boss embed pattern.
+module wing_root_tie_rod_fwd_bore() {
+    xc = ROD_FWD_STATION;
+    yc = midline_frac(xc / WING_CHORD_ROOT) * WING_CHORD_ROOT;
+    translate([xc, yc, -1.0])
+        cylinder(r = ROD_FWD_D / 2, h = ROD_FWD_EMBED + 1.0, $fn = 32);
+}
+
+module wing_root_tie_rod_aft_bore() {
+    xc = ROD_AFT_STATION;
+    yc = midline_frac(xc / WING_CHORD_ROOT) * WING_CHORD_ROOT;
+    translate([xc, yc, -1.0])
+        cylinder(r = ROD_AFT_D / 2, h = ROD_AFT_EMBED + 1.0, $fn = 32);
 }
 
 
@@ -1096,6 +1248,15 @@ module wing_one_side() {
 
         // ── Harness cableway (2× Ø7 conduits for EDF power + signal) ──────
         cableway_bore();
+
+        // ── Wing-root tie-rod couple (U5, "two_rod" path only) ─────────────
+        // Replaces the tenon's former structural role; see the module docs
+        // above and the couple-force derivation in
+        // airframe/fuselage-mid/WBS.md §1.1.1.2 CARGO-03c.
+        if (TENON_LOAD_PATH == "two_rod") {
+            wing_root_tie_rod_fwd_bore();
+            wing_root_tie_rod_aft_bore();
+        }
     }
 }
 
