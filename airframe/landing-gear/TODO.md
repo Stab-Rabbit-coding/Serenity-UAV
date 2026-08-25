@@ -32,5 +32,6 @@
 - [ ] LG-22 Render overview SVGs using FreeCAD TechDraw
 - [ ] LG-23 Exploded view SVG — printed parts only
 - [ ] LG-24 Exploded view SVG — full build
+- [ ] LG-25 Fore bay frame vs U5 tie-rod boss: 12mm proud, no fix chosen
 
 ---

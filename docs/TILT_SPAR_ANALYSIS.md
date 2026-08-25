@@ -15,6 +15,37 @@ SCAD is reworked.
 
 ## 1. Mechanism (as specified by user, 2026-07-18)
 
+> **SUPERSEDED 2026-08-25 (SPAR-01, `airframe/wings-nacelles/WBS.md` §1.1.2;
+> `docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md`).** The
+> single-spar/single-servo/cargo-bay-root-bearing model below is retired.
+> Each side now has its **own independent spar and servo** — the "servo
+> stays inside the fuselage" part of the mechanism is unchanged, but it is
+> now **two servos, one per port/stbd bulkhead**, not one servo in the
+> cargo bay driving a spar that crosses the whole ship. The **root bearing
+> moves from "inside the cargo bay" to in the fuselage SIDE WALL** (F688ZZ
+> seat, terminating at X −100 port / −240 stbd) — the spar no longer
+> crosses the bay at all, which is what closes CARGO-01. §3.2's torsion
+> path is correspondingly short (bulkhead servo → wingtip), not
+> cargo-bay-servo → wingtip. The nacelle-CG pivot, wingtip bearing, nozzle
+> drive, and Hall tilt feedback below are **unchanged** — only the spar's
+> inboard end and its drive servo's per-side count moved.
+>
+> - The **wing is fixed** to the fuselage and does **not** tilt.
+> - **Two independent rotating spars** (one per side) run: fuselage wall
+>   bearing → wing → **nacelle CG pivot** (duct Z = 111.5 mm; Rev T CG
+>   re-derive 2026-07-19, was 104.5 mm), each **fixed (keyed) to its own
+>   nacelle**.
+> - **One servo per side, mounted on the port/stbd bulkhead**, rotates its
+>   own spar → tilts its own nacelle. The spar *is* the drive shaft (no
+>   external pushrod/lever).
+> - **Two bearings per side** carry wing/spar loads and allow rotation:
+>     - **Root bearing** — **in the fuselage side wall** (F688ZZ, spar ↔
+>       fuselage), not free-floating inside the cargo bay.
+>     - **Wingtip bearing** — at the wingtip/nacelle joint (spar ↔ fixed wing).
+
+The mechanism as originally specified (2026-07-18), retained for the
+record:
+
 - The **wing is fixed** to the fuselage and does **not** tilt.
 - A **single rotating spar** runs: cargo bay → wing → **nacelle CG pivot**
   (duct Z = 111.5 mm; Rev T CG re-derive 2026-07-19, was 104.5 mm), and is
@@ -242,6 +273,13 @@ keyway); the 5 mm bore carries the nav-light harness (§5).
   → **FOS ≈ 12.8** on yield at the 2× design load.
 
 ### 3.2 Torsion (servo drive)
+
+**Re-checked 2026-08-25 (SPAR-01):** the torsion figures below are unaffected
+by the root bearing's move from the cargo bay to the fuselage side wall — the
+section (8 mm OD × 1.5 mm wall) and the applied torque are unchanged, and the
+now-per-side bulkhead servo shortens the drive path (bulkhead → wingtip)
+versus the original cargo-bay-servo → wingtip run, which can only reduce
+wind-up, not increase it. This FOS stands.
 
 - τ = T/Zp = 2,450 N·mm / 85.2 mm³ = **28.8 MPa (4.2 ksi)**
 - Shear yield ≈ 0.577 × 460 = 265 MPa → **FOS ≈ 9.2**.

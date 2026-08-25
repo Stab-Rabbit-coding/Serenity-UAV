@@ -275,15 +275,41 @@ See §7 for the exact cutter geometry applied to each shell.
 
 ### 5.6 BOM and Build Guide (Step 5)
 
+**SUPERSEDED 2026-08-25 (U4, SPAR-01) — the cargo Y=+30 ring is retired, not
+finalized.** §1 and §5.1's own load-station table already anticipated this
+station's job (anti-ovalisation at the spar pin), but the wing-root repair
+plan (`docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md`) found
+the load itself had changed: the spar no longer carries through the
+fuselage (SPAR-01, `airframe/wings-nacelles/WBS.md` §1.1.2), and this
+station's own bottom chord is cut away by the clamshell aperture (a
+three-sided frame, not a ring — see that WBS.md's SPAR-01 finding 3), so it
+never actually closed the couple it was sized for. Two new CF thwarts (fore
+Y −40, aft Y +118, same 2 mm CF-PLATE-2MM stock and locating-groove pattern
+as this section) replace it — sized and re-verified in
+`tools/wing_spar_carrythrough.py`'s `report_thwart()` (FOS 8.5/8.7 against
+the same conservative 300 MPa stand-in this section used) and cut in
+`add_structural_features.py` `RING_POCKETS["cargo_Yn40"]`/`["cargo_Y118"]`.
+The cargo_Y30 pocket is gated off in `merge_cargo_interior.py`
+(`RING_Y30_ENABLED = False`), not deleted — its own DXF was already
+PROVISIONAL (§5.4, blocked on the MESH-01 fragmented-mesh defect), so no
+finalized part is lost by retiring it.
+
 CF-PLATE-2MM notes update:
-- Station count: 2 (down from 5 estimated pre-Rev N)
-- Hull-Y positions: +30 mm (cargo, wing spar zone), +290 mm (rear, landing zone)
-- Ring types: both full closed rings
-- Estimated mass: 2 × (176 × 158 × 2 mm³ × 1.6 g/cm³ × 0.85 fill factor) ≈ 2 × 150 g = **300 g (10.6 oz)**
-  (fill factor 0.85 accounts for outer profile vs bounding rectangle)
+
+- Station count: 3 total tracked (2 active + 1 retired) — active: cargo
+  Y −40 mm (fore thwart) and Y +118 mm (aft thwart); retired: cargo Y +30 mm
+  (superseded above); unchanged: rear Y +290 mm (landing zone, still active)
+- Ring types: rear Y +290 remains a full closed ring; the two thwarts are
+  narrower bands (2 × 25 mm CF plate section, not a full-profile plate) —
+  see `wing_spar_carrythrough.py` `report_thwart()`, not the §5.2/§5.3
+  full-ring-profile method (that method still applies unchanged to Y +290)
+- Estimated mass: thwart pair ≈ 28 g (0.062 lbm) combined (2 × 14 g,
+  `wing_spar_carrythrough.py`), replacing the retired Y +30 ring's
+  ~78 g estimate (§5.1/WBS.md SPAR-01) — a net saving of ≈50 g (0.11 lbm)
+- Y +290 rear ring: unchanged from this section's original figures
 
 `REVN_BUILD_GUIDE_24IN.md` keel datum table: replace stale 91/165/251/320/388 mm
-stations with the new hull-Y ring stations +30 mm and +290 mm.
+stations with the new hull-Y ring/thwart stations −40 mm, +118 mm, and +290 mm.
 
 ---
 

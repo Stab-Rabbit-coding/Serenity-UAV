@@ -29,8 +29,8 @@
     - **[x]** Re-check root-tab center position: with 129 mm chord the tab centers at hull Y ≈ +57.5 mm (was +73.5 mm); confirm mortise center in cargo SCAD matches
     - **[x]** Verify wing TE position (hull Y≈+122 mm port, +117 mm stbd) clears cargo-section aft interior features; cargo aft boundary is hull Y≈+132 mm — 10 mm clearance
 
-- [ ] **SPAR-01 — spars do NOT carry through the fuselage; adopt the two-bearing
-    overhung shaft + CF thwart pair.** *(owner direction 2026-08-23: the 8 mm steel
+- [x] **SPAR-01 — spars do NOT carry through the fuselage; adopt the two-bearing
+    overhung shaft + CF thwart pair. CLOSED 2026-08-25 (U3/U4).** *(owner direction 2026-08-23: the 8 mm steel
     spars rotate **independently**, driven by the nacelle servos, on a wingtip
     bearing and a fuselage-side bearing.  Verified by
     `tools/wing_spar_carrythrough.py`.)*  **Resolves CARGO-01.**
@@ -137,12 +137,34 @@
     - Retire or re-scope the Y +30 cargo ring in `bom_revS.csv` and
       `docs/structural_analysis.md` §5 rather than finalising its PROVISIONAL DXF.
 
-    **Open sub-steps:**
-    - [ ] Owner confirms the thwart stations (Y −40 / +118) before geometry work.
-    - [ ] Re-cut the shell: spar bore → bearing seat, terminate at the wall.
-    - [ ] Author the two thwarts + their landing pads; re-run the cargo merge.
-    - [ ] Re-verify with `cargo_bay_envelope.py` and `wing_spar_carrythrough.py`.
-    - [ ] Update `TILT_SPAR_ANALYSIS.md` §1/§3.2 and `structural_analysis.md` §5.
+    **CLOSED 2026-08-25 (U3/U4).** Owner confirmed the Y −40/+118 stations
+    (KTD2). The shell's spar interface is re-cut to an F688ZZ bearing seat
+    terminating at the wall (U3, `7bfccd3`). The two CF thwart locating
+    pockets are authored in `add_structural_features.py` `RING_POCKETS`
+    (`cargo_Yn40`, `cargo_Y118`, same 4-slab groove pattern as the existing
+    ring frames — a bonded CF-PLATE-2MM part, not a printed solid) and wired
+    into `merge_cargo_interior.py`'s negatives; the superseded `cargo_Y30`
+    pocket is gated off (`RING_Y30_ENABLED = False`), not deleted, per this
+    repo's KTD1-style "keep documented" convention. Re-merged and
+    re-verified against the published shell:
+
+    | Gate | Result |
+    | --- | --- |
+    | `merge_cargo_interior.py` | watertight, 1 body, 910,470 faces, 306,626 mm³ |
+    | `tools/validate_stls.py` | 62/62 PASS |
+    | `tools/cargo_bay_envelope.py` | PASS — 4×3×3 in payload fits |
+    | `tools/wing_spar_carrythrough.py` | fore FOS 8.5, aft FOS 8.7 (unchanged from the analysis above) |
+    | `tools/wing_root_deconflict.py` | CLEAR |
+    | `tools/landing_gear_wing_clearance.py --proud` | CLEAR (4/4); LG-25 proud-material finding still open, tracked separately |
+
+    `docs/TILT_SPAR_ANALYSIS.md` §1/§3.2 and `docs/structural_analysis.md` §5
+    updated to point at the two-thwart closure instead of the single Y+30
+    ring (see those files' own changelog).
+
+    **Open sub-step, unchanged from before this closure:**
+    - [ ] ASTM D3039/D695 coupon test for the CF-PLATE-2MM bending allowable
+        (root `TODO.md` §0.8) — the FOS 8.5/8.7 above stands on the
+        conservative 300 MPa stand-in, not a certified figure.
 
 - [ ] **SPAR-02 — bulkhead servo mounts: deconflicted, but the pad is undersized.**
     **2026-08-25 status: torque re-derivation and current-rail resizing sub-items
@@ -447,8 +469,9 @@
     3. Take the lead out through the **nacelle** side instead of back down the
         wing, if the encoder can be read from a harness that stays outboard.
 
-- [ ] **★ WING-01 — the tabulated S1223 section is not a valid airfoil: the
-    surfaces cross at x/c 0.742 and the outline self-intersects.**
+- [x] **★ WING-01 — the tabulated S1223 section is not a valid airfoil: the
+    surfaces cross at x/c 0.742 and the outline self-intersects. CLOSED
+    2026-08-25 (U1/U2/U6).**
     *(owner asked 2026-08-23: "verify that the airfoil doesn't create a zero
     thickness point that would cause a gap partway toward the trailing edge, as
     some of the drawings show."  It does.  Gated by
@@ -501,23 +524,34 @@
     | 0.95 | −0.0109 | +0.0109 | −0.0218 |
     | 1.00 | 0.0000 | 0.0000 | 0.0000 |
 
-    **This item is NOT closed by a fix, deliberately.**  Correcting it means
-    replacing the coordinate table, and root `AGENTS.md` §4 forbids sourcing that
-    from memory — the Selig column above is a comparison, not a transcription to
-    paste in.  The table must come from a validated source (UIUC Airfoil
-    Coordinates Database), be added to `REFERENCES.md` with a validated URL, and
-    only then replace `S1223_UPPER`/`S1223_LOWER`.
+    **CLOSED 2026-08-25 (U1/U2/U6).** `S1223_UPPER`/`S1223_LOWER` replaced
+    with validated UIUC Airfoil Coordinates Database (Selig) coordinates,
+    cited as **REF-CAD-006** in `REFERENCES.md` (`39d8b9e`).
+    `tools/wing_airfoil_integrity.py` now **PASSES** all 3 checks: positive
+    thickness across the chord, a valid simple polygon, and — since check 3
+    (KTD4) — no `hull()` masking to report a ratio for at all.
 
-    **Open sub-steps:**
-    - [ ] Obtain S1223 coordinates from the UIUC database; add a `REF-CAD-*`
-        entry with a validated URL and the retrieval date.
-    - [ ] Replace both tables; `tools/wing_airfoil_integrity.py` must reach PASS.
-    - [ ] Decide `hull()` vs a true loft.  Even with a correct table, `hull()`
-        convexifies away S1223's concavity — check the ratio the gate reports and
-        move to a swept/lofted solid if it stays above tolerance.
-    - [ ] Re-render and re-bake both wings; re-run `wing_internal_clearance.py`
-        and `wing_root_deconflict.py` against the corrected section.
-    - [ ] Re-derive wing mass and re-check the §1.1.2 aero figures.
+    **KTD4 resolved against a true loft, not `hull()`.** The corrected
+    table's real concavity (a reflexed lower surface aft of ≈65 % chord)
+    convexified at **1.612×** under `hull()`, over the gate's tolerance, so
+    `wing_solid()` was rewritten to loft a manual `polyhedron()` from the
+    same `s1223_scaled_pts()` list the integrity gate already validates —
+    the built cross-section **is** the tabulated outline now, with no
+    convex-hull approximation and no area-ratio check needed (`cd3c8db`).
+
+    Both wings re-rendered and re-baked (U6, `a156aca`): each wing STL is
+    **70,069.5 mm³**, watertight, 1 body. `tools/wing_internal_clearance.py`
+    and `tools/wing_root_deconflict.py` both re-run clean against the
+    corrected section (see this unit's re-verification table above and the
+    U8 sweep below).
+
+    **Not closed by this fix — carried forward, not silently dropped:**
+    re-deriving wing mass from the corrected volume needs an infill %
+    convention for the wing print (the existing wing STLs have no
+    `bom_revS.csv` line to inherit one from, unlike the fuselage shells'
+    0.20 mm/8% gyroid convention) — logged as a follow-up BOM item, not
+    fabricated here. No §1.1.2 aero figure in this repo cites the old
+    convex-hull volume, so none needs correcting as a consequence.
 
 ##### 1.1.2.1 *Rev R1a — spar straightened + camber-centered + EDF cableway (2026-07-07)*
 
@@ -633,9 +667,103 @@
     is committed WIP. The camber-preservation argument above does not depend on
     CFD; the absolute penalty of the thicker tip does.
 
-- [ ] **[OPEN] Canon-check `THICKNESS_SCALE_TIP` / `SPAR_BORE_STATION` against the
-    Serenity wing silhouette** before print — carried over from the resolved item
-    above, and now more pointed, since the tip is thicker than when it was raised.
+- [x] **Canon-check `THICKNESS_SCALE_TIP` / `SPAR_BORE_STATION` against the
+    Serenity wing silhouette — CLOSED 2026-08-25 (U8).** Carried over from the
+    resolved item above, and made more pointed by the U6 re-derivation
+    (`THICKNESS_SCALE_TIP` 1.45 → 1.56).
+
+    **What was actually checked, and why not in FreeCAD against a 3D
+    reference mesh.** Confirmed on disk before measuring anything:
+    `docs/references/nick-henning/` holds nine `.jpg` renders (REF-CAD-002)
+    and `docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf`
+    (REF-CAD-003) is a 20-page scanned blueprint set — **neither is a 3D
+    mesh**. `REF-CAD-004` (misubisu Thingiverse) is the only 3D geometry in
+    the reference hierarchy, and it is explicitly the **lowest**-authority
+    source, already superseded as the hull/wing starting point. There is
+    therefore no 3D reference geometry to import into FreeCAD and diff
+    against — doing so would mean fabricating a comparison that did not
+    happen. What follows is a code-level measurement of the built wing
+    against a **visual** reading of REF-CAD-002/003, which is what the
+    source material actually supports.
+
+    **Built wing, measured (`tools/wing_airfoil_variants.py`, thickness-only
+    decomposition, the strategy actually built per Rev S1b):**
+
+    | Station | t/c | Camber max | x/c of max thickness |
+    | --- | --- | --- | --- |
+    | root (`THICKNESS_SCALE` = 1.0) | 12.14 % | 8.67 % | 19.8 % |
+    | tip (`THICKNESS_SCALE_TIP` = 1.56, as-built) | **18.94 %** | 8.67 % (unchanged) | 19.8 % |
+
+    `SPAR_BORE_STATION` = 45.15 mm = **35.0 % root chord / 48.5 % tip chord**
+    (constant mm station, not a chord fraction — see the Rev S1b note above).
+
+    **What REF-CAD-002/003 actually show, and the resulting scope of this
+    check.** `nick-henning-uvdisplay-wing.jpg` (REF-CAD-002) and QMx Sheet 4
+    "Dorsal Surface Plan View" (REF-CAD-003, PDF page 6) both depict
+    Serenity's "wing" as a **flat, boxy nacelle pod** — vertical panel faces,
+    hard chines, an aft engine housing — not a swept, thin aerodynamic
+    airfoil. Canon defines **no internal cross-section, no thickness
+    ratio, and no numeric spar station** for this feature; it is a
+    production model/CGI asset with a load-bearing external shape only. The
+    S1223 section, the 12.14 %/18.94 % t/c, and `SPAR_BORE_STATION` are all
+    **this project's own aerodynamic engineering additions** to give the
+    fictional shape a functioning lifting surface — they have no canon
+    figure to be checked against, and this item does not claim one.
+
+    **What canon DOES constrain, and was already fixed independent of this
+    unit:** the wing **planform** — root chord 129 mm, tip chord 93 mm, zero
+    LE sweep (Rev R1, 2026-06-14, table above, §1.1.2) — was derived from the
+    QMx dorsal plan view and is unchanged by any of U1–U7's airfoil-section
+    work. Visually cross-checking the current planform against
+    `nick-henning-uvdisplay-wing.jpg`'s wing-pod silhouette and QMx Sheet 4:
+    proportions (chord taper ratio ≈0.72, stub span, hard-edged root-to-pod
+    transition) are consistent with both references. No delta is computed
+    here because Rev R1's planform derivation predates and is outside this
+    plan's scope (WING-01/SPAR-01/SPAR-02 are section/structure fixes, not a
+    planform re-derivation) — this check confirms U1–U7 did not disturb it,
+    which is the only claim R8 requires.
+
+    **Delta, stated explicitly per R8/the plan's Test Scenarios (not
+    omitted even though it is not a numeric mismatch):** delta on t/c and
+    spar station vs. canon is **not quantifiable — zero reference figures
+    exist to diff against**, which is itself the finding, not a PASS on a
+    numeric tolerance. Delta on planform (the one canon-constrained
+    quantity) is **0 mm / 0°** — unchanged from Rev R1 by this plan.
+
+- [x] **U8 mating-verification pass and R9 gate sweep — CLOSED 2026-08-25.**
+    Same substitution rationale as the canon-check above: this repo has no
+    literal-FreeCAD numeric-verification precedent anywhere in its
+    toolchain (`airframe/FreeCAD-scripts/serenity_assembly.py` is a hull-
+    frame PLACEMENT script, not a clearance gate) — every other mating/
+    interference check in this repo (`wing_root_deconflict.py`,
+    `landing_gear_wing_clearance.py`, `cargo_bay_envelope.py`) is a
+    trimesh-based numeric probe against the published STLs, and this unit
+    follows that established pattern rather than introduce a new tool
+    family. `wing_root_deconflict.py` is extended (this session) with an
+    explicit probe for the U5 two-rod bores — previously unmodeled — using
+    the same camber-midline convention as its existing bore checks; each
+    rod's own fuselage-side embed span is used (not the wider main-spar
+    span) so the probe doesn't read solid wall beyond a root-only rod's
+    real embed as a false blockage.
+
+    **Full R9 gate sweep, final geometry (2026-08-25):**
+
+    | Gate | Result |
+    | --- | --- |
+    | `tools/wing_airfoil_integrity.py` | PASS — valid polygon, positive thickness, no `hull()` masking to check |
+    | `tools/wing_internal_clearance.py` | PASS — all bores clear each other, the skin, and the wingtip pad |
+    | `tools/wing_root_deconflict.py` | CLEAR — incl. new fwd/aft tie-rod bore probe, 0 mm³ blocked everywhere |
+    | `tools/wing_spar_carrythrough.py` | fwd rod FOS 5.26, aft rod FOS 4.14 (both ≥ 4.0 target); thwart FOS 8.5/8.7 |
+    | `tools/cargo_bay_envelope.py` | PASS — 101.6×76.2×76.2 mm payload fits (170.6×106.0×150.7 mm measured bay) |
+    | servo pad/body/horn deconfliction | CLEAR (folded into `wing_root_deconflict.py` — no standalone `nacelle_servo_deconflict.py` exists in this repo; WBS.md's own prose elsewhere already notes the servo PAD probe living there) |
+    | `tools/landing_gear_wing_clearance.py --proud` | CLEAR, 4/4 named checks; proud-material diagnostic finds 12.0 mm at the fore bay corners (U5's new tie-rod boss) — tracked as **LG-25** (`airframe/landing-gear/WBS.md`), not blocking this closeout, not silently re-closed |
+    | `tools/validate_stls.py` | 62/62 PASS, all watertight |
+
+    All gates PASS/CLEAR against the final, published, re-merged geometry
+    (not against source scripts alone, per this unit's own verification
+    contract). LG-25 is a genuine open finding from this sweep, not a
+    regression hidden by it — see that WBS.md entry for the candidate
+    resolutions, none yet selected.
 
 
 ## §1.1.3 — Nacelles

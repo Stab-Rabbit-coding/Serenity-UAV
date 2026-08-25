@@ -343,10 +343,9 @@
       "archived": false
     },
     "airframe/blender-scripts/add_structural_features.py": {
-      "description": "Python script",
+      "description": "add_structural_features.py \u2014 add structural features to the four baked fuselage shells.",
       "tags": [
         "cad-mesh",
-        "security",
         "structural"
       ],
       "archived": false
@@ -13182,7 +13181,6 @@
       "airframe/FreeCAD-scripts/serenity_assembly.py",
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
-      "airframe/blender-scripts/add_structural_features.py",
       "airframe/fuselage-joints/WBS.md",
       "airframe/landing-gear/WBS.md",
       "airframe/openscad/fuselage/cargo/cargo_spar_drive.scad",

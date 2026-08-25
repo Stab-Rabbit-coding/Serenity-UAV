@@ -605,6 +605,14 @@ NSVMT_HOLE_S_Y = 49.5 / 2.0   # = 24.75, datasheet
 NSVMT_HOLE_S_Z = 10.0 / 2.0   # =  5.00, datasheet
 NSVMT_M3_D = 4.1
 
+# SPAR-01/U4 (2026-08-25): the Y=+30 ring's own bottom chord is cut away by
+# the clamshell aperture (WBS.md SPAR-01 finding 3, a three-sided frame, not
+# a ring), so it never closed the wing-spar couple it was sized for. The two
+# CF thwarts (fore Y-40, aft Y+118 -- see asf.RING_POCKETS) replace it as the
+# couple closure; this gate gets flipped False only once a real geometry
+# alternative reopens the Y=+30 station, not on a whim.
+RING_Y30_ENABLED = False
+
 # Inara avionics-bay standoff bosses (dorsal port half, additive only).
 INARA_X = -135.0
 INARA_Y = 90.0
@@ -1233,9 +1241,25 @@ def build_negatives(shell_tm, envelope_tm=None):
         )
     )
     notes.append("keel channel")
-    for xm, xx, zm, zx, ym, yx in asf.RING_POCKETS["cargo_Y30"]:
+    if RING_Y30_ENABLED:
+        for xm, xx, zm, zx, ym, yx in asf.RING_POCKETS["cargo_Y30"]:
+            cutters.append(box(xm, xx, ym, yx, zm, zx))
+        notes.append("ring pocket Y=30")
+    else:
+        notes.append("ring pocket Y=30 GATED OFF -- superseded by the U4 "
+                     "CF thwart pair (SPAR-01); see RING_Y30_ENABLED")
+
+    # SPAR-01/U4: CF thwart pair (fore Y-40, aft Y+118) closing the wing-spar
+    # couple that the retired Y=+30 ring never closed (its bottom chord was
+    # cut away by the clamshell aperture -- see WBS.md SPAR-01 finding 3).
+    # Same locating-groove pattern as the existing ring frames: a 2 mm
+    # CF-PLATE-2MM part bonds into a shallow perimeter pocket, not a printed
+    # solid, so only the pocket is a Blender/hull-frame feature here.
+    for xm, xx, zm, zx, ym, yx in asf.RING_POCKETS["cargo_Yn40"]:
         cutters.append(box(xm, xx, ym, yx, zm, zx))
-    notes.append("ring pocket Y=30")
+    for xm, xx, zm, zx, ym, yx in asf.RING_POCKETS["cargo_Y118"]:
+        cutters.append(box(xm, xx, ym, yx, zm, zx))
+    notes.append("CF thwart pockets Y=-40 (fore) / Y=+118 (aft), U4/SPAR-01")
 
     # Wing spar F688ZZ bearing seat + rotating-spar clearance (per side,
     # terminating at the wall -- CARGO-01/CARGO-02) + 2 root mortises (through

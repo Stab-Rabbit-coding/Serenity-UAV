@@ -278,12 +278,30 @@ def _ring_pocket_slabs(
 
 
 RING_POCKETS = {
-    # Cargo wing-spar zone, Y = +30 mm
+    # Cargo wing-spar zone, Y = +30 mm.  SUPERSEDED 2026-08-25 (U4, plan
+    # docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md): the
+    # SPAR-01 couple-closure analysis found this station's own bottom chord
+    # cut away by the clamshell aperture (three-sided frame, not a ring —
+    # see WBS.md SPAR-01 finding 3), so it never closed the couple it was
+    # sized for. Retained here, DISABLED at the call site
+    # (`merge_cargo_interior.py` RING_Y30_ENABLED), per this repo's "keep
+    # documented, not deleted" convention — not recut, not procured.
     # Outer bounds at Y=30: X[-257.6..-81.1]  Z[+0.5..+158.6]
     "cargo_Y30": _ring_pocket_slabs((-257.6, -81.1), (0.5, 158.6), 30.0),
     # Rear anti-ovalisation zone, Y = +290 mm
     # Outer bounds at Y=290: X[-235.5..-116.0]  Z[+11.9..+152.4]
     "rear_Y290": _ring_pocket_slabs((-235.5, -116.0), (11.9, 152.4), 290.0),
+    # SPAR-01 CF thwart pair (U4) -- replaces cargo_Y30 as the couple closure.
+    # Sited on measured-intact structure straddling the wing-spar station
+    # (WBS.md SPAR-01 point 4): fore Y-40 is a true closed ring (1 poly, 1
+    # hole); aft Y+118 has belly + both flanks intact but is not a full
+    # topological ring (7 disjoint loops at that cut) -- the 4-slab cutter
+    # below is a no-op wherever a chord is absent, same as it always has been
+    # for cargo_Y30/rear_Y290, so this is safe at both stations.
+    # Outer bounds at Y=-40 (measured, published shell): X[-234.4..-102.8]  Z[43.4..142.7]
+    "cargo_Yn40": _ring_pocket_slabs((-234.4, -102.8), (43.4, 142.7), -40.0),
+    # Outer bounds at Y=+118 (measured, published shell): X[-256.1..-83.8]  Z[-0.0..155.0]
+    "cargo_Y118": _ring_pocket_slabs((-256.1, -83.8), (-0.0, 155.0), 118.0),
 }
 
 # ---------- CF skid-rod bores (Ø 4.2 mm cylinders, Y-axis, 60 mm total) ----------

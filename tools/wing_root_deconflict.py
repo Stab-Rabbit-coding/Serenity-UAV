@@ -176,13 +176,28 @@ def route_stations():
     # bores do not share a midline: at 22.75 and 32.25 mm the S1223 camber line
     # differs by ~0.8 mm.  Evaluating one midline for the pair puts both bores
     # off the shell's matching harness ports and reports phantom blockage.
-    return [
+    out = [
         ("EDF ESC conduit (40 A feeds)",
          [((cable_stn - cable_sep / 2) / chord, cable_d),
           ((cable_stn + cable_sep / 2) / chord, cable_d)]),
         ("Hall/encoder conduit", [(hall_stn / chord, hall_d)]),
         ("spar bore / nav-light 3-core", [(spar_stn / chord, spar_bore)]),
     ]
+    # U5/KTD1 two-rod couple: both rod clearance bores are camber-centred at
+    # their own station exactly like the bores above (see
+    # wing_root_tie_rod_fwd_bore()/_aft_bore() in the wing SCAD). Root-only
+    # embeds (40/42 mm), shorter than the PORT_INB..PORT_OUTB span this
+    # reuses for the probe cylinder -- checking the wider span is the
+    # conservative direction (more territory probed, never less).
+    m = re.search(r'^TENON_LOAD_PATH\s*=\s*"([^"]+)"\s*;', src, re.M)
+    if m and m.group(1) == "two_rod":
+        rod_fwd_d = wsf.scad_scalar(src, "ROD_FWD_D")
+        rod_fwd_stn = wsf.scad_scalar(src, "ROD_FWD_STATION")
+        rod_aft_d = wsf.scad_scalar(src, "ROD_AFT_D")
+        rod_aft_stn = wsf.scad_scalar(src, "ROD_AFT_STATION")
+        out.append(("fwd tie-rod bore", [(rod_fwd_stn / chord, rod_fwd_d)]))
+        out.append(("aft tie-rod bore", [(rod_aft_stn / chord, rod_aft_d)]))
+    return out
 
 
 def routes(side):
@@ -191,13 +206,28 @@ def routes(side):
     inb = mci.PORT_INB if side == "port" else mci.STBD_INB
     outb = mci.PORT_OUTB if side == "port" else mci.STBD_OUTB
     lo, hi = min(inb, outb), max(inb, outb)
+    # U5/KTD1: the tie-rods are ROOT-ONLY embeds, shorter than the main
+    # spar's PORT_INB..PORT_OUTB span -- probing the wider span reads solid
+    # wall beyond each rod's own embed as a false BLOCKED. Use each rod's
+    # actual fuselage-side embed span instead (mci.ROD_*_*_INB/OUTB).
+    rod_span = {
+        "fwd tie-rod bore": (mci.ROD_FWD_PORT_INB, mci.ROD_FWD_PORT_OUTB) if side == "port"
+        else (mci.ROD_FWD_STBD_INB, mci.ROD_FWD_STBD_OUTB),
+        "aft tie-rod bore": (mci.ROD_AFT_PORT_INB, mci.ROD_AFT_PORT_OUTB) if side == "port"
+        else (mci.ROD_AFT_STBD_INB, mci.ROD_AFT_STBD_OUTB),
+    }
     out = []
     for label, bores in route_stations():
         for i, (xfr, d) in enumerate(bores):
             z = WING_CHORD_LINE_Z + mid(xfr)
             y = mci.WING_LE_ROOT_Y + xfr * mci.WING_ROOT_CHORD
             tag = label if len(bores) == 1 else f"{label} #{i + 1}"
-            out.append((tag, xcyl(y, z, lo - 12.0, hi + 12.0, d / 2.0)))
+            if label in rod_span:
+                x0, x1 = rod_span[label]
+                span_lo, span_hi = min(x0, x1), max(x0, x1)
+            else:
+                span_lo, span_hi = lo - 12.0, hi + 12.0
+            out.append((tag, xcyl(y, z, span_lo, span_hi, d / 2.0)))
     return out
 
 

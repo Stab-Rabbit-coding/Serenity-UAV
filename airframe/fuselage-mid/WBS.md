@@ -563,7 +563,7 @@
 
 ##### 1.1.1.2 *Cargo*
 
-- [ ] **★ CARGO-01 — the mission payload does not fit past the wing spar.**
+- [x] **★ CARGO-01 — the mission payload does not fit past the wing spar. CLOSED 2026-08-25 (U3/U4).**
     *(found 2026-08-23 while placing the VERIFY-tier cargo accessories against the
     baked hull, root `WBS.md` §1.1.0; measured by `tools/cargo_bay_envelope.py`)*
     **BLOCKS the cargo mission, the cradle/winch placements, and the §1.1.1.2.1
@@ -602,10 +602,14 @@
     instead.  Verified adequate in `airframe/wings-nacelles/WBS.md` §1.1.2
     **SPAR-01** (`tools/wing_spar_carrythrough.py`).  With the spar stopping at
     X −100 / −240 the bay clear span is **X −240…−100 = 140 mm** at full bay
-    height, and the 4 × 3 × 3 in payload fits.  **This item stays open until the
-    shell is re-cut** — `tools/cargo_bay_envelope.py` still fails against the
-    published STL, which is correct until the geometry changes.  Close it together
-    with **CARGO-02**, which is the same shell edit.
+    height, and the 4 × 3 × 3 in payload fits.
+
+    **CLOSED 2026-08-25.** The shell was re-cut (U3, `7bfccd3`) and the two CF
+    thwarts closing the couple were added (U4). `tools/cargo_bay_envelope.py`
+    now PASSES against the published, re-merged STL: measured interior
+    170.6 mm (X) x 150.7 mm (Z), aperture 106.0 mm (Y) — the
+    101.6 x 76.2 x 76.2 mm payload fits with margin on every axis. Closed
+    together with **CARGO-02** below, the same shell edit.
 
     Candidate resolutions as originally tabled, retained for the record (the owner
     took 1; each of the others trades against a requirement that is currently
@@ -633,7 +637,7 @@
     (110 × 80 × 72 mm) is sized for the 4 × 3 × 3 in payload and inherits the same
     obstruction.
 
-- [ ] **CARGO-02 — the cargo shell bores for a spar the wing retired.**
+- [x] **CARGO-02 — the cargo shell bores for a spar the wing retired. CLOSED 2026-08-25 (U3).**
     *(found 2026-08-23 alongside CARGO-01; gated by `tools/cargo_bay_envelope.py`,
     which fails loudly on the mismatch)*  **BLOCKS cargo shell print.**
 
@@ -667,6 +671,12 @@
     stops at the wall (inboard end X −100 port / −240 starboard) instead of
     crossing the bay.  `WING_SPAR_BOSS_OD` is re-derived from that bearing's OD
     rather than from the retired Ø12 press fit.
+
+    **CLOSED 2026-08-25.** `WING_SPAR_BORE_D` is 8.3 mm (matching the wing's
+    `SPAR_BORE_OD`); `WING_SPAR_BOSS_OD` is 27.7 mm, derived from the F688ZZ
+    bearing seat, not the retired Ø22 press fit; `bom_revS.csv`'s
+    `CF-TUBE-12MM` row is marked SUPERSEDED (qty 0), retained for
+    traceability, citing `SPAR-TILT-4130` as the single active spar row.
 
 **Rev R shell updates (sensor/antenna mounts; carried fwd from Rev O, 2026-05-24):**
 

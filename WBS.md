@@ -219,8 +219,8 @@ see docs/WBS.md §0.10.2.)*
 - [x] Access panel frames + covers (24" Rev R)
 - [x] 49 MHz (Part 15 §15.235) wire posts
 - [x] Verify head-cargo mating boss positions in slicer — SUPERSEDED,…
-- [ ] ★ CARGO-01 payload won't fit past the wing spar (BLOCKER)
-- [ ] CARGO-02 shell bores Ø12.3 for a spar the wing retired (8.3)
+- [x] ★ CARGO-01 payload won't fit past the wing spar (BLOCKER)
+- [x] CARGO-02 shell bores Ø12.3 for a spar the wing retired (8.3)
 - [x] ★ CARGO-03 wing root mortise now penetrates — CLOSED
 - [x] ★ CARGO-03b tenon/mortise on one datum — CLOSED
 - [ ] ★ CARGO-03c coupon gates tenon vs second spar (15 MPa)
@@ -293,8 +293,8 @@ see docs/WBS.md §0.10.2.)*
 - [x] EDF cableway added
 - [x] Fuselage spar-interface mismatched — station RESOLVED (Rev S1b)
   (spar DIAMETER Ø12.3 vs 8.3 still open — see §1.1.1 CARGO-02)
-- [ ] ★ WING-01 S1223 section self-intersects at x/c 0.742 (BLOCKER)
-- [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
+- [x] ★ WING-01 S1223 section self-intersects at x/c 0.742 (BLOCKER)
+- [x] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
 - [x] SPAR-02 DS3225 torque re-derived (aero+inertia only, gravity nulled by CG pivot) -- DS3225 clears at ~7.3% margin, no part change; 6 V tilt-servo rail resized to 2.3A/servo (RAIL-2 is unrelated -- winch/Observer rail, corrected citation)
 - [x] SPAR-04 Hall tip jog crosses the spar bore — CLOSED
 
@@ -374,6 +374,7 @@ see docs/WBS.md §0.10.2.)*
       *(closed 2026-08-09 — 4 ft adopted)*
 - [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
 - [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
+- [ ] LG-25 Fore bay frame vs U5 tie-rod boss: 12mm proud, no fix chosen
 - [ ] Render overview SVGs using FreeCAD TechDraw
 
 #### 1.1.5 — Non-Printable Component Placeholders
