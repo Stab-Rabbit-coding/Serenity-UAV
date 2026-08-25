@@ -48,7 +48,7 @@ AIRFRAME := $(ROOT)/..
 SCAD     := $(AIRFRAME)/openscad
 STLS     := $(AIRFRAME)/stls
 SCRIPT   := $(ROOT)/serenity_assembly.py
-OUTPUT   := $(AIRFRAME)/Serenity-Assembled.FCStd
+OUTPUT   := $(AIRFRAME)/freecad/assembly/SerenityAssembly.FCStd
 
 # ---- OpenSCAD flags -------------------------------------------
 # --hardwarnings: treat parameter warnings as errors
@@ -71,13 +71,22 @@ FUSELAGE_STLS := \
 # (bevel housing, bevel pair, Pinion A, Nozzle Drive Pinion, sector gear) is
 # DELETED and archived (airframe/archive/); replaced by the spar-crank pushrod
 # (nacelle_pushrod_crank.stl).  See docs/NOZZLE_DRIVE_TRADE.md.
+# Rev T3 (2026-08-09, airframe/wings-nacelles/WBS.md SS1.1.3.1): the nozzle
+# flaps shingled into master+seal pairs, and the combined "asm" preview
+# split into two named-endpoint renders (FLAP_PHI = PHI_CLOSED / PHI_OPEN)
+# so serenity_assembly.py can pick the one matching each nacelle's
+# configured tilt (see nozzle_iris_stl() there). The old single
+# nacelle_nozzle_iris.stl (no suffix, always PHI_CLOSED) is superseded by
+# -closed.stl and no longer built here or imported by the assembly.
 NACELLE_STLS := \
     $(STLS)/nacelles/edf_stator_sleeve.stl               \
     $(STLS)/nacelles/edf_aft_spider_sleeve.stl           \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_iris.stl     \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-closed.stl \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-open.stl   \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl   \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_ring.stl     \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl     \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal.stl \
     $(STLS)/nacelles/nacelle_pushrod_crank.stl
 
 # -- Wings (SCAD-sourced part-local prints; the port/stbd wing
@@ -150,10 +159,20 @@ $(STLS)/nacelles/edf_aft_spider_sleeve.stl: \
 	    -o $@
 	@echo "[stl] $@"
 
-$(STLS)/nacelles/nozzles/nacelle_nozzle_iris.stl: \
+$(STLS)/nacelles/nozzles/nacelle_nozzle_iris-closed.stl: \
         $(SCAD)/nacelles/nacelle_nozzle_iris.scad
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'FLAP_PHI=PHI_CLOSED' \
+	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/nozzles/nacelle_nozzle_iris-open.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'FLAP_PHI=PHI_OPEN' \
 	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
 	    -o $@
 	@echo "[stl] $@"
@@ -183,6 +202,17 @@ $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl: \
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
 	    -D 'RENDER_PART="flap"' \
+	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+# Rev T3 (2026-08-09) seal flap -- 4 per nozzle, lapped 0.2 mm radially
+# outboard of the 4 master flaps (PRINT-NACELLE-FLAP-MASTER/-SEAL, 4+4).
+$(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'RENDER_PART="flap_seal"' \
 	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
 	    -o $@
 	@echo "[stl] $@"

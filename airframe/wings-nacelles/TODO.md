@@ -23,5 +23,6 @@
 
 - [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past nacelle bore (routing)
 - [ ] [OPEN — VERIFY] AK7455 off-axis bench-cal / wing pocket 4x4 §1.1.3.6
+- [ ] serenity_render_views.py still refs stale nacelle_nozzle_iris.stl
 
 ---

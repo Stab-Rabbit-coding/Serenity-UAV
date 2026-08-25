@@ -388,6 +388,33 @@ def tilt_placement(side):
     return App.Placement(base, rot)
 
 
+def nozzle_iris_stl(side):
+    """Nozzle iris STL matching this side's configured tilt.
+
+    Rev T3 (2026-08-09, airframe/wings-nacelles/WBS.md SS1.1.3.1) exposed
+    `FLAP_PHI` in nacelle_nozzle_iris.scad specifically so each published
+    assembly STL is reproducible from source at a given flap angle, and the
+    two committed renders are the two endpoints: nacelle_nozzle_iris-
+    closed.stl (FLAP_PHI = PHI_CLOSED, petals shut, 0 deg tilt) and
+    nacelle_nozzle_iris-open.stl (FLAP_PHI = PHI_OPEN, petals full open,
+    90 deg tilt). This picks the nearer endpoint by a 45 deg threshold --
+    it is NOT a continuous interpolation. A tilt strictly between 0 and 90
+    deg would need a fresh `openscad -D 'FLAP_PHI=<computed>'` render (the
+    SCAD supports it; this script does not invoke openscad) rather than a
+    third discrete asset, since the flap angle is a continuous function of
+    tilt, not a third fixed pose.
+
+    The single-file nacelle_nozzle_iris.stl this script imported before
+    R1.3 predates Rev T3 (2026-07-19 vs the 2026-08-09 shingle fix) and is
+    stale -- superseded by the closed/open pair, not reintroduced here.
+    """
+    return _stl(
+        "nacelles/nozzles/nacelle_nozzle_iris-open.stl"
+        if NACELLE_TILT_DEG[side] >= 45.0
+        else "nacelles/nozzles/nacelle_nozzle_iris-closed.stl"
+    )
+
+
 def apply_tilt_to_rows(rows, side):
     """Compose this side's configured tilt (about its own pivot) onto
     nacelle_rows()'s local->hull-cruise transform, for transform_mesh()
@@ -682,19 +709,23 @@ def assemble():
         # placed here until nacelle_nozzle_pushrod.scad is reworked (TODO §1.1.3).
 
         # ── Nozzle iris assembly ──────────────────────────────────────────
-        # nacelle_nozzle_iris.stl is the combined render (cam-only unison ring
-        # + outer housing + 8 flaps at the closed position) from
-        # nacelle_nozzle_iris.scad.  Rev T: the ring is a plain CAM disc (no
-        # gear teeth) driven by the spar-crank pushrod above; the housing has
-        # no drive-pinion relief and is rotationally symmetric, so identity
-        # rotation is fine.  Translate to NOZZLE_RING_Z.
+        # nacelle_nozzle_iris-{closed,open}.stl are the combined renders
+        # (cam-only unison ring + outer housing + 8 shingled master/seal
+        # flaps, Rev T3) from nacelle_nozzle_iris.scad, one per petal-state
+        # endpoint -- see nozzle_iris_stl() above for the tilt->file
+        # selection and its "not continuous" caveat. Rev T: the ring is a
+        # plain CAM disc (no gear teeth) driven by the spar-crank pushrod
+        # above; the housing has no drive-pinion relief and is rotationally
+        # symmetric, so identity rotation is fine. Translate to
+        # NOZZLE_RING_Z.
         # History: Rev R1 compound idler (2026-06-22) -> Rev S1 internal ring
         # gear (2026-07-07) -> Rev T pushrod/cam-only drive (2026-07-18,
-        # Option B); the entire gear train is deleted and archived — see
-        # ARCHIVE_INDEX.md and docs/NOZZLE_DRIVE_TRADE.md.
+        # Option B) -> Rev T3 shingled flaps (2026-08-09); the entire gear
+        # train is deleted and archived — see ARCHIVE_INDEX.md and
+        # docs/NOZZLE_DRIVE_TRADE.md.
         nozzle = add_mesh(
             doc,
-            _stl("nacelles/nozzles/nacelle_nozzle_iris.stl"),
+            nozzle_iris_stl(side),
             f"Nacelle_{label}_Nozzle_Iris",
         )
         transform_mesh(

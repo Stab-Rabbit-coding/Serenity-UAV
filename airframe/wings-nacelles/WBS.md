@@ -845,6 +845,28 @@
         the intervening gaps at +2.7 mm radius. Confirm the residual step is
         acceptable for the "smooth, low-turbulence exit" goal by bench/CFD before
         flight; if not, the alternative is a scarfed (tapering-thickness) seal.
+    - [x] **CLOSED 2026-08-25 — the FreeCAD assembly and its Makefile were
+        importing the pre-Rev-T3 `nacelle_nozzle_iris.stl`** (2026-07-19, single
+        combined render, `FLAP_PHI` not yet exposed — predates this shingle fix
+        by three weeks), found while wiring per-side nozzle petal state to
+        `airframe/FreeCAD-scripts/serenity_assembly.py`'s new nacelle-tilt
+        config. `airframe/FreeCAD-scripts/Makefile` built only that stale
+        target and never built `nacelle_nozzle_flap_seal.stl` at all.
+        Fixed: the assembly now imports `nacelle_nozzle_iris-closed.stl`
+        (petals shut, `FLAP_PHI = PHI_CLOSED`) for a 0°-tilt nacelle and
+        `nacelle_nozzle_iris-open.stl` (petals full open, `FLAP_PHI =
+        PHI_OPEN`) for 90°, picked by threshold — not a continuous
+        interpolation; an intermediate tilt would need a fresh `openscad`
+        render at a computed `FLAP_PHI`, which this script does not invoke.
+        Both committed STLs re-verified byte-identical (face count + volume)
+        against a fresh render from the current SCAD. Makefile gained rules
+        for `-closed.stl`/`-open.stl`/`nacelle_nozzle_flap_seal.stl` and
+        dropped the stale bare-name target.
+        **Not fixed, flagged for follow-up:**
+        `airframe/blender-scripts/serenity_render_views.py` still references
+        the stale bare `nacelle_nozzle_iris.stl` for its overview-image
+        pipeline (a different, non-FreeCAD tool) — untouched here since it
+        was out of scope for the tilt-config task that surfaced this.
 
 - **Rev T (2026-07-18) — Option B pushrod drive adopted** (user decision;
   `docs/NOZZLE_DRIVE_TRADE.md`). Supersedes the Rev S1 internal-ring gear drive.
