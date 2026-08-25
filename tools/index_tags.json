@@ -2412,15 +2412,6 @@
       ],
       "archived": false
     },
-    "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
-      "tags": [
-        "cad-mesh",
-        "propulsion",
-        "structural"
-      ],
-      "archived": false
-    },
     "airframe/stls/nacelles/nozzles/nacelle_nozzle_ring.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
@@ -3403,6 +3394,15 @@
       "archived": true
     },
     "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "archive",
+        "cad-mesh",
+        "propulsion"
+      ],
+      "archived": true
+    },
+    "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_iris.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "archive",
@@ -10051,6 +10051,22 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md": {
+      "description": "fix: Wing S1223 repair, root bearing-seat joint, and tenon fallback spar",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-08-25-001-finish-avionics-plan.md": {
+      "description": "plan: Close out avionics subsystem",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -12914,6 +12930,8 @@
       "docs/img/transparent-nacelle.png",
       "docs/img/wing_rev_r1a_sections.png",
       "docs/img/wing_rev_s1c_sections.png",
+      "docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md",
+      "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -13127,6 +13145,7 @@
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/WBS_FEDERATION.md",
       "docs/electrical_fault_margins.md",
+      "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
@@ -13267,6 +13286,7 @@
       "docs/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
+      "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
@@ -13755,7 +13775,6 @@
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl",
-      "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_ring.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_throat.stl",
       "airframe/stls/wings/wing_port_s1223_revo.stl",
@@ -13993,7 +14012,6 @@
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl",
-      "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_ring.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_throat.stl",
       "airframe/stls/wings/wing_port_s1223_revo.stl",
@@ -14104,6 +14122,7 @@
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_closed_asm_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl",
+      "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/rear_nozzle_petal_repaired.stl",
@@ -14268,7 +14287,6 @@
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl",
-      "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_ring.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_throat.stl",
       "airframe/wings-nacelles/TODO.md",
@@ -14300,6 +14318,7 @@
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_closed_asm_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl",
+      "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/rear_nozzle_petal_repaired.stl",
@@ -14741,6 +14760,7 @@
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_closed_asm_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl",
+      "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/rear_nozzle_petal_repaired.stl",

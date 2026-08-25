@@ -104,8 +104,14 @@ COMPONENTS = [
     ("nacelles/edf_stator_sleeve.stl", "Stator_Sleeve", DETAIL_COLOR),
     ("nacelles/edf_aft_spider_sleeve.stl", "Spider_Sleeve", DETAIL_COLOR),
     # nacelle_nozzle_closed_asm.stl (old Rev R1 axial-hinge nozzle) archived
-    # 2026-07-20; use the current Rev T iris assembly.  See ARCHIVE_INDEX.md.
-    ("nacelles/nozzles/nacelle_nozzle_iris.stl", "Nozzle_Asm", DETAIL_COLOR),
+    # 2026-07-20; use the current Rev T3 iris assembly. The bare
+    # nacelle_nozzle_iris.stl (2026-07-19, pre-dates the Rev T3 shingle fix,
+    # 2026-08-09) was itself archived 2026-08-25 -- see ARCHIVE_INDEX.md.
+    # Rev T3 split the combined render into two named-endpoint STLs (open/
+    # closed petals, see airframe/wings-nacelles/WBS.md SS1.1.3.1); this
+    # static overview render has no tilt concept, so it uses the closed
+    # (cruise, 0 deg) endpoint, matching FreeCAD's own untilted default.
+    ("nacelles/nozzles/nacelle_nozzle_iris-closed.stl", "Nozzle_Asm", DETAIL_COLOR),
     # Cargo bay doors (printed; positioned in cargo-section local frame)
     ("fuselage/cargo/cargo_door_port.stl", "Cargo_Door_Port", FUSELAGE_COLOR),
     ("fuselage/cargo/cargo_door_stbd.stl", "Cargo_Door_Stbd", FUSELAGE_COLOR),

@@ -13,6 +13,21 @@
 
 ---
 
+### Avionics close-out: actuator bus, SG90/OSC, Observer pitot (2026-08-25)
+→ full detail: `docs/plans/2026-08-25-001-finish-avionics-plan.md`
+
+- [ ] U1: Retire Pilot J_ESC/J_SERVO PWM headers → CAN-FD/RS-485 trunk
+- [ ] U2: LibreServo_v4 nacelle-tilt bus integration (GW-1 J_FLEX gap)
+- [ ] U3: Open-Secure-ESC 50A/6S CAN-FD integration + governor rewrite
+- [ ] U4: OpenServoCore SG90 TTL+CMAC bus finalize (re-check maturity gate)
+- [ ] U5: Add Observer pitot-tube airspeed sensor; fix Pilot's stale claim
+- [ ] U6: Fleet host+message auth wiring for ESC/servo/SG90 endpoints
+- [ ] U7: Per-board ERC/DRC/gerber closeout (Pilot/XO/Commo/FE/Obs/GW-1)
+- [ ] U8: Tamper-mesh creepage fix (Pilot fab blocker) + Faraday/shielding
+- [ ] U9: REFERENCES.md + WBS/TODO closeout for all of the above
+
+---
+
 #### ***EM hardening Objective is to ensure safe and controlled operations in hostile em/rf environments such as the vicinity of radiating commercial broadcast, amateur radio and cellular towers.***
 → full detail: `WBS.md` §1.2a
 
