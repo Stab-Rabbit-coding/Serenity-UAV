@@ -581,9 +581,10 @@ the lowest.
     (X, Z) pair per side; re-verify with the same continuous cross-section
     trace used to find this, then re-run `docs/structural_analysis.md` §6.4's
     nose-high case — a correctly-sited rod should meaningfully improve the
-    2.93 FOS that case measured with the rod (as currently sited) not
-    mechanically coupled to the tube at all. Not fixed here; this is a
-    finding, not a corrected geometry.
+    3.27 FOS that case measured (per REF-MAT-002's ASTM D790 flexural
+    allowable, superseding an earlier REF-MAT-001 tensile-proxy estimate)
+    with the rod (as currently sited) not mechanically coupled to the tube
+    at all. Not fixed here; this is a finding, not a corrected geometry.
 
 **Remaining parts needing SCAD source creation then STL export:**
 

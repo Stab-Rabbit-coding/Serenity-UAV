@@ -6388,6 +6388,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/mspm0g3507-q1.pdf": {
       "description": "PDF document",
       "tags": [
@@ -15608,6 +15615,7 @@
       "avionics/datasheets/iso6442.pdf",
       "avionics/datasheets/isow1044.pdf",
       "avionics/datasheets/isow1412.pdf",
+      "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf",
       "avionics/datasheets/mspm0g3507-q1.pdf",
       "avionics/datasheets/mspm0g3507.pdf",
       "avionics/datasheets/mspm0g3518-q1.pdf",

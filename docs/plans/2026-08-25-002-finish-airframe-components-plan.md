@@ -368,11 +368,11 @@ problem than the load case itself.** Full re-derivation in
 direction, so this doesn't need re-deriving again at final configuration).
 Summary:
 
-- Real geometry, corrected mass: symmetric flat-landing case (§6.2's own
-  case) now shows **FOS 5.85 — PASS**, better than believed (the old
-  "approx 76×23mm²" cross-section was ~3× too wide; corrected to a measured
-  ~24×23mm).
-- **Nose-high, single-skid-first case: FOS 2.93 — below this repo's 4.0
+- Real geometry, corrected mass, correct allowable (see below): symmetric
+  flat-landing case (§6.2's own case) now shows **FOS 6.53 — PASS**, better
+  than believed (the old "approx 76×23mm²" cross-section was ~3× too wide;
+  corrected to a measured ~24×23mm).
+- **Nose-high, single-skid-first case: FOS 3.27 — below this repo's 4.0
   target.** Real positive margin, not a snap failure, but short of the bar.
 - **Independent finding, more consequential than the FOS number:** tracking
   the skid tube's actual centerline continuously (Y=204 to 384) found the CF
@@ -385,11 +385,16 @@ Summary:
   it (LG-03 assumed the channel was simply missing — it exists, just in the
   wrong place).
 - Checked against the `3d-print-design` skill and a full re-read of
-  REF-MAT-001 (the tensile-allowable source): the paper has no flexural test
-  of its own and no print-orientation data for this specific geometry — the
-  FOS numbers above use bulk tensile strength as a bending-stress proxy,
-  flagged as an approximation pending a real flexural coupon and a stated
-  print orientation for this part.
+  REF-MAT-001 (the tensile-allowable source first used here): it has no
+  flexural test of its own, only tensile/compression. A second paper the
+  owner supplied afterward, **REF-MAT-002** (`REFERENCES.md`), does report a
+  genuine ASTM D790 flexural strength for unreinforced PETG (54 MPa) — the
+  correct test type for this failure mode — and now supersedes the tensile
+  proxy above (FOS figures updated accordingly: 6.53/3.27, was
+  5.85/2.93 under the proxy). Neither source provides print-orientation
+  data, so that caveat stands: the FOS figures remain upper bounds pending
+  confirmation the skid tube's bending axis sees the tested (in-plane)
+  direction, and a coupon of the actual tube geometry rather than a bulk bar.
 
 **Not fixed here — surfaced as findings for an owner decision, per this
 unit's own step 4.** The natural fix order is: re-site `SKID_ROD_BORES` to

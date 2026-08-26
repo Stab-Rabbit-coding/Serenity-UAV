@@ -1144,6 +1144,35 @@ requirements for the airframe itself.
 
 **Used in:** `docs/structural_analysis.md` §7.3, `airframe/fuselage-mid/WBS.md` §1.1.1.2 CARGO-03c, this file's Open Standards Verification Items table (CF-PETG bearing allowable row)
 
+### REF-MAT-002: Ramachandran, Pandian, Ramamoorthi & Britto John — "Influence of Process Parameters on the Mechanical Properties of Carbon Fibre Reinforced PETG"
+
+| Field | Value |
+|---|---|
+| **Authors** | Prabhakaran Ramachandran, Venkatesh Ramamoorthi, Jerold John Britto John (Ramco Institute of Technology, Rajapalayam, India); Pitchipoo Pandian (P.S.R. Engineering College, Sivakasi, India) |
+| **Publication** | *Mechanics of Advanced Composite Structures* **2026**, 13(1) [Serial No. 27], 171–184, Semnan University Press |
+| **DOI / Official URL** | <https://doi.org/10.22075/MACS.2025.36494.1791> — open access, CC BY 4.0 (<https://creativecommons.org/licenses/by/4.0/>) |
+| **Retrieved** | 2026-08-25, user-supplied PDF, cross-checked against the DOI landing page |
+| **Test method** | ASTM D695 (compression, cylindrical specimens), **ASTM D790 (three-point flexural)**, ASTM E384 (Shore D hardness), ASTM D1525 (Vicat softening), ASTM D648 (heat deflection); FFF-printed on a URU 3.0 printer, 0.1 mm layer height, 100% infill, 240°C nozzle / 85°C bed, 80 mm/s, ±45° raster |
+| **Material tested** | Pure PETG vs. 10%/20%/30% short chopped-carbon-fiber PETG (M/s. Medsby Health Care Solutions & FlashForge filament), five specimens per composition |
+
+**Measured properties, unreinforced PETG (this project's use — Table 4 of the paper):**
+
+| Property | Value | Notes |
+|---|---|---|
+| **Flexural strength (ASTM D790)** | **54 N/mm² (MPa)** | Table 4, exact — this is a genuine three-point-bend test, not a tensile-strength proxy |
+| **Flexural modulus (ASTM D790)** | **2.76 GPa** | Table 4, exact |
+| Compressive strength (ASTM D695) | 53 MPa | Table 3 |
+| Shore Hardness D | 71 | Table 5 |
+| Heat deflection temperature | 67 °C | Table 7 |
+
+FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated flexural yield strength for pure PETG = 50 MPa vs. the 54 MPa experimental figure above (7.4% error) — the paper's own validation, not independently re-verified here, but consistent enough to support citing the experimental figure with confidence.
+
+**What this study does NOT provide:** no print-orientation-specific data (loading axis vs. layer-stack axis) — the paper's own conclusions section notes "anisotropic fibre orientation" as a source of nonlinearity in its compressive/flexural results but gives no interlayer (Z-axis) strength figure or orientation-dependent allowable. It also does not test any geometry resembling a thin-walled tube (only solid dog-bone/bar/cylinder coupons) — this figure is a bulk material property, not a structural-member allowable.
+
+**Applied to:** `docs/structural_analysis.md` §6.4 (rear CF skid-rod nose-high re-derivation) — **replaces** the REF-MAT-001 tensile-strength-as-bending-proxy (48.41 MPa) used there initially with this source's direct ASTM D790 flexural strength (54 MPa), the correct test type for a bending failure mode. The print-orientation caveat from that section's original derivation stands unchanged — this source does not resolve it.
+
+**Used in:** `docs/structural_analysis.md` §6.4
+
 ---
 
 ## Part XI — FDA / CDRH Laser Product Regulations

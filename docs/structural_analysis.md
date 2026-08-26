@@ -463,42 +463,43 @@ not by resizing the rod. Not fixed here — this is a finding, not yet a
 corrected geometry; see `airframe/landing-gear/WBS.md` for the tracking
 item.
 
-**Allowable:** 48.41 MPa (ASTM D638 bulk tensile strength, unreinforced
-PETG, **REF-MAT-001**), used as a bending-stress proxy. Re-verified
-2026-08-25 by reading REF-MAT-001 in full (16 pages): it reports **no
-flexural test** of its own (ASTM D638 tensile and ASTM D695 compression
-only) and no interlayer/orientation-specific data of its own — its
-introduction cites a *different, third-party* source for the general claim
-that print orientation affects tensile strength and stiffness. Using bulk
-tensile strength as a flexural-allowable proxy is a common conservative
-approximation for FDM PETG but is **not verified equivalent** for this part,
-and REF-MAT-001's own dog-bone coupons were loaded in-plane (XY, the FDM
-strong axis) — this repo has no record of the rear shell's actual print
-orientation, so whether the skid tube's real load path sees this strong-axis
-number or the weaker interlayer strength is genuinely unknown. Treat the FOS
-figures below as upper bounds pending (a) a real flexural coupon and (b) a
-stated print orientation for this part.
+**Allowable:** **54 MPa (ASTM D790 three-point flexural strength, unreinforced
+PETG, REF-MAT-002)** — superseding this section's initial use of REF-MAT-001's
+48.41 MPa tensile strength as a bending proxy. REF-MAT-002 (added 2026-08-25,
+`REFERENCES.md`) is a genuine flexural test (the correct test type for this
+failure mode), not a proxy, and its 50 MPa ANSYS FEA cross-check for pure
+PETG (7.4% error vs. the 54 MPa experimental figure) supports citing it with
+confidence. **What it does not resolve:** no print-orientation-specific data
+(loading axis vs. layer-stack axis) exists in this source either — its own
+conclusions cite "anisotropic fibre orientation" as a source of nonlinearity
+but give no interlayer/Z-axis strength figure, and this repo has no record of
+the rear shell's actual print orientation. Treat the FOS figures below as
+upper bounds pending (a) confirmation the skid tube's bending axis sees the
+tested (in-plane) direction rather than the weaker interlayer direction, and
+(b) a coupon test of the actual tube geometry, not a bulk bar/dog-bone.
 
 **Load cases** (2.5 g factor per §3's existing "hard landing (vertical)"
 convention — kept, not re-derived, since no bound on nose-high pitch angle
 or sink rate exists anywhere in this repo's flight-envelope docs to justify
 a different factor):
 
-| Case | Load path | F | M = F × 177 mm | σ = M·c/I (c = 11.5 mm) | FOS vs 48.41 MPa |
+| Case | Load path | F | M = F × 177 mm | σ = M·c/I (c = 11.5 mm) | FOS vs 54 MPa |
 | --- | --- | --- | --- | --- | --- |
-| Symmetric flat landing (§6.2's own case, corrected mass + geometry) | both skids share 2.5g·W | 52.4 N | 9,275 N·mm | 8.27 MPa | **5.85 — PASS** |
-| Nose-high / single-skid-first strike (new — the owner's scenario) | one skid reacts the full 2.5g·W | 104.75 N | 18,541 N·mm | 16.53 MPa | **2.93 — below this repo's 4.0 FOS target (§3)** |
+| Symmetric flat landing (§6.2's own case, corrected mass + geometry) | both skids share 2.5g·W | 52.4 N | 9,275 N·mm | 8.27 MPa | **6.53 — PASS** |
+| Nose-high / single-skid-first strike (new — the owner's scenario) | one skid reacts the full 2.5g·W | 104.75 N | 18,541 N·mm | 16.53 MPa | **3.27 — below this repo's 4.0 FOS target (§3)** |
 
 The single-skid case assumes 100% of the moment is carried by the PETG skin
 (the conservative direction, since the rod is not currently coupled to the
 tube per the finding above — the original 99.8%-skin argument is not
 re-verified here, and doing so is moot until the rod is correctly sited).
 
-**Conclusion.** The existing symmetric case, once corrected for mass and
-real geometry, holds with more margin than §6.2 believed (5.85 vs. an
-implied-marginal earlier state). The nose-high case the owner specifically
-asked about does **not** clear this repo's 4.0 FOS target, though it is not
-an outright material failure (real, if thin, positive margin remains). This
+**Conclusion.** The existing symmetric case, once corrected for mass, real
+geometry, and the correct (flexural, not tensile-proxy) allowable, holds with
+more margin than §6.2 believed (6.53 vs. an implied-marginal earlier state).
+The nose-high case the owner specifically asked about does **not** clear
+this repo's 4.0 FOS target — closer than the initial tensile-proxy estimate
+(3.27 vs. 2.93), but still short. It is not an outright material failure
+(real, if thin, positive margin remains). This
 is a **finding, not a fix**: three things need an owner decision before this
 closes — (1) re-site the rod bore to actually track the tube (a geometry
 correction, likely closes most of the gap on its own once the rod is
