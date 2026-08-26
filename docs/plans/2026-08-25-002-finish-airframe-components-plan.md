@@ -520,6 +520,70 @@ open items, not scoped further by this plan:
 
 ## Scope Boundaries
 
+## U7. CF-PETG printability and flightworthiness audit
+
+**Goal:** Review every active `.scad` source and published STL in
+`airframe/openscad/` and `airframe/stls/` for fabrication in 20% CF-PETG,
+starting with `cargo_sect_shell24_2mm_repaired.stl`. The audit must separate
+intended solid material from intentional cavities, recesses, mortises,
+passthroughs, sockets, and mating clearances, and must not treat a global
+watertight result as proof that local wall thickness or interface geometry is
+printable.
+
+**First checkpoint:** `cargo_sect_shell24_2mm_repaired.stl`, followed by
+`head_cargo_splice_collar.stl`, `cargo_middle_splice_collar.stl`, and
+`middle_rear_splice_collar.stl`. The supplied `bow_sensor_faceplate.stl` is
+included as the first small-part control. The review expands to all active
+OpenSCAD/STL artifacts only after this checkpoint produces a repeatable report
+format and identifies the canonical source for each artifact.
+
+**Required evidence for each artifact:**
+
+- [ ] Mesh loads, is non-empty, and passes boundary-edge, non-manifold,
+  winding, degeneracy, and connected-body checks.
+- [ ] Bounding box, volume, mass bracket for 20% CF-PETG, and print orientation
+  are recorded; structural parts use at least 4 perimeters and 40% infill.
+- [ ] Local wall thickness is sampled at the shell, floors, roofs, ribs, boss
+  annuli, collar walls, and other load paths. Any value below the applicable
+  20% CF-PETG design minimum is a finding, not silently accepted.
+- [ ] Every cavity, recess, mortise, passthrough, bore, socket, and interface
+  is classified as intentional or unintended, with its mating artifact and
+  clearance requirement identified.
+- [ ] Unsupported overhangs, horizontal holes, bridges, trapped support
+  volumes, thin islands, sharp first-layer edges, and print-split joints are
+  assessed for the selected FDM orientation.
+- [ ] Flight-critical parts receive a load-path disposition. A mesh-only pass
+  is not a flightworthiness approval; material data, print orientation,
+  coupon testing, fastener/adhesive details, and assembly inspection remain
+  explicit gates where not verified.
+
+**Cargo-shell first-pass findings to resolve or document:**
+
+- [ ] Confirm the nominal 2.0 mm foam-fill skin thickness against local mesh
+  measurements, including the cargo aperture, joint faces, wing-root
+  mortises, spar bore, GPS/camera features, ribs, bosses, and splice-collar
+  seats.
+- [ ] Confirm which internal volumes are intentionally open for payload/cable
+  routing and which are meant to be solid CF-PETG, including the shell's
+  merged structural positives and negative cutters.
+- [ ] Verify the supplied splice collars are printable, correctly oriented,
+  and mechanically coupled to the shell; specifically check collar wall
+  thickness, bore/shoulder geometry, trapped cavities, and bonded joint
+  surfaces.
+- [ ] Record mass and CG deltas for any geometry disposition that changes the
+  current flight configuration.
+
+**Verification contract:** run `python3 tools/validate_stls.py` for the
+published inventory, run the shell-specific structural checks, and retain a
+machine-readable audit report with artifact path, measured values, findings,
+and `PASS`, `CONDITIONAL`, or `BLOCKED` disposition. A `PASS` requires both
+global mesh integrity and local printability evidence; unverified material or
+flight-load assumptions remain `CONDITIONAL`.
+
+**Dependencies:** U7.1 cargo shell measurement and intent map; U7.2 splice
+collar interface review; U7.3 full OpenSCAD/STL inventory; U7.4 corrective
+geometry and regeneration; U7.5 looped QA and flightworthiness closeout.
+
 **In scope:** Phase 5 units U1–U6 (full implementation); Phase 6/7/9/11
 (capture and light triage only, not implementation, per the owner's request
 for a plan covering "the rest of the airframe components").

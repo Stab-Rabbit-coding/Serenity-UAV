@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-25",
+  "generated": "2026-08-26",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -10090,6 +10090,15 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md": {
+      "description": "Plan: Nacelle ESC integration and circular intake refinement",
+      "tags": [
+        "documentation",
+        "power",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -12686,6 +12695,15 @@
       ],
       "archived": false
     },
+    "tools/nacelle_esc_service.py": {
+      "description": "Extract the committed Open-Secure-ESC board envelope for nacelle service design.",
+      "tags": [
+        "build-tooling",
+        "power",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/open_mating_faces.py": {
       "description": "Open the capped head-aft and middle-fwd fuselage mating faces.",
       "tags": [
@@ -12724,6 +12742,15 @@
       "tags": [
         "build-tooling",
         "cad-mesh"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_nacelle_esc_service.py": {
+      "description": "Python script",
+      "tags": [
+        "build-tooling",
+        "power",
+        "propulsion"
       ],
       "archived": false
     },
@@ -12957,6 +12984,7 @@
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-002-finish-airframe-components-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
+      "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -14410,6 +14438,7 @@
       "docs/img/port-nacelle-horizontal.png",
       "docs/img/starboard-nacelle-vert.png",
       "docs/img/transparent-nacelle.png",
+      "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
@@ -14458,7 +14487,9 @@
       "graphical-build-guide/build_guide_06_nacelle_pivot.svg",
       "graphical-build-guide/build_guide_07_edf_install.svg",
       "graphical-build-guide/build_guide_08_nozzle_gear.svg",
-      "graphical-build-guide/pngs/17_closeup_nacelle.png"
+      "graphical-build-guide/pngs/17_closeup_nacelle.png",
+      "tools/nacelle_esc_service.py",
+      "tools/tests/test_nacelle_esc_service.py"
     ],
     "bom": [
       "airframe/diagrams/ring_frames/ring_cargo_Y30_inner.csv",
@@ -14552,11 +14583,14 @@
       "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "docs/BATTERY_MOUNT.md",
       "docs/POWER_DISTRIBUTION.md",
+      "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md",
       "docs/references/vimdrones_esc_s50_v1.0.step",
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
-      "graphical-build-guide/build_guide_10_power_wiring.svg"
+      "graphical-build-guide/build_guide_10_power_wiring.svg",
+      "tools/nacelle_esc_service.py",
+      "tools/tests/test_nacelle_esc_service.py"
     ],
     "sensors-vision": [
       "airframe/openscad/fuselage/bow_sensor_faceplate.scad",
@@ -16240,11 +16274,13 @@
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",
       "tools/mirror_claude_memory.py",
+      "tools/nacelle_esc_service.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
       "tools/precommit_kicad_load.py",
       "tools/precommit_sanitize.py",
       "tools/purge_stale_fcstd_objects.py",
+      "tools/tests/test_nacelle_esc_service.py",
       "tools/validate_kicad.py",
       "tools/validate_stls.py",
       "tools/verify_bow_pod.py",
