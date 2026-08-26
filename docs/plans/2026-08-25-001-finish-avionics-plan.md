@@ -3,6 +3,7 @@ title: "plan: Close out avionics — CAN-FD/RS-485 actuator bus, SG90/OSC finali
 date: 2026-08-25
 plan_type: feature+fix
 execution: hardware+firmware
+deepened: 2026-08-25
 ---
 
 # plan: Close out avionics subsystem
@@ -58,6 +59,51 @@ ships gerbers.
   that flag is **not cleared by this plan**. U4 below re-checks it as a gate, not a
   formality; if it's still true, flight-article SG90 procurement stays blocked
   regardless of how much integration work lands.
+
+---
+
+## Skills & Workflow Map
+
+None of these nine units close on acceptance-criteria checkboxes alone — each has
+a project skill that either produces the artifact the checkbox demands or is the
+gate that must pass before the checkbox can be marked done. This table is the
+quick-reference; each unit below repeats its own row inline so an implementer
+never has to cross-reference back here.
+
+| Unit | Producing skill(s) | Gating skill/workflow | What "gate passes" means |
+|---|---|---|---|
+| U1 | `pcb-designer` (bus-topology + connector rework guidance) | `kicad` | ERC/DRC on `Pilot.kicad_sch`/`.kicad_pcb` shows 0 new violations after the `J_ESC`/`J_SERVO` retarget |
+| U2 | `pcb-designer` (RS-485 transceiver placement), `datasheets` (ADM2587E/ADM3055E extraction) | `kicad` | `CAN-PERIPH-GW-1` schematic ERC clean after the `J_FLEX` transceiver fix; datasheet extraction attached before REF-SENSOR-014 is renamed |
+| U3 | `bom`/`datasheets` (Open-Secure-ESC `CAN_485_faraday` BOM/spec pull) | `secure-controller-assurance` | Host+message-auth message schema maps onto SCA's actuator-authentication controls with no unmapped 🔒 gate |
+| U4 | — (protocol/firmware only) | `secure-controller-assurance` + explicit upstream-maturity re-check | CMAC framing maps onto an SCA control; REF-SENSOR-015 maturity flag is re-stated, not silently dropped |
+| U5 | `datasheets` (sensor extraction), `bom` (sourcing), `pcb-designer` (I2C bus/pull-up sizing) | `kicad`, then `kidoc` | Datasheet extraction exists **before** any REFERENCES.md entry is written (hard order, not parallel); ERC clean on `J_PITOT`; Observer's `kidoc` HDD scaffold regenerates without a stale-data warning |
+| U6 | — (architecture decision, no board edit) | `secure-controller-assurance` | Every new authenticated endpoint class (ESC, tilt servo, SG90) is mapped to an SCA control or overlay, not asserted informally |
+| U7 | — (closeout only) | `kicad` (ERC/DRC/BOM/DFM), `emc` (pre-compliance) | Each board table row reaches `kicad` ERC=0/DRC=0-hard (or documented exception) **and** an `emc` pre-compliance pass/waiver, before gerbers are generated |
+| U8 | `pcb-designer` (isolation/creepage reference), `emc` (shielding/radiated-emissions guidance) | `kicad` | DRC re-run shows the 13 `TMESH_P`/`TMESH_N` vs `GND2_*` violations resolved to ≥8mm creepage / ≥1.5mm clearance |
+| U9 | `kidoc` (regenerate per-board status docs) | `project-overseer` | WBS/TODO federation check shows no stale checkbox and no orphaned open item across `avionics/TODO.md`, `avionics/WBS.md`, and root `TODO.md`/`WBS.md` |
+
+**Why `kicad` (not ad-hoc `kicad-cli`) is the gate, not just a tool call:** the
+`kicad` skill's ERC/DRC analyzer produces a confidence-labeled, evidence-sourced
+report (`trust_summary` rollup) rather than a bare pass/fail — that's what
+`avionics/AGENTS.md`'s DRC Workflow policy ("document anything that cannot be
+resolved... with the specific DRC rule and reason") actually needs to be
+satisfiable. A bare `kicad-cli` exit code doesn't carry the reason text the
+policy requires.
+
+**Why `secure-controller-assurance` gates U3/U4/U6 specifically:** those three
+units are exactly where root `AGENTS.md`'s Zero Trust requirement stops being an
+aspiration and becomes a wire-level claim (an ESC accepts a signed setpoint, an
+SG90 accepts a CMAC frame). The skill's 96 controls + platform overlays are the
+existing mechanism for turning "this is authenticated" into a checked control
+rather than a sentence in a `.md` file.
+
+**Why `datasheets` gates the *order of operations* in U2/U5, not just informs
+them:** root CLAUDE.md's Authenticity policy ("No fabricated... reference...
+will ever be fabricated") is a standing constraint this plan cannot waive for
+convenience. U5 in particular is the unit most at risk of a fabricated citation
+— it is picking a **new** sensor with no prior art in the repo — so the datasheet
+pull is sequenced as a hard prerequisite to writing anything into
+`REFERENCES.md`, not a parallel nice-to-have.
 
 ---
 
@@ -118,6 +164,14 @@ addressed nodes on that trunk instead of point-to-point PWM wires.
 - [ ] Manual check: trace the retired `J_ESC`/`J_SERVO` nets end-to-end; confirm no
   firmware code path still assumes EHRPWM output exists.
 
+**Skills / workflow gate:** Use `pcb-designer` (communication-interfaces.md, §CAN
+reference) to work the point-to-point-vs-shared-trunk decision before touching the
+schematic. The unit is not done until the `kicad` skill's ERC/DRC analyzer runs
+against the edited `Pilot.kicad_sch`/`.kicad_pcb` and reports the confidence-labeled
+`trust_summary` this doc's own DRC Workflow policy requires — a bare `kicad-cli`
+exit code is not sufficient evidence for the "no new violations" acceptance
+criterion above.
+
 **Dependencies:** None (this is the gating decision for U2/U3/U6).
 
 **Files likely touched:** `avionics/kicad/Pilot/Pilot.md`, `Pilot.kicad_sch`,
@@ -162,6 +216,14 @@ the fork's current interface (ADM2587E RS-485 + ADM3055E CAN-FD, per
   addressed CAN-FD setpoint frame and returns authenticated position/current
   telemetry over the same trunk.
 
+**Skills / workflow gate:** Run `datasheets` against the ADM2587E and ADM3055E
+parts named in `LibreServo_v4/README.md` **before** editing REF-SENSOR-014 — the
+rename to v4 must carry a pulled-and-cached extraction, not a copy of the README
+prose, per root CLAUDE.md's citation-authenticity policy. Use `pcb-designer`'s
+communication-interfaces.md RS-485 guidance (120Ω termination, fail-safe bias) to
+size the new gateway-side transceiver. Gate: `kicad` ERC clean on the touched
+`CAN-PERIPH-GW-1` schematic.
+
 **Dependencies:** U1 (bus topology/addressing decision).
 
 **Files likely touched:** `avionics/kicad/CAN-PERIPH-GW-1/*`, `REFERENCES.md`,
@@ -198,6 +260,15 @@ telemetry readback), and rewrite the EDF PID governor firmware around it.
   is available; confirm settle/overshoot/equalization targets still hold.
 - [ ] CAN-FD cross-node RPM sync (fwd/aft pairing across River/Simon stacks, per
   firmware WBS §4.2) re-verified over the new bus.
+
+**Skills / workflow gate:** Pull the `CAN_485_faraday` build's own protocol doc
+and BOM via `bom`/`datasheets` before freezing the message schema — do not derive
+frame layout from the generic README description alone. The governing gate is
+`secure-controller-assurance`: run it against the new setpoint/telemetry/arm-
+disarm frame set and confirm each maps to an existing SCA actuator-authentication
+control (or is flagged as a new 🔒 gate to add) before this unit is considered
+closed — this is the unit where Zero Trust stops being a sentence in `AGENTS.md`
+and becomes a wire-level claim.
 
 **Dependencies:** U1.
 
@@ -242,6 +313,15 @@ osc-native protocol instead of raw PWM.
 - [ ] ERC clean on whichever node's schematic carries the TTL bus master pins.
 - [ ] Firmware state machine unit-tested against a simulated CMAC-authenticated
   frame sequence (or bench-tested if hardware is available).
+
+**Skills / workflow gate:** The upstream-maturity re-check is a literal step, not
+a note — actually query `github.com/OpenServoCore/open-servo-core` and the
+`-secure` fork's current state before closing this unit; do not reuse the
+REF-SENSOR-015 text from a prior pass. Run `secure-controller-assurance` against
+the CMAC framing to confirm it maps to an SG90/actuator-class control in the same
+way U3/U6 map the ESC and fleet-auth wiring — a servo class exception here would
+be a silent Zero Trust gap. No `kicad` gate is required unless the host-node
+decision changes that board's schematic (see Files below).
 
 **Dependencies:** None (parallel to Phase A).
 
@@ -290,6 +370,20 @@ correct Pilot's stale claim.
 - [ ] Manual check: confirm the chosen bus doesn't collide with an existing
   Observer peripheral (cross-reference `OBSERVER_SOM_NETMAP.md`/pinmap CSV).
 
+**Skills / workflow gate — strict order, not parallel steps:**
+
+1. `datasheets` pulls and caches the candidate sensor's actual datasheet (MS4525DO
+   or SDP3x family) — **this must complete before any `REFERENCES.md` edit**, per
+   root CLAUDE.md's no-fabrication policy; U5 is the highest citation-risk unit in
+   this plan because it introduces a part with zero prior art in the repo.
+2. `bom` confirms sourcing/availability for the selected part.
+3. `pcb-designer` (§6.3 I2C bus pattern, §3 pull-up sizing) informs the `J_PITOT`
+   connector and bus design.
+4. `kicad` ERC gate on the new connector and its wiring.
+5. `kidoc` regenerates Observer's HDD scaffold once wired — if the scaffold's
+   auto-run `kicad` analysis still shows the sensor as absent, the unit is not
+   done, regardless of what the `.md` prose claims.
+
 **Dependencies:** None (parallel to Phase A); feeds U9 documentation closeout.
 
 **Files likely touched:** `avionics/kicad/Observer/Observer.md`,
@@ -330,6 +424,14 @@ the existing TPM/OPTIGA fleet architecture (`project_fleet_trust_module`,
 **Verification:**
 - [ ] Design review checklist item: every new bus frame type introduced by
   U1–U4 has an explicit auth field and a documented verification path.
+
+**Skills / workflow gate:** `secure-controller-assurance` is the governing skill
+for this entire unit, not an optional cross-check — its 96 controls across the
+5 platform overlays are the mechanism for answering the "does Pilot's TPM relay
+or does each endpoint self-authenticate" architecture question with a control
+mapping instead of a guess. Run it once per endpoint class (ESC, nacelle tilt
+servo, SG90) and record which overlay applies to each; an endpoint class with no
+mapped control is an open gap, not a pass.
 
 **Dependencies:** U1, U2, U3, U4.
 
@@ -372,6 +474,17 @@ this plan's date):
 - [ ] `kicad-cli sch erc` / `kicad-cli pcb drc` output attached or referenced per
   board in that board's `.md` status file.
 
+**Skills / workflow gate (per board):** Run the `kicad` skill's full analyzer
+(ERC, DRC, DFM, BOM extraction) rather than raw `kicad-cli` — the analyzer's
+confidence-labeled findings are what let a residual violation be "documented in
+`TODO.md` with the specific DRC rule and reason" per `avionics/AGENTS.md`, versus
+a bare pass/fail. Follow each board's `kicad` pass with an `emc` pre-compliance
+check before generating gerbers — Pilot and Observer both carry explicit EMC
+compliance targets (IEC 61000-4-2/4/5, MIL-STD-461G) in their own `.md` files that
+a DRC-clean board does not automatically satisfy. A board is not ready for
+gerbers on DRC-clean alone if its `.md` file states EMC targets and no `emc` pass
+has been run against it.
+
 **Dependencies:** U1, U2, U3, U5 (for the boards each touches); U8 (Pilot
 specifically, tamper-mesh blocker).
 
@@ -404,6 +517,14 @@ actuator-bus work, but must close before Pilot's U7 pass.
 **Verification:**
 - [ ] DRC re-run confirms the 13 cross-domain violations are resolved (0.125mm →
   ≥8mm creepage / ≥1.5mm clearance).
+
+**Skills / workflow gate:** Use `pcb-designer`'s protection-reliability.md
+isolation guidance to redesign the per-domain mesh, and `emc`'s shielding
+guidance for the Faraday-cage/twisted-pair harness spec (both currently
+unstarted per `TODO.md`). Gate: `kicad` DRC confirms the creepage/clearance fix
+numerically — this unit's own acceptance criterion is a measured distance, not a
+design intent, so the gate has to be the analyzer's measured output, not a
+visual review of the new mesh geometry.
 
 **Dependencies:** None — can start immediately, independent of Phase A–C.
 
@@ -438,6 +559,18 @@ citations.
   gerbers or has its residual gap explicitly documented as deferred, with a
   reason.
 
+**Skills / workflow gate:** Regenerate each touched board's status doc with
+`kidoc` (`kidoc_scaffold.py --type hdd` or `design_review`) rather than
+hand-editing prose — the scaffold's auto-run `kicad`/`emc` analyses are the
+mechanism that keeps the `.md` files from drifting out of sync with the boards
+again, which is exactly the failure mode `avionics/kicad/Pilot/Pilot.md`'s own
+"known divergence" note (schematic vs. as-placed PCB) already shows happened
+once. The final gate is `project-overseer`: run its WBS/TODO consistency check
+across `avionics/TODO.md`, `avionics/WBS.md`, and root `TODO.md`/`WBS.md` to
+confirm no checkbox is left unchecked once its own text says resolved (the
+project's standing rule) and no item this plan closes is orphaned in one file
+but not the other.
+
 **Dependencies:** U7 (and effectively everything else, since this is the closeout
 pass).
 
@@ -469,11 +602,14 @@ root `TODO.md`, root `WBS.md`, `avionics/AGENTS.md`.
 
 ## Checkpoint: After Phase D (U7–U9)
 
-- [ ] Every avionics board is at 0 ERC/0 DRC-hard or has documented exceptions.
+- [ ] Every avionics board is at 0 ERC/0 DRC-hard or has documented exceptions,
+  each backed by a `kicad` skill run (not raw `kicad-cli`) and, where the board
+  states EMC targets, an `emc` pre-compliance pass.
 - [ ] `REFERENCES.md` has no fabricated or stale citations touching this plan's
-  scope.
+  scope — every new/changed entry traces to a `datasheets` extraction.
 - [ ] WBS/TODO federation reflects reality — no checkbox left unchecked once its
-  own text says resolved (standing project rule).
+  own text says resolved (standing project rule), verified by a `project-overseer`
+  consistency pass, not by visual scan.
 
 ---
 
@@ -498,6 +634,12 @@ root `TODO.md`, root `WBS.md`, `avionics/AGENTS.md`.
 - Observer supports the pitot-tube airspeed sensor; Pilot's stale claim is gone.
 - `REFERENCES.md`, `avionics/TODO.md`, `avionics/WBS.md`, and root `TODO.md`/`WBS.md`
   all reflect the closed state — no stale checkboxes.
+- Every authenticated endpoint class introduced by this plan (ESC, nacelle tilt
+  servo, SG90) has a `secure-controller-assurance` control mapping on record, not
+  an assumed-authenticated note.
+- Every board shipping gerbers has a `kicad`-skill analyzer report and, where
+  the board states EMC targets, an `emc`-skill pre-compliance pass on record —
+  see the Skills & Workflow Map above.
 
 ## Sources & Research
 

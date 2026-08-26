@@ -10081,6 +10081,15 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md": {
+      "description": "plan: EMI/RF Design and Test Plan",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -12947,6 +12956,7 @@
       "docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-002-finish-airframe-components-plan.md",
+      "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -13161,6 +13171,7 @@
       "docs/WBS_FEDERATION.md",
       "docs/electrical_fault_margins.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
+      "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
@@ -13302,6 +13313,7 @@
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
+      "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
