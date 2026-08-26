@@ -170,20 +170,31 @@ margin and worsens single-fault brown-out) — not the flight configuration.
 
 | Load | Qty | Stall (mA) | Running (mA) | Total run (mA) |
 |------|-----|-----------|--------------|----------------|
-| Nacelle tilt servos (SPT5425LV/LibreServo v2, 25-26 kgf·cm @ 6 V — was DS3218MG) ⚠ current not yet bench-verified, DS3218MG-era figure carried forward | 2 | 1 500 | 150 | 300 |
+| Nacelle tilt servos (DS3225/LibreServo_v4, 21–24.5 kgf·cm — was DS3218MG, briefly SPT5425LV) ⚠ **not bench-verified**; sized here to DS3225's own datasheet-cited 2.3 A @ 6.8 V stall figure (`REFERENCES.md` "Open Standards Verification Items" DS3225 row; `current-specification/bom_revS.csv` SERVO-TILT), superseding the DS3218MG-era 1.5 A carried-forward placeholder. **This is the tilt-servo current rail — not `RAIL-2`, which is the separate `5V_OBS` Observer/winch rail (§3.2.1/§11.1); see the 2026-08-25 SPAR-02 correction note.** | 2 | 2 300 | 150 | 300 |
 | RCS proportional valve servos (SG90 class + OpenServoCore, Phase 11) | 4 | 700 | 70 | 280 |
 | Cargo door servo (SG90 + OpenServoCore) | 1 | 700 | 70 | 70 |
 | Cargo release servo (SG90 + OpenServoCore) | 1 | 700 | 70 | 70 |
 | **6 V subtotal (running)** | — | — | — | **720** |
-| **6 V subtotal (all stalled simultaneously)** | — | — | — | **7 400** |
+| **6 V subtotal (all stalled simultaneously)** | — | — | — | **8 800** |
 
-All-servo stall is a transient; the BEC is sized for 5 A continuous (stall of 2×SPT5425LV
-+ 3×SG90 ≈ 5.1 A, carrying forward the DS3218MG-era current figure — marginal; the 6 V BEC
-is sized at 5 A with up to 7 A burst for ≤100 ms, which covers brief simultaneous stall
-events). Re-check once the SPT5425LV is bench-measured (REFERENCES.md Open Standards
-Verification Items).
+**2026-08-25 (SPAR-02 re-derivation, `docs/TILT_SPAR_ANALYSIS.md` §2.1):** the
+tilt-servo stall figure above is resized from the DS3218MG-era 1.5 A placeholder
+to DS3225's cited 2.3 A @ 6.8 V (2×2.3 A = 4.6 A tilt-servo contribution to the
+all-stall total, up from the prior 3.0 A). **This pushes the all-servo
+simultaneous-stall total to 8.8 A, exceeding the existing 6 V BEC's 7 A/≤100 ms
+burst rating** (stated below) — this is a genuine finding, not previously
+flagged, and needs owner attention: either confirm the ≤100 ms burst window and
+worst-case simultaneous-stall probability remain acceptable, or increase BEC
+burst capacity. All-servo stall is a transient (any single tilt servo hitting a
+hard mechanical stop while the other servos are also stalled is the worst
+case, not a sustained condition); the BEC is sized for 5 A continuous — now
+**below** the 2×DS3225 + 3×SG90 stall sum (8.8 A) even before accounting for
+burst headroom. Re-check once DS3225 is bench-measured (REFERENCES.md Open
+Standards Verification Items; bench current may come in under the datasheet's
+6.8 V figure at the project's actual servo-rail voltage).
 
-At 6 V / 22.2 V: 5.3 A × 6 V / 22.2 V ≈ **1.4 A from VBAT** at stall.
+At 6 V / 22.2 V: 8.8 A × 6 V / 22.2 V ≈ **2.4 A from VBAT** at all-servo stall
+(was 1.4 A before this resizing).
 
 ### 3.4 Total System Draw
 
@@ -214,7 +225,7 @@ single conductor in free air, 60 °C ambient, 90 °C conductor temperature.
 | Battery to PDB main bus | 165 (peak) / 90 (cont.) | ≥ 4 AWG | **4 AWG silicone** | 125 A cont. | +39 % at cont. |
 | PDB to ESC1–ESC4 (each) | 55 (burst) / 28 (cont.) | ≥ 10 AWG | **10 AWG silicone** | 55 A | ≈ 0 % at burst |
 | PDB 5 V BEC output | 18 A (cont.) | ≥ 14 AWG | **12 AWG silicone** | 30 A | +67 % |
-| PDB 6 V BEC output | 5.3 A (stall) | ≥ 18 AWG | **16 AWG silicone** | 13 A | +145 % |
+| PDB 6 V BEC output | 8.8 A (all-servo stall, DS3225-resized 2026-08-25) | ≥ 16 AWG | **16 AWG silicone** | 13 A | +48 % |
 | Avionics bay intra-bay | 3 A/node | ≥ 22 AWG | **18 AWG shielded** | 7 A | +133 % |
 | ESC signal (DSHOT) | <100 mA | 28 AWG | **28 AWG STP** | 500 mA | ≫ |
 

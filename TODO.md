@@ -33,6 +33,8 @@
 - [ ] Verify 4130 / 17-4 PH / 7075 allowables vs MMPDS/AMS (REF-MAT-*)
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
 - [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
+- [ ] ASTM D3039/D695 coupon test: CF-PLATE-2MM bending allowable (thwarts
+      built at FOS 8.5/8.7 vs the conservative 300 MPa stand-in only)
 
 ### 0.10 Update and correct documentation touching every non-archived file.
 
@@ -86,9 +88,10 @@ numeric order.)*
 
 → detail: `airframe/fuselage-mid/WBS.md` §1.1.1 (3/3)
 
-- [ ] ★ CARGO-01 payload won't fit past the wing spar (BLOCKER)
-- [ ] CARGO-02 shell bores Ø12.3 for a spar the wing retired (8.3)
-- [ ] ★ CARGO-03c coupon-test CF-PETG: >=15MPa tenon, else 2nd spar
+- [ ] CARGO-03c follow-up: coupon-test CF-PETG fusion/bearing (>=15MPa unlocks
+      the `enlarged_tenon` alternative) — the default two-rod tie-rod couple
+      is BUILT and does not block on this (`airframe/fuselage-mid/WBS.md`
+      §1.1.1.2 CARGO-03c, 2026-08-24)
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
 - [ ] Cargo gondola shell
@@ -132,13 +135,6 @@ numeric order.)*
 #### 1.1.2 — Wings
 
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
-
-- [ ] ★ WING-01 S1223 section self-intersects at x/c 0.742 (BLOCKER)
-- [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
-- [ ] SPAR-02 DS3225 24.5 vs 25 kgf·cm req (re-derive); RAIL-2 2.3A
-- [ ] Re-render + re-bake both wings — Rev S1b tip OML + Rev S1c Hall
-    (THICKNESS_SCALE_TIP 1.25→1.45, thickness-only section scaling); baked wing
-    STLs and docs/img/wing_rev_r1a_sections.png are stale
 
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
@@ -259,7 +255,6 @@ numeric order.)*
 - [ ] LG-13 Define wire-end retention detail at bay bosses
 - [ ] LG-02 Bay mounting integration: backing plates, flank conform…
 - [ ] Assess foot grip on concrete/asphalt
-- [ ] LG-03 CF rod channel in middle_canonical_shell24.scad rear skid…
 - [ ] LG-06 Elastic bench check: quarter-AUW fixture, 1.5 ft drop
 - [ ] LG-07 Confirm avionics enclosure shock rating
 - [ ] LG-11 Coupon-test CF-PETG

@@ -16,18 +16,13 @@
 ## §1.1.2 — Wings
 → full detail: `WBS.md` §1.1.2
 
-- [ ] wing_nacelle_pylon_revo.stl
-- [ ] wings_s1223_revo.stl
-- [ ] Re-render + re-bake both wings (Rev S1b OML + S1c Hall)
-- [ ] ★ WING-01 S1223 section self-intersects at x/c 0.742 (BLOCKER)
-- [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
-- [ ] SPAR-02 DS3225 24.5 vs 25 kgf·cm req (re-derive); RAIL-2 2.3A
-- [ ] Canon-check tip thickness/spar station vs silhouette
+- [ ] SPAR-02 mounting bolt pattern — measure real SPT5425LV ear span/holes
 
 ## §1.1.3 — Nacelles
 → full detail: `WBS.md` §1.1.3
 
 - [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past nacelle bore (routing)
 - [ ] [OPEN — VERIFY] AK7455 off-axis bench-cal / wing pocket 4x4 §1.1.3.6
+- [ ] serenity_render_views.py still refs stale nacelle_nozzle_iris.stl
 
 ---

@@ -412,6 +412,63 @@
     the table; < 15 MPa → second spar at 14 mm.**  Re-run
     `tools/wing_spar_carrythrough.py` either way.
 
+    **BUILT 2026-08-24, U5/KTD1: two-rod system, not a single rod vs. the
+    tenon.** A feasibility pass against the corrected S1223 geometry (WING-01
+    fix) found a matching Ø8.2 mm AFT rod does not fit anywhere aft of the
+    main spar (spar bore aft edge 49.30 mm and the Hall conduit's fixed
+    52.25..55.75 mm span leave no room); a smaller **Ø6.2 mm aft rod** fits
+    **root-only** at **62.0 mm from LE** (picked within the 60..62 mm feasible
+    band for maximum clearance margin to the Hall conduit's trailing edge —
+    `tools/wing_spar_station_fit.py`), with the forward Ø8.2 mm rod unchanged
+    at 14.0 mm. Both rods are root-only embeds (not full-span like the main
+    spar — a root-reacting tie rod has no structural reason to reach the
+    tip).
+
+    The couple-force split is **not** the single-rod `F = M / separation from
+    spar` method above: with two dedicated rods and no third reaction (the
+    main spar rides in a rotating CLEARANCE bore at the wing root and reacts
+    no moment about this axis), pure statics for two pin reactions gives
+    **equal-magnitude forces**, `F = M / (rod-to-rod separation)`, independent
+    of the spar's position — `tools/wing_spar_carrythrough.py
+    report_two_rod_couple()`:
+
+    | Rod | Station | D (nominal) | Embed | F (ultimate) | Bearing | FOS vs 5 MPa |
+    | --- | --- | --- | --- | --- | --- | --- |
+    | fwd | 14.0 mm | 8 mm | 40 mm | 304.3 N | 0.951 MPa | **5.26** |
+    | aft | 62.0 mm | 6 mm | 42 mm | 304.3 N | 1.207 MPa | **4.14** |
+
+    (48.00 mm rod-to-rod separation; ultimate root moment 14.60 N·m unchanged
+    from the table above.) Both clear the §3 FOS 4.0 target against the
+    existing 5 MPa bond-limited CF-PETG allowable — the aft rod needed its
+    embed bumped from the WBS-convention 40 mm to 42 mm to clear (at 40 mm,
+    FOS is 3.945, just under target).  No new coupon data required.
+
+    **REF-MAT-001 added 2026-08-25** (`REFERENCES.md`) — the first peer-
+    reviewed data point for CF-PETG in this repository (Batista et al. 2023,
+    *Appl. Sci.* 13(23), 12701, ASTM D695 bulk compressive strength on 20%
+    short-CF-reinforced PETG, ≈47–60 MPa).  It does not change anything
+    above — bulk unnotched compression is not the bearing-in-a-hole mode
+    either the tenon or the tie rods actually see, so it is not substituted
+    into the FOS figures here — but it is real evidence the `enlarged_tenon`
+    alternative's ≥11.1–40.6 MPa bar is plausibly clearable, which the
+    coupon-test decision is still the correct way to confirm.
+
+    **The tenon is traded out of the load path entirely** (not merely
+    "restored" pending a coupon result, as the single-rod branch above
+    described) — `fuselage_root_tab()` is now a pure locating/index feature,
+    gated behind `TENON_LOAD_PATH = "two_rod"` in
+    `wings_s1223_revo.scad` (default); the enlarged-tenon sizing above stays
+    documented and buildable under `TENON_LOAD_PATH = "enlarged_tenon"` if a
+    future coupon clears ≥ 15 MPa. Geometry: `wings_s1223_revo.scad`
+    (`ROD_FWD_*`/`ROD_AFT_*`, `wing_root_tie_rod_fwd_bore()`/
+    `_aft_bore()`), `merge_cargo_interior.py` (`ROD_FWD_*`/`ROD_AFT_*`
+    wall bosses, mirroring the `PORT_INB`/`PORT_OUTB` main-spar-boss embed
+    pattern — the forward boss's fuselage-side embed is 41 mm, not 40, to
+    avoid an exact end-cap coincidence with the main spar boss that produced
+    a non-manifold seam in the merged shell). CARGO-03c is CLOSED under this
+    branch; the coupon test remains open only to *enable* the
+    `enlarged_tenon` alternative, not to close this one.
+
 - [x] **CARGO-04 — the aft EDF ESC conduit is blocked, and the Hall conduit runs
     inside the rotating spar. CLOSED 2026-08-24.** *(found 2026-08-23 with CARGO-03; same tool)*
     **BLOCKS the nacelle ESC harness and the tilt-encoder harness.**
@@ -506,7 +563,7 @@
 
 ##### 1.1.1.2 *Cargo*
 
-- [ ] **★ CARGO-01 — the mission payload does not fit past the wing spar.**
+- [x] **★ CARGO-01 — the mission payload does not fit past the wing spar. CLOSED 2026-08-25 (U3/U4).**
     *(found 2026-08-23 while placing the VERIFY-tier cargo accessories against the
     baked hull, root `WBS.md` §1.1.0; measured by `tools/cargo_bay_envelope.py`)*
     **BLOCKS the cargo mission, the cradle/winch placements, and the §1.1.1.2.1
@@ -545,10 +602,14 @@
     instead.  Verified adequate in `airframe/wings-nacelles/WBS.md` §1.1.2
     **SPAR-01** (`tools/wing_spar_carrythrough.py`).  With the spar stopping at
     X −100 / −240 the bay clear span is **X −240…−100 = 140 mm** at full bay
-    height, and the 4 × 3 × 3 in payload fits.  **This item stays open until the
-    shell is re-cut** — `tools/cargo_bay_envelope.py` still fails against the
-    published STL, which is correct until the geometry changes.  Close it together
-    with **CARGO-02**, which is the same shell edit.
+    height, and the 4 × 3 × 3 in payload fits.
+
+    **CLOSED 2026-08-25.** The shell was re-cut (U3, `7bfccd3`) and the two CF
+    thwarts closing the couple were added (U4). `tools/cargo_bay_envelope.py`
+    now PASSES against the published, re-merged STL: measured interior
+    170.6 mm (X) x 150.7 mm (Z), aperture 106.0 mm (Y) — the
+    101.6 x 76.2 x 76.2 mm payload fits with margin on every axis. Closed
+    together with **CARGO-02** below, the same shell edit.
 
     Candidate resolutions as originally tabled, retained for the record (the owner
     took 1; each of the others trades against a requirement that is currently
@@ -576,7 +637,7 @@
     (110 × 80 × 72 mm) is sized for the 4 × 3 × 3 in payload and inherits the same
     obstruction.
 
-- [ ] **CARGO-02 — the cargo shell bores for a spar the wing retired.**
+- [x] **CARGO-02 — the cargo shell bores for a spar the wing retired. CLOSED 2026-08-25 (U3).**
     *(found 2026-08-23 alongside CARGO-01; gated by `tools/cargo_bay_envelope.py`,
     which fails loudly on the mismatch)*  **BLOCKS cargo shell print.**
 
@@ -610,6 +671,12 @@
     stops at the wall (inboard end X −100 port / −240 starboard) instead of
     crossing the bay.  `WING_SPAR_BOSS_OD` is re-derived from that bearing's OD
     rather than from the retired Ø12 press fit.
+
+    **CLOSED 2026-08-25.** `WING_SPAR_BORE_D` is 8.3 mm (matching the wing's
+    `SPAR_BORE_OD`); `WING_SPAR_BOSS_OD` is 27.7 mm, derived from the F688ZZ
+    bearing seat, not the retired Ø22 press fit; `bom_revS.csv`'s
+    `CF-TUBE-12MM` row is marked SUPERSEDED (qty 0), retained for
+    traceability, citing `SPAR-TILT-4130` as the single active spar row.
 
 **Rev R shell updates (sensor/antenna mounts; carried fwd from Rev O, 2026-05-24):**
 

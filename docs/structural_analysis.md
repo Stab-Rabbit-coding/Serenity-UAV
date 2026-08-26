@@ -275,15 +275,41 @@ See §7 for the exact cutter geometry applied to each shell.
 
 ### 5.6 BOM and Build Guide (Step 5)
 
+**SUPERSEDED 2026-08-25 (U4, SPAR-01) — the cargo Y=+30 ring is retired, not
+finalized.** §1 and §5.1's own load-station table already anticipated this
+station's job (anti-ovalisation at the spar pin), but the wing-root repair
+plan (`docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md`) found
+the load itself had changed: the spar no longer carries through the
+fuselage (SPAR-01, `airframe/wings-nacelles/WBS.md` §1.1.2), and this
+station's own bottom chord is cut away by the clamshell aperture (a
+three-sided frame, not a ring — see that WBS.md's SPAR-01 finding 3), so it
+never actually closed the couple it was sized for. Two new CF thwarts (fore
+Y −40, aft Y +118, same 2 mm CF-PLATE-2MM stock and locating-groove pattern
+as this section) replace it — sized and re-verified in
+`tools/wing_spar_carrythrough.py`'s `report_thwart()` (FOS 8.5/8.7 against
+the same conservative 300 MPa stand-in this section used) and cut in
+`add_structural_features.py` `RING_POCKETS["cargo_Yn40"]`/`["cargo_Y118"]`.
+The cargo_Y30 pocket is gated off in `merge_cargo_interior.py`
+(`RING_Y30_ENABLED = False`), not deleted — its own DXF was already
+PROVISIONAL (§5.4, blocked on the MESH-01 fragmented-mesh defect), so no
+finalized part is lost by retiring it.
+
 CF-PLATE-2MM notes update:
-- Station count: 2 (down from 5 estimated pre-Rev N)
-- Hull-Y positions: +30 mm (cargo, wing spar zone), +290 mm (rear, landing zone)
-- Ring types: both full closed rings
-- Estimated mass: 2 × (176 × 158 × 2 mm³ × 1.6 g/cm³ × 0.85 fill factor) ≈ 2 × 150 g = **300 g (10.6 oz)**
-  (fill factor 0.85 accounts for outer profile vs bounding rectangle)
+
+- Station count: 3 total tracked (2 active + 1 retired) — active: cargo
+  Y −40 mm (fore thwart) and Y +118 mm (aft thwart); retired: cargo Y +30 mm
+  (superseded above); unchanged: rear Y +290 mm (landing zone, still active)
+- Ring types: rear Y +290 remains a full closed ring; the two thwarts are
+  narrower bands (2 × 25 mm CF plate section, not a full-profile plate) —
+  see `wing_spar_carrythrough.py` `report_thwart()`, not the §5.2/§5.3
+  full-ring-profile method (that method still applies unchanged to Y +290)
+- Estimated mass: thwart pair ≈ 28 g (0.062 lbm) combined (2 × 14 g,
+  `wing_spar_carrythrough.py`), replacing the retired Y +30 ring's
+  ~78 g estimate (§5.1/WBS.md SPAR-01) — a net saving of ≈50 g (0.11 lbm)
+- Y +290 rear ring: unchanged from this section's original figures
 
 `REVN_BUILD_GUIDE_24IN.md` keel datum table: replace stale 91/165/251/320/388 mm
-stations with the new hull-Y ring stations +30 mm and +290 mm.
+stations with the new hull-Y ring/thwart stations −40 mm, +118 mm, and +290 mm.
 
 ---
 
@@ -373,6 +399,128 @@ Bore centers (hull frame, Y-axis aligned):
 | Stbd | −135.0 | 20.0 | +173 → +233 |
 
 Bore diameter: 4.2 mm (CF rod 4.0 mm OD + 0.1 mm clearance each side).
+
+### 6.4 Re-derivation against a nose-high/asymmetric strike (2026-08-25)
+
+*(Owner-directed: "canonically [the skids are] part of the propulsion
+system, not landing gear, but they'll be the first things hitting if the
+aircraft lands nose high." §6.2's own case is symmetric-only — both skids
+sharing the load, wings level — and never covered a single-skid-first
+touchdown. This unit re-derives §6.2 with the corrected AUW first, since
+§2's own 2026-08-22 note already flags every number in §3–§7 as computed
+from a stale, doubled mass budget, then adds the case §6.2 never had.)*
+
+**Mass basis:** the owner directed using the **Phase 11 (full system) AUW,
+4,273 g (9.42 lbm, `README.md`)** for this re-derivation specifically, so it
+does not need re-deriving again once the aircraft reaches its final,
+heaviest configuration. Total weight W = 4.273 kg × 9.80665 m/s² = **41.90 N**.
+This supersedes §2's own Phase 5–10 corrected figure (36.8 N) *for this
+section only* — §2 stays as the Phase 5–10 basis for the rest of this
+document; do not silently propagate the Phase 11 figure elsewhere.
+
+**Geometry re-measured directly from the published STL, not assumed.** §6.1's
+"low-Z vertices" survey and §6.2's "approx 76 × 23 mm²" box-shell estimate
+both predate this re-derivation and are **superseded by direct measurement**
+below — they were never geometrically verified against a specific cross-
+section, and the direct measurement found meaningful discrepancies with
+both.
+
+Sectioning `rear_shell24_2mm_repaired.stl` at 8 mm Y-intervals from the
+middle/rear joint (Y = 204) to the tip (Y = 384) and identifying the two
+discrete inner/outer loop pairs (not the whole-hull cross-section, which
+also spans this X range and can be mistaken for the skid at a glance):
+
+- The skid arm is a genuinely separate, thin-walled cantilevered tube only
+  from roughly **Y ≈ 250 onward** to the tip — consistent with §6.2's
+  177 mm moment-arm assumption (tip-to-joint), which this re-derivation
+  therefore keeps.
+- Measured outer cross-section near the tip: **≈ 24 mm (X) × 23 mm (Z)**,
+  wall thickness ≈ 2 mm, material (annulus) area ≈ 138 mm² — matching
+  independently via both a direct polygon slice and a `trimesh.split()`
+  body-area check. **This is roughly 3× narrower than §6.2's assumed
+  76 mm width** (76 was never a measurement; the "approx" in §6.2's own
+  text was accurate self-disclosure).
+- Approximated as a thin rectangular tube (24 × 23 mm outer, 2 mm wall) for
+  a bending second moment of area about the horizontal (X) axis:
+  `I = (24×23³ - 20×19³)/12 ≈ 12,900 mm⁴` — this **replaces** §6.2's
+  `I_PETG ≈ 438,080 mm⁴` box-shell estimate, which used the wrong width.
+
+**Independent finding, FIXED 2026-08-25 — the CF rod did not run through the
+measured skid tube.** Probing `X = -202, Z = 18` (the previously documented/
+bored station, §6.3) against the sectioned loops at Y = 210 (inside the
+bore's own Y-range, 173–233): the nearest material was the **main horseshoe
+ring's own wall**, 2.09–3.46 mm away — the discrete skid tube (centered ≈
+X = -224 at this Y) was 13.17 mm away, outside the bore's clearance
+entirely. **Root cause found and corrected** (`LG-26`,
+`airframe/landing-gear/WBS.md`): the tube's own hollow-cavity centerline was
+re-measured continuously across its full span (`middle_shell24_2mm_
+repaired.stl` Y=188–202, `rear_shell24_2mm_repaired.stl` Y=208–233 — it is
+not yet a separate feature below Y≈188), and `SKID_ROD_BORES` in
+`add_structural_features.py` re-sited to it: port moved to (-223.7, 18.5),
+stbd to a deliberate compromise center (-122.0, 19.0) since stbd's measured
+centerline has a genuine ~10 mm discontinuity at the print-split joint too
+large for one straight rod to stay centered on both sides. Both shells
+re-verified: `tools/validate_stls.py` 61/61 PASS, and the bore's nearest
+material at 8 sampled stations per side is now 2.09–7.03 mm (was 13+ mm
+everywhere) — the bore is inside the tube's cavity, not the ring wall, at
+every checked station. The stbd compromise is a real improvement, not a
+perfect fit; a slicer/test-fit check before fabrication is still warranted,
+and building the rod as two independently-anchored segments (rather than one
+straight rod) remains an option if the compromise proves inadequate — see
+LG-26.
+
+**Allowable:** **54 MPa (ASTM D790 three-point flexural strength, unreinforced
+PETG, REF-MAT-002)** — superseding this section's initial use of REF-MAT-001's
+48.41 MPa tensile strength as a bending proxy. REF-MAT-002 (added 2026-08-25,
+`REFERENCES.md`) is a genuine flexural test (the correct test type for this
+failure mode), not a proxy, and its 50 MPa ANSYS FEA cross-check for pure
+PETG (7.4% error vs. the 54 MPa experimental figure) supports citing it with
+confidence. **What it does not resolve:** no print-orientation-specific data
+(loading axis vs. layer-stack axis) exists in this source either — its own
+conclusions cite "anisotropic fibre orientation" as a source of nonlinearity
+but give no interlayer/Z-axis strength figure, and this repo has no record of
+the rear shell's actual print orientation. Treat the FOS figures below as
+upper bounds pending (a) confirmation the skid tube's bending axis sees the
+tested (in-plane) direction rather than the weaker interlayer direction, and
+(b) a coupon test of the actual tube geometry, not a bulk bar/dog-bone.
+
+**Load cases** (2.5 g factor per §3's existing "hard landing (vertical)"
+convention — kept, not re-derived, since no bound on nose-high pitch angle
+or sink rate exists anywhere in this repo's flight-envelope docs to justify
+a different factor). With the rod now geometrically coupled to the tube (the
+fix above), its stiffness share is credited via a simple parallel-EI split
+(`EI_skin = E·I_skin`, `EI_rod = 135,000 MPa × 12.57 mm⁴` for the solid
+4 mm CF rod) instead of assuming it carries zero load:
+
+| Case | Skin material (flexural) | F | M = F × 177 mm | Skin share of M | σ = M·c/I (c = 11.5 mm) | FOS |
+| --- | --- | --- | --- | --- | --- | --- |
+| Symmetric flat landing | plain PETG, 54 MPa / 2.76 GPa | 52.4 N | 9,275 N·mm | 94.1% | 7.78 MPa | **6.94 — PASS** |
+| Nose-high, single skid | plain PETG, 54 MPa / 2.76 GPa | 104.75 N | 18,541 N·mm | 94.1% | 15.55 MPa | **3.47 — still below the 4.0 target** |
+| Nose-high, single skid | **20% CF-PETG, 77 MPa / 6.67 GPa (REF-MAT-002 Table 4)** | 104.75 N | 18,541 N·mm | 98.1% | 16.20 MPa | **4.75 — PASS** |
+| Symmetric flat landing | 20% CF-PETG, 77 MPa / 6.67 GPa | 52.4 N | 9,275 N·mm | 98.1% | 8.11 MPa | **9.49 — PASS** |
+
+**Conclusion.** The rod-siting fix alone is not enough to close the nose-high
+gap: a solid 4 mm CF rod is too slender to meaningfully stiffen even this
+thin shell (it carries only ~2–6% of the moment once actually coupled), so
+correcting its position improves plain-PETG FOS only from 3.27 to 3.47 —
+real, but short of the 4.0 target. **What closes it is the material switch**
+(owner-directed, 2026-08-25): specifying 20% CF-PETG for the rear (and
+middle) fuselage skin, per REF-MAT-002's measured 77 MPa flexural strength /
+6.67 GPa flexural modulus at that fiber fraction, gets to FOS 4.75. This is
+fiber-fraction-specific — REF-MAT-002's own data shows **10% CF-PETG is
+*worse* than plain PETG** (43 MPa flexural, likely poor fiber-matrix cohesion
+at low loading) and that a nominal 30% blend (80 MPa/7.01 GPa) was the
+paper's own custom lab specimen, not a normal retail product — so the BOM
+and every citation must say **20% CF**, not a bare "CF-PETG" that could be
+read as any fraction. 20% was selected over the paper's stronger 30% figure
+specifically because a genuine, explicitly-labeled 20%-CF filament is a real,
+verifiable commercial product ("3D Maker Engineering" PETG-CF Pro Series,
+confirmed via direct vendor-page quote), whereas a true 30%-CF retail
+filament could not be verified to exist. See the BOM/material-spec update
+this drove (`current-specification/bom_revS.csv`, `REFERENCES.md`
+REF-MAT-002). The symmetric case was never actually a concern (FOS 6.94–9.49
+across all variants checked here) — it's included for completeness, not
+because it was ever in doubt.
 
 ---
 
@@ -470,8 +618,13 @@ hull Y = −71, arm to head CG = 86 mm, ultimate = limit × joint-FOS 4.0:
 
 The joint ring (perimeter ≈ 350 mm, t = 2 mm) has S_x ≈ 7 000–10 000 mm³, so even the
 9 g crash moment gives a peak fiber stress **M/S ≈ 0.7 MPa** — far below the CF-PETG and
-epoxy allowables (≈ 5 MPa for the PETG-bond-limited case).  **The joint is not
-strength-limited.**  What is actually required is peel resistance, alignment, and
+epoxy allowables (≈ 5 MPa for the PETG-bond-limited case; this figure predates any cited
+source and is carried here as the repository's conservative working placeholder for a
+bonded/adhesive-limited joint — **REF-MAT-001** (`REFERENCES.md`) now provides a real,
+peer-reviewed ASTM D695 *bulk compressive* figure for 20 %-CF-PETG, ≈47–60 MPa, an order
+of magnitude above this placeholder, but bulk compression is not the bond/peel mode this
+figure is meant to bound, so it does not replace it here — see REF-MAT-001's own entry for
+what it does and does not cover).  **The joint is not strength-limited.**  What is actually required is peel resistance, alignment, and
 anti-ovalisation of the thin section, plus the AGENTS.md fabrication standard's
 "minimum 2-wall contact annulus and positive-stop shoulder."
 

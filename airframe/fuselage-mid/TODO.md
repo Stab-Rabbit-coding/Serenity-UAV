@@ -16,9 +16,8 @@
 ## §1.1.1 — Fuselage: Shell Regeneration, Middle-Section Bays (part 3/3)
 → full detail: `WBS.md` §1.1.1
 
-- [ ] ★ CARGO-01 payload won't fit past the wing spar (BLOCKER)
-- [ ] CARGO-02 shell bores Ø12.3 for a spar the wing retired (8.3)
-- [ ] ★ CARGO-03c coupon-test CF-PETG: >=15MPa tenon, else 2nd spar
+- [ ] CARGO-03c follow-up: coupon-test CF-PETG fusion/bearing (built
+      two-rod couple already clears the cited 5 MPa figure; not blocking)
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
 - [ ] Cargo gondola shell

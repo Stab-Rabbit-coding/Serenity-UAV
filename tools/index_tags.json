@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-24",
+  "generated": "2026-08-25",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -346,7 +346,6 @@
       "description": "Python script",
       "tags": [
         "cad-mesh",
-        "security",
         "structural"
       ],
       "archived": false
@@ -684,7 +683,7 @@
       "archived": false
     },
     "airframe/blender-scripts/merge_cargo_interior.py": {
-      "description": "Python script",
+      "description": "merge_cargo_interior.py \u2014 Rev R1 (2026-06-30)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2075,7 +2074,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/dorsal_antenna_fin.stl": {
-      "description": "STL mesh (ASCII): dorsal_antenna_fin",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2106,7 +2105,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/head_shell24_2mm_repaired.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Head_Shell mating-face-open 2026-07-27",
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Head_Shell structural-features 2026-06-14",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2291,7 +2290,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/middle_shell24_2mm_repaired.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Middle_Shell mating-face-open 2026-07-26",
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Middle_Shell structural-features 2026-06-14",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2315,7 +2314,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/edf_aft_spider_sleeve.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -2324,7 +2323,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/edf_stator_sleeve.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -2405,15 +2404,6 @@
       "archived": false
     },
     "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
-      "tags": [
-        "cad-mesh",
-        "propulsion",
-        "structural"
-      ],
-      "archived": false
-    },
-    "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
@@ -3404,6 +3394,15 @@
       "archived": true
     },
     "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "archive",
+        "cad-mesh",
+        "propulsion"
+      ],
+      "archived": true
+    },
+    "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_iris.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "archive",
@@ -6383,6 +6382,13 @@
       "archived": false
     },
     "avionics/datasheets/isow1412.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -9426,7 +9432,7 @@
       "archived": false
     },
     "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (168 items)",
+      "description": "Bill of materials, CSV (171 items)",
       "tags": [
         "bom",
         "specification"
@@ -9847,7 +9853,6 @@
       "description": "Serenity UAV \u2014 Power Distribution & Battery Management",
       "tags": [
         "documentation",
-        "emi-hardening",
         "power",
         "security"
       ],
@@ -10050,6 +10055,38 @@
       "description": "Rendered image / reference photo",
       "tags": [
         "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md": {
+      "description": "fix: Wing S1223 repair, root bearing-seat joint, and tenon fallback spar",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-08-25-001-finish-avionics-plan.md": {
+      "description": "plan: Close out avionics subsystem",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "security"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-08-25-002-finish-airframe-components-plan.md": {
+      "description": "plan: Finish remaining airframe components",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md": {
+      "description": "plan: EMI/RF Design and Test Plan",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "security"
       ],
       "archived": false
     },
@@ -12760,7 +12797,8 @@
     "tools/wing_spar_carrythrough.py": {
       "description": "Does the rotating wing spar have to span the fuselage? First-principles check.",
       "tags": [
-        "build-tooling"
+        "build-tooling",
+        "security"
       ],
       "archived": false
     },
@@ -12915,6 +12953,10 @@
       "docs/img/transparent-nacelle.png",
       "docs/img/wing_rev_r1a_sections.png",
       "docs/img/wing_rev_s1c_sections.png",
+      "docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md",
+      "docs/plans/2026-08-25-001-finish-avionics-plan.md",
+      "docs/plans/2026-08-25-002-finish-airframe-components-plan.md",
+      "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -13122,13 +13164,14 @@
       "docs/FIRST_FLIGHT_READINESS.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/PHASED_BUILD_GUIDE.md",
-      "docs/POWER_DISTRIBUTION.md",
       "docs/README.md",
       "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/TILT_ENCODER_WIRING_EMI_SPEC.md",
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/WBS_FEDERATION.md",
       "docs/electrical_fault_margins.md",
+      "docs/plans/2026-08-25-001-finish-avionics-plan.md",
+      "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
@@ -13183,7 +13226,6 @@
       "airframe/FreeCAD-scripts/serenity_assembly.py",
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
-      "airframe/blender-scripts/add_structural_features.py",
       "airframe/fuselage-joints/WBS.md",
       "airframe/landing-gear/WBS.md",
       "airframe/openscad/fuselage/cargo/cargo_spar_drive.scad",
@@ -13270,6 +13312,8 @@
       "docs/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
+      "docs/plans/2026-08-25-001-finish-avionics-plan.md",
+      "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
@@ -13297,7 +13341,8 @@
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
       "tools/wing_internal_clearance.py",
-      "tools/wing_root_deconflict.py"
+      "tools/wing_root_deconflict.py",
+      "tools/wing_spar_carrythrough.py"
     ],
     "licensing": [
       "LICENSE",
@@ -13757,7 +13802,6 @@
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl",
-      "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_ring.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_throat.stl",
       "airframe/stls/wings/wing_port_s1223_revo.stl",
@@ -13995,7 +14039,6 @@
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl",
-      "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_ring.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_throat.stl",
       "airframe/stls/wings/wing_port_s1223_revo.stl",
@@ -14106,6 +14149,7 @@
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_closed_asm_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl",
+      "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/rear_nozzle_petal_repaired.stl",
@@ -14270,7 +14314,6 @@
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl",
-      "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_ring.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_throat.stl",
       "airframe/wings-nacelles/TODO.md",
@@ -14302,6 +14345,7 @@
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_closed_asm_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl",
+      "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/rear_nozzle_petal_repaired.stl",
@@ -14743,6 +14787,7 @@
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_closed_asm_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl",
+      "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/nacelle_nozzle_petal_repaired.stl",
       "archives/airframe-archives/archive/stls/nacelles/nozzles/rear_nozzle_petal_repaired.stl",
@@ -15582,6 +15627,7 @@
       "avionics/datasheets/iso6442.pdf",
       "avionics/datasheets/isow1044.pdf",
       "avionics/datasheets/isow1412.pdf",
+      "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf",
       "avionics/datasheets/mspm0g3507-q1.pdf",
       "avionics/datasheets/mspm0g3507.pdf",
       "avionics/datasheets/mspm0g3518-q1.pdf",

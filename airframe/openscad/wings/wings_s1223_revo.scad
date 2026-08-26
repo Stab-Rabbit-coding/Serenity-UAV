@@ -170,20 +170,36 @@ THICKNESS_SCALE =   1.0;  // [1.0 = full S1223 t/c; 0.85–1.0 recommended range
 // (gives 1.17 mm).  Measured by tools/wing_spar_station_fit.py; do not
 // hand-tune it.
 //
+// U6 (2026-08-25): 1.45 → 1.56.  The 1.447 figure above was measured against
+// the PRE-U1 S1223 table (a hand-approximated set of coordinates).  U1
+// replaced that table with the validated UIUC S1223 points, which are a
+// genuinely different shape at 48.5 % tip chord — deeper near mid-chord,
+// shallower aft, where this bore sits.  Re-measuring wall-over-spar with
+// tools/wing_internal_clearance.py against the corrected table found the tip
+// wall had dropped to 0.82 mm (below the 1.16 mm floor) at the old 1.45
+// scale.  1.5505 is the new exact figure (verified: `Section(chord_tip,
+// t_scale).depth(SPAR_BORE_STATION)/2 - SPAR_BORE_OD/2 == 1.16` at that
+// scale); 1.56 is used for the same "not sitting on its own limit" margin
+// (gives 1.19 mm).  Root is unaffected (unchanged THICKNESS_SCALE, 2.46 mm
+// wall there) -- this is purely a tip-airfoil-correction consequence.
+//
 // This is now a THICKNESS-only multiplier in fact as well as in name — see
 // s1223_section() below.  It no longer stretches the camber line, so the tip
-// keeps S1223's canonical 8.12 % camber instead of being driven to 11.75 %.
-// Tip t/c rises 13.45 % → 19.47 % (thickness only).
+// keeps S1223's canonical camber instead of being driven up.
+// Tip t/c is now ≈ 11.5 % at 1.56 (thickness only) -- see U6 note above;
+// the "13.45 % → 19.47 %" figure below predates the U1 airfoil correction and
+// is stale (kept in the historical record, not restated as current).
 //
 // CANON NOTE: this is an outer-mold-line change local to the wingtip; verify
 // against the canonical Serenity wing silhouette before committing to print
-// (see TODO.md §1.1.2).  Lower the value only if the bore stays skinned.
+// (see TODO.md §1.1.2, U8 canon-check). Lower the value only if the bore
+// stays skinned per tools/wing_internal_clearance.py.
 // UNVERIFIED BY CFD: the OpenFOAM study intended to quantify the drag penalty
-// of a 19.5 % t/c tip at Re ≈ 2.1e5 is blocked on mesh generation
+// of the thicker tip at Re ≈ 2.1e5 is blocked on mesh generation
 // (tools/wing_cfd_openfoam.py, WIP).  The camber-preservation argument does
 // not depend on it, but the absolute penalty of the thicker tip is not yet
 // quantified.
-THICKNESS_SCALE_TIP = 1.45;  // [tip thickness multiplier; root stays THICKNESS_SCALE]
+THICKNESS_SCALE_TIP = 1.56;  // [tip thickness multiplier; root stays THICKNESS_SCALE]
 
 // ── Rotating tilt-spar bore (Rev R2 — unified 8 mm rotating spar) ────────────
 // UNIFIED ROTATING SPAR (2026-07-18): the wing's single spar is now the 8 mm
@@ -459,12 +475,122 @@ HALL_CABLE_STATION = 54.0; // [mm] chordwise station aft of LE — CONSTANT over
 function spar_tip_y() = midline_frac(SPAR_BORE_STATION / WING_CHORD_TIP)
                         * WING_CHORD_TIP;
 
-// ── Wing root fuselage tab ────────────────────────────────────────────────────
+// ── Wing root joint load path (KTD1/U5, 2026-08-24 refinement) ───────────────
+// CARGO-03c found the tenon under-strength as a STRUCTURAL joint (10.14 MPa
+// bearing at ultimate vs. the repo's only CF-PETG figure, 5 MPa bond-limited,
+// docs/structural_analysis.md §7.3 — FOS 0.49) and, per the owner's
+// <15 MPa-fusion-strength decision rule, routed the load to a bonded CF rod
+// instead of growing the tenon.  A feasibility pass then found a SINGLE rod
+// forward of the main spar works (Ø8.2 mm at 14 mm from LE) but a matching
+// Ø8.2 mm AFT rod does not fit anywhere aft of the spar (the main spar bore's
+// aft edge at 49.30 mm and the Hall/encoder conduit's fixed Rev S1c span
+// 52.25..55.75 mm leave no room at any station without breaking the wall or
+// the skin).  A smaller Ø6.2 mm aft rod DOES fit, aft of the Hall conduit —
+// see ROD_AFT_* below.  So the tenon is now traded out of the load path
+// entirely and replaced by a TWO-ROD couple (not a single rod vs. the tenon).
+//
+// TENON_LOAD_PATH selects which joint reacts the wing-root couple:
+//   "two_rod"       (DEFAULT) — two bonded CF rods (below) react the couple;
+//                     the tenon is reduced to a locating/index feature only.
+//   "enlarged_tenon" — the tenon alone reacts the couple, grown to the
+//                     airframe's measured maximum envelope (39.2 x 20.1 mm,
+//                     tools/wing_root_deconflict.py max_tenon_envelope()).
+//                     Requires a CF-PETG fusion/bearing coupon test clearing
+//                     >= 15 MPa (root TODO.md §1.1.4 LG-11) — NOT yet
+//                     available, so this path is documented but NOT default.
+// Kept as a named constant, not deleted, per KTD1: a future coupon result
+// >= 15 MPa can swap the joint back to the tenon without re-deriving the
+// sizing table.
+TENON_LOAD_PATH = "two_rod";  // ["two_rod" | "enlarged_tenon"]
+
+// ── Wing root fuselage tab (locating/index feature under "two_rod"; full
+//    structural tenon under "enlarged_tenon") ────────────────────────────────
 // The root face (Z=0) must interface with the fuselage wing slot.
 // VERIFY slot dimensions in fuselage hull STL before printing.
-WING_ROOT_TAB_W =  30.0;  // [mm] VERIFY — fuselage slot width in X
-WING_ROOT_TAB_H =  20.0;  // [mm] VERIFY — fuselage slot height in Y
-WING_ROOT_TAB_L =  12.0;  // [mm] VERIFY — insertion depth into fuselage slot
+//
+// "two_rod" (default): the two CF rods below react the entire wing-root
+// couple, so the tab reverts to ITS OWN documented job — radial restraint
+// and rotational location, not moment reaction.  Only W and L shrink: those
+// are the two dimensions that actually appear in the bearing-stress formula
+// (sigma = F / (W . L/2), tools/wing_spar_carrythrough.py report_root_joint())
+// — H never did, it only sets the tab's vertical reach.  W/L are sized like
+// this repo's other non-structural locating dowels/bosses
+// (docs/structural_analysis.md §7.1 boss-pin convention: 8 mm depth is the
+// established "positive stop / 3-point kinematic location" figure for a
+// joint that "carries no structural flight load").
+//
+// H is DELIBERATELY left at its enlarged-tenon value, not shrunk: the S1223
+// section at this chordwise band is centred well ABOVE the chord line (the
+// tab is centred ON the chord line, Y=0, per CARGO-03b's fixed datum) — real
+// wing material at x=64.5 spans only Y +6.6..+15.7 mm
+// (tools/wing_spar_station_fit.py), so a tab shorter than ~H=13 mm never
+// reaches material at all and unions as a disconnected floating solid (found
+// by trimesh body-count during verification: bodies=2, not 1).  H=20 keeps
+// the ~3.4 mm structural-era overlap into that material band that already
+// made this connect cleanly; shrinking it would break the union, not the
+// bearing stress (H was already not part of that calculation).
+WING_ROOT_TAB_W_LOCATING =  12.0;  // [mm] locating-tab width in X
+WING_ROOT_TAB_H_LOCATING =  20.0;  // [mm] locating-tab height in Y — see note above
+WING_ROOT_TAB_L_LOCATING =   8.0;  // [mm] insertion depth (§7.1 boss-pin depth)
+
+// "enlarged_tenon" (documented, gated off): the AS-BUILT structural sizing
+// from CARGO-03c's first pass — 30 x 20 x 12 mm, FOS 0.49 against the 5 MPa
+// bond-limited figure at that size.  Retained verbatim (not the 39.2 x 20.1
+// mm envelope maximum, which needs the >=15 MPa fusion-strength coupon
+// before it can be built) so the alternate branch still renders a real,
+// previously-verified solid if selected.
+WING_ROOT_TAB_W_ENLARGED = 30.0;  // [mm] VERIFY — fuselage slot width in X
+WING_ROOT_TAB_H_ENLARGED = 20.0;  // [mm] VERIFY — fuselage slot height in Y
+WING_ROOT_TAB_L_ENLARGED = 12.0;  // [mm] VERIFY — insertion depth into slot
+
+WING_ROOT_TAB_W = (TENON_LOAD_PATH == "two_rod") ?
+                   WING_ROOT_TAB_W_LOCATING : WING_ROOT_TAB_W_ENLARGED;
+WING_ROOT_TAB_H = (TENON_LOAD_PATH == "two_rod") ?
+                   WING_ROOT_TAB_H_LOCATING : WING_ROOT_TAB_H_ENLARGED;
+WING_ROOT_TAB_L = (TENON_LOAD_PATH == "two_rod") ?
+                   WING_ROOT_TAB_L_LOCATING : WING_ROOT_TAB_L_ENLARGED;
+
+// ── Wing root tie-rod couple (U5, "two_rod" path) ─────────────────────────────
+// Two bonded CF rods react the ultimate root moment (14.60 N.m,
+// airframe/fuselage-mid/WBS.md §1.1.1.2 CARGO-03c) as a couple.  Each rod is a
+// simple bonded pin (shear only, no moment restraint credited — the
+// conservative idealisation, since the bond's rotational stiffness is not
+// characterised) — see the couple-force derivation in that WBS.md section and
+// tools/wing_spar_carrythrough.py report_root_joint().  Clearance bore = rod
+// OD + 0.1 mm/side, matching the CF-ROD bonding convention already
+// established for CF-ROD-4MM (docs/structural_analysis.md §6/§7: same
+// pultruded-CF-rod-stock citation, West System 105/206 epoxy, cure 24 h
+// before foam pour).
+//
+// Both rods are ROOT-ONLY embeds, not full-span like the main spar: the main
+// spar must run full-span because it is ALSO the rotating tilt axis reaching
+// the wingtip bearing — these tie rods only react the ROOT joint, so running
+// them to the tip would add mass and risk fouling the tip bearing/gear/Hall
+// pocket for no structural benefit.  Same reasoning applied to both rods for
+// consistency.
+//
+// FWD rod: Ø8.2 mm (8 mm CF rod + 0.1 mm/side), station 14 mm from LE
+// (largest separation from the main spar on a healthy bore wall — measured
+// 2.92 mm at Ø8.2, tools/wing_spar_station_fit.py).  40 mm wing-side embed.
+ROD_FWD_D       =  8.2;   // [mm] fwd tie-rod clearance bore
+ROD_FWD_STATION = 14.0;   // [mm] chordwise station aft of LE
+ROD_FWD_EMBED   = 40.0;   // [mm] wing-side embed depth (root face inward)
+
+// AFT rod: Ø6.2 mm (6 mm CF rod + 0.1 mm/side).  A matching Ø8.2 mm aft rod
+// does not fit at ANY aft station (main spar bore aft edge 49.30 mm and the
+// Hall conduit's fixed 52.25..55.75 mm span leave no room); Ø6.2 mm fits aft
+// of the Hall conduit.  Station 62.0 mm from LE is the pick WITHIN the
+// feasible 60..62 mm band: it maximises clearance margin to the Hall
+// conduit's trailing edge (3.15 mm vs 1.15 mm at 60 mm) while the spar-bore
+// margin stays ample throughout that band (7.6..9.6 mm) and root wall stays
+// well above the repo's 1.16 mm floor (measured 1.72 mm at 62 mm,
+// tools/wing_spar_station_fit.py --station 62 --bore 6.2).  40 mm embed
+// alone gives FOS 3.945 against the 5 MPa allowable (just under the §3 FOS
+// 4.0 target — see the couple-force derivation) so the embed is bumped to
+// 42 mm, which clears at FOS 4.14.
+ROD_AFT_D       =  6.2;   // [mm] aft tie-rod clearance bore
+ROD_AFT_STATION = 62.0;   // [mm] chordwise station aft of LE
+ROD_AFT_EMBED   = 42.0;   // [mm] wing-side embed depth (root face inward)
 
 // ── Print chirality ───────────────────────────────────────────────────────────
 // RENDER_SIDE = +1 → port (left) wing; RENDER_SIDE = -1 → starboard (right).
@@ -481,85 +607,118 @@ $fn = 72;
 // =============================================================================
 // ── S1223 Airfoil Coordinate Data ─────────────────────────────────────────────
 // =============================================================================
-// Normalised coordinates from UIUC Airfoil Database (Selig & Guglielmo 1997).
-// x ∈ [0,1], y = local thickness ratio (positive = upper surface toward sky).
+// Coordinates fetched live from the UIUC Airfoil Coordinates Database,
+// `s1223.dat` (Selig), 2026-08-24 — REFERENCES.md REF-CAD-006.  This is a
+// VERBATIM re-split of the published 81-point Selig-format loop (one closed
+// list, upper TE->LE then lower LE->TE) into the two ordered lists this
+// file's s1223_section()/midline_frac() decomposition expects (upper LE->TE,
+// lower TE->LE).  No coordinate value, interpolation, or invented point was
+// introduced — every (x, y) pair below appears verbatim in the fetched file.
+// x in [0,1], y = local thickness ratio (positive = upper surface toward sky).
 //
-// Format: closed polygon, upper surface LE→TE then lower surface TE→LE.
+// This table REPLACES the Rev R1 placeholder table, which was never traced to
+// an actual fetch and crossed to negative thickness at x/c ~= 0.742
+// (WING-01, tools/wing_airfoil_integrity.py) -- a fabricated/reconstructed
+// table, prohibited by root AGENTS.md SS4.
+//
+// Format: closed polygon, upper surface LE->TE then lower surface TE->LE.
 // OpenSCAD polygon() uses counterclockwise winding (positive fill).
-//
-// Accuracy note: interpolated from published data; matches database to ±0.001
-// chord units.  Download s1223.dat from UIUC for production verification:
-//   https://m-selig.ae.illinois.edu/ads/coord/s1223.dat
+// The two surfaces do not share an exact (0,0) leading-edge point -- neither
+// does the source data, which is normal for a discretely sampled finite-
+// radius leading edge (upper's LE-most point is [0.00005, 0.00178]; lower's
+// is [0.00044, -0.00561]).  tools/wing_airfoil_integrity.py excludes a
+// LE_EXCLUDE = 0.005 band from the thickness check for exactly this reason.
 // =============================================================================
 
-// ── Upper surface points (LE x=0 → TE x=1) ───────────────────────────────────
+// ── Upper surface points (LE x=0 -> TE x=1) ──────────────────────────────────
+// REF-CAD-006, s1223.dat rows 46 down to 1 (reversed to LE->TE order).
 S1223_UPPER = [
-    [ 0.0000,  0.0000 ],   // leading edge
-    [ 0.0050,  0.0163 ],
-    [ 0.0100,  0.0231 ],
-    [ 0.0150,  0.0284 ],
-    [ 0.0250,  0.0381 ],
-    [ 0.0350,  0.0472 ],
-    [ 0.0500,  0.0594 ],
-    [ 0.0650,  0.0706 ],
-    [ 0.0800,  0.0810 ],
-    [ 0.1000,  0.0936 ],
-    [ 0.1250,  0.1073 ],
-    [ 0.1500,  0.1189 ],
-    [ 0.1750,  0.1285 ],
-    [ 0.2000,  0.1362 ],
-    [ 0.2250,  0.1419 ],
-    [ 0.2500,  0.1455 ],   // ← approx max thickness station (half-thickness perp. to camber)
-    [ 0.2750,  0.1472 ],
-    [ 0.3000,  0.1471 ],
-    [ 0.3250,  0.1454 ],
-    [ 0.3500,  0.1422 ],
-    [ 0.3750,  0.1378 ],
-    [ 0.4000,  0.1323 ],
-    [ 0.4250,  0.1260 ],
-    [ 0.4500,  0.1189 ],
-    [ 0.5000,  0.1033 ],
-    [ 0.5500,  0.0866 ],
-    [ 0.6000,  0.0696 ],
-    [ 0.6500,  0.0526 ],
-    [ 0.7000,  0.0361 ],
-    [ 0.7500,  0.0210 ],
-    [ 0.8000,  0.0082 ],
-    [ 0.8500, -0.0020 ],
-    [ 0.9000, -0.0089 ],
-    [ 0.9500, -0.0109 ],
-    [ 1.0000,  0.0000 ],   // trailing edge
+    [ 0.00005,  0.00178 ],   // leading-edge-most upper sample (source data; see note above)
+    [ 0.00155,  0.01033 ],
+    [ 0.00495,  0.01969 ],
+    [ 0.01028,  0.02954 ],
+    [ 0.01755,  0.03961 ],
+    [ 0.02694,  0.04966 ],
+    [ 0.03855,  0.05968 ],
+    [ 0.05223,  0.06965 ],
+    [ 0.06789,  0.07940 ],
+    [ 0.08545,  0.08879 ],
+    [ 0.10482,  0.09770 ],
+    [ 0.12591,  0.10598 ],
+    [ 0.14863,  0.11355 ],
+    [ 0.17286,  0.12026 ],
+    [ 0.19846,  0.12594 ],
+    [ 0.22541,  0.13037 ],
+    [ 0.25370,  0.13346 ],
+    [ 0.28347,  0.13505 ],
+    [ 0.31488,  0.13526 ],   // <- max thickness station (source data)
+    [ 0.34777,  0.13447 ],
+    [ 0.38193,  0.13271 ],
+    [ 0.41721,  0.13011 ],
+    [ 0.45340,  0.12683 ],
+    [ 0.49025,  0.12303 ],
+    [ 0.52744,  0.11881 ],
+    [ 0.56465,  0.11425 ],
+    [ 0.60158,  0.10935 ],
+    [ 0.63798,  0.10412 ],
+    [ 0.67360,  0.09859 ],
+    [ 0.70823,  0.09277 ],
+    [ 0.74166,  0.08671 ],
+    [ 0.77369,  0.08044 ],
+    [ 0.80412,  0.07402 ],
+    [ 0.83277,  0.06749 ],
+    [ 0.85947,  0.06089 ],
+    [ 0.88406,  0.05427 ],
+    [ 0.90641,  0.04768 ],
+    [ 0.92639,  0.04116 ],
+    [ 0.94389,  0.03476 ],
+    [ 0.95884,  0.02853 ],
+    [ 0.97111,  0.02250 ],
+    [ 0.98075,  0.01646 ],
+    [ 0.98825,  0.01037 ],
+    [ 0.99417,  0.00494 ],
+    [ 0.99838,  0.00126 ],
+    [ 1.00000,  0.00000 ],   // trailing edge
 ];
 
-// ── Lower surface points (TE x=1 → LE x=0) ───────────────────────────────────
+// ── Lower surface points (TE x=1 -> LE x=0) ──────────────────────────────────
+// REF-CAD-006, s1223.dat rows 81 down to 47 (reversed to TE->LE order).
 S1223_LOWER = [
-    [ 1.0000,  0.0000 ],   // trailing edge
-    [ 0.9500,  0.0021 ],
-    [ 0.9000,  0.0063 ],
-    [ 0.8500,  0.0117 ],
-    [ 0.8000,  0.0175 ],
-    [ 0.7500,  0.0228 ],
-    [ 0.7000,  0.0270 ],
-    [ 0.6500,  0.0299 ],
-    [ 0.6000,  0.0313 ],
-    [ 0.5500,  0.0312 ],
-    [ 0.5000,  0.0297 ],
-    [ 0.4500,  0.0270 ],
-    [ 0.4000,  0.0233 ],
-    [ 0.3500,  0.0192 ],
-    [ 0.3000,  0.0149 ],
-    [ 0.2500,  0.0109 ],
-    [ 0.2000,  0.0073 ],
-    [ 0.1500,  0.0040 ],
-    [ 0.1000,  0.0012 ],
-    [ 0.0750, -0.0003 ],
-    [ 0.0500, -0.0022 ],
-    [ 0.0350, -0.0038 ],
-    [ 0.0250, -0.0053 ],
-    [ 0.0150, -0.0067 ],
-    [ 0.0100, -0.0074 ],
-    [ 0.0050, -0.0073 ],
-    [ 0.0000,  0.0000 ],   // leading edge (closes polygon)
+    [ 1.00000,  0.00000 ],   // trailing edge
+    [ 0.99825,  0.00115 ],
+    [ 0.99268,  0.00468 ],
+    [ 0.98255,  0.01060 ],
+    [ 0.96693,  0.01822 ],
+    [ 0.94573,  0.02624 ],
+    [ 0.91966,  0.03387 ],
+    [ 0.88928,  0.04088 ],
+    [ 0.85500,  0.04706 ],
+    [ 0.81729,  0.05219 ],
+    [ 0.77660,  0.05612 ],
+    [ 0.73344,  0.05872 ],
+    [ 0.68832,  0.05994 ],
+    [ 0.64176,  0.05976 ],
+    [ 0.59428,  0.05820 ],
+    [ 0.54639,  0.05534 ],
+    [ 0.49860,  0.05129 ],
+    [ 0.45139,  0.04618 ],
+    [ 0.40519,  0.04021 ],
+    [ 0.36044,  0.03358 ],
+    [ 0.31750,  0.02652 ],
+    [ 0.27673,  0.01928 ],
+    [ 0.23840,  0.01213 ],
+    [ 0.20278,  0.00535 ],
+    [ 0.17006, -0.00075 ],
+    [ 0.14020, -0.00563 ],
+    [ 0.11282, -0.00925 ],
+    [ 0.08787, -0.01202 ],
+    [ 0.06561, -0.01404 ],
+    [ 0.04627, -0.01532 ],
+    [ 0.03006, -0.01584 ],
+    [ 0.01718, -0.01550 ],
+    [ 0.00789, -0.01427 ],
+    [ 0.00264, -0.01120 ],
+    [ 0.00044, -0.00561 ],   // leading-edge-most lower sample (source data; see note above)
 ];
 
 // ── Combined polygon (counterclockwise: upper LE→TE, lower TE→LE) ─────────────
@@ -642,9 +801,30 @@ module s1223_section(chord = 65.0, t_scale = THICKNESS_SCALE) {
 // =============================================================================
 // ── Module: wing_solid ────────────────────────────────────────────────────────
 // =============================================================================
-// Lofted tapered wing solid using hull() of root and tip cross-sections.
-// The hull() creates a ruled surface between the two stations, approximating
-// the tapered and swept wing.  Valid for taper ratios > 0.4 (Serenity ≈ 0.65).
+// REV S1d (2026-08-24, KTD4): true vertex-matched loft, NOT hull().
+//
+// Why hull() was replaced: hull() takes the CONVEX HULL of the root and tip
+// cross-section point clouds.  With the corrected UIUC S1223 table
+// (REF-CAD-006, see S1223_UPPER/S1223_LOWER above) the real section has a
+// genuinely reflexed/concave lower surface aft of ~65% chord -- that is real
+// S1223 geometry, not a table defect.  `tools/wing_airfoil_integrity.py`
+// reports the convex hull of the tabulated outline is 1.612x the true
+// outline's area, over its 1.10x tolerance -- so a hull()-lofted solid would
+// be measurably not the S1223 section the aero/mass analysis assumes (the
+// reflex is filled in solid, changing wetted area, internal clearance, and
+// mass).
+//
+// Replacement: a manual polyhedron() built from the two end-station point
+// lists returned by s1223_scaled_pts() (the same list `s1223_section()`
+// polygon()s).  s1223_scaled_pts() always returns the SAME point count in
+// the SAME order (46 upper + 35 lower = 81 pts, upper LE->TE then lower
+// TE->LE) regardless of chord or t_scale -- only the scaled coordinate
+// values differ between root and tip -- so root and tip are vertex-matched
+// by construction and a straight quad-strip side wall between them is a
+// faithful ruled loft of the TRUE (non-convex) outline, not its hull.
+// Span-wise the loft is still linear between just the two stations (root,
+// tip), same as the old hull() version -- only the per-station CHORDWISE
+// cross-section fidelity changes, from convex-hull-approximated to exact.
 //
 // Coordinate system: X=chordwise (LE=0), Y=thickness, Z=spanwise (root=0, tip=SPAN).
 // The LE sweeps in +X by WING_SWEEP_LE over the span (aft sweep).
@@ -656,21 +836,47 @@ module wing_solid() {
     sweep      = WING_SWEEP_LE;    // LE moves aft (+X) by this amount over span
     dihedral   = WING_DIHEDRAL;    // tip rises (+Y) by this amount over span
 
-    hull() {
-        // ── Root cross-section at Z = 0 ───────────────────────────────────
-        // Extruded to 0.01 mm thin disc for hull input
-        translate([0, 0, 0])
-            linear_extrude(height = 0.01)
-                s1223_section(chord = root_chord);
+    // Normalized (chord-fraction) section point lists -- SAME topology
+    // (point count + winding order) at root and tip; only t_scale differs
+    // (THICKNESS_SCALE at root, THICKNESS_SCALE_TIP at tip, per the Rev S1b
+    // camber-preserving decomposition above).
+    root_pts2d = s1223_scaled_pts(THICKNESS_SCALE);
+    tip_pts2d  = s1223_scaled_pts(THICKNESS_SCALE_TIP);
+    n = len(root_pts2d);   // == len(tip_pts2d) by construction; asserted below
 
-        // ── Tip cross-section at Z = span (swept + tapered + dihedral) ────
-        // Leading edge swept aft by WING_SWEEP_LE; tip centred on same LE sweep.
-        // Tip uses THICKNESS_SCALE_TIP (local thickening for the spar bore — see
-        // parameter block); root uses THICKNESS_SCALE, so the loft tapers between.
-        translate([sweep, dihedral, span])
-            linear_extrude(height = 0.01)
-                s1223_section(chord = tip_chord, t_scale = THICKNESS_SCALE_TIP);
-    }
+    assert(n == len(tip_pts2d),
+        "wing_solid(): root/tip section point counts diverged -- vertex-matched loft requires identical topology");
+
+    // Scale each normalized point to its station's chord and place it in 3D.
+    root_pts3d = [ for (p = root_pts2d) [ p[0] * root_chord, p[1] * root_chord, 0 ] ];
+    tip_pts3d  = [ for (p = tip_pts2d)
+                     [ p[0] * tip_chord + sweep, p[1] * tip_chord + dihedral, span ] ];
+
+    pts = concat(root_pts3d, tip_pts3d);
+
+    // Root cap (Z=0): reversed winding so its outward normal points -Z (away
+    // from the solid, toward the fuselage).  Tip cap (Z=span): original CCW
+    // winding so its outward normal points +Z (toward the wingtip).  This is
+    // the standard prism-cap convention for a manually-built polyhedron().
+    root_cap = [ for (i = [n - 1 : -1 : 0]) i ];
+    tip_cap  = [ for (i = [0 : n - 1]) n + i ];
+
+    // Side wall: two triangles per matched root/tip vertex pair, wound
+    // outward.  Explicit triangulation (not a quad) because the root and
+    // tip outlines differ (taper + the S1223 reflex), so the quad
+    // [i, i2, n+i2, n+i] is not guaranteed planar -- OpenSCAD's own
+    // nonplanar-quad fallback triangulator was found to produce a
+    // non-watertight mesh (Volumes: 3, trimesh is_watertight: False) on
+    // this section, so the diagonal split is done here explicitly instead.
+    side_faces = [ for (i = [0 : n - 1])
+        let (i2 = (i + 1) % n)
+        each [
+            [ i, i2, n + i ],
+            [ i2, n + i2, n + i ],
+        ]
+    ];
+
+    polyhedron(points = pts, faces = concat([root_cap], [tip_cap], side_faces), convexity = 6);
 }
 
 
@@ -960,7 +1166,20 @@ module wing_tip_fixed_gear_inserts() { }
 // =============================================================================
 // A positive protrusion at the root face (Z = 0) that inserts into the fuselage
 // wing slot.  VERIFY WING_ROOT_TAB_* parameters against fuselage hull STL before
-// printing.  The tab provides radial restraint; the CF spar carries spanwise load.
+// printing.
+//
+// CORRECTED 2026-08-24 (U5/KTD1): under TENON_LOAD_PATH = "two_rod" (default)
+// the tab is RESTORED to its originally-intended, correct role — radial
+// restraint and rotational location only.  It does NOT react the wing-root
+// couple; the two CF tie rods (wing_root_tie_rod_fwd_bore() /
+// wing_root_tie_rod_aft_bore(), cut in wing_one_side()) do that.  This
+// corrects the stale comment that used to read "The tab provides radial
+// restraint; the CF spar carries spanwise load" — that was written when the
+// spar carried through the fuselage; under SPAR-01 it terminates at the wall
+// on its own bearing and never touched this joint anyway, and CARGO-03c then
+// (temporarily, before this fix) made the tab itself react the moment. Under
+// TENON_LOAD_PATH = "enlarged_tenon" the tab reverts to that structural role
+// at its documented AS-BUILT size — see the WING_ROOT_TAB_* selection above.
 //
 // The tab is centred chordwise at 50% root chord, at Y = 0 (chord line).
 module fuselage_root_tab() {
@@ -970,6 +1189,35 @@ module fuselage_root_tab() {
                -WING_ROOT_TAB_H / 2,
                -WING_ROOT_TAB_L])
         cube([WING_ROOT_TAB_W, WING_ROOT_TAB_H, WING_ROOT_TAB_L + 0.1]);
+}
+
+
+// =============================================================================
+// ── Module: wing_root_tie_rod_fwd_bore / wing_root_tie_rod_aft_bore ──────────
+// =============================================================================
+// U5 (KTD1 "two_rod" path): bonded CF tie-rod clearance bores that react the
+// wing-root couple as a two-point system, replacing the tenon's former
+// structural role.  Each is a straight, ROOT-ONLY bore (does NOT run to the
+// tip — see the rationale in the ROD_FWD_*/ROD_AFT_* parameter block above),
+// centred on the S1223 camber midline at its own chordwise station exactly
+// like spar_bore()/cableway_bore(), running from just outboard of the root
+// face inward (+Z) by the rod's own embed depth.
+//
+// Matching bosses/bores on the fuselage side live in
+// airframe/blender-scripts/merge_cargo_interior.py (ROD_FWD_*/ROD_AFT_*),
+// mirroring the PORT_INB/PORT_OUTB main-spar-boss embed pattern.
+module wing_root_tie_rod_fwd_bore() {
+    xc = ROD_FWD_STATION;
+    yc = midline_frac(xc / WING_CHORD_ROOT) * WING_CHORD_ROOT;
+    translate([xc, yc, -1.0])
+        cylinder(r = ROD_FWD_D / 2, h = ROD_FWD_EMBED + 1.0, $fn = 32);
+}
+
+module wing_root_tie_rod_aft_bore() {
+    xc = ROD_AFT_STATION;
+    yc = midline_frac(xc / WING_CHORD_ROOT) * WING_CHORD_ROOT;
+    translate([xc, yc, -1.0])
+        cylinder(r = ROD_AFT_D / 2, h = ROD_AFT_EMBED + 1.0, $fn = 32);
 }
 
 
@@ -1016,6 +1264,15 @@ module wing_one_side() {
 
         // ── Harness cableway (2× Ø7 conduits for EDF power + signal) ──────
         cableway_bore();
+
+        // ── Wing-root tie-rod couple (U5, "two_rod" path only) ─────────────
+        // Replaces the tenon's former structural role; see the module docs
+        // above and the couple-force derivation in
+        // airframe/fuselage-mid/WBS.md §1.1.1.2 CARGO-03c.
+        if (TENON_LOAD_PATH == "two_rod") {
+            wing_root_tie_rod_fwd_bore();
+            wing_root_tie_rod_aft_bore();
+        }
     }
 }
 

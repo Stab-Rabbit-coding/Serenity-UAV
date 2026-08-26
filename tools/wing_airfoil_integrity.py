@@ -107,8 +107,26 @@ def check_polygon(upper, lower):
     return poly
 
 
+def wing_solid_uses_hull(src):
+    """True if wing_solid() still lofts with hull() rather than a true loft.
+
+    Rev S1d (KTD4, 2026-08-24) replaced the hull()-based loft with a manual
+    polyhedron() built from s1223_scaled_pts() -- the SAME point list/order
+    check 2 validates as a polygon() -- so root and tip cross-sections in the
+    built solid are the tabulated outline exactly, not its convex hull.  This
+    check reads wing_solid()'s own source rather than assuming either
+    implementation, so it stays correct across a future revert either way.
+    """
+    start = src.find("module wing_solid()")
+    if start == -1:
+        return None  # can't locate the module; caller decides how to treat this
+    end = src.find("\nmodule ", start + 1)
+    body = src[start:end if end != -1 else len(src)]
+    return "hull(" in body
+
+
 def main():
-    upper, lower, _src = load_tables()
+    upper, lower, src = load_tables()
     dump = "--table" in sys.argv
 
     print("=== wing_airfoil_integrity.py ===")
@@ -138,28 +156,40 @@ def main():
     else:
         print("   ok")
 
+    uses_hull = wing_solid_uses_hull(src)
     print("\n3. hull() is not reshaping the section")
-    hull = poly.convex_hull
-    ratio = hull.area / poly.area if poly.area else float("inf")
-    print(f"   outline area {poly.area:.6f}   convex hull {hull.area:.6f}"
-          f"   ratio {ratio:.3f}")
-    if ratio > HULL_AREA_TOLERANCE:
-        print(f"   FAIL -- hull() adds {(hull.area - poly.area) / hull.area * 100:.1f}% "
-              f"area (tolerance {HULL_AREA_TOLERANCE:.2f}x)")
-        print("   wing_solid() lofts with hull(), so THIS is the shape that gets")
-        print("   built -- not the tabulated section the analysis assumes.")
-        failures.append("hull() materially reshapes the section")
+    if uses_hull is None:
+        print("   FAIL -- could not locate module wing_solid() to check")
+        failures.append("wing_solid() not found in source")
+    elif uses_hull:
+        hull = poly.convex_hull
+        ratio = hull.area / poly.area if poly.area else float("inf")
+        print(f"   outline area {poly.area:.6f}   convex hull {hull.area:.6f}"
+              f"   ratio {ratio:.3f}")
+        if ratio > HULL_AREA_TOLERANCE:
+            print(f"   FAIL -- hull() adds {(hull.area - poly.area) / hull.area * 100:.1f}% "
+                  f"area (tolerance {HULL_AREA_TOLERANCE:.2f}x)")
+            print("   wing_solid() lofts with hull(), so THIS is the shape that gets")
+            print("   built -- not the tabulated section the analysis assumes.")
+            failures.append("hull() materially reshapes the section")
+        else:
+            print("   ok")
     else:
-        print("   ok")
+        print("   n/a -- wing_solid() no longer calls hull() (Rev S1d, KTD4):")
+        print("   it lofts a manual polyhedron() built directly from the same")
+        print("   s1223_scaled_pts() list check 2 already validated, so the")
+        print("   built cross-section IS the tabulated outline, not a convex")
+        print("   approximation of it.  No area-ratio check applies.")
 
     print()
     if failures:
         print("  RESULT: FAIL")
         for f in failures:
             print(f"    - {f}")
-        print("\n  The exported STL is NOT evidence against this: hull() convexifies")
-        print("  each section, so a self-intersecting outline still yields a")
-        print("  watertight solid and validate_stls.py passes.")
+        if uses_hull:
+            print("\n  The exported STL is NOT evidence against this: hull() convexifies")
+            print("  each section, so a self-intersecting outline still yields a")
+            print("  watertight solid and validate_stls.py passes.")
         sys.exit(1)
     print("  RESULT: PASS -- the tabulated section is a valid closed airfoil")
 

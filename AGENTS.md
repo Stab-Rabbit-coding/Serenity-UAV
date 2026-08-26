@@ -242,7 +242,9 @@ both via Commo.
 
 - Read this file and the matching subsystem `AGENTS.md` before starting a task; check
   `TODO.md` and recent git history for context; verify any citation you use against
-  `REFERENCES.md`.
+  `REFERENCES.md`. `docs/solutions/` holds documented solutions to past problems (bugs,
+  design patterns, workflow lessons), organized by category with YAML frontmatter
+  (`module`, `tags`, `problem_type`) — worth a search when working in an area it covers.
 - New standards citation: look it up by REF-ID first; if absent, add it to `REFERENCES.md`
   with a validated URL and exact section, then cite the REF-ID. Never guess a section number.
 - Keep `PROJECT_INDEX.md` current for active files; when a file is archived, move its entry to

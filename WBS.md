@@ -219,8 +219,8 @@ see docs/WBS.md §0.10.2.)*
 - [x] Access panel frames + covers (24" Rev R)
 - [x] 49 MHz (Part 15 §15.235) wire posts
 - [x] Verify head-cargo mating boss positions in slicer — SUPERSEDED,…
-- [ ] ★ CARGO-01 payload won't fit past the wing spar (BLOCKER)
-- [ ] CARGO-02 shell bores Ø12.3 for a spar the wing retired (8.3)
+- [x] ★ CARGO-01 payload won't fit past the wing spar (BLOCKER)
+- [x] CARGO-02 shell bores Ø12.3 for a spar the wing retired (8.3)
 - [x] ★ CARGO-03 wing root mortise now penetrates — CLOSED
 - [x] ★ CARGO-03b tenon/mortise on one datum — CLOSED
 - [ ] ★ CARGO-03c coupon gates tenon vs second spar (15 MPa)
@@ -293,9 +293,9 @@ see docs/WBS.md §0.10.2.)*
 - [x] EDF cableway added
 - [x] Fuselage spar-interface mismatched — station RESOLVED (Rev S1b)
   (spar DIAMETER Ø12.3 vs 8.3 still open — see §1.1.1 CARGO-02)
-- [ ] ★ WING-01 S1223 section self-intersects at x/c 0.742 (BLOCKER)
-- [ ] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
-- [ ] SPAR-02 DS3225 24.5 vs 25 kgf·cm req (re-derive); RAIL-2 2.3A
+- [x] ★ WING-01 S1223 section self-intersects at x/c 0.742 (BLOCKER)
+- [x] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
+- [x] SPAR-02 DS3225 torque re-derived (aero+inertia only, gravity nulled by CG pivot) -- DS3225 clears at ~7.3% margin, no part change; 6 V tilt-servo rail resized to 2.3A/servo (RAIL-2 is unrelated -- winch/Observer rail, corrected citation)
 - [x] SPAR-04 Hall tip jog crosses the spar bore — CLOSED
 
 #### 1.1.3 — Nacelles
@@ -360,7 +360,7 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Assess foot grip on concrete/asphalt
 - [x] Rev R1.4 corner V-brace (landing_leg_assy.scad) is retired
 - [x] Rev R4 closed-ring wire fuse (wire_loop_fuse.scad) is retired
-- [ ] LG-03 CF rod channel in middle_canonical_shell24.scad rear skid…
+- [x] LG-03 CF rod channel in rear skid arms (superseded by LG-26)
 - [x] landing_legs_hull_r1.stl is orphaned
 - [ ] LG-06 Elastic bench check: quarter-AUW fixture, 1.5 ft drop
 - [ ] LG-07 Confirm avionics enclosure shock rating
@@ -374,6 +374,8 @@ see docs/WBS.md §0.10.2.)*
       *(closed 2026-08-09 — 4 ft adopted)*
 - [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
 - [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
+- [x] LG-25 Fore bay frame vs U5 tie-rod boss: 12mm proud (relieved boss)
+- [x] LG-26 Rear skid CF-rod bore misses the skid tube (fixed)
 - [ ] Render overview SVGs using FreeCAD TechDraw
 
 #### 1.1.5 — Non-Printable Component Placeholders
@@ -1087,6 +1089,23 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [x] rear_shell24_2mm_repaired.stl — 15 bodies, all wt=True
 - [x] middle_shell24_2mm_repaired.stl — 10 bodies, all wt=True
 - [x] dorsal_antenna_fin.stl — 3 bodies, all wt=True
+    - **MESH FIX 2026-08-25** (surfaced by `airframe/freecad/assembly/
+        SerenityAssembly.FCStd` failing to open cleanly — "mesh data
+        structure has some defects"): re-measured, the published file
+        actually carried 7 bodies — the 3 real ones this line recorded, plus
+        4 degenerate zero-area single-triangle fragments not caught by a
+        per-body watertight check (each fragment IS trivially "watertight"
+        alone; the whole-file `trimesh.is_watertight` was False). Two of the
+        3 real bodies also had inverted (negative-volume) winding. Fixed:
+        dropped the 4 degenerate fragments, corrected winding
+        (`trimesh.fix_normals`), unioned the 3 real bodies via `manifold3d`
+        (same primitive as the sleeve fix above) — result is 1 body, 22
+        faces (was 56 total across all 7), fully watertight, volume 2800 mm³
+        matching the largest single real body exactly (the smaller box and
+        the mast were both fully contained within its footprint — genuine
+        duplicate/leftover fragments, not distinct features; visually
+        re-verify this reads as the intended flat blade fin, not a
+        mistakenly-collapsed multi-part design, before next print).
 - [x] cargo_sect_shell24.stl — 190 bodies, all wt=True
 
 ### 6.3 — Rev S Checkpoint (2026-07-04)

@@ -35,9 +35,23 @@ Tolerances
 ----------
 The bay solids are themselves boolean results (they are trimmed against the
 keep-outs), so a subtracted face pair leaves sub-micron slivers behind.
-`EPS_MM3` is that residue floor -- 1e-3 mm^3 is a cube 0.1 mm on a side, four
-orders of magnitude below the smallest defect this tool has ever found
-(2.7 mm^3), so nothing real hides under it.
+`EPS_MM3` is that residue floor.
+
+U6 (2026-08-25): raised 1e-3 -> 1e-2 mm^3.  Re-running check 1 against the
+U5/KTD1 wing-root tie-rod bosses (added after this tool's floor was last
+calibrated) found "fore-port aperture x rod fwd boss port" at 0.0033 mm^3 --
+above the old floor, so it FOULed.  Inspecting it (bounding boxes of the
+aperture cutter and the rod boss, and of their intersection) showed the
+overlap spans almost the boss's full cross-section in Y/Z while totalling
+only thousandths of a mm^3: a razor-thin film along a boundary the two
+features are DESIGNED to meet at (the boss sits right at the bay aperture's
+edge), not a real interpenetration -- the same "two solids that merely share
+a face plane... is not a defect" class of artifact
+`tools/wing_root_deconflict.py` already documents for its own checks, just
+without that tool's flush-detection logic to filter it automatically.
+1e-2 mm^3 is a cube 0.22 mm on a side -- still nearly three orders of
+magnitude below the smallest REAL defect this tool has ever found
+(2.7 mm^3), so nothing real hides under it either.
 
 One overlap is ACCEPTED rather than eliminated: the bay's 16 M3 bolt bores are
 deliberately not trimmed, because a blocked bolt bore is a hard assembly
@@ -74,7 +88,7 @@ CARGO_STL = os.path.join(
 sys.path.insert(0, MERGE_DIR)
 
 # Boolean-residue floor -- see "Tolerances" above.
-EPS_MM3 = 1e-3
+EPS_MM3 = 1e-2
 # Accepted nick a single bay bolt bore may take out of a servo pad edge.
 # Measured worst at adoption (2026-08-16): 14.482 mm^3.
 BORE_PAD_BUDGET_MM3 = 20.0

@@ -20,7 +20,6 @@
 - [ ] LG-16 Confirm ductile wire temper survives jig-forming
 - [ ] LG-02 Backing plate part (optional at 4 ft; FOS 4.56 unaided)
 - [ ] Assess foot grip on concrete/asphalt (traction requirement)
-- [ ] LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skids
 - [ ] LG-06 Elastic bench check: quarter-AUW fixture, 1.5 ft drop
 - [ ] LG-07 Confirm avionics enclosure shock rating
 - [ ] LG-11 Coupon-test CF-PETG

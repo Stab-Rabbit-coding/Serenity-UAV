@@ -85,6 +85,7 @@ CERN-OHL-W 2.0 / CC BY-SA 4.0 dual-license split)
     - [REF-SENSOR-014: LibreServo v2 (stab-rabbit-coding fork) — Open-Source Smart-Servo Control Board](#ref-sensor-014-libreservo-v2-stab-rabbit-coding-fork--open-source-smart-servo-control-board)
     - [REF-SENSOR-015: OpenServoCore — Open-Source SG90/MG90-Class Smart-Servo Control Board](#ref-sensor-015-openservocore--open-source-sg90mg90-class-smart-servo-control-board)
     - [REF-SENSOR-016: Infineon OPTIGA™ Trust M — I2C Secure Element (planned, CAN-PERIPH-GW-1 + Flight Engineer only)](#ref-sensor-016-infineon-optiga-trust-m--i2c-secure-element-planned-can-periph-gw-1--flight-engineer-only)
+    - [REF-SENSOR-019: SMB Bearings F688ZZ — 8x16x5 mm Flanged Miniature Radial Ball Bearing (wing-root tilt-spar bearing)](#ref-sensor-019-smb-bearings-f688zz--8x16x5-mm-flanged-miniature-radial-ball-bearing-wing-root-tilt-spar-bearing)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -1115,6 +1116,75 @@ requirements for the airframe itself.
 
 ---
 
+## Part X-A — Material Allowables and Property Data (Academic / Test Sources)
+
+### REF-MAT-001: Batista, Lagomazzini, Ramirez-Peña & Vazquez-Martinez — "Mechanical and Tribological Performance of Carbon Fiber-Reinforced PETG for FFF Applications"
+
+| Field | Value |
+|---|---|
+| **Authors** | Moises Batista, Jose Miguel Lagomazzini, Magdalena Ramirez-Peña (Univ. of Cadiz), Juan Manuel Vazquez-Martinez (Polytechnic School of Engineering of Algeciras) |
+| **Publication** | *Applied Sciences* **2023**, 13(23), 12701 |
+| **DOI / Official URL** | <https://doi.org/10.3390/app132312701> — MDPI open access, CC BY 4.0 (<https://creativecommons.org/licenses/by/4.0/>) |
+| **Retrieved** | 2026-08-25, user-supplied PDF (`applsci-13-12701-v3.pdf`), cross-checked against the DOI landing page's abstract/citation |
+| **Test method** | ASTM D638 (tensile, "bone-type" specimens) and ASTM D695 (compression, Ø12.70 × 25.40 mm cylinders); FFF-printed, 100% concentric infill, 0.15/0.25/0.35 mm layer height, 220/230/240 °C extrusion, 60 mm/s |
+| **Material tested** | PETG-CF: **20% short (chopped) carbon fiber**-reinforced PETG filament (MÁSTONER, 1.75 mm), vs. unreinforced PETG baseline, both FFF/FDM printed |
+
+**Measured properties (as published, this project's use):**
+
+| Property | PETG-CF (20% short CF) | PETG (unreinforced) | Notes |
+|---|---|---|---|
+| Tensile strength | **39.23 N/mm² (MPa)** | 48.41 N/mm² (MPa) | Text Conclusions §4 — exact, not figure-read. CF **reduces** tensile strength (short-fiber pull-out/poor cohesion observed by SOM microscopy, Fig. 13b) |
+| Tensile force at break | 834.052 N | 956.6 N | dog-bone cross-section per Fig. 2a |
+| Elongation at break | 2.13% | 2.9% | |
+| Compressive strength (max, ASTM D695) | **≈47–60 N/mm² (MPa)**, print-parameter dependent | ≈47–53 N/mm² (MPa) | Read from Fig. 16 bar chart (approximate — the paper states the qualitative result "reinforced material outperforming the non-reinforced material" in compression, `mid text §4, ¶3`, without restating an exact single MPa figure in prose; the range above is the visual envelope across the nine print-parameter combinations tested, not a single certified value) |
+
+**What this study does NOT provide** (important for how it is used below): no bearing test (e.g., ASTM D953 pin-bearing-in-hole) and no interlaminar/interlayer shear or "fusion strength" test — only bulk tensile and bulk compressive coupons. It does not, by itself, satisfy the CF-PETG **bearing** allowable this repository has flagged as "requires verification" (`airframe/fuselage-mid/WBS.md` CARGO-03c) — bearing failure at a loaded hole is a distinct, generally more severe mode than bulk unnotched compressive strength, and no literature bearing-knockdown factor is asserted here (inventing one would violate root `AGENTS.md` §4). **Confirmed 2026-08-25 (full re-read, all 16 pages): the paper reports NO flexural test (no ASTM D790 or equivalent) and no orientation-specific data of its own** — its Introduction cites a THIRD-PARTY source (ref. [13] within the paper, not this paper's own data) for the general claim that "printing orientation significantly affects... elastic modulus and tensile strength" and that "longitudinal orientation results in greater stiffness," but Batista et al. themselves tested only ASTM D638 dog-bone tensile coupons (concentric 100% infill, load axis in-plane/XY, the FDM-strong direction) and ASTM D695 compression cylinders — do not cite this source for a flexural allowable or for a specific interlayer/Z-axis strength figure; neither exists in it. What it *does* provide: the first real, peer-reviewed, ASTM D695 bulk compressive figure for 20%-CF-reinforced PETG this repository has ever cited, replacing pure conjecture with a measured baseline an order of magnitude above the previous ≈5 MPa bond-limited placeholder (`docs/structural_analysis.md` §7.3), and (new use, `docs/structural_analysis.md` §6.2) the only citable bulk tensile figure for **unreinforced** PETG (48.41 MPa) this repo has, used there as a conservative bending-stress proxy for the rear skid arm — pending an actual flexural coupon and a stated print orientation, since a bending fiber-stress check is not the same test as bulk axial tension.
+
+**Applied to:** `docs/structural_analysis.md` §7.3 (CF-PETG allowables) and the CARGO-03c CF-PETG bearing-allowable "requires verification" row below — as *context and a materially better bulk-compressive baseline*, not as a substitute for the bearing-specific coupon test that item still calls for.
+
+**Used in:** `docs/structural_analysis.md` §7.3, `airframe/fuselage-mid/WBS.md` §1.1.1.2 CARGO-03c, this file's Open Standards Verification Items table (CF-PETG bearing allowable row)
+
+### REF-MAT-002: Ramachandran, Pandian, Ramamoorthi & Britto John — "Influence of Process Parameters on the Mechanical Properties of Carbon Fibre Reinforced PETG"
+
+| Field | Value |
+|---|---|
+| **Authors** | Prabhakaran Ramachandran, Venkatesh Ramamoorthi, Jerold John Britto John (Ramco Institute of Technology, Rajapalayam, India); Pitchipoo Pandian (P.S.R. Engineering College, Sivakasi, India) |
+| **Publication** | *Mechanics of Advanced Composite Structures* **2026**, 13(1) [Serial No. 27], 171–184, Semnan University Press |
+| **DOI / Official URL** | <https://doi.org/10.22075/MACS.2025.36494.1791> — open access, CC BY 4.0 (<https://creativecommons.org/licenses/by/4.0/>) |
+| **Retrieved** | 2026-08-25, user-supplied PDF, cross-checked against the DOI landing page |
+| **Test method** | ASTM D695 (compression, cylindrical specimens), **ASTM D790 (three-point flexural)**, ASTM E384 (Shore D hardness), ASTM D1525 (Vicat softening), ASTM D648 (heat deflection); FFF-printed on a URU 3.0 printer, 0.1 mm layer height, 100% infill, 240°C nozzle / 85°C bed, 80 mm/s, ±45° raster |
+| **Material tested** | Pure PETG vs. 10%/20%/30% short chopped-carbon-fiber PETG (M/s. Medsby Health Care Solutions & FlashForge filament), five specimens per composition |
+
+**Measured properties, unreinforced PETG (this project's use — Table 4 of the paper):**
+
+| Property | Value | Notes |
+|---|---|---|
+| **Flexural strength (ASTM D790)** | **54 N/mm² (MPa)** | Table 4, exact — this is a genuine three-point-bend test, not a tensile-strength proxy |
+| **Flexural modulus (ASTM D790)** | **2.76 GPa** | Table 4, exact |
+| Compressive strength (ASTM D695) | 53 MPa | Table 3 |
+| Shore Hardness D | 71 | Table 5 |
+| Heat deflection temperature | 67 °C | Table 7 |
+
+**Measured properties, chopped-carbon-fiber PETG by fiber fraction (Table 4 of the
+paper, ASTM D790 three-point flexural test — exact, not figure-read):**
+
+| Material | Flexural strength (MPa) | Flexural modulus (GPa) | Notes |
+|---|---|---|---|
+| PETG (0% CF) | 54 | 2.76 | baseline, same row as above |
+| **10% CF-PETG** | **43** | **5.15** | **Strength DROPS below plain PETG** at this fraction — the paper attributes this to poor fiber-matrix cohesion/wetting at low loading (short-fiber pull-out), consistent with the tensile-test finding in REF-MAT-001. Modulus still rises. **Do not treat "CF-PETG" as inherently stronger than plain PETG in flexure without a stated fiber fraction — 10% is a strength regression.** |
+| **20% CF-PETG** | **77** | **6.67** | Strength recovers well above plain PETG; this is the fraction specified for Serenity's structural airframe skins (owner-directed 2026-08-25, see below) |
+| 30% CF-PETG | 80 | 7.01 | Highest strength/modulus tested, but this exact fraction is a custom lab blend (Medsby Health Care Solutions & FlashForge filament, this paper's own test material) — not confirmed as an available commercial retail product; superseded as the airframe target by 20% CF-PETG once a real, explicitly-labeled 20%-CF commercial filament ("3D Maker Engineering" PETG-CF Pro Series) was verified to exist |
+
+FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated flexural yield strength for pure PETG = 50 MPa vs. the 54 MPa experimental figure above (7.4% error) — the paper's own validation, not independently re-verified here, but consistent enough to support citing the experimental figure with confidence.
+
+**What this study does NOT provide:** no print-orientation-specific data (loading axis vs. layer-stack axis) — the paper's own conclusions section notes "anisotropic fibre orientation" as a source of nonlinearity in its compressive/flexural results but gives no interlayer (Z-axis) strength figure or orientation-dependent allowable. It also does not test any geometry resembling a thin-walled tube (only solid dog-bone/bar/cylinder coupons) — this figure is a bulk material property, not a structural-member allowable.
+
+**Applied to:** `docs/structural_analysis.md` §6.4 (rear CF skid-rod nose-high re-derivation) — **replaces** the REF-MAT-001 tensile-strength-as-bending-proxy (48.41 MPa) used there initially with this source's direct ASTM D790 flexural strength (54 MPa), the correct test type for a bending failure mode. The print-orientation caveat from that section's original derivation stands unchanged — this source does not resolve it.
+
+**Used in:** `docs/structural_analysis.md` §6.4
+
+---
+
 ## Part XI — FDA / CDRH Laser Product Regulations
 
 ### REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products
@@ -1597,7 +1667,7 @@ TTL bus servo before the fleet-wide standardisation. Do not delete; do not cite 
 | **Control Interface** | **TTL half-duplex serial bus, ID-addressable** — **not** 1000–2000 µs PWM. Lands on `CAN-PERIPH-GW-1` `J_FLEX` → `FLEX_TTL_GPIO`, documented there as covering "a TTL-level digital servo protocol (e.g. a serial-bus servo)". |
 | **Operating Voltage** | Driven at 5.4 V nominal from Flight Engineer RAIL-2 `5V_OBS` (project-side decision, not a datasheet limit) |
 | **Torque** | ⚠ Not verified. **Design requirement is ≥ 3.2 kgf·cm (0.31 N·m)** at the coupler — derived in `docs/CARGO_WINCH_SPECIFICATION.md` §4.2, must be checked against the real rating. |
-| **Stall current** | ⚠ Not verified for SPT5425LV. Budgeted at 1.2 A for the RAIL-2 sizing (spec §5.4); if actual stall exceeds ~2.5 A, RAIL-2 must be resized. **Note (2026-08-23):** the nacelle-tilt servos moved to DS3225, whose datasheet DOES publish stall current — **1.9 A @ 5 V, 2.3 A @ 6.8 V** — i.e. ~1.9× the 1.2 A placeholder. RAIL-2 sizing must be re-checked against 2.3 A per tilt servo. |
+| **Stall current** | ⚠ Not verified for SPT5425LV (the cargo-winch servo on RAIL-2, `docs/CARGO_WINCH_SPECIFICATION.md` §5.4). Budgeted at 1.2 A for the RAIL-2 sizing; if actual stall exceeds ~2.5 A, RAIL-2 must be resized. **Note (2026-08-23):** the *nacelle-tilt* servos (a separate load, on the 6 V servo bus, `docs/POWER_DISTRIBUTION.md` §3.3 — not RAIL-2) moved to DS3225, whose datasheet DOES publish stall current — **1.9 A @ 5 V, 2.3 A @ 6.8 V**. **Correction (2026-08-25, SPAR-02 re-derivation):** the "RAIL-2 sizing must be re-checked" language here previously conflated the tilt servo with the RAIL-2 winch servo; RAIL-2 itself carries only the winch servo and Observer boards and is unaffected by the DS3225 swap. The 6 V servo bus (§3.3) has been resized to 2.3 A/servo instead — see `docs/POWER_DISTRIBUTION.md` §3.3/§4. |
 | **Mass** | ⚠ Not verified. **60 g assumed** in the mass/CG table (spec §6); this term dominates the +98.6 g net delta and the resulting T/W 1.613 → 1.557. |
 | **Case envelope / boss pattern** | ⚠ Not verified. Blocks `make_winch_pedestal_port()` in `airframe/stls/fuselage/cargo/generate_cargo_mounts.py`. |
 | **Application** | Cargo winch drive. Transmits **torque only** through a lost-motion dog coupler; the spool is carried on two MR84ZZ bearings on a fixed Ø4 mm axle clamped at both pedestals, so no radial load reaches the servo output. Paired with a normally-engaged one-way safety ratchet whose catch is retracted by a solenoid on the same gateway. Signed CAN-FD telemetry per [REF-NIST-001 §2.1]. |
@@ -1826,6 +1896,49 @@ those boards keep the SLB9672 (REF-SENSOR-011).
 
 ---
 
+### REF-SENSOR-019: SMB Bearings F688ZZ — 8x16x5 mm Flanged Miniature Radial Ball Bearing (wing-root tilt-spar bearing)
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | SMB Bearings |
+| **Product** | F688ZZ — flanged, double-metal-shielded miniature radial ball bearing |
+| **Datasheet (fetched and read this session)** | <https://www.smbbearings.com/firebrick/ckeditor/plugins/upload/Uploads/Documents/bearingpdfs/F688ZZ-flanged-miniature-bearing-8x16x5mm.pdf> |
+| **Bore (ID)** | 8 mm (0.3150 in) |
+| **Outside diameter (OD)** | 16 mm (0.6299 in) |
+| **Width** | 5 mm |
+| **Flange OD** | 18 mm |
+| **Flange width** | 1.1 mm |
+| **Flange step height** | 0.2 mm (min.) |
+| **Rings/balls material** | SAE 52100 chrome steel |
+| **Cage material** | Pressed steel |
+| **Closures** | Metal shields (ZZ) |
+| **Static load rating** | 59 kgf (579 N) |
+| **Dynamic load rating** | 125 kgf (1,226 N) |
+| **Speed limit** | 36,000 rpm (with adequate lubrication) |
+| **Standard lubrication** | Kyodo Yushi Multemp SRL grease |
+| **Bore/OD tolerance (P0, as-supplied grade)** | +0 / −0.008 mm each |
+| **Compliance** | EU RoHS and REACH |
+
+**Applied to:** the wing-root (fuselage-wall) end of each 8 mm OD AISI 4130 rotating
+tilt-spar, per `airframe/wings-nacelles/WBS.md` §1.1.2 **SPAR-01** ("Root bearing
+stays F688ZZ" — the tip end uses the downsized MF128ZZ, not this part; see the
+2026-07-19 Rev R2d note in the same section). The bearing seat cut into the cargo
+shell (`airframe/fuselage-mid/WBS.md` CARGO-02) is sized from this datasheet's OD —
+**16 mm nominal, +0/−0.008 mm** — plus a light interference allowance for a
+printed-plastic seat (outer race stationary in the shell; inner race rotates with
+the spar), not from the retired Ø22 mm press-fit figure that sized the old fixed
+12 mm CF tube boss. The 8 mm bore matches the spar's 8 mm OD directly (line-to-line
+on the rotating inner race, per the manufacturer's P0 bore tolerance above; no
+added clearance is applied on the *bearing* bore itself — the 8.3 mm figure in
+`WING_SPAR_BORE_D` is a separate, non-bearing rotating clearance elsewhere along
+the spar's run, not this seat).
+
+**Used in:** `airframe/blender-scripts/merge_cargo_interior.py`
+(`WING_SPAR_BOSS_OD`), `airframe/wings-nacelles/WBS.md` §1.1.2,
+`airframe/fuselage-mid/WBS.md` §1.1.1.2 CARGO-02, `current-specification/bom_revS.csv`
+
+---
+
 ## Part XIII — Telecommunications Standards
 
 ### REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)
@@ -1989,6 +2102,26 @@ inner surface as the flow-facing boundary.  The master flaps are geometrically u
 `docs/PHASED_BUILD_GUIDE.md` (nozzle flap print quantities), `current-specification/bom_revS.json`
 (`PRINT-NACELLE-FLAP-MASTER` / `PRINT-NACELLE-FLAP-SEAL`), `TODO.md` §1.1.3.
 
+### REF-CAD-006: Selig, M.S. — S1223 airfoil coordinates (UIUC Airfoil Coordinates Database)
+
+| Field | Value |
+|---|---|
+| **Author** | Michael S. Selig (University of Illinois at Urbana-Champaign, Department of Aerospace Engineering) |
+| **Work** | S1223 airfoil — tabulated (x, y) surface coordinates, normalised to unit chord, Selig convention (single closed loop starting/ending at the trailing edge, upper surface TE→LE followed by lower surface LE→TE) |
+| **Designation** | UIUC Airfoil Coordinates Database, entry `s1223.dat` |
+| **Official URL** | <https://m-selig.ae.illinois.edu/ads/coord_database.html> (database index); direct file <https://m-selig.ae.illinois.edu/ads/coord/s1223.dat> |
+| **Retrieved** | 2026-08-24, fetched live via HTTP GET against the direct file URL above; content verified against the published S1223 plots at <https://m-selig.ae.illinois.edu/ads/afplots/s1223.gif> (same database) |
+| **License** | UIUC Applied Aerodynamics Group airfoil data is published for open engineering/research use; cited here per this project's citation policy (root `AGENTS.md` §4) regardless of whether a formal license notice accompanies the file. No coordinate value is altered — the table below is a verbatim re-split of the published 81-point loop into the two ordered surface lists (`S1223_UPPER` LE→TE, `S1223_LOWER` TE→LE) that `wings_s1223_revo.scad`'s existing `s1223_section()`/`midline_frac()` decomposition expects; no interpolation, smoothing, or invented points were introduced. |
+| **Note** | Supersedes the placeholder table that shipped with `wings_s1223_revo.scad` since Rev R1 — that table was a hand-typed approximation that crossed to negative thickness at x/c ≈ 0.742 (WING-01, `tools/wing_airfoil_integrity.py`). This entry is the actual source data; the placeholder's origin was never traceable to a fetch and is not cited as a source. |
+
+**Applied to:** `S1223_UPPER` / `S1223_LOWER` coordinate tables — the wing outer-mold-line section
+used by `s1223_section()`, `wing_solid()`, and every bore/pad module in
+`wings_s1223_revo.scad` that reads `midline_frac()`.
+
+**Used in:** `airframe/openscad/wings/wings_s1223_revo.scad` (`S1223_UPPER`, `S1223_LOWER`),
+`tools/wing_airfoil_integrity.py` (validates this table), `airframe/wings-nacelles/WBS.md` §1.1.2
+(WING-01).
+
 ---
 
 ## Part XV — Open Hardware / Software Licensing Standards
@@ -2065,9 +2198,9 @@ Add verified section numbers to the relevant files and update this table.
 | Tilt-spar material allowables (4130 + trade-study alternates) | `docs/TILT_SPAR_ANALYSIS.md` §3.1–3.2/§3.5, `current-specification/bom_revS.csv` SPAR-TILT-4130 | The §3.5 material trade study uses **typical handbook allowables** for AISI 4130 (~460 MPa yield), 17-4 PH H1075 (~860 MPa), 7075-T6 (~503 MPa), 6061-T6 (~276 MPa), 316 SS, and Ti-6Al-4V (~880 MPa); none are yet tied to a validated MMPDS/AMS product page. Moduli/densities are nominal. | Confirm the **selected** material's design allowable and the two carried alternates (17-4 PH, 7075-T6) vs MMPDS-2023 / AMS (or mill cert) and add `REF-MAT-*` catalog entries with validated URLs before spar procurement (TODO §0.8). |
 | CF plate bending allowable for the SPAR-01 thwarts | `airframe/wings-nacelles/WBS.md` §1.1.2 SPAR-01, `tools/wing_spar_carrythrough.py`, `docs/structural_analysis.md` §1 | The two CF thwarts that replace the wing-spar carry-through (2026-08-23) are sized against a **300 MPa** cross-ply bending stand-in, chosen a factor of 5 below the only CF figure the repository carries — `docs/structural_analysis.md` §1's ~1 500 MPa for **unidirectional pultruded** stock, which is itself marked as requiring supplier certificates. A thwart is loaded in bending across the ship, which is not that layup, so neither number is a verified allowable for this part. The tool prints FOS against both (8.5 and 42.5 at the governing station). | Obtain ASTM D3039 (tensile) and ASTM D695 (compressive) certificates for the actual CF plate stock, add a `REF-MAT-*` catalog entry with a validated URL and the certified flexural allowable, and re-run `tools/wing_spar_carrythrough.py` before cutting the thwarts. Do not fabricate the figure. (root `TODO.md` §0.8) |
 | S1223 airfoil coordinates — the tabulated section is not a valid airfoil | `airframe/openscad/wings/wings_s1223_revo.scad` `S1223_UPPER`/`S1223_LOWER`, `airframe/wings-nacelles/WBS.md` §1.1.2 WING-01, `tools/wing_airfoil_integrity.py` | The tabulated upper surface falls below the lower surface over the aft quarter: section thickness goes **negative from x/c ≈ 0.742**, reaching t/c −0.0152 at x/c 0.90, and the outline self-intersects at (0.7417, 0.0235). The aft upper points sit ~0.03 t/c below published Selig S1223. **No source is recorded for the tables** — they carry no citation, retrieval date, or URL anywhere in the repository, which is how a corrupted aft section went unnoticed. `wing_solid()` lofts with `hull()`, whose convex hull is 1.647× the outline's area, so the defect never reaches the STL and `validate_stls.py` passes. | Retrieve S1223 coordinates from the **UIUC Airfoil Coordinates Database** (<https://m-selig.ae.illinois.edu/ads/coord_database.html>) — URL not yet validated against the issuing site by this repository, so verify before citing — record the retrieval date, add a `REF-CAD-*` entry, and only then replace both tables. `tools/wing_airfoil_integrity.py` must reach PASS. Do **not** transcribe coordinates from memory or from the comparison column in WING-01. (root `TODO.md` §1.1.2) |
-| DS3225 nacelle-tilt servo — residual torque margin vs the tilt requirement | `avionics/datasheets/DS3225 datasheet.pdf`, `docs/TILT_SPAR_ANALYSIS.md` §2, `current-specification/bom_revS.csv` SERVO-TILT | **Dimensions RESOLVED and stable across the swap.** DS3225 (added 2026-08-23) is **dimensionally identical** to the DS3218 it replaces — 40 × 20 × 40.5 mm, 60 g, 54.5 mm flange span, 49.5 × 10 mm bolt pattern, flange 27.7 mm above base — so the Rev S1d cargo-shell pads are unaffected. **Torque is closer but still not cleared on datasheet figures:** stall is **21 kgf·cm @ 5 V / 24.5 kgf·cm @ 6.8 V**; the "25kg" in the product name is the marketing figure and the spec table maxes at 24.5. Against the **≥ 25 kgf·cm (2.45 N·m)** requirement that is **98 % at 6.8 V, ~92 % at a 6 V rail, 84 % at 5 V** (DS3218 was 86 % at 6.8 V). LibreServo_v4 re-drives the motor from 4.5–18 V and may close it, but no converted-unit figure exists. Stall current is now cited at **1.9 A / 2.3 A**, against the 1.2 A placeholder RAIL-2 was sized on. | Two routes, and the second is probably the right one first: (a) bench-measure stall torque of a DS3225 + LibreServo_v4 unit at the rail voltage actually chosen; (b) **re-derive the ≥ 25 kgf·cm requirement itself** — it is cited to `serenity-rev-r.jsx` L383 as a spec pick, not a derivation, and `TILT_SPAR_ANALYSIS` §2 records the pivot as being AT the nacelle CG, which nulls the gravity moment and leaves only aero + inertia. Re-derive before buying a larger servo. Also re-size RAIL-2 at 2.3 A per tilt servo. (root `TODO.md` §1.1.3) |
+| DS3225 nacelle-tilt servo — residual torque margin vs the tilt requirement | `avionics/datasheets/DS3225 datasheet.pdf`, `docs/TILT_SPAR_ANALYSIS.md` §2/§2.1, `current-specification/bom_revS.csv` SERVO-TILT | **Dimensions RESOLVED and stable across the swap.** DS3225 (added 2026-08-23) is **dimensionally identical** to the DS3218 it replaces — 40 × 20 × 40.5 mm, 60 g, 54.5 mm flange span, 49.5 × 10 mm bolt pattern, flange 27.7 mm above base — so the Rev S1d cargo-shell pads are unaffected. Datasheet stall is **21 kgf·cm @ 5 V / 24.5 kgf·cm @ 6.8 V**; the "25kg" in the product name is the marketing figure and the spec table maxes at 24.5. Against the uncorrected **≥ 25 kgf·cm (2.45 N·m)** spec-pick that was **98 % at 6.8 V**. **RESOLVED 2026-08-25** (`docs/TILT_SPAR_ANALYSIS.md` §2.1): the ≥25 kgf·cm figure was itself the stale artifact — it is a spec pick (`archives/serenity-rev-r.jsx` L383), not a load derivation. Re-derived from aero+inertia only (pivot at CG nulls gravity to within a 0.019 kgf·cm bound on two off-axis parts): grounded requirement ≈ 1.80 kgf·cm, **7.3 % of DS3225's 24.5 kgf·cm** — wide margin. Aero moment could not be grounded (no nacelle Cd/frontal-area data exists in the repo) and remains an open item, not assumed zero. **DS3225 stands; no part change.** Stall current is cited at **1.9 A / 2.3 A** — this is the **6 V servo bus** current (`docs/POWER_DISTRIBUTION.md` §3.3), now resized there to 2.3 A/servo; it is **not** RAIL-2 (RAIL-2/`5V_OBS` is the separate Observer/winch-servo rail, `docs/POWER_DISTRIBUTION.md` §3.2.1/§11.1 — the earlier "1.2 A placeholder RAIL-2 was sized on" language in this row and elsewhere was a citation error, corrected 2026-08-25). | Bench-measure stall torque of a DS3225 + LibreServo_v4 unit at the rail voltage actually chosen, to confirm the datasheet figures translate to the built hardware — the load-side conclusion (DS3225 stands) does not depend on this, but it remains an open verification item per Scope Boundaries. (root `TODO.md` §0.8) |
 | SPT5425LV mounting-ear span and bolt-hole spacing (REF-SENSOR-013) | `REFERENCES.md` REF-SENSOR-013, `airframe/blender-scripts/merge_cargo_interior.py` `NSVMT_HOLE_S_Y`/`NSVMT_HOLE_S_Z`, `airframe/wings-nacelles/WBS.md` §1.1.2 SPAR-02 | REF-SENSOR-013 publishes the SPT5425LV body as 40.5 × 20 × 40.5 mm but **neither source lists the mounting-ear span or the bolt-hole spacing**. The cargo shell drills a 35 × 16 mm pattern into both nacelle-servo pads; that pattern predates this servo (drawn for the uncited DS3218MG the BOM replaced 2026-08-02) and is therefore unlikely to match. `tools/nacelle_servo_deconflict.py` carries a 6 mm/end ear allowance as an explicitly conservative stand-in, not a datasheet figure, and the 0.5 mm Y pad shortfall it reports rests entirely on that allowance. | Measure the ear span and hole spacing on a real SPT5425LV (or obtain a dimensioned manufacturer drawing), add them to REF-SENSOR-013, then correct `NSVMT_HOLE_S_Y`/`NSVMT_HOLE_S_Z` and re-run `tools/nacelle_servo_deconflict.py` before the cargo shell is cut. Do not fabricate the spacing. (root `TODO.md` §0.8) |
-| CF-PETG **bearing** allowable for the wing-root tenon | `airframe/fuselage-mid/WBS.md` §1.1.1.2 CARGO-03c, `tools/wing_spar_carrythrough.py`, `docs/structural_analysis.md` §7.3 | The wing root tenon is a structural joint element (owner, 2026-08-23 — the wings do not rotate with the nacelles, so spanwise load terminates at the fuselage wall through the tenon). It develops **10.14 MPa bearing** at ultimate on its mortise faces. The repository carries **no CF-PETG bearing allowable**; its only CF-PETG figure is ≈5 MPa, which is **bond**-limited (§7.3) and is the wrong mode for a tenon in a slot. Against the §3 joint FOS target of 4.0 the allowable must be ≥ 40.6 MPa at the present 12 mm insertion, or the tenon must grow. The airframe's measured maximum tenon is **39.2 mm wide x 20.1 mm insertion** (`tools/wing_root_deconflict.py` `max_tenon_envelope()`): width is capped aft by the landing-gear bay and cannot move forward at all (0.20 mm to the spar bore), and insertion is capped by the CARGO-01 payload envelope at X -119.1. At that maximum the joint reaches FOS 4.0 only if the allowable is **>= 11.1 MPa** — that is the hard floor the coupon test must clear. Below it the tenon cannot be grown into compliance. **Owner decision rule (2026-08-23): if CF-PETG cannot be sourced at >= 15 MPa fusion strength the joint gets a SECOND SPAR** forward of the main one (14 mm from LE, 31.15 mm separation, 469 N couple force), which at D8 x 40 mm embed needs an allowable of only ~5.9 MPa for FOS 4.0 -- see CARGO-03c. The coupon result therefore selects between two designs, and 15 MPa is the branch point. | Add CF-PETG **bearing/compressive** coupons (ASTM D695, printed in the tenon's own orientation and layer direction) to the LG-11 coupon-test schedule in root `TODO.md` §1.1.4, add a `REF-MAT-*` entry with the measured allowable, then re-run `tools/wing_spar_carrythrough.py` and size the tenon insertion from the result. Do not fabricate the allowable, and do not assume the bond-limited 5 MPa applies. |
+| CF-PETG **bearing** allowable for the wing-root tenon | `airframe/fuselage-mid/WBS.md` §1.1.1.2 CARGO-03c, `tools/wing_spar_carrythrough.py`, `docs/structural_analysis.md` §7.3, **REF-MAT-001** | **RESOLVED (built) 2026-08-25 under the default `two_rod` path — this row now describes the coupon-gated alternative, not a blocker.** The wing-root couple is now reacted by two bonded CF tie rods (`wings_s1223_revo.scad` `TENON_LOAD_PATH = "two_rod"`), sized against the repo's existing ≈5 MPa bond-limited CF-PETG figure at FOS 5.26 (fwd)/4.14 (aft) — no new allowable needed to close this. The tenon itself is traded out of the load path and reverted to a locating-only feature. The **`enlarged_tenon`** path (tenon alone reacting the full 14.60 N·m ultimate moment, needing ≥40.6 MPa bearing at 12 mm insertion or ≥11.1 MPa at the airframe's 39.2×20.1 mm maximum envelope) stays documented/buildable but is not default and remains gated on a real bearing coupon. **REF-MAT-001** (2026-08-25) adds the first peer-reviewed data point — ASTM D695 *bulk* compressive strength for 20%-CF-PETG, ≈47–60 MPa — an order of magnitude above the 5 MPa placeholder, but it is bulk unnotched compression, not a bearing-in-a-hole test, so it does not by itself clear the ≥11.1–40.6 MPa bar this row's `enlarged_tenon` alternative needs; it does make that alternative look plausibly viable pending an actual bearing coupon, where before this row had no positive evidence at all. | For the built `two_rod` path: no action required, already closed. To *reopen* `enlarged_tenon` as a real option: run a genuine bearing coupon (ASTM D953 or equivalent pin-in-hole test, printed in the tenon's own orientation/layer direction) rather than inferring a bearing allowable from REF-MAT-001's bulk-compression figure via an unstated knockdown factor — add the LG-11 coupon-test schedule item (root `TODO.md` §1.1.4) if pursued. Do not fabricate a bearing/bulk-compression knockdown factor. |
 | 14 CFR Part 107 dropped-object provision — section number **not yet verified** | `REFERENCES.md` REF-FAA-002 applied-sections table, `docs/CARGO_WINCH_SPECIFICATION.md` §3.10.2 | Part 107 contains a provision prohibiting dropping an object from a small UA in a manner that creates an undue hazard to persons or property. REF-FAA-002's applied-sections table currently lists only §107.3, §107.29, §107.31 and §107.51(a)–(d) — the dropped-object section is **absent**, so no section number is asserted in the winch spec (root `AGENTS.md` §4: never guess a section number). This matters because the cargo winch **intentionally** releases a payload (requirement R5, overload line-shed) while an uncommanded structural release of the spool itself (19.1 J, or 31.8 J for the full assembly, from the §107.51(b) 400 ft ceiling) is precisely the hazard the provision addresses. | Look up the section in the eCFR Part 107 text, add it to REF-FAA-002's applied-sections table with the exact title and a validated URL, then cite it in `docs/CARGO_WINCH_SPECIFICATION.md` §3.10.2 and state explicitly how a commanded shed differs from an uncommanded release under that text. Do not fabricate the number. (`docs/TODO.md` §0.x) |
 | STS3215 cargo winch servo — envelope, torque, mass, stall current (REF-SENSOR-012) | `REFERENCES.md` REF-SENSOR-012 | **MOOT — servo superseded 2026-08-02.** The STS3215 datasheet-verification gate below is retained only as a historical record; the winch (and nacelle tilt) servos have moved to SPT5425LV/LibreServo v2 (REF-SENSOR-013/014), whose envelope/torque/mass are published COTS figures — see the row below. Do not spend further effort clearing this gate. | None — superseded. |
 | SPT5425LV servo — stall current; rotation-pin removal procedure (REF-SENSOR-013) | `REFERENCES.md` REF-SENSOR-013, `docs/CARGO_WINCH_SPECIFICATION.md` §3.1/§3.9 (Rev C), `current-specification/bom_revS.json`/`.csv`, `airframe/openscad/nacelles/nacelle_servo_bracket.scad` | Stall/running current is not published on either sourced listing (manufacturer product page or servodatabase.com), so RAIL-2 and the nacelle-tilt servo rail budgets carry the prior STS3215-era 1.2 A figure forward as a **placeholder, not a verified SPT5425LV number**. Separately, the exact internal location and removal procedure for the rotation-limiting pin has not been confirmed by teardown — the "remove the pin for continuous rotation" mod is a well-known technique on hobby servos generally, but part-specific verification is outstanding. | Bench-measure SPT5425LV stall current at 5–6 V before finalizing RAIL-2 / nacelle-tilt servo-rail sizing; photograph/document the pin-removal procedure on a teardown unit before committing steps to the build guide. Do not fabricate either figure. (`docs/TODO.md` §0.x) |

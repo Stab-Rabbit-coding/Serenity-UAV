@@ -31,21 +31,35 @@ The payload gate
 ----------------
 `README.md` mission steps 6 and 9 require a 4 in x 3 in x 3 in
 (101.6 mm x 76.2 mm x 76.2 mm) payload to be winched up through the clamshell
-aperture and into the bay.  The wing spar crosses the bay laterally at the
-Rev S1b station, so the payload's vertical path is obstructed unless it can
-pass either under the spar or entirely forward/aft of it.  This tool measures
-all three clearances and fails if none admits the payload.
+aperture and into the bay.
+
+CARGO-01, closed 2026-08-24: the wing spar used to cross the bay laterally at
+the Rev S1b station, obstructing the payload's vertical path unless it passed
+under, forward of, or aft of it.  Per SPAR-01 (owner, 2026-08-23,
+`airframe/wings-nacelles/WBS.md` SS1.1.2), each spar now terminates at the
+fuselage wall on its own bearing instead of crossing the fuselage, so it is no
+longer present anywhere inside the bay's clear span -- there is no longer an
+analytical spar obstruction to check the payload's path against.  What DOES
+still bound the payload is the shell's own real interior envelope at the
+former spar station (the bearing boss now sits OUTSIDE the clear span, at the
+wall -- X <= -240 stbd / X >= -100 port), so this tool now measures that
+envelope directly off the published mesh (`station_envelope()`) rather than
+computing clearance around an analytical spar position, and fails if the
+measured X width or Z height at that station cannot admit the payload.
 
 A second finding this tool reports: the cargo shell and the wing disagree on the
 spar DIAMETER.  `airframe/openscad/wings/wings_s1223_revo.scad` (Rev R2,
 2026-07-18) states "the 12 mm fixed CF tube is retired" and carries
 `SPAR_BORE_OD = 8.3` for an 8 mm rotating AISI 4130 tilt-spar that is both the
-wing structural spar and the nacelle tilt axis.  `merge_cargo_interior.py` still
-cuts `WING_SPAR_BORE_D = 12.3` with Ø22 bearing bosses, and `bom_revS.csv` still
-lists `CF-TUBE-12MM`.  Rev S1b reconciled the spar STATION across those two
-files but not its diameter, so the same class of defect remains open.  The
-payload gate below is evaluated against the wing's 8 mm spar, which is the
-larger clearance of the two and therefore the generous case.
+wing structural spar and the nacelle tilt axis.  CARGO-01/CARGO-02, closed
+2026-08-24: `merge_cargo_interior.py` now cuts `WING_SPAR_BORE_D = 8.3` (the
+same rotating clearance) inside an F688ZZ bearing seat (REF-SENSOR-019,
+Ø27.7 boss) that TERMINATES at the fuselage wall (X −100 port / −240 stbd,
+per SPAR-01) instead of crossing the bay, and `bom_revS.csv` lists the 8 mm
+OD AISI 4130 hollow spar in place of the retired `CF-TUBE-12MM`.  The
+payload gate below is evaluated against the wing's 8 mm spar figure, but with
+the bay geometry re-cut the spar no longer crosses the bay at all -- the gate
+now measures the bearing-seat boss's own footprint, not a full-span bore.
 
 Geometry sources (single-sourced -- this tool derives nothing on its own):
     airframe/blender-scripts/merge_cargo_interior.py
@@ -98,7 +112,7 @@ APERTURE = mci.APERTURE             # clamshell belly opening, hull frame
 WING_SCAD = os.path.join(
     REPO_ROOT, "airframe", "openscad", "wings", "wings_s1223_revo.scad"
 )
-SHELL_BORE_D = mci.WING_SPAR_BORE_D  # 12.3 mm, as the cargo shell still cuts it
+SHELL_BORE_D = mci.WING_SPAR_BORE_D  # 8.3 mm rotating clearance (CARGO-02, closed 2026-08-24)
 
 # Mission payload, README.md steps 6 and 9.
 PAYLOAD_L = 101.6                   # 4.00 in
@@ -212,47 +226,78 @@ def door_top(meshes):
     return max(float(m.bounds[1][2]) for m in meshes)
 
 
-def payload_gate(floor_z, spar_od):
-    """Check every path the mission payload could take into the bay.
+def payload_gate(mesh, floor_z):
+    """Check whether the mission payload fits in the bay's real interior
+    envelope, measured off the published mesh at the former spar station.
 
-    `spar_od` is the wing's rotating tilt-spar outside diameter -- the generous
-    case, since the cargo shell's stale bore is wider still.
+    CARGO-01 (closed 2026-08-24): the spar terminates at the fuselage wall
+    (SPAR-01) and no longer crosses the bay, so this no longer checks
+    clearance around an analytical spar position -- it measures the actual
+    shell interior at `mci.WING_SPAR_Y` (the station the spar/bearing boss
+    used to obstruct) via `station_envelope()`, the same mesh-sectioning
+    machinery `--stations` already uses elsewhere in this file.  The bearing
+    boss itself now sits OUTSIDE this span, at the wall (X <= STBD_INB
+    / X >= PORT_INB), so a bounded, sufficiently large envelope here is
+    exactly CARGO-01's closing condition ("bay clear span X -240..-100 =
+    140 mm at full bay height").
 
     Returns (ok, findings) where `findings` is a list of printable lines.
     """
-    spar_under = SPAR_Z - spar_od / 2.0
-    spar_fwd = SPAR_Y - spar_od / 2.0
-    spar_aft = SPAR_Y + spar_od / 2.0
-
-    under_h = spar_under - floor_z
-    fwd_span = spar_fwd - APERTURE[2]
-    aft_span = APERTURE[3] - spar_aft
-
-    # The payload may present either 76.2 mm face to the spar, but never less.
-    smallest = min(PAYLOAD_W, PAYLOAD_H)
-
+    env = station_envelope(mesh, mci.WING_SPAR_Y, z_floor=floor_z)
     findings = [
-        f"  bay floor (closed doors)      Z {floor_z:+7.2f}",
-        f"  wing spar axis                Y {SPAR_Y:+7.2f}   Z {SPAR_Z:+7.2f}"
-        f"   spar OD {spar_od:.1f} (wing SCAD)",
-        f"  spar underside                Z {spar_under:+7.2f}",
-        "",
-        f"  path 1 - under the spar       {under_h:6.1f} mm clear "
-        f"({under_h / 25.4:.2f} in)   need {smallest:.1f} mm",
-        f"  path 2 - forward of the spar  {fwd_span:6.1f} mm clear "
-        f"({fwd_span / 25.4:.2f} in)   need {smallest:.1f} mm",
-        f"  path 3 - aft of the spar      {aft_span:6.1f} mm clear "
-        f"({aft_span / 25.4:.2f} in)   need {smallest:.1f} mm",
+        f"  bay floor (closed doors)          Z {floor_z:+7.2f}",
+        f"  station probed (former spar Y)    Y {mci.WING_SPAR_Y:+7.2f}",
+        f"  design wall stations (SPAR-01)    X port >= {mci.PORT_INB:+.1f}"
+        f"   X stbd <= {mci.STBD_INB:+.1f}"
+        f"   (design clear span {mci.PORT_INB - mci.STBD_INB:.1f} mm)",
     ]
-    ok = max(under_h, fwd_span, aft_span) >= smallest
+    if env is None:
+        findings.append(
+            "  MEASUREMENT FAILED - the probe found no bounded interior at "
+            "this station (bay axis obstructed or the mesh has an opening "
+            "here); cannot confirm the payload fits."
+        )
+        return False, findings
+
+    x_lo, x_hi, z_lo, z_hi = env
+    x_span = x_hi - x_lo
+    z_span = z_hi - z_lo
+    y_span = APERTURE[3] - APERTURE[2]   # clamshell aperture Y extent
+
+    findings += [
+        f"  measured X interior               X {x_lo:8.1f}..{x_hi:8.1f}"
+        f"   width {x_span:7.1f} mm",
+        f"  measured Z interior               Z {z_lo:8.1f}..{z_hi:8.1f}"
+        f"   height {z_span:7.1f} mm",
+        f"  clamshell aperture Y span                              "
+        f"width {y_span:7.1f} mm",
+        "",
+    ]
+
+    # The payload must present some permutation of its three dimensions to
+    # (X width, Z height, Y span).  Its two smaller dims are numerically
+    # equal (76.2 mm), so there are only two distinct orientations to check:
+    # the 101.6 mm dim along X or along Y (Z always takes one of the 76.2 mm
+    # faces, since Z is the most constrained axis here).
+    dims_ok = []
+    for x_dim, y_dim, z_dim in (
+        (PAYLOAD_L, PAYLOAD_W, PAYLOAD_H),
+        (PAYLOAD_W, PAYLOAD_L, PAYLOAD_H),
+    ):
+        dims_ok.append(x_dim <= x_span and y_dim <= y_span and z_dim <= z_span)
+    ok = any(dims_ok)
+
+    findings.append(
+        f"  payload {PAYLOAD_L:.1f} x {PAYLOAD_W:.1f} x {PAYLOAD_H:.1f} mm "
+        f"(README.md mission steps 6, 9): {'FITS' if ok else 'DOES NOT FIT'} "
+        f"(need <= {x_span:.1f} mm X, <= {y_span:.1f} mm Y, <= {z_span:.1f} mm Z)"
+    )
     if not ok:
-        shortfall = smallest - max(under_h, fwd_span, aft_span)
         findings += [
             "",
-            f"  BLOCKED - best path is {shortfall:.1f} mm short.  The "
-            f"{PAYLOAD_L:.1f} x {PAYLOAD_W:.1f} x {PAYLOAD_H:.1f} mm payload",
-            "  (README.md mission steps 6 and 9) cannot be winched into the bay",
-            "  past the wing spar in any orientation.",
+            "  BLOCKED - no permutation of the payload's dimensions fits the "
+            "measured envelope",
+            "  at the former spar station.",
         ]
     return ok, findings
 
@@ -286,16 +331,16 @@ def main():
         print("  these two files but not its DIAMETER.  Tracked as CARGO-02.")
 
     floor_z = door_top(doors)
-    print("\nMission payload gate (README.md steps 6, 9)")
-    ok, findings = payload_gate(floor_z, spar_od)
+    print("\nMission payload gate (README.md steps 6, 9) -- CARGO-01, closed 2026-08-24")
+    ok, findings = payload_gate(mesh, floor_z)
     for line in findings:
         print(line)
 
     print()
     if not ok:
-        print("  RESULT: FAIL - cargo payload path obstructed by the wing spar")
+        print("  RESULT: FAIL - cargo payload does not fit the measured bay envelope")
         sys.exit(1)
-    print("  RESULT: PASS - the payload has a clear path into the bay")
+    print("  RESULT: PASS - the payload fits the measured bay envelope")
 
 
 if __name__ == "__main__":
