@@ -2074,7 +2074,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/dorsal_antenna_fin.stl": {
-      "description": "STL mesh (ASCII): dorsal_antenna_fin",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2314,7 +2314,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/edf_aft_spider_sleeve.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -2323,7 +2323,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/edf_stator_sleeve.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "propulsion",

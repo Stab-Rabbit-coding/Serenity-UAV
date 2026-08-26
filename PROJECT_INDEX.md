@@ -434,7 +434,7 @@ battery_tray.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, power, structur
 belly_panel.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, structural]
 bow_sensor_faceplate.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, sensors-vision, structural]
 cargo_middle_splice_collar.stl — STL mesh (binary) [cad-mesh, structural]
-dorsal_antenna_fin.stl — STL mesh (ASCII): dorsal_antenna_fin [cad-mesh, structural]
+dorsal_antenna_fin.stl — STL mesh (binary) [cad-mesh, structural]
 generate_conforming_collars.py — Generate the three CONFORMING splice collars (hull frame, Rev R3). [structural]
 head_cargo_splice_collar.stl — STL mesh (binary) [cad-mesh, structural]
 head_shell24.stl — STL mesh (binary) [cad-mesh, structural]
@@ -496,8 +496,8 @@ lg_r6_common_spring_wire_nominal.stl — STL mesh (ASCII): OpenSCAD_Model [cad-m
 ## airframe/stls/nacelles/
 
 ```text
-edf_aft_spider_sleeve.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
-edf_stator_sleeve.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
+edf_aft_spider_sleeve.stl — STL mesh (binary) [cad-mesh, propulsion, structural]
+edf_stator_sleeve.stl — STL mesh (binary) [cad-mesh, propulsion, structural]
 eng_left_shell24_50mm_repaired.stl — STL mesh (binary) [cad-mesh, propulsion, structural]
 eng_right_shell24_50mm_repaired.stl — STL mesh (binary) [cad-mesh, propulsion, structural]
 nacelle_port_revs.stl — STL mesh — header: SerenityUAV HULL-FRAME R1 Nacelle_Port 2026-06-11 [cad-mesh, propulsion, structural]

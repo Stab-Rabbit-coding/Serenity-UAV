@@ -1088,6 +1088,23 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [x] rear_shell24_2mm_repaired.stl — 15 bodies, all wt=True
 - [x] middle_shell24_2mm_repaired.stl — 10 bodies, all wt=True
 - [x] dorsal_antenna_fin.stl — 3 bodies, all wt=True
+    - **MESH FIX 2026-08-25** (surfaced by `airframe/freecad/assembly/
+        SerenityAssembly.FCStd` failing to open cleanly — "mesh data
+        structure has some defects"): re-measured, the published file
+        actually carried 7 bodies — the 3 real ones this line recorded, plus
+        4 degenerate zero-area single-triangle fragments not caught by a
+        per-body watertight check (each fragment IS trivially "watertight"
+        alone; the whole-file `trimesh.is_watertight` was False). Two of the
+        3 real bodies also had inverted (negative-volume) winding. Fixed:
+        dropped the 4 degenerate fragments, corrected winding
+        (`trimesh.fix_normals`), unioned the 3 real bodies via `manifold3d`
+        (same primitive as the sleeve fix above) — result is 1 body, 22
+        faces (was 56 total across all 7), fully watertight, volume 2800 mm³
+        matching the largest single real body exactly (the smaller box and
+        the mast were both fully contained within its footprint — genuine
+        duplicate/leftover fragments, not distinct features; visually
+        re-verify this reads as the intended flat blade fin, not a
+        mistakenly-collapsed multi-part design, before next print).
 - [x] cargo_sect_shell24.stl — 190 bodies, all wt=True
 
 ### 6.3 — Rev S Checkpoint (2026-07-04)

@@ -788,8 +788,31 @@
     file (2592/2592 verts, identical). **Pre-existing finding, not caused by
     today's changes:** `edf_stator_sleeve.stl` is not 2-manifold (OpenSCAD
     itself warns "may not be a valid 2-manifold" on render) — logged here
-    per CLAUDE.md's mesh-verification-finding requirement; not fixed in this
-    pass (unrelated to the nozzle/gear-train work above).
+    per CLAUDE.md's mesh-verification-finding requirement.
+
+    **CLOSED 2026-08-25** — surfaced again as "The mesh data structure has
+    some defects" (5 objects, ×2 dialogs each in the FreeCAD GUI = 10) when
+    reopening `airframe/freecad/assembly/SerenityAssembly.FCStd` (the file
+    still opened underneath the warnings — confirmed headless via
+    `freecadcmd` and with `Gui` active under `xvfb-run`, all 34 view
+    providers created — but the dialogs are a bad user experience and the
+    defect is real, not cosmetic). Root cause, per-body: `edf_stator_sleeve.
+    stl` and `edf_aft_spider_sleeve.stl` each carry the main sleeve body plus
+    3-4 small keying-tab bodies that touch it at coincident vertices (min
+    distance 0.0, confirmed) but were never welded into the same shell by
+    OpenSCAD's STL export, leaving locally non-manifold/overlapping facets
+    at the seams. Fixed by a `manifold3d` boolean union of the mesh's own
+    split bodies (`Manifold.__add__`, the same primitive
+    `merge_cargo_interior.py` already uses throughout) — this is a real
+    topology fix, not a masking one: it measurably dropped 12/12 duplicate
+    seam facets (stator 6490→6478, aft sleeve 2748→2736) and both files are
+    now `trimesh`-watertight overall (each was already watertight per body;
+    the whole file was not). The tabs remain separate solids after the fix
+    (still 5/4 bodies under `mesh.split()`) — by design, not a residual
+    defect: manifold3d's own validity check is on the whole set, not on
+    single-body connectivity. `airframe/stls/fuselage/dorsal_antenna_fin.stl`
+    (unrelated part, same symptom) is fixed alongside — see
+    `dorsal_antenna_fin.stl — MESH FIX 2026-08-25` below.
 
 ##### 1.1.3.1 *Nozzle*
 
