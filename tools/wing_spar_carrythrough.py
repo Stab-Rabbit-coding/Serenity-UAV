@@ -327,11 +327,11 @@ def report_two_rod_couple(src, m_ult):
     print("  not a plain-PETG datasheet figure.")
 
     f_single = m_ult_mm / (x_spar - x_fwd)
-    print(f"\n  Sanity check vs. the superseded single-rod method (rod alone reacting")
-    print(f"  the full moment against the spar, F = M / (spar - rod station)): that")
+    print("\n  Sanity check vs. the superseded single-rod method (rod alone reacting")
+    print("  the full moment against the spar, F = M / (spar - rod station)): that")
     print(f"  gives F = {f_single:.1f} N at the forward station alone -- the two-rod")
     print(f"  couple's shared {f_couple:.1f} N is lower, as expected once a second")
-    print(f"  rod actually shares the load instead of being checked in isolation.")
+    print("  rod actually shares the load instead of being checked in isolation.")
 
 
 def report_enlarged_tenon(src, scad, m_ult):
@@ -350,7 +350,7 @@ def report_enlarged_tenon(src, scad, m_ult):
                            scad("WING_ROOT_TAB_H_ENLARGED"),
                            scad("WING_ROOT_TAB_L_ENLARGED"))
 
-    print(f"\nEnlarged-tenon path (superseded default; coupon-gated, >= 15 MPa)")
+    print("\nEnlarged-tenon path (superseded default; coupon-gated, >= 15 MPa)")
     print(f"  tenon {tab_w:.0f} (Y) x {tab_h:.0f} (Z) x {tab_l:.0f} (insertion) mm")
 
     m_tenon = m_ult
