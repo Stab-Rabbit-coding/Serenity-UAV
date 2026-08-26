@@ -85,7 +85,7 @@ WBS.md — Serenity UAV — Airframe (Hull-Frame Standard + Placeholders) Work B
 ## airframe/blender-scripts/
 
 ```text
-add_structural_features.py — add_structural_features.py — add structural features to the four baked fuselage shells. [cad-mesh, structural]
+add_structural_features.py — Python script [cad-mesh, structural]
 blender_edf_bore_and_petals.py — blender_edf_bore_and_petals.py — Rev D — run with: [cad-mesh, propulsion, structural]
 blender_hollow_shells.py — blender_hollow_shells.py — run with: [cad-mesh, structural]
 blender_intake_cut.py — blender_intake_cut.py — run with: [cad-mesh, structural]
@@ -438,12 +438,12 @@ dorsal_antenna_fin.stl — STL mesh (binary) [cad-mesh, structural]
 generate_conforming_collars.py — Generate the three CONFORMING splice collars (hull frame, Rev R3). [structural]
 head_cargo_splice_collar.stl — STL mesh (binary) [cad-mesh, structural]
 head_shell24.stl — STL mesh (binary) [cad-mesh, structural]
-head_shell24_2mm_repaired.stl — STL mesh — header: SerenityUAV HULL-FRAME R1 Head_Shell mating-face-open 2026-07-27 [cad-mesh, structural]
+head_shell24_2mm_repaired.stl — STL mesh — header: SerenityUAV HULL-FRAME R1 Head_Shell structural-features 2026-06-14 [cad-mesh, structural]
 inara_access_cover.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, structural]
 middle_canonical_edf_intake.stl — STL mesh (binary) [cad-mesh, propulsion, structural]
 middle_canonical_shell24.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, structural]
 middle_rear_splice_collar.stl — STL mesh (binary) [cad-mesh, structural]
-middle_shell24_2mm_repaired.stl — STL mesh — header: SerenityUAV HULL-FRAME R1 Middle_Shell mating-face-open 2026-07-26 [cad-mesh, structural]
+middle_shell24_2mm_repaired.stl — STL mesh — header: SerenityUAV HULL-FRAME R1 Middle_Shell structural-features 2026-06-14 [cad-mesh, structural]
 rear_shell24_2mm_repaired.stl — STL mesh — header: SerenityUAV HULL-FRAME R1 Rear_Shell interior-regen 2026-07-06 [cad-mesh, structural]
 river_access_cover.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, structural]
 ```
@@ -1185,7 +1185,7 @@ WBS.md — Serenity UAV — Avionics Rev S1 Redesign (Commo / XO / Flight Engine
 
 ```text
 AGENTS.md — Current Specification — Agent Instructions [documentation, specification]
-bom_revS.csv — Bill of materials, CSV (170 items) [bom, specification]
+bom_revS.csv — Bill of materials, CSV (171 items) [bom, specification]
 bom_revS.json — Bill of materials, JSON (168 items) [bom, specification]
 LICENSE — SERENITY UAV — SPECIFICATION & BOM LICENSING [licensing, specification]
 LICENSE_AND_ATTRIBUTION.md — Serenity-Class Tiltrotor UAV — License & Attribution [documentation, licensing, security, specification]

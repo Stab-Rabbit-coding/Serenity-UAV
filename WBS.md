@@ -375,7 +375,7 @@ see docs/WBS.md §0.10.2.)*
 - [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
 - [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
 - [x] LG-25 Fore bay frame vs U5 tie-rod boss: 12mm proud (relieved boss)
-- [ ] LG-26 Rear skid CF-rod bore misses the skid tube (wrong X station)
+- [x] LG-26 Rear skid CF-rod bore misses the skid tube (fixed)
 - [ ] Render overview SVGs using FreeCAD TechDraw
 
 #### 1.1.5 — Non-Printable Component Placeholders

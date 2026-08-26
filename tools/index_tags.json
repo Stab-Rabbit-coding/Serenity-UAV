@@ -343,7 +343,7 @@
       "archived": false
     },
     "airframe/blender-scripts/add_structural_features.py": {
-      "description": "add_structural_features.py \u2014 add structural features to the four baked fuselage shells.",
+      "description": "Python script",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2105,7 +2105,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/head_shell24_2mm_repaired.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Head_Shell mating-face-open 2026-07-27",
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Head_Shell structural-features 2026-06-14",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2290,7 +2290,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/middle_shell24_2mm_repaired.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Middle_Shell mating-face-open 2026-07-26",
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Middle_Shell structural-features 2026-06-14",
       "tags": [
         "cad-mesh",
         "structural"
@@ -9432,7 +9432,7 @@
       "archived": false
     },
     "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (170 items)",
+      "description": "Bill of materials, CSV (171 items)",
       "tags": [
         "bom",
         "specification"

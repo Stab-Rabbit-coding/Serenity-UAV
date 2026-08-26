@@ -406,11 +406,26 @@ whether the middle/rear print-split joint (Y≈203, a bonded splice collar,
 not continuous printed material, sitting at the same station as the peak
 moment) needs its own bonded-joint check — flagged, not computed.
 
+**Follow-up, same day — LG-26 fix applied and gap closed.** LG-26's rod
+re-siting (above) was actually implemented, not just found:
+`SKID_ROD_BORES` corrected in `add_structural_features.py`, both shells
+regenerated and re-verified (`tools/validate_stls.py` 61/61 PASS). Re-running
+§6.4 with the rod now geometrically coupled (parallel-EI split, not assumed
+at 0%) found the rod's own contribution small (a solid 4 mm CF rod is too
+slender to meaningfully stiffen this thin shell) — nose-high FOS moves only
+3.27 → 3.47, still short of 4.0. Closing the remaining gap required a
+material decision, resolved by the owner as **20% CF-PETG** (not the
+initially-proposed 30% — a genuine 30%-CF retail filament could not be
+verified to exist, while 20% is a real, verified commercial product; see
+`REFERENCES.md` REF-MAT-002 Table 4 for the fiber-fraction flexural data,
+which also shows 10% CF-PETG is *worse* than plain PETG). Final: nose-high
+FOS **4.75 — PASS** at 20% CF-PETG (77 MPa / 6.67 GPa flexural).
+
 **Verification:** A documented FOS ≥ this repo's standard 4.0 structural
 target (`docs/structural_analysis.md` §3 convention) for the defined
 nose-high case, computed from measured (not approximated) current geometry
-— **partially met**: computed and documented, does not yet clear 4.0;
-closing that gap is now gated on LG-26's rod re-siting, not on this unit.
+— **MET**: FOS 4.75 with the LG-26 rod fix + 20% CF-PETG skin material, both
+applied (not just proposed).
 
 ---
 

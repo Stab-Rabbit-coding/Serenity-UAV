@@ -445,23 +445,29 @@ also spans this X range and can be mistaken for the skid at a glance):
   `I = (24×23³ - 20×19³)/12 ≈ 12,900 mm⁴` — this **replaces** §6.2's
   `I_PETG ≈ 438,080 mm⁴` box-shell estimate, which used the wrong width.
 
-**Critical independent finding — the CF rod does not run through the
-measured skid tube.** Probing `X = -202, Z = 18` (the documented/bored
-station, §6.3) against the sectioned loops at Y = 210 (inside the bore's own
-Y-range, 173–233): the nearest material is the **main horseshoe ring's own
-wall**, 2.09–3.46 mm away — the discrete skid tube (centered ≈ X = -224 at
-this Y) is 13.17 mm away, outside the bore's clearance entirely. Tracking
-the tube's centerline continuously (X moves from ≈ -224 near the joint to
-≈ -207 near the tip) shows it only comes close to the bored station (X=-202)
-near Y ≈ 370+, well outside the rod's 173–233 embed span. **The rod is
-currently bored through the ring wall, not the skid tube, over the entire
-region where the bending moment is largest.** This is a geometry-placement
-defect independent of the load case below — fix it by re-siting
-`SKID_ROD_BORES` in `add_structural_features.py` to track the tube's actual
-measured centerline (a curve, not the current single constant X per side),
-not by resizing the rod. Not fixed here — this is a finding, not yet a
-corrected geometry; see `airframe/landing-gear/WBS.md` for the tracking
-item.
+**Independent finding, FIXED 2026-08-25 — the CF rod did not run through the
+measured skid tube.** Probing `X = -202, Z = 18` (the previously documented/
+bored station, §6.3) against the sectioned loops at Y = 210 (inside the
+bore's own Y-range, 173–233): the nearest material was the **main horseshoe
+ring's own wall**, 2.09–3.46 mm away — the discrete skid tube (centered ≈
+X = -224 at this Y) was 13.17 mm away, outside the bore's clearance
+entirely. **Root cause found and corrected** (`LG-26`,
+`airframe/landing-gear/WBS.md`): the tube's own hollow-cavity centerline was
+re-measured continuously across its full span (`middle_shell24_2mm_
+repaired.stl` Y=188–202, `rear_shell24_2mm_repaired.stl` Y=208–233 — it is
+not yet a separate feature below Y≈188), and `SKID_ROD_BORES` in
+`add_structural_features.py` re-sited to it: port moved to (-223.7, 18.5),
+stbd to a deliberate compromise center (-122.0, 19.0) since stbd's measured
+centerline has a genuine ~10 mm discontinuity at the print-split joint too
+large for one straight rod to stay centered on both sides. Both shells
+re-verified: `tools/validate_stls.py` 61/61 PASS, and the bore's nearest
+material at 8 sampled stations per side is now 2.09–7.03 mm (was 13+ mm
+everywhere) — the bore is inside the tube's cavity, not the ring wall, at
+every checked station. The stbd compromise is a real improvement, not a
+perfect fit; a slicer/test-fit check before fabrication is still warranted,
+and building the rod as two independently-anchored segments (rather than one
+straight rod) remains an option if the compromise proves inadequate — see
+LG-26.
 
 **Allowable:** **54 MPa (ASTM D790 three-point flexural strength, unreinforced
 PETG, REF-MAT-002)** — superseding this section's initial use of REF-MAT-001's
@@ -481,35 +487,40 @@ tested (in-plane) direction rather than the weaker interlayer direction, and
 **Load cases** (2.5 g factor per §3's existing "hard landing (vertical)"
 convention — kept, not re-derived, since no bound on nose-high pitch angle
 or sink rate exists anywhere in this repo's flight-envelope docs to justify
-a different factor):
+a different factor). With the rod now geometrically coupled to the tube (the
+fix above), its stiffness share is credited via a simple parallel-EI split
+(`EI_skin = E·I_skin`, `EI_rod = 135,000 MPa × 12.57 mm⁴` for the solid
+4 mm CF rod) instead of assuming it carries zero load:
 
-| Case | Load path | F | M = F × 177 mm | σ = M·c/I (c = 11.5 mm) | FOS vs 54 MPa |
-| --- | --- | --- | --- | --- | --- |
-| Symmetric flat landing (§6.2's own case, corrected mass + geometry) | both skids share 2.5g·W | 52.4 N | 9,275 N·mm | 8.27 MPa | **6.53 — PASS** |
-| Nose-high / single-skid-first strike (new — the owner's scenario) | one skid reacts the full 2.5g·W | 104.75 N | 18,541 N·mm | 16.53 MPa | **3.27 — below this repo's 4.0 FOS target (§3)** |
+| Case | Skin material (flexural) | F | M = F × 177 mm | Skin share of M | σ = M·c/I (c = 11.5 mm) | FOS |
+| --- | --- | --- | --- | --- | --- | --- |
+| Symmetric flat landing | plain PETG, 54 MPa / 2.76 GPa | 52.4 N | 9,275 N·mm | 94.1% | 7.78 MPa | **6.94 — PASS** |
+| Nose-high, single skid | plain PETG, 54 MPa / 2.76 GPa | 104.75 N | 18,541 N·mm | 94.1% | 15.55 MPa | **3.47 — still below the 4.0 target** |
+| Nose-high, single skid | **20% CF-PETG, 77 MPa / 6.67 GPa (REF-MAT-002 Table 4)** | 104.75 N | 18,541 N·mm | 98.1% | 16.20 MPa | **4.75 — PASS** |
+| Symmetric flat landing | 20% CF-PETG, 77 MPa / 6.67 GPa | 52.4 N | 9,275 N·mm | 98.1% | 8.11 MPa | **9.49 — PASS** |
 
-The single-skid case assumes 100% of the moment is carried by the PETG skin
-(the conservative direction, since the rod is not currently coupled to the
-tube per the finding above — the original 99.8%-skin argument is not
-re-verified here, and doing so is moot until the rod is correctly sited).
-
-**Conclusion.** The existing symmetric case, once corrected for mass, real
-geometry, and the correct (flexural, not tensile-proxy) allowable, holds with
-more margin than §6.2 believed (6.53 vs. an implied-marginal earlier state).
-The nose-high case the owner specifically asked about does **not** clear
-this repo's 4.0 FOS target — closer than the initial tensile-proxy estimate
-(3.27 vs. 2.93), but still short. It is not an outright material failure
-(real, if thin, positive margin remains). This
-is a **finding, not a fix**: three things need an owner decision before this
-closes — (1) re-site the rod bore to actually track the tube (a geometry
-correction, likely closes most of the gap on its own once the rod is
-mechanically coupled), (2) obtain a flexural coupon and confirm print
-orientation before trusting the FOS numbers above at face value, (3) decide
-whether the print-split at the middle/rear joint (Y ≈ 203 — the same station
-this section's own bending moment is maximum, and the same station the rod
-is supposed to bridge) needs its own bonded-joint check, since the
-cantilever's structural root is a splice-collar bond there, not continuous
-printed material.
+**Conclusion.** The rod-siting fix alone is not enough to close the nose-high
+gap: a solid 4 mm CF rod is too slender to meaningfully stiffen even this
+thin shell (it carries only ~2–6% of the moment once actually coupled), so
+correcting its position improves plain-PETG FOS only from 3.27 to 3.47 —
+real, but short of the 4.0 target. **What closes it is the material switch**
+(owner-directed, 2026-08-25): specifying 20% CF-PETG for the rear (and
+middle) fuselage skin, per REF-MAT-002's measured 77 MPa flexural strength /
+6.67 GPa flexural modulus at that fiber fraction, gets to FOS 4.75. This is
+fiber-fraction-specific — REF-MAT-002's own data shows **10% CF-PETG is
+*worse* than plain PETG** (43 MPa flexural, likely poor fiber-matrix cohesion
+at low loading) and that a nominal 30% blend (80 MPa/7.01 GPa) was the
+paper's own custom lab specimen, not a normal retail product — so the BOM
+and every citation must say **20% CF**, not a bare "CF-PETG" that could be
+read as any fraction. 20% was selected over the paper's stronger 30% figure
+specifically because a genuine, explicitly-labeled 20%-CF filament is a real,
+verifiable commercial product ("3D Maker Engineering" PETG-CF Pro Series,
+confirmed via direct vendor-page quote), whereas a true 30%-CF retail
+filament could not be verified to exist. See the BOM/material-spec update
+this drove (`current-specification/bom_revS.csv`, `REFERENCES.md`
+REF-MAT-002). The symmetric case was never actually a concern (FOS 6.94–9.49
+across all variants checked here) — it's included for completeness, not
+because it was ever in doubt.
 
 ---
 

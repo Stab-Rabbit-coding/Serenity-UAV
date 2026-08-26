@@ -563,28 +563,56 @@ the lowest.
     landing-gear bay frame is no longer blocked from printing on this
     finding.
 
-- [ ] **LG-26 — rear CF skid-rod bore does not run through the skid arm it's
-    meant to reinforce.** *(found 2026-08-25, `docs/structural_analysis.md`
-    §6.4 nose-high re-derivation.)* Tracking the skid tube's actual
-    cross-section continuously from the middle/rear joint (Y=204) to the tip
-    (Y=384) in the published `rear_shell24_2mm_repaired.stl` shows its
-    centerline moving from X≈-224 (port, near the joint) to X≈-207 (near the
-    tip) — but `add_structural_features.py`'s `SKID_ROD_BORES` cuts a single
-    constant-X bore (X=-202) for the entire 173–233 mm span. Direct probe at
-    Y=210 (inside the bore's own range): nearest material to the bore is the
-    **main horseshoe ring's wall** (2.1–3.5 mm away), not the skid tube
-    (13.2 mm away, outside the bore's clearance). The rod is bored through
-    the wrong structure over the whole region where the cantilever bending
-    moment is largest.
-    **Fix:** re-derive `SKID_ROD_BORES` as a curve (or a short piecewise
-    path) tracking the tube's measured centerline, not a single constant
-    (X, Z) pair per side; re-verify with the same continuous cross-section
-    trace used to find this, then re-run `docs/structural_analysis.md` §6.4's
-    nose-high case — a correctly-sited rod should meaningfully improve the
-    3.27 FOS that case measured (per REF-MAT-002's ASTM D790 flexural
-    allowable, superseding an earlier REF-MAT-001 tensile-proxy estimate)
-    with the rod (as currently sited) not mechanically coupled to the tube
-    at all. Not fixed here; this is a finding, not a corrected geometry.
+- [x] **LG-26 — rear CF skid-rod bore does not run through the skid arm it's
+    meant to reinforce. CLOSED 2026-08-25 (owner-directed fix).** *(found
+    2026-08-25, `docs/structural_analysis.md` §6.4 nose-high re-derivation.)*
+    Tracking the skid tube's actual cross-section continuously from the
+    middle/rear joint (Y=204) to the tip (Y=384) in the published
+    `rear_shell24_2mm_repaired.stl` showed its centerline far from the bored
+    station (X=-202): direct probe at Y=210 found the nearest material to
+    the bore was the **main horseshoe ring's wall** (2.1–3.5 mm away), not
+    the skid tube (13.2 mm away, outside the bore's clearance) — the rod was
+    bored through the wrong structure over the whole region where the
+    cantilever bending moment is largest.
+
+    **Fix applied:** re-measured the tube's own hollow-cavity centerline
+    continuously across its full span, including the middle-shell portion
+    this finding's first pass didn't check (`middle_shell24_2mm_repaired.stl`
+    Y=188–202 — the tube isn't a separate feature below Y≈188 — plus
+    `rear_shell24_2mm_repaired.stl` Y=208–233). Port is stable across its
+    whole span; re-sited to (-223.7, 18.5). **Stbd is not stable** — its
+    measured center jumps ~10 mm at the print-split joint (≈-117 on the
+    middle side, ≈-127 on the rear side), too large for one straight 4 mm CF
+    rod to stay centered on both sides at once; re-sited to a deliberate
+    compromise center (-122.0, 19.0) that minimizes the worst-case miss
+    rather than perfectly centering on either side. Both shells re-verified:
+    `tools/validate_stls.py` 61/61 PASS; nearest material to the bore is now
+    2.09–7.03 mm at every one of 8 sampled stations per side (was 13+ mm
+    everywhere) — the bore is inside the tube's cavity, not the ring wall,
+    everywhere checked.
+
+    **What this fix does and does not achieve.** Re-running
+    `docs/structural_analysis.md` §6.4 with the rod now geometrically
+    coupled (credited via a parallel-EI split, not assumed at 0% or 100%)
+    found the rod's own contribution is small — a solid 4 mm CF rod is too
+    slender to meaningfully stiffen even this thin PETG shell (5.9% of the
+    moment once coupled) — so the nose-high FOS only moves from 3.27 to
+    3.47, still short of the 4.0 target. **This finding is closed as a
+    geometry defect** (the rod now does what it was designed to do,
+    verified), **not as a load-case pass** — closing the FOS gap itself
+    required the separate 20% CF-PETG material decision recorded in §6.4
+    (FOS 4.75 with the rod fix combined; 20% chosen over the source paper's
+    stronger 30% figure because a genuine 30%-CF retail filament could not
+    be verified to exist, while 20% is a real, verified commercial product),
+    tracked in the BOM/material-spec
+    update, not in this item.
+
+    **Residual, not re-opened here:** the stbd compromise center is a real
+    improvement, not a perfect fit — a slicer/test-fit check before
+    fabrication is still warranted, and building the rod as two
+    independently-anchored segments (rather than one straight rod bridging
+    the ~10 mm stbd discontinuity) remains an option if the compromise
+    proves inadequate in practice.
 
 **Remaining parts needing SCAD source creation then STL export:**
 

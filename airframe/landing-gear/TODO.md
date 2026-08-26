@@ -31,6 +31,5 @@
 - [ ] LG-22 Render overview SVGs using FreeCAD TechDraw
 - [ ] LG-23 Exploded view SVG — printed parts only
 - [ ] LG-24 Exploded view SVG — full build
-- [ ] LG-26 Rear skid CF-rod bore misses the skid tube (wrong X station)
 
 ---

@@ -307,10 +307,41 @@ RING_POCKETS = {
 # ---------- CF skid-rod bores (Ø 4.2 mm cylinders, Y-axis, 60 mm total) ----------
 # Bore spans 30 mm each side of the middle/rear joint (Y = +203 mm).
 # Positions from STL vertex survey; see structural_analysis.md §6.3.
+# LG-26 (2026-08-25, airframe/landing-gear/WBS.md): the previous constants
+# here (-202.0/-135.0) missed the skid arm's own hollow cavity entirely --
+# direct measurement (docs/structural_analysis.md SS6.4) found the bore's
+# nearest material at those stations was the MAIN HORSESHOE RING's wall
+# (2.1-3.5 mm away), not the skid tube (13+ mm away). Re-derived by tracing
+# the tube's actual inner-cavity center continuously across its full span
+# (`middle_shell24_2mm_repaired.stl` Y=188-202, `rear_shell24_2mm_
+# repaired.stl` Y=208-233 -- the tube is not yet a separate feature below
+# Y~188, still fused to the ring) via cross-section slicing at 2-8 mm
+# intervals, identifying the isolated ~140 mm^2 annulus loop (not the
+# whole-hull cross-section, which spans the same X range and is easy to
+# mistake for it) and averaging its measured (X, Z) center.
+#
+# Port's measured center is stable across its whole span (-220.0 to -226.5,
+# a straight bore fits comfortably inside the ~8.5 mm inner-cavity radius
+# anywhere in range). Stbd's is NOT: it measures ~-113.7 to -118.4 on the
+# middle-shell side (Y188-200) but ~-127.0 to -127.9 on the rear-shell side
+# (Y208-233) -- a genuine ~10 mm discontinuity at the print-split joint
+# (Y~203), too large for one straight rod to stay centered in the hollow
+# cavity on both sides at once (a stiff 4 mm CF rod cannot bend to follow
+# it). -122.0 is a deliberate compromise center chosen to minimize the
+# worst-case miss across the full span, not a true center for either side
+# -- it stays within the ~6.4 mm safety margin (inner-cavity radius minus
+# bore radius) for most of the rear-shell span and all but the earliest
+# (Y~188) middle-shell stations, where the tube has only just become a
+# separate feature and the miss is a few mm larger than ideal. This is a
+# real improvement over the previous constant (which missed the cavity by
+# 10-20 mm everywhere), not a perfect fit -- verify by slicer/test-fit
+# before fabrication, and see LG-26 for the option of building this as two
+# independently-anchored rod segments instead of one straight rod if the
+# compromise proves inadequate in practice.
 SKID_ROD_BORES = [
     # (x_centre, z_centre, y_start, y_end)
-    (-202.0, 18.0, +173.0, +233.0),  # port arm
-    (-135.0, 20.0, +173.0, +233.0),  # stbd arm
+    (-223.7, 18.5, +173.0, +233.0),  # port arm
+    (-122.0, 19.0, +173.0, +233.0),  # stbd arm (compromise center, see above)
 ]
 SKID_ROD_RADIUS = 2.1  # mm — Ø 4.2 mm bore (CF rod 4.0 mm OD + 0.1 mm clearance/side)
 

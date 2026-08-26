@@ -1165,6 +1165,16 @@ requirements for the airframe itself.
 | Shore Hardness D | 71 | Table 5 |
 | Heat deflection temperature | 67 °C | Table 7 |
 
+**Measured properties, chopped-carbon-fiber PETG by fiber fraction (Table 4 of the
+paper, ASTM D790 three-point flexural test — exact, not figure-read):**
+
+| Material | Flexural strength (MPa) | Flexural modulus (GPa) | Notes |
+|---|---|---|---|
+| PETG (0% CF) | 54 | 2.76 | baseline, same row as above |
+| **10% CF-PETG** | **43** | **5.15** | **Strength DROPS below plain PETG** at this fraction — the paper attributes this to poor fiber-matrix cohesion/wetting at low loading (short-fiber pull-out), consistent with the tensile-test finding in REF-MAT-001. Modulus still rises. **Do not treat "CF-PETG" as inherently stronger than plain PETG in flexure without a stated fiber fraction — 10% is a strength regression.** |
+| **20% CF-PETG** | **77** | **6.67** | Strength recovers well above plain PETG; this is the fraction specified for Serenity's structural airframe skins (owner-directed 2026-08-25, see below) |
+| 30% CF-PETG | 80 | 7.01 | Highest strength/modulus tested, but this exact fraction is a custom lab blend (Medsby Health Care Solutions & FlashForge filament, this paper's own test material) — not confirmed as an available commercial retail product; superseded as the airframe target by 20% CF-PETG once a real, explicitly-labeled 20%-CF commercial filament ("3D Maker Engineering" PETG-CF Pro Series) was verified to exist |
+
 FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated flexural yield strength for pure PETG = 50 MPa vs. the 54 MPa experimental figure above (7.4% error) — the paper's own validation, not independently re-verified here, but consistent enough to support citing the experimental figure with confidence.
 
 **What this study does NOT provide:** no print-orientation-specific data (loading axis vs. layer-stack axis) — the paper's own conclusions section notes "anisotropic fibre orientation" as a source of nonlinearity in its compressive/flexural results but gives no interlayer (Z-axis) strength figure or orientation-dependent allowable. It also does not test any geometry resembling a thin-walled tube (only solid dog-bone/bar/cylinder coupons) — this figure is a bulk material property, not a structural-member allowable.

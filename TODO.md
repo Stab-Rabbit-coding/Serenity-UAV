@@ -261,7 +261,6 @@ numeric order.)*
 - [ ] LG-14 Instrumented drop test (load cell + high-speed video) at…
 - [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
 - [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
-- [ ] LG-26 Rear skid CF-rod bore misses the skid tube (wrong X station)
 - [ ] Reconcile the remaining-parts list
 - [ ] Combine all airframe STLs
 - [ ] Render overview SVGs using FreeCAD TechDraw
