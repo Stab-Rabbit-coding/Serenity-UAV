@@ -10067,6 +10067,13 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-08-25-002-finish-airframe-components-plan.md": {
+      "description": "plan: Finish remaining airframe components",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -12932,6 +12939,7 @@
       "docs/img/wing_rev_s1c_sections.png",
       "docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
+      "docs/plans/2026-08-25-002-finish-airframe-components-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",

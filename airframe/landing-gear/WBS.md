@@ -391,11 +391,19 @@ the lowest.
 
 ##### 1.1.4.6 *Rear Skid Reinforcement (related: tip-back backstop)*
 
-- [ ] **LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skid
-    arms** — 3 mm bore, ~140 mm per skid, per `docs/LANDING_GEAR_ANALYSIS.md`
-    §10. The skids now also serve as the aft-heavy stance tip-back backstop
-    (§2.3 of the analysis). Re-export, re-bake, verify watertight.
-    **BLOCKS taxi test.**
+- [x] **LG-03 CF rod channel in rear skid arms — CLOSED 2026-08-25, superseded
+    by LG-26.** *(was: "3 mm bore, ~140 mm per skid... re-export, re-bake" —
+    stale against the current Blender-merge pipeline; `middle_canonical_
+    shell24.scad` is not how these shells are built any more.)* The channel
+    itself is not missing: `add_structural_features.py`'s `SKID_ROD_BORES`
+    (4.2 mm, not 3 mm — matches a 4 mm rod not 3 mm) already cuts it in both
+    `process_middle()` and `regen_rear_interior.py`, confirmed present by
+    direct measurement in the published STLs (`docs/structural_analysis.md`
+    §6.4). What the same measurement found is a **different, more specific**
+    problem — the bore is cut at the wrong X station, missing the actual
+    skid tube entirely over its bored span — tracked precisely as **LG-26**
+    below. This item is closed as superseded, not because the underlying
+    concern is resolved.
 
 - [x] **`landing_legs_hull_r1.stl` orphan** *(resolved 2026-07-12; archived)*.
     The Rev R5-era gap ("no hull-frame multi-corner gear render") is now
@@ -554,6 +562,28 @@ the lowest.
     clean; `tools/validate_stls.py` passes on the re-merged shell. The fore
     landing-gear bay frame is no longer blocked from printing on this
     finding.
+
+- [ ] **LG-26 — rear CF skid-rod bore does not run through the skid arm it's
+    meant to reinforce.** *(found 2026-08-25, `docs/structural_analysis.md`
+    §6.4 nose-high re-derivation.)* Tracking the skid tube's actual
+    cross-section continuously from the middle/rear joint (Y=204) to the tip
+    (Y=384) in the published `rear_shell24_2mm_repaired.stl` shows its
+    centerline moving from X≈-224 (port, near the joint) to X≈-207 (near the
+    tip) — but `add_structural_features.py`'s `SKID_ROD_BORES` cuts a single
+    constant-X bore (X=-202) for the entire 173–233 mm span. Direct probe at
+    Y=210 (inside the bore's own range): nearest material to the bore is the
+    **main horseshoe ring's wall** (2.1–3.5 mm away), not the skid tube
+    (13.2 mm away, outside the bore's clearance). The rod is bored through
+    the wrong structure over the whole region where the cantilever bending
+    moment is largest.
+    **Fix:** re-derive `SKID_ROD_BORES` as a curve (or a short piecewise
+    path) tracking the tube's measured centerline, not a single constant
+    (X, Z) pair per side; re-verify with the same continuous cross-section
+    trace used to find this, then re-run `docs/structural_analysis.md` §6.4's
+    nose-high case — a correctly-sited rod should meaningfully improve the
+    2.93 FOS that case measured with the rod (as currently sited) not
+    mechanically coupled to the tube at all. Not fixed here; this is a
+    finding, not a corrected geometry.
 
 **Remaining parts needing SCAD source creation then STL export:**
 

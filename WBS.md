@@ -360,7 +360,7 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Assess foot grip on concrete/asphalt
 - [x] Rev R1.4 corner V-brace (landing_leg_assy.scad) is retired
 - [x] Rev R4 closed-ring wire fuse (wire_loop_fuse.scad) is retired
-- [ ] LG-03 CF rod channel in middle_canonical_shell24.scad rear skid…
+- [x] LG-03 CF rod channel in rear skid arms (superseded by LG-26)
 - [x] landing_legs_hull_r1.stl is orphaned
 - [ ] LG-06 Elastic bench check: quarter-AUW fixture, 1.5 ft drop
 - [ ] LG-07 Confirm avionics enclosure shock rating
@@ -374,7 +374,8 @@ see docs/WBS.md §0.10.2.)*
       *(closed 2026-08-09 — 4 ft adopted)*
 - [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
 - [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
-- [ ] LG-25 Fore bay frame vs U5 tie-rod boss: 12mm proud, no fix chosen
+- [x] LG-25 Fore bay frame vs U5 tie-rod boss: 12mm proud (relieved boss)
+- [ ] LG-26 Rear skid CF-rod bore misses the skid tube (wrong X station)
 - [ ] Render overview SVGs using FreeCAD TechDraw
 
 #### 1.1.5 — Non-Printable Component Placeholders

@@ -400,6 +400,116 @@ Bore centers (hull frame, Y-axis aligned):
 
 Bore diameter: 4.2 mm (CF rod 4.0 mm OD + 0.1 mm clearance each side).
 
+### 6.4 Re-derivation against a nose-high/asymmetric strike (2026-08-25)
+
+*(Owner-directed: "canonically [the skids are] part of the propulsion
+system, not landing gear, but they'll be the first things hitting if the
+aircraft lands nose high." §6.2's own case is symmetric-only — both skids
+sharing the load, wings level — and never covered a single-skid-first
+touchdown. This unit re-derives §6.2 with the corrected AUW first, since
+§2's own 2026-08-22 note already flags every number in §3–§7 as computed
+from a stale, doubled mass budget, then adds the case §6.2 never had.)*
+
+**Mass basis:** the owner directed using the **Phase 11 (full system) AUW,
+4,273 g (9.42 lbm, `README.md`)** for this re-derivation specifically, so it
+does not need re-deriving again once the aircraft reaches its final,
+heaviest configuration. Total weight W = 4.273 kg × 9.80665 m/s² = **41.90 N**.
+This supersedes §2's own Phase 5–10 corrected figure (36.8 N) *for this
+section only* — §2 stays as the Phase 5–10 basis for the rest of this
+document; do not silently propagate the Phase 11 figure elsewhere.
+
+**Geometry re-measured directly from the published STL, not assumed.** §6.1's
+"low-Z vertices" survey and §6.2's "approx 76 × 23 mm²" box-shell estimate
+both predate this re-derivation and are **superseded by direct measurement**
+below — they were never geometrically verified against a specific cross-
+section, and the direct measurement found meaningful discrepancies with
+both.
+
+Sectioning `rear_shell24_2mm_repaired.stl` at 8 mm Y-intervals from the
+middle/rear joint (Y = 204) to the tip (Y = 384) and identifying the two
+discrete inner/outer loop pairs (not the whole-hull cross-section, which
+also spans this X range and can be mistaken for the skid at a glance):
+
+- The skid arm is a genuinely separate, thin-walled cantilevered tube only
+  from roughly **Y ≈ 250 onward** to the tip — consistent with §6.2's
+  177 mm moment-arm assumption (tip-to-joint), which this re-derivation
+  therefore keeps.
+- Measured outer cross-section near the tip: **≈ 24 mm (X) × 23 mm (Z)**,
+  wall thickness ≈ 2 mm, material (annulus) area ≈ 138 mm² — matching
+  independently via both a direct polygon slice and a `trimesh.split()`
+  body-area check. **This is roughly 3× narrower than §6.2's assumed
+  76 mm width** (76 was never a measurement; the "approx" in §6.2's own
+  text was accurate self-disclosure).
+- Approximated as a thin rectangular tube (24 × 23 mm outer, 2 mm wall) for
+  a bending second moment of area about the horizontal (X) axis:
+  `I = (24×23³ - 20×19³)/12 ≈ 12,900 mm⁴` — this **replaces** §6.2's
+  `I_PETG ≈ 438,080 mm⁴` box-shell estimate, which used the wrong width.
+
+**Critical independent finding — the CF rod does not run through the
+measured skid tube.** Probing `X = -202, Z = 18` (the documented/bored
+station, §6.3) against the sectioned loops at Y = 210 (inside the bore's own
+Y-range, 173–233): the nearest material is the **main horseshoe ring's own
+wall**, 2.09–3.46 mm away — the discrete skid tube (centered ≈ X = -224 at
+this Y) is 13.17 mm away, outside the bore's clearance entirely. Tracking
+the tube's centerline continuously (X moves from ≈ -224 near the joint to
+≈ -207 near the tip) shows it only comes close to the bored station (X=-202)
+near Y ≈ 370+, well outside the rod's 173–233 embed span. **The rod is
+currently bored through the ring wall, not the skid tube, over the entire
+region where the bending moment is largest.** This is a geometry-placement
+defect independent of the load case below — fix it by re-siting
+`SKID_ROD_BORES` in `add_structural_features.py` to track the tube's actual
+measured centerline (a curve, not the current single constant X per side),
+not by resizing the rod. Not fixed here — this is a finding, not yet a
+corrected geometry; see `airframe/landing-gear/WBS.md` for the tracking
+item.
+
+**Allowable:** 48.41 MPa (ASTM D638 bulk tensile strength, unreinforced
+PETG, **REF-MAT-001**), used as a bending-stress proxy. Re-verified
+2026-08-25 by reading REF-MAT-001 in full (16 pages): it reports **no
+flexural test** of its own (ASTM D638 tensile and ASTM D695 compression
+only) and no interlayer/orientation-specific data of its own — its
+introduction cites a *different, third-party* source for the general claim
+that print orientation affects tensile strength and stiffness. Using bulk
+tensile strength as a flexural-allowable proxy is a common conservative
+approximation for FDM PETG but is **not verified equivalent** for this part,
+and REF-MAT-001's own dog-bone coupons were loaded in-plane (XY, the FDM
+strong axis) — this repo has no record of the rear shell's actual print
+orientation, so whether the skid tube's real load path sees this strong-axis
+number or the weaker interlayer strength is genuinely unknown. Treat the FOS
+figures below as upper bounds pending (a) a real flexural coupon and (b) a
+stated print orientation for this part.
+
+**Load cases** (2.5 g factor per §3's existing "hard landing (vertical)"
+convention — kept, not re-derived, since no bound on nose-high pitch angle
+or sink rate exists anywhere in this repo's flight-envelope docs to justify
+a different factor):
+
+| Case | Load path | F | M = F × 177 mm | σ = M·c/I (c = 11.5 mm) | FOS vs 48.41 MPa |
+| --- | --- | --- | --- | --- | --- |
+| Symmetric flat landing (§6.2's own case, corrected mass + geometry) | both skids share 2.5g·W | 52.4 N | 9,275 N·mm | 8.27 MPa | **5.85 — PASS** |
+| Nose-high / single-skid-first strike (new — the owner's scenario) | one skid reacts the full 2.5g·W | 104.75 N | 18,541 N·mm | 16.53 MPa | **2.93 — below this repo's 4.0 FOS target (§3)** |
+
+The single-skid case assumes 100% of the moment is carried by the PETG skin
+(the conservative direction, since the rod is not currently coupled to the
+tube per the finding above — the original 99.8%-skin argument is not
+re-verified here, and doing so is moot until the rod is correctly sited).
+
+**Conclusion.** The existing symmetric case, once corrected for mass and
+real geometry, holds with more margin than §6.2 believed (5.85 vs. an
+implied-marginal earlier state). The nose-high case the owner specifically
+asked about does **not** clear this repo's 4.0 FOS target, though it is not
+an outright material failure (real, if thin, positive margin remains). This
+is a **finding, not a fix**: three things need an owner decision before this
+closes — (1) re-site the rod bore to actually track the tube (a geometry
+correction, likely closes most of the gap on its own once the rod is
+mechanically coupled), (2) obtain a flexural coupon and confirm print
+orientation before trusting the FOS numbers above at face value, (3) decide
+whether the print-split at the middle/rear joint (Y ≈ 203 — the same station
+this section's own bending moment is maximum, and the same station the rod
+is supposed to bridge) needs its own bonded-joint check, since the
+cantilever's structural root is a splice-collar bond there, not continuous
+printed material.
+
 ---
 
 ## 7. Section Joint Boss Design
