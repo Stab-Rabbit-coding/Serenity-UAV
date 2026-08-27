@@ -433,6 +433,17 @@ SHAFT_CONDUIT_ID=   3.5;   // [mm] conduit inner bore
 INLET_BELL_L    =  27.5;   // [mm] inlet bell axial length (was 22.0 × 1.25)
 INLET_BELL_FLARE=   3.0;   // [mm] extra flare radius at intake lip
 
+// ── Circular intake exterior blend ─────────────────────────────────────────
+// The imported canonical shell is asymmetric at the nose.  Intersecting that
+// shell with a circular bore therefore leaves an oblique, elliptical-looking
+// intake rim even though the duct itself is round.  This fairing supplies a
+// planar circular lip and blends it into the existing shell over the same
+// 27.5 mm intake transition.  The bore and its area are unchanged.
+INTAKE_LIP_R       = EDF_BORE_R + WALL_T;  // [mm] circular outer lip radius
+INTAKE_BLEND_R_PEAK = 38.2;                // [mm] below measured shell maximum
+INTAKE_BLEND_R_END = 27.0;                 // [mm] buried in the duct wall
+INTAKE_BLEND_L     = 90.0;                 // [mm] reaches the thrust-tube station
+
 // ── Navigation light + harness exit (1.25× scale Z values) ───────────────────
 // Rev S1 (2026-07-04, TODO §1.1.3.5): the WS2812C position light was moved from
 // the INBOARD (pylon) face to the OUTBOARD (far) face, and its signal wire was
@@ -585,6 +596,48 @@ module inlet_bellmouth() {
                     [[0, INLET_BELL_L]]   // back to axis at the aft end
                 )
             );
+}
+
+
+// =============================================================================
+// ── Module: circular_intake_fairing ─────────────────────────────────────────
+// =============================================================================
+// Additive rotationally symmetric exterior fairing.  Its front annulus is
+// planar at Z=0, so the intake opening is circular in the side and front views.
+// The outer profile first reaches the measured shell envelope, then tapers
+// back into the duct wall before the thrust-tube station.  Its termination is
+// therefore buried instead of exposing a circumferential cap at the shell.
+module circular_intake_fairing() {
+    N_STATIONS = 64;
+
+    rotate_extrude(angle = 360, convexity = 4)
+        polygon(
+            points = concat(
+                [[0, 0], [INTAKE_LIP_R, 0]],
+                [
+                    for (i = [0 : N_STATIONS])
+                    let(
+                        z_frac = i / N_STATIONS,
+                        rise_frac = min(z_frac / (60 / INTAKE_BLEND_L), 1),
+                        fall_frac = max((z_frac - (60 / INTAKE_BLEND_L))
+                                / (1 - (60 / INTAKE_BLEND_L)), 0),
+                        rise_smooth = rise_frac * rise_frac
+                            * (3 - 2 * rise_frac),
+                        fall_smooth = fall_frac * fall_frac
+                            * (3 - 2 * fall_frac),
+                        r_at_shell = INTAKE_LIP_R
+                            + (INTAKE_BLEND_R_PEAK - INTAKE_LIP_R)
+                            * rise_smooth,
+                        r_outer = r_at_shell
+                            + (INTAKE_BLEND_R_END - r_at_shell)
+                            * fall_smooth,
+                        z_abs = z_frac * INTAKE_BLEND_L
+                    )
+                        [r_outer, z_abs]
+                ],
+                    [[0, INTAKE_BLEND_L], [0, INTAKE_BLEND_L + 0.5]]
+            )
+        );
 }
 
 
@@ -1015,6 +1068,12 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
 
                 // (Intake bell-mouth is now SUBTRACTIVE — see Zone B,
                 //  inlet_bellmouth(); TODO §1.1.3.4.)
+
+                // ── Circular intake exterior fairing ─────────────────────
+                // Establishes a round planar lip before the circular bore and
+                // blends into the canonical shell over the existing intake
+                // transition; it does not change the internal duct diameter.
+                circular_intake_fairing();
 
                 // ── CG-pivot keyed 8 mm spar hubs (at PIVOT_Z, Y=0) ──────
                 pivot_x_face_boss();
