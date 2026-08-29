@@ -89,17 +89,45 @@ the ring lies in a plane at constant X. Every point on it is at distance
 `√(X² + Y²) ≥ X` from the duct axis, so any ring at X ≥ 26 mm clears. Combined
 with the shell envelope, the usable band is:
 
-| Ring plane X | Duct margin | Shell allows | Max ring OD |
-|---|---|---|---|
-| 26 mm | +1 mm | \|Y\| ≤ ~30.2 mm | ~55 mm |
-| **28 mm** | **+3 mm** | **\|Y\| ≤ ~27.9 mm** | **~51 mm** |
-| 30 mm | +5 mm | \|Y\| ≤ ~25.2 mm | ~45 mm |
-| 34 mm | +9 mm | \|Y\| ≤ ~18.0 mm | ~31 mm |
+Measured from `airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl`,
+bore-centred as the SCAD does, in a ±2 mm slab at the pivot station Z = 111.5:
 
-X = 28 mm is the working point: 3 mm of duct margin with a ~51 mm ring envelope.
-Shell \|Y\| figures are from the bounding-box ellipse approximation and **must be
-re-measured against the actual shell** (the SCAD header notes the Serenity
-nacelle is not a symmetric ellipse) — see R8 and OQ2.
+| Ring plane X | Duct margin | Shell \|Y\| max | Max ring OD |
+|---|---|---|---|
+| 26 mm | +1 mm | 31.2 mm | 57.4 mm |
+| **28 mm** | **+3 mm** | **29.2 mm** | **53.4 mm** |
+| 30 mm | +5 mm | 27.9 mm | 50.8 mm |
+
+X = 28 mm is the working point: 3 mm of duct margin with a 53.4 mm ring
+envelope. Max ring OD = `2 × (|Y|max − WALL_T)`. These are measured values, not
+the bounding-box ellipse — the SCAD header is right that the Serenity nacelle is
+not a symmetric ellipse, and the real shell is ~1 mm more generous than the
+ellipse estimate at every station checked.
+
+### Hover ground clearance — and a bug in the current design
+
+Verifying R12 surfaced a defect that **predates this plan**. In hover the duct
+axis is vertical and the nozzle swings down, so the governing dimension is the
+pivot-to-nozzle-tip arm. The iris seats at `NOZZLE_RING_Z = 166.25` and its own
+STL runs to +55.1, so the rotating assembly reaches **local Z 221.3 — 36.1 mm
+proud of the 185.2 mm shell**. Measured against the baked hull-frame gear STLs:
+
+| `PIVOT_Z` | Arm | Tip hull Z | vs 1.5 in gear (−38.1) | vs 3.0 in gear (−80.0) |
+|---|---|---|---|---|
+| **111.5 (CG, as-built)** | 109.8 | −41.39 | **−3.3 mm — STRIKES** | +38.6 mm OK |
+| 79.0 (withdrawn KTD7) | 142.3 | −73.89 | −35.8 mm strikes | +6.1 mm marginal |
+
+`airframe/FreeCAD-scripts/serenity_assembly.py` L505-518 wires
+`lg_r6_1_5in_hull_legs.stl` in as "the ACTIVE (compact, default) variant", with
+the 3.0 in legs "kept for rough-field missions but not wired into this default
+assembly." **In that default configuration the nozzle tip sits 3.3 mm below the
+ground plane whenever the nacelles are vertical — i.e. on every takeoff and
+landing.** Worst case is exactly 90°; by 140° the tip has risen to 0.643× the arm.
+
+This is independent of the spar work and is filed as its own item (LG-HOVER-01).
+Either the 3.0 in gear becomes mandatory rather than optional, or the nozzle stack
+shortens. For this plan it sets a floor: with the 3.0 in gear and a 20 mm margin,
+`PIVOT_Z ≥ 92.9`; the CG at 111.5 clears that comfortably, and 79.0 does not.
 
 ### Cost of the change
 
@@ -159,6 +187,10 @@ station moves, and it moves back to a line the wing was already built on.
   power and signal disconnect, using hex drivers without cutting wire.
 - **R11** — Mass, CG, and hover T/W are re-derived and remain within the 1.2 T/W
   floor (`AGENTS.md` propulsion baseline).
+- **R12** — In the vertical (hover) attitude the rotating assembly clears the
+  ground plane with a stated, positive margin. The tilt pivot sits at the nacelle
+  CG so the centre of thrust does not move with tilt, and so the aircraft CG does
+  not shift through the transition.
 
 ---
 
@@ -179,29 +211,29 @@ at 20 mm) and root 1.464 is within 0.8 % of its own minimum (1.453 at 25 mm).
 Holding 45.15 mm would cost a 40 % t/c tip. Explicitly re-opens the Rev S1b
 decision. Governs R6.
 
-**KTD7 — The tilt pivot leaves the nacelle CG; the nacelle stays canonical.**
-*(resolved 2026-08-29, OQ5.)* Moving the spar forward in the *wing* does not
-require moving the nacelle on the *hull*. The canonical baked pivot is at hull
-Y +47.5 (`port_tilt_spar_assembly.scad` L108) and the nacelle is already slid
-−9.35 mm forward of it to reach today's spar. Two ways to absorb the new
-station:
+**KTD7 — The tilt pivot stays at the nacelle CG. `PIVOT_Z` = 111.5, unchanged.**
+*(REVISED 2026-08-29 — an earlier draft of this KTD moved the pivot to 79.0 to
+keep the nacelle canonical. That is **withdrawn**; two independent constraints
+kill it.)*
 
-- **A — keep pivot at CG, slide the nacelle:** puts the nacelle **−32.5 mm off
-  canonical**, a 3.5× worsening of a deviation the project already treats as a
-  cost, and ~18 % of the nacelle's own length.
-- **B — keep the nacelle canonical, move the pivot forward inside it
-  (`PIVOT_Z` 111.5 → 79.0):** costs a gravity moment of
-  `0.3934 kg × 9.80665 × 0.0325 m = 0.125 N·m` — **2.8 % of the 4.47 N·m the
-  belt delivers** (KTD5), and 0.71× the grounded requirement that sized the old
-  servo.
+1. **Thrust-centre and CG-shift (owner-directed).** The pivot must be at the CG
+   so the centre of thrust does not depend on tilt. With the pivot off the CG by
+   `d`, the nacelle CG swings on a radius `d` through the transition: at
+   `d = 32.5 mm` the two nacelles (786.8 g of a 2,768 g AUW, 28.4 %) would move
+   the **aircraft** CG ≈ 9.2 mm longitudinally and ≈ 9.2 mm vertically between
+   cruise and hover — a trim change that has to be flown out on every transition.
+2. **Ground clearance (measured, see below).** Moving the pivot forward
+   lengthens the pivot-to-nozzle arm, and the nozzle is what swings down in
+   hover. At `PIVOT_Z` 79.0 the tip reaches hull Z −73.9, leaving **+6.1 mm**
+   over even the extended 3.0 in gear — not a usable margin.
 
-**B is selected.** The pivot-at-CG rule (`docs/TILT_SPAR_ANALYSIS.md` §2.1.1)
-was written when the servo was the binding constraint — the old ≥ 25 kgf·cm
-spec pick was 98 % consumed. Under the belt's 1.86× multiplication that
-constraint is gone, and buying back full canonical nacelle placement for 2.8 %
-of the torque budget is a good trade. Measured cost to the ring envelope is
-1.4 mm (52.0 mm available at Z 79 vs 53.4 mm at Z 111.5, X = 28). Governs R4,
-R5, R11.
+The gravity moment the earlier draft was buying is real but small (0.125 N·m at
+`d = 32.5 mm`), and it is the *only* thing that trade won. It does not outweigh
+either constraint above. Governs R4, R5, R11, **R12**.
+
+**Consequence, carried forward as OQ5:** with the pivot pinned at the CG and the
+spar station moving to 22 mm, the nacelle slides to −32.5 mm off its canonical
+hull station unless the tilt axis is decoupled from the spar axis. See OQ5.
 
 **KTD3 — Trunnion ring at nacelle inboard face, ring plane X ≈ 28 mm.** Removes
 the through-duct spar entirely, recovering the stator blockage and freeing the
@@ -411,11 +443,9 @@ the skewered shaft from the duct.
 1. Delete `pivot_x_face_boss()`'s full-width through-bore, the outboard support
    hub, the D-flat, and `spar_duct_wall_bosses()`. Retain nothing that crosses
    r = 25 mm.
-2. **`PIVOT_Z` 111.5 → 79.0** (KTD7). The pivot is no longer the CG station; it
-   is set by the spar's hull Y (+15.0) and the bake transform
-   (`PIVOT_Z = SPAR_Y − NAC_BAKE.y = 15.0 + 64`). Update the header comment,
-   which currently *defines* `PIVOT_Z` as the CG station — that definition is
-   retired, and leaving it would make the next reader re-derive the wrong value.
+2. **`PIVOT_Z` stays 111.5** (KTD7) — the pivot remains the CG station, so the
+   SCAD header's existing definition stands and needs no rewrite. Verify against
+   the U9 re-derived CG and re-check R12 clearance if the CG moves.
 3. Add `nacelle_trunnion_ring()`: a structural ring centred on the tilt axis in
    the plane X = ring-plane (KTD3, ~28 mm), with a bearing seat and a load-
    spreading web into the shell. **Measured envelope (OQ2, resolved): 52.0 mm
@@ -426,10 +456,9 @@ the skewered shaft from the duct.
 4. Recover the stator: the spar tunnel and the 2-fin re-index that
    `docs/TILT_SPAR_ANALYSIS.md` §4 required exist only to pass the shaft. With
    the shaft gone, restore the canonical 11-fin stator.
-5. Check the annulus at the new pivot station: Z 79 is inside EDF1's axial span
-   (27.5–90), so confirm the ring's load-spreading web clears the EDF1 casing
-   and the ESC1 seat. The ring itself is outside r = 25 and so cannot foul the
-   duct, but the web reaches inward.
+5. The ring stays at the existing pivot station (Z 111.5, the inter-EDF stator
+   gap), so it does not foul either EDF casing — the same station the old spar
+   hubs already occupied.
 
 **Test scenarios:**
 - No nacelle geometry intersects the r = 25 mm duct cylinder at any Z.
@@ -665,6 +694,13 @@ change to the EDF units, battery, or power architecture upstream of the PDB.
 
 ## Risks & Dependencies
 
+- **RISK-0 (high) — hover ground clearance is already violated in the default
+  assembly.** The nozzle tip reaches hull Z −41.39 in hover against a −38.1 mm
+  ground plane on the active 1.5 in gear: a 3.3 mm strike on every vertical
+  takeoff and landing. Pre-existing, not caused by this plan, but this plan must
+  not make it worse and its pivot choice is constrained by it (KTD7, R12).
+  Mitigation: adopt the 3.0 in gear as mandatory (+38.6 mm), or shorten the
+  nozzle stack. Tracked as LG-HOVER-01.
 - **RISK-1 (high) — the airfoil is no longer S1223.** Root goes 12.1 → 17.6 %
   t/c and tip 18.9 → 25.5 %. S1223 is a high-lift low-Reynolds section
   characterised at 12.14 %; scaling thickness ~2× changes its behaviour
@@ -691,8 +727,10 @@ change to the EDF units, battery, or power architecture upstream of the PDB.
   CG.** `PIVOT_Z` is now fixed at 79.0 by the spar station and the bake
   transform, both of which are independent of the mass table. U9's mass work
   therefore *reports* a gravity moment rather than *relocating* the pivot.
-  Residual: if the re-derived CG lands far from 111.5, the 0.125 N·m figure in
-  KTD7 changes — recompute it, but the geometry does not move.
+  Residual: if U9's re-derived CG moves off 111.5, `PIVOT_Z` follows it (KTD7),
+  which moves the ring plane and re-opens R12 clearance. Bound it: R12 allows
+  `PIVOT_Z ≥ 92.9` on the 3.0 in gear at 20 mm margin, so a CG drift of up to
+  −18 mm is absorbable without geometry change.
 - **DEP-1** — No verified CF tube allowable exists in `REFERENCES.md`. The
   FOS 9.1 in this plan uses a 300 MPa cross-ply stand-in.
 - **DEP-2** — Actual 10 AWG silicone OD is assumed at 5.5 mm from the source
@@ -705,16 +743,25 @@ change to the EDF units, battery, or power architecture upstream of the PDB.
 
 - **OQ1 — RESOLVED 2026-08-29: station 22.0 mm.** See KTD2. Restores the Rev R1a
   chord line; within 1 % of the best tip scale and 0.8 % of the best root scale.
-- **OQ2 — RESOLVED 2026-08-29: 52.0 mm max ring OD** at Z 79 / X 28, measured
-  from the bore-centred canonical shell STL (X = 26 gives 54.9 mm at 1 mm duct
+- **OQ2 — RESOLVED 2026-08-29: 53.4 mm max ring OD** at Z 111.5 / X 28, measured
+  from the bore-centred canonical shell STL (X = 26 gives 57.4 mm at 1 mm duct
   margin). The ellipse estimate was 1 mm conservative; the working point holds.
 - **OQ3** — Actual servo angular range (180° vs 270°). Gates U6's tooth counts;
   travel, not torque, is binding.
 - **OQ4** — Measured OD of the procured 10 AWG silicone wire. Gates R1.
-- **OQ5 — RESOLVED 2026-08-29: the nacelle does not move.** See KTD7. The pivot
-  moves forward inside the nacelle instead (`PIVOT_Z` 111.5 → 79.0), keeping
-  hull placement canonical for a 0.125 N·m gravity moment — 2.8 % of belt-
-  delivered torque.
+- **OQ5 — REOPENED 2026-08-29, now the plan's main unresolved trade.** With the
+  pivot pinned at the CG (KTD7) and the spar at station 22, the nacelle slides to
+  **−32.5 mm off its canonical hull station** (vs −9.35 mm today). Two ways out,
+  both unpriced:
+  **(a) accept the offset** — simplest structurally, tilt axis is the spar axis,
+  but it is a visible silhouette change on a replica airframe;
+  **(b) decouple the tilt axis from the spar axis** — spar stays at station 22
+  for the airfoil, the trunnion sits at the canonical station on a bracket
+  carried by the tip rib, and the wire bundle makes its 23–32 mm jog *inside the
+  fixed garage* where nothing flexes. Costs a torque about the spar axis of
+  ≈ 0.5 N·m at limit (thrust × offset), reacted by the tip rib and pinch clamp,
+  and a more involved tip structure. Owner call; (b) is the only option that
+  keeps both the CG pivot and canonical placement.
 - **OQ6** — Roll-wrapped 20 × 16.3 CF: stock item or custom? Standard metric CF
   tube steps are 20 × 16 and 20 × 18; 20 × 16 (2 mm wall) gives 16.0 mm bore
   against a 13.28 mm bundle = 1.36 mm radial clearance, marginally under the

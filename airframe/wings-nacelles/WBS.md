@@ -1334,12 +1334,18 @@ drive that does not rely on the spar rotating. This **supersedes** the Ø8 mm
 rotating-spar architecture in `docs/TILT_SPAR_ANALYSIS.md` §1–§9 and the
 Rev S1b spar-station decision in §1.1.2.1 above.
 
-**Resolved 2026-08-29 (OQ1/OQ2/OQ5):** station **22.0 mm** (restores the
-Rev R1a chord line; within 1 % of the best tip scale). The **nacelle does not
-move on the hull** — instead `PIVOT_Z` goes 111.5 → **79.0**, leaving the CG for
-a 0.125 N·m gravity moment (2.8 % of belt-delivered torque). Trunnion ring
-envelope **measured** from the canonical shell STL: **52.0 mm OD at Z 79 /
-X 28**.
+**Resolved 2026-08-29 (OQ1/OQ2):** station **22.0 mm** (restores the Rev R1a
+chord line; within 1 % of the best tip scale). Trunnion ring envelope
+**measured** from the canonical shell STL: **53.4 mm OD at Z 111.5 / X 28**.
+
+**`PIVOT_Z` STAYS 111.5.** An earlier draft moved it to 79.0 to keep the nacelle
+canonical; **withdrawn** on two independent grounds — (1) owner-directed: the
+pivot must sit at the CG so the centre of thrust does not move with tilt (an
+off-CG pivot of 32.5 mm swings the *aircraft* CG ~9.2 mm through transition,
+with the two nacelles at 28.4 % of AUW), and (2) hover ground clearance, below.
+**OQ5 is therefore reopened**: with the pivot at the CG and the spar at station
+22, the nacelle sits −32.5 mm off canonical unless the tilt axis is decoupled
+from the spar axis and carried on a tip-rib bracket.
 
 Measured 2026-08-29 (`tools/wing_spar_station_fit.py`, exact 4-circle packing
 R/r = 1+√2): the bundle circumscribes **13.28 mm**, so the 16 mm tube named in
@@ -1360,10 +1366,9 @@ LE (root `t_scale` 1.464, tip 2.039); holding 45.15 mm would cost a 40 % t/c tip
 - [ ] **SPAR-20-3 (U3)** — Wingtip trunnion, split-collar pinch clamp (no set
     screws — CF crushes), and the field-maintainable garage with separated
     power/signal disconnects.
-- [ ] **SPAR-20-4 (U4)** — `PIVOT_Z` 111.5 → **79.0** (retire the "pivot = CG
-    station" definition in the SCAD header); nacelle trunnion ring at ring-plane
-    X ≈ 28 mm, measured envelope 52.0 mm OD; check the ring web clears the EDF1
-    casing (Z 79 is inside EDF1's 27.5–90 span); delete
+- [ ] **SPAR-20-4 (U4)** — `PIVOT_Z` stays **111.5** (pivot = CG stands);
+    nacelle trunnion ring at ring-plane X ≈ 28 mm, measured envelope 53.4 mm OD,
+    at the existing inter-EDF stator station; delete
     the through-duct spar bore, outboard hub, D-flat, and duct-wall collars;
     **restore the canonical 11-fin stator** (the spar tunnel and 2-fin re-index
     existed only to pass the shaft).
@@ -1388,6 +1393,18 @@ LE (root `t_scale` 1.464, tip 2.039); holding 45.15 mm would cost a 40 % t/c tip
     entries for the CF allowable and belt spec, regenerate and re-bake.
 
 **Standing flags (do not lose):**
+
+- [ ] **LG-HOVER-01 — hover ground clearance is violated in the DEFAULT
+    assembly (pre-existing, found 2026-08-29).** The rotating assembly reaches
+    nacelle-local Z **221.3** (the iris seats at 166.25 and runs 55.1 beyond —
+    36.1 mm proud of the 185.2 mm shell). In hover the tip swings to hull Z
+    **−41.39** against a **−38.1 mm** ground plane on the 1.5 in gear that
+    `serenity_assembly.py` L505-518 calls "the ACTIVE (compact, default)
+    variant" — a **3.3 mm strike on every vertical takeoff and landing**. The
+    3.0 in gear clears by +38.6 mm. Either make the 3.0 in gear mandatory rather
+    than "kept for rough-field missions", or shorten the nozzle stack. Sets the
+    floor `PIVOT_Z ≥ 92.9` (3.0 in gear, 20 mm margin). Belongs to the landing-
+    gear/fuselage WBS as much as this one — cross-file item.
 
 - [ ] **SPAR-20-AERO** — The re-lofted section is **no longer S1223** (root
     12.1 → 17.6 % t/c, tip 18.9 → 25.5 %). Every aero figure citing this wing —
