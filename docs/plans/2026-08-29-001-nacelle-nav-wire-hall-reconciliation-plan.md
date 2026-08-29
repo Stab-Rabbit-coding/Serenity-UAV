@@ -3,9 +3,34 @@ title: "fix: Reconcile nacelle nav-light wire routing with the hollow tilt-spar 
 date: 2026-08-29
 plan_type: fix
 execution: geometry
+status: superseded
+superseded_by: docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md
+superseded_also_by: docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md
 ---
 
 # fix: Nacelle nav-wire/spar reconciliation + AK7455 wing-side finish
+
+> **SUPERSEDED 2026-08-29.** Two parallel sessions worked this file; both
+> dispositions are merged here rather than one overwriting the other.
+>
+> - **Power routing** split out to
+>   [`2026-08-29-002-nacelle-esc-power-routing-plan.md`](2026-08-29-002-nacelle-esc-power-routing-plan.md),
+>   which posed the architecture choice.
+> - **That choice was then taken** in
+>   [`2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md`](2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md)
+>   (fixed 20 × 16.3 CF spar, trunnion pivot), with the mechanism in `…-004-…`
+>   and mould-line/clearance work in `…-005-…`.
+>
+> **This plan's own remaining scope is absorbed, not merely narrowed.** Both
+> findings that survived — the AK7455 wing pocket still sized for the rejected
+> MT6701, and nav-wire separation from the ESC harness — are carried into
+> **003 §U5**. And **§U1's specific fix is void**: routing the nav wire into the
+> spar bore depended on the spar *rotating* with the nacelle. Under the adopted
+> fixed spar the nav light still rotates but the spar does not, so the 3-core
+> crosses the joint at the trunnion instead (003 §U5 step 2).
+>
+> Part A's validation of the external proposal stands, with its row 2 corrected
+> (the Ø7 mm conduit claim was wrong) by both sessions independently.
 
 **Target repo:** Serenity-UAV (this repo)
 
@@ -109,8 +134,8 @@ but in the same subsystem, and it is the actual fix the EMI concern calls for.
 `airframe/wings-nacelles/WBS.md` L1304-1306 already carries an open item:
 `wing_tip_hall_sensor_pocket()` and the `HALL_*` block in
 `wings_s1223_revo.scad` are still sized/commented for the rejected MT6701
-(3×3 QFN, 4-wire I²C) rather than the selected AK7455 (QFN24 4×4, 7-wire SPI
-+ ERROR pigtail). Since this plan is already touching the same wingtip/nacelle
+(3×3 QFN, 4-wire I²C) rather than the selected AK7455 (QFN24 4×4, 7-wire
+SPI + ERROR pigtail). Since this plan is already touching the same wingtip/nacelle
 signal-routing geometry, it closes this out too rather than leaving a second
 half-finished pass over the same files.
 

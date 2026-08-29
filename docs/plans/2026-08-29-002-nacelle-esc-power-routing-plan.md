@@ -3,6 +3,20 @@ title: "fix: Nacelle ESC power routing across the tilt joint — decouple torque
 date: 2026-08-29
 plan_type: fix
 execution: geometry+mechanism, decision-support pre-implementation
+
+> **DECISION TAKEN 2026-08-29 — see
+> [`2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md`](2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md).**
+> This plan posed three candidate architectures and gated them on real wire data
+> plus an owner decision. Both gates have since closed, in a parallel session:
+> the owner selected the **unified on-axis spar**, and it was re-sized against
+> the packing math this plan flags — 4 × Ø5.5 circumscribe **13.28 mm**, so the
+> adopted tube is **20 × 16.3**, not 16 mm. Frozen configuration: station 28.0,
+> `THICKNESS_SCALE` 1.456 / tip 2.190, `SPAR_Z` 66.85, `PIVOT_Z` 116.1,
+> hover clearance +9.8 mm (owner-accepted).
+>
+> This plan is retained as the decision record for *why* those three options
+> were weighed; 003 is authoritative for what was chosen.
+
 ---
 
 # fix: Nacelle ESC power routing across the tilt joint
