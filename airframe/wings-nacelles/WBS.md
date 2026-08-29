@@ -1394,6 +1394,25 @@ LE (root `t_scale` 1.464, tip 2.039); holding 45.15 mm would cost a 40 % t/c tip
 
 **Standing flags (do not lose):**
 
+- [ ] **NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening.**
+    Owning plan: `docs/plans/2026-08-29-004-nacelle-mould-line-conformance-plan.md`
+    (requirements-only). Three deviations from the canonical shell, one of them
+    a flight-safety item: (a) flaps 40 → **30 mm** to cut the aft overhang
+    36.1 → 26.1 mm and buy 10 mm of hover clearance; (b) close the **deferred**
+    Stage 2 ovalising — the housing stands **3.2 mm** proud at Z 166.25 and
+    **3.9 mm** at the shell's aft end, and the SCAD says so explicitly ("Fully
+    ovalising the housing to the cowl mould line … deferred VERIFY"); the WBS
+    `[x]` above covers only the cylindrical taper 35.6 → 33.5, **not** the
+    ovalising. (c) intake fairing conformance — the additive blend stands
+    **+5.3 mm** proud at Z 0 and crosses the canonical dome near Z 7, which is
+    the wavy flange logged in the 08-26 plan's U5.
+    **Structural finding:** the overhang cannot be deleted. The tandem stack
+    fills the shell to 178.8 of 185.2, leaving **6.4 mm** for a nozzle that
+    measures **58.1 mm** — a variable-area iris cannot fit inside a
+    canonical-length nacelle. It is reduced and the residual documented.
+    **BLOCKING (OQ1):** flaps at 30 mm leave only **+3.7 mm** on the 1.5 in
+    gear — positive, not a margin. Needs an accepted margin or a longer gear
+    before this can close.
 - [ ] **LG-HOVER-01 — hover ground clearance is violated in the DEFAULT
     assembly (pre-existing, found 2026-08-29).** The rotating assembly reaches
     nacelle-local Z **221.3** (the iris seats at 166.25 and runs 55.1 beyond —
