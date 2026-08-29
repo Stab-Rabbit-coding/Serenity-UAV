@@ -107,6 +107,58 @@ def check_polygon(upper, lower):
     return poly
 
 
+def scaled_pts(upper, lower, t_scale):
+    """Mirror of the SCAD s1223_scaled_pts(): thickness scaled about camber.
+
+    y = midline(x) + (y_surface(x) - midline(x)) * t_scale, applied to BOTH
+    surface lists in their SCAD order (upper LE->TE, then lower TE->LE).
+    """
+    def mid(x):
+        return (wsf.surf_y(upper, x) + wsf.surf_y(lower, x)) / 2.0
+    out = []
+    for pts in (upper, lower):
+        for x, y in pts:
+            m = mid(x)
+            out.append((x, m + (y - m) * t_scale))
+    return out
+
+
+def check_scaled_sections(upper, lower, src):
+    """Validate the sections ACTUALLY built, at their real thickness scales.
+
+    Checks 1 and 2 above validate the tabulated table -- i.e. the section at
+    t_scale = 1.0.  That is not what gets lofted.  wing_solid() builds its
+    root from s1223_scaled_pts(THICKNESS_SCALE) and its tip from
+    s1223_scaled_pts(THICKNESS_SCALE_TIP), and s1223_section()'s own header
+    warns the decomposition "was intended for 0.85-1.0 and had left that
+    range long ago" at 1.25.
+
+    The unified-spar re-loft (docs/plans/2026-08-29-003-...) takes the root to
+    ~1.46 and the tip past 2.0, and flags self-intersection at those scales as
+    RISK-2 -- a risk this gate could not see, because it never read either
+    scale.  A gate that passes identically at t_scale 1.0 and 2.19 is not
+    covering the failure it is being cited for.
+
+    Returns a list of (label, t_scale, polygon, min_thickness) tuples.
+    """
+    results = []
+    for label, name in (("root", "THICKNESS_SCALE"),
+                        ("tip", "THICKNESS_SCALE_TIP")):
+        ts = wsf.scad_scalar(src, name)
+        pts = scaled_pts(upper, lower, ts)
+        poly = Polygon(pts)
+        # Sample over the SAME interior band check 1 uses -- excluding both
+        # the LE and TE closure regions, where the surfaces legitimately meet
+        # and a zero is expected rather than a defect.
+        band = [
+            (wsf.surf_y(upper, x / 400.0) - wsf.surf_y(lower, x / 400.0)) * ts
+            for x in range(int(LE_EXCLUDE * 400) + 1,
+                           int((1.0 - TE_EXCLUDE) * 400))
+        ]
+        results.append((label, ts, poly, min(band), max(band)))
+    return results
+
+
 def wing_solid_uses_hull(src):
     """True if wing_solid() still lofts with hull() rather than a true loft.
 
@@ -180,6 +232,25 @@ def main():
         print("   s1223_scaled_pts() list check 2 already validated, so the")
         print("   built cross-section IS the tabulated outline, not a convex")
         print("   approximation of it.  No area-ratio check applies.")
+
+    # ---- 4. the sections that actually get lofted, at their real scales ----
+    print("\n4. built sections are valid at their ACTUAL thickness scales")
+    print("   (checks 1-2 validate the table, i.e. t_scale = 1.0; wing_solid()")
+    print("    lofts THESE two.  s1223_section() was written for 0.85-1.0.)")
+    for label, ts, poly, thk, tc_max in check_scaled_sections(upper, lower, src):
+        note = "" if ts <= 1.0 + 1e-9 else "  (outside the 0.85-1.0 design range)"
+        print(f"   {label:<5} t_scale {ts:5.3f}   max t/c {tc_max:6.2%}   "
+              f"min t/c {thk:6.3%}   area {poly.area:.6f}{note}")
+        if not poly.is_valid:
+            print(f"     FAIL -- {explain_validity(poly)}")
+            failures.append(f"{label} section self-intersects at "
+                            f"t_scale {ts:.3f}")
+        elif thk <= 0.0:
+            print(f"     FAIL -- non-positive thickness {thk:+.5f}")
+            failures.append(f"{label} section pinches to zero at "
+                            f"t_scale {ts:.3f}")
+        else:
+            print("     ok")
 
     print()
     if failures:

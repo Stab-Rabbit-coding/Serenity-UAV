@@ -165,24 +165,47 @@ def route_stations():
     with open(wsf.WING_SCAD, encoding="utf-8") as fh:
         src = fh.read()
     chord = mci.WING_ROOT_CHORD
-    cable_d = wsf.scad_scalar(src, "CABLE_BORE_D")
-    cable_sep = wsf.scad_scalar(src, "CABLE_BORE_SEP")
-    cable_stn = wsf.scad_scalar(src, "CABLE_BORE_STATION")
     hall_d = wsf.scad_scalar(src, "HALL_CABLE_D")
     hall_stn = wsf.scad_scalar(src, "HALL_CABLE_STATION")
     spar_bore = wsf.scad_scalar(src, "SPAR_BORE_OD")
     spar_stn = wsf.scad_scalar(src, "SPAR_BORE_STATION")
-    # Each bore is camber-centred at ITS OWN chordwise station, so the two EDF
-    # bores do not share a midline: at 22.75 and 32.25 mm the S1223 camber line
-    # differs by ~0.8 mm.  Evaluating one midline for the pair puts both bores
-    # off the shell's matching harness ports and reports phantom blockage.
-    out = [
-        ("EDF ESC conduit (40 A feeds)",
-         [((cable_stn - cable_sep / 2) / chord, cable_d),
-          ((cable_stn + cable_sep / 2) / chord, cable_d)]),
-        ("Hall/encoder conduit", [(hall_stn / chord, hall_d)]),
-        ("spar bore / nav-light 3-core", [(spar_stn / chord, spar_bore)]),
-    ]
+    # Each bore is camber-centred at ITS OWN chordwise station, so bores at
+    # different stations do not share a midline -- evaluating one midline for
+    # several bores puts them off the shell's matching ports and reports
+    # phantom blockage.
+    #
+    # REV T1 (2026-08-29): the route set changed with the spar.
+    #   * The EDF double-D is RETIRED -- the four 10 AWG feeds moved INSIDE the
+    #     spar bore, on the tilt axis.  The spar bore is therefore no longer
+    #     "nav-light only": it is now the 40 A route as well, and is relabelled
+    #     to say so.  A stale "nav-light 3-core" label on the one bore that now
+    #     carries the aircraft's main propulsion current would be the most
+    #     misleading string in this tool.
+    #   * The nav 3-core gets its own small bore FORWARD of the spar.
+    #   * A tilt drive-shaft bore appears AFT of the AK7455 conduit.
+    # The legacy names are still read when present so this tool keeps working
+    # as a regression check against a pre-Rev-T1 source.
+    out = []
+    if re.search(r"^CABLE_BORE_D\s*=", src, re.M):
+        cable_d = wsf.scad_scalar(src, "CABLE_BORE_D")
+        cable_sep = wsf.scad_scalar(src, "CABLE_BORE_SEP")
+        cable_stn = wsf.scad_scalar(src, "CABLE_BORE_STATION")
+        out.append(("EDF ESC conduit (40 A feeds)",
+                    [((cable_stn - cable_sep / 2) / chord, cable_d),
+                     ((cable_stn + cable_sep / 2) / chord, cable_d)]))
+    if re.search(r"^NAV_BORE_D\s*=", src, re.M):
+        out.append(("nav-light 3-core conduit",
+                    [(wsf.scad_scalar(src, "NAV_BORE_STATION") / chord,
+                      wsf.scad_scalar(src, "NAV_BORE_D"))]))
+    out.append(("Hall/encoder conduit", [(hall_stn / chord, hall_d)]))
+    if re.search(r"^SHAFT_BORE_D\s*=", src, re.M):
+        out.append(("tilt drive-shaft bore",
+                    [(wsf.scad_scalar(src, "SHAFT_BORE_STATION") / chord,
+                      wsf.scad_scalar(src, "SHAFT_BORE_D"))]))
+    spar_label = ("spar bore / 4x 10 AWG ESC feeds"
+                  if re.search(r"^NAV_BORE_D\s*=", src, re.M)
+                  else "spar bore / nav-light 3-core")
+    out.append((spar_label, [(spar_stn / chord, spar_bore)]))
     # U5/KTD1 two-rod couple: both rod clearance bores are camber-centred at
     # their own station exactly like the bores above (see
     # wing_root_tie_rod_fwd_bore()/_aft_bore() in the wing SCAD). Root-only

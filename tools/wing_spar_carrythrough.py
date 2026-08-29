@@ -89,12 +89,40 @@ N_NACELLES = 2                      # AGENTS.md propulsion baseline
 LIMIT_FACTOR = 4.0                  # 3 g gust + 1 g maneuver
 ULTIMATE_FACTOR = 1.5
 
-# --- spar section, 8 mm OD x 1.5 mm wall (5 mm ID) AISI 4130 ---------------
-SPAR_OD, SPAR_ID = 8.0, 5.0
+# --- spar section ----------------------------------------------------------
+# REV T1 (2026-08-29, plan 003 KTD1/KTD4): the spar is a FIXED 20 x 16.3 mm
+# roll-wrapped CARBON FIBRE tube, not the Rev R2 8 x 1.5 rotating 4130 shaft.
+# Three things change together and they are not independent:
+#
+#   * SECTION.  Z goes 42.6 -> 438.9 mm^3, a 10.3x increase, because the tube
+#     is now sized by the WIRE BUNDLE it carries (tools/spar_bundle_fit.py),
+#     not by the torque it transmits.  It transmits none: the nacelle pivots
+#     on its own trunnion ring, so the spar carries bending only.
+#   * MATERIAL.  CF was rejected in TILT_SPAR_ANALYSIS.md SS3.5 on a FUNCTIONAL
+#     gate -- "delaminates at a keyway" -- not on strength.  A fixed spar has
+#     no keyway and no bearing journal, so that gate does not apply and CF's
+#     mass advantage becomes available: 67.5 g/pair against 96.2 g for the
+#     steel it replaces, i.e. the bigger spar is also the LIGHTER one.
+#   * LOAD PATH.  See report_spar_carrythrough_joint().
+#
+# ALLOWABLE IS UNVERIFIED.  300 MPa is the same deliberately conservative
+# cross-ply stand-in CF_ALLOW uses for the thwart plate, carried over because
+# the repo still has no ASTM D3039/D695 certificate for any CF stock (plan 003
+# DEP-1; REFERENCES.md "requires verification").  Do not quote the FOS below
+# as qualified.
+SPAR_OD, SPAR_ID = 20.0, 16.3
 SPAR_I = math.pi * (SPAR_OD ** 4 - SPAR_ID ** 4) / 64.0    # mm^4
 SPAR_Z = SPAR_I / (SPAR_OD / 2.0)                          # mm^3
+SPAR_ALLOW = 300.0                  # MPa -- REQUIRES VERIFICATION (DEP-1)
+SPAR_RHO = 1.60e-3                  # g/mm^3, roll-wrapped CF
+
+# Superseded Rev R2 section, retained so the comparison in the report is
+# against a real previous figure rather than a remembered one.
+LEGACY_OD, LEGACY_ID = 8.0, 5.0
+LEGACY_Z = (math.pi * (LEGACY_OD ** 4 - LEGACY_ID ** 4) / 64.0) / (LEGACY_OD / 2.0)
+LEGACY_RHO = 7.85e-3                # g/mm^3, AISI 4130
 # MPa, 4130 normalized (typical -- MMPDS; tracked in the root work-tracking
-# file SS0.8).
+# file SS0.8).  Retained: the legacy comparison row still cites it.
 STEEL_YIELD = 460.0
 
 # --- candidate thwart section ---------------------------------------------
@@ -170,13 +198,16 @@ def report_loads(geom):
     print(f"  span  L (fuselage bearing -> wingtip)  {geom['L']:6.1f} mm")
     print(f"  overhang a (wingtip -> nacelle axis)   {geom['a']:6.1f} mm")
     print(f"  arm   d (wall -> nacelle axis)         {geom['d']:6.1f} mm")
-    print(f"\n  section 8 x 1.5 4130:  I {SPAR_I:.0f} mm^4   Z {SPAR_Z:.1f} mm^3")
+    print(f"\n  section {SPAR_OD:.0f} x {SPAR_ID:.1f} CF (fixed, Rev T1):  "
+          f"I {SPAR_I:.0f} mm^4   Z {SPAR_Z:.1f} mm^3")
+    print(f"    superseded 8 x 1.5 4130 had Z {LEGACY_Z:.1f} mm^3 "
+          f"-- section modulus up {SPAR_Z / LEGACY_Z:.1f}x")
     print(f"\n{'case':>10s} {'R_tip N':>9s} {'R_fus N':>9s} "
           f"{'M_spar N.m':>11s} {'sigma MPa':>10s} {'FOS':>6s}")
     for tag, f in (("1 g", per_side_1g), ("limit", limit), ("ultimate", ultimate)):
         r_tip, r_fus, m_spar, sigma = spar_case(f, geom)
         print(f"{tag:>10s} {r_tip:9.1f} {r_fus:9.1f} {m_spar:11.2f} "
-              f"{sigma:10.1f} {STEEL_YIELD / sigma:6.1f}")
+              f"{sigma:10.1f} {SPAR_ALLOW / sigma:6.1f}")
     return limit, ultimate
 
 
@@ -236,11 +267,147 @@ def report_root_joint(geom, limit, ultimate):
     r_tip_ult, _rf, _m, _s = spar_case(ultimate, geom)
     m_ult = r_tip_ult * arm / 1000.0                  # N.m, ultimate root moment
 
+    if load_path == "spar_carrythrough":
+        report_spar_carrythrough_joint(scad, m_ult, ultimate)
+        return
+
     if load_path == "two_rod":
         report_two_rod_couple(src, m_ult)
         return
 
     report_enlarged_tenon(src, scad, m_ult)
+
+
+def report_spar_carrythrough_joint(scad, m_ult, v_ult):
+    """Rev T1 default: the FIXED spar itself is the wing-root load path.
+
+    WHAT CHANGED, AND WHY IT IS NOT JUST A BIGGER ROD
+
+    Under Rev R2 the spar was a rotating drive shaft.  It rode bearings at both
+    ends, so by definition it could not react a root MOMENT -- a bearing
+    transmits shear, not moment -- which is precisely why the root moment had
+    to be routed somewhere else: first into an enlarged tenon (CARGO-03c, found
+    at FOS 0.49), then into a two-rod bonded couple (U5/KTD1, FOS 4.14).  Both
+    of those existed to work AROUND a spar that structurally could not help.
+
+    Rev T1 removes that constraint at the source.  The spar is fixed and bonded
+    over its full span, so it is a moment-carrying member, and the load path
+    becomes nacelle -> trunnion -> spar -> fuselage socket.  The tenon and the
+    tie rods are no longer in it.  That is not a strength upgrade to the old
+    joint; it is a different joint.
+
+    WHY THE TIE RODS RETIRE RATHER THAN BEING KEPT AS BACKUP
+
+    1. The forward rod is physically impossible.  It sat at station 14.0 at
+       D8.2 (spanning 9.9..18.1); the Rev T1 spar bore spans 17.80..38.20.
+       They overlap.  There is no clearance version of the old joint.
+    2. The aft rod is possible but purposeless.  Its remaining job would be
+       reacting wing TORSION about the spar axis, and that load is negligible:
+       see the torsion check below.
+    3. Keeping an unnecessary bonded rod is not free -- it is a second bonded
+       interface competing for the same root volume as the spar socket, and a
+       stress riser in the skin at the station where the section is already
+       thinnest.
+
+    THE SOCKET MODEL
+
+    A rigid pin in an elastic socket develops a roughly triangular pressure
+    distribution on each side of the reversal point, with the two resultants
+    landing at L/3 from each end -- an effective couple arm of 2L/3.  That is
+    the standard conservative idealisation and it is what is used here:
+
+        F     = 3M / (2L) + V/2
+        area  = D . L/3            (projected bearing, the repo's own
+                                    CARGO-03c convention)
+        sigma = F / area
+
+    Note sigma goes as 1/L^2, so socket LENGTH is the only effective lever --
+    doubling it quarters the stress.  Diameter appears only linearly.
+
+    ALLOWABLE.  5 MPa, the repo's standing bond-limited CF-PETG figure
+    (docs/structural_analysis.md SS7.3), the same one CARGO-03c and the two-rod
+    couple were sized against.  It is a conservative working placeholder that
+    predates any cited source.  REF-MAT-001 gives a real ASTM D695 BULK
+    COMPRESSIVE figure for 20 %-CF-PETG of ~47-60 MPa, and bearing of a bonded
+    tube against a socket wall is a compressive mode rather than the bond/peel
+    mode 5 MPa was written to bound -- so this socket is very likely far more
+    conservative than it looks.  It is NOT re-based here: overturning a
+    standing repo allowable is an owner decision gated on the LG-11 coupon
+    (root TODO SS1.1.4), not a side effect of a geometry change.  The sweep
+    below shows what that coupon would buy.
+    """
+    d_sock = scad("TILT_SPAR_OD")
+    allow = 5.0
+    m_nmm = m_ult * 1000.0
+
+    def sigma_at(L):
+        f = 3.0 * m_nmm / (2.0 * L) + v_ult / 2.0
+        return f, d_sock * L / 3.0, f / (d_sock * L / 3.0)
+
+    print("\nSpar carry-through joint (Rev T1) -- the spar IS the root load path")
+    print(f"  fixed CF spar {SPAR_OD:.0f} x {SPAR_ID:.1f}, Z {SPAR_Z:.1f} mm^3")
+    sig_spar = m_nmm / SPAR_Z
+    print(f"  spar bending at the ultimate root moment ({m_ult:.2f} N.m):")
+    print(f"    sigma {sig_spar:.2f} MPa   FOS {SPAR_ALLOW / sig_spar:.1f} "
+          f"vs the {SPAR_ALLOW:.0f} MPa stand-in  (UNVERIFIED, DEP-1)")
+    print("    this is the CANTILEVER bound -- the whole root moment taken by")
+    print("    the spar alone.  The two-support bound (nacelle load reacted")
+    print("    between the wingtip clamp and the wall) gives only "
+          f"{v_ult * 38.3 / 1000.0:.2f} N.m,")
+    print(f"    sigma {v_ult * 38.3 / SPAR_Z:.2f} MPa.  The cantilever bound is "
+          "quoted because it")
+    print("    does not depend on the wing skin sharing load, which is not")
+    print("    characterised for a bonded printed skin.")
+
+    print(f"\n  fuselage-side socket sizing (D{d_sock:.0f} bonded, "
+          f"projected bearing vs {allow:.0f} MPa):")
+    print(f"    {'L mm':>6s} {'F N':>8s} {'area mm2':>9s} "
+          f"{'sigma MPa':>10s} {'FOS':>6s}")
+    for L in (20.0, 30.0, 40.0, 50.0, 55.0, 60.0):
+        f, a, sg = sigma_at(L)
+        print(f"    {L:6.0f} {f:8.1f} {a:9.1f} {sg:10.3f} {allow / sg:6.2f}")
+
+    lo, hi = 5.0, 200.0
+    for _ in range(200):
+        mid = (lo + hi) / 2.0
+        if allow / sigma_at(mid)[2] < 4.0:
+            lo = mid
+        else:
+            hi = mid
+    print(f"    -> socket length for the SS3 FOS 4.0 target: {hi:.1f} mm")
+    print(f"    -> REQUIREMENT ON THE FUSELAGE: a bonded socket of at least")
+    print(f"       {hi:.0f} mm spanwise reach inboard of the wall at the spar")
+    print("       station.  This is a JOINT REQUIREMENT this file publishes;")
+    print("       the fuselage owns building it (see the fuselage-mid WBS).")
+
+    # What the LG-11 coupon would buy, if it lands.
+    for alt, why in ((15.0, "the owner's <15 MPa fusion-strength decision rule"),
+                     (47.0, "REF-MAT-001 ASTM D695 bulk compressive, 20 % CF-PETG")):
+        lo2, hi2 = 5.0, 200.0
+        for _ in range(200):
+            mid = (lo2 + hi2) / 2.0
+            if alt / sigma_at(mid)[2] < 4.0:
+                lo2 = mid
+            else:
+                hi2 = mid
+        print(f"    (at {alt:.0f} MPa -- {why}: {hi2:.0f} mm would do)")
+
+    # Torsion: the only job the retired aft tie rod could still have had.
+    q = 0.5 * 1.225 * (40.0 * 0.514444) ** 2          # Pa, 40 kt cruise
+    s_half = 19025e-6 / 2.0                           # m^2, one wing panel
+    c_mean = 0.111                                    # m, mean chord
+    m_aero = 0.25 * q * s_half * c_mean               # N.m, Cm ~ 0.25
+    m_tors = m_aero * LIMIT_FACTOR * ULTIMATE_FACTOR
+    tau = m_tors * 1000.0 / (2.0 * math.pi * (d_sock / 2.0) ** 2 * 40.0)
+    print("\n  wing torsion about the spar axis (the retired aft rod's only")
+    print("  remaining candidate job):")
+    print(f"    Cm 0.25 at 40 kt -> {m_aero:.4f} N.m; ultimate (x{LIMIT_FACTOR * ULTIMATE_FACTOR:.0f}) "
+          f"{m_tors:.3f} N.m")
+    print(f"    bond shear over a 40 mm socket {tau:.4f} MPa "
+          f"-> FOS {allow / tau:.0f} vs {allow:.0f} MPa")
+    print("    NOTE thrust contributes no torque here: the duct axis passes")
+    print("    through the pivot, which is on the spar axis (plan 003 R12).")
+    print("    -> the aft tie rod is not needed for torsion either.  Retired.")
 
 
 def report_two_rod_couple(src, m_ult):
