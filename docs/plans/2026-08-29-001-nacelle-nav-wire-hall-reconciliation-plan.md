@@ -13,10 +13,29 @@ execution: geometry
 carrying 4× 10 AWG ESC power leads through an 11 mm bore, a static AS5600 Hall
 encoder on the wingtip, and a removable wingtip "garage" hatch. This plan
 opens with the validation of that proposal against the repo's own analysis
-and as-built geometry, then scopes the one real, substantiated gap the
-validation surfaced — which is unrelated to the external proposal's specific
-recommendations but sits in the same subsystem (nacelle/wingtip signal
-routing across the tilt joint).
+and as-built geometry, then scopes the real, substantiated gaps the
+validation surfaced that belong to **nav-light/Hall-sensor signal routing**
+— which is unrelated to the external proposal's specific recommendations but
+sits in the same subsystem (nacelle/wingtip signal routing across the tilt
+joint).
+
+**Scope correction (2026-08-29, post-review):** this plan's first pass
+concluded the 4× 10 AWG ESC power-wire claim was based on a false premise,
+citing the wing's existing Ø7 mm double-D conduit as "already a dedicated,
+sized, working path." That conclusion did not check real wire OD against
+bore area and was **wrong** — verified after the fact (and independently
+corroborated by the owner's own `docs/plans/2026-08-27-nacelle-wiring-plan.md`,
+found already merged onto this branch): a Ø7 mm bore cannot carry even two
+10 AWG silicone wires side by side at any realistic wire OD, and the
+nacelle's `harness_exit_port()` is a rigid slot offset from the tilt pivot
+that sweeps a ~29–45 mm arc across the operational tilt range with nothing
+in the geometry to absorb it. **Both are real, open problems.** They are
+split out to `docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md`
+as a separate, federated plan — this plan (`...001`) is narrowed back to
+its still-valid scope: nav-light wire routing and the AK7455 Hall-sensor
+wing-side geometry, neither of which the power-routing correction affects
+(both are already isolated from the ESC power path by design, and stay
+that way regardless of how `...002` resolves).
 
 **Scope:** `airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad`,
 `airframe/openscad/wings/wings_s1223_revo.scad`,
@@ -29,19 +48,23 @@ routing across the tilt joint).
 | # | External claim | Verdict | Evidence |
 |---|---|---|---|
 | 1 | "16 mm Unified Spar" with `SPAR_BORE_D = 11.0 mm` lumen for a 4× 10 AWG power bundle | **REJECTED** | `docs/TILT_SPAR_ANALYSIS.md` §3/§9 adopted **8 mm OD × 1.5 mm wall (5 mm ID)** AISI 4130 after a full bending/torsion/stiffness/material trade study (FOS ≈ 13 bending, ≈ 9 torsion; a **12 mm** "unified structural" candidate was already evaluated and rejected in §3.4 as "Overbuilt; heavier, bigger duct crossing" — 16 mm is further from adopted than that rejected candidate). §5 of the same doc states explicitly: *"EDF power/signal do NOT use the spar (6× 16 AWG @ Ø3 mm — too large). They keep the existing wing double-D cableway + nacelle harness port. The spar is nav-wire-only."* The 2026-08-26 nacelle/ESC plan (`docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md`) restates this as a confirmed input: *"Do not route high-current ESC conductors through the rotating spar."* |
-| 2 | 4× 10 AWG power wires need a bigger bore to fit | **PREMISE WRONG — path already exists** | `docs/POWER_DISTRIBUTION.md` confirms PDB→ESC feeds are **10 AWG silicone, 55 A rated** (external claim's gauge is right), but they already have a dedicated route: `wings_s1223_revo.scad` `CABLE_BORE_D = 7.0 mm` × 2 ("double-D", `CABLE_BORE_SEP = 9.5 mm`), forward of the spar, sized for "40 A EDF ESC power + ESC signal split across the two" (`WBS.md` §1.1.2.1 Rev R1a). No spar change is needed to carry this wiring. |
+| 2 | 4× 10 AWG power wires need a bigger bore to fit | **CONFIRMED REAL — this plan's own first pass was wrong here; see `docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md`** | `docs/POWER_DISTRIBUTION.md` confirms PDB→ESC feeds are **10 AWG silicone, 55 A rated** (external claim's gauge is right), and the BOM (`current-specification/bom_revS.csv` `WIRE-10AWG`) never records an actual wire OD. At any realistic 10 AWG silicone OD (4.5–5.5 mm), two such wires cannot both fit inside one Ø7 mm bore — minimum packing diameter for 2 equal circles is 2× their OD (9–11 mm), already over 7 mm before any assembly clearance. The `wings_s1223_revo.scad` double-D (`CABLE_BORE_D = 7.0 mm` × 2, `CABLE_BORE_SEP = 9.5 mm`) is **not** a working path for this wiring as sized — it was never checked against real wire OD. Re-derived in full, including the harness-port/pivot-offset tilt-sweep problem, in the split-out plan. |
 | 3 | Enlarging the spar would keep the same bearings/gears/duct fit | **FALSE if actually attempted** | The wingtip bearing is `MF128ZZ` (12 mm bore, downsized *from* `F688ZZ`/16 mm specifically because 16 mm cut through both tip airfoil skins — `wings_s1223_revo.scad` L334-341, `TILT_SPAR_ANALYSIS.md` §8.1). A 16 mm spar cannot pass through a 12 mm-bore bearing at all, and would reopen the exact skin-breach problem that motivated the R2d downsize. It would also roughly double the naive duct-core blockage (§4: 8 mm strut ≈ 20% naive / 2–4% mitigated by fairing into the existing 16 mm stator hub — a 16 mm spar is comparable to the *whole current hub diameter* and would not fit the same mitigation) and invalidate the `PINION_A_Y`-derived fixed-gear geometry. |
 | 4 | `PIVOT_Z = 111.5` | **Already current — no-op** | Matches `nacelle_pod_50mm_tandem.scad` L383 exactly (Rev T CG re-derive, 2026-07-19). Nothing to change. |
 | 5 | Mount the HE tilt encoder (named "AS5600") statically on the fixed wingtip, reading a diametric magnet on the rotating nacelle hub | **Architecture already built this way — chip name is wrong and the specific part is disqualified, not just outdated** | The off-axis/fixed-wing-side topology is exactly what `wing_tip_hall_sensor_pocket()` implements today. But **AS5600 was the original Rev Q design and was explicitly rejected**, not merely superseded: `airframe/wings-nacelles/WBS.md` L1276-1281 — AS5600 is on-axis-only and the mechanism has no free shaft end (the spar is a through-shaft to a keyed nacelle hub), so an on-axis sensor **cannot read the off-axis Ø22 ring magnet** the way this mechanism is built. MT6701 (also on-axis) was rejected for the same reason. The selected part is **AKM AK7455** (off-axis/side-of-shaft, SPI, anomaly-field detection for the ferromagnetic 4130/17-4 through-shaft — REF-SENSOR-008), with a dedicated EMI wiring spec already written (`docs/TILT_ENCODER_WIRING_EMI_SPEC.md`, more detailed than the external proposal's separation/shielding rules). Re-adopting AS5600 would be a functional regression, not a simplification. |
 | 6 | Wingtip "garage" access hatch exposing the spar end + bullet connectors for the 4× 10 AWG feeds + static HE encoder plug, secured by a split-collar pinch clamp | **REJECTED — conflicts with the adopted service architecture** | No such hatch exists in `wings_s1223_revo.scad` today (checked for "garage", "hatch", "bullet connector", "split-collar" — no matches). `docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md` already evaluated and selected **nacelle-off-spar** service (slide the nacelle off the rotating spar; wing, spar, bearings, servo indexing, and Hall calibration stay installed) specifically to avoid disturbing the bearing seats and encoder calibration — the alternative ("spar out of bearings") was explicitly relegated to a fallback. A wingtip hatch that exposes and disconnects the spar's outboard end is the rejected alternative's access pattern, not the adopted one. Wingtip serviceability, if wanted, needs to be re-scoped against the nacelle-off-spar model, not introduced as an independent hatch. |
 | 7 | Underlying EMI concern — don't co-locate low-voltage signal wiring with 4× 10 AWG PWM/high-current leads in the same lumen | **Correct instinct; structurally already satisfied by the adopted (not the proposed) architecture — except for one real, pre-existing gap found during this validation (Part B)** | HE encoder wiring never enters the spar (`TILT_SPAR_ANALYSIS.md` §1: "its wiring stays entirely within the fixed wing harness... eliminating wire fatigue and keeping it physically isolated from the ... EMI"). ESC power uses the wing double-D, not the spar. The spar's hollow bore is nav-wire-only. The one place this isolation is **not** actually built as designed is documented in Part B below. |
 
-**Conclusion:** none of the external proposal's concrete geometry changes
-(16 mm spar, 11 mm power bore, AS5600, wingtip garage) should be implemented.
-The underlying EMI-isolation concern is valid and already the repo's own
-design intent — but auditing it surfaced a real, independently-verifiable gap
-between that intent and what is actually built, which is the rest of this
-plan.
+**Conclusion:** the external proposal's *specific* geometry (16 mm spar as a
+combined torque+wire member, 11 mm power bore, AS5600, wingtip garage as
+described) should not be implemented as-is — but two of its underlying
+problem claims (power-wire bore sizing, tilt-sweep articulation) are real and
+open, not resolved by the as-built repo. AS5600 stays rejected on hard
+datasheet grounds regardless. The wingtip-garage-vs-nacelle-off-spar question
+and the power-routing/torque-decoupling redesign move to
+`docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md`. What's left
+here — nav-light wire routing and the AK7455 wing-side geometry (Part B) — is
+this plan's scope.
 
 ---
 
