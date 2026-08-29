@@ -6,7 +6,7 @@ artifact_contract: ce-unified-plan/v1
 artifact_readiness: implementation-ready
 execution: geometry+hardware
 product_contract_source: ce-plan-bootstrap
-parent: docs/plans/2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-plan.md
+parent: docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md
 ---
 
 # feat: Nacelle trunnion pivot on the fixed hollow spar + tilt-drive trade study
@@ -19,7 +19,7 @@ parent: docs/plans/2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-pla
 
 ## Summary
 
-Plan 002 establishes *why* the spar becomes a fixed 20 × 16.3 mm CF tube. This
+Plan 003 establishes *why* the spar becomes a fixed 20 × 16.3 mm CF tube. This
 plan builds the mechanism that hangs off it: how the nacelle pivots about that
 fixed spar, how the tilt is driven from a fuselage servo, and how the nozzle
 drive survives losing its rotating-spar datum.
@@ -94,8 +94,8 @@ with the nacelle and one fixed to the spar.
 ## Tilt-Drive Trade Study
 
 Four architectures were evaluated. All assume the fixed 20 × 16.3 CF spar at
-station **28** (plan 002 KTD2), the pivot at the nacelle CG `PIVOT_Z` = **116.1**
-after the ESC1 relocation (002 KTD7/KTD8), and a bulkhead-mounted servo.
+station **28** (plan 003 KTD2), the pivot at the nacelle CG `PIVOT_Z` = **116.1**
+after the ESC1 relocation (003 KTD7/KTD8), and a bulkhead-mounted servo.
 
 ### Option A — Spanwise shaft + spur pair at the tip *(recommended)*
 
@@ -137,7 +137,7 @@ A thin sleeve rotating on bushings over the fixed spar, keyed to the nacelle.
 
   A realistic sleeve (20 mm spar + bushing + wall ≈ 26 mm) pushes the tip from
   24.8 % to 31.3 % t/c on a section that is *already* the plan's largest risk
-  (002 RISK-1/RISK-2).
+  (003 RISK-1/RISK-2).
 - Also adds full-span bushing friction directly into the tilt loop.
 
 ### Option D — Shaft to the tip, belt for the final stage
@@ -205,7 +205,7 @@ one rotating and one fixed.** This is what a fixed spar buys: a genuine ground
 reference at the joint. Governs R4.
 
 **KTD4 — Shaft bore at station 43.** *(revised 2026-08-29 — station 40 no
-longer fits.)* With the spar at station **28** (plan 002 KTD2 revised), the
+longer fits.)* With the spar at station **28** (plan 003 KTD2 revised), the
 Ø20.4 spar occupies 17.8–38.2 and a Ø4.4 shaft at station 40 would occupy
 37.8–42.2 — **an 0.4 mm overlap**. Minimum clear station is
 `38.2 + 1.16 wall + 2.2 = 41.6`; use **43**, where the re-lofted tip section is
@@ -252,7 +252,7 @@ graph TB
 **Goal:** Turn the trade study into committed tooth counts, ratios, and a
 compliance budget.
 
-**Dependencies:** none (parallel with plan 002 U1)
+**Dependencies:** none (parallel with plan 003 U1)
 **Files:** `tools/tilt_drive_sizing.py` (new), `docs/NOZZLE_DRIVE_TRADE.md`
 
 **Approach:** Build a tool that takes servo range, target travel, module, and
@@ -278,7 +278,7 @@ the table in this plan.
 
 **Goal:** Carry the nacelle on the fixed spar with the pivot at the CG.
 
-**Dependencies:** U1, plan 002 U3
+**Dependencies:** U1, plan 003 U3
 **Files:** `airframe/openscad/wings/wingtip_trunnion.scad`,
 `airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad`
 
@@ -305,7 +305,7 @@ overlap; bearing load check recorded against the datasheet rating.
 
 **Goal:** Get torque from the bulkhead to the wingtip on a parallel axis.
 
-**Dependencies:** U1, plan 002 U2
+**Dependencies:** U1, plan 003 U2
 **Files:** `airframe/openscad/wings/wings_s1223_revo.scad`,
 `airframe/openscad/drive/tilt_shaft_drive.scad` (new)
 
@@ -439,9 +439,9 @@ the bearing and gear stock. Run the servo down-select from KTD5.
 - **RISK-4 (medium) — thrust bearing duty is attitude-dependent.** Nacelle
   thrust is axial to the spar in cruise and transverse in hover. A stack chosen
   for one attitude will be wrong for the other.
-- **DEP-1** — Inherits every open dependency from plan 002, notably the
+- **DEP-1** — Inherits every open dependency from plan 003, notably the
   unverified CF allowable and the aero revalidation of the re-lofted section.
-- **DEP-2** — Blocked behind plan 002 U2 (wing re-loft) for the shaft bore, and
+- **DEP-2** — Blocked behind plan 003 U2 (wing re-loft) for the shaft bore, and
   002 U3/U4 for the trunnion.
 
 ---
@@ -449,14 +449,14 @@ the bearing and gear stock. Run the servo down-select from KTD5.
 ## Open Questions
 
 - **OQ1** — Servo angular range (180° vs 270°). Sets tooth counts. Same
-  question as plan 002 OQ3 — answer once, use in both.
+  question as plan 003 OQ3 — answer once, use in both.
 - **OQ2** — Gear module and material: printed CF-PETG vs COTS metal pinion
   against a printed sector.
 - **OQ3** — Bearing selection for the combined axial/radial duty at the trunnion
   (RISK-4).
 - **OQ4** — Does the servo down-select (KTD5) change the bulkhead mount, and is
   the recovered mass worth the re-work? Quantify in U6.
-- **OQ5 (inherited, blocking)** — Plan 002's OQ5: whether the nacelle accepts
+- **OQ5 (inherited, blocking)** — Plan 003's OQ5: whether the nacelle accepts
   the −32.5 mm canonical offset, or the tilt axis is decoupled from the spar
   axis on a tip-rib bracket. **This changes U2's trunnion geometry** — if
   decoupled, the trunnion is not concentric with the spar and the shaft/gear
@@ -491,7 +491,7 @@ hover ground clearance with a stated margin.
 3. The nozzle iris reaches both end stops across the full tilt range from a
    trunnion-fixed datum.
 4. Hover ground clearance re-verified on final geometry with a stated positive
-   margin (plan 002 R12 / LG-HOVER-01).
+   margin (plan 003 R12 / LG-HOVER-01).
 5. Nacelle removable on the bench without disturbing wing, clamp, or encoder
    calibration.
 6. Gate suite green; mass/CG/T-W re-derived; BOM, WBS, `REFERENCES.md`, and
@@ -501,7 +501,7 @@ hover ground clearance with a stated margin.
 
 ## Sources & Research
 
-- `docs/plans/2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-plan.md`
+- `docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md`
   — parent plan; spar sizing, station, pivot, and R12 clearance floor.
 - `docs/Tilt-Rotor 10AWG Wire Clearance Analysis.md` — source conversation. Its
   four drive proposals are evaluated here; the belt recommendation is rejected on

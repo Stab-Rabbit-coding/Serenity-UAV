@@ -1320,7 +1320,7 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
 
 ## §1.1.4 — Tilt-Spar Migration (20 mm fixed CF spar, trunnion pivot, belt drive)
 
-**Owning plan:** `docs/plans/2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-plan.md`
+**Owning plan:** `docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md`
 (owner-directed architecture, `docs/plans/2026-08-27-nacelle-wiring-plan.md`;
 external source conversation `docs/Tilt-Rotor 10AWG Wire Clearance Analysis.md`).
 
@@ -1406,7 +1406,7 @@ LE (root `t_scale` 1.464, tip 2.039); holding 45.15 mm would cost a 40 % t/c tip
 **Standing flags (do not lose):**
 
 - [ ] **NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening.**
-    Owning plan: `docs/plans/2026-08-29-004-nacelle-mould-line-conformance-plan.md`
+    Owning plan: `docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md`
     (requirements-only). Three deviations from the canonical shell, one of them
     a flight-safety item: (a) flaps 40 → **30 mm** to cut the aft overhang
     36.1 → 26.1 mm and buy 10 mm of hover clearance; (b) close the **deferred**
@@ -1461,7 +1461,7 @@ LE (root `t_scale` 1.464, tip 2.039); holding 45.15 mm would cost a 40 % t/c tip
 
 ## §1.1.5 — Nacelle Trunnion Pivot and Tilt Drive
 
-**Owning plan:** `docs/plans/2026-08-29-003-feat-nacelle-trunnion-pivot-tilt-drive-plan.md`
+**Owning plan:** `docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md`
 (child of §1.1.4's plan). Builds the mechanism that hangs off the fixed spar:
 how the nacelle pivots on it, how tilt is driven, and how the nozzle drive
 survives losing its rotating-spar datum.

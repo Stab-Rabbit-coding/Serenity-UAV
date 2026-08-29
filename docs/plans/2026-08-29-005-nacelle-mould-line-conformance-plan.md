@@ -5,8 +5,8 @@ artifact_contract: ce-unified-plan/v1
 artifact_readiness: requirements-only
 product_contract_source: ce-brainstorm
 related:
-  - docs/plans/2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-plan.md
-  - docs/plans/2026-08-29-003-feat-nacelle-trunnion-pivot-tilt-drive-plan.md
+  - docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md
+  - docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md
   - docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md
 ---
 
@@ -31,7 +31,7 @@ stands proud of it, the printed geometry is wrong unless a functional
 requirement says otherwise and that requirement is recorded.
 
 **Clearance target — settled 2026-08-29.** The flap trim (40 → 30 mm) combines
-with plan 002's revised station (28.0) and ESC1 relocation to give **+9.8 mm on
+with plan 003's revised station (28.0) and ESC1 relocation to give **+9.8 mm on
 the existing 1.5 in gear**, which the owner has accepted. No landing-gear change
 is forced. No blockers remain.
 
@@ -171,7 +171,7 @@ architecture that creates the overhang.
 ### Outstanding Questions
 
 - **OQ1 — RESOLVED 2026-08-29 (owner-accepted).** +9.8 mm on the 1.5 in gear,
-  reached by combining the 30 mm flaps with plan 002's station 28.0 and the ESC1
+  reached by combining the 30 mm flaps with plan 003's station 28.0 and the ESC1
   relocation. The compact gear stays viable; `LG-HOVER-01` closes with it.
   Ballast could buy more (+16.6 mm at 12 mm CG shift) but costs T/W 1.59 → 1.55
   and is not taken.

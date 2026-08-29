@@ -10125,7 +10125,16 @@
       ],
       "archived": false
     },
-    "docs/plans/2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-plan.md": {
+    "docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md": {
+      "description": "fix: Nacelle ESC power routing across the tilt joint",
+      "tags": [
+        "documentation",
+        "power",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md": {
       "description": "feat: Unified 20 mm fixed CF spar, trunnion pivot, and belt tilt drive",
       "tags": [
         "documentation",
@@ -10133,7 +10142,7 @@
       ],
       "archived": false
     },
-    "docs/plans/2026-08-29-003-feat-nacelle-trunnion-pivot-tilt-drive-plan.md": {
+    "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md": {
       "description": "feat: Nacelle trunnion pivot on the fixed hollow spar + tilt-drive trade study",
       "tags": [
         "documentation",
@@ -10141,7 +10150,7 @@
       ],
       "archived": false
     },
-    "docs/plans/2026-08-29-004-nacelle-mould-line-conformance-plan.md": {
+    "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md": {
       "description": "Nacelle Mould-Line Conformance and Nozzle Shortening - Plan",
       "tags": [
         "documentation",
@@ -13038,9 +13047,10 @@
       "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md",
       "docs/plans/2026-08-27-nacelle-wiring-plan.md",
       "docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md",
-      "docs/plans/2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
-      "docs/plans/2026-08-29-003-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
-      "docs/plans/2026-08-29-004-nacelle-mould-line-conformance-plan.md",
+      "docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md",
+      "docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
+      "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
+      "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -13259,7 +13269,7 @@
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/plans/2026-08-27-nacelle-wiring-plan.md",
       "docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md",
-      "docs/plans/2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
+      "docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
@@ -14501,8 +14511,9 @@
       "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md",
       "docs/plans/2026-08-27-nacelle-wiring-plan.md",
       "docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md",
-      "docs/plans/2026-08-29-003-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
-      "docs/plans/2026-08-29-004-nacelle-mould-line-conformance-plan.md",
+      "docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md",
+      "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
+      "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
@@ -14648,6 +14659,7 @@
       "docs/BATTERY_MOUNT.md",
       "docs/POWER_DISTRIBUTION.md",
       "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md",
+      "docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md",
       "docs/references/vimdrones_esc_s50_v1.0.step",
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",

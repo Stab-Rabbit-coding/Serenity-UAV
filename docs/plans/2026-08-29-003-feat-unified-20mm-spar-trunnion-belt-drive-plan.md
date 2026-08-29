@@ -142,7 +142,7 @@ rides the camber midline and that midline is lower forward. Moving the station
 | 30.00 | 1.466 | 2.268 | 27.5 % | 67.18 | −24.5 | +5.5 |
 | 45.15 | 1.718 | 3.317 | 40.3 % | 68.73 | −9.3 | +5.6 |
 
-*(clearance figures assume plan 004's 30 mm flaps and the re-derived
+*(clearance figures assume plan 005's 30 mm flaps and the re-derived
 `PIVOT_Z` 110.1; canonical offset = `station + 57 − PIVOT_Z`.)*
 
 **Holding the spar at today's height instead of riding the midline is worse than

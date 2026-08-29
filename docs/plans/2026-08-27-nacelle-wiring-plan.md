@@ -1,5 +1,23 @@
 # nacelle wiring
 
+> **Status note (2026-08-29):** the two problems below (`4 x 10AWG conductors
+> can't fit in a 7mm cableway`, `4 x off axis 10AWG conductors can't rotate
+> or bend around 145 deg of tilt`) are **confirmed real** — see
+> `docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md` for the
+> worked verification (wire-OD/circle-packing math, harness-port/pivot
+> offset geometry). That plan also finds the specific numbers below
+> (`SPAR_OD = 16.0`, `SPAR_BORE_D = 11.0`) are **still undersized** for a
+> 4×10 AWG bundle at a realistic wire OD (need ≥13.3 mm bore at zero
+> clearance, more with real assembly margin) — re-derived there rather than
+> corrected in place here. This file is kept as the original draft/problem
+> statement; `2026-08-29-002` is the plan of record for the power-routing/
+> torque-decoupling redesign. The nav-light + Hall-encoder portions below
+> (§2.1, §2.2 "AS5600") are separately tracked, and mostly already superseded
+> by the as-built architecture, in
+> `docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md`
+> (AS5600 specifically: already datasheet-rejected as on-axis-only — see
+> that plan's validation table row 5).
+
 ## Problemm
 
 ### 4 x 10AWG conductors can't fit in a 7mm cableway
