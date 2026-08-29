@@ -129,6 +129,46 @@ Either the 3.0 in gear becomes mandatory rather than optional, or the nozzle sta
 shortens. For this plan it sets a floor: with the 3.0 in gear and a 20 mm margin,
 `PIVOT_Z ≥ 92.9`; the CG at 111.5 clears that comfortably, and 79.0 does not.
 
+### The spar station is a THREE-way trade, not a two-way one
+
+*(Added 2026-08-29.)* The station was originally traded as airfoil-thickness vs
+canonical-nacelle-offset. It also moves **hover clearance**, because the bore
+rides the camber midline and that midline is lower forward. Moving the station
+**aft** improves canonical offset *and* clearance, and costs only thickness:
+
+| Station | Root `t_scale` | Tip `t_scale` | Tip t/c | `SPAR_Z` | Canonical offset | Hover clr |
+|---|---|---|---|---|---|---|
+| 22.00 | 1.464 | 2.039 | 24.8 % | 65.68 | −32.5 | +2.6 |
+| 30.00 | 1.466 | 2.268 | 27.5 % | 67.18 | −24.5 | +5.5 |
+| 45.15 | 1.718 | 3.317 | 40.3 % | 68.73 | −9.3 | +5.6 |
+
+*(clearance figures assume plan 004's 30 mm flaps and the re-derived
+`PIVOT_Z` 110.1; canonical offset = `station + 57 − PIVOT_Z`.)*
+
+**Holding the spar at today's height instead of riding the midline is worse than
+either.** At station 22 the bore would sit 3.74 mm above the tip camber midline,
+making the upper skin the binding wall and pushing tip `t_scale` 2.039 → **2.711**
+(+33 %, t/c 33 %). Rejected.
+
+### Moving the pivot aft buys clearance — and pairs with the station move
+
+`PIVOT_Z` and the station push canonical offset in **opposite** directions
+(`offset = station + 57 − PIVOT_Z`), so moving both aft together buys clearance
+at constant offset. Relocating **ESC1 aft alongside ESC2** shifts the CG
++6.0 mm at **zero added mass**, and the pivot follows the CG:
+
+| Configuration | Station | `PIVOT_Z` | Tip t/c | Canonical offset | Hover clr |
+|---|---|---|---|---|---|
+| baseline | 22.0 | 110.1 | 24.8 % | −31.1 | +2.6 |
+| **+ ESC1 relocated (free)** | **28.0** | **116.1** | **26.6 %** | **−31.1** | **+9.8** |
+| + ESC1 + 4 mm ballast | 30.0 | 118.1 | 27.5 % | −31.1 | +12.1 |
+| + ESC1 + 12 mm ballast | 34.0 | 122.1 | 29.9 % | −31.1 | +16.6 |
+
+**+7.2 mm of hover clearance for no mass and 1.8 points of tip t/c, with the
+canonical offset unchanged.** Ballast beyond that costs 17.7 g per nacelle per
+4 mm of CG shift (T/W 1.59 → 1.55 at 12 mm) — available, but the free move
+should be taken first.
+
 ### Cost of the change
 
 The spar must move forward to stay inside the airfoil. Required section depth is

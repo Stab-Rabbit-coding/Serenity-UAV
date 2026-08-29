@@ -106,9 +106,12 @@ it, and records the residual as an accepted, documented deviation.
   point of the housing or its hinge bosses stands proud of the canonical shell
   radius at the same station, or the exception is recorded with its functional
   justification.
-- **R5** — The intake fairing does not stand proud of the canonical dome at any
-  station; the lip is circular and the flange reads as a single clean curve
-  rather than a wavy intersection.
+- **R5** — The intake fairing is a single fair curve: circular at the lip,
+  following the most convex line of the canonical profile at Z 0, and tangent
+  into the canonical mould line at or before the dome's monotonic limit
+  (Z ≈ 30, measured). It stands proud of the canonical dome nowhere. The
+  existing `INTAKE_BLEND_L = 90` / peak-at-Z-60 construction is retired — it
+  peaks past the dome's own maximum, which is the cause of the crossing.
 - **R6** — The Ø50 mm internal flow path and its effective area are unchanged by
   R4 and R5. Mould-line conformance is an *exterior* change; the duct is not to
   be reshaped to achieve it.
@@ -175,10 +178,19 @@ architecture that creates the overhang.
   larger arc? The linkage synthesis is already an open VERIFY item.
 - **OQ3** — Does full ovalising need the part-local→hull transform the SCAD says
   it does, and is that transform available yet in `serenity_assembly.py`?
-- **OQ4** — Is the canonical shell itself authoritative at the nose, or is the
-  Z 0–7 region an artifact of the voxel repair? The blend being 5.3 mm proud at
-  Z = 0 against a 22.2 mm shell radius is a large relative deviation and worth
-  confirming before conforming to it.
+- **OQ4 — RESOLVED 2026-08-29 (owner-directed).** Do not conform point-by-point
+  to the canonical dome at the nose. Instead build **a clean new curve that
+  follows the most convex line of the canonical curve at Z 0 and blends into the
+  canonical mould line before the dome departs from monotonic.** This sidesteps
+  the voxel-repair-fidelity question entirely: the new curve is fair by
+  construction rather than inherited from mesh noise.
+
+  Measured, this pins the blend's endpoint. The canonical dome's max radius
+  rises monotonically to **Z ≈ 30** (22.2 → 28.0 → 31.5 → 34.3 → 36.3 → 38.1 →
+  38.4) and falls thereafter (37.6 at Z 35). The existing fairing instead peaks
+  at **Z 60** with `INTAKE_BLEND_L = 90` — well past the monotonic region, which
+  is *why* the curves cross. **The blend must terminate by Z ≈ 30, tangent to
+  the dome**, not run to Z 90. See R5.
 - **OQ5** — Should the plan-002 station move (which lowers the spar 3.05 mm and
   costs that much clearance) be re-sequenced ahead of or behind this work? They
   interact on the same margin.
