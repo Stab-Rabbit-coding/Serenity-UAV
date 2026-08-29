@@ -1315,3 +1315,81 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
     (`R_FIELDSEL`), and confirm the **ERROR** pin drive (push-pull vs open-drain, add a
     node pull-up if open-drain). REFERENCES.md REF-SENSOR-008 / TODO §0.8; EMI WBS §1.4.6.
 
+
+---
+
+## §1.1.4 — Tilt-Spar Migration (20 mm fixed CF spar, trunnion pivot, belt drive)
+
+**Owning plan:** `docs/plans/2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-plan.md`
+(owner-directed architecture, `docs/plans/2026-08-27-nacelle-wiring-plan.md`;
+external source conversation `docs/Tilt-Rotor 10AWG Wire Clearance Analysis.md`).
+
+**Why this section exists.** The four 10 AWG ESC feeds have no viable path under
+the Rev R2 architecture: they do not fit the two Ø7 mm wing conduits (two
+Ø5.5 mm wires side by side need ≥ 11.0 mm in one round bore), and those conduits
+sit 17.65 mm forward of the tilt axis, sweeping a 44.7 mm arc every transition.
+The fix is not local — it forces a larger **fixed** hollow spar, a thicker
+airfoil to carry it, a pivot that no longer crosses the thrust duct, and a tilt
+drive that does not rely on the spar rotating. This **supersedes** the Ø8 mm
+rotating-spar architecture in `docs/TILT_SPAR_ANALYSIS.md` §1–§9 and the
+Rev S1b spar-station decision in §1.1.2.1 above.
+
+Measured 2026-08-29 (`tools/wing_spar_station_fit.py`, exact 4-circle packing
+R/r = 1+√2): the bundle circumscribes **13.28 mm**, so the 16 mm tube named in
+the source conversation fits it only as 16 × 14 (1 mm wall, 0.72 mm total
+clearance) and its stated `SPAR_BORE_D = 11.0` does not fit at all. Free twist
+needs ~16.3 mm bore → **20 mm OD**. At 20 mm the spar must move to ~25 mm aft of
+LE (root `t_scale` 1.453, tip 2.098); holding 45.15 mm would cost a 40 % t/c tip.
+
+- [ ] **SPAR-20-1 (U1)** — Freeze the spar/station/airfoil trade. Add
+    `tools/spar_bundle_fit.py`; extend `wing_spar_station_fit.py` to solve the
+    **root** `t_scale` as well as the tip; add `TILT_SPAR_ANALYSIS.md` §3.6
+    re-deriving the section for a *fixed* spar and marking §3.2/§3.5's torsion
+    and keyability discriminators superseded.
+- [ ] **SPAR-20-2 (U2)** — Re-loft the wing: `SPAR_BORE_STATION` 45.15 → ~25.0,
+    `SPAR_BORE_OD` 8.3 → 20.4, `THICKNESS_SCALE` 1.00 → ~1.453 (**root OML
+    changes for the first time**), `THICKNESS_SCALE_TIP` 1.56 → ~2.098.
+    Re-purpose or delete the now-redundant power half of the Ø7 double-D.
+- [ ] **SPAR-20-3 (U3)** — Wingtip trunnion, split-collar pinch clamp (no set
+    screws — CF crushes), and the field-maintainable garage with separated
+    power/signal disconnects.
+- [ ] **SPAR-20-4 (U4)** — Nacelle trunnion ring at ring-plane X ≈ 28 mm; delete
+    the through-duct spar bore, outboard hub, D-flat, and duct-wall collars;
+    **restore the canonical 11-fin stator** (the spar tunnel and 2-fin re-index
+    existed only to pass the shaft).
+- [ ] **SPAR-20-5 (U5)** — Wire routing: power coaxial through spar → trunnion →
+    nacelle annulus → ESCs; nav 3-core crosses the joint in a separated
+    micro-channel; AK7455 pigtail stays in the fixed harness. **Closes the open
+    AK7455 pocket/cableway item in §1.1.3.6** (still sized for MT6701).
+- [ ] **SPAR-20-6 (U6)** — Belt tilt drive. Size for **travel first** (145°
+    output is the binding constraint, not torque): 47T/25T at 270° servo range
+    gives 1.86× multiplication and 4.47 N·m against a 0.177 N·m requirement.
+    Belt channel, tensioner, and a re-derived torque budget including belt
+    pretension radial load.
+- [ ] **SPAR-20-7 (U7)** — Fuselage/cargo-shell re-cut to the new station; the
+    F688ZZ root bearing becomes a **clamped** mount (a bearing there would now
+    let the spar spin under belt reaction); re-run the CF thwart couple.
+- [ ] **SPAR-20-8 (U8)** — Re-datum the nozzle drive onto the fixed trunnion
+    (a fixed datum is better than the retired rotating one); delete the spar
+    crank; re-verify full iris travel.
+- [ ] **SPAR-20-9 (U9)** — Mass/CG/T-W re-derive (spar 96.2 → 67.5 g/pair, but
+    thicker skins add), BOM swap (CF tube, trunnion bearings, GT2 belt/pulleys
+    in; 4130 tube, F688ZZ, MF128ZZ, keyed-hub hardware out), `REFERENCES.md`
+    entries for the CF allowable and belt spec, regenerate and re-bake.
+
+**Standing flags (do not lose):**
+
+- [ ] **SPAR-20-AERO** — The re-lofted section is **no longer S1223** (root
+    12.1 → 17.6 % t/c, tip 18.9 → 25.5 %). Every aero figure citing this wing —
+    including the 7.6 N lift figure at `wings_s1223_revo.scad` L35 — becomes
+    **requires-verification** until CFD or bench data exists. Do not present the
+    re-lofted wing as an S1223 performance match.
+- [ ] **SPAR-20-TSCALE** — `s1223_section()` carries a note that `t_scale` was
+    intended for 0.85–1.0 and had "left that range long ago" at 1.25. This work
+    takes it past 2.0; run `tools/wing_airfoil_integrity.py` before any
+    downstream gate.
+- [ ] **SPAR-20-ALLOW** — No verified CF tube flexural allowable exists in
+    `REFERENCES.md`. The FOS 9.1 quoted in the plan uses a 300 MPa cross-ply
+    stand-in; obtain a real coupon/mill figure before release (TODO §0.8).
+- [ ] **SPAR-20-WIREOD** — `bom_revS.csv` records no OD for `WIRE-10AWG`. The
+    whole bore chain scales off the assumed 5.5 mm; measure the procured wire.

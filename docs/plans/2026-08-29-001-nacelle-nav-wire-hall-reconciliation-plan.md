@@ -3,9 +3,30 @@ title: "fix: Reconcile nacelle nav-light wire routing with the hollow tilt-spar 
 date: 2026-08-29
 plan_type: fix
 execution: geometry
+status: superseded
+superseded_by: docs/plans/2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-plan.md
 ---
 
 # fix: Nacelle nav-wire/spar reconciliation + AK7455 wing-side finish
+
+> **SUPERSEDED 2026-08-29 by
+> [`2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-plan.md`](2026-08-29-002-feat-unified-20mm-spar-trunnion-belt-drive-plan.md).**
+> This plan scoped only the nav-wire routing bug and the AK7455 pocket, and it
+> assumed the Ø8 mm **rotating** spar would survive. It did not: the four
+> 10 AWG ESC feeds have no viable path at all (they do not fit the Ø7 mm
+> conduits, and those conduits sit 17.65 mm off the tilt axis), which forces a
+> larger fixed spar, a thicker airfoil, a trunnion pivot, and a belt drive.
+>
+> Two findings here remain valid and are **carried into 002 §U5**: the AK7455
+> wing-pocket/cableway is still sized and commented for the rejected MT6701,
+> and the nav-wire path still needs to be separated from the ESC harness.
+> Part A's validation of the external proposal also stands, with 002 adding the
+> measurements that show the 16 mm spar itself does not close.
+>
+> **§U1's specific fix — routing the nav wire into the spar bore — is void.**
+> That reasoning depended on the spar rotating *with* the nacelle. Under a
+> fixed spar the nav light still rotates but the spar does not, so the 3-core
+> must cross the joint at the trunnion instead (002 §U5 step 2).
 
 **Target repo:** Serenity-UAV (this repo)
 
@@ -86,8 +107,8 @@ but in the same subsystem, and it is the actual fix the EMI concern calls for.
 `airframe/wings-nacelles/WBS.md` L1304-1306 already carries an open item:
 `wing_tip_hall_sensor_pocket()` and the `HALL_*` block in
 `wings_s1223_revo.scad` are still sized/commented for the rejected MT6701
-(3×3 QFN, 4-wire I²C) rather than the selected AK7455 (QFN24 4×4, 7-wire SPI
-+ ERROR pigtail). Since this plan is already touching the same wingtip/nacelle
+(3×3 QFN, 4-wire I²C) rather than the selected AK7455 (QFN24 4×4, 7-wire
+SPI + ERROR pigtail). Since this plan is already touching the same wingtip/nacelle
 signal-routing geometry, it closes this out too rather than leaving a second
 half-finished pass over the same files.
 
