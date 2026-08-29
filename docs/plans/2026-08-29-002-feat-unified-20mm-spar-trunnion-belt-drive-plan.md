@@ -159,7 +159,7 @@ at constant offset. Relocating **ESC1 aft alongside ESC2** shifts the CG
 
 | Configuration | Station | `PIVOT_Z` | Tip t/c | Canonical offset | Hover clr |
 |---|---|---|---|---|---|
-| baseline | 22.0 | 110.1 | 24.8 % | −31.1 | +2.6 |
+| baseline (22.0) | 22.0 | 110.1 | 24.8 % | −31.1 | +2.6 |
 | **+ ESC1 relocated (free)** | **28.0** | **116.1** | **26.6 %** | **−31.1** | **+9.8** |
 | + ESC1 + 4 mm ballast | 30.0 | 118.1 | 27.5 % | −31.1 | +12.1 |
 | + ESC1 + 12 mm ballast | 34.0 | 122.1 | 29.9 % | −31.1 | +16.6 |
@@ -177,16 +177,17 @@ The spar must move forward to stay inside the airfoil. Required section depth is
 | Station | Root `t_scale` | Root t/c | Tip `t_scale` | Tip t/c | Spar hull Y |
 |---|---|---|---|---|---|
 | 20.00 mm | 1.486 | 18.0 % | 2.019 | 24.5 % | +13.0 |
-| **22.00 mm (selected)** | **1.464** | **17.8 %** | **2.039** | **24.8 %** | **+15.0** |
+| 22.00 mm | 1.464 | 17.8 % | 2.039 | 24.8 % | +15.0 |
 | 25.00 mm | 1.453 | 17.6 % | 2.098 | 25.5 % | +18.0 |
+| **28.00 mm (SELECTED)** | **1.456** | **17.7 %** | **2.190** | **26.6 %** | **+21.0** |
 | 30.00 mm | 1.466 | 17.8 % | 2.268 | 27.5 % | +23.0 |
 | 45.15 mm (hold) | 1.718 | 20.9 % | 3.317 | 40.3 % | +38.15 |
 | *as-built* | *1.000* | *12.1 %* | *1.560* | *18.9 %* | *+38.15* |
 
-Holding the Rev S1b station costs a 40 % t/c tip — not an airfoil. **22.00 mm is
-selected** (KTD2): it restores the Rev R1a chord line exactly and sits within
-1 % of the best achievable tip scale and 0.8 % of the best root scale, so
-nothing meaningful is bought by landing between 20 and 25 mm.
+Holding the Rev S1b station costs a 40 % t/c tip — not an airfoil. **28.00 mm is
+selected** (KTD2). 22.0 minimises thickness, but the station also moves hover
+clearance (next section), and 28.0 trades 1.8 points of tip t/c for 7.2 mm of
+clearance at constant canonical offset.
 
 This re-opens the Rev S1b decision (`airframe/wings-nacelles/WBS.md` §1.1.2.1),
 which moved the spar aft to 45.15 mm partly to avoid dragging the nacelle
@@ -243,15 +244,25 @@ racetrack cableway, at the cost of airfoil thickening.)* Sized up from the plan
 doc's 16 mm because 16 mm does not clear the 13.28 mm bundle with any usable
 wall. Governs R1, R3, R6.
 
-**KTD2 — Spar station moves 45.15 → 22.0 mm aft of LE.** *(resolved 2026-08-29,
-OQ1.)* This **restores the Rev R1a station exactly**, so the wing has already
-been built at this chord line once. It is also effectively Pareto-optimal for a
-Ø20.4 bore: tip `t_scale` 2.039 is within 1 % of the achievable minimum (2.019
-at 20 mm) and root 1.464 is within 0.8 % of its own minimum (1.453 at 25 mm).
-Holding 45.15 mm would cost a 40 % t/c tip. Explicitly re-opens the Rev S1b
-decision. Governs R6.
+**KTD2 — Spar station moves 45.15 → 28.0 mm aft of LE.** *(resolved 2026-08-29;
+superseded the earlier 22.0 pick once the station's effect on hover clearance
+was measured.)* `THICKNESS_SCALE` 1.00 → **1.456** (root t/c 17.7 %),
+`THICKNESS_SCALE_TIP` 1.56 → **2.190** (tip t/c 26.6 %), `SPAR_Z` = **66.85**.
 
-**KTD7 — The tilt pivot stays at the nacelle CG. `PIVOT_Z` = 111.5, unchanged.**
+22.0 minimises airfoil thickness, but the station is a **three-way** trade (see
+the table below) and 28.0 buys 7.2 mm of hover clearance for 1.8 points of tip
+t/c while holding the canonical offset constant — paired with the pivot move in
+KTD7. Holding 45.15 mm would still cost a 40 % t/c tip. Explicitly re-opens the
+Rev S1b decision. Governs R6, R12.
+
+**KTD8 — ESC1 relocates aft alongside ESC2, moving the CG (and so the pivot)
++6.0 mm at zero added mass.** *(session-settled: user-directed.)* `PIVOT_Z`
+110.1 → **116.1**. Because canonical offset is `station + 57 − PIVOT_Z`, moving
+the station and the pivot aft *together* buys hover clearance at constant
+offset. This is the free half of the clearance fix; ballast beyond it costs
+17.7 g per nacelle per 4 mm and is not taken. Governs R11, R12.
+
+**KTD7 — The tilt pivot stays at the nacelle CG.**
 *(REVISED 2026-08-29 — an earlier draft of this KTD moved the pivot to 79.0 to
 keep the nacelle canonical. That is **withdrawn**; two independent constraints
 kill it.)*
@@ -400,11 +411,13 @@ them.
 
 **Approach:**
 
-1. `SPAR_BORE_STATION` 45.15 → **22.0** (KTD2, restores the Rev R1a line).
+1. `SPAR_BORE_STATION` 45.15 → **28.0** (KTD2).
 2. `SPAR_BORE_OD` 8.3 → 20.4.
-3. `THICKNESS_SCALE` 1.00 → **1.464** (**root OML now changes** — this is new;
+3. `THICKNESS_SCALE` 1.00 → **1.456** (**root OML now changes** — this is new;
    the root was untouched through every prior revision).
-4. `THICKNESS_SCALE_TIP` 1.56 → **2.039**.
+4. `THICKNESS_SCALE_TIP` 1.56 → **2.190**.
+5. `SPAR_Z` → **66.85** (camber midline at the new station + chord line 58.01).
+   This is a *derived* value — do not carry 68.42 forward.
 5. Re-check `spar_tip_y()` and `midline_frac()` centring at the new station —
    the bore rides the camber midline, and the midline moves with the station.
 6. The Ø7 mm double-D no longer carries power. Keep **one** bore for the AK7455
@@ -781,8 +794,9 @@ change to the EDF units, battery, or power architecture upstream of the PDB.
 
 ## Open Questions
 
-- **OQ1 — RESOLVED 2026-08-29: station 22.0 mm.** See KTD2. Restores the Rev R1a
-  chord line; within 1 % of the best tip scale and 0.8 % of the best root scale.
+- **OQ1 — RESOLVED 2026-08-29: station 28.0 mm.** See KTD2. Supersedes an
+  earlier 22.0 pick, which minimised airfoil thickness before the station's
+  effect on hover clearance was measured.
 - **OQ2 — RESOLVED 2026-08-29: 53.4 mm max ring OD** at Z 111.5 / X 28, measured
   from the bore-centred canonical shell STL (X = 26 gives 57.4 mm at 1 mm duct
   margin). The ellipse estimate was 1 mm conservative; the working point holds.
@@ -790,12 +804,12 @@ change to the EDF units, battery, or power architecture upstream of the PDB.
   travel, not torque, is binding.
 - **OQ4** — Measured OD of the procured 10 AWG silicone wire. Gates R1.
 - **OQ5 — REOPENED 2026-08-29, now the plan's main unresolved trade.** With the
-  pivot pinned at the CG (KTD7) and the spar at station 22, the nacelle slides to
-  **−32.5 mm off its canonical hull station** (vs −9.35 mm today). Two ways out,
+  pivot pinned at the CG (KTD7) and the spar at station 28, the nacelle sits
+  **−31.1 mm off its canonical hull station** (vs −9.35 mm today). Two ways out,
   both unpriced:
   **(a) accept the offset** — simplest structurally, tilt axis is the spar axis,
   but it is a visible silhouette change on a replica airframe;
-  **(b) decouple the tilt axis from the spar axis** — spar stays at station 22
+  **(b) decouple the tilt axis from the spar axis** — spar stays at station 28
   for the airfoil, the trunnion sits at the canonical station on a bracket
   carried by the tip rib, and the wire bundle makes its 23–32 mm jog *inside the
   fixed garage* where nothing flexes. Costs a torque about the spar axis of

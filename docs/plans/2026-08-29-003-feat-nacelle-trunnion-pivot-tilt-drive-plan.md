@@ -94,8 +94,8 @@ with the nacelle and one fixed to the spar.
 ## Tilt-Drive Trade Study
 
 Four architectures were evaluated. All assume the fixed 20 × 16.3 CF spar at
-station 22 (plan 002 KTD1/KTD2), the pivot at the nacelle CG `PIVOT_Z` = 111.5
-(002 KTD7), and a bulkhead-mounted servo.
+station **28** (plan 002 KTD2), the pivot at the nacelle CG `PIVOT_Z` = **116.1**
+after the ESC1 relocation (002 KTD7/KTD8), and a bulkhead-mounted servo.
 
 ### Option A — Spanwise shaft + spur pair at the tip *(recommended)*
 
@@ -107,7 +107,7 @@ bore; pinion on the shaft end meshing a ring gear on the nacelle trunnion.
 - **Wind-up:** 0.78° over 190 mm at 0.143 N·m (Ø4 steel, `J` = 25.13 mm⁴,
   `G` = 79 GPa). Ø5 gives 0.32°, Ø3 gives 2.47°.
 - **Packaging:** a Ø4.4 bore fits the re-lofted section comfortably aft of the
-  spar — at station 40 the tip section is ~16 mm deep against 6.72 mm needed.
+  spar — at station 43 the tip section is 16.0 mm deep against 6.72 mm needed.
 - **Cost:** one shaft, two bearings/bushings per side, two gears.
 
 ### Option B — Spanwise belt + right-angle stage at the tip
@@ -130,7 +130,7 @@ A thin sleeve rotating on bushings over the fixed spar, keyed to the nacelle.
 
   | Sleeve OD | Bore | Root `t_scale` | Tip `t_scale` | Tip t/c |
   |---|---|---|---|---|
-  | *20.0 (bare spar, baseline)* | *20.4* | *1.464* | *2.039* | *24.8 %* |
+  | *20.0 (bare spar, baseline)* | *20.4* | *1.456* | *2.190* | *26.6 %* |
   | 24.0 | 24.4 | 1.722 | 2.398 | 29.1 % |
   | 26.0 | 26.4 | 1.851 | 2.578 | **31.3 %** |
   | 28.0 | 28.4 | 1.980 | 2.757 | 33.5 % |
@@ -204,9 +204,13 @@ tooth counts. Governs R3.
 one rotating and one fixed.** This is what a fixed spar buys: a genuine ground
 reference at the joint. Governs R4.
 
-**KTD4 — Shaft bore at station ~40.** Aft of the Ø20.4 spar (station 22) and
-forward of the AK7455 SPI conduit (station 54), where the re-lofted tip section
-is ~16 mm deep against 6.72 mm needed. Governs R2.
+**KTD4 — Shaft bore at station 43.** *(revised 2026-08-29 — station 40 no
+longer fits.)* With the spar at station **28** (plan 002 KTD2 revised), the
+Ø20.4 spar occupies 17.8–38.2 and a Ø4.4 shaft at station 40 would occupy
+37.8–42.2 — **an 0.4 mm overlap**. Minimum clear station is
+`38.2 + 1.16 wall + 2.2 = 41.6`; use **43**, where the re-lofted tip section is
+16.0 mm deep against 6.72 mm needed and the AK7455 SPI conduit at 54 stays
+clear. Governs R2.
 
 **KTD5 — Re-open the servo selection.** At 0.143 N·m the DS3225 is ~17×
 oversized. Carry a down-select as explicit follow-up mass recovery, not a silent
@@ -305,7 +309,7 @@ overlap; bearing load check recorded against the datasheet rating.
 **Files:** `airframe/openscad/wings/wings_s1223_revo.scad`,
 `airframe/openscad/drive/tilt_shaft_drive.scad` (new)
 
-**Approach:** Ø4.4 bore at station ~40 (KTD4), spanwise, parallel to the spar.
+**Approach:** Ø4.4 bore at station **43** (KTD4), spanwise, parallel to the spar.
 Support bushings at the root rib and tip rib. Servo coupling at the bulkhead.
 Check against the spar bore, the AK7455 conduit at station 54, and the belt-free
 section — the wing now carries three spanwise bores and they must not intersect.

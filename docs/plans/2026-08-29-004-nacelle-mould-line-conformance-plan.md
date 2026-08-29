@@ -30,9 +30,10 @@ Thing 14474 scaled 1.25×) is the mould-line authority. Where printed geometry
 stands proud of it, the printed geometry is wrong unless a functional
 requirement says otherwise and that requirement is recorded.
 
-**Open blocker.** The selected flap trim (40 → 30 mm) yields **+3.7 mm** of
-hover clearance on the current 1.5 in gear — positive, but not a margin. See
-OQ1; this plan is not safe to close on that number alone.
+**Clearance target — settled 2026-08-29.** The flap trim (40 → 30 mm) combines
+with plan 002's revised station (28.0) and ESC1 relocation to give **+9.8 mm on
+the existing 1.5 in gear**, which the owner has accepted. No landing-gear change
+is forced. No blockers remain.
 
 ---
 
@@ -99,9 +100,10 @@ it, and records the residual as an accepted, documented deviation.
 - **R2** — The nozzle drive still reaches both end stops across the full tilt
   range at the larger swing arc the shorter flaps require, with the same exit-
   area range as today (75 %/105 % bore targets).
-- **R3** — Hover ground clearance is positive with a **stated, accepted margin**
-  at the chosen gear length, verified against final geometry with the nacelles
-  vertical.
+- **R3** — Hover ground clearance is **≥ 9.8 mm on the 1.5 in gear** with the
+  nacelles vertical, verified against final geometry. This is the owner-accepted
+  margin (~1 cm); it is not a derived requirement and must not be silently
+  traded away by downstream geometry changes.
 - **R4** — The nozzle housing conforms to the canonical cowl mould line: no
   point of the housing or its hinge bosses stands proud of the canonical shell
   radius at the same station, or the exception is recorded with its functional
@@ -168,11 +170,11 @@ architecture that creates the overhang.
 
 ### Outstanding Questions
 
-- **OQ1 (blocking)** — Flaps at 30 mm leave **+3.7 mm** on the 1.5 in gear.
-  That is positive but not a margin. Resolve one of: accept 3.7 mm as
-  sufficient with a stated rationale; adopt a longer gear (2.0 in → +6.4 mm,
-  2.25 in → +12.7 mm); or reopen a further lever. **This plan cannot close
-  without an answer.**
+- **OQ1 — RESOLVED 2026-08-29 (owner-accepted).** +9.8 mm on the 1.5 in gear,
+  reached by combining the 30 mm flaps with plan 002's station 28.0 and the ESC1
+  relocation. The compact gear stays viable; `LG-HOVER-01` closes with it.
+  Ballast could buy more (+16.6 mm at 12 mm CG shift) but costs T/W 1.59 → 1.55
+  and is not taken.
 - **OQ2** — Does the shorter flap still reach the 75 %/105 % bore exit-area
   targets, and does the RSSR linkage stay monotonic and non-locking at the
   larger arc? The linkage synthesis is already an open VERIFY item.
