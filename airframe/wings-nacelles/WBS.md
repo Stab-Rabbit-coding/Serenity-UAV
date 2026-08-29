@@ -1420,3 +1420,58 @@ LE (root `t_scale` 1.464, tip 2.039); holding 45.15 mm would cost a 40 % t/c tip
     stand-in; obtain a real coupon/mill figure before release (TODO §0.8).
 - [ ] **SPAR-20-WIREOD** — `bom_revS.csv` records no OD for `WIRE-10AWG`. The
     whole bore chain scales off the assumed 5.5 mm; measure the procured wire.
+
+---
+
+## §1.1.5 — Nacelle Trunnion Pivot and Tilt Drive
+
+**Owning plan:** `docs/plans/2026-08-29-003-feat-nacelle-trunnion-pivot-tilt-drive-plan.md`
+(child of §1.1.4's plan). Builds the mechanism that hangs off the fixed spar:
+how the nacelle pivots on it, how tilt is driven, and how the nozzle drive
+survives losing its rotating-spar datum.
+
+**Drive trade study — decided 2026-08-29.** Four architectures evaluated; the
+deciding finding is kinematic, not preference:
+
+> The tilt axis is the spar axis, running **spanwise along hull X**. A belt
+> spanning fuselage → wingtip must have its pulleys separated along X, so its
+> pulley axes are **perpendicular to X** — but the driven element must rotate
+> **about X**. **A spanwise toothed belt therefore cannot reach this pivot
+> without an added bevel/worm stage at the tip.** It does not remove gears; it
+> adds a belt in front of them. A shaft parallel to X has no such mismatch and
+> meshes the ring with a plain spur pair.
+
+| Option | Right-angle stage? | Airfoil penalty | Verdict |
+|---|---|---|---|
+| **A — spanwise Ø4 shaft + spur pair** | **no** | none beyond the spar | **SELECTED** |
+| B — spanwise belt + bevel at tip | yes | none | rejected (dominated by A) |
+| C — concentric torque sleeve over the spar | no | **severe**: tip t/c 24.8 → 31.3 % | rejected on airfoil |
+| D — shaft to tip + belt final stage | no | none | fallback if spur backlash bites |
+
+Also decided: the drive is bound by **travel, not torque**. 145° from a 180°
+servo needs a 1.24× step-**up**, so the shaft carries only 0.143 N·m against the
+DS3225's 2.402 N·m — the servo is ~17× oversized (see SPAR-25-6).
+
+- [ ] **SPAR-25-1 (U1)** — Freeze drive kinematics; add
+    `tools/tilt_drive_sizing.py`; record the A/B/C/D trade in
+    `docs/NOZZLE_DRIVE_TRADE.md` beside the existing nozzle trade.
+- [ ] **SPAR-25-2 (U2)** — Trunnion + bearing stack at ring-plane X ≈ 28 mm,
+    OD ≤ the measured 53.4 mm envelope. **Bearing duty is attitude-dependent** —
+    nacelle thrust is axial to the spar in cruise and transverse in hover, so a
+    stack chosen for one attitude is wrong for the other.
+- [ ] **SPAR-25-3 (U3)** — Ø4.4 drive-shaft bore at station ~40, spanwise,
+    between the Ø20.4 spar (station 22) and the AK7455 SPI conduit (station 54).
+    The wing now carries **three** spanwise bores; they must not intersect.
+- [ ] **SPAR-25-4 (U4)** — Tilt ring gear (sector is sufficient — the sweep is
+    only 145°) + pinion; mesh stays outside r = 25 mm.
+- [ ] **SPAR-25-5 (U5)** — Nozzle drive re-datum: sync gear mounts to the
+    **fixed** trunnion, coaxial with and inboard of the tilt ring. A fixed spar
+    is a *better* datum than the rotating one it replaces. Delete the spar crank.
+- [ ] **SPAR-25-6 (U6)** — Integration, load check, mass/CG, BOM, and the servo
+    down-select (0.143 N·m required vs 2.402 N·m rated).
+
+**Blocking cross-item:** §1.1.4's reopened OQ5 (nacelle canonical offset vs
+decoupling the tilt axis from the spar axis) **changes SPAR-25-2's trunnion
+geometry** — if decoupled, the trunnion is no longer concentric with the spar
+and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
+
