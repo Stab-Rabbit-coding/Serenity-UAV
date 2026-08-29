@@ -12804,6 +12804,13 @@
       ],
       "archived": false
     },
+    "tools/spar_bundle_fit.py": {
+      "description": "Size a hollow spar bore against the conductor bundle it has to swallow.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_nacelle_esc_service.py": {
       "description": "Python script",
       "tags": [
@@ -16356,6 +16363,7 @@
       "tools/precommit_kicad_load.py",
       "tools/precommit_sanitize.py",
       "tools/purge_stale_fcstd_objects.py",
+      "tools/spar_bundle_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/validate_kicad.py",
       "tools/validate_stls.py",
