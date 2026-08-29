@@ -65,7 +65,7 @@ Thrust: 4,464 g (9.84 lbf) nacelles-only; T/W ≈ 1.61 (VTOL capable).
 
 ## Printing Specifications
 
-**Material:** CF-PETG (carbon-fiber-filled polyethylene terephthalate)  
+**Material:** 20% CF-PETG (carbon-fiber-filled polyethylene terephthalate - 20% CF)  [REF-MAT-002]
 **Nozzle temperature:** 240–250°C  
 **Bed temperature:** 80–90°C  
 **Layer height:** 0.15 mm (all parts)  
