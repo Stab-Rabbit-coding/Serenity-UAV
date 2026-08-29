@@ -1183,7 +1183,7 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 
 **Used in:** `docs/structural_analysis.md` §6.4
 
----
+**Used in:** `airframe/README.md` §5.1
 
 ## Part XI — FDA / CDRH Laser Product Regulations
 

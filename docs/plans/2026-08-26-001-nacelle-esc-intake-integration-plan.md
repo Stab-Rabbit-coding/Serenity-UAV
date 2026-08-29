@@ -153,7 +153,9 @@ canonical exterior and record the aerodynamic deviation as conditional for
 owner review.
 
 #### Fine tune the circular intake flange to the canonical shell.
+
 The current shape intersects the canonical curve at multiple z values, creating a wavy profile.
+Increase the convexity of the intake flange transition to ensure a smooth, monotonic intersection with the canonical shell, eliminating the wavy profile. Ensure the flange thickness remains consistent at 2.5 mm to maintain structural integrity while minimizing weight.
 
 ### U6 -- Verify ESC cable clearance for rotation through full tilt range.
 
