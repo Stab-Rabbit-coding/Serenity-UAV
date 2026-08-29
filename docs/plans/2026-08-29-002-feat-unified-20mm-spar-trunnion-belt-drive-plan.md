@@ -106,20 +106,25 @@ nacelle is not a symmetric ellipse) — see R8 and OQ2.
 The spar must move forward to stay inside the airfoil. Required section depth is
 `20.4 + 2 × 1.16 = 22.72 mm`:
 
-| Station | Root `t_scale` | Root t/c | Tip `t_scale` | Tip t/c | Nacelle move |
+| Station | Root `t_scale` | Root t/c | Tip `t_scale` | Tip t/c | Spar hull Y |
 |---|---|---|---|---|---|
-| 20.00 mm | 1.486 | 18.0 % | 2.019 | 24.5 % | +25.1 mm fwd |
-| 22.00 mm | 1.464 | 17.8 % | 2.039 | 24.8 % | +23.1 mm fwd |
-| **25.00 mm** | **1.453** | **17.6 %** | **2.098** | **25.5 %** | **+20.1 mm fwd** |
-| 30.00 mm | 1.466 | 17.8 % | 2.268 | 27.5 % | +15.1 mm fwd |
-| 45.15 mm (hold) | 1.718 | 20.9 % | 3.317 | 40.3 % | 0 |
-| *as-built* | *1.000* | *12.1 %* | *1.560* | *18.9 %* | *—* |
+| 20.00 mm | 1.486 | 18.0 % | 2.019 | 24.5 % | +13.0 |
+| **22.00 mm (selected)** | **1.464** | **17.8 %** | **2.039** | **24.8 %** | **+15.0** |
+| 25.00 mm | 1.453 | 17.6 % | 2.098 | 25.5 % | +18.0 |
+| 30.00 mm | 1.466 | 17.8 % | 2.268 | 27.5 % | +23.0 |
+| 45.15 mm (hold) | 1.718 | 20.9 % | 3.317 | 40.3 % | +38.15 |
+| *as-built* | *1.000* | *12.1 %* | *1.560* | *18.9 %* | *+38.15* |
 
-Holding the Rev S1b station costs a 40 % t/c tip — not an airfoil. Station 25 mm
-is the minimum-root-thickening point and the recommended target. It re-opens the
-Rev S1b decision (`airframe/wings-nacelles/WBS.md` §1.1.2.1), which had moved the
-spar aft to 45.15 mm specifically to avoid dragging the nacelle forward; that
-trade is now dominated by a constraint Rev S1b did not face.
+Holding the Rev S1b station costs a 40 % t/c tip — not an airfoil. **22.00 mm is
+selected** (KTD2): it restores the Rev R1a chord line exactly and sits within
+1 % of the best achievable tip scale and 0.8 % of the best root scale, so
+nothing meaningful is bought by landing between 20 and 25 mm.
+
+This re-opens the Rev S1b decision (`airframe/wings-nacelles/WBS.md` §1.1.2.1),
+which moved the spar aft to 45.15 mm partly to avoid dragging the nacelle
+forward. **That second motive no longer applies**: the nacelle stays canonical
+because the pivot moves inside it instead (KTD7). Only the *wing-internal* spar
+station moves, and it moves back to a line the wing was already built on.
 
 ---
 
@@ -166,9 +171,37 @@ racetrack cableway, at the cost of airfoil thickening.)* Sized up from the plan
 doc's 16 mm because 16 mm does not clear the 13.28 mm bundle with any usable
 wall. Governs R1, R3, R6.
 
-**KTD2 — Spar station moves 45.15 → ~25 mm aft of LE.** The minimum-root-
-thickening point (root `t_scale` 1.453, tip 2.098). Holding 45.15 costs a 40 %
-t/c tip. Explicitly re-opens the Rev S1b decision. Governs R6.
+**KTD2 — Spar station moves 45.15 → 22.0 mm aft of LE.** *(resolved 2026-08-29,
+OQ1.)* This **restores the Rev R1a station exactly**, so the wing has already
+been built at this chord line once. It is also effectively Pareto-optimal for a
+Ø20.4 bore: tip `t_scale` 2.039 is within 1 % of the achievable minimum (2.019
+at 20 mm) and root 1.464 is within 0.8 % of its own minimum (1.453 at 25 mm).
+Holding 45.15 mm would cost a 40 % t/c tip. Explicitly re-opens the Rev S1b
+decision. Governs R6.
+
+**KTD7 — The tilt pivot leaves the nacelle CG; the nacelle stays canonical.**
+*(resolved 2026-08-29, OQ5.)* Moving the spar forward in the *wing* does not
+require moving the nacelle on the *hull*. The canonical baked pivot is at hull
+Y +47.5 (`port_tilt_spar_assembly.scad` L108) and the nacelle is already slid
+−9.35 mm forward of it to reach today's spar. Two ways to absorb the new
+station:
+
+- **A — keep pivot at CG, slide the nacelle:** puts the nacelle **−32.5 mm off
+  canonical**, a 3.5× worsening of a deviation the project already treats as a
+  cost, and ~18 % of the nacelle's own length.
+- **B — keep the nacelle canonical, move the pivot forward inside it
+  (`PIVOT_Z` 111.5 → 79.0):** costs a gravity moment of
+  `0.3934 kg × 9.80665 × 0.0325 m = 0.125 N·m` — **2.8 % of the 4.47 N·m the
+  belt delivers** (KTD5), and 0.71× the grounded requirement that sized the old
+  servo.
+
+**B is selected.** The pivot-at-CG rule (`docs/TILT_SPAR_ANALYSIS.md` §2.1.1)
+was written when the servo was the binding constraint — the old ≥ 25 kgf·cm
+spec pick was 98 % consumed. Under the belt's 1.86× multiplication that
+constraint is gone, and buying back full canonical nacelle placement for 2.8 %
+of the torque budget is a good trade. Measured cost to the ring envelope is
+1.4 mm (52.0 mm available at Z 79 vs 53.4 mm at Z 111.5, X = 28). Governs R4,
+R5, R11.
 
 **KTD3 — Trunnion ring at nacelle inboard face, ring plane X ≈ 28 mm.** Removes
 the through-duct spar entirely, recovering the stator blockage and freeing the
@@ -295,11 +328,11 @@ them.
 
 **Approach:**
 
-1. `SPAR_BORE_STATION` 45.15 → the U1-frozen station (~25.0).
+1. `SPAR_BORE_STATION` 45.15 → **22.0** (KTD2, restores the Rev R1a line).
 2. `SPAR_BORE_OD` 8.3 → 20.4.
-3. `THICKNESS_SCALE` 1.00 → ~1.453 (**root OML now changes** — this is new; the
-   root was untouched through every prior revision).
-4. `THICKNESS_SCALE_TIP` 1.56 → ~2.098.
+3. `THICKNESS_SCALE` 1.00 → **1.464** (**root OML now changes** — this is new;
+   the root was untouched through every prior revision).
+4. `THICKNESS_SCALE_TIP` 1.56 → **2.039**.
 5. Re-check `spar_tip_y()` and `midline_frac()` centring at the new station —
    the bore rides the camber midline, and the midline moves with the station.
 6. The Ø7 mm double-D no longer carries power. Keep **one** bore for the AK7455
@@ -378,16 +411,25 @@ the skewered shaft from the duct.
 1. Delete `pivot_x_face_boss()`'s full-width through-bore, the outboard support
    hub, the D-flat, and `spar_duct_wall_bosses()`. Retain nothing that crosses
    r = 25 mm.
-2. Add `nacelle_trunnion_ring()`: a structural ring centred on the tilt axis in
+2. **`PIVOT_Z` 111.5 → 79.0** (KTD7). The pivot is no longer the CG station; it
+   is set by the spar's hull Y (+15.0) and the bake transform
+   (`PIVOT_Z = SPAR_Y − NAC_BAKE.y = 15.0 + 64`). Update the header comment,
+   which currently *defines* `PIVOT_Z` as the CG station — that definition is
+   retired, and leaving it would make the next reader re-derive the wrong value.
+3. Add `nacelle_trunnion_ring()`: a structural ring centred on the tilt axis in
    the plane X = ring-plane (KTD3, ~28 mm), with a bearing seat and a load-
-   spreading web into the shell. Size the OD from the **measured** shell
-   envelope, not the ellipse approximation (OQ2).
-3. Recover the stator: the spar tunnel and the 2-fin re-index that
+   spreading web into the shell. **Measured envelope (OQ2, resolved): 52.0 mm
+   max ring OD at Z 79 / X 28**, from
+   `airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl` bore-centred —
+   1.4 mm less than at the old pivot station, and 1 mm more than the ellipse
+   estimate. X = 26 would allow 54.9 mm at 1 mm duct margin.
+4. Recover the stator: the spar tunnel and the 2-fin re-index that
    `docs/TILT_SPAR_ANALYSIS.md` §4 required exist only to pass the shaft. With
    the shaft gone, restore the canonical 11-fin stator.
-4. `PIVOT_Z` is unchanged as a *station*, but the rotating-assembly CG moves —
-   the 19.2 g steel spar span leaves and the ring arrives. Flag for U9; do not
-   guess a new value here.
+5. Check the annulus at the new pivot station: Z 79 is inside EDF1's axial span
+   (27.5–90), so confirm the ring's load-spreading web clears the EDF1 casing
+   and the ESC1 seat. The ring itself is outside r = 25 and so cannot foul the
+   duct, but the web reaches inward.
 
 **Test scenarios:**
 - No nacelle geometry intersects the r = 25 mm duct cylinder at any Z.
@@ -572,9 +614,12 @@ table), `current-specification/bom_revS.csv`, `REFERENCES.md`,
 **Approach:**
 
 1. Re-derive the rotating-assembly CG: −19.2 g steel spar span, −1.4 g crank,
-   + trunnion ring, + pulley. `PIVOT_Z` follows the CG (it is defined as the CG
-   station), so this may move the pivot again — and the pivot station feeds back
-   into U4's ring plane. Iterate if it moves more than a few mm.
+   + trunnion ring, + pulley. **`PIVOT_Z` no longer follows the CG** (KTD7) —
+   it is fixed at 79.0 by the spar station and the bake transform. So this
+   re-derivation *reports* the resulting gravity moment and updates KTD7's
+   0.125 N·m figure; it does **not** relocate the pivot or the ring plane.
+   Confirm the recomputed moment stays a small fraction of belt-delivered
+   torque.
 2. Airframe mass delta: spar 96.2 → 67.5 g/pair (−28.7 g, −0.063 lbm), plus
    thicker wing skins (**adds** mass — quantify from the re-lofted STL volume),
    plus belt/pulleys/bearings, minus the deleted gear-train and spar hardware.
@@ -636,14 +681,18 @@ change to the EDF units, battery, or power architecture upstream of the PDB.
 - **RISK-3 (medium) — CF crush at the clamp.** CF tube splinters under localised
   clamping. Mitigation: wide split collars, bonded internal inserts, no set
   screws (KTD4).
-- **RISK-4 (medium) — the ring envelope rests on an ellipse approximation.** The
-  shell is explicitly not a symmetric ellipse. If the measured envelope at
-  X = 28 is smaller than ~51 mm, the ring plane must move inboard toward the
-  duct, eating the 3 mm margin. Mitigation: OQ2 measures before U4 freezes.
-- **RISK-5 (medium) — CG feedback loop.** `PIVOT_Z` is *defined* as the CG
-  station, and this change moves mass on both sides of it. U9 may push the pivot,
-  which moves the ring plane, which moves mass again. Mitigation: iterate U4/U9;
-  accept a bounded band rather than chasing an exact value.
+- **RISK-4 — CLOSED 2026-08-29.** The ring envelope was measured from the
+  canonical shell STL rather than estimated: 52.0 mm at Z 79 / X 28, 1 mm better
+  than the ellipse approximation. The X = 28 working point holds with 3 mm duct
+  margin.
+- **RISK-5 — DISSOLVED 2026-08-29 by KTD7.** The feared feedback loop
+  (`PIVOT_Z` defined as the CG station → mass moves → pivot moves → ring plane
+  moves → mass moves) **cannot occur once the pivot is no longer defined by the
+  CG.** `PIVOT_Z` is now fixed at 79.0 by the spar station and the bake
+  transform, both of which are independent of the mass table. U9's mass work
+  therefore *reports* a gravity moment rather than *relocating* the pivot.
+  Residual: if the re-derived CG lands far from 111.5, the 0.125 N·m figure in
+  KTD7 changes — recompute it, but the geometry does not move.
 - **DEP-1** — No verified CF tube allowable exists in `REFERENCES.md`. The
   FOS 9.1 in this plan uses a 300 MPa cross-ply stand-in.
 - **DEP-2** — Actual 10 AWG silicone OD is assumed at 5.5 mm from the source
@@ -654,16 +703,18 @@ change to the EDF units, battery, or power architecture upstream of the PDB.
 
 ## Open Questions
 
-- **OQ1** — Exact spar station: 22 mm restores the Rev R1a value precisely
-  (existing wing precedent) while 25 mm minimises root thickening. Owner call.
-- **OQ2** — Measured shell \|Y\| envelope at the pivot station for X = 26–30 mm,
-  from the actual STL rather than the bounding-box ellipse. Gates U4's ring OD.
+- **OQ1 — RESOLVED 2026-08-29: station 22.0 mm.** See KTD2. Restores the Rev R1a
+  chord line; within 1 % of the best tip scale and 0.8 % of the best root scale.
+- **OQ2 — RESOLVED 2026-08-29: 52.0 mm max ring OD** at Z 79 / X 28, measured
+  from the bore-centred canonical shell STL (X = 26 gives 54.9 mm at 1 mm duct
+  margin). The ellipse estimate was 1 mm conservative; the working point holds.
 - **OQ3** — Actual servo angular range (180° vs 270°). Gates U6's tooth counts;
   travel, not torque, is binding.
 - **OQ4** — Measured OD of the procured 10 AWG silicone wire. Gates R1.
-- **OQ5** — Does the nacelle moving ~20 mm forward violate the canonical
-  Serenity silhouette enough to matter? Rev S1b moved the spar aft partly for
-  this reason. Owner call.
+- **OQ5 — RESOLVED 2026-08-29: the nacelle does not move.** See KTD7. The pivot
+  moves forward inside the nacelle instead (`PIVOT_Z` 111.5 → 79.0), keeping
+  hull placement canonical for a 0.125 N·m gravity moment — 2.8 % of belt-
+  delivered torque.
 - **OQ6** — Roll-wrapped 20 × 16.3 CF: stock item or custom? Standard metric CF
   tube steps are 20 × 16 and 20 × 18; 20 × 16 (2 mm wall) gives 16.0 mm bore
   against a 13.28 mm bundle = 1.36 mm radial clearance, marginally under the

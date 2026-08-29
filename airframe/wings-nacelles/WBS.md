@@ -1334,26 +1334,36 @@ drive that does not rely on the spar rotating. This **supersedes** the Ø8 mm
 rotating-spar architecture in `docs/TILT_SPAR_ANALYSIS.md` §1–§9 and the
 Rev S1b spar-station decision in §1.1.2.1 above.
 
+**Resolved 2026-08-29 (OQ1/OQ2/OQ5):** station **22.0 mm** (restores the
+Rev R1a chord line; within 1 % of the best tip scale). The **nacelle does not
+move on the hull** — instead `PIVOT_Z` goes 111.5 → **79.0**, leaving the CG for
+a 0.125 N·m gravity moment (2.8 % of belt-delivered torque). Trunnion ring
+envelope **measured** from the canonical shell STL: **52.0 mm OD at Z 79 /
+X 28**.
+
 Measured 2026-08-29 (`tools/wing_spar_station_fit.py`, exact 4-circle packing
 R/r = 1+√2): the bundle circumscribes **13.28 mm**, so the 16 mm tube named in
 the source conversation fits it only as 16 × 14 (1 mm wall, 0.72 mm total
 clearance) and its stated `SPAR_BORE_D = 11.0` does not fit at all. Free twist
-needs ~16.3 mm bore → **20 mm OD**. At 20 mm the spar must move to ~25 mm aft of
-LE (root `t_scale` 1.453, tip 2.098); holding 45.15 mm would cost a 40 % t/c tip.
+needs ~16.3 mm bore → **20 mm OD**. At 20 mm the spar must move to 22 mm aft of
+LE (root `t_scale` 1.464, tip 2.039); holding 45.15 mm would cost a 40 % t/c tip.
 
 - [ ] **SPAR-20-1 (U1)** — Freeze the spar/station/airfoil trade. Add
     `tools/spar_bundle_fit.py`; extend `wing_spar_station_fit.py` to solve the
     **root** `t_scale` as well as the tip; add `TILT_SPAR_ANALYSIS.md` §3.6
     re-deriving the section for a *fixed* spar and marking §3.2/§3.5's torsion
     and keyability discriminators superseded.
-- [ ] **SPAR-20-2 (U2)** — Re-loft the wing: `SPAR_BORE_STATION` 45.15 → ~25.0,
-    `SPAR_BORE_OD` 8.3 → 20.4, `THICKNESS_SCALE` 1.00 → ~1.453 (**root OML
-    changes for the first time**), `THICKNESS_SCALE_TIP` 1.56 → ~2.098.
+- [ ] **SPAR-20-2 (U2)** — Re-loft the wing: `SPAR_BORE_STATION` 45.15 → **22.0**,
+    `SPAR_BORE_OD` 8.3 → 20.4, `THICKNESS_SCALE` 1.00 → **1.464** (**root OML
+    changes for the first time**), `THICKNESS_SCALE_TIP` 1.56 → **2.039**.
     Re-purpose or delete the now-redundant power half of the Ø7 double-D.
 - [ ] **SPAR-20-3 (U3)** — Wingtip trunnion, split-collar pinch clamp (no set
     screws — CF crushes), and the field-maintainable garage with separated
     power/signal disconnects.
-- [ ] **SPAR-20-4 (U4)** — Nacelle trunnion ring at ring-plane X ≈ 28 mm; delete
+- [ ] **SPAR-20-4 (U4)** — `PIVOT_Z` 111.5 → **79.0** (retire the "pivot = CG
+    station" definition in the SCAD header); nacelle trunnion ring at ring-plane
+    X ≈ 28 mm, measured envelope 52.0 mm OD; check the ring web clears the EDF1
+    casing (Z 79 is inside EDF1's 27.5–90 span); delete
     the through-duct spar bore, outboard hub, D-flat, and duct-wall collars;
     **restore the canonical 11-fin stator** (the spar tunnel and 2-fin re-index
     existed only to pass the shaft).
