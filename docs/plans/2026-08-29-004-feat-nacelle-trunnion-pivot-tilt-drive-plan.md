@@ -38,6 +38,62 @@ recover, not margin to celebrate.
 
 ---
 
+## CORRECTION 2026-08-29 — KTD4's shaft station is kinematically impossible
+
+**U3 (the wing-side shaft bore) is BUILT, at station 54.0, not 43.0.** The
+correction is not a packaging preference; KTD4's figure cannot exist.
+
+KTD4 places the drive shaft 15.0 mm from the spar axis. Close this plan's own
+inputs on each other and that centre distance returns an impossible gear:
+
+- The tilt ring gear is **concentric with the spar** (KTD3 puts it on the
+  trunnion), so its root diameter must clear Ø20 plus a hub wall → PD ≥ ~30 mm.
+- The stage is a step-**up** — the nacelle sweeps 145°, more than a servo's
+  range — so the pinion is the SMALLER member:
+  `PD_ring × 145 = PD_pinion × servo_deg`.
+- `C = (PD_ring + PD_pinion) / 2`.
+
+At `C = 15` with a 270° servo this yields **`PD_ring = 10.5 mm` — a ring gear
+smaller than the spar it must encircle.** No tooth count fixes it.
+
+| PD_ring | Servo | PD_pinion | C | Wing shaft station |
+|---|---|---|---|---|
+| 30.0 | 270° | 16.1 | 23.1 | 51.1 |
+| **33.8** | **270°** | **18.2** | **26.0** | **54.0 — BUILT** |
+| 30.0 | 180° | 24.2 | 27.1 | 55.1 |
+| 33.8 | 180° | 27.2 | 30.5 | 58.5 |
+
+C = 26.0 is built because it is also what leaves the AK7455 pocket its 1.80 mm
+of chordwise clearance between the spar bore and the shaft bore — the three
+dimensions are coupled and none of them is free.
+
+**This escalates OQ1 from advisory to blocking.** The 180° column is not
+buildable at the current wing: station 58.5 collides with the root tenon at
+58.5 mm. Confirm the servo's real angular range before cutting gears; a 180°
+servo forces either a smaller ring gear or a tenon relocation.
+
+**KTD1 (Option A, shaft + spur) is unaffected and stands.** The right-angle
+argument that selected it over a belt is about axis orientation, not centre
+distance, and remains correct. What changes is only where the shaft sits.
+
+**U2's trunnion, U4's ring gear, U5's nozzle re-datum, and U6 remain OPEN** —
+they are nacelle work and were deliberately not touched this pass. Their
+interface numbers are consolidated in
+[`docs/WING_ATTACH_INTERFACE.md`](../WING_ATTACH_INTERFACE.md) §4.
+
+**RISK-1 (tip congestion) was realised, exactly as predicted.** The wingtip now
+hosts the spar bore, the register pad, the AK7455 pocket, the drive-shaft
+bushing boss, and the nav-conduit exit. Settling it took three coupled moves —
+the shaft's centre distance, `HALL_SENS_R` 11 → 17, and the AK7455 conduit
+54.0 → 44.5 — and the surviving margins are 1.80 mm on each side of the encoder
+pocket. There is no slack left at this station.
+
+**OQ5 (inherited) is resolved:** the trunnion IS concentric with the spar; the
+nacelle keeps its canonical station because the pivot moved inside it, so no
+tip-rib offset bracket is needed.
+
+---
+
 ## Problem Frame
 
 ### The kinematic constraint that decides the trade

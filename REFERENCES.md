@@ -1185,6 +1185,47 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 
 **Used in:** `airframe/README.md` §5.1
 
+### REF-MATH-001: Melissen, J.B.M. — "Packing and Covering with Circles"
+
+| Field | Value |
+|---|---|
+| **Author** | Johannes Bernardus Marinus Melissen, Utrecht University |
+| **Publication** | PhD thesis, Universiteit Utrecht, 1997 |
+| **Official URL** | <https://dspace.library.uu.nl/handle/1874/25091> — Utrecht University Repository, open access |
+| **Retrieved** | 2026-08-29 |
+| **Scope applied** | The proven-optimal ratios for packing *n* equal circles inside the smallest enclosing circle, for *n* ≤ 7. Only these small-*n* cases are used; they are proven optimal in this source and are reproduced throughout the standard circle-packing literature. |
+
+**Values used (enclosing diameter ÷ single-circle diameter):**
+
+| *n* | Ratio K(*n*) | Closed form |
+|---|---|---|
+| 1 | 1.00000 | 1 |
+| 2 | 2.00000 | 2 |
+| 3 | 2.15470 | 1 + 2/√3 |
+| 4 | **2.41421** | **1 + √2** |
+| 5 | 2.70130 | 1 + √(2(1 + 1/√5)) |
+| 6 | 3.00000 | 3 |
+| 7 | 3.00000 | 3 (hexagonal + centre) |
+
+**Why this is catalogued rather than treated as common knowledge:** the *n* = 4
+case decided a load-bearing geometry change. Two independent sources — the
+owner's `docs/plans/2026-08-27-nacelle-wiring-plan.md` and the external Gemini
+conversation it derived from — both specified an 11.0 mm spar bore for four
+10 AWG conductors. Four Ø5.5 mm circles circumscribe **13.28 mm** at zero
+clearance, so 11.0 mm does not fit at all, and the error propagated because the
+constant was carried in prose rather than computed. It is now computed, from
+this table, in `tools/spar_bundle_fit.py`, which refuses to interpolate for any
+*n* outside the tabulated set.
+
+**Caveat on the input, not the ratio:** the ratio is exact; the 5.5 mm wire OD
+it is applied to is **not** a verified figure. `current-specification/bom_revS.csv`
+records no outside diameter for `WIRE-10AWG`. See `tools/spar_bundle_fit.py`,
+which prints that caveat on every run.
+
+**Used in:** `tools/spar_bundle_fit.py`;
+`airframe/openscad/wings/wings_s1223_revo.scad` (`SPAR_BORE_OD` derivation);
+`docs/WING_ATTACH_INTERFACE.md` §2
+
 ## Part XI — FDA / CDRH Laser Product Regulations
 
 ### REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products

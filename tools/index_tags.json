@@ -207,6 +207,7 @@
       "description": "Serenity UAV \u2014 TODO (Open Work Only)",
       "tags": [
         "documentation",
+        "emi-hardening",
         "project-tracking",
         "security"
       ],
@@ -9959,6 +9960,14 @@
       ],
       "archived": false
     },
+    "docs/WING_ATTACH_INTERFACE.md": {
+      "description": "Wing Attachment Interface Specification \u2014 Rev T1",
+      "tags": [
+        "documentation",
+        "emi-hardening"
+      ],
+      "archived": false
+    },
     "docs/attribution_and_licensing.md": {
       "description": "Serenity UAV \u2014 Attribution and Licensing Policy",
       "tags": [
@@ -12888,7 +12897,7 @@
       "archived": false
     },
     "tools/wing_spar_carrythrough.py": {
-      "description": "Python script",
+      "description": "Does the rotating wing spar have to span the fuselage? First-principles check.",
       "tags": [
         "build-tooling"
       ],
@@ -13032,6 +13041,7 @@
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "docs/WBS_FEDERATION.md",
+      "docs/WING_ATTACH_INTERFACE.md",
       "docs/attribution_and_licensing.md",
       "docs/bom_revR.json",
       "docs/electrical_fault_margins.md",
@@ -13204,6 +13214,7 @@
     "emi-hardening": [
       "AGENTS.md",
       "README.md",
+      "TODO.md",
       "WBS.md",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
       "airframe/README.md",
@@ -13270,6 +13281,7 @@
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/Tilt-Rotor 10AWG Wire Clearance Analysis.md",
       "docs/WBS_FEDERATION.md",
+      "docs/WING_ATTACH_INTERFACE.md",
       "docs/electrical_fault_margins.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",

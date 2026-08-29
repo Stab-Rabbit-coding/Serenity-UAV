@@ -61,6 +61,16 @@ Within the nacelle:
 - **Group 1 (SPI signals):** CS, CLK, MOSI, MISO as a single shielded quad (e.g., Lapp ETHERLINE® TORSION or equivalent: 4-pair shielded, foil + braid)
 - **Group 2 (Power):** +3V3 and GND in separate shielded twisted pair
 - **Minimum Spacing:** 15 mm separation between Groups 1 and 2 (to prevent capacitive coupling)
+  - **DOCUMENTED DEVIATION (Rev T1, wing conduit only):** inside the wing both
+    groups share one Ø6.5 mm bore at chord station 44.5. 15 mm of separation is
+    not achievable at any bore the S1223 section can hold there, and a second
+    15-mm-separated conduit would have to sit in the shallow aft region where
+    the Ø7 EDF conduits already could not hold wall. Both groups are 100 %
+    braid-shielded per §2.1, which is the actual mitigation; this rule guards
+    UNSHIELDED proximity. Separation from the 40 A feeds — the clearance that
+    matters — is now far better than before: those conductors run inside the
+    spar's own grounded CF wall, 26 mm forward, rather than in an open conduit
+    9 mm away. See `docs/WING_ATTACH_INTERFACE.md` §4.5.
 - **EDF Feed Clearance:** ≥20 mm horizontal clearance from 40 A power leads (motor + ESC returns); cross perpendicular if unavoidable (to minimize flux coupling)
 
 ---
@@ -191,7 +201,22 @@ Each CAN-PERIPH-GW-1 gateway (port and starboard nacelles) publishes tilt-angle 
 
 ### 6.1 Spar Proximity Effects
 
-**Context:** The tilt spar is 4130 steel (ferromagnetic). The AK7455 magnet's field interacts with the ferrous spar, creating residual field distortion that shifts the encoded angle reading.
+> **CORRECTED 2026-08-29 (Rev T1, WA-R13).** The premise below is no longer
+> true. The tilt spar is now a **fixed roll-wrapped CARBON FIBRE tube**
+> (20 × 16.3 mm, `docs/plans/2026-08-29-003-...` KTD4), not 4130 steel, so the
+> ferromagnetic-shaft field distortion this section was written about **is
+> removed, not mitigated**. The mitigations below are RETAINED anyway, with a
+> changed target: the nearby ferrous parts are now the Ø4 mm steel tilt drive
+> shaft and its pinion, plus any fasteners and the nacelle-side collar. The
+> in-situ zero-calibration therefore stays mandatory — it now absorbs drive-train
+> field effects rather than the spar's. §6.2's clearance rules stand unchanged.
+>
+> Two further Rev T1 changes affect this section's geometry: the ring magnet
+> grew to **ID 27 / OD 41 mm** (ID 10 could not pass over a Ø20 spar) and
+> `HALL_SENS_R` moved **11 → 17 mm** so the IC still reads mid-annulus. See
+> `docs/WING_ATTACH_INTERFACE.md` §4.5.
+
+**Context (superseded — see the correction above):** The tilt spar is 4130 steel (ferromagnetic). The AK7455 magnet's field interacts with the ferrous spar, creating residual field distortion that shifts the encoded angle reading.
 
 **Mitigation Strategy (already addressed in §3 of AK7455_CALIBRATION_SPECIFICATION.md):**
 1. **Zero-calibration** absorbs static spar field effects at each tilt angle

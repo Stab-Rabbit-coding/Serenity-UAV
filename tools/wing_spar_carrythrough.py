@@ -375,7 +375,7 @@ def report_spar_carrythrough_joint(scad, m_ult, v_ult):
         else:
             hi = mid
     print(f"    -> socket length for the SS3 FOS 4.0 target: {hi:.1f} mm")
-    print(f"    -> REQUIREMENT ON THE FUSELAGE: a bonded socket of at least")
+    print("    -> REQUIREMENT ON THE FUSELAGE: a bonded socket of at least")
     print(f"       {hi:.0f} mm spanwise reach inboard of the wall at the spar")
     print("       station.  This is a JOINT REQUIREMENT this file publishes;")
     print("       the fuselage owns building it (see the fuselage-mid WBS).")
@@ -401,8 +401,9 @@ def report_spar_carrythrough_joint(scad, m_ult, v_ult):
     tau = m_tors * 1000.0 / (2.0 * math.pi * (d_sock / 2.0) ** 2 * 40.0)
     print("\n  wing torsion about the spar axis (the retired aft rod's only")
     print("  remaining candidate job):")
-    print(f"    Cm 0.25 at 40 kt -> {m_aero:.4f} N.m; ultimate (x{LIMIT_FACTOR * ULTIMATE_FACTOR:.0f}) "
-          f"{m_tors:.3f} N.m")
+    ult_factor = LIMIT_FACTOR * ULTIMATE_FACTOR
+    print(f"    Cm 0.25 at 40 kt -> {m_aero:.4f} N.m; "
+          f"ultimate (x{ult_factor:.0f}) {m_tors:.3f} N.m")
     print(f"    bond shear over a 40 mm socket {tau:.4f} MPa "
           f"-> FOS {allow / tau:.0f} vs {allow:.0f} MPa")
     print("    NOTE thrust contributes no torque here: the duct axis passes")

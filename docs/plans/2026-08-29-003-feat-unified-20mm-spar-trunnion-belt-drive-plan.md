@@ -43,6 +43,65 @@ it replaces** (67.5 g vs 96.2 g per pair, −0.063 lbm).
 
 ---
 
+## Implementation record — wing side BUILT 2026-08-29 (Rev T1)
+
+**U1, U2, U3, U5 (wing half), and plan 004 U3 (wing half) are implemented.**
+The joint requirements this plan hands to the fuselage (U7) and the nacelle
+(U4, U6, U8) are consolidated, with their numbers, in
+[`docs/WING_ATTACH_INTERFACE.md`](../WING_ATTACH_INTERFACE.md) — build to that,
+not to this plan's prose.
+
+**Frozen figures confirmed by tool, not accepted on trust.** `THICKNESS_SCALE`
+1.456 and `THICKNESS_SCALE_TIP` 2.190 at station 28.0 reproduce exactly
+(`tools/wing_spar_station_fit.py --bore 20.4 --station 28`), as does
+`SPAR_Z` 66.85 and the 13.28 mm circumscribed bundle. Both scales were rounded
+UP in the source (1.46 / 2.20) per this file's own established convention —
+Rev S1b took 1.447 → 1.45 and U6 took 1.5505 → 1.56 so the wall is not sitting
+on its own limit. Built walls are 1.19 mm (root) and 1.21 mm (tip).
+
+**Four things in this plan did not survive implementation. Each is recorded
+where it was found, not silently worked around:**
+
+1. **U3's wingtip split-collar pinch clamp — MOVED TO THE ROOT.** A collar that
+   grips Ø20 CF without crushing it needs ~Ø30 outside; the re-lofted tip
+   section is 22.83 mm deep at its deepest. It cannot exist there. It would
+   also have nothing to do: the spar is bonded over 85.7 mm (5,492 mm² of bond,
+   ~27 kN of axial retention at 5 MPa), and a bonded spar cannot be withdrawn,
+   so a clamp at that end cannot make the joint serviceable either. The clamp
+   belongs at the joint that is designed to open — the fuselage socket. Wing +
+   bonded spar are now one serviceable assembly.
+2. **U3's wingtip maintenance garage — MOVED TO THE NACELLE.** Any 10 AWG
+   disconnect needs ~6 mm of clear height; aft of the spar the tip section falls
+   17.50 → 3.43 mm over stations 40 → 78, and what depth exists is already
+   claimed by the AK7455 conduit and the drive shaft. This plan's own routing
+   already lands the bundle in the nacelle annulus, which has the volume — and
+   putting the break there also keeps the 40 A joint out of the AK7455's pocket,
+   which `TILT_ENCODER_WIRING_EMI_SPEC.md` §2.3 requires and a shared garage
+   would have violated. No hatch is needed: the nacelle is the cover.
+3. **U9's tie-rod expectation — the couple is RETIRED, not re-sized.** The
+   forward rod (station 14.0, Ø8.2 → 9.9..18.1) now intersects the Ø20.4 spar
+   bore (17.80..38.20) outright, and the aft rod's only remaining job would be
+   wing torsion — 0.41 N·m at ultimate, bond shear 0.016 MPa, FOS 306. A fixed
+   bonded spar reacts the root moment directly, which is what neither the tenon
+   nor the rods could do, so the whole work-around retires with it.
+4. **RISK-2 was not actually covered by its own gate.** `wing_airfoil_integrity.py`
+   validated the tabulated table — i.e. the section at `t_scale` 1.0 — and never
+   read either thickness scale, so it would have passed identically at 1.0 and
+   2.20. It now validates the sections `wing_solid()` actually lofts. Both are
+   valid closed polygons at 1.46 / 2.20; RISK-2 is closed on evidence rather
+   than on a gate that could not see it.
+
+**Open questions closed:** OQ3/OQ4 remain open and are now *blocking* rather
+than advisory — see the interface spec §6. **OQ5 is resolved by construction:**
+the nacelle keeps its canonical station because the pivot moved inside it
+(KTD7/KTD8), and only the wing-internal station moved.
+
+**RISK-1 stands and is now measurable.** Root t/c 12.14 → 17.72 %, tip
+18.93 → 26.70 %, both verified against the built source. Every aero figure in
+this repo that cites this wing is unverified until CFD or bench data exists.
+
+---
+
 ## Problem Frame
 
 ### What is actually broken

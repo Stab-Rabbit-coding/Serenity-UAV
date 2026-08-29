@@ -1070,3 +1070,87 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
     - [ ] Wire strobe to led pwd output on Pilot cape in Simon's medbay
 
+
+---
+
+## §1.1.1.5 — Wing-Root Spar Socket (Rev T1 joint requirements)
+
+**Owning specification:** [`docs/WING_ATTACH_INTERFACE.md`](../../docs/WING_ATTACH_INTERFACE.md)
+**Owning plans:** `docs/plans/2026-08-29-003-...` U7; `airframe/wings-nacelles/WBS.md` §1.1.4 SPAR-20-7
+
+**Why this section exists.** The wing side of the Rev T1 tilt-spar migration is
+BUILT (2026-08-29); the fuselage side is not. The spar is no longer a rotating
+drive shaft that the wing rides on — it is a **fixed 20 × 16.3 mm CF tube bonded
+into the wing**, and it is now the wing's primary bending member. That makes the
+fuselage socket the wing's structural root joint, replacing both the enlarged
+tenon (FOS 0.49, CARGO-03c) and the two-rod couple (FOS 4.14, U5/KTD1) that
+existed only because a spar on bearings could not react a moment.
+
+**The gate is currently RED and will stay red until this section lands.**
+`tools/wing_root_deconflict.py` exits 1 with three findings, all one cause — the
+fuselage still carries `WING_SPAR_Y = +38.15` and `WING_SPAR_BORE_D = 8.3`:
+
+| Finding | Blocked volume |
+|---|---|
+| rotating spar tube blocks Hall/encoder conduit | 1,720.6 mm³ |
+| rotating spar tube blocks tilt drive-shaft bore | 637.7 mm³ |
+| published cargo shell blocks spar bore / 4 × 10 AWG feeds | 2,048.6 mm³ |
+
+- [ ] **WA-R1 — Spar socket.** Hull **Y +21.00**, **Z +66.85**, bore **Ø20.4**
+    (20.0 OD + 0.2 mm/side epoxy gap), **≥ 55 mm spanwise reach** inboard of the
+    wall. Both stations are DERIVED, not chosen: the wing LE root bakes to hull
+    Y −7.0 and the spar is at chord station 28.0 → +21.0; the chord line bakes
+    to Z +58.01 and the spar rides the **unscaled** camber midline (+8.84 mm at
+    this station) → +66.85. **Do not apply `THICKNESS_SCALE` to the midline** —
+    `s1223_section()` opens the thickness envelope *about* an unscaled camber
+    line, so scaling it would lift the socket 4.07 mm above the spar.
+    Update `WING_SPAR_Y` / `WING_SPAR_Z` / `WING_SPAR_BORE_D` in
+    `airframe/blender-scripts/merge_cargo_interior.py`.
+
+- [ ] **WA-R2 — Delete the F688ZZ root bearing.** A bearing here is no longer
+    merely unnecessary, it is wrong: it would let the fixed spar spin under the
+    tilt pinion's gear reaction. Replace with a bonded/clamped socket.
+
+- [ ] **WA-R3 — Split-collar pinch clamp.** ≥ 5 mm wall over Ø20 (≈ Ø30 outside),
+    M3 heat-set inserts, 2 screws. **No set screws** — CF tube splinters under a
+    point load. The split must retain a **positive gap when clamped**; if the
+    halves close on each other first, the collar grips itself and the spar is
+    free. This is the joint that makes wing + bonded spar removable as one
+    assembly (the spar is bonded in the wing, clamped in the fuselage).
+
+- [ ] **WA-R4 — Re-size the mortise** 30.8 → **12.8 mm** wide. The tenon is now
+    a locating feature at 12 × 20 × 8 mm (`TENON_LOAD_PATH = "spar_carrythrough"`),
+    not a 30 mm structural tenon. The current mortise is oversize for it.
+
+- [ ] **WA-R5 — Re-verify the cargo-bay envelope** against the intruded clear
+    span, do not assume it. `tools/cargo_bay_envelope.py` currently passes the
+    mission payload (101.6 × 76.2 × 76.2 mm) against a 170.6 mm measured
+    interior width, but that is measured with the spar stopping at X −100.
+
+- [ ] **WA-R6 — Fuselage-side conduits** to match the wing's new bore set:
+    nav 3-core at hull Y +1.0 (Ø3.2), AK7455 shielded pair at Y +37.5 (Ø6.5),
+    tilt drive shaft at Y +47.0 (Ø4.4). The retired Ø7 EDF double-D ports can go
+    — the four 10 AWG feeds now enter the spar bore directly at the socket.
+
+### OWNER DECISION REQUIRED — bay intrusion
+
+55 mm of socket reach puts the spar's inboard end near hull **X −136** (wall at
+−81.3), cutting the cargo-bay clear span **140 mm → ~104 mm** on that side.
+`CARGO-01` removed a full-width spar carry-through *precisely* to free that
+volume, so this is a real re-encroachment in the same direction, and it is not
+the wing's call to make. Three options, unpriced:
+
+1. **Accept it** — re-run WA-R5 against the intruded span and confirm the
+   mission payload still fits.
+2. **Land the LG-11 coupon** (root `TODO.md` §1.1.4). Socket bearing stress goes
+   as 1/L², so the allowable moves the length hard: at the owner's own <15 MPa
+   decision-rule threshold **31 mm** clears FOS 4.0; at REF-MAT-001's ASTM D695
+   bulk-compressive figure for 20 % CF-PETG (47 MPa) **17 mm** would do — and
+   bearing of a bonded tube against a socket wall *is* a compressive mode, not
+   the bond/peel mode the standing 5 MPa figure was written to bound. This is
+   very likely the conservative direction by a wide margin, but overturning a
+   standing repo allowable is an owner decision, not a side effect of a geometry
+   change.
+3. **Two short collars** instead of one continuous socket — same 1/L² physics on
+   the separation; two 12 mm collars 50 mm apart reach FOS 4.1 with less
+   continuous material, though the same total reach.

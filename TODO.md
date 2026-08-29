@@ -35,6 +35,54 @@
 - [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 - [ ] ASTM D3039/D695 coupon test: CF-PLATE-2MM bending allowable (thwarts
       built at FOS 8.5/8.7 vs the conservative 300 MPa stand-in only)
+- [ ] **ASTM D3039/D695 certificate for the 20 x 16.3 CF SPAR TUBE.** New at
+      Rev T1 and now load-bearing: the spar is the wing's primary bending
+      member at FOS 9.0 against the same unverified 300 MPa stand-in
+      (`docs/TILT_SPAR_ANALYSIS.md` §3.6.3). The 4130 rows above no longer
+      govern the flight load path.
+- [ ] **Measure the procured 10 AWG silicone wire OD.** `bom_revS.csv` records
+      none; the 5.5 mm figure the Ø20.4 spar bore is derived from is an
+      ASSUMPTION. A larger real OD re-opens the airfoil trade
+      (`tools/spar_bundle_fit.py` prints this caveat on every run).
+- [ ] **Confirm the tilt servo's angular range (180 vs 270 deg) — BLOCKING.**
+      It sets the gear centre distance and therefore the wing's drive-shaft
+      station. 270 deg fits (C 26.0, station 54.0, BUILT); 180 deg needs
+      C 30.5 -> station 58.5, which collides with the root tenon at 58.5 mm.
+- [ ] **LG-11 coupon decides the wing-root socket length, and with it whether
+      the cargo bay is intruded at all.** 55 mm at the standing 5 MPa figure;
+      31 mm at the owner's <15 MPa rule; 17 mm at REF-MAT-001's 47 MPa
+      (`docs/WING_ATTACH_INTERFACE.md` §3.3).
+- [ ] **Aero revalidation of the re-lofted wing (CFD or bench).** The section
+      is no longer S1223 -- root t/c 12.14 -> 17.72 %, tip 18.93 -> 26.70 %.
+      Every aero figure in this repo citing this wing is unverified until this
+      lands, including the 7.6 N cruise-lift figure and everything derived
+      from it. `tools/wing_cfd_openfoam.py` is still blocked on mesh
+      generation.
+
+#### 0.8.1 — Wing attach interface (Rev T1), open requirements
+
+→ detail: `docs/WING_ATTACH_INTERFACE.md` §5; fuselage detail:
+`airframe/fuselage-mid/WBS.md` §1.1.1.5
+
+Wing side is BUILT. These are the two joints it publishes.
+
+- [ ] WA-R1..R6 — fuselage: spar socket (Y +21.00, Z +66.85, D20.4, >= 55 mm
+      reach), delete F688ZZ, split-collar clamp, re-size mortise 30.8 -> 12.8,
+      re-verify the bay envelope, and cut the three matching conduits.
+      **`tools/wing_root_deconflict.py` FAILS until this lands** (3 findings,
+      all one cause: the fuselage still carries `WING_SPAR_Y = +38.15`).
+- [ ] WA-R7..R12 — nacelle: trunnion bearing bore D20.0 at ring plane X ~ 28
+      (axial AND radial duty), ring gear PD 33.8 at C 26.0, ring magnet
+      ID 27 / OD 41 axially separated from that gear, the 4 x 10 AWG
+      disconnect relocated into the nacelle annulus, the nav 3-core crossing
+      at the trunnion, and confirmation of the 32 mm spar-stub protrusion.
+- [ ] WA-R13 — avionics: `docs/TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1's
+      ferromagnetic-spar premise is corrected in place; confirm the firmware
+      zero-calibration procedure still covers the drive-shaft/pinion field
+      that replaces it.
+- [ ] **OWNER DECISION — cargo-bay intrusion.** 55 mm of socket reach cuts the
+      bay clear span 140 -> ~104 mm, re-encroaching on the volume CARGO-01
+      freed. Three options priced in `airframe/fuselage-mid/WBS.md` §1.1.1.5.
 
 ### 0.10 Update and correct documentation touching every non-archived file.
 
