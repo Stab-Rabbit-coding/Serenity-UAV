@@ -1184,23 +1184,53 @@ reported an 8.60 mm/side mortise foul against a correctly-sized mortise. See
         reaches X −158.5 / −221.5, in the hull Z band +85.99…+112.99 — above the
         bay's working floor, so the loss is roof volume, not floor footprint.
 
-- [ ] **WA-R18 — Mass/CG/T-W re-derivation after Rev T1c.** The rework is
-    **+77.0 g (+0.170 lbm) net**, +1.97 % on the 3,911 g (8.62 lbm) AUW, and it is
-    *not* concentrated at the CG — it sits at the wing root, outboard and low.
-    Breakdown:
+- [ ] **WA-R18 — Mass/CG/T-W re-derivation after Rev T1c.** **REVISED 2026-08-30
+    by the weight audit — the first figure was low.** The rework is
+    **+102.8 g (+0.227 lbm) net**, +2.63 % on the 3,911 g (8.62 lbm) AUW, and it
+    is *not* concentrated at the CG — it sits at the wing root, outboard and low.
 
     | | Δ mass |
     |---|---|
     | Cargo shell (Ø30.1 sockets, 18 mm actuator standoffs, less the retired tie-rod bosses) | **+56.0 g** — 301,145 → 354,486 mm³ |
-    | New parts: `SPAR-CF-20X16` 58.2, `SHAFT-TILT-4MM` 49.4, `GEAR-TILT-FUS-38T` 16.0, `BUSH-TILT-4MM` 6.0, `PRINT-WING-ROOT-FLANGE` 25.4 | +155.0 g |
+    | New parts: `SPAR-CF-20X16` 58.2, `SHAFT-TILT-4MM` 49.4, `GEAR-TILT-FUS-38T` 16.0, `BUSH-TILT-4MM` 6.0, `PRINT-WING-ROOT-FLANGE` **51.2** | +180.8 g |
     | Retired: `SPAR-TILT-4130` 96, `BRG-F688ZZ` 10, `PRINT-PUSHROD-CRANK` 6, `CF-ROD-8MM` 14, `CF-ROD-6MM` 8 | −134.0 g |
-    | **Net** | **+21.0 g** parts, **+77.0 g** with the shell |
+    | **Net** | **+46.8 g** parts, **+102.8 g** with the shell |
+
+    The flange was under-massed by 25.6 g at Rev T1c: it was costed as
+    `RHO_SOLID × 40 % infill`, but at 5 mm thick with 4 perimeters at 0.6 mm the
+    plate is 4.8 mm of *wall* and 0.2 mm of infill — essentially solid, and infill
+    barely touches it. Use `RHO_PRINT` (1.05e-3 g/mm³).
 
     Hover T/W was ~1.19 (~1.25 with `BATT-6S-2800`) against the 1.2 minimum
-    (§1.1.5 mass notice), so **a 2 % mass rise puts the un-swapped case below the
-    minimum**. Re-derive T/W and the CG envelope before flight release; the
-    largest single recoverable item is the 18 mm actuator standoff (WA-R15), which
-    is currently a solid pad and could be ribbed. **BLOCKS flight release.**
+    (§1.1.5 mass notice), so **this puts the un-swapped case below the minimum**.
+    Re-derive T/W and the CG envelope before flight release.
+    **`docs/MASS_AUDIT_CARGO_WING_ROOT.md` §6 identifies −32.9 g of low-risk
+    recovery** (hollow the actuator standoffs), which lands Rev T1c at +69.9 g on
+    the corrected basis. **BLOCKS flight release.**
+
+- [ ] **MA-1 — Reconcile every `PRINT-*` BOM row to its STL.** The weight audit
+    measured 23 matched rows and found the BOM understates printed mass by
+    **+521.6 g — 13.3 % of AUW**. `PRINT-CARGO-SECT` (+207), `FOAM-PU-2LB` (kit
+    mass, −878) and `PRINT-WING-ROOT-FLANGE` (+12.9) are corrected; the rest are
+    measured and reported in `docs/MASS_AUDIT_CARGO_WING_ROOT.md` §5 for their
+    owning branches. Add a CI check so a regenerated STL cannot silently diverge
+    from its BOM row again. **BLOCKS any weight statement.**
+
+- [ ] **MA-5 — Hollow the actuator standoffs (−32.9 g).** They are 109.5 g of
+    solid block reacting a 5.0 N worst-case combined load; deflection at the gear
+    mesh is 1.4 × 10⁻⁵ mm, three-plus orders inside the 0.05 mm that would matter.
+    2.5 mm wall + 2.5 mm face. Do **not** instead shrink `NSVMT_STANDOFF` (it is
+    11 + 6 + 1, all of it accounted) or the 6 mm gear face (already 7.5 × module).
+    `docs/MASS_AUDIT_CARGO_WING_ROOT.md` §6.
+
+- [ ] **MA-6 — `PRINT-BATT-TRAY` measures 140.2 g against a 22 g BOM row.** It is
+    in the cargo section, it is 3.6 % of AUW, and it is 30 % of its own bounding
+    box for a part whose job is to locate a LiPo and react 4 g × 1.5 through
+    straps. Re-measure, then lighten on its merits.
+
+- [ ] **MA-7 — The BOM mass column mixes installed mass, consumable stock and
+    ground equipment.** Summing `Total_Mass_g` returns 12.7 kg, which is the mass
+    of nothing. Add an `Installed` flag before any weight statement uses it.
 
 - [ ] **WA-R15a — Cargo-bay envelope re-measure after the actuator standoff.**
     `tools/cargo_bay_envelope.py` measured the 140 mm lateral limit against pads

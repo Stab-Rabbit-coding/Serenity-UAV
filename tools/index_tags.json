@@ -9829,6 +9829,13 @@
       ],
       "archived": false
     },
+    "docs/MASS_AUDIT_CARGO_WING_ROOT.md": {
+      "description": "Mass Audit \u2014 Cargo Section and Wing Roots (Rev T1c)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/NOZZLE_DRIVE_TRADE.md": {
       "description": "Nozzle-Drive Mechanism Trade Study (Rev T, 2026-07-19)",
       "tags": [
@@ -13053,6 +13060,7 @@
       "docs/LANDING_GEAR_ANALYSIS.md",
       "docs/LICENSE",
       "docs/MANIFEST.json",
+      "docs/MASS_AUDIT_CARGO_WING_ROOT.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/OBSERVER_LASER_ANALYSIS.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",

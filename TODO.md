@@ -94,8 +94,17 @@ Wing side is BUILT. These are the two joints it publishes.
       no BOM row). **BLOCKS wing removal/refit.**
 - [ ] WA-R16 — the tilt train is NOT self-locking and has no holding provision.
       **BLOCKS flight release.** `docs/TILT_DRIVE_CONTROL_SPEC.md` §5.2/§7.3.
-- [ ] WA-R18 — Rev T1c is +77.0 g (+1.97 % AUW); hover T/W was ~1.19 against a
-      1.2 minimum, so re-derive mass/CG/T-W. **BLOCKS flight release.**
+- [ ] WA-R18 — Rev T1c is +102.8 g (+2.63 % AUW, revised by the weight audit);
+      hover T/W was ~1.19 vs a 1.2 minimum. Re-derive mass/CG/T-W.
+      **BLOCKS flight release.**
+- [ ] MA-1 — BOM printed-part masses understate by +521.6 g (13.3 % of AUW)
+      across 23 rows measured against their STLs. Reconcile + add a CI check.
+      **BLOCKS any weight statement.** -> `docs/MASS_AUDIT_CARGO_WING_ROOT.md`
+- [ ] MA-5 — hollow the actuator standoffs, -32.9 g, no structural question
+      (deflection 1.4e-5 mm at the gear mesh against a 0.05 mm budget).
+- [ ] MA-6 — `PRINT-BATT-TRAY` measures 140.2 g against a 22 g BOM row.
+- [ ] MA-7 — BOM mass column mixes installed mass, stock and GCS; add an
+      `Installed` flag before any weight statement uses it.
 - [ ] WA-R15a — re-measure the cargo-bay roof band: the actuators now reach
       X -158.5 / -221.5 at Z +85.99..+112.99.
 - [ ] TILT-CTL-01..06 — tilt control loop open items (plant model, slew rate,
