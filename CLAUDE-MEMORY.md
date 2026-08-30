@@ -2731,3 +2731,84 @@ Related: [[project_fleet_trust_module]], [[project_optiga_trust_m_swap]],
 [[project_esc_mcu_swap_mspm0]], [[feedback_kicad_hand_authoring]]
 
 ---
+
+---
+
+---
+name: project_fuselage_rev_t1c_tilt_drive
+description: Rev T1c fuselage wing-root joint + multi-turn tilt actuator; the tenon forces the gear plane and costs an 18mm actuator standoff
+metadata:
+  type: project
+---
+
+2026-08-30, commit 16ebb59. Fuselage side of [[project_wing_rev_t1_fixed_spar]]
+built in `merge_cargo_interior.py`: socket Y +21.00 / Z +66.85 / Ø20.4 / 18.5 mm,
+boss Ø30.1, F688ZZ **and both tie rods deleted**, mortise 30.8→12.8, conduits
+nav Ø4.2 @ Y+1.0 / AK7455 Ø7.5 @ Y+37.5 / shaft Ø4.4 @ Y+46.6.
+
+**Three non-obvious forcings, in the order they bite:**
+
+1. **Coaxial actuator does not fit.** DS3225 on the drive-shaft axis overlaps the
+   Ø30.1 socket boss by 13.5 mm in Y at *either* output-shaft orientation.
+   → fuselage spur pair m0.8 38T/38T, C 30.40, **1:1**.
+2. **C is set by the landing-gear bay tops** (Z +82.39 + 3.0 budget ⇒ C ≥ 29.80).
+   36T/37T fall under budget; 38T clears at 3.60 mm.
+3. **The root TENON forces the gear plane, and this is the expensive one.** Tenon
+   spans X −100…−108, Y +51.50…+63.50; its forward face is 4.90 mm from the shaft
+   axis, so clearing it *in Y* needs a tip radius < 3.90 mm — no gear that can
+   transmit at C = 30.40 qualifies. It must be cleared **axially**: mesh 11 mm
+   inboard of X −100/−240, which costs an **18 mm actuator standoff** and
+   18 mm/side of cargo-bay roof reach.
+
+**Stage is 1:1 on purpose.** A step-up would trade the 48× torque surplus for
+slew rate but pulls the actuator to 260° — under one revolution — re-opening the
+180-vs-270 question Rev T1 exists to close.
+
+**Root flange is a bonded PART, not printed hull.** Ray-cast 13×17 grid: the
+sidewall skin moves **34.3 mm (port) / 37.0 mm (stbd)** across the 80×60
+footprint. Filling to a plane ⇒ 34 mm thick; bounding with a plane ⇒ tangent to
+the skin (0.46 mm non-manifold edge, 4 faces, at −86.33/+8.6/+52.2). Subtracting
+a translated envelope from the full 900k-face shell was **worse** (4 boundary, 2
+non-manifold, 4 bodies). Done **locally** on a cropped envelope it is clean:
+`airframe/stls/fuselage/generate_wing_root_flange.py`, 12.7 g/side at 40 %.
+
+Mass: **+77.0 g, +1.97 % AUW**; hover T/W was ~1.19 vs a 1.2 minimum → WA-R18
+blocker.
+
+Actuator = DS3225 + LibreServo_v4, pin removed, **multi-turn**, closed on the
+AK7455 — same pattern as the cargo winch. Loop spec:
+`docs/TILT_DRIVE_CONTROL_SPEC.md`. **The train is NOT self-locking and has no
+holding provision (TILT-CTL-01/WA-R16) — flight-release blocker.**
+
+---
+
+---
+name: feedback_gates_mask_tool_bugs
+description: When a gate is red for a known geometry reason, its OTHER checks are unvalidated — fixing the geometry exposes tool bugs, so budget for them
+metadata:
+  type: feedback
+---
+
+Serenity-UAV, 2026-08-30. `wing_root_deconflict.py` had been red "by design"
+since Rev T1 for one known cause. Fixing that cause exposed **four** genuine
+defects in the checkers that the red state had been hiding:
+
+- `tenon_params()` matched only `"two_rod"`, so the Rev T1 default path
+  `"spar_carrythrough"` fell through to the **enlarged 30 mm tenon** — reporting
+  an 8.60 mm/side mortise foul against a correctly-sized mortise. The SCAD writes
+  the rule as a *negative* (`!= "enlarged_tenon"`) precisely so new paths inherit
+  the safe size; the tool mirrored it as a positive whitelist and inverted it.
+- The spar corridor is **stepped** (Ø20.4 outboard, Ø16.3 inboard) and was swept
+  at one diameter, reading the intended annulus as "wall not cut".
+- Every route was probed 12 mm past the wall bracket — right for a rigid shaft,
+  wrong for a wire that turns.
+- `cargo_bay_envelope.py` derived spar OD with the retired 0.15 mm/side rotating
+  clearance and printed "rotating tilt-spar" for a fixed bonded tube.
+
+**Why:** a failing gate is not a *partially* passing gate. Everything downstream
+of the first failure is unexercised, and stale assumptions accumulate there
+undisturbed.
+
+**How to apply:** when clearing a long-red gate, expect to fix the gate too;
+read each check's assumptions against the *current* design before trusting a new
+green. Related: [[project_fuselage_rev_t1c_tilt_drive]].
