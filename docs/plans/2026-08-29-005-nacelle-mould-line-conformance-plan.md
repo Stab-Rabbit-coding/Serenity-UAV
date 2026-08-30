@@ -203,7 +203,7 @@ architecture that creates the overhang.
   can silently spend it.
 - **OQ6 (new)** — The nacelle inherits three joint requirements from the wing
   side that touch this plan's geometry: the 4 × 10 AWG disconnect relocates into
-  the nacelle annulus (WA-R10), the ring magnet grows to ID 27 / OD 41 and must
+  the nacelle annulus (WA-R10), the ring magnet grows to ID 26 / OD 41.2 and must
   be axially separated from the ring gear (WA-R9), and the spar stub protrusion
   (32 mm) needs confirming against the final trunnion bearing stations (WA-R12).
   See `docs/WING_ATTACH_INTERFACE.md` §4.

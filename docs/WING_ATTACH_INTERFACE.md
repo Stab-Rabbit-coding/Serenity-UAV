@@ -376,12 +376,12 @@ because the spar bore is now full of the power bundle.
    steel and *are* nearby. In-situ zero-calibration stays required; it now
    absorbs the drive train rather than the spar.
 2. **The ring magnet had to grow.** It rides a collar on the spar, and the spar
-   went Ø8 → Ø20; ID 10 cannot pass over a Ø20 tube. ID 27 / OD 41 clears the
-   spar plus a 3.5 mm non-ferrous collar and fits inside the trunnion ring's
+   went Ø8 → Ø20; ID 10 cannot pass over a Ø20 tube. ID 26 / OD 41.2 clears the
+   spar plus a 3.0 mm non-ferrous collar and fits inside the trunnion ring's
    measured 53.4 mm envelope (plan 003 OQ2).
-3. **`HALL_SENS_R` 11 → 17 mm** so the IC still reads **mid-annulus**. This is
+3. **`HALL_SENS_R` 11 → 16.8 mm** so the IC still reads **mid-annulus**. This is
    not cosmetic: a diametric ring's field is only clean over the annulus, and an
-   IC left at R = 11 would sit 2.5 mm inboard of the magnet's inner edge — off
+   IC left at R = 11 would sit 2.0 mm inboard of the magnet's inner edge (r 13.0) — off
    the magnet entirely.
 4. **The ring magnet and the ring gear are nearly coradial** (magnet annulus
    r 13.0–20.6, gear PD r 20.0, gear OD r 20.8) and must therefore be **axially

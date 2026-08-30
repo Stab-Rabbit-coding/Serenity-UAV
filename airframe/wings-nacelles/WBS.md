@@ -1416,8 +1416,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     dimensioned around the MT6701 3 × 3 QFN rejected on 2026-07-19, with a Ø3.5
     conduit labelled 4-wire I²C. Now AK7455 QFN24 4×4 on a 10 × 8 board;
     conduit Ø6.5 for the shielded SPI quad + shielded power pair per
-    `TILT_ENCODER_WIRING_EMI_SPEC.md` §2.1; ring magnet ID 27 / OD 41 (ID 10
-    could not pass over a Ø20 spar); `HALL_SENS_R` 11 → **17** so the IC still
+    `TILT_ENCODER_WIRING_EMI_SPEC.md` §2.1; ring magnet ID 26 / OD 41.2 (ID 10
+    could not pass over a Ø20 spar); `HALL_SENS_R` 11 → **16.8** so the IC still
     reads mid-annulus. §2.3's ≥ 15 mm intra-conduit separation is recorded as a
     **documented deviation** — unachievable in one printed bore, and both groups
     are 100 % braid-shielded, which is the actual mitigation.

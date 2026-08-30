@@ -98,8 +98,8 @@ interface numbers are consolidated in
 **RISK-1 (tip congestion) was realised, exactly as predicted.** The wingtip now
 hosts the spar bore, the register pad, the AK7455 pocket, the drive-shaft
 bushing boss, and the nav-conduit exit. Settling it took three coupled moves —
-the shaft's centre distance, `HALL_SENS_R` 11 → 17, and the AK7455 conduit
-54.0 → 44.5 — and the surviving margins are 1.80 mm on each side of the encoder
+the shaft's centre distance, `HALL_SENS_R` 11 → 16.8, and the AK7455 conduit
+54.0 → 44.5 — and the surviving margins are 2.10 mm on each side of the encoder
 pocket. There is no slack left at this station.
 
 **OQ5 (inherited) is resolved:** the trunnion IS concentric with the spar; the

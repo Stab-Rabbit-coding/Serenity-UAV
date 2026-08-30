@@ -212,8 +212,8 @@ Each CAN-PERIPH-GW-1 gateway (port and starboard nacelles) publishes tilt-angle 
 > field effects rather than the spar's. §6.2's clearance rules stand unchanged.
 >
 > Two further Rev T1 changes affect this section's geometry: the ring magnet
-> grew to **ID 27 / OD 41 mm** (ID 10 could not pass over a Ø20 spar) and
-> `HALL_SENS_R` moved **11 → 17 mm** so the IC still reads mid-annulus. See
+> grew to **ID 26 / OD 41.2 mm** (ID 10 could not pass over a Ø20 spar) and
+> `HALL_SENS_R` moved **11 → 16.8 mm** so the IC still reads mid-annulus. See
 > `docs/WING_ATTACH_INTERFACE.md` §4.5.
 
 **Context (superseded — see the correction above):** The tilt spar is 4130 steel (ferromagnetic). The AK7455 magnet's field interacts with the ferrous spar, creating residual field distortion that shifts the encoded angle reading.
