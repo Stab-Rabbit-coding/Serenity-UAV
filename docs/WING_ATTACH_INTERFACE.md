@@ -1,6 +1,6 @@
 # Wing Attachment Interface Specification — Rev T1
 
-**Revision:** T1 (2026-08-29)
+**Revision:** T1b (2026-08-29)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Analysis and drafting:** Claude (Claude Opus 5, Anthropic) under the author's
 direction, per `AGENTS.md` §3 "Attribution and Licensing"
@@ -24,7 +24,7 @@ That single change re-writes both ends of the wing at once:
 
 | | Rev R2 (rotating spar) | **Rev T1 (fixed bonded spar)** |
 |---|---|---|
-| Wing root moment path | tenon, then two bonded CF tie rods | **the spar itself, into a fuselage socket** |
+| Wing root moment path | tenon, then two bonded CF tie rods | **the spar itself, into a bonded root flange** |
 | Root couple arm | 48 mm (chordwise rod spacing) | **86.7 mm (spanwise support span)** |
 | Wingtip | MF128ZZ bearing seat (spar journals in the wing) | **register face; the spar is rigid in the wing** |
 | Tilt bearing | wingtip, in the wing | **nacelle trunnion ring** |
@@ -44,7 +44,17 @@ carry an owner and a status.
 
 From `tools/wing_spar_carrythrough.py`, measured against the baked hull-frame
 STLs, at `docs/structural_analysis.md` §3's convention (4 g limit = 3 g gust +
-1 g manoeuvre, × 1.5 ultimate), AUW 3.911 kg (8.62 lbm):
+1 g manoeuvre, × 1.5 ultimate — the 1.5 is **14 CFR §23.2230** [REF-FAA-004],
+adopted as an engineering baseline, *not* a compliance claim: Serenity is an
+sUAS under Part 107, which imposes no structural certification basis), AUW
+3.911 kg (8.62 lbm):
+
+> **§23.2265 [REF-FAA-004] applies to this airframe.** It requires a *special*
+> factor beyond the basic 1.5 for parts "subject to appreciable variability
+> because of uncertainties in manufacturing processes or inspection methods" —
+> which is exactly FDM-printed CF-PETG. The repo's FOS 4.0 joint target is the
+> response to that; the requirement is cited, the numeric value is the
+> project's own choice.
 
 | Quantity | Limit | **Ultimate** |
 |---|---|---|
@@ -88,15 +98,19 @@ bore is **16.28 mm**, hence 20 × 16.3.
 
 ### 3.1 Mechanism
 
-A **bonded spar socket** in the cargo sidewall carries the whole root joint. The
-tenon locates and does not react moment. There are no tie rods.
+The joint **splits by load type**: a short bonded socket takes the shear, and a
+bonded flange on the inner sidewall takes the moment. The tenon locates and
+reacts neither. There are no tie rods. §3.3 derives why the split is forced —
+the cargo bay bounds the socket depth, and a socket's capacity goes as 1/L².
 
 ```mermaid
 graph LR
   N["nacelle<br/>115.1 N ultimate"] --> T["wingtip trunnion<br/>on the nacelle"]
   T --> S["fixed 20 x 16.3 CF spar<br/>bonded through the wing"]
-  S --> SK["fuselage socket<br/>>= 55 mm reach, bonded"]
-  SK --> TH["CF thwarts Y -40 / +118<br/>close the couple in the hull"]
+  S --> SK["fuselage socket 18.5 mm<br/>SHEAR only, FOS 16"]
+  S --> FL["bonded root flange 80 x 60<br/>MOMENT, FOS 29.2"]
+  FL --> TH["CF thwarts Y -40 / +118<br/>close the couple in the hull"]
+  SK --> TH
   TN["root tenon 12 x 20 x 8"] -.->|"locates only —<br/>no moment"| SK
 ```
 
@@ -107,7 +121,8 @@ graph LR
 | Spar station, hull Y | **+21.00 mm** | +38.15 mm |
 | Spar height, hull Z | **+66.85 mm** | +68.42 mm |
 | Socket bore | **Ø20.4 mm** (20.0 + 0.2/side epoxy gap) | Ø8.3 mm |
-| Socket spanwise reach inboard of the wall | **≥ 55 mm** | ~19 mm (bearing boss) |
+| Socket spanwise reach inboard of the wall | **18.5 mm — SHEAR ONLY** | ~19 mm (bearing boss) |
+| Bonded root flange on the inner sidewall | **80 (Z) × 60 (Y) mm — MOMENT** | none |
 | Root bearing | **NONE — bonded/clamped socket** | F688ZZ |
 | Mortise (for the locating tenon) | 12.8 × 20.8 mm | 30.8 × 20.8 mm |
 
@@ -122,7 +137,12 @@ station → `58.01 + 8.84 = 66.85`.
 > does not move the bore centre. Applying the thickness scale to the midline
 > would lift the socket 4.07 mm above the spar it is supposed to receive.
 
-### 3.3 Why 55 mm
+### 3.3 Why the joint splits in two
+
+**The cargo bay bounds the socket, and the bound is binding.** Owner
+requirement (2026-08-29): the centre of the cargo bay stays clear. The bay's
+clear span begins at hull **X −100** and the wall skin sits at **X −81.33**, so
+the socket has **18.67 mm** of depth and no more.
 
 A rigid pin in an elastic socket develops a roughly triangular pressure
 distribution either side of the reversal point, resultants at `L/3` from each
@@ -134,41 +154,45 @@ area  = D · L/3          (projected bearing, the CARGO-03c convention)
 sigma = F / area         ∝ 1/L²
 ```
 
-Stress goes as **1/L²**, so length is the only effective lever — diameter
-appears only linearly. Against the repo's standing 5 MPa bond-limited CF-PETG
-figure (`docs/structural_analysis.md` §7.3):
+| Socket L | σ | FOS | |
+|---|---|---|---|
+| **18.67 mm** | **9.89 MPa** | **0.51** | all the bay allows |
+| 30 mm | 3.94 MPa | 1.27 | would enter the bay |
+| 55 mm | 1.24 MPa | 4.02 | would enter the bay |
 
-| Socket L | σ | FOS |
-|---|---|---|
-| 20 mm | 8.65 MPa | 0.58 |
-| 40 mm | 2.27 MPa | 2.20 |
-| 50 mm | 1.49 MPa | 3.36 |
-| **55 mm** | **1.24 MPa** | **4.02** |
-| 60 mm | 1.06 MPa | 4.73 |
+Stress goes as **1/L²**, so depth is the only lever a socket has — and the bay
+has taken it away. **The socket therefore stops being the moment path.**
 
-**COST, AND IT IS AN OWNER DECISION.** 55 mm of reach puts the spar's inboard
-end near hull X −136 (wall at −81.3), reducing the cargo-bay clear span from
-140 mm to ~104 mm on that side. `CARGO-01` removed a full-width spar
-carry-through *precisely* to free that volume, so this is a real
-re-encroachment — smaller than the original, but in the same direction.
+**Shear, however, is fine and never needed depth:**
+`σ = 115.1 / (20 × 18.5) = 0.31 MPa` → **FOS 16**.
 
-Three ways out, unpriced here:
+**The moment moves to a bonded root flange** on the *inner face* of the
+sidewall, reacting over wall **area** instead of socket **depth** — so it needs
+no inboard reach at all. Triangular pressure over height `h`, arm `2h/3`:
 
-1. **Accept the 36 mm bay intrusion.** `tools/cargo_bay_envelope.py` currently
-   passes the mission payload (101.6 × 76.2 × 76.2 mm) against a 170.6 mm
-   measured interior width, so there is nominal room — but the check must be
-   re-run against the intruded span, not assumed.
-2. **Land the LG-11 coupon.** At the owner's own <15 MPa decision-rule
-   threshold a 31 mm socket clears FOS 4.0; at REF-MAT-001's ASTM D695 bulk
-   compressive figure for 20 % CF-PETG (47 MPa) **17 mm** would do. Bearing of
-   a bonded tube against a socket wall is a *compressive* mode, not the
-   bond/peel mode 5 MPa was written to bound, so this is very likely the
-   conservative direction by a wide margin. Overturning a standing repo
-   allowable is an owner call, not a side effect of a geometry change — hence
-   it is flagged, not assumed.
-3. **Two short collars instead of one long socket.** Same 1/L² physics applies
-   to the separation rather than the length; two 12 mm collars 50 mm apart
-   reach FOS 4.1 with less continuous material, though the same total reach.
+| h × w | F | area | σ | FOS |
+|---|---|---|---|---|
+| 40 × 40 | 548 N | 533 mm² | 1.03 MPa | 4.9 |
+| 60 × 50 | 365 N | 1,000 mm² | 0.37 MPa | 13.7 |
+| **80 × 60** | **274 N** | **1,600 mm²** | **0.17 MPa** | **29.2** |
+| 100 × 60 | 219 N | 2,000 mm² | 0.11 MPa | 45.6 |
+
+**80 × 60 mm is specified.** The cargo section is ~150 mm tall inside at this
+station, so 80 mm of height is available without crowding. The flange lies flat
+against the wall and protrudes only its own thickness (~5 mm, to X ≈ −86)
+against a bay edge at −100.
+
+**This is better than the 55 mm socket it replaces, not a compromise** — FOS
+29.2 against 4.02 — because a flange trades an unfavourable 1/L² depth term for
+a linear area term. The bay-clear requirement forced a better joint.
+
+It also **demotes the LG-11 coupon** here from a gate to a packaging
+convenience: at 5 / 15 / 47 MPa the flange gives FOS 29.2 / 87.6 / 274.6. The
+coupon would only decide how small the flange could shrink.
+
+The tube-to-flange transfer is the wing's own 85.7 mm bond, not a separate
+fitting: the spar is bonded through the wing root, and the flange is clamped to
+the spar at the wall by the same split collar that makes the joint releasable.
 
 ### 3.4 Clamp
 
@@ -205,13 +229,13 @@ the tilt drive shaft, and the fixed encoder.
 
 ```mermaid
 graph LR
-  W["wing tip face<br/>register pad, X 14..59"] --> ST["spar stub<br/>32 mm proud"]
+  W["wing tip face<br/>register pad, X 14..58.6"] --> ST["spar stub<br/>15 mm proud - DUCT BOUNDED"]
   ST --> BR["trunnion bearing pair<br/>IN THE NACELLE, ring plane X 28"]
   BR --> NR["nacelle rotates<br/>-5 .. +140 deg"]
-  SH["tilt drive shaft<br/>station 54, bushed in the pad"] --> PN["pinion PD 18.2"]
-  PN -->|"spur mesh, C = 26.0"| RG["tilt ring gear PD 33.8<br/>on the trunnion"]
+  SH["tilt drive shaft<br/>station 53.6, bushed in the pad"] --> PN["pinion 14T PD 11.2"]
+  PN -->|"spur REDUCTION i=3.571<br/>C = 25.6"| RG["tilt ring gear 50T PD 40.0<br/>on the trunnion"]
   RG --> NR
-  AK["AK7455 on the wing pad<br/>R 17, fixed"] -.->|"reads across<br/>1.5 mm air gap"| RM["ring magnet ID 27 / OD 41<br/>on the trunnion"]
+  AK["AK7455 on the wing pad<br/>R 16.8, fixed"] -.->|"reads across<br/>1.5 mm air gap"| RM["ring magnet ID 26 / OD 41.2<br/>on the trunnion"]
   NV["nav 3-core, wing bore st. 8"] --> XJ["crosses at the trunnion"]
   XJ --> LT["outboard nav light<br/>rotates with the nacelle"]
 ```
@@ -220,46 +244,90 @@ graph LR
 
 | Item | Value | Note |
 |---|---|---|
-| Spar stub proud of the wing tip face | **32.0 mm** | 4 joint gap + 10 to the ring plane + ~18 bearing pair. **REQUIRES CONFIRMATION** against the nacelle's final bearing stations. |
+| Spar stub proud of the wing tip face | **15.0 mm — DUCT-BOUNDED** | The spar must TERMINATE at ≥ 26 mm from the duct axis (see §4.3a). Max 15.7; 15.0 built. **The bearing pair must fit inside it** — 2 × 6804 (20 × 32 × 7) = 14.0 mm does. |
 | Trunnion bearing bore | **Ø20.0 H7** | on the nacelle, ring plane X ≈ 28 mm from the duct axis |
 | Bearing duty | axial **and** radial, 21.9 N each at 4 g × 1.5 | thrust is axial to the spar in cruise and transverse in hover — a stack chosen for one attitude is wrong for the other (plan 004 RISK-4) |
-| Ring gear pitch diameter | **33.8 mm** | must be concentric with and clear the Ø20 spar |
-| Pinion pitch diameter | **18.2 mm** | on the wing's drive shaft |
-| Gear centre distance | **26.0 mm** | → wing shaft at chord station 54.0 |
-| Ring magnet | **ID 27 / OD 41 mm**, diametric | mean radius 17.0 = `HALL_SENS_R` |
+| Ring gear | **50T, module 0.8, PD 40.0 mm** | concentric with the spar; root Ø 38.0 clears it with 9 mm of hub each side; OD 41.6 inside the 53.4 envelope |
+| Pinion | **14T, module 0.8, PD 11.2 mm** | on the wing's drive shaft; 14T is the no-undercut floor at 20° PA |
+| Reduction ratio | **3.571** | shaft turns **1.389 revolutions** per 140° of nacelle |
+| Gear centre distance | **25.6 mm** | → wing shaft at chord station 53.6 |
+| Ring magnet | **ID 26 / OD 41.2 mm**, diametric | mean radius 16.8 = `HALL_SENS_R` |
 | Magnet axial gap to the AK7455 face | **1.5 mm** | set by the nacelle standoff |
 | Non-ferrous zone | ≥ 10 mm radius around the IC | see §4.5 |
 | 4 × 10 AWG disconnect | **in the nacelle annulus** | see §4.4 |
 
-### 4.3 The gear centre distance is not free — and plan 004's figure is wrong
+### 4.3a The spar stub is bounded by the thrust duct
 
-`docs/plans/2026-08-29-004-...` KTD4 places the drive shaft at chord station
-43, i.e. **15.0 mm** from the spar axis. That centre distance is impossible for
-this mechanism, and the plan's own inputs show it once they are closed:
+**Owner requirement (2026-08-29): the spar must not penetrate the nacelle
+thrust tube.** That is a hard geometric bound and it is tighter than the bearing
+stack would like.
 
-- The tilt ring gear is **concentric with the spar**, so its root diameter must
-  clear Ø20 plus a hub wall → PD ≥ ~30 mm.
-- The stage is a step-**up** (the nacelle sweeps 145°, more than a servo's
-  range), so the pinion is the smaller member:
-  `PD_ring × 145 = PD_pinion × servo_deg`.
-- `C = (PD_ring + PD_pinion) / 2`.
+The duct is a cylinder of `r = 25 mm` about the nacelle's local Z axis. The spar
+runs along local X at `Y = 0`, so every point of it at station X sits
+`√(X² + Y²) ≥ |X|` from the duct axis. The spar therefore clears the duct **iff
+it terminates at `|X| ≥ 26`** (25 plus the 1 mm margin plan 003 R4 states):
 
-At `C = 15` with a 270° servo the algebra returns **`PD_ring = 10.5 mm` — a
-ring gear smaller than the spar it encircles.** No tooth count fixes this.
+```text
+wing tip face   |X| = 37.7 (NACELLE_OD_X/2) + 4.0 (joint gap) = 41.7 mm
+spar must stop  |X| = 26.0 mm
+=> MAXIMUM STUB       15.7 mm      (15.0 built, 0.7 in hand)
+```
 
-| PD_ring | Servo | PD_pinion | C | Wing shaft station |
-|---|---|---|---|---|
-| 30.0 | 270° | 16.1 | 23.1 | 51.1 |
-| **33.8** | **270°** | **18.2** | **26.0** | **54.0 (built)** |
-| 30.0 | 180° | 24.2 | 27.1 | 55.1 |
-| 33.8 | 180° | 27.2 | 30.5 | 58.5 |
+The 32.0 mm stub this document previously specified would have reached
+`|X| = 9.7` — **fifteen millimetres inside the duct wall**, straight through the
+thrust column between the two EDFs. It was budgeted outward from the bearing
+stack and never checked against the duct, which is the same class of error as
+the Rev R2 through-duct spar this whole revision exists to remove.
 
-**C = 26.0 is built** — it is the value that leaves the AK7455 pocket its
-1.80 mm of chordwise clearance between the spar bore and the shaft bore. The
-180° column is **not** buildable at the current wing: station 58.5 collides with
-the root tenon (58.5 mm). **Confirm the servo's real angular range
-(plan 003 OQ3 / plan 004 OQ1) before cutting gears** — a 180° servo forces
-either a smaller ring gear or a tenon relocation.
+**The bearing stack must fit inside 15 mm.** Two thin-section 6804 (20 × 32 × 7)
+total 14.0 mm and fit; 6804 is already a BOM item (`SKIPPER-BRG-6804`). A deeper
+stack does not fit and must not be assumed.
+
+### 4.3b The drive is a reduction — the shaft turns more than one revolution
+
+**Owner direction (2026-08-29):** the actuator drives the shaft through **more
+than a single revolution** to sweep the nacelle 140°. That inverts the tip
+stage, and it dissolves a problem this document previously reported as
+unsolvable.
+
+An earlier pass assumed a limited-rotation hobby servo (180°/270°), which forces
+a **step-up** — ring smaller than pinion. Since the ring gear is concentric with
+the spar and must clear Ø20, that produced an impossibility: at plan 004 KTD4's
+`C = 15 mm` the algebra returns `PD_ring = 10.5 mm`, a ring gear smaller than
+the spar it encircles.
+
+**As a reduction the ring is the larger member and the geometry closes easily.**
+With `i = N_ring / N_pinion`, the shaft turns `140° × i`:
+
+| N_ring | PD | i | shaft rev | C | station | ring OD | root Ø | |
+|---|---|---|---|---|---|---|---|---|
+| 36 | 28.8 | 2.571 | 1.000 | 20.00 | 48.00 | 30.4 | 26.8 | exactly one rev, not "more than" |
+| 45 | 36.0 | 3.214 | 1.250 | 23.60 | 51.60 | 37.6 | 34.0 | |
+| **50** | **40.0** | **3.571** | **1.389** | **25.60** | **53.60** | **41.6** | **38.0** | **selected** |
+| 54 | 43.2 | 3.857 | 1.500 | 27.20 | 55.20 | 44.8 | 41.2 | leaves 1.1 mm to the tenon — under the floor |
+
+*(module 0.8, 14T pinion, PD 11.2)*
+
+**50T is selected.** It also leaves the AK7455 pocket a 10.2 mm chordwise window
+between the spar bore's aft edge (38.2) and the shaft's forward edge (51.4) —
+the encoder radius, the board width and the gear centre distance are one coupled
+set, and none of the three is independently free.
+
+**Consequence for the actuator, and it is a real change.** A multi-turn output
+means the drive is **no longer a limited-rotation servo**. It is a
+continuous-rotation gearmotor or a stepper, closed on the AK7455's absolute
+nacelle angle rather than on the actuator's own travel. That:
+
+- **retires the 180°-vs-270° question**, which was blocking;
+- removes the 145°-of-travel constraint plan 004 KTD5 identified as the
+  *binding* one (torque never was — the reduction delivers 3.571× whatever the
+  actuator gives, against a 0.177 N·m grounded requirement);
+- makes the AK7455 **load-bearing for control**, not just telemetry: without
+  absolute feedback a multi-turn drive has no idea where the nacelle is.
+
+Shaft torque is 0.050 N·m; wind-up over the installed length is 0.27° (Ø4 steel,
+`G` = 79 GPa). **Re-open the actuator selection** — the DS3225 was already ~17×
+oversized on torque and is now also the wrong *kind* of device.
 
 ### 4.4 The power disconnect belongs in the nacelle, not the wingtip
 
@@ -316,8 +384,88 @@ because the spar bore is now full of the power bundle.
    IC left at R = 11 would sit 2.5 mm inboard of the magnet's inner edge — off
    the magnet entirely.
 4. **The ring magnet and the ring gear are nearly coradial** (magnet annulus
-   r 13.5–20.5, gear PD r 16.9) and must therefore be **axially separated** on
-   the trunnion. Nacelle to resolve.
+   r 13.0–20.6, gear PD r 20.0, gear OD r 20.8) and must therefore be **axially
+   separated** on the trunnion — and both must fit within the 15 mm the duct
+   allows the stub (§4.3a). Nacelle to resolve; this is the tightest packaging
+   constraint the joint has.
+
+---
+
+## 4A. The built section is not an S1223 — designation and data
+
+Re-derived 2026-08-29 by sampling `S1223_UPPER` / `S1223_LOWER` at 1/20000
+chord. These are computed from the tabulated UIUC coordinates [REF-CAD-006],
+not quoted from a datasheet.
+
+**Designations.** The built sections share S1223's *camber line* and nothing
+else, so they carry their own names:
+
+| | designation | meaning |
+|---|---|---|
+| root | **S1223/t17.7** | S1223 camber line, thickness envelope × 1.46 |
+| tip | **S1223/t26.7** | S1223 camber line, thickness envelope × 2.20 |
+
+The *filename* keeps `s1223` for continuity of the git/STL/BOM trail. The
+*section* does not.
+
+| | baseline | root built | tip built |
+|---|---|---|---|
+| thickness scale | 1.000 | 1.460 | 2.200 |
+| max t/c | 12.14 % | **17.72 %** | **26.71 %** |
+| at x/c | 0.198 | 0.198 | 0.198 |
+| max camber | 8.67 % | 8.67 % | 8.67 % |
+| at x/c | 0.490 | 0.490 | 0.490 |
+| LE radius r/c | 0.02502 | 0.05333 | 0.12110 |
+| LE radius, absolute | 3.23 mm @ c 129 | 6.88 mm @ c 129 | 11.26 mm @ c 93 |
+
+**Correction to the previous header.** It claimed max thickness *"at 22.6 %
+chord"* and max camber *"at 39.4 % chord"*. Both magnitudes were about right;
+both **chordwise locations were wrong**, and neither was traceable to the
+coordinate table the file actually builds from. The re-derivation returns
+19.8 % and 49.0 % — exactly the published S1223 characterisation.
+
+Camber is identical across all three columns because `s1223_section()` scales
+thickness *about an unscaled camber line*. LE radius goes as `t_scale²`, a
+consequence of scaling a fixed shape's thickness envelope, verified numerically
+(0.02502 × 1.46² = 0.05333; × 2.20² = 0.12110). The tip's leading edge is 12 %
+of its own chord — geometrically closer to a strut-fairing nose than to a
+low-Reynolds high-lift section.
+
+### What published S1223 data still applies
+
+**Flow regime first**, because it governs which methods are even legal.
+`Re = V·c/ν` at 40 kt (20.58 m/s), `ν = 1.46 × 10⁻⁵ m²/s` (ISA SL, 15 °C):
+
+| station | chord | Re |
+|---|---|---|
+| root | 129 mm | ≈ 182,000 |
+| MAC | 111 mm | ≈ 156,000 |
+| tip | 93 mm | ≈ 131,000 |
+
+All below `Re = 5 × 10⁵` — the **low-Reynolds regime**, where laminar
+separation bubbles dominate and published polars do not transfer between
+Reynolds numbers, let alone between sections. Chord is unchanged at Rev T1, so
+Re is unchanged.
+
+| Claim | Status |
+|---|---|
+| max camber 8.67 % at 49.0 % chord | **Exact** for the built sections — camber is unscaled by construction, not approximated |
+| zero-lift angle, lift-curve slope | **Partially survives at the root only.** Thin-airfoil theory makes `dc_l/dα = 2π` and `α_(L=0)` functions of the camber line alone, independent of thickness — which is *why* preserving the camber line matters. But that theory is valid for **thin** sections; 17.7 % is already outside its comfortable range and 26.7 % is emphatically outside. Optimism at the root; nothing at the tip |
+| `CL ≈ 1.55` at 3° AoA | **Does not survive** |
+| `CL_max ≈ 2.0` | **Does not survive.** `c_l,max` comes only from measurement or computation at the actual Re — never from theory, never carried across sections |
+| `L/D ≈ 30–35` | **Does not survive** |
+| 7.6 N cruise lift, "~22 % AUW" | **Does not survive** — derived from the above |
+| printed surface finish | **Never characterised.** FDM layer lines act as a de-facto trip strip whose effect at these Re is real and unquantified for this part |
+
+**Establishing real numbers** needs XFOIL or a transition-sensitive RANS run at
+Re 1.3–1.8 × 10⁵, or a bench/tunnel result. A fully-turbulent RANS model will
+misrepresent the separation bubble. Tracked in `TODO.md` §0.8 and
+`docs/flight_envelope.md`.
+
+> ⚠ **Engineering review required.** These are computed geometric properties
+> and a statement of what is *not* known. They are not a performance
+> substantiation and must be reviewed and accepted by a qualified engineer
+> before any flight-relevant decision rests on them.
 
 ---
 
@@ -325,18 +473,20 @@ because the spar bore is now full of the power bundle.
 
 | ID | Requirement | Owner | Status |
 |---|---|---|---|
-| **WA-R1** | Spar socket at hull Y +21.00, Z +66.85, Ø20.4, ≥ 55 mm reach | fuselage-mid | **OPEN** |
+| **WA-R1** | Spar socket at hull Y +21.00, Z +66.85, Ø20.4, 18.5 mm deep — SHEAR path (FOS 16) | fuselage-mid | **OPEN** |
+| **WA-R1b** | Bonded root flange 80 (Z) × 60 (Y) mm on the inner sidewall — MOMENT path (FOS 29.2). Nothing inboard of hull X ≈ −86; the bay stays clear | fuselage-mid | **OPEN** |
 | **WA-R2** | Root bearing (F688ZZ) deleted; bonded/clamped socket replaces it | fuselage-mid | **OPEN** |
 | **WA-R3** | Split-collar pinch clamp, ≥ 5 mm wall, M3 inserts, positive split gap | fuselage-mid | **OPEN** |
 | **WA-R4** | Mortise re-sized 30.8 → 12.8 mm wide for the locating tenon | fuselage-mid | **OPEN** |
-| **WA-R5** | Cargo-bay envelope re-verified against the intruded clear span | fuselage-mid | **OPEN** |
-| **WA-R6** | Fuselage-side conduits for the nav 3-core (Y +1.0) and the AK7455 pair (Y +37.5), and a drive-shaft bore at Y +47.0 | fuselage-mid | **OPEN** |
+| **WA-R5** | Cargo-bay envelope unchanged — **CLOSED by design**: the joint no longer enters the bay | fuselage-mid | **CLOSED** |
+| **WA-R6** | Fuselage-side conduits for the nav 3-core (Y +1.0) and the AK7455 pair (Y +37.5), and a drive-shaft bore at Y +46.6 | fuselage-mid | **OPEN** |
 | **WA-R7** | Trunnion bearing bore Ø20.0, ring plane X ≈ 28, axial + radial duty | wings-nacelles | **OPEN** |
-| **WA-R8** | Tilt ring gear PD 33.8 concentric with the spar, C = 26.0 to the wing shaft | wings-nacelles | **OPEN** |
-| **WA-R9** | Ring magnet ID 27 / OD 41, axially separated from the ring gear | wings-nacelles | **OPEN** |
+| **WA-R8** | Tilt ring gear 50T module 0.8 (PD 40.0) concentric with the spar, C = 25.6 to the wing shaft; reduction 3.571 | wings-nacelles | **OPEN** |
+| **WA-R9** | Ring magnet ID 26 / OD 41.2, axially separated from the ring gear, both inside the 15 mm stub | wings-nacelles | **OPEN** |
 | **WA-R10** | 4 × 10 AWG disconnect in the nacelle annulus, partitioned from the AK7455 plug | wings-nacelles | **OPEN** |
 | **WA-R11** | Nav 3-core crosses at the trunnion, radially separated from the power bundle | wings-nacelles | **OPEN** |
-| **WA-R12** | Confirm the spar stub protrusion (32 mm) against final bearing stations | wings-nacelles | **OPEN** |
+| **WA-R12** | Trunnion bearing pair within the **15 mm** duct-bounded stub (2 × 6804 = 14.0 mm fits); no member closer than 26 mm to the duct axis | wings-nacelles | **OPEN** |
+| **WA-R15** | Actuator re-select: continuous-rotation gearmotor or stepper, not a limited-rotation servo (§4.3b) | avionics / wings-nacelles | **OPEN** |
 | **WA-R13** | `TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1 corrected — the spar is no longer ferromagnetic | avionics | **OPEN** |
 | **WA-R14** | Wing side: bores, pad, root path, thickness scales | wings-nacelles | **BUILT** (Rev T1) |
 
@@ -348,16 +498,28 @@ because the spar bore is now full of the power bundle.
   with it. **Blocks CF tube procurement.**
 - **OI-2 — CF allowable.** No ASTM D3039/D695 certificate exists for any CF
   stock in this repo. The 300 MPa figure is a stand-in (plan 003 DEP-1).
-- **OI-3 — Socket allowable / LG-11 coupon.** Decides whether the socket is
-  55 mm or 17 mm, and therefore whether the cargo bay is intruded at all.
-- **OI-4 — Servo angular range.** 180° vs 270° changes the gear centre distance
-  and, at 180°, does not fit the current wing (§4.3).
+- **OI-3 — CLOSED as a gate.** The LG-11 coupon no longer decides whether the
+  root joint is buildable: the flange clears FOS 4.0 by 7× at the standing 5 MPa
+  figure (FOS 29.2 / 87.6 / 274.6 at 5 / 15 / 47 MPa). It now only sets how
+  small the flange could shrink — a packaging convenience.
+- **OI-4 — CLOSED.** The 180°-vs-270° question is void: the drive is multi-turn,
+  so the actuator's own travel no longer sets the ratio (§4.3b). **Replaced by
+  OI-7.**
+- **OI-7 — Actuator selection (new, open).** A continuous-rotation gearmotor or
+  stepper, closed on the AK7455. The DS3225 is both ~17× oversized on torque and
+  the wrong kind of device. Note this makes the encoder **load-bearing for
+  control**, not telemetry — a multi-turn drive without absolute feedback does
+  not know where the nacelle is.
+- **OI-8 — Trunnion packaging (new, open).** The bearing pair, the ring gear and
+  the ring magnet must all fit within the 15 mm the duct allows, and the magnet
+  and gear are nearly coradial. This is now the joint's tightest constraint.
 - **OI-5 — Aero revalidation.** The section is no longer S1223: root t/c
   12.14 → 17.72 %, tip 18.93 → 26.70 %. **Every aero figure in the repo that
   cites this wing is unverified**, including the 7.6 N cruise-lift figure in
   `wings_s1223_revo.scad`'s header and everything derived from it. Do not
   present the re-lofted wing as an S1223 performance match (plan 003 RISK-1).
-- **OI-6 — Bay intrusion decision** (§3.3).
+- **OI-6 — CLOSED.** The bay is not intruded; the joint was re-designed around
+  the requirement rather than trading against it (§3.3).
 
 ---
 

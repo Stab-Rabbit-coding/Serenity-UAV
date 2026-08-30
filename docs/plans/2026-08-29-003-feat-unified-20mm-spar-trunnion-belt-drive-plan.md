@@ -91,8 +91,23 @@ where it was found, not silently worked around:**
    valid closed polygons at 1.46 / 2.20; RISK-2 is closed on evidence rather
    than on a gate that could not see it.
 
-**Open questions closed:** OQ3/OQ4 remain open and are now *blocking* rather
-than advisory — see the interface spec §6. **OQ5 is resolved by construction:**
+**Open questions closed:** OQ3 (servo range) is **CLOSED and void** — the drive
+is multi-turn, so the actuator's own travel no longer sets the ratio. OQ4
+(wire OD) remains open and blocking. See the interface spec §6.
+
+**Three further owner directives landed 2026-08-29 after the first build pass,
+and two of them invalidated built geometry:**
+
+1. **The spar must not penetrate the thrust duct.** The 32 mm stub reached
+   |X| = 9.7 against a duct wall at 25 — fifteen millimetres inside it. Cut to
+   **15.0 mm** (max 15.7). The nacelle's bearing pair must now fit inside that.
+2. **The centre of the cargo bay must stay clear.** That rules out the 55 mm
+   socket U7 was scoped around; only 18.67 mm exists before the bay. The joint
+   splits instead — socket for shear (FOS 16), bonded 80 × 60 flange for the
+   moment (FOS 29.2) — which is *better* than the socket it replaces, because a
+   flange trades a 1/L² depth term for a linear area term.
+3. **The drive turns the shaft more than one revolution**, inverting the tip
+   stage to a reduction (see plan 004's correction note). **OQ5 is resolved by construction:**
 the nacelle keeps its canonical station because the pivot moved inside it
 (KTD7/KTD8), and only the wing-internal station moved.
 

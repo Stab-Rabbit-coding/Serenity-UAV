@@ -293,6 +293,65 @@ aft white); controlled by FC4 node (Simon's medbay, Bay D).
 
 ---
 
+### REF-FAA-004: 14 CFR Part 23 — Airworthiness Standards: Normal Category Airplanes
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | U.S. Federal Aviation Administration (FAA), Department of Transportation |
+| **Current edition** | Part 23 as restructured by Amdt. 23-64 (effective 2017-08-30), performance-based; as amended through the 2024 annual CFR edition |
+| **Official URL** | <https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-23> |
+| **Verified source** | Section text quoted below was retrieved and verified verbatim 2026-08-29 from GovInfo's authoritative CFR XML — <https://www.govinfo.gov/content/pkg/CFR-2024-title14-vol1/xml/CFR-2024-title14-vol1-sec23-2230.xml> and <https://www.govinfo.gov/content/pkg/CFR-2024-title14-vol1/xml/CFR-2024-title14-vol1-sec23-2265.xml>. (eCFR's HTML endpoint bot-blocks automated retrieval; GovInfo serves the same authority.) |
+| **Applicability caveat** | Part 23 governs **manned** normal-category airplanes. Serenity is an sUAS operated under Part 107 [REF-FAA-002], which imposes **no** structural certification basis. Part 23 is cited here as an **adopted engineering baseline**, exactly as `docs/structural_analysis.md` §3 already frames it — **NOT as a compliance claim.** |
+
+**Sections applied in this project:**
+
+| Section | Title | Applied where |
+|---|---|---|
+| **§ 23.2230** | *Limit and ultimate loads* | The 1.5× ultimate/limit factor used throughout `docs/structural_analysis.md` §3 and `tools/wing_spar_carrythrough.py` |
+| **§ 23.2265** | *Special factors of safety* | Justifies an additional factor on FDM-printed structure — see below |
+
+**§ 23.2230 (verbatim, GovInfo 2024 CFR):** the applicant must determine —
+(a) *"The limit loads, which are equal to the structural design loads unless
+otherwise specified elsewhere in this part"*; and (b) *"The ultimate loads,
+which are equal to the limit loads multiplied by a 1.5 factor of safety unless
+otherwise specified elsewhere in this part."*
+
+**§ 23.2265 (verbatim, GovInfo 2024 CFR):** (a) *"The applicant must determine a
+special factor of safety for each critical design value for each part, article,
+or assembly for which that critical design value is uncertain, and for each
+part, article, or assembly that is —"* … (a)(2) *"Subject to appreciable
+variability because of uncertainties in manufacturing processes or inspection
+methods."* (c) *"The applicant must multiply the highest pertinent special
+factor of safety in the design for each part of the structure by each limit and
+ultimate load…"*
+
+**Why §23.2265 matters here.** Serenity's primary structure is FDM-printed
+CF-PETG. Layer adhesion, raster orientation, moisture uptake, and
+machine-to-machine variation are precisely the *"appreciable variability because
+of uncertainties in manufacturing processes"* that (a)(2) contemplates. This is
+the regulatory hook for the FOS 4.0 joint target that `docs/structural_analysis.md`
+§3 currently describes only as *"a design-team judgment value"* — the judgment
+is sound and now has a citable basis, though the specific numeric value remains
+the project's own choice rather than anything Part 23 prescribes.
+
+**CORRECTION THIS ENTRY MAKES — stale section number.**
+`docs/structural_analysis.md` cited **"14 CFR Part 23.303"** in two places. That
+section belonged to the **pre-2017** Part 23 and does not exist in the current
+rule; the 2017 restructure moved the limit/ultimate relationship to **§23.2230**.
+This is the same class of defect this file already recorded for §23.1401 (see
+"Removed / Superseded Citations"). Both occurrences corrected 2026-08-29.
+
+**Also worth recording, to prevent a future fabrication:** the load factors
+**+3.8 / −1.52**, widely quoted as "the Part 23 load factors," appear **nowhere
+in the current rule** — they belong to the pre-2017 §23.337. Current §23.2200(b)
+requires only *"design maneuvering load factors not less than those, which
+service history shows, may occur within the structural design envelope."* This
+project's 4 g limit factor is an adopted figure under that framing, not a
+regulatory quotation. Do not cite +3.8/−1.52 to current Part 23.
+
+**Used in:** `docs/structural_analysis.md` §2, §3;
+`docs/WING_ATTACH_INTERFACE.md` §2.1; `tools/wing_spar_carrythrough.py`
+
 ## Part II — United States Federal Communications Commission Regulations
 
 > "Can't stop the signal." — Mr. Universe. We can, however, stay inside Part 15/95 limits while we transmit it.

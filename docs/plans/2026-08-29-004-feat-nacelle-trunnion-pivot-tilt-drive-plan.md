@@ -40,8 +40,22 @@ recover, not margin to celebrate.
 
 ## CORRECTION 2026-08-29 — KTD4's shaft station is kinematically impossible
 
-**U3 (the wing-side shaft bore) is BUILT, at station 54.0, not 43.0.** The
-correction is not a packaging preference; KTD4's figure cannot exist.
+**U3 (the wing-side shaft bore) is BUILT, at station 53.6, not 43.0.**
+
+**SUPERSEDED IN PART 2026-08-29 (owner direction): the stage is a REDUCTION.**
+The actuator drives the shaft through **more than one revolution** per 140° of
+nacelle, so the ring is the LARGER member. The impossibility recorded below was
+real *under the step-up reading* this plan assumed (a limited-rotation servo),
+and it is what a reduction dissolves. Built: module 0.8, **14T pinion / 50T
+ring**, i = 3.571, shaft 1.389 rev, **C = 25.6 → station 53.6**. The
+step-up analysis below is retained as the record of why the original figure
+failed — it is still correct about KTD4's C = 15 mm being impossible.
+
+**OQ1 (servo 180° vs 270°) is CLOSED — the question is void.** A multi-turn
+output means the actuator is a continuous-rotation gearmotor or stepper closed
+on the AK7455, not a limited-rotation servo. That also retires KTD5's "travel is
+the binding constraint" finding, and makes the encoder load-bearing for CONTROL
+rather than telemetry. **New open item: actuator re-select.**
 
 KTD4 places the drive shaft 15.0 mm from the spar axis. Close this plan's own
 inputs on each other and that centre distance returns an impossible gear:
@@ -367,7 +381,7 @@ overlap; bearing load check recorded against the datasheet rating.
 
 **Approach:** Ø4.4 bore at station **43** (KTD4), spanwise, parallel to the spar.
 Support bushings at the root rib and tip rib. Servo coupling at the bulkhead.
-Check against the spar bore, the AK7455 conduit at station 54, and the belt-free
+Check against the spar bore, the AK7455 conduit at station 44.5, and the belt-free
 section — the wing now carries three spanwise bores and they must not intersect.
 
 **Acceptance criteria:**

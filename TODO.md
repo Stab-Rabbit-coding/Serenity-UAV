@@ -44,20 +44,37 @@
       none; the 5.5 mm figure the Ø20.4 spar bore is derived from is an
       ASSUMPTION. A larger real OD re-opens the airfoil trade
       (`tools/spar_bundle_fit.py` prints this caveat on every run).
-- [ ] **Confirm the tilt servo's angular range (180 vs 270 deg) — BLOCKING.**
-      It sets the gear centre distance and therefore the wing's drive-shaft
-      station. 270 deg fits (C 26.0, station 54.0, BUILT); 180 deg needs
-      C 30.5 -> station 58.5, which collides with the root tenon at 58.5 mm.
-- [ ] **LG-11 coupon decides the wing-root socket length, and with it whether
-      the cargo bay is intruded at all.** 55 mm at the standing 5 MPa figure;
-      31 mm at the owner's <15 MPa rule; 17 mm at REF-MAT-001's 47 MPa
-      (`docs/WING_ATTACH_INTERFACE.md` §3.3).
+- [x] **Tilt servo angular range (180 vs 270 deg) — CLOSED 2026-08-29, VOID.**
+      Owner direction: the drive turns the shaft MORE THAN ONE REVOLUTION, so
+      the stage is a reduction and the actuator's own travel no longer sets the
+      ratio. Built: module 0.8, 14T pinion / 50T ring, i 3.571, shaft 1.389 rev
+      per 140 deg, C 25.6 -> station 53.6.
+- [ ] **ACTUATOR RE-SELECT (replaces the item above).** A multi-turn output means
+      the tilt drive is no longer a limited-rotation servo but a
+      continuous-rotation gearmotor or stepper, closed on the AK7455's absolute
+      nacelle angle. The DS3225 is ~17x oversized on torque AND now the wrong
+      kind of device. NOTE this makes the encoder load-bearing for CONTROL, not
+      telemetry: a multi-turn drive without absolute feedback does not know
+      where the nacelle is.
+- [ ] **LG-11 coupon — DEMOTED at the wing root, still a gate elsewhere.**
+      Owner ruled the cargo bay clear, so the root joint was re-designed around
+      it: socket for shear + bonded 80x60 flange for the moment, FOS 29.2 at the
+      STANDING 5 MPa figure (29.2 / 87.6 / 274.6 at 5 / 15 / 47 MPa). The coupon
+      no longer decides whether that joint is buildable, only how small the
+      flange could shrink. It remains a gate for the tenon path and the thwarts.
 - [ ] **Aero revalidation of the re-lofted wing (CFD or bench).** The section
       is no longer S1223 -- root t/c 12.14 -> 17.72 %, tip 18.93 -> 26.70 %.
       Every aero figure in this repo citing this wing is unverified until this
       lands, including the 7.6 N cruise-lift figure and everything derived
-      from it. `tools/wing_cfd_openfoam.py` is still blocked on mesh
-      generation.
+      from it. The built sections are designated S1223/t17.7 (root) and
+      S1223/t26.7 (tip) -- S1223's CAMBER LINE with the thickness envelope
+      scaled x1.46 / x2.20; camber is unscaled and exact (8.67% at 49.0%
+      chord), so zero-lift angle and lift-curve slope partially survive at the
+      ROOT on thin-airfoil grounds and not at all at the tip. CL_max, L/D and
+      the cruise-lift figure do NOT survive. Needs XFOIL or a
+      TRANSITION-SENSITIVE RANS run at Re 1.3-1.8e5 -- a fully-turbulent model
+      will misrepresent the separation bubble. `tools/wing_cfd_openfoam.py` is
+      still blocked on mesh generation. See docs/flight_envelope.md's banner.
 
 #### 0.8.1 — Wing attach interface (Rev T1), open requirements
 
@@ -66,9 +83,11 @@
 
 Wing side is BUILT. These are the two joints it publishes.
 
-- [ ] WA-R1..R6 — fuselage: spar socket (Y +21.00, Z +66.85, D20.4, >= 55 mm
-      reach), delete F688ZZ, split-collar clamp, re-size mortise 30.8 -> 12.8,
-      re-verify the bay envelope, and cut the three matching conduits.
+- [ ] WA-R1/R1b..R6 — fuselage: spar socket (Y +21.00, Z +66.85, D20.4, 18.5 mm
+      deep, SHEAR only) PLUS a bonded 80x60 root flange on the inner sidewall
+      (MOMENT, FOS 29.2); delete F688ZZ; split-collar clamp; re-size mortise
+      30.8 -> 12.8; cut the three matching conduits. WA-R5 (bay envelope) is
+      CLOSED by design -- the joint no longer enters the bay.
       **`tools/wing_root_deconflict.py` FAILS until this lands** (3 findings,
       all one cause: the fuselage still carries `WING_SPAR_Y = +38.15`).
 - [ ] WA-R7..R12 — nacelle: trunnion bearing bore D20.0 at ring plane X ~ 28
@@ -80,9 +99,16 @@ Wing side is BUILT. These are the two joints it publishes.
       ferromagnetic-spar premise is corrected in place; confirm the firmware
       zero-calibration procedure still covers the drive-shaft/pinion field
       that replaces it.
-- [ ] **OWNER DECISION — cargo-bay intrusion.** 55 mm of socket reach cuts the
-      bay clear span 140 -> ~104 mm, re-encroaching on the volume CARGO-01
-      freed. Three options priced in `airframe/fuselage-mid/WBS.md` §1.1.1.5.
+- [x] **OWNER DECISION — cargo-bay intrusion: CLOSED 2026-08-29.** The bay stays
+      clear; nothing goes inboard of hull X ~ -86 against a bay edge at -100.
+      The constraint produced a better joint (moment FOS 4.02 -> 29.2), not a
+      compromise. See `airframe/fuselage-mid/WBS.md` §1.1.1.5.
+- [ ] **Spar stub / trunnion packaging — NEW, tightest constraint on the joint.**
+      The spar must terminate >= 26 mm from the nacelle duct axis, so the stub is
+      15.0 mm (max 15.7). The trunnion bearing PAIR, the 50T ring gear and the
+      ID26/OD41.2 ring magnet must all fit inside that 15 mm, and the magnet and
+      gear are nearly coradial (r 13.0-20.6 vs 20.0) so they need axial
+      separation. 2x 6804 (20x32x7) = 14.0 mm fits; MF128ZZ retired to QTY 0.
 
 ### 0.10 Update and correct documentation touching every non-archived file.
 

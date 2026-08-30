@@ -9963,8 +9963,7 @@
     "docs/WING_ATTACH_INTERFACE.md": {
       "description": "Wing Attachment Interface Specification \u2014 Rev T1",
       "tags": [
-        "documentation",
-        "emi-hardening"
+        "documentation"
       ],
       "archived": false
     },
@@ -13281,7 +13280,6 @@
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/Tilt-Rotor 10AWG Wire Clearance Analysis.md",
       "docs/WBS_FEDERATION.md",
-      "docs/WING_ATTACH_INTERFACE.md",
       "docs/electrical_fault_margins.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",

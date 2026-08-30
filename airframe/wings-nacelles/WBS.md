@@ -1424,24 +1424,46 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
 - [~] **SPAR-20-6 (U6)** — SUPERSEDED as a *belt* drive by §1.1.5 (plan 004
     KTD1: a spanwise belt cannot reach an X-axis pivot without an added
     right-angle stage, so a shaft + spur pair does the same job with fewer
-    parts). WING HALF DONE: Ø4.4 drive-shaft bore at station **54.0**.
-    **Plan 004 KTD4's station 43 is kinematically impossible** — it implies a
-    15 mm gear centre distance, and since the ring gear is concentric with the
-    Ø20 spar, the algebra returns a ring PD of 10.5 mm, smaller than the spar
-    it encircles. Real minimum C is 23.1; **26.0 is built** (ring PD 33.8,
-    pinion 18.2, 270° servo). Sizing for **travel first** still stands.
-    **OQ1 (servo range) is now BLOCKING**: a 180° servo needs C = 30.5 →
-    station 58.5, which collides with the root tenon at 58.5 mm.
+    parts). WING HALF DONE: Ø4.4 drive-shaft bore at station **53.6**.
+    **THE STAGE IS A REDUCTION, NOT A STEP-UP** (owner direction 2026-08-29):
+    the shaft turns **more than one revolution** to sweep the nacelle 140°.
+    That inverts the ratio and dissolves the impossibility found under the
+    step-up reading — plan 004 KTD4's C = 15 mm returned a ring PD of 10.5 mm,
+    smaller than the Ø20 spar it must encircle. As a reduction the ring is the
+    LARGER member and the geometry closes easily.
+    **BUILT: module 0.8, 14T pinion (PD 11.2) / 50T ring (PD 40.0), i = 3.571,
+    shaft 1.389 rev per 140°, C = 25.6 → station 53.6.** 36T is exactly one
+    revolution (not "more than"); 54T pushes the bore to 55.2 and leaves 1.1 mm
+    to the root tenon, under the 1.16 mm floor.
+    **OQ1 (servo 180 vs 270) is CLOSED — the question is void.** A multi-turn
+    output means the actuator is no longer a limited-rotation servo but a
+    continuous-rotation gearmotor or stepper, closed on the AK7455's absolute
+    angle. That also retires "travel is the binding constraint" (plan 004 KTD5)
+    and makes the encoder load-bearing for CONTROL, not telemetry.
+    **NEW OPEN ITEM: actuator re-select** — the DS3225 is ~17× oversized on
+    torque and now also the wrong kind of device.
 - [ ] **SPAR-20-7 (U7)** — Fuselage/cargo-shell re-cut. **OPEN, and it is now
     the gating item**: `tools/wing_root_deconflict.py` FAILS at Rev T1 with three
     findings, all one cause — the fuselage still carries `WING_SPAR_Y = +38.15`
-    and `WING_SPAR_BORE_D = 8.3`. Required: socket at hull **Y +21.00 / Z +66.85**,
-    **Ø20.4**, **≥ 55 mm spanwise reach** (FOS 4.02 at the standing 5 MPa
-    figure; 17 mm would do at REF-MAT-001's 47 MPa if the LG-11 coupon lands).
+    and `WING_SPAR_BORE_D = 8.3`.
+    **THE JOINT SPLITS BY LOAD TYPE (revised 2026-08-29, owner: the centre of
+    the cargo bay must stay clear).** An earlier revision asked for a 55 mm
+    bonded socket; the bay's clear span starts at hull X −100 and the wall skin
+    is at −81.33, so only **18.67 mm** of socket depth exists. At that depth the
+    socket gives FOS 0.51 on the moment, and since capacity goes as 1/L² no
+    socket the bay permits can recover it. So:
+    - **socket Ø20.4 × 18.5 mm at hull Y +21.00 / Z +66.85 — SHEAR only**,
+      σ 0.31 MPa, **FOS 16**;
+    - **bonded root flange 80 (Z) × 60 (Y) mm on the inner sidewall — MOMENT**,
+      σ 0.17 MPa, **FOS 29.2**, protruding only its own ~5 mm to X ≈ −86.
+    This is **better** than the socket it replaces (FOS 29.2 vs 4.02), because a
+    flange reacts over wall AREA instead of socket DEPTH. The bay requirement
+    forced a better joint rather than a compromise, and **the bay is no longer
+    intruded at all** — the owner-decision item that stood here is closed.
     F688ZZ deleted — a bearing there would let the spar spin under the pinion's
-    gear reaction. **Owner decision required:** 55 mm of reach cuts the cargo-bay
-    clear span 140 → ~104 mm, re-encroaching on the volume CARGO-01 freed.
-    Full spec and alternatives: `docs/WING_ATTACH_INTERFACE.md` §3, WA-R1..R6.
+    gear reaction. The LG-11 coupon is **demoted here** from a gate to a
+    packaging convenience (flange FOS 29.2 / 87.6 / 274.6 at 5 / 15 / 47 MPa).
+    Full spec: `docs/WING_ATTACH_INTERFACE.md` §3, WA-R1/R1b/R2..R6.
 - [ ] **SPAR-20-8 (U8)** — Re-datum the nozzle drive onto the fixed trunnion
     (a fixed datum is better than the retired rotating one); delete the spar
     crank; re-verify full iris travel.
