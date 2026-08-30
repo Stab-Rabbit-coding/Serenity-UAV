@@ -340,3 +340,4 @@ plus closing U6 in the 2026-08-26 plan explicitly.
   commanded design range or stale pre-Rev-T test-step text (already flagged
   as unresolved in `TILT_SPAR_ANALYSIS.md` §2.1.2) — affects the sizing
   margin for whichever option is chosen.
+- Drive mechanism analysis between a belt and a shaft from wing root servo to wingtip nacelle.
