@@ -63,7 +63,7 @@ Mirrored: 48 memory files plus the index.
 - [OPTIGA Trust M firmware layer](project_optiga_trust_m_firmware.md) — 2026-08-23 LibreServo_v4 `firmware/` tree; V3 ships a DEFAULT world-readable 0xE140 so pairing is mandatory; KEYSTORE can't hold the PBS; Shielded Connection needs host AES-CCM; PA8 I2C0_SDA is PF4 not PF3
 - [Infineon docs via GitHub](reference_infineon_github_docs.md) — infineon.com PDFs are anti-bot blocked; `github.com/Infineon/<product>-overview` serves the same files (MD5-identical) and clones fine
 - [Engineering PE skills repo](project_engineering_pe_skills.md) — 10 NCEES-aligned skills; aero has NO PE exam, statics is FE-level, NCEES never names sponsoring societies
-- [Wing Rev T1 fixed CF spar](project_wing_rev_t1_fixed_spar.md) — spar is now a BONDED WING MEMBER not a rotating shaft; station 28/Ø20.4/t_scale 1.46-2.20; tie rods retired; joints published to fuselage (55 mm socket, bay intrusion = owner call) + nacelle
+- [Wing Rev T1/T1b fixed CF spar](project_wing_rev_t1_fixed_spar.md) — spar is a BONDED WING MEMBER not a rotating shaft; stub duct-bounded to 15mm; root joint splits shear(socket)/moment(80x60 flange) so the bay stays clear; drive is a REDUCTION (>1 rev, 14T/50T) so the servo-range question is void; section is S1223/t17.7—t26.7, NOT an S1223
 
 ---
 
@@ -878,15 +878,30 @@ Three findings that cost real fetches to establish — do not re-derive:
    discipline list implies.
 
 Verified from own sites: SFPE ("Licensing & PE Exam"), SNAME (PE Review Course).
-**ISA's PE Control Systems role is UNVERIFIED** (licensure URL 404s) and is not
-asserted anywhere — TODO §0.1 blocks the control-systems skill.
+**ISA role RESOLVED** at `isa.org/certification`: ISA "supports the Control
+Systems Engineer (CSE) License" and offers review materials — it does NOT author
+or administer the exam. Never upgrade that to "sponsors"/"develops".
 
 ASTM/AIChE/AIAA return HTTP 403 to curl (anti-bot, links are real) → recorded
 `VERIFIED (BLOCKED)`, not `VERIFIED`.
 
-Post-2017 Part 23 moved numeric criteria into consensus standards, so 1.5 FOS
-and n1=+3.8/n2=-1.52 can NOT be cited to "Part 23" — marked REQUIRES
-VERIFICATION in-line. See [[feedback-todo-stale-items]].
+**Part 23 RESOLVED** — ecfr.gov WebFetch is blocked (302 to an unblock page);
+use the eCFR API instead: `ecfr.gov/api/versioner/v1/full/<date>/title-14.xml?part=23`
+(date must be <= the title's issue date). Findings: **§23.2230(b) DOES state the
+1.5 FOS** — it is current text, my earlier caution was wrong. But **+3.8/-1.52
+appear NOWHERE** in current Part 23 (§23.2200(b) is performance-based) — that
+caution was right. §23.2265 "special factors of safety" covers articles with
+"appreciable variability because of uncertainties in manufacturing processes" =
+a real citation for printed-polymer allowables. See [[feedback-todo-stale-items]].
+
+4 of 10 skills drafted + installed via symlink `~/.claude/skills/<slug>` ->
+repo `skills/<slug>`: aeronautical, mechanical, statics-and-dynamics,
+control-systems. CI enforces the mandatory qualified-review notice is present
+and is the FIRST `##` section of every SKILL.md.
+
+markdownlint MD051 flags TOC link fragments in these files that an isolated
+repro can NOT reproduce — reference files are all <300 lines, so the fix is
+plain (unlinked) Contents lists, not chasing the rule.
 
 markdownlint: MD013 must exempt tables/code/headings — a SKILL.md frontmatter
 `description` is necessarily one long line.
@@ -2452,15 +2467,50 @@ could carry two 10 AWG conductors, and 27.5 now falls inside the spar bore.
    exist in a 22.83 mm section, and the tip has no volume for 10 AWG
    disconnects (section falls 17.50→3.43 mm aft of the spar).
 
+**Rev T1b (same day) — three owner directives, two invalidated built geometry:**
+
+1. **Spar must not penetrate the thrust duct.** Stub was 32 mm and reached
+   |X| = 9.7 against a duct wall at r=25 — 15 mm INSIDE it. The spar runs along
+   local X at Y=0 so it clears only if it TERMINATES at |X| ≥ 26; tip face is at
+   41.7, so **max stub 15.7, built 15.0**. The nacelle's bearing pair, ring gear
+   and ring magnet must now ALL fit in 15 mm (2× 6804 = 14.0 fits).
+2. **Cargo bay centre must stay clear.** Kills the 55 mm socket — only 18.67 mm
+   exists before the bay (wall −81.33, bay edge −100), where the socket gives
+   FOS 0.51 on moment. **Joint splits by load type:** socket 18.5 mm for SHEAR
+   (FOS 16) + bonded **80×60 flange** on the inner sidewall for MOMENT
+   (FOS 29.2). Better than the socket it replaced (4.02) — a flange trades a
+   1/L² depth term for a linear area term. Bay untouched; owner decision closed.
+3. **Shaft turns >1 revolution.** Inverts the stage to a REDUCTION, which
+   dissolves the "impossible ring gear" finding (that was true only under the
+   step-up reading). Built module 0.8, **14T pinion / 50T ring, i 3.571, 1.389
+   rev, C 25.6 → station 53.6**. Actuator is now a continuous-rotation gearmotor
+   or stepper closed on the AK7455 — the 180/270° question is VOID, and the
+   encoder becomes load-bearing for CONTROL, not telemetry.
+
+Encoder followed: `HALL_SENS_R` 17→**16.8**, ring **ID 26 / OD 41.2**, board 9×8.
+
 **Joints published, not built:** `docs/WING_ATTACH_INTERFACE.md` is the single
-spec for both. Fuselage needs a bonded socket at hull **Y +21.00 / Z +66.85 /
-Ø20.4, ≥ 55 mm reach** — and that reach cuts the cargo bay 140→~104 mm, an
-**open owner decision** (the LG-11 coupon would cut it to 17 mm). Nacelle needs
-trunnion bore Ø20.0, ring gear PD 33.8, ring magnet ID 27/OD 41.
+spec for both ends, with a requirement register (WA-R1..R15).
+
+**Airfoil re-derived from the tabulated UIUC coords (REF-CAD-006), NOT quoted.**
+The built sections are **S1223/t17.7** and **S1223/t26.7** — S1223's camber line
+with the thickness envelope scaled. max t/c 17.72/26.71 % **at 19.8 % chord**;
+camber **8.67 % at 49.0 %**, unscaled and exact. The old header's "22.6 %" and
+"39.4 %" locations were WRONG. LE radius goes as t_scale² (0.025c→0.053c→0.121c).
+Camber figures survive exactly; zero-lift angle and lift-curve slope partially
+survive at the ROOT only (thin-airfoil theory depends on camber alone, but 26.7 %
+is far outside "thin"); CL_max/L/D/cruise-lift do NOT survive.
 
 `tools/wing_root_deconflict.py` **FAILS by design** until the fuselage moves —
 3 findings, all one cause: fuselage still on `WING_SPAR_Y = +38.15`,
 `WING_SPAR_BORE_D = 8.3`.
+
+**Citation defects found and fixed:** the repo cited **14 CFR Part 23.303**,
+removed by the 2017 Amdt. 23-64 restructure → now **§23.2230** (REF-FAA-004,
+verified verbatim via GovInfo CFR XML; eCFR bot-blocks fetches). And the FOS 4.0
+joint target, described as bare judgment, has a real basis: **§23.2265** requires
+a *special* factor for parts with manufacturing-process variability — which is
+exactly FDM. Also recorded: +3.8/−1.52 appear NOWHERE in current Part 23.
 
 Two figures everything else hangs off are **unverified**: the 5.5 mm 10 AWG wire
 OD (no BOM entry) and the 300 MPa CF allowable (no certificate). See
