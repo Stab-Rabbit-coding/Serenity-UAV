@@ -1792,7 +1792,7 @@ wing_cfd_openfoam.py — 2D RANS comparison of S1223 thickening strategies, via 
 wing_internal_clearance.py — Check every internal bore in the wing against its neighbours and the skin. [build-tooling, security]
 wing_root_deconflict.py — Deconflict everything crowded into the wing-root zone of the cargo bulkhead. [build-tooling, security]
 wing_section_figure.py — Draw the wing's root and tip sections with every internal bore, to scale. [build-tooling]
-wing_spar_carrythrough.py — Does the rotating wing spar have to span the fuselage? First-principles check. [build-tooling]
+wing_spar_carrythrough.py — Python script [build-tooling]
 wing_spar_station_fit.py — Size the wing spar's chordwise station against the S1223 section it lives in. [build-tooling]
 ```
 

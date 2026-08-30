@@ -359,38 +359,58 @@ def report_spar_carrythrough_joint(scad, m_ult, v_ult):
     print("    does not depend on the wing skin sharing load, which is not")
     print("    characterised for a bonded printed skin.")
 
-    print(f"\n  fuselage-side socket sizing (D{d_sock:.0f} bonded, "
-          f"projected bearing vs {allow:.0f} MPa):")
-    print(f"    {'L mm':>6s} {'F N':>8s} {'area mm2':>9s} "
-          f"{'sigma MPa':>10s} {'FOS':>6s}")
-    for L in (20.0, 30.0, 40.0, 50.0, 55.0, 60.0):
+    print(f"\n  fuselage-side socket, D{d_sock:.0f} bonded "
+          f"(projected bearing vs {allow:.0f} MPa):")
+    print("    THE BAY BOUNDS THIS, NOT THE DESIGNER.  Owner requirement:")
+    print("    the centre of the cargo bay stays clear.  The bay's clear span")
+    print(f"    begins at hull X {mci.PORT_INB:.1f} and the wall skin sits at")
+    print("    X -81.33, so the socket has 18.67 mm of depth and no more.")
+    print(f"    {'L mm':>6} {'F N':>8} {'area mm2':>9} "
+          f"{'sigma MPa':>10} {'FOS':>6}")
+    for L in (18.67, 30.0, 55.0):
         f, a, sg = sigma_at(L)
-        print(f"    {L:6.0f} {f:8.1f} {a:9.1f} {sg:10.3f} {allow / sg:6.2f}")
+        tag = "  <- all the bay allows" if L < 19 else "  (would enter the bay)"
+        print(f"    {L:6.2f} {f:8.1f} {a:9.1f} {sg:10.3f} "
+              f"{allow / sg:6.2f}{tag}")
+    print("    => the socket CANNOT carry the moment.  Stress goes as 1/L^2 and")
+    print("       the bay has taken the length away.  Shear, however, is fine:")
+    v_only = v_ult / (d_sock * 18.5)
+    print(f"       sigma_shear = {v_ult:.1f} / (20 x 18.5) = {v_only:.3f} MPa"
+          f"  -> FOS {allow / v_only:.0f}")
 
-    lo, hi = 5.0, 200.0
-    for _ in range(200):
-        mid = (lo + hi) / 2.0
-        if allow / sigma_at(mid)[2] < 4.0:
-            lo = mid
-        else:
-            hi = mid
-    print(f"    -> socket length for the SS3 FOS 4.0 target: {hi:.1f} mm")
-    print("    -> REQUIREMENT ON THE FUSELAGE: a bonded socket of at least")
-    print(f"       {hi:.0f} mm spanwise reach inboard of the wall at the spar")
-    print("       station.  This is a JOINT REQUIREMENT this file publishes;")
-    print("       the fuselage owns building it (see the fuselage-mid WBS).")
+    # The moment goes to a bonded flange on the wall instead: area, not depth.
+    print("\n  bonded ROOT FLANGE on the inner sidewall (moment path):")
+    print("    Reacting the moment over wall AREA needs no inboard reach at all")
+    print("    -- the flange lies flat against the wall and protrudes only its")
+    print("    own thickness (~5 mm, to X ~ -86, against a bay edge at -100).")
+    print("    Triangular pressure over height h, couple arm 2h/3:")
+    print(f"    {'h mm':>6} {'w mm':>6} {'F N':>8} {'area mm2':>9} "
+          f"{'sigma MPa':>10} {'FOS':>6}")
+    for h, w in ((40.0, 40.0), (60.0, 50.0), (80.0, 60.0), (100.0, 60.0)):
+        f2 = 3.0 * m_nmm / (2.0 * h)
+        a2 = w * h / 3.0
+        sel = "  <- SPECIFIED" if (h, w) == (80.0, 60.0) else ""
+        print(f"    {h:6.0f} {w:6.0f} {f2:8.1f} {a2:9.0f} {f2 / a2:10.3f} "
+              f"{allow / (f2 / a2):6.1f}{sel}")
+    print("    80 x 60 is specified: FOS 29.2, and the cargo section is ~150 mm")
+    print("    tall inside at this station so 80 mm of height is available.")
+    print("    This is BETTER than the 55 mm socket it replaces (FOS 4.0), not a")
+    print("    compromise -- a flange trades an unfavourable 1/L^2 depth term")
+    print("    for a linear area term.")
 
-    # What the LG-11 coupon would buy, if it lands.
-    for alt, why in ((15.0, "the owner's <15 MPa fusion-strength decision rule"),
+    # The LG-11 coupon no longer decides whether this joint is buildable --
+    # the flange already clears FOS 4.0 by 7x at the standing 5 MPa figure.  It
+    # would only shrink the flange, which is a packaging convenience rather than
+    # a gate.  Recorded so the coupon's remaining value is not overstated.
+    print("\n    LG-11 coupon sensitivity (flange 80 x 60):")
+    for alt, why in ((5.0, "standing figure, structural_analysis.md SS7.3"),
+                     (15.0, "the owner's <15 MPa fusion-strength decision rule"),
                      (47.0, "REF-MAT-001 ASTM D695 bulk compressive, 20 % CF-PETG")):
-        lo2, hi2 = 5.0, 200.0
-        for _ in range(200):
-            mid = (lo2 + hi2) / 2.0
-            if alt / sigma_at(mid)[2] < 4.0:
-                lo2 = mid
-            else:
-                hi2 = mid
-        print(f"    (at {alt:.0f} MPa -- {why}: {hi2:.0f} mm would do)")
+        f2 = 3.0 * m_nmm / (2.0 * 80.0)
+        a2 = 60.0 * 80.0 / 3.0
+        print(f"      {alt:5.1f} MPa -> FOS {alt / (f2 / a2):5.1f}   ({why})")
+    print("      The coupon no longer gates BUILDABILITY here -- it only sets")
+    print("      how small the flange could shrink.")
 
     # Torsion: the only job the retired aft tie rod could still have had.
     q = 0.5 * 1.225 * (40.0 * 0.514444) ** 2          # Pa, 40 kt cruise

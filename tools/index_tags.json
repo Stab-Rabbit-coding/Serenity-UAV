@@ -12897,7 +12897,7 @@
       "archived": false
     },
     "tools/wing_spar_carrythrough.py": {
-      "description": "Does the rotating wing spar have to span the fuselage? First-principles check.",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
