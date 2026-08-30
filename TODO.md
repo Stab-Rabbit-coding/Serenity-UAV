@@ -105,6 +105,10 @@ Wing side is BUILT. These are the two joints it publishes.
 - [ ] MA-6 — `PRINT-BATT-TRAY` measures 140.2 g against a 22 g BOM row.
 - [ ] MA-7 — BOM mass column mixes installed mass, stock and GCS; add an
       `Installed` flag before any weight statement uses it.
+- [ ] W1..W8 — ranked weight-reduction targets: battery -225 g, tray floor
+      -23.1 g, actuator standoffs -32.9 g, cradle ~-25 g; wing root CLOSED.
+      W2 (BOM reconciliation) gates all of them.
+      -> `docs/plans/2026-08-30-001-weight-reduction-targets-plan.md`
 - [ ] WA-R15a — re-measure the cargo-bay roof band: the actuators now reach
       X -158.5 / -221.5 at Z +85.99..+112.99.
 - [ ] TILT-CTL-01..06 — tilt control loop open items (plant model, slew rate,

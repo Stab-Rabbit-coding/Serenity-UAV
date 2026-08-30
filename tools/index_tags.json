@@ -10205,6 +10205,13 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-08-30-001-weight-reduction-targets-plan.md": {
+      "description": "chore: Ranked weight-reduction targets",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -13106,6 +13113,7 @@
       "docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
       "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
       "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md",
+      "docs/plans/2026-08-30-001-weight-reduction-targets-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
