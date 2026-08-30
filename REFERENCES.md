@@ -1806,10 +1806,20 @@ Per-application operating mode differs even though the hardware is now identical
 | Application | Qty | Mode | Range |
 |---|---|---|---|
 | Cargo winch | 1 | Continuous rotation, gateway closes position on the AK7455 spool encoder (REF-SENSOR-008) | Multi-turn, unbounded by the servo itself |
-| Nacelle tilt | 2 | Position, firmware soft-limited | −5°…140°, backstopped by the existing CF-PETG hard-stop blocks in the external gear train (`docs/NOZZLE_DRIVE_TRADE.md`) — mechanically independent of the servo's own (now-removed) rotation pin |
+| Nacelle tilt | 2 | **CORRECTED Rev T1c (2026-08-30):** continuous rotation, Pilot closes position on the AK7455 nacelle encoder (REF-SENSOR-008) — the same pattern as the winch above | **Multi-turn** (1.438 rev of actuator per 145° of nacelle), unbounded by the servo itself. Soft-limited to −5°…140° *at the nacelle*, backstopped by CF-PETG hard stops in the external gear train |
 
-Removing the pin on all three is a deliberate commonality choice, not a requirement of the
-position-mode applications: LibreServo replaces the servo's potentiometer with a 360°
+> **The row above changed at Rev T1c and the change is structural, not editorial.**
+> The tilt stage became a REDUCTION (tip 14T/50T, `i` = 3.571), so the drive shaft must
+> turn **1.438 revolutions** over the 145° sweep and no limited-rotation servo can drive
+> it at any horn radius. Removing the rotation pin is therefore **required** on the tilt
+> servos now, not merely convenient — and the AK7455 became **load-bearing for control**
+> rather than telemetry, because a multi-turn drive without absolute feedback does not
+> know where the nacelle is. See `docs/WING_ATTACH_INTERFACE.md` §4.3b/§4.3c and
+> `docs/TILT_DRIVE_CONTROL_SPEC.md`.
+
+Removing the pin on the winch is a deliberate commonality choice; on the tilt servos it
+is now a requirement (see the note above). It is not a requirement of the
+position-mode applications generally: LibreServo replaces the servo's potentiometer with a 360°
 absolute magnetic encoder (AEAT-8800, 16-bit), so position feedback and soft-limit
 enforcement no longer depend on the mechanical stop the pin used to provide. See
 REF-SENSOR-013/014/015 below for the individual part records, and

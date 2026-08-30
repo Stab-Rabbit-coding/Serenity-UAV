@@ -83,13 +83,24 @@
 
 Wing side is BUILT. These are the two joints it publishes.
 
-- [ ] WA-R1/R1b..R6 — fuselage: spar socket (Y +21.00, Z +66.85, D20.4, 18.5 mm
-      deep, SHEAR only) PLUS a bonded 80x60 root flange on the inner sidewall
-      (MOMENT, FOS 29.2); delete F688ZZ; split-collar clamp; re-size mortise
-      30.8 -> 12.8; cut the three matching conduits. WA-R5 (bay envelope) is
-      CLOSED by design -- the joint no longer enters the bay.
-      **`tools/wing_root_deconflict.py` FAILS until this lands** (3 findings,
-      all one cause: the fuselage still carries `WING_SPAR_Y = +38.15`).
+- [x] WA-R1/R1b, R2, R4, R6 — fuselage side BUILT 2026-08-30 (Rev T1c). Socket
+      Y +21.00 / Z +66.85 / D20.4 / 18.5 mm; F688ZZ and both tie rods deleted;
+      mortise 30.8 -> 12.8 (tenon fits +0.40 mm/side); nav D4.2, AK7455 D7.5 and
+      shaft D4.4 conduits cut. `wing_root_deconflict.py` now CLEAR.
+- [x] WA-R15 — tilt actuator: DS3225 + LibreServo_v4 run MULTI-TURN, closed on
+      the AK7455; fuselage spur stage m0.8 38T/38T, C 30.40, 1:1. Coaxial does
+      not fit and no gear clears the tenon in Y -> 18 mm actuator standoff.
+- [ ] WA-R3/R17 — split-collar pinch clamp is still not a part (no SCAD, no STL,
+      no BOM row). **BLOCKS wing removal/refit.**
+- [ ] WA-R16 — the tilt train is NOT self-locking and has no holding provision.
+      **BLOCKS flight release.** `docs/TILT_DRIVE_CONTROL_SPEC.md` §5.2/§7.3.
+- [ ] WA-R18 — Rev T1c is +77.0 g (+1.97 % AUW); hover T/W was ~1.19 against a
+      1.2 minimum, so re-derive mass/CG/T-W. **BLOCKS flight release.**
+- [ ] WA-R15a — re-measure the cargo-bay roof band: the actuators now reach
+      X -158.5 / -221.5 at Z +85.99..+112.99.
+- [ ] TILT-CTL-01..06 — tilt control loop open items (plant model, slew rate,
+      differential-tilt trip, LibreServo_v4 encoder part).
+      → `docs/TILT_DRIVE_CONTROL_SPEC.md` §8.
 - [ ] WA-R7..R12 — nacelle: trunnion bearing bore D20.0 at ring plane X ~ 28
       (axial AND radial duty), ring gear PD 33.8 at C 26.0, ring magnet
       ID 27 / OD 41 axially separated from that gear, the 4 x 10 AWG

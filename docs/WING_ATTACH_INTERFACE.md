@@ -1,14 +1,17 @@
 # Wing Attachment Interface Specification — Rev T1
 
-**Revision:** T1b (2026-08-29)
+**Revision:** T1c (2026-08-30)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Analysis and drafting:** Claude (Claude Opus 5, Anthropic) under the author's
 direction, per `AGENTS.md` §3 "Attribution and Licensing"
 **License:** CC BY-SA 4.0 — <https://creativecommons.org/licenses/by-sa/4.0/>
 
 **Status:** SPECIFICATION — the wing side is built
-(`airframe/openscad/wings/wings_s1223_revo.scad`, Rev T1). The fuselage and
-nacelle sides are **NOT** built; this document is what they are to be built to.
+(`airframe/openscad/wings/wings_s1223_revo.scad`, Rev T1). **The fuselage side
+is now built too** (Rev T1c, 2026-08-30 —
+`airframe/blender-scripts/merge_cargo_interior.py`, §3 and §4.3c below). The
+**nacelle** side is still NOT built; for it, this document remains what it is to
+be built to.
 
 ---
 
@@ -209,6 +212,33 @@ joint where there is room for a collar.
 - **No set screws.** CF tube splinters under a point load; the grip must be
   distributed (plan 003 RISK-3).
 
+### 3.6 The flange is a CONFORMING plate, not a plane-bounded slab
+
+**Built 2026-08-30, and the first attempt was wrong in an instructive way.**
+
+Every other wing-root positive in `merge_cargo_interior.py` is modelled as deep
+material intersected with the hull envelope, which turns it into internal
+thickening that fills whatever the curved skin leaves. That idiom is wrong for
+this flange, twice:
+
+- Filling to the bay edge would make it **5–19 mm** thick across the 80 × 60
+  footprint instead of 5 — of order 90 g of solid CF-PETG per side, for a plate
+  whose *specified* 5 mm already buys FOS 29.2.
+- Bounding it with a plane at the nominal inner-face station (X −86.33 / −253.37)
+  instead leaves that plane nearly **tangent** to the skin near the footprint's
+  forward-lower corner. Measured on the first rebuild: one 0.46 mm non-manifold
+  edge with 4 incident faces at (−86.33, +8.6, +52.2), plus a 2-face zero-area
+  sliver body — enough to fail `tools/validate_stls.py` outright. Too long for
+  the 0.05 mm degenerate-edge collapse to touch, and not a mesh artifact to be
+  repaired away: it is the model saying the plane does not belong there.
+
+The flange is therefore built the way it is actually made — a layer of constant
+depth measured *from the skin* — by subtracting the hull envelope translated
+inboard by `ROOT_FLANGE_T`. The sidewall's normal at this station is within a few
+degrees of hull X, so a pure X translation is a wall-parallel offset to better
+than the 0.2 mm bond gap, and the plate conforms to the real curvature with no
+tangency anywhere.
+
 ### 3.5 Torsion — why no anti-rotation pin
 
 Wing pitching moment about the spar axis is 0.41 N·m at ultimate
@@ -328,6 +358,77 @@ nacelle angle rather than on the actuator's own travel. That:
 Shaft torque is 0.050 N·m; wind-up over the installed length is 0.27° (Ø4 steel,
 `G` = 79 GPa). **Re-open the actuator selection** — the DS3225 was already ~17×
 oversized on torque and is now also the wrong *kind* of device.
+
+### 4.3c The fuselage end of the shaft — and why it needs a gear pair too
+
+**Built 2026-08-30.** §4.3b settled what the actuator must BE. This settles
+where it goes, and the answer was not the obvious one.
+
+A coaxial coupling from the actuator straight onto the drive shaft is the
+simplest thing that could work, and it does not fit. Put the DS3225 body on the
+drive-shaft axis (hull Y +46.60, Z +69.09) and it overlaps the Ø30.1 spar socket
+boss by **13.5 mm in Y and the full 20 mm in Z**, at *either* orientation of the
+output shaft along the 40 mm body — the shaft sits 24 mm from one end, so the
+two available placements are Y +22.6…+62.6 and Y +30.6…+70.6, and both eat the
+boss. Relieving the boss to clear it would cut into the Ø20.4 socket bore.
+
+So the fuselage end carries a spur pair as well. Both axes run along hull X, so
+it is a plain parallel-axis mesh with no right-angle stage — the same kinematic
+argument that chose the tip stage (plan 004 KTD1), applied at the other end.
+Inside the fuselage there is no airfoil to pay for it.
+
+| Item | Value | Why this value |
+|---|---|---|
+| Stage ratio | **1:1** | see below |
+| Module / teeth | **0.8, 38T / 38T** (PD 30.4, tip Ø32.0) | first integer 1:1 pair clearing the bay floor |
+| Centre distance | **30.40 mm, pure hull +Z** | forced by the landing-gear bays |
+| Actuator axis | hull **Y +46.60, Z +99.49** | shaft axis + C |
+| Gear plane | **11.0 mm inboard** of X −100 / −240 | forced by the wing root tenon |
+| Actuator mounting face | X **−118.0** / **−222.0** | gear plane + face + hub clearance |
+
+**The centre distance is set by the landing gear, not chosen.** The Rev R6 bay
+seats top out at Z +82.39 and the actuator pad overlaps both bays in Y, so Z
+separation is the entire margin. With the repo's 3.0 mm clearance budget the pad
+bottom must sit at Z ≥ +85.39, i.e. the actuator axis at Z ≥ +98.89 — a centre
+distance of at least 29.80 mm. At module 0.8 the integer 1:1 pairs are 36T
+(C 28.80, 2.00 mm of bay clearance — under budget), 37T (29.60, 2.80 — still
+under) and **38T (30.40, 3.60 — clears)**.
+
+**The stage is 1:1 on purpose.** A step-up would trade surplus torque for slew
+rate, and the surplus is real: 2.402 N·m of actuator stall against 0.050 N·m at
+the shaft, a 48× margin. It is rejected because it pulls the *actuator* back
+below one revolution (500° of shaft ÷ 1.923 = 260°), which re-opens the
+180-vs-270 limited-rotation question §4.3b exists to close. 1:1 keeps the
+actuator at 1.438 rev over the full 145° sweep.
+
+**The gear plane is forced by the tenon, and this is the costly one.** Two
+solids share the shaft's X band at the wall:
+
+- the Ø30.1 spar socket boss — axes 25.70 mm apart, so a shaft gear may have a
+  tip radius of at most `25.70 − 15.05 − 1.0 = 9.65 mm`;
+- the wing root **tenon** (X −100…−108, Y +51.50…+63.50) — its forward face is
+  4.90 mm from the shaft axis, so clearing it *in Y* needs a tip radius under
+  **3.90 mm**, i.e. under 10 teeth at module 0.8.
+
+The second bound does not yield to gear sizing: **no gear that can transmit at
+this centre distance clears the tenon in Y.** It has to be cleared *axially*
+instead, which puts the mesh inboard of the tenon's inboard face and drags the
+actuator 18 mm further into the bay with it — reaching X −158.5 / −221.5 instead
+of −140.5 / −239.5.
+
+**That cost is real and it is recorded, not absorbed.** It is 18 mm per side, in
+the hull Z band +85.99…+112.99. That band is above the bay's working floor — the
+pad is datumed to the landing-gear bay tops and the CARGO-01 payload envelope is
+measured upward from the closed-door crown at Z +8.72 — so what is lost is roof
+volume rather than floor footprint. It is tracked at
+`airframe/fuselage-mid/WBS.md` WA-R15.
+
+**Sense.** Two external meshes, two reversals: actuator-positive is
+nacelle-positive. Total reduction 3.571; actuator travel 1.438 rev over 145°.
+The control-side consequences — cascade structure, sensor roles, fail states —
+are specified in [`docs/TILT_DRIVE_CONTROL_SPEC.md`](TILT_DRIVE_CONTROL_SPEC.md).
+
+---
 
 ### 4.4 The power disconnect belongs in the nacelle, not the wingtip
 
@@ -473,20 +574,20 @@ misrepresent the separation bubble. Tracked in `TODO.md` §0.8 and
 
 | ID | Requirement | Owner | Status |
 |---|---|---|---|
-| **WA-R1** | Spar socket at hull Y +21.00, Z +66.85, Ø20.4, 18.5 mm deep — SHEAR path (FOS 16) | fuselage-mid | **OPEN** |
-| **WA-R1b** | Bonded root flange 80 (Z) × 60 (Y) mm on the inner sidewall — MOMENT path (FOS 29.2). Nothing inboard of hull X ≈ −86; the bay stays clear | fuselage-mid | **OPEN** |
-| **WA-R2** | Root bearing (F688ZZ) deleted; bonded/clamped socket replaces it | fuselage-mid | **OPEN** |
-| **WA-R3** | Split-collar pinch clamp, ≥ 5 mm wall, M3 inserts, positive split gap | fuselage-mid | **OPEN** |
-| **WA-R4** | Mortise re-sized 30.8 → 12.8 mm wide for the locating tenon | fuselage-mid | **OPEN** |
+| **WA-R1** | Spar socket at hull Y +21.00, Z +66.85, Ø20.4, 18.5 mm deep — SHEAR path (FOS 16) | fuselage-mid | **BUILT** (T1c) |
+| **WA-R1b** | Bonded root flange 80 (Z) × 60 (Y) mm on the inner sidewall — MOMENT path (FOS 29.2). Nothing inboard of hull X ≈ −86; the bay stays clear | fuselage-mid | **BUILT** (T1c) — as a *conforming* 5 mm plate, not a plane-bounded slab; see §3.6 |
+| **WA-R2** | Root bearing (F688ZZ) deleted; bonded/clamped socket replaces it | fuselage-mid | **BUILT** (T1c) |
+| **WA-R3** | Split-collar pinch clamp, ≥ 5 mm wall, M3 inserts, positive split gap | fuselage-mid | **OPEN** — the Ø30.1 socket boss now matches the clamp's ~Ø30 envelope, but the clamp itself is not yet a part |
+| **WA-R4** | Mortise re-sized 30.8 → 12.8 mm wide for the locating tenon | fuselage-mid | **BUILT** (T1c) — tenon fit +0.40 mm/side in both axes |
 | **WA-R5** | Cargo-bay envelope unchanged — **CLOSED by design**: the joint no longer enters the bay | fuselage-mid | **CLOSED** |
-| **WA-R6** | Fuselage-side conduits for the nav 3-core (Y +1.0) and the AK7455 pair (Y +37.5), and a drive-shaft bore at Y +46.6 | fuselage-mid | **OPEN** |
+| **WA-R6** | Fuselage-side conduits for the nav 3-core (Y +1.0) and the AK7455 pair (Y +37.5), and a drive-shaft bore at Y +46.6 | fuselage-mid | **BUILT** (T1c) — Ø4.2 / Ø7.5 / Ø4.4, plus a Ø8.05 shaft-bushing seat in the root flange |
 | **WA-R7** | Trunnion bearing bore Ø20.0, ring plane X ≈ 28, axial + radial duty | wings-nacelles | **OPEN** |
 | **WA-R8** | Tilt ring gear 50T module 0.8 (PD 40.0) concentric with the spar, C = 25.6 to the wing shaft; reduction 3.571 | wings-nacelles | **OPEN** |
 | **WA-R9** | Ring magnet ID 26 / OD 41.2, axially separated from the ring gear, both inside the 15 mm stub | wings-nacelles | **OPEN** |
 | **WA-R10** | 4 × 10 AWG disconnect in the nacelle annulus, partitioned from the AK7455 plug | wings-nacelles | **OPEN** |
 | **WA-R11** | Nav 3-core crosses at the trunnion, radially separated from the power bundle | wings-nacelles | **OPEN** |
 | **WA-R12** | Trunnion bearing pair within the **15 mm** duct-bounded stub (2 × 6804 = 14.0 mm fits); no member closer than 26 mm to the duct axis | wings-nacelles | **OPEN** |
-| **WA-R15** | Actuator re-select: continuous-rotation gearmotor or stepper, not a limited-rotation servo (§4.3b) | avionics / wings-nacelles | **OPEN** |
+| **WA-R15** | Actuator re-select: multi-turn, not a limited-rotation servo (§4.3b) | avionics / fuselage-mid | **RESOLVED** (T1c) — DS3225 body + LibreServo_v4 with the rotation-limit pin removed, run continuous-rotation and closed on the AK7455, per the cargo-winch precedent. Same body, so the pad footprint and bolt pattern are unchanged; mount position and standoff are new (§4.3c) |
 | **WA-R13** | `TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1 corrected — the spar is no longer ferromagnetic | avionics | **OPEN** |
 | **WA-R14** | Wing side: bores, pad, root path, thickness scales | wings-nacelles | **BUILT** (Rev T1) |
 
@@ -505,11 +606,22 @@ misrepresent the separation bubble. Tracked in `TODO.md` §0.8 and
 - **OI-4 — CLOSED.** The 180°-vs-270° question is void: the drive is multi-turn,
   so the actuator's own travel no longer sets the ratio (§4.3b). **Replaced by
   OI-7.**
-- **OI-7 — Actuator selection (new, open).** A continuous-rotation gearmotor or
-  stepper, closed on the AK7455. The DS3225 is both ~17× oversized on torque and
-  the wrong kind of device. Note this makes the encoder **load-bearing for
-  control**, not telemetry — a multi-turn drive without absolute feedback does
-  not know where the nacelle is.
+- **OI-7 — CLOSED 2026-08-30.** The actuator is a **DS3225 body carrying the
+  LibreServo_v4 board with its rotation-limit pin removed**, run as a
+  continuous-rotation multi-turn unit and closed on the AK7455 — the same
+  architecture the cargo winch already uses (`REFERENCES.md`, Servo Fleet
+  Standardisation; `docs/CARGO_WINCH_SPECIFICATION.md` §3.7.3). It is not a new
+  part number: the *body* is unchanged, so the pad footprint, bolt pattern and
+  60 g mass all survive from Rev S1d. What changed is the operating mode, the
+  mount position, and the 18 mm standoff (§4.3c). The "~17× oversized" note was
+  right in direction and understated in size — the real figure at the built
+  reduction is **48×** — but a smaller body is not available on this path:
+  LibreServo's smallest documented target is a standard-size (40 mm) servo.
+  The encoder is now **load-bearing for control**, not telemetry; that is
+  specified in [`docs/TILT_DRIVE_CONTROL_SPEC.md`](TILT_DRIVE_CONTROL_SPEC.md),
+  which also opens TILT-CTL-01…06 — the items a multi-turn drive brings with it,
+  chief among them that **the train is not self-locking and has no specified
+  holding provision.**
 - **OI-8 — Trunnion packaging (new, open).** The bearing pair, the ring gear and
   the ring magnet must all fit within the 15 mm the duct allows, and the magnet
   and gear are nearly coradial. This is now the joint's tightest constraint.
@@ -537,15 +649,17 @@ misrepresent the separation bubble. Tracked in `TODO.md` §0.8 and
 /usr/bin/python3 tools/wing_root_deconflict.py     # RED until WA-R1/R6 land
 ```
 
-`wing_root_deconflict.py` **fails by design** at Rev T1 and must keep failing
-until the fuselage side moves. Its three findings are all one fact — the
-fuselage still carries `WING_SPAR_Y = +38.15` and `WING_SPAR_BORE_D = 8.3`:
+`wing_root_deconflict.py` **used to fail by design** at Rev T1b, on three
+findings that were all one fact — the fuselage still carried
+`WING_SPAR_Y = +38.15` and `WING_SPAR_BORE_D = 8.3`. Rev T1c moves the fuselage
+side and the gate is expected to pass. Three changes were needed in the tool
+itself, and each was a real defect rather than a re-tune:
 
-| Finding | Cause |
+| Change | Why |
 |---|---|
-| rotating spar tube blocks Hall/encoder conduit (1,720.6 mm³) | fuselage spar solid at Y +38.15 sits where the wing's new AK7455 conduit runs |
-| rotating spar tube blocks tilt drive-shaft bore (637.7 mm³) | same solid, vs. the new shaft bore |
-| cargo shell blocks spar bore / 4 × 10 AWG feeds (2,048.6 mm³) | shell bore still Ø12.3 at Y +38.15; the wing's Ø20.4 is at Y +21.0 |
+| `tenon_params()` selected `_LOCATING` only for the literal path `"two_rod"` | so the Rev T1 default `"spar_carrythrough"` fell through to `_ENLARGED` and the tool measured a 30 mm structural tenon the wing does not build, reporting a 8.60 mm/side mortise foul against a correctly-sized mortise. The SCAD writes the rule as a negative (`!= "enlarged_tenon"`) precisely so new paths inherit the safe size; mirroring it as a positive whitelist inverted that |
+| the spar corridor was swept at one diameter | it steps at the socket's inboard end — Ø20.4 outboard, Ø16.3 inboard — so a single-diameter sweep reads the intended 2.05 mm annulus as "wall not cut" |
+| every route was probed 12 mm past the wall bracket | correct for a rigid shaft, wrong for a wire. The Ø32.0 shaft gear sits 9.11 mm from the AK7455 conduit axis and **no** gear train at a 30.40 mm centre distance clears it; the lead turns forward into the wire trunk at the wall, and probing past the bracket reports that intended turn as a blockage on every run |
 
 ---
 
