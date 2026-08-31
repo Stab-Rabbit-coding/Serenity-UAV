@@ -27,6 +27,7 @@ CHECKS
   T5  ring gear matches the wing's pinion: module, ratio, centre distance
   T6  trunnion register fits the nacelle collar bore
   T7  ring magnet fits the trunnion seat and the wing's HALL_RING_* spec
+  T8  trunnion does not foul the STATOR SLEEVE — measured mesh against mesh
   S1  both sleeves fit the nacelle sleeve bore with the documented clearance
   S2  sleeve anti-rotation keys fit the nacelle bore slots
   S3  no sleeve carries a spar bore any more (the skewer is gone)
@@ -57,9 +58,20 @@ REPO = Path(__file__).resolve().parent.parent
 SCAD = REPO / "airframe/openscad"
 STLS = REPO / "airframe/stls"
 
-#: The one number this whole revision exists to protect.
-#: docs/WING_ATTACH_INTERFACE.md §4.3a — duct r = 25 mm plus plan 003 R4's 1 mm.
-DUCT_KEEPOUT_R = 26.0
+#: The one number this whole revision exists to protect — but NOT the one the
+#: interface document originally wrote down.
+#:
+#: §4.3a bounds the joint against "the duct", r = 25 mm, plus plan 003 R4's 1 mm.
+#: That is the Ø50 EDF bore, and it is not what occupies the pivot station: the
+#: pivot lies inside the SLEEVE ZONE, where the nacelle bore opens to 27.7 to
+#: accept the removable sleeves and the stator sleeve's own OD is r 27.5.  The
+#: 26.0 bound therefore passed a geometry that drove 23.3 mm³ of solid overlap
+#: into edf_stator_sleeve.stl.  Both bounds are checked below; T8 checks the
+#: thing itself rather than either number.
+DUCT_KEEPOUT_R = 26.0        # Ø50 EDF bore + 1.0 — applies OUTSIDE the sleeve zone
+SLEEVE_OD_R = 27.5           # stator / aft-spider sleeve outer radius
+SLEEVE_KEEPOUT_R = 28.2      # sleeve OD + 0.70 assembly clearance
+SLEEVE_Z_LO, SLEEVE_Z_HI = 90.0, 166.25
 
 _ASSIGN = r"^\s*{name}\s*=\s*([-+]?[0-9]*\.?[0-9]+)\s*;"
 
@@ -150,7 +162,14 @@ def main() -> int:
     # -------------------------------------------------------- T1 duct bound
     print("T1  duct keep-out")
     g.check("T1a", pod_t_x0 >= DUCT_KEEPOUT_R,
-            f"trunnion outboard face |X| = {pod_t_x0} >= {DUCT_KEEPOUT_R}")
+            f"trunnion outboard face |X| = {pod_t_x0} >= {DUCT_KEEPOUT_R} "
+            f"(Ø50 EDF bore + 1.0)")
+    pivot = scad_const(pod, "PIVOT_Z")
+    in_sleeve = SLEEVE_Z_LO <= pivot <= SLEEVE_Z_HI
+    g.check("T1a2", (not in_sleeve) or pod_t_x0 >= SLEEVE_KEEPOUT_R,
+            f"pivot Z {pivot} is {'INSIDE' if in_sleeve else 'outside'} the sleeve "
+            f"zone, so the binding radius is the sleeve OD: |X| {pod_t_x0} >= "
+            f"{SLEEVE_KEEPOUT_R}")
     gear_outboard = t_x0 + gear_z0
     g.check("T1b", gear_outboard >= DUCT_KEEPOUT_R,
             f"ring-gear outboard face |X| = {gear_outboard:.1f} "
@@ -246,6 +265,39 @@ def main() -> int:
     g.check("T7d", scad_const(tru, "PILOT_OD") / 2 < w_pad_r,
             f"pilot spigot Ø{scad_const(tru,'PILOT_OD')} lands inside the wing "
             f"tip pad disc (r {w_pad_r})")
+
+    # ---------------------------------------- T8 trunnion vs stator sleeve
+    print("T8  trunnion vs the stator sleeve — measured, mesh against mesh")
+    try:
+        import numpy as np
+        import trimesh
+
+        tr = trimesh.load_mesh(STLS / "nacelles/nacelle_trunnion.stl", force="mesh")
+        sl = trimesh.load_mesh(STLS / "nacelles/edf_stator_sleeve.stl", force="mesh")
+        pylon = scad_const(pod, "PYLON_SIDE")
+        # Place the trunnion: its part-local +Z runs along nacelle |X| outward
+        # from TRUNNION_X0 on the pylon side.
+        xf = np.eye(4)
+        xf[:3, :3] = (np.array([[0, 0, -1], [0, 1, 0], [1, 0, 0]]) if pylon < 0
+                      else np.array([[0, 0, 1], [0, 1, 0], [-1, 0, 0]]))
+        xf[:3, 3] = [pylon * t_x0, 0.0, pivot]
+        trn = tr.copy()
+        trn.apply_transform(xf)
+        sln = sl.copy()
+        sln.apply_translation([0, 0, SLEEVE_Z_LO])
+
+        v = trn.vertices
+        band = (v[:, 2] >= sln.bounds[0][2]) & (v[:, 2] <= sln.bounds[1][2])
+        r_min = float(np.hypot(v[band, 0], v[band, 1]).min()) if band.any() else 1e9
+        g.check("T8a", r_min >= SLEEVE_OD_R,
+                f"closest trunnion material to the duct axis, within the sleeve's "
+                f"Z span, is r {r_min:.2f} vs the sleeve OD {SLEEVE_OD_R}")
+        overlap = trimesh.boolean.intersection([trn, sln])
+        vol = 0.0 if overlap.is_empty else float(abs(overlap.volume))
+        g.check("T8b", vol < 1e-6,
+                f"solid overlap trunnion ∩ stator sleeve = {vol:.2f} mm³")
+    except ImportError:
+        g.note("T8", "trimesh/manifold3d unavailable — interference not measured")
 
     # ------------------------------------------------------------- sleeves
     print("S   sleeves")

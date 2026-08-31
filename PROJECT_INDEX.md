@@ -505,9 +505,9 @@ edf_aft_spider_sleeve.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propul
 edf_stator_sleeve.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
 eng_left_shell24_50mm_repaired.stl — STL mesh (binary) [cad-mesh, propulsion, structural]
 eng_right_shell24_50mm_repaired.stl — STL mesh (binary) [cad-mesh, propulsion, structural]
-nacelle_port_revs.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
+nacelle_port_revs.stl — STL mesh — header: SerenityUAV HULL-FRAME R1 Nacelle_Port 2026-06-11 [cad-mesh, propulsion, structural]
 nacelle_servo_bracket.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
-nacelle_stbd_revs.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
+nacelle_stbd_revs.stl — STL mesh — header: SerenityUAV HULL-FRAME R1 Nacelle_Stbd 2026-06-11 [cad-mesh, propulsion, structural]
 nacelle_trunnion.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
 ```
 

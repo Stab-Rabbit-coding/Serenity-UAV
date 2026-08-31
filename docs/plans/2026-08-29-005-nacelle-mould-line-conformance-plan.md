@@ -39,19 +39,30 @@ rotating-assembly mass table that estimated the pod shell and both sleeves at
 10.3 mm forward of what this plan assumed, and the built `SPAR_Z` is a further
 1.57 mm lower than the table that row came from used.
 
-With the built geometry and today's 40 mm flaps the nozzle tip sits at hull
-Z **−48.64**:
+**PARTLY RECOVERED 2026-08-31 (Rev T4b).** Hollowing the pods with a
+**forward-biased** wall — owner direction, to move the CG aft on purpose — put
+`PIVOT_Z` back to **113.8**, and counting the in-nacelle harness (22.9 g, all of
+it aft of the pivot, never carried in any previous roll-up) accounts for part of
+that. Where it now stands, measured:
 
-| gear | ground plane | clearance | |
-|---|---:|---:|---|
-| 1.5 in (ACTIVE default) | −38.1 | **−10.54 mm** | **STRIKES** |
-| 3.0 in (kept, not wired in) | −80.0 | +31.36 mm | clears |
+| configuration | `PIVOT_Z` | 1.5 in gear (−38.1) | 3.0 in gear (−80.0) |
+|---|---:|---:|---:|
+| solid pod, 40 mm flaps *(the failure)* | 105.9 | −10.47 mm **strikes** | +31.43 |
+| **hollow pod, 40 mm flaps (built today)** | **113.8** | **−2.55 mm strikes** | +39.35 |
+| hollow pod + **this plan's 30 mm flaps** | 112.8 | **+6.41 mm clears** | +48.31 |
 
-The 40 → 30 mm flap trim this plan proposes is worth ~10 mm and would still
-leave roughly −0.5 mm on the 1.5 in gear. **So a landing-gear change IS now
-forced, or the stack must shorten by more than R1 asks.** `LG-HOVER-01` is
-re-opened. This is precisely the failure mode OQ5 was written to catch — "R3 is
-an owner-accepted margin and this plan is the last thing that can silently spend
+So **R1 now finishes the job it could not finish alone** — and equally, the
+hollowing could not finish it without R1. Neither lever closes 10.5 mm by
+itself; together they clear by 6.41 mm.
+
+**What still needs an owner decision:** +6.41 mm is not the +9.8 mm that was
+accepted, and it should not be inherited as though it were. Remaining levers are
+KD5's deferred stator compression (~7 mm), aft ballast (17.7 g per nacelle per
+4 mm of CG shift), or making the 3.0 in gear mandatory — which clears by 39 mm
+today with no further change at all.
+
+This is precisely the failure mode OQ5 was written to catch — "R3 is an
+owner-accepted margin and this plan is the last thing that can silently spend
 it" — except that what spent it was a mass error upstream, not this plan.
 
 ---
@@ -121,8 +132,9 @@ it, and records the residual as an accepted, documented deviation.
   area range as today (75 %/105 % bore targets).
 - **R3** — ~~Hover ground clearance is **≥ 9.8 mm on the 1.5 in gear**~~
   **CANNOT BE MET AS WRITTEN (2026-08-31).** The measured pivot is 105.8, not
-  116.1, so the 1.5 in gear is −10.5 mm before this plan's flap trim and ~−0.5 mm
-  after it. R3 must be re-decided by the owner as one of: (a) the 3.0 in gear
+  116.1. **Re-measured 2026-08-31 after the pods were hollowed:** the 1.5 in gear
+  is −2.55 mm before this plan's flap trim and **+6.41 mm after it**. R3 must be
+  re-decided by the owner as one of: (a) the 3.0 in gear
   becomes mandatory (+31.4 mm today, no other change needed); (b) the stack
   shortens by more than the 10 mm R1 buys — KD5's deferred stator compression is
   the named next lever, worth ~7 mm; (c) aft ballast, at 17.7 g per nacelle per

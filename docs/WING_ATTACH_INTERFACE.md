@@ -277,18 +277,61 @@ graph LR
 | Item | Value | Note |
 |---|---|---|
 | Spar stub proud of the wing tip face | **15.0 mm — DUCT-BOUNDED** | The spar must TERMINATE at ≥ 26 mm from the duct axis (see §4.3a). Max 15.7; 15.0 built. |
-| Trunnion bearing pair | **2 × 6704ZZ (20 × 27 × 4) = 8.0 mm** | **CORRECTED 2026-08-31 — this row previously said 2 × 6804 (20 × 32 × 7) = 14.0 mm, which does not fit. See §4.3a.** Seat bore Ø27.0 H7 in `nacelle_trunnion.scad`, outboard face at \|X\| 26.7 |
+| Spar stub proud of the wing tip face | **13.5 mm — SLEEVE-BOUNDED** | corrected 2026-08-31 from 15.0; see §4.3a |
+| Trunnion bearing pair | **2 × 6704ZZ (20 × 27 × 4) = 8.0 mm** | **CORRECTED 2026-08-31 — this row previously said 2 × 6804 (20 × 32 × 7) = 14.0 mm, which does not fit. See §4.3a.** Seat bore Ø27.0 H7 in `nacelle_trunnion.scad`, outboard face at \|X\| **28.2** |
 | Bearing duty | axial **and** radial, 21.9 N each at 4 g × 1.5 | thrust is axial to the spar in cruise and transverse in hover — a stack chosen for one attitude is wrong for the other (plan 004 RISK-4) |
 | Ring gear | **50T, module 0.8, PD 40.0 mm** | concentric with the spar; root Ø 38.0 clears it with 9 mm of hub each side; OD 41.6 inside the 53.4 envelope |
 | Pinion | **14T, module 0.8, PD 11.2 mm** | on the wing's drive shaft; 14T is the no-undercut floor at 20° PA |
 | Reduction ratio | **3.571** | shaft turns **1.389 revolutions** per 140° of nacelle |
 | Gear centre distance | **25.6 mm** | → wing shaft at chord station 53.6 |
-| Ring magnet | **ID 26 / OD 41.2 mm**, diametric | mean radius 16.8 = `HALL_SENS_R` |
+| Ring magnet | **ID 26 / OD 41.2 × 2.0 mm**, diametric | mean radius 16.8 = `HALL_SENS_R`. Thickness cut 2.5 → 2.0 on 2026-08-31 when the stub lost 1.5 mm to the sleeve bound — the air gap and the pad proud are built wing geometry, so the magnet was the only term left to spend. **Flux re-validation is now load-bearing, not a formality**: the AK7455 off-axis window is 10–70 mT |
 | Magnet axial gap to the AK7455 face | **1.5 mm** | set by the nacelle standoff |
 | Non-ferrous zone | ≥ 10 mm radius around the IC | see §4.5 |
 | 4 × 10 AWG disconnect | **in the nacelle annulus** | see §4.4 |
 
-### 4.3a The spar stub is bounded by the thrust duct
+### 4.3a The spar stub is bounded by the SLEEVE ZONE, not the thrust duct
+
+> **CORRECTED AGAIN 2026-08-31 — the bound below is taken against the wrong
+> bore, and the error was found by measurement rather than by re-reading.**
+>
+> Everything after this box reasons about "the duct" as a cylinder of
+> **r = 25 mm**. That is the Ø50 EDF bore, and it is not what occupies the pivot
+> station. The pivot sits at nacelle-local **Z 113.8**, inside the **sleeve zone**
+> (Z 90 … 166.25), where the nacelle bore is opened to `SLEEVE_BORE_R` = 27.7 to
+> accept the removable stator and aft-spider sleeves — and where the *physical*
+> stator sleeve's OD is **r 27.5**, with anti-rotation keys standing proud to
+> **r 30.5**.
+>
+> Checked mesh against mesh (`tools/nacelle_trunnion_fit.py` gate T8), the
+> 15.0 mm stub this section specified produced:
+>
+> | interference | volume | cause |
+> |---|---:|---|
+> | trunnion ∩ stator sleeve | **23.3 mm³** | stub tip at \|X\| 26.7 vs sleeve OD r 27.5 — 0.80 mm deep |
+> | trunnion ∩ sleeve 0° key | **37.7 mm³** | a key at 0° lies along +X, where the starboard trunnion is |
+>
+> The corrected bound is the sleeve, not the duct:
+>
+> ```text
+> wing tip face                                   |X| = 41.7
+> stator sleeve OD                                  r =  27.5
+> + assembly clearance                                   0.70
+> spar must stop                                  |X| = 28.2
+> => MAXIMUM STUB                                       13.5 mm   (was 15.7)
+> ```
+>
+> **`SPAR_TIP_PROTRUSION` is 13.5 mm as of 2026-08-31.** That constant drives no
+> wing geometry — the spar is a COTS CF tube — so the wing STLs are unaffected;
+> it is a published requirement and the nacelle consumes it.
+>
+> The key clocking moved with it: **0/120/240 → 30/150/270**, the only spacing
+> that misses both +X and −X, so neither pod's trunnion meets a key.
+>
+> This is the third time this stub has been budgeted from what the joint wanted
+> and then checked against something other than what is physically there (32 mm
+> → 15.0 → 13.5). The gate now tests the **meshes**, not the constant.
+
+### 4.3a (original) The spar stub is bounded by the thrust duct
 
 **Owner requirement (2026-08-29): the spar must not penetrate the nacelle
 thrust tube.** That is a hard geometric bound and it is tighter than the bearing
@@ -645,7 +688,7 @@ misrepresent the separation bubble. Tracked in `TODO.md` §0.8 and
 | **WA-R9** | Ring magnet ID 26 / OD 41.2, axially separated from the ring gear, both inside the 15 mm stub | wings-nacelles | **BUILT** (Rev T4) — bonded seat at \|X\| 35.7–38.2; 2.0 mm of axial separation from the gear; gate T4 |
 | **WA-R10** | 4 × 10 AWG disconnect in the nacelle annulus, partitioned from the AK7455 plug | wings-nacelles | **PARTIAL / OPEN** — the bay is built (Z 82, 4 × M3 brass studs, ring terminals) and the EMI partition is achieved, but **there is no annulus to route the bundle through**; blocked on W0 (hollow the pod). See §4.4 |
 | **WA-R11** | Nav 3-core crosses at the trunnion, radially separated from the power bundle | wings-nacelles | **BUILT** (Rev T4) — Ø4.0 port through the collar at r = 20.75, 90° off the disconnect bay; power stays on the axis inside the spar bore |
-| **WA-R12** | Trunnion bearing pair within the **15 mm** duct-bounded stub; no member closer than 26 mm to the duct axis | wings-nacelles | **BUILT** (Rev T4) — 2 × **6704** (8.0 mm), *not* 6804: the pair never fitted once the magnet and air gap were budgeted. Outboard face \|X\| 26.7, gate T1/T2 |
+| **WA-R12** | Trunnion bearing pair within the **13.5 mm** SLEEVE-bounded stub; no member closer than 28.2 mm to the duct axis at the pivot | wings-nacelles | **BUILT** (Rev T4b) — 2 × **6704** (8.0 mm), *not* 6804. Two corrections landed here, both found by measurement: the pair never fitted once the magnet and air gap were budgeted, and the *bound itself* was 2.2 mm out because it was taken against the Ø50 duct rather than the Ø55.4 sleeve zone the pivot actually sits in. Outboard face \|X\| **28.2**; gates T1a/T1a2/T2/T8 |
 | **WA-R15** | Actuator re-select: multi-turn, not a limited-rotation servo (§4.3b) | avionics / fuselage-mid | **RESOLVED** (T1c) — DS3225 body + LibreServo_v4 with the rotation-limit pin removed, run continuous-rotation and closed on the AK7455, per the cargo-winch precedent. Same body, so the pad footprint and bolt pattern are unchanged; mount position and standoff are new (§4.3c) |
 | **WA-R13** | `TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1 corrected — the spar is no longer ferromagnetic | avionics | **CLOSED** (2026-08-31) — §6.1 carries the correction and §6.2 is updated for the built joint: the "30 mm from the spar centreline" rule is **superseded** by `HALL_SENS_R` 16.8 (30 mm would sit off the magnet), and the two steel 6704s inside the keep-out are recorded as calibration-mandatory rather than as a violation |
 | **WA-R14** | Wing side: bores, pad, root path, thickness scales | wings-nacelles | **BUILT** (Rev T1) |
@@ -690,10 +733,17 @@ misrepresent the separation bubble. Tracked in `TODO.md` §0.8 and
   magnet/gear problem this item flagged is real and is solved axially: gear band
   \|X\| 27.2–32.2, magnet 35.7–38.2, 2.0 mm apart, both outside the duct.
   Full arithmetic in `nacelle_trunnion.scad`; enforced by
-  `tools/nacelle_trunnion_fit.py` T1–T7. **The residual is the bearing SPAN**
-  (4.0 mm centres, 254 N per race at ultimate) — it passes, but it is the number
-  a future revision should attack, and it is set by the duct bound, not by
-  choice.
+  `tools/nacelle_trunnion_fit.py` T1–T8.
+  **RE-CLOSED 2026-08-31 at a tighter budget.** Moving the bound from the duct
+  (r 25) to the sleeve (r 27.5) took 1.5 mm off the stub, and the ring magnet
+  gave it back by thinning 2.5 → 2.0 mm. The bearing pair survived unchanged.
+  Two residuals, both stated rather than resolved:
+  - **the bearing SPAN** — 4.0 mm centres, 254 N per race at ultimate. It
+    passes, but the span, not the rating, governs, and it is set by the stub
+    bound rather than chosen.
+  - **magnet flux** — a 20 % thinner magnet against a 10–70 mT off-axis window
+    that was already bench-validation-pending. That validation is now
+    load-bearing.
 - **OI-5 — Aero revalidation.** The section is no longer S1223: root t/c
   12.14 → 17.72 %, tip 18.93 → 26.70 %. **Every aero figure in the repo that
   cites this wing is unverified**, including the 7.6 N cruise-lift figure in

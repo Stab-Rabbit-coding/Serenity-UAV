@@ -1248,16 +1248,57 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
 - [x] **New gate** `tools/nacelle_trunnion_fit.py` (T1–T7, S1–S3, M1, P1) and new
     mass tool `tools/nacelle_mass_cg.py`.
 
-- [ ] **[OPEN — WA-R10, blocked on weight-plan W0] The 4 × 10 AWG disconnect has
-    no route.** The bay itself is built (Z 82, 30 × 14 × 6.0 mm, 4 × M3 brass studs
+- [x] **Rev T4b (2026-08-31) — the pods are HOLLOW, with a forward-biased wall.**
+    Owner direction: take more from the forward end to move the CG aft and buy
+    hover clearance. Built at 2.5 mm forward ramping to 8.0 mm over Z 100–140.
+    **284.8 → 195.9 g per pod, −178.8 g for the pair** — the largest single
+    weight reduction on the aircraft — and `PIVOT_Z` 105.8 → **113.8**, worth
+    7.9 mm of hover clearance. The cavity is measured off the canonical shell by
+    ray-casting (`tools/nacelle_hollow_profile.py` → generated
+    `nacelle_hollow_profile.scad`), not offset by the fuselage voxel pipeline,
+    whose 40–66 MB output OpenSCAD cannot boolean in reasonable time. Three
+    **vented** webs at Z 40/62/84 carry the shear path; the first render sealed a
+    −17,227 mm³ compartment before they were drilled.
+
+- [x] **Rev T4b — the stub bound was wrong, and it was wrong about the bore.**
+    `SPAR_TIP_PROTRUSION` 15.0 → **13.5 mm**, `TRUNNION_X0` 26.7 → **28.2**.
+    §4.3a bounded the joint against the Ø50 EDF duct (r 25), but the pivot sits
+    inside the Ø55.4 **sleeve zone**, where the stator sleeve's OD is r 27.5.
+    Measured mesh against mesh: **23.3 mm³** of trunnion-into-sleeve overlap, plus
+    **37.7 mm³** where the sleeve's 0° anti-rotation key ran into the starboard
+    trunnion. Sleeve key clocking moved **0/120/240 → 30/150/270**, the only
+    120°-spaced set that misses both +X and −X; the aft sleeve's retention screws
+    pass through the keys, so its bores and the pod's retention bosses moved with
+    them. The ring magnet thinned **2.5 → 2.0 mm** to pay for the 1.5 mm the stub
+    lost — **flux re-validation is now load-bearing**, not a formality. New gate
+    **T8** tests the two meshes against each other rather than re-deriving a
+    constant, because this stub has now been mis-bounded three times (32 → 15.0
+    → 13.5).
+
+- [ ] **[OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not
+    built.** W0 has landed, so the 5–17 mm annulus plan 003 assumed now exists
+    and the bundle has somewhere to run. What remains is the routing itself: a
+    path out of the trunnion keep-out into the cavity, and the harness lengths to
+    go with it. The bay, the studs and the EMI partition are already built.
+    *(Superseded reason, kept because it is why the requirement stalled:)* The bay itself is built (Z 82, 30 × 14 × 6.0 mm, 4 × M3 brass studs
     for ring terminals) and sits over the EDF1 ESC wire exit. What does not exist
     is the annulus the wing side assigned the bundle to: **the pod is solid.** The
     SCAD imports the solid canonical shell and subtracts only the duct, so a groove
     from the trunnion to the bay could be at most ~3.6 mm deep before breaching the
     Ø55.4 sleeve bore, against a 13.28 mm bundle. Unblocks when the pod is hollowed.
 
-- [ ] **[OPEN — FLIGHT SAFETY, LG-HOVER-01 RE-OPENED] Hover ground clearance is
-    negative on the active gear.** `PIVOT_Z` is 111.5 → **105.8** once the pod is
+- [ ] **[OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still
+    negative on the active gear, but by 2.55 mm rather than 10.5.** Rev T4b's
+    forward-biased hollowing moved `PIVOT_Z` to 113.8 and recovered 7.9 mm of the
+    deficit; the in-nacelle harness (22.9 g, all aft of the pivot, never counted
+    in any previous roll-up) accounts for part of that. **Remaining: −2.55 mm on
+    the 1.5 in gear, +39.35 mm on the 3.0 in.** Plan 005's already-settled
+    40 → 30 mm flap trim is worth 10 mm and takes it to **+6.41 mm** — short of
+    the +9.8 mm previously accepted, so the owner should re-confirm the margin
+    rather than inherit it. Levers remaining: the flap trim, KD5's deferred
+    stator compression (~7 mm), aft ballast (17.7 g per nacelle per 4 mm), or
+    making the 3.0 in gear mandatory. `tools/nacelle_mass_cg.py` exits non-zero
+    while any variant strikes. *(Original entry:)* `PIVOT_Z` is 111.5 → **105.8** once the pod is
     measured rather than estimated (the header table carried 130 g for
     shell+sleeves; they measure 339.7 g). The pivot follows the CG, so the pivot
     moved 5.7 mm **forward**, which lengthens the pivot-to-nozzle-tip arm one for

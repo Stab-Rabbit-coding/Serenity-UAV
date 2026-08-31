@@ -2393,7 +2393,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_port_revs.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle_Port 2026-06-11",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -2411,7 +2411,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_stbd_revs.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle_Stbd 2026-06-11",
       "tags": [
         "cad-mesh",
         "propulsion",

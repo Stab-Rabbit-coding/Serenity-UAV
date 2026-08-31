@@ -96,6 +96,24 @@ SLEEVE_KEY_H    =   3.0;    // [mm] key radial height above sleeve OD
 KEY_ROOT_OVERLAP =  0.5;    // [mm] key root sunk below the tube OD — CGAL
                             //      volumetric overlap, not a touching face
 
+// ── Sleeve key CLOCKING (Rev T4b, 2026-08-31) ────────────────────────────────
+// Moved 0/120/240 -> 30/150/270, and the reason is an interference, not tidiness.
+//
+// A key stands proud to r = 30.5 and runs the sleeve's full length, so a key at
+// 0 deg lies along +X and a key at 180 deg along -X — which is exactly where the
+// trunnion sits, on the starboard and port pods respectively.  Measured mesh
+// against mesh, the 0 deg key drove 37.7 mm3 of solid overlap into the starboard
+// trunnion (tools/nacelle_trunnion_fit.py gate T8b).
+//
+// With three keys at 120 deg spacing the only clockings that miss BOTH +X and -X
+// are theta = 30 and 90 (and equivalents).  30/150/270 is used: it holds 30 deg
+// of angular clearance from each trunnion, and at r 30.5 the keys reach only
+// |X| = 26.4, inboard of the trunnion's 28.2 face by 1.8 mm.
+//
+// The aft sleeve's M3 retention screws pass THROUGH the key ribs, and the pod's
+// retention bosses receive them, so all three feature sets move together.
+SLEEVE_KEY_ANGLES = [30, 150, 270];
+
 // ── Stator geometry (nacelle 1.25× scale values converted to sleeve-local Z) ──
 // Sleeve-local Z = nacelle Z − SLEEVE_Z_START
 STATOR_Z_BOT_L  =   3.75;  // [mm] stator bottom (nacelle 93.75 − 90.0)
@@ -169,7 +187,7 @@ module stator_sleeve_body() {
         // ── Anti-rotation keys (3× at 120°) ──────────────────────────────
         // Rectangular rib on OD surface, spans full sleeve length.
         // Engages bore_key_slots() in nacelle enlarged bore.
-        for (angle = [0, 120, 240]) {
+        for (angle = SLEEVE_KEY_ANGLES) {
             rotate([0, 0, angle])
             // Rev T4 (2026-08-30): the key root is sunk KEY_ROOT_OVERLAP mm
             // BELOW the tube OD so the two solids INTERPENETRATE rather than

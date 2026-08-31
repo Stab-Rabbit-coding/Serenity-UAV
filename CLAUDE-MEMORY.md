@@ -66,7 +66,7 @@ Mirrored: 51 memory files plus the index.
 - [Wing Rev T1/T1b fixed CF spar](project_wing_rev_t1_fixed_spar.md) — spar is a BONDED WING MEMBER not a rotating shaft; stub duct-bounded to 15mm; root joint splits shear(socket)/moment(80x60 flange) so the bay stays clear; drive is a REDUCTION (>1 rev, 14T/50T) so the servo-range question is void; section is S1223/t17.7—t26.7, NOT an S1223
 - [Fuselage Rev T1c + tilt drive](project_fuselage_rev_t1c_tilt_drive.md) — tenon forces the gear plane → 18mm actuator standoff; root flange is a bonded PART (wall moves 34mm across the footprint); multi-turn DS3225; train NOT self-locking
 - [Red gates mask tool bugs](feedback_gates_mask_tool_bugs.md) — clearing a long-red gate exposed 4 real checker defects; budget for fixing the gate too
-- [Nacelle Rev T4 trunnion](project_nacelle_rev_t4_trunnion.md) — skewer deleted from pod+stator sleeve; 2×6704 not 6804 (OI-8); pods are SOLID (285 g not 132 g, W0 = 192.7 g); PIVOT_Z 111.5→105.8 makes hover clearance −10.5 mm on the 1.5in gear
+- [Nacelle Rev T4 trunnion](project_nacelle_rev_t4_trunnion.md) — skewer deleted from pod+stator sleeve; 2×6704 not 6804 (OI-8); pods HOLLOWED fwd-biased (285→196 g, −179 g pair); stub bound was against the WRONG bore (sleeve zone r27.5 not duct r25) → keys 0/120/240→30/150/270; PIVOT_Z 113.8, hover −2.55 mm (+6.41 with 30 mm flaps)
 
 ---
 
@@ -1726,6 +1726,31 @@ both X-face hubs, both duct-wall collars) and from `edf_stator_sleeve.scad`
 (`spar_fairing()` + `spar_bore_cut()`). New part
 `airframe/openscad/nacelles/nacelle_trunnion.scad` hangs the nacelle on the
 fixed wing spar's 15 mm stub.
+
+**Rev T4b (same day) — pods HOLLOWED with a forward-biased wall,** on owner
+direction to move the CG aft for hover clearance. 2.5 mm skin forward, ramping to
+8.0 mm over Z 100-140. **284.8 -> 195.9 g per pod, -178.8 g the pair** and
+`PIVOT_Z` 105.8 -> 113.8, worth 7.9 mm of clearance (-10.47 -> -2.55 mm on the
+1.5 in gear; +6.41 with plan 005's 30 mm flaps). Exchange rate for the bias is
+poor in isolation (~24 g per mm) but it is what lets the flap trim finish the job.
+Cavity is RAY-CAST off the canonical shell (`tools/nacelle_hollow_profile.py` ->
+generated `nacelle_hollow_profile.scad`), NOT offset by the fuselage voxel
+pipeline — 40-66 MB meshes are not OpenSCAD-booleanable. Section-radius sampling
+is WRONG on this shell (internal forward intake pocket -> two loops below Z 58,
+halves the apparent removable volume).
+
+**Rev T4b also found the stub bound was against the WRONG BORE.** §4.3a bounds the
+joint at r 25 (Ø50 EDF duct) but the pivot sits in the Ø55.4 SLEEVE ZONE, stator
+sleeve OD r 27.5. Measured: 23.3 mm³ trunnion-into-sleeve + 37.7 mm³ where the
+sleeve's 0° key hits the STARBOARD trunnion. Fixes: `SPAR_TIP_PROTRUSION`
+15.0 -> 13.5, `TRUNNION_X0` 26.7 -> 28.2, sleeve keys 0/120/240 -> **30/150/270**
+(only 120°-spaced set missing both ±X; aft-sleeve retention screws pass THROUGH
+the keys so those bores and the pod bosses move too), ring magnet 2.5 -> 2.0 mm
+(flux re-validation now load-bearing). Gate **T8** tests mesh-vs-mesh, because
+this stub has been mis-bounded three times.
+
+**The harness was never in the mass roll-up** — 22.9 g/nacelle, all aft of the
+pivot, so omitting it biased the CG forward. Now in `nacelle_mass_cg.py`.
 
 **Three findings that outrank the geometry work:**
 

@@ -54,7 +54,7 @@ is 118 g wrong is not weight reduction, it is decoration.
 
 | # | Target | Measured now | Recoverable | Confidence | Gate |
 |---|---|---:|---:|---|---|
-| **W0** | **Hollow the two nacelle pods** | **569.6 g (pair)** | **−192.7 g** | high | pod moves to the Blender/manifold3d pipeline |
+| **W0** | ~~Hollow the two nacelle pods~~ **DONE 2026-08-31** | 570.5 g (pair) | **−178.8 g** | measured | **cut — see §W0** |
 | **W1** | Battery down-select 4000 → 2800 mAh | 750 g | **−225 g** | high | endurance/mission, not structure |
 | **W2** | **BOM ⇄ mesh reconciliation** | — | **0 g** | — | **gates every other item** |
 | **W3** | Battery-tray floor pocket | 140.2 g | **−23.1 g** | high | rail-slot depth, not bending |
@@ -63,8 +63,8 @@ is 118 g wrong is not weight reduction, it is decoration.
 | **W6** | ~~Nacelle pod STL identity~~ **RESOLVED 2026-08-31** | 132 g BOM vs **284.8 g** measured | *(BOM error, not a cut)* | — | **closed — see §W6** |
 | **W7** | Landing-gear bay bolt bosses | 126.0 g raw | unquantified | low | bolt bearing; needs its own study |
 | | **Printed-part subtotal (W3–W5)** | | **≈ −81 g** | | |
-| | **Printed-part subtotal with W0** | | **≈ −274 g** | | |
-| | **With W1** | | **≈ −499 g** | | |
+| | **Printed-part subtotal with W0 (W0 measured, W3–W5 estimated)** | | **≈ −260 g** | | |
+| | **With W1** | | **≈ −485 g** | | |
 
 **Explicitly NOT a target: the wing roots.** §W8 records why, so it is not
 re-litigated.
@@ -159,7 +159,65 @@ trade; it does not make the call.
 
 ## Implementation Units
 
-### W0. Hollow the two nacelle pods *(largest structural lever)*
+### W0. Hollow the two nacelle pods — **CUT 2026-08-31**
+
+**Result: −178.8 g across the pair** (284.8 → 195.9 g port, 285.7 → 195.8 g stbd),
+measured from the meshes. The largest single weight reduction on the aircraft,
+and it came with a clearance dividend that was the reason the owner directed the
+shape of it.
+
+**The wall is deliberately not uniform.** Owner direction: *"take more from the
+forward end instead of the aft end to adjust CG and nacelle ground clearance."*
+The tilt pivot sits at the rotating assembly's CG, so mass removed forward of it
+drags the pivot aft, which shortens the pivot-to-nozzle arm one for one and lifts
+the nozzle in hover. Built schedule: **2.5 mm forward, ramping to 8.0 mm over
+Z 100–140.**
+
+| | pod mass | `PIVOT_Z` | hover clr, 1.5 in gear |
+|---|---:|---:|---:|
+| solid (as built) | 284.8 g | 105.9 | −10.47 mm |
+| uniform 2.5 mm wall | ~171 g | ~113.2 | ~−3.2 mm |
+| **built: 2.5 fwd → 8.0 aft** | **195.9 g** | **113.8** | **−2.55 mm** |
+| built + plan 005's 30 mm flaps | 195.9 g | 112.8 | **+6.41 mm** |
+
+Two things that table says and should not be softened: the forward bias is worth
+about **0.6 mm of clearance for 24 g**, a poor exchange rate in isolation, and it
+**cannot close the 10.5 mm deficit on its own**. What it does is carry 8 mm of it,
+so that plan 005's already-settled flap trim finishes the job instead of falling
+short. The residual after both is +6.41 mm against the +9.8 mm the owner
+previously accepted.
+
+**How it was done, and why not the obvious way.** The fuselage pipeline
+(`blender_shells_2mm_solidify.py` → `hollow_manifold.py`) was *not* used: it
+produces 40–66 MB voxel meshes and the pod is an OpenSCAD part whose booleans
+already take minutes against a 3.3 MB import. Instead
+`tools/nacelle_hollow_profile.py` **ray-casts** the canonical shell's outer skin
+and emits the cavity as an explicit `polyhedron()` — 29 KB of generated,
+diffable, regenerable SCAD. Ray-casting rather than section radii, because the
+canonical mesh carries an internal forward intake pocket that makes a section's
+minimum radius meaningless below Z ≈ 58; the first estimate built that way
+under-reported the removable volume by roughly half.
+
+**What the hollowing forced, all of it caught by gates rather than inspection:**
+- three **vented** structural webs at Z 40/62/84 — the first render sealed a
+  −17,227 mm³ compartment between the first two, which no slicer can drain;
+- a monotonic cavity-closure rule, after four sub-mm inverted slivers appeared
+  where the cavity grazed the duct wall at the end of the ramp;
+- `nav_wire_channel()` moved to Zone C — it is a rib standing *into* the cavity,
+  so it was a no-op while the pod was solid and would have been deleted once it
+  was not.
+
+**Acceptance:** all met. Both pods watertight, single-bodied, no negative-volume
+bodies, no OpenSCAD warnings; `validate_stls`, `nacelle_trunnion_fit` (T1–T8,
+S1–S3, M1) and the wing/cargo/landing-gear gates green; `nacelle_mass_cg.py`
+reports the CG fixed point converged to 0.00 mm.
+
+**What it unblocks:** `WA-R10`. There is now a real 5–17 mm annulus between the
+duct wall and the skin, which is what plan 003 assumed all along.
+
+---
+
+#### W0 (original scope, for the record)
 
 **Goal:** −192.7 g across the pair, and the annulus that WA-R10 needs.
 

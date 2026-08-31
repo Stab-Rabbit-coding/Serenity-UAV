@@ -137,12 +137,13 @@ HARNESS = [
 #: Items that sit ON the tilt axis.  Their CG_Z is PIVOT_Z by construction, so
 #: they are resolved after the first pass rather than carrying a fixed station.
 ON_AXIS = [
-    ("Trunnion (Rev T4, printed)", 7.0,
+    ("Trunnion (Rev T4, printed)", 7.9,
      "nacelle_trunnion.stl measured; its axis IS the tilt axis"),
     ("2 x 6704ZZ trunnion bearing", 2 * 4.9,
      "20x27x4 steel deep-groove; volume x 7.85 g/cm3 x 0.6 fill"),
-    ("Ring magnet ID26/OD41.2x2.5", 2005.0 * RHO_NDFEB,
-     "NdFeB N42 diametric, WA-R9"),
+    ("Ring magnet ID26/OD41.2x2.0", 1604.0 * RHO_NDFEB,
+     ("NdFeB N42 diametric, WA-R9; thinned 2.5->2.0 when the stub lost 1.5 mm "
+      "to the sleeve bound — flux re-validation is now load-bearing")),
     ("3 x M3 brass screw + inserts", 2.4, "non-ferrous, EMI keep-out"),
 ]
 
@@ -319,14 +320,19 @@ def main() -> int:
     # is the scale at which the printed features this number places (the trunnion
     # collar and its Ø34 H7 register) have any meaning — FDM positional tolerance
     # on a 185 mm part is not better than ±0.2 mm.
+    # Only meaningful for the AS-BUILT flap length: a `--flap` what-if deliberately
+    # models geometry the SCAD does not have, so its CG is not supposed to match.
     pod_scad = (REPO / "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad")
     m = re.search(r"^PIVOT_Z\s*=\s*([0-9.]+)\s*;", pod_scad.read_text(), re.MULTILINE)
-    if m:
+    if m and result["flap_len_mm"] == BUILT_FLAP_LEN:
         built = float(m.group(1))
         delta = result["cg_z_mm"] - built
         state = "CONVERGED" if abs(delta) <= 0.25 else "NOT CONVERGED — re-render"
         print(f"\nFixed point: SCAD PIVOT_Z = {built:.1f}, measured CG = "
               f"{result['cg_z_mm']:.2f}, residual {delta:+.2f} mm -> {state}")
+    elif m:
+        print(f"\nFixed point not checked: --flap {result['flap_len_mm']:.0f} is a "
+              f"what-if, and the SCAD is built at {BUILT_FLAP_LEN:.0f} mm.")
 
     # ---- hover ground clearance -------------------------------------------
     pivot = result["cg_z_mm"]

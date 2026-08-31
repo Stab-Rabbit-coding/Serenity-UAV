@@ -588,6 +588,33 @@ TILT_SPAR_BORE_CLEAR  =  20.4;   // [mm] bonded clearance bore through wing (0.2
 // thrust tube.**  That is a hard geometric bound, and it is tighter than the
 // bearing stack would like.
 //
+// CORRECTED 2026-08-31 — THE BOUND WAS TAKEN AGAINST THE WRONG BORE.
+// The paragraphs below reason about "the duct" as a cylinder of r = 25 mm.  That
+// is the Ø50 EDF bore, and it is NOT what occupies the pivot station.  The pivot
+// sits at nacelle-local Z 113.8, inside the SLEEVE ZONE (Z 90 … 166.25), where
+// the nacelle bore is opened to SLEEVE_BORE_R = 27.7 to accept the removable
+// stator and aft-spider sleeves — and where the physical stator sleeve's OD is
+// r 27.5.  Measured against the published meshes, a spar stub of 15.0 mm puts
+// the tip at |X| 26.7 and drives **23.3 mm³ of solid interference** into
+// edf_stator_sleeve.stl (0.80 mm deep, over |y| < 6.6).
+//
+// The governing radius is therefore 27.5, not 25.0:
+//
+//     wing tip face   |X| = 37.7 (NACELLE_OD_X/2) + 4.0 (joint gap) = 41.7
+//     stator sleeve OD                                       r     = 27.5
+//     + assembly clearance                                         =  0.7
+//     spar must stop  |X| = 28.2
+//     => MAXIMUM STUB       13.5 mm      (was stated as 15.7)
+//
+// This is the same class of error the note below describes in the 32 mm stub it
+// replaced: budgeted outward from what the joint wanted, then checked against a
+// bore that is not the one present at that station.  See
+// docs/WING_ATTACH_INTERFACE.md §4.3a and tools/nacelle_trunnion_fit.py gate T8,
+// which now tests the two MESHES against each other rather than re-deriving the
+// bound from a constant.
+//
+// SUPERSEDED derivation (kept because its method is right and only its input was
+// wrong):
 // The duct is a cylinder of r = 25 mm about the nacelle's local Z axis.  The
 // spar runs along local X at Y = 0, so every point of it at station X sits
 // sqrt(X² + Y²) ≥ |X| from the duct axis.  The spar therefore clears the duct
@@ -603,14 +630,29 @@ TILT_SPAR_BORE_CLEAR  =  20.4;   // [mm] bonded clearance bore through wing (0.2
 // checked against the duct, which is the same class of error as the Rev R2
 // through-duct spar this whole revision exists to remove.
 //
-// 15.0 is used, keeping 0.7 mm in hand.  THE BEARING STACK MUST FIT INSIDE IT:
-// 15 mm between |X| 41.7 and 26.7 carries a pair of thin-section bearings —
-// 2 × 6804 (20 × 32 × 7) = 14.0 mm fits, and 6804 is already a BOM item
-// (SKIPPER-BRG-6804).  A deeper stack does not fit and must not be assumed.
-SPAR_TIP_PROTRUSION   =  15.0;   // [mm] spar stub proud of the wing tip face —
-                                 //      DUCT-BOUNDED (max 15.7).  PUBLISHED
-                                 //      JOINT REQUIREMENT; the nacelle must fit
-                                 //      its trunnion bearing pair within it.
+// 13.5 is used, keeping 0.0 mm in hand against the corrected 13.5 bound.
+//
+// THE BEARING STACK MUST FIT INSIDE IT, AND ONLY PART OF IT IS AVAILABLE.  The
+// original note here claimed "2 × 6804 (20 × 32 × 7) = 14.0 mm fits".  Neither
+// half of that survives: the stub is 13.5 mm, not 15.0, and the stub also has to
+// pay for the encoder air gap and the ring magnet before a bearing gets any of
+// it.  What is left, and what is built:
+//
+//     wing tip pad face (TIP_PAD_PROUD below the tip face)   |X| = 39.7
+//       − HALL_AIR_GAP                                             1.5
+//     = ring-magnet face                                     |X| = 38.2
+//       − ring-magnet thickness                                    2.0
+//     = space for bearings, down to the spar tip at 28.2           8.0 mm
+//     => 2 × 6704ZZ (20 × 27 × 4).  6804 was never buildable here.
+//
+// This constant drives no geometry in this file — the spar is a COTS CF tube.
+// It is a PUBLISHED JOINT REQUIREMENT, consumed by
+// airframe/openscad/nacelles/nacelle_trunnion.scad and checked by
+// tools/nacelle_trunnion_fit.py.
+SPAR_TIP_PROTRUSION   =  13.5;   // [mm] spar stub proud of the wing tip face —
+                                 //      SLEEVE-BOUNDED (max 13.5, corrected
+                                 //      2026-08-31 from 15.0/15.7 which fouled
+                                 //      the stator sleeve by 0.80 mm).
 
 // ── Wingtip service access (Rev T1) ──────────────────────────────────────────
 // Plan 003 U3 also specified a wingtip "maintenance garage" housing the

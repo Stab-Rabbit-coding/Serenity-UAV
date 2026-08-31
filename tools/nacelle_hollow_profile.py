@@ -207,7 +207,7 @@ def mass_removed(zs, rc):
     vol = mom = 0.0
     for k, z in enumerate(zs):
         inner = bore_r(float(z)) + DUCT_WALL
-        a = float((0.5 * np.maximum(rc[k] ** 2 - inner ** 2, 0.0) * dth).sum())  # noqa: E501
+        a = float((0.5 * np.maximum(rc[k] ** 2 - inner ** 2, 0.0) * dth).sum())
         vol += a * dz
         mom += a * dz * float(z)
     return vol * RHO_PRINT, (mom / vol if vol else 0.0)
@@ -224,8 +224,8 @@ def emit(zs, az, grids) -> str:
         "//",
         "// The internal cavity surface of the nacelle pod, measured off the canonical",
         "// shell by ray-casting and offset inward by a FORWARD-BIASED wall schedule:",
-        f"//     wall = {WALL_FWD} mm for Z <= {RAMP_Z0:.0f}, ramping to {WALL_AFT} mm by "
-        f"Z {RAMP_Z1:.0f}",
+        (f"//     wall = {WALL_FWD} mm for Z <= {RAMP_Z0:.0f}, ramping to "
+         f"{WALL_AFT} mm by Z {RAMP_Z1:.0f}"),
         "// Removing more from the forward end moves the rotating-assembly CG AFT, which",
         "// is where the tilt pivot sits, which shortens the pivot-to-nozzle arm and",
         "// lifts the nozzle in hover.  See the tool's header for the measured trade.",
@@ -277,7 +277,20 @@ def main() -> int:
     for side, (m, c) in report.items():
         print(f"  {side:<6}{m:11.1f}{c:13.1f}{285.0 - m:14.1f}")
     pair = sum(m for m, _ in report.values())
-    print(f"\n  pair saving {pair:.1f} g")
+    print(f"\n  predicted removal, pair: {pair:.1f} g")
+
+    # Report the MEASURED delta alongside the prediction.  They differ, and the
+    # difference is not error: this integral assumes the whole annulus is solid,
+    # but the nozzle ring pocket, the sleeve bore, the disconnect bay and the
+    # trunnion keep-out have already taken some of it.  Quoting only the
+    # prediction would overstate the saving by roughly 30 %.
+    for side, rel in (("PORT", "nacelle_port_revs.stl"),
+                      ("STBD", "nacelle_stbd_revs.stl")):
+        path = REPO / "airframe/stls/nacelles" / rel
+        if path.exists():
+            mesh = trimesh.load_mesh(path, force="mesh")
+            print(f"  {side} as published: {mesh.volume * RHO_PRINT:7.1f} g "
+                  f"(measured; the pod was 284.8 g solid at Rev T4)")
 
     if args.emit:
         OUT.write_text(emit(zs, az, grids), encoding="utf-8")

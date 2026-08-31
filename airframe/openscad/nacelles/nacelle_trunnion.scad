@@ -121,7 +121,13 @@
 // =============================================================================
 
 // ── Joint stations, expressed as nacelle-local |X| (see the budget above) ─────
-TRUNNION_X0     =  26.7;   // [mm] outboard face = spar tip (duct bound ≥ 26.0)
+TRUNNION_X0     =  28.2;   // [mm] outboard face = spar tip.  SLEEVE-BOUNDED,
+                           //      not duct-bounded — corrected 2026-08-31.  The
+                           //      pivot sits inside the Ø55.4 sleeve zone, where
+                           //      the stator sleeve's OD is r 27.5, so the old
+                           //      26.7 (taken against the Ø50 EDF bore) drove
+                           //      23.3 mm³ of solid interference into
+                           //      edf_stator_sleeve.stl.  28.2 leaves 0.70 mm.
 WING_TIP_FACE_X =  41.7;   // [mm] wing tip face  (NACELLE_OD_X/2 + 4.0 joint gap)
 PAD_PROUD       =   2.0;   // [mm] wing tip pad proud of that face (TIP_PAD_PROUD)
 PILOT_CLEAR     =   0.3;   // [mm] running clearance, pilot spigot → pad face
@@ -175,7 +181,18 @@ N_BOLTS         =   3;
 // ── Ring magnet seat (WA-R9; the wing side is BUILT to these) ────────────────
 MAG_OD          =  41.2;   // [mm] HALL_RING_OD
 MAG_ID          =  26.0;   // [mm] HALL_RING_ID (clears Ø20 spar + 3 mm collar)
-MAG_T           =   2.5;   // [mm] magnet thickness (HALL-RING-MAG stock)
+MAG_T           =   2.0;   // [mm] magnet thickness.  2.5 -> 2.0 on 2026-08-31:
+                           //      the stub lost 1.5 mm when the bound moved to
+                           //      the sleeve, and the 0.5 mm has to come from
+                           //      somewhere the wing has not already fixed.  The
+                           //      air gap (1.5) and the pad proud (2.0) are built
+                           //      wing geometry; the magnet is a stock part and
+                           //      2.0 is a stock thickness.  FLUX CONSEQUENCE IS
+                           //      REAL AND UNVERIFIED: a 20 % thinner magnet
+                           //      weakens the field the AK7455 reads, and the
+                           //      off-axis window is 10-70 mT.  The bench
+                           //      validation the BOM row already demands is now
+                           //      load-bearing, not a formality.
 MAG_FIT         =   0.2;   // [mm] diametric bond-line clearance in the seat
 
 // ── Pilot spigot (sets the air gap off the wing tip pad) ─────────────────────

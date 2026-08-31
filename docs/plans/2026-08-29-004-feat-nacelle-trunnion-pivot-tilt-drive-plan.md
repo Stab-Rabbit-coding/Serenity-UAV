@@ -96,9 +96,15 @@ the collar it bolts into, and the Rev R2 through-duct spar is deleted from both
 the pod and the stator sleeve. Two corrections to this plan came out of building
 it:
 
-- **U2's bearing is 2 × 6704ZZ, not 2 × 6804.** The 15 mm stub also pays for the
-  pilot clearance, the encoder air gap and the ring magnet, leaving 9.0 mm — see
+- **U2's bearing is 2 × 6704ZZ, not 2 × 6804.** The stub also pays for the pilot
+  clearance, the encoder air gap and the ring magnet — see
   `WING_ATTACH_INTERFACE.md` OI-8, now closed.
+- **And the stub is 13.5 mm, not 15.0.** Corrected 2026-08-31: the bound was
+  taken against the Ø50 EDF duct, but the pivot sits inside the Ø55.4 sleeve
+  zone. Measured, the 15.0 mm stub drove 23.3 mm³ of trunnion-into-stator-sleeve
+  interference, and the sleeve's 0° key drove another 37.7 mm³ into the starboard
+  trunnion. Key clocking moved to 30/150/270; the ring magnet thinned 2.5 → 2.0
+  to pay for the lost 1.5 mm.
 - **KTD3 half-holds.** The tilt ring IS on the trunnion and the fixed spar IS a
   genuine ground reference, but the nozzle sync gear (U5) is not built, so the
   coaxial pair KTD3 describes exists only on the tilt side so far.

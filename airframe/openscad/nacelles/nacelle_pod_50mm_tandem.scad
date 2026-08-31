@@ -345,6 +345,24 @@ SLEEVE_KEY_H      =   3.0;  // [mm] key height (radial protrusion above sleeve O
 SLEEVE_KEY_SLOT_W = SLEEVE_KEY_W + 0.3;   // [mm] nacelle bore slot width (clearance)
 SLEEVE_KEY_SLOT_H = SLEEVE_KEY_H + 0.3;   // [mm] nacelle bore slot depth (clearance)
 
+// ── Sleeve key CLOCKING (Rev T4b, 2026-08-31) ────────────────────────────────
+// Moved 0/120/240 -> 30/150/270, and the reason is an interference, not tidiness.
+//
+// A key stands proud to r = 30.5 and runs the sleeve's full length, so a key at
+// 0 deg lies along +X and a key at 180 deg along -X — which is exactly where the
+// trunnion sits, on the starboard and port pods respectively.  Measured mesh
+// against mesh, the 0 deg key drove 37.7 mm3 of solid overlap into the starboard
+// trunnion (tools/nacelle_trunnion_fit.py gate T8b).
+//
+// With three keys at 120 deg spacing the only clockings that miss BOTH +X and -X
+// are theta = 30 and 90 (and equivalents).  30/150/270 is used: it holds 30 deg
+// of angular clearance from each trunnion, and at r 30.5 the keys reach only
+// |X| = 26.4, inboard of the trunnion's 28.2 face by 1.8 mm.
+//
+// The aft sleeve's M3 retention screws pass THROUGH the key ribs, and the pod's
+// retention bosses receive them, so all three feature sets move together.
+SLEEVE_KEY_ANGLES = [30, 150, 270];
+
 // ── ESC wire exit slot ────────────────────────────────────────────────────────
 // Rectangular slot through the forward thrust tube bore wall at the joint
 // between the integral nacelle bore section and the stator sleeve zone.
@@ -424,9 +442,14 @@ PIVOT_Z         = 113.8;   // [mm] pivot axial centre = full-assembly CG station
 // see nacelle_trunnion.scad, which is where that arithmetic lives).
 SPAR_OD          =  20.0;  // [mm] fixed CF spar OD (Rev T1) — reference only;
                            //      the spar is a WING part, not built here
-TRUNNION_X0      =  26.7;  // [mm] |X| of the spar tip = trunnion outboard face.
-                           //      HARD BOUND: must stay ≥ 26.0 so no member of
-                           //      this joint enters the r = 25 duct (§4.3a).
+TRUNNION_X0      =  28.2;  // [mm] |X| of the spar tip = trunnion outboard face.
+                           //      HARD BOUND, corrected 2026-08-31: the binding
+                           //      radius here is NOT the r = 25 duct.  PIVOT_Z
+                           //      lies inside the sleeve zone, where the bore is
+                           //      SLEEVE_BORE_R (27.7) and the stator sleeve's
+                           //      own OD is r 27.5.  At the old 26.7 the trunnion
+                           //      and the spar both cut into the sleeve — a
+                           //      measured 23.3 mm³ of solid overlap.  Gate T8.
 WING_TIP_FACE_X  =  41.7;  // [mm] |X| of the wing tip face = NACELLE_OD_X/2
                            //      (37.7) + the 4.0 mm joint gap
 TRUNNION_REG_D   =  34.0;  // [mm] H7 register bore — mates nacelle_trunnion.scad
@@ -830,7 +853,7 @@ module circular_intake_fairing() {
 // Placed in Zone C (outer union after difference) so the nozzle ring pocket
 // subtraction does not remove them.
 module sleeve_retention_bosses() {
-    for (angle = [0, 120, 240]) {
+    for (angle = SLEEVE_KEY_ANGLES) {
         rotate([0, 0, angle])
         translate([SLEEVE_BOSS_R, 0, NOZZLE_RING_Z])
             difference() {
@@ -925,7 +948,7 @@ module esc_wire_exit_slot(pylon_side = PYLON_SIDE) {
 // Used as a Zone B subtraction.
 module bore_key_slots() {
     slot_len = AFT_SLV_Z_END - STATOR_SLV_Z_START;
-    for (angle = [0, 120, 240]) {
+    for (angle = SLEEVE_KEY_ANGLES) {
         rotate([0, 0, angle])
         translate([SLEEVE_BORE_R - 0.01, -SLEEVE_KEY_SLOT_W / 2, STATOR_SLV_Z_START])
             cube([SLEEVE_KEY_SLOT_H + 1.0, SLEEVE_KEY_SLOT_W, slot_len]);
