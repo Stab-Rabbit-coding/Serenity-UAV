@@ -211,7 +211,63 @@ fasteners, and unresolved primary-source gates.
   on the tilt axis itself**, so the lever arm the unit was written about is zero.
   What replaces it is a service-loop question at the trunnion, and that is
   blocked behind WA-R10 (no route exists in a solid pod).
-- **U4 (parametric ESC seats) — still OPEN and still correctly gated.** Its own
+### U4 ESC BAY ENVELOPE — MEASURED 2026-08-31, and it is smaller than the board
+
+The owner is designing a single-end wire-egress variant (power and phase on
+opposite *faces* of the same end, `Open-Secure-ESC/docs/design-single-end-wire-
+egress-variant.md`) specifically so an ESC can sit **aft of the tilt pivot**.
+That is the right instinct — an ESC aft of the pivot is worth **+3.91 mm** of
+`PIVOT_Z` and therefore of hover clearance. Now that Rev T4b has hollowed the
+pod, the receiving volume can be measured instead of assumed. It was, and the
+answer constrains the board.
+
+**Method.** Ray-cast the canonical shell's outer skin over Z 88–166 at 5°
+azimuth, subtract the minimum skin wall (2.5 mm) and the duct wall
+(`SLEEVE_BORE_R` 27.7 + 2.5), then search every azimuth window wide enough to
+hold a 33 mm chord for the longest contiguous axial run at each required depth.
+This is the *best case*: it assumes the wall is thinned to the repo minimum
+everywhere in the bay, so no wall-schedule change can improve on it.
+
+| pocket depth | chord available | axial length | Z span | centroid |
+|---:|---:|---:|---|---:|
+| 5.0 mm | 35.5 mm | **40 mm** | 94–134 | 114.0 |
+| 6.0 mm | 35.5 mm | **28 mm** | 98–126 | 112.0 |
+| ≥ 7.0 mm | — | — | **no 33 mm chord exists at any station** | |
+
+**Width is not the constraint — 33 mm is fine, 35.5 mm of chord is available.**
+The constraints are **depth and length**, and depth is the hard one:
+
+- **Total stack height ≤ 5.0 mm** for a 40 mm-long bay. That is 1.6 mm of board
+  plus **3.4 mm for everything on both faces**. Electrolytic bulk capacitance
+  does not fit in that; low-profile polymer caps and DFN/PQFN FETs might.
+- **Board length ≤ 40 mm**, against the as-built 66.1 mm. "A little shorter" is
+  not enough — this is a 40 % cut.
+
+The deep spots in the shell (up to 12.5 mm) are real but **narrow and they wander
+in azimuth between stations**, so a straight flat pocket cannot follow them. That
+is why the 33 mm-chord requirement collapses the usable depth to 5–6 mm.
+
+**What this costs if the board cannot meet it.** ESC1 falls back to its forward
+station and `PIVOT_Z` goes 113.8 → 109.4, i.e. hover clearance −2.55 → −6.98 mm
+on the 1.5 in gear, and +6.41 → +3.02 mm even with plan 005's 30 mm flaps.
+
+**Options, in the order they cost least:**
+1. **Low-profile redesign to 33 × 40 × 5 mm.** Keeps the full +3.91 mm.
+2. **Split into two boards** — the single-end egress already groups the
+   conductors by face, so a two-board split along that seam is natural, and two
+   33 × 20 mm cards fit the 5 mm depth more easily than one long one.
+3. **Straddle the pivot.** A 66 mm board centred at Z 120 runs 87–153; the
+   forward 7 mm sits in the deeper Z 88–94 region. Recovers most of the CG
+   benefit (centroid 120 vs 150.6) at a shallower depth requirement.
+4. **Accept ESC1 forward** and take the 4.4 mm clearance hit, closing it from
+   the nozzle-stack side instead (plan 005 R1, KD5 stator compression).
+
+**No ESC seat geometry is built.** The bay above is an envelope, not a pocket:
+cutting it before the board outline freezes would be building to a guess. The
+pocket is one parametric block once the outline is known.
+
+- **U4 (parametric ESC seats) — still OPEN, now gated on the board outline
+  rather than on missing data.** Its own
   open gate (ESC component height, connector projection, mounting arrangement,
   thermal interface) is unresolved, and `tools/nacelle_esc_service.py` is written
   to refuse to invent it. No seat was built at Rev T4; what was built is the
