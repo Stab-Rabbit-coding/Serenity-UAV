@@ -28,7 +28,8 @@
     "@tootallnate/once": "^2.0.1",
     "http-proxy-middleware": "^3.0.6",
     "svgo": "^2.8.3",
-    "webpack-dev-server": "^5.2.6"
+    "webpack-dev-server": "^5.2.6",
+    "nanoid": "^3.3.18"
   },
   "eslintConfig": {
     "extends": [
