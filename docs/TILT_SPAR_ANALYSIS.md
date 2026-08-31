@@ -374,6 +374,105 @@ H1075** as the qualified plating-free alternative and **7075-T6** as the mass-
 critical (life-limited) fallback. All allowables pending MMPDS/AMS verification
 (§7, TODO §0.8).
 
+### 3.6 Re-derivation for a FIXED spar (Rev T1, 2026-08-29)
+
+> **This section supersedes §3.1–§3.5 for the adopted architecture.** Plan
+> `docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md`
+> replaces the rotating Ø8 mm shaft with a **fixed, bonded 20 × 16.3 mm
+> roll-wrapped carbon-fibre tube** that is a structural member of the wing.
+> §3.1's bending case survives in form; §3.2 (torsion) and §3.5's keyability and
+> bearing-journal discriminators **do not apply at all** and are marked
+> superseded below.
+
+#### 3.6.1 What stops being a requirement
+
+Three of the four gates that selected 4130 were consequences of the spar
+*rotating* and *transmitting torque*, not of the loads it carries:
+
+| §3.5 discriminator | Status under a fixed spar |
+|---|---|
+| **Keyed torque joint** ("CF delaminates at a keyway") | **VOID** — there is no keyway. The spar transmits no torque; the nacelle pivots on its own trunnion ring and tilt torque travels a separate Ø4 mm shaft. |
+| **Bearing journal** ("CF abrades the F688ZZ race") | **VOID** — there is no journal. The spar is bonded in the wing and clamped in the fuselage; the bearings moved to the nacelle. |
+| **Drive wind-up θ** (§3.2, §3.5) | **VOID** — no torque path, so no wind-up. The Hall-sensor de-rating argument in §3.5 is moot rather than merely reinforced. |
+| **Fatigue endurance limit** | **Still relevant**, but the load is now gust-cycled bending on a non-rotating member, not fully-reversed rotating-bending. A fixed spar does not see stress reversal every revolution, which is the case an endurance limit exists to bound. |
+
+CF was rejected in §3.5 on the **functional** gate, explicitly not on strength.
+With that gate gone, its mass advantage becomes available — and the *larger*
+spar comes out *lighter* than the small steel one it replaces.
+
+#### 3.6.2 What sizes the section instead
+
+**Wire volume, not torque.** The bore must carry four 10 AWG ESC conductors on
+the tilt axis. Four Ø5.5 mm circles circumscribe **13.28 mm** (exact 4-circle
+packing ratio 1 + √2, [REF-MATH-001], computed by `tools/spar_bundle_fit.py`);
+with 1.5 mm radial clearance so the bundle can twist through the −5…+140° sweep,
+the minimum bore is **16.28 mm**. On a ~1.85 mm wall that is a **20 mm OD** tube.
+
+This is why §3.4's rejection of the "12 mm unified structural" candidate as
+*"overbuilt; heavier, bigger duct crossing"* does not carry forward: both of its
+objections were about a spar that crossed the duct and was sized past its loads.
+The Rev T1 spar **never enters the duct** (the trunnion ring at the nacelle
+inboard face removes the crossing entirely — see §4), and it is not overbuilt for
+its bending duty so much as *sized by a different requirement altogether*.
+
+#### 3.6.3 Section properties and margins
+
+20 mm OD × 16.3 mm ID:
+
+```text
+I = π(20⁴ − 16.3⁴)/64 = 4,389 mm⁴        (was 170 mm⁴)
+Z = I/c = 438.9 mm³                      (was 42.6 mm³ — up 10.3×)
+A = 105.5 mm²
+```
+
+| Case | M | σ | FOS |
+|---|---|---|---|
+| 1 g | 0.73 N·m | 1.7 MPa | 179 |
+| limit (4 g) | 2.94 N·m | 6.7 MPa | 45 |
+| ultimate, two-support bound | 4.41 N·m | 10.0 MPa | 30 |
+| **ultimate, cantilever bound** | **14.60 N·m** | **33.28 MPa** | **9.0** |
+
+**The cantilever bound is the quoted figure.** It takes the whole wing-root
+moment on the spar alone and credits the printed skin with nothing, because the
+skin's share is not characterised for a bonded FDM part. The two-support bound
+(load reacted between the wingtip and the fuselage socket) is the physically
+likelier case and is 3.3× kinder.
+
+> **The allowable is a stand-in, not a qualified figure.** 300 MPa is the same
+> conservative cross-ply placeholder `tools/wing_spar_carrythrough.py` already
+> uses for the CF thwart plate — this repo holds no ASTM D3039/D695 certificate
+> for any CF stock (plan 003 DEP-1; `REFERENCES.md` "requires verification").
+> §7's caveat on the 4130 figure applied to one number; this applies to the
+> whole row. **Obtain supplier certificates before fabrication.**
+
+#### 3.6.4 Mass
+
+| | Rev R2 (8 × 5 4130) | **Rev T1 (20 × 16.3 CF)** |
+|---|---|---|
+| Density | 7.85 g/cm³ | 1.60 g/cm³ |
+| Installed length, per side | ~200 mm | 173 mm (55 socket + 85.7 wing + 32 stub) |
+| **Mass per pair** | **96.2 g (0.212 lbm)** | **58.2 g (0.128 lbm)** |
+
+**−38.0 g (−0.084 lbm) per pair**, against a section modulus 10.3× larger. The
+re-lofted wing skin adds ~8.1 g (0.018 lbm) per side and the retired tie-rod
+couple removes ~5.1 g per side, so the airframe-structure change is a net
+saving; the new Ø4 mm steel drive shaft (~18.7 g per side) spends most of it
+back, leaving the whole migration close to mass-neutral before gears.
+
+#### 3.6.5 Procurement note
+
+Standard metric CF tube steps are **20 × 16** and **20 × 18**, not 20 × 16.3.
+`20 × 16` (2.0 mm wall) gives 1.36 mm radial clearance around the bundle against
+the 1.5 mm target — marginally under, and acceptable *provided the bundle can
+still twist*, which is the actual requirement the clearance serves. `20 × 18`
+(1.0 mm wall) clears easily but halves the wall. **Confirm against a real
+supplier** (plan 003 OQ6) before committing, and re-run
+`tools/spar_bundle_fit.py --tube ...` against the procured item — and against
+the **measured** wire OD, since the 5.5 mm figure is itself an assumption
+(plan 003 DEP-2 / OQ4).
+
+---
+
 ---
 
 ## 4. Airflow — Spar Crossing the Thrust Duct

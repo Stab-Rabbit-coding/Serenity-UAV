@@ -318,10 +318,15 @@ def main():
     if "--stations" in sys.argv:
         print_stations(mesh)
 
-    spar_od = wing_spar_bore_od() - 0.30      # bore is OD + 0.15 mm/side clearance
+    # REV T1 (2026-08-29): the bond gap is 0.2 mm/side, not the rotating fit's
+    # 0.15, and the spar does not rotate -- it is a FIXED bonded CF tube and the
+    # wing's primary bending member (docs/WING_ATTACH_INTERFACE.md SS1).  Both
+    # the arithmetic and the label were carried over from the retired 8 mm
+    # rotating steel shaft and reported a 20.10 mm tube that does not exist.
+    spar_od = wing_spar_bore_od() - 0.40      # bore is OD + 0.20 mm/side bond gap
     print("\nSpar-diameter reconciliation (wing SCAD vs cargo shell)")
     print(f"  wing  wings_s1223_revo.scad SPAR_BORE_OD = {wing_spar_bore_od():.2f}"
-          f"  -> rotating tilt-spar OD {spar_od:.2f}")
+          f"  -> fixed bonded CF spar OD {spar_od:.2f}")
     print(f"  shell merge_cargo_interior.WING_SPAR_BORE_D = {SHELL_BORE_D:.2f}")
     if abs(SHELL_BORE_D - wing_spar_bore_od()) > 0.05:
         print(f"  MISMATCH {SHELL_BORE_D - wing_spar_bore_od():+.2f} mm — the wing "

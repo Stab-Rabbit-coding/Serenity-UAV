@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-29",
+  "generated": "2026-08-30",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -207,6 +207,7 @@
       "description": "Serenity UAV \u2014 TODO (Open Work Only)",
       "tags": [
         "documentation",
+        "emi-hardening",
         "project-tracking",
         "security"
       ],
@@ -2088,6 +2089,13 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/generate_wing_root_flange.py": {
+      "description": "Generate the two bonded wing-root flanges (WA-R1b, Rev T1c).",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/head_cargo_splice_collar.stl": {
       "description": "STL mesh (binary)",
       "tags": [
@@ -2307,6 +2315,22 @@
     },
     "airframe/stls/fuselage/river_access_cover.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/wing_root_flange_port.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/wing_root_flange_stbd.stl": {
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -9432,7 +9456,7 @@
       "archived": false
     },
     "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (171 items)",
+      "description": "Bill of materials, CSV (176 items)",
       "tags": [
         "bom",
         "specification"
@@ -9805,6 +9829,13 @@
       ],
       "archived": false
     },
+    "docs/MASS_AUDIT_CARGO_WING_ROOT.md": {
+      "description": "Mass Audit \u2014 Cargo Section and Wing Roots (Rev T1c)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/NOZZLE_DRIVE_TRADE.md": {
       "description": "Nozzle-Drive Mechanism Trade Study (Rev T, 2026-07-19)",
       "tags": [
@@ -9892,6 +9923,15 @@
       ],
       "archived": false
     },
+    "docs/TILT_DRIVE_CONTROL_SPEC.md": {
+      "description": "Nacelle Tilt Drive \u2014 Control References and Sensors (Rev T1)",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/TILT_ENCODER_WIRING_EMI_SPEC.md": {
       "description": "Nacelle Tilt-Angle Feedback (AK7455) \u2014 EMI Wiring Specification",
       "tags": [
@@ -9956,6 +9996,13 @@
         "documentation",
         "emi-hardening",
         "project-tracking"
+      ],
+      "archived": false
+    },
+    "docs/WING_ATTACH_INTERFACE.md": {
+      "description": "Wing Attachment Interface Specification \u2014 Rev T1",
+      "tags": [
+        "documentation"
       ],
       "archived": false
     },
@@ -10155,6 +10202,13 @@
       "tags": [
         "documentation",
         "propulsion"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-08-30-001-weight-reduction-targets-plan.md": {
+      "description": "chore: Ranked weight-reduction targets",
+      "tags": [
+        "documentation"
       ],
       "archived": false
     },
@@ -12804,6 +12858,13 @@
       ],
       "archived": false
     },
+    "tools/spar_bundle_fit.py": {
+      "description": "Size a hollow spar bore against the conductor bundle it has to swallow.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_nacelle_esc_service.py": {
       "description": "Python script",
       "tags": [
@@ -12866,10 +12927,9 @@
       "archived": false
     },
     "tools/wing_root_deconflict.py": {
-      "description": "Deconflict everything crowded into the wing-root zone of the cargo bulkhead.",
+      "description": "Python script",
       "tags": [
-        "build-tooling",
-        "security"
+        "build-tooling"
       ],
       "archived": false
     },
@@ -12881,10 +12941,9 @@
       "archived": false
     },
     "tools/wing_spar_carrythrough.py": {
-      "description": "Does the rotating wing spar have to span the fuselage? First-principles check.",
+      "description": "Python script",
       "tags": [
-        "build-tooling",
-        "security"
+        "build-tooling"
       ],
       "archived": false
     },
@@ -13008,6 +13067,7 @@
       "docs/LANDING_GEAR_ANALYSIS.md",
       "docs/LICENSE",
       "docs/MANIFEST.json",
+      "docs/MASS_AUDIT_CARGO_WING_ROOT.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/OBSERVER_LASER_ANALYSIS.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
@@ -13018,6 +13078,7 @@
       "docs/PYLON_INTEGRATION_2026-07-18.md",
       "docs/README.md",
       "docs/REVN_BUILD_GUIDE_24IN.md",
+      "docs/TILT_DRIVE_CONTROL_SPEC.md",
       "docs/TILT_ENCODER_WIRING_EMI_SPEC.md",
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/TODO.md",
@@ -13026,6 +13087,7 @@
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "docs/WBS_FEDERATION.md",
+      "docs/WING_ATTACH_INTERFACE.md",
       "docs/attribution_and_licensing.md",
       "docs/bom_revR.json",
       "docs/electrical_fault_margins.md",
@@ -13051,6 +13113,7 @@
       "docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
       "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
       "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md",
+      "docs/plans/2026-08-30-001-weight-reduction-targets-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -13198,6 +13261,7 @@
     "emi-hardening": [
       "AGENTS.md",
       "README.md",
+      "TODO.md",
       "WBS.md",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
       "airframe/README.md",
@@ -13260,6 +13324,7 @@
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
       "docs/REVN_BUILD_GUIDE_24IN.md",
+      "docs/TILT_DRIVE_CONTROL_SPEC.md",
       "docs/TILT_ENCODER_WIRING_EMI_SPEC.md",
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/Tilt-Rotor 10AWG Wire Clearance Analysis.md",
@@ -13407,6 +13472,7 @@
       "docs/POWER_DISTRIBUTION.md",
       "docs/PROTO_PRINT_DAVINCI_JR.md",
       "docs/README.md",
+      "docs/TILT_DRIVE_CONTROL_SPEC.md",
       "docs/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
@@ -13438,9 +13504,7 @@
       "tools/landing_gear_bay_pad_fit.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
-      "tools/wing_internal_clearance.py",
-      "tools/wing_root_deconflict.py",
-      "tools/wing_spar_carrythrough.py"
+      "tools/wing_internal_clearance.py"
     ],
     "licensing": [
       "LICENSE",
@@ -13863,6 +13927,7 @@
       "airframe/stls/fuselage/cargo_middle_splice_collar.stl",
       "airframe/stls/fuselage/dorsal_antenna_fin.stl",
       "airframe/stls/fuselage/generate_conforming_collars.py",
+      "airframe/stls/fuselage/generate_wing_root_flange.py",
       "airframe/stls/fuselage/head_cargo_splice_collar.stl",
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
@@ -13889,6 +13954,8 @@
       "airframe/stls/fuselage/middle_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/rear_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/river_access_cover.stl",
+      "airframe/stls/fuselage/wing_root_flange_port.stl",
+      "airframe/stls/fuselage/wing_root_flange_stbd.stl",
       "airframe/stls/nacelles/edf_aft_spider_sleeve.stl",
       "airframe/stls/nacelles/edf_stator_sleeve.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
@@ -14126,6 +14193,8 @@
       "airframe/stls/fuselage/middle_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/rear_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/river_access_cover.stl",
+      "airframe/stls/fuselage/wing_root_flange_port.stl",
+      "airframe/stls/fuselage/wing_root_flange_stbd.stl",
       "airframe/stls/nacelles/edf_aft_spider_sleeve.stl",
       "airframe/stls/nacelles/edf_stator_sleeve.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
@@ -16356,6 +16425,7 @@
       "tools/precommit_kicad_load.py",
       "tools/precommit_sanitize.py",
       "tools/purge_stale_fcstd_objects.py",
+      "tools/spar_bundle_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/validate_kicad.py",
       "tools/validate_stls.py",

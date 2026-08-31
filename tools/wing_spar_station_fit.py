@@ -79,6 +79,33 @@ def surf_y(pts, xq):
     return 0.0
 
 
+def base_tc(upper, lower, samples=400):
+    """Maximum t/c of the tabulated section at t_scale = 1.0.
+
+    Reported so the solved thickness scales can be quoted as an ACTUAL
+    thickness ratio rather than a bare multiplier -- 't_scale 2.19' means
+    nothing to an aerodynamicist, 'tip t/c 26.6 %' means the section is no
+    longer an S1223 (plan 003 RISK-1).
+    """
+    return max(surf_y(upper, x / samples) - surf_y(lower, x / samples)
+               for x in range(1, samples))
+
+
+def camber_midline(upper, lower, station_mm, chord):
+    """Camber-midline height in mm at a station, with NO thickness scaling.
+
+    This is the value the SCAD's spar_bore() centres on and the value the
+    fuselage side needs for SPAR_Z: s1223_section() opens the thickness
+    envelope about an UNSCALED camber line (Rev S1b), so the bore centre does
+    not move when THICKNESS_SCALE changes.  Section.at()'s reported midline
+    DOES carry the scale factor (see its docstring), so it is the wrong number
+    to hand to the fuselage -- hence this separate, deliberately unscaled
+    helper.
+    """
+    xq = station_mm / chord
+    return (surf_y(upper, xq) + surf_y(lower, xq)) / 2.0 * chord
+
+
 class Section:
     """One span station's S1223 section."""
 
@@ -107,22 +134,44 @@ class Section:
         return station_mm / self.chord
 
 
-def solve_tip_scale(tip, station, bore_d, target_wall):
+def solve_scale(sec, station, bore_d, target_wall):
     """Smallest t_scale that holds `target_wall` over the bore at `station`.
 
     Thickness scales linearly, so bisection is overkill -- but the midline
     moves with it too, so solve numerically rather than by ratio.
+
+    Works for EITHER end station.  Through Rev S1b this solved the tip only,
+    because the tip was the only station a Rev-R2-class D8.3 bore could
+    threaten -- the root was 15.6 mm deep against an 8.3 mm bore and never
+    came close to the floor.  The unified D20.4 spar
+    (docs/plans/2026-08-29-003-...) breaks that assumption outright: at the
+    28 mm station the ROOT section is 15.60 mm deep against a bore that needs
+    22.72 mm, so the root OML now moves too -- the first revision in which it
+    ever has.  A tip-only solver would have reported the tip figure and said
+    nothing about a root that breaks out by 2.40 mm.  Hence the generalised
+    name and the root row in main().
+
+    The caller's Section is MUTATED (its t_scale is left at the bisection's
+    last probe), so pass a throwaway instance -- same contract as before.
     """
     lo, hi = 0.5, 6.0
     for _ in range(80):
         mid_scale = (lo + hi) / 2.0
-        tip.t_scale = mid_scale
-        _d, _m, wu, wd = tip.at(station)
+        sec.t_scale = mid_scale
+        _d, _m, wu, wd = sec.at(station)
         if min(wu, wd) - bore_d / 2.0 < target_wall:
             lo = mid_scale
         else:
             hi = mid_scale
     return hi
+
+
+# Retained under its original name: tools/wing_internal_clearance.py and the
+# Rev S1b/U6 notes in wings_s1223_revo.scad both cite solve_tip_scale() by
+# name.  Renaming it silently would break those citations' traceability.
+def solve_tip_scale(tip, station, bore_d, target_wall):
+    """Backward-compatible alias for solve_scale() -- see that docstring."""
+    return solve_scale(tip, station, bore_d, target_wall)
 
 
 def row(sec, station, bore_d):
@@ -150,6 +199,12 @@ def main():
     ap.add_argument("--scan", action="store_true",
                     help="find the aft-most station the as-built tip "
                          "thickening still supports")
+    ap.add_argument("--t-root", type=float, default=None,
+                    help="override THICKNESS_SCALE for the root section "
+                         "(default: read from the wing SCAD)")
+    ap.add_argument("--t-tip", type=float, default=None,
+                    help="override THICKNESS_SCALE_TIP for the tip section "
+                         "(default: read from the wing SCAD)")
     args = ap.parse_args()
 
     src = open(WING_SCAD).read()
@@ -157,8 +212,10 @@ def main():
     lower = scad_points(src, "S1223_LOWER")
     c_root = scad_scalar(src, "WING_CHORD_ROOT")
     c_tip = scad_scalar(src, "WING_CHORD_TIP")
-    ts_root = scad_scalar(src, "THICKNESS_SCALE")
-    ts_tip = scad_scalar(src, "THICKNESS_SCALE_TIP")
+    ts_root = (args.t_root if args.t_root is not None
+               else scad_scalar(src, "THICKNESS_SCALE"))
+    ts_tip = (args.t_tip if args.t_tip is not None
+              else scad_scalar(src, "THICKNESS_SCALE_TIP"))
     cur = scad_scalar(src, "SPAR_BORE_STATION")
     sweep = scad_scalar(src, "WING_SWEEP_LE")
     wing_bore = scad_scalar(src, "SPAR_BORE_OD")
@@ -231,11 +288,30 @@ def main():
         tip = Section("tip", c_tip, ts_tip, upper, lower)
         print(row(root, st, args.bore))
         print(row(tip, st, args.bore))
-        need = solve_tip_scale(Section("tip", c_tip, ts_tip, upper, lower),
+        # BOTH ends are solved.  See solve_scale()'s docstring for why the
+        # root row is no longer optional: a D20.4 bore breaks the root out
+        # too, so reporting the tip alone would understate the OML change.
+        need_root = solve_scale(Section("root", c_root, ts_root, upper, lower),
+                                st, args.bore, args.min_wall)
+        need_tip = solve_scale(Section("tip", c_tip, ts_tip, upper, lower),
                                st, args.bore, args.min_wall)
-        verdict = "as-built" if need <= ts_tip + 1e-6 else "MORE THAN as-built"
-        print(f"  -> tip needs THICKNESS_SCALE_TIP >= {need:.3f} "
-              f"({verdict} {ts_tip:.2f})")
+        v_root = ("as-built" if need_root <= ts_root + 1e-6
+                  else "MORE THAN as-built")
+        v_tip = ("as-built" if need_tip <= ts_tip + 1e-6
+                 else "MORE THAN as-built")
+        print(f"  -> root needs THICKNESS_SCALE     >= {need_root:.3f} "
+              f"({v_root} {ts_root:.2f})   root t/c "
+              f"{need_root * base_tc(upper, lower):.1%}")
+        print(f"  -> tip  needs THICKNESS_SCALE_TIP >= {need_tip:.3f} "
+              f"({v_tip} {ts_tip:.2f})   tip  t/c "
+              f"{need_tip * base_tc(upper, lower):.1%}")
+        # Unscaled camber-midline heights -- what spar_bore() centres on and
+        # what the fuselage-side SPAR_Z must be derived from.
+        m_root = camber_midline(upper, lower, st, c_root)
+        m_tip = camber_midline(upper, lower, st, c_tip)
+        print(f"  -> bore centre on the UNSCALED camber midline: "
+              f"root +{m_root:.2f} mm / tip +{m_tip:.2f} mm above the "
+              f"chord line")
 
 
 if __name__ == "__main__":

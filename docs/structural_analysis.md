@@ -9,7 +9,7 @@
 | Reference | Role in This Analysis |
 | --- | --- |
 | ASTM F2910-14 [ASTM F38] | Primary design specification for sUAS construction. Used as design intent reference; formal compliance matrix is a pre-certification task (see §9). |
-| ASTM F3264-18 [ASTM F44] | Normal category aeroplane airworthiness. The 1.5× ultimate/limit load factor methodology (cf. 14 CFR Part 23.303) is adapted here as a conservative engineering baseline. This is NOT a compliance claim — F3264 applies to manned aircraft. |
+| ASTM F3264-18 [ASTM F44] | Normal category aeroplane airworthiness. The 1.5× ultimate/limit load factor methodology (**14 CFR §23.2230** [REF-FAA-004] — *corrected 2026-08-29 from "Part 23.303", which belonged to the pre-2017 Part 23 and does not exist in the current rule*) is adapted here as a conservative engineering baseline. This is NOT a compliance claim — F3264 applies to manned aircraft, and Part 23 is an adopted baseline, not Serenity's certification basis. |
 | 14 CFR Part 107 | FAA Small UAS operating rules. Defines the legal operational envelope (altitude, VLOS, pilot certification, registration, lighting). Structural requirements are not in Part 107; this is cited for operational context only. |
 | ISO 21384-1:2022 | UAS general requirements standard. Cited as design intent; ISO 21384-1 compliance review is a pre-certification task. |
 | IEEE 1936.1-2021 | Drone applications framework (operational category classification). Referenced for operational envelope classification; does not provide structural load data. |
@@ -66,10 +66,21 @@ weight-reduction pass that yields T/W ≈ 1.19 per TODO.md §1.1.5.
 ## 3. Design Load Cases
 
 All sizing uses a 2.0× design factor (loads × 2.0g) with an additional 1.5× safety factor
-where specified.  Load factor methodology is adapted from 14 CFR Part 23.303 (ultimate
-load = 1.5 × limit load) as a conservative engineering baseline.  Joint FOS target of 4.0
-is a design-team judgment value; no published FDM-specific knockdown factor standard
-exists for CF-PETG at the time of writing.  CF structural member (keel bar, boss pins,
+where specified.  Load factor methodology is adapted from **14 CFR §23.2230**
+[REF-FAA-004] (ultimate load = 1.5 × limit load) as a conservative engineering baseline.
+*(Corrected 2026-08-29: this previously cited "14 CFR Part 23.303", a pre-2017 section
+number removed by the Amdt. 23-64 restructure — same class of stale citation as the
+§23.1401 case already recorded in REFERENCES.md.)*
+
+Joint FOS target of 4.0 remains a design-team judgment value, and no published
+FDM-specific knockdown-factor standard exists for CF-PETG at the time of writing —
+but it now has a citable regulatory basis rather than resting on judgment alone.
+**14 CFR §23.2265** [REF-FAA-004] requires a *special* factor of safety beyond the
+basic 1.5 for any part "subject to appreciable variability because of uncertainties in
+manufacturing processes or inspection methods", and FDM-printed polymer structure —
+layer adhesion, raster orientation, moisture uptake, machine-to-machine variation — sits
+squarely in that clause.  The *requirement* for an extra factor is cited; its numeric
+value (4.0) stays this project's own choice.  CF structural member (keel bar, boss pins,
 ring frames, skid rods) material allowable σ_u = 1 500 N/mm² is an estimate for
 commercial unidirectional pultruded CF stock; supplier test certificates are required
 before fabrication (see §2 References).

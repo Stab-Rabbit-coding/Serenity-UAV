@@ -1347,35 +1347,60 @@ clearance and costs only thickness. 22.0 minimised thickness; 28.0 buys 7.2 mm
 of clearance for 1.8 points of tip t/c. Holding the spar at today's *height*
 instead of riding the midline is worse than either (tip t_scale → 2.711).
 
-**`PIVOT_Z` STAYS 111.5.** An earlier draft moved it to 79.0 to keep the nacelle
-canonical; **withdrawn** on two independent grounds — (1) owner-directed: the
-pivot must sit at the CG so the centre of thrust does not move with tilt (an
+**`PIVOT_Z` = 116.1, AT THE CG.** An earlier draft moved it to 79.0 to keep the
+nacelle canonical; **withdrawn** on two independent grounds — (1) owner-directed:
+the pivot must sit at the CG so the centre of thrust does not move with tilt (an
 off-CG pivot of 32.5 mm swings the *aircraft* CG ~9.2 mm through transition,
-with the two nacelles at 28.4 % of AUW), and (2) hover ground clearance, below.
-**OQ5 is therefore reopened**: with the pivot at the CG and the spar at station
-22, the nacelle sits −32.5 mm off canonical unless the tilt axis is decoupled
-from the spar axis and carried on a tip-rib bracket.
+with the two nacelles at 28.4 % of AUW), and (2) hover ground clearance. The CG
+itself then moves +6.0 mm when ESC1 relocates aft alongside ESC2 at zero added
+mass, so 111.5 → **116.1**. (An earlier revision of this paragraph still read
+"STAYS 111.5" and quoted the withdrawn station-22 pick; both are superseded by
+the FROZEN block above.)
+
+**OQ5 is RESOLVED, not reopened** (2026-08-29, on implementation): the trunnion
+is concentric with the spar and the nacelle keeps its canonical station because
+the pivot moved *inside* it. No tip-rib offset bracket is needed, and the tilt
+axis is not decoupled from the spar axis.
 
 Measured 2026-08-29 (`tools/wing_spar_station_fit.py`, exact 4-circle packing
 R/r = 1+√2): the bundle circumscribes **13.28 mm**, so the 16 mm tube named in
 the source conversation fits it only as 16 × 14 (1 mm wall, 0.72 mm total
 clearance) and its stated `SPAR_BORE_D = 11.0` does not fit at all. Free twist
-needs ~16.3 mm bore → **20 mm OD**. At 20 mm the spar must move to 22 mm aft of
-LE (root `t_scale` 1.464, tip 2.039); holding 45.15 mm would cost a 40 % t/c tip.
+needs ~16.3 mm bore → **20 mm OD**. At 20 mm the spar must move forward; the
+selected station is **28.0** (root `t_scale` 1.456, tip 2.190 — see the FROZEN
+block), superseding an earlier 22.0 pick made before the station's effect on
+hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
 
-- [ ] **SPAR-20-1 (U1)** — Freeze the spar/station/airfoil trade. Add
-    `tools/spar_bundle_fit.py`; extend `wing_spar_station_fit.py` to solve the
-    **root** `t_scale` as well as the tip; add `TILT_SPAR_ANALYSIS.md` §3.6
-    re-deriving the section for a *fixed* spar and marking §3.2/§3.5's torsion
-    and keyability discriminators superseded.
-- [ ] **SPAR-20-2 (U2)** — Re-loft the wing: `SPAR_BORE_STATION` 45.15 → **28.0**,
-    `SPAR_BORE_OD` 8.3 → 20.4, `THICKNESS_SCALE` 1.00 → **1.456** (**root OML
-    changes for the first time**), `THICKNESS_SCALE_TIP` 1.56 → **2.190**, and
-    re-derive `SPAR_Z` → **66.85** (do NOT carry 68.42 forward).
-    Re-purpose or delete the now-redundant power half of the Ø7 double-D.
-- [ ] **SPAR-20-3 (U3)** — Wingtip trunnion, split-collar pinch clamp (no set
-    screws — CF crushes), and the field-maintainable garage with separated
-    power/signal disconnects.
+- [x] **SPAR-20-1 (U1)** — DONE 2026-08-29. `tools/spar_bundle_fit.py` added
+    (exact packing ratios, REF-MATH-001, refuses to interpolate);
+    `wing_spar_station_fit.py` now solves the **root** `t_scale` too, reports
+    solved scales as actual t/c, and reports the UNSCALED camber midline the
+    fuselage must derive `SPAR_Z` from. `TILT_SPAR_ANALYSIS.md` §3.6 added.
+    Verified: `--bore 20.4 --station 28` → root 1.456 / tip 2.190;
+    regression `--bore 8.3 --station 45.15` still reproduces the as-built 1.550.
+- [x] **SPAR-20-2 (U2)** — DONE 2026-08-29 (Rev T1). Station 45.15 → **28.0**,
+    bore 8.3 → **20.4**, `THICKNESS_SCALE` 1.00 → **1.46**,
+    `THICKNESS_SCALE_TIP` 1.56 → **2.20** (both the solved 1.456/2.190 rounded
+    UP per this file's own "not sitting on its own limit" convention — built
+    walls 1.19 / 1.21 mm). `SPAR_Z` = **66.85**, derived from the UNSCALED
+    camber midline. The Ø7 double-D is **retired entirely**, not re-purposed:
+    it could not carry two 10 AWG conductors at any realistic wire OD, and its
+    27.5 mm station now falls inside the spar bore. A Ø3.2 nav conduit at
+    station 8.0 replaces it. Both wing STLs re-rendered, re-baked, watertight.
+- [x] **SPAR-20-3 (U3)** — DONE 2026-08-29, **with two documented relocations.**
+    Wing tip built: register pad (three-lobe hull — spar / AK7455 / drive-shaft
+    bushing boss), spar through-bore corrected (the Rev R2 module carried
+    `rotate([0,90,0])` and was cutting a CHORDWISE hole), bearing seat retired.
+    - **The pinch clamp moves to the ROOT.** A Ø30 collar cannot exist in a
+      22.83 mm section, and it would have nothing to do against a 5,492 mm²
+      bond (~27 kN axial). Wing + bonded spar are one serviceable assembly that
+      separates at the fuselage socket. Requirement published as WA-R3.
+    - **The garage moves to the NACELLE.** A 10 AWG disconnect needs ~6 mm of
+      height; aft of the spar the tip section falls 17.50 → 3.43 mm and that
+      depth is already claimed. Requirement published as WA-R10. No hatch is
+      needed — the nacelle is the cover.
+    Both relocations are recorded in
+    `docs/WING_ATTACH_INTERFACE.md` §3.4 / §4.4 with their measured causes.
 - [ ] **SPAR-20-4 (U4)** — `PIVOT_Z` **116.1** (pivot = CG stands; the CG itself
     moves +6.0 mm when ESC1 relocates aft alongside ESC2, at zero added mass);
     nacelle trunnion ring at ring-plane X ≈ 28 mm, measured envelope 53.4 mm OD,
@@ -1383,18 +1408,62 @@ LE (root `t_scale` 1.464, tip 2.039); holding 45.15 mm would cost a 40 % t/c tip
     the through-duct spar bore, outboard hub, D-flat, and duct-wall collars;
     **restore the canonical 11-fin stator** (the spar tunnel and 2-fin re-index
     existed only to pass the shaft).
-- [ ] **SPAR-20-5 (U5)** — Wire routing: power coaxial through spar → trunnion →
-    nacelle annulus → ESCs; nav 3-core crosses the joint in a separated
-    micro-channel; AK7455 pigtail stays in the fixed harness. **Closes the open
-    AK7455 pocket/cableway item in §1.1.3.6** (still sized for MT6701).
-- [ ] **SPAR-20-6 (U6)** — Belt tilt drive. Size for **travel first** (145°
-    output is the binding constraint, not torque): 47T/25T at 270° servo range
-    gives 1.86× multiplication and 4.47 N·m against a 0.177 N·m requirement.
-    Belt channel, tensioner, and a re-derived torque budget including belt
-    pretension radial load.
-- [ ] **SPAR-20-7 (U7)** — Fuselage/cargo-shell re-cut to the new station; the
-    F688ZZ root bearing becomes a **clamped** mount (a bearing there would now
-    let the spar spin under belt reaction); re-run the CF thwart couple.
+- [x] **SPAR-20-5 (U5)** — WING HALF DONE 2026-08-29; nacelle half is WA-R10/R11.
+    Wing bore set, all constant-mm so taper cannot erode the webs:
+    8.0 Ø3.2 nav 3-core · 28.0 Ø20.4 spar (carries the 4 × 10 AWG on the tilt
+    axis) · 44.5 Ø6.5 AK7455 · 54.0 Ø4.4 tilt drive shaft.
+    **Closes the open AK7455 item in §1.1.3.6**: the pocket was still 7 × 7 mm,
+    dimensioned around the MT6701 3 × 3 QFN rejected on 2026-07-19, with a Ø3.5
+    conduit labelled 4-wire I²C. Now AK7455 QFN24 4×4 on a 10 × 8 board;
+    conduit Ø6.5 for the shielded SPI quad + shielded power pair per
+    `TILT_ENCODER_WIRING_EMI_SPEC.md` §2.1; ring magnet ID 26 / OD 41.2 (ID 10
+    could not pass over a Ø20 spar); `HALL_SENS_R` 11 → **16.8** so the IC still
+    reads mid-annulus. §2.3's ≥ 15 mm intra-conduit separation is recorded as a
+    **documented deviation** — unachievable in one printed bore, and both groups
+    are 100 % braid-shielded, which is the actual mitigation.
+- [~] **SPAR-20-6 (U6)** — SUPERSEDED as a *belt* drive by §1.1.5 (plan 004
+    KTD1: a spanwise belt cannot reach an X-axis pivot without an added
+    right-angle stage, so a shaft + spur pair does the same job with fewer
+    parts). WING HALF DONE: Ø4.4 drive-shaft bore at station **53.6**.
+    **THE STAGE IS A REDUCTION, NOT A STEP-UP** (owner direction 2026-08-29):
+    the shaft turns **more than one revolution** to sweep the nacelle 140°.
+    That inverts the ratio and dissolves the impossibility found under the
+    step-up reading — plan 004 KTD4's C = 15 mm returned a ring PD of 10.5 mm,
+    smaller than the Ø20 spar it must encircle. As a reduction the ring is the
+    LARGER member and the geometry closes easily.
+    **BUILT: module 0.8, 14T pinion (PD 11.2) / 50T ring (PD 40.0), i = 3.571,
+    shaft 1.389 rev per 140°, C = 25.6 → station 53.6.** 36T is exactly one
+    revolution (not "more than"); 54T pushes the bore to 55.2 and leaves 1.1 mm
+    to the root tenon, under the 1.16 mm floor.
+    **OQ1 (servo 180 vs 270) is CLOSED — the question is void.** A multi-turn
+    output means the actuator is no longer a limited-rotation servo but a
+    continuous-rotation gearmotor or stepper, closed on the AK7455's absolute
+    angle. That also retires "travel is the binding constraint" (plan 004 KTD5)
+    and makes the encoder load-bearing for CONTROL, not telemetry.
+    **NEW OPEN ITEM: actuator re-select** — the DS3225 is ~17× oversized on
+    torque and now also the wrong kind of device.
+- [ ] **SPAR-20-7 (U7)** — Fuselage/cargo-shell re-cut. **OPEN, and it is now
+    the gating item**: `tools/wing_root_deconflict.py` FAILS at Rev T1 with three
+    findings, all one cause — the fuselage still carries `WING_SPAR_Y = +38.15`
+    and `WING_SPAR_BORE_D = 8.3`.
+    **THE JOINT SPLITS BY LOAD TYPE (revised 2026-08-29, owner: the centre of
+    the cargo bay must stay clear).** An earlier revision asked for a 55 mm
+    bonded socket; the bay's clear span starts at hull X −100 and the wall skin
+    is at −81.33, so only **18.67 mm** of socket depth exists. At that depth the
+    socket gives FOS 0.51 on the moment, and since capacity goes as 1/L² no
+    socket the bay permits can recover it. So:
+    - **socket Ø20.4 × 18.5 mm at hull Y +21.00 / Z +66.85 — SHEAR only**,
+      σ 0.31 MPa, **FOS 16**;
+    - **bonded root flange 80 (Z) × 60 (Y) mm on the inner sidewall — MOMENT**,
+      σ 0.17 MPa, **FOS 29.2**, protruding only its own ~5 mm to X ≈ −86.
+    This is **better** than the socket it replaces (FOS 29.2 vs 4.02), because a
+    flange reacts over wall AREA instead of socket DEPTH. The bay requirement
+    forced a better joint rather than a compromise, and **the bay is no longer
+    intruded at all** — the owner-decision item that stood here is closed.
+    F688ZZ deleted — a bearing there would let the spar spin under the pinion's
+    gear reaction. The LG-11 coupon is **demoted here** from a gate to a
+    packaging convenience (flange FOS 29.2 / 87.6 / 274.6 at 5 / 15 / 47 MPa).
+    Full spec: `docs/WING_ATTACH_INTERFACE.md` §3, WA-R1/R1b/R2..R6.
 - [ ] **SPAR-20-8 (U8)** — Re-datum the nozzle drive onto the fixed trunnion
     (a fixed datum is better than the retired rotating one); delete the spar
     crank; re-verify full iris travel.

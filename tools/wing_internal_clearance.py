@@ -150,6 +150,28 @@ class Bore:
         return self.d / 2.0
 
 
+def station_law(src, chord_root, chord_tip, mm_name, frac_name, label):
+    """Resolve a bore's chordwise law: constant mm, or a legacy chord fraction.
+
+    Constant-mm (…_STATION) is the correct law for this wing -- with a straight
+    LE it keeps every bore parallel, so chord taper cannot erode the webs
+    between them.  A constant chord FRACTION (…_XFR) tapers with the chord and
+    is what produced the Rev S1b/S1c convergence this whole tool exists to
+    catch.  Both are accepted so the tool still reports honestly on an older
+    source; only the fraction form is flagged.
+    """
+    mm = re.search(rf"^{mm_name}\s*=\s*(-?[\d.]+)\s*;", src, re.M)
+    if mm:
+        value = float(mm.group(1))
+        return value, value, f"{mm_name} = {value} mm (constant station)"
+    frac = re.search(rf"^{frac_name}\s*=\s*(-?[\d.]+)\s*;", src, re.M)
+    if frac:
+        value = float(frac.group(1))
+        return (chord_root * value, chord_tip * value,
+                f"{frac_name} = {value} c (CHORD FRACTION -- tapers)")
+    sys.exit(f"could not find {mm_name} or {frac_name} for {label}")
+
+
 def load_wing():
     """Parse the wing SCAD into sections and the list of internal bores."""
     with open(WING_SCAD, encoding="utf-8") as handle:
@@ -169,50 +191,81 @@ def load_wing():
     spar_station = scad_scalar(src, "SPAR_BORE_STATION")
     spar_d = scad_scalar(src, "SPAR_BORE_OD")
 
-    cable_d = scad_scalar(src, "CABLE_BORE_D")
-    cable_sep = scad_scalar(src, "CABLE_BORE_SEP")
     hall_d = scad_scalar(src, "HALL_CABLE_D")
 
     bores = [Bore("spar", spar_d, spar_station, spar_station, "through")]
 
-    # The EDF double-D and the AK7455 conduit each take EITHER a constant-mm
-    # station (…_STATION) or a legacy constant chord FRACTION (…_XFR).  Accept
-    # both so this tool reports on the pre-fix source as well as the fixed one
-    # -- that is the whole point of a regression check.
-    def station_law(mm_name, frac_name, label):
-        mm = re.search(rf"^{mm_name}\s*=\s*(-?[\d.]+)\s*;", src, re.M)
-        if mm:
-            value = float(mm.group(1))
-            return value, value, f"{mm_name} = {value} mm (constant station)"
-        frac = re.search(rf"^{frac_name}\s*=\s*(-?[\d.]+)\s*;", src, re.M)
-        if frac:
-            value = float(frac.group(1))
-            return (chord_root * value, chord_tip * value,
-                    f"{frac_name} = {value} c (CHORD FRACTION -- tapers)")
-        sys.exit(f"could not find {mm_name} or {frac_name} for {label}")
+    # REV T1 (2026-08-29): the 2 x D7 EDF "double-D" is RETIRED -- the ESC
+    # feeds moved inside the spar bore, on the tilt axis.  Two bores replace it
+    # and one is new:
+    #   nav_bore()        D3.2 @ 8.0   nav-light 3-core, must EXIT the tip face
+    #   tilt_shaft_bore() D4.4 @ 54.0  tilt drive shaft, exits THROUGH the pad
+    # The AK7455 conduit survives, moved 54.0 -> 44.0 because the drive shaft's
+    # gear-mesh centre distance claims station 54.
+    #
+    # The legacy CABLE_BORE_* names are still accepted when present, so this
+    # tool remains a regression check against the pre-Rev-T1 source -- which is
+    # the whole point of a gate that was written to catch a bore-convergence
+    # fault.  On a Rev T1 source they are simply absent.
+    if re.search(r"^CABLE_BORE_D\s*=", src, re.M):
+        cable_d = scad_scalar(src, "CABLE_BORE_D")
+        cable_sep = scad_scalar(src, "CABLE_BORE_SEP")
+        cable_root, cable_tip, cable_law = station_law(
+            src, chord_root, chord_tip,
+            "CABLE_BORE_STATION", "CABLE_BORE_XFR", "EDF cableway")
+        for sign, side in ((-1.0, "fwd"), (+1.0, "aft")):
+            bores.append(Bore(f"EDF {side}", cable_d,
+                              cable_root + sign * cable_sep / 2.0,
+                              cable_tip + sign * cable_sep / 2.0, "exit"))
+    else:
+        cable_law = "RETIRED at Rev T1 (power moved into the spar bore)"
 
-    cable_root, cable_tip, cable_law = station_law(
-        "CABLE_BORE_STATION", "CABLE_BORE_XFR", "EDF cableway")
-    for sign, side in ((-1.0, "fwd"), (+1.0, "aft")):
-        bores.append(Bore(f"EDF {side}", cable_d,
-                          cable_root + sign * cable_sep / 2.0,
-                          cable_tip + sign * cable_sep / 2.0, "exit"))
+    if re.search(r"^NAV_BORE_D\s*=", src, re.M):
+        nav_d = scad_scalar(src, "NAV_BORE_D")
+        nav_st = scad_scalar(src, "NAV_BORE_STATION")
+        # "exit": the nav light rotates WITH the nacelle, so this 3-core must
+        # break out of the tip face -- the pad must not cover it.
+        bores.append(Bore("nav 3-core", nav_d, nav_st, nav_st, "exit"))
+
+    if re.search(r"^SHAFT_BORE_D\s*=", src, re.M):
+        shaft_d = scad_scalar(src, "SHAFT_BORE_D")
+        shaft_st = scad_scalar(src, "SHAFT_BORE_STATION")
+        # "through": the shaft runs THROUGH the pad by design, which is the
+        # point -- the pad lobe is its outboard bushing boss.
+        bores.append(Bore("tilt shaft", shaft_d, shaft_st, shaft_st, "through"))
 
     hall_root, hall_tip, hall_law = station_law(
+        src, chord_root, chord_tip,
         "HALL_CABLE_STATION", "HALL_CABLE_XFR", "AK7455 conduit")
     bores.append(Bore("AK7455", hall_d, hall_root, hall_tip, "pocket"))
 
-    pad_fwd_r = scad_scalar(src, "TIP_PAD_FWD_R") if re.search(
-        r"^TIP_PAD_FWD_R\s*=", src, re.M) else scad_scalar(src, "TIP_PAD_OD") / 2.0
-    pad_aft_r = scad_scalar(src, "TIP_PAD_AFT_R") if re.search(
-        r"^TIP_PAD_AFT_R\s*=", src, re.M) else scad_scalar(src, "TIP_PAD_OD") / 2.0
+    # Tip-pad chordwise extent.  Rev T1 hulls THREE lobes (spar / AK7455 /
+    # drive-shaft bushing); Rev S1c hulled two; earlier revisions were a plain
+    # disc.  Read whichever set the source actually defines -- the pad's
+    # forward edge is the figure that matters, because a pad that reaches a
+    # conduit's tip-face exit is a blocked harness, not an overlap.
     hall_sens_r = scad_scalar(src, "HALL_SENS_R")
+    if re.search(r"^TIP_PAD_R\s*=", src, re.M):                    # Rev T1
+        pad_fwd_edge = spar_station - scad_scalar(src, "TIP_PAD_R")
+        aft_lobes = [spar_station + hall_sens_r
+                     + scad_scalar(src, "TIP_PAD_SENS_R")]
+        if re.search(r"^TIP_PAD_SHAFT_R\s*=", src, re.M):
+            aft_lobes.append(scad_scalar(src, "SHAFT_BORE_STATION")
+                             + scad_scalar(src, "TIP_PAD_SHAFT_R"))
+        pad_aft_edge = max(aft_lobes)
+    else:                                                          # Rev S1c / earlier
+        pad_fwd_r = scad_scalar(src, "TIP_PAD_FWD_R") if re.search(
+            r"^TIP_PAD_FWD_R\s*=", src, re.M) else scad_scalar(src, "TIP_PAD_OD") / 2.0
+        pad_aft_r = scad_scalar(src, "TIP_PAD_AFT_R") if re.search(
+            r"^TIP_PAD_AFT_R\s*=", src, re.M) else scad_scalar(src, "TIP_PAD_OD") / 2.0
+        pad_fwd_edge = spar_station - pad_fwd_r
+        pad_aft_edge = spar_station + hall_sens_r + pad_aft_r
 
     return {
         "root": root, "tip": tip, "bores": bores,
         "spar_station": spar_station,
-        "pad_fwd_edge": spar_station - pad_fwd_r,
-        "pad_aft_edge": spar_station + hall_sens_r + pad_aft_r,
+        "pad_fwd_edge": pad_fwd_edge,
+        "pad_aft_edge": pad_aft_edge,
         "laws": [f"spar        : SPAR_BORE_STATION = {spar_station} mm (constant station)",
                  f"EDF double-D: {cable_law}",
                  f"AK7455      : {hall_law}"],
