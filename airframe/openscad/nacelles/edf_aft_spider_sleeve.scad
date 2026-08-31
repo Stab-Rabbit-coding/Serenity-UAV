@@ -122,6 +122,34 @@ KEY_ROOT_OVERLAP =  0.5;    // [mm] key root sunk below the tube OD — CGAL
 // retention bosses receive them, so all three feature sets move together.
 SLEEVE_KEY_ANGLES = [30, 150, 270];
 
+// ── EDF2 spider arm CLOCKING (Rev T4b, 2026-08-31) ───────────────────────────
+// Moved 0/120/240 -> 105/225/345 so that ESC2's phase leads can actually reach
+// the motor.  This is a routing constraint, and it was found by measurement.
+//
+// The motor sits at the duct centre; the ONLY solid bridge from the annulus to
+// it is a spider arm.  So the phase bundle must cross the bore wall AT an arm
+// azimuth and WITHIN the arm's axial band (Z 144-152 for EDF2_SPIDER_Z = 148).
+// Measured on the canonical shell, the annulus (skin − 2.5 − duct wall) survives
+// aft to:
+//
+//     azimuth    0   45  105  120  165  225  240  285  345
+//     alive to  135  146  163  146  136  146  147  163  136   (mm, at >= 3.5 deep)
+//
+// At the old 0/120/240 the overlap with the arm band was 0 mm (az 0), 1.5 mm
+// (az 120) and 2.5 mm (az 240) — against a 3 x Ø3 mm 16 AWG flat bundle needing
+// ~3.5 mm.  The route was effectively closed.
+//
+// 105 and 285 are the pod's two deep lobes, alive to Z 163 at 6.2-6.4 mm, and
+// they are also where the ESC bays land (bay centres measured at azimuth 90 and
+// 270).  Clocking an arm to 105 puts the crossing directly beneath bay A with no
+// circumferential run at all.  225/345 follow at 120 deg spacing.
+//
+// Nothing constrains the absolute clocking: the motor's own 3-hole pattern
+// rotates with the arms (the MOTOR_BOLT_R pockets are co-angular), and 105/225/
+// 345 stays 75 deg clear of the key/retention angles at 30/150/270.
+// 16 AWG silicone Ø3 mm per docs/TILT_SPAR_ANALYSIS.md.
+SPIDER_ARM_ANGLES = [105, 225, 345];
+
 // ── EDF2 spider geometry ────────────────────────────────────────────────────────
 // Spider axial centre at nacelle Z = 148.0 mm.
 // Sleeve-local Z = 148.0 − 122.5 = 25.5 mm.
@@ -215,7 +243,7 @@ module edf2_spider() {
     // ── Spider arms (3× at 120°) ───────────────────────────────────────────
     // Arms are plain cuboids (no pockets).  Motor insert pockets are cut by
     // the parent module after the full union is assembled.
-    for (angle = [0, 120, 240]) {
+    for (angle = SPIDER_ARM_ANGLES) {
         rotate([0, 0, angle])
             translate([R_HUB - 1, -arm_w / 2, z_base])
                 cube([EDF_BORE_R - R_HUB + 2, arm_w, arm_h]);
@@ -261,7 +289,7 @@ module edf_aft_spider_sleeve() {
         // ── Step 2a: M3 motor insert pockets (spider arm aft faces) ───────
         // Blind pocket opens at Z_local = 29.5 mm (spider aft face).
         // One pocket per arm, co-angular with that arm, at MOTOR_BOLT_R.
-        for (angle = [0, 120, 240]) {
+        for (angle = SPIDER_ARM_ANGLES) {
             rotate([0, 0, angle])
             translate([MOTOR_BOLT_R, 0,
                        SPIDER_Z_L + SPIDER_ARM_H / 2 - M3_INSERT_L])

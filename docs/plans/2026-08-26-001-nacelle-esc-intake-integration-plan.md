@@ -299,6 +299,44 @@ bays at azimuth 25° / 205°, Z 94–132. If the height can be held to 4.0 mm th
 bay grows to 61 × 46 mm and moves 8 mm aft (Z 94–140, centroid 117), worth a
 further +0.4 mm of clearance.
 
+#### The phase-lead path to the aft motor — measured, and it was closed
+
+*"The power has to get to the motor."* It does, but only after one change.
+
+EDF2's motor sits at the duct centre, so the **only solid bridge from the annulus
+to it is a spider arm**. The phase bundle must therefore cross the bore wall
+**at an arm azimuth** and **inside the arm's axial band** — Z 144–152 for
+`EDF2_SPIDER_Z` = 148 with `SPIDER_ARM_H` = 8.0.
+
+Measured aft limit of the annulus (depth ≥ 3.5 mm, enough for a 3 × Ø3 mm
+16 AWG flat bundle — Ø3 mm per `docs/TILT_SPAR_ANALYSIS.md`):
+
+| azimuth | 0 | 45 | **105** | 120 | 165 | 225 | 240 | **285** | 345 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| alive to Z | 135 | 146 | **163** | 146 | 136 | 146 | 147 | **163** | 136 |
+
+At the as-built arm clocking of 0/120/240 the overlap with the arm band was
+**0.0 mm (az 0), 1.5 mm (az 120), 2.5 mm (az 240)** — against ~3.5 mm needed.
+**The route was effectively closed**, and the aft spider sleeve carries no wire
+feature of any kind (no `wire`/`cable`/`ESC` geometry in the file).
+
+**Fixed at Rev T4b: the EDF2 spider arms re-clock to 105/225/345.** 105° and 285°
+are the pod's two deep lobes, alive to Z 163 at 6.2–6.4 mm — and they are where
+the ESC bays land anyway (bay centres measured at azimuth **90°** and **270°**,
+spans 25–155 and 205–335). An arm at 105° therefore sits directly beneath bay A,
+so the crossing needs **no circumferential run at all**: the bundle drops out of
+the bay, runs aft in the annulus at 6.2 mm depth, and crosses into the arm.
+
+Nothing constrained the old clocking — the motor's own three-hole pattern rotates
+with the arms (`MOTOR_BOLT_R` pockets are co-angular), and 105/225/345 stays 75°
+clear of the key and retention angles at 30/150/270.
+
+**Still to build, and it needs the outline first:** the bore-wall crossing slot
+(≈ 9.5 × 3.5 mm at az 105, Z 144–152) and an open groove along the arm's forward
+face carrying the bundle from r 26 in to the motor at r ≈ 10. The arm is 6.0 mm
+wide × 8.0 mm tall, and a Ø6.5 through-hole would leave no wall — so it must be a
+**surface groove, not a bore**, or the arm is locally widened.
+
 **No seat geometry is built.** The above is an envelope; cutting a pocket before
 the outline freezes would be building to a guess. It is one parametric block
 once the outline is known.
