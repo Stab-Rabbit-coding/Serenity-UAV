@@ -211,60 +211,97 @@ fasteners, and unresolved primary-source gates.
   on the tilt axis itself**, so the lever arm the unit was written about is zero.
   What replaces it is a service-loop question at the trunnion, and that is
   blocked behind WA-R10 (no route exists in a solid pod).
-### U4 ESC BAY ENVELOPE — MEASURED 2026-08-31, and it is smaller than the board
+### U4 ESC BAY ENVELOPE — MEASURED 2026-08-31
 
-The owner is designing a single-end wire-egress variant (power and phase on
-opposite *faces* of the same end, `Open-Secure-ESC/docs/design-single-end-wire-
-egress-variant.md`) specifically so an ESC can sit **aft of the tilt pivot**.
-That is the right instinct — an ESC aft of the pivot is worth **+3.91 mm** of
-`PIVOT_Z` and therefore of hover clearance. Now that Rev T4b has hollowed the
-pod, the receiving volume can be measured instead of assumed. It was, and the
-answer constrains the board.
+The owner is designing the ESCs as a matched pair so both can sit **aft of the
+tilt pivot** (`Open-Secure-ESC/docs/design-single-end-wire-egress-variant.md`):
 
-**Method.** Ray-cast the canonical shell's outer skin over Z 88–166 at 5°
-azimuth, subtract the minimum skin wall (2.5 mm) and the duct wall
-(`SLEEVE_BORE_R` 27.7 + 2.5), then search every azimuth window wide enough to
-hold a 33 mm chord for the longest contiguous axial run at each required depth.
-This is the *best case*: it assumes the wall is thinned to the repo minimum
-everywhere in the bay, so no wall-schedule change can improve on it.
+- **ESC2**, driving the aft EDF, keeps the as-built **opposite-ends** layout —
+  power in at the forward end, phases out the aft end to a motor that is aft of
+  it anyway.
+- **ESC1**, driving the forward EDF, takes the **single-end** variant: power and
+  phase both leave the forward edge, on opposite copper faces.
 
-| pocket depth | chord available | axial length | Z span | centroid |
-|---:|---:|---:|---|---:|
-| 5.0 mm | 35.5 mm | **40 mm** | 94–134 | 114.0 |
-| 6.0 mm | 35.5 mm | **28 mm** | 98–126 | 112.0 |
-| ≥ 7.0 mm | — | — | **no 33 mm chord exists at any station** | |
+Board proportions are specifiable to some degree, so the question is not "does
+the board fit" but **"what proportions does this pod reward?"** Now that Rev T4b
+has hollowed the pod there is a real annulus to measure.
 
-**Width is not the constraint — 33 mm is fine, 35.5 mm of chord is available.**
-The constraints are **depth and length**, and depth is the hard one:
+**Method.** Ray-cast the canonical shell over Z 80–170 at 5° azimuth; subtract
+the minimum skin wall (2.5 mm) and the duct wall (`SLEEVE_BORE_R` 27.7 + 2.5);
+then search every azimuth window for the longest axial run clearing each depth,
+excluding the nav channel (azimuth 0°) and the disconnect bay / trunnion (180°).
+This is the best case — it assumes the wall is thinned to the repo minimum
+throughout the bay, so no wall-schedule change can beat it.
 
-- **Total stack height ≤ 5.0 mm** for a 40 mm-long bay. That is 1.6 mm of board
-  plus **3.4 mm for everything on both faces**. Electrolytic bulk capacitance
-  does not fit in that; low-profile polymer caps and DFN/PQFN FETs might.
-- **Board length ≤ 40 mm**, against the as-built 66.1 mm. "A little shorter" is
-  not enough — this is a 40 % cut.
+#### The pod wants a WIDE, SHORT board — the opposite of 32 × 66
 
-The deep spots in the shell (up to 12.5 mm) are real but **narrow and they wander
-in azimuth between stations**, so a straight flat pocket cannot follow them. That
-is why the 33 mm-chord requirement collapses the usable depth to 5–6 mm.
+Two bays, one per ESC, at azimuth **25°** and **205°**:
 
-**What this costs if the board cannot meet it.** ESC1 falls back to its forward
-station and `PIVOT_Z` goes 113.8 → 109.4, i.e. hover clearance −2.55 → −6.98 mm
-on the 1.5 in gear, and +6.41 → +3.02 mm even with plan 005's 30 mm flaps.
+| clear depth | each bay | area each | Z span |
+|---:|---|---:|---|
+| 4.0 mm | **61 × 46 mm** | 2805 mm² | 94–140 |
+| 4.5 mm | 61 × 44 mm | 2683 mm² | 94–138 |
+| **5.0 mm** | **61 × 38 mm** | **2317 mm²** | **94–132** |
+| 5.5 mm | 61 × 30 mm | 1829 mm² | 96–126 |
+| 6.0 mm | 57 × 24 mm | 1372 mm² | 98–122 |
 
-**Options, in the order they cost least:**
-1. **Low-profile redesign to 33 × 40 × 5 mm.** Keeps the full +3.91 mm.
-2. **Split into two boards** — the single-end egress already groups the
-   conductors by face, so a two-board split along that seam is natural, and two
-   33 × 20 mm cards fit the 5 mm depth more easily than one long one.
-3. **Straddle the pivot.** A 66 mm board centred at Z 120 runs 87–153; the
-   forward 7 mm sits in the deeper Z 88–94 region. Recovers most of the CG
-   benefit (centroid 120 vs 150.6) at a shallower depth requirement.
-4. **Accept ESC1 forward** and take the 4.4 mm clearance hit, closing it from
-   the nozzle-stack side instead (plan 005 R1, KD5 stator compression).
+*(as-built board: 32.0 × 66.1 = 2115 mm²)*
 
-**No ESC seat geometry is built.** The bay above is an envelope, not a pocket:
-cutting it before the board outline freezes would be building to a guess. The
-pocket is one parametric block once the outline is known.
+**Re-proportioning gains area rather than costing it.** At a 5.0 mm clear depth
+each bay holds **2317 mm² — 10 % more than the as-built board** — provided the
+board is turned side-on: roughly **60 wide × 38 long** instead of 32 × 66. An
+earlier pass that fixed the width at 33 mm found only 35 × 40 = 1400 mm², and
+that was an artefact of holding the width constant, not a property of the pod.
+
+That proportion also suits the single-end egress on its own merits: a 60 mm end
+edge lays out three phase and two pack terminals side by side comfortably, where
+a 32 mm edge would have to stack them.
+
+**The binding constraint is HEIGHT, and it is severe: 5.0 mm clear**, for board
+(1.6 mm) plus components on *both* faces plus any mounting standoff. Electrolytic
+bulk capacitance does not fit; low-profile polymer and DFN/PQFN do. Every extra
+millimetre of height costs roughly 8 mm of board length.
+
+#### But the annulus straddles the pivot — it is not aft of it
+
+This is the finding that matters more than the envelope, and it contradicts an
+assumption this repo has been carrying since plan 003 KTD8.
+
+**The bays are centred at Z 113. `PIVOT_Z` is 113.8.** An ESC placed there
+contributes essentially **zero** CG offset. KTD8's "+3.91 mm from relocating
+ESC1 aft" was computed with the ESC at Z 150.6 — a station no ESC can occupy.
+Searched for a bay lying wholly aft of Z 130, the aft cowl gives at most:
+
+| depth | best bay wholly aft |
+|---:|---|
+| 3.0 mm | 62 × 18 mm (1116 mm²) |
+| 4.0 mm | 23 × 30 mm (690 mm²) |
+
+Neither is an ESC. **There is no genuinely-aft ESC station in this pod.**
+
+| ESC placement | `PIVOT_Z` | clr, 40 mm flaps | clr, 30 mm flaps |
+|---|---:|---:|---:|
+| KTD8 assumption — both at Z 150.6 | 113.8 | −2.57 | +7.43 |
+| both in the real bay, centroid 113 | 110.1 | −6.21 | +3.79 |
+| both in the 4.0 mm bay, centroid 117 | 110.5 | −5.82 | +4.18 |
+| ESC1 in the bay, ESC2 at 150.6 *(if it can be sited)* | 112.0 | −4.39 | +5.61 |
+| ESC1 forward at 59.4 (pre-KTD8) | 109.4 | −6.98 | +3.02 |
+
+**So the ESC-aft lever is mostly unavailable, and the hollowing is carrying the
+CG.** Of the two levers measured on 2026-08-31 — hollowing +6.16 mm, ESC1 aft
++3.91 mm — the second is worth about **+0.4 mm** at the station the pod can
+actually offer, not +3.91. The remaining clearance gap has to come from the
+nozzle stack (plan 005 R1's flap trim, KD5's deferred stator compression) or
+from the landing gear.
+
+**Recommended board target:** **60 × 38 mm, ≤ 5.0 mm total stack height**, two
+bays at azimuth 25° / 205°, Z 94–132. If the height can be held to 4.0 mm the
+bay grows to 61 × 46 mm and moves 8 mm aft (Z 94–140, centroid 117), worth a
+further +0.4 mm of clearance.
+
+**No seat geometry is built.** The above is an envelope; cutting a pocket before
+the outline freezes would be building to a guess. It is one parametric block
+once the outline is known.
 
 - **U4 (parametric ESC seats) — still OPEN, now gated on the board outline
   rather than on missing data.** Its own
