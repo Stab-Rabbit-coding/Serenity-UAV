@@ -1019,16 +1019,16 @@
     },
     {
       "Ref": "PRINT-WINGS-S1223",
-      "Description": "s_wing_port/stbd_s1223_revo.stl — Wing pair with Selig S1223 airfoil (Rev O)",
+      "Description": "wing_port/stbd_s1223_revo.stl — Wing pair; section S1223/t17.7 (root) / S1223/t26.7 (tip) — Rev T1",
       "Category": "Printed Part",
       "Qty": "2",
-      "Unit_Mass_g": "118",
-      "Total_Mass_g": "236",
+      "Unit_Mass_g": "124",
+      "Total_Mass_g": "248",
       "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "CF-PETG — see FIL-CF-PETG",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "0.15mm / 40% gyroid / 4 walls; S1223 t/c=12.14% max camber=8.65%; SCAD: serenity/stl/s_wings_s1223_revo.scad; CL=1.55 at 3deg AoA"
+      "Notes": "Rev T1 (2026-08-29): 0.15mm / 40% gyroid / 4 walls. THE SECTION IS NOT AN S1223 — it is the S1223 CAMBER LINE with the thickness envelope scaled x1.46 (root) and x2.20 (tip) to swallow the D20.4 fixed CF spar. Re-derived from the tabulated UIUC coordinates (REF-CAD-006): max t/c 17.72%/26.71% at 19.8% chord; max camber 8.67% at 49.0% chord (UNSCALED — identical to baseline); LE radius 0.0533c/0.1211c. The Rev O note this replaces (t/c=12.14% max camber=8.65%; CL=1.55 at 3deg AoA) describes the TRUE S1223 and DOES NOT apply to this part: CL_max, L/D and the cruise-lift figure are all UNVERIFIED for the built section pending XFOIL/RANS at Re 1.3-1.8e5. Mass 118->124 g/side from the thicker skins. SCAD: airframe/openscad/wings/wings_s1223_revo.scad; spec: docs/WING_ATTACH_INTERFACE.md S4A"
     },
     {
       "Ref": "PRINT-NACELLE-PORT",
@@ -2169,16 +2169,16 @@
     },
     {
       "Ref": "BRG-MF128ZZ",
-      "Description": "MF128ZZ flanged/shielded ball bearing 8x12x3.5mm — tilt-spar WINGTIP bearing",
+      "Description": "MF128ZZ flanged/shielded ball bearing 8x12x3.5mm — SUPERSEDED Rev T1",
       "Category": "Bearing",
-      "Qty": "2",
+      "Qty": "0",
       "Unit_Mass_g": "2",
-      "Total_Mass_g": "4",
+      "Total_Mass_g": "0",
       "Supplier": "Amazon / AliExpress / VXB",
       "Supplier_PN_or_Search": "MF128ZZ 8x12x3.5 flanged shielded",
       "Est_Unit_Price_USD": "2.00",
-      "Est_Total_Price_USD": "4.00",
-      "Notes": "Rev R2d (2026-07-19): 1 per side — WINGTIP bearing. DOWNSIZED from F688ZZ: the Ø16 seat radius (7.975mm) exceeded the S1223 tip half-thickness (7.80mm) and broke through BOTH airfoil skins by ~0.21mm (wings_s1223_revo.scad TIP_BRG_*",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "SUPERSEDED Rev T1 (2026-08-29) — QTY 0. There is no wingtip bearing any more: the spar is FIXED and bonded into the wing, and the tilt bearing moved to the nacelle trunnion ring. A bearing here would now be actively WRONG — it would let the spar spin under the drive pinion gear reaction. Retained for traceability of the Rev R2d F688ZZ->MF128ZZ downsize. REPLACEMENT: 2x SKIPPER-BRG-6804 per side at the nacelle trunnion (20x32x7); the pair totals 14.0 mm and MUST fit inside the 15 mm duct-bounded spar stub (docs/WING_ATTACH_INTERFACE.md S4.3a).",
       "null": [
         " docs/TILT_SPAR_ANALYSIS.md §8). MF128ZZ (Ø12",
         " flange Ø13.5) seats with ~1.79mm skin margin. Wingtip radial reaction ~19 N (dyn) << MF128 dynamic capacity (~700 N) — load-safe."

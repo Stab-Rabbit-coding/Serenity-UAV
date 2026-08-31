@@ -193,9 +193,20 @@ architecture that creates the overhang.
   at **Z 60** with `INTAKE_BLEND_L = 90` — well past the monotonic region, which
   is *why* the curves cross. **The blend must terminate by Z ≈ 30, tangent to
   the dome**, not run to Z 90. See R5.
-- **OQ5** — Should the plan-002 station move (which lowers the spar 3.05 mm and
-  costs that much clearance) be re-sequenced ahead of or behind this work? They
-  interact on the same margin.
+- **OQ5 — RESOLVED 2026-08-29 by implementation.** The spar station move is
+  **done** (wing Rev T1, station 28.0, `SPAR_Z` 66.85), so it is no longer a
+  sequencing question — this plan's clearance budget must be computed against
+  the built spar height, not against a pending one. The +9.8 mm figure in R3
+  already assumes station 28.0 and the ESC1 relocation, so it stands; but
+  **re-verify it against the built geometry** rather than carrying it forward,
+  because R3 is an owner-accepted margin and this plan is the last thing that
+  can silently spend it.
+- **OQ6 (new)** — The nacelle inherits three joint requirements from the wing
+  side that touch this plan's geometry: the 4 × 10 AWG disconnect relocates into
+  the nacelle annulus (WA-R10), the ring magnet grows to ID 26 / OD 41.2 and must
+  be axially separated from the ring gear (WA-R9), and the spar stub protrusion
+  (32 mm) needs confirming against the final trunnion bearing stations (WA-R12).
+  See `docs/WING_ATTACH_INTERFACE.md` §4.
 
 ---
 

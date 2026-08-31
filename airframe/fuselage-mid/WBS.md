@@ -1070,3 +1070,214 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
     - [ ] Wire strobe to led pwd output on Pilot cape in Simon's medbay
 
+
+---
+
+## §1.1.1.5 — Wing-Root Spar Socket (Rev T1 joint requirements)
+
+**Owning specification:** [`docs/WING_ATTACH_INTERFACE.md`](../../docs/WING_ATTACH_INTERFACE.md)
+**Owning plans:** `docs/plans/2026-08-29-003-...` U7; `airframe/wings-nacelles/WBS.md` §1.1.4 SPAR-20-7
+
+**Why this section exists.** The wing side of the Rev T1 tilt-spar migration is
+BUILT (2026-08-29); the fuselage side is not. The spar is no longer a rotating
+drive shaft that the wing rides on — it is a **fixed 20 × 16.3 mm CF tube bonded
+into the wing**, and it is now the wing's primary bending member. That makes the
+fuselage socket the wing's structural root joint, replacing both the enlarged
+tenon (FOS 0.49, CARGO-03c) and the two-rod couple (FOS 4.14, U5/KTD1) that
+existed only because a spar on bearings could not react a moment.
+
+**LANDED 2026-08-30 (Rev T1c).** The gate was RED on three findings that were
+all one cause — the fuselage still carried `WING_SPAR_Y = +38.15` and
+`WING_SPAR_BORE_D = 8.3`. All of `merge_cargo_interior.py`'s wing-root geometry
+is rebuilt against the Rev T1 wing and the cargo shell regenerated.
+
+Fixing the fuselage also exposed three genuine defects in the CHECKING tool,
+masked while the geometry was wrong — most importantly `tenon_params()`
+selecting the enlarged 30 mm tenon for the Rev T1 default load path, which
+reported an 8.60 mm/side mortise foul against a correctly-sized mortise. See
+`docs/WING_ATTACH_INTERFACE.md` §7.
+
+- [x] **WA-R1 — Spar socket (SHEAR path). DONE 2026-08-30.** Hull **Y +21.00**, **Z +66.85**,
+    bore **Ø20.4** (20.0 OD + 0.2 mm/side epoxy gap), **18.5 mm** deep — all the
+    cargo bay allows, and all the shear needs (σ = 0.31 MPa, **FOS 16**). Both stations are DERIVED, not chosen: the wing LE root bakes to hull
+    Y −7.0 and the spar is at chord station 28.0 → +21.0; the chord line bakes
+    to Z +58.01 and the spar rides the **unscaled** camber midline (+8.84 mm at
+    this station) → +66.85. **Do not apply `THICKNESS_SCALE` to the midline** —
+    `s1223_section()` opens the thickness envelope *about* an unscaled camber
+    line, so scaling it would lift the socket 4.07 mm above the spar.
+    Update `WING_SPAR_Y` / `WING_SPAR_Z` / `WING_SPAR_BORE_D` in
+    `airframe/blender-scripts/merge_cargo_interior.py`.
+
+- [x] **WA-R1b — Bonded root flange (MOMENT path). DONE 2026-08-30 — as a SEPARATE BONDED PART, not printed hull.** **80 mm (hull Z) × 60 mm
+    (hull Y)** bonded to the INNER face of the sidewall, concentric with the
+    socket. σ = 0.17 MPa, **FOS 29.2**.
+    **This replaces the 55 mm socket the first revision of this section asked
+    for, and the bay requirement is why.** A socket's capacity goes as 1/L² and
+    the bay caps L at 18.67 mm, where the socket gives FOS 0.51 on the moment —
+    unrecoverable by any depth the bay permits. A flange reacts over wall AREA
+    instead, needs no inboard reach at all (it protrudes only its own ~5 mm, to
+    X ≈ −86 against a bay edge at −100), and lands at FOS 29.2. The constraint
+    forced a better joint, not a compromise.
+    **BUILD NOTE 2026-08-30 — it is a bonded PART, not printed hull material,
+    and that was settled by measurement.** Ray-casting the baked envelope on a
+    13 × 17 grid over the footprint (221/221 hits) shows the sidewall skin moving
+    through **34.3 mm (port) / 37.0 mm (stbd)** of hull X across the 80 × 60
+    window. So "internal thickening to a plane" — the idiom every other positive
+    in `merge_cargo_interior.py` uses — would make the flange up to 34 mm thick,
+    and a plane at the nominal inner face is *tangent* to the skin inside the
+    footprint (measured: a 0.46 mm non-manifold edge, 4 incident faces, at
+    (−86.33, +8.6, +52.2), plus a sliver body). A conforming plate cut from the
+    full 900k-face shell was worse still. Done LOCALLY it is clean:
+    `airframe/stls/fuselage/generate_wing_root_flange.py` →
+    `wing_root_flange_port/stbd.stl`, **24.3 / 24.4 cm³, 12.7 g each at 40 %
+    gyroid**, both watertight single bodies. The shell's only obligation is to
+    reserve the volume, which `wing_keepout_positives()` does.
+
+- [x] **WA-R2 — Delete the F688ZZ root bearing. DONE 2026-08-30.** A bearing here is no longer
+    merely unnecessary, it is wrong: it would let the fixed spar spin under the
+    tilt pinion's gear reaction. Replace with a bonded/clamped socket.
+
+- [ ] **WA-R3 — Split-collar pinch clamp.** ≥ 5 mm wall over Ø20 (≈ Ø30 outside),
+    M3 heat-set inserts, 2 screws. **No set screws** — CF tube splinters under a
+    point load. The split must retain a **positive gap when clamped**; if the
+    halves close on each other first, the collar grips itself and the spar is
+    free. This is the joint that makes wing + bonded spar removable as one
+    assembly (the spar is bonded in the wing, clamped in the fuselage).
+
+- [x] **WA-R4 — Re-size the mortise. DONE 2026-08-30.** 30.8 → **12.8 mm** wide. The tenon is now
+    a locating feature at 12 × 20 × 8 mm (`TENON_LOAD_PATH = "spar_carrythrough"`),
+    not a 30 mm structural tenon. The current mortise is oversize for it.
+
+- [x] **WA-R5 — CLOSED by design, 2026-08-29.** The joint no longer enters the
+    bay at all, so the envelope is unchanged and needs no re-verification. The
+    spar still stops at X −100 and the flange protrudes to X ≈ −86.
+
+- [x] **WA-R6 — Fuselage-side conduits. DONE 2026-08-30.** to match the wing's new bore set:
+    nav 3-core at hull Y +1.0 (Ø3.2), AK7455 shielded pair at Y +37.5 (Ø6.5),
+    tilt drive shaft at Y +46.6 (Ø4.4). The retired Ø7 EDF double-D ports can go
+    — the four 10 AWG feeds now enter the spar bore directly at the socket.
+
+- [x] **WA-R15 — Tilt actuator re-select and fuselage drive stage. DONE
+    2026-08-30.** The actuator is a **DS3225 body + LibreServo_v4 with the
+    rotation-limit pin removed**, run continuous-rotation (multi-turn) and closed
+    on the AK7455 — the architecture the cargo winch already uses. The *body* is
+    unchanged, so the Rev S1d pad footprint (61.5 × 27.0), the 49.5 × 10 mm bolt
+    pattern and the 60 g mass all carry over; what is new is the mode, the
+    position, and a gear stage.
+    - Pad re-datumed from the (now non-rotating) spar to the **drive shaft**:
+        axis at hull **Y +46.60, Z +99.49**. The old spar-relative datum existed
+        to preserve a horn-and-pushrod linkage that no longer exists.
+    - **Fuselage spur stage, module 0.8, 38T/38T, C = 30.40 mm, 1:1.** A coaxial
+        coupling was tried first and does not fit — the body overlaps the Ø30.1
+        socket boss by 13.5 mm in Y at either shaft orientation.
+    - C is set by the **landing-gear bays** (seats top out at Z +82.39; the 3.0 mm
+        budget puts the pad bottom at ≥ +85.39, so C ≥ 29.80; 36T and 37T fall
+        under budget, 38T clears at 3.60 mm).
+    - **The stage is 1:1 deliberately.** A step-up would trade the 48× torque
+        surplus for slew rate but pulls the actuator back to 260° — under one
+        revolution — re-opening the question `WING_ATTACH_INTERFACE.md` §4.3b
+        closed.
+    - **COST — 18 mm/side of extra reach into the cargo bay.** The gear plane is
+        forced 11 mm inboard of X −100/−240 because the wing root **tenon**
+        (X −100…−108) leaves only 4.90 mm to the shaft axis, and no gear that can
+        transmit at C = 30.40 clears it in Y. The actuator follows the gear and
+        reaches X −158.5 / −221.5, in the hull Z band +85.99…+112.99 — above the
+        bay's working floor, so the loss is roof volume, not floor footprint.
+
+- [ ] **WA-R18 — Mass/CG/T-W re-derivation after Rev T1c.** **REVISED 2026-08-30
+    by the weight audit — the first figure was low.** The rework is
+    **+102.8 g (+0.227 lbm) net**, +2.63 % on the 3,911 g (8.62 lbm) AUW, and it
+    is *not* concentrated at the CG — it sits at the wing root, outboard and low.
+
+    | | Δ mass |
+    |---|---|
+    | Cargo shell (Ø30.1 sockets, 18 mm actuator standoffs, less the retired tie-rod bosses) | **+56.0 g** — 301,145 → 354,486 mm³ |
+    | New parts: `SPAR-CF-20X16` 58.2, `SHAFT-TILT-4MM` 49.4, `GEAR-TILT-FUS-38T` 16.0, `BUSH-TILT-4MM` 6.0, `PRINT-WING-ROOT-FLANGE` **51.2** | +180.8 g |
+    | Retired: `SPAR-TILT-4130` 96, `BRG-F688ZZ` 10, `PRINT-PUSHROD-CRANK` 6, `CF-ROD-8MM` 14, `CF-ROD-6MM` 8 | −134.0 g |
+    | **Net** | **+46.8 g** parts, **+102.8 g** with the shell |
+
+    The flange was under-massed by 25.6 g at Rev T1c: it was costed as
+    `RHO_SOLID × 40 % infill`, but at 5 mm thick with 4 perimeters at 0.6 mm the
+    plate is 4.8 mm of *wall* and 0.2 mm of infill — essentially solid, and infill
+    barely touches it. Use `RHO_PRINT` (1.05e-3 g/mm³).
+
+    Hover T/W was ~1.19 (~1.25 with `BATT-6S-2800`) against the 1.2 minimum
+    (§1.1.5 mass notice), so **this puts the un-swapped case below the minimum**.
+    Re-derive T/W and the CG envelope before flight release.
+    **`docs/MASS_AUDIT_CARGO_WING_ROOT.md` §6 identifies −32.9 g of low-risk
+    recovery** (hollow the actuator standoffs), which lands Rev T1c at +69.9 g on
+    the corrected basis. **BLOCKS flight release.**
+
+- [ ] **MA-1 — Reconcile every `PRINT-*` BOM row to its STL.** The weight audit
+    measured 23 matched rows and found the BOM understates printed mass by
+    **+521.6 g — 13.3 % of AUW**. `PRINT-CARGO-SECT` (+207), `FOAM-PU-2LB` (kit
+    mass, −878) and `PRINT-WING-ROOT-FLANGE` (+12.9) are corrected; the rest are
+    measured and reported in `docs/MASS_AUDIT_CARGO_WING_ROOT.md` §5 for their
+    owning branches. Add a CI check so a regenerated STL cannot silently diverge
+    from its BOM row again. **BLOCKS any weight statement.**
+
+- [ ] **MA-5 — Hollow the actuator standoffs (−32.9 g).** They are 109.5 g of
+    solid block reacting a 5.0 N worst-case combined load; deflection at the gear
+    mesh is 1.4 × 10⁻⁵ mm, three-plus orders inside the 0.05 mm that would matter.
+    2.5 mm wall + 2.5 mm face. Do **not** instead shrink `NSVMT_STANDOFF` (it is
+    11 + 6 + 1, all of it accounted) or the 6 mm gear face (already 7.5 × module).
+    `docs/MASS_AUDIT_CARGO_WING_ROOT.md` §6.
+
+- [ ] **MA-6 — `PRINT-BATT-TRAY` measures 140.2 g against a 22 g BOM row.** It is
+    in the cargo section, it is 3.6 % of AUW, and it is 30 % of its own bounding
+    box for a part whose job is to locate a LiPo and react 4 g × 1.5 through
+    straps. Re-measure, then lighten on its merits.
+
+- [ ] **MA-7 — The BOM mass column mixes installed mass, consumable stock and
+    ground equipment.** Summing `Total_Mass_g` returns 12.7 kg, which is the mass
+    of nothing. Add an `Installed` flag before any weight statement uses it.
+
+- [ ] **WA-R15a — Cargo-bay envelope re-measure after the actuator standoff.**
+    `tools/cargo_bay_envelope.py` measured the 140 mm lateral limit against pads
+    at X −100/−240. The actuator bodies now reach −158.5/−221.5 in the
+    Z +85.99…+112.99 band. Re-measure and record the roof-band clear width before
+    the five roof/wall-mounted CARGO-01 accessories are placed.
+
+- [ ] **WA-R16 — Tilt drive holding provision (TILT-CTL-01).** The train is two
+    spur stages at a total reduction of 3.571 and is **not self-locking**; with
+    the motor unpowered the nacelle back-drives under any residual moment. The
+    gravity term is nulled by the pivot-at-CG, but the **aero moment is
+    unquantified**, and an unquantified moment on a non-self-locking train is an
+    unbounded rate. Candidates, in preference order: motor short-brake held by
+    LibreServo_v4; a detent at the hover/cruise ends; a self-locking worm stage
+    (rejected on the plan-004 KTD1 right-angle argument unless nothing else
+    works). **Do not close by assuming the motor holds** — see
+    `docs/TILT_DRIVE_CONTROL_SPEC.md` §7.3 for the bench test that decides it.
+    **BLOCKS flight release.**
+
+- [ ] **WA-R17 — Split-collar pinch clamp (WA-R3) is still not a part.** The
+    Ø30.1 socket boss now matches the ~Ø30 clamp envelope WA-R3 specifies, but
+    the clamp itself has no SCAD, no STL and no BOM row. ≥ 5 mm wall over Ø20,
+    M3 heat-set inserts, 2 screws, **positive split gap when clamped** (if the
+    halves close on each other first the collar grips itself and the spar is
+    free), **no set screws** (CF tube splinters under a point load). This is the
+    joint that makes wing + bonded spar removable as one assembly.
+    **BLOCKS wing removal/refit.**
+
+### RESOLVED 2026-08-29 — no bay intrusion, and no decision needed
+
+The first revision of this section asked the owner to choose between intruding
+36 mm into the bay, waiting on the LG-11 coupon, or splitting the socket into
+two collars. **The owner instead ruled the bay clear, and that ruling produced a
+better joint than any of the three options.**
+
+Splitting the load by TYPE rather than stretching one feature — socket for
+shear, flange for moment — moves the moment off a 1/L² depth term onto a linear
+area term:
+
+| | socket, 55 mm (was) | **socket 18.5 + flange 80 × 60 (now)** |
+|---|---|---|
+| Bay clear span | 140 → ~104 mm | **140 mm, unchanged** |
+| Moment FOS | 4.02 | **29.2** |
+| Reaches inboard to | X −136 | **X ≈ −86** |
+
+**The LG-11 coupon is demoted here** from a gate to a packaging convenience:
+the flange gives FOS 29.2 / 87.6 / 274.6 at 5 / 15 / 47 MPa, so it clears the
+FOS 4.0 target by 7× on the *standing* figure. The coupon would only decide how
+small the flange could shrink. It remains a gate elsewhere (root `TODO.md`
+§0.8).

@@ -35,6 +35,104 @@
 - [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 - [ ] ASTM D3039/D695 coupon test: CF-PLATE-2MM bending allowable (thwarts
       built at FOS 8.5/8.7 vs the conservative 300 MPa stand-in only)
+- [ ] **ASTM D3039/D695 certificate for the 20 x 16.3 CF SPAR TUBE.** New at
+      Rev T1 and now load-bearing: the spar is the wing's primary bending
+      member at FOS 9.0 against the same unverified 300 MPa stand-in
+      (`docs/TILT_SPAR_ANALYSIS.md` §3.6.3). The 4130 rows above no longer
+      govern the flight load path.
+- [ ] **Measure the procured 10 AWG silicone wire OD.** `bom_revS.csv` records
+      none; the 5.5 mm figure the Ø20.4 spar bore is derived from is an
+      ASSUMPTION. A larger real OD re-opens the airfoil trade
+      (`tools/spar_bundle_fit.py` prints this caveat on every run).
+- [x] **Tilt servo angular range (180 vs 270 deg) — CLOSED 2026-08-29, VOID.**
+      Owner direction: the drive turns the shaft MORE THAN ONE REVOLUTION, so
+      the stage is a reduction and the actuator's own travel no longer sets the
+      ratio. Built: module 0.8, 14T pinion / 50T ring, i 3.571, shaft 1.389 rev
+      per 140 deg, C 25.6 -> station 53.6.
+- [ ] **ACTUATOR RE-SELECT (replaces the item above).** A multi-turn output means
+      the tilt drive is no longer a limited-rotation servo but a
+      continuous-rotation gearmotor or stepper, closed on the AK7455's absolute
+      nacelle angle. The DS3225 is ~17x oversized on torque AND now the wrong
+      kind of device. NOTE this makes the encoder load-bearing for CONTROL, not
+      telemetry: a multi-turn drive without absolute feedback does not know
+      where the nacelle is.
+- [ ] **LG-11 coupon — DEMOTED at the wing root, still a gate elsewhere.**
+      Owner ruled the cargo bay clear, so the root joint was re-designed around
+      it: socket for shear + bonded 80x60 flange for the moment, FOS 29.2 at the
+      STANDING 5 MPa figure (29.2 / 87.6 / 274.6 at 5 / 15 / 47 MPa). The coupon
+      no longer decides whether that joint is buildable, only how small the
+      flange could shrink. It remains a gate for the tenon path and the thwarts.
+- [ ] **Aero revalidation of the re-lofted wing (CFD or bench).** The section
+      is no longer S1223 -- root t/c 12.14 -> 17.72 %, tip 18.93 -> 26.70 %.
+      Every aero figure in this repo citing this wing is unverified until this
+      lands, including the 7.6 N cruise-lift figure and everything derived
+      from it. The built sections are designated S1223/t17.7 (root) and
+      S1223/t26.7 (tip) -- S1223's CAMBER LINE with the thickness envelope
+      scaled x1.46 / x2.20; camber is unscaled and exact (8.67% at 49.0%
+      chord), so zero-lift angle and lift-curve slope partially survive at the
+      ROOT on thin-airfoil grounds and not at all at the tip. CL_max, L/D and
+      the cruise-lift figure do NOT survive. Needs XFOIL or a
+      TRANSITION-SENSITIVE RANS run at Re 1.3-1.8e5 -- a fully-turbulent model
+      will misrepresent the separation bubble. `tools/wing_cfd_openfoam.py` is
+      still blocked on mesh generation. See docs/flight_envelope.md's banner.
+
+#### 0.8.1 — Wing attach interface (Rev T1), open requirements
+
+→ detail: `docs/WING_ATTACH_INTERFACE.md` §5; fuselage detail:
+`airframe/fuselage-mid/WBS.md` §1.1.1.5
+
+Wing side is BUILT. These are the two joints it publishes.
+
+- [x] WA-R1/R1b, R2, R4, R6 — fuselage side BUILT 2026-08-30 (Rev T1c). Socket
+      Y +21.00 / Z +66.85 / D20.4 / 18.5 mm; F688ZZ and both tie rods deleted;
+      mortise 30.8 -> 12.8 (tenon fits +0.40 mm/side); nav D4.2, AK7455 D7.5 and
+      shaft D4.4 conduits cut. `wing_root_deconflict.py` now CLEAR.
+- [x] WA-R15 — tilt actuator: DS3225 + LibreServo_v4 run MULTI-TURN, closed on
+      the AK7455; fuselage spur stage m0.8 38T/38T, C 30.40, 1:1. Coaxial does
+      not fit and no gear clears the tenon in Y -> 18 mm actuator standoff.
+- [ ] WA-R3/R17 — split-collar pinch clamp is still not a part (no SCAD, no STL,
+      no BOM row). **BLOCKS wing removal/refit.**
+- [ ] WA-R16 — the tilt train is NOT self-locking and has no holding provision.
+      **BLOCKS flight release.** `docs/TILT_DRIVE_CONTROL_SPEC.md` §5.2/§7.3.
+- [ ] WA-R18 — Rev T1c is +102.8 g (+2.63 % AUW, revised by the weight audit);
+      hover T/W was ~1.19 vs a 1.2 minimum. Re-derive mass/CG/T-W.
+      **BLOCKS flight release.**
+- [ ] MA-1 — BOM printed-part masses understate by +521.6 g (13.3 % of AUW)
+      across 23 rows measured against their STLs. Reconcile + add a CI check.
+      **BLOCKS any weight statement.** -> `docs/MASS_AUDIT_CARGO_WING_ROOT.md`
+- [ ] MA-5 — hollow the actuator standoffs, -32.9 g, no structural question
+      (deflection 1.4e-5 mm at the gear mesh against a 0.05 mm budget).
+- [ ] MA-6 — `PRINT-BATT-TRAY` measures 140.2 g against a 22 g BOM row.
+- [ ] MA-7 — BOM mass column mixes installed mass, stock and GCS; add an
+      `Installed` flag before any weight statement uses it.
+- [ ] W1..W8 — ranked weight-reduction targets: battery -225 g, tray floor
+      -23.1 g, actuator standoffs -32.9 g, cradle ~-25 g; wing root CLOSED.
+      W2 (BOM reconciliation) gates all of them.
+      -> `docs/plans/2026-08-30-001-weight-reduction-targets-plan.md`
+- [ ] WA-R15a — re-measure the cargo-bay roof band: the actuators now reach
+      X -158.5 / -221.5 at Z +85.99..+112.99.
+- [ ] TILT-CTL-01..06 — tilt control loop open items (plant model, slew rate,
+      differential-tilt trip, LibreServo_v4 encoder part).
+      → `docs/TILT_DRIVE_CONTROL_SPEC.md` §8.
+- [ ] WA-R7..R12 — nacelle: trunnion bearing bore D20.0 at ring plane X ~ 28
+      (axial AND radial duty), ring gear PD 33.8 at C 26.0, ring magnet
+      ID 27 / OD 41 axially separated from that gear, the 4 x 10 AWG
+      disconnect relocated into the nacelle annulus, the nav 3-core crossing
+      at the trunnion, and confirmation of the 32 mm spar-stub protrusion.
+- [ ] WA-R13 — avionics: `docs/TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1's
+      ferromagnetic-spar premise is corrected in place; confirm the firmware
+      zero-calibration procedure still covers the drive-shaft/pinion field
+      that replaces it.
+- [x] **OWNER DECISION — cargo-bay intrusion: CLOSED 2026-08-29.** The bay stays
+      clear; nothing goes inboard of hull X ~ -86 against a bay edge at -100.
+      The constraint produced a better joint (moment FOS 4.02 -> 29.2), not a
+      compromise. See `airframe/fuselage-mid/WBS.md` §1.1.1.5.
+- [ ] **Spar stub / trunnion packaging — NEW, tightest constraint on the joint.**
+      The spar must terminate >= 26 mm from the nacelle duct axis, so the stub is
+      15.0 mm (max 15.7). The trunnion bearing PAIR, the 50T ring gear and the
+      ID26/OD41.2 ring magnet must all fit inside that 15 mm, and the magnet and
+      gear are nearly coradial (r 13.0-20.6 vs 20.0) so they need axial
+      separation. 2x 6804 (20x32x7) = 14.0 mm fits; MF128ZZ retired to QTY 0.
 
 ### 0.10 Update and correct documentation touching every non-archived file.
 

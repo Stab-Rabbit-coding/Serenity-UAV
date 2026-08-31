@@ -293,6 +293,65 @@ aft white); controlled by FC4 node (Simon's medbay, Bay D).
 
 ---
 
+### REF-FAA-004: 14 CFR Part 23 — Airworthiness Standards: Normal Category Airplanes
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | U.S. Federal Aviation Administration (FAA), Department of Transportation |
+| **Current edition** | Part 23 as restructured by Amdt. 23-64 (effective 2017-08-30), performance-based; as amended through the 2024 annual CFR edition |
+| **Official URL** | <https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-23> |
+| **Verified source** | Section text quoted below was retrieved and verified verbatim 2026-08-29 from GovInfo's authoritative CFR XML — <https://www.govinfo.gov/content/pkg/CFR-2024-title14-vol1/xml/CFR-2024-title14-vol1-sec23-2230.xml> and <https://www.govinfo.gov/content/pkg/CFR-2024-title14-vol1/xml/CFR-2024-title14-vol1-sec23-2265.xml>. (eCFR's HTML endpoint bot-blocks automated retrieval; GovInfo serves the same authority.) |
+| **Applicability caveat** | Part 23 governs **manned** normal-category airplanes. Serenity is an sUAS operated under Part 107 [REF-FAA-002], which imposes **no** structural certification basis. Part 23 is cited here as an **adopted engineering baseline**, exactly as `docs/structural_analysis.md` §3 already frames it — **NOT as a compliance claim.** |
+
+**Sections applied in this project:**
+
+| Section | Title | Applied where |
+|---|---|---|
+| **§ 23.2230** | *Limit and ultimate loads* | The 1.5× ultimate/limit factor used throughout `docs/structural_analysis.md` §3 and `tools/wing_spar_carrythrough.py` |
+| **§ 23.2265** | *Special factors of safety* | Justifies an additional factor on FDM-printed structure — see below |
+
+**§ 23.2230 (verbatim, GovInfo 2024 CFR):** the applicant must determine —
+(a) *"The limit loads, which are equal to the structural design loads unless
+otherwise specified elsewhere in this part"*; and (b) *"The ultimate loads,
+which are equal to the limit loads multiplied by a 1.5 factor of safety unless
+otherwise specified elsewhere in this part."*
+
+**§ 23.2265 (verbatim, GovInfo 2024 CFR):** (a) *"The applicant must determine a
+special factor of safety for each critical design value for each part, article,
+or assembly for which that critical design value is uncertain, and for each
+part, article, or assembly that is —"* … (a)(2) *"Subject to appreciable
+variability because of uncertainties in manufacturing processes or inspection
+methods."* (c) *"The applicant must multiply the highest pertinent special
+factor of safety in the design for each part of the structure by each limit and
+ultimate load…"*
+
+**Why §23.2265 matters here.** Serenity's primary structure is FDM-printed
+CF-PETG. Layer adhesion, raster orientation, moisture uptake, and
+machine-to-machine variation are precisely the *"appreciable variability because
+of uncertainties in manufacturing processes"* that (a)(2) contemplates. This is
+the regulatory hook for the FOS 4.0 joint target that `docs/structural_analysis.md`
+§3 currently describes only as *"a design-team judgment value"* — the judgment
+is sound and now has a citable basis, though the specific numeric value remains
+the project's own choice rather than anything Part 23 prescribes.
+
+**CORRECTION THIS ENTRY MAKES — stale section number.**
+`docs/structural_analysis.md` cited **"14 CFR Part 23.303"** in two places. That
+section belonged to the **pre-2017** Part 23 and does not exist in the current
+rule; the 2017 restructure moved the limit/ultimate relationship to **§23.2230**.
+This is the same class of defect this file already recorded for §23.1401 (see
+"Removed / Superseded Citations"). Both occurrences corrected 2026-08-29.
+
+**Also worth recording, to prevent a future fabrication:** the load factors
+**+3.8 / −1.52**, widely quoted as "the Part 23 load factors," appear **nowhere
+in the current rule** — they belong to the pre-2017 §23.337. Current §23.2200(b)
+requires only *"design maneuvering load factors not less than those, which
+service history shows, may occur within the structural design envelope."* This
+project's 4 g limit factor is an adopted figure under that framing, not a
+regulatory quotation. Do not cite +3.8/−1.52 to current Part 23.
+
+**Used in:** `docs/structural_analysis.md` §2, §3;
+`docs/WING_ATTACH_INTERFACE.md` §2.1; `tools/wing_spar_carrythrough.py`
+
 ## Part II — United States Federal Communications Commission Regulations
 
 > "Can't stop the signal." — Mr. Universe. We can, however, stay inside Part 15/95 limits while we transmit it.
@@ -1185,6 +1244,47 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 
 **Used in:** `airframe/README.md` §5.1
 
+### REF-MATH-001: Melissen, J.B.M. — "Packing and Covering with Circles"
+
+| Field | Value |
+|---|---|
+| **Author** | Johannes Bernardus Marinus Melissen, Utrecht University |
+| **Publication** | PhD thesis, Universiteit Utrecht, 1997 |
+| **Official URL** | <https://dspace.library.uu.nl/handle/1874/25091> — Utrecht University Repository, open access |
+| **Retrieved** | 2026-08-29 |
+| **Scope applied** | The proven-optimal ratios for packing *n* equal circles inside the smallest enclosing circle, for *n* ≤ 7. Only these small-*n* cases are used; they are proven optimal in this source and are reproduced throughout the standard circle-packing literature. |
+
+**Values used (enclosing diameter ÷ single-circle diameter):**
+
+| *n* | Ratio K(*n*) | Closed form |
+|---|---|---|
+| 1 | 1.00000 | 1 |
+| 2 | 2.00000 | 2 |
+| 3 | 2.15470 | 1 + 2/√3 |
+| 4 | **2.41421** | **1 + √2** |
+| 5 | 2.70130 | 1 + √(2(1 + 1/√5)) |
+| 6 | 3.00000 | 3 |
+| 7 | 3.00000 | 3 (hexagonal + centre) |
+
+**Why this is catalogued rather than treated as common knowledge:** the *n* = 4
+case decided a load-bearing geometry change. Two independent sources — the
+owner's `docs/plans/2026-08-27-nacelle-wiring-plan.md` and the external Gemini
+conversation it derived from — both specified an 11.0 mm spar bore for four
+10 AWG conductors. Four Ø5.5 mm circles circumscribe **13.28 mm** at zero
+clearance, so 11.0 mm does not fit at all, and the error propagated because the
+constant was carried in prose rather than computed. It is now computed, from
+this table, in `tools/spar_bundle_fit.py`, which refuses to interpolate for any
+*n* outside the tabulated set.
+
+**Caveat on the input, not the ratio:** the ratio is exact; the 5.5 mm wire OD
+it is applied to is **not** a verified figure. `current-specification/bom_revS.csv`
+records no outside diameter for `WIRE-10AWG`. See `tools/spar_bundle_fit.py`,
+which prints that caveat on every run.
+
+**Used in:** `tools/spar_bundle_fit.py`;
+`airframe/openscad/wings/wings_s1223_revo.scad` (`SPAR_BORE_OD` derivation);
+`docs/WING_ATTACH_INTERFACE.md` §2
+
 ## Part XI — FDA / CDRH Laser Product Regulations
 
 ### REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products
@@ -1706,10 +1806,20 @@ Per-application operating mode differs even though the hardware is now identical
 | Application | Qty | Mode | Range |
 |---|---|---|---|
 | Cargo winch | 1 | Continuous rotation, gateway closes position on the AK7455 spool encoder (REF-SENSOR-008) | Multi-turn, unbounded by the servo itself |
-| Nacelle tilt | 2 | Position, firmware soft-limited | −5°…140°, backstopped by the existing CF-PETG hard-stop blocks in the external gear train (`docs/NOZZLE_DRIVE_TRADE.md`) — mechanically independent of the servo's own (now-removed) rotation pin |
+| Nacelle tilt | 2 | **CORRECTED Rev T1c (2026-08-30):** continuous rotation, Pilot closes position on the AK7455 nacelle encoder (REF-SENSOR-008) — the same pattern as the winch above | **Multi-turn** (1.438 rev of actuator per 145° of nacelle), unbounded by the servo itself. Soft-limited to −5°…140° *at the nacelle*, backstopped by CF-PETG hard stops in the external gear train |
 
-Removing the pin on all three is a deliberate commonality choice, not a requirement of the
-position-mode applications: LibreServo replaces the servo's potentiometer with a 360°
+> **The row above changed at Rev T1c and the change is structural, not editorial.**
+> The tilt stage became a REDUCTION (tip 14T/50T, `i` = 3.571), so the drive shaft must
+> turn **1.438 revolutions** over the 145° sweep and no limited-rotation servo can drive
+> it at any horn radius. Removing the rotation pin is therefore **required** on the tilt
+> servos now, not merely convenient — and the AK7455 became **load-bearing for control**
+> rather than telemetry, because a multi-turn drive without absolute feedback does not
+> know where the nacelle is. See `docs/WING_ATTACH_INTERFACE.md` §4.3b/§4.3c and
+> `docs/TILT_DRIVE_CONTROL_SPEC.md`.
+
+Removing the pin on the winch is a deliberate commonality choice; on the tilt servos it
+is now a requirement (see the note above). It is not a requirement of the
+position-mode applications generally: LibreServo replaces the servo's potentiometer with a 360°
 absolute magnetic encoder (AEAT-8800, 16-bit), so position feedback and soft-limit
 enforcement no longer depend on the mechanical stop the pin used to provide. See
 REF-SENSOR-013/014/015 below for the individual part records, and

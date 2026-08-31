@@ -7,8 +7,15 @@ The nacelle drive servos are **25 kgf.cm+ units inside the fuselage, mounted
 against the port and starboard bulkheads**, each rotating one wing spar and the
 nacelle keyed to it (`airframe/wings-nacelles/WBS.md` SS1.1.2 SPAR-01).  Their
 mounts must clear the landing-gear bays, the port/starboard avionics bays, the
-wing root mortise and the spar bearing seat -- **and the nacelle ESC and
-nav-light cableways must not be blocked**.
+wing root mortise and the spar socket -- **and the nacelle ESC and nav-light
+cableways must not be blocked**.
+
+REV T1 UPDATE (2026-08-29).  The premise above is superseded in one respect and
+the tool follows it: the spar no longer rotates and the servos no longer turn
+it.  The spar is a FIXED bonded CF tube, the actuator is a MULTI-TURN unit
+driving a separate O4 shaft through a 1:1 spur pair, and the nav 3-core has been
+evicted from the spar bore by the four 10 AWG ESC feeds that now live there.
+See docs/WING_ATTACH_INTERFACE.md SS4.3b.
 
 The nav light is the easy one: it routes through the hollow spar's ~5 mm ID and
 tilts with it (95 deg twist, `docs/TILT_SPAR_ANALYSIS.md` SS5).  The 40 A EDF ESC
@@ -23,7 +30,7 @@ across them but not its diameter -- CARGO-02).
 
 Two sides of the check
 ----------------------
-OBSTRUCTIONS  -- solid things: servo body, servo horn swing, spar bearing seat,
+OBSTRUCTIONS  -- solid things: actuator body, tilt gear pair, spar socket boss,
                  wing root mortise, the WING ROOT TENON that enters it,
                  landing-gear bay seats, avionics bays.
 ROUTES        -- volumes that must stay open: the EDF ESC double-D conduit, the
@@ -88,7 +95,13 @@ SERVO_W = mci.NSVMT_BODY_W          # 20.0  body width    -> hull Z
 SERVO_DEPTH = mci.NSVMT_BODY_H      # 40.5  body height   -> hull X, inboard
 SERVO_EAR_SPAN = mci.NSVMT_EAR_SPAN  # 54.5 flange overall, hull Y
 SERVO_MASS_G = 60.0                 # datasheet SS2-2
-HORN_SWING_R = 22.0
+
+# REV T1 (2026-08-29): the horn and pushrod are GONE.  The actuator no longer
+# swings a horn against a crank on a rotating spar -- it drives a O4 shaft
+# through a 1:1 spur pair (mci.TILT_STAGE_*), so what has to be checked for
+# clearance is the GEAR PAIR envelope, not a horn arc.  HORN_SWING_R is retired
+# with the linkage it described.
+GEAR_ENVELOPE_R = mci.TILT_STAGE_OD / 2.0      # 16.0 mm, gear tip radius
 
 WING_CHORD_LINE_Z = 58.01       # hull Z of the wing chord line at the root
 GAP_BUDGET = 3.0                # mm, minimum acceptable edge-to-edge clearance
@@ -104,6 +117,10 @@ GAP_BUDGET = 3.0                # mm, minimum acceptable edge-to-edge clearance
 # those slivers as BLOCKED.  One constant for both keeps them from disagreeing
 # on what counts as noise.
 BOOL_NOISE_TOL = 1.0            # mm^3, see note above
+# Routes carried by a FLEXIBLE conductor rather than a rigid member.  Their
+# protected volume stops at the wall bracket; see routes() for why.
+WIRE_ROUTES = ("nav-light 3-core conduit", "Hall/encoder conduit")
+
 X_CL = -169.9                   # cargo centreline
 PAYLOAD_W = 101.6               # mission payload width, CARGO-01
 
@@ -165,24 +182,47 @@ def route_stations():
     with open(wsf.WING_SCAD, encoding="utf-8") as fh:
         src = fh.read()
     chord = mci.WING_ROOT_CHORD
-    cable_d = wsf.scad_scalar(src, "CABLE_BORE_D")
-    cable_sep = wsf.scad_scalar(src, "CABLE_BORE_SEP")
-    cable_stn = wsf.scad_scalar(src, "CABLE_BORE_STATION")
     hall_d = wsf.scad_scalar(src, "HALL_CABLE_D")
     hall_stn = wsf.scad_scalar(src, "HALL_CABLE_STATION")
     spar_bore = wsf.scad_scalar(src, "SPAR_BORE_OD")
     spar_stn = wsf.scad_scalar(src, "SPAR_BORE_STATION")
-    # Each bore is camber-centred at ITS OWN chordwise station, so the two EDF
-    # bores do not share a midline: at 22.75 and 32.25 mm the S1223 camber line
-    # differs by ~0.8 mm.  Evaluating one midline for the pair puts both bores
-    # off the shell's matching harness ports and reports phantom blockage.
-    out = [
-        ("EDF ESC conduit (40 A feeds)",
-         [((cable_stn - cable_sep / 2) / chord, cable_d),
-          ((cable_stn + cable_sep / 2) / chord, cable_d)]),
-        ("Hall/encoder conduit", [(hall_stn / chord, hall_d)]),
-        ("spar bore / nav-light 3-core", [(spar_stn / chord, spar_bore)]),
-    ]
+    # Each bore is camber-centred at ITS OWN chordwise station, so bores at
+    # different stations do not share a midline -- evaluating one midline for
+    # several bores puts them off the shell's matching ports and reports
+    # phantom blockage.
+    #
+    # REV T1 (2026-08-29): the route set changed with the spar.
+    #   * The EDF double-D is RETIRED -- the four 10 AWG feeds moved INSIDE the
+    #     spar bore, on the tilt axis.  The spar bore is therefore no longer
+    #     "nav-light only": it is now the 40 A route as well, and is relabelled
+    #     to say so.  A stale "nav-light 3-core" label on the one bore that now
+    #     carries the aircraft's main propulsion current would be the most
+    #     misleading string in this tool.
+    #   * The nav 3-core gets its own small bore FORWARD of the spar.
+    #   * A tilt drive-shaft bore appears AFT of the AK7455 conduit.
+    # The legacy names are still read when present so this tool keeps working
+    # as a regression check against a pre-Rev-T1 source.
+    out = []
+    if re.search(r"^CABLE_BORE_D\s*=", src, re.M):
+        cable_d = wsf.scad_scalar(src, "CABLE_BORE_D")
+        cable_sep = wsf.scad_scalar(src, "CABLE_BORE_SEP")
+        cable_stn = wsf.scad_scalar(src, "CABLE_BORE_STATION")
+        out.append(("EDF ESC conduit (40 A feeds)",
+                    [((cable_stn - cable_sep / 2) / chord, cable_d),
+                     ((cable_stn + cable_sep / 2) / chord, cable_d)]))
+    if re.search(r"^NAV_BORE_D\s*=", src, re.M):
+        out.append(("nav-light 3-core conduit",
+                    [(wsf.scad_scalar(src, "NAV_BORE_STATION") / chord,
+                      wsf.scad_scalar(src, "NAV_BORE_D"))]))
+    out.append(("Hall/encoder conduit", [(hall_stn / chord, hall_d)]))
+    if re.search(r"^SHAFT_BORE_D\s*=", src, re.M):
+        out.append(("tilt drive-shaft bore",
+                    [(wsf.scad_scalar(src, "SHAFT_BORE_STATION") / chord,
+                      wsf.scad_scalar(src, "SHAFT_BORE_D"))]))
+    spar_label = ("spar bore / 4x 10 AWG ESC feeds"
+                  if re.search(r"^NAV_BORE_D\s*=", src, re.M)
+                  else "spar bore / nav-light 3-core")
+    out.append((spar_label, [(spar_stn / chord, spar_bore)]))
     # U5/KTD1 two-rod couple: both rod clearance bores are camber-centred at
     # their own station exactly like the bores above (see
     # wing_root_tie_rod_fwd_bore()/_aft_bore() in the wing SCAD). Root-only
@@ -205,29 +245,44 @@ def routes(side):
     mid = midline_mm()
     inb = mci.PORT_INB if side == "port" else mci.STBD_INB
     outb = mci.PORT_OUTB if side == "port" else mci.STBD_OUTB
-    lo, hi = min(inb, outb), max(inb, outb)
-    # U5/KTD1: the tie-rods are ROOT-ONLY embeds, shorter than the main
-    # spar's PORT_INB..PORT_OUTB span -- probing the wider span reads solid
-    # wall beyond each rod's own embed as a false BLOCKED. Use each rod's
-    # actual fuselage-side embed span instead (mci.ROD_*_*_INB/OUTB).
-    rod_span = {
-        "fwd tie-rod bore": (mci.ROD_FWD_PORT_INB, mci.ROD_FWD_PORT_OUTB) if side == "port"
-        else (mci.ROD_FWD_STBD_INB, mci.ROD_FWD_STBD_OUTB),
-        "aft tie-rod bore": (mci.ROD_AFT_PORT_INB, mci.ROD_AFT_PORT_OUTB) if side == "port"
-        else (mci.ROD_AFT_STBD_INB, mci.ROD_AFT_STBD_OUTB),
-    }
+    # The U5/KTD1 tie-rod special case (root-only embeds needing their own
+    # shorter probe span) went with the rods -- the wing gates them off at
+    # TENON_LOAD_PATH = "spar_carrythrough" and the fuselage no longer drills
+    # them.  What replaces it is a THREE-WAY split by what the route carries:
+    # a rigid shaft, a stepped bore, or a flexible wire (see below).
+    sgn = 1.0 if side == "port" else -1.0        # +1 where outboard is +X
+    deep_in = inb - 12.0 * sgn                   # well inboard of the bracket
+    deep_out = outb + 12.0 * sgn                 # well outboard of the skin
+
     out = []
     for label, bores in route_stations():
         for i, (xfr, d) in enumerate(bores):
             z = WING_CHORD_LINE_Z + mid(xfr)
             y = mci.WING_LE_ROOT_Y + xfr * mci.WING_ROOT_CHORD
             tag = label if len(bores) == 1 else f"{label} #{i + 1}"
-            if label in rod_span:
-                x0, x1 = rod_span[label]
-                span_lo, span_hi = min(x0, x1), max(x0, x1)
+            if label.startswith("spar bore"):
+                # REV T1: the spar corridor STEPS at the socket's inboard end.
+                # Outboard of it the O20.4 tube itself occupies the bore;
+                # inboard of it only the 10 AWG bundle continues, at the tube's
+                # O16.3 ID.  Probing one diameter the whole way reads the
+                # intended 2.05 mm annulus between them as a blockage.
+                out.append((tag, xcyl(y, z, *sorted((inb, deep_out)), d / 2.0)))
+                out.append((f"{tag} (bundle exit)",
+                            xcyl(y, z, *sorted((deep_in, inb)),
+                                 mci.SPAR_WIRE_BORE_D / 2.0)))
+            elif label in WIRE_ROUTES:
+                # A WIRE is not a bore.  Its protected volume ends at the wall
+                # bracket's inboard face: past that it is in open bay and can
+                # turn, and it must -- the O32.0 shaft gear sits 9.11 mm from
+                # the AK7455 conduit axis and no gear train at a 30.40 mm centre
+                # distance clears it.  The lead turns forward into the wire trunk
+                # at the wall (docs/WING_ATTACH_INTERFACE.md SS4A-bis / WA-R6).
+                # Probing 12 mm past the bracket would report that intended turn
+                # as a blockage every run.
+                out.append((tag, xcyl(y, z, *sorted((inb, deep_out)), d / 2.0)))
             else:
-                span_lo, span_hi = lo - 12.0, hi + 12.0
-            out.append((tag, xcyl(y, z, span_lo, span_hi, d / 2.0)))
+                out.append((tag, xcyl(y, z, *sorted((deep_in, deep_out)),
+                                      d / 2.0)))
     return out
 
 
@@ -240,16 +295,25 @@ def tenon_params():
     That distinction is the whole point of the fit check below.
 
     U5/KTD1 (2026-08-24): `WING_ROOT_TAB_W/H/L` are now a
-    `TENON_LOAD_PATH`-conditional expression in the SCAD (locating-only under
-    the default "two_rod" path, the original structural size under
-    "enlarged_tenon"), not a plain literal `wsf.scad_scalar()` can parse.
-    Read whichever branch's `_LOCATING`/`_ENLARGED` constants are actually
-    active instead.
+    `TENON_LOAD_PATH`-conditional expression in the SCAD, not a plain literal
+    `wsf.scad_scalar()` can parse.  Read whichever branch's
+    `_LOCATING`/`_ENLARGED` constants are actually active instead.
+
+    FIXED 2026-08-29: this used to select `_LOCATING` only for the literal
+    string "two_rod", so the Rev T1 default path ("spar_carrythrough") fell
+    through to `_ENLARGED` and the tool measured a 30 x 20 x 12 mm structural
+    tenon the wing does not build -- reporting "TENON FOULS THE MORTISE" by
+    8.60 mm/side against a mortise correctly sized for the 12 mm locating tab.
+    The SCAD's own rule is written as a NEGATIVE (`TAB_IS_LOCATING =
+    TENON_LOAD_PATH != "enlarged_tenon"`) precisely so a new path inherits the
+    safe locating size; mirroring it as a positive whitelist inverted that.
+    Mirror the negative form instead.
     """
     with open(wsf.WING_SCAD, encoding="utf-8") as fh:
         src = fh.read()
     m = re.search(r'^TENON_LOAD_PATH\s*=\s*"([^"]+)"\s*;', src, re.M)
-    suffix = "_LOCATING" if (m and m.group(1) == "two_rod") else "_ENLARGED"
+    path = m.group(1) if m else "enlarged_tenon"
+    suffix = "_ENLARGED" if path == "enlarged_tenon" else "_LOCATING"
     return (wsf.scad_scalar(src, "WING_ROOT_TAB_W" + suffix),  # chordwise -> hull Y
             wsf.scad_scalar(src, "WING_ROOT_TAB_H" + suffix),  # thickness -> hull Z
             wsf.scad_scalar(src, "WING_ROOT_TAB_L" + suffix))  # insertion -> hull X
@@ -332,13 +396,13 @@ def max_tenon_envelope(side="port"):
     z_c = WING_CHORD_LINE_Z
     face = wall_face_x(side)
     y_fwd = y_c - w0 / 2.0
-    spar_aft = mci.WING_SPAR_Y + 8.3 / 2.0
+    spar_aft = mci.WING_SPAR_Y + mci.WING_SPAR_BORE_D / 2.0
     pay_edge = X_CL + PAYLOAD_W / 2.0            # payload port face, centred
 
     real = [(lbl, sol) for lbl, sol in obstructions(side)
             if lbl not in ("wing root tenon", "wing root mortise",
-                           "spar bearing seat")]
-    real.append(("rotating spar tube", spar_tube(side)))
+                           "spar socket boss")]
+    real.append(("fixed CF spar tube", spar_tube(side)))
 
     def clashes(y0, y1, depth):
         t = box(face - depth, face, y0, y1, z_c - h0 / 2, z_c + h0 / 2)
@@ -408,9 +472,10 @@ def servo_body(side):
     ears are what the pad has to carry.  Depth is the 40.5 mm HEIGHT -- the axis
     the output shaft runs along -- not the 20 mm width.
     """
-    inboard = mci.PORT_INB if side == "port" else mci.STBD_INB
     sign = -1.0 if side == "port" else +1.0
-    x0, x1 = sorted((inboard, inboard + sign * SERVO_DEPTH))
+    face = (mci.PORT_INB if side == "port" else mci.STBD_INB) \
+        + sign * mci.NSVMT_STANDOFF
+    x0, x1 = sorted((face, face + sign * SERVO_DEPTH))
     return box(x0, x1,
                mci.NSVMT_Y - SERVO_EAR_SPAN / 2.0,
                mci.NSVMT_Y + SERVO_EAR_SPAN / 2.0,
@@ -425,7 +490,9 @@ def servo_pad(side):
     reaches further toward the landing-gear bays.  Checking only the servo body
     would miss that.
     """
-    inb = mci.PORT_INB if side == "port" else mci.STBD_INB
+    sign = -1.0 if side == "port" else +1.0
+    inb = (mci.PORT_INB if side == "port" else mci.STBD_INB) \
+        + sign * mci.NSVMT_STANDOFF
     outb = mci.PORT_OUTB if side == "port" else mci.STBD_OUTB
     lo, hi = min(inb, outb), max(inb, outb)
     return box(lo, hi,
@@ -433,11 +500,27 @@ def servo_pad(side):
                mci.NSVMT_Z - mci.NSVMT_PAD_H / 2, mci.NSVMT_Z + mci.NSVMT_PAD_H / 2)
 
 
-def servo_horn(side):
+def tilt_gear_pair(side):
+    """The 1:1 spur pair between the actuator and the drive shaft (Rev T1).
+
+    Modelled as the two gear tip cylinders unioned, at the mesh plane -- which
+    sits `TILT_STAGE_PLANE_DX` INBOARD of the wall bracket precisely so the
+    O32.0 shaft gear does not graze the O30.1 spar socket boss (they are 25.70 mm
+    apart on centres against 31.05 mm of summed radii, so they would overlap by
+    5.35 mm if they shared a plane).  Checking the pair rather than one gear
+    matters: the actuator gear is the one that reaches down toward the
+    landing-gear bay tops, and the shaft gear is the one that reaches in toward
+    the spar boss.
+    """
     inboard = mci.PORT_INB if side == "port" else mci.STBD_INB
     sign = -1.0 if side == "port" else +1.0
-    x = inboard + sign * (SERVO_W + 4.0)
-    return xcyl(mci.NSVMT_Y, mci.NSVMT_Z, x - 4.0, x + 4.0, HORN_SWING_R, sections=64)
+    x0 = inboard + sign * mci.TILT_STAGE_PLANE_DX
+    x1 = x0 + sign * mci.TILT_STAGE_FACE_W
+    lo, hi = sorted((x0, x1))
+    shaft_g = xcyl(mci.WING_SHAFT_Y, mci.WING_SHAFT_Z, lo, hi,
+                   GEAR_ENVELOPE_R, sections=64)
+    act_g = xcyl(mci.NSVMT_Y, mci.NSVMT_Z, lo, hi, GEAR_ENVELOPE_R, sections=64)
+    return trimesh.util.concatenate([shaft_g, act_g])
 
 
 def obstructions(side):
@@ -447,9 +530,9 @@ def obstructions(side):
     lo, hi = min(inb, outb), max(inb, outb)
     out = [
         ("servo body", servo_body(side)),
-        ("servo horn swing", servo_horn(side)),
-        ("spar bearing seat", xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z,
-                                   lo, hi, mci.WING_SPAR_BOSS_OD / 2.0)),
+        ("tilt gear pair", tilt_gear_pair(side)),
+        ("spar socket boss", xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z,
+                                  lo, hi, mci.WING_SPAR_BOSS_OD / 2.0)),
         ("wing root mortise", box(
             lo, hi,
             mci.WING_MORT_Y - mci.MORT_W / 2, mci.WING_MORT_Y + mci.MORT_W / 2,
@@ -509,12 +592,25 @@ def penetration_check(shell_man, findings):
         # bounds below), but a stale label defeats the whole point of
         # printing the cut span for a human to sanity-check against the
         # wall brackets, so it is corrected to the real sweep bounds here.
-        ("spar bore, port", (-130.0, -55.0),
-         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, -130.0, -55.0,
+        # REV T1: the spar corridor is STEPPED, so a single-diameter sweep is
+        # the wrong probe.  Outboard of the socket's inboard end the bore is
+        # O20.4 (the spar itself); inboard of it the bore narrows to O16.3 (the
+        # spar's ID, carrying the 10 AWG bundle on into the bay).  Sweeping
+        # O20.4 the whole way would read the 2.05 mm annulus of intended
+        # material between the two diameters as "BLIND -- wall not cut", which
+        # is the opposite of the truth.
+        ("spar socket, port", (mci.PORT_INB, -55.0),
+         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, mci.PORT_INB, -55.0,
               mci.WING_SPAR_BORE_D / 2.0)),
-        ("spar bore, stbd", (-285.0, -210.0),
-         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, -285.0, -210.0,
+        ("10 AWG bundle exit, port", (-130.0, mci.PORT_INB),
+         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, -130.0, mci.PORT_INB,
+              mci.SPAR_WIRE_BORE_D / 2.0)),
+        ("spar socket, stbd", (-285.0, mci.STBD_INB),
+         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, -285.0, mci.STBD_INB,
               mci.WING_SPAR_BORE_D / 2.0)),
+        ("10 AWG bundle exit, stbd", (mci.STBD_INB, -210.0),
+         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, mci.STBD_INB, -210.0,
+              mci.SPAR_WIRE_BORE_D / 2.0)),
     ]
     # Boolean noise on a ~900 k-face shell leaves sub-mm^3 slivers in a corridor
     # that is genuinely open, so a hard zero is the wrong test.  1 mm^3 is far
@@ -546,13 +642,20 @@ def pad_fit_check():
 
 
 def spar_tube(side):
-    """The rotating spar itself -- solid, and it occupies its bore.
+    """The FIXED CF spar itself -- solid, and it occupies its bore.
 
     Anything else routed inside that bore collides with the spar, not with the
-    shell, so the shell test alone would miss it.
+    shell, so the shell test alone would miss it.  Rev T1: the OD is read as
+    TILT_SPAR_OD (20.0), not derived from the bore -- the bond gap is 0.2 mm/side
+    now, not the rotating fit's 0.15, and hard-coding the old subtraction here
+    would model a 20.1 mm tube that does not exist.
+
+    The spar STOPS at the socket's inboard end (PORT_INB / STBD_INB): the bay is
+    clear beyond it by owner ruling.  The four 10 AWG conductors inside the bore
+    do not stop there, which is what the separate bundle-exit cut is for.
     """
     with open(wsf.WING_SCAD, encoding="utf-8") as fh:
-        od = wsf.scad_scalar(fh.read(), "SPAR_BORE_OD") - 0.30   # bore = OD + 0.15/side
+        od = wsf.scad_scalar(fh.read(), "TILT_SPAR_OD")
     inb = mci.PORT_INB if side == "port" else mci.STBD_INB
     sign = 1.0 if side == "port" else -1.0
     return xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z,
@@ -576,22 +679,24 @@ def check_routes(side, findings, shell_man):
     reports those as blockages when they are the opposite.  The shell is ground
     truth for what material actually remains after the merge.
 
-    The two things not in the shell are added explicitly: the servo (not shell
-    geometry) and the rotating spar (occupies its own bore).
+    The two things not in the shell are added explicitly: the actuator and its
+    gear pair (not shell geometry) and the fixed spar (occupies its own bore).
     """
     print(f"\n  ROUTES vs real material -- {side}")
     print(f"  {'route':>30s} {'obstruction':>26s} {'blocked mm^3':>13s}   verdict")
     extra = [("published cargo shell", None),
              ("servo body", servo_body(side)),
-             ("servo horn swing", servo_horn(side)),
-             ("rotating spar tube", spar_tube(side)),
+             ("tilt gear pair", tilt_gear_pair(side)),
+             ("fixed CF spar tube", spar_tube(side)),
              ("wing root tenon", tenon(side))]
     for rlabel, rsolid in routes(side):
         rman = to_man(rsolid)
         for olabel, osolid in extra:
             oman = shell_man if osolid is None else to_man(osolid)
-            if olabel == "rotating spar tube" and rlabel.startswith("spar bore"):
+            if olabel == "fixed CF spar tube" and rlabel.startswith("spar bore"):
                 continue          # the spar is supposed to be in its own bore
+            if olabel == "tilt gear pair" and rlabel == "tilt drive-shaft bore":
+                continue          # the gear is keyed to that shaft, by design
             inter = volume_of(rman ^ oman)
             if inter > BOOL_NOISE_TOL:
                 verdict = "BLOCKED"
@@ -606,10 +711,10 @@ def check_solids(side, findings):
     print(f"\n  SOLIDS vs solids -- {side}")
     print(f"  {'probe':>18s} {'neighbour':>26s} {'overlap mm^3':>13s} "
           f"{'gap mm':>8s}   verdict")
-    probes = [("servo body", servo_body(side)), ("servo horn", servo_horn(side)),
+    probes = [("servo body", servo_body(side)), ("tilt gear pair", tilt_gear_pair(side)),
               ("servo PAD", servo_pad(side))]
     others = [(lbl, s) for lbl, s in obstructions(side)
-              if lbl not in ("servo body", "servo horn swing")]
+              if lbl not in ("servo body", "tilt gear pair")]
     for plabel, psolid in probes:
         for olabel, osolid in others:
             inter = volume_of(to_man(psolid) ^ to_man(osolid))
