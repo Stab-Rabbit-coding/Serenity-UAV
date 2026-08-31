@@ -101,6 +101,8 @@ SLEEVE_L        = SLEEVE_Z_END - SLEEVE_Z_START;  // = 43.75 mm
 // Angles must be identical to edf_stator_sleeve.scad for continuous slot engagement.
 SLEEVE_KEY_W    =   3.0;    // [mm] key tangential width
 SLEEVE_KEY_H    =   3.0;    // [mm] key radial height above sleeve OD
+KEY_ROOT_OVERLAP =  0.5;    // [mm] key root sunk below the tube OD — CGAL
+                            //      volumetric overlap, not a touching face
 
 // ── EDF2 spider geometry ────────────────────────────────────────────────────────
 // Spider axial centre at nacelle Z = 148.0 mm.
@@ -159,8 +161,15 @@ module aft_sleeve_body() {
         // Retention bore cutouts at aft end are applied by parent module.
         for (angle = [0, 120, 240]) {
             rotate([0, 0, angle])
-            translate([SLEEVE_OD / 2, -SLEEVE_KEY_W / 2, 0])
-                cube([SLEEVE_KEY_H, SLEEVE_KEY_W, SLEEVE_L]);
+            // Rev T4 (2026-08-30): the key root is sunk KEY_ROOT_OVERLAP mm
+            // BELOW the tube OD so the two solids INTERPENETRATE rather than
+            // meet on a coincident cylindrical face.  A touching face is what
+            // left the exported STL locally non-manifold (WBS §1.1.3 "MESH FIX
+            // 2026-08-25"), which had been patched downstream with a manifold3d
+            // re-union of the split bodies; fixing it in the source removes the
+            // need for that pass.  Outer edge is unchanged at OD/2 + KEY_H.
+            translate([SLEEVE_OD / 2 - KEY_ROOT_OVERLAP, -SLEEVE_KEY_W / 2, 0])
+                cube([SLEEVE_KEY_H + KEY_ROOT_OVERLAP, SLEEVE_KEY_W, SLEEVE_L]);
         }
 
     }

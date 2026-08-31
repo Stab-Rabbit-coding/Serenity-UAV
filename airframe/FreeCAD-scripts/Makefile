@@ -81,6 +81,7 @@ FUSELAGE_STLS := \
 NACELLE_STLS := \
     $(STLS)/nacelles/edf_stator_sleeve.stl               \
     $(STLS)/nacelles/edf_aft_spider_sleeve.stl           \
+    $(STLS)/nacelles/nacelle_trunnion.stl                \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-closed.stl \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-open.stl   \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl   \
@@ -156,6 +157,19 @@ $(STLS)/nacelles/edf_aft_spider_sleeve.stl: \
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
 	    $(SCAD)/nacelles/edf_aft_spider_sleeve.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+# Rev T4 (2026-08-30): the nacelle now hangs on a FIXED wing spar, so the
+# tilt bearing, the 50T ring gear and the encoder ring magnet all move into
+# this one printed part.  It is separate from the pod ON PURPOSE — its axis is
+# nacelle-local X, so integral gear teeth would print as stacked overhangs and
+# the bearing seat as a bridged horizontal bore.  See its header.
+$(STLS)/nacelles/nacelle_trunnion.stl: \
+        $(SCAD)/nacelles/nacelle_trunnion.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    $(SCAD)/nacelles/nacelle_trunnion.scad \
 	    -o $@
 	@echo "[stl] $@"
 

@@ -23,10 +23,29 @@ Hover T/W was ~1.19 against a 1.2 minimum, and Rev T1c added +102.8 g. This plan
 lists what can come back out, ranked by mass, with the check that has to clear
 before each one is cut.
 
-**The ranking has an uncomfortable shape and it is worth saying up front:** the
-single largest lever is not structural at all. Swapping `BATT-6S-4000` for
-`BATT-6S-2800` is **225 g** — more than every printed-part optimisation in this
-plan put together. Everything below it is 20–35 g at a time.
+**REVISED 2026-08-31 — the ranking's uncomfortable shape has been fixed, and
+RISK-3 was right.** The plan warned that if the canonical nacelle pod turned out
+to weigh far more than its 132 g BOM row, "the pods become the dominant target
+and this plan's ordering is wrong." That is what happened. W6 is closed: the
+canonical pod is `nacelle_port_revs.stl` / `nacelle_stbd_revs.stl`, and rebuilt
+from current source it measures **284.8 g each — 152.8 g over its BOM row, 305.6 g
+over the pair.**
+
+The reason is a single structural fact nobody had written down: **the nacelle
+pods are SOLID.** The SCAD imports the canonical shell — which is a solid
+1.25×-scaled mesh — and subtracts only the duct and a handful of pockets. The
+four *fuselage* shells were put through this repo's own hollowing pipeline
+(`blender_shells_2mm_solidify.py` → `hollow_manifold.py`, producing the
+`*_2mm_repaired.stl` files). **The nacelle shells never were.** So each pod is a
+185 mm block of CF-PETG with a 50 mm hole down the middle, and the "annular space
+between the duct wall and the outer skin" that three separate planning documents
+route wiring through does not exist.
+
+That makes **W0 the largest structural lever in this plan by a factor of two**,
+and unlike W1 it costs no capability.
+
+The battery swap (`BATT-6S-4000` → `BATT-6S-2800`, **225 g**) remains the single
+largest item, but it is an endurance trade. W0 is not.
 
 **And nothing here should be cut until W2 lands.** The BOM understates printed
 mass by **+521.6 g (13.3 % of AUW)**, so the aircraft is currently being weighed
@@ -35,15 +54,17 @@ is 118 g wrong is not weight reduction, it is decoration.
 
 | # | Target | Measured now | Recoverable | Confidence | Gate |
 |---|---|---:|---:|---|---|
+| **W0** | **Hollow the two nacelle pods** | **569.6 g (pair)** | **−192.7 g** | high | pod moves to the Blender/manifold3d pipeline |
 | **W1** | Battery down-select 4000 → 2800 mAh | 750 g | **−225 g** | high | endurance/mission, not structure |
 | **W2** | **BOM ⇄ mesh reconciliation** | — | **0 g** | — | **gates every other item** |
 | **W3** | Battery-tray floor pocket | 140.2 g | **−23.1 g** | high | rail-slot depth, not bending |
 | **W4** | Actuator standoffs → hollow | 109.5 g | **−32.9 g** | high | mesh deflection (already cleared) |
 | **W5** | Cargo cradle → windowed frame | 80.6 g | **−25 g (est.)** | medium | latch-tab flex, 250 g payload |
-| **W6** | Nacelle pod STL identity | 132 g BOM vs 278 or 658 g measured | unknown | — | must be resolved before it is a target |
+| **W6** | ~~Nacelle pod STL identity~~ **RESOLVED 2026-08-31** | 132 g BOM vs **284.8 g** measured | *(BOM error, not a cut)* | — | **closed — see §W6** |
 | **W7** | Landing-gear bay bolt bosses | 126.0 g raw | unquantified | low | bolt bearing; needs its own study |
 | | **Printed-part subtotal (W3–W5)** | | **≈ −81 g** | | |
-| | **With W1** | | **≈ −306 g** | | |
+| | **Printed-part subtotal with W0** | | **≈ −274 g** | | |
+| | **With W1** | | **≈ −499 g** | | |
 
 **Explicitly NOT a target: the wing roots.** §W8 records why, so it is not
 re-litigated.
@@ -137,6 +158,71 @@ trade; it does not make the call.
 ---
 
 ## Implementation Units
+
+### W0. Hollow the two nacelle pods *(largest structural lever)*
+
+**Goal:** −192.7 g across the pair, and the annulus that WA-R10 needs.
+
+**Dependencies:** W2 for the BOM row; nothing else. Note that W0 also *unblocks*
+`WA-R10` (the 4 × 10 AWG disconnect), which is currently blocked ON it.
+
+**Files:** `airframe/blender-scripts/blender_shells_2mm_solidify.py`,
+`airframe/blender-scripts/hollow_manifold.py`,
+`airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad`,
+`current-specification/bom_revS.csv`
+
+**Approach:** Put `eng_{left,right}_shell24_50mm_repaired.stl` through the same
+two-stage pipeline the fuselage shells already use — Blender voxel-remesh to
+clean outer/inner operands, then a `manifold3d` boolean difference — producing
+`eng_{left,right}_shell24_50mm_hollow.stl`, and import those in the pod SCAD
+instead of the solid.
+
+**How much is actually recoverable, measured rather than assumed.** Integrating
+the annulus between `duct_r + 2.5` and `skin_r − 2.5` over Z 28–166 at 1 mm
+stations and 5° azimuth bins, taking the **tightest** skin radius in each bin
+(so the figure is a floor, not a hope), and leaving the intake bell and the
+nozzle pocket alone:
+
+| | volume | mass |
+|---|---:|---:|
+| removable core, per pod | 91,777 mm³ | **96.4 g** |
+| pod as built | 271,198 mm³ | 284.8 g |
+| **pod hollowed** | | **188.4 g** |
+| **pair** | | **−192.7 g** |
+
+**The wall is not uniform and that is the whole point.** Measured usable depth
+(skin radius − duct radius − 2 × 2.5 mm) on the inboard face runs 7.1 mm at
+Z 75–88 and collapses to 1.1 mm by Z 110; in the fat lobes at azimuth 240–300 it
+reaches 12 mm. A rotationally-symmetric cavity sized to the minimum would
+recover almost nothing, which is why this needs a true inward offset — i.e. the
+existing pipeline — and not a `cylinder()` subtraction in the SCAD.
+
+**The real cost is architectural, and it should be stated before anyone starts.**
+The pod is currently an *OpenSCAD* part that imports a 3.3 MB solid and takes
+~4 minutes to render. A hollowed shell from the voxel pipeline is 40–66 MB (the
+fuselage ones are), and OpenSCAD CGAL booleans against a mesh that size are not
+practical. **Hollowing the pod therefore means moving it to the Blender /
+manifold3d pipeline**, as the cargo section already did
+(`merge_cargo_interior.py`). That is the work, not the boolean.
+
+**Acceptance criteria:**
+- [ ] `eng_{left,right}_shell24_50mm_hollow.stl` watertight, single body, 2.5 mm
+      minimum wall verified by section sampling — not by trusting the modifier.
+- [ ] Pod re-derived through whichever pipeline owns it; measured mass within
+      ±10 % of 188.4 g per pod.
+- [ ] No feature that currently relies on solid material is left cantilevered —
+      specifically the trunnion collar, the sleeve retention bosses, the EDF1
+      spider, and the nav wire channel each need a boss or rib into the new skin.
+- [ ] `tools/validate_stls.py` and `tools/nacelle_trunnion_fit.py` green.
+- [ ] WA-R10 re-opened and closed: route the 4 × 10 AWG from the trunnion to the
+      disconnect bay in the new annulus.
+
+**Verification:** `tools/validate_stls.py`, `tools/nacelle_trunnion_fit.py`,
+`tools/nacelle_mass_cg.py` (the pivot moves — see R5).
+
+**Scope:** L (5–8 files)
+
+---
 
 ### W2. Reconcile the BOM to the meshes *(do this first)*
 
@@ -333,32 +419,30 @@ an unmodified cradle before flight use.
 
 ---
 
-### W6. Resolve the nacelle pod STL identity *(investigation, not a cut)*
+### W6. Nacelle pod STL identity — **CLOSED 2026-08-31**
 
-**Goal:** Find out what the nacelle pods actually weigh.
+**Answer: `nacelle_port_revs.stl` / `nacelle_stbd_revs.stl` are canonical.**
 
-**Dependencies:** W2
-**Files:** `current-specification/bom_revS.csv`, `PROJECT_INDEX.md`
+`PRINT-NACELLE-PORT`/`-STBD` named `s_eng_left_stator_shell24_revo.stl` at 132 g
+each. That file does not exist; the `s_` prefix was dropped project-wide. Of the
+two candidates:
 
-**Approach:** `PRINT-NACELLE-PORT`/`-STBD` name
-`s_eng_left_stator_shell24_revo.stl` at **132 g each**. That filename does not
-exist — the `s_` prefix was dropped project-wide. Two candidates do:
-`nacelle_port_revs.stl` (**277.9 g**) and
-`eng_left_shell24_50mm_repaired.stl` (**658.5 g**).
+| candidate | mass | what it actually is |
+|---|---:|---|
+| `nacelle_port_revs.stl` (published) | 277.9 g | **the printed pod** — but STALE, predating Rev S1c |
+| `nacelle_port_revs.stl` (rebuilt 2026-08-31) | **284.8 g** | the printed pod at Rev T4 |
+| `eng_left_shell24_50mm_repaired.stl` | 658.5 g | **not a printed part** — the solid canonical mould-line INPUT the pod SCAD imports and bores |
 
-**If the canonical pod is either of those, the pods alone are 292 g or 1,053 g
-heavier than the BOM says** — which would dwarf everything else in this plan.
-This unit is to determine which STL is canonical and correct the row. It is
-listed as a target only because the answer might make it the largest one.
+It was resolved by reading the build command out of the render pipeline
+(`openscad -o nacelle_port_revs.stl nacelle_pod_50mm_tandem.scad -D SWIRL_DIR=-1
+-D PYLON_SIDE=-1 -D NACELLE_SIDE=-1`, then `tools/bake_hull_frame.py`) rather
+than by comparing masses, which would have been a guess.
 
-**Acceptance criteria:**
-- [ ] Canonical nacelle pod STL identified and named in the BOM row.
-- [ ] Measured mass recorded; if it exceeds the row by > 50 g, raise a
-      dedicated target in the wings-nacelles WBS.
+**BOM impact: +152.8 g per pod, +305.6 g for the pair** — on its own, 58 % of the
++521.6 g understatement W2 was chartered to chase, in two rows. The row is
+corrected and `PRINT-NACELLE-TRUNNION` is added alongside it.
 
-**Verification:** `tools/bom_mass_check.py` resolves the row.
-
-**Scope:** S (1–2 files)
+**This finding is what created W0**, and it realises RISK-3 exactly as written.
 
 ---
 
@@ -422,9 +506,12 @@ bearing. **Assume nothing is free here** until the bolt bearing check is redone.
   is uncharacterised, so any stiffness change near the tabs is a change to a
   function nobody has measured. Mitigated by the W5 exclusion zones and a bench
   comparison.
-- **RISK-3 (medium) — W6 could invert the whole ranking.** If the canonical
-  nacelle pod is 278 g or 658 g rather than 132 g, the pods become the dominant
-  target and this plan's ordering is wrong.
+- **RISK-3 — REALISED 2026-08-31, and the ranking was duly inverted.** The
+  canonical pod is 284.8 g, not 132 g. The pods are now the dominant structural
+  target (W0, −192.7 g for the pair) and the original ordering *was* wrong. Kept
+  here rather than deleted, because the lesson generalises: this plan's other
+  rankings also rest on BOM rows, and W2 is the only thing standing between them
+  and the same failure.
 - **RISK-4 (low) — cumulative FOS erosion.** Individually each cut keeps a large
   margin; R5 requires one combined re-derivation rather than trusting the sum of
   per-part checks.

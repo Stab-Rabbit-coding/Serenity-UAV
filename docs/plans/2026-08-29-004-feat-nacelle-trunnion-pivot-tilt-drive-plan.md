@@ -90,9 +90,25 @@ servo forces either a smaller ring gear or a tenon relocation.
 argument that selected it over a belt is about axis orientation, not centre
 distance, and remains correct. What changes is only where the shaft sits.
 
-**U2's trunnion, U4's ring gear, U5's nozzle re-datum, and U6 remain OPEN** —
-they are nacelle work and were deliberately not touched this pass. Their
-interface numbers are consolidated in
+**U2 and U4 are BUILT (2026-08-31, Rev T4).** `nacelle_trunnion.scad` carries the
+bearing pair and the integral 50T ring gear; `nacelle_pod_50mm_tandem.scad` has
+the collar it bolts into, and the Rev R2 through-duct spar is deleted from both
+the pod and the stator sleeve. Two corrections to this plan came out of building
+it:
+
+- **U2's bearing is 2 × 6704ZZ, not 2 × 6804.** The 15 mm stub also pays for the
+  pilot clearance, the encoder air gap and the ring magnet, leaving 9.0 mm — see
+  `WING_ATTACH_INTERFACE.md` OI-8, now closed.
+- **KTD3 half-holds.** The tilt ring IS on the trunnion and the fixed spar IS a
+  genuine ground reference, but the nozzle sync gear (U5) is not built, so the
+  coaxial pair KTD3 describes exists only on the tilt side so far.
+
+**U5 (nozzle re-datum) and U6 (integration/closeout) remain OPEN.** U5 is
+additionally gated by the RSSR linkage synthesis that WBS §1.1.3.1 already
+carries as an open VERIFY, and by plan 005's now-broken clearance requirement:
+the nozzle stack length is the subject of both.
+
+Interface numbers are consolidated in
 [`docs/WING_ATTACH_INTERFACE.md`](../WING_ATTACH_INTERFACE.md) §4.
 
 **RISK-1 (tip congestion) was realised, exactly as predicted.** The wingtip now
@@ -494,6 +510,12 @@ the bearing and gear stock. Run the servo down-select from KTD5.
 
 ## Risks & Dependencies
 
+- **RISK-1 — REALISED ON THE NACELLE SIDE TOO (2026-08-31).** The plan predicted
+  congestion at the WING tip and it duly arrived there. What it did not predict is
+  that the NACELLE side is congested for a different reason: the pod is a solid
+  import with only the duct bored out, so there is no internal volume to place
+  anything in. That is what blocks WA-R10 and it is tracked as W0 in the
+  weight-reduction plan. Original text follows.
 - **RISK-1 (high) — tip congestion.** The wingtip now hosts the trunnion,
   bearings, spar clamp, AK7455 pocket, wire garage, shaft bushing, and gear
   mesh. This is the densest region on the airframe and the most likely source of

@@ -201,6 +201,28 @@ fasteners, and unresolved primary-source gates.
 8. New Python tooling passes syntax/static analysis and every external claim is
    reconciled against the appropriate `REFERENCES.md` entry.
 
+## Status 2026-08-31 (Rev T4)
+
+- **U6 (ESC cable clearance through the tilt range) is VOID as written.** It
+  assumed "ESC wires are forward of the pivot ... will experience tension and
+  binding during the nacelle tilt", which was true of the Rev R2 architecture
+  where the wing fed the nacelle through two Ø7 mm conduits offset 17.65 mm from
+  the tilt axis. Under Rev T1 the four 10 AWG feeds run **inside the spar bore,
+  on the tilt axis itself**, so the lever arm the unit was written about is zero.
+  What replaces it is a service-loop question at the trunnion, and that is
+  blocked behind WA-R10 (no route exists in a solid pod).
+- **U4 (parametric ESC seats) — still OPEN and still correctly gated.** Its own
+  open gate (ESC component height, connector projection, mounting arrangement,
+  thermal interface) is unresolved, and `tools/nacelle_esc_service.py` is written
+  to refuse to invent it. No seat was built at Rev T4; what was built is the
+  disconnect bay the wing side reassigned here (WA-R10, partial).
+- **U5 (circular intake) — unchanged.** The `circular_intake_fairing()` and its
+  wavy-flange defect are untouched this pass; plan 2026-08-29-005 R5 supersedes
+  the fine-tuning sub-item and is requirements-only.
+- **U7 (regenerate and close out) — the regeneration half is DONE.** Both pods,
+  both sleeves and the new trunnion are re-rendered, baked and validated; BOM,
+  WBS and `PROJECT_INDEX.md` updated.
+
 ## Open gates
 
 - ESC component-height envelope, connector projection, mounting arrangement,

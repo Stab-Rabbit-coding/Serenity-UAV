@@ -8,10 +8,12 @@ direction, per `AGENTS.md` §3 "Attribution and Licensing"
 
 **Status:** SPECIFICATION — the wing side is built
 (`airframe/openscad/wings/wings_s1223_revo.scad`, Rev T1). **The fuselage side
-is now built too** (Rev T1c, 2026-08-30 —
-`airframe/blender-scripts/merge_cargo_interior.py`, §3 and §4.3c below). The
-**nacelle** side is still NOT built; for it, this document remains what it is to
-be built to.
+is built** (Rev T1c, 2026-08-30 —
+`airframe/blender-scripts/merge_cargo_interior.py`, §3 and §4.3c below). **The
+nacelle side is now built too** (Rev T4, 2026-08-31 —
+`airframe/openscad/nacelles/nacelle_trunnion.scad` and the trunnion collar in
+`nacelle_pod_50mm_tandem.scad`). One requirement, **WA-R10**, is NOT built and is
+blocked on hollowing the pod; see §4.4 and §6 OI-8.
 
 ---
 
@@ -274,8 +276,8 @@ graph LR
 
 | Item | Value | Note |
 |---|---|---|
-| Spar stub proud of the wing tip face | **15.0 mm — DUCT-BOUNDED** | The spar must TERMINATE at ≥ 26 mm from the duct axis (see §4.3a). Max 15.7; 15.0 built. **The bearing pair must fit inside it** — 2 × 6804 (20 × 32 × 7) = 14.0 mm does. |
-| Trunnion bearing bore | **Ø20.0 H7** | on the nacelle, ring plane X ≈ 28 mm from the duct axis |
+| Spar stub proud of the wing tip face | **15.0 mm — DUCT-BOUNDED** | The spar must TERMINATE at ≥ 26 mm from the duct axis (see §4.3a). Max 15.7; 15.0 built. |
+| Trunnion bearing pair | **2 × 6704ZZ (20 × 27 × 4) = 8.0 mm** | **CORRECTED 2026-08-31 — this row previously said 2 × 6804 (20 × 32 × 7) = 14.0 mm, which does not fit. See §4.3a.** Seat bore Ø27.0 H7 in `nacelle_trunnion.scad`, outboard face at \|X\| 26.7 |
 | Bearing duty | axial **and** radial, 21.9 N each at 4 g × 1.5 | thrust is axial to the spar in cruise and transverse in hover — a stack chosen for one attitude is wrong for the other (plan 004 RISK-4) |
 | Ring gear | **50T, module 0.8, PD 40.0 mm** | concentric with the spar; root Ø 38.0 clears it with 9 mm of hub each side; OD 41.6 inside the 53.4 envelope |
 | Pinion | **14T, module 0.8, PD 11.2 mm** | on the wing's drive shaft; 14T is the no-undercut floor at 20° PA |
@@ -309,9 +311,41 @@ thrust column between the two EDFs. It was budgeted outward from the bearing
 stack and never checked against the duct, which is the same class of error as
 the Rev R2 through-duct spar this whole revision exists to remove.
 
-**The bearing stack must fit inside 15 mm.** Two thin-section 6804 (20 × 32 × 7)
-total 14.0 mm and fit; 6804 is already a BOM item (`SKIPPER-BRG-6804`). A deeper
-stack does not fit and must not be assumed.
+**The bearing stack must fit inside 15 mm — and it is not 15 mm that the
+bearings get.** This paragraph previously read "two thin-section 6804
+(20 × 32 × 7) total 14.0 mm and fit". **CORRECTED 2026-08-31: they do not.** The
+error was budgeting the bearings against the whole stub while three other items
+were also spending it, which is the same class of mistake as the 32 mm stub this
+section exists to correct:
+
+```text
+wing tip pad face  (TIP_PAD_PROUD 2.0 inboard of the tip face)   |X| = 39.7
+  − pilot running clearance                                            0.3
+  − HALL_AIR_GAP (magnet face → AK7455 IC face)                        1.5
+= ring-magnet inboard face                                       |X| = 38.2
+  − ring-magnet thickness                                              2.5
+= ring-magnet outboard face                                      |X| = 35.7
+  − spar tip                                                          26.7
+= SPACE ACTUALLY LEFT FOR BEARINGS                                     9.0 mm
+```
+
+9.0 mm cannot hold 14.0 mm of bearing. **Built: 2 × 6704ZZ (20 × 27 × 4) =
+8.0 mm**, with 1.0 mm in hand. 6704 is still a deep-groove ball bearing, so both
+races take axial *and* radial load — which is what this section's own duty
+requirement needs (thrust is axial in cruise and transverse in hover, plan 004
+RISK-4) and which a plain bushing in the inboard position would not have given.
+
+**What the shorter stack costs, stated rather than buried.** Bearing centres are
+4.0 mm apart. Nacelle thrust (21.9 N static, 32.8 N at ×1.5 ultimate) acts along
+the duct axis ~31 mm off the trunnion, so the joint carries a 1.02 N·m ultimate
+moment and each bearing sees 254 N — 28 % of a 6704's static rating, and 2.4 MPa
+on the printed Ø27 seat. Both pass. But the **span**, not the rating, is the
+governing number, and it is a direct consequence of the duct bound. Angular play
+from bearing internal clearance is ≈ 0.25°; because the AK7455 reads the
+*nacelle* and not the actuator, that play appears as measured angle, not error.
+
+`SKIPPER-BRG-6804` stays in the BOM for the GCS gimbal pan stage, which is where
+it was already used; it is no longer the nacelle bearing.
 
 ### 4.3b The drive is a reduction — the shaft turns more than one revolution
 
@@ -447,12 +481,37 @@ Subtracting 2 × `WALL_T` of skin leaves 12.5 mm at station 40 and 1.8 mm by
 station 66 — over a chordwise run too short to lay four disconnects out in, and
 that volume is already claimed by the AK7455 conduit and the drive shaft.
 
-The nacelle has the volume: plan 003's own routing already lands the bundle in
-*"the annular space between the duct wall (r = 25) and the outer skin"* before
-ESC1/ESC2. Putting the break there also keeps the 40 A joint out of the same
-pocket as the AK7455 plug, which is what
-`docs/TILT_ENCODER_WIRING_EMI_SPEC.md` §2.3 requires and what a shared wingtip
-garage would have violated.
+~~The nacelle has the volume~~ — **IT DOES NOT, and this reassignment repeated
+the error it was correcting (measured 2026-08-31).** Plan 003's routing lands the
+bundle in *"the annular space between the duct wall (r = 25) and the outer
+skin"*. **That annulus does not exist.** The pod SCAD imports the canonical
+nacelle shell, which is a *solid* mesh, and subtracts only the duct and a few
+pockets — so the space between duct and skin is solid CF-PETG. Measured usable
+depth on the inboard face (skin radius − duct radius − 2 × 2.5 mm wall):
+
+| Z | 55 | 60 | 65 | 70 | 75 | 80 | 85 | 90 | 95 | 100 | 110 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| depth (mm) | 6.58 | −0.76 | 5.58 | 3.47 | **7.10** | **7.10** | **7.10** | 4.40 | 4.10 | 2.63 | 1.05 |
+
+**What is built at Rev T4:** a filleted 30 × 14 × 6.0 mm bay at Z 82, in that
+7.10 mm window, with four M3 **brass** stud inserts on a 7.5 mm pitch. It takes
+ring terminals — one of the three styles this section itself lists — because no
+station on this flank has room for a 10 AWG *bullet* laid lengthwise. It sits
+directly over the EDF1 ESC wire exit slot, so it is already that pair's junction.
+
+**What is NOT built, and why WA-R10 stays open:** the run from the trunnion to
+the bay. A groove in the inboard face may be at most ~3.6 mm deep at Z 110 before
+it breaks into the Ø55.4 sleeve bore, against a 13.28 mm circumscribed bundle
+(§2.3) whose individual conductor OD is still unrecorded (OI-1). Routing it
+through the bore instead would put 40 A conductors in the airflow. **WA-R10 is
+blocked on hollowing the pod** (`docs/plans/2026-08-30-001-…` W0), which opens a
+genuine 5–17 mm annulus here and recovers 192.7 g across the pair at the same
+time. Same finding from both ends.
+
+Siting the bay at Z 82 still keeps the 40 A joint out of the same pocket as the
+AK7455 plug, which is what `docs/TILT_ENCODER_WIRING_EMI_SPEC.md` §2.3 requires
+and what a shared wingtip garage would have violated — the signal harness port
+moved to Z 81.5 on the *forward* side of the trunnion for the same reason.
 
 **Service model is unchanged and needs no hatch:** sliding the nacelle off the
 spar exposes the entire wing tip face. **The nacelle is the cover.** This is the
@@ -581,14 +640,14 @@ misrepresent the separation bubble. Tracked in `TODO.md` §0.8 and
 | **WA-R4** | Mortise re-sized 30.8 → 12.8 mm wide for the locating tenon | fuselage-mid | **BUILT** (T1c) — tenon fit +0.40 mm/side in both axes |
 | **WA-R5** | Cargo-bay envelope unchanged — **CLOSED by design**: the joint no longer enters the bay | fuselage-mid | **CLOSED** |
 | **WA-R6** | Fuselage-side conduits for the nav 3-core (Y +1.0) and the AK7455 pair (Y +37.5), and a drive-shaft bore at Y +46.6 | fuselage-mid | **BUILT** (T1c) — Ø4.2 / Ø7.5 / Ø4.4, plus a Ø8.05 shaft-bushing seat in the root flange |
-| **WA-R7** | Trunnion bearing bore Ø20.0, ring plane X ≈ 28, axial + radial duty | wings-nacelles | **OPEN** |
-| **WA-R8** | Tilt ring gear 50T module 0.8 (PD 40.0) concentric with the spar, C = 25.6 to the wing shaft; reduction 3.571 | wings-nacelles | **OPEN** |
-| **WA-R9** | Ring magnet ID 26 / OD 41.2, axially separated from the ring gear, both inside the 15 mm stub | wings-nacelles | **OPEN** |
-| **WA-R10** | 4 × 10 AWG disconnect in the nacelle annulus, partitioned from the AK7455 plug | wings-nacelles | **OPEN** |
-| **WA-R11** | Nav 3-core crosses at the trunnion, radially separated from the power bundle | wings-nacelles | **OPEN** |
-| **WA-R12** | Trunnion bearing pair within the **15 mm** duct-bounded stub (2 × 6804 = 14.0 mm fits); no member closer than 26 mm to the duct axis | wings-nacelles | **OPEN** |
+| **WA-R7** | Trunnion bearing seat Ø27.0 H7 (2 × 6704ZZ), outboard face \|X\| 26.7, axial + radial duty | wings-nacelles | **BUILT** (Rev T4) — `nacelle_trunnion.scad`; bore is Ø27, not Ø20 (that was the bearing *bore*, not the seat) |
+| **WA-R8** | Tilt ring gear 50T module 0.8 (PD 40.0) concentric with the spar, C = 25.6 to the wing shaft; reduction 3.571 | wings-nacelles | **BUILT** (Rev T4) — integral involute gear on the trunnion, 5.0 mm face; gated by `tools/nacelle_trunnion_fit.py` T5 |
+| **WA-R9** | Ring magnet ID 26 / OD 41.2, axially separated from the ring gear, both inside the 15 mm stub | wings-nacelles | **BUILT** (Rev T4) — bonded seat at \|X\| 35.7–38.2; 2.0 mm of axial separation from the gear; gate T4 |
+| **WA-R10** | 4 × 10 AWG disconnect in the nacelle annulus, partitioned from the AK7455 plug | wings-nacelles | **PARTIAL / OPEN** — the bay is built (Z 82, 4 × M3 brass studs, ring terminals) and the EMI partition is achieved, but **there is no annulus to route the bundle through**; blocked on W0 (hollow the pod). See §4.4 |
+| **WA-R11** | Nav 3-core crosses at the trunnion, radially separated from the power bundle | wings-nacelles | **BUILT** (Rev T4) — Ø4.0 port through the collar at r = 20.75, 90° off the disconnect bay; power stays on the axis inside the spar bore |
+| **WA-R12** | Trunnion bearing pair within the **15 mm** duct-bounded stub; no member closer than 26 mm to the duct axis | wings-nacelles | **BUILT** (Rev T4) — 2 × **6704** (8.0 mm), *not* 6804: the pair never fitted once the magnet and air gap were budgeted. Outboard face \|X\| 26.7, gate T1/T2 |
 | **WA-R15** | Actuator re-select: multi-turn, not a limited-rotation servo (§4.3b) | avionics / fuselage-mid | **RESOLVED** (T1c) — DS3225 body + LibreServo_v4 with the rotation-limit pin removed, run continuous-rotation and closed on the AK7455, per the cargo-winch precedent. Same body, so the pad footprint and bolt pattern are unchanged; mount position and standoff are new (§4.3c) |
-| **WA-R13** | `TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1 corrected — the spar is no longer ferromagnetic | avionics | **OPEN** |
+| **WA-R13** | `TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1 corrected — the spar is no longer ferromagnetic | avionics | **CLOSED** (2026-08-31) — §6.1 carries the correction and §6.2 is updated for the built joint: the "30 mm from the spar centreline" rule is **superseded** by `HALL_SENS_R` 16.8 (30 mm would sit off the magnet), and the two steel 6704s inside the keep-out are recorded as calibration-mandatory rather than as a violation |
 | **WA-R14** | Wing side: bores, pad, root path, thickness scales | wings-nacelles | **BUILT** (Rev T1) |
 
 ---
@@ -622,9 +681,19 @@ misrepresent the separation bubble. Tracked in `TODO.md` §0.8 and
   which also opens TILT-CTL-01…06 — the items a multi-turn drive brings with it,
   chief among them that **the train is not self-locking and has no specified
   holding provision.**
-- **OI-8 — Trunnion packaging (new, open).** The bearing pair, the ring gear and
-  the ring magnet must all fit within the 15 mm the duct allows, and the magnet
-  and gear are nearly coradial. This is now the joint's tightest constraint.
+- **OI-8 — CLOSED 2026-08-31, and it did not close the way this document
+  assumed.** The bearing pair, the ring gear and the ring magnet do all fit
+  inside the 15 mm — but only after the bearing changed. Written out, the stub
+  spends 0.3 mm on pilot clearance, 1.5 mm on `HALL_AIR_GAP` and 2.5 mm on the
+  magnet before a bearing gets any of it, leaving **9.0 mm**, against 14.0 mm of
+  6804 pair. Built as **2 × 6704ZZ (20 × 27 × 4)**. The near-coradial
+  magnet/gear problem this item flagged is real and is solved axially: gear band
+  \|X\| 27.2–32.2, magnet 35.7–38.2, 2.0 mm apart, both outside the duct.
+  Full arithmetic in `nacelle_trunnion.scad`; enforced by
+  `tools/nacelle_trunnion_fit.py` T1–T7. **The residual is the bearing SPAN**
+  (4.0 mm centres, 254 N per race at ultimate) — it passes, but it is the number
+  a future revision should attack, and it is set by the duct bound, not by
+  choice.
 - **OI-5 — Aero revalidation.** The section is no longer S1223: root t/c
   12.14 → 17.72 %, tip 18.93 → 26.70 %. **Every aero figure in the repo that
   cites this wing is unverified**, including the 7.6 N cruise-lift figure in

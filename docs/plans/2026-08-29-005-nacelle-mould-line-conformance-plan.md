@@ -30,10 +30,29 @@ Thing 14474 scaled 1.25×) is the mould-line authority. Where printed geometry
 stands proud of it, the printed geometry is wrong unless a functional
 requirement says otherwise and that requirement is recorded.
 
-**Clearance target — settled 2026-08-29.** The flap trim (40 → 30 mm) combines
-with plan 003's revised station (28.0) and ESC1 relocation to give **+9.8 mm on
-the existing 1.5 in gear**, which the owner has accepted. No landing-gear change
-is forced. No blockers remain.
+**Clearance target — settled 2026-08-29, BROKEN 2026-08-31. Read OQ5 first.**
+
+The +9.8 mm figure below rested on `PIVOT_Z` = 116.1, which rested on a
+rotating-assembly mass table that estimated the pod shell and both sleeves at
+130 g combined. **They measure 339.7 g.** Re-derived from the meshes
+(`tools/nacelle_mass_cg.py`, new), the CG — and so the pivot — is **105.8 mm**,
+10.3 mm forward of what this plan assumed, and the built `SPAR_Z` is a further
+1.57 mm lower than the table that row came from used.
+
+With the built geometry and today's 40 mm flaps the nozzle tip sits at hull
+Z **−48.64**:
+
+| gear | ground plane | clearance | |
+|---|---:|---:|---|
+| 1.5 in (ACTIVE default) | −38.1 | **−10.54 mm** | **STRIKES** |
+| 3.0 in (kept, not wired in) | −80.0 | +31.36 mm | clears |
+
+The 40 → 30 mm flap trim this plan proposes is worth ~10 mm and would still
+leave roughly −0.5 mm on the 1.5 in gear. **So a landing-gear change IS now
+forced, or the stack must shorten by more than R1 asks.** `LG-HOVER-01` is
+re-opened. This is precisely the failure mode OQ5 was written to catch — "R3 is
+an owner-accepted margin and this plan is the last thing that can silently spend
+it" — except that what spent it was a mass error upstream, not this plan.
 
 ---
 
@@ -100,10 +119,16 @@ it, and records the residual as an accepted, documented deviation.
 - **R2** — The nozzle drive still reaches both end stops across the full tilt
   range at the larger swing arc the shorter flaps require, with the same exit-
   area range as today (75 %/105 % bore targets).
-- **R3** — Hover ground clearance is **≥ 9.8 mm on the 1.5 in gear** with the
-  nacelles vertical, verified against final geometry. This is the owner-accepted
-  margin (~1 cm); it is not a derived requirement and must not be silently
-  traded away by downstream geometry changes.
+- **R3** — ~~Hover ground clearance is **≥ 9.8 mm on the 1.5 in gear**~~
+  **CANNOT BE MET AS WRITTEN (2026-08-31).** The measured pivot is 105.8, not
+  116.1, so the 1.5 in gear is −10.5 mm before this plan's flap trim and ~−0.5 mm
+  after it. R3 must be re-decided by the owner as one of: (a) the 3.0 in gear
+  becomes mandatory (+31.4 mm today, no other change needed); (b) the stack
+  shortens by more than the 10 mm R1 buys — KD5's deferred stator compression is
+  the named next lever, worth ~7 mm; (c) aft ballast, at 17.7 g per nacelle per
+  4 mm of CG shift and a T/W cost. The requirement that survives untouched is the
+  underlying one: **positive clearance with the nacelles vertical, on whatever
+  gear is fitted.**
 - **R4** — The nozzle housing conforms to the canonical cowl mould line: no
   point of the housing or its hinge bosses stands proud of the canonical shell
   radius at the same station, or the exception is recorded with its functional
@@ -170,7 +195,10 @@ architecture that creates the overhang.
 
 ### Outstanding Questions
 
-- **OQ1 — RESOLVED 2026-08-29 (owner-accepted).** +9.8 mm on the 1.5 in gear,
+- **OQ1 — RE-OPENED 2026-08-31.** The resolution below is void: it was accepted
+  against a pivot station that a measured mass roll-up does not support. See the
+  Clearance target block and R3.
+- **OQ1 (superseded text, kept for the record).** +9.8 mm on the 1.5 in gear,
   reached by combining the 30 mm flaps with plan 003's station 28.0 and the ESC1
   relocation. The compact gear stays viable; `LG-HOVER-01` closes with it.
   Ballast could buy more (+16.6 mm at 12 mm CG shift) but costs T/W 1.59 → 1.55
@@ -193,7 +221,10 @@ architecture that creates the overhang.
   at **Z 60** with `INTAKE_BLEND_L = 90` — well past the monotonic region, which
   is *why* the curves cross. **The blend must terminate by Z ≈ 30, tangent to
   the dome**, not run to Z 90. See R5.
-- **OQ5 — RESOLVED 2026-08-29 by implementation.** The spar station move is
+- **OQ5 — RESOLVED, THEN VINDICATED 2026-08-31.** The re-verification this item
+  demanded was finally run, and it failed. Keeping the original text below,
+  because the item did its job.
+- **OQ5 (original).** RESOLVED 2026-08-29 by implementation. The spar station move is
   **done** (wing Rev T1, station 28.0, `SPAR_Z` 66.85), so it is no longer a
   sequencing question — this plan's clearance budget must be computed against
   the built spar height, not against a pending one. The +9.8 mm figure in R3

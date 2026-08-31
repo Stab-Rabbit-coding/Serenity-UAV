@@ -1244,6 +1244,40 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 
 **Used in:** `airframe/README.md` §5.1
 
+### REF-STD-GEAR-001: ISO 53:1998 — Cylindrical gears for general and heavy engineering — Standard basic rack tooth profile
+
+| Field | Value |
+|---|---|
+| **Designation** | ISO 53:1998 |
+| **Full title** | *Cylindrical gears for general and heavy engineering — Standard basic rack tooth profile* |
+| **Issuing body** | International Organization for Standardization (ISO), Technical Committee ISO/TC 60 (Gears) |
+| **Official access** | ISO catalogue, <https://www.iso.org/standards.html> — **DIRECT CATALOGUE URL REQUIRES VERIFICATION** (see below) |
+| **Retrieved** | not retrieved — cited by designation only |
+| **Scope applied** | The standard basic rack proportions used to generate the nacelle tilt ring gear: pressure angle α = 20°, addendum h_a = 1.00 × m, dedendum h_f = 1.25 × m. |
+
+**Where it is applied**
+
+- `airframe/openscad/nacelles/nacelle_trunnion.scad` — `GEAR_PA = 20.0`,
+  tip radius `GEAR_RA = PD/2 + m`, root radius `GEAR_RF = PD/2 − 1.25·m`, and the
+  involute flank generated from `inv(α) = tan α − α`.
+- `tools/nacelle_trunnion_fit.py` — gate T5, which checks the resulting pitch
+  diameter, ratio and centre distance against `docs/WING_ATTACH_INTERFACE.md`
+  WA-R8.
+- `airframe/blender-scripts/merge_cargo_interior.py` — the fuselage-end 38T/38T
+  stage uses the same module and the same proportions.
+
+> **REQUIRES VERIFICATION (`docs/WBS.md` §0.8).** The designation, title, issuing body and
+> the three numeric proportions above are the well-established profile-A basic
+> rack and are used as such throughout the mechanical-design literature. What is
+> **not** verified here is the direct ISO catalogue URL and the specific clause
+> number within ISO 53:1998 that states them. Neither has been fetched from the
+> issuing body, so neither is asserted. Per `CLAUDE.md` Standards Vetting Policy,
+> a guessed catalogue number or clause reference would be a fabricated citation;
+> the entry is therefore recorded at the level that *is* verifiable and flagged
+> at the level that is not. Resolve before the gear is released for fabrication.
+
+---
+
 ### REF-MATH-001: Melissen, J.B.M. — "Packing and Covering with Circles"
 
 | Field | Value |

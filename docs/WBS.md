@@ -274,6 +274,16 @@
 
 *(root `WBS.md` §0.8)*
 
+- [ ] **Verify `REF-STD-GEAR-001` (ISO 53:1998) to clause level.** Added
+    2026-08-31 with the nacelle tilt ring gear (Rev T4,
+    `airframe/openscad/nacelles/nacelle_trunnion.scad`). The designation, title,
+    issuing body and the three basic-rack proportions used (α = 20°,
+    h_a = 1.00·m, h_f = 1.25·m) are recorded; the **direct ISO catalogue URL and
+    the clause number are NOT verified** and are deliberately not guessed. Fetch
+    both from iso.org and complete the entry before the gear is released for
+    fabrication. Same standard also underwrites the fuselage-end 38T/38T stage in
+    `merge_cargo_interior.py`, so closing this closes both citation sites.
+
 Opened 2026-07-19 alongside the docs/TILT_SPAR_ANALYSIS.md §3.5 material trade
 study and the wing/nacelle Hall tilt-feedback sensor. Both carry
 "requires-verification" entries in `REFERENCES.md`.
