@@ -7,6 +7,26 @@ __pycache__/
 *.pyc
 *.pyo
 
+# Python virtual environments (never commit).  The local .venv here is 351 MB of
+# third-party packages; a single `git add -A` would push the lot.  Nothing under
+# it has ever been tracked, so this is a guard rather than a cleanup.
+#
+# It also matters to CI: `.github/workflows/ci.yml` runs `flake8` with an
+# explicit --exclude list that does NOT name .venv, so lint only passes today
+# because CI checks out a fresh tree with no virtualenv in it.  Were one ever
+# committed, the lint job would immediately fail on thousands of findings in
+# vendored code.  (Locally, `flake8 .` does report those — run it over
+# `git ls-files '*.py'` instead to see only this repo's own code.)
+#
+# NOTE for anyone running the tools: this .venv SHADOWS system Python packages
+# the repo's tools rely on (manifold3d, sympy, matplotlib are installed
+# system-wide).  Invoke tools as `/usr/bin/python3 tools/<name>.py`, not through
+# the venv.
+.venv/
+venv/
+env/
+ENV/
+
 # Claude Code agent worktrees and session data
 .claude/
 
