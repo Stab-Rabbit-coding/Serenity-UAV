@@ -378,13 +378,25 @@ SWIRL_DIR       =  +1;    // [+1 / -1] default port nacelle CW from intake
 // sync gear, servo bracket) do NOT tilt and are excluded.  Y = 0 (bore axis) =
 // Y_cg for the bore-symmetric assembly.  FIRST-PASS (credible band ≈109–112 mm);
 // see the header for the density / nozzle-pocket caveats.
-PIVOT_Z         = 105.8;   // [mm] pivot axial centre = full-assembly CG station
-                           //      Rev T4 (2026-08-31): 111.5 -> 105.8, and this
-                           //      is the first value in the part's history that
-                           //      was COMPUTED FROM MEASURED MESHES rather than
-                           //      from an estimated header table.  See
-                           //      tools/nacelle_mass_cg.py, which is now the
-                           //      authority for this number.
+PIVOT_Z         = 113.8;   // [mm] pivot axial centre = full-assembly CG station
+                           //      Rev T4b (2026-08-31): 111.5 -> 105.8 -> 113.8,
+                           //      the first values in this part's history that
+                           //      were COMPUTED FROM MEASURED MESHES rather than
+                           //      from an estimated header table.
+                           //        111.5  estimated table (pod guessed at 130 g
+                           //               with the sleeves)
+                           //        105.8  pod MEASURED solid at 285 g — the CG
+                           //               moved FORWARD, and hover clearance
+                           //               with it, to -10.5 mm on the 1.5 in gear
+                           //        113.8  pod hollowed with a forward-biased
+                           //               wall, plus the in-nacelle HARNESS,
+                           //               which no previous roll-up counted at
+                           //               all and which sits entirely aft of the
+                           //               pivot (22.9 g)
+                           //      tools/nacelle_mass_cg.py is the authority for
+                           //      this number and checks the fixed point: the CG
+                           //      it computes must land within 0.25 mm of the
+                           //      value set here, or the pod needs re-rendering.
 
 // ── Fixed-spar TRUNNION interface (Rev T4, 2026-08-30) ───────────────────────
 // SUPERSEDES the Rev R2 rotating Ø8 mm "skewer" entirely.  That spar ran
@@ -597,6 +609,69 @@ NAV_CHAN_INSET  =  3.0;    // [mm] channel wall sits this far inboard of the out
 // guards UNSHIELDED proximity.  Recorded here as a DOCUMENTED DEVIATION, and it
 // reverts the moment the pod is hollowed (weight plan W0) and a real annulus
 // exists to separate them in.
+// ── Internal cavity — the pod is HOLLOWED at Rev T4b (2026-08-31) ────────────
+// Until now this file imported the SOLID canonical shell and subtracted only
+// the duct, so each pod weighed 285 g and the "annular space between the duct
+// wall and the outer skin" that the wiring architecture routes through did not
+// exist.  It exists now.
+//
+// THE WALL IS DELIBERATELY NOT UNIFORM — owner direction, 2026-08-31:
+//   "take more from the forward end instead of the aft end to adjust CG and
+//    nacelle ground clearance."
+// The tilt pivot sits at the rotating assembly's CG, so mass removed FORWARD of
+// it drags the pivot AFT, which shortens the pivot-to-nozzle-tip arm one for one
+// and lifts the nozzle in hover.  Measured (tools/nacelle_mass_cg.py):
+//
+//   configuration                     pod g   PIVOT_Z   hover clr, 1.5 in gear
+//   solid, as built                   285.0     105.9      -10.47  STRIKES
+//   uniform 2.5 mm wall               105.0     113.7       -1.31  strikes
+//   THIS: 2.5 fwd -> 8.0 aft          155.9     114.4       -1.92  strikes
+//                        ... and with plan 005's 30 mm flaps    +8.08  clears
+//
+// Two things that table says plainly and should not be softened: the forward
+// bias is worth ~8.6 mm of the 10.5 mm deficit but CANNOT close it alone, and it
+// costs about 22 g per further millimetre, so it is not a lever to keep pulling.
+// The residual needs the nozzle stack to shorten (plan 005 R1) or the 3.0 in
+// gear.  Uniform hollowing would save 24 g more and land 0.6 mm lower.
+//
+// The ramp station is also structurally right, not only mass-right: thickening
+// across Z 100-140 puts material exactly where the trunnion collar (Z 105.8)
+// feeds the tilt-joint moment into the pod, and where the EDF2 mount, the aft
+// sleeve zone and the nozzle housing loads live.
+//
+// The cavity surface itself is MEASURED, not modelled — see
+// tools/nacelle_hollow_profile.py, which ray-casts the canonical shell and emits
+// the ring grid below.  Ray-casting rather than section radii, because the
+// canonical mesh carries an internal forward intake pocket that makes a
+// section's minimum radius meaningless below Z ~58.
+include <nacelle_hollow_profile.scad>
+
+CAVITY_DUCT_WALL  =  2.5;  // [mm] wall left on the duct side of the cavity
+// Structural bulkheads.  A hollow shell with a duct tube inside it and no shear
+// connection between them is a far weaker beam than the solid it replaces, and
+// the pod is the beam that carries EDF thrust and nacelle inertia into the
+// trunnion.  Three full annular webs forward of the trunnion restore the shear
+// path; aft of it the 8 mm wall and the trunnion keep-out are already solid.
+CAVITY_BULKHEAD_Z = [40.0, 62.0, 84.0];
+CAVITY_BULKHEAD_T =  3.0;  // [mm] web thickness
+// Each web must be VENTED or it seals a compartment.  The first render of the
+// hollowed pod exported a −17,227 mm³ inverted body between Z 41.5 and 60.5 —
+// the bay between the first two webs, closed at both ends and opening nowhere.
+// A sealed void in a printed part cannot be drained, inspected, or dried, and
+// CF-PETG is hygroscopic.  Six through-holes per web link every compartment to
+// the openings at the disconnect bay, the nav-light bore, the ESC wire exit slot
+// and the trunnion register.
+CAVITY_VENT_N     =    6;  // [count] vent/drain holes per web
+CAVITY_VENT_D     =  4.0;  // [mm] hole diameter
+CAVITY_VENT_R     = 30.0;  // [mm] hole centre radius — inside the annulus at all
+                           //      three web stations (measured: 27.5..33.1 at
+                           //      Z 40, 27.5..34.5 at Z 84)
+// Trunnion keep-out: solid material must survive around the collar, which is
+// additive in Zone A and would otherwise be hollowed out from behind.
+CAVITY_TRUNNION_R  = 30.0; // [mm] radius about the SPAR axis
+CAVITY_TRUNNION_X0 = 20.0; // [mm] |X| the keep-out starts at
+CAVITY_TRUNNION_X1 = 40.0; // [mm] |X| it ends at
+
 // ── Global facet resolution ───────────────────────────────────────────────────
 $fn = 72;
 
@@ -1108,6 +1183,94 @@ module _nav_wire_channel_posX() {
 
 
 // =============================================================================
+// ── Module: cavity_outer_solid ───────────────────────────────────────────────
+// =============================================================================
+// The measured cavity boundary as a closed polyhedron: one ring of HOLLOW_N_AZ
+// points per station in HOLLOW_Z, with flat caps at each end.  Faces are wound
+// CLOCKWISE seen from outside, which is what polyhedron() wants.
+module cavity_outer_solid(grid) {
+    nz = len(HOLLOW_Z);
+    na = HOLLOW_N_AZ;
+    pts = concat(
+        [ for (k = [0 : nz - 1], i = [0 : na - 1])
+              [ grid[k][i] * cos(i * 360 / na),
+                grid[k][i] * sin(i * 360 / na),
+                HOLLOW_Z[k] ] ],
+        [ [0, 0, HOLLOW_Z[0]], [0, 0, HOLLOW_Z[nz - 1]] ]);
+    c0 = nz * na;
+    c1 = nz * na + 1;
+    fs = concat(
+        [ for (k = [0 : nz - 2], i = [0 : na - 1])
+              [ k * na + i, (k + 1) * na + i, (k + 1) * na + (i + 1) % na ] ],
+        [ for (k = [0 : nz - 2], i = [0 : na - 1])
+              [ k * na + i, (k + 1) * na + (i + 1) % na, k * na + (i + 1) % na ] ],
+        [ for (i = [0 : na - 1]) [ c0, i, (i + 1) % na ] ],
+        [ for (i = [0 : na - 1])
+              [ c1, (nz - 1) * na + (i + 1) % na, (nz - 1) * na + i ] ]);
+    polyhedron(points = pts, faces = fs, convexity = 12);
+}
+
+
+// =============================================================================
+// ── Module: cavity_duct_wall ─────────────────────────────────────────────────
+// =============================================================================
+// The solid the cavity may NOT eat into on the bore side: the duct plus one
+// minimum wall, following the pod's own bore schedule (bell-mouth flare, the
+// Ø50 EDF1 section, then the Ø55.4 sleeve zone).  Restated nowhere else — this
+// reads the same constants the bore subtraction uses.
+module cavity_duct_wall() {
+    w = CAVITY_DUCT_WALL;
+    union() {
+        translate([0, 0, -1])
+            cylinder(r1 = EDF_BORE_R + INLET_BELL_FLARE + w + 1,
+                     r2 = EDF_BORE_R + w,
+                     h  = INLET_BELL_L + 1);
+        translate([0, 0, INLET_BELL_L])
+            cylinder(r = EDF_BORE_R + w, h = STATOR_SLV_Z_START - INLET_BELL_L);
+        translate([0, 0, STATOR_SLV_Z_START])
+            cylinder(r = SLEEVE_BORE_R + w, h = NACELLE_L - STATOR_SLV_Z_START);
+    }
+}
+
+
+// =============================================================================
+// ── Module: hollow_cavity ────────────────────────────────────────────────────
+// =============================================================================
+// SUBTRACTIVE.  The measured cavity, less everything that must stay solid:
+// the duct wall, three structural bulkheads, and a plug around the trunnion.
+//
+// NOT A TRAPPED VOID.  The cavity is deliberately open at four places — the
+// disconnect bay pocket, the nav-light through-bore, the EDF1 ESC wire exit
+// slot, and the trunnion register bore.  Printed intake-face-down the aft
+// openings are uppermost, so air escapes and the cavity can be inspected and
+// drained.  It is also, finally, the volume the wiring architecture has been
+// drawn against since plan 003.
+module hollow_cavity() {
+    grid = (NACELLE_SIDE > 0) ? HOLLOW_R_PORT : HOLLOW_R_STBD;
+    difference() {
+        cavity_outer_solid(grid);
+        cavity_duct_wall();
+        // Structural webs, each with its vent holes drilled back through
+        difference() {
+            for (z = CAVITY_BULKHEAD_Z)
+                translate([0, 0, z - CAVITY_BULKHEAD_T / 2])
+                    cylinder(r = 60, h = CAVITY_BULKHEAD_T);
+            for (z = CAVITY_BULKHEAD_Z, i = [0 : CAVITY_VENT_N - 1])
+                rotate([0, 0, i * 360 / CAVITY_VENT_N + 30])
+                    translate([CAVITY_VENT_R, 0,
+                               z - CAVITY_BULKHEAD_T / 2 - 0.1])
+                        cylinder(d = CAVITY_VENT_D,
+                                 h = CAVITY_BULKHEAD_T + 0.2);
+        }
+        translate([PYLON_SIDE * CAVITY_TRUNNION_X0, 0, PIVOT_Z])
+            rotate([0, PYLON_SIDE * 90, 0])
+                cylinder(r = CAVITY_TRUNNION_R,
+                         h = CAVITY_TRUNNION_X1 - CAVITY_TRUNNION_X0);
+    }
+}
+
+
+// =============================================================================
 // ── Module: nacelle_pod (main assembly) ──────────────────────────────────────
 // =============================================================================
 // Top-level assembly.  Geometry is organised into three zones:
@@ -1116,7 +1279,6 @@ module _nav_wire_channel_posX() {
 //   • nacelle_shell_imported() — canonical Serenity nacelle exterior hull
 //   • thrust_tube()            — forward bore wall, Z = 27.5 … 90 mm (Rev T restored)
 //   • trunnion_collar()        — Rev T4 fixed-spar pivot seat + junction fairing
-//   • nav_wire_channel()       — internal WS2812C wire cableway (outboard skin)
 //
 // Zone B — subtracted by difference():
 //   • Full-length 50 mm ID bore (opens intake and exhaust end caps)
@@ -1130,9 +1292,11 @@ module _nav_wire_channel_posX() {
 //   • nav_light_pocket()       — outboard flush WS2812C recess + wire bore
 //   • trunnion_collar_cut()    — Ø34 H7 register, gear cavity, 3× M3, nav port
 //   • esc_disconnect_bay()     — 4 × 10 AWG bullet-disconnect pocket (WA-R10)
+//   • hollow_cavity()          — Rev T4b forward-biased internal cavity
 //
 // Zone C — outer union() AFTER difference():
 //   • edf1_nacelle_spider()     — EDF1 spider at Z = 87.75 mm (nacelle-integrated)
+//   • nav_wire_channel()        — cableway rib, now standing in the real cavity
 //   • sleeve_retention_bosses() — 3× M3 insert bosses on nozzle pocket face
 module nacelle_pod(swirl_dir = SWIRL_DIR) {
 
@@ -1188,9 +1352,6 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                 // ── Fill the vestigial inboard-face socket (Rev R2) ──────
                 smooth_boss_fill();
 
-                // ── Internal nav-light wire channel (inside outboard skin) ─
-                nav_wire_channel(pylon_side = PYLON_SIDE);
-
             } // end union (Zone A additive)
 
             // ══════════════════════════════════════════════════════════════
@@ -1240,6 +1401,9 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
             // ── 4 × 10 AWG disconnect bay (WA-R10) ────────────────────────
             esc_disconnect_bay(pylon_side = PYLON_SIDE);
 
+            // ── Internal cavity (Rev T4b) — forward-biased hollowing ──────
+            hollow_cavity();
+
         } // end difference (Zone A + Zone B)
 
         // ══════════════════════════════════════════════════════════════════
@@ -1252,6 +1416,14 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
         // At EDF1_SPIDER_Z = 87.75 mm (just forward of stator zone).
         // M3 clearance bores on intake face; screws from intake bore end.
         edf1_nacelle_spider();
+
+        // ── Internal nav-light wire channel (inside the outboard skin) ────
+        // Rev T4b: MOVED from Zone A to Zone C.  It is a rib standing INTO the
+        // cavity, so while the pod was solid it was a no-op and while the
+        // cavity is subtracted in Zone B it would simply be deleted.  Added
+        // after the difference() closes, it is finally a real cableway in a
+        // real void — which is what it was drawn to be.
+        nav_wire_channel(pylon_side = PYLON_SIDE);
 
         // ── Aft sleeve retention M3 insert bosses on nozzle pocket face ──
         // 3× bosses at r = SLEEVE_BOSS_R = 28 mm, 120° spacing.

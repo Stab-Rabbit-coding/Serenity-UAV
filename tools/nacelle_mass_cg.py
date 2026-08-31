@@ -106,6 +106,34 @@ FIXED = [
     ("Pushrod (COTS + links)", 3.6, 140.8, "nacelle_nozzle_pushrod.scad"),
 ]
 
+#: In-nacelle HARNESS.  Added 2026-08-31 — it was missing from every previous
+#: version of this roll-up, including the hand-maintained table in the SCAD
+#: header that three revisions of `PIVOT_Z` were derived from.  It is not a
+#: rounding item: 10 AWG silicone is heavy, and all of it lives AFT of the pivot,
+#: so omitting it biased the CG FORWARD and made the hover-clearance picture look
+#: worse than it is.
+#:
+#: Masses are derived from this repo's own BOM rows rather than from a datasheet,
+#: because `WING_ATTACH_INTERFACE.md` OI-1 records that `WIRE-10AWG` has no
+#: published OD or linear density. Linear densities back-computed from the rows:
+#:   WIRE-10AWG      80 g / 2 m  = 40.0 g/m   (row: "red/black 1 m each")
+#:   WIRE-16AWG      40 g / 3 m  = 13.3 g/m   (row: "3 m assorted")
+#:   WIRE-28AWG-NAC   8 g / 1 m  =  8.0 g/m
+#:   WIRE-28AWG-STP  20 g / 5 m  =  4.0 g/m
+#: Run lengths are geometric, from the station each cable connects between plus a
+#: service loop; they are FIRST-PASS and should be replaced by measured harness
+#: lengths at first article.
+HARNESS = [
+    ("4 x 10 AWG feed, trunnion->ESCs", 4 * 0.080 * 40.0, 132.0,
+     "trunnion Z 105.8 -> ESC Z 150.6, + service loop at the rotating joint"),
+    ("6 x 16 AWG EDF phase leads", 6 * 0.100 * 13.3, 150.0,
+     "2 ESCs x 3 phases, ESC to motor"),
+    ("Signal + gateway pairs, 28 AWG STP", 0.30 * 4.0, 120.0,
+     "ESC telemetry + CAN-FD/RS-485 to the wing interface pocket"),
+    ("Nav 3-core, 28 AWG", 0.11 * 8.0, 88.0,
+     "trunnion crossing -> nav light at Z 70"),
+]
+
 #: Items that sit ON the tilt axis.  Their CG_Z is PIVOT_Z by construction, so
 #: they are resolved after the first pass rather than carrying a fixed station.
 ON_AXIS = [
@@ -133,9 +161,25 @@ ON_AXIS = [
 #: **66.851**, 1.57 mm lower than the 68.42 that table assumed.  That 1.57 mm is
 #: spent, not recoverable, and it comes off the clearance before `PIVOT_Z` is even
 #: considered.
-ROT_ASSY_TIP_Z = 221.3   # [mm] nacelle-local reach of the rotating assembly
-                         #      (iris seats at NOZZLE_RING_Z 166.25, its STL runs
-                         #      to +55.1) — measured, plan 003 R12
+ROT_ASSY_TIP_Z = 221.3   # [mm] nacelle-local reach of the rotating assembly AT
+                         #      THE BUILT 40 mm FLAP (iris seats at
+                         #      NOZZLE_RING_Z 166.25, its STL runs to +55.1) —
+                         #      measured, plan 003 R12.  Trimming the flap moves
+                         #      this one-for-one; see `tip_reach()`.
+BUILT_FLAP_LEN = 40.0    # [mm] the flap length ROT_ASSY_TIP_Z was measured at
+
+
+def tip_reach(flap_len: float) -> float:
+    """Rotating-assembly reach for a given flap length.
+
+    The flap hangs aft of a fixed hinge line, so shortening it shortens the reach
+    by the same amount.  This is the whole of plan 005 R1's clearance argument and
+    it must not be left out of `--flap`: an earlier version of this tool applied
+    the flap trim to the flap's MASS and CG only, which made a 30 mm flap look
+    WORSE than a 40 mm one — the mass moves forward, and without the matching
+    reach change that reads as a clearance loss instead of a 10 mm gain.
+    """
+    return ROT_ASSY_TIP_Z - (BUILT_FLAP_LEN - flap_len)
 WING_SPAR_HULL_Z = 66.851  # [mm] built spar height (merge_cargo_interior.py
                            #      WING_SPAR_Z, Rev T1c station 28)
 GROUND_PLANES = {"1.5 in gear (ACTIVE default)": -38.1,
@@ -196,12 +240,13 @@ def roll_up(flap_len: float = 40.0) -> dict:
             continue
         rows.append((label, mass, cg, rel))
 
-    for label, mass, cg, note in FIXED:
+    for label, mass, cg, note in FIXED + HARNESS:
         if label.startswith("8 x nozzle flap") and flap_len != 40.0:
             # Flap mass scales with length; its CG moves forward by half the
             # trim, because the flap hangs aft of a fixed hinge line.
-            scale = flap_len / 40.0
-            mass, cg = mass * scale, cg - (40.0 - flap_len) / 2.0
+            scale = flap_len / BUILT_FLAP_LEN
+            mass = mass * scale
+            cg = cg - (BUILT_FLAP_LEN - flap_len) / 2.0
             note = f"trimmed to {flap_len:.0f} mm (plan 005 R1)"
             label = f"8 x nozzle flap ({flap_len:.0f} mm)"
         rows.append((label, mass, cg, note))
@@ -285,11 +330,12 @@ def main() -> int:
 
     # ---- hover ground clearance -------------------------------------------
     pivot = result["cg_z_mm"]
-    arm = ROT_ASSY_TIP_Z - pivot
+    arm = tip_reach(result["flap_len_mm"]) - pivot
     tip_hull_z = WING_SPAR_HULL_Z - arm
     print("\nHover ground clearance (nacelles vertical, worst case at 90 deg)")
-    print(f"  rotating-assembly reach {ROT_ASSY_TIP_Z:.1f} mm local, "
-          f"pivot {pivot:.1f}  ->  arm {arm:.1f} mm")
+    print(f"  rotating-assembly reach {tip_reach(result['flap_len_mm']):.1f} mm "
+          f"local ({result['flap_len_mm']:.0f} mm flap), pivot {pivot:.1f}"
+          f"  ->  arm {arm:.1f} mm")
     print(f"  spar at hull Z {WING_SPAR_HULL_Z:+.2f}  ->  nozzle tip at hull Z "
           f"{tip_hull_z:+.2f}")
     worst = None
@@ -299,6 +345,11 @@ def main() -> int:
         print(f"    vs {name:<34} {clr:+7.2f} mm   {verdict}")
         if worst is None or clr < worst:
             worst = clr
+
+    harness = sum(m for _, m, _, _ in HARNESS)
+    print(f"\nIn-nacelle harness included above: {harness:.1f} g "
+          f"({harness / 453.592:.3f} lbm), all of it AFT of the pivot. "
+          f"First-pass lengths; see HARNESS in this file.")
 
     print("\nDeleted at Rev T4 (for the record):")
     for label, mass, cg, note in DELETED:

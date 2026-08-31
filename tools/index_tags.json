@@ -1101,6 +1101,15 @@
       ],
       "archived": false
     },
+    "airframe/openscad/nacelles/nacelle_hollow_profile.scad": {
+      "description": "nacelle_hollow_profile.scad \u2014 GENERATED FILE, DO NOT EDIT BY HAND",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/openscad/nacelles/nacelle_nozzle_iris.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
@@ -2384,7 +2393,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_port_revs.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle_Port 2026-06-11",
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -2402,7 +2411,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_stbd_revs.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle_Stbd 2026-06-11",
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -12836,6 +12845,14 @@
       ],
       "archived": false
     },
+    "tools/nacelle_hollow_profile.py": {
+      "description": "nacelle_hollow_profile.py \u2014 generate the nacelle pod's internal cavity surface.",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/nacelle_mass_cg.py": {
       "description": "nacelle_mass_cg.py \u2014 rotating-assembly mass and CG for one Serenity nacelle.",
       "tags": [
@@ -13847,6 +13864,7 @@
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
       "airframe/openscad/nacelles/gear_option_compare.scad",
+      "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
@@ -14095,6 +14113,7 @@
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
       "airframe/openscad/nacelles/gear_option_compare.scad",
+      "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
@@ -14502,6 +14521,7 @@
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
       "airframe/openscad/nacelles/gear_option_compare.scad",
+      "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
@@ -14677,6 +14697,7 @@
       "graphical-build-guide/build_guide_08_nozzle_gear.svg",
       "graphical-build-guide/pngs/17_closeup_nacelle.png",
       "tools/nacelle_esc_service.py",
+      "tools/nacelle_hollow_profile.py",
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_trunnion_fit.py",
       "tools/tests/test_nacelle_esc_service.py"
@@ -16466,6 +16487,7 @@
       "tools/landing_gear_wing_clearance.py",
       "tools/mirror_claude_memory.py",
       "tools/nacelle_esc_service.py",
+      "tools/nacelle_hollow_profile.py",
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_trunnion_fit.py",
       "tools/open_mating_faces.py",
