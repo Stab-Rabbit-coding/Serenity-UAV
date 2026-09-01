@@ -334,6 +334,79 @@ CG — EDF1 is forward of the pivot and EDF2 aft, so the two reductions nearly
 cancel. It is a **weight** win, not a clearance one. **Weigh a motor + rotor
 before this goes in the BOM**; do not infer it from the 75 g combo figure.
 
+#### HINGED ESC — owner direction 2026-08-31, and it recovers the board
+
+The board cannot narrow to 24 mm: 32 mm is already the floor set by
+`isolation_envelope.py` (12.90 widest non-isolated part + 2 × (7.5 creepage +
+1.43 inset) + 2 × 0.55 = 31.86 mm, off the ADM2582E/ADM2587E Table 6 clearance).
+**The owner's answer is a hinge**: two panels, **8.45 mm + 23.65 mm = 32.10 mm**
+total, folded so the assembly follows the annulus instead of chording it. One of
+the three power rails goes on the narrow panel, two on the wide. Same for both
+ESCs in a nacelle.
+
+**This is the right fix and the geometry says so.** A flat board's problem was
+its sagitta — the corners swinging out of a 7 mm annulus. Splitting the width
+collapses it:
+
+| | sagitta at R 33 |
+|---|---:|
+| one flat 32.10 mm board | **4.17 mm** |
+| wide panel, 23.65 mm | 2.19 mm |
+| narrow panel, 8.45 mm | 0.27 mm |
+
+**Measured fit — two bays, one ESC each, at azimuth 56° and 236°:**
+
+| stack height | board length | Z span | area | vs as-built 2115 mm² |
+|---:|---:|---|---:|---:|
+| 3.5 mm | **70 mm** | 74–144 | 2247 mm² | **106 %** |
+| **4.0 mm** | **64 mm** | **74–138** | **2054 mm²** | **97 %** |
+| 4.5 mm | 38 mm | 96–134 | 1220 mm² | 58 % |
+| 5.0 mm | 32 mm | 96–128 | 1027 mm² | 49 % |
+
+*(one flat 32.10 mm board, for comparison: 16 mm of length at 4.0 mm stack, and
+it does not fit at all above 6.0 mm)*
+
+**The hinge takes the usable length from 16 mm to 64 mm.** At a 4.0 mm stack the
+as-built 32 × 66 board is essentially recovered — 97 % of its area — and at
+3.5 mm it is exceeded.
+
+**There is a cliff between 4.0 and 4.5 mm, and it is the whole design point.**
+Half a millimetre of stack costs 26 mm of length. Hold the stack at **4.0 mm** —
+1.6 mm of board leaves 2.4 mm for components across both faces plus mounting.
+
+**Fold geometry to design the flex to:**
+
+| | value |
+|---|---|
+| wide panel half-angle | 19.07° |
+| narrow panel half-angle | 7.04° |
+| **fold angle (panel-centre separation)** | **27.1°** — the boards sit at ~153° to each other, a shallow fold |
+| hinge allowance | **≤ 1.0° (0.60 mm of arc) is free**; 1.5° costs 6 mm of length (64 → 58 mm) |
+| mounting radius | outer faces at ≈ 34.2 mm from the duct axis |
+
+**Both panels cap at 4.0 mm — the narrow one is not looser, which was worth
+checking.** The obvious idea is to put the tall parts (bulk capacitance) on the
+8.45 mm panel because its sagitta is negligible. Tested over the selected bay:
+the narrow panel fails at 5.0 mm just as the wide one does, because the fold
+carries it round into a region where the skin is closer. **Design for a uniform
+4.0 mm stack on both panels.**
+
+**CG — take the length, not the station.** The best bay's centroid is Z 106,
+7.8 mm *forward* of `PIVOT_Z` 113.8. Forcing the centroid aft of the pivot costs
+length:
+
+| stack | best bay with centroid ≥ 113.8 | length | area |
+|---:|---|---:|---:|
+| 3.5 mm | Z 84–144 | 60 mm | 1926 mm² |
+| 4.0 mm | Z 90–138 | 48 mm | 1541 mm² |
+
+16 mm of length at 4.0 mm stack, to buy a station worth **~+0.4 mm** of hover
+clearance (measured above). Not a good trade — let the board sit where it fits.
+
+**Still needed before the pocket can be cut:** board **length** and **stack
+height**. The width (32.10, split 8.45 + 23.65) and the fold are settled; the
+pocket is one parametric block once those two numbers land.
+
 #### EDF mechanicals — the vendor listing, read 2026-08-31 (REF-EDF-002)
 
 The manufacturer's page publishes no bolt pattern and no external dimensions
