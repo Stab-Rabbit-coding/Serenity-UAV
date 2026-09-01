@@ -1244,6 +1244,83 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 
 **Used in:** `airframe/README.md` §5.1
 
+### REF-EDF-001: XFly-Model — Galaxy X5 50 mm 12-blade EDF, 6S, motor 2627-KV3200
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | XFly-Model |
+| **Product** | EDF Ducted Fan XFly Galaxy X5, 50 mm, 12 blades, 6S, motor 2627-KV3200 |
+| **Official URL** | <https://www.xfly-model.eu/en/edf-units/4833-edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-6s-motor-3200kv.html> |
+| **Local archive** | `docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html` (saved 2026-08-18) plus a page screenshot |
+| **Retrieved** | 2026-08-18 (archived), re-read 2026-08-31 |
+
+**Values used, as published:**
+
+| quantity | value |
+|---|---|
+| motor | Brushless **2627-3200KV** outrunner |
+| shaft diameter | **3 mm** |
+| blades | **12** |
+| internal (shroud) diameter | **50 mm** |
+| static thrust | **1240 gf** @ 6S 22.2 V |
+| max current / power | **38 A / 843 W** @ 6S |
+| weight | **75 g** — combo EDF + lip + motor |
+| connectors | **PK 3.5 mm** bullets |
+| external diameter | published as "nc" — **not communicated** |
+| max rotation speed | published as "nc" — **not communicated** |
+
+**NOT published, and each is load-bearing somewhere in this repo:** the motor
+mounting bolt circle, the motor's length, the motor-alone weight, and the wire
+gauge. See REF-EDF-002 for what a vendor listing adds, and the open items in
+`docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md`.
+
+**Where it is applied:** the thrust budget throughout (`docs/structural_analysis.md`,
+`AGENTS.md`), `airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad`
+(`EDF_BORE_R`, EDF stations), `edf_stator_sleeve.scad`, `edf_aft_spider_sleeve.scad`,
+`current-specification/bom_revS.csv` `EDF-50-6S`, and
+`tools/nacelle_mass_cg.py`.
+
+> The KV was confirmed by the repository owner on 2026-08-31 against this page:
+> the motor is a **2627-KV3200**. One SCAD header had carried 2700KV.
+
+---
+
+### REF-EDF-002: Vendor listing image — XFly Galaxy X5 50 mm EDF dimensions and packing list
+
+| Field | Value |
+|---|---|
+| **Type** | Vendor product-listing infographic (AliExpress marketplace listing) |
+| **Image URL** | <https://ae-pic-a1.aliexpress-media.com/kf/Sbcaa665cfd9c4bbfbaabb2ceb99e0cc52.png> |
+| **Listing URL** | <https://www.aliexpress.us/item/3256811751635162.html> — **cookie-gated; the listing page itself could not be retrieved.** The image above is directly fetchable and is what was read. |
+| **Retrieved** | 2026-08-31 (image, 750 × 11 846 px) |
+| **Provenance caveat** | A **marketplace listing, not a manufacturer datasheet.** It is used only where the manufacturer publishes nothing, and each value below records which panel it came from. The listing mixes the 3S / 4S / 6S variants of the same X5 airframe — the motor photographed in its Packing List panel is labelled **2627-KV4600**, which is the **4S** motor. The repository owner's assessment is that the dimensions and screw layout are common across the variants; that is recorded as an **owner assessment, not a manufacturer statement.** |
+
+**Values used:**
+
+| quantity | value | panel |
+|---|---|---|
+| fan / rotor diameter | **Ø50 mm** | "Product Size" drawing |
+| shroud (housing) length | **38.6 mm** | "Product Size" drawing |
+| overall length, incl. motor | **76 mm** | "Product Size" drawing |
+| blade-tip to shell clearance | **0.4 mm** | body text |
+| motor mounting screws | **4** identical, plus 1 longer spinner screw | "Packing List" photo |
+| shroud motor hub | disc with 4 round holes alternating with 4 slots | "composite materials" photo |
+
+**Where it is applied:**
+
+- `edf_aft_spider_sleeve.scad` — the **4-screw** count is what shows the sleeve's
+  three 120° arms cannot match the motor, flagged there as print-blocking.
+- `edf_aft_spider_sleeve.scad` and `nacelle_pod_50mm_tandem.scad` post-print
+  checks — the **0.4 mm** tip clearance against a 50 mm shroud ID is what sets
+  the Ø50.0 +0.4/−0.0 bore tolerance now that the build discards the shroud and
+  runs the rotor against printed plastic.
+
+> **Still not published anywhere:** the **bolt-circle diameter** and the screw
+> **thread size**. Both must be measured off a physical motor before the aft
+> spider sleeve is printed for flight.
+
+---
+
 ### REF-STD-GEAR-001: ISO 53:1998 — Cylindrical gears for general and heavy engineering — Standard basic rack tooth profile
 
 | Field | Value |

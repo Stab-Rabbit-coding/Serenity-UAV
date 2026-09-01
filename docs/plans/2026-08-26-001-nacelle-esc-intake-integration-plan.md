@@ -334,6 +334,58 @@ CG — EDF1 is forward of the pivot and EDF2 aft, so the two reductions nearly
 cancel. It is a **weight** win, not a clearance one. **Weigh a motor + rotor
 before this goes in the BOM**; do not infer it from the 75 g combo figure.
 
+#### EDF mechanicals — the vendor listing, read 2026-08-31 (REF-EDF-002)
+
+The manufacturer's page publishes no bolt pattern and no external dimensions
+("nc" for both). The vendor listing image the owner supplied does carry a
+dimension drawing and a packing-list photo, and it settles two things and
+un-settles a third.
+
+| quantity | value | panel |
+|---|---|---|
+| fan / rotor diameter | **Ø50 mm** | Product Size drawing |
+| shroud (housing) length | **38.6 mm** | Product Size drawing |
+| overall length incl. motor | **76 mm** | Product Size drawing |
+| blade-tip to shell clearance | **0.4 mm** | body text |
+| motor mounting screws | **4**, plus 1 longer spinner screw | Packing List photo |
+| motor hub | disc, 4 round holes alternating with 4 slots | aft-view photo |
+| **bolt circle diameter** | **STILL NOT PUBLISHED** | — |
+
+**Caveat carried forward:** this is a marketplace listing, not a datasheet, and
+it mixes the 3S/4S/6S variants — the motor photographed is labelled
+**2627-KV4600**, the 4S unit. The owner's assessment is that the dimensions and
+screw layout are common across variants; that is recorded as an owner assessment,
+not a manufacturer statement.
+
+**1. The Ø50 bore is now a running fit, not just a nominal.** The build keeps
+only the rotor and motor and uses the nacelle bore as the thrust tube, so the
+rotor turns against **printed plastic**. The vendor holds 0.4 mm blade-tip to
+shell inside a 50 mm shroud ID, i.e. the rotor is ≈ Ø49.2. Our Ø50.0 bore
+therefore reproduces the designed clearance exactly — **but only if it prints on
+size.** Added to the post-print checks in both the pod and the aft sleeve:
+**Ø50.0 +0.4 / −0.0** at the EDF1 rotor station (Z ≈ 27.5–40) and at the EDF2
+rotor station (the aft sleeve bore). An undersize bore rubs the rotor.
+
+**2. PRINT-BLOCKING — the aft spider's motor interface is the wrong pattern.**
+`edf_aft_spider_sleeve.scad` mounts the motor on **three arms at 120°** with
+three M3 pockets. The motor takes **four screws**. Three holes at 120° cannot be
+made to coincide with four at 90°, and using three of the four would need them at
+90/90/180 — which these arms are not at either. This is not a clearance problem.
+
+`MOTOR_BOLT_R = 10.0` was *also* never verified and the listing does not publish
+a bolt circle, so **both the count and the radius are unknown**. Changing 3 → 4
+arms now would swap one unsupported assumption for another, so the sleeve is
+flagged and left as-is. **Do not print it for flight.**
+
+**What to measure off a physical motor — five minutes with a caliper:**
+- bolt-circle diameter;
+- screw thread (M2 / M2.5 / M3) and length;
+- whether the four holes are on a square (90°) or a rectangular pattern;
+- motor overall length (the "2627" designation implies 27 mm and the SCAD assumes
+  ≈27 mm, but 76 − 38.6 = 37.4 mm of the drawing is motor *plus* spinner and hub,
+  so it does not confirm it);
+- motor-alone weight, which closes the mass question in the BOM row.
+
 #### Phase-lead route matches the corrected bays
 
 The EDF2 spider arms were re-clocked to 105/225/345 (below). Against the

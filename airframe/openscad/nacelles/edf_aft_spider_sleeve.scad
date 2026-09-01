@@ -162,7 +162,34 @@ N_ARMS          =   3;      // [count] spider arms at 0°/120°/240°
 // EDF2 motor mounts on spider aft face using 3× M3×10 SHCS (nozzle-end access).
 // MOTOR_BOLT_R: distance from sleeve axis to M3 screw centre.
 // *** VERIFY against actual Xfly Galaxy X5 2627 motor bolt circle before print ***
-MOTOR_BOLT_R    =  10.0;    // [mm] motor M3 bolt circle radius (UNVERIFIED — check motor)
+// ############################################################################
+// ## PRINT-BLOCKING (2026-08-31): THE MOTOR MOUNT INTERFACE IS WRONG.       ##
+// ############################################################################
+// This sleeve mounts the EDF2 motor on THREE arms at 120 deg with three M3
+// insert pockets on a bolt circle of radius MOTOR_BOLT_R.  The motor takes
+// FOUR screws.
+//
+// Evidence, from the vendor listing image archived as REF-EDF-002:
+//   * the Packing List panel shows FOUR identical short screws plus ONE longer
+//     screw (the spinner/rotor retainer) — so four motor screws, not three;
+//   * the aft view of the shroud shows its motor hub as a disc carrying FOUR
+//     round holes alternating with FOUR lightening slots.
+//
+// Three holes at 120 deg CANNOT be made to coincide with four holes at 90 deg.
+// This is not a tolerance problem that a bigger clearance hole fixes — the
+// pattern is simply the wrong one, and using three of the four would put the
+// screws at 90/90/180, which these arms are not at either.
+//
+// MOTOR_BOLT_R = 10.0 was ALSO never verified, and the listing does not publish
+// a bolt circle.  So BOTH the hole count and the hole radius are unknown, and
+// changing 3 -> 4 arms now would only swap one unsupported assumption for
+// another.  ** DO NOT PRINT THIS SLEEVE FOR FLIGHT until both are measured off a
+// physical motor: ** the bolt-circle diameter, the screw thread (M2 / M2.5 / M3),
+// and whether the four holes are on a square (90 deg) or rectangular pattern.
+// Five minutes with a caliper closes it.  Tracked in
+// docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md.
+MOTOR_BOLT_R    =  10.0;    // [mm] motor bolt circle radius — UNVERIFIED, AND
+                            //      THE HOLE COUNT IS WRONG.  See the block above.
 M3_INSERT_D     =   3.5;    // [mm] M3 OLF heat-set insert outer diameter
 M3_INSERT_L     =   6.0;    // [mm] M3 OLF heat-set insert length (pocket depth)
 
@@ -348,7 +375,14 @@ edf_aft_spider_sleeve();
 //   2. Bore ID = 50.0 mm ± 0.2 mm.
 //   3. Key dimensions: 3.0 mm wide × 3.0 mm tall ± 0.1 mm; verify fit in
 //      nacelle bore key slots (3.3 mm wide × 3.3 mm deep nominal).
-//   4. Hub bore = 4.0 mm ± 0.1 mm (EDF2 motor shaft clearance).
+//   4. Hub bore = 4.0 mm ± 0.1 mm (EDF2 motor shaft clearance — the motor's
+//      shaft is Ø3 mm, published, so this is 1 mm diametric clearance).
+//   5. ** BORE ID = 50.0 mm +0.4 / −0.0 AT THE EDF2 ROTOR STATION. **  The build
+//      discards the EDF's own shroud and uses this sleeve's bore as the duct, so
+//      the rotor now runs against PRINTED plastic.  The vendor keeps 0.4 mm
+//      between blade tip and shell (REF-EDF-002), and the shroud ID is 50 mm, so
+//      the rotor is ~Ø49.2.  A bore that prints UNDERSIZE rubs the rotor.  Check
+//      it at three stations before fitting the fan.
 //   5. M3 insert pockets at r ≈ 10 mm, Ø ≈ 3.5 mm: verify insert presses
 //      flush to arm aft face.  Pocket must be ≥ 6 mm deep.
 //   6. Retention bores at r ≈ 28 mm, Ø ≈ 3.3 mm: verify M3×20 SHCS passes

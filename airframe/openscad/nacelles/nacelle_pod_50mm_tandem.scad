@@ -1506,6 +1506,12 @@ nacelle_pod(swirl_dir = SWIRL_DIR);
 //   1. Sleeve bore ID = 55.4 mm ± 0.3 mm at 3 axial stations in the EDF zone
 //      (Z = 90 … 166.25 mm).  Sleeve OD 55.0 mm must slide freely, and the three
 //      key slots must accept the sleeve keys without forcing.
+//   1b. ** THRUST-TUBE BORE = 50.0 mm +0.4 / −0.0 OVER THE EDF1 ROTOR STATION **
+//      (Z ≈ 27.5 … 40).  The build keeps only the rotor and motor and uses this
+//      bore as the duct, so the EDF1 rotor runs against PRINTED plastic.  The
+//      vendor holds 0.4 mm blade-tip-to-shell in a 50 mm shroud (REF-EDF-002),
+//      i.e. the rotor is ~Ø49.2.  An undersize bore rubs the rotor; check it
+//      before fitting the fan, and scrape rather than force.
 //   2. Trunnion collar register bore = 34.0 mm H7 (+0.03/−0.00) over its full
 //      3.5 mm depth; nacelle_trunnion.scad's Ø33.9 register must slip in.
 //   3. Collar flange rim flat within 0.1 mm — it is the moment path from the
