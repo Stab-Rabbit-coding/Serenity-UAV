@@ -126,7 +126,19 @@ STATOR_Z_TOP_L  =  28.75;  // [mm] stator top    (nacelle 118.75 − 90.0)
 // strut is obsolete — nothing crosses the duct now.  See the SUPERSEDED block.)
 N_FINS          =  11;     // [count] inter-stage stator fins (coprime w/ 12-blade rotor)
 FIN_THICKNESS   =   2.0;   // [mm] fin tangential thickness
-VANE_ANGLE_DEG  =  33.0;   // [deg] fin angle from axial (tuned to 50 mm 6S tip swirl)
+// *** VANE_ANGLE_DEG IS UNVERIFIED AS OF 2026-08-31 — see the SUPERSEDED
+// derivation block in airframe/blender-scripts/blender_stator_gen.py. ***
+// The 33 deg came from a calculation whose three inputs are all wrong: it
+// assumed ~35,000 rpm (the motor is a 2627-3200KV, 71,040 rpm no-load at 6S),
+// T = 8.94 N (published 12.16 N) and A = 0.00240 m^2 (the O55.3 casing, not the
+// O50 bore).  It also used atan(V_exit/U_tip), which is the relative flow angle
+// from tangential, not the absolute swirl from axial that a stator removes.
+// A first-pass Euler re-derivation suggests ~22 deg, but it assumes a loaded RPM
+// and a motor efficiency that are not published, so THE ANGLE IS LEFT AS BUILT
+// rather than replaced with a differently-unsupported one.  Re-derive from a
+// measured loaded RPM (BDSHOT telemetry) or a bench/CFD swirl survey before
+// flight.  Re-rendering this sleeve is cheap; getting the number right is not.
+VANE_ANGLE_DEG  =  33.0;   // [deg] fin angle from axial — SEE THE FLAG ABOVE
 
 // ── Hub dimensions ─────────────────────────────────────────────────────────────
 // Hub bore routes EDF1 ESC wires through stator zone to inter-stage space.

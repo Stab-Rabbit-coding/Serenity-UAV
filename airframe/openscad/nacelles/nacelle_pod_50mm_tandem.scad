@@ -120,7 +120,20 @@
 //
 // EDF Motors
 // ----------
-// Both EDFs are Xfly Galaxy X5 2627-2700KV 50 mm 6S units.
+// Both EDFs are Xfly Galaxy X5 **2627-3200KV** 50 mm 6S units.
+// CORRECTED 2026-08-31 (owner-confirmed against the manufacturer's page): this
+// line read 2700KV.  It was the only live 2700KV reference to this motor in the
+// repo — AGENTS.md, LICENSE_AND_ATTRIBUTION.md and generate_placeholders.py all
+// already said 3200KV.  (The 2700KV figures in docs/README.md and
+// PHASED_BUILD_GUIDE.md belong to a different part, the 80 mm Changesun XRP
+// 3660-2700KV of the archived Rev P / Phase 7 upgrade, and are untouched.)
+// Derived operating point, for anything downstream that needs it:
+//   6S nominal 22.2 V -> 71,040 rpm no-load;  6S full 25.2 V -> 80,640 rpm
+//   tip speed at 71,040 rpm on Ø50 = 186 m/s (M 0.55 at ISA SL)
+//   blade-passing frequency = 71,040/60 x 12 = 14.2 kHz
+// The 11-vane stator count is UNAFFECTED — Tyler-Sofrin cut-off is a relationship
+// between COUNTS (11 and 12 coprime), not frequencies.  What IS affected is the
+// stator VANE ANGLE; see the flag on VANE_ANGLE_DEG in edf_stator_sleeve.scad.
 // Counter-rotation (Rev R1/nacelle-swap corrected):
 //   port nacelle CCW from intake (SWIRL_DIR=-1),
 //   starboard nacelle CW from intake (SWIRL_DIR=+1).

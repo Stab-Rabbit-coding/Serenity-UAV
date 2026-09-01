@@ -92,10 +92,19 @@ PRINTED = [
 #: Everything the meshes cannot supply: (label, mass g, CG_Z mm, source note).
 #: CG_Z is nacelle-local, measured from the intake face along the duct axis.
 FIXED = [
-    ("EDF1 (upstream)", 70.0, 59.4,
-     "Xfly Galaxy X5 50 mm 6S, REFERENCES.md REF-EDF-001"),
-    ("EDF2 (downstream)", 70.0, 150.6,
-     "Xfly Galaxy X5 50 mm 6S, REFERENCES.md REF-EDF-001"),
+    # 75 g is the manufacturer's figure for the COMPLETE combo (EDF + lip +
+    # motor), read from the product page 2026-08-31.  The build keeps only the
+    # ROTOR AND MOTOR — the nacelle tube is the thrust tube — so the installed
+    # mass is lower, but the motor-alone weight is not published.  75 g is
+    # carried here because it is the sourced, published number and it is
+    # conservative; replace it with a weighed rotor+motor at first article.
+    # Sensitivity: 75 -> 50 g each moves PIVOT_Z 113.6 -> 114.5 and clearance
+    # +0.9 mm, because EDF1 is forward of the pivot and EDF2 aft and the two
+    # reductions very nearly cancel.  It is a WEIGHT win, not a clearance one.
+    ("EDF1 (upstream, rotor+motor)", 75.0, 59.4,
+     "Xfly Galaxy X5 2627-KV3200 50 mm 6S; 75 g published for the full combo"),
+    ("EDF2 (downstream, rotor+motor)", 75.0, 150.6,
+     "Xfly Galaxy X5 2627-KV3200 50 mm 6S; 75 g published for the full combo"),
     ("ESC1 (relocated aft)", 25.0, 150.6,
      "plan 003 KTD8 — session-settled, user-directed; was 59.4"),
     ("ESC2", 25.0, 150.6, "Open-Secure-ESC 6S/50A board"),

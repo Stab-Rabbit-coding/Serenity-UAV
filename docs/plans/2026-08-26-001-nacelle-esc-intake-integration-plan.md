@@ -284,7 +284,7 @@ Source: <https://www.xfly-model.eu/en/edf-units/4833-edf-ducted-fan-xfly-galaxy-
 
 | item | published | repo currently says | note |
 |---|---|---|---|
-| motor | 2627, **3200 KV** | 2627-**2700 KV** | **DISCREPANCY — resolve** |
+| motor | 2627, **3200 KV** | 2627-3200 KV | ✓ **CONFIRMED by the owner 2026-08-31** |
 | motor OD | 26 mm | — | vs `R_HUB` 8 / `MOTOR_BOLT_R` 10 |
 | shaft | Ø3 mm | Ø4 bore (`R_HUB_BORE` 2.0) | ✓ 1 mm clearance, as designed |
 | blades | 12 | 12 | ✓ `N_FINS` 11 stays coprime |
@@ -297,10 +297,26 @@ Source: <https://www.xfly-model.eu/en/edf-units/4833-edf-ducted-fan-xfly-galaxy-
 
 **Two things this changes.**
 
-1. **The KV is wrong somewhere.** The repo says 2700 KV throughout; the product
-   page for the 12-blade 6S unit says 3200 KV. Both cannot be the aircraft's
-   motor. This is not cosmetic — KV sets the RPM for a given voltage and
-   therefore the blade-passing frequency the 11-vane stator was chosen against.
+1. **KV — RESOLVED 2026-08-31, and my own claim above was overstated.** The
+   owner confirms **2627-KV3200**. I wrote that "the repo says 2700 KV
+   throughout"; it did not. `AGENTS.md`, `LICENSE_AND_ATTRIBUTION.md` and
+   `generate_placeholders.py` already said 3200 KV, and the 2700 KV figures in
+   `docs/README.md` / `PHASED_BUILD_GUIDE.md` belong to a **different part** —
+   the 80 mm Changesun XRP 3660-2700KV of the archived Rev P / Phase 7 upgrade.
+   Exactly **one** live line was wrong: the `nacelle_pod_50mm_tandem.scad`
+   header. Fixed.
+
+   **But it propagated into something that matters.** The stator vane angle was
+   derived in `blender_stator_gen.py` from "~35,000 RPM", and the real figure is
+   **71,040 rpm** no-load at 6S — 2.03×. Checking that derivation showed all
+   three of its inputs are wrong (RPM, thrust 8.94 N vs the published 12.16 N,
+   and area 0.00240 m² which is the Ø55.3 casing rather than the Ø50 bore), and
+   that it used `atan(V_exit/U_tip)` — the relative flow angle from tangential,
+   not the absolute swirl from axial that a stator removes. A first-pass Euler
+   re-derivation gives ≈ 22°, not 33°, but it rests on a loaded RPM and a motor
+   efficiency that are not published. **`VANE_ANGLE_DEG` is therefore flagged
+   and left as built, not silently changed.** The 11-vane count is unaffected —
+   Tyler–Sofrin cut-off is a relationship between counts, not frequencies.
 2. **The owner is keeping the rotor and motor only**, using the nacelle tube as
    the thrust tube, so the *carried* mass is less than the 75 g combo. The page
    does not publish the motor-alone weight, so this is a sensitivity rather than
