@@ -233,34 +233,103 @@ excluding the nav channel (azimuth 0°) and the disconnect bay / trunnion (180°
 This is the best case — it assumes the wall is thinned to the repo minimum
 throughout the bay, so no wall-schedule change can beat it.
 
-#### The pod wants a WIDE, SHORT board — the opposite of 32 × 66
+#### CORRECTED 2026-08-31 — the board must be NARROW and LONG, not wide and short
 
-Two bays, one per ESC, at azimuth **25°** and **205°**:
+An earlier pass in this section recommended a wide, short board (≈ 60 × 38 mm).
+**That was wrong, and the error was in the model, not the measurement.** It sized
+the bay as an *annular sector* — a pocket that follows the curve. A PCB is
+**flat**. A 61 mm chord on a 33 mm radius has a **sagitta of 20.4 mm**: the
+corners of a flat board of that width stand 20 mm proud of the arc, and the
+annulus is 7 mm deep. Wide is exactly the wrong direction.
 
-| clear depth | each bay | area each | Z span |
-|---:|---|---:|---|
-| 4.0 mm | **61 × 46 mm** | 2805 mm² | 94–140 |
-| 4.5 mm | 61 × 44 mm | 2683 mm² | 94–138 |
-| **5.0 mm** | **61 × 38 mm** | **2317 mm²** | **94–132** |
-| 5.5 mm | 61 × 30 mm | 1829 mm² | 96–126 |
-| 6.0 mm | 57 × 24 mm | 1372 mm² | 98–122 |
+**Corrected model.** The board is a flat slab between perpendicular distances
+`d_in` and `d_out = d_in + t` from the duct axis, centred at azimuth φ. Its
+innermost point is `d_in` (at the centreline) and must clear the duct wall; its
+outermost points are the **corners of the outer face**, at radius
+`√(d_out² + (w/2)²)` and azimuth `φ ± atan(y/d_out)`, which must stay inside the
+skin less one minimum wall. Verified by hand at az 90 / Z 110 / w 30 / t 5: the
+corner at y = 15 fouls by 0.93 mm, exactly as the search reports.
 
-*(as-built board: 32.0 × 66.1 = 2115 mm²)*
+| stack height `t` | best flat board | area | azimuth | Z span |
+|---:|---|---:|---:|---|
+| **4.0 mm** | **24 × 66 mm** | **1584 mm²** | 55° / 235° | 74–140 |
+| 5.0 mm | 18 × 54 mm | 972 mm² | 60° | 74–128 |
+| 6.0 mm | 18 × 36 mm | 648 mm² | 90° | 96–132 |
 
-**Re-proportioning gains area rather than costing it.** At a 5.0 mm clear depth
-each bay holds **2317 mm² — 10 % more than the as-built board** — provided the
-board is turned side-on: roughly **60 wide × 38 long** instead of 32 × 66. An
-earlier pass that fixed the width at 33 mm found only 35 × 40 = 1400 mm², and
-that was an artefact of holding the width constant, not a property of the pod.
+*(as-built 32.0 × 66.1 = 2115 mm²; `t` = 1.6 board + components on both faces +
+mounting)*
 
-That proportion also suits the single-end egress on its own merits: a 60 mm end
-edge lays out three phase and two pack terminals side by side comfortably, where
-a 32 mm edge would have to stack them.
+**So the as-built LENGTH is fine — it is the WIDTH that has to come down**, 32 →
+24 mm, and the stack height is the dominant lever: every millimetre of height
+costs about 6 mm of width. Two such bays exist and no more, at azimuth **55°**
+and **235°**, each taking the full 66 mm run over Z 74–140.
 
-**The binding constraint is HEIGHT, and it is severe: 5.0 mm clear**, for board
-(1.6 mm) plus components on *both* faces plus any mounting standoff. Electrolytic
-bulk capacitance does not fit; low-profile polymer and DFN/PQFN do. Every extra
-millimetre of height costs roughly 8 mm of board length.
+**Both bays centre at Z 107, forward of `PIVOT_Z` 113.8**, so the conclusion of
+the next subsection is unchanged and if anything slightly worse: ESC placement is
+not a CG lever in this pod.
+
+**Options if 24 × 66 × 4.0 mm is not buildable:**
+1. **Split each ESC into two boards** — the single-end egress already groups the
+   conductors by face, so a power-stage / logic-stage split along that seam is
+   natural, and the thin logic card can live where the annulus is shallow.
+2. **Bulge the cowl locally** — a documented mould-line deviation (plan
+   2026-08-29-005 R7) buys depth directly.
+3. **Curve the board** to the 33 mm radius. Real, but not for a 4-layer power
+   board without a rigid-flex process this project has not costed.
+4. Accept the 25 % area cut at 24 × 66.
+
+#### EDF unit data — read from the manufacturer's page 2026-08-31
+
+Source: <https://www.xfly-model.eu/en/edf-units/4833-edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-6s-motor-3200kv.html>
+
+| item | published | repo currently says | note |
+|---|---|---|---|
+| motor | 2627, **3200 KV** | 2627-**2700 KV** | **DISCREPANCY — resolve** |
+| motor OD | 26 mm | — | vs `R_HUB` 8 / `MOTOR_BOLT_R` 10 |
+| shaft | Ø3 mm | Ø4 bore (`R_HUB_BORE` 2.0) | ✓ 1 mm clearance, as designed |
+| blades | 12 | 12 | ✓ `N_FINS` 11 stays coprime |
+| thrust | 1240 gf @ 6S | 1240 gf | ✓ |
+| max current | 38 A @ 6S | 40 A branch fusing | ✓ |
+| **unit weight** | **75 g complete** (EDF + lip + motor) | 70 g | see below |
+| **bolt pattern** | **NOT STATED** | `MOTOR_BOLT_R` = 10.0 | **still UNVERIFIED, and the spider is built to it** |
+| motor weight alone | **NOT STATED** | — | needed; see below |
+| wire gauge / length | **NOT STATED** | 16 AWG Ø3 assumed | |
+
+**Two things this changes.**
+
+1. **The KV is wrong somewhere.** The repo says 2700 KV throughout; the product
+   page for the 12-blade 6S unit says 3200 KV. Both cannot be the aircraft's
+   motor. This is not cosmetic — KV sets the RPM for a given voltage and
+   therefore the blade-passing frequency the 11-vane stator was chosen against.
+2. **The owner is keeping the rotor and motor only**, using the nacelle tube as
+   the thrust tube, so the *carried* mass is less than the 75 g combo. The page
+   does not publish the motor-alone weight, so this is a sensitivity rather than
+   a value:
+
+| carried mass per EDF | `PIVOT_Z` | clr, 40 mm flaps | rotating assembly |
+|---:|---:|---:|---:|
+| 75 g (full combo) | 113.6 | −2.73 mm | 558.6 g |
+| 70 g (repo assumption) | 113.8 | −2.57 mm | 548.6 g |
+| 60 g | 114.1 | −2.21 mm | 528.6 g |
+| 50 g | 114.5 | −1.83 mm | 508.6 g |
+
+Discarding the housing is worth up to **40 g per nacelle** but almost nothing in
+CG — EDF1 is forward of the pivot and EDF2 aft, so the two reductions nearly
+cancel. It is a **weight** win, not a clearance one. **Weigh a motor + rotor
+before this goes in the BOM**; do not infer it from the 75 g combo figure.
+
+#### Phase-lead route matches the corrected bays
+
+The EDF2 spider arms were re-clocked to 105/225/345 (below). Against the
+corrected bay azimuths that still works, and works *better* for one side:
+
+| | bay azimuth | nearest arm | circumferential run | annulus alive to |
+|---|---:|---:|---:|---:|
+| bay A | 55° | 105° | 50° ≈ 29 mm | Z 162.5 at the arm |
+| bay B | 235° | 225° | **10° ≈ 6 mm** | Z 146.0 at the arm |
+
+Both runs are in a live annulus. Putting **ESC2 in bay B** makes its phase run to
+the EDF2 spider almost direct.
 
 #### But the annulus straddles the pivot — it is not aft of it
 
