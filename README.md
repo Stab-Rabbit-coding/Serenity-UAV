@@ -85,6 +85,10 @@ Throughout the mission, the aircraft must also:
 | External comms | Wi-Fi 5 GHz, Zigbee 2.4 GHz, SiK/MAVLink 915 MHz, 49 MHz AX.25 |
 | EMI design objective | 500 W/m² RF field, correct operation |
 
+*Mass/thrust/T-W figures are the Rev S BOM baseline, not yet recomputed for Rev S4c nacelle
+hollowing (−179 g/pair) or the Rev S1g wing spar — see `current-specification/README.md` and
+`docs/WBS.md` §0.10.2.*
+
 </td>
 </tr>
 </table>
@@ -99,7 +103,9 @@ Throughout the mission, the aircraft must also:
 **Airframe**
 
 Four-section CF-PETG printed hull (head, cargo, middle, rear) with high-lift wings, hollow-walled
-and foam-filled to the canonical Firefly outer mold line.
+and foam-filled to the canonical Firefly outer mold line. Rev S1g gave the wing a fixed,
+bonded 20×16.3 mm carbon-fiber spar as its primary bending member, replacing the earlier
+rotating-shaft design.
 
 [Airframe README →](airframe/README.md)
 
@@ -123,7 +129,8 @@ deliberately progressive, field-replaceable failure mode rated for a 6 ft full-A
 **Nacelles**
 
 Two tilting pods each carry a tandem 50 mm EDF pair behind an 11-fin stator, with an 8-petal
-variable-area nozzle gear-linked passively to the 0°–140° tilt pivot.
+variable-area nozzle gear-linked passively to the 0°–140° tilt pivot. Rev S4c hollowed the
+pods (−179 g/pair) and added hinged ESC bays with flush access covers on a 4×90° motor pattern.
 
 [Nozzle-Drive Trade Study →](docs/NOZZLE_DRIVE_TRADE.md)
 
@@ -233,7 +240,7 @@ Dual-licensed by Steve Griffing, PE(CSE), CISSP-ISSEP, CPP:
 
 See `docs/attribution_and_licensing.md` for the full policy, the per-subsystem `LICENSE`
 federation map, and the CERN-OHL-W "Available Component" treatment of upstream
-canonical-reference geometry. Revision S, July 2026.
+canonical-reference geometry. Revision T, September 2026.
 
 ## Attribution
 
