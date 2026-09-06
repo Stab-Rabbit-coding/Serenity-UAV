@@ -156,7 +156,8 @@ see docs/WBS.md §0.10.2.)*
 
 ## 1.0 — Design Artifacts (Pre-Fabrication)
 
-### 1.1 — 3D Models: SCAD → STL Exports (Rev S baseline)
+### 1.1 — 3D Models: SCAD → STL Exports (Rev T baseline; hull carries forward from Rev S,
+wings/nacelles at Rev T1c/T4c — see `docs/WBS.md` §6.4)
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 → detail: `airframe/WBS.md` §1.1.0

@@ -11,7 +11,10 @@ Creative-Universe Attribution section and the `docs/references/` canonical-refer
 REF-CAD-003 QMx 2007 Blueprints pack, REF-CAD-004 misubisu Thingiverse origin model; expanded
 REF-CAD-002 Nick Henning after consolidation) → 2026-08-01 (TODO.md §0.9 licensing audit: added
 Part XV REF-LIC-001/002, corrected REF-CAD-004 license to CC BY-SA 4.0, documented the
-CERN-OHL-W 2.0 / CC BY-SA 4.0 dual-license split)
+CERN-OHL-W 2.0 / CC BY-SA 4.0 dual-license split) → Rev T (2026-09-06, project-wide
+comprehensive checkpoint — `docs/WBS.md` §6.4; no new citations added by this checkpoint
+itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains open per
+`TODO.md` §0.8)
 
 ---
 

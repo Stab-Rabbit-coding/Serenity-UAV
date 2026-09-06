@@ -1,8 +1,10 @@
 # Serenity UAV — Documentation Index
 
-> **Rev S Baseline (2026-07-04):** 24-inch CF-PETG hull, 8-node cooperative avionics,
-> 50mm tandem EDF nacelles, cargo system, autonomous flight capability. See below for
-> links to all design documents, build guides, and technical analysis.
+> **Rev T Baseline (2026-09-06, see `WBS.md` §6.4):** 24-inch CF-PETG hull, 8-node
+> cooperative avionics, 50mm tandem EDF nacelles (Rev T4c — hinged ESC bays, hollowed
+> pods), fixed CF wing spar (Rev T1c), cargo system, autonomous flight capability. Avionics
+> and BOM carry forward from Rev S unchanged — see below for links to all design documents,
+> build guides, and technical analysis.
 
 ## 📋 Quick Navigation
 
@@ -12,7 +14,7 @@
 - **[REFERENCES.md](../REFERENCES.md)** — Master citation catalog (all standards, regulations,
   suppliers, datasheets)
 - **[PHASED_BUILD_GUIDE.md](./PHASED_BUILD_GUIDE.md)** — Rev S phases 0–10 assembly steps (with
-  material quantities and time estimates)
+  material quantities and time estimates; not yet updated for Rev T geometry)
 - **[REVN_BUILD_GUIDE_24IN.md](./REVN_BUILD_GUIDE_24IN.md)** — Detailed Phase 1–4 guidance for
   24-inch hull structure
 
@@ -77,7 +79,8 @@
 
 | Rev | Hull | Nacelle EDFs | Avionics | Build Status | Archive |
 |-----|------|--------------|----------|--------------|---------|
-| S | 24" | 50mm X-Fly tandem | 8-node Pilot/XO/Flight Engineer/Commo/Observer (Rev S1) | Current baseline (Phase 5 ready) | — |
+| T | 24" | 50mm X-Fly tandem, Rev T4c nacelle (hinged ESC bays, hollowed) | 8-node Pilot/XO/Flight Engineer/Commo/Observer (Rev S1, unchanged) | Current baseline (Phase 5 ready) | — |
+| S | 24" | 50mm X-Fly tandem | 8-node Pilot/XO/Flight Engineer/Commo/Observer (Rev S1) | Superseded by Rev T | `docs/WBS.md` §6.3 |
 | R1 | 24" | 50mm X-Fly tandem | 8-node (pre-S1) + hull-frame baking | Design complete | `git log` |
 | R | 24" | 50mm X-Fly tandem | 8-node (first 24" iteration) | Archived | `git log` |
 | Q | 24" | 50mm X-Fly tandem | 8-node architecture finalized | Archived | `git log` |
@@ -85,7 +88,7 @@
 | M & earlier | 18" | Various | 2–4 node prototypes | Archived | `git log` |
 
 **⚠ SUPERSEDED for builds:** Rev M (18", dual 80mm EDFs) and earlier are **not** the current
-design baseline. All new work targets Rev S (24", 50mm tandem EDFs, 8-node Pilot/XO). The Rev M
+design baseline. All new work targets Rev T (24", 50mm tandem EDFs, 8-node Pilot/XO). The Rev M
 design documents are retained for historical reference only; see links below.
 
 **Author:** Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
