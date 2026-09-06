@@ -9,13 +9,14 @@
 [![CAD: FreeCAD | OpenSCAD | Blender](https://img.shields.io/badge/CAD-FreeCAD%20%7C%20OpenSCAD%20%7C%20Blender-fe7d37)](airframe/README.md)
 [![PCB: KiCad 9](https://img.shields.io/badge/PCB-KiCad%209-1BA94C)](avionics/README.md)
 [![Firmware: C | Python](https://img.shields.io/badge/firmware-C%20%7C%20Python-2f81f7)](avionics/firmware/)
-[![Status: Rev S — Phase 5 build](https://img.shields.io/badge/status-Rev%20S%20%E2%80%94%20Phase%205%20build-dfb317)](TODO.md)
+[![Status: Rev T — Phase 5 build](https://img.shields.io/badge/status-Rev%20T%20%E2%80%94%20Phase%205%20build-dfb317)](TODO.md)
 
 *"Can't stop the signal, and can't take the sky from me."*
 
 <img src="docs/img/assembled-iso.png" width="720" alt="Serenity UAV — isometric render of the full assembly">
 
-*Isometric render of the full Rev S assembly — port/bow/dorsal view.*
+*Isometric render of the Rev S assembly — port/bow/dorsal view. Predates the Rev T1c wing
+spar and Rev T4c nacelle geometry; re-render pending (see `TODO.md` §0.10).*
 
 </div>
 

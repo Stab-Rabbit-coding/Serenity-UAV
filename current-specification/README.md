@@ -1,12 +1,15 @@
-# Serenity UAV — Current Specification (Rev S Baseline)
+# Serenity UAV — Current Specification (Rev S BOM Baseline)
 
 **License:** Dual-licensed — CERN-OHL-W 2.0 (hardware/CAD/PCB) / CC BY-SA 4.0 (docs/BOM/scripts).
 See `docs/attribution_and_licensing.md`.  
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
+**Current design revision (project-wide):** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for
+changelog). **This folder's BOM data is still the Rev S snapshot below** — the Rev T1c
+wing spar and Rev T4c nacelle mass changes (nacelles −179g/pair from hollowing) are not yet
+recomputed into `bom_revS.json`/`.csv` or the AUW figure. Tracked open in `TODO.md` §0.10.2.
 
 > Bill of Materials, component specifications, and system-level design parameters for
 > Serenity UAV in JSON and CSV formats. **This is the authoritative baseline for Phase 5
-> assembly and beyond.**
+> assembly and beyond**, pending the Rev T mass/CG recompute noted above.
 
 ## Files
 
@@ -160,13 +163,17 @@ See `docs/attribution_and_licensing.md`.
 
 ## Revision History
 
+- **Rev T** (2026-09-06): Wings Rev T1c (fixed CF spar, geared tilt drive) and nacelles Rev
+  T4c (hollowed pods, hinged ESC bays, 4x90° motor pattern) integrated; avionics/BOM carried
+  forward from Rev S **unrecomputed** — see the BOM-currency note at the top of this file.
 - **Rev S** (2026-07-04): Baseline for Phase 5; 24-inch hull, 8-node PACE, Flight Engineer/Observer, Pilot/XO/Commo/Flight Engineer/Observer Rev S1 PCBs
 - **Rev R1** (2026-06-11): 24-inch hull final, hull-frame coordinate std baked into STLs, Nacelle CG tuning (PIVOT_Z = 111.5 mm)
 - **Rev R** (2026-04-XX): First 24-inch hull iteration, pre-PIVOT_Z tuning
 - **Rev Q** (2026-02-XX): Last 18-inch baseline; 8-node architecture finalized
 - **Rev P & earlier:** Historical prototypes (DaVinci Jr, 18-inch predecessor)
 
-See `docs/WBS.md` §6.3 for full Rev S changelog and component-level deltas from Rev R1.
+See `docs/WBS.md` §6.4 for the full Rev T changelog and §6.3 for the Rev S changelog and
+component-level deltas from Rev R1.
 
 ## Part Cross-References
 

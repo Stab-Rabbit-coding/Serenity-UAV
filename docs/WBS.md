@@ -674,6 +674,17 @@ Per the predecessor `docs/DOC_VERIFICATION_0.6.2.md §0.6.2.3` open items:
 - `tools/update_bom.py`, cited by `current-specification/README.md` and `tools/README.md` as
   the CSV↔JSON sync mechanism, does not exist — noted in both places rather than left as a
   dangling reference to a script nobody can run.
+- **`bom_revS.json`/`.csv` predate the Rev T checkpoint (§6.4) and were not recomputed for
+  it.** Confirmed deltas not yet reflected: nacelle mass (Rev T4b/T4c hollowing, −179g/pair),
+  wing spar (Rev T1c fixed 20x16.3mm CF tube replacing whatever the BOM currently prices/
+  masses as the spar part), and the nozzle drive (Rev T2 pushrod/cam). Given the AUW figure
+  is already flagged above as possibly understated by ~1.7–1.9 kg before any of these T-series
+  deltas are applied, this BOM should not be treated as authoritative for mass/CG until a
+  full recompute happens — see the caveat now stated at the top of
+  `current-specification/README.md`.
+- **`docs/img/assembled-iso.png`** (root `README.md` hero image) is dated 2026-08-23 —
+  predates both Rev T1c and Rev T4c geometry. Re-render needed before it can be captioned as
+  current; root `README.md` now says so explicitly rather than implying it's up to date.
 
 #### 4. WBS and TODO files
 

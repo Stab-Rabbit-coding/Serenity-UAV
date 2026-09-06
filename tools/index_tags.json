@@ -9548,7 +9548,7 @@
       "archived": false
     },
     "current-specification/README.md": {
-      "description": "Serenity UAV \u2014 Current Specification (Rev S Baseline)",
+      "description": "Serenity UAV \u2014 Current Specification (Rev S BOM Baseline)",
       "tags": [
         "documentation",
         "redundancy-failover",
