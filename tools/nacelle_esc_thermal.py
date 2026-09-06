@@ -129,6 +129,12 @@ BAY_WIDTH = 33.0e-3      # [m] folded board width
 ESC_BLEED_N = 4
 ESC_BLEED_D = 5.5e-3     # [m]
 
+#: Cover louvres, mirrored from nacelle_esc_bay.scad.  Enlarged at Rev T4e to
+#: carry a FOD screen without the inlet becoming the restriction.
+ESC_LOUVRE_N = 6
+ESC_LOUVRE_W = 1.2       # [mm]
+ESC_LOUVRE_L = 16.0      # [mm]
+
 # ── EDF (BOM EDF-50-6S, XFly Galaxy X5 2627-KV3200) ──────────────────────────
 EDF_THRUST_N = 12.16     # [N] 1240 gf per unit, static
 NACELLE_THRUST_N = 21.84 # [N] 4.91 lbf per nacelle = 2 x 2.73 lbf x 0.90 stator
@@ -146,6 +152,39 @@ FWD_STAGE_FRACTION = 0.5
 #: for the discharge.  This is the number a bench flow test or CFD would replace,
 #: and it is the weakest input to the flow rate below.
 CIRCUIT_K = 3.0
+
+# ── FOD screen (owner direction, 2026-09-06) ─────────────────────────────────
+#: Aspirating rather than bleeding made the bay an unfiltered path from outside
+#: air INTO the aft fan.  A woven screen closes it.
+#:
+#: WHAT THE SCREEN ACTUALLY BUYS, because it is not what it first looks like.
+#: The louvres are already 1.2 mm wide, and standard insect mesh has a ~1.1-1.2 mm
+#: aperture — no better in that dimension.  The gain is in the OTHER dimension: a
+#: 1.2 x 16 mm slot passes a 1.2 x 16 mm sliver, while a 1.2 mm square aperture
+#: passes only 1.2 x 1.2.  The screen bounds the second dimension, which the slot
+#: cannot.  A finer "no-see-um" mesh bounds both at ~0.6 mm and, as the sweep
+#: below shows, is affordable once the louvres are enlarged.
+#:
+#: beta is the FREE-AREA RATIO of the weave: (aperture / (aperture + strand))^2.
+SCREENS = {
+    "none": (1.00, 0.00),
+    "insect mesh, 1.2 mm ap / 0.28 strand": ((1.2 / 1.48) ** 2, 1.2),
+    "no-see-um, 0.6 mm ap / 0.25 strand": ((0.6 / 0.85) ** 2, 0.6),
+    "fine, 0.4 mm ap / 0.25 strand": ((0.4 / 0.65) ** 2, 0.4),
+}
+
+#: Screen loss coefficient from the free-area ratio, referenced to the APPROACH
+#: velocity.  Standard woven-screen form:
+#:      K = 1.3 (1 - beta) + (1/beta - 1)^2
+#: ** REQUIRES VERIFICATION ** — this is the form used in wind-tunnel screen
+#: practice, but no primary source for it is catalogued in REFERENCES.md and the
+#: attribution is therefore not asserted.  The sizing below is deliberately made
+#: insensitive to it: the louvres are enlarged until the screen is a small term,
+#: so a factor-of-two error in K moves the flow by a few percent, not by half.
+def screen_k(beta: float) -> float:
+    if beta >= 1.0:
+        return 0.0
+    return 1.3 * (1 - beta) + (1 / beta - 1) ** 2
 
 # ── Materials ────────────────────────────────────────────────────────────────
 K_ALUMINIUM = 167.0      # [W/m.K] 6061-T6, typical
@@ -393,6 +432,33 @@ def main() -> int:
     print("    that air has been worked on and is then thrown away, so the whole")
     print(f"    bypassed momentum is lost — {100 * bypass * 2:.2f} % — and it cannot")
     print("    flow anyway, because the duct is below ambient everywhere.")
+
+    # ------------------------------------------------------------ D. screen
+    print("\n" + "=" * 78)
+    print("D.  FOD SCREEN — and why the louvres have to grow to carry one")
+    print("=" * 78)
+    louvre_now = 2 * 5 * 1.2 * 12.0            # as built at Rev T4d, mm2
+    louvre_new = 2 * ESC_LOUVRE_N * ESC_LOUVRE_W * ESC_LOUVRE_L
+    print(f"  discharge ports (the throat)      {throat * 1e6:6.0f} mm2")
+    print(f"  louvre area as built at Rev T4d   {louvre_now:6.0f} mm2")
+    print(f"  louvre area now                   {louvre_new:6.0f} mm2\n")
+    print(f"  {'screen':<40}{'beta':>7}{'K':>7}{'free area':>11}"
+          f"{'vs throat':>11}{'flow':>8}")
+    for name, (beta, _ap) in SCREENS.items():
+        ks = screen_k(beta)
+        for label, a_in in (("", louvre_new),):
+            free = a_in * beta
+            # screen loss referred to the throat by continuity, V_in/V_t = At/Ain
+            k_eff = CIRCUIT_K + ks * (throat * 1e6 / a_in) ** 2
+            ratio = math.sqrt(CIRCUIT_K / k_eff)
+            flag = "" if free > throat * 1e6 else "  <-- INLET IS NOW THE THROAT"
+            print(f"  {name:<40}{beta:>7.3f}{ks:>7.2f}{free:>10.0f}mm2"
+                  f"{free / (throat * 1e6):>10.2f}x{100 * ratio:>7.0f}%{flag}")
+    print("\n  Sized so the SCREENED free area stays comfortably above the throat.")
+    print("  At the old 144 mm2 an insect mesh left only "
+          f"{144 * SCREENS['insect mesh, 1.2 mm ap / 0.28 strand'][0]:.0f} mm2 free —")
+    print("  BELOW the 95 mm2 throat, so the inlet would have become the")
+    print("  restriction and the screen a first-order loss instead of a small one.")
 
     print("\n" + "=" * 78)
     print("VERDICT — channel temperature at the design points")

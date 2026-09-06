@@ -1396,7 +1396,10 @@ module esc_cover_doubler() {
 //           layer at the widest part of the nacelle;
 //   bores   M3 heat-set pockets opening on the rebate floor.
 module esc_bay_cut() {
-    // window — full depth over the board footprint
+    // window — full depth over the board footprint.  The pocket is cut from the
+    // SEAT outward, so it automatically carries ESC_STACK + ESC_FLOW_LANE: the
+    // lane is the gap between the top of the component stack and the cover's
+    // inner face, and it is what the cooling air actually flows through.
     for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0);
 
     // rebate — a cover's thickness deep, over window + landing band

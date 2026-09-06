@@ -49,13 +49,48 @@
 //     5.0 mm   50 mm   74–122   1650 mm²    78 %
 //     6.0 mm   16 mm   74– 88    528 mm²    25 %
 //
-// 4.0 mm is built: 1.6 mm of PCB leaves 2.4 mm for components across both faces
-// plus mounting, and it recovers 97 % of the as-built board's area.  The fold
-// also softens the cliff a flat board had — 4.0 → 5.0 mm of stack now costs
-// 12 mm of length instead of all of it.
+// 4.0 mm is the stack: 1.6 mm of PCB leaves 2.4 mm for components across both
+// faces plus mounting.
+//
+// THE RADIAL BUDGET — corrected 2026-09-06, and the correction costs 18 mm
+// ------------------------------------------------------------------------
+// The 62 mm figure was wrong, and it was wrong because the fit search tested the
+// board against a 2.5 mm skin wall while the COVER is a separate part occupying
+// its own thickness in the same space.  Everything between the seat and the
+// canonical skin comes out of one budget, and the board's outer CORNERS bind:
+//
+//     seat R 30.2
+//       + component stack        4.0
+//       + cooling flow lane      1.0     <- did not exist in the first sizing
+//       + cover                  2.5
+//       + running clearance      0.4
+//     = 7.9 mm to the skin
+//
+// Every millimetre of that comes straight off the board's LENGTH, because the
+// bay runs out of depth before it runs out of length:
+//
+//     stack  lane  cover      length    area   vs COTS 2115 mm²
+//      3.0   0.0    2.5        70 mm   2310     109 %
+//      3.5   0.0    2.5        62 mm   2046      97 %   <- what was claimed
+//      4.0   0.0    2.5        56 mm   1848      87 %
+//      3.5   1.0    2.5        52 mm   1716      81 %
+//      4.0   1.0    2.5        44 mm   1452      69 %   <- BUILT
+//      4.0   1.0    3.0        16 mm    528      25 %
+//
+// **The 3.0 mm cover was costing 28 mm of board on its own** — hence the drop to
+// the 2.5 mm minimum and a proud screw head.
+//
+// TWO WAYS TO GET THE LENGTH BACK, and both belong to the board rather than the
+// airframe:
+//   * `ESC_FLOW_LANE = 0` if the ESC layout guarantees a 1 mm clear lane along
+//     its own length between components — the airframe then need not reserve it,
+//     and the board returns to 56 mm.
+//   * a 3.5 mm stack instead of 4.0 returns it to 52 mm.
+// Neither is the airframe's to decide; both are recorded so the choice is
+// visible.
 // =============================================================================
 
-ESC_BAY_AZ      = [69, 249];  // [deg] hinge azimuth of each bay.  NOT free: 105
+ESC_BAY_AZ      = [68, 248];  // [deg] hinge azimuth of each bay.  NOT free: 105
                               //   and 285 are the pod's two DEEP LOBES (annulus
                               //   alive aft to Z 163 at 6.2–6.4 mm, against
                               //   Z 135–147 elsewhere) and are where the EDF
@@ -71,7 +106,13 @@ ESC_STACK       =   4.0;  // [mm] radial envelope: PCB + parts both faces + moun
 ESC_MOUNT_R     =  30.2;  // [mm] board inner face — equals the pod's
                           //   SLEEVE_BORE_R + CAVITY_DUCT_WALL, asserted there
 ESC_BAY_Z0      =  74.0;  // [mm] bay forward end
-ESC_BAY_Z1      = 134.0;  // [mm] bay aft end (62 mm of board + end clearance)
+ESC_BAY_Z1      = 116.0;  // [mm] bay aft end — 44 mm of board.  This was 134
+                          //   (62 mm) until 2026-09-06, and the 18 mm came off
+                          //   for two reasons that had both been missed; see
+                          //   THE RADIAL BUDGET below.
+ESC_FLOW_LANE   =   1.0;  // [mm] clear lane above the component stack, for the
+                          //   cooling air.  Set this to 0 and the board grows
+                          //   back to 56 mm — see the trade below.
 ESC_FIT         =   0.6;  // [mm] clearance per side around the board
 
 // ── Access ───────────────────────────────────────────────────────────────────
@@ -80,9 +121,11 @@ ESC_FIT         =   0.6;  // [mm] clearance per side around the board
 // drops into a rebate and finishes flush with the mould line.  The window is the
 // union of the two panel footprints, so it is chevron-shaped and follows the
 // fold — a rectangular window would either foul the fold or waste skin.
-ESC_COVER_T     =   3.0;  // [mm] cover thickness — 3.0 rather than the 2.5 mm
-                          //   minimum wall so an M3 counterbore still leaves
-                          //   1.2 mm of material under the screw head
+ESC_COVER_T     =   2.5;  // [mm] cover thickness — the repo minimum wall, and
+                          //   every 0.5 mm above it costs ~10 mm of board
+                          //   LENGTH (see the radial budget).  The M3 button
+                          //   head therefore sits 0.65 mm proud rather than
+                          //   flush; see ESC_CBORE_DEPTH.
 ESC_LEDGE_W     =   8.0;  // [mm] cover landing band around the window
 ESC_LEDGE_T     =   2.5;  // [mm] material under the cover, radially
 ESC_COVER_FIT   =   0.25; // [mm] clearance per side, cover into its rebate
@@ -90,7 +133,14 @@ ESC_BOSS_OD     =   7.0;  // [mm] insert boss OD
 ESC_BOSS_INSET  =   4.0;  // [mm] boss centre inset from the window edge
 ESC_SCREW_D     =   3.4;  // [mm] M3 clearance through the cover
 ESC_CBORE_D     =   6.2;  // [mm] counterbore for an M3 BUTTON head (Ø5.7×1.65)
-ESC_CBORE_DEPTH =   1.8;  // [mm] counterbore depth — head finishes flush
+ESC_CBORE_DEPTH =   1.0;  // [mm] counterbore depth.  An M3 button head is
+                          //   1.65 mm tall, so it stands 0.65 mm PROUD — a
+                          //   deliberate, quantified deviation.  Sinking it
+                          //   flush would need a 3.0 mm cover, and that costs
+                          //   ~10 mm of board length; 0.65 mm of screw head is
+                          //   the cheaper of the two, on a nacelle that already
+                          //   carries a 15 mm trunnion fairing proud of the
+                          //   mould line.
 ESC_INSERT_D    =   3.5;  // [mm] M3 × 6 heat-set insert bore (pod M3_INSERT_D)
 ESC_INSERT_L    =   6.0;  // [mm] insert depth              (pod M3_INSERT_L)
 ESC_BOSS_DEPTH  = ESC_INSERT_L + 1.0;  // [mm] 6.0 of insert plus 1.0 of material
@@ -171,10 +221,45 @@ ESC_BOSS_DEPTH  = ESC_INSERT_L + 1.0;  // [mm] 6.0 of insert plus 1.0 of materia
 // coefficient is ASSUMED K = 3 (one velocity head each for inlet, bay and
 // discharge).  Whether the bay delivers 28 m/s needs CFD or a bench flow test.
 // See airframe/wings-nacelles/WBS.md §1.1.3.8.
-ESC_LOUVRE_N    =   5;    // [count] slots per end
-ESC_LOUVRE_W    =   1.2;  // [mm] slot width (Z) — 2 extrusions at a 0.6 nozzle
-ESC_LOUVRE_L    =  12.0;  // [mm] slot length (circumferential)
-ESC_LOUVRE_P    =   3.0;  // [mm] slot pitch
+// The louvres are the circuit's INLET and they are AFT-ONLY.  Slots at both ends
+// short-circuit: the forward field sat directly over the discharge ports at
+// Z 76-88, so air would have entered and left again without ever crossing the
+// board.  One field at the aft end forces the full-length traverse.
+ESC_LOUVRE_N    =   8;    // [count] slots, aft field only
+ESC_LOUVRE_W    =   1.2;  // [mm] slot width (Z).  TWO CRITERIA MEET HERE: two
+                          //   extrusions at a 0.6 mm nozzle, AND the coarse FOD
+                          //   limit — see the screen note below.
+ESC_LOUVRE_L    =  24.0;  // [mm] slot length (circumferential)
+ESC_LOUVRE_P    =   3.0;  // [mm] slot pitch (1.8 mm rib)
+
+// ── FOD screen (owner direction, 2026-09-06) ─────────────────────────────────
+// Aspirating rather than bleeding made the bay an unfiltered path from outside
+// air INTO the aft fan.  A woven screen closes it, bonded into a rebate in the
+// cover's inner face over the louvre field.
+//
+// WHAT THE SCREEN BUYS IS NOT WHAT IT LOOKS LIKE.  The louvres are already
+// 1.2 mm wide and standard insect mesh has a ~1.2 mm aperture — no better in
+// that dimension.  The gain is the OTHER dimension: a 1.2 x 24 mm slot passes a
+// 1.2 x 24 mm sliver; a square aperture passes only 1.2 x 1.2.  The screen bounds
+// the second dimension, which a slot cannot.
+//
+// AND THE LOUVRES HAD TO GROW TO CARRY IT.  A screen's free area is beta =
+// (aperture/(aperture+strand))^2, so it throws away a third to a half of the
+// geometric opening.  At the old 144 mm2 an insect mesh left 95 mm2 free —
+// exactly the discharge-port throat, so the inlet would have BECOME the
+// restriction.  At 230 mm2:
+//
+//     screen                         beta    free area   vs throat   flow
+//     none                          1.000     230 mm2      2.42x     100 %
+//     insect mesh, 1.2 mm aperture  0.657     151 mm2      1.59x      98 %
+//     no-see-um,   0.6 mm aperture  0.498     115 mm2      1.21x      96 %
+//     fine,        0.4 mm aperture  0.379      87 mm2      0.92x      91 %  <- inlet becomes the throat
+//
+// **No-see-um (0.6 mm) is the selection**: it bounds FOD at 0.6 mm in BOTH
+// dimensions for 4 % of the flow, where the coarse mesh only matches the slot.
+// The fine 0.4 mm mesh is where the trade breaks down.
+ESC_MESH_REBATE   = 0.6;  // [mm] rebate depth in the cover's inner face
+ESC_MESH_MARGIN   = 3.0;  // [mm] rebate oversize around the louvre field
 
 // ── Discharge ports (Rev T4d, 2026-09-06; direction corrected same day) ─────
 // Where the cooling air GOES — into the duct, not out of it.  They have to be at

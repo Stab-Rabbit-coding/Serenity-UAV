@@ -102,42 +102,53 @@ module cover_shell(d_out, d_in) {
 }
 
 
-// ── Module: cover_louvres ────────────────────────────────────────────────────
-// The INLET of the bay's cooling circuit.  This comment has been wrong twice and
-// it is worth saying why, because the geometry never changed — only the
-// understanding of which way air moves through it.
+// ── Module: cover_louvre_field ───────────────────────────────────────────────
+// The circuit's INLET, and it is AFT-ONLY.
 //
+// This comment has been wrong twice, and it is worth saying why, because the
+// geometry barely changed — only the understanding of which way air moves.
 // First it was "a route and an area", with no flow sized at all.  Then it was
-// the outlet of a duct bleed, on the belief that the inter-stage ran above
-// ambient.  **It does not: every station inside this duct is at or below
-// ambient, and the aft fan's inlet sits 2781 Pa BELOW it.**  So the fan
-// ASPIRATES the bay: ambient air enters HERE, washes both faces of the board,
-// and is drawn out through the discharge ports into the duct.
+// the OUTLET of a duct bleed, on the belief that the inter-stage ran above
+// ambient.  It does not: every station inside this duct is at or below ambient
+// and the aft fan's inlet sits 2781 Pa below it, so the fan ASPIRATES the bay.
 //
-// Total open area = 2 ends × 5 × 1.2 × 12 = 144 mm², deliberately larger than
-// the 95 mm² of discharge port so that the ports are the throat and these
-// cannot choke the circuit.  Slots at both ends rather than one, so the wash
-// covers the whole board instead of short-circuiting across a corner.
+// Slots at BOTH ends, which is what the first version had, short-circuit the
+// circuit: the forward field sat directly over the discharge ports at Z 76-88,
+// so air would enter and leave again without ever crossing the board.  One field
+// at the AFT end forces the full-length traverse.
 //
-// ** ESC_LOUVRE_W = 1.2 mm IS A FOD CRITERION, not only a printability one. **
-// This is now an unfiltered path from outside air into the EDF2 rotor, and these
-// slots are the only screen in it.  Anything that passes 1.2 mm reaches the fan.
-//
-// Cut as radial boxes so they pierce the cover cleanly whatever the local skin
-// radius happens to be at that station.
+// ESC_LOUVRE_W = 1.2 mm now answers to two criteria at once: two extrusions at a
+// 0.6 mm nozzle, and the coarse FOD limit.  The fine limit is the bonded screen.
+function cover_louvre_span() = (ESC_LOUVRE_N - 1) * ESC_LOUVRE_P + ESC_LOUVRE_W;
+function cover_louvre_z0()   = ESC_BAY_Z1 - ESC_LEDGE_W / 2 - cover_louvre_span();
+
 module cover_louvres() {
-    span = (ESC_LOUVRE_N - 1) * ESC_LOUVRE_P;
-    for (end = [0, 1]) {
-        z_ctr = (end == 0) ? ESC_BAY_Z0 + ESC_LEDGE_W / 2 + span / 2
-                           : ESC_BAY_Z1 - ESC_LEDGE_W / 2 - span / 2;
-        for (i = [0 : ESC_LOUVRE_N - 1])
-            rotate([0, 0, COVER_AZ + esc_a_pow()])
-                translate([ESC_MOUNT_R,
-                           -ESC_LOUVRE_L / 2,
-                           z_ctr - span / 2 + i * ESC_LOUVRE_P
-                                 - ESC_LOUVRE_W / 2])
-                    cube([40, ESC_LOUVRE_L, ESC_LOUVRE_W]);
-    }
+    for (i = [0 : ESC_LOUVRE_N - 1])
+        rotate([0, 0, COVER_AZ + esc_a_pow()])
+            translate([ESC_MOUNT_R,
+                       -ESC_LOUVRE_L / 2,
+                       cover_louvre_z0() + i * ESC_LOUVRE_P])
+                cube([40, ESC_LOUVRE_L, ESC_LOUVRE_W]);
+}
+
+
+// ── Module: cover_mesh_rebate ────────────────────────────────────────────────
+// A shallow pocket in the cover's INNER face for the bonded FOD screen.
+//
+// The screen is a consumable and the cover is a cheap printed part, so it is
+// bonded rather than clamped: a clamped screen wants its own retainer and eight
+// more fasteners, for a part that is replaced by reprinting the cover.
+//
+// Depth 0.6 mm against a ~0.3 mm woven mesh leaves room for an adhesive bead at
+// the rim without the mesh standing proud of the inner face and fouling the
+// board.
+module cover_mesh_rebate() {
+    rotate([0, 0, COVER_AZ + esc_a_pow()])
+        translate([ESC_MOUNT_R,
+                   -(ESC_LOUVRE_L / 2 + ESC_MESH_MARGIN),
+                   cover_louvre_z0() - ESC_MESH_MARGIN])
+            cube([40, ESC_LOUVRE_L + 2 * ESC_MESH_MARGIN,
+                  cover_louvre_span() + 2 * ESC_MESH_MARGIN]);
 }
 
 
@@ -165,8 +176,14 @@ module nacelle_esc_cover() {
             esc_boss_cylinders(COVER_AZ, ESC_CBORE_D);
         }
 
-        // Cooling louvres.
+        // Cooling louvres — the circuit's inlet.
         cover_louvres();
+
+        // Rebate for the bonded FOD screen, in the inner face only.
+        intersection() {
+            cover_shell(ESC_COVER_T - ESC_MESH_REBATE, ESC_COVER_T);
+            cover_mesh_rebate();
+        }
     }
 }
 
@@ -202,6 +219,13 @@ nacelle_esc_cover();
 //   4. Louvres open through the full thickness — hold it to the light.  A
 //      bridged-over louvre is the difference between a vented bay and a sealed
 //      one, and this bay has no other heat path.
+//   5. FOD screen: cut no-see-um mesh (0.6 mm aperture) to the rebate, bond at
+//      the rim only — adhesive across the weave blocks the free area the sizing
+//      depends on.  It must not stand proud of the inner face; the board is
+//      1.0 mm away.  Check with a straightedge before fitting the cover.
+//   6. M3 button heads sit 0.65 mm PROUD by design, not flush.  A head that sits
+//      BELOW the surface means the counterbore printed deep and the cover is
+//      thinner than 1.5 mm under it — reject.
 //
 // Render commands
 // ---------------
