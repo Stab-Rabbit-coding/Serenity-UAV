@@ -1203,6 +1203,82 @@ requirements for the airframe itself.
 
 **Used in:** `docs/structural_analysis.md` §7.3, `airframe/fuselage-mid/WBS.md` §1.1.1.2 CARGO-03c, this file's Open Standards Verification Items table (CF-PETG bearing allowable row)
 
+### REF-SEMI-001: Toshiba — TPHR8504PL 40 V N-channel Power MOSFET datasheet
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Toshiba Electronic Devices & Storage Corporation |
+| **Document** | *TPHR8504PL — MOSFET Silicon N-channel MOS (U-MOS IX-H)*, datasheet, 2019-10-24 |
+| **Local copy** | `Open-Secure-ESC/docs/datasheets/TPHR8504PL_datasheet_en_20191024.pdf` |
+| **Official URL** | <https://toshiba.semicon-storage.com/ap-en/semiconductor/product/mosfets/detail.TPHR8504PL.html> — **REQUIRES VERIFICATION**: the local PDF is authoritative and was read directly; the product-page URL follows Toshiba's standard pattern but has not been fetched from the issuing body |
+| **Retrieved** | 2026-09-06, from the local PDF via `pdftotext` |
+| **Scope applied** | §5 Thermal Characteristics and the electrical characteristics table |
+
+**Values used (read from the PDF, not quoted from memory):**
+
+| Parameter | Symbol | Value | Where used |
+|---|---|---|---|
+| Channel-to-case thermal resistance (max, Tc = 25 °C) | `Rth(ch-c)` | **0.88 °C/W** | `tools/nacelle_esc_thermal.py` |
+| Channel-to-ambient, glass-epoxy board (a) | `Rth(ch-a)` | **50 °C/W** | board-to-local-air term |
+| Channel-to-ambient, glass-epoxy board (b) | `Rth(ch-a)` | 142 °C/W | bounding case, not used |
+| Channel temperature, absolute maximum | `Tch` | **175 °C** | design limit derives from this |
+| Drain-source on-resistance, typ / max (VGS = 10 V, ID = 50 A) | `RDS(on)` | **0.7 / 0.85 mΩ** | confirms the 1.75 W/FET figure |
+
+The 0.7 mΩ typical reproduces Open-Secure-ESC's 6 × 1.75 W conduction figure
+exactly at 50 A (`I²R` = 2500 × 0.0007). **The `max` 0.85 mΩ gives 2.13 W/FET,
+and `RDS(on)` roughly doubles by 125 °C** — a positive feedback the steady-state
+network in `nacelle_esc_thermal.py` does not model and which is stated there.
+
+**Used in:** `tools/nacelle_esc_thermal.py`, `airframe/wings-nacelles/WBS.md`
+§1.1.3.8
+
+---
+
+### REF-MAT-004: CF-PETG THERMAL CONDUCTIVITY — NO SOURCE EXISTS. DO NOT CITE A NUMBER.
+
+**This entry exists to record an absence, and to stop the absence being filled
+by a plausible-looking figure.**
+
+| Field | Value |
+|---|---|
+| **Quantity** | Thermal conductivity `k` of 20 % chopped-carbon-fibre PETG, as printed by FFF |
+| **Status** | **UNVERIFIED — no primary source in this repository or cited by it** |
+| **What REF-MAT-002 does NOT contain** | It is a mechanical-properties study (ASTM D790 flexural, D695 compressive, E384 hardness, D1525 Vicat, D648 HDT). It publishes **no thermal conductivity**, and it is the only CF-PETG characterisation this project cites. |
+
+**A figure of 0.25 W/m·K appeared in `airframe/wings-nacelles/WBS.md` on
+2026-09-06 and was written as though established.** It was not: it was an
+unsourced engineering estimate. It is retracted here and corrected in that file.
+
+**What can honestly be said, pending a measurement:**
+
+| | plausible band | reasoning |
+|---|---|---|
+| neat PETG | ~0.20 W/m·K | typical amorphous thermoplastic |
+| 20 % CF, **through-plane** | ~0.25–0.45 W/m·K | short fibres align **in**-plane during extrusion, so the through-thickness gain over neat resin is small |
+| 20 % CF, **in-plane** | ~0.5–1.0 W/m·K | along the fibre axis |
+| FFF porosity | reduces both | inter-bead voids are series air gaps |
+
+These are bounds for reasoning, **not a citation**, and no design decision may
+rest on a single value from this table.
+
+**How the open question was worked around rather than guessed.**
+`tools/nacelle_esc_thermal.py` **sweeps** k from 0.15 to 1.20 W/m·K and shows the
+conduction path to the stator sleeve fails at every point in the band — 28.98
+K/W at the bottom, 8.52 K/W at the top, against a budget of about 4.6 K/W. The
+decision is therefore insensitive to the missing datum. A measured value would
+sharpen the numbers; it would not change the answer.
+
+**To close this item:** either obtain a manufacturer datasheet for the specific
+filament (3D Maker Engineering PETG-CF Pro Series — the product REF-MAT-002's
+notes identify as the commercial 20 % CF material) that publishes thermal
+conductivity, or measure a printed coupon per ASTM D5470 (through-plane, the
+orientation that governs here) or ASTM E1225. Record the print orientation with
+the value; without it the number is not usable.
+
+**Tracked in:** `airframe/wings-nacelles/WBS.md` §1.1.3.8 open items
+
+---
+
 ### REF-MAT-002: Ramachandran, Pandian, Ramamoorthi & Britto John — "Influence of Process Parameters on the Mechanical Properties of Carbon Fibre Reinforced PETG"
 
 | Field | Value |

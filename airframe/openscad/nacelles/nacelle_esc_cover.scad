@@ -103,9 +103,19 @@ module cover_shell(d_out, d_in) {
 
 
 // ── Module: cover_louvres ────────────────────────────────────────────────────
-// Slots at both ends of the WIDE panel, venting the bay to ambient.  Cut as
-// radial boxes so they pierce the cover cleanly whatever the local skin radius.
-// Total open area = 2 ends × ESC_LOUVRE_N × ESC_LOUVRE_W × ESC_LOUVRE_L.
+// The OUTLET of the bay's cooling circuit — not, as this comment said before
+// the flow was sized, a hopeful vent.  Air enters through the bleed inlets in
+// the pod's duct wall (Rev T4d, driven by the ~3.1 kPa inter-stage static rise),
+// washes both faces of the board, and leaves here.
+//
+// Total open area = 2 ends × 5 × 1.2 × 12 = 144 mm², which is matched to the
+// 95 mm² of inlet: the outlet is deliberately the larger of the two so the
+// ORIFICE sets the flow and the outlet does not choke it.  Slots at both ends
+// rather than one end, so the wash covers the whole board rather than
+// short-circuiting across one corner.
+//
+// Cut as radial boxes so they pierce the cover cleanly whatever the local skin
+// radius happens to be at that station.
 module cover_louvres() {
     span = (ESC_LOUVRE_N - 1) * ESC_LOUVRE_P;
     for (end = [0, 1]) {

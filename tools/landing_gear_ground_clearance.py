@@ -84,6 +84,7 @@ Design references (see REFERENCES.md):
 """
 
 import argparse
+import re
 import math
 import sys
 from pathlib import Path
@@ -136,10 +137,34 @@ T_BAKE = {
 TRACK_MM = 288.0
 WHEELBASE_MM = 170.0
 
-#: The belly clearance of each printed leg variant, and which one the assembly
-#: actually wires in.  serenity_assembly.py L505-518.
+#: The belly clearance of each printed leg variant.
 CATALOGUE = {"1.5 in": 38.1, "3.0 in": 80.0}
-ACTIVE_VARIANT = "1.5 in"
+
+
+def _active_variant() -> str:
+    """Read which leg the assembly actually wires in, rather than restate it.
+
+    This was a hard-coded constant with a comment pointing at
+    `serenity_assembly.py`.  A gate whose input is a copy of the fact it is
+    guarding does not guard anything: it goes on passing (or failing) after the
+    assembly changes underneath it.  This project has been bitten by exactly that
+    twice in one day — a cover built from a duplicated shell selector, and ESC
+    parameters held in two files — so the fact is read from its source.
+    """
+    src = (HERE.parent / "airframe/FreeCAD-scripts/serenity_assembly.py"
+           ).read_text(encoding="utf-8")
+    found = set(re.findall(r"lg_r6_(\d_\din)_hull_legs\.stl", src))
+    mapping = {"1_5in": "1.5 in", "3_0in": "3.0 in"}
+    wired = {mapping[f] for f in found if f in mapping}
+    if len(wired) != 1:
+        raise RuntimeError(
+            "serenity_assembly.py wires "
+            f"{len(wired)} landing-gear variants ({sorted(wired) or 'none'}); "
+            "this gate cannot tell which one is active")
+    return wired.pop()
+
+
+ACTIVE_VARIANT = _active_variant()
 
 # ---------------------------------------------------------------------------
 # The reserve budget.  Each term is a separate, named, arguable number -- that
@@ -278,7 +303,7 @@ def report(flap_len: float, theta_deg: float) -> int:
     print(f"Stance: track {TRACK_MM:.0f} mm, wheelbase {WHEELBASE_MM:.0f} mm; "
           f"nozzles lie INSIDE the wheelbase and ~73 mm OUTBOARD of the track")
 
-    print(f"\n--- Reserve budget (what the tip must still hold at first contact) ---")
+    print("\n--- Reserve budget (what the tip must still hold at first contact) ---")
     print(f"  hull settle, spring elastic limit ({U_SPRING_LEG_J:.2f} J/leg at "
           f"{F_LEG_ELASTIC_N:.0f} N/leg)   {SETTLE_ELASTIC_MM:6.2f} mm")
     print(f"  PIVOT_Z drift reserve (observed 111.5/105.8/113.8/107.5)      "
@@ -332,10 +357,10 @@ def report(flap_len: float, theta_deg: float) -> int:
           f"(4 ft schedule, both variants).")
     print(f"  Clearing the nozzle through that stroke as well would need "
           f"{c_full:.2f} mm ({c_full / 25.4:.2f} in).")
-    print(f"  This is a crash case: the fuse has fired and the wires are "
-          f"scrap.  Sizing the leg to it")
-    print(f"  is an owner decision (LG-28); the flaps are sacrificial and "
-          f"cheaper than the leg.")
+    print("  This is a crash case: the fuse has fired and the wires are "
+          "scrap.  Sizing the leg to it")
+    print("  is an owner decision (LG-28); the flaps are sacrificial and "
+          "cheaper than the leg.")
 
     if status:
         print(f"\nFAIL: the ACTIVE gear variant ({ACTIVE_VARIANT}) is below the "

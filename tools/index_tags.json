@@ -12968,6 +12968,15 @@
       ],
       "archived": false
     },
+    "tools/nacelle_esc_thermal.py": {
+      "description": "nacelle_esc_thermal.py \u2014 where does the ESC heat go, and does any path work?",
+      "tags": [
+        "build-tooling",
+        "power",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/nacelle_hollow_profile.py": {
       "description": "nacelle_hollow_profile.py \u2014 generate the nacelle pod's internal cavity surface.",
       "tags": [
@@ -14848,6 +14857,7 @@
       "graphical-build-guide/pngs/17_closeup_nacelle.png",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
+      "tools/nacelle_esc_thermal.py",
       "tools/nacelle_hollow_profile.py",
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_trunnion_fit.py",
@@ -14962,6 +14972,7 @@
       "graphical-build-guide/build_guide_10_power_wiring.svg",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
+      "tools/nacelle_esc_thermal.py",
       "tools/tests/test_nacelle_esc_service.py"
     ],
     "sensors-vision": [
@@ -16649,6 +16660,7 @@
       "tools/mirror_claude_memory.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
+      "tools/nacelle_esc_thermal.py",
       "tools/nacelle_hollow_profile.py",
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_trunnion_fit.py",

@@ -343,14 +343,26 @@ def nacelle_rows(side, r_local, t_local):
 # can use PIVOT_Z; kept together since they share one source (the SCAD).
 STATOR_SLV_Z_START = 90.0
 AFT_SLV_Z_START = 122.5
-# PIVOT_Z re-derived 2026-07-19 for the Rev T rotating assembly: CG_Z =
-# 111.5 mm.  See nacelle_pod_50mm_tandem.scad header mass breakdown.  The
-# earlier 104.5 mm figure predates the Rev T nozzle changes: deleting the
-# gear train alone left the pivot CG ~unchanged, but doubling the flaps
-# 20→40 mm (CG ~198 mm), making the Ø71 throat+housing a discrete pocket
-# part (~175 mm), and adding the ~19 g steel spar (on the pivot) net-move
-# the CG +7.0 mm aft to 111.5 mm.  The spar crank clamps at this station.
-PIVOT_Z = 111.5  # pivot / spar-crank station = full-assembly nacelle CG
+# PIVOT_Z — the tilt pivot sits at the rotating assembly's CG, so this is an
+# OUTPUT of a mass roll-up and not a chosen number.  `tools/nacelle_mass_cg.py`
+# is the authority for it; this constant must track that tool's result and the
+# SCAD's own PIVOT_Z, or the assembly tilts the nacelle about the wrong station.
+#
+# UPDATED 2026-09-06 (Rev T4c/T4d): 111.5 -> 107.5.  Raised as LG-33 by the
+# landing-gear session, which found this file still carrying the 2026-07-19
+# figure while the measured CG had moved twice underneath it.
+#
+# The history is worth keeping, because every move was a correction rather than
+# a redesign, and the direction was not always the same:
+#   111.5  2026-07-19, from an ESTIMATED header table that put the pod shell and
+#          both sleeves at 130 g combined
+#   105.8  the pod MEASURED, solid, at 285 g — the CG moved FORWARD
+#   113.8  the pod hollowed with a forward-biased wall (Rev T4b), plus the
+#          in-nacelle harness, which no earlier roll-up had counted at all
+#   107.5  the ESCs sited where they actually FIT (measured bay centroid Z 104)
+#          instead of at plan 003 KTD8's assumed Z 150.6 — a station no board
+#          can occupy, so that lever never existed
+PIVOT_Z = 107.5  # pivot station = full-assembly nacelle CG; see the note above
 NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
 
 
@@ -520,20 +532,33 @@ def assemble():
     place_mesh(splice3, PL_IDENTITY)
 
     # Landing gear — Rev R6 canonical articulated legs (2026-07-21; split
-    # into 1.5in/3.0in belly-clearance variants 2026-07-23 — see
-    # docs/LANDING_GEAR_ANALYSIS.md Rev R6 §4.7).  The lg_r6_1_5in_hull_legs
-    # compound is the ACTIVE (compact, default) variant and is ALREADY in
-    # hull frame (all 4 corners at the canonical QMx Sheet 5 bay stations,
-    # identity placement); see
-    # airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad "hull_legs"
-    # PART.  The extended 3.0in variant
-    # (canonical_leg_r6_3_0in.scad -> lg_r6_3_0in_hull_legs.stl) is kept for
-    # rough-field missions but is not wired into this default assembly.  The
-    # prior Thingiverse-derived feet_x_4/legs parts are archived
+    # into 1.5in/3.0in belly-clearance variants 2026-07-23).
+    #
+    # ** THE ACTIVE VARIANT IS NOW THE 3.0 in LEG (LG-31, 2026-09-06). **
+    # It was the 1.5 in compound, and that configuration struck the ground with
+    # the nozzle on every vertical takeoff and landing.  See
+    # docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md
+    # and docs/LANDING_GEAR_ANALYSIS.md §4.8: the governing case is TOUCHDOWN
+    # ROLL, not static clearance, because each nozzle sits ~73 mm outboard of its
+    # own foot line, so roll costs 1.30 mm/deg (pitch and a four-feet-planted
+    # slope cost nothing — the feet define the plane).  Minimum safe belly
+    # clearance is 74.41 mm at the 5 deg attitude case with the built 40 mm
+    # flaps; the 3.0 in leg gives 80.0 mm.
+    #
+    # Leg length is very nearly free, which was not previously understood: since
+    # the 2026-08-09 hip-recess fix BOTH variants run R_h = 80 mm, so they carry
+    # identical wire loads (39.7/79.4 g) and `M = 2.P.r` has no R_h term.  The
+    # older "1.5 in runs hotter" note in LANDING_GEAR_ANALYSIS.md was four weeks
+    # stale when it was quoted; it has been corrected there.
+    #
+    # The 1.5 in compound (canonical_leg_r6_1_5in.scad) is RETIRED to a non-flight
+    # variant — kept for bench/handling use, not wired in here.  Both are already
+    # in hull frame at the canonical QMx Sheet 5 bay stations (identity
+    # placement).  The prior Thingiverse-derived feet_x_4/legs parts are archived
     # (ARCHIVE_INDEX.md).
     gear = add_mesh(
         doc,
-        _stl("fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl"),
+        _stl("fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl"),
         "Landing_Gear_R6",
     )
     place_mesh(gear, PL_IDENTITY)

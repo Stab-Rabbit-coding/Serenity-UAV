@@ -1383,12 +1383,71 @@ analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
     "nc". Measure it off a physical motor — five minutes with a caliper — along
     with the thread size and whether the four holes are on a true square. **Do
     not print either spider for flight until this is measured.**
-- [ ] **[OPEN] ESC bay thermal path is not sized.** The covers carry louvres at
-    both ends, 144 mm² of open area total, and that is a route and an area — not
-    a verified heat path. A 50 A ESC in a sealed CF-PETG annulus has no path at
-    all, and conduction through the duct wall is not one either (0.25 W/mK over
-    2.5 mm and 460 mm² is 21.7 K/W). No duct bleed is taken: it would cost thrust
-    and is not a trade to make without analysis. Needs CFD or a bench soak.
+- [x] **ESC bay thermal path — SIZED 2026-09-06, and the sealed bay is dead.**
+    `tools/nacelle_esc_thermal.py`, built for this. Load case from
+    Open-Secure-ESC's own copper sizing (6 × 1.75 W FETs + 6.67 W phase pours at
+    2 oz + 4.55 W gap fill = **21.72 W at 50 A**, scaling as I²; **6.81 W at the
+    28 A sustained hover** of `POWER_DISTRIBUTION.md`). FET data from the Toshiba
+    datasheet itself, REF-SEMI-001.
+
+    **The owner's proposal was right about the sink and it is not the problem.**
+    The 11-vane stator sleeve has **188 cm² of wetted area** at a 71 m/s duct jet
+    — `h` ≈ 197 W/m²·K, **0.27 K/W**. That is an excellent heat sink. What fails
+    is the path to it:
+
+    | path | R (K/W) | Tch at 28 A | at 50 A |
+    |---|---:|---:|---:|
+    | sealed bay, conduct through CF-PETG (k = 0.25) | 19.63 | 215 °C | 632 °C |
+    | same path, 6061 aluminium + thermal pad | 1.86 | 94 °C | 246 °C |
+    | **bleed air, 30 m/s through the bay** | **2.74** | **64 °C** | 148 °C |
+
+    *(against a 125 °C design limit — declared judgement — on a 175 °C part)*
+
+    **The 0.2 mm running fit between the sleeve OD and the pod bore is 5.33 K/W
+    of still air on its own** — more than the pod wall, the sleeve wall and the
+    stator sink combined even at a generous k = 1.2 W/m·K. It cannot be filled:
+    the sleeve slides in and out on its keys, and a thermal pad across a sliding
+    joint shears on every service. **Conduction to the stator is unavailable for
+    a geometric reason, not a material one.**
+
+- [x] **CORRECTION — the 0.25 W/m·K written here on 2026-09-06 was unsourced.**
+    REF-MAT-002 is a mechanical-properties paper and publishes no thermal
+    conductivity; nothing else in this repository does either. The figure was an
+    estimate stated as though established. Retracted and recorded as
+    **REF-MAT-004**, which is an entry documenting an *absence*. The analysis
+    above does not depend on it: `nacelle_esc_thermal.py` **sweeps** k from 0.15
+    to 1.20 W/m·K and the conduction path fails at every point (28.98 → 8.52 K/W
+    against a ~4.6 K/W budget), so the decision is insensitive to the missing
+    datum.
+
+- [x] **Bleed inlets built (Rev T4d).** 4 × Ø5.5 mm teardrop holes per bay at
+    Z 76/80/84/88 — the only stations where the POD's own bore is the flow
+    boundary, since aft of Z 90 the sleeves line the duct and a hole there would
+    open into the sleeve clearance rather than the airflow. Teardrop rather than
+    round because the axis is radial, i.e. a horizontal hole in the print. Fed
+    from the ~3.1 kPa inter-stage static rise, vented through the covers'
+    existing 144 mm² of louvre. Mass-neutral (−0.08 g).
+
+- [x] **Material substitution evaluated and REJECTED for the stator sleeve.**
+    6061 in place of CF-PETG takes it 31.0 g → 79.6 g, **+97.3 g the pair**, and
+    still does not carry 50 A (246 °C). It also cannot be printed on this
+    project's equipment — 11 twisted vanes in aluminium is 5-axis machining or
+    DMLS. The sleeve stays CF-PETG.
+
+- [ ] **[OPEN — the flow, not the geometry] Bay velocity is not verified.** The
+    inlet is sized for 4.85 g/s at Cd 0.62 against the inter-stage static rise,
+    which is **2.8 % of EDF1's mass flow ≈ 1.4 % of nacelle thrust**. Whether the
+    bay actually delivers 30 m/s depends on the loss coefficient of a circuit
+    nobody has modelled, and the 0.35 factor by which `nacelle_esc_thermal.py`
+    scales the board's natural-convection resistance for forced flow is the
+    weakest number in that tool. Needs CFD or a bench flow test.
+- [ ] **[OPEN] 50 A sustained is not survivable on any path evaluated.** All
+    three options exceed 125 °C at 50 A. Bleed air reaches **≈ 45 A continuous**
+    at the limit, against a 28 A hover and a 50 A board rating. Two omissions
+    make even that optimistic: switching loss is not in the 21.72 W (those are
+    conduction figures), and `RDS(on)` roughly doubles by 125 °C — a feedback the
+    steady-state model does not carry. **Establish the real sustained current
+    before treating 45 A as headroom.**
 - [ ] **[OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn.**
     Hollowing gave the bundle its annulus and the bays merge into it by design,
     so the blocker recorded at Rev T4 is lifted. What remains is to route and

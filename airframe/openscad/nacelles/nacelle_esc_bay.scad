@@ -103,16 +103,54 @@ ESC_BOSS_DEPTH  = ESC_INSERT_L + 1.0;  // [mm] 6.0 of insert plus 1.0 of materia
 // so conduction through the duct wall into the fan stream is not a path either.
 // The cover therefore carries louvres at both ends, venting the bay to ambient.
 //
-// ** THE FLOW IS NOT SIZED. ** These slots give a known OPEN AREA and a route;
-// what drives air through them is the external pressure gradient along the
-// nacelle in forward flight, and in hover there is nothing but convection.  No
-// bleed is taken from the duct: that would cost thrust, and stealing it without
-// analysis is not a trade this file is entitled to make.  Thermal verification
-// is an open item — see airframe/wings-nacelles/WBS.md §1.1.3.7.
+// ** SIZED 2026-09-06 — and the earlier decision not to bleed was wrong. **
+// This block used to say a duct bleed "would cost thrust, and stealing it
+// without analysis is not a trade this file is entitled to make."  The analysis
+// has now been done (`tools/nacelle_esc_thermal.py`) and the cost is small while
+// every alternative fails:
+//
+//   path                                          R (K/W)   Tch at 28 A / 50 A
+//   sealed bay, conduct through CF-PETG to stator   19.63     215 C / 632 C
+//   same path in 6061 aluminium with a thermal pad   1.86      94 C / 246 C
+//   BLEED AIR, 30 m/s through the bay                2.74      64 C / 148 C
+//
+// The stator sleeve is an EXCELLENT sink — 188 cm² of wetted area at 71 m/s
+// gives 0.27 K/W — but it cannot be reached.  The 0.2 mm running fit between
+// the sleeve OD and the pod bore is 5.33 K/W of still air ON ITS OWN, more than
+// the pod wall, the sleeve wall and the stator sink combined even at a generous
+// k = 1.2 W/m·K.  Filling it is not available: the sleeve slides in and out on
+// its keys, and a thermal pad across a sliding joint shears on every service.
+//
+// So the heat leaves in the air, not through the walls.  The bay is a duct, fed
+// from the inter-stage region where the static pressure is ~3.1 kPa above
+// ambient, and vented through the louvres below.  At a 30 m/s bay velocity that
+// is 4.85 g/s — **2.8 % of EDF1's mass flow, so roughly 1.4 % of the nacelle's
+// thrust** — for a 61 K improvement over the sealed bay at hover.
+//
+// STILL OPEN, and it is the flow and not the geometry: the ACTUAL bay velocity
+// depends on the loss coefficient of a circuit nobody has modelled.  The inlet
+// is sized for the target flow at Cd 0.62; whether the bay delivers it needs
+// CFD or a bench flow test.  See airframe/wings-nacelles/WBS.md §1.1.3.8.
 ESC_LOUVRE_N    =   5;    // [count] slots per end
 ESC_LOUVRE_W    =   1.2;  // [mm] slot width (Z) — 2 extrusions at a 0.6 nozzle
 ESC_LOUVRE_L    =  12.0;  // [mm] slot length (circumferential)
 ESC_LOUVRE_P    =   3.0;  // [mm] slot pitch
+
+// ── Bleed inlet (Rev T4d, 2026-09-06) ────────────────────────────────────────
+// Where the cooling air comes from.  It has to be Z 74–90: that is the only part
+// of the bay where the POD's own bore is the flow boundary.  Aft of Z 90 the
+// stator and aft-spider sleeves line the duct, so a hole in the pod wall there
+// would open into the sleeve clearance, not into the airflow — and drilling
+// both would put a bleed path across a sliding joint.
+//
+// Teardrop profile, not round: the hole axis is radial, so it is a HORIZONTAL
+// hole in the print, and the top of a horizontal circle is an unsupported arc.
+// A 45° apex removes it (3d-print-design FDM rules, "Horizontal holes").  It
+// also adds a little area, which is free.
+ESC_BLEED_N     =    4;   // [count] inlets per bay
+ESC_BLEED_D     =  5.5;   // [mm] inlet diameter — 4 x Ø5.5 = 95 mm2, sized for
+                          //   4.85 g/s at Cd 0.62 against a 3.1 kPa static rise
+ESC_BLEED_Z     = [76.0, 80.0, 84.0, 88.0];  // [mm] stations, all inside 74–90
 
 
 // ── Derived fold geometry ────────────────────────────────────────────────────

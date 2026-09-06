@@ -1418,6 +1418,30 @@ module esc_bay_cut() {
     }
 }
 
+// ── SUBTRACTIVE (Zone B) — ESC bay bleed inlets (Rev T4d) ───────────────────
+// The cooling circuit's inlet.  See nacelle_esc_bay.scad for why the heat has to
+// leave in the air rather than through the walls, and why these must sit forward
+// of Z 90.
+//
+// The teardrop apex points toward +Z, which is UP when the pod prints
+// intake-face-down — so the unsupported top arc of each horizontal hole becomes
+// a self-supporting 45° roof.
+module esc_bleed_inlets() {
+    for (az_hinge = ESC_BAY_AZ, z = ESC_BLEED_Z)
+        rotate([0, 0, az_hinge + esc_a_pow()])
+            translate([EDF_BORE_R - 1.0, 0, z])
+                rotate([0, 90, 0])
+                    linear_extrude(ESC_MOUNT_R - EDF_BORE_R + 3.0)
+                        hull() {
+                            circle(d = ESC_BLEED_D);
+                            // local -x maps to global +Z under rotate([0,90,0])
+                            translate([-ESC_BLEED_D * 0.5, 0])
+                                rotate(45)
+                                    square(ESC_BLEED_D * 0.707, center = true);
+                        }
+}
+
+
 // ── The board seat is a KEEP-OUT, not an addition (Rev T4c) ─────────────────
 // Forward of Z 90 the bore is Ø50, so the duct wall's outer face sits at 27.5
 // and the board needs 2.7 mm of packing under it to reach ESC_MOUNT_R.
@@ -1471,6 +1495,7 @@ module esc_bay_seat_keepout() {
 //   • trunnion_collar_cut()    — Ø34 H7 register, gear cavity, 3× M3, nav port
 //   • esc_disconnect_bay()     — 4 × 10 AWG bullet-disconnect pocket (WA-R10)
 //   • hollow_cavity()          — Rev T4b forward-biased internal cavity
+//   • esc_bleed_inlets()       — Rev T4d duct bleed feeding the ESC bays
 //   • esc_bay_cut()            — Rev T4c ESC window + cover rebate + bores
 //     (the board seat is cut by the same pocket; see esc_bay_seat_keepout)
 //
@@ -1598,6 +1623,9 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
 
             // ── Internal cavity (Rev T4b) — forward-biased hollowing ──────
             hollow_cavity();
+
+            // ── ESC bay bleed inlets (Rev T4d) ────────────────────────────
+            esc_bleed_inlets();
 
             // ── Hinged-ESC bays: board pocket + access window (Rev T4c) ───
             // Cut AFTER the cavity so the two merge into one volume — that is
