@@ -137,8 +137,8 @@ ESC_LOUVRE_L = 16.0      # [mm]
 
 # ── EDF (BOM EDF-50-6S, XFly Galaxy X5 2627-KV3200) ──────────────────────────
 EDF_THRUST_N = 12.16     # [N] 1240 gf per unit, static
-NACELLE_THRUST_N = 21.84 # [N] 4.91 lbf per nacelle = 2 x 2.73 lbf x 0.90 stator
-                         #     efficiency (nacelle_pod_50mm_tandem.scad header)
+NACELLE_THRUST_N = 21.84  # [N] 4.91 lbf per nacelle = 2 x 2.73 lbf x 0.90 stator
+# efficiency (nacelle_pod_50mm_tandem.scad header)
 DUCT_AREA = math.pi * 0.025 ** 2   # [m2] Ø50 bore
 
 #: Fraction of the total static pressure rise contributed by the FORWARD fan.
@@ -181,10 +181,13 @@ SCREENS = {
 #: attribution is therefore not asserted.  The sizing below is deliberately made
 #: insensitive to it: the louvres are enlarged until the screen is a small term,
 #: so a factor-of-two error in K moves the flow by a few percent, not by half.
+
+
 def screen_k(beta: float) -> float:
     if beta >= 1.0:
         return 0.0
     return 1.3 * (1 - beta) + (1 / beta - 1) ** 2
+
 
 # ── Materials ────────────────────────────────────────────────────────────────
 K_ALUMINIUM = 167.0      # [W/m.K] 6061-T6, typical
@@ -299,7 +302,7 @@ def stator_wetted_area() -> float:
     return vanes + hub + bore
 
 
-def report(title: str, rows, note: str = "") -> None:
+def report(title: str, rows, note: str = "") -> float:
     print(f"\n{title}")
     print("  " + "-" * 74)
     total = 0.0
@@ -417,6 +420,7 @@ def main() -> int:
               f"{100 * mdot / st['mdot']:>8.2f}%{h_b:>8.0f}{r_conv:>9.2f}")
         if frac == 1.0:
             best_c = (r_conv, mdot, 100 * mdot / st["mdot"])
+    assert best_c is not None, "100% throttle case always runs and sets best_c"
 
     print("\n  THRUST COST.  The cooling air is INGESTED and then pumped by the")
     print("  aft fan, so it leaves with the jet and carries its own momentum out.")

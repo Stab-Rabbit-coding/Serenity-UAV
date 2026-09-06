@@ -186,12 +186,11 @@ ON_AXIS = [
 #: **66.851**, 1.57 mm lower than the 68.42 that table assumed.  That 1.57 mm is
 #: spent, not recoverable, and it comes off the clearance before `PIVOT_Z` is even
 #: considered.
-ROT_ASSY_TIP_Z = 221.3   # [mm] nacelle-local reach of the rotating assembly AT
-                         #      THE BUILT 40 mm FLAP (iris seats at
-                         #      NOZZLE_RING_Z 166.25, its STL runs to +55.1) —
-                         #      measured, plan 003 R12.  Trimming the flap moves
-                         #      this one-for-one; see `tip_reach()`.
-BUILT_FLAP_LEN = 40.0    # [mm] the flap length ROT_ASSY_TIP_Z was measured at
+ROT_ASSY_TIP_Z = 221.3  # [mm] nacelle-local reach of the rotating assembly AT
+# THE BUILT 40 mm FLAP (iris seats at NOZZLE_RING_Z 166.25, its STL runs to
+# +55.1) — measured, plan 003 R12.  Trimming the flap moves this one-for-one;
+# see `tip_reach()`.
+BUILT_FLAP_LEN = 40.0  # [mm] the flap length ROT_ASSY_TIP_Z was measured at
 
 
 def tip_reach(flap_len: float) -> float:
@@ -205,8 +204,10 @@ def tip_reach(flap_len: float) -> float:
     reach change that reads as a clearance loss instead of a 10 mm gain.
     """
     return ROT_ASSY_TIP_Z - (BUILT_FLAP_LEN - flap_len)
+
+
 WING_SPAR_HULL_Z = 66.851  # [mm] built spar height (merge_cargo_interior.py
-                           #      WING_SPAR_Z, Rev T1c station 28)
+# WING_SPAR_Z, Rev T1c station 28)
 GROUND_PLANES = {"1.5 in gear (ACTIVE default)": -38.1,
                  "3.0 in gear (kept, not wired in)": -80.0}
 

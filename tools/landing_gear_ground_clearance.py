@@ -250,6 +250,7 @@ def worst_case(clearance_mm: float, tips: dict, theta_deg: float,
             clr = x * n[0] + y * n[1] + z * n[2] - contact[0]
             if worst is None or clr < worst[0]:
                 worst = (clr, math.degrees(psi), side, contact[1])
+    assert worst is not None, "steps > 0 guarantees at least one iteration sets worst"
     return worst
 
 
