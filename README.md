@@ -15,8 +15,8 @@
 
 <img src="docs/img/assembled-iso.png" width="720" alt="Serenity UAV — isometric render of the full assembly">
 
-*Isometric render of the Rev S assembly — port/bow/dorsal view. Predates the Rev T1c wing
-spar and Rev T4c nacelle geometry; re-render pending (see `TODO.md` §0.10).*
+*Isometric render of the Rev S assembly — port/bow/dorsal view. Predates the Rev S1g wing
+spar and Rev S4c nacelle geometry; re-render pending (see `TODO.md` §0.10).*
 
 </div>
 

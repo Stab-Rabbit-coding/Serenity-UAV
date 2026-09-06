@@ -3,8 +3,8 @@
 **License:** Dual-licensed — CERN-OHL-W 2.0 (hardware/CAD/PCB) / CC BY-SA 4.0 (docs/BOM/scripts).
 See `docs/attribution_and_licensing.md`.  
 **Current design revision (project-wide):** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for
-changelog). **This folder's BOM data is still the Rev S snapshot below** — the Rev T1c
-wing spar and Rev T4c nacelle mass changes (nacelles −179g/pair from hollowing) are not yet
+changelog). **This folder's BOM data is still the Rev S snapshot below** — the Rev S1g
+wing spar and Rev S4c nacelle mass changes (nacelles −179g/pair from hollowing) are not yet
 recomputed into `bom_revS.json`/`.csv` or the AUW figure. Tracked open in `TODO.md` §0.10.2.
 
 > Bill of Materials, component specifications, and system-level design parameters for
@@ -163,8 +163,8 @@ recomputed into `bom_revS.json`/`.csv` or the AUW figure. Tracked open in `TODO.
 
 ## Revision History
 
-- **Rev T** (2026-09-06): Wings Rev T1c (fixed CF spar, geared tilt drive) and nacelles Rev
-  T4c (hollowed pods, hinged ESC bays, 4x90° motor pattern) integrated; avionics/BOM carried
+- **Rev T** (2026-09-06): Wings Rev S1g (fixed CF spar, geared tilt drive) and nacelles Rev
+  S4c (hollowed pods, hinged ESC bays, 4x90° motor pattern) integrated; avionics/BOM carried
   forward from Rev S **unrecomputed** — see the BOM-currency note at the top of this file.
 - **Rev S** (2026-07-04): Baseline for Phase 5; 24-inch hull, 8-node PACE, Flight Engineer/Observer, Pilot/XO/Commo/Flight Engineer/Observer Rev S1 PCBs
 - **Rev R1** (2026-06-11): 24-inch hull final, hull-frame coordinate std baked into STLs, Nacelle CG tuning (PIVOT_Z = 111.5 mm)

@@ -1288,8 +1288,8 @@ flight_envelope.md — Serenity UAV — Flight Envelope Document [documentation]
 LANDING_GEAR_ANALYSIS.md — Serenity UAV — Landing Gear Structural Analysis [documentation, landing-gear]
 LICENSE — Serenity UAV — docs — License [documentation, licensing]
 MANIFEST.json — JSON data (12 top-level keys) [documentation]
-MASS_AUDIT_CARGO_WING_ROOT.md — Mass Audit — Cargo Section and Wing Roots (Rev T1c) [documentation]
-NOZZLE_DRIVE_TRADE.md — Nozzle-Drive Mechanism Trade Study (Rev T, 2026-07-19) [documentation, propulsion]
+MASS_AUDIT_CARGO_WING_ROOT.md — Mass Audit — Cargo Section and Wing Roots (Rev S1g) [documentation]
+NOZZLE_DRIVE_TRADE.md — Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19) [documentation, propulsion]
 OBSERVER_LASER_ANALYSIS.md — Observer Laser Indicator — Single-Source Feasibility & Spread-Angle Analysis [documentation, security, sensors-vision]
 OBSERVER_MANUFACTURING_READINESS.md — Observer — Manufacturing-Readiness Gap Analysis [documentation, emi-hardening, security]
 OSHW_CERTIFICATION.md — Serenity UAV — Open Source Hardware Certification Readiness [documentation, security]
@@ -1301,7 +1301,7 @@ README.md — Serenity UAV — Documentation Index [documentation, emi-hardening
 REVN_BUILD_GUIDE_24IN.md — Serenity UAV — 24-Inch Build Guide (Rev S Baseline) [documentation, emi-hardening, redundancy-failover]
 structural_analysis.md — Serenity UAV — Fuselage Structural Analysis [documentation]
 Tilt-Rotor 10AWG Wire Clearance Analysis.md — **Tilt-Rotor 10AWG Wire Clearance Analysis** [documentation, emi-hardening]
-TILT_DRIVE_CONTROL_SPEC.md — Nacelle Tilt Drive — Control References and Sensors (Rev T1) [documentation, emi-hardening, security]
+TILT_DRIVE_CONTROL_SPEC.md — Nacelle Tilt Drive — Control References and Sensors (Rev S1e) [documentation, emi-hardening, security]
 TILT_ENCODER_WIRING_EMI_SPEC.md — Nacelle Tilt-Angle Feedback (AK7455) — EMI Wiring Specification [documentation, emi-hardening]
 TILT_SPAR_ANALYSIS.md — Rotating Tilt-Spar Analysis — 8 mm Through-Spar Option [documentation, emi-hardening]
 TODO.md — Serenity UAV — Documentation, Standards & Regulatory TODO (Open Work Only) [documentation, project-tracking]
@@ -1309,7 +1309,7 @@ TODO_1_1_0_COMPLETION_SUMMARY.md — TODO.md §1.1.0 — Hull-Frame Coordinate S
 VERIFY_PLACEMENT_WORKFLOW.md — VERIFY Parts Placement — Workflow & Action Plan [documentation, security]
 WBS.md — Serenity UAV — Documentation, Standards & Regulatory Work Breakdown Structure [documentation, project-tracking, security]
 WBS_FEDERATION.md — WBS.md / TODO.md Federation Inventory (Rev S2) [documentation, emi-hardening, project-tracking]
-WING_ATTACH_INTERFACE.md — Wing Attachment Interface Specification — Rev T1 [documentation]
+WING_ATTACH_INTERFACE.md — Wing Attachment Interface Specification — Rev S1e [documentation]
 ```
 
 ## docs/img/

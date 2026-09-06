@@ -1996,9 +1996,9 @@ Per-application operating mode differs even though the hardware is now identical
 | Application | Qty | Mode | Range |
 |---|---|---|---|
 | Cargo winch | 1 | Continuous rotation, gateway closes position on the AK7455 spool encoder (REF-SENSOR-008) | Multi-turn, unbounded by the servo itself |
-| Nacelle tilt | 2 | **CORRECTED Rev T1c (2026-08-30):** continuous rotation, Pilot closes position on the AK7455 nacelle encoder (REF-SENSOR-008) — the same pattern as the winch above | **Multi-turn** (1.438 rev of actuator per 145° of nacelle), unbounded by the servo itself. Soft-limited to −5°…140° *at the nacelle*, backstopped by CF-PETG hard stops in the external gear train |
+| Nacelle tilt | 2 | **CORRECTED Rev S1g (2026-08-30):** continuous rotation, Pilot closes position on the AK7455 nacelle encoder (REF-SENSOR-008) — the same pattern as the winch above | **Multi-turn** (1.438 rev of actuator per 145° of nacelle), unbounded by the servo itself. Soft-limited to −5°…140° *at the nacelle*, backstopped by CF-PETG hard stops in the external gear train |
 
-> **The row above changed at Rev T1c and the change is structural, not editorial.**
+> **The row above changed at Rev S1g and the change is structural, not editorial.**
 > The tilt stage became a REDUCTION (tip 14T/50T, `i` = 3.571), so the drive shaft must
 > turn **1.438 revolutions** over the 145° sweep and no limited-rotation servo can drive
 > it at any horn radius. Removing the rotation pin is therefore **required** on the tilt
@@ -2385,7 +2385,7 @@ dropped Rev R1); full remix attribution in
 | **License** | Not applicable — an expired US patent is public-domain technical disclosure, cited here as prior-art/technique literature. No text, figure, or geometry from the patent is copied or redistributed. |
 | **Note** | Cited for the **master-flap / seal-flap principle only**: in a variable-area nozzle whose flaps overlap circumferentially, the overlap is only realisable if alternate members sit at different radii, so one set laps over its neighbours and closes the inter-flap gap from outside rather than occupying the same material. Serenity-UAV's implementation (tangential-hinge conical flaps, `FLAP_SHINGLE_GAP` running clearance, spiral-cam unison ring) is original work; the patent's own bellcrank-centered seal linkage is **not** used — this design carries the seal on its own hinge, identical to the master flap. |
 
-**Concept applied in this project:** Rev T3 (2026-08-09) of the nacelle variable nozzle.  All eight
+**Concept applied in this project:** Rev S3 (2026-08-09) of the nacelle variable nozzle.  All eight
 flaps had been carved from one radial band, so the deliberate 5° circumferential overlap
 (`FLAP_SPAN_DEG` 50° × 8 = 400° of arc on a 360° circle) was a solid interpenetration — physically
 unbuildable, and it exported assembly STLs with coincident cylindrical surfaces that failed the
@@ -2397,7 +2397,7 @@ inner surface as the flow-facing boundary.  The master flaps are geometrically u
 **Applied to:** the nacelle variable-area nozzle flap ring (8 flaps per nozzle = 4 master + 4 seal;
 2 nozzles per aircraft).
 
-**Used in:** `airframe/openscad/nacelles/nacelle_nozzle_iris.scad` (header Rev T3 and the
+**Used in:** `airframe/openscad/nacelles/nacelle_nozzle_iris.scad` (header Rev S3 and the
 `FLAP_SHINGLE_GAP` derivation block), `airframe/wings-nacelles/WBS.md` §1.1.3,
 `docs/PHASED_BUILD_GUIDE.md` (nozzle flap print quantities), `current-specification/bom_revS.json`
 (`PRINT-NACELLE-FLAP-MASTER` / `PRINT-NACELLE-FLAP-SEAL`), `TODO.md` §1.1.3.

@@ -34,10 +34,10 @@ result materially.
 
 ---
 
-> ## ⚠ EVERY AERODYNAMIC RESULT IN THIS DOCUMENT IS UNVERIFIED AS OF REV T1
+> ## ⚠ EVERY AERODYNAMIC RESULT IN THIS DOCUMENT IS UNVERIFIED AS OF REV S1e
 >
 > **The wing section changed on 2026-08-29 and this document has not been
-> re-derived against it.** The Rev T1 spar migration scales the thickness
+> re-derived against it.** The Rev S1e spar migration scales the thickness
 > envelope ×1.46 at the root and ×2.20 at the tip to swallow a Ø20.4 spar, so
 > the built sections are **S1223/t17.7** and **S1223/t26.7** — not S1223.
 >
@@ -99,7 +99,7 @@ with zero forward airspeed (θ_hover, solving sin(θ) = W/T):
 | 120° (backing thrust) | 0 kt | 0 kt | Vertical component still exceeds weight (sin 120° = 0.866) |
 | 140° (hard stop) | 0 kt | ≈ 0 kt, thin margin | Vertical component only 1.0 N above weight at Phase 5–10 AUW — **do not rely on 140° for sustained hover margin**; treat as a transient/backing-thrust extreme, not a hover trim point |
 
-**Important caveat on CL_max — strengthened at Rev T1.** The 2.0 figure is
+**Important caveat on CL_max — strengthened at Rev S1e.** The 2.0 figure is
 wind-tunnel data at Re ≈ 100,000 for the **unmodified** S1223. This airframe's
 cruise Reynolds number at the wing root is ≈ 182,000 at 40 kt (ISA SL;
 ≈ 177,000 at 20 °C), and for a *true* S1223 the higher Re would make the

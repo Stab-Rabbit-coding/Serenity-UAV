@@ -816,7 +816,7 @@
 
 ##### 1.1.3.1 *Nozzle*
 
-- **Rev T3 (2026-08-09) — flap SHINGLE implemented (master/seal)** (user decision
+- **Rev S3 (2026-08-09) — flap SHINGLE implemented (master/seal)** (user decision
   2026-08-09; found by CI "STL Validation", not by inspection).
     - [x] **Root cause** — `N_FLAPS` 8 × `FLAP_SPAN_DEG` 50° = 400° of arc on a
         360° circle, i.e. the deliberate 5° inter-flap overlap documented since
@@ -860,8 +860,8 @@
     - [ ] **[OPEN — VERIFY] Mass/CG impact of the shingle.** Flap-set mass rises
         32.0 g → 56.8 g (1.13 oz → 2.00 oz), i.e. **+24.8 g (+0.87 oz) total,
         +12.4 g (+0.44 oz) per nacelle**, all of it aft of and outboard of the
-        tilt pivot. Re-check the Rev T CG band (≈109–112 mm) and the tilt-servo
-        torque margin against this before flight — see §1.1.3 "VERIFY Rev T CG".
+        tilt pivot. Re-check the Rev S2 CG band (≈109–112 mm) and the tilt-servo
+        torque margin against this before flight — see §1.1.3 "VERIFY Rev S2 CG".
     - [ ] **[OPEN — VERIFY] Seal-flap aerodynamic step.** The seal sits 0.2 mm
         proud of the masters' outer surface, so the flow boundary is no longer a
         single continuous cone: masters bound it over 4 × 50° of arc, seals over
@@ -869,7 +869,7 @@
         acceptable for the "smooth, low-turbulence exit" goal by bench/CFD before
         flight; if not, the alternative is a scarfed (tapering-thickness) seal.
     - [x] **CLOSED 2026-08-25 — the FreeCAD assembly and its Makefile were
-        importing the pre-Rev-T3 `nacelle_nozzle_iris.stl`** (2026-07-19, single
+        importing the pre-Rev-S3 `nacelle_nozzle_iris.stl`** (2026-07-19, single
         combined render, `FLAP_PHI` not yet exposed — predates this shingle fix
         by three weeks), found while wiring per-side nozzle petal state to
         `airframe/FreeCAD-scripts/serenity_assembly.py`'s new nacelle-tilt
@@ -891,7 +891,7 @@
         pipeline (a different, non-FreeCAD tool) — untouched here since it
         was out of scope for the tilt-config task that surfaced this.
 
-- **Rev T (2026-07-18) — Option B pushrod drive adopted** (user decision;
+- **Rev S2 (2026-07-18) — Option B pushrod drive adopted** (user decision;
   `docs/NOZZLE_DRIVE_TRADE.md`). Supersedes the Rev S1 internal-ring gear drive.
     - [x] **Rev S2 bug fix** — corrected the `TAB_X`/`TAB_Z` follower-offset SIGN
         error that parked all 8 flap follower pins in the exhaust jet (pin_r
@@ -900,8 +900,8 @@
     - [x] **Cam-only unison ring** — deleted the internal ring gear; ring is now
         a plain cam disc with one pushrod lever ear. Ring Ø74→Ø66, housing
         Ø82→Ø71; follower band pulled to pin_r 29→31; drive-pinion throat relief
-        removed *(nacelle_nozzle_iris.scad Rev T)*.
-    - [x] **Rev T2 — flaps doubled** 20→40 mm (user direction): swing arc halved
+        removed *(nacelle_nozzle_iris.scad Rev S2)*.
+    - [x] **Rev S2b — flaps doubled** 20→40 mm (user direction): swing arc halved
         (PHI 1.79→12.64° vs 3.58→25.94°); bore stays clean, exit continuous.
     - [x] **Housing aft taper** (Stage 2) toward the cowl mold line; binding
         envelope is now the hinge bosses (≈Ø69.4), not the ring.
@@ -916,10 +916,10 @@
         0→90° tilt → 0→23.75° ring map that clears the nacelle skin over the
         full sweep. Current pushrod geometry is first-pass placeholder. Do NOT
         print for flight until closed.
-    - [x] **Re-bake the pod shells** — DONE 2026-08-31 (Rev T4). Both
+    - [x] **Re-bake the pod shells** — DONE 2026-08-31 (Rev S4). Both
         `nacelle_port_revs.stl` and `nacelle_stbd_revs.stl` re-rendered from
         current source and re-baked with `tools/bake_hull_frame.py`; the Ø72
-        nozzle pocket, the Rev S1c harness changes and the whole Rev T4 trunnion
+        nozzle pocket, the Rev S1c harness changes and the whole Rev S4 trunnion
         rework are now in the published meshes. The published files had been
         stale since 2026-07-21. Both are watertight single bodies.
     - [ ] **[OPEN — VERIFY] Full housing ovalization** to the cowl mold line +
@@ -1080,9 +1080,9 @@
     negligible +0.75 mm) — the nacelle still pivots about its CG, per the user
     requirement.  See the pod header mass breakdown and `nacelle_nozzle_idler.scad`
     header.
-- [x] **CG RE-DERIVED for Rev T (pushrod/cam drive + rotating 8 mm spar),
+- [x] **CG RE-DERIVED for Rev S2 (pushrod/cam drive + rotating 8 mm spar),
     2026-07-19 — SUPERSEDES the 104.5 mm figure above.** Deleting the gear train
-    alone left the pivot ~unchanged, but the Rev T2 40 mm flaps (CG ~198 mm), the
+    alone left the pivot ~unchanged, but the Rev S2b 40 mm flaps (CG ~198 mm), the
     discrete Ø71 throat+housing (~175 mm), the cam-only ring, and the ~19 g steel
     spar (on the pivot) net-move the rotating CG to **CG_Z = 111.5 mm** (mass
     393.4 g / 0.867 lbm).  `PIVOT_Z` propagated 104.5 → 111.5 across the pod SCAD
@@ -1094,7 +1094,7 @@
     FIRST-PASS (band ≈109–112 mm) — see root `TODO.md` §1.1.3 for the open VERIFY
     items (sliced-mass density check, single-straight-spar re-solve for the +7 mm
     move, stator teardrop-strut aero, and the Ø72-pocket aft-cowl-tail decision).
-- [x] **Stator spar-crossing rework (Rev T2, 2026-07-19).** Pivot at 111.5 lands
+- [x] **Stator spar-crossing rework (Rev S2b, 2026-07-19).** Pivot at 111.5 lands
     mid-stator; kept **11 vanes** (coprime with the 12-blade EDF rotor — Tyler–
     Sofrin resonance cut-off; 12 would resonate, 13 changes thrust) and carried
     the spar across in a **streamlined teardrop strut** (round nose over the bore,
@@ -1199,13 +1199,13 @@
     `nacelle_nozzle_iris.scad`, `nacelle_sector_gear.scad`, removing
     `nacelle_nozzle_idler*`, and updating `serenity_assembly.py` + the ratio/BOM.
 
-##### 1.1.3.7 *Rev T4 — fixed-spar trunnion, skewer removal, print readiness*
+##### 1.1.3.7 *Rev S4 — fixed-spar trunnion, skewer removal, print readiness*
 
-**2026-08-31.** Closes the nacelle side of the Rev T1 wing/nacelle joint and
+**2026-08-31.** Closes the nacelle side of the Rev S1e wing/nacelle joint and
 takes the rotating spar out of the airflow path. Geometry and analysis by Claude
 (Claude Opus 5, Anthropic) under the author's direction, per `AGENTS.md` §3.
 
-- [x] **The "skewer" is deleted, both ends of it.** Through Rev T2 a rotating
+- [x] **The "skewer" is deleted, both ends of it.** Through Rev S2b a rotating
     Ø8 mm steel spar crossed the duct spanwise at the pivot. In the pod that
     meant a full-width through-bore, a keyed hub and a plain hub on the two
     X-faces, and reinforcing collars at **both duct-wall breaches**; in
@@ -1213,7 +1213,7 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     the annulus, with its clearance bore drilled out through the 0° anti-rotation
     key — leaving that key in two pieces. All of it is gone. The duct pressure
     boundary is continuous again and the 11 vanes get the last word before EDF2,
-    which is what the Rev T2 strut comment said the aero wanted and could not have.
+    which is what the Rev S2b strut comment said the aero wanted and could not have.
 - [x] **`nacelle_trunnion.scad` — NEW PART** (`PRINT-NACELLE-TRUNNION`, 7.0 g).
     Carries the 2 × 6704ZZ bearing pair, the 50T module-0.8 involute ring gear
     (PD 40.0, i = 3.571, C = 25.6 → wing chord station 53.6), the bonded ring-magnet
@@ -1232,7 +1232,7 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     the governing number and it is set by the duct bound.
 - [x] **Vestigial gear-train hardware removed** — `pinion_a_boss()`,
     `crown_pinion_boss()` and `shaft_conduit()` had survived six weeks past the
-    Rev T archiving of the train they served. Not merely dead mass: the conduit's
+    Rev S2 archiving of the train they served. Not merely dead mass: the conduit's
     Ø3.5 bore, blind at both ends once the gears went, exported as a **second,
     inverted body** (−25.2 mm³) — a sealed internal void inside the print. The pod
     now exports as one solid body.
@@ -1248,7 +1248,7 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
 - [x] **New gate** `tools/nacelle_trunnion_fit.py` (T1–T7, S1–S3, M1, P1) and new
     mass tool `tools/nacelle_mass_cg.py`.
 
-- [x] **Rev T4b (2026-08-31) — the pods are HOLLOW, with a forward-biased wall.**
+- [x] **Rev S4b (2026-08-31) — the pods are HOLLOW, with a forward-biased wall.**
     Owner direction: take more from the forward end to move the CG aft and buy
     hover clearance. Built at 2.5 mm forward ramping to 8.0 mm over Z 100–140.
     **284.8 → 195.9 g per pod, −178.8 g for the pair** — the largest single
@@ -1260,7 +1260,7 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     **vented** webs at Z 40/62/84 carry the shear path; the first render sealed a
     −17,227 mm³ compartment before they were drilled.
 
-- [x] **Rev T4b — the stub bound was wrong, and it was wrong about the bore.**
+- [x] **Rev S4b — the stub bound was wrong, and it was wrong about the bore.**
     `SPAR_TIP_PROTRUSION` 15.0 → **13.5 mm**, `TRUNNION_X0` 26.7 → **28.2**.
     §4.3a bounded the joint against the Ø50 EDF duct (r 25), but the pivot sits
     inside the Ø55.4 **sleeve zone**, where the stator sleeve's OD is r 27.5.
@@ -1288,7 +1288,7 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     Ø55.4 sleeve bore, against a 13.28 mm bundle. Unblocks when the pod is hollowed.
 
 - [ ] **[OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still
-    negative on the active gear, but by 2.55 mm rather than 10.5.** Rev T4b's
+    negative on the active gear, but by 2.55 mm rather than 10.5.** Rev S4b's
     forward-biased hollowing moved `PIVOT_Z` to 113.8 and recovered 7.9 mm of the
     deficit; the in-nacelle harness (22.9 g, all aft of the pivot, never counted
     in any previous roll-up) accounts for part of that. **Remaining: −2.55 mm on
@@ -1312,7 +1312,7 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     aft ballast — but the decision is now forced, not optional. Reported by
     `tools/nacelle_mass_cg.py`, which exits non-zero on it.
 
-    **WORSE AT REV T4c, and the reason is worth stating.** Siting the ESCs where
+    **WORSE AT REV S4c, and the reason is worth stating.** Siting the ESCs where
     they actually FIT — the measured bay centroid, Z 104 — instead of where plan
     003 KTD8 assumed they could go (Z 150.6) moves `PIVOT_Z` **113.8 → 107.5**.
     KTD8 banked +3.91 mm of pivot station on a relocation to a station **no board
@@ -1330,13 +1330,13 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     length, which the earlier analysis already rejected as a bad trade.
 
 - [ ] **[OPEN — VERIFY] `serenity_assembly.py` still places the deleted parts.**
-    The nacelle sub-component rows and the spar-crank placement predate Rev T4;
+    The nacelle sub-component rows and the spar-crank placement predate Rev S4;
     the trunnion is not yet registered in the assembly. Re-run the tilt sweep at
     −5/0/45/90/140° once it is.
 
-##### 1.1.3.8 *Rev T4c — hinged ESC bays, access covers, 90° motor pattern*
+##### 1.1.3.8 *Rev S4c — hinged ESC bays, access covers, 90° motor pattern*
 
-**2026-09-06.** Owner direction settled two things Rev T4b had left open, and
+**2026-09-06.** Owner direction settled two things Rev S4b had left open, and
 both turned out to unlock work rather than merely constrain it. Geometry and
 analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
 `AGENTS.md` §3.
@@ -1420,7 +1420,7 @@ analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
     against a ~4.6 K/W budget), so the decision is insensitive to the missing
     datum.
 
-- [x] **Cooling ports built (Rev T4d).** 4 × Ø5.5 mm teardrop holes per bay at
+- [x] **Cooling ports built (Rev S4d).** 4 × Ø5.5 mm teardrop holes per bay at
     Z 76/80/84/88 — the only stations where the POD's own bore is the flow
     boundary, since aft of Z 90 the sleeves line the duct and a hole there would
     open into the sleeve clearance rather than the airflow. Teardrop rather than
@@ -1493,7 +1493,7 @@ analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
     before treating 45 A as headroom.**
 - [ ] **[OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn.**
     Hollowing gave the bundle its annulus and the bays merge into it by design,
-    so the blocker recorded at Rev T4 is lifted. What remains is to route and
+    so the blocker recorded at Rev S4 is lifted. What remains is to route and
     strain-relieve it from the disconnect bay to each ESC, which needs the
     conductor OD that `WING_ATTACH_INTERFACE.md` OI-1 still does not record.
 - [ ] **[OPEN] Window structural allowance.** Two 62 × 35 mm windows 180° apart
@@ -1682,7 +1682,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     fuselage must derive `SPAR_Z` from. `TILT_SPAR_ANALYSIS.md` §3.6 added.
     Verified: `--bore 20.4 --station 28` → root 1.456 / tip 2.190;
     regression `--bore 8.3 --station 45.15` still reproduces the as-built 1.550.
-- [x] **SPAR-20-2 (U2)** — DONE 2026-08-29 (Rev T1). Station 45.15 → **28.0**,
+- [x] **SPAR-20-2 (U2)** — DONE 2026-08-29 (Rev S1e). Station 45.15 → **28.0**,
     bore 8.3 → **20.4**, `THICKNESS_SCALE` 1.00 → **1.46**,
     `THICKNESS_SCALE_TIP` 1.56 → **2.20** (both the solved 1.456/2.190 rounded
     UP per this file's own "not sitting on its own limit" convention — built
@@ -1747,7 +1747,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     **NEW OPEN ITEM: actuator re-select** — the DS3225 is ~17× oversized on
     torque and now also the wrong kind of device.
 - [ ] **SPAR-20-7 (U7)** — Fuselage/cargo-shell re-cut. **OPEN, and it is now
-    the gating item**: `tools/wing_root_deconflict.py` FAILS at Rev T1 with three
+    the gating item**: `tools/wing_root_deconflict.py` FAILS at Rev S1e with three
     findings, all one cause — the fuselage still carries `WING_SPAR_Y = +38.15`
     and `WING_SPAR_BORE_D = 8.3`.
     **THE JOINT SPLITS BY LOAD TYPE (revised 2026-08-29, owner: the centre of

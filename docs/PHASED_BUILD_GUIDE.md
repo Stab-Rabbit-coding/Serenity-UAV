@@ -405,14 +405,14 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Bevel block → longitudinal shaft → crown pinion → ring gear
 - Install sector gear on bracket; rotate by hand to verify mesh; adjust for 0.1–0.2mm backlash
-- Install 8 nozzle flaps per nozzle, **alternating 4 master and 4 seal** around the ring (Rev T3):
+- Install 8 nozzle flaps per nozzle, **alternating 4 master and 4 seal** around the ring (Rev S3):
   the seal flap laps 0.2 mm (0.008 in) OUTBOARD of its two neighbouring masters, closing the gap
   between them from outside.  Both types share the same PIN-3X18 hinge and PIN-2X4 follower, so
   they differ only in the panel — check the part label before fitting.  See REFERENCES.md
-  [REF-CAD-005].  **NOTE:** the gear-train steps in this section are pre-Rev T and describe the
+  [REF-CAD-005].  **NOTE:** the gear-train steps in this section are pre-Rev S2 and describe the
   deleted sector/bevel/crown chain plus a third fuselage nozzle; the current drive is a
   pushrod/bellcrank to a single ring lever, and there are 2 nozzles, not 3 — this section still
-  needs a Rev T rewrite (TODO.md §1.1.3).
+  needs a Rev S2 rewrite (TODO.md §1.1.3).
 - Install SG90 nozzle servos (2 nacelle + 1 fuselage); cap servo leads at hull/bay E
 
 **8. Install nacelle tip caps** (with WS2812C LEDs embedded) — M2.5 screws or press-fit per drawing.

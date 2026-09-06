@@ -26,8 +26,8 @@
 | Domain | End State | Current Status |
 |--------|-------------------|----------------|
 | Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S baseline, carried forward unchanged into Rev T; STLs pending regeneration where noted |
-| Wings | Fixed CF spar (20x16.3mm tube, 35% root chord), S1223-derived section, gear-linked nacelle tilt drive | Rev T1c: spar bonded wing member (not rotating shaft), root joint splits shear(socket)/moment(80x60 flange); 14T/50T reduction drive; SPAR-20-2 station 45.15→28.0mm |
-| Nacelles | 2x 50mm tandem EDF, CG pivot ~Z=107.5mm, M=1.0 gear, iris nozzle, hinged ESC bays | Rev T4c: trunnion skewer deleted, pods hollowed (285→196g fwd-biased), 4 flush ESC covers, 4x90° motor pattern, cooling ports (Rev T4d); nacelle T/W ~1.61 at Phase 5-10 AUW — VTOL hover capable |
+| Wings | Fixed CF spar (20x16.3mm tube, 35% root chord), S1223-derived section, gear-linked nacelle tilt drive | Rev S1g: spar bonded wing member (not rotating shaft), root joint splits shear(socket)/moment(80x60 flange); 14T/50T reduction drive; SPAR-20-2 station 45.15→28.0mm |
+| Nacelles | 2x 50mm tandem EDF, CG pivot ~Z=107.5mm, M=1.0 gear, iris nozzle, hinged ESC bays | Rev S4c: trunnion skewer deleted, pods hollowed (285→196g fwd-biased), 4 flush ESC covers, 4x90° motor pattern, cooling ports (Rev S4d); nacelle T/W ~1.61 at Phase 5-10 AUW — VTOL hover capable |
 | Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected; unchanged at Rev T |
 | Landing gear | Sponson-mounted bays, canonical 1.5in leg (extended 3.0in variant retained) | Rev T (component design generation "R6" retained as its own permanent name): sponson wells CLOSED, leg length derived from nozzle clearance not belly height |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
@@ -160,7 +160,7 @@ see docs/WBS.md §0.10.2.)*
 ## 1.0 — Design Artifacts (Pre-Fabrication)
 
 ### 1.1 — 3D Models: SCAD → STL Exports (Rev T baseline; hull carries forward from Rev S,
-wings/nacelles at Rev T1c/T4c — see `docs/WBS.md` §6.4)
+wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 → detail: `airframe/WBS.md` §1.1.0
@@ -340,13 +340,13 @@ wings/nacelles at Rev T1c/T4c — see `docs/WBS.md` §6.4)
 - [ ] VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
 - [ ] Migrate nacelle_hall_ring_hub → nacelle_pod_50mm_tandem.scad + re-bake
 - [ ] Bench-cal AK7455 with steel spar/MF128 bearing (ferrous-field check)
-- [ ] VERIFY Rev T CG (first-pass, band ≈109–112 mm)
+- [ ] VERIFY Rev S2 CG (first-pass, band ≈109–112 mm)
 - [ ] Re-solve single-straight-spar alignment for +7 mm pivot move
 - [ ] Nozzle drive: replace invalid spar-crank w/ wing-referenced sync…
 - [x] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
-- [ ] Stator spar crossing (Rev T2): 11 vanes, coprime w/ 12-blade rotor
+- [ ] Stator spar crossing (Rev S2b): 11 vanes, coprime w/ 12-blade rotor
 - [ ] Ø72 nozzle-pocket eats the aft cowl tail…
-- [x] Re-derive rotating-assembly CG for Rev T pushrod/cam drive…
+- [x] Re-derive rotating-assembly CG for Rev S2 pushrod/cam drive…
 
 #### 1.1.4 — Landing Gear
 → detail: `airframe/landing-gear/WBS.md` §1.1.4

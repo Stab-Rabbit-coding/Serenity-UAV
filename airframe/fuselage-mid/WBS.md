@@ -1073,12 +1073,12 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 ---
 
-## §1.1.1.5 — Wing-Root Spar Socket (Rev T1 joint requirements)
+## §1.1.1.5 — Wing-Root Spar Socket (Rev S1e joint requirements)
 
 **Owning specification:** [`docs/WING_ATTACH_INTERFACE.md`](../../docs/WING_ATTACH_INTERFACE.md)
 **Owning plans:** `docs/plans/2026-08-29-003-...` U7; `airframe/wings-nacelles/WBS.md` §1.1.4 SPAR-20-7
 
-**Why this section exists.** The wing side of the Rev T1 tilt-spar migration is
+**Why this section exists.** The wing side of the Rev S1e tilt-spar migration is
 BUILT (2026-08-29); the fuselage side is not. The spar is no longer a rotating
 drive shaft that the wing rides on — it is a **fixed 20 × 16.3 mm CF tube bonded
 into the wing**, and it is now the wing's primary bending member. That makes the
@@ -1086,14 +1086,14 @@ fuselage socket the wing's structural root joint, replacing both the enlarged
 tenon (FOS 0.49, CARGO-03c) and the two-rod couple (FOS 4.14, U5/KTD1) that
 existed only because a spar on bearings could not react a moment.
 
-**LANDED 2026-08-30 (Rev T1c).** The gate was RED on three findings that were
+**LANDED 2026-08-30 (Rev S1g).** The gate was RED on three findings that were
 all one cause — the fuselage still carried `WING_SPAR_Y = +38.15` and
 `WING_SPAR_BORE_D = 8.3`. All of `merge_cargo_interior.py`'s wing-root geometry
-is rebuilt against the Rev T1 wing and the cargo shell regenerated.
+is rebuilt against the Rev S1e wing and the cargo shell regenerated.
 
 Fixing the fuselage also exposed three genuine defects in the CHECKING tool,
 masked while the geometry was wrong — most importantly `tenon_params()`
-selecting the enlarged 30 mm tenon for the Rev T1 default load path, which
+selecting the enlarged 30 mm tenon for the Rev S1e default load path, which
 reported an 8.60 mm/side mortise foul against a correctly-sized mortise. See
 `docs/WING_ATTACH_INTERFACE.md` §7.
 
@@ -1184,7 +1184,7 @@ reported an 8.60 mm/side mortise foul against a correctly-sized mortise. See
         reaches X −158.5 / −221.5, in the hull Z band +85.99…+112.99 — above the
         bay's working floor, so the loss is roof volume, not floor footprint.
 
-- [ ] **WA-R18 — Mass/CG/T-W re-derivation after Rev T1c.** **REVISED 2026-08-30
+- [ ] **WA-R18 — Mass/CG/T-W re-derivation after Rev S1g.** **REVISED 2026-08-30
     by the weight audit — the first figure was low.** The rework is
     **+102.8 g (+0.227 lbm) net**, +2.63 % on the 3,911 g (8.62 lbm) AUW, and it
     is *not* concentrated at the CG — it sits at the wing root, outboard and low.
@@ -1196,7 +1196,7 @@ reported an 8.60 mm/side mortise foul against a correctly-sized mortise. See
     | Retired: `SPAR-TILT-4130` 96, `BRG-F688ZZ` 10, `PRINT-PUSHROD-CRANK` 6, `CF-ROD-8MM` 14, `CF-ROD-6MM` 8 | −134.0 g |
     | **Net** | **+46.8 g** parts, **+102.8 g** with the shell |
 
-    The flange was under-massed by 25.6 g at Rev T1c: it was costed as
+    The flange was under-massed by 25.6 g at Rev S1g: it was costed as
     `RHO_SOLID × 40 % infill`, but at 5 mm thick with 4 perimeters at 0.6 mm the
     plate is 4.8 mm of *wall* and 0.2 mm of infill — essentially solid, and infill
     barely touches it. Use `RHO_PRINT` (1.05e-3 g/mm³).
@@ -1205,7 +1205,7 @@ reported an 8.60 mm/side mortise foul against a correctly-sized mortise. See
     (§1.1.5 mass notice), so **this puts the un-swapped case below the minimum**.
     Re-derive T/W and the CG envelope before flight release.
     **`docs/MASS_AUDIT_CARGO_WING_ROOT.md` §6 identifies −32.9 g of low-risk
-    recovery** (hollow the actuator standoffs), which lands Rev T1c at +69.9 g on
+    recovery** (hollow the actuator standoffs), which lands Rev S1g at +69.9 g on
     the corrected basis. **BLOCKS flight release.**
 
 - [ ] **MA-1 — Reconcile every `PRINT-*` BOM row to its STL.** The weight audit

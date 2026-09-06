@@ -1,4 +1,4 @@
-# Nozzle-Drive Mechanism Trade Study (Rev T, 2026-07-19)
+# Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19)
 
 > *"It's the tilt-nozzle. Passive. Elegant. Right up until a gear's hanging off
 > the side of the ship." — design review, this session.*
@@ -91,10 +91,10 @@ ring. Spatial (RSSR-class) linkage — tilt axis (X) ⟂ ring axis (Z).
 > the aft cowl.  Option B deletes the ring gear, freeing the now cam-only ring
 > to shrink to Ø66 (housing Ø71), which tucks under the cowl.
 >
-> Implementation (Rev T, 2026-07-18): the entire tilt-to-nozzle gear train
+> Implementation (Rev S2, 2026-07-18): the entire tilt-to-nozzle gear train
 > (sector gear, Pinion A, bevel pair, bevel housing, Nozzle Drive Pinion) is
 > archived; the ring becomes cam-only with a single pushrod lever ear
-> (`nacelle_nozzle_iris.scad` Rev T); a spar crank + COTS ball-link pushrod is
+> (`nacelle_nozzle_iris.scad` Rev S2); a spar crank + COTS ball-link pushrod is
 > added (`nacelle_nozzle_pushrod.scad`).  The current pod spar ROTATES with
 > tilt, so the crank is a direct tilt-angle input (a simplification over this
 > study's "fixed crank on a non-rotating spar" assumption).
@@ -111,7 +111,7 @@ ring. Spatial (RSSR-class) linkage — tilt axis (X) ⟂ ring axis (Z).
 > nacelle**, so a crank clamped to the spar shares the nacelle's rotating frame
 > with the unison ring — they swing together through the whole 0→90° tilt with
 > **zero relative motion**, so the pushrod never strokes the ring.  A passive,
-> tilt-driven nozzle **must take its datum from the non-tilting WING**; the Rev T
+> tilt-driven nozzle **must take its datum from the non-tilting WING**; the Rev S2
 > header's "rotating-spar pod makes the crank a plain driven link" was the error.
 >
 > **Adopted (user 2026-07-19): "a gear at the wingtip that engages a bellcrank in

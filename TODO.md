@@ -36,7 +36,7 @@
 - [ ] ASTM D3039/D695 coupon test: CF-PLATE-2MM bending allowable (thwarts
       built at FOS 8.5/8.7 vs the conservative 300 MPa stand-in only)
 - [ ] **ASTM D3039/D695 certificate for the 20 x 16.3 CF SPAR TUBE.** New at
-      Rev T1 and now load-bearing: the spar is the wing's primary bending
+      Rev S1e and now load-bearing: the spar is the wing's primary bending
       member at FOS 9.0 against the same unverified 300 MPa stand-in
       (`docs/TILT_SPAR_ANALYSIS.md` §3.6.3). The 4130 rows above no longer
       govern the flight load path.
@@ -76,14 +76,14 @@
       will misrepresent the separation bubble. `tools/wing_cfd_openfoam.py` is
       still blocked on mesh generation. See docs/flight_envelope.md's banner.
 
-#### 0.8.1 — Wing attach interface (Rev T1), open requirements
+#### 0.8.1 — Wing attach interface (Rev S1e), open requirements
 
 → detail: `docs/WING_ATTACH_INTERFACE.md` §5; fuselage detail:
 `airframe/fuselage-mid/WBS.md` §1.1.1.5
 
 Wing side is BUILT. These are the two joints it publishes.
 
-- [x] WA-R1/R1b, R2, R4, R6 — fuselage side BUILT 2026-08-30 (Rev T1c). Socket
+- [x] WA-R1/R1b, R2, R4, R6 — fuselage side BUILT 2026-08-30 (Rev S1g). Socket
       Y +21.00 / Z +66.85 / D20.4 / 18.5 mm; F688ZZ and both tie rods deleted;
       mortise 30.8 -> 12.8 (tenon fits +0.40 mm/side); nav D4.2, AK7455 D7.5 and
       shaft D4.4 conduits cut. `wing_root_deconflict.py` now CLEAR.
@@ -94,7 +94,7 @@ Wing side is BUILT. These are the two joints it publishes.
       no BOM row). **BLOCKS wing removal/refit.**
 - [ ] WA-R16 — the tilt train is NOT self-locking and has no holding provision.
       **BLOCKS flight release.** `docs/TILT_DRIVE_CONTROL_SPEC.md` §5.2/§7.3.
-- [ ] WA-R18 — Rev T1c is +102.8 g (+2.63 % AUW, revised by the weight audit);
+- [ ] WA-R18 — Rev S1g is +102.8 g (+2.63 % AUW, revised by the weight audit);
       hover T/W was ~1.19 vs a 1.2 minimum. Re-derive mass/CG/T-W.
       **BLOCKS flight release.**
 - [ ] MA-1 — BOM printed-part masses understate by +521.6 g (13.3 % of AUW)
@@ -248,7 +248,7 @@ numeric order.)*
     (2026-07-19).** CG_Z = 111.5 mm (was 104.5); `PIVOT_Z` propagated to all
     SCAD/assembly/docs; nacelle shells + stator sleeve re-rendered/re-baked (66
     STLs pass validate_stls). Drivers: 40 mm flaps + discrete Ø71 housing aft.
-- [ ] VERIFY Rev T CG (first-pass, band ≈109–112 mm)
+- [ ] VERIFY Rev S2 CG (first-pass, band ≈109–112 mm)
     printed densities (CF-PETG 1.05 / PETG 1.00 g/cm³) against printer-sliced
     masses, and the discrete-housing vs cowl-skin overlap. → pod header table.
 - [ ] Re-solve single-straight-spar alignment for +7 mm pivot move
@@ -257,13 +257,13 @@ numeric order.)*
     spar still passes through the CG pivot. `port_tilt_spar_assembly.scad` NAC_D
     is now DERIVED from `PIVOT_ZLOC` (slide-fwd-to-Y15, user 2026-07-19) so the
     overlay stays consistent; the baked nacelle STL still needs re-baking to the
-    Rev T CG pivot (its old boss is ~7 mm fwd of the new pivot).
+    Rev S2 CG pivot (its old boss is ~7 mm fwd of the new pivot).
 - [ ] Nozzle drive: replace invalid spar-crank w/ wing-referenced sync…
-    gear + geared bellcrank (2026-07-19).** The Rev T crank clamps the spar, which
+    gear + geared bellcrank (2026-07-19).** The Rev S2 crank clamps the spar, which
     is KEYED to the nacelle → shares the ring's rotating frame → zero relative
     motion → no actuation. Adopted hybrid (user; docs/NOZZLE_DRIVE_TRADE.md
     "DECISION AMENDMENT"): wing-fixed sun gear coaxial with the spar + nacelle
-    pinion (1:1) → geared bellcrank → Rev T cam-only-ring pushrod. Modelled in
+    pinion (1:1) → geared bellcrank → Rev S2 cam-only-ring pushrod. Modelled in
     `port_tilt_spar_assembly.scad` §6. SUB-TASKS:
     - [ ] Reconcile the wing fixed R22 sector (`wings_s1223_revo.scad`) to the
         chosen 1:1 sun (module, teeth, pitch radius; keep bolt circle vs bearing).
@@ -278,8 +278,8 @@ numeric order.)*
     used `rotate([0, PHI_CLOSED, 0])` → petals DIVERGE at "closed"; must be
     `−PHI_CLOSED` to converge to 75 % bore. Preview-only (print parts unaffected).
     **RESOLVED 2026-07-20** (sign-bug fix in the asm loop); the loop now reads
-    `rotate([0, −FLAP_PHI, 0])` after the Rev T3 parameterisation.
-- [x] Iris flap shingle (Rev T3, 2026-08-09) — the documented 5° inter-flap…
+    `rotate([0, −FLAP_PHI, 0])` after the Rev S3 parameterisation.
+- [x] Iris flap shingle (Rev S3, 2026-08-09) — the documented 5° inter-flap…
     overlap was a solid INTERPENETRATION: all 8 flaps sat in one radial band, so
     adjacent flaps shared coincident surfaces (17/12 non-manifold edges) and CI
     "STL Validation" failed. Alternate flaps are now SEAL flaps lapped
@@ -290,10 +290,10 @@ numeric order.)*
     → detail: `airframe/wings-nacelles/WBS.md` §1.1.3.1. SUB-TASKS:
     - [ ] VERIFY mass/CG: flap set 32.0 → 56.8 g (+24.8 g / +0.87 oz total,
         +12.4 g / +0.44 oz per nacelle), all aft/outboard of the tilt pivot —
-        re-check the Rev T CG band (≈109–112 mm) and tilt-servo torque margin.
+        re-check the Rev S2 CG band (≈109–112 mm) and tilt-servo torque margin.
     - [ ] VERIFY the 0.2 mm seal step against the "smooth, low-turbulence exit"
         goal by bench/CFD; fall back to a scarfed seal if the step is material.
-    - [ ] Rewrite `docs/PHASED_BUILD_GUIDE.md` §7 for Rev T — it still describes
+    - [ ] Rewrite `docs/PHASED_BUILD_GUIDE.md` §7 for Rev S2 — it still describes
         the deleted sector/bevel/crown gear chain and a third fuselage nozzle
         (current drive is a pushrod/bellcrank to one ring lever; 2 nozzles).
     - [x] Harden `tools/precommit_index.py`: `collect_files()` indexed every
@@ -329,7 +329,7 @@ numeric order.)*
         in repository secrets to do safely. Meanwhile the determinism fix above
         removes the failure class that actually kept firing, and the job now prints
         a one-command fix plus uploads the corrected files as an artifact.
-- [ ] Stator spar crossing (Rev T2): 11 vanes, coprime w/ 12-blade rotor
+- [ ] Stator spar crossing (Rev S2b): 11 vanes, coprime w/ 12-blade rotor
     rotor — Tyler–Sofrin); spar carried in a streamlined teardrop strut (tail
     aft, TE ≈ vane TE) + 0° anti-rotation key drilled through. VERIFY strut
     chord/tail + residual swirl into EDF2 by CFD/bench before flight.

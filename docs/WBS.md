@@ -276,7 +276,7 @@
 *(root `WBS.md` §0.8)*
 
 - [ ] **Verify `REF-STD-GEAR-001` (ISO 53:1998) to clause level.** Added
-    2026-08-31 with the nacelle tilt ring gear (Rev T4,
+    2026-08-31 with the nacelle tilt ring gear (Rev S4,
     `airframe/openscad/nacelles/nacelle_trunnion.scad`). The designation, title,
     issuing body and the three basic-rack proportions used (α = 20°,
     h_a = 1.00·m, h_f = 1.25·m) are recorded; the **direct ISO catalogue URL and
@@ -654,7 +654,7 @@ Per the predecessor `docs/DOC_VERIFICATION_0.6.2.md §0.6.2.3` open items:
   figure was off by ~2.7× in the CSV — the number that actually feeds the hover-thrust
   calculation used throughout the flight-safety docs; the nacelle nozzle flap row was a full
   design revision behind, still describing the superseded Rev S single-flap instead of the
-  current Rev T3 master+seal split).
+  current Rev S3 master+seal split).
 
 **Still open, significant:**
 - **~15 more `bom_revS.csv` rows have unquoted-comma `Description`/`Notes` fields that
@@ -674,15 +674,15 @@ Per the predecessor `docs/DOC_VERIFICATION_0.6.2.md §0.6.2.3` open items:
   the CSV↔JSON sync mechanism, does not exist — noted in both places rather than left as a
   dangling reference to a script nobody can run.
 - **`bom_revS.json`/`.csv` predate the Rev T checkpoint (§6.4) and were not recomputed for
-  it.** Confirmed deltas not yet reflected: nacelle mass (Rev T4b/T4c hollowing, −179g/pair),
-  wing spar (Rev T1c fixed 20x16.3mm CF tube replacing whatever the BOM currently prices/
-  masses as the spar part), and the nozzle drive (Rev T2 pushrod/cam). Given the AUW figure
+  it.** Confirmed deltas not yet reflected: nacelle mass (Rev S4b/S4c hollowing, −179g/pair),
+  wing spar (Rev S1g fixed 20x16.3mm CF tube replacing whatever the BOM currently prices/
+  masses as the spar part), and the nozzle drive (Rev S2b pushrod/cam). Given the AUW figure
   is already flagged above as possibly understated by ~1.7–1.9 kg before any of these T-series
   deltas are applied, this BOM should not be treated as authoritative for mass/CG until a
   full recompute happens — see the caveat now stated at the top of
   `current-specification/README.md`.
 - **`docs/img/assembled-iso.png`** (root `README.md` hero image) is dated 2026-08-23 —
-  predates both Rev T1c and Rev T4c geometry. Re-render needed before it can be captioned as
+  predates both Rev S1g and Rev S4c geometry. Re-render needed before it can be captioned as
   current; root `README.md` now says so explicitly rather than implying it's up to date.
 
 #### 4. WBS and TODO files
@@ -880,20 +880,37 @@ meaningfully higher, and that bears on the aircraft's actual hover margin.
 integrated, tested, and documented as of this letter — components not listed below carry
 forward from Rev S unchanged.
 
+**Numbering correction applied 2026-09-06 (owner direction):** everything below was
+previously labeled with a "T"-prefixed number (T1, T1b, T1c for wings; T, T2, T3, T4, T4b,
+T4c, T4d for the nacelle/nozzle) even though those changes happened while Rev S was still
+the pinned project letter — per root `AGENTS.md` §8, a numbered modification continues the
+*current* letter's sequence, and only work that happens after a letter is actually pinned
+gets to use the new letter's number-1. Since none of this work postdates today's Rev T pin,
+none of it keeps a "T" number: it was renumbered to continue each component's own S-lineage
+(wings: S1→S1b→S1c→S1d→**S1e→S1f→S1g**; nacelle/nozzle: **S2→S2b→S3→S4→S4b→S4c→S4d**,
+continuing past the pre-existing S1/S2 nozzle-drive labels). "Rev T" itself now names only
+this checkpoint, not any individual line item — renamed consistently across WBS/TODO/README/
+REFERENCES.md and the technical analyses (`docs/WING_ATTACH_INTERFACE.md`,
+`docs/MASS_AUDIT_CARGO_WING_ROOT.md`, `docs/TILT_SPAR_ANALYSIS.md`,
+`docs/TILT_DRIVE_CONTROL_SPEC.md`, `docs/NOZZLE_DRIVE_TRADE.md`, `docs/flight_envelope.md`,
+`docs/PHASED_BUILD_GUIDE.md`); left untouched as historical/point-in-time records: git
+history, `CLAUDE-MEMORY.md`, and `docs/plans/*.md`. `tools/nacelle_trunnion_fit.py`'s T1–T8
+verification *gate* names are a separate, unrelated namespace and were not touched.
+
 Components carrying new work into Rev T (numbered sub-revisions superseded by this checkpoint):
 
-- **Wings — Rev T1c** (`airframe/wings-nacelles/WBS.md` §1.1.2): fixed CF spar (20x16.3mm
+- **Wings — Rev S1g** (`airframe/wings-nacelles/WBS.md` §1.1.2): fixed CF spar (20x16.3mm
   tube, bonded wing member, not a rotating shaft) at 35% root chord / station 45.15mm; root
   joint splits shear (socket) from moment (80x60mm flange); tilt drive is a >1 rev reduction
   (14T/50T), not a direct servo throw; SPAR-20-2 (U2) station moved 45.15→28.0mm.
-- **Nacelles — Rev T4c** (`airframe/wings-nacelles/WBS.md` §1.1.3): trunnion skewer deleted
+- **Nacelles — Rev S4c** (`airframe/wings-nacelles/WBS.md` §1.1.3): trunnion skewer deleted
   from both the pod and stator sleeve; pods hollowed fwd-biased (285→196g each, −179g/pair);
   hinged 23+10mm ESC bays (62x33mm stack, az 69°/249°) with 4 distinct flush access covers;
-  motor-mount spider pattern changed 3@120°→4@90° (15/105/195/285°); cooling ports (Rev T4d,
+  motor-mount spider pattern changed 3@120°→4@90° (15/105/195/285°); cooling ports (Rev S4d,
   4x Ø5.5mm teardrop holes/bay); CG pivot re-derived to Z≈107.5mm (1.5in gear variant found
   not viable at this pivot — see `airframe/wings-nacelles/WBS.md` §1.1.3.8).
-- **Nozzle drive — Rev T2** (superseding the Rev S1 internal-ring-gear drive): Option B
-  pushrod/cam drive (`docs/NOZZLE_DRIVE_TRADE.md`), flaps doubled 20→40mm.
+- **Nozzle drive — Rev S2** (superseding the Rev S1 internal-ring-gear drive): Option B
+  pushrod/cam drive (`docs/NOZZLE_DRIVE_TRADE.md`); Rev S2b doubled the flaps 20→40mm.
 - **Landing gear — folded into Rev T** (`airframe/landing-gear/WBS.md`): sponson-mounted
   gear bays CLOSED, canonical 1.5in leg retained alongside the extended 3.0in variant,
   minimum safe leg length re-derived from nozzle ground clearance rather than cargo-box

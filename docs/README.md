@@ -1,8 +1,8 @@
 # Serenity UAV — Documentation Index
 
 > **Rev T Baseline (2026-09-06, see `WBS.md` §6.4):** 24-inch CF-PETG hull, 8-node
-> cooperative avionics, 50mm tandem EDF nacelles (Rev T4c — hinged ESC bays, hollowed
-> pods), fixed CF wing spar (Rev T1c), cargo system, autonomous flight capability. Avionics
+> cooperative avionics, 50mm tandem EDF nacelles (Rev S4c — hinged ESC bays, hollowed
+> pods), fixed CF wing spar (Rev S1g), cargo system, autonomous flight capability. Avionics
 > and BOM carry forward from Rev S unchanged — see below for links to all design documents,
 > build guides, and technical analysis.
 
@@ -79,7 +79,7 @@
 
 | Rev | Hull | Nacelle EDFs | Avionics | Build Status | Archive |
 |-----|------|--------------|----------|--------------|---------|
-| T | 24" | 50mm X-Fly tandem, Rev T4c nacelle (hinged ESC bays, hollowed) | 8-node Pilot/XO/Flight Engineer/Commo/Observer (Rev S1, unchanged) | Current baseline (Phase 5 ready) | — |
+| T | 24" | 50mm X-Fly tandem, Rev S4c nacelle (hinged ESC bays, hollowed) | 8-node Pilot/XO/Flight Engineer/Commo/Observer (Rev S1, unchanged) | Current baseline (Phase 5 ready) | — |
 | S | 24" | 50mm X-Fly tandem | 8-node Pilot/XO/Flight Engineer/Commo/Observer (Rev S1) | Superseded by Rev T | `docs/WBS.md` §6.3 |
 | R1 | 24" | 50mm X-Fly tandem | 8-node (pre-S1) + hull-frame baking | Design complete | `git log` |
 | R | 24" | 50mm X-Fly tandem | 8-node (first 24" iteration) | Archived | `git log` |

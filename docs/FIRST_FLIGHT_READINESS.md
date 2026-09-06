@@ -6,7 +6,7 @@
 
 > **STALE SNAPSHOT — predates the Rev T checkpoint (`docs/WBS.md` §6.4, 2026-09-06).** The
 > open-item counts below were correct against the 2026-07-05 `WBS.md` and have not been
-> recounted since; wings (Rev T1c) and nacelles (Rev T4c) both had substantial work land in
+> recounted since; wings (Rev S1g) and nacelles (Rev S4c) both had substantial work land in
 > `airframe/wings-nacelles/WBS.md` §1.1.2/§1.1.3 after this snapshot was taken, which changes
 > the §1.1 open-item count below. Treat the branch list and file pointers as still valid; do
 > not treat the counts as current. A recount against the live WBS federation is open in
