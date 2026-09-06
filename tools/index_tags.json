@@ -9548,7 +9548,7 @@
       "archived": false
     },
     "current-specification/README.md": {
-      "description": "Serenity UAV \u2014 Current Specification (Rev S Baseline)",
+      "description": "Serenity UAV \u2014 Current Specification (Rev S BOM Baseline)",
       "tags": [
         "documentation",
         "redundancy-failover",
@@ -9949,14 +9949,14 @@
       "archived": false
     },
     "docs/MASS_AUDIT_CARGO_WING_ROOT.md": {
-      "description": "Mass Audit \u2014 Cargo Section and Wing Roots (Rev T1c)",
+      "description": "Mass Audit \u2014 Cargo Section and Wing Roots (Rev S1g)",
       "tags": [
         "documentation"
       ],
       "archived": false
     },
     "docs/NOZZLE_DRIVE_TRADE.md": {
-      "description": "Nozzle-Drive Mechanism Trade Study (Rev T, 2026-07-19)",
+      "description": "Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19)",
       "tags": [
         "documentation",
         "propulsion"
@@ -10043,7 +10043,7 @@
       "archived": false
     },
     "docs/TILT_DRIVE_CONTROL_SPEC.md": {
-      "description": "Nacelle Tilt Drive \u2014 Control References and Sensors (Rev T1)",
+      "description": "Nacelle Tilt Drive \u2014 Control References and Sensors (Rev S1e)",
       "tags": [
         "documentation",
         "emi-hardening",
@@ -10119,7 +10119,7 @@
       "archived": false
     },
     "docs/WING_ATTACH_INTERFACE.md": {
-      "description": "Wing Attachment Interface Specification \u2014 Rev T1",
+      "description": "Wing Attachment Interface Specification \u2014 Rev S1e",
       "tags": [
         "documentation"
       ],

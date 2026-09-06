@@ -1,7 +1,7 @@
 # Serenity UAV — Avionics Subsystem
 
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
-**Current design revision:** Rev S (2026-07-04)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > Avionics subsystem for the Serenity UAV: 8-node cooperative flight control,
 > PACE failover architecture, EMI-hardened PCBs, multi-link comms (CAN FD, RS-485,

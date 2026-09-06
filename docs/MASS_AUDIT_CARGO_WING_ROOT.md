@@ -1,4 +1,4 @@
-# Mass Audit — Cargo Section and Wing Roots (Rev T1c)
+# Mass Audit — Cargo Section and Wing Roots (Rev S1g)
 
 **Revision:** 1 (2026-08-30)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
@@ -51,7 +51,7 @@ Those two corrections move in opposite directions and do not cancel.
 > almost entirely perimeter: a 5 mm plate at 4 × 0.6 mm perimeters is 4.8 mm of
 > wall and 0.2 mm of infill, so infill percentage barely moves it. Applying
 > `1.30e-3 × 0.40` gives roughly **half** the true mass. That error was made in
-> this repository on `PRINT-WING-ROOT-FLANGE` at Rev T1c and is corrected in §5.
+> this repository on `PRINT-WING-ROOT-FLANGE` at Rev S1g and is corrected in §5.
 
 All masses below are `RHO_PRINT` unless stated. Thin-walled proposals in §6 are
 quoted at `RHO_SOLID`, which is the honest density for a pure-perimeter section
@@ -78,7 +78,7 @@ recoverable mass lives.
 
 | Feature | Volume (mm³) | Mass | Note |
 |---|---:|---:|---|
-| **Actuator pad, port** | 52,673 | **55.3 g** | 24.1 g legacy embed + 31.4 g Rev T1c standoff |
+| **Actuator pad, port** | 52,673 | **55.3 g** | 24.1 g legacy embed + 31.4 g Rev S1g standoff |
 | **Actuator pad, starboard** | 51,599 | **54.2 g** | 23.3 g + 31.4 g |
 | Spar socket boss, port | 12,227 | 12.8 g | Ø30.1 (was Ø27.7 / 10.9 g) |
 | Spar socket boss, starboard | 10,656 | 11.2 g | Ø30.1 (was Ø27.7 / 9.5 g) |
@@ -86,10 +86,10 @@ recoverable mass lives.
 | Root flanges | — | **0 g** | reserved keep-out only; separate bonded parts |
 
 **The two actuator pads are 109.5 g — the heaviest discretionary feature on the
-cargo section, and 29 % of the whole shell.** Before the Rev T1c standoff they
+cargo section, and 29 % of the whole shell.** Before the Rev S1g standoff they
 were 47.4 g. They are the obvious target and §6 quantifies them.
 
-### 2.2 Already recovered at Rev T1c
+### 2.2 Already recovered at Rev S1g
 
 Retiring the wing-root tie-rod couple removed four bosses from the shell:
 
@@ -202,12 +202,12 @@ was measured. Twenty-three matched.
 
 ### 5.1 Corrected in this pass
 
-* **`PRINT-CARGO-SECT` 165 → 372 g.** Not a Rev T1c regression: the *pre*-Rev-T1c
+* **`PRINT-CARGO-SECT` 165 → 372 g.** Not a Rev S1g regression: the *pre*-Rev-S1g
   shell already measured 316 g against the same 165 g row. The row predates the
   Rev R6 landing-gear bay features, the actuator pads, the Ø30.1 sockets and the
   CF thwart pockets.
 * **`PRINT-WING-ROOT-FLANGE` 12.7 → 25.6 g/ea.** This one was our own error,
-  introduced at Rev T1c: `RHO_SOLID × 0.40` instead of `RHO_PRINT`. See the
+  introduced at Rev S1g: `RHO_SOLID × 0.40` instead of `RHO_PRINT`. See the
   warning in §1.
 * **`FOAM-PU-2LB` 900 → 22 g.** §4.2.
 
@@ -296,7 +296,7 @@ because a thin wall is all perimeter. That makes these savings conservative.
 
 ---
 
-## 7. Revised Rev T1c mass delta
+## 7. Revised Rev S1g mass delta
 
 Correcting the flange density error changes the figure previously recorded:
 
@@ -305,13 +305,13 @@ Correcting the flange density error changes the figure previously recorded:
 | Cargo shell (Ø30.1 sockets, 18 mm standoffs, less the retired tie-rod bosses) | +56.0 g |
 | `SPAR-CF-20X16` 58.2, `SHAFT-TILT-4MM` 49.4, `GEAR-TILT-FUS-38T` 16.0, `BUSH-TILT-4MM` 6.0, `PRINT-WING-ROOT-FLANGE` **51.2** | +180.8 g |
 | Retired: `SPAR-TILT-4130` 96, `BRG-F688ZZ` 10, `PRINT-PUSHROD-CRANK` 6, `CF-ROD-8MM` 14, `CF-ROD-6MM` 8 | −134.0 g |
-| **Rev T1c net** | **+102.8 g (+0.227 lbm), +2.63 % of AUW** |
+| **Rev S1g net** | **+102.8 g (+0.227 lbm), +2.63 % of AUW** |
 
 Previously recorded as +77.0 g / +1.97 %. **The earlier figure was low because
 the flange was under-massed by 25.6 g.** Corrected here and in
 `airframe/fuselage-mid/WBS.md` WA-R18.
 
-With the §6.3 recommendation applied, Rev T1c lands at **+69.9 g (+1.79 %)** —
+With the §6.3 recommendation applied, Rev S1g lands at **+69.9 g (+1.79 %)** —
 below where it was first reported, on a corrected basis.
 
 ---
@@ -328,7 +328,7 @@ below where it was first reported, on a corrected basis.
 | **MA-6** | `PRINT-BATT-TRAY` measures **140.2 g** vs 22 g, in the cargo section | Re-measure, then lighten on its merits | fuselage-mid |
 | **MA-7** | BOM mass column mixes installed mass, consumable stock and GCS | Add an `Installed` flag before any weight statement uses it | specification |
 | **MA-8** | Wing roots have **no** recoverable mass — wall at 4-perimeter floor, thickness solved by the bore | None. Record so it is not re-litigated | wings-nacelles |
-| **MA-9** | Rev T1c net is **+102.8 g**, not +77.0 g | **CORRECTED** in WA-R18 | fuselage-mid |
+| **MA-9** | Rev S1g net is **+102.8 g**, not +77.0 g | **CORRECTED** in WA-R18 | fuselage-mid |
 
 ---
 

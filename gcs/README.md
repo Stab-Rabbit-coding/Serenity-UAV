@@ -1,7 +1,7 @@
 # Serenity UAV — Ground Control Station (Skipper)
 
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
-**Current design revision:** Rev S (2026-07-04)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > Ground control station (GCS) hardware and software for Serenity UAV: multi-radio comms
 > node (Wi-Fi, Zigbee, SiK 915 MHz, 49 MHz, LoRa), antenna gimbal tracking, and

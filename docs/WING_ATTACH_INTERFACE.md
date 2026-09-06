@@ -1,16 +1,16 @@
-# Wing Attachment Interface Specification — Rev T1
+# Wing Attachment Interface Specification — Rev S1e
 
-**Revision:** T1c (2026-08-30)
+**Revision:** S1g (2026-08-30)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Analysis and drafting:** Claude (Claude Opus 5, Anthropic) under the author's
 direction, per `AGENTS.md` §3 "Attribution and Licensing"
 **License:** CC BY-SA 4.0 — <https://creativecommons.org/licenses/by-sa/4.0/>
 
 **Status:** SPECIFICATION — the wing side is built
-(`airframe/openscad/wings/wings_s1223_revo.scad`, Rev T1). **The fuselage side
-is built** (Rev T1c, 2026-08-30 —
+(`airframe/openscad/wings/wings_s1223_revo.scad`, Rev S1e). **The fuselage side
+is built** (Rev S1g, 2026-08-30 —
 `airframe/blender-scripts/merge_cargo_interior.py`, §3 and §4.3c below). **The
-nacelle side is now built too** (Rev T4, 2026-08-31 —
+nacelle side is now built too** (Rev S4, 2026-08-31 —
 `airframe/openscad/nacelles/nacelle_trunnion.scad` and the trunnion collar in
 `nacelle_pod_50mm_tandem.scad`). One requirement, **WA-R10**, is NOT built and is
 blocked on hollowing the pod; see §4.4 and §6 OI-8.
@@ -19,15 +19,15 @@ blocked on hollowing the pod; see §4.4 and §6 OI-8.
 
 ## 1. Why this document exists
 
-Rev T1 changes what the spar *is*. Through Rev R2 the tilt spar was a rotating
+Rev S1e changes what the spar *is*. Through Rev R2 the tilt spar was a rotating
 drive shaft that happened to pass through the wing on two bearings; the wing was
-a fairing threaded onto it. Under Rev T1 the spar is a **fixed 20 × 16.3 mm
+a fairing threaded onto it. Under Rev S1e the spar is a **fixed 20 × 16.3 mm
 carbon-fibre tube bonded into the wing over its full span**, and it is the
 wing's primary bending member.
 
 That single change re-writes both ends of the wing at once:
 
-| | Rev R2 (rotating spar) | **Rev T1 (fixed bonded spar)** |
+| | Rev R2 (rotating spar) | **Rev S1e (fixed bonded spar)** |
 |---|---|---|
 | Wing root moment path | tenon, then two bonded CF tie rods | **the spar itself, into a bonded root flange** |
 | Root couple arm | 48 mm (chordwise rod spacing) | **86.7 mm (spanwise support span)** |
@@ -536,7 +536,7 @@ depth on the inboard face (skin radius − duct radius − 2 × 2.5 mm wall):
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | depth (mm) | 6.58 | −0.76 | 5.58 | 3.47 | **7.10** | **7.10** | **7.10** | 4.40 | 4.10 | 2.63 | 1.05 |
 
-**What is built at Rev T4:** a filleted 30 × 14 × 6.0 mm bay at Z 82, in that
+**What is built at Rev S4:** a filleted 30 × 14 × 6.0 mm bay at Z 82, in that
 7.10 mm window, with four M3 **brass** stud inserts on a 7.5 mm pitch. It takes
 ring terminals — one of the three styles this section itself lists — because no
 station on this flank has room for a 10 AWG *bullet* laid lengthwise. It sits
@@ -571,7 +571,7 @@ because the spar bore is now full of the power bundle.
 
 1. **The spar is no longer ferromagnetic.** Rev R2's magnetic-siting problem was
    a 4130/17-4 PH steel shaft through the ring centre distorting the bias field
-   (`docs/TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1). The Rev T1 spar is carbon
+   (`docs/TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1). The Rev S1e spar is carbon
    fibre. **That distortion source is removed, not mitigated** — and §6.1's
    stated premise is now factually wrong and needs correcting there.
    The non-ferrous keep-out is **retained anyway**, because it also governs the
@@ -647,7 +647,7 @@ low-Reynolds high-lift section.
 
 All below `Re = 5 × 10⁵` — the **low-Reynolds regime**, where laminar
 separation bubbles dominate and published polars do not transfer between
-Reynolds numbers, let alone between sections. Chord is unchanged at Rev T1, so
+Reynolds numbers, let alone between sections. Chord is unchanged at Rev S1e, so
 Re is unchanged.
 
 | Claim | Status |
@@ -676,22 +676,22 @@ misrepresent the separation bubble. Tracked in `TODO.md` §0.8 and
 
 | ID | Requirement | Owner | Status |
 |---|---|---|---|
-| **WA-R1** | Spar socket at hull Y +21.00, Z +66.85, Ø20.4, 18.5 mm deep — SHEAR path (FOS 16) | fuselage-mid | **BUILT** (T1c) |
-| **WA-R1b** | Bonded root flange 80 (Z) × 60 (Y) mm on the inner sidewall — MOMENT path (FOS 29.2). Nothing inboard of hull X ≈ −86; the bay stays clear | fuselage-mid | **BUILT** (T1c) — as a *conforming* 5 mm plate, not a plane-bounded slab; see §3.6 |
-| **WA-R2** | Root bearing (F688ZZ) deleted; bonded/clamped socket replaces it | fuselage-mid | **BUILT** (T1c) |
+| **WA-R1** | Spar socket at hull Y +21.00, Z +66.85, Ø20.4, 18.5 mm deep — SHEAR path (FOS 16) | fuselage-mid | **BUILT** (Rev S1g) |
+| **WA-R1b** | Bonded root flange 80 (Z) × 60 (Y) mm on the inner sidewall — MOMENT path (FOS 29.2). Nothing inboard of hull X ≈ −86; the bay stays clear | fuselage-mid | **BUILT** (Rev S1g) — as a *conforming* 5 mm plate, not a plane-bounded slab; see §3.6 |
+| **WA-R2** | Root bearing (F688ZZ) deleted; bonded/clamped socket replaces it | fuselage-mid | **BUILT** (Rev S1g) |
 | **WA-R3** | Split-collar pinch clamp, ≥ 5 mm wall, M3 inserts, positive split gap | fuselage-mid | **OPEN** — the Ø30.1 socket boss now matches the clamp's ~Ø30 envelope, but the clamp itself is not yet a part |
-| **WA-R4** | Mortise re-sized 30.8 → 12.8 mm wide for the locating tenon | fuselage-mid | **BUILT** (T1c) — tenon fit +0.40 mm/side in both axes |
+| **WA-R4** | Mortise re-sized 30.8 → 12.8 mm wide for the locating tenon | fuselage-mid | **BUILT** (Rev S1g) — tenon fit +0.40 mm/side in both axes |
 | **WA-R5** | Cargo-bay envelope unchanged — **CLOSED by design**: the joint no longer enters the bay | fuselage-mid | **CLOSED** |
-| **WA-R6** | Fuselage-side conduits for the nav 3-core (Y +1.0) and the AK7455 pair (Y +37.5), and a drive-shaft bore at Y +46.6 | fuselage-mid | **BUILT** (T1c) — Ø4.2 / Ø7.5 / Ø4.4, plus a Ø8.05 shaft-bushing seat in the root flange |
-| **WA-R7** | Trunnion bearing seat Ø27.0 H7 (2 × 6704ZZ), outboard face \|X\| 26.7, axial + radial duty | wings-nacelles | **BUILT** (Rev T4) — `nacelle_trunnion.scad`; bore is Ø27, not Ø20 (that was the bearing *bore*, not the seat) |
-| **WA-R8** | Tilt ring gear 50T module 0.8 (PD 40.0) concentric with the spar, C = 25.6 to the wing shaft; reduction 3.571 | wings-nacelles | **BUILT** (Rev T4) — integral involute gear on the trunnion, 5.0 mm face; gated by `tools/nacelle_trunnion_fit.py` T5 |
-| **WA-R9** | Ring magnet ID 26 / OD 41.2, axially separated from the ring gear, both inside the 15 mm stub | wings-nacelles | **BUILT** (Rev T4) — bonded seat at \|X\| 35.7–38.2; 2.0 mm of axial separation from the gear; gate T4 |
+| **WA-R6** | Fuselage-side conduits for the nav 3-core (Y +1.0) and the AK7455 pair (Y +37.5), and a drive-shaft bore at Y +46.6 | fuselage-mid | **BUILT** (Rev S1g) — Ø4.2 / Ø7.5 / Ø4.4, plus a Ø8.05 shaft-bushing seat in the root flange |
+| **WA-R7** | Trunnion bearing seat Ø27.0 H7 (2 × 6704ZZ), outboard face \|X\| 26.7, axial + radial duty | wings-nacelles | **BUILT** (Rev S4) — `nacelle_trunnion.scad`; bore is Ø27, not Ø20 (that was the bearing *bore*, not the seat) |
+| **WA-R8** | Tilt ring gear 50T module 0.8 (PD 40.0) concentric with the spar, C = 25.6 to the wing shaft; reduction 3.571 | wings-nacelles | **BUILT** (Rev S4) — integral involute gear on the trunnion, 5.0 mm face; gated by `tools/nacelle_trunnion_fit.py` T5 |
+| **WA-R9** | Ring magnet ID 26 / OD 41.2, axially separated from the ring gear, both inside the 15 mm stub | wings-nacelles | **BUILT** (Rev S4) — bonded seat at \|X\| 35.7–38.2; 2.0 mm of axial separation from the gear; gate T4 |
 | **WA-R10** | 4 × 10 AWG disconnect in the nacelle annulus, partitioned from the AK7455 plug | wings-nacelles | **PARTIAL / OPEN** — the bay is built (Z 82, 4 × M3 brass studs, ring terminals) and the EMI partition is achieved, but **there is no annulus to route the bundle through**; blocked on W0 (hollow the pod). See §4.4 |
-| **WA-R11** | Nav 3-core crosses at the trunnion, radially separated from the power bundle | wings-nacelles | **BUILT** (Rev T4) — Ø4.0 port through the collar at r = 20.75, 90° off the disconnect bay; power stays on the axis inside the spar bore |
-| **WA-R12** | Trunnion bearing pair within the **13.5 mm** SLEEVE-bounded stub; no member closer than 28.2 mm to the duct axis at the pivot | wings-nacelles | **BUILT** (Rev T4b) — 2 × **6704** (8.0 mm), *not* 6804. Two corrections landed here, both found by measurement: the pair never fitted once the magnet and air gap were budgeted, and the *bound itself* was 2.2 mm out because it was taken against the Ø50 duct rather than the Ø55.4 sleeve zone the pivot actually sits in. Outboard face \|X\| **28.2**; gates T1a/T1a2/T2/T8 |
-| **WA-R15** | Actuator re-select: multi-turn, not a limited-rotation servo (§4.3b) | avionics / fuselage-mid | **RESOLVED** (T1c) — DS3225 body + LibreServo_v4 with the rotation-limit pin removed, run continuous-rotation and closed on the AK7455, per the cargo-winch precedent. Same body, so the pad footprint and bolt pattern are unchanged; mount position and standoff are new (§4.3c) |
+| **WA-R11** | Nav 3-core crosses at the trunnion, radially separated from the power bundle | wings-nacelles | **BUILT** (Rev S4) — Ø4.0 port through the collar at r = 20.75, 90° off the disconnect bay; power stays on the axis inside the spar bore |
+| **WA-R12** | Trunnion bearing pair within the **13.5 mm** SLEEVE-bounded stub; no member closer than 28.2 mm to the duct axis at the pivot | wings-nacelles | **BUILT** (Rev S4b) — 2 × **6704** (8.0 mm), *not* 6804. Two corrections landed here, both found by measurement: the pair never fitted once the magnet and air gap were budgeted, and the *bound itself* was 2.2 mm out because it was taken against the Ø50 duct rather than the Ø55.4 sleeve zone the pivot actually sits in. Outboard face \|X\| **28.2**; gates T1a/T1a2/T2/T8 |
+| **WA-R15** | Actuator re-select: multi-turn, not a limited-rotation servo (§4.3b) | avionics / fuselage-mid | **RESOLVED** (Rev S1g) — DS3225 body + LibreServo_v4 with the rotation-limit pin removed, run continuous-rotation and closed on the AK7455, per the cargo-winch precedent. Same body, so the pad footprint and bolt pattern are unchanged; mount position and standoff are new (§4.3c) |
 | **WA-R13** | `TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1 corrected — the spar is no longer ferromagnetic | avionics | **CLOSED** (2026-08-31) — §6.1 carries the correction and §6.2 is updated for the built joint: the "30 mm from the spar centreline" rule is **superseded** by `HALL_SENS_R` 16.8 (30 mm would sit off the magnet), and the two steel 6704s inside the keep-out are recorded as calibration-mandatory rather than as a violation |
-| **WA-R14** | Wing side: bores, pad, root path, thickness scales | wings-nacelles | **BUILT** (Rev T1) |
+| **WA-R14** | Wing side: bores, pad, root path, thickness scales | wings-nacelles | **BUILT** (Rev S1e) |
 
 ---
 
@@ -768,15 +768,15 @@ misrepresent the separation bubble. Tracked in `TODO.md` §0.8 and
 /usr/bin/python3 tools/wing_root_deconflict.py     # RED until WA-R1/R6 land
 ```
 
-`wing_root_deconflict.py` **used to fail by design** at Rev T1b, on three
+`wing_root_deconflict.py` **used to fail by design** at Rev S1f, on three
 findings that were all one fact — the fuselage still carried
-`WING_SPAR_Y = +38.15` and `WING_SPAR_BORE_D = 8.3`. Rev T1c moves the fuselage
+`WING_SPAR_Y = +38.15` and `WING_SPAR_BORE_D = 8.3`. Rev S1g moves the fuselage
 side and the gate is expected to pass. Three changes were needed in the tool
 itself, and each was a real defect rather than a re-tune:
 
 | Change | Why |
 |---|---|
-| `tenon_params()` selected `_LOCATING` only for the literal path `"two_rod"` | so the Rev T1 default `"spar_carrythrough"` fell through to `_ENLARGED` and the tool measured a 30 mm structural tenon the wing does not build, reporting a 8.60 mm/side mortise foul against a correctly-sized mortise. The SCAD writes the rule as a negative (`!= "enlarged_tenon"`) precisely so new paths inherit the safe size; mirroring it as a positive whitelist inverted that |
+| `tenon_params()` selected `_LOCATING` only for the literal path `"two_rod"` | so the Rev S1e default `"spar_carrythrough"` fell through to `_ENLARGED` and the tool measured a 30 mm structural tenon the wing does not build, reporting a 8.60 mm/side mortise foul against a correctly-sized mortise. The SCAD writes the rule as a negative (`!= "enlarged_tenon"`) precisely so new paths inherit the safe size; mirroring it as a positive whitelist inverted that |
 | the spar corridor was swept at one diameter | it steps at the socket's inboard end — Ø20.4 outboard, Ø16.3 inboard — so a single-diameter sweep reads the intended 2.05 mm annulus as "wall not cut" |
 | every route was probed 12 mm past the wall bracket | correct for a rigid shaft, wrong for a wire. The Ø32.0 shaft gear sits 9.11 mm from the AK7455 conduit axis and **no** gear train at a 30.40 mm centre distance clears it; the lead turns forward into the wire trunk at the wall, and probing past the bracket reports that intended turn as a blockage on every run |
 
@@ -798,4 +798,4 @@ itself, and each was a real defect rather than a re-tune:
   REF-SENSOR-008 (AK7455), REF-FAA-003 §91.209(a) (nav lights).
 - Geometry measured 2026-08-29 by `tools/wing_spar_station_fit.py`,
   `tools/wing_internal_clearance.py`, `tools/wing_spar_carrythrough.py`, and
-  `tools/spar_bundle_fit.py` against the Rev T1 sources.
+  `tools/spar_bundle_fit.py` against the Rev S1e sources.

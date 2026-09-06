@@ -5,7 +5,10 @@
 Anthropic) under the author's direction, 2026-07-21; extended for the
 1.5in/3.0in leg-length variant split 2026-07-23, per `AGENTS.md`.
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
-**Current design revision:** Rev R6 (2026-07-21; variant split 2026-07-23)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog).
+Component design generation: **R6** (2026-07-21; variant split 2026-07-23) — "R6" is this
+leg design's own permanent name (like a PCB's "Rev S1"), not a pointer to the project-wide
+letter; landing gear carries forward into Rev T unchanged, per root `AGENTS.md` §8.
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items

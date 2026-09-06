@@ -32,7 +32,7 @@ SCAD is reworked.
 >
 > - The **wing is fixed** to the fuselage and does **not** tilt.
 > - **Two independent rotating spars** (one per side) run: fuselage wall
->   bearing → wing → **nacelle CG pivot** (duct Z = 111.5 mm; Rev T CG
+>   bearing → wing → **nacelle CG pivot** (duct Z = 111.5 mm; Rev S2 CG
 >   re-derive 2026-07-19, was 104.5 mm), each **fixed (keyed) to its own
 >   nacelle**.
 > - **One servo per side, mounted on the port/stbd bulkhead**, rotates its
@@ -48,7 +48,7 @@ record:
 
 - The **wing is fixed** to the fuselage and does **not** tilt.
 - A **single rotating spar** runs: cargo bay → wing → **nacelle CG pivot**
-  (duct Z = 111.5 mm; Rev T CG re-derive 2026-07-19, was 104.5 mm), and is
+  (duct Z = 111.5 mm; Rev S2 CG re-derive 2026-07-19, was 104.5 mm), and is
   **fixed (keyed) to the nacelle**.
 - **Servo in the cargo bay** rotates the spar → tilts the nacelle. The spar *is*
   the drive shaft (no external pushrod/lever).
@@ -59,7 +59,7 @@ record:
   **sync gear** (Pinion A orbits a gear fixed to the non-rotating wingtip — §6,
   kept at **R22**) and the now-adopted **Option B pushrod** (a crank clamped to
   the rotating spar strokes the nozzle unison ring — `nacelle_nozzle_pushrod.scad`,
-  BOM Rev T). **Either way the nozzle datum is taken at the nacelle/tip** — the
+  BOM Rev S2). **Either way the nozzle datum is taken at the nacelle/tip** — the
   gear meshes the fixed wingtip; the crank shares the nacelle-keyed spar end — so
   nozzle position tracks *true nacelle tilt* and is **not** corrupted by spar
   torsional wind-up, which lives upstream between the cargo-bay servo and the tip.
@@ -78,8 +78,8 @@ record:
 | Quantity | Value | Source |
 |---|---|---|
 | Thrust per nacelle (hover) | 2,232 gf = **21.9 N (4.92 lbf)** | `serenity-rev-r.jsx` L346 |
-| Nacelle mass (rotating assy) | 393.4 g = **0.867 lbm** (Rev T) | `nacelle_pod_50mm_tandem.scad` header mass breakdown |
-| Nacelle CG (duct axis) | Z = 111.5 mm (4.39 in) (Rev T; was 104.5) | ibid — pivot at CG |
+| Nacelle mass (rotating assy) | 393.4 g = **0.867 lbm** (Rev S2) | `nacelle_pod_50mm_tandem.scad` header mass breakdown |
+| Nacelle CG (duct axis) | Z = 111.5 mm (4.39 in) (Rev S2; was 104.5) | ibid — pivot at CG |
 | Wing lift per side (40 kt) | ≈ **3.8 N (0.85 lbf)** | `wings_s1223_revo.scad` L35 (7.6 N ÷ 2) |
 | Servo torque (tilt drive) | ≥ 25 kg·cm = **2.45 N·m (21.7 lbf·in)** | `serenity-rev-r.jsx` L383 |
 | EDF bore ID | 50 mm (1.97 in), r = 25 mm | `nacelle_pod…scad` L221 |
@@ -123,7 +123,7 @@ the body about L — this holds for **all** tilt angles, not just the neutral
 position, since rotating a zero vector about any axis is still zero).
 
 The nacelle assembly's own mass table (`nacelle_pod_50mm_tandem.scad` header,
-Rev T, 11 components, 393.4 g) gives axial CG:
+Rev S2, 11 components, 393.4 g) gives axial CG:
 
 ```text
 CG_Z = Σ(m_i · Z_i) / Σm_i = 43,879 g·mm / 393.4 g = 111.5 mm = PIVOT_Z
@@ -182,7 +182,7 @@ rate (`docs/TILT_ENCODER_WIRING_EMI_SPEC.md` §7.3, "Nacelle sweep at 10°/s"
 during a tethered-hover CAN-message-rate test — an instrumentation check, not
 a commanded transition profile) and a **stale** Phase-3 build-guide test step
 (`docs/REVN_BUILD_GUIDE_24IN.md` "Test servo response time (<500 ms slew)"
-over the −5°→140° = 145° range, written against the pre-Rev-T DS3218MG/Z=83mm
+over the −5°→140° = 145° range, written against the pre-Rev-S2 DS3218MG/Z=83mm
 pivot). Using the 145°/500 ms figure with a triangular (accelerate-then-
 decelerate, no cruise) velocity-profile assumption — a standard kinematic
 model applied to the repo's own cited angle/time pair, not a fabricated
@@ -199,7 +199,7 @@ At the repo's own 4 g / 1.5× ultimate convention applied as a margin multiplier
 7 % of DS3225's 24.5 kgf·cm 6.8 V stall figure, and the α input itself is
 already the *highest* cited tilt rate in the repo (the 10°/s bench-monitoring
 rate would give an α roughly two orders of magnitude smaller). **This θ/t
-figure is stale (pre-Rev-T geometry) and not a confirmed commanded design
+figure is stale (pre-Rev-S2 geometry) and not a confirmed commanded design
 profile — flag for owner confirmation of the actual intended transition
 time**, but given the 14× margin already present, only a ~14× faster
 transition would put inertia alone at risk of the requirement.
@@ -374,7 +374,7 @@ H1075** as the qualified plating-free alternative and **7075-T6** as the mass-
 critical (life-limited) fallback. All allowables pending MMPDS/AMS verification
 (§7, TODO §0.8).
 
-### 3.6 Re-derivation for a FIXED spar (Rev T1, 2026-08-29)
+### 3.6 Re-derivation for a FIXED spar (Rev S1e, 2026-08-29)
 
 > **This section supersedes §3.1–§3.5 for the adopted architecture.** Plan
 > `docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md`
@@ -411,7 +411,7 @@ the minimum bore is **16.28 mm**. On a ~1.85 mm wall that is a **20 mm OD** tube
 This is why §3.4's rejection of the "12 mm unified structural" candidate as
 *"overbuilt; heavier, bigger duct crossing"* does not carry forward: both of its
 objections were about a spar that crossed the duct and was sized past its loads.
-The Rev T1 spar **never enters the duct** (the trunnion ring at the nacelle
+The Rev S1e spar **never enters the duct** (the trunnion ring at the nacelle
 inboard face removes the crossing entirely — see §4), and it is not overbuilt for
 its bending duty so much as *sized by a different requirement altogether*.
 
@@ -447,7 +447,7 @@ likelier case and is 3.3× kinder.
 
 #### 3.6.4 Mass
 
-| | Rev R2 (8 × 5 4130) | **Rev T1 (20 × 16.3 CF)** |
+| | Rev R2 (8 × 5 4130) | **Rev S1e (20 × 16.3 CF)** |
 |---|---|---|
 | Density | 7.85 g/cm³ | 1.60 g/cm³ |
 | Installed length, per side | ~200 mm | 173 mm (55 socket + 85.7 wing + 32 stub) |
@@ -478,7 +478,7 @@ the **measured** wire OD, since the 5.5 mm figure is itself an assumption
 ## 4. Airflow — Spar Crossing the Thrust Duct
 
 The spar crosses the 50 mm duct **spanwise (X), perpendicular to flow (Z)**, at
-**Z = 111.5 mm — the inter-EDF stator station** (stator spans 90–122.5 mm; Rev T
+**Z = 111.5 mm — the inter-EDF stator station** (stator spans 90–122.5 mm; Rev S2
 CG re-derive, was 104.5 mm — still well inside the stator span). This is the key
 finding: **the duct core is already obstructed there.**
 

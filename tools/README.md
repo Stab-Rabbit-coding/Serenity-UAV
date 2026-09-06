@@ -1,7 +1,7 @@
 # Serenity UAV — Build Tools & Validation Scripts
 
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Current design revision:** Rev S (2026-07-04)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > Python and shell scripts for design validation, mesh integrity checking, KiCad PCB/ERC/DRC
 > verification, STL export, and repository linting. All tools support the design-to-fabrication
