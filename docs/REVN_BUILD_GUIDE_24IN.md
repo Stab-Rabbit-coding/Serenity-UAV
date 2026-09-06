@@ -1,8 +1,10 @@
 # Serenity UAV — 24-Inch Build Guide (Rev S Baseline)
 
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Current design revision:** Rev S (2026-07-04)  
-**Status:** Reference Stub (detailed procedures consolidated into graphical build guide)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)  
+**Status:** Reference Stub (detailed procedures consolidated into graphical build guide).
+This stub's own procedural content is still scoped to the Rev S hull — it has not been
+revised for Rev T1c wing/Rev T4c nacelle geometry; see `docs/WBS.md` §6.4.
 
 > Step-by-step procedural assembly guide for Serenity UAV Rev S 24-inch hull (609mm length).
 > **For illustrated procedures, see [`graphical-build-guide/`](../graphical-build-guide/README.md) and

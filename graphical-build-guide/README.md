@@ -1,7 +1,7 @@
 # Serenity UAV — Graphical Build Guide
 
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Current design revision:** Rev S (2026-07-04)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > Step-by-step visual assembly guide for Serenity UAV, organized by build phase (0–10).
 > SVG diagrams, checklists, and mechanical callouts for each major assembly milestone from
