@@ -105,9 +105,23 @@ FIXED = [
      "Xfly Galaxy X5 2627-KV3200 50 mm 6S; 75 g published for the full combo"),
     ("EDF2 (downstream, rotor+motor)", 75.0, 150.6,
      "Xfly Galaxy X5 2627-KV3200 50 mm 6S; 75 g published for the full combo"),
-    ("ESC1 (relocated aft)", 25.0, 150.6,
-     "plan 003 KTD8 — session-settled, user-directed; was 59.4"),
-    ("ESC2", 25.0, 150.6, "Open-Secure-ESC 6S/50A board"),
+    # ---- ESCs: where they FIT, not where the CG wanted them ----------------
+    # Plan 003 KTD8 relocated ESC1 aft "alongside ESC2" at Z 150.6 and banked
+    # +3.91 mm of pivot station on it.  Rev T4c measured the pod and there is no
+    # such station: the only bays that take a 33 mm hinged board run Z 74-134,
+    # centroid 104, and searching for a bay lying wholly aft of Z 130 returns
+    # 23 x 30 mm at a 4.0 mm stack, which is not an ESC.
+    #
+    # So both ESCs sit at 104 — 10 mm FORWARD of the pivot, not 37 mm aft of it.
+    # KTD8's lever was never available; it was computed against a station no
+    # board can occupy.  Recorded here rather than in prose because it is worth
+    # about 3.4 mm of hover clearance and every table that quotes 150.6 is wrong.
+    ("ESC1 (hinged, bay A)", 25.0, 104.0,
+     "measured bay centroid, tools/nacelle_esc_bay_fit.py — NOT KTD8's 150.6"),
+    ("ESC2 (hinged, bay B)", 25.0, 104.0,
+     "measured bay centroid, tools/nacelle_esc_bay_fit.py — NOT KTD8's 150.6"),
+    ("4 x ESC access cover", 4 * 12.14 / 2, 104.0,
+     "nacelle_esc_cover.stl measured; two covers per nacelle"),
     ("Nozzle throat + housing", 21.4, 174.8, "nacelle_nozzle_iris.scad Rev T"),
     ("Unison ring (cam-only)", 6.7, 169.9, "nacelle_nozzle_iris.scad Rev T"),
     ("8 x nozzle flap (40 mm)", 21.1, 198.2,
@@ -133,10 +147,11 @@ FIXED = [
 #: service loop; they are FIRST-PASS and should be replaced by measured harness
 #: lengths at first article.
 HARNESS = [
-    ("4 x 10 AWG feed, trunnion->ESCs", 4 * 0.080 * 40.0, 132.0,
-     "trunnion Z 105.8 -> ESC Z 150.6, + service loop at the rotating joint"),
-    ("6 x 16 AWG EDF phase leads", 6 * 0.100 * 13.3, 150.0,
-     "2 ESCs x 3 phases, ESC to motor"),
+    ("4 x 10 AWG feed, trunnion->ESCs", 4 * 0.055 * 40.0, 109.0,
+     "trunnion Z 113.8 -> bay Z 104, + service loop at the rotating joint"),
+    ("6 x 16 AWG EDF phase leads", 6 * 0.075 * 13.3, 105.0,
+     "2 ESCs x 3 phases; each bay sits over a spider arm, so the crossing is "
+     "radial with no circumferential run (arms clocked 15/105/195/285)"),
     ("Signal + gateway pairs, 28 AWG STP", 0.30 * 4.0, 120.0,
      "ESC telemetry + CAN-FD/RS-485 to the wing interface pocket"),
     ("Nav 3-core, 28 AWG", 0.11 * 8.0, 88.0,
@@ -362,8 +377,9 @@ def main() -> int:
             worst = clr
 
     harness = sum(m for _, m, _, _ in HARNESS)
+    h_cg = sum(m * z for _, m, z, _ in HARNESS) / harness
     print(f"\nIn-nacelle harness included above: {harness:.1f} g "
-          f"({harness / 453.592:.3f} lbm), all of it AFT of the pivot. "
+          f"({harness / 453.592:.3f} lbm) at CG_Z {h_cg:.1f}. "
           f"First-pass lengths; see HARNESS in this file.")
 
     print("\nDeleted at Rev T4 (for the record):")

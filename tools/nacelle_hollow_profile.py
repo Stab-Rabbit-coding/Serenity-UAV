@@ -213,7 +213,7 @@ def mass_removed(zs, rc):
     return vol * RHO_PRINT, (mom / vol if vol else 0.0)
 
 
-def emit(zs, az, grids) -> str:
+def emit(zs, az, grids, skins) -> str:
     """Render the generated OpenSCAD source."""
     lines = [
         "// =============================================================================",
@@ -252,6 +252,16 @@ def emit(zs, az, grids) -> str:
             lines.append("  [" + ",".join(f"{v:.2f}" for v in row) + "],")
         lines.append("];")
     lines.append("")
+    lines.append("// The OUTER SKIN itself, on the same grid.  The cavity grid above is this")
+    lines.append("// surface offset inward by the wall schedule, so it cannot be used to")
+    lines.append("// rebuild the mould line — the ESC access covers need the skin, because a")
+    lines.append("// cover that does not sit flush is a step in the boundary layer.")
+    for side, sk in skins.items():
+        lines.append(f"HOLLOW_SKIN_{side} = [")
+        for row in sk:
+            lines.append("  [" + ",".join(f"{v:.2f}" for v in row) + "],")
+        lines.append("];")
+    lines.append("")
     return "\n".join(lines)
 
 
@@ -262,11 +272,13 @@ def main() -> int:
     args = ap.parse_args()
 
     grids = {}
+    skins = {}
     report = {}
     for side in SHELLS:
         zs, az, outer = skin_grid(side)
         rc = cavity_radii(zs, outer)
         grids[side] = rc
+        skins[side] = outer
         report[side] = mass_removed(zs, rc)
 
     print("Nacelle pod hollowing — forward-biased wall schedule")
@@ -293,7 +305,7 @@ def main() -> int:
                   f"(measured; the pod was 284.8 g solid at Rev T4)")
 
     if args.emit:
-        OUT.write_text(emit(zs, az, grids), encoding="utf-8")
+        OUT.write_text(emit(zs, az, grids, skins), encoding="utf-8")
         print(f"\n  wrote {OUT.relative_to(REPO)} "
               f"({OUT.stat().st_size / 1024:.0f} KB)")
     else:

@@ -1312,10 +1312,91 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     aft ballast — but the decision is now forced, not optional. Reported by
     `tools/nacelle_mass_cg.py`, which exits non-zero on it.
 
+    **WORSE AT REV T4c, and the reason is worth stating.** Siting the ESCs where
+    they actually FIT — the measured bay centroid, Z 104 — instead of where plan
+    003 KTD8 assumed they could go (Z 150.6) moves `PIVOT_Z` **113.8 → 107.5**.
+    KTD8 banked +3.91 mm of pivot station on a relocation to a station **no board
+    can occupy**: searching for a bay lying wholly aft of Z 130 returns 23 × 30 mm
+    at a 4.0 mm stack, which is not an ESC. Current figures:
+
+    | configuration | `PIVOT_Z` | 1.5 in gear | 3.0 in gear |
+    |---|---:|---:|---:|
+    | as built, 40 mm flaps | 107.5 | **−8.90 mm** | +33.00 mm |
+    | with plan 005's 30 mm flaps | 106.4 | **+0.07 mm** | +41.97 mm |
+
+    +0.07 mm is not a margin. **The 1.5 in gear is not viable on any combination
+    now on the table; the 3.0 in gear clears by 33 mm as built.** Moving the bay
+    aft is not the answer either — it buys ~1.3 mm of CG for 14 mm of board
+    length, which the earlier analysis already rejected as a bad trade.
+
 - [ ] **[OPEN — VERIFY] `serenity_assembly.py` still places the deleted parts.**
     The nacelle sub-component rows and the spar-crank placement predate Rev T4;
     the trunnion is not yet registered in the assembly. Re-run the tilt sweep at
     −5/0/45/90/140° once it is.
+
+##### 1.1.3.8 *Rev T4c — hinged ESC bays, access covers, 90° motor pattern*
+
+**2026-09-06.** Owner direction settled two things Rev T4b had left open, and
+both turned out to unlock work rather than merely constrain it. Geometry and
+analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
+`AGENTS.md` §3.
+
+- [x] **The ESC is a HINGED PAIR — 23 mm power + 10 mm signal, 33 mm folded.**
+    The board could not narrow: 32 mm is the floor `isolation_envelope.py` sets
+    from the ADM2582E creepage, and the annulus is ~7 mm deep. The hinge does not
+    make the board smaller, it makes its **deviation from the arc** smaller,
+    which is the dimension the pod was short of. Sagitta at R 33 goes 4.42 mm for
+    one flat board to 2.07 (power) + 0.38 (signal).
+- [x] **Both bays built and measured** — `tools/nacelle_esc_bay_fit.py`, which
+    tests the OUTER CORNERS of each panel against the ray-cast skin rather than
+    the panel centre. At a 4.0 mm stack: **62 × 33 mm, Z 74–134, 2046 mm² = 97 %
+    of the as-built 32 × 66 board.** Hinge azimuths **69° / 249°**, seat radius
+    30.2 (the sleeve-zone duct wall), fold 30.25° so the panels sit at 149.75°.
+    The fold also softens the stack cliff a flat board had — 4.0 → 5.0 mm now
+    costs 12 mm of length, not all of it.
+- [x] **Bay azimuth is not free, and it pays for itself.** 105° and 285° are the
+    pod's two deep lobes (annulus alive aft to Z 163 at 6.2–6.4 mm, against
+    Z 135–147 elsewhere). Siting the bays over them puts each ESC directly above
+    its own phase-lead crossing with **no circumferential run at all**, and keeps
+    both clear of the nav cableway (az 0) and the trunnion and disconnect bay
+    (az 180).
+- [x] **`nacelle_esc_cover.scad` — NEW PART, four distinct instances.** Hollowing
+    the pod is what created the annulus; it also sealed it, and a 33 mm folded
+    board cannot be threaded into a sealed annulus. So each bay opens radially
+    through the skin and a printed cover closes it flush. The shell is not
+    axisymmetric, so port/stbd and bay A/bay B are four different shapes — they
+    are not interchangeable and must not be mirrored in the slicer.
+- [x] **The cover is built from the pod's own measurement.** Its outer face is
+    the same ray-cast skin grid the pod's rebate is cut from
+    (`nacelle_shell_grid.scad`, `nacelle_hollow_profile.scad`), so the two cannot
+    disagree. Verified mesh-against-mesh: interference **0.008 mm³** on all four.
+- [x] **Motor mount corrected 3 arms @ 120° → 4 arms @ 90°** in BOTH spiders, on
+    owner direction. The Galaxy X5 takes four screws (REF-EDF-002); three holes
+    at 120° cannot be made to coincide with four at 90°, and this was
+    print-blocking. The 90° pattern is also strictly better for routing:
+    285 − 105 = 180 = 2 × 90, so one set holds **both** deep lobes, which the
+    120° set could not. Clocked **15/105/195/285**.
+
+- [ ] **[OPEN — PRINT-BLOCKING] `MOTOR_BOLT_R` is still 10.0 mm and still
+    unverified.** The owner direction settles the screw COUNT and the 90°
+    spacing; it does not settle the bolt circle, and the vendor listing publishes
+    "nc". Measure it off a physical motor — five minutes with a caliper — along
+    with the thread size and whether the four holes are on a true square. **Do
+    not print either spider for flight until this is measured.**
+- [ ] **[OPEN] ESC bay thermal path is not sized.** The covers carry louvres at
+    both ends, 144 mm² of open area total, and that is a route and an area — not
+    a verified heat path. A 50 A ESC in a sealed CF-PETG annulus has no path at
+    all, and conduction through the duct wall is not one either (0.25 W/mK over
+    2.5 mm and 460 mm² is 21.7 K/W). No duct bleed is taken: it would cost thrust
+    and is not a trade to make without analysis. Needs CFD or a bench soak.
+- [ ] **[OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn.**
+    Hollowing gave the bundle its annulus and the bays merge into it by design,
+    so the blocker recorded at Rev T4 is lifted. What remains is to route and
+    strain-relieve it from the disconnect bay to each ESC, which needs the
+    conductor OD that `WING_ATTACH_INTERFACE.md` OI-1 still does not record.
+- [ ] **[OPEN] Window structural allowance.** Two 62 × 35 mm windows 180° apart
+    in the pod's principal bending section, closed by bolted covers acting as
+    doublers. Section modulus with and without the windows is not yet computed.
 
 ##### 1.1.3.4 *Nacelle Intake*
 

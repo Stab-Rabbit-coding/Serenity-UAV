@@ -144,11 +144,26 @@ SLEEVE_KEY_ANGLES = [30, 150, 270];
 // 270).  Clocking an arm to 105 puts the crossing directly beneath bay A with no
 // circumferential run at all.  225/345 follow at 120 deg spacing.
 //
-// Nothing constrains the absolute clocking: the motor's own 3-hole pattern
-// rotates with the arms (the MOTOR_BOLT_R pockets are co-angular), and 105/225/
-// 345 stays 75 deg clear of the key/retention angles at 30/150/270.
+// ── CORRECTED Rev T4c (2026-09-01) — FOUR arms at 90 deg, not three at 120 ──
+// Owner direction.  The Xfly Galaxy X5 motor takes FOUR screws on a square
+// pattern (REF-EDF-002: the packing-list photo shows four motor screws plus one
+// longer spinner screw, and the hub is a disc with four round holes alternating
+// with four slots).  Three arms at 120 deg cannot be made to coincide with four
+// holes at 90 deg — using three of the four would need them at 90/90/180, which
+// 120 deg spacing never provides.  This was PRINT-BLOCKING and is now fixed.
+//
+// The 90 deg pattern is strictly better for the routing constraint above, which
+// is the happy part of the correction: 285 - 105 = 180 = 2 x 90, so a single
+// 90 deg set can put an arm on BOTH deep lobes at once.  The old 120 deg set had
+// to choose one and give the other a 50 deg circumferential run.  15 and 195
+// fall out of the spacing.
+//
+// ** MOTOR_BOLT_R REMAINS UNVERIFIED. ** The listing publishes the screw COUNT,
+// not the bolt circle; the manufacturer page says "nc".  10.0 mm is inherited
+// from Rev R and is still an assumption.  Measure it off a physical motor before
+// printing for flight.
 // 16 AWG silicone Ø3 mm per docs/TILT_SPAR_ANALYSIS.md.
-SPIDER_ARM_ANGLES = [105, 225, 345];
+SPIDER_ARM_ANGLES = [15, 105, 195, 285];
 
 // ── EDF2 spider geometry ────────────────────────────────────────────────────────
 // Spider axial centre at nacelle Z = 148.0 mm.
@@ -156,7 +171,7 @@ SPIDER_ARM_ANGLES = [105, 225, 345];
 SPIDER_Z_L      =  25.5;    // [mm] spider axial centre (sleeve-local)
 SPIDER_ARM_H    =   8.0;    // [mm] spider arm axial height (thickness along Z)
 SPIDER_ARM_W    =   6.0;    // [mm] spider arm tangential width
-N_ARMS          =   3;      // [count] spider arms at 0°/120°/240°
+N_ARMS          =   len(SPIDER_ARM_ANGLES);  // [count] = 4, at 90° (Rev T4c)
 
 // ── Motor mount — M3 heat-set inserts in spider arm aft faces ─────────────────
 // EDF2 motor mounts on spider aft face using 3× M3×10 SHCS (nozzle-end access).
@@ -267,7 +282,7 @@ module edf2_spider() {
     arm_w  = SPIDER_ARM_W;
     z_base = SPIDER_Z_L - arm_h / 2;   // = 21.5 mm
 
-    // ── Spider arms (3× at 120°) ───────────────────────────────────────────
+    // ── Spider arms (4× at 90°, Rev T4c) ───────────────────────────────────
     // Arms are plain cuboids (no pockets).  Motor insert pockets are cut by
     // the parent module after the full union is assembled.
     for (angle = SPIDER_ARM_ANGLES) {
@@ -292,8 +307,10 @@ module edf2_spider() {
 // =============================================================================
 // Assembly sequence:
 //   1. Union: sleeve tube + keys + spider arms + spider hub.
-//   2. Difference: subtract 3× M3 motor insert pockets from spider arm aft
-//      faces; subtract 3× M3 retention clearance bores through sleeve aft face.
+//   2. Difference: subtract 4× M3 motor insert pockets from spider arm aft
+//      faces (Rev T4c — the Galaxy X5 takes four screws at 90°); subtract 3× M3
+//      retention clearance bores through sleeve aft face (still three — those
+//      are OUR fasteners into the pod's bosses, not the motor's).
 //
 // Motor insert pocket geometry (blind, from spider aft face):
 //   Centre radius : MOTOR_BOLT_R = 10 mm (one bolt per arm, at arm angle).

@@ -291,6 +291,31 @@ EDF2_Z_EXIT     = 178.8;  // [mm] EDF2 aft face      (was 143.0 × 1.25) = 7.04 
 //   Screws set from intake bore end with T-handle 2.5 mm hex key.
 // EDF2 spider (aft spider sleeve): M3 heat-set inserts on nozzle face.
 //   Screws from nozzle bore end after iris removed.
+// ── Motor mount PATTERN — 4 screws at 90 deg (Rev T4c, 2026-09-01) ──────────
+// CORRECTED on owner direction.  Both spiders mounted the motor on THREE arms at
+// 120 deg with three M3 pockets.  The Xfly Galaxy X5 motor takes FOUR screws on
+// a square pattern (REF-EDF-002, packing-list photo: four motor screws plus one
+// longer spinner screw; hub is a disc with four round holes alternating with
+// four slots).  Three holes at 120 deg cannot be made to coincide with four at
+// 90 deg — this was a print-blocking defect, not a clearance one.
+//
+// CLOCKING 15/105/195/285 is not free choice.  A spider arm is the ONLY solid
+// bridge from the annulus to the motor, so each ESC's phase bundle has to cross
+// the bore wall AT an arm azimuth.  Measured on the canonical shell, azimuth 105
+// and 285 are the pod's two deep lobes — the annulus survives aft to Z 163 at
+// 6.2-6.4 mm depth there, against Z 135-147 elsewhere — and they are also where
+// the two ESC bays land.  A 90 deg pattern can hold BOTH lobes at once, because
+// 285 - 105 = 180 = 2 x 90; the old 120 deg pattern could not.  15 and 195 fall
+// out of the spacing and land 15 deg clear of the sleeve key/retention angles
+// (30/150/270), which sit at a different radius anyway.
+//
+// ** MOTOR_BOLT_R IS STILL UNVERIFIED and the owner direction does not settle
+// it. ** The vendor listing publishes the screw COUNT but no bolt circle
+// ("nc" on the manufacturer page).  10.0 mm is an assumption inherited from
+// Rev R.  Measure the bolt circle off a physical motor before printing for
+// flight — see the open item in airframe/wings-nacelles/WBS.md SS1.1.3.7.
+N_SPIDER_ARMS   =   4;     // [count] motor mount arms — 4 screws at 90 deg
+SPIDER_ARM_ANGLES = [15, 105, 195, 285];  // [deg] shared by BOTH spiders
 SPIDER_ARM_H    =   8.0;   // [mm] arm axial thickness
 SPIDER_ARM_W    =   6.0;   // [mm] arm tangential width
 MOTOR_BOLT_R    =  10.0;   // [mm] M3 bolt circle radius — VERIFY vs actual motor
@@ -409,7 +434,7 @@ SWIRL_DIR       =  +1;    // [+1 / -1] default port nacelle CW from intake
 // sync gear, servo bracket) do NOT tilt and are excluded.  Y = 0 (bore axis) =
 // Y_cg for the bore-symmetric assembly.  FIRST-PASS (credible band ≈109–112 mm);
 // see the header for the density / nozzle-pocket caveats.
-PIVOT_Z         = 113.8;   // [mm] pivot axial centre = full-assembly CG station
+PIVOT_Z         = 107.5;   // [mm] pivot axial centre = full-assembly CG station
                            //      Rev T4b (2026-08-31): 111.5 -> 105.8 -> 113.8,
                            //      the first values in this part's history that
                            //      were COMPUTED FROM MEASURED MESHES rather than
@@ -681,6 +706,7 @@ NAV_CHAN_INSET  =  3.0;    // [mm] channel wall sits this far inboard of the out
 // canonical mesh carries an internal forward intake pocket that makes a
 // section's minimum radius meaningless below Z ~58.
 include <nacelle_hollow_profile.scad>
+use <nacelle_shell_grid.scad>
 
 CAVITY_DUCT_WALL  =  2.5;  // [mm] wall left on the duct side of the cavity
 // Structural bulkheads.  A hollow shell with a duct tube inside it and no shear
@@ -688,7 +714,14 @@ CAVITY_DUCT_WALL  =  2.5;  // [mm] wall left on the duct side of the cavity
 // the pod is the beam that carries EDF thrust and nacelle inertia into the
 // trunnion.  Three full annular webs forward of the trunnion restore the shear
 // path; aft of it the 8 mm wall and the trunnion keep-out are already solid.
-CAVITY_BULKHEAD_Z = [40.0, 62.0, 84.0];
+// Rev T4c (2026-09-01): 84.0 -> 70.0 and a fourth web added at 138.0.  The ESC
+// bays run Z 74-134, so a web at 84 would be cut away over 2 x 60 deg of its
+// circumference by the two bay pockets plus another 50 deg by the disconnect
+// bay — barely half a web, in the middle of the span it exists to stiffen.
+// Moved just FORWARD of the bays instead, with a fourth picked up just AFT of
+// them.  The 138 web costs almost nothing: the wall is already at 8 mm there so
+// the cavity, and therefore the web, is nearly closed.
+CAVITY_BULKHEAD_Z = [40.0, 62.0, 70.0, 138.0];
 CAVITY_BULKHEAD_T =  3.0;  // [mm] web thickness
 // Each web must be VENTED or it seals a compartment.  The first render of the
 // hollowed pod exported a −17,227 mm³ inverted body between Z 41.5 and 60.5 —
@@ -707,6 +740,14 @@ CAVITY_VENT_R     = 30.0;  // [mm] hole centre radius — inside the annulus at 
 CAVITY_TRUNNION_R  = 30.0; // [mm] radius about the SPAR axis
 CAVITY_TRUNNION_X0 = 20.0; // [mm] |X| the keep-out starts at
 CAVITY_TRUNNION_X1 = 40.0; // [mm] |X| it ends at
+
+// ── Hinged ESC bays (Rev T4c, 2026-09-01) ───────────────────────────────────
+// Every dimension the pod and the access covers must agree on lives in ONE file,
+// because they are two parts that have to match a third thing — the hole between
+// them.  The cover was briefly built from the wrong shell and dropped 442 mm3 of
+// itself inside the pod; that was a selector error, but duplicated parameters
+// are how the same class of mistake becomes permanent.
+include <nacelle_esc_bay.scad>
 
 // ── Global facet resolution ───────────────────────────────────────────────────
 $fn = 72;
@@ -895,8 +936,9 @@ module sleeve_retention_bosses() {
 // Motor mounting (EDF1):
 //   • Motor slides in from nozzle end; back plate seats against spider AFT face.
 //   • Motor shaft extends FORWARD through hub bore (Ø4 mm) to rotor1.
-//   • 3× M3 SHCS from INTAKE bore end pass through M3 CLEARANCE bores in spider
-//     arms and thread into motor's own M3 female back-plate holes.
+//   • 4× M3 SHCS from INTAKE bore end pass through M3 CLEARANCE bores in spider
+//     arms and thread into the motor's own female back-plate holes (Rev T4c —
+//     the Galaxy X5 takes four screws on a 90 deg pattern, REF-EDF-002).
 //   • T-handle 2.5 mm hex key required; reach ≈ EDF1_SPIDER_Z ≈ 88 mm.
 //
 // Arms span (R_HUB − 1) → (EDF_BORE_R + 1) with ±1 mm CGAL overrun.
@@ -906,7 +948,7 @@ module edf1_nacelle_spider() {
     arm_w = SPIDER_ARM_W;
     z_ctr = EDF1_SPIDER_Z;
 
-    for (angle = [0, 120, 240]) {
+    for (angle = SPIDER_ARM_ANGLES) {
         rotate([0, 0, angle])
         difference() {
             // Arm solid — ±1 mm overrun for CGAL volumetric overlap.
@@ -1219,35 +1261,6 @@ module _nav_wire_channel_posX() {
 
 
 // =============================================================================
-// ── Module: cavity_outer_solid ───────────────────────────────────────────────
-// =============================================================================
-// The measured cavity boundary as a closed polyhedron: one ring of HOLLOW_N_AZ
-// points per station in HOLLOW_Z, with flat caps at each end.  Faces are wound
-// CLOCKWISE seen from outside, which is what polyhedron() wants.
-module cavity_outer_solid(grid) {
-    nz = len(HOLLOW_Z);
-    na = HOLLOW_N_AZ;
-    pts = concat(
-        [ for (k = [0 : nz - 1], i = [0 : na - 1])
-              [ grid[k][i] * cos(i * 360 / na),
-                grid[k][i] * sin(i * 360 / na),
-                HOLLOW_Z[k] ] ],
-        [ [0, 0, HOLLOW_Z[0]], [0, 0, HOLLOW_Z[nz - 1]] ]);
-    c0 = nz * na;
-    c1 = nz * na + 1;
-    fs = concat(
-        [ for (k = [0 : nz - 2], i = [0 : na - 1])
-              [ k * na + i, (k + 1) * na + i, (k + 1) * na + (i + 1) % na ] ],
-        [ for (k = [0 : nz - 2], i = [0 : na - 1])
-              [ k * na + i, (k + 1) * na + (i + 1) % na, k * na + (i + 1) % na ] ],
-        [ for (i = [0 : na - 1]) [ c0, i, (i + 1) % na ] ],
-        [ for (i = [0 : na - 1])
-              [ c1, (nz - 1) * na + (i + 1) % na, (nz - 1) * na + i ] ]);
-    polyhedron(points = pts, faces = fs, convexity = 12);
-}
-
-
-// =============================================================================
 // ── Module: cavity_duct_wall ─────────────────────────────────────────────────
 // =============================================================================
 // The solid the cavity may NOT eat into on the bore side: the duct plus one
@@ -1284,7 +1297,7 @@ module cavity_duct_wall() {
 module hollow_cavity() {
     grid = (NACELLE_SIDE > 0) ? HOLLOW_R_PORT : HOLLOW_R_STBD;
     difference() {
-        cavity_outer_solid(grid);
+        grid_solid(grid, HOLLOW_Z, HOLLOW_N_AZ);
         cavity_duct_wall();
         // Structural webs, each with its vent holes drilled back through
         difference() {
@@ -1302,7 +1315,136 @@ module hollow_cavity() {
             rotate([0, PYLON_SIDE * 90, 0])
                 cylinder(r = CAVITY_TRUNNION_R,
                          h = CAVITY_TRUNNION_X1 - CAVITY_TRUNNION_X0);
+        // The ESC cover doubler and its bosses are Zone-A material INSIDE the
+        // skin, which is exactly where the cavity wants to be.  Keep them, or
+        // the covers have nothing to land on and nothing to screw into.
+        esc_cover_doubler();
+
+        // Keep the ESC board seat solid forward of the bore step — see
+        // esc_bay_seat_keepout() for why this is a keep-out and not a plinth.
+        esc_bay_seat_keepout();
+
+        // Keep the vestigial-boss cleanup region solid.  smooth_boss_shave()
+        // trims the canonical shell back to a MEASURED contour at this station,
+        // and the cavity's own 48-facet surface crosses that contour at a
+        // shallow angle — which left a 0.08 mm3 lens of material detached from
+        // the pod (a floating speck the slicer would try to print in mid-air).
+        // Two measured surfaces grazing each other is not something to resolve
+        // with more facets; the region is small, it is where the trunnion
+        // collar's loads enter the shell, and keeping it solid settles both.
+        scale([PYLON_SIDE, 1, 1])
+            translate([20, 4, BOSS_Z_LO - 1])
+                cube([40, 28, BOSS_Z_H + 2]);
     }
+}
+
+
+// =============================================================================
+// ── ESC bay geometry (Rev T4c) ───────────────────────────────────────────────
+// =============================================================================
+// Offsets of the MEASURED skin, hoisted so every consumer builds from the same
+// surface.  See nacelle_shell_grid.scad for why a radial offset is legitimate
+// over this Z range and would not be near the nose.
+ESC_SKIN = (NACELLE_SIDE > 0) ? HOLLOW_SKIN_PORT : HOLLOW_SKIN_STBD;
+
+// Both bays' fastener positions at once, from the shared bay definition — the
+// same module the covers drill their clearance holes with, so a boss and its
+// hole cannot end up on different centres.
+module esc_boss_cylinders_local(dia) {
+    for (az_hinge = ESC_BAY_AZ) esc_boss_cylinders(az_hinge, dia);
+}
+
+// The shell of material between two radial offsets of the measured skin.
+module _esc_skin_shell(d_out, d_in) {
+    difference() {
+        grid_solid(offset_grid(ESC_SKIN, d_out), HOLLOW_Z, HOLLOW_N_AZ);
+        grid_solid(offset_grid(ESC_SKIN, d_in), HOLLOW_Z, HOLLOW_N_AZ);
+    }
+}
+
+
+// ── ADDITIVE (Zone A) — the cover doubler and its insert bosses ──────────────
+// The cover has to land on something, and forward of Z 100 the skin is at the
+// 2.5 mm minimum — thinner than the cover itself.  So the bay carries a DOUBLER:
+// a band of material added inside the skin around the window, thick enough that
+// a rebate can be cut into it without breaking through.
+//
+// Placed in Zone A, not Zone C, and that ordering is the whole trick.  In Zone A
+// the Zone-B rebate can cut into it; in Zone C nothing could.  It is protected
+// from the cavity subtraction by being named in hollow_cavity()'s keep-out list,
+// the same way the trunnion collar is.
+module esc_cover_doubler() {
+    intersection() {
+        _esc_skin_shell(0.0, ESC_COVER_T + ESC_LEDGE_T);
+        union() for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0, ESC_LEDGE_W);
+    }
+    intersection() {
+        _esc_skin_shell(0.0, ESC_COVER_T + ESC_BOSS_DEPTH);
+        esc_boss_cylinders_local(ESC_BOSS_OD);
+    }
+}
+
+// ── SUBTRACTIVE (Zone B) — window, rebate, insert bores ─────────────────────
+// Three cuts that must be made together, because each is defined against the
+// others:
+//   window  the board footprint, cut clean through from the seat radius out —
+//           a 33 mm folded board cannot be threaded into a sealed annulus, so
+//           the bay opens radially and the cover closes it;
+//   rebate  everything outside (skin − ESC_COVER_T) across window PLUS the
+//           doubler band, so the cover drops in and its outer face is flush with
+//           the mould line.  A cover standing proud is a step in the boundary
+//           layer at the widest part of the nacelle;
+//   bores   M3 heat-set pockets opening on the rebate floor.
+module esc_bay_cut() {
+    // window — full depth over the board footprint
+    for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0);
+
+    // rebate — a cover's thickness deep, over window + landing band
+    intersection() {
+        difference() {
+            translate([0, 0, ESC_BAY_Z0 - ESC_LEDGE_W - 1])
+                cylinder(r = 60, h = (ESC_BAY_Z1 - ESC_BAY_Z0)
+                                     + 2 * ESC_LEDGE_W + 2, $fn = 96);
+            grid_solid(offset_grid(ESC_SKIN, ESC_COVER_T),
+                       HOLLOW_Z, HOLLOW_N_AZ);
+        }
+        union() for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0, ESC_LEDGE_W);
+    }
+
+    // insert bores — opening on the rebate floor
+    intersection() {
+        _esc_skin_shell(ESC_COVER_T - 0.01, ESC_COVER_T + M3_INSERT_L);
+        esc_boss_cylinders_local(M3_INSERT_D);
+    }
+}
+
+// ── The board seat is a KEEP-OUT, not an addition (Rev T4c) ─────────────────
+// Forward of Z 90 the bore is Ø50, so the duct wall's outer face sits at 27.5
+// and the board needs 2.7 mm of packing under it to reach ESC_MOUNT_R.
+//
+// The first attempt ADDED that packing as a Zone-C plinth whose top face was at
+// exactly ESC_MOUNT_R — the same plane the Zone-B pocket floor lies in.  Two
+// coplanar faces meeting is the touching-face problem this repo has hit before,
+// and it duly produced six non-2-manifold edges in the starboard pod at
+// local r 30.4, Z 86.9–88.8 — precisely on that plane, in both bays.
+//
+// The fix is to stop adding material and start KEEPING it.  The canonical shell
+// is solid; the cavity is what would have hollowed this region out.  Excluding
+// the seat footprint from the cavity leaves the shell's own material there, and
+// the bay pocket then CUTS the seat face at ESC_MOUNT_R as a real boolean
+// result rather than as two surfaces that happen to coincide.  Same geometry,
+// one fewer coincidence, and one fewer part to print.
+//
+// The inner bound deliberately runs BELOW the duct wall (26.0 against 27.5) so
+// the keep-out crosses the cavity's inner cylinder instead of grazing it.
+module esc_bay_seat_keepout() {
+    for (az_hinge = ESC_BAY_AZ)
+        for (side = [0, 1])
+            esc_panel_slab(
+                (side == 0 ? ESC_W_POWER : ESC_W_SIGNAL) + 2 * (ESC_FIT + 2.0),
+                az_hinge + (side == 0 ? esc_a_pow() : -esc_a_sig()),
+                26.0, ESC_MOUNT_R + 2.0,
+                ESC_BAY_Z0 - 1.0, STATOR_SLV_Z_START);
 }
 
 
@@ -1329,6 +1471,8 @@ module hollow_cavity() {
 //   • trunnion_collar_cut()    — Ø34 H7 register, gear cavity, 3× M3, nav port
 //   • esc_disconnect_bay()     — 4 × 10 AWG bullet-disconnect pocket (WA-R10)
 //   • hollow_cavity()          — Rev T4b forward-biased internal cavity
+//   • esc_bay_cut()            — Rev T4c ESC window + cover rebate + bores
+//     (the board seat is cut by the same pocket; see esc_bay_seat_keepout)
 //
 // Zone C — outer union() AFTER difference():
 //   • edf1_nacelle_spider()     — EDF1 spider at Z = 87.75 mm (nacelle-integrated)
@@ -1346,6 +1490,18 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
            "trunnion collar reaches past the wing tip face");
     assert(COLLAR_OD / 2 + 0.1 < COLLAR_FAIR_D / 2,
            "junction fairing is not larger than the collar it fairs");
+    // The bay must not reach inside the duct wall, and its board must be the
+    // one the fit tool measured — a silent widening here is a silent foul.
+    // The shared bay file states ESC_MOUNT_R as a literal so the cover can use
+    // it without importing the pod.  This is where the two are tied together.
+    assert(abs(ESC_MOUNT_R - (SLEEVE_BORE_R + CAVITY_DUCT_WALL)) < 1e-9,
+           "ESC seat radius has drifted from the sleeve-zone duct wall");
+    assert(ESC_INSERT_D == M3_INSERT_D && ESC_INSERT_L == M3_INSERT_L,
+           "ESC insert size has drifted from the pod's M3 insert");
+    assert(ESC_W_POWER + ESC_W_SIGNAL >= 32.0,
+           "folded ESC width is under the 32 mm isolation floor");
+    assert(ESC_BAY_Z1 - ESC_BAY_Z0 >= 60.0,
+           "ESC bay is shorter than the 62 mm board the fit tool selected");
     assert(ESC_DISC_D < ESC_DISC_AVAIL,
            "disconnect bay is deeper than the MEASURED inboard-face envelope");
     assert(ESC_DISC_Z - ESC_DISC_H / 2 >= 75.0
@@ -1378,6 +1534,9 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                 // blends into the canonical shell over the existing intake
                 // transition; it does not change the internal duct diameter.
                 circular_intake_fairing();
+
+                // ── ESC cover doubler + insert bosses (Rev T4c) ──────────
+                esc_cover_doubler();
 
                 // ── Trunnion collar + junction fairing (Rev T4) ──────────
                 // The fixed-spar pivot seat.  Placed in Zone A ON PURPOSE so
@@ -1440,6 +1599,12 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
             // ── Internal cavity (Rev T4b) — forward-biased hollowing ──────
             hollow_cavity();
 
+            // ── Hinged-ESC bays: board pocket + access window (Rev T4c) ───
+            // Cut AFTER the cavity so the two merge into one volume — that is
+            // deliberate: it is what gives the power feed a route from the
+            // disconnect bay and the phase leads a route to the spider arms.
+            esc_bay_cut();
+
         } // end difference (Zone A + Zone B)
 
         // ══════════════════════════════════════════════════════════════════
@@ -1453,6 +1618,11 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
         // M3 clearance bores on intake face; screws from intake bore end.
         edf1_nacelle_spider();
 
+        // ── ESC bay seat plinth, cover ledge and insert bosses (Rev T4c) ──
+        // Zone C, all three: the cavity subtraction would otherwise delete the
+        // plinth and the ledge, and the bay cut would delete the bosses.  They
+        // sit outside every Zone-B cut by construction, so adding them after the
+        // difference() closes is correct rather than a workaround.
         // ── Internal nav-light wire channel (inside the outboard skin) ────
         // Rev T4b: MOVED from Zone A to Zone C.  It is a rib standing INTO the
         // cavity, so while the pod was solid it was a no-op and while the

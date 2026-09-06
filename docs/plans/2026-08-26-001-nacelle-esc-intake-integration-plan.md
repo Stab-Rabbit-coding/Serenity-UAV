@@ -407,6 +407,52 @@ clearance (measured above). Not a good trade — let the board sit where it fits
 height**. The width (32.10, split 8.45 + 23.65) and the fold are settled; the
 pocket is one parametric block once those two numbers land.
 
+#### BUILT 2026-09-06 — the bays, at the owner's final widths
+
+The owner settled the split as **23.0 mm power + 10.0 mm signal = 33.0 mm**
+(the analysis above had used a provisional 23.65 + 8.45), and named the panels:
+the wide one carries the power stage, the narrow one the signal stage. Re-run at
+those widths against the ray-cast shell:
+
+| stack | length | Z span | area | vs as-built 2115 mm² |
+|---:|---:|---|---:|---:|
+| 3.0 mm | 74 mm | 74–146 | 2442 mm² | 115 % |
+| 3.5 mm | 68 mm | 74–140 | 2244 mm² | 106 % |
+| **4.0 mm** | **62 mm** | **74–134** | **2046 mm²** | **97 %** |
+| 4.5 mm | 58 mm | 74–130 | 1914 mm² | 91 % |
+| 5.0 mm | 50 mm | 74–122 | 1650 mm² | 78 % |
+| 6.0 mm | 16 mm | 74–88 | 528 mm² | 25 % |
+
+**The cliff is gone.** At the earlier 8.45 mm narrow panel, 4.0 → 4.5 mm of stack
+cost 26 mm of length. At 10 mm it costs 4 mm, and 4.0 → 5.0 costs 12 mm rather
+than everything. A slightly wider signal panel bought a materially more forgiving
+design point, which is not what one would predict from the sagitta table alone.
+
+**Built:** hinge azimuth **69° / 249°**, seat radius **30.2** (the sleeve-zone
+duct wall, so the board lands on structure aft of Z 90 and on kept-solid shell
+forward of it), fold **30.25°** — panels at **149.75°** to each other.
+
+**Access is a cover, and that was forced by the hollowing.** Rev T4b created the
+annulus; it also sealed it. A 33 mm folded board cannot be threaded in through a
+4 mm vent, so each bay is cut radially through the skin and closed by
+`nacelle_esc_cover.scad` — **four distinct parts**, because the shell is not
+axisymmetric and port/stbd/bay-A/bay-B are four different surfaces. The cover's
+outer face is the same ray-cast skin grid the pod's rebate is cut from, so the
+joint is flush by construction; verified mesh-against-mesh at **0.008 mm³** of
+interference (gate T9).
+
+**U6 is now genuinely void, not merely superseded.** Its premise was ESC wires
+forward of the pivot experiencing tension through the tilt range. The feeds run
+inside the spar bore on the tilt axis, and the ESCs themselves sit in bays
+centred at Z 104 — 3.5 mm forward of `PIVOT_Z` 107.5, which is as close to the
+axis as anything in this pod gets.
+
+**And U4's own CG conclusion is confirmed the hard way.** Plan 003 KTD8 banked
++3.91 mm of pivot station on relocating ESC1 aft to Z 150.6. Measured, no bay
+exists there — the best bay wholly aft of Z 130 is 23 × 30 mm, which is not an
+ESC. Siting both ESCs at the real centroid moves `PIVOT_Z` **113.8 → 107.5** and
+costs **6.3 mm of hover clearance**. That lever was never available.
+
 #### EDF mechanicals — the vendor listing, read 2026-08-31 (REF-EDF-002)
 
 The manufacturer's page publishes no bolt pattern and no external dimensions

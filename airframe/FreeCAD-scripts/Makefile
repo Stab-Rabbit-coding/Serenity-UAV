@@ -82,6 +82,10 @@ NACELLE_STLS := \
     $(STLS)/nacelles/edf_stator_sleeve.stl               \
     $(STLS)/nacelles/edf_aft_spider_sleeve.stl           \
     $(STLS)/nacelles/nacelle_trunnion.stl                \
+    $(STLS)/nacelles/esc/nacelle_esc_cover_port_a.stl    \
+    $(STLS)/nacelles/esc/nacelle_esc_cover_port_b.stl    \
+    $(STLS)/nacelles/esc/nacelle_esc_cover_stbd_a.stl    \
+    $(STLS)/nacelles/esc/nacelle_esc_cover_stbd_b.stl    \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-closed.stl \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-open.stl   \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl   \
@@ -171,6 +175,57 @@ $(STLS)/nacelles/nacelle_trunnion.stl: \
 	$(OPENSCAD) $(SCAD_FLAGS) \
 	    $(SCAD)/nacelles/nacelle_trunnion.scad \
 	    -o $@
+	@echo "[stl] $@"
+
+# -- Hinged-ESC bay access covers (Rev T4c) --------------------
+# FOUR distinct parts, not one printed four times.  The shell is not
+# axisymmetric, so the bay at azimuth 69 and the bay at 249 sit on different
+# surface, and port and starboard are mirror images rather than copies.
+#
+# ** NACELLE_SIDE IS INVERTED RELATIVE TO THE FILENAME. ** The Rev R1
+# nacelle-swap renamed the pod outputs to their PHYSICAL mounting side without
+# changing the shell selector, so nacelle_port_revs.stl is rendered with
+# NACELLE_SIDE=-1.  A cover MUST use the same value as the pod it closes;
+# building it on the other shell puts ~440 mm3 of cover inside the pod, which
+# tools/nacelle_esc_bay_fit.py --check-fit measures.
+$(STLS)/nacelles/esc/nacelle_esc_cover_port_a.stl: \
+        $(SCAD)/nacelles/nacelle_esc_cover.scad \
+        $(SCAD)/nacelles/nacelle_esc_bay.scad \
+        $(SCAD)/nacelles/nacelle_shell_grid.scad \
+        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
+	    -D NACELLE_SIDE=-1 -D RENDER_BAY=0 -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/esc/nacelle_esc_cover_port_b.stl: \
+        $(SCAD)/nacelles/nacelle_esc_cover.scad \
+        $(SCAD)/nacelles/nacelle_esc_bay.scad \
+        $(SCAD)/nacelles/nacelle_shell_grid.scad \
+        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
+	    -D NACELLE_SIDE=-1 -D RENDER_BAY=1 -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/esc/nacelle_esc_cover_stbd_a.stl: \
+        $(SCAD)/nacelles/nacelle_esc_cover.scad \
+        $(SCAD)/nacelles/nacelle_esc_bay.scad \
+        $(SCAD)/nacelles/nacelle_shell_grid.scad \
+        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
+	    -D NACELLE_SIDE=1 -D RENDER_BAY=0 -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/esc/nacelle_esc_cover_stbd_b.stl: \
+        $(SCAD)/nacelles/nacelle_esc_cover.scad \
+        $(SCAD)/nacelles/nacelle_esc_bay.scad \
+        $(SCAD)/nacelles/nacelle_shell_grid.scad \
+        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
+	    -D NACELLE_SIDE=1 -D RENDER_BAY=1 -o $@
 	@echo "[stl] $@"
 
 $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-closed.stl: \
