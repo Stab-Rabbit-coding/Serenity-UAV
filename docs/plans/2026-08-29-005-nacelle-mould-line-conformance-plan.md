@@ -30,10 +30,59 @@ Thing 14474 scaled 1.25×) is the mould-line authority. Where printed geometry
 stands proud of it, the printed geometry is wrong unless a functional
 requirement says otherwise and that requirement is recorded.
 
-**Clearance target — settled 2026-08-29.** The flap trim (40 → 30 mm) combines
-with plan 003's revised station (28.0) and ESC1 relocation to give **+9.8 mm on
-the existing 1.5 in gear**, which the owner has accepted. No landing-gear change
-is forced. No blockers remain.
+**Clearance target — settled 2026-08-29, BROKEN 2026-08-31, RESOLVED 2026-09-06
+BY A GEAR DECISION. Read this block, then OQ1.**
+
+> **Resolved 2026-09-06 —
+> `docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md`.**
+> R3's remaining question ("which gear, and at what margin") is answered there
+> and is no longer this plan's to carry. The **3.0 in gear is the flight
+> article**; the 1.5 in gear is a non-flight variant, below the derived minimum
+> safe belly clearance by 27–40 mm in every case. **R1 (40 → 30 mm flaps) is
+> unchanged and still owned here** — but its role changes: with the 3.0 in gear
+> fitted, R1 is no longer what makes clearance positive (that is already +33.00 mm
+> statically). R1 now buys **attitude margin**, taking the 3.0 in surplus from
+> +5.45 mm to +14.37 mm at a 5° touchdown-roll case. That is a promotion in value,
+> not a demotion: it is what makes the margin defensible rather than nominal.
+> The requirement that survives unchanged is the underlying one — *positive
+> clearance with the nacelles vertical, on whatever gear is fitted* — now with a
+> derived minimum behind it (`docs/LANDING_GEAR_ANALYSIS.md` §4.8, gated by
+> `tools/landing_gear_ground_clearance.py`).
+
+*(Original block, kept for the record:)*
+
+The +9.8 mm figure below rested on `PIVOT_Z` = 116.1, which rested on a
+rotating-assembly mass table that estimated the pod shell and both sleeves at
+130 g combined. **They measure 339.7 g.** Re-derived from the meshes
+(`tools/nacelle_mass_cg.py`, new), the CG — and so the pivot — is **105.8 mm**,
+10.3 mm forward of what this plan assumed, and the built `SPAR_Z` is a further
+1.57 mm lower than the table that row came from used.
+
+**PARTLY RECOVERED 2026-08-31 (Rev T4b).** Hollowing the pods with a
+**forward-biased** wall — owner direction, to move the CG aft on purpose — put
+`PIVOT_Z` back to **113.8**, and counting the in-nacelle harness (22.9 g, all of
+it aft of the pivot, never carried in any previous roll-up) accounts for part of
+that. Where it now stands, measured:
+
+| configuration | `PIVOT_Z` | 1.5 in gear (−38.1) | 3.0 in gear (−80.0) |
+|---|---:|---:|---:|
+| solid pod, 40 mm flaps *(the failure)* | 105.9 | −10.47 mm **strikes** | +31.43 |
+| **hollow pod, 40 mm flaps (built today)** | **113.8** | **−2.55 mm strikes** | +39.35 |
+| hollow pod + **this plan's 30 mm flaps** | 112.8 | **+6.41 mm clears** | +48.31 |
+
+So **R1 now finishes the job it could not finish alone** — and equally, the
+hollowing could not finish it without R1. Neither lever closes 10.5 mm by
+itself; together they clear by 6.41 mm.
+
+**What still needs an owner decision:** +6.41 mm is not the +9.8 mm that was
+accepted, and it should not be inherited as though it were. Remaining levers are
+KD5's deferred stator compression (~7 mm), aft ballast (17.7 g per nacelle per
+4 mm of CG shift), or making the 3.0 in gear mandatory — which clears by 39 mm
+today with no further change at all.
+
+This is precisely the failure mode OQ5 was written to catch — "R3 is an
+owner-accepted margin and this plan is the last thing that can silently spend
+it" — except that what spent it was a mass error upstream, not this plan.
 
 ---
 
@@ -100,10 +149,17 @@ it, and records the residual as an accepted, documented deviation.
 - **R2** — The nozzle drive still reaches both end stops across the full tilt
   range at the larger swing arc the shorter flaps require, with the same exit-
   area range as today (75 %/105 % bore targets).
-- **R3** — Hover ground clearance is **≥ 9.8 mm on the 1.5 in gear** with the
-  nacelles vertical, verified against final geometry. This is the owner-accepted
-  margin (~1 cm); it is not a derived requirement and must not be silently
-  traded away by downstream geometry changes.
+- **R3** — ~~Hover ground clearance is **≥ 9.8 mm on the 1.5 in gear**~~
+  **CANNOT BE MET AS WRITTEN (2026-08-31).** The measured pivot is 105.8, not
+  116.1. **Re-measured 2026-08-31 after the pods were hollowed:** the 1.5 in gear
+  is −2.55 mm before this plan's flap trim and **+6.41 mm after it**. R3 must be
+  re-decided by the owner as one of: (a) the 3.0 in gear
+  becomes mandatory (+31.4 mm today, no other change needed); (b) the stack
+  shortens by more than the 10 mm R1 buys — KD5's deferred stator compression is
+  the named next lever, worth ~7 mm; (c) aft ballast, at 17.7 g per nacelle per
+  4 mm of CG shift and a T/W cost. The requirement that survives untouched is the
+  underlying one: **positive clearance with the nacelles vertical, on whatever
+  gear is fitted.**
 - **R4** — The nozzle housing conforms to the canonical cowl mould line: no
   point of the housing or its hinge bosses stands proud of the canonical shell
   radius at the same station, or the exception is recorded with its functional
@@ -170,7 +226,19 @@ architecture that creates the overhang.
 
 ### Outstanding Questions
 
-- **OQ1 — RESOLVED 2026-08-29 (owner-accepted).** +9.8 mm on the 1.5 in gear,
+- **OQ1 — RESOLVED 2026-09-06 by
+  `docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md`.**
+  Not by re-accepting a margin on the 1.5 in gear, but by retiring it: the
+  minimum safe belly clearance is derived at **65.5–78.4 mm** and the 1.5 in
+  gear's 38.1 mm cannot reach it by any lever on this plan's table. The 3.0 in
+  gear is the flight article and carries **+14.37 mm** of surplus at a 5°
+  touchdown-roll case once R1's 30 mm flaps land. Residual owner decisions moved
+  to **LG-27** (the attitude case itself) and **LG-28** (nozzle strike during a
+  full fuse arrest).
+- **OQ1 — RE-OPENED 2026-08-31 (superseded by the above).** The resolution below is void: it was accepted
+  against a pivot station that a measured mass roll-up does not support. See the
+  Clearance target block and R3.
+- **OQ1 (superseded text, kept for the record).** +9.8 mm on the 1.5 in gear,
   reached by combining the 30 mm flaps with plan 003's station 28.0 and the ESC1
   relocation. The compact gear stays viable; `LG-HOVER-01` closes with it.
   Ballast could buy more (+16.6 mm at 12 mm CG shift) but costs T/W 1.59 → 1.55
@@ -193,7 +261,10 @@ architecture that creates the overhang.
   at **Z 60** with `INTAKE_BLEND_L = 90` — well past the monotonic region, which
   is *why* the curves cross. **The blend must terminate by Z ≈ 30, tangent to
   the dome**, not run to Z 90. See R5.
-- **OQ5 — RESOLVED 2026-08-29 by implementation.** The spar station move is
+- **OQ5 — RESOLVED, THEN VINDICATED 2026-08-31.** The re-verification this item
+  demanded was finally run, and it failed. Keeping the original text below,
+  because the item did its job.
+- **OQ5 (original).** RESOLVED 2026-08-29 by implementation. The spar station move is
   **done** (wing Rev T1, station 28.0, `SPAR_Z` 66.85), so it is no longer a
   sequencing question — this plan's clearance budget must be computed against
   the built spar height, not against a pending one. The +9.8 mm figure in R3

@@ -245,6 +245,9 @@ both via Commo.
   `REFERENCES.md`. `docs/solutions/` holds documented solutions to past problems (bugs,
   design patterns, workflow lessons), organized by category with YAML frontmatter
   (`module`, `tags`, `problem_type`) — worth a search when working in an area it covers.
+  `CONCEPTS.md` (repo root) defines shared domain vocabulary — entities, named processes,
+  and status concepts with project-specific meaning — relevant when orienting to the
+  codebase or discussing domain concepts.
 - New standards citation: look it up by REF-ID first; if absent, add it to `REFERENCES.md`
   with a validated URL and exact section, then cite the REF-ID. Never guess a section number.
 - Keep `PROJECT_INDEX.md` current for active files; when a file is archived, move its entry to

@@ -1203,6 +1203,82 @@ requirements for the airframe itself.
 
 **Used in:** `docs/structural_analysis.md` §7.3, `airframe/fuselage-mid/WBS.md` §1.1.1.2 CARGO-03c, this file's Open Standards Verification Items table (CF-PETG bearing allowable row)
 
+### REF-SEMI-001: Toshiba — TPHR8504PL 40 V N-channel Power MOSFET datasheet
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Toshiba Electronic Devices & Storage Corporation |
+| **Document** | *TPHR8504PL — MOSFET Silicon N-channel MOS (U-MOS IX-H)*, datasheet, 2019-10-24 |
+| **Local copy** | `Open-Secure-ESC/docs/datasheets/TPHR8504PL_datasheet_en_20191024.pdf` |
+| **Official URL** | <https://toshiba.semicon-storage.com/ap-en/semiconductor/product/mosfets/detail.TPHR8504PL.html> — **REQUIRES VERIFICATION**: the local PDF is authoritative and was read directly; the product-page URL follows Toshiba's standard pattern but has not been fetched from the issuing body |
+| **Retrieved** | 2026-09-06, from the local PDF via `pdftotext` |
+| **Scope applied** | §5 Thermal Characteristics and the electrical characteristics table |
+
+**Values used (read from the PDF, not quoted from memory):**
+
+| Parameter | Symbol | Value | Where used |
+|---|---|---|---|
+| Channel-to-case thermal resistance (max, Tc = 25 °C) | `Rth(ch-c)` | **0.88 °C/W** | `tools/nacelle_esc_thermal.py` |
+| Channel-to-ambient, glass-epoxy board (a) | `Rth(ch-a)` | **50 °C/W** | board-to-local-air term |
+| Channel-to-ambient, glass-epoxy board (b) | `Rth(ch-a)` | 142 °C/W | bounding case, not used |
+| Channel temperature, absolute maximum | `Tch` | **175 °C** | design limit derives from this |
+| Drain-source on-resistance, typ / max (VGS = 10 V, ID = 50 A) | `RDS(on)` | **0.7 / 0.85 mΩ** | confirms the 1.75 W/FET figure |
+
+The 0.7 mΩ typical reproduces Open-Secure-ESC's 6 × 1.75 W conduction figure
+exactly at 50 A (`I²R` = 2500 × 0.0007). **The `max` 0.85 mΩ gives 2.13 W/FET,
+and `RDS(on)` roughly doubles by 125 °C** — a positive feedback the steady-state
+network in `nacelle_esc_thermal.py` does not model and which is stated there.
+
+**Used in:** `tools/nacelle_esc_thermal.py`, `airframe/wings-nacelles/WBS.md`
+§1.1.3.8
+
+---
+
+### REF-MAT-004: CF-PETG THERMAL CONDUCTIVITY — NO SOURCE EXISTS. DO NOT CITE A NUMBER.
+
+**This entry exists to record an absence, and to stop the absence being filled
+by a plausible-looking figure.**
+
+| Field | Value |
+|---|---|
+| **Quantity** | Thermal conductivity `k` of 20 % chopped-carbon-fibre PETG, as printed by FFF |
+| **Status** | **UNVERIFIED — no primary source in this repository or cited by it** |
+| **What REF-MAT-002 does NOT contain** | It is a mechanical-properties study (ASTM D790 flexural, D695 compressive, E384 hardness, D1525 Vicat, D648 HDT). It publishes **no thermal conductivity**, and it is the only CF-PETG characterisation this project cites. |
+
+**A figure of 0.25 W/m·K appeared in `airframe/wings-nacelles/WBS.md` on
+2026-09-06 and was written as though established.** It was not: it was an
+unsourced engineering estimate. It is retracted here and corrected in that file.
+
+**What can honestly be said, pending a measurement:**
+
+| | plausible band | reasoning |
+|---|---|---|
+| neat PETG | ~0.20 W/m·K | typical amorphous thermoplastic |
+| 20 % CF, **through-plane** | ~0.25–0.45 W/m·K | short fibres align **in**-plane during extrusion, so the through-thickness gain over neat resin is small |
+| 20 % CF, **in-plane** | ~0.5–1.0 W/m·K | along the fibre axis |
+| FFF porosity | reduces both | inter-bead voids are series air gaps |
+
+These are bounds for reasoning, **not a citation**, and no design decision may
+rest on a single value from this table.
+
+**How the open question was worked around rather than guessed.**
+`tools/nacelle_esc_thermal.py` **sweeps** k from 0.15 to 1.20 W/m·K and shows the
+conduction path to the stator sleeve fails at every point in the band — 28.98
+K/W at the bottom, 8.52 K/W at the top, against a budget of about 4.6 K/W. The
+decision is therefore insensitive to the missing datum. A measured value would
+sharpen the numbers; it would not change the answer.
+
+**To close this item:** either obtain a manufacturer datasheet for the specific
+filament (3D Maker Engineering PETG-CF Pro Series — the product REF-MAT-002's
+notes identify as the commercial 20 % CF material) that publishes thermal
+conductivity, or measure a printed coupon per ASTM D5470 (through-plane, the
+orientation that governs here) or ASTM E1225. Record the print orientation with
+the value; without it the number is not usable.
+
+**Tracked in:** `airframe/wings-nacelles/WBS.md` §1.1.3.8 open items
+
+---
+
 ### REF-MAT-002: Ramachandran, Pandian, Ramamoorthi & Britto John — "Influence of Process Parameters on the Mechanical Properties of Carbon Fibre Reinforced PETG"
 
 | Field | Value |
@@ -1243,6 +1319,117 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 **Used in:** `docs/structural_analysis.md` §6.4
 
 **Used in:** `airframe/README.md` §5.1
+
+### REF-EDF-001: XFly-Model — Galaxy X5 50 mm 12-blade EDF, 6S, motor 2627-KV3200
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | XFly-Model |
+| **Product** | EDF Ducted Fan XFly Galaxy X5, 50 mm, 12 blades, 6S, motor 2627-KV3200 |
+| **Official URL** | <https://www.xfly-model.eu/en/edf-units/4833-edf-ducted-fan-xfly-galaxy-x5-xfly-model-50mm-12-blades-6s-motor-3200kv.html> |
+| **Local archive** | `docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html` (saved 2026-08-18) plus a page screenshot |
+| **Retrieved** | 2026-08-18 (archived), re-read 2026-08-31 |
+
+**Values used, as published:**
+
+| quantity | value |
+|---|---|
+| motor | Brushless **2627-3200KV** outrunner |
+| shaft diameter | **3 mm** |
+| blades | **12** |
+| internal (shroud) diameter | **50 mm** |
+| static thrust | **1240 gf** @ 6S 22.2 V |
+| max current / power | **38 A / 843 W** @ 6S |
+| weight | **75 g** — combo EDF + lip + motor |
+| connectors | **PK 3.5 mm** bullets |
+| external diameter | published as "nc" — **not communicated** |
+| max rotation speed | published as "nc" — **not communicated** |
+
+**NOT published, and each is load-bearing somewhere in this repo:** the motor
+mounting bolt circle, the motor's length, the motor-alone weight, and the wire
+gauge. See REF-EDF-002 for what a vendor listing adds, and the open items in
+`docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md`.
+
+**Where it is applied:** the thrust budget throughout (`docs/structural_analysis.md`,
+`AGENTS.md`), `airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad`
+(`EDF_BORE_R`, EDF stations), `edf_stator_sleeve.scad`, `edf_aft_spider_sleeve.scad`,
+`current-specification/bom_revS.csv` `EDF-50-6S`, and
+`tools/nacelle_mass_cg.py`.
+
+> The KV was confirmed by the repository owner on 2026-08-31 against this page:
+> the motor is a **2627-KV3200**. One SCAD header had carried 2700KV.
+
+---
+
+### REF-EDF-002: Vendor listing image — XFly Galaxy X5 50 mm EDF dimensions and packing list
+
+| Field | Value |
+|---|---|
+| **Type** | Vendor product-listing infographic (AliExpress marketplace listing) |
+| **Image URL** | <https://ae-pic-a1.aliexpress-media.com/kf/Sbcaa665cfd9c4bbfbaabb2ceb99e0cc52.png> |
+| **Listing URL** | <https://www.aliexpress.us/item/3256811751635162.html> — **cookie-gated; the listing page itself could not be retrieved.** The image above is directly fetchable and is what was read. |
+| **Retrieved** | 2026-08-31 (image, 750 × 11 846 px) |
+| **Provenance caveat** | A **marketplace listing, not a manufacturer datasheet.** It is used only where the manufacturer publishes nothing, and each value below records which panel it came from. The listing mixes the 3S / 4S / 6S variants of the same X5 airframe — the motor photographed in its Packing List panel is labelled **2627-KV4600**, which is the **4S** motor. The repository owner's assessment is that the dimensions and screw layout are common across the variants; that is recorded as an **owner assessment, not a manufacturer statement.** |
+
+**Values used:**
+
+| quantity | value | panel |
+|---|---|---|
+| fan / rotor diameter | **Ø50 mm** | "Product Size" drawing |
+| shroud (housing) length | **38.6 mm** | "Product Size" drawing |
+| overall length, incl. motor | **76 mm** | "Product Size" drawing |
+| blade-tip to shell clearance | **0.4 mm** | body text |
+| motor mounting screws | **4** identical, plus 1 longer spinner screw | "Packing List" photo |
+| shroud motor hub | disc with 4 round holes alternating with 4 slots | "composite materials" photo |
+
+**Where it is applied:**
+
+- `edf_aft_spider_sleeve.scad` — the **4-screw** count is what shows the sleeve's
+  three 120° arms cannot match the motor, flagged there as print-blocking.
+- `edf_aft_spider_sleeve.scad` and `nacelle_pod_50mm_tandem.scad` post-print
+  checks — the **0.4 mm** tip clearance against a 50 mm shroud ID is what sets
+  the Ø50.0 +0.4/−0.0 bore tolerance now that the build discards the shroud and
+  runs the rotor against printed plastic.
+
+> **Still not published anywhere:** the **bolt-circle diameter** and the screw
+> **thread size**. Both must be measured off a physical motor before the aft
+> spider sleeve is printed for flight.
+
+---
+
+### REF-STD-GEAR-001: ISO 53:1998 — Cylindrical gears for general and heavy engineering — Standard basic rack tooth profile
+
+| Field | Value |
+|---|---|
+| **Designation** | ISO 53:1998 |
+| **Full title** | *Cylindrical gears for general and heavy engineering — Standard basic rack tooth profile* |
+| **Issuing body** | International Organization for Standardization (ISO), Technical Committee ISO/TC 60 (Gears) |
+| **Official access** | ISO catalogue, <https://www.iso.org/standards.html> — **DIRECT CATALOGUE URL REQUIRES VERIFICATION** (see below) |
+| **Retrieved** | not retrieved — cited by designation only |
+| **Scope applied** | The standard basic rack proportions used to generate the nacelle tilt ring gear: pressure angle α = 20°, addendum h_a = 1.00 × m, dedendum h_f = 1.25 × m. |
+
+**Where it is applied**
+
+- `airframe/openscad/nacelles/nacelle_trunnion.scad` — `GEAR_PA = 20.0`,
+  tip radius `GEAR_RA = PD/2 + m`, root radius `GEAR_RF = PD/2 − 1.25·m`, and the
+  involute flank generated from `inv(α) = tan α − α`.
+- `tools/nacelle_trunnion_fit.py` — gate T5, which checks the resulting pitch
+  diameter, ratio and centre distance against `docs/WING_ATTACH_INTERFACE.md`
+  WA-R8.
+- `airframe/blender-scripts/merge_cargo_interior.py` — the fuselage-end 38T/38T
+  stage uses the same module and the same proportions.
+
+> **REQUIRES VERIFICATION (`docs/WBS.md` §0.8).** The designation, title, issuing body and
+> the three numeric proportions above are the well-established profile-A basic
+> rack and are used as such throughout the mechanical-design literature. What is
+> **not** verified here is the direct ISO catalogue URL and the specific clause
+> number within ISO 53:1998 that states them. Neither has been fetched from the
+> issuing body, so neither is asserted. Per `CLAUDE.md` Standards Vetting Policy,
+> a guessed catalogue number or clause reference would be a fabricated citation;
+> the entry is therefore recorded at the level that *is* verifiable and flagged
+> at the level that is not. Resolve before the gear is released for fabrication.
+
+---
 
 ### REF-MATH-001: Melissen, J.B.M. — "Packing and Covering with Circles"
 

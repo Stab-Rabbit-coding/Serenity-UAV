@@ -201,8 +201,9 @@ Each CAN-PERIPH-GW-1 gateway (port and starboard nacelles) publishes tilt-angle 
 
 ### 6.1 Spar Proximity Effects
 
-> **CORRECTED 2026-08-29 (Rev T1, WA-R13).** The premise below is no longer
-> true. The tilt spar is now a **fixed roll-wrapped CARBON FIBRE tube**
+> **CORRECTED 2026-08-29 (Rev T1, WA-R13) — WA-R13 CLOSED 2026-08-31, this
+> correction being the whole of what it asked for.** The premise below is no
+> longer true. The tilt spar is now a **fixed roll-wrapped CARBON FIBRE tube**
 > (20 × 16.3 mm, `docs/plans/2026-08-29-003-...` KTD4), not 4130 steel, so the
 > ferromagnetic-shaft field distortion this section was written about **is
 > removed, not mitigated**. The mitigations below are RETAINED anyway, with a
@@ -230,6 +231,32 @@ Each CAN-PERIPH-GW-1 gateway (port and starboard nacelles) publishes tilt-angle 
 - Magnet ring must sit in a non-ferrous pocket (aluminum or composite; see airframe CAD)
 - Encoder PCB mounted on non-ferrous standoff (nylon M2.5 or phenolic)
 - No ferrous fasteners within 40 mm of magnet ring
+
+> **UPDATED 2026-08-31 (Rev T4 — the nacelle side is now built).** The joint
+> geometry these rules apply to exists as of
+> `airframe/openscad/nacelles/nacelle_trunnion.scad`. Three consequences, and one
+> of them is a rule this section cannot keep:
+>
+> 1. **"Minimum 30 mm clearance from the tilt spar centerline" is not
+>    achievable and must not be carried forward as if it were.** The AK7455 sits
+>    at `HALL_SENS_R` = **16.8 mm** from the spar axis, because that is the mean
+>    radius of the ID 26 / OD 41.2 ring magnet and an off-axis IC has to read
+>    mid-annulus (`docs/WING_ATTACH_INTERFACE.md` §4.5). 30 mm would put the IC
+>    9.4 mm outside the magnet's outer edge — off the magnet entirely. The 30 mm
+>    figure predates the Ø8 → Ø20 spar change and the magnet regrow; it is
+>    **superseded by `HALL_SENS_R`**, and the governing keep-out is
+>    `HALL_KEEPOUT_R` = 10 mm around the IC.
+> 2. **The trunnion is non-ferrous by construction** — CF-PETG, with the three
+>    M3 flange fasteners specified as **brass, not A2/A4 stainless**. That is a
+>    hard requirement, not a preference: they land inside `HALL_KEEPOUT_R`.
+> 3. **Two steel bearings are inside the keep-out and cannot be moved out of
+>    it.** The trunnion's 2 × 6704ZZ sit at r ≤ 13.5 mm, 3.3 mm inboard of the
+>    IC's own radius, and the duct bound (§4.3a) leaves nowhere else to put them.
+>    So does the Ø4 mm steel drive shaft and its pinion. **The in-situ
+>    zero/INL calibration is therefore mandatory and must be run with bearings,
+>    shaft and pinion INSTALLED** — calibrating a bare joint would characterise a
+>    magnetic environment the aircraft never flies in
+>    (`docs/TILT_DRIVE_CONTROL_SPEC.md` §7.5).
 
 ---
 
