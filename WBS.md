@@ -2,8 +2,8 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
-**Last updated:** 2026-07-18  
-**Current design revision:** Rev S (2026-07-04, see `docs/WBS.md` §6.3 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Last updated:** 2026-09-06  
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 > **This is the full historical record — every task ever defined, done or open,**
 > for clear project-progression tracking. It is a compact *index* (one line per
@@ -25,9 +25,11 @@
 
 | Domain | End State | Current Status |
 |--------|-------------------|----------------|
-| Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S; STLs pending regeneration where noted |
-| Nacelles | 2x 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev S stator shells pending render |
-| Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected; nacelle T/W ~1.61 at Phase 5-10 AUW — VTOL hover capable |
+| Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S baseline, carried forward unchanged into Rev T; STLs pending regeneration where noted |
+| Wings | Fixed CF spar (20x16.3mm tube, 35% root chord), S1223-derived section, gear-linked nacelle tilt drive | Rev T1c: spar bonded wing member (not rotating shaft), root joint splits shear(socket)/moment(80x60 flange); 14T/50T reduction drive; SPAR-20-2 station 45.15→28.0mm |
+| Nacelles | 2x 50mm tandem EDF, CG pivot ~Z=107.5mm, M=1.0 gear, iris nozzle, hinged ESC bays | Rev T4c: trunnion skewer deleted, pods hollowed (285→196g fwd-biased), 4 flush ESC covers, 4x90° motor pattern, cooling ports (Rev T4d); nacelle T/W ~1.61 at Phase 5-10 AUW — VTOL hover capable |
+| Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected; unchanged at Rev T |
+| Landing gear | Sponson-mounted bays, canonical 1.5in leg (extended 3.0in variant retained) | Rev R6 (independent component-level track, not part of the S/T letter chain): sponson wells CLOSED, leg length derived from nozzle clearance not belly height |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
 | Cargo bay | Clamshell doors + SG90 servos (OpenServoCore) + DRV8833 + SPT5425LV/LibreServo v2 winch + Dyneema + auto-latch + GPS ring + FPV bezel | N20 winch train retired Rev S; STS3215 winch servo superseded 2026-08-02 by SPT5425LV+LibreServo v2 (envelope gate resolved, 6 winch STLs still unimplemented — see WBS §1.1.1.2.1); other cargo STLs generated; gondola shell open |
 | PCBs | Rev Q: all 8 nodes use EM-hardened Pilot/XO capes. Flight Engineer is the PDB. Two Commo boards give 49 MHz connectivity. Rev S adds Observer (standalone vision/ToF/laser board). | Rev S schematics complete; Flight Engineer PCB DRC clean, gerbers generated; manual placement/routing remain (see avionics detail files) |
@@ -128,6 +130,8 @@ what was fixed, and what remains open per item.)*
 - [ ] Verify avionics specifications vs as- built.
 - [ ] Verify and update all assessment and engineering documents.
 - [ ] Verify and update all software, firmware, and scripts, along with their documentation.
+- [ ] Decide: fold landing gear's standalone "Rev R6" label into the Rev T letter chain,
+    or amend AGENTS.md §8 for a documented per-component exception
 
 #### 0.10.2 Documentation
 
@@ -1110,6 +1114,9 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 
 ### 6.3 — Rev S Checkpoint (2026-07-04)
 → detail: `docs/WBS.md` §6.3
+
+### 6.4 — Rev T Checkpoint (2026-09-06)
+→ detail: `docs/WBS.md` §6.4
 
 ---
 

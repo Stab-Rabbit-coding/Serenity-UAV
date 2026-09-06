@@ -2,7 +2,7 @@
 
 **License:** Dual-licensed — CERN-OHL-W 2.0 (hardware/CAD/PCB) / CC BY-SA 4.0 (docs/BOM/scripts).
 See `docs/attribution_and_licensing.md`.  
-**Current design revision:** Rev S (2026-07-04)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > Bill of Materials, component specifications, and system-level design parameters for
 > Serenity UAV in JSON and CSV formats. **This is the authoritative baseline for Phase 5

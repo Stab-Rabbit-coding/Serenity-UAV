@@ -151,6 +151,9 @@ numeric order.)*
 - [ ] Verify avionics specifications vs as- built.
 - [ ] Verify and update all assessment and engineering documents.
 - [ ] Verify and update all software, firmware, and scripts, along with their documentation.
+- [ ] Decide: fold landing gear's standalone "Rev R6" label into the Rev T letter chain,
+      or amend AGENTS.md §8 to permit a documented per-component exception (see
+      `docs/WBS.md` §6.4 Rev T Checkpoint)
 
 #### 0.10.2 Documentation
 
