@@ -123,9 +123,29 @@ FIT_GAP = 0.2e-3         # [m] radial air gap, sleeve OD 27.5 in a 27.7 bore
 BAY_GAP = 4.0e-3         # [m] radial height of the bay cavity
 BAY_WIDTH = 33.0e-3      # [m] folded board width
 
+#: The cooling circuit's duct-side ports, mirrored from nacelle_esc_bay.scad.
+#: They are the THROAT: 95 mm2 against 144 mm2 of skin-side louvre, so the
+#: circuit is set by these and the louvres cannot choke it.
+ESC_BLEED_N = 4
+ESC_BLEED_D = 5.5e-3     # [m]
+
 # ── EDF (BOM EDF-50-6S, XFly Galaxy X5 2627-KV3200) ──────────────────────────
-EDF_THRUST_N = 12.16     # [N] 1240 gf per unit
+EDF_THRUST_N = 12.16     # [N] 1240 gf per unit, static
+NACELLE_THRUST_N = 21.84 # [N] 4.91 lbf per nacelle = 2 x 2.73 lbf x 0.90 stator
+                         #     efficiency (nacelle_pod_50mm_tandem.scad header)
 DUCT_AREA = math.pi * 0.025 ** 2   # [m2] Ø50 bore
+
+#: Fraction of the total static pressure rise contributed by the FORWARD fan.
+#: ASSUMED 0.5 — the two EDFs are the same unit and the header credits them with
+#: equal thrust.  The sensitivity is reported rather than hidden, because this
+#: assumption sets how far below ambient the inter-stage sits.
+FWD_STAGE_FRACTION = 0.5
+
+#: Cooling-circuit loss coefficient, in velocity heads on the throat.  ASSUMED
+#: K = 3: roughly one head for the skin inlet, one for the bay and its turns, one
+#: for the discharge.  This is the number a bench flow test or CFD would replace,
+#: and it is the weakest input to the flow rate below.
+CIRCUIT_K = 3.0
 
 # ── Materials ────────────────────────────────────────────────────────────────
 K_ALUMINIUM = 167.0      # [W/m.K] 6061-T6, typical
@@ -140,8 +160,70 @@ def dissipation(current_a: float) -> float:
 
 
 def duct_velocity() -> float:
-    """Jet velocity from static thrust: T = rho.A.Ve^2 for a static fan."""
-    return math.sqrt(EDF_THRUST_N / (RHO_AIR * DUCT_AREA))
+    """Duct velocity in hover, from momentum theory for a DUCTED fan.
+
+    A constant-area duct discharging to ambient does not contract its wake, so
+    the exit area equals the duct area and
+
+        T = m_dot . Ve = rho . A . Ve^2   ->   Ve = sqrt(T / (rho.A))
+
+    This is NOT the open-rotor actuator-disc result (v_h = sqrt(T/2.rho.A),
+    references/propulsion.md S1), which assumes a contracting slipstream.  Using
+    the open-rotor form here would overstate the velocity by sqrt(2).
+    """
+    return math.sqrt(NACELLE_THRUST_N / (RHO_AIR * DUCT_AREA))
+
+
+def duct_stations() -> dict:
+    """Static pressure at each duct station in hover, relative to ambient.
+
+    THIS IS THE ANALYSIS THAT OVERTURNS THE REV T4d COOLING CIRCUIT.
+
+    Incompressible, one-dimensional, bellmouth inlet (no separation loss), duct
+    of constant area A discharging as a free jet:
+
+        station 0  far field          V = 0     p = p0
+        station 1  duct inlet         V = Ve    p = p0 - 0.5.rho.Ve^2
+        ---- forward fan adds dp1 ----
+        station 2  inter-stage        V = Ve    p = p1 + dp1
+        ---- aft fan adds dp2 ----
+        station 3  nozzle exit        V = Ve    p = p0     (free jet)
+
+    Because station 3 is back at ambient and station 1 is below it, the fans'
+    combined rise is exactly the inlet's dynamic head, and **every station inside
+    the duct is at or below ambient**.  There is nowhere in this duct to bleed
+    FROM.  A cooling circuit that takes air from the duct and vents it to the
+    skin is not merely expensive — it flows backwards.
+
+    Note the pressure rise accounts for only part of the thrust:
+    dp_fan x A is the FAN's share, and the balance is inlet-lip suction
+    (references/propulsion.md S3, "total thrust is fan thrust plus duct
+    thrust").  Sizing a bleed from thrust/area conflates the two and overstates
+    the available pressure by about 2x — which is the error this corrects.
+    """
+    ve = duct_velocity()
+    q = 0.5 * RHO_AIR * ve ** 2
+    dp_total = q                     # fans must restore the inlet depression
+    dp_fwd = dp_total * FWD_STAGE_FRACTION
+    return {
+        "Ve": ve,
+        "q": q,
+        "dp_fan_total": dp_total,
+        "p1_gauge": -q,                       # duct inlet, pre-fwd-fan
+        "p2_gauge": -q + dp_fwd,              # inter-stage = AFT FAN INLET
+        "p3_gauge": 0.0,                      # nozzle exit
+        "fan_thrust": dp_total * DUCT_AREA,   # the fans' share
+        "lip_thrust": NACELLE_THRUST_N - dp_total * DUCT_AREA,
+        "mdot": RHO_AIR * DUCT_AREA * ve,
+    }
+
+
+def aspirated_flow(dp_drive: float, throat_area: float) -> tuple[float, float]:
+    """Cooling mass flow and bay velocity for a given driving depression."""
+    v_throat = math.sqrt(2 * dp_drive / (RHO_AIR * CIRCUIT_K))
+    mdot = RHO_AIR * throat_area * v_throat
+    v_bay = mdot / (RHO_AIR * BAY_GAP * BAY_WIDTH)
+    return mdot, v_bay
 
 
 def h_flat_plate(velocity: float, length: float) -> tuple[float, float, str]:
@@ -260,30 +342,57 @@ def main() -> int:
     r_b = r_pod_al + r_tim + r_slv_al + r_spread + r_stator_conv
 
     print("\n" + "=" * 78)
-    print("C.  BLEED AIR THROUGH THE BAY — cool the board, do not conduct from it")
+    print("C.  ASPIRATED COOLING — external skin inlet, discharge into the duct")
     print("=" * 78)
-    dp = EDF_THRUST_N / DUCT_AREA
-    v_ideal = math.sqrt(2 * dp / RHO_AIR)
-    print(f"  inter-stage total pressure rise   {dp:7.0f} Pa "
-          f"(= thrust / duct area)")
-    print(f"  ideal orifice velocity            {v_ideal:7.1f} m/s")
-    edf_mdot = RHO_AIR * DUCT_AREA * v_duct
-    print(f"  EDF1 mass flow                    {edf_mdot:7.3f} kg/s")
-    bay_area = BAY_GAP * BAY_WIDTH
-    print(f"  bay flow cross-section            {bay_area * 1e6:7.0f} mm2\n")
-    print(f"  {'bay V':>8}{'mdot':>10}{'% of EDF1':>11}{'h':>9}"
-          f"{'R_conv':>9}{'air dT':>9}{'dT @21.7W':>11}")
+    st = duct_stations()
+    print(f"  duct velocity (ducted-fan momentum theory) {st['Ve']:7.1f} m/s")
+    print(f"  duct mass flow                             {st['mdot']:7.3f} kg/s")
+    print(f"  fans' pressure rise                        {st['dp_fan_total']:7.0f} Pa")
+    print(f"  of the {NACELLE_THRUST_N:.1f} N nacelle thrust: "
+          f"{st['fan_thrust']:.1f} N from fan pressure, "
+          f"{st['lip_thrust']:.1f} N from inlet-lip suction")
+    print("\n  STATIC PRESSURE, gauge (relative to ambient):")
+    for label, key in (("station 1  duct inlet, pre-fwd-fan", "p1_gauge"),
+                       ("station 2  INTER-STAGE = aft-fan inlet", "p2_gauge"),
+                       ("station 3  nozzle exit (free jet)", "p3_gauge")):
+        print(f"    {label:<42}{st[key]:+8.0f} Pa")
+    print("\n  Every station is at or below ambient.  THERE IS NOWHERE IN THIS")
+    print("  DUCT TO BLEED FROM.  The inter-stage sits "
+          f"{-st['p2_gauge']:.0f} Pa BELOW ambient, so")
+    print("  it is a SUCTION source, not a pressure source — which is exactly")
+    print("  what an aspirated cooling circuit wants.\n")
+
+    throat = ESC_BLEED_N * math.pi * (ESC_BLEED_D / 2) ** 2
+    print(f"  circuit throat (the duct-side holes) {throat * 1e6:6.0f} mm2 "
+          f"at K = {CIRCUIT_K:.1f}")
+    print(f"\n  {'throttle':>9}{'dp drive':>11}{'mdot':>11}{'bay V':>9}"
+          f"{'% duct':>9}{'h':>8}{'R_conv':>9}")
     best_c = None
-    for v_bay in (5.0, 10.0, 20.0, 30.0, 45.0):
-        mdot = RHO_AIR * bay_area * v_bay
+    for frac, name in ((1.00, "100 %"), (0.70, "70 %"), (0.50, "50 %")):
+        # driving depression scales with Ve^2, i.e. with thrust, i.e. throttle
+        dp = -st["p2_gauge"] * frac
+        mdot, v_bay = aspirated_flow(dp, throat)
         h_b, _, _ = h_flat_plate(v_bay, ESC_LEN)
-        r_conv = 1.0 / (h_b * 2 * BOARD_AREA)    # both faces washed
-        air_dt = 21.72 / (mdot * CP_AIR)
-        print(f"  {v_bay:>8.0f}{mdot * 1e3:>9.2f} g/s{100 * mdot / edf_mdot:>10.2f}%"
-              f"{h_b:>9.0f}{r_conv:>9.2f}{air_dt:>8.1f} K"
-              f"{r_conv * 21.72 + air_dt:>10.0f} K")
-        if v_bay == 30.0:
-            best_c = (r_conv, air_dt, 100 * mdot / edf_mdot)
+        r_conv = 1.0 / (h_b * 2 * BOARD_AREA)
+        print(f"  {name:>9}{dp:>10.0f} Pa{mdot * 1e3:>9.2f} g/s{v_bay:>8.1f}"
+              f"{100 * mdot / st['mdot']:>8.2f}%{h_b:>8.0f}{r_conv:>9.2f}")
+        if frac == 1.0:
+            best_c = (r_conv, mdot, 100 * mdot / st["mdot"])
+
+    print("\n  THRUST COST.  The cooling air is INGESTED and then pumped by the")
+    print("  aft fan, so it leaves with the jet and carries its own momentum out.")
+    print("  What it misses is the FORWARD fan's work — it bypasses that stage —")
+    print("  so the cost is the forward stage's share of the bypassed flow:")
+    bypass = best_c[2] / 100.0
+    cost_n = bypass * st["fan_thrust"] * FWD_STAGE_FRACTION \
+        + bypass * st["lip_thrust"] * FWD_STAGE_FRACTION
+    print(f"    bypass fraction              {100 * bypass:5.2f} % of duct flow")
+    print(f"    thrust cost                  {cost_n:5.3f} N = "
+          f"{100 * cost_n / NACELLE_THRUST_N:.2f} % of nacelle thrust")
+    print("\n  Against the DISCARD circuit (take duct air, vent it to the skin):")
+    print("    that air has been worked on and is then thrown away, so the whole")
+    print(f"    bypassed momentum is lost — {100 * bypass * 2:.2f} % — and it cannot")
+    print("    flow anyway, because the duct is below ambient everywhere.")
 
     print("\n" + "=" * 78)
     print("VERDICT — channel temperature at the design points")
@@ -302,7 +411,7 @@ def main() -> int:
          + POD_DUCT_WALL / (0.25 * a_cond) + r_gap
          + SLEEVE_WALL / (0.25 * a_cond) + r_stator_conv),
         ("B  aluminium path to the stator + TIM", r_board + r_b),
-        ("C  bleed air, 30 m/s in the bay", r_board * 0.35 + best_c[0]),
+        ("C  aspirated, skin inlet -> duct suction", r_board * 0.35 + best_c[0]),
     ]
     for label, r in cases:
         t_hov = T_AMBIENT + r * dissipation(i_hover)

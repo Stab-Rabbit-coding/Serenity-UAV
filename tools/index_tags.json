@@ -1136,6 +1136,7 @@
         "cad-mesh",
         "power",
         "propulsion",
+        "security",
         "structural"
       ],
       "archived": false
@@ -13584,6 +13585,7 @@
       "airframe/openscad/fuselage/cargo/cargo_spar_drive.scad",
       "airframe/openscad/fuselage/landing_leg_assy.scad",
       "airframe/openscad/nacelles/_export_pivot_slab.scad",
+      "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/port_tilt_spar_assembly.scad",
       "airframe/placeholders/generate_placeholders.py",

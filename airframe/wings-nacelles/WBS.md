@@ -1420,13 +1420,57 @@ analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
     against a ~4.6 K/W budget), so the decision is insensitive to the missing
     datum.
 
-- [x] **Bleed inlets built (Rev T4d).** 4 × Ø5.5 mm teardrop holes per bay at
+- [x] **Cooling ports built (Rev T4d).** 4 × Ø5.5 mm teardrop holes per bay at
     Z 76/80/84/88 — the only stations where the POD's own bore is the flow
     boundary, since aft of Z 90 the sleeves line the duct and a hole there would
     open into the sleeve clearance rather than the airflow. Teardrop rather than
-    round because the axis is radial, i.e. a horizontal hole in the print. Fed
-    from the ~3.1 kPa inter-stage static rise, vented through the covers'
-    existing 144 mm² of louvre. Mass-neutral (−0.08 g).
+    round because the axis is radial, i.e. a horizontal hole in the print.
+    Mass-neutral (−0.08 g).
+
+- [x] **DIRECTION CORRECTED the same day — the circuit is ASPIRATED, and the
+    first version of it flowed backwards.** Owner's proposal: take the air from
+    an external skin inlet and discharge it into the aft fan's low-pressure zone,
+    rather than bleeding the duct and venting to the skin. Worked under
+    `/aeronautical-engineering`; the station analysis is in
+    `tools/nacelle_esc_thermal.py`.
+
+    **The duct has no pressure source in it.** For a constant-area duct
+    discharging as a free jet in hover, the exit is AT ambient and the inlet is a
+    full dynamic head below it, so the fans' rise exactly restores the inlet
+    depression and every station is at or below ambient:
+
+    | station | | gauge |
+    |---|---|---:|
+    | 1 | duct inlet, pre-forward-fan | −5562 Pa |
+    | 2 | **inter-stage = aft-fan inlet** | **−2781 Pa** |
+    | 3 | nozzle exit (free jet) | +0 Pa |
+
+    The original sizing used **thrust ÷ duct area as a static pressure**, which
+    is wrong twice over: it has the sign inverted, and it conflates the fan's
+    pressure share with inlet-lip suction — a 50/50 split here, 10.9 N each of
+    21.8 N (`references/propulsion.md` §3) — so it also overstates the fan rise
+    by ~2×. **The hardware is unchanged; only the arrows were wrong.**
+
+    | | flow | thrust cost |
+    |---|---:|---:|
+    | discard: duct → bay → skin | **cannot flow** (duct is below ambient) | 3.95 % if forced |
+    | **aspirate: skin → bay → duct** | **4.53 g/s, 28.0 m/s over the board** | **0.99 %** |
+
+    The aspirated air is INGESTED and then pumped by the aft fan, so it leaves
+    with the jet and carries its own momentum out; all it misses is the forward
+    fan's work. Discarded air had already been worked on and was then thrown
+    away — twice the cost, for a circuit that could not flow. It also scales the
+    right way: the driving depression goes as Ve², so cooling arrives with the
+    power that needs it (2781 Pa / 28.0 m/s at full throttle, 1390 Pa / 19.8 m/s
+    at half).
+
+- [ ] **[OPEN — NEW, and it is a safety item] The bay is now an unfiltered path
+    from outside air INTO the EDF2 rotor.** That is the price of aspirating
+    rather than bleeding, and it did not exist in the discard circuit. The cover
+    louvres are the only screen: `ESC_LOUVRE_W` = 1.2 mm is now a **FOD
+    criterion**, not merely a printability one, and anything passing a 1.2 mm
+    slot reaches the fan. Needs a decision on whether 1.2 mm is acceptable
+    unscreened, plus a drain provision — the same path admits water.
 
 - [x] **Material substitution evaluated and REJECTED for the stator sleeve.**
     6061 in place of CF-PETG takes it 31.0 g → 79.6 g, **+97.3 g the pair**, and
@@ -1435,12 +1479,11 @@ analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
     DMLS. The sleeve stays CF-PETG.
 
 - [ ] **[OPEN — the flow, not the geometry] Bay velocity is not verified.** The
-    inlet is sized for 4.85 g/s at Cd 0.62 against the inter-stage static rise,
-    which is **2.8 % of EDF1's mass flow ≈ 1.4 % of nacelle thrust**. Whether the
-    bay actually delivers 30 m/s depends on the loss coefficient of a circuit
-    nobody has modelled, and the 0.35 factor by which `nacelle_esc_thermal.py`
-    scales the board's natural-convection resistance for forced flow is the
-    weakest number in that tool. Needs CFD or a bench flow test.
+    28.0 m/s follows from an **ASSUMED** circuit loss coefficient K = 3 (one
+    velocity head each for inlet, bay and discharge). That, and the 0.35 factor
+    by which `nacelle_esc_thermal.py` scales the board's natural-convection
+    resistance for forced flow, are the two weakest numbers in the analysis.
+    Needs CFD or a bench flow test.
 - [ ] **[OPEN] 50 A sustained is not survivable on any path evaluated.** All
     three options exceed 125 °C at 50 A. Bleed air reaches **≈ 45 A continuous**
     at the limit, against a 28 A hover and a 50 A board rating. Two omissions

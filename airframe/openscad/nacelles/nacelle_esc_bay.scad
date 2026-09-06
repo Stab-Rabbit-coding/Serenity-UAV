@@ -103,7 +103,28 @@ ESC_BOSS_DEPTH  = ESC_INSERT_L + 1.0;  // [mm] 6.0 of insert plus 1.0 of materia
 // so conduction through the duct wall into the fan stream is not a path either.
 // The cover therefore carries louvres at both ends, venting the bay to ambient.
 //
-// ** SIZED 2026-09-06 — and the earlier decision not to bleed was wrong. **
+// ** SIZED 2026-09-06, THEN CORRECTED 2026-09-06 — THE FLOW RUNS THE OTHER WAY. **
+//
+// The first sizing had this circuit taking air FROM the duct and venting it to
+// the skin, driven by what it called a "~3.1 kPa inter-stage static rise".
+// **There is no static rise.  The inter-stage is 2.78 kPa BELOW ambient**, and
+// that circuit would have flowed backwards.
+//
+// The error was using thrust/area as a static pressure.  In a constant-area duct
+// discharging as a free jet, the exit is AT ambient and the inlet is a full
+// dynamic head BELOW it, so the fans' pressure rise exactly restores the inlet
+// depression and **every station inside the duct is at or below ambient**:
+//
+//     station 1  duct inlet, pre-forward-fan        -5562 Pa gauge
+//     station 2  INTER-STAGE = aft-fan inlet        -2781 Pa gauge
+//     station 3  nozzle exit (free jet)                 +0 Pa gauge
+//
+// Thrust/area also conflates the fan's share with the inlet-lip suction, which
+// on this duct is a 50/50 split (10.9 N each of 21.8 N) — so it overstates the
+// fan's pressure rise by about 2x on top of getting the sign wrong.
+//
+// **The hardware is unchanged; only the direction and the labels were wrong.**
+// Owner's proposal, and it is strictly better than what it replaces.
 // This block used to say a duct bleed "would cost thrust, and stealing it
 // without analysis is not a trade this file is entitled to make."  The analysis
 // has now been done (`tools/nacelle_esc_thermal.py`) and the cost is small while
@@ -112,7 +133,7 @@ ESC_BOSS_DEPTH  = ESC_INSERT_L + 1.0;  // [mm] 6.0 of insert plus 1.0 of materia
 //   path                                          R (K/W)   Tch at 28 A / 50 A
 //   sealed bay, conduct through CF-PETG to stator   19.63     215 C / 632 C
 //   same path in 6061 aluminium with a thermal pad   1.86      94 C / 246 C
-//   BLEED AIR, 30 m/s through the bay                2.74      64 C / 148 C
+//   ASPIRATED: skin inlet -> bay -> duct suction     2.84      64 C / 150 C
 //
 // The stator sleeve is an EXCELLENT sink — 188 cm² of wetted area at 71 m/s
 // gives 0.27 K/W — but it cannot be reached.  The 0.2 mm running fit between
@@ -121,35 +142,60 @@ ESC_BOSS_DEPTH  = ESC_INSERT_L + 1.0;  // [mm] 6.0 of insert plus 1.0 of materia
 // k = 1.2 W/m·K.  Filling it is not available: the sleeve slides in and out on
 // its keys, and a thermal pad across a sliding joint shears on every service.
 //
-// So the heat leaves in the air, not through the walls.  The bay is a duct, fed
-// from the inter-stage region where the static pressure is ~3.1 kPa above
-// ambient, and vented through the louvres below.  At a 30 m/s bay velocity that
-// is 4.85 g/s — **2.8 % of EDF1's mass flow, so roughly 1.4 % of the nacelle's
-// thrust** — for a 61 K improvement over the sealed bay at hover.
+// So the heat leaves in the air, not through the walls — and the fan aspirates
+// it rather than the duct feeding it.  Ambient air enters through the cover
+// louvres, washes both faces of the board, and is drawn out through the
+// discharge ports into the aft fan's inlet:
 //
-// STILL OPEN, and it is the flow and not the geometry: the ACTUAL bay velocity
-// depends on the loss coefficient of a circuit nobody has modelled.  The inlet
-// is sized for the target flow at Cd 0.62; whether the bay delivers it needs
-// CFD or a bench flow test.  See airframe/wings-nacelles/WBS.md §1.1.3.8.
+//     ambient (0 Pa) -> louvres -> BAY -> discharge ports -> station 2 (-2781 Pa)
+//
+// At the built port area that is 4.53 g/s and 28.0 m/s over the board — 1.98 %
+// of the duct's mass flow.
+//
+// **THRUST COST 0.99 %, against 3.95 % for the discard circuit.**  The cooling
+// air is INGESTED and then pumped by the aft fan, so it leaves with the jet and
+// carries its own momentum out; all it misses is the forward fan's work.  The
+// discarded air, by contrast, had already been worked on and was then thrown
+// away — twice the cost, for a circuit that could not flow.
+//
+// It also scales the right way.  The driving depression goes as Ve^2, i.e. with
+// thrust, so cooling arrives with the power that needs it: 2781 Pa and 28.0 m/s
+// at full throttle, 1390 Pa and 19.8 m/s at half.
+//
+// ** NEW REQUIREMENT THIS CREATES: ** the bay is now an unfiltered path from
+// outside air INTO the aft fan.  The louvres are the screen, and that is why
+// ESC_LOUVRE_W is 1.2 mm — it is a FOD criterion now, not only a printability
+// one.  Anything that passes a 1.2 mm slot reaches the EDF2 rotor.
+//
+// STILL OPEN, and it is the flow and not the geometry: the circuit loss
+// coefficient is ASSUMED K = 3 (one velocity head each for inlet, bay and
+// discharge).  Whether the bay delivers 28 m/s needs CFD or a bench flow test.
+// See airframe/wings-nacelles/WBS.md §1.1.3.8.
 ESC_LOUVRE_N    =   5;    // [count] slots per end
 ESC_LOUVRE_W    =   1.2;  // [mm] slot width (Z) — 2 extrusions at a 0.6 nozzle
 ESC_LOUVRE_L    =  12.0;  // [mm] slot length (circumferential)
 ESC_LOUVRE_P    =   3.0;  // [mm] slot pitch
 
-// ── Bleed inlet (Rev T4d, 2026-09-06) ────────────────────────────────────────
-// Where the cooling air comes from.  It has to be Z 74–90: that is the only part
-// of the bay where the POD's own bore is the flow boundary.  Aft of Z 90 the
-// stator and aft-spider sleeves line the duct, so a hole in the pod wall there
-// would open into the sleeve clearance, not into the airflow — and drilling
-// both would put a bleed path across a sliding joint.
+// ── Discharge ports (Rev T4d, 2026-09-06; direction corrected same day) ─────
+// Where the cooling air GOES — into the duct, not out of it.  They have to be at
+// Z 74–90: that is the only part of the bay where the POD's own bore is the flow
+// boundary.  Aft of Z 90 the stator and aft-spider sleeves line the duct, so a
+// hole in the pod wall there would open into the sleeve clearance rather than
+// the airflow, and drilling both would put the circuit across a sliding joint.
+//
+// Z 74–90 is downstream of the forward rotor and upstream of the aft fan, so it
+// sits at the same −2781 Pa station-2 depression as the inter-stage proper.
+//
+// These are the circuit's THROAT — 95 mm² against 144 mm² of louvre — so the
+// flow is set here and the louvres cannot choke it.
 //
 // Teardrop profile, not round: the hole axis is radial, so it is a HORIZONTAL
 // hole in the print, and the top of a horizontal circle is an unsupported arc.
 // A 45° apex removes it (3d-print-design FDM rules, "Horizontal holes").  It
 // also adds a little area, which is free.
-ESC_BLEED_N     =    4;   // [count] inlets per bay
-ESC_BLEED_D     =  5.5;   // [mm] inlet diameter — 4 x Ø5.5 = 95 mm2, sized for
-                          //   4.85 g/s at Cd 0.62 against a 3.1 kPa static rise
+ESC_BLEED_N     =    4;   // [count] discharge ports per bay
+ESC_BLEED_D     =  5.5;   // [mm] port diameter — 4 x Ø5.5 = 95 mm2, giving
+                          //   4.53 g/s at K = 3 against the 2781 Pa depression
 ESC_BLEED_Z     = [76.0, 80.0, 84.0, 88.0];  // [mm] stations, all inside 74–90
 
 

@@ -1418,15 +1418,16 @@ module esc_bay_cut() {
     }
 }
 
-// ── SUBTRACTIVE (Zone B) — ESC bay bleed inlets (Rev T4d) ───────────────────
-// The cooling circuit's inlet.  See nacelle_esc_bay.scad for why the heat has to
-// leave in the air rather than through the walls, and why these must sit forward
-// of Z 90.
+// ── SUBTRACTIVE (Zone B) — ESC bay DISCHARGE ports (Rev T4d) ────────────────
+// The cooling circuit's OUTLET into the duct — the fan aspirates the bay through
+// these.  Named "bleed" in the first pass, when the flow was believed to run the
+// other way; it does not.  See nacelle_esc_bay.scad for the station pressures
+// that settle the direction, and for why these must sit forward of Z 90.
 //
 // The teardrop apex points toward +Z, which is UP when the pod prints
 // intake-face-down — so the unsupported top arc of each horizontal hole becomes
 // a self-supporting 45° roof.
-module esc_bleed_inlets() {
+module esc_discharge_ports() {
     for (az_hinge = ESC_BAY_AZ, z = ESC_BLEED_Z)
         rotate([0, 0, az_hinge + esc_a_pow()])
             translate([EDF_BORE_R - 1.0, 0, z])
@@ -1495,7 +1496,7 @@ module esc_bay_seat_keepout() {
 //   • trunnion_collar_cut()    — Ø34 H7 register, gear cavity, 3× M3, nav port
 //   • esc_disconnect_bay()     — 4 × 10 AWG bullet-disconnect pocket (WA-R10)
 //   • hollow_cavity()          — Rev T4b forward-biased internal cavity
-//   • esc_bleed_inlets()       — Rev T4d duct bleed feeding the ESC bays
+//   • esc_discharge_ports()    — Rev T4d aspirated-cooling outlet into the duct
 //   • esc_bay_cut()            — Rev T4c ESC window + cover rebate + bores
 //     (the board seat is cut by the same pocket; see esc_bay_seat_keepout)
 //
@@ -1624,8 +1625,8 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
             // ── Internal cavity (Rev T4b) — forward-biased hollowing ──────
             hollow_cavity();
 
-            // ── ESC bay bleed inlets (Rev T4d) ────────────────────────────
-            esc_bleed_inlets();
+            // ── ESC bay discharge ports into the duct (Rev T4d) ───────────
+            esc_discharge_ports();
 
             // ── Hinged-ESC bays: board pocket + access window (Rev T4c) ───
             // Cut AFTER the cavity so the two merge into one volume — that is

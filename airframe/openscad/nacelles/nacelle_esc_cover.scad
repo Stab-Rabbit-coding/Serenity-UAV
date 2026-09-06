@@ -103,16 +103,25 @@ module cover_shell(d_out, d_in) {
 
 
 // ── Module: cover_louvres ────────────────────────────────────────────────────
-// The OUTLET of the bay's cooling circuit — not, as this comment said before
-// the flow was sized, a hopeful vent.  Air enters through the bleed inlets in
-// the pod's duct wall (Rev T4d, driven by the ~3.1 kPa inter-stage static rise),
-// washes both faces of the board, and leaves here.
+// The INLET of the bay's cooling circuit.  This comment has been wrong twice and
+// it is worth saying why, because the geometry never changed — only the
+// understanding of which way air moves through it.
 //
-// Total open area = 2 ends × 5 × 1.2 × 12 = 144 mm², which is matched to the
-// 95 mm² of inlet: the outlet is deliberately the larger of the two so the
-// ORIFICE sets the flow and the outlet does not choke it.  Slots at both ends
-// rather than one end, so the wash covers the whole board rather than
-// short-circuiting across one corner.
+// First it was "a route and an area", with no flow sized at all.  Then it was
+// the outlet of a duct bleed, on the belief that the inter-stage ran above
+// ambient.  **It does not: every station inside this duct is at or below
+// ambient, and the aft fan's inlet sits 2781 Pa BELOW it.**  So the fan
+// ASPIRATES the bay: ambient air enters HERE, washes both faces of the board,
+// and is drawn out through the discharge ports into the duct.
+//
+// Total open area = 2 ends × 5 × 1.2 × 12 = 144 mm², deliberately larger than
+// the 95 mm² of discharge port so that the ports are the throat and these
+// cannot choke the circuit.  Slots at both ends rather than one, so the wash
+// covers the whole board instead of short-circuiting across a corner.
+//
+// ** ESC_LOUVRE_W = 1.2 mm IS A FOD CRITERION, not only a printability one. **
+// This is now an unfiltered path from outside air into the EDF2 rotor, and these
+// slots are the only screen in it.  Anything that passes 1.2 mm reaches the fan.
 //
 // Cut as radial boxes so they pierce the cover cleanly whatever the local skin
 // radius happens to be at that station.
