@@ -24,7 +24,7 @@
 | §0.7 | 0.7 — CI Lint Scope and Repo-Wide Lint Debt | 0 | — |
 | §0.8 | 0.8 — Tilt-Spar Material Allowables + Hall Encoder | 3 | — |
 | §0.9 | 0.9 — Licensing Updates | 1 | — |
-| §0.10 | 0.10 — Update and Correct Documentation Touching Every Non-Archived File | 7 | — |
+| §0.10 | 0.10 — Update and Correct Documentation Touching Every Non-Archived File | 6 | — |
 | §1.5 | 1.5 — Documentation | 3 | — |
 | §1.6 | 1.6 — Rev Q: Repo-Wide Architecture Propagation | 0 | — |
 | §1.7 | 1.7 — Rev R: Component Rev Sync + s_ Prefix Removal | 0 | — |
@@ -35,7 +35,7 @@
 | §6.2 | 6.2 — STL Mesh Repair | 0 | — |
 | §6.3 | 6.3 — Rev S Checkpoint | 0 | — |
 | §6.4 | 6.4 — Rev T Checkpoint | 0 | — |
-| | **Total open (this subsystem)** | **28** | |
+| | **Total open (this subsystem)** | **27** | |
 
 ---
 
@@ -511,11 +511,10 @@ Resolved every open item in `airframe/SPEC_VERIFICATION_0.6.1.md`:
   docs).
 - Tilt-servo torque: BOM self-reports 25–26 kgf·cm with no external datasheet citation —
   requires supplier datasheet verification.
-- **Landing gear's "Rev R6" label has never been reconciled to the project's global letter
-  chain** (root `AGENTS.md` §8) — it has sat at "R6" since 2026-07-21 while the rest of the
-  project moved S→T. Needs an owner decision, not a docs fix: fold it into Rev T, or amend
-  §8 to permit a documented per-component exception. Tracked as `TODO.md` §0.10.1 item 5 and
-  `docs/WBS.md` §6.4 Rev T Checkpoint.
+- **RESOLVED 2026-09-06 (owner direction):** landing gear's "R6" label is retained as the
+  leg design's own permanent generation name (like a PCB's "Rev S1"), not a pointer into the
+  project's global letter chain — that chain now reads Rev T for landing gear like every
+  other component (root `AGENTS.md` §8; `airframe/landing-gear/WBS.md` header).
 - `docs/PHASED_BUILD_GUIDE.md`, `graphical-build-guide/TODO-old.md`, and 3 other
   build-guide/federation files still carry the pre-correction Bay-lettering scheme
   (River's Room as "Bay D", Simon's Medbay as "Bay E" — should be C/D per root `AGENTS.md`
@@ -895,15 +894,12 @@ Components carrying new work into Rev T (numbered sub-revisions superseded by th
   not viable at this pivot — see `airframe/wings-nacelles/WBS.md` §1.1.3.8).
 - **Nozzle drive — Rev T2** (superseding the Rev S1 internal-ring-gear drive): Option B
   pushrod/cam drive (`docs/NOZZLE_DRIVE_TRADE.md`), flaps doubled 20→40mm.
-- **Landing gear — Rev R6** (`airframe/landing-gear/WBS.md`): sponson-mounted gear bays
-  CLOSED, canonical 1.5in leg retained alongside the extended 3.0in variant, minimum safe leg
-  length re-derived from nozzle ground clearance rather than cargo-box height. **Open
-  question, not resolved by this checkpoint:** the landing-gear header has carried its own
-  "Rev R6" label since 2026-07-21 rather than following the project's global letter chain
-  (root `AGENTS.md` §8), and per that policy a comprehensive letter checkpoint should cover
-  every component. Flagged as `TODO.md` §0.10 item below — needs an owner decision on whether
-  landing gear gets folded into Rev T under this policy or the policy is amended to allow a
-  documented per-component exception.
+- **Landing gear — folded into Rev T** (`airframe/landing-gear/WBS.md`): sponson-mounted
+  gear bays CLOSED, canonical 1.5in leg retained alongside the extended 3.0in variant,
+  minimum safe leg length re-derived from nozzle ground clearance rather than cargo-box
+  height. Its "R6" component design-generation name is unchanged and permanent (like a
+  PCB's own "Rev S1") — only the project-wide letter pointer moved, per owner direction
+  2026-09-06.
 
 Not yet part of a Rev T checkpoint (still Rev S or earlier, tracked open in their own
 WBS/TODO): avionics PCB placement/routing (`avionics/WBS.md`), firmware Phase 7
