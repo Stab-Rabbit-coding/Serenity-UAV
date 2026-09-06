@@ -30,7 +30,26 @@ Thing 14474 scaled 1.25×) is the mould-line authority. Where printed geometry
 stands proud of it, the printed geometry is wrong unless a functional
 requirement says otherwise and that requirement is recorded.
 
-**Clearance target — settled 2026-08-29, BROKEN 2026-08-31. Read OQ5 first.**
+**Clearance target — settled 2026-08-29, BROKEN 2026-08-31, RESOLVED 2026-09-06
+BY A GEAR DECISION. Read this block, then OQ1.**
+
+> **Resolved 2026-09-06 —
+> `docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md`.**
+> R3's remaining question ("which gear, and at what margin") is answered there
+> and is no longer this plan's to carry. The **3.0 in gear is the flight
+> article**; the 1.5 in gear is a non-flight variant, below the derived minimum
+> safe belly clearance by 27–40 mm in every case. **R1 (40 → 30 mm flaps) is
+> unchanged and still owned here** — but its role changes: with the 3.0 in gear
+> fitted, R1 is no longer what makes clearance positive (that is already +33.00 mm
+> statically). R1 now buys **attitude margin**, taking the 3.0 in surplus from
+> +5.45 mm to +14.37 mm at a 5° touchdown-roll case. That is a promotion in value,
+> not a demotion: it is what makes the margin defensible rather than nominal.
+> The requirement that survives unchanged is the underlying one — *positive
+> clearance with the nacelles vertical, on whatever gear is fitted* — now with a
+> derived minimum behind it (`docs/LANDING_GEAR_ANALYSIS.md` §4.8, gated by
+> `tools/landing_gear_ground_clearance.py`).
+
+*(Original block, kept for the record:)*
 
 The +9.8 mm figure below rested on `PIVOT_Z` = 116.1, which rested on a
 rotating-assembly mass table that estimated the pod shell and both sleeves at
@@ -207,7 +226,16 @@ architecture that creates the overhang.
 
 ### Outstanding Questions
 
-- **OQ1 — RE-OPENED 2026-08-31.** The resolution below is void: it was accepted
+- **OQ1 — RESOLVED 2026-09-06 by
+  `docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md`.**
+  Not by re-accepting a margin on the 1.5 in gear, but by retiring it: the
+  minimum safe belly clearance is derived at **65.5–78.4 mm** and the 1.5 in
+  gear's 38.1 mm cannot reach it by any lever on this plan's table. The 3.0 in
+  gear is the flight article and carries **+14.37 mm** of surplus at a 5°
+  touchdown-roll case once R1's 30 mm flaps land. Residual owner decisions moved
+  to **LG-27** (the attitude case itself) and **LG-28** (nozzle strike during a
+  full fuse arrest).
+- **OQ1 — RE-OPENED 2026-08-31 (superseded by the above).** The resolution below is void: it was accepted
   against a pivot station that a measured mass roll-up does not support. See the
   Clearance target block and R3.
 - **OQ1 (superseded text, kept for the record).** +9.8 mm on the 1.5 in gear,

@@ -165,6 +165,13 @@ Located in subsystem directories:
 - **`landing_gear_*.py`** (`_r6_sizing`, `_bay_pad_fit`, `_bay_seat_fit`, `_bay_station_fit`,
   `_cowl_clearance`, `_foot_stance`, `_opening_fit`, `_wing_clearance`) — landing-gear geometry
   fit/clearance checks against the current CAD, one script per constraint
+- **`landing_gear_ground_clearance.py`** — **GATE.** Derives the *minimum safe belly
+  clearance* (i.e. the leg length) from the live nacelle mass roll-up: nozzle depth below
+  the belly datum with the nacelles vertical, plus an exact touchdown-attitude model, the
+  energy-absorption stroke, a `PIVOT_Z` drift reserve and build tolerance. Exits non-zero
+  when the gear variant wired into `serenity_assembly.py` is below the minimum. Pairs with
+  `nacelle_mass_cg.py` (which reports the *static* number only). See
+  `docs/LANDING_GEAR_ANALYSIS.md` §4.8
 - **`wing_airfoil_variants.py`**, **`wing_cfd_openfoam.py`**, **`wing_spar_station_fit.py`** —
   wing airfoil/CFD/spar-fit tooling
 - **`add_landing_gear_bosses.py`**, **`build_head_shell.py`**, **`build_landing_gear_views.py`**,

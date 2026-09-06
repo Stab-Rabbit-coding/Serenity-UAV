@@ -10330,6 +10330,14 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md": {
+      "description": "fix: Minimum safe landing-gear leg length",
+      "tags": [
+        "documentation",
+        "landing-gear"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -12903,6 +12911,14 @@
       ],
       "archived": false
     },
+    "tools/landing_gear_ground_clearance.py": {
+      "description": "Serenity UAV -- minimum safe landing-gear leg length, and the gate that holds it.",
+      "tags": [
+        "build-tooling",
+        "landing-gear"
+      ],
+      "archived": false
+    },
     "tools/landing_gear_opening_fit.py": {
       "description": "LG-10.1 -- locate and measure the landing-gear opening flats in the sponson.",
       "tags": [
@@ -13275,6 +13291,7 @@
       "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
       "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md",
       "docs/plans/2026-08-30-001-weight-reduction-targets-plan.md",
+      "docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -14899,6 +14916,7 @@
       "archives/airframe-archives/archive/stls/fuselage/landing-gear/spring_wire_nominal.stl",
       "archives/airframe-archives/archive/stls/fuselage/landing-gear/strong-leg.stl",
       "docs/LANDING_GEAR_ANALYSIS.md",
+      "docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md",
       "tools/add_landing_gear_bosses.py",
       "tools/build_landing_gear_views.py",
       "tools/export_landing_gear_stls.py",
@@ -14907,6 +14925,7 @@
       "tools/landing_gear_bay_station_fit.py",
       "tools/landing_gear_cowl_clearance.py",
       "tools/landing_gear_foot_stance.py",
+      "tools/landing_gear_ground_clearance.py",
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py"
@@ -16623,6 +16642,7 @@
       "tools/landing_gear_bay_station_fit.py",
       "tools/landing_gear_cowl_clearance.py",
       "tools/landing_gear_foot_stance.py",
+      "tools/landing_gear_ground_clearance.py",
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",

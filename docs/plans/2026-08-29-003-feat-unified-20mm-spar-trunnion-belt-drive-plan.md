@@ -200,7 +200,15 @@ landing.** Worst case is exactly 90°; by 140° the tip has risen to 0.643× the
 
 This is independent of the spar work and is filed as its own item (LG-HOVER-01).
 Either the 3.0 in gear becomes mandatory rather than optional, or the nozzle stack
-shortens. For this plan it sets a floor: with the 3.0 in gear and a 20 mm margin,
+shortens. **LG-HOVER-01 is answered 2026-09-06 — both, and the first one is the
+fix.** The 3.0 in gear is mandatory
+(`docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md`,
+`docs/LANDING_GEAR_ANALYSIS.md` §4.8); plan 005 R1's 30 mm flaps stay, as
+attitude margin rather than as the clearance fix. Note the table below is
+computed at `PIVOT_Z` 111.5, which has since been measured at **107.45**, and at
+a spar height of 68.42, since **built** at 66.851 — re-run
+`tools/nacelle_mass_cg.py` and `tools/landing_gear_ground_clearance.py` rather
+than reading these rows. For this plan it sets a floor: with the 3.0 in gear and a 20 mm margin,
 `PIVOT_Z ≥ 92.9`; the CG at 111.5 clears that comfortably, and 79.0 does not.
 
 ### The spar station is a THREE-way trade, not a two-way one
@@ -821,6 +829,17 @@ change to the EDF units, battery, or power architecture upstream of the PDB.
 
 ## Risks & Dependencies
 
+- **RISK-0 (high) — MITIGATED BY DECISION 2026-09-06, not yet closed.** The gear
+  question this risk raised is answered in
+  `docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md`:
+  the **3.0 in gear is the flight article** (the 1.5 in gear is below the derived
+  minimum safe belly clearance by 27–40 mm and is retired from the flight
+  configuration), and the nozzle clears by +33.00 mm statically / +26.48 mm at a
+  5° touchdown-roll case as built today. It closes when the assembly actually
+  consumes `lg_r6_3_0in_hull_legs.stl` (**LG-31**) and the attitude case is
+  confirmed (**LG-27**). This plan's own floor — `PIVOT_Z ≥ 92.9` on the 3.0 in
+  gear at 20 mm margin — is unaffected and still satisfied at the measured
+  107.45. *(Original text:)*
 - **RISK-0 (high) — hover ground clearance is already violated in the default
   assembly.** The nozzle tip reaches hull Z −41.39 in hover against a −38.1 mm
   ground plane on the active 1.5 in gear: a 3.3 mm strike on every vertical
