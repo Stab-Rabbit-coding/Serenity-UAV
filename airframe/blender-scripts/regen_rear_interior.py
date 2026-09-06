@@ -54,6 +54,16 @@ from manifold3d import Manifold, Mesh
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 SRC = os.path.join(SCRIPT_DIR, "files-hollowed-24in", "rear_shell24_2mm_repaired.stl")
+
+# Mating-aperture allowlist (2026-09-05) — see tools/open_mating_faces.py's
+# module docstring: rear_fwd has been found re-capped by a thin membrane after
+# this pipeline's own boolean/finalize steps, even though those steps report
+# a clean watertight PASS (is_watertight is True for a capped face too — a
+# solid disk is watertight, same as a genuinely open bore; is_capped()'s point
+# probe is the real test). main() re-asserts rear_fwd is open as the last
+# step before writing, regardless of what ran before it.
+sys.path.insert(0, os.path.join(REPO, "tools"))
+import open_mating_faces as omf  # noqa: E402
 OUT = os.environ.get("REAR_REGEN_OUT") or os.path.join(
     REPO, "airframe", "stls", "fuselage", "rear_shell24_2mm_repaired.stl"
 )
@@ -217,6 +227,12 @@ def main():
         neg = cm if neg is None else (neg + cm)
     out = from_manifold(to_manifold(shell) - neg)
     out = drop_junk(out)
+
+    # Allowlist enforcement (2026-09-05): re-assert rear_fwd is open before
+    # verify()/export — see tools/open_mating_faces.py and the module-level
+    # note above.
+    out, changed, note = omf.ensure_open(out, "rear_fwd")
+    print(f"  {note}")
 
     ok = verify(out, "rear")
     stamp_export(out, OUT)

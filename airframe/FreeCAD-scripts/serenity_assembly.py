@@ -118,6 +118,24 @@ except ModuleNotFoundError as exc:  # not inside FreeCAD's interpreter
         "--python` may not exit cleanly headless — use freecadcmd."
     )
 
+# FreeCADGui (2026-09-05 fix): plain `freecadcmd` never attaches GUI
+# ViewObjects to the objects it creates, so every Mesh::Feature this script
+# adds silently defaults to ViewObject is None / Visibility False once a GUI
+# does open the file — the tree lists everything but the 3D view is empty.
+# Starting a headless GUI session (needs an X/Xvfb display: run this script
+# under `xvfb-run -a freecadcmd ...` if $DISPLAY isn't already set) lets us
+# force every object's Visibility = True before saving. If FreeCADGui truly
+# can't be started (no display at all), fall back to saving without it —
+# geometry and placements are unaffected, only the stored visibility flag.
+try:
+    import FreeCADGui  # type: ignore[import-not-found]
+
+    FreeCADGui.showMainWindow()
+    HAVE_GUI = True
+except Exception:  # pragma: no cover - depends on display availability
+    FreeCADGui = None  # type: ignore[assignment]
+    HAVE_GUI = False
+
 # ---------------------------------------------------------------------------
 # Path setup — resolved relative to this script file so the script works
 # regardless of the current working directory.
@@ -551,29 +569,106 @@ def assemble():
     # Hinge retention blocks — baked into hull frame (already at identity).
     add_mesh(doc, _stl("fuselage/cargo/cargo_hinge_retention.stl"), "Cargo_Hinge_Retention")
 
-    # Cargo accessories — VERIFY placements (import at origin for manual positioning).
-    add_mesh(doc, _stl("fuselage/cargo/cargo_cradle_autolatch.stl"), "Cargo_Cradle")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_fpv_bezel.stl"), "Cargo_FPV_Bezel")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_gps_retention_ring.stl"), "Cargo_GPS_Ring")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_winch_motor_mount.stl"), "Cargo_Winch_Mount")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_winch_spool.stl"), "Cargo_Winch_Spool")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_drv8833_tray.stl"), "Cargo_DRV8833_Tray")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_door_servo_bracket.stl"), "Cargo_Door_Servo_Bracket")
-    add_mesh(
+    # Cargo accessories — VERIFY placements (2026-09-05 fix).
+    # These previously imported at origin/identity with no place_mesh() call
+    # at all — since world origin (0,0,0) sits inside Nacelle_Port's own
+    # bounding box (+4..+86, -58..+108, +21..+105) and Wing_Port's (-93..+5,
+    # -7..+122, +48..+77), every one of these "unplaced" parts rendered
+    # stacked on top of the port wing/nacelle instead of inside the cargo
+    # bay — this is what the owner spotted after the visibility fix above.
+    # None of these parts has a .scad source (VERIFY_PLACEMENT_CHECKLIST.md
+    # §1 confirms), so there is no documented local-axis convention to
+    # derive a correct orientation from; the estimates below are position-
+    # only (identity rotation), taken from that checklist's own Y/Z
+    # estimates but re-centred on the CARGO SECTION'S ACTUAL hull-frame
+    # centreline (X ~ -170, the mean of Cargo_Shell's measured bbox
+    # -266.97..-72.68 — the checklist's original "X ~ -170" text was already
+    # centreline-correct; only the never-applied code was missing). Rough
+    # placement only — orientation and fine position still need the
+    # checklist's own visual-fit pass in FreeCAD.
+    CARGO_X_CL = -170.0  # cargo/middle section lateral centreline, hull frame
+
+    cradle = add_mesh(doc, _stl("fuselage/cargo/cargo_cradle_autolatch.stl"), "Cargo_Cradle")
+    place_mesh(cradle, (CARGO_X_CL, 45.0, 1.0, 0.0, 0.0, 0.0, 1.0))
+
+    fpv = add_mesh(doc, _stl("fuselage/cargo/cargo_fpv_bezel.stl"), "Cargo_FPV_Bezel")
+    place_mesh(fpv, (CARGO_X_CL, 60.0, 160.0, 0.0, 0.0, 0.0, 1.0))
+
+    gps = add_mesh(doc, _stl("fuselage/cargo/cargo_gps_retention_ring.stl"), "Cargo_GPS_Ring")
+    place_mesh(gps, (CARGO_X_CL, 20.0, 161.5, 0.0, 0.0, 0.0, 1.0))
+
+    winch_mount = add_mesh(
+        doc, _stl("fuselage/cargo/cargo_winch_motor_mount.stl"), "Cargo_Winch_Mount"
+    )
+    place_mesh(winch_mount, (-140.0, 55.0, 1.0, 0.0, 0.0, 0.0, 1.0))
+
+    winch_spool = add_mesh(doc, _stl("fuselage/cargo/cargo_winch_spool.stl"), "Cargo_Winch_Spool")
+    place_mesh(winch_spool, (-140.0, 55.0, 27.0, 0.0, 0.0, 0.0, 1.0))  # coaxial, above mount
+
+    drv8833 = add_mesh(doc, _stl("fuselage/cargo/cargo_drv8833_tray.stl"), "Cargo_DRV8833_Tray")
+    place_mesh(drv8833, (-200.0, 55.0, 12.0, 0.0, 0.0, 0.0, 1.0))
+
+    door_servo = add_mesh(
+        doc, _stl("fuselage/cargo/cargo_door_servo_bracket.stl"), "Cargo_Door_Servo_Bracket"
+    )
+    place_mesh(door_servo, (-125.0, 85.0, 110.0, 0.0, 0.0, 0.0, 1.0))
+
+    release_servo = add_mesh(
         doc, _stl("fuselage/cargo/cargo_release_servo_bracket.stl"), "Cargo_Release_Servo_Bracket"
     )
+    place_mesh(release_servo, (-210.0, 85.0, 110.0, 0.0, 0.0, 0.0, 1.0))
 
     # -------------------------------------------------------------------
-    # FUSELAGE ACCESSORIES (battery tray and belly panel)
-    # VERIFY: all parts imported at origin (identity placement).
-    # User will manually position these in FreeCAD, then AI extracts
-    # final placements from the corrected file.
-    # See VERIFY_PLACEMENT_CHECKLIST.md §2 for positioning guidance.
-    # -------------------------------------------------------------------
-    print("[assembly] Battery tray and belly panel ...", flush=True)
+    # FUSELAGE ACCESSORIES (battery tray and belly panel) — VERIFY (2026-09-05
+    # fix). Same never-applied-placement bug as the cargo accessories above:
+    # both parts imported at world origin, landing inside Nacelle_Port/
+    # Wing_Port's bounding boxes instead of the cargo bay's keel.
+    #
+    # Unlike the cargo accessories, both of these DO have a documented
+    # part-local axis convention in their own .scad header (battery_tray.scad
+    # line 97, belly_panel.scad — same convention, part-local origin):
+    #   local X — longitudinal, +X = forward (toward nose)  => hull -Y
+    #   local Y — vertical,     +Y = up                     => hull +Z
+    #   local Z — lateral,      +Z = toward port             => hull +X
+    # That mapping (hull_x=local_z, hull_y=-local_x, hull_z=local_y) is an
+    # IMPROPER rotation (det = -1, a mirror) — transform_mesh() supports this
+    # per its own docstring, but a mirror flips any left/right-asymmetric
+    # feature. belly_panel is stated port/stbd-symmetric (safe to mirror);
+    # battery_tray.scad's own detent screw bores are cut through only "the
+    # stbd outer wall" (line 236) despite the header's generic +Z=port
+    # convention, an inconsistency already flagged in that file's own Rev R1
+    # note (conflicting cargo-vs-middle-section placement, never reconciled).
+    # Applying the documented convention as-is may put those bores on the
+    # wrong (port) wall — flag for visual confirmation in FreeCAD, per this
+    # checklist's own established VERIFY workflow.
+    #
+    # Position: centred on the cargo/middle centreline (X ~ -170, see
+    # CARGO_X_CL above) and placed within the cargo section per
+    # battery_tray.scad's own current operative note ("place this tray in
+    # the CARGO section, on the cargo keel segment") rather than the older,
+    # explicitly-superseded middle-section note in the same header — Y
+    # centred on Cargo_Shell's own Y span (-69.5..+129, mean +29.75) so the
+    # 154 mm-long tray fits inside it; Z near the belly floor (Cargo_Shell
+    # Z min ~ 0).
+    battery_tray = add_mesh(doc, _stl("fuselage/battery_tray.stl"), "Battery_Tray")
+    transform_mesh(
+        battery_tray,
+        (
+            (0.0, 0.0, 1.0, CARGO_X_CL - 31.0),  # hull_x = local_z + tx (tray Z half-width 31)
+            (-1.0, 0.0, 0.0, 106.75),  # hull_y = -local_x + ty
+            (0.0, 1.0, 0.0, 2.0),  # hull_z = local_y + tz (tray bottom ~2 mm off the floor)
+        ),
+    )
 
-    add_mesh(doc, _stl("fuselage/battery_tray.stl"), "Battery_Tray")
-    add_mesh(doc, _stl("fuselage/belly_panel.stl"), "Belly_Panel")
+    belly_panel = add_mesh(doc, _stl("fuselage/belly_panel.stl"), "Belly_Panel")
+    transform_mesh(
+        belly_panel,
+        (
+            (0.0, 0.0, 1.0, CARGO_X_CL - 32.5),  # panel is 65 mm wide, half-width 32.5
+            (-1.0, 0.0, 0.0, 106.75),  # same X/Y centre as Battery_Tray (covers its opening)
+            (0.0, 1.0, 0.0, 0.0),  # flush with the belly (Z ~ 0) below the tray
+        ),
+    )
 
     # -------------------------------------------------------------------
     # WINGS
@@ -767,6 +862,19 @@ def assemble():
     print("[assembly] Dorsal antenna fin ...", flush=True)
 
     add_mesh(doc, _stl("fuselage/dorsal_antenna_fin.stl"), "Dorsal_Antenna_Fin")
+
+    # -------------------------------------------------------------------
+    # Visibility (2026-09-05 fix)
+    # This script builds the document headless (freecadcmd), which never
+    # attaches GUI ViewObjects unless FreeCADGui is explicitly loaded first
+    # (see main() below). Every object defaulted to ViewObject.Visibility =
+    # False, so opening either output FCStd in the FreeCAD GUI showed an
+    # empty 3D viewport — the tree was fully populated, but nothing was
+    # switched on to draw. Force every object visible before saving.
+    # -------------------------------------------------------------------
+    for _obj in doc.Objects:
+        if _obj.ViewObject is not None:
+            _obj.ViewObject.Visibility = True
 
     # -------------------------------------------------------------------
     # Recompute and save

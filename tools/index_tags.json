@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-31",
+  "generated": "2026-09-05",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -131,6 +131,13 @@
     },
     "CLAUDE.md": {
       "description": "See [`AGENTS.md`](AGENTS.md) \u2014 the authoritative, model-agnostic project instructions for all AI agents worki\u2026",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "CONCEPTS.md": {
+      "description": "Concepts",
       "tags": [
         "documentation"
       ],
@@ -313,6 +320,14 @@
         "documentation",
         "redundancy-failover",
         "security",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/Serenity-Assembled.FCStd.bak": {
+      "description": "PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000Ej\\=-}5",
+      "tags": [
+        "cad-mesh",
         "structural"
       ],
       "archived": false
@@ -735,6 +750,20 @@
       "description": "verify_shells.py \u2014 watertight / no-breach gate for the 2 mm fuselage shells.",
       "tags": [
         "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/diagrams/cargo-ringframe-fit1.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/diagrams/cargo-ringframe-fit2.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
         "structural"
       ],
       "archived": false
@@ -2002,14 +2031,6 @@
     },
     "airframe/stls/fuselage/cargo/cargo_release_servo_bracket.stl": {
       "description": "STL mesh (binary)",
-      "tags": [
-        "cad-mesh",
-        "structural"
-      ],
-      "archived": false
-    },
-    "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_bossed.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "structural"
@@ -11265,6 +11286,14 @@
       ],
       "archived": false
     },
+    "docs/solutions/logic-errors/mating-face-aperture-allowlist.md": {
+      "description": "Mesh-repair pipelines silently re-cap intentional open fuselage mating faces",
+      "tags": [
+        "documentation",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/structural_analysis.md": {
       "description": "Serenity UAV \u2014 Fuselage Structural Analysis",
       "tags": [
@@ -12871,7 +12900,7 @@
       "archived": false
     },
     "tools/open_mating_faces.py": {
-      "description": "Open the capped head-aft and middle-fwd fuselage mating faces.",
+      "description": "Open (and keep open) the six fuselage-section mating-face apertures.",
       "tags": [
         "build-tooling",
         "security"
@@ -13025,6 +13054,7 @@
       "AGENTS.md",
       "CLAUDE-MEMORY.md",
       "CLAUDE.md",
+      "CONCEPTS.md",
       "README.md",
       "REFERENCES.md",
       "REPO_ENFORCEMENT.md",
@@ -13287,6 +13317,7 @@
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
+      "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "docs/structural_analysis.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
@@ -13534,6 +13565,7 @@
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
+      "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
       "gcs/SKIPPER_SPEC.md",
@@ -13770,6 +13802,7 @@
       "airframe/LICENSE",
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
+      "airframe/Serenity-Assembled.FCStd.bak",
       "airframe/TODO.md",
       "airframe/VERIFY_PLACEMENT_CHECKLIST.md",
       "airframe/WBS.md",
@@ -13822,6 +13855,8 @@
       "airframe/blender-scripts/repair_shells_for_scad.py",
       "airframe/blender-scripts/serenity_render_views.py",
       "airframe/blender-scripts/verify_shells.py",
+      "airframe/diagrams/cargo-ringframe-fit1.png",
+      "airframe/diagrams/cargo-ringframe-fit2.png",
       "airframe/diagrams/ring_frames/ring_cargo_Y30_inner.csv",
       "airframe/diagrams/ring_frames/ring_cargo_Y30_plate_PROVISIONAL.dxf",
       "airframe/diagrams/ring_frames/ring_rear_Y290_inner.csv",
@@ -13971,7 +14006,6 @@
       "airframe/stls/fuselage/cargo/cargo_gps_retention_ring.stl",
       "airframe/stls/fuselage/cargo/cargo_hinge_retention.stl",
       "airframe/stls/fuselage/cargo/cargo_release_servo_bracket.stl",
-      "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_bossed.stl",
       "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/cargo/cargo_sect_shell24_repaired.stl",
       "airframe/stls/fuselage/cargo/cargo_vera_faraday.stl",
@@ -14039,6 +14073,7 @@
       "airframe/FreeCAD-scripts/make_flat_pattern.py",
       "airframe/FreeCAD-scripts/serenity_assembly.py",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
+      "airframe/Serenity-Assembled.FCStd.bak",
       "airframe/blender-scripts/add_structural_features.py",
       "airframe/blender-scripts/blender_edf_bore_and_petals.py",
       "airframe/blender-scripts/blender_hollow_shells.py",
@@ -14219,7 +14254,6 @@
       "airframe/stls/fuselage/cargo/cargo_gps_retention_ring.stl",
       "airframe/stls/fuselage/cargo/cargo_hinge_retention.stl",
       "airframe/stls/fuselage/cargo/cargo_release_servo_bracket.stl",
-      "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_bossed.stl",
       "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/cargo/cargo_sect_shell24_repaired.stl",
       "airframe/stls/fuselage/cargo/cargo_vera_faraday.stl",

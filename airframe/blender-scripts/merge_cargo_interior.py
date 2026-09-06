@@ -123,6 +123,16 @@ CARGO_DIR = os.path.join(REPO_ROOT, "airframe", "stls", "fuselage", "cargo")
 sys.path.insert(0, SCRIPT_DIR)
 import add_structural_features as asf  # noqa: E402
 
+# Mating-aperture allowlist (2026-09-05): the final defence against this
+# pipeline's own repair passes re-capping cargo_fwd/cargo_aft. See
+# tools/open_mating_faces.py's module docstring for why this is necessary —
+# fill_holes()-style repair cannot tell an intentional open bore from a
+# genuine defect, so every hull-shell pipeline must re-assert its known
+# apertures are open as the LAST step before writing, not rely on getting
+# there cleanly through repair.
+sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
+import open_mating_faces as omf  # noqa: E402
+
 # Reuse the Rev R1c hull-frame hinge retention blocks verbatim
 sys.path.insert(0, CARGO_DIR)
 import generate_cargo_hinge_retention as hinge  # noqa: E402
@@ -1695,6 +1705,20 @@ def repair_exported(out_path):
     m.merge_vertices()
     print(f"  reloaded+welded: watertight={m.is_watertight} faces={len(m.faces):,}")
     m = finalize_watertight(m)
+
+    # Allowlist enforcement (2026-09-05): finalize_watertight()'s fill_holes()
+    # fallback cannot tell the cargo_fwd/cargo_aft mating apertures apart from
+    # a genuine defect, so it will happily reseal them if the float32 round-trip
+    # left them as a boundary loop. Re-assert both are open, unconditionally,
+    # as the LAST step before this function's own write — see
+    # tools/open_mating_faces.py for why this must be enforced here rather
+    # than trusted to survive the repair pass above.
+    for aperture in ("cargo_fwd", "cargo_aft"):
+        m, changed, note = omf.ensure_open(m, aperture)
+        print(f"  {note}")
+        if changed:
+            m.merge_vertices()
+
     verify(m)  # in-memory result
     stamp_export(m, out_path)
     print(f"  re-stamped -> {out_path}")
