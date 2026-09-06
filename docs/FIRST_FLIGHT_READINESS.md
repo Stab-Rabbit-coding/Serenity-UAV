@@ -4,6 +4,14 @@
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
 **Compiled by:** Claude (Opus 4.8), 2026-07-05, from master `WBS.md` (md5 `829246af291844cd6b557230e8430a12`).
 
+> **STALE SNAPSHOT — predates the Rev T checkpoint (`docs/WBS.md` §6.4, 2026-09-06).** The
+> open-item counts below were correct against the 2026-07-05 `WBS.md` and have not been
+> recounted since; wings (Rev S1g) and nacelles (Rev S4c) both had substantial work land in
+> `airframe/wings-nacelles/WBS.md` §1.1.2/§1.1.3 after this snapshot was taken, which changes
+> the §1.1 open-item count below. Treat the branch list and file pointers as still valid; do
+> not treat the counts as current. A recount against the live WBS federation is open in
+> `TODO.md` §0.10.2.
+>
 > **First flight = master WBS Phase 5, "Minimum Viable Flyer."**
 > Goal: CN1+FC1 (Shepherd's room / Bay A) and CN2+FC2 (Inara's shuttle / Bay B)
 > installed and flying — a 4-node VTOL hover (nacelle T/W ~1.14, corrected 2026-08-22, see TODO.md §0.10.1). The aft EDF

@@ -101,6 +101,69 @@ SLEEVE_L        = SLEEVE_Z_END - SLEEVE_Z_START;  // = 43.75 mm
 // Angles must be identical to edf_stator_sleeve.scad for continuous slot engagement.
 SLEEVE_KEY_W    =   3.0;    // [mm] key tangential width
 SLEEVE_KEY_H    =   3.0;    // [mm] key radial height above sleeve OD
+KEY_ROOT_OVERLAP =  0.5;    // [mm] key root sunk below the tube OD — CGAL
+                            //      volumetric overlap, not a touching face
+
+// ── Sleeve key CLOCKING (Rev T4b, 2026-08-31) ────────────────────────────────
+// Moved 0/120/240 -> 30/150/270, and the reason is an interference, not tidiness.
+//
+// A key stands proud to r = 30.5 and runs the sleeve's full length, so a key at
+// 0 deg lies along +X and a key at 180 deg along -X — which is exactly where the
+// trunnion sits, on the starboard and port pods respectively.  Measured mesh
+// against mesh, the 0 deg key drove 37.7 mm3 of solid overlap into the starboard
+// trunnion (tools/nacelle_trunnion_fit.py gate T8b).
+//
+// With three keys at 120 deg spacing the only clockings that miss BOTH +X and -X
+// are theta = 30 and 90 (and equivalents).  30/150/270 is used: it holds 30 deg
+// of angular clearance from each trunnion, and at r 30.5 the keys reach only
+// |X| = 26.4, inboard of the trunnion's 28.2 face by 1.8 mm.
+//
+// The aft sleeve's M3 retention screws pass THROUGH the key ribs, and the pod's
+// retention bosses receive them, so all three feature sets move together.
+SLEEVE_KEY_ANGLES = [30, 150, 270];
+
+// ── EDF2 spider arm CLOCKING (Rev T4b, 2026-08-31) ───────────────────────────
+// Moved 0/120/240 -> 105/225/345 so that ESC2's phase leads can actually reach
+// the motor.  This is a routing constraint, and it was found by measurement.
+//
+// The motor sits at the duct centre; the ONLY solid bridge from the annulus to
+// it is a spider arm.  So the phase bundle must cross the bore wall AT an arm
+// azimuth and WITHIN the arm's axial band (Z 144-152 for EDF2_SPIDER_Z = 148).
+// Measured on the canonical shell, the annulus (skin − 2.5 − duct wall) survives
+// aft to:
+//
+//     azimuth    0   45  105  120  165  225  240  285  345
+//     alive to  135  146  163  146  136  146  147  163  136   (mm, at >= 3.5 deep)
+//
+// At the old 0/120/240 the overlap with the arm band was 0 mm (az 0), 1.5 mm
+// (az 120) and 2.5 mm (az 240) — against a 3 x Ø3 mm 16 AWG flat bundle needing
+// ~3.5 mm.  The route was effectively closed.
+//
+// 105 and 285 are the pod's two deep lobes, alive to Z 163 at 6.2-6.4 mm, and
+// they are also where the ESC bays land (bay centres measured at azimuth 90 and
+// 270).  Clocking an arm to 105 puts the crossing directly beneath bay A with no
+// circumferential run at all.  225/345 follow at 120 deg spacing.
+//
+// ── CORRECTED Rev T4c (2026-09-01) — FOUR arms at 90 deg, not three at 120 ──
+// Owner direction.  The Xfly Galaxy X5 motor takes FOUR screws on a square
+// pattern (REF-EDF-002: the packing-list photo shows four motor screws plus one
+// longer spinner screw, and the hub is a disc with four round holes alternating
+// with four slots).  Three arms at 120 deg cannot be made to coincide with four
+// holes at 90 deg — using three of the four would need them at 90/90/180, which
+// 120 deg spacing never provides.  This was PRINT-BLOCKING and is now fixed.
+//
+// The 90 deg pattern is strictly better for the routing constraint above, which
+// is the happy part of the correction: 285 - 105 = 180 = 2 x 90, so a single
+// 90 deg set can put an arm on BOTH deep lobes at once.  The old 120 deg set had
+// to choose one and give the other a 50 deg circumferential run.  15 and 195
+// fall out of the spacing.
+//
+// ** MOTOR_BOLT_R REMAINS UNVERIFIED. ** The listing publishes the screw COUNT,
+// not the bolt circle; the manufacturer page says "nc".  10.0 mm is inherited
+// from Rev R and is still an assumption.  Measure it off a physical motor before
+// printing for flight.
+// 16 AWG silicone Ø3 mm per docs/TILT_SPAR_ANALYSIS.md.
+SPIDER_ARM_ANGLES = [15, 105, 195, 285];
 
 // ── EDF2 spider geometry ────────────────────────────────────────────────────────
 // Spider axial centre at nacelle Z = 148.0 mm.
@@ -108,13 +171,40 @@ SLEEVE_KEY_H    =   3.0;    // [mm] key radial height above sleeve OD
 SPIDER_Z_L      =  25.5;    // [mm] spider axial centre (sleeve-local)
 SPIDER_ARM_H    =   8.0;    // [mm] spider arm axial height (thickness along Z)
 SPIDER_ARM_W    =   6.0;    // [mm] spider arm tangential width
-N_ARMS          =   3;      // [count] spider arms at 0°/120°/240°
+N_ARMS          =   len(SPIDER_ARM_ANGLES);  // [count] = 4, at 90° (Rev T4c)
 
 // ── Motor mount — M3 heat-set inserts in spider arm aft faces ─────────────────
 // EDF2 motor mounts on spider aft face using 3× M3×10 SHCS (nozzle-end access).
 // MOTOR_BOLT_R: distance from sleeve axis to M3 screw centre.
 // *** VERIFY against actual Xfly Galaxy X5 2627 motor bolt circle before print ***
-MOTOR_BOLT_R    =  10.0;    // [mm] motor M3 bolt circle radius (UNVERIFIED — check motor)
+// ############################################################################
+// ## PRINT-BLOCKING (2026-08-31): THE MOTOR MOUNT INTERFACE IS WRONG.       ##
+// ############################################################################
+// This sleeve mounts the EDF2 motor on THREE arms at 120 deg with three M3
+// insert pockets on a bolt circle of radius MOTOR_BOLT_R.  The motor takes
+// FOUR screws.
+//
+// Evidence, from the vendor listing image archived as REF-EDF-002:
+//   * the Packing List panel shows FOUR identical short screws plus ONE longer
+//     screw (the spinner/rotor retainer) — so four motor screws, not three;
+//   * the aft view of the shroud shows its motor hub as a disc carrying FOUR
+//     round holes alternating with FOUR lightening slots.
+//
+// Three holes at 120 deg CANNOT be made to coincide with four holes at 90 deg.
+// This is not a tolerance problem that a bigger clearance hole fixes — the
+// pattern is simply the wrong one, and using three of the four would put the
+// screws at 90/90/180, which these arms are not at either.
+//
+// MOTOR_BOLT_R = 10.0 was ALSO never verified, and the listing does not publish
+// a bolt circle.  So BOTH the hole count and the hole radius are unknown, and
+// changing 3 -> 4 arms now would only swap one unsupported assumption for
+// another.  ** DO NOT PRINT THIS SLEEVE FOR FLIGHT until both are measured off a
+// physical motor: ** the bolt-circle diameter, the screw thread (M2 / M2.5 / M3),
+// and whether the four holes are on a square (90 deg) or rectangular pattern.
+// Five minutes with a caliper closes it.  Tracked in
+// docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md.
+MOTOR_BOLT_R    =  10.0;    // [mm] motor bolt circle radius — UNVERIFIED, AND
+                            //      THE HOLE COUNT IS WRONG.  See the block above.
 M3_INSERT_D     =   3.5;    // [mm] M3 OLF heat-set insert outer diameter
 M3_INSERT_L     =   6.0;    // [mm] M3 OLF heat-set insert length (pocket depth)
 
@@ -157,10 +247,17 @@ module aft_sleeve_body() {
         // Rectangular rib on OD surface, full sleeve length.
         // Angles match edf_stator_sleeve.scad for bore-key-slot continuity.
         // Retention bore cutouts at aft end are applied by parent module.
-        for (angle = [0, 120, 240]) {
+        for (angle = SLEEVE_KEY_ANGLES) {
             rotate([0, 0, angle])
-            translate([SLEEVE_OD / 2, -SLEEVE_KEY_W / 2, 0])
-                cube([SLEEVE_KEY_H, SLEEVE_KEY_W, SLEEVE_L]);
+            // Rev T4 (2026-08-30): the key root is sunk KEY_ROOT_OVERLAP mm
+            // BELOW the tube OD so the two solids INTERPENETRATE rather than
+            // meet on a coincident cylindrical face.  A touching face is what
+            // left the exported STL locally non-manifold (WBS §1.1.3 "MESH FIX
+            // 2026-08-25"), which had been patched downstream with a manifold3d
+            // re-union of the split bodies; fixing it in the source removes the
+            // need for that pass.  Outer edge is unchanged at OD/2 + KEY_H.
+            translate([SLEEVE_OD / 2 - KEY_ROOT_OVERLAP, -SLEEVE_KEY_W / 2, 0])
+                cube([SLEEVE_KEY_H + KEY_ROOT_OVERLAP, SLEEVE_KEY_W, SLEEVE_L]);
         }
 
     }
@@ -185,10 +282,10 @@ module edf2_spider() {
     arm_w  = SPIDER_ARM_W;
     z_base = SPIDER_Z_L - arm_h / 2;   // = 21.5 mm
 
-    // ── Spider arms (3× at 120°) ───────────────────────────────────────────
+    // ── Spider arms (4× at 90°, Rev T4c) ───────────────────────────────────
     // Arms are plain cuboids (no pockets).  Motor insert pockets are cut by
     // the parent module after the full union is assembled.
-    for (angle = [0, 120, 240]) {
+    for (angle = SPIDER_ARM_ANGLES) {
         rotate([0, 0, angle])
             translate([R_HUB - 1, -arm_w / 2, z_base])
                 cube([EDF_BORE_R - R_HUB + 2, arm_w, arm_h]);
@@ -210,8 +307,10 @@ module edf2_spider() {
 // =============================================================================
 // Assembly sequence:
 //   1. Union: sleeve tube + keys + spider arms + spider hub.
-//   2. Difference: subtract 3× M3 motor insert pockets from spider arm aft
-//      faces; subtract 3× M3 retention clearance bores through sleeve aft face.
+//   2. Difference: subtract 4× M3 motor insert pockets from spider arm aft
+//      faces (Rev T4c — the Galaxy X5 takes four screws at 90°); subtract 3× M3
+//      retention clearance bores through sleeve aft face (still three — those
+//      are OUR fasteners into the pod's bosses, not the motor's).
 //
 // Motor insert pocket geometry (blind, from spider aft face):
 //   Centre radius : MOTOR_BOLT_R = 10 mm (one bolt per arm, at arm angle).
@@ -234,7 +333,7 @@ module edf_aft_spider_sleeve() {
         // ── Step 2a: M3 motor insert pockets (spider arm aft faces) ───────
         // Blind pocket opens at Z_local = 29.5 mm (spider aft face).
         // One pocket per arm, co-angular with that arm, at MOTOR_BOLT_R.
-        for (angle = [0, 120, 240]) {
+        for (angle = SPIDER_ARM_ANGLES) {
             rotate([0, 0, angle])
             translate([MOTOR_BOLT_R, 0,
                        SPIDER_Z_L + SPIDER_ARM_H / 2 - M3_INSERT_L])
@@ -248,7 +347,7 @@ module edf_aft_spider_sleeve() {
         // Bore passes through key body (27.5 … 30.5 mm) and sleeve wall
         // inner portion (25 … 27.5 mm), creating clearance for the M3 SHCS
         // retention screw to reach the nacelle boss insert at Z = 166.25 mm.
-        for (angle = [0, 120, 240]) {
+        for (angle = SLEEVE_KEY_ANGLES) {
             rotate([0, 0, angle])
             translate([BOSS_R, 0, SLEEVE_L - BOSS_BORE_DEPTH])
                 cylinder(r = M3_CLEAR_D / 2,
@@ -293,7 +392,14 @@ edf_aft_spider_sleeve();
 //   2. Bore ID = 50.0 mm ± 0.2 mm.
 //   3. Key dimensions: 3.0 mm wide × 3.0 mm tall ± 0.1 mm; verify fit in
 //      nacelle bore key slots (3.3 mm wide × 3.3 mm deep nominal).
-//   4. Hub bore = 4.0 mm ± 0.1 mm (EDF2 motor shaft clearance).
+//   4. Hub bore = 4.0 mm ± 0.1 mm (EDF2 motor shaft clearance — the motor's
+//      shaft is Ø3 mm, published, so this is 1 mm diametric clearance).
+//   5. ** BORE ID = 50.0 mm +0.4 / −0.0 AT THE EDF2 ROTOR STATION. **  The build
+//      discards the EDF's own shroud and uses this sleeve's bore as the duct, so
+//      the rotor now runs against PRINTED plastic.  The vendor keeps 0.4 mm
+//      between blade tip and shell (REF-EDF-002), and the shroud ID is 50 mm, so
+//      the rotor is ~Ø49.2.  A bore that prints UNDERSIZE rubs the rotor.  Check
+//      it at three stations before fitting the fan.
 //   5. M3 insert pockets at r ≈ 10 mm, Ø ≈ 3.5 mm: verify insert presses
 //      flush to arm aft face.  Pocket must be ≥ 6 mm deep.
 //   6. Retention bores at r ≈ 28 mm, Ø ≈ 3.3 mm: verify M3×20 SHCS passes

@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Subsystem
 
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Current design revision:** Rev S (2026-07-04)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > Structural design, 3D CAD, STL generation, and fabrication guidance for the Serenity UAV
 > airframe: 24-inch CF-PETG printed fuselage, carbon-fiber wings with tilt-drive nacelles, and

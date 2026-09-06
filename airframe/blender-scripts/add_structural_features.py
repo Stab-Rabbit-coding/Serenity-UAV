@@ -81,6 +81,18 @@ from shapely.geometry import Polygon
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 STL_DIR = os.path.join(REPO_ROOT, "airframe", "stls")
+
+# Mating-aperture allowlist (2026-09-05) — see tools/open_mating_faces.py's
+# module docstring. process_head's/process_middle's own cutters are SUPPOSED
+# to leave head_aft/middle_fwd/middle_aft open, but a downstream
+# nondegenerate-face strip or watertight repair elsewhere in this file's
+# pipeline can re-cap a thin membrane at the exact mating plane without
+# tripping any of this file's own manifold/volume checks (they check
+# is_watertight, which is True for a capped face too — see is_capped()'s
+# docstring for why that check alone is insufficient). main() re-asserts
+# every aperture this file owns is open as the last step before writing.
+sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
+import open_mating_faces as omf  # noqa: E402
 RING_CSV_DIR = os.path.join(REPO_ROOT, "airframe", "diagrams", "ring_frames")
 
 # Canonical baked shell paths (hull frame, identity placement)
@@ -903,6 +915,15 @@ def main():
         "rear": process_rear,
     }
 
+    # Which open_mating_faces.APERTURES entries each shell owns — matches
+    # MATING_PLANES above. cargo/rear are delegated elsewhere (SKIP below) so
+    # they enforce their own apertures in merge_cargo_interior.py /
+    # regen_rear_interior.py, not here.
+    SHELL_APERTURES = {
+        "head": ("head_aft",),
+        "middle": ("middle_fwd", "middle_aft"),
+    }
+
     # Ring-frame profile export: slice BEFORE modification (geometry unchanged at
     # those Y stations — ring pockets only affect a 2.5 mm Y slice).
     print("\n--- ring-frame inner-profile CSV export ---")
@@ -951,6 +972,14 @@ def main():
         modified = processors[name](mesh)
 
         print(f"  after:  {len(modified.faces):,} faces  vol={modified.volume:.0f} mm³")
+
+        # Allowlist enforcement (2026-09-05): re-assert this shell's own known
+        # mating apertures are open, unconditionally, before verify()/export —
+        # see tools/open_mating_faces.py and the module-level note above.
+        for aperture in SHELL_APERTURES.get(name, ()):
+            modified, changed, note = omf.ensure_open(modified, aperture)
+            print(f"  {note}")
+
         passed = verify(modified, name)
 
         # Write output with HULL-FRAME R1 header (geometry already in hull frame;

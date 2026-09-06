@@ -97,11 +97,9 @@
 //   • 11-fin twisted inter-stage stator  (EDF1 exit … EDF2 entry)
 //   • EDF2 seat and 4-arm motor-mount strut ring  (aft EDF, downstream)
 //   • Nozzle ring pocket at exhaust exit (iris ring seat)
-//   • CG-aligned pivot X-face boss (two MF104ZZ bearing bosses at PIVOT_Z)
-//   • Drive Pinion A boss (MR63ZZ, at Y=PINION_A_Y=30.5mm, meshes sector gear)
-//   • Crown Pinion boss (MR63ZZ, near nozzle ring, drives idler gear which
-//       in turn drives the nozzle ring gear — see nacelle_nozzle_idler.scad)
-//   • Longitudinal gear-shaft conduit (3 mm CF rod in PTFE sleeve)
+//   • CG-aligned TRUNNION COLLAR at PIVOT_Z (Rev T4) — seats the printed
+//       nacelle_trunnion.scad on the FIXED wing spar; nothing crosses the duct
+//   • 4 × 10 AWG power-disconnect bay in the inboard flank (WA-R10)
 //   • External D-section nav-light wire conduit (inboard X-face)
 //   • Harness exit port (ESC and nav-light leads to pylon channel)
 //
@@ -122,7 +120,20 @@
 //
 // EDF Motors
 // ----------
-// Both EDFs are Xfly Galaxy X5 2627-2700KV 50 mm 6S units.
+// Both EDFs are Xfly Galaxy X5 **2627-3200KV** 50 mm 6S units.
+// CORRECTED 2026-08-31 (owner-confirmed against the manufacturer's page): this
+// line read 2700KV.  It was the only live 2700KV reference to this motor in the
+// repo — AGENTS.md, LICENSE_AND_ATTRIBUTION.md and generate_placeholders.py all
+// already said 3200KV.  (The 2700KV figures in docs/README.md and
+// PHASED_BUILD_GUIDE.md belong to a different part, the 80 mm Changesun XRP
+// 3660-2700KV of the archived Rev P / Phase 7 upgrade, and are untouched.)
+// Derived operating point, for anything downstream that needs it:
+//   6S nominal 22.2 V -> 71,040 rpm no-load;  6S full 25.2 V -> 80,640 rpm
+//   tip speed at 71,040 rpm on Ø50 = 186 m/s (M 0.55 at ISA SL)
+//   blade-passing frequency = 71,040/60 x 12 = 14.2 kHz
+// The 11-vane stator count is UNAFFECTED — Tyler-Sofrin cut-off is a relationship
+// between COUNTS (11 and 12 coprime), not frequencies.  What IS affected is the
+// stator VANE ANGLE; see the flag on VANE_ANGLE_DEG in edf_stator_sleeve.scad.
 // Counter-rotation (Rev R1/nacelle-swap corrected):
 //   port nacelle CCW from intake (SWIRL_DIR=-1),
 //   starboard nacelle CW from intake (SWIRL_DIR=+1).
@@ -280,6 +291,31 @@ EDF2_Z_EXIT     = 178.8;  // [mm] EDF2 aft face      (was 143.0 × 1.25) = 7.04 
 //   Screws set from intake bore end with T-handle 2.5 mm hex key.
 // EDF2 spider (aft spider sleeve): M3 heat-set inserts on nozzle face.
 //   Screws from nozzle bore end after iris removed.
+// ── Motor mount PATTERN — 4 screws at 90 deg (Rev T4c, 2026-09-01) ──────────
+// CORRECTED on owner direction.  Both spiders mounted the motor on THREE arms at
+// 120 deg with three M3 pockets.  The Xfly Galaxy X5 motor takes FOUR screws on
+// a square pattern (REF-EDF-002, packing-list photo: four motor screws plus one
+// longer spinner screw; hub is a disc with four round holes alternating with
+// four slots).  Three holes at 120 deg cannot be made to coincide with four at
+// 90 deg — this was a print-blocking defect, not a clearance one.
+//
+// CLOCKING 15/105/195/285 is not free choice.  A spider arm is the ONLY solid
+// bridge from the annulus to the motor, so each ESC's phase bundle has to cross
+// the bore wall AT an arm azimuth.  Measured on the canonical shell, azimuth 105
+// and 285 are the pod's two deep lobes — the annulus survives aft to Z 163 at
+// 6.2-6.4 mm depth there, against Z 135-147 elsewhere — and they are also where
+// the two ESC bays land.  A 90 deg pattern can hold BOTH lobes at once, because
+// 285 - 105 = 180 = 2 x 90; the old 120 deg pattern could not.  15 and 195 fall
+// out of the spacing and land 15 deg clear of the sleeve key/retention angles
+// (30/150/270), which sit at a different radius anyway.
+//
+// ** MOTOR_BOLT_R IS STILL UNVERIFIED and the owner direction does not settle
+// it. ** The vendor listing publishes the screw COUNT but no bolt circle
+// ("nc" on the manufacturer page).  10.0 mm is an assumption inherited from
+// Rev R.  Measure the bolt circle off a physical motor before printing for
+// flight — see the open item in airframe/wings-nacelles/WBS.md SS1.1.3.7.
+N_SPIDER_ARMS   =   4;     // [count] motor mount arms — 4 screws at 90 deg
+SPIDER_ARM_ANGLES = [15, 105, 195, 285];  // [deg] shared by BOTH spiders
 SPIDER_ARM_H    =   8.0;   // [mm] arm axial thickness
 SPIDER_ARM_W    =   6.0;   // [mm] arm tangential width
 MOTOR_BOLT_R    =  10.0;   // [mm] M3 bolt circle radius — VERIFY vs actual motor
@@ -347,6 +383,24 @@ SLEEVE_KEY_H      =   3.0;  // [mm] key height (radial protrusion above sleeve O
 SLEEVE_KEY_SLOT_W = SLEEVE_KEY_W + 0.3;   // [mm] nacelle bore slot width (clearance)
 SLEEVE_KEY_SLOT_H = SLEEVE_KEY_H + 0.3;   // [mm] nacelle bore slot depth (clearance)
 
+// ── Sleeve key CLOCKING (Rev T4b, 2026-08-31) ────────────────────────────────
+// Moved 0/120/240 -> 30/150/270, and the reason is an interference, not tidiness.
+//
+// A key stands proud to r = 30.5 and runs the sleeve's full length, so a key at
+// 0 deg lies along +X and a key at 180 deg along -X — which is exactly where the
+// trunnion sits, on the starboard and port pods respectively.  Measured mesh
+// against mesh, the 0 deg key drove 37.7 mm3 of solid overlap into the starboard
+// trunnion (tools/nacelle_trunnion_fit.py gate T8b).
+//
+// With three keys at 120 deg spacing the only clockings that miss BOTH +X and -X
+// are theta = 30 and 90 (and equivalents).  30/150/270 is used: it holds 30 deg
+// of angular clearance from each trunnion, and at r 30.5 the keys reach only
+// |X| = 26.4, inboard of the trunnion's 28.2 face by 1.8 mm.
+//
+// The aft sleeve's M3 retention screws pass THROUGH the key ribs, and the pod's
+// retention bosses receive them, so all three feature sets move together.
+SLEEVE_KEY_ANGLES = [30, 150, 270];
+
 // ── ESC wire exit slot ────────────────────────────────────────────────────────
 // Rectangular slot through the forward thrust tube bore wall at the joint
 // between the integral nacelle bore section and the stator sleeve zone.
@@ -380,54 +434,176 @@ SWIRL_DIR       =  +1;    // [+1 / -1] default port nacelle CW from intake
 // sync gear, servo bracket) do NOT tilt and are excluded.  Y = 0 (bore axis) =
 // Y_cg for the bore-symmetric assembly.  FIRST-PASS (credible band ≈109–112 mm);
 // see the header for the density / nozzle-pocket caveats.
-PIVOT_Z         = 111.5;   // [mm] pivot axial centre = full-assembly CG station
+PIVOT_Z         = 107.5;   // [mm] pivot axial centre = full-assembly CG station
+                           //      Rev T4b (2026-08-31): 111.5 -> 105.8 -> 113.8,
+                           //      the first values in this part's history that
+                           //      were COMPUTED FROM MEASURED MESHES rather than
+                           //      from an estimated header table.
+                           //        111.5  estimated table (pod guessed at 130 g
+                           //               with the sleeves)
+                           //        105.8  pod MEASURED solid at 285 g — the CG
+                           //               moved FORWARD, and hover clearance
+                           //               with it, to -10.5 mm on the 1.5 in gear
+                           //        113.8  pod hollowed with a forward-biased
+                           //               wall, plus the in-nacelle HARNESS,
+                           //               which no previous roll-up counted at
+                           //               all and which sits entirely aft of the
+                           //               pivot (22.9 g)
+                           //      tools/nacelle_mass_cg.py is the authority for
+                           //      this number and checks the fixed point: the CG
+                           //      it computes must land within 0.25 mm of the
+                           //      value set here, or the pod needs re-rendering.
 
-// ── Rotating 8 mm tilt-spar interface (Rev R2, 2026-07-18) ─────────────────────
-// SUPERSEDES the MF104ZZ 4 mm fixed-rod pivot.  The 8 mm spar (AISI 4130,
-// hollow 5 mm ID) is FIXED (keyed) to the nacelle at the CG and ROTATES with it,
-// driven by the cargo-bay servo; the tilt bearings live at the wing root (cargo
-// bay) and the wingtip, NOT in the nacelle.  So the nacelle needs a KEYED hub
-// (inboard) + a plain support hub (outboard) + reinforcing collars where the
-// bore breaches the two duct walls, and a full-width through-bore.  The nav
-// 3-core routes through the hollow spar to the outboard nav light.
-// See docs/TILT_SPAR_ANALYSIS.md.
-SPAR_OD         =   8.0;   // [mm] rotating spar OD
-SPAR_BORE_D     =   8.15;  // [mm] through-bore (clearance; spar fixed only at keyed hub)
-SPAR_HUB_OD     =  16.0;   // [mm] keyed/support hub OD (matches old boss OD)
-SPAR_HUB_PROUD  =   4.0;   // [mm] hub protrusion beyond the X-face skin
-SPAR_HUB_EMBED  =   4.0;   // [mm] hub root buried inside shell wall (overlap margin)
-SPAR_KEY_FLAT   =   0.8;   // [mm] D-flat depth at the inboard keyed hub (rotational lock)
-SPAR_WALLBOSS_OD =  15.0;  // [mm] duct-wall reinforcing collar OD
-SPAR_WALLBOSS_L  =   6.0;  // [mm] duct-wall collar length (straddles the bore breach)
-// Legacy names retained where still referenced downstream (nav channel etc.):
-PIVOT_BOSS_DEPTH =  SPAR_HUB_PROUD; // [mm] kept for nav_channel Z reference
-CLEVIS_EAR_OD   =  16.0;   // [mm] retained for compatibility (nav rib sizing)
+// ── Fixed-spar TRUNNION interface (Rev T4, 2026-08-30) ───────────────────────
+// SUPERSEDES the Rev R2 rotating Ø8 mm "skewer" entirely.  That spar ran
+// spanwise THROUGH the nacelle, breached BOTH duct walls at the pivot, needed
+// reinforcing collars at each breach, a keyed hub and a plain hub on the two
+// X-faces, a full-width through-bore, and a streamlined strut inside the stator
+// sleeve to carry it across the airflow.  All of that is DELETED.
+//
+// Under Rev T1 the spar is a FIXED 20 × 16.3 mm carbon tube bonded into the
+// wing, and it TERMINATES at nacelle-local |X| = 26.7 mm — outside the r = 25 mm
+// duct, by owner requirement (docs/WING_ATTACH_INTERFACE.md §4.3a;
+// wings_s1223_revo.scad SPAR_TIP_PROTRUSION = 15.0).  Nothing crosses the duct.
+// The nacelle now hangs off that stub on a separate printed trunnion
+// (nacelle_trunnion.scad), and this file supplies only the COLLAR that trunnion
+// bolts into: a register bore, a flange seat with three M3 inserts, and the
+// cavity its ring gear and bearing barrel occupy.
+//
+// What the change buys, beyond deleting a part:
+//   • the duct is unobstructed at the pivot — the stator's 11 vanes get the
+//     last word before EDF2, which is what the Rev T2 strut could not give;
+//   • the two duct-wall breaches and their reinforcing collars are gone, so the
+//     duct pressure boundary is continuous;
+//   • ~19 g of steel spar and its crank come off the rotating assembly.
+// Closes WA-R7 / WA-R8 / WA-R9 / WA-R11 / WA-R12 and OI-8 (the axial budget —
+// see nacelle_trunnion.scad, which is where that arithmetic lives).
+SPAR_OD          =  20.0;  // [mm] fixed CF spar OD (Rev T1) — reference only;
+                           //      the spar is a WING part, not built here
+TRUNNION_X0      =  28.2;  // [mm] |X| of the spar tip = trunnion outboard face.
+                           //      HARD BOUND, corrected 2026-08-31: the binding
+                           //      radius here is NOT the r = 25 duct.  PIVOT_Z
+                           //      lies inside the sleeve zone, where the bore is
+                           //      SLEEVE_BORE_R (27.7) and the stator sleeve's
+                           //      own OD is r 27.5.  At the old 26.7 the trunnion
+                           //      and the spar both cut into the sleeve — a
+                           //      measured 23.3 mm³ of solid overlap.  Gate T8.
+WING_TIP_FACE_X  =  41.7;  // [mm] |X| of the wing tip face = NACELLE_OD_X/2
+                           //      (37.7) + the 4.0 mm joint gap
+TRUNNION_REG_D   =  34.0;  // [mm] H7 register bore — mates nacelle_trunnion.scad
+                           //      REG_D 33.9
+COLLAR_X0        = TRUNNION_X0 + 5.5;   // = 32.2  register bore, outboard end
+COLLAR_X1        = TRUNNION_X0 + 9.0;   // = 35.7  flange seat rim face
+COLLAR_OD        =  50.0;  // [mm] collar OD = trunnion flange OD
+COLLAR_BOLT_D    =  41.5;  // [mm] 3 × M3 bolt circle (matches the trunnion)
+COLLAR_FAIR_D    =  66.0;  // [mm] junction-fairing footprint diameter
+COLLAR_FAIR_X    =  22.0;  // [mm] |X| the fairing blends back to.  Everything
+                           //      it puts inside the duct is removed again by
+                           //      the Zone-B bore subtraction, so the fairing
+                           //      survives only as fore/aft gussets into the
+                           //      shell — which is where the shell HAS material
+                           //      (measured 2026-08-30: at |X| = 31 the skin
+                           //      reaches only r ≈ 9 about the spar axis on the
+                           //      +Y side, but r ≈ 97 fore and aft).
+// Trunnion internal cavity: the ring gear (Ø41.6) and the bearing barrel live
+// inside the pod, outboard of the collar bore.
+TRUNNION_CAV_D   =  42.6;  // [mm] cavity Ø — gear tip Ø41.6 + 0.5 mm/side
+TRUNNION_CAV_X0  = TRUNNION_X0 - 1.0;   // = 25.7, opens the cavity outboard so
+                           //      the gear is not blind-ended.  This is a VOID,
+                           //      not a member, so the ≥ 26 bound does not apply.
+// Legacy name retained where still referenced downstream (nav channel etc.):
+PIVOT_BOSS_DEPTH = COLLAR_X1 - NACELLE_FACE_X_PYLON;  // nav_channel Z reference
 
-// ── Gear mount features ───────────────────────────────────────────────────────
-// Module M=1.0, pressure angle 20°.
-PINION_A_Z      = PIVOT_Z;  // [mm] Pinion A shaft Z (tracks PIVOT_Z = 111.5)
-PINION_A_Y      =  30.5;   // [mm] Pinion A fore-aft offset = R_sector + R_pinionA
-                           //   = 22 + 8.5 = 30.5 mm (Rev S1: Pinion A regeared
-                           //   12T R6 -> 17T R8.5 for the internal-ring nozzle
-                           //   drive — docs/NOZZLE_DRIVE_TRADE.md.  30.5 mm is
-                           //   ALSO the internal-mesh centre distance to the
-                           //   nozzle ring, R_ring - R_drive = 34 - 3.5, so the
-                           //   whole shaft run stays on one Y station.)
-PINION_A_BOSS_OD=   7.0;   // [mm] MR63ZZ press-fit boss OD (6mm OD + 0.5mm wall)
-PINION_A_BOSS_L =  10.0;   // [mm] boss length (2× MR63ZZ stacked + gap)
-PINION_A_SHAFT_D=   3.2;   // [mm] shaft clearance bore
-// Rev S1 (2026-07-07): the compound idler is DELETED — the Nozzle Drive
-// Pinion (14T M0.5, nacelle_pinion.scad PINION_VARIANT="DRIVE") meshes the
-// INTERNAL nozzle ring gear directly at the ring plane, its 4 mm gear band
-// seated in the ring's gear band (iris local Z 0..4.5 = nacelle Z
-// 166.25..170.75).  This boss is the shaft's MR63ZZ bearing, placed just
-// FORWARD of the nozzle housing so the pinion cantilevers into the ring.
-CROWN_Z         = NOZZLE_RING_Z - 6.0;   // [mm] = 160.25; drive-pinion shaft
-                                         //   bearing boss centre (Rev S1)
-CROWN_BOSS_OD   =   7.0;   // [mm] same spec as Pinion A
-CROWN_BOSS_L    =  10.0;   // [mm] boss length
-SHAFT_CONDUIT_OD=   5.5;   // [mm] conduit outer diameter
-SHAFT_CONDUIT_ID=   3.5;   // [mm] conduit inner bore
+// ── 4 × 10 AWG power disconnect bay (WA-R10, Rev T4) ─────────────────────────
+// Plan 003 U3 put the four high-current bullet disconnects in a wingtip
+// "maintenance garage"; the wing MEASURED itself out of that (aft of the spar
+// the tip section is 6.78 mm deep by station 66) and reassigned them here, to
+// "the annular space between the duct wall and the outer skin".
+//
+// THAT ANNULUS DOES NOT EXIST, and the reassignment repeated the error it was
+// correcting — assumed volume, not measured volume.  The canonical shell import
+// is SOLID; only the duct is bored out of it, so the space between duct and
+// skin is solid CF-PETG.  Measured 2026-08-30 on the bore-centred shell, the
+// depth actually available on the inboard face (skin radius − duct radius −
+// 2.5 mm skin − 2.5 mm duct wall) is:
+//
+//     Z      55    60    65    70    75    80    85    90    95   100   110
+//     depth 6.58 −0.76  5.58  3.47  7.10  7.10  7.10  4.40  4.10  2.63  1.05
+//
+// It peaks at 7.10 mm over Z 75–88 and collapses aft of Z 90 where the bore
+// steps out to the Ø55.4 sleeve zone.  There is no station on this flank with
+// room for a 10 AWG BULLET pair laid lengthwise (~20 mm of barrel + shrink).
+//
+// SO THE BAY IS BUILT FOR RING TERMINALS ON STUDS, not bullets — one of the
+// three disconnect styles the wing itself listed, and the only one that fits a
+// 6.0 mm pocket.  Four M3 brass studs on a 7.5 mm pitch across the 30 mm width;
+// ring terminals stack under a brass nut.  Brass, not steel: this is 21 mm from
+// the AK7455 keep-out and the whole joint is a non-ferrous zone
+// (docs/TILT_ENCODER_WIRING_EMI_SPEC.md §6.2).
+//
+// **A bullet or lever-nut bay becomes available only when the pod is hollowed**
+// to a 2.5 mm skin, which would open a genuine 5–17 mm annulus here.  That is
+// tracked as W0 in docs/plans/2026-08-30-001-weight-reduction-targets-plan.md
+// and it is the same finding from the other end: the pod is solid.
+//
+// SITING.  Z 82 centre, so the bay spans 75–89 and SWALLOWS the existing
+// esc_wire_exit_slot() at Z 86 — the EDF1 ESC leads now surface directly into
+// the disconnect bay instead of into blind material.  It is also ≥ 20 mm from
+// the signal harness port, which is the separation between 40 A feeds and
+// shielded signal pairs that the EMI spec §2.3 requires and that the previous
+// shared-flank arrangement did not have.
+ESC_DISC_AVAIL   = NACELLE_FACE_X_PYLON - EDF_BORE_R - WALL_T;  // = 6.50 mm
+                           // [mm] the GEOMETRIC bound: how deep a pocket in the
+                           // inboard face can go before it breaches the duct.
+                           // Aft of Z 90 the bore steps out to SLEEVE_BORE_R and
+                           // this collapses to 3.80 mm, which is why the bay must
+                           // stay forward of the sleeve zone.  Independently
+                           // cross-checked against the measured skin: 7.10 mm of
+                           // material remains over Z 75–88 after reserving both
+                           // 2.5 mm walls, so 6.0 mm of pocket is inside both
+                           // bounds.
+ESC_DISC_W       =  30.0;  // [mm] bay width  (Y) — 4 studs on a 7.5 mm pitch
+ESC_DISC_H       =  14.0;  // [mm] bay length (Z)
+ESC_DISC_D       =   6.0;  // [mm] bay depth  (X) — 1.10 mm inside the measured
+                           //      envelope; 6.0 is the wing's own clear-height
+                           //      figure for a disconnect
+ESC_DISC_Z       =  82.0;  // [mm] bay centre, in the measured 7.10 mm window
+ESC_DISC_FILLET  =   3.0;  // [mm] corner radius — a square internal corner in a
+                           //      printed part is where the crack starts
+ESC_STUD_N       =   4;    // [count] M3 brass studs (one per 10 AWG feed)
+ESC_STUD_PITCH   =   7.5;  // [mm] stud spacing across the bay width
+// NO TROUGH IS BUILT, and that is a finding rather than an omission.  The
+// bundle leaves the SPAR BORE at the trunnion (Z = PIVOT_Z) and would have to
+// reach this bay 29.5 mm forward.  There is no compliant route in a solid pod:
+// a groove in the inboard face may be at most
+//     skin_r(Z) − SLEEVE_BORE_R − WALL_T = 3.55 mm deep at Z 110, 3.8 at Z 111.5
+// before it breaks into the Ø55.4 sleeve bore, against a 4 × 10 AWG bundle whose
+// circumscribed diameter is 13.28 mm (WING_ATTACH_INTERFACE §2.3) and whose
+// individual conductor OD is not even recorded yet (that document's OI-1).
+// Routing it through the bore instead would put 40 A conductors in the airflow.
+//
+// **WA-R10 therefore stays OPEN, and it is blocked on W0 (hollowing the pod),
+// not on this file.**  What is built here is the bay itself, which is
+// independently useful: it sits directly over esc_wire_exit_slot() at Z 86, so
+// it is already the junction for the EDF1 ESC leads.  When the pod is hollowed
+// to a 2.5 mm skin the 5–17 mm annulus appears, the wing bundle reaches the bay,
+// and the same pocket becomes the full four-feed disconnect WA-R10 asks for.
+
+// ── SUPERSEDED Rev T (2026-07-18) — the tilt→nozzle GEAR TRAIN ──────────────
+// Drive Pinion A, the Crown / Nozzle Drive Pinion, the bevel pair and housing,
+// the sector gear and the internal ring gear were all DELETED and archived when
+// the nozzle drive became a pushrod (Option B, docs/NOZZLE_DRIVE_TRADE.md;
+// WBS §1.1.3.1 "Gear train archived (Stage 4)").
+//
+// Their MOUNTING FEATURES were left behind in this file for another six weeks:
+// pinion_a_boss(), crown_pinion_boss() and shaft_conduit() were still being
+// unioned into every rendered pod.  They are removed at Rev T4.  This was not
+// only dead mass — the conduit's Ø3.5 bore, blind at both ends once the gears
+// went, exported as a SECOND, INVERTED body inside the pod (measured 2026-08-30:
+// −25.2 mm³ at Y ≈ 31.8, Z 118–142), i.e. a sealed internal void that no slicer
+// can fill and no inspection can reach.  Removing them returns the pod to a
+// single solid body.  Constants removed (recorded, not re-used): PINION_A_Z/_Y/
+// _BOSS_OD/_BOSS_L/_SHAFT_D, CROWN_Z, CROWN_BOSS_OD/_L, SHAFT_CONDUIT_OD/_ID.
 
 // ── Inlet bell (1.25× scale) ──────────────────────────────────────────────────
 INLET_BELL_L    =  27.5;   // [mm] inlet bell axial length (was 22.0 × 1.25)
@@ -471,34 +647,107 @@ NAV_CHAN_Z_LO   = NAV_LIGHT_Z;                    // [mm] channel start (at emit
 NAV_CHAN_Z_HI   = PIVOT_Z - PIVOT_BOSS_DEPTH - 1.0;  // [mm] end below pivot boss root
 NAV_CHAN_INSET  =  3.0;    // [mm] channel wall sits this far inboard of the outer face
 
-// ── EDF harness entry from the wing (Rev S1c, 2026-08-18) ────────────────────
-// This slot must line up with the wing's EDF double-D where it breaks out of
-// the wing TIP face, because that is the only path the 40 A feeds take into the
-// pod.  It did not: at HARNESS_PORT_Z = 107.5 the slot sat at hull Y ≈ +11.0
-// while the old 0.48c cableway exited the tip at hull Y ≈ +37.6 — about 26 mm
-// adrift, and adrift before Rev S1b as well, so this is a long-standing
-// mismatch that the cableway reroute merely makes measurable.
+// ── SUPERSEDED Rev T4 (2026-08-31) — the separate harness exit port ──────────
+// Rev S1c sized and sited this slot (14 x 18 mm at Z 93.85) to line up with the
+// wing's TWO Ø7 mm EDF power conduits where they broke out of the tip face.
+// THOSE CONDUITS NO LONGER EXIST — under Rev T1 the four 10 AWG feeds run inside
+// the spar bore, on the tilt axis.  A slot aligned to a deleted conduit pair is
+// 252 mm² of hole in the pod's principal bending section serving nothing.
 //
-// Mapping (see airframe/openscad/port_tilt_spar_assembly.scad): nacelle-LOCAL
-// z maps to hull Y as  hull_Y = local_z + NAC_BAKE.y + NAC_D.y, with
-// NAC_BAKE.y = −64 and NAC_D.y = SPAR_Y − (PIVOT_ZLOC + NAC_BAKE.y)
-//            = 38.15 − 47.5 = −9.35,  so  hull_Y = local_z − 73.35.
+// It is DELETED rather than re-sited, because there is nowhere to re-site it to.
+// A pocket in the inboard flank may be at most
+//     NACELLE_FACE_X_PYLON − bore_r − WALL_T
+// deep before it breaches the duct: 6.5 mm forward of Z 90, and only 3.8 mm aft
+// of it where the bore steps out to the Ø55.4 sleeve zone.  The one window with
+// usable depth is Z 75–89, and the disconnect bay is already in it.
 //
-// The wing conduits (CABLE_BORE_STATION 27.5, CABLE_BORE_SEP 9.5, straight LE
-// with the root LE at hull Y −7) exit at hull Y +15.75 and +25.25, so their
-// centre is hull Y +20.50  ->  local z = 20.50 + 73.35 = 93.85.
+// So the two merge: **esc_disconnect_bay() is the single wing-interface pocket**,
+// carrying the power studs and the ESC/gateway signal pairs.  That gives up the
+// ≥ 20 mm power-to-signal separation of TILT_ENCODER_WIRING_EMI_SPEC §2.3, and
+// the deviation is taken on the same grounds the wing already took it for its
+// shared Ø6.5 conduit (§2.3, "Rev T1 wing conduit only"): the actual mitigation
+// is 100 % braid shielding plus the ferrite-lined conduit of §3.3, and the rule
+// guards UNSHIELDED proximity.  Recorded here as a DOCUMENTED DEVIATION, and it
+// reverts the moment the pod is hollowed (weight plan W0) and a real annulus
+// exists to separate them in.
+// ── Internal cavity — the pod is HOLLOWED at Rev T4b (2026-08-31) ────────────
+// Until now this file imported the SOLID canonical shell and subtracted only
+// the duct, so each pod weighed 285 g and the "annular space between the duct
+// wall and the outer skin" that the wiring architecture routes through did not
+// exist.  It exists now.
 //
-// H (local Z ⇒ hull Y) must span both Ø7 conduits plus wall: 15.75 − 4 to
-// 25.25 + 4 = 17.5 mm, so 18.0.  W (local Y ⇒ hull Z) must span their camber
-// heights, hull Z 66.70 and 68.10, plus wall: ≈ 9.4 mm, so 14.0 still covers it.
+// THE WALL IS DELIBERATELY NOT UNIFORM — owner direction, 2026-08-31:
+//   "take more from the forward end instead of the aft end to adjust CG and
+//    nacelle ground clearance."
+// The tilt pivot sits at the rotating assembly's CG, so mass removed FORWARD of
+// it drags the pivot AFT, which shortens the pivot-to-nozzle-tip arm one for one
+// and lifts the nozzle in hover.  Measured (tools/nacelle_mass_cg.py):
 //
-// NOTE: the published nacelle STL is baked at the pre-Rev-T CG and is already
-// flagged for re-bake (wings-nacelles WBS §1.1.3); this parameter is correct
-// as of Rev S1c and takes effect on that re-render.
-HARNESS_PORT_W   = 14.0;   // [mm] slot width in Y (⇒ hull Z; spans the double-D camber spread)
-HARNESS_PORT_H   =  18.0;  // [mm] slot height in Z (⇒ hull Y; spans both Ø7 conduits)
-HARNESS_PORT_Z   =  93.85; // [mm] slot centre Z — aligned to the wing EDF double-D
-                           //      (was 107.5, ≈26 mm adrift of the wing exit)
+//   configuration                     pod g   PIVOT_Z   hover clr, 1.5 in gear
+//   solid, as built                   285.0     105.9      -10.47  STRIKES
+//   uniform 2.5 mm wall               105.0     113.7       -1.31  strikes
+//   THIS: 2.5 fwd -> 8.0 aft          155.9     114.4       -1.92  strikes
+//                        ... and with plan 005's 30 mm flaps    +8.08  clears
+//
+// Two things that table says plainly and should not be softened: the forward
+// bias is worth ~8.6 mm of the 10.5 mm deficit but CANNOT close it alone, and it
+// costs about 22 g per further millimetre, so it is not a lever to keep pulling.
+// The residual needs the nozzle stack to shorten (plan 005 R1) or the 3.0 in
+// gear.  Uniform hollowing would save 24 g more and land 0.6 mm lower.
+//
+// The ramp station is also structurally right, not only mass-right: thickening
+// across Z 100-140 puts material exactly where the trunnion collar (Z 105.8)
+// feeds the tilt-joint moment into the pod, and where the EDF2 mount, the aft
+// sleeve zone and the nozzle housing loads live.
+//
+// The cavity surface itself is MEASURED, not modelled — see
+// tools/nacelle_hollow_profile.py, which ray-casts the canonical shell and emits
+// the ring grid below.  Ray-casting rather than section radii, because the
+// canonical mesh carries an internal forward intake pocket that makes a
+// section's minimum radius meaningless below Z ~58.
+include <nacelle_hollow_profile.scad>
+use <nacelle_shell_grid.scad>
+
+CAVITY_DUCT_WALL  =  2.5;  // [mm] wall left on the duct side of the cavity
+// Structural bulkheads.  A hollow shell with a duct tube inside it and no shear
+// connection between them is a far weaker beam than the solid it replaces, and
+// the pod is the beam that carries EDF thrust and nacelle inertia into the
+// trunnion.  Three full annular webs forward of the trunnion restore the shear
+// path; aft of it the 8 mm wall and the trunnion keep-out are already solid.
+// Rev T4c (2026-09-01): 84.0 -> 70.0 and a fourth web added at 138.0.  The ESC
+// bays run Z 74-134, so a web at 84 would be cut away over 2 x 60 deg of its
+// circumference by the two bay pockets plus another 50 deg by the disconnect
+// bay — barely half a web, in the middle of the span it exists to stiffen.
+// Moved just FORWARD of the bays instead, with a fourth picked up just AFT of
+// them.  The 138 web costs almost nothing: the wall is already at 8 mm there so
+// the cavity, and therefore the web, is nearly closed.
+CAVITY_BULKHEAD_Z = [40.0, 62.0, 70.0, 138.0];
+CAVITY_BULKHEAD_T =  3.0;  // [mm] web thickness
+// Each web must be VENTED or it seals a compartment.  The first render of the
+// hollowed pod exported a −17,227 mm³ inverted body between Z 41.5 and 60.5 —
+// the bay between the first two webs, closed at both ends and opening nowhere.
+// A sealed void in a printed part cannot be drained, inspected, or dried, and
+// CF-PETG is hygroscopic.  Six through-holes per web link every compartment to
+// the openings at the disconnect bay, the nav-light bore, the ESC wire exit slot
+// and the trunnion register.
+CAVITY_VENT_N     =    6;  // [count] vent/drain holes per web
+CAVITY_VENT_D     =  4.0;  // [mm] hole diameter
+CAVITY_VENT_R     = 30.0;  // [mm] hole centre radius — inside the annulus at all
+                           //      three web stations (measured: 27.5..33.1 at
+                           //      Z 40, 27.5..34.5 at Z 84)
+// Trunnion keep-out: solid material must survive around the collar, which is
+// additive in Zone A and would otherwise be hollowed out from behind.
+CAVITY_TRUNNION_R  = 30.0; // [mm] radius about the SPAR axis
+CAVITY_TRUNNION_X0 = 20.0; // [mm] |X| the keep-out starts at
+CAVITY_TRUNNION_X1 = 40.0; // [mm] |X| it ends at
+
+// ── Hinged ESC bays (Rev T4c, 2026-09-01) ───────────────────────────────────
+// Every dimension the pod and the access covers must agree on lives in ONE file,
+// because they are two parts that have to match a third thing — the hole between
+// them.  The cover was briefly built from the wrong shell and dropped 442 mm3 of
+// itself inside the pod; that was a selector error, but duplicated parameters
+// are how the same class of mistake becomes permanent.
+include <nacelle_esc_bay.scad>
 
 // ── Global facet resolution ───────────────────────────────────────────────────
 $fn = 72;
@@ -658,7 +907,7 @@ module circular_intake_fairing() {
 // Placed in Zone C (outer union after difference) so the nozzle ring pocket
 // subtraction does not remove them.
 module sleeve_retention_bosses() {
-    for (angle = [0, 120, 240]) {
+    for (angle = SLEEVE_KEY_ANGLES) {
         rotate([0, 0, angle])
         translate([SLEEVE_BOSS_R, 0, NOZZLE_RING_Z])
             difference() {
@@ -687,8 +936,9 @@ module sleeve_retention_bosses() {
 // Motor mounting (EDF1):
 //   • Motor slides in from nozzle end; back plate seats against spider AFT face.
 //   • Motor shaft extends FORWARD through hub bore (Ø4 mm) to rotor1.
-//   • 3× M3 SHCS from INTAKE bore end pass through M3 CLEARANCE bores in spider
-//     arms and thread into motor's own M3 female back-plate holes.
+//   • 4× M3 SHCS from INTAKE bore end pass through M3 CLEARANCE bores in spider
+//     arms and thread into the motor's own female back-plate holes (Rev T4c —
+//     the Galaxy X5 takes four screws on a 90 deg pattern, REF-EDF-002).
 //   • T-handle 2.5 mm hex key required; reach ≈ EDF1_SPIDER_Z ≈ 88 mm.
 //
 // Arms span (R_HUB − 1) → (EDF_BORE_R + 1) with ±1 mm CGAL overrun.
@@ -698,7 +948,7 @@ module edf1_nacelle_spider() {
     arm_w = SPIDER_ARM_W;
     z_ctr = EDF1_SPIDER_Z;
 
-    for (angle = [0, 120, 240]) {
+    for (angle = SPIDER_ARM_ANGLES) {
         rotate([0, 0, angle])
         difference() {
             // Arm solid — ±1 mm overrun for CGAL volumetric overlap.
@@ -753,7 +1003,7 @@ module esc_wire_exit_slot(pylon_side = PYLON_SIDE) {
 // Used as a Zone B subtraction.
 module bore_key_slots() {
     slot_len = AFT_SLV_Z_END - STATOR_SLV_Z_START;
-    for (angle = [0, 120, 240]) {
+    for (angle = SLEEVE_KEY_ANGLES) {
         rotate([0, 0, angle])
         translate([SLEEVE_BORE_R - 0.01, -SLEEVE_KEY_SLOT_W / 2, STATOR_SLV_Z_START])
             cube([SLEEVE_KEY_SLOT_H + 1.0, SLEEVE_KEY_SLOT_W, slot_len]);
@@ -762,57 +1012,140 @@ module bore_key_slots() {
 
 
 // =============================================================================
-// ── Module: pivot_x_face_boss  (Rev R2 — keyed 8 mm spar hubs) ────────────────
+// ── Module: trunnion_collar  (Rev T4 — fixed-spar pivot) ─────────────────────
 // =============================================================================
-// SOLID (bored separately) keyed hubs on the nacelle X-faces at PIVOT_Z, Y=0,
-// for the rotating 8 mm spar that is FIXED to the nacelle (replaces the two
-// MF104ZZ bearing bosses).  Inboard (+X, pylon side) is the KEYED hub (the spar
-// D-flat locks rotation here); outboard (−X, far side) is a plain support hub
-// the spar/nav-wire exits through.  The 8 mm through-bore and the inboard D-flat
-// are SUBTRACTED in the main assembly (Zone B), so these are additive solids.
+// ADDITIVE.  The seat nacelle_trunnion.scad bolts into, on the INBOARD (pylon)
+// X-face at the pivot station, concentric with the fixed spar.
 //
-// Face asymmetry (measured from the true shell slab, 2026-07-18):
-//   +X pylon face ≈ 37.1 mm, −X far face ≈ 37.7 mm.  SPAR_HUB_EMBED (4 mm) buries
-// the hub root well inside the wall on both sides, so the union is solid despite
-// the pod's approximate NACELLE_FACE_X_* constants (34/38).
-module pivot_x_face_boss() {
-    for (sign = [-1, +1]) {
-        face_dist = (sign > 0) ? NACELLE_FACE_X_PYLON : NACELLE_FACE_X_FAR;
+// Two pieces, and the second one is the interesting one:
+//
+//   1. The COLLAR proper — a Ø50 tube from COLLAR_X0 to COLLAR_X1 carrying the
+//      Ø34 H7 register bore and the flange seat rim.
+//   2. A JUNCTION FAIRING hulled from that rim back to a Ø66 footprint at
+//      |X| = COLLAR_FAIR_X.  It is not decoration: the canonical shell falls
+//      away hard on one side here.  Measured on the bore-centred shell at the
+//      pivot, the skin's reach about the SPAR axis is
+//          |X| = 31 →  r ≈ 9 at azimuth 0/345 (+Y),  r ≈ 97 fore and aft
+//      so a collar standing to |X| = 35.7 has no shell under it on the +Y side
+//      and a great deal of shell fore and aft.  The hull turns that into two
+//      gussets running along the duct axis into the thick part of the shell,
+//      which is the load path the joint actually needs, and fairs the ~15 mm
+//      the collar stands proud on the tight side.
+//
+// The fairing is deliberately built oversize and then TRIMMED BY THE DUCT: it
+// is placed in Zone A, so the Zone-B bore subtraction removes everything it put
+// inside r = 25 (and inside the r = 27.7 sleeve bore).  Nothing here may finish
+// closer than 26 mm to the duct axis — asserted in nacelle_pod().
+//
+// DOCUMENTED MOULD-LINE EXCEPTION (plan 2026-08-29-005 R7): the collar stands
+// proud of the canonical shell at this station.  It cannot not: the encoder air
+// gap is set from the wing tip pad at |X| = 39.7, which is 5.7 mm outboard of
+// the shell face, and the wing side is already built to it.  The protrusion is
+// wholly inside the 4.0 mm wing/nacelle joint gap region and is bounded by the
+// wing tip face at |X| = 41.7 — it is a junction fillet, not drift.  Measured
+// magnitude is reported by tools/nacelle_trunnion_fit.py.
+module trunnion_collar() {
+    sgn = PYLON_SIDE;
+    union() {
+        // ── Collar tube ────────────────────────────────────────────────────
+        translate([sgn * COLLAR_X0, 0, PIVOT_Z])
+            rotate([0, sgn * 90, 0])
+                cylinder(d = COLLAR_OD, h = COLLAR_X1 - COLLAR_X0);
 
-        // ── Solid keyed/support hub cylinder (bored later in Zone B) ─────────
-        translate([sign * (face_dist - SPAR_HUB_EMBED), 0, PIVOT_Z])
-        rotate([0, sign * 90, 0])
-            cylinder(r = SPAR_HUB_OD / 2,
-                    h = SPAR_HUB_EMBED + SPAR_HUB_PROUD,
-                    center = false);
-
-        // ── Load-spreading web onto the shell (hull avoids coplanar faces) ──
+        // ── Junction fairing / gussets ─────────────────────────────────────
         hull() {
-            translate([sign * (face_dist - SPAR_HUB_EMBED), 0, PIVOT_Z])
-            rotate([0, sign * 90, 0])
-                difference() {
-                    cylinder(r = SPAR_HUB_OD / 2, h = 0.4, center = false);
-                    cylinder(r = SPAR_HUB_OD / 2 - WALL_T, h = 0.41, center = false);
-                }
-            translate([sign * (face_dist + SPAR_HUB_PROUD), 0, PIVOT_Z])
-            rotate([0, sign * 90, 0])
-                cylinder(r = SPAR_HUB_OD / 2, h = 0.4, center = false);
+            translate([sgn * (COLLAR_X1 - 0.4), 0, PIVOT_Z])
+                rotate([0, sgn * 90, 0])
+                    cylinder(d = COLLAR_OD, h = 0.4);
+            translate([sgn * COLLAR_FAIR_X, 0, PIVOT_Z])
+                rotate([0, sgn * 90, 0])
+                    cylinder(d = COLLAR_FAIR_D, h = 0.4);
         }
     }
 }
 
 
 // =============================================================================
-// ── Module: spar_duct_wall_bosses  (Rev R2) ──────────────────────────────────
+// ── Module: trunnion_collar_cut  (Rev T4) ────────────────────────────────────
 // =============================================================================
-// Reinforcing collars where the 8 mm spar bore breaches the two duct walls
-// (bore inner radius EDF_BORE_R = 25 mm) at Y=0, PIVOT_Z.  Straddle the wall so
-// the airflow-duct penetration stays sealed and stiff.  Additive; bored in Zone B.
-module spar_duct_wall_bosses() {
-    for (sign = [-1, +1])
-        translate([sign * (EDF_BORE_R - SPAR_WALLBOSS_L / 2), 0, PIVOT_Z])
-        rotate([0, sign * 90, 0])
-            cylinder(r = SPAR_WALLBOSS_OD / 2, h = SPAR_WALLBOSS_L, center = false);
+// SUBTRACTIVE counterpart to trunnion_collar().
+//   • Ø34.0 H7 register bore, COLLAR_X0 … out through the inboard face
+//   • Ø42.6 cavity for the trunnion's ring gear and bearing barrel
+//   • 3 × M3 heat-set insert bores in the flange seat rim
+//   • nav 3-core crossing port (WA-R11), radially separated from the power
+//     bundle: the 40 A feeds come out of the SPAR BORE on the axis, the nav
+//     3-core crosses through this port at r = 21 mm, 90° away from the
+//     disconnect bay.  That is the radial + angular separation the EMI spec
+//     asks for (§2.3) without a second conduit.
+module trunnion_collar_cut() {
+    sgn = PYLON_SIDE;
+
+    // ── Register bore, open to the inboard face ────────────────────────────
+    translate([sgn * COLLAR_X0, 0, PIVOT_Z])
+        rotate([0, sgn * 90, 0])
+            cylinder(d = TRUNNION_REG_D, h = (WING_TIP_FACE_X - COLLAR_X0) + 1);
+
+    // ── Ring-gear / bearing-barrel cavity, outboard of the register ────────
+    translate([sgn * TRUNNION_CAV_X0, 0, PIVOT_Z])
+        rotate([0, sgn * 90, 0])
+            cylinder(d = TRUNNION_CAV_D, h = COLLAR_X0 - TRUNNION_CAV_X0 + 0.01);
+
+    // ── 3 × M3 heat-set inserts in the flange rim (bores run OUTBOARD) ─────
+    for (i = [0 : 2])
+        rotate([0, 0, i * 120])
+            translate([0, COLLAR_BOLT_D / 2, 0])
+                translate([sgn * (COLLAR_X1 + 0.01), 0, PIVOT_Z])
+                    rotate([0, sgn * 90, 0])
+                        cylinder(d = M3_INSERT_D, h = M3_INSERT_L + 0.01);
+
+    // ── Nav 3-core crossing port (WA-R11) ──────────────────────────────────
+    translate([sgn * (COLLAR_X1 + 0.01), 0, PIVOT_Z + COLLAR_BOLT_D / 2])
+        rotate([0, sgn * 90, 0])
+            cylinder(d = NAV_WIRE_BORE + 1.6, h = COLLAR_X1 - COLLAR_FAIR_X + 1);
+}
+
+
+// =============================================================================
+// ── Module: esc_disconnect_bay  (Rev T4 — WA-R10) ────────────────────────────
+// =============================================================================
+// SUBTRACTIVE.  Carved pocket in the inboard flank for the four 10 AWG power
+// disconnects, plus the trough that feeds it from the spar bore, plus the four
+// stud insert bores.  See the parameter block for why it is stud-and-ring
+// rather than bullet, and why it sits at Z 82.
+//
+// Filleted in both in-plane axes (hull of four cylinders) because this pocket
+// is in the pod's principal bending section.
+//
+// SERVICE MODEL — reached by sliding the nacelle off the spar; there is no
+// hatch, because the wing tip face is the cover (WING_ATTACH_INTERFACE §4.4).
+// Open to the inboard face, so it also prints without support: the only
+// overhang is the pocket roof, bridging 6 mm.
+module esc_disconnect_bay(pylon_side = PYLON_SIDE) {
+    face_x = pylon_side * NACELLE_FACE_X_PYLON;
+    r      = ESC_DISC_FILLET;
+
+    // ── Filleted pocket ────────────────────────────────────────────────────
+    translate([(pylon_side > 0) ? (face_x - ESC_DISC_D) : face_x, 0, ESC_DISC_Z])
+        hull()
+            for (dy = [-1, 1], dz = [-1, 1])
+                translate([0,
+                           dy * (ESC_DISC_W / 2 - r),
+                           dz * (ESC_DISC_H / 2 - r)])
+                    rotate([0, 90, 0])
+                        cylinder(r = r, h = ESC_DISC_D + 0.5);
+
+    // ── 4 × M3 brass stud inserts in the pocket floor ──────────────────────
+    // Bores run OUTBOARD from the floor into the 2.5 mm skin plus the material
+    // behind it; ESC_DISC_AVAIL − ESC_DISC_D = 1.10 mm remains beyond the
+    // insert, so the insert length is capped at that plus the duct wall.
+    for (i = [0 : ESC_STUD_N - 1])
+        translate([(pylon_side > 0) ? (face_x - ESC_DISC_D)
+                                    : (face_x + ESC_DISC_D),
+                   (i - (ESC_STUD_N - 1) / 2) * ESC_STUD_PITCH,
+                   ESC_DISC_Z])
+            rotate([0, pylon_side > 0 ? -90 : 90, 0])
+                cylinder(d = M3_INSERT_D, h = M3_INSERT_L);
+
 }
 
 
@@ -842,75 +1175,6 @@ module smooth_boss_shave() {  // difference: remove material beyond the contour
     scale([PYLON_SIDE, 1, 1])
         translate([0, 0, BOSS_Z_LO]) linear_extrude(BOSS_Z_H)
             polygon(concat(BOSS_CONTOUR, [[50, 30], [50, 6]]));
-}
-
-
-// =============================================================================
-// ── Module: pinion_a_boss ────────────────────────────────────────────────────
-// =============================================================================
-// MR63ZZ bearing boss for Drive Pinion A.  Cylinder along X at
-// (Y=PINION_A_Y=30.5mm, Z=PIVOT_Z).  Meshes the fixed sector gear (R=22mm)
-// at centre-distance 22+8.5=30.5mm from the pivot axis (Rev S1).
-module pinion_a_boss() {
-    translate([0, PINION_A_Y, PINION_A_Z])
-        rotate([0, 90, 0])
-            difference() {
-                cylinder(r = PINION_A_BOSS_OD / 2,
-                        h = PINION_A_BOSS_L,
-                        center = true);
-                cylinder(r = PINION_A_SHAFT_D / 2,
-                        h = PINION_A_BOSS_L + 0.02,
-                        center = true);
-            }
-}
-
-
-// =============================================================================
-// ── Module: crown_pinion_boss ────────────────────────────────────────────────
-// =============================================================================
-// MR63ZZ bearing boss for the Nozzle Drive Pinion shaft at CROWN_Z (Rev S1;
-// the part this supports was called the "Crown Pinion" through Rev R1).
-// Co-planar with Pinion A in Y so the longitudinal CF shaft runs straight.
-//
-// The drive pinion is documented (nacelle_pinion.scad, nacelle_bevel_housing.scad)
-// as mounted on the longitudinal shaft (nacelle Z-axis) — unlike Pinion A,
-// which is transverse (X-axis, meshes the fixed sector gear on the tilt
-// pivot) and needs rotate([0, 90, 0]) to lay its bore along X.  This boss
-// must NOT carry that rotation: cylinder() already extrudes along Z by
-// default, the correct bore axis here.  Fixed 2026-06-22 — see TODO.md
-// §1.1.3.3 ("crown_pinion_boss() copies pinion_a_boss()'s rotate([0,90,0])
-// X-axis-bore pattern verbatim").
-module crown_pinion_boss() {
-    translate([0, PINION_A_Y, CROWN_Z])
-        difference() {
-            cylinder(r = CROWN_BOSS_OD / 2,
-                    h = CROWN_BOSS_L,
-                    center = true);
-            cylinder(r = PINION_A_SHAFT_D / 2,
-                    h = CROWN_BOSS_L + 0.02,
-                    center = true);
-        }
-}
-
-
-// =============================================================================
-// ── Module: shaft_conduit ────────────────────────────────────────────────────
-// =============================================================================
-// Axial PTFE-sleeve conduit from Pinion A to the Nozzle Drive Pinion.
-// Y = PINION_A_Y = 30.5 mm (co-linear with both bosses → straight shaft path).
-module shaft_conduit() {
-    conduit_len = CROWN_Z - PINION_A_Z;
-
-    translate([0, PINION_A_Y, PINION_A_Z])
-        difference() {
-            cylinder(r = SHAFT_CONDUIT_OD / 2,
-                    h = conduit_len,
-                    center = false);
-            translate([0, 0, -0.01])
-                cylinder(r = SHAFT_CONDUIT_ID / 2,
-                        h = conduit_len + 0.02,
-                        center = false);
-        }
 }
 
 
@@ -966,8 +1230,8 @@ module _nav_light_pocket_posX() {
 // ADDITIVE.  An INTERNAL cableway rib bonded to the inside of the OUTBOARD skin,
 // running longitudinally from the emitter (NAV_CHAN_Z_LO) to just below the pivot
 // boss (NAV_CHAN_Z_HI), where the wire joins the existing ESC/harness bundle and
-// exits via harness_exit_port() to the pylon (reuses the EDF cableway — TODO
-// §1.1.3.5 item 7).  The wire groove is OPEN toward the interior (a snap-in
+// joins the wing-interface pocket esc_disconnect_bay() (Rev T4: this used to say
+// harness_exit_port(), which is deleted — see its SUPERSEDED block above).  The wire groove is OPEN toward the interior (a snap-in
 // U-channel, not a sealed tunnel — so it prints without a trapped void and the
 // wire is field-serviceable), and open at both Z ends (wire enters from the
 // pocket bore at the top, drops into the interior at the bottom).  The rib sits
@@ -997,22 +1261,218 @@ module _nav_wire_channel_posX() {
 
 
 // =============================================================================
-// ── Module: harness_exit_port ────────────────────────────────────────────────
+// ── Module: cavity_duct_wall ─────────────────────────────────────────────────
 // =============================================================================
-// Rectangular slot through the inboard X-face shell at HARNESS_PORT_Z.
-// Allows ESC motor leads, signal leads, and nav-light wire to transition from
-// nacelle interior to the pylon harness channel.
-module harness_exit_port(pylon_side = PYLON_SIDE) {
-    face_dist = (pylon_side > 0) ? NACELLE_FACE_X_PYLON : NACELLE_FACE_X_FAR;
-    face_x    = pylon_side * face_dist;
-    cut_depth = WALL_T + 3.5;
+// The solid the cavity may NOT eat into on the bore side: the duct plus one
+// minimum wall, following the pod's own bore schedule (bell-mouth flare, the
+// Ø50 EDF1 section, then the Ø55.4 sleeve zone).  Restated nowhere else — this
+// reads the same constants the bore subtraction uses.
+module cavity_duct_wall() {
+    w = CAVITY_DUCT_WALL;
+    union() {
+        translate([0, 0, -1])
+            cylinder(r1 = EDF_BORE_R + INLET_BELL_FLARE + w + 1,
+                     r2 = EDF_BORE_R + w,
+                     h  = INLET_BELL_L + 1);
+        translate([0, 0, INLET_BELL_L])
+            cylinder(r = EDF_BORE_R + w, h = STATOR_SLV_Z_START - INLET_BELL_L);
+        translate([0, 0, STATOR_SLV_Z_START])
+            cylinder(r = SLEEVE_BORE_R + w, h = NACELLE_L - STATOR_SLV_Z_START);
+    }
+}
 
-    translate([
-        (pylon_side > 0) ? (face_x - cut_depth) : face_x,
-        -HARNESS_PORT_W / 2,
-        HARNESS_PORT_Z - HARNESS_PORT_H / 2
-    ])
-        cube([cut_depth + 0.5, HARNESS_PORT_W, HARNESS_PORT_H]);
+
+// =============================================================================
+// ── Module: hollow_cavity ────────────────────────────────────────────────────
+// =============================================================================
+// SUBTRACTIVE.  The measured cavity, less everything that must stay solid:
+// the duct wall, three structural bulkheads, and a plug around the trunnion.
+//
+// NOT A TRAPPED VOID.  The cavity is deliberately open at four places — the
+// disconnect bay pocket, the nav-light through-bore, the EDF1 ESC wire exit
+// slot, and the trunnion register bore.  Printed intake-face-down the aft
+// openings are uppermost, so air escapes and the cavity can be inspected and
+// drained.  It is also, finally, the volume the wiring architecture has been
+// drawn against since plan 003.
+module hollow_cavity() {
+    grid = (NACELLE_SIDE > 0) ? HOLLOW_R_PORT : HOLLOW_R_STBD;
+    difference() {
+        grid_solid(grid, HOLLOW_Z, HOLLOW_N_AZ);
+        cavity_duct_wall();
+        // Structural webs, each with its vent holes drilled back through
+        difference() {
+            for (z = CAVITY_BULKHEAD_Z)
+                translate([0, 0, z - CAVITY_BULKHEAD_T / 2])
+                    cylinder(r = 60, h = CAVITY_BULKHEAD_T);
+            for (z = CAVITY_BULKHEAD_Z, i = [0 : CAVITY_VENT_N - 1])
+                rotate([0, 0, i * 360 / CAVITY_VENT_N + 30])
+                    translate([CAVITY_VENT_R, 0,
+                               z - CAVITY_BULKHEAD_T / 2 - 0.1])
+                        cylinder(d = CAVITY_VENT_D,
+                                 h = CAVITY_BULKHEAD_T + 0.2);
+        }
+        translate([PYLON_SIDE * CAVITY_TRUNNION_X0, 0, PIVOT_Z])
+            rotate([0, PYLON_SIDE * 90, 0])
+                cylinder(r = CAVITY_TRUNNION_R,
+                         h = CAVITY_TRUNNION_X1 - CAVITY_TRUNNION_X0);
+        // The ESC cover doubler and its bosses are Zone-A material INSIDE the
+        // skin, which is exactly where the cavity wants to be.  Keep them, or
+        // the covers have nothing to land on and nothing to screw into.
+        esc_cover_doubler();
+
+        // Keep the ESC board seat solid forward of the bore step — see
+        // esc_bay_seat_keepout() for why this is a keep-out and not a plinth.
+        esc_bay_seat_keepout();
+
+        // Keep the vestigial-boss cleanup region solid.  smooth_boss_shave()
+        // trims the canonical shell back to a MEASURED contour at this station,
+        // and the cavity's own 48-facet surface crosses that contour at a
+        // shallow angle — which left a 0.08 mm3 lens of material detached from
+        // the pod (a floating speck the slicer would try to print in mid-air).
+        // Two measured surfaces grazing each other is not something to resolve
+        // with more facets; the region is small, it is where the trunnion
+        // collar's loads enter the shell, and keeping it solid settles both.
+        scale([PYLON_SIDE, 1, 1])
+            translate([20, 4, BOSS_Z_LO - 1])
+                cube([40, 28, BOSS_Z_H + 2]);
+    }
+}
+
+
+// =============================================================================
+// ── ESC bay geometry (Rev T4c) ───────────────────────────────────────────────
+// =============================================================================
+// Offsets of the MEASURED skin, hoisted so every consumer builds from the same
+// surface.  See nacelle_shell_grid.scad for why a radial offset is legitimate
+// over this Z range and would not be near the nose.
+ESC_SKIN = (NACELLE_SIDE > 0) ? HOLLOW_SKIN_PORT : HOLLOW_SKIN_STBD;
+
+// Both bays' fastener positions at once, from the shared bay definition — the
+// same module the covers drill their clearance holes with, so a boss and its
+// hole cannot end up on different centres.
+module esc_boss_cylinders_local(dia) {
+    for (az_hinge = ESC_BAY_AZ) esc_boss_cylinders(az_hinge, dia);
+}
+
+// The shell of material between two radial offsets of the measured skin.
+module _esc_skin_shell(d_out, d_in) {
+    difference() {
+        grid_solid(offset_grid(ESC_SKIN, d_out), HOLLOW_Z, HOLLOW_N_AZ);
+        grid_solid(offset_grid(ESC_SKIN, d_in), HOLLOW_Z, HOLLOW_N_AZ);
+    }
+}
+
+
+// ── ADDITIVE (Zone A) — the cover doubler and its insert bosses ──────────────
+// The cover has to land on something, and forward of Z 100 the skin is at the
+// 2.5 mm minimum — thinner than the cover itself.  So the bay carries a DOUBLER:
+// a band of material added inside the skin around the window, thick enough that
+// a rebate can be cut into it without breaking through.
+//
+// Placed in Zone A, not Zone C, and that ordering is the whole trick.  In Zone A
+// the Zone-B rebate can cut into it; in Zone C nothing could.  It is protected
+// from the cavity subtraction by being named in hollow_cavity()'s keep-out list,
+// the same way the trunnion collar is.
+module esc_cover_doubler() {
+    intersection() {
+        _esc_skin_shell(0.0, ESC_COVER_T + ESC_LEDGE_T);
+        union() for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0, ESC_LEDGE_W);
+    }
+    intersection() {
+        _esc_skin_shell(0.0, ESC_COVER_T + ESC_BOSS_DEPTH);
+        esc_boss_cylinders_local(ESC_BOSS_OD);
+    }
+}
+
+// ── SUBTRACTIVE (Zone B) — window, rebate, insert bores ─────────────────────
+// Three cuts that must be made together, because each is defined against the
+// others:
+//   window  the board footprint, cut clean through from the seat radius out —
+//           a 33 mm folded board cannot be threaded into a sealed annulus, so
+//           the bay opens radially and the cover closes it;
+//   rebate  everything outside (skin − ESC_COVER_T) across window PLUS the
+//           doubler band, so the cover drops in and its outer face is flush with
+//           the mould line.  A cover standing proud is a step in the boundary
+//           layer at the widest part of the nacelle;
+//   bores   M3 heat-set pockets opening on the rebate floor.
+module esc_bay_cut() {
+    // window — full depth over the board footprint.  The pocket is cut from the
+    // SEAT outward, so it automatically carries ESC_STACK + ESC_FLOW_LANE: the
+    // lane is the gap between the top of the component stack and the cover's
+    // inner face, and it is what the cooling air actually flows through.
+    for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0);
+
+    // rebate — a cover's thickness deep, over window + landing band
+    intersection() {
+        difference() {
+            translate([0, 0, ESC_BAY_Z0 - ESC_LEDGE_W - 1])
+                cylinder(r = 60, h = (ESC_BAY_Z1 - ESC_BAY_Z0)
+                                     + 2 * ESC_LEDGE_W + 2, $fn = 96);
+            grid_solid(offset_grid(ESC_SKIN, ESC_COVER_T),
+                       HOLLOW_Z, HOLLOW_N_AZ);
+        }
+        union() for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0, ESC_LEDGE_W);
+    }
+
+    // insert bores — opening on the rebate floor
+    intersection() {
+        _esc_skin_shell(ESC_COVER_T - 0.01, ESC_COVER_T + M3_INSERT_L);
+        esc_boss_cylinders_local(M3_INSERT_D);
+    }
+}
+
+// ── SUBTRACTIVE (Zone B) — ESC bay DISCHARGE ports (Rev T4d) ────────────────
+// The cooling circuit's OUTLET into the duct — the fan aspirates the bay through
+// these.  Named "bleed" in the first pass, when the flow was believed to run the
+// other way; it does not.  See nacelle_esc_bay.scad for the station pressures
+// that settle the direction, and for why these must sit forward of Z 90.
+//
+// The teardrop apex points toward +Z, which is UP when the pod prints
+// intake-face-down — so the unsupported top arc of each horizontal hole becomes
+// a self-supporting 45° roof.
+module esc_discharge_ports() {
+    for (az_hinge = ESC_BAY_AZ, z = ESC_BLEED_Z)
+        rotate([0, 0, az_hinge + esc_a_pow()])
+            translate([EDF_BORE_R - 1.0, 0, z])
+                rotate([0, 90, 0])
+                    linear_extrude(ESC_MOUNT_R - EDF_BORE_R + 3.0)
+                        hull() {
+                            circle(d = ESC_BLEED_D);
+                            // local -x maps to global +Z under rotate([0,90,0])
+                            translate([-ESC_BLEED_D * 0.5, 0])
+                                rotate(45)
+                                    square(ESC_BLEED_D * 0.707, center = true);
+                        }
+}
+
+
+// ── The board seat is a KEEP-OUT, not an addition (Rev T4c) ─────────────────
+// Forward of Z 90 the bore is Ø50, so the duct wall's outer face sits at 27.5
+// and the board needs 2.7 mm of packing under it to reach ESC_MOUNT_R.
+//
+// The first attempt ADDED that packing as a Zone-C plinth whose top face was at
+// exactly ESC_MOUNT_R — the same plane the Zone-B pocket floor lies in.  Two
+// coplanar faces meeting is the touching-face problem this repo has hit before,
+// and it duly produced six non-2-manifold edges in the starboard pod at
+// local r 30.4, Z 86.9–88.8 — precisely on that plane, in both bays.
+//
+// The fix is to stop adding material and start KEEPING it.  The canonical shell
+// is solid; the cavity is what would have hollowed this region out.  Excluding
+// the seat footprint from the cavity leaves the shell's own material there, and
+// the bay pocket then CUTS the seat face at ESC_MOUNT_R as a real boolean
+// result rather than as two surfaces that happen to coincide.  Same geometry,
+// one fewer coincidence, and one fewer part to print.
+//
+// The inner bound deliberately runs BELOW the duct wall (26.0 against 27.5) so
+// the keep-out crosses the cavity's inner cylinder instead of grazing it.
+module esc_bay_seat_keepout() {
+    for (az_hinge = ESC_BAY_AZ)
+        for (side = [0, 1])
+            esc_panel_slab(
+                (side == 0 ? ESC_W_POWER : ESC_W_SIGNAL) + 2 * (ESC_FIT + 2.0),
+                az_hinge + (side == 0 ? esc_a_pow() : -esc_a_sig()),
+                26.0, ESC_MOUNT_R + 2.0,
+                ESC_BAY_Z0 - 1.0, STATOR_SLV_Z_START);
 }
 
 
@@ -1024,11 +1484,7 @@ module harness_exit_port(pylon_side = PYLON_SIDE) {
 // Zone A — inside difference() additive union (survive bore subtraction, r > 25):
 //   • nacelle_shell_imported() — canonical Serenity nacelle exterior hull
 //   • thrust_tube()            — forward bore wall, Z = 27.5 … 90 mm (Rev T restored)
-//   • pivot_x_face_boss()      — CG-pivot MF104ZZ bearing bosses
-//   • pinion_a_boss()          — Drive Pinion A MR63ZZ boss
-//   • crown_pinion_boss()      — Crown Pinion MR63ZZ boss
-//   • shaft_conduit()          — longitudinal CF gear shaft conduit
-//   • nav_wire_channel()       — internal WS2812C wire cableway (outboard skin)
+//   • trunnion_collar()        — Rev T4 fixed-spar pivot seat + junction fairing
 //
 // Zone B — subtracted by difference():
 //   • Full-length 50 mm ID bore (opens intake and exhaust end caps)
@@ -1039,14 +1495,47 @@ module harness_exit_port(pylon_side = PYLON_SIDE) {
 //   • bore_key_slots()         — 3× longitudinal anti-rotation key slots, sleeve zone
 //   • esc_wire_exit_slot()     — EDF1 ESC wire exit at Z ≈ 86 mm
 //   • nozzle_ring_pocket()     — iris ring seat at exhaust end
-//   • harness_exit_port()      — ESC / nav-light wiring slot
 //   • nav_light_pocket()       — outboard flush WS2812C recess + wire bore
-//   • Tilt spar clearance bore (4.2 mm dia along X through both X-faces)
+//   • trunnion_collar_cut()    — Ø34 H7 register, gear cavity, 3× M3, nav port
+//   • esc_disconnect_bay()     — 4 × 10 AWG bullet-disconnect pocket (WA-R10)
+//   • hollow_cavity()          — Rev T4b forward-biased internal cavity
+//   • esc_discharge_ports()    — Rev T4d aspirated-cooling outlet into the duct
+//   • esc_bay_cut()            — Rev T4c ESC window + cover rebate + bores
+//     (the board seat is cut by the same pocket; see esc_bay_seat_keepout)
 //
 // Zone C — outer union() AFTER difference():
 //   • edf1_nacelle_spider()     — EDF1 spider at Z = 87.75 mm (nacelle-integrated)
+//   • nav_wire_channel()        — cableway rib, now standing in the real cavity
 //   • sleeve_retention_bosses() — 3× M3 insert bosses on nozzle pocket face
 module nacelle_pod(swirl_dir = SWIRL_DIR) {
+
+    // ── Hard geometric bounds, checked at parse time ─────────────────────────
+    // The one requirement this whole revision exists to satisfy: no member of
+    // the tilt joint may enter the thrust duct (docs/WING_ATTACH_INTERFACE.md
+    // §4.3a).  TRUNNION_CAV_X0 is deliberately NOT checked — it is a void.
+    assert(TRUNNION_X0 >= EDF_BORE_R + 1.0,
+           "trunnion outboard face is inside the duct + 1 mm margin");
+    assert(COLLAR_X1 < WING_TIP_FACE_X,
+           "trunnion collar reaches past the wing tip face");
+    assert(COLLAR_OD / 2 + 0.1 < COLLAR_FAIR_D / 2,
+           "junction fairing is not larger than the collar it fairs");
+    // The bay must not reach inside the duct wall, and its board must be the
+    // one the fit tool measured — a silent widening here is a silent foul.
+    // The shared bay file states ESC_MOUNT_R as a literal so the cover can use
+    // it without importing the pod.  This is where the two are tied together.
+    assert(abs(ESC_MOUNT_R - (SLEEVE_BORE_R + CAVITY_DUCT_WALL)) < 1e-9,
+           "ESC seat radius has drifted from the sleeve-zone duct wall");
+    assert(ESC_INSERT_D == M3_INSERT_D && ESC_INSERT_L == M3_INSERT_L,
+           "ESC insert size has drifted from the pod's M3 insert");
+    assert(ESC_W_POWER + ESC_W_SIGNAL >= 32.0,
+           "folded ESC width is under the 32 mm isolation floor");
+    assert(ESC_BAY_Z1 - ESC_BAY_Z0 >= 60.0,
+           "ESC bay is shorter than the 62 mm board the fit tool selected");
+    assert(ESC_DISC_D < ESC_DISC_AVAIL,
+           "disconnect bay is deeper than the MEASURED inboard-face envelope");
+    assert(ESC_DISC_Z - ESC_DISC_H / 2 >= 75.0
+           && ESC_DISC_Z + ESC_DISC_H / 2 <= 89.0,
+           "disconnect bay has left the Z 75-89 window where that depth exists");
 
     union() {
 
@@ -1075,26 +1564,17 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                 // transition; it does not change the internal duct diameter.
                 circular_intake_fairing();
 
-                // ── CG-pivot keyed 8 mm spar hubs (at PIVOT_Z, Y=0) ──────
-                pivot_x_face_boss();
+                // ── ESC cover doubler + insert bosses (Rev T4c) ──────────
+                esc_cover_doubler();
 
-                // ── Duct-wall reinforcing collars at the spar breach ─────
-                spar_duct_wall_bosses();
+                // ── Trunnion collar + junction fairing (Rev T4) ──────────
+                // The fixed-spar pivot seat.  Placed in Zone A ON PURPOSE so
+                // the bore subtraction below trims whatever the fairing hull
+                // put inside the duct.
+                trunnion_collar();
 
                 // ── Fill the vestigial inboard-face socket (Rev R2) ──────
                 smooth_boss_fill();
-
-                // ── Drive Pinion A bearing boss (MR63ZZ, at PIVOT_Z) ─────
-                pinion_a_boss();
-
-                // ── Crown Pinion bearing boss (MR63ZZ, at CROWN_Z) ───────
-                crown_pinion_boss();
-
-                // ── Longitudinal CF gear-shaft conduit ────────────────────
-                shaft_conduit();
-
-                // ── Internal nav-light wire channel (inside outboard skin) ─
-                nav_wire_channel(pylon_side = PYLON_SIDE);
 
             } // end union (Zone A additive)
 
@@ -1132,8 +1612,6 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
             // ── Nozzle ring pocket (iris ring seat at exhaust end) ─────────
             nozzle_ring_pocket();
 
-            // ── Harness exit port (ESC / nav-light wiring slot) ───────────
-            harness_exit_port(pylon_side = PYLON_SIDE);
 
             // ── Nav-light emitter recess + through-wall wire bore (outboard)
             nav_light_pocket(pylon_side = PYLON_SIDE);
@@ -1141,26 +1619,23 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
             // ── Shave the vestigial inboard-face boss (Rev R2) ───────────
             smooth_boss_shave();
 
-            // ── Rotating 8 mm spar through-bore (along X, Rev R2) ─────────
-            // Spans both X faces + hub protrusions + margin for clean exits.
-            translate([0, 0, PIVOT_Z])
-                rotate([0, 90, 0])
-                    cylinder(
-                        r      = SPAR_BORE_D / 2,
-                        h      = NACELLE_FACE_X_PYLON + NACELLE_FACE_X_FAR
-                                + 2 * SPAR_HUB_PROUD + 8,
-                        center = true
-                    );
+            // ── Trunnion register bore, gear cavity, inserts, nav port ───
+            trunnion_collar_cut();
 
-            // ── Inboard keyed D-flat (locks the fixed spar rotationally) ──
-            // Axis-aligned chord slab across the top of the bore, only over the
-            // inboard (+X pylon) keyed hub, so the spar's matching D-flat seats
-            // and the nacelle cannot rotate on the spar (they turn as one).
-            //   X: over the keyed-hub length; Y: full bore width; Z: top KEY_FLAT.
-            translate([NACELLE_FACE_X_PYLON - SPAR_HUB_EMBED,
-                       -6,
-                       PIVOT_Z + SPAR_BORE_D / 2 - SPAR_KEY_FLAT])
-                cube([SPAR_HUB_EMBED + SPAR_HUB_PROUD + 0.1, 12, SPAR_KEY_FLAT + 3]);
+            // ── 4 × 10 AWG disconnect bay (WA-R10) ────────────────────────
+            esc_disconnect_bay(pylon_side = PYLON_SIDE);
+
+            // ── Internal cavity (Rev T4b) — forward-biased hollowing ──────
+            hollow_cavity();
+
+            // ── ESC bay discharge ports into the duct (Rev T4d) ───────────
+            esc_discharge_ports();
+
+            // ── Hinged-ESC bays: board pocket + access window (Rev T4c) ───
+            // Cut AFTER the cavity so the two merge into one volume — that is
+            // deliberate: it is what gives the power feed a route from the
+            // disconnect bay and the phase leads a route to the spider arms.
+            esc_bay_cut();
 
         } // end difference (Zone A + Zone B)
 
@@ -1174,6 +1649,19 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
         // At EDF1_SPIDER_Z = 87.75 mm (just forward of stator zone).
         // M3 clearance bores on intake face; screws from intake bore end.
         edf1_nacelle_spider();
+
+        // ── ESC bay seat plinth, cover ledge and insert bosses (Rev T4c) ──
+        // Zone C, all three: the cavity subtraction would otherwise delete the
+        // plinth and the ledge, and the bay cut would delete the bosses.  They
+        // sit outside every Zone-B cut by construction, so adding them after the
+        // difference() closes is correct rather than a workaround.
+        // ── Internal nav-light wire channel (inside the outboard skin) ────
+        // Rev T4b: MOVED from Zone A to Zone C.  It is a rib standing INTO the
+        // cavity, so while the pod was solid it was a no-op and while the
+        // cavity is subtracted in Zone B it would simply be deleted.  Added
+        // after the difference() closes, it is finally a real cableway in a
+        // real void — which is what it was drawn to be.
+        nav_wire_channel(pylon_side = PYLON_SIDE);
 
         // ── Aft sleeve retention M3 insert bosses on nozzle pocket face ──
         // 3× bosses at r = SLEEVE_BOSS_R = 28 mm, 120° spacing.
@@ -1206,13 +1694,49 @@ nacelle_pod(swirl_dir = SWIRL_DIR);
 //               per CLAUDE.md fabrication standards.
 //               Insert foam before sliding EDF bore sleeve into nacelle.
 //
-// Post-print checks:
-//   1. Sleeve bore ID = 55.4 mm ± 0.3 mm at 3 axial stations in EDF zone
-//      (Z = 27.5 … 178.8 mm).  Sleeve OD 55.0 mm must slide freely.
-//   2. Pivot boss bore = 10.0 mm ± 0.1 mm (MF104ZZ OD press-fit), both X faces.
-//   3. Tilt spar bore ID = 4.2 mm ± 0.1 mm through both X faces.
-//   4. Shaft conduit ID = 3.5 mm ± 0.1 mm (4 mm PTFE tube).
-//   5. Retention boss bores = 3.5 mm ± 0.05 mm (M3 × 6 mm OLF heat-set insert).
+// MEASURED MASS (Rev T4, 2026-08-31): port 285.0 g, stbd 285.7 g at
+// RHO_PRINT 1.05e-3 g/mm^3.  Not 132 g — that BOM figure named a file that does
+// not exist and was never measured.  **The pod is SOLID**: this file imports the
+// solid canonical shell and subtracts only the duct and a few pockets, so the
+// "cavity" the foam note below refers to is not a cavity.  Hollowing it to a
+// 2.5 mm skin recovers 96.4 g per pod and is tracked as W0 in
+// docs/plans/2026-08-30-001-weight-reduction-targets-plan.md — the largest
+// structural weight target on the aircraft.  The foam line below is therefore
+// NOT ACTIONABLE as written and is retained only until W0 lands.
+//
+// Post-print checks (Rev T4):
+//   1. Sleeve bore ID = 55.4 mm ± 0.3 mm at 3 axial stations in the EDF zone
+//      (Z = 90 … 166.25 mm).  Sleeve OD 55.0 mm must slide freely, and the three
+//      key slots must accept the sleeve keys without forcing.
+//   1b. ** THRUST-TUBE BORE = 50.0 mm +0.4 / −0.0 OVER THE EDF1 ROTOR STATION **
+//      (Z ≈ 27.5 … 40).  The build keeps only the rotor and motor and uses this
+//      bore as the duct, so the EDF1 rotor runs against PRINTED plastic.  The
+//      vendor holds 0.4 mm blade-tip-to-shell in a 50 mm shroud (REF-EDF-002),
+//      i.e. the rotor is ~Ø49.2.  An undersize bore rubs the rotor; check it
+//      before fitting the fan, and scrape rather than force.
+//   2. Trunnion collar register bore = 34.0 mm H7 (+0.03/−0.00) over its full
+//      3.5 mm depth; nacelle_trunnion.scad's Ø33.9 register must slip in.
+//   3. Collar flange rim flat within 0.1 mm — it is the moment path from the
+//      nacelle into the trunnion, and the three M3 inserts are not.
+//   4. 3 × M3 insert bores = 3.5 mm ± 0.05 mm on the Ø41.5 bolt circle.
+//      **Fit BRASS screws only** — this is inside the AK7455 non-ferrous zone.
+//   5. Disconnect-bay pocket 30 × 14 × 6.0 mm at Z 82, with ≥ 2.5 mm of material
+//      remaining between its floor and the Ø50 duct.
+//   6. Sleeve retention boss bores = 3.5 mm ± 0.05 mm (M3 × 6 mm heat-set).
+//   7. There must be NO through-bore on the X axis at the pivot.  If one is
+//      present the render came from a pre-Rev-T4 source: the spar does not pass
+//      through this part any more.
+//
+// ASSEMBLY ORDER AT THE TILT JOINT (Rev T4)
+//   1. Press 2 × 6704ZZ into the trunnion's Ø27.0 seat, outboard bearing first.
+//   2. Bond the ring magnet into the trunnion's inboard counterbore, flush.
+//   3. Enter the trunnion into the collar FROM INSIDE the nacelle, register
+//      first; the ring gear stays outboard of the collar and never passes it.
+//   4. Seat the flange on the collar rim; 3 × M3 brass into the inserts; bond.
+//   5. Slide the nacelle onto the wing's spar stub.  The trunnion's pilot spigot
+//      lands 0.3 mm off the wing tip pad, which sets HALL_AIR_GAP = 1.5 mm.
+//   6. Removal is the reverse and disturbs neither the wing, the spar, the
+//      encoder calibration nor the drive shaft — the nacelle is the cover.
 //
 // Render commands (Rev R1 nacelle-swap corrected):
 //   Port nacelle (pylon inboard -X; RED nav light OUTBOARD +X; CCW from intake):

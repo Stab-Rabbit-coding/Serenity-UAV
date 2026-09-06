@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-30",
+  "generated": "2026-09-06",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -131,6 +131,13 @@
     },
     "CLAUDE.md": {
       "description": "See [`AGENTS.md`](AGENTS.md) \u2014 the authoritative, model-agnostic project instructions for all AI agents worki\u2026",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "CONCEPTS.md": {
+      "description": "Concepts",
       "tags": [
         "documentation"
       ],
@@ -313,6 +320,14 @@
         "documentation",
         "redundancy-failover",
         "security",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/Serenity-Assembled.FCStd.bak": {
+      "description": "PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000Ej\\=-}5",
+      "tags": [
+        "cad-mesh",
         "structural"
       ],
       "archived": false
@@ -739,6 +754,20 @@
       ],
       "archived": false
     },
+    "airframe/diagrams/cargo-ringframe-fit1.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/diagrams/cargo-ringframe-fit2.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/diagrams/ring_frames/ring_cargo_Y30_inner.csv": {
       "description": "Tabular data (CSV)",
       "tags": [
@@ -1101,6 +1130,36 @@
       ],
       "archived": false
     },
+    "airframe/openscad/nacelles/nacelle_esc_bay.scad": {
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "security",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/nacelles/nacelle_esc_cover.scad": {
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/nacelles/nacelle_hollow_profile.scad": {
+      "description": "nacelle_hollow_profile.scad \u2014 GENERATED FILE, DO NOT EDIT BY HAND",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/openscad/nacelles/nacelle_nozzle_iris.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
@@ -1133,6 +1192,25 @@
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
         "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/nacelles/nacelle_shell_grid.scad": {
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/nacelles/nacelle_trunnion.scad": {
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
+      "tags": [
+        "cad-mesh",
+        "emi-hardening",
         "propulsion",
         "structural"
       ],
@@ -1989,14 +2067,6 @@
       ],
       "archived": false
     },
-    "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_bossed.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
-      "tags": [
-        "cad-mesh",
-        "structural"
-      ],
-      "archived": false
-    },
     "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Cargo_Shell interior-merge 2026-06-30",
       "tags": [
@@ -2338,7 +2408,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/edf_aft_spider_sleeve.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -2347,7 +2417,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/edf_stator_sleeve.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -2373,6 +2443,46 @@
       ],
       "archived": false
     },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_port_a.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_port_b.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_a.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_b.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/nacelles/nacelle_port_revs.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle_Port 2026-06-11",
       "tags": [
@@ -2393,6 +2503,15 @@
     },
     "airframe/stls/nacelles/nacelle_stbd_revs.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle_Stbd 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/nacelle_trunnion.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -9429,7 +9548,7 @@
       "archived": false
     },
     "current-specification/README.md": {
-      "description": "Serenity UAV \u2014 Current Specification (Rev S Baseline)",
+      "description": "Serenity UAV \u2014 Current Specification (Rev S BOM Baseline)",
       "tags": [
         "documentation",
         "redundancy-failover",
@@ -9456,7 +9575,7 @@
       "archived": false
     },
     "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (176 items)",
+      "description": "Bill of materials, CSV (181 items)",
       "tags": [
         "bom",
         "specification"
@@ -9830,14 +9949,14 @@
       "archived": false
     },
     "docs/MASS_AUDIT_CARGO_WING_ROOT.md": {
-      "description": "Mass Audit \u2014 Cargo Section and Wing Roots (Rev T1c)",
+      "description": "Mass Audit \u2014 Cargo Section and Wing Roots (Rev S1g)",
       "tags": [
         "documentation"
       ],
       "archived": false
     },
     "docs/NOZZLE_DRIVE_TRADE.md": {
-      "description": "Nozzle-Drive Mechanism Trade Study (Rev T, 2026-07-19)",
+      "description": "Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19)",
       "tags": [
         "documentation",
         "propulsion"
@@ -9924,7 +10043,7 @@
       "archived": false
     },
     "docs/TILT_DRIVE_CONTROL_SPEC.md": {
-      "description": "Nacelle Tilt Drive \u2014 Control References and Sensors (Rev T1)",
+      "description": "Nacelle Tilt Drive \u2014 Control References and Sensors (Rev S1e)",
       "tags": [
         "documentation",
         "emi-hardening",
@@ -10000,7 +10119,7 @@
       "archived": false
     },
     "docs/WING_ATTACH_INTERFACE.md": {
-      "description": "Wing Attachment Interface Specification \u2014 Rev T1",
+      "description": "Wing Attachment Interface Specification \u2014 Rev S1e",
       "tags": [
         "documentation"
       ],
@@ -10209,6 +10328,14 @@
       "description": "chore: Ranked weight-reduction targets",
       "tags": [
         "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md": {
+      "description": "fix: Minimum safe landing-gear leg length",
+      "tags": [
+        "documentation",
+        "landing-gear"
       ],
       "archived": false
     },
@@ -11231,6 +11358,14 @@
     },
     "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md": {
       "description": "Reducing token cost of a federated AGENTS.md set \u2014 relocate before you compress",
+      "tags": [
+        "documentation",
+        "security"
+      ],
+      "archived": false
+    },
+    "docs/solutions/logic-errors/mating-face-aperture-allowlist.md": {
+      "description": "Mesh-repair pipelines silently re-cap intentional open fuselage mating faces",
       "tags": [
         "documentation",
         "security"
@@ -12777,6 +12912,14 @@
       ],
       "archived": false
     },
+    "tools/landing_gear_ground_clearance.py": {
+      "description": "Serenity UAV -- minimum safe landing-gear leg length, and the gate that holds it.",
+      "tags": [
+        "build-tooling",
+        "landing-gear"
+      ],
+      "archived": false
+    },
     "tools/landing_gear_opening_fit.py": {
       "description": "LG-10.1 -- locate and measure the landing-gear opening flats in the sponson.",
       "tags": [
@@ -12808,6 +12951,15 @@
       ],
       "archived": false
     },
+    "tools/nacelle_esc_bay_fit.py": {
+      "description": "nacelle_esc_bay_fit.py \u2014 site the hinged Open-Secure-ESC boards in the nacelle.",
+      "tags": [
+        "build-tooling",
+        "power",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/nacelle_esc_service.py": {
       "description": "Extract the committed Open-Secure-ESC board envelope for nacelle service design.",
       "tags": [
@@ -12817,8 +12969,42 @@
       ],
       "archived": false
     },
+    "tools/nacelle_esc_thermal.py": {
+      "description": "nacelle_esc_thermal.py \u2014 where does the ESC heat go, and does any path work?",
+      "tags": [
+        "build-tooling",
+        "power",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "tools/nacelle_hollow_profile.py": {
+      "description": "nacelle_hollow_profile.py \u2014 generate the nacelle pod's internal cavity surface.",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "tools/nacelle_mass_cg.py": {
+      "description": "nacelle_mass_cg.py \u2014 rotating-assembly mass and CG for one Serenity nacelle.",
+      "tags": [
+        "build-tooling",
+        "emi-hardening",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "tools/nacelle_trunnion_fit.py": {
+      "description": "nacelle_trunnion_fit.py \u2014 gate for the Rev T4 nacelle tilt joint and sleeves.",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/open_mating_faces.py": {
-      "description": "Open the capped head-aft and middle-fwd fuselage mating faces.",
+      "description": "Open (and keep open) the six fuselage-section mating-face apertures.",
       "tags": [
         "build-tooling",
         "security"
@@ -12972,6 +13158,7 @@
       "AGENTS.md",
       "CLAUDE-MEMORY.md",
       "CLAUDE.md",
+      "CONCEPTS.md",
       "README.md",
       "REFERENCES.md",
       "REPO_ENFORCEMENT.md",
@@ -13114,6 +13301,7 @@
       "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
       "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md",
       "docs/plans/2026-08-30-001-weight-reduction-targets-plan.md",
+      "docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -13234,6 +13422,7 @@
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
+      "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "docs/structural_analysis.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
@@ -13270,6 +13459,7 @@
       "airframe/openscad/fuselage/cargo/cargo_vera_faraday.scad",
       "airframe/openscad/fuselage/head_shell24.scad",
       "airframe/openscad/fuselage/rcrs49_wire_post.scad",
+      "airframe/openscad/nacelles/nacelle_trunnion.scad",
       "airframe/placeholders/faraday/Far_EMI_vent_40x40x6mm.stl",
       "airframe/placeholders/generate_placeholders.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Assemble.py",
@@ -13338,6 +13528,7 @@
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
+      "tools/nacelle_mass_cg.py",
       "tools/precommit_index.py",
       "tools/validate_kicad.py"
     ],
@@ -13394,6 +13585,7 @@
       "airframe/openscad/fuselage/cargo/cargo_spar_drive.scad",
       "airframe/openscad/fuselage/landing_leg_assy.scad",
       "airframe/openscad/nacelles/_export_pivot_slab.scad",
+      "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/port_tilt_spar_assembly.scad",
       "airframe/placeholders/generate_placeholders.py",
@@ -13479,6 +13671,7 @@
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
+      "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
       "gcs/SKIPPER_SPEC.md",
@@ -13715,6 +13908,7 @@
       "airframe/LICENSE",
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
+      "airframe/Serenity-Assembled.FCStd.bak",
       "airframe/TODO.md",
       "airframe/VERIFY_PLACEMENT_CHECKLIST.md",
       "airframe/WBS.md",
@@ -13767,6 +13961,8 @@
       "airframe/blender-scripts/repair_shells_for_scad.py",
       "airframe/blender-scripts/serenity_render_views.py",
       "airframe/blender-scripts/verify_shells.py",
+      "airframe/diagrams/cargo-ringframe-fit1.png",
+      "airframe/diagrams/cargo-ringframe-fit2.png",
       "airframe/diagrams/ring_frames/ring_cargo_Y30_inner.csv",
       "airframe/diagrams/ring_frames/ring_cargo_Y30_plate_PROVISIONAL.dxf",
       "airframe/diagrams/ring_frames/ring_rear_Y290_inner.csv",
@@ -13809,10 +14005,15 @@
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
       "airframe/openscad/nacelles/gear_option_compare.scad",
+      "airframe/openscad/nacelles/nacelle_esc_bay.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover.scad",
+      "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
+      "airframe/openscad/nacelles/nacelle_shell_grid.scad",
+      "airframe/openscad/nacelles/nacelle_trunnion.scad",
       "airframe/openscad/port_tilt_spar_assembly.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad.backup-2026-07-18",
@@ -13914,7 +14115,6 @@
       "airframe/stls/fuselage/cargo/cargo_gps_retention_ring.stl",
       "airframe/stls/fuselage/cargo/cargo_hinge_retention.stl",
       "airframe/stls/fuselage/cargo/cargo_release_servo_bracket.stl",
-      "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_bossed.stl",
       "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/cargo/cargo_sect_shell24_repaired.stl",
       "airframe/stls/fuselage/cargo/cargo_vera_faraday.stl",
@@ -13960,9 +14160,14 @@
       "airframe/stls/nacelles/edf_stator_sleeve.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_b.stl",
       "airframe/stls/nacelles/nacelle_port_revs.stl",
       "airframe/stls/nacelles/nacelle_servo_bracket.stl",
       "airframe/stls/nacelles/nacelle_stbd_revs.stl",
+      "airframe/stls/nacelles/nacelle_trunnion.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
@@ -13981,6 +14186,7 @@
       "airframe/FreeCAD-scripts/make_flat_pattern.py",
       "airframe/FreeCAD-scripts/serenity_assembly.py",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
+      "airframe/Serenity-Assembled.FCStd.bak",
       "airframe/blender-scripts/add_structural_features.py",
       "airframe/blender-scripts/blender_edf_bore_and_petals.py",
       "airframe/blender-scripts/blender_hollow_shells.py",
@@ -14055,10 +14261,15 @@
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
       "airframe/openscad/nacelles/gear_option_compare.scad",
+      "airframe/openscad/nacelles/nacelle_esc_bay.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover.scad",
+      "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
+      "airframe/openscad/nacelles/nacelle_shell_grid.scad",
+      "airframe/openscad/nacelles/nacelle_trunnion.scad",
       "airframe/openscad/port_tilt_spar_assembly.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad.backup-2026-07-18",
@@ -14159,7 +14370,6 @@
       "airframe/stls/fuselage/cargo/cargo_gps_retention_ring.stl",
       "airframe/stls/fuselage/cargo/cargo_hinge_retention.stl",
       "airframe/stls/fuselage/cargo/cargo_release_servo_bracket.stl",
-      "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_bossed.stl",
       "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/cargo/cargo_sect_shell24_repaired.stl",
       "airframe/stls/fuselage/cargo/cargo_vera_faraday.stl",
@@ -14199,9 +14409,14 @@
       "airframe/stls/nacelles/edf_stator_sleeve.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_b.stl",
       "airframe/stls/nacelles/nacelle_port_revs.stl",
       "airframe/stls/nacelles/nacelle_servo_bracket.stl",
       "airframe/stls/nacelles/nacelle_stbd_revs.stl",
+      "airframe/stls/nacelles/nacelle_trunnion.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
@@ -14460,10 +14675,15 @@
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
       "airframe/openscad/nacelles/gear_option_compare.scad",
+      "airframe/openscad/nacelles/nacelle_esc_bay.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover.scad",
+      "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
+      "airframe/openscad/nacelles/nacelle_shell_grid.scad",
+      "airframe/openscad/nacelles/nacelle_trunnion.scad",
       "airframe/placeholders/foam/Void_nacelle_pylon_20x80x20mm.stl",
       "airframe/placeholders/propulsion/EDF_120mm_6S_deferred.stl",
       "airframe/placeholders/propulsion/EDF_50mm_6S.stl",
@@ -14474,9 +14694,14 @@
       "airframe/stls/nacelles/edf_stator_sleeve.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_b.stl",
       "airframe/stls/nacelles/nacelle_port_revs.stl",
       "airframe/stls/nacelles/nacelle_servo_bracket.stl",
       "airframe/stls/nacelles/nacelle_stbd_revs.stl",
+      "airframe/stls/nacelles/nacelle_trunnion.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
@@ -14632,7 +14857,12 @@
       "graphical-build-guide/build_guide_07_edf_install.svg",
       "graphical-build-guide/build_guide_08_nozzle_gear.svg",
       "graphical-build-guide/pngs/17_closeup_nacelle.png",
+      "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
+      "tools/nacelle_esc_thermal.py",
+      "tools/nacelle_hollow_profile.py",
+      "tools/nacelle_mass_cg.py",
+      "tools/nacelle_trunnion_fit.py",
       "tools/tests/test_nacelle_esc_service.py"
     ],
     "bom": [
@@ -14698,6 +14928,7 @@
       "archives/airframe-archives/archive/stls/fuselage/landing-gear/spring_wire_nominal.stl",
       "archives/airframe-archives/archive/stls/fuselage/landing-gear/strong-leg.stl",
       "docs/LANDING_GEAR_ANALYSIS.md",
+      "docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md",
       "tools/add_landing_gear_bosses.py",
       "tools/build_landing_gear_views.py",
       "tools/export_landing_gear_stls.py",
@@ -14706,12 +14937,15 @@
       "tools/landing_gear_bay_station_fit.py",
       "tools/landing_gear_cowl_clearance.py",
       "tools/landing_gear_foot_stance.py",
+      "tools/landing_gear_ground_clearance.py",
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py"
     ],
     "power": [
       "airframe/openscad/fuselage/battery_tray.scad",
+      "airframe/openscad/nacelles/nacelle_esc_bay.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/placeholders/foam/Void_power_bus_25x500x25mm.stl",
       "airframe/placeholders/power/Fuse_MAXI_150A.stl",
       "airframe/placeholders/power/Fuse_mini_40A.stl",
@@ -14722,6 +14956,10 @@
       "airframe/placeholders/propulsion/ESC_40A_6S_BLHeli32.stl",
       "airframe/placeholders/propulsion/ESC_80A_6S_BLHeli32_deferred.stl",
       "airframe/stls/fuselage/battery_tray.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_b.stl",
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
       "archives/serenity-esc-telem-revH1.jsx",
       "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
@@ -14734,7 +14972,9 @@
       "docs/references/vimdrones_esc_s50_wiring.png",
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
       "graphical-build-guide/build_guide_10_power_wiring.svg",
+      "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
+      "tools/nacelle_esc_thermal.py",
       "tools/tests/test_nacelle_esc_service.py"
     ],
     "sensors-vision": [
@@ -16415,11 +16655,17 @@
       "tools/landing_gear_bay_station_fit.py",
       "tools/landing_gear_cowl_clearance.py",
       "tools/landing_gear_foot_stance.py",
+      "tools/landing_gear_ground_clearance.py",
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",
       "tools/mirror_claude_memory.py",
+      "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
+      "tools/nacelle_esc_thermal.py",
+      "tools/nacelle_hollow_profile.py",
+      "tools/nacelle_mass_cg.py",
+      "tools/nacelle_trunnion_fit.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
       "tools/precommit_kicad_load.py",

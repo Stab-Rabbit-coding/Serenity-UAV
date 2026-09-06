@@ -1,6 +1,6 @@
-# Nacelle Tilt Drive — Control References and Sensors (Rev T1)
+# Nacelle Tilt Drive — Control References and Sensors (Rev S1e)
 
-**Revision:** T1 (2026-08-30)
+**Revision:** S1e (2026-08-30)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Analysis and drafting:** Claude (Claude Opus 5, Anthropic) under the author's
 direction, per `AGENTS.md` §3 "Attribution and Licensing"
@@ -130,12 +130,12 @@ disturbance in the loop that can actually reject it.
 architecture — *"continuous rotation, gateway closes position on the AK7455
 spool encoder … multi-turn, unbounded by the servo itself"*
 (`REFERENCES.md`, Servo Fleet Standardisation table; `docs/CARGO_WINCH_SPECIFICATION.md`
-§3.7.3). Nacelle tilt moves onto the same pattern at Rev T1. Reuse the winch's
+§3.7.3). Nacelle tilt moves onto the same pattern at Rev S1e. Reuse the winch's
 gateway command scheme rather than inventing a second one.
 
 > **The `REFERENCES.md` fleet table is now STALE for this row.** It records
 > nacelle tilt as *"Position, firmware soft-limited, −5°…140°"* — i.e. a
-> limited-travel application. Rev T1 makes it multi-turn. Corrected in that file
+> limited-travel application. Rev S1e makes it multi-turn. Corrected in that file
 > under WA-R15.
 
 ### 2.1 Rate-limit the reference, do not rate-limit with the integrator
@@ -171,7 +171,7 @@ transition.
 | — | LibreServo_v4 on-board absolute encoder | Actuator absolute position | Internal to the board | Inner loop |
 | — | LibreServo_v4 motor current | Actuator torque proxy | RS-485 telemetry | Jam / obstruction detection, §5.3 |
 
-### 3.1 What changed about the AK7455 installation at Rev T1
+### 3.1 What changed about the AK7455 installation at Rev S1e
 
 Three things, all consequences of the spar becoming a fixed CF tube
 (`docs/WING_ATTACH_INTERFACE.md` §4.5):
@@ -181,7 +181,7 @@ Three things, all consequences of the spar becoming a fixed CF tube
    `docs/TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1 still states the old premise and
    is **factually wrong until corrected** (WA-R13).
 2. **The keep-out is retained anyway.** The 10 mm non-ferrous radius still
-   governs the fasteners, the nacelle-side collar, and — new at Rev T1 — the
+   governs the fasteners, the nacelle-side collar, and — new at Rev S1e — the
    **steel drive shaft and its steel pinion**, which are nearby and moving.
    In-situ zero-calibration remains required; it now absorbs the drive train
    instead of the spar.

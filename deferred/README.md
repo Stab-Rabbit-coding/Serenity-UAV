@@ -1,7 +1,7 @@
 # Serenity UAV — Deferred Work & Future Phases
 
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Current design revision:** Rev S (2026-07-04)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > Phase 11+ design work, aft propulsion system, RCS attitude thrusters, cargo-bay range-extender
 > battery module, and other deferred upgrades planned for post-Phase-10 operations.

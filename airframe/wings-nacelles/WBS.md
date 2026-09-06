@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
-**Current design revision:** Rev S (2026-07-04)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items
@@ -816,7 +816,7 @@
 
 ##### 1.1.3.1 *Nozzle*
 
-- **Rev T3 (2026-08-09) — flap SHINGLE implemented (master/seal)** (user decision
+- **Rev S3 (2026-08-09) — flap SHINGLE implemented (master/seal)** (user decision
   2026-08-09; found by CI "STL Validation", not by inspection).
     - [x] **Root cause** — `N_FLAPS` 8 × `FLAP_SPAN_DEG` 50° = 400° of arc on a
         360° circle, i.e. the deliberate 5° inter-flap overlap documented since
@@ -860,8 +860,8 @@
     - [ ] **[OPEN — VERIFY] Mass/CG impact of the shingle.** Flap-set mass rises
         32.0 g → 56.8 g (1.13 oz → 2.00 oz), i.e. **+24.8 g (+0.87 oz) total,
         +12.4 g (+0.44 oz) per nacelle**, all of it aft of and outboard of the
-        tilt pivot. Re-check the Rev T CG band (≈109–112 mm) and the tilt-servo
-        torque margin against this before flight — see §1.1.3 "VERIFY Rev T CG".
+        tilt pivot. Re-check the Rev S2 CG band (≈109–112 mm) and the tilt-servo
+        torque margin against this before flight — see §1.1.3 "VERIFY Rev S2 CG".
     - [ ] **[OPEN — VERIFY] Seal-flap aerodynamic step.** The seal sits 0.2 mm
         proud of the masters' outer surface, so the flow boundary is no longer a
         single continuous cone: masters bound it over 4 × 50° of arc, seals over
@@ -869,7 +869,7 @@
         acceptable for the "smooth, low-turbulence exit" goal by bench/CFD before
         flight; if not, the alternative is a scarfed (tapering-thickness) seal.
     - [x] **CLOSED 2026-08-25 — the FreeCAD assembly and its Makefile were
-        importing the pre-Rev-T3 `nacelle_nozzle_iris.stl`** (2026-07-19, single
+        importing the pre-Rev-S3 `nacelle_nozzle_iris.stl`** (2026-07-19, single
         combined render, `FLAP_PHI` not yet exposed — predates this shingle fix
         by three weeks), found while wiring per-side nozzle petal state to
         `airframe/FreeCAD-scripts/serenity_assembly.py`'s new nacelle-tilt
@@ -891,7 +891,7 @@
         pipeline (a different, non-FreeCAD tool) — untouched here since it
         was out of scope for the tilt-config task that surfaced this.
 
-- **Rev T (2026-07-18) — Option B pushrod drive adopted** (user decision;
+- **Rev S2 (2026-07-18) — Option B pushrod drive adopted** (user decision;
   `docs/NOZZLE_DRIVE_TRADE.md`). Supersedes the Rev S1 internal-ring gear drive.
     - [x] **Rev S2 bug fix** — corrected the `TAB_X`/`TAB_Z` follower-offset SIGN
         error that parked all 8 flap follower pins in the exhaust jet (pin_r
@@ -900,8 +900,8 @@
     - [x] **Cam-only unison ring** — deleted the internal ring gear; ring is now
         a plain cam disc with one pushrod lever ear. Ring Ø74→Ø66, housing
         Ø82→Ø71; follower band pulled to pin_r 29→31; drive-pinion throat relief
-        removed *(nacelle_nozzle_iris.scad Rev T)*.
-    - [x] **Rev T2 — flaps doubled** 20→40 mm (user direction): swing arc halved
+        removed *(nacelle_nozzle_iris.scad Rev S2)*.
+    - [x] **Rev S2b — flaps doubled** 20→40 mm (user direction): swing arc halved
         (PHI 1.79→12.64° vs 3.58→25.94°); bore stays clean, exit continuous.
     - [x] **Housing aft taper** (Stage 2) toward the cowl mold line; binding
         envelope is now the hinge bosses (≈Ø69.4), not the ring.
@@ -916,9 +916,12 @@
         0→90° tilt → 0→23.75° ring map that clears the nacelle skin over the
         full sweep. Current pushrod geometry is first-pass placeholder. Do NOT
         print for flight until closed.
-    - [ ] **[OPEN — VERIFY] Re-bake the pod shells** (`nacelle_port_revs.stl` /
-        `nacelle_stbd_revs.stl`) for the grown Ø72 nozzle pocket; the canonical-
-        shell bake needs review before regenerating.
+    - [x] **Re-bake the pod shells** — DONE 2026-08-31 (Rev S4). Both
+        `nacelle_port_revs.stl` and `nacelle_stbd_revs.stl` re-rendered from
+        current source and re-baked with `tools/bake_hull_frame.py`; the Ø72
+        nozzle pocket, the Rev S1c harness changes and the whole Rev S4 trunnion
+        rework are now in the published meshes. The published files had been
+        stale since 2026-07-21. Both are watertight single bodies.
     - [ ] **[OPEN — VERIFY] Full housing ovalization** to the cowl mold line +
         hinge-boss vs aft-cowl clearance — needs the assembly part-local→hull
         transform (serenity_assembly.py).
@@ -1077,9 +1080,9 @@
     negligible +0.75 mm) — the nacelle still pivots about its CG, per the user
     requirement.  See the pod header mass breakdown and `nacelle_nozzle_idler.scad`
     header.
-- [x] **CG RE-DERIVED for Rev T (pushrod/cam drive + rotating 8 mm spar),
+- [x] **CG RE-DERIVED for Rev S2 (pushrod/cam drive + rotating 8 mm spar),
     2026-07-19 — SUPERSEDES the 104.5 mm figure above.** Deleting the gear train
-    alone left the pivot ~unchanged, but the Rev T2 40 mm flaps (CG ~198 mm), the
+    alone left the pivot ~unchanged, but the Rev S2b 40 mm flaps (CG ~198 mm), the
     discrete Ø71 throat+housing (~175 mm), the cam-only ring, and the ~19 g steel
     spar (on the pivot) net-move the rotating CG to **CG_Z = 111.5 mm** (mass
     393.4 g / 0.867 lbm).  `PIVOT_Z` propagated 104.5 → 111.5 across the pod SCAD
@@ -1091,7 +1094,7 @@
     FIRST-PASS (band ≈109–112 mm) — see root `TODO.md` §1.1.3 for the open VERIFY
     items (sliced-mass density check, single-straight-spar re-solve for the +7 mm
     move, stator teardrop-strut aero, and the Ø72-pocket aft-cowl-tail decision).
-- [x] **Stator spar-crossing rework (Rev T2, 2026-07-19).** Pivot at 111.5 lands
+- [x] **Stator spar-crossing rework (Rev S2b, 2026-07-19).** Pivot at 111.5 lands
     mid-stator; kept **11 vanes** (coprime with the 12-blade EDF rotor — Tyler–
     Sofrin resonance cut-off; 12 would resonate, 13 changes thrust) and carried
     the spar across in a **streamlined teardrop strut** (round nose over the bore,
@@ -1195,6 +1198,307 @@
     trade table done. **AWAITING production-CAD decision** (A or B) before rebuilding
     `nacelle_nozzle_iris.scad`, `nacelle_sector_gear.scad`, removing
     `nacelle_nozzle_idler*`, and updating `serenity_assembly.py` + the ratio/BOM.
+
+##### 1.1.3.7 *Rev S4 — fixed-spar trunnion, skewer removal, print readiness*
+
+**2026-08-31.** Closes the nacelle side of the Rev S1e wing/nacelle joint and
+takes the rotating spar out of the airflow path. Geometry and analysis by Claude
+(Claude Opus 5, Anthropic) under the author's direction, per `AGENTS.md` §3.
+
+- [x] **The "skewer" is deleted, both ends of it.** Through Rev S2b a rotating
+    Ø8 mm steel spar crossed the duct spanwise at the pivot. In the pod that
+    meant a full-width through-bore, a keyed hub and a plain hub on the two
+    X-faces, and reinforcing collars at **both duct-wall breaches**; in
+    `edf_stator_sleeve.scad` it meant a teardrop strut carrying the spar across
+    the annulus, with its clearance bore drilled out through the 0° anti-rotation
+    key — leaving that key in two pieces. All of it is gone. The duct pressure
+    boundary is continuous again and the 11 vanes get the last word before EDF2,
+    which is what the Rev S2b strut comment said the aero wanted and could not have.
+- [x] **`nacelle_trunnion.scad` — NEW PART** (`PRINT-NACELLE-TRUNNION`, 7.0 g).
+    Carries the 2 × 6704ZZ bearing pair, the 50T module-0.8 involute ring gear
+    (PD 40.0, i = 3.571, C = 25.6 → wing chord station 53.6), the bonded ring-magnet
+    seat, and the pilot spigot that sets `HALL_AIR_GAP` off the wing tip pad.
+    Separate from the pod because its axis is nacelle-local **X**: printed
+    integrally the teeth would be stacked overhangs and the bearing seat a bridged
+    horizontal bore. Closes **WA-R7, WA-R8, WA-R9, WA-R11, WA-R12**.
+- [x] **OI-8 closed, and not the way the interface document expected.**
+    `WING_ATTACH_INTERFACE.md` §4.3a budgeted all 15.0 mm of the duct-bounded spar
+    stub to bearings and concluded 2 × 6804 = 14.0 mm fits. **It does not** — the
+    stub also pays 0.3 mm pilot clearance, 1.5 mm `HALL_AIR_GAP` and 2.5 mm of ring
+    magnet first, leaving 9.0 mm. Built with 2 × **6704ZZ** (8.0 mm). Both remain
+    deep-groove, so both take axial *and* radial load, which is what the
+    attitude-dependent duty needs. Residual: the bearing centres are only 4.0 mm
+    apart, so each race sees 254 N at ultimate — it passes, but the **span** is now
+    the governing number and it is set by the duct bound.
+- [x] **Vestigial gear-train hardware removed** — `pinion_a_boss()`,
+    `crown_pinion_boss()` and `shaft_conduit()` had survived six weeks past the
+    Rev S2 archiving of the train they served. Not merely dead mass: the conduit's
+    Ø3.5 bore, blind at both ends once the gears went, exported as a **second,
+    inverted body** (−25.2 mm³) — a sealed internal void inside the print. The pod
+    now exports as one solid body.
+- [x] **Sleeve mesh defect fixed at the source.** Both sleeves' anti-rotation keys
+    met the tube on a coincident cylindrical face, which is what left the exported
+    STLs locally non-manifold (the 2026-08-25 "MESH FIX" patched it downstream with
+    a `manifold3d` re-union of the split bodies). The key root is now sunk 0.5 mm
+    below the OD so the solids interpenetrate. Both sleeves now come out of
+    OpenSCAD as **watertight single bodies with no warnings**, and the downstream
+    repair pass is no longer needed for them.
+- [x] **Both pods re-rendered, re-baked and validated** — watertight, single body,
+    no OpenSCAD warnings, hull-frame marker verified.
+- [x] **New gate** `tools/nacelle_trunnion_fit.py` (T1–T7, S1–S3, M1, P1) and new
+    mass tool `tools/nacelle_mass_cg.py`.
+
+- [x] **Rev S4b (2026-08-31) — the pods are HOLLOW, with a forward-biased wall.**
+    Owner direction: take more from the forward end to move the CG aft and buy
+    hover clearance. Built at 2.5 mm forward ramping to 8.0 mm over Z 100–140.
+    **284.8 → 195.9 g per pod, −178.8 g for the pair** — the largest single
+    weight reduction on the aircraft — and `PIVOT_Z` 105.8 → **113.8**, worth
+    7.9 mm of hover clearance. The cavity is measured off the canonical shell by
+    ray-casting (`tools/nacelle_hollow_profile.py` → generated
+    `nacelle_hollow_profile.scad`), not offset by the fuselage voxel pipeline,
+    whose 40–66 MB output OpenSCAD cannot boolean in reasonable time. Three
+    **vented** webs at Z 40/62/84 carry the shear path; the first render sealed a
+    −17,227 mm³ compartment before they were drilled.
+
+- [x] **Rev S4b — the stub bound was wrong, and it was wrong about the bore.**
+    `SPAR_TIP_PROTRUSION` 15.0 → **13.5 mm**, `TRUNNION_X0` 26.7 → **28.2**.
+    §4.3a bounded the joint against the Ø50 EDF duct (r 25), but the pivot sits
+    inside the Ø55.4 **sleeve zone**, where the stator sleeve's OD is r 27.5.
+    Measured mesh against mesh: **23.3 mm³** of trunnion-into-sleeve overlap, plus
+    **37.7 mm³** where the sleeve's 0° anti-rotation key ran into the starboard
+    trunnion. Sleeve key clocking moved **0/120/240 → 30/150/270**, the only
+    120°-spaced set that misses both +X and −X; the aft sleeve's retention screws
+    pass through the keys, so its bores and the pod's retention bosses moved with
+    them. The ring magnet thinned **2.5 → 2.0 mm** to pay for the 1.5 mm the stub
+    lost — **flux re-validation is now load-bearing**, not a formality. New gate
+    **T8** tests the two meshes against each other rather than re-deriving a
+    constant, because this stub has now been mis-bounded three times (32 → 15.0
+    → 13.5).
+
+- [ ] **[OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not
+    built.** W0 has landed, so the 5–17 mm annulus plan 003 assumed now exists
+    and the bundle has somewhere to run. What remains is the routing itself: a
+    path out of the trunnion keep-out into the cavity, and the harness lengths to
+    go with it. The bay, the studs and the EMI partition are already built.
+    *(Superseded reason, kept because it is why the requirement stalled:)* The bay itself is built (Z 82, 30 × 14 × 6.0 mm, 4 × M3 brass studs
+    for ring terminals) and sits over the EDF1 ESC wire exit. What does not exist
+    is the annulus the wing side assigned the bundle to: **the pod is solid.** The
+    SCAD imports the solid canonical shell and subtracts only the duct, so a groove
+    from the trunnion to the bay could be at most ~3.6 mm deep before breaching the
+    Ø55.4 sleeve bore, against a 13.28 mm bundle. Unblocks when the pod is hollowed.
+
+- [ ] **[OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still
+    negative on the active gear, but by 2.55 mm rather than 10.5.** Rev S4b's
+    forward-biased hollowing moved `PIVOT_Z` to 113.8 and recovered 7.9 mm of the
+    deficit; the in-nacelle harness (22.9 g, all aft of the pivot, never counted
+    in any previous roll-up) accounts for part of that. **Remaining: −2.55 mm on
+    the 1.5 in gear, +39.35 mm on the 3.0 in.** Plan 005's already-settled
+    40 → 30 mm flap trim is worth 10 mm and takes it to **+6.41 mm** — short of
+    the +9.8 mm previously accepted, so the owner should re-confirm the margin
+    rather than inherit it. Levers remaining: the flap trim, KD5's deferred
+    stator compression (~7 mm), aft ballast (17.7 g per nacelle per 4 mm), or
+    making the 3.0 in gear mandatory. `tools/nacelle_mass_cg.py` exits non-zero
+    while any variant strikes. *(Original entry:)* `PIVOT_Z` is 111.5 → **105.8** once the pod is
+    measured rather than estimated (the header table carried 130 g for
+    shell+sleeves; they measure 339.7 g). The pivot follows the CG, so the pivot
+    moved 5.7 mm **forward**, which lengthens the pivot-to-nozzle-tip arm one for
+    one. With the built `SPAR_Z` 66.851 the nozzle tip sits at hull Z −48.64:
+    **−10.5 mm against the 1.5 in gear's −38.1 ground plane, +31.4 mm against the
+    3.0 in gear.** Plan 005 R3's owner-accepted "+9.8 mm on the 1.5 in gear" rested
+    on `PIVOT_Z` 116.1 and on the pod weighing 132 g; neither holds. This is exactly
+    what plan 005 **OQ5** said to re-verify rather than carry forward. Options are
+    unchanged — make the 3.0 in gear mandatory, shorten the nozzle stack (plan 005
+    R1, 40 → 30 mm flaps, worth ~10 mm and still ~0.5 mm short on its own), or add
+    aft ballast — but the decision is now forced, not optional. Reported by
+    `tools/nacelle_mass_cg.py`, which exits non-zero on it.
+
+    **WORSE AT REV S4c, and the reason is worth stating.** Siting the ESCs where
+    they actually FIT — the measured bay centroid, Z 104 — instead of where plan
+    003 KTD8 assumed they could go (Z 150.6) moves `PIVOT_Z` **113.8 → 107.5**.
+    KTD8 banked +3.91 mm of pivot station on a relocation to a station **no board
+    can occupy**: searching for a bay lying wholly aft of Z 130 returns 23 × 30 mm
+    at a 4.0 mm stack, which is not an ESC. Current figures:
+
+    | configuration | `PIVOT_Z` | 1.5 in gear | 3.0 in gear |
+    |---|---:|---:|---:|
+    | as built, 40 mm flaps | 107.5 | **−8.90 mm** | +33.00 mm |
+    | with plan 005's 30 mm flaps | 106.4 | **+0.07 mm** | +41.97 mm |
+
+    +0.07 mm is not a margin. **The 1.5 in gear is not viable on any combination
+    now on the table; the 3.0 in gear clears by 33 mm as built.** Moving the bay
+    aft is not the answer either — it buys ~1.3 mm of CG for 14 mm of board
+    length, which the earlier analysis already rejected as a bad trade.
+
+- [ ] **[OPEN — VERIFY] `serenity_assembly.py` still places the deleted parts.**
+    The nacelle sub-component rows and the spar-crank placement predate Rev S4;
+    the trunnion is not yet registered in the assembly. Re-run the tilt sweep at
+    −5/0/45/90/140° once it is.
+
+##### 1.1.3.8 *Rev S4c — hinged ESC bays, access covers, 90° motor pattern*
+
+**2026-09-06.** Owner direction settled two things Rev S4b had left open, and
+both turned out to unlock work rather than merely constrain it. Geometry and
+analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
+`AGENTS.md` §3.
+
+- [x] **The ESC is a HINGED PAIR — 23 mm power + 10 mm signal, 33 mm folded.**
+    The board could not narrow: 32 mm is the floor `isolation_envelope.py` sets
+    from the ADM2582E creepage, and the annulus is ~7 mm deep. The hinge does not
+    make the board smaller, it makes its **deviation from the arc** smaller,
+    which is the dimension the pod was short of. Sagitta at R 33 goes 4.42 mm for
+    one flat board to 2.07 (power) + 0.38 (signal).
+- [x] **Both bays built and measured** — `tools/nacelle_esc_bay_fit.py`, which
+    tests the OUTER CORNERS of each panel against the ray-cast skin rather than
+    the panel centre. At a 4.0 mm stack: **62 × 33 mm, Z 74–134, 2046 mm² = 97 %
+    of the as-built 32 × 66 board.** Hinge azimuths **69° / 249°**, seat radius
+    30.2 (the sleeve-zone duct wall), fold 30.25° so the panels sit at 149.75°.
+    The fold also softens the stack cliff a flat board had — 4.0 → 5.0 mm now
+    costs 12 mm of length, not all of it.
+- [x] **Bay azimuth is not free, and it pays for itself.** 105° and 285° are the
+    pod's two deep lobes (annulus alive aft to Z 163 at 6.2–6.4 mm, against
+    Z 135–147 elsewhere). Siting the bays over them puts each ESC directly above
+    its own phase-lead crossing with **no circumferential run at all**, and keeps
+    both clear of the nav cableway (az 0) and the trunnion and disconnect bay
+    (az 180).
+- [x] **`nacelle_esc_cover.scad` — NEW PART, four distinct instances.** Hollowing
+    the pod is what created the annulus; it also sealed it, and a 33 mm folded
+    board cannot be threaded into a sealed annulus. So each bay opens radially
+    through the skin and a printed cover closes it flush. The shell is not
+    axisymmetric, so port/stbd and bay A/bay B are four different shapes — they
+    are not interchangeable and must not be mirrored in the slicer.
+- [x] **The cover is built from the pod's own measurement.** Its outer face is
+    the same ray-cast skin grid the pod's rebate is cut from
+    (`nacelle_shell_grid.scad`, `nacelle_hollow_profile.scad`), so the two cannot
+    disagree. Verified mesh-against-mesh: interference **0.008 mm³** on all four.
+- [x] **Motor mount corrected 3 arms @ 120° → 4 arms @ 90°** in BOTH spiders, on
+    owner direction. The Galaxy X5 takes four screws (REF-EDF-002); three holes
+    at 120° cannot be made to coincide with four at 90°, and this was
+    print-blocking. The 90° pattern is also strictly better for routing:
+    285 − 105 = 180 = 2 × 90, so one set holds **both** deep lobes, which the
+    120° set could not. Clocked **15/105/195/285**.
+
+- [ ] **[OPEN — PRINT-BLOCKING] `MOTOR_BOLT_R` is still 10.0 mm and still
+    unverified.** The owner direction settles the screw COUNT and the 90°
+    spacing; it does not settle the bolt circle, and the vendor listing publishes
+    "nc". Measure it off a physical motor — five minutes with a caliper — along
+    with the thread size and whether the four holes are on a true square. **Do
+    not print either spider for flight until this is measured.**
+- [x] **ESC bay thermal path — SIZED 2026-09-06, and the sealed bay is dead.**
+    `tools/nacelle_esc_thermal.py`, built for this. Load case from
+    Open-Secure-ESC's own copper sizing (6 × 1.75 W FETs + 6.67 W phase pours at
+    2 oz + 4.55 W gap fill = **21.72 W at 50 A**, scaling as I²; **6.81 W at the
+    28 A sustained hover** of `POWER_DISTRIBUTION.md`). FET data from the Toshiba
+    datasheet itself, REF-SEMI-001.
+
+    **The owner's proposal was right about the sink and it is not the problem.**
+    The 11-vane stator sleeve has **188 cm² of wetted area** at a 71 m/s duct jet
+    — `h` ≈ 197 W/m²·K, **0.27 K/W**. That is an excellent heat sink. What fails
+    is the path to it:
+
+    | path | R (K/W) | Tch at 28 A | at 50 A |
+    |---|---:|---:|---:|
+    | sealed bay, conduct through CF-PETG (k = 0.25) | 19.63 | 215 °C | 632 °C |
+    | same path, 6061 aluminium + thermal pad | 1.86 | 94 °C | 246 °C |
+    | **bleed air, 30 m/s through the bay** | **2.74** | **64 °C** | 148 °C |
+
+    *(against a 125 °C design limit — declared judgement — on a 175 °C part)*
+
+    **The 0.2 mm running fit between the sleeve OD and the pod bore is 5.33 K/W
+    of still air on its own** — more than the pod wall, the sleeve wall and the
+    stator sink combined even at a generous k = 1.2 W/m·K. It cannot be filled:
+    the sleeve slides in and out on its keys, and a thermal pad across a sliding
+    joint shears on every service. **Conduction to the stator is unavailable for
+    a geometric reason, not a material one.**
+
+- [x] **CORRECTION — the 0.25 W/m·K written here on 2026-09-06 was unsourced.**
+    REF-MAT-002 is a mechanical-properties paper and publishes no thermal
+    conductivity; nothing else in this repository does either. The figure was an
+    estimate stated as though established. Retracted and recorded as
+    **REF-MAT-004**, which is an entry documenting an *absence*. The analysis
+    above does not depend on it: `nacelle_esc_thermal.py` **sweeps** k from 0.15
+    to 1.20 W/m·K and the conduction path fails at every point (28.98 → 8.52 K/W
+    against a ~4.6 K/W budget), so the decision is insensitive to the missing
+    datum.
+
+- [x] **Cooling ports built (Rev S4d).** 4 × Ø5.5 mm teardrop holes per bay at
+    Z 76/80/84/88 — the only stations where the POD's own bore is the flow
+    boundary, since aft of Z 90 the sleeves line the duct and a hole there would
+    open into the sleeve clearance rather than the airflow. Teardrop rather than
+    round because the axis is radial, i.e. a horizontal hole in the print.
+    Mass-neutral (−0.08 g).
+
+- [x] **DIRECTION CORRECTED the same day — the circuit is ASPIRATED, and the
+    first version of it flowed backwards.** Owner's proposal: take the air from
+    an external skin inlet and discharge it into the aft fan's low-pressure zone,
+    rather than bleeding the duct and venting to the skin. Worked under
+    `/aeronautical-engineering`; the station analysis is in
+    `tools/nacelle_esc_thermal.py`.
+
+    **The duct has no pressure source in it.** For a constant-area duct
+    discharging as a free jet in hover, the exit is AT ambient and the inlet is a
+    full dynamic head below it, so the fans' rise exactly restores the inlet
+    depression and every station is at or below ambient:
+
+    | station | | gauge |
+    |---|---|---:|
+    | 1 | duct inlet, pre-forward-fan | −5562 Pa |
+    | 2 | **inter-stage = aft-fan inlet** | **−2781 Pa** |
+    | 3 | nozzle exit (free jet) | +0 Pa |
+
+    The original sizing used **thrust ÷ duct area as a static pressure**, which
+    is wrong twice over: it has the sign inverted, and it conflates the fan's
+    pressure share with inlet-lip suction — a 50/50 split here, 10.9 N each of
+    21.8 N (`references/propulsion.md` §3) — so it also overstates the fan rise
+    by ~2×. **The hardware is unchanged; only the arrows were wrong.**
+
+    | | flow | thrust cost |
+    |---|---:|---:|
+    | discard: duct → bay → skin | **cannot flow** (duct is below ambient) | 3.95 % if forced |
+    | **aspirate: skin → bay → duct** | **4.53 g/s, 28.0 m/s over the board** | **0.99 %** |
+
+    The aspirated air is INGESTED and then pumped by the aft fan, so it leaves
+    with the jet and carries its own momentum out; all it misses is the forward
+    fan's work. Discarded air had already been worked on and was then thrown
+    away — twice the cost, for a circuit that could not flow. It also scales the
+    right way: the driving depression goes as Ve², so cooling arrives with the
+    power that needs it (2781 Pa / 28.0 m/s at full throttle, 1390 Pa / 19.8 m/s
+    at half).
+
+- [ ] **[OPEN — NEW, and it is a safety item] The bay is now an unfiltered path
+    from outside air INTO the EDF2 rotor.** That is the price of aspirating
+    rather than bleeding, and it did not exist in the discard circuit. The cover
+    louvres are the only screen: `ESC_LOUVRE_W` = 1.2 mm is now a **FOD
+    criterion**, not merely a printability one, and anything passing a 1.2 mm
+    slot reaches the fan. Needs a decision on whether 1.2 mm is acceptable
+    unscreened, plus a drain provision — the same path admits water.
+
+- [x] **Material substitution evaluated and REJECTED for the stator sleeve.**
+    6061 in place of CF-PETG takes it 31.0 g → 79.6 g, **+97.3 g the pair**, and
+    still does not carry 50 A (246 °C). It also cannot be printed on this
+    project's equipment — 11 twisted vanes in aluminium is 5-axis machining or
+    DMLS. The sleeve stays CF-PETG.
+
+- [ ] **[OPEN — the flow, not the geometry] Bay velocity is not verified.** The
+    28.0 m/s follows from an **ASSUMED** circuit loss coefficient K = 3 (one
+    velocity head each for inlet, bay and discharge). That, and the 0.35 factor
+    by which `nacelle_esc_thermal.py` scales the board's natural-convection
+    resistance for forced flow, are the two weakest numbers in the analysis.
+    Needs CFD or a bench flow test.
+- [ ] **[OPEN] 50 A sustained is not survivable on any path evaluated.** All
+    three options exceed 125 °C at 50 A. Bleed air reaches **≈ 45 A continuous**
+    at the limit, against a 28 A hover and a 50 A board rating. Two omissions
+    make even that optimistic: switching loss is not in the 21.72 W (those are
+    conduction figures), and `RDS(on)` roughly doubles by 125 °C — a feedback the
+    steady-state model does not carry. **Establish the real sustained current
+    before treating 45 A as headroom.**
+- [ ] **[OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn.**
+    Hollowing gave the bundle its annulus and the bays merge into it by design,
+    so the blocker recorded at Rev S4 is lifted. What remains is to route and
+    strain-relieve it from the disconnect bay to each ESC, which needs the
+    conductor OD that `WING_ATTACH_INTERFACE.md` OI-1 still does not record.
+- [ ] **[OPEN] Window structural allowance.** Two 62 × 35 mm windows 180° apart
+    in the pod's principal bending section, closed by bolted covers acting as
+    doublers. Section modulus with and without the windows is not yet computed.
 
 ##### 1.1.3.4 *Nacelle Intake*
 
@@ -1378,7 +1682,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     fuselage must derive `SPAR_Z` from. `TILT_SPAR_ANALYSIS.md` §3.6 added.
     Verified: `--bore 20.4 --station 28` → root 1.456 / tip 2.190;
     regression `--bore 8.3 --station 45.15` still reproduces the as-built 1.550.
-- [x] **SPAR-20-2 (U2)** — DONE 2026-08-29 (Rev T1). Station 45.15 → **28.0**,
+- [x] **SPAR-20-2 (U2)** — DONE 2026-08-29 (Rev S1e). Station 45.15 → **28.0**,
     bore 8.3 → **20.4**, `THICKNESS_SCALE` 1.00 → **1.46**,
     `THICKNESS_SCALE_TIP` 1.56 → **2.20** (both the solved 1.456/2.190 rounded
     UP per this file's own "not sitting on its own limit" convention — built
@@ -1443,7 +1747,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     **NEW OPEN ITEM: actuator re-select** — the DS3225 is ~17× oversized on
     torque and now also the wrong kind of device.
 - [ ] **SPAR-20-7 (U7)** — Fuselage/cargo-shell re-cut. **OPEN, and it is now
-    the gating item**: `tools/wing_root_deconflict.py` FAILS at Rev T1 with three
+    the gating item**: `tools/wing_root_deconflict.py` FAILS at Rev S1e with three
     findings, all one cause — the fuselage still carries `WING_SPAR_Y = +38.15`
     and `WING_SPAR_BORE_D = 8.3`.
     **THE JOINT SPLITS BY LOAD TYPE (revised 2026-08-29, owner: the centre of
