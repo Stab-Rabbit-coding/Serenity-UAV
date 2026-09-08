@@ -74,9 +74,30 @@ REPO = Path(__file__).resolve().parent.parent
 W_POWER = 23.0        # [mm] power panel width
 W_SIGNAL = 10.0       # [mm] signal panel width
 BOARD_T = 1.6         # [mm] PCB thickness (both panels)
+FLOW_LANE = 1.0       # [mm] clear lane above the stack for the cooling air.
+                      #      Added to --stack when searching, because the pocket
+                      #      has to hold BOTH.  nacelle_esc_bay.scad
+                      #      ESC_FLOW_LANE; set it to 0 there and here together
+                      #      if the ESC layout guarantees its own lane.
 
 # ── The pod, mirrored from nacelle_pod_50mm_tandem.scad ──────────────────────
-SKIN_WALL = 2.5       # WALL_T — the repo minimum, 4 perimeters at 0.6 mm
+#
+# ** SKIN_WALL IS NOT THE POD'S WALL THICKNESS, AND ASSUMING IT WAS COST 18 mm
+#    OF BOARD. **
+#
+# This was WALL_T = 2.5, the repo's minimum printed wall.  But over an ESC bay
+# the skin is not what stands between the board and the outside — the bay is cut
+# clean through and closed by a COVER, which is a separate part occupying its own
+# thickness in the same radial budget.  Sizing the board against 2.5 mm while the
+# cover was 3.0 mm let the board's outer corners foul the cover by 0.5 mm, and
+# the reported 62 mm board was really 50 mm.
+#
+# What actually bounds the board is:
+#     cover thickness + running clearance   (this constant)
+#   + the cooling flow lane                 (ESC_FLOW_LANE, added to the stack)
+#
+# Both are read from nacelle_esc_bay.scad so they cannot drift again.
+SKIN_WALL = 2.9       # = ESC_COVER_T 2.5 + 0.4 running clearance
 DUCT_WALL = 2.5       # CAVITY_DUCT_WALL
 BORE_CX = {"PORT": 42.72, "STBD": 155.02}
 BORE_CY = 190.79
@@ -316,11 +337,16 @@ def main() -> int:
 
     zs, _, skin = skin_grid(args.side)
 
+    envelope = args.stack + FLOW_LANE
     print(f"\n  stack height {args.stack:.1f} mm "
           f"(PCB {BOARD_T} + {args.stack - BOARD_T:.1f} of parts and mounting)")
+    print(f"  + cooling flow lane {FLOW_LANE:.1f} mm, + cover and clearance "
+          f"{SKIN_WALL:.1f} mm")
+    print(f"  => the pocket must hold {envelope:.1f} mm from the seat, and the "
+          f"skin must clear {envelope + SKIN_WALL:.1f} mm in total")
     print(f"\n  {'hinge az':>9}{'Z from':>9}{'Z to':>8}{'length':>9}"
           f"{'d_in':>8}{'centroid':>10}")
-    rows = best_bays(skin, zs, args.stack)
+    rows = best_bays(skin, zs, envelope)
     for phi, run, z0, z1, d in rows[:12]:
         print(f"  {phi:9.0f}{z0:9.1f}{z1:8.1f}{z1 - z0 + DZ:9.1f}"
               f"{d:8.2f}{(z0 + z1) / 2:10.1f}")

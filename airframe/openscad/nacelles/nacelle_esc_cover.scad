@@ -180,8 +180,14 @@ module nacelle_esc_cover() {
         cover_louvres();
 
         // Rebate for the bonded FOD screen, in the inner face only.
+        //
+        // The inner bound runs 1.0 mm PAST the cover's own inner face rather
+        // than stopping on it.  Stopping on it puts two coplanar surfaces in the
+        // boolean, which is the touching-face problem this project keeps hitting
+        // — it produced a non-manifold export the first time this cut was added.
+        // Overshooting costs nothing: there is no material out there to remove.
         intersection() {
-            cover_shell(ESC_COVER_T - ESC_MESH_REBATE, ESC_COVER_T);
+            cover_shell(ESC_COVER_T - ESC_MESH_REBATE, ESC_COVER_T + 1.0);
             cover_mesh_rebate();
         }
     }

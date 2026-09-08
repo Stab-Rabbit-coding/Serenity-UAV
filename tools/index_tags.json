@@ -1182,6 +1182,15 @@
       ],
       "archived": false
     },
+    "airframe/openscad/nacelles/nacelle_housing_profile.scad": {
+      "description": "nacelle_housing_profile.scad \u2014 GENERATED FILE, DO NOT EDIT BY HAND",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/openscad/nacelles/nacelle_nozzle_iris.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
@@ -13014,6 +13023,14 @@
       ],
       "archived": false
     },
+    "tools/nacelle_housing_profile.py": {
+      "description": "nacelle_housing_profile.py \u2014 station sampler for the nozzle housing's outer",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/nacelle_mass_cg.py": {
       "description": "nacelle_mass_cg.py \u2014 rotating-assembly mass and CG for one Serenity nacelle.",
       "tags": [
@@ -13028,6 +13045,15 @@
       "tags": [
         "build-tooling",
         "propulsion"
+      ],
+      "archived": false
+    },
+    "tools/nozzle_linkage_check.py": {
+      "description": "Nozzle pushrod (RSSR) linkage reachability check.",
+      "tags": [
+        "build-tooling",
+        "propulsion",
+        "security"
       ],
       "archived": false
     },
@@ -13724,6 +13750,7 @@
       "tools/add_landing_gear_bosses.py",
       "tools/build_landing_gear_views.py",
       "tools/landing_gear_bay_pad_fit.py",
+      "tools/nozzle_linkage_check.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
       "tools/wing_internal_clearance.py"
@@ -14040,6 +14067,7 @@
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
+      "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
@@ -14296,6 +14324,7 @@
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
+      "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
@@ -14710,6 +14739,7 @@
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
+      "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
@@ -14893,8 +14923,10 @@
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",
       "tools/nacelle_hollow_profile.py",
+      "tools/nacelle_housing_profile.py",
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_trunnion_fit.py",
+      "tools/nozzle_linkage_check.py",
       "tools/tests/test_nacelle_esc_service.py"
     ],
     "bom": [
@@ -16696,8 +16728,10 @@
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",
       "tools/nacelle_hollow_profile.py",
+      "tools/nacelle_housing_profile.py",
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_trunnion_fit.py",
+      "tools/nozzle_linkage_check.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
       "tools/precommit_kicad_load.py",
