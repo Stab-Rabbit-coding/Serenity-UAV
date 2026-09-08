@@ -53,17 +53,21 @@
 // ── Flap pivot kinematics ──────────────────────────────────────────────────
 //   Flap hinge circle radius R_HINGE = THROAT_OUTER_R = 27.5 mm (right at
 //   the throat tube's OD — see THROAT geometry below).  Flap axial length
-//   FLAP_LENGTH = 40 mm, hinge to trailing edge.  Trailing-edge exit radius
-//   as a function of flap swing angle phi (phi = 0 -> flap parallel to duct
-//   axis, flush extension of the throat tube; phi > 0 -> flap swings
-//   inward/downstream, converging):
+//   FLAP_LENGTH = 30 mm (Rev T5, plan 005 R1 — was 40 mm; the shorter flap
+//   cuts the aft overhang and buys ~10 mm of hover ground clearance on the
+//   3.0 in gear, per docs/plans/2026-08-29-005-...), hinge to trailing edge.
+//   Trailing-edge exit radius as a function of flap swing angle phi (phi = 0
+//   -> flap parallel to duct axis, flush extension of the throat tube;
+//   phi > 0 -> flap swings inward/downstream, converging):
 //     exit_r(phi) = R_HINGE - FLAP_LENGTH * sin(phi)
 //   Solving for the two bore-percentage targets (CLAUDE.md: 75 % of the
-//   25 mm bore radius at 0 deg/cruise tilt, 105 % at 90 deg/hover tilt):
+//   25 mm bore radius at 0 deg/cruise tilt, 105 % at 90 deg/hover tilt) —
+//   these targets (NOZZLE_CLOSED_R/NOZZLE_OPEN_R) are unchanged by the flap
+//   trim per plan 005 R2/R6; only phi moves to reach them:
 //     phi_closed = asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH)
-//                = asin((27.5 - 18.75) / 40) = asin(0.21875) = 12.64 deg
+//                = asin((27.5 - 18.75) / 30) = asin(0.29167) = 16.96 deg
 //     phi_open   = asin((R_HINGE - NOZZLE_OPEN_R)   / FLAP_LENGTH)
-//                = asin((27.5 - 26.25) / 40) = asin(0.03125) =  1.79 deg
+//                = asin((27.5 - 26.25) / 30) = asin(0.04167) =  2.39 deg
 //   Both angles are POSITIVE (always at least slightly converging from the
 //   throat) — there is no sign change to handle, unlike an earlier draft of
 //   this derivation that put the hinge at the bore radius itself.  Both
@@ -315,18 +319,24 @@ THROAT_LEN       = 15.0;   // [mm] axial length, inboard face (Z=0) to hinge lin
 // ── Flap Pivot Geometry ────────────────────────────────────────────────────────
 
 R_HINGE      = THROAT_OUTER_R;   // [mm] = 27.5, tangential hinge circle radius
-FLAP_LENGTH  = 40.0;             // [mm] hinge to trailing edge, axial-ish length
+FLAP_LENGTH  = 30.0;             // [mm] hinge to trailing edge, axial-ish length
                                  //   Rev T2 (2026-07-18): doubled 20 -> 40 per
                                  //   user direction — a longer flap sweeps the
-                                 //   same exit-radius range over HALF the swing
-                                 //   arc (PHI 1.79..12.64 deg vs the old
-                                 //   3.58..25.94), a gentler cone / lower
-                                 //   turbulence and less follower travel demand.
+                                 //   same exit-radius range over a smaller swing
+                                 //   arc, a gentler cone / lower turbulence and
+                                 //   less follower travel demand.
+                                 //   Rev T5 (2026-09-08, plan 005 R1): trimmed
+                                 //   40 -> 30 to cut the aft nozzle overhang and
+                                 //   recover hover ground clearance (see
+                                 //   docs/plans/2026-08-29-005-...). Widens the
+                                 //   swing arc to PHI 2.39..16.96 deg (was
+                                 //   1.79..12.64); re-verified non-locking by
+                                 //   tools/nozzle_linkage_check.py.
 HINGE_Z      = THROAT_LEN;       // [mm] = 15.0, hinge line Z station
 
 // phi(exit_r) = asin((R_HINGE - exit_r) / FLAP_LENGTH) — see header derivation.
-PHI_CLOSED = asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH);   // = 12.64 deg (L=40)
-PHI_OPEN   = asin((R_HINGE - NOZZLE_OPEN_R)   / FLAP_LENGTH);   // =  1.79 deg (L=40)
+PHI_CLOSED = asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH);   // = 16.96 deg (L=30)
+PHI_OPEN   = asin((R_HINGE - NOZZLE_OPEN_R)   / FLAP_LENGTH);   // =  2.39 deg (L=30)
 
 // ── Lever Tab / Follower Pin (drives the flap from the ring's spiral cam) ────
 //
