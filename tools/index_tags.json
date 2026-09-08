@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-06",
+  "generated": "2026-09-07",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -872,6 +872,28 @@
     },
     "airframe/gcode/davinci-jr-proto/.gitignore": {
       "description": "Generated slicer output \u2014 regenerate with slice_all_batches.sh",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/gcode/davinci-jr-proto/cura/README.md": {
+      "description": "Rev T Cura Slice Output \u2014 da Vinci Jr. microSD",
+      "tags": [
+        "documentation",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/gcode/davinci-jr-proto/cura/mesh_repair.py": {
+      "description": "mesh_repair.py -- Cura-CLI-specific mesh cleanup for Rev T \"heavy\" STLs.",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/gcode/davinci-jr-proto/cura/slice_all_batches_cura.py": {
+      "description": "slice_all_batches_cura.py -- Serenity-Class UAV Rev T Prototype Slice Runner (Cura)",
       "tags": [
         "structural"
       ],
@@ -10011,8 +10033,7 @@
     "docs/PROTO_PRINT_DAVINCI_JR.md": {
       "description": "Serenity-Class Tiltrotor UAV \u2014 Prototype Print Guide",
       "tags": [
-        "documentation",
-        "security"
+        "documentation"
       ],
       "archived": false
     },
@@ -11369,6 +11390,13 @@
       "tags": [
         "documentation",
         "security"
+      ],
+      "archived": false
+    },
+    "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md": {
+      "description": "CuraEngine hangs or crashes on an STL with overlapping faces trimesh reports as watertight",
+      "tags": [
+        "documentation"
       ],
       "archived": false
     },
@@ -13178,6 +13206,7 @@
       "airframe/fuselage-joints/WBS.md",
       "airframe/fuselage-mid/TODO.md",
       "airframe/fuselage-mid/WBS.md",
+      "airframe/gcode/davinci-jr-proto/cura/README.md",
       "airframe/landing-gear/HANDOFF.md",
       "airframe/landing-gear/TODO.md",
       "airframe/landing-gear/WBS.md",
@@ -13423,6 +13452,7 @@
       "docs/references/vimdrones_esc_s50_wiring.png",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
+      "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md",
       "docs/structural_analysis.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
@@ -13662,7 +13692,6 @@
       "docs/OSHW_CERTIFICATION.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/POWER_DISTRIBUTION.md",
-      "docs/PROTO_PRINT_DAVINCI_JR.md",
       "docs/README.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
       "docs/TODO_1_1_0_COMPLETION_SUMMARY.md",
@@ -13976,6 +14005,9 @@
       "airframe/fuselage-mid/TODO.md",
       "airframe/fuselage-mid/WBS.md",
       "airframe/gcode/davinci-jr-proto/.gitignore",
+      "airframe/gcode/davinci-jr-proto/cura/README.md",
+      "airframe/gcode/davinci-jr-proto/cura/mesh_repair.py",
+      "airframe/gcode/davinci-jr-proto/cura/slice_all_batches_cura.py",
       "airframe/gcode/davinci-jr-proto/davinci_jr_pla.ini",
       "airframe/gcode/davinci-jr-proto/slice_all_batches.sh",
       "airframe/gcode/davinci-jr-proto/xyz_wrap.py",

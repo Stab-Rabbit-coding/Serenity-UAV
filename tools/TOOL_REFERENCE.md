@@ -142,7 +142,10 @@ Before committing any generated files:
 
 **For STL files:**
 
-- [ ] Mesh validation passed (watertight, no voids)
+- [ ] Mesh validation passed (watertight, no voids) — note this does not rule out
+      duplicate/overlapping coincident triangles left by a boolean/hollowing step; that
+      defect class passes a watertight check but can crash or hang a downstream slicer
+      (see `docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md`)
 - [ ] Bake tool has been run and file carries header marker
 - [ ] Z-range verified against specification
 - [ ] Bore diameter verified against specification (if applicable)
