@@ -116,11 +116,14 @@ FIXED = [
     # KTD8's lever was never available; it was computed against a station no
     # board can occupy.  Recorded here rather than in prose because it is worth
     # about 3.4 mm of hover clearance and every table that quotes 150.6 is wrong.
-    ("ESC1 (hinged, bay A)", 25.0, 104.0,
+    # Bay centroid moved 104 -> 95 at Rev T4e: the board shortened 62 -> 44 mm
+    # once the cover's own thickness and the cooling lane were charged to the
+    # same radial budget, and the bay shortened with it (Z 74-134 -> 74-116).
+    ("ESC1 (hinged, bay A)", 25.0, 95.0,
      "measured bay centroid, tools/nacelle_esc_bay_fit.py — NOT KTD8's 150.6"),
-    ("ESC2 (hinged, bay B)", 25.0, 104.0,
+    ("ESC2 (hinged, bay B)", 25.0, 95.0,
      "measured bay centroid, tools/nacelle_esc_bay_fit.py — NOT KTD8's 150.6"),
-    ("4 x ESC access cover", 4 * 12.14 / 2, 104.0,
+    ("4 x ESC access cover", 4 * 6.99 / 2, 95.0,
      "nacelle_esc_cover.stl measured; two covers per nacelle"),
     ("Nozzle throat + housing", 21.4, 174.8, "nacelle_nozzle_iris.scad Rev T"),
     ("Unison ring (cam-only)", 6.7, 169.9, "nacelle_nozzle_iris.scad Rev T"),
@@ -147,9 +150,9 @@ FIXED = [
 #: service loop; they are FIRST-PASS and should be replaced by measured harness
 #: lengths at first article.
 HARNESS = [
-    ("4 x 10 AWG feed, trunnion->ESCs", 4 * 0.055 * 40.0, 109.0,
-     "trunnion Z 113.8 -> bay Z 104, + service loop at the rotating joint"),
-    ("6 x 16 AWG EDF phase leads", 6 * 0.075 * 13.3, 105.0,
+    ("4 x 10 AWG feed, trunnion->ESCs", 4 * 0.060 * 40.0, 101.0,
+     "trunnion Z 107.5 -> bay Z 95, + service loop at the rotating joint"),
+    ("6 x 16 AWG EDF phase leads", 6 * 0.080 * 13.3, 100.0,
      "2 ESCs x 3 phases; each bay sits over a spider arm, so the crossing is "
      "radial with no circumferential run (arms clocked 15/105/195/285)"),
     ("Signal + gateway pairs, 28 AWG STP", 0.30 * 4.0, 120.0,

@@ -1529,8 +1529,15 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
            "ESC insert size has drifted from the pod's M3 insert");
     assert(ESC_W_POWER + ESC_W_SIGNAL >= 32.0,
            "folded ESC width is under the 32 mm isolation floor");
-    assert(ESC_BAY_Z1 - ESC_BAY_Z0 >= 60.0,
-           "ESC bay is shorter than the 62 mm board the fit tool selected");
+    // The bay length is an OUTPUT of the radial budget, not a target, so this
+    // asserts the budget instead of the length.  Pinning it to a length is what
+    // it did before, and that assertion then fired on a correct change: the
+    // board went 62 -> 44 mm when the cover's own thickness and the cooling lane
+    // were finally charged to the same budget.
+    assert(ESC_STACK + ESC_FLOW_LANE + ESC_COVER_T + 0.4 <= 8.0,
+           "ESC radial budget over 8.0 mm - the bay then runs out of depth before length; see nacelle_esc_bay.scad");
+    assert(ESC_BAY_Z1 - ESC_BAY_Z0 >= 40.0,
+           "ESC bay is under 40 mm — below the shortest board considered viable");
     assert(ESC_DISC_D < ESC_DISC_AVAIL,
            "disconnect bay is deeper than the MEASURED inboard-face envelope");
     assert(ESC_DISC_Z - ESC_DISC_H / 2 >= 75.0

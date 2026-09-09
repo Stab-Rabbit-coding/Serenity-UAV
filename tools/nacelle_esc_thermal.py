@@ -115,12 +115,16 @@ T_AMBIENT = 25.0         # [C] design ambient
 
 # ── Pod geometry (nacelle_pod_50mm_tandem.scad / edf_stator_sleeve.scad) ─────
 ESC_W_POWER = 23.0e-3    # [m] power panel width — the conducting footprint
-ESC_LEN = 62.0e-3        # [m] board length
-BOARD_AREA = 2046e-6     # [m2] folded board area, one face
+ESC_LEN = 44.0e-3        # [m] board length — 44, not 62.  The first sizing
+# tested the board against a 2.5 mm skin wall while the COVER is a separate
+# part in the same radial budget, and no cooling lane was reserved at all.
+# See nacelle_esc_bay.scad "THE RADIAL BUDGET".
+BOARD_AREA = 1452e-6     # [m2] folded board area, one face (44 x 33)
+FLOW_LANE = 1.0e-3       # [m] clear lane above the stack — the channel the
+# cooling air actually flows through
 POD_DUCT_WALL = 2.5e-3   # [m] pod duct wall, r 27.7 -> 30.2
 SLEEVE_WALL = 2.5e-3     # [m] stator sleeve wall, r 25 -> 27.5
 FIT_GAP = 0.2e-3         # [m] radial air gap, sleeve OD 27.5 in a 27.7 bore
-BAY_GAP = 4.0e-3         # [m] radial height of the bay cavity
 BAY_WIDTH = 33.0e-3      # [m] folded board width
 
 #: The cooling circuit's duct-side ports, mirrored from nacelle_esc_bay.scad.
@@ -131,9 +135,9 @@ ESC_BLEED_D = 5.5e-3     # [m]
 
 #: Cover louvres, mirrored from nacelle_esc_bay.scad.  Enlarged at Rev T4e to
 #: carry a FOD screen without the inlet becoming the restriction.
-ESC_LOUVRE_N = 6
+ESC_LOUVRE_N = 8         # aft field only — slots at both ends short-circuit
 ESC_LOUVRE_W = 1.2       # [mm]
-ESC_LOUVRE_L = 16.0      # [mm]
+ESC_LOUVRE_L = 24.0      # [mm]
 
 # ── EDF (BOM EDF-50-6S, XFly Galaxy X5 2627-KV3200) ──────────────────────────
 EDF_THRUST_N = 12.16     # [N] 1240 gf per unit, static
@@ -152,6 +156,7 @@ FWD_STAGE_FRACTION = 0.5
 #: for the discharge.  This is the number a bench flow test or CFD would replace,
 #: and it is the weakest input to the flow rate below.
 CIRCUIT_K = 3.0
+K_ENDS = 2.5             # velocity heads for entry, exit and turns in the lane
 
 # ── FOD screen (owner direction, 2026-09-06) ─────────────────────────────────
 #: Aspirating rather than bleeding made the bay an unfiltered path from outside
@@ -260,12 +265,37 @@ def duct_stations() -> dict:
     }
 
 
-def aspirated_flow(dp_drive: float, throat_area: float) -> tuple[float, float]:
-    """Cooling mass flow and bay velocity for a given driving depression."""
-    v_throat = math.sqrt(2 * dp_drive / (RHO_AIR * CIRCUIT_K))
-    mdot = RHO_AIR * throat_area * v_throat
-    v_bay = mdot / (RHO_AIR * BAY_GAP * BAY_WIDTH)
-    return mdot, v_bay
+def channel_flow(dp_drive: float, lane: float, throat_area: float):
+    """Solve the cooling channel — do not assume a velocity for it.
+
+    An earlier version picked a target "bay velocity" and read the flow off it,
+    using the whole 4 mm bay depth as the flow area.  That area does not exist:
+    the board FILLS the bay, and what the air actually gets is the lane above the
+    component stack.  Solving the circuit instead of assuming it changes the
+    answer in a useful direction, because a narrow channel has a small hydraulic
+    diameter and therefore a HIGH convection coefficient at modest velocity.
+
+    Loss terms, all referred to the channel velocity:
+        friction   f L / D_h      (laminar 64/Re, else Blasius 0.316 Re^-0.25)
+        ends       K_ENDS         entry, exit and turns
+        throat     (A_ch/A_th)^2  the discharge ports, by continuity
+
+    Returns (V, Re, regime, h, mdot).
+    """
+    area = lane * BAY_WIDTH
+    d_h = 2 * area / (lane + BAY_WIDTH)
+    v = 30.0
+    for _ in range(200):
+        re = RHO_AIR * v * d_h / MU_AIR
+        f = 64 / re if re < 2300 else 0.316 * re ** -0.25
+        k_tot = f * ESC_LEN / d_h + K_ENDS + (area / throat_area) ** 2
+        v = 0.5 * v + 0.5 * math.sqrt(2 * dp_drive / (RHO_AIR * k_tot))
+    re = RHO_AIR * v * d_h / MU_AIR
+    if re < 2300:
+        nu, regime = 7.54, "lam"        # parallel plates, developed, constant Tw
+    else:
+        nu, regime = 0.023 * re ** 0.8 * PR_AIR ** 0.4, "turb"   # Dittus-Boelter
+    return v, re, regime, nu * K_AIR / d_h, RHO_AIR * area * v
 
 
 def h_flat_plate(velocity: float, length: float) -> tuple[float, float, str]:
@@ -407,20 +437,29 @@ def main() -> int:
     throat = ESC_BLEED_N * math.pi * (ESC_BLEED_D / 2) ** 2
     print(f"  circuit throat (the duct-side holes) {throat * 1e6:6.0f} mm2 "
           f"at K = {CIRCUIT_K:.1f}")
-    print(f"\n  {'throttle':>9}{'dp drive':>11}{'mdot':>11}{'bay V':>9}"
-          f"{'% duct':>9}{'h':>8}{'R_conv':>9}")
+    print(f"\n  {'throttle':>9}{'dp drive':>10}{'lane V':>9}{'Re':>8}{'regime':>8}"
+          f"{'h':>8}{'mdot':>10}{'% duct':>9}{'R_conv':>9}")
     best_c = None
     for frac, name in ((1.00, "100 %"), (0.70, "70 %"), (0.50, "50 %")):
-        # driving depression scales with Ve^2, i.e. with thrust, i.e. throttle
+        # the driving depression scales with Ve^2, i.e. with thrust, i.e. throttle
         dp = -st["p2_gauge"] * frac
-        mdot, v_bay = aspirated_flow(dp, throat)
-        h_b, _, _ = h_flat_plate(v_bay, ESC_LEN)
-        r_conv = 1.0 / (h_b * 2 * BOARD_AREA)
-        print(f"  {name:>9}{dp:>10.0f} Pa{mdot * 1e3:>9.2f} g/s{v_bay:>8.1f}"
-              f"{100 * mdot / st['mdot']:>8.2f}%{h_b:>8.0f}{r_conv:>9.2f}")
+        v, re, regime, h_c, mdot = channel_flow(dp, FLOW_LANE, throat)
+        r_conv = 1.0 / (h_c * 2 * BOARD_AREA)
+        print(f"  {name:>9}{dp:>9.0f} Pa{v:>9.1f}{re:>8.0f}{regime:>8}{h_c:>8.0f}"
+              f"{mdot * 1e3:>8.2f} g/s{100 * mdot / st['mdot']:>8.2f}%{r_conv:>9.2f}")
         if frac == 1.0:
-            best_c = (r_conv, mdot, 100 * mdot / st["mdot"])
-    assert best_c is not None, "100% throttle case always runs and sets best_c"
+            best_c = (r_conv, mdot, 100 * mdot / st["mdot"],
+                      21.72 / (mdot * CP_AIR))
+
+    assert best_c is not None, "100% throttle case must set best_c"
+
+    print("\n  A NARROW LANE IS BETTER, WHICH IS NOT THE OBVIOUS RESULT.  The")
+    print(f"  {FLOW_LANE * 1e3:.1f} mm lane gives h = "
+          f"{1.0 / (best_c[0] * 2 * BOARD_AREA):.0f} W/m2.K on "
+          f"{best_c[1] * 1e3:.2f} g/s, because a small hydraulic diameter buys")
+    print("  convection coefficient without buying mass flow.  A 4 mm lane moves")
+    print("  three times the air for WORSE cooling and three times the thrust cost.")
+    print(f"  Air temperature rise through the bay: {best_c[3]:.1f} K at 21.7 W.")
 
     print("\n  THRUST COST.  The cooling air is INGESTED and then pumped by the")
     print("  aft fan, so it leaves with the jet and carries its own momentum out.")
@@ -441,11 +480,13 @@ def main() -> int:
     print("\n" + "=" * 78)
     print("D.  FOD SCREEN — and why the louvres have to grow to carry one")
     print("=" * 78)
-    louvre_now = 2 * 5 * 1.2 * 12.0            # as built at Rev T4d, mm2
-    louvre_new = 2 * ESC_LOUVRE_N * ESC_LOUVRE_W * ESC_LOUVRE_L
+    louvre_now = 2 * 5 * 1.2 * 12.0            # Rev T4d: 5 slots at BOTH ends
+    louvre_new = ESC_LOUVRE_N * ESC_LOUVRE_W * ESC_LOUVRE_L   # aft field only
     print(f"  discharge ports (the throat)      {throat * 1e6:6.0f} mm2")
-    print(f"  louvre area as built at Rev T4d   {louvre_now:6.0f} mm2")
-    print(f"  louvre area now                   {louvre_new:6.0f} mm2\n")
+    print(f"  louvre area at Rev T4d (both ends) {louvre_now:5.0f} mm2")
+    print(f"  louvre area now (AFT FIELD ONLY)   {louvre_new:5.0f} mm2")
+    print("  Aft-only because slots at both ends short-circuit: the forward")
+    print("  field sat directly over the discharge ports.\n")
     print(f"  {'screen':<40}{'beta':>7}{'K':>7}{'free area':>11}"
           f"{'vs throat':>11}{'flow':>8}")
     for name, (beta, _ap) in SCREENS.items():
@@ -476,16 +517,29 @@ def main() -> int:
     print(f"  {'case':<44}{f'{i_hover:.0f} A hover':>13}"
           f"{f'{i_max:.0f} A max':>13}")
     print("  " + "-" * 70)
+    # The cooling air heats up as it crosses the board, so the DOWNSTREAM end of
+    # the board does not see ambient — it sees ambient plus the full rise.  Using
+    # ambient for every case would flatter option C by ~15 K at 50 A, which is
+    # most of its remaining margin.  The rise is charged only to C: A and B are
+    # conduction paths whose sink is the whole airframe or the duct jet, neither
+    # of which heats measurably.
+    mdot_c = best_c[1]
+
+    def air_rise(power: float) -> float:
+        return power / (mdot_c * CP_AIR)
+
     cases = [
         ("A  sealed bay, CF-PETG @ k=0.25", r_board
          + POD_DUCT_WALL / (0.25 * a_cond) + r_gap
          + SLEEVE_WALL / (0.25 * a_cond) + r_stator_conv),
         ("B  aluminium path to the stator + TIM", r_board + r_b),
-        ("C  aspirated, skin inlet -> duct suction", r_board * 0.35 + best_c[0]),
+        ("C  aspirated, 1.0 mm lane over the board", r_board * 0.35 + best_c[0]),
     ]
     for label, r in cases:
-        t_hov = T_AMBIENT + r * dissipation(i_hover)
-        t_max = T_AMBIENT + r * dissipation(i_max)
+        rise_h = air_rise(dissipation(i_hover)) if label.startswith("C") else 0.0
+        rise_m = air_rise(dissipation(i_max)) if label.startswith("C") else 0.0
+        t_hov = T_AMBIENT + rise_h + r * dissipation(i_hover)
+        t_max = T_AMBIENT + rise_m + r * dissipation(i_max)
         f_h = "OK " if t_hov <= T_CH_DESIGN else "OVER"
         f_m = "OK " if t_max <= T_CH_DESIGN else "OVER"
         print(f"  {label:<44}{t_hov:>8.0f} C {f_h}{t_max:>8.0f} C {f_m}")
@@ -493,6 +547,21 @@ def main() -> int:
           f"{dissipation(i_max):.2f} W at {i_max:.0f} A")
     print(f"  design limit {T_CH_DESIGN:.0f} C (declared judgement) against a "
           f"{FET_TCH_MAX:.0f} C absolute maximum")
+
+    # Where does C stop passing?
+    r_c = r_board * 0.35 + best_c[0]
+    lo, hi = 1.0, 60.0
+    for _ in range(60):
+        mid = 0.5 * (lo + hi)
+        p_mid = dissipation(mid)
+        t = T_AMBIENT + p_mid / (best_c[1] * CP_AIR) + r_c * p_mid
+        lo, hi = (mid, hi) if t < T_CH_DESIGN else (lo, mid)
+    print(f"\n  Option C reaches the {T_CH_DESIGN:.0f} C limit at "
+          f"{lo:.1f} A continuous — against a {I_HOVER:.0f} A hover and a "
+          f"{I_REF:.0f} A board rating.")
+    print("  The air's own rise through the channel is included above and is "
+          f"{air_rise(dissipation(i_max)):.1f} K at {i_max:.0f} A; leaving it out")
+    print("  would flatter C by most of its remaining margin.")
 
     print("\n  Option C's board resistance is scaled by 0.35 because forced")
     print("  convection replaces the datasheet's natural-convection figure; that")
