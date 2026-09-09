@@ -523,9 +523,10 @@ def main() -> int:
     # most of its remaining margin.  The rise is charged only to C: A and B are
     # conduction paths whose sink is the whole airframe or the duct jet, neither
     # of which heats measurably.
+    mdot_c = best_c[1]
 
     def air_rise(power: float) -> float:
-        return power / (best_c[1] * CP_AIR)
+        return power / (mdot_c * CP_AIR)
 
     cases = [
         ("A  sealed bay, CF-PETG @ k=0.25", r_board
