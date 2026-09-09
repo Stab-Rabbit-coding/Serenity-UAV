@@ -916,15 +916,31 @@
         exhaustively swept CRANK_R 8.5–28 mm × PUSHROD_LEN 58–90 mm × 24 crank
         mounting phases × 8 spar mounting stations (336 combinations) and
         found **zero** that are both reachable and monotonic across the full
-        0→90° tilt sweep — every reachable candidate genuinely reverses
-        direction partway through (a real toggle/dead-point). As-drawn
-        (CRANK_R=8.5, PUSHROD_LEN=45) fails outright. This is no longer an
-        open sizing question — it is evidence the crank-on-tilt-axis /
-        straight-pushrod-to-perpendicular-ring topology may not admit a
-        working solution at this scale. **Recommendation: reopen
-        `docs/NOZZLE_DRIVE_TRADE.md`** (the 2026-07-18 Option A/B trade study)
-        rather than continue searching this topology's dimension space. Do NOT
-        print for flight hardware.
+        0→90° tilt sweep. As-drawn (CRANK_R=8.5, PUSHROD_LEN=45) fails
+        outright. **This independently re-confirms a defect the trade study
+        already caught**: `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT —
+        hybrid A+B adopted (2026-07-19)" records that the pure spar-crank is
+        kinematically INVALID because **the tilt spar is keyed to the nacelle**
+        — a crank clamped to it shares the nacelle's rotating frame with the
+        unison ring, so the two swing together with *zero relative motion* and
+        the pushrod never strokes the ring. No choice of CRANK_R/PUSHROD_LEN
+        can fix that, which is exactly why the sweep came back empty.
+        `nacelle_nozzle_pushrod.scad` is therefore a **stale implementation of
+        a superseded decision**. The adopted replacement (below) is not a new
+        trade — it is already decided; do NOT reopen the trade study.
+    - [ ] **[OPEN — IMPLEMENT] Adopted nozzle drive: wing-fixed sun + nacelle
+        pinion + geared bellcrank** (`docs/NOZZLE_DRIVE_TRADE.md` amendment,
+        2026-07-19). A gear fixed coaxial with the spar at the **wing tip**
+        (non-tilting datum) meshes a nacelle-mounted **pinion**; as the nacelle
+        tilts θ the fixed-sun/planet pair spins the pinion by θ·(N_sun/N_pinion)
+        *relative to the nacelle*, restoring the relative motion the spar-crank
+        lacked. At **1:1** the crank(8.5)→pushrod→cam-ring-lever(32) geometry is
+        reused unchanged (90° tilt → ≈23.9° ring). Open parameters: module +
+        tooth counts + pitch radius, crank/pushrod length + transmission angle
+        over 0..90°, ring-lever azimuth (relocate iris 22.5°→157.5°, inboard
+        flap gap), and the ~8 mm wing-tip↔nacelle gap stack (MF128ZZ bearing →
+        sun gear → Hall ring magnet / AK7455, pinion ≈26 mm aft of the spar
+        axis to clear the on-axis Hall stack).
     - [x] **Re-bake the pod shells** — DONE 2026-08-31 (Rev S4). Both
         `nacelle_port_revs.stl` and `nacelle_stbd_revs.stl` re-rendered from
         current source and re-baked with `tools/bake_hull_frame.py`; the Ø72

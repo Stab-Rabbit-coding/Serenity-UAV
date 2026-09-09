@@ -71,15 +71,29 @@
 //   reachable candidate genuinely reverses direction partway through (a real
 //   toggle/dead-point, not a search artifact; confirmed by hand-tracing the
 //   full continuous psi(theta) curve). As-drawn (CRANK_R=8.5, PUSHROD_LEN=45)
-//   also fails outright (cannot reach at any tilt). This is evidence the
-//   TOPOLOGY -- a crank on the tilt axis driving, via a straight pushrod, a
-//   lever on a ring whose axis is PERPENDICULAR to and ~63mm axially offset
-//   from the tilt axis -- may not admit a working solution at this scale, not
-//   that these particular dimensions need tuning. Recommendation: reopen
-//   `docs/NOZZLE_DRIVE_TRADE.md` (the 2026-07-18 Option A/B/... trade study)
-//   rather than continue searching this topology's dimension space. Do NOT
-//   print for flight hardware -- this is now a documented NO-GO, not an open
-//   question.
+//   also fails outright (cannot reach at any tilt).
+//
+//   ROOT CAUSE (already on record -- `docs/NOZZLE_DRIVE_TRADE.md`, "DECISION
+//   AMENDMENT -- hybrid A+B adopted (2026-07-19)", which the sweep above
+//   independently re-confirms): **the tilt spar is KEYED TO THE NACELLE**, so
+//   a crank clamped to that spar shares the nacelle's rotating frame with the
+//   unison ring.  The two swing together through the whole 0..90 deg tilt with
+//   ZERO RELATIVE MOTION, so the pushrod never strokes the ring.  No choice of
+//   CRANK_R / PUSHROD_LEN can create relative motion that the frame geometry
+//   does not have -- which is exactly why an exhaustive dimension sweep comes
+//   back empty.  A passive, tilt-driven nozzle MUST take its datum from the
+//   NON-TILTING WING.
+//
+//   THIS FILE IS THEREFORE A STALE IMPLEMENTATION OF A SUPERSEDED DECISION.
+//   Do NOT print it for flight hardware, and do NOT reopen the trade study --
+//   the replacement is already adopted (see that amendment): a wing-fixed sun
+//   gear coaxial with the spar at the wing tip, meshed by a nacelle-mounted
+//   pinion, whose arm becomes the geared bellcrank.  At a 1:1 mesh the pinion
+//   tracks tilt 1:1 RELATIVE TO THE NACELLE, restoring the relative motion the
+//   spar-crank lacked, and the crank(8.5) -> pushrod -> cam-ring-lever(32)
+//   geometry below is reused UNCHANGED (90 deg tilt -> ~23.9 deg ring).  The
+//   SOURCE follow-up that amendment names is precisely: "move the
+//   nacelle_nozzle_pushrod.scad crank from the spar onto the pinion."
 //
 // Print / procurement specification:
 //   spar_crank : CF-PETG, 0.15 mm layers, 4 perimeters, 60 % infill (carries
