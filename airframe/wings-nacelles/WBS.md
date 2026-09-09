@@ -931,9 +931,28 @@
         nozzle pocket, the Rev S1c harness changes and the whole Rev S4 trunnion
         rework are now in the published meshes. The published files had been
         stale since 2026-07-21. Both are watertight single bodies.
-    - [ ] **[OPEN — VERIFY] Full housing ovalization** to the cowl mold line +
-        hinge-boss vs aft-cowl clearance — needs the assembly part-local→hull
-        transform (serenity_assembly.py).
+    - [x] **Housing outer-wall ovalization — CLOSED 2026-09-09 (plan 005 R4).**
+        `tools/nacelle_housing_profile.py` station-samples the canonical shell
+        (reusing `serenity_assembly.py`'s `R_BAKE`/`T_BAKE["port"]` part-local
+        → hull transform) and the outer wall now tracks it: **0 proud
+        violations** across 768 outer-wall samples (16 axial × 48 azimuthal),
+        worst-case margin 0.5 mm at z=0.
+    - [ ] **[OPEN — ACCEPTED RESIDUAL, not fixable by boss sizing] Hinge
+        bosses remain proud of the canonical shell.** Wall trimmed Rev T5b
+        2.5 mm/side → 1.5 mm/side (the minimum this repo's FDM practice treats
+        as reliable, ≥3 perimeters at 0.4 mm nozzle), cutting the worst-case
+        overshoot from 6.1 mm to **4.1 mm** — but it cannot reach zero: the
+        boss's inner-fusion geometry holds its inner edge fixed at
+        `R_HINGE - 1.0` regardless of wall thickness, so even a notional
+        **zero-wall** bore (`HINGE_BOSS_OD = HINGE_BORE_D` = 3.2 mm) still
+        reaches outer edge 29.7 mm, which already exceeds the canonical
+        shell's ~28.55 mm worst-case radius at this station by 1.15 mm.
+        `R_HINGE` = 27.5 mm is fixed by the flap kinematics (R2 invariant,
+        changing it ripples through the whole nozzle) and itself leaves only
+        ~1.05 mm clearance to the canonical mould line at this axial station.
+        **Accepted per plan 005 R7**: this is a genuine hinge-circle-vs-
+        mould-line geometric conflict, not an under-sized boss. Do not shrink
+        the wall further chasing an unreachable zero.
     - [ ] **[OPEN] Spar-crank placement** in serenity_assembly.py is first-pass
         (Y=0, Z=PIVOT_Z, X-axis clamp); confirm clock angle + pushrod routing.
     - [ ] **[OPEN] User WIP** `gear_option_compare.scad` / `gear_shell_compare.scad`

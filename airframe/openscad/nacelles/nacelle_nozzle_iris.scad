@@ -597,7 +597,28 @@ module nozzle_throat_and_housing() {
                 // the existing tube wall (solid from THROAT_INNER_R=25 to
                 // THROAT_OUTER_R=27.5) already provides the bore's inner
                 // bearing surface "for free."
-                HINGE_BOSS_OD = HINGE_BORE_D + 5.0;
+                // Rev T5b (2026-09-09, plan 005 R4): wall trimmed 2.5mm/side
+                // (+5.0 OD) -> 1.5mm/side (+3.0 OD), the minimum this repo's
+                // FDM practice treats as reliable (>=3 perimeters at 0.4mm
+                // nozzle, matches the flap-shingle "effectively solid at
+                // 2.5mm + 3x0.4mm perimeters" precedent scaled down for this
+                // much smaller, lighter-loaded pin joint). This cuts the
+                // mould-line overshoot from 6.1mm to ~4.1mm worst-case (see
+                // tools/nacelle_housing_profile.py --check) but CANNOT reach
+                // zero: the inner-fusion formula below holds the boss's inner
+                // edge fixed at R_HINGE - 1.0 regardless of OD, so even a
+                // notional zero-wall bore (OD = HINGE_BORE_D = 3.2mm) still
+                // reaches outer edge R_HINGE - 1.0 + 3.2 = 29.7mm, which
+                // already exceeds the canonical shell's ~28.55mm worst-case
+                // radius at this station by 1.15mm. R_HINGE=27.5 is fixed by
+                // the flap kinematics (R2 invariant) and itself leaves only
+                // ~1.05mm clearance to the canonical mould line here -- this
+                // residual is a genuine hinge-circle-vs-mould-line conflict,
+                // not a boss-sizing problem, and is accepted per plan 005 R7
+                // (WBS Sec 1.1.3). Do not shrink the wall further chasing an
+                // unreachable zero -- the remaining ~4mm buys nothing once
+                // the wall drops below print-integrity margin.
+                HINGE_BOSS_OD = HINGE_BORE_D + 3.0;
                 HINGE_BOSS_X_CEN = R_HINGE + HINGE_BOSS_OD / 2 - 1.0;
                 for (i = [0 : N_FLAPS - 1]) {
                     rotate([0, 0, i * 360 / N_FLAPS]) {

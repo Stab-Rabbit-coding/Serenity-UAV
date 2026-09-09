@@ -134,9 +134,10 @@ HINGE_BORE_D = 3.2
 # nacelle_nozzle_iris.scad:600-601 — hinge-boss envelope geometry (verbatim
 # formula from nozzle_throat_and_housing()): boss OD, boss centre offset, and
 # therefore boss outer-edge radius from the duct axis.
-HINGE_BOSS_OD = HINGE_BORE_D + 5.0                      # = 8.2
-HINGE_BOSS_X_CEN = R_HINGE + HINGE_BOSS_OD / 2 - 1.0    # = 30.6
-HINGE_BOSS_MAX_R = HINGE_BOSS_X_CEN + HINGE_BOSS_OD / 2  # = 34.7 (Ø69.4, iris.scad:548)
+HINGE_BOSS_OD = HINGE_BORE_D + 3.0                      # = 6.2, iris.scad
+                                                          # Rev T5b (2026-09-09)
+HINGE_BOSS_X_CEN = R_HINGE + HINGE_BOSS_OD / 2 - 1.0    # = 29.6
+HINGE_BOSS_MAX_R = HINGE_BOSS_X_CEN + HINGE_BOSS_OD / 2  # = 32.7
 
 # Current (pre-ovalisation) housing constants — read live from the SCAD source
 # by `read_current_housing()` below rather than hardcoded here, so --check
