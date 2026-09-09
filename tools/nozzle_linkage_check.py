@@ -169,9 +169,20 @@ SPAN_TOL_DEG = 5.0        # [deg] allowed deviation of psi(0)/psi(90) from
                            # the 0 / THETA_RING_REF_OPEN design target before
                            # a reachable, monotonic solution is still marked
                            # a span mismatch.
-PSI_SEARCH_LO_DEG = -90.0
-PSI_SEARCH_HI_DEG = 90.0
-PSI_SCAN_STEPS = 360       # coarse bracket scan resolution (0.5 deg/step)
+PSI_SEARCH_LO_DEG = -200.0
+PSI_SEARCH_HI_DEG = 200.0
+                           # Widened 2026-09-09 from an original +/-90 deg: a
+                           # +/-90 bracket clips real coupler motion and
+                           # produces a FALSE reversal by root-tracking a
+                           # wrapped-around root just outside the window
+                           # instead of the true continuous branch (caught by
+                           # hand-tracing a "MONO-FAIL" case and finding the
+                           # psi(theta) curve actually continues smoothly past
+                           # +/-90 before genuinely toggling elsewhere). See
+                           # docs/plans/2026-08-29-005-... Planning Contract
+                           # for the exhaustive-search finding this enabled.
+PSI_SCAN_STEPS = 400       # coarse bracket scan resolution (~1 deg/step over
+                           # the widened range)
 BISECT_ITERS = 50
 
 
@@ -381,6 +392,64 @@ def report(flap_length: float, pushrod_len: float, label: str) -> bool:
     return False
 
 
+def search_dimensions(
+    crank_r_grid: list[float] = (8.5, 12.0, 15.0, 18.0, 22.0, 28.0),
+    pushrod_len_grid: list[float] = (58.0, 63.0, 68.0, 73.0, 78.0, 83.0, 90.0),
+    phase_grid: list[float] = tuple(range(0, 360, 15)),
+    axial_grid: list[float] = (0.0, 15.0, 30.0, 45.0, 60.0, 62.75, 75.0, 90.0),
+    theta_step_deg: float = 4.0,
+) -> list[tuple]:
+    """Exhaustive (CRANK_R, PUSHROD_LEN) sizing search over the free assembly
+    parameters (phase, axial station) already used by `synthesize()`.
+
+    2026-09-09 finding (session-settled request: "size it"): this search,
+    across the ranges above -- CRANK_R 8.5-28mm (3.3x the nominal), PUSHROD_LEN
+    58-90mm (spanning the full 56-79mm crank-to-ring 3-D separation measured
+    across the whole theta/psi/phase space), 24 mounting phases, 8 axial
+    stations -- returns ZERO passing combinations. Every candidate either
+    cannot reach, or reaches but genuinely reverses direction partway through
+    the 0->90 deg sweep (a real toggle/dead-point, confirmed by hand-tracing
+    the widened +/-200 deg psi search against the pre-2026-09-09 +/-90 deg
+    version, which had been clipping the true continuous branch and reporting
+    some cases as reversals that were actually just wrapping past +/-90).
+    This is evidence the Option B topology itself (crank on the tilt axis
+    driving, via a straight pushrod, a lever on a ring whose axis is
+    PERPENDICULAR to and ~63mm axially offset from the tilt axis) may not
+    admit a monotonic non-locking solution at this scale, not that the
+    as-drawn dimensions merely need tuning. See the plan's Planning Contract
+    for the resulting recommendation (reopen docs/NOZZLE_DRIVE_TRADE.md rather
+    than continue searching this topology).
+    """
+    global CRANK_R
+    results = []
+    for crank_r in crank_r_grid:
+        CRANK_R = crank_r
+        for pushrod_len in pushrod_len_grid:
+            best = None
+            best_score = None
+            best_phase = None
+            best_axial = None
+            for axial_x in axial_grid:
+                for phase in phase_grid:
+                    r = sweep(phase, axial_x, pushrod_len, theta_step_deg)
+                    if r["ok"]:
+                        best, best_phase, best_axial = r, phase, axial_x
+                        break
+                    if not r["reachable"]:
+                        score = 1e6 - r["fail_theta"]
+                    elif not r["monotonic"]:
+                        score = 1e4 - (r["fail_theta"] or 0.0)
+                    else:
+                        score = r["span_lo_err"] + r["span_hi_err"]
+                    if best_score is None or score < best_score:
+                        best_score, best = score, r
+                        best_phase, best_axial = phase, axial_x
+                if best is not None and best["ok"]:
+                    break
+            results.append((crank_r, pushrod_len, best_phase, best_axial, best))
+    return results
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=__doc__.splitlines()[0],
@@ -397,7 +466,31 @@ def main() -> int:
                               f"{PUSHROD_LEN_NOMINAL:.1f} mm).")
     parser.add_argument("--label", type=str, default="run",
                          help="label for the printed report section.")
+    parser.add_argument("--search-dimensions", action="store_true",
+                         help="Exhaustively search CRANK_R x PUSHROD_LEN "
+                              "(see search_dimensions() docstring) instead of "
+                              "checking one nominal case. Exits 0 if any "
+                              "passing combination is found, 1 otherwise.")
     args = parser.parse_args()
+
+    if args.search_dimensions:
+        results = search_dimensions()
+        passing = [row for row in results if row[4]["ok"]]
+        print(f"Searched {len(results)} (CRANK_R, PUSHROD_LEN) combinations "
+              f"x up to {len(tuple(range(0, 360, 15)))} phases x "
+              f"{len((0.0, 15.0, 30.0, 45.0, 60.0, 62.75, 75.0, 90.0))} axial "
+              "stations each.")
+        if passing:
+            for crank_r, pushrod_len, phase, axial, r in passing:
+                print(f"  PASS: CRANK_R={crank_r:.1f} PUSHROD_LEN={pushrod_len:.1f} "
+                      f"phase={phase:.1f} axial_x={axial:.1f} "
+                      f"(span err lo={r['span_lo_err']:.2f} hi={r['span_hi_err']:.2f})")
+            return 0
+        print("FAIL: no passing (CRANK_R, PUSHROD_LEN, phase, axial_x) "
+              "combination found in the searched ranges. This is evidence "
+              "of a topology problem, not a sizing problem -- see "
+              "search_dimensions() docstring.")
+        return 1
 
     ok = report(args.flap_length, args.pushrod_len, args.label)
     print(f"\n{'PASS' if ok else 'FAIL'}: {args.label} "

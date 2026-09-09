@@ -911,11 +911,20 @@
         bevel housing, drive pinion (+STLs) → `airframe/archive/`; Makefile,
         PROJECT_INDEX/ARCHIVE_INDEX, serenity_assembly.py updated.
     - [x] **Pod pocket** grown `NOZZLE_RING_OD` 65→72 to seat the Ø71 housing.
-    - [ ] **[OPEN — VERIFY] Spatial RSSR linkage synthesis** — solve crank
-        radius, ball 3-D positions, and rod length for a MONOTONIC, non-locking
-        0→90° tilt → 0→23.75° ring map that clears the nacelle skin over the
-        full sweep. Current pushrod geometry is first-pass placeholder. Do NOT
-        print for flight until closed.
+    - [ ] **[OPEN — NO-GO, was VERIFY] Spatial RSSR linkage synthesis.**
+        `tools/nozzle_linkage_check.py --search-dimensions` (2026-09-09)
+        exhaustively swept CRANK_R 8.5–28 mm × PUSHROD_LEN 58–90 mm × 24 crank
+        mounting phases × 8 spar mounting stations (336 combinations) and
+        found **zero** that are both reachable and monotonic across the full
+        0→90° tilt sweep — every reachable candidate genuinely reverses
+        direction partway through (a real toggle/dead-point). As-drawn
+        (CRANK_R=8.5, PUSHROD_LEN=45) fails outright. This is no longer an
+        open sizing question — it is evidence the crank-on-tilt-axis /
+        straight-pushrod-to-perpendicular-ring topology may not admit a
+        working solution at this scale. **Recommendation: reopen
+        `docs/NOZZLE_DRIVE_TRADE.md`** (the 2026-07-18 Option A/B trade study)
+        rather than continue searching this topology's dimension space. Do NOT
+        print for flight hardware.
     - [x] **Re-bake the pod shells** — DONE 2026-08-31 (Rev S4). Both
         `nacelle_port_revs.stl` and `nacelle_stbd_revs.stl` re-rendered from
         current source and re-baked with `tools/bake_hull_frame.py`; the Ø72

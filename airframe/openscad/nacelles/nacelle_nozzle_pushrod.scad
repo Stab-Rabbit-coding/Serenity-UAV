@@ -63,6 +63,24 @@
 //   study / motion sim before this geometry is relied upon.  Tracked as a WBS
 //   VERIFY item (§1.1.3).  Do NOT print for flight hardware until closed.
 //
+//   2026-09-09 -- kinematic study RUN, and this VERIFY does NOT close.
+//   `tools/nozzle_linkage_check.py --search-dimensions` exhaustively swept
+//   CRANK_R 8.5-28mm x PUSHROD_LEN 58-90mm x 24 crank mounting phases x 8
+//   spar mounting stations (336 combinations) and found ZERO that are both
+//   reachable AND monotonic across the full 0-90 deg tilt sweep -- every
+//   reachable candidate genuinely reverses direction partway through (a real
+//   toggle/dead-point, not a search artifact; confirmed by hand-tracing the
+//   full continuous psi(theta) curve). As-drawn (CRANK_R=8.5, PUSHROD_LEN=45)
+//   also fails outright (cannot reach at any tilt). This is evidence the
+//   TOPOLOGY -- a crank on the tilt axis driving, via a straight pushrod, a
+//   lever on a ring whose axis is PERPENDICULAR to and ~63mm axially offset
+//   from the tilt axis -- may not admit a working solution at this scale, not
+//   that these particular dimensions need tuning. Recommendation: reopen
+//   `docs/NOZZLE_DRIVE_TRADE.md` (the 2026-07-18 Option A/B/... trade study)
+//   rather than continue searching this topology's dimension space. Do NOT
+//   print for flight hardware -- this is now a documented NO-GO, not an open
+//   question.
+//
 // Print / procurement specification:
 //   spar_crank : CF-PETG, 0.15 mm layers, 4 perimeters, 60 % infill (carries
 //                the full nozzle actuation load through a small ball stud —
