@@ -265,6 +265,17 @@
 //          Found by CI, not by inspection — the header had claimed shingling since
 //          Rev R2 while the geometry never implemented it.  AI contribution:
 //          Claude (Opus 5, Anthropic), directed by Steve Griffing.
+// Rev:     T4 (2026-09-09): RING_LEVER_AZ relocated 22.5 -> 157.5 deg, per
+//          docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT — hybrid A+B adopted
+//          (2026-07-19)".  The drive crank now rides a nacelle sync PINION on
+//          the INBOARD side of the pod, so the lever ear moves to the inboard
+//          flap gap and the pushrod hugs the inboard cheek instead of crossing
+//          the duct.  157.5 is a legal gap (8 flaps -> gaps at 22.5 + k*45), so
+//          cam slots, flap sweep and all exit-radius kinematics are numerically
+//          UNCHANGED; the solved linkage gives psi(0) = -0.36 deg so no cam
+//          re-clocking is needed either (tools/nozzle_linkage_check.py).
+//          AI contribution: Claude (Opus 5, Anthropic), directed by
+//          Steve Griffing.
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 
@@ -496,8 +507,22 @@ CAM_FLANGE_INNER_R = 28.5;   // [mm] cam-flange inner radius (clears throat OD
                              //   27.5 by 1.0; slot_in = 29 − 1.2 = 27.8 > 27.5)
 
 // ── Pushrod lever (single drive input; replaces the internal ring gear) ──────
-RING_LEVER_AZ   = 22.5;   // [deg] azimuth of the lever ear (in a flap gap,
-                          //   between slots at 0°/45°)
+RING_LEVER_AZ   = 157.5;  // [deg] azimuth of the lever ear.  Flap gaps sit at
+                          //   22.5 + k*45 (8 flaps), so 157.5 is a legal gap and
+                          //   the ear still clears all 8 cam slots and the flap
+                          //   sweep exactly as 22.5 did.
+                          //   RELOCATED 22.5 -> 157.5 (2026-07-19 amendment,
+                          //   docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT —
+                          //   hybrid A+B adopted"): the drive crank now lives on
+                          //   the nacelle-mounted sync PINION on the INBOARD
+                          //   side of the pod, so putting the ear in the inboard
+                          //   flap gap lets the pushrod hug the inboard cheek
+                          //   instead of crossing the duct.
+                          //   The cam slots need NO re-clocking for this move:
+                          //   the solved linkage gives psi(0 deg tilt) = -0.36
+                          //   deg, i.e. essentially zero ring rotation at the
+                          //   closed/cruise reference pose (tools/
+                          //   nozzle_linkage_check.py, default run).
 RING_LEVER_R    = 32.0;   // [mm] radial reach of the ball-socket centre on the
                           //   lever (effective moment arm for the pushrod)
 RING_LEVER_W    =  5.0;   // [mm] lever ear tangential width

@@ -13063,11 +13063,10 @@
       "archived": false
     },
     "tools/nozzle_linkage_check.py": {
-      "description": "Nozzle pushrod (RSSR) linkage reachability check.",
+      "description": "Python script",
       "tags": [
         "build-tooling",
-        "propulsion",
-        "security"
+        "propulsion"
       ],
       "archived": false
     },
@@ -13766,7 +13765,6 @@
       "tools/add_landing_gear_bosses.py",
       "tools/build_landing_gear_views.py",
       "tools/landing_gear_bay_pad_fit.py",
-      "tools/nozzle_linkage_check.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
       "tools/wing_internal_clearance.py"

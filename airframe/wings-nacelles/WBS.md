@@ -935,12 +935,42 @@
         tilts θ the fixed-sun/planet pair spins the pinion by θ·(N_sun/N_pinion)
         *relative to the nacelle*, restoring the relative motion the spar-crank
         lacked. At **1:1** the crank(8.5)→pushrod→cam-ring-lever(32) geometry is
-        reused unchanged (90° tilt → ≈23.9° ring). Open parameters: module +
-        tooth counts + pitch radius, crank/pushrod length + transmission angle
-        over 0..90°, ring-lever azimuth (relocate iris 22.5°→157.5°, inboard
-        flap gap), and the ~8 mm wing-tip↔nacelle gap stack (MF128ZZ bearing →
-        sun gear → Hall ring magnet / AK7455, pinion ≈26 mm aft of the spar
-        axis to clear the on-axis Hall stack).
+        reused unchanged.
+    - [x] **Linkage geometry SOLVED and verified — 2026-09-09.** The
+        amendment's open kinematic parameters are now closed, and
+        `tools/nozzle_linkage_check.py` (reworked to model the adopted
+        nacelle-frame architecture; the superseded spar-crank model is retained
+        behind `--model spar-crank-superseded` as the negative-result record)
+        **passes on its default run**:
+        | parameter | value | note |
+        |---|---|---|
+        | `CRANK_R` | 8.5 mm | **unchanged**, as the amendment predicted |
+        | `CRANK_PHASE` | **206.0°** | new — crank clocking on the pinion at zero tilt |
+        | `PUSHROD_LEN` | 45 → **48.0 mm** | COTS turnbuckle-adjustable rod: a spec change, not new hardware |
+        | `RING_LEVER_AZ` | 22.5 → **157.5°** | inboard flap gap (gaps at 22.5 + k·45) |
+        Verified over a 0→90° sweep at 1° steps: ring stroke **23.816°** vs the
+        23.75° target (0.3 % error); **ψ(0) = −0.36°**, so the ring cam needs
+        **no re-clocking**; **monotonic** throughout (no toggle/dead point);
+        transmission angle 88.1–103.8°, worst-case min(TA, 180−TA) = **76.2°**,
+        far above the ≥40–45° rule of thumb. Iris re-renders `Simple: yes`.
+        Also corrected `port_tilt_spar_assembly.scad` `PIVOT_ZLOC` 111.5 →
+        **107.5** (was stale against `nacelle_pod_50mm_tandem.scad:437`).
+    - [ ] **[OPEN] Re-hub `spar_crank()` onto the pinion.** The linkage
+        *numbers* are closed but the *part* is not printable as-is: it is still
+        drawn as the Ø8 tilt-spar clamp. Needs (a) the Ø8.2 bore + Ø16 clamp hub
+        replaced with a hub suited to the pinion shaft — shaft Ø, retention
+        method, and whether it co-prints with the pinion are all unchosen, and
+        the hub OD must clear the sun's pitch Ø26 at CD 26 — and (b) the arm
+        clocked to `CRANK_PHASE` = 206°, since as drawn it is an unclocked
+        local +Z arm. Carries a matching TODO/VERIFY in the SCAD module.
+    - [ ] **[OPEN] Sun/pinion gear teeth.** Pitch radius is fixed at 13.0 mm
+        (1:1, pitch Ø26) but module and tooth counts are unchosen, and the pair
+        exists only as pitch cylinders. Must also fit the ~8 mm wing-tip↔nacelle
+        gap stack (MF128ZZ bearing → sun gear → Hall ring magnet / AK7455),
+        pinion ≈26 mm aft of the spar axis to clear the on-axis Hall stack.
+    - [ ] **[OPEN] Pushrod clearance/interference check.** The linkage checker
+        is kinematics-only by design; it does not verify the rod clears the cowl
+        skin, the ESC bays, or the flap sweep across the full tilt range.
     - [x] **Re-bake the pod shells** — DONE 2026-08-31 (Rev S4). Both
         `nacelle_port_revs.stl` and `nacelle_stbd_revs.stl` re-rendered from
         current source and re-baked with `tools/bake_hull_frame.py`; the Ø72
