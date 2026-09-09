@@ -116,13 +116,12 @@ T_AMBIENT = 25.0         # [C] design ambient
 # ── Pod geometry (nacelle_pod_50mm_tandem.scad / edf_stator_sleeve.scad) ─────
 ESC_W_POWER = 23.0e-3    # [m] power panel width — the conducting footprint
 ESC_LEN = 44.0e-3        # [m] board length — 44, not 62.  The first sizing
-                         #     tested the board against a 2.5 mm skin wall while
-                         #     the COVER is a separate part in the same radial
-                         #     budget, and no cooling lane was reserved at all.
-                         #     See nacelle_esc_bay.scad "THE RADIAL BUDGET".
+# tested the board against a 2.5 mm skin wall while the COVER is a separate
+# part in the same radial budget, and no cooling lane was reserved at all.
+# See nacelle_esc_bay.scad "THE RADIAL BUDGET".
 BOARD_AREA = 1452e-6     # [m2] folded board area, one face (44 x 33)
 FLOW_LANE = 1.0e-3       # [m] clear lane above the stack — the channel the
-                         #     cooling air actually flows through
+# cooling air actually flows through
 POD_DUCT_WALL = 2.5e-3   # [m] pod duct wall, r 27.7 -> 30.2
 SLEEVE_WALL = 2.5e-3     # [m] stator sleeve wall, r 25 -> 27.5
 FIT_GAP = 0.2e-3         # [m] radial air gap, sleeve OD 27.5 in a 27.7 bore
@@ -452,6 +451,8 @@ def main() -> int:
             best_c = (r_conv, mdot, 100 * mdot / st["mdot"],
                       21.72 / (mdot * CP_AIR))
 
+    assert best_c is not None, "100% throttle case must set best_c"
+
     print("\n  A NARROW LANE IS BETTER, WHICH IS NOT THE OBVIOUS RESULT.  The")
     print(f"  {FLOW_LANE * 1e3:.1f} mm lane gives h = "
           f"{1.0 / (best_c[0] * 2 * BOARD_AREA):.0f} W/m2.K on "
@@ -522,6 +523,7 @@ def main() -> int:
     # most of its remaining margin.  The rise is charged only to C: A and B are
     # conduction paths whose sink is the whole airframe or the duct jet, neither
     # of which heats measurably.
+
     def air_rise(power: float) -> float:
         return power / (best_c[1] * CP_AIR)
 

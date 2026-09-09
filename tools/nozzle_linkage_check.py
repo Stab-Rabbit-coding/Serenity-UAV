@@ -141,8 +141,7 @@ RING_H = 8.0                     # [mm] nacelle_nozzle_iris.scad:489
 RING_BALL_Z = RING_H / 2.0       # [mm] unison_ring() ball socket, ~line 705
 
 THETA_RING_REF_OPEN_DEG = 23.75  # [deg] nacelle_nozzle_iris.scad:410 -- FIXED
-                                  #   ring-stroke target, independent of
-                                  #   FLAP_LENGTH (see module docstring).
+# ring-stroke target, independent of FLAP_LENGTH (see module docstring).
 
 R_HINGE = 27.5                   # [mm] nacelle_nozzle_iris.scad THROAT_OUTER_R
 NOZZLE_CLOSED_R = 18.75          # [mm] nacelle_nozzle_iris.scad:309
@@ -166,9 +165,8 @@ CRANK_PHASE_GRID_DEG = [i * 5.0 for i in range(0, 360, 5)]   # 0..355 step 5
 CRANK_AXIAL_X_GRID = [0.0, 20.0, 40.0]        # [mm] candidate spar stations
 
 SPAN_TOL_DEG = 5.0        # [deg] allowed deviation of psi(0)/psi(90) from
-                           # the 0 / THETA_RING_REF_OPEN design target before
-                           # a reachable, monotonic solution is still marked
-                           # a span mismatch.
+# the 0 / THETA_RING_REF_OPEN design target before a reachable, monotonic
+# solution is still marked a span mismatch.
 PSI_SEARCH_LO_DEG = -90.0
 PSI_SEARCH_HI_DEG = 90.0
 PSI_SCAN_STEPS = 360       # coarse bracket scan resolution (0.5 deg/step)
@@ -331,6 +329,8 @@ def synthesize(pushrod_len: float, theta_step_deg: float = 1.0) -> tuple[dict, f
                 best_phase = phase
                 best_axial = axial_x
 
+    assert best_result is not None and best_phase is not None \
+        and best_axial is not None, "grid search must visit at least one candidate"
     return best_result, best_phase, best_axial
 
 
@@ -386,17 +386,17 @@ def main() -> int:
         description=__doc__.splitlines()[0],
         formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--flap-length", type=float, default=30.0,
-                         help="[mm] FLAP_LENGTH, for report context only -- "
-                              "does not affect the pushrod/ring solve; see "
-                              "module docstring ASSUMPTIONS (default: 30.0, "
-                              "the plan 005 R1 target).")
+                        help="[mm] FLAP_LENGTH, for report context only -- "
+                             "does not affect the pushrod/ring solve; see "
+                             "module docstring ASSUMPTIONS (default: 30.0, "
+                             "the plan 005 R1 target).")
     parser.add_argument("--pushrod-len", type=float, default=PUSHROD_LEN_NOMINAL,
-                         help="[mm] override PUSHROD_LEN for a synthetic "
-                              "failure demonstration; NOT for tuning the "
-                              "real result (default: the nominal SCAD value, "
-                              f"{PUSHROD_LEN_NOMINAL:.1f} mm).")
+                        help="[mm] override PUSHROD_LEN for a synthetic "
+                             "failure demonstration; NOT for tuning the "
+                             "real result (default: the nominal SCAD value, "
+                             f"{PUSHROD_LEN_NOMINAL:.1f} mm).")
     parser.add_argument("--label", type=str, default="run",
-                         help="label for the printed report section.")
+                        help="label for the printed report section.")
     args = parser.parse_args()
 
     ok = report(args.flap_length, args.pushrod_len, args.label)

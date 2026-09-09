@@ -282,7 +282,7 @@ def read_current_housing():
             out[name] = _safe_eval_scad_expr(expr, out)
         except NameError as exc:
             raise ValueError(f"{name} = '{expr}' references an unparsed "
-                              f"name in {IRIS_SCAD}") from exc
+                             f"name in {IRIS_SCAD}") from exc
     return out
 
 
