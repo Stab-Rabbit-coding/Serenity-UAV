@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-08",
+  "generated": "2026-09-09",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -11386,6 +11386,13 @@
       ],
       "archived": false
     },
+    "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md": {
+      "description": "Passive mechanisms: check the reference frames before sizing anything",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md": {
       "description": "Reducing token cost of a federated AGENTS.md set \u2014 relocate before you compress",
       "tags": [
@@ -11404,6 +11411,13 @@
     },
     "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md": {
       "description": "CuraEngine hangs or crashes on an STL with overlapping faces trimesh reports as watertight",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/workflow-issues/read-the-decision-record-before-verifying-first-pass-geometry.md": {
+      "description": "A source file's \"first-pass / VERIFY\" comment may be stale \u2014 read the decision record first",
       "tags": [
         "documentation"
       ],
@@ -13476,9 +13490,11 @@
       "docs/references/vimdrones_esc_s50_v1.0.step",
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
+      "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md",
+      "docs/solutions/workflow-issues/read-the-decision-record-before-verifying-first-pass-geometry.md",
       "docs/structural_analysis.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
