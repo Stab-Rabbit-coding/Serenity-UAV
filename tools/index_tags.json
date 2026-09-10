@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-09",
+  "generated": "2026-09-10",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -1203,6 +1203,15 @@
     },
     "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/nacelles/nacelle_nozzle_sync_gears.scad": {
+      "description": "DO NOT PRINT THE SUN \u2014 ITS DATUM IS BLOCKED (2026-09-10)",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -14084,6 +14093,7 @@
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_sync_gears.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",
@@ -14341,6 +14351,7 @@
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_sync_gears.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",
@@ -14756,6 +14767,7 @@
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_sync_gears.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",

@@ -963,11 +963,46 @@
         the hub OD must clear the sun's pitch Ø26 at CD 26 — and (b) the arm
         clocked to `CRANK_PHASE` = 206°, since as drawn it is an unclocked
         local +Z arm. Carries a matching TODO/VERIFY in the SCAD module.
-    - [ ] **[OPEN] Sun/pinion gear teeth.** Pitch radius is fixed at 13.0 mm
-        (1:1, pitch Ø26) but module and tooth counts are unchosen, and the pair
-        exists only as pitch cylinders. Must also fit the ~8 mm wing-tip↔nacelle
-        gap stack (MF128ZZ bearing → sun gear → Hall ring magnet / AK7455),
-        pinion ≈26 mm aft of the spar axis to clear the on-axis Hall stack.
+    - [x] **Sun/pinion gear teeth SIZED 2026-09-10 — datum-independent, carries
+        over to any datum choice.** 1:1 pair, **module 0.8** (deliberately matches
+        the existing tilt-drivetrain module: wing 14T pinion, trunnion 50T ring
+        WA-R8, fuselage 38T/38T — no second module introduced), **33T**, PD 26.4,
+        tip Ø28.0, root Ø24.4, 20° full depth, no profile shift (33T ≫ the 17T
+        undercut floor), face 4.0 mm. Root Ø24.4 clears a Ø20.6 spar bore with
+        1.9 mm rim (2.4 × m). Lewis bending at a generous 20 N rod force =
+        10.94 MPa → FOS **7.04** vs 77 MPa (REF-MAT-002 Tbl 4, ASTM D790
+        flexural, the correct test type) and **4.43** vs the conservative
+        48.41 MPa proxy (REF-MAT-001); teeth are not governing on any candidate
+        allowable. Backlash 0.15 mm cut into tooth thickness (not opened at the
+        centre distance, which the linkage pins); 0.4 mm first-layer chamfer
+        against elephant-foot. Print flat, gear axis vertical, so tooth bending
+        runs in-plane. **Note:** this repo has no orientation-specific or
+        interlayer CF-PETG allowable and the bearing allowable is "requires
+        verification" — do not re-label either figure.
+    - [ ] **[BLOCKED — needs an owner decision, do NOT assume resolved] The
+        KTD3 sync-gear datum does not package in the Rev T4 joint.** Full
+        numbers and the lever-by-lever analysis are written up in
+        `docs/NOZZLE_DRIVE_TRADE.md` § "PACKAGING BLOCKER — the KTD3 datum does
+        not fit (2026-09-10)". Summary: the joint has **+0.0 mm axial margin in
+        hand** (the OI-8 comment's "1.0 mm" was stale and was corrected
+        2026-09-10); the 13.5 mm spar stub is fully consumed and terminates
+        hard against the stator sleeve, so there is **zero** fixed-frame space
+        for a coaxial fixed sun. Lever (a), recovering stub to the "duct bound"
+        26.0, is worth **0.0 mm** — that bound was taken against the Ø50 EDF
+        bore ignoring the sleeve, and reaching it would leave 1.0 mm of a 2.5 mm
+        sleeve wall on the Ø50 flow boundary (R6 invariant, ID cannot move).
+        Single-bearing is barred by OI-8's span argument. So honouring KTD3
+        costs **either a flux re-validation (AK7455 10–70 mT window) or a
+        wing-geometry change**. Choose: spend flux, spend wing geometry, or
+        reopen the datum — the linkage solve, gear sizing and print work above
+        are all datum-independent and carry over, so reopening is cheap.
+    - [ ] **[OPEN — parked, do NOT print] `nacelle_nozzle_sync_gears.scad`.**
+        The gear pair and the integral pinion+crank are authored and render
+        manifold (sun 3741 facets, pinion 7279, both `Simple: yes`), but the
+        **sun's bore and mounting are built to the superseded 2026-07-19
+        wing-tip datum** (Ø8.4 bore for a rotating Ø8 spar) and are wrong under
+        Rev T1's fixed Ø20 spar. Committed for the reusable half only. Fix
+        depends entirely on the blocked decision above.
     - [ ] **[OPEN] Pushrod clearance/interference check.** The linkage checker
         is kinematics-only by design; it does not verify the rod clears the cowl
         skin, the ESC bays, or the flap sweep across the full tilt range.
