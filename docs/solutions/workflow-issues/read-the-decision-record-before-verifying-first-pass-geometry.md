@@ -122,3 +122,13 @@ read SCAD header ("first-pass, VERIFY, do NOT print")
 
 Same tools, same conclusions, none of the rework and none of the wrong WBS
 entry.
+
+## Refresh 2026-09-15
+
+Still current. One addendum from the day after it was written: reading the decision
+record to its end found the *design* answer, and the very next step — checking it against
+the as-built joint — found the datum has no axial home (`docs/NOZZLE_DRIVE_TRADE.md`,
+"What is blocked", 2026-09-10). The order of operations this learning prescribes therefore
+has a third step in this repo: decision record → **as-built numbers in the SCAD headers
+(`nacelle_trunnion.scad` OI-8 block)** → tooling. The WBS entries that carry the datum
+question are `airframe/wings-nacelles/WBS.md` §1.1.3.1 `[BLOCKED]` and §1.1.5 SPAR-25-5.

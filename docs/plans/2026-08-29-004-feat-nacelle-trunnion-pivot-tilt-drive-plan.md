@@ -618,3 +618,26 @@ hover ground clearance with a stated margin.
 
 *Analysis and plan drafted by Claude (Claude Sonnet 5, Anthropic) under the
 author's direction, 2026-08-29, per `AGENTS.md` AI attribution.*
+
+---
+
+## Status 2026-09-15 (doc-review against the Rev T record)
+
+- **U1–U4 closed in the WBS** on 2026-09-15 (`airframe/wings-nacelles/WBS.md` §1.1.5
+  SPAR-25-1..4) with the as-built values: m0.8 14T/50T reduction, C 25.6 → station 53.6,
+  2 × 6704ZZ, 13.5 mm stub. `tools/tilt_drive_sizing.py` (U1) was never written and is
+  not needed — the built numbers supersede the sizing sweep.
+- **U5 is BLOCKED (2026-09-10), not merely open.** The KTD3 coaxial fixed sun has no axial
+  home: the OI-8 bearing-stack margin this plan's correction section called "1.0 mm in
+  hand" was re-measured to **0.0 mm**, and every lever (spar stub, air gap, magnet, joint
+  gap, single bearing) is at a floor. `docs/NOZZLE_DRIVE_TRADE.md` "What is blocked" has
+  the numbers; the decision is D2 in the first-flight plan. KTD3 therefore does *not*
+  "half-hold" — it is unbuildable as written until one of the three options is chosen.
+- **U6 absorbs the actuator re-select** (multi-turn ⇒ gearmotor/stepper on the AK7455;
+  KTD5's "17× oversized DS3225" is now the wrong device class, not just oversized) and
+  WA-R16 (train not self-locking). The trunnion is still not registered in
+  `serenity_assembly.py` (§1.1.3.7 VERIFY), so the FreeCAD sweep in the Definition of Done
+  has not been run at −5/0/45/90/140°.
+- OQ1 closed (void), OQ3 closed (6704ZZ), OQ5 closed (concentric). OQ2 (printed vs metal
+  pinion) and OQ4 (mount rework) remain and fold into U6.
+- Successor roadmap: `docs/plans/2026-09-15-001-first-flight-readiness-plan.md` A1/A2.

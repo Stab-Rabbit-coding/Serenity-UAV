@@ -22,10 +22,10 @@
 | §0.5 | 0.5 — Citation Completeness Audit (All Source Files) | 3 | — |
 | §0.1 | 0.1 — FCC Part 95 Section-Number Verification | 0 | — |
 | §0.7 | 0.7 — CI Lint Scope and Repo-Wide Lint Debt | 0 | — |
-| §0.8 | 0.8 — Tilt-Spar Material Allowables + Hall Encoder | 3 | — |
+| §0.8 | 0.8 — Tilt-Spar Material Allowables + Hall Encoder | 4 | — |
 | §0.9 | 0.9 — Licensing Updates | 1 | — |
-| §0.10 | 0.10 — Update and Correct Documentation Touching Every Non-Archived File | 6 | — |
-| §1.5 | 1.5 — Documentation | 3 | — |
+| §0.10 | 0.10 — Update and Correct Documentation Touching Every Non-Archived File | 8 | — |
+| §1.5 | 1.5 — Documentation | 4 | — |
 | §1.6 | 1.6 — Rev Q: Repo-Wide Architecture Propagation | 0 | — |
 | §1.7 | 1.7 — Rev R: Component Rev Sync + s_ Prefix Removal | 0 | — |
 | §5.1 | 5.1 — FCC (external radio systems) | 1 | — |
@@ -35,7 +35,7 @@
 | §6.2 | 6.2 — STL Mesh Repair | 0 | — |
 | §6.3 | 6.3 — Rev S Checkpoint | 0 | — |
 | §6.4 | 6.4 — Rev T Checkpoint | 0 | — |
-| | **Total open (this subsystem)** | **27** | |
+| | **Total open (this subsystem)** | **31** | |
 
 ---
 
@@ -298,12 +298,16 @@ study and the wing/nacelle Hall tilt-feedback sensor. Both carry
     bearing journals — specify zinc/cadmium plate (journals ground) on
     `SPAR-TILT-4130` in the BOM and the build guide, or adopt the plating-free
     17-4 PH alternative. (docs §3.5 / §9.)
-- [ ] **Verify the MT6701 off-axis geometry + pinout.** Encoder selected =
-    `SKIPPER-TILT-ENC-PCB` (Magntek MT6701, I²C, off-axis; MA732/SPI fallback). Confirm
-    against the MT6701 datasheet: pinout/protocol, off-axis air-gap (assumed
-    1.5 mm), ring OD/ID, IC radial offset (R = 12 mm), and ferrous-through-shaft
-    behavior; add a `REF-SENSOR-*` entry with a validated URL before PCB/harness
-    sign-off. Bench-cal tracked in `avionics/emi-hardening/WBS.md` §1.4.6 and
+- [ ] **Verify the AK7455 off-axis geometry on the bench.** *(Text corrected
+    2026-09-15 — this item still named the Magntek MT6701, rejected 2026-07-19 as an
+    on-axis part; the selected encoder is the AKM **AK7455** on `SKIPPER-TILT-ENC-PCB`,
+    REF-SENSOR-008.)* Pinout/protocol were **verified against the datasheet
+    2026-07-26** (`airframe/wings-nacelles/WBS.md` §1.1.3.6, ERC 0). Still open, and
+    physical: confirm the ring magnet presents **10–70 mT** at the IC across the
+    1.5 mm air gap (magnet ID 27 / OD 41, thickness cut 2.5 → 2.0 mm on 2026-08-31 —
+    both edges of that window are now load-bearing per `docs/NOZZLE_DRIVE_TRADE.md`
+    "What is blocked"), run the EEPROM INL calibration over −5..140°, and confirm
+    ERROR-pin drive. Bench-cal tracked in `avionics/emi-hardening/WBS.md` §1.4.6 and
     `avionics/WBS.md` §1.9.1.
 
 
@@ -467,7 +471,7 @@ This detail entry did not previously exist — root `WBS.md` §0.10/§0.10.1/§0
 before any of those sections existed, a broken cross-reference discovered and closed as part
 of this same audit (see "WBS/TODO federation sync" below). Predecessor audits exist under the
 pre-renumbering "0.6" label: `airframe/SPEC_VERIFICATION_0.6.1.md` (Systems) and
-`docs/DOC_VERIFICATION_0.6.2.md` (Documentation), both dated 2026-08-01, left "In Progress"
+`docs/DOC_VERIFICATION_0.6.2.md` (Documentation; archived 2026-09-15 to `archives/docs-superseded/`), both dated 2026-08-01, left "In Progress"
 with open action-item lists — this pass picks up from there rather than starting cold.
 
 **Scope of this pass (2026-08-22):** a full read-only audit across six areas (airframe,
@@ -556,7 +560,7 @@ files), retired-name net labels (`J_JAYNE`/`5V_JAYNE`/`5V_VERA`/`F_VERA`→`J_OB
 `docs/structural_analysis.md`** that inflated its AUW baseline to a fabricated 16.5 lbm
 (corrected; flagged that every downstream load case in that document needs re-derivation, not
 attempted here — real structural re-analysis is out of scope for a documentation pass), two
-documents (`docs/FIRST_FLIGHT_READINESS.md`, `docs/PYLON_INTEGRATION_2026-07-18.md`)
+documents (`docs/FIRST_FLIGHT_READINESS.md`, `docs/PYLON_INTEGRATION_2026-07-18.md` — the latter archived 2026-09-15)
 instructing fabrication of a tilt/nozzle-drive mechanism superseded within a day of being
 written (added superseded-mechanism banners), a stale sensor selection in
 `docs/TILT_SPAR_ANALYSIS.md` (MT6701→AK7455, rejected the same day it was written but never
@@ -643,7 +647,7 @@ sections. All READMEs already using current naming were left alone.
 
 #### 3. System specification files and BOM
 
-Per the predecessor `docs/DOC_VERIFICATION_0.6.2.md §0.6.2.3` open items:
+Per the predecessor `docs/DOC_VERIFICATION_0.6.2.md` §0.6.2.3 open items (file now in `archives/docs-superseded/`):
 - **JSX viewers**: archived `serenity-rev-r.jsx` to `archives/`, matching the existing
   precedent for `serenity-rev-p.jsx`/`serenity-rev-q.jsx` — `serenity-rev-s.jsx` is now the
   sole current viewer, and the 2 stale self-references to rev-r were fixed.
@@ -707,6 +711,46 @@ correctly from `WBS.md` is a substantial, repo-wide editorial task in its own ri
 line-by-line against ~15 files) and was not attempted in this pass; flagging it as its own
 follow-up rather than a quick fix bundled in here.
 
+**CLOSED 2026-09-15 — mechanised.** `AGENTS.md` §10 has said since Rev S2 that `TODO.md` is
+*generated* from `WBS.md`, but no generator existed and every `TODO.md` in the federation had
+been hand-patched (root: 531 lines, 43 % over the cap; `airframe/wings-nacelles/TODO.md`: 4
+lines against 44 genuinely-open top-level items in its `WBS.md`). Added
+`tools/gen_todo_from_wbs.py` (`--check` for drift, no args to regenerate all 17 pairs) and
+regenerated every `TODO.md` from its owner. Rules it encodes: one line per open *top-level*
+item (an open sub-item under a closed parent is promoted; under an open parent it folds in),
+first clause of the item cut to ≤70 chars, headings only where open work remains, preamble and
+footer quote preserved. Consequences worth knowing:
+
+- Root `TODO.md` §0.8/§0.8.1 carried ~25 items that root `WBS.md` §0.8 did not — a
+  TODO-as-source-of-truth inversion. Those lines were first written into root `WBS.md` §0.8
+  (one-liners, pointing at `docs/WING_ATTACH_INTERFACE.md` §5 / `docs/TILT_DRIVE_CONTROL_SPEC.md`
+  §8 / `docs/MASS_AUDIT_CARGO_WING_ROOT.md`), *then* regenerated — nothing was dropped.
+- Root `WBS.md` §1.1.3 listed 11 open nacelle lines that do not exist in the owning
+  `airframe/wings-nacelles/WBS.md` in any form (`Reconcile crazy-ivan/PR#141`, `Merge
+  cargo_spar_drive into cargo shell`, `Verify stbd cargo-chunk placement`, `Tune servo→spar
+  horn/pushrod throw`, `Repair pre-existing stator sleeve non-manifold`, `Bench-cal AK7455 with
+  steel spar/MF128 bearing`, `VERIFY Rev S2 CG`, `Re-solve single-straight-spar alignment`,
+  `Nozzle drive: replace invalid spar-crank`, `Stator spar crossing (Rev S2b)`, `Ø72
+  nozzle-pocket eats the aft cowl tail`). All describe the Rev R2/S2 rotating-spar
+  architecture retired at Rev S4; the AK7455 bench-cal and CG items survive under their own
+  §1.1.3.6/§1.1.3.1 entries. Dropped from the root index as orphans — recorded here so they
+  can be resurrected deliberately if any was closed by mistake rather than by supersession.
+- `airframe/wings-nacelles/WBS.md` numbers its own tilt-spar sections **§1.1.4** and
+  **§1.1.5**, which collide with root §1.1.4 (Landing Gear) and §1.1.5 (Placeholders). Root
+  indexes them under §1.1.3 with an explicit local-numbering note; renumbering the owner is a
+  cross-file edit deferred to the owner's next revision (new item, §0.10.2 item 4 below).
+- Closed while resyncing, with dated notes in the owner: `SPAR-20-4`, `SPAR-20-7`,
+  `SPAR-25-1..4` (built 2026-08-29/31 per plan 004 and `wing_root_deconflict.py` CLEAR) and
+  three §1.1.3.6 items done by SPAR-20-5 or superseded by the trunnion.
+
+- [ ] **Renumber `airframe/wings-nacelles/WBS.md` §1.1.4/§1.1.5 → §1.1.3.9/§1.1.3.10** (or
+    another non-colliding scheme) so the owner's section labels match the root index; update
+    every inbound `§1.1.4`/`§1.1.5` pointer in `docs/plans/*`, `docs/WING_ATTACH_INTERFACE.md`
+    and the owner's own cross-references. Cross-file; do it in one commit.
+- [ ] **Wire `tools/gen_todo_from_wbs.py --check` into the pre-commit hook / CI** beside
+    `precommit_index.py --check`, so a hand-edited `TODO.md` fails the same way a stale index
+    does.
+
 #### 5. REFERENCES.md file
 
 Fixed: a duplicate-REF-ID bug (`REF-SENSOR-013`/`014` were each defined twice — once for the
@@ -724,6 +768,38 @@ more stale paths beyond the ID itself (fixed, see commit); no further gaps found
 pass beyond what's listed as open elsewhere in this section (e.g. the 3 new "requires
 verification" entries above still need an actual URL/section lookup, which this pass
 deliberately did not fabricate).
+
+#### 6. Superseded documents archived (2026-09-15)
+
+Moved to `archives/docs-superseded/` (entries added to its `README.md`; indexes regenerated):
+
+- `docs/DOC_VERIFICATION_0.6.2.md` (2026-08-01, "In Progress") — every action item it lists
+  was either closed by this section's 2026-08-22 pass or is tracked here as a residual; the
+  file's own status never moved. Superseded by §0.10.2 above.
+- `docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md` — point-in-time Rev S report whose own
+  "Next audit" trigger (Rev T) has fired; the Rev T checkpoint is §6.4.
+- `docs/TODO_1_1_0_COMPLETION_SUMMARY.md` (2026-07-18) — a hand-off note asking for two
+  checkboxes to be ticked; both are ticked in root `WBS.md` §1.1.0 and the detail lives in
+  `airframe/WBS.md` §1.1.0.
+- `docs/PYLON_INTEGRATION_2026-07-18.md` — self-declared superseded within a day of writing;
+  the superseding documents it names are still current.
+
+**Kept in place with a supersession banner, not archived:** `docs/AVIONICS_PB2_REDESIGN.md` —
+flagged in item 3 above as "comprehensively stale … recommend archival or a full rewrite", but
+it is cited from 16 `REFERENCES.md` "Used in" lists and is the architecture pointer in
+`Pilot.md`/`XO.md`; nothing yet replaces its bus-topology / radio-link narrative. Archiving it
+today would orphan those citations. Banner added 2026-09-15 naming `avionics/AGENTS.md` and the
+per-board `.md` files as the as-built authorities; the rewrite is a new item:
+
+- [ ] **Rewrite `docs/AVIONICS_PB2_REDESIGN.md` as a Rev T architecture overview** (8 nodes,
+    Pilot/XO/Commo/Flight Engineer/Observer/CAN-PERIPH-GW-1, CAN-FD/RS-485 actuator trunk per
+    plan 2026-08-25-001 U1, current radio table), then move the Rev Q/R text to
+    `archives/docs-superseded/` and repoint the 16 `REFERENCES.md` "Used in" entries.
+
+Kept, rewritten in place rather than archived: `docs/FIRST_FLIGHT_READINESS.md` — regenerated
+2026-09-15 from the live federation (was a 2026-07-05 snapshot carrying two stale-warning
+banners); the ordered plan it rolls up is
+`docs/plans/2026-09-15-001-first-flight-readiness-plan.md`.
 
 ### Summary
 
@@ -774,6 +850,14 @@ meaningfully higher, and that bears on the aircraft's actual hover margin.
     per-system build-guide cards) before starting; do not attempt as one pass.
 - [ ] **Sync `bom_revO.json` ↔ `bom_revO.csv`** — verify all XCVR-49MHZ-1 BOM items (Phase 5
     above) are reflected in both files once XCVR-49MHZ-1 Phase 5 is complete.
+- [ ] **Rewrite build-guide Phase 2/3 steps for the Rev T mechanism** (added 2026-09-15,
+    first-flight plan A9). `graphical-build-guide/WBS.md` Phases 2–3 still instruct fitting
+    the sector gear, bevel pair, crown pinion, idler, 2 mm longitudinal shaft, MF104ZZ
+    bearings and 4 mm CF pivot rod — every one deleted by Rev S2 (pushrod drive) and Rev S4
+    (trunnion on 2 × 6704ZZ). Phase 0 dry-fit checks ("sector gear ↔ pinion backlash",
+    "4 mm CF pivot rod slides through") are wrong for the same reason. Owner of the steps is
+    `graphical-build-guide/`; this item tracks the documentation rewrite, which must wait for
+    the D2 nozzle-datum decision so the Phase 2 nozzle steps are written once.
 
 - [x] **1.5.7 Consolidate CLAUDE.md/AGENTS.md into a single, model-agnostic `AGENTS.md`**
     *(done 2026-07-18)*. Root `AGENTS.md` now merges the former root `AGENTS.md` +

@@ -619,3 +619,18 @@ once the outline is known.
 - Intake measurement tolerance and any CFD or bench-flow evidence required to
   support a no-separation claim.
 - Printed-part and airframe mass/CG deltas after geometry is frozen.
+
+## Status 2026-09-15 (doc-review against the Rev T record)
+
+- **U4 bays: BUILT** (2026-09-06, above). Still open on them, and they are safety items,
+  not polish: the bay is an unfiltered path into the duct, bay velocity is unverified, and
+  50 A sustained is not survivable on any evaluated path (`airframe/wings-nacelles/WBS.md`
+  §1.1.3.8). The cooling circuit was corrected to aspirate, not bleed (commit `325c360`).
+- **PRINT-BLOCKING, unchanged:** `MOTOR_BOLT_R` 10.0 mm and the 3-arm spider against a
+  4-screw motor. Nothing here can close until a physical motor is measured.
+- **U5 intake: unchanged;** the wavy-flange defect stands, superseded as a requirement by
+  plan 2026-08-29-005 R5.
+- **U6 is void** (recorded above) — leave it closed.
+- **U7:** regeneration done; the BOM/mass half is now part of first-flight plan A0 (the
+  +521.6 g MA-1 under-count includes nacelle rows).
+- Successor roadmap: `docs/plans/2026-09-15-001-first-flight-readiness-plan.md` A3.

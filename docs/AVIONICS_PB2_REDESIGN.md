@@ -4,6 +4,14 @@
 **Date:** 2026-06-11 (Rev R: Pilot/XO naming finalised; Flight Engineer PDB DRC-clean + gerbers; hull-frame coords validated; battery spec propagated)
 **Scope:** Avionics compute, cape specifications, bus topology, radio link architecture
 
+> **SUPERSEDED AS A SOURCE OF BOARD DETAIL (banner added 2026-09-15).** This document is a
+> Rev Q/R narrative: it predates the Observer board, `CAN-PERIPH-GW-1`, the fleet trust module,
+> the 2026-08-01 board rename (it still uses Cape-A/Cape-B terminology in places), and the
+> CAN-FD/RS-485 actuator-trunk decision of plan `2026-08-25-001`. **As-built authorities are
+> `avionics/AGENTS.md` and each board's own `.md` under `avionics/kicad/<Board>/`.** It is kept
+> only because its bus-topology and radio-link overview has no replacement yet and 16
+> `REFERENCES.md` entries cite it; a Rev T rewrite is tracked in `docs/WBS.md` §0.10.2 item 6.
+
 > **Rev Q cape change:** All 8 nodes (Bays A, B, D, E) now use EMI-hardened -2 capes. Previously
 > Bays B and D used Cape-A-1 / Cape-B-1 (-1 standard). Rev Q standardises on a single hardened SKU,
 > providing 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every position.

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-10",
+  "generated": "2026-09-16",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -100,7 +100,7 @@
       "archived": false
     },
     ".vscode/settings.json": {
-      "description": "JSON data (4 top-level keys)",
+      "description": "JSON data (5 top-level keys)",
       "tags": [
         "repo-infra"
       ],
@@ -336,6 +336,7 @@
       "description": "Serenity UAV \u2014 Airframe (Hull-Frame Standard + Placeholders) TODO (Open Work Only)",
       "tags": [
         "documentation",
+        "emi-hardening",
         "project-tracking",
         "structural"
       ],
@@ -699,7 +700,7 @@
       "archived": false
     },
     "airframe/blender-scripts/merge_cargo_interior.py": {
-      "description": "merge_cargo_interior.py \u2014 Rev R1 (2026-06-30)",
+      "description": "merge_cargo_interior.py \u2014 Rev T5e (2026-09-16; Rev R1 2026-06-30 base)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -4959,6 +4960,25 @@
       ],
       "archived": true
     },
+    "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md": {
+      "description": "Documentation Reconciliation Summary \u2014 2026-07-28",
+      "tags": [
+        "archive",
+        "documentation",
+        "emi-hardening",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/docs-superseded/DOC_VERIFICATION_0.6.2.md": {
+      "description": "Documentation Verification (Task 0.6.2)",
+      "tags": [
+        "archive",
+        "documentation"
+      ],
+      "archived": true
+    },
     "archives/docs-superseded/POWER_SYSTEM_Q.md": {
       "description": "Serenity UAV \u2014 Power System Analysis (Rev Q)",
       "tags": [
@@ -4969,11 +4989,29 @@
       ],
       "archived": true
     },
+    "archives/docs-superseded/PYLON_INTEGRATION_2026-07-18.md": {
+      "description": "Tilt Bracket Integration into Wing \u2014 Summary (2026-07-18)",
+      "tags": [
+        "archive",
+        "documentation"
+      ],
+      "archived": true
+    },
     "archives/docs-superseded/README.md": {
       "description": "Superseded Design Documents",
       "tags": [
         "archive",
         "documentation"
+      ],
+      "archived": true
+    },
+    "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md": {
+      "description": "TODO.md \u00a71.1.0 \u2014 Hull-Frame Coordinate Standardisation (Rev R1) \u2014 Completion Summary",
+      "tags": [
+        "archive",
+        "documentation",
+        "project-tracking",
+        "security"
       ],
       "archived": true
     },
@@ -9615,7 +9653,7 @@
       "archived": false
     },
     "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (182 items)",
+      "description": "Bill of materials, CSV (197 items)",
       "tags": [
         "bom",
         "specification"
@@ -9623,7 +9661,7 @@
       "archived": false
     },
     "current-specification/bom_revS.json": {
-      "description": "Bill of materials, JSON (168 items)",
+      "description": "Bill of materials, JSON (197 items)",
       "tags": [
         "bom",
         "specification"
@@ -9922,25 +9960,8 @@
       ],
       "archived": false
     },
-    "docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md": {
-      "description": "Documentation Reconciliation Summary \u2014 2026-07-28",
-      "tags": [
-        "documentation",
-        "emi-hardening",
-        "redundancy-failover",
-        "security"
-      ],
-      "archived": false
-    },
     "docs/DOC_TEMPLATES.md": {
       "description": "Documentation Structure Templates",
-      "tags": [
-        "documentation"
-      ],
-      "archived": false
-    },
-    "docs/DOC_VERIFICATION_0.6.2.md": {
-      "description": "Documentation Verification (Task 0.6.2)",
       "tags": [
         "documentation"
       ],
@@ -9956,12 +9977,10 @@
       "archived": false
     },
     "docs/FIRST_FLIGHT_READINESS.md": {
-      "description": "Serenity UAV \u2014 First-Flight Readiness: Open-Item Summary",
+      "description": "Serenity UAV \u2014 First-Flight Readiness: Open-Item Rollup",
       "tags": [
         "documentation",
-        "emi-hardening",
-        "redundancy-failover",
-        "security"
+        "emi-hardening"
       ],
       "archived": false
     },
@@ -10055,13 +10074,6 @@
       ],
       "archived": false
     },
-    "docs/PYLON_INTEGRATION_2026-07-18.md": {
-      "description": "Tilt Bracket Integration into Wing \u2014 Summary (2026-07-18)",
-      "tags": [
-        "documentation"
-      ],
-      "archived": false
-    },
     "docs/README.md": {
       "description": "Serenity UAV \u2014 Documentation Index",
       "tags": [
@@ -10111,15 +10123,6 @@
       "tags": [
         "documentation",
         "project-tracking"
-      ],
-      "archived": false
-    },
-    "docs/TODO_1_1_0_COMPLETION_SUMMARY.md": {
-      "description": "TODO.md \u00a71.1.0 \u2014 Hull-Frame Coordinate Standardisation (Rev R1) \u2014 Completion Summary",
-      "tags": [
-        "documentation",
-        "project-tracking",
-        "security"
       ],
       "archived": false
     },
@@ -10375,6 +10378,15 @@
       "tags": [
         "documentation",
         "landing-gear"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-09-15-001-first-flight-readiness-plan.md": {
+      "description": "plan: Get Serenity to first flight (Phase 5) from the Rev T checkpoint",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "security"
       ],
       "archived": false
     },
@@ -11420,6 +11432,13 @@
     },
     "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md": {
       "description": "CuraEngine hangs or crashes on an STL with overlapping faces trimesh reports as watertight",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/workflow-issues/generate-open-item-views-never-hand-patch-them.md": {
+      "description": "A \"generated\" open-items view that has no generator becomes the source of truth by accident",
       "tags": [
         "documentation"
       ],
@@ -12924,6 +12943,15 @@
       ],
       "archived": false
     },
+    "tools/gen_todo_from_wbs.py": {
+      "description": "Regenerate a ``TODO.md`` (open work only) from its owning ``WBS.md``.",
+      "tags": [
+        "build-tooling",
+        "emi-hardening",
+        "project-tracking"
+      ],
+      "archived": false
+    },
     "tools/import-specctra-ses.py": {
       "description": "Companion to export-specctra-dsn.py: import a freerouting-produced",
       "tags": [
@@ -13266,8 +13294,12 @@
       "archives/avionics-archives/kicad-archives/archive/CAPE-B-2.md",
       "archives/avionics-archives/kicad-archives/archive/PWR-DIST-1.md",
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.md",
+      "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
+      "archives/docs-superseded/DOC_VERIFICATION_0.6.2.md",
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
+      "archives/docs-superseded/PYLON_INTEGRATION_2026-07-18.md",
       "archives/docs-superseded/README.md",
+      "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/root-readme-deep-dive-2026-08-03/README.md",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity/README.md",
@@ -13323,9 +13355,7 @@
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/BATTERY_MOUNT.md",
       "docs/CARGO_WINCH_SPECIFICATION.md",
-      "docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
       "docs/DOC_TEMPLATES.md",
-      "docs/DOC_VERIFICATION_0.6.2.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
       "docs/LANDING_GEAR_ANALYSIS.md",
@@ -13339,14 +13369,12 @@
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/POWER_DISTRIBUTION.md",
       "docs/PROTO_PRINT_DAVINCI_JR.md",
-      "docs/PYLON_INTEGRATION_2026-07-18.md",
       "docs/README.md",
       "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
       "docs/TILT_ENCODER_WIRING_EMI_SPEC.md",
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/TODO.md",
-      "docs/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "docs/Tilt-Rotor 10AWG Wire Clearance Analysis.md",
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
@@ -13379,6 +13407,7 @@
       "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md",
       "docs/plans/2026-08-30-001-weight-reduction-targets-plan.md",
       "docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md",
+      "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -13502,6 +13531,7 @@
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md",
+      "docs/solutions/workflow-issues/generate-open-item-views-never-hand-patch-them.md",
       "docs/solutions/workflow-issues/read-the-decision-record-before-verifying-first-pass-geometry.md",
       "docs/structural_analysis.md",
       "gcs/AGENTS.md",
@@ -13534,6 +13564,7 @@
       "WBS.md",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
       "airframe/README.md",
+      "airframe/TODO.md",
       "airframe/fuselage-joints/WBS.md",
       "airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad",
       "airframe/openscad/fuselage/cargo/cargo_vera_faraday.scad",
@@ -13552,6 +13583,7 @@
       "archives/avionics-archives/kicad-archives/archive/gen_cape_a2_pcb.py",
       "archives/avionics-archives/kicad-archives/archive/gen_cape_b2.py",
       "archives/avionics-archives/kicad-archives/archive/gen_cape_b2_pcb.py",
+      "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
       "archives/docs-superseded/serenity-rev-q.jsx",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity-rev-q.jsx",
@@ -13587,7 +13619,6 @@
       "current-specification/serenity-rev-s.jsx",
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/BATTERY_MOUNT.md",
-      "docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
@@ -13605,9 +13636,11 @@
       "docs/plans/2026-08-27-nacelle-wiring-plan.md",
       "docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md",
       "docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
+      "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
+      "tools/gen_todo_from_wbs.py",
       "tools/nacelle_mass_cg.py",
       "tools/precommit_index.py",
       "tools/validate_kicad.py"
@@ -13619,6 +13652,7 @@
       "airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad",
       "airframe/openscad/fuselage/head_shell24.scad",
       "airframe/openscad/fuselage/middle_canonical_shell24.scad",
+      "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "avionics/AGENTS.md",
       "avionics/README.md",
@@ -13630,9 +13664,7 @@
       "current-specification/README.md",
       "deferred/README.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
-      "docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
       "docs/ETHERNET_PHY_TRADE.md",
-      "docs/FIRST_FLIGHT_READINESS.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
       "docs/REVN_BUILD_GUIDE_24IN.md",
@@ -13676,7 +13708,9 @@
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.md",
       "archives/chat/journal.txt",
+      "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
+      "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/serenity-rev-q.jsx",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity-esc-telem-revH1.jsx",
@@ -13735,8 +13769,6 @@
       "current-specification/serenity-rev-s.jsx",
       "docs/AGENTS.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
-      "docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
-      "docs/FIRST_FLIGHT_READINESS.md",
       "docs/OBSERVER_LASER_ANALYSIS.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/OSHW_CERTIFICATION.md",
@@ -13744,11 +13776,11 @@
       "docs/POWER_DISTRIBUTION.md",
       "docs/README.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
-      "docs/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
+      "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "gcs/AGENTS.md",
@@ -13945,6 +13977,7 @@
       "airframe/landing-gear/WBS.md",
       "airframe/wings-nacelles/TODO.md",
       "airframe/wings-nacelles/WBS.md",
+      "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
@@ -13963,7 +13996,6 @@
       "deferred/TODO.md",
       "deferred/WBS.md",
       "docs/TODO.md",
-      "docs/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "docs/WBS.md",
       "docs/WBS_FEDERATION.md",
       "gcs/TODO.md",
@@ -13973,7 +14005,8 @@
       "graphical-build-guide/WBS.md",
       "graphical-build-guide/flight-phases/TODO.md",
       "graphical-build-guide/flight-phases/WBS.md",
-      "tools/TODO.md"
+      "tools/TODO.md",
+      "tools/gen_todo_from_wbs.py"
     ],
     "structural": [
       "airframe/AGENTS.md",
@@ -15463,8 +15496,12 @@
       "archives/chat/2026-04-28-14-10-02-serenity-tiltrotor-drone-design.txt",
       "archives/chat/2026-05-03-20-24-05-serenity-tiltrotor-drone-design.txt",
       "archives/chat/journal.txt",
+      "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
+      "archives/docs-superseded/DOC_VERIFICATION_0.6.2.md",
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
+      "archives/docs-superseded/PYLON_INTEGRATION_2026-07-18.md",
       "archives/docs-superseded/README.md",
+      "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/bom_revQ.csv",
       "archives/docs-superseded/serenity-rev-q.jsx",
       "archives/files.zip",
@@ -16739,6 +16776,7 @@
       "tools/compact_bom_entries.py",
       "tools/export-specctra-dsn.py",
       "tools/export_landing_gear_stls.py",
+      "tools/gen_todo_from_wbs.py",
       "tools/import-specctra-ses.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/landing_gear_bay_seat_fit.py",

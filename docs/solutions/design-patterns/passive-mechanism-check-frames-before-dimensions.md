@@ -141,3 +141,13 @@ cam-ring-lever(32 mm) geometry carries over unchanged.
 
 See `docs/NOZZLE_DRIVE_TRADE.md`, "DECISION AMENDMENT — hybrid A+B adopted
 (2026-07-19)", which is the governing decision record for this mechanism.
+
+## Refresh 2026-09-15
+
+The frame lesson stands unchanged. What has moved is the *packaging* of the adopted
+formulation: on 2026-09-10 the trunnion-fixed sun (plan 004 KTD3, the coaxial variant of
+the wing-fixed datum above) was found to have **no axial home** in the as-built joint —
+the bearing-stack margin re-measured to 0.0 mm (`docs/NOZZLE_DRIVE_TRADE.md`, "What is
+blocked"). That is a separate finding from this one: the reference frame is right; where
+the fixed member physically sits is an owner decision (first-flight plan D2). Do not read
+this learning as "the linkage is buildable as drawn".

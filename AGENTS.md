@@ -273,8 +273,11 @@ gets a new detail file); the full per-subsystem inventory of those `{TODO,WBS}.m
 `current-specification/` — is in **`docs/WBS_FEDERATION.md`**. Split detail files are governed
 by their parent folder's `AGENTS.md` (no separate federated `AGENTS.md` per split).
 
-New work: close it in the owning `WBS.md` first (full notes there), then prune/regenerate the
-matching `TODO.md` line from it. Sync root and subsystem `WBS.md`/`TODO.md` before committing.
+New work: close it in the owning `WBS.md` first (full notes there), then regenerate every
+`TODO.md` with `/usr/bin/python3 tools/gen_todo_from_wbs.py` (`--check` reports drift and
+exits non-zero). Never hand-edit a `TODO.md`; a `TODO.md` line with no `WBS.md` home is a
+defect in the record — move the content into the owning `WBS.md`, then regenerate. Sync root
+and subsystem `WBS.md` before committing.
 
 - Prefer editing existing files. No speculative abstractions, feature flags, or unused
   scaffolding — build only what the task needs.

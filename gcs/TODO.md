@@ -16,39 +16,39 @@
 ## §4.5 — Ground Control (Skipper / CAPT Reynolds) &#9733;
 → full detail: `WBS.md` §4.5
 
-- [ ] Create Skipper host computer specification
-- [ ] Skipper field enclosure — print and fit-check
+- [ ] Create Skipper host computer specification (`gcs/skipper/hardware/doc…
+- [ ] Skipper field enclosure — print and fit-check `gcs/skipper/hardware/e…
 - [ ] Gimbal STL generation and mesh verification
-- [ ] Gimbal servo wind-load torque check
-- [ ] Procure Skipper comms node hardware:
-- [ ] Procure antenna hardware
-- [ ] Procure gimbal hardware:
-- [ ] Flash Debian Linux to Skipper PB2-I eMMC
+- [ ] Gimbal servo wind-load torque check — compute worst-case wind torque…
+- [ ] Procure Skipper comms node hardware: - 1× PocketBeagle 2 Industrial…
+- [ ] Procure antenna hardware per `gcs/skipper/hardware/docs/skipper_anten…
+- [ ] Procure gimbal hardware: - 2× DS3218MG digital servo (same as…
+- [ ] Flash Debian Linux to Skipper PB2-I eMMC — same OS image as aircraft…
 - [ ] Apply Cape-B-2 device tree overlay for Skipper
-- [ ] Provision TPM 2.0 (SLB9672) on Skipper's PB2-I
-- [ ] Verify CPLD write-blocker on Skipper's log μSD
+- [ ] Provision TPM 2.0 (SLB9672) on Skipper's PB2-I — unique key material
+- [ ] Verify CPLD write-blocker on Skipper's log μSD (Cape-B-2 ATF16V8BQL)
 - [ ] Build and install Skipper PB2-I firmware:
 - [ ] Install and configure mavlink-router on Skipper's PB2-I
-- [ ] Enable all 5 radio interfaces on Skipper's PB2-I
-- [ ] Configure Wi-Fi transmit power
-- [ ] Install Debian Linux on GCS host PC
+- [ ] Enable all 5 radio interfaces on Skipper's PB2-I and verify each…
+- [ ] Configure Wi-Fi transmit power per FCC EIRP compliance
+- [ ] Install Debian Linux on GCS host PC (bookworm or later).
 - [ ] Run installation scripts in order:
-- [ ] Configure QGroundControl:
-- [ ] Configure Wi-Fi Tx power on host PC
+- [ ] Configure QGroundControl: Application Settings → Comm Links → Add →…
+- [ ] Configure Wi-Fi Tx power on host PC — if host PC has Wi-Fi and 14…
 - [ ] Run tracking software tests:
-- [ ] Implement `gcs/skipper/firmware/pb2i/src/skipper_comms.c` and `skipper_…
-- [ ] Bench test gimbal hardware
-- [ ] Gimbal calibration:
-- [ ] Run telemetry_feed.py bench test
-- [ ] Run tracker.py bench test
-- [ ] Run gimbal_ctrl.py bench test
-- [ ] End-to-end tracking test (outdoor):
-- [ ] Multi-link communication bench test:
-- [ ] 915 MHz link margin test (open field, 1 km):
-- [ ] Wi-Fi link margin test (open field, 200 m):
-- [ ] 49 MHz (Part 15 §15.235) link test (1 km):
-- [ ] Gimbal pointing accuracy test (outdoor, aircraft at 200–500 m):
-- [ ] MAVLink authentication test:
-- [ ] Node loss with Skipper active:
+- [ ] Implement `gcs/skipper/firmware/pb2i/src/skipper_comms.c` and…
+- [ ] Bench test gimbal hardware — connect two AS5600 encoders via…
+- [ ] Gimbal calibration: - Home position: set `s_pan_zero_counts` and…
+- [ ] Run telemetry_feed.py bench test — power aircraft (Phase 5 minimum
+- [ ] Run tracker.py bench test — with telemetry_feed.py running and GCS…
+- [ ] Run gimbal_ctrl.py bench test — with tracker.py running, run…
+- [ ] End-to-end tracking test (outdoor): - GCS GNSS acquires fix (HDOP…
+- [ ] Multi-link communication bench test: connect aircraft (Phase 5…
+- [ ] 915 MHz link margin test (open field, 1 km)
+- [ ] Wi-Fi link margin test (open field, 200 m): Aircraft at 200 m
+- [ ] 49 MHz (Part 15 §15.235) link test (1 km): Aircraft at 1 km
+- [ ] Gimbal pointing accuracy test (outdoor, aircraft at 200–500 m)
+- [ ] MAVLink authentication test: verify aircraft nodes reject unsigned…
+- [ ] Node loss with Skipper active: kill one aircraft FC node during…
 
 ---

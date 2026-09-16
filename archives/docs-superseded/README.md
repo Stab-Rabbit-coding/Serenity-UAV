@@ -1,7 +1,7 @@
 # Superseded Design Documents
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 
 ---
 
@@ -27,3 +27,48 @@
 The VTOL thrust analysis, ESC selection, and weight-and-balance content from this
 document has been migrated (with corrected numbers) into `docs/POWER_DISTRIBUTION.md`
 §§ 12–14.
+
+---
+
+## Documentation-process snapshots — Archived 2026-09-15
+
+Four point-in-time documentation reports/hand-offs, all superseded by the living record in
+`docs/WBS.md` §0.10 (the "Update and correct documentation" audit) and the Rev T checkpoint
+(`docs/WBS.md` §6.4). Archived, not deleted, because each records what was true and what was
+believed on its date; none should be read as current status. Archival pass performed by
+Claude Opus 5 (Anthropic) under the author's direction; see `docs/WBS.md` §0.10.2 item 6.
+
+### DOC_VERIFICATION_0.6.2.md — 2026-08-01, Claude Haiku 4.5
+
+**Superseded by:** `docs/WBS.md` §0.10.2 (2026-08-22 pass and later).
+
+Left "In Progress" with an action-item list; every item was either closed by the §0.10.2
+pass (attribution doc, subsystem READMEs, licence split, JSX viewer, BOM sync, REFERENCES.md
+duplicate IDs) or is tracked there as a named residual. The task number it uses ("0.6.2") was
+itself renumbered to §0.10.2 on 2026-08-01.
+
+### DOCUMENTATION_RECONCILIATION_2026-07-28.md — 2026-07-28, Claude Haiku 4.5
+
+**Superseded by:** `docs/WBS.md` §0.10 and §6.4 (Rev T checkpoint, 2026-09-06).
+
+A Rev S reconciliation report. Its own closing line — "Next audit: recommended after next
+major revision (Rev T milestone)" — has fired. Its "Recommendations for Future Maintenance"
+item 4 (regenerate `TODO.md` from `WBS.md`) was implemented 2026-09-15 as
+`tools/gen_todo_from_wbs.py`.
+
+### TODO_1_1_0_COMPLETION_SUMMARY.md — 2026-07-18
+
+**Superseded by:** root `WBS.md` §1.1.0 and `airframe/WBS.md` §1.1.0.
+
+A hand-off note asking the maintainer to tick two §1.1.0 checkboxes. Both are ticked; the
+one item it left open ("Hull-frame placements for VERIFY parts") is still open in the owner.
+
+### PYLON_INTEGRATION_2026-07-18.md — 2026-07-18
+
+**Superseded by:** `docs/TILT_SPAR_ANALYSIS.md`, `docs/NOZZLE_DRIVE_TRADE.md`,
+`docs/WING_ATTACH_INTERFACE.md` (the fixed 20 × 16.3 mm CF spar and trunnion pivot of
+Rev S1g/S4).
+
+Described a fixed 4 mm CF press-fit spar with a sector gear on a wing bracket; replaced
+within a day of being written (its own banner said so from 2026-08-22). Retained as the
+record of the geometry that `wings_s1223_revo.scad` Rev R1a was integrated against.

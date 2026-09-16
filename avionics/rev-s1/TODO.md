@@ -16,8 +16,8 @@
 ## §1.2b — PCB Redesigns: Commo / XO / Flight Engineer Rev S1
 → full detail: `WBS.md` §1.2b
 
-- [ ] Commo Rev S1 — add LoRa, replace JST with P1+P2 socket rails
+- [ ] Commo Rev S1 — add LoRa, replace JST with P1+P2 socket rails - Add…
 - [ ] XO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
-- [ ] Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output
+- [ ] Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output…
 
 ---

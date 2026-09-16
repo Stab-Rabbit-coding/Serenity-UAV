@@ -208,6 +208,8 @@ Located in subsystem directories:
   `CLAUDE-MEMORY.md`
 - **`precommit_index.py`** — regenerates `PROJECT_INDEX.md`/`ARCHIVE_INDEX.md` (see
   `tools/TOOL_REFERENCE.md`)
+- **`gen_todo_from_wbs.py`** — regenerates every `TODO.md` from its owning `WBS.md`
+  (root `AGENTS.md` §10 federation rule; `--check` for drift — see `tools/TOOL_REFERENCE.md`)
 
 ## Documentation & References
 
