@@ -1,7 +1,7 @@
 {
   "revision": "S",
   "date": "2026-07-04",
-  "description": "Serenity UAV Bill of Materials — Rev S (Comprehensive Checkpoint)",
+  "description": "Serenity UAV Bill of Materials — Rev S (Comprehensive Checkpoint) | Rev T5b 2026-09-15: tilt actuator (worm + 25D gearmotor + pin brake), battery cradle, cargo shell T5 rows updated by tools-assisted edit; see docs/TILT_ACTUATOR_SELECTION.md | Rev T5e 2026-09-16: 25D -> 20D (#3712) + six-start worm, chin node shelf, void former node_bay, cargo shell re-merged; CSV rebuilt from HEAD + this mirror (the 14 HEAD-only rows the mirror had dropped are restored; 18 rows with unquoted commas in Notes re-quoted)",
   "items": [
     {
       "Ref": "EDF-50-6S",
@@ -59,14 +59,14 @@
       "Ref": "SERVO-TILT",
       "Description": "Nacelle tilt servo — DS3225 converted with LibreServo_v4, 21-24.5 kgf·cm stall (4.8-6.8V), rotation-limit pin removed",
       "Category": "Servo",
-      "Qty": "2",
+      "Qty": "0",
       "Unit_Mass_g": "60",
-      "Total_Mass_g": "120",
+      "Total_Mass_g": "0",
       "Supplier": "Amazon / AliExpress (servo) + github.com/Stab-Rabbit-coding/LibreServo_v4 (board, self-build)",
       "Supplier_PN_or_Search": "DS3225 25kg digital servo metal gear",
       "Est_Unit_Price_USD": "13.00",
-      "Est_Total_Price_USD": "26.00",
-      "Notes": "2026-08-23 (Rev S1d, owner): DS3225 bodies + LibreServo_v4 PCB (TI MSPM0G3518-Q1 + OPTIGA Trust M). Supersedes DS3218 (same session) and the 2026-08-02 SPT5425LV+LibreServo v2. DIMENSIONS AUTHORITATIVE from avionics/datasheets/DS3225 datasheet.pdf (Dongguan City Dsservo): 40x20x40.5 mm, 60 g, 54.5 mm flange span, 49.5x10 mm bolt pattern, flange 27.7 mm above base, IP66, double bearing, 275:1 — DIMENSIONALLY IDENTICAL to the DS3218 datasheet, so the Rev S1d cargo-shell pads (61.5x27.0 mm at hull Z +98.89, bores 49.5x10) are unchanged by this swap. LibreServo_v4 keeps the stock case, so the external envelope is unchanged. ** TORQUE, still marginal ** datasheet stall 21 kgf·cm @5V / 24.5 @6.8V — the '25kg' in the product name is the marketing figure, the spec table maxes at 24.5. Against the >=25 kgf·cm (2.45 N·m) tilt requirement (docs/TILT_SPAR_ANALYSIS.md §2, from serenity-rev-r.jsx L383) that is 98% at 6.8V, ~92% at a 6V rail, 84% at 5V. Much closer than DS3218's 86%, but not cleared on datasheet figures alone. LibreServo_v4 re-drives the motor from 4.5-18V and may close it; no converted-unit figure exists. RESOLVED 2026-08-25 (docs/TILT_SPAR_ANALYSIS.md §2.1): the >=25 kgf·cm requirement was itself the stale artifact -- it is a spec pick (archives/serenity-rev-r.jsx L383), not a load derivation. Pivot-at-CG nulls gravity to within a 0.019 kgf·cm bound (two off-axis parts: spar crank + pushrod); inertia from the nacelle's own mass-moment table and the repo's only cited tilt-transition figure is ~1.78 kgf·cm ultimate. Grounded total ~1.80 kgf·cm = 7.3% of DS3225's cited 24.5 kgf·cm @ 6.8V -- wide margin. Aero moment not grounded (no nacelle Cd/frontal-area data in repo) -- explicit open item, not assumed zero. DS3225 STANDS, no part change. ** CURRENT ** stall 1.9A @5V / 2.3A @6.8V is the 6V servo bus figure (docs/POWER_DISTRIBUTION.md §3.3), now resized there to 2.3A/servo -- NOT RAIL-2 (RAIL-2/5V_OBS is the separate Observer/winch-servo rail; the 'RAIL-2' language previously here was a citation error, corrected 2026-08-25). See REFERENCES.md and airframe/wings-nacelles/WBS.md SPAR-02."
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): RETIRED for the nacelle tilt -- replaced by GM-TILT-25D + LibreServo_v4.1-TC (LS-TILT-TC) + the worm stage. Qty 0, row kept for the record. ** REV T1c 2026-08-30 -- OPERATING MODE CHANGED, PART UNCHANGED (WA-R15). ** The tilt stage is now a REDUCTION (tip 14T/50T, i=3.571) so the drive shaft turns 1.438 rev over the 145 deg sweep; the actuator is therefore run CONTINUOUS-ROTATION (multi-turn) and closed on the AK7455's absolute nacelle angle, not soft-limited on its own travel -- the same architecture the cargo winch already uses. The rotation-limit pin removal this row already specifies is now REQUIRED rather than a commonality choice. The body is unchanged, so the pad footprint (61.5 x 27.0), the 49.5 x 10 bolt pattern and the 60 g mass all carry over from Rev S1d; what is new is the MOUNT POSITION (hull Y +46.60, Z +99.49, shaft-relative, was spar-relative) and an 18 mm standoff so the output-shaft gear clears the wing root tenon. Torque margin at the built reduction is 0.050 N.m required vs 2.402 N.m stall = 48x, not the 17x previously recorded. NO SPEED FIGURE IS PUBLISHED FOR THE DS3225 IN THIS REPO -- the 0.18 s/60 deg in REFERENCES.md belongs to the superseded SPT5425LV and must not be reused; nacelle rate = actuator rate / 3.571, and the actuator rate is unmeasured (docs/TILT_DRIVE_CONTROL_SPEC.md SS7.2, TILT-CTL-05). See docs/TILT_DRIVE_CONTROL_SPEC.md for the loop, sensors and fail states. 2026-08-23 (Rev S1d, owner): DS3225 bodies + LibreServo_v4 PCB (TI MSPM0G3518-Q1 + OPTIGA Trust M). Supersedes DS3218 (same session) and the 2026-08-02 SPT5425LV+LibreServo v2. DIMENSIONS AUTHORITATIVE from avionics/datasheets/DS3225 datasheet.pdf (Dongguan City Dsservo): 40x20x40.5 mm, 60 g, 54.5 mm flange span, 49.5x10 mm bolt pattern, flange 27.7 mm above base, IP66, double bearing, 275:1 — DIMENSIONALLY IDENTICAL to the DS3218 datasheet, so the Rev S1d cargo-shell pads (61.5x27.0 mm at hull Z +98.89, bores 49.5x10) are unchanged by this swap. LibreServo_v4 keeps the stock case, so the external envelope is unchanged. ** TORQUE, still marginal ** datasheet stall 21 kgf·cm @5V / 24.5 @6.8V — the '25kg' in the product name is the marketing figure, the spec table maxes at 24.5. Against the >=25 kgf·cm (2.45 N·m) tilt requirement (docs/TILT_SPAR_ANALYSIS.md §2, from serenity-rev-r.jsx L383) that is 98% at 6.8V, ~92% at a 6V rail, 84% at 5V. Much closer than DS3218's 86%, but not cleared on datasheet figures alone. LibreServo_v4 re-drives the motor from 4.5-18V and may close it; no converted-unit figure exists. RESOLVED 2026-08-25 (docs/TILT_SPAR_ANALYSIS.md §2.1): the >=25 kgf·cm requirement was itself the stale artifact -- it is a spec pick (archives/serenity-rev-r.jsx L383), not a load derivation. Pivot-at-CG nulls gravity to within a 0.019 kgf·cm bound (two off-axis parts: spar crank + pushrod); inertia from the nacelle's own mass-moment table and the repo's only cited tilt-transition figure is ~1.78 kgf·cm ultimate. Grounded total ~1.80 kgf·cm = 7.3% of DS3225's cited 24.5 kgf·cm @ 6.8V -- wide margin. Aero moment not grounded (no nacelle Cd/frontal-area data in repo) -- explicit open item, not assumed zero. DS3225 STANDS, no part change. ** CURRENT ** stall 1.9A @5V / 2.3A @6.8V is the 6V servo bus figure (docs/POWER_DISTRIBUTION.md §3.3), now resized there to 2.3A/servo -- NOT RAIL-2 (RAIL-2/5V_OBS is the separate Observer/winch-servo rail; the 'RAIL-2' language previously here was a citation error, corrected 2026-08-25). See REFERENCES.md and airframe/wings-nacelles/WBS.md SPAR-02."
     },
     {
       "Ref": "SERVO-RCS-VALVE",
@@ -121,6 +121,32 @@
       "Notes": "One per nacelle; cut length per pivot housing drawing; pivot at Z=83mm (CG) in Rev O"
     },
     {
+      "Ref": "CF-ROD-8MM",
+      "Description": "8mm OD solid CF wing-root fwd tie-rod — SUPERSEDED Rev T1",
+      "Category": "0",
+      "Qty": "0",
+      "Unit_Mass_g": "7",
+      "Total_Mass_g": "0",
+      "Supplier": "Amazon / AliExpress",
+      "Supplier_PN_or_Search": "8mm solid carbon fiber rod (same generic pultruded-CF-rod-stock as CF-ROD-4MM; not part-number-specific)",
+      "Est_Unit_Price_USD": "7.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "U5/KTD1 wing-root couple: forward rod, Ø8.2mm clearance bore (0.1mm/side), station 14.0mm from LE, 40mm wing-side embed + 41mm fuselage-side embed (West System 105/206 epoxy, docs/structural_analysis.md §6/§7); one per side (port+stbd) ** SUPERSEDED Rev T1 (2026-08-29/30) -- QTY 0. ** The wing-root tie-rod couple existed only because a spar on BEARINGS cannot react a moment, so the couple had to be closed by something else (U5/KTD1, FOS 4.14). Under Rev T1 the spar is bonded and FIXED, carries its own moment into the bonded root flange (PRINT-WING-ROOT-FLANGE, FOS 29.2), and the rods have no remaining job. They are also no longer BUILDABLE: the wing gates them off (wings_s1223_revo.scad TENON_LOAD_PATH = \"spar_carrythrough\", whose own comment records that the forward rod now INTERSECTS the O20.4 spar bore), and merge_cargo_interior.py no longer drills the fuselage side. Retained at qty 0 for traceability."
+    },
+    {
+      "Ref": "CF-ROD-6MM",
+      "Description": "6mm OD solid CF wing-root aft tie-rod — SUPERSEDED Rev T1",
+      "Category": "0",
+      "Qty": "0",
+      "Unit_Mass_g": "4",
+      "Total_Mass_g": "0",
+      "Supplier": "Amazon / AliExpress",
+      "Supplier_PN_or_Search": "6mm solid carbon fiber rod (same generic pultruded-CF-rod-stock as CF-ROD-4MM; not part-number-specific)",
+      "Est_Unit_Price_USD": "5.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "U5/KTD1 wing-root couple: aft rod, Ø6.2mm clearance bore (0.1mm/side), station 62.0mm from LE (root-only embed, does not run to tip), 42mm wing-side embed + 42mm fuselage-side embed (West System 105/206 epoxy); one per side (port+stbd) ** SUPERSEDED Rev T1 (2026-08-29/30) -- QTY 0. ** The wing-root tie-rod couple existed only because a spar on BEARINGS cannot react a moment, so the couple had to be closed by something else (U5/KTD1, FOS 4.14). Under Rev T1 the spar is bonded and FIXED, carries its own moment into the bonded root flange (PRINT-WING-ROOT-FLANGE, FOS 29.2), and the rods have no remaining job. They are also no longer BUILDABLE: the wing gates them off (wings_s1223_revo.scad TENON_LOAD_PATH = \"spar_carrythrough\", whose own comment records that the forward rod now INTERSECTS the O20.4 spar bore), and merge_cargo_interior.py no longer drills the fuselage side. Retained at qty 0 for traceability."
+    },
+    {
       "Ref": "PIN-3X18",
       "Description": "3mm OD × 18mm stainless dowel pin — nacelle nozzle flap tangential hinge (Rev S)",
       "Category": "Hardware",
@@ -144,10 +170,7 @@
       "Supplier_PN_or_Search": "Stainless dowel pin 2mm x 4mm, McMaster 91585A302 or equiv",
       "Est_Unit_Price_USD": "0.40",
       "Est_Total_Price_USD": "6.40",
-      "Notes": "8 per nacelle × 2; follower pin rides the unison-ring spiral face-cam slot that drives each flap — REPLACES the retired Rev R1 0.8mm piano-wire iris link ring (the Rev R2/S drive is a rotating spiral cam",
-      "null": [
-        " no bent wire)."
-      ]
+      "Notes": "8 per nacelle × 2; follower pin rides the unison-ring spiral face-cam slot that drives each flap — REPLACES the retired Rev R1 0.8mm piano-wire iris link ring (the Rev R2/S drive is a rotating spiral cam, no bent wire)."
     },
     {
       "Ref": "SECTOR-GEAR-M05",
@@ -654,14 +677,7 @@
       "Supplier_PN_or_Search": "6mm x 3mm carbon fiber flat bar 700mm",
       "Est_Unit_Price_USD": "12.00",
       "Est_Total_Price_USD": "12.00",
-      "Notes": "*** COMPLETE RE-EVALUATION REQUIRED (Rev R1) *** A continuous bow-to-stern keel is structurally justified",
-      "null": [
-        " but the canonical Serenity hull geometry makes a straight flat bar infeasible: Head_Shell Z_min=+61.2mm vs Cargo Z_min=0mm (≈61mm vertical step at head/cargo joint); Middle_Shell horseshoe is open at −Z (no belly floor to bond to at Y=+130..+204mm). Keel form (straight / pre-bent / segmented-lap / tube / CF-tow-in-foam)",
-        " cross-section",
-        " span (full 620mm or cargo-to-rear-only ≈455mm)",
-        " Z routing",
-        " and RF counterpoise integration must all be re-evaluated against the baked canonical hull cross-sections. Datum marks (91/165/251/320/388mm from nose) are stale — tied to pre-Rev N ring plate stations. Mass and length TBD. BLOCKS keel fabrication + ring plate + foam pour — see TODO §1.1.1 keel re-evaluation task."
-      ]
+      "Notes": "*** COMPLETE RE-EVALUATION REQUIRED (Rev R1) *** A continuous bow-to-stern keel is structurally justified, but the canonical Serenity hull geometry makes a straight flat bar infeasible: Head_Shell Z_min=+61.2mm vs Cargo Z_min=0mm (≈61mm vertical step at head/cargo joint); Middle_Shell horseshoe is open at −Z (no belly floor to bond to at Y=+130..+204mm). Keel form (straight / pre-bent / segmented-lap / tube / CF-tow-in-foam), cross-section, span (full 620mm or cargo-to-rear-only ≈455mm), Z routing, and RF counterpoise integration must all be re-evaluated against the baked canonical hull cross-sections. Datum marks (91/165/251/320/388mm from nose) are stale — tied to pre-Rev N ring plate stations. Mass and length TBD. BLOCKS keel fabrication + ring plate + foam pour — see TODO §1.1.1 keel re-evaluation task."
     },
     {
       "Ref": "CF-TUBE-12MM",
@@ -687,16 +703,7 @@
       "Supplier_PN_or_Search": "Amazon / AliExpress",
       "Est_Unit_Price_USD": "2mm carbon fiber sheet 200x300mm",
       "Est_Total_Price_USD": "20.00",
-      "Notes": "40.00",
-      "null": [
-        "Re-evaluation complete (Rev R1",
-        " docs/structural_analysis.md §5); 2 full-closed-ring stations (down from 5 pre-Rev N): cargo hull Y=+30mm (wing-spar anti-ovalisation) and rear hull Y=+290mm (landing-impact anti-ovalisation). Inner-skin profiles in airframe/diagrams/ring_frames/*_inner.csv (add_structural_features.py); DXF plate profiles (inner trace + 3mm outward clearance offset + 3.5mm(X) x 6mm(Z) keel-bar notch centred hull X=-170mm",
-        " per structural_analysis.md §4.5/§5.4) exported 2026-07-03 to airframe/diagrams/ring_frames/ring_rear_Y290_plate.dxf (FINAL: net area 113.2 cm^2",
-        " mass 36.2 g @ rho=1.6 g/cm^3) and ring_cargo_Y30_plate_PROVISIONAL.dxf (net area 242.9 cm^2",
-        " mass 77.7 g @ rho=1.6 g/cm^3 -- PROVISIONAL: the cargo Y=+30mm mesh cross-section is fragmented into 4 disjoint closed loops",
-        " consistent with the open large_shells>1/MESH-01 cargo-mesh defect tracked in TODO §1.1.1; this profile is a convex-hull approximation of those 4 loops pending that mesh fix and must be re-extracted once the cargo shell is repaired). rho=1.6 g/cm^3 is the CF sheet density already used in structural_analysis.md §5.6 (verified precedent in this repo); the 1.54 g/cm^3 figure previously quoted in TODO.md §1.1.1.0b has no other citation in this repo and is superseded by the §5.6 value. Combined mass 113.9 g (Unit_Mass_g/Total_Mass_g columns are an average of the two different-size rings; supersedes the ~300g bounding-rectangle/fill-factor estimate in structural_analysis.md §5.6",
-        " now replaced by actual computed DXF areas). Do not procure/cut the cargo ring until its DXF is finalized post-mesh-fix. See TODO §1.1.1.0b."
-      ]
+      "Notes": "40.00,Re-evaluation complete (Rev R1, docs/structural_analysis.md §5); 2 full-closed-ring stations (down from 5 pre-Rev N): cargo hull Y=+30mm (wing-spar anti-ovalisation) and rear hull Y=+290mm (landing-impact anti-ovalisation). Inner-skin profiles in airframe/diagrams/ring_frames/*_inner.csv (add_structural_features.py); DXF plate profiles (inner trace + 3mm outward clearance offset + 3.5mm(X) x 6mm(Z) keel-bar notch centred hull X=-170mm, per structural_analysis.md §4.5/§5.4) exported 2026-07-03 to airframe/diagrams/ring_frames/ring_rear_Y290_plate.dxf (FINAL: net area 113.2 cm^2, mass 36.2 g @ rho=1.6 g/cm^3) and ring_cargo_Y30_plate_PROVISIONAL.dxf (net area 242.9 cm^2, mass 77.7 g @ rho=1.6 g/cm^3 -- PROVISIONAL: the cargo Y=+30mm mesh cross-section is fragmented into 4 disjoint closed loops, consistent with the open large_shells>1/MESH-01 cargo-mesh defect tracked in TODO §1.1.1; this profile is a convex-hull approximation of those 4 loops pending that mesh fix and must be re-extracted once the cargo shell is repaired). rho=1.6 g/cm^3 is the CF sheet density already used in structural_analysis.md §5.6 (verified precedent in this repo); the 1.54 g/cm^3 figure previously quoted in TODO.md §1.1.1.0b has no other citation in this repo and is superseded by the §5.6 value. Combined mass 113.9 g (Unit_Mass_g/Total_Mass_g columns are an average of the two different-size rings; supersedes the ~300g bounding-rectangle/fill-factor estimate in structural_analysis.md §5.6, now replaced by actual computed DXF areas). Do not procure/cut the cargo ring until its DXF is finalized post-mesh-fix. See TODO §1.1.1.0b."
     },
     {
       "Ref": "FOAM-PU-2LB",
@@ -826,15 +833,7 @@
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "PRINT FROM: airframe/stls/fuselage/head_shell24_2mm_repaired.stl (baked hull-frame R1; 790036 tri; extents X -232.9..-103.5 / Y -305.7..-70.7 / Z +61.1..+201.5 mm). BLENDER SOURCE: airframe/blender-scripts/files-hollowed-24in/head_shell24_2mm_repaired.stl. SCAD s_head_shell24.scad is secondary reference only. Rev R1: 0.20mm / 5% gyroid (reduced from 8%); saves ~12g. FABRICATION SPLIT at head/cargo joint hull Y≈−71mm — print-split for fabrication access",
-      "null": [
-        " not a structural joint. STRUCTURAL CONTINUITY REQUIRES ENGINEERING: the Thingiverse reference model was a decorative display piece — no structural provision for UAV flight loads (bending",
-        " torsion",
-        " shear",
-        " vibration). Inter-section load paths must be designed from first principles. See CF-BAR-6X3 keel re-evaluation",
-        " CF-PLATE-2MM ring plate re-evaluation",
-        " and TODO §1.1.1.0b joint boss design task. Joint face requires minimum 2-wall contact annulus + positive-stop shoulder per CLAUDE.md once structural design is complete."
-      ]
+      "Notes": "PRINT FROM: airframe/stls/fuselage/head_shell24_2mm_repaired.stl (baked hull-frame R1; 790036 tri; extents X -232.9..-103.5 / Y -305.7..-70.7 / Z +61.1..+201.5 mm). BLENDER SOURCE: airframe/blender-scripts/files-hollowed-24in/head_shell24_2mm_repaired.stl. SCAD s_head_shell24.scad is secondary reference only. Rev R1: 0.20mm / 5% gyroid (reduced from 8%); saves ~12g. FABRICATION SPLIT at head/cargo joint hull Y≈−71mm — print-split for fabrication access, not a structural joint. STRUCTURAL CONTINUITY REQUIRES ENGINEERING: the Thingiverse reference model was a decorative display piece — no structural provision for UAV flight loads (bending, torsion, shear, vibration). Inter-section load paths must be designed from first principles. See CF-BAR-6X3 keel re-evaluation, CF-PLATE-2MM ring plate re-evaluation, and TODO §1.1.1.0b joint boss design task. Joint face requires minimum 2-wall contact annulus + positive-stop shoulder per CLAUDE.md once structural design is complete."
     },
     {
       "Ref": "PRINT-MIDDLE-CANONICAL",
@@ -847,38 +846,20 @@
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "PRINT FROM: airframe/stls/fuselage/middle_shell24_2mm_repaired.stl (baked hull-frame R1; 855328 tri; extents X -258.5..-81.6 / Y +130.4..+203.6 / Z +1.3..+166.1 mm). BLENDER SOURCE: airframe/blender-scripts/files-hollowed-24in/middle_shell24_2mm_repaired.stl. SCAD s_middle_canonical_shell24.scad superseded. GEOMETRY: ONE printed piece — (1) outer horseshoe ring (U-shaped exterior frame open at −Z/ventral); (2) inner neck (closed tube passing through horseshoe centre",
-      "null": [
-        " connecting cargo bay interior to rear engine room interior). FLIGHT ENGINEER'S ROOM: the Flight Engineer PDB bay is located inside the inner neck",
-        " accessible through the open ventral face of the horseshoe. Mounting boss features for Flight Engineer must be added to the inner neck before printing — see TODO §1.1.1.3. PHASE 5-10: inner neck is a closed tube — aft EDF intake scoops (4 radial cuts for 120mm EDF) are DEFERRED to Phase 11. Print as-is with no intake modifications. 0.20mm / 8% gyroid. Rev R1 skid reinforcement: add 4.2mm bore CF rod channel running full length of each horseshoe-to-skid section (2 channels",
-        " coaxial with PRINT-REAR-NECK-INTAKE) — see TODO §1.1.5 skid task. FABRICATION SPLITS at cargo/middle hull Y≈+131mm (fwd face) and middle/rear hull Y≈+203mm (aft face) — print-splits for fabrication access only. Skids are integral extensions of this horseshoe ring; the middle/rear cut was for printability only. STRUCTURAL CONTINUITY REQUIRES ENGINEERING: the Thingiverse model was a decorative display piece — no structural provision for UAV flight loads. The inner neck and horseshoe ring cross-sections were not designed for bending",
-        " torsion",
-        " or shear. Inter-section and intra-section structural solutions must be designed from first principles. See CF-BAR-6X3 keel re-evaluation",
-        " CF-PLATE-2MM ring plate re-evaluation",
-        " and TODO §1.1.1.0b joint boss task. The 4mm CF skid rods address skid bending specifically; all other joint load paths remain open design items."
-      ]
+      "Notes": "PRINT FROM: airframe/stls/fuselage/middle_shell24_2mm_repaired.stl (baked hull-frame R1; 855328 tri; extents X -258.5..-81.6 / Y +130.4..+203.6 / Z +1.3..+166.1 mm). BLENDER SOURCE: airframe/blender-scripts/files-hollowed-24in/middle_shell24_2mm_repaired.stl. SCAD s_middle_canonical_shell24.scad superseded. GEOMETRY: ONE printed piece — (1) outer horseshoe ring (U-shaped exterior frame open at −Z/ventral); (2) inner neck (closed tube passing through horseshoe centre, connecting cargo bay interior to rear engine room interior). FLIGHT ENGINEER'S ROOM: the Flight Engineer PDB bay is located inside the inner neck, accessible through the open ventral face of the horseshoe. Mounting boss features for Flight Engineer must be added to the inner neck before printing — see TODO §1.1.1.3. PHASE 5-10: inner neck is a closed tube — aft EDF intake scoops (4 radial cuts for 120mm EDF) are DEFERRED to Phase 11. Print as-is with no intake modifications. 0.20mm / 8% gyroid. Rev R1 skid reinforcement: add 4.2mm bore CF rod channel running full length of each horseshoe-to-skid section (2 channels, coaxial with PRINT-REAR-NECK-INTAKE) — see TODO §1.1.5 skid task. FABRICATION SPLITS at cargo/middle hull Y≈+131mm (fwd face) and middle/rear hull Y≈+203mm (aft face) — print-splits for fabrication access only. Skids are integral extensions of this horseshoe ring; the middle/rear cut was for printability only. STRUCTURAL CONTINUITY REQUIRES ENGINEERING: the Thingiverse model was a decorative display piece — no structural provision for UAV flight loads. The inner neck and horseshoe ring cross-sections were not designed for bending, torsion, or shear. Inter-section and intra-section structural solutions must be designed from first principles. See CF-BAR-6X3 keel re-evaluation, CF-PLATE-2MM ring plate re-evaluation, and TODO §1.1.1.0b joint boss task. The 4mm CF skid rods address skid bending specifically; all other joint load paths remain open design items."
     },
     {
       "Ref": "PRINT-CARGO-SECT",
       "Description": "cargo_sect_shell24_2mm_repaired.stl — Cargo section (Blender-canonical; interior features pending merge)",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "165",
-      "Total_Mass_g": "165",
+      "Unit_Mass_g": "301.6",
+      "Total_Mass_g": "301.6",
       "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "PETG — see FIL-PETG",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "PRINT FROM: airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl (baked hull-frame R1; 1414068 tri; extents X -267.0..-72.7 / Y -71.5..+132.0 / Z 0.0..+163.2 mm). BLENDER SOURCE: airframe/blender-scripts/files-hollowed-24in/cargo_sect_shell24_2mm_repaired.stl. SCAD cargo_sect_shell24.scad (Rev S3) is secondary — interior boss features (door opening",
-      "null": [
-        " hinge blocks",
-        " servo pads",
-        " spar bore",
-        " avionics standoffs) from SCAD Rev S/S1/S2/S3 must be merged into the Blender mesh before printing; see TODO §1.1.1.2. FABRICATION SPLITS at head/cargo hull Y≈−71mm (fwd face) and cargo/middle hull Y≈+131mm (aft face) — print-splits for fabrication access",
-        " not structural joints. STRUCTURAL CONTINUITY REQUIRES ENGINEERING: the Thingiverse model was a decorative display piece — no structural provision for UAV flight loads. Inter-section load paths must be designed from first principles. See CF-BAR-6X3 keel re-evaluation",
-        " CF-PLATE-2MM ring plate re-evaluation",
-        " and TODO §1.1.1.0b joint boss task. Joint faces require minimum 2-wall contact annulus + positive-stop shoulder per CLAUDE.md once structural design is complete."
-      ]
+      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): shell re-merged: bracket feet moved, 4 chin-shelf floor bosses + 4 Observer belly bosses added; 287.2 cm3, 301.6 g as-printed, watertight. Rev T5 2026-09-15: shell re-merged -- DS3225 pads and Inara bosses removed, ramp sealed, 6 bracket feet + 4 cradle hangers + 2 winch pedestals + 2 GPS cups added; 287,765 mm3 x 1.05 = 302 g as-printed (was 372 g row). ** MASS CORRECTED 2026-08-30 (weight audit): 165 -> 372 g, +207 g. ** Measured from the published STL, 354,486 mm^3 x RHO_PRINT 1.05e-3. The 165 g figure predates the Rev R6 landing-gear bay features (~126 g raw), the nacelle-tilt actuator pads (109.5 g at Rev T1c, 47.4 g before the standoff), the Ø30.1 spar socket bosses (24.0 g) and the CF thwart pockets. IT IS NOT A REV T1c REGRESSION -- the pre-Rev-T1c shell already measured 316 g against the same 165 g row. This is the largest single mass error found in the audit; see docs/MASS_AUDIT_CARGO_WING_ROOT.md. PRINT FROM: airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl (baked hull-frame R1; 1414068 tri; extents X -267.0..-72.7 / Y -71.5..+132.0 / Z 0.0..+163.2 mm). BLENDER SOURCE: airframe/blender-scripts/files-hollowed-24in/cargo_sect_shell24_2mm_repaired.stl. SCAD cargo_sect_shell24.scad (Rev S3) is secondary — interior boss features (door opening MATERIAL CHANGED 2026-08-25 (owner-directed): plain PETG -> 20% CF-PETG (was PETG — see FIL-PETG), per docs/structural_analysis.md SS6.4 nose-high skid re-derivation and REF-MAT-002 (20% CF-PETG: 77 MPa flexural / 6.67 GPa, verified commercial product)., hinge blocks, servo pads, spar bore, avionics standoffs) from SCAD Rev S/S1/S2/S3 must be merged into the Blender mesh before printing; see TODO §1.1.1.2. FABRICATION SPLITS at head/cargo hull Y≈−71mm (fwd face) and cargo/middle hull Y≈+131mm (aft face) — print-splits for fabrication access, not structural joints. STRUCTURAL CONTINUITY REQUIRES ENGINEERING: the Thingiverse model was a decorative display piece — no structural provision for UAV flight loads. Inter-section load paths must be designed from first principles. See CF-BAR-6X3 keel re-evaluation, CF-PLATE-2MM ring plate re-evaluation, and TODO §1.1.1.0b joint boss task. Joint faces require minimum 2-wall contact annulus + positive-stop shoulder per CLAUDE.md once structural design is complete., hinge blocks, servo pads, spar bore, avionics standoffs) from SCAD Rev S/S1/S2/S3 must be merged into the Blender mesh before printing; see TODO §1.1.1.2. FABRICATION SPLITS at head/cargo hull Y≈−71mm (fwd face) and cargo/middle hull Y≈+131mm (aft face) — print-splits for fabrication access, not structural joints. STRUCTURAL CONTINUITY REQUIRES ENGINEERING: the Thingiverse model was a decorative display piece — no structural provision for UAV flight loads. Inter-section load paths must be designed from first principles. See CF-BAR-6X3 keel re-evaluation, CF-PLATE-2MM ring plate re-evaluation, and TODO §1.1.1.0b joint boss task. Joint faces require minimum 2-wall contact annulus + positive-stop shoulder per CLAUDE.md once structural design is complete."
     },
     {
       "Ref": "PRINT-REAR-NECK-INTAKE",
@@ -891,18 +872,7 @@
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "PRINT FROM: airframe/stls/fuselage/rear_shell24_2mm_repaired.stl (baked hull-frame R1; 1095972 tri; extents X -246.1..-105.5 / Y +203.2..+384.3 / Z +3.3..+161.1 mm). BLENDER SOURCE: airframe/blender-scripts/files-hollowed-24in/rear_shell24_2mm_repaired.stl. SCAD s_rear_neck_intake_shell24.scad is secondary. NOTE: the \"neck\" in this part name refers to the rear section transition toward the aft EDF intake (deferred Phase 11) — the inner neck of the MIDDLE section is a separate feature of PRINT-MIDDLE-CANONICAL. PHASE 5-10: print as-is from baked canonical mesh; no EDF intake hardware",
-      "null": [
-        " thrust tube",
-        " or petal nozzle. Rev R1: 0.20mm / 5% gyroid throughout. Skid reinforcement: skid arms are extensions of the PRINT-MIDDLE-CANONICAL horseshoe ring continuing through this section — the middle/rear print joint is a fabrication split for printability only. Add 4.2mm bore CF rod channels coaxially aligned with matching channels in PRINT-MIDDLE-CANONICAL; insert 4mm CF rod (~250mm per skid from CF-ROD-4MM stock) from aft; epoxy; rod provides skid bending stiffness and joint alignment. See TODO §1.1.5. FABRICATION SPLIT at middle/rear joint hull Y≈+203mm — print-split for fabrication access only. STRUCTURAL CONTINUITY REQUIRES ENGINEERING: the Thingiverse model was a decorative display piece — no structural provision for UAV flight loads. The rear cone geometry",
-        " skid arms",
-        " and dorsal pod were not designed for bending",
-        " torsion",
-        " landing impact",
-        " or vibration loads. Inter-section and local structural solutions must be designed from first principles. The 4mm CF skid rods address skid bending specifically; all other load paths remain open design items. See CF-BAR-6X3 keel re-evaluation",
-        " CF-PLATE-2MM ring plate re-evaluation",
-        " and TODO §1.1.1.0b joint boss task."
-      ]
+      "Notes": "PRINT FROM: airframe/stls/fuselage/rear_shell24_2mm_repaired.stl (baked hull-frame R1; 1095972 tri; extents X -246.1..-105.5 / Y +203.2..+384.3 / Z +3.3..+161.1 mm). BLENDER SOURCE: airframe/blender-scripts/files-hollowed-24in/rear_shell24_2mm_repaired.stl. SCAD s_rear_neck_intake_shell24.scad is secondary. NOTE: the \"neck\" in this part name refers to the rear section transition toward the aft EDF intake (deferred Phase 11) — the inner neck of the MIDDLE section is a separate feature of PRINT-MIDDLE-CANONICAL. PHASE 5-10: print as-is from baked canonical mesh; no EDF intake hardware, thrust tube, or petal nozzle. Rev R1: 0.20mm / 5% gyroid throughout. Skid reinforcement: skid arms are extensions of the PRINT-MIDDLE-CANONICAL horseshoe ring continuing through this section — the middle/rear print joint is a fabrication split for printability only. Add 4.2mm bore CF rod channels coaxially aligned with matching channels in PRINT-MIDDLE-CANONICAL; insert 4mm CF rod (~250mm per skid from CF-ROD-4MM stock) from aft; epoxy; rod provides skid bending stiffness and joint alignment. See TODO §1.1.5. FABRICATION SPLIT at middle/rear joint hull Y≈+203mm — print-split for fabrication access only. STRUCTURAL CONTINUITY REQUIRES ENGINEERING: the Thingiverse model was a decorative display piece — no structural provision for UAV flight loads. The rear cone geometry, skid arms, and dorsal pod were not designed for bending, torsion, landing impact, or vibration loads. Inter-section and local structural solutions must be designed from first principles. The 4mm CF skid rods address skid bending specifically; all other load paths remain open design items. See CF-BAR-6X3 keel re-evaluation, CF-PLATE-2MM ring plate re-evaluation, and TODO §1.1.1.0b joint boss task."
     },
     {
       "Ref": "PRINT-HEAD-CARGO-COLLAR",
@@ -967,10 +937,7 @@
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — 55mm rear EDF plenum with 4 RCS bleed taps (~15% flow); REQUIRES REGEN (outlet 120mm->55mm + RCS taps",
-      "null": [
-        " Rev R1); not printed/installed in Phases 5-10 ***"
-      ]
+      "Notes": "*** PHASE 11 DEFERRED — 55mm rear EDF plenum with 4 RCS bleed taps (~15% flow); REQUIRES REGEN (outlet 120mm->55mm + RCS taps, Rev R1); not printed/installed in Phases 5-10 ***"
     },
     {
       "Ref": "PRINT-EDF-MOTOR-MOUNT",
@@ -983,10 +950,7 @@
       "Supplier_PN_or_Search": "CF-PETG + hardened nozzle — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — 3-arm spider motor mount for 55mm rear EDF; REQUIRES REGEN (120mm->55mm",
-      "null": [
-        " Rev R1); not printed in Phases 5-10 ***"
-      ]
+      "Notes": "*** PHASE 11 DEFERRED — 3-arm spider motor mount for 55mm rear EDF; REQUIRES REGEN (120mm->55mm, Rev R1); not printed in Phases 5-10 ***"
     },
     {
       "Ref": "PRINT-THRUST-TUBE",
@@ -999,10 +963,7 @@
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — inner duct for 55mm rear EDF; REQUIRES REGEN (120mm->55mm",
-      "null": [
-        " Rev R1); not printed in Phases 5-10 ***"
-      ]
+      "Notes": "*** PHASE 11 DEFERRED — inner duct for 55mm rear EDF; REQUIRES REGEN (120mm->55mm, Rev R1); not printed in Phases 5-10 ***"
     },
     {
       "Ref": "PRINT-WINGS",
@@ -1249,10 +1210,7 @@
       "Supplier_PN_or_Search": "nacelle_nozzle_idler.scad",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Crown-Pinion→ring-gear stage; Idler-In 44T meshes the Crown Pinion",
-      "null": [
-        " Idler-Out 15T meshes the 72T unison ring; RENDER_PART=\"gear\""
-      ]
+      "Notes": "Crown-Pinion→ring-gear stage; Idler-In 44T meshes the Crown Pinion, Idler-Out 15T meshes the 72T unison ring; RENDER_PART=\"gear\""
     },
     {
       "Ref": "PRINT-NACELLE-IDLER-BKT",
@@ -1278,12 +1236,7 @@
       "Supplier_PN_or_Search": "CF-PETG — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — fixed canonical Serenity tail nozzle (52.3x44.7mm elliptical exit",
-      "null": [
-        " ~1836 mm2); NO iris",
-        " NO servo; blends into hull outer mold line; REQUIRES GEN (Rev R1",
-        " supersedes old iris rear_nozzle_frame/petal); not printed in Phases 5-10 ***"
-      ]
+      "Notes": "*** PHASE 11 DEFERRED — fixed canonical Serenity tail nozzle (52.3x44.7mm elliptical exit, ~1836 mm2); NO iris, NO servo; blends into hull outer mold line; REQUIRES GEN (Rev R1, supersedes old iris rear_nozzle_frame/petal); not printed in Phases 5-10 ***"
     },
     {
       "Ref": "PRINT-RCS-THRUSTER",
@@ -1640,14 +1593,14 @@
       "Ref": "PRINT-BATT-TRAY",
       "Description": "battery_tray.stl — 6S LiPo battery tray, CF-PETG; interior 148×56×44mm; adjustable ±20mm keel rail",
       "Category": "Printed Part",
-      "Qty": "1",
+      "Qty": "0",
       "Unit_Mass_g": "22",
-      "Total_Mass_g": "22",
+      "Total_Mass_g": "0",
       "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "CF-PETG + hardened nozzle — see FIL-CF-PETG",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) + hardened nozzle — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev Q new; stations 60-130mm from nose; 3mm wall / 4mm floor; 4x strap anchor slots; 4x 8×2mm vent slots (stainless mesh); 14×10mm XT60/balance exit slot; forward stop rib 4mm; SCAD: battery_tray.scad; 0.15mm / 40% gyroid / 4 walls"
+      "Notes": "Rev T5 2026-09-15: RETIRED -- replaced by PRINT-BATT-CRADLE (roof-hung inverted U in the cargo roof band, docs/BATTERY_MOUNT.md Rev T5). MA-6 (140.2 g measured vs 22 g row) closed by retirement. Rev Q new; stations 60-130mm from nose; 3mm wall / 4mm floor; 4x strap anchor slots; 4x 8×2mm vent slots (stainless mesh); 14×10mm XT60/balance exit slot; forward stop rib 4mm; SCAD: battery_tray.scad; 0.15mm / 40% gyroid / 4 walls"
     },
     {
       "Ref": "PRINT-BELLY-PANEL",
@@ -1661,6 +1614,19 @@
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
       "Notes": "Rev Q new; 2mm PETG; 1.5mm rebate locates flush with hull skin; 2x M3 coin-slot screws; EPDM foam tape seal; 1 per face (port+stbd); SCAD: belly_panel.scad; 0.20mm / 15% gyroid / 3 walls"
+    },
+    {
+      "Ref": "PRINT-DORSAL-ANTENNA-FIN",
+      "Description": "dorsal_antenna_fin.stl — Dorsal antenna support fin, PETG",
+      "Category": "Printed Part",
+      "Qty": "1",
+      "Unit_Mass_g": "4",
+      "Total_Mass_g": "4",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "PETG — see FIL-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "ADDED TO BOM 2026-08-25: this part existed as a published STL (imported by airframe/FreeCAD-scripts/serenity_assembly.py as Dorsal_Antenna_Fin) and was already repaired for mesh defects this session (4 degenerate zero-area fragments removed, winding corrected, 3 real bodies unioned into 1 -- see WBS.md), but had no BOM row at all until now -- found during the 2026-08-25 owner-directed airframe-wide PETG-to-CF-PETG material sweep. Mass estimated from the published mesh's solid volume (2800 mm^3 x 1.27 g/cm^3 PETG = 3.56 g), rounded up for typical wall/infill printing; not yet bench-weighed. KEPT PLAIN PETG (excluded from the CF-PETG conversion) 2026-08-25: this is a dorsal ANTENNA support structure -- carbon fiber is electrically conductive and converting an antenna's own supporting fin to CF-PETG risks detuning or blocking whichever antenna it carries. Function/which antenna this fin actually serves is not documented elsewhere in this repo as of this writing -- VERIFY before finalizing print settings."
     },
     {
       "Ref": "BATT-STRAP-CAM",
@@ -1751,10 +1717,7 @@
       "Supplier_PN_or_Search": "Order with aircraft Cape-B-2 batch",
       "Est_Unit_Price_USD": "105.00",
       "Est_Total_Price_USD": "105.00",
-      "Notes": "Rev R1: same PCB as aircraft CN (LoRa removed",
-      "null": [
-        " P1+P2 passthrough rails added); Skipper does not mount Commo board; WiFi+SiK+MAVLink interfaces"
-      ]
+      "Notes": "Rev R1: same PCB as aircraft CN (LoRa removed, P1+P2 passthrough rails added); Skipper does not mount Commo board; WiFi+SiK+MAVLink interfaces"
     },
     {
       "Ref": "SKIPPER-Commo",
@@ -2105,10 +2068,7 @@
       "Supplier_PN_or_Search": "Würth 742 716 1 series or Fair-Rite 0431167281",
       "Est_Unit_Price_USD": "1.50",
       "Est_Total_Price_USD": "24.00",
-      "Notes": "Rev R1: 4 per cage × 4 cages (reduced from 8); covers all primary cable penetrations: CAN FD ×2 + RS-485 + Ethernet; power and XCVR leads un-clamped (shorter runs inside foam void",
-      "null": [
-        " low EM coupling risk); ~200 Ω impedance at 100 MHz"
-      ]
+      "Notes": "Rev R1: 4 per cage × 4 cages (reduced from 8); covers all primary cable penetrations: CAN FD ×2 + RS-485 + Ethernet; power and XCVR leads un-clamped (shorter runs inside foam void, low EM coupling risk); ~200 Ω impedance at 100 MHz"
     },
     {
       "Ref": "SKIPPER-FAR-FAN",
@@ -2147,12 +2107,7 @@
       "Supplier_PN_or_Search": "4130 chromoly tube 8mm OD 1.5mm wall",
       "Est_Unit_Price_USD": "9.00",
       "Est_Total_Price_USD": "18.00",
-      "Notes": "Rev R2: unified rotating tilt-spar (wing structural spar AND nacelle tilt axis); servo-driven from cargo bay",
-      "null": [
-        " keyed to nacelle at CG; also carries the Option B nozzle pushrod crank. ~200mm/side. FOS ~13 bend / ~9 torsion (docs/TILT_SPAR_ANALYSIS.md). Hollow 5mm ID routes nav 3-core to outboard nav light. MATERIAL TRADE (docs §3.5): 4130 baseline REQUIRES corrosion finish (zinc/cadmium plate; journals ground — bare tube rusts at bearing journals); 17-4 PH H1075 is the qualified plating-free alternative (same section/mass/stiffness",
-        " higher FOS",
-        " higher cost/make-from-bar); 7075-T6 is the mass-critical life-limited fallback. FERROMAGNETIC (4130/17-4) — see Hall-sensor rows + EMI WBS §1.4.6. 4130/17-4/7075 allowables require MMPDS/AMS verification — REFERENCES.md / TODO §0.8."
-      ]
+      "Notes": "Rev R2: unified rotating tilt-spar (wing structural spar AND nacelle tilt axis); servo-driven from cargo bay, keyed to nacelle at CG; also carries the Option B nozzle pushrod crank. ~200mm/side. FOS ~13 bend / ~9 torsion (docs/TILT_SPAR_ANALYSIS.md). Hollow 5mm ID routes nav 3-core to outboard nav light. MATERIAL TRADE (docs §3.5): 4130 baseline REQUIRES corrosion finish (zinc/cadmium plate; journals ground — bare tube rusts at bearing journals); 17-4 PH H1075 is the qualified plating-free alternative (same section/mass/stiffness, higher FOS, higher cost/make-from-bar); 7075-T6 is the mass-critical life-limited fallback. FERROMAGNETIC (4130/17-4) — see Hall-sensor rows + EMI WBS §1.4.6. 4130/17-4/7075 allowables require MMPDS/AMS verification — REFERENCES.md / TODO §0.8."
     },
     {
       "Ref": "BRG-F688ZZ",
@@ -2178,11 +2133,7 @@
       "Supplier_PN_or_Search": "MF128ZZ 8x12x3.5 flanged shielded",
       "Est_Unit_Price_USD": "2.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "SUPERSEDED Rev T1 (2026-08-29) — QTY 0. There is no wingtip bearing any more: the spar is FIXED and bonded into the wing, and the tilt bearing moved to the nacelle trunnion ring. A bearing here would now be actively WRONG — it would let the spar spin under the drive pinion gear reaction. Retained for traceability of the Rev R2d F688ZZ->MF128ZZ downsize. REPLACEMENT: 2x SKIPPER-BRG-6804 per side at the nacelle trunnion (20x32x7); the pair totals 14.0 mm and MUST fit inside the 15 mm duct-bounded spar stub (docs/WING_ATTACH_INTERFACE.md S4.3a).",
-      "null": [
-        " docs/TILT_SPAR_ANALYSIS.md §8). MF128ZZ (Ø12",
-        " flange Ø13.5) seats with ~1.79mm skin margin. Wingtip radial reaction ~19 N (dyn) << MF128 dynamic capacity (~700 N) — load-safe."
-      ]
+      "Notes": "SUPERSEDED Rev T1 (2026-08-29) — QTY 0. There is no wingtip bearing any more: the spar is FIXED and bonded into the wing, and the tilt bearing moved to the nacelle trunnion ring. A bearing here would now be actively WRONG — it would let the spar spin under the drive pinion gear reaction. Retained for traceability of the Rev R2d F688ZZ->MF128ZZ downsize. REPLACEMENT: 2x SKIPPER-BRG-6804 per side at the nacelle trunnion (20x32x7); the pair totals 14.0 mm and MUST fit inside the 15 mm duct-bounded spar stub (docs/WING_ATTACH_INTERFACE.md S4.3a)., docs/TILT_SPAR_ANALYSIS.md §8). MF128ZZ (Ø12, flange Ø13.5) seats with ~1.79mm skin margin. Wingtip radial reaction ~19 N (dyn) << MF128 dynamic capacity (~700 N) — load-safe."
     },
     {
       "Ref": "PRINT-PUSHROD-CRANK",
@@ -2195,11 +2146,7 @@
       "Supplier_PN_or_Search": "In-house 3D print",
       "Est_Unit_Price_USD": "CF-PETG — see FIL-CF-PETG",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "0.00",
-      "null": [
-        "Rev T (2026-07-18): clamps the rotating 8mm spar (SPAR_OD)",
-        " carries an M3 ball stud at CRANK_R=8.5mm; tilt directly strokes the nozzle unison-ring lever via the pushrod. nacelle_nozzle_pushrod.scad. 0.15mm/40%/4 walls."
-      ]
+      "Notes": "0.00,Rev T (2026-07-18): clamps the rotating 8mm spar (SPAR_OD), carries an M3 ball stud at CRANK_R=8.5mm; tilt directly strokes the nozzle unison-ring lever via the pushrod. nacelle_nozzle_pushrod.scad. 0.15mm/40%/4 walls."
     },
     {
       "Ref": "PUSHROD-BALL-M3",
@@ -2225,11 +2172,7 @@
       "Supplier_PN_or_Search": "Amazon / AliExpress",
       "Est_Unit_Price_USD": "M3 ball stud 3mm ball RC",
       "Est_Total_Price_USD": "0.50",
-      "Notes": "2.00",
-      "null": [
-        "Rev T: 2 per nacelle (one on the spar crank",
-        " one on the nozzle ring lever); M3 shank into tapped 2.5mm pilot bores."
-      ]
+      "Notes": "2.00,Rev T: 2 per nacelle (one on the spar crank, one on the nozzle ring lever); M3 shank into tapped 2.5mm pilot bores."
     },
     {
       "Ref": "SKIPPER-TILT-ENC-PCB",
@@ -2282,6 +2225,344 @@
       "Est_Unit_Price_USD": "0.15",
       "Est_Total_Price_USD": "1.20",
       "Notes": "Rev R2c: 2 per sensor PCB + 2 spare per side; MUST be brass/316/nylon (NOT steel) within the ~10mm keep-out of the encoder IC — ferrous fasteners corrupt the angle read (docs §3.5 / EMI WBS §1.4.6)."
+    },
+    {
+      "Ref": "GM-TILT-25D",
+      "Description": "Nacelle tilt gearmotor -- Pololu 25D HP 6V 9.7:1, NO encoder (#1571, 25Dx48L), 1000 rpm, 23 kgf.mm stall, 6.0 A stall",
+      "Category": "Actuator",
+      "Qty": "0",
+      "Unit_Mass_g": "90",
+      "Total_Mass_g": "0",
+      "Supplier": "Pololu",
+      "Supplier_PN_or_Search": "1571",
+      "Est_Unit_Price_USD": "24.95",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): RETIRED (T5d-1) -- a O25 body coaxial with its worm clears the O42 wheel tip by WORM_PD/2 - 12.5 - 1 mm for ANY centre distance or worm angle, and the worm's inboard reach against the battery cradle caps WORM_PD at 26: -1.5 mm, unfixable. Replaced by GM-TILT-20D. Rev T5c 2026-09-15: encoder version (#4802, 25Dx63L) DROPPED -- its 15 mm longer body blocked the chin-flank avionics node; the LibreServo AEAT-8800 reads a magnet in the worm's brake collar instead. Mass 80-100 g datasheet bracket for non-encoder gearmotors; weigh at first article. Price listed at retrieval, VERIFY. Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): REF-ACT-002. 100 g is the datasheet's 95-110 g encoder-version bracket; weigh at first article. Drives a 4-start m1 worm (PRINT-TILT-WORM) into PRINT-TILT-WHEEL on the O4 drive shaft, 10:1; 168 deg/s at the nacelle. Own fused VBAT branch F_TILT_P/S (POWER_DISTRIBUTION.md 3.3a). Price is the listed Pololu price at retrieval, VERIFY."
+    },
+    {
+      "Ref": "GM-TILT-20D",
+      "Description": "Nacelle tilt gearmotor -- Pololu 20D 25:1 CB 6V, 20Dx41L, O4 D-shaft 18 mm, 6 x 2 mm rear shaft, no encoder; 570 rpm, 1.6 kgf.cm stall, 2.9 A stall",
+      "Category": "Actuator",
+      "Qty": "2",
+      "Unit_Mass_g": "44",
+      "Total_Mass_g": "88",
+      "Supplier": "Pololu",
+      "Supplier_PN_or_Search": "3712",
+      "Est_Unit_Price_USD": "21.95",
+      "Est_Total_Price_USD": "43.90",
+      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): REF-ACT-001 (product page read 2026-09-16: 41 mm body, 18 mm shaft, M2.5 mounting threads max 3.5 mm deep -> M2.5 x 6 through the 2.5 mm face plate). Drives a SIX-start m1 O26 worm (PRINT-TILT-WORM) into PRINT-TILT-WHEEL on the O4 drive shaft, 6.67:1; 144 deg/s no-load / 111 deg/s at max efficiency at the nacelle (TILT-CTL-07 >= 120 met no-load; owner to confirm the loaded figure). Motor body 2.0 mm above the wheel tip (both bracket-located). Inner-loop sensor = LibreServo AEAT-8800 on the worm collar. Own fused VBAT branch F_TILT_P/S. 44 g is the 20D CB figure used in tools/tilt_actuator_options.py -- weigh at first article; price listed at retrieval, VERIFY."
+    },
+    {
+      "Ref": "LS-TILT-TC",
+      "Description": "LibreServo_v4.1-TC tilt-controller board (variant of LibreServo_v4: 6 A bridge, quadrature input, brake driver, VBAT front end)",
+      "Category": "Avionics",
+      "Qty": "2",
+      "Unit_Mass_g": "12",
+      "Total_Mass_g": "24",
+      "Supplier": "JLCPCB (fab from LibreServo_v4 repo)",
+      "Supplier_PN_or_Search": "LibreServo_v4/docs/CR-2026-09-15-tilt-controller-variant.md",
+      "Est_Unit_Price_USD": "30.00",
+      "Est_Total_Price_USD": "60.00",
+      "Notes": "Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): NOT YET DESIGNED -- change request filed in the LibreServo_v4 repo (TODO.md 8.x). 36.5 x 42.9 mm outline carried on PRINT-TILT-BRACKET card-edge rails. Mass estimate 12 g, VERIFY."
+    },
+    {
+      "Ref": "PRINT-TILT-BRACKET",
+      "Description": "tilt_actuator_bracket_{port,stbd}.stl -- worm-drive actuator bracket, CF-PETG (3 feet to shell bosses, O20 motor cradle, worm slot, controller-board rails on the OUTBOARD face)",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "16.3",
+      "Total_Mass_g": "32.6",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): web Y 4..97.5, feet (10.6/124.09), (40/124.09), (64/77); board rails outboard of the web at Y 55..97.9 / Z 83..119.5 (T5d-2: the T5b rails ran through the worm); worm/collar slot (T5d-3); face plate flat-bottomed at the motor underside. Exported volume x 1.05 g/cm3. Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): SCAD airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad PART=bracket SIDE=+/-1; mass = STL volume 18,291 mm3 x 1.05 g/cm3 as-printed. 3 x M3 heat-set + M3x8 SHCS per side (into the shell's T5 foot bosses), 2 x M3x6 to the gearmotor face. Print web DOWN, 4 perimeters, 40% gyroid."
+    },
+    {
+      "Ref": "PRINT-TILT-WORM",
+      "Description": "tilt_actuator_worm.stl -- 6-start m1 O26 worm (lead 13.0 deg) with integral 12-slot brake collar and O6.2 magnet pocket, O4 D-bore through to the collar (18 mm shaft), M3 grub (RH, one part both sides)",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "6.0",
+      "Total_Mass_g": "12",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "PETG, 0.12 mm layers, 100% infill; no commercial six-start m1 worm catalogued",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): Rev T5b tooth profile (fixed 0.79 mm tangential half-width) was wrong for any lead and is replaced by a transverse section derived from the axial thickness. Exported volume x 1.05. Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): lead angle 9.5 deg; printed vertical, 0.12 mm layers, 100% infill. Starboard uses the SAME right-hand part translated (a mirror would be left-hand) -> starboard sense reversed, declared in firmware."
+    },
+    {
+      "Ref": "PRINT-TILT-WHEEL",
+      "Description": "tilt_actuator_wheel.stl -- 40T m1 worm wheel, 5 mm face, O4 bore, M3 grub, on the wing drive shaft",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "6.9",
+      "Total_Mass_g": "13.8",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): gear plane moved 1 mm outboard (GEAR_X_OUT -122.75). Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): tooth-limited train torque 1.83 N.m at the nacelle (Lewis, FOS 4 on 54 MPa REF-MAT-002); print face DOWN, 5 perimeters."
+    },
+    {
+      "Ref": "PRINT-TILT-BRAKE-GUIDE",
+      "Description": "tilt_brake_guide.stl -- pin-brake guide block + solenoid saddle, CF-PETG, 2 x M2.5 THROUGH the bracket web (Z +/-11)",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "2.1",
+      "Total_Mass_g": "4.2",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): block X -134.25..-119.75 (outboard face on the web), Y 57.1..62.1; solenoid axis 1.5 mm inboard of the worm axis. Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): SCAD tilt_brake.scad PART=guide. BRK-1..3 (TILT_DRIVE_CONTROL_SPEC.md 5.2)."
+    },
+    {
+      "Ref": "SOL-TILT-BRAKE",
+      "Description": "Brake solenoid -- pull type, O12 x 24 mm envelope, ~3 N at 3 mm stroke, 6 V, 100% duty or PWM-held",
+      "Category": "Actuator",
+      "Qty": "2",
+      "Unit_Mass_g": "15",
+      "Total_Mass_g": "30",
+      "Supplier": "TBD",
+      "Supplier_PN_or_Search": "REQUIRES VERIFICATION -- no candidate part cited yet (BRK-4)",
+      "Est_Unit_Price_USD": "8.00",
+      "Est_Total_Price_USD": "16.00",
+      "Notes": "Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): envelope only in tilt_brake.scad / cargo_layout_fit.py; de-energised = pin engaged (fail-safe). Mass and price are placeholders."
+    },
+    {
+      "Ref": "PIN-2X22",
+      "Description": "Brake pin -- O2 x 22 mm hardened steel dowel (DIN 6325 / ISO 8734 class)",
+      "Category": "Hardware",
+      "Qty": "2",
+      "Unit_Mass_g": "1",
+      "Total_Mass_g": "2",
+      "Supplier": "McMaster-Carr / Misumi",
+      "Supplier_PN_or_Search": "O2 x 22 dowel pin, A2 or hardened steel",
+      "Est_Unit_Price_USD": "0.50",
+      "Est_Total_Price_USD": "1.00",
+      "Notes": "Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): holds 9.3 N shear at the train's 0.051 N.m worm-shaft limit; spring BOM SPRING-BRAKE (TBD, ~2 N)."
+    },
+    {
+      "Ref": "FUSE-TILT-3A",
+      "Description": "3 A mini blade fuse -- per-path tilt controller + motor + brake branch (F_TILT_P / F_TILT_S)",
+      "Category": "Power",
+      "Qty": "2",
+      "Unit_Mass_g": "2",
+      "Total_Mass_g": "4",
+      "Supplier": "Littelfuse",
+      "Supplier_PN_or_Search": "0297003.WXNV (REQUIRES VERIFICATION of the 3 A rating in the 0297 series)",
+      "Est_Unit_Price_USD": "0.80",
+      "Est_Total_Price_USD": "1.60",
+      "Notes": "Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): POWER_DISTRIBUTION.md 3.3a / 5: 1.8 A stall transient from VBAT, 0.5 A running; per-path principle (owner 2026-09-15)."
+    },
+    {
+      "Ref": "PRINT-BATT-CRADLE",
+      "Description": "battery_cradle.stl -- roof-hung inverted-U cradle for the 6S 4000 pack, cargo roof band Y -58..+84, CF-PETG, 4 x M3 to shell hangers",
+      "Category": "Printed Part",
+      "Qty": "1",
+      "Unit_Mass_g": "39.2",
+      "Total_Mass_g": "39.2",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T5 2026-09-15: SCAD airframe/openscad/fuselage/cargo/battery_cradle.scad; mass = STL volume 37,534 mm3 x 1.05 g/cm3. Pack exchanged DOWNWARD through the open bay; 2 x BATT-STRAP-CAM under the pack, BATT-FOAM-SILICONE pad on the ceiling. Replaces PRINT-BATT-TRAY (140 g)."
+    },
+    {
+      "Ref": "PRINT-VOID-FORMER-CARGO",
+      "Description": "void_former_cargo_{collar_rim,batt_chimney,harness_trunk_port,harness_trunk_stbd,node_bay}.stl -- removable PLA void formers for the OPTIONAL chin foam pour",
+      "Category": "Printed Part",
+      "Qty": "5",
+      "Unit_Mass_g": "20",
+      "Total_Mass_g": "100",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "PLA, 25% infill, waxed (Johnson's paste wax x2)",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): node_bay former added (chin nodes on the floor); chimney now Z 90..131; trunks are the 10-13 mm flank ways outboard of the node bay. Masses 17.9/24.8/8.5/8.5/39.7 g at 25% PLA. Rev T5 2026-09-15: generated from the published shell by tools/gen_cargo_void_formers.py (18/48/6/6 g). The cargo section is NOT foamed by default (docs/CARGO_SECTION_LAYOUT.md); these exist only if the chin is poured. Removed after cure; not flight mass."
+    },
+    {
+      "Ref": "MAG-6X2.5-DIA",
+      "Description": "Diametric NdFeB magnet O6 x 2.5 mm -- AEAT-8800 target in the worm's brake collar",
+      "Category": "Sensor",
+      "Qty": "2",
+      "Unit_Mass_g": "0.5",
+      "Total_Mass_g": "1",
+      "Supplier": "Digi-Key / Mouser",
+      "Supplier_PN_or_Search": "diametrically magnetised disc magnet 6 x 2.5 mm (AEAT-8800 datasheet target spec -- VERIFY)",
+      "Est_Unit_Price_USD": "1.00",
+      "Est_Total_Price_USD": "2.00",
+      "Notes": "Rev T5c 2026-09-15: tilt inner-loop sensor target; pocket in tilt_actuator_worm.stl."
+    },
+    {
+      "Ref": "PRINT-NODE-SADDLE",
+      "Description": "node_saddle.stl -- avionics node saddle for a pouch-wrapped PB2I + cape, bolts to the battery cradle aft wall (4 x M3)",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "8",
+      "Total_Mass_g": "16",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): aft nodes moved to Y 99.5..121.5 (were 89.5..111.5) so the tilt-controller boards clear them; saddles on the cradle aft wall now need a 13 mm reach or a floor-standing design -- SCAD still NOT AUTHORED. Rev T5c 2026-09-15: N2 FC2 port / N4 FC3 stbd at Y 89.5..111.5, Z 87..124 (docs/CARGO_SECTION_LAYOUT.md 3a). SCAD NOT YET AUTHORED -- envelope proven in tools/cargo_layout_fit.py; mass estimate."
+    },
+    {
+      "Ref": "PRINT-CHIN-SHELF",
+      "Description": "chin_node_shelf.stl -- shelf for the two chin-floor avionics nodes (CN2/CN3 pouches, flat under the battery nose), CF-PETG, 4 x M3 to floor bosses, 4 cam-strap slots",
+      "Category": "Printed Part",
+      "Qty": "1",
+      "Unit_Mass_g": "9.4",
+      "Total_Mass_g": "9.4",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): nodes N1/N3 at Y -58..0, Z 66..88, X_CL +/-5..42 (docs/CARGO_SECTION_LAYOUT.md 3a); exported volume x 1.05 g/cm3. Uses 4 x BATT-STRAP-CAM (add 4 to that row's qty at order)."
+    },
+    {
+      "Ref": "SPAR-CF-20X16",
+      "Description": "20mm OD x 16.3mm ID roll-wrapped CF tube — FIXED wing spar and nacelle tilt axis",
+      "Category": "Structural Hardware",
+      "Qty": "2",
+      "Unit_Mass_g": "29.1",
+      "Total_Mass_g": "58.2",
+      "Supplier": "Rock West Composites / DragonPlate / Aircraft Spruce",
+      "Supplier_PN_or_Search": "roll-wrapped carbon fibre tube 20mm OD 16.3mm ID",
+      "Est_Unit_Price_USD": "22.00",
+      "Est_Total_Price_USD": "44.00",
+      "Notes": "Rev T1 (2026-08-29). Supersedes SPAR-TILT-4130 (8mm rotating steel) and CF-TUBE-12MM. One per side, ~173 mm installed (85.7 mm bonded through the wing + 15.0 mm stub proud of the tip face + the fuselage socket). SECTION I=4,389 mm^4, Z=438.9 mm^3, A=105.5 mm^2; 14.5 g over the wing span, 29.1 g over the full installed run (docs/WING_ATTACH_INTERFACE.md SS2.2). BENDING at the 14.60 N.m ultimate root moment, cantilever bound: sigma=33.28 MPa, FOS 9.0. ** THE ALLOWABLE IS NOT VERIFIED ** -- 300 MPa is the same conservative cross-ply stand-in tools/wing_spar_carrythrough.py uses for the CF thwart plate, carried over because this repo holds NO ASTM D3039/D695 certificate for any CF stock (plan 003 DEP-1, OI-2). Obtain supplier certificates before fabrication. BORE IS SIZED BY WIRE VOLUME, NOT TORQUE: four 10 AWG conductors at Ø5.5 circumscribe 13.28 mm (the exact 1+sqrt(2) four-circle packing ratio, REF-MATH-001, tools/spar_bundle_fit.py) and 1.5 mm of radial clearance lets the bundle twist through the tilt sweep, giving a 16.28 mm minimum bore. ** THE 5.5 mm WIRE OD IS AN ASSUMPTION ** -- WIRE-10AWG records no OD (OI-1). MEASURE THE PROCURED WIRE BEFORE CUTTING CF: a larger real OD scales the whole bore chain and re-opens the airfoil trade. Bonded into the wing with West System 105/206 (0.2 mm/side gap); CLAMPED, not bonded, at the fuselage so wing+spar come off as one assembly (WA-R3)."
+    },
+    {
+      "Ref": "SHAFT-TILT-4MM",
+      "Description": "4mm OD x ~250mm ground steel shaft — nacelle tilt drive, fuselage to wingtip",
+      "Category": "Structural Hardware",
+      "Qty": "2",
+      "Unit_Mass_g": "24.7",
+      "Total_Mass_g": "49.4",
+      "Supplier": "McMaster-Carr / Misumi",
+      "Supplier_PN_or_Search": "ground shaft 4mm OD 250mm precision steel",
+      "Est_Unit_Price_USD": "6.00",
+      "Est_Total_Price_USD": "12.00",
+      "Notes": "Rev T1 (2026-08-30). Carries tilt torque along chord station 53.6, parallel to the spar, from the fuselage gear pair (GEAR-TILT-FUS-38T) to the tip pinion (WA-R8). Spur pairs at both ends, no right-angle stage -- the shaft is already parallel to the tilt axis, which is the kinematic argument that selected it over a spanwise belt (plan 004 KTD1). LOADS: 0.050 N.m (0.44 lbf.in), from the 0.177 N.m grounded nacelle requirement divided by the 3.571 tip reduction. Wind-up 0.27 deg over the installed length (J=25.13 mm^4, G=79 GPa) = 0.076 deg referred to the nacelle. Runs in BUSH-TILT-4MM at the fuselage wall and at the wing tip rib. FERROMAGNETIC and it moves -- it sits inside the AK7455 non-ferrous keep-out envelope, so the in-situ INL calibration must be run with the shaft and pinion INSTALLED (docs/TILT_DRIVE_CONTROL_SPEC.md SS7.5). Mass: 4mm steel, 250mm, 7.85 g/cm^3 = 24.7 g/side."
+    },
+    {
+      "Ref": "BUSH-TILT-4MM",
+      "Description": "Flanged bronze sleeve bushing 4mm ID x 8mm OD x 5mm — tilt drive shaft support",
+      "Category": "Bearing",
+      "Qty": "4",
+      "Unit_Mass_g": "1.5",
+      "Total_Mass_g": "6.0",
+      "Supplier": "Igus / McMaster-Carr / Misumi",
+      "Supplier_PN_or_Search": "flanged oil-impregnated bronze sleeve bearing 4x8x5mm",
+      "Est_Unit_Price_USD": "1.50",
+      "Est_Total_Price_USD": "6.00",
+      "Notes": "Rev T1c (2026-08-30). Two per side: one in the fuselage root flange, one in the wing tip rib. FUSELAGE SEAT GETS NO BOSS OF ITS OWN, and that is a finding not an omission: the boss-margin rule (bore + 2 x 4.85) wants Ø17.75, but the root mortise forward face is only 4.50 mm from the shaft axis, so any compliant boss is cut in half by the mortise -- and shrinking it to fit leaves 0.48 mm of wall, under this repo 1.16 mm floor. The bonded root flange (PRINT-WING-ROOT-FLANGE) solves it for free: 5 mm of solid material on the inner wall face plus 2 mm of skin behind it gives 7 mm of bearing length, more than a boss would have. Seat Ø8.05 slip fit, bonded with West System 105/206. NOT a rolling bearing: the duty is a slow-oscillating 0.050 N.m shaft, where a sleeve bushing outlives a miniature ball race and costs a quarter as much."
+    },
+    {
+      "Ref": "GEAR-TILT-FUS-38T",
+      "Description": "Spur gear 38T module 0.8, 20 deg PA, 6mm face, 4mm bore — fuselage tilt drive stage (1:1 pair)",
+      "Category": "Gear",
+      "Qty": "4",
+      "Unit_Mass_g": "4.0",
+      "Total_Mass_g": "16.0",
+      "Supplier": "KHK / SDP-SI / Misumi",
+      "Supplier_PN_or_Search": "spur gear module 0.8 38 teeth 20 deg PA steel or POM",
+      "Est_Unit_Price_USD": "5.00",
+      "Est_Total_Price_USD": "20.00",
+      "Notes": "Rev T1c (2026-08-30). TWO PER SIDE (one on the actuator output spline, one on the drive shaft) -- a 1:1 pair, PD 30.4, tip Ø32.0, centre distance C = 30.40 mm on a pure hull-Z offset. WHY A GEAR PAIR AND NOT A COUPLING: a coaxial actuator does not fit -- the DS3225 body on the drive-shaft axis overlaps the Ø30.1 spar socket boss by 13.5 mm in Y at EITHER orientation of the output shaft, and relieving the boss would cut into the Ø20.4 socket bore. Both axes run along hull X so a plain parallel-axis spur mesh is legal with no right-angle stage. WHY 38T: C is set by the Rev R6 landing-gear bay seats (top out at Z +82.39; the 3.0 mm clearance budget puts the pad bottom at >= +85.39, so C >= 29.80). At module 0.8 the integer 1:1 pairs are 36T (C 28.80, only 2.00 mm of bay clearance), 37T (29.60, 2.80) and 38T (30.40, 3.60 -- clears). WHY 1:1 AND NOT A STEP-UP: a step-up would trade the 48x torque surplus for slew rate, but pulls the ACTUATOR back to 260 deg -- under one revolution -- re-opening the 180-vs-270 limited-rotation question Rev T1 exists to close. MESH PLANE is 11.0 mm inboard of X -100/-240, forced by the wing root tenon: the tenon forward face is 4.90 mm from the shaft axis, so clearing it in Y needs a tip radius under 3.90 mm and NO gear that can transmit at this centre distance qualifies -- it has to be cleared axially. That is what costs the actuator its 18 mm standoff. Load 0.050 N.m; specify steel or POM, not printed -- module 0.8 teeth are at the edge of FDM capability (plan 004 RISK-3)."
+    },
+    {
+      "Ref": "PRINT-WING-ROOT-FLANGE",
+      "Description": "wing_root_flange_port/stbd.stl — bonded wing-root moment flange, 80 (Z) x 60 (Y) x 5 mm conforming plate",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "25.6",
+      "Total_Mass_g": "51.2",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) + hardened nozzle — see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "** MASS CORRECTED 2026-08-30 (weight audit): 12.7 -> 25.6 g each. ** The first figure applied 'solid density x 40% infill' (1.30e-3 x 0.40), which is the wrong model for this part and for most of this BOM: at 5 mm thick with 4 perimeters at 0.6 mm the plate is 4.8 mm of perimeter and 0.2 mm of infill -- it is essentially solid, and infill percentage barely touches it. Use merge_cargo_interior.RHO_PRINT = 1.05e-3 g/mm^3, the repo's own bulk as-printed figure (RHO_SOLID = 1.28e-3 brackets it above). 24,336 mm^3 x 1.05e-3 = 25.6 g. Rev T1c (2026-08-30). 0.15mm / 40% gyroid / 4 walls. GENERATOR airframe/stls/fuselage/generate_wing_root_flange.py -> wing_root_flange_port.stl (24,336 mm^3) and _stbd.stl (24,405 mm^3), both hull-frame, watertight single bodies. FUNCTION: WA-R1b, the MOMENT path of the wing root joint. The cargo bay caps socket depth at 18.67 mm and a socket capacity goes as 1/L^2, so at that depth a socket gives FOS 0.51 on the moment -- unrecoverable by any depth the bay allows. A flange reacts over wall AREA instead: F = 3M/(2h) = 274 N over 1,600 mm^2 = 0.17 MPa, FOS 29.2 against the 5 MPa bond-limited CF-PETG figure (docs/structural_analysis.md SS7.3). The bay requirement forced a BETTER joint, not a compromise. WHY IT IS A SEPARATE PART: measured 2026-08-30 by ray-casting the baked envelope on a 13 x 17 grid (221/221 hits), the sidewall skin moves through 34.3 mm (port) / 37.0 mm (stbd) of hull X across the 80 x 60 footprint -- the wall is not flat there, so a printed slab would be up to 34 mm thick and a plane-bounded one is tangent to the skin inside the footprint (measured: a 0.46 mm non-manifold edge, 4 incident faces, plus a sliver body). Same treatment as the CF thwarts and the splice collars: the shell reserves the volume, the part carries the shape. BOND with West System 105/206 to the inner sidewall; cure 24 h before foam pour. Clamped to the spar at the wall by the WA-R3 split collar (NOT YET A PART -- see fuselage-mid WBS WA-R17). Also carries the BUSH-TILT-4MM seat."
+    },
+    {
+      "Ref": "PRINT-NACELLE-TRUNNION",
+      "Description": "nacelle_trunnion.stl - nacelle tilt trunnion: 6704 bearing seat + 50T ring gear + ring-magnet seat + pilot",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "7.9",
+      "Total_Mass_g": "15.8",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) + hardened nozzle - see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T4 (2026-08-31), NEW PART. The nacelle-side half of the Rev T1 wing/nacelle tilt joint: it replaces the rotating O8 mm through-duct spar with a trunnion on the FIXED wing spar's 15 mm duct-bounded stub. Carries on one axis the 2 x BRG-6704ZZ pair (O27.0 H7 seat), the 50T module-0.8 involute ring gear the wing's 14T pinion drives (PD 40.0, i = 3.571, C = 25.6 -> wing chord station 53.6), the bonded seat for HALL-RING-MAG, and a pilot spigot that sets HALL_AIR_GAP = 1.5 mm off the wing tip pad. SEPARATE FROM THE POD ON PURPOSE: its axis is nacelle-local X, so printed integrally the gear teeth would be stacked overhangs and the bearing seat a bridged horizontal bore. Print OUTBOARD FACE DOWN, 0.12 mm layers, 60% gyroid, 4 walls, no supports. NON-FERROUS ZONE: the 3 x M3 flange screws MUST be BRASS - the whole part sits inside HALL_KEEPOUT_R of the AK7455. Closes WA-R7/R8/R9/R11/R12 and OI-8. Gated by tools/nacelle_trunnion_fit.py; mass measured from the mesh at RHO_PRINT 1.05e-3."
+    },
+    {
+      "Ref": "BRG-6704ZZ",
+      "Description": "6704ZZ thin-section deep-groove ball bearing 20x27x4mm - nacelle tilt trunnion",
+      "Category": "Bearing",
+      "Qty": "4",
+      "Unit_Mass_g": "4.9",
+      "Total_Mass_g": "19.6",
+      "Supplier": "Amazon / AliExpress / VXB Bearings",
+      "Supplier_PN_or_Search": "6704ZZ (61704ZZ) 20x27x4mm shielded",
+      "Est_Unit_Price_USD": "2.50",
+      "Est_Total_Price_USD": "10.00",
+      "Notes": "Rev T4 (2026-08-31). 2 per nacelle, stacked in PRINT-NACELLE-TRUNNION. ** THIS IS NOT THE 6804 THE INTERFACE DOCUMENT SPECIFIED, and the substitution is forced, not preferred. ** docs/WING_ATTACH_INTERFACE.md S4.3a budgeted all 15.0 mm of the duct-bounded spar stub to bearings and concluded 2 x 6804 (20x32x7 = 14.0 mm) fits. It does not: the stub also pays 0.3 mm pilot clearance, 1.5 mm HALL_AIR_GAP and 2.5 mm of ring magnet before a bearing gets any of it, leaving 9.0 mm. 2 x 6704 = 8.0 mm fits with 1.0 mm in hand. Deep-groove, so both races take AXIAL AND RADIAL load - required, because nacelle thrust is axial to the spar in cruise and transverse in hover (plan 004 RISK-4); a plain bushing in the inboard position would not have done. DUTY: bearing centres are 4.0 mm apart, so the 1.02 N.m ultimate thrust moment gives 254 N per bearing = 28% of the ~0.9 kN static rating, and 2.4 MPa on the printed O27 seat. Passes, but the SPAN is the governing number and it is set by the duct bound, not chosen. FERROUS and inside HALL_KEEPOUT_R - run the AK7455 INL calibration with the bearings INSTALLED. SKIPPER-BRG-6804 stays in this BOM for the GCS gimbal pan stage, which is where it was already used."
+    },
+    {
+      "Ref": "STUD-M3-BRASS",
+      "Description": "M3 brass stud + nut + heat-set insert - 10 AWG ring-terminal disconnect, nacelle bay",
+      "Category": "Electrical Hardware",
+      "Qty": "8",
+      "Unit_Mass_g": "1.2",
+      "Total_Mass_g": "9.6",
+      "Supplier": "McMaster-Carr / Amazon",
+      "Supplier_PN_or_Search": "M3 brass threaded stud + brass hex nut + M3 brass heat-set insert",
+      "Est_Unit_Price_USD": "0.60",
+      "Est_Total_Price_USD": "4.80",
+      "Notes": "Rev T4 (2026-08-31). 4 per nacelle on a 7.5 mm pitch in the esc_disconnect_bay pocket (nacelle_pod_50mm_tandem.scad, Z 82, 30 x 14 x 6.0 mm). Ring terminals rather than bullets BECAUSE OF A MEASUREMENT: the inboard flank has at most 7.10 mm of usable depth and only over Z 75-88, so no 10 AWG bullet fits lengthwise anywhere on it (docs/WING_ATTACH_INTERFACE.md S4.4). BRASS, not steel - 21 mm from the AK7455 keep-out. ** WA-R10 IS ONLY PARTLY SATISFIED: ** the bay exists and serves the EDF1 ESC pair, but there is no compliant route for the wing's 4 x 10 AWG bundle from the trunnion to this bay in a SOLID pod. Blocked on hollowing the pod (weight plan W0), which opens a 5-17 mm annulus and settles both at once."
+    },
+    {
+      "Ref": "PRINT-NACELLE-ESC-COVER",
+      "Description": "nacelle_esc_cover_{port,stbd}_{a,b}.stl - hinged-ESC bay access covers, FOUR distinct parts",
+      "Category": "Printed Part",
+      "Qty": "4",
+      "Unit_Mass_g": "7.0",
+      "Total_Mass_g": "28.0",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) + hardened nozzle - see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev T4e (2026-09-07). Closes the ESC bay that Rev T4b's hollowing made necessary: a 33 mm hinged board cannot be threaded into a sealed annulus, so each bay is cut radially through the skin and this drops into a rebate. ** FOUR DISTINCT PARTS, NOT ONE PRINTED FOUR TIMES: ** the shell is not axisymmetric, so bay A (az 68) and bay B (az 248) sit on different surface and port/stbd are mirror images. The outer face IS the canonical mould line, from the same ray-cast skin grid the pod's rebate is cut from; fit verified mesh-against-mesh at 0.008 mm3 (gate T9). ** THICKNESS 2.5 mm, NOT 3.0: ** every 0.5 mm of cover costs ~10 mm of ESC board LENGTH out of the same radial budget, so the cover runs at the repo minimum wall and the M3 button head sits 0.65 mm PROUD by design rather than flush - a quantified deviation on a nacelle that already carries a 15 mm trunnion fairing proud of the mould line. COOLING: carries the aspirated circuit's INLET - one AFT louvre field only (8 x 1.2 x 24 mm = 230 mm2). Slots at both ends short-circuit, because the forward field sat directly over the discharge ports. Louvre width 1.2 mm answers two criteria at once: two extrusions at a 0.6 mm nozzle, and the coarse FOD limit. Carries a bonded no-see-um FOD screen in a 0.6 mm rebate on the inner face - see MESH-FOD-NOSEEUM. PRINT: inner (concave) face DOWN, 0.15 mm, 4 perimeters, 100% infill, no supports; the arch bridges."
+    },
+    {
+      "Ref": "SCREW-M3-BUTTON-8",
+      "Description": "M3 x 8 mm button-head screw - ESC bay access covers",
+      "Category": "Fastener",
+      "Qty": "24",
+      "Unit_Mass_g": "0.9",
+      "Total_Mass_g": "21.6",
+      "Supplier": "McMaster-Carr / Amazon",
+      "Supplier_PN_or_Search": "M3x8 button head socket cap screw A2 stainless",
+      "Est_Unit_Price_USD": "0.10",
+      "Est_Total_Price_USD": "2.40",
+      "Notes": "Rev T4e (2026-09-07). 6 per cover x 4 covers = 24. Button head (O5.7 x 1.65) in a 1.0 mm counterbore of a 2.5 mm cover, so the head stands 0.65 mm PROUD - deliberate. Sinking it flush needs a 3.0 mm cover and that costs ~10 mm of ESC board length out of the same radial budget; 0.65 mm of screw head is the cheaper of the two. Threads into M3 x 6 heat-set inserts in the pod's cover bosses - the same insert used throughout the pod, so no new fastener family. Stainless is acceptable HERE, unlike the trunnion screws: the nearest cover boss is ~60 mm from the AK7455, well outside HALL_KEEPOUT_R."
+    },
+    {
+      "Ref": "MESH-FOD-NOSEEUM",
+      "Description": "No-see-um insect mesh, 0.6 mm aperture - ESC bay cooling inlet FOD screen",
+      "Category": "Hardware",
+      "Qty": "4",
+      "Unit_Mass_g": "0.2",
+      "Total_Mass_g": "0.8",
+      "Supplier": "Amazon / outdoor fabric suppliers",
+      "Supplier_PN_or_Search": "no-see-um mesh 0.6mm aperture polyester or fibreglass insect screen",
+      "Est_Unit_Price_USD": "0.25",
+      "Est_Total_Price_USD": "1.00",
+      "Notes": "Rev T4e (2026-09-07). One per ESC bay cover, ~30 x 24 mm, bonded at the RIM ONLY into a 0.6 mm rebate in the cover's inner face - adhesive across the weave blocks the free area the sizing depends on. ** WHY A SCREEN EXISTS AT ALL: ** aspirating the bay rather than bleeding it made the bay an unfiltered path from outside air INTO the EDF2 rotor. That risk did not exist in the discard circuit and is the price of the far cheaper one. ** WHY 0.6 mm AND NOT COARSER: ** the louvres are already 1.2 mm wide and standard insect mesh has a ~1.2 mm aperture, so a coarse mesh adds nothing in that dimension. What a mesh bounds is the OTHER dimension - a 1.2 x 24 mm slot passes a 1.2 x 24 mm sliver, a square aperture passes only its own size. No-see-um bounds FOD at 0.6 mm in BOTH dimensions for 4% of the cooling flow. ** WHY THE LOUVRES GREW 144 -> 230 mm2: ** free area is beta = (aperture/(aperture+strand))^2 = 0.498 here, so the screen throws away half the geometric opening. At 144 mm2 a mesh left 95 mm2 free - exactly the discharge-port throat - and the inlet would have BECOME the restriction. At 230 mm2 it leaves 115 mm2, 1.21x the throat. A finer 0.4 mm mesh is where the trade breaks down (0.92x - inlet becomes the throat). CONSUMABLE: inspect at every ESC service; replace by reprinting the cover."
     }
   ]
 }

@@ -99,7 +99,7 @@
 - [ ] ★ ASTM D3039/D695 certificate for the 20 x 16.3 CF spar tube (FOS 9.0)
 - [ ] Measure procured 10 AWG silicone wire OD (5.5 mm bore chain is assumed)
 - [x] Tilt servo angular range 180 vs 270° — VOID 2026-08-29 (drive is a reduction)
-- [ ] ★ Actuator re-select: multi-turn gearmotor/stepper closed on the AK7455
+- [x] ★ Actuator re-select — DONE 2026-09-15 (D5), RE-CUT 2026-09-16 (Rev T5e): Pololu 20D 25:1 + six-start worm 6.67:1 + pin brake; the 25D pick could not clear the wheel (T5d-1) (`docs/TILT_ACTUATOR_SELECTION.md` §1a)
 - [ ] LG-11 coupon — demoted at wing root (flange FOS 29.2); gates tenon/thwarts
 - [ ] ★ Aero revalidation of the re-lofted wing (S1223/t17.7–t26.7; XFOIL/RANS)
 
@@ -110,15 +110,19 @@
 - [x] WA-R15 — tilt actuator multi-turn on AK7455; 38T/38T fuselage stage
 - [x] Owner decision — cargo bay stays clear; joint = socket + flange (2026-08-29)
 - [ ] WA-R3/R17 — split-collar pinch clamp is not yet a part (BLOCKS wing refit)
-- [ ] ★ WA-R16 — tilt train not self-locking, no holding provision (BLOCKS flight)
+- [x] ★ WA-R16 — holding provision DONE 2026-09-15: pin brake BRK-1..3 (`tilt_brake.scad`); solenoid part BRK-4 + bench BRK-5 open below
+- [ ] ★ BRK-4 — brake solenoid part selection (Ø12×24 pull, 3 N, 6 V) — SOL-TILT-BRAKE
+- [ ] BRK-5 — bench: pin-engaged hold, release under load, drift ≤ 0.63° (spec §7.3; 23.8:1 train)
+- [ ] TILT-CTL-07 — owner to confirm the adopted rate ≥ 120 °/s, ≥ 4 Hz at ±5° (Rev T5e delivers 144 °/s no-load, 111 °/s at max efficiency)
+- [ ] TILT-CTL-08 — LibreServo_v4.1-TC controller variant (LibreServo_v4 CR 2026-09-15; TC-1 bridge re-rated to 2.9 A for the 20D, 2026-09-16)
 - [ ] ★ WA-R18 — Rev S1g +102.8 g; hover T/W ~1.19 vs 1.2 min; re-derive mass/CG
 - [ ] ★ MA-1 — BOM printed-part masses understate by +521.6 g (13.3 % AUW)
-- [ ] MA-5 — hollow the actuator standoffs (−32.9 g)
-- [ ] MA-6 — PRINT-BATT-TRAY measures 140.2 g vs 22 g BOM row
+- [x] MA-5 — CLOSED 2026-09-15: standoff pads removed with the worm-drive bracket (−53.5 g + 23.4 g bosses)
+- [x] MA-6 — CLOSED 2026-09-15: PRINT-BATT-TRAY retired; PRINT-BATT-CRADLE 39.4 g (`battery_cradle.scad`)
 - [ ] MA-7 — add an `Installed` flag to the BOM mass column
 - [ ] W1..W8 — ranked weight-reduction targets (W2 BOM reconciliation gates all)
-- [ ] WA-R15a — re-measure cargo-bay roof band vs actuators X −158.5/−221.5
-- [ ] TILT-CTL-01..06 — tilt control loop open items (TILT_DRIVE_CONTROL_SPEC §8)
+- [x] WA-R15a — CLOSED 2026-09-15: pads gone; roof band re-proved by `tools/cargo_layout_fit.py` (PASS)
+- [ ] TILT-CTL-02..06 — tilt control loop open items (TILT_DRIVE_CONTROL_SPEC §8; 01 closed by BRK)
 - [ ] WA-R7..R12 — nacelle side: bore D20, ring gear, magnet, disconnect, nav 3-core
 - [ ] WA-R13 — avionics: confirm zero-cal covers the drive-shaft/pinion field
 - [ ] Spar stub / trunnion packaging — 13.5 mm stub, 2×6704ZZ, magnet 2.0 (0.0 mm margin)

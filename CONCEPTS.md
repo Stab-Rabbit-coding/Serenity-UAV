@@ -20,9 +20,31 @@ The internal bonded sleeve that joins two adjoining Fuselage Sections across a f
 
 ## Tilt Spar
 
-The transverse shaft a nacelle pivots about when it tilts between cruise and hover attitude, running along the hull X axis at the nacelle's pivot station.
+The transverse carbon-fibre member at the wing root that carries the nacelle's loads into the fuselage, running along the hull X axis at the spar station. Since Rev T1 it is a **fixed, bonded wing member**, not a rotating shaft: the nacelle pivots on its own trunnion bearings, and tilt torque travels a separate, smaller Tilt Drive Shaft. (Through Rev S it was keyed to the nacelle and rotated with it, which is why older documents treat "spar" and "tilt axis" as the same thing — they no longer are.)
 
-The spar is **keyed to the nacelle**, so it rotates *with* the nacelle rather than remaining fixed to the wing. This is the single non-obvious fact about it: anything clamped to the spar therefore sits in the nacelle's own rotating frame and has no relative motion against other nacelle-mounted parts, so the spar is not a usable datum for a Passive Tilt Drive.
+## Tilt Drive Shaft
+
+The Ø4 steel shaft, parallel to the Tilt Spar, that carries tilt torque from the fuselage-mounted actuator out to the nacelle. It turns more than one revolution over the nacelle's sweep because the tip stage is a reduction, so the nacelle angle is read by an absolute sensor on the nacelle itself rather than inferred from the shaft.
+
+## Tilt Drive Train
+
+The two-stage path from the tilt actuator to the nacelle: a fuselage stage on the Tilt Drive Shaft (a worm since Rev T5b; six-start on a Ø20 gearmotor since Rev T5e) and a tip stage at the nacelle. A train is either self-locking or it is not; when it is not, a Tilt Brake — never the motor's own drag — is what holds the nacelle unpowered. For a motor coaxial with its worm, the motor's clearance to the wheel tip is set by the worm's pitch diameter alone — not by the centre distance and not by where the worm sits on the wheel — so the worm's inboard reach caps the motor diameter.
+
+## Layout Envelope
+
+A simple solid — box or cylinder — standing in for a piece of equipment, a moving part, a cable zone or a keep-out inside a Fuselage Section, used to prove a layout by boolean intersection against the section's published shell and against every other envelope, rather than by eye. Each envelope carries its own clearance budget (larger for moving parts than for static ones) and a declared list of the envelopes it is allowed to touch; anything a bracket or cradle carries must be an envelope too, because a part drawn only in its own source file is invisible to the proof.
+
+## Void Former
+
+A removable printed shape, cut to the exact cavity of a published shell, that is placed before an optional foam pour and withdrawn after cure so that the volume it occupied — a collar seat, an equipment bay, a harness way — stays foam-free. Formers are derived from the shell mesh, not drawn by hand, because a hand-drawn shape is either too big to insert or leaves a foam fillet where the equipment must later go.
+
+## Chin Node Shelf
+
+The printed plate on the cargo-section chin floor, under the battery nose and forward of the hoisted payload, that carries the two remaining control nodes lying flat side by side with a shared cable channel on the centreline. It exists because the chin flanks beside the battery were measured too narrow three times; the chin floor was clear first try.
+
+## Tilt Brake
+
+The spring-applied, power-released mechanical lock that holds a nacelle at its last commanded angle when its actuator loses power. It is flight-critical because every propulsion path is fused independently so the aircraft can descend on the remaining units; the brake must survive the actuator's own path failing during that descent.
 
 ## Unison Ring
 

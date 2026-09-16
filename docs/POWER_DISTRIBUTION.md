@@ -26,6 +26,8 @@
                           │  ├──── F_ESC3 (40 A) ── XT30 ── ESC3     │
                           │  ├──── F_ESC4 (40 A) ── XT30 ── ESC4     │
                           │  │        (ESC5 – Phase 11, DNP)         │
+                          │  ├──── F_TILT_P (3 A) ── port tilt ctlr  │  Rev T5b
+                          │  ├──── F_TILT_S (3 A) ── stbd tilt ctlr  │  (own paths)
                           │  ├──── 5 V / 10 A BEC ── avionics bus    │
                           │  └──── 6 V /  5 A BEC ── servo bus       │
                           │                                           │
@@ -170,7 +172,7 @@ margin and worsens single-fault brown-out) — not the flight configuration.
 
 | Load | Qty | Stall (mA) | Running (mA) | Total run (mA) |
 |------|-----|-----------|--------------|----------------|
-| Nacelle tilt servos (DS3225/LibreServo_v4, 21–24.5 kgf·cm — was DS3218MG, briefly SPT5425LV) ⚠ **not bench-verified**; sized here to DS3225's own datasheet-cited 2.3 A @ 6.8 V stall figure (`REFERENCES.md` "Open Standards Verification Items" DS3225 row; `current-specification/bom_revS.csv` SERVO-TILT), superseding the DS3218MG-era 1.5 A carried-forward placeholder. **This is the tilt-servo current rail — not `RAIL-2`, which is the separate `5V_OBS` Observer/winch rail (§3.2.1/§11.1); see the 2026-08-25 SPAR-02 correction note.** | 2 | 2 300 | 150 | 300 |
+| ~~Nacelle tilt servos~~ **MOVED OFF THIS RAIL, Rev T5b (2026-09-15):** the tilt actuators are now Pololu 20D gearmotors (Rev T5e; 25D HP at Rev T5b) + brake solenoids on their own fused VBAT branches F_TILT_P / F_TILT_S (§3.3a, §5) per the owner's per-path principle (`docs/TILT_ACTUATOR_SELECTION.md` §3/§5). Row retained for the record: (DS3225/LibreServo_v4, 21–24.5 kgf·cm — was DS3218MG, briefly SPT5425LV) ⚠ **not bench-verified**; sized here to DS3225's own datasheet-cited 2.3 A @ 6.8 V stall figure (`REFERENCES.md` "Open Standards Verification Items" DS3225 row; `current-specification/bom_revS.csv` SERVO-TILT), superseding the DS3218MG-era 1.5 A carried-forward placeholder. **This is the tilt-servo current rail — not `RAIL-2`, which is the separate `5V_OBS` Observer/winch rail (§3.2.1/§11.1); see the 2026-08-25 SPAR-02 correction note.** | 2 | 2 300 | 150 | 300 |
 | RCS proportional valve servos (SG90 class + OpenServoCore, Phase 11) | 4 | 700 | 70 | 280 |
 | Cargo door servo (SG90 + OpenServoCore) | 1 | 700 | 70 | 70 |
 | Cargo release servo (SG90 + OpenServoCore) | 1 | 700 | 70 | 70 |
@@ -195,6 +197,25 @@ Standards Verification Items; bench current may come in under the datasheet's
 
 At 6 V / 22.2 V: 8.8 A × 6 V / 22.2 V ≈ **2.4 A from VBAT** at all-servo stall
 (was 1.4 A before this resizing).
+
+### 3.3a Tilt actuator branches (VBAT, per path) — Rev T5b, re-rated Rev T5e (2026-09-16)
+
+| Branch | Load | Stall (transient) | Running | Fuse |
+|---|---|---|---|---|
+| F_TILT_P | port tilt controller (LibreServo_v4.1-TC) + Pololu 20D 25:1 CB 6 V gearmotor (2.9 A stall, 0.74 A max-eff, 0.15 A free-run at 6 V, REF-ACT-001; Rev T5e — the 25D's 6.0 A / 1.8 A figures were Rev T5b) + brake solenoid (~0.5 A at 6 V, BRK-4) | 2.9 × 6 / 22.2 / 0.9 ≈ **0.9 A** from VBAT | ≈ 0.5 A | 3 A mini blade |
+| F_TILT_S | starboard, identical | 0.9 A | 0.5 A | 3 A mini blade |
+
+The 6 V servo bus (§3.3) loses the 2 × 2.3 A DS3225 stall contribution: its
+all-stall total falls from 8.8 A to **4.2 A**, back inside the 5 A continuous /
+7 A burst BEC rating. The tilt controllers take VBAT directly (22.2 V nominal,
+25.2 V at full charge) — the MPM3610 buck on LibreServo_v4 must be verified
+against 25.2 V input or replaced (`docs/TILT_ACTUATOR_SELECTION.md` §4).
+
+Rationale (owner, 2026-09-15): each ESC has an independent fused path to its
+EDF so that no single failure cascades and the aircraft can descend under
+control on the remaining units; the tilt actuators follow the same principle so
+that a tilt-path failure during such a descent cannot take the nacelle hold
+with it (BRK-2).
 
 ### 3.4 Total System Draw
 
@@ -245,14 +266,22 @@ Battery ────────────────────────
                 │
           F1: 150 A MAXI blade (Littelfuse 0297150.ZXNV)
                 │
-         ┌──────┼──────────────────────┬─────────────┐
-         │      │                      │             │
-   F_ESC1: 40 A  F_ESC2: 40 A   F_ESC3: 40 A  F_ESC4: 40 A
-   (Littelfuse   (Littelfuse      (Littelfuse   (Littelfuse
-   0297040.WXNV) 0297040.WXNV)   0297040.WXNV) 0297040.WXNV)
-         │      │                      │             │
-        ESC1  ESC2                   ESC3          ESC4
+         ┌──────┼──────────────────────┬─────────────┬──────────────┬──────────────┐
+         │      │                      │             │              │              │
+   F_ESC1: 40 A  F_ESC2: 40 A   F_ESC3: 40 A  F_ESC4: 40 A   F_TILT_P: 3 A   F_TILT_S: 3 A
+   (Littelfuse   (Littelfuse      (Littelfuse   (Littelfuse    (mini blade,    (mini blade,
+   0297040.WXNV) 0297040.WXNV)   0297040.WXNV) 0297040.WXNV)  Rev T5b)        Rev T5b)
+         │      │                      │             │              │              │
+        ESC1  ESC2                   ESC3          ESC4      port tilt ctlr  stbd tilt ctlr
+                                                             + motor + brake  + motor + brake
 ```
+
+Rev T5b: F_TILT_P/S are 3 A mini blade fuses (part number to be selected from the
+same Littelfuse 0297 series as F_ESC — REQUIRES VERIFICATION of the 3 A rating's
+availability in that series). Coordination: a tilt-branch fault at 3 A cannot
+approach F1's 150 A; the 0.9 A stall transient (Rev T5e; 1.8 A at Rev T5b) is 30 %
+of rating and under the series' 100 % / 4 h no-blow curve — a 2 A rating would
+also coordinate, 3 A is kept for the solenoid inrush margin.
 
 ### 5.1 Coordination Analysis
 

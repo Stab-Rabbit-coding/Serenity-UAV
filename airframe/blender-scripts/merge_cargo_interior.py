@@ -1,6 +1,32 @@
 #!/usr/bin/env python3
 """
-merge_cargo_interior.py — Rev R1 (2026-06-30)
+merge_cargo_interior.py — Rev T5e (2026-09-16; Rev R1 2026-06-30 base)
+
+Rev T5e (2026-09-16) — layout re-cut after the 2026-09-16 findings:
+  * Tilt bracket feet move (top row Z 124.09, foot 2 low at Y 64 / Z 77) for
+    the 20D gearmotor + six-start O26 worm (T5d-1 closed) and the tilt-
+    controller board on the bracket's OUTBOARD face (T5d-2).
+  * Four chin-floor bosses for the chin node shelf (CN2/CN3 lie flat under
+    the battery nose) and four belly bosses for the cargo Observer tray
+    (standing behind the payload box).  Stations: tools/cargo_layout_fit.py.
+
+Rev T5 (2026-09-15) — cargo-section layout freeze (docs/CARGO_SECTION_LAYOUT.md):
+  * Nacelle-tilt actuator: the DS3225/38T-spur standoff pads (NSVMT_*) are
+    GATED OFF and replaced by 3 bracket-foot bosses per side for the worm-
+    drive bracket (airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad;
+    docs/TILT_ACTUATOR_SELECTION.md).  Closes WA-R15a / MA-5 by removal.
+  * Flight battery: 4 roof hanger bosses for the inverted-U cradle
+    (battery_cradle.scad) on the bay centreline, Y -58..+84.
+  * Canonical forward cargo ramp: SEALED with a fused fairing following the
+    measured flank profile (plan 2026-08-25-002 U2 / KTD1), with recessed
+    panel lines.  The 52 x 36 mm void in the canted forward face is gone.
+  * Inara/River dorsal tray bosses GATED OFF -- both trays leave the cargo
+    section (D-T5-3).  GPS x2 dorsal cups + SMA bores ADDED in hull frame
+    (the legacy-frame SCAD recesses were never cut).
+  * Winch (Phase 7): two roof pedestal bosses reserved for the twin-drum
+    bridle axle at Y 55.5.
+  Every Rev T5 station is single-sourced from tools/cargo_layout_fit.py,
+  which also proves the layout against this script's own output.
 
 Build the FINAL canonical cargo-section shell by merging every cargo interior
 feature into the Blender-canonical hull skin, in one robust manifold3d pass.
@@ -153,6 +179,7 @@ import generate_cargo_hinge_retention as hinge  # noqa: E402
 TOOLS_DIR = os.path.join(REPO_ROOT, "tools")
 sys.path.insert(0, TOOLS_DIR)
 import wing_spar_station_fit as wsf  # noqa: E402
+import cargo_layout_fit as clf  # noqa: E402  -- Rev T5 layout, single source
 
 
 def _wing_midline_mm(chord_fraction):
@@ -693,7 +720,8 @@ NSVMT_PAD_H = NSVMT_BODY_W + 2 * NSVMT_MARGIN     # = 27.0, Z span
 # 49.5 mm along the body length (hull Y) x 10 mm across its width (hull Z),
 # DS3218 datasheet drawing.  This replaces the 35 x 16 mm pattern inherited from
 # a servo the BOM had already replaced, which matched nothing.
-NSVMT_HOLES_ENABLED = True
+NSVMT_HOLES_ENABLED = False   # Rev T5: pads retired (see NSVMT_PADS_ENABLED)
+NSVMT_PADS_ENABLED = False    # Rev T5: DS3225 standoff pads GATED OFF -- worm bracket feet instead
 NSVMT_HOLE_S_Y = 49.5 / 2.0   # = 24.75, datasheet
 NSVMT_HOLE_S_Z = 10.0 / 2.0   # =  5.00, datasheet
 NSVMT_M3_D = 4.1
@@ -707,6 +735,9 @@ NSVMT_M3_D = 4.1
 RING_Y30_ENABLED = False
 
 # Inara avionics-bay standoff bosses (dorsal port half, additive only).
+# Rev T5: GATED OFF -- Inara/River relocate out of the cargo section
+# (docs/CARGO_SECTION_LAYOUT.md D-T5-3); constants kept for the re-run.
+INARA_ENABLED = False
 INARA_X = -135.0
 INARA_Y = 90.0
 INARA_BOSS_DX = 25.0
@@ -867,14 +898,6 @@ def wing_keepout_positives(envelope_tm=None):
         ("spar boss stbd", x_cylinder(
             WING_SPAR_Y, WING_SPAR_Z, STBD_OUTB, STBD_INB,
             WING_SPAR_BOSS_OD / 2.0)),
-        ("actuator pad port", box(
-            PORT_INB - NSVMT_STANDOFF, PORT_OUTB,
-            NSVMT_Y - NSVMT_PAD_W / 2, NSVMT_Y + NSVMT_PAD_W / 2,
-            NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2)),
-        ("actuator pad stbd", box(
-            STBD_OUTB, STBD_INB + NSVMT_STANDOFF,
-            NSVMT_Y - NSVMT_PAD_W / 2, NSVMT_Y + NSVMT_PAD_W / 2,
-            NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2)),
         # WA-R1b (Rev T1): the bonded root flange -- the MOMENT path.
         #
         # THIS IS A KEEP-OUT, NOT PRINTED HULL MATERIAL, and that distinction was
@@ -909,6 +932,21 @@ def wing_keepout_positives(envelope_tm=None):
             WING_SPAR_Y - ROOT_FLANGE_W / 2, WING_SPAR_Y + ROOT_FLANGE_W / 2,
             WING_SPAR_Z - ROOT_FLANGE_H / 2, WING_SPAR_Z + ROOT_FLANGE_H / 2)),
     ]
+    if NSVMT_PADS_ENABLED:
+        raw += [
+            ("actuator pad port", box(
+                PORT_INB - NSVMT_STANDOFF, PORT_OUTB,
+                NSVMT_Y - NSVMT_PAD_W / 2, NSVMT_Y + NSVMT_PAD_W / 2,
+                NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2)),
+            ("actuator pad stbd", box(
+                STBD_OUTB, STBD_INB + NSVMT_STANDOFF,
+                NSVMT_Y - NSVMT_PAD_W / 2, NSVMT_Y + NSVMT_PAD_W / 2,
+                NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2)),
+        ]
+    else:
+        # Rev T5: the worm bracket's feet are the keep-out the LG bay must
+        # respect on each wall (tools/cargo_layout_fit.py BRACKET_FEET).
+        raw += t5_bracket_feet_raw()
     if envelope_tm is None:
         return raw
     env = to_man(envelope_tm)
@@ -918,6 +956,225 @@ def wing_keepout_positives(envelope_tm=None):
         if len(got.faces):
             clipped.append((label, got))
     return clipped
+
+
+# ---------------------------------------------------------------------------
+# Rev T5 features (docs/CARGO_SECTION_LAYOUT.md) -- stations from
+# tools/cargo_layout_fit.py, never restated here.
+# ---------------------------------------------------------------------------
+T5_FOOT = 12.0            # bracket foot boss section, mm (= bracket FOOT_PAD)
+T5_FOOT_X_PORT = clf.GEAR_X_OUT + 5.0          # boss inboard face = bracket web face (-117.75, Rev T5e)
+T5_HANGER = 10.0          # cradle hanger boss section
+T5_PEDESTAL = 10.0        # winch pedestal boss section (Phase 7 reserve)
+T5_M3_D = 4.1             # heat-set pilot (RX-M3x5.7) -- same as BOSS_BORE_D
+T5_M25_D = 3.5            # heat-set pilot (RX-M2.5) for the Observer tray bosses
+T5_GPS_STATIONS = ((-135.0, 92.0), (-205.0, 92.0))   # (X, Y) dorsal, port / stbd
+T5_GPS_CUP_OD, T5_GPS_RECESS_D, T5_GPS_RECESS_H = 40.0, 36.0, 6.0
+T5_GPS_SMA_D, T5_GPS_RING_PCD, T5_GPS_M2_D = 6.5, 44.0, 1.6
+T5_WINCH_PEDESTAL_X = (clf.HOIST_XS[0] - clf.DRUM_L / 2 - 5.0,
+                       clf.HOIST_XS[1] + clf.DRUM_L / 2 + 5.0)
+
+
+def _mirror_x(tm):
+    m = tm.copy()
+    m.apply_transform(np.array([[-1, 0, 0, 2 * clf.X_CL], [0, 1, 0, 0],
+                                [0, 0, 1, 0], [0, 0, 0, 1.0]]))
+    return m
+
+
+def t5_bracket_feet_raw():
+    """Six 12 x 12 mm boss columns (3 per wall) from the bracket web plane
+    OUTBOARD to the skin (envelope-clipped by the caller).  (label, solid)."""
+    out = []
+    for i, (fy, fz) in enumerate(clf.BRACKET_FEET):
+        port = box(T5_FOOT_X_PORT, -60.0, fy - T5_FOOT / 2, fy + T5_FOOT / 2,
+                   fz - T5_FOOT / 2, fz + T5_FOOT / 2)
+        out.append((f"tilt bracket foot {i} port", port))
+        out.append((f"tilt bracket foot {i} stbd", _mirror_x(port)))
+    return out
+
+
+def t5_bracket_feet_bores():
+    """M3 heat-set pilots along X into each foot boss (8 mm deep from the face)."""
+    cut = []
+    for fy, fz in clf.BRACKET_FEET:
+        c = x_cylinder(fy, fz, T5_FOOT_X_PORT - 0.5, T5_FOOT_X_PORT + 8.0, T5_M3_D / 2)
+        cut += [c, _mirror_x(c)]
+    return cut
+
+
+def t5_cradle_hangers():
+    """Four 10 x 10 mm columns from the cradle ceiling top UP to the roof
+    skin (envelope-clipped), each with an M3 pilot 8 mm deep from below."""
+    pos, neg = [], []
+    for dx in (-clf.CRADLE_BOSS_DX, clf.CRADLE_BOSS_DX):
+        for by in (clf.CRADLE_FWD_BOSS_Y, clf.CRADLE_AFT_BOSS_Y):
+            x = clf.CRADLE_XC + dx
+            pos.append(box(x - T5_HANGER / 2, x + T5_HANGER / 2, by - T5_HANGER / 2,
+                           by + T5_HANGER / 2, clf.CRADLE_TOP_Z, 175.0))
+            neg.append(z_cylinder(x, by, clf.CRADLE_TOP_Z - 0.5, clf.CRADLE_TOP_Z + 8.0,
+                                  T5_M3_D / 2))
+    return pos, neg
+
+
+def t5_winch_pedestals():
+    """Phase 7 reserve: two roof columns outboard of the bridle drums, at the
+    hoist station, M3 pilot from below at the axle height."""
+    pos, neg = [], []
+    zc = clf.SPOOL_Z0 + clf.DRUM_D / 2
+    for x in T5_WINCH_PEDESTAL_X:
+        pos.append(box(x - T5_PEDESTAL / 2, x + T5_PEDESTAL / 2, clf.HOIST_Y - T5_PEDESTAL / 2,
+                       clf.HOIST_Y + T5_PEDESTAL / 2, zc - 6.0, 175.0))
+        neg.append(z_cylinder(x, clf.HOIST_Y, zc - 6.5, zc + 2.0, T5_M3_D / 2))
+    return pos, neg
+
+
+def t5_chin_shelf_bosses():
+    """Rev T5e: four 10 x 10 mm floor columns under the chin node shelf
+    (chin_node_shelf.scad) -- forward pair on the chin floor (Z ~60), aft
+    pair on the ramp fairing's inner face (Z ~44).  Built DEEP (from below
+    the skin) and envelope-clipped by the caller, so each conforms to the
+    real floor; M3 heat-set pilot 8 mm deep from the shelf face."""
+    pos, neg = [], []
+    for x, y in clf.SHELF_BOSS:
+        pos.append(box(x - 5.0, x + 5.0, y - 5.0, y + 5.0, -5.0, clf.SHELF_Z0))
+        neg.append(z_cylinder(x, y, clf.SHELF_Z0 - 8.0, clf.SHELF_Z0 + 0.5, T5_M3_D / 2))
+    return pos, neg
+
+
+def t5_observer_bosses():
+    """Rev T5e: four belly columns for the cargo Observer tray, standing
+    behind the payload box (Y 108.5..128.5); the aft row stops at Y 120.5,
+    forward of the middle-section splice collar's ring (Y >= 121).  M2.5
+    heat-set pilot (RX-M2.5) 6 mm deep from the tray base."""
+    pos, neg = [], []
+    for dx, dy, h in clf.OBSERVER_BOSS:
+        x, y = clf.X_CL + dx, clf.OBSERVER_Y0 + dy
+        pos.append(box(x - h, x + h, y - h, y + h, -5.0, clf.OBSERVER_Z0))
+        neg.append(z_cylinder(x, y, clf.OBSERVER_Z0 - 6.0, clf.OBSERVER_Z0 + 0.5, T5_M25_D / 2))
+    return pos, neg
+
+
+def t5_gps_cups(shell_tm):
+    """Two dorsal GPS patch-antenna cups (O40 boss, O36 x 6 mm flush recess,
+    O6.5 SMA bore, 4 x M2 ring pilots on O44) in HULL frame -- replaces the
+    never-cut legacy-frame recesses of cargo_sect_shell24.scad."""
+    pos, neg = [], []
+    for x, y in T5_GPS_STATIONS:
+        loc, _, _ = shell_tm.ray.intersects_location(
+            np.array([[x, y, 200.0]]), np.array([[0, 0, -1.0]]), multiple_hits=False)
+        loc = np.asarray(loc).reshape(-1, 3)
+        if not len(loc):
+            raise RuntimeError(f"no dorsal skin under GPS station ({x}, {y})")
+        z_skin = float(loc[0, 2])
+        pos.append(z_cylinder(x, y, z_skin - T5_GPS_RECESS_H - 3.0, z_skin + 5.0,
+                              T5_GPS_CUP_OD / 2))
+        neg.append(z_cylinder(x, y, z_skin - T5_GPS_RECESS_H, z_skin + 6.0,
+                              T5_GPS_RECESS_D / 2))
+        neg.append(z_cylinder(x, y, z_skin - 30.0, z_skin + 6.0, T5_GPS_SMA_D / 2))
+        for k in range(4):
+            a = np.radians(45 + 90 * k)
+            neg.append(z_cylinder(x + T5_GPS_RING_PCD / 2 * np.cos(a),
+                                  y + T5_GPS_RING_PCD / 2 * np.sin(a),
+                                  z_skin - 4.0, z_skin + 6.0, T5_GPS_M2_D / 2))
+    return pos, neg
+
+
+def _flank_profile(shell_tm, z0=0.0, z1=54.0, step=0.5):
+    """Ray-probe the forward flank surface Y(z) on both sides of the ramp
+    opening (X = RAMP_X1 + 4 port, RAMP_X0 - 4 stbd) on ONE fine Z grid.
+    Every ramp slab (skin, lip, grooves) interpolates this same table, so
+    a 0.8 mm groove is 0.8 mm deep everywhere -- the first build sampled
+    each slab separately (3.2 mm rows for the skin, 0.6 mm for a groove)
+    and the disagreement at the curved lower lip cut the hinge line
+    straight through the skin (measured 2026-09-15)."""
+    xp, xs = clf.RAMP_X1 + 4.0, clf.RAMP_X0 - 4.0
+    zs = np.arange(z0, z1 + step / 2, step)
+    prof = {}
+    for key, xx in (("p", xp), ("s", xs)):
+        ys = []
+        for z in zs:
+            loc, _, _ = shell_tm.ray.intersects_location(
+                np.array([[xx, -70.0, z]]), np.array([[0, 1.0, 0]]), multiple_hits=False)
+            loc = np.asarray(loc).reshape(-1, 3)
+            ys.append(float(loc[0, 1]) if len(loc) else np.nan)
+        ys = np.array(ys)
+        bad = np.isnan(ys)
+        if bad.any():
+            ys[bad] = np.interp(zs[bad], zs[~bad], ys[~bad])
+        prof[key] = ys
+    return zs, prof["p"], prof["s"], xp, xs
+
+
+def _ruled_slab(profile, x0, x1, z0, z1, d_in, d_out, step=0.5):
+    """Slab whose OUTER face follows the measured forward flank surface
+    (see _flank_profile): at each Z the outer face is the straight line
+    between the port and stbd flank probes; the slab extends d_in aft (+Y,
+    into the hull) and d_out forward of that surface."""
+    zt, yp_t, ys_t, xp, xs = profile
+    n = max(3, int(round((z1 - z0) / step)) + 1)
+    zs = np.linspace(z0, z1, n)
+    yp = np.interp(zs, zt, yp_t)
+    ys = np.interp(zs, zt, ys_t)
+    def ysurf(x, i):
+        t = (x - xs) / (xp - xs)
+        return ys[i] + t * (yp[i] - ys[i])
+    verts, faces = [], []
+    for k, off in ((0, -d_out), (1, d_in)):
+        for i in range(n):
+            for x in (x0, x1):
+                verts.append([x, ysurf(x, i) + off, zs[i]])
+    def vid(k, i, j):
+        return k * (2 * n) + i * 2 + j
+    for i in range(n - 1):
+        a, b, c, d = vid(0, i, 0), vid(0, i, 1), vid(0, i + 1, 1), vid(0, i + 1, 0)
+        faces += [[a, c, b], [a, d, c]]                      # outer, normal -Y
+        a, b, c, d = vid(1, i, 0), vid(1, i, 1), vid(1, i + 1, 1), vid(1, i + 1, 0)
+        faces += [[a, b, c], [a, c, d]]                      # inner, normal +Y
+        for j in (0, 1):                                     # sides (x0 / x1)
+            o0, o1, i0, i1 = vid(0, i, j), vid(0, i + 1, j), vid(1, i, j), vid(1, i + 1, j)
+            faces += ([[o0, o1, i1], [o0, i1, i0]] if j == 0 else [[o0, i1, o1], [o0, i0, i1]])
+    for i, kk in ((0, 0), (n - 1, 1)):                       # bottom / top caps
+        o0, o1, i0, i1 = vid(0, i, 0), vid(0, i, 1), vid(1, i, 0), vid(1, i, 1)
+        faces += ([[o0, i0, i1], [o0, i1, o1]] if kk == 0 else [[o0, i1, i0], [o0, o1, i1]])
+    tm = trimesh.Trimesh(np.array(verts, dtype=float), np.array(faces), process=True)
+    tm.fix_normals()
+    assert tm.is_watertight and tm.volume > 0, "ruled slab not closed"
+    return tm
+
+
+def t5_ramp_fairing(shell_tm):
+    """Fixed, non-opening fairing over the canonical cargo-ramp void
+    (plan 2026-08-25-002 U2, KTD1).  Outer skin 2.0 mm following the flanks,
+    fused onto them with RAMP_OVERLAP; an inner frame lip 2.0 mm thick x 6 mm
+    wide around the opening for bonding stiffness; recessed panel lines
+    (0.8 mm deep x 1.2 mm) inset 4 mm from the opening plus a hinge-line
+    groove 6 mm above the bottom edge, read from REF-CAD-003 Sheet One
+    'Detail of Cargo Ramp' (closed position) at thumbnail fidelity --
+    proportions and location, not line-art detail (plan 002 risk note).
+    The fairing is flush with the opening's own raised frame lip, which
+    stands ~4 mm forward of the general flank at the belly turn (measured)."""
+    prof = _flank_profile(shell_tm)
+    x0, x1 = clf.RAMP_X0 - clf.RAMP_OVERLAP, clf.RAMP_X1 + clf.RAMP_OVERLAP
+    z0, z1 = clf.RAMP_Z0 - clf.RAMP_OVERLAP, clf.RAMP_Z1 + clf.RAMP_OVERLAP
+    skin = _ruled_slab(prof, x0, x1, z0, z1, d_in=2.0, d_out=0.0)
+    lip_o = _ruled_slab(prof, x0, x1, z0, z1, d_in=4.0, d_out=0.0)
+    lip_i = _ruled_slab(prof, clf.RAMP_X0 + 6.0, clf.RAMP_X1 - 6.0,
+                        clf.RAMP_Z0 + 6.0, clf.RAMP_Z1 - 6.0, d_in=5.0, d_out=1.0)
+    lip = from_man(to_man(lip_o) - to_man(lip_i))
+    pos = [skin, lip]
+    g, w = 0.8, 1.2
+    ix0, ix1 = clf.RAMP_X0 + 4.0, clf.RAMP_X1 - 4.0
+    iz0, iz1 = clf.RAMP_Z0 + 4.0, clf.RAMP_Z1 - 4.0
+    hz = clf.RAMP_Z0 + 6.0
+    neg = [
+        _ruled_slab(prof, ix0, ix0 + w, iz0, iz1, g, 1.5),            # stbd vertical
+        _ruled_slab(prof, ix1 - w, ix1, iz0, iz1, g, 1.5),            # port vertical
+        _ruled_slab(prof, ix0, ix1, iz0, iz0 + w, g, 1.5),            # bottom
+        _ruled_slab(prof, ix0, ix1, iz1 - w, iz1, g, 1.5),            # top
+        _ruled_slab(prof, ix0, ix1, hz - w / 2, hz + w / 2, g, 1.5),  # hinge line
+    ]
+    return pos, neg
 
 
 def wing_harness_ports():
@@ -1391,6 +1648,28 @@ def build_negatives(shell_tm, envelope_tm=None):
     cutters.extend(lg_neg)
     notes.append(lg_note)
 
+    # --- Rev T5 ---------------------------------------------------------------
+    cutters.extend(t5_bracket_feet_bores())
+    notes.append("T5 tilt-bracket foot M3 pilots (6)")
+    _p, n = t5_cradle_hangers()
+    cutters.extend(n)
+    notes.append("T5 battery-cradle hanger M3 pilots (4)")
+    _p, n = t5_winch_pedestals()
+    cutters.extend(n)
+    notes.append("T5 winch pedestal M3 pilots (2, Phase 7 reserve)")
+    _p, n = t5_gps_cups(shell_tm)
+    cutters.extend(n)
+    notes.append("T5 GPS x2 dorsal recess + SMA bore + 4 x M2 ring pilots")
+    _p, n = t5_chin_shelf_bosses()
+    cutters.extend(n)
+    notes.append("T5e chin-shelf boss M3 pilots (4)")
+    _p, n = t5_observer_bosses()
+    cutters.extend(n)
+    notes.append("T5e Observer tray boss M2.5 pilots (4)")
+    _p, n = t5_ramp_fairing(shell_tm)
+    cutters.extend(n)
+    notes.append("T5 ramp fairing panel-line grooves (5)")
+
     return cutters, notes
 
 
@@ -1416,13 +1695,15 @@ def build_positives(shell_tm, envelope_tm=None):
             continue
         feats.append(solid)
     notes.append("2 wing-spar socket bosses (O30.1, Rev T1)")
-    notes.append("2 nacelle-tilt actuator mount pads")
+    notes.append("nacelle-tilt actuator: DS3225 pads GATED OFF (Rev T5); "
+                 "6 worm-bracket foot bosses instead" if not NSVMT_PADS_ENABLED
+                 else "2 nacelle-tilt actuator mount pads")
     notes.append("root flanges RESERVED, not printed -- separate bonded parts "
                  "(generate_wing_root_flange.py)")
 
     # Inara avionics-bay standoff bosses (dorsal port, deep Z-cyl, clipped).
     n = 0
-    for dx in (-INARA_BOSS_DX, INARA_BOSS_DX):
+    for dx in ((-INARA_BOSS_DX, INARA_BOSS_DX) if INARA_ENABLED else ()):
         for dy in (-INARA_BOSS_DY, INARA_BOSS_DY):
             body = z_cylinder(
                 INARA_X + dx, INARA_Y + dy, DORSAL_Z_INB, DORSAL_Z_TOP, BOSS_OD / 2.0
@@ -1436,13 +1717,42 @@ def build_positives(shell_tm, envelope_tm=None):
             )
             feats.append(from_man(to_man(body) - to_man(bore)))
             n += 1
-    notes.append(f"Inara avionics bosses ({n})")
+    notes.append(f"Inara avionics bosses ({n})" if INARA_ENABLED
+                 else "Inara/River tray bosses GATED OFF (Rev T5, D-T5-3)")
 
     lg_pos, _lg_neg, lg_note = lg_bay_features(shell_tm, envelope_tm)
     feats.extend(lg_pos)
     notes.append(lg_note)
 
+    # --- Rev T5 ---------------------------------------------------------------
+    p, _n = t5_cradle_hangers()
+    feats.extend(p)
+    notes.append("T5 battery-cradle roof hangers (4)")
+    p, _n = t5_winch_pedestals()
+    feats.extend(p)
+    notes.append("T5 winch pedestal columns (2, Phase 7 reserve)")
+    p, _n = t5_gps_cups(shell_tm)
+    feats.extend(p)
+    notes.append("T5 GPS antenna cups (2)")
+    p, _n = t5_chin_shelf_bosses()
+    feats.extend(p)
+    notes.append("T5e chin node shelf floor bosses (4)")
+    p, _n = t5_observer_bosses()
+    feats.extend(p)
+    notes.append("T5e Observer tray belly bosses (4)")
+    # NOTE: the ramp fairing is NOT in this list -- it lives in the ramp
+    # void, which the outer-skin envelope excludes, so envelope-clipping would
+    # delete it.  main() unions it unclipped (build_unclipped_positives).
+
     return feats, notes
+
+
+def build_unclipped_positives(shell_tm):
+    """Positives that must NOT be envelope-clipped: features that fill a void
+    in the canonical skin (the ramp fairing sits where the envelope has a
+    hole).  They are built to their own outer surface from ray probes."""
+    p, _n = t5_ramp_fairing(shell_tm)
+    return p, ["T5 canonical cargo-ramp fairing (skin + frame lip), unclipped"]
 
 
 def stamp_export(mesh, out_path):
@@ -1743,7 +2053,7 @@ def main():
         ok = repair_exported(OUT_PATH)
         sys.exit(0 if ok else 1)
 
-    print("=== merge_cargo_interior.py  Rev R2  2026-07-21 ===")
+    print("=== merge_cargo_interior.py  Rev T5e  2026-09-16 ===")
     print(f"source: {BLENDER_SRC}")
     src = trimesh.load(BLENDER_SRC, process=False)
     src.merge_vertices()
@@ -1769,11 +2079,15 @@ def main():
 
     negs, nnotes = build_negatives(shell_tm, envelope_tm)
     poss, pnotes = build_positives(shell_tm, envelope_tm)
+    upos, unotes = build_unclipped_positives(shell_tm)
     print(f"\n  negatives ({len(negs)} cutters):")
     for n in nnotes:
         print(f"    - {n}")
     print(f"  positives ({len(poss)} features, envelope-clipped):")
     for n in pnotes:
+        print(f"    - {n}")
+    print(f"  positives ({len(upos)} features, UNCLIPPED):")
+    for n in unotes:
         print(f"    - {n}")
 
     print("\n  evaluating (shell + (positives ∩ envelope)) − negatives …")
@@ -1784,6 +2098,9 @@ def main():
     result = shell_man
     if pos_man is not None:
         result = result + (pos_man ^ env_man)  # ^ = intersection in manifold3d
+    upos_man = union_all(upos)
+    if upos_man is not None:
+        result = result + upos_man
     if neg_man is not None:
         result = result - neg_man
     out = from_man(result)

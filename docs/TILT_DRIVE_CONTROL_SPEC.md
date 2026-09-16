@@ -54,6 +54,27 @@ test that produces the model.
 
 ### 1.1 Train, ratio, and sense
 
+**Rev T5e (2026-09-16) — the fuselage stage is a worm stage
+(`docs/TILT_ACTUATOR_SELECTION.md`); the spur pair below is the retired Rev T4
+record.**
+
+```text
+gearmotor   --[six-start worm O26 / wheel 40T, m 1, C 33.0, 6.667:1]-->  drive shaft
+drive shaft --[tip pinion 14T -> ring 50T, m 0.8, C 25.60, i 3.571]-->  nacelle
+```
+
+* Total reduction gearmotor output → nacelle: **23.8**; 145° of nacelle =
+  9.6 gearmotor-output revolutions. Rate: 570 rpm no-load (Pololu 20D 25:1 CB
+  6 V, REF-ACT-001) → **144 °/s** at the nacelle; 440 rpm at max efficiency →
+  111 °/s. The inner-loop sensor is the AEAT-8800 on the worm shaft (one turn =
+  54° of drive shaft = 15.1° of nacelle); firmware counts worm turns and the
+  AK7455 (below) gives the absolute nacelle angle.
+* Sense: a worm/wheel mesh reverses like an external pair, so PORT keeps the Rev
+  T4 sense (actuator-positive = nacelle-positive); the STARBOARD worm is the
+  same right-hand part translated, so starboard is **reversed**. Declare per side.
+
+*Rev T4 record (retired):*
+
 ```text
 actuator  --[fuselage spur pair 38T/38T, m 0.8, C 30.40, 1:1]-->  drive shaft
 drive shaft --[tip pinion 14T -> ring 50T, m 0.8, C 25.60, i 3.571]--> nacelle
@@ -259,8 +280,31 @@ The gravity term is nulled by the pivot-at-CG, so on the ground and in still air
 the nacelle will sit. **In flight the aero moment is unquantified**, and an
 unquantified moment on a non-self-locking train is an unbounded rate.
 
-**OPEN — a holding provision is required and is not yet specified (TILT-CTL-01,
-§8).** The candidates, in the order this analysis prefers them:
+**Rev T5b (2026-09-15): CLOSED by BRK-1..3 — a spring-applied, solenoid-released
+pin brake on each worm shaft (`airframe/openscad/fuselage/cargo/tilt_brake.scad`,
+`docs/TILT_ACTUATOR_SELECTION.md` §3).** The worm's lead (Rev T5e six-start:
+13.0°, μ ≥ 0.23 to lock; the T5b four-start was 9.5° / 0.17) is only
+conditionally self-locking and is *not* the design basis.
+
+* **BRK-1** — each tilt train shall hold its last commanded angle against the
+  full aero + thrust-asymmetry moment with the actuator unpowered, for the
+  duration of a three-EDF controlled descent from any Phase 5 condition; sized
+  to the train's own limit (1.81 N·m nacelle / 0.51 N·m drive shaft / 0.077 N·m
+  worm shaft at the Rev T5e 6.67:1; T5b: 0.051 N·m at 10:1).
+* **BRK-2** — the hold is independent of the actuator's electrical path and of
+  the bus: spring-applied, held off only by the actuator's own fused feed.
+* **BRK-3** — engagement on power loss is automatic; release is commanded after
+  the loop has unloaded the pin; bench-verified with the AK7455 reading the
+  nacelle (§7.3).
+
+Governing rationale (owner, 2026-09-15): every ESC has an independent fused path
+to its EDF so a single failure cannot cascade and the aircraft descends under
+control on the remaining units; the tilt hold must therefore survive the loss
+of the tilt actuator's own path during that descent. A shorted-winding
+"short-brake" is a damper, not a hold (zero static torque), and is candidate 1
+below only as damping.
+
+*Superseded text — the candidates as first analysed:*
 
 1. Motor short-brake held by the LibreServo board on loss of command — costs
    nothing mechanical, but is only as available as the board's own power.
@@ -387,10 +431,14 @@ INL calibration over the real −5…+140° sweep.
 
 | ID | Item | Blocks |
 |---|---|---|
-| **TILT-CTL-01** | Holding provision for a non-self-locking train (§5.2). Not closed by assuming the motor brakes. | Flight release |
+| ~~TILT-CTL-01~~ | **CLOSED 2026-09-15** by BRK-1..3 (§5.2): pin brake on the worm shaft, own fused feed. | — |
+| **BRK-4** | Brake solenoid part selection (Ø12 × 30 mm pull, ~3 N @ 3 mm, 6 V continuous) — BOM `SOL-TILT-BRAKE`, REQUIRES VERIFICATION. | Flight release |
+| **BRK-5** | Bench: pin-engaged hold test, release under load, drift ≤ 0.63° at the nacelle (§7.3; 12 slots at 23.8:1 — was 0.42° at 35.7:1). | Flight release |
+| **TILT-CTL-07** | Adopted rate requirement ≥ 120 °/s and ≥ 4 Hz at ±5° (Rev T5b) — owner to confirm against the flight-dynamics case; supersedes the "no requirement" state of TILT-CTL-05. | Transition schedule |
+| **TILT-CTL-08** | Controller: LibreServo_v4 is a servo board; the gearmotor needs a re-rated bridge (6 A stall), quadrature input, brake driver and a VBAT front end — change request `LibreServo_v4/docs/CR-2026-09-15-tilt-controller-variant.md`. | Bring-up |
 | **TILT-CTL-02** | Differential-tilt trip threshold (§5.4). Needs roll/yaw authority vs tilt split. | Flight release |
 | **TILT-CTL-03** | Plant model — `K_p`, `τ`, `θ` — and gains derived from it with stated margins (§7.1). | Bring-up |
-| **TILT-CTL-04** | LibreServo_v4 position-sensor part and resolution unverified (§1.2). | Inner-loop design |
+| **TILT-CTL-04** | LibreServo_v4 position-sensor part and resolution unverified (§1.2). Rev T5b: the inner loop moves to the gearmotor's 48 CPR quadrature encoder (REF-ACT-002); the AEAT-8800 becomes optional. | Inner-loop design |
 | **TILT-CTL-05** | Actuator slew rate unmeasured; no transition-time requirement exists (§7.2). | Transition schedule |
 | **TILT-CTL-06** | Aero moment about the tilt axis unquantified (`TILT_SPAR_ANALYSIS.md` §2.1.3). | TILT-CTL-01, TILT-CTL-02 |
 | **WA-R13** | `TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1 states a premise that is now false (§3.1). | Documentation integrity |

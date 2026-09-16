@@ -61,9 +61,12 @@ None of these can be made by an agent; each unblocks a whole stream.
 - **D4 — Hover T/W floor.** The record carries both "≥ 1.2 minimum" (WA-R18) and "T/W
   measured ≥ 1.10" (Phase 9 gate). State one number; it decides how much of W1..W8 is
   mandatory before first lift.
-- **D5 — Tilt actuator class.** Multi-turn drive ⇒ continuous-rotation gearmotor or stepper
-  closed on the AK7455 (root `TODO.md` §0.8 "Actuator re-select"). This also decides the
-  WA-R16 holding provision (brake / worm / detent) and the LibreServo_v4 role.
+- **D5 — Tilt actuator class.** **DECIDED 2026-09-15, RE-CUT 2026-09-16 (Rev T5e):** Pololu 20D
+  25:1 CB gearmotor + six-start worm 6.67:1 + spring-applied pin brake, own fused feeds (the
+  25D / 4-start pick of 2026-09-15 could not clear the worm wheel — T5d-1); LibreServo_v4 becomes
+  a v4.1-TC variant (`docs/TILT_ACTUATOR_SELECTION.md`). D-T5-3 CLOSED (all four nodes placed in
+  the cargo section). Residual: owner confirms the adopted rate requirement (TILT-CTL-07: 144 °/s
+  no-load, 111 °/s at max efficiency).
 
 ## Work streams
 
@@ -76,11 +79,11 @@ skill; each lists its owning WBS entry, so closure happens there first.
 | --- | --- | --- | --- |
 | **A0 Mass truth** | Reconcile the 23 under-counted printed rows (MA-1, +521.6 g), add the `Installed` flag (MA-7), fix `PRINT-BATT-TRAY` (MA-6), then re-derive AUW / CG / hover T/W once (WA-R18, SPAR-20-9, LG-32). Add the CI check MA-1 asks for. | root §0.8.1; `docs/MASS_AUDIT_CARGO_WING_ROOT.md` | A single AUW/CG ledger every other stream cites; T/W against D4 |
 | **A1 Nozzle drive** *(full-ladder only)* | Execute D2; then SPAR-25-5 / re-hub `spar_crank()` / pushrod clearance / un-park `nacelle_nozzle_sync_gears.scad`; register in `serenity_assembly.py`. | wings-nacelles §1.1.3.1, §1.1.5 | `tools/nozzle_linkage_check.py` pass; iris reaches both stops over −5..140° |
-| **A2 Tilt actuation** | Execute D5; WA-R16 holding provision; TILT-CTL-01..06 plant model + slew + differential-tilt trip; WA-R15a roof-band re-measure. | root §0.8/§0.8.1; `docs/TILT_DRIVE_CONTROL_SPEC.md` §5.2/§7.3/§8 | Train holds nacelle at 90° unpowered; spec §8 items closed |
+| **A2 Tilt actuation** | ~~Execute D5; WA-R16; WA-R15a~~ **done 2026-09-15** (worm drive + brake, bracket/worm/wheel/brake-guide STLs, shell re-merged). Remaining: BRK-4 solenoid part, BRK-5 hold bench, TILT-CTL-02..08, LibreServo_v4.1-TC. | root §0.8/§0.8.1; `docs/TILT_ACTUATOR_SELECTION.md` | Train holds nacelle at 90° unpowered (bench); spec §8 items closed |
 | **A3 Nacelle print-readiness** | Measure a real motor (bolt circle, 4-hole pattern, length, mass) and fix `MOTOR_BOLT_R` + spider; close the three ESC-bay safety findings (unfiltered path, bay velocity, 50 A sustained) and draw the WA-R10 disconnect route; NAC-MOULD-01 Stage 2 ovalising; register the trunnion in `serenity_assembly.py` and re-run the tilt sweep. | wings-nacelles §1.1.3.7, §1.1.3.8, §1.1.4 | `validate_stls.py`, `nacelle_mass_cg.py`, `nacelle_trunnion_fit.py` T1–T9 green |
 | **A4 Landing gear** | Execute D3; LG-15/16 wire procurement + coupon; LG-02 backing plates; LG-27 touchdown attitude; LG-06/14 bench + drop tests. | landing-gear §1.1.4 | `landing_gear_wing_clearance.py --proud` CLEAR at 3.0 in; drop test FOS ≥ 4 |
 | **A5 Wing attach hardware** | WA-R3/R17 split-collar pinch clamp (no part exists; blocks wing removal/refit). | root §0.8.1; `WING_ATTACH_INTERFACE.md` §5 | Part rendered, in BOM, in assembly |
-| **A6 Fuselage closure** | Cargo clamshell doors re-fit to the current shell + SG90 bell-crank boss (plan 002 U1); forward cargo-ramp fixed fairing (U2); Inara/River access covers from SCAD (U4). Doors gate first flight even though the winch does not. | fuselage-mid §1.1.1; plan 2026-08-25-002 | `cargo_bay_envelope.py` PASS; covers land on bosses |
+| **A6 Fuselage closure** | Cargo clamshell doors re-fit to the current shell + SG90 bell-crank boss (plan 002 U1) — **still open**; ~~forward cargo-ramp fixed fairing (U2)~~ **done 2026-09-15**; ~~Inara/River access covers (U4)~~ superseded by D-T5-3. Plus the Rev T5 battery cradle + tilt brackets are now shell features (`docs/CARGO_SECTION_LAYOUT.md`). | fuselage-mid §1.1.1; plan 2026-08-25-002 | `cargo_bay_envelope.py` PASS; covers land on bosses |
 | **A7 Material allowables** | CF spar tube ASTM D3039/D695 certificate (FOS 9.0 rests on an unverified 300 MPa stand-in); CF-PLATE-2MM coupon; measure the procured 10 AWG wire OD; REF-STD-GEAR-001 clause lookup. | root §0.8; `docs/TILT_SPAR_ANALYSIS.md` §3.6.3 | REF-MAT-* entries with validated sources |
 | **A8 Aero revalidation** *(full-ladder only)* | XFOIL or transition-sensitive RANS at Re 1.3–1.8e5 on S1223/t17.7 and /t26.7; re-derive the 7.6 N cruise-lift figure and `docs/flight_envelope.md`. | root §0.8; wings-nacelles SPAR-20-AERO | Cruise CL, L/D with a stated method |
 | **A9 Build-guide currency** | Rewrite build-guide Phase 2/3 steps (currently sector gear, bevel pair, crown pinion, MF104ZZ + 4 mm pivot rod — all deleted) to the trunnion / 6704ZZ / pushrod drive; then Phase 0 checks. | graphical-build-guide WBS Phase 2/3; docs §1.5 | No step names a retired part |
