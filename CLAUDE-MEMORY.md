@@ -621,7 +621,7 @@ metadata:
   modified: 2026-08-04T11:51:03.045Z
 ---
 
-In `Griffing.tech/designs/LibreServo_v2-Sec`, **all new schematic and layout work goes in
+In the sibling repo `../LibreServo_v2-Sec`, **all new schematic and layout work goes in
 `PCB/kicad/`**. Stated by the user 2026-08-04: EAGLE is end-of-life and unsupported, so the
 EAGLE artefacts are kept **for backward compatibility only** — they are frozen legacy, not
 the deliverable.
@@ -2688,7 +2688,7 @@ metadata:
 ---
 
 New project **TidySweep** created 2026-09-05 as a sibling repo at
-`/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/TidySweep`
+`../TidySweep` (sibling of this repo)
 (separate git repo, not part of Serenity-UAV) — a multi-room autonomous
 toy-cleaning robot, a cross between a FIRST Robotics-style debris-collection
 bot and a Roomba. Firm constraints: BeagleBone-ecosystem compute (SKU TBD

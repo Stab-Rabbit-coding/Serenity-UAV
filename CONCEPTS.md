@@ -28,7 +28,7 @@ The Ø4 steel shaft, parallel to the Tilt Spar, that carries tilt torque from th
 
 ## Tilt Drive Train
 
-The two-stage path from the tilt actuator to the nacelle: a fuselage stage on the Tilt Drive Shaft (a worm since Rev T5b; six-start on a Ø20 gearmotor since Rev T5e) and a tip stage at the nacelle. A train is either self-locking or it is not; when it is not, a Tilt Brake — never the motor's own drag — is what holds the nacelle unpowered. For a motor coaxial with its worm, the motor's clearance to the wheel tip is set by the worm's pitch diameter alone — not by the centre distance and not by where the worm sits on the wheel — so the worm's inboard reach caps the motor diameter.
+The two-stage path from the tilt actuator to the nacelle: a fuselage stage on the Tilt Drive Shaft (a worm stage) and a tip stage at the nacelle. A train is either self-locking or it is not; when it is not, a Tilt Brake — never the motor's own drag — is what holds the nacelle unpowered. For a motor coaxial with its worm, the motor's clearance to the wheel tip is set by the worm's pitch diameter alone — not by the centre distance and not by where the worm sits on the wheel — so the worm's inboard reach caps the motor diameter.
 
 ## Layout Envelope
 
