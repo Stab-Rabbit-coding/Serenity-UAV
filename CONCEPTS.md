@@ -55,3 +55,7 @@ The single rotating ring inside a nacelle's nozzle that drives every nozzle flap
 The project's standing requirement that the nozzle's exit area be driven by nacelle tilt alone — no dedicated nozzle actuator, servo, or control channel. Nozzle position is a pure function of tilt angle, so tilt and nozzle schedule cannot disagree in flight.
 
 Because the driven parts ride the tilting nacelle, a passive tilt drive must take its input datum from a body that does *not* tilt with the nacelle (the wing); a pickup fixed to any nacelle-mounted body, the Tilt Spar included, has zero relative motion against the Unison Ring and transmits nothing.
+
+## Tilt Controller
+
+The per-side bus device that closes the tilt actuator's inner loop: it drives the gearmotor, reads the actuator-shaft sensor, holds and releases the Tilt Brake, and receives the nacelle's absolute angle from the gateway over the fleet bus. It is an instance of the project's own Open-Secure-ESC platform (a brushed-DC build), not a servo controller, so its identity is a build folder in that repository rather than a board of its own.
