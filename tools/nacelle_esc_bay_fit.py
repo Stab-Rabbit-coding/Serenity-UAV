@@ -75,10 +75,9 @@ W_POWER = 23.0        # [mm] power panel width
 W_SIGNAL = 10.0       # [mm] signal panel width
 BOARD_T = 1.6         # [mm] PCB thickness (both panels)
 FLOW_LANE = 1.0       # [mm] clear lane above the stack for the cooling air.
-                      #      Added to --stack when searching, because the pocket
-                      #      has to hold BOTH.  nacelle_esc_bay.scad
-                      #      ESC_FLOW_LANE; set it to 0 there and here together
-                      #      if the ESC layout guarantees its own lane.
+# Added to --stack when searching, because the pocket has to hold BOTH.
+# nacelle_esc_bay.scad ESC_FLOW_LANE; set it to 0 there and here together
+# if the ESC layout guarantees its own lane.
 
 # ── The pod, mirrored from nacelle_pod_50mm_tandem.scad ──────────────────────
 #

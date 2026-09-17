@@ -663,6 +663,9 @@ def synthesize_spar(crank_r: float, pushrod_len: float,
             if best_score is None or score < best_score:
                 best_score, best_result = score, result
                 best_phase, best_axial = phase, axial_x
+
+    assert best_result is not None and best_phase is not None \
+        and best_axial is not None, "grid search must visit at least one candidate"
     return best_result, best_phase, best_axial
 
 
