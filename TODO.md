@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
-**Last updated:** 2026-08-01
+**Last updated:** 2026-09-16
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -14,210 +14,102 @@
 
 ---
 
-## 0.0 — Standards Vetting and Regulatory Compliance
-
-### 0.1 — FCC Part 95 Section Number Verification
-
-→ detail: `docs/WBS.md` §0.1
-
-*(All items completed 2026-07-18)*
-
-### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
-
-→ detail: `docs/WBS.md` §0.7
-
 ### 0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
-
 → detail: `docs/WBS.md` §0.8
 
+- [ ] Verify REF-STD-GEAR-001 (ISO 53:1998) to clause level before gear…
 - [ ] Verify 4130 / 17-4 PH / 7075 allowables vs MMPDS/AMS (REF-MAT-*)
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
-- [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
-- [ ] ASTM D3039/D695 coupon test: CF-PLATE-2MM bending allowable (thwarts
-      built at FOS 8.5/8.7 vs the conservative 300 MPa stand-in only)
-- [ ] **ASTM D3039/D695 certificate for the 20 x 16.3 CF SPAR TUBE.** New at
-      Rev S1e and now load-bearing: the spar is the wing's primary bending
-      member at FOS 9.0 against the same unverified 300 MPa stand-in
-      (`docs/TILT_SPAR_ANALYSIS.md` §3.6.3). The 4130 rows above no longer
-      govern the flight load path.
-- [ ] **Measure the procured 10 AWG silicone wire OD.** `bom_revS.csv` records
-      none; the 5.5 mm figure the Ø20.4 spar bore is derived from is an
-      ASSUMPTION. A larger real OD re-opens the airfoil trade
-      (`tools/spar_bundle_fit.py` prints this caveat on every run).
-- [x] **Tilt servo angular range (180 vs 270 deg) — CLOSED 2026-08-29, VOID.**
-      Owner direction: the drive turns the shaft MORE THAN ONE REVOLUTION, so
-      the stage is a reduction and the actuator's own travel no longer sets the
-      ratio. Built: module 0.8, 14T pinion / 50T ring, i 3.571, shaft 1.389 rev
-      per 140 deg, C 25.6 -> station 53.6.
-- [ ] **ACTUATOR RE-SELECT (replaces the item above).** A multi-turn output means
-      the tilt drive is no longer a limited-rotation servo but a
-      continuous-rotation gearmotor or stepper, closed on the AK7455's absolute
-      nacelle angle. The DS3225 is ~17x oversized on torque AND now the wrong
-      kind of device. NOTE this makes the encoder load-bearing for CONTROL, not
-      telemetry: a multi-turn drive without absolute feedback does not know
-      where the nacelle is.
-- [ ] **LG-11 coupon — DEMOTED at the wing root, still a gate elsewhere.**
-      Owner ruled the cargo bay clear, so the root joint was re-designed around
-      it: socket for shear + bonded 80x60 flange for the moment, FOS 29.2 at the
-      STANDING 5 MPa figure (29.2 / 87.6 / 274.6 at 5 / 15 / 47 MPa). The coupon
-      no longer decides whether that joint is buildable, only how small the
-      flange could shrink. It remains a gate for the tenon path and the thwarts.
-- [ ] **Aero revalidation of the re-lofted wing (CFD or bench).** The section
-      is no longer S1223 -- root t/c 12.14 -> 17.72 %, tip 18.93 -> 26.70 %.
-      Every aero figure in this repo citing this wing is unverified until this
-      lands, including the 7.6 N cruise-lift figure and everything derived
-      from it. The built sections are designated S1223/t17.7 (root) and
-      S1223/t26.7 (tip) -- S1223's CAMBER LINE with the thickness envelope
-      scaled x1.46 / x2.20; camber is unscaled and exact (8.67% at 49.0%
-      chord), so zero-lift angle and lift-curve slope partially survive at the
-      ROOT on thin-airfoil grounds and not at all at the tip. CL_max, L/D and
-      the cruise-lift figure do NOT survive. Needs XFOIL or a
-      TRANSITION-SENSITIVE RANS run at Re 1.3-1.8e5 -- a fully-turbulent model
-      will misrepresent the separation bubble. `tools/wing_cfd_openfoam.py` is
-      still blocked on mesh generation. See docs/flight_envelope.md's banner.
+- [ ] AK7455 off-axis bench-cal: 10–70 mT window, INL cal (pinout verified)
+- [ ] ASTM D3039/D695 coupon: CF-PLATE-2MM bending allowable (thwarts FOS…
+- [ ] ★ ASTM D3039/D695 certificate for the 20 x 16.3 CF spar tube (FOS 9.0)
+- [ ] Measure procured 10 AWG silicone wire OD (5.5 mm bore chain is…
+- [ ] LG-11 coupon — demoted at wing root (flange FOS 29.2)
+- [ ] ★ Aero revalidation of the re-lofted wing (S1223/t17.7–t26.7
 
-#### 0.8.1 — Wing attach interface (Rev S1e), open requirements
+#### 0.8.1 — Wing attach interface (Rev S1g), open requirements
+→ detail: `docs/WING_ATTACH_INTERFACE.md` §5; `airframe/fuselage-mid/WBS.md` §1.1.1.5
 
-→ detail: `docs/WING_ATTACH_INTERFACE.md` §5; fuselage detail:
-`airframe/fuselage-mid/WBS.md` §1.1.1.5
-
-Wing side is BUILT. These are the two joints it publishes.
-
-- [x] WA-R1/R1b, R2, R4, R6 — fuselage side BUILT 2026-08-30 (Rev S1g). Socket
-      Y +21.00 / Z +66.85 / D20.4 / 18.5 mm; F688ZZ and both tie rods deleted;
-      mortise 30.8 -> 12.8 (tenon fits +0.40 mm/side); nav D4.2, AK7455 D7.5 and
-      shaft D4.4 conduits cut. `wing_root_deconflict.py` now CLEAR.
-- [x] WA-R15 — tilt actuator: DS3225 + LibreServo_v4 run MULTI-TURN, closed on
-      the AK7455; fuselage spur stage m0.8 38T/38T, C 30.40, 1:1. Coaxial does
-      not fit and no gear clears the tenon in Y -> 18 mm actuator standoff.
-- [ ] WA-R3/R17 — split-collar pinch clamp is still not a part (no SCAD, no STL,
-      no BOM row). **BLOCKS wing removal/refit.**
-- [ ] WA-R16 — the tilt train is NOT self-locking and has no holding provision.
-      **BLOCKS flight release.** `docs/TILT_DRIVE_CONTROL_SPEC.md` §5.2/§7.3.
-- [ ] WA-R18 — Rev S1g is +102.8 g (+2.63 % AUW, revised by the weight audit);
-      hover T/W was ~1.19 vs a 1.2 minimum. Re-derive mass/CG/T-W.
-      **BLOCKS flight release.**
-- [ ] MA-1 — BOM printed-part masses understate by +521.6 g (13.3 % of AUW)
-      across 23 rows measured against their STLs. Reconcile + add a CI check.
-      **BLOCKS any weight statement.** -> `docs/MASS_AUDIT_CARGO_WING_ROOT.md`
-- [ ] MA-5 — hollow the actuator standoffs, -32.9 g, no structural question
-      (deflection 1.4e-5 mm at the gear mesh against a 0.05 mm budget).
-- [ ] MA-6 — `PRINT-BATT-TRAY` measures 140.2 g against a 22 g BOM row.
-- [ ] MA-7 — BOM mass column mixes installed mass, stock and GCS; add an
-      `Installed` flag before any weight statement uses it.
-- [ ] W1..W8 — ranked weight-reduction targets: battery -225 g, tray floor
-      -23.1 g, actuator standoffs -32.9 g, cradle ~-25 g; wing root CLOSED.
-      W2 (BOM reconciliation) gates all of them.
-      -> `docs/plans/2026-08-30-001-weight-reduction-targets-plan.md`
-- [ ] WA-R15a — re-measure the cargo-bay roof band: the actuators now reach
-      X -158.5 / -221.5 at Z +85.99..+112.99.
-- [ ] TILT-CTL-01..06 — tilt control loop open items (plant model, slew rate,
-      differential-tilt trip, LibreServo_v4 encoder part).
-      → `docs/TILT_DRIVE_CONTROL_SPEC.md` §8.
-- [ ] WA-R7..R12 — nacelle: trunnion bearing bore D20.0 at ring plane X ~ 28
-      (axial AND radial duty), ring gear PD 33.8 at C 26.0, ring magnet
-      ID 27 / OD 41 axially separated from that gear, the 4 x 10 AWG
-      disconnect relocated into the nacelle annulus, the nav 3-core crossing
-      at the trunnion, and confirmation of the 32 mm spar-stub protrusion.
-- [ ] WA-R13 — avionics: `docs/TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1's
-      ferromagnetic-spar premise is corrected in place; confirm the firmware
-      zero-calibration procedure still covers the drive-shaft/pinion field
-      that replaces it.
-- [x] **OWNER DECISION — cargo-bay intrusion: CLOSED 2026-08-29.** The bay stays
-      clear; nothing goes inboard of hull X ~ -86 against a bay edge at -100.
-      The constraint produced a better joint (moment FOS 4.02 -> 29.2), not a
-      compromise. See `airframe/fuselage-mid/WBS.md` §1.1.1.5.
-- [ ] **Spar stub / trunnion packaging — NEW, tightest constraint on the joint.**
-      The spar must terminate >= 26 mm from the nacelle duct axis, so the stub is
-      15.0 mm (max 15.7). The trunnion bearing PAIR, the 50T ring gear and the
-      ID26/OD41.2 ring magnet must all fit inside that 15 mm, and the magnet and
-      gear are nearly coradial (r 13.0-20.6 vs 20.0) so they need axial
-      separation. 2x 6804 (20x32x7) = 14.0 mm fits; MF128ZZ retired to QTY 0.
-
-### 0.10 Update and correct documentation touching every non-archived file.
-
-→ detail: `docs/WBS.md` §0.10
-
-*(Renumbered 2026-08-01 from a colliding "0.6" — root `WBS.md` §0.6 was already the distinct,
-completed "IEC 62368-1 PCB Layout Isolation Verification" item, so the old label here was not
-a valid cross-reference. Renumbered in both files, and moved after §0.9 here for ascending
-numeric order.)*
+- [ ] WA-R3/R17 — split-collar pinch clamp is not yet a part (BLOCKS wing…
+- [ ] ★ BRK-4 — brake solenoid part selection (Ø12×24 pull, 3 N, 6 V)
+- [ ] BRK-5 — bench: pin-engaged hold, release under load, drift ≤ 0.63°…
+- [ ] TILT-CTL-07 — owner to confirm the adopted rate ≥ 120 °/s, ≥ 4 Hz at…
+- [ ] TILT-CTL-08 — LibreServo_v4.1-TC controller variant (LibreServo_v4…
+- [ ] ★ WA-R18 — Rev S1g +102.8 g; hover T/W ~1.19 vs 1.2 min
+- [ ] ★ MA-1 — BOM printed-part masses understate by +521.6 g (13.3 % AUW)
+- [ ] MA-7 — add an `Installed` flag to the BOM mass column
+- [ ] ★ BOM-SYNC — `bom_revS.json` vs `.csv` parity
+- [ ] W1..W8 — ranked weight-reduction targets (W2 BOM reconciliation…
+- [ ] TILT-CTL-02..06 — tilt control loop open items (TILT_DRIVE_CONTROL_SP…
+- [ ] WA-R7..R12 — nacelle side: bore D20, ring gear, magnet, disconnect…
+- [ ] WA-R13 — avionics: confirm zero-cal covers the drive-shaft/pinion…
+- [ ] Spar stub / trunnion packaging — 13.5 mm stub, 2×6704ZZ, magnet 2.0…
 
 #### 0.10.1 Systems
+→ detail: docs/WBS.md §0.10.1
 
-→ detail: `docs/WBS.md` §0.10.1
-
-- [ ] Verify and update airframe specifications vs as built for each component.
+- [ ] Verify and update airframe specifications vs as built for each…
 - [ ] Verify avionics specifications vs as- built.
 - [ ] Verify and update all assessment and engineering documents.
-- [ ] Verify and update all software, firmware, and scripts, along with their documentation.
+- [ ] Verify and update all software, firmware, and scripts, along with…
 
 #### 0.10.2 Documentation
-
-→ detail: `docs/WBS.md` §0.10.2
+→ detail: docs/WBS.md §0.10.2
 
 - [ ] Verify and update the system specification files and BOM.
 - [ ] Verify and update the WBS and TODO files.
+- [ ] Renumber wings-nacelles WBS §1.1.4/§1.1.5 (collide with root…
+- [ ] Wire gen_todo_from_wbs.py --check into pre-commit/CI beside the…
+- [ ] Rewrite docs/AVIONICS_PB2_REDESIGN.md as a Rev T overview, then…
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
-
 → detail: `airframe/WBS.md` §1.1.0
 
 - [ ] Hull-frame placements for VERIFY parts
 
 #### 1.1.1 — Fuselage
-
 → detail: `airframe/fuselage-joints/WBS.md` §1.1.1 (1/3)
 
-- [ ] User FreeCAD fine-tune (fractional mm) for all component placements
-- [ ] PMMA window spec finalised (optical & structural requirements)
-- [ ] Procure PMMA discs per final specification
-- [ ] Add standards REF-IDs to bow_sensor_pod.scad (firmware interface)
+- [ ] User FreeCAD fine-tune (fractional mm):
+- [ ] PMMA window spec finalised
+- [ ] Procure PMMA discs
+- [ ] Add standards REF-IDs to bow_sensor_pod.scad firmware integrati…
 - [ ] Middle section inner neck — Phase 5-10 print guidance
-- [ ] Deprecate SCAD fuselage shell files (post-Rev S archive)
+- [ ] Deprecate SCAD fuselage shell files
 
 #### 1.1.1 — Fuselage (continued)
-
-→ detail: `airframe/fuselage-covers/WBS.md` §1.1.1 (2/3)
-
-*No open items. MESH-01 closed 2026-08-23 — all four shells verify watertight.*
-
-#### 1.1.1 — Fuselage (continued)
-
 → detail: `airframe/fuselage-mid/WBS.md` §1.1.1 (3/3)
 
-- [ ] CARGO-03c follow-up: coupon-test CF-PETG fusion/bearing (>=15MPa unlocks
-      the `enlarged_tenon` alternative) — the default two-rod tie-rod couple
-      is BUILT and does not block on this (`airframe/fuselage-mid/WBS.md`
-      §1.1.1.2 CARGO-03c, 2026-08-24)
+- [ ] ★ CARGO-03c coupon gates tenon vs second spar (15 MPa)
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
 - [ ] Cargo gondola shell
 - [ ] Clamshell door halves
-- [ ] `cargo_sect_shell24.scad` — shuttle exterior fairing profiles on Z walls
-- [ ] Avionics dorsal access covers / Faraday tray lids (Inara & River)
+- [ ] cargo_sect_shell24.scad — shuttle exterior fairing profiles on…
+- [ ] Avionics dorsal access covers / Faraday tray lids for Inara and…
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate cargo_sect_shell24.stl
 - [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
-- [ ] Add SG90 bell-crank boss to inner face of each door panel
-- [ ] ★ Bench-verify SPT5425LV stall current + pin-removal procedure (was: STS3215 datasheet gate)
+- [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
+- [ ] ★ Bench-verify SPT5425LV stall current + pin-removal procedure…
+- [ ] RS-485 gateway integration for LibreServo v2 bus (J_FLEX has no…
 - [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
 - [ ] Verify Part 107 dropped-object section number
 - [ ] Containment checks on assembly + pre-flight cards
 - [ ] ★ Shed threshold vs maneuver envelope (2.0g = 0.98x)
 - [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
 - [ ] Set servo torque ceiling below T_slip (wear protection)
-- [ ] Servo mode: continuous rotation by construction (pin removed); confirm LibreServo v2 protocol commands
+- [ ] Servo mode: continuous rotation by construction (pin removed)
 - [ ] Mark winch spool a consumable (wear item + spare)
 - [ ] AK7455 spool encoder on gateway J_ENC (spec §3.7.3)
 - [ ] Implement the six Rev S winch STLs
 - [ ] Winch pedestal M3 boss stations in cargo_sect_shell24.scad
-- [ ] RS-485 differential bus wiring for LibreServo v2 (was: half-duplex TTL on FLEX_TTL_GPIO)
+- [ ] RS-485 differential bus wiring for LibreServo v2 (was
 - [ ] Catch solenoid drive (AO3400 + pull-down + SS34)
 - [ ] Bench-calibrate ratchet slip to 8.0 N ± 1.0 N
 - [ ] Line-shed test (inboard end must NOT be anchored)
 - [ ] Winch state machine firmware (Simon + gateway)
-- [ ] Re-run winch mass/CG once SPT5425LV+LibreServo v2 mass is bench-weighed
+- [ ] Re-run winch mass/CG once SPT5425LV+LibreServo v2 mass is…
 - [ ] Slicer verification
 - [ ] Flight Engineer's room — PDB mounting in inner neck
 - [ ] CF skid rod channels
@@ -231,142 +123,70 @@ numeric order.)*
 - [ ] Mount ant-collision steady white tail light on upper pod of rea…
 
 #### 1.1.2 — Wings
-
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
+
+- [ ] ASTM D3039/D695 coupon test for the CF-PLATE-2MM bending allowable…
+- [ ] SPAR-02 — bulkhead servo mounts
+- [ ] Re-render and re-bake both wings (Rev S1b OML change)
 
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 
-- [ ] Reconcile crazy-ivan/PR#141 as SUPERSEDED by fix/nozzle branch
-- [ ] Merge cargo_spar_drive into cargo shell (bearing/servo/mortise…
-- [ ] Verify stbd cargo-chunk placement of spar-drive features
-- [ ] Tune servo→spar horn/pushrod linkage throw (−5°..140°)
-- [ ] Repair pre-existing stator sleeve non-manifold (edf_stator_sleeve)
-- [ ] VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
-- [ ] Migrate nacelle_hall_ring_hub → nacelle_pod_50mm_tandem.scad + re-bake
-- [ ] Bench-cal AK7455 with steel spar/MF128 bearing (ferrous-field check)
-    (2026-07-19).** CG_Z = 111.5 mm (was 104.5); `PIVOT_Z` propagated to all
-    SCAD/assembly/docs; nacelle shells + stator sleeve re-rendered/re-baked (66
-    STLs pass validate_stls). Drivers: 40 mm flaps + discrete Ø71 housing aft.
-- [ ] VERIFY Rev S2 CG (first-pass, band ≈109–112 mm)
-    printed densities (CF-PETG 1.05 / PETG 1.00 g/cm³) against printer-sliced
-    masses, and the discrete-housing vs cowl-skin overlap. → pod header table.
-- [ ] Re-solve single-straight-spar alignment for +7 mm pivot move
-    In the hull-frame bake the spar line slides ~7 mm aft in Y; re-derive the
-    nacelle bake translation (or the cargo/wing spar Y-station) so one straight
-    spar still passes through the CG pivot. `port_tilt_spar_assembly.scad` NAC_D
-    is now DERIVED from `PIVOT_ZLOC` (slide-fwd-to-Y15, user 2026-07-19) so the
-    overlay stays consistent; the baked nacelle STL still needs re-baking to the
-    Rev S2 CG pivot (its old boss is ~7 mm fwd of the new pivot).
-- [ ] Nozzle drive: replace invalid spar-crank w/ wing-referenced sync…
-    gear + geared bellcrank (2026-07-19).** The Rev S2 crank clamps the spar, which
-    is KEYED to the nacelle → shares the ring's rotating frame → zero relative
-    motion → no actuation. Adopted hybrid (user; docs/NOZZLE_DRIVE_TRADE.md
-    "DECISION AMENDMENT"): wing-fixed sun gear coaxial with the spar + nacelle
-    pinion (1:1) → geared bellcrank → Rev S2 cam-only-ring pushrod. Modelled in
-    `port_tilt_spar_assembly.scad` §6. SUB-TASKS:
-    - [ ] Reconcile the wing fixed R22 sector (`wings_s1223_revo.scad`) to the
-        chosen 1:1 sun (module, teeth, pitch radius; keep bolt circle vs bearing).
-    - [ ] Rework `nacelle_nozzle_pushrod.scad`: seat the crank on the pinion, add
-        the pinion + bellcrank; delete the spar-crank clamp.
-    - [ ] Relocate the iris unison-ring lever ear 22.5°→157.5° (inboard flap gap)
-        so the pushrod hugs the inboard cheek instead of crossing the duct.
-    - [ ] Motion study: 1:1-mesh + crank/pushrod transmission angle, monotonic
-        0..90° tilt → 0..23.9° ring; verify joint-gap width vs. the coaxial
-        bearing + sun-gear + Hall-magnet/AK7455 stack.
-- [x] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
-    used `rotate([0, PHI_CLOSED, 0])` → petals DIVERGE at "closed"; must be
-    `−PHI_CLOSED` to converge to 75 % bore. Preview-only (print parts unaffected).
-    **RESOLVED 2026-07-20** (sign-bug fix in the asm loop); the loop now reads
-    `rotate([0, −FLAP_PHI, 0])` after the Rev S3 parameterisation.
-- [x] Iris flap shingle (Rev S3, 2026-08-09) — the documented 5° inter-flap…
-    overlap was a solid INTERPENETRATION: all 8 flaps sat in one radial band, so
-    adjacent flaps shared coincident surfaces (17/12 non-manifold edges) and CI
-    "STL Validation" failed. Alternate flaps are now SEAL flaps lapped
-    `FLAP_SHINGLE_GAP` 0.2 mm (0.008 in) outboard of the MASTER flaps
-    [REF-CAD-005]. Masters unchanged → `exit_r(φ)` and the 75 %/105 % bore
-    targets unaffected. Print split 8 → 4 master + 4 seal per nozzle; the
-    abandoned `-closed-5deg.stl` shingling attempt was discarded (user).
-    → detail: `airframe/wings-nacelles/WBS.md` §1.1.3.1. SUB-TASKS:
-    - [ ] VERIFY mass/CG: flap set 32.0 → 56.8 g (+24.8 g / +0.87 oz total,
-        +12.4 g / +0.44 oz per nacelle), all aft/outboard of the tilt pivot —
-        re-check the Rev S2 CG band (≈109–112 mm) and tilt-servo torque margin.
-    - [ ] VERIFY the 0.2 mm seal step against the "smooth, low-turbulence exit"
-        goal by bench/CFD; fall back to a scarfed seal if the step is material.
-    - [ ] Rewrite `docs/PHASED_BUILD_GUIDE.md` §7 for Rev S2 — it still describes
-        the deleted sector/bevel/crown gear chain and a third fuselage nozzle
-        (current drive is a pushrod/bellcrank to one ring lever; 2 nozzles).
-    - [x] Harden `tools/precommit_index.py`: `collect_files()` indexed every
-        root-level loose FILE, and inside a git worktree `.git` IS a file, so a
-        regeneration from a worktree re-injected a bare `.git` entry (the artifact
-        removed in 48eae05; it recurred via the `.githooks` pre-commit hook on
-        2026-08-08). **RESOLVED 2026-08-09** — `collect_files()` now filters the
-        walk through `git_tracked_paths()` (`git ls-files`), so the index is a
-        deterministic function of the COMMIT rather than the working directory.
-        Kills both failure modes at once: the worktree `.git` entry (git never
-        lists it in any checkout topology) and untracked local artifacts leaking
-        in (154 of them — KiCad `*-backups/*.zip`, `~*.lck`, `fp-info-cache`,
-        sliced gcode, `*.FCStd` — which CI's fresh clone never had, the actual
-        cause of the "random" index-sync failures). Falls back to the plain walk
-        when git cannot answer (source tarball). Verified output-neutral: a clean
-        worktree regenerates byte-identically, and planted untracked strays are
-        excluded. The pre-commit hook is now safe to run anywhere, so `--no-verify`
-        is no longer needed when committing index changes from a worktree.
-    - [x] DevSkim `DS176209` false positives on the generated indexes —
-        **RESOLVED 2026-08-09**: excluded the three generated artifacts by PATH via
-        `ignore-globs` in `.github/workflows/devskim.yml` rather than disabling the
-        rule repo-wide, so leftover-TODO detection stays active in real source. The
-        alerts flagged the substring "TODO" inside indexed *filenames*
-        (`tools/TODO.md`) and document titles, which cannot be reworded because the
-        files are generator output asserted byte-equal by CI (PR #180, alerts
-        942/945).
-    - [ ] **[OPEN — needs a credential decision]** Auto-commit a stale index from
-        CI instead of failing. Drafted and deliberately NOT shipped: the push would
-        use `GITHUB_TOKEN`, and GitHub does not trigger workflow runs for
-        `GITHUB_TOKEN` pushes, so the corrected head commit would arrive without the
-        ruleset's required checks ("Python lint", "STL Validation") and the PR would
-        be unmergeable — worse than a clear failure. Needs a PAT or GitHub App token
-        in repository secrets to do safely. Meanwhile the determinism fix above
-        removes the failure class that actually kept firing, and the job now prints
-        a one-command fix plus uploads the corrected files as an artifact.
-- [ ] Stator spar crossing (Rev S2b): 11 vanes, coprime w/ 12-blade rotor
-    rotor — Tyler–Sofrin); spar carried in a streamlined teardrop strut (tail
-    aft, TE ≈ vane TE) + 0° anti-rotation key drilled through. VERIFY strut
-    chord/tail + residual swirl into EDF2 by CFD/bench before flight.
-- [ ] Ø72 nozzle-pocket eats the aft cowl tail…
-    end at duct Z≈172.2 mm (was 185.2) — the straight Ø72 pocket over-cuts the
-    tapering dome tail (172–185), so the nozzle housing becomes the aft surface.
-    Decide: taper/shorten the pocket to preserve the silhouette, or accept the
-    housing as the aft OML. (`NOZZLE_RING_OD`; the long-standing "shell bake
-    needs review" note.)
-
-→ detail: `airframe/wings-nacelles/WBS.md` §1.1.3
-
-- [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle…
+- [ ] [OPEN — VERIFY] Mass/CG impact of the shingle
+- [ ] [OPEN — VERIFY] Seal-flap aerodynamic step
+- [ ] [OPEN — NO-GO, was VERIFY] Spatial RSSR linkage synthesis
+- [ ] [OPEN — IMPLEMENT] Adopted nozzle drive
+- [ ] Re-hub `spar_crank()` onto the pinion
+- [ ] [BLOCKED — needs an owner decision, do NOT assume resolved] The KTD3…
+- [ ] [OPEN — parked, do NOT print] `nacelle_nozzle_sync_gears.scad`
+- [ ] Pushrod clearance/interference check
+- [ ] [OPEN — ACCEPTED RESIDUAL, not fixable by boss sizing] Hinge bosses…
+- [ ] Spar-crank placement in serenity_assembly.py is first-pass (Y=0…
+- [ ] User WIP `gear_option_compare.scad` / `gear_shell_compare.scad`…
+- [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD…
+- [ ] [OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not…
+- [ ] [OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still…
+- [ ] [OPEN — VERIFY] `serenity_assembly.py` still places the deleted parts
+- [ ] [OPEN — PRINT-BLOCKING] `MOTOR_BOLT_R` is still 10.0 mm and still…
+- [ ] [OPEN — NEW, and it is a safety item] The bay is now an unfiltered…
+- [ ] [OPEN — the flow, not the geometry] Bay velocity is not verified
+- [ ] 50 A sustained is not survivable on any path evaluated
+- [ ] [OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn
+- [ ] Window structural allowance
+- [ ] [OPEN — cross-subsystem, rescoped 2026-07-26] `Pilot.md` §13 /…
+- [ ] AK7455 off-axis bench validation
+- [ ] SPAR-20-8 (U8) — Re-datum the nozzle drive onto the fixed trunnion…
+- [ ] SPAR-20-9 (U9) — Mass/CG/T-W re-derive (spar 96.2 → 67.5 g/pair, but…
+- [ ] NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening
+- [ ] SPAR-20-AERO — The re-lofted section is no longer S1223 (root 12.1 →…
+- [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
+- [ ] SPAR-20-ALLOW — No verified CF tube flexural allowable exists in…
+- [ ] SPAR-20-WIREOD — `bom_revS.csv` records no OD for `WIRE-10AWG`
+- [ ] SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision (§1.1.3.1…
+- [ ] SPAR-25-6 (U6) — Integration, load check, mass/CG, BOM, and the…
 
 #### 1.1.4 — Landing Gear
-
 → detail: `airframe/landing-gear/WBS.md` §1.1.4
 
 - [ ] LG-15 Procure both wire grades/tempers; coupon test
 - [ ] LG-16 Confirm ductile wire temper survives jig-forming
 - [ ] LG-13 Define wire-end retention detail at bay bosses
 - [ ] LG-02 Bay mounting integration: backing plates, flank conform…
+- [ ] Add top-face socket to canonical foot
 - [ ] Assess foot grip on concrete/asphalt
 - [ ] LG-06 Elastic bench check: quarter-AUW fixture, 1.5 ft drop
 - [ ] LG-07 Confirm avionics enclosure shock rating
 - [ ] LG-11 Coupon-test CF-PETG
 - [ ] LG-14 Instrumented drop test (load cell + high-speed video) at…
-- [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
-- [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
 - [ ] Reconcile the remaining-parts list
 - [ ] Combine all airframe STLs
-- [ ] Render overview SVGs using FreeCAD TechDraw
 - [ ] Exploded view SVG — printed parts only
 - [ ] Exploded view SVG — full build
+- [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
+- [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
+- [ ] Render overview SVGs using FreeCAD TechDraw
 
 #### 1.1.5 — Non-Printable Component Placeholders
-
 → detail: `airframe/WBS.md` §1.1.5
 
 - [ ] Rear skid reinforcement — SCAD update (TWO files)
@@ -378,7 +198,6 @@ numeric order.)*
 - [ ] Link placeholders to BOM entries
 
 ### 1.2b — PCB Redesigns: Commo Rev S1 / XO Rev S1 / Flight Engineer Rev S1
-
 → detail: `avionics/rev-s1/WBS.md` §1.2b
 
 - [ ] Commo Rev S1 — add LoRa, replace JST with P1+P2 socket rails
@@ -386,9 +205,9 @@ numeric order.)*
 - [ ] Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output
 
 ### 1.2c — PCB Design: Observer (Nose/Cargo-Bay Vision, ToF & Laser)
-
 → detail: `avionics/observer/WBS.md` §1.2c
 
+- [ ] FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error…
 - [ ] Final component placement (user-reserved) + impedance-controlle…
 - [ ] Generate production-ready Gerber files to avionics/kicad/Observer/…
 - [ ] Flag stale laser bore dimensions:
@@ -404,76 +223,22 @@ numeric order.)*
 - [ ] Do not source
 
 ### 1.2d — Trust-Module MCU/TPM Retarget (MSPM0G351x-Q1 + SLB 9672)
+→ detail: `avionics/WBS.md` §1.9.3
 
-Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematics) and
-`avionics/kicad/retarget_pcb_footprints.py` (PCBs).  Parts per REF-SENSOR-017 and REF-SEC-002.
-
-| Board | MCU | Package | TPM |
-|---|---|---|---|
-| Observer (observer) | `M0G3519QRGZRQ1` | 48-pin RGZ VQFN 7×7 | `SLB 9672AU2.0` |
-| `CAN-PERIPH-GW-1` (gateway) | `M0G3518QRHBRQ1` | 32-pin RHB VQFN 5×5 | `SLB 9672AU2.0` |
-| FlightEngineer (flight engineer) | `M0G3518QRHBRQ1` | 32-pin RHB VQFN 5×5 | `SLB 9672AU2.0` |
-
-- [x] Verify the MSPM0G351x-Q1 RGZ-48 pin map against the MSPM0G350x it replaces —
-      identical for all 48 pads plus the exposed pad (SLASFA6B Fig 6-5 vs SLASEX6C Fig 6-4).
-- [x] Re-pinmux the gateway and FlightEngineer onto RHB-32, which bonds out PA0–PA27 only and has
-      no PBx ports: RS485_TX→PA8 (UART1_TX PF2), RS485_RX→PA9 (UART1_RX PF2),
-      RS485_DE→PA21, RS485_FLT_N→PA22, CANFD_FLT_N→PA23 (FlightEngineer),
-      FLEX_PWM_IO→PA25 (TIMA0_C3 PF5), FLEX_BSHOT_IO→PA26 (TIMG8_C0 PF4).
-- [x] Swap and re-anchor the PCB footprints on the gateway (U1_1/U1_2) and Observer (U3).
-- [x] Tie the TPM exposed pad to GND on all three boards — the SLB9670 symbol omitted pad 33
-      entirely, so it was floating (Infineon SLB9672 datasheet rev 1.3 §2.1.2 requires it).
-- [x] Correct the MCU land pattern: the design used
-      `QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm`, which KiCad's own `descr` identifies as an
-      **Analog Devices LTC legacy** outline. TI's RGZ0048F exposed pad is 4.1 mm square, so
-      the old land overhung the package thermal pad by 0.525 mm per side.
-- [x] Separate FlightEngineer's overlapping `U_MCU` / `U_TPM` symbols (17 pads shared a coordinate,
-      shorting the SPI bus and tying MCU VCORE to TPM GND); `U_TPM` moved +34.29 mm.
-
-**Open — blocks fabrication:**
-
-- [ ] **Re-route the gateway MCU area.** U1_1/U1_2 went from 48 pads at 7×7 mm to 32 pads at
-      5×5 mm, so every trace into them is dangling. Needs a manual placement/routing pass and
-      a DRC sign-off before gerbers.
-- [ ] **Confirm MSPM0G351x-Q1 errata and TRM applicability.** SLAZ742G covers MSPM0G3x0x /
-      G1x0x / G3x0x-Q1 and does not enumerate MSPM0G3518/3519; SLAU846E contains no
-      occurrence of either part number. Obtain the correct errata/TRM for MSPM0G351x-Q1
-      before firmware sign-off (REF-SENSOR-018 "requires verification").
-- [ ] **Update firmware pinmux constants for the new family.** CAN moves from
-      `CAN_TX`/`CAN_RX` PF5/PF6 to `CAN0_TX`/`CAN0_RX` **PF12**; PA15 offers `SPI1_CS2`
-      (PF3) rather than `SPI1_CS0`; PB15/PB16 offered UART2 on the old part and UART7 on the
-      new one (moot on the 32-pin boards, which now use UART1 on PA8/PA9). See §4.6.2.
-- [ ] **Add the missing MCU support parts per SLAAE76E Table 1-1.** No board has the
-      10 µF bulk C(VDD) local to the MCU (the gateway shares one 22 µF at the regulator and
-      FlightEngineer's MCU has no local 100 nF at all), and none has the recommended NRST network —
-      all three use a 10 kΩ pull-up with no 10 nF pull-down capacitor against the
-      recommended 47 kΩ + 10 nF.
-- [ ] **Add a pull-up on the gateway's PA0/PA1 FLEX UART.** PA0/PA1 are 5 V-tolerant
-      open-drain on this family with no internal pull-up available, so `FLEX_UART_TX` cannot
-      drive high without an external pull-up (SLASFA6B §9.1.1; SLAAE76E §8.5).
-- [ ] **Pull PA18 down on the gateway and Observer.** PA18 is the default BSL invoke pin and is
-      used as SPI MOSI on both boards; it floats during reset, so the part can enter BSL
-      (SLAAE76E Table 1-1).
-- [ ] **Add thermal vias under the MCU exposed pad.** Only gateway U1_1 has any (3);
-      U1_2 and Observer U3 have none. TI requires the pad be soldered to a board thermal pad
-      and recommends the 3×3 via pattern in the land-pattern drawing.
-- [ ] **Resolve FlightEngineer's ground-net naming.** FlightEngineer's board ground carries the name
-      `CM2_OUT_N` (108 nodes, including every MCU/TPM ground pin), i.e. a current-monitor
-      output label is shorted into, or mis-merged with, `PGND`. Pre-existing; not introduced
-      by this retarget.
-- [ ] **Clean up FlightEngineer's dangling no-connect flags.** The retarget left ~30 `no_connect`
-      markers that no longer sit on a pin (ERC warnings only; error count is unchanged at 0).
-- [ ] **Close the Observer sch↔pcb parity gap.** `RS485_DE`, `RS485_TX` and `RS485_RX` exist on
-      U3 in the schematic but not in the PCB net table; those pads were left unconnected
-      rather than inventing net entries.
-- [ ] **Place gateway lanes 3 and 4.** `U1_3`/`U1_4` and `U2_3`/`U2_4` exist in the
-      schematic but are not on the PCB, so only two of the four tiled lanes were retargeted
-      on the board.
-- [ ] **Decide whether Emma, Wash and Zoë follow to the SLB 9672.** They still carry the
-      SLB9670; this retarget deliberately did not touch them.
+- [ ] ★ Re-route the gateway MCU area (48 → 32 pads; every trace dangling)
+- [ ] Confirm MSPM0G351x-Q1 errata + TRM applicability (REF-SENSOR-018)
+- [ ] Update firmware pinmux constants (CAN0 PF12, SPI1_CS2, UART1 PA8/9)
+- [ ] Add MCU support parts per SLAAE76E Table 1-1 (10 µF, NRST 47k+10n)
+- [ ] Add pull-up on the gateway PA0/PA1 FLEX UART (open-drain, 5 V-tol)
+- [ ] Pull PA18 (BSL invoke) down on the gateway and Observer
+- [ ] Add thermal vias under the MCU exposed pad (U1_2, Observer U3)
+- [ ] Resolve FlightEngineer ground-net naming (CM2_OUT_N on 108 nodes)
+- [ ] Clean up FlightEngineer's ~30 dangling no-connect flags
+- [ ] Close the Observer sch↔pcb parity gap (RS485_DE/TX/RX on U3)
+- [ ] Place gateway lanes 3 and 4 (U1_3/U1_4, U2_3/U2_4 not on the PCB)
+- [ ] Decide whether Commo, Pilot, XO follow to the SLB 9672
 
 ### 1.2a — PCB Design: Pilot, XO, and Commo (EMI-Hardened Variants)
-
 → detail: `avionics/WBS.md` §1.2a
 
 - [ ] Reconcile Pilot.md §14 field-connector table with the actual P…
@@ -487,16 +252,14 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Generate Pilot gerbers
 - [ ] Generate XO gerbers
 - [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
+- [ ] Generate Commo gerbers
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
 - [ ] EMI isolation validation checklist
 - [ ] Merge claude/cape-em-harsh-variants-9Yfr1 → master
 - [ ] Design Faraday cages / boxes to protect all PCBs
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
 
-→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Pilot PB2-P2 unwired-header finding, Pilot/XO/FlightEngineer/Observer DRC clean-out, CAN-PERIPH-GW-1 N=4 routing all still open.
-
 ### 1.4 — EMI Hardening Beyond the PCBs (500 W/m^2 environment)
-
 → detail: `avionics/emi-hardening/WBS.md` §1.4
 
 - [ ] PB2-I + Pilot Enclosure
@@ -509,22 +272,34 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] I2C
 - [ ] BDSHOT/DSHOT (ESC telemetry)
 - [ ] PWM
-- [ ] Add FlightEngineer/battery boss pattern to middle_canonical_shell24.sca…
+- [ ] Add FlightEngineer/battery boss pattern to middle_canonical_shell24.s…
 - [ ] Add ventral battery-swap hatch cut to middle_canonical_shell24.…
 - [ ] Create flight_engineer_battery_tray.scad.
 - [ ] Create flight_engineer_pdb_tray.scad.
 - [ ] Update REVN_BUILD_GUIDE_24IN.md Phase 1
 
 ### 1.5 — Documentation
-
 → detail: `docs/WBS.md` §1.5
 
 - [ ] Update PHASED_BUILD_GUIDE.md
 - [ ] 1.5.6 Rebuild Graphical Buiild Guide
 - [ ] Sync bom_revO.json ↔ bom_revO.csv
+- [ ] Rewrite build-guide Phase 2/3 steps for the Rev T mechanism (after D2)
+
+### 1.10 — Avionics close-out plan (2026-08-25-001), unit index
+→ detail: `avionics/WBS.md` §1.10
+
+- [ ] ★ U1 — Retire Pilot J_ESC/J_SERVO PWM headers → CAN-FD/RS-485 trunk
+- [ ] U2 — LibreServo_v4 nacelle-tilt bus integration (GW-1 J_FLEX gap)
+- [ ] U3 — Open-Secure-ESC 50A/6S CAN-FD integration + governor rewrite
+- [ ] U4 — OpenServoCore SG90 TTL+CMAC bus finalize (re-check maturity)
+- [ ] U5 — Observer pitot-tube airspeed sensor; fix Pilot's stale claim
+- [ ] U6 — Fleet host+message auth wiring for ESC/servo/SG90 endpoints
+- [ ] ★ U7 — Per-board ERC/DRC/gerber closeout (6 boards)
+- [ ] ★ U8 — Pilot tamper-mesh creepage fix (fab blocker) +…
+- [ ] U9 — REFERENCES.md + WBS/TODO + AGENTS.md closeout for U1–U8
 
 ### Phase0 — Print All Parts + CF Cuts
-
 → detail: `graphical-build-guide/WBS.md` §Phase0
 
 - [ ] Install hardened-steel nozzle (CF-PETG abrades brass)
@@ -541,7 +316,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Rear neck shell scoop windows covered with removable 3mm PETG b…
 
 ### Phase1 — Hull Structure + All Future Provisions
-
 → detail: `graphical-build-guide/WBS.md` §Phase1
 
 - [ ] Epoxy keel through all hull sections; cure 2h. Datum marks at 9…
@@ -569,7 +343,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] All 6 access panel lids flush ±0.2 mm; latches/magnets engage
 
 ### Phase2 — Nacelle Assembly
-
 → detail: `graphical-build-guide/WBS.md` §Phase2
 
 - [ ] Test EDF rotation direction on bench before installation: port…
@@ -597,7 +370,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Petal closed: hull-match at 0°; petal open: all 8 even at 90°
 
 ### Phase3 — Tilt Mechanism
-
 → detail: `graphical-build-guide/WBS.md` §Phase3
 
 - [ ] Press MF104ZZ bearings into pivot housing bores (both ends); fl…
@@ -614,7 +386,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Both nacelles synchronise to within 2° at 0° and 90°
 
 ### Phase4 — Hull Foam Pour + Close-up
-
 → detail: `graphical-build-guide/WBS.md` §Phase4
 
 - [ ] All PTFE conduits routed — pull strings accessible at both ends
@@ -630,7 +401,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Install all 6 access panel lids; verify flush fit.
 
 ### Phase5 — Minimum Viable Flyer ★ FIRST FLIGHT
-
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase5
 
 - [ ] Mount XT90 PDB at keel sta 130mm; solder 14AWG main leads to ES…
@@ -696,7 +466,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Flight log on both CN μSDs; CPLD write-block verified
 
 ### Phase6 — Full 8-Node Architecture + ToF Obstacle Avoidance
-
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase6
 
 - [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Pilot in Inara's s…
@@ -736,12 +505,11 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] 3-waypoint autonomous mission with GPS, altitude hold, RTL on s…
 
 ### Phase7 — Cargo System
-
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase7
 
 - [ ] Bond cargo gondola shell into belly void at 4× M3 hard points (…
 - [ ] Install 3mm CF door hinge pins; attach clamshell door halves (s…
-- [ ] Install SPT5425LV/LibreServo v2 winch + twin-pedestal spool + ratchet; wind Dy…
+- [ ] Install SPT5425LV/LibreServo v2 winch + twin-pedestal spool + ratchet
 - [ ] Install SG90 door-actuator servo (spring-assist open, servo pul…
 - [ ] Install SG90 payload-release servo; connect to DRV8833 IN1/IN2…
 - [ ] Route control leads through PWR conduit belly tap to CN master…
@@ -755,7 +523,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Autonomous delivery: 3-waypoint mission, deploy at waypoint 2,…
 
 ### Phase8 — Finishing
-
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase8
 
 - [ ] Replace FAA N00000 placeholder in serenity/diagrams/decal_sheet…
@@ -766,7 +533,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] FAA compliance final check: registration visible without moving…
 
 ### Phase9 — Performance Tuning and Flight Envelope Expansion
-
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase9
 
 - [ ] Thrust stand calibration
@@ -782,7 +548,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Logs on all 4 CN nodes; write-block verified
 
 ### Phase10 — Advanced Autonomy and Long-Range Operations
-
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase10
 
 - [ ] BVLOS communication validation
@@ -799,7 +564,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] All regulatory documentation current and on file
 
 ### Phase11 — Aft EDF Integration (Deferred)
-
 → detail: `deferred/WBS.md` §Phase11
 
 - [ ] Scoop windows must be re-sized for the 55 mm EDF (reduced area).
@@ -846,7 +610,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruis…
 
 ### Phase12 — Cargo-bay Range-Extender Battery Module (Deferred)
-
 → detail: `deferred/WBS.md` §Phase12
 
 - [ ] RBM module:
@@ -857,11 +620,10 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] CAD:
 
 ### 4.2 — FC Node (Pilot) - Phase 7 Firmware
-
 → detail: `avionics/firmware/WBS.md` §4.2
 
 - [ ] EDF ESC PID governor
-- [ ] Nacelle tilt servo command generation (RS-485/LibreServo v2, was PWM)
+- [ ] Nacelle tilt servo command generation (RS-485/LibreServo v2, was PWM…
 - [ ] IMU / barometer sensor fusion
 - [ ] ToF sensor array management
 - [ ] u-blox M10Q GNSS integration
@@ -869,7 +631,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] TPM-bound attestation
 
 ### 4.3 — CN Node (XO) - Phase 7 Firmware
-
 → detail: `avionics/firmware/WBS.md` §4.3
 
 - [ ] CAN FD heartbeat and telemetry forwarding
@@ -882,7 +643,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] MAVLink routing configuration
 
 ### 4.4 — Both Nodes
-
 → detail: `avionics/firmware/WBS.md` §4.4
 
 - [ ] Node role election protocol
@@ -892,7 +652,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Security message signing
 
 #### 4.5.1 — Skipper Hardware Design
-
 → detail: `gcs/WBS.md` §4.5
 
 - [ ] Create Skipper host computer specification
@@ -904,7 +663,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Procure gimbal hardware:
 
 #### 4.5.2 — Skipper Comms Node Setup (Phase Skipper-2)
-
 → detail: `gcs/WBS.md` §4.5
 
 - [ ] Flash Debian Linux to Skipper PB2-I eMMC
@@ -917,7 +675,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Configure Wi-Fi transmit power
 
 #### 4.5.3 — Skipper Host PC Software Setup (Phase Skipper-3)
-
 → detail: `gcs/WBS.md` §4.5
 
 - [ ] Install Debian Linux on GCS host PC
@@ -925,10 +682,9 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Configure QGroundControl:
 - [ ] Configure Wi-Fi Tx power on host PC
 - [ ] Run tracking software tests:
-- [ ] Implement gcs/skipper/firmware/pb2i/src/skipper_comms.c and skipper_com…
+- [ ] Implement gcs/skipper/firmware/pb2i/src/skipper_comms.c and…
 
 #### 4.5.4 — Tracking and Gimbal Integration (Phase Skipper-3)
-
 → detail: `gcs/WBS.md` §4.5
 
 - [ ] Bench test gimbal hardware
@@ -939,7 +695,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] End-to-end tracking test (outdoor):
 
 #### 4.5.5 — Skipper Integration Testing (Phase Skipper-4)
-
 → detail: `gcs/WBS.md` §4.5
 
 - [ ] Multi-link communication bench test:
@@ -951,7 +706,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Node loss with Skipper active:
 
 #### 4.6.1 — TI AM62Ax Vision Pipeline Bring-Up
-
 → detail: `avionics/observer/WBS.md` §4.6.1
 
 - [ ] MIPI CSI-2 camera sensor bring-up
@@ -961,7 +715,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Bench test:
 
 #### 4.6.2 — TI MSPM0G3507 Control Firmware
-
 → detail: `avionics/observer/WBS.md` §4.6.2
 
 - [ ] MCAN (CAN-FD) driver bring-up
@@ -973,7 +726,6 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Signed telemetry:
 
 #### 4.6.3 — Integration Testing
-
 → detail: `avionics/observer/WBS.md` §4.6.3
 
 - [ ] Bench test:
@@ -981,13 +733,11 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Laser safety interlock test (nose only):
 
 ### 5.1 — FCC (external radio systems)
-
 → detail: `docs/WBS.md` §5.1
 
 - [ ] XCVR-49MHZ-1/2 FCC Part 15 §15.235 compliance
 
 ### 5.2 — FAA (airworthiness and operations)
-
 → detail: `docs/WBS.md` §5.2
 
 - [ ] Aircraft registration
@@ -998,21 +748,18 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Airspace waiver (if applicable)
 
 ### 5.3 — Industry Standards Compliance
-
 → detail: `docs/WBS.md` §5.3
 
 - [ ] Structural validation
 - [ ] IEEE/ISA/AUVSI best practices
 - [ ] Tamper-evident logging
 
-### 5.4 - Open Source Hardware Certification
-
+### 5.4 — Open Source Hardware Certification
 → detail: `docs/WBS.md` §0.9
 
 - [ ] Submit OSHW self-certification — requires the human maintainer to act
 
 ### 6.1 — Branch Reconciliation (2026-06-09)
-
 → detail: `docs/WBS.md` §6.1
 
 - [ ] Delete stale feature branches

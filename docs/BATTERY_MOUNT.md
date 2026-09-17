@@ -2,8 +2,49 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
-**Revision:** Rev R
-**Date:** 2026-06-11
+**Revision:** Rev T5 (2026-09-15) — Rev R body retained below as the superseded record
+**Date:** 2026-06-11 (Rev R); 2026-09-15 (Rev T5 preface)
+
+---
+
+## Rev T5 (2026-09-15) — what changed, and why the rest of this document is history
+
+> ⚠️ **ENGINEERING REVIEW REQUIRED** — see `docs/CARGO_SECTION_LAYOUT.md`.
+
+* **Where:** the pack is in the **cargo section roof band, on the centreline,
+  hull Y −58..+84, Z 90..128** (`docs/CARGO_SECTION_LAYOUT.md` D-T5-1). The Rev R
+  head-section station (§2.4 below, "84 mm from the nose") was derived from a
+  46 %-of-length CG target that predates the pivot-at-CG tilt axis; on a lateral
+  tandem pair the hover thrust line *is* the tilt axis (Y 46.6) and the largest
+  single mass has to sit at it. The middle-ventral note of 2026-06-13 is also
+  superseded. The battery station is now fixed by the cradle — fore/aft trim
+  belongs to the mass ledger (A0), not to a rail.
+* **How:** `battery_cradle.stl` (`airframe/openscad/fuselage/cargo/battery_cradle.scad`),
+  a roof-hung **inverted U**: ceiling plate with the 3 mm silicone-foam pad, two
+  30 mm side rails, full-height forward stop, aft wall with the 14 × 10 mm lead
+  exit, four M3 hangers to shell bosses. The pack is pushed **up** into it and held
+  by the two 16 mm cam straps **under** it. 39.4 g as printed against the 140 g
+  keel-rail tray (MA-6 closed by retirement of `PRINT-BATT-TRAY`).
+* **Cradle vs. straps:** evaluated in the SCAD header — straps/hook-and-loop alone
+  give friction-only location and no vibration control; the cradle gives positive
+  location in X, Y, +Z, roll, yaw, the straps carry only the hanging load (3.7 N
+  each at 1 g, FOS 5.4 at 2.5 g on the 50 N buckle, 2.7 at the legacy 5 g case),
+  and the foam pad is the isolator (k ≈ 950 N/mm ASSUMED modulus → f_n ≈ 180 Hz,
+  ~83 % isolation at the 470 Hz EDF shaft rate).
+* **Field exchange:** from **below** through the open clamshell bay with the winch
+  not fitted (Phase 5): release both buckles, lower the pack out, push the fresh
+  pack up to the ceiling until the fore/aft stops seat, re-strap, connect. No
+  roof access, no tools. The §6 procedure below (belly panel, keel rail, detents)
+  is superseded.
+* **Leads:** XT60 + balance exit aft through the cradle's aft wall toward the
+  Flight Engineer PDB in the middle inner neck — ≤ 160 mm run (§4.1 limit) is met
+  with the pack's aft face at Y +84 and the neck starting at Y +132.
+* **Foam:** the cradle nose sits in the chin; if the chin is ever poured, the
+  `void_former_cargo_batt_chimney` former keeps the drop path open
+  (`tools/gen_cargo_void_formers.py`).
+
+Everything from §1 onward is the Rev R record, kept for the CG derivation and
+the thermal estimate, which still apply.
 
 ---
 

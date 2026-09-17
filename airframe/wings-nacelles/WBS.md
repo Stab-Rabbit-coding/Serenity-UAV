@@ -911,20 +911,129 @@
         bevel housing, drive pinion (+STLs) → `airframe/archive/`; Makefile,
         PROJECT_INDEX/ARCHIVE_INDEX, serenity_assembly.py updated.
     - [x] **Pod pocket** grown `NOZZLE_RING_OD` 65→72 to seat the Ø71 housing.
-    - [ ] **[OPEN — VERIFY] Spatial RSSR linkage synthesis** — solve crank
-        radius, ball 3-D positions, and rod length for a MONOTONIC, non-locking
-        0→90° tilt → 0→23.75° ring map that clears the nacelle skin over the
-        full sweep. Current pushrod geometry is first-pass placeholder. Do NOT
-        print for flight until closed.
+    - [ ] **[OPEN — NO-GO, was VERIFY] Spatial RSSR linkage synthesis.**
+        `tools/nozzle_linkage_check.py --search-dimensions` (2026-09-09)
+        exhaustively swept CRANK_R 8.5–28 mm × PUSHROD_LEN 58–90 mm × 24 crank
+        mounting phases × 8 spar mounting stations (336 combinations) and
+        found **zero** that are both reachable and monotonic across the full
+        0→90° tilt sweep. As-drawn (CRANK_R=8.5, PUSHROD_LEN=45) fails
+        outright. **This independently re-confirms a defect the trade study
+        already caught**: `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT —
+        hybrid A+B adopted (2026-07-19)" records that the pure spar-crank is
+        kinematically INVALID because **the tilt spar is keyed to the nacelle**
+        — a crank clamped to it shares the nacelle's rotating frame with the
+        unison ring, so the two swing together with *zero relative motion* and
+        the pushrod never strokes the ring. No choice of CRANK_R/PUSHROD_LEN
+        can fix that, which is exactly why the sweep came back empty.
+        `nacelle_nozzle_pushrod.scad` is therefore a **stale implementation of
+        a superseded decision**. The adopted replacement (below) is not a new
+        trade — it is already decided; do NOT reopen the trade study.
+    - [ ] **[OPEN — IMPLEMENT] Adopted nozzle drive: wing-fixed sun + nacelle
+        pinion + geared bellcrank** (`docs/NOZZLE_DRIVE_TRADE.md` amendment,
+        2026-07-19). A gear fixed coaxial with the spar at the **wing tip**
+        (non-tilting datum) meshes a nacelle-mounted **pinion**; as the nacelle
+        tilts θ the fixed-sun/planet pair spins the pinion by θ·(N_sun/N_pinion)
+        *relative to the nacelle*, restoring the relative motion the spar-crank
+        lacked. At **1:1** the crank(8.5)→pushrod→cam-ring-lever(32) geometry is
+        reused unchanged.
+    - [x] **Linkage geometry SOLVED and verified — 2026-09-09.** The
+        amendment's open kinematic parameters are now closed, and
+        `tools/nozzle_linkage_check.py` (reworked to model the adopted
+        nacelle-frame architecture; the superseded spar-crank model is retained
+        behind `--model spar-crank-superseded` as the negative-result record)
+        **passes on its default run**:
+        | parameter | value | note |
+        |---|---|---|
+        | `CRANK_R` | 8.5 mm | **unchanged**, as the amendment predicted |
+        | `CRANK_PHASE` | **206.0°** | new — crank clocking on the pinion at zero tilt |
+        | `PUSHROD_LEN` | 45 → **48.0 mm** | COTS turnbuckle-adjustable rod: a spec change, not new hardware |
+        | `RING_LEVER_AZ` | 22.5 → **157.5°** | inboard flap gap (gaps at 22.5 + k·45) |
+        Verified over a 0→90° sweep at 1° steps: ring stroke **23.816°** vs the
+        23.75° target (0.3 % error); **ψ(0) = −0.36°**, so the ring cam needs
+        **no re-clocking**; **monotonic** throughout (no toggle/dead point);
+        transmission angle 88.1–103.8°, worst-case min(TA, 180−TA) = **76.2°**,
+        far above the ≥40–45° rule of thumb. Iris re-renders `Simple: yes`.
+        Also corrected `port_tilt_spar_assembly.scad` `PIVOT_ZLOC` 111.5 →
+        **107.5** (was stale against `nacelle_pod_50mm_tandem.scad:437`).
+    - [ ] **[OPEN] Re-hub `spar_crank()` onto the pinion.** The linkage
+        *numbers* are closed but the *part* is not printable as-is: it is still
+        drawn as the Ø8 tilt-spar clamp. Needs (a) the Ø8.2 bore + Ø16 clamp hub
+        replaced with a hub suited to the pinion shaft — shaft Ø, retention
+        method, and whether it co-prints with the pinion are all unchosen, and
+        the hub OD must clear the sun's pitch Ø26 at CD 26 — and (b) the arm
+        clocked to `CRANK_PHASE` = 206°, since as drawn it is an unclocked
+        local +Z arm. Carries a matching TODO/VERIFY in the SCAD module.
+    - [x] **Sun/pinion gear teeth SIZED 2026-09-10 — datum-independent, carries
+        over to any datum choice.** 1:1 pair, **module 0.8** (deliberately matches
+        the existing tilt-drivetrain module: wing 14T pinion, trunnion 50T ring
+        WA-R8, fuselage 38T/38T — no second module introduced), **33T**, PD 26.4,
+        tip Ø28.0, root Ø24.4, 20° full depth, no profile shift (33T ≫ the 17T
+        undercut floor), face 4.0 mm. Root Ø24.4 clears a Ø20.6 spar bore with
+        1.9 mm rim (2.4 × m). Lewis bending at a generous 20 N rod force =
+        10.94 MPa → FOS **7.04** vs 77 MPa (REF-MAT-002 Tbl 4, ASTM D790
+        flexural, the correct test type) and **4.43** vs the conservative
+        48.41 MPa proxy (REF-MAT-001); teeth are not governing on any candidate
+        allowable. Backlash 0.15 mm cut into tooth thickness (not opened at the
+        centre distance, which the linkage pins); 0.4 mm first-layer chamfer
+        against elephant-foot. Print flat, gear axis vertical, so tooth bending
+        runs in-plane. **Note:** this repo has no orientation-specific or
+        interlayer CF-PETG allowable and the bearing allowable is "requires
+        verification" — do not re-label either figure.
+    - [ ] **[BLOCKED — needs an owner decision, do NOT assume resolved] The
+        KTD3 sync-gear datum does not package in the Rev T4 joint.** Full
+        numbers and the lever-by-lever analysis are written up in
+        `docs/NOZZLE_DRIVE_TRADE.md` § "PACKAGING BLOCKER — the KTD3 datum does
+        not fit (2026-09-10)". Summary: the joint has **+0.0 mm axial margin in
+        hand** (the OI-8 comment's "1.0 mm" was stale and was corrected
+        2026-09-10); the 13.5 mm spar stub is fully consumed and terminates
+        hard against the stator sleeve, so there is **zero** fixed-frame space
+        for a coaxial fixed sun. Lever (a), recovering stub to the "duct bound"
+        26.0, is worth **0.0 mm** — that bound was taken against the Ø50 EDF
+        bore ignoring the sleeve, and reaching it would leave 1.0 mm of a 2.5 mm
+        sleeve wall on the Ø50 flow boundary (R6 invariant, ID cannot move).
+        Single-bearing is barred by OI-8's span argument. So honouring KTD3
+        costs **either a flux re-validation (AK7455 10–70 mT window) or a
+        wing-geometry change**. Choose: spend flux, spend wing geometry, or
+        reopen the datum — the linkage solve, gear sizing and print work above
+        are all datum-independent and carry over, so reopening is cheap.
+    - [ ] **[OPEN — parked, do NOT print] `nacelle_nozzle_sync_gears.scad`.**
+        The gear pair and the integral pinion+crank are authored and render
+        manifold (sun 3741 facets, pinion 7279, both `Simple: yes`), but the
+        **sun's bore and mounting are built to the superseded 2026-07-19
+        wing-tip datum** (Ø8.4 bore for a rotating Ø8 spar) and are wrong under
+        Rev T1's fixed Ø20 spar. Committed for the reusable half only. Fix
+        depends entirely on the blocked decision above.
+    - [ ] **[OPEN] Pushrod clearance/interference check.** The linkage checker
+        is kinematics-only by design; it does not verify the rod clears the cowl
+        skin, the ESC bays, or the flap sweep across the full tilt range.
     - [x] **Re-bake the pod shells** — DONE 2026-08-31 (Rev S4). Both
         `nacelle_port_revs.stl` and `nacelle_stbd_revs.stl` re-rendered from
         current source and re-baked with `tools/bake_hull_frame.py`; the Ø72
         nozzle pocket, the Rev S1c harness changes and the whole Rev S4 trunnion
         rework are now in the published meshes. The published files had been
         stale since 2026-07-21. Both are watertight single bodies.
-    - [ ] **[OPEN — VERIFY] Full housing ovalization** to the cowl mold line +
-        hinge-boss vs aft-cowl clearance — needs the assembly part-local→hull
-        transform (serenity_assembly.py).
+    - [x] **Housing outer-wall ovalization — CLOSED 2026-09-09 (plan 005 R4).**
+        `tools/nacelle_housing_profile.py` station-samples the canonical shell
+        (reusing `serenity_assembly.py`'s `R_BAKE`/`T_BAKE["port"]` part-local
+        → hull transform) and the outer wall now tracks it: **0 proud
+        violations** across 768 outer-wall samples (16 axial × 48 azimuthal),
+        worst-case margin 0.5 mm at z=0.
+    - [ ] **[OPEN — ACCEPTED RESIDUAL, not fixable by boss sizing] Hinge
+        bosses remain proud of the canonical shell.** Wall trimmed Rev T5b
+        2.5 mm/side → 1.5 mm/side (the minimum this repo's FDM practice treats
+        as reliable, ≥3 perimeters at 0.4 mm nozzle), cutting the worst-case
+        overshoot from 6.1 mm to **4.1 mm** — but it cannot reach zero: the
+        boss's inner-fusion geometry holds its inner edge fixed at
+        `R_HINGE - 1.0` regardless of wall thickness, so even a notional
+        **zero-wall** bore (`HINGE_BOSS_OD = HINGE_BORE_D` = 3.2 mm) still
+        reaches outer edge 29.7 mm, which already exceeds the canonical
+        shell's ~28.55 mm worst-case radius at this station by 1.15 mm.
+        `R_HINGE` = 27.5 mm is fixed by the flap kinematics (R2 invariant,
+        changing it ripples through the whole nozzle) and itself leaves only
+        ~1.05 mm clearance to the canonical mould line at this axial station.
+        **Accepted per plan 005 R7**: this is a genuine hinge-circle-vs-
+        mould-line geometric conflict, not an under-sized boss. Do not shrink
+        the wall further chasing an unreachable zero.
     - [ ] **[OPEN] Spar-crank placement** in serenity_assembly.py is first-pass
         (Y=0, Z=PIVOT_Z, X-axis clamp); confirm clock angle + pushrod routing.
     - [ ] **[OPEN] User WIP** `gear_option_compare.scad` / `gear_shell_compare.scad`
@@ -1605,14 +1714,24 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
     table row (not a SPI reconciliation — the connector's function no longer belongs on Pilot at
     all). See `avionics/WBS.md` §1.9.1/§1.9.2 and
     `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` deployment mode 1.
-- [ ] **[OPEN — airframe] Resize the wing sensor pocket for the AK7455 QFN24 4×4**
+- [x] **[CLOSED 2026-09-15 — done by SPAR-20-5, 2026-08-29] Resize the wing sensor pocket for the AK7455 QFN24 4×4**
+    — pocket is now AK7455 QFN24 4×4 on a 10 × 8 board with a Ø6.5 SPI conduit at
+    station 44.5 (`wings_s1223_revo.scad` L406); the remaining `MT6701` mentions in
+    that file are historical rejection notes, not live geometry. Original text:
     (was sized for the MT6701 3×3) and route the **7-wire SPI** pigtail — update the
     `HALL_*` block + comments in `wings_s1223_revo.scad` (they still name MT6701) and
     `_export_pivot_slab.scad`, then re-bake.
-- [ ] **VERIFY `INBOARD_FACE_X` sign** in `_export_pivot_slab.scad` (which X face
-    of the port nacelle is the wing side).
-- [ ] **Migrate `nacelle_hall_ring_hub()` into `nacelle_pod_50mm_tandem.scad`** with
+- [x] **VERIFY `INBOARD_FACE_X` sign** in `_export_pivot_slab.scad` (which X face
+    of the port nacelle is the wing side). *(CLOSED 2026-09-15 as MOOT — the pivot
+    slab was a sandbox preview of the skewered Rev R2 joint; the Rev S4 trunnion
+    (`nacelle_trunnion.scad`, §1.1.3.7) replaced it and carries its own wing-side
+    datum via `WING_ATTACH_INTERFACE.md` §4.)*
+- [x] **Migrate `nacelle_hall_ring_hub()` into `nacelle_pod_50mm_tandem.scad`** with
     the keyed spar hub (retire the sandbox preview); re-bake port/stbd shells.
+    *(CLOSED 2026-09-15 as SUPERSEDED — the keyed spar hub was deleted with the
+    skewer at Rev S4; the diametric ring magnet now lives in `nacelle_trunnion.scad`
+    (WA-R9), which is baked and validated. `nacelle_hall_ring_hub()` survives only
+    in the retired `_export_pivot_slab.scad` sandbox.)*
 - [ ] **AK7455 off-axis bench validation** — confirm the ring presents **10–70 mT** at
     the IC (magnetisation diametric vs radial + gap/offset), run the **EEPROM INL
     calibration** over −5..90° (AKM app support; monotonic angle), set the sense plane
@@ -1705,7 +1824,12 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
       needed — the nacelle is the cover.
     Both relocations are recorded in
     `docs/WING_ATTACH_INTERFACE.md` §3.4 / §4.4 with their measured causes.
-- [ ] **SPAR-20-4 (U4)** — `PIVOT_Z` **116.1** (pivot = CG stands; the CG itself
+- [x] **SPAR-20-4 (U4) — BUILT 2026-08-31 (Rev S4, §1.1.3.7) and re-derived at
+    Rev S4c (§1.1.3.8).** Trunnion in `nacelle_trunnion.scad` (2 × 6704ZZ, integral
+    50T ring gear), through-duct spar/hub/D-flat/collars deleted from pod and stator
+    sleeve, 11-fin stator restored. `PIVOT_Z` moved 116.1 → 113.8 → **107.5** once
+    the ESC bays were measured (no aft ESC station exists). Original text:
+    `PIVOT_Z` **116.1** (pivot = CG stands; the CG itself
     moves +6.0 mm when ESC1 relocates aft alongside ESC2, at zero added mass);
     nacelle trunnion ring at ring-plane X ≈ 28 mm, measured envelope 53.4 mm OD,
     at the existing inter-EDF stator station; delete
@@ -1746,7 +1870,10 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     and makes the encoder load-bearing for CONTROL, not telemetry.
     **NEW OPEN ITEM: actuator re-select** — the DS3225 is ~17× oversized on
     torque and now also the wrong kind of device.
-- [ ] **SPAR-20-7 (U7)** — Fuselage/cargo-shell re-cut. **OPEN, and it is now
+- [x] **SPAR-20-7 (U7) — BUILT 2026-08-30 (Rev S1g; `airframe/fuselage-mid/WBS.md`
+    §1.1.1.5 WA-R1/R1b/R2/R4/R6).** Socket Y +21.00 / Z +66.85 / Ø20.4 × 18.5 and the
+    80 × 60 bonded root flange are cut; `tools/wing_root_deconflict.py` reports
+    CLEAR (re-run 2026-09-15). Original text — Fuselage/cargo-shell re-cut. **Was
     the gating item**: `tools/wing_root_deconflict.py` FAILS at Rev S1e with three
     findings, all one cause — the fuselage still carries `WING_SPAR_Y = +38.15`
     and `WING_SPAR_BORE_D = 8.3`.
@@ -1861,25 +1988,41 @@ Also decided: the drive is bound by **travel, not torque**. 145° from a 180°
 servo needs a 1.24× step-**up**, so the shaft carries only 0.143 N·m against the
 DS3225's 2.402 N·m — the servo is ~17× oversized (see SPAR-25-6).
 
-- [ ] **SPAR-25-1 (U1)** — Freeze drive kinematics; add
-    `tools/tilt_drive_sizing.py`; record the A/B/C/D trade in
-    `docs/NOZZLE_DRIVE_TRADE.md` beside the existing nozzle trade.
-- [ ] **SPAR-25-2 (U2)** — Trunnion + bearing stack at ring-plane X ≈ 28 mm,
+- [x] **SPAR-25-1 (U1) — kinematics FROZEN 2026-08-29 (owner direction: the stage
+    is a REDUCTION, not a step-up).** Module 0.8, 14T pinion / 50T ring, i = 3.571,
+    shaft 1.389 rev per 140°, C = 25.6 → wing shaft station 53.6; recorded in
+    `docs/WING_ATTACH_INTERFACE.md` §4 and `nacelle_trunnion.scad`. The A/B/C/D
+    trade is recorded in this section and in plan 004. `tools/tilt_drive_sizing.py`
+    was never written and is not needed — the built numbers supersede the sizing
+    sweep it would have run. The step-up premise below is retained as history.
+- [x] **SPAR-25-2 (U2) — BUILT 2026-08-31 (`nacelle_trunnion.scad`, 2 × 6704ZZ
+    not 6804; stub 13.5 mm; see `WING_ATTACH_INTERFACE.md` OI-8).** Original text —
+    Trunnion + bearing stack at ring-plane X ≈ 28 mm,
     OD ≤ the measured 53.4 mm envelope. **Bearing duty is attitude-dependent** —
     nacelle thrust is axial to the spar in cruise and transverse in hover, so a
     stack chosen for one attitude is wrong for the other.
-- [ ] **SPAR-25-3 (U3)** — Ø4.4 drive-shaft bore at station **43**, spanwise,
+- [x] **SPAR-25-3 (U3) — BUILT at station 53.6, not 43 (the reduction moved C to
+    25.6; plan 004 "CORRECTION 2026-08-29").** Original text — Ø4.4 drive-shaft
+    bore at station **43**, spanwise,
     between the Ø20.4 spar (station 28, occupying 17.8–38.2) and the AK7455 SPI
     conduit (station 54). Station 40 was the first pick and **overlaps the spar
     by 0.4 mm** once the spar moved to 28; minimum clear station is 41.6.
     The wing now carries **three** spanwise bores; they must not intersect.
-- [ ] **SPAR-25-4 (U4)** — Tilt ring gear (sector is sufficient — the sweep is
-    only 145°) + pinion; mesh stays outside r = 25 mm.
-- [ ] **SPAR-25-5 (U5)** — Nozzle drive re-datum: sync gear mounts to the
+- [x] **SPAR-25-4 (U4) — BUILT 2026-08-31: integral 50T ring on the trunnion +
+    14T pinion (module 0.8).** Original text — Tilt ring gear (sector is sufficient
+    — the sweep is only 145°) + pinion; mesh stays outside r = 25 mm.
+- [ ] **SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision** (§1.1.3.1
+    "[BLOCKED] KTD3"; `docs/NOZZLE_DRIVE_TRADE.md` "What is blocked"): the fixed
+    sun has no axial home in the as-built joint (bearing-stack margin 0.0 mm).
+    Choose (i) spend flux margin, (ii) spend wing geometry, or (iii) reopen the
+    datum. Original text — Nozzle drive re-datum: sync gear mounts to the
     **fixed** trunnion, coaxial with and inboard of the tilt ring. A fixed spar
     is a *better* datum than the rotating one it replaces. Delete the spar crank.
-- [ ] **SPAR-25-6 (U6)** — Integration, load check, mass/CG, BOM, and the servo
-    down-select (0.143 N·m required vs 2.402 N·m rated).
+- [ ] **SPAR-25-6 (U6)** — Integration, load check, mass/CG, BOM, and the
+    **actuator re-select** (multi-turn reduction ⇒ continuous-rotation gearmotor or
+    stepper closed on the AK7455, not a limited-rotation servo; root `TODO.md`
+    §0.8). The servo down-select (0.143 N·m vs 2.402 N·m) is folded into it.
+    Trunnion still not registered in `serenity_assembly.py` (§1.1.3.7 VERIFY).
 
 **Blocking cross-item:** §1.1.4's reopened OQ5 (nacelle canonical offset vs
 decoupling the tilt axis from the spar axis) **changes SPAR-25-2's trunnion

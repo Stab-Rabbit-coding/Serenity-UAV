@@ -64,6 +64,28 @@
 //
 // 9.0 mm cannot hold 14.0 mm of bearing.  The pair is therefore 2 × 6704ZZ
 // (20 × 27 × 4 = 8.0 mm), which fits with 1.0 mm in hand.  6704 is still a
+//
+//   *** THE "1.0 mm IN HAND" ABOVE IS STALE — THE BUILT MARGIN IS ZERO. ***
+//   The budget above was derived at spar tip |X| 26.7 and a 2.5 mm magnet.
+//   The 2026-08-31 corrections moved the spar tip to 28.2 (SLEEVE-bounded, not
+//   duct-bounded) and thinned the magnet 2.5 → 2.0.  Recomputed at the values
+//   this file actually builds:
+//       pad face 39.7 − air gap 1.5 = magnet inboard face   |X| 38.2
+//       − magnet 2.0                = magnet outboard face  |X| 36.2
+//       − spar tip                                          |X| 28.2
+//       = space for the bearing stack                          8.0 mm
+//       bearing stack (2 × 6704ZZ)                             8.0 mm
+//       MARGIN IN HAND                                        +0.0 mm
+//   Every term in this budget is at a hard-won floor: the wing tip face and pad
+//   proud are built wing geometry; the air gap and magnet thickness are
+//   flux-coupled and push in OPPOSITE directions (AK7455 window 10–70 mT, and
+//   WING_ATTACH_INTERFACE.md already calls flux re-validation "load-bearing,
+//   not a formality"); the spar tip is sleeve-bounded with 0.70 mm to the
+//   stator sleeve; and OI-8's own analysis makes the bearing-centre SPAN the
+//   governing number, so dropping to a single bearing is not available.
+//   DO NOT plan new axial content into this joint on the strength of the
+//   "1.0 mm" figure — there is none.  Recovering space means spending one of
+//   those floors deliberately (see WBS §1.1.3, nozzle sync-gear packaging).
 // deep-groove ball bearing, so BOTH races take axial and radial load together —
 // which is what WA-R12's attitude-dependent duty actually requires (plan 004
 // RISK-4) and what a plain bushing in the inboard position would NOT have given.
@@ -135,9 +157,13 @@ AIR_GAP         =   1.5;   // [mm] magnet face → AK7455 IC face (HALL_AIR_GAP)
 
 // ── Derived part-local stations (local z = |X| − TRUNNION_X0) ────────────────
 PAD_FACE_X      = WING_TIP_FACE_X - PAD_PROUD;          // = 39.7
-PILOT_Z         = PAD_FACE_X - PILOT_CLEAR - TRUNNION_X0;   // = 12.7
-MAGNET_FACE_Z   = PAD_FACE_X - AIR_GAP - TRUNNION_X0;       // = 11.5
-TRUNNION_L      = PILOT_Z;                               // = 12.7 total length
+// The trailing values below were corrected 2026-09-10: they were still quoting
+// results computed at the pre-2026-08-31 TRUNNION_X0 = 26.7 and were each
+// 1.5 mm optimistic.  The expressions were always right; only the comments
+// were stale.
+PILOT_Z         = PAD_FACE_X - PILOT_CLEAR - TRUNNION_X0;   // = 11.2 (was 12.7)
+MAGNET_FACE_Z   = PAD_FACE_X - AIR_GAP - TRUNNION_X0;       // = 10.0 (was 11.5)
+TRUNNION_L      = PILOT_Z;                               // = 11.2 total length
 
 // ── Spar / bearing ───────────────────────────────────────────────────────────
 SPAR_OD         =  20.0;   // [mm] fixed CF spar OD (Rev T1)

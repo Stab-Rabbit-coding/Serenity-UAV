@@ -671,3 +671,21 @@ for a plan covering "the rest of the airframe components").
   pack's own overview); U2's implementer must re-read Sheet One/Five at full
   resolution before cutting any geometry, per `AGENTS.md` §4's
   no-fabricated-reference rule.
+
+---
+
+## Status 2026-09-15 (doc-review against the Rev T record)
+
+| Unit | State | Evidence |
+| --- | --- | --- |
+| U1 cargo doors re-fit | **OPEN** | `airframe/fuselage-mid/WBS.md` "Clamshell door halves", "SG90 bell-crank boss" still `[ ]`; doors on disk are the Rev-O fit |
+| U2 forward ramp fairing | **DONE 2026-09-15** | `merge_cargo_interior.py` `t5_ramp_fairing()`: fused fairing on the ray-probed flank profile, panel lines from REF-CAD-003 Sheet One at thumbnail fidelity (the plan's relaxation clause applied); ray map 100 % closed. `docs/CARGO_SECTION_LAYOUT.md` §5 |
+| U3 nozzle drive linkage | **Solved, then BLOCKED** | linkage synthesised 2026-09-09 (`tools/nozzle_linkage_check.py`, crank 8.5 / pushrod 48 / m0.8, tooth FOS 4.43); on 2026-09-10 the KTD3 fixed sun was found to have **0.0 mm** axial home in the as-built trunnion — owner decision required (`docs/NOZZLE_DRIVE_TRADE.md` "What is blocked"; WBS §1.1.3.1 `[BLOCKED]`). The "spar-crank zero relative motion" objection this plan's KTD3 rests on no longer applies as written under a **fixed** spar — see the trade doc's decision paragraph before re-deriving. |
+| U4 Inara/River covers | **SUPERSEDED 2026-09-15** (D-T5-3); **RESOLVED 2026-09-16 (Rev T5e)** | the rigid trays and their covers are gone: all four nodes stay in the cargo section in Faraday pouches — FC2/FC3 in the aft strip, CN2/CN3 flat on the chin floor on `chin_node_shelf.stl` (`docs/CARGO_SECTION_LAYOUT.md` §0/§3a) |
+| U5 skid nose-high check | **DONE 2026-08-25** | recorded above; FOS 4.75 at 20 % CF-PETG |
+| U6 stale TODO/WBS entries | **DONE 2026-09-15** (the three lines named below closed as superseded in `airframe/fuselage-mid/WBS.md`) | the federation was regenerated from WBS (`tools/gen_todo_from_wbs.py`); the bare `head_shell24.stl` / `cargo_sect_shell24.stl` / "Cargo gondola shell" lines are still `[ ]` in `airframe/fuselage-mid/WBS.md` and need the dated close-out this unit specifies |
+| U7 CF-PETG printability audit | **OPEN** | the PLA proto-print guide (`docs/PROTO_PRINT_DAVINCI_JR.md`, Rev T) covers Cura slicing, not the wall-thickness/intent map this unit asks for |
+
+Phase-numbering note: this plan's "Rev T pushrod redesign" / "Rev T3 flap shingle" labels
+predate the 2026-09-06 renumbering (`docs/WBS.md` §6.4) — read them as Rev S2 / S3.
+Successor roadmap: `docs/plans/2026-09-15-001-first-flight-readiness-plan.md` (A1, A6, A9).

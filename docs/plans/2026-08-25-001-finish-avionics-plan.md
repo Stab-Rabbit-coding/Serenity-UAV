@@ -651,3 +651,27 @@ root `TODO.md`, root `WBS.md`, `avionics/AGENTS.md`.
 - `docs/POWER_DISTRIBUTION.md`, `avionics/kicad/FlightEngineer/FlightEngineer.md` (power budget rows for ESC/servo)
 - `LibreServo_v4/README.md`, `Open-Secure-ESC/README.md`, `open-servo-core-secure/README.md` (backend protocol confirmation)
 - Repo-wide grep confirming no existing pitot/airspeed/MS4525/SDP3 references anywhere in the codebase
+
+---
+
+## Status 2026-09-15 (doc-review against the Rev T record)
+
+- **No unit has started.** U1–U9 had lived only in `avionics/TODO.md` since this plan was
+  written; on 2026-09-15 they were given a `WBS.md` home (`avionics/WBS.md` §1.10, indexed
+  from root `WBS.md` §1.10) so the generated `TODO.md` carries them.
+- **The U7 backlog table is still accurate** as of the last per-board ERC/DRC pass
+  (`avionics/WBS.md` §1.9.2 "Board status"); nothing has been cleaned since. The
+  MSPM0G351x-Q1 retarget's own 12 open items (gateway MCU re-route, support parts, PA18,
+  thermal vias, lanes 3/4 …) are now `avionics/WBS.md` §1.9.3 and sit ahead of U7 for
+  `CAN-PERIPH-GW-1`.
+- **U2's actuator premise has moved:** the tilt drive is a multi-turn reduction, so the
+  device is a continuous-rotation gearmotor/stepper closed on the AK7455, not a
+  limited-rotation servo (root `TODO.md` §0.8 "Actuator re-select"). Whether LibreServo_v4
+  is still the controller is owner decision D5 in the first-flight plan; U2 should not
+  freeze the `J_FLEX` transceiver until it is taken.
+- **U3's ESC mechanical envelope is settled** (23 + 10 mm hinged pair, 4.0 mm stack,
+  bays at az 69°/249° — plan 2026-08-26-001 "BUILT 2026-09-06"); the CAN-FD frame schema
+  and governor rewrite are untouched.
+- First-flight scope: U1, U7 (Phase 5 board set only) and U8 are on the critical path;
+  U5 (pitot) and the Commo/Observer rows of U7 are Phase 6. Successor roadmap:
+  `docs/plans/2026-09-15-001-first-flight-readiness-plan.md` streams B and C.

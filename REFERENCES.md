@@ -84,6 +84,8 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-010: TI ISOW1412 — 5 kVrms Isolated RS-485/RS-422 Transceiver with Integrated Isolated DC-DC](#ref-sensor-010-ti-isow1412--5-kvrms-isolated-rs-485rs-422-transceiver-with-integrated-isolated-dc-dc)
     - [REF-SENSOR-011: Infineon OPTIGA™ SLB 9672 — SPI TPM 2.0](#ref-sensor-011-infineon-optiga-slb-9672--spi-tpm-20)
     - [REF-SENSOR-012: STS3215 Digital Servo Motor — Cargo Winch Control (SUPERSEDED)](#ref-sensor-012-sts3215-serial-bus-servo--cargo-winch-drive-superseded)
+    - [REF-ACT-001: Pololu 20D mm Metal Gearmotors](#ref-act-001-pololu--20d-mm-metal-gearmotors-datasheet--dimension-diagram)
+    - [REF-ACT-002: Pololu 25D mm Metal Gearmotors](#ref-act-002-pololu--25d-mm-metal-gearmotors-datasheet-rev-20--dimension-diagram)
     - [REF-SENSOR-013: SPT Servo SPT5425LV — 25 kgf·cm Analog/Digital PWM Servo (fleet-standard high-torque body)](#ref-sensor-013-spt-servo-spt5425lv--25-kgfcm-analogdigital-pwm-servo-fleet-standard-high-torque-body)
     - [REF-SENSOR-014: LibreServo v2 (stab-rabbit-coding fork) — Open-Source Smart-Servo Control Board](#ref-sensor-014-libreservo-v2-stab-rabbit-coding-fork--open-source-smart-servo-control-board)
     - [REF-SENSOR-015: OpenServoCore — Open-Source SG90/MG90-Class Smart-Servo Control Board](#ref-sensor-015-openservocore--open-source-sg90mg90-class-smart-servo-control-board)
@@ -1475,6 +1477,18 @@ which prints that caveat on every run.
 `airframe/openscad/wings/wings_s1223_revo.scad` (`SPAR_BORE_OD` derivation);
 `docs/WING_ATTACH_INTERFACE.md` §2
 
+### REF-STD-GEAR-002: Budynas & Nisbett — *Shigley's Mechanical Engineering Design* — worm-gear efficiency and self-locking condition
+
+| Field | Value |
+|---|---|
+| **Authors** | Richard G. Budynas, J. Keith Nisbett |
+| **Publication** | *Shigley's Mechanical Engineering Design*, 10th ed., McGraw-Hill Education, 2015, ISBN 978-0-07-339820-4 |
+| **Official URL** | <https://www.mheducation.com/highered/product/shigley-s-mechanical-engineering-design-budynas-nisbett/M9780073398204.html> (publisher page; text not open access) |
+| **Section applied** | Chapter 13 "Gears — General", the worm-gearing force-analysis section (efficiency η = tan λ / tan(λ + φ) with φ = arctan μ, and the statement that a worm gearset is self-locking when the lead angle λ is below the friction angle φ). **Section number REQUIRES VERIFICATION against a physical copy** (§13-16 in the 9th/10th editions is believed correct; not confirmed from the book in hand). |
+| **Retrieved** | 2026-09-15 (publisher page only) |
+| **Applied to** | `tools/tilt_actuator_options.py` (`worm_eta()`, the self-lock test `tan(λ−φ) ≤ 0`), `docs/TILT_ACTUATOR_SELECTION.md` §3, `airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad` header |
+| **Caveat** | The friction coefficient μ = 0.20 used for the printed PETG wheel / brass or PETG worm pair is an ASSUMPTION, not from this source; the self-locking margin of the built six-start worm (lead 13.0°; Rev T5b 4-start 9.5°) is therefore CONDITIONAL and the design relies on the pin brake (BRK-1..3), not on this condition. |
+
 ## Part XI — FDA / CDRH Laser Product Regulations
 
 ### REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products
@@ -2238,6 +2252,35 @@ the spar's run, not this seat).
 `airframe/fuselage-mid/WBS.md` §1.1.1.2 CARGO-02, `current-specification/bom_revS.csv`
 
 ---
+
+### REF-ACT-001: Pololu — 20D mm Metal Gearmotors (datasheet + dimension diagram)
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Pololu Corporation, Las Vegas, NV |
+| **Product** | 20D mm Metal Gearmotors; specifically item #3712 "25:1 Metal Gearmotor 20Dx41L mm 6V CB with Extended Motor Shaft" and encoder kit #5660 |
+| **Category page** | <https://www.pololu.com/category/214/20d-mm-metal-gearmotors> |
+| **Datasheet** | <https://www.pololu.com/file/0J1688/pololu-20d-metal-gearmotors.pdf> |
+| **Dimension diagram** | <https://www.pololu.com/file/0J1242/20d-metal-gearmotor-dimension-diagram.pdf> (drawing dated 6 Oct 2017, items 3450–3497, 3700–3723) |
+| **Retrieved** | 2026-09-15; product page #3712 re-read 2026-09-16 (overall length 41 mm gearbox + motor excluding shafts; 18 mm output shaft; "6 × 2 mm extended motor shaft"; M2.5 mounting threads, max screw depth 3.5 mm; 570 rpm / 150 mA / 1.6 kg·cm / 2.9 A at 6 V; other 6 V CB ratios 31:1 450 rpm 2.0 kg·cm, 63:1 230 rpm 4.0 kg·cm) |
+| **Figures used** | 25:1 6 V CB: 570 rpm no-load, 150 mA free-run, 1.6 kgf·cm stall, 2.9 A stall, 44 g, max-efficiency point 440 rpm / 0.33 kgf·cm / 0.74 A (product #3712 specs page). Dimensions: Ø20.0 body, 2 × M2.5 mounting holes on 15.0 mm, Ø7.0 × 0.9 mm boss, Ø4.0 D-shaft (3.5 mm flat) × 18.0 mm, gearbox L 16.0 mm (25:1/31:1), motor 25.1 mm, 6 × 2 mm rear encoder shaft. The 15.0 mm hole spacing and the Ø7.0 boss were read from the dimension diagram on 2026-09-15 and are carried as REQUIRES VERIFICATION until re-read against the drawing; the 41 mm overall length is confirmed. No axial (thrust) load rating for the output shaft is published. |
+| **Applied to** | `tools/cargo_layout_fit.py` (Rev T5e baseline), `tools/tilt_actuator_options.py` (Options 1 and 4), `docs/TILT_ACTUATOR_OPTIONS.md`, `docs/TILT_ACTUATOR_SELECTION.md`, `docs/POWER_DISTRIBUTION.md` §3.3a, `airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad`, `current-specification/bom_revS.csv` GM-TILT-20D |
+| **Status** | **SELECTED for the build (Rev T5e, 2026-09-16)** — #3712 with a six-start m1 worm; Rev T5b's REF-ACT-002 (25D) is retired (finding T5d-1). |
+
+### REF-ACT-002: Pololu — 25D mm Metal Gearmotors (datasheet Rev 2.0 + dimension diagram)
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Pololu Corporation |
+| **Product** | 25D mm Metal Gearmotors; specifically item #4802 "9.7:1 Metal Gearmotor 25Dx63L mm HP 6V with 48 CPR Encoder" |
+| **Category page** | <https://www.pololu.com/category/115/25d-mm-metal-gearmotors> |
+| **Datasheet** | <https://www.pololu.com/file/0J1829/pololu-25d-metal-gearmotors-rev-2-0.pdf> (Rev 2.0, July 2026) |
+| **Dimension diagram** | <https://www.pololu.com/file/0J1634/25d-metal-gearmotor-dimension-diagram.pdf> (drawing dated 8 Feb 2019) |
+| **Retrieved** | 2026-09-15 |
+| **Figures used** | HP 6 V 9.68:1 (#1571/#4802): 1000 rpm no-load, 420 mA free-run, max efficiency 810 rpm / 4.5 kgf·mm / 1.4 A / 3.8 W / 44 %, stall extrapolation 23 kgf·mm / 6.0 A (datasheet performance table); HP 6 V 4.4:1 (#1570/#4801): 2200 rpm, 12 kgf·mm stall; encoder versions 95–110 g. Dimensions: Ø25.0 body, 2 × M3 on 17.0 mm (6 mm deep), Ø7.0 × 2.5 mm boss, Ø4.0 D-shaft × 12.5 mm (3.5 mm flat), gearbox L 17 mm (4.4:1/9.7:1), motor 30.8 mm, Ø6.4 rear shaft 4.2 mm. |
+| **Applied to** | `tools/tilt_actuator_options.py` (Option 2, trade record), `docs/TILT_ACTUATOR_OPTIONS.md`, `docs/TILT_ACTUATOR_SELECTION.md` §1a, `current-specification/bom_revS.csv` GM-TILT-25D (qty 0) |
+| **Status** | Trade-study record only from Rev T5e (2026-09-16): the Ø25 body cannot clear the Ø42 worm wheel for any worm that clears the battery cradle (finding T5d-1, `docs/CARGO_SECTION_LAYOUT.md` §4); superseded for the build by REF-ACT-001. |
+| **Caveat** | Overall length of the encoder version is not read from the drawing (the diagram covers motors without encoders). No axial-load rating for the output shaft is published. |
 
 ## Part XIII — Telecommunications Standards
 

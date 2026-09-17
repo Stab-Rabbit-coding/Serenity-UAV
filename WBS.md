@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
-**Last updated:** 2026-09-06  
+**Last updated:** 2026-09-15  
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 > **This is the full historical record — every task ever defined, done or open,**
@@ -91,9 +91,42 @@
 ### 0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
 → detail: `docs/WBS.md` §0.8
 
+- [ ] Verify REF-STD-GEAR-001 (ISO 53:1998) to clause level before gear release
 - [ ] Verify 4130 / 17-4 PH / 7075 allowables vs MMPDS/AMS (REF-MAT-*)
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
-- [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
+- [ ] AK7455 off-axis bench-cal: 10–70 mT window, INL cal (pinout verified)
+- [ ] ASTM D3039/D695 coupon: CF-PLATE-2MM bending allowable (thwarts FOS 8.5)
+- [ ] ★ ASTM D3039/D695 certificate for the 20 x 16.3 CF spar tube (FOS 9.0)
+- [ ] Measure procured 10 AWG silicone wire OD (5.5 mm bore chain is assumed)
+- [x] Tilt servo angular range 180 vs 270° — VOID 2026-08-29 (drive is a reduction)
+- [x] ★ Actuator re-select — DONE 2026-09-15 (D5), RE-CUT 2026-09-16 (Rev T5e): Pololu 20D 25:1 + six-start worm 6.67:1 + pin brake; the 25D pick could not clear the wheel (T5d-1) (`docs/TILT_ACTUATOR_SELECTION.md` §1a)
+- [ ] LG-11 coupon — demoted at wing root (flange FOS 29.2); gates tenon/thwarts
+- [ ] ★ Aero revalidation of the re-lofted wing (S1223/t17.7–t26.7; XFOIL/RANS)
+
+#### 0.8.1 — Wing attach interface (Rev S1g), open requirements
+→ detail: `docs/WING_ATTACH_INTERFACE.md` §5; `airframe/fuselage-mid/WBS.md` §1.1.1.5
+
+- [x] WA-R1/R1b, R2, R4, R6 — fuselage side BUILT 2026-08-30 (Rev S1g)
+- [x] WA-R15 — tilt actuator multi-turn on AK7455; 38T/38T fuselage stage
+- [x] Owner decision — cargo bay stays clear; joint = socket + flange (2026-08-29)
+- [ ] WA-R3/R17 — split-collar pinch clamp is not yet a part (BLOCKS wing refit)
+- [x] ★ WA-R16 — holding provision DONE 2026-09-15: pin brake BRK-1..3 (`tilt_brake.scad`); solenoid part BRK-4 + bench BRK-5 open below
+- [ ] ★ BRK-4 — brake solenoid part selection (Ø12×24 pull, 3 N, 6 V) — SOL-TILT-BRAKE
+- [ ] BRK-5 — bench: pin-engaged hold, release under load, drift ≤ 0.63° (spec §7.3; 23.8:1 train)
+- [ ] TILT-CTL-07 — owner to confirm the adopted rate ≥ 120 °/s, ≥ 4 Hz at ±5° (Rev T5e delivers 144 °/s no-load, 111 °/s at max efficiency)
+- [ ] TILT-CTL-08 — LibreServo_v4.1-TC controller variant (LibreServo_v4 CR 2026-09-15; TC-1 bridge re-rated to 2.9 A for the 20D, 2026-09-16)
+- [ ] ★ WA-R18 — Rev S1g +102.8 g; hover T/W ~1.19 vs 1.2 min; re-derive mass/CG
+- [ ] ★ MA-1 — BOM printed-part masses understate by +521.6 g (13.3 % AUW)
+- [x] MA-5 — CLOSED 2026-09-15: standoff pads removed with the worm-drive bracket (−53.5 g + 23.4 g bosses)
+- [x] MA-6 — CLOSED 2026-09-15: PRINT-BATT-TRAY retired; PRINT-BATT-CRADLE 39.4 g (`battery_cradle.scad`)
+- [ ] MA-7 — add an `Installed` flag to the BOM mass column
+- [ ] ★ BOM-SYNC — `bom_revS.json` vs `.csv` parity: the "canonical" JSON had dropped 14 rows and an in-place CSV rewrite truncated the file (2026-09-16, `docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md`); write `tools/bom_sync.py` (parity assertion, temp-file + `os.replace`, overflow fold) or amend `current-specification/README.md` to name the CSV as the edited file
+- [ ] W1..W8 — ranked weight-reduction targets (W2 BOM reconciliation gates all)
+- [x] WA-R15a — CLOSED 2026-09-15: pads gone; roof band re-proved by `tools/cargo_layout_fit.py` (PASS)
+- [ ] TILT-CTL-02..06 — tilt control loop open items (TILT_DRIVE_CONTROL_SPEC §8; 01 closed by BRK)
+- [ ] WA-R7..R12 — nacelle side: bore D20, ring gear, magnet, disconnect, nav 3-core
+- [ ] WA-R13 — avionics: confirm zero-cal covers the drive-shaft/pinion field
+- [ ] Spar stub / trunnion packaging — 13.5 mm stub, 2×6704ZZ, magnet 2.0 (0.0 mm margin)
 
 ### 0.9 — Licensing Updates
 → detail: `docs/WBS.md` §0.9
@@ -153,7 +186,9 @@ see docs/WBS.md §0.10.2.)*
 - [x] Verify and update the REFERENCES.md file. *(closed 2026-08-22 — fixed a duplicate
     REF-ID bug, added 3 missing catalog entries, updated the timestamp; see docs/WBS.md
     §0.10.2 item 5.)*
-- [ ] Verify and update the REFERENCES.md file.
+- [ ] Renumber wings-nacelles WBS §1.1.4/§1.1.5 (collide with root LG/placeholders)
+- [ ] Wire gen_todo_from_wbs.py --check into pre-commit/CI beside the index check
+- [ ] Rewrite docs/AVIONICS_PB2_REDESIGN.md as a Rev T overview, then archive Rev Q/R
 
 ---
 
@@ -305,6 +340,9 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [x] SPAR-01 spars stop at the wall; CF thwarts fore/aft of bay
 - [x] SPAR-02 DS3225 torque re-derived (aero+inertia only, gravity nulled by CG pivot) -- DS3225 clears at ~7.3% margin, no part change; 6 V tilt-servo rail resized to 2.3A/servo (RAIL-2 is unrelated -- winch/Observer rail, corrected citation)
 - [x] SPAR-04 Hall tip jog crosses the spar bore — CLOSED
+- [ ] ASTM D3039/D695 coupon test for the CF-PLATE-2MM bending allowable…
+- [ ] SPAR-02 — bulkhead servo mounts
+- [ ] Re-render and re-bake both wings (Rev S1b OML change)
 
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
@@ -327,26 +365,46 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [x] Confirm Sector Gear standoff distance from the nacelle face
 - [x] nacelle_tip_cap_port/stbd.stl — ARCHIVED 2026-06-22
 - [x] cargo_sect_shell24.scad's port/stbd mirroring used the wrong…
-- [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle…
 - [x] Trim the intake bell to the canonical leading nacelle dome
 - [x] Move the port (red) / stbd (green) nav lights INWARD→OUTWARD fa…
 - [x] Route nav-light wires through an internal cableway (not protrud…
 - [x] Remove the exhaust WS2812B LED rings + harnesses from the desig…
-- [ ] Reconcile crazy-ivan/PR#141 as SUPERSEDED by fix/nozzle branch
-- [ ] Merge cargo_spar_drive into cargo shell (bearing/servo/mortise…
-- [ ] Verify stbd cargo-chunk placement of spar-drive features
-- [ ] Tune servo→spar horn/pushrod linkage throw (−5°..140°)
-- [ ] Repair pre-existing stator sleeve non-manifold (edf_stator_sleeve)
-- [ ] VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
-- [ ] Migrate nacelle_hall_ring_hub → nacelle_pod_50mm_tandem.scad + re-bake
-- [ ] Bench-cal AK7455 with steel spar/MF128 bearing (ferrous-field check)
-- [ ] VERIFY Rev S2 CG (first-pass, band ≈109–112 mm)
-- [ ] Re-solve single-straight-spar alignment for +7 mm pivot move
-- [ ] Nozzle drive: replace invalid spar-crank w/ wing-referenced sync…
 - [x] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
-- [ ] Stator spar crossing (Rev S2b): 11 vanes, coprime w/ 12-blade rotor
-- [ ] Ø72 nozzle-pocket eats the aft cowl tail…
 - [x] Re-derive rotating-assembly CG for Rev S2 pushrod/cam drive…
+→ also: `airframe/wings-nacelles/WBS.md` §1.1.4 (tilt-spar) and §1.1.5
+  (trunnion) — the owner's LOCAL numbering, not root §1.1.4/§1.1.5
+- [ ] [OPEN — VERIFY] Mass/CG impact of the shingle
+- [ ] [OPEN — VERIFY] Seal-flap aerodynamic step
+- [ ] [OPEN — NO-GO, was VERIFY] Spatial RSSR linkage synthesis
+- [ ] [OPEN — IMPLEMENT] Adopted nozzle drive
+- [ ] Re-hub `spar_crank()` onto the pinion
+- [ ] [BLOCKED — needs an owner decision, do NOT assume resolved] The KTD3…
+- [ ] [OPEN — parked, do NOT print] `nacelle_nozzle_sync_gears.scad`
+- [ ] Pushrod clearance/interference check
+- [ ] [OPEN — ACCEPTED RESIDUAL, not fixable by boss sizing] Hinge bosses…
+- [ ] Spar-crank placement in serenity_assembly.py is first-pass (Y=0…
+- [ ] User WIP `gear_option_compare.scad` / `gear_shell_compare.scad`…
+- [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD…
+- [ ] [OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not…
+- [ ] [OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still…
+- [ ] [OPEN — VERIFY] `serenity_assembly.py` still places the deleted parts
+- [ ] [OPEN — PRINT-BLOCKING] `MOTOR_BOLT_R` is still 10.0 mm and still…
+- [ ] [OPEN — NEW, and it is a safety item] The bay is now an unfiltered…
+- [ ] [OPEN — the flow, not the geometry] Bay velocity is not verified
+- [ ] 50 A sustained is not survivable on any path evaluated
+- [ ] [OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn
+- [ ] Window structural allowance
+- [ ] [OPEN — cross-subsystem, rescoped 2026-07-26] `Pilot.md` §13 /…
+- [ ] AK7455 off-axis bench validation
+- [ ] SPAR-20-8 (U8) — Re-datum the nozzle drive onto the fixed trunnion…
+- [ ] SPAR-20-9 (U9) — Mass/CG/T-W re-derive (spar 96.2 → 67.5 g/pair, but…
+- [ ] NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening
+- [ ] SPAR-20-AERO — The re-lofted section is no longer S1223 (root 12.1 →…
+- [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
+- [ ] SPAR-20-ALLOW — No verified CF tube flexural allowable exists in…
+- [ ] SPAR-20-WIREOD — `bom_revS.csv` records no OD for `WIRE-10AWG`
+- [ ] SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision (§1.1.3.1…
+- [ ] SPAR-25-6 (U6) — Integration, load check, mass/CG, BOM, and the…
 
 #### 1.1.4 — Landing Gear
 → detail: `airframe/landing-gear/WBS.md` §1.1.4
@@ -452,6 +510,28 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [x] *(No longer required — the Rev-A "nose Class 3B mechanical beam…
 - [ ] Do not source
 
+### 1.2d — Trust-Module MCU/TPM Retarget (MSPM0G351x-Q1 + SLB 9672)
+→ detail: `avionics/WBS.md` §1.9.3
+
+- [x] Verify MSPM0G351x-Q1 RGZ-48 pin map vs MSPM0G350x (identical, 48 + EP)
+- [x] Re-pinmux gateway + FlightEngineer onto RHB-32 (PA0–PA27 only, no PBx)
+- [x] Swap/re-anchor PCB footprints (gateway U1_1/U1_2, Observer U3)
+- [x] Tie the TPM exposed pad to GND on all three boards
+- [x] Correct the MCU land pattern (was an ADI LTC legacy QFN-48 outline)
+- [x] Separate FlightEngineer's overlapping U_MCU / U_TPM symbols (+34.29 mm)
+- [ ] ★ Re-route the gateway MCU area (48 → 32 pads; every trace dangling)
+- [ ] Confirm MSPM0G351x-Q1 errata + TRM applicability (REF-SENSOR-018)
+- [ ] Update firmware pinmux constants (CAN0 PF12, SPI1_CS2, UART1 PA8/9)
+- [ ] Add MCU support parts per SLAAE76E Table 1-1 (10 µF, NRST 47k+10n)
+- [ ] Add pull-up on the gateway PA0/PA1 FLEX UART (open-drain, 5 V-tol)
+- [ ] Pull PA18 (BSL invoke) down on the gateway and Observer
+- [ ] Add thermal vias under the MCU exposed pad (U1_2, Observer U3)
+- [ ] Resolve FlightEngineer ground-net naming (CM2_OUT_N on 108 nodes)
+- [ ] Clean up FlightEngineer's ~30 dangling no-connect flags
+- [ ] Close the Observer sch↔pcb parity gap (RS485_DE/TX/RX on U3)
+- [ ] Place gateway lanes 3 and 4 (U1_3/U1_4, U2_3/U2_4 not on the PCB)
+- [ ] Decide whether Commo, Pilot, XO follow to the SLB 9672
+
 ### 1.2a — PCB Design: Pilot, XO, and Commo (EMI-Hardened Variants)
 → detail: `avionics/WBS.md` §1.2a
 
@@ -528,6 +608,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Update PHASED_BUILD_GUIDE.md
 - [ ] 1.5.6 Rebuild Graphical Buiild Guide
 - [ ] Sync bom_revO.json ↔ bom_revO.csv
+- [ ] Rewrite build-guide Phase 2/3 steps for the Rev T mechanism (after D2)
 - [x] Create bom_revQ.json + bom_revQ.csv
 - [x] 1.5.7 Consolidate CLAUDE.md/AGENTS.md into one AGENTS.md
 
@@ -558,6 +639,19 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 
 ### 1.9 — Avionics Workload Balancing
 → detail: `avionics/WBS.md` §1.9
+
+### 1.10 — Avionics close-out plan (2026-08-25-001), unit index
+→ detail: `avionics/WBS.md` §1.10
+
+- [ ] ★ U1 — Retire Pilot J_ESC/J_SERVO PWM headers → CAN-FD/RS-485 trunk
+- [ ] U2 — LibreServo_v4 nacelle-tilt bus integration (GW-1 J_FLEX gap)
+- [ ] U3 — Open-Secure-ESC 50A/6S CAN-FD integration + governor rewrite
+- [ ] U4 — OpenServoCore SG90 TTL+CMAC bus finalize (re-check maturity)
+- [ ] U5 — Observer pitot-tube airspeed sensor; fix Pilot's stale claim
+- [ ] U6 — Fleet host+message auth wiring for ESC/servo/SG90 endpoints
+- [ ] ★ U7 — Per-board ERC/DRC/gerber closeout (6 boards)
+- [ ] ★ U8 — Pilot tamper-mesh creepage fix (fab blocker) + Faraday/shielding
+- [ ] U9 — REFERENCES.md + WBS/TODO + AGENTS.md closeout for U1–U8
 
 ---
 
@@ -1060,6 +1154,11 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Structural validation
 - [ ] IEEE/ISA/AUVSI best practices
 - [ ] Tamper-evident logging
+
+### 5.4 — Open Source Hardware Certification
+→ detail: `docs/WBS.md` §0.9
+
+- [ ] Submit OSHW self-certification — requires the human maintainer to act
 
 ---
 

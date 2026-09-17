@@ -167,3 +167,96 @@ the selected option is pending user decision — see TODO.md §1.1.3.3.
 - `airframe/AGENTS.md` "Nacelle Nozzle Drive" — states the fixed nozzle-diameter functional
   requirement; the drive mechanism that achieves it is an open trade study and must not be
   assumed to be a fixed "gear train" (see this document's adopted hybrid design above).
+
+---
+
+## PACKAGING BLOCKER — the KTD3 datum does not fit (2026-09-10)
+
+> **The linkage is solved. The datum has nowhere to live. These are separate
+> problems and only the first one is closed.**
+
+### What is closed
+
+The linkage geometry for the adopted pinion-driven architecture is **solved and
+verified** by `tools/nozzle_linkage_check.py` (default run passes). Sweeping tilt
+0→90° at 1° steps and root-finding the ring angle that holds the rod length
+constant:
+
+| parameter | value | note |
+|---|---|---|
+| `CRANK_R` | 8.5 mm | unchanged, as the 2026-07-19 amendment predicted |
+| `CRANK_PHASE` | 206.4° | new — crank clocking on the pinion at zero tilt |
+| `PUSHROD_LEN` | 47.6 mm | COTS turnbuckle-adjustable rod: a spec change, not new hardware |
+| `RING_LEVER_AZ` | 157.5° | inboard flap gap (gaps at 22.5 + k·45) |
+
+Ring stroke **23.742°** against the 23.75° target (0.03 % error); **ψ(0) = −0.25°**
+so the ring cam needs **no re-clocking**; **monotonic** throughout, no toggle or
+dead point; transmission angle 88.1–103.8°, worst-case min(TA, 180−TA) = **76.2°**,
+far above the ≥40–45° rule of thumb.
+
+Gear sizing is also settled and is **datum-independent**: a 1:1 pair, **module
+0.8** (matching the existing repo-wide tilt-drivetrain module — wing 14T pinion,
+trunnion 50T ring WA-R8, fuselage 38T/38T), **33T**, PD 26.4, tip Ø28.0, root
+Ø24.4, 20° full depth, no profile shift (33T ≫ the 17T undercut floor). Root Ø24.4
+clears a Ø20.6 spar bore with 1.9 mm of rim (2.4 × m), so the sizing survives any
+datum choice. Lewis bending at a deliberately generous 20 N rod force gives
+10.94 MPa → FOS **7.04** against 77 MPa (REF-MAT-002 Table 4, ASTM D790 flexural —
+the correct test type for a tooth in bending) and **4.43** against the conservative
+48.41 MPa unreinforced-PETG proxy (REF-MAT-001). Teeth are not the governing
+concern on any candidate allowable. *Note: this repo has no print-orientation-
+specific or interlayer (Z-axis) CF-PETG allowable, and the bearing allowable is
+carried as "requires verification" — do not re-label either figure.*
+
+### What is blocked
+
+**KTD3** (plan 004, 2026-08-29) re-datums the nozzle sync gear to be *"coaxial at
+the trunnion, one rotating and one fixed"*, superseding this document's
+2026-07-19 wing-tip sun. **That fixed sun has no axial home in the as-built Rev T4
+joint.** Recomputed at the values `nacelle_trunnion.scad` actually builds:
+
+```
+wing tip face                       |X| 41.7    BUILT WING GEOMETRY
+ − pad proud 2.0                 →      39.7    BUILT WING GEOMETRY
+ − Hall air gap 1.5              →      38.2    flux-coupled, AK7455 window 10–70 mT
+ − ring magnet 2.0               →      36.2    already cut 2.5 → 2.0 on 2026-08-31
+ − spar tip                      |X| 28.2       SLEEVE-bounded, 0.70 mm to sleeve OD r27.5
+ = space for the bearing stack          8.0 mm
+   bearing stack (2 × 6704ZZ)           8.0 mm
+   MARGIN IN HAND                      +0.0 mm
+```
+
+The spar stub is only **13.5 mm** proud of the wing tip face and is fully
+consumed: bearings z 0–8.0, tilt ring band z 0.5–5.5, register z 5.5+, magnet face
+z 10.0, pilot z 11.2. The only remaining window (z 8.0–11.2 = 3.2 mm) is occupied
+by *rotating* trunnion structure and is narrower than a 4.0 mm sun face anyway.
+There is **zero** fixed-frame space inboard of the spar tip, because the spar
+terminates there.
+
+**Every lever is at a floor:**
+
+| lever | frees | why not |
+|---|---|---|
+| (a) spar stub → "duct bound" 26.0 | **0.0 mm** | The 26.0 figure is **stale** — it was *"taken against the Ø50 EDF bore"*, ignoring the stator sleeve, and was superseded by the SLEEVE bound on 2026-08-31. Reaching r 26.0 drives the spar 1.5 mm into `edf_stator_sleeve`'s **2.5 mm** wall (`SLEEVE_OD` 55.0, `EDF_BORE_R` 25.0), leaving 1.0 mm — 60 % below the project minimum wall, on the Ø50 EDF flow boundary, whose ID cannot move inward (R6 invariant). |
+| (b) shrink Hall air gap | 1:1 | Raises flux toward the **70 mT ceiling**; re-validation already flagged "load-bearing, not a formality". |
+| (c) thin the magnet again | 1:1 | Lowers flux toward the **10 mT floor**; already cut once for exactly this reason. Pushes flux *opposite* to (b). |
+| (d) grow the 4.0 mm joint gap | 1:1 | Pushes the nacelle outboard — track/span and wing-attach ripple into plan 003. |
+| (e) single bearing | 4.0 mm | **Not available.** OI-8's own analysis makes bearing-centre *span* the governing number (254 N/brg at 4.0 mm span from the 1.02 N·m ultimate); one bearing has no span and cannot react the moment. |
+
+**There is no cheap lever.** Honouring KTD3 costs either a flux re-validation or a
+wing-geometry change. This is very likely *why* plan 004 records KTD3 as only
+"half-holding" with U5 unbuilt: the intent was recorded while the axial budget
+still appeared to have 1.0 mm in hand — a figure corrected to **0.0 mm** on
+2026-09-10 (`nacelle_trunnion.scad` OI-8 block), which is what makes this cost
+visible at all.
+
+### Decision required (do NOT assume this is resolved)
+
+Someone must choose to either (i) spend flux margin (b/c), (ii) spend wing
+geometry (d), or (iii) **reopen the datum** — noting that the linkage solve, gear
+sizing, tooth stress and print work above are all datum-independent and carry
+over, so reopening is cheaper than it sounds. Under Rev T1's **fixed** spar the
+2026-07-19 "zero relative motion" objection to a spar-mounted pickup no longer
+applies as written, so that option is not disqualified on the old grounds either.
+
+*Analysis by Claude (Claude Opus 5, Anthropic) under the author's direction,
+2026-09-10, per `AGENTS.md` AI attribution.*

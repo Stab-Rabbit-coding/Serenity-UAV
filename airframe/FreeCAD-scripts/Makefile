@@ -92,6 +92,8 @@ NACELLE_STLS := \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_ring.stl     \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl     \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal.stl \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_sync_sun.stl \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_sync_pinion.stl \
     $(STLS)/nacelles/nacelle_pushrod_crank.stl
 
 # -- Wings (SCAD-sourced part-local prints; the port/stbd wing
@@ -283,6 +285,35 @@ $(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal.stl: \
 	$(OPENSCAD) $(SCAD_FLAGS) \
 	    -D 'RENDER_PART="flap_seal"' \
 	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+# Nozzle SYNC GEAR PAIR (Rev T, 2026-09-09) — the two printed members of the
+# ADOPTED hybrid A+B nozzle drive (docs/NOZZLE_DRIVE_TRADE.md "DECISION
+# AMENDMENT -- hybrid A+B adopted (2026-07-19)"): a wing-fixed 33T sun and a
+# nacelle 33T pinion CO-PRINTED WITH ITS CRANK, both module 0.8, 1:1 at a
+# 26.4 mm centre distance.  Each is printed x 2 (one per nacelle).  Both come
+# out of one SCAD file via RENDER_PART, already posed for a flat, teeth-down
+# print.  The COTS members of the drive (M3 ball studs, the ball-link pushrod,
+# the Ø4 steel stub axle) are not printed targets.
+# NOTE the file carries OPEN VERIFY items (spar diameter/motion, the sun's
+# wing-tip attachment, CD 26.4 vs the pushrod file's stale 26.0) — see its
+# header before sending either part to a printer.
+$(STLS)/nacelles/nozzles/nacelle_nozzle_sync_sun.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_sync_gears.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'RENDER_PART="sun"' \
+	    $(SCAD)/nacelles/nacelle_nozzle_sync_gears.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/nozzles/nacelle_nozzle_sync_pinion.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_sync_gears.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'RENDER_PART="pinion"' \
+	    $(SCAD)/nacelles/nacelle_nozzle_sync_gears.scad \
 	    -o $@
 	@echo "[stl] $@"
 

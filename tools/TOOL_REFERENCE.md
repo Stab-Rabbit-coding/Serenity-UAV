@@ -89,7 +89,7 @@ on every commit and in CI. Fully regenerates both Markdown indexes and `tools/in
 from scratch every run (never append-only patches) — this is deliberate: the earlier append-only
 generator silently corrupted both files for months (renamed/archived paths dropped their entry's
 first line but left wrapped description lines orphaned forever; see git history of this file and
-`docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md` item 2). A file is classified **archived** if
+`archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md` item 2). A file is classified **archived** if
 any path component is literally `archive` or `archives`; everything else tracked is **active**,
 including `deferred/` (future work, not superseded work).
 
@@ -122,6 +122,34 @@ python3 tools/precommit_index.py --check    # exit 1 if the indexes would change
 To change how entries look (a new tag, a new file-type description rule), edit the generator —
 never hand-edit `PROJECT_INDEX.md` or `ARCHIVE_INDEX.md` directly; the next commit's pre-commit
 hook overwrites hand edits.
+
+## WBS → TODO Generator
+
+**File:** `tools/gen_todo_from_wbs.py`
+**Purpose:** Implement the root `AGENTS.md` §10 rule that every `TODO.md` is *generated* from
+its owning `WBS.md` — one line per currently-open top-level item, ≤70 characters, headings only
+where open work remains, each section pointing back at its `WBS.md` entry. Added 2026-09-15
+after two months of hand-patched `TODO.md` files had inverted the federation in places (see
+`docs/solutions/workflow-issues/generate-open-item-views-never-hand-patch-them.md`).
+
+Covers all 17 `{WBS,TODO}.md` pairs listed in `docs/WBS_FEDERATION.md` (`PAIRS` in the
+script). Rules: an open `- [ ]` under a *closed* parent is promoted to its own line, under an
+*open* parent it folds into the parent; item text is the first sentence/clause that fits, cut at
+a word boundary with an ellipsis; the existing `TODO.md` preamble (through the first `---`) and
+footer (after the last `---`) are preserved, so headers, licence stamps and quotes survive.
+
+**Usage:**
+
+```sh
+/usr/bin/python3 tools/gen_todo_from_wbs.py                 # regenerate every TODO.md
+/usr/bin/python3 tools/gen_todo_from_wbs.py --check         # unified diff + exit 1 on drift
+/usr/bin/python3 tools/gen_todo_from_wbs.py docs/WBS.md     # one pair
+```
+
+Never hand-edit a `TODO.md`. A `TODO.md` line with no `WBS.md` home is a defect in the record:
+move its content into the owning `WBS.md`, then regenerate. Wiring `--check` into
+`.githooks/pre-commit` / CI beside `precommit_index.py --check` is tracked in root `WBS.md`
+§0.10.2.
 
 ## Output Locations
 

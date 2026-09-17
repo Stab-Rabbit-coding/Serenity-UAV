@@ -265,6 +265,17 @@
 //          Found by CI, not by inspection — the header had claimed shingling since
 //          Rev R2 while the geometry never implemented it.  AI contribution:
 //          Claude (Opus 5, Anthropic), directed by Steve Griffing.
+// Rev:     T4 (2026-09-09): RING_LEVER_AZ relocated 22.5 -> 157.5 deg, per
+//          docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT — hybrid A+B adopted
+//          (2026-07-19)".  The drive crank now rides a nacelle sync PINION on
+//          the INBOARD side of the pod, so the lever ear moves to the inboard
+//          flap gap and the pushrod hugs the inboard cheek instead of crossing
+//          the duct.  157.5 is a legal gap (8 flaps -> gaps at 22.5 + k*45), so
+//          cam slots, flap sweep and all exit-radius kinematics are numerically
+//          UNCHANGED; the solved linkage gives psi(0) = -0.36 deg so no cam
+//          re-clocking is needed either (tools/nozzle_linkage_check.py).
+//          AI contribution: Claude (Opus 5, Anthropic), directed by
+//          Steve Griffing.
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 
@@ -496,8 +507,22 @@ CAM_FLANGE_INNER_R = 28.5;   // [mm] cam-flange inner radius (clears throat OD
                              //   27.5 by 1.0; slot_in = 29 − 1.2 = 27.8 > 27.5)
 
 // ── Pushrod lever (single drive input; replaces the internal ring gear) ──────
-RING_LEVER_AZ   = 22.5;   // [deg] azimuth of the lever ear (in a flap gap,
-                          //   between slots at 0°/45°)
+RING_LEVER_AZ   = 157.5;  // [deg] azimuth of the lever ear.  Flap gaps sit at
+                          //   22.5 + k*45 (8 flaps), so 157.5 is a legal gap and
+                          //   the ear still clears all 8 cam slots and the flap
+                          //   sweep exactly as 22.5 did.
+                          //   RELOCATED 22.5 -> 157.5 (2026-07-19 amendment,
+                          //   docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT —
+                          //   hybrid A+B adopted"): the drive crank now lives on
+                          //   the nacelle-mounted sync PINION on the INBOARD
+                          //   side of the pod, so putting the ear in the inboard
+                          //   flap gap lets the pushrod hug the inboard cheek
+                          //   instead of crossing the duct.
+                          //   The cam slots need NO re-clocking for this move:
+                          //   the solved linkage gives psi(0 deg tilt) = -0.36
+                          //   deg, i.e. essentially zero ring rotation at the
+                          //   closed/cruise reference pose (tools/
+                          //   nozzle_linkage_check.py, default run).
 RING_LEVER_R    = 32.0;   // [mm] radial reach of the ball-socket centre on the
                           //   lever (effective moment arm for the pushrod)
 RING_LEVER_W    =  5.0;   // [mm] lever ear tangential width
@@ -597,7 +622,28 @@ module nozzle_throat_and_housing() {
                 // the existing tube wall (solid from THROAT_INNER_R=25 to
                 // THROAT_OUTER_R=27.5) already provides the bore's inner
                 // bearing surface "for free."
-                HINGE_BOSS_OD = HINGE_BORE_D + 5.0;
+                // Rev T5b (2026-09-09, plan 005 R4): wall trimmed 2.5mm/side
+                // (+5.0 OD) -> 1.5mm/side (+3.0 OD), the minimum this repo's
+                // FDM practice treats as reliable (>=3 perimeters at 0.4mm
+                // nozzle, matches the flap-shingle "effectively solid at
+                // 2.5mm + 3x0.4mm perimeters" precedent scaled down for this
+                // much smaller, lighter-loaded pin joint). This cuts the
+                // mould-line overshoot from 6.1mm to ~4.1mm worst-case (see
+                // tools/nacelle_housing_profile.py --check) but CANNOT reach
+                // zero: the inner-fusion formula below holds the boss's inner
+                // edge fixed at R_HINGE - 1.0 regardless of OD, so even a
+                // notional zero-wall bore (OD = HINGE_BORE_D = 3.2mm) still
+                // reaches outer edge R_HINGE - 1.0 + 3.2 = 29.7mm, which
+                // already exceeds the canonical shell's ~28.55mm worst-case
+                // radius at this station by 1.15mm. R_HINGE=27.5 is fixed by
+                // the flap kinematics (R2 invariant) and itself leaves only
+                // ~1.05mm clearance to the canonical mould line here -- this
+                // residual is a genuine hinge-circle-vs-mould-line conflict,
+                // not a boss-sizing problem, and is accepted per plan 005 R7
+                // (WBS Sec 1.1.3). Do not shrink the wall further chasing an
+                // unreachable zero -- the remaining ~4mm buys nothing once
+                // the wall drops below print-integrity margin.
+                HINGE_BOSS_OD = HINGE_BORE_D + 3.0;
                 HINGE_BOSS_X_CEN = R_HINGE + HINGE_BOSS_OD / 2 - 1.0;
                 for (i = [0 : N_FLAPS - 1]) {
                     rotate([0, 0, i * 360 / N_FLAPS]) {

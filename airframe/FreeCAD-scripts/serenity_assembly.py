@@ -675,25 +675,30 @@ def assemble():
     # centred on Cargo_Shell's own Y span (-69.5..+129, mean +29.75) so the
     # 154 mm-long tray fits inside it; Z near the belly floor (Cargo_Shell
     # Z min ~ 0).
-    battery_tray = add_mesh(doc, _stl("fuselage/battery_tray.stl"), "Battery_Tray")
-    transform_mesh(
-        battery_tray,
-        (
-            (0.0, 0.0, 1.0, CARGO_X_CL - 31.0),  # hull_x = local_z + tx (tray Z half-width 31)
-            (-1.0, 0.0, 0.0, 106.75),  # hull_y = -local_x + ty
-            (0.0, 1.0, 0.0, 2.0),  # hull_z = local_y + tz (tray bottom ~2 mm off the floor)
-        ),
-    )
+    # Rev T5 (2026-09-15): the keel-rail tray and its belly panel are
+    # SUPERSEDED by Battery_Cradle (roof-hung, cargo roof band, imported in
+    # the Rev T5 block below; docs/BATTERY_MOUNT.md Rev T5).  Kept, gated off.
+    LEGACY_BATTERY_TRAY = False
+    if LEGACY_BATTERY_TRAY:
+        battery_tray = add_mesh(doc, _stl("fuselage/battery_tray.stl"), "Battery_Tray")
+        transform_mesh(
+            battery_tray,
+            (
+                (0.0, 0.0, 1.0, CARGO_X_CL - 31.0),  # hull_x = local_z + tx (tray Z half-width 31)
+                (-1.0, 0.0, 0.0, 106.75),  # hull_y = -local_x + ty
+                (0.0, 1.0, 0.0, 2.0),  # hull_z = local_y + tz (tray bottom ~2 mm off the floor)
+            ),
+        )
 
-    belly_panel = add_mesh(doc, _stl("fuselage/belly_panel.stl"), "Belly_Panel")
-    transform_mesh(
-        belly_panel,
-        (
-            (0.0, 0.0, 1.0, CARGO_X_CL - 32.5),  # panel is 65 mm wide, half-width 32.5
-            (-1.0, 0.0, 0.0, 106.75),  # same X/Y centre as Battery_Tray (covers its opening)
-            (0.0, 1.0, 0.0, 0.0),  # flush with the belly (Z ~ 0) below the tray
-        ),
-    )
+        belly_panel = add_mesh(doc, _stl("fuselage/belly_panel.stl"), "Belly_Panel")
+        transform_mesh(
+            belly_panel,
+            (
+                (0.0, 0.0, 1.0, CARGO_X_CL - 32.5),  # panel is 65 mm wide, half-width 32.5
+                (-1.0, 0.0, 0.0, 106.75),  # same X/Y centre as Battery_Tray (covers its opening)
+                (0.0, 1.0, 0.0, 0.0),  # flush with the belly (Z ~ 0) below the tray
+            ),
+        )
 
     # -------------------------------------------------------------------
     # WINGS
@@ -870,12 +875,41 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Nacelle servo brackets (fuselage-mounted tilt actuators) ...", flush=True)
 
-    add_mesh(
-        doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Port"
-    )
-    add_mesh(
-        doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Stbd"
-    )
+    # Rev T5b (2026-09-15, docs/TILT_ACTUATOR_SELECTION.md): the DS3225 saddle
+    # brackets are SUPERSEDED by the worm-drive actuator brackets below.  The
+    # legacy import is kept, gated off, so the retired part stays traceable.
+    LEGACY_SERVO_BRACKETS = False
+    if LEGACY_SERVO_BRACKETS:
+        add_mesh(
+            doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Port"
+        )
+        add_mesh(
+            doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Stbd"
+        )
+
+    # -------------------------------------------------------------------
+    # REV T5 CARGO SECTION EQUIPMENT — all modelled DIRECTLY in hull frame
+    # (identity placement; single-sourced from tools/cargo_layout_fit.py via
+    # cargo_layout_t5_params.scad).  Worm and wheel are one part each: the
+    # starboard copies are TRANSLATED by 2*(X_CL - WORM_X) = -89.2 mm (Rev
+    # T5e, WORM_X -125.25), never mirrored (the worm has a hand; see
+    # tilt_actuator_bracket.scad header).  Rev T5e adds the chin node shelf
+    # (chin_node_shelf.scad); the cargo Observer tray is an ENVELOPE only until
+    # cargo_vera_faraday.scad is re-authored in hull frame (OBS-CARGO).
+    # -------------------------------------------------------------------
+    print("[assembly] Rev T5e cargo equipment (tilt actuators, brake, battery cradle, chin shelf) ...", flush=True)
+    T5_STBD_DX = 2.0 * (-169.85 - (-125.25))   # -89.2 mm, port -> starboard translate
+    add_mesh(doc, _stl("fuselage/cargo/tilt_actuator_bracket_port.stl"), "Tilt_Bracket_Port")
+    add_mesh(doc, _stl("fuselage/cargo/tilt_actuator_bracket_stbd.stl"), "Tilt_Bracket_Stbd")
+    for side, dx in (("Port", 0.0), ("Stbd", T5_STBD_DX)):
+        for part, label in (("tilt_actuator_worm", "Tilt_Worm"),
+                            ("tilt_actuator_wheel", "Tilt_Wheel"),
+                            ("tilt_brake_guide", "Tilt_Brake_Guide")):
+            obj = add_mesh(doc, _stl(f"fuselage/cargo/{part}.stl"), f"{label}_{side}")
+            if obj is not None and dx:
+                place_mesh(obj, (dx, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0))
+    add_mesh(doc, _stl("fuselage/cargo/battery_cradle.stl"), "Battery_Cradle")
+    add_mesh(doc, _stl("fuselage/cargo/chin_node_shelf.stl"), "Chin_Node_Shelf")
 
     # -------------------------------------------------------------------
     # DORSAL ANTENNA FIN
