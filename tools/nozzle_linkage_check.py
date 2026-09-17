@@ -513,7 +513,7 @@ def search_dimensions_pinion(
     Returns a list of (crank_r, pushrod_len, best_phase, result) rows, one per
     (crank_r, pushrod_len) cell, carrying the best phase found for that cell.
     """
-    results = []
+    results: list[tuple] = []   # explicit: List is invariant (CI mypy, PYTHON_MYPY)
     for crank_r in crank_r_grid:
         for pushrod_len in pushrod_len_grid:
             best = None
@@ -738,7 +738,7 @@ def search_dimensions_spar(
     TOPOLOGY does not admit a solution at this scale -- not that the as-drawn
     dimensions merely need tuning.
     """
-    results = []
+    results: list[tuple] = []   # explicit: List is invariant (CI mypy, PYTHON_MYPY)
     for crank_r in crank_r_grid:
         for pushrod_len in pushrod_len_grid:
             best = best_score = best_phase = best_axial = None
