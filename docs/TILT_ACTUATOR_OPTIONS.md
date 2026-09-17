@@ -73,7 +73,8 @@ shaft, dark grey = motor, red = brake envelope (Opt 2/3) or overlap (Opt 3).
 Mass basis: motor mass from the datasheets; mechanism masses are the exported
 STL volumes × 1.05 g/cm³ (Opt 1), scaled estimates (Opt 2 cradle, brake 12 g
 EST), the Rev T4 BOM rows (Opt 3) and the exported Rev T5e STLs (Opt 4:
-bracket 16.3, worm 6.0, wheel 6.9, guide 2.1 g; solenoid + pin 10 g EST).  Shell delta: the two DS3225 standoff
+bracket 16.3, worm 6.0, wheel 6.9, guide 2.1 g; solenoid + pin 10 g EST).
+Shell delta: the two DS3225 standoff
 pads measure 53.5 g in the published Rev T4 shell; six 12 × 12 mm foot bosses
 add 3.9 g each.
 

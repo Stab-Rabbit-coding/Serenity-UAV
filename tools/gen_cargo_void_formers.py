@@ -27,7 +27,8 @@ optional pour is the few slivers around it.
 The formers
 -----------
 1. collar_rim   -- keeps the head/cargo splice-collar seat clear (the open
-                   fwd mating face is at Y -69.5 and the rim wall is not a closed ring until Y ~-67, so the plug starts at -66): the collar
+                   fwd mating face is at Y -69.5 and the rim wall is not a closed
+                   ring until Y ~-67, so the plug starts at -66): the collar
                    reaches to Y -61.5 (head_cargo_splice_collar.stl) and is
                    bonded AFTER the pour, so the rim band Y -71.5..-58 must
                    stay foam-free right round the section.
@@ -73,16 +74,17 @@ sys.path.insert(0, HERE)
 import cargo_layout_fit as clf  # noqa: E402
 
 OUT_DIR = os.path.join(REPO, "airframe", "stls", "fuselage", "cargo")
-SHRINK_MM = 0.4            # wax film + PLA shrink: former is this much smaller than the cavity
-FOAM_RHO = 32.04e-6        # g/mm^3, 2 lb/ft^3 PU (docs/MASS_AUDIT_CARGO_WING_ROOT.md SS4)
-COLLAR_Y1 = -58.0          # head/cargo collar reaches Y -61.5; +3.5 mm bonding access
-CHIN_Y1 = -22.0            # aft end of the chin floor (ramp face top)
-TRUNK = 20.0               # harness trunk section
+SHRINK_MM = 0.4  # wax film + PLA shrink: former is this much smaller than the cavity
+FOAM_RHO = 32.04e-6  # g/mm^3, 2 lb/ft^3 PU (docs/MASS_AUDIT_CARGO_WING_ROOT.md SS4)
+COLLAR_Y1 = -58.0  # head/cargo collar reaches Y -61.5; +3.5 mm bonding access
+CHIN_Y1 = -22.0  # aft end of the chin floor (ramp face top)
+TRUNK = 20.0  # harness trunk section
 
 
 def to_man(tm):
-    return Manifold(Mesh(vert_properties=tm.vertices.astype(np.float32),
-                         tri_verts=tm.faces.astype(np.uint32)))
+    return Manifold(
+        Mesh(vert_properties=tm.vertices.astype(np.float32), tri_verts=tm.faces.astype(np.uint32))
+    )
 
 
 def from_man(m):
@@ -90,8 +92,9 @@ def from_man(m):
     # shared vertex indices; trimesh's merge_vertices() would weld the
     # station-seam T-junctions into 4-face edges and break watertightness.
     msh = m.to_mesh()
-    return trimesh.Trimesh(np.asarray(msh.vert_properties)[:, :3],
-                           np.asarray(msh.tri_verts), process=False)
+    return trimesh.Trimesh(
+        np.asarray(msh.vert_properties)[:, :3], np.asarray(msh.tri_verts), process=False
+    )
 
 
 def box(x0, x1, y0, y1, z0, z1):
@@ -117,9 +120,9 @@ def former_in_box(shell_man, design_box, seed):
 
 # Rev T5e node bay: the shelf + two pouched nodes + 2 mm, floor to the
 # battery underside
-NODE_BAY_X1 = clf.N_CHIN_X_IN + clf.NODE_H + 2.0        # -125.85
-NODE_BAY_X0 = 2 * clf.X_CL - NODE_BAY_X1                # -213.85
-NODE_BAY_Z1 = clf.BATT_Z0                               # 90
+NODE_BAY_X1 = clf.N_CHIN_X_IN + clf.NODE_H + 2.0  # -125.85
+NODE_BAY_X0 = 2 * clf.X_CL - NODE_BAY_X1  # -213.85
+NODE_BAY_Z1 = clf.BATT_Z0  # 90
 
 
 def main():
@@ -132,16 +135,29 @@ def main():
     formers = {
         # name: (design box, seed point inside the cavity)
         "collar_rim": (box(-260, -80, -66.0, COLLAR_Y1, 44.0, 170.0), (xc, -64.0, 100.0)),
-        "batt_chimney": (box(clf.BATT_X0 - clf.CRADLE_T - 1.0, clf.BATT_X1 + clf.CRADLE_T + 1.0,
-                             COLLAR_Y1, CHIN_Y1, NODE_BAY_Z1, clf.CRADLE_TOP_Z + 1.0), (xc, -40.0, 110.0)),
-        "harness_trunk_port": (box(NODE_BAY_X1 + 1.0, NODE_BAY_X1 + 1.0 + TRUNK,
-                                   -66.0, CHIN_Y1, 44.0, 62.0 + TRUNK),
-                               (NODE_BAY_X1 + 4.0, -45.0, 72.0)),
-        "harness_trunk_stbd": (box(NODE_BAY_X0 - 1.0 - TRUNK, NODE_BAY_X0 - 1.0,
-                                   -66.0, CHIN_Y1, 44.0, 62.0 + TRUNK),
-                               (NODE_BAY_X0 - 4.0, -45.0, 72.0)),
-        "node_bay": (box(NODE_BAY_X0, NODE_BAY_X1, COLLAR_Y1, CHIN_Y1, 44.0, NODE_BAY_Z1),
-                     (xc, -40.0, 75.0)),
+        "batt_chimney": (
+            box(
+                clf.BATT_X0 - clf.CRADLE_T - 1.0,
+                clf.BATT_X1 + clf.CRADLE_T + 1.0,
+                COLLAR_Y1,
+                CHIN_Y1,
+                NODE_BAY_Z1,
+                clf.CRADLE_TOP_Z + 1.0,
+            ),
+            (xc, -40.0, 110.0),
+        ),
+        "harness_trunk_port": (
+            box(NODE_BAY_X1 + 1.0, NODE_BAY_X1 + 1.0 + TRUNK, -66.0, CHIN_Y1, 44.0, 62.0 + TRUNK),
+            (NODE_BAY_X1 + 4.0, -45.0, 72.0),
+        ),
+        "harness_trunk_stbd": (
+            box(NODE_BAY_X0 - 1.0 - TRUNK, NODE_BAY_X0 - 1.0, -66.0, CHIN_Y1, 44.0, 62.0 + TRUNK),
+            (NODE_BAY_X0 - 4.0, -45.0, 72.0),
+        ),
+        "node_bay": (
+            box(NODE_BAY_X0, NODE_BAY_X1, COLLAR_Y1, CHIN_Y1, 44.0, NODE_BAY_Z1),
+            (xc, -40.0, 75.0),
+        ),
     }
     total_void = 0.0
     for name, (b, seed) in formers.items():
@@ -160,13 +176,19 @@ def main():
         chk = trimesh.load(path, process=True)
         assert chk.is_watertight or all(bb.is_watertight for bb in chk.split()), f"{name} on-disk"
         bb = f.bounds
-        print(f"  {name:20s} vol {f.volume:9,.0f} mm^3  PLA ~{f.volume * 1.24e-3 * 0.25:5.1f} g @25% infill  "
-              f"X{bb[0][0]:.0f}..{bb[1][0]:.0f} Y{bb[0][1]:.0f}..{bb[1][1]:.0f} Z{bb[0][2]:.0f}..{bb[1][2]:.0f}")
+        print(
+            f"  {name:20s} vol {f.volume:9,.0f} mm^3  "
+            f"PLA ~{f.volume * 1.24e-3 * 0.25:5.1f} g @25% infill  "
+            f"X{bb[0][0]:.0f}..{bb[1][0]:.0f} Y{bb[0][1]:.0f}..{bb[1][1]:.0f} "
+            f"Z{bb[0][2]:.0f}..{bb[1][2]:.0f}"
+        )
         total_void += f.volume
     chin = former_in_box(shell_man, box(-260, -80, -66.0, CHIN_Y1, 44.0, 170.0), (xc, -40.0, 100.0))
     foam = chin.volume - total_void
-    print(f"\nchin zone cavity {chin.volume:,.0f} mm^3; formers {total_void:,.0f}; "
-          f"foamable {foam:,.0f} mm^3 = {foam * FOAM_RHO:.1f} g of 2 lb/ft^3 PU (optional)")
+    print(
+        f"\nchin zone cavity {chin.volume:,.0f} mm^3; formers {total_void:,.0f}; "
+        f"foamable {foam:,.0f} mm^3 = {foam * FOAM_RHO:.1f} g of 2 lb/ft^3 PU (optional)"
+    )
 
 
 if __name__ == "__main__":

@@ -48,7 +48,7 @@ Inputs (REF-IDs in REFERENCES.md; ASSUMED where marked)
 Run:
     /usr/bin/python3 tools/tilt_actuator_options.py             # table
     /usr/bin/python3 tools/tilt_actuator_options.py --write     # + docs/TILT_ACTUATOR_OPTIONS.md
-                                                                #   + tilt_actuator_options_params.scad
+                                                                #   + ..._options_params.scad
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (model: Claude Opus 5, Anthropic) under the
@@ -64,18 +64,18 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, ".."))
 
 G = 9.80665
-KGFCM = 0.0980665           # N.m per kgf.cm
-I_NAC = 7.189e-4            # kg.m^2, about the pivot (cited)
-T_LOAD = 0.177              # N.m grounded requirement at the nacelle (cited)
-I_TIP = 50.0 / 14.0         # 3.571
-ETA_TIP = 0.95              # spur pair, ASSUMED
-MU = 0.20                   # ASSUMED, dry printed pair
+KGFCM = 0.0980665  # N.m per kgf.cm
+I_NAC = 7.189e-4  # kg.m^2, about the pivot (cited)
+T_LOAD = 0.177  # N.m grounded requirement at the nacelle (cited)
+I_TIP = 50.0 / 14.0  # 3.571
+ETA_TIP = 0.95  # spur pair, ASSUMED
+MU = 0.20  # ASSUMED, dry printed pair
 AUW_G = 3911.0
-AUW_HI_G = 3911.0 + 521.6   # MA-1 under-count
-SPAN_MM = 430.0             # nacelle-to-nacelle lateral spacing
+AUW_HI_G = 3911.0 + 521.6  # MA-1 under-count
+SPAN_MM = 430.0  # nacelle-to-nacelle lateral spacing
 PIVOT_Z = 69.09
-SIGMA_PETG = 54.0           # MPa flexural, REF-MAT-002 (plain PETG floor)
-LEWIS_Y = 0.40              # ASSUMED, 40T 20 deg
+SIGMA_PETG = 54.0  # MPa flexural, REF-MAT-002 (plain PETG floor)
+LEWIS_Y = 0.40  # ASSUMED, 40T 20 deg
 FOS = 4.0
 
 
@@ -93,35 +93,65 @@ OPTIONS = {
     1: dict(
         name="Single-start worm 40:1 + Pololu 20D 25:1 CB 6V",
         motor="Pololu #3712 (20D, 25:1, CB, 6 V) + #5660 encoder",
-        motor_rpm_nl=570.0, motor_rpm_eff=440.0, motor_stall_kgfcm=1.6,
-        motor_stall_A=2.9, motor_mass_g=44.0 + 6.0, motor_d=20.0,
-        stage="worm", starts=1, wheel_n=40, worm_pd=18.0, module=1.0,
-        mech_mass_g=17.7 + 2.3 + 6.9 + 3.0,      # bracket + worm + wheel + M3/inserts
-        shell_delta_g=-53.5 + 6 * 3.9,             # pads removed, 6 foot bosses added
-        reach_x=-138.75,                           # motor inboard face, port
-        battery_ok=True, hold_unpowered=True, brake_needed=False,
+        motor_rpm_nl=570.0,
+        motor_rpm_eff=440.0,
+        motor_stall_kgfcm=1.6,
+        motor_stall_A=2.9,
+        motor_mass_g=44.0 + 6.0,
+        motor_d=20.0,
+        stage="worm",
+        starts=1,
+        wheel_n=40,
+        worm_pd=18.0,
+        module=1.0,
+        mech_mass_g=17.7 + 2.3 + 6.9 + 3.0,  # bracket + worm + wheel + M3/inserts
+        shell_delta_g=-53.5 + 6 * 3.9,  # pads removed, 6 foot bosses added
+        reach_x=-138.75,  # motor inboard face, port
+        battery_ok=True,
+        hold_unpowered=True,
+        brake_needed=False,
     ),
     2: dict(
         name="Four-start worm 10:1 + Pololu 25D HP 6V 9.7:1 + brake",
         motor="Pololu #1571 (25D, 9.7:1, HP, 6 V, no encoder; AEAT-8800 on the worm collar)",
-        motor_rpm_nl=1000.0, motor_rpm_eff=810.0, motor_stall_kgfcm=2.3,
-        motor_stall_A=6.0, motor_mass_g=90.0, motor_d=25.0,
-        stage="worm", starts=4, wheel_n=40, worm_pd=24.0, module=1.0,
+        motor_rpm_nl=1000.0,
+        motor_rpm_eff=810.0,
+        motor_stall_kgfcm=2.3,
+        motor_stall_A=6.0,
+        motor_mass_g=90.0,
+        motor_d=25.0,
+        stage="worm",
+        starts=4,
+        wheel_n=40,
+        worm_pd=24.0,
+        module=1.0,
         mech_mass_g=20.0 + 4.0 + 6.9 + 3.0 + 12.0,  # bigger cradle, worm, wheel, hw, brake (EST)
         shell_delta_g=-53.5 + 6 * 3.9,
-        reach_x=-142.75,                            # O25 body, worm PD 24 -> mid-plane -126.25
-        battery_ok=True, hold_unpowered=False, brake_needed=True,
+        reach_x=-142.75,  # O25 body, worm PD 24 -> mid-plane -126.25
+        battery_ok=True,
+        hold_unpowered=False,
+        brake_needed=True,
     ),
     3: dict(
         name="Spur 1:1 (38T/38T m0.8) + DS3225 multi-turn (Rev T4)",
         motor="DS3225 body + LibreServo_v4, limit pin removed (SERVO-TILT)",
-        motor_rpm_nl=60.0 / 0.13 / 6.0, motor_rpm_eff=60.0 / 0.13 / 6.0 * 0.8,
-        motor_stall_kgfcm=24.5, motor_stall_A=2.3, motor_mass_g=60.0, motor_d=20.0,
-        stage="spur", starts=None, wheel_n=38, worm_pd=None, module=0.8,
-        mech_mass_g=10.6 + 2 * 4.2 + 3.0 + 12.0,     # bracket, 2 gears, hw, brake (EST)
-        shell_delta_g=0.0,                           # pads stay (32.9 g standoffs, MA-5)
+        motor_rpm_nl=60.0 / 0.13 / 6.0,
+        motor_rpm_eff=60.0 / 0.13 / 6.0 * 0.8,
+        motor_stall_kgfcm=24.5,
+        motor_stall_A=2.3,
+        motor_mass_g=60.0,
+        motor_d=20.0,
+        stage="spur",
+        starts=None,
+        wheel_n=38,
+        worm_pd=None,
+        module=0.8,
+        mech_mass_g=10.6 + 2 * 4.2 + 3.0 + 12.0,  # bracket, 2 gears, hw, brake (EST)
+        shell_delta_g=0.0,  # pads stay (32.9 g standoffs, MA-5)
         reach_x=-158.5,
-        battery_ok=False, hold_unpowered=False, brake_needed=True,
+        battery_ok=False,
+        hold_unpowered=False,
+        brake_needed=True,
     ),
     # Rev T5e (2026-09-16) -- the BUILT configuration.  Option 2's O25 body
     # cannot clear the O42 wheel for any C or worm angle (T5d-1: the gap is
@@ -130,13 +160,28 @@ OPTIONS = {
     4: dict(
         name="Six-start worm 6.67:1 + Pololu 20D 25:1 CB 6V + brake (Rev T5e, built)",
         motor="Pololu #3712 (20D, 25:1, CB, 6 V, no encoder; AEAT-8800 on the worm collar)",
-        motor_rpm_nl=570.0, motor_rpm_eff=440.0, motor_stall_kgfcm=1.6,
-        motor_stall_A=2.9, motor_mass_g=44.0, motor_d=20.0,
-        stage="worm", starts=6, wheel_n=40, worm_pd=26.0, module=1.0,
-        mech_mass_g=16.3 + 6.0 + 6.9 + 3.0 + 2.1 + 10.0,  # bracket, worm, wheel, hw, guide, solenoid+pin (EST)
+        motor_rpm_nl=570.0,
+        motor_rpm_eff=440.0,
+        motor_stall_kgfcm=1.6,
+        motor_stall_A=2.9,
+        motor_mass_g=44.0,
+        motor_d=20.0,
+        stage="worm",
+        starts=6,
+        wheel_n=40,
+        worm_pd=26.0,
+        module=1.0,
+        mech_mass_g=16.3
+        + 6.0
+        + 6.9
+        + 3.0
+        + 2.1
+        + 10.0,  # bracket, worm, wheel, hw, guide, solenoid+pin (EST)
         shell_delta_g=-53.5 + 6 * 3.9,
-        reach_x=-139.25,                            # O26 worm tip, mid-plane -125.25
-        battery_ok=True, hold_unpowered=False, brake_needed=True,
+        reach_x=-139.25,  # O26 worm tip, mid-plane -125.25
+        battery_ok=True,
+        hold_unpowered=False,
+        brake_needed=True,
     ),
 }
 
@@ -152,8 +197,13 @@ def analyse(o):
         # friction angle at which the lock is lost; below ~6 deg lead the
         # lock survives any plausible lubricated pair, above it the lock is
         # CONDITIONAL on staying dry (mu >= tan(lead))
-        r.update(lead_deg=lead, eta=eta, eta_back=eta_back, self_lock=self_lock,
-                 mu_min_lock=math.tan(math.radians(lead)))
+        r.update(
+            lead_deg=lead,
+            eta=eta,
+            eta_back=eta_back,
+            self_lock=self_lock,
+            mu_min_lock=math.tan(math.radians(lead)),
+        )
         r["C_mm"] = (o["wheel_n"] * o["module"] + o["worm_pd"]) / 2
     else:
         ratio, eta, self_lock = 1.0, 0.95, False
@@ -167,15 +217,15 @@ def analyse(o):
     r["T_margin_stall"] = r["T_nac_stall"] / T_LOAD
     # wheel / gear tooth limit (Lewis, FOS 4, plain PETG floor)
     b = 5.0 if o["stage"] == "worm" else 6.0
-    F_allow = SIGMA_PETG * b * o["module"] * LEWIS_Y / FOS       # N
+    F_allow = SIGMA_PETG * b * o["module"] * LEWIS_Y / FOS  # N
     pd = o["wheel_n"] * o["module"]
-    r["T_shaft_tooth"] = F_allow * pd / 2 / 1000.0                # N.m
+    r["T_shaft_tooth"] = F_allow * pd / 2 / 1000.0  # N.m
     r["T_nac_tooth"] = r["T_shaft_tooth"] * I_TIP * ETA_TIP
     r["T_nac_limit"] = min(r["T_nac_stall"], r["T_nac_tooth"])
     r["limit_by"] = "tooth (Lewis)" if r["T_nac_tooth"] < r["T_nac_stall"] else "motor stall"
     # rates
     for tag, rpm in (("nl", o["motor_rpm_nl"]), ("eff", o["motor_rpm_eff"])):
-        r[f"rate_{tag}"] = rpm / r["ratio_total"] * 6.0            # deg/s at the nacelle
+        r[f"rate_{tag}"] = rpm / r["ratio_total"] * 6.0  # deg/s at the nacelle
     # Acceleration.  The nacelle's own inertia (7.19e-4 kg.m^2) is NOT what
     # limits it: the motor rotor's inertia reflected through ratio^2 (a
     # 20D rotor ~1e-7 kg.m^2 class x 25^2 x 40^2 x 3.571^2 ~ 1.4 kg.m^2 at
@@ -186,8 +236,8 @@ def analyse(o):
     # inertia does set is the torque it costs: I*alpha at the nacelle.
     TAU_M = 0.03
     w_max = math.radians(r["rate_nl"])
-    r["alpha"] = w_max / TAU_M                                      # rad/s^2, motor-limited
-    r["T_inertia_nac"] = I_NAC * r["alpha"]                         # N.m to accelerate the nacelle
+    r["alpha"] = w_max / TAU_M  # rad/s^2, motor-limited
+    r["T_inertia_nac"] = I_NAC * r["alpha"]  # N.m to accelerate the nacelle
     for ang in (5.0, 15.0, 90.0, 145.0):
         r[f"t_{int(ang)}"] = math.radians(ang) / w_max + TAU_M
     # small-signal bandwidth proxy: a +/-5 deg sinusoid is rate-limited above
@@ -204,9 +254,11 @@ def analyse(o):
     # aircraft-level authority at hover thrust = weight
     W = AUW_G / 1000.0 * G
     for d in (2.0, 5.0, 10.0):
-        r[f"a_x_{int(d)}"] = G * math.sin(math.radians(d))          # m/s^2, both nacelles
-        r[f"N_yaw_{int(d)}"] = W * math.sin(math.radians(d)) * SPAN_MM / 2 / 1000.0   # N.m diff tilt
-        r[f"M_pitch_per_mm_{int(d)}"] = W * math.sin(math.radians(d)) / 1000.0        # N.m per mm of (z_pivot - z_cg)
+        r[f"a_x_{int(d)}"] = G * math.sin(math.radians(d))  # m/s^2, both nacelles
+        r[f"N_yaw_{int(d)}"] = W * math.sin(math.radians(d)) * SPAN_MM / 2 / 1000.0  # N.m diff tilt
+        r[f"M_pitch_per_mm_{int(d)}"] = (
+            W * math.sin(math.radians(d)) / 1000.0
+        )  # N.m per mm of (z_pivot - z_cg)
     # masses
     r["mass_per_side"] = o["motor_mass_g"] + o["mech_mass_g"]
     r["mass_pair"] = 2 * r["mass_per_side"] + o["shell_delta_g"]
@@ -222,22 +274,71 @@ def fmt(v, nd=2):
 
 def table(res):
     rows = [
-        ("Fuselage stage ratio", lambda r: f"{r['ratio_fuse']:.1f}:1 ({r['stage']}" + (f", lead {r['lead_deg']:.1f} deg)" if r['lead_deg'] else ")")),
+        (
+            "Fuselage stage ratio",
+            lambda r: f"{r['ratio_fuse']:.1f}:1 ({r['stage']}"
+            + (f", lead {r['lead_deg']:.1f} deg)" if r["lead_deg"] else ")"),
+        ),
         ("Total ratio actuator -> nacelle", lambda r: f"{r['ratio_total']:.1f}:1"),
-        ("Stage efficiency (drive / back-drive)", lambda r: f"{r['eta']*100:.0f} % / " + ("locked" if r['eta_back'] <= 0 else f"{r['eta_back']*100:.0f} %")),
-        ("Unpowered hold (WA-R16)", lambda r: ("YES by geometry (locked for mu >= %.2f)" % r["mu_min_lock"]) if r["hold_unpowered"]
-            else (("CONDITIONAL -- locked only while mu >= %.2f (dry); brake required for the lubricated/vibration case" % r["mu_min_lock"]) if r.get("mu_min_lock") else "NO -- brake required (part TBD)")),
+        (
+            "Stage efficiency (drive / back-drive)",
+            lambda r: f"{r['eta']*100:.0f} % / "
+            + ("locked" if r["eta_back"] <= 0 else f"{r['eta_back']*100:.0f} %"),
+        ),
+        (
+            "Unpowered hold (WA-R16)",
+            lambda r: (
+                ("YES by geometry (locked for mu >= %.2f)" % r["mu_min_lock"])
+                if r["hold_unpowered"]
+                else (
+                    (
+                        "CONDITIONAL -- locked only while mu >= %.2f (dry); "
+                        "brake required for the lubricated/vibration case"
+                        % r["mu_min_lock"]
+                    )
+                    if r.get("mu_min_lock")
+                    else "NO -- brake required (part TBD)"
+                )
+            ),
+        ),
         ("Nacelle rate, no-load", lambda r: f"{r['rate_nl']:.0f} deg/s"),
         ("Nacelle rate, motor max-efficiency point", lambda r: f"{r['rate_eff']:.0f} deg/s"),
-        ("Torque at nacelle, motor stall", lambda r: f"{r['T_nac_stall']:.2f} N.m ({r['T_nac_stall']/KGFCM:.1f} kgf.cm) = {r['T_margin_stall']:.0f}x the 0.177 N.m load"),
-        ("Torque limit at nacelle (governing)", lambda r: f"{r['T_nac_limit']:.2f} N.m, by {r['limit_by']}"),
-        ("Angular accel (motor-limited, tau_m 0.03 s ASSUMED)", lambda r: f"{r['alpha']:.0f} rad/s^2; nacelle inertia costs {r['T_inertia_nac']:.3f} N.m"),
-        ("Time +/-5 deg / +/-15 deg / 90 deg / 145 deg", lambda r: f"{r['t_5']:.2f} / {r['t_15']:.2f} / {r['t_90']:.2f} / {r['t_145']:.2f} s"),
-        ("Rate-limit bandwidth, +/-2 deg / +/-5 deg", lambda r: f"{r['f_2']:.1f} Hz / {r['f_5deg']:.1f} Hz" if 'f_2' in r else f"{r['f_2deg']:.1f} Hz / {r['f_5deg']:.1f} Hz"),
+        (
+            "Torque at nacelle, motor stall",
+            lambda r: f"{r['T_nac_stall']:.2f} N.m ({r['T_nac_stall']/KGFCM:.1f} kgf.cm) "
+            f"= {r['T_margin_stall']:.0f}x the 0.177 N.m load",
+        ),
+        (
+            "Torque limit at nacelle (governing)",
+            lambda r: f"{r['T_nac_limit']:.2f} N.m, by {r['limit_by']}",
+        ),
+        (
+            "Angular accel (motor-limited, tau_m 0.03 s ASSUMED)",
+            lambda r: f"{r['alpha']:.0f} rad/s^2; "
+            f"nacelle inertia costs {r['T_inertia_nac']:.3f} N.m",
+        ),
+        (
+            "Time +/-5 deg / +/-15 deg / 90 deg / 145 deg",
+            lambda r: f"{r['t_5']:.2f} / {r['t_15']:.2f} / {r['t_90']:.2f} / {r['t_145']:.2f} s",
+        ),
+        (
+            "Rate-limit bandwidth, +/-2 deg / +/-5 deg",
+            lambda r: (
+                f"{r['f_2']:.1f} Hz / {r['f_5deg']:.1f} Hz"
+                if "f_2" in r
+                else f"{r['f_2deg']:.1f} Hz / {r['f_5deg']:.1f} Hz"
+            ),
+        ),
         ("Motor inboard reach (port, hull X)", lambda r: f"{r['reach_x']:.1f} mm"),
-        ("Battery cradle (X -197..-142) clear?", lambda r: "yes" if r["battery_ok"] else "NO -- 13.6 mm overlap"),
+        (
+            "Battery cradle (X -197..-142) clear?",
+            lambda r: "yes" if r["battery_ok"] else "NO -- 13.6 mm overlap",
+        ),
         ("Mass per side (motor + mechanism)", lambda r: f"{r['mass_per_side']:.0f} g"),
-        ("Mass, both sides incl. shell delta", lambda r: f"{r['mass_pair']:+.0f} g vs Rev T4 shell"),
+        (
+            "Mass, both sides incl. shell delta",
+            lambda r: f"{r['mass_pair']:+.0f} g vs Rev T4 shell",
+        ),
         ("Stall current, both motors (6 V bus)", lambda r: f"{r['current_pair_stall']:.1f} A"),
     ]
     hdr = "| Metric | " + " | ".join(f"Opt {k}" for k in res) + " |"
@@ -251,48 +352,119 @@ def table(res):
 def domains(res):
     r1 = next(iter(res.values()))
     lines = [
-        "| Flight domain | What the actuator must do | " + " | ".join(f"Opt {k}" for k in res) + " |",
+        "| Flight domain | What the actuator must do | "
+        + " | ".join(f"Opt {k}" for k in res)
+        + " |",
         "|---|---|" + "---|" * len(res),
     ]
+
     def row(label, need, key):
         lines.append(f"| {label} | {need} | " + " | ".join(key(r) for r in res.values()) + " |")
-    row("Hover attitude (pitch/yaw by vectoring)", "small +/-2..5 deg moves at a few Hz",
-        lambda r: f"{r['f_5deg']:.1f} Hz @5 deg, {r['rate_nl']:.0f} deg/s")
-    row("Hover translate (2/5/10 deg collective tilt)", f"a_x = {r1['a_x_2']:.2f}/{r1['a_x_5']:.2f}/{r1['a_x_10']:.2f} m/s^2 (all options, thrust-limited)",
-        lambda r: f"reach 5 deg in {r['t_5']:.2f} s")
-    row("Hover yaw (differential +/-5 deg)", f"N = {r1['N_yaw_5']:.2f} N.m at AUW {AUW_G:.0f} g",
-        lambda r: f"{r['t_5']:.2f} s to command")
-    row("Transition 0 -> 90 deg", "monotonic, iris scheduled (nozzle_linkage_check.py)",
-        lambda r: f"{r['t_90']:.1f} s")
-    row("Full sweep -5 -> 140 deg", "no requirement recorded (TILT-CTL-05)",
-        lambda r: f"{r['t_145']:.1f} s")
-    row("Cruise hold, powered", "hold against aero moment (unquantified, TILT-CTL-06)",
-        lambda r: f"{r['T_nac_limit']:.1f} N.m available")
-    row("Loss of actuator power", "hold (TILT_DRIVE_CONTROL_SPEC SS5.2)",
-        lambda r: "holds (self-locking)" if r["hold_unpowered"] else ("holds only if dry (mu >= %.2f); brake required" % r["mu_min_lock"] if r.get("mu_min_lock") else "free -- brake required"))
-    row("Hard landing 2.5 g", "inertial load nulled by pivot-at-CG; train sees 0.177 N.m bound",
-        lambda r: f"{r['T_margin_stall']:.0f}x margin")
+
+    row(
+        "Hover attitude (pitch/yaw by vectoring)",
+        "small +/-2..5 deg moves at a few Hz",
+        lambda r: f"{r['f_5deg']:.1f} Hz @5 deg, {r['rate_nl']:.0f} deg/s",
+    )
+    row(
+        "Hover translate (2/5/10 deg collective tilt)",
+        f"a_x = {r1['a_x_2']:.2f}/{r1['a_x_5']:.2f}/{r1['a_x_10']:.2f} m/s^2 "
+        "(all options, thrust-limited)",
+        lambda r: f"reach 5 deg in {r['t_5']:.2f} s",
+    )
+    row(
+        "Hover yaw (differential +/-5 deg)",
+        f"N = {r1['N_yaw_5']:.2f} N.m at AUW {AUW_G:.0f} g",
+        lambda r: f"{r['t_5']:.2f} s to command",
+    )
+    row(
+        "Transition 0 -> 90 deg",
+        "monotonic, iris scheduled (nozzle_linkage_check.py)",
+        lambda r: f"{r['t_90']:.1f} s",
+    )
+    row(
+        "Full sweep -5 -> 140 deg",
+        "no requirement recorded (TILT-CTL-05)",
+        lambda r: f"{r['t_145']:.1f} s",
+    )
+    row(
+        "Cruise hold, powered",
+        "hold against aero moment (unquantified, TILT-CTL-06)",
+        lambda r: f"{r['T_nac_limit']:.1f} N.m available",
+    )
+    row(
+        "Loss of actuator power",
+        "hold (TILT_DRIVE_CONTROL_SPEC SS5.2)",
+        lambda r: (
+            "holds (self-locking)"
+            if r["hold_unpowered"]
+            else (
+                "holds only if dry (mu >= %.2f); brake required" % r["mu_min_lock"]
+                if r.get("mu_min_lock")
+                else "free -- brake required"
+            )
+        ),
+    )
+    row(
+        "Hard landing 2.5 g",
+        "inertial load nulled by pivot-at-CG; train sees 0.177 N.m bound",
+        lambda r: f"{r['T_margin_stall']:.0f}x margin",
+    )
     return "\n".join(lines)
 
 
 def write_scad(res, path):
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write("// tilt_actuator_options_params.scad -- GENERATED by tools/tilt_actuator_options.py\n"
-                 "// --write.  Per-option geometry for tilt_actuator_options.scad.  Do not edit.\n"
-                 "// License: CC BY 4.0\n")
-        fh.write("OPT_MOTOR_D    = [0, %s];\n" % ", ".join(f"{r['motor_d']:.1f}" for r in res.values()))
-        fh.write("OPT_WORM_PD    = [0, %s];\n" % ", ".join(f"{(r['worm_pd'] or 0):.1f}" for r in res.values()))
-        fh.write("OPT_STARTS     = [0, %s];\n" % ", ".join(f"{(r['starts'] or 0)}" for r in res.values()))
+        fh.write(
+            "// tilt_actuator_options_params.scad -- GENERATED by tools/tilt_actuator_options.py\n"
+            "// --write.  Per-option geometry for tilt_actuator_options.scad.  Do not edit.\n"
+            "// License: CC BY 4.0\n"
+        )
+        fh.write(
+            "OPT_MOTOR_D    = [0, %s];\n" % ", ".join(f"{r['motor_d']:.1f}" for r in res.values())
+        )
+        fh.write(
+            "OPT_WORM_PD    = [0, %s];\n"
+            % ", ".join(f"{(r['worm_pd'] or 0):.1f}" for r in res.values())
+        )
+        fh.write(
+            "OPT_STARTS     = [0, %s];\n" % ", ".join(f"{(r['starts'] or 0)}" for r in res.values())
+        )
         fh.write("OPT_WHEEL_N    = [0, %s];\n" % ", ".join(f"{r['wheel_n']}" for r in res.values()))
-        fh.write("OPT_MODULE     = [0, %s];\n" % ", ".join(f"{r['module']:.2f}" for r in res.values()))
-        fh.write("OPT_C          = [0, %s];\n" % ", ".join(f"{r['C_mm']:.2f}" for r in res.values()))
-        fh.write("OPT_RATE_NL    = [0, %s];\n" % ", ".join(f"{r['rate_nl']:.1f}" for r in res.values()))
-        fh.write("OPT_T_NAC      = [0, %s];\n" % ", ".join(f"{r['T_nac_limit']:.2f}" for r in res.values()))
-        fh.write("OPT_MASS_PAIR  = [0, %s];\n" % ", ".join(f"{r['mass_pair']:.0f}" for r in res.values()))
-        fh.write("OPT_T145       = [0, %s];\n" % ", ".join(f"{r['t_145']:.2f}" for r in res.values()))
+        fh.write(
+            "OPT_MODULE     = [0, %s];\n" % ", ".join(f"{r['module']:.2f}" for r in res.values())
+        )
+        fh.write(
+            "OPT_C          = [0, %s];\n" % ", ".join(f"{r['C_mm']:.2f}" for r in res.values())
+        )
+        fh.write(
+            "OPT_RATE_NL    = [0, %s];\n" % ", ".join(f"{r['rate_nl']:.1f}" for r in res.values())
+        )
+        fh.write(
+            "OPT_T_NAC      = [0, %s];\n"
+            % ", ".join(f"{r['T_nac_limit']:.2f}" for r in res.values())
+        )
+        fh.write(
+            "OPT_MASS_PAIR  = [0, %s];\n" % ", ".join(f"{r['mass_pair']:.0f}" for r in res.values())
+        )
+        fh.write(
+            "OPT_T145       = [0, %s];\n" % ", ".join(f"{r['t_145']:.2f}" for r in res.values())
+        )
         fh.write("OPT_T5         = [0, %s];\n" % ", ".join(f"{r['t_5']:.2f}" for r in res.values()))
-        fh.write("OPT_LOCK       = [0, %s];\n" % ", ".join("true" if r["hold_unpowered"] else "false" for r in res.values()))
-        fh.write("OPT_NAME       = [\"\", %s];\n" % ", ".join(f"\"{r['name']}\"" for r in res.values()))
+        fh.write(
+            "OPT_LOCK       = [0, %s];\n"
+            % ", ".join("true" if r["hold_unpowered"] else "false" for r in res.values())
+        )
+        fh.write(
+            'OPT_NAME       = ["", %s];\n' % ", ".join(f"\"{r['name']}\"" for r in res.values())
+        )
+
+
+def img_row(view):
+    """One markdown table row of the four option renders (front | iso)."""
+    tag = "" if view == "front" else " iso"
+    cells = " | ".join(f"![opt{k}{tag}](img/tilt_option_{k}_{view}.png)" for k in (1, 2, 3, 4))
+    return "| " + cells + " |"
 
 
 def write_doc(res, path):
@@ -326,8 +498,8 @@ it by 2.0 mm.  A six-start worm on the slower 20D keeps TILT-CTL-07.
 
 | Option 1 | Option 2 | Option 3 | Option 4 (built) |
 |---|---|---|---|
-| ![opt1](img/tilt_option_1_front.png) | ![opt2](img/tilt_option_2_front.png) | ![opt3](img/tilt_option_3_front.png) | ![opt4](img/tilt_option_4_front.png) |
-| ![opt1 iso](img/tilt_option_1_iso.png) | ![opt2 iso](img/tilt_option_2_iso.png) | ![opt3 iso](img/tilt_option_3_iso.png) | ![opt4 iso](img/tilt_option_4_iso.png) |
+{img_row("front")}
+{img_row("iso")}
 
 Looking aft from ahead: grey = hull ring sections at Y −10/20/46.6/80, brown =
 root-flange keep-out, gold = battery in its cradle, green = mission payload at
@@ -354,7 +526,8 @@ shaft, dark grey = motor, red = brake envelope (Opt 2/3) or overlap (Opt 3).
 Mass basis: motor mass from the datasheets; mechanism masses are the exported
 STL volumes × 1.05 g/cm³ (Opt 1), scaled estimates (Opt 2 cradle, brake 12 g
 EST), the Rev T4 BOM rows (Opt 3) and the exported Rev T5e STLs (Opt 4:
-bracket 16.3, worm 6.0, wheel 6.9, guide 2.1 g; solenoid + pin 10 g EST).  Shell delta: the two DS3225 standoff
+bracket 16.3, worm 6.0, wheel 6.9, guide 2.1 g; solenoid + pin 10 g EST).
+Shell delta: the two DS3225 standoff
 pads measure 53.5 g in the published Rev T4 shell; six 12 × 12 mm foot bosses
 add 3.9 g each.
 
@@ -401,8 +574,9 @@ def main():
     print()
     print(domains(res))
     if a.write:
-        p1 = os.path.join(REPO, "airframe", "openscad", "fuselage", "cargo",
-                          "tilt_actuator_options_params.scad")
+        p1 = os.path.join(
+            REPO, "airframe", "openscad", "fuselage", "cargo", "tilt_actuator_options_params.scad"
+        )
         p2 = os.path.join(REPO, "docs", "TILT_ACTUATOR_OPTIONS.md")
         write_scad(res, p1)
         write_doc(res, p2)

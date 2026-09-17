@@ -480,8 +480,14 @@ def report_pinion(flap_length: float, crank_r: float, phase_deg: float,
     return True
 
 
+# Crank-phase sweep grids (module-level: a comprehension in a default argument
+# trips mypy's name resolution -- 'Name "d" is not defined').
+PHASE_GRID_2_DEG: tuple = tuple(float(d) for d in range(0, 360, 2))
+PHASE_GRID_15_DEG: tuple = tuple(float(d) for d in range(0, 360, 15))
+
+
 def search_dimensions_pinion(
-    crank_phase_grid: tuple = tuple(float(d) for d in range(0, 360, 2)),
+    crank_phase_grid: tuple = PHASE_GRID_2_DEG,
     pushrod_len_grid: tuple = (40.0, 44.0, 48.0, 52.0, 56.0, 60.0),
     crank_r_grid: tuple = (6.0, 8.5, 11.0, 14.0),
     ta_floor_deg: float = TA_FLOOR_DEG_DEFAULT,
@@ -714,7 +720,7 @@ def report_spar_superseded(flap_length: float, crank_r: float,
 def search_dimensions_spar(
     crank_r_grid: tuple = (8.5, 12.0, 15.0, 18.0, 22.0, 28.0),
     pushrod_len_grid: tuple = (58.0, 63.0, 68.0, 73.0, 78.0, 83.0, 90.0),
-    phase_grid: tuple = tuple(float(d) for d in range(0, 360, 15)),
+    phase_grid: tuple = PHASE_GRID_15_DEG,
     axial_grid: tuple = (0.0, 15.0, 30.0, 45.0, 60.0, 62.75, 75.0, 90.0),
     theta_step_deg: float = 4.0,
 ) -> list[tuple]:
