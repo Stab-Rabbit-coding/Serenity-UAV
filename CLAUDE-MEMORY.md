@@ -982,6 +982,8 @@ D-T5-3 closed. Void former `node_bay` added. Shell 287.2 cm³ / 301.6 g. The BOM
 CSV had to be rebuilt from HEAD + the JSON mirror (the mirror had dropped 14 rows
 and 18 HEAD rows had unquoted commas) — check both files agree before editing.
 
+**Lessons compounded (2026-09-16, docs/solutions/):** coaxial-worm clearance + envelopes; probe-the-hull / change the placement class; single-source layout module; void formers by seeded boolean; twisted-extrusion worm profile from the lead; BOM CSV/JSON mirror drift (logic-errors). Read those before touching the cargo interior again.
+
 ---
 
 ## `project_emma_zoe_schematic_migration.md`

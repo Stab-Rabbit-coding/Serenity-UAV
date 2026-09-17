@@ -11660,8 +11660,22 @@
       ],
       "archived": false
     },
+    "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md": {
+      "description": "One Python module holds every layout station, proves the layout, feeds the mesh merge and emits the SCAD incl\u2026",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md": {
       "description": "Passive mechanisms: check the reference frames before sizing anything",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/design-patterns/probe-the-published-hull-and-change-the-placement-class-not-the-margins.md": {
+      "description": "Ray-probe the published hull at the station before placing anything \u2014 and when a placement misses by fraction\u2026",
       "tags": [
         "documentation"
       ],
@@ -11682,6 +11696,21 @@
       ],
       "archived": false
     },
+    "docs/solutions/design-patterns/void-formers-are-cut-from-the-shell-mesh-by-a-seeded-boolean.md": {
+      "description": "Void formers for a foam pour are (design box \u2212 shell) picked by a seed point, exported without re-processing\u2026",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md": {
+      "description": "Unquoted commas in bom_revS.csv Notes truncate the BOM on rewrite and hide JSON/CSV drift",
+      "tags": [
+        "bom",
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/logic-errors/mating-face-aperture-allowlist.md": {
       "description": "Mesh-repair pipelines silently re-cap intentional open fuselage mating faces",
       "tags": [
@@ -11692,6 +11721,13 @@
     },
     "docs/solutions/logic-errors/mesh-boolean-layout-proofs-silent-zero-volumes-and-shared-profiles.md": {
       "description": "Mesh-boolean layout proofs: three silent failure modes",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/logic-errors/twisted-extrusion-worm-thread-needs-a-transverse-section-from-the-lead.md": {
+      "description": "A worm made by twisted extrusion needs its transverse tooth section derived from the axial thickness and the\u2026",
       "tags": [
         "documentation"
       ],
@@ -13828,11 +13864,16 @@
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
+      "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md",
       "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
+      "docs/solutions/design-patterns/probe-the-published-hull-and-change-the-placement-class-not-the-margins.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/design-patterns/self-locking-worm-and-vectoring-bandwidth-are-mutually-exclusive.md",
+      "docs/solutions/design-patterns/void-formers-are-cut-from-the-shell-mesh-by-a-seeded-boolean.md",
+      "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "docs/solutions/logic-errors/mesh-boolean-layout-proofs-silent-zero-volumes-and-shared-profiles.md",
+      "docs/solutions/logic-errors/twisted-extrusion-worm-thread-needs-a-transverse-section-from-the-lead.md",
       "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md",
       "docs/solutions/workflow-issues/generate-open-item-views-never-hand-patch-them.md",
       "docs/solutions/workflow-issues/read-the-decision-record-before-verifying-first-pass-geometry.md",
@@ -15351,6 +15392,7 @@
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
       "docs/bom_revR.json",
+      "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md",
       "tools/compact_bom_entries.py"
     ],
     "landing-gear": [

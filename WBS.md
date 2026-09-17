@@ -120,6 +120,7 @@
 - [x] MA-5 — CLOSED 2026-09-15: standoff pads removed with the worm-drive bracket (−53.5 g + 23.4 g bosses)
 - [x] MA-6 — CLOSED 2026-09-15: PRINT-BATT-TRAY retired; PRINT-BATT-CRADLE 39.4 g (`battery_cradle.scad`)
 - [ ] MA-7 — add an `Installed` flag to the BOM mass column
+- [ ] ★ BOM-SYNC — `bom_revS.json` vs `.csv` parity: the "canonical" JSON had dropped 14 rows and an in-place CSV rewrite truncated the file (2026-09-16, `docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md`); write `tools/bom_sync.py` (parity assertion, temp-file + `os.replace`, overflow fold) or amend `current-specification/README.md` to name the CSV as the edited file
 - [ ] W1..W8 — ranked weight-reduction targets (W2 BOM reconciliation gates all)
 - [x] WA-R15a — CLOSED 2026-09-15: pads gone; roof band re-proved by `tools/cargo_layout_fit.py` (PASS)
 - [ ] TILT-CTL-02..06 — tilt control loop open items (TILT_DRIVE_CONTROL_SPEC §8; 01 closed by BRK)
