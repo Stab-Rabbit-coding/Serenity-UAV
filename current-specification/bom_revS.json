@@ -2256,14 +2256,27 @@
       "Ref": "LS-TILT-TC",
       "Description": "LibreServo_v4.1-TC tilt-controller board (variant of LibreServo_v4: 6 A bridge, quadrature input, brake driver, VBAT front end)",
       "Category": "Avionics",
-      "Qty": "2",
+      "Qty": "0",
       "Unit_Mass_g": "12",
-      "Total_Mass_g": "24",
+      "Total_Mass_g": "0",
       "Supplier": "JLCPCB (fab from LibreServo_v4 repo)",
       "Supplier_PN_or_Search": "LibreServo_v4/docs/CR-2026-09-15-tilt-controller-variant.md",
       "Est_Unit_Price_USD": "30.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "RETIRED 2026-09-17 -- replaced by OSESC-TILT-TC (Open-Secure-ESC build, REF-ESC-001); the LibreServo_v4.1-TC change request is SUPERSEDED. Qty 0, row kept for the record. Original note: Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): NOT YET DESIGNED -- change request filed in the LibreServo_v4 repo (TODO.md 8.x). 36.5 x 42.9 mm outline carried on PRINT-TILT-BRACKET card-edge rails. Mass estimate 12 g, VERIFY."
+    },
+    {
+      "Ref": "OSESC-TILT-TC",
+      "Description": "Nacelle tilt controller -- Open-Secure-ESC build 6S/10A BRUSHED_CAN_485_isolation (DRV8874-Q1 bridge, TPS54560B buck motor rail, TPL7407L brake driver, remote AEAT-8800 header, isolated CAN-FD + RS-485, OPTIGA Trust M)",
+      "Category": "Avionics",
+      "Qty": "2",
+      "Unit_Mass_g": "12",
+      "Total_Mass_g": "24",
+      "Supplier": "JLCPCB (fab from the Open-Secure-ESC repo) + hand assembly",
+      "Supplier_PN_or_Search": "Open-Secure-ESC/builds/6s/10A/BRUSHED_CAN_485_isolation/",
+      "Est_Unit_Price_USD": "30.00",
       "Est_Total_Price_USD": "60.00",
-      "Notes": "Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): NOT YET DESIGNED -- change request filed in the LibreServo_v4 repo (TODO.md 8.x). 36.5 x 42.9 mm outline carried on PRINT-TILT-BRACKET card-edge rails. Mass estimate 12 g, VERIFY."
+      "Notes": "2026-09-17 (docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md, REF-ESC-001): replaces LS-TILT-TC -- the controller is a build of the project's own Open-Secure-ESC platform, not a LibreServo variant. State: schematic ERC 0/0, BOM walked from that repo's decision matrix, NO PCB yet (its TODO 18). Host constraints carried by the build: 42.9 x 36.5 mm outline, 4 mm parts on the web-facing side, bare back, connectors aft/inboard (PRINT-TILT-BRACKET card-edge rails, Rev T5e). Mass 12 g is an ESTIMATE carried from the retired row until a populated board is weighed; price carried likewise until quoted. Feeds: F_TILT_P/S 3 A. The solenoid (SOL-TILT-BRAKE) and the AEAT-8800 sensor daughter (ENC-DAUGHTER, docs/TILT_ACTUATOR_SELECTION.md section 7) are separate rows/items."
     },
     {
       "Ref": "PRINT-TILT-BRACKET",
@@ -2328,7 +2341,7 @@
       "Supplier_PN_or_Search": "REQUIRES VERIFICATION -- no candidate part cited yet (BRK-4)",
       "Est_Unit_Price_USD": "8.00",
       "Est_Total_Price_USD": "16.00",
-      "Notes": "Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): envelope only in tilt_brake.scad / cargo_layout_fit.py; de-energised = pin engaged (fail-safe). Mass and price are placeholders."
+      "Notes": "Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): envelope only in tilt_brake.scad / cargo_layout_fit.py; de-energised = pin engaged (fail-safe). Mass and price are placeholders. 2026-09-17: driven by the TPL7407L low-side driver on OSESC-TILT-TC (coil between the 6.5 V motor rail and the sink; clamp to VBAT); BRK-4 must also record the hold-in / dropout voltage so the controller's rail-droop rule has a threshold."
     },
     {
       "Ref": "PIN-2X22",

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-17",
+  "generated": "2026-09-18",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -9831,7 +9831,7 @@
       "archived": false
     },
     "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (197 items)",
+      "description": "Bill of materials, CSV (198 items)",
       "tags": [
         "bom",
         "specification"
@@ -9839,7 +9839,7 @@
       "archived": false
     },
     "current-specification/bom_revS.json": {
-      "description": "Bill of materials, JSON (197 items)",
+      "description": "Bill of materials, JSON (198 items)",
       "tags": [
         "bom",
         "specification"
@@ -13233,6 +13233,14 @@
       ],
       "archived": false
     },
+    "tools/bom_edit_tilt_controller.py": {
+      "description": "Swap the tilt-controller BOM row: retire LS-TILT-TC, add OSESC-TILT-TC.",
+      "tags": [
+        "bom",
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/build_head_shell.py": {
       "description": "build_head_shell.py \u2014 apply head-shell features (bosses + aperture cuts) to",
       "tags": [
@@ -15441,6 +15449,7 @@
       "current-specification/bom_revS.json",
       "docs/bom_revR.json",
       "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md",
+      "tools/bom_edit_tilt_controller.py",
       "tools/compact_bom_entries.py"
     ],
     "landing-gear": [
@@ -17206,6 +17215,7 @@
       "tools/TOOL_REFERENCE.md",
       "tools/add_landing_gear_bosses.py",
       "tools/bake_hull_frame.py",
+      "tools/bom_edit_tilt_controller.py",
       "tools/build_head_shell.py",
       "tools/build_landing_gear_views.py",
       "tools/cargo_bay_envelope.py",
