@@ -48,7 +48,7 @@ test that produces the model.
 | **Controlled variable (CV)** | Nacelle tilt angle `θ_n`, −5° (cruise) … +140° (hover), 145° of sweep |
 | **Manipulated variable (MV)** | Actuator shaft position command, on the RS-485 fleet bus |
 | **Measured variable (MV_meas)** | `θ_n`, absolute, from the AK7455 on the wingtip pad reading the trunnion ring magnet (REF-SENSOR-008) |
-| **Inner measured variable** | Actuator shaft position, absolute, from the LibreServo board's own encoder |
+| **Inner measured variable** | Worm-shaft angle, single-turn absolute, from the tilt controller's remote AEAT-8800-Q24 in the brake guide (turns accumulated in firmware; REF-ESC-001) |
 | **Disturbances** | Aero moment about the tilt axis (**unquantified**, `docs/TILT_SPAR_ANALYSIS.md` §2.1.3); gear backlash across two external meshes; shaft wind-up; gravity residual (bounded, ≤ 0.019 kgf·cm — the pivot is at the nacelle CG) |
 | **Actuator limits** | Rate: **not established** (§7.2). Span: unbounded — the rotation-limiting pin is removed, so the actuator has no travel limit of its own. Deadband: **not established** |
 
@@ -99,7 +99,7 @@ drive shaft --[tip pinion 14T -> ring 50T, m 0.8, C 25.60, i 3.571]--> nacelle
 | | counts/rev | at the nacelle |
 |---|---|---|
 | AK7455, outer (REF-SENSOR-008) | 16,384 (14-bit) | **0.0220°** — the magnet rides the trunnion, 1:1 with the nacelle |
-| LibreServo encoder, inner (REF-SENSOR-014, v2: AEAT-8800) | 65,536 (16-bit) | 0.00154° — divided by the 3.571 reduction |
+| AEAT-8800-Q24 on the worm shaft, inner (REF-ESC-001; Broadcom pub-005892) | 65,536 (16-bit, programmable 10–16) | 0.00023° — divided by the Rev T5e 23.8:1 train (was 0.00154° at the pre-T5 3.571) |
 
 The inner sensor is **14× finer at the nacelle** than the outer one. It is still
 the wrong sensor to close the outer loop on, because it is upstream of every
@@ -113,11 +113,11 @@ one sensor over the other.
 Over the full sweep the AK7455 gives 6,598 counts. Quantisation is not a
 limiting error source at any plausible pointing requirement for this axis.
 
-> **LibreServo_v4 encoder part is UNVERIFIED.** REF-SENSOR-014 documents the
-> AEAT-8800 on **v2**. The aircraft carries **v4** (`current-specification/bom_revS.csv`
-> `SERVO-TILT`), whose position sensor this repository has not confirmed. The
-> 16-bit figure above is therefore v2's, carried as a **class expectation, not a
-> v4 datasheet value**. Confirm before it is used for anything but architecture.
+> **Inner sensor part — RESOLVED 2026-09-17 (closes TILT-CTL-04).** The inner sensor is the
+> Broadcom AEAT-8800-Q24, read remotely by the Open-Secure-ESC tilt controller
+> (REF-ESC-001; datasheet held in that repository as its [64]). The 16-bit figure is
+> that part's programmable maximum. The earlier "LibreServo_v4 encoder" premise is
+> superseded — no LibreServo board is fitted to the tilt actuator.
 
 ---
 
@@ -127,9 +127,9 @@ limiting error source at any plausible pointing requirement for this axis.
 graph LR
   REF["transition schedule<br/>theta_cmd, rate-limited"] --> OUT["OUTER loop (Pilot)<br/>nacelle angle PI"]
   AK["AK7455 absolute<br/>nacelle angle"] -->|"14-bit, 0.0220 deg"| OUT
-  OUT -->|"shaft position cmd<br/>RS-485"| IN["INNER loop (LibreServo_v4)<br/>actuator position/velocity"]
-  ENC["LibreServo encoder<br/>actuator absolute"] --> IN
-  IN --> M["motor + 275:1 gearbox"]
+  OUT -->|"shaft position cmd<br/>RS-485"| IN["INNER loop (Open-Secure-ESC tilt build)<br/>worm-shaft position/velocity"]
+  ENC["AEAT-8800-Q24<br/>worm-shaft absolute, remote"] --> IN
+  IN --> M["Pololu 20D 25:1 gearmotor + six-start worm"]
   M --> G1["fuselage spur 1:1"] --> SH["drive shaft"] --> G2["tip 14T/50T"] --> NAC["nacelle"]
   NAC -.->|"the thing actually controlled"| AK
 ```
@@ -189,8 +189,8 @@ transition.
 | ID | Device | Measures | Interface | Role |
 |---|---|---|---|---|
 | `ENC-NACELLE-1/2` (`SKIPPER-TILT-ENC-PCB`) | AKM AK7455, 14-bit off-axis (REF-SENSOR-008) | Nacelle absolute angle | SPI, shared bus, separate CSN per side, plus `ERROR` | **Outer loop, control-critical.** Was telemetry through Rev S |
-| — | LibreServo_v4 on-board absolute encoder | Actuator absolute position | Internal to the board | Inner loop |
-| — | LibreServo_v4 motor current | Actuator torque proxy | RS-485 telemetry | Jam / obstruction detection, §5.3 |
+| — | AEAT-8800-Q24 in the brake guide, read by the tilt controller over a 6-pin SPI/SSI header (REF-ESC-001) | Worm-shaft absolute angle (turns accumulated) | Off-board sensor, ~35 mm cable | Inner loop; also the "stationary" signal for brake sequencing |
+| — | Tilt controller motor current (DRV8874-Q1 IPROPI mirror, REF-ESC-001) | Actuator torque proxy | RS-485 telemetry | Jam / obstruction detection, §5.3 — note IPROPI reports only one low-side FET in slow decay and nothing in coast, so it is not a "settled" signal |
 
 ### 3.1 What changed about the AK7455 installation at Rev S1e
 
@@ -297,6 +297,20 @@ conditionally self-locking and is *not* the design basis.
   the loop has unloaded the pin; bench-verified with the AK7455 reading the
   nacelle (§7.3).
 
+**Controller fail-state chain (2026-09-17, REF-ESC-001 build README, fail-state
+table).** Every DRV8874-Q1 protection event — UVLO, charge-pump UVLO, OCP, TSD
+— disables all four bridge FETs: a **coast**, not a hold. The solenoid rides
+the same buck rail and stays energised, so a driver fault leaves the pin
+retracted until firmware engages it on `nFAULT` (a brake-engage input, latency
+budget set at bring-up). A motor-rail droop below the solenoid's hold-in
+voltage (BRK-4) can drop the pin into a *driven* castellation before the
+bridge's own UVLO acts, so the controller senses the rail and commands
+slow-decay (EN = 0) before the coil drops out. An MCU reset engages the brake
+without firmware (driver-input pull-down). Bus loss engages the brake after a
+timeout, then sleeps the bridge. The brake is released only from a "settled"
+state read on the AEAT-8800 (worm stationary) and an "unloaded" state read on
+the AK7455 — never from motor current.
+
 Governing rationale (owner, 2026-09-15): every ESC has an independent fused path
 to its EDF so a single failure cannot cascade and the aircraft descends under
 control on the remaining units; the tilt hold must therefore survive the loss
@@ -306,7 +320,7 @@ below only as damping.
 
 *Superseded text — the candidates as first analysed:*
 
-1. Motor short-brake held by the LibreServo board on loss of command — costs
+1. Motor short-brake held by the tilt controller on loss of command — costs
    nothing mechanical, but is only as available as the board's own power.
 2. A detent or over-centre latch at the hover and cruise ends — holds without
    power, but only at the ends, and adds a mechanism to the tightest region on
@@ -320,9 +334,11 @@ measurement (§7.3).
 
 ### 5.3 Jam or obstruction
 
-Actuator current is available as RS-485 telemetry. A current at or near stall
-with the AK7455 reading unchanged is a jam. Required behaviour: stop commanding
-into it — a 48× torque margin against a 0.050 N·m requirement means the actuator
+Actuator current is available as RS-485 telemetry (DRV8874-Q1 IPROPI, REF-ESC-001).
+A current at or near stall with the AK7455 reading unchanged is a jam. Required
+behaviour: stop commanding into it — the controller's bridge is strapped to
+latched-off overcurrent with cycle-by-cycle current regulation (IMODE level 3)
+so that hardware cannot hammer a jammed train at its 2 ms retry period either — a 48× torque margin against a 0.050 N·m requirement means the actuator
 can comfortably destroy the drive train it is jammed against.
 
 ### 5.4 Differential tilt — the safety layer
@@ -346,11 +362,20 @@ not have (§2.2). Tracked as TILT-CTL-02.
 
 The actuator is a bus device on the fleet RS-485 segment and the loop's MV
 crosses that bus. Command authenticity is a design input, not an add-on
-[REF-ISA-001]. LibreServo_v4 carries an OPTIGA Trust M
-(`current-specification/bom_revS.csv` `SERVO-TILT`); the fleet position recorded
-in `REFERENCES.md` is that the **gateway** signs the frame rather than the servo,
-because the fork's own TPM/RS-485 work is schematic-only. Nothing in this
-document assumes servo-native signing.
+[REF-ISA-001]. The tilt controller is an Open-Secure-ESC build (REF-ESC-001,
+`current-specification/bom_revS.csv` `OSESC-TILT-TC`) carrying an OPTIGA Trust M
+and the MSPM0 AES-CMAC hot path, so it is a **self-signing trunk node**: it
+verifies the gateway-signed AK7455 angle frame (that frame is a trust boundary)
+and signs its own telemetry.
+
+**Brake release (TILT-CTL-09, 2026-09-17).** Release is a phase event, not a
+per-command act, so it fits the per-frame CMAC hot path and must never invoke
+an OPTIGA private-key operation (Open-Secure-ESC `docs/secure-element-architecture.md`,
+5 s protected-op budget). Brake release is a distinct authenticated command
+class with its own freshness counter and an arm/confirm pair. The fail policy is
+asymmetric: a MAC failure on a **position** frame → fail-operational on the last
+valid command (never engage mid-manoeuvre); a MAC failure on a **release** →
+stay engaged.
 
 ---
 
@@ -435,10 +460,11 @@ INL calibration over the real −5…+140° sweep.
 | **BRK-4** | Brake solenoid part selection (Ø12 × 30 mm pull, ~3 N @ 3 mm, 6 V continuous) — BOM `SOL-TILT-BRAKE`, REQUIRES VERIFICATION. | Flight release |
 | **BRK-5** | Bench: pin-engaged hold test, release under load, drift ≤ 0.63° at the nacelle (§7.3; 12 slots at 23.8:1 — was 0.42° at 35.7:1). | Flight release |
 | **TILT-CTL-07** | Adopted rate requirement ≥ 120 °/s and ≥ 4 Hz at ±5° (Rev T5b) — owner to confirm against the flight-dynamics case; supersedes the "no requirement" state of TILT-CTL-05. | Transition schedule |
-| **TILT-CTL-08** | Controller: LibreServo_v4 is a servo board; the gearmotor needs a re-rated bridge (6 A stall), quadrature input, brake driver and a VBAT front end — change request `LibreServo_v4/docs/CR-2026-09-15-tilt-controller-variant.md`. | Bring-up |
-| **TILT-CTL-02** | Differential-tilt trip threshold (§5.4). Needs roll/yaw authority vs tilt split. | Flight release |
+| ~~TILT-CTL-08~~ | **CLOSED 2026-09-17:** the controller is an Open-Secure-ESC build, `builds/6s/10A/BRUSHED_CAN_485_isolation/` (REF-ESC-001) — DRV8874-Q1 bridge, TPS54560B buck motor rail, TPL7407L brake driver, remote AEAT-8800 header; schematic ERC-clean, BOM walked from the decision matrix. The LibreServo_v4.1-TC CR is superseded. Layout, BOM values and firmware are that repository's TODO §18. | — |
+| **TILT-CTL-09** | Brake-release authorization and asymmetric MAC fail policy (§5.5): command class, freshness, arm/confirm; implemented in the controller firmware. | Bring-up |
+| **TILT-CTL-02** | Differential-tilt trip threshold (§5.4). Needs roll/yaw authority vs tilt split. **Also:** if the trip response is "engage both brakes", it is a bus command with latency and authorization — define the executor and its independence from the loop MCU (the controller exposes a hardware `TRIP_IN`, REF-ESC-001). | Flight release |
 | **TILT-CTL-03** | Plant model — `K_p`, `τ`, `θ` — and gains derived from it with stated margins (§7.1). | Bring-up |
-| **TILT-CTL-04** | LibreServo_v4 position-sensor part and resolution unverified (§1.2). Rev T5b: the inner loop moves to the gearmotor's 48 CPR quadrature encoder (REF-ACT-002); the AEAT-8800 becomes optional. | Inner-loop design |
+| ~~TILT-CTL-04~~ | **CLOSED 2026-09-17:** inner sensor is the AEAT-8800-Q24 on the worm shaft, read by the tilt controller (§1.2, REF-ESC-001); the T5b quadrature idea was dropped with the no-encoder #3712 motor. | Inner-loop design |
 | **TILT-CTL-05** | Actuator slew rate unmeasured; no transition-time requirement exists (§7.2). | Transition schedule |
 | **TILT-CTL-06** | Aero moment about the tilt axis unquantified (`TILT_SPAR_ANALYSIS.md` §2.1.3). | TILT-CTL-01, TILT-CTL-02 |
 | **WA-R13** | `TILT_ENCODER_WIRING_EMI_SPEC.md` §6.1 states a premise that is now false (§3.1). | Documentation integrity |
@@ -458,7 +484,8 @@ INL calibration over the real −5…+140° sweep.
   multi-turn actuator closed on an AK7455.
 - `docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md`
   KTD1 (parallel-axis argument), RISK-2 (backlash as hysteresis).
-- `REFERENCES.md` REF-SENSOR-008 (AK7455), REF-SENSOR-013/014 (fleet servo and
-  LibreServo v2), REF-ISA-001 (ISA/IEC 62443-3-3).
+- `REFERENCES.md` REF-SENSOR-008 (AK7455), REF-ESC-001 (Open-Secure-ESC tilt
+  controller build), REF-SENSOR-013/014 (fleet servo and LibreServo v2, winch
+  only), REF-ISA-001 (ISA/IEC 62443-3-3).
 - `airframe/blender-scripts/merge_cargo_interior.py` `TILT_STAGE_*` — the
   fuselage stage geometry this loop drives through.

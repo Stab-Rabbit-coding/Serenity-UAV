@@ -202,14 +202,15 @@ At 6 V / 22.2 V: 8.8 A × 6 V / 22.2 V ≈ **2.4 A from VBAT** at all-servo stal
 
 | Branch | Load | Stall (transient) | Running | Fuse |
 |---|---|---|---|---|
-| F_TILT_P | port tilt controller (LibreServo_v4.1-TC) + Pololu 20D 25:1 CB 6 V gearmotor (2.9 A stall, 0.74 A max-eff, 0.15 A free-run at 6 V, REF-ACT-001; Rev T5e — the 25D's 6.0 A / 1.8 A figures were Rev T5b) + brake solenoid (~0.5 A at 6 V, BRK-4) | 2.9 × 6 / 22.2 / 0.9 ≈ **0.9 A** from VBAT | ≈ 0.5 A | 3 A mini blade |
+| F_TILT_P | port tilt controller (Open-Secure-ESC `builds/6s/10A/BRUSHED_CAN_485_isolation/`, REF-ESC-001) + Pololu 20D 25:1 CB 6 V gearmotor (2.9 A stall, 0.74 A max-eff, 0.15 A free-run at 6 V, REF-ACT-001; Rev T5e — the 25D's 6.0 A / 1.8 A figures were Rev T5b) + brake solenoid (~0.5 A at 6 V, BRK-4) | 2.9 × 6 / 22.2 / 0.9 ≈ **0.9 A** from VBAT | ≈ 0.5 A | 3 A mini blade |
 | F_TILT_S | starboard, identical | 0.9 A | 0.5 A | 3 A mini blade |
 
 The 6 V servo bus (§3.3) loses the 2 × 2.3 A DS3225 stall contribution: its
 all-stall total falls from 8.8 A to **4.2 A**, back inside the 5 A continuous /
 7 A burst BEC rating. The tilt controllers take VBAT directly (22.2 V nominal,
-25.2 V at full charge) — the MPM3610 buck on LibreServo_v4 must be verified
-against 25.2 V input or replaced (`docs/TILT_ACTUATOR_SELECTION.md` §4).
+25.2 V at full charge) into a TPS54560B buck (4.5–60 V input) that makes the
+6.5 V motor/solenoid rail; the buck's current limit and soft-start, not the
+branch fuse, bound the rail (REF-ESC-001; `docs/TILT_ACTUATOR_SELECTION.md` §4).
 
 Rationale (owner, 2026-09-15): each ESC has an independent fused path to its
 EDF so that no single failure cascades and the aircraft can descend under
@@ -281,7 +282,9 @@ same Littelfuse 0297 series as F_ESC — REQUIRES VERIFICATION of the 3 A rating
 availability in that series). Coordination: a tilt-branch fault at 3 A cannot
 approach F1's 150 A; the 0.9 A stall transient (Rev T5e; 1.8 A at Rev T5b) is 30 %
 of rating and under the series' 100 % / 4 h no-blow curve — a 2 A rating would
-also coordinate, 3 A is kept for the solenoid inrush margin.
+also coordinate; 3 A is kept as margin — with the controller's buck in front of
+the coil (REF-ESC-001), solenoid inrush is a rail-side event and the VBAT-side
+transient is the buck's soft-start, so the fuse no longer sees it directly.
 
 ### 5.1 Coordination Analysis
 

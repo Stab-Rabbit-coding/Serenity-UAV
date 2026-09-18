@@ -121,26 +121,35 @@ Limitation, stated: a brake on the worm shaft does not protect against a broken
 worm, wheel or bracket — a mechanism failure frees the nacelle regardless. A
 drive-shaft brake would, but no placement below Z 85 clears the hoisted payload.
 
-## 4. Controller — this changes the LibreServo_v4 specification
+## 4. Controller — an Open-Secure-ESC build, not a LibreServo variant
 
-LibreServo_v4 is a **servo** controller: discrete N+P MOSFET bridge with FAN3227
-gate drivers, ACS711 current sense, an on-axis AEAT-8800 absolute encoder, an
-MPM3610 +7 V buck from the servo bus, CAN-FD (ADM3055E) + RS-485 (ADM2587E),
-OPTIGA Trust M. Driving a gearmotor breaks four of those assumptions:
+**Decision 2026-09-17 (plan `docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md`, KTD1).**
+The gearmotor + brake is no longer a servo, and turning LibreServo_v4 into a
+tilt controller would have forked that board away from its upstream
+(LibreServo → LibreServo_v2 → v4) and broken the attribution chain. The tilt
+controller is instead a build instance of the project's own Open-Secure-ESC
+platform: `builds/6s/10A/BRUSHED_CAN_485_isolation/` (REF-ESC-001), walked
+from that repository's decision matrix, which gained a Holding Brake axis and a
+magnetic-absolute shaft-sensor row for it. The LibreServo_v4.1-TC change
+request is superseded; v4.0.0 stays on the winch and door servos.
 
-| Item | LibreServo_v4 today | Tilt-controller requirement (Opt 2) |
+| Item | Tilt-controller requirement | How the build meets it (REF-ESC-001) |
 |---|---|---|
-| Motor | DS3225 internal motor, 2.3 A stall @ 6.8 V | **Rev T5e: Pololu 20D 25:1 CB 6 V: 2.9 A stall**, 150 mA free-run (REF-ACT-001) — within 30 % of the v4 bridge's design point; re-rate rather than redesign. (Opt 2's 25D wanted 6.0 A.) |
-| Position sensing | AEAT-8800 on the output shaft, single-turn absolute | **T5c/T5e:** the AEAT-8800 stays — it reads a Ø6 magnet in the worm's brake collar (worm-shaft angle, single-turn absolute; firmware counts turns, the AK7455 gives the absolute nacelle angle). The gearmotor is the no-encoder **#3712 (20Dx41L)** |
-| Brake | none | one **solenoid driver output** (~0.5 A continuous or PWM-held), fail-safe de-energised = engaged, with brake-state telemetry |
-| Power input | +7 V from the 6 V servo bus via MPM3610 | **own fused feed from VBAT (22.2 V nominal, 25.2 V full)**; MPM3610 input rating vs 25.2 V **REQUIRES VERIFICATION** — if it is a 21 V part the front end must change |
-| Firmware | servo position loop | cascade: quadrature velocity/position inner loop, AK7455 outer loop, brake sequencing (BRK-3), differential-tilt trip input |
+| Motor | Pololu 20D 25:1 CB 6 V: 2.9 A stall, 0.74 A max-eff, 0.15 A free-run (REF-ACT-001) | TI DRV8874-Q1 integrated H-bridge, 4.5–37 V, 6 A peak, PH/EN mode; IPROPI current mirror into the ADC (no shunt) |
+| Position sensing | AEAT-8800 reads the Ø6 magnet in the worm's brake collar, ~35 mm from the board; firmware counts turns, the AK7455 gives the absolute nacelle angle | Keyed 6-pin SPI/SSI header (3V3, GND, SCLK, DO, NSL, DI) with series protection; the Broadcom AEAT-8800-Q24 sits on a sensor daughter in the brake guide (Serenity item, §7) |
+| Brake | one solenoid output, ~0.5 A continuous or PWM-held, de-energised = engaged, state on the bus, released only after the loop has unloaded the pin | TI TPL7407L low-side driver, two channels paralleled, clamp diodes returned to VBAT, external + internal input pull-down so an MCU reset engages the brake; brake-state readback divider; `nFAULT` of the bridge is a brake-engage input |
+| Power input | own fused feed from VBAT (22.2 V nominal, 25.2 V full), 3 A branch | TPS54560B buck (4.5–60 V in, 5 A) making a 6.5 V motor/solenoid rail; a second TPS54560B for 3V3; VBAT and rail sense dividers into the ADC |
+| Bus / trust | isolated CAN-FD (AK7455 angle from the gateway) + RS-485 (MV, telemetry); command authenticity per `TILT_DRIVE_CONTROL_SPEC.md` §5.5 | ADM3057E + ADM2587E isolated transceivers, OPTIGA Trust M, MSPM0G3518-Q1 — the same stack as the 6S/50A EDF build |
+| Firmware | cascade (worm-shaft inner loop, AK7455 outer loop), brake sequencing, differential-tilt trip input, jam detection, per-side sense | Recorded as requirements in the build README; hardware `TRIP_IN` pin; implementation is that repository's TODO §18 |
 
-The bus, the trust module and the board outline (36.5 × 42.9 mm, card-edge rails
-on the bracket — Rev T5e: on the web's OUTBOARD face, component side toward the
-web with a 4 mm standoff, bare back to the skin) are unchanged. This is filed as a change request in the
-LibreServo_v4 repository (`docs/CR-2026-09-15-tilt-controller-variant.md`) —
-"LibreServo_v4.1-TC" — rather than a change to the winch/door servos' v4.0.0.
+The board outline is a **host constraint carried by the build**, not something
+the bracket adapts to: ≤ 42.9 × 36.5 mm, ≤ 4 mm component height on the
+web-facing side, bare back to the skin, connectors on the aft or inboard edge
+(card-edge rails on the web's OUTBOARD face, Rev T5e; `tilt_actuator_bracket.scad`
+`BOARD_*` / `RAIL_*`). Status 2026-09-17: schematic ERC-clean (0/0), BOM walked
+from the matrix with every line's citation status, no PCB yet; the buck
+inductors are the height risk and are unselected (`UNVERIFIED`) until a part
+under 4 mm is sourced with its datasheet.
 
 ## 5. Power — per-path feeds
 
@@ -185,6 +194,7 @@ finding drops to 4.2 A). The tilt actuators are no longer on that bus at all.
 | TILT-CTL-06 | Aero moment about the tilt axis — sizes the brake's real margin |
 | BRK-4 | Solenoid part selection (Ø12 × 24, pull, ~3 N @ 3 mm, 6 V, continuous) — BOM `SOL-TILT-BRAKE`, REQUIRES VERIFICATION |
 | BRK-5 | Bench: hold test (§7.3) with the pin engaged, release under load, drift ≤ 0.63° |
-| LS-CR-1 | LibreServo_v4.1-TC change request (bridge re-rated to 2.9 A stall, brake driver, VBAT front end) |
+| ~~LS-CR-1~~ | CLOSED 2026-09-17 — the LibreServo_v4.1-TC CR is superseded; the controller is the Open-Secure-ESC build (REF-ESC-001, §4) |
+| ENC-DAUGHTER | AEAT-8800-Q24 sensor daughter for the brake-guide pocket (QFN-24 carrier + 6-pin lead to the controller's J7) — Serenity print/PCB item, not in the controller BOM |
 | REF-ACT-001 | Pololu 20D: product page read 2026-09-16 (41 L, 18 mm shaft, M2.5 ≤ 3.5 deep); mounting-hole spacing (15 mm assumed) and Ø7 boss REQUIRE VERIFICATION on the dimension diagram; axial load rating not published |
-| TC-BOARD | Rail standoff 4 mm assumes ≤ 4 mm component height on LibreServo_v4 — verify against the v4.0.0 layout |
+| TC-BOARD | Rail standoff 4 mm is a hard constraint on the Open-Secure-ESC build's layout (REF-ESC-001, its TODO §18.6); the buck inductors are the risk |

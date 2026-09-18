@@ -49,7 +49,7 @@ hoist line at Y 55.5. What was built instead:
 | Aft avionics nodes N2 FC2 (port) / N4 FC3 (stbd) | X_CL + 30 / − 31, Y 99.5..121.5, Z 87..124, transverse, pouch-wrapped | PB2I + cape in foil pouch, saddle (SCAD not yet authored) | `PRINT-NODE-SADDLE` |
 | Chin avionics nodes N1 CN2 (port) / N3 CN3 (stbd) | X_CL + 5..42 / − 5..−42, Y −58..0, Z 66..88, lying flat, connector edges inboard on a shared 10 mm cable channel | PB2I + cape in foil pouch on `chin_node_shelf.stl` (plate Y −52..1.6, Z 63.6..66; two cam straps each) | 4 × 10 mm floor bosses at (X_CL ± 30, Y −49) and (X_CL ± 20, Y −33, on the ramp fairing), M3 heat-set |
 | Cargo Observer tray | X_CL ± 38.4, Y 108.5..128.5, Z 14.2..85, standing (board plane transverse); nadir camera on the top edge looking forward-down through the clamshell aperture | envelope of `cargo_vera_faraday.scad` Rev S1 (76.8 × 70.8 × 20) — tray SCAD to be re-authored in hull frame to these bosses (OBS-CARGO) | 4 × belly bosses (X_CL ± 30, Y 112.5 / 117) forward of the splice-collar ring, M2.5 heat-set |
-| Tilt controller board (per side) | card-edge rails on the bracket web's **outboard** face, Y 55..97.9, Z 83..119.5, component side toward the web | LibreServo_v4.1-TC (change request filed) | rails + cable tie |
+| Tilt controller board (per side) | card-edge rails on the bracket web's **outboard** face, Y 55..97.9, Z 83..119.5, component side toward the web | Open-Secure-ESC tilt controller build `6s/10A/BRUSHED_CAN_485_isolation` (REF-ESC-001), ≤ 42.9 × 36.5 mm, ≤ 4 mm parts web-side | rails + cable tie |
 | Flight battery | X −194.85..−144.85, Y −58..+84, Z 90..128 (centred, longitudinal) | `battery_cradle.stl` (inverted U, roof-hung) | 4 × 10 mm roof hanger bosses at (X −179.85/−159.85, Y −50 / +80), M3 heat-set |
 | Mission payload (README steps 6/9) | 76.2 (X) × 101.6 (Y) × 76.2 (Z) box at the door crown Z 8.72, centred Y 55.5 — long side along Y | keep-out | — |
 | Hoist (Phase 7 reserve) | **twin-line bridle** at X −200.75 / −138.95, Y 55.5; drums Ø16 at Z 133.4..149.4 on a common X axle; two 10 mm roof pedestal bosses at X −211.75 / −127.95 | `CARGO_WINCH_SPECIFICATION.md` needs a Rev D (twin drum) | pedestal bosses, M3 |
@@ -204,7 +204,7 @@ worm/wheel mesh zone 21 mm³, shelf lips in the cable channel).
 | WINCH-D | `CARGO_WINCH_SPECIFICATION.md` Rev D for the twin-drum bridle at Y 55.5 |
 | HARN-CLIP | Encoder-harness turn-down clip on the tilt bracket |
 | NODE-SADDLE | `node_saddle.scad` for N2/N4 at Y 99.5..121.5 — the cradle aft wall is now 13 mm ahead of them; a floor- or thwart-mounted saddle is the likelier answer |
-| TC-BOARD | LibreServo_v4.1-TC change request: the bridge rating drops to the 20D's 2.9 A stall (TC-1 said 6 A); the board's component side faces the bracket web, 4 mm rail standoff |
+| TC-BOARD | Open-Secure-ESC tilt controller (REF-ESC-001): the build carries the T5e rail envelope as a hard host constraint (≤ 42.9 × 36.5 mm, ≤ 4 mm parts on the web-facing side, bare back, connectors aft/inboard); layout not started — its buck inductors are the height risk |
 | GPS-ANT | Ø36 patch antenna part vs the legacy ANN-MB reference (82 × 60 mm — does not fit the cup) |
 | OBS-CARGO | Envelope PLACED (T5e, §1) and bosses merged; `cargo_vera_faraday.scad` (legacy frame) must be re-authored in hull frame to the 4 belly bosses, with the camera on the top edge looking forward-down through the aperture |
 | A0 | Battery station fixed at Y −58..84 — feed the CG ledger |
