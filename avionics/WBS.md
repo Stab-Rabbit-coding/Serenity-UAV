@@ -379,16 +379,21 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
 
 - [ ] **U1** — Retire Pilot `J_ESC`/`J_SERVO` PWM headers → CAN-FD/RS-485 actuator
     trunk (gates U2/U3/U6). ★
-- [ ] **U2** — LibreServo_v4 nacelle-tilt bus integration; close the `CAN-PERIPH-GW-1`
-    `J_FLEX` bare-UART gap (REF-SENSOR-014 → v4).
+- [ ] **U2** — Open-Secure-ESC tilt controller (REF-ESC-001, build
+    `6s/10A/BRUSHED_CAN_485_isolation`, 2026-09-17) as a self-signing node on the
+    CAN-FD/RS-485 trunk: verify the gateway-signed AK7455 angle frame, publish
+    telemetry and brake state; the `CAN-PERIPH-GW-1` `J_FLEX` bare-UART gap is
+    now winch-only (REF-SENSOR-014).
 - [ ] **U3** — Open-Secure-ESC 50A/6S `CAN_485_faraday` integration + PID governor
     rewrite off PRU/BDSHOT onto CAN-FD frames.
 - [ ] **U4** — OpenServoCore SG90 TTL+CMAC bus finalize; re-check the REF-SENSOR-015
     upstream-maturity gate literally, not from memory.
 - [ ] **U5** — Observer pitot-tube airspeed sensor (`J_PITOT`); remove Pilot's
     unbacked "airspeed sensor" claim. Datasheet pull precedes any REFERENCES.md edit.
-- [ ] **U6** — Fleet host+message authentication wiring for ESC / tilt-servo / SG90
-    endpoints; one `secure-controller-assurance` mapping per endpoint class.
+- [ ] **U6** — Fleet host+message authentication wiring for ESC / brushed tilt
+    controller / SG90 endpoints; one `secure-controller-assurance` mapping per
+    endpoint class (the tilt endpoint is a brushed-ESC class since 2026-09-17,
+    with the brake-release command class of `TILT_DRIVE_CONTROL_SPEC.md` §5.5).
 - [ ] **U7** — Per-board ERC/DRC/gerber closeout (Pilot, XO, Commo, Flight Engineer,
     Observer, CAN-PERIPH-GW-1); runs after U1/U2/U3/U5 land on the boards. ★
 - [ ] **U8** — Pilot tamper-mesh creepage fix (13 DRC, 0.125 mm vs 8 mm; fab blocker)

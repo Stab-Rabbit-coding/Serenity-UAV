@@ -158,8 +158,9 @@ MOTOR_D = 20.0  # Pololu 20D (REF-ACT-001)
 MOTOR_BODY_L = 41.0  # #3712 "20Dx41L": gearbox + motor, no shafts
 # #3712 carries a 6 x 2 mm EXTENDED REAR SHAFT (O2); modelled at the full
 # body diameter as a conservative envelope.  No encoder is fitted: the inner-
-# loop sensor is the LibreServo AEAT-8800 reading a magnet in the worm's
-# brake collar (SENSOR_*), so the controller change request stays TC-2.
+# loop sensor is the AEAT-8800-Q24 reading a magnet in the worm's brake
+# collar (SENSOR_*), read remotely by the Open-Secure-ESC tilt controller
+# (REF-ESC-001; the LibreServo variant was superseded 2026-09-17).
 MOTOR_ENC_L = 6.0
 MOTOR_L = MOTOR_BODY_L + MOTOR_ENC_L
 MOTOR_SHAFT_L = 18.0  # O4 D output shaft (20D: 18 mm)
@@ -187,8 +188,10 @@ BRAKE_SOL_X = WORM_X - 1.5  # -126.75
 SENSOR_PCB_T = 3.0  # AEAT-8800 carrier (part of the brake guide block face)
 # 62.1: 1 mm gap + 5 mm guide block (pin, sensor), then the coil to 86.1
 BRAKE_SOL_Y0 = BRAKE_Y + BRAKE_COLLAR_L / 2 + 3.0 + SENSOR_PCB_T
-# Tilt CONTROLLER board (LibreServo_v4.1-TC, 36.5 x 42.9, card-edge rails on
-# the bracket).  Rev T5b put it on the web's INBOARD face at Y 38..81 / Z
+# Tilt CONTROLLER board (Open-Secure-ESC build 6s/10A/BRUSHED_CAN_485_isolation,
+# REF-ESC-001; the build carries this 36.5 x 42.9 envelope and the 4 mm
+# component-side height as hard host constraints; card-edge rails on the
+# bracket).  Rev T5b put it on the web's INBOARD face at Y 38..81 / Z
 # 93..129.5 -- straight through the worm (T5d-2, found 2026-09-16: the board
 # was never an envelope here).  Rev T5e: on the web's OUTBOARD face, in the
 # shoulder pocket, clear of the motor's and worm's reach past the web plane
