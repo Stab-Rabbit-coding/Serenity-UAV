@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-18",
+  "generated": "2026-09-19",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -4635,6 +4635,49 @@
       ],
       "archived": true
     },
+    "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md": {
+      "description": "Pilot \u2014 EMI-Hardened Flight Control & Sensor Cape",
+      "tags": [
+        "archive",
+        "documentation",
+        "emi-hardening",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_pcb": {
+      "description": "KiCad PCB layout",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_sch": {
+      "description": "KiCad schematic",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot_rebuild.kicad_sch": {
+      "description": "KiCad schematic",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/mod_pilot_pcb_reconcile.py": {
+      "description": "Pilot PCB repair pass: strip stale routing, reconcile with Wash_rebuild.",
+      "tags": [
+        "archive",
+        "pcb-design",
+        "security"
+      ],
+      "archived": true
+    },
     "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md": {
       "description": "Avionics KiCad Archive \u2014 Rev Q (2026-06-05 / updated 2026-06-10)",
       "tags": [
@@ -6549,6 +6592,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/74438335033.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/749010012A.pdf": {
       "description": "PDF document",
       "tags": [
@@ -6577,6 +6627,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/ECS-2520MV.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf": {
       "description": "PDF document",
       "tags": [
@@ -6598,6 +6655,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/MAX-M10S_DataSheet_UBX-20035208.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/MAX-M10S_IntegrationManual_UBX-20053088.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf": {
       "description": "PDF document",
       "tags": [
@@ -6606,6 +6677,13 @@
       "archived": false
     },
     "avionics/datasheets/PCA9555.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/PremierMagnetics_DB2791S.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -6731,6 +6809,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/dp83825i.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/ds-000347-icm-42688-p-v1.6.pdf": {
       "description": "PDF document",
       "tags": [
@@ -6753,6 +6838,13 @@
       "archived": false
     },
     "avionics/datasheets/eGH.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/hi-1573.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -6815,6 +6907,27 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/samtec_ssm_footprint.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/samtec_tsm-dv-footprint.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/samtec_tsm_catalog.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/slaae29a.pdf": {
       "description": "PDF document",
       "tags": [
@@ -6851,6 +6964,13 @@
       "archived": false
     },
     "avionics/datasheets/slb9672.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/tps62933.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8605,113 +8725,18 @@
       "archived": false
     },
     "avionics/kicad/Pilot/Pilot.md": {
-      "description": "Pilot \u2014 EMI-Hardened Flight Control & Sensor Cape",
+      "description": "Pilot \u2014 Flight Control & Sensor Cape",
       "tags": [
         "avionics-hardware",
         "documentation",
         "emi-hardening",
-        "pcb-design"
+        "pcb-design",
+        "security"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-B_Cu.gbr": {
-      "description": "Gerber fabrication layer (b_cu)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot-B_Mask.gbr": {
-      "description": "Gerber fabrication layer (b_mask)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot-B_Paste.gbr": {
-      "description": "Gerber fabrication layer (b_paste)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot-B_Silkscreen.gbr": {
-      "description": "Gerber fabrication layer (b_silkscreen)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot-Edge_Cuts.gbr": {
-      "description": "Gerber fabrication layer (edge_cuts)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot-F_Cu.gbr": {
-      "description": "Gerber fabrication layer (f_cu)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot-F_Mask.gbr": {
-      "description": "Gerber fabrication layer (f_mask)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot-F_Paste.gbr": {
-      "description": "Gerber fabrication layer (f_paste)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot-F_Silkscreen.gbr": {
-      "description": "Gerber fabrication layer (f_silkscreen)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot-In1_Cu.gbr": {
-      "description": "Gerber fabrication layer (in1_cu)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot-In2_Cu.gbr": {
-      "description": "Gerber fabrication layer (in2_cu)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot-job.gbrjob": {
-      "description": "Gerber job file (fabrication job spec)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/gerbers/Pilot.drl": {
-      "description": "Drill file (NC drill data)",
+    "avionics/kicad/Pilot/kicads/Pilot.kicad_dru": {
+      "description": "KiCad custom design-rules file",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -8750,8 +8775,24 @@
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/kicads/Pilot_rebuild.kicad_sch": {
-      "description": "KiCad schematic",
+    "avionics/kicad/Pilot/kicads/Pilot.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicads/Pilot.net": {
+      "description": "KiCad netlist",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicads/fp-lib-table": {
+      "description": "(fp_lib_table",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -8766,8 +8807,33 @@
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/scripts/gen_pilot_sch.py": {
-      "description": "gen_wash_sch.py \u2014 Author a readable, datasheet-accurate Pilot schematic.",
+    "avionics/kicad/Pilot/scripts/export_pilot_gerbers.sh": {
+      "description": "!/usr/bin/env bash",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/finish_pilot_pcb.py": {
+      "description": "finish_pilot_pcb.py \u2014 Import a freerouting session, fill outer-layer GND",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py": {
+      "description": "gen_pilot_footprints.py \u2014 Author the project-custom land patterns Pilot needs.",
+      "tags": [
+        "avionics-hardware",
+        "emi-hardening",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py": {
+      "description": "Python script",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -8775,8 +8841,8 @@
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/scripts/mod_pilot_pcb_reconcile.py": {
-      "description": "Pilot PCB repair pass: strip stale routing, reconcile with Wash_rebuild.",
+    "avionics/kicad/Pilot/scripts/gen_pilot_sch.py": {
+      "description": "Python script",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -8794,7 +8860,47 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Serenity-Custom.pretty/Bosch_BMP388_LGA-10_2x2mm.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/Bourns_SRF2012_4T.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/L_WE-MAPI_3015.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/Molex_NanoFit_1x04_Horizontal.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.2mm_M2_SelfTap_Compact.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.7mm_M2.5_PGND_Ring.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
@@ -8810,10 +8916,59 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/Samtec_TSM-108-01-x-DV.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/Wurth_749010012A_WE-LAN.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/X2Y_0805_4T.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -10406,6 +10561,13 @@
       ],
       "archived": false
     },
+    "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html": {
+      "description": "HTML document",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/img/assembled-iso.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -11683,6 +11845,15 @@
         "documentation",
         "power",
         "specification"
+      ],
+      "archived": false
+    },
+    "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md": {
+      "description": "PocketBeagle 2 capes: verify every land against its OEM datasheet and budget real courtyards before layout",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "security"
       ],
       "archived": false
     },
@@ -13661,6 +13832,7 @@
       "airframe/wings-nacelles/TODO.md",
       "airframe/wings-nacelles/WBS.md",
       "archives/airframe-archives/archive/ARCHIVE-REVQ.md",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-2.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-B-2.md",
@@ -13760,6 +13932,7 @@
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
       "docs/flight_envelope.md",
+      "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
       "docs/img/assembled-iso.png",
       "docs/img/cargo_layout_t5_sections.png",
       "docs/img/leg.png",
@@ -13913,6 +14086,7 @@
       "docs/references/vimdrones_esc_s50_v1.0.step",
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
+      "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
       "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md",
       "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
@@ -13969,6 +14143,7 @@
       "airframe/placeholders/generate_placeholders.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Assemble.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Subsystem-Assembly.py",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-2.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-B-2.md",
@@ -14005,6 +14180,7 @@
       "avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py",
       "avionics/kicad/Observer/scripts/gen_observer_pcb.py",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/XO/XO.md",
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/fix_xcvr_labels.py",
@@ -14032,6 +14208,7 @@
       "docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
       "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
+      "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
@@ -14100,6 +14277,7 @@
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Assemble.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Subsystem-Assembly.py",
       "archives/airframe-archives/archive/openscad/wings/wing_nacelle_pylon_revo.scad",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/mod_pilot_pcb_reconcile.py",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.md",
       "archives/chat/journal.txt",
@@ -14148,8 +14326,9 @@
       "avionics/kicad/Observer/scripts/gen_observer_ic_symbols.py",
       "avionics/kicad/Observer/scripts/gen_observer_pcb.py",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
+      "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
-      "avionics/kicad/Pilot/scripts/mod_pilot_pcb_reconcile.py",
       "avionics/kicad/README.md",
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
       "avionics/kicad/replace_footprints.py",
@@ -14177,6 +14356,7 @@
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
+      "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "gcs/AGENTS.md",
@@ -15601,6 +15781,7 @@
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2-In2_Cu.gbr",
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2-job.gbrjob",
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2.drl",
+      "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/fix_xcvr_labels.py",
       "gcs/skipper/software/config/mavlink_router.conf",
@@ -15880,6 +16061,11 @@
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_205610.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_210615.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_211230.zip",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_pcb",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_sch",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot_rebuild.kicad_sch",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/mod_pilot_pcb_reconcile.py",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-1-no-comment.kicad_pcb",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-1-no-comment.kicad_sch",
@@ -16210,6 +16396,11 @@
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_205610.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_210615.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_211230.zip",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_pcb",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_sch",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot_rebuild.kicad_sch",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/mod_pilot_pcb_reconcile.py",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-1-no-comment.kicad_pcb",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-1-no-comment.kicad_sch",
@@ -16438,31 +16629,35 @@
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Mask.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Paste.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Silkscreen.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-Edge_Cuts.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Mask.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Paste.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Silkscreen.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-In1_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-In2_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-job.gbrjob",
-      "avionics/kicad/Pilot/gerbers/Pilot.drl",
+      "avionics/kicad/Pilot/kicads/Pilot.kicad_dru",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_pcb",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_prl",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_pro",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sch",
-      "avionics/kicad/Pilot/kicads/Pilot_rebuild.kicad_sch",
+      "avionics/kicad/Pilot/kicads/Pilot.kicad_sym",
+      "avionics/kicad/Pilot/kicads/Pilot.net",
+      "avionics/kicad/Pilot/kicads/fp-lib-table",
       "avionics/kicad/Pilot/kicads/sym-lib-table",
+      "avionics/kicad/Pilot/scripts/export_pilot_gerbers.sh",
+      "avionics/kicad/Pilot/scripts/finish_pilot_pcb.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
-      "avionics/kicad/Pilot/scripts/mod_pilot_pcb_reconcile.py",
       "avionics/kicad/README.md",
+      "avionics/kicad/Serenity-Custom.pretty/Bosch_BMP388_LGA-10_2x2mm.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Bourns_SRF2012_4T.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/L_WE-MAPI_3015.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Molex_NanoFit_1x04_Horizontal.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.2mm_M2_SelfTap_Compact.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.7mm_M2.5_PGND_Ring.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Samtec_TSM-108-01-x-DV.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Wurth_749010012A_WE-LAN.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/X2Y_0805_4T.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/uBlox_SAM-M10Q-00B.kicad_mod",
       "avionics/kicad/TODO-1.2b-CHECKLIST.md",
       "avionics/kicad/TODO-1.2b-KICAD-READY.md",
@@ -16584,15 +16779,20 @@
       "avionics/TODO.md",
       "avionics/WBS.md",
       "avionics/datasheets/6391731564544371956530548.pdf",
+      "avionics/datasheets/74438335033.pdf",
       "avionics/datasheets/749010012A.pdf",
       "avionics/datasheets/987651-1223.pdf",
       "avionics/datasheets/DS3218 datasheet.pdf",
       "avionics/datasheets/DS3225 datasheet.pdf",
+      "avionics/datasheets/ECS-2520MV.pdf",
       "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf",
       "avionics/datasheets/KSZ9477S-Data-Sheet-DS00002392C.pdf",
       "avionics/datasheets/L-1038e.A5_phyCORE-AM62x_HW Manual.pdf",
+      "avionics/datasheets/MAX-M10S_DataSheet_UBX-20035208.pdf",
+      "avionics/datasheets/MAX-M10S_IntegrationManual_UBX-20053088.pdf",
       "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf",
       "avionics/datasheets/PCA9555.pdf",
+      "avionics/datasheets/PremierMagnetics_DB2791S.pdf",
       "avionics/datasheets/S32K-RM.pdf",
       "avionics/datasheets/S32K1xx.pdf",
       "avionics/datasheets/SAM-M10Q_DataSheet_UBX-22013293.pdf",
@@ -16610,10 +16810,12 @@
       "avionics/datasheets/bsh-bth.pdf",
       "avionics/datasheets/bst-bmp388-ds001.pdf",
       "avionics/datasheets/bth-xxx-xx-x-d-xx-footprint.pdf",
+      "avionics/datasheets/dp83825i.pdf",
       "avionics/datasheets/ds-000347-icm-42688-p-v1.6.pdf",
       "avionics/datasheets/ds26lv31qml.pdf",
       "avionics/datasheets/ds26lv32at.pdf",
       "avionics/datasheets/eGH.pdf",
+      "avionics/datasheets/hi-1573.pdf",
       "avionics/datasheets/infineon-optiga-trust-m-datasheet-en.pdf",
       "avionics/datasheets/iso6442.pdf",
       "avionics/datasheets/isow1044.pdf",
@@ -16622,12 +16824,16 @@
       "avionics/datasheets/mspm0g3507-q1.pdf",
       "avionics/datasheets/mspm0g3507.pdf",
       "avionics/datasheets/mspm0g3518-q1.pdf",
+      "avionics/datasheets/samtec_ssm_footprint.pdf",
+      "avionics/datasheets/samtec_tsm-dv-footprint.pdf",
+      "avionics/datasheets/samtec_tsm_catalog.pdf",
       "avionics/datasheets/slaae29a.pdf",
       "avionics/datasheets/slaae76e.pdf",
       "avionics/datasheets/slaaet8a.pdf",
       "avionics/datasheets/slau846e.pdf",
       "avionics/datasheets/slaz742g.pdf",
       "avionics/datasheets/slb9672.pdf",
+      "avionics/datasheets/tps62933.pdf",
       "avionics/emi-hardening/TODO.md",
       "avionics/emi-hardening/WBS.md",
       "avionics/firmware/AK7455_CALIBRATION_SPECIFICATION.md",
@@ -16835,31 +17041,35 @@
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Mask.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Paste.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Silkscreen.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-Edge_Cuts.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Mask.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Paste.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Silkscreen.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-In1_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-In2_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-job.gbrjob",
-      "avionics/kicad/Pilot/gerbers/Pilot.drl",
+      "avionics/kicad/Pilot/kicads/Pilot.kicad_dru",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_pcb",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_prl",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_pro",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sch",
-      "avionics/kicad/Pilot/kicads/Pilot_rebuild.kicad_sch",
+      "avionics/kicad/Pilot/kicads/Pilot.kicad_sym",
+      "avionics/kicad/Pilot/kicads/Pilot.net",
+      "avionics/kicad/Pilot/kicads/fp-lib-table",
       "avionics/kicad/Pilot/kicads/sym-lib-table",
+      "avionics/kicad/Pilot/scripts/export_pilot_gerbers.sh",
+      "avionics/kicad/Pilot/scripts/finish_pilot_pcb.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
-      "avionics/kicad/Pilot/scripts/mod_pilot_pcb_reconcile.py",
       "avionics/kicad/README.md",
+      "avionics/kicad/Serenity-Custom.pretty/Bosch_BMP388_LGA-10_2x2mm.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Bourns_SRF2012_4T.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/L_WE-MAPI_3015.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Molex_NanoFit_1x04_Horizontal.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.2mm_M2_SelfTap_Compact.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.7mm_M2.5_PGND_Ring.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Samtec_TSM-108-01-x-DV.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Wurth_749010012A_WE-LAN.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/X2Y_0805_4T.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/uBlox_SAM-M10Q-00B.kicad_mod",
       "avionics/kicad/TODO-1.2b-CHECKLIST.md",
       "avionics/kicad/TODO-1.2b-KICAD-READY.md",

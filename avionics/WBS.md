@@ -146,8 +146,18 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     pair) to select SBUS vs. plain UART framing on the existing J_SBUS-equivalent
     pad, matching the J_SBUS line item already in Pilot.md §14's field-connector
     table (§1.2, "Reconcile Pilot.md §14...").
-- [ ] **Generate Pilot gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
-    KiCad; export to `avionics/kicad/gerbers/CAPE-A-2/`; re-export drill files.
+- [ ] **Generate Pilot gerbers** — superseded by the 2026-09-19 schematic-first Rev T
+    rebuild (`avionics/kicad/Pilot/Pilot.md`; `CAPE-A-2.kicad_pcb` no longer exists).
+    Rev T is fully generated (`gen_pilot_sch.py`/`gen_pilot_footprints.py`/
+    `gen_pilot_pcb.py`), datasheet-verified, 6-layer, ERC 0 / DRC 0 at 0%
+    routed (388 connections). Two freerouting attempts via the Specctra bridge
+    did not produce a safe result — the second completed but introduced 9 real
+    shorts + 118 hole-clearance violations around the dense PocketBeagle 2
+    headers and was rejected; see `Pilot.md` "Routing status" for the full
+    account. Remaining: route (recommend KiCad's interactive push-and-shove
+    router, which applies this project's live DRC rules including the
+    isolation-domain `ISO_BAND` rule, unlike the batch Specctra round-trip),
+    then `bash scripts/export_pilot_gerbers.sh`.
     - **BLOCKS Pilot fab order**
 - [ ] **Generate XO gerbers** — `CAPE-B-2.kicad_pcb` complete; same DRC + export procedure;
     export to `avionics/kicad/gerbers/CAPE-B-2/`.
