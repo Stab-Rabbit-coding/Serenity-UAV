@@ -704,16 +704,60 @@ REFERENCES.md Removed/Superseded Citations).
     swapped to ISOW1412 (`fix_wash_zoe_isolators.py`) — footprint swap +
     re-route + gerbers still open. **Keep all legacy connectors** (user
     instruction) even where superseded by the trust module.
-- [ ] **XO full DRC/ERC clean-out — not started.** 219 ERC hard (206
-    `pin_not_connected`, mirrors the CAN-TR/ISOW1044 VCC1/GND1/RXD/VCC2 pins
-    genuinely unconnected in the schematic, plus LoRa/other pre-existing
-    gaps) + 154 DRC hard. Same ADM2795E→ISOW1412 PCB footprint swap needed
-    as Pilot. A stray `_autosave-XO.kicad_pcb` + `.lck` files are
-    git-tracked in `avionics/kicad/XO/kicads/` — the autosave file appears
-    to be an accidental commit of a KiCad crash-recovery artifact (578 hard
-    DRC violations on its own, clearly not real design intent) and should
-    be reviewed for removal. **Keep all legacy connectors** (user
-    instruction).
+- [x] **XO schematic-first rebuild — ERC 0.** 2026-09-20 (Claude Sonnet 5):
+    replaced the legacy schematic (169 refs vs 43 PCB footprints, 564 ERC
+    violations) with a fresh generator (`avionics/kicad/XO/scripts/
+    gen_xo_sch.py`), reusing Pilot's verified fleet-shared blocks (ISOW1044
+    CAN-FD, ISOW1412 RS-485, HI-1573+PM-DB2791S 1553 — same
+    DS26LV31/32+fake-"SM-1553-11" fix as Pilot — SLB9672 TPM, DP83825I
+    Ethernet PHY x1 per this file's own "XO: 1x PHY (RMII0)" line) plus new
+    XO-unique blocks (RFD900x SiK, RFM95W LoRa, WL1837MOD WiFi+BT, TPS63031
+    RF rail, W25Q128JV NOR flash, ATF16V8BQL logging write-block interlock,
+    3 antenna filter/ESD chains, microSD). `_B_`-suffixed bus nets per this
+    file's own documented rationale. ERC 0 confirmed (`kicad-cli sch erc
+    --severity-all`). Two part-number defects found IN THIS FILE'S OWN
+    antenna-filter table and corrected (flagged, not silently fixed):
+    Johanson "0915LP15B0100E"/"2450BP15B050E" do not exist in Johanson's
+    catalog — substituted with the closest real parts (0915LP15B026E,
+    2450BP15E0100), **needs owner confirmation**. Microsd connector
+    "Molex 503182-1852" could not be verified real — replaced with the
+    confirmed-real `Connector_Card:microSD_HC_Molex_104031-0811` already in
+    KiCad's system library. RCLAMP0502B's datasheet PDF could not be
+    obtained (every mirror blocked) — footprint is a reasonable SOD-882
+    estimate, not pixel-verified; needs a real datasheet fetch.
+    **PCB layout: board-area infeasible at 55x35mm as originally scoped**
+    (full component set summed to ~4580 mm^2 vs a 3850 mm^2 *theoretical*
+    two-sided ceiling, confirmed by an actual placement attempt, not just
+    the area sum). Owner-directed fixes applied: (1) smaller IC packages
+    (ATF16V8BQL SOIC-20W->TSSOP-20, PCA9685 TSSOP28->HVQFN28, minor); (2)
+    3x panel-mount SMA antenna jacks -> vertical MMCX (Molex 73415-1471,
+    ~24 mm^2 vs SMA's ~198 mm^2 each — the major recoverable block); (3)
+    **owner clarified the winch (multi-turn servo) and SG90 door servos are
+    bus-networked over CAN-FD/RS-485 for fleet failover, not locally
+    driven** — removed DRV8833, HX711, and PCA9685 (and their connectors)
+    entirely, since XO needs no local actuator-drive silicon at all (see
+    `avionics/kicad/../memory` project_fleet_trust_module note on this
+    general fleet pattern). Area now 3515 mm^2 (91% of the theoretical
+    ceiling) but the actual auto-placer still only fits ~69/132 footprints
+    with both faces already spanning the full board edge-to-edge — a
+    simple rectangular spiral placer's packing-density limit, not a
+    remaining area/scope problem. **Owner elected to finish placement
+    manually in the KiCad GUI** rather than keep iterating the generator;
+    DRC-0 verification and routing (freerouting bridge, same
+    accept-only-if-clean discipline as Pilot) are follow-on items once
+    placement is done. Reused Pilot's courtyard-collision-aware Placer/
+    outline/zone/DRU machinery in `gen_xo_pcb.py`. **Keep all legacy
+    connectors** (user instruction) — n/a here since this is a from-scratch
+    rebuild, not a trust-module injection onto an existing layout.
+    Pre-existing `_autosave-XO.kicad_pcb` + `.lck` crash-recovery artifacts
+    in `avionics/kicad/XO/kicads/` are untouched by this rebuild and should
+    still be reviewed for removal separately.
+- [ ] **XO PCB placement + DRC 0 + routing — IN PROGRESS (owner doing manual
+    placement in KiCad).** Follow-on to the rebuild above: once the owner
+    finishes placing the ~69 currently-unplaced footprints, run `kicad-cli
+    pcb drc --severity-all --schematic-parity` to 0, then attempt
+    freerouting via the Specctra DSN/SES bridge (reject and report if it
+    introduces shorts, same discipline as Pilot), then export gerbers.
 - [ ] **Flight Engineer full PCB resync — not started.** 213 DRC hard, almost all
     `net_conflict` (PCB pad nets don't match the schematic at all — the
     injected trust module and other schematic changes never propagated to
