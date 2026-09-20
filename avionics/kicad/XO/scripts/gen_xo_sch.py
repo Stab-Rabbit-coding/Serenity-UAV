@@ -96,6 +96,19 @@ FP_R0402 = "Resistor_SMD:R_0402_1005Metric"
 FP_R0603 = "Resistor_SMD:R_0603_1608Metric"
 FP_R0805 = "Resistor_SMD:R_0805_2012Metric"
 FP_L0805 = "Inductor_SMD:L_0805_2012Metric"
+# Real Würth 742792510 size per its own datasheet's SIZE/TYPE field is 1812
+# (4.5x3.2mm), NOT 0402/0805 as earlier assumed — FP_L0805 was undersized for
+# every ferrite bead using this MPN; corrected 2026-09-20.
+FP_L1812 = "Inductor_SMD:L_1812_4532Metric"
+# TPS63031's own datasheet (Table 3, §9.2.2.2) recommends Coilcraft LPS3015 /
+# Murata LQH3NP / Taiyo Yuden NR3015 for the 2.2uH switching inductor —
+# "744042002" (the MPN previously used here) could not be found as a real
+# Würth part number anywhere and appears to have been fabricated during this
+# rebuild; corrected to a real Coilcraft LPS3015 part. No exact Coilcraft
+# LPS3015 KiCad footprint exists in the system libraries; the body-size-
+# matched "L_Wuerth_MAPI-3015" 3015-family land is used as a stand-in,
+# flagged as NOT pixel-verified against Coilcraft's own land drawing.
+FP_L3015 = "Inductor_SMD:L_Wuerth_MAPI-3015"
 FP_SOIC8 = "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
 FP_SOIC16 = "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm"
 FP_SOIC20W = "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"
@@ -615,16 +628,17 @@ SIMPLE: List[Any] = [
     ("PWR-IN", "Nano-Fit 4P", FP_NANOFIT, "105313-1204",
      "XO.md §14 power entry (Molex Nano-Fit 2.5 mm, 4 ckt) — NOT datasheet-verified, same flag as Pilot PWR-IN",
      [("1", "+5V_IN", "+5V_IN"), ("2", "+5V_IN", "+5V_IN"), ("3", "GND", "GND"), ("4", "GND", "GND")]),
-    ("FB1", "742792510", FP_L0805, "742792510", "wurth-742792510.pdf 0402 ferrite bead; XO §12 power "
+    ("FB1", "742792510", FP_L1812, "742792510", "wurth-742792510.pdf 1812 ferrite bead (SIZE/TYPE field, "
+     "corrected 2026-09-20 from an earlier wrong 0402/0805 assumption); XO §12 power "
      "budget draws 3.0A +5V so a HIGHER-current bead than Pilot's 742792512 (2A) is required here",
      [("1", "IN", "+5V_IN"), ("2", "OUT", "+5V")]),
     ("C-IN1", "47uF 10V X5R", FP_C1210, "", "XO.md §6 input bulk", [("1", "P", "+5V_IN"), ("2", "N", "GND")]),
-    ("C-IN2", "10uF 10V X5R", FP_C0805, "", "XO.md §6 filtered bulk", [("1", "P", "+5V"), ("2", "N", "GND")]),
+    ("C-IN2", "10uF 10V X5R", FP_C0603, "", "XO.md §6 filtered bulk", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-IN3", "100nF", FP_C0402, "", "XO.md §6 HF bypass", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("R-PGND", "0R", FP_R0805, "", "XO.md §7 single-point GND<->PGND link", [("1", "A", "GND"), ("2", "B", "PGND")]),
     # --- +3V3 logic buck (TPS62933) ------------------------------------------
     ("R-EN3", "100k", FP_R0201, "", "TPS62933 EN pull-up to VIN", [("1", "A", "+5V"), ("2", "B", "U3V3_EN")]),
-    ("C-3V3-IN", "10uF 10V X5R", FP_C0805, "", "TPS62933 CIN at VIN/GND", [("1", "P", "+5V"), ("2", "N", "GND")]),
+    ("C-3V3-IN", "10uF 10V X5R", FP_C0603, "", "TPS62933 CIN at VIN/GND", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-3V3-HF", "100nF", FP_C0402, "", "TPS62933 CIN HF", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-BST", "100nF", FP_C0402, "", "TPS62933 BST-SW bootstrap", [("1", "P", "BST_3V3"), ("2", "N", "SW_3V3")]),
     ("C-SS", "10nF", FP_C0201, "", "TPS62933 soft-start", [("1", "P", "SS_3V3"), ("2", "N", "GND")]),
@@ -632,16 +646,20 @@ SIMPLE: List[Any] = [
      [("1", "A", "SW_3V3"), ("2", "B", "+3V3")]),
     ("R-FB3H", "100k 1%", FP_R0201, "", "TPS62933 FB divider top", [("1", "A", "+3V3"), ("2", "B", "FB_3V3")]),
     ("R-FB3L", "32.4k 1%", FP_R0201, "", "TPS62933 FB divider bottom (3.27 V)", [("1", "A", "FB_3V3"), ("2", "B", "GND")]),
-    ("C-3V3-O1", "22uF 6.3V X5R", FP_C0805, "", "TPS62933 COUT", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-3V3-O2", "22uF 6.3V X5R", FP_C0805, "", "TPS62933 COUT", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-3V3-O1", "22uF 6.3V X5R", FP_C0603, "", "TPS62933 COUT", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-3V3-O2", "22uF 6.3V X5R", FP_C0603, "", "TPS62933 COUT", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     # --- +3V3_RF buck-boost (TPS63031) --------------------------------------
-    ("L-RF1", "2.2uH 3A", FP_L0805, "744042002", "TPS63031 first inductor leg (typical app circuit)",
+    ("L-RF1", "2.2uH 3A", FP_L3015, "LPS3015-222MRC", "TPS63031 first inductor leg; tps63031.pdf Table 3 "
+     "recommends Coilcraft LPS3015/Murata LQH3NP/Taiyo Yuden NR3015 — \"744042002\" (used here previously) "
+     "could not be found as a real Wurth part and appears fabricated during this rebuild, corrected "
+     "2026-09-20 to a real Coilcraft LPS3015 part",
      [("1", "A", "RF_SW1"), ("2", "B", "+5V")]),
-    ("L-RF2", "2.2uH 3A", FP_L0805, "744042002", "TPS63031 second inductor leg", [("1", "A", "RF_SW2"), ("2", "B", "+3V3_RF")]),
-    ("C-RF-IN1", "10uF 10V X5R", FP_C0805, "", "TPS63031 VIN bulk", [("1", "P", "+5V"), ("2", "N", "GND")]),
+    ("L-RF2", "2.2uH 3A", FP_L3015, "LPS3015-222MRC", "TPS63031 second inductor leg, same correction as L-RF1",
+     [("1", "A", "RF_SW2"), ("2", "B", "+3V3_RF")]),
+    ("C-RF-IN1", "10uF 10V X5R", FP_C0603, "", "TPS63031 VIN bulk", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-RF-IN2", "100nF", FP_C0402, "", "TPS63031 VIN HF", [("1", "P", "+5V"), ("2", "N", "GND")]),
-    ("C-RF-O1", "22uF 6.3V X5R", FP_C0805, "", "TPS63031 COUT", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
-    ("C-RF-O2", "22uF 6.3V X5R", FP_C0805, "", "TPS63031 COUT", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-RF-O1", "22uF 6.3V X5R", FP_C0603, "", "TPS63031 COUT", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-RF-O2", "22uF 6.3V X5R", FP_C0603, "", "TPS63031 COUT", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
     # --- WL1837MOD 1.8V SDIO/VIO rail (small LDO from +3V3) -----------------
     ("U-1V8", "TLV75718PDBVR", FP_SOT89, "TLV75718PDBVR", "TI TLV757 fixed 1.8V/150mA LDO for WL1837MOD "
      "VIO / SDIO PHY level (wl1837mod.pdf pin 38 = VIO, SDIO signals are 1.8V not 3.3V)",
@@ -650,16 +668,16 @@ SIMPLE: List[Any] = [
     ("C-1V8-OUT", "1uF", FP_C0402, "", "TLV757 output bypass", [("1", "P", "+1V8_IO"), ("2", "N", "GND")]),
     # --- CAN FD field port ---------------------------------------------------
     ("C-CAN1", "10nF", FP_C0201, "", "ISOW1044 VDD HF bypass §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
-    ("C-CAN2", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VDD bulk §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
+    ("C-CAN2", "10uF 10V X5R", FP_C0603, "", "ISOW1044 VDD bulk §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-CAN3", "100nF", FP_C0402, "", "ISOW1044 VIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-CAN4", "10nF", FP_C0201, "", "ISOW1044 VISOOUT HF bypass", [("1", "P", "VCC2_CANB"), ("2", "N", "GND2_CANB")]),
-    ("C-CAN5", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VISOOUT bulk", [("1", "P", "VCC2_CANB"), ("2", "N", "GND2_CANB")]),
+    ("C-CAN5", "10uF 10V X5R", FP_C0603, "", "ISOW1044 VISOOUT bulk", [("1", "P", "VCC2_CANB"), ("2", "N", "GND2_CANB")]),
     ("C-CAN6", "100nF", FP_C0402, "", "ISOW1044 VISOIN bypass", [("1", "P", "VCC2_CANB"), ("2", "N", "GND2_CANB")]),
     ("CMC-CAN", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "CAN_B_H"), ("2", "W1_OUT", "CAN_B_H_F"), ("4", "W2_IN", "CAN_B_L"), ("3", "W2_OUT", "CAN_B_L_F")]),
     ("TVS-CAN", "PRTR5V0U2X", FP_SOT143, "PRTR5V0U2X,315", "prtr5v0u2x.pdf (Nexperia, SOT143B 4-pin) [REF-SENSOR-038]",
      [("1", "IO1", "CAN_B_H_F"), ("2", "GND", "GND2_CANB"), ("3", "IO2", "CAN_B_L_F"), ("4", "VCC", "VCC2_CANB")]),
-    ("R-CANT", "120R", FP_R0603, "", "CAN bus termination — populate ONLY at a bus end node (DNP default)",
+    ("R-CANT", "120R", FP_R0402, "", "CAN bus termination — populate ONLY at a bus end node (DNP default); shrunk to 0402, DNP by default so no continuous-power concern",
      [("1", "A", "CAN_B_H_F"), ("2", "B", "CAN_B_L_F")], {"dnp": True}),
     ("J-CAN", "SM03B-GHS-TB", FP_GH3, "SM03B-GHS-TB(LF)(SN)", "XO.md §14 J_CAN",
      [("1", "CAN_H", "CAN_B_H_F"), ("2", "CAN_L", "CAN_B_L_F"), ("3", "GND", "GND2_CANB"), ("MP", "SHIELD", "PGND")]),
@@ -667,16 +685,16 @@ SIMPLE: List[Any] = [
      [("1", "A", "GND"), ("2", "B", "GND"), ("3", "G1", "GND2_CANB"), ("4", "G2", "GND2_CANB")]),
     # --- RS-485 field port ---------------------------------------------------
     ("C-485-1", "10nF", FP_C0201, "", "ISOW1412 VDD HF bypass", [("1", "P", "+5V"), ("2", "N", "GND")]),
-    ("C-485-2", "10uF 10V X5R", FP_C0805, "", "ISOW1412 VDD bulk", [("1", "P", "+5V"), ("2", "N", "GND")]),
+    ("C-485-2", "10uF 10V X5R", FP_C0603, "", "ISOW1412 VDD bulk", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-485-3", "100nF", FP_C0402, "", "ISOW1412 VIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-485-4", "10nF", FP_C0201, "", "ISOW1412 VISOOUT HF bypass", [("1", "P", "VCC2_RS485B"), ("2", "N", "GND2_RS485B")]),
-    ("C-485-5", "10uF 10V X5R", FP_C0805, "", "ISOW1412 VISOOUT bulk", [("1", "P", "VCC2_RS485B"), ("2", "N", "GND2_RS485B")]),
+    ("C-485-5", "10uF 10V X5R", FP_C0603, "", "ISOW1412 VISOOUT bulk", [("1", "P", "VCC2_RS485B"), ("2", "N", "GND2_RS485B")]),
     ("C-485-6", "100nF", FP_C0402, "", "ISOW1412 VISOIN bypass", [("1", "P", "VCC2_RS485B"), ("2", "N", "GND2_RS485B")]),
     ("CMC-RS485", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "RS485_B_A"), ("2", "W1_OUT", "RS485_B_A_F"), ("4", "W2_IN", "RS485_B_B"), ("3", "W2_OUT", "RS485_B_B_F")]),
     ("TVS-RS485", "PRTR5V0U2X", FP_SOT143, "PRTR5V0U2X,315", "prtr5v0u2x.pdf (Nexperia, SOT143B) [REF-SENSOR-038]",
      [("1", "IO1", "RS485_B_A_F"), ("2", "GND", "GND2_RS485B"), ("3", "IO2", "RS485_B_B_F"), ("4", "VCC", "VCC2_RS485B")]),
-    ("R-485T", "120R", FP_R0603, "", "RS-485 termination — populate ONLY at a bus end node (DNP default)",
+    ("R-485T", "120R", FP_R0402, "", "RS-485 termination — populate ONLY at a bus end node (DNP default); shrunk to 0402, DNP by default so no continuous-power concern",
      [("1", "A", "RS485_B_A_F"), ("2", "B", "RS485_B_B_F")], {"dnp": True}),
     ("J-485", "SM03B-GHS-TB", FP_GH3, "SM03B-GHS-TB(LF)(SN)", "XO.md §14 J_485",
      [("1", "A", "RS485_B_A_F"), ("2", "B", "RS485_B_B_F"), ("3", "GND", "GND2_RS485B"), ("MP", "SHIELD", "PGND")]),
@@ -714,7 +732,7 @@ SIMPLE: List[Any] = [
       ("MP", "SHIELD", "PGND")]),
     ("C-1553A", "100nF", FP_C0402, "", "HI-1573 VDDA bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-1553B", "100nF", FP_C0402, "", "HI-1573 VDDB bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-1553C", "10uF 6.3V X5R", FP_C0805, "", "HI-1573 transmitter bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-1553C", "10uF 6.3V X5R", FP_C0603, "", "HI-1573 transmitter bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     # --- TPM ------------------------------------------------------------------
     ("C-TPM1", "1uF", FP_C0402, "", "SLB9672 §3.1.3 typical schematic bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-TPM2", "100nF", FP_C0402, "", "SLB9672 VDD bypass (pin 1)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
@@ -723,12 +741,12 @@ SIMPLE: List[Any] = [
     ("R-TPMCS", "10k", FP_R0201, "", "SLB9672 CS# pull-up (§3.1.3)", [("1", "A", "+3V3"), ("2", "B", "SPI0_B_CS_TPM")]),
     ("R-TPM10", "10k", FP_R0201, "", "SLB9672 pin 10 NCI/VDD pull-up (Table 13, preferred)", [("1", "A", "+3V3"), ("2", "B", "TPM_B_P10_PU")]),
     # --- SiK (RFD900x) supply/UART filtering --------------------------------
-    ("FB-SIK1", "742792510", FP_L0805, "742792510", "RFD900x Vcc filter bead (Wurth 742792510)", [("1", "IN", "+5V"), ("2", "OUT", "SIK_VCC_F")]),
-    ("C-SIK1", "10uF 10V X5R", FP_C0805, "", "RFD900x Vcc bulk", [("1", "P", "SIK_VCC_F"), ("2", "N", "GND")]),
+    ("FB-SIK1", "742792510", FP_L1812, "742792510", "RFD900x Vcc filter bead (Wurth 742792510)", [("1", "IN", "+5V"), ("2", "OUT", "SIK_VCC_F")]),
+    ("C-SIK1", "10uF 10V X5R", FP_C0603, "", "RFD900x Vcc bulk", [("1", "P", "SIK_VCC_F"), ("2", "N", "GND")]),
     ("C-SIK2", "100nF", FP_C0402, "", "RFD900x Vcc HF", [("1", "P", "SIK_VCC_F"), ("2", "N", "GND")]),
-    ("FB-SIK2", "742792510", FP_L0805, "742792510", "RFD900x UART RX line filter", [("1", "IN", "UART_SIK_RX"), ("2", "OUT", "UART_SIK_RX_F")]),
-    ("FB-SIK3", "742792510", FP_L0805, "742792510", "RFD900x UART TX line filter", [("1", "IN", "UART_SIK_TX"), ("2", "OUT", "UART_SIK_TX_F")]),
-    ("FB-SIK4", "742792510", FP_L0805, "742792510", "RFD900x CTS line filter", [("1", "IN", "SIK_CTS"), ("2", "OUT", "SIK_CTS_F")]),
+    ("FB-SIK2", "742792510", FP_L1812, "742792510", "RFD900x UART RX line filter", [("1", "IN", "UART_SIK_RX"), ("2", "OUT", "UART_SIK_RX_F")]),
+    ("FB-SIK3", "742792510", FP_L1812, "742792510", "RFD900x UART TX line filter", [("1", "IN", "UART_SIK_TX"), ("2", "OUT", "UART_SIK_TX_F")]),
+    ("FB-SIK4", "742792510", FP_L1812, "742792510", "RFD900x CTS line filter", [("1", "IN", "SIK_CTS"), ("2", "OUT", "SIK_CTS_F")]),
     # --- LoRa (RFM95W) SPI filtering ----------------------------------------
     ("R-LORA-M1", "33R", FP_R0402, "", "RFM95W MISO series (CM3 SRF2012 pairing per XO.md §12)", [("1", "A", "SPI0_B_MISO"), ("2", "B", "SPI0_B_MISO_F")]),
     ("R-LORA-M2", "33R", FP_R0402, "", "RFM95W MOSI series", [("1", "A", "SPI0_B_MOSI"), ("2", "B", "SPI0_B_MOSI_F")]),
@@ -738,14 +756,14 @@ SIMPLE: List[Any] = [
     ("R-LORA-RST", "10k", FP_R0201, "", "RFM95W RESET pull-up (open-drain reset per §7.2.2)", [("1", "A", "+3V3_RF"), ("2", "B", "LORA_RESETN")]),
     # --- WiFi/BT (WL1837MOD) SDIO filtering + supply ------------------------
     ("C-WIFI1", "100nF", FP_C0402, "", "WL1837MOD VBAT_IN bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
-    ("C-WIFI2", "10uF 6.3V X5R", FP_C0805, "", "WL1837MOD VBAT_IN bulk", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-WIFI2", "10uF 6.3V X5R", FP_C0603, "", "WL1837MOD VBAT_IN bulk", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
     ("R-WIFI-EN", "10k", FP_R0201, "", "WLAN_EN pull-up (power-up default off, PB2 drives active)", [("1", "A", "+1V8_IO"), ("2", "B", "WIFI_EN")]),
-    ("FB-SDIO1", "742792510", FP_L0805, "742792510", "SDIO CMD ferrite (Wurth 742792510)", [("1", "IN", "SDIO_CMD"), ("2", "OUT", "SDIO_CMD_F")]),
-    ("FB-SDIO2", "742792510", FP_L0805, "742792510", "SDIO CLK ferrite", [("1", "IN", "SDIO_CLK"), ("2", "OUT", "SDIO_CLK_F")]),
-    ("FB-SDIO3", "742792510", FP_L0805, "742792510", "SDIO D0 ferrite", [("1", "IN", "SDIO_D0"), ("2", "OUT", "SDIO_D0_F")]),
-    ("FB-SDIO4", "742792510", FP_L0805, "742792510", "SDIO D1 ferrite", [("1", "IN", "SDIO_D1"), ("2", "OUT", "SDIO_D1_F")]),
-    ("FB-SDIO5", "742792510", FP_L0805, "742792510", "SDIO D2 ferrite", [("1", "IN", "SDIO_D2"), ("2", "OUT", "SDIO_D2_F")]),
-    ("FB-SDIO6", "742792510", FP_L0805, "742792510", "SDIO D3 ferrite", [("1", "IN", "SDIO_D3"), ("2", "OUT", "SDIO_D3_F")]),
+    ("FB-SDIO1", "742792510", FP_L1812, "742792510", "SDIO CMD ferrite (Wurth 742792510)", [("1", "IN", "SDIO_CMD"), ("2", "OUT", "SDIO_CMD_F")]),
+    ("FB-SDIO2", "742792510", FP_L1812, "742792510", "SDIO CLK ferrite", [("1", "IN", "SDIO_CLK"), ("2", "OUT", "SDIO_CLK_F")]),
+    ("FB-SDIO3", "742792510", FP_L1812, "742792510", "SDIO D0 ferrite", [("1", "IN", "SDIO_D0"), ("2", "OUT", "SDIO_D0_F")]),
+    ("FB-SDIO4", "742792510", FP_L1812, "742792510", "SDIO D1 ferrite", [("1", "IN", "SDIO_D1"), ("2", "OUT", "SDIO_D1_F")]),
+    ("FB-SDIO5", "742792510", FP_L1812, "742792510", "SDIO D2 ferrite", [("1", "IN", "SDIO_D2"), ("2", "OUT", "SDIO_D2_F")]),
+    ("FB-SDIO6", "742792510", FP_L1812, "742792510", "SDIO D3 ferrite", [("1", "IN", "SDIO_D3"), ("2", "OUT", "SDIO_D3_F")]),
     # --- SPI-NOR flash + logging PLD supply ---------------------------------
     ("C-FLASH1", "100nF", FP_C0402, "", "W25Q128JV VCC bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("R-FLASH-WP", "10k", FP_R0201, "", "FLASH_WP_N pull-up (write-enabled default; PLD asserts low to block)",
