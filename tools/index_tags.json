@@ -6788,7 +6788,35 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/aon6260.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/aon6554.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/aon6558.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/atf16v8bql.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/bq76930.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -6866,6 +6894,13 @@
       "archived": false
     },
     "avionics/datasheets/hx711.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ina226.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7041,6 +7076,20 @@
       "archived": false
     },
     "avionics/datasheets/smaj-series-tvs-datasheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/tps54540.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/tps54620.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8305,6 +8354,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_dru": {
+      "description": "KiCad custom design-rules file",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb": {
       "description": "KiCad PCB layout",
       "tags": [
@@ -8337,12 +8394,44 @@
       ],
       "archived": false
     },
+    "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/kicads/FlightEngineer.net": {
+      "description": "KiCad netlist",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x": {
       "description": "(kicad_sch (version 20240101) (generator eeschema)",
       "tags": [
         "avionics-hardware",
         "pcb-design",
         "power"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/kicads/fp-lib-table": {
+      "description": "(fp_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/kicads/sym-lib-table": {
+      "description": "(sym_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
       ],
       "archived": false
     },
@@ -8367,6 +8456,33 @@
       "tags": [
         "avionics-hardware",
         "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/scripts/gen_fe_footprints.py": {
+      "description": "gen_fe_footprints.py \u2014 Author the project-custom land patterns FlightEngineer needs.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/scripts/gen_fe_pcb.py": {
+      "description": "gen_fe_pcb.py \u2014 Build the FlightEngineer PCB from the schematic netlist.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/scripts/gen_fe_sch.py": {
+      "description": "Python script",
+      "tags": [
+        "avionics-hardware",
+        "emi-hardening",
+        "pcb-design",
+        "security"
       ],
       "archived": false
     },
@@ -8965,6 +9081,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Serenity-Custom.pretty/AOSMD_DFN5x6-8L.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Serenity-Custom.pretty/Bosch_BMP388_LGA-10_2x2mm.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
@@ -9013,6 +9137,22 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Serenity-Custom.pretty/M3_Chassis_Lug_PGND.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/MAXI_Blade_Fuseholder_2P.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Serenity-Custom.pretty/Molex_NanoFit_1x04_Horizontal.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
@@ -9030,6 +9170,14 @@
       "archived": false
     },
     "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.7mm_M2.5_PGND_Ring.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/PGND_ViaPad_1p2mm.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
@@ -9101,7 +9249,23 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Serenity-Custom.pretty/Texas_RGY0014A_VQFN-14-1EP_3.5x3.5mm.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Serenity-Custom.pretty/WL1837MOD_MOC_100.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/Wurth_7440640500_CMC_THT.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
@@ -14400,6 +14564,7 @@
       "avionics/kicad/Commo/scripts/gen_commo_sch.py",
       "avionics/kicad/ENC-NACELLE-1.md",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
+      "avionics/kicad/FlightEngineer/scripts/gen_fe_sch.py",
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_pcb.py",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
@@ -14545,6 +14710,8 @@
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
+      "avionics/kicad/FlightEngineer/scripts/gen_fe_pcb.py",
+      "avionics/kicad/FlightEngineer/scripts/gen_fe_sch.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
@@ -16795,14 +16962,22 @@
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-Margin.gbr",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-job.gbrjob",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer.drl",
+      "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_dru",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_prl",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch",
+      "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sym",
+      "avionics/kicad/FlightEngineer/kicads/FlightEngineer.net",
       "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
+      "avionics/kicad/FlightEngineer/kicads/fp-lib-table",
+      "avionics/kicad/FlightEngineer/kicads/sym-lib-table",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_pin_snap.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_revs1_cleanup.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_yinv.py",
+      "avionics/kicad/FlightEngineer/scripts/gen_fe_footprints.py",
+      "avionics/kicad/FlightEngineer/scripts/gen_fe_pcb.py",
+      "avionics/kicad/FlightEngineer/scripts/gen_fe_sch.py",
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer.py",
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_pcb.py",
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
@@ -16873,15 +17048,19 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
       "avionics/kicad/README.md",
+      "avionics/kicad/Serenity-Custom.pretty/AOSMD_DFN5x6-8L.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bosch_BMP388_LGA-10_2x2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bourns_SRF2012_4T.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/HopeRF_RFM95W_Castellated_16.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_0915LP15B026E_SMD4.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_2450BP15E0100_SMD4.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/L_WE-MAPI_3015.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/M3_Chassis_Lug_PGND.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/MAXI_Blade_Fuseholder_2P.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Molex_NanoFit_1x04_Horizontal.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.2mm_M2_SelfTap_Compact.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.7mm_M2.5_PGND_Ring.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PGND_ViaPad_1p2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
@@ -16890,7 +17069,9 @@
       "avionics/kicad/Serenity-Custom.pretty/Samtec_TSM-108-01-x-DV.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TPS6303x_VSON-10_2p5.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Texas_RGY0014A_VQFN-14-1EP_3.5x3.5mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/WL1837MOD_MOC_100.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Wurth_7440640500_CMC_THT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Wurth_749010012A_WE-LAN.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/X2Y_0805_4T.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",
@@ -17051,7 +17232,11 @@
       "avionics/datasheets/adin1300.pdf",
       "avionics/datasheets/adm2795e.pdf",
       "avionics/datasheets/ak7455-en-datasheet-myakm.pdf",
+      "avionics/datasheets/aon6260.pdf",
+      "avionics/datasheets/aon6554.pdf",
+      "avionics/datasheets/aon6558.pdf",
       "avionics/datasheets/atf16v8bql.pdf",
+      "avionics/datasheets/bq76930.pdf",
       "avionics/datasheets/bsh-bth.pdf",
       "avionics/datasheets/bst-bmp388-ds001.pdf",
       "avionics/datasheets/bth-xxx-xx-x-d-xx-footprint.pdf",
@@ -17063,6 +17248,7 @@
       "avionics/datasheets/eGH.pdf",
       "avionics/datasheets/hi-1573.pdf",
       "avionics/datasheets/hx711.pdf",
+      "avionics/datasheets/ina226.pdf",
       "avionics/datasheets/infineon-optiga-trust-m-datasheet-en.pdf",
       "avionics/datasheets/iso6442.pdf",
       "avionics/datasheets/isow1044.pdf",
@@ -17088,6 +17274,8 @@
       "avionics/datasheets/slaz742g.pdf",
       "avionics/datasheets/slb9672.pdf",
       "avionics/datasheets/smaj-series-tvs-datasheet.pdf",
+      "avionics/datasheets/tps54540.pdf",
+      "avionics/datasheets/tps54620.pdf",
       "avionics/datasheets/tps62933.pdf",
       "avionics/datasheets/tps63031.pdf",
       "avionics/datasheets/w25q128jv.pdf",
@@ -17237,14 +17425,22 @@
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-Margin.gbr",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-job.gbrjob",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer.drl",
+      "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_dru",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_prl",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro",
       "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch",
+      "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sym",
+      "avionics/kicad/FlightEngineer/kicads/FlightEngineer.net",
       "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
+      "avionics/kicad/FlightEngineer/kicads/fp-lib-table",
+      "avionics/kicad/FlightEngineer/kicads/sym-lib-table",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_pin_snap.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_revs1_cleanup.py",
       "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_yinv.py",
+      "avionics/kicad/FlightEngineer/scripts/gen_fe_footprints.py",
+      "avionics/kicad/FlightEngineer/scripts/gen_fe_pcb.py",
+      "avionics/kicad/FlightEngineer/scripts/gen_fe_sch.py",
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer.py",
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_pcb.py",
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
@@ -17315,15 +17511,19 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
       "avionics/kicad/README.md",
+      "avionics/kicad/Serenity-Custom.pretty/AOSMD_DFN5x6-8L.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bosch_BMP388_LGA-10_2x2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bourns_SRF2012_4T.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/HopeRF_RFM95W_Castellated_16.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_0915LP15B026E_SMD4.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_2450BP15E0100_SMD4.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/L_WE-MAPI_3015.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/M3_Chassis_Lug_PGND.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/MAXI_Blade_Fuseholder_2P.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Molex_NanoFit_1x04_Horizontal.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.2mm_M2_SelfTap_Compact.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.7mm_M2.5_PGND_Ring.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PGND_ViaPad_1p2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
@@ -17332,7 +17532,9 @@
       "avionics/kicad/Serenity-Custom.pretty/Samtec_TSM-108-01-x-DV.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TPS6303x_VSON-10_2p5.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Texas_RGY0014A_VQFN-14-1EP_3.5x3.5mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/WL1837MOD_MOC_100.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Wurth_7440640500_CMC_THT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Wurth_749010012A_WE-LAN.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/X2Y_0805_4T.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",

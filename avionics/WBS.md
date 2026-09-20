@@ -758,13 +758,51 @@ REFERENCES.md Removed/Superseded Citations).
     pcb drc --severity-all --schematic-parity` to 0, then attempt
     freerouting via the Specctra DSN/SES bridge (reject and report if it
     introduces shorts, same discipline as Pilot), then export gerbers.
-- [ ] **Flight Engineer full PCB resync — not started.** 213 DRC hard, almost all
-    `net_conflict` (PCB pad nets don't match the schematic at all — the
-    injected trust module and other schematic changes never propagated to
-    layout; compounds the pre-existing `gen_flight_engineer.py` drift above). No
-    trust-module footprints exist on the PCB yet. Largest remaining board
-    task — needs a real `Update PCB from Schematic` pass plus manual net
-    cleanup, not just footprint addition.
+- [x] **Flight Engineer schematic-first rebuild — ERC 0.** 2026-09-20 (Claude
+    Sonnet 5): the legacy schematic (586 ERC violations, PCB pad nets not
+    matching at all, `gen_flight_engineer.py` itself confirmed drifted per its own
+    injector script's warning) was replaced by a fresh generator
+    (`avionics/kicad/FlightEngineer/scripts/gen_fe_sch.py`), transcribing every
+    pin table from OEM datasheets: TPS54620/TPS54540 (dual+single BEC),
+    INA226 x5, BQ76930 (6S cell monitor, Table 9-3 6-cell tap config), plus
+    the CURRENT (not superseded) trust module target — MSPM0G3518-Q1 RHB-32
+    (pinmux reused verbatim from `retarget_mspm0g351x_slb9672.py`'s own
+    verified `FLIGHT_ENGINEER_REMAP`/`FLIGHT_ENGINEER_TPM_NETS` tables, not
+    re-derived), SLB9672, ISOW1044BDFMR, ISOW1412DFMR (same parts/pin tables
+    as Pilot/XO). ISOW1412's EN/FLT pin now wired to a real MCU GPIO
+    (RS485_FLT_N) instead of Pilot's hard-tied convention, since the RHB-32
+    pinmux happened to free one. ERC 0 confirmed (151 parts, 539 pins).
+    **One part-number defect found in FlightEngineer.md's own BOM and
+    corrected** (flagged, not silently fixed): "AON6556" (Q_BATT_DSG,
+    cited 60V/30A) does not exist in AOSMD's catalog (their 30V AlphaMOS
+    family tops out at AON6554/6558; no 60V "6556" found) — substituted with
+    AON6260, a real AOSMD 60V/85A DFN5x6 MOSFET, NEEDS owner confirmation.
+    MBRD1045CT and SMBJ33CA are confirmed real via manufacturer/distributor
+    catalog search but their datasheet PDFs could not be fetched this pass
+    (every mirror blocked) — standard package pinouts used, flagged for a
+    follow-up fetch. **PCB: courtyard-budgeted before layout** per
+    `docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-
+    courtyard-budget-before-layout.md` — 7377 mm^2 total footprint area vs
+    FlightEngineer.md's own 90x65mm/4-layer spec (11700 mm^2 two-sided
+    theoretical ceiling) = 63%, comfortably under the ~70% (4-layer)
+    guideline, so no capability was cut to make this board fit (unlike XO).
+    All 151 footprints placed (0 unplaced). DRC reduced from a 213-hard
+    baseline (on the old, unrelated PCB) to **31 remaining violations** on
+    the new layout (9 solder-mask-bridge + 8 shorting-items + 8 cosmetic
+    silk-over-copper + 4 hole-clearance + 2 clearance), all concentrated
+    around D_OR1/D_OR2 (the 5V BEC OR-diodes) and U_RS485 landing close to a
+    few ESC-branch passives — a placer packing-density limit on this
+    generator's simple rectangular spiral placer (same class of limit XO
+    hit), not an area or scope problem. Routing not yet attempted.
+- [ ] **Flight Engineer PCB: close the last 31 DRC items + route + gerbers —
+    not started.** Follow-on to the rebuild above. The remaining violations
+    are localized to D_OR1/D_OR2 vs CM_ESC3/F_ESC3/C_DEC4 and U_RS485 vs
+    C1/C2 — nudging those ~5 footprints apart in the KiCad GUI (same
+    approach the owner is using on XO) should clear it faster than further
+    generator-side placement iteration. Then `kicad-cli pcb drc
+    --severity-all --schematic-parity` to 0, freerouting attempt via the
+    Specctra bridge (reject/report on any shorts, same discipline as
+    Pilot/XO), then gerbers.
 - [ ] **Observer PCB resync — not started.** 124 DRC hard. PCB (`Observer.kicad_pcb`,
     dated 2026-07-14) predates the schematic's ISOW1412/Section H addition
     (2026-07-26) entirely — no RS-485 footprint on the board yet.

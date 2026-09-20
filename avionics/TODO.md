@@ -81,7 +81,7 @@
 - [ ] Pilot: `PB2-P2` header appears fully unwired in ERC (all 36 pins…
 - [ ] Pilot full DRC/ERC clean-out — not started
 - [ ] XO PCB placement + DRC 0 + routing — IN PROGRESS (owner doing manual…
-- [ ] Flight Engineer full PCB resync — not started
+- [ ] Flight Engineer PCB: close the last 31 DRC items + route + gerbers
 - [ ] Observer PCB resync — not started
 
 ---

@@ -6,7 +6,30 @@
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** R (Rev R baseline; carried forward from Rev A, 2026-06-07; no design changes)
 **Date:** 2026-06-11
-**Status:** Schematic complete — PCB layout pending DRC sign-off
+**Status (2026-09-20 update, Claude Sonnet 5):** The legacy schematic/PCB pair
+(586 ERC violations, PCB pad nets not matching the schematic at all,
+`gen_flight_engineer.py` itself confirmed drifted from the checked-in design per its own
+injector script's warning) has been replaced by a from-scratch schematic-first
+rebuild (`avionics/kicad/FlightEngineer/scripts/gen_fe_sch.py` / `gen_fe_footprints.py`
+/ `gen_fe_pcb.py`), the same method used for Pilot and XO. **ERC is 0** (151
+parts, 539 pins), including the CURRENT trust-module target (MSPM0G3518-Q1
+RHB-32 + SLB9672 + ISOW1044BDFMR + ISOW1412DFMR), not the superseded
+MSPM0G3507/SLB9670 this section's own Section H text still describes below.
+All 151 PCB footprints are placed (courtyard budget: 7377 mm^2 vs the
+90x65mm/4-layer board's 11700 mm^2 two-sided theoretical ceiling = 63%,
+comfortably under budget — no capability was cut). DRC is down to 31
+remaining violations, localized to a handful of footprints (D_OR1/D_OR2, the
+5V dual-BEC OR-diodes, and U_RS485) that need final hand-nudging in the KiCad
+GUI; routing has not yet been attempted. One part-number defect found in this
+file's own BOM was corrected (flagged, not silent): "AON6556" does not exist
+in AOSMD's catalog — substituted with the real AON6260 (60V/85A DFN5x6),
+needs owner confirmation. See `avionics/WBS.md`'s "Flight Engineer
+schematic-first rebuild" item for the full trail. The Section H text below
+(MSPM0G3507/SLB9670VQ2.0 lineage, injection-script rationale) is historical
+context for how the trust module was first added and is superseded by the
+rebuild above for current part numbers.
+
+**Status (superseded, pre-2026-09-20):** Schematic complete — PCB layout pending DRC sign-off
 
 ---
 
