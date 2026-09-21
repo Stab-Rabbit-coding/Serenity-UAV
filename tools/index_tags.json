@@ -6900,6 +6900,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/hm-trp.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/hx711.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8091,6 +8098,30 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Commo/kicads/Commo.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/kicads/fp-lib-table": {
+      "description": "(fp_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/kicads/sym-lib-table": {
+      "description": "(sym_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Commo/scripts/cleanup_commo_drc.py": {
       "description": "cleanup_commo_drc.py \u2014 Clear the pre-existing hard DRC debt on Commo.kicad_pcb",
       "tags": [
@@ -9217,6 +9248,14 @@
       "archived": false
     },
     "avionics/kicad/Serenity-Custom.pretty/RCLAMP0502B_SOD882.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
@@ -16937,6 +16976,9 @@
       "avionics/kicad/Commo/kicads/Commo.kicad_prl",
       "avionics/kicad/Commo/kicads/Commo.kicad_pro",
       "avionics/kicad/Commo/kicads/Commo.kicad_sch",
+      "avionics/kicad/Commo/kicads/Commo.kicad_sym",
+      "avionics/kicad/Commo/kicads/fp-lib-table",
+      "avionics/kicad/Commo/kicads/sym-lib-table",
       "avionics/kicad/Commo/scripts/cleanup_commo_drc.py",
       "avionics/kicad/Commo/scripts/gen_commo_sch.py",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
@@ -17072,6 +17114,7 @@
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RCLAMP0502B_SOD882.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900x_2x8_THT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Samtec_TSM-108-01-x-DV.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
@@ -17255,6 +17298,7 @@
       "avionics/datasheets/ds26lv32at.pdf",
       "avionics/datasheets/eGH.pdf",
       "avionics/datasheets/hi-1573.pdf",
+      "avionics/datasheets/hm-trp.pdf",
       "avionics/datasheets/hx711.pdf",
       "avionics/datasheets/ina226.pdf",
       "avionics/datasheets/infineon-optiga-trust-m-datasheet-en.pdf",
@@ -17401,6 +17445,9 @@
       "avionics/kicad/Commo/kicads/Commo.kicad_prl",
       "avionics/kicad/Commo/kicads/Commo.kicad_pro",
       "avionics/kicad/Commo/kicads/Commo.kicad_sch",
+      "avionics/kicad/Commo/kicads/Commo.kicad_sym",
+      "avionics/kicad/Commo/kicads/fp-lib-table",
+      "avionics/kicad/Commo/kicads/sym-lib-table",
       "avionics/kicad/Commo/scripts/cleanup_commo_drc.py",
       "avionics/kicad/Commo/scripts/gen_commo_sch.py",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
@@ -17536,6 +17583,7 @@
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RCLAMP0502B_SOD882.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900x_2x8_THT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Samtec_TSM-108-01-x-DV.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
