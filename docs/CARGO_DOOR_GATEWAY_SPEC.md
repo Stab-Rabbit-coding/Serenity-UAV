@@ -110,7 +110,7 @@ with the doors open (§5).
   | Frame | Rate / trigger | Direction | Payload |
   |---|---|---|---|
   | `DOOR_STATUS` | 5 Hz + on change | gateway → bus | per-servo commanded / reported position (osc-native reports; PWM fallback reports commanded only), servo bus health, release armed/fired flags, rail-present flag |
-  | `DOOR_COMMAND` | event | commanding node → gateway | `{port, stbd} ∈ {OPEN, CLOSE, HOLD}`; signed, freshness counter |
+  | `DOOR_COMMAND` | event | commanding node → gateway | `{port, stbd} ∈ {OPEN, CLOSE, HOLD}`; signed, freshness counter; both channels written in the same control-loop tick — this frame IS the doors' software cross-link (`docs/CARGO_DOOR_LATCH_SPEC.md` §4.2a) |
   | `RELEASE_COMMAND` | event, **arm + confirm pair** within a window | commanding node → gateway | payload release — its **own** authenticated command class, like the tilt brake release (`TILT_DRIVE_CONTROL_SPEC.md` §5.5, TILT-CTL-09): a MAC failure on a door position frame → hold last valid state; a MAC failure on a release → **do not release** |
 
 - **Interlocks (firmware, gateway-side).** Release is refused unless `DOOR_STATUS` shows
@@ -118,18 +118,20 @@ with the doors open (§5).
   present, Phase 7+) reports a line under tension or a payload in the aperture. Bus IDs
   are assigned in firmware, not here.
 - **Failsafe.** Loss of bus heartbeat → hold the last commanded positions (never auto-open
-  in flight). Loss of the 6 V servo branch → the SG90s are unpowered and the doors are held
-  only by the servo gear trains' static friction — **there is no positive door latch in
-  the current design** (open item DOOR-LATCH, §8). Loss of `RAIL-2` → the gateway drops
-  off the bus; the servos hold whatever pulse they last saw only while the fallback PWM is
-  driven, so the commanding node sees the missing heartbeat within one status period.
+  in flight). Loss of the 6 V servo branch → the SG90s are unpowered, but each door is held
+  shut by its own bell-crank hook seated in a fixed mortise (`docs/CARGO_DOOR_LATCH_SPEC.md`)
+  — **not** by servo holding torque, so this loss case no longer risks the doors opening.
+  Loss of `RAIL-2` → the gateway drops off the bus; the servos hold whatever pulse they last
+  saw only while the fallback PWM is driven, so the commanding node sees the missing
+  heartbeat within one status period — the latch still holds regardless.
 - **Assurance mapping.** The SG90 door/release endpoint class is already in
   `avionics/WBS.md` U6 ("Fleet host+message authentication wiring for ESC / brushed tilt
   controller / SG90 endpoints"); this document is the endpoint's hardware/behaviour input to
   that `secure-controller-assurance` mapping.
 - **Firmware.** AP_Periph-derived image, same licensing note as `CAN-PERIPH-GW-1.md` open
   item 5 (GPLv3 firmware, CC-BY hardware). Adds: osc-native master (or the PWM fallback),
-  the three frames above, the interlocks, and the `DOOR-LATCH` state once that exists.
+  the three frames above, and the interlocks; sequence CLOSE as a soft final approach into
+  the latch, not full-speed to the mortise lip (`docs/CARGO_DOOR_LATCH_SPEC.md` DOOR-LATCH-6).
 
 ---
 
@@ -224,7 +226,7 @@ plane (Z < 8.7) or the hoist lines.
 | **GW-DOOR-3** | PWM fallback bench test: SG90 input threshold at 3.3 V; PA24 timer capability per SLASFA6B Table 6-2 (bit-bang otherwise); measured stall current of three SG90s → size `F_DOOR`. |
 | **GW-DOOR-4 (D-GW-2)** | Owner confirmation that the two independent doors get two actuators (`SERVO-CARGO` qty 3). |
 | **SERVO-PLACE** | Hull-frame placement of the three SG90s and their brackets (`cargo_door_servo_bracket.stl`, `cargo_release_servo_bracket.stl` are legacy-frame and unplaced) plus the door bell-crank bosses (`fuselage-mid/WBS.md` §1.1.1.2.1 open item); run them through `cargo_layout_fit.py`. |
-| **DOOR-LATCH** | The doors have no positive in-flight latch; retention is servo gear-train friction. Root `AGENTS.md` §7 forbids friction retention on flight-critical joints — decide over-centre linkage vs mechanical latch before first flight with the doors fitted. **Finding, not designed here.** |
+| **DOOR-LATCH** | **CLOSED 2026-09-21 — see `docs/CARGO_DOOR_LATCH_SPEC.md`.** Bell-crank-mounted hook engages a mortise on a fixed bracket (positive mechanical stop, not friction/an over-centre linkage); load path bypasses the servo gear train entirely once latched. Quantified finding: SG90 stall torque (0.177 N·m) is *less* than the door-opening moment at V_max (0.202 N·m) — the gear train could not hold the door shut even with zero FOS, confirming the friction-retention prohibition was not just a style rule here. Cross-link: software (single `DOOR_COMMAND` frame drives both doors) + a tongue-and-groove door-to-door seam (DOOR-SEAM-1, not yet implemented) — a *rigid* crank-to-crank link was evaluated and rejected (two independent open-loop servos would fight each other through it). |
 | **GW-DOOR-5** | SG90 6 V tolerance: REF-ACT-003 lists 4.8 V only; the servo rail is 6 V (`POWER_DISTRIBUTION.md` §3.3 already assumes SG90s on it). Confirm with the sourced part or feed the branch from 5 V. |
 | **GW-DOOR-6** | Weigh the populated gateway board and the tray; replace the 6 g / 5 g estimates and re-run the CG ledger (A0). |
 | **GW-DOOR-7** | Firmware: osc-native master / PWM fallback, `DOOR_STATUS` / `DOOR_COMMAND` / `RELEASE_COMMAND`, interlocks, U6 assurance mapping. |

@@ -2461,6 +2461,45 @@
       "Notes": "Rev T5f 2026-09-21 (docs/CARGO_DOOR_GATEWAY_SPEC.md section 5; airframe/openscad/fuselage/cargo/gateway_door_tray.scad): 5.4 mm base slab 52.2 x 15.25 mm on four 7 x 7 mm bosses (rear row counterbored under the board, front row exposed), side rails 1.6 mm + 2 mm lips, board drops in from above; exported volume 4 729 mm3 x 1.05 g/cm3. Print slab flat, rails up, 4 perimeters, 30% gyroid. Hardware: 4 x RX-M3x5.7 inserts + 4 x M3x8 SHCS (add to those rows at order); 3 cable ties."
     },
     {
+      "Ref": "PRINT-DOOR-LATCH-BRACKET",
+      "Description": "door_latch_bracket_{port,stbd}.stl -- bell-crank + pivot bracket + mortise, cargo door positive latch, CF-PETG",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "3.55",
+      "Total_Mass_g": "7.10",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev A 2026-09-21 (docs/CARGO_DOOR_LATCH_SPEC.md): closes the DOOR-LATCH finding (docs/CARGO_DOOR_GATEWAY_SPEC.md) -- servo-driven bell-crank hook engages a mortise on this FIXED bracket; the hook/lip mechanical interference, not the SG90 gear train, carries the door-closed load (governing case: aero pressure at V_max=87kt, REF-FAA-002; SG90 stall torque 0.177 N.m < 0.202 N.m door-opening moment even at FOS=1). FOS_bearing=10.4, FOS_shear~3.0 (order-of-magnitude, FDM anisotropic -- bench pull-test required, DOOR-LATCH-1). One bracket per door, mounted at Y=39.33 (2nd hinge knuckle station). Print with a >=1.5mm hook-root fillet (not modelled in the CSG source -- DOOR-LATCH-4) and orient so the governing shear plane runs with the layer lines."
+    },
+    {
+      "Ref": "PRINT-DOOR-HORN",
+      "Description": "door_horn.stl -- door-panel control horn for the latch/drive pushrod, CF-PETG",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "0.92",
+      "Total_Mass_g": "1.84",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev A 2026-09-21 (docs/CARGO_DOOR_LATCH_SPEC.md section 2): bonded to each door panel's inner face at the bracket's Y station; the 2mm steel pushrod (existing Z-bend procurement row) runs from here to the bell-crank drive arm. One per door."
+    },
+    {
+      "Ref": "PIN-3X10",
+      "Description": "3mm x 10mm SS dowel pin -- door-latch bell-crank pivot",
+      "Category": "Hardware",
+      "Qty": "2",
+      "Unit_Mass_g": "0.6",
+      "Total_Mass_g": "1.2",
+      "Supplier": "Amazon / McMaster",
+      "Supplier_PN_or_Search": "3mm x 10mm stainless dowel pin",
+      "Est_Unit_Price_USD": "0.50",
+      "Est_Total_Price_USD": "1.00",
+      "Notes": "Rev A 2026-09-21 (docs/CARGO_DOOR_LATCH_SPEC.md section 3): bell-crank pivot, one per door-latch bracket. Same class as the door-hinge PIN-3X18 stock, shorter length (no 4-knuckle span to cross). Reaction ~135 N resultant, steel FOS large (not governing -- section 3)."
+    },
+    {
       "Ref": "SPAR-CF-20X16",
       "Description": "20mm OD x 16.3mm ID roll-wrapped CF tube — FIXED wing spar and nacelle tilt axis",
       "Category": "Structural Hardware",

@@ -793,13 +793,33 @@ Record: `docs/CARGO_SECTION_LAYOUT.md`, `docs/TILT_ACTUATOR_SELECTION.md`,
         the bell-crank boss item in §1.1.1.2.1 is still open. Candidate: the pocket flanking
         the gateway tray, X ±(27..45) at Z ≤ 20, Y −20..0 (measured 2026-09-21). Add them as
         envelopes in `cargo_layout_fit.py`; pigtail lengths in the spec §6 follow.
-    - [ ] **DOOR-LATCH — the clamshell doors have no positive in-flight latch (finding).**
-        Retention today is the SG90 gear train's static friction; root `AGENTS.md` §7
-        forbids friction retention on flight-critical joints. Decide over-centre linkage vs
-        a mechanical latch before the first flight with doors fitted. Not designed in Rev T5f.
-    - [ ] **GW-DOOR-4 — owner confirmation (D-GW-2):** two independent clamshell halves →
-        two door actuators (`SERVO-CARGO` qty 3). Alternative (one servo + cross-linkage)
-        not designed.
+    - [x] **DOOR-LATCH — CLOSED 2026-09-21.** `docs/CARGO_DOOR_LATCH_SPEC.md`: each door's
+        bell-crank carries a hook that engages a mortise on a FIXED bracket at the closed
+        position — a hard mechanical stop, not friction or an over-centre linkage; the
+        hook/lip load path bypasses the servo gear train entirely once latched. Quantified:
+        SG90 stall torque (0.177 N·m) < the door-opening moment at V_max=87 kt
+        (0.202 N·m, REF-FAA-002) even at FOS=1 — gear-train-only retention genuinely could
+        not have held at cruise speed. New parts: `door_latch_mechanism.scad` →
+        `door_latch_bracket_{port,stbd}.stl` (3.55 g ea, stbd watertight, port has one
+        cosmetic non-manifold edge — DOOR-LATCH verification §7), `door_horn.stl`
+        (0.92 g ea). FOS_bearing 10.4, FOS_shear ≈3.0 (order-of-magnitude, FDM
+        anisotropic — bench pull-test open, DOOR-LATCH-1). BOM: `PRINT-DOOR-LATCH-BRACKET`,
+        `PRINT-DOOR-HORN`, `PIN-3X10` (`tools/bom_edit_door_latch.py`).
+        - [ ] DOOR-LATCH-1..6 (`docs/CARGO_DOOR_LATCH_SPEC.md` §6): bench pull-test the
+            hook, source/cite the pushrod wire spec, pushrod buckling check, print a real
+            ≥1.5mm hook-root fillet (OpenSCAD CSG attempt was non-manifold), dry-fit against
+            the door + shell once SERVO-PLACE resolves, soft-approach CLOSE sequencing in
+            firmware.
+        - [ ] **DOOR-SEAM-1 — tongue-and-groove interlock at the door-to-door mating edges**
+            (`docs/CARGO_DOOR_LATCH_SPEC.md` §4.2b): the structural half of the cross-link
+            (the software half — one `DOOR_COMMAND` frame drives both doors — already
+            exists). Needs a `generate_cargo_doors.py` edit + both door STLs regenerated;
+            3.0mm tongue/groove, 4.0mm wide, 0.3mm/side clearance, full Y 2..108 seam.
+            **Deliberately NOT a rigid crank-to-crank rod** — two independent open-loop
+            SG90s would fight each other through one (§4.1 of the same doc).
+    - [x] **GW-DOOR-4 — resolved by design, 2026-09-21.** Two independent door actuators
+        (`SERVO-CARGO` qty 3 stands); the cross-link is software (shared `DOOR_COMMAND`
+        frame) + the DOOR-SEAM-1 seam, not a shared actuator — see DOOR-LATCH above.
     - [ ] **PRINT-GW-DOOR-TRAY hardware at order:** 4 × RX-M3x5.7 inserts, 4 × M3×8 SHCS,
         3 cable ties (BOM row note).
 
