@@ -142,30 +142,44 @@ def write(name: str, body: List[str]) -> None:
     print("wrote", name)
 
 
-def rfd900x_header() -> None:
-    name = "RFDesign_RFD900x_2x8_THT"
-    b = hdr(name, "RF Design RFD900x/RFD868x SiK radio modem, 2x8 THT 0.1 in pitch, "
-                  "20.0 mm row spacing, 42.5x30 mm body (rfd900x-datasheet.pdf Fig 5-1). "
-                  "MOUNTED ON STANDOFFS ABOVE the cape (piggyback, like the cape-on-PocketBeagle2 "
-                  "stack) per XO.md §12/§14 board-area budget — the 55x35 mm cape cannot fit the "
-                  "full 42.5x30 mm body flush AND everything else (XO.md §1 'no overall board size "
-                  "increase from CAPE-B-1'). F.Fab shows the true body outline for documentation; "
-                  "F.CrtYd (what the PCB auto-placer budgets against) is only the header pin field "
-                  "plus a small standoff margin, since the raised module does not block placement "
-                  "of low-profile parts on the cape surface beneath it.", smd=False)
-    row = 20.0 / 2
-    b.append(rect("F.Fab", -30.0 / 2, -42.5 / 2, 30.0 / 2, 42.5 / 2))
-    b.append(rect("F.CrtYd", -row - 2.0, -3.5 * 2.54 - 1.5, row + 2.0, 3.5 * 2.54 + 1.5, 0.05))
-    b.append(rect("F.SilkS", -30.0 / 2 + 0.15, -42.5 / 2 + 0.15, 30.0 / 2 - 0.15, 42.5 / 2 - 0.15))
-    b.append(circ("F.SilkS", -30.0 / 2 + 1.0, -42.5 / 2 + 1.0, 0.3))
-    # 16 pins, 2 rows of 8 (pin 1..8 left row top->bottom, pin 9..16 right row bottom->top,
-    # matching the datasheet's Fig 5-1 orientation convention used throughout this project).
-    for i in range(8):
-        y = -3.5 * 2.54 + i * 2.54
-        b.append(tht_pad(str(1 + i), -row, y, 1.6, 1.0, "circle" if i else "rect"))
-        b.append(tht_pad(str(16 - i), row, y, 1.6, 1.0))
-    for mx, my in ((-30.0 / 2 + 3.0, -42.5 / 2 + 3.0), (30.0 / 2 - 3.0, -42.5 / 2 + 3.0), (0.0, 42.5 / 2 - 3.0)):
-        b.append(nplated_hole(mx, my, 3.1))
+def rfd900ux_smt() -> None:
+    """RF Design RFD900ux-SMT/RFD868ux-SMT — replaces the earlier RFD900x THT
+    piggyback header 2026-09-20: the owner found the RFD900x (42.5x30mm THT,
+    even piggybacked) overhangs the 55x35mm XO cape in more than one
+    direction. The RFD900ux-SMT is the same manufacturer's flush SMT variant,
+    21x29x4.2mm body (~48% of the RFD900x's footprint area) — real, verified
+    from "RFD900ux DataSheet v1.2.pdf" §5.2 (Fig 5-2, 28-pad pin layout),
+    §6.1 (Fig 6-1 / Table 6-1, land pattern: 2x14 castellated edge pads +
+    2 central thermal/GND pads). No piggyback/standoff mounting needed —
+    this module mounts flush like RFM95W/WL1837MOD."""
+    name = "RFDesign_RFD900ux_SMT"
+    hx, hy = 21.2 / 2, 29.0 / 2  # K=21.2mm land width; body height per §2 "21x29x4.2mm"
+    b = hdr(name, "RF Design RFD900ux-SMT/RFD868ux-SMT, 21x29x4.2mm flush SMT, 28 castellated "
+                  "edge pads (14/side) + 2 central GND thermal pads (RFD900ux DataSheet v1.2.pdf "
+                  "Fig 5-2 pinout / Fig 6-1 + Table 6-1 land pattern)")
+    b.append(rect("F.Fab", -hx, -hy, hx, hy))
+    b.append(rect("F.CrtYd", -hx - 0.5, -hy - 0.5, hx + 0.5, hy + 0.5, 0.05))
+    b.append(rect("F.SilkS", -hx + 0.15, -hy + 0.15, hx - 0.15, hy - 0.15))
+    b.append(circ("F.SilkS", -hx - 0.3, -hy - 0.3, 0.2))
+    # Pad pitch: Table 6-1 gives absolute pad/margin dimensions (A,B,C,G,H,K,
+    # etc.) but not a single "pitch" value, and Figure 6-1's vector art
+    # wasn't machine-extractable at pad-to-pad resolution. Estimated as
+    # (body height 29mm - top/bottom keepout) / 13 gaps ~= 1.9mm, NOT
+    # pixel-verified against the figure -- flagged for confirmation before
+    # this footprint is used on a real fab order.
+    pitch = 1.9
+    span = (14 - 1) * pitch
+    y0 = span / 2
+    # Left column: pins 15 (top) .. 28 (bottom); Right column: 14 (top) .. 1 (bottom)
+    # per Fig 5-2's silkscreen pin numbering (top view).
+    for i in range(14):
+        y = y0 - i * pitch
+        b.append(castellated_pad(str(15 + i), -hx, y, 1.0, 2.4))
+        b.append(castellated_pad(str(14 - i), hx, y, 1.0, 2.4))
+    # Two central GND/thermal pads (D=8 x E=6.6mm each per Table 6-1), stacked
+    # vertically per Fig 6-1, both tied to GND.
+    b.append(smd_pad("29", 0.0, -4.0, 8.0, 6.6, "rect"))
+    b.append(smd_pad("30", 0.0, 4.0, 8.0, 6.6, "rect"))
     write(name, b)
 
 
@@ -285,7 +299,7 @@ def rclamp0502b() -> None:
 
 def main() -> None:
     LIB.mkdir(parents=True, exist_ok=True)
-    rfd900x_header()
+    rfd900ux_smt()
     rfm95w_castellated()
     wl1837mod_moc100()
     tps6303x_vson10()

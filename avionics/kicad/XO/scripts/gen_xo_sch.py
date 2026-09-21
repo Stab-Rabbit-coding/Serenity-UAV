@@ -134,7 +134,7 @@ FP_NANOFIT = "Serenity-Custom:Molex_NanoFit_1x04_Horizontal"
 FP_SRF2012 = "Serenity-Custom:Bourns_SRF2012_4T"
 FP_X2Y0805 = "Serenity-Custom:X2Y_0805_4T"
 FP_WELAN = "Serenity-Custom:Wurth_749010012A_WE-LAN"
-FP_RFD900X = "Serenity-Custom:RFDesign_RFD900x_2x8_THT"
+FP_RFD900X = "Serenity-Custom:RFDesign_RFD900ux_SMT"
 FP_RFM95W = "Serenity-Custom:HopeRF_RFM95W_Castellated_16"
 FP_WL1837 = "Serenity-Custom:WL1837MOD_MOC_100"
 FP_VSON10 = "Serenity-Custom:TPS6303x_VSON-10_2p5"
@@ -361,27 +361,49 @@ ICS: List[Dict[str, Any]] = [
     },
     {
         "ref": "SIK",
-        "value": "RFD900x",
+        "value": "RFD900ux-SMT",
         "fp": FP_RFD900X,
-        "mpn": "RFD900X",
-        "ds": "rfd900x-datasheet.pdf §4 Pin signals and layout (16-pin, 2x8 THT) [REF-SENSOR-031]",
+        "mpn": "RFD900UX-SMT",
+        "ds": "\"RFD900ux DataSheet v1.2.pdf\" §5.2 Fig 5-2 (28-pad pin layout) [REF-SENSOR-031] — "
+              "swapped 2026-09-20 from the RFD900x THT module (42.5x30mm, overhung the 55x35mm XO "
+              "cape in more than one direction even piggybacked) to the same manufacturer's flush SMT "
+              "variant, 21x29x4.2mm. Only ANT1 is wired; ANT2 (spatial-diversity second antenna, "
+              "pin 16) is left NC — single-antenna use, matching XO's one SMA/MMCX port per SiK "
+              "channel. VUSB/USB_DM/USB_DP (pins 1-3, \"USB functionality available in future "
+              "updates\" per the datasheet) and the onboard +3V3 LDO output (pin 10, XO already has "
+              "its own +3V3 rail) and SWO/P3.x/GPIO0-3 spare pins are left NC — disclosed scope "
+              "calibration, same pattern as WL1837MOD's unused-ball treatment.",
         "pins": [
-            ("1", "GND", "GND", "L"),
-            ("2", "GND", "GND", "L"),
-            ("3", "CTS", "SIK_CTS_F", "L"),
-            ("4", "Vcc", "SIK_VCC_F", "L"),
-            ("5", "Vusb", None, "L"),
-            ("6", "Vusb", None, "L"),
-            ("7", "RX", "UART_SIK_RX_F", "L"),
-            ("8", "GPIO5/P3.4", None, "L"),
-            ("9", "TX", "UART_SIK_TX_F", "R"),
-            ("10", "GPIO4/P3.3", None, "R"),
-            ("11", "RTS", "SIK_RTS", "R"),
-            ("12", "GPIO3/P1.3", None, "R"),
-            ("13", "GPIO0/P1.0", None, "R"),
-            ("14", "GPIO2/P1.2", None, "R"),
-            ("15", "GPIO1/P1.1", None, "R"),
-            ("16", "GND", "GND", "R"),
+            ("1", "VUSB", None, "L"),
+            ("2", "USB_DM", None, "L"),
+            ("3", "USB_DP", None, "L"),
+            ("4", "SWO", None, "L"),
+            ("5", "P3.3", None, "L"),
+            ("6", "P3.4", None, "L"),
+            ("7", "P3.5", None, "L"),
+            ("8", "GND", "GND", "L"),
+            ("9", "GND", "GND", "L"),
+            ("10", "+3V3", None, "L"),
+            ("11", "GND", "GND", "L"),
+            ("12", "GND", "GND", "L"),
+            ("13", "ANT1", "SIK_ANT_RF", "L"),
+            ("14", "GND", "GND", "L"),
+            ("15", "GND", "GND", "R"),
+            ("16", "ANT2", None, "R"),
+            ("17", "GND", "GND", "R"),
+            ("18", "GND", "GND", "R"),
+            ("19", "+5V", "SIK_VCC_F", "R"),
+            ("20", "GND", "GND", "R"),
+            ("21", "GPIO0", None, "R"),
+            ("22", "GPIO1", None, "R"),
+            ("23", "GPIO2", None, "R"),
+            ("24", "GPIO3", None, "R"),
+            ("25", "RX", "UART_SIK_RX_F", "R"),
+            ("26", "TX", "UART_SIK_TX_F", "R"),
+            ("27", "RTS", "SIK_RTS", "R"),
+            ("28", "CTS", "SIK_CTS_F", "R"),
+            ("29", "GND_THERMAL1", "GND", "R"),
+            ("30", "GND_THERMAL2", "GND", "R"),
         ],
     },
     {
@@ -785,9 +807,11 @@ SIMPLE: List[Any] = [
      [("1", "IN", "SIK_ANT_RF"), ("2", "GND", "GND"), ("3", "GND", "GND"), ("4", "OUT", "SIK_ANT_F")]),
     ("D-ANT-SIK", "RCLAMP0502B", FP_RCLAMP, "RCLAMP0502BTCL", "RF ESD shunt — datasheet PDF not obtained this pass, flagged",
      [("1", "A", "SIK_ANT_F"), ("2", "K", "PGND")]),
-    ("J-SIK-ANT", "U.FL-R-SMT-1", FP_USMD, "U.FL-R-SMT-1(10)", "SiK module pigtail (module ANT pin has no on-module connector — "
-     "reuses the datasheet's U.FL RF-out convention already applied to Pilot's GPS-ANT)",
-     [("1", "RF", "SIK_ANT_RF"), ("2", "SHIELD", "GND")]),
+    # J-SIK-ANT (U.FL pigtail) REMOVED 2026-09-20: that connector only existed
+    # because the old RFD900x THT module had no on-module RF pad, so a
+    # physical U.FL jumper cable was needed to reach it. RFD900ux-SMT's ANT1
+    # (pin 13) is a direct PCB-trace coax launch pad — SIK_ANT_RF now runs
+    # straight from SIK pin 13 to FL-SIK's input on copper, no connector.
     ("J-SMA-SIK", "MMCX vertical", FP_MMCX, "73415-1471",
      "SiK antenna jack — swapped from a panel-mount SMA edge connector to a vertical MMCX (Molex "
      "73415-1471, real/verified, KiCad system library) per the 2026-09-20 board-area decision: MMCX's "

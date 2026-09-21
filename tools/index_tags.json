@@ -6690,6 +6690,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/RFD900ux DataSheet v1.2.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/S32K-RM.pdf": {
       "description": "PDF document",
       "tags": [
@@ -17218,6 +17225,7 @@
       "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf",
       "avionics/datasheets/PCA9555.pdf",
       "avionics/datasheets/PremierMagnetics_DB2791S.pdf",
+      "avionics/datasheets/RFD900ux DataSheet v1.2.pdf",
       "avionics/datasheets/S32K-RM.pdf",
       "avionics/datasheets/S32K1xx.pdf",
       "avionics/datasheets/SAM-M10Q_DataSheet_UBX-22013293.pdf",
