@@ -406,32 +406,17 @@ ICS: List[Dict[str, Any]] = [
             ("30", "GND_THERMAL2", "GND", "R"),
         ],
     },
-    {
-        "ref": "LORA",
-        "value": "RFM95W",
-        "fp": FP_RFM95W,
-        "mpn": "RFM95W-915S2",
-        "ds": "rfm95w-datasheet.pdf §1.4 Pin Description (16-pin castellated module, NOT the bare "
-              "SX1276 die) [REF-SENSOR-032]",
-        "pins": [
-            ("1", "GND", "GND", "L"),
-            ("2", "MISO", "SPI0_B_MISO_F", "L"),
-            ("3", "MOSI", "SPI0_B_MOSI_F", "L"),
-            ("4", "SCK", "SPI0_B_CLK_F", "L"),
-            ("5", "NSS", "SPI0_B_CS_LORA_F", "L"),
-            ("6", "RESET", "LORA_RESETN", "L"),
-            ("7", "DIO5", None, "L"),
-            ("8", "GND", "GND", "L"),
-            ("9", "ANT", "LORA_ANT_RF", "R"),
-            ("10", "GND", "GND", "R"),
-            ("11", "DIO3", None, "R"),
-            ("12", "DIO4", None, "R"),
-            ("13", "3.3V", "+3V3_RF", "R"),
-            ("14", "DIO0", "LORA_DIO0", "R"),
-            ("15", "DIO1", None, "R"),
-            ("16", "DIO2", None, "R"),
-        ],
-    },
+    # LORA (RFM95W) REMOVED 2026-09-20 per owner: Commo already carries a
+    # LoRa radio, so XO's own LoRa was fleet-level DUPLICATE capability, not
+    # a unique function — removing it is de-duplication, not a capability
+    # loss (unlike the earlier area-crisis "cut a subsystem" options, which
+    # would have actually removed a function nothing else on the fleet
+    # covers). Recovers ~292 mm^2 (module body) plus its SPI series
+    # resistors, bypass cap, reset pull-up, antenna filter/ESD/MMCX chain —
+    # the single largest lever available once RFD900ux-SMT's flush-mount
+    # area correction pushed XO to 99.6% of its two-sided theoretical
+    # ceiling. SiK (915 MHz self-contained mesh telemetry) and WiFi/BT stay;
+    # neither duplicates a function Commo already provides.
     {
         "ref": "WIFI",
         "value": "WL1837MOD",
@@ -616,17 +601,19 @@ PB2_P1 = [
     "PRU_1553B_RX_N", "PRU_1553B_RX_P", "PRU_1553B_TX_N", "PRU_1553B_TX_P",
     "RS485_B_DE", "RS485_B_RX", "RS485_B_TX", "CAN_B_STB", "MCAN0_B_RX", "MCAN0_B_TX",
     "SD_CD", None, None, "M1553B_TX_INH", "SPI0_B_CS_TPM",
-    "SPI0_B_CS_FLASH", "SPI0_B_MISO", "SPI0_B_MOSI", "SPI0_B_CLK", "SPI0_B_CS_LORA",
+    "SPI0_B_CS_FLASH", "SPI0_B_MISO", "SPI0_B_MOSI", "SPI0_B_CLK", None,  # was SPI0_B_CS_LORA, freed with LORA removal
     None, None, None, None, "UART_SIK_RX",
     "UART_SIK_TX", "+3V3_PB2", "+3V3_PB2", "+5V", "GND",
 ]
 PB2_P2 = [
+    # index 27 (was LORA_DIO0) freed 2026-09-20 when RFM95W/LORA was removed
+    # (duplicate of Commo's LoRa radio) -- left None rather than reassigned.
     "SDIO_D2", "SDIO_D3", "SIK_CTS", "SIK_RTS", "FAN_PWM_B", "PLD_CLK", "PLD_I1", "PLD_I2",
     "WIFI_EN", "WIFI_IRQ", "TPM_B_RSTN", "TPM_B_IRQN",
     "PLD_I3", "PLD_I4", "PHY1_RSTN", "PHY1_INTRN", "MDIO0", "MDC0",
     "SDIO_CLK", "SDIO_CMD", "SDIO_D0", "SDIO_D1",
     "PLD_I5", "PLD_I6", "PLD_I7", "PLD_I8",
-    "LORA_DIO0", "RMII0_RX_ER", "RMII0_CRS_DV", "RMII0_RXD1",
+    None, "RMII0_RX_ER", "RMII0_CRS_DV", "RMII0_RXD1",
     "RMII0_RXD0", "RMII0_TX_EN", "RMII0_TXD1", "RMII0_TXD0", "+5V", "GND",
 ]
 
@@ -769,13 +756,8 @@ SIMPLE: List[Any] = [
     ("FB-SIK2", "742792510", FP_L1812, "742792510", "RFD900x UART RX line filter", [("1", "IN", "UART_SIK_RX"), ("2", "OUT", "UART_SIK_RX_F")]),
     ("FB-SIK3", "742792510", FP_L1812, "742792510", "RFD900x UART TX line filter", [("1", "IN", "UART_SIK_TX"), ("2", "OUT", "UART_SIK_TX_F")]),
     ("FB-SIK4", "742792510", FP_L1812, "742792510", "RFD900x CTS line filter", [("1", "IN", "SIK_CTS"), ("2", "OUT", "SIK_CTS_F")]),
-    # --- LoRa (RFM95W) SPI filtering ----------------------------------------
-    ("R-LORA-M1", "33R", FP_R0402, "", "RFM95W MISO series (CM3 SRF2012 pairing per XO.md §12)", [("1", "A", "SPI0_B_MISO"), ("2", "B", "SPI0_B_MISO_F")]),
-    ("R-LORA-M2", "33R", FP_R0402, "", "RFM95W MOSI series", [("1", "A", "SPI0_B_MOSI"), ("2", "B", "SPI0_B_MOSI_F")]),
-    ("R-LORA-C", "33R", FP_R0402, "", "RFM95W SCK series", [("1", "A", "SPI0_B_CLK"), ("2", "B", "SPI0_B_CLK_F")]),
-    ("R-LORA-N", "33R", FP_R0402, "", "RFM95W NSS series", [("1", "A", "SPI0_B_CS_LORA"), ("2", "B", "SPI0_B_CS_LORA_F")]),
-    ("C-LORA1", "100nF", FP_C0402, "", "RFM95W 3.3V bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
-    ("R-LORA-RST", "10k", FP_R0201, "", "RFM95W RESET pull-up (open-drain reset per §7.2.2)", [("1", "A", "+3V3_RF"), ("2", "B", "LORA_RESETN")]),
+    # LoRa (RFM95W) SPI filtering block REMOVED 2026-09-20 along with LORA
+    # itself (duplicate of Commo's LoRa radio; see the ICS list note above).
     # --- WiFi/BT (WL1837MOD) SDIO filtering + supply ------------------------
     ("C-WIFI1", "100nF", FP_C0402, "", "WL1837MOD VBAT_IN bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
     ("C-WIFI2", "10uF 6.3V X5R", FP_C0603, "", "WL1837MOD VBAT_IN bulk", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
@@ -821,13 +803,8 @@ SIMPLE: List[Any] = [
      "bulkhead adapter cable can still terminate the MMCX externally if a threaded exterior connector "
      "is wanted at the airframe skin.",
      [("1", "RF", "SIK_ANT_F"), ("2", "SHIELD", "PGND")]),
-    ("FL-LORA", "0915LP15B026E", FP_FLLORA, "0915LP15B026E", "Johanson 915 MHz filter, same substitution as FL-SIK",
-     [("1", "IN", "LORA_ANT_RF"), ("2", "GND", "GND"), ("3", "GND", "GND"), ("4", "OUT", "LORA_ANT_F")]),
-    ("D-ANT-LORA", "RCLAMP0502B", FP_RCLAMP, "RCLAMP0502BTCL", "RF ESD shunt, same flag as D-ANT-SIK",
-     [("1", "A", "LORA_ANT_F"), ("2", "K", "PGND")]),
-    ("J-SMA-LORA", "MMCX vertical", FP_MMCX, "73415-1471",
-     "LoRa antenna jack — swapped SMA edge-mount for vertical MMCX, same rationale as J-SMA-SIK",
-     [("1", "RF", "LORA_ANT_F"), ("2", "SHIELD", "PGND")]),
+    # FL-LORA / D-ANT-LORA / J-SMA-LORA (LoRa antenna filter/ESD/jack chain)
+    # REMOVED 2026-09-20 along with LORA itself.
     ("FL-WIFI", "2450BP15E0100", FP_FLWIFI, "2450BP15E0100", "Johanson 2.45 GHz band-pass filter — substituted for XO.md's "
      "fabricated \"2450BP15B050E\", NEEDS user confirmation",
      [("1", "IN", "WIFI_ANT_RF"), ("2", "GND", "GND"), ("3", "GND", "GND"), ("4", "OUT", "WIFI_ANT_F")]),
