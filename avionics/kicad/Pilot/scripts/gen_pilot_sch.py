@@ -523,7 +523,7 @@ PB2_P2 = [
 ]
 
 
-def pb2_header(ref: str, value: str, fp: str, nets: List[str]) -> Dict[str, Any]:
+def pb2_header(ref: str, value: str, fp: str, nets: List[Optional[str]]) -> Dict[str, Any]:
     pins = [(str(i), f"P{i}", net, "L" if i <= 18 else "R") for i, net in enumerate(nets, start=1)]
     return {"ref": ref, "value": value, "fp": fp, "mpn": "", "ds": "PocketBeagle 2 P1/P2 expansion rails", "pins": pins}
 
@@ -682,9 +682,9 @@ _pwm_pins: List[Tuple[str, str, Optional[str]]] = []
 for _i, _net in enumerate(PWM_CH):
     _row = 0 if _i < 2 else 1                      # 0 = row A (odd pins), 1 = row B (even pins)
     _col0 = 1 + 4 * (_i % 2)
-    for _j, (_fn, _n) in enumerate(((f"SIG{_i}", _net), (f"+5V_{_i}", "+5V"), (f"GND{_i}", "GND"), (f"SHLD{_i}", "PGND"))):
+    for _j, (_fn, _pin_net) in enumerate(((f"SIG{_i}", _net), (f"+5V_{_i}", "+5V"), (f"GND{_i}", "GND"), (f"SHLD{_i}", "PGND"))):
         _k = _col0 + _j
-        _pwm_pins.append((str(2 * _k - 1 + _row), _fn, _n))
+        _pwm_pins.append((str(2 * _k - 1 + _row), _fn, _pin_net))
 SIMPLE += [
     ("J-PWM", "TSM-108-01-L-DV", FP_TSM2X8, "TSM-108-01-L-DV",
      "Servo / ESC signal block, 2x8 SMT 0.1 in (Samtec TSM -DV); 4 ch x (SIG, +5V, GND, PGND shield) along a row; "

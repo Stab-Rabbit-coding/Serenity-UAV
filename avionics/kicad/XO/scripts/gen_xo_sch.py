@@ -618,7 +618,7 @@ PB2_P2 = [
 ]
 
 
-def pb2_header(ref: str, value: str, fp: str, nets: List[str]) -> Dict[str, Any]:
+def pb2_header(ref: str, value: str, fp: str, nets: List[Optional[str]]) -> Dict[str, Any]:
     pins = [(str(i), f"P{i}", net, "L" if i <= 18 else "R") for i, net in enumerate(nets, start=1)]
     return {"ref": ref, "value": value, "fp": fp, "mpn": "", "ds": "PocketBeagle 2 P1/P2 expansion rails (XO map)", "pins": pins}
 

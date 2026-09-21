@@ -626,8 +626,8 @@ def main() -> None:
 
     # 2) auto-place the rest, larger parts first, isolated-domain parts before the rest
     def area(fp):
-        r = courtyard(fp)
-        return (r.x2 - r.x1) * (r.y2 - r.y1)
+        cy = courtyard(fp)
+        return (cy.x2 - cy.x1) * (cy.y2 - cy.y1)
 
     todo = [r for r in fps if r not in FIXED]
     todo.sort(key=lambda r: -area(fps[r]))
@@ -691,11 +691,11 @@ def main() -> None:
     # silk refs cannot be kept off pads, and JLCPCB assembles from the CPL, not
     # the silkscreen.  Connectors keep a silk label placed by hand below.
     for ref, fp in fps.items():
-        r = fp.Reference()
-        r.SetTextSize(pcbnew.VECTOR2I(mm(0.8), mm(0.8)))
-        r.SetTextThickness(mm(0.12))
-        r.SetLayer(pcbnew.B_Fab if fp.IsFlipped() else pcbnew.F_Fab)
-        r.SetVisible(True)
+        ref_text = fp.Reference()
+        ref_text.SetTextSize(pcbnew.VECTOR2I(mm(0.8), mm(0.8)))
+        ref_text.SetTextThickness(mm(0.12))
+        ref_text.SetLayer(pcbnew.B_Fab if fp.IsFlipped() else pcbnew.F_Fab)
+        ref_text.SetVisible(True)
         fp.Value().SetVisible(False)
 
     # zones -------------------------------------------------------------

@@ -259,7 +259,9 @@ def rounded_box(x0, x1, y0, y1, z0, z1, r):
 def layout_t6():
     L = {}
     L["Kaylee can"] = dict(
-        solid=rounded_box(FE_CAN_X0, FE_CAN_X1, FE_CAN_Y0, FE_CAN_Y1, FE_CAN_Z0, FE_CAN_Z1, FE_CAN_R),
+        solid=rounded_box(
+            FE_CAN_X0, FE_CAN_X1, FE_CAN_Y0, FE_CAN_Y1, FE_CAN_Z0, FE_CAN_Z1, FE_CAN_R
+        ),
         gap=STATIC_GAP,
         section="middle",
     )
@@ -297,8 +299,12 @@ def layout_t6():
         mates=("Kaylee can", "Kaylee entry plate", "Kaylee cradle pillars"),
     )
     for i, (fx, fy) in enumerate(
-        ((FE_XC - FE_FOOT_DX, FE_FOOT_YC - FE_FOOT_DY), (FE_XC + FE_FOOT_DX, FE_FOOT_YC - FE_FOOT_DY),
-         (FE_XC - FE_FOOT_DX, FE_FOOT_YC + FE_FOOT_DY), (FE_XC + FE_FOOT_DX, FE_FOOT_YC + FE_FOOT_DY))
+        (
+            (FE_XC - FE_FOOT_DX, FE_FOOT_YC - FE_FOOT_DY),
+            (FE_XC + FE_FOOT_DX, FE_FOOT_YC - FE_FOOT_DY),
+            (FE_XC - FE_FOOT_DX, FE_FOOT_YC + FE_FOOT_DY),
+            (FE_XC + FE_FOOT_DX, FE_FOOT_YC + FE_FOOT_DY),
+        )
     ):
         L[f"Kaylee cradle pillar {i}"] = dict(
             solid=box(fx - 5.0, fx + 5.0, fy - 5.0, fy + 5.0, 5.0, FE_CAN_Z0),
@@ -308,7 +314,9 @@ def layout_t6():
         )
     for name, sx in SMA_XS.items():
         L[name] = dict(
-            solid=cyl("z", sx, SMA_Y, 150.0, 175.0, SMA_BORE_D / 2), skin_seat=True, section="middle"
+            solid=cyl("z", sx, SMA_Y, 150.0, 175.0, SMA_BORE_D / 2),
+            skin_seat=True,
+            section="middle",
         )
     # middle-side trunks
     L["Simon trunk"] = dict(solid=box(*S1), gap=0.0, section="middle",
@@ -319,11 +327,18 @@ def layout_t6():
         section="middle", mates=("Kaylee entry plate",),
     )
     # cargo-side corridors (checked against the cargo shell + Rev T5e layout)
-    L["ESC E1 flange-face drop"] = dict(solid=box(*E1), gap=STATIC_GAP, section="cargo", mirror=True)
+    L["ESC E1 flange-face drop"] = dict(
+        solid=box(*E1), gap=STATIC_GAP, section="cargo", mirror=True
+    )
     L["ESC E1a wheel-shadow slab"] = dict(solid=box(*E1A), gap=0.0, section="cargo", mirror=True,
                                           record_only=True)
-    L["ESC E3 under-wheel trough"] = dict(solid=box(*E3), gap=STATIC_GAP, section="cargo", mirror=True,
-                                          mates=("ESC E1 flange-face drop", "ESC E34 rise", "tilt feed T1"))
+    L["ESC E3 under-wheel trough"] = dict(
+        solid=box(*E3),
+        gap=STATIC_GAP,
+        section="cargo",
+        mirror=True,
+        mates=("ESC E1 flange-face drop", "ESC E34 rise", "tilt feed T1"),
+    )
     L["ESC E34 rise"] = dict(solid=box(*E34), gap=STATIC_GAP, section="cargo", mirror=True,
                              mates=("ESC E4 Observer slot",))
     L["ESC E4 Observer slot"] = dict(solid=box(*E4), gap=STATIC_GAP, section="cargo", mirror=True)
@@ -455,7 +470,10 @@ def airflow_report(shell_tm, solids):
         blocked = unary_union(cuts).intersection(v).area if cuts else 0.0
         free = v.area - blocked
         flag = "ok" if free >= PHASE11_CAPTURE_MM2 else "SHORT"
-        print(f"  Y={y:3d}: void {v.area:8.0f}  blocked {blocked:7.0f}  free {free:8.0f} mm^2  {flag}")
+        print(
+            f"  Y={y:3d}: void {v.area:8.0f}  blocked {blocked:7.0f}  "
+            f"free {free:8.0f} mm^2  {flag}"
+        )
 
 
 def cg_ledger():
@@ -493,7 +511,8 @@ def write_scad(path):
         f"X_CL = {X_CL};",
         f"NECK_ZC = {NECK_ZC};",
         f"NECK_R = {NECK_R};",
-        f"FE_CAN_X = {FE_CAN_X}; FE_CAN_Z = {FE_CAN_Z}; FE_CAN_Y = {FE_CAN_Y}; FE_CAN_R = {FE_CAN_R};",
+        f"FE_CAN_X = {FE_CAN_X}; FE_CAN_Z = {FE_CAN_Z}; "
+        f"FE_CAN_Y = {FE_CAN_Y}; FE_CAN_R = {FE_CAN_R};",
         f"FE_XC = {FE_XC}; FE_ZC = {FE_ZC};",
         f"FE_CAN_Y0 = {FE_CAN_Y0}; FE_CAN_Y1 = {FE_CAN_Y1};",
         f"FE_CAN_Z0 = {FE_CAN_Z0}; FE_CAN_Z1 = {FE_CAN_Z1};",
@@ -502,18 +521,21 @@ def write_scad(path):
         f"FE_BOARD_X = {FE_BOARD_X}; FE_BOARD_Z = {FE_BOARD_Z};",
         f"FE_HOLE_DX = {FE_HOLE_DX}; FE_HOLE_DZ = {FE_HOLE_DZ};",
         f"FE_FOOT_DX = {FE_FOOT_DX}; FE_FOOT_DY = {FE_FOOT_DY}; FE_FOOT_YC = {FE_FOOT_YC};",
-        f"HATCH_X0 = {HATCH_X0}; HATCH_X1 = {HATCH_X1}; HATCH_Y0 = {HATCH_Y0}; HATCH_Y1 = {HATCH_Y1};",
+        f"HATCH_X0 = {HATCH_X0}; HATCH_X1 = {HATCH_X1}; "
+        f"HATCH_Y0 = {HATCH_Y0}; HATCH_Y1 = {HATCH_Y1};",
         f"HATCH_ZCUT = {HATCH_ZCUT}; HATCH_LIP = {HATCH_LIP};",
         "HATCH_SCREWS = [" + ", ".join(f"[{x}, {y}]" for x, y in HATCH_SCREWS) + "];",
         f"NODE_L = {NODE_L}; NODE_H = {NODE_H}; NODE_T = {NODE_T}; NODE_CABLE = {NODE_CABLE};",
-        f"SIMON_Y0 = {SIMON_Y0}; SIMON_Y1 = {SIMON_Y1}; SIMON_XC = {SIMON_XC}; SIMON_ZC = {SIMON_ZC};",
+        f"SIMON_Y0 = {SIMON_Y0}; SIMON_Y1 = {SIMON_Y1}; "
+        f"SIMON_XC = {SIMON_XC}; SIMON_ZC = {SIMON_ZC};",
         f"SIMON_X0 = {SIMON_X0}; SIMON_X1 = {SIMON_X1}; SIMON_CABLE_X1 = {SIMON_CABLE_X1};",
         f"CN4_Z0 = {CN4_Z0}; CN4_Z1 = {CN4_Z1}; FC4_Z0 = {FC4_Z0}; FC4_Z1 = {FC4_Z1};",
         f"SIMON_STACK_GAP = {SIMON_STACK_GAP}; SADDLE_T = {SADDLE_T};",
         "SADDLE_BOSS = [" + ", ".join(f"[{x}, {y}]" for x, y in SADDLE_BOSS) + "];",
         f"SMA_Y = {SMA_Y}; SMA_BORE_D = {SMA_BORE_D};",
         "SMA_XS = [" + ", ".join(str(v) for v in SMA_XS.values()) + "];",
-        f"CREST_X0 = {CREST_X0}; CREST_X1 = {CREST_X1}; CREST_Z0 = {CREST_Z0}; CREST_Z1 = {CREST_Z1};",
+        f"CREST_X0 = {CREST_X0}; CREST_X1 = {CREST_X1}; "
+        f"CREST_Z0 = {CREST_Z0}; CREST_Z1 = {CREST_Z1};",
     ]
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
@@ -578,7 +600,8 @@ def main():
     print(f"Kaylee can: {FE_CAN_X} x {FE_CAN_Z} x {FE_CAN_Y} mm ext, {can_mass():.0f} g at "
           f"{FE_WALL} mm; lid clearance over a {FE_COMP_MAX} mm component = {FE_CLEAR:.1f} mm")
     print(f"Y budget: sleeve {FWD_SLEEVE_Y1} | plate {FE_PLATE_Y0}..{FE_PLATE_Y1} | can "
-          f"{FE_CAN_Y0}..{FE_CAN_Y1} | pouches {SIMON_Y0}..{SIMON_Y1} | rear face {REAR_RESERVED_Y}")
+          f"{FE_CAN_Y0}..{FE_CAN_Y1} | pouches {SIMON_Y0}..{SIMON_Y1} | "
+          f"rear face {REAR_RESERVED_Y}")
     assert SIMON_Y1 <= REAR_RESERVED_Y, "layout crosses into the Phase-11 rear cone"
     L = layout_t6()
     mid = load_middle()

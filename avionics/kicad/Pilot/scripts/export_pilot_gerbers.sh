@@ -13,21 +13,21 @@ rm -rf "$OUT"
 mkdir -p "$OUT"
 
 kicad-cli pcb export gerbers \
-  --output "$OUT" \
-  --layers "F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts" \
-  --subtract-soldermask \
-  --precision 6 \
-  "$PCB"
+    --output "$OUT" \
+    --layers "F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts" \
+    --subtract-soldermask \
+    --precision 6 \
+    "$PCB"
 
 kicad-cli pcb export drill \
-  --output "$OUT" \
-  --format excellon \
-  --excellon-units mm \
-  --excellon-zeros-format decimal \
-  --excellon-separate-th \
-  --generate-map \
-  --map-format gerberx2 \
-  "$PCB"
+    --output "$OUT" \
+    --format excellon \
+    --excellon-units mm \
+    --excellon-zeros-format decimal \
+    --excellon-separate-th \
+    --generate-map \
+    --map-format gerberx2 \
+    "$PCB"
 
 echo "Gerbers + drill written to $OUT"
 ls -la "$OUT"
