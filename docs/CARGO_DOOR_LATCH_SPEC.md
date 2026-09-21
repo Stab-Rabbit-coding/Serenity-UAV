@@ -346,15 +346,18 @@ against the committed geometry, before this fix. `door_latch_mechanism.scad`'s
 match; the bracket STLs were re-rendered (dimensions unchanged, the whole
 mechanism just translates ≈2.1 mm in Z with the hinge).
 
-**CARGO-HINGE-SYNC (open, not fixed here):** both
-`generate_cargo_hinge_retention.py`'s `ROD_AXES` and this mechanism's
-`HINGE_X_*`/`HINGE_Z_*` are still hand-copied duplicates of a fact
-`generate_cargo_doors.py` already computes and prints — the exact failure
-mode that caused this drift. A follow-up should have the retention-block and
-latch-mechanism generators import or read these figures from a single
-source (matching this project's own established convention, e.g.
-`cargo_layout_t5_params.scad` for the cargo layout) rather than restate
-them.
+**CARGO-HINGE-SYNC — CLOSED, single-sourced (2026-09-21, same day).**
+`generate_cargo_doors.py` now writes the hinge coordinates it computes to
+two generated files every run — `cargo_door_hinge_params.py` (Python
+consumers) and `cargo_door_hinge_params.scad` (OpenSCAD consumers), the
+same generated-include pattern `cargo_layout_t5_params.scad` already
+established for the cargo layout. `generate_cargo_hinge_retention.py`
+imports `ROD_AXES` from the generated module instead of hand-copying it
+(and refuses to run with a clear message if that module is missing, rather
+than falling back to a stale guess); `door_latch_mechanism.scad` `include`s
+the generated `.scad` file instead of hardcoding `HINGE_X_*`/`HINGE_Z_*`.
+Regression-verified: re-running the full chain after the switch reproduced
+byte-identical coordinates and geometry to the hand-fixed values above.
 
 ## 8. References
 

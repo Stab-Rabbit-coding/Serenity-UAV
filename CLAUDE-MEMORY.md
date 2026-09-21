@@ -80,7 +80,7 @@ Mirrored: 65 memory files plus the index.
 - [Cargo-door servo gateway (2026-09-21)](project_cargo_door_gateway.md) — SG90 door/release servos on their OWN N_STACKS=1 CAN-PERIPH-GW (winch gateway's J_FLEX is full); tray on the fwd belly slab; merge traps: ramp-void positives must be UNCLIPPED, DUCT_CUT truncates at Z 8
 - [Cargo door positive latch + cross-link (2026-09-21)](project_cargo_door_latch.md) — bell-crank hook into a FIXED mortise (not friction); rigid crank-to-crank cross-link REJECTED (servo fighting), used software+seam instead
 - [3.0in landing gear = flight article](project_lg_3in_canonical.md) — corrects my own stale "1.5in runs hotter" note; real reason is nozzle belly clearance (S4.8, 2026-09-06); labels reconciled 2026-09-21, LG-31 found already resolved
-- [Cargo door hinge sync fix (2026-09-21)](project_cargo_door_hinge_sync_fix.md) — generator drift: cargo_hinge_retention.stl hand-copied hinge coords went stale after shell re-merges (rod would not have aligned); CARGO-HINGE-SYNC still open (import, don't hand-copy)
+- [Cargo door hinge sync fix (2026-09-21)](project_cargo_door_hinge_sync_fix.md) — CARGO-HINGE-SYNC CLOSED: generate_cargo_doors.py now writes cargo_door_hinge_params.{py,scad} every run, hinge_retention.py imports + door_latch scad includes (was hand-copied, drifted once already)
 
 ---
 
@@ -950,40 +950,44 @@ See [[project_cargo_rev_t5_layout]], [[project_fleet_trust_module]], [[project_x
 
 ---
 name: project_cargo_door_hinge_sync_fix
-description: Cargo door hinge coordinates drift-fixed (2026-09-21) — generate_cargo_doors.py output shifted ~2.1mm in Z after many shell re-merges; cargo_hinge_retention.stl and door_latch_mechanism.scad had the OLD numbers hardcoded (not imported) and silently drifted out of alignment. CARGO-HINGE-SYNC still open.
+description: "Cargo door hinge coordinates single-sourced (2026-09-21) — generate_cargo_doors.py now writes cargo_door_hinge_params.{py,scad} every run; generate_cargo_hinge_retention.py imports, door_latch_mechanism.scad includes. CARGO-HINGE-SYNC CLOSED."
 metadata: 
   node_type: memory
   type: project
   originSessionId: 483eac9c-ea5c-4560-9eff-2d4122d9e7c1
-  modified: 2026-09-21T22:01:21.077Z
+  modified: 2026-09-21T22:30:57.824Z
 ---
 
 Trigger: user hit `ModuleNotFoundError: No module named 'manifold3d'` running
 generate_cargo_doors.py via plain `python3` (repo .venv hides manifold3d — use
-`/usr/bin/python3`, see [[env_venv_hides_system_python]]). Reproducing it revealed a
-SECOND, more serious issue: running the generator against the CURRENT shell produces
-different hinge coordinates than committed (port X/Z: -117.6/5.11 → -117.53/3.00; stbd:
--222.5/5.22 → -222.68/3.49) — the shell has been re-merged many times (Rev T5-T5f) since
-the doors were last generated 2026-06-22.
+`/usr/bin/python3`, see [[env_venv_hides_system_python]]). Reproducing it revealed the
+shell had been re-merged many times since the doors were last generated (2026-06-22),
+shifting the hinge coordinates ~2.1mm in Z. `generate_cargo_hinge_retention.py` (shell-side
+retention blocks, merged INTO the shell) had the OLD hinge coords hand-copied in a
+`ROD_AXES` dict — drifted stale, rod would not have aligned. First pass (same session)
+hand-fixed both copies + `door_latch_mechanism.scad`'s copy. User then asked to single-
+source it properly.
 
-**Real defect found:** `generate_cargo_hinge_retention.py` (shell-side retention blocks,
-merged INTO the shell) hardcodes `ROD_AXES` as a hand-copied duplicate of
-generate_cargo_doors.py's output — not imported, "keep in sync" was a comment, not code.
-It had drifted: if built as committed, the CF rod hinge pin would NOT have aligned
-between the door knuckle bores and the fixed shell-side retention bores.
+**Single-source fix (CARGO-HINGE-SYNC, now CLOSED):**
+- `make_door()` in `generate_cargo_doors.py` now returns `(door_mesh, z_hinge)`.
+- New `write_hinge_params()` writes BOTH `cargo_door_hinge_params.py` (Python, next to
+  the two door generators) and `cargo_door_hinge_params.scad` (OpenSCAD, next to
+  door_latch_mechanism.scad) every run — same generated-include pattern as
+  `cargo_layout_t5_params.scad` (tools/cargo_layout_fit.py --write-scad).
+- `generate_cargo_hinge_retention.py` now `import`s `ROD_AXES`/`BAY_Y_FWD`/`BAY_Y_AFT`
+  from the generated module; raises `SystemExit` with a clear "run generate_cargo_doors.py
+  first" message if it's missing, rather than silently guessing.
+- `door_latch_mechanism.scad` now `include <cargo_door_hinge_params.scad>` instead of
+  hardcoding `HINGE_X_*`/`HINGE_Z_*`.
+- Regression-verified: re-running the whole chain (both generators, bracket STL render,
+  shell re-merge) after the switch reproduced byte-identical numbers/geometry to the
+  hand-fixed values. Full gate set re-run PASS.
 
-**Fixed:** regenerated both doors + cargo_hinge_retention.stl against the current shell,
-re-merged (merge_cargo_interior.py imports generate_cargo_hinge_retention, so the fix
-propagates automatically), updated door_latch_mechanism.scad's HINGE_X/Z constants
-(same hand-copy pattern, same fix). Verified with a manifold3d boolean (the RIGHT tool —
-raw ray/contains() probes near the thin curved belly skin gave noisy/misleading results)
-that the physical 3mm CF rod (r=1.5) has ZERO collision across its full span through both
-retention blocks on both sides.
-
-**CARGO-HINGE-SYNC (open, not fixed):** both files still hand-copy a fact
-generate_cargo_doors.py already computes and prints — this exact failure mode can
-recur on the next shell re-merge. Should read/import instead, matching this project's
-own `cargo_layout_t5_params.scad` single-source pattern.
+**Build order this establishes:** whenever the cargo shell changes, run
+`generate_cargo_doors.py` FIRST (writes the params), then
+`generate_cargo_hinge_retention.py` and any SCAD consumer of the params, then
+`merge_cargo_interior.py`. Generated params files ARE git-tracked (matching
+`cargo_layout_t5_params.scad`'s precedent), not gitignored build artifacts.
 
 See [[project_cargo_door_gateway]], [[project_cargo_door_latch]], [[env_venv_hides_system_python]].
 

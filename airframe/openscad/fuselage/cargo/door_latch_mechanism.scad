@@ -65,20 +65,22 @@
 // ============================================================
 
 include <cargo_layout_t5_params.scad>
+include <cargo_door_hinge_params.scad>
 
 $fn = 48;
 EPS = 0.01;
 
 // ---------------------------------------------------------------------------
-// Door / hinge geometry (generate_cargo_doors.py: KNUCKLE_Y, hinge X/Z)
+// Door / hinge geometry (CARGO-HINGE-SYNC single source, 2026-09-21)
 // ---------------------------------------------------------------------------
-// 2026-09-21: re-read from a fresh generate_cargo_doors.py run against the
-// CURRENT shell (was -117.6/5.11, -222.5/5.22 -- 2026-06-22 figures, stale
-// by ~2.1 mm in Z after the shell's many subsequent re-merges, Rev T5-T5f).
-// Same CARGO-HINGE-SYNC gap as generate_cargo_hinge_retention.py: hand-copied,
-// not imported, and can drift the same way on the next shell change.
-HINGE_X_PORT = -117.53;   HINGE_Z_PORT = 3.00;
-HINGE_X_STBD = -222.68;   HINGE_Z_STBD = 3.49;
+// HINGE_X_PORT/HINGE_Z_PORT/HINGE_X_STBD/HINGE_Z_STBD come from the
+// `include <cargo_door_hinge_params.scad>` above -- generated fresh by
+// generate_cargo_doors.py every run, not restated here.  A prior revision
+// hardcoded these (and, before that, a different stale pair) with no
+// mechanism to catch drift when the cargo shell is re-merged; both
+// generate_cargo_hinge_retention.py and this file now import/include the
+// same single source instead.  Regenerate the door STLs (which writes this
+// include) before regenerating this file's parts whenever the shell changes.
 BRACKET_Y    = 39.33;    // 2nd hinge knuckle station -- clear of the aperture
                          // rim (Y=2) and the GW-CARGO-DOOR tray (Y<=-2)
 

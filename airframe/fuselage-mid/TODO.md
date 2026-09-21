@@ -60,7 +60,6 @@
 - [ ] DOOR-LATCH-1..6 (`docs/CARGO_DOOR_LATCH_SPEC.md` §6)
 - [ ] DOOR-SEAM-1 — tongue-and-groove interlock at the door-to-door mating…
 - [ ] PRINT-GW-DOOR-TRAY hardware at order: 4 × RX-M3x5.7 inserts, 4 ×…
-- [ ] CARGO-HINGE-SYNC — regeneration-drift class fix (2026-09-21)
 
 ###### 1.1.1.2.1a *Cargo Winch — STS3215 Conversion (Rev B, 2026-07-27)*
 → full detail: `WBS.md` §1.1.1.2.1a

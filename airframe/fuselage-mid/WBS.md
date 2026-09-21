@@ -825,16 +825,22 @@ Record: `docs/CARGO_SECTION_LAYOUT.md`, `docs/TILT_ACTUATOR_SELECTION.md`,
         frame) + the DOOR-SEAM-1 seam, not a shared actuator — see DOOR-LATCH above.
     - [ ] **PRINT-GW-DOOR-TRAY hardware at order:** 4 × RX-M3x5.7 inserts, 4 × M3×8 SHCS,
         3 cable ties (BOM row note).
-    - [ ] **CARGO-HINGE-SYNC — regeneration-drift class fix (2026-09-21).**
-        `generate_cargo_hinge_retention.py`'s `ROD_AXES` and
-        `door_latch_mechanism.scad`'s `HINGE_X_*`/`HINGE_Z_*` both hand-copy hinge
-        coordinates `generate_cargo_doors.py` already computes and prints, instead of
-        importing/reading them. This already drifted once (found + fixed 2026-09-21,
-        `docs/CARGO_DOOR_LATCH_SPEC.md` §7a, ~2.1 mm in Z after several shell re-merges
-        the CF rod would not have aligned against) and can drift again on the next
-        shell change. Fix the class, not just the instance: single-source the hinge
-        coordinates (matching `cargo_layout_t5_params.scad`'s generated-include
-        pattern) so both consumers read one fact instead of two copies of it.
+    - [x] **CARGO-HINGE-SYNC — CLOSED 2026-09-21, single-sourced.**
+        `generate_cargo_doors.py` now writes `cargo_door_hinge_params.py`
+        (`airframe/stls/fuselage/cargo/`) and `cargo_door_hinge_params.scad`
+        (`airframe/openscad/fuselage/cargo/`) every run — `make_door()` returns
+        `z_hinge` alongside the mesh, and `write_hinge_params()` emits both files from
+        the same four numbers, matching `cargo_layout_t5_params.scad`'s
+        generated-include pattern. `generate_cargo_hinge_retention.py` now `import`s
+        `ROD_AXES`/`BAY_Y_FWD`/`BAY_Y_AFT` from the generated module (fails loudly
+        with a "run generate_cargo_doors.py first" message if it's missing, rather
+        than silently falling back to a stale guess); `door_latch_mechanism.scad` now
+        `include`s the generated `.scad` file instead of hardcoding
+        `HINGE_X_*`/`HINGE_Z_*`. Regression-verified: re-running both generators and
+        re-merging the shell after the switch reproduced byte-identical hinge
+        coordinates and geometry (port X −117.53/Z 3.00, stbd X −222.68/Z 3.49, same
+        as the hand-fixed values) — the refactor changed *how* the numbers reach their
+        consumers, not the numbers themselves.
 
 ###### 1.1.1.2.1a *Cargo Winch — STS3215 Conversion (Rev B, 2026-07-27)*
 
