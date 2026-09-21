@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "Serenity-Custom")(type "KiCad")(uri "${KIPRJMOD}/../../Serenity-Custom.pretty")(options "")(descr "Serenity project custom footprints (SAM-M10Q, WE-LAN 749010012A, SM1553, BMP388 LGA-10, X2Y 0805, SRF2012, WE-MAPI 3015, Nano-Fit, PB2 rails)"))
+)

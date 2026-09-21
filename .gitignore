@@ -57,3 +57,4 @@ docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf
 *.pre-g351x
 code-scanning-files-extracted.csv
 denominations.odg
+*.rpt

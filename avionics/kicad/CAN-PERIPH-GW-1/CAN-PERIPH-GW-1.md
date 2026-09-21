@@ -156,9 +156,16 @@ designs) matches root `AGENTS.md`'s explicit goal: *"Avionics, comms, and
 software are designed for reuse on other UAV/UGV/USV/robot platforms, not just
 this airframe."*
 
+**Nacelle tilt no longer uses this drop (2026-09-17).** The tilt actuator is a
+brushed gearmotor driven by its own Open-Secure-ESC build (`REFERENCES.md`
+REF-ESC-001), a self-signing node on the CAN-FD/RS-485 trunk; this gateway's
+tilt role narrows to relaying the signed AK7455 angle (Section 1), which that
+controller verifies as a trust boundary. The `J_FLEX` question below remains
+live for the **winch** only.
+
 **⚠ Open item, added 2026-08-02 — LibreServo v2 needs differential RS-485, not
-single-wire TTL.** The nacelle tilt servos and the cargo winch servo are all
-migrating to SPT5425LV converted with LibreServo v2 (`REFERENCES.md`
+single-wire TTL.** The cargo winch servo (and, until 2026-09-17, the nacelle
+tilt servos) migrated to SPT5425LV converted with LibreServo v2 (`REFERENCES.md`
 "Servo Fleet Standardisation, 2026-08-02"; `docs/CARGO_WINCH_SPECIFICATION.md`
 Rev C §3.1.1). LibreServo v2's daisy-chain bus is genuine differential RS-485
 (an A/B pair through an onboard transceiver), not the single-wire half-duplex
@@ -380,12 +387,13 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
 6. **`Pilot.md` §13** still lists a legacy AS5600 I²C `J_ENC` — needs a
    documentation-only edit to note the encoder is now read via this gateway,
    not directly. Flagged, not edited here (Pilot's own file).
-7. **LibreServo v2 RS-485 servo bus (added 2026-08-02), not resolved.** See
-   "Servo actuator gateway" above — `J_FLEX` has no local RS-485 transceiver
-   for the differential bus the SPT5425LV/LibreServo v2 servos now need.
-   Decide the interim transceiver approach (dedicated part fed from
-   `FLEX_UART_TX/RX`, or extend the existing isolated RS-485 trunk) before
-   winch or nacelle-tilt firmware bring-up. **Watch for a bigger change:**
+7. **LibreServo v2 RS-485 servo bus (added 2026-08-02), not resolved — winch
+   only since 2026-09-17.** See "Servo actuator gateway" above — `J_FLEX` has
+   no local RS-485 transceiver for the differential bus the SPT5425LV/LibreServo
+   v2 winch servo needs. The nacelle tilt is moot here: its Open-Secure-ESC
+   controller (REF-ESC-001) sits on the trunk directly. Decide the interim
+   transceiver approach (dedicated part fed from `FLEX_UART_TX/RX`, or extend
+   the existing isolated RS-485 trunk) before winch firmware bring-up. **Watch for a bigger change:**
    per the LibreServo v2 fork maintainer, the fork's in-progress isolated
    RS-485 + isolated CAN-FD + SLB9672 TPM upgrade is intended to let a
    converted servo attach **directly** to the airframe's isolated CAN-FD/

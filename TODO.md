@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-20
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -32,9 +32,13 @@
 
 - [ ] WA-R3/R17 — split-collar pinch clamp is not yet a part (BLOCKS wing…
 - [ ] ★ BRK-4 — brake solenoid part selection (Ø12×24 pull, 3 N, 6 V)
+- [ ] BRK-4a — record the solenoid hold-in / dropout voltage (controller…
 - [ ] BRK-5 — bench: pin-engaged hold, release under load, drift ≤ 0.63°…
+- [ ] BRK-6 — bench: engage into motion at max slew (MCU-reset case)
 - [ ] TILT-CTL-07 — owner to confirm the adopted rate ≥ 120 °/s, ≥ 4 Hz at…
-- [ ] TILT-CTL-08 — LibreServo_v4.1-TC controller variant (LibreServo_v4…
+- [ ] TILT-CTL-09 — brake-release authorization + asymmetric MAC fail…
+- [ ] TILT-CTL-02a — trip response executor and its independence from the…
+- [ ] ENC-DAUGHTER — AEAT-8800-Q24 sensor daughter for the brake-guide…
 - [ ] ★ WA-R18 — Rev S1g +102.8 g; hover T/W ~1.19 vs 1.2 min
 - [ ] ★ MA-1 — BOM printed-part masses understate by +521.6 g (13.3 % AUW)
 - [ ] MA-7 — add an `Installed` flag to the BOM mass column
@@ -290,7 +294,7 @@
 → detail: `avionics/WBS.md` §1.10
 
 - [ ] ★ U1 — Retire Pilot J_ESC/J_SERVO PWM headers → CAN-FD/RS-485 trunk
-- [ ] U2 — LibreServo_v4 nacelle-tilt bus integration (GW-1 J_FLEX gap)
+- [ ] U2 — Open-Secure-ESC tilt controller on the trunk (REF-ESC-001)
 - [ ] U3 — Open-Secure-ESC 50A/6S CAN-FD integration + governor rewrite
 - [ ] U4 — OpenServoCore SG90 TTL+CMAC bus finalize (re-check maturity)
 - [ ] U5 — Observer pitot-tube airspeed sensor; fix Pilot's stale claim

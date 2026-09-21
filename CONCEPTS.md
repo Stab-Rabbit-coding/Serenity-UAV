@@ -55,3 +55,19 @@ The single rotating ring inside a nacelle's nozzle that drives every nozzle flap
 The project's standing requirement that the nozzle's exit area be driven by nacelle tilt alone — no dedicated nozzle actuator, servo, or control channel. Nozzle position is a pure function of tilt angle, so tilt and nozzle schedule cannot disagree in flight.
 
 Because the driven parts ride the tilting nacelle, a passive tilt drive must take its input datum from a body that does *not* tilt with the nacelle (the wing); a pickup fixed to any nacelle-mounted body, the Tilt Spar included, has zero relative motion against the Unison Ring and transmits nothing.
+
+## Tilt Controller
+
+The per-side bus device that closes the tilt actuator's inner loop: it drives the gearmotor, reads the actuator-shaft sensor, holds and releases the Tilt Brake, and receives the nacelle's absolute angle from the gateway over the fleet bus. It is an instance of the project's own Open-Secure-ESC platform (a brushed-DC build), not a servo controller, so its identity is a build folder in that repository rather than a board of its own.
+
+## Control Node
+
+One of the four PocketBeagle 2 Industrial single-board computers that fly the aircraft, each with exactly one cape stacked on its two 0.1 in rails and each carrying a point of presence on all four wired buses (MIL-STD-1553B, CAN-FD, RS-485, Ethernet) so any node can take over any role. Flight-control nodes carry the Pilot cape; comms nodes carry the XO cape. A node lives inside a Faraday pouch in the cargo section; its allowable size is the Layout Envelope's node envelope, which is why a node is one cape, never a stack of two.
+
+## Cape Usable Band
+
+The strip of a cape between its two PocketBeagle 2 stacking rails that can actually hold parts and copper — roughly the middle two-thirds of the board's short dimension, on each face. The rails are through-hole, so they consume both faces; component area budgets for a cape are computed against the usable band, per face, using each footprint's courtyard, not against the board outline or against package body sizes.
+
+## Isolation Band
+
+The region of a cape that belongs to the isolated (bus-side) reference of the isolated CAN-FD and RS-485 transceivers: their isolated pin rows, the field connectors and the filters between them. Only isolated-domain nets and chassis ground may have copper inside it, and the main ground and supply planes are cut away beneath it; the gap between the band and logic-side copper is the barrier the board actually delivers, whatever the transceiver's own isolation rating says.

@@ -151,8 +151,10 @@ MOTOR_BOSS_D  = 7.0 + 0.4;               // O7.0 gearbox boss (REF-ACT-001) + cl
 HUB_BORE_D    = 10.0 + 0.4;              // worm hub (O10) turns inside the face plate; the hub's forward face bears on the gearbox boss
 M25_CLR       = 2.7;                     // M2.5 clearance (20D: 2 x M2.5 on MOTOR_HOLE_S, REF-ACT-001)
 TIE_SLOT      = [1.6, 4.5];              // cable-tie slot (thickness x width)
-// LibreServo_v4 board (36.5 x 42.9 mm outline, LibreServo-v4.0.0.kicad_pcb
-// Edge.Cuts, read 2026-09-15; NO mounting holes in v4.0.0) -- card-edge
+// Tilt controller board: Open-Secure-ESC build 6s/10A/BRUSHED_CAN_485_isolation
+// (REF-ESC-001, 2026-09-17), which carries this 36.5 x 42.9 mm envelope and
+// the RAIL_H component height as hard host constraints (the envelope was
+// first cut for a LibreServo_v4 outline, since superseded) -- card-edge
 // rails on the web's OUTBOARD face (Rev T5e), board plane parallel to the
 // web, component side toward the web (RAIL_H standoff), bare back to the
 // skin.  BOARD_L / BOARD_W / BOARD_Y0 / BOARD_Z0 come from the params file
@@ -377,7 +379,8 @@ module worm() {
                 for (i = [0 : 11]) rotate([0, 0, i * 30])
                     translate([5.5 - 1.2, -1.2, BRAKE_COLLAR_L - 2.5]) cube([4.0, 2.4, 3.0]);
                 // Rev T5c: O6.2 x 2.5 diametric-magnet pocket on the axis --
-                // the LibreServo AEAT-8800 in the brake guide reads it, so the
+                // the AEAT-8800-Q24 in the brake guide reads it (remote sensor of
+                // the Open-Secure-ESC tilt controller, REF-ESC-001), so the
                 // gearmotor carries no rear encoder (#1571, 25Dx48L)
                 translate([0, 0, BRAKE_COLLAR_L - 1.0]) cylinder(d = 6.2, h = 3.0);
             }

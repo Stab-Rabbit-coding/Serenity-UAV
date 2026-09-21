@@ -146,8 +146,18 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     pair) to select SBUS vs. plain UART framing on the existing J_SBUS-equivalent
     pad, matching the J_SBUS line item already in Pilot.md §14's field-connector
     table (§1.2, "Reconcile Pilot.md §14...").
-- [ ] **Generate Pilot gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
-    KiCad; export to `avionics/kicad/gerbers/CAPE-A-2/`; re-export drill files.
+- [ ] **Generate Pilot gerbers** — superseded by the 2026-09-19 schematic-first Rev T
+    rebuild (`avionics/kicad/Pilot/Pilot.md`; `CAPE-A-2.kicad_pcb` no longer exists).
+    Rev T is fully generated (`gen_pilot_sch.py`/`gen_pilot_footprints.py`/
+    `gen_pilot_pcb.py`), datasheet-verified, 6-layer, ERC 0 / DRC 0 at 0%
+    routed (388 connections). Two freerouting attempts via the Specctra bridge
+    did not produce a safe result — the second completed but introduced 9 real
+    shorts + 118 hole-clearance violations around the dense PocketBeagle 2
+    headers and was rejected; see `Pilot.md` "Routing status" for the full
+    account. Remaining: route (recommend KiCad's interactive push-and-shove
+    router, which applies this project's live DRC rules including the
+    isolation-domain `ISO_BAND` rule, unlike the batch Specctra round-trip),
+    then `bash scripts/export_pilot_gerbers.sh`.
     - **BLOCKS Pilot fab order**
 - [ ] **Generate XO gerbers** — `CAPE-B-2.kicad_pcb` complete; same DRC + export procedure;
     export to `avionics/kicad/gerbers/CAPE-B-2/`.
@@ -173,6 +183,20 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     and feed CC2652R7's 2.4 GHz path through a passive 2.4/5 GHz diplexer onto the existing
     shared Wi-Fi antenna (no separate Zigbee antenna/SMA pad needed). Still open: add
     CC2652R7 + diplexer to a Cape-B-2 schematic revision; decide which bay(s) carry it.
+- [x] **REJECTED (2026-09-20): mLRS as XO's SiK radio-link protocol.** Considered during the
+    XO board-area rebuild (via `ce-ideate`) as a possible replacement for the RFD900ux-SMT SiK
+    channel. XO's and Commo's radio links provide **redundant multiband connectivity between
+    the UAV and its human-piloted ground station** — the whole point is path diversity across
+    independent hardware/modulation families. mLRS is a real, mature open-source project
+    (github.com/olliw42/mLRS) with genuinely competitive range/performance, but it runs on
+    Semtech LoRa silicon (SX1280/1276/1262/etc.) — the **same radio family Commo's LoRa link
+    already uses**. Adopting it on XO would collapse two supposedly-independent links onto one
+    LoRa failure domain (interference, jamming, a LoRa-specific hardware defect), defeating the
+    redundancy the two-link architecture exists to provide. Also a poor fit operationally: mLRS
+    is architected as an MCU+radio-chip *subsystem* (not a self-contained module like SiK), which
+    would have made XO's board-area crisis worse, not better. Kept for the record per the
+    project's "explicit rejection with reasons" ideation discipline — do not re-propose mLRS for
+    XO or any other node carrying a LoRa link elsewhere in the fleet.
 
 - [ ] **Generate Commo gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
     `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
@@ -379,16 +403,21 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
 
 - [ ] **U1** — Retire Pilot `J_ESC`/`J_SERVO` PWM headers → CAN-FD/RS-485 actuator
     trunk (gates U2/U3/U6). ★
-- [ ] **U2** — LibreServo_v4 nacelle-tilt bus integration; close the `CAN-PERIPH-GW-1`
-    `J_FLEX` bare-UART gap (REF-SENSOR-014 → v4).
+- [ ] **U2** — Open-Secure-ESC tilt controller (REF-ESC-001, build
+    `6s/10A/BRUSHED_CAN_485_isolation`, 2026-09-17) as a self-signing node on the
+    CAN-FD/RS-485 trunk: verify the gateway-signed AK7455 angle frame, publish
+    telemetry and brake state; the `CAN-PERIPH-GW-1` `J_FLEX` bare-UART gap is
+    now winch-only (REF-SENSOR-014).
 - [ ] **U3** — Open-Secure-ESC 50A/6S `CAN_485_faraday` integration + PID governor
     rewrite off PRU/BDSHOT onto CAN-FD frames.
 - [ ] **U4** — OpenServoCore SG90 TTL+CMAC bus finalize; re-check the REF-SENSOR-015
     upstream-maturity gate literally, not from memory.
 - [ ] **U5** — Observer pitot-tube airspeed sensor (`J_PITOT`); remove Pilot's
     unbacked "airspeed sensor" claim. Datasheet pull precedes any REFERENCES.md edit.
-- [ ] **U6** — Fleet host+message authentication wiring for ESC / tilt-servo / SG90
-    endpoints; one `secure-controller-assurance` mapping per endpoint class.
+- [ ] **U6** — Fleet host+message authentication wiring for ESC / brushed tilt
+    controller / SG90 endpoints; one `secure-controller-assurance` mapping per
+    endpoint class (the tilt endpoint is a brushed-ESC class since 2026-09-17,
+    with the brake-release command class of `TILT_DRIVE_CONTROL_SPEC.md` §5.5).
 - [ ] **U7** — Per-board ERC/DRC/gerber closeout (Pilot, XO, Commo, Flight Engineer,
     Observer, CAN-PERIPH-GW-1); runs after U1/U2/U3/U5 land on the boards. ★
 - [ ] **U8** — Pilot tamper-mesh creepage fix (13 DRC, 0.125 mm vs 8 mm; fab blocker)
@@ -689,23 +718,105 @@ REFERENCES.md Removed/Superseded Citations).
     swapped to ISOW1412 (`fix_wash_zoe_isolators.py`) — footprint swap +
     re-route + gerbers still open. **Keep all legacy connectors** (user
     instruction) even where superseded by the trust module.
-- [ ] **XO full DRC/ERC clean-out — not started.** 219 ERC hard (206
-    `pin_not_connected`, mirrors the CAN-TR/ISOW1044 VCC1/GND1/RXD/VCC2 pins
-    genuinely unconnected in the schematic, plus LoRa/other pre-existing
-    gaps) + 154 DRC hard. Same ADM2795E→ISOW1412 PCB footprint swap needed
-    as Pilot. A stray `_autosave-XO.kicad_pcb` + `.lck` files are
-    git-tracked in `avionics/kicad/XO/kicads/` — the autosave file appears
-    to be an accidental commit of a KiCad crash-recovery artifact (578 hard
-    DRC violations on its own, clearly not real design intent) and should
-    be reviewed for removal. **Keep all legacy connectors** (user
-    instruction).
-- [ ] **Flight Engineer full PCB resync — not started.** 213 DRC hard, almost all
-    `net_conflict` (PCB pad nets don't match the schematic at all — the
-    injected trust module and other schematic changes never propagated to
-    layout; compounds the pre-existing `gen_flight_engineer.py` drift above). No
-    trust-module footprints exist on the PCB yet. Largest remaining board
-    task — needs a real `Update PCB from Schematic` pass plus manual net
-    cleanup, not just footprint addition.
+- [x] **XO schematic-first rebuild — ERC 0.** 2026-09-20 (Claude Sonnet 5):
+    replaced the legacy schematic (169 refs vs 43 PCB footprints, 564 ERC
+    violations) with a fresh generator (`avionics/kicad/XO/scripts/
+    gen_xo_sch.py`), reusing Pilot's verified fleet-shared blocks (ISOW1044
+    CAN-FD, ISOW1412 RS-485, HI-1573+PM-DB2791S 1553 — same
+    DS26LV31/32+fake-"SM-1553-11" fix as Pilot — SLB9672 TPM, DP83825I
+    Ethernet PHY x1 per this file's own "XO: 1x PHY (RMII0)" line) plus new
+    XO-unique blocks (RFD900x SiK, RFM95W LoRa, WL1837MOD WiFi+BT, TPS63031
+    RF rail, W25Q128JV NOR flash, ATF16V8BQL logging write-block interlock,
+    3 antenna filter/ESD chains, microSD). `_B_`-suffixed bus nets per this
+    file's own documented rationale. ERC 0 confirmed (`kicad-cli sch erc
+    --severity-all`). Two part-number defects found IN THIS FILE'S OWN
+    antenna-filter table and corrected (flagged, not silently fixed):
+    Johanson "0915LP15B0100E"/"2450BP15B050E" do not exist in Johanson's
+    catalog — substituted with the closest real parts (0915LP15B026E,
+    2450BP15E0100), **needs owner confirmation**. Microsd connector
+    "Molex 503182-1852" could not be verified real — replaced with the
+    confirmed-real `Connector_Card:microSD_HC_Molex_104031-0811` already in
+    KiCad's system library. RCLAMP0502B's datasheet PDF could not be
+    obtained (every mirror blocked) — footprint is a reasonable SOD-882
+    estimate, not pixel-verified; needs a real datasheet fetch.
+    **PCB layout: board-area infeasible at 55x35mm as originally scoped**
+    (full component set summed to ~4580 mm^2 vs a 3850 mm^2 *theoretical*
+    two-sided ceiling, confirmed by an actual placement attempt, not just
+    the area sum). Owner-directed fixes applied: (1) smaller IC packages
+    (ATF16V8BQL SOIC-20W->TSSOP-20, PCA9685 TSSOP28->HVQFN28, minor); (2)
+    3x panel-mount SMA antenna jacks -> vertical MMCX (Molex 73415-1471,
+    ~24 mm^2 vs SMA's ~198 mm^2 each — the major recoverable block); (3)
+    **owner clarified the winch (multi-turn servo) and SG90 door servos are
+    bus-networked over CAN-FD/RS-485 for fleet failover, not locally
+    driven** — removed DRV8833, HX711, and PCA9685 (and their connectors)
+    entirely, since XO needs no local actuator-drive silicon at all (see
+    `avionics/kicad/../memory` project_fleet_trust_module note on this
+    general fleet pattern). Area now 3515 mm^2 (91% of the theoretical
+    ceiling) but the actual auto-placer still only fits ~69/132 footprints
+    with both faces already spanning the full board edge-to-edge — a
+    simple rectangular spiral placer's packing-density limit, not a
+    remaining area/scope problem. **Owner elected to finish placement
+    manually in the KiCad GUI** rather than keep iterating the generator;
+    DRC-0 verification and routing (freerouting bridge, same
+    accept-only-if-clean discipline as Pilot) are follow-on items once
+    placement is done. Reused Pilot's courtyard-collision-aware Placer/
+    outline/zone/DRU machinery in `gen_xo_pcb.py`. **Keep all legacy
+    connectors** (user instruction) — n/a here since this is a from-scratch
+    rebuild, not a trust-module injection onto an existing layout.
+    Pre-existing `_autosave-XO.kicad_pcb` + `.lck` crash-recovery artifacts
+    in `avionics/kicad/XO/kicads/` are untouched by this rebuild and should
+    still be reviewed for removal separately.
+- [ ] **XO PCB placement + DRC 0 + routing — IN PROGRESS (owner doing manual
+    placement in KiCad).** Follow-on to the rebuild above: once the owner
+    finishes placing the ~69 currently-unplaced footprints, run `kicad-cli
+    pcb drc --severity-all --schematic-parity` to 0, then attempt
+    freerouting via the Specctra DSN/SES bridge (reject and report if it
+    introduces shorts, same discipline as Pilot), then export gerbers.
+- [x] **Flight Engineer schematic-first rebuild — ERC 0.** 2026-09-20 (Claude
+    Sonnet 5): the legacy schematic (586 ERC violations, PCB pad nets not
+    matching at all, `gen_flight_engineer.py` itself confirmed drifted per its own
+    injector script's warning) was replaced by a fresh generator
+    (`avionics/kicad/FlightEngineer/scripts/gen_fe_sch.py`), transcribing every
+    pin table from OEM datasheets: TPS54620/TPS54540 (dual+single BEC),
+    INA226 x5, BQ76930 (6S cell monitor, Table 9-3 6-cell tap config), plus
+    the CURRENT (not superseded) trust module target — MSPM0G3518-Q1 RHB-32
+    (pinmux reused verbatim from `retarget_mspm0g351x_slb9672.py`'s own
+    verified `FLIGHT_ENGINEER_REMAP`/`FLIGHT_ENGINEER_TPM_NETS` tables, not
+    re-derived), SLB9672, ISOW1044BDFMR, ISOW1412DFMR (same parts/pin tables
+    as Pilot/XO). ISOW1412's EN/FLT pin now wired to a real MCU GPIO
+    (RS485_FLT_N) instead of Pilot's hard-tied convention, since the RHB-32
+    pinmux happened to free one. ERC 0 confirmed (151 parts, 539 pins).
+    **One part-number defect found in FlightEngineer.md's own BOM and
+    corrected** (flagged, not silently fixed): "AON6556" (Q_BATT_DSG,
+    cited 60V/30A) does not exist in AOSMD's catalog (their 30V AlphaMOS
+    family tops out at AON6554/6558; no 60V "6556" found) — substituted with
+    AON6260, a real AOSMD 60V/85A DFN5x6 MOSFET, NEEDS owner confirmation.
+    MBRD1045CT and SMBJ33CA are confirmed real via manufacturer/distributor
+    catalog search but their datasheet PDFs could not be fetched this pass
+    (every mirror blocked) — standard package pinouts used, flagged for a
+    follow-up fetch. **PCB: courtyard-budgeted before layout** per
+    `docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-
+    courtyard-budget-before-layout.md` — 7377 mm^2 total footprint area vs
+    FlightEngineer.md's own 90x65mm/4-layer spec (11700 mm^2 two-sided
+    theoretical ceiling) = 63%, comfortably under the ~70% (4-layer)
+    guideline, so no capability was cut to make this board fit (unlike XO).
+    All 151 footprints placed (0 unplaced). DRC reduced from a 213-hard
+    baseline (on the old, unrelated PCB) to **31 remaining violations** on
+    the new layout (9 solder-mask-bridge + 8 shorting-items + 8 cosmetic
+    silk-over-copper + 4 hole-clearance + 2 clearance), all concentrated
+    around D_OR1/D_OR2 (the 5V BEC OR-diodes) and U_RS485 landing close to a
+    few ESC-branch passives — a placer packing-density limit on this
+    generator's simple rectangular spiral placer (same class of limit XO
+    hit), not an area or scope problem. Routing not yet attempted.
+- [ ] **Flight Engineer PCB: close the last 31 DRC items + route + gerbers —
+    not started.** Follow-on to the rebuild above. The remaining violations
+    are localized to D_OR1/D_OR2 vs CM_ESC3/F_ESC3/C_DEC4 and U_RS485 vs
+    C1/C2 — nudging those ~5 footprints apart in the KiCad GUI (same
+    approach the owner is using on XO) should clear it faster than further
+    generator-side placement iteration. Then `kicad-cli pcb drc
+    --severity-all --schematic-parity` to 0, freerouting attempt via the
+    Specctra bridge (reject/report on any shorts, same discipline as
+    Pilot/XO), then gerbers.
 - [ ] **Observer PCB resync — not started.** 124 DRC hard. PCB (`Observer.kicad_pcb`,
     dated 2026-07-14) predates the schematic's ISOW1412/Section H addition
     (2026-07-26) entirely — no RS-485 footprint on the board yet.

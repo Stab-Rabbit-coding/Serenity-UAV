@@ -63,8 +63,8 @@ None of these can be made by an agent; each unblocks a whole stream.
   mandatory before first lift.
 - **D5 — Tilt actuator class.** **DECIDED 2026-09-15, RE-CUT 2026-09-16 (Rev T5e):** Pololu 20D
   25:1 CB gearmotor + six-start worm 6.67:1 + spring-applied pin brake, own fused feeds (the
-  25D / 4-start pick of 2026-09-15 could not clear the worm wheel — T5d-1); LibreServo_v4 becomes
-  a v4.1-TC variant (`docs/TILT_ACTUATOR_SELECTION.md`). D-T5-3 CLOSED (all four nodes placed in
+  25D / 4-start pick of 2026-09-15 could not clear the worm wheel — T5d-1); the controller is an
+  Open-Secure-ESC build, not a LibreServo variant (2026-09-17, `docs/TILT_ACTUATOR_SELECTION.md` §4). D-T5-3 CLOSED (all four nodes placed in
   the cargo section). Residual: owner confirms the adopted rate requirement (TILT-CTL-07: 144 °/s
   no-load, 111 °/s at max efficiency).
 
@@ -79,7 +79,7 @@ skill; each lists its owning WBS entry, so closure happens there first.
 | --- | --- | --- | --- |
 | **A0 Mass truth** | Reconcile the 23 under-counted printed rows (MA-1, +521.6 g), add the `Installed` flag (MA-7), fix `PRINT-BATT-TRAY` (MA-6), then re-derive AUW / CG / hover T/W once (WA-R18, SPAR-20-9, LG-32). Add the CI check MA-1 asks for. | root §0.8.1; `docs/MASS_AUDIT_CARGO_WING_ROOT.md` | A single AUW/CG ledger every other stream cites; T/W against D4 |
 | **A1 Nozzle drive** *(full-ladder only)* | Execute D2; then SPAR-25-5 / re-hub `spar_crank()` / pushrod clearance / un-park `nacelle_nozzle_sync_gears.scad`; register in `serenity_assembly.py`. | wings-nacelles §1.1.3.1, §1.1.5 | `tools/nozzle_linkage_check.py` pass; iris reaches both stops over −5..140° |
-| **A2 Tilt actuation** | ~~Execute D5; WA-R16; WA-R15a~~ **done 2026-09-15** (worm drive + brake, bracket/worm/wheel/brake-guide STLs, shell re-merged). Remaining: BRK-4 solenoid part, BRK-5 hold bench, TILT-CTL-02..08, LibreServo_v4.1-TC. | root §0.8/§0.8.1; `docs/TILT_ACTUATOR_SELECTION.md` | Train holds nacelle at 90° unpowered (bench); spec §8 items closed |
+| **A2 Tilt actuation** | ~~Execute D5; WA-R16; WA-R15a~~ **done 2026-09-15** (worm drive + brake, bracket/worm/wheel/brake-guide STLs, shell re-merged). Remaining: BRK-4 solenoid part, BRK-5 hold bench, TILT-CTL-02..07, TILT-CTL-09; controller = Open-Secure-ESC build (REF-ESC-001, layout + firmware in that repo's TODO §18). | root §0.8/§0.8.1; `docs/TILT_ACTUATOR_SELECTION.md` | Train holds nacelle at 90° unpowered (bench); spec §8 items closed |
 | **A3 Nacelle print-readiness** | Measure a real motor (bolt circle, 4-hole pattern, length, mass) and fix `MOTOR_BOLT_R` + spider; close the three ESC-bay safety findings (unfiltered path, bay velocity, 50 A sustained) and draw the WA-R10 disconnect route; NAC-MOULD-01 Stage 2 ovalising; register the trunnion in `serenity_assembly.py` and re-run the tilt sweep. | wings-nacelles §1.1.3.7, §1.1.3.8, §1.1.4 | `validate_stls.py`, `nacelle_mass_cg.py`, `nacelle_trunnion_fit.py` T1–T9 green |
 | **A4 Landing gear** | Execute D3; LG-15/16 wire procurement + coupon; LG-02 backing plates; LG-27 touchdown attitude; LG-06/14 bench + drop tests. | landing-gear §1.1.4 | `landing_gear_wing_clearance.py --proud` CLEAR at 3.0 in; drop test FOS ≥ 4 |
 | **A5 Wing attach hardware** | WA-R3/R17 split-collar pinch clamp (no part exists; blocks wing removal/refit). | root §0.8.1; `WING_ATTACH_INTERFACE.md` §5 | Part rendered, in BOM, in assembly |
@@ -96,7 +96,7 @@ skill; each lists its owning WBS entry, so closure happens there first.
 | **B2 Pilot fab blocker** | U8 tamper-mesh creepage (13 DRC, 0.125 vs 8 mm); the 7 non-manufacturable footprints; PB2-P2 unwired-header root cause; ISOW1412 swap. | avionics §1.2a, §1.9.2 | Pilot DRC 0 hard |
 | **B3 Gateway** | §1.9.3: re-route the MCU area after the RHB-32 retarget, MCU support parts, PA0/PA1 pull-up, PA18 pull-down, thermal vias, lanes 3/4; OPTIGA Trust M swap; 47/296 nets. | avionics §1.9.2, §1.9.3 | GW-1 DRC 0 hard |
 | **B4 XO + Flight Engineer** | XO DRC clean-out (219 ERC / 154 DRC) + TPM land fix; Flight Engineer full PCB resync (213 DRC). | avionics §1.9.2 | DRC 0 hard each |
-| **B5 Bus integration** | U2 LibreServo_v4 (or the D5 replacement) on the trunk + `J_FLEX` transceiver; U3 Open-Secure-ESC frames + governor rewrite; U6 endpoint authentication mapping. | avionics §1.10 U2/U3/U6 | `secure-controller-assurance` mapping per endpoint |
+| **B5 Bus integration** | U2 Open-Secure-ESC tilt controller (REF-ESC-001; replaced the LibreServo_v4 variant 2026-09-17) on the trunk — `J_FLEX` transceiver now winch-only; U3 Open-Secure-ESC frames + governor rewrite; U6 endpoint authentication mapping. | avionics §1.10 U2/U3/U6 | `secure-controller-assurance` mapping per endpoint |
 | **B6 Gerbers** | U7 for the Phase 5 set: Pilot ×2, XO ×2, Flight Engineer, CAN-PERIPH-GW-1 ×2, ENC-NACELLE-1 ×2. Commo and Observer are Phase 6. | avionics §1.10 U7 | Gerbers + `emc` pre-compliance pass per board |
 
 ### Stream C — Firmware to a flyable stack

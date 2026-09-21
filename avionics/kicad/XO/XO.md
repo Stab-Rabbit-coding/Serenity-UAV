@@ -5,14 +5,32 @@
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** R (Rev R baseline — XO naming finalised from CAPE-B-2; EMI-hardened variant of CAPE-B-1 Rev M, Ethernet PHY restored)
 **Date:** 2026-06-07
-**Status:** Schematic complete — PCB layout pending. **Rev S1 reconciliation IN PROGRESS
-(2026-07-04):** the PCB is already at the intended end-state (LoRa removed, P1/P2 +TOP
-passthrough rails placed) but the **schematic lags** — it still carries the LoRa block, the
-now-obsolete `J_XCVR` Commo-cable connector, and an SBUS block, and uses a **different
-reference-designator convention** from the PCB (only ~10 of ~50 refs match). A load-blocking
-stray-`(comment)` bug in `XO.kicad_sch` was fixed 2026-07-04 (it now opens in kicad-cli).
-The remaining schematic reconciliation needs a **user-confirmed sch↔pcb reference-designator
-remap** before edits — see TODO.md §1.2b and `avionics/AGENTS.md`.
+**Status (2026-09-20 update, Claude Sonnet 5):** The Rev S1 reconciliation described below is
+SUPERSEDED — the legacy schematic/PCB pair (169 sch refs vs 43 PCB footprints, 564 ERC
+violations) was not patchable and has been replaced by a from-scratch schematic-first rebuild
+(`avionics/kicad/XO/scripts/gen_xo_sch.py` / `gen_xo_pcb.py`), the same method used for Pilot.
+**ERC is 0.** PCB placement is IN PROGRESS: board-area math showed the full component set does
+not fit the 55x35mm two-sided envelope this section's §1 requires (confirmed by an actual
+placement run, not just an area estimate); the winch and SG90 door servos were moved to
+bus-networked (CAN-FD/RS-485) control per owner correction (they were never meant to be driven
+locally — see WBS.md), and the 3 SMA antenna jacks became vertical MMCX — this recovered enough
+area to get close, but the owner is finishing placement by hand in KiCad rather than continuing
+to iterate the auto-placer. **Note:** this rebuild restored LoRa/RFM95W (contradicting this
+section's old claim that Rev S1 removed it — XO.md's own §13 antenna-filter BOM already listed
+RFM95W, a second internal contradiction in this doc alongside the Ethernet one below); see
+avionics/WBS.md for the full rebuild trail and two flagged part-number defects (Johanson filter
+MPNs, microSD connector MPN) that need owner confirmation. See WBS.md's "XO schematic-first
+rebuild" and "XO PCB placement" items for the authoritative current state; the paragraphs below
+describe the PRE-REBUILD Rev R/S1 history and are kept for record only.
+
+**Status (superseded, pre-2026-09-20):** Schematic complete — PCB layout pending. **Rev S1
+reconciliation IN PROGRESS (2026-07-04):** the PCB is already at the intended end-state (LoRa
+removed, P1/P2 +TOP passthrough rails placed) but the **schematic lags** — it still carries the
+LoRa block, the now-obsolete `J_XCVR` Commo-cable connector, and an SBUS block, and uses a
+**different reference-designator convention** from the PCB (only ~10 of ~50 refs match). A
+load-blocking stray-`(comment)` bug in `XO.kicad_sch` was fixed 2026-07-04 (it now opens in
+kicad-cli). The remaining schematic reconciliation needs a **user-confirmed sch↔pcb
+reference-designator remap** before edits — see TODO.md §1.2b and `avionics/AGENTS.md`.
 
 ---
 

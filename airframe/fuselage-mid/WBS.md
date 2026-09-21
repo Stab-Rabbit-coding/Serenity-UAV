@@ -772,7 +772,8 @@ Record: `docs/CARGO_SECTION_LAYOUT.md`, `docs/TILT_ACTUATOR_SELECTION.md`,
 - [ ] **HARN-CLIP — encoder-harness turn-down clip** on the tilt bracket (the Y 37.5 wall bore exits inside the wheel disc; 9 mm to turn).
 - [ ] **GPS-ANT — Ø36 patch antenna part** for the dorsal cups (legacy ANN-MB-00 is 82 × 60 mm and does not fit).
 - [x] **MOTOR_ENC_L — verify the 25D encoder-version length** — VOID 2026-09-16: the 25D is retired (T5d-1); the 20D #3712's 41 mm body + 6 mm rear shaft are confirmed from the product page (REF-ACT-001).
-- [ ] **TC-BOARD — LibreServo_v4.1-TC fit on the T5e rails**: 4 mm component-side standoff toward the web (verify ≤ 4 mm parts on v4.0.0), bare back to the skin; bridge re-rated to the 20D's 2.9 A stall (was 6 A in the CR).
+- [ ] **TC-BOARD — Open-Secure-ESC tilt controller fit on the T5e rails** (REF-ESC-001, 2026-09-17): the build carries the 42.9 × 36.5 mm outline, ≤ 4 mm parts on the web-facing side, bare back and aft/inboard connectors as hard host constraints; layout not started; the buck inductors are the height risk (re-check `cargo_layout_fit.py` if the build ever asks for more than `RAIL_H`).
+- [ ] **ENC-DAUGHTER — AEAT-8800-Q24 sensor daughter** for the brake-guide pocket (QFN-24 carrier, Ø6 diametric magnet on the collar axis, 6-pin 1.25 mm lead ≈ 35 mm to the controller's J7; `symbols/AEAT_8800_Q24` in the Open-Secure-ESC repo) — a Serenity print/PCB item, not in the controller BOM.
 - [ ] **20D VERIFY — mounting-hole spacing (15 mm assumed) and Ø7 boss** against the Pololu 20D dimension diagram before printing the face plate; output-shaft axial rating unpublished (27 N worm thrust at stall — thrust washer fallback).
 - [ ] **CHIN-STRAPS — add 4 × BATT-STRAP-CAM** to the order for the chin node shelf (BOM note on PRINT-CHIN-SHELF).
 - [ ] **Cargo door re-fit (U1)** still open — see 1.1.1.2.1 "Clamshell door halves"; the T5 shell moved no aperture geometry.

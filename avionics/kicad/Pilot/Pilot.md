@@ -1,396 +1,193 @@
-# Pilot — EMI-Hardened Flight Control & Sensor Cape
+# Pilot — Flight Control & Sensor Cape
 
-**Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+**Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CEH
 **Callsign:** Pilot
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
-**Revision:** R (Rev R baseline; carried forward from Rev A — EMI-hardened variant of CAPE-A-1 Rev M; no design changes)
-**Date:** 2026-06-11
-**Status:** Schematic complete — PCB layout pending
+**Revision:** T (schematic-first rebuild, superseding Rev Q)
+**Date:** 2026-09-19
+**Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers. **Routing not yet complete** (see "Routing status" below).
 
-> **Known divergence (open, `avionics/WBS.md` §1.2a):** this document's Ethernet-PHY/
-> magnetics/regulator sections below describe the *schematic* design (DP83825I +
-> HX1188NL + TPS62933). The **as-placed PCB** uses ADIN1300BCPZ + Würth 749010012A +
-> ISO7642 instead — see `PILOT_FOOTPRINT_VERIFICATION.md`. Schematic-first rebuild in
-> progress; do not treat §§1-2 below as as-built until that item closes.
+> **Rev Q archived:** the prior revision's document, whose schematic and PCB
+> had diverged into two different designs, is archived at
+> `archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md`.
+> `PILOT_FOOTPRINT_VERIFICATION.md` in this directory is kept in place — it is
+> the per-footprint verification record that started the Rev T rebuild and is
+> still an accurate account of what was wrong with Rev Q's land patterns.
 
 ---
 
 ## Purpose
 
-Pilot is an electromagnetic-environment-hardened variant of CAPE-A-1 (Rev M) intended
-for operation in the nacelle bays and fuselage sections of the Serenity UAV where EDF motor
-switching noise, high-current ESC PWM harmonics, and external RF threats require a higher
-level of conducted and radiated immunity than the standard Rev M design provides.
+Pilot is the flight-control and sensor cape for a PocketBeagle 2 Industrial
+(AM6254) node. Per `docs/AVIONICS_PB2_REDESIGN.md` §3, every control node
+(Pilot and XO capes alike) carries a point of presence on all four onboard
+buses — MIL-STD-1553B, isolated CAN-FD, isolated RS-485, and Ethernet — so
+any node can take over any role. Pilot additionally carries the node's GPS,
+IMU, barometer and TPM.
 
-This variant maintains full functional equivalence with CAPE-A-1: same PocketBeagle 2
-Industrial (AM6254) host, same sensor suite, same bus topology. The changes are purely
-protective hardening — no firmware or DTS changes are required.
+## Board
 
----
+55 × 35 mm (2.165 × 1.378 in), **6-layer** (F.Cu signal / In1.Cu GND with
+isolated GND2 islands / In2.Cu signal / In3.Cu signal / In4.Cu +3V3 plane /
+B.Cu signal), 1.6 mm (0.063 in), stacked on the PocketBeagle 2's two 2×18
+0.1 in headers. Schematic, footprints, and PCB are produced by three
+generators from one part table, gated by `kicad-cli`:
 
-## Changes from CAPE-A-1 (Rev M)
+| File | Produces |
+|---|---|
+| `scripts/gen_pilot_sch.py` | `kicads/Pilot.kicad_sch` + `kicads/Pilot.kicad_sym` |
+| `scripts/gen_pilot_footprints.py` | project-custom lands in `../Serenity-Custom.pretty/` |
+| `scripts/gen_pilot_pcb.py` | `kicads/Pilot.kicad_pcb` + `kicads/Pilot.kicad_dru` + `kicads/Pilot.kicad_pro` netclass patch |
+| `scripts/finish_pilot_pcb.py` | imports the freerouting session, adds outer GND pours, re-fills zones |
+| `scripts/export_pilot_gerbers.sh` | production Gerbers + Excellon drill |
 
-### 1. EMI-Hardened Dual Ethernet PHY (Rev R baseline; introduced Rev A)
+**Do not hand-edit `Pilot.kicad_sch` or `Pilot.kicad_pcb`.** A part or
+placement change is a table edit in the generator; re-running it regenerates
+every downstream artifact and the placer immediately reports any resulting
+courtyard collision. See
+`docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md`
+for the verification and area-budgeting discipline this rebuild established
+(applies to XO, Observer, Flight Engineer, and CAN-PERIPH-GW-1 too).
 
-Two Texas Instruments DP83825I 10/100BASE-TX PHYs are included with full EMI
-hardening. Each PHY connects via RMII to one of the PocketBeagle 2 AM6254's
-two RGMII/RMII Ethernet ports (RMII0 and RMII1).
+Gates, run in this order after any generator change:
 
-EMI hardening measures per PHY:
-
-- **LAN magnetics:** Pulse Electronics HX1188NL dual 10/100BASE-TX transformer
-  with integrated common-mode choke (1500 V isolation, SOIC-16).
-- **Additional CMC:** Bourns SRF2012-100Y on PHY-side MDI lines (belt-and-suspenders).
-- **TVS protection:** 2× PRTR5V0U2X (dual-channel SOT-363) on connector-side MDI lines.
-- **Bypass capacitors:** 100nF + 10nF + 1nF triplet on all VDD pins (100BASE-TX edge
-  rates suppressed; 100 MHz emissions are primarily the VDD ripple, not MDI lines).
-- **1.8V supply:** TPS62933 SMPS (3.3V→1.8V, 300mA) for PHY AVDD and DVDD.
-  Switching frequency 2.2 MHz — far from 100BASE-TX 125 MHz spectral content.
-- **RBIAS:** 49.9Ω 1% 0402 resistor on RBIAS pin.
-- **Connector:** JST SM06B-GHS-TB-1MP (6-pin shielded GH) — GND/TX+/TX-/RX+/RX-/GND,
-  SHIELD pin to PGND. One connector per PHY, both populated on the PCB.
-
-PHY1 connects to PocketBeagle 2 RMII0; PHY2 connects to RMII1.
-MDC and MDIO are shared between both PHYs (different PHY addresses: PHY1=0x01, PHY2=0x02).
-
-Ethernet connector assignments:
-
-| Connector | PHY | Port | Signals |
-|---|---|---|---|
-| J_ETH1 | DP83825I PHY1 | RMII0 / ETH0 | ETH1_TX+/TX-/RX+/RX-, GND, SHIELD |
-| J_ETH2 | DP83825I PHY2 | RMII1 / ETH1 | ETH2_TX+/TX-/RX+/RX-, GND, SHIELD |
-
-### 2. CAN FD transceiver: ATA6561 → ISOW1044BDFMR
-
-| Parameter | CAPE-A-1 | Pilot |
-|---|---|---|
-| Part | ATA6561 (SOIC-8) | ISOW1044BDFMR (SOIC-16) |
-| Isolation | None (non-isolated) | 5000 V RMS reinforced (IEC 62368-1) |
-| Surge | ±25 V bus fault protection | ±42 V bus fault protection |
-| Data rate | 5 Mbps CAN FD | 5 Mbps CAN FD (ISO 11898-1:2015 compliant) |
-| Supply | 5 V (VCC) | 3.3 V VCC1 (logic); internal DC/DC generates VCC2 |
-| Current | 40 mA typical | 55 mA typical (includes DC/DC overhead) |
-| DigiKey | — | 296-ISOW1044BDFMRCT-ND |
-
-The integrated DC/DC converter in the ISOW1044BDFMR generates the isolated bus-side VCC2
-from VCC1 — no external isolated power supply is required. The CAN transceiver pins (TXD,
-RXD, STB_N) are logically compatible with the ATA6561 pinout, with the following note:
-
-> **Polarity note:** ISOW1044BDFMR STB_N is active LOW for standby (same polarity as
-> ATA6561 STB). No firmware change required.
-
-A 100 nF + 10 nF bypass capacitor pair is placed on VCC2-to-GND2 at the isolation
-boundary. A 4.7 nF X2Y capacitor bridges GND1-to-GND2 externally per TI application note
-SLLA337A, providing a low-impedance CM noise return path at RF frequencies (>1 MHz)
-without compromising DC isolation.
-
-### 3. RS-485 transceiver: MAX3485E → ADM2795EBRWZ → ISOW1412 (REF-SENSOR-010)
-
-| Parameter | CAPE-A-1 | Pilot (current) |
-|---|---|---|
-| Part | MAX3485E (SOIC-8) | **ISOW1412** (20-pin DFM, `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm`) |
-| Isolation | None (non-isolated) | 5000 V RMS reinforced |
-| Data rate | 32 Mbps | 500 kbps (ISOW1412 variant; pin-compatible ISOW1432 is the 12 Mbps part, not used) |
-| Supply / DC-DC | 3.3 V | 3.3 V VIO; **own integrated isolated DC/DC** generates the bus-side supply (no external isolated supply needed) |
-| Current | 3.5 mA | ≤60 mA (VIO 4.5–5.5 V, incl. integrated DC/DC per datasheet §8.9/8.10); 20 mA of the DC/DC's output is available for other bus-side circuits |
-| DigiKey | — | see REFERENCES.md REF-SENSOR-010 |
-
-**Fleet-wide swap, 2026-07-26** (REFERENCES.md "Removed / Superseded Citations"): ADM2795EBRWZ
-was briefly used here but is signal-isolation-only and needs a *separate* external isolated
-DC-DC for its bus-side VDD2. ISOW1412 integrates its own isolated DC-DC, removing that extra
-supply fleet-wide (same swap applied to XO, Observer, Flight Engineer, CAN-PERIPH-GW-1). While performing
-this swap, Pilot's pre-existing ADM2795EBRWZ symbol was found to have incorrectly numbered pins
-(pre-existing defect, corrected in the same pass — see `avionics/kicad/fix_wash_zoe_isolators.py`).
-Pilot's own **PCB footprint has not yet been swapped to ISOW1412** — it currently still carries
-the old ADM2795EBRWZ footprint; this is open work (see root `TODO.md` §1.2a).
-
-ISOW1412 is a full-duplex part (separate Y/Z driver-out, A/B receiver-in); it is run in
-half-duplex mode on this project's 2-wire RS485_A/RS485_B bus by shorting Y-to-A and Z-to-B,
-the standard technique for using a full-duplex transceiver as half-duplex. The half-duplex
-direction-control scheme (RS485_DE driving DE/RE_N) is preserved unchanged.
-
-A 4.7 nF X2Y capacitor bridges GND1-to-GND2 externally for the same RF CM noise return
-path reason described above for the CAN transceiver.
-
-### 4. Common-mode chokes on CAN and RS-485 bus lines
-
-Each bus exits the isolated transceiver through a common-mode choke before reaching the
-JST-GH field connector:
-
-| Reference | Bus | Part | Spec | Package |
-| --- | --- | --- | --- | --- |
-| CM1 | CAN FD | Bourns SRF2012-100Y | 100 Ω @ 100 MHz, 800 mA, 0805 | 2012 SMD |
-| CM2 | RS-485 | Bourns SRF2012-100Y | 100 Ω @ 100 MHz, 800 mA, 0805 | 2012 SMD |
-
-The chokes suppress common-mode currents injected by the EDF switching environment onto
-the bus cable shields.
-
-### 5. TVS diode arrays on all external field connectors
-
-| Reference | Connector | Part | Clamp | DigiKey |
-| --- | --- | --- | --- | --- |
-| TVS-CAN | CAN-A JST-GH | PRTR5V0U2X | 5.5 V, bidirectional, 25 A 8/20 µs | 1727-4776-1-ND |
-| TVS-485 | RS485-A JST-GH | PRTR5V0U2X | 5.5 V, bidirectional, 25 A 8/20 µs | 1727-4776-1-ND |
-| TVS-1553 | 1553-A JST-GH | SMAJ33CA (×2) | 33 V, bidirectional, 400 W 1 ms | SMAJ33CACT-ND |
-
-The PRTR5V0U2X is a dual-channel SOT-363 array; one device protects both differential
-lines of a bus simultaneously. The 1553 bus is protected with two individual SMAJ33CA
-bidirectional TVS diodes (one per bus line, clamped to chassis ground PGND), since the
-1553 coupling transformer secondary already provides 1:1.41 isolation — the TVS protects
-the transformer primary from destructive cable-injected transients.
-
-### 6. Power entry filter
-
-A π-filter is placed on the +5V power entry from the cape power bus connector (J-PWR,
-Molex Nano-Fit 4-pin). The filter attenuates conducted EMI entering the board on the
-supply rails:
-
-```text
-
-+5V_IN ── FB1 ── +5V (cape rail)
-|  |
-          C11          C12
-|  |
-          GND          GND
-
+```bash
+python3 scripts/gen_pilot_sch.py
+kicad-cli sch erc --severity-all kicads/Pilot.kicad_sch          # must be 0
+kicad-cli sch export netlist --format kicadsexpr -o kicads/Pilot.net kicads/Pilot.kicad_sch
+python3 scripts/gen_pilot_footprints.py
+python3 scripts/gen_pilot_pcb.py
+kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # must be 0
+# route (see "Routing" below), then:
+python3 scripts/finish_pilot_pcb.py kicads/Pilot.kicad_pcb <routed.ses>
+kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # must still be 0
+bash scripts/export_pilot_gerbers.sh
 ```
 
-| Reference | Value | Part | Spec |
-| --- | --- | --- | --- |
-| C11 | 47 µF / 10 V | MLCC X5R 1210 | Input bulk cap; low ESL |
-| FB1 | 600 Ω @ 100 MHz | Würth 742792512 | 2 A, 2012 SMD ferrite bead |
-| C12 | 10 µF / 10 V | MLCC X5R 0805 | Output bulk; plus 100 nF 0402 in parallel |
+## Routing status — NOT complete, tried and rejected an automated result
 
-### 7. Chassis ground (PGND) implementation
+The board above is fully placed (0 courtyard collisions, 0 DRC errors) but
+**0% routed** — all 388 connections are still ratsnest. Two freerouting runs
+were made via the project's Specctra bridge (`tools/export-specctra-dsn.py` /
+`tools/import-specctra-ses.py`, `pcbnew.ExportSpecctraDSN` /
+`pcbnew.ImportSpecctraSES`, `java -jar
+/usr/share/freerouting-2.2.4-linux-x64/lib/app/freerouting-executable.jar -de
+<in.dsn> -do <out.ses> -mp <passes>`):
 
-A dedicated chassis ground net (PGND) is introduced, connected to:
+- First run, `-mp 40`: freerouting logs one pass every ~3-4 minutes and only
+  writes the `.ses` at the very end of the whole run — after 8 passes
+  (~24 minutes) and a plateau around 150-160 unrouted connections, it was
+  killed with no output recoverable (consistent with the documented
+  freerouting-headless caveat: it does not checkpoint between passes).
+- Second run, bounded to `-mp 6` (~22 minutes): completed and wrote
+  `Pilot.ses` — 161 of 389 connections still unrouted (58.6% routed) at exit.
+  Importing it (`scripts/finish_pilot_pcb.py`) and running
+  `kicad-cli pcb drc` on the result showed **9 genuine net-to-net shorts and
+  118 hole-clearance violations**, concentrated around the dense 36-pad
+  PocketBeagle 2 P1/P2 headers (e.g. a `MDC0` track routed directly across a
+  `PTH pad [RMII1_TXD0]` on `PB2-P2`) — the Specctra round-trip does not carry
+  this project's DRC/netclass configuration into freerouting, so its router
+  does not treat a neighboring pad's copper as an obstacle the way KiCad's
+  own interactive router would. **That result was rejected and the board was
+  reverted to the clean, unrouted checkpoint above** rather than accepting a
+  board with real shorts.
 
-- All four M3 mounting holes (via 0 Ω solder-selectable resistors to PGND)
-- Isolated bus sides of ISOW1044BDFMR (GND2)
-- Isolated bus sides of ADM2795EBRWZ (GND2)
-- Shield pins of all JST-GH field connectors (CAN-A, RS485-A, 1553-A)
-- TVS return pins (TVS-CAN, TVS-485, TVS-1553)
-- C11 (power entry bulk cap return)
+`gen_pilot_pcb.py` deliberately leaves the outer F.Cu/B.Cu pour-free (a
+freerouting run treats a filled zone as fixed copper it must route around);
+`finish_pilot_pcb.py` adds the top/bottom GND pours back and re-fills all
+zones after a routing pass is imported and accepted.
 
-PGND is connected to GND (signal ground) at exactly one point via a 0 Ω / 10 Ω
-solder-selectable link at J-PWR. This single-point connection prevents ground loops
-while ensuring a defined potential relationship. In the installed aircraft, each cape
-bay provides a secondary chassis bond through the mounting hardware.
+**Recommended next step:** finish routing interactively in the KiCad PCB
+editor, whose push-and-shove router applies this project's live DRC rules
+(including the `ISO_BAND` isolation-domain rule) as it routes, rather than
+through the batch Specctra bridge. A from-scratch freerouting attempt with
+tighter DSN-side clearance margins is a viable alternative but unproven at
+this board's density (95%+ per-side prior to going to 6 layers) and header
+pitch.
 
-### 8. Additional bypass capacitors
+## Rev T changes from Rev Q
 
-All logic-side IC VCC pins receive a 100 nF + 10 nF + 1 nF bypass capacitor triplet
-(in 0402 packages, placed within 0.5 mm of the power pin) in addition to the original
-100 nF single-cap practice. This suppresses higher-order resonances that a single cap
-value cannot address.
+Rev Q's schematic and PCB had diverged into different designs (verified in
+`PILOT_FOOTPRINT_VERIFICATION.md`: 7 of 46 footprints were not manufacturable
+as drawn, and several net→pin maps were wrong). Rev T is a full rebuild, not
+a patch, and changed several parts along the way:
 
----
-
-## PCB Layout Constraints (additions to CAPE-A-1 rules)
-
-- **PGND copper pour:** All inner-layer copper (In1.Cu GND) is renamed to PGND on the
-
-  board perimeter ring (3 mm width around all four edges). Signal GND and PGND connect
-  at the single-point J-PWR star under the mounting hole.
-
-- **Isolation creepage:** Maintain ≥ 8 mm creepage and ≥ 1.5 mm clearance between
-
-  GND1 and GND2 copper pours on the ISOW1044BDFMR and ADM2795EBRWZ
-  [REF-IEC-001 §5.5.2] [REF-VDE-001 Cl.4.3]. Per IEC 62368-1 Annex G, 5 kV
-  reinforced isolation at 250 V working voltage requires ≥ 8 mm creepage in
-  pollution degree 2 environment.
-
-  > **Verification status (2026-06-22, `kicad-cli pcb drc` against `Pilot.kicad_pcb`,
-  > KiCad 9.0.2): NOT MET — BLOCKS PCB fab.** The board does not currently meet this
-  > requirement. After excluding same-package pin-to-pin spacing (adjacent pins on the
-  > secondary side of the same isolator IC, which the `ISOLATION` netclass rule also
-  > flags but which are not a primary/secondary creepage issue), DRC found **13 genuine
-  > cross-domain clearance violations**, all between the `TMESH_P`/`TMESH_N`
-  > tamper-detect mesh and `GND2_CAN`/`GND2_ETH` isolated-domain pads/tracks, with
-  > actual measured spacing as low as **0.125 mm** — far short of both the 0.5 mm
-  > `ISOLATION` netclass DRC minimum and the ≥ 8 mm physical creepage target above.
-  > Root cause and full violation count are already tracked in `TODO.md` §1.2a (tamper
-  > mesh routed through the isolated `GND2_*` domains; ≈335 of Pilot's then-465 DRC
-  > errors). This verification did not change layout — per `AGENTS.md`, footprint/route
-  > rework to close this gap is referred to the user, not performed automatically.
-
-- **CMC placement:** CM1 and CM2 must be placed on the board side of the field
-
-  connector (between the IC and the JST-GH pin row), not on the cable side.
-
-- **TVS placement:** TVS-CAN and TVS-485 must be placed within 5 mm of the JST-GH
-
-  connector body, on the outer copper layer, with GND return via ≥ 2× 0.3 mm vias to
-  the inner PGND plane.
-
-- **X2Y isolation caps (C13, C14):** Place on the PCB with the isolation-boundary
-
-  axis perpendicular to the creepage gap axis. Reference TI SLLA337A layout guidance.
-
-- **Stitching vias:** Double the original stitching via density around the isolated
-
-  transceiver areas to prevent fringe fields from bridging the isolation gap.
-
----
-
-## Eliminated vs. CAPE-A-1 Bill of Materials (delta)
-
-### Removed
-
-| Reference | Part | Notes |
-|---|---|---|
-| CAN-TR (ATA6561) | Non-isolated CAN FD transceiver | Replaced by ISOW1044BDFMR |
-| RS485 (MAX3485E) | Non-isolated RS-485 | Replaced by ADM2795EBRWZ |
-
-### Added
-
-| Reference | Part | Function |
-|---|---|---|
-| ETH1-PHY | DP83825I | RMII PHY for ETH0, EMI-hardened |
-| ETH2-PHY | DP83825I | RMII PHY for ETH1, EMI-hardened |
-| U_ETH1_1V8 | TPS62933 | 1.8V supply for ETH1 PHY (AVDD, DVDD) |
-| U_ETH2_1V8 | TPS62933 | 1.8V supply for ETH2 PHY (AVDD, DVDD) |
-| HX1188_1 | HX1188NL | ETH1 LAN transformer + integrated CMC |
-| HX1188_2 | HX1188NL | ETH2 LAN transformer + integrated CMC |
-| TVS_ETH1_TX | PRTR5V0U2X | ETH1 TX+/TX- TVS protection |
-| TVS_ETH1_RX | PRTR5V0U2X | ETH1 RX+/RX- TVS protection |
-| TVS_ETH2_TX | PRTR5V0U2X | ETH2 TX+/TX- TVS protection |
-| TVS_ETH2_RX | PRTR5V0U2X | ETH2 RX+/RX- TVS protection |
-| CM_ETH1 | SRF2012-100Y | ETH1 PHY-side MDI common-mode choke |
-| CM_ETH2 | SRF2012-100Y | ETH2 PHY-side MDI common-mode choke |
-| J_ETH1 | JST SM06B-GHS-TB-1MP | ETH1 shielded 6-pin GH connector |
-| J_ETH2 | JST SM06B-GHS-TB-1MP | ETH2 shielded 6-pin GH connector |
-| CAN-ISO | ISOW1044BDFMR | Isolated CAN FD transceiver (5 kV reinforced) |
-| RS485-ISO | ADM2795EBRWZ | Isolated RS-485 transceiver (5 kV reinforced, ±42 V) |
-| CM1 | Bourns SRF2012-100Y | CAN bus common-mode choke |
-| CM2 | Bourns SRF2012-100Y | RS-485 bus common-mode choke |
-| TVS-CAN | PRTR5V0U2X | Dual TVS on CAN-A connector |
-| TVS-485 | PRTR5V0U2X | Dual TVS on RS485-A connector |
-| TVS-1553 | SMAJ33CA × 2 | Bidirectional TVS on 1553 bus lines |
-| FB1 | Würth 742792512 | 5V power entry ferrite bead |
-| C11 | 47 µF MLCC 1210 | 5V input bulk capacitor |
-| C12 | 10 µF + 100 nF | 5V filtered rail bypass |
-| C13 | 4.7 nF X2Y | CAN isolation boundary CM bypass |
-| C14 | 4.7 nF X2Y | RS-485 isolation boundary CM bypass |
-| J-PWR | Molex Nano-Fit 4-pin | Power entry connector (per AVIONICS_PB2_REDESIGN §11) |
-
----
-
-## Power Budget (updated)
-
-| Rail | Consumers | Max current |
-| --- | --- | --- |
-| +5V (filtered) | PB2 VIN | 2.0 A |
-| +3V3 (LDO) | ICM-42688-P, BMP388, M10Q, SLB9672, ISOW1044BDFMR VCC1, ADM2795EBRWZ VDD1, 2× DP83825I IOVDD (55 mA each = 110 mA), 2× TPS62933 VIN quiescent | 720 mA |
-| +3V3 isolated bus-side (VCC2/VDD2 — internal) | CAN bus stub loads, RS-485 line drivers | ≤ 150 mA combined (limited by ISOW1044B) |
-| +1V8_ETH1 (TPS62933 output) | DP83825I PHY1 AVDD + DVDD | 80 mA |
-| +1V8_ETH2 (TPS62933 output) | DP83825I PHY2 AVDD + DVDD | 80 mA |
-
-Both DP83825I PHYs are populated and active. The two TPS62933 converters (3.3V→1.8V,
-300 mA rated) supply AVDD and DVDD for each PHY respectively. The +3V3 rail increases
-by approximately 110 mA IOVDD (2× 55 mA) plus two TPS62933 conversion losses (~10 mA
-each). Total +3V3 budget remains within the LDO regulator's rated capacity.
-
----
-
-## EMC Compliance Targets
-
-This variant is designed to achieve immunity per the following standards, applicable
-to the Serenity UAV airframe operating environment:
-
-| Standard | Level | Test | Notes |
-| --- | --- | --- | --- |
-| IEC 61000-4-2 [REF-IEC-003] | Level 4 (±8 kV contact, ±15 kV air) | ESD | TVS arrays at all field connectors |
-| IEC 61000-4-4 [REF-IEC-004] | Level 4 (4 kV peak) | EFT/Burst on signal lines | CMCs + isolated transceivers |
-| IEC 61000-4-5 [REF-IEC-005] | Level 3 (2 kV CM, 1 kV DM) | Surge | ±42 V bus fault on CAN/RS-485 |
-| MIL-STD-461G RE102 [REF-MIL-002] | Limit C | Radiated emissions | 100BASE-TX EMI suppressed via HX1188NL magnetics, CMCs, and TVS arrays |
-| MIL-STD-461G RS103 [REF-MIL-002] | 200 V/m, 10 kHz–18 GHz | Radiated susceptibility | Isolated buses + chassis ground |
-
-Pre-compliance testing against IEC 61000-4-2 through 4-5 is required before first
-flight. Formal MIL-STD-461G testing is deferred pending airframe integration.
-
----
-
-## §14 — Field Connectors Summary
-
-All field connectors use JST GH series (1.25 mm pitch) with shrouded shielded housings.
-SHIELD/MP pins on all connectors connect to chassis ground (PGND). Power pins are
-routed through the π-filter (FB1/C11/C12) before distribution to the cape rail.
-
-| Designator | Type | Pin Assignments | Function |
+| Area | Rev Q | Rev T | Why |
 |---|---|---|---|
-| J_PWR | SM04B-GHS-TB-1MP | 1=+5V_IN, 2=GND, 3=GND, 4=+5V_IN, MP=PGND | Power input (4-pin dual-rail entry) |
-| J_CAN | SM03B-GHS-TB-1MP | 1=CAN_A_H, 2=CAN_A_L, 3=GND, MP=PGND | CAN FD bus (ISOW1044BDFMR isolated) |
-| J_485 | SM03B-GHS-TB-1MP | 1=RS485_A_P, 2=RS485_A_N, 3=GND, MP=PGND | RS-485 half-duplex (ADM2795EBRWZ isolated) |
-| J_1553 | SM04B-GHS-TB-1MP | 1=BUS_1553_A_P, 2=BUS_1553_A_N, 3=GND, 4=PGND, MP=PGND | MIL-STD-1553B differential bus |
-| J_GPS | SM05B-GHS-TB-1MP | 1=GND, 2=+3V3, 3=GPS_TX(UART2_RX), 4=GPS_RX(UART2_TX), 5=GPS_PPS, MP=PGND | u-blox M10Q GPS module |
-| J_SERVO | SM06B-GHS-TB-1MP | 1=GND, 2=+5V, 3=SERVO_CH0, 4=SERVO_CH1, 5=SERVO_CH2, 6=SERVO_CH3, MP=PGND | Nacelle tilt servos (PWM) |
-| J_ESC | SM04B-GHS-TB-1MP | 1=ESC_PWM_0, 2=ESC_PWM_1, 3=ESC_PWM_2, 4=GND, MP=PGND | EDF ESC PWM / BDSHOT outputs |
-| J_ENC | SM04B-GHS-TB | 1=GND, 2=+3V3, 3=ENC_SDA, 4=ENC_SCL, MP=PGND | AS5600 nacelle tilt angle encoder (I2C) |
-| J_ETH1 | SM06B-GHS-TB-1MP | 1=GND, 2=ETH1_TX+, 3=ETH1_TX-, 4=ETH1_RX+, 5=ETH1_RX-, 6=GND, MP=PGND | Ethernet PHY1 (DP83825I, RMII0) |
-| J_ETH2 | SM06B-GHS-TB-1MP | 1=GND, 2=ETH2_TX+, 3=ETH2_TX-, 4=ETH2_RX+, 5=ETH2_RX-, 6=GND, MP=PGND | Ethernet PHY2 (DP83825I, RMII1) |
-| J_SBUS | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=SBUS_RAW, MP=PGND | RC receiver SBUS input (inverted via 74LVC1G14) |
-| J_VBAT | SM02B-GHS-TB-1MP | 1=VBAT_MON_P, 2=GND, MP=PGND | Battery voltage monitor (INA226 sense input) |
-| J_FAN | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=FAN_PWM_A, MP=PGND | Bay ventilation fan PWM control |
+| Ethernet PHY | ADIN1300BCPZ (gigabit, LFCSP-40 6×6) drifted in during EMI-hardening | **DP83825I** (10/100 RMII, WQFN-24 3×3) | `docs/AVIONICS_PB2_REDESIGN.md` §3.1 specifies DP83825I; the ring is 100BASE-TX, never needed gigabit. Removes the 0.9 V core rail, 12 hardware straps, and one oscillator per PHY (RMII Leader mode sources 50MHzOut from a shared 25 MHz reference). |
+| MIL-STD-1553B | DS26LV31/DS26LV32 (RS-422 line drivers) mislabeled as a 1553 transceiver | **Holt HI-1573** (3.3 V, MIL-STD-1553A/B compliant, QFN-44) + **Premier Magnetics PM-DB2791S** 1:2.5 direct-coupled-stub transformer + 2× 55 Ω isolation resistors + 2× SMAJ33CA | RS-422's ~2 V differential swing cannot meet MIL-STD-1553B §4.5.2 bus voltage levels. Bus A only is populated (bus B parked); Manchester II encode/decode stays in the AM6254 PRU per §94, unchanged. |
+| GPS | u-blox SAM-M10Q (integrated patch antenna module) | **u-blox MAX-M10S** + U.FL to the airframe's dorsal-cup SMA bulkhead, with a bias-T (Table 52-54 of the integration manual) | Pilot flies inside a Faraday pouch (`docs/CARGO_SECTION_LAYOUT.md`) with the antenna in an external cup — an integrated-patch module could never see the sky. |
+| Isolated CAN-FD | ATA6561 (non-isolated) | ISOW1044BDFMR, unchanged from the Rev Q *plan* (Rev Q's PCB never actually carried the right land) | 5 kV reinforced isolated CAN-FD with an integrated isolated DC-DC. |
+| Isolated RS-485 | MAX3485E (non-isolated) / ADM2795EBRWZ (wrong land) | ISOW1412DFMR | Fleet-wide isolated-transceiver standardization (2026-07-26); ADM2795E needs a separate isolated supply ISOW1412 does not. |
+| PWM / ESC servo header | 1×8 THT pin header | **Samtec TSM-108-01-L-DV**, 2×8 SMT 0.1 in, 4 channels × (SIG, +5V, GND, **PGND shield**) | Keeps the board usable on other platforms with PWM/DSHOT/BDSHOT ESCs (owner requirement, 2026-09-19) while an SMT header does not block the opposite copper layer the way the THT part did. SIG pins are the SoC's PRU-capable DSHOT0-3 balls. |
+| Field connectors | J_ESC / J_SERVO PWM headers | **retired** — ESCs and tilt actuators live on the isolated CAN-FD/RS-485 trunk (WBS §1.10 U1) | The servo/ESC header above is a platform-portability port, not the flight actuation path. |
+| Anti-tamper mesh | `TMESH_P`/`TMESH_N` routed through the isolated GND2 domains — the single largest DRC-blocking defect in Rev Q (13 genuine cross-domain violations, 0.125 mm measured spacing vs an 8 mm creepage target) | **not carried forward** | Open item — see "Known gaps" below. |
+| Layer count | 4 | **6** | The 4-layer board had only F/B for signal routing and was ~95% full at real courtyard sizes — unroutable. See `docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html` idea #1. |
+| Passives | 0402/0603 throughout | 0201 for straps, pull-ups, and HF bypass caps | See ideation idea #5. |
 
-**Notes:**
+## Isolation — what the board actually delivers
 
-- GPS pin 3 (GPS_TX) connects to PocketBeagle 2 UART2_RX: the GPS module transmits, the SBC receives.
-- GPS pin 4 (GPS_RX) connects to PocketBeagle 2 UART2_TX: the SBC transmits, the GPS module receives.
-- SERVO_CH3 on J_SERVO pin 6 is a spare servo channel; populate as needed.
-- J_1553 pin 4 is chassis shield drain; both pins 4 and MP connect to PGND to provide a
-  dual-point shield termination compliant with MIL-STD-1553B stub cabling practice.
-- All PGND connections float relative to signal GND except at the single-point star under J_PWR
-  (0 Ω / 10 Ω solder-selectable link per §7 above).
+The cape can offer roughly a 0.5 mm creepage gap between the isolated
+(bus-side) domain of ISOW1044/ISOW1412 and everything else — not the 8 mm
+IEC 62368-1 Annex G reinforced-insulation target Rev Q's document asserted.
+This is enforced, not just documented: `gen_pilot_pcb.py` generates a named
+rule area (`ISO_BAND`) covering the isolated pin rows and field connectors,
+and `Pilot.kicad_dru` carries a custom DRC rule
+(`iso_cross_domain_clearance`) requiring ≥ 0.5 mm between any ISOLATION-class
+net and any non-ISOLATION net — DRC fails if a track, via, or the isolated
+band's boundary is violated. The X2Y-CAN/X2Y-RS485 GND1↔GND2 RF bridging
+capacitors (TI app note SLLA337A) are the one deliberate exception: their
+whole function is a small, intentional high-frequency bridge across the
+barrier, so they are explicitly excluded from the cross-domain rule rather
+than silently failing DRC.
 
----
+If the fleet needs true reinforced (5 kV, 8 mm creepage) isolation at the
+cape rather than functional isolation, that is an architecture decision (see
+`docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html` idea #3
+and its rejected/harder alternatives), not a layout fix.
 
-## Known Issues
+## Field Connectors
 
-### `PB2-P2` header appears fully unwired (found 2026-07-26, unresolved)
+| Designator | Type | Pins | Function |
+|---|---|---|---|
+| PWR-IN | Molex Nano-Fit 4-pin (THT) | +5V_IN ×2, GND ×2 | Power entry |
+| CAN-FD | JST SM04B-GHS-TB | GND2_CAN, CAN_H, CAN_L, VCC2_CAN | Isolated CAN-FD bus |
+| RS-485 | JST SM04B-GHS-TB | GND2_RS485, A, B, VCC2_RS485 | Isolated RS-485 bus |
+| MIL-1553 | JST SM04B-GHS-TB | BUS_P, BUS_N, GND, PGND (shield) | MIL-STD-1553B bus A |
+| ETH1 / ETH2 | JST SM04B-GHS-TB | TXP, TXN, RXP, RXN | 10/100 Ethernet line pairs (isolated by the 749010012A magnetics) |
+| J-ANT | U.FL-R-SMT-1 | RF, shield | GNSS active-antenna feed to the dorsal-cup SMA bulkhead |
+| J-PWM | Samtec TSM-108-01-L-DV, 2×8 SMT 0.1 in | 4 × (SIG, +5V, GND, PGND shield) | PWM/DSHOT/BDSHOT-capable servo/ESC port; SIG = PRU DSHOT0-3 balls |
 
-`kicad-cli sch erc` reports every one of `PB2-P2`'s 36 pins as `pin_not_connected`, and
-`kicad-cli sch export netlist` confirms zero nets reference `PB2-P2` at all — not even a
-single-pin net. This is surprising: `WBS.md` §1.2a.1 records the ETH2/`PB2-P2` wiring
-(RMII1, MDIO1/MDC1 on repurposed servo pins, etc.) as completed work back in 2026-06-12.
+## Known gaps (tracked in `avionics/WBS.md`)
 
-Investigation so far: `PB2-P2` uses the same `Conn_36` lib symbol as `PB2-P1`, whose pins
-mostly **do** connect correctly (only 6 of 36 fail, all edge pins) — so the general
-label-to-pin coincidence mechanism works in this file. Reconstructing the coordinate
-transform from a known-good `PB2-P1` pin (`sheet_x = anchor_x + local_x`, `sheet_y =
-anchor_y − local_y`, matching this project's documented KiCad hand-authoring convention)
-and applying it to `PB2-P2` pin 1 predicts sheet position (67.54, 474.45) — and the
-`MDIO1` global label sits at exactly that position. Despite the apparent exact coincidence,
-KiCad does not merge the nets.
-
-**Not resolved before this finding was recorded.** Next step is almost certainly to open
-`Pilot.kicad_sch` in the KiCad GUI and look at the `PB2-P2` block directly — something is
-visually different there vs. `PB2-P1` that isn't obvious from the raw S-expression text
-(a duplicate/orphaned object exactly on top of the label, a stray hierarchical sheet pin,
-or a symbol instance issue are all plausible). **If this is a genuine defect, Pilot's
-ETH2/MDIO1 wiring has been silently non-functional** — treat as higher priority than the
-rest of the pre-existing ERC/DRC backlog.
-
----
-
-## Related Files
-
-- `CAPE-A-1.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline
-- `AVIONICS_PB2_REDESIGN.md` — system architecture and power budgets
-- `Commo.md` — EMI-hardened 49 MHz transceiver, XCVR-49MHZ-2 (companion board)
-- `XO.md` — EMI-hardened comms/logging cape (companion board)
-- `Pilot.kicad_sch` — schematic for this board (canonical filename: Pilot.kicad_sch)
-
----
+- **Anti-tamper mesh not carried forward.** Rev Q's mesh was the single
+  largest source of DRC failures and is not reproduced in Rev T. If tamper
+  detection into the SLB9672 TPM is still required, it needs a per-domain
+  redesign (one monitored mesh per isolation region, clear of the 0.5 mm
+  ISOLATION moat) — an owner decision, not something to guess back in.
+- **Single-bus 1553.** HI-1573 is a dual-bus transceiver; only bus A is
+  wired (bus B parked). Dual-redundant 1553 would need a second PM-DB2791S
+  transformer, TVS pair, and connector — real area cost, see the ideation
+  doc's item #4.
+- **U.FL antenna feed unverified against the physical cup mount** — the
+  U.FL-to-SMA-bulkhead pigtail length and routing inside the pouch has not
+  been checked against `docs/CARGO_SECTION_LAYOUT.md`'s dorsal-cup geometry.
 
 ## References
 
-1. TI Application Note SLLA337A — "Isolation Boundary Layout Guidelines for ISOW Devices"
-2. Analog Devices ADM2795E Data Sheet Rev. B — isolation boundary capacitor guidance
-3. Bourns SRF2012 Series Data Sheet — common-mode choke attenuation curves
-4. IEC 62368-1:2018 Annex G — creepage/clearance for reinforced insulation [REF-IEC-001 §5.5.2]
-5. IEC 61000-4-5:2014+AMD1:2017 — surge immunity test levels [REF-IEC-005]
-6. MIL-STD-461G:2015 — EM emissions and susceptibility requirements for aircraft [REF-MIL-002]
-7. Texas Instruments DP83825I Data Sheet (SNLS505C) — 10/100BASE-TX RMII PHY, RBIAS and bypass cap recommendations
-8. Pulse Electronics HX1188NL Data Sheet — dual 10/100BASE-TX LAN transformer application circuit, center-tap termination
-9. Texas Instruments TPS62933 Data Sheet (SLVSGM7) — 3.3V→1.8V SMPS, FB divider, output filter design
+1. `docs/AVIONICS_PB2_REDESIGN.md` — fleet architecture, part list, power budgets.
+2. `docs/CARGO_SECTION_LAYOUT.md` — node envelope (58×37×22 mm pouch), GPS antenna cups.
+3. `docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html` — the
+   ranked options that produced the Rev T design decisions, including the
+   ideas that were tried and refuted (populating F.Cu between the PB2 rail
+   pins; vertical GH4 connectors to save area; sharing one magnetic core
+   between 1553 and Ethernet).
+4. `docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md`
+   — the datasheet-verification and courtyard-budgeting convention this
+   rebuild established for the fleet.
+5. `PILOT_FOOTPRINT_VERIFICATION.md` — the Rev Q footprint audit that started
+   the rebuild.
+6. TI Application Note SLLA337A — isolation boundary layout guidelines for
+   ISOW devices (X2Y bridge capacitor placement).
+7. MIL-STD-1553B §4.5.1.5.2 / §4.5.2 — direct-coupled stub and bus electrical
+   requirements (Holt HI-1573, Premier Magnetics PM-DB2791S).

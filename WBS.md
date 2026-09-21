@@ -112,9 +112,14 @@
 - [ ] WA-R3/R17 — split-collar pinch clamp is not yet a part (BLOCKS wing refit)
 - [x] ★ WA-R16 — holding provision DONE 2026-09-15: pin brake BRK-1..3 (`tilt_brake.scad`); solenoid part BRK-4 + bench BRK-5 open below
 - [ ] ★ BRK-4 — brake solenoid part selection (Ø12×24 pull, 3 N, 6 V) — SOL-TILT-BRAKE
+- [ ] BRK-4a — record the solenoid hold-in / dropout voltage (controller rail-droop threshold)
 - [ ] BRK-5 — bench: pin-engaged hold, release under load, drift ≤ 0.63° (spec §7.3; 23.8:1 train)
+- [ ] BRK-6 — bench: engage into motion at max slew (MCU-reset case); pin and castellation survival
 - [ ] TILT-CTL-07 — owner to confirm the adopted rate ≥ 120 °/s, ≥ 4 Hz at ±5° (Rev T5e delivers 144 °/s no-load, 111 °/s at max efficiency)
-- [ ] TILT-CTL-08 — LibreServo_v4.1-TC controller variant (LibreServo_v4 CR 2026-09-15; TC-1 bridge re-rated to 2.9 A for the 20D, 2026-09-16)
+- [x] TILT-CTL-08 — CLOSED 2026-09-17: controller = Open-Secure-ESC build 6s/10A/BRUSHED_CAN_485_isolation (REF-ESC-001); LibreServo CR superseded
+- [ ] TILT-CTL-09 — brake-release authorization + asymmetric MAC fail policy (spec §5.5; controller firmware)
+- [ ] TILT-CTL-02a — trip response executor and its independence from the loop MCU (controller `TRIP_IN`)
+- [ ] ENC-DAUGHTER — AEAT-8800-Q24 sensor daughter for the brake-guide pocket + 6-pin lead (spec §4 / §7)
 - [ ] ★ WA-R18 — Rev S1g +102.8 g; hover T/W ~1.19 vs 1.2 min; re-derive mass/CG
 - [ ] ★ MA-1 — BOM printed-part masses understate by +521.6 g (13.3 % AUW)
 - [x] MA-5 — CLOSED 2026-09-15: standoff pads removed with the worm-drive bracket (−53.5 g + 23.4 g bosses)
@@ -644,7 +649,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 → detail: `avionics/WBS.md` §1.10
 
 - [ ] ★ U1 — Retire Pilot J_ESC/J_SERVO PWM headers → CAN-FD/RS-485 trunk
-- [ ] U2 — LibreServo_v4 nacelle-tilt bus integration (GW-1 J_FLEX gap)
+- [ ] U2 — Open-Secure-ESC tilt controller on the trunk (REF-ESC-001); J_FLEX gap is winch-only
 - [ ] U3 — Open-Secure-ESC 50A/6S CAN-FD integration + governor rewrite
 - [ ] U4 — OpenServoCore SG90 TTL+CMAC bus finalize (re-check maturity)
 - [ ] U5 — Observer pitot-tube airspeed sensor; fix Pilot's stale claim
