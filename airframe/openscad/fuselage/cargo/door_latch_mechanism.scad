@@ -72,8 +72,13 @@ EPS = 0.01;
 // ---------------------------------------------------------------------------
 // Door / hinge geometry (generate_cargo_doors.py: KNUCKLE_Y, hinge X/Z)
 // ---------------------------------------------------------------------------
-HINGE_X_PORT = -117.6;   HINGE_Z_PORT = 5.11;
-HINGE_X_STBD = -222.5;   HINGE_Z_STBD = 5.22;
+// 2026-09-21: re-read from a fresh generate_cargo_doors.py run against the
+// CURRENT shell (was -117.6/5.11, -222.5/5.22 -- 2026-06-22 figures, stale
+// by ~2.1 mm in Z after the shell's many subsequent re-merges, Rev T5-T5f).
+// Same CARGO-HINGE-SYNC gap as generate_cargo_hinge_retention.py: hand-copied,
+// not imported, and can drift the same way on the next shell change.
+HINGE_X_PORT = -117.53;   HINGE_Z_PORT = 3.00;
+HINGE_X_STBD = -222.68;   HINGE_Z_STBD = 3.49;
 BRACKET_Y    = 39.33;    // 2nd hinge knuckle station -- clear of the aperture
                          // rim (Y=2) and the GW-CARGO-DOOR tray (Y<=-2)
 

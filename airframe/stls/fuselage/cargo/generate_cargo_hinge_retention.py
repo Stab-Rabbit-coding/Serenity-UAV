@@ -33,8 +33,17 @@
 #   Mating geometry (taken from generate_cargo_doors.py / verified against the
 #   baked door STLs cargo_door_{port,stbd}.stl, 2026-06-29):
 #       Door bay (rod span):   hull Y = +2.0 .. +108.0 mm
-#       Port door rod axis:    hull X = -117.6 mm, Z = +5.11 mm
-#       Stbd door rod axis:    hull X = -222.5 mm, Z = +5.22 mm
+#       Port door rod axis:    hull X = -117.53 mm, Z = +3.00 mm
+#       Stbd door rod axis:    hull X = -222.68 mm, Z = +3.49 mm
+#       (updated 2026-09-21: the values above were 2026-06-22 door-generation
+#       figures, stale after the cargo shell's many subsequent re-merges
+#       (Rev T5-T5f) shifted the sampled belly surface ~2.1 mm in Z; re-read
+#       directly from a fresh generate_cargo_doors.py run against the
+#       CURRENT shell rather than hand-adjusted -- see that script's own
+#       console output for the authoritative numbers on any future shell
+#       change.  KNOWN GAP: this file still hardcodes a copy of those
+#       numbers instead of importing them, so it can drift again the same
+#       way -- tracked as CARGO-HINGE-SYNC below.)
 #       CF rod:                3.0 mm OD; bore Ø3.3 mm (rod + 0.15 mm/side)
 #       Door knuckles (each):  6 mm OD, 12 mm long, at Y = 8.0/39.3/70.7/102.0
 #
@@ -85,9 +94,13 @@ BAY_Y_AFT = 108.0  # mm — aft edge of door bay (rod end)
 
 # Per-door rod axis (hull X, Z).  Verified against the baked door STLs.
 ROD_AXES = {
-    "port": (-117.6, 5.11),
-    "stbd": (-222.5, 5.22),
-}
+    "port": (-117.53, 3.00),
+    "stbd": (-222.68, 3.49),
+}  # 2026-09-21: re-read from generate_cargo_doors.py's console output
+# against the current shell (was -117.6/5.11, -222.5/5.22 -- 2026-06-22
+# figures, stale by ~2.1 mm in Z).  CARGO-HINGE-SYNC (open): this dict is
+# still a hand-copied duplicate of a fact generate_cargo_doors.py already
+# computes -- the next shell re-merge can drift it again the same way.
 # Inboard direction (toward ship centreline X_CL ≈ -169.85) for each door:
 #   port hinge X = -117.6 is OUTBOARD of CL (less negative) → block extends -X
 #   stbd hinge X = -222.5 is OUTBOARD of CL (more negative) → block extends +X
@@ -183,7 +196,7 @@ def main():
 
     combined = trimesh.util.concatenate(blocks)
     combined.export(out)
-    print("\n  rod axes: port (X=-117.6, Z=5.11), stbd (X=-222.5, Z=5.22)")
+    print("\n  rod axes: port (X=-117.53, Z=3.00), stbd (X=-222.68, Z=3.49)")
     print(f"  wrote {out}")
     print(
         f"  total blocks={len(blocks)}  facets={len(combined.faces)}  "

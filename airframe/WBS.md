@@ -154,9 +154,12 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
         55.7×106.0×9.2 mm (hinge X ≈ −222.5 mm, hinge Z ≈ 5.22 mm); both verified as a
         single connected watertight body (`trimesh` `split()` → 1 body each).
     - [ ] **Verify cargo door fit in slicer** — open `cargo_door_port.stl` and
-        `cargo_door_stbd.stl` in slicer; confirm hinge knuckles align at X ≈ −117.6 mm
-        (port) and X ≈ −222.5 mm (stbd), free edges meet at X ≈ −169.85 mm, and panels
-        cover Y = 2..108 mm at Z ≈ 0..5 mm. Pay particular attention to the aft-outboard
+        `cargo_door_stbd.stl` in slicer; confirm hinge knuckles align at X ≈ −117.53 mm
+        (port) and X ≈ −222.68 mm (stbd), free edges meet at X ≈ −169.85 mm, and panels
+        cover Y = 2..108 mm at Z ≈ 0..5 mm (coordinates corrected 2026-09-21 — the doors
+        were regenerated against the current shell after many re-merges moved the
+        sampled belly surface; see the note after the 2026-06-29 cross-check below).
+        Pay particular attention to the aft-outboard
         corner of each door (Y → 108, near the hinge edge) — this is where the despike
         safety net (above) is masking real but algorithmically-unresolved hull
         curvature; confirm by eye it isn't flattened in a way that leaves a gap against
@@ -171,15 +174,27 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
             HULL_ATTACH_POS Y=25/100 boss-overlap check — the latter references the
             *retired* `landing_leg_assy.scad`; redo against the Rev R5 wire-brace hull
             bosses once those are finalized in the cargo shell (§1.1.4).
+        - **SUPERSEDED 2026-09-21 — the numbers above are the 2026-06-22 figures.**
+            The cargo shell has been re-merged many times since (Rev T5–T5f); a fresh
+            `generate_cargo_doors.py` run against the *current* shell found the belly
+            surface had shifted (hinge Z: port 5.11→3.00, stbd 5.22→3.49; hinge X:
+            port −117.6→−117.53, stbd −222.5→−222.68). Both doors and
+            `cargo_hinge_retention.stl` were regenerated and re-merged against the
+            current shell so the CF rod hinge pin actually aligns between the door
+            knuckles and the fixed retention bores — it did not, against what was
+            committed, before this fix. See `docs/CARGO_DOOR_LATCH_SPEC.md` §7a.
     - [ ] **Piano-hinge CF rod (×2, independent)** — verify 3 mm CF rod passes through
         each door's own 4 knuckle bores (3.15 mm bore) — port and stbd are now two
         separate pins/rods, not one shared centerline pin; test in printed prototype
         before final assembly.
-        - **Geometry cross-check DONE 2026-06-29:** each door's 4 knuckle bores (Ø3.15)
+        - **Geometry cross-check DONE 2026-06-29 (RE-VERIFIED 2026-09-21 after the
+            hinge-coordinate correction below):** each door's 4 knuckle bores (Ø3.15)
             and the two Rev R1c shell-side retention-block bores (Ø3.3,
             `cargo_hinge_retention.stl`) are coaxial on the door's rod axis (port
-            X=−117.6/Z=5.11, stbd X=−222.5/Z=5.22), rod span Y +2..+108.  Printed-prototype
-            insertion test still required (physical).
+            X=−117.53/Z=3.00, stbd X=−222.68/Z=3.49 — was X=−117.6/Z=5.11,
+            X=−222.5/Z=5.22 before the 2026-09-21 re-merge, `docs/CARGO_DOOR_LATCH_SPEC.md`
+            §7a), rod span Y +2..+108. Printed-prototype insertion test still required
+            (physical).
     - [x] **Sync `cargo_sect_shell24.scad` hinge-pin blocks to the Rev R1b hinge lines.**
         **DONE 2026-06-29 (Rev R1c).**  The legacy `hinge_pin_block()` /
         `HINGE_Y`/`HINGE_Z` parameters describe a single shared hinge along the legacy

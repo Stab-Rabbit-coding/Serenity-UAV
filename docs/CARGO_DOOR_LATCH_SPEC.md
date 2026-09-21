@@ -96,7 +96,7 @@ M_design = 3.0 × 0.202 = 0.605 N·m per door
 
 | Feature | Station |
 |---|---|
-| Door hinge axis (piano-hinge pin, from `generate_cargo_doors.py`) | port X −117.6, Z 5.11; stbd X −222.5, Z 5.22, along Y |
+| Door hinge axis (piano-hinge pin, from `generate_cargo_doors.py`) | port X −117.53, Z 3.00; stbd X −222.68, Z 3.49, along Y (re-read 2026-09-21 against the current shell — see §7a) |
 | Bell-crank pivot bracket | Y 39.33 (the door's 2nd hinge knuckle station — clear of the aperture rim at Y 2 and of the `GW-CARGO-DOOR` tray at Y ≤ −2), inboard 10 mm of the hinge line, 14 mm above the hinge Z |
 | Drive arm (crank → door horn, via pushrod) | `r_A` = 5 mm |
 | Latch arm (crank → hook) | `r_B` = 10 mm |
@@ -327,6 +327,34 @@ No boolean check against the published cargo shell or the door STLs has been run
 (DOOR-LATCH-5) — `BRACKET_Y`/`PIVOT_H`/`PIVOT_IN` are derived from the documented hinge
 and knuckle geometry, not yet cross-checked against the shell mesh the way the
 `GW-CARGO-DOOR` tray was in `docs/CARGO_DOOR_GATEWAY_SPEC.md`.
+
+### 7a. Hinge-coordinate correction (2026-09-21, same day)
+
+The door hinge coordinates this document was first written against
+(port X −117.6/Z 5.11, stbd X −222.5/Z 5.22) were `generate_cargo_doors.py`'s
+2026-06-22 output. The cargo shell has been re-merged many times since
+(Rev T5–T5f); running the door generator against the *current* shell — done
+this same day, while fixing an unrelated `ModuleNotFoundError` report — found
+the belly surface had drifted, moving the hinge Z down ≈2.1 mm (port Z
+5.11 → 3.00, stbd 5.22 → 3.49) and X by ≈0.1–0.2 mm. **Both doors and the
+shell-side hinge-retention blocks (`cargo_hinge_retention.stl`,
+`generate_cargo_hinge_retention.py`) were regenerated against the current
+shell and re-merged** so the physical CF rod hinge pin actually aligns
+between the door knuckles and the fixed retention bores — they did not,
+against the committed geometry, before this fix. `door_latch_mechanism.scad`'s
+`HINGE_X_*`/`HINGE_Z_*` constants and the table in §2 above are updated to
+match; the bracket STLs were re-rendered (dimensions unchanged, the whole
+mechanism just translates ≈2.1 mm in Z with the hinge).
+
+**CARGO-HINGE-SYNC (open, not fixed here):** both
+`generate_cargo_hinge_retention.py`'s `ROD_AXES` and this mechanism's
+`HINGE_X_*`/`HINGE_Z_*` are still hand-copied duplicates of a fact
+`generate_cargo_doors.py` already computes and prints — the exact failure
+mode that caused this drift. A follow-up should have the retention-block and
+latch-mechanism generators import or read these figures from a single
+source (matching this project's own established convention, e.g.
+`cargo_layout_t5_params.scad` for the cargo layout) rather than restate
+them.
 
 ## 8. References
 

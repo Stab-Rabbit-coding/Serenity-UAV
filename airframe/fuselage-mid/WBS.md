@@ -118,7 +118,10 @@
             Y=−305.6), which sits entirely inside the post run (sta 120–580 mm) — the mid-run
             wire, not just the two discrete posts, crosses the door's swing zone and must clear
             it. Door swing envelope = a semicircle radius ≈52–55 mm (measured door width)
-            centered at hinge (X=−117.6 port/−222.5 stbd, Z≈5.1–5.2), spanning only hull Y 2–108.
+            centered at hinge (X=−117.53 port/−222.68 stbd, Z≈3.0–3.5 — corrected 2026-09-21
+            after the doors were regenerated against the current shell, was Z≈5.1–5.2;
+            `docs/CARGO_DOOR_LATCH_SPEC.md` §7a; the ≈2 mm Z shift does not change the
+            recommended Z ≥ 65 mm margin below), spanning only hull Y 2–108.
             `rcrs49_wire_post.scad` still has **no defined shoulder-height Z value** (flagged open
             in its own header) — cannot compute a real clearance margin until that Z is set;
             recommend Z ≥ 65 mm (hinge Z + envelope radius + margin) at any station falling within
@@ -822,6 +825,16 @@ Record: `docs/CARGO_SECTION_LAYOUT.md`, `docs/TILT_ACTUATOR_SELECTION.md`,
         frame) + the DOOR-SEAM-1 seam, not a shared actuator — see DOOR-LATCH above.
     - [ ] **PRINT-GW-DOOR-TRAY hardware at order:** 4 × RX-M3x5.7 inserts, 4 × M3×8 SHCS,
         3 cable ties (BOM row note).
+    - [ ] **CARGO-HINGE-SYNC — regeneration-drift class fix (2026-09-21).**
+        `generate_cargo_hinge_retention.py`'s `ROD_AXES` and
+        `door_latch_mechanism.scad`'s `HINGE_X_*`/`HINGE_Z_*` both hand-copy hinge
+        coordinates `generate_cargo_doors.py` already computes and prints, instead of
+        importing/reading them. This already drifted once (found + fixed 2026-09-21,
+        `docs/CARGO_DOOR_LATCH_SPEC.md` §7a, ~2.1 mm in Z after several shell re-merges
+        the CF rod would not have aligned against) and can drift again on the next
+        shell change. Fix the class, not just the instance: single-source the hinge
+        coordinates (matching `cargo_layout_t5_params.scad`'s generated-include
+        pattern) so both consumers read one fact instead of two copies of it.
 
 ###### 1.1.1.2.1a *Cargo Winch — STS3215 Conversion (Rev B, 2026-07-27)*
 
