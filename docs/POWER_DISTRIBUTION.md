@@ -174,10 +174,10 @@ margin and worsens single-fault brown-out) — not the flight configuration.
 |------|-----|-----------|--------------|----------------|
 | ~~Nacelle tilt servos~~ **MOVED OFF THIS RAIL, Rev T5b (2026-09-15):** the tilt actuators are now Pololu 20D gearmotors (Rev T5e; 25D HP at Rev T5b) + brake solenoids on their own fused VBAT branches F_TILT_P / F_TILT_S (§3.3a, §5) per the owner's per-path principle (`docs/TILT_ACTUATOR_SELECTION.md` §3/§5). Row retained for the record: (DS3225/LibreServo_v4, 21–24.5 kgf·cm — was DS3218MG, briefly SPT5425LV) ⚠ **not bench-verified**; sized here to DS3225's own datasheet-cited 2.3 A @ 6.8 V stall figure (`REFERENCES.md` "Open Standards Verification Items" DS3225 row; `current-specification/bom_revS.csv` SERVO-TILT), superseding the DS3218MG-era 1.5 A carried-forward placeholder. **This is the tilt-servo current rail — not `RAIL-2`, which is the separate `5V_OBS` Observer/winch rail (§3.2.1/§11.1); see the 2026-08-25 SPAR-02 correction note.** | 2 | 2 300 | 150 | 300 |
 | RCS proportional valve servos (SG90 class + OpenServoCore, Phase 11) | 4 | 700 | 70 | 280 |
-| Cargo door servo (SG90 + OpenServoCore) | 1 | 700 | 70 | 70 |
-| Cargo release servo (SG90 + OpenServoCore) | 1 | 700 | 70 | 70 |
-| **6 V subtotal (running)** | — | — | — | **720** |
-| **6 V subtotal (all stalled simultaneously)** | — | — | — | **8 800** |
+| Cargo door servos (SG90 + OpenServoCore) — **2 since 2026-09-21** (one per independent clamshell half, `docs/CARGO_DOOR_GATEWAY_SPEC.md` D-GW-2); driven by `CAN-PERIPH-GW-DOOR` (0.10 A on RAIL-2, §11.1), fed from this rail through a fused branch `F_DOOR` (3 A placeholder — size to the measured three-servo stall; REF-ACT-003 gives 0.5–2 A "operation current" only) | 2 | 700 | 70 | 140 |
+| Cargo release servo (SG90 + OpenServoCore) — same gateway and branch | 1 | 700 | 70 | 70 |
+| **6 V subtotal (running)** | — | — | — | **790** |
+| **6 V subtotal (all stalled simultaneously)** | — | — | — | **9 500** |
 
 **2026-08-25 (SPAR-02 re-derivation, `docs/TILT_SPAR_ANALYSIS.md` §2.1):** the
 tilt-servo stall figure above is resized from the DS3218MG-era 1.5 A placeholder
@@ -190,7 +190,7 @@ worst-case simultaneous-stall probability remain acceptable, or increase BEC
 burst capacity. All-servo stall is a transient (any single tilt servo hitting a
 hard mechanical stop while the other servos are also stalled is the worst
 case, not a sustained condition); the BEC is sized for 5 A continuous — now
-**below** the 2×DS3225 + 3×SG90 stall sum (8.8 A) even before accounting for
+**below** the 2×DS3225 + 3×SG90 stall sum (8.8 A; **9.5 A** since 2026-09-21 with the third cargo SG90 — 2 door + 1 release, `docs/CARGO_DOOR_GATEWAY_SPEC.md` D-GW-2; the 4 Phase 11 RCS servos were already in the sum) even before accounting for
 burst headroom. Re-check once DS3225 is bench-measured (REFERENCES.md Open
 Standards Verification Items; bench current may come in under the datasheet's
 6.8 V figure at the project's actual servo-rail voltage).

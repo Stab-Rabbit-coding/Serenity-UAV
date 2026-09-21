@@ -61,7 +61,8 @@
 - [ ] Remove temporary aft post from station ~580mm.
 - [ ] Restring 49MHz top wire (~470mm) from forward post to nozzle aft post with ~20g tension.
 - [ ] Enable ESC5 in FC2 firmware (PRU Ch.2); configure BDSHOT governor for the 55mm EDF.
-- [ ] Add the 4 RCS proportional-valve channels to the attitude-control mixer; calibrate pitch/yaw authority via `governor_cal.py`.
+- [ ] **GW-RCS — build the RCS bleed-valve gateway** (specified 2026-09-21, `docs/CARGO_DOOR_GATEWAY_SPEC.md` §9; `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` Deployment 5): one `SKIPPER-CAN-PERIPH-GW-PCB` in the Panel F bay beside the 50 A ESC — `N_STACKS=1` on an osc-native chain if OpenServoCore has shipped (GW-DOOR-2), else `N_STACKS=2` `END_TO_END` for four hardware timer channels; tray = `gateway_door_tray.scad` re-parameterised (`GW_PCB_L`) on bosses cut into the rear-cone shell (blocked on its MESH-01 regeneration); `J_PWR` from the aft 5 V feed, valves on a fused 6 V branch; trunks extended aft through the inner neck. ~+23 g to the Phase 11 mass line.
+- [ ] Add the 4 RCS proportional-valve channels to the attitude-control mixer **as signed `RCS_COMMAND` frames to GW-RCS (≥ 50 Hz, fail-CLOSED on heartbeat/MAC loss — RCS authority absent when `RCS_STATUS` stops)**, not as FC2 local PWM (`avionics/WBS.md` U1); measure the per-frame signing latency on the door gateway first; calibrate pitch/yaw authority via `governor_cal.py`.
 - [ ] Add rear EDF to the forward-thrust (cruise) schedule — NOT the hover lift mixer.
 - [ ] Verify all 5 ESC heartbeats on CAN FD; confirm FC2 cross-drive capability for ESC5.
 - [ ] Bench-test RCS attitude authority; then forward-flight thrust test with the rear EDF at 60% throttle.

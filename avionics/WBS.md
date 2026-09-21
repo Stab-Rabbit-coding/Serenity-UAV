@@ -669,6 +669,54 @@ REFERENCES.md Removed/Superseded Citations).
     in `gen_can_periph_gw_pcb.py`) and must not be touched by a full
     regeneration again without explicit permission. Further freerouting
     passes or manual GUI cleanup still possible for the remaining 47 nets.
+- [x] **Cargo-door servo gateway `GW-CARGO-DOOR` specified and wired in, 2026-09-21
+    (Claude Opus 5).** `docs/CARGO_DOOR_GATEWAY_SPEC.md` Rev A: the three SG90-class
+    door/release servos (declared bus-networked 2026-09-20, XO item above) are hosted by
+    their OWN `SKIPPER-CAN-PERIPH-GW-PCB` at `N_STACKS=1` — not a lane on the winch
+    gateway, whose `J_FLEX` is fully consumed by `CARGO_WINCH_SPECIFICATION.md` §5.1
+    (D-GW-1). Primary command path = OpenServoCore osc-native chain on `FLEX_UART_TX/RX`;
+    fallback = stock SG90 PWM on `FLEX_PWM_IO` (PA25 TIMA0_C3) / `FLEX_BSHOT_IO` (PA26
+    TIMG8_C0), release on `FLEX_TTL_GPIO` (PA24). Servo power = fused 6 V rail branch
+    `F_DOOR`, never `J_FLEX +5V`; `J_PWR` from RAIL-2. Signed `DOOR_STATUS` /
+    `DOOR_COMMAND` / `RELEASE_COMMAND` (arm+confirm class, `TILT_DRIVE_CONTROL_SPEC.md`
+    §5.5 pattern), hold-last failsafe. Mount points cut into the Rev T5f cargo shell
+    (`airframe/fuselage-mid/WBS.md` §1.1.1.2.2). BOM: `CAN-PERIPH-GW-DOOR`,
+    `PRINT-GW-DOOR-TRAY`, `SERVO-CARGO` 2→3, `DRV8833-CARGO` + tray retired
+    (`tools/bom_edit_door_gateway.py`). `CAN-PERIPH-GW-1.md` Deployment 4/5.
+    - [ ] **GW-DOOR-1 — build the `N_STACKS=1` instance.** Confirm the layout to
+        build from (the DRC-clean N=1 backup vs a repack of the live 2-lane board);
+        keep parts ≥ 2.5 mm from the two short edges and the bottom long edge (card-edge
+        rails); if the outline changes, update `GW_PCB_L/W` in `tools/cargo_layout_fit.py`.
+        ERC/DRC/gerbers close under U7.
+    - [ ] **GW-DOOR-2 — OpenServoCore physical layer + logic level.** The upstream README
+        (re-read 2026-09-21) does not state whether osc-native is single-wire half-duplex
+        (→ `FLEX_TTL_GPIO` = direction line) or full-duplex, nor the swap board's I/O
+        voltage; the swap board is "designed but not spun yet". Read the hardware docs,
+        decide the `FLEX_TTL_GPIO` role, re-check the shippable gate literally (REF-SENSOR-015
+        row in `REFERENCES.md` Open Standards Verification Items).
+    - [ ] **GW-DOOR-3 — PWM-fallback bench items.** SG90 input threshold at 3.3 V (else a
+        harness level shifter); PA24 timer function per SLASFA6B Table 6-2 (bit-bang the
+        release otherwise); measured three-servo stall current → size `F_DOOR` (3 A
+        placeholder; REF-ACT-003 states 0.5–2 A "operation current" only).
+    - [ ] **GW-DOOR-5 — SG90 at 6 V.** REF-ACT-003 lists 4.8 V only; `POWER_DISTRIBUTION.md`
+        §3.3 feeds the class from the 6 V rail. Confirm the sourced part's rating or feed
+        `F_DOOR` from 5 V.
+    - [ ] **GW-DOOR-6 — weigh the populated board** (6 g estimate) and feed A0.
+    - [ ] **GW-DOOR-7 — firmware:** osc-native master / PWM fallback, the three frame
+        classes, door/release interlocks (release only with both doors OPEN; CLOSE refused
+        while `WINCH_STATUS` reports tension), U6 assurance mapping for the SG90 endpoint
+        class. Cross-ref `avionics/firmware/WBS.md`.
+    - [ ] **Nacelle gateway BOM rows.** Found while adding `CAN-PERIPH-GW-DOOR`: no BOM row
+        exists for the two nacelle gateway boards (GW-PORT / GW-STBD, `N_STACKS=4`) either —
+        add them with a weighed mass once a populated board exists.
+- [ ] **`GW-RCS` — Phase 11 RCS bleed-valve gateway, SPECIFIED ONLY (2026-09-21).**
+    `docs/CARGO_DOOR_GATEWAY_SPEC.md` §9 / `CAN-PERIPH-GW-1.md` Deployment 5: second
+    gateway instance in the rear engine cone for the 4 `SERVO-RCS-VALVE` (osc-native chain at
+    `N_STACKS=1`, or `N_STACKS=2` for four hardware timer channels with stock PWM — attitude
+    effectors need loop-rate command, no bit-banging); fail-CLOSED on heartbeat/MAC loss;
+    `RCS_COMMAND ≥ 50 Hz` — per-frame CMAC signing latency to be measured on the door
+    gateway first. Replaces the Phase 11 wording that maps the valves onto FC2's local PWM
+    (contradicts U1). Not to be built before Phase 11; tracked in `deferred/WBS.md` §Phase11.
 - [x] **`ENC-NACELLE-1` DRC — fixed, 2026-07-26.** Found and fixed a genuine
     short (+3V3/ENC_CSN via-to-track contact) plus several clearance
     violations from a congested prior reroute, by moving the conflicting
@@ -766,12 +814,40 @@ REFERENCES.md Removed/Superseded Citations).
     Pre-existing `_autosave-XO.kicad_pcb` + `.lck` crash-recovery artifacts
     in `avionics/kicad/XO/kicads/` are untouched by this rebuild and should
     still be reviewed for removal separately.
-- [ ] **XO PCB placement + DRC 0 + routing — IN PROGRESS (owner doing manual
-    placement in KiCad).** Follow-on to the rebuild above: once the owner
-    finishes placing the ~69 currently-unplaced footprints, run `kicad-cli
-    pcb drc --severity-all --schematic-parity` to 0, then attempt
-    freerouting via the Specctra DSN/SES bridge (reject and report if it
-    introduces shorts, same discipline as Pilot), then export gerbers.
+- [x] **XO SiK radio swap + LoRa removal.** 2026-09-20 (Claude Sonnet 5): the
+    RFD900x THT module (42.5x30mm) was found to overhang the 55x35mm cape in
+    more than one direction even piggyback-mounted on standoffs — swapped to
+    RF Design's own flush-SMT variant, RFD900ux-SMT (21x29x4.2mm), per the
+    owner-supplied `avionics/datasheets/RFD900ux DataSheet v1.2.pdf` (new
+    footprint `Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod`, pad
+    pitch back-calculated/estimated — not pixel-verified against the
+    datasheet's land-pattern figure, flagged). Separately, the owner pointed
+    out Commo already carries a LoRa (RFM95W) radio, so XO's own LoRa module
+    was fleet-level duplicate capability — removed entirely (module + SPI
+    filtering + antenna chain), recovering ~336 mm^2. mLRS (LoRa-based
+    SiK alternative) was evaluated as a replacement radio protocol and
+    **REJECTED** — see the dedicated entry above. Net effect: 121 parts (down
+    from 132), ERC 0 confirmed, footprint area 3497 mm^2 (90.8% of the 3850
+    mm^2 two-sided theoretical ceiling, down from 99.6% pre-removal).
+- [ ] **XO PCB placement + DRC 0 + routing — IN PROGRESS.** Follow-on to the
+    rebuild + radio-swap above. Owner gave explicit permission to regenerate
+    the PCB after the LoRa removal; current auto-placer state is 78/121
+    footprints placed with 43 still unplaced (both faces already spanning
+    the full board edge-to-edge — a placer packing-density limit at 90.8%
+    area, not a remaining scope problem, same class of limit FlightEngineer
+    hit at a much lower 63% area). **Open owner decision, not yet made:**
+    cut one more subsystem, grow the board past 55x35mm, or finish placement
+    by hand (as done for the original pre-LoRa-removal cut). The project's
+    own `tools/validate_kicad.py` CI gate (run 2026-09-21 against the
+    unplaced-parts state, via PR #207's "KiCad Validation" check) reports
+    **102 hard DRC violations** on `XO.kicad_pcb` — courtyard overlaps,
+    shorting-items, and clearance violations concentrated on the unplaced
+    footprints sitting at the placer's overflow coordinates, not real
+    layout defects on the ~78 already-placed parts. Once placement is
+    finished: `kicad-cli pcb drc --severity-all --schematic-parity` to 0,
+    then attempt freerouting via the Specctra DSN/SES bridge (reject and
+    report if it introduces shorts, same discipline as Pilot), then export
+    gerbers.
 - [x] **Flight Engineer schematic-first rebuild — ERC 0.** 2026-09-20 (Claude
     Sonnet 5): the legacy schematic (586 ERC violations, PCB pad nets not
     matching at all, `gen_flight_engineer.py` itself confirmed drifted per its own
@@ -808,18 +884,65 @@ REFERENCES.md Removed/Superseded Citations).
     few ESC-branch passives — a placer packing-density limit on this
     generator's simple rectangular spiral placer (same class of limit XO
     hit), not an area or scope problem. Routing not yet attempted.
-- [ ] **Flight Engineer PCB: close the last 31 DRC items + route + gerbers —
+- [ ] **Flight Engineer PCB: close the last DRC items + route + gerbers —
     not started.** Follow-on to the rebuild above. The remaining violations
     are localized to D_OR1/D_OR2 vs CM_ESC3/F_ESC3/C_DEC4 and U_RS485 vs
     C1/C2 — nudging those ~5 footprints apart in the KiCad GUI (same
-    approach the owner is using on XO) should clear it faster than further
-    generator-side placement iteration. Then `kicad-cli pcb drc
-    --severity-all --schematic-parity` to 0, freerouting attempt via the
-    Specctra bridge (reject/report on any shorts, same discipline as
-    Pilot/XO), then gerbers.
+    approach used on XO) should clear it faster than further generator-side
+    placement iteration. The project's own `tools/validate_kicad.py` CI gate
+    (run 2026-09-21 via PR #207's "KiCad Validation" check) reports **29
+    hard violations** on the current `FlightEngineer.kicad_pcb` — close to,
+    but not identical to, the 31 raw `kicad-cli pcb drc` count recorded
+    above (the CI validator applies its own accepted-class filter, which
+    reclassifies a small number of findings — not a design change). Then
+    `kicad-cli pcb drc --severity-all --schematic-parity` to 0, freerouting
+    attempt via the Specctra bridge (reject/report on any shorts, same
+    discipline as Pilot/XO), then gerbers.
 - [ ] **Observer PCB resync — not started.** 124 DRC hard. PCB (`Observer.kicad_pcb`,
     dated 2026-07-14) predates the schematic's ISOW1412/Section H addition
     (2026-07-26) entirely — no RS-485 footprint on the board yet.
+- [x] **Commo schematic file-corruption fix — lib_id prefix, ERC 127 -> 48.**
+    2026-09-20/21 (Claude Sonnet 5): `Commo.kicad_sch` had no
+    `sym-lib-table`/`fp-lib-table` and used bare (unprefixed) `lib_id`s
+    (e.g. `"S_+5V_Bead"` instead of `"Commo:S_+5V_Bead"`) — prefixing only
+    the instance references without also prefixing the matching embedded
+    `lib_symbols` cache-key definitions produced a state that segfaulted
+    `kicad-cli sch erc` outright. Fixed both together (matching
+    `gen_pilot_sch.py`/`gen_xo_sch.py`'s own convention), extracted the
+    embedded `lib_symbols` block into a companion `Commo.kicad_sym`, added
+    the missing `sym-lib-table`/`fp-lib-table`. Raw `kicad-cli sch erc`
+    count: 127 -> 48 (all 79 `lib_symbol_issues` resolved; 43
+    `global_label_dangling` + 5 cosmetic `endpoint_off_grid` remain,
+    neither diagnosed yet). **Per the project's own `tools/validate_kicad.py`
+    CI gate** (accepted-class-aware), `Commo.kicad_sch` is already **0 hard,
+    51 soft (accepted-class)** — the dangling-label findings are in an
+    accepted class, so this schematic already clears the real gate despite
+    the raw ERC count looking non-zero. PCB side (DRC) not yet touched this
+    pass; legacy baseline was 160 DRC / 113 unconnected.
+- [x] **avionics PR #207 opened and babysat.** 2026-09-21 (Claude Sonnet 5):
+    the `avionics` branch's accumulated work (XO/FlightEngineer rebuilds,
+    RFD900ux-SMT swap, LoRa dedup, mLRS rejection, Commo lib_id fix) pushed
+    to PR #207 (`Stab-Rabbit-coding/Serenity-UAV#207`). All 12 unresolved
+    review threads resolved — every one was a GitHub Advanced Security
+    (devskim) false positive: 9x `DS126858` "Weak/Broken Hash Algorithm"
+    matched the substring `md4` inside the `SMD4` (Surface-Mount-Device
+    4-pad) Johanson RF-filter footprint-family naming convention (no
+    `hashlib`/md5/sha1 call exists in either flagged file); 3x `DS176209`
+    "Suspicious comment" matched the literal word "TODO" inside BOM `Notes`
+    fields referencing this project's own tracked `TODO.md` items. All 12
+    alerts dismissed as false positive. CI lint/type-check failures fixed
+    (`mypy`/`flake8`/`shfmt`) — one was a real bug (a module-level variable
+    name reused across two unrelated loops in `gen_pilot_sch.py` with
+    genuinely different types), the rest were formatting/annotation gaps.
+    **The `KiCad Validation` CI job carries `needs: lint` in `ci.yml`, so it
+    had never actually run on this PR until the lint fix unblocked it** —
+    it then surfaced the 131 pre-existing hard DRC violations recorded
+    above (102 XO + 29 FlightEngineer), which are the same open placement
+    work, not a regression from this PR. **Owner decision 2026-09-21:**
+    leave `KiCad Validation` red and accepted as documented follow-up work
+    rather than a merge blocker — `main` carries no branch-protection rules,
+    so nothing technically prevents merging PR #207 as-is. PR not yet
+    merged as of this entry.
 
 ---
 

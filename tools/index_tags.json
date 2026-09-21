@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-20",
+  "generated": "2026-09-21",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -125,6 +125,7 @@
       "description": "CLAUDE-MEMORY.md",
       "tags": [
         "documentation",
+        "redundancy-failover",
         "security"
       ],
       "archived": false
@@ -700,7 +701,7 @@
       "archived": false
     },
     "airframe/blender-scripts/merge_cargo_interior.py": {
-      "description": "merge_cargo_interior.py \u2014 Rev T5e (2026-09-16; Rev R1 2026-06-30 base)",
+      "description": "merge_cargo_interior.py \u2014 Rev T5f (2026-09-21; Rev R1 2026-06-30 base)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -1072,6 +1073,14 @@
       "archived": false
     },
     "airframe/openscad/fuselage/cargo/chin_node_shelf.scad": {
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See AGENTS.md.",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/fuselage/cargo/gateway_door_tray.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See AGENTS.md.",
       "tags": [
         "cad-mesh",
@@ -2239,6 +2248,14 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/chin_node_shelf.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/cargo/gateway_door_tray.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
@@ -10423,7 +10440,7 @@
       "archived": false
     },
     "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (198 items)",
+      "description": "Bill of materials, CSV (200 items)",
       "tags": [
         "bom",
         "specification"
@@ -10431,7 +10448,7 @@
       "archived": false
     },
     "current-specification/bom_revS.json": {
-      "description": "Bill of materials, JSON (198 items)",
+      "description": "Bill of materials, JSON (200 items)",
       "tags": [
         "bom",
         "specification"
@@ -10723,8 +10740,17 @@
       ],
       "archived": false
     },
+    "docs/CARGO_DOOR_GATEWAY_SPEC.md": {
+      "description": "Cargo-Door Servo Gateway (GW-CARGO-DOOR) \u2014 Specification, Rev A (2026-09-21)",
+      "tags": [
+        "documentation",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/CARGO_SECTION_LAYOUT.md": {
-      "description": "Cargo Section Layout \u2014 Rev T5e (2026-09-16; Rev T5/T5b 2026-09-15 base)",
+      "description": "Cargo Section Layout \u2014 Rev T5f (2026-09-21; Rev T5e 2026-09-16, Rev T5/T5b 2026-09-15 base)",
       "tags": [
         "documentation"
       ],
@@ -13841,6 +13867,15 @@
       ],
       "archived": false
     },
+    "tools/bom_edit_door_gateway.py": {
+      "description": "Wire the cargo-door servo gateway into the BOM (docs/CARGO_DOOR_GATEWAY_SPEC.md).",
+      "tags": [
+        "bom",
+        "build-tooling",
+        "security"
+      ],
+      "archived": false
+    },
     "tools/bom_edit_tilt_controller.py": {
       "description": "Swap the tilt-controller BOM row: retire LS-TILT-TC, add OSESC-TILT-TC.",
       "tags": [
@@ -13873,7 +13908,7 @@
       "archived": false
     },
     "tools/cargo_layout_fit.py": {
-      "description": "Python script",
+      "description": "cargo_layout_fit.py -- measure a proposed cargo-section equipment layout",
       "tags": [
         "build-tooling"
       ],
@@ -14335,6 +14370,7 @@
       "docs/AGENTS.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/BATTERY_MOUNT.md",
+      "docs/CARGO_DOOR_GATEWAY_SPEC.md",
       "docs/CARGO_SECTION_LAYOUT.md",
       "docs/CARGO_WINCH_SPECIFICATION.md",
       "docs/DOC_TEMPLATES.md",
@@ -14657,6 +14693,7 @@
     ],
     "redundancy-failover": [
       "AGENTS.md",
+      "CLAUDE-MEMORY.md",
       "README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad",
@@ -14674,6 +14711,7 @@
       "current-specification/README.md",
       "deferred/README.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
+      "docs/CARGO_DOOR_GATEWAY_SPEC.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
@@ -14785,6 +14823,7 @@
       "current-specification/serenity-rev-s.jsx",
       "docs/AGENTS.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
+      "docs/CARGO_DOOR_GATEWAY_SPEC.md",
       "docs/OBSERVER_LASER_ANALYSIS.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/OSHW_CERTIFICATION.md",
@@ -14822,6 +14861,7 @@
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
       "tools/add_landing_gear_bosses.py",
+      "tools/bom_edit_door_gateway.py",
       "tools/build_landing_gear_views.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/open_mating_faces.py",
@@ -15130,6 +15170,7 @@
       "airframe/openscad/fuselage/cargo/cargo_spar_drive.scad",
       "airframe/openscad/fuselage/cargo/cargo_vera_faraday.scad",
       "airframe/openscad/fuselage/cargo/chin_node_shelf.scad",
+      "airframe/openscad/fuselage/cargo/gateway_door_tray.scad",
       "airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad",
       "airframe/openscad/fuselage/cargo/tilt_actuator_options.scad",
       "airframe/openscad/fuselage/cargo/tilt_actuator_options_params.scad",
@@ -15267,6 +15308,7 @@
       "airframe/stls/fuselage/cargo/cargo_winch_motor_mount.stl",
       "airframe/stls/fuselage/cargo/cargo_winch_spool.stl",
       "airframe/stls/fuselage/cargo/chin_node_shelf.stl",
+      "airframe/stls/fuselage/cargo/gateway_door_tray.stl",
       "airframe/stls/fuselage/cargo/generate_cargo_doors.py",
       "airframe/stls/fuselage/cargo/generate_cargo_hinge_retention.py",
       "airframe/stls/fuselage/cargo/generate_cargo_mounts.py",
@@ -15410,6 +15452,7 @@
       "airframe/openscad/fuselage/cargo/cargo_spar_drive.scad",
       "airframe/openscad/fuselage/cargo/cargo_vera_faraday.scad",
       "airframe/openscad/fuselage/cargo/chin_node_shelf.scad",
+      "airframe/openscad/fuselage/cargo/gateway_door_tray.scad",
       "airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad",
       "airframe/openscad/fuselage/cargo/tilt_actuator_options.scad",
       "airframe/openscad/fuselage/cargo/tilt_actuator_options_params.scad",
@@ -15546,6 +15589,7 @@
       "airframe/stls/fuselage/cargo/cargo_winch_motor_mount.stl",
       "airframe/stls/fuselage/cargo/cargo_winch_spool.stl",
       "airframe/stls/fuselage/cargo/chin_node_shelf.stl",
+      "airframe/stls/fuselage/cargo/gateway_door_tray.stl",
       "airframe/stls/fuselage/cargo/tilt_actuator_bracket_port.stl",
       "airframe/stls/fuselage/cargo/tilt_actuator_bracket_stbd.stl",
       "airframe/stls/fuselage/cargo/tilt_actuator_wheel.stl",
@@ -16071,6 +16115,7 @@
       "current-specification/bom_revS.json",
       "docs/bom_revR.json",
       "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md",
+      "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_tilt_controller.py",
       "tools/compact_bom_entries.py"
     ],
@@ -17957,6 +18002,7 @@
       "tools/TOOL_REFERENCE.md",
       "tools/add_landing_gear_bosses.py",
       "tools/bake_hull_frame.py",
+      "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_tilt_controller.py",
       "tools/build_head_shell.py",
       "tools/build_landing_gear_views.py",

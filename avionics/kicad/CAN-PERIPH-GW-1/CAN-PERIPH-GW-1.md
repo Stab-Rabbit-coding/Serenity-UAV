@@ -186,6 +186,46 @@ bridge needed for this application once that ships (not yet — schematic-only,
 TPM not started as of 2026-08-02). Filed in `airframe/fuselage-mid/WBS.md`
 §1.1.1.2.1b and `avionics/WBS.md`.
 
+### 4. Cargo-door servo gateway (GW-CARGO-DOOR, 1×, `N_STACKS=1`) — added 2026-09-21
+
+Hosts the three SG90-class cargo servos (port door, starboard door, payload
+release — `SERVO-CARGO` ×3, OpenServoCore swap boards per REF-SENSOR-015) as a
+TPM-signed trunk node. Full specification: `docs/CARGO_DOOR_GATEWAY_SPEC.md`
+(BOM `CAN-PERIPH-GW-DOOR`, tray `PRINT-GW-DOOR-TRAY`). Why its own board and
+not a lane on the winch gateway: `docs/CARGO_WINCH_SPECIFICATION.md` §5.1
+already uses every `J_FLEX` signal of that board (D-GW-1 there). `J_FLEX`
+assignment on this instance:
+
+| Pin | Net | MCU | Primary (osc-native chain) | Fallback (stock SG90 PWM) |
+|---|---|---|---|---|
+| 1/2 | `FLEX_UART_TX/RX` | PA0/PA1 UART0 | all three servos, IDs 1–3 | — |
+| 3 | `FLEX_TTL_GPIO` | PA24 | reserved: bus direction/enable if osc-native is half-duplex (VERIFY) | release servo, software-timed 50 Hz (PA24 timer function VERIFY) |
+| 4 | `FLEX_PWM_IO` | PA25 TIMA0_C3 | spare | port door |
+| 5 | `FLEX_BSHOT_IO` | PA26 TIMG8_C0 | spare | starboard door |
+| 6–8 | `+5V` / `+3V3` / `GND` | — | GND only — servo power is a fused 6 V rail branch, never this header | same |
+
+`J_ENC` unused. Termination jumpers open (mid-chain: chin nodes → this board →
+cargo Observer). `J_PWR` from `RAIL-2 5V_OBS`. **Mechanical host constraint on
+the build:** the tray (`airframe/openscad/fuselage/cargo/gateway_door_tray.scad`)
+grips the board's two short edges and the bottom long edge in card-edge rails —
+keep parts ≥ 2.5 mm from those three edges on both faces; the tray is
+parametric on the 49.0 × 25.5 mm `N_STACKS=1` outline (`GW_PCB_L/W` in
+`tools/cargo_layout_fit.py`), so a repack that changes the outline must update
+those two numbers. Build this instance from the DRC-clean `N_STACKS=1` layout in
+`CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_N1_2026-07-26.kicad_pcb` (the live
+`.kicad_pcb` is the user-packed 2-lane nacelle board).
+
+### 5. RCS bleed-valve gateway (GW-RCS, Phase 11 — SPECIFIED ONLY, not built)
+
+The four SG90-class RCS valve servos of the deferred aft EDF (`SERVO-RCS-VALVE`
+×4) get a second instance in the rear engine cone: `N_STACKS=1` on one
+osc-native chain if OpenServoCore ships, otherwise `N_STACKS=2` (`END_TO_END`)
+so that two lanes' `FLEX_PWM_IO` + `FLEX_BSHOT_IO` give the four **hardware**
+timer channels an attitude effector needs at loop rate (no bit-banging).
+Fail-closed (all valves shut on heartbeat/MAC loss), `RCS_COMMAND ≥ 50 Hz` —
+the per-frame signing latency on this MCU/TPM must be measured on the door
+gateway first. `docs/CARGO_DOOR_GATEWAY_SPEC.md` §9; `deferred/WBS.md` §Phase11.
+
 ## Stackable: N complete trust modules on one PCB
 
 Set `N_STACKS` at the top of `scripts/gen_can_periph_gw_sch.py` (and the PCB
@@ -402,6 +442,11 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
    TPM not started as of 2026-08-02); if/when it lands, this board's role for
    the winch/nacelle-tilt servos may be eliminated rather than just rewired.
    Re-check before committing to either interim transceiver option above.
+8a. **Cargo-door gateway instance (added 2026-09-21).** Deployment 4 above is
+   specified and its shell mount points are cut (`docs/CARGO_DOOR_GATEWAY_SPEC.md`
+   §8 GW-DOOR-1..7): build the `N_STACKS=1` instance, resolve the OpenServoCore
+   physical layer (`FLEX_TTL_GPIO` role) and the PWM-fallback bench items before
+   wiring `J_FLEX`. The Phase 11 RCS instance (Deployment 5) is specification only.
 8. **SLB9672 → OPTIGA™ Trust M (added 2026-08-06), not resolved.** See the
    callout in "Section-by-section design" §C above and REF-SENSOR-016.
    Blocked on primary-datasheet access (network egress) and `kicad-cli`

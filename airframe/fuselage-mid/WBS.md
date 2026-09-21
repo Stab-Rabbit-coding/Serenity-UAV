@@ -777,6 +777,31 @@ Record: `docs/CARGO_SECTION_LAYOUT.md`, `docs/TILT_ACTUATOR_SELECTION.md`,
 - [ ] **20D VERIFY — mounting-hole spacing (15 mm assumed) and Ø7 boss** against the Pololu 20D dimension diagram before printing the face plate; output-shaft axial rating unpublished (27 N worm thrust at stall — thrust washer fallback).
 - [ ] **CHIN-STRAPS — add 4 × BATT-STRAP-CAM** to the order for the chin node shelf (BOM note on PRINT-CHIN-SHELF).
 - [ ] **Cargo door re-fit (U1)** still open — see 1.1.1.2.1 "Clamshell door halves"; the T5 shell moved no aperture geometry.
+- [x] **Rev T5f — cargo-door servo gateway mount points (2026-09-21, Claude Opus 5).**
+    `GW-CARGO-DOOR` (`docs/CARGO_DOOR_GATEWAY_SPEC.md`) placed standing transverse on the
+    solid 6.2 mm belly slab at the forward aperture rim: board X_CL ± 24.5 / Y −14.5..−12.9 /
+    Z 15.6..41.1, tray `gateway_door_tray.scad` → `.stl` (5.0 g, watertight) at Y −17.25..−2,
+    Z 10.2..44.1; four 7 × 7 mm M3 slab bosses at (X_CL ± 19, Y −13 / −6) merged
+    (`merge_cargo_interior.py` `t5_gw_door_bosses` — UNCLIPPED because the slab lies in the
+    ramp void of the outer-skin envelope, and carved out of `DUCT_CUT`, which otherwise
+    truncates them at Z 8). Ray-probed pocket: 4 mm to the aperture rim, 2.75 mm to the
+    ramp-fairing wall at floor level, 19.5 mm to the chin shelf. `cargo_layout_fit.py` PASS
+    (0 hit / 0 near / 0 overlap); all Rev T5 gates re-run PASS; `validate_stls.py` 80/80.
+    - [ ] **SERVO-PLACE — hull-frame placement of the three SG90s** (port door, stbd door,
+        release) and their brackets. `cargo_door_servo_bracket.stl` /
+        `cargo_release_servo_bracket.stl` are legacy-frame and unplaced (§1.1.0 VERIFY parts);
+        the bell-crank boss item in §1.1.1.2.1 is still open. Candidate: the pocket flanking
+        the gateway tray, X ±(27..45) at Z ≤ 20, Y −20..0 (measured 2026-09-21). Add them as
+        envelopes in `cargo_layout_fit.py`; pigtail lengths in the spec §6 follow.
+    - [ ] **DOOR-LATCH — the clamshell doors have no positive in-flight latch (finding).**
+        Retention today is the SG90 gear train's static friction; root `AGENTS.md` §7
+        forbids friction retention on flight-critical joints. Decide over-centre linkage vs
+        a mechanical latch before the first flight with doors fitted. Not designed in Rev T5f.
+    - [ ] **GW-DOOR-4 — owner confirmation (D-GW-2):** two independent clamshell halves →
+        two door actuators (`SERVO-CARGO` qty 3). Alternative (one servo + cross-linkage)
+        not designed.
+    - [ ] **PRINT-GW-DOOR-TRAY hardware at order:** 4 × RX-M3x5.7 inserts, 4 × M3×8 SHCS,
+        3 cable ties (BOM row note).
 
 ###### 1.1.1.2.1a *Cargo Winch — STS3215 Conversion (Rev B, 2026-07-27)*
 
@@ -918,8 +943,11 @@ do not restate its dimensions here.
     spec. Cross-ref `avionics/firmware/WBS.md`.
 - [ ] **Re-run the §6 mass/CG table** once the SPT5425LV+LibreServo v2 unit is bench-weighed;
     propagate to `docs/flight_envelope.md` if AUW moves materially.
-- [ ] *(Optional, out of scope for this change)* Move the door/release SG90s onto the
-    gateway's spare `FLEX_PWM_IO` and retire `DRV8833-CARGO` + `cargo_drv8833_tray.stl`.
+- [x] ~~*(Optional, out of scope for this change)* Move the door/release SG90s onto the
+    gateway's spare `FLEX_PWM_IO` and retire `DRV8833-CARGO` + `cargo_drv8833_tray.stl`.~~
+    **CLOSED 2026-09-21, differently** — `FLEX_PWM_IO` on the winch gateway is the catch
+    solenoid, not spare; the door/release SG90s got their OWN gateway (`GW-CARGO-DOOR`,
+    `docs/CARGO_DOOR_GATEWAY_SPEC.md`) and `DRV8833-CARGO` + its tray are retired (qty 0).
 
 **BLOCKS:** Phase 8 cargo winch assembly; `build_guide_23_winch_latch.svg` rebuild;
 Flight Engineer RAIL-2 third BEC channel (`docs/POWER_DISTRIBUTION.md` §11.1).

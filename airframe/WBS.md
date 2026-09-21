@@ -443,7 +443,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | 50A 6S BLHeli32 ESC | 1× | ~$18–28 | Fuselage EDF; **Phase 11 deferred** |
 | Digital tilt servo ≥25 kg·cm @ 6V, metal gear | 2× | ~$20–30ea | Nacelle tilt; prefer 30+ kg·cm |
 | SG90 micro servo | 2× | ~$3ea | Nacelle nozzle ×2 (redundant) |
-| SG90-class proportional valve servo | 4× | ~$3ea | RCS bleed jets; **Phase 11 deferred** |
+| SG90-class proportional valve servo | 4× | ~$3ea | RCS bleed jets; **Phase 11 deferred**; hosted by the Phase 11 `GW-RCS` gateway (`docs/CARGO_DOOR_GATEWAY_SPEC.md` §9), not FC2 PWM |
 | MF104ZZ flanged bearing 4×10×4mm | 4× | ~$8 total | 2 per nacelle pivot |
 | 4mm OD CF rod (pivot) | 2× cut lengths | — | From 2.3 CF stock above |
 | Steel pushrod 2mm OD × ~60mm | 2× | ~$3 total | Longitudinal nozzle shaft per nacelle |
@@ -464,8 +464,8 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
 | STS3215 serial-bus servo | 1× | ~$25 | Winch drive (supersedes N20 DC motor) |
-| DRV8833 dual H-bridge driver | 1× | ~$2 | |
-| SG90 servo | 2× | ~$6 | Door actuator + payload release |
+| ~~DRV8833 dual H-bridge driver~~ | 0× | — | RETIRED 2026-09-21 — servos are gateway-driven |
+| SG90 servo | 3× | ~$9 | Port door + stbd door + payload release, on `CAN-PERIPH-GW-DOOR` (`docs/CARGO_DOOR_GATEWAY_SPEC.md`, 2026-09-21) |
 | Dyneema SK75 0.5mm braid | 2 m | ~$4 | Winch line |
 | 3mm CF rod | ~60 mm | — | Clamshell door hinge pin |
 | Closed-cell foam gasket tape | — | — | Gondola-to-hull perimeter seal |

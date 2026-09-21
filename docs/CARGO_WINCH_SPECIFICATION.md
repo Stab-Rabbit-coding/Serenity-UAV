@@ -969,8 +969,12 @@ See §3.3. All six are new STLs from
 12. **Pedestal mounting stations** — the retired mount anchored to the *gondola
     ceiling* with M2 self-taps; the pedestals need real M3 boss stations in
     `cargo_sect_shell24.scad`, FreeCAD-verified against the door swing envelope.
-13. **DRV8833 consolidation (optional)** — door/release servos could move to the
-    gateway's spare `FLEX_PWM_IO`, retiring `DRV8833-CARGO` and its tray.
+13. ~~**DRV8833 consolidation (optional)** — door/release servos could move to the
+    gateway's spare `FLEX_PWM_IO`, retiring `DRV8833-CARGO` and its tray.~~
+    **CLOSED 2026-09-21, differently:** `FLEX_PWM_IO` is not spare — §5.1 assigns
+    it to the catch solenoid. The door/release servos get their **own**
+    `N_STACKS=1` gateway (`CAN-PERIPH-GW-DOOR`, `docs/CARGO_DOOR_GATEWAY_SPEC.md`
+    D-GW-1); `DRV8833-CARGO` and its tray are retired by that document.
 14. **AK7455 spool-encoder integration (§3.7.3)** — magnet pocket in the port
     flange hub, off-axis (the fixed axle occupies the centerline); confirm flux
     at the IC for the chosen magnet and gap, the same bench item already open for

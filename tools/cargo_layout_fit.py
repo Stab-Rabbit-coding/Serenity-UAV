@@ -35,7 +35,8 @@ and `manifold3d`, and `pip` is not permitted in this environment.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (model: Claude Opus 5, Anthropic) under the
-author's direction, 2026-09-15, per `AGENTS.md` §3 AI attribution.
+author's direction, 2026-09-15 (Rev T5f door-gateway station 2026-09-21), per
+`AGENTS.md` §3 AI attribution.
 License: CC BY 4.0 -- creativecommons.org/licenses/by/4.0
 """
 
@@ -339,6 +340,53 @@ SPOOL_Z0 = BATT_Z1 + CRADLE_T + GAP_MM  # 133.4, above the cradle ceiling
 RAMP_X0, RAMP_X1 = -194.0, -142.0
 RAMP_Z0, RAMP_Z1 = 8.0, 44.0
 RAMP_OVERLAP = 6.0  # fuse margin onto the flanks
+# Cargo-door servo GATEWAY (GW-CARGO-DOOR: one SKIPPER-CAN-PERIPH-GW-PCB at
+# N_STACKS=1, docs/CARGO_DOOR_GATEWAY_SPEC.md, 2026-09-21).  The board has no
+# mounting holes, so it rides card-edge rails in a printed tray
+# (gateway_door_tray.scad) STANDING transverse (board plane normal to Y) on
+# the solid 6.2 mm belly slab that the sealed ramp fairing leaves under the
+# chin shelf, X -195..-145 / Y -26..+2 (ray-probed 2026-09-21: floor Z 6.2
+# across dX +/-25, Z 2 outboard of it; forward wall at Y -20 at the floor,
+# Y -23..-28 above Z 15; chin shelf underside at Z 63.6 above).  Component
+# side AFT (SWD/J_FLEX reachable through the open bay), bare-ish back
+# (SOIC isolators, 3 mm) forward.  Outline = the generator's N_STACKS=1
+# board (130.96..179.96 x 92.5..118 in CAN-PERIPH-GW-1_N1 backup): 49.0 x
+# 25.5 x 1.6 mm; tallest front part = the 1x08 2.54 mm vertical J_FLEX
+# header (~9 mm), tallest back part = SOIC-20W (~3 mm).  Static equipment:
+# 2.0 mm skin gap like the nodes.
+GW_PCB_L, GW_PCB_W, GW_PCB_T = 49.0, 25.5, 1.6  # X, Z, Y
+GW_FRONT_H, GW_BACK_H = 9.0, 3.0  # component heights aft / forward of the board
+GW_RAIL_T, GW_RAIL_CLR, GW_RAIL_LIP = 1.6, 0.3, 1.2  # side-rail wall, slot clearance, slot lip
+# The base is a 5.4 mm slab Y -17.25..-2 on the bosses: the rear screw row
+# (Y -13) lies under the board's bottom edge, so its heads are counterbored
+# (O6.0 x 3.2, 1.25 mm walls) into the slab top and covered by the removable
+# board; the front row (Y -6) has its heads exposed forward of the rails.
+# M3 x 8 SHCS both rows.  The board's bottom edge rests on the slab top.
+GW_BASE_T = 5.4
+GW_CBORE_D, GW_CBORE_H = 6.0, 3.2
+GW_BOSS_H = 4.0  # boss height above the 6.2 mm slab
+GW_SLAB_Z = 6.2  # slab top (interior floor) at the tray station
+GW_XC = X_CL
+GW_X0, GW_X1 = GW_XC - GW_PCB_L / 2, GW_XC + GW_PCB_L / 2  # board -194.35..-145.35
+GW_TRAY_X0, GW_TRAY_X1 = GW_X0 - GW_RAIL_T, GW_X1 + GW_RAIL_T  # -195.95..-143.75
+GW_BASE_Y0 = -17.25  # base slab back face (2.75 mm off the floor-level wall at Y -20)
+GW_TRAY_Y0 = -16.0  # rail back face
+GW_PCB_Y0 = GW_TRAY_Y0 + GW_RAIL_LIP + GW_RAIL_CLR  # -14.5 board back face
+GW_PCB_Y1 = GW_PCB_Y0 + GW_PCB_T  # -12.9 board front face
+GW_TRAY_Y1 = GW_PCB_Y1 + GW_RAIL_CLR + GW_RAIL_LIP  # -11.4 tray front (rail) face
+GW_ENV_Y0 = GW_PCB_Y0 - GW_BACK_H  # -17.5 back components
+GW_ENV_Y1 = GW_PCB_Y1 + GW_FRONT_H  # -3.9 front components; aperture edge at +2, payload at +4.7
+GW_Z0 = GW_SLAB_Z + GW_BOSS_H  # 10.2 tray underside on the boss tops
+GW_PCB_Z0 = GW_Z0 + GW_BASE_T  # 15.6 board bottom edge on the base slab
+GW_PCB_Z1 = GW_PCB_Z0 + GW_PCB_W  # 41.1
+GW_TRAY_Z1 = GW_PCB_Z1 + 3.0  # 44.1 side-rail tops (cable-tie keeper over the board edge)
+GW_BASE_Y1 = -2.0  # base plate runs forward under the component zone (4 mm off the aperture edge)
+GW_BOSS_DX, GW_BOSS_H2 = 19.0, 3.5  # boss (X offset from X_CL, half-size; 7 x 7 mm)
+# rear row under the board (counterbored), front row exposed; the 7 x 7 bosses
+# meet edge-to-edge at Y -9.5
+GW_BOSS_Y = (-13.0, -6.0)
+GW_BOSS = tuple((sx * GW_BOSS_DX, by) for by in GW_BOSS_Y for sx in (-1, 1))  # (dX, Y)
+GW_DOOR_PLACED = True
 
 
 def layout_t5():
@@ -597,6 +645,44 @@ def layout_t5():
             gap=2.0,
             mates=(f"node {tag}",),
         )
+    if GW_DOOR_PLACED:
+        # tray body (base plate + side rails + slot lips) and the board's
+        # component zones fore and aft of it; the four slab bosses seat on skin
+        # The "ramp fairing" entry below is a coarse proxy box (Y -40..-14)
+        # for a feature that is ALREADY fused into the published shell; the
+        # real fairing surface is what the shell test measures (0 hit / 0
+        # near here), so the proxy is declared a mate rather than a foul.
+        L["door gateway tray base"] = dict(
+            solid=box(GW_TRAY_X0, GW_TRAY_X1, GW_BASE_Y0, GW_BASE_Y1, GW_Z0, GW_Z0 + GW_BASE_T),
+            gap=2.0,
+            mates=("ramp fairing",),
+        )
+        L["door gateway tray rails"] = dict(
+            solid=box(
+                GW_TRAY_X0, GW_TRAY_X1, GW_TRAY_Y0, GW_TRAY_Y1, GW_Z0 + GW_BASE_T, GW_TRAY_Z1
+            ),
+            gap=2.0,
+            mates=("ramp fairing", "door gateway tray base"),
+        )
+        L["door gateway board+parts"] = dict(
+            solid=box(GW_X0, GW_X1, GW_ENV_Y0, GW_ENV_Y1, GW_PCB_Z0, GW_PCB_Z1),
+            gap=2.0,
+            mates=("ramp fairing", "door gateway tray base", "door gateway tray rails"),
+        )
+        for i, (dx, by) in enumerate(GW_BOSS):
+            L[f"door gateway boss {i}"] = dict(
+                solid=box(
+                    GW_XC + dx - GW_BOSS_H2,
+                    GW_XC + dx + GW_BOSS_H2,
+                    by - GW_BOSS_H2,
+                    by + GW_BOSS_H2,
+                    -5.0,
+                    GW_Z0 + 0.5,
+                ),
+                skin_seat=True,
+                mates=("ramp fairing", "door gateway tray base")
+                + tuple(f"door gateway boss {j}" for j in range(4)),
+            )
     # --- mission payload + twin-line bridle hoist (Phase 7 reserve) ----------
     L["payload"] = dict(
         solid=box(
@@ -711,6 +797,18 @@ def shell_after_merge(shell_tm):
                     OBSERVER_Z0 + 0.5,
                 )
             )
+    if GW_DOOR_PLACED:
+        for dx, by in GW_BOSS:
+            m = m - to_man(
+                box(
+                    GW_XC + dx - GW_BOSS_H2 - 0.5,
+                    GW_XC + dx + GW_BOSS_H2 + 0.5,
+                    by - GW_BOSS_H2 - 0.5,
+                    by + GW_BOSS_H2 + 0.5,
+                    GW_SLAB_Z + 0.3,
+                    GW_Z0 + 0.5,
+                )
+            )
     for hx in HOIST_XS:
         px = hx - DRUM_L / 2 - 5.0 if hx < X_CL else hx + DRUM_L / 2 + 5.0
         m = m - to_man(
@@ -821,13 +919,45 @@ def write_scad(path):
         "OBSERVER_T",
         "OBSERVER_Y0",
         "OBSERVER_Z0",
+        "GW_PCB_L",
+        "GW_PCB_W",
+        "GW_PCB_T",
+        "GW_FRONT_H",
+        "GW_BACK_H",
+        "GW_RAIL_T",
+        "GW_RAIL_CLR",
+        "GW_RAIL_LIP",
+        "GW_BASE_T",
+        "GW_CBORE_D",
+        "GW_CBORE_H",
+        "GW_BOSS_H",
+        "GW_SLAB_Z",
+        "GW_XC",
+        "GW_X0",
+        "GW_X1",
+        "GW_TRAY_X0",
+        "GW_TRAY_X1",
+        "GW_BASE_Y0",
+        "GW_TRAY_Y0",
+        "GW_PCB_Y0",
+        "GW_PCB_Y1",
+        "GW_TRAY_Y1",
+        "GW_ENV_Y0",
+        "GW_ENV_Y1",
+        "GW_Z0",
+        "GW_PCB_Z0",
+        "GW_PCB_Z1",
+        "GW_TRAY_Z1",
+        "GW_BASE_Y1",
+        "GW_BOSS_DX",
+        "GW_BOSS_H2",
     ]
     g = globals()
     with open(path, "w", encoding="utf-8") as fh:
         fh.write(
             "// cargo_layout_t5_params.scad -- GENERATED by tools/cargo_layout_fit.py\n"
             "// --write-scad.  Do not edit: change the Python constants and regenerate.\n"
-            "// Hull frame, mm (X=+port, Y=+aft, Z=+dorsal).  Rev T5e, 2026-09-16.\n"
+            "// Hull frame, mm (X=+port, Y=+aft, Z=+dorsal).  Rev T5f, 2026-09-21.\n"
             "// License: CC BY 4.0 -- creativecommons.org/licenses/by/4.0\n"
         )
         for n in names:
@@ -844,6 +974,9 @@ def write_scad(path):
             "OBSERVER_BOSS = ["
             + ", ".join(f"[{x:.2f}, {y:.2f}, {h:.2f}]" for x, y, h in OBSERVER_BOSS)
             + "];\n"
+        )
+        fh.write(
+            "GW_BOSS = [" + ", ".join(f"[{x:.2f}, {y:.2f}]" for x, y in GW_BOSS) + "];\n"
         )
 
 
