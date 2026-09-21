@@ -84,7 +84,8 @@ def check_angle(scad_path, flex, workdir):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--variant", default="1_5in", choices=("1_5in", "3_0in"))
+    # 3_0in is the flight article as of 2026-09-06 (docs/LANDING_GEAR_ANALYSIS.md S4.8)
+    ap.add_argument("--variant", default="3_0in", choices=("1_5in", "3_0in"))
     args = ap.parse_args()
 
     scad = os.path.join(SCAD_DIR, f"canonical_leg_r6_{args.variant}.scad")

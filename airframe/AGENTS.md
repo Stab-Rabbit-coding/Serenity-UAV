@@ -117,8 +117,10 @@ matures — do not restate its specifics here or in any other file; they will go
 the current revision directly:
 
 - **Canonical design and structural analysis:** `docs/LANDING_GEAR_ANALYSIS.md`
-- **SCAD source:** `airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad` (default)
-  and `canonical_leg_r6_3_0in.scad` (extended, kept). The Rev R5 `wire_brace_leg.scad`
+- **SCAD source:** `airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad` (THE FLIGHT
+  ARTICLE, adopted 2026-09-06 — nozzle belly-clearance driver, `docs/LANDING_GEAR_ANALYSIS.md`
+  §4.8) and `canonical_leg_r6_1_5in.scad` (RETIRED to bench/ground-handling use — below the
+  minimum safe nozzle clearance). The Rev R5 `wire_brace_leg.scad`
   this file used to name is superseded — corrected 2026-08-23.
 - **Open work:** `airframe/landing-gear/TODO.md` §1.1.4
 

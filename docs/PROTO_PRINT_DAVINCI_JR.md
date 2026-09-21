@@ -620,10 +620,20 @@ knife. Sand support-contact surfaces to 320 grit if surface finish matters for t
 - **ESC bay covers, splice collars, Faraday enclosure, hinge retention** are new parts with
   no Rev P equivalent (Rev T4c and Rev T1c work).
 - **Landing gear replaced** — Rev P had no printed landing gear STLs in this guide; current
-  gear is Rev R6, with two leg-length variants sharing common bay/foot/wire hardware. This
-  guide defaults to the **1.5 in leg** (canonical default per `airframe/AGENTS.md` landing
-  gear pointer); the 3.0 in extended variant (`lg_r6_3_0in_*`) is not printed by default —
-  swap it in if you're validating the extended-clearance case.
+  gear is Rev R6, with two leg-length variants sharing common bay/foot/wire hardware.
+  **SUPERSEDED 2026-09-21 — the 3.0 in leg is now the flight article** (adopted 2026-09-06,
+  `docs/LANDING_GEAR_ANALYSIS.md` §4.8: the nozzle stack hangs 38–47 mm below the belly
+  datum with the nacelles tilted vertical for every takeoff/landing, and the 1.5 in leg is
+  27–40 mm below the minimum safe clearance that drives — not rescuable within this leg
+  family). `airframe/AGENTS.md`'s pointer has been updated accordingly. **This guide's own
+  §9 part list, bed-layout tables, and print-time estimates below still reference the
+  1.5 in STLs** (`lg_r6_1_5in_*`) and have **not** been regenerated for the physically
+  larger 3.0 in parts (different bed footprint, different print time) — treat those
+  specific tables as the 1.5 in bench/handling variant's numbers, not the flight-article
+  print plan, until **PROTO-LG-1** (regenerate this section's part list and dimension
+  tables for `lg_r6_3_0in_*`) closes. Until then: if you are printing a PLA prototype of
+  the flight-article gear, print `lg_r6_3_0in_*` and expect this guide's landing-gear bed
+  layout/time figures not to apply.
 
 ### 9.2 Parts on disk that are NOT current — do not print as reference
 
