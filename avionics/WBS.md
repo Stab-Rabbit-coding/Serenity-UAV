@@ -183,6 +183,20 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     and feed CC2652R7's 2.4 GHz path through a passive 2.4/5 GHz diplexer onto the existing
     shared Wi-Fi antenna (no separate Zigbee antenna/SMA pad needed). Still open: add
     CC2652R7 + diplexer to a Cape-B-2 schematic revision; decide which bay(s) carry it.
+- [x] **REJECTED (2026-09-20): mLRS as XO's SiK radio-link protocol.** Considered during the
+    XO board-area rebuild (via `ce-ideate`) as a possible replacement for the RFD900ux-SMT SiK
+    channel. XO's and Commo's radio links provide **redundant multiband connectivity between
+    the UAV and its human-piloted ground station** — the whole point is path diversity across
+    independent hardware/modulation families. mLRS is a real, mature open-source project
+    (github.com/olliw42/mLRS) with genuinely competitive range/performance, but it runs on
+    Semtech LoRa silicon (SX1280/1276/1262/etc.) — the **same radio family Commo's LoRa link
+    already uses**. Adopting it on XO would collapse two supposedly-independent links onto one
+    LoRa failure domain (interference, jamming, a LoRa-specific hardware defect), defeating the
+    redundancy the two-link architecture exists to provide. Also a poor fit operationally: mLRS
+    is architected as an MCU+radio-chip *subsystem* (not a self-contained module like SiK), which
+    would have made XO's board-area crisis worse, not better. Kept for the record per the
+    project's "explicit rejection with reasons" ideation discipline — do not re-propose mLRS for
+    XO or any other node carrying a LoRa link elsewhere in the fleet.
 
 - [ ] **Generate Commo gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
     `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
