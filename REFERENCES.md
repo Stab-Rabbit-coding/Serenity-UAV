@@ -116,7 +116,7 @@ previously named in this file — are acknowledged wherever this catalog is read
 
 ### Project license (this work)
 
-All original work in this repository is © 2025 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP,
+All original work in this repository is © 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP,
 **dual-licensed** (corrected 2026-08-01 — see "Removed / Superseded Citations"):
 
 - **Hardware/CAD/PCB design** (airframe SCAD/STL/FCStd, KiCad schematics/PCB/Gerbers, mechanical
