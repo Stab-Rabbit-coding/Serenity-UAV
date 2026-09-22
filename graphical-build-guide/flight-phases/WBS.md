@@ -27,7 +27,7 @@
 > adds the 55mm rear EDF for **forward-flight (cruise) thrust and RCS attitude authority** — it
 > exhausts aft through the canonical nozzle and is not counted in hover (Phase 11 hover T/W ≈ 1.43).
 
-**Dependency:** Cape-A (×2) and Cape-B (×2) PCB assemblies received from JLCPCB.
+**Dependency:** Pilot (×2) and TACCO (×2) PCB assemblies received from JLCPCB.
 
 **Power system:**
 
@@ -41,16 +41,16 @@
 
 - [ ] Pull motor phase leads through conduit to ESCs; solder (verify rotation marking first).
 
-- [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Shepherd's room (Bay A, bus start); temporary 120Ω at FC2 Cape-A in Inara's shuttle (Bay B, Phase 3 far-end; remove in Phase 7).
+- [ ] CAN FD termination: 120Ω SOLDERED to CN1 TACCO at Shepherd's room (Bay A, bus start); temporary 120Ω at FC2 Pilot in Inara's shuttle (Bay B, Phase 3 far-end; remove in Phase 7).
 
 **ESC assignment (cross-nacelle redundancy — any FC failure retains 50% thrust both nacelles):**
 
 | ESC | EDF | Nacelle | Controlled by |
 |-----|-----|---------|---------------|
-| ESC1 | EDF1 (fore) | Port | FC1 Cape-A PRU Ch.0 |
-| ESC2 | EDF2 (aft) | Port | FC2 Cape-A PRU Ch.0 |
-| ESC3 | EDF1 (fore) | Stbd | FC1 Cape-A PRU Ch.1 |
-| ESC4 | EDF2 (aft) | Stbd | FC2 Cape-A PRU Ch.1 |
+| ESC1 | EDF1 (fore) | Port | FC1 Pilot PRU Ch.0 |
+| ESC2 | EDF2 (aft) | Port | FC2 Pilot PRU Ch.0 |
+| ESC3 | EDF1 (fore) | Stbd | FC1 Pilot PRU Ch.1 |
+| ESC4 | EDF2 (aft) | Stbd | FC2 Pilot PRU Ch.1 |
 | ESC5 | 55mm rear | Fuselage | **DEFERRED — Phase 11** |
 
 **CN1+FC1 installation — Shepherd's room (Bay A, nose) — XO / Pilot (v2 EM-hardened):**
@@ -64,9 +64,9 @@
 
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 
-- [ ] Install log μSD (64GB) in CN1 Cape-B log slot. Label: **CN1-LOG**.
+- [ ] Install log μSD (64GB) in CN1 TACCO log slot. Label: **CN1-LOG**.
 
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN1 Cape-B header; connect its coax to forward 49 MHz wire post.
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN1 TACCO header; connect its coax to forward 49 MHz wire post.
 
 - [ ] Connect CN1 radio pigtails: SiK 915MHz → belly port SMA; LoRa → belly stbd SMA; Wi-Fi → dorsal fwd SMA.
 
@@ -78,7 +78,7 @@
 
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT 0x01.
 
-- [ ] Cap Simon's medbay (Bay D) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
+- [ ] Cap Simon's medbay (Bay D) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 TACCO ETH-2.
 
 **CN2+FC2 installation — Inara's shuttle (Bay B, dorsal fwd) — XO / Pilot (Rev R):**
 > Rev R: Inara's shuttle (Bay B) also uses v2 EMI-hardened capes (same as Shepherd's room). All four bays use Pilot + XO.
@@ -87,7 +87,7 @@
 
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 
-- [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: **CN2-LOG**.
+- [ ] Install log μSD (64GB) in CN2 TACCO log slot. Label: **CN2-LOG**.
 
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 XO J_XCVR header.
 
@@ -221,11 +221,11 @@
 
 - [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mount GPS patch, face UP.
 
-- [ ] Terminate CAN FD bus end: CN4 → FC4 + **120Ω PERMANENT** soldered to FC4 Cape-A.
+- [ ] Terminate CAN FD bus end: CN4 → FC4 + **120Ω PERMANENT** soldered to FC4 Pilot.
 
-- [ ] Connect ETH-DE (River's room → Simon's medbay): FC3 Cape-A ETH-1 → CN4 Cape-B ETH-2.
+- [ ] Connect ETH-DE (River's room → Simon's medbay): FC3 Pilot ETH-1 → CN4 TACCO ETH-2.
 
-- [ ] Connect ETH-EA ring-close (Simon's medbay → Shepherd's room): FC4 Cape-A ETH-1 → [Shepherd's room CN1 Cape-B ETH-2 already connected]. Closes the 8-node RSTP ring.
+- [ ] Connect ETH-EA ring-close (Simon's medbay → Shepherd's room): FC4 Pilot ETH-1 → [Shepherd's room CN1 TACCO ETH-2 already connected]. Closes the 8-node RSTP ring.
 
 - [ ] Power tap Simon's medbay (Bay D); verify 5V ±0.05V.
 
@@ -256,7 +256,7 @@ Array B (hosted by FC1, Shepherd's room / Bay A):
 | S5B | 315mm | Dorsal keel |
 | S6B | 265mm | Belly blister |
 
-- [ ] Install 6× VL53L5CX in Array B flush-mount frames; wire to TCA9548A ch.0–5 in Shepherd's room (Bay A); MCP23008 GP0–GP5 → XSHUT; I²C to FC1 Cape-A.
+- [ ] Install 6× VL53L5CX in Array B flush-mount frames; wire to TCA9548A ch.0–5 in Shepherd's room (Bay A); MCP23008 GP0–GP5 → XSHUT; I²C to FC1 Pilot.
 
 Array A (hosted by FC3, River's room / Bay C):
 
@@ -347,7 +347,7 @@ Array A (hosted by FC3, River's room / Bay C):
 
 - [ ] Final airworthiness inspection: all fasteners, propulsion, electronics, battery, CG.
 
-- [ ] Documentation archive: build log (photos + test results), Cape-B CPLD bitstream, TPM endorsement key fingerprints, final AUW + CG measurements.
+- [ ] Documentation archive: build log (photos + test results), TACCO CPLD bitstream, TPM endorsement key fingerprints, final AUW + CG measurements.
 
 - [ ] FAA compliance final check: registration visible without moving any part; remote pilot certificate current; AUW <55 lbs; LAANC authorization for any controlled airspace.
 

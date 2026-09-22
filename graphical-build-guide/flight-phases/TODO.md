@@ -21,12 +21,12 @@
 - [ ] Phase 11 only: Install 50A ESC in Panel F for 55mm rear EDF (FC2 PRU…
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 - [ ] Pull motor phase leads through conduit to ESCs
-- [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Shepherd's room…
+- [ ] CAN FD termination: 120Ω SOLDERED to CN1 TACCO at Shepherd's room…
 - [ ] Mount CN1 XO on Shepherd's room (Bay A) floor standoffs (M2.5 nylon…
 - [ ] Mount FC1 Pilot on inter-cape standoffs (M2.5 nylon 20mm) above CN1
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
-- [ ] Install log μSD (64GB) in CN1 Cape-B log slot. Label: CN1-LOG.
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN1 Cape-B header
+- [ ] Install log μSD (64GB) in CN1 TACCO log slot. Label: CN1-LOG.
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN1 TACCO header
 - [ ] Connect CN1 radio pigtails: SiK 915MHz → belly port SMA
 - [ ] Route FC1 GPS U.FL coax through cockpit-roof PTFE sleeve (sta ~59mm)
 - [ ] Daisy-chain CAN FD: 120Ω (soldered) → CN1 → FC1 → exit Shepherd's…
@@ -35,7 +35,7 @@
 - [ ] Cap Simon's medbay (Bay D) end of ETH-EA conduit (will connect to…
 - [ ] Mount CN2 XO on Inara's shuttle (Bay B) floor standoffs; insert PB2-I
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
-- [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: CN2-LOG.
+- [ ] Install log μSD (64GB) in CN2 TACCO log slot. Label: CN2-LOG.
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 XO J_XCVR header.
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm)
 - [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle
@@ -142,7 +142,7 @@
 - [ ] Print decal sheet on waterslide decal paper; seal with clear coat
 - [ ] Apply decals per `build_guide_19_decal_placement.svg`
 - [ ] Final airworthiness inspection: all fasteners, propulsion…
-- [ ] Documentation archive: build log (photos + test results), Cape-B…
+- [ ] Documentation archive: build log (photos + test results), TACCO…
 - [ ] FAA compliance final check: registration visible without moving any…
 
 ### Phase 9 — Performance Tuning and Flight Envelope Expansion

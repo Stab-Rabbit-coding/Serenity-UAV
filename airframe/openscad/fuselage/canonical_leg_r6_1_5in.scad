@@ -9,7 +9,9 @@
 // ===========================================================================
 // canonical_leg_r6_1_5in.scad
 // Serenity UAV -- Rev R6 -- Canonical Articulated Landing Leg (hip-pivot)
-// -- 1.5 in (38.1 mm) BELLY CLEARANCE VARIANT (compact, default) --
+// -- 1.5 in (38.1 mm) BELLY CLEARANCE VARIANT (compact; RETIRED to bench/
+// handling use 2026-09-06 -- see canonical_leg_r6_3_0in.scad, now the
+// flight article) --
 // ===========================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP

@@ -63,7 +63,7 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 
 | Parameter               | Value                                 |
 |-------------------------|---------------------------------------|
-| Module                  | RFM95W on Cape-B-2                    |
+| Module                  | RFM95W on TACCO                    |
 | Tx output power         | +20 dBm (firmware configurable 2–20 dBm)|
 | Short-range antenna     | 5 dBi rubber duck omni, RP-SMA        |
 | Directional antenna     | 9 dBi Yagi, RP-SMA, gimbal-shared with SiK via RF splitter |
@@ -82,7 +82,7 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 
 | Parameter               | Value                                 |
 |-------------------------|---------------------------------------|
-| Module                  | TI WL1837MOD on Cape-B-2              |
+| Module                  | TI WL1837MOD on TACCO              |
 | Tx output power (max)   | +18 dBm (UNII-3, firmware limit)      |
 | Directional antenna     | 14 dBi flat panel, RP-SMA, gimbal-mounted |
 | Coax loss (LMR-195 1 m) | −1.0 dB (higher loss at 5 GHz)       |
@@ -112,7 +112,7 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 
 | Parameter               | Value                                 |
 |-------------------------|---------------------------------------|
-| Module                  | Commo (via Cape-B-2 UART5)    |
+| Module                  | Commo (via TACCO UART5)    |
 | PA output power, as-designed | +20 dBm (100 mW) — **non-compliant with §15.235**, see below |
 | Antenna                 | 1/4-wave base-loaded whip, ~0.94 m physical with loading coil; omnidirectional, ~0 dBi assumed |
 | Ground radials          | 4× 1/4-wave radials (star pattern, flat on mast base) |
@@ -154,7 +154,7 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 
 | Parameter               | Value                                 |
 |-------------------------|---------------------------------------|
-| Module                  | CC2652R7 (optional, via Cape-B-2)     |
+| Module                  | CC2652R7 (optional, via TACCO)     |
 | Tx output power         | +20 dBm (module maximum)              |
 | Antenna                 | 3 dBi rubber duck dipole, RP-SMA      |
 | Coax loss               | −0.5 dB                               |

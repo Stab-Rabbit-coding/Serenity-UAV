@@ -18,8 +18,8 @@ are standard Linux processes that use POSIX APIs, i2c-dev, libgpiod 2.x, and pth
 
 | Group | Count | Cape | Responsibilities |
 | ------- | ------- | ------ | ----------------- |
-| FC nodes | 4 | Cape-A | Flight control, navigation, obstacle avoidance, ESC/actuator drive |
-| CN nodes | 4 | Cape-B | Radio links, system logging, payload/cargo management |
+| FC nodes | 4 | Pilot | Flight control, navigation, obstacle avoidance, ESC/actuator drive |
+| CN nodes | 4 | TACCO | Radio links, system logging, payload/cargo management |
 
 ## Cape Variant Placement
 
@@ -32,7 +32,7 @@ The eight nodes use a **v2 · v2 · v2 · v2** (nose → tail) cape variant layo
 | C | River's room | FC3 / CN3 | Pilot | XO | Rev R: uniform EMI hardening across all bays |
 | D (tail) | Simon's medbay | FC4 / CN4 | Pilot | XO | Bus end termination; 5 kV isolation closest to nacelle motor wiring / rear EDF |
 
-Rev R places 5 kV galvanic isolation at every node. Cape-A-1 / Cape-B-1 are archived (Rev Q, 2026-06-05).
+Rev R places 5 kV galvanic isolation at every node. Pilot / TACCO are archived (Rev Q, 2026-06-05).
 
 ## Directory Layout
 
@@ -46,7 +46,7 @@ firmware/
 │       ├── failsafe_config.h   # Failsafe threshold constants (docs/failsafe_thresholds.md)
 │       ├── sbus_input.h        # S-Bus input decoding API
 │       └── sbus_input.c        # S-Bus frame parsing
-├── cn/                  # CN node daemon (runs on all 4 Cape-B / AM6254 nodes)
+├── cn/                  # CN node daemon (runs on all 4 TACCO / AM6254 nodes)
 │   ├── CMakeLists.txt
 │   └── src/
 │       ├── main.c       # Daemon entry point, argument parsing, signal handling

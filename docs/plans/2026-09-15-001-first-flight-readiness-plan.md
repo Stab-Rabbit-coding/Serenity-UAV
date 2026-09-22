@@ -67,6 +67,20 @@ None of these can be made by an agent; each unblocks a whole stream.
   Open-Secure-ESC build, not a LibreServo variant (2026-09-17, `docs/TILT_ACTUATOR_SELECTION.md` §4). D-T5-3 CLOSED (all four nodes placed in
   the cargo section). Residual: owner confirms the adopted rate requirement (TILT-CTL-07: 144 °/s
   no-load, 111 °/s at max efficiency).
+- **D6 — XO board-area lever.** (`avionics/WBS.md` §1.9.2 "XO PCB placement + DRC 0 +
+  routing"). XO's 55x35mm cape is at 90.8% of its two-sided theoretical footprint-area
+  ceiling after the RFD900ux-SMT swap and LoRa-module removal (2026-09-20/21); the
+  auto-placer still leaves 43 of 121 footprints unplaced, both faces already spanning the
+  full board edge-to-edge — a placer packing-density limit, not a remaining scope problem.
+  Pick one: (i) cut one more subsystem (candidates: WiFi/BT WL1837MOD, if redundant with
+  another node's own WiFi/BT capability — not yet checked), (ii) grow the board past
+  55x35mm (mechanical/mounting impact on the cape stack-up not yet assessed), or (iii)
+  finish placement by hand in the KiCad GUI (as done for FlightEngineer's much lower
+  63%-area board, though XO's tighter margin makes hand-placement slower). Blocks closing
+  Stream B's B4 unit / the closeout plan's U7 unit for XO specifically — Flight Engineer's
+  own DRC closeout is unblocked and can proceed independently. See
+  `docs/plans/2026-08-25-001-finish-avionics-plan.md`'s 2026-09-21 status addendum for the
+  current CI-measured violation count (102 hard, concentrated on the unplaced footprints).
 
 ## Work streams
 
@@ -136,7 +150,7 @@ D1..D5 (owner, one sitting)
    ├─ A7 ─┘                                       ┐
    │                                              ├─ Phase 5 ladder
    ├─ B1 → B5 → C1/C2/C3 ────────────────────────┤
-   ├─ B2, B3, B4 → B6 (fab) ─────────────────────┤
+   ├─ B2, B3, B4 (XO half needs D6) → B6 (fab) ──┤
    ├─ C4                                          │
    └─ D (regulatory), A8 (if D1=full) ───────────┘
 ```
@@ -181,3 +195,38 @@ Not automatable: KiCad ERC/DRC per board (`kicad` skill), FreeCAD tilt sweep at
 
 *Plan drafted by Claude (Claude Opus 5, Anthropic) under the author's direction,
 2026-09-15, per `AGENTS.md` §3 AI attribution.*
+
+## Status 2026-09-21 (Stream B progress — XO, Flight Engineer, Commo)
+
+The "Avionics PCBs" row of the "Where the project actually is" table above ("Rev S
+schematics; no board has clean DRC") is now **partially stale**: XO and Flight
+Engineer were both fully rebuilt schematic-first this session and are at **ERC 0**
+(full detail in `docs/plans/2026-08-25-001-finish-avionics-plan.md`'s own
+2026-09-21 status addendum, avoiding duplication here). Neither board is at DRC 0
+yet — XO has 78/121 footprints placed with an open owner decision on the remaining
+43 (cut more / grow board / manual finish), Flight Engineer has all 151 placed with
+29 hard DRC items localized to two footprint clusters. Commo's schematic had a
+file-corruption bug (bare `lib_id`s crashing `kicad-cli`) found and fixed; its
+schematic now clears the project's real (accepted-class-aware) CI gate at 0 hard,
+though its PCB/DRC side is untouched.
+
+Also resolved this session: XO's RFD900x SiK radio (which physically overhung the
+cape) was swapped to the RFD900ux-SMT flush variant; XO's duplicate LoRa module was
+removed since Commo already carries one; mLRS was evaluated and formally rejected
+as a SiK-replacement protocol (would collapse XO/Commo's intended link-path
+diversity onto one LoRa failure domain) — logged in `avionics/WBS.md` §1.9.2.
+
+**Stream B (avionics) status against this plan's B4 unit** ("XO + Flight Engineer...
+DRC 0 hard each"): **not yet closed** for either board — schematic side is done
+(ERC 0), PCB side is open work with a real, CI-verified violation count (102 XO /
+29 Flight Engineer, via `tools/validate_kicad.py`). PR #207 carries this session's
+work; its own `KiCad Validation` CI check surfaced these counts for the first time
+(it was previously gated behind a failing lint job) and the owner elected to accept
+it as red/documented follow-up rather than block the PR on it. Observer and
+CAN-PERIPH-GW-1 (B3/B4's other named boards) were only surveyed this session — no
+schematic or PCB work done; CAN-PERIPH-GW-1 carries a standing "do not re-run its
+PCB generator without explicit owner permission" constraint (the current PCB is the
+owner's own hand-packed layout).
+
+*Status update by Claude Sonnet 5, Anthropic, 2026-09-21, per `AGENTS.md` §3 AI
+attribution.*

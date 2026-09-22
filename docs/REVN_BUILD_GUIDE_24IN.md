@@ -184,8 +184,8 @@ detailed procedural steps are being consolidated into:
 
 **Steps:**
 1. Install PocketBeagle 2 Industrial × 4 in stacked positions (Shepherd, Inara, River, Simon bays)
-2. Install Wash Cape-A-2 on each FC node (IMU, GPS, encoder feedback)
-3. Install Zoë Cape-B-2 on each CN node (comms, logging, payload control)
+2. Install Wash Pilot on each FC node (IMU, GPS, encoder feedback)
+3. Install Zoë TACCO on each CN node (comms, logging, payload control)
 4. Calibrate ESC throttle endpoints on all 4 EDFs (min/max stick travel mapping)
 5. Calibrate IMU (gyro zero-bias, accel alignment) in benchtop mode
 6. Verify GPS lock (HDOP < 1.5 at 10 satellites minimum)

@@ -46,8 +46,8 @@ extern "C" {
  * ============================================================================
  *
  * The PRU0 MIL-STD-1553B bus controller role and general node-primary role
- * are elected via CAN FD heartbeat (see avionics/firmware/dts/cape-a/
- * k3-am6254-pocketbeagle2-serenity-cape-a2.dts S8, and
+ * are elected via CAN FD heartbeat (see avionics/firmware/dts/Pilot/
+ * k3-am6254-pocketbeagle2-serenity-Pilot2.dts S8, and
  * docs/POWER_DISTRIBUTION.md S10 "T+30s: CAN FD heartbeat election
  * complete; FC1 assumes primary role").  This constant governs the
  * steady-state re-election path: if the current primary's heartbeat frame

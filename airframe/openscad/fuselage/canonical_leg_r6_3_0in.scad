@@ -9,7 +9,8 @@
 // ===========================================================================
 // canonical_leg_r6_3_0in.scad
 // Serenity UAV -- Rev R6 -- Canonical Articulated Landing Leg (hip-pivot)
-// -- 3.0 in (80 mm) BELLY CLEARANCE VARIANT (extended, rough-field option) --
+// -- 3.0 in (80 mm) BELLY CLEARANCE VARIANT (THE FLIGHT ARTICLE, adopted
+// 2026-09-06 -- see docs/LANDING_GEAR_ANALYSIS.md S4.8) --
 // ===========================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
@@ -41,13 +42,22 @@
 //      at 24-in scale.  Ground clearance is an AIRCRAFT SAFETY spec (avoid
 //      a belly/tail strike and keep the hull clear of ground debris during
 //      the landing/absorption stroke) -- it is NOT sized to pass a cargo
-//      box underneath the parked aircraft.  THIS FILE is the extended
-//      3.0 in (80 mm) variant, kept for rough-field / extra-margin
-//      missions -- it is the original Rev R6 design point (2026-07-21)
-//      and the reference the wire schedule is solved against.  The
-//      compact 1.5 in (38.1 mm) default variant is
-//      `canonical_leg_r6_1_5in.scad`.  Both share the identical
-//      bay/foot/wire BOM; only the printed leg-frame length differs.
+//      box underneath the parked aircraft.  THIS FILE is the 3.0 in
+//      (80 mm) variant -- it is the original Rev R6 design point
+//      (2026-07-21) and the reference the wire schedule is solved
+//      against.  **Adopted as the flight article 2026-09-06**
+//      (docs/LANDING_GEAR_ANALYSIS.md S4.8): the tilted-to-vertical
+//      nozzle stack hangs 38-47 mm below the belly datum on every
+//      takeoff/landing, and the compact 1.5 in leg is 27-40 mm below the
+//      minimum safe clearance that drives -- not rescuable within this
+//      leg family.  "The 3.0 in leg is the flight article" (S4.8
+//      verbatim).  The compact 1.5 in variant, `canonical_leg_r6_1_5in.scad`,
+//      is RETIRED to bench/ground-handling use only (props off, no
+//      tilt-to-vertical, the nozzle-clearance driver does not apply).
+//      Both share the identical bay/foot/wire BOM; only the printed
+//      leg-frame length differs.  Cost of the decision: +67 g (0.148 lbm),
+//      symmetric fore/aft (no X/Y CG shift), vertical CG and belly both
+//      rise 41.9 mm (LG-29, open) -- see S4.8 for the full trade.
 //   2. Knee/ankle articulate on-screen; here the leg frame is ONE printed
 //      piece (thigh+shin) and all articulation is at the HIP -- the knee
 //      and ankle discs are canonical styling.  ("Feet Pivot 90 deg" is

@@ -14,7 +14,7 @@ Output tree (relative to this script):
     servos/         DS3218MG, SG90
     bearings/       MF104ZZ, MR63ZZ, 6804
     structural/     CF rods / tubes / bar / plate, PTFE sleeve
-    avionics/       PocketBeagle2, Cape-A-2/B-2, XCVR-49MHZ-2, Flight Engineer PDB, microSD
+    avionics/       PocketBeagle2, Pilot/B-2, XCVR-49MHZ-2, Flight Engineer PDB, microSD
     power/          LiPo packs, automotive fuses, Bourns shunt
     cargo/          N20 winch motor, HX711, DRV8833
     gears/          M=1.0 sector, pinion, bevel pair, crown (resin-print or SDP-SI)
@@ -400,11 +400,11 @@ def gen_pocketbeagle2():
 
 def gen_cape_a2():
     """
-    Cape-A-2 PCB 55 × 35 mm — EMI-hardened Pilot (Flight Control) cape.
+    Pilot PCB 55 × 35 mm — EMI-hardened Pilot (Flight Control) cape.
     Same form factor as PocketBeagle 2 Industrial SBC.
     Includes ISOW1044BDFMR CAN FD isolator, ADM2795EBRWZ RS-485, 2× DP83825I ETH PHY.
     Assembled height ~10 mm (PCB + isolation ICs + JST-GH connectors).
-    BOM: CAPE-A-2 (×4, all FC positions).
+    BOM: Pilot (×4, all FC positions).
     Dimensions verified against Pilot.kicad_pcb Edge.Cuts (X: 121–176, Y: 87.5–122.5 mm).
     """
     pcb = _box(55.0, 35.0, 1.6)
@@ -415,12 +415,12 @@ def gen_cape_a2():
 
 def gen_cape_b2():
     """
-    Cape-B-2 PCB 55 × 35 mm — EMI-hardened XO (Comms / Logging / Payload) cape.
-    Same form factor as PocketBeagle 2 Industrial SBC and Cape-A-2.
+    TACCO PCB 55 × 35 mm — EMI-hardened XO (Comms / Logging / Payload) cape.
+    Same form factor as PocketBeagle 2 Industrial SBC and Pilot.
     Adds MAVLink SiK, LoRa RFM95W, TI WL1837MOD WiFi/BT, SLB9672 TPM 2.0,
     ATF16V8BQL CPLD write-blocker, log microSD.
     Assembled height ~12 mm (RF module stack + JST-GH connectors).
-    BOM: CAPE-B-2 (×4 aircraft), SKIPPER-CAPE-B-2 (×1 GCS).
+    BOM: TACCO (×4 aircraft), SKIPPER-TACCO (×1 GCS).
     Dimensions verified against XO.kicad_pcb Edge.Cuts (X: 121–176, Y: 87.5–122.5 mm).
     """
     pcb = _box(55.0, 35.0, 1.6)
@@ -460,7 +460,7 @@ def gen_flight_engineer_pdb():
 
 def gen_microsd():
     """
-    64 GB microSD card — Cape-B write-blocked flight log.
+    64 GB microSD card — TACCO write-blocked flight log.
     Standard microSD form factor: 15 × 11 × 1.0 mm.
     BOM: MICROSD-LOG (×4 aircraft), SKIPPER-MICROSD-LOG (×1 GCS).
     """
@@ -1069,7 +1069,7 @@ def gen_far_ft_panel():
     LC π-filters + TVS on every line:
       CAN FD ×2 (JST-GH 4P), RS-485 ×1 (JST-GH 3P),
       Ethernet ×1 (RJ45 mag), power rail ×1 (JST-GH 2P).
-    Continuous with the 5 kV isolation chain of Cape-A-2 / Cape-B-2.
+    Continuous with the 5 kV isolation chain of Pilot / TACCO.
     Modelled as panel body + connector protrusion strip on one edge.
 
     BOM: FAR-FT-PANEL (×1 per cage = ×4 aircraft).
@@ -1501,15 +1501,15 @@ _COMPONENTS = [
         gen_cape_a2,
         "avionics",
         "Cape_A2_PCB_55x35mm.stl",
-        "CAPE-A-2",
-        "Cape-A-2 Pilot FC cape PCB 55×35 mm (×4 aircraft)",
+        "Pilot",
+        "Pilot Pilot FC cape PCB 55×35 mm (×4 aircraft)",
     ),
     (
         gen_cape_b2,
         "avionics",
         "Cape_B2_PCB_55x35mm.stl",
-        "CAPE-B-2 / SKIPPER-CAPE-B-2",
-        "Cape-B-2 XO Comms cape PCB 55×35 mm (×4 aircraft + ×1 GCS)",
+        "TACCO / SKIPPER-TACCO",
+        "TACCO XO Comms cape PCB 55×35 mm (×4 aircraft + ×1 GCS)",
     ),
     (
         gen_xcvr_49mhz2,

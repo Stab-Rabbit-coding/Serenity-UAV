@@ -36,7 +36,7 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
         source of truth, matching the as-placed PCB except for the topology changes below.
         Migration is driven by an auditable generator (`gen_commo_sch.py`, repository script
         convention) and gated on `kicad-cli sch erc` / `pcb drc`.
-        - **DROP J1 (JST-GH-6P "CAPE-B IF").** The modem host UART moves onto the PB2
+        - **DROP J1 (JST-GH-6P "TACCO IF").** The modem host UART moves onto the PB2
             passthrough rails: modem TX → `UART_RCRS_RX` (PB2-P1 pin 15), modem RX →
             `UART_RCRS_TX` (PB2-P1 pin 16). This honors the root-`CLAUDE.md` "replace JST
             GH 6P with P1+P2 socket rails" intent (chosen over the lower-rework "keep J1"
@@ -139,8 +139,8 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
         - [ ] Pad 9 (ANT) and pad 13 (3.3V) carry no net — module has no antenna or power path
         - [ ] DIO0–DIO5 (pads 7, 11, 12, 14–16) unassigned pending P1-header GPIO budget decision
         - [ ] Footprint pad size (2.95×1.27 mm) is oversized vs. real RFM95W castellated pads
-        - [ ] Footprint physically overlaps CAPE-B IF (JST GH 6P) — needs repositioning
-        - [ ] CAPE-B IF (JST GH 6P) connector is still present and fully wired — "replace JST
+        - [ ] Footprint physically overlaps TACCO IF (JST GH 6P) — needs repositioning
+        - [ ] TACCO IF (JST GH 6P) connector is still present and fully wired — "replace JST
             with P1+P2 socket rails" has NOT happened; verify whether PB2-P1/P2 sockets already
             carry all 6 of its signals before removing it
     - [ ] EMI spacing verified
@@ -240,12 +240,12 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
         PCB-side work is correct just because footprints exist; it was never ERC-checked.
     - Remove RFM95W footprint and all associated SPI routing + LDO supply.
     - Add 2× 20-pin 2.54 mm pass-through socket rails on upper face (upper sockets
-        match Commo P1+P2 pinout; lower pins pass through to Cape-A-2 / PB2-I stack).
+        match Commo P1+P2 pinout; lower pins pass through to Pilot / PB2-I stack).
     - Carry all PB2 P1+P2 signals from lower pins to upper sockets; add 0 Ω options
         on signals consumed by XO (Wi-Fi, SiK, I²C, UART) so they are both used and
         passed through.
-    - Update silk/fab: "Cape-B-2 Rev S1 — XO CN cape"; note Commo header on upper face.
-    - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/CAPE-B-2-S1/`.
+    - Update silk/fab: "TACCO Rev S1 — XO CN cape"; note Commo header on upper face.
+    - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/TACCO-S1/`.
     - **BLOCKS XO + Commo fabrication order.**
 
 - [ ] **Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output**
@@ -268,7 +268,7 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
 
 
 **Superseded 2026-06-21.** XCVR-49MHZ-1 was archived as of Rev Q (2026-06-05) per `CLAUDE.md`
-(`Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q`) and replaced by **Commo**
+(`Cape-A-1, TACCO, and XCVR-49MHZ-1 are archived as of Rev Q`) and replaced by **Commo**
 (XCVR-49MHZ-2 Rev R1), whose schematic, layout, and production-file tasks are tracked under
 §1.2b and §1.2a, not here. The remaining unchecked Phase 2–5 items below were never started and
 will not be pursued on this stub design — Commo's circuit topology (Si5351A DDS + discrete BJT PA
@@ -292,7 +292,7 @@ All Phase 1–3 items must be sequentially complete. Phase 4 verification runs i
 
 - [x] **Evaluate PA options** — **Two-stage discrete BJT selected**: MMBT2222A (SOT-23, driver) + 2N3866 (SOT-39, final). Class-A/AB; +5 V supply direct; ≈ 100 mW ERP; ≈ $1.60 BOM; ≥ 40 dBc harmonic suppression via FL1 LPF (SPICE verify Phase 4). RA07H4047M eliminated (requires 7.2–13.6 V; needs boost converter). *(decided 2026-05-31)*
 
-- [x] **Confirm TCM3105 availability** — TCM3105 confirmed discontinued (TI); no in-production drop-in. **Software Bell 202 AFSK selected**: AM6254 Cape-B MCU generates/decodes audio; TX via MCP4921 SPI 12-bit DAC; RX via LM393 comparator + passive RC bandpass filter. *(decided 2026-05-31)*
+- [x] **Confirm TCM3105 availability** — TCM3105 confirmed discontinued (TI); no in-production drop-in. **Software Bell 202 AFSK selected**: AM6254 TACCO MCU generates/decodes audio; TX via MCP4921 SPI 12-bit DAC; RX via LM393 comparator + passive RC bandpass filter. *(decided 2026-05-31)*
 
 **Phases 2–5 (Schematic, PCB Layout, Verification, Production Files) — not pursued.**
 Superseded before schematic capture began; U1–U6 sub-circuit design, layout, DRC/ERC, and

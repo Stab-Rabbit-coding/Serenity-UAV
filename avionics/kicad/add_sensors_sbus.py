@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-add_sensors_sbus.py — Add sensor and SBUS/XCVR hardware to Cape-A-1 and Cape-B-1
+add_sensors_sbus.py — Add sensor and SBUS/XCVR hardware to Pilot and TACCO
 ===================================================================================
 
-Appends new hardware to CAPE-A-1.kicad_sch and CAPE-B-1.kicad_sch in-place so
+Appends new hardware to Pilot.kicad_sch and TACCO.kicad_sch in-place so
 that the v1 schematics carry the additional components before gen_cape_a2.py and
 gen_cape_b2.py transform them into v2 variants.
 
-CAPE-A-1 additions (Y ≥ 540):
+Pilot additions (Y ≥ 540):
   1.  QMC5883L        — QST I²C magnetometer, LGA-16, fixed addr 0x0D
   2.  INA219AIDR      — TI I²C current/voltage monitor, SOIC-8
   3.  J_VBAT          — JST GH 2-pin battery-voltage sense connector
@@ -15,7 +15,7 @@ CAPE-A-1 additions (Y ≥ 540):
   4b. R_SBUS          — 100 Ω series resistor, 0402
   4c. U_SBUS          — Nexperia 74LVC1G14 Schmitt inverter, SOT-23-5
 
-CAPE-B-1 additions (Y ≥ 540):
+TACCO additions (Y ≥ 540):
   5.  J_XCVR          — JST GH 6-pin transceiver/SBUS shared connector
   6.  U_SBUS_B        — Nexperia 74LVC1G14 Schmitt inverter (XCVR_RX_RAW)
   7.  SW1             — 2-position DIP switch (mode selector)
@@ -44,23 +44,23 @@ import sys
 # File paths (absolute, per project convention)
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-CAPE_A1_PATH = os.path.join(SCRIPT_DIR, "CAPE-A-1.kicad_sch")
-CAPE_B1_PATH = os.path.join(SCRIPT_DIR, "CAPE-B-1.kicad_sch")
+CAPE_A1_PATH = os.path.join(SCRIPT_DIR, "Pilot.kicad_sch")
+CAPE_B1_PATH = os.path.join(SCRIPT_DIR, "TACCO.kicad_sch")
 
 # ---------------------------------------------------------------------------
 # UUID counters
 # ---------------------------------------------------------------------------
-# Cape-A-1 max existing counter: 370  →  new additions start at 400
-# Cape-B-1 max existing counter: 467  →  new additions start at 500
-# Prefix matches the existing CAPE-A-1 / CAPE-B-1 convention.
+# Pilot max existing counter: 370  →  new additions start at 400
+# TACCO max existing counter: 467  →  new additions start at 500
+# Prefix matches the existing Pilot / TACCO convention.
 UUID_PREFIX = "00000000-0000-0000-0000-"
 
-_uuid_counter_a = 400  # Cape-A-1 counter
-_uuid_counter_b = 500  # Cape-B-1 counter
+_uuid_counter_a = 400  # Pilot counter
+_uuid_counter_b = 500  # TACCO counter
 
 
 def next_uuid_a() -> str:
-    """Return the next sequential UUID for Cape-A-1 additions.
+    """Return the next sequential UUID for Pilot additions.
 
     Counter starts at 400 to avoid collisions with existing A-1 UUIDs
     (max existing is 370).  Uses the standard '00000000-0000-0000-0000-'
@@ -76,7 +76,7 @@ def next_uuid_a() -> str:
 
 
 def next_uuid_b() -> str:
-    """Return the next sequential UUID for Cape-B-1 additions.
+    """Return the next sequential UUID for TACCO additions.
 
     Counter starts at 500 to avoid collisions with existing B-1 UUIDs
     (max existing is 467).
@@ -163,7 +163,7 @@ def find_sexp_block(text: str, tag: str) -> tuple:
 
 
 # ===========================================================================
-# lib_symbol definitions — Cape-A-1 components
+# lib_symbol definitions — Pilot components
 # ===========================================================================
 
 
@@ -428,7 +428,7 @@ def lib_sym_74lvc1g14() -> str:
 
 
 # ===========================================================================
-# lib_symbol definitions — Cape-B-1 additional components
+# lib_symbol definitions — TACCO additional components
 # ===========================================================================
 
 
@@ -525,7 +525,7 @@ def lib_sym_sw_dip_x02() -> str:
 
 
 # ===========================================================================
-# Component instance generators — Cape-A-1
+# Component instance generators — Pilot
 # ===========================================================================
 
 
@@ -932,7 +932,7 @@ def inst_u_sbus(cx: float, cy: float, r_sbus_right_tip_x: float) -> str:
 
 
 # ===========================================================================
-# Component instance generators — Cape-B-1
+# Component instance generators — TACCO
 # ===========================================================================
 
 
@@ -1028,7 +1028,7 @@ def inst_j_xcvr(cx: float, cy: float) -> str:
 def inst_u_sbus_b(cx: float, cy: float) -> str:
     """Return the symbol instance block for U_SBUS_B (74LVC1G14 Schmitt inverter).
 
-    U_SBUS_B inverts the XCVR_RX_RAW signal for SBUS use on Cape-B.
+    U_SBUS_B inverts the XCVR_RX_RAW signal for SBUS use on TACCO.
     Placed at (*cx*, *cy*) = (165, 568).
 
     Pin tip positions:
@@ -1281,14 +1281,14 @@ def append_instances(text: str, new_instances: str) -> str:
 
 
 # ===========================================================================
-# Main modification routines — Cape-A-1
+# Main modification routines — Pilot
 # ===========================================================================
 
 
 def modify_cape_a1(src_text: str) -> str:
-    """Apply all Cape-A-1 additions to the schematic text.
+    """Apply all Pilot additions to the schematic text.
 
-    Adds the following components to CAPE-A-1 (Y ≥ 540 region):
+    Adds the following components to Pilot (Y ≥ 540 region):
       1.  QMC5883L magnetometer at (155, 560)
       2.  INA219AIDR battery voltage monitor at (290, 560)
       3.  J_VBAT JST GH 2-pin connector at (370, 557)
@@ -1297,7 +1297,7 @@ def modify_cape_a1(src_text: str) -> str:
       4c. U_SBUS 74LVC1G14 inverter at (180, 627.54)
 
     Args:
-        src_text: Full text of CAPE-A-1.kicad_sch.
+        src_text: Full text of Pilot.kicad_sch.
 
     Returns:
         Modified text with all additions.
@@ -1372,20 +1372,20 @@ def modify_cape_a1(src_text: str) -> str:
         + usbus_block
     )
     text = append_instances(text, all_instances)
-    print("  [A] Appended all Cape-A-1 instance blocks to schematic")
+    print("  [A] Appended all Pilot instance blocks to schematic")
 
     return text
 
 
 # ===========================================================================
-# Main modification routines — Cape-B-1
+# Main modification routines — TACCO
 # ===========================================================================
 
 
 def modify_cape_b1(src_text: str) -> str:
-    """Apply all Cape-B-1 additions to the schematic text.
+    """Apply all TACCO additions to the schematic text.
 
-    Adds the following components to CAPE-B-1 (Y ≥ 540 region):
+    Adds the following components to TACCO (Y ≥ 540 region):
       5.  J_XCVR  JST GH 6-pin connector at (100, 560)
       6.  U_SBUS_B 74LVC1G14 inverter at (165, 568)
       7.  SW1     2-position DIP switch at (235, 562)
@@ -1393,7 +1393,7 @@ def modify_cape_b1(src_text: str) -> str:
       9.  R_SBUS_RX 100 Ω resistor at (268, 564.54)
 
     Args:
-        src_text: Full text of CAPE-B-1.kicad_sch.
+        src_text: Full text of TACCO.kicad_sch.
 
     Returns:
         Modified text with all additions.
@@ -1403,7 +1403,7 @@ def modify_cape_b1(src_text: str) -> str:
     # ------------------------------------------------------------------
     # Step 1: Insert new lib_symbol definitions.
     # 74LVC1G14 and R_SMD are also needed here; SW_DIP_x02 and
-    # Conn_JST_GH_06P are new to Cape-B.
+    # Conn_JST_GH_06P are new to TACCO.
     # ------------------------------------------------------------------
     new_lib_syms = (
         lib_sym_conn_jst_gh_06p()
@@ -1461,7 +1461,7 @@ def modify_cape_b1(src_text: str) -> str:
         + rsbus_rx_block
     )
     text = append_instances(text, all_instances)
-    print("  [B] Appended all Cape-B-1 instance blocks to schematic")
+    print("  [B] Appended all TACCO instance blocks to schematic")
 
     return text
 
@@ -1472,26 +1472,26 @@ def modify_cape_b1(src_text: str) -> str:
 
 
 def main() -> None:
-    """Read both Cape-A-1 and Cape-B-1 schematics, add hardware, write back.
+    """Read both Pilot and TACCO schematics, add hardware, write back.
 
     Process summary:
-      1. Read CAPE-A-1.kicad_sch.
-      2. Apply all Cape-A-1 additions (magnetometer, INA219, VBAT connector,
+      1. Read Pilot.kicad_sch.
+      2. Apply all Pilot additions (magnetometer, INA219, VBAT connector,
          SBUS RC input circuit).
-      3. Write modified CAPE-A-1.kicad_sch.
-      4. Read CAPE-B-1.kicad_sch.
-      5. Apply all Cape-B-1 additions (J_XCVR, U_SBUS_B, SW1, R_XCVR_RX,
+      3. Write modified Pilotcad_sch.
+      4. Read TACCO.kicad_sch.
+      5. Apply all TACCO additions (J_XCVR, U_SBUS_B, SW1, R_XCVR_RX,
          R_SBUS_RX).
-      6. Write modified CAPE-B-1.kicad_sch.
+      6. Write modified TACCO.kicad_sch.
     """
     # -----------------------------------------------------------------------
-    # Process CAPE-A-1
+    # Process Pilot
     # -----------------------------------------------------------------------
     if not os.path.isfile(CAPE_A1_PATH):
         print(f"ERROR: {CAPE_A1_PATH} not found", file=sys.stderr)
         sys.exit(1)
 
-    print(f"\nProcessing CAPE-A-1: {CAPE_A1_PATH}")
+    print(f"\nProcessing PilotCAPE_A1_PATH}")
     with open(CAPE_A1_PATH, "r", encoding="utf-8") as fh:
         cape_a1_src = fh.read()
     print(f"  Read {len(cape_a1_src):,} characters from source")
@@ -1506,7 +1506,7 @@ def main() -> None:
         f"back to {CAPE_A1_PATH}"
     )
 
-    # Quick sanity checks for Cape-A-1
+    # Quick sanity checks for Pilot
     checks_a = [
         ("QMC5883L", True),
         ("INA219AIDR", True),
@@ -1533,18 +1533,18 @@ def main() -> None:
             all_ok_a = False
         print(f"    {status}: '{token}' {'present' if found else 'absent'}")
     if all_ok_a:
-        print("  All Cape-A-1 checks PASSED.")
+        print("  All Pilotecks PASSED.")
     else:
-        print("  WARNING: One or more Cape-A-1 checks FAILED.", file=sys.stderr)
+        print("  WARNING: One or more Pilot checks FAILED.", file=sys.stderr)
 
     # -----------------------------------------------------------------------
-    # Process CAPE-B-1
+    # Process TACCO
     # -----------------------------------------------------------------------
     if not os.path.isfile(CAPE_B1_PATH):
         print(f"ERROR: {CAPE_B1_PATH} not found", file=sys.stderr)
         sys.exit(1)
 
-    print(f"\nProcessing CAPE-B-1: {CAPE_B1_PATH}")
+    print(f"\nProcessing TACCO: {CAPE_B1_PATH}")
     with open(CAPE_B1_PATH, "r", encoding="utf-8") as fh:
         cape_b1_src = fh.read()
     print(f"  Read {len(cape_b1_src):,} characters from source")
@@ -1559,7 +1559,7 @@ def main() -> None:
         f"back to {CAPE_B1_PATH}"
     )
 
-    # Quick sanity checks for Cape-B-1
+    # Quick sanity checks for TACCO
     checks_b = [
         ("Conn_JST_GH_06P", True),
         ("74LVC1G14", True),
@@ -1587,9 +1587,9 @@ def main() -> None:
             all_ok_b = False
         print(f"    {status}: '{token}' {'present' if found else 'absent'}")
     if all_ok_b:
-        print("  All Cape-B-1 checks PASSED.")
+        print("  All TACCO checks PASSED.")
     else:
-        print("  WARNING: One or more Cape-B-1 checks FAILED.", file=sys.stderr)
+        print("  WARNING: One or more TACCO checks FAILED.", file=sys.stderr)
 
     print("\nadd_sensors_sbus.py complete.")
     if not (all_ok_a and all_ok_b):

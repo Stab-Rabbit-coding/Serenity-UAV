@@ -55,13 +55,13 @@
 <text x="968" y="283" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
 <circle cx="776" cy="299" r="9" fill="#006db7"/>
 <text x="776" y="303" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
-<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Provision SLB9672 TPM 2.0 on CAPE-A-1 and CAPE-B-1 of each node (8 total)</text>
+<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Provision SLB9672 TPM 2.0 on Pilot and TACCO of each node (8 total)</text>
 <circle cx="776" cy="323" r="9" fill="#006db7"/>
 <text x="776" y="327" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
 <text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Generate unique key material per node; seal to TPM non-reversible</text>
 <circle cx="776" cy="347" r="9" fill="#006db7"/>
 <text x="776" y="351" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
-<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Enable μSD hardware write-blocker on log card slot of each CAPE-B-1</text>
+<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Enable μSD hardware write-blocker on log card slot of each TACCO</text>
 <circle cx="776" cy="371" r="9" fill="#006db7"/>
 <text x="776" y="375" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
 <text x="792" y="376" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Enable signed-message enforcement: all CAN/ETH/1553 traffic authenticated</text>
@@ -76,7 +76,7 @@
 <polygon points="176.0,411.0 232.3,378.5 187.3,352.5 131.0,385.0"   fill="#dde4ea"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="176.0,408.0 232.3,375.5 232.3,378.5 176.0,411.0" fill="#90a4ae" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="232.3,375.5 187.3,349.5 187.3,352.5 232.3,378.5" fill="#78909c" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
-<text x="208" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">CAPE-A-1</text>
+<text x="208" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">Pilot</text>
 <polygon points="196.0,383.0 211.6,374.0 196.0,365.0 180.4,374.0"   fill="#a3e635"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="196.0,378.0 211.6,369.0 211.6,374.0 196.0,383.0" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="211.6,369.0 196.0,360.0 196.0,365.0 211.6,374.0" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
@@ -92,7 +92,7 @@
 <polygon points="456.0,411.0 512.3,378.5 470.7,354.5 414.4,387.0"   fill="#dde4ea"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="456.0,408.0 512.3,375.5 512.3,378.5 456.0,411.0" fill="#90a4ae" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="512.3,375.5 470.7,351.5 470.7,354.5 512.3,378.5" fill="#78909c" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
-<text x="488" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">CAPE-B-1</text>
+<text x="488" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">TACCO</text>
 <polygon points="466.0,383.0 478.1,376.0 466.0,369.0 453.9,376.0"   fill="#ffe0c0"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="466.0,378.0 478.1,371.0 478.1,376.0 466.0,383.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="478.1,371.0 466.0,364.0 466.0,369.0 478.1,376.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
@@ -116,7 +116,7 @@
 <rect x="96" y="528" width="620" height="90" rx="6" fill="#fffdf6" stroke="#a3e635" stroke-width="2"/>
 <text x="126" y="546" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#2e7d32">SECURITY VERIFICATION CHECKLIST</text>
 <rect x="106" y="550" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.6"/>
-<text x="124" y="562" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">JP2 installed on CAPE-A-1 → LED1 (green) illuminated</text>
+<text x="124" y="562" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">JP2 installed on Pilot → LED1 (green) illuminated</text>
 <rect x="106" y="569" width="14" height="14" rx="2" fill="#ff7518" opacity="0.6"/>
 <text x="124" y="581" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">NX_LATCH measures HIGH at TP_NX test point on COMMS-HAT</text>
 <rect x="106" y="588" width="14" height="14" rx="2" fill="#c62828" opacity="0.6"/>

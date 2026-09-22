@@ -141,7 +141,7 @@ design documents are retained for historical reference only; see links below.
 | GPS patch | 59.4 mm from nose |
 | SiK 915MHz belly | 253.7 mm from nose |
 | 49MHz Part 15 dorsal | 365.8 mm from nose |
-| Avionics | **8× PocketBeagle 2 Industrial (AM6254)** · FC1–FC4 Cape-A · CN1–CN4 Cape-B · DK 2820-100003007-ND · $51.03 ea |
+| Avionics | **8× PocketBeagle 2 Industrial (AM6254)** · FC1–FC4 Pilot · CN1–CN4 TACCO · DK 2820-100003007-ND · $51.03 ea |
 | Navigation lights | ICAO Annex 2 · 14 CFR 91.209 · PCA9685 I²C PWM driver |
 | FAA registration | **N00000 PLACEHOLDER — replace before flight** |
 
@@ -157,7 +157,7 @@ design documents are retained for historical reference only; see links below.
 | Log microSD (Cape-B) | 4× write-blocked | **Unchanged — retained** |
 | Temperature | Commercial 0–70°C | **Industrial −40°C to 85°C** |
 | Onboard MCU | None beyond A53/M4F/PRU | **MSPM0L1105 + 12-bit ADC (future use)** |
-| Cape-A / Cape-B PCBs | Rev K design | **Unchanged — 72-pin header compatible** |
+| Pilot / TACCO PCBs | Rev K design | **Unchanged — 72-pin header compatible** |
 | Propulsion / governor | Rev L dual-EDF PID | **Unchanged** |
 | Part number | — | **100003007 · DK 2820-100003007-ND · $51.03 ea** |
 

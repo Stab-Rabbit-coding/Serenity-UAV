@@ -51,10 +51,10 @@
 //   All bow positions marked VERIFY in slicer before printing.
 // Rev R (2026-06-11): Rev R baseline checkpoint — no geometry changes.
 // Rev S1 (2026-06-09): Shepherd Book avionics bay (Faraday enclosure) on
-//   interior dorsal face.  Book bay: Cape-B-2 (XO) + Cape-A-2 (Pilot) stack,
+//   interior dorsal face.  Book bay: TACCO (XO) +Pilot stack,
 //   60×40×55 mm Faraday tray, 4× M3 bosses + 62×42 mm dorsal access panel.
 //   Ductwork parameters shared with cargo SCAD spec (DUCT_* constants).
-//   Ref: cargo_sect_shell24.scad Rev S4; CLAUDE.md Book bay; CAPE-B-2.kicad_pcb.
+//   Ref: cargo_sect_shell24.scad Rev S4; CLAUDE.md Book bay; TACCO.kicad_pcb.
 // Rev S2 (2026-06-16): Forward sensor and FPV camera positions corrected to
 //   nose face.  Rev S1 positions (X=224/226, Y=CY, Z=CZ±offset) placed all
 //   three apertures on the port LATERAL face (X near X_max=228), not the nose.
@@ -277,7 +277,7 @@ BOSS_AFT_6 = [  99, CY + 38, CZ - 52  ];  // VERIFY: dorsal-stbd quadrant
 //
 // Book is the primary watchdog / fault-detection / authentication SBC stack
 // (CLAUDE.md: Book bay = "Shepherd Book" = forward avionics bay).
-// Cape stack: Cape-B-2 (XO) + PB2-I + Cape-A-2 (Pilot) + PB2-I, 55×35 mm each.
+// Cape stack: TACCO (XO) + PB2-I +Pilot + PB2-I, 55×35 mm each.
 // Faraday enclosure: 5-walled aluminium-sheet tray, 60×40×55 mm external.
 // Hull dorsal skin IS the 6th wall; access cover (72×52 mm) is the EMI lid.
 //
@@ -295,11 +295,11 @@ BOSS_AFT_6 = [  99, CY + 38, CZ - 52  ];  // VERIFY: dorsal-stbd quadrant
 //   Bosses protrude in −Y (downward into interior) from interior dorsal face.
 //   VERIFY each boss clears hull skin and avoids sensor aperture zones in slicer.
 //   Ref: cargo_sect_shell24.scad Rev S4 FARADAY_* / AVINICS_BOSS_* pattern;
-//   CAPE-B-2.kicad_pcb MH1–MH4; CLAUDE.md Book bay; Ruthex RX-M3x5.7.
+//   TACCO.kicad_pcb MH1–MH4; CLAUDE.md Book bay; Ruthex RX-M3x5.7.
 //
 // Cape PCB dimensions (same as cargo SCAD Rev S4):
-CAPE_PCB_X     =  55.0;   // mm, Cape-B-2 / Cape-A-2 PCB X extent
-CAPE_PCB_Z     =  35.0;   // mm, Cape-B-2 / Cape-A-2 PCB Z extent
+CAPE_PCB_X     =  55.0;   // mm, TACCO / Pilot PCB X extent
+CAPE_PCB_Z     =  35.0;   // mm, TACCO / Pilot PCB Z extent
 CAPE_HOLE_DX   =  24.5;   // mm, ±X M2.5 corner hole offset from board centre
 CAPE_HOLE_DZ   =  14.5;   // mm, ±Z M2.5 corner hole offset from board centre
 

@@ -153,7 +153,7 @@ function TabOverview() {
                     cols={["Subsystem", "Change", "Status", "Date"]}
                     accent={C.green}
                     rows={[
-                        ["Avionics / Naming", "Cape-A-2 renamed to Pilot; Cape-B-2 renamed to XO. CAPE-A-2 and CAPE-B-2 KiCad files archived to avionics/kicad/archive/. Pilot.* and XO.* are now the sole active cape design files.", "✓ DONE", "2026-06-10"],
+                        ["Avionics / Naming", "Pilot renamed to Pilot; TACCO renamed to XO. CAPE-A-2 and TACCO KiCad files archived to avionics/kicad/archive/. Pilot.* and XO.* are now the sole active cape design files.", "✓ DONE", "2026-06-10"],
                         ["Avionics / Flight Engineer PDB", "Flight Engineer Power Distribution Board: KiCad pro/sch/pcb generated; DRC 0 shorts; gerbers generated to avionics/kicad/gerbers/. FlightEngineer.md design notes created.", "✓ DONE", "2026-06-10"],
                         ["Airframe / FreeCAD", "SerenityAssembly.FCStd validated: position + quaternion for Head, Cargo, Middle, Rear, Wing×2, Nacelle×2 documented in CLAUDE.md and serenity_assembly.py. Hull-frame axes defined (X = +port, Y = +aft, Z = +dorsal).", "✓ DONE", "2026-06-10"],
                         ["Airframe / Coordinates (R1)", "Hull-frame standardisation: validated placements baked into all 8 primary STLs (tools/bake_hull_frame.py, header marker 'SerenityUAV HULL-FRAME R1'); serenity_assembly.py imports at identity; 48 scripts stamped with the hull-frame standard header. Exceptions: avionics KiCad, Skipper GCS, G-code. Open: nacelle port/stbd label swap vs wings; head-cargo joint axis re-verify.", "✓ DONE", "2026-06-11"],
@@ -431,9 +431,9 @@ function TabAvionics() {
                     <br /><br />
                     <span style={{ color: C.green }}>Rev Q change:</span> All 8 positions use EMI-hardened v2 capes
                     (Pilot / XO + Commo). Placement is uniform v2·v2·v2·v2 nose to tail.
-                    Cape-A-1, Cape-B-1, XCVR-49MHZ-1 designs are archived.
+                    Cape-A-1, TACCO, XCVR-49MHZ-1 designs are archived.
                     <br />
-                    <span style={{ color: C.green }}>Rev R change:</span> Cape-A-2 / Cape-B-2 generic designators retired.
+                    <span style={{ color: C.green }}>Rev R change:</span> Cape-A-2 / TACCO generic designators retired.
                     Pilot and XO are now the sole active cape names in all documentation, design files, and gerbers.
                 </div>
                 <Table
@@ -487,14 +487,14 @@ function TabAvionics() {
                         ["Tamper mesh",   "F.Cu / B.Cu TMESH_P/N nets routed to TPM GPIO — physical intrusion detect"],
                         ["MIL-STD-1553", "PRU Manchester II encoder/decoder; FC1=BC, FC2=standby BC"],
                         ["ADC (ESC telem)","74HC4051 8:1 mux — BDSHOT telemetry demux for 4 ESCs"],
-                        ["DTS overlay",   "k3-am6254-pocketbeagle2-serenity-cape-a2.dts (avionics/firmware/dts/cape-a/)"],
+                        ["DTS overlay",   "k3-am6254-pocketbeagle2-serenity-Pilot2.dts (avionics/firmware/dts/Pilot/)"],
                     ]}
                 />
             </Card>
 
             <Card title="XO — CN Node (EMI-Hardened Comms / Logging / Payload)" accent={C.pink}>
                 <div style={{ fontFamily: M, fontSize: 11, color: C.green, marginBottom: 8 }}>
-                    Rev R: Active design. Cape-B-1 and CAPE-B-2 designators archived. All 4 CN positions use XO.
+                    Rev R: Active design. TACCO and TACCO designators archived. All 4 CN positions use XO.
                 </div>
                 <Table
                     cols={["Feature", "Detail"]}
@@ -515,7 +515,7 @@ function TabAvionics() {
                         ["Tamper mesh",    "Same as Pilot"],
                         ["Cargo GPIO",     "DRV8833 winch H-bridge + HX711 load cell ADC via XO GPIO"],
                         ["MIL-STD-1553",  "PRU Manchester II; CN1=RT 0x01, CN2–CN4 RT addresses"],
-                        ["DTS overlay",   "k3-am6254-pocketbeagle2-serenity-cape-b2.dts (avionics/firmware/dts/cape-b/)"],
+                        ["DTS overlay",   "k3-am6254-pocketbeagle2-serenity-cape-b2.dts (avionics/firmware/dts/TACCO/)"],
                     ]}
                 />
             </Card>
@@ -893,8 +893,8 @@ function TabFiles() {
                         ["XO.kicad_pcb / .kicad_sch", "XO (55×35mm EMI-hardened CN)", "✓ ACTIVE — primary CN cape at all positions"],
                         ["XCVR-49MHZ-2.kicad_pcb / .kicad_sch", "Commo (55×35mm EMI-hardened)", "✓ ACTIVE — primary 49 MHz sub-module"],
                         ["FlightEngineer.kicad_pcb / .kicad_sch", "Flight Engineer PDB Rev A", "✓ ACTIVE — Rev R addition; DRC clean; gerbers generated 2026-06-10"],
-                        ["CAPE-A-2 / CAPE-B-2", "v2 generic cape designators", "ARCHIVED — avionics/kicad/archive/ (Rev R 2026-06-10; renamed Pilot/XO)"],
-                        ["CAPE-A-1 / CAPE-B-1 / XCVR-49MHZ-1", "v1 standard capes", "ARCHIVED — avionics/kicad/archive/ (Rev Q 2026-06-05)"],
+                        ["CAPE-A-2 / TACCO", "v2 generic cape designators", "ARCHIVED — avionics/kicad/archive/ (Rev R 2026-06-10; renamed Pilot/XO)"],
+                        ["CAPE-A-1 / TACCO / XCVR-49MHZ-1", "v1 standard capes", "ARCHIVED — avionics/kicad/archive/ (Rev Q 2026-06-05)"],
                     ]}
                 />
             </Card>
@@ -923,10 +923,10 @@ function TabFiles() {
                     cols={["File", "Cape", "Status"]}
                     accent={C.teal}
                     rows={[
-                        ["avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts", "Pilot", "✓ ACTIVE"],
-                        ["avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts", "XO", "✓ ACTIVE"],
-                        ["avionics/firmware/dts/cape-a/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts", "Cape-A-1", "ARCHIVED Rev Q"],
-                        ["avionics/firmware/dts/cape-b/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts", "Cape-B-1", "ARCHIVED Rev Q"],
+                        ["avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts", "Pilot", "✓ ACTIVE"],
+                        ["avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dts", "XO", "✓ ACTIVE"],
+                        ["avionics/firmware/dts/Pilot/archive/k3-am6254-pocketbeagle2-serenity-Pilot.dts", "Pilot", "ARCHIVED Rev Q"],
+                        ["avionics/firmware/dts/TACCO/archive/k3-am6254-pocketbeagle2-serenity-TACCO.dts", "TACCO", "ARCHIVED Rev Q"],
                     ]}
                 />
             </Card>
@@ -1001,8 +1001,8 @@ function TabBuildStatus() {
                 ["Flight Engineer PDB KiCad pro/sch/pcb generated", "✓ DONE  Rev R 2026-06-10"],
                 ["Flight Engineer PDB DRC clean (0 shorts)", "✓ DONE  Rev R 2026-06-10"],
                 ["Flight Engineer PDB gerbers generated", "✓ DONE  Rev R 2026-06-10"],
-                ["Cape-A-2 / Cape-B-2 archived; Pilot/XO naming finalised", "✓ DONE  Rev R 2026-06-10"],
-                ["Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived", "✓ DONE  Rev Q 2026-06-05"],
+                ["Cape-A-2 / TACCO archived; Pilot/XO naming finalised", "✓ DONE  Rev R 2026-06-10"],
+                ["Cape-A-1 / TACCO / XCVR-49MHZ-1 archived", "✓ DONE  Rev Q 2026-06-05"],
                 ["Commo RF trace Z₀ = 52.26 Ω", "✓ DONE  PASS"],
                 ["Pilot PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
                 ["XO PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],

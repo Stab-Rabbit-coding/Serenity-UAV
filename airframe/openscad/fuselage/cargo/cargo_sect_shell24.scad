@@ -28,11 +28,11 @@
 //
 // Rev R (2026-06-11): Rev R baseline — consolidated from Rev S4 (2026-06-08); no geometry changes.
 //
-// Rev S4 (2026-06-08): Correct Cape-B-2/Cape-A-2 PCB dimensions — was CAPE-B-1 legacy.
-//   VERIFIED from CAPE-B-2.kicad_pcb Edge.Cuts (X=121..176, Y=87.5..122.5 mm):
-//   Both Cape-B-2 (XO) and Cape-A-2 (Pilot) are 55×35 mm, not the 90×60 mm / 85×55 mm
-//   values used in Rev S2/S3.  Those came from CAPE-B-1's archived footprint referenced
-//   in CAPE-B-2.md; CAPE-B-2 was redesigned to match the 55×35 mm PB2-I footprint.
+// Rev S4 (2026-06-08): Correct TACCO/Pilot PCB dimensions — was TACCO legacy.
+//   VERIFIED from TACCO.kicad_pcb Edge.Cuts (X=121..176, Y=87.5..122.5 mm):
+//   Both TACCO (XO) and Pilot  are 55×35 mm, not the 90×60 mm / 85×55 mm
+//   values used in Rev S2/S3.  Those came from TACCO's archived footprint referenced
+//   in TACCO.md; TACCO was redesigned to match the 55×35 mm PB2-I footprint.
 //   All AVINICS_BOSS_* and FARADAY_ENC_* parameters corrected accordingly:
 //     AVINICS_BOSS_DX: 42 → 25 mm  (tray ±24.5 mm PCB hole + 0.5 mm wall inset)
 //     AVINICS_BOSS_DZ: 27 → 15 mm  (tray ±14.5 mm PCB hole + 0.5 mm wall inset)
@@ -45,13 +45,13 @@
 //   Inara tray Z = 99..139 mm; River tray Z = 24..64 mm; inter-bay gap = 35 mm.
 //   GPS clearances re-verified at new boss positions: nearest boss ≥ 25.0 mm to GPS ✓.
 //   CAPE_PCB_* and CAPE_HOLE_* constants added for cape/tray SCAD cross-referencing.
-//   Ref: CAPE-B-2.kicad_pcb pad MH1–MH4 (2.7 mm drill at ±24.5×±14.5 mm from board ctr).
+//   Ref: TACCO.kicad_pcb pad MH1–MH4 (2.7 mm drill at ±24.5×±14.5 mm from board ctr).
 //
 // Rev S3 (2026-06-08): Faraday enclosure space allocation for avionics bays.
 //   Access panel cuts enlarged 85×55 mm → 95×65 mm (Cape-B PCB 90×60 mm plus
 //   2.5 mm Faraday tray wall each side) to allow Faraday tray insertion from
 //   dorsal face.  Boss offsets updated to Faraday enclosure corner mount pattern:
-//   ±42×±27 mm (was ±40×±25 mm for Cape-B PCB corners directly — PCBs now mount
+//   ±42×±27 mm (was ±40×±25 mm for TACCO PCB corners directly — PCBs now mount
 //   on internal standoffs inside the Faraday tray, not on gondola bosses directly).
 //   Bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) to maintain 10 mm
 //   inter-bay gap for conduit routing between Inara and River enclosures.
@@ -61,12 +61,12 @@
 //   GPS_PORT (Z=104.7) remains within Inara panel (86.5..151.5 mm) ✓.
 //   GPS_STBD (Z=44.7)  remains within River  panel (11.5.. 76.5 mm) ✓.
 //   All boss clearances to GPS Ø36 mm recesses re-verified (min ≥ 43.9 mm) ✓.
-//   Ref: CLAUDE.md §1.4.1 EMI hardening; TODO §1.4.1; Cape-B-2 90×60 mm footprint.
+//   Ref: CLAUDE.md §1.4.1 EMI hardening; TODO §1.4.1; TACCO 90×60 mm footprint.
 //
 // Rev S2 (2026-06-08): Inara and River avionics bay dorsal mounts.
 //   Inara bay (port, Z centre = 118 mm): 4× M3 boss standoffs on interior
-//   dorsal face; 85×55 mm dorsal access panel cut.  Cape-B (XO Cape-A-2,
-//   90×60 mm) mounts on 6 mm standoffs; Cape-A (Pilot Cape-B-2, 85×55 mm)
+//   dorsal face; 85×55 mm dorsal access panel cut.  TACCO (XO Pilot,
+//   90×60 mm) mounts on 6 mm standoffs; Pilot (Pilot TACCO, 85×55 mm)
 //   on 20 mm inter-cape standoffs above (total stack height 29.2 mm).
 //   GPS_PORT (Z=104.7 mm) co-located for minimal SMA routing.
 //   River bay (stbd, Z centre = 45 mm): same boss + panel pattern.
@@ -937,26 +937,26 @@ NSVMT_M3_DEP       =    6.0;        // mm, M3 insert pocket depth (>= insert len
 NSVMT_CONDUIT_W    =   10.0;        // mm, servo lead conduit slot width (X)
 NSVMT_CONDUIT_H    =    6.0;        // mm, servo lead conduit slot height (Y)
 
-// ── Cape PCB dimensions (Rev S4 — verified from CAPE-B-2.kicad_pcb Edge.Cuts) ──
-//   Both Cape-B-2 (XO) and Cape-A-2 (Pilot) share the 55×35 mm PB2-I footprint.
-//   Ref: CAPE-B-2.kicad_pcb X=121..176 mm (55 mm), Y=87.5..122.5 mm (35 mm).
+// ── Cape PCB dimensions (Rev S4 — verified from TACCO.kicad_pcb Edge.Cuts) ──
+//   Both TACCO (XO) andPilot share the 55×35 mm PB2-I footprint.
+//   Ref: TACCO.kicad_pcb X=121..176 mm (55 mm), Y=87.5..122.5 mm (35 mm).
 //   MH1–MH4: 2.7 mm drill (M2.5 nylon standoffs inside tray) at ±24.5×±14.5 mm
 //   from board centre.  Title block: "55x35mm 4L JLCPCB assembled".
-CAPE_PCB_X     =  55.0;   // mm, Cape-B-2 / Cape-A-2 PCB X extent
-CAPE_PCB_Z     =  35.0;   // mm, Cape-B-2 / Cape-A-2 PCB Z extent
+CAPE_PCB_X     =  55.0;   // mm, TACCO / Pilot PCB X extent
+CAPE_PCB_Z     =  35.0;   // mm, TACCO / Pilot PCB Z extent
 CAPE_HOLE_DX   =  24.5;   // mm, ±X M2.5 corner hole offset from board centre
 CAPE_HOLE_DZ   =  14.5;   // mm, ±Z M2.5 corner hole offset from board centre
 
 // ── Avionics bay dorsal mounts — Inara (port) and River (stbd) (Rev S4) ──────
 //
 // CAPE STACK GEOMETRY (Rev Q -2 EMI-hardened capes per CLAUDE.md Rev Q):
-//   Cape-B-2 (XO):  55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
-//   Cape-A-2 (Pilot): 55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
+//   TACCO (XO):  55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
+//  Pilot: 55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
 //   Architecture: hull M3 bosses → Faraday tray body.
 //                 M2.5 nylon standoffs inside tray → PCB corners.
-//   Cape-B-2 ↔ dorsal tray floor: 6 mm standoff + 1.6 mm PCB.
+//   TACCO ↔ dorsal tray floor: 6 mm standoff + 1.6 mm PCB.
 //   PocketBeagle 2 Industrial SOM: 5 mm height above PCB surface.
-//   Inter-cape standoff: 20 mm.  Cape-A-2 + PB2-I: 1.6 + 5 mm.
+//   Inter-cape standoff: 20 mm.  Pilot + PB2-I: 1.6 + 5 mm.
 //   Stack height: 6 + 1.6 + 5 + 20 + 1.6 + 5 = 39.2 mm total.
 //   Cape long axis oriented in X (longitudinal) to align with gondola X span.
 //
@@ -996,7 +996,7 @@ CAPE_HOLE_DZ   =  14.5;   // mm, ±Z M2.5 corner hole offset from board centre
 //       -> now the real longitudinal (Y) footprint dimension
 //     legacy "Z"-named quantities (used to differentiate Inara/River bays)
 //       -> now the real lateral (X) separation-axis dimension
-//   Ref: CAPE-B-2.kicad_pcb pad MH1–MH4; GPS_PORT/STBD co-location analysis;
+//   Ref: TACCO.kicad_pcb pad MH1–MH4; GPS_PORT/STBD co-location analysis;
 //   Ruthex RX-M3x5.7 pullout spec; CLAUDE.md standoff and 2-wall requirements.
 AVIONICS_BOSS_ROT  = [0, 0, 0];    // no rotation -- see DORSAL_ROT note above
 BAY_GAP            =  35.0;        // mm, edge-to-edge gap between Inara/River trays (unchanged intent)
@@ -1012,7 +1012,7 @@ BAY_GAP            =  35.0;        // mm, edge-to-edge gap between Inara/River t
 //   The access panel cover (72×52 mm, copper-foil-lined PETG or 0.5 mm Al sheet)
 //   completes the EMI shield when installed.
 //   Tray body inserts through AVINICS_PANEL_X × AVINICS_PANEL_Y dorsal opening.
-//   Cape-B-2 (XO) and Cape-A-2 (Pilot) PCBs mount on M2.5 internal standoffs.
+//   TACCO (XO) andPilot PCBs mount on M2.5 internal standoffs.
 //   One 25×25×7 mm axial fan per tray on one tray wall; air exhausts into
 //   gondola interior (no hull skin penetrations required).  Intake covered by
 //   6 mm-thick waveguide-below-cutoff honeycomb panel (6 mm cell, attenuation
@@ -1213,7 +1213,7 @@ module nacelle_servo_mount_block(side) {
 // Module: avinics_dorsal_boss
 //   Single M3 heat-set insert boss post on the interior dorsal face, protruding
 //   in −Z (downward into gondola interior).  Provides one corner standoff anchor
-//   for Cape-B avionics PCB (one call per corner of each bay, 4 per bay).
+//   for TACCO avionics PCB (one call per corner of each bay, 4 per bay).
 //   Rev R2 (2026-07-03): corrected to use the real dorsal (Z) axis for depth
 //   and the real (X,Y) plane for in-panel position -- see header note above.
 //   Reuses m3_boss() with AVIONICS_BOSS_ROT = [0,0,0] (no rotation needed).
@@ -1221,7 +1221,7 @@ module nacelle_servo_mount_block(side) {
 //   Boss base fused to interior dorsal face at DORSAL_Z_EXT; extends to
 //   DORSAL_Z_EXT − BOSS_H into gondola interior.
 //   VERIFY each boss clears GPS recess (Ø36 mm, R=18 mm) and GPS M2 holes in slicer.
-//   Ref: Ruthex RX-M3x5.7; Cape-B-2 90×60 mm PCB corner hole pattern; CLAUDE.md.
+//   Ref: Ruthex RX-M3x5.7; TACCO 90×60 mm PCB corner hole pattern; CLAUDE.md.
 // ----------------------------------------------------------------------------
 module avinics_dorsal_boss(x_pos, y_pos) {
     m3_boss([x_pos, y_pos, DORSAL_Z_EXT], AVIONICS_BOSS_ROT);
@@ -1413,7 +1413,7 @@ union() {
             //     4× M3 Faraday tray anchor bosses on interior dorsal face (Z≈DORSAL_Z_EXT).
             //     Boss pattern: ±15 mm (X) × ±25 mm (Y) from bay centre.
             //     GPS_PORT co-located (same X); nearest boss ≥ 5 mm from GPS centre.
-            //     Cape-B-2 (XO) / Cape-A-2 (Pilot) PCBs mount on M2.5 internal standoffs
+            //     TACCO (XO) /Pilot PCBs mount on M2.5 internal standoffs
             //     inside Faraday tray; hull bosses anchor tray body only.
             //     VERIFY boss positions and clearance in slicer before printing.
             //     Ref: Rev S4 dimension correction (Rev R2 axis fix); GPS_PORT recess
@@ -1427,7 +1427,7 @@ union() {
             //      4× M3 Faraday tray anchor bosses on interior dorsal face (Z≈DORSAL_Z_EXT).
             //      Boss pattern: ±15 mm (X) × ±25 mm (Y) from bay centre.
             //      GPS_STBD co-located (same X); nearest boss ≥ 5 mm from GPS centre.
-            //      Cape-B-2 (XO) / Cape-A-2 (Pilot) PCBs mount on M2.5 internal standoffs.
+            //      TACCO (XO) /Pilot PCBs mount on M2.5 internal standoffs.
             //      35 mm inter-bay gap (X) available for conduit and wiring routing.
             //      VERIFY boss positions and clearance in slicer before printing.
             //      Ref: Rev S4 dimension correction (Rev R2 axis fix); GPS_STBD recess

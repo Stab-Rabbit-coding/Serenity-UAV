@@ -1,4 +1,4 @@
-# Cargo Section Layout — Rev T5e (2026-09-16; Rev T5/T5b 2026-09-15 base)
+# Cargo Section Layout — Rev T5f (2026-09-21; Rev T5e 2026-09-16, Rev T5/T5b 2026-09-15 base)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI note:** Drafted by Claude (model: Claude Opus 5, Anthropic) under the author's
@@ -11,6 +11,22 @@ Single source of every station in this document: `tools/cargo_layout_fit.py`
 Run `tools/cargo_layout_fit.py --plot` for the proof (`docs/img/cargo_layout_t5_sections.png`).
 
 > ⚠️ **ENGINEERING REVIEW REQUIRED** — see the notice in `docs/TILT_ACTUATOR_SELECTION.md`.
+
+## 0a. Rev T5f (2026-09-21) — what changed
+
+One addition: the **cargo-door servo gateway** (GW-CARGO-DOOR, a
+`SKIPPER-CAN-PERIPH-GW-PCB` at `N_STACKS=1` hosting the three SG90-class
+door/release servos — `docs/CARGO_DOOR_GATEWAY_SPEC.md`) is placed standing
+transverse on the solid 6.2 mm belly slab at the forward rim of the clamshell
+aperture, Y −17.25..−2, Z 10.2..44.1, on a printed card-edge tray
+(`gateway_door_tray.stl`, 5.0 g) bolted to four new 7 × 7 mm slab bosses
+(X_CL ± 19, Y −13 / −6, M3 heat-set). `cargo_layout_fit.py` PASS (0 hit, 0 near,
+0 pair overlap); the ray-probed pocket has 4 mm to the aperture rim, 2.75 mm to
+the ramp-fairing wall at floor level, 19.5 mm to the chin shelf. Shell re-merged
+(`merge_cargo_interior.py` Rev T5f: `t5_gw_door_bosses`, unclipped — the slab is
+in the ramp void of the outer-skin envelope — and carved out of `DUCT_CUT`).
+`DRV8833-CARGO` + `cargo_drv8833_tray.stl` are retired by it. Shell 287.7 cm³ / 302.1 g
+(+0.5 g), watertight, one body; all §7 gates re-run PASS.
 
 ## 0. Rev T5e (2026-09-16) — what changed
 
@@ -50,6 +66,7 @@ hoist line at Y 55.5. What was built instead:
 | Chin avionics nodes N1 CN2 (port) / N3 CN3 (stbd) | X_CL + 5..42 / − 5..−42, Y −58..0, Z 66..88, lying flat, connector edges inboard on a shared 10 mm cable channel | PB2I + cape in foil pouch on `chin_node_shelf.stl` (plate Y −52..1.6, Z 63.6..66; two cam straps each) | 4 × 10 mm floor bosses at (X_CL ± 30, Y −49) and (X_CL ± 20, Y −33, on the ramp fairing), M3 heat-set |
 | Cargo Observer tray | X_CL ± 38.4, Y 108.5..128.5, Z 14.2..85, standing (board plane transverse); nadir camera on the top edge looking forward-down through the clamshell aperture | envelope of `cargo_vera_faraday.scad` Rev S1 (76.8 × 70.8 × 20) — tray SCAD to be re-authored in hull frame to these bosses (OBS-CARGO) | 4 × belly bosses (X_CL ± 30, Y 112.5 / 117) forward of the splice-collar ring, M2.5 heat-set |
 | Tilt controller board (per side) | card-edge rails on the bracket web's **outboard** face, Y 55..97.9, Z 83..119.5, component side toward the web | Open-Secure-ESC tilt controller build `6s/10A/BRUSHED_CAN_485_isolation` (REF-ESC-001), ≤ 42.9 × 36.5 mm, ≤ 4 mm parts web-side | rails + cable tie |
+| Cargo-door servo gateway (GW-CARGO-DOOR) | board X_CL ± 24.5, Y −14.5..−12.9 (standing transverse, component side aft), Z 15.6..41.1; parts to Y −3.9 aft / −17.5 fwd; tray X −196..−143.75, Y −17.25..−2, Z 10.2..44.1 | `gateway_door_tray.stl` (card-edge rails, keeper tie) + `CAN-PERIPH-GW-DOOR` (`N_STACKS=1`) — `docs/CARGO_DOOR_GATEWAY_SPEC.md` | 4 × 7 mm slab bosses at (X_CL ± 19, Y −13 / −6), M3 heat-set (Rev T5f) |
 | Flight battery | X −194.85..−144.85, Y −58..+84, Z 90..128 (centred, longitudinal) | `battery_cradle.stl` (inverted U, roof-hung) | 4 × 10 mm roof hanger bosses at (X −179.85/−159.85, Y −50 / +80), M3 heat-set |
 | Mission payload (README steps 6/9) | 76.2 (X) × 101.6 (Y) × 76.2 (Z) box at the door crown Z 8.72, centred Y 55.5 — long side along Y | keep-out | — |
 | Hoist (Phase 7 reserve) | **twin-line bridle** at X −200.75 / −138.95, Y 55.5; drums Ø16 at Z 133.4..149.4 on a common X axle; two 10 mm roof pedestal bosses at X −211.75 / −127.95 | `CARGO_WINCH_SPECIFICATION.md` needs a Rev D (twin drum) | pedestal bosses, M3 |
@@ -190,6 +207,7 @@ grooves 0.8 mm deep and closed (off-grid ray map).
 ```
 
 Shell: 287.2 cm³, 301.6 g as-printed (T5b 287.8 / 302; T4 338.5 / 355), watertight, one body.
+Rev T5f (2026-09-21) re-merge: see §0a; gates re-run — all PASS; `gateway_door_tray.stl` 4.73 cm³ / 5.0 g, watertight, touches only its own board envelope and bosses.
 Parts (exported STL × 1.05 g/cm³): bracket 16.3 g ×2, worm 6.0 ×2, wheel 6.9 ×2,
 brake guide 2.1 ×2, chin shelf 9.4, battery cradle 39.2. The rendered bracket, worm,
 wheel, guide and shelf were each booleaned against the shell and every layout
@@ -208,3 +226,4 @@ worm/wheel mesh zone 21 mm³, shelf lips in the cable channel).
 | GPS-ANT | Ø36 patch antenna part vs the legacy ANN-MB reference (82 × 60 mm — does not fit the cup) |
 | OBS-CARGO | Envelope PLACED (T5e, §1) and bosses merged; `cargo_vera_faraday.scad` (legacy frame) must be re-authored in hull frame to the 4 belly bosses, with the camera on the top edge looking forward-down through the aperture |
 | A0 | Battery station fixed at Y −58..84 — feed the CG ledger |
+| GW-DOOR-1..7, SERVO-PLACE, DOOR-LATCH | `docs/CARGO_DOOR_GATEWAY_SPEC.md` §8 (Rev T5f): build the `N_STACKS=1` instance; OpenServoCore physical layer; PWM-fallback bench items; two-actuator confirmation; hull-frame placement of the three SG90s (the pocket beside the tray, X ±(27..45) at Z ≤ 20, is the candidate); **the doors have no positive in-flight latch** (finding) |

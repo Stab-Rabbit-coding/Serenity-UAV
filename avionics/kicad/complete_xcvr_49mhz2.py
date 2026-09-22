@@ -798,7 +798,7 @@ def main():
 
     # -----------------------------------------------------------------------
     # BACK-SILK ATTRIBUTION BLOCK  (B.SilkS, mirrored)
-    # Matches CAPE-A/B format for consistency across the avionics suite.
+    # Matches Pilot/B format for consistency across the avionics suite.
     # -----------------------------------------------------------------------
     attr = (
         "49 MHz AX.25 KISS Transceiver\n"

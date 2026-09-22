@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-merge_cargo_interior.py — Rev T5e (2026-09-16; Rev R1 2026-06-30 base)
+merge_cargo_interior.py — Rev T5f (2026-09-21; Rev R1 2026-06-30 base)
+
+Rev T5f (2026-09-21) — four belly-slab bosses for the cargo-door servo
+  gateway tray (GW-CARGO-DOOR, docs/CARGO_DOOR_GATEWAY_SPEC.md) at Y -16..-2
+  under the chin shelf.  Stations: tools/cargo_layout_fit.py GW_*.
 
 Rev T5e (2026-09-16) — layout re-cut after the 2026-09-16 findings:
   * Tilt bracket feet move (top row Z 124.09, foot 2 low at Y 64 / Z 77) for
@@ -1055,6 +1059,26 @@ def t5_observer_bosses():
     return pos, neg
 
 
+def t5_gw_door_bosses():
+    """Rev T5f (2026-09-21): four 7 x 7 mm columns on the solid 6.2 mm belly
+    slab under the chin shelf for the cargo-door servo GATEWAY tray
+    (gateway_door_tray.scad; docs/CARGO_DOOR_GATEWAY_SPEC.md).  The slab
+    lies in the ramp VOID of the canonical skin, where the outer-skin
+    envelope has a hole (same reason the fairing is merged unclipped), so
+    these columns are NOT envelope-clipped: they are built from 0.7 mm
+    below the measured slab top (Z 6.18, ray-probed at all four stations
+    2026-09-21) to the tray base, and unioned by build_unclipped_positives.
+    M3 heat-set pilot 6 mm deep from the tray base (4 mm boss + 2 mm into
+    the slab, 4.2 mm of slab left above the skin).  Stations:
+    tools/cargo_layout_fit.py GW_BOSS."""
+    pos, neg = [], []
+    for dx, y in clf.GW_BOSS:
+        x, h = clf.GW_XC + dx, clf.GW_BOSS_H2
+        pos.append(box(x - h, x + h, y - h, y + h, clf.GW_SLAB_Z - 0.7, clf.GW_Z0))
+        neg.append(z_cylinder(x, y, clf.GW_Z0 - 6.0, clf.GW_Z0 + 0.5, T5_M3_D / 2))
+    return pos, neg
+
+
 def t5_gps_cups(shell_tm):
     """Two dorsal GPS patch-antenna cups (O40 boss, O36 x 6 mm flush recess,
     O6.5 SMA bore, 4 x M2 ring pilots on O44) in HULL frame -- replaces the
@@ -1557,8 +1581,15 @@ def build_negatives(shell_tm, envelope_tm=None):
     """Return (cutters, notes)."""
     cutters, notes = [], []
 
-    cutters.append(box(*DUCT_CUT))
-    notes.append("interior-wall duct removal")
+    # Rev T5f: the door-gateway tray bosses stand on the duct-floor curb this
+    # box leaves (Z 6.2, the "slab"), inside its Y -20..107 / Z >= 8 reach --
+    # carve their four footprints out of the cutter so the unclipped columns
+    # (t5_gw_door_bosses) survive to the tray base at Z 10.2.
+    duct = to_man(box(*DUCT_CUT))
+    for col in t5_gw_door_bosses()[0]:
+        duct = duct - to_man(col)
+    cutters.append(from_man(duct))
+    notes.append("interior-wall duct removal (minus the 4 T5f gateway-boss footprints)")
     cutters.append(box(*APERTURE))
     notes.append("clamshell belly aperture")
 
@@ -1666,6 +1697,9 @@ def build_negatives(shell_tm, envelope_tm=None):
     _p, n = t5_observer_bosses()
     cutters.extend(n)
     notes.append("T5e Observer tray boss M2.5 pilots (4)")
+    _p, n = t5_gw_door_bosses()
+    cutters.extend(n)
+    notes.append("T5f door-gateway tray boss M3 pilots (4)")
     _p, n = t5_ramp_fairing(shell_tm)
     cutters.extend(n)
     notes.append("T5 ramp fairing panel-line grooves (5)")
@@ -1752,7 +1786,11 @@ def build_unclipped_positives(shell_tm):
     in the canonical skin (the ramp fairing sits where the envelope has a
     hole).  They are built to their own outer surface from ray probes."""
     p, _n = t5_ramp_fairing(shell_tm)
-    return p, ["T5 canonical cargo-ramp fairing (skin + frame lip), unclipped"]
+    notes = ["T5 canonical cargo-ramp fairing (skin + frame lip), unclipped"]
+    g, _n = t5_gw_door_bosses()
+    p = list(p) + g
+    notes.append("T5f door-gateway tray slab bosses (4), unclipped -- ramp void")
+    return p, notes
 
 
 def stamp_export(mesh, out_path):
@@ -2053,7 +2091,7 @@ def main():
         ok = repair_exported(OUT_PATH)
         sys.exit(0 if ok else 1)
 
-    print("=== merge_cargo_interior.py  Rev T5e  2026-09-16 ===")
+    print("=== merge_cargo_interior.py  Rev T5f  2026-09-21 ===")
     print(f"source: {BLENDER_SRC}")
     src = trimesh.load(BLENDER_SRC, process=False)
     src.merge_vertices()

@@ -9,16 +9,16 @@
 ## Overview
 
 This directory contains the AM62X device tree overlays that configure the
-PocketBeagle 2 Industrial (AM6254) peripherals for the Serenity UAV Cape-A
-and Cape-B expansion boards.
+PocketBeagle 2 Industrial (AM6254) peripherals for the Serenity UAV Pilot
+and TACCO expansion boards.
 
 | Overlay | Cape | Node | Peripherals |
 | --------- | ------ | ------ | ------------- |
-| `cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dtbo` | Cape-A-2 (Pilot) | FC nodes (4×) | IMU, barometer, TPM, ToF, GNSS, RS-485, CAN FD, Ethernet, EHRPWM, MIL-STD-1553 |
-| `cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dtbo` | Cape-B-2 (XO) | CN nodes (4×) | TPM, LoRa, NOR flash, logging SD, SiK radio, RS-485, 49 MHz (Part 15 §15.235), CAN FD, Ethernet, WiFi, cargo servo, MIL-STD-1553 |
+| `Pilot/k3-am6254-pocketbeagle2-serenity-Pilot2.dtbo` |Pilot | FC nodes (4×) | IMU, barometer, TPM, ToF, GNSS, RS-485, CAN FD, Ethernet, EHRPWM, MIL-STD-1553 |
+| `TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dtbo` | TACCO (XO) | CN nodes (4×) | TPM, LoRa, NOR flash, logging SD, SiK radio, RS-485, 49 MHz (Part 15 §15.235), CAN FD, Ethernet, WiFi, cargo servo, MIL-STD-1553 |
 
-The non-"2" `cape-a`/`cape-b` (Rev Q, Cape-A-1/Cape-B-1) overlays are archived under
-`cape-a/archive/` and `cape-b/archive/` — superseded, not built by default.
+The non-"2" `Pilot`/`TACCO` (Rev Q, Pilot/TACCO) overlays are archived under
+`Pilot/archive/` and `TACCO/archive/` — superseded, not built by default.
 
 ## Prerequisites
 
@@ -42,7 +42,7 @@ make
 
 ```
 
-This produces `cape-a/*.dtbo` and `cape-b/*.dtbo`.
+This produces `Pilot/*.dtbo` and `TACCO/*.dtbo`.
 
 ## Install
 
@@ -63,11 +63,11 @@ Then edit `/boot/firmware/extlinux/extlinux.conf` and add the appropriate
 
 # FC nodes (Cape-A):
 
-fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-cape-a.dtbo
+fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-Pilot.dtbo
 
 # CN nodes (Cape-B):
 
-fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-cape-b.dtbo
+fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-TACCO.dtbo
 
 ```
 
@@ -90,7 +90,7 @@ Linux 6.x kernel tree and have been validated against production hardware.
 GPIO line numbers are logical (relative to `main_gpio0`) and must also
 be verified against the PocketBeagle 2 expansion header pin map.
 
-## Cape-A Peripheral Details
+## Pilot Peripheral Details
 
 | Peripheral | Interface | Linux Driver | Notes |
 | ------------ | ----------- | -------------- | ------- |
@@ -110,7 +110,7 @@ be verified against the PocketBeagle 2 expansion header pin map.
 | MIL-STD-1553B | PRU-ICSS0 PRU0 | n/a | Manchester II 1 Mbps |
 | Extra PWM ch 6-7 | PRU-ICSS0 PRU1 | n/a | 1 µs resolution |
 
-## Cape-B Peripheral Details
+## TACCO Peripheral Details
 
 | Peripheral | Interface | Linux Driver | Notes |
 | ------------ | ----------- | -------------- | ------- |
@@ -137,8 +137,8 @@ the target before loading the overlays:
 
 sudo mkdir -p /lib/firmware/serenity/
 sudo cp pru0-mil1553.out   /lib/firmware/serenity/
-sudo cp pru1-servo-pwm.out /lib/firmware/serenity/    # Cape-A PRU1
-sudo cp pru1-cargo-servo.out /lib/firmware/serenity/  # Cape-B PRU1
+sudo cp pru1-servo-pwm.out /lib/firmware/serenity/    # Pilot PRU1
+sudo cp pru1-cargo-servo.out /lib/firmware/serenity/  # TACCO PRU1
 
 ```
 

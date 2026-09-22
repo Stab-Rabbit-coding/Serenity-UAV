@@ -30,11 +30,19 @@
 #     merge (TODO.md §1.1.1.0a "Cargo section interior boss features").
 #     The legacy SCAD hinge_pin_block() is marked SUPERSEDED accordingly.
 #
-#   Mating geometry (taken from generate_cargo_doors.py / verified against the
-#   baked door STLs cargo_door_{port,stbd}.stl, 2026-06-29):
-#       Door bay (rod span):   hull Y = +2.0 .. +108.0 mm
-#       Port door rod axis:    hull X = -117.6 mm, Z = +5.11 mm
-#       Stbd door rod axis:    hull X = -222.5 mm, Z = +5.22 mm
+#   Mating geometry (CARGO-HINGE-SYNC single source, 2026-09-21):
+#       Door bay (rod span) and the port/stbd rod axis (hull X, Z) are
+#       IMPORTED from cargo_door_hinge_params.py, generated fresh by
+#       generate_cargo_doors.py every time it runs -- not restated here.
+#       Run that script first whenever the cargo shell changes (it moves
+#       the sampled belly surface, and with it the hinge coordinates); this
+#       script then reads the current values automatically. A prior
+#       revision hand-copied these numbers as a plain dict with a "keep in
+#       sync" comment; that drifted stale after a shell re-merge (Rev
+#       T5-T5f) and the retention bores stopped aligning with the door
+#       knuckle bores -- found + fixed 2026-09-21,
+#       docs/CARGO_DOOR_LATCH_SPEC.md S7a. This import is the fix for the
+#       class of bug, not just that one instance.
 #       CF rod:                3.0 mm OD; bore Ø3.3 mm (rod + 0.15 mm/side)
 #       Door knuckles (each):  6 mm OD, 12 mm long, at Y = 8.0/39.3/70.7/102.0
 #
@@ -73,24 +81,37 @@ Run:    python3 generate_cargo_hinge_retention.py
 """
 
 import os
+import sys
 
 import numpy as np
 import trimesh
 
 # ---------------------------------------------------------------------------
-# Mating constants — keep in sync with generate_cargo_doors.py
+# Mating constants — CARGO-HINGE-SYNC single source, 2026-09-21
 # ---------------------------------------------------------------------------
-BAY_Y_FWD = 2.0  # mm — fwd edge of door bay (rod start)
-BAY_Y_AFT = 108.0  # mm — aft edge of door bay (rod end)
+# ROD_AXES / BAY_Y_FWD / BAY_Y_AFT used to be hand-copied constants here,
+# with a "keep in sync with generate_cargo_doors.py" comment instead of
+# code.  They drifted stale after a shell re-merge (2026-06-22 figures
+# still committed after Rev T5-T5f moved the belly surface ~2.1 mm in Z) --
+# the shell-side retention bores stopped aligning with the door knuckle
+# bores, found + fixed 2026-09-21 (docs/CARGO_DOOR_LATCH_SPEC.md S7a). Now
+# imported directly from cargo_door_hinge_params.py, which
+# generate_cargo_doors.py (re)generates every run -- run that script first
+# whenever the cargo shell changes, then this one.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    from cargo_door_hinge_params import BAY_Y_AFT, BAY_Y_FWD, ROD_AXES
+except ImportError as exc:  # pragma: no cover - operator-facing guidance
+    raise SystemExit(
+        "cargo_door_hinge_params.py not found next to this script. Run "
+        "generate_cargo_doors.py first (it writes that file from the "
+        "current cargo shell) -- see CARGO-HINGE-SYNC, "
+        "docs/CARGO_DOOR_LATCH_SPEC.md S7a."
+    ) from exc
 
-# Per-door rod axis (hull X, Z).  Verified against the baked door STLs.
-ROD_AXES = {
-    "port": (-117.6, 5.11),
-    "stbd": (-222.5, 5.22),
-}
-# Inboard direction (toward ship centreline X_CL ≈ -169.85) for each door:
-#   port hinge X = -117.6 is OUTBOARD of CL (less negative) → block extends -X
-#   stbd hinge X = -222.5 is OUTBOARD of CL (more negative) → block extends +X
+# Inboard direction (toward ship centreline X_CL ~ -169.85) for each door:
+#   port hinge X is OUTBOARD of CL (less negative) -> block extends -X
+#   stbd hinge X is OUTBOARD of CL (more negative) -> block extends +X
 INBOARD_SIGN = {"port": -1.0, "stbd": +1.0}
 
 ROD_BORE_D = 3.3  # mm — Ø3.3 bore (3.0 CF rod + 0.15 mm/side clearance)
@@ -183,7 +204,9 @@ def main():
 
     combined = trimesh.util.concatenate(blocks)
     combined.export(out)
-    print("\n  rod axes: port (X=-117.6, Z=5.11), stbd (X=-222.5, Z=5.22)")
+    px, pz = ROD_AXES["port"]
+    sx, sz = ROD_AXES["stbd"]
+    print(f"\n  rod axes: port (X={px:.2f}, Z={pz:.2f}), stbd (X={sx:.2f}, Z={sz:.2f})")
     print(f"  wrote {out}")
     print(
         f"  total blocks={len(blocks)}  facets={len(combined.faces)}  "

@@ -226,7 +226,7 @@ PHASE11_CAPTURE_MM2 = 3090.0
 # Masses for the ledger (g).  Kaylee PCB assembly per FlightEngineer.md
 # "Estimated Mass" (158 g; POWER_DISTRIBUTION.md SS14 says 198 -- flagged);
 # can 1.0 mm 6061 (computed below); nodes per airframe/README.md mass table
-# (PB2-I 13 g, Cape-A-2 31 g, Cape-B-2 40 g) + 5 g pouch each.
+# (PB2-I 13 g, Pilot 31 g, TACCO 40 g) + 5 g pouch each.
 M_FE_PCB = 158.0
 M_FE_PLATE = 25.0  # brass plate + EMC bushings (ASSUMED)
 M_FE_HW = 10.0

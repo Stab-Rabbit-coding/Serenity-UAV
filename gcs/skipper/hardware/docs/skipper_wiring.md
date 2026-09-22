@@ -8,9 +8,9 @@
 
 ## Overview
 
-Skipper's comms node (PB2-I + Cape-B-2 + Commo) connects to the host PC via USB
+Skipper's comms node (PB2-I + TACCO + Commo) connects to the host PC via USB
 (CDC-ECM Ethernet-over-USB or USB serial) and to the antenna system via SMA RF cables.
-The gimbal servos and AS5600 encoders connect to Cape-B-2 servo and I²C outputs.
+The gimbal servos and AS5600 encoders connect to TACCO servo and I²C outputs.
 
 ---
 
@@ -29,13 +29,13 @@ The gimbal servos and AS5600 encoders connect to Cape-B-2 servo and I²C outputs
 |------------------|-------------------------------|------------------------|------------|-------|
 | +5 V (bench)     | 5 V 3 A USB-C supply          | PB2-I J_USB or J_PWR   | 22 AWG     | Bench use only |
 | +5 V (field)     | Field battery → 5 V 5 A BEC  | PB2-I J_PWR (JST-GH 2P)| 22 AWG    | Field use; BEC from 3S–6S LiPo field pack |
-| +5 V gimbal rail | Same 5 V BEC                  | Cape-B-2 J_SERVO VCC   | 22 AWG     | Powers both gimbal servos from Cape-B-2 servo rail |
+| +5 V gimbal rail | Same 5 V BEC                  | TACCO J_SERVO VCC   | 22 AWG     | Powers both gimbal servos from TACCO servo rail |
 
 ---
 
 ## RF Connections (SMA)
 
-| Cape-B-2 Connector | Signal         | Cable Type | Antenna / Device              |
+| TACCO Connector | Signal         | Cable Type | Antenna / Device              |
 |--------------------|----------------|------------|-------------------------------|
 | J_SMA_SIK          | SiK 915 MHz    | LMR-195    | ANT-915-OMNI (stationary) or → RF splitter → ANT-915-YAGI (gimbal) |
 | J_SMA_LORA         | LoRa 915 MHz   | LMR-195    | ANT-915-OMNI (stationary) or → same RF splitter port             |
@@ -54,27 +54,27 @@ The gimbal servos and AS5600 encoders connect to Cape-B-2 servo and I²C outputs
 
 ### Servo Outputs
 
-| Cape-B-2 Pin / Connector | Signal         | Gimbal Connection  | Wire Gauge |
+| TACCO Pin / Connector | Signal         | Gimbal Connection  | Wire Gauge |
 |--------------------------|----------------|--------------------|------------|
 | J_SERVO Ch.0 (PWM)       | Pan servo PWM  | Pan DS3218MG signal | 26 AWG     |
 | J_SERVO Ch.1 (PWM)       | Tilt servo PWM | Tilt DS3218MG signal| 26 AWG     |
 | J_SERVO VCC (6 V rail)   | Servo power    | Both servo +V pins  | 22 AWG     |
 | J_SERVO GND              | Ground         | Both servo GND pins | 22 AWG     |
 
-> Cape-B-2 servo rail is 6 V (from TPS54540 BEC on Flight Engineer PDB for aircraft, or from a
+> TACCO servo rail is 6 V (from TPS54540 BEC on Flight Engineer PDB for aircraft, or from a
 > standalone 6 V BEC on the GCS field power supply).  DS3218MG rated 6 V, 25 kg·cm.
 
 ### Encoder I²C Bus
 
-| Cape-B-2 Pin    | Signal    | AS5600 Connection            | Notes |
+| TACCO Pin    | Signal    | AS5600 Connection            | Notes |
 |-----------------|-----------|------------------------------|-------|
 | J_EXT_I2C SDA   | I²C SDA   | Both AS5600 SDA (shared bus) | 3.3 V logic; 2.2 kΩ pull-up to VDD on breakout |
 | J_EXT_I2C SCL   | I²C SCL   | Both AS5600 SCL (shared bus) | AS5600 uses fixed address 0x36; use MCP23008 GPIO to select active encoder via OTP_ADDRESS pin |
-| J_EXT_I2C VCC   | 3.3 V     | AS5600 VDD                   | 3.3 V supply from Cape-B-2 |
+| J_EXT_I2C VCC   | 3.3 V     | AS5600 VDD                   | 3.3 V supply from TACCO |
 | J_EXT_I2C GND   | Ground    | AS5600 GND                   |       |
 
 > **Address conflict:** Both AS5600 encoders share I²C address 0x36.  Use an MCP23008
-> (already available on Cape-B-2) GPIO expander output to toggle the AS5600_ADDRESS_SELECT
+> (already available on TACCO) GPIO expander output to toggle the AS5600_ADDRESS_SELECT
 > pin on each encoder, or use an I²C multiplexer (TCA9548A at 0x70) to isolate them.
 > The latter is preferred; add TCA9548A between PB2-I I²C bus and encoder breakouts.
 
@@ -82,7 +82,7 @@ The gimbal servos and AS5600 encoders connect to Cape-B-2 servo and I²C outputs
 
 ## Commo Sub-Module
 
-Commo seats on Cape-B-2 J_XCVR header (JST-GH 6P).  No separate wiring required
+Commo seats on TACCO J_XCVR header (JST-GH 6P).  No separate wiring required
 for signal lines.  The RF RP-SMA connector on Commo routes to ANT-49MHZ via RG-58.
 
 ---

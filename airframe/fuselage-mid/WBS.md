@@ -118,7 +118,10 @@
             Y=−305.6), which sits entirely inside the post run (sta 120–580 mm) — the mid-run
             wire, not just the two discrete posts, crosses the door's swing zone and must clear
             it. Door swing envelope = a semicircle radius ≈52–55 mm (measured door width)
-            centered at hinge (X=−117.6 port/−222.5 stbd, Z≈5.1–5.2), spanning only hull Y 2–108.
+            centered at hinge (X=−117.53 port/−222.68 stbd, Z≈3.0–3.5 — corrected 2026-09-21
+            after the doors were regenerated against the current shell, was Z≈5.1–5.2;
+            `docs/CARGO_DOOR_LATCH_SPEC.md` §7a; the ≈2 mm Z shift does not change the
+            recommended Z ≥ 65 mm margin below), spanning only hull Y 2–108.
             `rcrs49_wire_post.scad` still has **no defined shoulder-height Z value** (flagged open
             in its own header) — cannot compute a real clearance margin until that Z is set;
             recommend Z ≥ 65 mm (hinge Z + envelope radius + margin) at any station falling within
@@ -702,7 +705,7 @@
     All 4 spatial conflicts resolved (NSVMT_X_CEN moved AFT to −147.6 mm). Load FOS ≥ 11 vs 4.0
     AUVSI target. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S2** — Inara and River avionics bay dorsal standoffs
-    (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (62×42 mm each) for Cape-B
+    (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (62×42 mm each) for TACCO
     (55×35 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
     colocated for minimal SMA routing. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
@@ -777,6 +780,67 @@ Record: `docs/CARGO_SECTION_LAYOUT.md`, `docs/TILT_ACTUATOR_SELECTION.md`,
 - [ ] **20D VERIFY — mounting-hole spacing (15 mm assumed) and Ø7 boss** against the Pololu 20D dimension diagram before printing the face plate; output-shaft axial rating unpublished (27 N worm thrust at stall — thrust washer fallback).
 - [ ] **CHIN-STRAPS — add 4 × BATT-STRAP-CAM** to the order for the chin node shelf (BOM note on PRINT-CHIN-SHELF).
 - [ ] **Cargo door re-fit (U1)** still open — see 1.1.1.2.1 "Clamshell door halves"; the T5 shell moved no aperture geometry.
+- [x] **Rev T5f — cargo-door servo gateway mount points (2026-09-21, Claude Opus 5).**
+    `GW-CARGO-DOOR` (`docs/CARGO_DOOR_GATEWAY_SPEC.md`) placed standing transverse on the
+    solid 6.2 mm belly slab at the forward aperture rim: board X_CL ± 24.5 / Y −14.5..−12.9 /
+    Z 15.6..41.1, tray `gateway_door_tray.scad` → `.stl` (5.0 g, watertight) at Y −17.25..−2,
+    Z 10.2..44.1; four 7 × 7 mm M3 slab bosses at (X_CL ± 19, Y −13 / −6) merged
+    (`merge_cargo_interior.py` `t5_gw_door_bosses` — UNCLIPPED because the slab lies in the
+    ramp void of the outer-skin envelope, and carved out of `DUCT_CUT`, which otherwise
+    truncates them at Z 8). Ray-probed pocket: 4 mm to the aperture rim, 2.75 mm to the
+    ramp-fairing wall at floor level, 19.5 mm to the chin shelf. `cargo_layout_fit.py` PASS
+    (0 hit / 0 near / 0 overlap); all Rev T5 gates re-run PASS; `validate_stls.py` 80/80.
+    - [ ] **SERVO-PLACE — hull-frame placement of the three SG90s** (port door, stbd door,
+        release) and their brackets. `cargo_door_servo_bracket.stl` /
+        `cargo_release_servo_bracket.stl` are legacy-frame and unplaced (§1.1.0 VERIFY parts);
+        the bell-crank boss item in §1.1.1.2.1 is still open. Candidate: the pocket flanking
+        the gateway tray, X ±(27..45) at Z ≤ 20, Y −20..0 (measured 2026-09-21). Add them as
+        envelopes in `cargo_layout_fit.py`; pigtail lengths in the spec §6 follow.
+    - [x] **DOOR-LATCH — CLOSED 2026-09-21.** `docs/CARGO_DOOR_LATCH_SPEC.md`: each door's
+        bell-crank carries a hook that engages a mortise on a FIXED bracket at the closed
+        position — a hard mechanical stop, not friction or an over-centre linkage; the
+        hook/lip load path bypasses the servo gear train entirely once latched. Quantified:
+        SG90 stall torque (0.177 N·m) < the door-opening moment at V_max=87 kt
+        (0.202 N·m, REF-FAA-002) even at FOS=1 — gear-train-only retention genuinely could
+        not have held at cruise speed. New parts: `door_latch_mechanism.scad` →
+        `door_latch_bracket_{port,stbd}.stl` (3.55 g ea, stbd watertight, port has one
+        cosmetic non-manifold edge — DOOR-LATCH verification §7), `door_horn.stl`
+        (0.92 g ea). FOS_bearing 10.4, FOS_shear ≈3.0 (order-of-magnitude, FDM
+        anisotropic — bench pull-test open, DOOR-LATCH-1). BOM: `PRINT-DOOR-LATCH-BRACKET`,
+        `PRINT-DOOR-HORN`, `PIN-3X10` (`tools/bom_edit_door_latch.py`).
+        - [ ] DOOR-LATCH-1..6 (`docs/CARGO_DOOR_LATCH_SPEC.md` §6): bench pull-test the
+            hook, source/cite the pushrod wire spec, pushrod buckling check, print a real
+            ≥1.5mm hook-root fillet (OpenSCAD CSG attempt was non-manifold), dry-fit against
+            the door + shell once SERVO-PLACE resolves, soft-approach CLOSE sequencing in
+            firmware.
+        - [ ] **DOOR-SEAM-1 — tongue-and-groove interlock at the door-to-door mating edges**
+            (`docs/CARGO_DOOR_LATCH_SPEC.md` §4.2b): the structural half of the cross-link
+            (the software half — one `DOOR_COMMAND` frame drives both doors — already
+            exists). Needs a `generate_cargo_doors.py` edit + both door STLs regenerated;
+            3.0mm tongue/groove, 4.0mm wide, 0.3mm/side clearance, full Y 2..108 seam.
+            **Deliberately NOT a rigid crank-to-crank rod** — two independent open-loop
+            SG90s would fight each other through one (§4.1 of the same doc).
+    - [x] **GW-DOOR-4 — resolved by design, 2026-09-21.** Two independent door actuators
+        (`SERVO-CARGO` qty 3 stands); the cross-link is software (shared `DOOR_COMMAND`
+        frame) + the DOOR-SEAM-1 seam, not a shared actuator — see DOOR-LATCH above.
+    - [ ] **PRINT-GW-DOOR-TRAY hardware at order:** 4 × RX-M3x5.7 inserts, 4 × M3×8 SHCS,
+        3 cable ties (BOM row note).
+    - [x] **CARGO-HINGE-SYNC — CLOSED 2026-09-21, single-sourced.**
+        `generate_cargo_doors.py` now writes `cargo_door_hinge_params.py`
+        (`airframe/stls/fuselage/cargo/`) and `cargo_door_hinge_params.scad`
+        (`airframe/openscad/fuselage/cargo/`) every run — `make_door()` returns
+        `z_hinge` alongside the mesh, and `write_hinge_params()` emits both files from
+        the same four numbers, matching `cargo_layout_t5_params.scad`'s
+        generated-include pattern. `generate_cargo_hinge_retention.py` now `import`s
+        `ROD_AXES`/`BAY_Y_FWD`/`BAY_Y_AFT` from the generated module (fails loudly
+        with a "run generate_cargo_doors.py first" message if it's missing, rather
+        than silently falling back to a stale guess); `door_latch_mechanism.scad` now
+        `include`s the generated `.scad` file instead of hardcoding
+        `HINGE_X_*`/`HINGE_Z_*`. Regression-verified: re-running both generators and
+        re-merging the shell after the switch reproduced byte-identical hinge
+        coordinates and geometry (port X −117.53/Z 3.00, stbd X −222.68/Z 3.49, same
+        as the hand-fixed values) — the refactor changed *how* the numbers reach their
+        consumers, not the numbers themselves.
 
 ###### 1.1.1.2.1a *Cargo Winch — STS3215 Conversion (Rev B, 2026-07-27)*
 
@@ -913,13 +977,16 @@ do not restate its dimensions here.
     inboard end is **not** anchored.
 - [ ] **Firmware — winch state machine** (Simon payload-primary, gateway-side control).
     `WINCH_STATUS` / `WINCH_COMMAND` frames, TPM-signed per [REF-NIST-001 §2.1]; STS3215 bus
-    driver; HX711 re-hosted from Cape-B to the gateway; Shepherd watchdog cuts RAIL-2 on
+    driver; HX711 re-hosted from TACCO to the gateway; Shepherd watchdog cuts RAIL-2 on
     heartbeat timeout (which *engages* the catch). Bus IDs assigned in firmware, not in the
     spec. Cross-ref `avionics/firmware/WBS.md`.
 - [ ] **Re-run the §6 mass/CG table** once the SPT5425LV+LibreServo v2 unit is bench-weighed;
     propagate to `docs/flight_envelope.md` if AUW moves materially.
-- [ ] *(Optional, out of scope for this change)* Move the door/release SG90s onto the
-    gateway's spare `FLEX_PWM_IO` and retire `DRV8833-CARGO` + `cargo_drv8833_tray.stl`.
+- [x] ~~*(Optional, out of scope for this change)* Move the door/release SG90s onto the
+    gateway's spare `FLEX_PWM_IO` and retire `DRV8833-CARGO` + `cargo_drv8833_tray.stl`.~~
+    **CLOSED 2026-09-21, differently** — `FLEX_PWM_IO` on the winch gateway is the catch
+    solenoid, not spare; the door/release SG90s got their OWN gateway (`GW-CARGO-DOOR`,
+    `docs/CARGO_DOOR_GATEWAY_SPEC.md`) and `DRV8833-CARGO` + its tray are retired (qty 0).
 
 **BLOCKS:** Phase 8 cargo winch assembly; `build_guide_23_winch_latch.svg` rebuild;
 Flight Engineer RAIL-2 third BEC channel (`docs/POWER_DISTRIBUTION.md` §11.1).
@@ -1033,7 +1100,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     Export updated STL, re-bake, verify watertight.  See §1.1.0a skid task.  **BLOCKS taxi test.**
 
 - [ ] **Simon bay — define avionics bay in the MIDDLE section (moved here from §1.1.1.2, 2026-06-13).**
-    Simon's stack (Cape-B-2 + Cape-A-2, 55×35 mm both, 39.2 mm stack height) + Faraday tray (60×40×55 mm)
+    Simon's stack (Cape-B-2 + Pilot, 55×35 mm both, 39.2 mm stack height) + Faraday tray (60×40×55 mm)
     mounts in the **middle inner-neck dorsal** interior. Add boss standoffs + dorsal access panel to the
     middle Blender/SCAD source. Verify the inner-neck dorsal band has clearance (middle Z ≈ 1.3..166 mm,
     thin horseshoe section — confirm the inscribed cavity holds the 60×40×55 tray before placing bosses).

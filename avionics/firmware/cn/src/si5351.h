@@ -8,7 +8,7 @@
  *
  * The Si5351A (Skyworks / Silicon Labs) is an I²C-programmable clock
  * synthesiser used as the carrier-frequency DDS on the XCVR-49MHZ-1 board.
- * It is connected to the CN node (AM6254) via the Cape-B I²C bus (J1 pin).
+ * It is connected to the CN node (AM6254) via the TACCO I²C bus (J1 pin).
  *
  * This driver programs CLK0 to one of the five 49 MHz channels licensed for
  * unlicensed operation under 47 CFR Part 15 §15.235 (not FCC Part 95 RCRS —

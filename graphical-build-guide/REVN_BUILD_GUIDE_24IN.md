@@ -192,8 +192,8 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 | Johnson's Paste Wax | 1 tin | 2 coats on all EPS void surfaces (release agent) |
 | 3M 4016 closed-cell gasket tape | 1 roll | Seal all access panel frame lips |
 | PTFE tube 5mm OD × 3mm ID | 6 m | 8 conduits (CAN FD, RS-485, 1553, ETH×4, PWR) |
-| M2.5 nylon hex standoffs 6mm | 16× | Cape-B floor mounts (4 per bay × 4 bays) |
-| M2.5 nylon hex standoffs 20mm | 16× | Cape-A inter-cape spacing |
+| M2.5 nylon hex standoffs 6mm | 16× | TACCO floor mounts (4 per bay × 4 bays) |
+| M2.5 nylon hex standoffs 20mm | 16× | Pilot inter-cape spacing |
 | M2.5 × 8mm SS button screws | 64× | Standoff attachment + panel B/E fasteners |
 | M3 heat-set inserts | 4× | Cargo gondola belly hard points |
 | N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |
@@ -230,8 +230,8 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
 | F — Rear | 15.28–23.98 in (388–609 mm) | EDF access | Bayonet PETG frame |
 
 **4. Install M2.5 nylon standoffs in bays A, B, D, E.**
-- Floor standoffs (6mm): Cape-B (55×35mm) hole pattern
-- Inter-cape standoffs (20mm): Cape-A (55×35mm) hole pattern above Cape-B
+- Floor standoffs (6mm): TACCO (55×35mm) hole pattern
+- Inter-cape standoffs (20mm): Pilot (55×35mm) hole pattern above TACCO
 - Verify 44mm total stack height clears bay void former
 
 **5. Bond wing spar pocket inserts** at wing root stations, both sides. Spar must slide freely in/out for nacelle assembly access.
@@ -521,13 +521,13 @@ After cure:
 Install **CN1 + FC1** in Shepherd's room / Bay A (nose), **CN2 + FC2** in Inara's shuttle / Bay B (dorsal fwd).
 
 **For each bay:**
-1. Seat Cape-B (CN node) on floor standoffs (M2.5 × 6mm). 4 screws.
-2. Seat Cape-A (FC node) on 20mm inter-cape standoffs above Cape-B. 4 screws.
+1. Seat TACCO (CN node) on floor standoffs (M2.5 × 6mm). 4 screws.
+2. Seat Pilot (FC node) on 20mm inter-cape standoffs above TACCO. 4 screws.
 3. Plug 72-pin expansion connector between PB2-I and Cape.
 4. Connect CAN FD, RS-485, 1553, ETH chain connectors per bus harness.
-5. Connect ESC DSHOT signal leads to Cape-A PRU-ICSS header.
-6. Connect servo signal leads (2× tilt servos; 4× RCS valve servos are Phase 11) to Cape-A servo rail.
-7. Connect GPS patch antenna coax to Cape-A GPS header. Mount GPS patch antenna on hull dorsal surface at nearest bay location.
+5. Connect ESC DSHOT signal leads to Pilot PRU-ICSS header.
+6. Connect servo signal leads (2× tilt servos; 4× RCS valve servos are Phase 11) to Pilot servo rail.
+7. Connect GPS patch antenna coax to Pilot GPS header. Mount GPS patch antenna on hull dorsal surface at nearest bay location.
 
 ### ESC Assignment — Cross-Nacelle Redundancy
 
@@ -551,15 +551,15 @@ hover rather than losing one nacelle entirely.
 
 | Signal | From | To | Via |
 |--------|------|----|-----|
-| ESC1 DSHOT (port EDF1) | Cape-A FC1 PRU Ch.0 | ESC1 | Conduit Shepherd's room (Bay A) → port wing root |
-| ESC3 DSHOT (stbd EDF1) | Cape-A FC1 PRU Ch.1 | ESC3 | Conduit Shepherd's room (Bay A) → stbd wing root |
-| ESC2 DSHOT (port EDF2) | Cape-A FC2 PRU Ch.0 | ESC2 | Conduit Inara's shuttle (Bay B) → port wing root |
-| ESC4 DSHOT (stbd EDF2) | Cape-A FC2 PRU Ch.1 | ESC4 | Conduit Inara's shuttle (Bay B) → stbd wing root |
+| ESC1 DSHOT (port EDF1) | Pilot FC1 PRU Ch.0 | ESC1 | Conduit Shepherd's room (Bay A) → port wing root |
+| ESC3 DSHOT (stbd EDF1) | Pilot FC1 PRU Ch.1 | ESC3 | Conduit Shepherd's room (Bay A) → stbd wing root |
+| ESC2 DSHOT (port EDF2) | Pilot FC2 PRU Ch.0 | ESC2 | Conduit Inara's shuttle (Bay B) → port wing root |
+| ESC4 DSHOT (stbd EDF2) | Pilot FC2 PRU Ch.1 | ESC4 | Conduit Inara's shuttle (Bay B) → stbd wing root |
 | ESC5 / rear EDF | — | — | **DEFERRED — Phase 11** (PRU Ch.2 reserved) |
-| Nacelle tilt servo 1 (port) | Cape-A FC1 servo rail | Servo-tilt-port | SERVO-PWR conduit |
-| Nacelle tilt servo 2 (stbd) | Cape-A FC2 servo rail | Servo-tilt-stbd | SERVO-PWR conduit |
+| Nacelle tilt servo 1 (port) | Pilot FC1 servo rail | Servo-tilt-port | SERVO-PWR conduit |
+| Nacelle tilt servo 2 (stbd) | Pilot FC2 servo rail | Servo-tilt-stbd | SERVO-PWR conduit |
 | 4× RCS valve servos | — | — | **DEFERRED — Phase 11** |
-| LED strips | Cape-B CN1 GPIO | WS2812B ×3 | LED wiring harness |
+| LED strips | TACCO CN1 GPIO | WS2812B ×3 | LED wiring harness |
 | CAN FD bus | CN1→FC1→CN2→FC2 | Ring (open at FC2 end) | CAN conduit, 120Ω term at CN1 |
 
 ### Firmware Flash
@@ -612,7 +612,7 @@ Verify full obstacle avoidance in firmware (dual-redundant arrays — A and B co
 
 ## Phase 7 — Cargo System
 
-Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_sect_shell24.stl interior). Install the STS3215 winch train in the aft bay: both pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. **The spool must be supported at both pedestals — never hung off the servo output.** Fit the auto-latch cradle. Wire the HX711 load cell and the STS3215 TTL bus to the cargo-bay CAN-PERIPH-GW (not Cape-B). Bench-calibrate the pawl spring to an 8.0 N ± 1.0 N slip threshold, then test release and retrieval with a 250 g dummy load. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
+Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_sect_shell24.stl interior). Install the STS3215 winch train in the aft bay: both pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. **The spool must be supported at both pedestals — never hung off the servo output.** Fit the auto-latch cradle. Wire the HX711 load cell and the STS3215 TTL bus to the cargo-bay CAN-PERIPH-GW (not TACCO). Bench-calibrate the pawl spring to an 8.0 N ± 1.0 N slip threshold, then test release and retrieval with a 250 g dummy load. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
 
 ---
 
@@ -620,12 +620,12 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 
 1. **Decals and paint.** Airbrush or hand-paint hull sections in Serenity's distinctive brown. Panel lines with thin pilot.
 2. **NAV lights.** Port = red, starboard = green, aft/top = white strobe
-   [REF-FAA-003 §91.209(a)] / [REF-ICAO-001 Ch.3 §3.1.9]. Wire to Cape-B CN4 GPIO.
+   [REF-FAA-003 §91.209(a)] / [REF-ICAO-001 Ch.3 §3.1.9]. Wire to TACCO CN4 GPIO.
 3. **FAA registration.** Display on hull exterior per 14 CFR Part 48 §48.205(b)(1)
    [REF-FAA-001 §48.205] — minimum 3 in (76 mm) characters, clearly visible.
    Replace N00000 on decal sheet with your FAA-issued number.
    Note: 14 CFR Part 47 applies to manned aircraft; the applicable UAS regulation is Part 48.
-4. **Firmware security provisioning.** Program Cape-B CPLD write-blocker (ATF16V8BQL). Provision SLB9672 TPM 2.0 endorsement keys on all 8 nodes. Keys cannot be regenerated without physical node replacement.
+4. **Firmware security provisioning.** Program TACCO CPLD write-blocker (ATF16V8BQL). Provision SLB9672 TPM 2.0 endorsement keys on all 8 nodes. Keys cannot be regenerated without physical node replacement.
 5. **Weight and balance.** Measure actual AUW with battery. CG should be at 40–45% of hull length from nose. Adjust battery position in cargo bay for trim if needed.
 6. **Documentation.** Log all configuration in `governor_config.h`. Archive MAVLink parameter file. Photograph completed build for insurance / forensic baseline.
 

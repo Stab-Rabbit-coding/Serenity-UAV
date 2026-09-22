@@ -63,7 +63,7 @@
  *
  * ODR and bandwidth are configured via CTRL0 (0x09), CTRL1 (0x0A), and
  * CTRL2 (0x0B).  This driver initialises to:
- *   BW  = 100 Hz bandwidth (fastest settling, matches QMC5883L on Cape-A-1)
+ *   BW  = 100 Hz bandwidth (fastest settling, matches QMC5883L on Pilot)
  *   ODR = 100 Hz continuous measurement
  *   CMM_freq_en = 1, Take_meas_M = 1 (enable continuous measurement)
  *

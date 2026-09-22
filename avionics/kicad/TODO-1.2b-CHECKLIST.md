@@ -251,7 +251,7 @@ WINCH-DRV      → WINCH DRV
   ```bash
   python3 avionics/kicad/generate_gerbers.py xo
   ```
-- [ ] Verify output in `avionics/kicad/gerbers/CAPE-B-2-S1/`
+- [ ] Verify output in `avionics/kicad/gerbers/TACCO-S1/`
 - [ ] Inspect gerber files (same checklist as Commo 1.F)
 
 ---
@@ -373,7 +373,7 @@ WINCH-DRV      → WINCH DRV
   - [ ] Edge_Cuts: Closed board outline
   - [ ] Drill (.drl): Hole coordinates reasonable
 
-- [ ] **CAPE-B-2-S1/**: Same checks as Commo
+- [ ] **TACCO-S1/**: Same checks as Commo
 - [ ] **FlightEngineer-S1/**: Same checks as Commo
 
 ### Documentation Updates
@@ -395,7 +395,7 @@ WINCH-DRV      → WINCH DRV
 - [ ] Stage changes:
   ```bash
   git add -A avionics/kicad/Commo/kicads/*.kicad_* avionics/kicad/XO/kicads/*.kicad_* avionics/kicad/FlightEngineer/kicads/*.kicad_*
-  git add avionics/kicad/gerbers/Commo-S1/ avionics/kicad/gerbers/CAPE-B-2-S1/ avionics/kicad/gerbers/FlightEngineer-S1/
+  git add avionics/kicad/gerbers/Commo-S1/ avionics/kicad/gerbers/TACCO-S1/ avionics/kicad/gerbers/FlightEngineer-S1/
   git add avionics/rev-s1/WBS.md TODO.md
   git add avionics/kicad/Commo/Commo.md avionics/kicad/XO/XO.md avionics/kicad/FlightEngineer/FlightEngineer.md
   ```
@@ -416,7 +416,7 @@ WINCH-DRV      → WINCH DRV
     • LoRa/SBUS/XCVR blocks removed from schematic
     • P1/P2 TOP passthrough sockets added
     • ERC 0 new errors; pre-existing 564 warnings documented
-    • Gerbers generated to avionics/kicad/gerbers/CAPE-B-2-S1/
+    • Gerbers generated to avionics/kicad/gerbers/TACCO-S1/
 
   - Flight Engineer Rev S1: Remove 6V BEC, add 5V servo output
     • Schematic: TPS54540 (6V BEC) removed, TPS54620 (5V servo BEC) added
@@ -448,7 +448,7 @@ WINCH-DRV      → WINCH DRV
   - [ ] Flight Engineer 5V servo rail replacement (firmware mapping for servo outputs)
 
 - [ ] Notify PCB fabrication vendor:
-  - [ ] Provide gerbers from avionics/kicad/gerbers/{Commo-S1,CAPE-B-2-S1,FlightEngineer-S1}/
+  - [ ] Provide gerbers from avionics/kicad/gerbers/{Commo-S1,TACCO-S1,FlightEngineer-S1}/
   - [ ] Specify: FR-4, 4-layer, ENIG finish, 1oz copper on signal layers
   - [ ] Quote for 5 units (prototype + spares)
 

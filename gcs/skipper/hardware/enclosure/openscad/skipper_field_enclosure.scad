@@ -14,7 +14,7 @@
 /*
  * skipper_field_enclosure.scad
  * IP65 weatherproof field enclosure for Skipper GCS comms node
- * (PocketBeagle 2 Industrial + Cape-B-2 + XCVR-49MHZ-2 stack)
+ * (PocketBeagle 2 Industrial + TACCO + XCVR-49MHZ-2 stack)
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -22,7 +22,7 @@
  *
  * Description:
  *   Two-part (lid + body) enclosure for Skipper's comms node.  The interior
- *   fits the PB2-I + Cape-B-2 + XCVR-49MHZ-2 stack on standoffs, a 40 mm
+ *   fits the PB2-I + TACCO + XCVR-49MHZ-2 stack on standoffs, a 40 mm
  *   cooling fan, and cable gland locations for RF, USB, power, and servo
  *   feedthroughs.  The lid is retained by M3 screws with a perimeter EPDM
  *   gasket for IP65 ingress protection.
@@ -85,14 +85,14 @@ RF_GLAND_Z      = INT_H * 0.7; /* 5× SMA glands on right wall — upper zone   
 SERVO_GLAND_Z   = INT_H * 0.3; /* Multi-pin servo/I2C connector on left wall  */
 
 /* ---------------------------------------------------------------------------
- * Standoff pattern for Cape-B-2 PCB (55×35mm, M2.5 holes)
+ * Standoff pattern for TACCO PCB (55×35mm, M2.5 holes)
  * Origin at floor centre of interior.
  * ---------------------------------------------------------------------------*/
 STAND_H     = 3.0;  /* Standoff height off floor mm                           */
 STAND_OD    = 5.0;  /* Standoff outer diameter mm                             */
 STAND_ID    = 2.7;  /* M2.5 clearance bore mm                                 */
-PCB_W       = 90.0; /* Cape-B-2 PCB width mm                                  */
-PCB_D       = 60.0; /* Cape-B-2 PCB depth mm                                  */
+PCB_W       = 90.0; /* TACCO PCB width mm                                  */
+PCB_D       = 60.0; /* TACCO PCB depth mm                                  */
 PCB_MOUNT_X = PCB_W / 2 - 3;   /* PCB mounting hole inset from edge mm        */
 PCB_MOUNT_Y = PCB_D / 2 - 3;
 

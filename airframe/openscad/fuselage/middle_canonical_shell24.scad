@@ -28,7 +28,7 @@
 //   Simon is the aft avionics SBC stack (CLAUDE.md: aft EDF control, alternate
 //   nacelle/watchdog, Observer cargo control, 49 MHz primary, SiK backup).
 //   Flight Engineer is the power distribution board (CLAUDE.md: "Everything is shiny.").
-//   Simon bay: Cape-B-2 (XO) + PB2-I + Cape-A-2 (Pilot) + PB2-I; 55×35 mm PCBs.
+//   Simon bay: TACCO (XO) + PB2-I +Pilot + PB2-I; 55×35 mm PCBs.
 //   Faraday tray: 60×40×55 mm external, same spec as cargo Rev S4 and head Rev S1.
 //   4× M3 dorsal boss anchors (±25×±15 mm); 62×42 mm dorsal access panel.
 //   Fan (25×25×7 mm) exhausts into fuselage interior; 22×22 mm honeycomb intake.
@@ -36,7 +36,7 @@
 //     4× M3 boss anchors; 110×70 mm ventral access hatch.
 //   Battery: 6S 4000 mAh LiPo ≈ 145×44×50 mm; ventral, station 190 mm, keel.
 //     Battery tray boss pattern: ±60 mm (X) × ±20 mm (Z) from tray centre.
-//   Ref: cargo_sect_shell24.scad Rev S4; CLAUDE.md FlightEngineer/Simon; CAPE-B-2.kicad_pcb.
+//   Ref: cargo_sect_shell24.scad Rev S4; CLAUDE.md FlightEngineer/Simon; TACCO.kicad_pcb.
 //
 // Mounts:
 //   S3A  -- VL53L5CX port-side ToF,  Array A (FC3), sta 267 mm
@@ -323,9 +323,9 @@ module ant49_cut(pos, rot) {
 }
 
 // ── Cape PCB dimensions (Rev S1 — same spec as cargo Rev S4, head Rev S1) ────
-//   Verified from CAPE-B-2.kicad_pcb Edge.Cuts; title block: "55x35mm 4L JLCPCB".
-CAPE_PCB_X     =  55.0;   // mm, Cape-B-2 / Cape-A-2 PCB X extent
-CAPE_PCB_Z     =  35.0;   // mm, Cape-B-2 / Cape-A-2 PCB Z extent
+//   Verified from TACCO.kicad_pcb Edge.Cuts; title block: "55x35mm 4L JLCPCB".
+CAPE_PCB_X     =  55.0;   // mm, TACCO / Pilot PCB X extent
+CAPE_PCB_Z     =  35.0;   // mm, TACCO / Pilot PCB Z extent
 CAPE_HOLE_DX   =  24.5;   // mm, ±X M2.5 corner hole offset from board centre
 CAPE_HOLE_DZ   =  14.5;   // mm, ±Z M2.5 corner hole offset from board centre
 
@@ -353,7 +353,7 @@ DUCT_CELL_D    =   6.0;   // mm, honeycomb cell diameter (λ/2 cutoff > 25 GHz)
 // ── Simon avionics bay — dorsal interior, mid-fuselage (Rev S1) ──────────────
 //
 // Simon (CLAUDE.md: aft avionics bay) is the primary aft-EDF and alternate
-// watchdog SBC.  Cape-B-2 (XO) + PB2-I + Cape-A-2 (Pilot) + PB2-I stack.
+// watchdog SBC.  TACCO (XO) + PB2-I +Pilot + PB2-I stack.
 //
 // DORSAL INTERIOR FACE Y:
 //   Dorsal exterior ≈ CY + 62 = -5 mm.  Interior face ≈ -5 - 2.5 = -7.5 mm.
@@ -371,7 +371,7 @@ DUCT_CELL_D    =   6.0;   // mm, honeycomb cell diameter (λ/2 cutoff > 25 GHz)
 //   Boss X: CX ± 25 = 155.95 and 205.95 mm.
 //   Boss Z: CZ ± 15 = 21.47 and 51.47 mm.
 //   VERIFY bosses sit on flat interior dorsal face in slicer before printing.
-//   Ref: FARADAY_* dims above; CAPE-B-2.kicad_pcb MH1–MH4; Ruthex RX-M3x5.7.
+//   Ref: FARADAY_* dims above; TACCO.kicad_pcb MH1–MH4; Ruthex RX-M3x5.7.
 SIMON_BOSS_ROT    = [90, 0, 0];    // rotate cylinder: +Z → −Y (protrudes down into interior)
 SIMON_X_CEN       = CX;            // mm, bay X centre = 180.95 mm
 SIMON_Z_CEN       = MID_Z;         // mm, bay Z centre =  36.47 mm
