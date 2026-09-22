@@ -197,6 +197,156 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     would have made XO's board-area crisis worse, not better. Kept for the record per the
     project's "explicit rejection with reasons" ideation discipline — do not re-propose mLRS for
     XO or any other node carrying a LoRa link elsewhere in the fleet.
+- [ ] **APPROVED DIRECTION (2026-09-21, supersedes the same-day initial
+    rejection below): relocate SiK (RFD900ux-SMT) from XO to Commo, remove
+    Commo's LoRa (RFM95W).** Considered via `ce-ideate` (targeted
+    primary-source analysis, not the full multi-agent dispatch — disclosed).
+    Initial pass flagged three findings and rejected the idea; the owner
+    overruled two of the three as acceptable tradeoffs and asked for the
+    third to be checked against real numbers:
+    - **Firmware rewrite (SiK↔LoRa/AX.25 protocol stacks on both hosts):
+      owner-accepted.** Rationale: "firmware can be rewritten more easily
+      than parts can be manufactured" — a real cost, but not a blocker.
+    - **Commo's power budget (250 mA documented vs SiK's 1A Tx peak):
+      owner-accepted.** Commo is already the fleet's high-power radio-comms
+      cape by design; per the owner, absorbing SiK's draw there is "mostly
+      just moving the power requirement from XO, not building a whole new
+      power distribution rail from the batteries."
+    - **Footprint headroom: CHECKED, confirmed sufficient.** Commo's actual
+      `Commo.kicad_pcb` (not estimated) carries 81 footprints at **1342.7
+      mm^2 (34.9%)** of the 3850 mm^2 two-sided ceiling — LoRa's own real
+      placed courtyard is 307.4 mm^2 (not the 289 mm^2 footprint-generator
+      estimate used in the first pass). Remove LoRa -> 1035.3 mm^2 (26.9%);
+      add RFD900ux-SMT (666.0 mm^2, same courtyard as XO's own instance) ->
+      **1701.3 mm^2 (44.2%)** — comfortably under the ~70% guideline ceiling
+      for Commo's 4-layer stackup (`Commo.md` "Layer stackup: 4-layer"),
+      leaving ~994 mm^2 of headroom even against that conservative bar.
+      Commo was never remotely area-constrained the way XO is.
+    **Resolved 2026-09-21 — XO's replacement link decided: mLRS on a Seeed
+    Wio-E5 module.** Removing SiK from XO clears ~666 mm^2 there; what fills
+    the slot was a separate decision from the earlier mLRS-for-SiK rejection
+    (that rejection assumed XO would still carry a SiK-class self-contained
+    modem in parallel with a new LoRa-family link, collapsing path diversity
+    — here XO no longer carries SiK at all, so a LoRa-family link on XO does
+    not collapse anything; the fleet still ends up with one SiK-class link
+    (now on Commo) and one LoRa-class link (now on XO), same split as today).
+    - **mLRS vs. bare LoRa+custom firmware:** mLRS chosen — closest
+      like-for-like replacement for what SiK actually did (MAVLink-transparent
+      telemetry + bidirectional RC + frequency hopping, out of the box,
+      github.com/olliw42/mLRS), vs. writing a new protocol stack from scratch.
+    - **Target MCU: STM32WLE5 (mLRS's own primary-supported target), NOT a
+      tiny non-ARM MCU.** A CH32V006-class RISC-V MCU was considered and
+      rejected: mLRS's firmware is confirmed ARM-only (STM32F103/G4/L4/F3/
+      WLE5, or ESP32/ESP8285) with **no RISC-V support in the codebase at
+      all** — this is a firmware-architecture hard-stop, not a size
+      tradeoff, and CH32V006 also has no integrated radio (would still need
+      a separate discrete Semtech LoRa chip) and only 8KB RAM vs. the
+      32-64KB SRAM mLRS's codebase assumes. STM32WLE5 has the LoRa radio
+      **integrated in the die** (verified against ST's own datasheet,
+      `avionics/datasheets/stm32wle5jc.pdf`): UFQFPN48 (7x7mm) or UFBGA73
+      (5x5mm) package, up to 256KB flash / 64KB SRAM — single-chip courtyard
+      ~36-64mm^2, smaller than the bare RFM95W module (289 mm^2) it's
+      replacing, and a rounding error against the ~666 mm^2 SiK frees up.
+    - **Hardware form factor: pre-certified module (Seeed Wio-E5), not a
+      bare-chip layout.** Considered Seeed Wio-E5 vs. EByte E77-MBL (mLRS's
+      two suggested "easy" pre-certified options) on supply-chain grounds:
+      EByte is Chengdu Ebyte Electronic Technology Co., Ltd. (Chengdu,
+      China) with no public schematics/design files. Seeed Wio-E5 is
+      designed by Seeed Technology Co., Ltd. (Shenzhen, China HQ; US offices
+      in Austin/San Francisco are sales/support only, not manufacturing —
+      no US fab exists for this product) but **publishes full open-source
+      schematics/KiCad source/documentation** for the module itself, and the
+      underlying silicon (STM32WLE5) is from STMicroelectronics N.V., a
+      company incorporated in the Netherlands — satisfies the project's
+      source-control requirement on the chip even though final module
+      assembly is in China. **Owner's call**, made explicitly on these
+      tradeoffs (open documentation + EU-domiciled silicon outweighing
+      Chinese module assembly, vs. EByte's closed documentation with no
+      offsetting benefit).
+    **Implemented 2026-09-21 — both boards' schematics rebuilt, ERC 0 on
+    both.** XO: `gen_xo_sch.py` regenerated with WIOE5 (mLRS/Wio-E5) IC
+    entry replacing the SIK entry, plus a second TPS62933 regulator
+    (`U-1V8RF`) sharing the RF 1.8V rail instead of a separate TLV75718
+    LDO (owner's "one bigger regulator, not two" call) — `kicad-cli sch
+    erc` = **0 violations**. Commo: since `gen_commo_sch.py` is PCB-first
+    and confirmed drifted (do not re-run), the LoRa->SiK swap was done via
+    a new one-off script, `avionics/kicad/Commo/scripts/swap_lora_for_sik.py`
+    (direct S-expression lib_symbol + instance + wiring surgery, matching
+    Commo's existing per-part symbol convention). Also fixed, in the same
+    pass, 2 pre-existing dangling-net bugs unmasked once the swap's
+    incidental ERC improvements exposed them clearly: `RF_ANT_SW` (a T/R
+    switch antenna pin) was on a differently-named net one row away from
+    the already-working ANT filter chain — renamed to merge; and
+    `PA_EMIT`/`U3B` emitter-degeneration resistor was in-circuit but the
+    "PA 100mW" (2N3866) transistor's own emitter pin was wired straight to
+    GND, bypassing the resistor — rewired onto `PA_EMIT`. 37 PB2-header
+    passthrough signals genuinely unused by Commo (RMII0/1_*, SDIO_*,
+    PWM_CH*, WINCH_*, LOAD_CELL_*, TPM_*, PHY1_*, I2C0_*, MCAN1_*, RS485_*,
+    CAN_STB, PRU_1553_*) were converted from `global_label` to `no_connect`,
+    matching the same-meaning convention already proven ERC-clean on Pilot
+    and XO. `DDS_FSYNC` (the MCP4921 TX DAC's SPI chip-select, previously
+    never routed to a controller pin) was wired to PB2-P1 pin 26 — the
+    exact pin freed by the LoRa->SiK swap (was `SPI1_CS_LORA`, now unused
+    since SiK talks UART not SPI) — **owner's explicit call** (asked
+    directly rather than guessing a GPIO assignment). `kicad-cli sch erc`
+    = **0 violations** on Commo too (down from 45: 43 pre-existing +
+    3 incidentally introduced then fixed by the swap itself).
+    **PCB sync (schematic-driving-PCB, not the reverse):** XO's PCB
+    regenerated via `gen_xo_pcb.py` (143 footprints, 135 nets; 86.1% of
+    the 2-sided area ceiling; DRC 169 violations/0 schematic-parity
+    issues — residual violations are the pre-existing 41-footprint
+    unplaced backlog, not new). Commo's PCB (no reliable generator exists
+    for it either) was synced via direct `pcbnew` Python scripting: removed
+    the old RFM95W footprint, added the 8 new SIK-chain footprints (SIK +
+    6 passives + MMCX jack), matched nets 1:1 to the schematic (verified
+    against the real `Commo:S_SIK` lib_symbol pin table, not guessed).
+    While placing the SIK footprint, DRC caught a real, previously-latent
+    footprint-geometry bug in `gen_xo_footprints.py`'s `rfd900ux_smt()`:
+    the estimated 1.9mm pad pitch (flagged "NOT pixel-verified" in that
+    function's own docstring) was replaced with the real Table 6-1 value
+    (A=2mm, confirmed against "RFD900ux DataSheet v1.2.pdf" p.11 — 13
+    gaps x 2mm + 1.5mm margins each side = 29mm body height, exact match),
+    and the pad's width/height (B=2.4mm depth-into-board, C=1mm along-edge)
+    had been assigned to the wrong axis, causing every adjacent castellated
+    pad to short into its neighbor — fixed and confirmed via DRC (the
+    SIK-internal `shorting_items` count dropped to 0 after the fix).
+    **Known residual, disclosed, not silently papered over:** Commo's
+    existing hand-placed layout is extremely dense (88 footprints in
+    55.1x35.1mm) and has no contiguous free region large enough for the
+    21x29mm SIK module without touching an existing neighbor in any
+    orientation — the aggregate-area headroom computed above (46.1% used
+    of the 2-sided ceiling post-swap) does not by itself guarantee a 2D
+    placement fits. Placed SIK rotated to minimize the conflict (fits
+    cleanly between the PB2-P1/PB2-P2 connector rows; the SIK-internal
+    pad-pitch bug is fixed) but its GND thermal pad and edge pads still
+    partially overlap ETH-PHY's and T-ETH's back-layer footprints —
+    `kicad-cli pcb drc --schematic-parity` on Commo: 0 net conflicts,
+    0 missing/extra footprints (down from 8 missing + 1 extra), 262
+    ordinary DRC violations (up from a 160 pre-existing baseline — the
+    increase is the disclosed placement-density cost of fitting 8 new
+    parts into an already-packed board, not a hidden regression), 93
+    schematic-parity issues remaining (down from 136; all residual ones
+    are either the pre-existing `footprint_symbol_mismatch` noise from
+    Commo's own established convention of leaving symbols' Footprint
+    property blank, or 4 pre-existing duplicate mounting-hole footprints
+    unrelated to this work). **Real physical floorplan rework — moving
+    ETH-PHY/T-ETH or re-siting SIK's neighbors — is still needed before
+    Commo's PCB is fab-ready; flagging for the owner's hand-placement
+    pass, per the same convention already accepted for XO's own PCB.**
+- [x] **REJECTED (2026-09-21, initial pass, superseded above): swap XO's SiK
+    (RFD900ux-SMT) with Commo's LoRa (RFM95W) between boards** on three
+    findings — footprint asymmetry (RFD900ux-SMT's 666 mm^2 courtyard vs
+    RFM95W's then-estimated 289 mm^2, a 2.3x ratio), Commo's documented 250 mA
+    power budget vs SiK's 1A Tx peak, and the SiK-modem-vs-bare-LoRa-chip
+    firmware rewrite on both hosts. **Superseded same day**: the owner
+    accepted the power and firmware costs as tradeoffs worth taking, and
+    asked for the footprint finding specifically to be re-checked against
+    Commo's real PCB rather than estimated — see the approved-direction entry
+    above for the confirmed numbers. Kept for the record (not deleted) per
+    the project's "explicit rejection with reasons" discipline — the
+    reasoning here was sound given what was checked at the time; it just
+    turned out the one load-bearing finding (footprint) didn't hold once
+    verified against Commo's actual PCB instead of a generic estimate.
 
 - [ ] **Generate Commo gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
     `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
@@ -829,25 +979,78 @@ REFERENCES.md Removed/Superseded Citations).
     **REJECTED** — see the dedicated entry above. Net effect: 121 parts (down
     from 132), ERC 0 confirmed, footprint area 3497 mm^2 (90.8% of the 3850
     mm^2 two-sided theoretical ceiling, down from 99.6% pre-removal).
+- [x] **XO WiFi/BT + Zigbee consolidated onto one module (Murata Type 2EL).**
+    2026-09-21 (Claude Sonnet 5): per owner direction, WL1837MOD (WiFi+BT
+    only) replaced with Murata Type 2EL (LBES5PL2EL-923, `avionics/
+    datasheets/type2el.pdf` Rev.18 + the companion Unified Design Guide
+    Rev.2.0) — an NXP IW612-based module adding IEEE 802.15.4, closing the
+    scope gap this WBS previously flagged as "the Zigbee radio... never
+    having been added to XO" without needing a second, separate radio
+    subsystem. Wired in shared-antenna (SANT) mode per the datasheet's own
+    Fig.1/Table 6/7 and the app note's Fig.10 (ANT1<->BT_15.4_IN 10pF
+    loopback, `C-ANT-SANT`) — one antenna feed for all three radios instead
+    of what would otherwise need at least two. ERC 0 confirmed. type2el.pdf's
+    own DC characteristics show AVDD18 draws up to **1009 mA peak / ~392-550
+    mA typical Tx**, far beyond the pre-existing 150 mA `U-1V8` LDO's rating
+    (that LDO was sized only for SDIO signaling level) — a dedicated
+    high-current 1.8V buck (`U-1V8RF`, second TPS62933DRLR instance,
+    FB-divider retargeted to ~1.79V) was added rather than silently
+    under-provisioning the rail. Antenna matching network follows the
+    vendor's own reference pattern (several DNP positions in Murata's
+    Fig.6/7): series 0R placeholder for continuity, both shunt positions DNP
+    pending real bench VSWR tuning against the as-built antenna —
+    matching-component values are never blindly copied from a vendor
+    reference for a different antenna.
+    **Update, same day (owner-prompted footprint + regulator improvements):**
+    (1) the owner supplied the vendor's own footprint DXF
+    (`avionics/datasheets/type2el-2dl-module-footprint-topview.dxf`) —
+    `Murata_Type2EL_LGA107`'s 107 pads are now EXACT (parsed programmatically
+    from the DXF's `NC_Work2`/`ProductsBoradOutline` layers), not a
+    placeholder; only the pin-NUMBER-to-pad correspondence remains an
+    inference (no per-pad text labels in the DXF), flagged in the footprint's
+    own docstring for a final cross-check against Murata's CAD/BOM output.
+    (2) The owner asked whether one larger regulator could cover both 1.8V
+    loads instead of two — yes: `U-1V8` was removed entirely, `SD_VIO` now
+    shares `U-1V8RF`'s output directly (see the PCB-placement entry below for
+    the full before/after numbers). (3) The PCB has now been regenerated
+    twice (once per improvement) — no longer stale; see the PCB-placement
+    entry below for current placement/area/DRC state.
 - [ ] **XO PCB placement + DRC 0 + routing — IN PROGRESS.** Follow-on to the
-    rebuild + radio-swap above. Owner gave explicit permission to regenerate
-    the PCB after the LoRa removal; current auto-placer state is 78/121
-    footprints placed with 43 still unplaced (both faces already spanning
-    the full board edge-to-edge — a placer packing-density limit at 90.8%
-    area, not a remaining scope problem, same class of limit FlightEngineer
-    hit at a much lower 63% area). **Open owner decision, not yet made:**
-    cut one more subsystem, grow the board past 55x35mm, or finish placement
-    by hand (as done for the original pre-LoRa-removal cut). The project's
-    own `tools/validate_kicad.py` CI gate (run 2026-09-21 against the
-    unplaced-parts state, via PR #207's "KiCad Validation" check) reports
-    **102 hard DRC violations** on `XO.kicad_pcb` — courtyard overlaps,
-    shorting-items, and clearance violations concentrated on the unplaced
-    footprints sitting at the placer's overflow coordinates, not real
-    layout defects on the ~78 already-placed parts. Once placement is
-    finished: `kicad-cli pcb drc --severity-all --schematic-parity` to 0,
-    then attempt freerouting via the Specctra DSN/SES bridge (reject and
-    report if it introduces shorts, same discipline as Pilot), then export
-    gerbers.
+    rebuild + radio-swap + WiFi/BT/Zigbee consolidation above. **Regenerated
+    2026-09-21 against the 135-part post-Type2EL-swap schematic** (owner
+    approved), **then again after a second owner-prompted improvement**: the
+    owner asked whether one larger regulator could supply both 1.8V loads
+    instead of two separate ones — yes: `U-1V8` (the pre-existing 150 mA LDO,
+    dedicated only to `SD_VIO`) was removed entirely, since `SD_VIO` is just
+    low-current 1.8V logic-level signaling at the same nominal voltage as
+    `U-1V8RF`'s `AVDD18` output and shares it directly (own local bypass cap,
+    no separate regulator). Net: 138 parts -> 135, one fewer regulator in
+    the design. Auto-placer state: **85/135 placed, 50 unplaced** (up from
+    43/121 pre-swap, down from 61/138 before the regulator merge).
+    Authoritative area (via `pcbnew`, not estimated): **3542.3 mm^2 / 92.0%**
+    of the 3850 mm^2 two-sided theoretical ceiling (up from 90.8% pre-swap,
+    down from 92.8% before the merge) — the regulator consolidation clawed
+    back about a third of the area the swap had cost, but net area is still
+    up overall: the Type2EL module itself is smaller than WL1837MOD, but the
+    high-current 1.8V buck it needs (even just one, not two) costs more
+    footprint than the module saved. `kicad-cli pcb drc --severity-all
+    --schematic-parity` now reports **133 hard violations** (up from 102
+    pre-swap, down from 153 before the regulator merge, tracking the
+    unplaced count) and **0 schematic-parity issues** (confirms the
+    footprints/nets are correctly wired, not a source of the DRC count).
+    **Owner elected 2026-09-21 to finish placement by hand in the KiCad
+    GUI** (D6) rather than cut a further subsystem or grow the board past
+    55x35mm — same choice made for the pre-Type2EL-swap 43-unplaced state.
+    The packing is tighter than that earlier pass (92.0% vs 90.8% area, 50
+    vs 43 unplaced), so hand-placement may still run into the same
+    packing-density wall if all 50 can't be made to fit; the cut/grow levers
+    remain available if so. `XO.kicad_pcb` is not to be regenerated by the
+    generator again until the owner says placement is done (same rule as
+    every prior manual-placement handoff this session — regenerating would
+    discard hand work). Once placement is finished: `kicad-cli pcb drc
+    --severity-all --schematic-parity` to 0, then attempt freerouting via
+    the Specctra DSN/SES bridge (reject and report if it introduces shorts,
+    same discipline as Pilot), then export gerbers.
 - [x] **Flight Engineer schematic-first rebuild — ERC 0.** 2026-09-20 (Claude
     Sonnet 5): the legacy schematic (586 ERC violations, PCB pad nets not
     matching at all, `gen_flight_engineer.py` itself confirmed drifted per its own

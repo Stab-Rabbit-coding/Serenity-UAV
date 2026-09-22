@@ -675,3 +675,35 @@ root `TODO.md`, root `WBS.md`, `avionics/AGENTS.md`.
 - First-flight scope: U1, U7 (Phase 5 board set only) and U8 are on the critical path;
   U5 (pitot) and the Commo/Observer rows of U7 are Phase 6. Successor roadmap:
   `docs/plans/2026-09-15-001-first-flight-readiness-plan.md` streams B and C.
+
+## Status 2026-09-21 (U7 backlog table refresh + PR #207)
+
+The U7 per-board backlog table above (2026-08-25 baseline: "XO 219 ERC + 154 DRC hard",
+"Flight Engineer 213 DRC hard") is now **stale** — both boards were fully rebuilt
+schematic-first this session (`avionics/WBS.md` §1.9.2). Current, CI-verified numbers:
+
+| Board | 2026-08-25 baseline | Current (2026-09-21) |
+|---|---|---|
+| XO | 219 ERC + 154 DRC hard | **ERC 0** (schematic rebuilt); PCB placement incomplete (78/121 footprints placed, owner decision pending on cut-more/grow-board/manual-finish); `tools/validate_kicad.py` reports **102 DRC hard** (concentrated on the 43 still-unplaced footprints, not the placed ones) |
+| Flight Engineer | 213 DRC hard | **ERC 0** (schematic rebuilt); all 151 footprints placed; `tools/validate_kicad.py` reports **29 DRC hard** (localized to D_OR1/D_OR2 and U_RS485, a placer packing-density limit, not a scope problem) |
+| Commo | (not in original table) | Schematic file-corruption bug fixed (bare `lib_id`s crashing `kicad-cli`); raw ERC 127 -> 48, but `validate_kicad.py`'s accepted-class filter already reports **0 hard** on the schematic. PCB/DRC side untouched (legacy baseline 160 DRC / 113 unconnected) |
+
+Also this session: the RFD900x SiK radio was swapped to RFD900ux-SMT (fixed a physical
+board-overhang defect), XO's duplicate LoRa module was removed (Commo already carries
+one), and mLRS was evaluated and formally rejected as a SiK replacement (LoRa-hardware-
+family duplication would defeat XO/Commo's intended link-path diversity) — see
+`avionics/WBS.md` §1.9.2 "REJECTED (2026-09-20): mLRS" entry.
+
+**PR #207 opened and babysat this session:** all 12 review-comment threads resolved
+(12/12 were GitHub Advanced Security devskim false positives, dismissed with evidence);
+CI lint/type-check failures fixed. The **`KiCad Validation` CI job — which gates U7's
+own acceptance criterion — had never actually run on this PR** (it carries `needs: lint`
+in `ci.yml`, and lint was red until this session's fix), so the 131 hard DRC violations
+above are newly *visible* via CI for the first time, not newly introduced. Owner elected
+to leave this check red and accepted as documented follow-up rather than a merge
+blocker (`main` has no branch-protection rules). **U7 is not yet closed** for XO or
+Flight Engineer — this refresh corrects the backlog table's numbers and records real
+progress (both boards' ERC now 0), but the acceptance criterion ("0 ERC / 0 DRC hard, or
+documented exception per board") is not yet met for either board's PCB.
+
+*Status update by Claude Sonnet 5, Anthropic, 2026-09-21, per `AGENTS.md` §3 AI attribution.*
