@@ -6817,6 +6817,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/TYPE2EL.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/Vishay_45273MDSK.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7160,6 +7167,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/stm32wle5jc.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/tps54540.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7188,7 +7202,28 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/type2el-2dl-2ll-2kl-unified-design-guide.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/type2el-2dl-module-footprint-topview.dxf": {
+      "description": "2D DXF drawing",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/w25q128jv.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/wio-e5-datasheet.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -9279,6 +9314,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Serenity-Custom.pretty/Murata_Type2EL_LGA107.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Serenity-Custom.pretty/PGND_ViaPad_1p2mm.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
@@ -9336,6 +9379,14 @@
       "archived": false
     },
     "avionics/kicad/Serenity-Custom.pretty/Samtec_TSM-108-01-x-DV.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/Seeed_WioE5_QFN28.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
@@ -17233,6 +17284,7 @@
       "avionics/kicad/Serenity-Custom.pretty/Molex_NanoFit_1x04_Horizontal.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.2mm_M2_SelfTap_Compact.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.7mm_M2.5_PGND_Ring.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Murata_Type2EL_LGA107.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PGND_ViaPad_1p2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
@@ -17241,6 +17293,7 @@
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900x_2x8_THT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Samtec_TSM-108-01-x-DV.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Seeed_WioE5_QFN28.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TPS6303x_VSON-10_2p5.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Texas_RGY0014A_VQFN-14-1EP_3.5x3.5mm.kicad_mod",
@@ -17401,6 +17454,7 @@
       "avionics/datasheets/SM04B-SRSS-TB.pdf",
       "avionics/datasheets/SM1553-Series_HiRel-Data-Bus-Pulse-Transformer_RevD.pdf",
       "avionics/datasheets/SRF2012A.pdf",
+      "avionics/datasheets/TYPE2EL.pdf",
       "avionics/datasheets/Vishay_45273MDSK.pdf",
       "avionics/datasheets/X2YDatasheet.pdf",
       "avionics/datasheets/X2Y_15-2237598.pdf",
@@ -17450,11 +17504,15 @@
       "avionics/datasheets/slaz742g.pdf",
       "avionics/datasheets/slb9672.pdf",
       "avionics/datasheets/smaj-series-tvs-datasheet.pdf",
+      "avionics/datasheets/stm32wle5jc.pdf",
       "avionics/datasheets/tps54540.pdf",
       "avionics/datasheets/tps54620.pdf",
       "avionics/datasheets/tps62933.pdf",
       "avionics/datasheets/tps63031.pdf",
+      "avionics/datasheets/type2el-2dl-2ll-2kl-unified-design-guide.pdf",
+      "avionics/datasheets/type2el-2dl-module-footprint-topview.dxf",
       "avionics/datasheets/w25q128jv.pdf",
+      "avionics/datasheets/wio-e5-datasheet.pdf",
       "avionics/datasheets/wl1837mod.pdf",
       "avionics/datasheets/wurth-742792510.pdf",
       "avionics/emi-hardening/TODO.md",
@@ -17702,6 +17760,7 @@
       "avionics/kicad/Serenity-Custom.pretty/Molex_NanoFit_1x04_Horizontal.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.2mm_M2_SelfTap_Compact.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.7mm_M2.5_PGND_Ring.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Murata_Type2EL_LGA107.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PGND_ViaPad_1p2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
@@ -17710,6 +17769,7 @@
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900x_2x8_THT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Samtec_TSM-108-01-x-DV.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Seeed_WioE5_QFN28.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/TPS6303x_VSON-10_2p5.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Texas_RGY0014A_VQFN-14-1EP_3.5x3.5mm.kicad_mod",

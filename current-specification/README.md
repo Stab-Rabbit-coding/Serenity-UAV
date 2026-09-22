@@ -126,7 +126,7 @@ recomputed into `bom_revS.json`/`.csv` or the AUW figure. Tracked open in `TODO.
 ### Comms & Sensors
 
 - **Radios:**
-  - SiK RFD900x (915 MHz MAVLink)
+  - SiK RFD900ux (915 MHz MAVLink)
   - XCVR-49MHZ-1/2 (SI5351-based, 49 MHz Part 15 §15.235)
   - LoRa SX1262 (optional, Phase 10+)
   - Wi-Fi 5 GHz (via host PC or PB2-I USB dongle)
