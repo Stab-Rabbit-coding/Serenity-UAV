@@ -92,7 +92,7 @@
       "Supplier_PN_or_Search": "SG90 9g micro servo 1.8kg cm",
       "Est_Unit_Price_USD": "3.00",
       "Est_Total_Price_USD": "9.00",
-      "Notes": "Rev P new; Ch-A = door cam via DRV8833 H-bridge; Ch-B = latch release pull-wire; both on Cape-B GPIO PWM. 2026-08-02: control board specified as OpenServoCore \"OSC SG90 M007\" (REFERENCES.md REF-SENSOR-015), a swap board that physically replaces the SG90 factory PCB — same body envelope, no bracket change. ⚠ Upstream hardware is pre-production (\"nothing here is shippable yet\" per project status); do not procure in flight-article quantity until upstream reaches a shippable release. 2026-09-21 (docs/CARGO_DOOR_GATEWAY_SPEC.md, D-GW-2): Qty 2 -> 3 -- the doors are two INDEPENDENT piano-hinged halves (Rev R1b), one actuator each, plus the release; all three are driven by CAN-PERIPH-GW-DOOR (osc-native chain, or PWM fallback with stock SG90s), NOT by DRV8833-CARGO (retired) or Cape-B GPIO. The old 'Ch-A/Ch-B' wording is historical. Owner to confirm the two-actuator reading (GW-DOOR-4)."
+      "Notes": "Rev P new; Ch-A = door cam via DRV8833 H-bridge; Ch-B = latch release pull-wire; both on TACCO GPIO PWM. 2026-08-02: control board specified as OpenServoCore \"OSC SG90 M007\" (REFERENCES.md REF-SENSOR-015), a swap board that physically replaces the SG90 factory PCB — same body envelope, no bracket change. ⚠ Upstream hardware is pre-production (\"nothing here is shippable yet\" per project status); do not procure in flight-article quantity until upstream reaches a shippable release. 2026-09-21 (docs/CARGO_DOOR_GATEWAY_SPEC.md, D-GW-2): Qty 2 -> 3 -- the doors are two INDEPENDENT piano-hinged halves (Rev R1b), one actuator each, plus the release; all three are driven by CAN-PERIPH-GW-DOOR (osc-native chain, or PWM fallback with stock SG90s), NOT by DRV8833-CARGO (retired) or TACCO GPIO. The old 'Ch-A/Ch-B' wording is historical. Owner to confirm the two-actuator reading (GW-DOOR-4)."
     },
     {
       "Ref": "CAN-PERIPH-GW-DOOR",
@@ -226,7 +226,7 @@
     },
     {
       "Ref": "PB2-I-FC",
-      "Description": "PocketBeagle 2 Industrial AM6254 — FC node, Cape-A",
+      "Description": "PocketBeagle 2 Industrial AM6254 — FC node, Pilot",
       "Category": "Avionics",
       "Qty": "4",
       "Unit_Mass_g": "13",
@@ -239,7 +239,7 @@
     },
     {
       "Ref": "PB2-I-CN",
-      "Description": "PocketBeagle 2 Industrial AM6254 — CN node, Cape-B",
+      "Description": "PocketBeagle 2 Industrial AM6254 — CN node, TACCO",
       "Category": "Avionics",
       "Qty": "4",
       "Unit_Mass_g": "13",
@@ -251,30 +251,30 @@
       "Notes": "CN node lower slot in bays A/B/D/E; comms + logging + payload control"
     },
     {
-      "Ref": "CAPE-A",
-      "Description": "Cape-A PCB 55×35mm — Sensor + FC cape (tamper mesh on F.Cu/B.Cu nets TMESH_P/N)",
+      "Ref": "Pilot",
+      "Description": "PilotPCB 55×35mm — Sensor + FC cape (tamper mesh on F.Cu/B.Cu nets TMESH_P/N)",
       "Category": "Avionics",
       "Qty": "0",
       "Unit_Mass_g": "0",
       "Total_Mass_g": "0",
       "Supplier": "JLCPCB (fab from project gerbers)",
-      "Supplier_PN_or_Search": "serenity/kicad/ CAPE-A gerbers + BOM",
+      "Supplier_PN_or_Search": "serenity/kicad/ Pilotgerbers + BOM",
       "Est_Unit_Price_USD": "0",
       "Est_Total_Price_USD": "0",
-      "Notes": "ARCHIVED Rev Q 2026-06-05 — superseded by CAPE-A-2."
+      "Notes": "ARCHIVED Rev Q 2026-06-05 — superseded by Pilot."
     },
     {
-      "Ref": "CAPE-B",
-      "Description": "Cape-B PCB 55×35mm — Comms + Logging + Payload cape (tamper mesh on F.Cu/B.Cu nets TMESH_P/N)",
+      "Ref": "TACCO",
+      "Description": "TACCO PCB 55×35mm — Comms + Logging + Payload cape (tamper mesh on F.Cu/B.Cu nets TMESH_P/N)",
       "Category": "Avionics",
       "Qty": "0",
       "Unit_Mass_g": "0",
       "Total_Mass_g": "0",
       "Supplier": "JLCPCB (fab from project gerbers)",
-      "Supplier_PN_or_Search": "serenity/kicad/ CAPE-B gerbers + BOM",
+      "Supplier_PN_or_Search": "serenity/kicad/ TACCO gerbers + BOM",
       "Est_Unit_Price_USD": "0",
       "Est_Total_Price_USD": "0",
-      "Notes": "ARCHIVED Rev Q 2026-06-05 — superseded by CAPE-B-2."
+      "Notes": "ARCHIVED Rev Q 2026-06-05 — superseded by TACCO."
     },
     {
       "Ref": "RCRS-49",
@@ -290,30 +290,30 @@
       "Notes": "ARCHIVED Rev Q 2026-06-05 — superseded by XCVR-49MHZ-2."
     },
     {
-      "Ref": "CAPE-A-2",
-      "Description": "Cape-A-2 PCB 55x35mm — EMI-hardened Cape-A: ISOW1044BDFMR 5kV CAN FD isolation + ADM2795EBRWZ 5kV RS-485 isolation + ADIN1300BCPZ 1000BASE-T PHY + 2x ISO7642FDWRR 6-ch digital isolators + Wurth 749010012A ETH transformer + JST GH 4P + SRF2012 CMC + PRTR5V0U2X TVS",
+      "Ref": "Pilot",
+      "Description": "Pilot PCB 55x35mm — EMI-hardened Pilot: ISOW1044BDFMR 5kV CAN FD isolation + ADM2795EBRWZ 5kV RS-485 isolation + ADIN1300BCPZ 1000BASE-T PHY + 2x ISO7642FDWRR 6-ch digital isolators + Wurth 749010012A ETH transformer + JST GH 4P + SRF2012 CMC + PRTR5V0U2X TVS",
       "Category": "Avionics",
       "Qty": "4",
       "Unit_Mass_g": "31",
       "Total_Mass_g": "124",
       "Supplier": "JLCPCB (fab from project gerbers)",
-      "Supplier_PN_or_Search": "serenity/kicad/ CAPE-A-2 gerbers + BOM",
+      "Supplier_PN_or_Search": "serenity/kicad/ Pilot gerbers + BOM",
       "Est_Unit_Price_USD": "68.00",
       "Est_Total_Price_USD": "272.00",
-      "Notes": "Cape-A-2 PCB 55x35mm EMI-hardened — ALL 4 FC positions — Rev Q primary FC cape. ISOW1044BDFMR 5kV CAN FD + ADM2795EBRWZ 5kV RS-485 + ADIN1300BCPZ 1000BASE-T. Gerbers pending DRC. DTS: cape-a2.dts"
+      "Notes": "Pilot PCB 55x35mm EMI-hardened — ALL 4 FC positions — Rev Q primary FC cape. ISOW1044BDFMR 5kV CAN FD + ADM2795EBRWZ 5kV RS-485 + ADIN1300BCPZ 1000BASE-T. Gerbers pending DRC. DTS: cape-a2.dts"
     },
     {
-      "Ref": "CAPE-B-2",
-      "Description": "Cape-B-2 PCB 55x35mm — EMI-hardened Cape-B: same CAN FD + RS-485 + Ethernet isolation stack as CAPE-A-2 plus Cape-B payload ICs (MAVLink, TI WL1837MOD WiFi/BT, SLB9672 TPM 2.0, ATF16V8BQL CPLD write-blocker, log microSD); P1+P2 passthrough socket rails on upper face for Commo XCVR stack (LoRa removed from XO — moved to Commo board Rev R1)",
+      "Ref": "TACCO",
+      "Description": "TACCO PCB 55x35mm — EMI-hardened TACCO: same CAN FD + RS-485 + Ethernet isolation stack as Pilot plus TACCO payload ICs (MAVLink, TI WL1837MOD WiFi/BT, SLB9672 TPM 2.0, ATF16V8BQL CPLD write-blocker, log microSD); P1+P2 passthrough socket rails on upper face for Commo XCVR stack (LoRa removed from XO — moved to Commo board Rev R1)",
       "Category": "Avionics",
       "Qty": "4",
       "Unit_Mass_g": "40",
       "Total_Mass_g": "160",
       "Supplier": "JLCPCB (fab from project gerbers)",
-      "Supplier_PN_or_Search": "serenity/kicad/ CAPE-B-2 gerbers + BOM",
+      "Supplier_PN_or_Search": "serenity/kicad/ TACCO gerbers + BOM",
       "Est_Unit_Price_USD": "105.00",
       "Est_Total_Price_USD": "420.00",
-      "Notes": "Cape-B-2 PCB 55x35mm EMI-hardened — ALL 4 CN positions — Rev R1: LoRa RFM95W removed (moved to Commo); P1+P2 passthrough rails added to upper face (Commo plugs onto River and Simon stacks; rails bare/capped on Shepherd and Inara stacks). PCB redesign required — see TODO §avionics. Gerbers pending DRC. DTS: cape-b2.dts"
+      "Notes": "TACCO PCB 55x35mm EMI-hardened — ALL 4 CN positions — Rev R1: LoRa RFM95W removed (moved to Commo); P1+P2 passthrough rails added to upper face (Commo plugs onto River and Simon stacks; rails bare/capped on Shepherd and Inara stacks). PCB redesign required — see TODO §avionics. Gerbers pending DRC. DTS: cape-b2.dts"
     },
     {
       "Ref": "Commo",
@@ -326,11 +326,11 @@
       "Supplier_PN_or_Search": "Commo gerbers (redesign pending — see TODO §avionics)",
       "Est_Unit_Price_USD": "32.00",
       "Est_Total_Price_USD": "64.00",
-      "Notes": "Commo XCVR sub-module — River's Room + Simon's Medbay only (Rev R1). LoRa RFM95W added (moved from Cape-B-2); P1+P2 socket rails replace JST GH 6P for clean board-to-board stacking on XO passthrough rails. RF Z0=52.26Ohm PASS. PCB redesign required. Gerbers pending DRC."
+      "Notes": "Commo XCVR sub-module — River's Room + Simon's Medbay only (Rev R1). LoRa RFM95W added (moved from TACCO); P1+P2 socket rails replace JST GH 6P for clean board-to-board stacking on XO passthrough rails. RF Z0=52.26Ohm PASS. PCB redesign required. Gerbers pending DRC."
     },
     {
       "Ref": "MICROSD-LOG",
-      "Description": "64GB microSD — Cape-B write-blocked flight log",
+      "Description": "64GB microSD — TACCO write-blocked flight log",
       "Category": "Avionics",
       "Qty": "4",
       "Unit_Mass_g": "1",
@@ -638,7 +638,7 @@
       "Supplier_PN_or_Search": "HX711 load cell amplifier breakout module",
       "Est_Unit_Price_USD": "4.00",
       "Est_Total_Price_USD": "4.00",
-      "Notes": "Cargo weight monitoring; interfaces to Cape-B SPI/GPIO"
+      "Notes": "Cargo weight monitoring; interfaces to TACCO SPI/GPIO"
     },
     {
       "Ref": "DRV8833-CARGO",
@@ -1600,7 +1600,7 @@
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev P new (PR #21 2026-05-30); 28mm FOV cutout for M12 FPV module; 4x M2 mounting screws; camera points down at payload; cable to Cape-B MIPI/USB; 0.20mm / 20% gyroid"
+      "Notes": "Rev P new (PR #21 2026-05-30); 28mm FOV cutout for M12 FPV module; 4x M2 mounting screws; camera points down at payload; cable to TACCO MIPI/USB; 0.20mm / 20% gyroid"
     },
     {
       "Ref": "PRINT-BATT-TRAY",
@@ -1717,17 +1717,17 @@
       "Supplier_PN_or_Search": "2820-100003007-ND",
       "Est_Unit_Price_USD": "51.03",
       "Est_Total_Price_USD": "51.03",
-      "Notes": "Rev Q1; USB CDC-ECM tether to host PC; same hardware as aircraft CN nodes; Cape-B-2 + Commo mounted; separate from aircraft nodes"
+      "Notes": "Rev Q1; USB CDC-ECM tether to host PC; same hardware as aircraft CN nodes; TACCO + Commo mounted; separate from aircraft nodes"
     },
     {
-      "Ref": "SKIPPER-CAPE-B-2",
-      "Description": "Cape-B-2 (XO) Rev R1 PCB — Skipper radio+logging cape",
+      "Ref": "SKIPPER-TACCO",
+      "Description": "TACCO (XO) Rev R1 PCB — Skipper radio+logging cape",
       "Category": "GCS",
       "Qty": "1",
       "Unit_Mass_g": "34",
       "Total_Mass_g": "34",
       "Supplier": "JLCPCB (in-house fab)",
-      "Supplier_PN_or_Search": "Order with aircraft Cape-B-2 batch",
+      "Supplier_PN_or_Search": "Order with aircraft TACCO batch",
       "Est_Unit_Price_USD": "105.00",
       "Est_Total_Price_USD": "105.00",
       "Notes": "Rev R1: same PCB as aircraft CN (LoRa removed, P1+P2 passthrough rails added); Skipper does not mount Commo board; WiFi+SiK+MAVLink interfaces"
@@ -1821,7 +1821,7 @@
       "Supplier_PN_or_Search": "3dBi RP-SMA 2.4GHz rubber duck dipole",
       "Est_Unit_Price_USD": "6.00",
       "Est_Total_Price_USD": "6.00",
-      "Notes": "Rev Q1; Zigbee 2.4 GHz link on Cape-B-2; optional directional upgrade to 6 dBi panel in future"
+      "Notes": "Rev Q1; Zigbee 2.4 GHz link on TACCO; optional directional upgrade to 6 dBi panel in future"
     },
     {
       "Ref": "SKIPPER-ANT-GPS",
@@ -1938,7 +1938,7 @@
       "Supplier_PN_or_Search": "Hammond 1455N1601 or equiv 145×90×65mm IP65 aluminum enclosure",
       "Est_Unit_Price_USD": "28.00",
       "Est_Total_Price_USD": "28.00",
-      "Notes": "Rev Q1; EPDM gasket; 40mm fan cutout; cable glands for USB/RF/power/servo; PCB standoffs at Cape-B-2 hole pattern 55×35mm"
+      "Notes": "Rev Q1; EPDM gasket; 40mm fan cutout; cable glands for USB/RF/power/servo; PCB standoffs at TACCO hole pattern 55×35mm"
     },
     {
       "Ref": "SKIPPER-TRIPOD",
@@ -1964,7 +1964,7 @@
       "Supplier_PN_or_Search": "Pololu D24V50F5 5V 5A switching step-down",
       "Est_Unit_Price_USD": "12.00",
       "Est_Total_Price_USD": "12.00",
-      "Notes": "Rev Q1; supplies PB2-I + Cape-B-2 (560 mA typ; 1400 mA peak); input from SKIPPER-FIELD-BATTERY via XT30"
+      "Notes": "Rev Q1; supplies PB2-I + TACCO (560 mA typ; 1400 mA peak); input from SKIPPER-FIELD-BATTERY via XT30"
     },
     {
       "Ref": "SKIPPER-PWR-6V-BEC",
@@ -1990,7 +1990,7 @@
       "Supplier_PN_or_Search": "Tattu 4S 10000mAh 14.8V LiPo XT60 RC battery",
       "Est_Unit_Price_USD": "65.00",
       "Est_Total_Price_USD": "65.00",
-      "Notes": "Rev Q1; ~6.4 h endurance at 560 mA typical load; powers PB2-I + Cape-B-2 + servos + field electronics; XT60 output"
+      "Notes": "Rev Q1; ~6.4 h endurance at 560 mA typical load; powers PB2-I + TACCO + servos + field electronics; XT60 output"
     },
     {
       "Ref": "FAR-CAGE-AV",
@@ -2068,7 +2068,7 @@
       "Supplier_PN_or_Search": "FAR-FT-PANEL gerbers (design pending — see TODO §1.2)",
       "Est_Unit_Price_USD": "15.00",
       "Est_Total_Price_USD": "60.00",
-      "Notes": "Rev R new; one per cage; 5 kV LC π-filter + TVS on all penetrations: CAN FD ×2 (JST-GH 4P) + RS-485 ×1 (JST-GH 3P) + Ethernet ×1 (RJ45 mag) + power ×1 (JST-GH 2P); continuous with Cape-A-2/B-2 5 kV isolation chain"
+      "Notes": "Rev R new; one per cage; 5 kV LC π-filter + TVS on all penetrations: CAN FD ×2 (JST-GH 4P) + RS-485 ×1 (JST-GH 3P) + Ethernet ×1 (RJ45 mag) + power ×1 (JST-GH 2P); continuous with Pilot/B-2 5 kV isolation chain"
     },
     {
       "Ref": "FAR-FERRITE-4MM",

@@ -7,7 +7,7 @@
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Drives the QMC5883L 3-axis magnetometer via Linux userspace i2c-dev
- * (ioctl/read/write on /dev/i2c-N).  Used by serenity-fc on Cape-A-1.
+ * (ioctl/read/write on /dev/i2c-N).  Used by serenity-fc on Pilot.
  *
  * ── Device Overview ───────────────────────────────────────────────────────
  *
@@ -60,7 +60,7 @@
  *
  * ── DRDY Signal ───────────────────────────────────────────────────────────
  *
- * Cape-A hardware connects DRDY (STATUS.0) to a GPIO line named
+ * Pilot hardware connects DRDY (STATUS.0) to a GPIO line named
  * CAPE_A_GPIO_MAG_DRDY.  This driver polls the STATUS register rather than
  * using the GPIO interrupt, to keep the driver self-contained and avoid
  * platform-specific libgpiod dependencies in the FC daemon.

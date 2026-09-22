@@ -58,7 +58,7 @@
 <text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install SMA-RP bulkhead in flush cutout at belly port, sta 260mm</text>
 <circle cx="776" cy="323" r="9" fill="#006db7"/>
 <text x="776" y="327" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
-<text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Thread SiK 915MHz antenna to SMA-RP (belly port) · route coax to CAPE-B-1</text>
+<text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Thread SiK 915MHz antenna to SMA-RP (belly port) · route coax to TACCO</text>
 <circle cx="776" cy="347" r="9" fill="#006db7"/>
 <text x="776" y="351" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
 <text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install GPS 25×25mm patch in recess at mid-fuselage dorsal, sta 140mm</text>

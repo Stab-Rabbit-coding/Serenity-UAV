@@ -374,7 +374,7 @@
       "infill": "20% gyroid",
       "qty": 1,
       "mass_g": 8,
-      "notes": "Rev P new (PR #21 2026-05-30). 28 mm dia FOV cutout; accepts standard 28 mm M12 lens FPV module; 4× M2 mounting screws to forward bulkhead; camera cable routes to Cape-B MIPI/USB."
+      "notes": "Rev P new (PR #21 2026-05-30). 28 mm dia FOV cutout; accepts standard 28 mm M12 lens FPV module; 4× M2 mounting screws to forward bulkhead; camera cable routes to TACCO MIPI/USB."
     },
     {
       "stl": "bow_sensor_faceplate.stl",
@@ -686,33 +686,33 @@
     ]
   },
   "avionics": {
-    "note": "Rev Q: All 8 nodes use EMI-hardened v2 capes. Placement: v2·v2·v2·v2 (nose → tail). Cape-A-1, Cape-B-1, RCRS-49/XCVR-49MHZ-1 archived 2026-06-05.",
+    "note": "Rev Q: All 8 nodes use EMI-hardened v2 capes. Placement: v2·v2·v2·v2 (nose → tail). Pilot, TACCO, RCRS-49/XCVR-49MHZ-1 archived 2026-06-05.",
     "nodes": [
       {
         "ref": "PB2-I-FC",
-        "desc": "PocketBeagle 2 Industrial (AM6254) — FC node, Cape-A-2",
+        "desc": "PocketBeagle 2 Industrial (AM6254) — FC node, Pilot",
         "qty": 4,
         "mass_g": 13,
         "cost_usd": 51.03
       },
       {
         "ref": "PB2-I-CN",
-        "desc": "PocketBeagle 2 Industrial (AM6254) — CN node, Cape-B-2",
+        "desc": "PocketBeagle 2 Industrial (AM6254) — CN node, TACCO",
         "qty": 4,
         "mass_g": 13,
         "cost_usd": 51.03
       },
       {
-        "ref": "CAPE-A",
-        "desc": "Cape-A PCB (ARCHIVED Rev Q — superseded by CAPE-A-2 at all FC positions)",
+        "ref": "Pilot",
+        "desc": "Pilot PCB (ARCHIVED Rev Q — superseded by Pilot at all FC positions)",
         "qty": 0,
         "mass_g": 0,
         "cost_usd": 0,
         "archived": "Rev Q 2026-06-05"
       },
       {
-        "ref": "CAPE-B",
-        "desc": "Cape-B PCB (ARCHIVED Rev Q — superseded by CAPE-B-2 at all CN positions)",
+        "ref": "TACCO",
+        "desc": "TACCO PCB (ARCHIVED Rev Q — superseded by TACCO at all CN positions)",
         "qty": 0,
         "mass_g": 0,
         "cost_usd": 0,
@@ -727,25 +727,25 @@
         "archived": "Rev Q 2026-06-05"
       },
       {
-        "ref": "CAPE-A-2",
-        "desc": "Cape-A-2 PCB 55×35 mm — EMI-hardened FC cape, ALL 4 FC positions. ISOW1044BDFMR 5kV CAN FD + ADM2795EBRWZ 5kV RS-485 + ADIN1300BCPZ 1000BASE-T. Gerbers: avionics/gerbers/CAPE-A-2/ (pending DRC). DTS: k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
+        "ref": "Pilot",
+        "desc": "Pilot PCB 55×35 mm — EMI-hardened FC cape, ALL 4 FC positions. ISOW1044BDFMR 5kV CAN FD + ADM2795EBRWZ 5kV RS-485 + ADIN1300BCPZ 1000BASE-T. Gerbers: avionics/gerbers/Pilot/ (pending DRC). DTS: k3-am6254-pocketbeagle2-serenity-Pilot2.dts",
         "qty": 4,
         "mass_g": 31,
         "cost_usd": 68,
         "supplier": "JLCPCB (fab from project gerbers)",
-        "search": "serenity/kicad/ CAPE-A-2 gerbers + BOM",
-        "notes": "EMI-hardened -2 variant; gerbers not yet generated (see TODO §1.2a); use in high-EMI environments or as production replacement for CAPE-A",
+        "search": "serenity/kicad/ Pilot gerbers + BOM",
+        "notes": "EMI-hardened -2 variant; gerbers not yet generated (see TODO §1.2a); use in high-EMI environments or as production replacement for Pilot",
         "note": "Rev Q primary FC cape — all positions"
       },
       {
-        "ref": "CAPE-B-2",
-        "desc": "Cape-B-2 PCB 55×35 mm — EMI-hardened CN cape, ALL 4 CN positions. Same isolation stack as CAPE-A-2 plus all Cape-B payload ICs. Gerbers: avionics/gerbers/CAPE-B-2/ (pending DRC). DTS: k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
+        "ref": "TACCO",
+        "desc": "TACCO PCB 55×35 mm — EMI-hardened CN cape, ALL 4 CN positions. Same isolation stack as Pilot plus all TACCO payload ICs. Gerbers: avionics/gerbers/TACCO/ (pending DRC). DTS: k3-am6254-pocketbeagle2-serenity-TACCO2.dts",
         "qty": 4,
         "mass_g": 41,
         "cost_usd": 105,
         "supplier": "JLCPCB (fab from project gerbers)",
-        "search": "serenity/kicad/ CAPE-B-2 gerbers + BOM",
-        "notes": "EMI-hardened -2 variant; gerbers not yet generated (see TODO §1.2a); retains all Cape-B payload ICs; use as production replacement for CAPE-B",
+        "search": "serenity/kicad/ TACCO gerbers + BOM",
+        "notes": "EMI-hardened -2 variant; gerbers not yet generated (see TODO §1.2a); retains all TACCO payload ICs; use as production replacement for TACCO",
         "note": "Rev Q primary CN cape — all positions"
       },
       {
@@ -761,7 +761,7 @@
       },
       {
         "ref": "MICROSD-LOG",
-        "desc": "64 GB microSD — Cape-B write-blocked flight log",
+        "desc": "64 GB microSD — TACCO write-blocked flight log",
         "qty": 4,
         "mass_g": 1,
         "cost_usd": 12
@@ -773,32 +773,32 @@
         {
           "bay": "A (nose)",
           "station_mm": "0–91",
-          "cn": "CN1/Cape-B-2",
-          "fc": "FC1/Cape-A-2",
+          "cn": "CN1/TACCO",
+          "fc": "FC1/Pilot",
           "xcvr": "XCVR-49MHZ-2",
           "notes": "CAN FD bus start 120Ω; GPS1; SiK+LoRa+WiFi+XCVR-49MHZ-2"
         },
         {
           "bay": "B (fwd)",
           "station_mm": "91–165",
-          "cn": "CN2/Cape-B-2",
-          "fc": "FC2/Cape-A-2",
+          "cn": "CN2/TACCO",
+          "fc": "FC2/Pilot",
           "xcvr": "XCVR-49MHZ-2",
           "notes": "Rev Q: upgraded from v1; GPS2"
         },
         {
           "bay": "D (aft)",
           "station_mm": "251–320",
-          "cn": "CN3/Cape-B-2",
-          "fc": "FC3/Cape-A-2",
+          "cn": "CN3/TACCO",
+          "fc": "FC3/Pilot",
           "xcvr": "XCVR-49MHZ-2",
           "notes": "Rev Q: upgraded from v1; GPS3"
         },
         {
           "bay": "E (svc)",
           "station_mm": "320–388",
-          "cn": "CN4/Cape-B-2",
-          "fc": "FC4/Cape-A-2",
+          "cn": "CN4/TACCO",
+          "fc": "FC4/Pilot",
           "xcvr": "XCVR-49MHZ-2",
           "notes": "CAN FD bus end 120Ω; GPS4"
         }
@@ -867,7 +867,7 @@
       },
       {
         "ref": "ANT-GPS-PATCH",
-        "desc": "Active GNSS patch antenna, integrated LNA — one per FC node (Pilot, Cape-A-2), mounted dorsal hull face-up",
+        "desc": "Active GNSS patch antenna, integrated LNA — one per FC node (Pilot, Pilot), mounted dorsal hull face-up",
         "qty": 4,
         "mass_g": 6,
         "cost_usd": 9,
@@ -972,7 +972,7 @@
       "esc_motor": "16AWG silicone — each ESC to EDF motor",
       "signal": "28AWG shielded twisted pair for servo signal + DSHOT leads",
       "data_bus": "PTFE 3 mm ID conduit, full hull length, for CAN FD / RS-485 / 1553 / ETH",
-      "cargo_signal": "28AWG 3-core silicone — Cape-B GPIO to DRV8833 tray (PWM + DIR + GND), ~250 mm run (door/release servos). WINCH IS SEPARATE: CAN-PERIPH-GW J_FLEX -> STS3215 TTL bus + catch solenoid FET gate + HX711; gateway reaches the airframe only over its isolated CAN-FD/RS-485 trunks."
+      "cargo_signal": "28AWG 3-core silicone — TACCO GPIO to DRV8833 tray (PWM + DIR + GND), ~250 mm run (door/release servos). WINCH IS SEPARATE: CAN-PERIPH-GW J_FLEX -> STS3215 TTL bus + catch solenoid FET gate + HX711; gateway reaches the airframe only over its isolated CAN-FD/RS-485 trunks."
     }
   },
   "structure": {
@@ -1018,7 +1018,7 @@
       "catch_actuator": "SOL-CATCH-5V pull solenoid (>= 2.5 N @ 3 mm), driven by the SAME gateway via FLEX_PWM_IO -> AO3400 N-FET + SS34 flyback; 10k gate pull-down so an undriven MCU leaves the catch ENGAGED. De-energised = fail-safe engaged.",
       "overload_shed": "Slip threshold 8.0 N (2.04x the 3.92 N payload load; 48% of the 16.64 N available excess lift). 8-degree undercut on the locking tooth face cams the pawl out above threshold -> slow pay-out with NO power. Dyneema anchor slot DELETED: the inboard end is friction-retained only (~0.7 N capstan on the last 2 turns) so the line runs off the drum and falls away rather than fouling the UAV. The slip interface lives in the PRINTED SPOOL HUB (friction slipper, T_slip = 0.060 N.m), so at overload the spool breaks free of the servo and T_backdrive drops out of F_shed entirely; only T_slip < T_backdrive must hold. Sacrificial element is the printed spool, not the servo. Spec §3.8.",
       "line": "Dyneema SK75 0.5 mm braid x 2 m (REF: DYNEEMA-SK75); rated break ~300 N; WLL ~60 N (5:1 SF). Unchanged from Rev R.",
-      "load_cell": "HX711 24-bit ADC (REF: HX711-LC) — tension monitoring, re-hosted from Cape-B onto the CAN-PERIPH-GW; feeds the sensed (secondary) overload path.",
+      "load_cell": "HX711 24-bit ADC (REF: HX711-LC) — tension monitoring, re-hosted from TACCO onto the CAN-PERIPH-GW; feeds the sensed (secondary) overload path.",
       "position_sensing": "ENC-AK7455-SPOOL on the spool itself (gateway J_ENC, SPI). Spool angle is reported whenever powered, regardless of coupler type. A powerless shed is un-telemetered by construction (no power, no encoder, no CAN). Spec §3.7.3.",
       "servo_mode": "Encoded continuous-rotation (NOT position/servo: single-turn cannot express 23.2 spool turns; NOT stepper: its open-loop count becomes fiction after a hub slip). Gateway closes the position loop on the AK7455. Servo torque ceiling set BELOW T_slip so routine lifting never wears the sacrificial hub. Mode indices/registers pending the datasheet gate. Spec §3.9.",
       "maneuver_conflict": "OPEN: at F_shed = 8.0 N a 2.0g manoeuvre on the slung payload reaches 0.98x threshold and 2.5g sheds it. Referred to the flight envelope — declare a ~1.5g slung-load limit, or raise F_shed to ~12 N (72% of excess lift). Spec §4.4.",
@@ -1031,7 +1031,7 @@
     },
     "instrumentation": {
       "gps_retention": "cargo_gps_retention_ring.stl — PETG, 25 mm dia opening aligned to GPS patch; bonds to closed door inner face",
-      "fpv_camera": "cargo_fpv_bezel.stl — PETG, 28 mm dia cutout on forward cargo bay bulkhead; camera points down at payload; connects to Cape-B MIPI/USB"
+      "fpv_camera": "cargo_fpv_bezel.stl — PETG, 28 mm dia cutout on forward cargo bay bulkhead; camera points down at payload; connects to TACCO MIPI/USB"
     },
     "cargo_electronics": [
       {
@@ -1044,7 +1044,7 @@
         "cost_usd": 3.0,
         "supplier": "Amazon / AliExpress",
         "search": "SG90 9g micro servo 1.8 kg·cm",
-        "notes": "Ch-A servo = door cam; Ch-B servo = latch pull-wire release; both driven via DRV8833 H-bridge controlled by Cape-B GPIO"
+        "notes": "Ch-A servo = door cam; Ch-B servo = latch pull-wire release; both driven via DRV8833 H-bridge controlled by TACCO GPIO"
       },
       {
         "ref": "DRV8833-CARGO",
@@ -1056,7 +1056,7 @@
         "cost_usd": 2.0,
         "supplier": "Amazon / AliExpress",
         "search": "DRV8833 dual H-bridge motor driver breakout board",
-        "notes": "Treats SG90 servos as DC motors in position control; over-current protection prevents door-jam damage; mounts in cargo_drv8833_tray.stl; controlled via Cape-B GPIO"
+        "notes": "Treats SG90 servos as DC motors in position control; over-current protection prevents door-jam damage; mounts in cargo_drv8833_tray.stl; controlled via TACCO GPIO"
       }
     ],
     "cargo_hardware": [
@@ -1241,11 +1241,11 @@
       "total_estimate": "~$1,905",
       "notes": "Rev P adds ~$23 vs Rev O ($1,882). Component prices as of 2026-06-01. Excludes one-time tools. Printed cargo parts ($0 marginal cost for in-house prints) not included in cost delta beyond filament."
     },
-    "note": "Rev Q: v1 capes (CAPE-A, CAPE-B, RCRS-49) qty=0/archived. All 8 positions use v2 capes. AUW ~3,590 g. T/W ~1.48. Est. total cost: ~$2,137."
+    "note": "Rev Q: v1 capes (CAPE-A, TACCO, RCRS-49) qty=0/archived. All 8 positions use v2 capes. AUW ~3,590 g. T/W ~1.48. Est. total cost: ~$2,137."
   },
-  "rev_q_summary": "Rev Q standardises all 8 avionics nodes on EMI-hardened v2 capes. Changes from Rev P: (1) All 4 FC positions now use Cape-A-2 (Bay A/B/D/E); (2) All 4 CN positions now use Cape-B-2; (3) All 4 XCVR sub-modules now use XCVR-49MHZ-2. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 KiCad, gerbers, and DTS archived. Old nacelle and fuselage EDF design variants archived (see airframe/archive/). AUW impact: +~40 g. Cost impact: +~$232 (inner bays upgraded to v2).",
+  "rev_q_summary": "Rev Q standardises all 8 avionics nodes on EMI-hardened v2 capes. Changes from Rev P: (1) All 4 FC positions now use Pilot (Bay A/B/D/E); (2) All 4 CN positions now use TACCO; (3) All 4 XCVR sub-modules now use XCVR-49MHZ-2. Pilot, TACCO, XCVR-49MHZ-1 KiCad, gerbers, and DTS archived. Old nacelle and fuselage EDF design variants archived (see airframe/archive/). AUW impact: +~40 g. Cost impact: +~$232 (inner bays upgraded to v2).",
   "gcs": {
-    "note": "Rev Q1 — Skipper GCS (Ground Control Station). Host PC + PB2-I comms node + Cape-B-2 + XCVR-49MHZ-2. Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz (Part 15 §15.235), Zigbee 2.4 GHz. Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders. IP65 field enclosure. No external PAs (FCC-compliant). See gcs/skipper/hardware/docs/skipper_antenna_spec.md.",
+    "note": "Rev Q1 — Skipper GCS (Ground Control Station). Host PC + PB2-I comms node + TACCO + XCVR-49MHZ-2. Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz (Part 15 §15.235), Zigbee 2.4 GHz. Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders. IP65 field enclosure. No external PAs (FCC-compliant). See gcs/skipper/hardware/docs/skipper_antenna_spec.md.",
     "items": [
       {
         "ref": "SKIPPER-PB2-I",
@@ -1258,13 +1258,13 @@
         "notes": "USB CDC-ECM to host PC; same hardware as aircraft CN nodes"
       },
       {
-        "ref": "SKIPPER-CAPE-B-2",
-        "desc": "Cape-B-2 (XO) PCB — Skipper radio+logging cape",
+        "ref": "SKIPPER-TACCO",
+        "desc": "TACCO (XO) PCB — Skipper radio+logging cape",
         "qty": 1,
         "mass_g": 35,
         "cost_usd": 105.0,
         "supplier": "JLCPCB (in-house fab)",
-        "pn": "order with aircraft Cape-B-2 batch",
+        "pn": "order with aircraft TACCO batch",
         "notes": "Same PCB as aircraft CN; SiK+LoRa+WiFi+Zigbee+49 MHz interfaces"
       },
       {
@@ -1335,7 +1335,7 @@
         "cost_usd": 6.0,
         "supplier": "Amazon / AliExpress",
         "pn": "3dBi RP-SMA 2.4GHz rubber duck dipole",
-        "notes": "Cape-B-2 Zigbee interface"
+        "notes": "TACCO Zigbee interface"
       },
       {
         "ref": "SKIPPER-ANT-GPS",
@@ -1425,7 +1425,7 @@
         "cost_usd": 28.0,
         "supplier": "Amazon / Hammond Mfg",
         "pn": "Hammond 1455N1601 or equiv 145x90x65mm IP65",
-        "notes": "EPDM gasket; 40mm fan cutout; cable glands; PCB standoffs at 55×35mm Cape-B-2 hole pattern"
+        "notes": "EPDM gasket; 40mm fan cutout; cable glands; PCB standoffs at 55×35mm TACCO hole pattern"
       },
       {
         "ref": "SKIPPER-TRIPOD",

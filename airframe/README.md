@@ -53,7 +53,7 @@ See `AGENTS.md` "Airframe Geometry" for the validated component placement extent
 | Nacelle assembly (2× complete: EDFs + shells + pivot + iris) | ~625 | 22.0 | Includes 4× XFly Galaxy X5 (70g mass each), shells, hubs, pivot, iris mechanism |
 | Tilt mechanism (servos, linkage, frame) | ~200 | 7.1 | 2× SPT5425LV (converted with LibreServo v2, ≥25 kg·cm @ 6V), rods, brackets |
 | Landing gear (wire + mounts) | ~436 | 15.4 | R6 canonical (1.5 in): leg+bay+foot 310g + wires 91g + pins/bolts 34g; see docs/LANDING_GEAR_ANALYSIS.md §11.6 (open item LG-18: target ≤300g pending mass-reduction pass) |
-| Avionics (all 8 nodes, capes, TPM, SD cards) | ~432 | 15.2 | 8× PB2-I (104g) + 4× Cape-A-2 (124g) + 4× Cape-B-2 (160g) + 2× Commo (40g) + 4× microSD (4g); excludes cable/conduit |
+| Avionics (all 8 nodes, capes, TPM, SD cards) | ~432 | 15.2 | 8× PB2-I (104g) + 4× Pilot (124g) + 4× TACCO (160g) + 2× Commo (40g) + 4× microSD (4g); excludes cable/conduit |
 | Power (battery + PDB + ESCs) | ~925 | 32.6 | 6S 4000 mAh LiPo (750g) + Flight Engineer PDB (75g) + 4× 40A BLHeli32 ESCs (100g) |
 | Cargo bay internals (gondola, door, winch, servo) | ~180 | 6.3 | SPT5425LV winch servo (LibreServo v2), ratchet, latch, Dyneema line |
 | Payload bay (empty) | — | — | Rated for 226 g (8 oz) cargo |

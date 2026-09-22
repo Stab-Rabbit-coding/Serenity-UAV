@@ -176,7 +176,7 @@ currently covers 4 overview SVGs; the 26+ build-guide cards remain hand-drawn.
 - ✅ `build_guide_06_nacelle_pivot.svg` — Pivot mechanism (current)
 - ✅ `build_guide_07_tilt_servo.svg` — Servo linkage (current)
 - ✅ `build_guide_08_nozzle_gear.svg` — Nozzle iris gearing (current)
-- ⚠️ `build_guide_09_avionics.svg` — **STALE** (depicts old Cape-A-1/B-1, not Rev S Wash/Zoë)
+- ⚠️ `build_guide_09_avionics.svg` — **STALE** (depicts old Pilot/B-1, not Rev S Wash/Zoë)
 
 ### Phase 5–7 (Electrical & Flight)
 

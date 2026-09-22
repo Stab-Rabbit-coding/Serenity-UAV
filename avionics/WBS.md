@@ -15,16 +15,16 @@
 
 ---
 
-## §1.2 — PCB Design: Cape-A-1 and Cape-B-1 (archived)
+## §1.2 — PCB Design: Pilot and Cape-B-1 (archived)
 
 *(root `WBS.md` §1.2)*
 
-- [x] **Regenerate Cape-A-1 gerbers** — `.kicad_pcb` modified 2026-05-23 (tamper-mesh commit); gerbers in `serenity/kicad/gerbers/CAPE-A-1/` are from 2026-05-22.
-    - Open in KiCad → Plot → Gerbers; overwrite files in `serenity/kicad/gerbers/CAPE-A-1/`; re-export drill files.
+- [x] **Regenerate Pilot gerbers** — `.kicad_pcb` modified 2026-05-23 (tamper-mesh commit); gerbers in `serenity/kicad/gerbers/Pilot/` are from 2026-05-22.
+    - Open in KiCad → Plot → Gerbers; overwrite files in `serenity/kicad/gerbers/Pilot/`; re-export drill files.
     - Run DRC to zero errors before plotting.
     - **BLOCKS Phase 6 fab order**
 
-- [x] **Regenerate Cape-B-1 gerbers** — same timestamp issue. `serenity/kicad/gerbers/CAPE-B-1/` files are from 2026-05-22.
+- [x] **Regenerate TACCO gerbers** — same timestamp issue. `serenity/kicad/gerbers/CAPE-B-1/` files are from 2026-05-22.
     - **BLOCKS Phase 6 fab order**
 
 ---
@@ -53,11 +53,11 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 **Transform scripts** (generate -2 files from -1 originals):
 
-- `avionics/kicad/gen_cape_a2.py` → `CAPE-A-2.kicad_sch`
-- `avionics/kicad/gen_cape_b2.py` → `CAPE-B-2.kicad_sch`
+- `avionics/kicad/gen_cape_a2.py` → `Pilot.kicad_sch`
+- `avionics/kicad/gen_cape_b2.py` → `TACCO.kicad_sch`
 - `avionics/kicad/add_eth_phy.py` — ETH PHY isolation sub-circuit generator (called by above)
-- `avionics/kicad/gen_cape_a2_pcb.py` → `CAPE-A-2.kicad_pcb`
-- `avionics/kicad/gen_cape_b2_pcb.py` → `CAPE-B-2.kicad_pcb`
+- `avionics/kicad/gen_cape_a2_pcb.py` → `Pilot.kicad_pcb`
+- `avionics/kicad/gen_cape_b2_pcb.py` → `TACCO.kicad_pcb`
 
 **Open tasks:**
 
@@ -147,7 +147,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     pad, matching the J_SBUS line item already in Pilot.md §14's field-connector
     table (§1.2, "Reconcile Pilot.md §14...").
 - [ ] **Generate Pilot gerbers** — superseded by the 2026-09-19 schematic-first Rev T
-    rebuild (`avionics/kicad/Pilot/Pilot.md`; `CAPE-A-2.kicad_pcb` no longer exists).
+    rebuild (`avionics/kicad/Pilot/Pilot.md`; `Pilot.kicad_pcb` no longer exists).
     Rev T is fully generated (`gen_pilot_sch.py`/`gen_pilot_footprints.py`/
     `gen_pilot_pcb.py`), datasheet-verified, 6-layer, ERC 0 / DRC 0 at 0%
     routed (388 connections). Two freerouting attempts via the Specctra bridge
@@ -159,17 +159,17 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     isolation-domain `ISO_BAND` rule, unlike the batch Specctra round-trip),
     then `bash scripts/export_pilot_gerbers.sh`.
     - **BLOCKS Pilot fab order**
-- [ ] **Generate XO gerbers** — `CAPE-B-2.kicad_pcb` complete; same DRC + export procedure;
-    export to `avionics/kicad/gerbers/CAPE-B-2/`.
+- [ ] **Generate XO gerbers** — `TACCOcad_pcb` complete; same DRC + export procedure;
+    export to `avionics/kicad/gerbers/TACCO/`.
     - **BLOCKS XO fab order**
 
 - [x] remove Wi-Fi, sik, and loRa antennas from XO. Use filtered chokes on rf lines to route all
     RF signals from antennas to Wi-Fi, lora, zigbee,and sik xcvr circuits on XO, and/or use uart
     or i2c with filtering to connect isolated xcvrs to the cape. **Done (2026-06-05):** Added §13
-    antenna filter chains to CAPE-B-2.kicad_sch — each radio ANT pin now routes through a Johanson
+    antenna filter chains to TACCO.kicad_sch — each radio ANT pin now routes through a Johanson
     BPF (FL_LORA/FL_SIK: 0915LP15B0100E; FL_WIFI: 2450BP15B050E) and RCLAMP0502B ESD shunt to a
     dedicated SMA connector (J_SMA_LORA, J_SMA_WIFI, J_SMA_SIK). SiK uses Hirose U.FL J_SIK_ANT for
-    module pigtail. All connector shells PGND. See CAPE-B-2.md §13.
+    module pigtail. All connector shells PGND. See TACCO.md §13.
 - [x] **Re-evaluate space / restore Ethernet to XO** — One DP83825I EMI-hardened PHY
     added to XO at Rev R (introduced Rev Q); J_ETH_B connector populated. Board has adequate
     space; RF SMA connectors remain. *(done 2026-06-07)*
@@ -182,7 +182,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     strategy already decided (§1.4.2, 2026-06-22):** restrict WL1837MOD Wi-Fi to 5 GHz only
     and feed CC2652R7's 2.4 GHz path through a passive 2.4/5 GHz diplexer onto the existing
     shared Wi-Fi antenna (no separate Zigbee antenna/SMA pad needed). Still open: add
-    CC2652R7 + diplexer to a Cape-B-2 schematic revision; decide which bay(s) carry it.
+    CC2652R7 + diplexer to a TACCO schematic revision; decide which bay(s) carry it.
 - [x] **REJECTED (2026-09-20): mLRS as XO's SiK radio-link protocol.** Considered during the
     XO board-area rebuild (via `ce-ideate`) as a possible replacement for the RFD900ux-SMT SiK
     channel. XO's and Commo's radio links provide **redundant multiband connectivity between
@@ -368,12 +368,12 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     FAR-FAN-40, FAR-EMI-VENT-40, FAR-BOND-STRAP, FAR-FT-PANEL, FAR-FERRITE-4MM) already exists at
     §1.1.5 (364 g / 0.80 lbm system total) — these sub-tasks convert the placeholders into
     real, build-ready enclosures:
-    - [ ] **Shepherd's Room cage** (Cape-A-2 + Cape-B-2 stack, no Commo) — final wall thickness,
+    - [ ] **Shepherd's Room cage** (Cape-A-2 + TACCO stack, no Commo) — final wall thickness,
         seam/gasket detail, FAR-FAN-40 mount, FAR-EMI-VENT-40 vent location.
-    - [ ] **Inara's Shuttle cage** (Cape-A-2 + Cape-B-2 stack, no Commo) — same scope as Shepherd's.
-    - [ ] **River's Room cage** (Cape-A-2 + Cape-B-2 + Commo stack) — add Commo board clearance and
+    - [ ] **Inara's Shuttle cage** (Cape-A-2 + TACCO stack, no Commo) — same scope as Shepherd's.
+    - [ ] **River's Room cage** (Cape-A-2 + TACCO + Commo stack) — add Commo board clearance and
         LoRa/49 MHz feedthrough ports to the FAR-FT-PANEL design.
-    - [ ] **Simon's Medbay cage** (Cape-A-2 + Cape-B-2 + Commo stack) — same scope as River's Room.
+    - [ ] **Simon's Medbay cage** (Cape-A-2 + TACCO + Commo stack) — same scope as River's Room.
     - [ ] **Flight Engineer (PDB) enclosure** — verify whether the PDB needs a full Faraday cage or only a
         bond strap to the keel ground plane (no TPM/RF on Flight Engineer; see §1.2 "Carry the tamper
         signal over the link for the TPM-less boards").
@@ -580,9 +580,9 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
 
 - [x] The ground control station is named "Skipper" aka "CAPT Reynolds" or "CAPT Tight Pants" - "I aim to misbehave" *(implemented throughout all docs)*
 
-- [x] The Flight Control Avionics Cape is named "Pilot" - "I'm a leaf on the wind" *(implemented: CAPE-A-2.kicad_sch, CAPE-A-2.md, all docs)*
+- [x] The Flight Control Avionics Cape is named "Pilot" - "I'm a leaf on the wind" *(implemented: Pilot.kicad_sch, Pilot.md, all docs)*
 
-- [x] The Comms/Logging/Payload Cape is named "XO" - "Big Damn Heros, sir." *(implemented: CAPE-B-2.kicad_sch, CAPE-B-2.md, all docs)*
+- [x] The Comms/Logging/Payload Cape is named "XO" - "Big Damn Heros, sir." *(implemented: TACCO.kicad_sch, TACCO.md, all docs)*
 
 - [x] The Power Distribution Board is named "Flight Engineer" - "Everything is shiny." *(implemented: FlightEngineer.md, PWR-DIST-1.kicad_sch)*
 
@@ -1153,12 +1153,12 @@ REFERENCES.md Removed/Superseded Citations).
 
 *(root `TODO.md` §2.4-§2.5)*
 
-*Rev R: all nodes use v2 EMI-hardened capes. Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 are retired.*
+*Rev R: all nodes use v2 EMI-hardened capes. Pilot / Cape-B-1 / XCVR-49MHZ-1 are retired.*
 
 | Item | Qty | Unit Cost | Total | Notes |
 |------|-----|----------|-------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 | ~$204 | DK 2820-100003007-ND |
-| Pilot (Pilot) PCB (JLCPCB assembled) | 2× | ~$55 | ~$110 | FC1/Shepherd's room (Bay A) + FC2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
+|Pilot PCB (JLCPCB assembled) | 2× | ~$55 | ~$110 | FC1/Shepherd's room (Bay A) + FC2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
 | XO (XO) PCB (JLCPCB assembled) | 2× | ~$95 | ~$190 | CN1/Shepherd's room (Bay A) + CN2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
 | Commo PCB (JLCPCB assembled) | 2× | ~$25 | ~$50 | 49 MHz (Part 15 §15.235) sub-module for CN1, CN2 (v2 EMI-hardened) |
 | SiK 915MHz ground station radio | 1× | ~$15 | ~$15 | MAVLink GCS link |
@@ -1173,7 +1173,7 @@ REFERENCES.md Removed/Superseded Citations).
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | ~$204 | CN3, FC3, CN4, FC4 |
-| Pilot (Pilot) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/River's room (Bay C) + FC4/Simon's medbay (Bay D) (v2) |
+|Pilot PCB (JLCPCB assembled) | 2× | ~$110 | FC3/River's room (Bay C) + FC4/Simon's medbay (Bay D) (v2) |
 | XO (XO) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/River's room (Bay C) + CN4/Simon's medbay (Bay D) (v2) |
 | Commo PCB (assembled) | 2× | ~$50 | CN3, CN4 (v2 EMI-hardened) |
 | microSD 64GB (log) | 2× | ~$20 | CN3-LOG, CN4-LOG |

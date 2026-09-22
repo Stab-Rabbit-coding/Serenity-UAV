@@ -25,7 +25,7 @@
 
 - [x] Si5351A I²C driver — `serenity/firmware/cn/src/si5351.c/.h` *(done 2026-05-25)*
 
-- [x] AM6254 device tree overlays — Cape-A and Cape-B DTSs *(done 2026-05-25)*
+- [x] AM6254 device tree overlays — Pilot and TACCO DTSs *(done 2026-05-25)*
 
 - [x] serenity-cn Phase 6 daemon (XCVR KISS driver + argparse + SIGTERM) *(done 2026-05-25)*
 

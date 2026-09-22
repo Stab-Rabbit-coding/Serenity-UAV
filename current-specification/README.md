@@ -93,8 +93,8 @@ recomputed into `bom_revS.json`/`.csv` or the AUW figure. Tracked open in `TODO.
 ### Avionics (PCBs, Capes, Sensors)
 
 - **SBCs:** 8× PocketBeagle2 Industrial
-- **Capes:** 8× Pilot/Cape-A-2, 8× XO/Cape-B-2, 2× Commo/Cape-X-1, 1× Flight Engineer/PDB
-- **Standalone:** 1× Observer (vision/ToF/laser board, PCM-071 SoM)
+- **Capes:** 4× Pilot, 4× TACCO (Tactical Coordinator: Comms, Payload, Logs), 2× COMMO (915 MHz SiK and 49 MHz S )
+- **Standalone:** 1× Observer (vision/ToF/laser board, PCM-071 SoM), 1x Flight Engineer (Power Distribution Board)
 - **Sensors:** GPS, IMU, barometer, 2× Hall encoders (AK7455), 12× ToF (VL53L5CX), 2× laser
 - **Security:** 8× TPM 2.0 (SLB9672), 4× CPLD write-blocker (ATF16V8BQL)
 - **Connectors & cabling:** USB-C, XT90 PDB, RP-SMA antenna bulkheads, shielded Ethernet/CAN

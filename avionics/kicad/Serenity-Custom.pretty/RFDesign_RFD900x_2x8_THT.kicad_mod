@@ -3,7 +3,7 @@
 	(generator "gen_xo_footprints.py")
 	(generator_version "9.0")
 	(layer "F.Cu")
-	(descr "RF Design RFD900x/RFD868x SiK radio modem, 2x8 THT 0.1 in pitch, 20.0 mm row spacing, 42.5x30 mm body (rfd900x-datasheet.pdf Fig 5-1). MOUNTED ON STANDOFFS ABOVE the cape (piggyback, like the cape-on-PocketBeagle2 stack) per XO.md §12/§14 board-area budget — the 55x35 mm cape cannot fit the full 42.5x30 mm body flush AND everything else (XO.md §1 'no overall board size increase from CAPE-B-1'). F.Fab shows the true body outline for documentation; F.CrtYd (what the PCB auto-placer budgets against) is only the header pin field plus a small standoff margin, since the raised module does not block placement of low-profile parts on the cape surface beneath it.")
+	(descr "RF Design RFD900x/RFD868x SiK radio modem, 2x8 THT 0.1 in pitch, 20.0 mm row spacing, 42.5x30 mm body (rfd900x-datasheet.pdf Fig 5-1). MOUNTED ON STANDOFFS ABOVE the cape (piggyback, like the cape-on-PocketBeagle2 stack) per XO.md §12/§14 board-area budget — the 55x35 mm cape cannot fit the full 42.5x30 mm body flush AND everything else (XO.md §1 'no overall board size increase from TACCO'). F.Fab shows the true body outline for documentation; F.CrtYd (what the PCB auto-placer budgets against) is only the header pin field plus a small standoff margin, since the raised module does not block placement of low-profile parts on the cape surface beneath it.")
 	(tags "Serenity XO RFDesign_RFD900x_2x8_THT")
 	(attr through_hole)
 	(property "Reference" "REF**" (at 0 -1 0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))

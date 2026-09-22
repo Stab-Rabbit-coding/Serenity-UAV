@@ -705,7 +705,7 @@
     All 4 spatial conflicts resolved (NSVMT_X_CEN moved AFT to −147.6 mm). Load FOS ≥ 11 vs 4.0
     AUVSI target. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S2** — Inara and River avionics bay dorsal standoffs
-    (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (62×42 mm each) for Cape-B
+    (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (62×42 mm each) for TACCO
     (55×35 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
     colocated for minimal SMA routing. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
@@ -977,7 +977,7 @@ do not restate its dimensions here.
     inboard end is **not** anchored.
 - [ ] **Firmware — winch state machine** (Simon payload-primary, gateway-side control).
     `WINCH_STATUS` / `WINCH_COMMAND` frames, TPM-signed per [REF-NIST-001 §2.1]; STS3215 bus
-    driver; HX711 re-hosted from Cape-B to the gateway; Shepherd watchdog cuts RAIL-2 on
+    driver; HX711 re-hosted from TACCO to the gateway; Shepherd watchdog cuts RAIL-2 on
     heartbeat timeout (which *engages* the catch). Bus IDs assigned in firmware, not in the
     spec. Cross-ref `avionics/firmware/WBS.md`.
 - [ ] **Re-run the §6 mass/CG table** once the SPT5425LV+LibreServo v2 unit is bench-weighed;
@@ -1100,7 +1100,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     Export updated STL, re-bake, verify watertight.  See §1.1.0a skid task.  **BLOCKS taxi test.**
 
 - [ ] **Simon bay — define avionics bay in the MIDDLE section (moved here from §1.1.1.2, 2026-06-13).**
-    Simon's stack (Cape-B-2 + Cape-A-2, 55×35 mm both, 39.2 mm stack height) + Faraday tray (60×40×55 mm)
+    Simon's stack (Cape-B-2 + Pilot, 55×35 mm both, 39.2 mm stack height) + Faraday tray (60×40×55 mm)
     mounts in the **middle inner-neck dorsal** interior. Add boss standoffs + dorsal access panel to the
     middle Blender/SCAD source. Verify the inner-neck dorsal band has clearance (middle Z ≈ 1.3..166 mm,
     thin horseshoe section — confirm the inscribed cavity holds the 60×40×55 tray before placing bosses).

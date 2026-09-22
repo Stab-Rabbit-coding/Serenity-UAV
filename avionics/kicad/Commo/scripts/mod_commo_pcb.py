@@ -7,7 +7,7 @@ mod_commo_pcb.py — Apply the schematic-first reconciliation transform to
 Mirrors exactly the topology transform authored into Commo.kicad_sch by
 gen_commo_sch.py:
 
-  1. DROP J1 ("CAPE-B IF", JST-GH-6P).  Its host-UART role moves onto the PB2
+  1. DROP J1 ("TACCO IF", JST-GH-6P).  Its host-UART role moves onto the PB2
      rails, so the two modem UART nets are MERGED into the existing rail nets:
         UART_TX -> UART_49MHZ_XCVR_RX   (modem TX  = host RX,  PB2-P1 pin 15)
         UART_RX -> UART_49MHZ_XCVR_TX   (modem RX  = host TX,  PB2-P1 pin 16)
@@ -141,7 +141,7 @@ def main():
     # Load/add/assign the new footprints BEFORE any board.Remove(): a Remove()
     # invalidates the SWIG IO-plugin state that FootprintLoad relies on.
     # Placed in the strip vacated by J1 (left edge).  Final placement TBD.
-    j1 = fp_by_ref.get("CAPE-B IF")
+    j1 = fp_by_ref.get("TACCO IF")
     jx, jy = (
         (pcbnew.ToMM(j1.GetPosition().x), pcbnew.ToMM(j1.GetPosition().y))
         if j1 is not None

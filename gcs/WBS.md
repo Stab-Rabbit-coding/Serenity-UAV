@@ -34,7 +34,7 @@
     (IP54 or better) for field use.  Document recommended models and any BIOS/driver notes.
 - [ ] **Skipper field enclosure — print and fit-check** `gcs/skipper/hardware/enclosure/openscad/skipper_field_enclosure.scad`:
     export STL (`openscad -o skipper_field_enclosure_body.stl ... -D RENDER_MODE=0`);
-    verify PCB standoff spacing matches Cape-B-2 55×35 mm mounting hole pattern in slicer;
+    verify PCB standoff spacing matches TACCO 55×35 mm mounting hole pattern in slicer;
     run mesh validation; print body + lid in PETG (IP65 gasket groove accepts 3 mm EPDM cord).
     **Add to Phase Skipper-1 print schedule.**
 - [ ] **Gimbal STL generation and mesh verification** — for each of the three SCAD files:
@@ -48,7 +48,7 @@
     provides ≥2× safety factor.  Document in `gcs/skipper/hardware/docs/skipper_power_budget.md`.
 - [ ] **Procure Skipper comms node hardware:**
     - 1× PocketBeagle 2 Industrial (AM6254) — same DigiKey PN 2820-100003007-ND
-    - 1× Cape-B-2 (XO) PCB — order 1 additional unit when placing aircraft PCB order at JLCPCB
+    - 1× TACCO (XO) PCB — order 1 additional unit when placing aircraft PCB order at JLCPCB
     - 1× Commo sub-module — order 1 additional unit with aircraft Commo order
     - 1× 64 GB microSD (Samsung or equiv, same as aircraft CN nodes)
     - 1× 5 V / 5 A switching BEC (Pololu D24V50F5 or equiv)
@@ -72,8 +72,8 @@
     - 1× M6 camera tripod (heavy-duty) or 3 m telescoping mast for outdoor use
 - [ ] **Flash Debian Linux to Skipper PB2-I eMMC** — same OS image as aircraft nodes.
     USB-C boot procedure per BeagleBone Debian documentation.
-- [ ] **Apply Cape-B-2 device tree overlay for Skipper** — compile and install
-    `gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dtbo`.
+- [ ] **Apply TACCO device tree overlay for Skipper** — compile and install
+    `gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-TACCO2.dtbo`.
     Verify EHRPWM0 appears as `/sys/class/pwm/pwmchip0/` with 2 channels.
     Verify I²C2 appears as `/dev/i2c-2`.
 - [ ] **Provision TPM 2.0 (SLB9672) on Skipper's PB2-I** — unique key material; persistent

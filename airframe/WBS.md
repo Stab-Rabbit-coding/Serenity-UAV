@@ -324,7 +324,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Servos (DS3218MG, SG90) | 2 | `airframe/placeholders/servos/` |
 | Bearings (MF104ZZ, MR63ZZ, 6804) | 3 | `airframe/placeholders/bearings/` |
 | Structural CF (rods, tube, bar, plate, PTFE) | 6 | `airframe/placeholders/structural/` |
-| Avionics PCBs (PB2-I, Cape-A-2/B-2, Commo, Flight Engineer, microSD) | 6 | `airframe/placeholders/avionics/` |
+| Avionics PCBs (PB2-I, Pilot/B-2, Commo, Flight Engineer, microSD) | 6 | `airframe/placeholders/avionics/` |
 | Power (LiPos, fuses, shunt) | 7 | `airframe/placeholders/power/` |
 | Cargo (STS3215, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` — N20 placeholder retired, STS3215 placeholder pending envelope |
 | Gears M=1.0 (sector, pinion, bevel, housing) | 4 | `airframe/placeholders/gears/` |
@@ -439,8 +439,8 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Johnson's Paste Wax | 1 tin | Void former release agent (2 coats) |
 | 3M 4016 closed-cell gasket tape | 1 roll | Access panel frame lips |
 | PTFE tube 5mm OD × 3mm ID | 6 m | 8 conduits (CAN FD, RS-485, 1553A, 1553B, ETH×2, SERVO-PWR, MAIN-PWR) |
-| M2.5 nylon hex standoff 6mm | 16× | Cape-B floor mounts (4 per bay × 4 bays) |
-| M2.5 nylon hex standoff 20mm | 16× | Cape-A inter-cape spacing |
+| M2.5 nylon hex standoff 6mm | 16× | TACCO floor mounts (4 per bay × 4 bays) |
+| M2.5 nylon hex standoff 20mm | 16× | Pilot inter-cape spacing |
 | M2.5 × 8mm SS button screws | 64× | Standoff attachment + panel B/E fasteners |
 | M3 heat-set threaded inserts | 4× | Cargo gondola belly hard points |
 | N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |

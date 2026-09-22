@@ -101,7 +101,7 @@ SERVO_NOTE = (
     " 2026-09-21 (" + SPEC_DOC + ", D-GW-2): Qty 2 -> 3 -- the doors are two INDEPENDENT "
     "piano-hinged halves (Rev R1b), one actuator each, plus the release; all three are "
     "driven by CAN-PERIPH-GW-DOOR (osc-native chain, or PWM fallback with stock SG90s), "
-    "NOT by DRV8833-CARGO (retired) or Cape-B GPIO. The old 'Ch-A/Ch-B' wording is "
+    "NOT by DRV8833-CARGO (retired) or TACCO GPIO. The old 'Ch-A/Ch-B' wording is "
     "historical. Owner to confirm the two-actuator reading (GW-DOOR-4)."
 )
 

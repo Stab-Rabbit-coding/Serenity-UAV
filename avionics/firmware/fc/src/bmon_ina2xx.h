@@ -27,7 +27,7 @@
  *   Resolution  : 4 mV per LSB in the voltage register.
  *   Configuration register 0x00 defaults to:
  *     PGA = ±320 mV, BADC = 12-bit, SADC = 12-bit, MODE = Continuous both
- *   Cape-A-1 usage: voltage-only; shunt disabled by tying IN+/IN−.
+ *   Pilotage: voltage-only; shunt disabled by tying IN+/IN−.
  *
  * ── INA226AIDGSR (Pilot on-cape) ──────────────────────────────────────
  *
@@ -96,7 +96,7 @@ extern "C" {
  * Device constants — INA219
  * ---------------------------------------------------------------------------*/
 
-/** I2C address with A0 = A1 = GND (both INA219 and INA226 on Cape-A). */
+/** I2C address with A0 = A1 = GND (both INA219 and INA226 on Pilot). */
 #define INA2XX_I2C_ADDR        (0x40U)
 
 /** INA219 bus voltage register address. */

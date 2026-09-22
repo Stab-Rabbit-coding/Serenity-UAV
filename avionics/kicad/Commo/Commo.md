@@ -14,7 +14,7 @@ part/pinout datasheet vetting, PTT/RSSI pinmux firmware sign-off, and 3 pre-exis
 in-circuit stubs the schematic surfaced (`RF_ANT_SW`, `PA_EMIT`, `DDS_FSYNC`).
 
 > **Note:** the "As-Built" tables below predate the 2026-07-04 reconciliation and still
-> list J1 "CAPE-B IF" as present; J1 has since been removed and the modem UART moved to the
+> list J1 "TACCO IF" as present; J1 has since been removed and the modem UART moved to the
 > PB2 rails. `Commo.kicad_sch` (not these tables) is now the source of truth.
 
 ---
@@ -39,7 +39,7 @@ constraints from XCVR-49MHZ-1 apply unchanged.
 
 The 6-pin 2.54 mm pitch header J1 that connects to XO's XCVR-49MHZ port is the
 primary EMI ingress path. Any high-frequency conducted noise arriving on the UART and
-PTT lines from the CAPE-B harness routes directly to the Si5351A logic interface
+PTT lines from the TACCO harness routes directly to the Si5351A logic interface
 and MCP4921 SPI port. Commo adds a three-tier protection network:
 
 ## Tier 1 — Common-mode choke (CM5)
@@ -154,7 +154,7 @@ A PGND copper pour ring (3 mm wide, all four board edges) connects to:
 - TVS-SMA (SMAJ5.0A, see §6)
 
 PGND-to-GND single-point connection: 0 Ω solder-selectable link at J1 GND (pin 2),
-so the board shares chassis ground with the CAPE-B host when plugged in. If RF isolation
+so the board shares chassis ground with the TACCO host when plugged in. If RF isolation
 from the host ground is preferred, the link is left open.
 
 ## EMI shield can footprint
@@ -443,7 +443,7 @@ from the actual board the way a hand-maintained BOM can.
 | CMP By, DAC By, SW By | 100 nF ×3 | C 0402 | Local +3V3 bypass at U2B/U2A/U5 |
 | PGND 10n | 10 nF C0G | C 0402 | §7 GND–PGND moat bridge (digital side ref) |
 | **Connectors** | | | |
-| CAPE-B IF | JST-GH-6P (custom) | JST_GH_6P | Host UART/PTT/RSSI/+3V3 interface |
+| TACCO IF | JST-GH-6P (custom) | JST_GH_6P | Host UART/PTT/RSSI/+3V3 interface |
 | PB2-P1, PB2-P2 | PB2I 2×18 sockets | 2x18 socket | Rev R1 PocketBeagle2 header rails |
 | **Ethernet (Rev R1 addition — see TODO.md §1.2b)** | | | |
 | ETH-PHY | ADIN1300BCPZ | QFN-48, B.Cu | Second Ethernet PHY, gives Commo (and the XO stack it plugs into) a 2nd port matching Pilot's 2-PHY config; also lets Commo run Ethernet standalone outside Serenity |
@@ -477,8 +477,8 @@ vacated AMS1117 SOT-223 pad area plus a 5 × 8 mm strip adjacent to J1.
 R = 2.5 mm quarter-circle arcs, centered on the M2.5 corner mounting holes
 (which are placed 2.5 mm from each edge). This eliminates the sharp right-angle
 corners that are prone to chipping during depanelization and handling, and matches
-the corner profile applied to CAPE-A-1, Pilot, XCVR-49MHZ-1 (also updated),
-and the existing CAPE-B-1/B-2 boards (which already carried this profile).
+the corner profile applied to Pilot, Pilot, XCVR-49MHZ-1 (also updated),
+and the existing TACCO/B-2 boards (which already carried this profile).
 
 ---
 
@@ -539,7 +539,7 @@ P1/P2 block already reserves an SPI1 slot for exactly this purpose within Commo'
 file). That header has been removed from both the schematic and the generator script;
 see `inject_commo_tpm.py`'s docstring for the full correction. Prior to the TPM's
 addition, cryptographic operations for AX.25 payload signing were entirely on the
-CAPE-B host CPU; that remains true for any signing not routed through the local TPM.
+TACCO host CPU; that remains true for any signing not routed through the local TPM.
 
 ---
 

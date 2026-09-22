@@ -31,7 +31,7 @@
                           │  ├──── 5 V / 10 A BEC ── avionics bus    │
                           │  └──── 6 V /  5 A BEC ── servo bus       │
                           │                                           │
-                          │  INA226 monitors (I2C → Cape-A / Shepherd's room / Bay A)  │
+                          │  INA226 monitors (I2C → Pilot / Shepherd's room / Bay A)  │
                           │   MAIN (0x44), ESC1 (0x40)–ESC4 (0x43)  │
                           └───────────────────────────────────────────┘
 ```
@@ -103,7 +103,7 @@ At 5 V / 22.2 V conversion: 26.7 A × 5 V / 22.2 V ≈ **6.0 A from VBAT** at pe
 (The WS2812B exhaust LED rings — formerly 240 mA nom / 600 mA peak — were removed
 from the design; see TODO §1.1.3.5.)
 
-> **Note:** Simultaneous TX on all four Cape-B radios is an upper bound; in practice
+> **Note:** Simultaneous TX on all four TACCO radios is an upper bound; in practice
 > the four boards stagger TX by frequency and election priority. Sustained 5 V peak
 > current ≈ 14–18 A in nominal flight.
 
@@ -424,7 +424,7 @@ noise into the avionics ground. Single-point; no ground loops.
 Each Pilot has one INA226AIDGSR wired to J_VBAT (direct VBAT tap), configured
 in voltage-only mode (no shunt). Provides coarse pack voltage at 1.25 mV/LSB.
 
-- I2C address: 0x40 (on Cape-A internal I2C bus)
+- I2C address: 0x40 (on Pilot internal I2C bus)
 - Driver: `bmon_ina2xx` (bmon_ina2xx.h / bmon_ina2xx.c)
 - Poll rate: 10 Hz (via FC node pwr_fault task)
 
@@ -546,7 +546,7 @@ The BQ76930 enforces hardware-level protection independent of firmware:
 
 After a BQ76930 hardware trip, the battery is fully disconnected from the load.
 Recovery requires a power cycle (reconnect battery) after the fault condition clears.
-The flight controller logs the BQ76930 SYS_STAT register contents via Cape-A I2C
+The flight controller logs the BQ76930 SYS_STAT register contents via Pilot I2C
 on every poll cycle, providing pre-fault data for post-flight analysis.
 
 ---

@@ -19231,7 +19231,7 @@
 			(justify right)
 		)
 	)
-	(gr_text "J1 6P HDR\nCAPE-B I/F"
+	(gr_text "J1 6P HDR\nTACCO I/F"
 		(at 120 104.5 0)
 		(layer "F.Fab")
 		(uuid "e1386c46-6578-46c1-94df-464d41bc6345")

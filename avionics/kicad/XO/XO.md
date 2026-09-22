@@ -3,7 +3,7 @@
 **Callsign:** XO
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
-**Revision:** R (Rev R baseline — XO naming finalised from CAPE-B-2; EMI-hardened variant of CAPE-B-1 Rev M, Ethernet PHY restored)
+**Revision:** R (Rev R baseline — XO naming finalised from TACCO; EMI-hardened variant of TACCO Rev M, Ethernet PHY restored)
 **Date:** 2026-06-07
 **Status (2026-09-20 update, Claude Sonnet 5):** The Rev S1 reconciliation described below is
 SUPERSEDED — the legacy schematic/PCB pair (169 sch refs vs 43 PCB footprints, 564 ERC
@@ -36,7 +36,7 @@ reference-designator remap** before edits — see TODO.md §1.2b and `avionics/A
 
 ## Purpose
 
-XO is the electromagnetic-environment-hardened variant of CAPE-B-1
+XO is the electromagnetic-environment-hardened variant of TACCO
 (Rev M), designed for the same harsh nacelle and fuselage EM environment as Pilot.
 The communications payload of this cape (SiK 915 MHz, LoRa 915 MHz, WiFi 2.4/5 GHz,
 49 MHz Part 15 §15.235) is inherently more susceptible to radiated interference than the purely
@@ -46,7 +46,7 @@ better supply filtering and digital-interface isolation from the RF groundplane.
 
 ---
 
-## Changes from CAPE-B-1 (Rev M)
+## Changes from TACCO (Rev M)
 
 ### 1. Ethernet PHY removal (space recovery)
 
@@ -55,7 +55,7 @@ ETH-P/ETH-N JST-GH connectors are removed. The 22 P2 expansion-header pins forme
 allocated to RMII0/1, MDC, MDIO, and PHY control signals become no-connect.
 
 The freed board area (approximately 20 × 12 mm) accommodates the new EMI filter components
-without any overall board size increase from the CAPE-B-1 55 × 35 mm footprint.
+without any overall board size increase from the TACCO 55 × 35 mm footprint.
 
 ### 2. CAN FD transceiver: ATA6561 → ISOW1044BDFMR
 
@@ -101,7 +101,7 @@ lines treated as follows:
 
 - **Supply:** A 10 µF + 100 nF MLCC decoupling pair placed ≤ 1 mm from the module
 
-  VCC pin, in addition to the existing 100 µF + 100 nF bulk cap array (U16 in CAPE-B-1).
+  VCC pin, in addition to the existing 100 µF + 100 nF bulk cap array (U16 in TACCO).
 
 - **UART lines (UART_SIK_TX/RX):** A ferrite bead (Würth 742792510, 600 Ω @ 100 MHz,
 
@@ -171,9 +171,9 @@ specific to XO:
 - Mounting holes × 4: PGND via 0 Ω solder-selectable links.
 - PGND-to-GND star point: single 0 Ω / 10 Ω link at J-PWR under the bay mounting boss.
 
-### 12. RF supply decoupling (upgraded from CAPE-B-1)
+### 12. RF supply decoupling (upgraded from TACCO)
 
-CAPE-B-1 had 100 µF + 100 nF per radio VCC (U16 ferrite + bulk cap array). XO
+TACCO had 100 µF + 100 nF per radio VCC (U16 ferrite + bulk cap array). XO
 upgrades to:
 
 | Radio | Input supply filter | VCC bypass |
@@ -185,7 +185,7 @@ upgrades to:
 
 ---
 
-## PCB Layout Constraints (additions to CAPE-B-1 rules)
+## PCB Layout Constraints (additions to TACCO rules)
 
 The Pilot layout constraints apply equally here, including the ≥ 8 mm creepage / ≥ 1.5 mm
 clearance requirement between GND1 and GND2 copper pours on the ISOW1044BDFMR and
@@ -206,7 +206,7 @@ Additional XO specifics:
 
 - **RF groundplane moat:** The RFD900x and RFM95W occupy the same RF section as in
 
-  CAPE-B-1 (right 30 mm of board). The isolation moat between the RF groundplane and
+  TACCO (right 30 mm of board). The isolation moat between the RF groundplane and
   the digital groundplane must be maintained; the moat capacitors (10 nF X2Y) bridge
   the moat at RF frequencies, referenced to PGND on the RF side and GND on the digital
   side.
@@ -306,7 +306,7 @@ copper pour, consistent with §11.
 
 ---
 
-## Eliminated vs. CAPE-B-1 Bill of Materials (delta)
+## Eliminated vs. TACCO Bill of Materials (delta)
 
 ### Removed
 
@@ -411,7 +411,7 @@ schematic bus ring without net name conflicts.
 
 ## Related Files
 
-- `CAPE-B-1.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline
+- `TACCO.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline
 - `XCVR-49MHZ-2.kicad_sch` — EMI-hardened 49 MHz transceiver
 - `Pilot.md` — EMI-hardened flight control cape
 - `AVIONICS_PB2_REDESIGN.md` — system architecture

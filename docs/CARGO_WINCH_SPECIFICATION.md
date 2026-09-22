@@ -71,7 +71,7 @@ from the active BOM and must not be carried into the next letter revision.
 
 **Retained unchanged:** `DYNEEMA-SK75` (0.5 mm braid × 2 m, ~300 N break,
 60 N WLL) and `HX711-LC` (24-bit tension ADC). Both are re-hosted onto the
-gateway rather than Cape-B — see §5.
+gateway rather than TACCO — see §5.
 
 ### 2.1 Why the cantilever fails, numerically
 

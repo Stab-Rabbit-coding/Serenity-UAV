@@ -100,7 +100,7 @@ All four paths are **authenticated, signed, logged**:
 
 ### Node Firmware (`avionics/firmware/`)
 
-- **serenity-cn** (Comms Node) — runs on XO/Cape-B boards (all 8 nodes)
+- **serenity-cn** (Comms Node) — runs on XO/TACCO boards (all 8 nodes)
   - CAN FD heartbeat relay and telemetry forwarding
   - RS-485 backup messaging
   - Ethernet RSTP ring management  
@@ -109,7 +109,7 @@ All four paths are **authenticated, signed, logged**:
   - Cargo control GPIO sequencing
   - MAVLink routing configuration
 
-- **serenity-fc** (Flight Control) — runs on Pilot/Cape-A boards (4× FC nodes: Shepherd, Inara, River, Simon)
+- **serenity-fc** (Flight Control) — runs on Pilot/Pilot boards (4× FC nodes: Shepherd, Inara, River, Simon)
   - ESC PID governor (nacelle thrust control)
   - Nacelle tilt servo PWM generation + sync across all 4 nacelles
   - IMU + barometer + GPS sensor fusion

@@ -87,7 +87,7 @@ Each section includes:
 After all three boards are complete:
 ```bash
 git add avionics/kicad/Commo/kicads/*.kicad_* avionics/kicad/XO/kicads/*.kicad_* avionics/kicad/FlightEngineer/kicads/*.kicad_*
-git add avionics/kicad/gerbers/Commo-S1/ avionics/kicad/gerbers/CAPE-B-2-S1/ avionics/kicad/gerbers/FlightEngineer-S1/
+git add avionics/kicad/gerbers/Commo-S1/ avionics/kicad/gerbers/TACCO-S1/ avionics/kicad/gerbers/FlightEngineer-S1/
 git add avionics/rev-s1/WBS.md TODO.md
 git add avionics/kicad/Commo/Commo.md avionics/kicad/XO/XO.md avionics/kicad/FlightEngineer/FlightEngineer.md
 
@@ -216,7 +216,7 @@ avionics/kicad/gerbers/Commo-S1/
   ├─ Commo.drl (drill file)
   └─ Commo-job.gbrjob (KiCad job file)
 
-[Same structure for CAPE-B-2-S1/ and FlightEngineer-S1/]
+[Same structure for TACCO-S1/ and FlightEngineer-S1/]
 ```
 
 ### Updated Documentation
@@ -282,7 +282,7 @@ When you reach this state, todo 1.2b is **complete**:
   - [ ] LoRa, SBUS, XCVR blocks removed from schematic
   - [ ] P1/P2-TOP passthrough sockets added to schematic
   - [ ] ERC: 0 new errors (pre-existing warnings documented)
-  - [ ] Gerbers generated to `avionics/kicad/gerbers/CAPE-B-2-S1/`
+  - [ ] Gerbers generated to `avionics/kicad/gerbers/TACCO-S1/`
   - [ ] Board markdown updated, status = "Rev S1 complete, ready for fabrication"
 
 - [ ] **Flight Engineer Rev S1**

@@ -7,7 +7,7 @@ Usage:
 
 Generates production Gerber and drill files to:
   - avionics/kicad/gerbers/Commo-S1/
-  - avionics/kicad/gerbers/CAPE-B-2-S1/
+  - avionics/kicad/gerbers/TACCO-S1/
   - avionics/kicad/gerbers/FlightEngineer-S1/
 
 Author: Claude Haiku 4.5 (Anthropic) — 2026-07-18
@@ -29,7 +29,7 @@ BOARDS = {
     "xo": {
         "pcb": "avionics/kicad/XO/kicads/XO.kicad_pcb",
         "pro": "avionics/kicad/XO/kicads/XO.kicad_pro",
-        "gerber_dir": "avionics/kicad/gerbers/CAPE-B-2-S1",
+        "gerber_dir": "avionics/kicad/gerbers/TACCO-S1",
         "name": "XO Rev S1",
     },
     "flight_engineer": {

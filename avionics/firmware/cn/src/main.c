@@ -7,7 +7,7 @@
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * The CN node (Communications/Payload) daemon runs on each of the four
- * Cape-B / AM6254 PocketBeagle 2 Industrial nodes.  This file provides:
+ * TACCO / AM6254 PocketBeagle 2 Industrial nodes.  This file provides:
  *
  *   - Command-line argument parsing.
  *   - Signal handling (SIGTERM / SIGINT for clean shutdown).

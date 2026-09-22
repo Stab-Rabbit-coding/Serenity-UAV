@@ -134,7 +134,7 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
 
 - [x] **Wire TFmini-S UART to bow sensor MCU.** — **SUPERSEDED by Observer (2026-07-06).**
     The pre-Observer plan ran a 28 AWG loom from the bow pod all the way to Shepherd's Room and
-    read the TFmini-S on the Shepherd (Pilot) node. Observer is now the board *at* the bow pod, so
+    read the TFmini-S on the Shepherd Pilot node. Observer is now the board *at* the bow pod, so
     the TFmini-S is a short local run (<75 mm) on Observer's dedicated `J_TOF`/UART1, read by Observer's
     MSPM0G3507 — no head-section loom to Shepherd's, no Shepherd `serenity-fc` UART driver.
     Replaced by the Observer local sensor harness (§1.2c) and Observer node firmware (§4.6).

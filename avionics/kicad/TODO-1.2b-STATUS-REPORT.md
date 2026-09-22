@@ -121,7 +121,7 @@ Commo is ~90% complete on schematic/PCB design, but **cannot be fabricated** unt
   - LoRa (RFM95W) removed — footprint **gone**, traces cleaned
   - P1+P2 socket rails placed: `2x18_P1_Socket` + `2x18_P2_Socket` on upper face
   - `PB2-P1/P2-TOP` passthrough headers placed
-  - Lower pins pass through to Cape-A-2 / PB2-I stack
+  - Lower pins pass through to Pilot / PB2-I stack
 
 #### Blocking — Requires User Interaction + KiCad
 - [ ] **CRITICAL: Full sch↔pcb reference-designator remap**
@@ -163,7 +163,7 @@ Commo is ~90% complete on schematic/PCB design, but **cannot be fabricated** unt
 
 - [ ] **Gerbers export** BLOCKED
   - Requires completion of above work + kicad-cli
-  - Output directory: `avionics/kicad/gerbers/CAPE-B-2-S1/`
+  - Output directory: `avionics/kicad/gerbers/TACCO-S1/`
 
 #### Summary
 XO PCB is **complete and ready**, but schematic is **30 days behind** and cannot be used without:

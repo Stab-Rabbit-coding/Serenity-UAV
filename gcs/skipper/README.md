@@ -33,11 +33,11 @@ tracking software stack.
 
 ### Skipper Comms Node
 
-One PocketBeagle 2 Industrial (AM6254) + Cape-B-2 (XO) stack, USB-tethered to the host
+One PocketBeagle 2 Industrial (AM6254) + TACCO (XO) stack, USB-tethered to the host
 PC.  This is the same hardware and firmware base used in the aircraft, providing a
 symmetric, tested ground-side interface for every radio link.
 
-| Link          | Module on Cape-B-2              | GCS antenna              |
+| Link          | Module on TACCO              | GCS antenna              |
 |---------------|---------------------------------|--------------------------|
 | SiK 915 MHz   | RFD900x via UART2               | 5 dBi omni + 9 dBi Yagi  |
 | LoRa 915 MHz  | RFM95W via SPI1                 | 5 dBi omni + 9 dBi Yagi  |
@@ -48,7 +48,7 @@ symmetric, tested ground-side interface for every radio link.
 ### Directional Antenna Gimbal
 
 A two-axis (pan + tilt) CF-PETG gimbal carries the 9 dBi 915 MHz Yagi and 14 dBi WiFi
-panel antennas.  Two AS5600 magnetic encoders (I²C to Cape-B-2) provide position feedback.
+panel antennas.  Two AS5600 magnetic encoders (I²C to TACCO) provide position feedback.
 Two DS3218MG (or equivalent) servos drive the axes, commanded by Skipper's PB2-I via the
 same servo output lines used on the aircraft.  The tracking software automatically points
 the gimbal at the aircraft using MAVLink GLOBAL\_POSITION\_INT and the GCS's own GNSS fix.
@@ -116,7 +116,7 @@ skipper/
 
 ## Build and Setup
 
-1. **Hardware:** See `hardware/docs/skipper_wiring.md`.  Flash PB2-I, seat Cape-B-2, attach
+1. **Hardware:** See `hardware/docs/skipper_wiring.md`.  Flash PB2-I, seat TACCO, attach
    Commo, connect antennas and field enclosure per wiring doc.
 
 2. **Firmware:** Build Skipper's PB2-I firmware:

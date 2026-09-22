@@ -45,7 +45,7 @@ PROJECTS = {
         "sch": "avionics/kicad/XO/kicads/XO.kicad_sch",
         "pcb": "avionics/kicad/XO/kicads/XO.kicad_pcb",
         "pro": "avionics/kicad/XO/kicads/XO.kicad_pro",
-        "gerber_dir": "avionics/kicad/gerbers/CAPE-B-2-S1",
+        "gerber_dir": "avionics/kicad/gerbers/TACCO-S1",
     },
     "flight_engineer": {
         "sch": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch",

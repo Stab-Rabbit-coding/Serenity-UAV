@@ -50,8 +50,8 @@
     - [ ] Seven additional SVGs (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
     `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
     `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) are
-    built entirely or partly around the **archived** Cape-A-1/Cape-B-1 hardware instead of
-    the Rev R1 baseline (all 8 nodes now carry Pilot/Cape-A-2 + XO/Cape-B-2 per CLAUDE.md).
+    built entirely or partly around the **archived** Pilot/TACCO hardware instead of
+    the Rev R1 baseline (all 8 nodes now carry Pilot/Pilot + XO/TACCO per CLAUDE.md).
     This is a content-currency problem independent of citations — needs a dedicated pass
     (likely a content rewrite, not a text-substitution fix) with visual verification.
     **Superseded by, and folded into, the "Rebuild `graphical-build-guide/`..." item in
@@ -99,7 +99,7 @@
       config key (`rcrs:` → `xcvr_49mhz:`, unused by any code yet), SCAD comment prose in
       `rcrs49_wire_post.scad`/`middle_canonical_shell24.scad`/`head_shell24.scad` (filenames
       left as-is — a physical-file rename is a separate, larger task), and a **stale/incorrect
-      citation** in `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
+      citation** in `avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
       reference [4] that still cited "47 CFR Part 95 ... RCRS 49 MHz channel plan" — the exact
       claim REF-FCC-003 documents as superseded everywhere else; corrected to cite Part 15
       §15.235 per REF-FCC-003. Same stale-citation pattern found and fixed in
@@ -399,7 +399,7 @@ gaps. Full policy: `docs/attribution_and_licensing.md` (new).
       scripts, companion `.md` docs) plus the 6 shared `Jayne_*.kicad_sym` symbol libraries
       (authored under Jayne, reused fleet-wide) → `Observer_*.kicad_sym`, with every
       referencing `sym-lib-table`/`fp-lib-table`/embedded `lib_symbols` updated to match.
-      Also caught: a second, separate `avionics/kicad/gerbers/{CAPE-B-2-S1,Emma-S1,Kaylee-S1}/`
+      Also caught: a second, separate `avionics/kicad/gerbers/{TACCO-S1,Emma-S1,Kaylee-S1}/`
       gerber export set not inside the per-board folders, and 4 STL BOM placeholders
       (`Kaylee_PDB_*.stl`, `Malcolm_enclosure_*.stl`, `Malcolm_tripod_*.stl`, `text_kaylee.stl`).
     - Content sweep: ~5,800 substitutions across ~330 tracked text files, using word-boundary
@@ -418,7 +418,7 @@ gaps. Full policy: `docs/attribution_and_licensing.md` (new).
       instance was missed — a full repo-wide grep confirms zero remaining old-name
       occurrences in tracked files — but the maintainer should still open each of the 5 boards
       in KiCad and re-run ERC/DRC before trusting them for fabrication.
-    - `MAL-*` BOM/component designators (`MAL-TILT-ENC-PCB`, `MAL-CAPE-B-2`, etc.) were renamed
+    - `MAL-*` BOM/component designators (`MAL-TILT-ENC-PCB`, `MAL-TACCO`, etc.) were renamed
       to `SKIPPER-*` along with everything else — these are baked into `ENC-NACELLE-1` and
       `CAN-PERIPH-GW-1`'s own netlists as cross-board net names, updated consistently.
     - Root `AGENTS.md` §9 table rewritten: dropped the "Firefly line" column from the live
@@ -588,7 +588,7 @@ Fixed extensively: `avionics/firmware/README.md`'s bay table and directory-layou
 description (the `fc/` daemon has real Phase 6 sensor/monitor work, not a Phase-7 stub as
 documented), stale `serenity/firmware` paths (repo root has no `serenity/` directory) in 2
 files, `avionics/firmware/dts/README.md`'s overlay table (pointed at the archived non-"2"
-Cape-A-1/B-1 overlays instead of the current `-a2`/`-b2` ones) and the
+Pilot/B-1 overlays instead of the current `-a2`/`-b2` ones) and the
 `avionics/firmware/dts/Makefile`'s build targets (literally could not `make` — pointed at
 files moved to `archive/`; now builds only the current, non-retired overlays).
 `tools/README.md`/`TODO.md`/`TOOL_REFERENCE.md`: a retired-board-name CLI example, wrong
@@ -827,7 +827,7 @@ meaningfully higher, and that bears on the aircraft's actual hover margin.
     - The 26 numbered `build_guide_XX_*.svg` step cards (antenna placement, node install,
     inter-board wiring, first flight, etc.) are hand-drawn schematic line art — the
     airframe silhouettes in them were never derived from actual model geometry at all,
-    and (per the §0.5 audit above) several depict the **archived** Cape-A-1/Cape-B-1
+    and (per the §0.5 audit above) several depict the **archived** Pilot/TACCO
     hardware instead of the Rev R1 Pilot/XO baseline
     (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
     `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,

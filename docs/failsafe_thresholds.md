@@ -75,7 +75,7 @@ assignment) is a runtime-assurance monitor structure consistent with
 tier above it. The CAN FD heartbeat is the underlying liveness signal for
 that takeover, per [REF-ISO-001] (ISO 11898-1:2015+Amd.1, CAN FD data-link
 layer) and the existing bus-controller election note in
-`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`
+`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`
 S8 ("BC capability on FC1, elected via CAN FD heartbeat"). At steady state
 (post power-up), `docs/POWER_DISTRIBUTION.md` S10 documents heartbeat
 election completing by T+30 s; 100 ms is the *in-flight* re-election

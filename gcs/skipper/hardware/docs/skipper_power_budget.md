@@ -12,7 +12,7 @@ Skipper GCS uses two independent power rails in field configuration:
 
 | Rail    | Voltage | Source                         | Consumers |
 |---------|---------|--------------------------------|-----------|
-| +5 V    | 5.0 V   | 5 V / 5 A BEC from field pack  | PB2-I + Cape-B-2 + Commo |
+| +5 V    | 5.0 V   | 5 V / 5 A BEC from field pack  | PB2-I + TACCO + Commo |
 | Laptop  | 19–20 V | DC–DC or laptop adapter        | GCS host PC (laptop) |
 
 ---
@@ -22,7 +22,7 @@ Skipper GCS uses two independent power rails in field configuration:
 | Component                       | Typical (mA) | Peak (mA) | Notes |
 |---------------------------------|-------------|-----------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 350       | 600       | AM6254 quad-core at ~1 GHz; includes LPDDR4 |
-| Cape-B-2 (XO) digital section  | 120         | 200       | ISOW1044, ADM2795, CPLD, TPM, log microSD |
+| TACCO (XO) digital section  | 120         | 200       | ISOW1044, ADM2795, CPLD, TPM, log microSD |
 | RFM95W LoRa (Tx)                | 0 (Rx)      | 120       | +20 dBm Tx burst, 40 mA Rx |
 | RFD900x SiK (Tx)                | 0 (Rx)      | 200       | +20 dBm Tx burst, 50 mA Rx |
 | TI WL1837MOD WiFi (Tx)          | 80          | 250       | Tx peak at +18 dBm; Rx ~80 mA |
@@ -80,7 +80,7 @@ Host PC on AC mains
 ```
 3S–6S 5000 mAh LiPo field pack
         │
-        ├─► 5 V 5 A BEC ──────────────────► PB2-I + Cape-B-2 + Commo  (~2 W avg)
+        ├─► 5 V 5 A BEC ──────────────────► PB2-I + TACCO + Commo  (~2 W avg)
         ├─► 6 V 2 A BEC ──────────────────► Gimbal servos             (~1.2 W avg)
         └─► DC–DC to 19 V (or laptop direct if 6S pack used) ──► GCS host PC (~20 W avg)
 ```

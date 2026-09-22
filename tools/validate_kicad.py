@@ -24,7 +24,7 @@ board in this project this session -- Pilot/XO/FlightEngineer/Commo/Observer):
 
 Scope: by default checks every .kicad_sch/.kicad_pcb in the repo EXCEPT
 archive/archives directories (frozen historical boards, e.g. the pre-Rev-Q
-CAPE-A-1 family, are not held to ongoing standards -- see root CLAUDE.md
+Pilot family, are not held to ongoing standards -- see root CLAUDE.md
 revision/archival policy). Several currently-active boards (Pilot, Flight Engineer,
 Commo) predate this validator and carry a large pre-existing backlog of real
 DRC findings (matching this project's own long-standing practice of tracking

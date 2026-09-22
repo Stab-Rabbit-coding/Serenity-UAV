@@ -67,7 +67,7 @@
 - Must protect the log uSD
 
 - [ ] **PB2-I + Pilot Enclosure** (Shepherd's Room / Inara's Shuttle — no Commo board):
-    - [ ] Confirm internal clearance for PB2-Industrial + Cape-A-2 stack height against
+    - [ ] Confirm internal clearance for PB2-Industrial + Pilot stack height against
         the FAR-CAGE-AV placeholder envelope (76×56×88 mm, §1.1.5).
     - [ ] Cut-outs for GPS/IMU/barometer sensor leads, ToF array cabling, servo/ESC
         connectors, and the microSD log slot — each cut-out gets its own FAR-FT-PANEL
@@ -75,9 +75,9 @@
     - [ ] Mount FAR-FAN-40 + FAR-EMI-VENT-40 on the low-pressure side of the enclosure;
         verify intake/exhaust path does not create a direct RF leakage slot.
     - [ ] Bond enclosure to chassis ground via FAR-BOND-STRAP (single point, no loop).
-- [ ] **PB2-I + XO Enclosure** (all 4 bays — Cape-B-2, plus Commo in River's Room /
+- [ ] **PB2-I + XO Enclosure** (all 4 bays — TACCO, plus Commo in River's Room /
     Simon's Medbay only):
-    - [ ] Confirm internal clearance for PB2-Industrial + Cape-B-2 (+ Commo where fitted)
+    - [ ] Confirm internal clearance for PB2-Industrial + TACCO (+ Commo where fitted)
         stack height against the FAR-CAGE-AV placeholder envelope.
     - [ ] Cut-outs for CAN FD/RS-485/Ethernet/MIL-1553 connectors, SMA antenna feeds
         (WiFi/SiK/LoRa per §1.4.2), and the microSD log slot — feedthrough or grommet
@@ -93,7 +93,7 @@
     was wrong on two counts: (a) no stack actually mounts an antenna for all 4 external
     links — each of the 4 bays carries exactly 2 external-link antennas (its PACE
     primary + secondary, per `CLAUDE.md`), not one-per-link-globally; (b) GPS/GNSS is
-    one patch **per FC node (Pilot, Cape-A-2)**, and there are 4 FC nodes (one per bay),
+    one patch **per FC node (Pilot, Pilot)**, and there are 4 FC nodes (one per bay),
     not 2. Resolved count, reconciled against current (pre-Rev-R1) hardware fit:
 
     | Bay | Radios fitted | External antennas | GPS |
@@ -129,7 +129,7 @@
         top-wire antenna, new, on the **STARBOARD flank, shoulder height** (primary; see
         dedicated sub-task below — do not share River's antenna) + SiK 915 MHz RP-SMA
         whip (secondary, stays dorsal).
-    - [x] **4× GPS/GNSS patch antenna mounts** — one per FC node (Pilot, Cape-A-2), all
+    - [x] **4× GPS/GNSS patch antenna mounts** — one per FC node (Pilot, Pilot), all
         dorsal hull, face up, per existing routing tasks (Phase 5/6 install steps,
         TODO.md lines ~2645/2666/2773/2794): FC1 sta ≈ 59 mm, FC2 sta ≈ 130 mm,
         FC3 sta ≈ 275 mm, FC4 sta ≈ 350 mm. ≥ 3 mm clearance from the 49 MHz wire posts
@@ -140,7 +140,7 @@
     - [ ] **Zigbee 2.4 GHz antenna mount — BLOCKED, hardware gap confirmed; antenna
         strategy decided 2026-06-22 (with user).** XO (Cape-B-2) Rev S has no Zigbee
         transceiver, antenna filter chain, or SMA pad (the CC2652R7 Zigbee radio exists
-        only in the archived COMMS-HAT-1 design, not in the current Rev S Cape-B-2
+        only in the archived COMMS-HAT-1 design, not in the current Rev S TACCO
         schematic) — **no antenna can be mounted for hardware that does not exist on
         the board**, so this remains a genuine PCB scope gap, not just a placement
         question. **Decision:** rather than a time-shared coexistence switch, split
@@ -157,7 +157,7 @@
         Wi-Fi/Zigbee are not PACE failover partners of each other (unlike River/Simon's
         49 MHz link, sharing here doesn't undermine the redundancy mandate).
         Still open: which bay carries the Zigbee module once added, diplexer part
-        selection, and Cape-B-2 schematic work to add the CC2652R7 RF chain.
+        selection, and TACCO schematic work to add the CC2652R7 RF chain.
         **Cross-reference added to §1.2a as a tracked PCB scope gap.**
     - [ ] **Verify the 6 dorsal mount stations (Shepherd ×2, Inara ×2, River's LoRa whip,
         Simon's SiK whip) in FreeCAD against the baked hull** — confirm ≥ 30 mm

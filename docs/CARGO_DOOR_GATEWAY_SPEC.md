@@ -29,7 +29,7 @@ What this closes: the SG90 cargo servos were declared bus-networked on 2026-09-2
 (`avionics/WBS.md` §1.9.2, XO board-area fix: "the winch and SG90 door servos are
 bus-networked over CAN-FD/RS-485 for fleet failover, not locally driven") and their
 local driver silicon was deleted from XO — but nothing on the airframe was assigned to
-drive them. `DRV8833-CARGO` + `cargo_drv8833_tray.stl` (Rev P, Cape-B GPIO) were still in
+drive them. `DRV8833-CARGO` + `cargo_drv8833_tray.stl` (Rev P, TACCO GPIO) were still in
 the BOM. This document assigns the servos to their own gateway and **retires the DRV8833
 path** (§7).
 
@@ -44,7 +44,7 @@ path** (§7).
 | **D-GW-3** | Primary command path = **OpenServoCore osc-native serial chain** on `FLEX_UART_TX/RX`; **fallback** = stock SG90 PWM on the two hardware timer pins | REF-SENSOR-015 standardised the SG90 class on OpenServoCore (2026-08-02), but the SG90 swap board is "designed but not spun yet" and the project says "nothing here is shippable yet" (re-read 2026-09-21). The fallback lets the doors work with stock SG90s until then. |
 | **D-GW-4** | Servo power is a **fused branch of the 6 V servo rail**, not `J_FLEX`'s `+5V` pin | Three SG90s at the manufacturer's stated 0.5–2 A operating current (REF-ACT-003) can exceed 3 A stalled; the 2.54 mm header pin and the board's `+5V` trace are not rated for that, and the gateway's own supply is the avionics `RAIL-2`. Signal + GND only cross `J_FLEX`. |
 | **D-GW-5** | Mount = printed **card-edge tray**, board standing transverse on the forward belly slab, component side aft | The board has no mounting holes (generator outline; `gen_can_periph_gw_pcb.py` places none). The tilt-controller board on the Rev T5e bracket uses the same rail pattern. Standing transverse is the only orientation that fits the pocket's 14 mm floor-level depth (§5). |
-| **D-GW-6** | Termination solder jumpers **open** on this node | It sits mid-chain between the chin nodes and the cargo Observer (§6). Termination stays at the trunk ends per the Phase 5 build steps (`WBS.md` Phase 5: "120 Ω SOLDERED to CN1 Cape-B"). |
+| **D-GW-6** | Termination solder jumpers **open** on this node | It sits mid-chain between the chin nodes and the cargo Observer (§6). Termination stays at the trunk ends per the Phase 5 build steps (`WBS.md` Phase 5: "120 Ω SOLDERED to CN1 TACCO"). |
 
 ---
 

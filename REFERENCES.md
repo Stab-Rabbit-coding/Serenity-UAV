@@ -383,7 +383,7 @@ regulatory quotation. Do not cite +3.8/−1.52 to current Part 23.
 **Applied to:** SiK 915 MHz MAVLink (RFD900x), LoRa 915 MHz (RFM95W), Zigbee 2.4 GHz (CC2652R7)
 
 **Used in:** `gcs/skipper/hardware/docs/skipper_antenna_spec.md`, `TODO.md`, `AGENTS.md`,
-`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
+`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-TACCO2.dts`
 
 ---
 
@@ -468,7 +468,7 @@ physical board re-spin/fabrication run to populate 132289RP in place of 132289; 
 fix is complete.
 
 **Used in:** `gcs/skipper/hardware/docs/skipper_antenna_spec.md`,
-`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
+`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-TACCO2.dts`,
 `README.md`, `TODO.md`, `AGENTS.md`, `docs/AVIONICS_PB2_REDESIGN.md`
 
 ---
@@ -644,8 +644,8 @@ encoder/decoder at 250 MHz (250 cycles per 1 µs bit cell); DS26LV31 driver / DS
 PE-68515 coupling transformer (1:1.41, 78 Ω); 78 Ω termination at CN1 (Bay A) and FC4 (Bay D).
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`,
-`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
-`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
+`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-Pilot.dts`,
+`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-TACCO2.dts`
 
 ---
 
@@ -701,7 +701,7 @@ MIL-STD-461G qualification testing is deferred pending airframe integration.
 ATA6561 CAN FD transceivers; 120 Ω bus termination at CN1 (Bay A) and FC4 (Bay D).
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`,
-`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`, `AGENTS.md`
+`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`, `AGENTS.md`
 
 ---
 
@@ -736,8 +736,8 @@ between primary and secondary sides of each isolation barrier.  PCB layout verif
 required before fabrication (see TODO.md §1.4 PCB DRC and isolation verification).
 
 **Used in:** `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`,
-`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
-`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
+`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-TACCO2.dts`,
 `TODO.md`, `AGENTS.md`, `airframe/openscad/fuselage/bow_sensor_pod.scad`
 
 ---
@@ -816,8 +816,8 @@ placeholder text. Tracked in TODO.md §1.2c.
 per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ datasheets.
 
 **Used in:** `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`, `AGENTS.md`,
-`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
-`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
+`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-TACCO2.dts`
 
 ---
 
@@ -972,8 +972,8 @@ The design environment of 500 W/m² (≈434 V/m, equivalent to RF proximity near
 **Applied to:** Ethernet RSTP ring connecting all 8 nodes; CPSW3G hardware switch mode in AM6254.
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `AGENTS.md`,
-`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
-`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
+`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-TACCO2.dts`
 
 ---
 
@@ -1081,7 +1081,7 @@ The design environment of 500 W/m² (≈434 V/m, equivalent to RF proximity near
 | §6.2 | I Frame (Information Frame) | Data packet format for command uplink and telemetry downlink |
 | §6.3 | S Frames | Flow control and error recovery on the 49 MHz link |
 
-**Used in:** `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`, `README.md`,
+**Used in:** `avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-TACCO2.dts`, `README.md`,
 `docs/AVIONICS_PB2_REDESIGN.md`, `avionics/firmware/common/include/ax25_types.h`
 
 ---
@@ -1593,7 +1593,7 @@ missing connection; left as-built, the SPI clock signal would have driven the mo
 module has no antenna or power connection yet — and DIO0–DIO5 (pads 7, 11, 12, 14–16)
 are unassigned pending a GPIO budget decision on the P1 header. Footprint pad size
 (2.95×1.27 mm per pad) is also oversized versus the module's real castellated-pad
-dimensions and the footprint physically overlaps `CAPE-B IF`; both require a footprint
+dimensions and the footprint physically overlaps `TACCO IF`; both require a footprint
 correction and reposition before fabrication. Tracked in `TODO.md` §1.2b.
 
 **Used in:** `avionics/kicad/Commo.kicad_pcb`, `avionics/kicad/Commo.md`, `TODO.md`
@@ -2350,8 +2350,8 @@ transceivers on Pilot (Cape-A-2) and XO (Cape-B-2); 120 Ω termination resistors
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `docs/REVN_BUILD_GUIDE_24IN.md`,
 `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`,
-`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
-`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
+`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-TACCO2.dts`,
 `graphical-build-guide/build_guide_11_inter_board.svg`
 
 ---

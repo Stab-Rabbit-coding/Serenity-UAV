@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-21",
+  "generated": "2026-09-22",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -7429,6 +7429,26 @@
       ],
       "archived": false
     },
+    "avionics/firmware/dts/Pilot/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts": {
+      "description": "Device-tree source (kernel board description)",
+      "tags": [
+        "archive",
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": true
+    },
+    "avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts": {
+      "description": "Device-tree source (kernel board description)",
+      "tags": [
+        "avionics-hardware",
+        "emi-hardening",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
     "avionics/firmware/dts/README.md": {
       "description": "Serenity UAV \u2014 Device Tree Overlays",
       "tags": [
@@ -7439,7 +7459,7 @@
       ],
       "archived": false
     },
-    "avionics/firmware/dts/cape-a/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts": {
+    "avionics/firmware/dts/TACCO/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts": {
       "description": "Device-tree source (kernel board description)",
       "tags": [
         "archive",
@@ -7449,27 +7469,7 @@
       ],
       "archived": true
     },
-    "avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts": {
-      "description": "Device-tree source (kernel board description)",
-      "tags": [
-        "avionics-hardware",
-        "emi-hardening",
-        "firmware",
-        "security"
-      ],
-      "archived": false
-    },
-    "avionics/firmware/dts/cape-b/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts": {
-      "description": "Device-tree source (kernel board description)",
-      "tags": [
-        "archive",
-        "avionics-hardware",
-        "firmware",
-        "security"
-      ],
-      "archived": true
-    },
-    "avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts": {
+    "avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dts": {
       "description": "Device-tree source (kernel board description)",
       "tags": [
         "avionics-hardware",
@@ -7625,7 +7625,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md": {
+    "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md": {
       "description": "CAN-PERIPH-GW-1 \u2014 TPM-Secured Dual-Isolated-Bus (CAN-FD + RS-485) Peripheral Gateway",
       "tags": [
         "avionics-hardware",
@@ -7635,7 +7635,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Adhesive.gba": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Adhesive.gba": {
       "description": "Gerber fabrication layer (b_adhesive)",
       "tags": [
         "avionics-hardware",
@@ -7643,7 +7643,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Courtyard.gbr": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Courtyard.gbr": {
       "description": "Gerber fabrication layer (b_courtyard)",
       "tags": [
         "avionics-hardware",
@@ -7651,7 +7651,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Cu.gbl": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Cu.gbl": {
       "description": "Gerber fabrication layer (b_cu)",
       "tags": [
         "avionics-hardware",
@@ -7659,7 +7659,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Fab.gbr": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Fab.gbr": {
       "description": "Gerber fabrication layer (b_fab)",
       "tags": [
         "avionics-hardware",
@@ -7667,7 +7667,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Mask.gbs": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Mask.gbs": {
       "description": "Gerber fabrication layer (b_mask)",
       "tags": [
         "avionics-hardware",
@@ -7675,7 +7675,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Paste.gbp": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Paste.gbp": {
       "description": "Gerber fabrication layer (b_paste)",
       "tags": [
         "avionics-hardware",
@@ -7683,7 +7683,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Silkscreen.gbo": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Silkscreen.gbo": {
       "description": "Gerber fabrication layer (b_silkscreen)",
       "tags": [
         "avionics-hardware",
@@ -7691,7 +7691,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-Edge_Cuts.gm1": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-Edge_Cuts.gm1": {
       "description": "Gerber fabrication layer (edge_cuts)",
       "tags": [
         "avionics-hardware",
@@ -7699,7 +7699,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Adhesive.gta": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Adhesive.gta": {
       "description": "Gerber fabrication layer (f_adhesive)",
       "tags": [
         "avionics-hardware",
@@ -7707,7 +7707,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Courtyard.gbr": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Courtyard.gbr": {
       "description": "Gerber fabrication layer (f_courtyard)",
       "tags": [
         "avionics-hardware",
@@ -7715,7 +7715,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Cu.gtl": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Cu.gtl": {
       "description": "Gerber fabrication layer (f_cu)",
       "tags": [
         "avionics-hardware",
@@ -7723,7 +7723,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Fab.gbr": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Fab.gbr": {
       "description": "Gerber fabrication layer (f_fab)",
       "tags": [
         "avionics-hardware",
@@ -7731,7 +7731,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Mask.gts": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Mask.gts": {
       "description": "Gerber fabrication layer (f_mask)",
       "tags": [
         "avionics-hardware",
@@ -7739,7 +7739,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Paste.gtp": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Paste.gtp": {
       "description": "Gerber fabrication layer (f_paste)",
       "tags": [
         "avionics-hardware",
@@ -7747,7 +7747,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Silkscreen.gto": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Silkscreen.gto": {
       "description": "Gerber fabrication layer (f_silkscreen)",
       "tags": [
         "avionics-hardware",
@@ -7755,7 +7755,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-Margin.gbr": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-Margin.gbr": {
       "description": "Gerber fabrication layer (margin)",
       "tags": [
         "avionics-hardware",
@@ -7763,7 +7763,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-job.gbrjob": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-job.gbrjob": {
       "description": "Gerber job file (fabrication job spec)",
       "tags": [
         "avionics-hardware",
@@ -7771,7 +7771,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1.drl": {
+    "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1.drl": {
       "description": "Drill file (NC drill data)",
       "tags": [
         "avionics-hardware",
@@ -7779,7 +7779,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.dsn": {
+    "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.dsn": {
       "description": "Specctra design file (autorouter input)",
       "tags": [
         "avionics-hardware",
@@ -7787,7 +7787,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb": {
+    "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_pcb": {
       "description": "KiCad PCB layout",
       "tags": [
         "avionics-hardware",
@@ -7795,15 +7795,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x": {
-      "description": "(kicad_pcb",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_prl": {
+    "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_prl": {
       "description": "KiCad project-local settings",
       "tags": [
         "avionics-hardware",
@@ -7811,7 +7803,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pro": {
+    "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_pro": {
       "description": "KiCad project file",
       "tags": [
         "avionics-hardware",
@@ -7819,7 +7811,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch": {
+    "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_sch": {
       "description": "KiCad schematic",
       "tags": [
         "avionics-hardware",
@@ -7827,15 +7819,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x": {
-      "description": "(kicad_sch (version 20240101) (generator eeschema)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.net": {
+    "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.net": {
       "description": "KiCad netlist",
       "tags": [
         "avionics-hardware",
@@ -7843,7 +7827,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses": {
+    "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.ses": {
       "description": "Specctra session file (autorouter output)",
       "tags": [
         "avionics-hardware",
@@ -7851,7 +7835,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1_v2.ses": {
+    "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1_v2.ses": {
       "description": "Specctra session file (autorouter output)",
       "tags": [
         "avionics-hardware",
@@ -7859,7 +7843,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py": {
+    "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py": {
       "description": "gen_can_periph_gw_pcb.py -- generate CAN-PERIPH-GW-1.kicad_pcb.",
       "tags": [
         "avionics-hardware",
@@ -7868,7 +7852,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_sch.py": {
+    "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py": {
       "description": "SUPERSEDED PART WARNING (2026-08-03)",
       "tags": [
         "avionics-hardware",
@@ -7877,7 +7861,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/CAN-PERIPH-GW-1/scripts/route_can_periph_gw_pcb.py": {
+    "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py": {
       "description": "route_can_periph_gw_pcb.py -- non-destructive net-sync pass on the user's",
       "tags": [
         "avionics-hardware",
@@ -14462,7 +14446,7 @@
       "avionics/firmware/TODO.md",
       "avionics/firmware/WBS.md",
       "avionics/firmware/dts/README.md",
-      "avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md",
+      "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/ENC-NACELLE-1.md",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
@@ -14766,8 +14750,8 @@
       "avionics/emi-hardening/WBS.md",
       "avionics/firmware/AK7455_CALIBRATION_SPECIFICATION.md",
       "avionics/firmware/README.md",
-      "avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
-      "avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
+      "avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
+      "avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
       "avionics/firmware/fc/src/mag_mmc5983ma.h",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/scripts/gen_commo_sch.py",
@@ -14911,15 +14895,15 @@
       "avionics/firmware/WBS.md",
       "avionics/firmware/cn/src/main.c",
       "avionics/firmware/common/src/sbus_input.c",
+      "avionics/firmware/dts/Pilot/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts",
+      "avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
       "avionics/firmware/dts/README.md",
-      "avionics/firmware/dts/cape-a/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts",
-      "avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
-      "avionics/firmware/dts/cape-b/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts",
-      "avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
+      "avionics/firmware/dts/TACCO/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts",
+      "avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
       "avionics/firmware/fc/src/main.c",
-      "avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md",
-      "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py",
-      "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_sch.py",
+      "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
+      "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
+      "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
       "avionics/kicad/Commo/scripts/swap_lora_for_sik.py",
@@ -16927,8 +16911,8 @@
       "archives/stl/sensorhat_mounting_tray.stl",
       "archives/stl/tilt_bracket_cf_petg.stl",
       "archives/tiltrotor-drone.jsx",
-      "avionics/firmware/dts/cape-a/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts",
-      "avionics/firmware/dts/cape-b/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts"
+      "avionics/firmware/dts/Pilot/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts",
+      "avionics/firmware/dts/TACCO/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts"
     ],
     "pcb-design": [
       "archives/avionics-archives/gerber-archive/CAPE-A-1/CAPE-A-1-B_Cu.gbl",
@@ -17096,38 +17080,36 @@
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/TRIHAT-1/TRIHAT-1.kicad_sch",
       "avionics/kicad/.gitignore",
       "avionics/kicad/4_Run KiCad ERC_DRC validator (changed files only).txt",
-      "avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Adhesive.gba",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Courtyard.gbr",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Cu.gbl",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Fab.gbr",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Mask.gbs",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Paste.gbp",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Silkscreen.gbo",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-Edge_Cuts.gm1",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Adhesive.gta",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Courtyard.gbr",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Cu.gtl",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Fab.gbr",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Mask.gts",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Paste.gtp",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Silkscreen.gto",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-Margin.gbr",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-job.gbrjob",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1.drl",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.dsn",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_prl",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pro",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.net",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1_v2.ses",
-      "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py",
-      "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_sch.py",
-      "avionics/kicad/CAN-PERIPH-GW-1/scripts/route_can_periph_gw_pcb.py",
+      "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Adhesive.gba",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Courtyard.gbr",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Cu.gbl",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Fab.gbr",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Mask.gbs",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Paste.gbp",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Silkscreen.gbo",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-Edge_Cuts.gm1",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Adhesive.gta",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Courtyard.gbr",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Cu.gtl",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Fab.gbr",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Mask.gts",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Paste.gtp",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Silkscreen.gto",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-Margin.gbr",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-job.gbrjob",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1.drl",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.dsn",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_pcb",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_prl",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_pro",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_sch",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.net",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.ses",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1_v2.ses",
+      "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
+      "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
+      "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/gerbers/Commo-B_Courtyard.gbr",
       "avionics/kicad/Commo/gerbers/Commo-B_Cu.gbl",
@@ -17550,11 +17532,11 @@
       "avionics/firmware/common/include/sbus_input.h",
       "avionics/firmware/common/src/sbus_input.c",
       "avionics/firmware/dts/Makefile",
+      "avionics/firmware/dts/Pilot/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts",
+      "avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
       "avionics/firmware/dts/README.md",
-      "avionics/firmware/dts/cape-a/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts",
-      "avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
-      "avionics/firmware/dts/cape-b/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts",
-      "avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
+      "avionics/firmware/dts/TACCO/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts",
+      "avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
       "avionics/firmware/fc/CMakeLists.txt",
       "avionics/firmware/fc/src/bmon_ina2xx.c",
       "avionics/firmware/fc/src/bmon_ina2xx.h",
@@ -17573,38 +17555,36 @@
       "avionics/firmware/fc/tools/requirements.txt",
       "avionics/kicad/.gitignore",
       "avionics/kicad/4_Run KiCad ERC_DRC validator (changed files only).txt",
-      "avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Adhesive.gba",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Courtyard.gbr",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Cu.gbl",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Fab.gbr",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Mask.gbs",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Paste.gbp",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Silkscreen.gbo",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-Edge_Cuts.gm1",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Adhesive.gta",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Courtyard.gbr",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Cu.gtl",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Fab.gbr",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Mask.gts",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Paste.gtp",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Silkscreen.gto",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-Margin.gbr",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-job.gbrjob",
-      "avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1.drl",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.dsn",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_prl",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pro",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.net",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses",
-      "avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1_v2.ses",
-      "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py",
-      "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_sch.py",
-      "avionics/kicad/CAN-PERIPH-GW-1/scripts/route_can_periph_gw_pcb.py",
+      "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Adhesive.gba",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Courtyard.gbr",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Cu.gbl",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Fab.gbr",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Mask.gbs",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Paste.gbp",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-B_Silkscreen.gbo",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-Edge_Cuts.gm1",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Adhesive.gta",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Courtyard.gbr",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Cu.gtl",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Fab.gbr",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Mask.gts",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Paste.gtp",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-F_Silkscreen.gto",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-Margin.gbr",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1-job.gbrjob",
+      "avionics/kicad/Bus-Gateway/gerbers/CAN-PERIPH-GW-1.drl",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.dsn",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_pcb",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_prl",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_pro",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_sch",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.net",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.ses",
+      "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1_v2.ses",
+      "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
+      "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
+      "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/gerbers/Commo-B_Courtyard.gbr",
       "avionics/kicad/Commo/gerbers/Commo-B_Cu.gbl",
@@ -17937,11 +17917,11 @@
       "avionics/firmware/common/include/sbus_input.h",
       "avionics/firmware/common/src/sbus_input.c",
       "avionics/firmware/dts/Makefile",
+      "avionics/firmware/dts/Pilot/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts",
+      "avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
       "avionics/firmware/dts/README.md",
-      "avionics/firmware/dts/cape-a/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts",
-      "avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
-      "avionics/firmware/dts/cape-b/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts",
-      "avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
+      "avionics/firmware/dts/TACCO/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts",
+      "avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
       "avionics/firmware/fc/CMakeLists.txt",
       "avionics/firmware/fc/src/bmon_ina2xx.c",
       "avionics/firmware/fc/src/bmon_ina2xx.h",

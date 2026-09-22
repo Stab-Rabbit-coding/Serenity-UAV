@@ -17,7 +17,7 @@
 → full detail: `WBS.md` §1.4.1
 
 - [ ] PB2-I + Pilot Enclosure (Shepherd's Room / Inara's Shuttle
-- [ ] PB2-I + XO Enclosure (all 4 bays — Cape-B-2, plus Commo in River's…
+- [ ] PB2-I + XO Enclosure (all 4 bays — TACCO, plus Commo in River's…
 
 #### 1.4.2. Antenna Placement and feedlines
 → full detail: `WBS.md` §1.4.2

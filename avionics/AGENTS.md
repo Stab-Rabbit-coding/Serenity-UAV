@@ -15,13 +15,13 @@ board-level detail, plus the band-by-band FCC citations under "External Communic
 Regulations Compliance" below.
 
 **Platform:** four pairs of **PocketBeagle2 Industrial SBCs** (8 nodes total, Rev S placement,
-established at Rev R1). Every node carries a **TPM** (Trusted Platform Module) for cryptographic
-operations in addition to its Pilot and XO capes.
+established at Rev R1). 
 
-**Bus isolation:** CAN FD, RS-485, and Ethernet are galvanically isolated at every node through
-Cape-A-2 and Cape-B-2. MIL-STD 1553 is legacy and is being phased out.
+**Zero Trust Security** Every PB2-I Cape (Pilot, TACCO, and Commo), node carries a **TPM** (Trusted Platform Module) and every other PCB carries an **SE** (Security Element) to provide cryptographic authentication and message integrity in addition to its other functions.
 
-**Commo transceiver cape** (49 MHz Part 15 §15.235 + LoRa 915 MHz): installed in **River's
+**Bus Topology:** CAN FD, RS-485, Ethernet, and MIL-STD-1553C are galvanically isolated at every Pilot and TACCO node, providing a 4 lane redundant bus ring.  CAN-FD and RS-485 provide connectivity to every PCB, actuator and sensor on the aircraft.  The Observer PCB also has Ethernet to support its higher bandwidth sensor data. The 1553C bus is not extended to the resource constrained nodes lacking an SBC.
+
+**Commo transceiver cape** (49 MHz Part 15 §15.235 + SiK 915 MHz): installed in **River's
 Room** (Bay C, starboard cargo) and **Simon's Medbay** (Bay D, middle section) only — see "Cape
 Naming and Revision History" below for current build status.
 
@@ -57,19 +57,19 @@ summary below reflects today's as-built state.
 
 Flight control input, sensor fusion, and PID motor speed control: GPS, IMU, compass,
 barometer, anti-collision range sensors, airspeed sensor, EDF PID control, nacelle tilt servo
-control. Current build designation: Cape-A-2. Status/history: `avionics/kicad/Pilot/Pilot.md`.
+control. Current build designation: Pilot. Status/history: `avionics/kicad/Pilot/Pilot.md`.
 
-### XO — Communications, Logging, and Payload Cape
+### TACCO (Tactical Coordinator) — Communications, Logging, and Payload Cape
 
 External communications, onboard logging, payload interface: all four external radio
 transceivers, onboard data logging to hardware-enforced non-executable microSD, payload I/O.
-Current build designation: Cape-B-2. Status/history: `avionics/kicad/XO/XO.md`, TODO.md
+Current build designation: TACCO. Status/history: `avionics/kicad/TACCO/TACCO.md`, TODO.md
 §1.2b.
 
-### Commo — 49 MHz + LoRa Transceiver Cape
+### Commo — 49 MHz + SiK Transceiver Cape
 
 Unlicensed-band communications for high-RF-field environments: 49 MHz transceiver (47 CFR
-Part 15 §15.235) plus LoRa 915 MHz, both galvanically isolated. Installed only in River's Room
+Part 15 §15.235) plus Sik 915 MHz, both galvanically isolated. Installed only in River's Room
 (Bay C) and Simon's Medbay (Bay D). Connects via P1+P2 socket rails (Rev R1; replaces the
 legacy JST GH 6P). Status/history: `avionics/kicad/Commo/Commo.md`, TODO.md §1.2b.
 
@@ -104,6 +104,10 @@ Simon's Medbay — minimizes power-run length to all nacelles, all four stacks, 
 Status/history (including the planned 6V-servo-BEC removal): `avionics/kicad/FlightEngineer/FlightEngineer.md`,
 TODO.md §1.2b.
 
+### Bus-Gateway - Secure CAN-FD and RS-485 edge node
+
+Provides secure bus connection for sensors and actuators lacking native capability.  specifically the nacelle tilt Hall effect sensors and SG90 microservos.
+
 ## PCB Design Standards
 
 ### Design Rules Checker (DRC) Workflow
@@ -130,7 +134,7 @@ placed manually after PCBs are populated and nets are built by script (root `AGE
 Every message, internal and external, must be **digitally signed** and authenticated,
 **logged** for forensic analysis, and **timestamped** by the TPM.
 
-- **TPM:** every node carries one; all keys are generated and stored on the TPM, never in
+- **TPM:** every CAPE carries a TPM, all other nodes cary an SE; all keys are generated and stored on the TPM, never in
   software; all messages are signed using TPM-held keys.
 - **Data logging:** everything is logged — sensor data, CAN messages, MAVLink commands, camera
   feed, authentication events — to **hardware-enforced non-executable microSD cards**
@@ -144,7 +148,7 @@ All avionics design shall comply with **NIST SP 800-207 Zero Trust Architecture*
 - Verify every transaction: no implicit trust based on network location
 - Authenticate every message and every node state change
 - Least privilege: each node operates with minimum required permissions
-- Micro-segmentation: isolate avionics bays with galvanic isolation and message authentication
+- Micro-segmentation: Each node, even if it's just an HE Sensor or sg90 microservo, is a microsegment that must be authenticated at startup and throughout missions.  Isolate avionics bays with galvanic isolation and message authentication
 
 ## External Communications Regulations Compliance
 

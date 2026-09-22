@@ -43,7 +43,7 @@ REF_THICK = 0.10  # mm
 # ---------------------------------------------------------------------------
 SILK = {
     # Connectors
-    "J1": "CAPE-B IF",
+    "J1": "TACCO IF",
     "J2": "ANT SMA",
     # EMI stage — original stub components
     "CMC_CAN": "ANT CMC",

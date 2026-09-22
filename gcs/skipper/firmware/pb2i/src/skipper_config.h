@@ -64,7 +64,7 @@
 #define SKIPPER_SIK_BAUD                   (57600U)
 
 /* ---------------------------------------------------------------------------
- * LoRa 915 MHz (RFM95W on Cape-B-2 SPI1)
+ * LoRa 915 MHz (RFM95W on TACCO SPI1)
  * ---------------------------------------------------------------------------*/
 
 /** SPI device for RFM95W. */
@@ -124,7 +124,7 @@
 #define SKIPPER_49MHZ_XCVR_PTT_LINE        (11U)
 
 /* ---------------------------------------------------------------------------
- * Gimbal servo outputs (via Cape-B-2 J_SERVO, EHRPWM outputs)
+ * Gimbal servo outputs (via TACCO J_SERVO, EHRPWM outputs)
  * ---------------------------------------------------------------------------*/
 
 /** PWM chip for pan servo (EHRPWM channel). */

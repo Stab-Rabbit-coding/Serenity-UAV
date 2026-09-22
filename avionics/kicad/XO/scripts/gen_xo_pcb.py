@@ -12,7 +12,7 @@ auto-placement anchored to a shared net or parent IC for the rest).
 
 Board: PocketBeagle 2 Industrial cape, 55 x 35 mm — XO.md §1 is explicit that
 the comms/logging/payload rebuild must fit "without any overall board size
-increase from the CAPE-B-1 55 x 35 mm footprint," so this is a hard
+increase from the TACCO 55 x 35 mm footprint," so this is a hard
 constraint, not a starting guess.  6-layer (F.Cu signal / In1.Cu GND + isolated
 GND2 islands / In2.Cu signal / In3.Cu signal / In4.Cu +3V3 / B.Cu signal),
 1.6 mm — same stackup decision as Pilot (the 2026-09-19 four-bus-area

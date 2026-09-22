@@ -8,8 +8,8 @@
  * Revision: R (2026-06-11)
  *
  * The gimbal controller drives two DS3218MG servos (pan and tilt) via
- * Cape-B-2 EHRPWM outputs, and reads two AS5600 magnetic encoders (via
- * TCA9548A I²C mux on Cape-B-2) for closed-loop position feedback.
+ * TACCO EHRPWM outputs, and reads two AS5600 magnetic encoders (via
+ * TCA9548A I²C mux on TACCO) for closed-loop position feedback.
  *
  * Position convention:
  *   Pan  (azimuth)  : 0° = North; +CW from above; range ±170°.
