@@ -8263,6 +8263,17 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Commo/scripts/swap_lora_for_sik.py": {
+      "description": "swap_lora_for_sik.py \u2014 One-off transform: remove Commo's LoRa (RFM95W),",
+      "tags": [
+        "avionics-hardware",
+        "comms-protocol",
+        "emi-hardening",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
     "avionics/kicad/ENC-NACELLE-1.kicad_pcb": {
       "description": "KiCad PCB layout",
       "tags": [
@@ -14760,6 +14771,7 @@
       "avionics/firmware/fc/src/mag_mmc5983ma.h",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/scripts/gen_commo_sch.py",
+      "avionics/kicad/Commo/scripts/swap_lora_for_sik.py",
       "avionics/kicad/ENC-NACELLE-1.md",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/scripts/gen_fe_sch.py",
@@ -14910,6 +14922,7 @@
       "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
+      "avionics/kicad/Commo/scripts/swap_lora_for_sik.py",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/scripts/gen_fe_pcb.py",
       "avionics/kicad/FlightEngineer/scripts/gen_fe_sch.py",
@@ -16398,6 +16411,7 @@
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2-In2_Cu.gbr",
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2-job.gbrjob",
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2.drl",
+      "avionics/kicad/Commo/scripts/swap_lora_for_sik.py",
       "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/fix_xcvr_labels.py",
@@ -17159,6 +17173,7 @@
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
       "avionics/kicad/Commo/scripts/mod_commo_pcb.py",
       "avionics/kicad/Commo/scripts/route_commo_rssi.py",
+      "avionics/kicad/Commo/scripts/swap_lora_for_sik.py",
       "avionics/kicad/ENC-NACELLE-1.kicad_pcb",
       "avionics/kicad/ENC-NACELLE-1.kicad_prl",
       "avionics/kicad/ENC-NACELLE-1.kicad_pro",
@@ -17635,6 +17650,7 @@
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
       "avionics/kicad/Commo/scripts/mod_commo_pcb.py",
       "avionics/kicad/Commo/scripts/route_commo_rssi.py",
+      "avionics/kicad/Commo/scripts/swap_lora_for_sik.py",
       "avionics/kicad/ENC-NACELLE-1.kicad_pcb",
       "avionics/kicad/ENC-NACELLE-1.kicad_prl",
       "avionics/kicad/ENC-NACELLE-1.kicad_pro",
