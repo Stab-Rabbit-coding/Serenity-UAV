@@ -1,14 +1,14 @@
-# XO — EMI-Hardened Communications, Logging & Payload Cape
+# TACCO — EMI-Hardened Communications, Logging & Payload Cape
 
-**Callsign:** XO
+**Callsign:** TACCO (Tactical Coordinator)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
-**Revision:** R (Rev R baseline — XO naming finalised from TACCO; EMI-hardened variant of TACCO Rev M, Ethernet PHY restored)
+**Revision:** R (Rev R baseline — TACCO naming finalized; EMI-hardened variant of TACCO Rev M, Ethernet PHY restored)
 **Date:** 2026-06-07
 **Status (2026-09-20 update, Claude Sonnet 5):** The Rev S1 reconciliation described below is
 SUPERSEDED — the legacy schematic/PCB pair (169 sch refs vs 43 PCB footprints, 564 ERC
 violations) was not patchable and has been replaced by a from-scratch schematic-first rebuild
-(`avionics/kicad/XO/scripts/gen_xo_sch.py` / `gen_xo_pcb.py`), the same method used for Pilot.
+(`avionics/kicad/TACCO/scripts/gen_tacco_sch.py` / `gen_tacco_pcb.py`), the same method used for Pilot.
 **ERC is 0.** PCB placement is IN PROGRESS: board-area math showed the full component set does
 not fit the 55x35mm two-sided envelope this section's §1 requires (confirmed by an actual
 placement run, not just an area estimate); the winch and SG90 door servos were moved to
@@ -16,11 +16,11 @@ bus-networked (CAN-FD/RS-485) control per owner correction (they were never mean
 locally — see WBS.md), and the 3 SMA antenna jacks became vertical MMCX — this recovered enough
 area to get close, but the owner is finishing placement by hand in KiCad rather than continuing
 to iterate the auto-placer. **Note:** this rebuild restored LoRa/RFM95W (contradicting this
-section's old claim that Rev S1 removed it — XO.md's own §13 antenna-filter BOM already listed
+section's old claim that Rev S1 removed it — TACCO.md's own §13 antenna-filter BOM already listed
 RFM95W, a second internal contradiction in this doc alongside the Ethernet one below); see
 avionics/WBS.md for the full rebuild trail and two flagged part-number defects (Johanson filter
-MPNs, microSD connector MPN) that need owner confirmation. See WBS.md's "XO schematic-first
-rebuild" and "XO PCB placement" items for the authoritative current state; the paragraphs below
+MPNs, microSD connector MPN) that need owner confirmation. See WBS.md's "TACCO schematic-first
+rebuild" and "TACCO PCB placement" items for the authoritative current state; the paragraphs below
 describe the PRE-REBUILD Rev R/S1 history and are kept for record only.
 
 **Status (superseded, pre-2026-09-20):** Schematic complete — PCB layout pending. **Rev S1
@@ -28,7 +28,7 @@ reconciliation IN PROGRESS (2026-07-04):** the PCB is already at the intended en
 removed, P1/P2 +TOP passthrough rails placed) but the **schematic lags** — it still carries the
 LoRa block, the now-obsolete `J_XCVR` Commo-cable connector, and an SBUS block, and uses a
 **different reference-designator convention** from the PCB (only ~10 of ~50 refs match). A
-load-blocking stray-`(comment)` bug in `XO.kicad_sch` was fixed 2026-07-04 (it now opens in
+load-blocking stray-`(comment)` bug in `TACCO.kicad_sch` was fixed 2026-07-04 (it now opens in
 kicad-cli). The remaining schematic reconciliation needs a **user-confirmed sch↔pcb
 reference-designator remap** before edits — see TODO.md §1.2b and `avionics/AGENTS.md`.
 
@@ -36,8 +36,8 @@ reference-designator remap** before edits — see TODO.md §1.2b and `avionics/A
 
 ## Purpose
 
-XO is the electromagnetic-environment-hardened variant of TACCO
-(Rev M), designed for the same harsh nacelle and fuselage EM environment as Pilot.
+TACCO is the electromagnetic-environment-hardened communications, logging, and payload cape
+designed for the same harsh nacelle and fuselage EM environment as Pilot.
 The communications payload of this cape (SiK 915 MHz, LoRa 915 MHz, WiFi 2.4/5 GHz,
 49 MHz Part 15 §15.235) is inherently more susceptible to radiated interference than the purely
 digital Pilot, so hardening concentrates on conducted immunity for the wired
@@ -191,7 +191,7 @@ The Pilot layout constraints apply equally here, including the ≥ 8 mm creepage
 clearance requirement between GND1 and GND2 copper pours on the ISOW1044BDFMR and
 ADM2795EBRWZ [REF-IEC-001 §5.5.2] [REF-VDE-001 Cl.4.3] — see Pilot.md "Isolation creepage."
 
-> **Verification status (2026-06-22, `kicad-cli pcb drc` against `XO.kicad_pcb`,
+> **Verification status (2026-06-22, `kicad-cli pcb drc` against `TACCO.kicad_pcb`,
 > KiCad 9.0.2): NOT MET — BLOCKS PCB fab.** Same finding as Pilot, with different
 > numbers: after excluding same-package pin-to-pin spacing, DRC found **9 genuine
 > cross-domain clearance violations** between the `TMESH_P`/`TMESH_N` tamper-detect
@@ -325,7 +325,7 @@ copper pour, consistent with §11.
 | Reference | Part | Function |
 | --- | --- | --- |
 | CAN-ISO | ISOW1044BDFMR | Isolated CAN FD (5 kV) |
-| RS485-ISO | ADM2795EBRWZ | Isolated RS-485 (5 kV, ±42 V) |
+| RS485-ISO | ISOW1412 | Isolated RS-485 (5 kV, ±42 V) |
 | CM1 | Bourns SRF2012-100Y | CAN CMC |
 | CM2 | Bourns SRF2012-100Y | RS-485 CMC |
 | CM3 | Bourns SRF2012-100Y | LoRa SPI CMC |
@@ -398,11 +398,11 @@ All field connectors are shielded JST-GH (or SMA/U.FL for RF). SHIELD pins conne
 | J_SMA_SIK | SMA (50 Ω) | RF center via FL_SIK; shell = PGND | SiK 915 MHz antenna output |
 
 Note: J_ETH_B and J_XCVR are absent from this table — confirmed removed from the as-placed
-PCB (`XO.kicad_pcb`) even though both still appear in the lagging schematic (`XO.kicad_sch`,
+PCB (`TACCO.kicad_pcb`) even though both still appear in the lagging schematic (`TACCO.kicad_sch`,
 see status note above and TODO.md §1.2b); this table reflects the as-built board, not the
 schematic.
 
-Note: XO uses `_B_` net name suffixes on CAN, RS-485, and 1553 bus signals
+Note: TACCO uses `_B_` net name suffixes on CAN, RS-485, and 1553 bus signals
 (CAN_B_H/CAN_B_L, RS485_B_P/RS485_B_N, BUS_1553_B_P/BUS_1553_B_N) to distinguish
 them from Pilot's `_A_` nets, allowing both boards to coexist on a shared
 schematic bus ring without net name conflicts.
@@ -411,8 +411,8 @@ schematic bus ring without net name conflicts.
 
 ## Related Files
 
-- `TACCO.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline
-- `XCVR-49MHZ-2.kicad_sch` — EMI-hardened 49 MHz transceiver
+- `TACCO.kicad_sch` — schematic
+- `TACCO.kicad_pcb` — PCB layout
 - `Pilot.md` — EMI-hardened flight control cape
 - `AVIONICS_PB2_REDESIGN.md` — system architecture
 

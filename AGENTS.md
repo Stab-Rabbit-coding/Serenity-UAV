@@ -40,7 +40,7 @@ implementation/PCB status see `avionics/AGENTS.md` and each board's own `.md` un
 as-built state):
 
 - 8× PocketBeagle2 Industrial SBC nodes, each carrying **Pilot** (flight control/sensor cape) +
-  **XO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
+  **TACCO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
 - **Commo** (49 MHz + LoRa transceiver cape) is installed only in River's Room and Simon's
   Medbay.
 - Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected.
@@ -197,7 +197,7 @@ active trade study and must not be assumed.
 | --- | --- |
 | Skipper | Ground control station |
 | Pilot | Flight Control + Sensor cape |
-| XO | Comms/Logging/Payload cape |
+| TACCO | Comms/Logging/Payload cape |
 | Flight Engineer | Power Distribution Board |
 | Commo | 49 MHz + LoRa transceiver cape |
 | Observer | Cargo-handling + nose/cargo-bay vision/ToF/laser board |
@@ -206,7 +206,7 @@ active trade study and must not be assumed.
 | River's Room | Bay C — starboard avionics |
 | Simon's Medbay | Bay D — aft avionics |
 
-The six board names (Skipper, Pilot, XO, Flight Engineer, Commo, Observer) are **generic role
+The six board names (Skipper, Pilot, TACCO, Flight Engineer, Commo, Observer) are **generic role
 names**, chosen 2026-08-01 to replace the project's original Firefly-character board names
 (TODO.md §0.9 item 8 — avoiding trademark exposure, §3 above). The four bay names were **not**
 renamed. The former-name/inspiration table and the full renaming record live in

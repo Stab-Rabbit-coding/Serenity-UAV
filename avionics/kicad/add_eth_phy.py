@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-add_eth_phy.py — Add one EM-hardened Ethernet port to Pilot and XO.
+add_eth_phy.py — Add one EM-hardened Ethernet port to Pilot and TACCO.
 
 Components added:
   ADIN1300BCPZ  : ADI industrial 10/100/1000BASE-T PHY, IEC 61000-4 hardened,
@@ -22,11 +22,11 @@ were placed by gen_cape_a2.py / gen_cape_b2.py) through two ISO7642FDWRR isolato
 to the ADIN1300 PHY.  RMII1 signals and PHY2 control remain as no_connect (only
 one PHY per cape).
 
-For XO also removes orphaned PHY-side global_labels left by gen_cape_b2.py.
+For TACCO also removes orphaned PHY-side global_labels left by gen_tacco_sch.py.
 
 Usage:
     python3 add_eth_phy.py Pilot.kicad_sch
-    python3 add_eth_phy.py XO.kicad_sch
+    python3 add_eth_phy.py TACCO.kicad_sch
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0
@@ -62,10 +62,10 @@ RMII0_RESTORE = {
     438.89: "PHY1_RSTN",
 }
 
-# Orphaned PHY-side labels in XO (left by gen_cape_b2.py).
+# Orphaned PHY-side labels in TACCO (left by gen_tacco_sch.py).
 # These are at X=197.30/222.70/347.30/372.70, Y=447-465.
-CAPE_B2_ORPHAN_X = {197.30, 222.70, 347.30, 372.70}
-CAPE_B2_ORPHAN_Y_RANGE = (440.0, 470.0)
+TACCO_ORPHAN_X = {197.30, 222.70, 347.30, 372.70}
+TACCO_ORPHAN_Y_RANGE = (440.0, 470.0)
 
 
 # ---------------------------------------------------------------------------
@@ -379,13 +379,13 @@ def remove_noconnects_at_y(content: str, y_values: set) -> str:
     return content
 
 
-def remove_orphan_labels_cape_b2(content: str) -> str:
+def remove_orphan_labels_tacco(content: str) -> str:
     """
-    Remove orphaned global_labels at X in CAPE_B2_ORPHAN_X and
-    Y in CAPE_B2_ORPHAN_Y_RANGE — left by gen_cape_b2.py when
+    Remove orphaned global_labels at X in TACCO_ORPHAN_X and
+    Y in TACCO_ORPHAN_Y_RANGE — left by gen_tacco_sch.py when
     DP83825I instances were removed but their attached labels were not.
     """
-    x_pattern = "|".join(re.escape(f"{x:.2f}") for x in CAPE_B2_ORPHAN_X)
+    x_pattern = "|".join(re.escape(f"{x:.2f}") for x in TACCO_ORPHAN_X)
     pattern = (
         r'\n?\s*\(global_label "[^"]*" \(shape [^)]+\) \(at '
         r"(?:" + x_pattern + r") "
@@ -578,7 +578,7 @@ def transform(path: str) -> None:
     with open(path, "r", encoding="utf-8") as fh:
         content = fh.read()
 
-    is_cape_b = "XO" in path or "cape_b2" in path.lower()
+    is_tacco = "TACCO" in path or "tacco" in path.lower()
 
     # Determine UUID prefix from existing content.
     if "a2000000" in content:
@@ -603,10 +603,10 @@ def transform(path: str) -> None:
     content = remove_noconnects_at_y(content, set(RMII0_RESTORE.keys()))
 
     # -----------------------------------------------------------------------
-    # Step 3: For XO, remove orphaned PHY-side labels.
+    # Step 3: For TACCO, remove orphaned PHY-side labels.
     # -----------------------------------------------------------------------
-    if is_cape_b:
-        content = remove_orphan_labels_cape_b2(content)
+    if is_tacco:
+        content = remove_orphan_labels_tacco(content)
 
     # -----------------------------------------------------------------------
     # Step 4: Build all new schematic elements.

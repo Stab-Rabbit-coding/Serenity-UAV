@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-generate_gerbers_rev_s1.py — Generate Gerber files for Rev S1 boards (Commo, XO, Flight Engineer)
+generate_gerbers_rev_s1.py — Generate Gerber files for Rev S1 boards (Commo, TACCO, Flight Engineer)
 
 Usage:
-    python3 generate_gerbers_rev_s1.py [commo|xo|flight_engineer]
+    python3 generate_gerbers_rev_s1.py [commo|tacco|flight_engineer]
 
 Generates production Gerber and drill files to:
   - avionics/kicad/gerbers/Commo-S1/
@@ -26,11 +26,11 @@ BOARDS = {
         "gerber_dir": "avionics/kicad/gerbers/Commo-S1",
         "name": "Commo Rev S1",
     },
-    "xo": {
-        "pcb": "avionics/kicad/XO/kicads/XO.kicad_pcb",
-        "pro": "avionics/kicad/XO/kicads/XO.kicad_pro",
+    "tacco": {
+        "pcb": "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
+        "pro": "avionics/kicad/TACCO/kicads/TACCO.kicad_pro",
         "gerber_dir": "avionics/kicad/gerbers/TACCO-S1",
-        "name": "XO Rev S1",
+        "name": "TACCO Rev S1",
     },
     "flight_engineer": {
         "pcb": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb",

@@ -1,35 +1,35 @@
 #!/usr/bin/env python3
-"""gen_xo_sch.py — Author the datasheet-accurate XO (CAPE-B-1 successor) schematic.
+"""gen_tacco_sch.py — Author the datasheet-accurate TACCO schematic.
 
-Schematic-first rebuild of the XO comms/logging/payload cape (PocketBeagle 2
-Industrial cape), following the exact method used for the Pilot rebuild
+Schematic-first rebuild of the TACCO (Tactical Coordinator) comms/logging/payload cape
+(PocketBeagle 2 Industrial cape), following the exact method used for the Pilot rebuild
 (``avionics/kicad/Pilot/scripts/gen_pilot_sch.py``): every IC is a rectangular
 symbol carrying its FULL datasheet pinout, every functional pin is wired to a
 global net label, and every symbol carries the footprint the PCB generator
-(``gen_xo_pcb.py``) places.  ``kicad-cli sch erc`` and the PCB net-sync both
+(``gen_tacco_pcb.py``) places.  ``kicad-cli sch erc`` and the PCB net-sync both
 read from the ``ICS`` / ``SIMPLE`` tables below.
 
 Scope for this rebuild
 -----------------------
-The prior ``XO.kicad_sch`` had 169 component references against only 43 PCB
+The prior ``TACCO.kicad_sch`` had 169 component references against only 43 PCB
 footprints (matching Pilot's pre-rebuild divergence) and 564 ERC violations —
 not a patchable state.  This rebuild starts fresh, reusing the fleet-shared
 blocks already verified on Pilot (identical part, identical pin table) and
-authoring the XO-unique radio/logging/payload blocks new:
+authoring the TACCO-unique radio/logging/payload blocks new:
 
-* **Fleet-shared (reused verbatim from Pilot, ``_B_`` net suffix per XO.md's
-  own documented rationale — lets Pilot and XO share one bus ring without net
+* **Fleet-shared (reused verbatim from Pilot, ``_B_`` net suffix per TACCO.md's
+  own documented rationale — lets Pilot and TACCO share one bus ring without net
   collisions):** ISOW1044BDFMR (CAN FD), ISOW1412DFMR (RS-485), SLB9672 (TPM),
   Holt HI-1573 + Premier PM-DB2791S (MIL-STD-1553B — the RS-422 DS26LV31/32 +
   fake "SM-1553-11" defect in the legacy schematic is retired, same fix as
   Pilot), DP83825I (Ethernet PHY) + WE-LAN transformer, PocketBeagle 2 P1/P2
   stacking headers.
 * **Ethernet inclusion resolved via avionics/WBS.md** (higher authority than
-  XO.md's own internal contradiction — see WBS.md "Re-evaluate space / restore
-  Ethernet to XO", DONE at Rev R, single DP83825I, confirmed adequate space):
-  XO gets **one** PHY (RMII0), not the dual pair Pilot has (WBS §1.2a "XO: 1x
+  TACCO.md's own internal contradiction — see WBS.md "Re-evaluate space / restore
+  Ethernet to TACCO", DONE at Rev R, single DP83825I, confirmed adequate space):
+  TACCO gets **one** PHY (RMII0), not the dual pair Pilot has (WBS §1.2a "TACCO: 1x
   PHY (RMII0)").
-* **XO-unique (new this pass):** Seeed Wio-E5 module running mLRS firmware
+* **TACCO-unique (new this pass):** Seeed Wio-E5 module running mLRS firmware
   (wio-e5-datasheet.pdf — replaces RFD900x SiK, relocated to Commo; see the
   2026-09-21 SiK-swap note below), Murata Type 2EL WiFi+BT+802.15.4 tri-radio
   module (type2el.pdf — see the 2026-09-21 swap note below), TPS63031
@@ -42,16 +42,16 @@ authoring the XO-unique radio/logging/payload blocks new:
   filter/ESD chains, microSD card slot, fan connector.
 * **2026-09-21 — SiK (RFD900ux-SMT) relocated to Commo, replaced by mLRS on a
   Seeed Wio-E5 module:** per owner direction (via `ce-ideate` footprint/power/
-  firmware analysis, see avionics/WBS.md's "APPROVED DIRECTION" entry), XO's
+  firmware analysis, see avionics/WBS.md's "APPROVED DIRECTION" entry), TACCO's
   own long-range link becomes mLRS running on STM32WLE5JC (LoRa radio
   integrated in the die — no separate MCU+radio-chip subsystem). Every net on
   the WIOE5 IC entry below is transcribed directly from mLRS's own published
   HAL source for this hardware target (`rx-hal-WioE5-Mini-wle5jc.h`), not
   guessed. This does NOT re-collapse the path-diversity argument that killed
   the earlier mLRS-for-SiK proposal (avionics/WBS.md's original mLRS
-  rejection): that rejection assumed XO would carry SiK AND a LoRa-family
-  radio in parallel; here SiK leaves XO entirely, so the fleet still ends up
-  with one SiK-class link (now on Commo) and one LoRa-class link (now on XO)
+  rejection): that rejection assumed TACCO would carry SiK AND a LoRa-family
+  radio in parallel; here SiK leaves TACCO entirely, so the fleet still ends up
+  with one SiK-class link (now on Commo) and one LoRa-class link (now on TACCO)
   — same two-family split as before, different physical boards.
 * **2026-09-21 — WL1837MOD (WiFi+BT) + the never-implemented Zigbee scope gap
   both replaced/closed by one part:** Murata Type 2EL (LBES5PL2EL-923,
@@ -107,7 +107,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 HERE = Path(__file__).resolve().parent
-OUT = HERE.parent / "kicads" / "XO.kicad_sch"
+OUT = HERE.parent / "kicads" / "TACCO.kicad_sch"
 SYMLIB = HERE.parent / "kicads" / "XO.kicad_sym"
 
 SIZE = 1.27
@@ -1145,7 +1145,7 @@ def emit_instance(ic, X, Y, left, right, half_w, half_h, sheet_uuid) -> List[str
     ]
     for pn, *_ in left + right:
         out.append(f'    (pin "{esc(pn)}" (uuid "{uid()}"))')
-    out.append(f'    (instances (project "XO" (path "/{sheet_uuid}" (reference "{esc(ref)}") (unit 1))))')
+    out.append(f'    (instances (project "TACCO" (path "/{sheet_uuid}" (reference "{esc(ref)}") (unit 1))))')
     out.append("  )")
     wl = []
     for i, (pn, fn, net, _) in enumerate(left):
@@ -1198,7 +1198,7 @@ def emit_pwr_flags(x0: float, y0: float, sheet_uuid: str) -> List[str]:
             f'    (uuid "{uid()}")\n'
             f'    (property "Reference" "#FLG{i + 1}" (at {x:.2f} {y0 - 2.54:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))\n'
             f'    (property "Value" "PWR_FLAG" (at {x:.2f} {y0 - 5.08:.2f} 0) (effects (font (size 1.27 1.27))))\n'
-            f'    (instances (project "XO" (path "/{sheet_uuid}" (reference "#FLG{i + 1}") (unit 1)))))'
+            f'    (instances (project "TACCO" (path "/{sheet_uuid}" (reference "#FLG{i + 1}") (unit 1)))))'
         )
         out.append(wire(x, y0, x, y0 + STUB))
         out.append(label(rail, x, y0 + STUB, 270))
@@ -1211,7 +1211,7 @@ TITLE_BLOCK = """  (title_block
     (rev "S2")
     (company "Griffing Technology LLC")
     (comment 1 "XO Node — PocketBeagle 2 Industrial cape, 4-layer")
-    (comment 2 "Generated by avionics/kicad/XO/scripts/gen_xo_sch.py — do not hand-edit; edit the generator")
+    (comment 2 "Generated by avionics/kicad/TACCO/scripts/gen_tacco_sch.py — do not hand-edit; edit the generator")
     (comment 3 "Author: Claude Sonnet 5 (2026-09-20); owner sgriffing")
     (comment 4 "CC BY 4.0 — pinouts transcribed from OEM datasheets in avionics/datasheets/")
   )"""
@@ -1253,7 +1253,7 @@ def main() -> None:
     parts.append('  (sheet_instances (path "/" (page "1")))')
     parts.append(")")
     OUT.write_text("\n".join(parts) + "\n")
-    lib = ["(kicad_symbol_lib (version 20241209) (generator \"gen_xo_sch.py\") (generator_version \"9.0\")"]
+    lib = ["(kicad_symbol_lib (version 20241209) (generator \"gen_tacco_sch.py\") (generator_version \"9.0\")"]
     for ic, left, right, hw, hh in built:
         lib.append(lib_symbol(ic)[0].replace('(symbol "XO:', '(symbol "', 1))
     lib.append(")")

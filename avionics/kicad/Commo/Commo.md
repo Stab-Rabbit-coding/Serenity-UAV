@@ -599,8 +599,8 @@ cable shield, the following on-board measures are active (see §1):
 
 - `XCVR-49MHZ-1.kicad_sch` — original (Phase 1 stub) schematic
 - `XCVR-49MHZ-1.md` — original Phase 1 design notes and committed BOM
-- `XO.kicad_sch` — host board with J1 counter-connector
-- `XO.md` — XO design notes
+- `TACCO.kicad_sch` — host board with J1 counter-connector
+- `TACCO.md` — TACCO design notes
 
 ---
 
