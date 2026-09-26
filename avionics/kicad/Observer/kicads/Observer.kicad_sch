@@ -6,7 +6,9 @@
     (comment 2 "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP | Griffing Technology LLC")
     (comment 3 "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0")
     (comment 4 "SoM carrier: real clean-room symbols; see gen_Observer_carrier_sch.py")
-  )
+		(comment 8 "Wurth parts (749010012A): see Wurth usage notice on this page [USAGE-NOTICE-2026-09-26]")
+		(comment 9 "Intended for use ONLY on uncrewed aircraft")
+	)
   (lib_symbols
   (symbol "C_Generic" (in_bom yes) (on_board yes)
     (property "Reference" "R" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
@@ -5894,4 +5896,10 @@
     (uuid "9672ep00-0000-0000-0000-000000000000")
     (property "Intersheet References" "${INTERSHEET_REFS}" (at 137.16 195.58 0)
       (effects (font (size 1.016 1.016)) (hide yes))))
-)
+	(text "WÜRTH ELEKTRONIK USAGE NOTICE (verbatim, 749010012A data sheet rev 004.000 p.1; applies to Würth\nparts on this board: 749010012A):\n\nThis electronic component has been designed and developed for usage in general electronic equipment\nonly. This product is not authorized for use in equipment where a higher safety standard and\nreliability standard is especially required or where a failure of the product is reasonably expected\nto cause severe personal injury or death, unless the parties have executed an agreement specifically\ngoverning such use. Moreover Würth Elektronik eiSos GmbH & Co KG products are neither designed nor\nintended for use in areas such as military, aerospace, aviation, nuclear control, submarine,\ntransportation, transportation signal, disaster prevention, medical, public information network\netc.. Würth Elektronik eiSos GmbH & Co KG must be informed about the intent of such usage before the\ndesign-in stage. In addition, sufficient reliability evaluation checks for safety must be performed\non every electronic component which is used in electrical circuits that require high safety and\nreliability functions or performance.\n\nINTENDED USE: The Serenity-UAV avionics, including this board, are intended for use only on uncrewed\naircraft.\n[USAGE-NOTICE-2026-09-26]"
+		(exclude_from_sim no)
+		(at -35.56 -114.30 0)
+		(effects (font (size 1.27 1.27)) (justify left top))
+		(uuid "dc5e4468-09ed-4ac3-9a61-6c6f14893ec8")
+	)
+	)

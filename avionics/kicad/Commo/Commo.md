@@ -775,3 +775,31 @@ fixed offsets from the symbol anchor per the lib_symbols definition above.
 - J2 GND pin (285.08, 100.00) → GND power symbol
 - `RF_ANT_F` label at (270.00, 116.19) → C_X2Y pin 1 (top)
 - C_X2Y pin 2 (270.00, 123.81) → GND power symbol
+
+## Usage notices
+
+**Intended use:** the Serenity-UAV avionics, including this board, are intended
+for use only on uncrewed aircraft.
+
+**Würth Elektronik usage notice** — applies to the Würth parts on this board
+(749010012A, 742792510, 742792512). Quoted verbatim from Würth Elektronik eiSos,
+*749010012A data sheet* rev 004.000 (2024-04-11), p. 1 [REF-SENSOR-028]; the
+same notice appears on every Würth product data sheet. Owner decision
+2026-09-26: the Würth parts are retained (avionics/WBS.md U7.1d).
+
+> This electronic component has been designed and developed for usage in general
+> electronic equipment only. This product is not authorized for use in equipment
+> where a higher safety standard and reliability standard is especially required
+> or where a failure of the product is reasonably expected to cause severe
+> personal injury or death, unless the parties have executed an agreement
+> specifically governing such use. Moreover Würth Elektronik eiSos GmbH & Co KG
+> products are neither designed nor intended for use in areas such as military,
+> aerospace, aviation, nuclear control, submarine, transportation,
+> transportation signal, disaster prevention, medical, public information
+> network etc.. Würth Elektronik eiSos GmbH & Co KG must be informed about the
+> intent of such usage before the design-in stage. In addition, sufficient
+> reliability evaluation checks for safety must be performed on every electronic
+> component which is used in electrical circuits that require high safety and
+> reliability functions or performance.
+
+<!-- /USAGE-NOTICE-2026-09-26 -->

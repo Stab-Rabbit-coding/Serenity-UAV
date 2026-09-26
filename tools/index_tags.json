@@ -14450,6 +14450,13 @@
       ],
       "archived": false
     },
+    "tools/add_board_notices.py": {
+      "description": "Stamp the Wurth usage notice and the uncrewed-only notice onto boards.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/add_landing_gear_bosses.py": {
       "description": "Add 16 Rev R5 landing-gear hull boss sockets (4 per corner, one per wire)",
       "tags": [
@@ -18753,6 +18760,7 @@
       "tools/README.md",
       "tools/TODO.md",
       "tools/TOOL_REFERENCE.md",
+      "tools/add_board_notices.py",
       "tools/add_landing_gear_bosses.py",
       "tools/bake_hull_frame.py",
       "tools/bom_edit_door_gateway.py",

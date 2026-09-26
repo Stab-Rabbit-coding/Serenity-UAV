@@ -611,8 +611,17 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
         - [ ] U7.1c — STEP models for every `SecureControllers.pretty` footprint;
             install `kicad-packages3d` on the build workstation (stock
             `${KICAD9_3DMODEL_DIR}` models are absent — owner action, needs root).
-        - [ ] U7.1d — ★ Owner decision: Wurth 749010012A datasheet excludes
-            aviation use unless Wurth is informed before design-in.
+        - [x] U7.1d — Wurth 749010012A usage notice (excludes aviation use
+            unless Wurth is informed). Owner decision 2026-09-26: keep the Wurth
+            parts; notice quoted verbatim + "uncrewed aircraft only" on Pilot,
+            TACCO, Commo, Flight Engineer, Observer (.md, schematic, PCB
+            Cmts.User, title-block comments 8/9) via `tools/add_board_notices.py`
+            [REF-SENSOR-028]. Generator-owned schematics (gen_*_sch.py) will drop
+            the stamp on regeneration -- re-run the tool after any regen.
+        - [ ] U7.1g — Catalogue the remaining uncited-but-used IDs
+            REF-SENSOR-020/021/024/031/032/034-037/039 (022-040 subset done
+            2026-09-26); ICM-42688-P, PM-DB2791S, HI-1573, SLB 9672 public
+            URLs require verification.
         - [ ] U7.1e — ★ TLV62569 FB/PG swap (gateway, Observer) and 3-pad SOT-23
             (Flight Engineer); recommend TLV62569PDRLR (SOT-563, with PG).
         - [ ] U7.1f — Observer 749010012A symbol/footprint is an invented 8-pin

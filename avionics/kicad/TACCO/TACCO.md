@@ -453,3 +453,31 @@ schematic bus ring without net name conflicts.
 7. Johanson Technology 0915LP15B0100E Data Sheet — 902–928 MHz bandpass filter
 8. Johanson Technology 2450BP15B050E Data Sheet — 2.4 GHz bandpass filter
 9. Semtech RCLAMP0502B Data Sheet — RF ESD protection, 0.15 pF, SOD-882
+
+## Usage notices
+
+**Intended use:** the Serenity-UAV avionics, including this board, are intended
+for use only on uncrewed aircraft.
+
+**Würth Elektronik usage notice** — applies to the Würth parts on this board
+(749010012A, 742792510, WE-MAPI 3015). Quoted verbatim from Würth Elektronik
+eiSos, *749010012A data sheet* rev 004.000 (2024-04-11), p. 1 [REF-SENSOR-028];
+the same notice appears on every Würth product data sheet. Owner decision
+2026-09-26: the Würth parts are retained (avionics/WBS.md U7.1d).
+
+> This electronic component has been designed and developed for usage in general
+> electronic equipment only. This product is not authorized for use in equipment
+> where a higher safety standard and reliability standard is especially required
+> or where a failure of the product is reasonably expected to cause severe
+> personal injury or death, unless the parties have executed an agreement
+> specifically governing such use. Moreover Würth Elektronik eiSos GmbH & Co KG
+> products are neither designed nor intended for use in areas such as military,
+> aerospace, aviation, nuclear control, submarine, transportation,
+> transportation signal, disaster prevention, medical, public information
+> network etc.. Würth Elektronik eiSos GmbH & Co KG must be informed about the
+> intent of such usage before the design-in stage. In addition, sufficient
+> reliability evaluation checks for safety must be performed on every electronic
+> component which is used in electrical circuits that require high safety and
+> reliability functions or performance.
+
+<!-- /USAGE-NOTICE-2026-09-26 -->

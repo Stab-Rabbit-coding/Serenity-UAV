@@ -6,7 +6,9 @@
     (date "2026-09-21") (rev "S2") (company "Griffing Technology LLC")
     (comment 1 "Schematic-first reconciliation: authored to match Commo.kicad_pcb (J1 dropped; UART on PB2 rails; PTT_N + RSSI_DCD on gated payload GPIOs). 2026-09-21: LoRa (RFM95W) removed, replaced by SiK (RFD900ux-SMT) relocated from XO/TACCO -- see avionics/WBS.md sec1.2a.")
     (comment 2 "Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  |  AI-assist: Claude Opus 4.8 (Anthropic)")
-  )
+		(comment 8 "Wurth parts (749010012A, 742792510, 742792512): see Wurth usage notice on this page [USAGE-NOTICE-2026-09-26]")
+		(comment 9 "Intended for use ONLY on uncrewed aircraft")
+	)
   (lib_symbols
     (symbol "Commo:S_+5V_Bead" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
@@ -3014,4 +3016,10 @@
     (uuid "7ee00000-0000-0000-0000-00000000002e")
     (property "Intersheet References" "${INTERSHEET_REFS}" (at 229.87 1104.90 0)
       (effects (font (size 1.016 1.016)) (hide yes))))
-)
+	(text "WÜRTH ELEKTRONIK USAGE NOTICE (verbatim, 749010012A data sheet rev 004.000 p.1; applies to Würth\nparts on this board: 749010012A, 742792510, 742792512):\n\nThis electronic component has been designed and developed for usage in general electronic equipment\nonly. This product is not authorized for use in equipment where a higher safety standard and\nreliability standard is especially required or where a failure of the product is reasonably expected\nto cause severe personal injury or death, unless the parties have executed an agreement specifically\ngoverning such use. Moreover Würth Elektronik eiSos GmbH & Co KG products are neither designed nor\nintended for use in areas such as military, aerospace, aviation, nuclear control, submarine,\ntransportation, transportation signal, disaster prevention, medical, public information network\netc.. Würth Elektronik eiSos GmbH & Co KG must be informed about the intent of such usage before the\ndesign-in stage. In addition, sufficient reliability evaluation checks for safety must be performed\non every electronic component which is used in electrical circuits that require high safety and\nreliability functions or performance.\n\nINTENDED USE: The Serenity-UAV avionics, including this board, are intended for use only on uncrewed\naircraft.\n[USAGE-NOTICE-2026-09-26]"
+		(exclude_from_sim no)
+		(at -25.40 -88.90 0)
+		(effects (font (size 1.27 1.27)) (justify left top))
+		(uuid "bb075b8b-dd73-45ce-9044-380c152d9dfa")
+	)
+	)

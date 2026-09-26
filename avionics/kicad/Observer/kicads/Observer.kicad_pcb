@@ -15,6 +15,8 @@
 		(comment 2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
 		(comment 3 "1.0 × 2.75 in (25.4 × 69.85 mm) 4-layer FR4, DOUBLE-SIDED, EMI-hardened — see gen_Jayne_pcb.py docstring")
 		(comment 4 "SoM end-state: real footprints (PCM-071 2xBTH-060, TQFP-128-EP, VQFN, SOIC-20W); see gen_Jayne_carrier_pcb.py")
+		(comment 8 "Wurth parts (749010012A): see Wurth usage notice on this page [USAGE-NOTICE-2026-09-26]")
+		(comment 9 "Intended for use ONLY on uncrewed aircraft")
 	)
 	(layers
 		(0 "F.Cu" signal)
@@ -17869,4 +17871,10 @@
 		)
 	)
 	(embedded_fonts no)
+	(gr_text "WÜRTH ELEKTRONIK USAGE NOTICE (verbatim, 749010012A data sheet rev 004.000 p.1; applies to Würth\nparts on this board: 749010012A):\n\nThis electronic component has been designed and developed for usage in general electronic equipment\nonly. This product is not authorized for use in equipment where a higher safety standard and\nreliability standard is especially required or where a failure of the product is reasonably expected\nto cause severe personal injury or death, unless the parties have executed an agreement specifically\ngoverning such use. Moreover Würth Elektronik eiSos GmbH & Co KG products are neither designed nor\nintended for use in areas such as military, aerospace, aviation, nuclear control, submarine,\ntransportation, transportation signal, disaster prevention, medical, public information network\netc.. Würth Elektronik eiSos GmbH & Co KG must be informed about the intent of such usage before the\ndesign-in stage. In addition, sufficient reliability evaluation checks for safety must be performed\non every electronic component which is used in electrical circuits that require high safety and\nreliability functions or performance.\n\nINTENDED USE: The Serenity-UAV avionics, including this board, are intended for use only on uncrewed\naircraft.\n[USAGE-NOTICE-2026-09-26]"
+		(at 248.74 123.17 0)
+		(layer "Cmts.User")
+		(uuid "d8cfa10a-89f1-4564-b088-0b77f026f1b1")
+		(effects (font (size 0.8 0.8) (thickness 0.1)) (justify left top))
+	)
 )

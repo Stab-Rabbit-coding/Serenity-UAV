@@ -546,3 +546,31 @@ The exposed-pad corrections are applied as an in-place edit of the placed footpr
 library instead would discard whatever the board author tuned on that instance — mask
 margins, pad clearance overrides, zone connections — which showed up as ~180 spurious
 clearance / solder-mask-bridge / shorting violations on Observer before this was fixed.
+
+## Usage notices
+
+**Intended use:** the Serenity-UAV avionics, including this board, are intended
+for use only on uncrewed aircraft.
+
+**Würth Elektronik usage notice** — applies to the Würth parts on this board
+(749010012A). Quoted verbatim from Würth Elektronik eiSos, *749010012A data
+sheet* rev 004.000 (2024-04-11), p. 1 [REF-SENSOR-028]; the same notice appears
+on every Würth product data sheet. Owner decision 2026-09-26: the Würth parts
+are retained (avionics/WBS.md U7.1d).
+
+> This electronic component has been designed and developed for usage in general
+> electronic equipment only. This product is not authorized for use in equipment
+> where a higher safety standard and reliability standard is especially required
+> or where a failure of the product is reasonably expected to cause severe
+> personal injury or death, unless the parties have executed an agreement
+> specifically governing such use. Moreover Würth Elektronik eiSos GmbH & Co KG
+> products are neither designed nor intended for use in areas such as military,
+> aerospace, aviation, nuclear control, submarine, transportation,
+> transportation signal, disaster prevention, medical, public information
+> network etc.. Würth Elektronik eiSos GmbH & Co KG must be informed about the
+> intent of such usage before the design-in stage. In addition, sufficient
+> reliability evaluation checks for safety must be performed on every electronic
+> component which is used in electrical circuits that require high safety and
+> reliability functions or performance.
+
+<!-- /USAGE-NOTICE-2026-09-26 -->

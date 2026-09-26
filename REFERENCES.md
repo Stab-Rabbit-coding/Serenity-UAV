@@ -93,6 +93,17 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-015: OpenServoCore — Open-Source SG90/MG90-Class Smart-Servo Control Board](#ref-sensor-015-openservocore--open-source-sg90mg90-class-smart-servo-control-board)
     - [REF-SENSOR-016: Infineon OPTIGA™ Trust M — I2C Secure Element (planned, CAN-PERIPH-GW-1 + Flight Engineer only)](#ref-sensor-016-infineon-optiga-trust-m--i2c-secure-element-planned-can-periph-gw-1--flight-engineer-only)
     - [REF-SENSOR-019: SMB Bearings F688ZZ — 8x16x5 mm Flanged Miniature Radial Ball Bearing (wing-root tilt-spar bearing)](#ref-sensor-019-smb-bearings-f688zz--8x16x5-mm-flanged-miniature-radial-ball-bearing-wing-root-tilt-spar-bearing)
+    - [REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6](#ref-sensor-022-tdk-invensense-icm-42688-p--6-axis-imu-data-sheet-ds-000347-v16)
+    - [REF-SENSOR-023: Bosch Sensortec BMP388 — barometric pressure sensor data sheet BST-BMP388-DS001](#ref-sensor-023-bosch-sensortec-bmp388--barometric-pressure-sensor-data-sheet-bst-bmp388-ds001)
+    - [REF-SENSOR-025: Premier Magnetics PM-DB2791S — MIL-STD-1553 SMD data-bus transformer](#ref-sensor-025-premier-magnetics-pm-db2791s--mil-std-1553-smd-data-bus-transformer)
+    - [REF-SENSOR-026: Bourns SRF2012A — SMD common-mode choke data sheet](#ref-sensor-026-bourns-srf2012a--smd-common-mode-choke-data-sheet)
+    - [REF-SENSOR-027: u-blox MAX-M10S — GNSS module data sheet UBX-20035208](#ref-sensor-027-u-blox-max-m10s--gnss-module-data-sheet-ubx-20035208)
+    - [REF-SENSOR-028: Würth Elektronik 749010012A — WE-LAN 10/100BASE-TX SMT transformer, data sheet rev 004.000 (2024-04-11)](#ref-sensor-028-würth-elektronik-749010012a--we-lan-10100base-tx-smt-transformer-data-sheet-rev-004000-2024-04-11)
+    - [REF-SENSOR-029: Texas Instruments DP83825I — low-power 10/100 Ethernet PHY data sheet](#ref-sensor-029-texas-instruments-dp83825i--low-power-10100-ethernet-phy-data-sheet)
+    - [REF-SENSOR-030: Holt Integrated Circuits HI-1573/HI-1574 — 3.3 V MIL-STD-1553 dual transceiver, DS1573 Rev U](#ref-sensor-030-holt-integrated-circuits-hi-1573hi-1574--33-v-mil-std-1553-dual-transceiver-ds1573-rev-u)
+    - [REF-SENSOR-033: Winbond W25Q128JV — 128 Mbit serial NOR flash data sheet](#ref-sensor-033-winbond-w25q128jv--128-mbit-serial-nor-flash-data-sheet)
+    - [REF-SENSOR-038: Nexperia PRTR5V0U2X — dual-line ESD protection product data sheet](#ref-sensor-038-nexperia-prtr5v0u2x--dual-line-esd-protection-product-data-sheet)
+    - [REF-SENSOR-040: Texas Instruments BQ76930 — 6-10 cell battery monitor AFE data sheet](#ref-sensor-040-texas-instruments-bq76930--6-10-cell-battery-monitor-afe-data-sheet)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -2323,6 +2334,109 @@ the spar's run, not this seat).
 | **Applied to** | `docs/TILT_ACTUATOR_SELECTION.md` §4/§7, `docs/TILT_DRIVE_CONTROL_SPEC.md` §1, §3, §5.2–§5.5, §8, `docs/POWER_DISTRIBUTION.md` §3.3a/§5, `docs/CARGO_SECTION_LAYOUT.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` §3, `current-specification/bom_revS.csv` `OSESC-TILT-TC`, `tools/cargo_layout_fit.py`, `WBS.md` TILT-CTL-08, `docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md` |
 | **Date accessed** | 2026-09-17 (local checkout, commits afbe2dd…87dc60e) |
 | **AI note** | Build authored by Claude Opus 5 (Anthropic) under the direction of Steve Griffing, PE(CSE), CISSP-ISSEP, CPP; attribution recorded in that repository's commit messages and file headers |
+
+<!-- REF-SENSOR-022..040 catalogued 2026-09-26 by Claude Opus 5.5: these IDs were already cited in board schematics/generator scripts but had never been entered here (avionics/WBS.md U7.1). REF-SENSOR-020/021/024/031/032/034-037/039 remain uncatalogued; see Open Standards Verification Items. -->
+
+### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
+
+| Field | Value |
+|---|---|
+| **Official access** | `avionics/datasheets/ds-000347-icm-42688-p-v1.6.pdf` (local copy) |
+| **URL status** | requires verification (TDK URL returned 404, 2026-09-26) |
+| **Section applied** | Pilot IMU pin map |
+| **Cited in** | Pilot.kicad_sch/.kicad_sym, gen_pilot_sch.py |
+
+### REF-SENSOR-023: Bosch Sensortec BMP388 — barometric pressure sensor data sheet BST-BMP388-DS001
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp388-ds001.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Pin configuration / LGA-10 package |
+| **Cited in** | Pilot.kicad_sch/.kicad_sym, gen_pilot_sch.py |
+
+### REF-SENSOR-025: Premier Magnetics PM-DB2791S — MIL-STD-1553 SMD data-bus transformer
+
+| Field | Value |
+|---|---|
+| **Official access** | `avionics/datasheets/PremierMagnetics_DB2791S.pdf` (local copy) |
+| **URL status** | requires verification (no working manufacturer URL found 2026-09-26) |
+| **Section applied** | Fig. 1 schematic (winding pins) |
+| **Cited in** | Pilot, TACCO schematics |
+
+### REF-SENSOR-026: Bourns SRF2012A — SMD common-mode choke data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.bourns.com/docs/Product-Datasheets/SRF2012A.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Windings 1-2 / 4-3; land pattern |
+| **Cited in** | Pilot, TACCO schematics; SecureControllers library |
+
+### REF-SENSOR-027: u-blox MAX-M10S — GNSS module data sheet UBX-20035208
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://content.u-blox.com/sites/default/files/MAX-M10S_DataSheet_UBX-20035208.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Pin assignment |
+| **Cited in** | Pilot schematic |
+
+### REF-SENSOR-028: Würth Elektronik 749010012A — WE-LAN 10/100BASE-TX SMT transformer, data sheet rev 004.000 (2024-04-11)
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.we-online.com/components/products/datasheet/749010012A.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | p. 1 schematic, recommended land pattern, and usage notice (quoted verbatim on every Würth-bearing board, owner decision 2026-09-26) |
+| **Cited in** | Pilot, TACCO, Commo, Observer schematics/PCBs/.md; Flight Engineer notice; tools/add_board_notices.py; SecureControllers library |
+
+### REF-SENSOR-029: Texas Instruments DP83825I — low-power 10/100 Ethernet PHY data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.ti.com/lit/ds/symlink/dp83825i.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Table 4-1 Pin Functions |
+| **Cited in** | Pilot, TACCO schematics; SecureControllers library |
+
+### REF-SENSOR-030: Holt Integrated Circuits HI-1573/HI-1574 — 3.3 V MIL-STD-1553 dual transceiver, DS1573 Rev U
+
+| Field | Value |
+|---|---|
+| **Official access** | `avionics/datasheets/hi-1573.pdf` (local copy) |
+| **URL status** | requires verification (holtic.com link serves an HTML page, 2026-09-26) |
+| **Section applied** | p. 1 Pin Configurations (44-pin QFN); heat-sink note |
+| **Cited in** | Pilot, TACCO schematics; SecureControllers library |
+
+### REF-SENSOR-033: Winbond W25Q128JV — 128 Mbit serial NOR flash data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.winbond.com/resource-files/w25q128jv%20revf%2003272018%20plus.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Pin configuration (SOIC-8) |
+| **Cited in** | TACCO schematic |
+
+### REF-SENSOR-038: Nexperia PRTR5V0U2X — dual-line ESD protection product data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Table 2 pinning (SOT143B: 1 GND, 2 I/O1, 3 I/O2, 4 VCC); Sec. 11 outline |
+| **Cited in** | Pilot, TACCO, Flight Engineer, Commo, Observer; SecureControllers library |
+
+### REF-SENSOR-040: Texas Instruments BQ76930 — 6-10 cell battery monitor AFE data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.ti.com/lit/ds/symlink/bq76930.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Sec. 6.3 pin diagram (30-TSSOP); Table 9-3 |
+| **Cited in** | Flight Engineer schematic |
+
+---
 
 ## Part XIII — Telecommunications Standards
 
