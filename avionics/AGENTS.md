@@ -39,13 +39,16 @@ does not carry:
 
 - River's Room (Bay C) and Simon's Medbay (Bay D) run **Pilot + TACCO + Commo**; Shepherd's Room
   (Bay A) and Inara's Shuttle (Bay B) run Pilot + TACCO only.
-- LoRa module placement is unsettled as of the 2026-09-23 TACCO rebuild: this section says LoRa
-  is migrating from TACCO to Commo, but TACCO's own status file documents LoRa (RFM95W) being
-  restored to TACCO's schematic during that rebuild. Resolve against whichever of
-  `avionics/kicad/TACCO/TACCO.md` or `avionics/kicad/Commo/Commo.md` is more current before
-  citing a LoRa host board anywhere.
-- The Inara stack's secondary link is **SiK-MAVLink** (root §9 is authoritative). Inara carries
-  Pilot + TACCO only — no Commo cape — so LoRa 915 MHz is not available on that stack.
+- **Radio assignment resolved (2026-09-21/26):** TACCO carries an **mLRS radio on a Seeed
+  Wio-E5 (STM32WLE5) module** (LoRa-class, not RFM95W); Commo carries **SiK (RFD900ux-SMT)** in
+  addition to the 49 MHz transceiver. TACCO no longer carries SiK, and Commo no longer carries
+  LoRa/RFM95W — both boards' status files (`avionics/kicad/TACCO/TACCO.md`,
+  `avionics/kicad/Commo/Commo.md`) and `avionics/WBS.md` §1.2a agree on this.
+- **Open conflict this swap creates:** root `AGENTS.md` §9 states Inara's secondary link is
+  **SiK-MAVLink**, but Inara runs Pilot + TACCO only (no Commo cape), and SiK now lives
+  exclusively on Commo. As currently documented, Inara has no board hosting a SiK radio. This is
+  a real architecture conflict introduced by the radio relocation, not a wording issue — flag to
+  the owner rather than silently resolving it in either direction.
 
 ## Cape Naming and Revision History
 

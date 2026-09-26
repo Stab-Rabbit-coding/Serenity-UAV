@@ -1,10 +1,9 @@
 # TACCO — EMI-Hardened Communications, Logging & Payload Cape
-# TACCO — EMI-Hardened Communications, Logging & Payload Cape
 
 **Callsign:** TACCO (Tactical Coordinator)
-**Callsign:** TACCO (Tactical Coordinator)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CERN-OHL-W 2.0 (hardware design); status notes/prose in this file are CC BY-SA 4.0 —
+see `docs/attribution_and_licensing.md`
 **Revision:** R (Rev R baseline — TACCO naming finalized; EMI-hardened variant of TACCO Rev M, Ethernet PHY restored)
 **Date:** 2026-06-07
 **Status (2026-09-23 update, S. Griffing):** The Rev S1 reconciliation described below is
@@ -23,6 +22,7 @@ RFM95W, a second internal contradiction in this doc alongside the Ethernet one b
 avionics/WBS.md for the full rebuild trail and two flagged part-number defects (Johanson filter
 MPNs, microSD connector MPN) that need owner confirmation. See WBS.md's "TACCO schematic-first
 rebuild" and "TACCO PCB placement" items for the authoritative current state; the paragraphs below
+describe the PRE-REBUILD Rev R/S1 history and are kept for record only.
 
 **Status (2026-09-26 correction, S. Griffing / Claude Sonnet 5) — RADIO SWAP, supersedes the
 "restored LoRa/RFM95W" claim above, which is wrong for the current schematic:** This board never
@@ -45,7 +45,6 @@ Both the lib table and the 429 stale `"XO:` prefixes in `TACCO.kicad_sch` are no
 `kicad-cli sch erc` genuinely reports **0 violations** as of this note. PCB DRC is unaffected by
 the rename (`TACCO.kicad_pcb` never referenced the `XO` symbol library) and remains at 169
 violations / 0 schematic-parity issues, per `avionics/WBS.md` §1.2a.
-describe the PRE-REBUILD Rev R/S1 history and are kept for record only.
 
 **Status (superseded, pre-2026-09-20):** Schematic complete — PCB layout pending. **Rev S1
 reconciliation IN PROGRESS (2026-07-04):** the PCB is already at the intended end-state (LoRa

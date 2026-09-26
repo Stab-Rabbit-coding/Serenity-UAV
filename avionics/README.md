@@ -71,10 +71,17 @@ All four paths are **authenticated, signed, logged**:
    flights; range limited (<500 m line-of-sight)
 2. **ZigBee 2.4 GHz** — MAVLink fallback; robust link in congested RF environments
 3. **MAVLink/SiK 915 MHz** — Licensed ISM band; range ~5 km (open field, typical line-of-sight);
-   serves as secondary autonomous-mission link
+   serves as secondary autonomous-mission link. **As of the 2026-09-21 radio relocation, this
+   link is hosted on Commo (RFD900ux-SMT), not TACCO** — see "PCB Boards" below.
 4. **49 MHz (Part 15 §15.235)** — Unlicensed, extremely low power (~30 µW EIRP); forward and
    aft wire antennas (see `XCVR-49MHZ` in BOM); carries encrypted command/telemetry; requires
    FCC pre-compliance (energy-limited but not power-limited per Part 15)
+
+TACCO additionally carries an **mLRS radio on a Seeed Wio-E5 (STM32WLE5) module**, the LoRa-class
+link swapped onto TACCO in the same 2026-09-21 relocation (TACCO gave up SiK, Commo gave up its
+prior LoRa/RFM95W module). Whether this counts as a 5th independent external-comms path or folds
+into one of the four above is not yet reconciled in this doc — confirm against
+`avionics/kicad/TACCO/TACCO.md` and `avionics/WBS.md` §1.2a before citing a path count.
 
 ## PCB Boards
 
@@ -99,9 +106,9 @@ on them for fab, BOM, or integration decisions.
 
 ### TACCO (Cape-B-2) — Comms / Logging / Payload
 
-- **Radios:** SiK 915 MHz (RFD900x), a LoRa module (RFM95W per current schematic — see board
-  status file for whether it's TACCO- or Commo-resident, this is in flux), dedicated UART for
-  the 49 MHz transceiver module (XCVR-49MHZ-1/2)
+- **Radio:** mLRS on a Seeed Wio-E5 (STM32WLE5) module, replacing this board's prior SiK radio
+  in the 2026-09-21 relocation (SiK moved to Commo — see below); dedicated UART also serves the
+  49 MHz transceiver module (XCVR-49MHZ-1/2). This board carries neither SiK nor LoRa/RFM95W now
 - **Logging:** eMMC mass storage (OS + runtime logs); μSD slot (flight logs, write-blocked)
 - **Payload Interface:** cargo door/winch servo and sensor-expansion I/O — see Pilot note above;
   much of this is moving to Bus-Gateway rather than local GPIO
@@ -109,13 +116,17 @@ on them for fab, BOM, or integration decisions.
 - **Security:** TPM 2.0; CPLD write-blocker on μSD
 - Status: `avionics/kicad/TACCO/TACCO.md`
 
-### Commo — 49 MHz Transceiver
+### Commo — 49 MHz + SiK Transceiver
 
-- **Radio:** 49 MHz transceiver (Si5351A-based tunable DDS/PLL, MMBT2222A + 2N3866 PA,
-  ~30 µW max EIRP)
+- **Radios:** 49 MHz transceiver (Si5351A-based tunable DDS/PLL, MMBT2222A + 2N3866 PA,
+  ~30 µW max EIRP) **plus SiK (RFD900ux-SMT)**, relocated here from TACCO in the 2026-09-21
+  radio swap in exchange for Commo's prior LoRa/RFM95W module (removed)
 - **Installed only on:** River's Room (Bay C) and Simon's Medbay (Bay D) — maximizes antenna
   diversity and geographic spread for robust long-range comms
 - **Isolation:** galvanic isolation
+- **Known open item:** the existing hand-placed PCB layout has no contiguous free area for the
+  SiK module without touching the Ethernet PHY footprint — a floorplan pass is still needed
+  before fab; see status file
 - Status: `avionics/kicad/Commo/Commo.md`
 
 ### Flight Engineer (Power Distribution Board)
