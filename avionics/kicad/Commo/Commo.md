@@ -298,7 +298,7 @@ connector J1, providing the same EMI filtering in both modes.
 | Reference | Part | Package | Net connections | Placement (PCB coords) |
 | --- | --- | --- | --- | --- |
 | INV1 | SN74LVC1G04 (TI DBV) | SOT-23-5 | A=UART_RX_F, Y=SBUS_OUT, VCC=+3V3, GND | (109.5, 125) |
-| MUX1 | SN74LVC1G157 (TI DCT) | SC-70-6 (SOT-363) | A0=UART_RX_F, A1=SBUS_OUT, S=MODE_SEL, Y=UART_RX_MUX, VCC=+3V3 | (113.5, 125) |
+| MUX1 | SN74LVC1G3157DRYR (TI DRY) | USON-6 1.45 x 1.0 mm | B1(3)=UART_RX_F, B2(1)=SBUS_OUT, S(6)=MODE_SEL, A(4)=UART_RX_MUX, VCC(5)=+3V3 | (113.5, 125) |
 | S1 | SPST SMD slide switch | Custom 2-pad, 1.5 mm pitch | pad1=+3V3, pad2=MODE_SEL | (109.5, 128.5) |
 | C_INV | 100 nF C0G 0402 | C_0402_1005Metric | VCC bypass for INV1: +3V3→GND | (112.5, 128.5) |
 | C_MUX | 100 nF C0G 0402 | C_0402_1005Metric | VCC bypass for MUX1: +3V3→GND | (115.5, 128.5) |
@@ -391,7 +391,7 @@ pad 3), which constitutes a real short-circuit risk and must be corrected.
 | C27 | 10 nF C0G 0402 | GND–PGND moat bridge |
 | Shield | Laird MSA030020T (or equiv) | RF section EMI shield can |
 | INV1 | SN74LVC1G04DBVR (TI, SOT-23-5) | UART_RX_F → SBUS_OUT signal inverter |
-| MUX1 | SN74LVC1G157DCKR (TI, SC-70-6) | 2:1 MUX; selects UART or SBUS polarity |
+| MUX1 | SN74LVC1G3157DRYR (TI, USON-6) | SPDT switch; S low = UART_RX_F, S high = SBUS_OUT |
 | S1 | SPST SMD slide switch, 1.5 mm pitch | UART / SBUS mode selector |
 | C_INV | 100 nF C0G 0402 | INV1 VCC bypass |
 | C_MUX | 100 nF C0G 0402 | MUX1 VCC bypass |
@@ -451,7 +451,7 @@ from the actual board the way a hand-maintained BOM can.
 | UART TVS | PRTR5V0U2X | SOT-363 | UART TX/RX ESD (Tier 3, §1) |
 | TX Bead, RX Bead, PTT Bead | 742792510 ×3 | L 0402 | Series ferrite beads (Tier 2, §1) |
 | INV1 | SN74LVC1G04 | SOT-23-5 | UART_RX_F → SBUS_OUT inverter (§9) |
-| MUX1 | SN74LVC1G157 | SC-70-6 | UART/SBUS select mux (§9) |
+| MUX1 | SN74LVC1G3157DRYR | USON-6 | UART/SBUS select switch (§9) |
 | S1 | SPST SMD | 2-pin slide | UART/SBUS mode switch (§9) |
 | R_MODE | 10k | R 0402 | MODE_SEL pull-down, default UART |
 | C_INV, C_MUX | 100 nF ×2 | C 0402 | INV1/MUX1 VCC bypass |
@@ -803,3 +803,15 @@ same notice appears on every Würth product data sheet. Owner decision
 > reliability functions or performance.
 
 <!-- /USAGE-NOTICE-2026-09-26 -->
+
+## Revision note — MUX1 (2026-09-26)
+
+MUX1 was drawn as an SN74LVC1G157 with +3V3 on pin 4 and MODE_SEL on pin 5,
+which matches neither the '157 nor the '3157 pinout (the output would have
+been tied to +3V3 and the supply pin driven by MODE_SEL). Owner decision
+2026-09-26: replaced with the TI SN74LVC1G3157DRYR SPDT switch and rewired
+per its data sheet (SCES424O, Pin Configuration and Functions: B2 1, GND 2,
+B1 3, A 4, VCC 5, S 6). The GND stitching via under the old package was moved
+to (112.35, 125.0). Change by Claude Opus 5.5 (Anthropic) via
+`tools/kicad_relink.py --rewire`; see avionics/WBS.md U7.1.
+

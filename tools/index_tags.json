@@ -6984,6 +6984,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/MBRD1045CT.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/MGA-82563-TR1G.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf": {
       "description": "PDF document",
       "tags": [
@@ -6998,7 +7012,28 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/PESD5V0F1BL.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/PESD5V0X1BL.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/PremierMagnetics_DB2791S.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/RClamp0504FA.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7062,6 +7097,20 @@
       "archived": false
     },
     "avionics/datasheets/SRF2012A.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/TG2520SMN_en-2584158.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/TVS-Diode-SMBJ-Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7222,6 +7271,41 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/esd101-b1.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/esd501.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/esd601.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/esd701.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/esd801.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/hi-1573.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7362,6 +7446,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/nexperia-MMBT2222A.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/nexperia-PMBT2222A.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/pca9685.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7475,6 +7573,13 @@
       "archived": false
     },
     "avionics/datasheets/sn74lvc1g04.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/sn74lvc1g3157.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -18119,9 +18224,14 @@
       "avionics/datasheets/L-1038e.A5_phyCORE-AM62x_HW Manual.pdf",
       "avionics/datasheets/MAX-M10S_DataSheet_UBX-20035208.pdf",
       "avionics/datasheets/MAX-M10S_IntegrationManual_UBX-20053088.pdf",
+      "avionics/datasheets/MBRD1045CT.pdf",
+      "avionics/datasheets/MGA-82563-TR1G.pdf",
       "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf",
       "avionics/datasheets/PCA9555.pdf",
+      "avionics/datasheets/PESD5V0F1BL.pdf",
+      "avionics/datasheets/PESD5V0X1BL.pdf",
       "avionics/datasheets/PremierMagnetics_DB2791S.pdf",
+      "avionics/datasheets/RClamp0504FA.pdf",
       "avionics/datasheets/RFD900ux DataSheet v1.2.pdf",
       "avionics/datasheets/S32K-RM.pdf",
       "avionics/datasheets/S32K1xx.pdf",
@@ -18131,6 +18241,8 @@
       "avionics/datasheets/SM04B-SRSS-TB.pdf",
       "avionics/datasheets/SM1553-Series_HiRel-Data-Bus-Pulse-Transformer_RevD.pdf",
       "avionics/datasheets/SRF2012A.pdf",
+      "avionics/datasheets/TG2520SMN_en-2584158.pdf",
+      "avionics/datasheets/TVS-Diode-SMBJ-Datasheet.pdf",
       "avionics/datasheets/TYPE2EL.pdf",
       "avionics/datasheets/Vishay_45273MDSK.pdf",
       "avionics/datasheets/X2YDatasheet.pdf",
@@ -18153,6 +18265,11 @@
       "avionics/datasheets/ds26lv31qml.pdf",
       "avionics/datasheets/ds26lv32at.pdf",
       "avionics/datasheets/eGH.pdf",
+      "avionics/datasheets/esd101-b1.pdf",
+      "avionics/datasheets/esd501.pdf",
+      "avionics/datasheets/esd601.pdf",
+      "avionics/datasheets/esd701.pdf",
+      "avionics/datasheets/esd801.pdf",
       "avionics/datasheets/hi-1573.pdf",
       "avionics/datasheets/hm-trp.pdf",
       "avionics/datasheets/hx711.pdf",
@@ -18173,6 +18290,8 @@
       "avionics/datasheets/mspm0g3507.pdf",
       "avionics/datasheets/mspm0g3518-q1.pdf",
       "avionics/datasheets/mspm0g3519-q1.pdf",
+      "avionics/datasheets/nexperia-MMBT2222A.pdf",
+      "avionics/datasheets/nexperia-PMBT2222A.pdf",
       "avionics/datasheets/pca9685.pdf",
       "avionics/datasheets/pe4259.pdf",
       "avionics/datasheets/prtr5v0u2x.pdf",
@@ -18190,6 +18309,7 @@
       "avionics/datasheets/slb9672.pdf",
       "avionics/datasheets/smaj-series-tvs-datasheet.pdf",
       "avionics/datasheets/sn74lvc1g04.pdf",
+      "avionics/datasheets/sn74lvc1g3157.pdf",
       "avionics/datasheets/stm32wle5jc.pdf",
       "avionics/datasheets/tlv62569.pdf",
       "avionics/datasheets/tlv757p.pdf",

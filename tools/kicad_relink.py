@@ -256,7 +256,7 @@ def new_label(net, point, ang):
             % (net, point[0], point[1], ang, uuid.uuid4()))
 
 
-def relink_sch(sch_path, ref, sym_name, sets, ncs):
+def relink_sch(sch_path, ref, sym_name, sets, ncs, rewire=False):
     """Relink the schematic instance; return {new_pin_number: net_hint}."""
     t = sch_path.read_text(encoding="utf-8")
     s, e, inst = find_instance(t, ref)
@@ -284,15 +284,21 @@ def relink_sch(sch_path, ref, sym_name, sets, ncs):
         if not items:
             continue
         targets = by_name.get(p[0])
-        if not targets:
-            raise SystemExit("%s pin %s (%s) has no same-named pin in %s"
-                             % (ref, num, p[0], sym_name))
-        tnum = targets.pop(0)
-        npoint, nang = pin_geom(inst, new[tnum], sign)
-        # A pin whose net is being REPLACED via --set loses its old
-        # attachments instead of carrying them over (never both, which
-        # would short the old and new nets together).
-        drop = tnum in sets
+        if rewire:
+            # --rewire: the old pin map is untrusted; every connection is
+            # restated with --set, so all old attachments are dropped.
+            tnum, drop = None, True
+            npoint = nang = None
+        else:
+            if not targets:
+                raise SystemExit("%s pin %s (%s) has no same-named pin in %s"
+                                 % (ref, num, p[0], sym_name))
+            tnum = targets.pop(0)
+            npoint, nang = pin_geom(inst, new[tnum], sign)
+            # A pin whose net is REPLACED via --set loses its old
+            # attachments instead of carrying them over (never both, which
+            # would short the old and new nets together).
+            drop = tnum in sets
         for kind, a, b, extra in items:
             blk = t[a:b]
             if kind == "wire":
@@ -332,6 +338,14 @@ def relink_sch(sch_path, ref, sym_name, sets, ncs):
     for key in ("Value", "Footprint", "Datasheet"):
         val = prop(new_blk, key) if key != "Value" else (
             prop(new_blk, "MPN") or sym_name)
+        if prop(iblk, key) is None:
+            # Some generated instances omit the property entirely; add it
+            # hidden at the symbol origin so parity sees the footprint.
+            i = iblk.index("(property")
+            iblk = (iblk[:i] + '(property "%s" "%s" (at %.2f %.2f 0) '
+                    '(effects (font (size 1.27 1.27)) (hide yes)))\n    '
+                    % (key, val, inst["x"], inst["y"]) + iblk[i:])
+            continue
         iblk = re.sub(r'(\(property "%s"\s+)"(?:[^"\\]|\\.)*"' % key,
                       lambda m, v=val: m.group(1) + '"%s"' % v, iblk, count=1)
     edits.append((s, e, iblk))
@@ -489,6 +503,9 @@ def main():
                     help="NEWPIN=NET: attach a global label (fix/new net)")
     ap.add_argument("--nc", action="append", default=[],
                     help="NEWPIN: add a no-connect flag")
+    ap.add_argument("--rewire", action="store_true",
+                    help="drop ALL old pin attachments; nets come only from "
+                         "--set (for parts whose old pin map is wrong)")
     args = ap.parse_args()
     sch, pcb = pathlib.Path(args.sch), pathlib.Path(args.pcb)
 
@@ -501,7 +518,9 @@ def main():
 
     sets = dict(s.split("=", 1) for s in args.set)
     fp_id, value, new_names = relink_sch(sch, args.ref, args.symbol, sets,
-                                         args.nc)
+                                         args.nc, args.rewire)
+    if args.rewire:
+        name_to_net = {}
     for pin, net in sets.items():
         name_to_net[new_names[pin]] = net
     removed = relink_pcb(pcb, args.ref, fp_id, new_names, name_to_net, value)
