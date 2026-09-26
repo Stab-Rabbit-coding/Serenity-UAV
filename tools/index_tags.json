@@ -6886,6 +6886,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/100058045.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/317990687.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/6391731564544371956530548.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8426,6 +8440,38 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Commo/kicads/analysis/emc.json": {
+      "description": "JSON data (13 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/kicads/analysis/pcb.json": {
+      "description": "JSON data (36 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/kicads/analysis/schematic.json": {
+      "description": "JSON data (45 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/kicads/analysis/thermal.json": {
+      "description": "JSON data (6 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Commo/kicads/fp-lib-table": {
       "description": "(fp_lib_table",
       "tags": [
@@ -8436,6 +8482,40 @@
     },
     "avionics/kicad/Commo/kicads/sym-lib-table": {
       "description": "(sym_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/reports/HDD.md": {
+      "description": "Hardware Design Description",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/reports/figures/diagrams/bus_topology.json": {
+      "description": "JSON data (1 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/reports/figures/diagrams/bus_topology.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/reports/figures/schematics/Commo.svg": {
+      "description": "Vector diagram",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -9131,14 +9211,6 @@
     },
     "avionics/kicad/Observer/kicads/Observer.net": {
       "description": "KiCad netlist",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Observer/kicads/_autosave-Observer.kicad_pcb": {
-      "description": "KiCad PCB layout",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -9892,6 +9964,38 @@
       ],
       "archived": false
     },
+    "avionics/kicad/TACCO/kicads/analysis/emc.json": {
+      "description": "JSON data (13 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/kicads/analysis/pcb.json": {
+      "description": "JSON data (33 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/kicads/analysis/schematic.json": {
+      "description": "JSON data (49 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/kicads/analysis/thermal.json": {
+      "description": "JSON data (8 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/TACCO/kicads/fp-lib-table": {
       "description": "(fp_lib_table",
       "tags": [
@@ -9910,6 +10014,55 @@
     },
     "avionics/kicad/TACCO/ref_remap_2026-07-18.json": {
       "description": "JSON data (10 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/reports/HDD.md": {
+      "description": "Hardware Design Description",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/reports/figures/diagrams/bus_topology.json": {
+      "description": "JSON data (1 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/reports/figures/diagrams/bus_topology.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.json": {
+      "description": "JSON data (1 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/reports/figures/schematics/TACCO.svg": {
+      "description": "Vector diagram",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -12769,6 +12922,13 @@
       ],
       "archived": false
     },
+    "docs/solutions/runtime-errors/pcbnew-flip-segfault-before-board-add.md": {
+      "description": "pcbnew: FOOTPRINT.Flip()/SetLayerAndFlip() segfaults if called before board.Add()",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/workflow-issues/generate-open-item-views-never-hand-patch-them.md": {
       "description": "A \"generated\" open-items view that has no generator becomes the source of truth by accident",
       "tags": [
@@ -14708,6 +14868,7 @@
       "avionics/firmware/dts/README.md",
       "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
       "avionics/kicad/Commo/Commo.md",
+      "avionics/kicad/Commo/reports/HDD.md",
       "avionics/kicad/Encoder/ENC-NACELLE-1.md",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
@@ -14721,6 +14882,7 @@
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/README.md",
       "avionics/kicad/TACCO/TACCO.md",
+      "avionics/kicad/TACCO/reports/HDD.md",
       "avionics/kicad/TODO-1.2b-CHECKLIST.md",
       "avionics/kicad/TODO-1.2b-KICAD-READY.md",
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
@@ -14946,6 +15108,7 @@
       "docs/solutions/logic-errors/mesh-boolean-layout-proofs-silent-zero-volumes-and-shared-profiles.md",
       "docs/solutions/logic-errors/twisted-extrusion-worm-thread-needs-a-transverse-section-from-the-lead.md",
       "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md",
+      "docs/solutions/runtime-errors/pcbnew-flip-segfault-before-board-add.md",
       "docs/solutions/workflow-issues/generate-open-item-views-never-hand-patch-them.md",
       "docs/solutions/workflow-issues/read-the-decision-record-before-verifying-first-pass-geometry.md",
       "docs/structural_analysis.md",
@@ -15168,6 +15331,7 @@
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Commo/Commo.md",
+      "avionics/kicad/Commo/reports/HDD.md",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
       "avionics/kicad/Commo/scripts/swap_lora_for_sik.py",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
@@ -17462,8 +17626,16 @@
       "avionics/kicad/Commo/kicads/Commo.kicad_pro",
       "avionics/kicad/Commo/kicads/Commo.kicad_sch",
       "avionics/kicad/Commo/kicads/Commo.kicad_sym",
+      "avionics/kicad/Commo/kicads/analysis/emc.json",
+      "avionics/kicad/Commo/kicads/analysis/pcb.json",
+      "avionics/kicad/Commo/kicads/analysis/schematic.json",
+      "avionics/kicad/Commo/kicads/analysis/thermal.json",
       "avionics/kicad/Commo/kicads/fp-lib-table",
       "avionics/kicad/Commo/kicads/sym-lib-table",
+      "avionics/kicad/Commo/reports/HDD.md",
+      "avionics/kicad/Commo/reports/figures/diagrams/bus_topology.json",
+      "avionics/kicad/Commo/reports/figures/diagrams/bus_topology.svg",
+      "avionics/kicad/Commo/reports/figures/schematics/Commo.svg",
       "avionics/kicad/Commo/scripts/cleanup_commo_drc.py",
       "avionics/kicad/Commo/scripts/gen_commo_sch.py",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
@@ -17546,7 +17718,6 @@
       "avionics/kicad/Observer/kicads/Observer.kicad_pro",
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
       "avionics/kicad/Observer/kicads/Observer.net",
-      "avionics/kicad/Observer/kicads/_autosave-Observer.kicad_pcb",
       "avionics/kicad/Observer/kicads/fp-lib-table",
       "avionics/kicad/Observer/mod_vera_corners.py",
       "avionics/kicad/Observer/mod_vera_ds_pcb.py",
@@ -17637,9 +17808,19 @@
       "avionics/kicad/TACCO/kicads/TACCO.kicad_sch",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_sym",
       "avionics/kicad/TACCO/kicads/TACCO.net",
+      "avionics/kicad/TACCO/kicads/analysis/emc.json",
+      "avionics/kicad/TACCO/kicads/analysis/pcb.json",
+      "avionics/kicad/TACCO/kicads/analysis/schematic.json",
+      "avionics/kicad/TACCO/kicads/analysis/thermal.json",
       "avionics/kicad/TACCO/kicads/fp-lib-table",
       "avionics/kicad/TACCO/kicads/sym-lib-table",
       "avionics/kicad/TACCO/ref_remap_2026-07-18.json",
+      "avionics/kicad/TACCO/reports/HDD.md",
+      "avionics/kicad/TACCO/reports/figures/diagrams/bus_topology.json",
+      "avionics/kicad/TACCO/reports/figures/diagrams/bus_topology.svg",
+      "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.json",
+      "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.svg",
+      "avionics/kicad/TACCO/reports/figures/schematics/TACCO.svg",
       "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
@@ -17757,6 +17938,8 @@
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
+      "avionics/datasheets/100058045.pdf",
+      "avionics/datasheets/317990687.pdf",
       "avionics/datasheets/6391731564544371956530548.pdf",
       "avionics/datasheets/74438335033.pdf",
       "avionics/datasheets/749010012A.pdf",
@@ -17953,8 +18136,16 @@
       "avionics/kicad/Commo/kicads/Commo.kicad_pro",
       "avionics/kicad/Commo/kicads/Commo.kicad_sch",
       "avionics/kicad/Commo/kicads/Commo.kicad_sym",
+      "avionics/kicad/Commo/kicads/analysis/emc.json",
+      "avionics/kicad/Commo/kicads/analysis/pcb.json",
+      "avionics/kicad/Commo/kicads/analysis/schematic.json",
+      "avionics/kicad/Commo/kicads/analysis/thermal.json",
       "avionics/kicad/Commo/kicads/fp-lib-table",
       "avionics/kicad/Commo/kicads/sym-lib-table",
+      "avionics/kicad/Commo/reports/HDD.md",
+      "avionics/kicad/Commo/reports/figures/diagrams/bus_topology.json",
+      "avionics/kicad/Commo/reports/figures/diagrams/bus_topology.svg",
+      "avionics/kicad/Commo/reports/figures/schematics/Commo.svg",
       "avionics/kicad/Commo/scripts/cleanup_commo_drc.py",
       "avionics/kicad/Commo/scripts/gen_commo_sch.py",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
@@ -18037,7 +18228,6 @@
       "avionics/kicad/Observer/kicads/Observer.kicad_pro",
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
       "avionics/kicad/Observer/kicads/Observer.net",
-      "avionics/kicad/Observer/kicads/_autosave-Observer.kicad_pcb",
       "avionics/kicad/Observer/kicads/fp-lib-table",
       "avionics/kicad/Observer/mod_vera_corners.py",
       "avionics/kicad/Observer/mod_vera_ds_pcb.py",
@@ -18128,9 +18318,19 @@
       "avionics/kicad/TACCO/kicads/TACCO.kicad_sch",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_sym",
       "avionics/kicad/TACCO/kicads/TACCO.net",
+      "avionics/kicad/TACCO/kicads/analysis/emc.json",
+      "avionics/kicad/TACCO/kicads/analysis/pcb.json",
+      "avionics/kicad/TACCO/kicads/analysis/schematic.json",
+      "avionics/kicad/TACCO/kicads/analysis/thermal.json",
       "avionics/kicad/TACCO/kicads/fp-lib-table",
       "avionics/kicad/TACCO/kicads/sym-lib-table",
       "avionics/kicad/TACCO/ref_remap_2026-07-18.json",
+      "avionics/kicad/TACCO/reports/HDD.md",
+      "avionics/kicad/TACCO/reports/figures/diagrams/bus_topology.json",
+      "avionics/kicad/TACCO/reports/figures/diagrams/bus_topology.svg",
+      "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.json",
+      "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.svg",
+      "avionics/kicad/TACCO/reports/figures/schematics/TACCO.svg",
       "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",

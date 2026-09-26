@@ -279,6 +279,40 @@ exits non-zero). Never hand-edit a `TODO.md`; a `TODO.md` line with no `WBS.md` 
 defect in the record — move the content into the owning `WBS.md`, then regenerate. Sync root
 and subsystem `WBS.md` before committing.
 
+### Design-shift documentation gate (mandatory, before implementation)
+
+A **design shift** is any change that alters an avionics or airframe subsystem's
+*capability*, not just its implementation — moving a radio, sensor, or other functional
+block from one PCB to another; swapping one radio, servo, actuator, or major part for a
+different make/model; changing how a structural assembly (e.g. cargo bay doors, landing
+gear, a joint) mounts or actuates; or any other change a stakeholder would recognize as
+"we now do X differently" rather than "we fixed a bug in X." Routine bug fixes, DRC/ERC
+cleanup, placement/routing work, and documentation corrections are not design shifts and
+don't require this gate.
+
+For a design shift, work in this order — **do not reverse it**:
+
+1. **Document the decision first**, in the owning subsystem's `WBS.md` (and root `WBS.md`
+   if it's federation-visible), before any KiCad, OpenSCAD, Blender, or STL file changes.
+   The entry must state what changes, why, what was considered and rejected (per the
+   project's "explicit rejection with reasons" discipline), and which boards/parts/files
+   are affected. This makes the decision the **authoritative, promulgated record** other
+   work in the project can rely on from that point forward — not something reverse-engineered
+   from a diff after the fact.
+   Update matching descriptive docs in the same pass (a board's own `.md` in
+   `avionics/kicad/<Board>/`, `current-specification/README.md`, or the equivalent
+   airframe doc) — at minimum a dated status note if a full rewrite isn't warranted, so a
+   reader of the descriptive doc alone is not misled by stale content.
+2. **Then generate an implementation plan** (`ce-plan` or equivalent) from that documented
+   decision.
+3. **Then implement** in the KiCad project files (schematic → PCB) or STL/CAD sources,
+   per the normal workflow in this file and the owning subsystem `AGENTS.md`.
+
+If implementation work is already underway or done before the WBS entry exists (e.g. the
+decision was made verbally or mid-session), write the WBS entry retroactively as the next
+step, before moving on — never leave a shipped design shift undocumented, and never let a
+KiCad/STL change be the first place the decision appears in the repo.
+
 - Prefer editing existing files. No speculative abstractions, feature flags, or unused
   scaffolding — build only what the task needs.
 - Blender: run headless — `blender --background --python <script>.py`. FreeCAD:

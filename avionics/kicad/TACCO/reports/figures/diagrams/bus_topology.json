@@ -1,0 +1,94 @@
+{
+  "buses": [
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    },
+    {
+      "devices": [],
+      "master": null,
+      "signals": [],
+      "type": "UART"
+    }
+  ]
+}
