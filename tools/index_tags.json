@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-22",
+  "generated": "2026-09-26",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -9723,7 +9723,7 @@
       "archived": false
     },
     "avionics/kicad/TACCO/TACCO.md": {
-      "description": "XO \u2014 EMI-Hardened Communications, Logging & Payload Cape",
+      "description": "TACCO \u2014 EMI-Hardened Communications, Logging & Payload Cape",
       "tags": [
         "avionics-hardware",
         "documentation",
@@ -9917,7 +9917,7 @@
       "archived": false
     },
     "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py": {
-      "description": "gen_xo_footprints.py \u2014 Author the project-custom land patterns XO needs.",
+      "description": "gen_tacco_footprints.py \u2014 Author the project-custom land patterns TACCO needs.",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -9925,7 +9925,7 @@
       "archived": false
     },
     "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py": {
-      "description": "gen_xo_pcb.py \u2014 Build the XO PCB from the schematic netlist.",
+      "description": "gen_tacco_pcb.py \u2014 Build the TACCO PCB from the schematic netlist.",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -10033,7 +10033,7 @@
       "archived": false
     },
     "avionics/kicad/fix_pilot_xo_isolators.py": {
-      "description": "Fix Pilot's and XO's pre-existing, broken isolator symbols in place.",
+      "description": "Fix Pilot's and TACCO's pre-existing, broken isolator symbols in place.",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -10084,7 +10084,7 @@
       "archived": false
     },
     "avionics/kicad/generate_gerbers_rev_s1.py": {
-      "description": "generate_gerbers_rev_s1.py \u2014 Generate Gerber files for Rev S1 boards (Commo, XO, Flight Engineer)",
+      "description": "generate_gerbers_rev_s1.py \u2014 Generate Gerber files for Rev S1 boards (Commo, TACCO, Flight Engineer)",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -11367,6 +11367,27 @@
     },
     "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html": {
       "description": "HTML document",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/img/20260923_065833.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/img/20260923_065848.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/img/20260923_065933.jpg": {
+      "description": "Rendered image / reference photo",
       "tags": [
         "documentation"
       ],
@@ -14756,6 +14777,9 @@
       "docs/failsafe_thresholds.md",
       "docs/flight_envelope.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
+      "docs/img/20260923_065833.jpg",
+      "docs/img/20260923_065848.jpg",
+      "docs/img/20260923_065933.jpg",
       "docs/img/assembled-iso.png",
       "docs/img/cargo_layout_t5_sections.png",
       "docs/img/leg.png",
