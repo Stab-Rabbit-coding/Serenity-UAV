@@ -622,8 +622,24 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
             REF-SENSOR-020/021/024/031/032/034-037/039 (022-040 subset done
             2026-09-26); ICM-42688-P, PM-DB2791S, HI-1573, SLB 9672 public
             URLs require verification.
-        - [ ] U7.1e — ★ TLV62569 FB/PG swap (gateway, Observer) and 3-pad SOT-23
-            (Flight Engineer); recommend TLV62569PDRLR (SOT-563, with PG).
+        - [x] U7.1e — TLV62569 FB/PG swap (gateway, Observer) and 3-pad SOT-23
+            (Flight Engineer). Owner-approved 2026-09-26: all four TLV62569 ->
+            TLV62569PDRLR (SOT-563) and Observer TLV75725 -> TLV75725PDRVR
+            (WSON-6, EP to GND) via `tools/kicad_relink.py` (pin-name remap).
+            Datasheet-driven fixes found on the way (TLV62569 Sec. 8.2.2.2, Eq. 2,
+            VFB 0.6 V): gateway divider 10k/20k set 0.9 V -> 453k/100k (3.318 V);
+            Observer dividers were placeholders -> 453k/100k (3V3), 100k/100k
+            (1V2); Flight Engineer had EN on its own output and FB tied straight
+            to +3V3 -> EN = +5V, divider R_H_FBT 453k / R_H_FBB 100k added.
+            Flight Engineer parity 2 -> 0.
+        - [ ] U7.1h — Placement follow-ups from the swaps: gateway U_REG_3V3
+            overlaps U1_1 (pre-existing); Observer R_FB3B/R_FB1T sit on
+            C_VISO/C_VCORE (pre-existing).
+        - [x] U7.1i — Stale-component cleanup: `tools/kicad_prune_stale.py`
+            (kicad-cli parity driven; removes electrical extras/duplicates and
+            only the copper they orphan; mechanical parts get board_only + MHn).
+            Commo parity 93 -> 86, Observer 21 -> 17. Gateway: 423 pad-less
+            copper items on stack 3/4 nets reported, not removed (U7.1h).
         - [ ] U7.1f — Observer 749010012A symbol/footprint is an invented 8-pin
             part; replace with the verified 16-lead part.
     - [ ] **U7.2** — ★ PRTR5V0U2X pinout/package blocker: datasheet Table 2 is SOT143B,

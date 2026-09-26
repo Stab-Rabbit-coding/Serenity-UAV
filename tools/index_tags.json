@@ -8171,6 +8171,22 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Bus-Gateway/kicads/fp-lib-table": {
+      "description": "(fp_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Bus-Gateway/kicads/sym-lib-table": {
+      "description": "(sym_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py": {
       "description": "gen_can_periph_gw_pcb.py -- generate CAN-PERIPH-GW-1.kicad_pcb.",
       "tags": [
@@ -8705,6 +8721,22 @@
         "avionics-hardware",
         "pcb-design",
         "propulsion"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Encoder/fp-lib-table": {
+      "description": "(fp_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Encoder/sym-lib-table": {
+      "description": "(sym_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9296,6 +9328,14 @@
     },
     "avionics/kicad/Observer/kicads/fp-lib-table": {
       "description": "(fp_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Observer/kicads/sym-lib-table": {
+      "description": "(sym_lib_table",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -14574,6 +14614,39 @@
       ],
       "archived": false
     },
+    "tools/kicad_add_part.py": {
+      "description": "Add one part to a board's schematic AND PCB, nets bound by pin number.",
+      "tags": [
+        "build-tooling",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "tools/kicad_prune_stale.py": {
+      "description": "Remove stale components (and their orphaned copper) from a KiCad PCB.",
+      "tags": [
+        "build-tooling",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "tools/kicad_relink.py": {
+      "description": "Relink a placed part to a SecureControllers library symbol + footprint.",
+      "tags": [
+        "build-tooling",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "tools/kicad_set_value.py": {
+      "description": "Set the Value property of reference designators in a .kicad_sch/.kicad_pcb.",
+      "tags": [
+        "build-tooling",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "tools/landing_gear_bay_pad_fit.py": {
       "description": "Solve the common Rev R6 landing-gear bay MOUNTING-PAD plane (LG-10 / LG-02).",
       "tags": [
@@ -15489,6 +15562,7 @@
       "tools/add_landing_gear_bosses.py",
       "tools/bom_edit_door_gateway.py",
       "tools/build_landing_gear_views.py",
+      "tools/kicad_relink.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
@@ -17669,6 +17743,8 @@
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.net",
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.ses",
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1_v2.ses",
+      "avionics/kicad/Bus-Gateway/kicads/fp-lib-table",
+      "avionics/kicad/Bus-Gateway/kicads/sym-lib-table",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
@@ -17732,6 +17808,8 @@
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_sch",
       "avionics/kicad/Encoder/ENC-NACELLE-1.md",
       "avionics/kicad/Encoder/ENC-NACELLE-1.net",
+      "avionics/kicad/Encoder/fp-lib-table",
+      "avionics/kicad/Encoder/sym-lib-table",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Adhesive.gba",
@@ -17803,6 +17881,7 @@
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
       "avionics/kicad/Observer/kicads/Observer.net",
       "avionics/kicad/Observer/kicads/fp-lib-table",
+      "avionics/kicad/Observer/kicads/sym-lib-table",
       "avionics/kicad/Observer/mod_vera_corners.py",
       "avionics/kicad/Observer/mod_vera_ds_pcb.py",
       "avionics/kicad/Observer/mod_vera_som_place.py",
@@ -17998,6 +18077,10 @@
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
+      "tools/kicad_add_part.py",
+      "tools/kicad_prune_stale.py",
+      "tools/kicad_relink.py",
+      "tools/kicad_set_value.py",
       "tools/precommit_kicad_load.py",
       "tools/validate_kicad.py"
     ],
@@ -18190,6 +18273,8 @@
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.net",
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.ses",
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1_v2.ses",
+      "avionics/kicad/Bus-Gateway/kicads/fp-lib-table",
+      "avionics/kicad/Bus-Gateway/kicads/sym-lib-table",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
@@ -18253,6 +18338,8 @@
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_sch",
       "avionics/kicad/Encoder/ENC-NACELLE-1.md",
       "avionics/kicad/Encoder/ENC-NACELLE-1.net",
+      "avionics/kicad/Encoder/fp-lib-table",
+      "avionics/kicad/Encoder/sym-lib-table",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Adhesive.gba",
@@ -18324,6 +18411,7 @@
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
       "avionics/kicad/Observer/kicads/Observer.net",
       "avionics/kicad/Observer/kicads/fp-lib-table",
+      "avionics/kicad/Observer/kicads/sym-lib-table",
       "avionics/kicad/Observer/mod_vera_corners.py",
       "avionics/kicad/Observer/mod_vera_ds_pcb.py",
       "avionics/kicad/Observer/mod_vera_som_place.py",
@@ -18776,6 +18864,10 @@
       "tools/gen_cargo_void_formers.py",
       "tools/gen_todo_from_wbs.py",
       "tools/import-specctra-ses.py",
+      "tools/kicad_add_part.py",
+      "tools/kicad_prune_stale.py",
+      "tools/kicad_relink.py",
+      "tools/kicad_set_value.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/landing_gear_bay_seat_fit.py",
       "tools/landing_gear_bay_station_fit.py",

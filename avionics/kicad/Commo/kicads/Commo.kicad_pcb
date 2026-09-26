@@ -2365,9 +2365,10 @@
 	)
 	(footprint "MountingHole:MountingHole_2.7mm_M2.5"
 		(layer "F.Cu")
+		(attr board_only)
 		(uuid "49020000-0000-0000-0000-000000000070")
 		(at 102.5 102.5)
-		(property "Reference" ""
+		(property "Reference" "MH1"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(uuid "49020000-0000-0000-0000-000000000071")
@@ -2424,9 +2425,10 @@
 	)
 	(footprint "MountingHole:MountingHole_2.7mm_M2.5"
 		(layer "F.Cu")
+		(attr board_only)
 		(uuid "49020000-0000-0000-0000-000000000080")
 		(at 152.5 102.5)
-		(property "Reference" ""
+		(property "Reference" "MH2"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(uuid "49020000-0000-0000-0000-000000000081")
@@ -2483,9 +2485,10 @@
 	)
 	(footprint "MountingHole:MountingHole_2.7mm_M2.5"
 		(layer "F.Cu")
+		(attr board_only)
 		(uuid "49020000-0000-0000-0000-000000000090")
 		(at 102.5 132.5)
-		(property "Reference" ""
+		(property "Reference" "MH3"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(uuid "49020000-0000-0000-0000-000000000091")
@@ -2542,9 +2545,10 @@
 	)
 	(footprint "MountingHole:MountingHole_2.7mm_M2.5"
 		(layer "F.Cu")
+		(attr board_only)
 		(uuid "49020000-0000-0000-0000-0000000000a0")
 		(at 152.5 132.5)
-		(property "Reference" ""
+		(property "Reference" "MH4"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(uuid "49020000-0000-0000-0000-0000000000a1")
