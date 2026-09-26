@@ -7117,6 +7117,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/ao3400.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/aon6260.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7285,6 +7292,34 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/lm393.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/lmv331.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/mcp1703.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/mcp4921.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7320,7 +7355,21 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/mspm0g3519-q1.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/pca9685.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/pe4259.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7363,6 +7412,13 @@
       "archived": false
     },
     "avionics/datasheets/samtec_tsm_catalog.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/si5351.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7418,7 +7474,28 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/sn74lvc1g04.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/stm32wle5jc.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/tlv62569.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/tlv757p.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -17971,6 +18048,7 @@
       "avionics/datasheets/adin1300.pdf",
       "avionics/datasheets/adm2795e.pdf",
       "avionics/datasheets/ak7455-en-datasheet-myakm.pdf",
+      "avionics/datasheets/ao3400.pdf",
       "avionics/datasheets/aon6260.pdf",
       "avionics/datasheets/aon6554.pdf",
       "avionics/datasheets/aon6558.pdf",
@@ -17995,18 +18073,25 @@
       "avionics/datasheets/isow1412.pdf",
       "avionics/datasheets/johanson-0915lp15b026e.pdf",
       "avionics/datasheets/johanson-2450bp15e0100.pdf",
+      "avionics/datasheets/lm393.pdf",
+      "avionics/datasheets/lmv331.pdf",
+      "avionics/datasheets/mcp1703.pdf",
+      "avionics/datasheets/mcp4921.pdf",
       "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf",
       "avionics/datasheets/molex-104031.pdf",
       "avionics/datasheets/mspm0g3507-q1.pdf",
       "avionics/datasheets/mspm0g3507.pdf",
       "avionics/datasheets/mspm0g3518-q1.pdf",
+      "avionics/datasheets/mspm0g3519-q1.pdf",
       "avionics/datasheets/pca9685.pdf",
+      "avionics/datasheets/pe4259.pdf",
       "avionics/datasheets/prtr5v0u2x.pdf",
       "avionics/datasheets/rfd900x-datasheet.pdf",
       "avionics/datasheets/rfm95w-datasheet.pdf",
       "avionics/datasheets/samtec_ssm_footprint.pdf",
       "avionics/datasheets/samtec_tsm-dv-footprint.pdf",
       "avionics/datasheets/samtec_tsm_catalog.pdf",
+      "avionics/datasheets/si5351.pdf",
       "avionics/datasheets/slaae29a.pdf",
       "avionics/datasheets/slaae76e.pdf",
       "avionics/datasheets/slaaet8a.pdf",
@@ -18014,7 +18099,10 @@
       "avionics/datasheets/slaz742g.pdf",
       "avionics/datasheets/slb9672.pdf",
       "avionics/datasheets/smaj-series-tvs-datasheet.pdf",
+      "avionics/datasheets/sn74lvc1g04.pdf",
       "avionics/datasheets/stm32wle5jc.pdf",
+      "avionics/datasheets/tlv62569.pdf",
+      "avionics/datasheets/tlv757p.pdf",
       "avionics/datasheets/tps54540.pdf",
       "avionics/datasheets/tps54620.pdf",
       "avionics/datasheets/tps62933.pdf",

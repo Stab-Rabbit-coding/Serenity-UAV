@@ -588,8 +588,48 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
     with the brake-release command class of `TILT_DRIVE_CONTROL_SPEC.md` §5.5).
 - [ ] **U7** — Per-board ERC/DRC/gerber closeout (Pilot, XO, Commo, Flight Engineer,
     Observer, CAN-PERIPH-GW-1); runs after U1/U2/U3/U5 land on the boards. ★
+    *Baseline 2026-09-26 (kicad-cli 9.0.2, errors+warnings): Pilot 0/0; TACCO
+    ERC 0 / DRC 169; Commo 0 / 257 + 93 parity; Flight Engineer 0 / 31 + 2 parity;
+    Observer 157 / 115 + 21 parity; CAN-PERIPH-GW-1 168 / 829 + 54 parity;
+    ENC-NACELLE-1 52 / 4. Unrouted connections tracked separately (routing ≠ clean).*
+    - [ ] **U7.1** — Shared, datasheet-verified symbol / footprint / 3D library in
+        the SecureControllers repo (`kicad/libraries/`), consumed by every board via
+        the `${SECURE_CONTROLLERS_LIB}` path variable (owner decision 2026-09-26).
+        MPN-named symbols with real pin electrical types; stock `Device:*` passives.
+        Replaces ~500 per-refdes `S_<ref>` symbols and board-prefixed names
+        (`Observer_ISOW1044BDFMR`, `GW_ISOW1412`) that block reuse and have
+        already drifted (ISOW1412, SLB 9672 pin 10/33, PRTR5V0U2X).
+        *2026-09-26: SecureControllers `c61cf51` (branch `feat/shared-kicad-library`)
+        — generator `tools/sclib.py`, 13 of ~75 parts verified with footprint
+        pad checks + package-options ledger (`kicad/libraries/VERIFICATION.md`).*
+        - [ ] U7.1a — Verify + add the remaining ~60 parts (Commo analog/RF,
+            Flight Engineer power, TACCO radios/storage, Pilot sensors/GNSS,
+            Observer KSZ9477/SoM, AK7455, connectors).
+        - [ ] U7.1b — Datasheets not obtainable by download (mark "requires
+            verification" until sourced): SN74LVC1G157, MBRD1045CT, RCLAMP0502B,
+            MGA-82563, TG2520SMN, MMBT2222A, SMBJ33CA, 2N3866.
+        - [ ] U7.1c — STEP models for every `SecureControllers.pretty` footprint;
+            install `kicad-packages3d` on the build workstation (stock
+            `${KICAD9_3DMODEL_DIR}` models are absent — owner action, needs root).
+        - [ ] U7.1d — ★ Owner decision: Wurth 749010012A datasheet excludes
+            aviation use unless Wurth is informed before design-in.
+        - [ ] U7.1e — ★ TLV62569 FB/PG swap (gateway, Observer) and 3-pad SOT-23
+            (Flight Engineer); recommend TLV62569PDRLR (SOT-563, with PG).
+        - [ ] U7.1f — Observer 749010012A symbol/footprint is an invented 8-pin
+            part; replace with the verified 16-lead part.
+    - [ ] **U7.2** — ★ PRTR5V0U2X pinout/package blocker: datasheet Table 2 is SOT143B,
+        1 = GND, 2 = I/O1, 3 = I/O2, 4 = VCC. Pilot (TVS-CAN, TVS-RS485), Flight
+        Engineer (D_I2C), Commo (ANT TVS), Observer (5×) use SOT-363; Pilot / TACCO /
+        Flight Engineer put GND on pin 2. Swap footprint + remap on every board
+        (owner approved placement moves 2026-09-26).
+    - [ ] **U7.3** — Migrate the seven boards' `lib_id`s to the shared library
+        (Pilot, TACCO, Commo, Flight Engineer, Observer, CAN-PERIPH-GW-1,
+        ENC-NACELLE-1); schematic-to-PCB parity 0.
+    - [ ] **U7.4** — ERC 0 and DRC 0 (errors + warnings) on all seven boards.
+    - [ ] **U7.5** — Route remaining unrouted connections per board; gerbers.
+    - [ ] **U7.6** — Per-board README / HDD (kidoc) + WBS/TODO status refresh.
 - [ ] **U8** — Pilot tamper-mesh creepage fix (13 DRC, 0.125 mm vs 8 mm; fab blocker)
-    + Faraday cage / shielded-harness spec. ★
+    and Faraday cage / shielded-harness spec. ★
 - [ ] **U9** — REFERENCES.md, WBS/TODO and `avionics/AGENTS.md` closeout for U1–U8.
 
 ## §1.8 — Names
