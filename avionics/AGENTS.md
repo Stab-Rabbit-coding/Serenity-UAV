@@ -44,11 +44,12 @@ does not carry:
   addition to the 49 MHz transceiver. TACCO no longer carries SiK, and Commo no longer carries
   LoRa/RFM95W — both boards' status files (`avionics/kicad/TACCO/TACCO.md`,
   `avionics/kicad/Commo/Commo.md`) and `avionics/WBS.md` §1.2a agree on this.
-- **Open conflict this swap creates:** root `AGENTS.md` §9 states Inara's secondary link is
-  **SiK-MAVLink**, but Inara runs Pilot + TACCO only (no Commo cape), and SiK now lives
-  exclusively on Commo. As currently documented, Inara has no board hosting a SiK radio. This is
-  a real architecture conflict introduced by the radio relocation, not a wording issue — flag to
-  the owner rather than silently resolving it in either direction.
+- **Per-stack radio priority rebalanced (2026-09-26)** to match this hardware assignment: root
+  `AGENTS.md` §9 previously listed SiK as Shepherd's and Inara's secondary/primary comms link,
+  which neither stack's hardware supports (no Commo cape, no SiK). Both now list **mLRS** as
+  their long-range link instead — the radio their TACCO cape actually carries. River and Simon
+  (both Commo-equipped) keep 49 MHz primary / SiK secondary. See root `AGENTS.md` §9 for the
+  current table.
 
 ## Cape Naming and Revision History
 

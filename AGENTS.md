@@ -41,13 +41,14 @@ as-built state):
 
 - 8× PocketBeagle2 Industrial SBC nodes, each carrying **Pilot** (flight control/sensor cape) +
   **TACCO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
-- **Commo** (49 MHz + LoRa transceiver cape) is installed only in River's Room and Simon's
+- **Commo** (49 MHz + SiK transceiver cape) is installed only in River's Room and Simon's
   Medbay.
 - Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected.
-- External C2, all 4 usable for command and control: Wi-Fi 5 GHz, Zigbee 2.4 GHz, MAVLink/SiK
-  915 MHz, AX.25 49 MHz (47 CFR Part 15 §15.235 — unlicensed, **not** Part 95 RCRS
-  [REF-FCC-003]). S-Bus is supported by the capes but unused. Band-by-band FCC citations:
-  `avionics/AGENTS.md` "External Communications Regulations Compliance".
+- External C2, all 5 usable for command and control: Wi-Fi 5 GHz, Zigbee 2.4 GHz, and mLRS (all
+  3 on every TACCO cape, so all 8 nodes), plus MAVLink/SiK 915 MHz and AX.25 49 MHz (47 CFR Part
+  15 §15.235 — unlicensed, **not** Part 95 RCRS [REF-FCC-003]), both via Commo and so limited to
+  River's Room and Simon's Medbay. S-Bus is supported by the capes but unused. Band-by-band FCC
+  citations: `avionics/AGENTS.md` "External Communications Regulations Compliance".
 - Each nacelle has 2 EDFs in series, independently PID-controlled by two different SBCs. Any
   of the 4 flight-control nodes can take over any EDF.
 
@@ -199,7 +200,7 @@ active trade study and must not be assumed.
 | Pilot | Flight Control + Sensor cape |
 | TACCO | Comms/Logging/Payload cape |
 | Flight Engineer | Power Distribution Board |
-| Commo | 49 MHz + LoRa transceiver cape |
+| Commo | 49 MHz + SiK transceiver cape |
 | Observer | Cargo-handling + nose/cargo-bay vision/ToF/laser board |
 | Shepherd's Room | Bay A — forward avionics |
 | Inara's Shuttle | Bay B — port avionics |
@@ -230,10 +231,17 @@ here; canonical source is `docs/OBSERVER_LASER_ANALYSIS.md` (current revision) a
 | River | C | E | P | A |
 | Simon | A | C | A | P |
 
-Shepherd: watchdog/fault-detect/failover/auth; SiK primary, Wi-Fi secondary.
-Inara: camera/external sensors/high-bandwidth ground link; Wi-Fi primary, SiK-MAVLink
-secondary.
-River: forward EDF + nacelle tilt sync + most resilient comms; 49 MHz primary, LoRa secondary,
+Radio assignment follows the hardware each stack actually carries, not a fixed link name — see
+`avionics/AGENTS.md` "Cape Naming and Revision History" for the current per-board radio
+complement. As of the 2026-09-21 TACCO/Commo radio relocation: every stack's TACCO cape carries
+Wi-Fi + ZigBee (Murata Type 2EL) and mLRS (Seeed Wio-E5); only River and Simon additionally carry
+a Commo cape, which hosts 49 MHz and SiK (RFD900ux-SMT). Shepherd and Inara have no Commo cape,
+so neither has SiK or 49 MHz access — their secondary link is mLRS, the long-range link their
+hardware actually has, not SiK.
+
+Shepherd: watchdog/fault-detect/failover/auth; Wi-Fi primary, mLRS secondary.
+Inara: camera/external sensors/high-bandwidth ground link; Wi-Fi primary, mLRS secondary.
+River: forward EDF + nacelle tilt sync + most resilient comms; 49 MHz primary, SiK secondary,
 both via Commo.
 Simon: aft EDF + alternate watchdog + Observer/cargo oversight; 49 MHz primary, SiK secondary,
 both via Commo.

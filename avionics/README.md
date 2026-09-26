@@ -29,7 +29,7 @@ Each node runs a **PocketBeagle2 Industrial (PB2-I) SBC** carrying:
 - **TACCO** cape: comms/logging/payload interface (Cape-B-2). "XO" is a legacy/internal working
   name still present in some script and file names (e.g. `gen_xo_sch.py`) — TACCO is the
   canonical current name; see `avionics/AGENTS.md` "Cape Naming and Revision History."
-- Optional: **Commo** cape (49 MHz transceiver) — installed only on River's Room (Bay C) and
+- Optional: **Commo** cape (49 MHz + SiK transceivers) — installed only on River's Room (Bay C) and
   Simon's Medbay (Bay D); see `avionics/AGENTS.md` for the current per-bay cape loadout.
 
 **Flight Engineer** (Power Distribution Board) sits in the middle-section inner neck, minimizing
@@ -63,25 +63,27 @@ by Pilot — see `avionics/kicad/Encoder/ENC-NACELLE-1.md`.
 | MIL-STD-1553C | Dual redundant buses | 8 PACE nodes | Deterministic real-time control (legacy compatibility, backup) |
 | UART | Various | Cape headers | Serial debugging, bootloader, optional mission-specific sensors |
 
-## External Comms (4 Independent Paths)
+## External Comms (5 Independent Paths)
 
-All four paths are **authenticated, signed, logged**:
+All five paths are **authenticated, signed, logged**. Availability differs by stack: every
+stack's TACCO cape carries Wi-Fi, ZigBee, and mLRS; only River and Simon additionally carry a
+Commo cape (49 MHz + SiK) — see root `AGENTS.md` §9 for the per-stack primary/secondary
+assignment.
 
 1. **Wi-Fi 5 GHz** — MAVLink to QGroundControl; primary for higher-bandwidth development
-   flights; range limited (<500 m line-of-sight)
-2. **ZigBee 2.4 GHz** — MAVLink fallback; robust link in congested RF environments
-3. **MAVLink/SiK 915 MHz** — Licensed ISM band; range ~5 km (open field, typical line-of-sight);
-   serves as secondary autonomous-mission link. **As of the 2026-09-21 radio relocation, this
-   link is hosted on Commo (RFD900ux-SMT), not TACCO** — see "PCB Boards" below.
-4. **49 MHz (Part 15 §15.235)** — Unlicensed, extremely low power (~30 µW EIRP); forward and
-   aft wire antennas (see `XCVR-49MHZ` in BOM); carries encrypted command/telemetry; requires
-   FCC pre-compliance (energy-limited but not power-limited per Part 15)
-
-TACCO additionally carries an **mLRS radio on a Seeed Wio-E5 (STM32WLE5) module**, the LoRa-class
-link swapped onto TACCO in the same 2026-09-21 relocation (TACCO gave up SiK, Commo gave up its
-prior LoRa/RFM95W module). Whether this counts as a 5th independent external-comms path or folds
-into one of the four above is not yet reconciled in this doc — confirm against
-`avionics/kicad/TACCO/TACCO.md` and `avionics/WBS.md` §1.2a before citing a path count.
+   flights; range limited (<500 m line-of-sight); all 4 stacks (TACCO)
+2. **ZigBee 2.4 GHz** — MAVLink fallback; robust link in congested RF environments; all 4 stacks
+   (TACCO, Murata Type 2EL module shared with Wi-Fi)
+3. **mLRS (Seeed Wio-E5 / STM32WLE5)** — LoRa-class long-range link; all 4 stacks (TACCO). Moved
+   here from TACCO's prior SiK radio in the 2026-09-21 relocation; serves as Shepherd's and
+   Inara's long-range fallback since neither stack carries a Commo cape
+4. **MAVLink/SiK 915 MHz** — Licensed ISM band; range ~5 km (open field, typical line-of-sight);
+   **River and Simon only**, via Commo (RFD900ux-SMT) — moved here from TACCO in the same
+   2026-09-21 relocation
+5. **49 MHz (Part 15 §15.235)** — Unlicensed, extremely low power (~30 µW EIRP); **River and
+   Simon only**, via Commo; forward and aft wire antennas (see `XCVR-49MHZ` in BOM); carries
+   encrypted command/telemetry; requires FCC pre-compliance (energy-limited but not
+   power-limited per Part 15)
 
 ## PCB Boards
 
