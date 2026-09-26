@@ -21,7 +21,7 @@
 
 Each node runs a **PocketBeagle2 Industrial (PB2-I) SBC** carrying:
 - **Pilot** cape: flight control + sensor interface (Cape-A-2, Rev S1)
-- **XO** cape: comms/logging/payload interface (Cape-B-2, Rev S1)
+- **TACCO** cape: comms/logging/payload interface (Cape-B-2, Rev S1)
 - Optional: **Commo** cape (49 MHz + LoRa transceiver) on Shepherd and River only
 
 **Flight Engineer** (Power Distribution Board) sits in the middle-section inner neck, minimizing
@@ -65,7 +65,7 @@ All four paths are **authenticated, signed, logged**:
   5 kV iso-gate chips and transformers (EMI-hardening per Rev S)
 - **Security:** TPM 2.0 (SLB9672) for attestation; CPLD write-blocker on log μSD
 
-### XO (Cape-B-2) — Comms / Logging / Payload
+### TACCO (Cape-B-2) — Comms / Logging / Payload
 - **Radios:** SiK 915 MHz (RFD900x), LoRa SX1262 (optional expansion), dedicated UART for
   49 MHz transceiver module (XCVR-49MHZ-1/2)
 - **Logging:** eMMC mass storage (OS + runtime logs); μSD slot (flight logs, write-blocked)

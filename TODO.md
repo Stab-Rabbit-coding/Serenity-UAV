@@ -201,11 +201,11 @@
 - [ ] FAR-FT-PANEL PCB design
 - [ ] Link placeholders to BOM entries
 
-### 1.2b — PCB Redesigns: Commo Rev S1 / XO Rev S1 / Flight Engineer Rev S1
+### 1.2b — PCB Redesigns: Commo Rev S1 / TACCO Rev S1 / Flight Engineer Rev S1
 → detail: `avionics/rev-s1/WBS.md` §1.2b
 
 - [ ] Commo Rev S1 — add LoRa, replace JST with P1+P2 socket rails
-- [ ] XO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
+- [ ] TACCO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
 - [ ] Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output
 
 ### 1.2c — PCB Design: Observer (Nose/Cargo-Bay Vision, ToF & Laser)
@@ -240,9 +240,9 @@
 - [ ] Clean up FlightEngineer's ~30 dangling no-connect flags
 - [ ] Close the Observer sch↔pcb parity gap (RS485_DE/TX/RX on U3)
 - [ ] Place gateway lanes 3 and 4 (U1_3/U1_4, U2_3/U2_4 not on the PCB)
-- [ ] Decide whether Commo, Pilot, XO follow to the SLB 9672
+- [ ] Decide whether Commo, Pilot, TACCO follow to the SLB 9672
 
-### 1.2a — PCB Design: Pilot, XO, and Commo (EMI-Hardened Variants)
+### 1.2a — PCB Design: Pilot, TACCO, and Commo (EMI-Hardened Variants)
 → detail: `avionics/WBS.md` §1.2a
 
 - [ ] Reconcile Pilot.md §14 field-connector table with the actual P…
@@ -254,8 +254,8 @@
 - [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
 - [ ] Add SBUS/UART DIP switch to Pilot
 - [ ] Generate Pilot gerbers
-- [ ] Generate XO gerbers
-- [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
+- [ ] Generate TACCO gerbers
+- [ ] Zigbee RF chain was never actually added to TACCO — PCB scope g…
 - [ ] Generate Commo gerbers
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
 - [ ] EMI isolation validation checklist
@@ -267,7 +267,7 @@
 → detail: `avionics/emi-hardening/WBS.md` §1.4
 
 - [ ] PB2-I + Pilot Enclosure
-- [ ] PB2-I + XO Enclosure
+- [ ] PB2-I + TACCO Enclosure
 - [ ] CAN FD
 - [ ] RS-485
 - [ ] MIL-STD-1553B
