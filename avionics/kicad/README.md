@@ -5,13 +5,13 @@ This directory holds the KiCad projects for the four cape/board types:
 | Project | Name | Role |
 | --- | --- | --- |
 | `Pilot.kicad_*` | **Pilot** | Flight-control & sensor cape (FC) |
-| `XO.kicad_*` | **XO** | Comms / logging / payload cape (CN) |
+| `TACCO.kicad_*` | **TACCO** | Comms / logging / payload cape (CN) |
 | `FlightEngineer.kicad_*` | **Flight Engineer** | Power-distribution board (PDB) |
 | `Commo.kicad_*` | **Commo** | 49 MHz (Part 15 §15.235) transceiver |
 | `Observer.kicad_*` | **Observer** | Nose/Cargo vision, ToF, & laser board (standalone) |
 
 Per-board net/pin documentation lives in the matching `*.md` files
-(`Pilot.md`, `XO.md`, `FlightEngineer.md`, `XCVR-49MHZ-2.md`). KiCad files keep
+(`Pilot.md`, `TACCO.md`, `FlightEngineer.md`, `XCVR-49MHZ-2.md`). KiCad files keep
 KiCad board coordinates (documented exception to the hull-frame standard,
 see root `AGENTS.md`).
 

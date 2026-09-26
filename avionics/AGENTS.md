@@ -31,25 +31,25 @@ battery; interfaces with all four flight-control nodes for EDF and servo control
 
 ### Node Workload Balancing and PACE Failover
 
-All Pilot capes are identical and all XO capes are identical, but each stack has **primary and
+All Pilot capes are identical and all TACCO capes are identical, but each stack has **primary and
 alternative tasking** with PACE prioritization (**P**rimary, **A**lternative, **C**ontingency,
 **E**mergency). The per-stack PACE assignment, primary tasking, and radio priority are in root
 `AGENTS.md` §9 "Naming and Roles" — read that table, do not copy it here. Board-level facts it
 does not carry:
 
-- River's Room (Bay C) and Simon's Medbay (Bay D) run **Pilot + XO + Commo**; Shepherd's Room
-  (Bay A) and Inara's Shuttle (Bay B) run Pilot + XO only.
-- LoRa is migrating from XO to Commo on the River and Simon stacks — see "Cape Naming and
+- River's Room (Bay C) and Simon's Medbay (Bay D) run **Pilot + TACCO + Commo**; Shepherd's Room
+  (Bay A) and Inara's Shuttle (Bay B) run Pilot + TACCO only.
+- LoRa is migrating from TACCO to Commo on the River and Simon stacks — see "Cape Naming and
   Revision History" below for current build status.
 - The Inara stack's secondary link is **SiK-MAVLink** (root §9 is authoritative). Inara carries
-  Pilot + XO only — no Commo cape — so LoRa 915 MHz is not available on that stack.
+  Pilot + TACCO only — no Commo cape — so LoRa 915 MHz is not available on that stack.
 
 ## Cape Naming and Revision History
 
 Board architecture, sch↔pcb parity status, and reconciliation progress change frequently and
 are tracked at the source, not duplicated here. **For any board, the authoritative,
 most-current status is that board's own `.md` file** under `avionics/kicad/<board>/` (e.g.
-`Pilot.md`, `XO.md`, `Commo.md`, `FlightEngineer.md`, `Observer.md`) plus the matching `TODO.md` §1.2
+`Pilot.md`, `TACCO.md`, `Commo.md`, `FlightEngineer.md`, `Observer.md`) plus the matching `TODO.md` §1.2
 subsection — read those before starting work, and do not assume this file's stable-fact
 summary below reflects today's as-built state.
 
@@ -80,7 +80,7 @@ cargo bay door) and the vision/ToF/laser sensing board. Historical references to
 earlier working name for the sensing board) refer to this same board.
 
 **Observer is a standalone PCB — not a PocketBeagle 2 Industrial cape.** It does not use the
-P1+P2 header stack and does not mount on a Pilot/XO node; it connects to the rest of the
+P1+P2 header stack and does not mount on a Pilot/TACCO node; it connects to the rest of the
 airframe only via the shielded JST-GH Ethernet ring and CAN-FD trunk connectors, with its own
 5V power input. One shared board design is installed at two physical locations: the bow
 sensor pod (nose) and the cargo bay nadir FPV mount, the latter co-located with the mechanical

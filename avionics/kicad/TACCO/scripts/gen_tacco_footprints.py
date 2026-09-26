@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""gen_xo_footprints.py — Author the project-custom land patterns XO needs.
+"""gen_tacco_footprints.py — Author the project-custom land patterns TACCO needs.
 
 Writes KiCad 9 ``.kicad_mod`` files into ``avionics/kicad/Serenity-Custom.pretty``
 (the same shared custom library Pilot uses — ``gen_pilot_footprints.py`` and this
 script write disjoint file names into it).  Every land pattern below is
 transcribed from the OEM datasheet in ``avionics/datasheets/`` where one could be
 obtained; two parts could NOT be fully datasheet-verified this pass and are
-flagged individually below and in ``XO.md`` — this mirrors the project's
+flagged individually below and in ``TACCO.md`` — this mirrors the project's
 existing precedent for an unverified land (Pilot's Molex Nano-Fit, WBS §1.2a).
 
 Footprints and sources
@@ -24,7 +24,7 @@ Footprints and sources
                                    DATASHEET-EXACT.  Replaces WL1837MOD
                                    2026-09-21 (also closes the never-
                                    implemented Zigbee scope gap — see
-                                   gen_xo_sch.py's swap note).  *** Pad-by-pad
+                                   gen_tacco_sch.py's swap note).  *** Pad-by-pad
                                    positions are a PLACEHOLDER, NOT
                                    pixel-verified *** — the 107-terminal LGA
                                    array's raster in the source PDF was too
@@ -44,11 +44,11 @@ Footprints and sources
                                    TI's mechanical drawing.  Flagged.
 * ``Johanson_0915LP15B026E_SMD4``  johanson-0915lp15b026e.pdf: substituted for
                                    the fabricated "0915LP15B0100E" part number
-                                   XO.md originally cited (that MPN does not
+                                   TACCO.md originally cited (that MPN does not
                                    exist in Johanson's catalog — confirmed by
                                    direct catalog search).  0915LP15B026E is a
                                    real Johanson 915 MHz LOW-PASS filter (not a
-                                   band-pass, a different topology than XO.md's
+                                   band-pass, a different topology than TACCO.md's
                                    table implied); 4-pad SMD, ~2.0 x 1.25 mm
                                    body, pattern-matched to Johanson's standard
                                    0805-size RF filter footprint family since no
@@ -82,7 +82,7 @@ def hdr(name: str, descr: str, smd: bool = True) -> List[str]:
     return [
         f'(footprint "{name}"',
         "\t(version 20241229)",
-        '\t(generator "gen_xo_footprints.py")',
+        '\t(generator "gen_tacco_footprints.py")',
         '\t(generator_version "9.0")',
         '\t(layer "F.Cu")',
         f'\t(descr "{descr}")',
@@ -148,8 +148,8 @@ def rfd900ux_smt() -> None:
     2 central thermal/GND pads). No piggyback/standoff mounting needed —
     this module mounts flush like RFM95W/WL1837MOD.
 
-    2026-09-21: XO's own SIK (RFD900ux-SMT) instance was REMOVED from this
-    board's schematic (relocated to Commo; see gen_xo_sch.py's swap note and
+    2026-09-21: TACCO's own SIK (RFD900ux-SMT) instance was REMOVED from this
+    board's schematic (relocated to Commo; see gen_tacco_sch.py's swap note and
     avionics/WBS.md) — this function stays here and still runs from main()
     because Commo's own footprint generator does not (yet) duplicate it, and
     Serenity-Custom.pretty is the one shared library both boards' generators
@@ -427,7 +427,7 @@ def main() -> None:
     tps6303x_vson10()
     rf_filter_smd4("Johanson_0915LP15B026E_SMD4",
                    "Johanson 0915LP15B026E 915 MHz low-pass RF filter, substituted for the "
-                   "fabricated 0915LP15B0100E part number XO.md originally cited (does not exist "
+                   "fabricated 0915LP15B0100E part number TACCO.md originally cited (does not exist "
                    "in Johanson's catalog); 4-pad SMD, ~2.0x1.25 mm, pattern-matched land — NEEDS "
                    "user confirmation.")
     rclamp0502b()

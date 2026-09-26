@@ -3,7 +3,7 @@
 """
 complete_1_2b.py — Master orchestration script for finishing todo 1.2b
 ================================================================================
-This script automates the completion of the three PCB redesigns (Commo, XO, Flight Engineer
+This script automates the completion of the three PCB redesigns (Commo, TACCO, Flight Engineer
 Rev S1) when run in an environment with KiCad 9.0.2 + pcbnew Python module.
 
 PREREQUISITES:
@@ -16,7 +16,7 @@ USAGE:
   python3 avionics/kicad/complete_1_2b.py [--board BOARD] [--steps STEPS]
 
   Options:
-    --board commo|xo|flight_engineer    Work on specific board (default: all)
+    --board commo|tacco|flight_engineer    Work on specific board (default: all)
     --steps list              Show available steps
     --dry-run                 Plan work without modifying files
     --verbose                 Show detailed progress
@@ -41,10 +41,10 @@ PROJECTS = {
         "gerber_dir": "avionics/kicad/gerbers/Commo-S1",
         "scripts": ["avionics/kicad/Commo/scripts/route_commo_rssi.py"],
     },
-    "xo": {
-        "sch": "avionics/kicad/XO/kicads/XO.kicad_sch",
-        "pcb": "avionics/kicad/XO/kicads/XO.kicad_pcb",
-        "pro": "avionics/kicad/XO/kicads/XO.kicad_pro",
+    "tacco": {
+        "sch": "avionics/kicad/TACCO/kicads/TACCO.kicad_sch",
+        "pcb": "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
+        "pro": "avionics/kicad/TACCO/kicads/TACCO.kicad_pro",
         "gerber_dir": "avionics/kicad/gerbers/TACCO-S1",
     },
     "flight_engineer": {
@@ -170,12 +170,12 @@ def commo_generate_gerbers():
         return False
 
 
-def zoë_run_erc():
-    """Run ERC on XO schematic"""
+def tacco_run_erc():
+    """Run ERC on TACCO schematic"""
     print("\n" + "=" * 70)
-    print("STEP: Run ERC on XO schematic")
+    print("STEP: Run ERC on TACCO schematic")
     print("=" * 70)
-    sch = PROJECTS["xo"]["sch"]
+    sch = PROJECTS["tacco"]["sch"]
     try:
         result = subprocess.run(
             ["kicad-cli", "sch", "erc", sch],
@@ -195,13 +195,13 @@ def zoë_run_erc():
         return False
 
 
-def zoë_generate_gerbers():
-    """Generate Gerber files for XO"""
+def tacco_generate_gerbers():
+    """Generate Gerber files for TACCO"""
     print("\n" + "=" * 70)
-    print("STEP: Generate XO Gerbers")
+    print("STEP: Generate TACCO Gerbers")
     print("=" * 70)
     script = "avionics/kicad/generate_gerbers.py"
-    board = "xo"
+    board = "tacco"
 
     if not Path(script).exists():
         print(f"✗ Script not found: {script}")
@@ -284,8 +284,8 @@ STEPS = {
     "commo-route": ("Route Commo RSSI_DCD (1 net)", commo_route_rssi_dcd),
     "commo-drc": ("DRC check Commo", commo_drc_check),
     "commo-gerber": ("Generate Commo gerbers", commo_generate_gerbers),
-    "xo-erc": ("ERC check XO", zoë_run_erc),
-    "xo-gerber": ("Generate XO gerbers", zoë_generate_gerbers),
+    "tacco-erc": ("ERC check TACCO", tacco_run_erc),
+    "tacco-gerber": ("Generate TACCO gerbers", tacco_generate_gerbers),
     "flight_engineer-drc": ("DRC check Flight Engineer", flight_engineer_run_drc),
     "flight_engineer-gerber": ("Generate Flight Engineer gerbers", flight_engineer_generate_gerbers),
 }
@@ -293,10 +293,10 @@ STEPS = {
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Complete todo 1.2b PCB redesigns (Commo, XO, Flight Engineer Rev S1)"
+        description="Complete todo 1.2b PCB redesigns (Commo, TACCO, Flight Engineer Rev S1)"
     )
     parser.add_argument(
-        "--board", choices=["commo", "xo", "flight_engineer"], help="Work on specific board"
+        "--board", choices=["commo", "tacco", "flight_engineer"], help="Work on specific board"
     )
     parser.add_argument("--steps", action="store_true", help="List available steps")
     parser.add_argument("--verbose", action="store_true", help="Verbose output")
@@ -332,8 +332,8 @@ def main():
                 if args.verbose:
                     input("Press Enter to continue...")
 
-    if args.board == "xo" or not args.board:
-        for step_name in ["xo-erc", "xo-gerber"]:
+    if args.board == "tacco" or not args.board:
+        for step_name in ["tacco-erc", "tacco-gerber"]:
             if step_name in STEPS:
                 _, func = STEPS[step_name]
                 func()

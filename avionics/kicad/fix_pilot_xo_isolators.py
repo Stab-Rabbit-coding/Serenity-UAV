@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Fix Pilot's and XO's pre-existing, broken isolator symbols in place.
+"""Fix Pilot's and TACCO's pre-existing, broken isolator symbols in place.
 
-Applied 2026-07-26 against Pilot.kicad_sch and XO.kicad_sch. Both files had
+Applied 2026-07-26 against Pilot.kicad_sch and TACCO.kicad_sch. Both files had
 two independent, pre-existing defects (neither introduced this session):
 
 1. ADM2795EBRWZ (isolated RS-485) had incorrectly numbered pins in both the
@@ -16,12 +16,12 @@ two independent, pre-existing defects (neither introduced this session):
    SOIC-20W_7.5x12.8mm_P1.27mm.
 
 Verified via `kicad-cli sch erc --severity-error`: Pilot 48 violations,
-XO 234 violations, IDENTICAL to the pre-existing (untouched) baseline
+TACCO 234 violations, IDENTICAL to the pre-existing (untouched) baseline
 before this fix -- confirming the fix corrected the two target defects with
 zero regression against these boards' large, unrelated, pre-existing ERC
 backlog (out of scope for this change).
 
-Usage: python3 fix_wash_zoe_isolators.py <Pilot.kicad_sch> <XO.kicad_sch>
+Usage: python3 fix_pilot_tacco_isolators.py <Pilot.kicad_sch> <TACCO.kicad_sch>
 
 Not idempotent: re-running against an already-fixed file will fail (the
 lib_id "ADM2795EBRWZ" it searches for no longer exists). Kept in the repo
@@ -121,6 +121,6 @@ def fix_file(path):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        sys.exit("Usage: fix_wash_zoe_isolators.py <Pilot.kicad_sch> <XO.kicad_sch> [...]")
+        sys.exit("Usage: fix_pilot_tacco_isolators.py <Pilot.kicad_sch> <TACCO.kicad_sch> [...]")
     for p in sys.argv[1:]:
         fix_file(p)
