@@ -676,11 +676,17 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
             copper items on stack 3/4 nets reported, not removed (U7.1h).
         - [ ] U7.1f — Observer 749010012A symbol/footprint is an invented 8-pin
             part; replace with the verified 16-lead part.
-    - [ ] **U7.2** — ★ PRTR5V0U2X pinout/package blocker: datasheet Table 2 is SOT143B,
-        1 = GND, 2 = I/O1, 3 = I/O2, 4 = VCC. Pilot (TVS-CAN, TVS-RS485), Flight
-        Engineer (D_I2C), Commo (ANT TVS), Observer (5×) use SOT-363; Pilot / TACCO /
-        Flight Engineer put GND on pin 2. Swap footprint + remap on every board
-        (owner approved placement moves 2026-09-26).
+    - [x] **U7.2** — PRTR5V0U2X pinout/package blocker: **resolved 2026-09-27.**
+        All 12 instances across Pilot/TACCO/FlightEngineer/Commo/Observer relinked
+        to the shared SecureControllers PRTR5V0U2X (SOT143B, Table 2 pinout) via
+        `tools/kicad_relink.py --rewire`, position/rotation preserved. ERC 0 on
+        all 5 boards; parity flat/improved. Judgment call recorded, not fabricated:
+        Observer's 5 Ethernet/CAN instances and Commo's 2 RF/UART instances had no
+        VCC net in the original wrong-package design — VCC tied to local GND/PGND
+        as a conservative fallback (line/ground clamping preserved, rail-clamp
+        direction inert); flagged for design review, see commit `24f2c315`.
+        One new mechanical-only DRC warning (Pilot TVS-CAN/C-IN1 courtyard overlap)
+        left unresolved rather than guess a placement nudge blind — see U7.1h.
     - [ ] **U7.3** — Migrate the seven boards' `lib_id`s to the shared library
         (Pilot, TACCO, Commo, Flight Engineer, Observer, CAN-PERIPH-GW-1,
         ENC-NACELLE-1); schematic-to-PCB parity 0.
