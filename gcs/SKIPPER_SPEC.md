@@ -9,7 +9,7 @@ software module list that `gcs/AGENTS.md` points to. For project-wide standards 
 
 ### Command Authentication
 
-Every operator command to the UAV must be:
+Every operator command to the UAV shall be:
 
 - **Verified:** Syntax and scope checked against allowed operations
 - **Signed:** Cryptographically signed by the operator's certificate
@@ -90,7 +90,7 @@ carries these fields:
 
 ### Computer Requirements
 
-Skipper can run on:
+Skipper may run on:
 
 - **Desktop / laptop:** Windows, macOS, Linux with standard telemetry radio interface
 - **Tablet/mobile:** Android or iOS with Wi-Fi or USB radio dongle
@@ -98,7 +98,7 @@ Skipper can run on:
 
 ### Radio Interface
 
-Skipper must support:
+Skipper shall support:
 
 - Standard USB radio dongles (SiK, Wi-Fi USB adapters)
 - Integrated Wi-Fi and Bluetooth (for tablet-based operation)

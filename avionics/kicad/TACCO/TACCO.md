@@ -230,16 +230,16 @@ Additional XO specifics:
 - **RF groundplane moat:** The RFD900x and RFM95W occupy the same RF section as in
 
   TACCO (right 30 mm of board). The isolation moat between the RF groundplane and
-  the digital groundplane must be maintained; the moat capacitors (10 nF X2Y) bridge
+  the digital groundplane shall be maintained; the moat capacitors (10 nF X2Y) bridge
   the moat at RF frequencies, referenced to PGND on the RF side and GND on the digital
   side.
 
-- **SMA shield contacts:** All four SMA connectors must have their shells soldered to
+- **SMA shield contacts:** All four SMA connectors shall have their shells soldered to
 
   a PGND copper pour, NOT to the digital GND pour. Route a 3 mm PGND pour around each
   SMA mounting footprint.
 
-- **Ferrite bead orientation:** SDIO and SPI ferrite beads must be oriented with their
+- **Ferrite bead orientation:** SDIO and SPI ferrite beads shall be oriented with their
 
   axis perpendicular to the associated RF trace runs (per Würth EMC design guide).
 
@@ -320,11 +320,11 @@ copper pour, consistent with §11.
   RFD900x module U.FL/antenna pads respectively (≤ 5 mm trace from ANT pin to filter
   pad). Place FL_WIFI ≤ 5 mm from WL1837MOD ANT pin.
 - **RCLAMP placement:** Place D_ANT_xxx immediately after the BPF (between BPF output
-  and SMA pin 1). The shunt path to PGND must be as short as possible (via directly
+  and SMA pin 1). The shunt path to PGND shall be as short as possible (via directly
   to PGND plane, no daisy-chain routing).
 - **Keep the RF trace in the BPF-to-SMA segment entirely within the RF groundplane
   moat region** (right 30 mm of board). Do not route it over the digital GND pour.
-- **SMA pad PGND pour:** Each SMA footprint shell must have a ≥ 3 mm PGND copper pour
+- **SMA pad PGND pour:** Each SMA footprint shell shall have a ≥ 3 mm PGND copper pour
   ring as specified in §11.
 
 ---

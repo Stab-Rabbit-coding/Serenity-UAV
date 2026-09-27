@@ -30,7 +30,7 @@ python3 tools/bake_hull_frame.py --check    # report baked state only
 
 ## SCAD and STL Generation
 
-Generator scripts may model parts in convenient part-local frames, but any **regenerated primary-component STL must be re-baked before publishing**.
+Generator scripts may model parts in convenient part-local frames, but any **regenerated primary-component STL shall be re-baked before publishing**.
 
 **General workflow:**
 
@@ -46,7 +46,7 @@ Generator scripts may model parts in convenient part-local frames, but any **reg
 **Directory:** `airframe/blender-scripts/files-hollowed-24in/`
 **Purpose:** Generate canonical fuselage shells (authoritative source for all fuselage geometry)
 
-The Blender hollowing pipeline is the **authoritative canonical source** for all fuselage geometry. Any future changes must start from the corresponding Blender source file in `files-hollowed-24in/`.
+The Blender hollowing pipeline is the **authoritative canonical source** for all fuselage geometry. Any future changes shall start from the corresponding Blender source file in `files-hollowed-24in/`.
 
 **Usage:**
 

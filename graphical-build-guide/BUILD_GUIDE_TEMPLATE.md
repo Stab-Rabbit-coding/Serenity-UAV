@@ -96,7 +96,7 @@ For each fabrication method, provide solutions for:
 
 ## Phase Completion Sign-Off
 
-Each phase build guide includes a **completion checklist** that must be verified before proceeding to the next phase:
+Each phase build guide includes a **completion checklist** that shall be verified before proceeding to the next phase:
 
 **Phase 5–10 Completion Sign-Off:**
 
