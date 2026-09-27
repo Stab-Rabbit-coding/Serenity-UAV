@@ -27,22 +27,16 @@
 - [ ] Clear residual DRC after mesh + routing (counts measured 2026-06-12…
 - [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
 - [ ] Add SBUS/UART DIP switch to Pilot — add a 2-position DIP (or…
-- [ ] Generate Pilot gerbers — superseded by the 2026-09-19…
-- [ ] Generate XO gerbers — `TACCO.kicad_pcb` complete
-- [ ] Zigbee RF chain was never actually added to XO
-- [ ] APPROVED DIRECTION (2026-09-21, supersedes the same-day initial…
-- [ ] Generate Commo gerbers — `XCVR-49MHZ-2.kicad_pcb` complete
+- [ ] Generate Pilot gerbers — routed board still needed first
+- [ ] Generate XO/TACCO gerbers — existing set is stale (pre-rebuild/swap)
+- [ ] Generate Commo gerbers — existing set is stale (pre-radio-swap)
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
 - [ ] EMI isolation validation checklist — verify isolation barrier…
 - [ ] Merge `claude/cape-em-harsh-variants-9Yfr1` → master after gerbers…
 - [ ] Design Faraday cages / boxes to protect all PCBs
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
-
-### Pilot footprint verification and schematic-first rebuild (2026-07-13/14)
-→ full detail: `WBS.md` Pilot footprint verification and schematic-first rebuild (2026-07-13/14)
-
-- [ ] Rebuild the 7 non-manufacturable Pilot footprints before fab
-- [ ] Pilot SCHEMATIC-FIRST REBUILD — decided + started 2026-07-14 (user)
+- [ ] Commo PCB: re-run DRC to confirm/refute the SIK/ETH-PHY overlap claim
+- [ ] Pilot: verify ISOW1044/ISOW1412 SOIC-20W land vs each datasheet's DFM outline
 
 ### §1.9.3 — Trust-Module MCU/TPM Retarget (MSPM0G351x-Q1 + SLB 9672), 2026-08-03
 → full detail: `WBS.md` §1.9.3
@@ -54,11 +48,9 @@
 - [ ] Add a pull-up on the gateway's PA0/PA1 FLEX UART
 - [ ] Pull PA18 down on the gateway and Observer
 - [ ] Add thermal vias under the MCU exposed pad
-- [ ] Resolve FlightEngineer's ground-net naming
 - [ ] Clean up FlightEngineer's dangling no-connect flags
 - [ ] Close the Observer sch↔pcb parity gap
 - [ ] Place gateway lanes 3 and 4
-- [ ] Decide whether Commo, Pilot and XO (formerly Emma, Wash, Zoë) follow…
 
 ## §1.10 — Avionics close-out plan (2026-08-25-001), unit index
 → full detail: `WBS.md` §1.10
@@ -70,13 +62,13 @@
 - [ ] U5 — Observer pitot-tube airspeed sensor (`J_PITOT`)
 - [ ] U6 — Fleet host+message authentication wiring for ESC / brushed tilt…
 - [ ] U7 — Per-board ERC/DRC/gerber closeout (Pilot, XO, Commo, Flight…
-- [ ] U8 — Pilot tamper-mesh creepage fix (13 DRC, 0.125 mm vs 8 mm
+- [ ] U8 — Faraday cage / shielded-harness spec; tamper-mesh re-add is an…
 - [ ] U9 — REFERENCES.md, WBS/TODO and `avionics/AGENTS.md` closeout for…
 
 ### §1.9.2 — Fleet Trust Module (MCU + TPM + isolated CAN-FD + isolated RS-485)
 → full detail: `WBS.md` §1.9.2
 
-- [ ] SLB9670→SLB9672 TPM migration — ERC/DRC not re-run, 2026-08-01
+- [ ] SLB9670→SLB9672 TPM migration — live ERC/DRC re-run still needed
 - [ ] ★ SLB9672 → OPTIGA™ Trust M, `CAN-PERIPH-GW-1` + Flight Engineer…
 - [ ] `CAN-PERIPH-GW-1` PCB routing (updated 2026-07-26, post `N_STACKS=4`…
 - [ ] GW-DOOR-1 — build the `N_STACKS=1` instance
@@ -87,9 +79,7 @@
 - [ ] GW-DOOR-7 — firmware: osc-native master / PWM fallback, the three…
 - [ ] Nacelle gateway BOM rows
 - [ ] `GW-RCS` — Phase 11 RCS bleed-valve gateway, SPECIFIED ONLY…
-- [ ] Pilot: `PB2-P2` header appears fully unwired in ERC (all 36 pins…
-- [ ] Pilot full DRC/ERC clean-out — not started
-- [ ] XO PCB placement + DRC 0 + routing — IN PROGRESS
+- [ ] XO/TACCO PCB placement + DRC 0 + routing — IN PROGRESS
 - [ ] Flight Engineer PCB: close the last DRC items + route + gerbers
 - [ ] Observer PCB resync — not started
 

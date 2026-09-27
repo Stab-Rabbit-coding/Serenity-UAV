@@ -707,3 +707,48 @@ progress (both boards' ERC now 0), but the acceptance criterion ("0 ERC / 0 DRC 
 documented exception per board") is not yet met for either board's PCB.
 
 *Status update by Claude Sonnet 5, Anthropic, 2026-09-21, per `AGENTS.md` §3 AI attribution.*
+
+## Status 2026-09-27 (WBS/TODO reconciliation against current board files; U7 backlog refresh)
+
+This update follows a reconciliation pass against the raw `.kicad_sch`/`.kicad_pcb` files for
+all six boards (no `kicad-cli` in that environment, so by direct text/coordinate inspection,
+not a live ERC/DRC run) — see `avionics/WBS.md`/`avionics/TODO.md` for the underlying edits.
+Net effect: several items this plan and its predecessors carried as open are now closed on
+the board files; the remaining open work below supersedes the 2026-09-21 U7 table.
+
+**U1 (Pilot PWM→CAN-FD/RS-485 retarget) — hardware side DONE, not previously recorded here.**
+Pilot's Rev T schematic-first rebuild (2026-09-19, `avionics/kicad/Pilot/Pilot.md`) already
+retired `J_ESC`/`J_SERVO`: zero references to either in the current `Pilot.kicad_sch`, per
+Rev T's own changelog. This unit's remaining acceptance criteria (bus-topology decision
+record, firmware WBS §4.2 rewrite, power-budget re-check) are **not** confirmed done — only
+the connector removal is. Do not close U1 outright; narrow its remaining scope to the
+firmware/topology-decision items.
+
+**U7 per-board backlog table — refreshed 2026-09-27 (supersedes the 2026-09-21 table above):**
+
+| Board | 2026-09-21 | Current (2026-09-27, static file inspection) |
+|---|---|---|
+| Pilot | (not separately listed; Rev T just landed) | Rev T: 24 PWR_FLAG/79 no_connect/508 global_label, plausible ERC-0 per `Pilot.md` (not independently re-run). PCB fully placed, **0% routed** (388 connections) — two rejected freerouting attempts. CAN-TR/RS485 land pattern (SOIC-20W generic vs each datasheet's DFM outline) still unconfirmed. Gerbers blocked on routing. |
+| TACCO (formerly XO) | ERC 0; 78/121 footprints placed, 102 DRC hard | Schematic-first rebuild landed 2026-09-20 (155 symbols/143 footprints); radio moved to WIOE5/mLRS, Wi-Fi/BT/Zigbee consolidated onto Murata Type2EL. ERC still 0 per `TACCO.md` (plausible, not re-run). Placement now ~92.0% area, 50 unplaced footprints (up from 43) — owner elected to hand-place rather than grow the board. Existing gerbers are stale (embedded date 2026-06-04, pre-rebuild) — must regenerate, not just re-export. |
+| Commo (formerly Emma) | (not in table) | LoRa→SiK swap done 2026-09-21 (RFD900ux-SMT placed, RFM95W fully removed from both sch and PCB). The previously-recorded "93 schematic-parity issues / SIK-vs-ETH-PHY footprint overlap" finding does **not** hold up geometrically on re-check (27-28.5mm clearance, no plausible overlap) — flagged as likely stale, needs a live DRC re-run to confirm before either closing or re-opening the floorplan-rework item. Existing gerbers are stale (embedded date 2026-06-03/04, pre-swap). FCC §15.235 pre-compliance and EMI isolation checklists still not started. |
+| Flight Engineer | ERC 0, 29 DRC hard (D_OR1/D_OR2/U_RS485 packing) | Unchanged on the DRC-hard front (not independently re-run). The "CM2_OUT_N ground-net naming bug" this plan and `WBS.md` §1.9.3 both carried as open **does not reproduce** — zero `CM2_OUT_N` references anywhere in the current schematic/PCB/netlist; ground net is cleanly `PGND`. Closed in `WBS.md`. |
+| Observer | 124 DRC (legacy figure) | MCU/TPM retarget (MSPM0G3519QRGZRQ1 + SLB9672AU2.0) confirmed in both sch and PCB. Sch↔PCB parity gap genuinely still open: `RS485_DE`/`RS485_TX`/`RS485_RX` exist in the schematic (U6 ISOW1412 block, added 2026-07-26) but zero occurrences in the PCB — PCB layout was never synced to that addition. PCB is **0% routed** (0 `(segment` entries). No `J_PITOT` connector present yet (U5 not started). Laser enable/switching circuitry (Q1/AO3400, J_LASER) is in the schematic; the actual diode/driver IC is still doc-only per the project's own sourcing gate. |
+| CAN-PERIPH-GW-1 (gateway) | 47/296 nets unrouted | Confirmed still open, itemized: only lanes 1/2 of 4 are placed on the PCB (lanes 3/4 exist in schematic only); only U1_1 has thermal vias (3) under its MCU exposed pad, U1_2 has none; no pull-up found on PA0/PA1 FLEX UART; no pull-down found on PA18. |
+
+**U8 (tamper mesh) reframed, not merely refreshed:** Pilot's Rev T rebuild dropped the
+per-domain anti-tamper mesh entirely rather than fixing its creepage violation — the
+"13 DRC violations, 0.125mm vs 8mm" figure this plan's Risks table and U8's own acceptance
+criteria cite described the pre-Rev-T board and no longer applies to a mesh that doesn't
+exist on the current PCB. U8 is now an **owner decision** (re-add the mesh to Rev T with
+correct per-domain creepage, or accept Rev T without a tamper mesh) before it can be
+re-scoped as an implementation unit. The Faraday-cage/shielded-harness half of U8 is
+unaffected and remains open as originally scoped.
+
+**Net scope change for this plan:** no unit closes outright this pass except the ground-net
+sub-finding folded into U7's Flight Engineer row above. U1 narrows (hardware retarget done,
+firmware/topology decision still open). U7's board table is now current as of 2026-09-27
+rather than 2026-09-21, and three of its six rows (Pilot, TACCO, Commo) reflect boards that
+were substantively rebuilt since the last refresh — treat the 2026-09-21 table as superseded
+by the one above, not as a second data point to reconcile.
+
+*Status update by Claude Sonnet 5, Anthropic, 2026-09-27, per `AGENTS.md` §3 AI attribution.*
