@@ -632,6 +632,15 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
             (1V2); Flight Engineer had EN on its own output and FB tied straight
             to +3V3 -> EN = +5V, divider R_H_FBT 453k / R_H_FBB 100k added.
             Flight Engineer parity 2 -> 0.
+        - [x] U7.1j — Deprecated parts (owner 2026-09-26): RCLAMP0502B antenna
+            clamps (TACCO D-ANT-WIOE5/D-ANT-RADIO, Commo D-ANT-SIK) ->
+            Infineon ESD101-B1-02ELS 0201 (0.1 pF); RClamp0504FA rejected for
+            RF (3 pF). MMBT2222A -> Nexperia PMBT2222A (drop-in). Commo MUX1
+            (miswired SN74LVC1G157) -> SN74LVC1G3157DRYR, rewired per datasheet.
+        - [ ] U7.1k — STEP model for SecureControllers
+            Infineon_TSSLP-2-4_0.62x0.32mm (0.62 x 0.32 x 0.31 mm, Fig. 10).
+        - [ ] U7.1l — Commo reference designators contain spaces ("PA Drvr",
+            "PA 100mW", ...); rename to standard refdes in the Commo pass.
         - [ ] U7.1h — Placement follow-ups from the swaps: gateway U_REG_3V3
             overlaps U1_1 (pre-existing); Observer R_FB3B/R_FB1T sit on
             C_VISO/C_VCORE (pre-existing).

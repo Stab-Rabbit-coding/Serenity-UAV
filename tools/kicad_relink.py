@@ -372,8 +372,7 @@ def relink_sch(sch_path, ref, sym_name, sets, ncs, rewire=False):
         i = t.rindex("(sheet_instances") if "(sheet_instances" in t \
             else t.rstrip().rindex(")")
         t = t[:i] + "\n  ".join(adds) + "\n  " + t[i:]
-    sch_path.write_text(t, encoding="utf-8")
-    return (prop(new_blk, "Footprint"), prop(new_blk, "MPN") or sym_name,
+    return (t, prop(new_blk, "Footprint"), prop(new_blk, "MPN") or sym_name,
             {n: p[0] for n, p in new.items()})
 
 
@@ -400,9 +399,7 @@ def relink_pcb(pcb_path, ref, fp_id, pin_names, name_to_net, value):
     m = re.search(r"\(at ([-\d.]+) ([-\d.]+)(?: ([-\d.]+))?\)", old)
     fx, fy, rot = float(m.group(1)), float(m.group(2)), float(m.group(3) or 0)
     layer = re.search(r'\(layer "([^"]+)"\)', old).group(1)
-    if layer != "F.Cu":
-        raise SystemExit("%s on %s: back-side rebuild not implemented"
-                         % (ref, layer))
+    back = layer == "B.Cu"
 
     # Old pad absolute positions (for track clean-up).
     old_abs = []
@@ -451,12 +448,14 @@ def relink_pcb(pcb_path, ref, fp_id, pin_names, name_to_net, value):
                              mm.group(1), mm.group(2),
                              (float(mm.group(3) or 0) + rot) % 360),
                          blk, count=1)
+        if back:
+            blk = flip_block(blk, rot)
         body.append(blk)
 
     keep = [old[a:b] for a, b in children(old, 0, len(old))
             if re.match(r'\((uuid|at|path|sheetname|sheetfile)\b', old[a:b])
             or re.match(r'\(property "(Reference|Value)"', old[a:b])]
-    new = ('(footprint "%s"\n\t\t(layer "F.Cu")\n\t\t' % fp_id
+    new = ('(footprint "%s"\n\t\t(layer "%s")\n\t\t' % (fp_id, layer)
            + "\n\t\t".join(keep + body) + "\n\t)")
     new = re.sub(r'(\(property "Value"\s+)"(?:[^"\\]|\\.)*"',
                  lambda mm: mm.group(1) + '"%s"' % value, new, count=1)
@@ -472,8 +471,37 @@ def relink_pcb(pcb_path, ref, fp_id, pin_names, name_to_net, value):
                for p in pts for q in old_abs):
             t = t[:a] + t[b:]
             removed += 1
-    pcb_path.write_text(t, encoding="utf-8")
-    return removed
+    return t, removed
+
+
+def flip_block(blk, rot):
+    """Mirror one footprint child block onto the back side.
+
+    KiCad stores back-side footprint children in the footprint frame with
+    local y negated (x unchanged), F.* layers swapped to B.*, and pad
+    angles mirrored.  Convention confirmed 2026-09-26 against Pilot
+    ETH1-PHY / CAN-TR (B.Cu, -90 deg): library pad y -0.9 -> stored +0.9.
+    """
+    def neg(m):
+        return "(%s %s %s%s)" % (m.group(1), m.group(2),
+                                 fmt(-float(m.group(3))), m.group(4) or "")
+    head = re.match(r"\((\w+)", blk).group(1)
+    if head == "pad":
+        blk = re.sub(r"\(at ([-\d.]+) ([-\d.]+) ([-\d.]+)\)",
+                     lambda m: "(at %s %s %g)" % (
+                         m.group(1), fmt(-float(m.group(2))),
+                         (2 * rot - float(m.group(3))) % 360), blk, count=1)
+    blk = re.sub(r"\((start|end|center|mid|xy|at) ([-\d.]+) ([-\d.]+)"
+                 r"((?: [-\d.]+)?)\)",
+                 neg, blk) if head != "pad" else blk
+    blk = re.sub(r'"F\.(\w+)"', r'"B.\1"', blk)
+    blk = blk.replace('"*.Cu"', '"*.Cu"')
+    return blk
+
+
+def fmt(v):
+    """Compact float formatting for coordinates."""
+    return ("%.6f" % v).rstrip("0").rstrip(".") if v else "0"
 
 
 def pcb_pin_nets(pcb_path, ref, sch_pin_names):
@@ -517,13 +545,17 @@ def main():
     name_to_net = pcb_pin_nets(pcb, args.ref, old_names)
 
     sets = dict(s.split("=", 1) for s in args.set)
-    fp_id, value, new_names = relink_sch(sch, args.ref, args.symbol, sets,
-                                         args.nc, args.rewire)
+    sch_text, fp_id, value, new_names = relink_sch(
+        sch, args.ref, args.symbol, sets, args.nc, args.rewire)
     if args.rewire:
         name_to_net = {}
     for pin, net in sets.items():
         name_to_net[new_names[pin]] = net
-    removed = relink_pcb(pcb, args.ref, fp_id, new_names, name_to_net, value)
+    pcb_text, removed = relink_pcb(pcb, args.ref, fp_id, new_names,
+                                   name_to_net, value)
+    # Both edits succeeded in memory: only now touch the files (atomic).
+    sch.write_text(sch_text, encoding="utf-8")
+    pcb.write_text(pcb_text, encoding="utf-8")
     print("%s -> %s:%s  footprint %s  (%d stale segments removed)"
           % (args.ref, NICK, args.symbol, fp_id, removed))
     for num in sorted(new_names, key=lambda x: (len(x), x)):

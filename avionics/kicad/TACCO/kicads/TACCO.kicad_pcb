@@ -10166,12 +10166,10 @@
 			)
 		)
 	)
-	(footprint "Serenity-Custom:RCLAMP0502B_SOD882"
+	(footprint "SecureControllers:Infineon_TSSLP-2-4_0.62x0.32mm"
 		(layer "F.Cu")
 		(uuid "77b6e884-40b5-468f-aaee-fcb01792e148")
 		(at 152.198837 93.355523)
-		(descr "Semtech RCLAMP0502B 2-line ESD/RF clamp, SOD-882 (SC-75), 2-pad, ~1.0 x 0.6 mm body — NOT datasheet-verified (no PDF obtained this pass, product page confirms package family only). Flagged for confirmation.")
-		(tags "Serenity XO RCLAMP0502B_SOD882")
 		(property "Reference" "D-ANT-WIOE5"
 			(at 0 -1 0)
 			(layer "F.Fab")
@@ -10183,7 +10181,7 @@
 				)
 			)
 		)
-		(property "Value" "RCLAMP0502B"
+		(property "Value" "ESD101-B1-02ELS"
 			(at 0 1 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -10195,80 +10193,23 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "26ea2729-67ff-4d46-86ac-7f11bf013a53")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4f8cad87-c325-4fb7-b0d0-7f98f65f4d9b")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
+		(descr "Infineon TSSLP-2-4 (0201-class) 2-terminal leadless package, 0.62 x 0.32 x 0.31 mm. Land pattern per Infineon ESD101-B1-02 Series datasheet Rev 1.4 (2017-10-26) Fig. 10 (outline) and Fig. 11 (footprint): copper 0.32 x 0.24 mm, 0.14 mm gap; stencil 0.27 x 0.19 mm. Authored by Claude Opus 5.5 (Anthropic) 2026-09-26.")
+		(tags "TSSLP-2-4 Infineon 0201 ESD")
 		(attr smd)
-		(fp_line
-			(start -0.65 -0.45)
-			(end -0.65 0.45)
-			(stroke
-				(width 0.12)
-				(type default)
-			)
-			(layer "F.SilkS")
-			(uuid "7a6937bd-c40c-4051-9cc1-b5e0da4aeabb")
-		)
-		(fp_rect
-			(start -0.85 -0.65)
-			(end 0.85 0.65)
-			(stroke
-				(width 0.05)
-				(type default)
-			)
-			(fill no)
-			(layer "F.CrtYd")
-			(uuid "bd2bd35e-3b95-4e5a-a503-f74b4c88a1a0")
-		)
-		(fp_rect
-			(start -0.5 -0.3)
-			(end 0.5 0.3)
-			(stroke
-				(width 0.1)
-				(type default)
-			)
-			(fill no)
-			(layer "F.Fab")
-			(uuid "907efb5e-2a16-463b-913a-aebc509f340a")
-		)
-		(pad "1" smd roundrect
-			(at -0.9 0)
-			(size 0.5 0.5)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.25)
+		(fp_rect (start -0.16 -0.31) (end 0.16 0.31) (stroke (width 0.05) (type solid)) (fill no) (layer "F.Fab"))
+		(fp_line (start -0.16 0.21) (end 0.16 0.21) (stroke (width 0.05) (type solid)) (layer "F.Fab"))
+		(fp_rect (start -0.33 -0.47) (end 0.33 0.47) (stroke (width 0.05) (type solid)) (fill no) (layer "F.CrtYd"))
+		(fp_circle (center -0.45 0.35) (end -0.4 0.35) (stroke (width 0.1) (type solid)) (fill yes) (layer "F.SilkS"))
+		(pad "1" smd rect (at 0 0.19 0) (size 0.32 0.24) (layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_paste_margin_ratio -0.2)
 			(net 123 "WIOE5_ANT_F")
-			(uuid "5e593c10-9c2a-4f25-b6ec-46f85ee22e77")
 		)
-		(pad "2" smd roundrect
-			(at 0.9 0)
-			(size 0.5 0.5)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.25)
+		(pad "2" smd rect (at 0 -0.19 0) (size 0.32 0.24) (layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_paste_margin_ratio -0.2)
 			(net 50 "PGND")
-			(uuid "59fbfc78-94d0-4cd3-9622-fd334ee7c0d2")
 		)
-		(embedded_fonts no)
+		(model "${SECURE_CONTROLLERS_LIB}/SecureControllers.3dshapes/Infineon_TSSLP-2-4_0.62x0.32mm.step"
+		(offset (xyz 0 0 0)) (scale (xyz 1 1 1)) (rotate (xyz 0 0 0)))
 	)
 	(footprint "Serenity-Custom:MountingHole_2.7mm_M2.5_PGND_Ring"
 		(layer "F.Cu")
@@ -13604,12 +13545,10 @@
 			)
 		)
 	)
-	(footprint "Serenity-Custom:RCLAMP0502B_SOD882"
+	(footprint "SecureControllers:Infineon_TSSLP-2-4_0.62x0.32mm"
 		(layer "F.Cu")
 		(uuid "c3beed45-93b4-4b8e-92eb-8b4b92807421")
 		(at 129.447818 93.99986)
-		(descr "Semtech RCLAMP0502B 2-line ESD/RF clamp, SOD-882 (SC-75), 2-pad, ~1.0 x 0.6 mm body — NOT datasheet-verified (no PDF obtained this pass, product page confirms package family only). Flagged for confirmation.")
-		(tags "Serenity XO RCLAMP0502B_SOD882")
 		(property "Reference" "D-ANT-RADIO"
 			(at 0 -1 0)
 			(layer "F.Fab")
@@ -13621,7 +13560,7 @@
 				)
 			)
 		)
-		(property "Value" "RCLAMP0502B"
+		(property "Value" "ESD101-B1-02ELS"
 			(at 0 1 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -13633,80 +13572,23 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "52f6c3c3-afe0-46cd-bac1-4ba32fb14526")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "dc22cc5a-6230-4de7-a7fa-e65e57641e52")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
+		(descr "Infineon TSSLP-2-4 (0201-class) 2-terminal leadless package, 0.62 x 0.32 x 0.31 mm. Land pattern per Infineon ESD101-B1-02 Series datasheet Rev 1.4 (2017-10-26) Fig. 10 (outline) and Fig. 11 (footprint): copper 0.32 x 0.24 mm, 0.14 mm gap; stencil 0.27 x 0.19 mm. Authored by Claude Opus 5.5 (Anthropic) 2026-09-26.")
+		(tags "TSSLP-2-4 Infineon 0201 ESD")
 		(attr smd)
-		(fp_line
-			(start -0.65 -0.45)
-			(end -0.65 0.45)
-			(stroke
-				(width 0.12)
-				(type default)
-			)
-			(layer "F.SilkS")
-			(uuid "a7128b7f-b195-4138-9e69-e00590ca096b")
-		)
-		(fp_rect
-			(start -0.85 -0.65)
-			(end 0.85 0.65)
-			(stroke
-				(width 0.05)
-				(type default)
-			)
-			(fill no)
-			(layer "F.CrtYd")
-			(uuid "02da4484-d355-491a-8bcc-4f09540d2c52")
-		)
-		(fp_rect
-			(start -0.5 -0.3)
-			(end 0.5 0.3)
-			(stroke
-				(width 0.1)
-				(type default)
-			)
-			(fill no)
-			(layer "F.Fab")
-			(uuid "6abd5463-02b1-431b-9c74-a974058d7028")
-		)
-		(pad "1" smd roundrect
-			(at -0.9 0)
-			(size 0.5 0.5)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.25)
+		(fp_rect (start -0.16 -0.31) (end 0.16 0.31) (stroke (width 0.05) (type solid)) (fill no) (layer "F.Fab"))
+		(fp_line (start -0.16 0.21) (end 0.16 0.21) (stroke (width 0.05) (type solid)) (layer "F.Fab"))
+		(fp_rect (start -0.33 -0.47) (end 0.33 0.47) (stroke (width 0.05) (type solid)) (fill no) (layer "F.CrtYd"))
+		(fp_circle (center -0.45 0.35) (end -0.4 0.35) (stroke (width 0.1) (type solid)) (fill yes) (layer "F.SilkS"))
+		(pad "1" smd rect (at 0 0.19 0) (size 0.32 0.24) (layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_paste_margin_ratio -0.2)
 			(net 69 "RADIO_ANT_F")
-			(uuid "70ec1028-6994-47d1-8116-35a927212d18")
 		)
-		(pad "2" smd roundrect
-			(at 0.9 0)
-			(size 0.5 0.5)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.25)
+		(pad "2" smd rect (at 0 -0.19 0) (size 0.32 0.24) (layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_paste_margin_ratio -0.2)
 			(net 50 "PGND")
-			(uuid "4f1cc6a1-789f-4067-b137-df5d48289d16")
 		)
-		(embedded_fonts no)
+		(model "${SECURE_CONTROLLERS_LIB}/SecureControllers.3dshapes/Infineon_TSSLP-2-4_0.62x0.32mm.step"
+		(offset (xyz 0 0 0)) (scale (xyz 1 1 1)) (rotate (xyz 0 0 0)))
 	)
 	(footprint "Resistor_SMD:R_0201_0603Metric"
 		(layer "F.Cu")

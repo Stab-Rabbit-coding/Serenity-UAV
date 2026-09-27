@@ -265,7 +265,7 @@ the digital bus lines, while keeping in-band insertion loss below 1 dB.
       |
   FL_xxx  (bandpass filter, series)
       |
-      +----[D_ANT_xxx  RCLAMP0502B]---- PGND   ← shunt ESD clamp
+      +----[D-ANT-xxx  ESD101-B1-02ELS]---- PGND   ← shunt ESD clamp
       |
   J_SMA_xxx  (SMA bulkhead connector)
       |
@@ -285,18 +285,23 @@ the digital bus lines, while keeping in-band insertion loss below 1 dB.
 Both 915 MHz radios (LoRa and SiK) share the same BPF part number — they operate in
 the same band and there is no benefit to using separate filters.
 
-**RF ESD protection:**
+**RF ESD protection** (revised 2026-09-26, avionics/WBS.md U7.1):
 
-| Reference | Part | Capacitance | Clamp voltage | Package |
-|---|---|---|---|---|
-| D_ANT_LORA | Semtech RCLAMP0502BTCL | 0.15 pF max | 5.5 V | SOD-882 |
-| D_ANT_WIFI | Semtech RCLAMP0502BTCL | 0.15 pF max | 5.5 V | SOD-882 |
-| D_ANT_SIK  | Semtech RCLAMP0502BTCL | 0.15 pF max | 5.5 V | SOD-882 |
+| Reference | Board | Part | Capacitance | VRWM | Package |
+|---|---|---|---|---|---|
+| D-ANT-WIOE5 | TACCO | Infineon ESD101-B1-02ELS | 0.1 pF typ (1 GHz), 0.2 pF max (1 MHz) | ±5.5 V | TSSLP-2-4 (0201) |
+| D-ANT-RADIO | TACCO | Infineon ESD101-B1-02ELS | 0.1 pF typ (1 GHz), 0.2 pF max (1 MHz) | ±5.5 V | TSSLP-2-4 (0201) |
+| D-ANT-SIK | Commo | Infineon ESD101-B1-02ELS | 0.1 pF typ (1 GHz), 0.2 pF max (1 MHz) | ±5.5 V | TSSLP-2-4 (0201) |
 
-The RCLAMP0502B is specified for RF antenna protection applications; its 0.15 pF
-maximum capacitance causes negligible antenna detuning at 915 MHz (< 1° phase shift
-at 50 Ω) and at 2.4 GHz (< 2° phase shift). The existing digital-line PRTR5V0U2X
-TVS (capacitance ≈ 5 pF per channel) is not suitable for RF antenna ports.
+Values from the Infineon ESD101-B1-02 Series datasheet Rev 1.4 (2017-10-26),
+p. 4 and Sec. 4.1. The previous part, Semtech RCLAMP0502B, is deprecated (owner,
+2026-09-26); its 0.15 pF figure quoted here earlier was never backed by a
+datasheet in this repository. The suggested successor RClamp0504FA was
+rejected for these ports: it is a 3 pF USB-class array (Semtech datasheet,
+"no insertion loss to 2.0 GHz"), which as a 50 Ω shunt costs about 0.7 dB at
+915 MHz and 3.7–8.8 dB on the 2.4/5 GHz Type2EL feed. At 0.2 pF worst case the
+ESD101-B1 mismatch loss is about 0.04 dB at 2.45 GHz and 0.13 dB at 5.5 GHz.
+The digital-line PRTR5V0U2X TVS is not suitable for RF antenna ports.
 
 **SiK U.FL input (J_SIK_ANT):**
 
@@ -319,7 +324,7 @@ copper pour, consistent with §11.
 - **BPF placement:** Place FL_LORA and FL_SIK as close as possible to the RFM95W and
   RFD900x module U.FL/antenna pads respectively (≤ 5 mm trace from ANT pin to filter
   pad). Place FL_WIFI ≤ 5 mm from WL1837MOD ANT pin.
-- **RCLAMP placement:** Place D_ANT_xxx immediately after the BPF (between BPF output
+- **Antenna ESD placement:** Place D_ANT_xxx immediately after the BPF (between BPF output
   and SMA pin 1). The shunt path to PGND must be as short as possible (via directly
   to PGND plane, no daisy-chain routing).
 - **Keep the RF trace in the BPF-to-SMA segment entirely within the RF groundplane
@@ -366,9 +371,9 @@ copper pour, consistent with §11.
 | FL_LORA | Johanson 0915LP15B0100E | LoRa ANT bandpass filter |
 | FL_SIK | Johanson 0915LP15B0100E | SiK ANT bandpass filter |
 | FL_WIFI | Johanson 2450BP15B050E | WiFi/BT ANT bandpass filter |
-| D_ANT_LORA | Semtech RCLAMP0502BTCL | LoRa ANT ESD shunt (0.15 pF) |
-| D_ANT_SIK | Semtech RCLAMP0502BTCL | SiK ANT ESD shunt (0.15 pF) |
-| D_ANT_WIFI | Semtech RCLAMP0502BTCL | WiFi/BT ANT ESD shunt (0.15 pF) |
+| D-ANT-WIOE5 | Infineon ESD101-B1-02ELS | LoRa/mLRS ANT ESD shunt (0.1 pF) |
+| D-ANT-SIK | Infineon ESD101-B1-02ELS | SiK ANT ESD shunt (0.1 pF) — on Commo |
+| D-ANT-RADIO | Infineon ESD101-B1-02ELS | Wi-Fi/BT ANT ESD shunt (0.1 pF) |
 | J_SIK_ANT | Hirose U.FL-R-SMT-1(10) | SiK module pigtail U.FL receptacle |
 | J_SMA_LORA | SMA bulkhead jack (50 Ω) | LoRa 915 MHz antenna SMA output |
 | J_SMA_WIFI | SMA bulkhead jack (50 Ω) | WiFi/BT 2.4 GHz antenna SMA output |
@@ -396,8 +401,8 @@ IEC 61000-4-5 Level 3 [REF-IEC-005], MIL-STD-461G RE102 Limit C, RS103 200 V/m [
 
 Additional RF susceptibility note: the RFD900x and RFM95W modules have their own
 internal LNA protectors. The PRTR5V0U2X TVS arrays on J1 protect the UART interface,
-not the antenna port. Antenna port protection is now provided by the RCLAMP0502B ESD
-shunts (D_ANT_LORA, D_ANT_WIFI, D_ANT_SIK) and by the BPF series filters (FL_LORA,
+not the antenna port. Antenna port protection is now provided by the ESD101-B1-02ELS ESD
+shunts (D-ANT-WIOE5, D-ANT-RADIO; D-ANT-SIK on Commo) and by the BPF series filters (FL_LORA,
 FL_WIFI, FL_SIK) as documented in §13. The SMA connector shell PGND connection and
 antenna cable shielding provide the primary conducted shield path.
 
@@ -452,7 +457,7 @@ schematic bus ring without net name conflicts.
 6. MIL-STD-461G:2015 — EM emissions and susceptibility requirements for aircraft [REF-MIL-002]
 7. Johanson Technology 0915LP15B0100E Data Sheet — 902–928 MHz bandpass filter
 8. Johanson Technology 2450BP15B050E Data Sheet — 2.4 GHz bandpass filter
-9. Semtech RCLAMP0502B Data Sheet — RF ESD protection, 0.15 pF, SOD-882
+9. Infineon ESD101-B1-02 Series Datasheet Rev 1.4 (2017-10-26) — RF ESD protection, 0.1 pF, TSSLP-2-4 (replaces the deprecated Semtech RCLAMP0502B)
 
 ## Usage notices
 

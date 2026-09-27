@@ -48,7 +48,7 @@ intentional-radiator rule, not Part 95 RCRS — see REFERENCES.md REF-FCC-003); 
 adds conducted and radiated immunity measures to handle the EDF motor and ESC switching
 environment inside the Serenity UAV nacelles.
 
-All Phase 1 IC selections (Si5351A-B-GT DDS, MMBT2222A + 2N3866 PA, MCP4921 DAC,
+All Phase 1 IC selections (Si5351A-B-GT DDS, PMBT2222A + 2N3866 PA, MCP4921 DAC,
 LM393 comparator, MGA-82563 LNA, PE4259-63 T/R switch) are unchanged. The regulatory
 constraints from XCVR-49MHZ-1 apply unchanged.
 
@@ -422,7 +422,7 @@ from the actual board the way a hand-maintained BOM can.
 | OSC By | 100 nF | C 0402 | TCXO +3V3 bypass |
 | U1 ByA, U1 ByB | 100 nF ×2 | C 0402 | Si5351A VDDA/VDD bypass |
 | **PA chain** | | | |
-| PA Drvr | MMBT2222A | SOT-23 | Class-A driver stage |
+| PA Drvr | Nexperia PMBT2222A | SOT-23 | Class-A driver stage (replaces deprecated MMBT2222A, 2026-09-26) |
 | PA 100mW | 2N3866 | SOT-89-3 | Class-AB final, 100 mW |
 | PA Rb1, PA Rc1, PA Rb2, PA Re | 10k / 100R / 1k / 10R | R 0402 | Driver/final bias network |
 | PA Cb1, PA Cb2, PA By, PA By2 | 100 pF / 100 pF / 100 nF / 1 nF | C 0402 | Interstage coupling + bypass |
@@ -508,7 +508,7 @@ and the existing TACCO/B-2 boards (which already carried this profile).
 Unchanged from XCVR-49MHZ-1. The 6-element LPF provides additional margin vs. the
 5-element version, improving compliance margin for the 47 CFR §15.209 out-of-band
 emission limits applied via §15.235(b) (REF-FCC-003) — not Part 95 §95.655, which does
-not apply to this band.  Note: the PA chain (MMBT2222A + 2N3866) is sized for ~100 mW
+not apply to this band.  Note: the PA chain (PMBT2222A + 2N3866) is sized for ~100 mW
 output, which exceeds the §15.235 field-strength-equivalent EIRP ceiling of ≈ 30 µW by
 roughly 35 dB; firmware must limit conducted output to ≈ −13 dBm (≈ 48 µW) for
 compliance — see `gcs/skipper/hardware/docs/skipper_antenna_spec.md` Link 4 and
@@ -814,4 +814,19 @@ per its data sheet (SCES424O, Pin Configuration and Functions: B2 1, GND 2,
 B1 3, A 4, VCC 5, S 6). The GND stitching via under the old package was moved
 to (112.35, 125.0). Change by Claude Opus 5.5 (Anthropic) via
 `tools/kicad_relink.py --rewire`; see avionics/WBS.md U7.1.
+
+## Revision note — antenna ESD and PA driver (2026-09-26)
+
+- **D-ANT-SIK:** Semtech RCLAMP0502B (deprecated) replaced by Infineon
+  ESD101-B1-02ELS (0.1 pF typ at 1 GHz, 0.2 pF max; ±5.5 V; TSSLP-2-4 0201),
+  per the Infineon ESD101-B1-02 Series datasheet Rev 1.4. Moved from (104, 133)
+  -- where the old part's pad 1 overlapped the MH3 hole -- to (104.4, 118.16),
+  rotated 90°, beside J-ANT-SIK. See TACCO.md "RF ESD protection" for why the
+  3 pF RClamp0504FA was rejected for antenna ports.
+- **PA Drvr:** MMBT2222A (deprecated) replaced by Nexperia PMBT2222A
+  (production; same SOT-23 B1/E2/C3 pinout; fT >= 300 MHz; AEC-Q101), per the
+  Nexperia PMBT2222A product data sheet (27 July 2022).
+
+Changes by Claude Opus 5.5 (Anthropic) via `tools/kicad_relink.py`; owner
+decisions 2026-09-26 (avionics/WBS.md U7.1).
 
