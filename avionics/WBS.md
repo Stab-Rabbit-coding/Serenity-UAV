@@ -619,7 +619,7 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
             [REF-SENSOR-028]. Generator-owned schematics (gen_*_sch.py) will drop
             the stamp on regeneration -- re-run the tool after any regen.
         - [ ] U7.1g — Catalogue the remaining uncited-but-used IDs
-            REF-SENSOR-020/021/024/031/032/034-037/039 (022-040 subset done
+            REF-SENSOR-020/021/024/031/032/034/035/036 (022-040 subset except these done
             2026-09-26); ICM-42688-P, PM-DB2791S, HI-1573, SLB 9672 public
             URLs require verification.
         - [x] U7.1e — TLV62569 FB/PG swap (gateway, Observer) and 3-pad SOT-23
