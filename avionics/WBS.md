@@ -637,6 +637,31 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
             Infineon ESD101-B1-02ELS 0201 (0.1 pF); RClamp0504FA rejected for
             RF (3 pF). MMBT2222A -> Nexperia PMBT2222A (drop-in). Commo MUX1
             (miswired SN74LVC1G157) -> SN74LVC1G3157DRYR, rewired per datasheet.
+        - [x] U7.1m — Library extraction batch 2 (2026-09-27, Claude Sonnet 5):
+            LMV331, MCP1703A, MCP4921, AO3400A, MBRD1045CT, SMAJ/SMBJ-TVS added
+            (24 symbols total). Datasheets extracted for BMP388/ICM-42688-P/
+            INA226/ATF16V8BQL/PM-DB2791S/W25Q128/749010012A already covered by
+            REFERENCES.md entries; TOML library entries for those still pending.
+        - [ ] U7.1n — ★ Commo ref "RX Demod" (Value "LM393 Comparator RX-AFSK
+            Demodulator") is mislabeled: real TI LM393 has no 5-pin package
+            (dual comparator, 8-pin minimum). The drawn symbol has 5 pins with
+            NO output pin -- pin 5 is wired to GND instead of an output net.
+            Likely meant to be a single comparator (LMV331-class, same part as
+            the correctly-wired RSSI_CMP). Do not fabricate the intended output
+            net -- trace AFSK demodulator design intent before relinking.
+        - [ ] U7.1o — Remaining ~35 parts needing library entries (datasheets
+            already in avionics/datasheets/, not yet extracted to TOML):
+            ADIN1300BCPZ (40-pin PHY), BQ76930PWRQ1 (30-pin AFE), Wio-E5
+            (STM32WLE5 module), LBES5PL2EL-923 (Type2EL Wi-Fi/BT module),
+            Si5351A-B-GT, TG2520SMN, PE4259-63, MGA-82563, SN74LVC1G04,
+            TFmini-S, MAX-M10S-00B, RFD900ux-SMT, TPS54540DDAR, TPS54620RGYT,
+            TPS63031DSKR, W25Q128JVSIQ, ATF16V8BQL-15XI, PM-DB2791S,
+            749010012A, BMP388, ICM-42688-P, INA226AIDGSR (REFERENCES.md
+            entries exist for the last 7; TOML library entries still pending).
+            Connectors/mechanical (lower priority, not yet started):
+            PB2I-P1/P2 (PocketBeagle socket), TSM-108-01-L-DV, SM0xB-GHS-TB
+            family, MMCX, U.FL, RPSMA, XH-7P, XT30/XT60, Nano-Fit, microSD,
+            switches, mounting hardware.
         - [ ] U7.1k — STEP model for SecureControllers
             Infineon_TSSLP-2-4_0.62x0.32mm (0.62 x 0.32 x 0.31 mm, Fig. 10).
         - [ ] U7.1l — Commo reference designators contain spaces ("PA Drvr",
