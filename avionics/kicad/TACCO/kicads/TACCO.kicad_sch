@@ -1144,21 +1144,7 @@
         (pin passive line (at 19.05 0.00 180) (length 2.54) (name "W2_OUT" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "TACCO:S_TVS-CAN" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "U" (at 0 6.35 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "PRTR5V0U2X" (at 0 -6.35 0) (effects (font (size 1.27 1.27))))
-      (property "Footprint" "Package_TO_SOT_SMD:SOT-143" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "prtr5v0u2x.pdf (Nexperia, SOT143B 4-pin) [REF-SENSOR-038]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_TVS-CAN_0_1"
-        (rectangle (start -16.51 5.08) (end 16.51 -5.08) (stroke (width 0.2540) (type default)) (fill (type background)))
-      )
-      (symbol "S_TVS-CAN_1_1"
-        (pin passive line (at -19.05 2.54 0) (length 2.54) (name "IO1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-        (pin power_in line (at -19.05 0.00 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 2.54 180) (length 2.54) (name "IO2" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 0.00 180) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-      )
-    )
+    
     (symbol "TACCO:S_R-CANT" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
       (property "Value" "120R" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
@@ -1295,21 +1281,7 @@
         (pin passive line (at 19.05 0.00 180) (length 2.54) (name "W2_OUT" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "TACCO:S_TVS-RS485" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "U" (at 0 6.35 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "PRTR5V0U2X" (at 0 -6.35 0) (effects (font (size 1.27 1.27))))
-      (property "Footprint" "Package_TO_SOT_SMD:SOT-143" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "prtr5v0u2x.pdf (Nexperia, SOT143B) [REF-SENSOR-038]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_TVS-RS485_0_1"
-        (rectangle (start -16.51 5.08) (end 16.51 -5.08) (stroke (width 0.2540) (type default)) (fill (type background)))
-      )
-      (symbol "S_TVS-RS485_1_1"
-        (pin passive line (at -19.05 2.54 0) (length 2.54) (name "IO1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-        (pin power_in line (at -19.05 0.00 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 2.54 180) (length 2.54) (name "IO2" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 0.00 180) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-      )
-    )
+    
     (symbol "TACCO:S_R-485T" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
       (property "Value" "120R" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
@@ -2349,6 +2321,81 @@
 				(length 2.54)
 				(name "A2" (effects (font (size 1.27 1.27))))
 				(number "2" (effects (font (size 1.27 1.27))))
+			)
+		)
+		(embedded_fonts no)
+	)
+    (symbol "SecureControllers:PRTR5V0U2X"
+		(pin_names (offset 1.016))
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "D"
+			(at -7.62 8.89 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "PRTR5V0U2X"
+			(at -7.62 -8.89 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-143"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "Description" "Dual-line ESD protection, rail-to-rail clamp to VCC, SOT143B"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "Manufacturer" "Nexperia"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "MPN" "PRTR5V0U2X"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "ki_keywords" "ESD TVS rail clamp USB CAN RS485 I2C"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "ki_fp_filters" "SOT?143*"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(symbol "PRTR5V0U2X_0_1"
+			(rectangle (start -7.62 7.62) (end 7.62 -7.62)
+				(stroke (width 0.254) (type default))
+				(fill (type background))
+			)
+		)
+		(symbol "PRTR5V0U2X_1_1"
+			(pin passive line
+				(at -10.16 5.08 0)
+				(length 2.54)
+				(name "IO1" (effects (font (size 1.27 1.27))))
+				(number "2" (effects (font (size 1.27 1.27))))
+			)
+			(pin passive line
+				(at -10.16 2.54 0)
+				(length 2.54)
+				(name "IO2" (effects (font (size 1.27 1.27))))
+				(number "3" (effects (font (size 1.27 1.27))))
+			)
+			(pin passive line
+				(at 0.00 10.16 270)
+				(length 2.54)
+				(name "VCC" (effects (font (size 1.27 1.27))))
+				(number "4" (effects (font (size 1.27 1.27))))
+			)
+			(pin passive line
+				(at 0.00 -10.16 90)
+				(length 2.54)
+				(name "GND" (effects (font (size 1.27 1.27))))
+				(number "1" (effects (font (size 1.27 1.27))))
 			)
 		)
 		(embedded_fonts no)
@@ -4271,12 +4318,12 @@
   (global_label "CAN_B_L" (shape passive) (at 478.79 330.20 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b7000000-0000-0000-0000-000000001477"))
   (wire (pts (xy 476.25 332.74) (xy 478.79 332.74)) (stroke (width 0) (type default)) (uuid "b7000000-0000-0000-0000-000000001478"))
   (global_label "CAN_B_L_F" (shape passive) (at 478.79 332.74 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b7000000-0000-0000-0000-000000001479"))
-  (symbol (lib_id "TACCO:S_TVS-CAN") (at 457.20 358.14 0) (unit 1)
+  (symbol (lib_id "SecureControllers:PRTR5V0U2X") (at 457.20 358.14 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "b7000000-0000-0000-0000-000000001480")
     (property "Reference" "TVS-CAN" (at 457.20 351.79 0) (effects (font (size 1.27 1.27))))
     (property "Value" "PRTR5V0U2X" (at 457.20 364.49 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Package_TO_SOT_SMD:SOT-143" (at 457.20 358.14 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Datasheet" "prtr5v0u2x.pdf (Nexperia, SOT143B 4-pin) [REF-SENSOR-038]" (at 457.20 358.14 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf" (at 457.20 358.14 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "MPN" "PRTR5V0U2X,315" (at 457.20 358.14 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (pin "1" (uuid "b7000000-0000-0000-0000-000000001481"))
     (pin "2" (uuid "b7000000-0000-0000-0000-000000001482"))
@@ -4284,14 +4331,14 @@
     (pin "4" (uuid "b7000000-0000-0000-0000-000000001484"))
     (instances (project "XO" (path "/b7000000-0000-0000-0000-000000000001" (reference "TVS-CAN") (unit 1))))
   )
-  (wire (pts (xy 438.15 355.60) (xy 435.61 355.60)) (stroke (width 0) (type default)) (uuid "b7000000-0000-0000-0000-000000001485"))
-  (global_label "CAN_B_H_F" (shape passive) (at 435.61 355.60 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "b7000000-0000-0000-0000-000000001486"))
-  (wire (pts (xy 438.15 358.14) (xy 435.61 358.14)) (stroke (width 0) (type default)) (uuid "b7000000-0000-0000-0000-000000001487"))
-  (global_label "GND2_CANB" (shape passive) (at 435.61 358.14 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "b7000000-0000-0000-0000-000000001488"))
-  (wire (pts (xy 476.25 355.60) (xy 478.79 355.60)) (stroke (width 0) (type default)) (uuid "b7000000-0000-0000-0000-000000001489"))
-  (global_label "CAN_B_L_F" (shape passive) (at 478.79 355.60 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b7000000-0000-0000-0000-000000001490"))
-  (wire (pts (xy 476.25 358.14) (xy 478.79 358.14)) (stroke (width 0) (type default)) (uuid "b7000000-0000-0000-0000-000000001491"))
-  (global_label "VCC2_CANB" (shape passive) (at 478.79 358.14 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b7000000-0000-0000-0000-000000001492"))
+  
+  
+  
+  
+  
+  
+  
+  
   (symbol (lib_id "TACCO:S_R-CANT") (at 457.20 382.27 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp yes) (uuid "b7000000-0000-0000-0000-000000001493")
     (property "Reference" "R-CANT" (at 457.20 377.19 0) (effects (font (size 1.27 1.27))))
@@ -4460,12 +4507,12 @@
   (global_label "RS485_B_B" (shape passive) (at 478.79 591.82 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b7000000-0000-0000-0000-000000001578"))
   (wire (pts (xy 476.25 594.36) (xy 478.79 594.36)) (stroke (width 0) (type default)) (uuid "b7000000-0000-0000-0000-000000001579"))
   (global_label "RS485_B_B_F" (shape passive) (at 478.79 594.36 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b7000000-0000-0000-0000-000000001580"))
-  (symbol (lib_id "TACCO:S_TVS-RS485") (at 584.20 81.28 0) (unit 1)
+  (symbol (lib_id "SecureControllers:PRTR5V0U2X") (at 584.20 81.28 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "b7000000-0000-0000-0000-000000001581")
     (property "Reference" "TVS-RS485" (at 584.20 74.93 0) (effects (font (size 1.27 1.27))))
     (property "Value" "PRTR5V0U2X" (at 584.20 87.63 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Package_TO_SOT_SMD:SOT-143" (at 584.20 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Datasheet" "prtr5v0u2x.pdf (Nexperia, SOT143B) [REF-SENSOR-038]" (at 584.20 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf" (at 584.20 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "MPN" "PRTR5V0U2X,315" (at 584.20 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (pin "1" (uuid "b7000000-0000-0000-0000-000000001582"))
     (pin "2" (uuid "b7000000-0000-0000-0000-000000001583"))
@@ -4473,14 +4520,14 @@
     (pin "4" (uuid "b7000000-0000-0000-0000-000000001585"))
     (instances (project "XO" (path "/b7000000-0000-0000-0000-000000000001" (reference "TVS-RS485") (unit 1))))
   )
-  (wire (pts (xy 565.15 78.74) (xy 562.61 78.74)) (stroke (width 0) (type default)) (uuid "b7000000-0000-0000-0000-000000001586"))
-  (global_label "RS485_B_A_F" (shape passive) (at 562.61 78.74 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "b7000000-0000-0000-0000-000000001587"))
-  (wire (pts (xy 565.15 81.28) (xy 562.61 81.28)) (stroke (width 0) (type default)) (uuid "b7000000-0000-0000-0000-000000001588"))
-  (global_label "GND2_RS485B" (shape passive) (at 562.61 81.28 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "b7000000-0000-0000-0000-000000001589"))
-  (wire (pts (xy 603.25 78.74) (xy 605.79 78.74)) (stroke (width 0) (type default)) (uuid "b7000000-0000-0000-0000-000000001590"))
-  (global_label "RS485_B_B_F" (shape passive) (at 605.79 78.74 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b7000000-0000-0000-0000-000000001591"))
-  (wire (pts (xy 603.25 81.28) (xy 605.79 81.28)) (stroke (width 0) (type default)) (uuid "b7000000-0000-0000-0000-000000001592"))
-  (global_label "VCC2_RS485B" (shape passive) (at 605.79 81.28 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b7000000-0000-0000-0000-000000001593"))
+  
+  
+  
+  
+  
+  
+  
+  
   (symbol (lib_id "TACCO:S_R-485T") (at 584.20 105.41 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp yes) (uuid "b7000000-0000-0000-0000-000000001594")
     (property "Reference" "R-485T" (at 584.20 100.33 0) (effects (font (size 1.27 1.27))))
@@ -5788,5 +5835,29 @@
   (global_label "PGND" (shape bidirectional) (at 965.2000 113.0300 270)
     (effects (font (size 1.27 1.27)))
     (uuid "92ce8dc2-99be-4ea1-a2db-b8acbc5c5560"))
+  (global_label "RS485_B_A_F" (shape bidirectional) (at 574.0400 76.2000 180)
+    (effects (font (size 1.27 1.27)))
+    (uuid "515d27b0-2716-4e5c-9524-759f474f1798"))
+  (global_label "RS485_B_B_F" (shape bidirectional) (at 574.0400 78.7400 180)
+    (effects (font (size 1.27 1.27)))
+    (uuid "99862885-ad9b-40d9-b99e-7857ae871a2d"))
+  (global_label "GND2_RS485B" (shape bidirectional) (at 584.2000 91.4400 270)
+    (effects (font (size 1.27 1.27)))
+    (uuid "3e883cfd-4a79-4bd0-9bda-8460b9692f67"))
+  (global_label "VCC2_RS485B" (shape bidirectional) (at 584.2000 71.1200 90)
+    (effects (font (size 1.27 1.27)))
+    (uuid "10b6eaf6-357c-40df-85a3-fe25975d865e"))
+  (global_label "CAN_B_H_F" (shape bidirectional) (at 447.0400 353.0600 180)
+    (effects (font (size 1.27 1.27)))
+    (uuid "fbf091c5-477b-448d-bde4-dfdce7b0dc07"))
+  (global_label "CAN_B_L_F" (shape bidirectional) (at 447.0400 355.6000 180)
+    (effects (font (size 1.27 1.27)))
+    (uuid "78acd87c-6467-474a-81a4-3a1da56148af"))
+  (global_label "GND2_CANB" (shape bidirectional) (at 457.2000 368.3000 270)
+    (effects (font (size 1.27 1.27)))
+    (uuid "b8c01d4e-30dd-4102-a5c2-75af0ba1aa8a"))
+  (global_label "VCC2_CANB" (shape bidirectional) (at 457.2000 347.9800 90)
+    (effects (font (size 1.27 1.27)))
+    (uuid "583504b8-3f95-45c1-97b2-f7754fd2719c"))
   (sheet_instances (path "/" (page "1")))
 )

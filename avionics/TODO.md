@@ -1,4 +1,4 @@
-# Serenity UAV — Avionics (Pilot / XO / Commo Cape Hardware) TODO (Open Work Only)
+# Serenity UAV — Avionics (Pilot / TACCO / Commo Cape Hardware) TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
@@ -25,10 +25,10 @@
 - [ ] Carry the tamper signal over the link for the TPM-less boards
 - [ ] Route the rearranged capes
 - [ ] Clear residual DRC after mesh + routing (counts measured 2026-06-12…
-- [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
+- [ ] Finish Pilot PCB close-out pass:
 - [ ] Add SBUS/UART DIP switch to Pilot — add a 2-position DIP (or…
 - [ ] Generate Pilot gerbers — superseded by the 2026-09-19…
-- [ ] Generate XO gerbers — `TACCOcad_pcb` complete
+- [ ] Generate TACCO gerbers — `TACCO.kicad_pcb` complete
 - [ ] Zigbee RF chain was never actually added to XO
 - [ ] APPROVED DIRECTION (2026-09-21, supersedes the same-day initial…
 - [ ] Generate Commo gerbers — `XCVR-49MHZ-2.kicad_pcb` complete
@@ -89,7 +89,7 @@
 - [ ] `GW-RCS` — Phase 11 RCS bleed-valve gateway, SPECIFIED ONLY…
 - [ ] Pilot: `PB2-P2` header appears fully unwired in ERC (all 36 pins…
 - [ ] Pilot full DRC/ERC clean-out — not started
-- [ ] XO PCB placement + DRC 0 + routing — IN PROGRESS
+- [ ] TACCO PCB placement + DRC 0 + routing — IN PROGRESS
 - [ ] Flight Engineer PCB: close the last DRC items + route + gerbers
 - [ ] Observer PCB resync — not started
 

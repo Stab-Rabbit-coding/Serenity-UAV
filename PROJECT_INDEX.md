@@ -607,7 +607,7 @@ LICENSE — SERENITY UAV — AVIONICS SUBSYSTEM LICENSING [avionics-hardware, li
 mosfet-search.txt — Text file [avionics-hardware]
 README.md — Serenity UAV — Avionics Subsystem [avionics-hardware, documentation, emi-hardening, redundancy-failover, security]
 TODO-1-9-COMPLETION-STATUS.md — Task 1.9 — Avionics Workload Balancing: Completion Status [avionics-hardware, documentation, emi-hardening, project-tracking, redundancy-failover, security]
-TODO.md — Serenity UAV — Avionics (Pilot / XO / Commo Cape Hardware) TODO (Open Work Only) [avionics-hardware, documentation, emi-hardening, project-tracking, security]
+TODO.md — Serenity UAV — Avionics (Pilot / TACCO / Commo Cape Hardware) TODO (Open Work Only) [avionics-hardware, documentation, emi-hardening, project-tracking, security]
 WBS.md — Serenity UAV — Avionics (Pilot / XO / Commo Cape Hardware) Work Breakdown Structure (Detail) [avionics-hardware, documentation, emi-hardening, project-tracking, security]
 ```
 

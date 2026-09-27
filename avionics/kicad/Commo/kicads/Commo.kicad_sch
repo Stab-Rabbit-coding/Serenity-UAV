@@ -418,21 +418,7 @@
         (pin passive line (at 15.24 1.27 180) (length 2.54) (name "ANT" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "Commo:S_ANT_TVS" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "U" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "ANT TVS" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
-      (symbol "S_ANT_TVS_0_1"
-        (rectangle (start -12.70 6.35) (end 12.70 -6.35) (stroke (width 0.2540) (type default)) (fill (type background)))
-      )
-      (symbol "S_ANT_TVS_1_1"
-        (pin passive line (at -15.24 3.81 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -15.24 1.27 0) (length 2.54) (name "ANT" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -15.24 -1.27 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 15.24 3.81 180) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 15.24 1.27 180) (length 2.54) (name "RF_TX" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 15.24 -1.27 180) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
-      )
-    )
+    
     (symbol "Commo:S_SMA_ESD" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
       (property "Value" "SMA ESD" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
@@ -621,21 +607,7 @@
         (pin passive line (at 15.24 0.00 180) (length 2.54) (name "UART_49MHZ_XCVR_TX" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "Commo:S_UART_TVS" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "U" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "UART TVS" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
-      (symbol "S_UART_TVS_0_1"
-        (rectangle (start -12.70 6.35) (end 12.70 -6.35) (stroke (width 0.2540) (type default)) (fill (type background)))
-      )
-      (symbol "S_UART_TVS_1_1"
-        (pin passive line (at -15.24 3.81 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -15.24 1.27 0) (length 2.54) (name "UART_49MHZ_XCVR_RX" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -15.24 -1.27 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 15.24 3.81 180) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 15.24 1.27 180) (length 2.54) (name "UART_49MHZ_XCVR_TX" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 15.24 -1.27 180) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
-      )
-    )
+    
     (symbol "Commo:S_TX_Bead" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
       (property "Value" "TX Bead" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
@@ -1495,6 +1467,81 @@
 		)
 		(embedded_fonts no)
 	)
+    (symbol "SecureControllers:PRTR5V0U2X"
+		(pin_names (offset 1.016))
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "D"
+			(at -7.62 8.89 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "PRTR5V0U2X"
+			(at -7.62 -8.89 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-143"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "Description" "Dual-line ESD protection, rail-to-rail clamp to VCC, SOT143B"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "Manufacturer" "Nexperia"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "MPN" "PRTR5V0U2X"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "ki_keywords" "ESD TVS rail clamp USB CAN RS485 I2C"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "ki_fp_filters" "SOT?143*"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(symbol "PRTR5V0U2X_0_1"
+			(rectangle (start -7.62 7.62) (end 7.62 -7.62)
+				(stroke (width 0.254) (type default))
+				(fill (type background))
+			)
+		)
+		(symbol "PRTR5V0U2X_1_1"
+			(pin passive line
+				(at -10.16 5.08 0)
+				(length 2.54)
+				(name "IO1" (effects (font (size 1.27 1.27))))
+				(number "2" (effects (font (size 1.27 1.27))))
+			)
+			(pin passive line
+				(at -10.16 2.54 0)
+				(length 2.54)
+				(name "IO2" (effects (font (size 1.27 1.27))))
+				(number "3" (effects (font (size 1.27 1.27))))
+			)
+			(pin passive line
+				(at 0.00 10.16 270)
+				(length 2.54)
+				(name "VCC" (effects (font (size 1.27 1.27))))
+				(number "4" (effects (font (size 1.27 1.27))))
+			)
+			(pin passive line
+				(at 0.00 -10.16 90)
+				(length 2.54)
+				(name "GND" (effects (font (size 1.27 1.27))))
+				(number "1" (effects (font (size 1.27 1.27))))
+			)
+		)
+		(embedded_fonts no)
+	)
   )
   (text "POWER SUPPLY (5V input filter, MCP1703 LDO, bypass cascade)" (at 50.80 29.02 0) (effects (font (size 2.0 2.0) (bold yes)) (justify left)) (uuid "49030000-0000-0000-0000-000000001001"))
   (symbol (lib_id "Commo:S_+5V_Bead") (at 63.50 63.50 0) (unit 1)
@@ -2004,8 +2051,10 @@
   (global_label "ANT" (shape passive) (at 330.20 427.99 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "49030000-0000-0000-0000-000000001144"))
   (wire (pts (xy 364.49 427.99) (xy 368.30 427.99)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-000000001145"))
   (global_label "ANT" (shape passive) (at 368.30 427.99 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "49030000-0000-0000-0000-000000001146"))
-  (symbol (lib_id "Commo:S_ANT_TVS") (at 444.50 429.26 0) (unit 1)
+  (symbol (lib_id "SecureControllers:PRTR5V0U2X") (at 444.50 429.26 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "49030000-0000-0000-0000-000000001147")
+    (property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf" (at 444.50 429.26 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-143" (at 444.50 429.26 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Reference" "ANT TVS" (at 444.50 421.64 0) (effects (font (size 1.27 1.27))))
     (property "Value" "PRTR5V0U2X" (at 444.50 436.88 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "49030000-0000-0000-0000-000000001148"))
@@ -2016,18 +2065,18 @@
     (pin "6" (uuid "49030000-0000-0000-0000-00000000114d"))
     (instances (project "Commo" (path "/49030000-0000-0000-0000-000000000001" (reference "ANT TVS") (unit 1))))
   )
-  (wire (pts (xy 429.26 425.45) (xy 425.45 425.45)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-00000000114e"))
-  (global_label "GND" (shape passive) (at 425.45 425.45 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "49030000-0000-0000-0000-00000000114f"))
-  (wire (pts (xy 429.26 427.99) (xy 425.45 427.99)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-000000001150"))
-  (global_label "ANT" (shape passive) (at 425.45 427.99 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "49030000-0000-0000-0000-000000001151"))
-  (wire (pts (xy 429.26 430.53) (xy 425.45 430.53)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-000000001152"))
-  (global_label "GND" (shape passive) (at 425.45 430.53 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "49030000-0000-0000-0000-000000001153"))
-  (wire (pts (xy 459.74 425.45) (xy 463.55 425.45)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-000000001154"))
-  (global_label "GND" (shape passive) (at 463.55 425.45 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "49030000-0000-0000-0000-000000001155"))
-  (wire (pts (xy 459.74 427.99) (xy 463.55 427.99)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-000000001156"))
-  (global_label "RF_TX" (shape passive) (at 463.55 427.99 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "49030000-0000-0000-0000-000000001157"))
-  (wire (pts (xy 459.74 430.53) (xy 463.55 430.53)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-000000001158"))
-  (global_label "GND" (shape passive) (at 463.55 430.53 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "49030000-0000-0000-0000-000000001159"))
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   (symbol (lib_id "Commo:S_SMA_ESD") (at 539.75 429.26 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "49030000-0000-0000-0000-00000000115a")
     (property "Reference" "SMA ESD" (at 539.75 424.18 0) (effects (font (size 1.27 1.27))))
@@ -2258,10 +2307,12 @@
   (global_label "UART_RX_MUX" (shape passive) (at 82.55 731.52 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "49030000-0000-0000-0000-0000000011ed"))
   (wire (pts (xy 78.74 734.06) (xy 82.55 734.06)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-0000000011ee"))
   (global_label "UART_49MHZ_XCVR_TX" (shape passive) (at 82.55 734.06 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "49030000-0000-0000-0000-0000000011ef"))
-  (symbol (lib_id "Commo:S_UART_TVS") (at 158.75 734.06 0) (unit 1)
+  (symbol (lib_id "SecureControllers:PRTR5V0U2X") (at 158.75 734.06 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "49030000-0000-0000-0000-0000000011f0")
+    (property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf" (at 158.75 734.06 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-143" (at 158.75 734.06 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Reference" "UART TVS" (at 158.75 726.44 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "PRTR5V0U2X  Dual TVS 5.5V  UART-TX/RX ESD" (at 158.75 741.68 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "PRTR5V0U2X" (at 158.75 741.68 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "49030000-0000-0000-0000-0000000011f1"))
     (pin "2" (uuid "49030000-0000-0000-0000-0000000011f2"))
     (pin "3" (uuid "49030000-0000-0000-0000-0000000011f3"))
@@ -2270,18 +2321,18 @@
     (pin "6" (uuid "49030000-0000-0000-0000-0000000011f6"))
     (instances (project "Commo" (path "/49030000-0000-0000-0000-000000000001" (reference "UART TVS") (unit 1))))
   )
-  (wire (pts (xy 143.51 730.25) (xy 139.70 730.25)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-0000000011f7"))
-  (global_label "GND" (shape passive) (at 139.70 730.25 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "49030000-0000-0000-0000-0000000011f8"))
-  (wire (pts (xy 143.51 732.79) (xy 139.70 732.79)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-0000000011f9"))
-  (global_label "UART_49MHZ_XCVR_RX" (shape passive) (at 139.70 732.79 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "49030000-0000-0000-0000-0000000011fa"))
-  (wire (pts (xy 143.51 735.33) (xy 139.70 735.33)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-0000000011fb"))
-  (global_label "GND" (shape passive) (at 139.70 735.33 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "49030000-0000-0000-0000-0000000011fc"))
-  (wire (pts (xy 173.99 730.25) (xy 177.80 730.25)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-0000000011fd"))
-  (global_label "GND" (shape passive) (at 177.80 730.25 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "49030000-0000-0000-0000-0000000011fe"))
-  (wire (pts (xy 173.99 732.79) (xy 177.80 732.79)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-0000000011ff"))
-  (global_label "UART_49MHZ_XCVR_TX" (shape passive) (at 177.80 732.79 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "49030000-0000-0000-0000-000000001200"))
-  (wire (pts (xy 173.99 735.33) (xy 177.80 735.33)) (stroke (width 0) (type default)) (uuid "49030000-0000-0000-0000-000000001201"))
-  (global_label "GND" (shape passive) (at 177.80 735.33 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "49030000-0000-0000-0000-000000001202"))
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   (symbol (lib_id "Commo:S_TX_Bead") (at 254.00 734.06 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "49030000-0000-0000-0000-000000001203")
     (property "Reference" "TX Bead" (at 254.00 728.98 0) (effects (font (size 1.27 1.27))))
@@ -3240,4 +3291,28 @@
   (global_label "PA_INT" (shape bidirectional) (at 254.0000 236.2200 90)
     (effects (font (size 1.27 1.27)))
     (uuid "d5f24463-394f-42d6-a197-81edd7ce78f9"))
+  (global_label "ANT" (shape bidirectional) (at 434.3400 424.1800 180)
+    (effects (font (size 1.27 1.27)))
+    (uuid "31494ac8-500a-44c1-9db5-156bf2e0a3f9"))
+  (global_label "RF_TX" (shape bidirectional) (at 434.3400 426.7200 180)
+    (effects (font (size 1.27 1.27)))
+    (uuid "9f8a8452-7a48-4d3e-9739-7581d71e6f88"))
+  (global_label "GND" (shape bidirectional) (at 444.5000 439.4200 270)
+    (effects (font (size 1.27 1.27)))
+    (uuid "85d9d9e6-77f6-4283-8993-55c6f5a2a91c"))
+  (global_label "GND" (shape bidirectional) (at 444.5000 419.1000 90)
+    (effects (font (size 1.27 1.27)))
+    (uuid "6269e1c8-eeb3-4518-8f0c-21b223b444e3"))
+  (global_label "UART_49MHZ_XCVR_RX" (shape bidirectional) (at 148.5900 728.9800 180)
+    (effects (font (size 1.27 1.27)))
+    (uuid "32727a16-4bc8-4b8f-9dff-e150f3aa0f94"))
+  (global_label "UART_49MHZ_XCVR_TX" (shape bidirectional) (at 148.5900 731.5200 180)
+    (effects (font (size 1.27 1.27)))
+    (uuid "99548b90-ca3a-4eb0-821c-2408520c2b6f"))
+  (global_label "GND" (shape bidirectional) (at 158.7500 744.2200 270)
+    (effects (font (size 1.27 1.27)))
+    (uuid "dab95471-a280-453e-b0f0-c057509e7b29"))
+  (global_label "GND" (shape bidirectional) (at 158.7500 723.9000 90)
+    (effects (font (size 1.27 1.27)))
+    (uuid "4b696eeb-bcfe-4ad2-a1d9-b14b5fe5a046"))
   )

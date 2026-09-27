@@ -599,23 +599,7 @@
         (pin passive line (at 19.05 1.27 180) (length 2.54) (name "B" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "FlightEngineer:S_D_I2C" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "U" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "PRTR5V0U2X" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
-      (property "Footprint" "Package_TO_SOT_SMD:SOT-363_SC-70-6" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "prtr5v0u2x.pdf — I2C line RF transient protection at enclosure wall" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_D_I2C_0_1"
-        (rectangle (start -16.51 6.35) (end 16.51 -6.35) (stroke (width 0.2540) (type default)) (fill (type background)))
-      )
-      (symbol "S_D_I2C_1_1"
-        (pin passive line (at -19.05 3.81 0) (length 2.54) (name "IO1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-        (pin power_in line (at -19.05 1.27 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -1.27 0) (length 2.54) (name "IO2" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 3.81 180) (length 2.54) (name "NC" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 1.27 180) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -1.27 180) (length 2.54) (name "NC" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
-      )
-    )
+    
     (symbol "FlightEngineer:S_J_BAL" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 8.89 0) (effects (font (size 1.27 1.27))))
       (property "Value" "XH-7P" (at 0 -8.89 0) (effects (font (size 1.27 1.27))))
@@ -2425,6 +2409,81 @@
 		)
 		(embedded_fonts no)
 	)
+    (symbol "SecureControllers:PRTR5V0U2X"
+		(pin_names (offset 1.016))
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "D"
+			(at -7.62 8.89 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "PRTR5V0U2X"
+			(at -7.62 -8.89 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-143"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "Description" "Dual-line ESD protection, rail-to-rail clamp to VCC, SOT143B"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "Manufacturer" "Nexperia"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "MPN" "PRTR5V0U2X"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "ki_keywords" "ESD TVS rail clamp USB CAN RS485 I2C"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "ki_fp_filters" "SOT?143*"
+			(at 0.00 0.00 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(symbol "PRTR5V0U2X_0_1"
+			(rectangle (start -7.62 7.62) (end 7.62 -7.62)
+				(stroke (width 0.254) (type default))
+				(fill (type background))
+			)
+		)
+		(symbol "PRTR5V0U2X_1_1"
+			(pin passive line
+				(at -10.16 5.08 0)
+				(length 2.54)
+				(name "IO1" (effects (font (size 1.27 1.27))))
+				(number "2" (effects (font (size 1.27 1.27))))
+			)
+			(pin passive line
+				(at -10.16 2.54 0)
+				(length 2.54)
+				(name "IO2" (effects (font (size 1.27 1.27))))
+				(number "3" (effects (font (size 1.27 1.27))))
+			)
+			(pin passive line
+				(at 0.00 10.16 270)
+				(length 2.54)
+				(name "VCC" (effects (font (size 1.27 1.27))))
+				(number "4" (effects (font (size 1.27 1.27))))
+			)
+			(pin passive line
+				(at 0.00 -10.16 90)
+				(length 2.54)
+				(name "GND" (effects (font (size 1.27 1.27))))
+				(number "1" (effects (font (size 1.27 1.27))))
+			)
+		)
+		(embedded_fonts no)
+	)
   )
   (symbol (lib_id "FlightEngineer:S_U_IS_MAIN") (at 76.20 86.36 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "fe000000-0000-0000-0000-000000000003")
@@ -3434,12 +3493,12 @@
   (global_label "SHUNT_MAIN_N" (shape passive) (at 181.61 396.24 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "fe000000-0000-0000-0000-000000000784"))
   (wire (pts (xy 222.25 396.24) (xy 224.79 396.24)) (stroke (width 0) (type default)) (uuid "fe000000-0000-0000-0000-000000000785"))
   (global_label "VDIS" (shape passive) (at 224.79 396.24 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "fe000000-0000-0000-0000-000000000786"))
-  (symbol (lib_id "FlightEngineer:S_D_I2C") (at 203.20 422.91 0) (unit 1)
+  (symbol (lib_id "SecureControllers:PRTR5V0U2X") (at 203.20 422.91 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "fe000000-0000-0000-0000-000000000787")
     (property "Reference" "D_I2C" (at 203.20 415.29 0) (effects (font (size 1.27 1.27))))
     (property "Value" "PRTR5V0U2X" (at 203.20 430.53 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "Package_TO_SOT_SMD:SOT-363_SC-70-6" (at 203.20 422.91 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Datasheet" "prtr5v0u2x.pdf — I2C line RF transient protection at enclosure wall" (at 203.20 422.91 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-143" (at 203.20 422.91 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf" (at 203.20 422.91 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "MPN" "PRTR5V0U2X,115" (at 203.20 422.91 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (pin "1" (uuid "fe000000-0000-0000-0000-000000000788"))
     (pin "2" (uuid "fe000000-0000-0000-0000-000000000789"))
@@ -3449,16 +3508,16 @@
     (pin "6" (uuid "fe000000-0000-0000-0000-000000000793"))
     (instances (project "FlightEngineer" (path "/fe000000-0000-0000-0000-000000000001" (reference "D_I2C") (unit 1))))
   )
-  (wire (pts (xy 184.15 419.10) (xy 181.61 419.10)) (stroke (width 0) (type default)) (uuid "fe000000-0000-0000-0000-000000000794"))
-  (global_label "I2C_SCL" (shape passive) (at 181.61 419.10 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "fe000000-0000-0000-0000-000000000795"))
-  (wire (pts (xy 184.15 421.64) (xy 181.61 421.64)) (stroke (width 0) (type default)) (uuid "fe000000-0000-0000-0000-000000000796"))
-  (global_label "PGND" (shape passive) (at 181.61 421.64 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "fe000000-0000-0000-0000-000000000797"))
-  (wire (pts (xy 184.15 424.18) (xy 181.61 424.18)) (stroke (width 0) (type default)) (uuid "fe000000-0000-0000-0000-000000000798"))
-  (global_label "I2C_SDA" (shape passive) (at 181.61 424.18 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "fe000000-0000-0000-0000-000000000799"))
-  (no_connect (at 222.25 419.10) (uuid "fe000000-0000-0000-0000-000000000800"))
-  (wire (pts (xy 222.25 421.64) (xy 224.79 421.64)) (stroke (width 0) (type default)) (uuid "fe000000-0000-0000-0000-000000000801"))
-  (global_label "+5V" (shape passive) (at 224.79 421.64 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "fe000000-0000-0000-0000-000000000802"))
-  (no_connect (at 222.25 424.18) (uuid "fe000000-0000-0000-0000-000000000803"))
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   (symbol (lib_id "FlightEngineer:S_J_BAL") (at 203.20 452.12 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "fe000000-0000-0000-0000-000000000804")
     (property "Reference" "J_BAL" (at 203.20 443.23 0) (effects (font (size 1.27 1.27))))
@@ -5520,5 +5579,17 @@
   (global_label "PGND" (shape bidirectional) (at 850.9000 276.8600 270)
     (effects (font (size 1.27 1.27)))
     (uuid "66f0afd3-9039-4455-9ef4-6747ab1f4374"))
+  (global_label "I2C_SCL" (shape bidirectional) (at 193.0400 417.8300 180)
+    (effects (font (size 1.27 1.27)))
+    (uuid "6ca5acd4-7132-436d-a231-32b6bbcde711"))
+  (global_label "I2C_SDA" (shape bidirectional) (at 193.0400 420.3700 180)
+    (effects (font (size 1.27 1.27)))
+    (uuid "cee086ee-38bf-4fc2-b94d-4a0cd93b5f04"))
+  (global_label "PGND" (shape bidirectional) (at 203.2000 433.0700 270)
+    (effects (font (size 1.27 1.27)))
+    (uuid "97330ab3-f918-4e69-a208-ef49b375dc3e"))
+  (global_label "+5V" (shape bidirectional) (at 203.2000 412.7500 90)
+    (effects (font (size 1.27 1.27)))
+    (uuid "78b3d4d6-7fba-4175-8a29-bf7e9e50eca9"))
   (sheet_instances (path "/" (page "1")))
 )
