@@ -2,9 +2,9 @@
   (paper "User" 841.00 1200.78)
   (uuid "49030000-0000-0000-0000-000000000001")
   (title_block
-    (title "Commo — 49 MHz AX.25 + LoRa 915 MHz Transceiver Cape (Rev S1)")
-    (date "2026-07-04") (rev "S1") (company "Griffing Technology LLC")
-    (comment 1 "Schematic-first reconciliation: authored to match Commo.kicad_pcb (J1 dropped; UART on PB2 rails; PTT_N + RSSI_DCD on gated payload GPIOs)")
+    (title "Commo — 49 MHz AX.25 + SiK 915 MHz (RFD900ux-SMT) Transceiver Cape (Rev S2)")
+    (date "2026-09-21") (rev "S2") (company "Griffing Technology LLC")
+    (comment 1 "Schematic-first reconciliation: authored to match Commo.kicad_pcb (J1 dropped; UART on PB2 rails; PTT_N + RSSI_DCD on gated payload GPIOs). 2026-09-21: LoRa (RFM95W) removed, replaced by SiK (RFD900ux-SMT) relocated from XO/TACCO -- see avionics/WBS.md sec1.2a.")
     (comment 2 "Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  |  AI-assist: Claude Opus 4.8 (Anthropic)")
   )
   (lib_symbols

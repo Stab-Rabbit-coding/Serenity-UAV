@@ -203,7 +203,7 @@
       (property "Reference" "U" (at 0 10.16 0) (effects (font (size 1.27 1.27))))
       (property "Value" "TPS63031DSKR" (at 0 -10.16 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Serenity-Custom:TPS6303x_VSON-10_2p5" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "tps63031.pdf Pin Functions (VSON-10 DSK) — dedicated buck-boost RF rail so WIFI-BT-ZB (AVDD33)/RFM95W/RFD900x RF supply stays regulated even if +5V sags (XO.md §12 power budget +3V3_RF 1.5A cont / 2.0A peak)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Datasheet" "tps63031.pdf Pin Functions (VSON-10 DSK) — dedicated buck-boost RF rail so WIFI-BT-ZB (AVDD33)/WIOE5 mLRS RF supply stays regulated even if +5V sags (TACCO.md §12 power budget +3V3_RF 1.5A cont / 2.0A peak)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (symbol "S_U-3V3RF_0_1"
         (rectangle (start -16.51 8.89) (end 16.51 -8.89) (stroke (width 0.2540) (type default)) (fill (type background)))
       )

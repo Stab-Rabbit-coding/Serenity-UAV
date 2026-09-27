@@ -1,0 +1,1362 @@
+{
+  "analyzer_type": "emc",
+  "schema_version": "1.3.0",
+  "summary": {
+    "total_findings": 19,
+    "categories_checked": 6,
+    "active": 19,
+    "suppressed": 0,
+    "by_severity": {
+      "error": 4,
+      "warning": 8,
+      "info": 7
+    },
+    "emc_risk_score": 67.0
+  },
+  "target_standard": "fcc-class-b",
+  "findings": [
+    {
+      "category": "ground_plane",
+      "severity": "info",
+      "rule_id": "GP-001",
+      "confidence": "deterministic",
+      "title": "Return path analysis data not available",
+      "description": "PCB analysis did not include return path continuity data. Run the PCB analyzer with --full flag to enable GP-001 reference plane coverage checking.",
+      "components": [],
+      "nets": [],
+      "recommendation": "Re-run PCB analysis with: python3 analyze_pcb.py <file> --full",
+      "detector": "emc_ground_plane",
+      "summary": "Return path analysis data not available",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Ground Plane",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "ground_plane",
+      "severity": "warning",
+      "rule_id": "GP-005",
+      "confidence": "deterministic",
+      "title": "4 ground domains detected",
+      "description": "Board has 4 separate ground domains: ?, ?, ?, ?. Multiple ground domains require careful single-point connection to avoid ground loops and EMI.",
+      "components": [],
+      "nets": [
+        "?",
+        "?",
+        "?",
+        "?"
+      ],
+      "recommendation": "Verify ground domains connect at a single, intentional point (typically near the ADC for analog/digital split). Ensure no signal traces cross the domain boundary.",
+      "detector": "emc_ground_plane",
+      "summary": "4 ground domains detected",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Ground Plane",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on PB2-P2",
+      "description": "PB2-P2 (PB2I-P2-2x18) has 1 ground pin(s) for 31 signal pins. Recommended: at least 8 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "PB2-P2"
+      ],
+      "nets": [],
+      "recommendation": "Ensure PB2-P2 has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on PB2-P2",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on PB2-P1",
+      "description": "PB2-P1 (PB2I-P1-2x18) has 3 ground pin(s) for 25 signal pins. Recommended: at least 7 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "PB2-P1"
+      ],
+      "nets": [],
+      "recommendation": "Ensure PB2-P1 has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on PB2-P1",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on J-ETH",
+      "description": "J-ETH (SM04B-GHS-TB) has 1 ground pin(s) for 4 signal pins. Recommended: at least 2 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "J-ETH"
+      ],
+      "nets": [],
+      "recommendation": "Ensure J-ETH has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on J-ETH",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "via_stitching",
+      "severity": "warning",
+      "rule_id": "VS-001",
+      "confidence": "heuristic",
+      "title": "Via stitching may be insufficient",
+      "description": "Board has 0 vias across 1925 mm\u00b2 (no vias detected). For the highest frequency on this board (150 MHz), \u03bb/20 stitching requires \u226448mm spacing.",
+      "components": [],
+      "nets": [],
+      "recommendation": "Add ground stitching vias at \u226448mm intervals, especially at board edges and near connectors.",
+      "detector": "emc_via_stitching",
+      "summary": "Via stitching may be insufficient",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Via Stitching",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "emission_estimate",
+      "severity": "info",
+      "rule_id": "EE-001",
+      "confidence": "heuristic",
+      "title": "Board cavity resonance frequencies",
+      "description": "Board (55\u00d735mm, \u03b5r=4.4) cavity resonances: (1,0) at 1299 MHz; (0,1) at 2042 MHz; (1,1) at 2420 MHz; (2,0) at 2599 MHz. PDN impedance spikes at these frequencies. Ensure adequate decoupling at and around these frequencies.",
+      "components": [],
+      "nets": [],
+      "recommendation": "Add decoupling capacitors with SRF near these frequencies.",
+      "detector": "emc_emission_estimate",
+      "summary": "Board cavity resonance frequencies",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Emission Estimate",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "schematic"
+      ]
+    },
+    {
+      "category": "esd_path",
+      "severity": "warning",
+      "rule_id": "ES-001",
+      "confidence": "heuristic",
+      "title": "ESD device TVS-CAN far from connector J-FAN",
+      "description": "TVS-CAN (esd_ic) is 21.0mm from J-FAN. Estimated pre-TVS trace inductance: ~15nH \u2192 ~551V overshoot during 8kV ESD strike (dI/dt = 37.5 GA/s). Recommended: <10mm.",
+      "components": [
+        "TVS-CAN",
+        "J-FAN"
+      ],
+      "nets": [],
+      "recommendation": "Move TVS-CAN closer to J-FAN. The ESD current path from connector to TVS should be as short as possible.",
+      "detector": "emc_esd_path",
+      "summary": "ESD device TVS-CAN far from connector J-FAN",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Esd Path",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "fix_params": {
+        "type": "add_protection",
+        "components": [
+          {
+            "type": "tvs_diode"
+          }
+        ],
+        "basis": "ESD protection on external pins"
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "esd_path",
+      "severity": "warning",
+      "rule_id": "ES-001",
+      "confidence": "heuristic",
+      "title": "ESD device TVS-RS485 far from connector J-FAN",
+      "description": "TVS-RS485 (esd_ic) is 24.0mm from J-FAN. Estimated pre-TVS trace inductance: ~17nH \u2192 ~630V overshoot during 8kV ESD strike (dI/dt = 37.5 GA/s). Recommended: <10mm.",
+      "components": [
+        "TVS-RS485",
+        "J-FAN"
+      ],
+      "nets": [],
+      "recommendation": "Move TVS-RS485 closer to J-FAN. The ESD current path from connector to TVS should be as short as possible.",
+      "detector": "emc_esd_path",
+      "summary": "ESD device TVS-RS485 far from connector J-FAN",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Esd Path",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "fix_params": {
+        "type": "add_protection",
+        "components": [
+          {
+            "type": "tvs_diode"
+          }
+        ],
+        "basis": "ESD protection on external pins"
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "switching_emc",
+      "severity": "error",
+      "rule_id": "SW-001",
+      "confidence": "heuristic",
+      "title": "U-1V8RF harmonics in 30-88 MHz band",
+      "description": "U-1V8RF (TPS62933DRLR) switching at 2.2 MHz has 27 harmonics in the 30-88 MHz band (harmonics 14-40). Envelope rolloff at 32 MHz (-40 dB/decade above).",
+      "components": [
+        "U-1V8RF"
+      ],
+      "nets": [],
+      "recommendation": "Minimize switching loop area for U-1V8RF. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+      "detector": "emc_switching_emc",
+      "summary": "U-1V8RF harmonics in 30-88 MHz band",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Switching Emc",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "switching_emc",
+      "severity": "warning",
+      "rule_id": "SW-001",
+      "confidence": "heuristic",
+      "title": "U-1V8RF harmonics in 88-216 MHz band",
+      "description": "U-1V8RF (TPS62933DRLR) switching at 2.2 MHz has 59 harmonics in the 88-216 MHz band (harmonics 40-98). Envelope rolloff at 32 MHz (-40 dB/decade above).",
+      "components": [
+        "U-1V8RF"
+      ],
+      "nets": [],
+      "recommendation": "Minimize switching loop area for U-1V8RF. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+      "detector": "emc_switching_emc",
+      "summary": "U-1V8RF harmonics in 88-216 MHz band",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Switching Emc",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "switching_emc",
+      "severity": "warning",
+      "rule_id": "SW-001",
+      "confidence": "heuristic",
+      "title": "U-1V8RF harmonics in 216-960 MHz band",
+      "description": "U-1V8RF (TPS62933DRLR) switching at 2.2 MHz has 338 harmonics in the 216-960 MHz band (harmonics 99-436). Envelope rolloff at 32 MHz (-40 dB/decade above).",
+      "components": [
+        "U-1V8RF"
+      ],
+      "nets": [],
+      "recommendation": "Minimize switching loop area for U-1V8RF. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+      "detector": "emc_switching_emc",
+      "summary": "U-1V8RF harmonics in 216-960 MHz band",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Switching Emc",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "switching_emc",
+      "severity": "error",
+      "rule_id": "SW-001",
+      "confidence": "heuristic",
+      "title": "U-3V3 harmonics in 30-88 MHz band",
+      "description": "U-3V3 (TPS62933DRLR) switching at 2.2 MHz has 27 harmonics in the 30-88 MHz band (harmonics 14-40). Envelope rolloff at 32 MHz (-40 dB/decade above).",
+      "components": [
+        "U-3V3"
+      ],
+      "nets": [],
+      "recommendation": "Minimize switching loop area for U-3V3. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+      "detector": "emc_switching_emc",
+      "summary": "U-3V3 harmonics in 30-88 MHz band",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Switching Emc",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "switching_emc",
+      "severity": "warning",
+      "rule_id": "SW-001",
+      "confidence": "heuristic",
+      "title": "U-3V3 harmonics in 88-216 MHz band",
+      "description": "U-3V3 (TPS62933DRLR) switching at 2.2 MHz has 59 harmonics in the 88-216 MHz band (harmonics 40-98). Envelope rolloff at 32 MHz (-40 dB/decade above).",
+      "components": [
+        "U-3V3"
+      ],
+      "nets": [],
+      "recommendation": "Minimize switching loop area for U-3V3. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+      "detector": "emc_switching_emc",
+      "summary": "U-3V3 harmonics in 88-216 MHz band",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Switching Emc",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "switching_emc",
+      "severity": "warning",
+      "rule_id": "SW-001",
+      "confidence": "heuristic",
+      "title": "U-3V3 harmonics in 216-960 MHz band",
+      "description": "U-3V3 (TPS62933DRLR) switching at 2.2 MHz has 338 harmonics in the 216-960 MHz band (harmonics 99-436). Envelope rolloff at 32 MHz (-40 dB/decade above).",
+      "components": [
+        "U-3V3"
+      ],
+      "nets": [],
+      "recommendation": "Minimize switching loop area for U-3V3. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+      "detector": "emc_switching_emc",
+      "summary": "U-3V3 harmonics in 216-960 MHz band",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Switching Emc",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "emission_estimate",
+      "severity": "info",
+      "rule_id": "EE-002",
+      "confidence": "heuristic",
+      "title": "U-1V8RF harmonic envelope",
+      "description": "U-1V8RF (TPS62933DRLR) switching at 2.20 MHz, duty \u224850%. Harmonic envelope: flat to 1.4 MHz, -20 dB/dec to 32 MHz, -40 dB/dec above. Harmonics extend into FCC test range starting at 13th harmonic.",
+      "components": [
+        "U-1V8RF"
+      ],
+      "nets": [],
+      "recommendation": "Minimize the hot loop area (input cap \u2192 high-side switch \u2192 inductor \u2192 low-side switch \u2192 input cap). Every halving of loop area reduces emissions by 6 dB.",
+      "detector": "emc_emission_estimate",
+      "summary": "U-1V8RF harmonic envelope",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Emission Estimate",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "schematic"
+      ]
+    },
+    {
+      "category": "emission_estimate",
+      "severity": "info",
+      "rule_id": "EE-002",
+      "confidence": "heuristic",
+      "title": "U-3V3 harmonic envelope",
+      "description": "U-3V3 (TPS62933DRLR) switching at 2.20 MHz, duty \u224850%. Harmonic envelope: flat to 1.4 MHz, -20 dB/dec to 32 MHz, -40 dB/dec above. Harmonics extend into FCC test range starting at 13th harmonic.",
+      "components": [
+        "U-3V3"
+      ],
+      "nets": [],
+      "recommendation": "Minimize the hot loop area (input cap \u2192 high-side switch \u2192 inductor \u2192 low-side switch \u2192 input cap). Every halving of loop area reduces emissions by 6 dB.",
+      "detector": "emc_emission_estimate",
+      "summary": "U-3V3 harmonic envelope",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Emission Estimate",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "schematic"
+      ]
+    },
+    {
+      "category": "switching_emc",
+      "severity": "error",
+      "rule_id": "SW-003",
+      "confidence": "heuristic",
+      "title": "Large hot loop for U-1V8RF",
+      "description": "U-1V8RF (TPS62933DRLR) hot loop area \u2248 134mm\u00b2 (triangle: C-IN2 \u2192 U-1V8RF \u2192 L-1V8RF). Recommended: <25mm\u00b2 for low EMI.",
+      "components": [
+        "U-1V8RF",
+        "L-1V8RF",
+        "C-IN2"
+      ],
+      "nets": [
+        "SW_1V8RF"
+      ],
+      "recommendation": "Place C-IN2, U-1V8RF, and L-1V8RF in a tight triangle. Minimize trace length between them. Input cap should be adjacent to the IC with the inductor on the opposite side.",
+      "detector": "emc_switching_emc",
+      "summary": "Large hot loop for U-1V8RF",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Switching Emc",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "switching_emc",
+      "severity": "error",
+      "rule_id": "SW-003",
+      "confidence": "heuristic",
+      "title": "Large hot loop for U-3V3",
+      "description": "U-3V3 (TPS62933DRLR) hot loop area \u2248 223mm\u00b2 (triangle: C-IN2 \u2192 U-3V3 \u2192 L-3V3). Recommended: <25mm\u00b2 for low EMI.",
+      "components": [
+        "U-3V3",
+        "L-3V3",
+        "C-IN2"
+      ],
+      "nets": [
+        "SW_3V3"
+      ],
+      "recommendation": "Place C-IN2, U-3V3, and L-3V3 in a tight triangle. Minimize trace length between them. Input cap should be adjacent to the IC with the inductor on the opposite side.",
+      "detector": "emc_switching_emc",
+      "summary": "Large hot loop for U-3V3",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Switching Emc",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    }
+  ],
+  "per_net_scores": [
+    {
+      "net": "?",
+      "score": 88.0,
+      "finding_count": 4,
+      "rules": [
+        "GP-005"
+      ]
+    },
+    {
+      "net": "SW_1V8RF",
+      "score": 94.0,
+      "finding_count": 1,
+      "rules": [
+        "SW-003"
+      ]
+    },
+    {
+      "net": "SW_3V3",
+      "score": 94.0,
+      "finding_count": 1,
+      "rules": [
+        "SW-003"
+      ]
+    }
+  ],
+  "test_plan": {
+    "frequency_bands": [
+      {
+        "band": "30-88 MHz",
+        "freq_min_hz": 30000000.0,
+        "freq_max_hz": 88000000.0,
+        "risk_level": "medium",
+        "source_count": 2,
+        "sources": [
+          "U-1V8RF (TPS62933DRLR) harmonics 14-40",
+          "U-3V3 (TPS62933DRLR) harmonics 14-40"
+        ]
+      },
+      {
+        "band": "88-216 MHz",
+        "freq_min_hz": 88000000.0,
+        "freq_max_hz": 216000000.0,
+        "risk_level": "medium",
+        "source_count": 2,
+        "sources": [
+          "U-1V8RF (TPS62933DRLR) harmonics 40-98",
+          "U-3V3 (TPS62933DRLR) harmonics 40-98"
+        ]
+      },
+      {
+        "band": "216-960 MHz",
+        "freq_min_hz": 216000000.0,
+        "freq_max_hz": 960000000.0,
+        "risk_level": "medium",
+        "source_count": 2,
+        "sources": [
+          "U-1V8RF (TPS62933DRLR) harmonics 99-436",
+          "U-3V3 (TPS62933DRLR) harmonics 99-436"
+        ]
+      },
+      {
+        "band": "960-40000 MHz",
+        "freq_min_hz": 960000000.0,
+        "freq_max_hz": 40000000000.0,
+        "risk_level": "medium",
+        "source_count": 2,
+        "sources": [
+          "U-1V8RF (TPS62933DRLR) harmonics 437-18181",
+          "U-3V3 (TPS62933DRLR) harmonics 437-18181"
+        ]
+      }
+    ],
+    "interface_risks": [
+      {
+        "connector": "PWR-IN",
+        "value": "Nano-Fit 4P",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-CAN",
+        "value": "SM03B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-ANT-RADIO",
+        "value": "MMCX vertical",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-ANT-WIOE5",
+        "value": "MMCX vertical",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-WIOE5-SWD",
+        "value": "SM04B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-FAN",
+        "value": "SM03B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-1553",
+        "value": "SM04B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-485",
+        "value": "SM03B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PB2-P2",
+        "value": "PB2I-P2-2x18",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PB2-P1",
+        "value": "PB2I-P1-2x18",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-SD",
+        "value": "microSD push-pull",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-ETH",
+        "value": "SM04B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      }
+    ],
+    "probe_points": [
+      {
+        "x": 196.0,
+        "y": 97.5,
+        "type": "inductor",
+        "ref": "L-RF2",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 161.4,
+        "y": 94.6,
+        "type": "inductor",
+        "ref": "L-WIOE5-SER",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 132.2,
+        "y": 93.0,
+        "type": "inductor",
+        "ref": "L-ANT-SER",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 172.8,
+        "y": 106.4,
+        "type": "inductor",
+        "ref": "L-1V8RF",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 139.0,
+        "y": 114.6,
+        "type": "inductor",
+        "ref": "L-3V3",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 193.0,
+        "y": 97.5,
+        "type": "inductor",
+        "ref": "L-RF1",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 168.4,
+        "y": 94.3,
+        "type": "crystal",
+        "ref": "X-25M",
+        "reason": "Crystal/oscillator \u2014 clock harmonics source"
+      },
+      {
+        "x": 158.8,
+        "y": 94.4,
+        "type": "crystal",
+        "ref": "X2Y-CAN",
+        "reason": "Crystal/oscillator \u2014 clock harmonics source"
+      },
+      {
+        "x": 165.1,
+        "y": 115.4,
+        "type": "crystal",
+        "ref": "X2Y-RS485",
+        "reason": "Crystal/oscillator \u2014 clock harmonics source"
+      }
+    ]
+  },
+  "regulatory_coverage": {
+    "market": "us",
+    "applicable_standards": [
+      "FCC Part 15 Class B",
+      "FCC Part 15 Class B"
+    ],
+    "coverage_matrix": [
+      {
+        "standard": "FCC Part 15 Class B",
+        "test_type": "radiated",
+        "coverage": "minimal",
+        "checked_rules": [
+          "GP-001",
+          "GP-005",
+          "SW-001",
+          "VS-001",
+          "EE-001",
+          "EE-002"
+        ],
+        "total_applicable_rules": 23,
+        "note": "Design rule checks identify common radiation sources. Cannot predict absolute emission levels."
+      },
+      {
+        "standard": "FCC Part 15 Class B",
+        "test_type": "conducted",
+        "coverage": "partial",
+        "checked_rules": [
+          "SW-001",
+          "EE-002"
+        ],
+        "total_applicable_rules": 4,
+        "note": "Switching harmonic analysis and decoupling checks. EMI filter verification not yet implemented."
+      }
+    ]
+  },
+  "category_summary": {
+    "ground_plane": {
+      "count": 2,
+      "max_severity": "warning",
+      "severities": {
+        "error": 0,
+        "warning": 1,
+        "info": 1
+      },
+      "suppressed_count": 0
+    },
+    "io_filtering": {
+      "count": 3,
+      "max_severity": "info",
+      "severities": {
+        "error": 0,
+        "warning": 0,
+        "info": 3
+      },
+      "suppressed_count": 0
+    },
+    "via_stitching": {
+      "count": 1,
+      "max_severity": "warning",
+      "severities": {
+        "error": 0,
+        "warning": 1,
+        "info": 0
+      },
+      "suppressed_count": 0
+    },
+    "emission_estimate": {
+      "count": 3,
+      "max_severity": "info",
+      "severities": {
+        "error": 0,
+        "warning": 0,
+        "info": 3
+      },
+      "suppressed_count": 0
+    },
+    "esd_path": {
+      "count": 2,
+      "max_severity": "warning",
+      "severities": {
+        "error": 0,
+        "warning": 2,
+        "info": 0
+      },
+      "suppressed_count": 0
+    },
+    "switching_emc": {
+      "count": 8,
+      "max_severity": "error",
+      "severities": {
+        "error": 4,
+        "warning": 4,
+        "info": 0
+      },
+      "suppressed_count": 0
+    }
+  },
+  "board_info": {
+    "board_width_mm": 55.0,
+    "board_height_mm": 35.0,
+    "layer_count": 6,
+    "footprint_count": 143,
+    "via_count": 0,
+    "has_stackup": false,
+    "total_components": 143,
+    "total_nets": 250,
+    "switching_frequencies_hz": [
+      2200000.0
+    ]
+  },
+  "elapsed_s": 0.011,
+  "audience_summary": {
+    "designer": {
+      "total_findings": 19,
+      "by_severity": {
+        "error": 4,
+        "warning": 8,
+        "info": 7
+      },
+      "by_category": {
+        "ground_plane": 2,
+        "io_filtering": 3,
+        "via_stitching": 1,
+        "emission_estimate": 3,
+        "esd_path": 2,
+        "switching_emc": 8
+      },
+      "top_issues": [
+        {
+          "category": "switching_emc",
+          "severity": "error",
+          "rule_id": "SW-001",
+          "confidence": "heuristic",
+          "title": "U-1V8RF harmonics in 30-88 MHz band",
+          "description": "U-1V8RF (TPS62933DRLR) switching at 2.2 MHz has 27 harmonics in the 30-88 MHz band (harmonics 14-40). Envelope rolloff at 32 MHz (-40 dB/decade above).",
+          "components": [
+            "U-1V8RF"
+          ],
+          "nets": [],
+          "recommendation": "Minimize switching loop area for U-1V8RF. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+          "detector": "emc_switching_emc",
+          "summary": "U-1V8RF harmonics in 30-88 MHz band",
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Switching Emc",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "switching_emc",
+          "severity": "error",
+          "rule_id": "SW-001",
+          "confidence": "heuristic",
+          "title": "U-3V3 harmonics in 30-88 MHz band",
+          "description": "U-3V3 (TPS62933DRLR) switching at 2.2 MHz has 27 harmonics in the 30-88 MHz band (harmonics 14-40). Envelope rolloff at 32 MHz (-40 dB/decade above).",
+          "components": [
+            "U-3V3"
+          ],
+          "nets": [],
+          "recommendation": "Minimize switching loop area for U-3V3. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+          "detector": "emc_switching_emc",
+          "summary": "U-3V3 harmonics in 30-88 MHz band",
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Switching Emc",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "switching_emc",
+          "severity": "error",
+          "rule_id": "SW-003",
+          "confidence": "heuristic",
+          "title": "Large hot loop for U-1V8RF",
+          "description": "U-1V8RF (TPS62933DRLR) hot loop area \u2248 134mm\u00b2 (triangle: C-IN2 \u2192 U-1V8RF \u2192 L-1V8RF). Recommended: <25mm\u00b2 for low EMI.",
+          "components": [
+            "U-1V8RF",
+            "L-1V8RF",
+            "C-IN2"
+          ],
+          "nets": [
+            "SW_1V8RF"
+          ],
+          "recommendation": "Place C-IN2, U-1V8RF, and L-1V8RF in a tight triangle. Minimize trace length between them. Input cap should be adjacent to the IC with the inductor on the opposite side.",
+          "detector": "emc_switching_emc",
+          "summary": "Large hot loop for U-1V8RF",
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Switching Emc",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "switching_emc",
+          "severity": "error",
+          "rule_id": "SW-003",
+          "confidence": "heuristic",
+          "title": "Large hot loop for U-3V3",
+          "description": "U-3V3 (TPS62933DRLR) hot loop area \u2248 223mm\u00b2 (triangle: C-IN2 \u2192 U-3V3 \u2192 L-3V3). Recommended: <25mm\u00b2 for low EMI.",
+          "components": [
+            "U-3V3",
+            "L-3V3",
+            "C-IN2"
+          ],
+          "nets": [
+            "SW_3V3"
+          ],
+          "recommendation": "Place C-IN2, U-3V3, and L-3V3 in a tight triangle. Minimize trace length between them. Input cap should be adjacent to the IC with the inductor on the opposite side.",
+          "detector": "emc_switching_emc",
+          "summary": "Large hot loop for U-3V3",
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Switching Emc",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "ground_plane",
+          "severity": "warning",
+          "rule_id": "GP-005",
+          "confidence": "deterministic",
+          "title": "4 ground domains detected",
+          "description": "Board has 4 separate ground domains: ?, ?, ?, ?. Multiple ground domains require careful single-point connection to avoid ground loops and EMI.",
+          "components": [],
+          "nets": [
+            "?",
+            "?",
+            "?",
+            "?"
+          ],
+          "recommendation": "Verify ground domains connect at a single, intentional point (typically near the ADC for analog/digital split). Ensure no signal traces cross the domain boundary.",
+          "detector": "emc_ground_plane",
+          "summary": "4 ground domains detected",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Ground Plane",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "via_stitching",
+          "severity": "warning",
+          "rule_id": "VS-001",
+          "confidence": "heuristic",
+          "title": "Via stitching may be insufficient",
+          "description": "Board has 0 vias across 1925 mm\u00b2 (no vias detected). For the highest frequency on this board (150 MHz), \u03bb/20 stitching requires \u226448mm spacing.",
+          "components": [],
+          "nets": [],
+          "recommendation": "Add ground stitching vias at \u226448mm intervals, especially at board edges and near connectors.",
+          "detector": "emc_via_stitching",
+          "summary": "Via stitching may be insufficient",
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Via Stitching",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "esd_path",
+          "severity": "warning",
+          "rule_id": "ES-001",
+          "confidence": "heuristic",
+          "title": "ESD device TVS-CAN far from connector J-FAN",
+          "description": "TVS-CAN (esd_ic) is 21.0mm from J-FAN. Estimated pre-TVS trace inductance: ~15nH \u2192 ~551V overshoot during 8kV ESD strike (dI/dt = 37.5 GA/s). Recommended: <10mm.",
+          "components": [
+            "TVS-CAN",
+            "J-FAN"
+          ],
+          "nets": [],
+          "recommendation": "Move TVS-CAN closer to J-FAN. The ESD current path from connector to TVS should be as short as possible.",
+          "detector": "emc_esd_path",
+          "summary": "ESD device TVS-CAN far from connector J-FAN",
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Esd Path",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "fix_params": {
+            "type": "add_protection",
+            "components": [
+              {
+                "type": "tvs_diode"
+              }
+            ],
+            "basis": "ESD protection on external pins"
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "pre_fab"
+          ]
+        },
+        {
+          "category": "esd_path",
+          "severity": "warning",
+          "rule_id": "ES-001",
+          "confidence": "heuristic",
+          "title": "ESD device TVS-RS485 far from connector J-FAN",
+          "description": "TVS-RS485 (esd_ic) is 24.0mm from J-FAN. Estimated pre-TVS trace inductance: ~17nH \u2192 ~630V overshoot during 8kV ESD strike (dI/dt = 37.5 GA/s). Recommended: <10mm.",
+          "components": [
+            "TVS-RS485",
+            "J-FAN"
+          ],
+          "nets": [],
+          "recommendation": "Move TVS-RS485 closer to J-FAN. The ESD current path from connector to TVS should be as short as possible.",
+          "detector": "emc_esd_path",
+          "summary": "ESD device TVS-RS485 far from connector J-FAN",
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Esd Path",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "fix_params": {
+            "type": "add_protection",
+            "components": [
+              {
+                "type": "tvs_diode"
+              }
+            ],
+            "basis": "ESD protection on external pins"
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "pre_fab"
+          ]
+        },
+        {
+          "category": "switching_emc",
+          "severity": "warning",
+          "rule_id": "SW-001",
+          "confidence": "heuristic",
+          "title": "U-1V8RF harmonics in 88-216 MHz band",
+          "description": "U-1V8RF (TPS62933DRLR) switching at 2.2 MHz has 59 harmonics in the 88-216 MHz band (harmonics 40-98). Envelope rolloff at 32 MHz (-40 dB/decade above).",
+          "components": [
+            "U-1V8RF"
+          ],
+          "nets": [],
+          "recommendation": "Minimize switching loop area for U-1V8RF. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+          "detector": "emc_switching_emc",
+          "summary": "U-1V8RF harmonics in 88-216 MHz band",
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Switching Emc",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "switching_emc",
+          "severity": "warning",
+          "rule_id": "SW-001",
+          "confidence": "heuristic",
+          "title": "U-1V8RF harmonics in 216-960 MHz band",
+          "description": "U-1V8RF (TPS62933DRLR) switching at 2.2 MHz has 338 harmonics in the 216-960 MHz band (harmonics 99-436). Envelope rolloff at 32 MHz (-40 dB/decade above).",
+          "components": [
+            "U-1V8RF"
+          ],
+          "nets": [],
+          "recommendation": "Minimize switching loop area for U-1V8RF. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+          "detector": "emc_switching_emc",
+          "summary": "U-1V8RF harmonics in 216-960 MHz band",
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Switching Emc",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        }
+      ]
+    },
+    "reviewer": {
+      "total_findings": 12,
+      "by_category": {
+        "ground_plane": 1,
+        "via_stitching": 1,
+        "esd_path": 2,
+        "switching_emc": 8
+      },
+      "top_issues": [
+        {
+          "rule_id": "SW-001",
+          "severity": "error",
+          "summary": "U-1V8RF harmonics in 30-88 MHz band",
+          "recommendation": "Minimize switching loop area for U-1V8RF. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+          "category": "switching_emc"
+        },
+        {
+          "rule_id": "SW-001",
+          "severity": "error",
+          "summary": "U-3V3 harmonics in 30-88 MHz band",
+          "recommendation": "Minimize switching loop area for U-3V3. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+          "category": "switching_emc"
+        },
+        {
+          "rule_id": "SW-003",
+          "severity": "error",
+          "summary": "Large hot loop for U-1V8RF",
+          "recommendation": "Place C-IN2, U-1V8RF, and L-1V8RF in a tight triangle. Minimize trace length between them. Input cap should be adjacent to the IC with the inductor on the opposite side.",
+          "category": "switching_emc"
+        },
+        {
+          "rule_id": "SW-003",
+          "severity": "error",
+          "summary": "Large hot loop for U-3V3",
+          "recommendation": "Place C-IN2, U-3V3, and L-3V3 in a tight triangle. Minimize trace length between them. Input cap should be adjacent to the IC with the inductor on the opposite side.",
+          "category": "switching_emc"
+        },
+        {
+          "rule_id": "GP-005",
+          "severity": "warning",
+          "summary": "4 ground domains detected",
+          "recommendation": "Verify ground domains connect at a single, intentional point (typically near the ADC for analog/digital split). Ensure no signal traces cross the domain boundary.",
+          "category": "ground_plane"
+        },
+        {
+          "rule_id": "VS-001",
+          "severity": "warning",
+          "summary": "Via stitching may be insufficient",
+          "recommendation": "Add ground stitching vias at \u226448mm intervals, especially at board edges and near connectors.",
+          "category": "via_stitching"
+        },
+        {
+          "rule_id": "ES-001",
+          "severity": "warning",
+          "summary": "ESD device TVS-CAN far from connector J-FAN",
+          "recommendation": "Move TVS-CAN closer to J-FAN. The ESD current path from connector to TVS should be as short as possible.",
+          "category": "esd_path"
+        },
+        {
+          "rule_id": "ES-001",
+          "severity": "warning",
+          "summary": "ESD device TVS-RS485 far from connector J-FAN",
+          "recommendation": "Move TVS-RS485 closer to J-FAN. The ESD current path from connector to TVS should be as short as possible.",
+          "category": "esd_path"
+        },
+        {
+          "rule_id": "SW-001",
+          "severity": "warning",
+          "summary": "U-1V8RF harmonics in 88-216 MHz band",
+          "recommendation": "Minimize switching loop area for U-1V8RF. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+          "category": "switching_emc"
+        },
+        {
+          "rule_id": "SW-001",
+          "severity": "warning",
+          "summary": "U-1V8RF harmonics in 216-960 MHz band",
+          "recommendation": "Minimize switching loop area for U-1V8RF. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+          "category": "switching_emc"
+        },
+        {
+          "rule_id": "SW-001",
+          "severity": "warning",
+          "summary": "U-3V3 harmonics in 88-216 MHz band",
+          "recommendation": "Minimize switching loop area for U-3V3. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+          "category": "switching_emc"
+        },
+        {
+          "rule_id": "SW-001",
+          "severity": "warning",
+          "summary": "U-3V3 harmonics in 216-960 MHz band",
+          "recommendation": "Minimize switching loop area for U-3V3. Place input cap as close as possible. Consider spread-spectrum modulation if available.",
+          "category": "switching_emc"
+        }
+      ]
+    },
+    "manager": {
+      "risk_level": "moderate",
+      "blocker_count": 4,
+      "warning_count": 8,
+      "stage_readiness": {
+        "schematic": "pass",
+        "layout": "needs_work",
+        "pre_fab": "needs_review",
+        "bring_up": "pass"
+      },
+      "one_liner": "4 errors, 8 warnings across 4 categories. Layout stage has blockers."
+    }
+  },
+  "trust_summary": {
+    "total_findings": 19,
+    "trust_level": "low",
+    "by_confidence": {
+      "deterministic": 2,
+      "heuristic": 17,
+      "datasheet-backed": 0
+    },
+    "by_evidence_source": {
+      "datasheet": 0,
+      "topology": 2,
+      "heuristic_rule": 17,
+      "symbol_footprint": 0,
+      "bom": 0,
+      "geometry": 0,
+      "api_lookup": 0
+    },
+    "provenance_coverage_pct": 0.0
+  }
+}

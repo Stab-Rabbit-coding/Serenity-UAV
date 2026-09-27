@@ -1,7 +1,8 @@
 # Commo — EMI-Hardened 49 MHz AX.25 Transceiver
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CERN-OHL-W 2.0 (hardware design); status notes/prose in this file are CC BY-SA 4.0 —
+see `docs/attribution_and_licensing.md`
 **Revision:** S1 (Rev S baseline + schematic-first reconciliation 2026-07-04)
 **Date:** 2026-07-04
 **Status:** Schematic-first reconciliation COMPLETE — `Commo.kicad_sch` authored from the
@@ -12,6 +13,26 @@ on-board `RSSI_DCD` carrier-detect ride presence-gated PB2-P2 payload GPIOs. Ope
 §1.2b): manual placement/routing of the 4 new RSSI parts (parked off-board), `RSSI_CMP`
 part/pinout datasheet vetting, PTT/RSSI pinmux firmware sign-off, and 3 pre-existing
 in-circuit stubs the schematic surfaced (`RF_ANT_SW`, `PA_EMIT`, `DDS_FSYNC`).
+
+**Status update (2026-09-21, S. Griffing / Claude Sonnet 5) — RADIO SWAP, everything below this
+note describing "LoRa (RFM95W)" as this board's radio is superseded:** Per the fleet radio
+relocation decision (`avionics/WBS.md` §1.2a "APPROVED DIRECTION"), **Commo's LoRa (RFM95W)
+module was removed and replaced with the SiK modem (RFD900ux-SMT) relocated from XO/TACCO**,
+which gave up SiK in exchange for an mLRS radio on a Seeed Wio-E5 module (see
+`avionics/kicad/TACCO/TACCO.md`'s matching status note for that side of the swap). New refs:
+`SIK`, `C-SIK1/2`, `C-SIK-SH1/2`, `L-SIK-SER`, `D-ANT-SIK`, `J-ANT-SIK`. The 3 pre-existing
+in-circuit stubs flagged above are now **resolved**, not open: `RF_ANT_SW` was merged onto the
+already-working `ANT` antenna filter chain (adjacent-row naming mismatch); `PA_EMIT`'s emitter-
+degeneration resistor was back in circuit after fixing the PA transistor's emitter pin, which had
+been wired straight to GND, bypassing it; `DDS_FSYNC` (the MCP4921 TX DAC's SPI chip-select) was
+wired to PB2-P1 pin 26, the exact pin freed by the LoRa->SiK swap (owner's explicit call, not
+guessed). `kicad-cli sch erc` = **0 violations**. `Commo.kicad_pcb` was synced to match: old
+RFM95W footprint removed, the 8 new SIK-chain footprints added with nets matched 1:1 against the
+schematic. Along the way, a real pad-pitch/axis bug in the shared `RFDesign_RFD900ux_SMT`
+footprint (used by both boards) was found and fixed against the OEM datasheet's land-pattern
+table. **Known residual:** this board's existing hand-placed layout has no contiguous free area
+for the 21x29mm SIK module without touching `ETH-PHY`/`T-ETH` — a real floorplan pass, not a
+netlist-sync task, is still needed before fab. Full detail: `avionics/WBS.md` §1.2a.
 
 > **Note:** the "As-Built" tables below predate the 2026-07-04 reconciliation and still
 > list J1 "TACCO IF" as present; J1 has since been removed and the modem UART moved to the

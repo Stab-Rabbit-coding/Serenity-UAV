@@ -15,7 +15,7 @@ board-level detail, plus the band-by-band FCC citations under "External Communic
 Regulations Compliance" below.
 
 **Platform:** four pairs of **PocketBeagle2 Industrial SBCs** (8 nodes total, Rev S placement,
-established at Rev R1). 
+established at Rev R1).
 
 **Zero Trust Security** Every PB2-I Cape (Pilot, TACCO, and Commo), node carries a **TPM** (Trusted Platform Module) and every other PCB carries an **SE** (Security Element) to provide cryptographic authentication and message integrity in addition to its other functions.
 
@@ -39,10 +39,17 @@ does not carry:
 
 - River's Room (Bay C) and Simon's Medbay (Bay D) run **Pilot + TACCO + Commo**; Shepherd's Room
   (Bay A) and Inara's Shuttle (Bay B) run Pilot + TACCO only.
-- LoRa is migrating from TACCO to Commo on the River and Simon stacks — see "Cape Naming and
-  Revision History" below for current build status.
-- The Inara stack's secondary link is **SiK-MAVLink** (root §9 is authoritative). Inara carries
-  Pilot + TACCO only — no Commo cape — so LoRa 915 MHz is not available on that stack.
+- **Radio assignment resolved (2026-09-21/26):** TACCO carries an **mLRS radio on a Seeed
+  Wio-E5 (STM32WLE5) module** (LoRa-class, not RFM95W); Commo carries **SiK (RFD900ux-SMT)** in
+  addition to the 49 MHz transceiver. TACCO no longer carries SiK, and Commo no longer carries
+  LoRa/RFM95W — both boards' status files (`avionics/kicad/TACCO/TACCO.md`,
+  `avionics/kicad/Commo/Commo.md`) and `avionics/WBS.md` §1.2a agree on this.
+- **Per-stack radio priority rebalanced (2026-09-26)** to match this hardware assignment: root
+  `AGENTS.md` §9 previously listed SiK as Shepherd's and Inara's secondary/primary comms link,
+  which neither stack's hardware supports (no Commo cape, no SiK). Both now list **mLRS** as
+  their long-range link instead — the radio their TACCO cape actually carries. River and Simon
+  (both Commo-equipped) keep 49 MHz primary / SiK secondary. See root `AGENTS.md` §9 for the
+  current table.
 
 ## Cape Naming and Revision History
 
@@ -104,9 +111,13 @@ Simon's Medbay — minimizes power-run length to all nacelles, all four stacks, 
 Status/history (including the planned 6V-servo-BEC removal): `avionics/kicad/FlightEngineer/FlightEngineer.md`,
 TODO.md §1.2b.
 
-### Bus-Gateway - Secure CAN-FD and RS-485 edge node
+### Bus-Gateway (CAN-PERIPH-GW-1) - Secure CAN-FD and RS-485 edge node
 
-Provides secure bus connection for sensors and actuators lacking native capability.  specifically the nacelle tilt Hall effect sensors and SG90 microservos.
+Provides secure bus connection for sensors and actuators lacking native capability, specifically
+the nacelle tilt Hall effect sensors and SG90 microservos (winch, cargo door), plus per-EDF ESC
+telemetry gateways. Folder/file/BOM designator is `CAN-PERIPH-GW-1`
+(`avionics/kicad/Bus-Gateway/`); "Bus-Gateway" is the board-class name used here. Status/history:
+`avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md`, TODO.md §1.2.
 
 ## PCB Design Standards
 

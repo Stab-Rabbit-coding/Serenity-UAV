@@ -1,0 +1,287 @@
+{
+  "analyzer_type": "thermal",
+  "schema_version": "1.3.0",
+  "summary": {
+    "total_findings": 4,
+    "components_assessed": 1,
+    "active": 4,
+    "suppressed": 0,
+    "by_severity": {
+      "error": 1,
+      "warning": 1,
+      "info": 2
+    },
+    "thermal_score": 82,
+    "total_board_dissipation_w": 0.831,
+    "hottest_component": {
+      "ref": "U-3V3RF",
+      "tj_estimated_c": 149.6
+    },
+    "components_analyzed": 1,
+    "components_above_85c": 1,
+    "components_above_tjmax": 1,
+    "ambient_c": 25.0
+  },
+  "findings": [
+    {
+      "category": "thermal_safety",
+      "severity": "error",
+      "rule_id": "TS-001",
+      "confidence": "heuristic",
+      "title": "U-3V3RF (TPS63031DSKR) estimated Tj 150\u00b0C exceeds abs max 125\u00b0C",
+      "description": "ldo dissipates 0.831W in unknown package (R\u03b8_JA=150\u00b0C/W). Source: (5.0V - 3.3V) \u00d7 0.489A.",
+      "components": [
+        "U-3V3RF"
+      ],
+      "recommendation": "Reduce power dissipation (lower Vin, reduce load), improve thermal path (add thermal vias, larger copper pour), or use a more efficient topology (switching regulator instead of LDO).",
+      "detector": "analyze_thermal",
+      "summary": "U-3V3RF (TPS63031DSKR) estimated Tj 150\u00b0C exceeds abs max 125\u00b0C",
+      "nets": [],
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Thermal Safety",
+        "impact": "Component reliability",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "thermal_safety",
+      "severity": "warning",
+      "rule_id": "TS-004",
+      "confidence": "deterministic",
+      "title": "U-3V3RF (TPS63031DSKR) dissipates 0.83W with no thermal vias",
+      "description": "ldo in unknown package dissipates 0.831W but no thermal pad vias were detected. Heat removal relies entirely on surface copper.",
+      "components": [
+        "U-3V3RF"
+      ],
+      "recommendation": "Add thermal vias under the component's thermal pad or exposed pad. Minimum 5 vias for QFN, more for larger pads.",
+      "detector": "analyze_thermal",
+      "summary": "U-3V3RF (TPS63031DSKR) dissipates 0.83W with no thermal vias",
+      "nets": [],
+      "pins": [],
+      "evidence_source": "geometry",
+      "report_context": {
+        "section": "Thermal Safety",
+        "impact": "Component reliability",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "thermal_proximity",
+      "severity": "info",
+      "rule_id": "TP-001",
+      "confidence": "deterministic",
+      "title": "MLCC C-IN1 is 3.0mm from U-3V3RF (TPS63031DSKR) (Tj=150\u00b0C)",
+      "description": "Ceramic capacitors lose effective capacitance at elevated temperatures. X7R loses ~15% at 85\u00b0C, X5R loses ~30%.",
+      "components": [
+        "C-IN1",
+        "U-3V3RF"
+      ],
+      "recommendation": "Verify capacitor maintains adequate capacitance at the elevated temperature, or use C0G/NP0 dielectric for temperature-critical applications.",
+      "detector": "analyze_thermal",
+      "summary": "MLCC C-IN1 is 3.0mm from U-3V3RF (TPS63031DSKR) (Tj=150\u00b0C)",
+      "nets": [],
+      "pins": [],
+      "evidence_source": "geometry",
+      "report_context": {
+        "section": "Thermal Proximity",
+        "impact": "Component reliability",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "ref": "U-3V3RF",
+      "value": "TPS63031DSKR",
+      "component_type": "ldo",
+      "pdiss_w": 0.831,
+      "pdiss_source": "(5.0V - 3.3V) \u00d7 0.489A",
+      "pdiss_confidence": "heuristic",
+      "package": "unknown",
+      "rtheta_ja_raw": 150.0,
+      "rtheta_ja_source": "default",
+      "pcb_correction": 1.0,
+      "pcb_correction_notes": [],
+      "rtheta_ja_effective": 150.0,
+      "ambient_c": 25.0,
+      "tj_estimated_c": 149.6,
+      "tj_max_c": 125.0,
+      "tj_max_source": "default_125",
+      "margin_c": -24.6,
+      "position": {
+        "x": 205.0,
+        "y": 97.5
+      },
+      "detector": "analyze_thermal",
+      "rule_id": "TH-DET",
+      "category": "thermal",
+      "severity": "info",
+      "confidence": "heuristic",
+      "evidence_source": "heuristic_rule",
+      "summary": "Thermal: U-3V3RF Tj=149.6C (margin -24.6C)",
+      "description": "Component U-3V3RF in unknown package: Tj=149.6C, margin -24.6C to Tj_max (125.0C).",
+      "components": [
+        "U-3V3RF"
+      ],
+      "nets": [],
+      "pins": [],
+      "recommendation": "",
+      "report_context": {
+        "section": "Thermal",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "stages": [
+        "layout"
+      ]
+    }
+  ],
+  "elapsed_s": 0.0,
+  "missing_info": {
+    "default_rtheta_ja": [
+      "U-3V3RF"
+    ],
+    "default_tj_max": [
+      "U-3V3RF"
+    ]
+  },
+  "trust_summary": {
+    "total_findings": 4,
+    "trust_level": "mixed",
+    "by_confidence": {
+      "deterministic": 2,
+      "heuristic": 2,
+      "datasheet-backed": 0
+    },
+    "by_evidence_source": {
+      "datasheet": 0,
+      "topology": 0,
+      "heuristic_rule": 2,
+      "symbol_footprint": 0,
+      "bom": 0,
+      "geometry": 2,
+      "api_lookup": 0
+    },
+    "provenance_coverage_pct": 0.0
+  },
+  "audience_summary": {
+    "designer": {
+      "total_findings": 4,
+      "by_severity": {
+        "error": 1,
+        "warning": 1,
+        "info": 2
+      },
+      "by_category": {
+        "thermal_safety": 2,
+        "thermal_proximity": 1,
+        "thermal": 1
+      },
+      "top_issues": [
+        {
+          "category": "thermal_safety",
+          "severity": "error",
+          "rule_id": "TS-001",
+          "confidence": "heuristic",
+          "title": "U-3V3RF (TPS63031DSKR) estimated Tj 150\u00b0C exceeds abs max 125\u00b0C",
+          "description": "ldo dissipates 0.831W in unknown package (R\u03b8_JA=150\u00b0C/W). Source: (5.0V - 3.3V) \u00d7 0.489A.",
+          "components": [
+            "U-3V3RF"
+          ],
+          "recommendation": "Reduce power dissipation (lower Vin, reduce load), improve thermal path (add thermal vias, larger copper pour), or use a more efficient topology (switching regulator instead of LDO).",
+          "detector": "analyze_thermal",
+          "summary": "U-3V3RF (TPS63031DSKR) estimated Tj 150\u00b0C exceeds abs max 125\u00b0C",
+          "nets": [],
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Thermal Safety",
+            "impact": "Component reliability",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "thermal_safety",
+          "severity": "warning",
+          "rule_id": "TS-004",
+          "confidence": "deterministic",
+          "title": "U-3V3RF (TPS63031DSKR) dissipates 0.83W with no thermal vias",
+          "description": "ldo in unknown package dissipates 0.831W but no thermal pad vias were detected. Heat removal relies entirely on surface copper.",
+          "components": [
+            "U-3V3RF"
+          ],
+          "recommendation": "Add thermal vias under the component's thermal pad or exposed pad. Minimum 5 vias for QFN, more for larger pads.",
+          "detector": "analyze_thermal",
+          "summary": "U-3V3RF (TPS63031DSKR) dissipates 0.83W with no thermal vias",
+          "nets": [],
+          "pins": [],
+          "evidence_source": "geometry",
+          "report_context": {
+            "section": "Thermal Safety",
+            "impact": "Component reliability",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        }
+      ]
+    },
+    "reviewer": {
+      "total_findings": 2,
+      "by_category": {
+        "thermal_safety": 2
+      },
+      "top_issues": [
+        {
+          "rule_id": "TS-001",
+          "severity": "error",
+          "summary": "U-3V3RF (TPS63031DSKR) estimated Tj 150\u00b0C exceeds abs max 125\u00b0C",
+          "recommendation": "Reduce power dissipation (lower Vin, reduce load), improve thermal path (add thermal vias, larger copper pour), or use a more efficient topology (switching regulator instead of LDO).",
+          "category": "thermal_safety"
+        },
+        {
+          "rule_id": "TS-004",
+          "severity": "warning",
+          "summary": "U-3V3RF (TPS63031DSKR) dissipates 0.83W with no thermal vias",
+          "recommendation": "Add thermal vias under the component's thermal pad or exposed pad. Minimum 5 vias for QFN, more for larger pads.",
+          "category": "thermal_safety"
+        }
+      ]
+    },
+    "manager": {
+      "risk_level": "moderate",
+      "blocker_count": 1,
+      "warning_count": 1,
+      "stage_readiness": {
+        "schematic": "pass",
+        "layout": "needs_work",
+        "pre_fab": "pass",
+        "bring_up": "pass"
+      },
+      "one_liner": "1 error, 1 warning across 1 category. Layout stage has blockers."
+    }
+  }
+}

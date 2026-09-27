@@ -199,7 +199,25 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     XO or any other node carrying a LoRa link elsewhere in the fleet.
 - [ ] **APPROVED DIRECTION (2026-09-21, supersedes the same-day initial
     rejection below): relocate SiK (RFD900ux-SMT) from XO to Commo, remove
-    Commo's LoRa (RFM95W).** Considered via `ce-ideate` (targeted
+    Commo's LoRa (RFM95W).**
+
+    **Radio swap at a glance (unambiguous summary — both boards changed radios,
+    not just Commo):**
+
+    | Board | Radio before | Radio after |
+    |---|---|---|
+    | XO (renamed **TACCO** 2026-09-22) | SiK modem, RFD900ux-SMT | **mLRS on a Seeed Wio-E5 (STM32WLE5) module** |
+    | Commo | LoRa modem, RFM95W | **SiK modem, RFD900ux-SMT** (the same physical-design unit XO gave up) |
+
+    Net effect on the fleet: still exactly one SiK-class link and one
+    LoRa-family link (mLRS runs on LoRa-class silicon), just swapped between
+    the two radio-comms capes rather than added or removed. See
+    `avionics/kicad/TACCO/TACCO.md` and `avionics/kicad/Commo/Commo.md` for
+    each board's own status note on this swap, and
+    `avionics/kicad/TACCO/reports/HDD.md` / `avionics/kicad/Commo/reports/HDD.md`
+    for the generated hardware design descriptions.
+
+    Considered via `ce-ideate` (targeted
     primary-source analysis, not the full multi-agent dispatch — disclosed).
     Initial pass flagged three findings and rejected the idea; the owner
     overruled two of the three as acceptable tradeoffs and asked for the

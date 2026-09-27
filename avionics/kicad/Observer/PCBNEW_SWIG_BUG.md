@@ -170,4 +170,14 @@ the saved one.
 - End-to-end: delete the `inject_pad_nets` text pass in `gen_Jayne_carrier_pcb.py`,
   restore the native `pad.SetNet(...)` loop, and confirm a DRC-parity-clean board.
 
+## 7. Addendum (2026-09-21) — a fourth, distinct defect found during the Commo PCB sync
+
+`FOOTPRINT.Flip()` / `SetLayerAndFlip()` also segfaults, but only when called
+**before** `board.Add(fp)` on a footprint fresh out of `FootprintLoad()` — this is
+a call-order precondition, not a wrapper/typemap bug like A–C above, and it is why
+this doc's own §5 workaround (which calls `SetLayerAndFlip` *after* `board.Add` in
+the same sequence) never hit it. Full repro, root-cause theory, and the safe
+load→add→flip→orient ordering are in
+`docs/solutions/runtime-errors/pcbnew-flip-segfault-before-board-add.md`.
+
 > *"She's a good gun." — but the sights need adjusting.*

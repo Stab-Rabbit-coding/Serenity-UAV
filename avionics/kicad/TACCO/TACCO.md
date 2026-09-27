@@ -2,10 +2,11 @@
 
 **Callsign:** TACCO (Tactical Coordinator)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CERN-OHL-W 2.0 (hardware design); status notes/prose in this file are CC BY-SA 4.0 —
+see `docs/attribution_and_licensing.md`
 **Revision:** R (Rev R baseline — TACCO naming finalized; EMI-hardened variant of TACCO Rev M, Ethernet PHY restored)
 **Date:** 2026-06-07
-**Status (2026-09-20 update, Claude Sonnet 5):** The Rev S1 reconciliation described below is
+**Status (2026-09-23 update, S. Griffing):** The Rev S1 reconciliation described below is
 SUPERSEDED — the legacy schematic/PCB pair (169 sch refs vs 43 PCB footprints, 564 ERC
 violations) was not patchable and has been replaced by a from-scratch schematic-first rebuild
 (`avionics/kicad/TACCO/scripts/gen_tacco_sch.py` / `gen_tacco_pcb.py`), the same method used for Pilot.
@@ -22,6 +23,28 @@ avionics/WBS.md for the full rebuild trail and two flagged part-number defects (
 MPNs, microSD connector MPN) that need owner confirmation. See WBS.md's "TACCO schematic-first
 rebuild" and "TACCO PCB placement" items for the authoritative current state; the paragraphs below
 describe the PRE-REBUILD Rev R/S1 history and are kept for record only.
+
+**Status (2026-09-26 correction, S. Griffing / Claude Sonnet 5) — RADIO SWAP, supersedes the
+"restored LoRa/RFM95W" claim above, which is wrong for the current schematic:** This board never
+carries LoRa/RFM95W in its current, post-2026-09-21 form. The 2026-09-21 radio-relocation
+(`avionics/WBS.md` §1.2a "APPROVED DIRECTION") did two things across two boards:
+
+| | Before | After |
+|---|---|---|
+| **This board (XO, renamed TACCO 2026-09-22)** | SiK modem (RFD900ux-SMT) | **mLRS radio on a Seeed Wio-E5 (STM32WLE5) module** — refs `WIOE5`, `C-WIOE5-*`, `D-ANT-WIOE5`, `J-ANT-WIOE5`, `FB-WIOE5-*`, `LED-WIOE5-*`, `R-WIOE5-*`, `SW-WIOE5-BOOT` |
+| **Commo** | LoRa modem (RFM95W) | **SiK modem (RFD900ux-SMT)**, the exact unit relocated from this board |
+
+`avionics/kicad/TACCO/kicads/TACCO.kicad_sch` currently has **zero** `RFM95W`/`LORA` symbol
+references (confirmed by grep) and 143 `WIOE5`-refixed component references. The "restored
+LoRa/RFM95W" note above appears to have been written against a different/earlier schematic state
+and does not describe the file as it exists now. Also fixed same-day: the 2026-09-22 XO->TACCO
+repo-wide rename left `sym-lib-table` pointing at a now-nonexistent `XO.kicad_sym` under the
+nickname `XO`, and every symbol instance's `lib_id` still read `"XO:S_*"` — this silently broke
+ERC (**143 `lib_symbol_issues` violations**, not the "ERC is 0" this status block claims above).
+Both the lib table and the 429 stale `"XO:` prefixes in `TACCO.kicad_sch` are now corrected;
+`kicad-cli sch erc` genuinely reports **0 violations** as of this note. PCB DRC is unaffected by
+the rename (`TACCO.kicad_pcb` never referenced the `XO` symbol library) and remains at 169
+violations / 0 schematic-parity issues, per `avionics/WBS.md` §1.2a.
 
 **Status (superseded, pre-2026-09-20):** Schematic complete — PCB layout pending. **Rev S1
 reconciliation IN PROGRESS (2026-07-04):** the PCB is already at the intended end-state (LoRa
@@ -46,7 +69,7 @@ better supply filtering and digital-interface isolation from the RF groundplane.
 
 ---
 
-## Changes from TACCO (Rev M)
+## Changes from CAPE-B (Rev M)
 
 ### 1. Ethernet PHY removal (space recovery)
 
@@ -398,6 +421,7 @@ All field connectors are shielded JST-GH (or SMA/U.FL for RF). SHIELD pins conne
 | J_SMA_SIK | SMA (50 Ω) | RF center via FL_SIK; shell = PGND | SiK 915 MHz antenna output |
 
 Note: J_ETH_B and J_XCVR are absent from this table — confirmed removed from the as-placed
+PCB (`TACCO.kicad_pcb`) even though both still appear in the lagging schematic (`TACCO.kicad_sch`,
 PCB (`TACCO.kicad_pcb`) even though both still appear in the lagging schematic (`TACCO.kicad_sch`,
 see status note above and TODO.md §1.2b); this table reflects the as-built board, not the
 schematic.
