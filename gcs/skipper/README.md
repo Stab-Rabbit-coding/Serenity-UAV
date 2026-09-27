@@ -152,7 +152,7 @@ Skipper participates in the Serenity NIST SP 800-207 Zero Trust architecture.
 
 - Every command message sent from Skipper is digitally signed with the TPM-bound key
   provisioned during setup.
-- Skipper's PB2-I TPM 2.0 must be provisioned before first operational use.
+- Skipper's PB2-I TPM 2.0 shall be provisioned before first operational use.
 - The MAVLink system ID for Skipper is **255** (GCS reserved).
 - Unsigned or unauthenticated messages from Skipper are discarded by all aircraft nodes.
 

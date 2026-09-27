@@ -129,7 +129,7 @@ frame directly into vertex data, every tool sees identical coordinates regardles
 5. **C/C++ Compile Check**
    - GCC syntax check on firmware files (`avionics/firmware/*/src/`)
 
-**Status:** CI must pass (all checks green) before PR merge. Maintainers can override
+**Status:** CI shall pass (all checks green) before PR merge. Maintainers may override
 documented violations (recorded in `.github/workflows/ci.yml`).
 
 ### Pre-Commit Hook (`.githooks/pre-commit`)

@@ -167,7 +167,7 @@ Located in the middle section's ventral interior (inner-neck/Flight Engineer's r
 
 ### 2.1 Battery Tray
 - **Part:** `battery_tray.stl`
-- **Design intent:** 6S LiPo battery support platform; sits on the keel underside. CG must align with forward CG (FCOG ≈ sta 130 mm) for trim.
+- **Design intent:** 6S LiPo battery support platform; sits on the keel underside. CG shall align with forward CG (FCOG ≈ sta 130 mm) for trim.
 - **Current state:** VERIFY placement estimated in assembly (lines 405–414).
 - **Current estimate:**
   ```
