@@ -11169,6 +11169,22 @@
       ],
       "archived": false
     },
+    "current-specification/bom_revT.csv": {
+      "description": "Bill of materials, CSV (211 items)",
+      "tags": [
+        "bom",
+        "specification"
+      ],
+      "archived": false
+    },
+    "current-specification/bom_revT.json": {
+      "description": "Bill of materials, JSON (211 items)",
+      "tags": [
+        "bom",
+        "specification"
+      ],
+      "archived": false
+    },
     "current-specification/serenity-rev-s.jsx": {
       "description": "React/JSX specification component",
       "tags": [
@@ -15717,6 +15733,8 @@
       "current-specification/TODO.md",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
+      "current-specification/bom_revT.csv",
+      "current-specification/bom_revT.json",
       "current-specification/serenity-rev-s.jsx",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -16947,6 +16965,8 @@
       "code-scanning-files-extracted.csv",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
+      "current-specification/bom_revT.csv",
+      "current-specification/bom_revT.json",
       "docs/bom_revR.json",
       "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md",
       "tools/bom_edit_door_gateway.py",

@@ -1486,12 +1486,104 @@ analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
     285 − 105 = 180 = 2 × 90, so one set holds **both** deep lobes, which the
     120° set could not. Clocked **15/105/195/285**.
 
-- [ ] **[OPEN — PRINT-BLOCKING] `MOTOR_BOLT_R` is still 10.0 mm and still
-    unverified.** The owner direction settles the screw COUNT and the 90°
-    spacing; it does not settle the bolt circle, and the vendor listing publishes
-    "nc". Measure it off a physical motor — five minutes with a caliper — along
-    with the thread size and whether the four holes are on a true square. **Do
-    not print either spider for flight until this is measured.**
+- [x] **`MOTOR_BOLT_R` MEASURED 2026-09-28 — 7.5 mm, true square (was 10.0 mm
+    placeholder).** Photos of the physical Xfly Galaxy X5 EDF were reviewed
+    (`docs/img/20260923_065833.jpg` center-boss/motor-mount, `_065933.jpg`
+    rotor OD, `_065848.jpg` stator/duct with wiring); the analog Vernier scale
+    in the photo itself was not trustworthy to read (oblique angle, not
+    square to the camera), so all numeric readings below are the owner's own
+    caliper reads, not photo estimates. Owner took two passes:
+    - **First pass:** 14.65 mm diameter → `MOTOR_BOLT_R = 7.325 mm` (superseded).
+    - **Re-measurement (final):** **15.0 mm** spanning screw-centre to
+      diagonally-opposite screw-centre through the shaft boss (bolt-circle
+      **diameter**), with the **4-hole pattern confirmed a true square** —
+      not just visually, by caliper. `MOTOR_BOLT_R = 15.0 / 2 = 7.5 mm`, set
+      in `edf_aft_spider_sleeve.scad`.
+    - **Screw thread confirmed M2** (not the M3 previously assumed) off the
+      same physical motor. Renamed `M3_INSERT_D`/`M3_INSERT_L` →
+      `M2_INSERT_D`/`M2_INSERT_L`; `M2_INSERT_D` set to 3.0 mm using this
+      repo's existing M2 heat-set precedent (`FP_INS_D` in
+      `airframe/openscad/fuselage/bow_sensor_pod.scad:367`); `M2_INSERT_L`
+      carried over unchanged at 6.0 mm from the old M3 value — plausible for
+      a short M2 knurled insert but **not independently re-verified**.
+
+    All motor-mount comment blocks (bench pre-assembly steps, pocket geometry,
+    hardware BOM, post-print checks) updated from 3×M3/4×M3 to 4×M2 throughout
+    `edf_aft_spider_sleeve.scad`, including a stale duplicate
+    "PRINT-BLOCKING…THE MOTOR MOUNT INTERFACE IS WRONG" block that still
+    described the already-fixed 3-arm/120° issue as open. Re-rendered after
+    each value change (`openscad -o ... edf_aft_spider_sleeve.scad`): single
+    manifold solid (Simple: yes), no CGAL errors throughout — the final 7.5 mm
+    radius (inside the 8.0 mm `R_HUB` hub OD) still sits on continuous
+    material because the hub ring (0–8 mm) and spider arm (7–26 mm) overlap
+    at that azimuth, so the M2 insert pocket does not break out of the part.
+
+    **2026-09-28 update — motor screw spec confirmed AND mounting method
+    corrected: M2×12.5 mm flat-head (countersunk), no heat-set insert.**
+    Owner read the screw spec directly off the physical motor's packed
+    hardware, then measured the motor's own mounting flange: a 20 mm dia,
+    3.5 mm thick flange carrying the four TAPPED M2 holes (the bolt circle
+    already measured above), a second non-tapped 1.75 mm flange 6.5 mm
+    further back, and 15 mm from the back of the tapped flange to the motor
+    body. **This means the motor supplies its own female thread** — no
+    heat-set insert is needed in this sleeve at all, which reverses the
+    previous (wrong) assumption that the countersink belonged in the motor's
+    tab. The countersink actually belongs in THIS sleeve.
+
+    Reworked `edf_aft_spider_sleeve.scad` accordingly: the motor-mount holes
+    are now a through clearance hole (`M2_CLEAR_D = 2.4 mm`, generic M2
+    close-fit convention) spanning the full 8 mm spider-arm thickness, with a
+    countersink (`M2_CSK_D = 4.0 mm` × `M2_CSK_DEPTH = 1.2 mm`, generic M2
+    flat-head estimate — both flagged to verify against the actual screw SKU)
+    cut into the arm's FORWARD face so the flat head seats flush there; the
+    screw then threads directly into the motor's tapped flange beyond the
+    sleeve's aft face. `M2_INSERT_D`/`M2_INSERT_L` and the blind-pocket
+    geometry from the prior pass are removed — they described a fastening
+    method that doesn't exist on this hardware. Stack check: 8 mm clearance
+    plus up to 3.5 mm thread engagement in the motor's flange plus ~1 mm
+    head recess totals 12.5 mm, matching the confirmed screw length —
+    self-consistent.
+    All affected comment blocks (bench pre-assembly steps, motor-mount
+    header, hardware BOM, post-print checks) updated to match. Re-rendered:
+    still a single manifold solid, no CGAL errors, at every stage of this
+    rework.
+
+    **2026-09-28 — access-direction flag RESOLVED, and the file's older
+    "nozzle-end access" wording was simply wrong, not just stale.** Owner
+    confirmed: forward/intake-face screwdriver access (as the corrected
+    countersink geometry above requires) has always been the standing
+    requirement — it's the only way to remove the rotor, which otherwise
+    covers these screws, on any assembly stage. What that does NOT mean is
+    that a technician reaches down the nacelle's OWN front air intake with
+    everything installed: this EDF2 spider/motor/rotor sits buried behind
+    EDF1 and the stator sleeve, so there is no in-situ path to it once the
+    nacelle is assembled. Field service means pulling the 3× M3×20 SHCS
+    retention screws and extracting the WHOLE aft spider sleeve out the
+    nacelle's AFT (nozzle) end first — already the documented installation
+    path in this file, just now explicitly tied to the reason it has to work
+    that way. Once extracted, the sleeve is serviced at the bench, where its
+    own forward/intake face is freely accessible. All affected comment
+    blocks (bench pre-assembly, motor-mount header, nacelle installation
+    sequence/retention summary, pocket-geometry comment) updated in
+    `edf_aft_spider_sleeve.scad`. Re-rendered: still a single manifold solid.
+
+    **Also captured this pass (informational, no geometry change):** the
+    rotor's spinner/retainer screw — previously just "one longer spinner
+    screw" in the REF-EDF-002 evidence note — is now specified as M1.5×11
+    round-head, 1.5 mm Allen (hex) drive, owner-measured off the physical
+    rotor. Also noted: the rotor is factory-balanced by drilling small holes
+    in its face (visible in `docs/img/20260923_065933.jpg`), so it is not an
+    azimuthally uniform disc — flagged in-file for any future rotor mass/CG
+    or vibration work, no action needed now.
+    The manufacturer datasheet (`docs/references/EDF Ducted Fan XFly Galaxy
+    X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html`) was
+    checked directly and confirms internal (bore) diameter = 50 mm (matches
+    `EDF_BORE_R = 25.0 mm`, already correct in both sleeve files — no change
+    needed) and motor shaft = 3 mm (matches `R_HUB_BORE = 2.0 mm`, 1 mm
+    diametric clearance — also already correct); it publishes external
+    diameter and bolt circle as "nc" (not confirmed by the manufacturer),
+    which is why this was a physical-caliper blocker rather than a datasheet
+    lookup in the first place.
 - [x] **ESC bay thermal path — SIZED 2026-09-06, and the sealed bay is dead.**
     `tools/nacelle_esc_thermal.py`, built for this. Load case from
     Open-Secure-ESC's own copper sizing (6 × 1.75 W FETs + 6.67 W phase pours at
