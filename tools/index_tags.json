@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-04",
+  "generated": "2026-10-05",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -15560,6 +15560,13 @@
       ],
       "archived": false
     },
+    "tools/precommit_doc_wording.py": {
+      "description": "Pre-commit check for CNAF M-3710.7 [REF-MIL-001]-style doc wording.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/precommit_index.py": {
       "description": "Automated Project/Archive Index agent for Serenity UAV.",
       "tags": [
@@ -19837,6 +19844,7 @@
       "tools/nacelle_trunnion_fit.py",
       "tools/nozzle_linkage_check.py",
       "tools/open_mating_faces.py",
+      "tools/precommit_doc_wording.py",
       "tools/precommit_index.py",
       "tools/precommit_kicad_load.py",
       "tools/precommit_sanitize.py",
