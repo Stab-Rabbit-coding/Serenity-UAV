@@ -14948,6 +14948,15 @@
       ],
       "archived": false
     },
+    "tools/nozzle_servo_linkage.py": {
+      "description": "Servo nozzle drive \u2014 schedule, linkage and force-margin tool (plan U2).",
+      "tags": [
+        "build-tooling",
+        "propulsion",
+        "security"
+      ],
+      "archived": false
+    },
     "tools/open_mating_faces.py": {
       "description": "Open (and keep open) the six fuselage-section mating-face apertures.",
       "tags": [
@@ -15008,6 +15017,14 @@
       "tags": [
         "build-tooling",
         "power",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_nozzle_servo_linkage.py": {
+      "description": "Tests for tools/nozzle_servo_linkage.py \u2014 servo nozzle drive (plan U2).",
+      "tags": [
+        "build-tooling",
         "propulsion"
       ],
       "archived": false
@@ -15721,6 +15738,7 @@
       "tools/build_landing_gear_views.py",
       "tools/kicad_relink.py",
       "tools/landing_gear_bay_pad_fit.py",
+      "tools/nozzle_servo_linkage.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
       "tools/wing_internal_clearance.py"
@@ -16965,7 +16983,9 @@
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_trunnion_fit.py",
       "tools/nozzle_linkage_check.py",
-      "tools/tests/test_nacelle_esc_service.py"
+      "tools/nozzle_servo_linkage.py",
+      "tools/tests/test_nacelle_esc_service.py",
+      "tools/tests/test_nozzle_servo_linkage.py"
     ],
     "bom": [
       "airframe/diagrams/ring_frames/ring_cargo_Y30_inner.csv",
@@ -19066,6 +19086,7 @@
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_trunnion_fit.py",
       "tools/nozzle_linkage_check.py",
+      "tools/nozzle_servo_linkage.py",
       "tools/open_mating_faces.py",
       "tools/precommit_doc_wording.py",
       "tools/precommit_index.py",
@@ -19074,6 +19095,7 @@
       "tools/purge_stale_fcstd_objects.py",
       "tools/spar_bundle_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
+      "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tilt_actuator_options.py",
       "tools/validate_kicad.py",
       "tools/validate_stls.py",
