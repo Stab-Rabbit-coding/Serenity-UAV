@@ -523,10 +523,62 @@ RING_LEVER_AZ   = 157.5;  // [deg] azimuth of the lever ear.  Flap gaps sit at
                           //   deg, i.e. essentially zero ring rotation at the
                           //   closed/cruise reference pose (tools/
                           //   nozzle_linkage_check.py, default run).
-RING_LEVER_R    = 32.0;   // [mm] radial reach of the ball-socket centre on the
-                          //   lever (effective moment arm for the pushrod)
+RING_LEVER_R    = 32.0;   // [mm] historical pushrod ball radius — retained ONLY
+                          //   as the reference the pre-2026-09-28 linkage tools cite
 RING_LEVER_W    =  5.0;   // [mm] lever ear tangential width
-RING_BALL_D     =  3.0;   // [mm] pushrod ball-end nominal (socket = +clearance)
+
+// ── Servo push-only drive (2026-09-28, docs/NOZZLE_DRIVE_TRADE.md "DECISION
+//    AMENDMENT — servo drive (2026-09-28)"; plan
+//    docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md U3) ─────
+// OPENING ROTATES THE RING CLOCKWISE (negative world azimuth): the cam slots are
+// cut with radius rising with ring-local angle (spiral_pts), so the flap pin
+// only reaches the open-end radius when the ring turns by -THETA_RING_REF_OPEN.
+// The ear therefore sweeps az 157.5 (75 %, closed) -> 133.75 (105 %, open).
+//
+// FAIL-OPEN BY CONSTRUCTION: the servo arm tip is a UNILATERAL (push-only)
+// contact on the ear's LOW-azimuth flank and pushes the ring toward CLOSED; a
+// spring cord wrapped on the rim pulls it toward OPEN and holds the ear against
+// the arm.  The ring can always move away from the arm, so a dead, unpowered or
+// SEIZED servo cannot hold the nozzle closed.  (A pull link cannot give this: a
+// seized pull link blocks the ring from paying out toward open — owner-approved
+// correction 2026-09-28.)
+//
+// HARD STOPS are the ends of a window cut through the housing wall: the ear's
+// HIGH flank lands on the closed (75 %) edge; its LOW flank lands on the open
+// (105 %) edge in the UPPER band only, so the arm tip (LOWER band) is never
+// trapped between the ear and the stop.  Stop lands are the housing wall
+// (HOUSING_OUTER_R - HOUSING_INNER_R = 2.0 mm) x the ear's radial overlap.
+EAR_TIP_R        = 35.2;   // [mm] ear tip radius; < HOUSING_OUTER_R (35.6) so the
+                           //   ear never stands proud of the housing OD.  Stop
+                           //   land radial overlap = 35.2 - 33.6 = 1.6 mm (>= 1.5)
+EAR_HALF_ANG     = RING_LEVER_W / 2 / (RING_OUTER_R + 0.5) * 180 / PI;
+                           // [deg] = 4.26, ear flank half-angle at the housing bore
+CONTACT_R        = 34.3;   // [mm] arm-tip contact radius on the ear flank
+ARM_BAND_Z_LO    =  2.0;   // [mm] arm-tip contact band (ring-local Z) — lower
+ARM_BAND_Z_HI    =  5.0;   //   band; open-stop lug is above ARM_BAND_Z_HI + 0.5
+STOP_BAND_Z_LO   = ARM_BAND_Z_HI + 0.5;   // [mm] = 5.5, open-stop lug band start
+ARM_TIP_CLEAR_DEG = 8.0;   // [deg] window over-run past the open flank for the
+                           //   arm-tip nub (Ø2) + over-command, lower band only
+AZ_CLOSED        = RING_LEVER_AZ;                         // [deg] 157.5
+AZ_OPEN          = RING_LEVER_AZ - THETA_RING_REF_OPEN;    // [deg] 133.75
+WIN_AZ_CLOSED_EDGE = AZ_CLOSED + EAR_HALF_ANG;              // [deg] 75 % stop
+WIN_AZ_OPEN_EDGE   = AZ_OPEN   - EAR_HALF_ANG;              // [deg] 105 % stop
+WIN_AZ_ARM_EDGE    = WIN_AZ_OPEN_EDGE - ARM_TIP_CLEAR_DEG;  // [deg] lower band
+// Forward-lip window: the servo arm enters from forward (Z < 0) through the
+// housing's bonding lip, centred on the mid-stroke contact azimuth.
+LIP_WIN_AZ_C     = (AZ_CLOSED + AZ_OPEN) / 2 - EAR_HALF_ANG;  // [deg] ~141.4
+LIP_WIN_HALF_DEG = 12.0;   // [deg] covers the arm's tangential sweep at the lip
+// Opening-spring cord (Dyneema, Ø0.5) on a rim groove below the cam slots.
+SPRING_GROOVE_R  = 32.1;   // [mm] groove root radius (rim 33.1, depth 1.0)
+SPRING_GROOVE_W  =  1.2;   // [mm] groove axial width
+SPRING_GROOVE_Z  =  1.5;   // [mm] groove centre (cam slots occupy Z 5..8)
+SPRING_CORD_D    =  0.5;   // [mm] cord diameter
+SPRING_CORD_R    = SPRING_GROOVE_R + SPRING_CORD_D / 2;   // [mm] cord centre
+SPRING_TANGENT_AZ = 115.0; // [deg] fixed tangency where the cord leaves the rim
+SPRING_BORE_D    =  1.2;   // [mm] tangential exit bore through the housing wall
+                           //   (fit a PTFE sleeve or brass eyelet against wear)
+CORD_ANCHOR_D    =  1.0;   // [mm] radial anchor hole through the rim at the ear
+CORD_KNOT_D      =  2.2;   // [mm] knot counterbore on the ring's inner face
 
 // ── Outer Housing Dimensions ──────────────────────────────────────────────────
 // Rev T: bore shrinks to clear the Ø66 cam ring; outer wall 2.0 mm (piloting
@@ -578,6 +630,16 @@ RIB_ANG_OFFSET = 22.5;   // [deg] angular offset from flap centrelines (avoids
 //     part-local→hull transform — deferred VERIFY (serenity_assembly.py).
 //
 //   Origin: centre of inboard (nacelle-side) face, Z = 0.
+// Annular sector [az0, az1] x [r0, r1] x [z0, z1] (az in degrees, az1 > az0).
+module nz_wedge(az0, az1, r0, r1, z0, z1) {
+    n = max(2, ceil((az1 - az0) / 2));
+    translate([0, 0, z0])
+        linear_extrude(height = z1 - z0)
+            polygon(concat(
+                [for (i = [0 : n]) let(a = az0 + (az1 - az0) * i / n) [r1 * cos(a), r1 * sin(a)]],
+                [for (i = [n : -1 : 0]) let(a = az0 + (az1 - az0) * i / n) [r0 * cos(a), r0 * sin(a)]]));
+}
+
 module nozzle_throat_and_housing() {
     union() {
         difference() {
@@ -668,6 +730,29 @@ module nozzle_throat_and_housing() {
             // bosses came out as disconnected floating bodies, severed at
             // exactly this cut's Z end).  1 mm margin past the ring height.
             RING_CAVITY_Z_HI = RING_H + 1.0;   // [mm] = 9.0
+            // ── 2026-09-28 servo drive: ear window, hard stops, arm entry and
+            //    spring-cord exit bore (see "Servo push-only drive" block) ──────
+            // Upper band: from the 105 % stop edge to the 75 % stop edge.
+            nz_wedge(WIN_AZ_OPEN_EDGE, WIN_AZ_CLOSED_EDGE,
+                     HOUSING_INNER_R - 0.5, HOUSING_OUTER_R + 1.0,
+                     STOP_BAND_Z_LO, RING_CAVITY_Z_HI);
+            // Lower band: extends past the open stop for the arm tip.
+            nz_wedge(WIN_AZ_ARM_EDGE, WIN_AZ_CLOSED_EDGE,
+                     HOUSING_INNER_R - 0.5, HOUSING_OUTER_R + 1.0,
+                     -0.1, STOP_BAND_Z_LO);
+            // Forward-lip window for the servo arm.
+            nz_wedge(LIP_WIN_AZ_C - LIP_WIN_HALF_DEG, LIP_WIN_AZ_C + LIP_WIN_HALF_DEG,
+                     HOUSING_INNER_R - 0.5, HOUSING_OUTER_R + 1.0,
+                     -HOUSING_LIP_H - 0.2, 0.1);
+            // Spring-cord tangential exit bore (leaves the rim at
+            // SPRING_TANGENT_AZ heading toward decreasing azimuth).
+            translate([SPRING_CORD_R * cos(SPRING_TANGENT_AZ),
+                       SPRING_CORD_R * sin(SPRING_TANGENT_AZ), SPRING_GROOVE_Z])
+                rotate([0, 0, SPRING_TANGENT_AZ - 90])
+                    rotate([0, 90, 0])
+                        cylinder(h = sqrt(pow(HOUSING_OUTER_R + 1.0, 2)
+                                          - pow(SPRING_CORD_R, 2)),
+                                 d = SPRING_BORE_D, $fn = 16);
             // Rev S1 BUG FIX: this cut used to be a FULL cylinder of radius
             // HOUSING_INNER_R — which also swallowed the throat tube (r
             // 25..27.5) over the whole cavity height, deleting the flow
@@ -726,9 +811,12 @@ module unison_ring() {
             // A radial tab off the rim carrying the pushrod ball socket at
             // RING_LEVER_R.  Sits in a flap gap (RING_LEVER_AZ) so it clears
             // all 8 cam slots and the flap sweep.
+            // 2026-09-28: servo push-only contact ear + stop lug (see the
+            // "Servo push-only drive" block).  Starts 1 mm inside the rim for
+            // fusion; tip at EAR_TIP_R.
             rotate([0, 0, RING_LEVER_AZ])
-                translate([0, -RING_LEVER_W / 2, 0])
-                    cube([RING_LEVER_R + RING_BALL_D, RING_LEVER_W, RING_H]);
+                translate([RING_OUTER_R - 1.0, -RING_LEVER_W / 2, 0])
+                    cube([EAR_TIP_R - (RING_OUTER_R - 1.0), RING_LEVER_W, RING_H]);
         }
 
         // Cam-flange through-bore — clears the throat tube full height
@@ -746,10 +834,22 @@ module unison_ring() {
             }
         }
 
-        // ── Pushrod ball socket (blind, in the lever ear) ────────────────────
-        rotate([0, 0, RING_LEVER_AZ])
-            translate([RING_LEVER_R, 0, RING_H / 2])
-                sphere(d = RING_BALL_D + 0.4);   // 0.2 mm/side clearance ball seat
+        // ── Opening-spring cord groove (full circumference) ──────────────────
+        translate([0, 0, SPRING_GROOVE_Z - SPRING_GROOVE_W / 2])
+            difference() {
+                cylinder(h = SPRING_GROOVE_W, r = RING_OUTER_R + 0.1);
+                translate([0, 0, -0.1])
+                    cylinder(h = SPRING_GROOVE_W + 0.2, r = SPRING_GROOVE_R);
+            }
+        // ── Cord anchor: radial hole just under the ear's low (open-side) flank,
+        //    knot counterbore on the ring's inner face ────────────────────────
+        rotate([0, 0, RING_LEVER_AZ - EAR_HALF_ANG + 1.0])
+            translate([CAM_FLANGE_INNER_R - 0.1, 0, SPRING_GROOVE_Z])
+                rotate([0, 90, 0]) {
+                    cylinder(h = SPRING_GROOVE_R - CAM_FLANGE_INNER_R + 0.3,
+                             d = CORD_ANCHOR_D);
+                    cylinder(h = 0.9, d = CORD_KNOT_D);
+                }
     }
 }
 
