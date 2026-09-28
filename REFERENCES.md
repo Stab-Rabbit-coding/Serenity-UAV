@@ -126,6 +126,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
 - [Part XV — Open Hardware / Software Licensing Standards](#part-xv--open-hardware--software-licensing-standards)
+- [Part XVI — Documentation and Technical-Writing Standards](#part-xvi--documentation-and-technical-writing-standards)
     - [REF-LIC-001: CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)](#ref-lic-001-cern-open-hardware-licence-version-2--weakly-reciprocal-cern-ohl-w-20)
     - [REF-LIC-002: OSHWA Open Source Hardware Certification](#ref-lic-002-oshwa-open-source-hardware-certification)
 - [Removed / Superseded Citations](#removed--superseded-citations)
@@ -2838,6 +2839,24 @@ airframe reference sources (REF-CAD-002/003/004) — see `docs/attribution_and_l
 OSHWA certification submission (open item).
 
 **Used in:** `docs/OSHW_CERTIFICATION.md`, `TODO.md` §0.9.
+
+## Part XVI — Documentation and Technical-Writing Standards
+
+### REF-MIL-001: CNAF M-3710.7 — NATOPS General Flight and Operating Instructions Manual, §1.5 (Warnings, Cautions, and Notes) and §1.6 (Wording)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Department of the Navy, Commander, Naval Air Forces (CNAF) |
+| **Designation** | CNAF M-3710.7 (COMNAVAIRFOR M-3710.7), 2 May 2016, Original |
+| **Official URL** | <https://www.mynatec.navair.navy.mil/> (NATEC NATOPS library, access-restricted); publicly mirrored copy verified against pages 1–52 of the issued manual (front matter, Chapter 1, Glossary, List of Abbreviations/Acronyms) held locally at `docs/cnaf-3710.7_1-52.pdf` in `SecureControllers` |
+| **Applied sections** | §1.5 "Warnings, Cautions, and Notes" (p.1-5) — the WARNING/CAUTION/Note severity definitions; §1.6 "Wording" (p.1-5) — shall/should/may–need not/will requirement-verb usage |
+| **Note** | This project is not a Navy NATOPS publication and does not claim compliance with CNAF M-3710.7 as a whole. Only the §1.5 callout-severity definitions and §1.6 requirement-verb conventions are adopted, as a documentation style standard, for `AGENTS.md`/`CLAUDE.md`/design-doc procedural text across this workspace. The active-vs-passive-voice guidance paired with this citation in each repo's `AGENTS.md` is a project addition, not sourced from CNAF M-3710.7. |
+
+**Used in:** `AGENTS.md` §6a "Warnings, Cautions, Notes, and Wording" (this repo), and the
+equivalent section promulgated to every sibling repo's `AGENTS.md`/`CLAUDE.md` in this
+workspace — see each repo's own `REFERENCES.md` for its local REF-MIL-001 entry.
+
+---
 
 ## Removed / Superseded Citations
 
