@@ -830,8 +830,16 @@ def assemble():
         # a crank on it shares the ring's rotating frame (zero relative motion).
         # Replaced by a WING-REFERENCED sync gear + geared bellcrank (hybrid A+B,
         # docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT"; overlay
-        # port_tilt_spar_assembly.scad §6).  The new pinion-mounted crank is not
-        # placed here until nacelle_nozzle_pushrod.scad is reworked (TODO §1.1.3).
+        # port_tilt_spar_assembly.scad §6).
+        # RETIRED 2026-09-28 (servo drive, docs/NOZZLE_DRIVE_TRADE.md
+        # "DECISION AMENDMENT — servo drive (2026-09-28)"): that sync-gear
+        # drive could not be packaged either (0.0 mm axial room for the sun; pinion vs tilt-drive-shaft
+        # collision; ring over-travel past 90 deg tilt).  Both
+        # nacelle_nozzle_sync_gears.scad and nacelle_nozzle_pushrod.scad are
+        # archived.  The nozzle is now servo-driven from inside the pod; the
+        # servo mount is placed here once
+        # docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md U4
+        # produces it.  Nothing is placed for the nozzle drive until then.
 
         # ── Nozzle iris assembly ──────────────────────────────────────────
         # nacelle_nozzle_iris-{closed,open}.stl are the combined renders
@@ -839,8 +847,8 @@ def assemble():
         # flaps, Rev T3) from nacelle_nozzle_iris.scad, one per petal-state
         # endpoint -- see nozzle_iris_stl() above for the tilt->file
         # selection and its "not continuous" caveat. Rev T: the ring is a
-        # plain CAM disc (no gear teeth) driven by the spar-crank pushrod
-        # above; the housing has no drive-pinion relief and is rotationally
+        # plain CAM disc (no gear teeth), servo-driven via a pull-only link
+        # since 2026-09-28; the housing has no drive-pinion relief and is rotationally
         # symmetric, so identity rotation is fine. Translate to
         # NOZZLE_RING_Z.
         # History: Rev R1 compound idler (2026-06-22) -> Rev S1 internal ring

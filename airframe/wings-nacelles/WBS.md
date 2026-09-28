@@ -816,6 +816,43 @@
 
 ##### 1.1.3.1 *Nozzle*
 
+- **Servo drive (2026-09-28) — per-nacelle servo scheduled on measured tilt** (owner decision;
+  `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"; plan
+  `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`; ideation
+  `docs/ideation/2026-09-28-nozzle-servo-actuation-ideation.html`). Supersedes the Rev S2 passive
+  drive below. Analysis by Claude (Claude Opus 5.5, Anthropic) under the author's direction.
+    - [x] **Decision recorded and passive drive retired (plan U1)** — trade-doc amendment,
+        `airframe/AGENTS.md` requirement reworded ("scheduled on measured nacelle tilt",
+        105 % from 90° to 145°, fail to 105 %), sync-gear/pushrod SCADs + gear-compare WIP
+        archived, Makefile targets and overlay §6 retired.
+    - [ ] **[OPEN — IMPLEMENT] Servo linkage + schedule tool (plan U2)** —
+        `tools/nozzle_servo_linkage.py`: ring angle vs servo angle, spring/servo margins, and a
+        tilt→ring→PWM table held flat from 90° to 145°.
+    - [ ] **[OPEN — IMPLEMENT] Ring stops, spring seat, full-stroke slotted pull ear (plan U3)**
+        in `nacelle_nozzle_iris.scad`.
+    - [ ] **[OPEN — IMPLEMENT] Servo mount, pod pocket, flush cover + fit check (plan U4)** —
+        BMS-101DMG (8 mm case) forward of the ring inside the canonical shell; faired blister
+        only with owner sign-off.
+    - [ ] **[OPEN — DECISION D-NZ-1] Gateway variant (plan U6)** — V1: the AK7455 encoder lane's
+        spare `FLEX_PWM_IO`. V2: a dedicated N_STACKS=1 gateway. Mounting, wiring, weight and
+        CG are compared in `docs/NACELLE_NOZZLE_SERVO_SPEC.md` (to be written).
+    - [ ] **[OPEN — IMPLEMENT] BOM + REFERENCES (plan U7)** — `SERVO-NOZZLE`, spring, pull link,
+        mount, `FUSE-F_NOZ`, `SW-F_NOZ`, contingent level shifter. Retire `PUSHROD-BALL-M3`,
+        `BALLSTUD-M3`, `PRINT-PUSHROD-CRANK`.
+    - [ ] **[OPEN — BENCH] Servo-drive verification (plan U8)**:
+        - flap hinge moment at the lever ear (fan off and at hover);
+        - servo sweep and µs map;
+        - BMS-101DMG at 6 V, and 3.3 V PWM input;
+        - stall current, to size `F_NOZ`;
+        - spring rate;
+        - **fail-open with the servo unpowered and with it seized at 75/90/105 %** (stop
+          condition);
+        - signal-loss behaviour;
+        - cruise penalty at 105 %, and debounce/re-arm tuning.
+    - [ ] **[OPEN — FOLLOW-UP] `airframe/FreeCAD-scripts/Makefile` still has a rule for the
+        deleted `wing_nacelle_pylon_revo.scad`** (found 2026-09-28; pre-existing, unrelated).
+        `make -n` stops on it.
+
 - **Rev S3 (2026-08-09) — flap SHINGLE implemented (master/seal)** (user decision
   2026-08-09; found by CI "STL Validation", not by inspection).
     - [x] **Root cause** — `N_FLAPS` 8 × `FLAP_SPAN_DEG` 50° = 400° of arc on a
@@ -911,7 +948,7 @@
         bevel housing, drive pinion (+STLs) → `airframe/archive/`; Makefile,
         PROJECT_INDEX/ARCHIVE_INDEX, serenity_assembly.py updated.
     - [x] **Pod pocket** grown `NOZZLE_RING_OD` 65→72 to seat the Ø71 housing.
-    - [ ] **[OPEN — NO-GO, was VERIFY] Spatial RSSR linkage synthesis.**
+    - [x] **[CLOSED 2026-09-28 — NO-GO confirmed; superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"] Spatial RSSR linkage synthesis.**
         `tools/nozzle_linkage_check.py --search-dimensions` (2026-09-09)
         exhaustively swept CRANK_R 8.5–28 mm × PUSHROD_LEN 58–90 mm × 24 crank
         mounting phases × 8 spar mounting stations (336 combinations) and
@@ -928,7 +965,7 @@
         `nacelle_nozzle_pushrod.scad` is therefore a **stale implementation of
         a superseded decision**. The adopted replacement (below) is not a new
         trade — it is already decided; do NOT reopen the trade study.
-    - [ ] **[OPEN — IMPLEMENT] Adopted nozzle drive: wing-fixed sun + nacelle
+    - [x] **[CLOSED 2026-09-28 — NOT IMPLEMENTED, superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"] Adopted nozzle drive: wing-fixed sun + nacelle
         pinion + geared bellcrank** (`docs/NOZZLE_DRIVE_TRADE.md` amendment,
         2026-07-19). A gear fixed coaxial with the spar at the **wing tip**
         (non-tilting datum) meshes a nacelle-mounted **pinion**; as the nacelle
@@ -955,7 +992,7 @@
         far above the ≥40–45° rule of thumb. Iris re-renders `Simple: yes`.
         Also corrected `port_tilt_spar_assembly.scad` `PIVOT_ZLOC` 111.5 →
         **107.5** (was stale against `nacelle_pod_50mm_tandem.scad:437`).
-    - [ ] **[OPEN] Re-hub `spar_crank()` onto the pinion.** The linkage
+    - [x] **[CLOSED 2026-09-28 — superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"; `nacelle_nozzle_pushrod.scad` archived] Re-hub `spar_crank()` onto the pinion.** The linkage
         *numbers* are closed but the *part* is not printable as-is: it is still
         drawn as the Ø8 tilt-spar clamp. Needs (a) the Ø8.2 bore + Ø16 clamp hub
         replaced with a hub suited to the pinion shaft — shaft Ø, retention
@@ -979,7 +1016,8 @@
         runs in-plane. **Note:** this repo has no orientation-specific or
         interlayer CF-PETG allowable and the bearing allowable is "requires
         verification" — do not re-label either figure.
-    - [ ] **[BLOCKED — needs an owner decision, do NOT assume resolved] The
+    - [x] **[CLOSED 2026-09-28 — owner decision: datum reopened; no wing-fixed home exists inside the tip
+        airfoil, so the passive drive was retired for the servo drive] The
         KTD3 sync-gear datum does not package in the Rev T4 joint.** Full
         numbers and the lever-by-lever analysis are written up in
         `docs/NOZZLE_DRIVE_TRADE.md` § "PACKAGING BLOCKER — the KTD3 datum does
@@ -996,14 +1034,14 @@
         wing-geometry change**. Choose: spend flux, spend wing geometry, or
         reopen the datum — the linkage solve, gear sizing and print work above
         are all datum-independent and carry over, so reopening is cheap.
-    - [ ] **[OPEN — parked, do NOT print] `nacelle_nozzle_sync_gears.scad`.**
+    - [x] **[CLOSED 2026-09-28 — ARCHIVED to `archives/airframe-archives/archive/openscad/nacelles/`; superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"] `nacelle_nozzle_sync_gears.scad`.**
         The gear pair and the integral pinion+crank are authored and render
         manifold (sun 3741 facets, pinion 7279, both `Simple: yes`), but the
         **sun's bore and mounting are built to the superseded 2026-07-19
         wing-tip datum** (Ø8.4 bore for a rotating Ø8 spar) and are wrong under
         Rev T1's fixed Ø20 spar. Committed for the reusable half only. Fix
         depends entirely on the blocked decision above.
-    - [ ] **[OPEN] Pushrod clearance/interference check.** The linkage checker
+    - [x] **[CLOSED 2026-09-28 — superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"; the servo drive's own link clearance is plan U4] Pushrod clearance/interference check.** The linkage checker
         is kinematics-only by design; it does not verify the rod clears the cowl
         skin, the ESC bays, or the flap sweep across the full tilt range.
     - [x] **Re-bake the pod shells** — DONE 2026-08-31 (Rev S4). Both
@@ -1018,7 +1056,7 @@
         → hull transform) and the outer wall now tracks it: **0 proud
         violations** across 768 outer-wall samples (16 axial × 48 azimuthal),
         worst-case margin 0.5 mm at z=0.
-    - [ ] **[OPEN — ACCEPTED RESIDUAL, not fixable by boss sizing] Hinge
+    - [x] **[CLOSED 2026-09-28 — ACCEPTED RESIDUAL per plan 005 R7, not fixable by boss sizing] Hinge
         bosses remain proud of the canonical shell.** Wall trimmed Rev T5b
         2.5 mm/side → 1.5 mm/side (the minimum this repo's FDM practice treats
         as reliable, ≥3 perimeters at 0.4 mm nozzle), cutting the worst-case
@@ -1034,10 +1072,12 @@
         **Accepted per plan 005 R7**: this is a genuine hinge-circle-vs-
         mould-line geometric conflict, not an under-sized boss. Do not shrink
         the wall further chasing an unreachable zero.
-    - [ ] **[OPEN] Spar-crank placement** in serenity_assembly.py is first-pass
+    - [x] **[CLOSED 2026-09-28 — superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"; the assembly has placed no spar crank since 2026-07-20] Spar-crank placement** in serenity_assembly.py was first-pass
         (Y=0, Z=PIVOT_Z, X-axis clamp); confirm clock angle + pushrod routing.
-    - [ ] **[OPEN] User WIP** `gear_option_compare.scad` / `gear_shell_compare.scad`
-        (untracked) `use<>` the now-archived gear SCADs — update or archive.
+    - [x] **[CLOSED 2026-09-28 — ARCHIVED] User WIP** `gear_option_compare.scad` / `gear_shell_compare.scad`
+        `use<>` the now-archived gear SCADs. `gear_option_compare.scad` moved to
+        `archives/airframe-archives/archive/openscad/nacelles/`; `gear_shell_compare.scad` no longer
+        exists in the tree.
 
 - [x] **nacelle_nozzle_iris.stl** — `openscad -o ... serenity/stl/nacelle_nozzle_iris.scad`
     *(rendered 2026-06-22)* — Rev R1 50 mm iris: full-circle M=1.0 ring gear
@@ -1288,7 +1328,8 @@
     (only the SCAD source has been authored); render it once the Z-conflict
     above is resolved.
 
-- [ ] **[OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD**
+- [x] **[CLOSED 2026-09-28 — STALE since 2026-07-18: Option B deleted the idler/ring-gear train
+    that protruded; now superseded again by the in-pod servo drive] Nozzle drive protrudes ~10 mm past the nacelle OD**
     *(flagged 2026-07-07, design review)* — the compound idler shaft sits at R43.6 mm
     and its Idler-Out teeth reach R≈51 mm, ~10 mm proud of the Ø82 nozzle housing /
     nacelle OD (the "steampunk accessory"). Root cause: the external 72T ring gear

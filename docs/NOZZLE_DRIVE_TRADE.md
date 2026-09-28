@@ -1,4 +1,7 @@
-# Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19)
+# Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19; decided 2026-09-28)
+
+> **Current decision:** servo drive scheduled on measured tilt — see
+> [DECISION AMENDMENT — servo drive (2026-09-28)](#decision-amendment--servo-drive-2026-09-28).
 
 > *"It's the tilt-nozzle. Passive. Elegant. Right up until a gear's hanging off
 > the side of the ship." — design review, this session.*
@@ -260,3 +263,73 @@ applies as written, so that option is not disqualified on the old grounds either
 
 *Analysis by Claude (Claude Opus 5, Anthropic) under the author's direction,
 2026-09-10, per `AGENTS.md` AI attribution.*
+
+## DECISION AMENDMENT — servo drive (2026-09-28)
+
+> **Supersedes the 2026-07-19 hybrid A+B drive and resolves the 2026-09-10 PACKAGING BLOCKER.**
+> Owner decision (Steve Griffing, 2026-09-28). In the 2026-09-28 session this choice was
+> labelled "Option A". It is **not** this document's 2026-07-07 "Option A" (internal ring gear).
+
+### Decision
+
+The nozzle is driven by one sub-micro servo per nacelle, inside the pod, forward of the unison
+ring. The servo is **scheduled on the measured AK7455 tilt angle** by the gateway that reads the
+encoder:
+
+| Tilt | Nozzle exit |
+|---|---|
+| 0° | 75 % of bore |
+| 90° to 145° | 105 % of bore, held flat |
+
+The servo pulls the ring toward 75 % through a pull-only slotted link. The slot is at least as
+long as the full stroke. A torsion spring drives the ring to a hard 105 % stop whenever the servo
+stops pulling:
+
+- On a fault, the gateway commands 105 % and then opens a load switch on the servo's fused 6 V
+  branch.
+- The first sub-200 ms glitch in a flight is forgiven. Any later fault trips at once.
+- A tripped fault re-arms once, after 2 s clean at tilt ≥ 60°. A second trip latches until power
+  cycle.
+
+Implementation: `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`. The gateway
+variant (share the AK7455's lane, or a dedicated board) is open there as D-NZ-1.
+
+### Why the passive drive was retired (three independent defects)
+
+1. **No home for the fixed sun.** The Rev T4 joint has +0.0 mm of axial margin (PACKAGING
+   BLOCKER, above). The owner chose to reopen the datum. Under Rev T1 the spar is fixed, so a
+   wing-frame pickup is valid again in principle. But the only nacelle structure reaching the joint
+   gap is fore and aft of the pivot along the duct axis:
+   - **Aft** is swept by the tilt-drive pinion and shaft (wing station 53.6, r 25.6 mm).
+   - **Forward**, the pushrod would have to pass through the Ø50 collar.
+   - **Any wing-fixed sector or cam at r ≥ 26 mm** stands out of the tip airfoil (±13 mm at the
+     spar, 3–9 mm aft) into the airstream.
+2. **The pinion collides with the tilt-drive shaft.** The drawn pinion axis sits 26.4 mm aft of
+   the pivot. At 0° tilt that is 0.8 mm from the Rev T1 tilt-drive shaft centre (25.6 mm aft of the
+   spar).
+3. **Over-travel past 90°.** The tilt drive sweeps 145°. The solved 1:1 linkage
+   (`tools/nozzle_linkage_check.py` default geometry) keeps driving the unison ring past its
+   23.75° stroke:
+
+   | Tilt | 0° | 30° | 60° | 90° | 105° | 120° | 135° | 145° |
+   |---|---|---|---|---|---|---|---|---|
+   | Ring ψ | −0.36° | −5.48° | −14.05° | −24.18° | −29.42° | −34.51° | −39.22° | −42.01° |
+
+   At 145° that is 177 % of the stroke. That violates "105 % at ≥ 90°" and would jam or back-drive
+   the flaps. Any continuous mechanical 1:1 drive has this defect, and it needs a dwell (cam) or a
+   spring cartridge to fix.
+
+### Alternatives costed (2026-09-28, owner-reviewed)
+
+| Option | Mass change, per aircraft | Parts outside the mould line | Service | Worst failure |
+|---|---|---|---|---|
+| **Servo scheduled on the AK7455 (adopted)** | ≈ +19 g (0.042 lbm) (shared gateway) | 0 if the servo fits the annulus (plan U4) | plug-in servo behind a cover | loss of power or command → spring to 105 % (hover-safe) |
+| Wing-tip sector + spring-cartridge rod | +16 to +36 g est. | 3 (large faired sector, pinion, rod slot) | exposed sector | a jam back-drives the tilt worm |
+| Wider joint gap + spring-cartridge rod | ≈ +28 g est. plus plan-003 structure | 2 | nacelle-off | as above; nacelle 4.5 mm outboard |
+
+`tools/nozzle_linkage_check.py` is kept as the negative-result record for both passive
+architectures. `nacelle_nozzle_sync_gears.scad` and `nacelle_nozzle_pushrod.scad` are archived
+under `archives/airframe-archives/archive/openscad/nacelles/` (see `ARCHIVE_INDEX.md`).
+
+*Analysis by Claude (Claude Opus 5.5, Anthropic) under the author's direction, 2026-09-28; servo
+research and ideation sub-agents Claude Sonnet 5 (Anthropic). Per `AGENTS.md` AI attribution.*
