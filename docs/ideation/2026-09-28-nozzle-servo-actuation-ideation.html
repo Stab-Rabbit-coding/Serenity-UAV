@@ -1,0 +1,123 @@
+<title>Ideation: Nacelle Nozzle Servo Actuation</title>
+<style>
+:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#5d5b55;--line:#dcd8cf;--card:#ffffff;--accent:#1f5f8b;--accent-soft:#e3eef6;--warn:#8a3b12;--warn-soft:#fbeadf;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17181a;--fg:#e8e6e1;--muted:#a7a49c;--line:#34363a;--card:#1f2124;--accent:#7fb6dc;--accent-soft:#1d2d3a;--warn:#f0a27a;--warn-soft:#3a2419;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17181a;--fg:#e8e6e1;--muted:#a7a49c;--line:#34363a;--card:#1f2124;--accent:#7fb6dc;--accent-soft:#1d2d3a;--warn:#f0a27a;--warn-soft:#3a2419;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;padding:0 16px;margin:0}
+main{max-width:46rem;margin:0 auto;padding-block:2rem 3rem}
+h1{font-size:1.6rem;margin:0 0 .3rem}h2{margin-top:2.2rem;border-bottom:1px solid var(--line);padding-bottom:.3rem}
+.meta{color:var(--muted);font-size:.9rem}.meta span{margin-right:1.2rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:1rem 1.2rem;margin:1.2rem 0}
+.card h3{margin:.1rem 0 .6rem}.field{margin:.35rem 0}.field b{display:inline-block;min-width:6.5rem}
+.chips span{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:0 .6rem;margin-right:.4rem;font-size:.85rem}
+code{font-size:.88em}table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{border:1px solid var(--line);padding:.35rem .5rem;text-align:left;vertical-align:top}
+.tw{overflow-x:auto}svg{max-width:100%;height:auto}
+svg text{fill:var(--fg);font:12px system-ui,sans-serif}.sv-box{fill:var(--card);stroke:var(--muted)}.sv-acc{fill:var(--accent-soft);stroke:var(--accent)}.sv-warn{fill:var(--warn-soft);stroke:var(--warn)}.sv-line{stroke:var(--fg);fill:none;stroke-width:1.5}
+footer{margin-top:3rem;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding-top:.8rem}
+</style>
+<main>
+<h1>Ideation: Nacelle Nozzle Servo Actuation</h1>
+<p class="meta"><span>Date: <time datetime="2026-09-28">2026-09-28</time></span><span>Topic: nozzle-servo-actuation</span><span>Mode: repo-grounded</span></p>
+<p class="meta">Focus: Option A (owner decision 2026-09-28) — per-nacelle servo commanded from the AK7455 tilt angle, ring spring-biased open; present shared-AK7455-gateway vs dedicated-gateway variants with mounting, wiring and weight.</p>
+
+<h2 id="grounding">Codebase Context</h2>
+<ul>
+<li><b>Requirement</b> (<code>airframe/AGENTS.md</code> "Nacelle Nozzle Drive"): exit 75 % of bore at 0° tilt → 105 % at ≥ 90°, held to the 145° tilt limit.</li>
+<li><b>Why the passive drive was dropped:</b> the wing-fixed sun gear has 0.0 mm axial room in the Rev T4 trunnion; the pinion collided with the Rev T1 tilt-drive shaft (wing station 53.6); the 1:1 drive over-travels the ring to −40.7° at 140° tilt vs a 23.75° stroke. Deleted parts ≈ 14.8 g (0.033 lbm) per nacelle.</li>
+<li><b>Ring:</b> cam disc, lever ear r 32 mm at 157.5° (inboard flap gap), stroke 23.75° ≈ 13.2 mm (0.52 in) of lever-ball chord, at nacelle Z 166.25.</li>
+<li><b>Pod:</b> duct r 25 / sleeve r 27.5 inside a r 37.7 skin → ≈ 10 mm (0.39 in) annulus; wall thickens 2.5 → 8.0 mm toward the aft end (Rev T4b); pivot sits at the rotating assembly's CG, so aft mass moves PIVOT_Z and hover clearance (<code>tools/nacelle_mass_cg.py</code>).</li>
+<li><b>Gateway:</b> nacelle CAN-PERIPH-GW-1 encoder lane reads the AK7455 on <code>J_ENC</code>; its <code>J_FLEX</code> is unused. <code>CAN-PERIPH-GW-1.md</code> §3 states <code>FLEX_PWM_IO</code> (PA25, TIMA0_C3) generates 50 Hz 1000–2000 µs servo PWM "for nozzle-drive actuators … a firmware-mode choice, not a hardware change". The tilt servo lane was freed on 2026-09-17 (tilt moved to OSESC-TILT-TC, in the fuselage cargo bay).</li>
+<li><b>Door precedent</b> (<code>docs/CARGO_DOOR_GATEWAY_SPEC.md</code>): N_STACKS=1 board 49.0 × 25.5 mm, ~6 g VERIFY, card-edge tray 5.0 g; servo power from a fused 6 V servo-rail branch (D-GW-4); failsafe = hold last position on heartbeat loss.</li>
+<li><b>Thin servos (web research, specs read on vendor pages):</b> Blue Bird BMS-A10V 22 × 8 × 15.3 mm, 7.4 g, 1.6–3.2 kgf·cm, 3.7–8.4 V (hyperflight.co.uk, blue-bird-model.com); KST X08 Plus V6.0, 8 mm case, 9.0 g, 5.3 kgf·cm (kstservos.com); Hitec HS-40 20 × 8.6 × 17 mm, 4.8 g, 0.8 kgf·cm @ 6 V. TowerPro SG90 is 12.2 mm thick (REF-ACT-003) — does not fit.</li>
+<li><b>Hazard:</b> hover T/W already 5–18 % below the 1.2 floor, so a nozzle stuck closed in hover is the governing failure.</li>
+</ul>
+
+<h2 id="axes">Topic Axes</h2>
+<p>1. Servo selection &amp; in-pod packaging<br>2. Ring actuation linkage &amp; fail-open bias<br>3. Gateway/bus integration &amp; wiring through the wing–nacelle joint<br>4. Mounting, access &amp; field service<br>5. Failure modes, schedule software &amp; verification</p>
+
+<h2 id="ideas">Ranked Ideas</h2>
+<p><a href="#i1">1. Spring opens, servo only pulls closed</a> · <a href="#i2">2. Schedule table with hold and open-on-loss</a> · <a href="#i3">3. Shared encoder-lane gateway as baseline</a> · <a href="#i4">4. 8 mm wing servo in the annulus, fit-gated</a> · <a href="#i5">5. Measure flap hinge moment first</a> · <a href="#i6">6. Combined pre-arm sweep</a> · <a href="#i7">7. Net mass and pivot accounting</a></p>
+
+<div class="card" id="i1"><h3>1. Spring opens, servo only pulls closed</h3>
+<div class="chips"><span>Axis 2</span><span>Confidence 85 %</span><span>Complexity Medium</span></div>
+<p class="field"><b>Description:</b> A metal torsion (or clock) spring on the unison-ring axis drives the ring to a hard 105 % stop. The servo reaches the ring through a one-way link — a slotted pushrod or a pull cable — that can only pull toward the hard 75 % stop and can never push. Hard stops set both endpoints, and the servo is commanded slightly past each through the link's compliance, so both nacelles land on identical areas with no per-servo trim.</p>
+<p class="field"><b>Basis:</b> <code>external:</code> spring-return fail-safe damper actuators (HVAC practice: the actuator winds a spring while powered and the spring drives to the fail position on power loss). <code>reasoned:</code> a normal RC servo gearbox can hold its position unpowered under a light load, so a spring alone cannot guarantee "open" if the servo seizes or stays powered at a closed command. A pull-only link separates the fail-safe path from the servo entirely.</p>
+<p class="field"><b>Rationale:</b> This is the difference between "spring-biased open" as a wish and as a guarantee against the governing hazard (stuck closed in hover).</p>
+<p class="field"><b>Downsides:</b> Needs a real spring part number (only McMaster torsion/clock-spring catalogue categories were confirmed); the spring torque adds to what the servo must hold in cruise; the slotted link needs wear-resistant faces.</p>
+<svg viewBox="0 0 560 150" role="img" aria-label="Force paths: spring pushes ring to open stop; servo pulls through one-way link to closed stop">
+<rect class="sv-acc" x="20" y="45" width="120" height="50" rx="6"/><text x="80" y="74" text-anchor="middle">Torsion spring</text>
+<rect class="sv-box" x="220" y="45" width="120" height="50" rx="25"/><text x="280" y="74" text-anchor="middle">Unison ring</text>
+<rect class="sv-box" x="420" y="45" width="120" height="50" rx="6"/><text x="480" y="74" text-anchor="middle">Servo</text>
+<line class="sv-line" x1="140" y1="70" x2="216" y2="70" marker-end="url(#a)"/><text x="178" y="60" text-anchor="middle">push open</text>
+<line class="sv-line" x1="420" y1="70" x2="344" y2="70" marker-end="url(#a)" stroke-dasharray="6 4"/><text x="382" y="60" text-anchor="middle">pull only</text>
+<text x="280" y="122" text-anchor="middle">hard stops: 75 % … 105 %</text>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="currentColor"/></marker></defs>
+</svg></div>
+
+<div class="card" id="i2"><h3>2. Schedule table with hold and open-on-loss</h3>
+<div class="chips"><span>Axis 5</span><span>Confidence 90 %</span><span>Complexity Low</span></div>
+<p class="field"><b>Description:</b> The gateway maps the signed AK7455 angle to ring position with a lookup table: 75 % at 0°, 105 % from 90° to 145° (flat hold). On heartbeat loss, a MAC failure, AK7455 ERROR or an out-of-range angle, it commands 105 % and then drops servo drive so the spring holds the ring open. This deliberately inverts the door gateway's "hold last position". One firmware image serves both sides, with a side flag in config, guarding against the known NACELLE_SIDE inversion trap.</p>
+<p class="field"><b>Basis:</b> <code>direct:</code> the over-travel defect (ring −40.7° at 140° tilt vs a 23.75° stroke); <code>CARGO_DOOR_GATEWAY_SPEC.md</code> failsafe "hold the last commanded positions". <code>external:</code> ArduPilot <code>SERVOn_FSPWM</code>, a per-output failsafe PWM (ardupilot.org/plane/docs/apms-failsafe-function.html), as the precedent for a commanded fail position.</p>
+<p class="field"><b>Rationale:</b> It fixes the over-travel by construction. Copying the door firmware unchanged would have built in the unsafe case.</p>
+<p class="field"><b>Downsides:</b> Assurance work: the nozzle-command message class needs its own safety rating in the secure-controller mapping.</p></div>
+
+<div class="card" id="i3"><h3>3. Shared encoder-lane gateway as baseline; dedicated gateway only for fault isolation</h3>
+<div class="chips"><span>Axis 3</span><span>Confidence 85 %</span><span>Complexity Low</span></div>
+<p class="field"><b>Description:</b></p>
+<ul>
+<li><b>Baseline:</b> <code>FLEX_PWM_IO</code> on the nacelle encoder lane's <code>J_FLEX</code>. Only signal and GND cross <code>J_FLEX</code>. Power comes from a fused branch of the 6 V servo rail, following door decision D-GW-4. The lead gets the encoder's EMI discipline: shielded, ≥ 10 mm from the 40 A feeds, ferrite at entry.</li>
+<li><b>Dedicated alternative:</b> an N_STACKS=1 board in a copy of the door card-edge tray, near an ESC bay cover.</li>
+<li><b>What the dedicated board buys:</b> only one thing. With a shared gateway, a gateway fault costs tilt feedback and nozzle command together; a dedicated board separates them.</li>
+</ul>
+<p class="field"><b>Basis:</b> <code>direct:</code> <code>CAN-PERIPH-GW-1.md</code> §3, "this board type also serves as a signed CAN-FD/RS-485-to-servo command bridge (e.g. nacelle tilt or nozzle-drive actuators)"; door decisions D-GW-4 and D-GW-5.</p>
+<p class="field"><b>Rationale:</b> The baseline costs no new boards. It turns the variant choice into a single failure-mode question for the owner, rather than a matter of taste.</p>
+<p class="field"><b>Downsides:</b> The shared lane creates a common-mode failure. The mitigation is idea 2: loss of the gateway leaves the nozzle open, which is the hover-safe state.</p></div>
+
+<div class="card" id="i4"><h3>4. 8 mm wing servo in the annulus, fit-gated, with a blister as fallback</h3>
+<div class="chips"><span>Axes 1, 4</span><span>Confidence 60 %</span><span>Complexity Medium</span></div>
+<p class="field"><b>Description:</b> Lay a glider wing servo flat in the ≈ 10 mm annulus, near the ring lever at 157.5°, so its 8 mm dimension is radial. Candidates:</p>
+<ul>
+<li>Blue Bird BMS-A10V: 7.4 g, 3.2 kgf·cm at 8.4 V.</li>
+<li>KST X08 Plus: 9 g, 5.3 kgf·cm.</li>
+</ul>
+<p>Gate the choice on a CAD fit check against the thickening aft wall. If it fails, fall back to a small faired blister over the servo body.</p>
+<p class="field"><b>Basis:</b> <code>external:</code> the vendor dimension pages listed in Codebase Context; <code>direct:</code> SG90 12.2 mm vs a ≈ 10 mm annulus.</p>
+<p class="field"><b>Rationale:</b> This is the only path to no mould-line break, which was the main reason Option A won.</p>
+<p class="field"><b>Downsides:</b> The verifier rated the fit claim weak until it is mocked up. The aft wall is 8 mm, so the servo probably belongs forward of the ring, with a longer pull link. KST's case thickness is stated for the series, not dimensioned on the page.</p></div>
+
+<div class="card" id="i5"><h3>5. Measure flap hinge moment before sizing spring and servo</h3>
+<div class="chips"><span>Axes 2, 5</span><span>Confidence 80 %</span><span>Complexity Low</span></div>
+<p class="field"><b>Description:</b> On the EDF bench, measure the lever-ear force at r 32 mm at 75 % and 105 %, with the fan off and at hover throttle. If exhaust pressure already loads the flaps toward open, the spring only has to cover the zero-thrust case, and the servo's cruise holding torque is set by the measured moment.</p>
+<p class="field"><b>Basis:</b> <code>reasoned:</code> convergent flaps downstream of the fan carry static-pressure loading on their inner faces. The direction and size are unknown, and they set both the spring rate and the servo class.</p>
+<p class="field"><b>Rationale:</b> It replaces the "generous 20 N" placeholder with a measured load.</p>
+<p class="field"><b>Downsides:</b> It needs a printed nozzle and bench time, and blocks final spring selection.</p></div>
+
+<div class="card" id="i6"><h3>6. Combined pre-arm sweep</h3>
+<div class="chips"><span>Axis 5</span><span>Confidence 75 %</span><span>Complexity Low–Medium</span></div>
+<p class="field"><b>Description:</b> Before arming, the gateway drives the ring 105 → 75 → 105 % and confirms it moved, using a servo current signature or a small ring-side position sensor. This runs in the same pre-arm step as the tilt brake check.</p>
+<p class="field"><b>Basis:</b> <code>reasoned:</code> none of the confirmed thin servos gives position feedback, so a bound ring or broken link is invisible electrically. Only a moved-and-returned check catches a mechanical jam before flight.</p>
+<p class="field"><b>Rationale:</b> It catches the one failure the electrical fail-open cannot: a mechanical bind.</p>
+<p class="field"><b>Downsides:</b> Sensing current or position needs an ADC pin or a sensor, which is still to be chosen.</p></div>
+
+<div class="card" id="i7"><h3>7. Net mass and pivot accounting</h3>
+<div class="chips"><span>Axes 1, 4</span><span>Confidence 95 %</span><span>Complexity Low</span></div>
+<p class="field"><b>Description:</b> Report the servo, link, spring, harness and (if chosen) gateway net of the deleted ≈ 14.8 g per nacelle. Re-run <code>tools/nacelle_mass_cg.py</code> to get the new PIVOT_Z and hover ground clearance, because the new mass lands aft of the pivot.</p>
+<p class="field"><b>Basis:</b> <code>direct:</code> the pod-file table that ties pod mass to PIVOT_Z and hover clearance, and the repo rule that no mass or CG may be left TBD.</p>
+<p class="field"><b>Rationale:</b> Aft mass in a tilting pod is not free: it shifts the pivot and ground clearance.</p>
+<p class="field"><b>Downsides:</b> None beyond the tool run.</p></div>
+
+<h2 id="rejected">Rejection Summary</h2>
+<div class="tw"><table><tr><th>#</th><th>Idea</th><th>Reason rejected</th></tr>
+<tr><td>1</td><td>Wing-mounted servo + Bowden cable along the tilt axis</td><td>Refuted: the Ø20 spar fills the Ø20.6 bore (0.3 mm/side) and ends 0.7 mm from the stator sleeve. There is no cable path.</td></tr>
+<tr><td>2</td><td>Drive the nozzle servo from OSESC-TILT-TC</td><td>Refuted: that controller is in the fuselage cargo bay (<code>tilt_actuator_bracket.scad</code>), so the servo would need a hard-wired PWM run through the tilt joint.</td></tr>
+<tr><td>3</td><td>Printed PETG flexure tabs on the seal flaps as the open bias</td><td>Refuted: PETG creeps and relaxes under sustained strain, so it can't be the primary safety preload.</td></tr>
+<tr><td>4</td><td>SMA/wax thermal backstop latch</td><td>Duplicates idea 1's fail-open path with a new technology; not worth the complexity.</td></tr>
+<tr><td>5</td><td>Schedule on thrust/RPM as well as tilt</td><td>Beyond the asked scope; worth reconsidering once idea 5's data exists.</td></tr>
+<tr><td>6</td><td>Nozzle spec written on a skeleton reusable by the future RCS-valve gateway (GW-RCS)</td><td>Tangential to the decision asked for.</td></tr>
+<tr><td>7</td><td>External blister with an SG90</td><td>Merged into idea 4 as the fallback.</td></tr>
+<tr><td>8</td><td>Hard end stops + compliant overdrive</td><td>Merged into idea 1.</td></tr>
+<tr><td>9</td><td>Single firmware image with a side flag; servo lead EMI + fused power</td><td>Merged into ideas 2 and 3.</td></tr>
+</table></div>
+
+<footer class="composition-signal">Composed <time datetime="2026-09-28T21:05Z">2026-09-28T21:05Z</time> by ce-ideate (Claude Opus 5.5, Anthropic; ideation fleet Claude Sonnet 5 + Claude Opus 5.5; basis verifier Claude Sonnet 5) from the session prompt "go with a … own gateway and present both options", directed by Steve Griffing.</footer>
+</main>
