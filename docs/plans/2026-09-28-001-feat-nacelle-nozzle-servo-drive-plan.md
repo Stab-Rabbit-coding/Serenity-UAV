@@ -43,9 +43,9 @@ ideation and servo research sub-agents Claude Sonnet 5 (Anthropic). Per `AGENTS.
 
 ### Summary
 
-Each nacelle gets a sub-micro servo inside the pod, forward of the nozzle ring. The servo pulls the
-unison ring toward 75 % bore through a pull-only link. A spring drives the ring to a hard 105 % stop
-whenever the servo stops pulling.
+Each nacelle gets a sub-micro servo inside the pod, forward of the nozzle ring. Its arm pushes the
+unison ring toward 75 % bore through a push-only contact. A spring drives the ring to a hard 105 %
+stop whenever the servo stops pushing, and a seized servo cannot hold the ring closed.
 
 The schedule runs on the gateway that reads the AK7455, as a lookup table from tilt angle to ring
 position:
@@ -161,18 +161,22 @@ Option A on 2026-09-28.
     stroke is listed inconsistently, and the lever arm would have to shrink to about 21 mm to match
     that stroke. It cannot hold against any open-spring worth having, so it is recorded as
     rejected unless U8 measures a total closing load under about 1 N.
-- **KTD3 — Spring opens, servo only pulls** *(session-settled: user-approved — chosen over a
-  spring bias acting through a push-pull rod, because a seized or powered servo could then hold
-  the ring closed)*.
-  - The pull link is a 0.8 mm music-wire pull rod in a slotted ear, or equivalently a pull cable.
-    **The slot is at least the full ring stroke (≥ 13.2 mm (0.52 in) of lever-ball chord) plus
-    1 mm (0.04 in).** The ring can then travel to 105 % whatever angle the servo is stopped or
-    seized at, so fail-open never depends on the servo gearbox back-driving (doc review
-    2026-09-28, P0).
-  - Hard stops at 75 % and 105 % set the areas. The servo is commanded about 2° past each stop
-    through the link's compliance, so no per-servo trim is needed.
-  - Spring sizing target: at least 1.5 × (measured opening-side friction) and no more than 40 % of
-    the servo pull, i.e. ≤ 4.2 N (0.94 lbf) at the lever ball, pending U8.
+- **KTD3 — Spring opens, servo only pushes toward closed (push-only contact)** *(session-settled:
+  user-approved; revised 2026-09-28 by owner-approved correction)*.
+  - The servo arm tip is a **unilateral contact** on the ear's open-side flank at r 34.3 mm. It
+    pushes the ring toward 75 %. A spring cord wrapped on a rim groove (r 32.35 mm) pulls the ring
+    toward 105 % and holds the ear on the tip.
+  - Because the contact is push-only, the ring can always move away from the arm, so a dead,
+    unpowered **or seized** servo cannot hold the nozzle closed.
+  - **Correction:** the earlier "full-stroke slotted pull link" fix was wrong. A seized pull link
+    blocks the ring from paying out toward open, and no slot or cord arrangement avoids that.
+  - Hard stops are the ends of a window through the housing wall:
+    - the 75 % stop is full height on the ear's closed-side flank;
+    - the 105 % stop is an upper-band lug on the ear's open-side flank, above the arm's contact
+      band, so the tip is never trapped.
+  - Spring sizing target: at least 1.5 × (measured opening-side friction) and no more than 40 %
+    of servo stall push, pending U8.
+
 - **KTD4 — The schedule runs on the gateway that reads the AK7455** *(user-approved at scoping:
   chosen over flight-computer-commanded nozzle position)*.
   - The tilt-to-ring lookup table holds flat from 90° to 145°. The over-travel is fixed by
@@ -192,10 +196,12 @@ Option A on 2026-09-28.
     avoids spending a whole cruise at 105 % after one transient glitch (owner decision
     2026-09-28, chosen over latching until power cycle). Both timing values are starting points,
     to be set by U8.
-- **KTD5 — Servo forward of the ring, inside the pod** *(user-approved at scoping)*. The aft wall
-  is 8.0 mm (Rev T4b), so the servo sits where the annulus has depth for the 8 mm case. The pull
-  link runs aft to the lever ear at 157.5°, the inboard flap gap. A faired blister is the fall-back
-  only (R3).
+- **KTD5 — Servo forward of the ring, inside the pod** *(user-approved at scoping)*.
+  - The servo lies flat in the annulus just forward of the nozzle housing, with its shaft radial
+    (8 mm case thickness radial) at the mid-stroke contact azimuth, about 141°.
+  - Its 10.05 mm arm reaches aft through a window in the housing's forward lip.
+  - The ear sweeps 157.5° (closed) → 133.75° (open), because the ring opens clockwise.
+  - A faired blister is the fall-back only (R3).
 - **KTD6 — Servo power from a fused branch of the 6 V servo rail in both variants** (door
   precedent D-GW-4). Only signal and GND use `J_FLEX`. The 6 V pair crosses the joint through the
   spar bore with the power feeds, under the same braid/ferrite rule as the encoder pair.
@@ -212,8 +218,8 @@ flowchart LR
   GW -- LUT tilt to ring --> PWM[FLEX_PWM_IO 50 Hz]
   PWM --> SV[BMS-101DMG servo<br/>fwd of ring]
   RAIL[FE PDB 6 V servo rail<br/>fused F_NOZ] --> SV
-  SV -- pull-only link --> RING[Unison ring<br/>stops 75 % / 105 %]
-  SPR[Torsion spring] -- drives open --> RING
+  SV -- push-only arm contact --> RING[Unison ring<br/>stops 75 % / 105 %]
+  SPR[Spring cord on rim groove] -- drives open --> RING
   GW -- signed NOZZLE_STATUS --> BUS[(CAN-FD / RS-485 trunk)]
   GW -. fault: AK7455/heartbeat/MAC/rail .-> OPEN[Command 105 % then open F_NOZ load switch]
 ```
@@ -337,7 +343,7 @@ Verification Contract still apply.
 ### U2. Servo linkage and schedule tool
 
 **Goal:** One re-runnable tool for the Option A drive. It works out:
-- the ring angle for a given servo angle through the pull link;
+- the ring angle for a given servo angle through the push-only arm contact;
 - the spring/servo force margins;
 - the tilt → ring → PWM lookup table with the 90–145° hold.
 
@@ -379,8 +385,8 @@ convention, pass/fail exit codes).
 
 ### U3. Ring stops, spring seat and pull-link anchor
 
-**Goal:** The iris hardware carries KTD3: hard 75 %/105 % stops, a torsion-spring seat on the ring
-axis, and a slotted pull-link ear replacing the ball socket.
+**Goal:** The iris hardware carries KTD3: hard 75 %/105 % stops (housing window ends), a spring-cord
+rim groove, anchor and exit bore, and a push-only contact ear replacing the ball socket.
 
 **Requirements:** R1, R2, R3.
 
@@ -429,8 +435,8 @@ access cover, and prove the fit.
 **Approach:**
 1. Search Z stations between the ESC bays and the ring for an annulus depth of at least
    8 mm + 2 × 0.3 mm clearance + skin. Use the actual Rev T4b wall-thickness profile.
-2. Route the pull link at the 157.5° azimuth clear of the aft spider sleeve and the EDF2 phase
-   leads.
+2. Clear the arm's sweep (lip window about 141° ± 12°) and the spring's run from the cord
+   exit bore (about 90°) of the aft spider sleeve and the EDF2 phase leads.
 3. Side-dependent geometry is keyed on `PYLON_SIDE`. Remember the known trap: NACELLE_SIDE is
    inverted relative to the filename.
 4. If no station fits, stop per the Goal Capsule and draft the faired-blister fallback for owner
@@ -549,7 +555,8 @@ records the chosen variant's integration.
 1. Add rows:
    - `SERVO-NOZZLE` (BMS-101DMG ×2);
    - `SPRING-NOZZLE-OPEN`;
-   - `LINK-NOZZLE-PULL`;
+   - `ARM-NOZZLE` (the servo arm with its contact nub) and `CORD-NOZZLE-SPRING` (Dyneema
+     Ø0.5 mm);
    - `PRINT-NOZZLE-SERVO-MOUNT`;
    - `FUSE-F_NOZ`;
    - `SW-F_NOZ` (the high-side load switch);

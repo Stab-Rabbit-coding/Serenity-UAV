@@ -56,9 +56,9 @@ class LinkageTest(unittest.TestCase):
     """Servo arm -> pull link -> ring lever geometry."""
 
     def test_arm_radius_for_default_sweep(self) -> None:
-        # 13.2 mm lever chord over a 90 deg servo sweep -> ~9.3 mm arm.
+        # 14.2 mm contact travel (r 34.3 x 23.75 deg) over 90 deg -> ~10.1 mm arm.
         arm = nsl.arm_radius_for_stroke(sweep_deg=90.0)
-        self.assertAlmostEqual(arm, 9.33, delta=0.1)
+        self.assertAlmostEqual(arm, 10.05, delta=0.1)
 
     def test_pwm_table_endpoints(self) -> None:
         # Integration: table rows run from 75 % to 105 % and stay in 1000-2000 us.
@@ -69,9 +69,19 @@ class LinkageTest(unittest.TestCase):
             self.assertGreaterEqual(row["pulse_us"], 1000)
             self.assertLessEqual(row["pulse_us"], 2000)
 
-    def test_slot_covers_full_stroke(self) -> None:
-        # R2 / KTD3: the pull-only slot must exceed the full lever chord + 1 mm.
-        self.assertGreaterEqual(nsl.SLOT_LEN_MM, nsl.lever_chord_mm() + 1.0)
+    def test_seized_arm_never_blocks_open(self) -> None:
+        # R2 / KTD3: push-only contact — with the arm seized at ANY angle, the
+        # fully-open ring position is still admissible (ear clear of the tip).
+        for alpha in (-45.0, -20.0, 0.0, 20.0, 45.0):
+            self.assertTrue(nsl.ring_can_open_with_arm_seized(alpha))
+
+    def test_arm_holds_schedule_by_contact(self) -> None:
+        # Integration: at each scheduled psi the arm tip sits exactly on the ear.
+        for tilt in (0.0, 30.0, 60.0, 90.0):
+            psi = nsl.ring_angle_for_tilt(tilt)
+            alpha = nsl.servo_angle_for_ring(psi)
+            self.assertAlmostEqual(nsl.tip_travel_mm(alpha),
+                                   nsl.ear_travel_mm(psi), delta=0.01)
 
 
 class MarginTest(unittest.TestCase):
