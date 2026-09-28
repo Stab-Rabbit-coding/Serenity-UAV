@@ -535,11 +535,18 @@ RING_LEVER_W    =  5.0;   // [mm] lever ear tangential width
 // only reaches the open-end radius when the ring turns by -THETA_RING_REF_OPEN.
 // The ear therefore sweeps az 157.5 (75 %, closed) -> 133.75 (105 %, open).
 //
-// FAIL-OPEN BY CONSTRUCTION: the servo arm tip is a UNILATERAL (push-only)
+// FAIL-OPEN BY CONSTRUCTION: a guided PUSH WIRE (0.8 mm music wire in a PTFE
+// tube, driven by the servo) ends as a UNILATERAL (push-only, unattached)
 // contact on the ear's LOW-azimuth flank and pushes the ring toward CLOSED; a
 // spring cord wrapped on the rim pulls it toward OPEN and holds the ear against
-// the arm.  The ring can always move away from the arm, so a dead, unpowered or
-// SEIZED servo cannot hold the nozzle closed.  (A pull link cannot give this: a
+// the wire tip.  The ring can always move away from the wire, so a dead,
+// unpowered or SEIZED servo cannot hold the nozzle closed.
+// The wire runs along the ring TANGENT at mid-stroke (WIRE_TANGENT_AZ) — the
+// tube end sits just outside the housing OD and the wire enters through the
+// window's lower band.  A direct servo arm was rejected 2026-09-28: the
+// wing servo's 15.3 mm shaft-axis height cannot stand radially in the ~10 mm
+// pod annulus, and an axial-shaft arm cannot track the ear arc within the
+// flank's 2.1 mm radial span.  (A pull link cannot give this: a
 // seized pull link blocks the ring from paying out toward open — owner-approved
 // correction 2026-09-28.)
 //
@@ -553,21 +560,27 @@ EAR_TIP_R        = 35.2;   // [mm] ear tip radius; < HOUSING_OUTER_R (35.6) so t
                            //   land radial overlap = 35.2 - 33.6 = 1.6 mm (>= 1.5)
 EAR_HALF_ANG     = RING_LEVER_W / 2 / (RING_OUTER_R + 0.5) * 180 / PI;
                            // [deg] = 4.26, ear flank half-angle at the housing bore
-CONTACT_R        = 34.3;   // [mm] arm-tip contact radius on the ear flank
-ARM_BAND_Z_LO    =  2.0;   // [mm] arm-tip contact band (ring-local Z) — lower
+CONTACT_R        = 34.3;   // [mm] wire-tip tangency radius on the ear flank
+ARM_BAND_Z_LO    =  2.0;   // [mm] wire-tip contact band (ring-local Z) — lower
 ARM_BAND_Z_HI    =  5.0;   //   band; open-stop lug is above ARM_BAND_Z_HI + 0.5
+WIRE_Z           = (ARM_BAND_Z_LO + ARM_BAND_Z_HI) / 2;   // [mm] = 3.5 wire axis
 STOP_BAND_Z_LO   = ARM_BAND_Z_HI + 0.5;   // [mm] = 5.5, open-stop lug band start
-ARM_TIP_CLEAR_DEG = 8.0;   // [deg] window over-run past the open flank for the
-                           //   arm-tip nub (Ø2) + over-command, lower band only
+ARM_TIP_CLEAR_DEG = 8.0;   // [deg] window over-run past the open flank so the
+                           //   wire and its tangent path clear the housing wall
+                           //   (lower band only)
 AZ_CLOSED        = RING_LEVER_AZ;                         // [deg] 157.5
 AZ_OPEN          = RING_LEVER_AZ - THETA_RING_REF_OPEN;    // [deg] 133.75
 WIN_AZ_CLOSED_EDGE = AZ_CLOSED + EAR_HALF_ANG;              // [deg] 75 % stop
 WIN_AZ_OPEN_EDGE   = AZ_OPEN   - EAR_HALF_ANG;              // [deg] 105 % stop
 WIN_AZ_ARM_EDGE    = WIN_AZ_OPEN_EDGE - ARM_TIP_CLEAR_DEG;  // [deg] lower band
-// Forward-lip window: the servo arm enters from forward (Z < 0) through the
-// housing's bonding lip, centred on the mid-stroke contact azimuth.
-LIP_WIN_AZ_C     = (AZ_CLOSED + AZ_OPEN) / 2 - EAR_HALF_ANG;  // [deg] ~141.4
-LIP_WIN_HALF_DEG = 12.0;   // [deg] covers the arm's tangential sweep at the lip
+// Push-wire path: tangent to CONTACT_R at the mid-stroke flank azimuth.
+WIRE_TANGENT_AZ  = (AZ_CLOSED + AZ_OPEN) / 2 - EAR_HALF_ANG;  // [deg] ~141.4
+HOUSING_OUTER_R_REF = 35.6; // [mm] = HOUSING_OUTER_R (defined below; repeated
+                            //   here because OpenSCAD reads top-level in order)
+WIRE_EXIT_AZ     = WIRE_TANGENT_AZ
+                   - acos(CONTACT_R / HOUSING_OUTER_R_REF);   // [deg] ~126.0
+PUSH_WIRE_D      =  0.8;   // [mm] music wire (ASTM A228 class)
+PUSH_TUBE_OD     =  2.0;   // [mm] PTFE guide tube OD (ID ~1.0)
 // Opening-spring cord (Dyneema, Ø0.5) on a rim groove below the cam slots.
 SPRING_GROOVE_R  = 32.1;   // [mm] groove root radius (rim 33.1, depth 1.0)
 SPRING_GROOVE_W  =  1.2;   // [mm] groove axial width
@@ -740,10 +753,6 @@ module nozzle_throat_and_housing() {
             nz_wedge(WIN_AZ_ARM_EDGE, WIN_AZ_CLOSED_EDGE,
                      HOUSING_INNER_R - 0.5, HOUSING_OUTER_R + 1.0,
                      -0.1, STOP_BAND_Z_LO);
-            // Forward-lip window for the servo arm.
-            nz_wedge(LIP_WIN_AZ_C - LIP_WIN_HALF_DEG, LIP_WIN_AZ_C + LIP_WIN_HALF_DEG,
-                     HOUSING_INNER_R - 0.5, HOUSING_OUTER_R + 1.0,
-                     -HOUSING_LIP_H - 0.2, 0.1);
             // Spring-cord tangential exit bore (leaves the rim at
             // SPRING_TANGENT_AZ heading toward decreasing azimuth).
             translate([SPRING_CORD_R * cos(SPRING_TANGENT_AZ),
