@@ -21,14 +21,15 @@ What it computes
 2. **Cam kinematics.**  psi -> follower-pin radius (linear spiral, exactly as
    ``nacelle_nozzle_iris.scad`` ``pin_r_at_theta``) -> flap swing phi (inverse
    of ``flap_pin_r``) -> exit radius ``R_HINGE - FLAP_LENGTH * sin(phi)``.
-3. **Linkage — push-only arm (owner-approved correction 2026-09-28).**  The
-   servo lies flat forward of the nozzle housing, shaft radial, and its arm tip
-   is a UNILATERAL contact on the ear's open-side flank at ``CONTACT_R``.  The
-   arm pushes the ring toward CLOSED; the spring cord pulls it toward OPEN and
-   holds the ear on the tip.  Contact travel = ``CONTACT_R`` x stroke; an arm of
-   radius ``r_a`` sweeping ``sweep`` degrees supplies it
-   (``tip = r_a (sin a + sin(sweep/2))``).  Because contact is push-only, a
-   seized arm never blocks the ring from opening.  The table maps each ring
+3. **Linkage — push-only wire (owner-approved correction 2026-09-28).**  A
+   0.8 mm music wire in a PTFE tube runs along the ring tangent at
+   ``WIRE_TANGENT_AZ`` (radius ``CONTACT_R``); its UNATTACHED tip pushes the
+   ear's open-side flank toward CLOSED, and the spring cord pulls the ring
+   toward OPEN, holding the ear on the tip.  Exact contact travel along the
+   tangent line is ``CONTACT_R * tan(flank_az - WIRE_TANGENT_AZ)``.  The servo
+   arm of radius ``r_a`` sweeping ``sweep`` degrees drives the wire
+   (``stroke = r_a (sin a + sin(sweep/2))``).  Because the contact is push-only,
+   a seized servo never blocks the ring from opening.  The table maps each ring
    angle to a servo angle and a 1000-2000 us pulse.
 4. **Force margins.**  Available pull = servo stall torque / arm (rotary) or
    rated force (linear), derated to 50 % for continuous holding.  Required =
@@ -79,7 +80,10 @@ PIN_R_REF_CLOSED = 29.0        # [mm] :389  follower-pin radius at psi = 0
 PIN_R_REF_OPEN = 31.0          # [mm] :390  follower-pin radius at full stroke
 THETA_RING_REF_OPEN = 23.75    # [deg] :421 ring stroke closed -> open
 RING_LEVER_AZ = 157.5          # [deg] :510 lever-ear azimuth (inboard flap gap)
-CONTACT_R = 34.3               # [mm] CONTACT_R — arm-tip contact radius on the ear
+CONTACT_R = 34.3               # [mm] CONTACT_R — push-wire tangency radius
+AZ_CLOSED = 157.5              # [deg] AZ_CLOSED — ear centre at 75 % (= RING_LEVER_AZ)
+EAR_HALF_ANG = math.degrees(2.5 / 33.6)   # [deg] EAR_HALF_ANG = 4.26
+WIRE_TANGENT_AZ = AZ_CLOSED - THETA_RING_REF_OPEN / 2 - EAR_HALF_ANG   # [deg] 141.36
 SPRING_CORD_R = 32.35          # [mm] SPRING_CORD_R — opening-cord wrap radius
 
 # Derived exactly as the SCAD derives them (:349-:395).
@@ -170,9 +174,25 @@ def ring_angle_for_tilt(tilt_deg: float | None) -> float:
 
 # ══ Linkage ══════════════════════════════════════════════════════════════════
 
+def _flank_offset_deg(psi_deg: float) -> float:
+    """Open-side flank azimuth minus the wire tangent azimuth, at ring angle psi.
+
+    psi runs 0 (closed) -> THETA_RING_REF_OPEN (open); opening turns the ring
+    clockwise, so the flank azimuth falls as psi rises.
+    """
+    return (AZ_CLOSED - psi_deg - EAR_HALF_ANG) - WIRE_TANGENT_AZ
+
+
 def ear_travel_mm(psi_deg: float) -> float:
-    """Contact-point travel of the ear from OPEN toward closed [mm] at psi."""
-    return CONTACT_R * math.radians(THETA_RING_REF_OPEN - psi_deg)
+    """Wire-tip travel along the tangent from the OPEN pose to psi [mm]."""
+    t = CONTACT_R * math.tan(math.radians(_flank_offset_deg(psi_deg)))
+    t_open = CONTACT_R * math.tan(math.radians(_flank_offset_deg(THETA_RING_REF_OPEN)))
+    return t - t_open
+
+
+def contact_radius_mm(psi_deg: float) -> float:
+    """Radius at which the wire tip touches the ear flank [mm]."""
+    return CONTACT_R / math.cos(math.radians(_flank_offset_deg(psi_deg)))
 
 
 def contact_travel_mm() -> float:
@@ -315,8 +335,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  {r['tilt_deg']:5.0f} {r['exit_pct']:7.2f} {r['ring_psi_deg']:8.3f} "
               f"{r['servo_deg']:9.2f} {r['pulse_us']:8d}")
     print(f"\n  servo {args.servo}: {servo['note']}")
-    print(f"  stall pull       {_lbf(res['stall_pull_n'])}")
-    print(f"  holding pull     {_lbf(res['hold_pull_n'])} ({HOLD_DERATE:.0%} of stall)")
+    print(f"  stall push       {_lbf(res['stall_pull_n'])}")
+    print(f"  holding push     {_lbf(res['hold_pull_n'])} ({HOLD_DERATE:.0%} of stall)")
     print(f"  spring           {_lbf(res['spring_n'])}  "
           f"(<= {SPRING_MAX_FRAC:.0%} stall: {'ok' if res['spring_ok'] else 'FAIL'})")
     print(f"  allowable flap load at contact  {_lbf(res['allowable_flap_load_n'])}")

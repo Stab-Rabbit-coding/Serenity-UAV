@@ -56,9 +56,17 @@ class LinkageTest(unittest.TestCase):
     """Servo arm -> pull link -> ring lever geometry."""
 
     def test_arm_radius_for_default_sweep(self) -> None:
-        # 14.2 mm contact travel (r 34.3 x 23.75 deg) over 90 deg -> ~10.1 mm arm.
+        # ~14.4 mm tangent-line wire travel over a 90 deg sweep -> ~10.2 mm arm.
         arm = nsl.arm_radius_for_stroke(sweep_deg=90.0)
-        self.assertAlmostEqual(arm, 10.05, delta=0.1)
+        self.assertAlmostEqual(arm, 10.2, delta=0.15)
+
+    def test_contact_stays_on_ear_flank(self) -> None:
+        # Edge: the wire tip touches the flank inside its radial span
+        # (ring rim 33.1 mm to ear tip 35.2 mm) over the whole stroke.
+        for psi in (0.0, 6.0, 11.875, 18.0, 23.75):
+            r = nsl.contact_radius_mm(psi)
+            self.assertGreater(r, 33.1)
+            self.assertLessEqual(r, 35.2)
 
     def test_pwm_table_endpoints(self) -> None:
         # Integration: table rows run from 75 % to 105 % and stay in 1000-2000 us.

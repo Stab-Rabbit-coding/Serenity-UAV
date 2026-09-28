@@ -43,8 +43,8 @@ ideation and servo research sub-agents Claude Sonnet 5 (Anthropic). Per `AGENTS.
 
 ### Summary
 
-Each nacelle gets a sub-micro servo inside the pod, forward of the nozzle ring. Its arm pushes the
-unison ring toward 75 % bore through a push-only contact. A spring drives the ring to a hard 105 %
+Each nacelle gets a sub-micro servo inside the pod, forward of the nozzle ring. Its push wire drives
+the unison ring toward 75 % bore through a push-only contact. A spring drives the ring to a hard 105 %
 stop whenever the servo stops pushing, and a seized servo cannot hold the ring closed.
 
 The schedule runs on the gateway that reads the AK7455, as a lookup table from tilt angle to ring
@@ -163,8 +163,9 @@ Option A on 2026-09-28.
     rejected unless U8 measures a total closing load under about 1 N.
 - **KTD3 — Spring opens, servo only pushes toward closed (push-only contact)** *(session-settled:
   user-approved; revised 2026-09-28 by owner-approved correction)*.
-  - The servo arm tip is a **unilateral contact** on the ear's open-side flank at r 34.3 mm. It
-    pushes the ring toward 75 %. A spring cord wrapped on a rim groove (r 32.35 mm) pulls the ring
+  - A **push wire** (0.8 mm music wire in a PTFE tube, driven by the servo arm) runs along the
+    ring tangent at 141.4°. Its **unattached** tip is a unilateral contact on the ear's open-side
+    flank (tangency r 34.3 mm, contact r ≤ 35.05 mm) and pushes the ring toward 75 %. A spring cord wrapped on a rim groove (r 32.35 mm) pulls the ring
     toward 105 % and holds the ear on the tip.
   - Because the contact is push-only, the ring can always move away from the arm, so a dead,
     unpowered **or seized** servo cannot hold the nozzle closed.
@@ -172,8 +173,11 @@ Option A on 2026-09-28.
     blocks the ring from paying out toward open, and no slot or cord arrangement avoids that.
   - Hard stops are the ends of a window through the housing wall:
     - the 75 % stop is full height on the ear's closed-side flank;
-    - the 105 % stop is an upper-band lug on the ear's open-side flank, above the arm's contact
+    - the 105 % stop is an upper-band lug on the ear's open-side flank, above the wire's contact
       band, so the tip is never trapped.
+  - A direct servo arm was rejected on the 2026-09-28 packaging check. The wing servo's
+    15.3 mm shaft-axis height cannot stand radially in the ~10 mm annulus, and an axial-shaft arm
+    cannot track the ear arc within the flank's 2.1 mm span.
   - Spring sizing target: at least 1.5 × (measured opening-side friction) and no more than 40 %
     of servo stall push, pending U8.
 
@@ -197,9 +201,10 @@ Option A on 2026-09-28.
     2026-09-28, chosen over latching until power cycle). Both timing values are starting points,
     to be set by U8.
 - **KTD5 — Servo forward of the ring, inside the pod** *(user-approved at scoping)*.
-  - The servo lies flat in the annulus just forward of the nozzle housing, with its shaft radial
-    (8 mm case thickness radial) at the mid-stroke contact azimuth, about 141°.
-  - Its 10.05 mm arm reaches aft through a window in the housing's forward lip.
+  - The servo lies flat in the annulus: 8 mm case thickness radial, 22 mm axial, and the shaft
+    **tangential**, so its 10.2 mm arm strokes the push wire axially. The PTFE tube carries the
+    wire forward-to-tangent into the housing window. The servo station can sit wherever the tube
+    reaches, preferably behind an existing access cover (R4).
   - The ear sweeps 157.5° (closed) → 133.75° (open), because the ring opens clockwise.
   - A faired blister is the fall-back only (R3).
 - **KTD6 — Servo power from a fused branch of the 6 V servo rail in both variants** (door
@@ -218,7 +223,7 @@ flowchart LR
   GW -- LUT tilt to ring --> PWM[FLEX_PWM_IO 50 Hz]
   PWM --> SV[BMS-101DMG servo<br/>fwd of ring]
   RAIL[FE PDB 6 V servo rail<br/>fused F_NOZ] --> SV
-  SV -- push-only arm contact --> RING[Unison ring<br/>stops 75 % / 105 %]
+  SV -- push wire, unattached tip --> RING[Unison ring<br/>stops 75 % / 105 %]
   SPR[Spring cord on rim groove] -- drives open --> RING
   GW -- signed NOZZLE_STATUS --> BUS[(CAN-FD / RS-485 trunk)]
   GW -. fault: AK7455/heartbeat/MAC/rail .-> OPEN[Command 105 % then open F_NOZ load switch]
@@ -435,8 +440,10 @@ access cover, and prove the fit.
 **Approach:**
 1. Search Z stations between the ESC bays and the ring for an annulus depth of at least
    8 mm + 2 × 0.3 mm clearance + skin. Use the actual Rev T4b wall-thickness profile.
-2. Clear the arm's sweep (lip window about 141° ± 12°) and the spring's run from the cord
-   exit bore (about 90°) of the aft spider sleeve and the EDF2 phase leads.
+2. Route the PTFE push-wire tube from the servo arm to its tangent exit just outside the housing
+   OD at about 126°. Route the spring cord from its exit bore (about 90°) to the spring anchor.
+   Keep both clear of the aft spider sleeve and the EDF2 phase leads, with a tube bend radius of
+   at least 15 mm.
 3. Side-dependent geometry is keyed on `PYLON_SIDE`. Remember the known trap: NACELLE_SIDE is
    inverted relative to the filename.
 4. If no station fits, stop per the Goal Capsule and draft the faired-blister fallback for owner
@@ -555,8 +562,8 @@ records the chosen variant's integration.
 1. Add rows:
    - `SERVO-NOZZLE` (BMS-101DMG ×2);
    - `SPRING-NOZZLE-OPEN`;
-   - `ARM-NOZZLE` (the servo arm with its contact nub) and `CORD-NOZZLE-SPRING` (Dyneema
-     Ø0.5 mm);
+   - `WIRE-NOZZLE-PUSH` (0.8 mm music wire), `TUBE-NOZZLE-PTFE` (2.0 mm OD) and
+     `CORD-NOZZLE-SPRING` (Dyneema Ø0.5 mm);
    - `PRINT-NOZZLE-SERVO-MOUNT`;
    - `FUSE-F_NOZ`;
    - `SW-F_NOZ` (the high-side load switch);
@@ -623,7 +630,7 @@ pass/fail criterion.
 - `tools/gen_todo_from_wbs.py` regenerates TODO.md. The index generator regenerates PROJECT_INDEX
   and ARCHIVE_INDEX: never hand-merge them.
 - Markdown lint (all rules) and the repo pre-commit hooks pass. These include the CNAF
-  warning/caution/note labels and shall/should/may/will wording.
+  warning/caution/note labels and modal-verb wording rules.
 - Static analysis (ruff/flake8 per repo config) is clean on new Python.
 
 ## Definition of Done
