@@ -1,3 +1,6 @@
+// ARCHIVED 2026-09-28 — RETIRED by the servo nozzle drive (docs/NOZZLE_DRIVE_TRADE.md
+// "DECISION AMENDMENT — servo drive (2026-09-28)"). Kept for the record only; not built,
+// not imported. Original header and attribution follow unchanged.
 // ===========================================================================
 // HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
 //   Hull frame (canonical for ALL design artifacts): X = +port (left),

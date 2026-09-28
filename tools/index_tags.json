@@ -1278,15 +1278,6 @@
       ],
       "archived": false
     },
-    "airframe/openscad/nacelles/gear_option_compare.scad": {
-      "description": "gear_option_compare.scad \u2014 DECISION AID (2026-07-18)",
-      "tags": [
-        "cad-mesh",
-        "propulsion",
-        "structural"
-      ],
-      "archived": false
-    },
     "airframe/openscad/nacelles/nacelle_esc_bay.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
@@ -1332,24 +1323,6 @@
         "cad-mesh",
         "propulsion",
         "security",
-        "structural"
-      ],
-      "archived": false
-    },
-    "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad": {
-      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
-      "tags": [
-        "cad-mesh",
-        "propulsion",
-        "structural"
-      ],
-      "archived": false
-    },
-    "airframe/openscad/nacelles/nacelle_nozzle_sync_gears.scad": {
-      "description": "DO NOT PRINT THE SUN \u2014 ITS DATUM IS BLOCKED (2026-09-10)",
-      "tags": [
-        "cad-mesh",
-        "propulsion",
         "structural"
       ],
       "archived": false
@@ -3307,6 +3280,15 @@
       ],
       "archived": true
     },
+    "archives/airframe-archives/archive/openscad/nacelles/gear_option_compare.scad": {
+      "description": "ARCHIVED 2026-09-28 \u2014 RETIRED by the servo nozzle drive (docs/NOZZLE_DRIVE_TRADE.md",
+      "tags": [
+        "archive",
+        "cad-mesh",
+        "propulsion"
+      ],
+      "archived": true
+    },
     "archives/airframe-archives/archive/openscad/nacelles/nacelle_bevel_housing.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
@@ -3327,6 +3309,24 @@
     },
     "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_idler.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
+      "tags": [
+        "archive",
+        "cad-mesh",
+        "propulsion"
+      ],
+      "archived": true
+    },
+    "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_pushrod.scad": {
+      "description": "ARCHIVED 2026-09-28 \u2014 RETIRED by the servo nozzle drive (docs/NOZZLE_DRIVE_TRADE.md",
+      "tags": [
+        "archive",
+        "cad-mesh",
+        "propulsion"
+      ],
+      "archived": true
+    },
+    "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_sync_gears.scad": {
+      "description": "ARCHIVED 2026-09-28 \u2014 RETIRED by the servo nozzle drive (docs/NOZZLE_DRIVE_TRADE.md",
       "tags": [
         "archive",
         "cad-mesh",
@@ -11557,7 +11557,7 @@
       "archived": false
     },
     "docs/NOZZLE_DRIVE_TRADE.md": {
-      "description": "Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19)",
+      "description": "Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19; decided 2026-09-28)",
       "tags": [
         "documentation",
         "propulsion"
@@ -16053,14 +16053,11 @@
       "airframe/openscad/nacelles/_export_pivot_slab.scad",
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
-      "airframe/openscad/nacelles/gear_option_compare.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
-      "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
-      "airframe/openscad/nacelles/nacelle_nozzle_sync_gears.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",
@@ -16341,14 +16338,11 @@
       "airframe/openscad/nacelles/_export_pivot_slab.scad",
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
-      "airframe/openscad/nacelles/gear_option_compare.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
-      "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
-      "airframe/openscad/nacelles/nacelle_nozzle_sync_gears.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",
@@ -16567,9 +16561,12 @@
       "archives/airframe-archives/archive/blender-scripts/generate_shells_v2.py",
       "archives/airframe-archives/archive/edf_bore_sleeve.scad",
       "archives/airframe-archives/archive/openscad/fuselage/canonical_leg_r6.scad",
+      "archives/airframe-archives/archive/openscad/nacelles/gear_option_compare.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_bevel_housing.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_bevel_pair.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_idler.scad",
+      "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_pushrod.scad",
+      "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_sync_gears.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_pinion.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_sector_gear.scad",
       "archives/airframe-archives/archive/openscad/wings/wing_nacelle_pylon_revo.scad",
@@ -16773,14 +16770,11 @@
       "airframe/openscad/nacelles/_export_pivot_slab.scad",
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
-      "airframe/openscad/nacelles/gear_option_compare.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
-      "airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad",
-      "airframe/openscad/nacelles/nacelle_nozzle_sync_gears.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",
@@ -16814,9 +16808,12 @@
       "archives/airframe-archives/archive/blender-scripts/blender_nacelle_integrated_v1.py",
       "archives/airframe-archives/archive/blender-scripts/blender_nacelle_integrated_v2.py",
       "archives/airframe-archives/archive/edf_bore_sleeve.scad",
+      "archives/airframe-archives/archive/openscad/nacelles/gear_option_compare.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_bevel_housing.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_bevel_pair.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_idler.scad",
+      "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_pushrod.scad",
+      "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_sync_gears.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_pinion.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_sector_gear.scad",
       "archives/airframe-archives/archive/openscad/wings/wing_nacelle_pylon_revo.scad",
@@ -17271,9 +17268,12 @@
       "archives/airframe-archives/archive/blender-scripts/generate_shells_v2.py",
       "archives/airframe-archives/archive/edf_bore_sleeve.scad",
       "archives/airframe-archives/archive/openscad/fuselage/canonical_leg_r6.scad",
+      "archives/airframe-archives/archive/openscad/nacelles/gear_option_compare.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_bevel_housing.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_bevel_pair.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_idler.scad",
+      "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_pushrod.scad",
+      "archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_sync_gears.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_pinion.scad",
       "archives/airframe-archives/archive/openscad/nacelles/nacelle_sector_gear.scad",
       "archives/airframe-archives/archive/openscad/wings/wing_nacelle_pylon_revo.scad",
