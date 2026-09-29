@@ -13,19 +13,21 @@
 
 ---
 
-##### 1.2a.2 *Commo Rev T — standalone MCU bus node (2026-09-29)*
-→ full detail: `WBS.md` §1.2a.2
+##### 1.2a.2 *Commo Rev T — standalone MCU bus node (approved 2026-09-29)*
+→ full detail: `WBS.md` §1.2a
 
-- [ ] Confirm MCU peripheral budget (MSPM0G3507 vs MSPM0G351x-Q1)
-- [ ] Select + datasheet-verify Holt 1553C RT protocol engine
-- [ ] Confirm fleet iso CAN-FD / RS-485 parts for reuse
-- [ ] Select SE; check I²C address vs Si5351A
-- [ ] Define power input rail and budget
-- [ ] Rev T schematic: port RF chains, add MCU/buses/SE; ERC clean
-- [ ] Rev T layout at antenna site; 1553 stub check; DRC; gerbers
-- [ ] PCB mass roll-up → airframe/README, BATTERY_MOUNT, W&B
-- [ ] Fix antenna-site station vs hull model + separation checks
-- [ ] Log Rev T firmware items in firmware/WBS.md
+- [ ] Owner sign-off: MCU = M0G3519QRGZRQ1 over G3518 (256 KB).
+- [ ] Choose 1553 coupling (direct 1:2.5 + 55 Ω, or transformer 1:1.79)…
+- [ ] Select the Holt 1553C protocol engine (SPI host), and verify its P/N…
+- [ ] Confirm the fleet isolated CAN-FD part (ISOW1044) and RS-485 part…
+- [ ] Select the SE (OPTIGA Trust M?) and check for an I²C address…
+- [ ] Define the power input rail and budget (PA and SiK TX peaks).
+- [ ] Port the RF chains unchanged, remove PB2 / TPM / ETH, add the MCU /…
+- [ ] Outline to the antenna site; owner does manual placement
+- [ ] Check the 1553 stub length; DRC clean; generate Gerbers.
+- [ ] PCB mass roll-up, then update `airframe/README.md`…
+- [ ] Fix the antenna-site station against the hull model and the…
+- [ ] Log firmware items in `avionics/firmware/WBS.md`
 
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 → full detail: `WBS.md` §1.2a
@@ -41,14 +43,18 @@
 - [ ] Clear residual DRC after mesh + routing (counts measured 2026-06-12…
 - [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
 - [ ] Add SBUS/UART DIP switch to Pilot — add a 2-position DIP (or…
-- [ ] Generate Pilot gerbers — routed board still needed first
-- [ ] Generate XO/TACCO gerbers — existing set is stale (pre-rebuild/swap)
+- [ ] Generate Pilot gerbers — the 2026-09-19 schematic-first Rev T…
+- [ ] Generate XO/TACCO gerbers — a `gerbers/TACCO/` set exists but its…
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
 - [ ] EMI isolation validation checklist — verify isolation barrier…
 - [ ] Merge `claude/cape-em-harsh-variants-9Yfr1` → master after gerbers…
 - [ ] Design Faraday cages / boxes to protect all PCBs
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
-- [ ] Pilot: verify ISOW1044/ISOW1412 SOIC-20W land vs each datasheet's DFM outline
+
+### Pilot footprint verification and schematic-first rebuild (2026-07-13/14) — SUPERSEDED
+→ full detail: `WBS.md` Pilot footprint verification and schematic-first rebuild (2026-07-13/14)
+
+- [ ] CAN-TR/RS485 land pattern still genuinely unconfirmed
 
 ### §1.9.3 — Trust-Module MCU/TPM Retarget (MSPM0G351x-Q1 + SLB 9672), 2026-08-03
 → full detail: `WBS.md` §1.9.3
@@ -74,13 +80,13 @@
 - [ ] U5 — Observer pitot-tube airspeed sensor (`J_PITOT`)
 - [ ] U6 — Fleet host+message authentication wiring for ESC / brushed tilt…
 - [ ] U7 — Per-board ERC/DRC/gerber closeout (Pilot, XO, Commo, Flight…
-- [ ] U8 — Faraday cage / shielded-harness spec; tamper-mesh re-add is an…
+- [ ] U8 — Faraday cage / shielded-harness spec (still open)
 - [ ] U9 — REFERENCES.md, WBS/TODO and `avionics/AGENTS.md` closeout for…
 
 ### §1.9.2 — Fleet Trust Module (MCU + TPM + isolated CAN-FD + isolated RS-485)
 → full detail: `WBS.md` §1.9.2
 
-- [ ] SLB9670→SLB9672 TPM migration — live ERC/DRC re-run still needed
+- [ ] SLB9670→SLB9672 TPM migration — ERC/DRC not re-run, 2026-08-01
 - [ ] ★ SLB9672 → OPTIGA™ Trust M, `CAN-PERIPH-GW-1` + Flight Engineer…
 - [ ] `CAN-PERIPH-GW-1` PCB routing (updated 2026-07-26, post `N_STACKS=4`…
 - [ ] GW-DOOR-1 — build the `N_STACKS=1` instance
@@ -91,7 +97,7 @@
 - [ ] GW-DOOR-7 — firmware: osc-native master / PWM fallback, the three…
 - [ ] Nacelle gateway BOM rows
 - [ ] `GW-RCS` — Phase 11 RCS bleed-valve gateway, SPECIFIED ONLY…
-- [ ] XO/TACCO PCB placement + DRC 0 + routing — IN PROGRESS
+- [ ] XO PCB placement + DRC 0 + routing — IN PROGRESS
 - [ ] Flight Engineer PCB: close the last DRC items + route + gerbers
 - [ ] Observer PCB resync — not started
 

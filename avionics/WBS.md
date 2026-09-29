@@ -74,6 +74,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 ##### 1.2a.2 *Commo Rev T — standalone MCU bus node (approved 2026-09-29)*
 
 Owner decisions (2026-09-29, S. Griffing):
+
 - One unit per airframe, co-located with its antennas.
 - Isolated CAN-FD + RS-485 + MIL-STD-1553C RT.
 - No Ethernet.
@@ -88,34 +89,40 @@ Rev S cape items in `TODO.md` §1.2a.1 (Commo gerbers, SIK/ETH-PHY overlap DRC) 
 to Rev T.
 
 - **Phase 0 — architecture paperwork**
-  - [x] Amend `avionics/AGENTS.md`: bus-topology 1553 exception, Commo re-classed as a
-      standalone node with an SE (2026-09-29).
-  - [x] Update root `AGENTS.md` §1 and §9 for single-Commo / bus-reachable radios
-      (2026-09-29).
-  - [x] Archive the Rev S cape snapshot to
-      `archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/`
-      and add it to `ARCHIVE_INDEX.md` (2026-09-29).
+    - [x] Amend `avionics/AGENTS.md`: bus-topology 1553 exception, Commo re-classed as a
+        standalone node with an SE (2026-09-29).
+    - [x] Update root `AGENTS.md` §1 and §9 for single-Commo / bus-reachable radios
+        (2026-09-29).
+    - [x] Archive the Rev S cape snapshot to
+        `archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/`
+        and add it to `ARCHIVE_INDEX.md` (2026-09-29).
 - **Phase 1 — part selection** (datasheet-verified)
-  - [ ] Confirm the MCU peripheral budget: MSPM0G3507 vs. the fleet trust-module
-      MSPM0G351x-Q1 (§1.9.3). Needs 1 MCAN, 3 UART, 2 SPI, and I²C.
-  - [ ] Select the Holt 1553C protocol engine (SPI host), and verify its P/N and 1553C
-      conformance against the OEM datasheet.
-  - [ ] Confirm the fleet isolated CAN-FD part (ISOW1044) and RS-485 part (ADM2795E) for reuse.
-  - [ ] Select the SE (OPTIGA Trust M?) and check for an I²C address conflict with Si5351A.
-  - [ ] Define the power input rail and budget (PA and SiK TX peaks).
+    - [x] Confirm the MCU peripheral budget (2026-09-28). Result: MSPM0G351x-Q1 in VQFN-48 RGZ
+        fits (1 CAN-FD, 6 UART, 3 I²C, 2 SPI, 44 GPIO against about 30 needed). RHB-32 is too
+        small (28 GPIO). G3519 (512 KB) is recommended for dual-bank OTA headroom. Source: TI
+        SLASFA6B Table 5-1. Detail is in the plan's Phase 1 findings.
+    - [ ] Owner sign-off: MCU = M0G3519QRGZRQ1 over G3518 (256 KB).
+    - [ ] Choose 1553 coupling (direct 1:2.5 + 55 Ω, or transformer 1:1.79) once the antenna-site
+        stub length is known (Holt DS1573 p. 2).
+    - [ ] Select the Holt 1553C protocol engine (SPI host), and verify its P/N and 1553C
+        conformance against the OEM datasheet. The HI-1573 transceiver claims 1553A/B only
+        (DS1573 Rev U p. 1). The engine datasheet is not yet in `avionics/datasheets/`.
+    - [ ] Confirm the fleet isolated CAN-FD part (ISOW1044) and RS-485 part (ADM2795E) for reuse.
+    - [ ] Select the SE (OPTIGA Trust M?) and check for an I²C address conflict with Si5351A.
+    - [ ] Define the power input rail and budget (PA and SiK TX peaks).
 - **Phase 2 — schematic (Rev T)**
-  - [ ] Port the RF chains unchanged, remove PB2 / TPM / ETH, add the MCU / buses / SE /
-      power. ERC clean.
+    - [ ] Port the RF chains unchanged, remove PB2 / TPM / ETH, add the MCU / buses / SE /
+        power. ERC clean.
 - **Phase 3 — layout**
-  - [ ] Outline to the antenna site; owner does manual placement; RF rules retained.
-  - [ ] Check the 1553 stub length; DRC clean; generate Gerbers.
+    - [ ] Outline to the antenna site; owner does manual placement; RF rules retained.
+    - [ ] Check the 1553 stub length; DRC clean; generate Gerbers.
 - **Phase 4 — integration**
-  - [ ] PCB mass roll-up, then update `airframe/README.md`, `docs/BATTERY_MOUNT.md`, and
-      W&B/CG.
-  - [ ] Fix the antenna-site station against the hull model and the emi-hardening separation
-      checks.
-  - [ ] Log firmware items in `avionics/firmware/WBS.md`: AFSK/AX.25, SiK bridge, PTT lease,
-      1553 RT map / BC schedule, SE signing / secure boot.
+    - [ ] PCB mass roll-up, then update `airframe/README.md`, `docs/BATTERY_MOUNT.md`, and
+        W&B/CG.
+    - [ ] Fix the antenna-site station against the hull model and the emi-hardening separation
+        checks.
+    - [ ] Log firmware items in `avionics/firmware/WBS.md`: AFSK/AX.25, SiK bridge, PTT lease,
+        1553 RT map / BC schedule, SE signing / secure boot.
 
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 
@@ -430,7 +437,7 @@ to Rev T.
     turned out the one load-bearing finding (footprint) didn't hold once
     verified against Commo's actual PCB instead of a generic estimate.
 
-- [ ] **Generate Commo gerbers** — a gerbers/`XCVR-49MHZ-2` set exists but its embedded
+- [x] **SUPERSEDED 2026-09-29 by Rev T (§1.2a.2) — Generate Commo gerbers** — a gerbers/`XCVR-49MHZ-2` set exists but its embedded
     `CreationDate` (2026-06-04) and the PCB's own title-block date (2026-06-03) both predate
     the 2026-09-21 LoRa→SiK radio swap — confirmed stale (2026-09-27). Regenerate against
     the current `Commo.kicad_pcb` once the floorplan rework above and DRC closeout (§1.10 U7)

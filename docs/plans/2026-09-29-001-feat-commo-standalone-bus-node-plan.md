@@ -46,6 +46,36 @@ comes from the PCB roll-up.
 | Power | Local buck from the bus harness supply + isolated DC-DC per bus domain | Input rail and budget. The 49 MHz PA and SiK TX peaks set the sizing. |
 | Radios | Existing 49 MHz chain and RFD900ux-SMT, unchanged | Keep the fixed shared `RFDesign_RFD900ux_SMT` footprint |
 
+### Phase 1 findings (2026-09-28, from on-file datasheets)
+
+**MCU: TI MSPM0G351x-Q1, VQFN-48 RGZ.**
+- Source: `avionics/datasheets/mspm0g3518-q1.pdf`, TI SLASFA6B, Table 5-1.
+- The RGZ-48 package gives 1 CAN-FD, 6 UART, 3 I²C, 2 SPI, and 44 GPIO. The G351x also has an
+  AES-256 accelerator, secure key storage, and a TRNG (§1).
+- Estimated signal count: about 30 lines. That covers SWD, CAN-FD, RS-485 (TX/RX/DE), the SiK
+  UART, SPI to the 1553 engine with IRQ and reset, SPI to the MCP4921, I²C to the Si5351A and
+  SE, PTT, RSSI_DCD, the demod input, T/R switch control, and PA enable.
+- **The RHB-32 package is ruled out.** It has 28 GPIO, which is too few for about 30 lines.
+- SPI is exactly consumed: RGZ-48 has 2 SPI ports, and Commo needs 2 (1553 engine and DAC).
+- **Recommend M0G3519QRGZRQ1** (512 KB flash) over the G3518 (256 KB). It is the same
+  footprint and the same part as Observer, and dual-bank OTA halves the usable flash.
+- The G3507 is dropped. The fleet retarget (§1.9.3) moved to G351x for key storage.
+
+**1553: HI-1573 is a transceiver only.**
+- Source: `avionics/datasheets/hi-1573.pdf`, Holt DS1573 Rev U.
+- It takes Manchester II bi-phase data in and out (p. 2). A separate protocol engine is
+  mandatory.
+- The MCU's Manchester-capable UARTs cannot substitute. 1553 sync is an invalid-Manchester
+  waveform, and RT response timing must be guaranteed in hardware.
+- **Conformance gap:** HI-1573 claims only "MIL-STD-1553A and B" compliance (p. 1). It does
+  not claim 1553C. 1553C conformance must be shown on the protocol engine's datasheet or
+  justified in `REFERENCES.md`. This blocks final part selection.
+- Coupling (p. 2): direct coupling uses a 1:2.5 transformer with 2 × 55 Ω resistors.
+  Transformer coupling uses 1:1.79 plus a 1:1.4 coupler and 0.75·Zo resistors.
+- The fleet's 55 Ω parts (`R-1553P/N`) match direct coupling, which is short-stub only. The
+  antenna-site stub length decides which coupling Commo uses.
+- The Holt protocol-engine datasheet is **not on file** and must be downloaded next.
+
 ## Phase 2 — Schematic (schematic-first, script-generated per root `AGENTS.md` §5)
 
 1. Create the new `avionics/kicad/Commo/` project (Rev T). Port the RF sheets (DDS, PA, 6-element
