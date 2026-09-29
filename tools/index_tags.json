@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-29",
+  "generated": "2026-09-28",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -11736,6 +11736,13 @@
       ],
       "archived": false
     },
+    "docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md": {
+      "description": "Serenity UAV \u2014 36in Hull / 64mm EDF Scale-Up Evaluation",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/LANDING_GEAR_ANALYSIS.md": {
       "description": "Serenity UAV \u2014 Landing Gear Structural Analysis",
       "tags": [
@@ -11985,6 +11992,13 @@
     },
     "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html": {
       "description": "HTML document",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/ideation/7-2.webp": {
+      "description": "RIFFv\u0001\u0000WEBPVP8 v\u0001\u0000p\u0003\u0001* \u0003\u0003>m2G#)!&\u0019Z",
       "tags": [
         "documentation"
       ],
@@ -15386,6 +15400,7 @@
       "docs/DOC_TEMPLATES.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
+      "docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md",
       "docs/LANDING_GEAR_ANALYSIS.md",
       "docs/LICENSE",
       "docs/MANIFEST.json",
@@ -15417,6 +15432,7 @@
       "docs/failsafe_thresholds.md",
       "docs/flight_envelope.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
+      "docs/ideation/7-2.webp",
       "docs/img/20260923_065833.jpg",
       "docs/img/20260923_065848.jpg",
       "docs/img/20260923_065933.jpg",
