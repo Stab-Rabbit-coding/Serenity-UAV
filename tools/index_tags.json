@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-28",
+  "generated": "2026-09-29",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -7348,6 +7348,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/2N3866_SERIES.PDF": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/317990687.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7439,6 +7446,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/MGA-82563-TR1G.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7517,6 +7531,20 @@
       "archived": false
     },
     "avionics/datasheets/SRF2012A.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/Si5351-B.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/TG2520SMN_en-2584158.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7747,6 +7775,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/lmv331.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/mcp4921.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7782,7 +7824,28 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/mspm0g3519-q1.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/nexperia-PMBT2222A.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/pca9685.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/pe4259.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7887,6 +7950,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/tlv757p.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/tps54540.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7909,6 +7979,13 @@
       "archived": false
     },
     "avionics/datasheets/tps63031.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/tps7a20.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8579,6 +8656,16 @@
       "tags": [
         "avionics-hardware",
         "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md": {
+      "description": "Commo Rev T \u2014 Phase 1 Part Selection, Power Budget, and RF-Chain Audit",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
       ],
       "archived": false
     },
@@ -15398,6 +15485,7 @@
       "avionics/firmware/WBS.md",
       "avionics/firmware/dts/README.md",
       "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
+      "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/reports/HDD.md",
       "avionics/kicad/Encoder/ENC-NACELLE-1.md",
@@ -15878,6 +15966,7 @@
       "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
+      "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/reports/HDD.md",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
@@ -18261,6 +18350,7 @@
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
+      "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/gerbers/Commo-B_Courtyard.gbr",
       "avionics/kicad/Commo/gerbers/Commo-B_Cu.gbl",
@@ -18615,6 +18705,7 @@
       "avionics/TODO.md",
       "avionics/WBS.md",
       "avionics/datasheets/100058045.pdf",
+      "avionics/datasheets/2N3866_SERIES.PDF",
       "avionics/datasheets/317990687.pdf",
       "avionics/datasheets/6391731564544371956530548.pdf",
       "avionics/datasheets/74438335033.pdf",
@@ -18628,6 +18719,7 @@
       "avionics/datasheets/L-1038e.A5_phyCORE-AM62x_HW Manual.pdf",
       "avionics/datasheets/MAX-M10S_DataSheet_UBX-20035208.pdf",
       "avionics/datasheets/MAX-M10S_IntegrationManual_UBX-20053088.pdf",
+      "avionics/datasheets/MGA-82563-TR1G.pdf",
       "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf",
       "avionics/datasheets/PCA9555.pdf",
       "avionics/datasheets/PremierMagnetics_DB2791S.pdf",
@@ -18640,6 +18732,8 @@
       "avionics/datasheets/SM04B-SRSS-TB.pdf",
       "avionics/datasheets/SM1553-Series_HiRel-Data-Bus-Pulse-Transformer_RevD.pdf",
       "avionics/datasheets/SRF2012A.pdf",
+      "avionics/datasheets/Si5351-B.pdf",
+      "avionics/datasheets/TG2520SMN_en-2584158.pdf",
       "avionics/datasheets/TYPE2EL.pdf",
       "avionics/datasheets/Vishay_45273MDSK.pdf",
       "avionics/datasheets/X2YDatasheet.pdf",
@@ -18672,12 +18766,17 @@
       "avionics/datasheets/isow1412.pdf",
       "avionics/datasheets/johanson-0915lp15b026e.pdf",
       "avionics/datasheets/johanson-2450bp15e0100.pdf",
+      "avionics/datasheets/lmv331.pdf",
+      "avionics/datasheets/mcp4921.pdf",
       "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf",
       "avionics/datasheets/molex-104031.pdf",
       "avionics/datasheets/mspm0g3507-q1.pdf",
       "avionics/datasheets/mspm0g3507.pdf",
       "avionics/datasheets/mspm0g3518-q1.pdf",
+      "avionics/datasheets/mspm0g3519-q1.pdf",
+      "avionics/datasheets/nexperia-PMBT2222A.pdf",
       "avionics/datasheets/pca9685.pdf",
+      "avionics/datasheets/pe4259.pdf",
       "avionics/datasheets/prtr5v0u2x.pdf",
       "avionics/datasheets/rfd900x-datasheet.pdf",
       "avionics/datasheets/rfm95w-datasheet.pdf",
@@ -18692,10 +18791,12 @@
       "avionics/datasheets/slb9672.pdf",
       "avionics/datasheets/smaj-series-tvs-datasheet.pdf",
       "avionics/datasheets/stm32wle5jc.pdf",
+      "avionics/datasheets/tlv757p.pdf",
       "avionics/datasheets/tps54540.pdf",
       "avionics/datasheets/tps54620.pdf",
       "avionics/datasheets/tps62933.pdf",
       "avionics/datasheets/tps63031.pdf",
+      "avionics/datasheets/tps7a20.pdf",
       "avionics/datasheets/type2el-2dl-2ll-2kl-unified-design-guide.pdf",
       "avionics/datasheets/type2el-2dl-module-footprint-topview.dxf",
       "avionics/datasheets/w25q128jv.pdf",
@@ -18775,6 +18876,7 @@
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
+      "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/gerbers/Commo-B_Courtyard.gbr",
       "avionics/kicad/Commo/gerbers/Commo-B_Cu.gbl",

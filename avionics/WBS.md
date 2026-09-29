@@ -128,9 +128,28 @@ to Rev T.
         Holt's product-page "1553B/C" claim is consistent with this. The one C-specific
         paragraph, §4.4.3.2 "Superseding valid commands", is a protocol behavior that the
         HI-6138 RT logic handles. Confirm it during firmware bring-up.
-    - [ ] Confirm the fleet isolated CAN-FD part (ISOW1044) and RS-485 part (ADM2795E) for reuse.
-    - [ ] Select the SE (OPTIGA Trust M?) and check for an I²C address conflict with Si5351A.
-    - [ ] Define the power input rail and budget (PA and SiK TX peaks).
+    - [x] Confirm the fleet isolated CAN-FD part (ISOW1044) and RS-485 part for reuse. Done
+        2026-09-29: ISOW1044BDFMR + **ISOW1412DFMR**, the fleet standard (the plan's ADM2795E is
+        corrected). See `avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md` §1.
+    - [x] Select the SE and check for an I²C address conflict with Si5351A. Done 2026-09-29:
+        OPTIGA Trust M at 0x30 vs. Si5351A at 0x60, so there is no conflict.
+    - [x] Define the power input rail and budget. Done 2026-09-29:
+        - Input is +5 V from the avionics bus.
+        - Logic 3.3 V comes from a TPS62933 buck, sized for the HI-6138's 695 mA max
+            transmit current (DS6138 §24.3).
+        - RF-analog 3.3 V comes from a TPS7A2033 LDO.
+        - Worst case is about 1.9 A at 5 V, a net reduction against two Rev S capes.
+    - [x] Select the Holt 1553C protocol engine. Done 2026-09-28: HI-6138, fleet part
+        (§1.2a.3).
+    - [x] RF-chain datasheet audit. Done 2026-09-29: the Rev S 49 MHz chain is miswired on the
+        Si5351A (9/10 pins), TCXO, PE4259, and MGA-82563, has no receive demodulator, and uses
+        three unbuildable packages (2N3866 SOT-89, MCP4921 SOT-23-8, LM393 SOT-23-5). See
+        `avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md` §3.
+    - [ ] **OWNER DECISION — 49 MHz receive architecture:** (a) discrete mixer + FM IF with
+        MCU AFSK decode, or (b) a single-chip transceiver covering 49 MHz with AFSK. This
+        blocks the Phase 2 RX section and all of Phases 3–4.
+    - [ ] **OWNER DECISION — 49 MHz PA:** the 2N3866 is TO-39 only and about 35 dB over
+        §15.235. Choose a low-power stage or drive CLK0 directly.
 - **Phase 2 — schematic (Rev T)**
     - [ ] Port the RF chains unchanged, remove PB2 / TPM / ETH, add the MCU / buses / SE /
         power. ERC clean.
