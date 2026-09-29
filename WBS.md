@@ -556,6 +556,11 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Add SBUS/UART DIP switch to Pilot
 - [ ] Generate Pilot gerbers
 - [ ] Generate XO gerbers
+- [ ] TACCO area recovery, mLRS bare-chip radio, fab-ready layout (2026-09-29)
+- [x] TACCO PB2 header map rebuilt from the real PocketBeagle 2 schematic
+- [x] TACCO DP83825I pin table rebuilt from TI SNLS638C Table 4-1
+- [ ] TACCO Wi-Fi host: USB module on USB1 — part selection open (fab blocker)
+- [ ] Pilot: re-derive PB2 header map and DP83825I table the same way
 - [x] remove Wi-Fi, sik, and loRa antennas from XO. Use filtered cho…
 - [x] Re-evaluate space / restore Ethernet to XO
 - [ ] Zigbee RF chain was never actually added to XO — PCB scope g…

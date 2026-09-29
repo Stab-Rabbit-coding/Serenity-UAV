@@ -230,7 +230,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "XO.kicad_pro",
+    "filename": "TACCO.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -249,7 +249,7 @@
         "priority": 2147483647,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.127,
-        "via_diameter": 0.5,
+        "via_diameter": 0.6,
         "via_drill": 0.3,
         "wire_width": 6
       },
@@ -263,7 +263,7 @@
         "priority": 0,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.2,
-        "via_diameter": 0.5,
+        "via_diameter": 0.6,
         "via_drill": 0.3
       },
       {
@@ -273,7 +273,7 @@
         "priority": 1,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
-        "via_diameter": 0.5,
+        "via_diameter": 0.6,
         "via_drill": 0.3
       },
       {
@@ -283,6 +283,16 @@
         "priority": 2,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.4,
+        "via_diameter": 0.6,
+        "via_drill": 0.3
+      },
+      {
+        "clearance": 0.127,
+        "name": "RF",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 3,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.35,
         "via_diameter": 0.6,
         "via_drill": 0.3
       }
@@ -363,11 +373,39 @@
       },
       {
         "netclass": "POWER",
+        "pattern": "+1V8_RF"
+      },
+      {
+        "netclass": "POWER",
         "pattern": "GND"
       },
       {
         "netclass": "POWER",
         "pattern": "PGND"
+      },
+      {
+        "netclass": "RF",
+        "pattern": "MLRS_RFO_HP"
+      },
+      {
+        "netclass": "RF",
+        "pattern": "MLRS_TX*"
+      },
+      {
+        "netclass": "RF",
+        "pattern": "MLRS_RX*"
+      },
+      {
+        "netclass": "RF",
+        "pattern": "MLRS_RFI_*"
+      },
+      {
+        "netclass": "RF",
+        "pattern": "MLRS_ANT*"
+      },
+      {
+        "netclass": "RF",
+        "pattern": "RADIO_ANT*"
       }
     ]
   },

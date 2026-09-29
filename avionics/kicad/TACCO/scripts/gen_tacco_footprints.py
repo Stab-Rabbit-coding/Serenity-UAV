@@ -410,12 +410,14 @@ def rclamp0502b() -> None:
                   "product page confirms package family only). Flagged for confirmation.")
     bx, by = 1.0 / 2, 0.6 / 2
     b.append(rect("F.Fab", -bx, -by, bx, by))
-    b.append(rect("F.CrtYd", -bx - 0.35, -by - 0.35, bx + 0.35, by + 0.35, 0.05))
+    # courtyard must enclose the 1.8 mm-pitch pads (0.5 mm), not just the body
+    b.append(rect("F.CrtYd", -1.4, -0.55, 1.4, 0.55, 0.05))
     b.append(line("F.SilkS", -bx - 0.15, -by - 0.15, -bx - 0.15, by + 0.15))
     pitch = 1.8 / 2
     b.append(smd_pad("1", -pitch, 0.0, 0.5, 0.5))
     b.append(smd_pad("2", pitch, 0.0, 0.5, 0.5))
     write(name, b)
+
 
 
 def main() -> None:

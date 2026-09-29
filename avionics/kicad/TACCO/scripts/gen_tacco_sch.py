@@ -162,7 +162,22 @@ FP_SMA_EDGE = "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount"
 FP_MMCX = "Connector_Coaxial:MMCX_Molex_73415-1471_Vertical"
 FP_MICROSD = "Connector_Card:microSD_HC_Molex_104031-0811"
 FP_LED0603 = "LED_SMD:LED_0603_1608Metric"
-FP_BOOTBTN = "Button_Switch_SMD:SW_Push_1P1T_NO_CK_PTS125Sx43PSMTR"
+# 2026-09-29 area recovery (avionics/WBS.md §1.2a "TACCO area recovery"): C&K KMR2
+# side-actuated tact switch (21 mm²) replaces the 12 mm PTS125 (213 mm²).
+FP_BOOTBTN = "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2"
+# Tag-Connect TC2030-IDC-NL 6-pad SWD footprint (no BOM part) replaces the JST-GH 4-pin.
+FP_TC2030 = "Connector:Tag-Connect_TC2030-IDC-NL_2x03_P1.27mm_Vertical"
+# 600 Ohm @ 100 MHz signal-line ferrite beads (TACCO.md §6/§8 intent) — 0402 land.  The
+# 1812 742792510 (5 A, 70 Ohm) is a POWER bead and stays only on FB1.
+FP_L0402 = "Inductor_SMD:L_0402_1005Metric"
+FP_L0603 = "Inductor_SMD:L_0603_1608Metric"
+# Bare STM32WLE5JC radio MCU (stm32wle5jc.pdf DS13105 Rev 9 Table 95: UFQFPN48 7x7 mm,
+# 0.5 mm pitch, exposed pad D2/E2 5.6 mm typ) — KiCad system land with thermal vias.
+# (plain land; 0.3 mm thermal vias are added by finish_tacco_pcb.py — the library
+# _ThermalVias variant uses 0.2 mm drills, below this board's 0.3 mm minimum)
+FP_QFN48_WL = "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm"
+# Epson TG2520SMN 2.5x2.0 mm TCXO (TG2520SMN_en-2584158.pdf pin map 1 NC, 2 GND, 3 OUT, 4 VCC)
+FP_TG2520 = "Oscillator:Oscillator_SMD_SeikoEpson_TG2520SMN-xxx-xxxxxx-4Pin_2.5x2.0mm"
 # project-custom lands (avionics/kicad/Serenity-Custom.pretty)
 FP_PB2P1 = "Serenity-Custom:PocketBeagle2_2x18_P1_Socket"
 FP_PB2P2 = "Serenity-Custom:PocketBeagle2_2x18_P2_Socket"
@@ -428,64 +443,78 @@ ICS: List[Dict[str, Any]] = [
     # did: MAVLink-transparent telemetry + RC + frequency hopping) and over
     # a CH32V006-class tiny MCU (mLRS's firmware is confirmed ARM-only, no
     # RISC-V support at all — a hard architecture stop, not a size tradeoff).
+    # 2026-09-29 (owner decision, avionics/WBS.md §1.2a "TACCO area recovery"): the
+    # Seeed Wio-E5 module (Chinese-built, © Seeed Technology Co., Ltd., Shenzhen)
+    # is replaced by the bare ST STM32WLE5JC it was built around, plus a Japanese
+    # TCXO (Epson TG2520SMN) and a US antenna switch (pSemi PE4259).  Every pin
+    # below is transcribed from stm32wle5jc.pdf (DS13105 Rev 9) Figure 9 (UFQFPN48
+    # pinout) / Table 19 (pin definitions).  Host-side mapping is kept identical to
+    # what the Wio-E5 module exposed, so mLRS's rx-hal-WioE5-Mini-wle5jc.h stays
+    # valid except for the bind button (PB13 is not bonded on UFQFPN48 -> PA0,
+    # firmware remap).  RF switch: PA4 -> PE4259 CTRL (RX), PA5 -> CTRLB (TX).
+    # RF matching / harmonic-filter VALUES are placeholders tagged "VERIFY AN5457"
+    # (ST AN5457 could not be fetched from this environment) — bench-tune before
+    # flight.  Supply scheme per DS13105 §3.9.1: VDD, VDDRF, VDDSMPS (and VDDA,
+    # VBAT, VDDPA) on +3V3_RF; SMPS mode with Lout 15 uH / Cout 470 nF (DS13105
+    # SMPS characteristics); VDDRF1V55 tied to VFBSMPS.
     {
-        "ref": "WIOE5",
-        "value": "Wio-E5",
-        "fp": FP_WIOE5,
-        "mpn": "420J00019W",
-        "ds": "wio-e5-datasheet.pdf V1.1 Table 1 (pinout), §5.1 (12x12x2.5mm package). Pin "
-              "function/net assignment below is NOT guessed — it is transcribed directly from "
-              "mLRS's own published receiver-role HAL source for this exact hardware target "
-              "(github.com/olliw42/mLRS, mLRS/Common/hal/stm32/rx-hal-WioE5-Mini-wle5jc.h): "
-              "UARTB=USART2 PA2(TX)/PA3(RX) is the host serial link (MAVLink-transparent, same "
-              "role SiK's UART played); BUTTON/BOOT_BUTTON=PB13 (active-low, MCU's own internal "
-              "pull-up, no external resistor needed — doubles as bind button in normal operation "
-              "and a hold-at-power-on system-bootloader trigger); LED_GREEN=PA15 (active-high), "
-              "LED_RED=PB5 (active-low); PB15 MUST be left floating per the HAL's own "
-              "leds_init() comment (\"used as artificial pad for green LED\" on Seeed's reference "
-              "layout — this is a from-scratch layout, so PB15 is simply left NC here). SX_RX_EN/"
-              "SX_TX_EN (PA4/PA5 on the bare STM32WLE5) control the module's own internal RF "
-              "switch and are NOT exposed on Wio-E5's 28-pin castellated interface at all (absent "
-              "from the datasheet's own Table 1) — nothing to wire, handled inside the module. "
-              "PA13/PA14 (SWDIO/SWCLK) exposed to a debug header: these modules ship from Seeed "
-              "with their OWN AT-command firmware and MUST be reflashed with mLRS firmware before "
-              "first use. PB6/PB7 (UART1, mLRS's secondary debug/bootloader-fallback port) and "
-              "PC0/PC1 (LPUART1 'OUT' port, SBus-style — not needed for MAVLink telemetry) are "
-              "left NC: SWD is the chosen programming path, disclosed scope calibration. PA0, "
-              "PB3, PB4, PB9, PB10, PB14, PA9, PA10, PB0 are confirmed UNUSED by mLRS's own "
-              "Rx-Mini HAL for this target (grepped the actual firmware source, not assumed) — "
-              "left NC; PB0 additionally carries the datasheet's own \"must be left floating, "
-              "not allowed to be pulled up or grounded\" note.",
+        "ref": "MLRS-MCU",
+        "value": "STM32WLE5JCU6",
+        "fp": FP_QFN48_WL,
+        "mpn": "STM32WLE5JCU6",
+        "ds": "stm32wle5jc.pdf DS13105 Rev 9 Fig.9 / Table 19 (UFQFPN48), Table 95 (package), "
+              "Table 58 (TCXO), §3.8-3.9 (RF/PA, supplies); mLRS target = Wio-E5 HAL with "
+              "BUTTON remapped PB13->PA0; RF values VERIFY AN5457",
         "pins": [
-            ("1", "VCC", "+3V3_RF", "L"),
-            ("2", "GND", "GND", "L"),
-            ("3", "PA13", "WIOE5_SWDIO", "L"),
-            ("4", "PA14", "WIOE5_SWCLK", "L"),
-            ("5", "PB15", None, "L"),
-            ("6", "PA15", "WIOE5_LED_G", "L"),
-            ("7", "PB4", None, "L"),
-            ("8", "PB3", None, "L"),
-            ("9", "PB7", None, "L"),
-            ("10", "PB6", None, "L"),
-            ("11", "PB5", "WIOE5_LED_R", "L"),
-            ("12", "PC1", None, "L"),
-            ("13", "PC0", None, "L"),
-            ("14", "GND", "GND", "L"),
-            ("15", "RFIO", "WIOE5_ANT_RF", "R"),
-            ("16", "GND", "GND", "R"),
-            ("17", "RST", "WIOE5_RST", "R"),
-            ("18", "PA3", "UART_WIOE5_RX_F", "R"),
-            ("19", "PA2", "UART_WIOE5_TX_F", "R"),
-            ("20", "PB10", None, "R"),
-            ("21", "PA9", None, "R"),
-            ("22", "GND", "GND", "R"),
-            ("23", "PA0", None, "R"),
-            ("24", "PB13", "WIOE5_BOOT_BTN", "R"),
-            ("25", "PB9", None, "R"),
-            ("26", "PB14", None, "R"),
-            ("27", "PA10", None, "R"),
-            ("28", "PB0", None, "R"),
-            ("29", "PAD_GND", "GND", "R"),
+            ("1", "PB3", None, "L"),
+            ("2", "PB4", None, "L"),
+            ("3", "PB5", "MLRS_LED_R", "L"),
+            ("4", "PB6", None, "L"),
+            ("5", "PB7", None, "L"),
+            ("6", "PB8", None, "L"),
+            ("7", "PA0", "MLRS_BTN", "L"),
+            ("8", "PA1", None, "L"),
+            ("9", "PA2", "UART_WIOE5_TX_F", "L"),
+            ("10", "PA3", "UART_WIOE5_RX_F", "L"),
+            ("11", "VDD", "+3V3_RF", "L"),
+            ("12", "PA4", "MLRS_RF_RX_EN", "L"),
+            ("13", "PA5", "MLRS_RF_TX_EN", "L"),
+            ("14", "PA6", None, "L"),
+            ("15", "PA7", None, "L"),
+            ("16", "PA8", None, "L"),
+            ("17", "PA9", None, "L"),
+            ("18", "NRST", "MLRS_RST", "L"),
+            ("19", "PH3-BOOT0", "MLRS_BOOT0", "L"),
+            ("20", "RFI_P", "MLRS_RFI_P", "L"),
+            ("21", "RFI_N", "MLRS_RFI_N", "L"),
+            ("22", "RFO_LP", None, "L"),
+            ("23", "RFO_HP", "MLRS_RFO_HP", "L"),
+            ("24", "VR_PA", "MLRS_VR_PA", "L"),
+            ("25", "VDDPA", "+3V3_RF", "R"),
+            ("26", "OSC_IN", "MLRS_HSE_IN", "R"),
+            ("27", "OSC_OUT", None, "R"),
+            ("28", "VDDRF", "+3V3_RF", "R"),
+            ("29", "VDDRF1V55", "MLRS_VFB", "R"),
+            ("30", "PB0-VDD_TCXO", "MLRS_VDDTCXO", "R"),
+            ("31", "PB2", None, "R"),
+            ("32", "PB12", None, "R"),
+            ("33", "PA10", None, "R"),
+            ("34", "PA11", None, "R"),
+            ("35", "PA12", None, "R"),
+            ("36", "PA13", "MLRS_SWDIO", "R"),
+            ("37", "VBAT", "+3V3_RF", "R"),
+            ("38", "PC13", None, "R"),
+            ("39", "PC14-OSC32_IN", None, "R"),
+            ("40", "PC15-OSC32_OUT", None, "R"),
+            ("41", "VDDA", "+3V3_RF", "R"),
+            ("42", "PA14", "MLRS_SWCLK", "R"),
+            ("43", "PA15", "MLRS_LED_G", "R"),
+            ("44", "VDD", "+3V3_RF", "R"),
+            ("45", "VFBSMPS", "MLRS_VFB", "R"),
+            ("46", "VDDSMPS", "+3V3_RF", "R"),
+            ("47", "VLXSMPS", "MLRS_VLX", "R"),
+            ("48", "VSSSMPS", "GND", "R"),
+            ("49", "EP", "GND", "R"),
         ],
     },
     # LORA (RFM95W) REMOVED 2026-09-20 per owner: Commo already carries a
@@ -576,13 +605,13 @@ ICS: List[Dict[str, Any]] = [
             ("39", "GND", "GND", "R"),
             ("40", "SD_VIO", "+1V8_RF", "R"),
             ("41", "GND", "GND", "R"),
-            ("42", "SD_CMD", "SDIO_CMD_F", "R"),
+            ("42", "SD_CMD", None, "R"),
             ("43", "GND", "GND", "R"),
-            ("44", "SD_CLK", "SDIO_CLK_F", "R"),
-            ("45", "SD_DAT1", "SDIO_D1_F", "R"),
-            ("46", "SD_DAT3", "SDIO_D3_F", "R"),
-            ("47", "SD_DAT2", "SDIO_D2_F", "R"),
-            ("48", "SD_DAT0", "SDIO_D0_F", "R"),
+            ("44", "SD_CLK", None, "R"),
+            ("45", "SD_DAT1", None, "R"),
+            ("46", "SD_DAT3", None, "R"),
+            ("47", "SD_DAT2", None, "R"),
+            ("48", "SD_DAT0", None, "R"),
             ("49", "UART_TX", "BT_UART_TX", "R"),
             ("50", "UART_CTS", "BT_UART_CTS", "R"),
             ("51", "UART_RX", "BT_UART_RX", "R"),
@@ -684,38 +713,47 @@ ICS: List[Dict[str, Any]] = [
 
 
 def dp83825i(ref: str, rmii: str, rstn: str, intn: str, eth: str, mdio: str, mdc: str) -> Dict[str, Any]:
-    """TI DP83825I 10/100 RMII PHY, WQFN-24 — dp83825i.pdf Table 4-1 (identical part/pin table to
-    Pilot's ETH1-PHY; XO gets ONE PHY per WBS.md §1.2a "XO: 1x PHY (RMII0)")."""
+    """TI DP83825I 10/100 RMII PHY, WQFN-24 (RMQ0024A) — dp83825i.pdf SNLS638C Table 4-1.
+
+    REBUILT 2026-09-29: the previous table (X1 on 8, X2 on 9, DGND 10, DVDD10 11, RESET 12,
+    MDIO 13, MDC 14, INT 15, TXOP/TXON 17/18, RXIP/RXIN 21/22, RBIAS 24, RX_D0 on 1 ...) was
+    NOT the DP83825I pinout (it resembles a DP83848-family table) and is shared with Pilot's
+    ETH1/ETH2-PHY — see avionics/WBS.md §1.2a 2026-09-29 item 8.  Datasheet Table 4-1:
+    1 TX_EN, 2 50MHzOut/LED2, 3 INTR/PWRDN, 4 LED0, 5 RST_N, 6 VDDA3V3, 7 RD_M, 8 RD_P, 9 GND,
+    10 TD_M, 11 TD_P, 12 XO, 13 XI/50MHzIn, 14 RBIAS, 15 MDIO, 16 MDC, 17 RX_D1, 18 RX_D0
+    (PhyAdd[0] strap), 19 VDDIO, 20 CRS_DV, 21 GND, 22 RX_ER, 23 TX_D0, 24 TX_D1, DAP = GND.
+    RMII Leader mode (25 MHz oscillator on XI): pin 2 drives the 50 MHz reference clock the
+    AM6254 RMII2 port takes on P1-34 (`RMII2_REF_CLK`)."""
     return {
         "ref": ref, "value": "DP83825IRHBR", "fp": "Package_DFN_QFN:Texas_RMQ0024A_WQFN-24-1EP_3x3mm_P0.4mm_EP1.9x1.9mm",
         "mpn": "DP83825IRHBR",
-        "ds": "dp83825i.pdf Table 4-1 (WQFN-24), Fig 8-3/8-4 [REF-SENSOR-029]",
+        "ds": "dp83825i.pdf SNLS638C Table 4-1 (WQFN-24 RMQ), §6 RMII Leader mode [REF-SENSOR-020]",
         "pins": [
-            ("1", "RX_D0/PHYAD0", f"{rmii}_RXD0", "L"),
-            ("2", "RX_D1", f"{rmii}_RXD1", "L"),
-            ("3", "RX_ER", f"{rmii}_RX_ER", "L"),
-            ("4", "CRS_DV", f"{rmii}_CRS_DV", "L"),
-            ("5", "TX_EN", f"{rmii}_TX_EN", "L"),
-            ("6", "TX_D0", f"{rmii}_TXD0", "L"),
-            ("7", "TX_D1", f"{rmii}_TXD1", "L"),
-            ("8", "X1", "PHY_XI_25M", "L"),
-            ("9", "X2", None, "L"),
-            ("10", "DGND", "GND", "L"),
-            ("11", "DVDD10", None, "L"),
-            ("12", "RESET_N", rstn, "L"),
-            ("13", "MDIO", mdio, "R"),
-            ("14", "MDC", mdc, "R"),
-            ("15", "INT_N", intn, "R"),
-            ("16", "AGND_TX", "GND", "R"),
-            ("17", "TXOP", f"{eth}_TXP", "R"),
-            ("18", "TXON", f"{eth}_TXN", "R"),
-            ("19", "AVDD33_TX", "+3V3", "R"),
-            ("20", "AGND_RX", "GND", "R"),
-            ("21", "RXIP", f"{eth}_RXP", "R"),
-            ("22", "RXIN", f"{eth}_RXN", "R"),
-            ("23", "AVDD33_RX", "+3V3", "R"),
-            ("24", "RBIAS", f"{ref}_RBIAS", "R"),
-            ("25", "EP", "GND", "R"),
+            ("1", "TX_EN", f"{rmii}_TX_EN", "L"),
+            ("2", "50MHzOut/LED2", f"{rmii}_REF_CLK", "L"),
+            ("3", "INTR/PWRDN", intn, "L"),
+            ("4", "LED0", None, "L"),
+            ("5", "RST_N", rstn, "L"),
+            ("6", "VDDA3V3", "+3V3", "L"),
+            ("7", "RD_M", f"{eth}_RXN", "L"),
+            ("8", "RD_P", f"{eth}_RXP", "L"),
+            ("9", "GND", "GND", "L"),
+            ("10", "TD_M", f"{eth}_TXN", "L"),
+            ("11", "TD_P", f"{eth}_TXP", "L"),
+            ("12", "XO", None, "L"),
+            ("13", "XI/50MHzIn", "PHY_XI_25M", "R"),
+            ("14", "RBIAS", f"{ref}_RBIAS", "R"),
+            ("15", "MDIO", mdio, "R"),
+            ("16", "MDC", mdc, "R"),
+            ("17", "RX_D1", f"{rmii}_RXD1", "R"),
+            ("18", "RX_D0/PHYAD0", f"{rmii}_RXD0", "R"),
+            ("19", "VDDIO", "+3V3", "R"),
+            ("20", "CRS_DV", f"{rmii}_CRS_DV", "R"),
+            ("21", "GND", "GND", "R"),
+            ("22", "RX_ER", f"{rmii}_RX_ER", "R"),
+            ("23", "TX_D0", f"{rmii}_TXD0", "R"),
+            ("24", "TX_D1", f"{rmii}_TXD1", "R"),
+            ("25", "DAP", "GND", "R"),
         ],
     }
 
@@ -749,7 +787,7 @@ def eth_xfmr(ref: str, eth: str) -> Dict[str, Any]:
 
 
 ICS += [
-    dp83825i("ETH-PHY", "RMII0", "PHY1_RSTN", "PHY1_INTRN", "ETHB", "MDIO0", "MDC0"),
+    dp83825i("ETH-PHY", "RMII2", "PHY1_RSTN", "PHY1_INTRN", "ETHB", "MDIO0", "MDC0"),
     eth_xfmr("T-ETH", "ETHB"),
 ]
 
@@ -760,41 +798,66 @@ ICS += [
 # (IMU/baro/GPS) balls for its own comms/logging/payload peripherals (winch
 # H-bridge, SD card, SPI-NOR flash, LoRa/SiK/WiFi radios, load cell, PLD).
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# PocketBeagle 2 P1/P2 map — REBUILT 2026-09-29 from the BeagleBoard PocketBeagle 2
+# schematic sheet "016_BP P1 & P2" (avionics/datasheets/pocketbeagle2_sch.pdf), see
+# avionics/kicad/PB2_HEADER_PINMAP.md for the ball-by-ball table and the TACCO
+# allocation.  The previous tables were not derived from the PB2 schematic (GND
+# on P1-1 = VIN, MCAN0 on the GND pins, SDIO on MDC/PRU balls) and would have
+# shorted the PB2's 5 V input.  MMC2/SDIO is NOT on the headers: the Type 2EL
+# WLAN core (SDIO-only) cannot be hosted from P1/P2 — owner decision 2026-09-29:
+# Wi-Fi moves to a USB module on USB1 (P1-9/11), BT stays on UART1, 802.15.4 on
+# SPI0.  Net names RMII0_* -> RMII2_* (the PB2 exposes RMII2, not RMII0).
+# ---------------------------------------------------------------------------
 PB2_P1 = [
-    # Indices 2-5 (was WINCH_IN1-4, freed 2026-09-20) now carry the
-    # Bluetooth UART for WIFI-BT-ZB (Murata Type 2EL) — a second, dedicated
-    # UART bus, distinct from SiK's UART_SIK_RX/TX pair below.
-    "GND", "GND", "BT_UART_TX", "BT_UART_RX", "BT_UART_RTS", "BT_UART_CTS",
-    # P1-7..10: PRU 1553 lines retired 2026-09-28 (HI-6138 swap) -> GPIOs
-    "M1553B_IRQN", "M1553B_MRN", "M1553B_TX_INH", None,
-    "RS485_B_DE", "RS485_B_RX", "RS485_B_TX", "CAN_B_STB", "MCAN0_B_RX", "MCAN0_B_TX",
-    "SD_CD", None, None, "SPI0_B_CS_1553", "SPI0_B_CS_TPM",  # P1-20 TX_INH -> GPIO CS 2026-09-28
-    "SPI0_B_CS_FLASH", "SPI0_B_MISO", "SPI0_B_MOSI", "SPI0_B_CLK",
-    "SPI0_B_CS_ZB",  # was SPI0_B_CS_LORA (freed 2026-09-20); reused 2026-09-21
-                     # for WIFI-BT-ZB's 802.15.4 SPI_FRM (shares the SPI0_B
-                     # MISO/MOSI/CLK bus with TPM/flash via its own CS, same
-                     # multi-drop pattern already used for those two).
-    "ZB_SPI_INT", None, None, None, "UART_WIOE5_RX",  # was UART_SIK_RX, reused 2026-09-21
-    "UART_WIOE5_TX", "+3V3_PB2", "+3V3_PB2", "+5V", "GND",  # was UART_SIK_TX
+    "+5V", "RMII2_TX_EN",                    # 1 VIN (cape feeds the PB2), 2 AA19
+    None, "RMII2_TXD0",                      # 3 F18 USB1_DRVVBUS (reserved: USB Wi-Fi module, WBS §1.2a), 4 Y18
+    None, "BT_UART_RX",                      # 5 USB1 VBUS (reserved), 6 E19 UART1_RXD
+    "+5V", "BT_UART_TX",                     # 7 VIN.USB, 8 A20 UART1_TXD
+    None, "BT_UART_CTS",                     # 9 USB1 D- (reserved), 10 B19 UART1_CTSn
+    None, "BT_UART_RTS",                     # 11 USB1 D+ (reserved), 12 A19 UART1_RTSn
+    "PLD_CLK", "+3V3_PB2",                   # 13 N20 GPIO0_36, 14 VDD_3V3
+    "GND", "GND",                            # 15, 16
+    None, None,                              # 17 VREF-, 18 VREF+ (analog, unused)
+    "RMII2_RX_ER", "PLD_I1",                 # 19 AD22, 20 Y24 GPIO0_50
+    "PLD_I2", "GND",                         # 21 AE22 GPIO1_6, 22
+    "PLD_I3", None,                          # 23 AC21 GPIO1_5, 24 VOUT (VSYS, unused)
+    "RMII2_RXD1", "PLD_I4",                  # 25 AB20, 26 K24 GPIO0_44
+    "RMII2_RXD0", "PLD_I5",                  # 27 AE23, 28 K22 GPIO0_43
+    "PLD_I6", "UART_WIOE5_TX",               # 29 Y20 GPIO0_62, 30 E14 UART0_TXD (mLRS link)
+    "PLD_I7", "UART_WIOE5_RX",               # 31 Y22 GPIO0_59, 32 D14 UART0_RXD
+    "PLD_I8", "RMII2_REF_CLK",               # 33 AA23 GPIO0_56, 34 AD23
+    "RMII2_CRS_DV", "FAN_PWM_B",             # 35 AE21, 36 B17 EHRPWM2_A
 ]
 PB2_P2 = [
-    # index 27 (was LORA_DIO0) freed 2026-09-20 when RFM95W/LORA was removed
-    # (duplicate of Commo's LoRa radio) -- left None rather than reassigned.
-    # indices 2-3 (were SIK_CTS/SIK_RTS) freed 2026-09-21: Wio-E5's mLRS UART
-    # (UARTB=USART2) carries no RTS/CTS flow control per mLRS's own HAL
-    # source for this target -- left None rather than reassigned.
-    "SDIO_D2", "SDIO_D3", None, None, "FAN_PWM_B", "PLD_CLK", "PLD_I1", "PLD_I2",
-    "WIFI_EN", "WIFI_IRQ", "TPM_B_RSTN", "TPM_B_IRQN",
-    "PLD_I3", "PLD_I4", "PHY1_RSTN", "PHY1_INTRN", "MDIO0", "MDC0",
-    "SDIO_CLK", "SDIO_CMD", "SDIO_D0", "SDIO_D1",
-    "PLD_I5", "PLD_I6", "PLD_I7", "PLD_I8",
-    None, "RMII0_RX_ER", "RMII0_CRS_DV", "RMII0_RXD1",
-    "RMII0_RXD0", "RMII0_TX_EN", "RMII0_TXD1", "RMII0_TXD0", "+5V", "GND",
+    "MDC0", "CAN_B_STB",                     # 1 AD24 MDIO0_MDC, 2 U22 GPIO0_45
+    "MDIO0", "PHY1_RSTN",                    # 3 AB22 MDIO0_MDIO, 4 V24 GPIO0_46
+    "MCAN0_B_TX", "PHY1_INTRN",              # 5 C15 MCAN0_TX, 6 W25 GPIO0_47
+    "MCAN0_B_RX", "M1553B_IRQN",             # 7 E15 MCAN0_RX, 8 W24 GPIO0_48
+    "RS485_B_RX", "M1553B_MRN",              # 9 A15 UART2_RXD, 10 AD21 GPIO0_91
+    "RS485_B_TX", None,                      # 11 B15 UART2_TXD, 12 PWR_BTN
+    None, None,                              # 13 VOUT, 14 BAT VIN
+    "GND", None,                             # 15, 16 BAT TEMP
+    "M1553B_TX_INH", "TPM_B_RSTN",           # 17 AC24 GPIO0_64, 18 V21 GPIO0_53
+    "TPM_B_IRQN", "SD_CD",                   # 19 AC20 GPIO1_0, 20 Y25 GPIO0_49
+    "GND", "RS485_B_DE",                     # 21, 22 AC25 UART2_RTSn (hardware DE)
+    "+3V3_PB2", "SPI0_B_CS_1553",            # 23 VDD_3V3, 24 Y23 GPIO0_51
+    "SPI0_B_MOSI", None,                     # 25 B14 SPI0_D1, 26 nRESET (not used by the cape)
+    "SPI0_B_MISO", "WIFI_EN",                # 27 B13 SPI0_D0, 28 AB24 GPIO0_61
+    "SPI0_B_CLK", "SPI0_B_CS_FLASH",         # 29 A14 SPI0_CLK, 30 AA24 GPIO0_58
+    "RMII2_TXD1", "SPI0_B_CS_ZB",            # 31 AA18 RMII2_TXD1, 32 AB25 GPIO0_57
+    "WIFI_IRQ", "ZB_SPI_INT",                # 33 AA25 GPIO0_52, 34 AA21 GPIO0_60
+    None, "SPI0_B_CS_TPM",                   # 35 W21 spare, 36 C13 SPI0_CS1
 ]
+
+
+PB2_P2_OMITTED: set = set()  # gap idea withdrawn 2026-09-29: P2-5/7 are the only MCAN0 pins
 
 
 def pb2_header(ref: str, value: str, fp: str, nets: List[Optional[str]]) -> Dict[str, Any]:
-    pins = [(str(i), f"P{i}", net, "L" if i <= 18 else "R") for i, net in enumerate(nets, start=1)]
+    omitted = PB2_P2_OMITTED if ref == "PB2-P2" else set()
+    pins = [(str(i), f"P{i}", net, "L" if i <= 18 else "R")
+            for i, net in enumerate(nets, start=1) if i not in omitted]
     return {"ref": ref, "value": value, "fp": fp, "mpn": "", "ds": "PocketBeagle 2 P1/P2 expansion rails (XO map)", "pins": pins}
 
 
@@ -916,7 +979,7 @@ SIMPLE: List[Any] = [
      [("1", "TRI", None), ("2", "GND", "GND"), ("3", "OUT", "PHY_XI_25M"), ("4", "VDD", "+3V3")]),
     ("C-25M", "100nF", FP_C0402, "", "oscillator VDD bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("R-RBIAS", "6.49k 1%", FP_R0201, "", "DP83825I RBIAS to GND (pin 24)", [("1", "A", "ETH-PHY_RBIAS"), ("2", "B", "GND")]),
-    ("R-AD0", "2.49k", FP_R0201, "", "PhyAdd[0] strap mode 1 -> PHY address 1", [("1", "A", "+3V3"), ("2", "B", "RMII0_RXD0")]),
+    ("R-AD0", "2.49k", FP_R0201, "", "PhyAdd[0] strap mode 1 -> PHY address 1", [("1", "A", "+3V3"), ("2", "B", "RMII2_RXD0")]),
     ("C-PHY-A1", "10nF", FP_C0201, "", "VDDA3V3 HF bypass (Fig 8-4)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-PHY-A2", "100nF", FP_C0402, "", "VDDA3V3 bypass (Fig 8-4)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-PHY-A3", "1uF", FP_C0402, "", "VDDA3V3 bulk (Fig 8-4)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
@@ -946,30 +1009,73 @@ SIMPLE: List[Any] = [
     ("C-50M", "100nF", FP_C0402, "", "50 MHz oscillator VDD bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     # --- TPM ------------------------------------------------------------------
     ("C-TPM1", "1uF", FP_C0402, "", "SLB9672 §3.1.3 typical schematic bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-TPM2", "100nF", FP_C0402, "", "SLB9672 VDD bypass (pin 1)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-TPM3", "100nF", FP_C0402, "", "SLB9672 VDD bypass (pin 14)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-TPM4", "100nF", FP_C0402, "", "SLB9672 VDD bypass (pin 22)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-TPM2", "100nF 6.3V X5R", FP_C0201, "", "SLB9672 VDD bypass (pin 1)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-TPM3", "100nF 6.3V X5R", FP_C0201, "", "SLB9672 VDD bypass (pin 14)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-TPM4", "100nF 6.3V X5R", FP_C0201, "", "SLB9672 VDD bypass (pin 22)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("R-TPMCS", "10k", FP_R0201, "", "SLB9672 CS# pull-up (§3.1.3)", [("1", "A", "+3V3"), ("2", "B", "SPI0_B_CS_TPM")]),
     ("R-TPM10", "10k", FP_R0201, "", "SLB9672 pin 10 NCI/VDD pull-up (Table 13, preferred)", [("1", "A", "+3V3"), ("2", "B", "TPM_B_P10_PU")]),
-    # --- Wio-E5 (mLRS) supply/UART filtering + RST + boot/bind + LEDs -------
-    ("C-WIOE5-IN", "4.7uF", FP_C0603, "", "Wio-E5 VCC bypass (wio-e5-datasheet.pdf Fig.12 reference design C1)", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
-    ("R-WIOE5-RST", "22k", FP_R0201, "", "Wio-E5 RST pull-up (Fig.12 reference design R1)", [("1", "A", "+3V3_RF"), ("2", "B", "WIOE5_RST")]),
-    ("FB-WIOE5-1", "742792510", FP_L1812, "742792510", "Wio-E5 host UART RX line filter", [("1", "IN", "UART_WIOE5_RX"), ("2", "OUT", "UART_WIOE5_RX_F")]),
-    ("FB-WIOE5-2", "742792510", FP_L1812, "742792510", "Wio-E5 host UART TX line filter", [("1", "IN", "UART_WIOE5_TX"), ("2", "OUT", "UART_WIOE5_TX_F")]),
-    ("R-WIOE5-SWDIO", "22R", FP_R0201, "", "Wio-E5 SWDIO series (Fig.12 reference design R2)", [("1", "A", "WIOE5_SWDIO"), ("2", "B", "WIOE5_SWDIO_HDR")]),
-    ("R-WIOE5-SWCLK", "22R", FP_R0201, "", "Wio-E5 SWCLK series (Fig.12 reference design R3)", [("1", "A", "WIOE5_SWCLK"), ("2", "B", "WIOE5_SWCLK_HDR")]),
-    ("J-WIOE5-SWD", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)",
-     "Wio-E5 SWD programming header — required since the module ships from Seeed with its own "
-     "AT-command firmware and must be reflashed with mLRS firmware before first use",
-     [("1", "VTREF", "+3V3_RF"), ("2", "SWDIO", "WIOE5_SWDIO_HDR"), ("3", "SWCLK", "WIOE5_SWCLK_HDR"), ("4", "GND", "GND")]),
-    ("SW-WIOE5-BOOT", "PTS125Sx43", FP_BOOTBTN, "PTS125S43SMTR2LFS",
-     "Wio-E5 bind/boot button (mLRS BUTTON=PB13, active-low, MCU's own internal pull-up per "
-     "the HAL source — no external pull-up needed)",
-     [("1", "A", "WIOE5_BOOT_BTN"), ("2", "B", "GND")]),
-    ("R-WIOE5-LEDG", "1k", FP_R0201, "", "Wio-E5 LED_GREEN (PA15) current limit, active-high per HAL", [("1", "A", "WIOE5_LED_G"), ("2", "B", "WIOE5_LEDG_A")]),
-    ("LED-WIOE5-G", "Green", FP_LED0603, "", "Wio-E5 status LED (green)", [("1", "A", "WIOE5_LEDG_A"), ("2", "K", "GND")]),
-    ("R-WIOE5-LEDR", "1k", FP_R0201, "", "Wio-E5 LED_RED (PB5) current limit, active-low (sinks) per HAL", [("1", "A", "+3V3_RF"), ("2", "B", "WIOE5_LEDR_A")]),
-    ("LED-WIOE5-R", "Red", FP_LED0603, "", "Wio-E5 status LED (red)", [("1", "A", "WIOE5_LEDR_A"), ("2", "K", "WIOE5_LED_R")]),
+    # --- mLRS radio (bare STM32WLE5JC): supplies, clock, reset, button, LEDs, SWD -----
+    # VERIFY-tagged values: topology per DS13105 Figs. 2-4; element values need
+    # ST AN5457 (915 MHz) confirmation and bench tuning (WBS §1.2a; REFERENCES.md
+    # "Open Standards Verification Items").
+    ("C-MLRS-VDD1", "100nF", FP_C0402, "", "STM32WLE5 VDD pin 11 bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-MLRS-VDD2", "100nF", FP_C0402, "", "STM32WLE5 VDD pin 44 bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-MLRS-VDDA1", "100nF", FP_C0402, "", "STM32WLE5 VDDA bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-MLRS-VDDA2", "1uF", FP_C0402, "", "STM32WLE5 VDDA bulk", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-MLRS-VDDRF", "100nF", FP_C0402, "", "STM32WLE5 VDDRF bypass (DS13105 §3.9.1: same supply as VDD)", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-MLRS-VBAT", "100nF", FP_C0402, "", "STM32WLE5 VBAT bypass (tied to VDD, no backup battery)", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-MLRS-SMPS", "100nF", FP_C0402, "", "STM32WLE5 VDDSMPS bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-MLRS-BULK", "4.7uF", FP_C0603, "", "STM32WLE5 supply bulk (was C-WIOE5-IN)", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-MLRS-VDDPA1", "100nF", FP_C0402, "", "STM32WLE5 VDDPA HF bypass (+22 dBm PA supply, DS13105 Fig.3)", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-MLRS-VDDPA2", "4.7uF", FP_C0603, "", "STM32WLE5 VDDPA bulk (PA transmit bursts)", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-MLRS-VFB", "470nF", FP_C0402, "", "STM32WLE5 VFBSMPS Cout 470 nF (DS13105 SMPS characteristics), shared LDO/SMPS", [("1", "P", "MLRS_VFB"), ("2", "N", "GND")]),
+    ("L-MLRS-SMPS", "15uH", FP_L0603, "", "STM32WLE5 SMPS inductor Lout 15 uH (DS13105 SMPS characteristics) VLXSMPS->VFBSMPS", [("1", "A", "MLRS_VLX"), ("2", "B", "MLRS_VFB")]),
+    ("C-MLRS-VRPA", "100nF VERIFY AN5457", FP_C0402, "", "STM32WLE5 VR_PA regulator output decoupling (value per AN5457)", [("1", "P", "MLRS_VR_PA"), ("2", "N", "GND")]),
+    ("X-MLRS", "TG2520SMN 32MHz 1.8V clipped-sine", FP_TG2520, "",
+     "Epson TG2520SMN 32.000 MHz TCXO (TG2520SMN_en-2584158.pdf: pin 1 NC, 2 GND, 3 OUT, 4 VCC; "
+     "clipped sine >=0.8 Vpp, VCC 1.8 V option) fed from PB0-VDD_TCXO (DS13105 Table 58, "
+     "VTCXO 1.6-3.3 V, <=4 mA); ordering code (frequency/voltage/Vc option) to be confirmed by owner",
+     [("1", "NC", None), ("2", "GND", "GND"), ("3", "OUT", "MLRS_TCXO_OUT"), ("4", "VCC", "MLRS_VDDTCXO")]),
+    ("C-MLRS-TCXO", "100nF", FP_C0402, "", "TCXO VCC bypass, as close as possible (Epson note)", [("1", "P", "MLRS_VDDTCXO"), ("2", "N", "GND")]),
+    ("C-MLRS-HSE", "10pF C0G", FP_C0402, "", "TCXO OUT -> OSC_IN series cap (DS13105 Table 58 note 1: 10 pF for 0.8 Vpp TCXO)", [("1", "A", "MLRS_TCXO_OUT"), ("2", "B", "MLRS_HSE_IN")]),
+    ("R-MLRS-RST", "22k", FP_R0201, "", "NRST pull-up (carried over from the Wio-E5 reference R1)", [("1", "A", "+3V3_RF"), ("2", "B", "MLRS_RST")]),
+    ("C-MLRS-RST", "100nF", FP_C0402, "", "NRST filter capacitor", [("1", "P", "MLRS_RST"), ("2", "N", "GND")]),
+    ("R-MLRS-BOOT0", "10k", FP_R0201, "", "PH3-BOOT0 pull-down: boot from main flash; programming via SWD", [("1", "A", "MLRS_BOOT0"), ("2", "B", "GND")]),
+    ("FB-MLRS-1", "600R@100MHz 0402", FP_L0402, "", "mLRS host UART RX line filter — 600 Ohm/100 MHz signal bead (TACCO.md §6 intent; MPN owner-select, WBS §1.2a)", [("1", "IN", "UART_WIOE5_RX"), ("2", "OUT", "UART_WIOE5_RX_F")]),
+    ("FB-MLRS-2", "600R@100MHz 0402", FP_L0402, "", "mLRS host UART TX line filter — 600 Ohm/100 MHz signal bead (MPN owner-select)", [("1", "IN", "UART_WIOE5_TX"), ("2", "OUT", "UART_WIOE5_TX_F")]),
+    ("R-MLRS-SWDIO", "22R", FP_R0201, "", "SWDIO series", [("1", "A", "MLRS_SWDIO"), ("2", "B", "MLRS_SWDIO_HDR")]),
+    ("R-MLRS-SWCLK", "22R", FP_R0201, "", "SWCLK series", [("1", "A", "MLRS_SWCLK"), ("2", "B", "MLRS_SWCLK_HDR")]),
+    ("J-MLRS-SWD", "TC2030-IDC-NL pads", FP_TC2030, "",
+     "Tag-Connect TC2030-IDC-NL SWD pad set (no BOM part; ARM Cortex 6-pin: 1 VTREF, 2 SWDIO, "
+     "3 nRESET, 4 SWCLK, 5 GND, 6 SWO) — replaces the JST-GH header (owner 2026-09-29)",
+     [("1", "VTREF", "+3V3_RF"), ("2", "SWDIO", "MLRS_SWDIO_HDR"), ("3", "nRESET", "MLRS_RST"),
+      ("4", "SWCLK", "MLRS_SWCLK_HDR"), ("5", "GND", "GND"), ("6", "SWO", None)], {"dnp": True}),
+    ("SW-MLRS", "KMR2 tact", FP_BOOTBTN, "",
+     "mLRS bind/boot button on PA0 (mLRS BUTTON, active-low, MCU internal pull-up; PB13 is not "
+     "bonded on UFQFPN48 so the HAL remaps PB13->PA0); C&K KMR2 series, variant owner-select",
+     [("1", "A", "MLRS_BTN"), ("2", "B", "GND")]),
+    ("R-MLRS-LEDG", "1k", FP_R0201, "", "LED_GREEN (PA15) current limit, active-high per HAL", [("1", "A", "MLRS_LED_G"), ("2", "B", "MLRS_LEDG_A")]),
+    ("LED-MLRS-G", "Green", FP_LED0603, "", "mLRS status LED (green)", [("1", "A", "MLRS_LEDG_A"), ("2", "K", "GND")]),
+    ("R-MLRS-LEDR", "1k", FP_R0201, "", "LED_RED (PB5) current limit, active-low (sinks) per HAL", [("1", "A", "+3V3_RF"), ("2", "B", "MLRS_LEDR_A")]),
+    ("LED-MLRS-R", "Red", FP_LED0603, "", "mLRS status LED (red)", [("1", "A", "MLRS_LEDR_A"), ("2", "K", "MLRS_LED_R")]),
+    # --- mLRS RF front end: PA feed, TX low-pass, RX balun, antenna switch --------
+    ("L-MLRS-PA", "VERIFY AN5457", FP_L0402, "", "RFO_HP DC feed choke from VR_PA (DS13105 Fig.3 HP PA; value per AN5457 915 MHz)", [("1", "A", "MLRS_VR_PA"), ("2", "B", "MLRS_RFO_HP")]),
+    ("C-MLRS-TX0", "VERIFY AN5457", FP_C0402, "", "RFO_HP DC block", [("1", "A", "MLRS_RFO_HP"), ("2", "B", "MLRS_TX1")]),
+    ("L-MLRS-TX1", "VERIFY AN5457", FP_L0402, "", "TX harmonic low-pass, series 1", [("1", "A", "MLRS_TX1"), ("2", "B", "MLRS_TX2")]),
+    ("C-MLRS-TX1", "VERIFY AN5457", FP_C0402, "", "TX harmonic low-pass, shunt 1", [("1", "A", "MLRS_TX2"), ("2", "B", "GND")]),
+    ("L-MLRS-TX2", "VERIFY AN5457", FP_L0402, "", "TX harmonic low-pass, series 2", [("1", "A", "MLRS_TX2"), ("2", "B", "MLRS_TX_F")]),
+    ("C-MLRS-TX2", "VERIFY AN5457", FP_C0402, "", "TX harmonic low-pass, shunt 2", [("1", "A", "MLRS_TX_F"), ("2", "B", "GND")]),
+    ("C-MLRS-RXP", "VERIFY AN5457", FP_C0402, "", "RFI_P series DC block / balun element", [("1", "A", "MLRS_RFI_P"), ("2", "B", "MLRS_RX1")]),
+    ("C-MLRS-RXN", "VERIFY AN5457", FP_C0402, "", "RFI_N series DC block / balun element", [("1", "A", "MLRS_RFI_N"), ("2", "B", "MLRS_RX2")]),
+    ("L-MLRS-RX1", "VERIFY AN5457", FP_L0402, "", "RX balun series element (P leg to switch)", [("1", "A", "MLRS_RX1"), ("2", "B", "MLRS_RX_F")]),
+    ("L-MLRS-RX2", "VERIFY AN5457", FP_L0402, "", "RX balun shunt element (N leg to GND)", [("1", "A", "MLRS_RX2"), ("2", "B", "GND")]),
+    ("C-MLRS-RX1", "VERIFY AN5457", FP_C0402, "", "RX balun shunt element at the switch port", [("1", "A", "MLRS_RX_F"), ("2", "B", "GND")]),
+    ("RFSW-MLRS", "PE4259", FP_SOT363, "PE4259-63",
+     "pSemi PE4259 SPDT antenna switch (pe4259.pdf Table 7: 1 RF1, 2 GND, 3 RF2, 4 CTRL, 5 RFC, "
+     "6 CTRLB/VDD), complementary-pin control (Table 6): CTRL=PA4 RX_EN high & CTRLB low -> "
+     "RFC-RF1 (RX); CTRL low & CTRLB=PA5 TX_EN high -> RFC-RF2 (TX). US vendor.",
+     [("1", "RF1", "MLRS_RX_F"), ("2", "GND", "GND"), ("3", "RF2", "MLRS_TX_F"),
+      ("4", "CTRL", "MLRS_RF_RX_EN"), ("5", "RFC", "MLRS_ANT_RF"), ("6", "CTRLB", "MLRS_RF_TX_EN")]),
     # LoRa (RFM95W) SPI filtering block REMOVED 2026-09-20 along with LORA
     # itself (duplicate of Commo's LoRa radio; see the ICS list note above).
     # --- WIFI-BT-ZB (Murata Type 2EL) power bypass + SDIO filtering ---------
@@ -978,18 +1084,14 @@ SIMPLE: List[Any] = [
     # (type2el.pdf Table 9, 51kOhm nominal) — the module defaults to power-down
     # until the host actively drives PDn/WIFI_EN high, so an external pull-up
     # would fight that documented-safe default rather than support it.
-    ("C-ZB-33-1", "100nF", FP_C0402, "", "WIFI-BT-ZB AVDD33_1 bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
-    ("C-ZB-33-2", "100nF", FP_C0402, "", "WIFI-BT-ZB AVDD33_2 bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
-    ("C-ZB-18-1", "100nF", FP_C0402, "", "WIFI-BT-ZB AVDD18_1 bypass", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
-    ("C-ZB-18-2", "100nF", FP_C0402, "", "WIFI-BT-ZB AVDD18_2 bypass", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
-    ("C-ZB-VIO", "100nF", FP_C0402, "", "WIFI-BT-ZB VIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-ZB-SDVIO", "100nF", FP_C0402, "", "WIFI-BT-ZB SD_VIO bypass (shares U-1V8RF's +1V8_RF, no separate LDO)", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
-    ("FB-SDIO1", "742792510", FP_L1812, "742792510", "SDIO CMD ferrite (Wurth 742792510)", [("1", "IN", "SDIO_CMD"), ("2", "OUT", "SDIO_CMD_F")]),
-    ("FB-SDIO2", "742792510", FP_L1812, "742792510", "SDIO CLK ferrite", [("1", "IN", "SDIO_CLK"), ("2", "OUT", "SDIO_CLK_F")]),
-    ("FB-SDIO3", "742792510", FP_L1812, "742792510", "SDIO D0 ferrite", [("1", "IN", "SDIO_D0"), ("2", "OUT", "SDIO_D0_F")]),
-    ("FB-SDIO4", "742792510", FP_L1812, "742792510", "SDIO D1 ferrite", [("1", "IN", "SDIO_D1"), ("2", "OUT", "SDIO_D1_F")]),
-    ("FB-SDIO5", "742792510", FP_L1812, "742792510", "SDIO D2 ferrite", [("1", "IN", "SDIO_D2"), ("2", "OUT", "SDIO_D2_F")]),
-    ("FB-SDIO6", "742792510", FP_L1812, "742792510", "SDIO D3 ferrite", [("1", "IN", "SDIO_D3"), ("2", "OUT", "SDIO_D3_F")]),
+    # 2026-09-29: WIFI-BT-ZB bypasses moved to 0201 (100 nF 6.3 V X5R) — the only
+    # remaining free sites are the top-face PB2 rail cells, which take 0201 only.
+    ("C-ZB-33-1", "100nF 6.3V X5R", FP_C0201, "", "WIFI-BT-ZB AVDD33_1 bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-ZB-33-2", "100nF 6.3V X5R", FP_C0201, "", "WIFI-BT-ZB AVDD33_2 bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-ZB-18-1", "100nF 6.3V X5R", FP_C0201, "", "WIFI-BT-ZB AVDD18_1 bypass", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
+    ("C-ZB-18-2", "100nF 6.3V X5R", FP_C0201, "", "WIFI-BT-ZB AVDD18_2 bypass", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
+    ("C-ZB-VIO", "100nF 6.3V X5R", FP_C0201, "", "WIFI-BT-ZB VIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-ZB-SDVIO", "100nF 6.3V X5R", FP_C0201, "", "WIFI-BT-ZB SD_VIO bypass (shares U-1V8RF's +1V8_RF, no separate LDO)", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
     # --- SPI-NOR flash + logging PLD supply ---------------------------------
     ("C-FLASH1", "100nF", FP_C0402, "", "W25Q128JV VCC bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("R-FLASH-WP", "10k", FP_R0201, "", "FLASH_WP_N pull-up (write-enabled default; PLD asserts low to block)",
@@ -1015,18 +1117,17 @@ SIMPLE: List[Any] = [
     # STM32WLE5, so this follows the same disclosed "populate per bench VSWR
     # tuning" pattern already used for WIFI-BT-ZB's shared antenna (Type2EL):
     # series 0R placeholder for continuity, both shunt positions DNP.
-    ("C-WIOE5-SH1", "DNP", FP_C0201, "", "Wio-E5 antenna match shunt 1 (DNP until bench VSWR tuning)",
-     [("1", "A", "WIOE5_ANT_RF"), ("2", "B", "GND")]),
-    ("L-WIOE5-SER", "0R link", FP_R0402, "", "Wio-E5 antenna match series position — 0R placeholder for continuity before tuning",
-     [("1", "A", "WIOE5_ANT_RF"), ("2", "B", "WIOE5_ANT_F")]),
-    ("C-WIOE5-SH2", "DNP", FP_C0201, "", "Wio-E5 antenna match shunt 2 (DNP until bench VSWR tuning)",
-     [("1", "A", "WIOE5_ANT_F"), ("2", "B", "GND")]),
-    ("D-ANT-WIOE5", "RCLAMP0502B", FP_RCLAMP, "RCLAMP0502BTCL", "RF ESD shunt, same flag as D-ANT-SIK originally carried",
-     [("1", "A", "WIOE5_ANT_F"), ("2", "K", "PGND")]),
-    ("J-ANT-WIOE5", "MMCX vertical", FP_MMCX, "73415-1471",
-     "Wio-E5/mLRS antenna jack — same vertical-MMCX board-area rationale as XO's other antenna "
-     "jacks (SiK's own former jack, WIFI-BT-ZB's shared jack)",
-     [("1", "RF", "WIOE5_ANT_F"), ("2", "SHIELD", "PGND")]),
+    ("C-MLRS-SH1", "DNP", FP_C0201, "", "mLRS antenna match shunt 1 (DNP until bench VSWR tuning)",
+     [("1", "A", "MLRS_ANT_RF"), ("2", "B", "GND")]),
+    ("L-MLRS-SER", "0R link", FP_R0402, "", "mLRS antenna match series position — 0R placeholder for continuity before tuning",
+     [("1", "A", "MLRS_ANT_RF"), ("2", "B", "MLRS_ANT_F")]),
+    ("C-MLRS-SH2", "DNP", FP_C0201, "", "mLRS antenna match shunt 2 (DNP until bench VSWR tuning)",
+     [("1", "A", "MLRS_ANT_F"), ("2", "B", "GND")]),
+    ("D-ANT-MLRS", "RCLAMP0502B", FP_RCLAMP, "RCLAMP0502BTCL", "RF ESD shunt, same flag as D-ANT-SIK originally carried",
+     [("1", "A", "MLRS_ANT_F"), ("2", "K", "PGND")]),
+    ("J-ANT-MLRS", "MMCX vertical", FP_MMCX, "73415-1471",
+     "mLRS antenna jack — same vertical-MMCX board-area rationale as the WiFi/BT/802.15.4 jack",
+     [("1", "RF", "MLRS_ANT_F"), ("2", "SHIELD", "PGND")]),
     # FL-LORA / D-ANT-LORA / J-SMA-LORA (LoRa antenna filter/ESD/jack chain)
     # REMOVED 2026-09-20 along with LORA itself.
     # FL-WIFI (Johanson 2.45 GHz band-pass filter) REMOVED 2026-09-21 along
@@ -1226,13 +1327,13 @@ def emit_pwr_flags(x0: float, y0: float, sheet_uuid: str) -> List[str]:
 
 
 TITLE_BLOCK = """  (title_block
-    (title "XO — Comms / Logging / Payload Cape")
-    (date "2026-09-20")
+    (title "TACCO — Comms / Logging / Payload Cape")
+    (date "2026-09-29")
     (rev "S2")
     (company "Griffing Technology LLC")
-    (comment 1 "XO Node — PocketBeagle 2 Industrial cape, 4-layer")
+    (comment 1 "TACCO — PocketBeagle 2 Industrial cape, 55 x 35 mm, 6-layer")
     (comment 2 "Generated by avionics/kicad/TACCO/scripts/gen_tacco_sch.py — do not hand-edit; edit the generator")
-    (comment 3 "Author: Claude Sonnet 5 (2026-09-20); owner sgriffing")
+    (comment 3 "Authors: Claude Sonnet 5 (2026-09-20), Claude Fable 5.1 (2026-09-29); owner sgriffing")
     (comment 4 "CC BY 4.0 — pinouts transcribed from OEM datasheets in avionics/datasheets/")
   )"""
 

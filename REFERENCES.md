@@ -93,6 +93,8 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-015: OpenServoCore — Open-Source SG90/MG90-Class Smart-Servo Control Board](#ref-sensor-015-openservocore--open-source-sg90mg90-class-smart-servo-control-board)
     - [REF-SENSOR-016: Infineon OPTIGA™ Trust M — I2C Secure Element (planned, CAN-PERIPH-GW-1 + Flight Engineer only)](#ref-sensor-016-infineon-optiga-trust-m--i2c-secure-element-planned-can-periph-gw-1--flight-engineer-only)
     - [REF-SENSOR-019: SMB Bearings F688ZZ — 8x16x5 mm Flanged Miniature Radial Ball Bearing (wing-root tilt-spar bearing)](#ref-sensor-019-smb-bearings-f688zz--8x16x5-mm-flanged-miniature-radial-ball-bearing-wing-root-tilt-spar-bearing)
+    - [REF-SENSOR-020: TI DP83825I — Low-Power 10/100 Mbps Ethernet PHY with RMII (Leader/Follower)](#ref-sensor-020-ti-dp83825i--low-power-10100-mbps-ethernet-phy-with-rmii-leaderfollower)
+    - [REF-SENSOR-021: BeagleBoard.org PocketBeagle 2 — Schematic and SysConfig (P1/P2 expansion header map)](#ref-sensor-021-beagleboardorg-pocketbeagle-2--schematic-and-sysconfig-p1p2-expansion-header-map)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -2344,6 +2346,35 @@ the spar's run, not this seat).
 | **Date accessed** | 2026-09-17 (local checkout, commits afbe2dd…87dc60e) |
 | **AI note** | Build authored by Claude Opus 5 (Anthropic) under the direction of Steve Griffing, PE(CSE), CISSP-ISSEP, CPP; attribution recorded in that repository's commit messages and file headers |
 
+### REF-SENSOR-020: TI DP83825I — Low-Power 10/100 Mbps Ethernet PHY with RMII (Leader/Follower)
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Product** | DP83825IRHBR (WQFN-24, RMQ0024A) |
+| **Datasheet** | SNLS638C, December 2018 – revised April 2026, archived at `avionics/datasheets/dp83825i.pdf` |
+| **Package** | WQFN-24 3 × 3 mm, 0.4 mm pitch, exposed DAP = GND, `Package_DFN_QFN:Texas_RMQ0024A_WQFN-24-1EP_3x3mm_P0.4mm_EP1.9x1.9mm` |
+| **Portion applied** | Table 4-1 pin functions (1 TX_EN, 2 50MHzOut/LED2, 3 INTR/PWRDN, 4 LED0, 5 RST_N, 6 VDDA3V3, 7 RD_M, 8 RD_P, 9 GND, 10 TD_M, 11 TD_P, 12 XO, 13 XI/50MHzIn, 14 RBIAS, 15 MDIO, 16 MDC, 17 RX_D1, 18 RX_D0/PHYAD0, 19 VDDIO, 20 CRS_DV, 21 GND, 22 RX_ER, 23 TX_D0, 24 TX_D1); §6 RMII Leader mode (25 MHz on XI, 50 MHz reference out on pin 2); RBIAS 6.49 kΩ ±1 % |
+| **Note** | Added 2026-09-29 when the TACCO generator's `dp83825i()` pin table was found not to be this part's pinout (it cited a non-existent `REF-SENSOR-029`); Pilot's copy of the table carries the same defect (`avionics/WBS.md` §1.2a 2026-09-29 item 8). |
+
+**Used in:** `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`ETH-PHY`), `avionics/kicad/Pilot/scripts/gen_pilot_sch.py` (`ETH1-PHY`, `ETH2-PHY` — table still to be corrected).
+
+---
+
+### REF-SENSOR-021: BeagleBoard.org PocketBeagle 2 — Schematic and SysConfig (P1/P2 expansion header map)
+
+| Field | Value |
+|---|---|
+| **Publisher** | BeagleBoard.org Foundation |
+| **Product** | PocketBeagle 2 (TI AM6254 Sitara), expansion headers P1/P2 |
+| **Source** | <https://github.com/beagleboard/pocketbeagle> (owner-supplied copies archived at `avionics/datasheets/pocketbeagle2_sch.pdf` — sheet "016_BP P1 & P2" v1.0 — and `avionics/datasheets/pocketbeagle-2.syscfg`, TI SysConfig for the AM62x ALW package) |
+| **Portion applied** | P1/P2 header ball assignment and pinmux options, transcribed into `avionics/kicad/PB2_HEADER_PINMAP.md`; MMC2/SDIO not present on the headers; USB1 on P1-3/5/9/11/13 |
+| **Note** | Licence line not present on the schematic sheet; confirm the repository licence before redistributing the archived PDF. Added 2026-09-29. |
+
+**Used in:** `avionics/kicad/PB2_HEADER_PINMAP.md`, `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`PB2_P1`/`PB2_P2`), `avionics/WBS.md` §1.2a.
+
+---
+
 ## Part XIII — Telecommunications Standards
 
 ### REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)
@@ -2588,6 +2619,11 @@ Add verified section numbers to the relevant files and update this table.
 
 | Citation | File | Issue | Action Required |
 |---|---|---|---|
+| STM32WLE5JC RF matching / harmonic-filter values (ST AN5457) | `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`L-MLRS-PA`, `C-MLRS-TX0..2`, `L-MLRS-TX1/2`, `C-MLRS-RXP/RXN`, `L-MLRS-RX1/2`, `C-MLRS-RX1`, `C-MLRS-VRPA`) | **Open (2026-09-29).** Topology follows DS13105 Figures 2–4; the 915 MHz element values come from ST AN5457, which could not be fetched from the build environment. Values are tagged `VERIFY AN5457`. | Obtain AN5457, populate the values, add it as a REF-ID, bench-tune (VSWR/harmonics) before flight. |
+| TACCO signal-line ferrite bead MPN (600 Ω @ 100 MHz, 0402) | `gen_tacco_sch.py` (`FB-MLRS-1/2`) | **Open (2026-09-29).** The 1812 power bead 742792510 had been used on signal lines by mistake; the correct 0402 part is not yet selected (no catalog access). | Owner selects the MPN (Würth WE-CBF 0402 600 Ω family or equivalent), archive its datasheet, cite it. |
+| C&K KMR2 tact-switch variant, Epson TG2520SMN 32 MHz ordering code, pSemi PE4259 datasheet REF-ID | `gen_tacco_sch.py` (`SW-MLRS`, `X-MLRS`, `RFSW-MLRS`) | **Open (2026-09-29).** Footprints are from the KiCad library / `avionics/datasheets/`; exact orderable part numbers are not confirmed. | Owner confirms MPNs; add REF-IDs for TG2520SMN and PE4259 (datasheets already archived). |
+| USB Wi-Fi/BT module for TACCO (owner decision 2026-09-29) | `avionics/WBS.md` §1.2a, `PB2_HEADER_PINMAP.md` §3 | **Open — fab blocker.** SDIO is not on the PB2 headers; Wi-Fi moves to USB1. No non-restricted-vendor module has been selected and no datasheet is archived. | Owner selects the module; archive datasheet; author symbol/land; re-run the area budget. |
+| `[REF-PWR-003]`, `[REF-PWR-004]` cited in `gen_tacco_sch.py` (WE-MAPI inductor, ECS-2520MV oscillator) | `gen_tacco_sch.py` | **Open (2026-09-29).** These REF-IDs do not exist in this catalog; the datasheets are archived (`74438335033.pdf`, `ECS-2520MV.pdf`). | Add catalog entries (or renumber) and fix the citations. |
 | §15.203 antenna restriction (Commo RF connector) | Commo board files, `skipper_wiring.md` | **Confirmed, resolved 2026-06-20.** §15.203 binds the manufacturer directly. J2 used a generic SMA edge connector (Amphenol 132289), a standard jack; no exception applies. | **Resolved:** J2 changed to 132289RP (RP-SMA, same footprint), satisfying §15.203. Board re-spin tracked in TODO.md §0.1 |
 | 14 CFR Part 47 (aircraft registration marks) | `ax25_types.h` | **Resolved 2026-06-21.** README/build guide had no erroneous citation; the miscitation was in `ax25_types.h`, which stated Part 47 governs registration and AX.25 needs an amateur license (Part 97) | Corrected to cite Part 48 §48.205 [REF-FAA-001]; link is license-exempt under Part 15 §15.235 [REF-FCC-003], per REF-PROTO-001 |
 | AUVSI "standards" (unnamed) | `AGENTS.md`, `README.md` | **Resolved 2026-06-22.** No specific numbered AUVSI standard exists (AUVSI publishes frameworks, not numbered design standards). Identified and verified three applicable ASTM F38 standards. | Added REF-ASTM-001 (F2910-22, design/construction/test), REF-ASTM-002 (F3005-22, batteries), REF-ASTM-003 (F3269-21, runtime assurance/failover). `AGENTS.md`/`README.md` AUVSI text is accurate as-is (AUVSI frameworks, not numbered standards) — no doc text change needed there. |

@@ -7908,6 +7908,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/pocketbeagle-2.syscfg": {
+      "description": "* These arguments were used when this file was generated. They will be automatically applied on subsequent lo\u2026",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/pocketbeagle2_sch.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/prtr5v0u2x.pdf": {
       "description": "PDF document",
       "tags": [
@@ -10061,6 +10075,16 @@
       ],
       "archived": false
     },
+    "avionics/kicad/PB2_HEADER_PINMAP.md": {
+      "description": "PocketBeagle 2 Industrial \u2014 P1/P2 expansion header pin map (verified) and TACCO allocation",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md": {
       "description": "Pilot (CAPE-A-2) \u2014 Footprint-vs-Datasheet Verification",
       "tags": [
@@ -10739,6 +10763,22 @@
       ],
       "archived": false
     },
+    "avionics/kicad/TACCO/scripts/export_tacco_gerbers.sh": {
+      "description": "!/usr/bin/env bash",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/scripts/finish_tacco_pcb.py": {
+      "description": "finish_tacco_pcb.py \u2014 Route TACCO with freerouting through KiCad's Specctra bridge,",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py": {
       "description": "gen_tacco_footprints.py \u2014 Author the project-custom land patterns TACCO needs.",
       "tags": [
@@ -10748,7 +10788,7 @@
       "archived": false
     },
     "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py": {
-      "description": "gen_tacco_pcb.py \u2014 Build the TACCO PCB from the schematic netlist.",
+      "description": "Python script",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -15620,6 +15660,7 @@
       "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
       "avionics/kicad/Observer/observer/TODO.md",
       "avionics/kicad/Observer/observer/WBS.md",
+      "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/README.md",
@@ -16107,6 +16148,7 @@
       "avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py",
       "avionics/kicad/Observer/scripts/gen_observer_ic_symbols.py",
       "avionics/kicad/Observer/scripts/gen_observer_pcb.py",
+      "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
@@ -18635,6 +18677,7 @@
       "avionics/kicad/Observer/scripts/mod_observer_ds_pcb.py",
       "avionics/kicad/Observer/scripts/mod_observer_som_place.py",
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
+      "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_dru",
@@ -18718,6 +18761,8 @@
       "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.json",
       "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.svg",
       "avionics/kicad/TACCO/reports/figures/schematics/TACCO.svg",
+      "avionics/kicad/TACCO/scripts/export_tacco_gerbers.sh",
+      "avionics/kicad/TACCO/scripts/finish_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
@@ -18917,6 +18962,8 @@
       "avionics/datasheets/nexperia-PMBT2222A.pdf",
       "avionics/datasheets/pca9685.pdf",
       "avionics/datasheets/pe4259.pdf",
+      "avionics/datasheets/pocketbeagle-2.syscfg",
+      "avionics/datasheets/pocketbeagle2_sch.pdf",
       "avionics/datasheets/prtr5v0u2x.pdf",
       "avionics/datasheets/rfd900x-datasheet.pdf",
       "avionics/datasheets/rfm95w-datasheet.pdf",
@@ -19175,6 +19222,7 @@
       "avionics/kicad/Observer/scripts/mod_observer_ds_pcb.py",
       "avionics/kicad/Observer/scripts/mod_observer_som_place.py",
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
+      "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_dru",
@@ -19258,6 +19306,8 @@
       "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.json",
       "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.svg",
       "avionics/kicad/TACCO/reports/figures/schematics/TACCO.svg",
+      "avionics/kicad/TACCO/scripts/export_tacco_gerbers.sh",
+      "avionics/kicad/TACCO/scripts/finish_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
