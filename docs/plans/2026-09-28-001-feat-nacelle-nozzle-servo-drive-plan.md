@@ -388,10 +388,11 @@ convention, pass/fail exit codes).
 - The tool passes its tests.
 - The default run prints PASS with the BMS-101DMG and the placeholder load flagged "pending U8".
 
-### U3. Ring stops, spring seat and pull-link anchor
+### U3. Ring stops, spring-cord groove and push-wire contact ear — DONE (2026-09-28)
 
 **Goal:** The iris hardware carries KTD3: hard 75 %/105 % stops (housing window ends), a spring-cord
-rim groove, anchor and exit bore, and a push-only contact ear replacing the ball socket.
+rim groove, anchor and exit bore, a push-only contact ear replacing the ball socket, and a housing
+window/exit bore for the guided 0.8 mm push wire.
 
 **Requirements:** R1, R2, R3.
 
@@ -403,11 +404,18 @@ rim groove, anchor and exit bore, and a push-only contact ear replacing the ball
   STLs.
 - `airframe/FreeCAD-scripts/Makefile` if targets change.
 
-**Approach:**
-1. Put the stops on the throat/housing, with ring tabs and a ≥ 1.5 mm (0.06 in) PETG land.
-2. Seat the spring coaxially in the housing, clear of the flap clevises.
-3. Keep the ring's cam-only geometry, so the flap kinematics are unchanged (R2 invariant). Keep
-   `R_HINGE` fixed.
+**Approach (as built, commits 566b860c, 6b29b671):**
+1. Stops are the ends of a housing window cut through the wall at the ear's flanks: full-height at
+   the 75 % (closed) edge, an upper-band lug at the 105 % (open) edge so the wire's lower contact
+   band is never trapped. Stop land ≥ 1.6 mm.
+2. The spring cord runs in a groove on the ring rim (not coaxial in the housing — the ring itself
+   is the spring seat), clear of the flap clevises and the cam slots.
+3. The push wire is a UNATTACHED 0.8 mm music-wire tip riding a PTFE tube tangent to the ear flank
+   at 141.4°, exiting the housing at 125.8° — not a direct servo arm (rejected: the servo's
+   15.3 mm shaft-axis height cannot stand radially in the annulus, and an axial arm cannot track
+   the ear's arc within its 2.1 mm flank span).
+4. The ring's cam-only geometry is unchanged, so the flap kinematics are unchanged (R2 invariant).
+   `R_HINGE` is unchanged.
 
 **Patterns to follow:** the Rev S2 cam-only ring change set; the `RENDER_PART` selector convention.
 
