@@ -1090,8 +1090,20 @@ def lib_symbol(ic: Dict[str, Any]) -> Tuple[str, List[Any], List[Any], float, fl
     left = [p for p in pins if p[3] == "L"]
     right = [p for p in pins if p[3] == "R"]
     rows = max(len(left), len(right), 1)
-    half_h = (rows * PIN_PITCH) / 2 + PIN_PITCH
-    half_w = 16.51
+    n_pins = len(left) + len(right)
+    # Passives (2-pin R/C/L/TVS/etc.) get a compact 600 x 200 mil box instead
+    # of the 1300 x 300 mil IC box -- same box machinery, smaller footprint so
+    # more parts fit per sheet (owner request 2026-09-29). Height is 200mil
+    # (half_h = PIN_PITCH), not the requested 150mil: 150mil (half_h=75mil)
+    # is off the 50mil grid this generator's pins/wires all sit on and broke
+    # ERC (endpoint_off_grid); 200mil is the nearest on-grid value and also
+    # centers the single pin row exactly on the box (y=0).
+    if n_pins <= 2:
+        half_w = 7.62
+        half_h = 2.54
+    else:
+        half_h = (rows * PIN_PITCH) / 2 + PIN_PITCH
+        half_w = 16.51
     libid = f"S_{sanitize(ref)}"
     s = [
         f'    (symbol "TACCO:{libid}" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)',
@@ -1236,7 +1248,7 @@ def main() -> None:
         PWR_FLAG_LIB,
     ]
     placed = []
-    X0, Y0, DX = 76.2, 76.2, 127.0
+    X0, Y0, DX = 76.2, 76.2, 63.5  # halved column pitch to match the smaller passive boxes
     COL_MAX_Y = 610.0
     x, y = X0, Y0
     built = []
