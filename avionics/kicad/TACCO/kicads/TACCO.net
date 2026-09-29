@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "/home/user/Serenity-UAV/avionics/kicad/TACCO/kicads/TACCO.kicad_sch")
-    (date "2026-09-29T18:47:17+0000")
+    (date "2026-09-29T21:55:12+0000")
     (tool "Eeschema 9.0.3+dfsg-1")
     (sheet (number "1") (name "/") (tstamps "/")
       (title_block
