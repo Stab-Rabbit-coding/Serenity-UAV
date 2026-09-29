@@ -31,6 +31,7 @@
 → full detail: `WBS.md` §1.2a
 
 - [ ] Add MIL-STD-1553C to `REFERENCES.md`: title, issuing body, validated…
+- [ ] Footprint and space budget first
 - [ ] Pilot: replace HI-1573 with the protocol engine on a PB2 SPI port
 - [ ] TACCO: same change as Pilot. Update `TACCO.md` and `reports/HDD.md`.
 - [ ] Firmware: replace the PRU-ICSS Manchester RT task…

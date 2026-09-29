@@ -166,6 +166,25 @@ Rev S Fig. 28 p. 255; [REF-MIL-001 §4.5.1.5.2.1]).
 
 - [ ] Add MIL-STD-1553C to `REFERENCES.md`: title, issuing body, validated URL, and the
     sections applied. Do not cite section numbers until they are verified.
+- [ ] **Footprint and space budget first. Both capes are space-critical (owner, 2026-09-28).**
+    Findings from 2026-09-28:
+    - **Current part:** `1553-XCVR` is HI-1573 in `QFN-44-1EP_7x7mm_P0.5mm_EP5.2x5.2mm` on
+        B.Cu. Pilot has it at (142.5, 98.5), rotated −90°; TACCO at (142.86, 111.49).
+    - **Replacement:** HI-6138PC* is a 48-pin QFN, 6.000 × 6.000 mm BSC, 0.40 mm pitch.
+        Exposed pad 4.700 ± 0.050 mm, electrically isolated. Leads are 0.200 mm wide and
+        0.400 ± 0.050 mm long (DS6138 Rev S §29, p. 263).
+    - **Body area:** drops from 49 mm² to 36 mm², so the part fits inside the existing
+        courtyard. The PQFP option (9 × 9 mm body) is rejected as larger.
+    - **No stock KiCad match.** The closest stock footprint is
+        `QFN-48-1EP_6x6mm_P0.4mm_EP4.66x4.66mm`. Author and verify a custom footprint in the
+        SecureControllers library against DS6138 §29, following
+        `docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md`.
+    - **Routing:** 0.40 mm pitch is finer than today's 0.5 mm, so check the fab's minimum
+        clearance and solder-mask web.
+    - **Extra parts cost area.** The part needs SPI (4 lines), IRQ, and MR to the host.
+        Mode and configuration pins need tie-offs; count those strap resistors against the
+        freed area before layout. The HI-1573's separate VDDA/VDDB decoupling (C-1553A/B/C)
+        gets re-derived from the HI-6138 supply pins.
 - [ ] Pilot: replace HI-1573 with the protocol engine on a PB2 SPI port. Confirm a free SPI
     chip-select and IRQ on P1/P2. Update `Pilot.md` (1553B → 1553C) and the magnetics if
     the ratio changes.
