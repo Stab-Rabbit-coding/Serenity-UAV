@@ -101,7 +101,8 @@ to Rev T.
         fits (1 CAN-FD, 6 UART, 3 I²C, 2 SPI, 44 GPIO against about 30 needed). RHB-32 is too
         small (28 GPIO). G3519 (512 KB) is recommended for dual-bank OTA headroom. Source: TI
         SLASFA6B Table 5-1. Detail is in the plan's Phase 1 findings.
-    - [ ] Owner sign-off: MCU = M0G3519QRGZRQ1 over G3518 (256 KB).
+    - [x] Owner sign-off: MCU = M0G3519QRGZRQ1 over G3518 (256 KB). Approved by
+        S. Griffing 2026-09-28.
     - [ ] Choose 1553 coupling (direct 1:2.5 + 55 Ω, or transformer 1:1.79) once the antenna-site
         stub length is known (Holt DS1573 p. 2).
     - [ ] Select the Holt 1553C protocol engine (SPI host), and verify its P/N and 1553C
