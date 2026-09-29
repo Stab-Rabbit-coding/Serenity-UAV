@@ -38,7 +38,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-NIST-003: NIST SP 800-160 Vol 1 Rev 1 — Engineering Trustworthy Secure Systems](#ref-nist-003-nist-sp-800-160-vol-1-rev-1--engineering-trustworthy-secure-systems)
     - [REF-NIST-004: NIST SP 800-92 — Guide to Computer Security Log Management](#ref-nist-004-nist-sp-800-92--guide-to-computer-security-log-management)
 - [Part IV — Defense Standards](#part-iv--defense-standards)
-    - [REF-MIL-001: MIL-STD-1553B — Aircraft Internal Time Division Command/Response Multiplex Data Bus](#ref-mil-001-mil-std-1553b--aircraft-internal-time-division-commandresponse-multiplex-data-bus)
+    - [REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus](#ref-mil-001-mil-std-1553c--digital-time-division-commandresponse-multiplex-data-bus)
     - [REF-MIL-002: MIL-STD-461G — Requirements for the Control of Electromagnetic Interference Characteristics of Subsystems and Equipment](#ref-mil-002-mil-std-461g--requirements-for-the-control-of-electromagnetic-interference-characteristics-of-subsystems-and-equipment)
 - [Part V — International Standards (ISO, IEC)](#part-v--international-standards-iso-iec)
     - [REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling](#ref-iso-001-iso-11898-12015--road-vehicles--controller-area-network-can--part-1-data-link-layer-and-physical-signalling)
@@ -618,34 +618,54 @@ cycle); hardware-enforced append-only non-executable log microSD on every XO nod
 
 ## Part IV — Defense Standards
 
-### REF-MIL-001: MIL-STD-1553B — Aircraft Internal Time Division Command/Response Multiplex Data Bus
+### REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus
 
 | Field | Value |
 |---|---|
-| **Issuing authority** | U.S. Department of Defense (DoD) |
-| **Edition** | MIL-STD-1553B with Notice 2 (30 September 1996); original date 21 September 1978 |
-| **Official access** | DLA ASSIST QuickSearch: <https://assist.dla.mil/> (search "MIL-STD-1553") |
-| **Note** | Public domain per 10 U.S.C. §4252; no purchase required |
+| **Issuing authority** | U.S. Department of Defense (DoD); comments to AFLCMC/EZSS, Wright-Patterson AFB |
+| **Edition** | MIL-STD-1553C, 28 February 2018, superseding MIL-STD-1553B (21 September 1978). AMSC N/A, Area AVCS. |
+| **Official access** | DLA ASSIST: <https://assist.dla.mil/> (search "MIL-STD-1553"). Public mirror of the ASSIST copy: <https://www.altadt.com/wp-content/uploads/dlm_uploads/2020/12/MIL-STD-1553C.pdf> |
+| **Distribution** | Distribution Statement A: approved for public release; distribution is unlimited |
+| **Verified** | Text checked against the ASSIST-sourced copy on 2026-09-28 (Claude Opus 5.5) |
 
-**Sections applied in this project:**
+**Relation to 1553B.** 1553C is a document revision. Its electrical and protocol
+requirements are the same as 1553B. The changes are clarified text and figures, the EMC
+wiring reference moved to MIL-STD-464 (§4.5.1.5.3), and added "superseding valid commands"
+paragraphs for RT and BC operation (§4.4.3.2, §4.6.3.2). Alta Data Technologies, which
+publishes the mirror, says in its cover note: "1553C is a document change only … There
+are no functional changes to 1553B." A terminal that meets 1553B electrically therefore
+meets 1553C electrically. RT firmware must still implement §4.4.3.2.
 
-| Section/Table | Title | Application |
+**Sections applied in this project (verified against the 1553C text):**
+
+| Section | Title | Requirement applied |
 |---|---|---|
-| §3.1 | Definitions | Bus Controller (BC), Remote Terminal (RT), Bus Monitor (BM) — FC1 is primary BC, FC2 is standby BC, all others are RT |
-| §4.1 | Bus Characteristics | 78 Ω characteristic impedance; shielded twisted pair (MIL-C-17/131 or equivalent); Manchester II biphase-level encoding |
-| §4.2 | Terminal Types | One BC per bus at any given time; up to 31 RT addresses |
-| §4.3 | Word Formats | 20-bit Manchester II word: 3-bit sync + 16-bit data + 1-bit parity; 1.0 Mbps ± 1% |
-| §4.4 | Message Formats | BC-to-RT, RT-to-BC, and RT-to-RT transfer formats |
-| §4.6 | Coupling Methods | Transformer coupling required for stub length > 0.9 m (0.03 ft) from the bus; PE-68515 or equivalent 1:1.41 transformer |
-| Table IV | Response Time | RT must begin Status Word response between 4 µs and 12 µs after last bit of last valid Command Word |
+| §4.3.3.8 | Response time | RT responds to a valid command within 4.0–12.0 µs |
+| §4.4.3.2 | Superseding valid commands | RT behavior when a new valid command arrives; required in the RT firmware or protocol engine |
+| §4.5.1.2 | Characteristic impedance | Cable Zo of 70.0–85.0 Ω at 1.0 MHz |
+| §4.5.1.3 | Cable attenuation | ≤ 1.5 dB per 100 ft (30.5 m) at 1.0 MHz |
+| §4.5.1.5.1 | Transformer coupled stubs | Stub should not exceed 20 ft (6.1 m) |
+| §4.5.1.5.1.1 | Coupling transformer | Bus coupler turns ratio 1:1.41 ± 3.0 % |
+| §4.5.1.5.2 | Direct coupled stubs | Stub should not exceed 1 ft (0.305 m) |
+| §4.5.1.5.2.1 | Fault isolation | 55.0 Ω ± 2.0 % isolation resistor in series with each bus connection |
+| §4.5.1.5.3 | Wiring and cabling for EMC | MIL-STD-464 wiring and cabling provisions apply |
+| §4.5.2 | Terminal characteristics | Terminal output and input levels for transformer and direct coupling |
 
-**Applied to:** 8-node linear bus (CN1–FC1–CN2–FC2–CN3–FC3–CN4–FC4); PRU-ICSS Manchester II
-encoder/decoder at 250 MHz (250 cycles per 1 µs bit cell); DS26LV31 driver / DS26LV32 receiver;
-PE-68515 coupling transformer (1:1.41, 78 Ω); 78 Ω termination at CN1 (Bay A) and FC4 (Bay D).
+**Corrected 2026-09-28.** The earlier 1553B entry cited §4.1, §4.2, §4.3, §4.4, §4.6, and
+Table IV. It also gave a transformer-coupling threshold of "0.9 m (0.03 ft)", which is
+wrong: the direct-stub limit is 1 ft (0.305 m). Those citations did not match the
+standard's paragraph numbering and are replaced by the verified rows above. The old
+"Applied to" text described the retired DS26LV31/DS26LV32 and PE-68515 chain. The current
+chain is the HI-1573 or HI-6138 with the PM-DB2791S (`avionics/WBS.md` §1.2a.2 and
+§1.2a.3).
 
-**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`,
-`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-Pilot.dts`,
-`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-TACCO2.dts`
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `avionics/kicad/Pilot/Pilot.md`,
+`avionics/kicad/TACCO/TACCO.md`, `avionics/WBS.md` §1.2a.2 and §1.2a.3,
+`avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md`, `avionics/kicad/Pilot/scripts/gen_pilot_sch.py`,
+`avionics/kicad/TACCO/scripts/gen_tacco_sch.py`, `avionics/firmware/WBS.md`,
+`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
+`docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`
 
 ---
 

@@ -41,13 +41,17 @@ as-built state):
 
 - 8× PocketBeagle2 Industrial SBC nodes, each carrying **Pilot** (flight control/sensor cape) +
   **TACCO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
-- **Commo** (49 MHz + SiK transceiver cape) is installed only in River's Room and Simon's
-  Medbay.
-- Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected.
+- **Commo** (49 MHz + SiK transceiver): the Rev S design is a PB2-I cape in River's Room and
+  Simon's Medbay. **Rev T (approved 2026-09-29)** replaces it with one standalone MCU node at the
+  antennas, reachable by all stacks over CAN-FD / RS-485 / MIL-STD-1553C (no Ethernet). See
+  `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`.
+- Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected. Commo
+  (Rev T) is the only non-SBC node on 1553.
 - External C2, all 5 usable for command and control: Wi-Fi 5 GHz, Zigbee 2.4 GHz, and mLRS (all
   3 on every TACCO cape, so all 8 nodes), plus MAVLink/SiK 915 MHz and AX.25 49 MHz (47 CFR Part
-  15 §15.235 — unlicensed, **not** Part 95 RCRS [REF-FCC-003]), both via Commo and so limited to
-  River's Room and Simon's Medbay. S-Bus is supported by the capes but unused. Band-by-band FCC
+  15 §15.235 — unlicensed, **not** Part 95 RCRS [REF-FCC-003]), both via Commo. Under Rev S they
+  are limited to River's Room and Simon's Medbay; under Rev T every stack reaches them over the
+  bus. S-Bus is supported by the capes but unused. Band-by-band FCC
   citations: `avionics/AGENTS.md` "External Communications Regulations Compliance".
 - Each nacelle has 2 EDFs in series, independently PID-controlled by two different SBCs. Any
   of the 4 flight-control nodes can take over any EDF.
@@ -238,6 +242,13 @@ Wi-Fi + ZigBee (Murata Type 2EL) and mLRS (Seeed Wio-E5); only River and Simon a
 a Commo cape, which hosts 49 MHz and SiK (RFD900ux-SMT). Shepherd and Inara have no Commo cape,
 so neither has SiK or 49 MHz access — their secondary link is mLRS, the long-range link their
 hardware actually has, not SiK.
+
+**Rev T change (approved 2026-09-29, pending hardware):** Commo becomes a single standalone bus
+node at the antennas, so 49 MHz and SiK stop being tied to River's and Simon's stacks. When Rev T
+is built, any stack can key either radio over CAN-FD / RS-485 / 1553C, and a PACE-aware PTT
+ownership lease decides which stack transmits. Losing the one Commo node drops every stack to
+Wi-Fi / ZigBee / mLRS. The per-stack radio lines below describe Rev S hardware until the Rev T
+firmware lands (`avionics/firmware/WBS.md`).
 
 Shepherd: watchdog/fault-detect/failover/auth; Wi-Fi primary, mLRS secondary.
 Inara: camera/external sensors/high-bandwidth ground link; Wi-Fi primary, mLRS secondary.

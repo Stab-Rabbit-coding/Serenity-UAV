@@ -71,6 +71,203 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     retained. If "reduce per-PHY glue on Pilot" resurfaces, the on-architecture answer
     is a managed KSZ9477/KSZ9567 switch, tracked as a separate trade — NOT USB.
 
+##### 1.2a.2 *Commo Rev T — standalone MCU bus node (approved 2026-09-29)*
+
+Owner decisions (2026-09-29, S. Griffing):
+
+- One unit per airframe, co-located with its antennas.
+- Isolated CAN-FD + RS-485 + MIL-STD-1553C RT.
+- No Ethernet.
+- SE instead of TPM.
+- Mass from the PCB roll-up.
+
+Sources: requirements in `docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md`;
+plan in `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`.
+
+Rev S cape items in `TODO.md` §1.2a.1 (Commo gerbers, SIK/ETH-PHY overlap DRC) are
+**superseded** by Rev T and should not be worked. The §15.235 pre-compliance item still applies
+to Rev T.
+
+- **Phase 0 — architecture paperwork**
+    - [x] Amend `avionics/AGENTS.md`: bus-topology 1553 exception, Commo re-classed as a
+        standalone node with an SE (2026-09-29).
+    - [x] Update root `AGENTS.md` §1 and §9 for single-Commo / bus-reachable radios
+        (2026-09-29).
+    - [x] Archive the Rev S cape snapshot to
+        `archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/`
+        and add it to `ARCHIVE_INDEX.md` (2026-09-29).
+- **Phase 1 — part selection** (datasheet-verified)
+    - [x] Confirm the MCU peripheral budget (2026-09-28). Result: MSPM0G351x-Q1 in VQFN-48 RGZ
+        fits (1 CAN-FD, 6 UART, 3 I²C, 2 SPI, 44 GPIO against about 30 needed). RHB-32 is too
+        small (28 GPIO). G3519 (512 KB) is recommended for dual-bank OTA headroom. Source: TI
+        SLASFA6B Table 5-1. Detail is in the plan's Phase 1 findings.
+    - [x] Owner sign-off: MCU = M0G3519QRGZRQ1 over G3518 (256 KB). Approved by
+        S. Griffing 2026-09-28.
+    - [ ] Choose 1553 coupling (direct 1:2.5 + 55 Ω, or transformer 1:1.79) once the antenna-site
+        stub length is known (Holt DS1573 p. 2).
+    - [x] Owner decision (S. Griffing, 2026-09-28): use a dedicated 1553 protocol engine
+        (option 2), not MCU-peripheral Manchester. **Candidate: Holt HI-6138** (BC/RT/MT,
+        40 MHz SPI host, on-chip dual-bus transceiver, 3.3 V, 48-pin 6×6 mm QFN or LQFP).
+        Holt's product page states "MIL-STD-1553B/C, MIL-STD-1760, SAE AS15531A and STANAG
+        3838 compliant" (holtic.com/products/3102-hi-6138.aspx, retrieved 2026-09-28).
+    - [x] HI-6138 datasheet on file (S. Griffing, 2026-09-28):
+        `avionics/datasheets/hi-6138_v-rev-s.pdf`, Holt DS6138 Rev S, dated October 2024.
+    - [x] Verify the HI-6138 against DS6138 Rev S (2026-09-28):
+        - **Magnetics:** Figure 28 (p. 255) uses a 1:2.5 isolation transformer for both
+          direct coupling (2 × 55 Ω) and transformer coupling (1:1.4 stub coupler +
+          2 × 52.5 Ω). The fleet's 1:2.5 PM-DB2791S therefore carries over; only the
+          coupler choice depends on stub length.
+        - **Host interface:** 40 MHz 4-wire SPI, modes 0 and 3.
+        - **Control pins:** IRQ is active low, with an ACKIRQ pulse of at least 250 ns in
+          level mode. MR is an active-low reset, minimum 50 ns.
+        - **Transceiver and supply:** dual-bus transceiver on-chip, so the HI-1573 is
+          dropped. Supply is 3.3 V (VCCP).
+    - [x] **1553C conformance resolved (2026-09-28).** DS6138 Rev S says only "1553B", but
+        MIL-STD-1553C (28 Feb 2018) is a document revision with no electrical or protocol
+        change from 1553B [REF-MIL-001]. A 1553B-compliant terminal therefore meets 1553C.
+        Holt's product-page "1553B/C" claim is consistent with this. The one C-specific
+        paragraph, §4.4.3.2 "Superseding valid commands", is a protocol behavior that the
+        HI-6138 RT logic handles. Confirm it during firmware bring-up.
+    - [x] Confirm the fleet isolated CAN-FD part (ISOW1044) and RS-485 part for reuse. Done
+        2026-09-29: ISOW1044BDFMR + **ISOW1412DFMR**, the fleet standard (the plan's ADM2795E is
+        corrected). See `avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md` §1.
+    - [x] Select the SE and check for an I²C address conflict with Si5351A. Done 2026-09-29:
+        OPTIGA Trust M at 0x30 vs. Si5351A at 0x60, so there is no conflict.
+    - [x] Define the power input rail and budget. Done 2026-09-29:
+        - Input is +5 V from the avionics bus.
+        - Logic 3.3 V comes from a TPS62933 buck, sized for the HI-6138's 695 mA max
+            transmit current (DS6138 §24.3).
+        - RF-analog 3.3 V comes from a TPS7A2033 LDO.
+        - Worst case is about 1.9 A at 5 V, a net reduction against two Rev S capes.
+    - [x] Select the Holt 1553C protocol engine. Done 2026-09-28: HI-6138, fleet part
+        (§1.2a.3).
+    - [x] RF-chain datasheet audit. Done 2026-09-29: the Rev S 49 MHz chain is miswired on the
+        Si5351A (9/10 pins), TCXO, PE4259, and MGA-82563, has no receive demodulator, and uses
+        three unbuildable packages (2N3866 SOT-89, MCP4921 SOT-23-8, LM393 SOT-23-5). See
+        `avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md` §3.
+    - [x] **49 MHz architecture decided (owner, 2026-09-29):** discrete receiver. The AX5043
+        single chip is discontinued (onsemi Rev 4, 2026-06-11), and so are the SA605, SA614A,
+        and SA636 FM-IF chips. Build an I/Q direct-conversion receiver with 2 × SA612A and an
+        Si5351B VCXO-FM transmitter with no PA. Plan:
+        `docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md`.
+    - [x] **Background single-chip search (Claude agent, 2026-09-29):**
+        `docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md`. No in-production
+        single chip with a modular grant exists. The best lead is the CML CMX994G receiver,
+        whose datasheet states operation "down to 50 MHz", so 49.86 MHz is unconfirmed.
+    - [ ] Ask CML in writing to confirm CMX994G performance at 49.86 MHz and its production
+        status (owner action).
+    - [ ] Budget full §15.235 certification for Commo. No modular-grant path exists.
+- **Phase 2 — schematic (Rev T)**
+    - [ ] Port the RF chains unchanged, remove PB2 / TPM / ETH, add the MCU / buses / SE /
+        power. ERC clean.
+- **Phase 3 — layout**
+    - [ ] Outline to the antenna site; owner does manual placement; RF rules retained.
+    - [ ] Check the 1553 stub length; DRC clean; generate Gerbers.
+- **Phase 4 — integration**
+    - [ ] PCB mass roll-up, then update `airframe/README.md`, `docs/BATTERY_MOUNT.md`, and
+        W&B/CG.
+    - [ ] Fix the antenna-site station against the hull model and the emi-hardening separation
+        checks.
+    - [ ] Log firmware items in `avionics/firmware/WBS.md`: AFSK/AX.25, SiK bridge, PTT lease,
+        1553 RT map / BC schedule, SE signing / secure boot.
+
+##### 1.2a.3 *Fleet MIL-STD-1553C upgrade (approved 2026-09-28)*
+
+Owner decision (S. Griffing, 2026-09-28): upgrade the whole fleet from MIL-STD-1553B to
+MIL-STD-1553C. Today Pilot and TACCO use a Holt HI-1573 transceiver, which claims 1553A/B only
+(DS1573 Rev U p. 1), with Manchester II handled in the AM6254 PRU. The candidate
+replacement is the same protocol engine selected for Commo Rev T (§1.2a.2, HI-6138), so the
+fleet shares one 1553 part.
+
+**Finding 2026-09-28 [REF-MIL-001]:** 1553C is electrically identical to 1553B, so the capes'
+HI-1573 and PM-DB2791S already meet 1553C electrically. The swap to the HI-6138 is therefore
+**not required** for 1553C; it is justified by part commonality and by moving the protocol
+off the PRU. The only C-specific work is §4.4.3.2 (superseding valid commands) in the RT
+logic.
+
+**Owner decision (S. Griffing, 2026-09-28): make the fleet swap.** Pilot and TACCO move from
+HI-1573 + PRU Manchester to the HI-6138 on SPI, for one 1553 part fleet-wide and to take the
+protocol off the PRU. The PM-DB2791S (1:2.5) and 55 Ω isolation resistors carry over (DS6138
+Rev S Fig. 28 p. 255; [REF-MIL-001 §4.5.1.5.2.1]).
+
+Plan: `docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md` (Claude Opus 5.5,
+2026-09-28). Phases 1–4 are listed below; each lands as its own commit.
+
+- [x] **Phase 1 (U1):** HI-6138 footprint (custom, DS6138 §29), pin table, 50 MHz MCLK
+    oscillator, and courtyard area budget. Done 2026-09-28; see
+    `avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md`. Net courtyard change is −1.16 mm² per cape.
+- [x] **Phase 2 (U2):** Pilot schematic regenerate, PCB in-place patch, ERC/DRC gates.
+    Done 2026-09-28:
+    - ERC: 0.
+    - DRC: 0 violations, 0 schematic-parity issues. Unconnected pads went 388 → 390;
+      routing is still open.
+    - `1553-XCVR` kept its position and side; only the 4 new parts were added
+      (`avionics/kicad/tools/swap_1553_hi6138.py`).
+- [x] **Phase 3 (U3):** TACCO schematic regenerate, PCB in-place patch, ERC/DRC gates.
+    Done 2026-09-28:
+    - **Generator drift fixed first.** `gen_tacco_sch.py` still wrote the pre-rename
+        `XO` library, and one datasheet string was stale. After the fix its output matches
+        the committed netlist exactly (0 component and 0 pin-to-net differences).
+    - **Gates:** ERC 0. DRC 169, equal to the pre-change baseline of 169 (no new
+        violations), with 0 schematic-parity issues. Unconnected pads went 480 → 482.
+    - **Placement:** `1553-XCVR` swapped in place.
+- [ ] **TACCO manual placement (owner):** `X-50M`, `C-50M`, `C-1553D`, and `R-1553IRQ` are
+    parked off-board at the right edge. No collision-free site exists within 20 mm of
+    the HI-6138 on either side of the board (TACCO area crisis; see memory
+    project_xo_board_area_crisis). Options:
+    - Free area as the 2026-09-20 area analysis proposes.
+    - Drop `R-1553IRQ` in favor of the AM62x internal pull-up on P1-7, a firmware
+        pinmux change.
+    - Accept a 6-layer or denser-passive respin.
+- [x] **Phase 4 (U4):** DTS (both capes), firmware WBS, Pilot.md, TACCO.md, HDD, and 1553C
+    documentation. Done 2026-09-28:
+    - **DTS:** PRU0 1553 disabled. The HI-6138 is an SPI child using a GPIO chip-select,
+        IRQ, reset, and TXINH. Both DTS files pass a stub-header `cpp`/`dtc` syntax check;
+        no kernel headers are available here for a real build.
+    - **Firmware WBS:** retargeted to an HI-6138 driver, with a §4.4.3.2 conformance test
+        and a response-time test.
+    - **Docs:** REF-MIL-001 "Used in" list updated. `HDD.md` is marked for regeneration.
+- [ ] **Pinmux verification:** the P1-7/8/9/20 GPIO numbers and pad offsets in both DTS
+    files are carried over as `[ESTIMATE]`. Check them against the PB2 pin map / SPRUJ40.
+- [ ] **TACCO DTS drift (pre-existing, found 2026-09-28):** the DTS names the SPI
+    controller `main_spi1` and still lists the retired RFM95W, RFD900x, and WL1837, while
+    the schematic uses SPI0_B with the TPM, flash, ZigBee, and HI-6138. Reconcile the DTS
+    with `gen_tacco_sch.py`.
+- [x] Add MIL-STD-1553C to `REFERENCES.md` (REF-MIL-001 rebuilt against the ASSIST text,
+    2026-09-28).
+- [x] **Footprint and space budget first. Both capes are space-critical (owner, 2026-09-28).**
+    *Closed 2026-09-28 by Phase 1 (U1).*
+    Findings from 2026-09-28:
+    - **Current part:** `1553-XCVR` is HI-1573 in `QFN-44-1EP_7x7mm_P0.5mm_EP5.2x5.2mm` on
+        B.Cu. Pilot has it at (142.5, 98.5), rotated −90°; TACCO at (142.86, 111.49).
+    - **Replacement:** HI-6138PC* is a 48-pin QFN, 6.000 × 6.000 mm BSC, 0.40 mm pitch.
+        Exposed pad 4.700 ± 0.050 mm, electrically isolated. Leads are 0.200 mm wide and
+        0.400 ± 0.050 mm long (DS6138 Rev S §29, p. 263).
+    - **Body area:** drops from 49 mm² to 36 mm², so the part fits inside the existing
+        courtyard. The PQFP option (9 × 9 mm body) is rejected as larger.
+    - **No stock KiCad match.** The closest stock footprint is
+        `QFN-48-1EP_6x6mm_P0.4mm_EP4.66x4.66mm`. Author and verify a custom footprint in the
+        SecureControllers library against DS6138 §29, following
+        `docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md`.
+    - **Routing:** 0.40 mm pitch is finer than today's 0.5 mm, so check the fab's minimum
+        clearance and solder-mask web.
+    - **Extra parts cost area.** The part needs SPI (4 lines), IRQ, and MR to the host.
+        Mode and configuration pins need tie-offs; count those strap resistors against the
+        freed area before layout. The HI-1573's separate VDDA/VDDB decoupling (C-1553A/B/C)
+        gets re-derived from the HI-6138 supply pins.
+- [x] *(Closed 2026-09-28 by Phase 2.)* Pilot: replace HI-1573 with the protocol engine on a PB2 SPI port. Confirm a free SPI
+    chip-select and IRQ on P1/P2. Update `Pilot.md` (1553B → 1553C) and the magnetics if
+    the ratio changes.
+- [x] TACCO: same change as Pilot. *(Closed 2026-09-28 by Phase 3; placement is a separate open item above.)* Update `TACCO.md` and `reports/HDD.md`.
+- [x] *(Closed 2026-09-28 by Phase 4; driver work itself is open in `avionics/firmware/WBS.md`.)* Firmware: replace the PRU-ICSS Manchester RT task (`avionics/firmware/WBS.md`
+    "MIL-STD-1553B RT implementation") with an SPI protocol-engine driver. Retire the
+    PRU0 1553 pinmux in the DT overlays.
+- [ ] Docs sweep: change remaining "1553B" statements to 1553C once the hardware matches.
+    Status on 2026-09-28: the board docs, DTS, firmware WBS, and REFERENCES are done. About
+    470 mentions remain in other active files. Many are legitimate and must not be changed:
+    history, archived DTS, and TACCO's `M1553B_*` cape-B net names. Sweep file by file.
+    `avionics/AGENTS.md` already states 1553C.
+
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 
 - [x] **Wire second Ethernet (ETH2) on Pilot.** `ETH2` / `ETH2-PHY` (ADIN1300) /
@@ -384,7 +581,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     turned out the one load-bearing finding (footprint) didn't hold once
     verified against Commo's actual PCB instead of a generic estimate.
 
-- [ ] **Generate Commo gerbers** — a gerbers/`XCVR-49MHZ-2` set exists but its embedded
+- [x] **SUPERSEDED 2026-09-29 by Rev T (§1.2a.2) — Generate Commo gerbers** — a gerbers/`XCVR-49MHZ-2` set exists but its embedded
     `CreationDate` (2026-06-04) and the PCB's own title-block date (2026-06-03) both predate
     the 2026-09-21 LoRa→SiK radio swap — confirmed stale (2026-09-27). Regenerate against
     the current `Commo.kicad_pcb` once the floorplan rework above and DRC closeout (§1.10 U7)
