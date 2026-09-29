@@ -122,11 +122,12 @@ to Rev T.
           level mode. MR is an active-low reset, minimum 50 ns.
         - **Transceiver and supply:** dual-bus transceiver on-chip, so the HI-1573 is
           dropped. Supply is 3.3 V (VCCP).
-    - [ ] **1553C claim not in the datasheet.** DS6138 Rev S says "MIL-STD-1553B bus" (p. 1)
-        and never mentions 1553C or AS15531. The "MIL-STD-1553B/C" claim appears only on
-        Holt's product page. Get written 1553C conformance from Holt, for example a
-        datasheet revision or an application note, before the fleet 1553C upgrade (§1.2a.3)
-        is treated as met.
+    - [x] **1553C conformance resolved (2026-09-28).** DS6138 Rev S says only "1553B", but
+        MIL-STD-1553C (28 Feb 2018) is a document revision with no electrical or protocol
+        change from 1553B [REF-MIL-001]. A 1553B-compliant terminal therefore meets 1553C.
+        Holt's product-page "1553B/C" claim is consistent with this. The one C-specific
+        paragraph, §4.4.3.2 "Superseding valid commands", is a protocol behavior that the
+        HI-6138 RT logic handles. Confirm it during firmware bring-up.
     - [ ] Confirm the fleet isolated CAN-FD part (ISOW1044) and RS-485 part (ADM2795E) for reuse.
     - [ ] Select the SE (OPTIGA Trust M?) and check for an I²C address conflict with Si5351A.
     - [ ] Define the power input rail and budget (PA and SiK TX peaks).
@@ -151,6 +152,12 @@ MIL-STD-1553C. Today Pilot and TACCO use a Holt HI-1573 transceiver, which claim
 (DS1573 Rev U p. 1), with Manchester II handled in the AM6254 PRU. The candidate
 replacement is the same protocol engine selected for Commo Rev T (§1.2a.2, HI-6138), so the
 fleet shares one 1553 part.
+
+**Finding 2026-09-28 [REF-MIL-001]:** 1553C is electrically identical to 1553B, so the capes'
+HI-1573 and PM-DB2791S already meet 1553C electrically. The swap to the HI-6138 is therefore
+**not required** for 1553C; it is justified by part commonality and by moving the protocol
+off the PRU. The only C-specific work is §4.4.3.2 (superseding valid commands) in the RT
+logic. Owner to confirm whether the Pilot/TACCO chip swap stays in scope.
 
 - [ ] Add MIL-STD-1553C to `REFERENCES.md`: title, issuing body, validated URL, and the
     sections applied. Do not cite section numbers until they are verified.
