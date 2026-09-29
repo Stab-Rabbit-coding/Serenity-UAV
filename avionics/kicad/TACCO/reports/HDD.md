@@ -2,6 +2,11 @@
 
 **Project:** TACCO (formerly XO)
 
+> **Stale — regenerate (2026-09-28):** this report predates the MIL-STD-1553C HI-6138 swap.
+> The design now has 147 components: the HI-6138 replaced the HI-1573, and X-50M, C-50M,
+> C-1553D, and R-1553IRQ were added. Only the BOM row for `1553-XCVR` was hand-updated.
+> Regenerate with the `kidoc` skill.
+
 
 ## Executive Summary
 
@@ -187,7 +192,7 @@ beyond the fleet default has been established for this cape.
 
 | References                                             | Value             | Footprint                                           | MPN                  | Qty |
 | ------------------------------------------------------ | ----------------- | --------------------------------------------------- | -------------------- | --: |
-| 1553-XCVR                                              | HI-1573PCI        | QFN-44-1EP_7x7mm_P0.5mm_EP5.2x5.2mm                 | HI-1573PCI           |   1 |
+| 1553-XCVR                                              | HI-6138PCIF       | Holt_HI-6138_QFN-48_6x6mm_P0.4mm_EP4.6mm            | HI-6138PCIF          |   1 |
 | 1553-XFM                                               | PM-DB2791S        | Xfmr_1553_SMD_0.40in_8pin                           | PM-DB2791S           |   1 |
 | C-1553C                                                | 10uF 6.3V X5R     | C_0603_1608Metric                                   |                      |   1 |
 | C-3V3-O1, C-3V3-O2, C-1V8RF-O1, C-1V8RF-O2, C-RF-O1 +1 | 22uF 6.3V X5R     | C_0603_1608Metric                                   |                      |   6 |

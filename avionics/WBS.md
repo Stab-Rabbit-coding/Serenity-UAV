@@ -193,11 +193,24 @@ Plan: `docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md` (Claude O
     - Drop `R-1553IRQ` in favor of the AM62x internal pull-up on P1-7, a firmware
         pinmux change.
     - Accept a 6-layer or denser-passive respin.
-- [ ] **Phase 4 (U4):** DTS (both capes), firmware WBS, Pilot.md, TACCO.md, HDD, and 1553C
-    documentation.
-- [ ] Add MIL-STD-1553C to `REFERENCES.md`: title, issuing body, validated URL, and the
-    sections applied. Do not cite section numbers until they are verified.
-- [ ] **Footprint and space budget first. Both capes are space-critical (owner, 2026-09-28).**
+- [x] **Phase 4 (U4):** DTS (both capes), firmware WBS, Pilot.md, TACCO.md, HDD, and 1553C
+    documentation. Done 2026-09-28:
+    - **DTS:** PRU0 1553 disabled. The HI-6138 is an SPI child using a GPIO chip-select,
+        IRQ, reset, and TXINH. Both DTS files pass a stub-header `cpp`/`dtc` syntax check;
+        no kernel headers are available here for a real build.
+    - **Firmware WBS:** retargeted to an HI-6138 driver, with a §4.4.3.2 conformance test
+        and a response-time test.
+    - **Docs:** REF-MIL-001 "Used in" list updated. `HDD.md` is marked for regeneration.
+- [ ] **Pinmux verification:** the P1-7/8/9/20 GPIO numbers and pad offsets in both DTS
+    files are carried over as `[ESTIMATE]`. Check them against the PB2 pin map / SPRUJ40.
+- [ ] **TACCO DTS drift (pre-existing, found 2026-09-28):** the DTS names the SPI
+    controller `main_spi1` and still lists the retired RFM95W, RFD900x, and WL1837, while
+    the schematic uses SPI0_B with the TPM, flash, ZigBee, and HI-6138. Reconcile the DTS
+    with `gen_tacco_sch.py`.
+- [x] Add MIL-STD-1553C to `REFERENCES.md` (REF-MIL-001 rebuilt against the ASSIST text,
+    2026-09-28).
+- [x] **Footprint and space budget first. Both capes are space-critical (owner, 2026-09-28).**
+    *Closed 2026-09-28 by Phase 1 (U1).*
     Findings from 2026-09-28:
     - **Current part:** `1553-XCVR` is HI-1573 in `QFN-44-1EP_7x7mm_P0.5mm_EP5.2x5.2mm` on
         B.Cu. Pilot has it at (142.5, 98.5), rotated −90°; TACCO at (142.86, 111.49).
@@ -216,14 +229,17 @@ Plan: `docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md` (Claude O
         Mode and configuration pins need tie-offs; count those strap resistors against the
         freed area before layout. The HI-1573's separate VDDA/VDDB decoupling (C-1553A/B/C)
         gets re-derived from the HI-6138 supply pins.
-- [ ] Pilot: replace HI-1573 with the protocol engine on a PB2 SPI port. Confirm a free SPI
+- [x] *(Closed 2026-09-28 by Phase 2.)* Pilot: replace HI-1573 with the protocol engine on a PB2 SPI port. Confirm a free SPI
     chip-select and IRQ on P1/P2. Update `Pilot.md` (1553B → 1553C) and the magnetics if
     the ratio changes.
-- [ ] TACCO: same change as Pilot. Update `TACCO.md` and `reports/HDD.md`.
-- [ ] Firmware: replace the PRU-ICSS Manchester RT task (`avionics/firmware/WBS.md`
+- [x] TACCO: same change as Pilot. *(Closed 2026-09-28 by Phase 3; placement is a separate open item above.)* Update `TACCO.md` and `reports/HDD.md`.
+- [x] *(Closed 2026-09-28 by Phase 4; driver work itself is open in `avionics/firmware/WBS.md`.)* Firmware: replace the PRU-ICSS Manchester RT task (`avionics/firmware/WBS.md`
     "MIL-STD-1553B RT implementation") with an SPI protocol-engine driver. Retire the
     PRU0 1553 pinmux in the DT overlays.
 - [ ] Docs sweep: change remaining "1553B" statements to 1553C once the hardware matches.
+    Status on 2026-09-28: the board docs, DTS, firmware WBS, and REFERENCES are done. About
+    470 mentions remain in other active files. Many are legitimate and must not be changed:
+    history, archived DTS, and TACCO's `M1553B_*` cape-B net names. Sweep file by file.
     `avionics/AGENTS.md` already states 1553C.
 
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`

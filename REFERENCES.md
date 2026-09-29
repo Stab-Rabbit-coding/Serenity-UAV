@@ -661,6 +661,10 @@ chain is the HI-1573 or HI-6138 with the PM-DB2791S (`avionics/WBS.md` §1.2a.2 
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `avionics/kicad/Pilot/Pilot.md`,
 `avionics/kicad/TACCO/TACCO.md`, `avionics/WBS.md` §1.2a.2 and §1.2a.3,
+`avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md`, `avionics/kicad/Pilot/scripts/gen_pilot_sch.py`,
+`avionics/kicad/TACCO/scripts/gen_tacco_sch.py`, `avionics/firmware/WBS.md`,
+`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
 `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`
 
 ---

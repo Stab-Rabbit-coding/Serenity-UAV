@@ -66,8 +66,12 @@
     - [ ] Multi-node cross-check consumer (flag/exclude outliers >2m, feeds §4.4 "GPS cross-check").
     - [ ] Bench/field test: static fix HDOP and 4-node position agreement.
 
-- [ ] **MIL-STD-1553B RT implementation** — PRU-ICSS Manchester II encoder/decoder; RT address assignment per node role; BC arbitration on FC1 and FC2.
-    - [ ] PRU-ICSS Manchester II encode/decode driver.
+- [ ] **MIL-STD-1553C BC/RT implementation (HI-6138)** — Holt HI-6138 SPI driver; RT address assignment per node role; BC arbitration on FC1 and FC2. *(Retargeted 2026-09-28: the fleet 1553C swap, `avionics/WBS.md` §1.2a.3, replaced the PRU-ICSS Manchester codec with the HI-6138 protocol engine on SPI0; see the cape DTS `mil1553@3`.)*
+    - [x] ~~PRU-ICSS Manchester II encode/decode driver.~~ Superseded 2026-09-28 by the HI-6138, which encodes and decodes in hardware.
+    - [ ] HI-6138 SPI driver: reset (MR#), wait for READY, register and RAM configuration, pulse-mode IRQ handler, TXINHA release after configuration (DS6138 Rev S).
+    - [ ] Schedule SPI0 so IMU reads keep priority over HI-6138 accesses (shared bus).
+    - [ ] RT §4.4.3.2 "superseding valid commands" conformance test [REF-MIL-001].
+    - [ ] Response-time check, 4.0–12.0 µs [REF-MIL-001 §4.3.3.8], measured at the stub on the bench.
     - [ ] RT address assignment table per node role (FC1–FC4).
     - [ ] BC arbitration logic for FC1 (primary) / FC2 (standby).
     - [ ] Bench test against the 1553-XFM transformer coupling hardware (§1.2 "Wire the MIL-1553 connector + transformer").
@@ -89,9 +93,9 @@
     - [ ] MAVLink telemetry relay path: FC master CAN FD → CN master → SiK GCS link.
     - [ ] Bench test: heartbeat timeout detection feeding §4.4 "Node role election protocol."
 
-- [ ] **MIL-STD-1553B BC/RT tasks** — BC on CN1 (standby), RT on CN2–CN4; mirror FC bus controller arbitration.
+- [ ] **MIL-STD-1553C BC/RT tasks** — BC on CN1 (standby), RT on CN2–CN4; mirror FC bus controller arbitration. *(HI-6138 on the TACCO SPI bus since 2026-09-28.)*
     - [ ] BC standby logic on CN1 (mirrors FC1/FC2 arbitration, §4.2).
-    - [ ] RT implementation on CN2–CN4 (shares PRU-ICSS Manchester II driver with §4.2).
+    - [ ] RT implementation on CN2–CN4 (shares the HI-6138 SPI driver with §4.2).
     - [ ] Bench test against 1553-XFM transformer coupling hardware (§1.2).
 
 - [ ] **RS-485 inter-board messaging** — structured message format (header/payload/CRC); inter-node command and status relay.

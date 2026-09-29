@@ -6,6 +6,17 @@
 see `docs/attribution_and_licensing.md`
 **Revision:** R (Rev R baseline — TACCO naming finalized; EMI-hardened variant of TACCO Rev M, Ethernet PHY restored)
 **Date:** 2026-06-07
+**Update 2026-09-28 (MIL-STD-1553C fleet swap, S. Griffing decision; implemented by Claude
+Opus 5.5):** `1553-XCVR` is now the **Holt HI-6138** protocol engine on the SPI0_B bus,
+replacing the HI-1573 and the PRU Manchester codec.
+- **Generator:** `gen_tacco_sch.py` was first brought back in line with the committed
+  schematic, proven netlist-identical. Then the swap was applied.
+- **Gates:** ERC 0; DRC 169, equal to the pre-change baseline (no new violations), with 0
+  schematic-parity issues.
+- **Owner action:** the four new parts (`X-50M` 50 MHz MCLK oscillator, `C-50M`, `C-1553D`,
+  `R-1553IRQ`) are **parked off-board**. No collision-free site exists on either side within
+  20 mm, so they need manual placement (`avionics/WBS.md` §1.2a.3).
+- **References:** pin table in `../HI6138_FOOTPRINT_VERIFICATION.md`.
 **Status (2026-09-23 update, S. Griffing):** The Rev S1 reconciliation described below is
 SUPERSEDED — the legacy schematic/PCB pair (169 sch refs vs 43 PCB footprints, 564 ERC
 violations) was not patchable and has been replaced by a from-scratch schematic-first rebuild
@@ -412,7 +423,7 @@ All field connectors are shielded JST-GH (or SMA/U.FL for RF). SHIELD pins conne
 | J_PWR | SM04B-GHS-TB-1MP | 1=+5V_IN, 2=GND, 3=GND, 4=+5V_IN, MP=PGND | Power input |
 | J_CAN | SM03B-GHS-TB-1MP | 1=CAN_B_H, 2=CAN_B_L, 3=GND, MP=PGND | CAN FD bus |
 | J_485 | SM03B-GHS-TB-1MP | 1=RS485_B_P, 2=RS485_B_N, 3=GND, MP=PGND | RS-485 |
-| J_1553 | SM04B-GHS-TB-1MP | 1=BUS_1553_B_P, 2=BUS_1553_B_N, 3=GND, 4=PGND, MP=PGND | MIL-STD-1553B |
+| J_1553 | SM04B-GHS-TB-1MP | 1=BUS_1553_B_P, 2=BUS_1553_B_N, 3=GND, 4=PGND, MP=PGND | MIL-STD-1553C |
 | J_FAN | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=FAN_PWM_B, MP=PGND | Bay ventilation fan |
 | J_SD | MicroSD (Molex 503182-1852) | SDIO: CLK/CMD/D0-D3/CD/WP | Logging microSD |
 | J_SMA_LORA | SMA (50 Ω) | RF center conductor = LORA_ANT; shell = PGND | LoRa 915 MHz antenna |
