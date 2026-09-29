@@ -164,6 +164,15 @@ HI-1573 + PRU Manchester to the HI-6138 on SPI, for one 1553 part fleet-wide and
 protocol off the PRU. The PM-DB2791S (1:2.5) and 55 Ω isolation resistors carry over (DS6138
 Rev S Fig. 28 p. 255; [REF-MIL-001 §4.5.1.5.2.1]).
 
+Plan: `docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md` (Claude Opus 5.5,
+2026-09-28). Phases 1–4 are listed below; each lands as its own commit.
+
+- [ ] **Phase 1 (U1):** HI-6138 footprint (custom, DS6138 §29), pin table, 50 MHz MCLK
+    oscillator, and courtyard area budget.
+- [ ] **Phase 2 (U2):** Pilot schematic regenerate, PCB in-place patch, ERC/DRC gates.
+- [ ] **Phase 3 (U3):** TACCO schematic regenerate, PCB in-place patch, ERC/DRC gates.
+- [ ] **Phase 4 (U4):** DTS (both capes), firmware WBS, Pilot.md, TACCO.md, HDD, and 1553C
+    documentation.
 - [ ] Add MIL-STD-1553C to `REFERENCES.md`: title, issuing body, validated URL, and the
     sections applied. Do not cite section numbers until they are verified.
 - [ ] **Footprint and space budget first. Both capes are space-critical (owner, 2026-09-28).**
