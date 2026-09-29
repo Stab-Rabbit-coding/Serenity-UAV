@@ -53,20 +53,19 @@ class ScheduleTest(unittest.TestCase):
 
 
 class LinkageTest(unittest.TestCase):
-    """Servo arm -> pull link -> ring lever geometry."""
+    """Servo arm -> rigid pushrod -> ball-cup ring lever geometry."""
 
     def test_arm_radius_for_default_sweep(self) -> None:
-        # ~14.4 mm tangent-line wire travel over a 90 deg sweep -> ~10.2 mm arm.
+        # 13.17 mm lever chord (r 32 mm, 23.75 deg) over a 90 deg sweep.
         arm = nsl.arm_radius_for_stroke(sweep_deg=90.0)
-        self.assertAlmostEqual(arm, 10.2, delta=0.15)
+        self.assertAlmostEqual(arm, 9.31, delta=0.1)
 
-    def test_contact_stays_on_ear_flank(self) -> None:
-        # Edge: the wire tip touches the flank inside its radial span
-        # (ring rim 33.1 mm to ear tip 35.2 mm) over the whole stroke.
-        for psi in (0.0, 6.0, 11.875, 18.0, 23.75):
-            r = nsl.contact_radius_mm(psi)
-            self.assertGreater(r, 33.1)
-            self.assertLessEqual(r, 35.2)
+    def test_rod_length_spans_the_chord(self) -> None:
+        # Edge: rod length runs from 0 (open) to the full chord (closed).
+        self.assertAlmostEqual(nsl.rod_length_from_open_mm(nsl.THETA_RING_REF_OPEN),
+                               0.0, delta=1e-6)
+        self.assertAlmostEqual(nsl.rod_length_from_open_mm(0.0),
+                               nsl.lever_chord_mm(), delta=1e-6)
 
     def test_pwm_table_endpoints(self) -> None:
         # Integration: table rows run from 75 % to 105 % and stay in 1000-2000 us.
@@ -77,19 +76,23 @@ class LinkageTest(unittest.TestCase):
             self.assertGreaterEqual(row["pulse_us"], 1000)
             self.assertLessEqual(row["pulse_us"], 2000)
 
-    def test_seized_arm_never_blocks_open(self) -> None:
-        # R2 / KTD3: push-only contact — with the arm seized at ANY angle, the
-        # fully-open ring position is still admissible (ear clear of the tip).
+    def test_seized_rod_never_blocks_open(self) -> None:
+        # R2 / KTD3: the OPEN ball cup — with the rod seized at ANY angle, the
+        # fully-open ring position is still admissible (cup does not retain
+        # the ball against the opening direction).
         for alpha in (-45.0, -20.0, 0.0, 20.0, 45.0):
-            self.assertTrue(nsl.ring_can_open_with_arm_seized(alpha))
+            self.assertTrue(nsl.ring_can_open_with_rod_seized(alpha))
 
-    def test_arm_holds_schedule_by_contact(self) -> None:
-        # Integration: at each scheduled psi the arm tip sits exactly on the ear.
+    def test_servo_angle_holds_schedule(self) -> None:
+        # Integration: servo angle at each scheduled psi reproduces that same
+        # rod length through the forward kinematics.
         for tilt in (0.0, 30.0, 60.0, 90.0):
             psi = nsl.ring_angle_for_tilt(tilt)
             alpha = nsl.servo_angle_for_ring(psi)
-            self.assertAlmostEqual(nsl.tip_travel_mm(alpha),
-                                   nsl.ear_travel_mm(psi), delta=0.01)
+            half = math.radians(nsl.SERVO_SWEEP_DEG) / 2.0
+            r_a = nsl.arm_radius_for_stroke()
+            rod_len = r_a * (math.sin(math.radians(alpha)) + math.sin(half))
+            self.assertAlmostEqual(rod_len, nsl.rod_length_from_open_mm(psi), delta=0.01)
 
 
 class MarginTest(unittest.TestCase):

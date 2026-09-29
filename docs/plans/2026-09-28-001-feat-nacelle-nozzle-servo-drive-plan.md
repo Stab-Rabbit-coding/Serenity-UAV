@@ -43,7 +43,7 @@ ideation and servo research sub-agents Claude Sonnet 5 (Anthropic). Per `AGENTS.
 
 ### Summary
 
-Each nacelle gets a sub-micro servo inside the pod, forward of the nozzle ring. Its push wire drives
+Each nacelle gets a sub-micro servo inside the pod, forward of the nozzle ring. Its rigid pushrod drives
 the unison ring toward 75 % bore through a push-only contact. A spring drives the ring to a hard 105 %
 stop whenever the servo stops pushing, and a seized servo cannot hold the ring closed.
 
@@ -161,23 +161,37 @@ Option A on 2026-09-28.
     stroke is listed inconsistently, and the lever arm would have to shrink to about 21 mm to match
     that stroke. It cannot hold against any open-spring worth having, so it is recorded as
     rejected unless U8 measures a total closing load under about 1 N.
-- **KTD3 — Spring opens, servo only pushes toward closed (push-only contact)** *(session-settled:
-  user-approved; revised 2026-09-28 by owner-approved correction)*.
-  - A **push wire** (0.8 mm music wire in a PTFE tube, driven by the servo arm) runs along the
-    ring tangent at 141.4°. Its **unattached** tip is a unilateral contact on the ear's open-side
-    flank (tangency r 34.3 mm, contact r ≤ 35.05 mm) and pushes the ring toward 75 %. A spring cord wrapped on a rim groove (r 32.35 mm) pulls the ring
-    toward 105 % and holds the ear on the tip.
-  - Because the contact is push-only, the ring can always move away from the arm, so a dead,
-    unpowered **or seized** servo cannot hold the nozzle closed.
-  - **Correction:** the earlier "full-stroke slotted pull link" fix was wrong. A seized pull link
-    blocks the ring from paying out toward open, and no slot or cord arrangement avoids that.
-  - Hard stops are the ends of a window through the housing wall:
-    - the 75 % stop is full height on the ear's closed-side flank;
-    - the 105 % stop is an upper-band lug on the ear's open-side flank, above the wire's contact
-      band, so the tip is never trapped.
-  - A direct servo arm was rejected on the 2026-09-28 packaging check. The wing servo's
-    15.3 mm shaft-axis height cannot stand radially in the ~10 mm annulus, and an axial-shaft arm
-    cannot track the ear arc within the flank's 2.1 mm span.
+- **KTD3 — Rigid pushrod into an OPEN ball cup; spring cord opens** *(session-settled:
+  user-approved; corrected 2026-09-29, third and final revision)*.
+  - A rigid rod (COTS M3 ball stud, the same part the pre-Option-A pushrod used) drives the ring's
+    lever ball at r 32 mm, exactly the chord/angle relationship `tools/nozzle_linkage_check.py`
+    already solved for this ring — this is proportional position control, not a hard stop.
+  - The ring-side socket is an **open cup** (a hemisphere plus a clear exit channel, not a
+    captured sphere): the rod can only push the ball in. Nothing retains the ball against the
+    cup once the rod stops pushing, so a dead, unpowered, **or seized** servo cannot hold the
+    nozzle closed — the ball simply lifts out as the spring cord (wrapped on a rim groove, r
+    32.35 mm) drives the ring to its 105 % stop.
+  - Hard stops are additive lugs projecting inward from the housing's own bore wall, just outside
+    the ear's normal 157.5°→133.75° sweep, so the ear only reaches them on overtravel.
+  - **Two earlier corrections, both superseded, kept here as the record so they are not
+    retried:**
+    1. *2026-09-28, first cut* — a pull-only slotted ear. Rejected same day: a seized pull link
+       still blocks the ring paying out toward open.
+    2. *2026-09-28, second cut* — a push-only wire tangent to the ear's flat flank. Rejected
+       2026-09-29: kinematically broken (a fixed point contacting a **rotating flat face** is
+       coincident with it at one angle only, not a continuous range — confirmed when the wire's
+       required contact radius ran past the ear's own tip near both ends of the stroke) and it
+       still needed a window straight through the housing's exterior-mould-line wall to reach the
+       ear, the same packaging cost item 3 below already flagged.
+  - A direct axial-shaft servo arm remains rejected (2026-09-28 packaging check): the wing servo's
+    15.3 mm shaft-axis height cannot stand radially in the ~10 mm annulus, and it cannot track the
+    ear's arc within the flank's narrow radial span — hence a rod, not an arm, at the ring.
+  - **Packaging cost accepted:** the ear (tip r 35.0 mm, matching the original pre-Option-A
+    reach) stands past the housing bore (33.6 mm), so a small window through the housing wall,
+    spanning only the ear's own 32.3° stop-to-stop sweep, lets the rod reach it — a fairing-
+    covered actuator slot at the inboard flap gap, consistent with how real variable-nozzle
+    linkages (REF-CAD-001) cross their cowl. Flagged for the U8 bench check the pre-Option-A
+    design also deferred ("Pushrod clearance/interference check").
   - Spring sizing target: at least 1.5 × (measured opening-side friction) and no more than 40 %
     of servo stall push, pending U8.
 
@@ -202,9 +216,9 @@ Option A on 2026-09-28.
     to be set by U8.
 - **KTD5 — Servo forward of the ring, inside the pod** *(user-approved at scoping)*.
   - The servo lies flat in the annulus: 8 mm case thickness radial, 22 mm axial, and the shaft
-    **tangential**, so its 10.2 mm arm strokes the push wire axially. The PTFE tube carries the
-    wire forward-to-tangent into the housing window. The servo station can sit wherever the tube
-    reaches, preferably behind an existing access cover (R4).
+    oriented so its 9.31 mm crank arm swings a rigid ball-link rod up to the housing window at the
+    ear's sweep. The servo station can sit wherever the rod geometrically reaches, preferably
+    behind an existing access cover (R4).
   - The ear sweeps 157.5° (closed) → 133.75° (open), because the ring opens clockwise.
   - A faired blister is the fall-back only (R3).
 - **KTD6 — Servo power from a fused branch of the 6 V servo rail in both variants** (door
@@ -223,7 +237,7 @@ flowchart LR
   GW -- LUT tilt to ring --> PWM[FLEX_PWM_IO 50 Hz]
   PWM --> SV[BMS-101DMG servo<br/>fwd of ring]
   RAIL[FE PDB 6 V servo rail<br/>fused F_NOZ] --> SV
-  SV -- push wire, unattached tip --> RING[Unison ring<br/>stops 75 % / 105 %]
+  SV -- rigid pushrod, open ball cup --> RING[Unison ring<br/>stops 75 % / 105 %]
   SPR[Spring cord on rim groove] -- drives open --> RING
   GW -- signed NOZZLE_STATUS --> BUS[(CAN-FD / RS-485 trunk)]
   GW -. fault: AK7455/heartbeat/MAC/rail .-> OPEN[Command 105 % then open F_NOZ load switch]
@@ -348,7 +362,7 @@ Verification Contract still apply.
 ### U2. Servo linkage and schedule tool
 
 **Goal:** One re-runnable tool for the Option A drive. It works out:
-- the ring angle for a given servo angle through the push-only arm contact;
+- the ring angle for a given servo angle through the rigid pushrod / open ball cup;
 - the spring/servo force margins;
 - the tilt → ring → PWM lookup table with the 90–145° hold.
 
@@ -388,11 +402,11 @@ convention, pass/fail exit codes).
 - The tool passes its tests.
 - The default run prints PASS with the BMS-101DMG and the placeholder load flagged "pending U8".
 
-### U3. Ring stops, spring-cord groove and push-wire contact ear — DONE (2026-09-28)
+### U3. Ring stops, spring-cord groove and open ball-cup ear — DONE (2026-09-29)
 
-**Goal:** The iris hardware carries KTD3: hard 75 %/105 % stops (housing window ends), a spring-cord
-rim groove, anchor and exit bore, a push-only contact ear replacing the ball socket, and a housing
-window/exit bore for the guided 0.8 mm push wire.
+**Goal:** The iris hardware carries KTD3: hard 75 %/105 % stops (additive housing-bore lugs), a
+spring-cord rim groove + housing-side anchor rib, an open (uncaptured) ball cup on the ear, and a
+housing window sized to the ear's own sweep for the pushrod to reach it.
 
 **Requirements:** R1, R2, R3.
 
@@ -404,24 +418,39 @@ window/exit bore for the guided 0.8 mm push wire.
   STLs.
 - `airframe/FreeCAD-scripts/Makefile` if targets change.
 
-**Approach (as built, commits 566b860c, 6b29b671):**
-1. Stops are the ends of a housing window cut through the wall at the ear's flanks: full-height at
-   the 75 % (closed) edge, an upper-band lug at the 105 % (open) edge so the wire's lower contact
-   band is never trapped. Stop land ≥ 1.6 mm.
-2. The spring cord runs in a groove on the ring rim (not coaxial in the housing — the ring itself
-   is the spring seat), clear of the flap clevises and the cam slots.
-3. The push wire is a UNATTACHED 0.8 mm music-wire tip riding a PTFE tube tangent to the ear flank
-   at 141.4°, exiting the housing at 125.8° — not a direct servo arm (rejected: the servo's
-   15.3 mm shaft-axis height cannot stand radially in the annulus, and an axial arm cannot track
-   the ear's arc within its 2.1 mm flank span).
-4. The ring's cam-only geometry is unchanged, so the flap kinematics are unchanged (R2 invariant).
+**Approach (as built, commit history 566b860c → 6b29b671 → 2026-09-29 correction):**
+1. The ear restores the original (pre-Option-A) `RING_LEVER_R` (32 mm) / `RING_BALL_D` (3 mm,
+   COTS M3 ball stud) geometry and tip reach (35.0 mm) — proven chord kinematics, not a new
+   contact model.
+2. The ball socket is cut as a hemisphere **plus a clear exit channel** extending radially
+   outward through the rest of the ear (an open cup, not `sphere()`'s full captured void): the
+   rod presses the ball in; nothing retains it once the rod stops pushing.
+3. Stops are additive lugs projecting inward from the housing's own bore wall (r 33.6→33.3), just
+   outside the ear's 157.5°→133.75° sweep so the ear only reaches them on overtravel; they clear
+   the plain ring rim (33.1 mm) by 0.2 mm.
+4. A single housing window (r 33.1→36.6, the ear's own stop-to-stop azimuth span, full ring
+   height) lets the rod reach the ear from outside — sized to the sweep, not wider.
+5. The spring cord runs in a groove on the ring rim (the ring itself is the spring seat) and
+   anchors, housing-side, to a small rib on the housing's own bore wall at the flap gap
+   diametrically opposite the ear (337.5°) — clear of the window, the cam slots and the flap
+   clevises.
+6. The ring's cam-only geometry is unchanged, so the flap kinematics are unchanged (R2 invariant).
    `R_HINGE` is unchanged.
 
-**Patterns to follow:** the Rev S2 cam-only ring change set; the `RENDER_PART` selector convention.
+**Rework note (2026-09-29):** two earlier cuts of this unit (a pull-only slotted ear, then a
+push-only wire tangent to a flat ear flank) were built, rendered, and found defective during U4's
+routing check before either was field-usable — see KTD3 above for the full record. Manifold
+sweep verification (0° → −23.75° psi) now shows 0 mm³ interference throughout the operating
+range and correct blocking beyond each stop.
+
+**Patterns to follow:** the Rev S2 cam-only ring change set; the `RENDER_PART` selector convention;
+the pre-Option-A pushrod's own ball/socket numbers (only the socket's openness changed).
 
 **Test scenarios:**
 - Each print part renders `Simple: yes` and is watertight in `tools/validate_stls.py`.
-- At ring ψ = 0 and ψ = 23.75° (tabs against the stops), the flap flow boundary is 18.75 mm and
+- Ring-vs-housing manifold overlap is 0 mm³ from ψ = 0° to ψ = −23.75° and strictly positive
+  (blocked) beyond either end — verified with `manifold3d`, not asserted from drawing inspection.
+- At ring ψ = 0 and ψ = −23.75° (tabs against the stops), the flap flow boundary is 18.75 mm and
   26.25 mm ± 0.1 mm. Measure it from the asm renders.
 - The spring seat does not intersect any flap at either stop.
 
@@ -448,23 +477,31 @@ access cover, and prove the fit.
 **Approach:**
 1. Search Z stations between the ESC bays and the ring for an annulus depth of at least
    8 mm + 2 × 0.3 mm clearance + skin. Use the actual Rev T4b wall-thickness profile.
-2. Route the PTFE push-wire tube from the servo arm to its tangent exit just outside the housing
-   OD at about 126°. Route the spring cord from its exit bore (about 90°) to the spring anchor.
-   Keep both clear of the aft spider sleeve and the EDF2 phase leads, with a tube bend radius of
-   at least 15 mm.
+2. Place the servo and its crank so a rigid pushrod (COTS ball-link rod + the M3 ball stud
+   already at the ring's lever, U3) reaches the housing window at the ear's sweep (157.5°→133.75°,
+   window centred there). Route the spring cord from its housing-side anchor (337.5°, the
+   diametrically-opposite flap gap) back to wherever the servo's own structure can anchor it, or
+   to a dedicated boss if not. Keep both clear of the aft spider sleeve and the EDF2 phase leads.
 3. Side-dependent geometry is keyed on `PYLON_SIDE`. Remember the known trap: NACELLE_SIDE is
    inverted relative to the filename.
 4. If no station fits, stop per the Goal Capsule and draft the faired-blister fallback for owner
    sign-off.
+5. Note: the servo, mount, rod and ring are all rigid parts of the nacelle assembly, which rotates
+   as one body about the trunnion — nacelle tilt does not change any distance between them. The
+   fit check below needs one pose, not a tilt sweep; a tilt sweep matters only for parts that cross
+   the wing–nacelle joint, which this unit's parts do not.
 
 **Patterns to follow:** `nacelle_esc_bay.scad` / `nacelle_esc_cover.scad` flush-cover pattern;
 `tools/cargo_layout_fit.py`-style interference report.
 
 **Test scenarios:**
-- Servo, mount and link have 0 mm³ intersection with the duct, stator/aft spider sleeves, ESC bays
-  and harness troughs at 0°, 90° and 145° tilt poses.
+- Servo, mount, crank and rod have 0 mm³ intersection with the duct, stator/aft spider sleeves,
+  ESC bays and harness troughs, checked in the nacelle's own rigid frame (see Approach step 5 —
+  one pose suffices).
 - Minimum wall around the pocket ≥ 1.5 mm (3 perimeters at 0.4 mm).
-- The link path clears the ring lever ear across the full 23.75° stroke.
+- The rod sweeps its ball-cup end through the ring's ear window across the full 23.75° stroke with
+  0 mm³ interference against the housing (this repeats U3's own manifold sweep check, now with the
+  rod present too).
 - Both baked shells are watertight single bodies.
 
 **Verification:**
@@ -570,7 +607,7 @@ records the chosen variant's integration.
 1. Add rows:
    - `SERVO-NOZZLE` (BMS-101DMG ×2);
    - `SPRING-NOZZLE-OPEN`;
-   - `WIRE-NOZZLE-PUSH` (0.8 mm music wire), `TUBE-NOZZLE-PTFE` (2.0 mm OD) and
+   - `ROD-NOZZLE-PUSH` (COTS ball-link pushrod, same class the pre-Option-A drive used) and
      `CORD-NOZZLE-SPRING` (Dyneema Ø0.5 mm);
    - `PRINT-NOZZLE-SERVO-MOUNT`;
    - `FUSE-F_NOZ`;

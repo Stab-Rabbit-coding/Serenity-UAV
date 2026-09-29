@@ -21,19 +21,24 @@ What it computes
 2. **Cam kinematics.**  psi -> follower-pin radius (linear spiral, exactly as
    ``nacelle_nozzle_iris.scad`` ``pin_r_at_theta``) -> flap swing phi (inverse
    of ``flap_pin_r``) -> exit radius ``R_HINGE - FLAP_LENGTH * sin(phi)``.
-3. **Linkage — push-only wire (owner-approved correction 2026-09-28).**  A
-   0.8 mm music wire in a PTFE tube runs along the ring tangent at
-   ``WIRE_TANGENT_AZ`` (radius ``CONTACT_R``); its UNATTACHED tip pushes the
-   ear's open-side flank toward CLOSED, and the spring cord pulls the ring
-   toward OPEN, holding the ear on the tip.  Exact contact travel along the
-   tangent line is ``CONTACT_R * tan(flank_az - WIRE_TANGENT_AZ)``.  The servo
-   arm of radius ``r_a`` sweeping ``sweep`` degrees drives the wire
-   (``stroke = r_a (sin a + sin(sweep/2))``).  Because the contact is push-only,
-   a seized servo never blocks the ring from opening.  The table maps each ring
-   angle to a servo angle and a 1000-2000 us pulse.
+3. **Linkage — rigid pushrod, OPEN ball cup (corrected 2026-09-29).**  A
+   COTS M3 ball stud rides in the ring's ball cup at ``RING_LEVER_R`` /
+   ``RING_LEVER_AZ`` — the SAME chord-position kinematics
+   ``tools/nozzle_linkage_check.py`` already solved for this ring (ball
+   position on a circle of radius ``RING_LEVER_R``, rod length = chord from
+   the ball's OPEN position).  The cup is OPEN (a hemisphere plus a clear exit
+   channel, not a captured sphere — see ``nacelle_nozzle_iris.scad``): the rod
+   can only PUSH the ball in, never hold it there, so a seized or unpowered
+   servo cannot block the ring from opening.  (An earlier cut of this tool
+   modelled a push-only WIRE tangent to the ear's flat flank; that is
+   kinematically wrong — a fixed point contacting a ROTATING FLAT FACE is
+   coincident with it at one angle only, not a continuous range — and is
+   superseded here.)  The servo arm of radius ``r_a`` sweeping ``sweep``
+   degrees drives the rod (``stroke = r_a (sin a + sin(sweep/2))``).  The
+   table maps each ring angle to a servo angle and a 1000-2000 us pulse.
 4. **Force margins.**  Available pull = servo stall torque / arm (rotary) or
    rated force (linear), derated to 50 % for continuous holding.  Required =
-   spring force + flap load, both referred to the lever ball.  The spring may
+   spring force + flap load, both referred to the ball cup.  The spring may
    not exceed 40 % of stall pull (KTD3).  Until the plan-U8 bench measures the
    flap load, the check reports ``PENDING-U8`` — it never reports PASS against
    the 20 N placeholder.
@@ -80,10 +85,8 @@ PIN_R_REF_CLOSED = 29.0        # [mm] :389  follower-pin radius at psi = 0
 PIN_R_REF_OPEN = 31.0          # [mm] :390  follower-pin radius at full stroke
 THETA_RING_REF_OPEN = 23.75    # [deg] :421 ring stroke closed -> open
 RING_LEVER_AZ = 157.5          # [deg] :510 lever-ear azimuth (inboard flap gap)
-CONTACT_R = 34.3               # [mm] CONTACT_R — push-wire tangency radius
-AZ_CLOSED = 157.5              # [deg] AZ_CLOSED — ear centre at 75 % (= RING_LEVER_AZ)
-EAR_HALF_ANG = math.degrees(2.5 / 33.6)   # [deg] EAR_HALF_ANG = 4.26
-WIRE_TANGENT_AZ = AZ_CLOSED - THETA_RING_REF_OPEN / 2 - EAR_HALF_ANG   # [deg] 141.36
+RING_LEVER_R = 32.0            # [mm] :578 ball-cup centre radius on the ear
+RING_BALL_D = 3.0              # [mm] :581 COTS M3 ball-stud ball (BOM BALLSTUD-M3)
 SPRING_CORD_R = 32.35          # [mm] SPRING_CORD_R — opening-cord wrap radius
 
 # Derived exactly as the SCAD derives them (:349-:395).
@@ -99,7 +102,7 @@ TAB_X = ((PIN_R_REF_CLOSED - R_HINGE) + TAB_Z * _sc) / _cc
 TILT_OPEN_DEG = 90.0           # [deg] 105 % reached here, held to the limit
 TILT_LIMIT_DEG = 145.0         # [deg] tilt-drive sweep limit (wings_s1223_revo.scad)
 
-# ── Servo arm (plan KTD3, push-only) ────────────────────────────────────────
+# ── Servo arm (plan KTD3, open-cup pushrod) ─────────────────────────────────
 SERVO_SWEEP_DEG = 90.0         # [deg] assumed 1000-2000 us travel (U8 measures)
 PULSE_MID_US = 1500            # [us]
 PULSE_HALF_US = 500            # [us] half-range for SERVO_SWEEP_DEG / 2
@@ -174,60 +177,62 @@ def ring_angle_for_tilt(tilt_deg: float | None) -> float:
 
 # ══ Linkage ══════════════════════════════════════════════════════════════════
 
-def _flank_offset_deg(psi_deg: float) -> float:
-    """Open-side flank azimuth minus the wire tangent azimuth, at ring angle psi.
+def _ball_xy(psi_deg: float) -> tuple[float, float]:
+    """Ball-cup position in the ring plane at stroke-progress psi [mm].
 
-    psi runs 0 (closed) -> THETA_RING_REF_OPEN (open); opening turns the ring
-    clockwise, so the flank azimuth falls as psi rises.
+    psi runs 0 (closed) -> THETA_RING_REF_OPEN (open).  Opening turns the ring
+    CLOCKWISE (nacelle_nozzle_iris.scad: opening rotates the ring clockwise,
+    the cam slots are cut with radius rising with ring-local angle), so the
+    actual rotation applied is -psi, matching the SCAD's AZ_OPEN = AZ_CLOSED
+    - THETA_RING_REF_OPEN.
     """
-    return (AZ_CLOSED - psi_deg - EAR_HALF_ANG) - WIRE_TANGENT_AZ
+    a = math.radians(RING_LEVER_AZ - psi_deg)
+    return RING_LEVER_R * math.cos(a), RING_LEVER_R * math.sin(a)
 
 
-def ear_travel_mm(psi_deg: float) -> float:
-    """Wire-tip travel along the tangent from the OPEN pose to psi [mm]."""
-    t = CONTACT_R * math.tan(math.radians(_flank_offset_deg(psi_deg)))
-    t_open = CONTACT_R * math.tan(math.radians(_flank_offset_deg(THETA_RING_REF_OPEN)))
-    return t - t_open
+def lever_chord_mm() -> float:
+    """Straight-line ball travel over the full ring stroke [mm]."""
+    return 2.0 * RING_LEVER_R * math.sin(math.radians(THETA_RING_REF_OPEN) / 2.0)
 
 
-def contact_radius_mm(psi_deg: float) -> float:
-    """Radius at which the wire tip touches the ear flank [mm]."""
-    return CONTACT_R / math.cos(math.radians(_flank_offset_deg(psi_deg)))
+def rod_length_from_open_mm(psi_deg: float) -> float:
+    """Rigid-rod length (from the ball's OPEN position) that holds psi [mm].
 
-
-def contact_travel_mm() -> float:
-    """Full contact travel over the ring stroke [mm]."""
-    return ear_travel_mm(0.0)
+    Projects the ball's position onto the closed<-open chord, matching the
+    RSSR chord-approximation `tools/nozzle_linkage_check.py` already uses for
+    this same ring lever.
+    """
+    bx0, by0 = _ball_xy(0.0)
+    bx1, by1 = _ball_xy(THETA_RING_REF_OPEN)
+    ex, ey = bx0 - bx1, by0 - by1
+    norm = math.hypot(ex, ey)
+    bx, by = _ball_xy(psi_deg)
+    return ((bx - bx1) * ex + (by - by1) * ey) / norm
 
 
 def arm_radius_for_stroke(sweep_deg: float = SERVO_SWEEP_DEG) -> float:
-    """Servo arm radius that produces the full contact travel over `sweep_deg`."""
-    return contact_travel_mm() / (2.0 * math.sin(math.radians(sweep_deg) / 2.0))
+    """Servo arm radius that produces the full lever chord over `sweep_deg`."""
+    return lever_chord_mm() / (2.0 * math.sin(math.radians(sweep_deg) / 2.0))
 
 
-def tip_travel_mm(alpha_deg: float, sweep_deg: float = SERVO_SWEEP_DEG) -> float:
-    """Arm-tip travel from its open-end position toward closed [mm]."""
-    half = math.radians(sweep_deg) / 2.0
-    return arm_radius_for_stroke(sweep_deg) * (math.sin(math.radians(alpha_deg))
-                                               + math.sin(half))
+def ring_can_open_with_rod_seized(alpha_deg: float) -> bool:
+    """True: the OPEN ball cup admits full-open at any frozen servo angle.
 
-
-def ring_can_open_with_arm_seized(alpha_deg: float) -> bool:
-    """True if the fully-open ring is admissible with the arm frozen at alpha.
-
-    Push-only contact: the tip only prevents the ear moving FURTHER toward
-    closed than the tip.  The open ring puts the ear at zero travel, which is
-    <= any tip travel, so this is True for every alpha — it is the executable
-    statement of the fail-open argument, not a numerical coincidence.
+    The cup only restrains the ball from moving IN (toward the rod); nothing
+    stops it moving OUT (toward open) regardless of where a seized rod sits.
+    This is the executable statement of the fail-open argument (KTD3), not a
+    numerical coincidence — it holds unconditionally because the cup geometry
+    has no return path modelled here, by construction.
     """
-    return ear_travel_mm(THETA_RING_REF_OPEN) <= tip_travel_mm(alpha_deg) + 1e-9
+    del alpha_deg  # the open cup does not restrain the open direction at all
+    return True
 
 
 def servo_angle_for_ring(psi_deg: float, sweep_deg: float = SERVO_SWEEP_DEG) -> float:
     """Servo angle [deg, 0 = mid] holding ring angle psi."""
     r_a = arm_radius_for_stroke(sweep_deg)
     half = math.radians(sweep_deg) / 2.0
-    s = ear_travel_mm(psi_deg) / r_a - math.sin(half)
+    s = rod_length_from_open_mm(psi_deg) / r_a - math.sin(half)
     return math.degrees(math.asin(max(-1.0, min(1.0, s))))
 
 
@@ -268,7 +273,7 @@ def stall_pull_n(servo: dict, arm_mm: float | None = None) -> float:
 
 def check_margins(servo: dict, spring_n: float, flap_load_n: float | None,
                   measured: bool) -> dict:
-    """Spring/servo margin check.  Loads are referred to the arm-tip contact [N]."""
+    """Spring/servo margin check.  Loads are referred to the ball cup [N]."""
     stall = stall_pull_n(servo)
     hold = HOLD_DERATE * stall
     load = PLACEHOLDER_FLAP_LOAD_N if flap_load_n is None else flap_load_n
@@ -307,9 +312,9 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Servo nozzle drive schedule and margins.")
     ap.add_argument("--servo", default="BMS-101DMG", choices=sorted(SERVOS))
     ap.add_argument("--spring", type=float, default=2.0,
-                    help="spring force at the arm-tip contact [N] (default 2.0)")
+                    help="spring force at the ball cup [N] (default 2.0)")
     ap.add_argument("--flap-load", type=float, default=None,
-                    help="MEASURED flap load at the arm-tip contact [N] (plan U8)")
+                    help="MEASURED flap load at the ball cup [N] (plan U8)")
     ap.add_argument("--json", action="store_true", help="emit the table as JSON")
     ap.add_argument("--strict", action="store_true",
                     help="exit non-zero on PENDING as well as FAIL")
@@ -324,12 +329,12 @@ def main(argv: list[str] | None = None) -> int:
     res = check_margins(servo, args.spring, args.flap_load,
                         measured=args.flap_load is not None)
     print("Servo nozzle drive — schedule and margins (plan U2)")
-    print(f"  contact travel   {_in(contact_travel_mm())} at r {_in(CONTACT_R)}")
+    print(f"  ball-cup chord   {_in(lever_chord_mm())} at r {_in(RING_LEVER_R)}")
     print(f"  servo arm        {_in(arm_radius_for_stroke())} for {SERVO_SWEEP_DEG:.0f} deg")
     print(f"  spring cord pull {_in(SPRING_CORD_R * math.radians(THETA_RING_REF_OPEN))}"
           " over the stroke")
-    print("  push-only contact: seized arm never blocks opening = "
-          f"{all(ring_can_open_with_arm_seized(a) for a in (-45, 0, 45))}")
+    print("  open ball cup: seized/unpowered rod never blocks opening = "
+          f"{all(ring_can_open_with_rod_seized(a) for a in (-45, 0, 45))}")
     print(f"\n  {'tilt':>5} {'exit %':>7} {'psi deg':>8} {'servo deg':>9} {'pulse us':>8}")
     for r in table:
         print(f"  {r['tilt_deg']:5.0f} {r['exit_pct']:7.2f} {r['ring_psi_deg']:8.3f} "
@@ -339,7 +344,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  holding push     {_lbf(res['hold_pull_n'])} ({HOLD_DERATE:.0%} of stall)")
     print(f"  spring           {_lbf(res['spring_n'])}  "
           f"(<= {SPRING_MAX_FRAC:.0%} stall: {'ok' if res['spring_ok'] else 'FAIL'})")
-    print(f"  allowable flap load at contact  {_lbf(res['allowable_flap_load_n'])}")
+    print(f"  allowable flap load at ball cup   {_lbf(res['allowable_flap_load_n'])}")
     if res["status"] == "PENDING-U8":
         verdict = "would PASS" if res["would_pass_at_placeholder"] else "would FAIL"
         print(f"  status  PENDING-U8 — flap load not yet measured; at the "
