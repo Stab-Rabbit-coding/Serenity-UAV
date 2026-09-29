@@ -161,6 +161,39 @@ active trade study and must not be assumed.
   no filenames/paths/PII), and do not commit the failure pattern until it's been discussed.
   See `.githooks/pre-commit` / `tools/precommit_sanitize.py`.
 
+### Warnings, Cautions, Notes, and Wording
+
+Callout severity and requirement-verb usage follow CNAF M-3710.7 §1.5–1.6 (NATOPS General
+Flight and Operating Instructions Manual) [REF-MIL-001 §1.5, §1.6], adapted for a build/design
+repo rather than a flight-ops manual:
+
+- **WARNING** — a procedure, practice, or condition that may result in injury, death, or loss
+  of the aircraft/vehicle if not carefully observed or followed. Reserve for personnel-safety
+  or airframe-loss risk (e.g., handling a charged spring, using of a soldering iron, releasing a payload near people, a live battery pack, a load-bearing.)
+  joint that can fail catastrophically).
+- **CAUTION** — a procedure, practice, or condition that may result in damage to equipment if
+  not carefully observed or followed, with no personnel-injury or airframe-loss risk. (over torquing a fitting, shorting a circuit)
+- **Note** — information about a procedure, practice, or condition that must be emphasized, but
+  carries no WARNING- or CAUTION-level risk.
+
+Never downgrade a WARNING-level risk into a Note, and never use WARNING/CAUTION for information
+that is merely helpful rather than risk-bearing.
+
+Requirement wording follows the same source [REF-MIL-001 §1.6]:
+
+- **Shall** — the procedure is mandatory.
+- **Should** — the procedure is recommended, not mandatory.
+- **May** / **need not** — the procedure is optional.
+- **Will** — indicates futurity only; it never indicates any degree of requirement. Do not use
+  "will" where "shall" is meant.
+
+**Active vs. passive voice (project addition — not in CNAF M-3710.7):** write procedural and
+instructional text in the active voice ("Torque the fastener to 25 in-lb," not "The fastener
+shall be torqued to 25 in-lb") except where the shall/should/may/will wording above requires the
+passive construction to state the requirement itself (e.g., "The joint shall be inspected before
+final assembly"). Active voice names who or what performs the action; passive requirement
+language states what is required regardless of actor.
+
 ## 7. Fabrication Standards
 
 - **Material: CF-PETG** — 0.15 mm layer height, ≥4 perimeters, ≥40% infill load-bearing /

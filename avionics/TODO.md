@@ -1,4 +1,4 @@
-# Serenity UAV — Avionics (Pilot / XO / Commo Cape Hardware) TODO (Open Work Only)
+# Serenity UAV — Avionics (Pilot / TACCO / Commo Cape Hardware) TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
