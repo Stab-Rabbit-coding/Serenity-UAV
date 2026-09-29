@@ -20,9 +20,11 @@ authoring the TACCO-unique radio/logging/payload blocks new:
 * **Fleet-shared (reused verbatim from Pilot, ``_B_`` net suffix per TACCO.md's
   own documented rationale — lets Pilot and TACCO share one bus ring without net
   collisions):** ISOW1044BDFMR (CAN FD), ISOW1412DFMR (RS-485), SLB9672 (TPM),
-  Holt HI-1573 + Premier PM-DB2791S (MIL-STD-1553B — the RS-422 DS26LV31/32 +
-  fake "SM-1553-11" defect in the legacy schematic is retired, same fix as
-  Pilot), DP83825I (Ethernet PHY) + WE-LAN transformer, PocketBeagle 2 P1/P2
+  Holt HI-6138 protocol engine + Premier PM-DB2791S (MIL-STD-1553C fleet
+  swap 2026-09-28, avionics/WBS.md §1.2a.3 — replaces the HI-1573 + PRU
+  Manchester codec, which had itself retired the RS-422 DS26LV31/32 + fake
+  "SM-1553-11" defect; pin table and area budget in
+  avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md), DP83825I (Ethernet PHY) + WE-LAN transformer, PocketBeagle 2 P1/P2
   stacking headers.
 * **Ethernet inclusion resolved via avionics/WBS.md** (higher authority than
   TACCO.md's own internal contradiction — see WBS.md "Re-evaluate space / restore
@@ -84,7 +86,7 @@ system KiCad library's ``Connector_Card:microSD_HC_Molex_104031-0811`` (a
 confirmed, datasheet-real part) is used instead.
 
 Datasheets (all in ``avionics/datasheets/``):
-  ISOW1044BDFMR/ISOW1412DFMR/SLB9672/HI-1573/PM-DB2791S/DP83825I — see
+  ISOW1044BDFMR/ISOW1412DFMR/SLB9672/HI-6138/PM-DB2791S/DP83825I — see
   gen_pilot_sch.py docstring (identical parts, identical citations) |
   Wio-E5 wio-e5-datasheet.pdf V1.1 Table 1/§5.1 + mLRS rx-hal-WioE5-Mini-wle5jc.h
   (github.com/olliw42/mLRS) for pin function assignment |
@@ -108,7 +110,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE.parent / "kicads" / "TACCO.kicad_sch"
-SYMLIB = HERE.parent / "kicads" / "XO.kicad_sym"
+SYMLIB = HERE.parent / "kicads" / "TACCO.kicad_sym"
 
 SIZE = 1.27
 PIN_PITCH = 2.54
@@ -146,7 +148,8 @@ FP_SOIC20W = "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"
 FP_TSSOP28 = "Package_SO:TSSOP-28_4.4x9.7mm_P0.65mm"
 FP_WQFN16 = "Package_DFN_QFN:WQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm"
 FP_UQFN32 = "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm"
-FP_QFN44 = "Package_DFN_QFN:QFN-44-1EP_7x7mm_P0.5mm_EP5.2x5.2mm"
+FP_HI6138 = "Serenity-Custom:Holt_HI-6138_QFN-48_6x6mm_P0.4mm_EP4.6mm"
+FP_OSC2520 = "Oscillator:Oscillator_SMD_ECS_2520MV-xxx-xx-4Pin_2.5x2.0mm"
 FP_SMA = "Diode_SMD:D_SMA"
 FP_SOT363 = "Package_TO_SOT_SMD:SOT-363_SC-70-6"
 FP_SOT143 = "Package_TO_SOT_SMD:SOT-143"
@@ -296,45 +299,42 @@ ICS: List[Dict[str, Any]] = [
     },
     {
         "ref": "1553-XCVR",
-        "value": "HI-1573PCI",
-        "fp": FP_QFN44,
-        "mpn": "HI-1573PCI",
-        "ds": "hi-1573.pdf p.1 Pin Configurations (44-pin 7x7 QFN) / p.11 package [REF-SENSOR-030]; "
-              "same part as Pilot 1553-XCVR (retires the legacy DS26LV31/32 RS-422 + fake "
-              "\"SM-1553-11\" defect — RS-422 cannot meet MIL-STD-1553B §4.5.2 levels [REF-MIL-001])",
+        "value": "HI-6138PCIF",
+        "fp": FP_HI6138,
+        "mpn": "HI-6138PCIF",
+        "ds": "hi-6138_v-rev-s.pdf p.1 Pin Configuration (48-pin 6x6 QFN) / Table 1 pp.16-18 / §29 p.263; "
+              "same part and pin table as Pilot 1553-XCVR (MIL-STD-1553C fleet swap 2026-09-28 [REF-MIL-001])",
+        # See Pilot's gen_pilot_sch.py 1553-XCVR entry for the strap rationale;
+        # every no-connect is justified in HI6138_FOOTPRINT_VERIFICATION.md §2.
         "pins": [
-            ("36", "TXA", "PRU_1553B_TX_P", "L"),
-            ("37", "TXA*", "PRU_1553B_TX_N", "L"),
-            ("31", "TXINHA", "M1553B_TX_INH", "L"),
-            ("2", "RXENA", "+3V3", "L"),
-            ("30", "RXA", "PRU_1553B_RX_P", "L"),
-            ("29", "RXA*", "PRU_1553B_RX_N", "L"),
-            ("25", "TXB", "GND", "L"),
-            ("26", "TXB*", "GND", "L"),
-            ("24", "TXINHB", "+3V3", "L"),
-            ("16", "RXENB", "GND", "L"),
-            ("21", "RXB", None, "L"),
-            ("20", "RXB*", None, "L"),
-            ("40", "BUSA", "M1553B_P", "R"),
-            ("41", "BUSA", "M1553B_P", "R"),
-            ("42", "BUSA*", "M1553B_N", "R"),
+            ("2", "IRQ*", "M1553B_IRQN", "L"),
+            ("11", "TXINHA", "M1553B_TX_INH", "L"),
+            ("15", "CE*", "SPI0_B_CS_1553", "L"),
+            ("17", "SCK", "SPI0_B_CLK", "L"),
+            ("18", "SO", "SPI0_B_MISO", "L"),
+            ("19", "SI", "SPI0_B_MOSI", "L"),
+            ("21", "MCLK", "M1553B_MCLK", "L"),
+            ("23", "MR*", "M1553B_MRN", "L"),
+            ("45", "BUSA", "M1553B_P", "R"),
             ("43", "BUSA*", "M1553B_N", "R"),
-            ("8", "BUSB", None, "R"),
-            ("9", "BUSB", None, "R"),
-            ("10", "BUSB*", None, "R"),
-            ("11", "BUSB*", None, "R"),
-            ("38", "VDDA", "+3V3", "R"),
-            ("39", "VDDA", "+3V3", "R"),
-            ("6", "VDDB", "+3V3", "R"),
-            ("7", "VDDB", "+3V3", "R"),
-            ("3", "GNDA", "GND", "R"),
-            ("4", "GNDA", "GND", "R"),
-            ("5", "GNDA", "GND", "R"),
-            ("17", "GNDB", "GND", "R"),
-            ("18", "GNDB", "GND", "R"),
-            ("19", "GNDB", "GND", "R"),
-            ("45", "EP", "GND", "R"),
-        ] + [(str(n), "NC", None, "R") for n in (1, 12, 13, 14, 15, 22, 23, 27, 28, 32, 33, 34, 35, 44)],
+            ("40", "BUSB", None, "R"),
+            ("42", "BUSB*", None, "R"),
+            ("6", "VCC", "+3V3", "R"),
+            ("16", "VCC", "+3V3", "R"),
+            ("31", "VCC", "+3V3", "R"),
+            ("41", "VCCP", "+3V3", "R"),
+            ("44", "VCCP", "+3V3", "R"),
+            ("7", "GND", "GND", "R"),
+            ("20", "GND", "GND", "R"),
+            ("30", "GND", "GND", "R"),
+            ("49", "EP", "GND", "R"),
+        ] + [(str(n), nm, None, "L") for n, nm in (
+            (1, "MODE"), (3, "ACKIRQ"), (4, "MODE1760"), (5, "READY"), (8, "ACTIVE"),
+            (9, "RTSSF"), (10, "AUTOEN"), (12, "TXINHB"), (13, "RTAP"), (14, "RTA0"),
+            (22, "RTA1"), (24, "RTA2"), (25, "RTA3"), (26, "RTA4"), (27, "LOCK"),
+            (28, "MTTCLK"), (29, "EMISO"), (32, "EMOSI"), (33, "ECS*"), (34, "EECOPY"),
+            (35, "ESCLK"), (36, "TTCLK"), (37, "RTMC8*"), (38, "EE2K"), (39, "MTSTOFF"),
+            (46, "TEST"), (47, "BENDI"), (48, "BCTRIG"))],
     },
     {
         "ref": "1553-XFM",
@@ -376,8 +376,8 @@ ICS: List[Dict[str, Any]] = [
         "fp": FP_VSON10,
         "mpn": "TPS63031DSKR",
         "ds": "tps63031.pdf Pin Functions (VSON-10 DSK) — dedicated buck-boost RF rail so "
-              "WIFI-BT-ZB (AVDD33)/RFM95W/RFD900x RF supply stays regulated even if +5V sags "
-              "(XO.md §12 power budget +3V3_RF 1.5A cont / 2.0A peak)",
+              "WIFI-BT-ZB (AVDD33)/WIOE5 mLRS RF supply stays regulated even if +5V sags "
+              "(TACCO.md §12 power budget +3V3_RF 1.5A cont / 2.0A peak)",
         "pins": [
             ("5", "VIN", "+5V", "L"),
             ("8", "VINA", "+5V", "L"),
@@ -765,9 +765,10 @@ PB2_P1 = [
     # Bluetooth UART for WIFI-BT-ZB (Murata Type 2EL) — a second, dedicated
     # UART bus, distinct from SiK's UART_SIK_RX/TX pair below.
     "GND", "GND", "BT_UART_TX", "BT_UART_RX", "BT_UART_RTS", "BT_UART_CTS",
-    "PRU_1553B_RX_N", "PRU_1553B_RX_P", "PRU_1553B_TX_N", "PRU_1553B_TX_P",
+    # P1-7..10: PRU 1553 lines retired 2026-09-28 (HI-6138 swap) -> GPIOs
+    "M1553B_IRQN", "M1553B_MRN", "M1553B_TX_INH", None,
     "RS485_B_DE", "RS485_B_RX", "RS485_B_TX", "CAN_B_STB", "MCAN0_B_RX", "MCAN0_B_TX",
-    "SD_CD", None, None, "M1553B_TX_INH", "SPI0_B_CS_TPM",
+    "SD_CD", None, None, "SPI0_B_CS_1553", "SPI0_B_CS_TPM",  # P1-20 TX_INH -> GPIO CS 2026-09-28
     "SPI0_B_CS_FLASH", "SPI0_B_MISO", "SPI0_B_MOSI", "SPI0_B_CLK",
     "SPI0_B_CS_ZB",  # was SPI0_B_CS_LORA (freed 2026-09-20); reused 2026-09-21
                      # for WIFI-BT-ZB's 802.15.4 SPI_FRM (shares the SPI0_B
@@ -933,9 +934,16 @@ SIMPLE: List[Any] = [
     ("J-1553", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "XO.md §14 J_1553",
      [("1", "BUS_P", "BUS_1553_B_P"), ("2", "BUS_N", "BUS_1553_B_N"), ("3", "GND", "GND"), ("4", "SHIELD", "PGND"),
       ("MP", "SHIELD", "PGND")]),
-    ("C-1553A", "100nF", FP_C0402, "", "HI-1573 VDDA bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-1553B", "100nF", FP_C0402, "", "HI-1573 VDDB bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-1553C", "10uF 6.3V X5R", FP_C0603, "", "HI-1573 transmitter bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-1553A", "100nF", FP_C0402, "", "HI-6138 VCC (pins 6/16/31) bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-1553B", "100nF", FP_C0402, "", "HI-6138 VCCP (pins 41/44) bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-1553C", "10uF 6.3V X5R", FP_C0603, "", "HI-6138 transceiver (VCCP) bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-1553D", "100nF", FP_C0402, "", "HI-6138 VCCP second pin bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("R-1553IRQ", "10k", FP_R0402, "", "HI-6138 IRQ open-drain pull-up (DS6138 Table 1)",
+     [("1", "A", "+3V3"), ("2", "B", "M1553B_IRQN")]),
+    ("X-50M", "50MHz 3.3V", FP_OSC2520, "ECS-2520MV-500-BN-TR",
+     "HI-6138 MCLK 50.0 MHz +/-100 ppm required (DS6138 Table 1); +/-50 ppm part (ECS-2520MV.pdf)",
+     [("1", "TRI", None), ("2", "GND", "GND"), ("3", "OUT", "M1553B_MCLK"), ("4", "VDD", "+3V3")]),
+    ("C-50M", "100nF", FP_C0402, "", "50 MHz oscillator VDD bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     # --- TPM ------------------------------------------------------------------
     ("C-TPM1", "1uF", FP_C0402, "", "SLB9672 §3.1.3 typical schematic bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-TPM2", "100nF", FP_C0402, "", "SLB9672 VDD bypass (pin 1)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
@@ -1086,7 +1094,7 @@ def lib_symbol(ic: Dict[str, Any]) -> Tuple[str, List[Any], List[Any], float, fl
     half_w = 16.51
     libid = f"S_{sanitize(ref)}"
     s = [
-        f'    (symbol "XO:{libid}" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)',
+        f'    (symbol "TACCO:{libid}" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)',
         f'      (property "Reference" "U" (at 0 {half_h + 1.27:.2f} 0) (effects (font (size {SIZE} {SIZE}))))',
         f'      (property "Value" "{esc(ic["value"])}" (at 0 {-half_h - 1.27:.2f} 0) (effects (font (size {SIZE} {SIZE}))))',
         f'      (property "Footprint" "{esc(ic["fp"])}" (at 0 0 0) (effects (font (size {SIZE} {SIZE})) (hide yes)))',
@@ -1135,7 +1143,7 @@ def emit_instance(ic, X, Y, left, right, half_w, half_h, sheet_uuid) -> List[str
     libid = f"S_{sanitize(ref)}"
     dnp = "yes" if ic.get("dnp") else "no"
     out = [
-        f'  (symbol (lib_id "XO:{libid}") (at {X:.2f} {Y:.2f} 0) (unit 1)',
+        f'  (symbol (lib_id "TACCO:{libid}") (at {X:.2f} {Y:.2f} 0) (unit 1)',
         f'    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp {dnp}) (uuid "{uid()}")',
         f'    (property "Reference" "{esc(ref)}" (at {X:.2f} {Y - half_h - 1.27:.2f} 0) (effects (font (size {SIZE} {SIZE}))))',
         f'    (property "Value" "{esc(value)}" (at {X:.2f} {Y + half_h + 1.27:.2f} 0) (effects (font (size {SIZE} {SIZE}))))',
@@ -1255,7 +1263,7 @@ def main() -> None:
     OUT.write_text("\n".join(parts) + "\n")
     lib = ["(kicad_symbol_lib (version 20241209) (generator \"gen_tacco_sch.py\") (generator_version \"9.0\")"]
     for ic, left, right, hw, hh in built:
-        lib.append(lib_symbol(ic)[0].replace('(symbol "XO:', '(symbol "', 1))
+        lib.append(lib_symbol(ic)[0].replace('(symbol "TACCO:', '(symbol "', 1))
     lib.append(")")
     SYMLIB.write_text("\n".join(lib) + "\n")
     npins = sum(len(ic["pins"]) for ic in ICS)

@@ -247,6 +247,19 @@ remaining `PRU_1553` or `DS26LV31` in active files.
 
 ---
 
+## Execution deviations (recorded 2026-09-28)
+
+- **U3 net names.** TACCO keeps its `M1553B_*` and `SPI0_B_*` names. The `_B_` suffix is
+  TACCO's documented cape-B convention that avoids net collisions with Pilot on the shared
+  ring; it is not a "1553B" label. The planned rename to `M1553_*` is dropped.
+- **U3 generator drift.** `gen_tacco_sch.py` predated the XO → TACCO rename. It was
+  corrected first and proven netlist-identical to the committed schematic before the swap.
+- **U3 placement.** TACCO has no collision-free site for any of the 4 new parts within 20 mm
+  on either side, so they are parked off-board and left for the owner's placement (WBS
+  §1.2a.3). The swap tool gained two fixes during this run: NPTH holes now block the
+  opposite side, and the courtyard margin is 0.25 mm. Pilot's committed placement, made
+  with the earlier tool settings, passes DRC with 0 violations.
+
 ## Risks
 
 - **SPI0 contention with the IMU (Pilot) and ZigBee/flash (TACCO).** 1553 traffic shares SPI0.

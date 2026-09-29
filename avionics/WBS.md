@@ -177,7 +177,22 @@ Plan: `docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md` (Claude O
       routing is still open.
     - `1553-XCVR` kept its position and side; only the 4 new parts were added
       (`avionics/kicad/tools/swap_1553_hi6138.py`).
-- [ ] **Phase 3 (U3):** TACCO schematic regenerate, PCB in-place patch, ERC/DRC gates.
+- [x] **Phase 3 (U3):** TACCO schematic regenerate, PCB in-place patch, ERC/DRC gates.
+    Done 2026-09-28:
+    - **Generator drift fixed first.** `gen_tacco_sch.py` still wrote the pre-rename
+        `XO` library, and one datasheet string was stale. After the fix its output matches
+        the committed netlist exactly (0 component and 0 pin-to-net differences).
+    - **Gates:** ERC 0. DRC 169, equal to the pre-change baseline of 169 (no new
+        violations), with 0 schematic-parity issues. Unconnected pads went 480 → 482.
+    - **Placement:** `1553-XCVR` swapped in place.
+- [ ] **TACCO manual placement (owner):** `X-50M`, `C-50M`, `C-1553D`, and `R-1553IRQ` are
+    parked off-board at the right edge. No collision-free site exists within 20 mm of
+    the HI-6138 on either side of the board (TACCO area crisis; see memory
+    project_xo_board_area_crisis). Options:
+    - Free area as the 2026-09-20 area analysis proposes.
+    - Drop `R-1553IRQ` in favor of the AM62x internal pull-up on P1-7, a firmware
+        pinmux change.
+    - Accept a 6-layer or denser-passive respin.
 - [ ] **Phase 4 (U4):** DTS (both capes), firmware WBS, Pilot.md, TACCO.md, HDD, and 1553C
     documentation.
 - [ ] Add MIL-STD-1553C to `REFERENCES.md`: title, issuing body, validated URL, and the

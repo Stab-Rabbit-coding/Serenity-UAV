@@ -15,12 +15,14 @@ changes only what the swap needs:
 2. parts that are in the regenerated netlist but not on the board (the 50 MHz
    MCLK oscillator and its bypass, the IRQ pull-up, the extra VCCP bypass) are
    placed by a courtyard-collision-free spiral search around the new HI-6138
-   on the same side -- nothing already placed is moved;
+   on the same side, falling back to the opposite side only when the same side
+   has no free site within 20 mm -- nothing already placed is moved;
 3. every pad's net is re-assigned from the regenerated netlist (so the PB2 P1
    remap and the renamed nets land); pads absent from the netlist are cleared.
 
-The run refuses to place a part it cannot fit without a courtyard overlap and
-exits non-zero, rather than forcing an overlap.
+The run never forces a courtyard overlap: a part with no free site within
+20 mm on either side is parked just off the board edge (the generators'
+"unplaced" convention) and reported as an owner placement action.
 
 Usage::
 
@@ -45,7 +47,7 @@ ANCHOR = "1553-XCVR"
 XFMR = "1553-XFM"
 BUS_PADS = ("43", "45")          # HI-6138 BUSA*/BUSA (DS6138 p.1)
 XFMR_PRI = ("1", "3")            # PM-DB2791S primary
-MARGIN = 0.15                    # mm courtyard-to-courtyard gap for new parts
+MARGIN = 0.25                    # mm courtyard-to-courtyard gap for new parts (clears silk/mask webs)
 
 
 def mm(v: float) -> int:
@@ -126,8 +128,12 @@ def pad_centroid(fp: pcbnew.FOOTPRINT, nums) -> Tuple[float, float]:
 
 
 def blocked_on(fp: pcbnew.FOOTPRINT, flipped: bool) -> bool:
-    """A footprint blocks a side if it is on that side or is through-hole."""
-    th = any(p.GetAttribute() == pcbnew.PAD_ATTRIB_PTH for p in fp.Pads())
+    """A footprint blocks a side if it is on that side or has any drilled pad.
+
+    NPTH counts too: an SMD part's locating-peg holes (e.g. TACCO's
+    SW-WIOE5-BOOT) pierce the opposite face (DRC hole_clearance, 2026-09-28).
+    """
+    th = any(p.GetAttribute() in (pcbnew.PAD_ATTRIB_PTH, pcbnew.PAD_ATTRIB_NPTH) for p in fp.Pads())
     return th or fp.IsFlipped() == flipped
 
 
@@ -175,38 +181,56 @@ def main() -> None:
     ex = (edge.GetLeft() / 1e6 + 0.5, edge.GetTop() / 1e6 + 0.5,
           edge.GetRight() / 1e6 - 0.5, edge.GetBottom() / 1e6 - 0.5)
     ax, ay = pos.x / 1e6, pos.y / 1e6
+    parked: List[str] = []
     for ref in new_refs:
         nf = loaded[ref]
         nf.SetReference(ref)
         nf.SetValue(comps[ref]["value"])
         board.Add(nf)
-        if flipped != nf.IsFlipped():
-            nf.Flip(nf.GetPosition(), True)
-        others = [crt(o, MARGIN) for o in board.GetFootprints()
-                  if o is not nf and blocked_on(o, flipped)]
         placed = False
-        r = 0.0
-        while r <= 20.0 and not placed:
-            steps = max(1, int(2 * math.pi * r / 0.25))
-            for k in range(steps):
-                a = 2 * math.pi * k / steps
-                for rot in (0, 90):
-                    nf.SetOrientationDegrees(rot)
-                    nf.SetPosition(pcbnew.VECTOR2I(mm(ax + r * math.cos(a)), mm(ay + r * math.sin(a))))
-                    c = crt(nf)
-                    if c[0] < ex[0] or c[1] < ex[1] or c[2] > ex[2] or c[3] > ex[3]:
-                        continue
-                    if any(hits(c, o) for o in others):
-                        continue
-                    placed = True
-                    break
-                if placed:
-                    break
-            r += 0.25
+        # Same side as the HI-6138 first; the opposite side only if the
+        # same side has no collision-free site within 20 mm (dense boards).
+        for side_flipped in (flipped, not flipped):
+            if side_flipped != nf.IsFlipped():
+                nf.Flip(nf.GetPosition(), True)
+            others = [crt(o, MARGIN) for o in board.GetFootprints()
+                      if o is not nf and blocked_on(o, side_flipped)]
+            r = 0.0
+            while r <= 20.0 and not placed:
+                steps = max(1, int(2 * math.pi * r / 0.25))
+                for k in range(steps):
+                    a = 2 * math.pi * k / steps
+                    for rot in (0, 90):
+                        nf.SetOrientationDegrees(rot)
+                        nf.SetPosition(pcbnew.VECTOR2I(mm(ax + r * math.cos(a)), mm(ay + r * math.sin(a))))
+                        c = crt(nf)
+                        if c[0] < ex[0] or c[1] < ex[1] or c[2] > ex[2] or c[3] > ex[3]:
+                            continue
+                        if any(hits(c, o) for o in others):
+                            continue
+                        placed = True
+                        break
+                    if placed:
+                        break
+                r += 0.25
+            if placed:
+                break
         if not placed:
-            raise SystemExit(f"FAIL: no collision-free site for {ref} within 20 mm of {ANCHOR}")
+            # Repo convention (gen_*_pcb.py "unplaced", Commo RSSI parts): park
+            # the part just off the right board edge on the HI-6138's side and
+            # report it for the owner's manual floorplan pass -- never overlap.
+            if flipped != nf.IsFlipped():
+                nf.Flip(nf.GetPosition(), True)
+            nf.SetOrientationDegrees(0)
+            nf.SetPosition(pcbnew.VECTOR2I(mm(edge.GetRight() / 1e6 + 4.0 + 4.0 * len(parked)), mm(edge.GetTop() / 1e6 + 5.0)))
+            parked.append(ref)
+            print(f"PARKED OFF-BOARD {ref}: no collision-free site within 20 mm on either side")
+            nf.Reference().SetLayer(pcbnew.B_Fab if nf.IsFlipped() else pcbnew.F_Fab)
+            nf.Value().SetVisible(False)
+            continue
         p = nf.GetPosition()
-        print(f"placed {ref} ({comps[ref]['footprint']}) at ({p.x / 1e6:.3f}, {p.y / 1e6:.3f}) r={r - 0.25:.2f} mm")
+        side = "B" if nf.IsFlipped() else "F"
+        print(f"placed {ref} ({comps[ref]['footprint']}) at ({p.x / 1e6:.3f}, {p.y / 1e6:.3f}) {side}.Cu r={r - 0.25:.2f} mm")
         nf.Reference().SetLayer(pcbnew.B_Fab if nf.IsFlipped() else pcbnew.F_Fab)
         nf.Value().SetVisible(False)
 
@@ -238,6 +262,8 @@ def main() -> None:
     # Nets no longer in the netlist are left padless; KiCad drops padless,
     # trackless nets on the next save from the editor and DRC ignores them.
     board.Save(str(pcb_path))
+    if parked:
+        print(f"OWNER ACTION: manual placement needed for {parked}")
     print("saved", pcb_path)
 
 
