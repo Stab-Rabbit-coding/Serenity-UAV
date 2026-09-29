@@ -105,9 +105,15 @@ to Rev T.
         S. Griffing 2026-09-28.
     - [ ] Choose 1553 coupling (direct 1:2.5 + 55 Ω, or transformer 1:1.79) once the antenna-site
         stub length is known (Holt DS1573 p. 2).
-    - [ ] Select the Holt 1553C protocol engine (SPI host), and verify its P/N and 1553C
-        conformance against the OEM datasheet. The HI-1573 transceiver claims 1553A/B only
-        (DS1573 Rev U p. 1). The engine datasheet is not yet in `avionics/datasheets/`.
+    - [x] Owner decision (S. Griffing, 2026-09-28): use a dedicated 1553 protocol engine
+        (option 2), not MCU-peripheral Manchester. **Candidate: Holt HI-6138** (BC/RT/MT,
+        40 MHz SPI host, on-chip dual-bus transceiver, 3.3 V, 48-pin 6×6 mm QFN or LQFP).
+        Holt's product page states "MIL-STD-1553B/C, MIL-STD-1760, SAE AS15531A and STANAG
+        3838 compliant" (holtic.com/products/3102-hi-6138.aspx, retrieved 2026-09-28).
+    - [ ] Download the HI-6138 datasheet (Rev S, 2025-01-29) into `avionics/datasheets/`.
+        holtic.com gates it behind a download form, so it needs a manual fetch.
+    - [ ] Verify the HI-6138 against the datasheet: 1553C claim, transformer ratio and
+        coupling (does PM-DB2791S still apply?), SPI mode, IRQ/reset pins, and power.
     - [ ] Confirm the fleet isolated CAN-FD part (ISOW1044) and RS-485 part (ADM2795E) for reuse.
     - [ ] Select the SE (OPTIGA Trust M?) and check for an I²C address conflict with Si5351A.
     - [ ] Define the power input rail and budget (PA and SiK TX peaks).
@@ -124,6 +130,26 @@ to Rev T.
         checks.
     - [ ] Log firmware items in `avionics/firmware/WBS.md`: AFSK/AX.25, SiK bridge, PTT lease,
         1553 RT map / BC schedule, SE signing / secure boot.
+
+##### 1.2a.3 *Fleet MIL-STD-1553C upgrade (approved 2026-09-28)*
+
+Owner decision (S. Griffing, 2026-09-28): upgrade the whole fleet from MIL-STD-1553B to
+MIL-STD-1553C. Today Pilot and TACCO use a Holt HI-1573 transceiver, which claims 1553A/B only
+(DS1573 Rev U p. 1), with Manchester II handled in the AM6254 PRU. The candidate
+replacement is the same protocol engine selected for Commo Rev T (§1.2a.2, HI-6138), so the
+fleet shares one 1553 part.
+
+- [ ] Add MIL-STD-1553C to `REFERENCES.md`: title, issuing body, validated URL, and the
+    sections applied. Do not cite section numbers until they are verified.
+- [ ] Pilot: replace HI-1573 with the protocol engine on a PB2 SPI port. Confirm a free SPI
+    chip-select and IRQ on P1/P2. Update `Pilot.md` (1553B → 1553C) and the magnetics if
+    the ratio changes.
+- [ ] TACCO: same change as Pilot. Update `TACCO.md` and `reports/HDD.md`.
+- [ ] Firmware: replace the PRU-ICSS Manchester RT task (`avionics/firmware/WBS.md`
+    "MIL-STD-1553B RT implementation") with an SPI protocol-engine driver. Retire the
+    PRU0 1553 pinmux in the DT overlays.
+- [ ] Docs sweep: change remaining "1553B" statements to 1553C once the hardware matches.
+    `avionics/AGENTS.md` already states 1553C.
 
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 

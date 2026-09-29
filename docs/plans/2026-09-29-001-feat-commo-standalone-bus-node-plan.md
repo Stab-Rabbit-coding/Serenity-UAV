@@ -132,3 +132,12 @@ comes from the PCB roll-up.
 - The mass roll-up is propagated.
 - The old cape is archived.
 - The firmware items are logged.
+
+### Owner decisions, 2026-09-28 (after Phase 1 findings)
+
+- **MCU:** M0G3519QRGZRQ1 approved.
+- **1553:** dedicated protocol engine (option 2). The candidate is Holt HI-6138: BC/RT/MT,
+  SPI host, on-chip transceiver. Holt claims MIL-STD-1553B/C compliance on its product page.
+  Datasheet verification is pending a manual download.
+- **Fleet:** Pilot and TACCO also move to MIL-STD-1553C using the same part. This is tracked
+  as its own work item in `avionics/WBS.md` §1.2a.3, outside this plan's scope.
