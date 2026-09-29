@@ -7495,6 +7495,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/SA612A.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/SAM-M10Q_DataSheet_UBX-22013293.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7622,6 +7629,20 @@
       "archived": false
     },
     "avionics/datasheets/atf16v8bql.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ax5043-d.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ax5043.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -12440,6 +12461,15 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md": {
+      "description": "Commo Rev T \u2014 49 MHz I/Q radio and full Rev T board",
+      "tags": [
+        "comms-protocol",
+        "documentation",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -15617,6 +15647,7 @@
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
       "docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md",
       "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
+      "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -16034,6 +16065,7 @@
       "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
       "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
+      "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
@@ -17513,6 +17545,7 @@
       "avionics/kicad/fix_xcvr_labels.py",
       "avionics/kicad/tools/swap_1553_hi6138.py",
       "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
+      "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
       "gcs/skipper/software/config/mavlink_router.conf",
       "gcs/skipper/software/install/install_mavlink_router.sh"
     ],
@@ -18743,6 +18776,7 @@
       "avionics/datasheets/RFD900ux DataSheet v1.2.pdf",
       "avionics/datasheets/S32K-RM.pdf",
       "avionics/datasheets/S32K1xx.pdf",
+      "avionics/datasheets/SA612A.pdf",
       "avionics/datasheets/SAM-M10Q_DataSheet_UBX-22013293.pdf",
       "avionics/datasheets/SLB_9670VQ20_Infineon.pdf",
       "avionics/datasheets/SLB_9672XU20_Infineon.pdf",
@@ -18762,6 +18796,8 @@
       "avionics/datasheets/aon6554.pdf",
       "avionics/datasheets/aon6558.pdf",
       "avionics/datasheets/atf16v8bql.pdf",
+      "avionics/datasheets/ax5043-d.pdf",
+      "avionics/datasheets/ax5043.pdf",
       "avionics/datasheets/bq76930.pdf",
       "avionics/datasheets/bsh-bth.pdf",
       "avionics/datasheets/bst-bmp388-ds001.pdf",
