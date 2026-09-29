@@ -145,11 +145,18 @@ to Rev T.
         Si5351A (9/10 pins), TCXO, PE4259, and MGA-82563, has no receive demodulator, and uses
         three unbuildable packages (2N3866 SOT-89, MCP4921 SOT-23-8, LM393 SOT-23-5). See
         `avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md` §3.
-    - [ ] **OWNER DECISION — 49 MHz receive architecture:** (a) discrete mixer + FM IF with
-        MCU AFSK decode, or (b) a single-chip transceiver covering 49 MHz with AFSK. This
-        blocks the Phase 2 RX section and all of Phases 3–4.
-    - [ ] **OWNER DECISION — 49 MHz PA:** the 2N3866 is TO-39 only and about 35 dB over
-        §15.235. Choose a low-power stage or drive CLK0 directly.
+    - [x] **49 MHz architecture decided (owner, 2026-09-29):** discrete receiver. The AX5043
+        single chip is discontinued (onsemi Rev 4, 2026-06-11), and so are the SA605, SA614A,
+        and SA636 FM-IF chips. Build an I/Q direct-conversion receiver with 2 × SA612A and an
+        Si5351B VCXO-FM transmitter with no PA. Plan:
+        `docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md`.
+    - [x] **Background single-chip search (Claude agent, 2026-09-29):**
+        `docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md`. No in-production
+        single chip with a modular grant exists. The best lead is the CML CMX994G receiver,
+        whose datasheet states operation "down to 50 MHz", so 49.86 MHz is unconfirmed.
+    - [ ] Ask CML in writing to confirm CMX994G performance at 49.86 MHz and its production
+        status (owner action).
+    - [ ] Budget full §15.235 certification for Commo. No modular-grant path exists.
 - **Phase 2 — schematic (Rev T)**
     - [ ] Port the RF chains unchanged, remove PB2 / TPM / ETH, add the MCU / buses / SE /
         power. ERC clean.
