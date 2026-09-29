@@ -481,18 +481,18 @@ def patch_project_netclasses(pro_path: Path) -> None:
         {"bus_width": 12, "clearance": 0.127, "diff_pair_gap": 0.15, "diff_pair_via_gap": 0.2,
          "diff_pair_width": 0.15, "line_style": 0, "microvia_diameter": 0.3, "microvia_drill": 0.1,
          "name": "Default", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 2147483647,
-         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.127, "via_diameter": 0.5,
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.127, "via_diameter": 0.6,
          "via_drill": 0.3, "wire_width": 6},
         {"clearance": 0.127, "diff_pair_gap": 0.15, "diff_pair_via_gap": 0.2, "diff_pair_width": 0.15,
          "name": "DIFF_PAIR", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 0,
-         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.2, "via_diameter": 0.5, "via_drill": 0.3},
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.2, "via_diameter": 0.6, "via_drill": 0.3},
         {"clearance": 0.127, "name": "ISOLATION", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 1,
-         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.25, "via_diameter": 0.5, "via_drill": 0.3},
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.25, "via_diameter": 0.6, "via_drill": 0.3},
         {"clearance": 0.127, "name": "POWER", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 2,
          "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.4, "via_diameter": 0.6, "via_drill": 0.3},
         # 50 Ohm microstrip on the 6-layer stack (TACCO.md §13: ~0.35 mm over the In1 GND plane)
         {"clearance": 0.127, "name": "RF", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 3,
-         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.35, "via_diameter": 0.5, "via_drill": 0.3},
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.35, "via_diameter": 0.6, "via_drill": 0.3},
     ]
     d["net_settings"]["classes"] = classes
     patterns = []
@@ -548,7 +548,7 @@ def main() -> None:
     ds.SetBoardThickness(mm(1.6))
     ds.m_MinClearance = mm(0.127)
     ds.m_TrackMinWidth = mm(0.127)
-    ds.m_ViasMinSize = mm(0.5)
+    ds.m_ViasMinSize = mm(0.5)  # netclass vias are 0.6/0.3 so hole-to-copper stays >= 0.25 at 0.127 clearance
     ds.m_MinThroughDrill = mm(0.3)
     ds.m_HoleClearance = mm(0.25)
     ds.m_HoleToHoleMin = mm(0.5)
