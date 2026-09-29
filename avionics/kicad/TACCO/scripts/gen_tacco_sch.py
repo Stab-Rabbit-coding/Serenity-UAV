@@ -1016,7 +1016,8 @@ SIMPLE: List[Any] = [
     ("R-TPM10", "10k", FP_R0201, "", "SLB9672 pin 10 NCI/VDD pull-up (Table 13, preferred)", [("1", "A", "+3V3"), ("2", "B", "TPM_B_P10_PU")]),
     # --- mLRS radio (bare STM32WLE5JC): supplies, clock, reset, button, LEDs, SWD -----
     # VERIFY-tagged values: topology per DS13105 Figs. 2-4; element values need
-    # ST AN5457 (915 MHz) confirmation and bench tuning (WBS §1.2a, TODO §0.x).
+    # ST AN5457 (915 MHz) confirmation and bench tuning (WBS §1.2a; REFERENCES.md
+    # "Open Standards Verification Items").
     ("C-MLRS-VDD1", "100nF", FP_C0402, "", "STM32WLE5 VDD pin 11 bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
     ("C-MLRS-VDD2", "100nF", FP_C0402, "", "STM32WLE5 VDD pin 44 bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
     ("C-MLRS-VDDA1", "100nF", FP_C0402, "", "STM32WLE5 VDDA bypass", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
