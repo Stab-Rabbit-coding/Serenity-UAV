@@ -141,3 +141,14 @@ comes from the PCB roll-up.
   Datasheet verification is pending a manual download.
 - **Fleet:** Pilot and TACCO also move to MIL-STD-1553C using the same part. This is tracked
   as its own work item in `avionics/WBS.md` §1.2a.3, outside this plan's scope.
+
+### HI-6138 datasheet check (DS6138 Rev S, 2026-09-28)
+
+- **Magnetics carry over.** Figure 28 (p. 255) specifies a 1:2.5 isolation transformer for
+  both coupling modes, which matches the fleet's PM-DB2791S. Transformer coupling adds a
+  1:1.4 stub coupler and 52.5 Ω resistors.
+- **HI-1573 dropped.** The transceiver is on-chip.
+- **Host interface:** SPI up to 40 MHz, modes 0 and 3. IRQ is active low; MR is an
+  active-low reset.
+- **Open:** the datasheet claims MIL-STD-1553B only. The 1553C claim exists only on Holt's
+  product page, and written confirmation from Holt is required.

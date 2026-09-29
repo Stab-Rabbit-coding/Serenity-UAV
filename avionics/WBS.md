@@ -110,10 +110,23 @@ to Rev T.
         40 MHz SPI host, on-chip dual-bus transceiver, 3.3 V, 48-pin 6×6 mm QFN or LQFP).
         Holt's product page states "MIL-STD-1553B/C, MIL-STD-1760, SAE AS15531A and STANAG
         3838 compliant" (holtic.com/products/3102-hi-6138.aspx, retrieved 2026-09-28).
-    - [ ] Download the HI-6138 datasheet (Rev S, 2025-01-29) into `avionics/datasheets/`.
-        holtic.com gates it behind a download form, so it needs a manual fetch.
-    - [ ] Verify the HI-6138 against the datasheet: 1553C claim, transformer ratio and
-        coupling (does PM-DB2791S still apply?), SPI mode, IRQ/reset pins, and power.
+    - [x] HI-6138 datasheet on file (S. Griffing, 2026-09-28):
+        `avionics/datasheets/hi-6138_v-rev-s.pdf`, Holt DS6138 Rev S, dated October 2024.
+    - [x] Verify the HI-6138 against DS6138 Rev S (2026-09-28):
+        - **Magnetics:** Figure 28 (p. 255) uses a 1:2.5 isolation transformer for both
+          direct coupling (2 × 55 Ω) and transformer coupling (1:1.4 stub coupler +
+          2 × 52.5 Ω). The fleet's 1:2.5 PM-DB2791S therefore carries over; only the
+          coupler choice depends on stub length.
+        - **Host interface:** 40 MHz 4-wire SPI, modes 0 and 3.
+        - **Control pins:** IRQ is active low, with an ACKIRQ pulse of at least 250 ns in
+          level mode. MR is an active-low reset, minimum 50 ns.
+        - **Transceiver and supply:** dual-bus transceiver on-chip, so the HI-1573 is
+          dropped. Supply is 3.3 V (VCCP).
+    - [ ] **1553C claim not in the datasheet.** DS6138 Rev S says "MIL-STD-1553B bus" (p. 1)
+        and never mentions 1553C or AS15531. The "MIL-STD-1553B/C" claim appears only on
+        Holt's product page. Get written 1553C conformance from Holt, for example a
+        datasheet revision or an application note, before the fleet 1553C upgrade (§1.2a.3)
+        is treated as met.
     - [ ] Confirm the fleet isolated CAN-FD part (ISOW1044) and RS-485 part (ADM2795E) for reuse.
     - [ ] Select the SE (OPTIGA Trust M?) and check for an I²C address conflict with Si5351A.
     - [ ] Define the power input rail and budget (PA and SiK TX peaks).

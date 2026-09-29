@@ -7677,6 +7677,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/hi-6138_v-rev-s.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/hm-trp.pdf": {
       "description": "PDF document",
       "tags": [
@@ -18616,6 +18623,7 @@
       "avionics/datasheets/ds26lv32at.pdf",
       "avionics/datasheets/eGH.pdf",
       "avionics/datasheets/hi-1573.pdf",
+      "avionics/datasheets/hi-6138_v-rev-s.pdf",
       "avionics/datasheets/hm-trp.pdf",
       "avionics/datasheets/hx711.pdf",
       "avionics/datasheets/ina226.pdf",
