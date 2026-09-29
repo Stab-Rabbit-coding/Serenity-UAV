@@ -9439,6 +9439,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md": {
+      "description": "HI-6138 Footprint, Pin Table, and Area Budget \u2014 Verification Report",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md": {
       "description": "Observer \u2194 phyCORE-AM62A SoM \u2014 Pad-Level Net Map",
       "tags": [
@@ -10024,6 +10033,14 @@
       "archived": false
     },
     "avionics/kicad/Serenity-Custom.pretty/Bourns_SRF2012_4T.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/Holt_HI-6138_QFN-48_6x6mm_P0.4mm_EP4.6mm.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
@@ -15377,6 +15394,7 @@
       "avionics/kicad/Encoder/ENC-NACELLE-1.md",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
+      "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md",
@@ -18335,6 +18353,7 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
+      "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -18404,6 +18423,7 @@
       "avionics/kicad/Serenity-Custom.pretty/AOSMD_DFN5x6-8L.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bosch_BMP388_LGA-10_2x2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bourns_SRF2012_4T.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Holt_HI-6138_QFN-48_6x6mm_P0.4mm_EP4.6mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/HopeRF_RFM95W_Castellated_16.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_0915LP15B026E_SMD4.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_2450BP15E0100_SMD4.kicad_mod",
@@ -18846,6 +18866,7 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
+      "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -18915,6 +18936,7 @@
       "avionics/kicad/Serenity-Custom.pretty/AOSMD_DFN5x6-8L.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bosch_BMP388_LGA-10_2x2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bourns_SRF2012_4T.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Holt_HI-6138_QFN-48_6x6mm_P0.4mm_EP4.6mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/HopeRF_RFM95W_Castellated_16.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_0915LP15B026E_SMD4.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_2450BP15E0100_SMD4.kicad_mod",
