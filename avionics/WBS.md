@@ -157,7 +157,12 @@ fleet shares one 1553 part.
 HI-1573 and PM-DB2791S already meet 1553C electrically. The swap to the HI-6138 is therefore
 **not required** for 1553C; it is justified by part commonality and by moving the protocol
 off the PRU. The only C-specific work is §4.4.3.2 (superseding valid commands) in the RT
-logic. Owner to confirm whether the Pilot/TACCO chip swap stays in scope.
+logic.
+
+**Owner decision (S. Griffing, 2026-09-28): make the fleet swap.** Pilot and TACCO move from
+HI-1573 + PRU Manchester to the HI-6138 on SPI, for one 1553 part fleet-wide and to take the
+protocol off the PRU. The PM-DB2791S (1:2.5) and 55 Ω isolation resistors carry over (DS6138
+Rev S Fig. 28 p. 255; [REF-MIL-001 §4.5.1.5.2.1]).
 
 - [ ] Add MIL-STD-1553C to `REFERENCES.md`: title, issuing body, validated URL, and the
     sections applied. Do not cite section numbers until they are verified.
