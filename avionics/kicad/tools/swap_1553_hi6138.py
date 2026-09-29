@@ -38,7 +38,7 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-import pcbnew
+import pcbnew  # type: ignore
 
 HERE = Path(__file__).resolve().parent
 CUSTOM = HERE.parent / "Serenity-Custom.pretty"
@@ -162,13 +162,14 @@ def main() -> None:
         fp.Flip(pos, True)
     xf = onboard[XFMR]
     tx = pad_centroid(xf, XFMR_PRI)
-    best = None
+    best: Tuple[float, int] | None = None
     for rot in (0, 90, 180, 270):
         fp.SetOrientationDegrees(rot)
         bx = pad_centroid(fp, BUS_PADS)
         d = math.hypot(bx[0] - tx[0], bx[1] - tx[1])
         if best is None or d < best[0]:
             best = (d, rot)
+    assert best is not None  # loop always runs 4 times
     fp.SetOrientationDegrees(best[1])
     # Fleet convention (gen_pilot_pcb.py): reference designators on Fab, not silk.
     fp.Reference().SetLayer(pcbnew.B_Fab if fp.IsFlipped() else pcbnew.F_Fab)
