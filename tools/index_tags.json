@@ -7656,6 +7656,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/cmx994ds.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/dp83825i.pdf": {
       "description": "PDF document",
       "tags": [
@@ -12076,6 +12083,14 @@
       ],
       "archived": false
     },
+    "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md": {
+      "description": "Commo 49 MHz Single-Chip Transceiver Search",
+      "tags": [
+        "comms-protocol",
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md": {
       "description": "Commo as a Standalone MCU Bus Node \u2014 Requirements Brainstorm",
       "tags": [
@@ -15556,6 +15571,7 @@
       "docs/WING_ATTACH_INTERFACE.md",
       "docs/attribution_and_licensing.md",
       "docs/bom_revR.json",
+      "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
@@ -17496,6 +17512,7 @@
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/fix_xcvr_labels.py",
       "avionics/kicad/tools/swap_1553_hi6138.py",
+      "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
       "gcs/skipper/software/config/mavlink_router.conf",
       "gcs/skipper/software/install/install_mavlink_router.sh"
     ],
@@ -18749,6 +18766,7 @@
       "avionics/datasheets/bsh-bth.pdf",
       "avionics/datasheets/bst-bmp388-ds001.pdf",
       "avionics/datasheets/bth-xxx-xx-x-d-xx-footprint.pdf",
+      "avionics/datasheets/cmx994ds.pdf",
       "avionics/datasheets/dp83825i.pdf",
       "avionics/datasheets/drv8833.pdf",
       "avionics/datasheets/ds-000347-icm-42688-p-v1.6.pdf",
