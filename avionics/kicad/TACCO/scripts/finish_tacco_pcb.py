@@ -51,28 +51,33 @@ def board_edge(board: pcbnew.BOARD):
 
 def add_edge_keepout(board: pcbnew.BOARD, width: float = 0.55) -> None:
     """Hard keepout ring just inside the outline on every copper layer so freerouting
-    honours the 0.3 mm copper-to-edge rule it cannot read from the project."""
+    honours the 0.3 mm copper-to-edge rule it cannot read from the project.  Four
+    plain rectangles (the Specctra exporter drops polygon holes, so a ring with a
+    hole would have covered the whole board)."""
     x1, y1, x2, y2 = board_edge(board)
-    outer = [(x1 - 1, y1 - 1), (x2 + 1, y1 - 1), (x2 + 1, y2 + 1), (x1 - 1, y2 + 1)]
-    inner = [(x1 + width, y1 + width), (x2 - width, y1 + width), (x2 - width, y2 - width), (x1 + width, y2 - width)]
+    w = width
+    strips = [
+        [(x1 - 1, y1 - 1), (x2 + 1, y1 - 1), (x2 + 1, y1 + w), (x1 - 1, y1 + w)],
+        [(x1 - 1, y2 - w), (x2 + 1, y2 - w), (x2 + 1, y2 + 1), (x1 - 1, y2 + 1)],
+        [(x1 - 1, y1 - 1), (x1 + w, y1 - 1), (x1 + w, y2 + 1), (x1 - 1, y2 + 1)],
+        [(x2 - w, y1 - 1), (x2 + 1, y1 - 1), (x2 + 1, y2 + 1), (x2 - w, y2 + 1)],
+    ]
     for layer in board.GetEnabledLayers().CuStack():
-        z = pcbnew.ZONE(board)
-        z.SetLayer(layer)
-        z.SetIsRuleArea(True)
-        z.SetDoNotAllowTracks(True)
-        z.SetDoNotAllowVias(True)
-        z.SetDoNotAllowCopperPour(False)
-        z.SetDoNotAllowPads(False)
-        z.SetDoNotAllowFootprints(False)
-        z.SetZoneName("TMP_EDGE_KEEPOUT")
-        ol = z.Outline()
-        ol.NewOutline()
-        for x, y in outer:
-            ol.Append(mm(x), mm(y))
-        ol.NewHole()
-        for x, y in inner:
-            ol.Append(mm(x), mm(y), 0)
-        board.Add(z)
+        for pts in strips:
+            z = pcbnew.ZONE(board)
+            z.SetLayer(layer)
+            z.SetIsRuleArea(True)
+            z.SetDoNotAllowTracks(True)
+            z.SetDoNotAllowVias(True)
+            z.SetDoNotAllowCopperPour(False)
+            z.SetDoNotAllowPads(False)
+            z.SetDoNotAllowFootprints(False)
+            z.SetZoneName("TMP_EDGE_KEEPOUT")
+            ol = z.Outline()
+            ol.NewOutline()
+            for x, y in pts:
+                ol.Append(mm(x), mm(y))
+            board.Add(z)
 
 
 def _copper_boxes(board: pcbnew.BOARD):
