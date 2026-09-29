@@ -6,6 +6,33 @@
 see `docs/attribution_and_licensing.md`
 **Revision:** R (Rev R baseline — TACCO naming finalized; EMI-hardened variant of TACCO Rev M, Ethernet PHY restored)
 **Date:** 2026-06-07
+**Update 2026-09-29 (area recovery + mLRS bare-chip radio + fab-ready layout, S. Griffing
+decisions; implemented by Claude Fable 5.1):** see `avionics/WBS.md` §1.2a "TACCO area recovery,
+mLRS bare-chip radio, non-stack rails, and fab-ready layout" for the full decision record.
+- **Radio:** the Seeed Wio-E5 module (Chinese-built) is replaced by a bare ST **STM32WLE5JC**
+  (`MLRS-MCU`) with an Epson TG2520SMN 32 MHz TCXO and a pSemi PE4259 antenna switch. mLRS pin
+  map and the `UART_WIOE5_*` net names are unchanged. **RF matching values are placeholders
+  pending ST AN5457 verification and bench tuning** — do not fly the radio before that.
+- **Bead defect fixed:** the eight SDIO/UART signal beads were the 1812 5 A power bead
+  (742792510); they are now 0402 600 Ω positions (MPN: owner to select). `FB1` keeps 742792510.
+- **Smaller parts, same function:** boot/bind switch → C&K KMR2; SWD header → Tag-Connect
+  TC2030-NL pads. PB2 rails are non-stack-through (Commo Rev T is standalone).
+- **PB2 header map rebuilt from the real PocketBeagle 2 schematic** (owner-supplied,
+  `avionics/datasheets/pocketbeagle2_sch.pdf`): the Rev S2 map had GND on the PB2's 5 V VIN pin
+  and peripherals on the wrong balls. Verified map and allocation:
+  `avionics/kicad/PB2_HEADER_PINMAP.md`. Ethernet is now RMII2 + MDIO0 (`RMII2_*` nets),
+  CAN-FD on MCAN0 (P2-5/7), RS-485 on UART2 with hardware DE, mLRS on UART0, BT on UART1.
+- **Wi-Fi host interface:** SDIO is not on the PB2 headers, so the Type 2EL WLAN core cannot
+  be hosted; the SDIO beads are deleted. **Owner decision: Wi-Fi moves to a USB module on USB1
+  (P1-9/11); module selection with datasheet is open and blocks fab** (WBS §1.2a).
+- **DP83825I pin table corrected** against TI SNLS638C Table 4-1 (the previous table was not
+  this part's pinout; Pilot shares the defect). Pin 2 (50MHzOut) drives `RMII2_REF_CLK`.
+- **Layout:** owner authorized full auto-placement and autorouting; the §1/§11–13 layout
+  constraints below still apply. All 170 parts are placed on the 55 × 35 mm outline with 0 DRC
+  errors before routing (isolation band and GND2 islands follow the transceiver positions;
+  small bypasses use the top-face cells between the non-stack-through rail pins). Routing,
+  Gerber and remaining gates are tracked in the WBS entry.
+
 **Update 2026-09-28 (MIL-STD-1553C fleet swap, S. Griffing decision; implemented by Claude
 Opus 5.5):** `1553-XCVR` is now the **Holt HI-6138** protocol engine on the SPI0_B bus,
 replacing the HI-1573 and the PRU Manchester codec.

@@ -1260,6 +1260,156 @@ REFERENCES.md Removed/Superseded Citations).
     --severity-all --schematic-parity` to 0, then attempt freerouting via
     the Specctra DSN/SES bridge (reject and report if it introduces shorts,
     same discipline as Pilot), then export gerbers.
+- [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
+    APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift
+    record per root `AGENTS.md` §10 (documented before any KiCad change). Supersedes the
+    2026-09-21 election to finish placement by hand: the owner authorized full auto-placement
+    and routing on 2026-09-29.
+    **Why.** With true KiCad courtyards (`fp.BuildCourtyardCaches()` + `GetCourtyard()`, not
+    the bounding-box fallback used in earlier area notes) the 147 parts need 3234 mm² total,
+    2709 mm² excluding the PB2 rails, against ~2596 mm² usable between the rails on both faces
+    (104 %). A routable board needs ≤ ~85 % (≈ 2200 mm²), so ~500 mm² had to come out with
+    **no capability lost** and the outline fixed at 55 × 35 mm (2.17 × 1.38 in) by the PB2.
+    Growing the board and splitting into two capes were offered and rejected by the owner.
+    **What changes (owner-approved 2026-09-29):**
+    1. **Ferrite-bead specification defect fixed (−173 mm²).** `FB-SDIO1..6` and
+        `FB-WIOE5-1/2` carried Würth **742792510**, which `avionics/datasheets/wurth-742792510.pdf`
+        shows is the **1812, 5 A, 70 Ω @ 100 MHz power-entry bead** — correct for `FB1`, wrong
+        for eight signal lines whose intent (`TACCO.md` §6, §8) is a **600 Ω @ 100 MHz, 100 mA,
+        0402** bead. The eight signal beads move to the 0402 land with value
+        `600R@100MHz 0402`; the MPN is left for owner selection because no vendor catalog was
+        reachable from this environment (candidates: Würth WE-CBF 0402 600 Ω family; the fleet
+        already uses 742792612 on Flight Engineer, size to be confirmed from its datasheet).
+    2. **Boot/bind switch (−192 mm²).** `SW-WIOE5-BOOT` C&K PTS125 12 mm (213 mm²) → C&K
+        **KMR2**-series side-actuated tact switch (KiCad `SW_Push_1P1T_NO_CK_KMR2`, 21 mm²).
+        Rejected: deleting the switch (loses local bind/boot), host-GPIO-only boot (loses bench
+        access without a PB2 attached).
+    3. **SWD debug port (−33 mm²).** `J-WIOE5-SWD` JST-GH 4-pin (62 mm²) → **Tag-Connect
+        TC2030-IDC-NL** 6-pad footprint (29 mm², no BOM part), ARM Cortex 6-pin pinout
+        (1 VTREF, 2 SWDIO, 3 nRESET, 4 SWCLK, 5 GND, 6 SWO). Rejected: 0.05 in header (larger).
+    4. **mLRS radio: Seeed Wio-E5 module → bare ST STM32WLE5JC (−70 mm² and a sourcing
+        fix).** `wio-e5-datasheet.pdf` is © Seeed Technology Co., Ltd. (Shenzhen); the module
+        is Chinese-built around the ST die, which conflicts with the owner's restricted-country
+        component rule (China, Russia, DPRK, …). Owner decision 2026-09-29: replace it now.
+        New radio block, every pin from `stm32wle5jc.pdf` (DS13105 Rev 9) Figure 9 / Table 19
+        (UFQFPN48, 7 × 7 mm, EP 5.6 mm typ per Table 95 → KiCad
+        `QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm_ThermalVias`):
+        - HSE32 from an **Epson TG2520SMN 32 MHz clipped-sine TCXO** (Japan;
+          `TG2520SMN_en-2584158.pdf` pin map 1 NC, 2 GND, 3 OUT, 4 VCC) supplied by
+          `PB0-VDD_TCXO` (DS13105 Table 58: VTCXO 1.6–3.3 V, ≤ 4 mA), OUT → 10 pF series →
+          `OSC_IN` (Table 58 note 1), `OSC_OUT` NC.
+        - **pSemi PE4259 SPDT** (US; `pe4259.pdf` Table 7: 1 RF1, 2 GND, 3 RF2, 4 CTRL, 5 RFC,
+          6 VDD/CTRL̄), RF1 = receive (RFI_P/RFI_N via LC balun), RF2 = transmit (RFO_HP), RFC →
+          existing `L-WIOE5-SER`/RCLAMP/MMCX antenna chain. Control `PA4`/`PA5`, the same pins
+          the Wio-E5 module drives its internal switch with, so mLRS's
+          `rx-hal-WioE5-Mini-wle5jc.h` stays valid — **verify polarity against that header**.
+        - SMPS mode: `VLXSMPS`→`VFBSMPS` 15 µH, `VFBSMPS` 470 nF (DS13105 SMPS
+          characteristics, Lout/Cout); `VDDRF1V55` tied to `VFBSMPS` (§3.9.1); `VDD`,
+          `VDDRF`, `VDDSMPS`, `VDDA`, `VBAT` on `+3V3_RF` (§3.9.1 note: VDD/VDDRF/VDDSMPS wired
+          together); 100 nF per supply pin plus 4.7 µF bulk; `VR_PA` decoupled.
+        - Host map unchanged: `PA2/PA3` USART2 ↔ `UART_WIOE5_TX/RX` (net names kept so the DTS
+          does not drift), `PB13` bind/boot button, `PA15` green LED, `PB5` red LED,
+          `PA13/PA14` SWD, `NRST` 22 k pull-up + 100 nF, `PH3-BOOT0` 10 k pull-down.
+        - **RF matching and harmonic-filter VALUES REQUIRE VERIFICATION.** The topology
+          (RFO_HP DC-feed inductor from `VR_PA`, DC block, 2-section LC low-pass; RFI_P/RFI_N
+          series-C / shunt-L balun) follows DS13105 Figures 2–4, but the 915 MHz element values
+          come from ST AN5457, which could not be fetched here. Positions are populated with
+          the topology and flagged `[VERIFY AN5457]` in the schematic; **bench-tune before
+          flight** (same discipline as the Type 2EL antenna match). `TODO.md` §0.x item.
+        - Alternative considered, not rejected: **Murata Type 1SJ** (STM32WLE5-based module,
+          Japan) would remove the RF design burden; its datasheet was unobtainable here, so it
+          is logged for the owner as a fallback if bench tuning of the bare chip fails.
+        - Reference-designator prefix `WIOE5-*` → `MLRS-*` (`MLRS-MCU`, `X-MLRS`, `SW-MLRS`,
+          `R-MLRS-*`, `LED-MLRS-*`, `FB-MLRS-*`, `J-MLRS-SWD`, `J-ANT-MLRS`, `D-ANT-MLRS`).
+    5. **PB2 rails are no longer stack-through, and the P2 rail gets an 8-position gap
+        (owner request 2026-09-29).** Commo Rev T is a standalone node (§1.2a.2), so nothing
+        stacks on top of TACCO. The existing socket lands already carry their courtyard only on
+        the component (bottom) side, so the top-face band between rail pins is DRC-free; the
+        placer may put 0402/0201 parts there at 45° (a 1.56 × 0.86 mm 0402 courtyard fits in
+        every 2.54 mm cell with ≥ 0.47 mm hole clearance). **Header-net clustering:** only
+        GPIO-class nets can move (SPI0, MCAN0, SDIO, RMII0, MDIO, both UARTs are fixed to
+        their PB2 balls). The six GPIO nets on P2-5..10 (`FAN_PWM_B`, `PLD_CLK`, `PLD_I1`,
+        `PLD_I2`, `WIFI_EN`, `WIFI_IRQ`) move to the six spare P1 positions
+        (P1-10/18/19/28/29/30), so **P2-3..10 becomes one contiguous 8-position gap**: the new
+        `PocketBeagle2_2x18_P2_Socket_Gap3-10` land has no pads or holes there, the P2 socket
+        is fitted as a 2×1 (pins 1–2) plus a 2×13 (pins 11–36) strip, and the matching PB2
+        header pins 3–10 are left unpopulated. Both faces of that ~10 × 5.6 mm patch are free
+        for parts. **Verification owed:** the repo has no PB2 ball-capability map; P1-10, P2-3,
+        P2-4, P2-27 are GPIO by prior use, but **P1-18/19/28/29/30 must be checked against the
+        PocketBeagle 2 pin map / SPRUJ40 before fab** (on the original PocketBeagle those were
+        analog-reference/ADC positions). Tracked with the existing DTS pinmux `[ESTIMATE]`
+        item in §1.2a.3.
+    6. **Layout:** placement is regenerated by `gen_tacco_pcb.py` with a floor-planned FIXED
+        table (connectors on edges, isolated CAN/RS-485 bus sides in the bottom band so the
+        `ISO_BAND` rule area and GND2 islands match the real transceiver positions, RF at the
+        antenna edge), then freerouting via the Specctra bridge, `kicad-cli pcb drc
+        --severity-all --schematic-parity` to 0, Gerber/drill/position export.
+    **Affected files:** `avionics/kicad/TACCO/scripts/gen_tacco_sch.py`,
+    `gen_tacco_footprints.py`, `gen_tacco_pcb.py`, `avionics/kicad/Serenity-Custom.pretty/`,
+    `avionics/kicad/TACCO/kicads/*`, `avionics/kicad/TACCO/gerbers/`, `TACCO.md`,
+    `reports/HDD.md`, `avionics/firmware/` DTS (net names unchanged; UART_WIOE5_* kept).
+    **Plan (units):** U1 this record + `TACCO.md` note → U2 footprints → U3 schematic
+    generator, ERC 0, netlist → U4 PCB generator + placement DRC-clean → U5 route + DRC 0 →
+    U6 Gerbers/drill/pos + gerber analyzer → U7 docs, HDD regen, TODO regen.
+    - [x] U1 decision record (this entry) and `TACCO.md` status note — 2026-09-29.
+    - [x] U2 footprints — KMR2 / Tag-Connect TC2030-NL / QFN-48 EP 5.6 / TG2520SMN / SC-70-6 from
+        the KiCad 9.0.3 system library; RCLAMP0502B courtyard widened to cover its pads; the
+        rail lands are unchanged (their courtyard is already component-side only). 2026-09-29.
+    - [x] U3 schematic — beads, switch, SWD, STM32WLE5JC block, PB2 map (item 7), DP83825I
+        table (item 8), SDIO removed, Wi-Fi/TPM 100 nF bypasses moved to 0201 (the only free
+        sites left are the rail cells). `kicad-cli sch erc --severity-all`: 0 design violations
+        (12 `lib_symbol_issues` are this container's missing global `power` library, not the
+        schematic). 170 parts, 287 nets. 2026-09-29.
+    - [x] U4 placement — all 170 parts on the 55 × 35 mm outline, `kicad-cli pcb drc
+        --severity-all --schematic-parity` before routing: **0 errors, 4 silkscreen warnings,
+        0 parity issues, 499 unconnected** (unrouted by definition). Floor plan: microSD and
+        Wi-Fi module bottom-right, 1553 block left, isolated CAN/RS-485 band across the bottom
+        with the GND2 islands and `ISO_BAND` derived from the SOIC-20W positions, mLRS radio at
+        the right edge under its MMCX, Tag-Connect at (39.4, 26.0). 2026-09-29.
+    - [ ] U5 routing: freerouting, outer GND pours, DRC 0 incl. `.kicad_dru` isolation rules.
+    - [ ] U6 Gerbers (6 Cu + mask/paste/silk/edge), Excellon drill, pick-and-place, BOM.
+    - [ ] U7 `TACCO.md`, `reports/HDD.md`, `TODO.md` regen, `REFERENCES.md` "Used in".
+    - [ ] Owner: select the 0402 600 Ω bead MPN and the KMR2 variant; verify RF values (AN5457).
+    - [x] ~~Confirm P1-18/19/28/29/30 are GPIO-capable~~ — **resolved by the owner-supplied PB2
+        schematic (2026-09-29, item 7 below)**; the P2-3..10 gap is withdrawn.
+    - [ ] mLRS HAL: BUTTON moves PB13 → PA0 (PB13 is not bonded on UFQFPN48), RF switch
+        PA4 = RX_EN (PE4259 CTRL), PA5 = TX_EN (CTRL̄).
+    7. **PB2 header map was wrong — rebuilt from the real schematic (2026-09-29, owner-supplied
+        `avionics/datasheets/pocketbeagle2_sch.pdf` + `pocketbeagle-2.syscfg`).** The Rev S2
+        `PB2_P1`/`PB2_P2` tables put GND on P1-1 (the PB2's 5 V **VIN**), +3V3/+5V on
+        P1-33..36 (PRU/UART balls), MCAN0 on the GND pins P1-15/16, SPI0 on ADC/GPIO balls and
+        SDIO on MDC/PRU balls; mating that cape would have shorted VIN to ground. The verified
+        ball-by-ball map and the new TACCO allocation are in
+        `avionics/kicad/PB2_HEADER_PINMAP.md` (MCAN0 P2-5/7, UART2 = RS-485 with hardware DE on
+        UART2_RTSn, UART0 = mLRS link, UART1 + flow control = BT, SPI0 P2-25/27/29 + CS1,
+        RMII2 + MDIO0 for the DP83825I, EHRPWM2_A = fan, GPIOs for the rest; net names
+        `RMII0_*` → `RMII2_*`). The header is fully subscribed (24 GPIO-class nets on 25 free
+        positions), so the "gap" clustering asked for on 2026-09-29 is not achievable; the
+        `PocketBeagle2_2x18_P2_Socket_Gap3-10` land was removed again. **Pilot uses the same
+        table family and must be re-derived the same way** (separate item, not done here).
+        **Wi-Fi host interface:** MMC2/SDIO is not on the headers, so the Murata Type 2EL WLAN
+        core (SDIO-only) cannot be hosted; the six SDIO beads are deleted and the module's SDIO
+        pins are NC. **Owner decision 2026-09-29: Wi-Fi moves to a USB module on USB1
+        (P1-9/11, `USB1_DP/DM/VBUS/DRVVBUS`), BT stays on UART1, 802.15.4 on SPI0.** Module
+        selection is open: no vendor catalog or datasheet is reachable from this environment,
+        so the USB Wi-Fi/BT module (non-restricted vendor) and, if Type 2EL is dropped, a
+        separate 802.15.4 SPI radio need owner-selected parts with datasheets before the
+        symbol/land can be authored. **FAB BLOCKER until resolved.**
+    - [ ] Owner: choose the USB Wi-Fi/BT module (and 802.15.4 radio if Type 2EL goes) and
+        supply datasheets; then author symbol/land, re-run the area budget (adds ≈ 100–200 mm²).
+    8. **DP83825I pin table was wrong (found 2026-09-29 while wiring `RMII2_REF_CLK`).** The
+        generator's `dp83825i()` (shared verbatim with Pilot's `gen_pilot_sch.py`) listed X1 on
+        pin 8, X2 on 9, DGND 10, DVDD10 11, RESET 12, MDIO 13, MDC 14, INT 15, TXOP/TXON 17/18,
+        RXIP/RXIN 21/22, RBIAS 24 — a DP83848-family table, not the DP83825I. TI SNLS638C
+        Table 4-1 (WQFN-24 RMQ): 1 TX_EN, 2 50MHzOut/LED2, 3 INTR/PWRDN, 4 LED0, 5 RST_N,
+        6 VDDA3V3, 7 RD_M, 8 RD_P, 9 GND, 10 TD_M, 11 TD_P, 12 XO, 13 XI/50MHzIn, 14 RBIAS,
+        15 MDIO, 16 MDC, 17 RX_D1, 18 RX_D0/PHYAD0, 19 VDDIO, 20 CRS_DV, 21 GND, 22 RX_ER,
+        23 TX_D0, 24 TX_D1, DAP GND. TACCO's table is rebuilt from the datasheet; in RMII
+        Leader mode pin 2 sources the 50 MHz reference clock to `RMII2_REF_CLK` (P1-34).
+        **Pilot's ETH1-PHY/ETH2-PHY carry the same defect (not fixed here).**
+    - [ ] Pilot: re-derive its PB2 header map from `PB2_HEADER_PINMAP.md` and rebuild
+        `dp83825i()` from SNLS638C Table 4-1 (item 8).
+    - [ ] Firmware: TACCO DTS overlay per `PB2_HEADER_PINMAP.md` §4 (console moves off UART0).
 - [x] **Flight Engineer schematic-first rebuild — ERC 0.** 2026-09-20 (Claude
     Sonnet 5): the legacy schematic (586 ERC violations, PCB pad nets not
     matching at all, `gen_flight_engineer.py` itself confirmed drifted per its own
