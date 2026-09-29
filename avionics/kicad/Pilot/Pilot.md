@@ -53,14 +53,14 @@ Gates, run in this order after any generator change:
 
 ```bash
 python3 scripts/gen_pilot_sch.py
-kicad-cli sch erc --severity-all kicads/Pilot.kicad_sch          # must be 0
+kicad-cli sch erc --severity-all kicads/Pilot.kicad_sch          # shall be 0
 kicad-cli sch export netlist --format kicadsexpr -o kicads/Pilot.net kicads/Pilot.kicad_sch
 python3 scripts/gen_pilot_footprints.py
 python3 scripts/gen_pilot_pcb.py
-kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # must be 0
+kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # shall be 0
 # route (see "Routing" below), then:
 python3 scripts/finish_pilot_pcb.py kicads/Pilot.kicad_pcb <routed.ses>
-kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # must still be 0
+kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # shall still be 0
 bash scripts/export_pilot_gerbers.sh
 ```
 
@@ -93,7 +93,7 @@ were made via the project's Specctra bridge (`tools/export-specctra-dsn.py` /
   board with real shorts.
 
 `gen_pilot_pcb.py` deliberately leaves the outer F.Cu/B.Cu pour-free (a
-freerouting run treats a filled zone as fixed copper it must route around);
+freerouting run treats a filled zone as fixed copper it shall route around);
 `finish_pilot_pcb.py` adds the top/bottom GND pours back and re-fills all
 zones after a routing pass is imported and accepted.
 

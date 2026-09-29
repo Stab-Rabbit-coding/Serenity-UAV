@@ -73,7 +73,10 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 
 1. **Print EVERYTHING in Phase 0.** Print both nacelle pod variants (80 mm and 83 mm ID). Resin-print or source all M0.5 gears. Filament costs pennies compared to build time.
 
-- Step 2: **Install ALL conduits, voids, and mounts before the foam pour.**All 8 PTFE conduit tubes, all EPS void formers, all access-panel frames, all PCB standoffs, all SMA bulkhead pass-throughs, all ToF sensor flush-mounts, and all M3 cargo hard points must be in place before any foam is poured.**Once foam cures, these cannot be added.**
+- Step 2: **Install ALL conduits, voids, and mounts before the foam pour.**All 8 PTFE conduit tubes, all EPS void formers, all access-panel frames, all PCB standoffs, all SMA bulkhead pass-throughs, all ToF sensor flush-mounts, and all M3 cargo hard points shall be in place before any foam is poured.**Once foam cures, these cannot be added.**
+
+> **CAUTION:** The foam pour is irreversible. A missing conduit, void former, or mount cannot
+> be added after the foam cures without cutting into the hull, destroying the shell.
 
 - Step 3: **The foam pour is the point of no return.** Verify every provision with a test fit BEFORE mixing foam.
 
@@ -207,7 +210,8 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 
 ### Installation Sequence — Follow Exactly
 
-> **Critical:** Steps 1–10 must all be complete before mixing any foam (Step 11).
+> **CAUTION:** Steps 1–10 shall all be complete before mixing any foam (Step 11). The foam pour
+> cannot be undone — an omitted provision means cutting into the cured shell to correct it.
 
 **1. Epoxy ring frames to keel** at stations 91, 165, 251, 320, 388mm. Cure 2h minimum.
 
@@ -296,11 +300,11 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 ## 10. Prepare EPS void formers
 
 - Cut formers A–E from 25mm EPS board using craft knife + printed jig templates
-- Each former must clear its panel frame by ≥5mm on all sides
+- Each former shall clear its panel frame by ≥5mm on all sides
 - Apply 2 coats Johnson's Paste Wax to ALL EPS surfaces; buff between coats; 15min dry
 - Do NOT wax PTFE conduit tubes (foam bond to tube is fine)
 
-**11. Insert void formers A–E** through open dorsal-forward hull seam. Secure each with 2 toothpick pins into hull ribs. Test-fit all 6 access panel lids — all must close flush (≤0.2mm gap).
+**11. Insert void formers A–E** through open dorsal-forward hull seam. Secure each with 2 toothpick pins into hull ribs. Test-fit all 6 access panel lids — all shall close flush (≤0.2mm gap).
 
 ## 12. Hull section bonding
 
@@ -361,13 +365,15 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 | Kynar wire 28AWG for nav lights                          | ~300mm | ~$2                |
 | 5-minute epoxy (LED sealing)                             | —      | carry from Phase 1 |
 
-> **Budget EDF housing OD note:** All 4 budget EDFs must fit in the **`nacelle_pod_dual_80mm.stl`** 230mm tandem pod. Measure OD with calipers. Typical generic 80mm 6S EDF housing OD = 80–82mm. The dual pod has 83mm ID — add a thin (0.5–1mm) PETG liner ring if needed. This is the only Phase 2 variable.
+> **Budget EDF housing OD note:** All 4 budget EDFs shall fit in the **`nacelle_pod_dual_80mm.stl`** 230mm tandem pod. Measure OD with calipers. Typical generic 80mm 6S EDF housing OD = 80–82mm. The dual pod has 83mm ID — add a thin (0.5–1mm) PETG liner ring if needed. This is the only Phase 2 variable.
 >
 > **ESC note for Phases 2–6:** 50–60A BLHeli32 ESCs are adequate for budget EDFs (≤50A peak). You will replace these with 4× Hobbywing 120A in Phase 7. Do not spend on premium ESCs until Phase 7 — budget ESCs are a deliberate temporary choice.
 
 ### Nacelle Assembly Sequence
 
-**1. Press 4× MR63ZZ bearings** into nacelle pivot sockets — must be flush ±0.2mm. Use a printed bearing-press jig or M5 bolt as press tool. Do not apply side load to bearing.
+**1. Press 4× MR63ZZ bearings** into nacelle pivot sockets — shall be flush ±0.2mm. Use a printed bearing-press jig or M5 bolt as press tool.
+
+> **CAUTION:** Do not apply side load to the bearing while pressing — side loading cracks the race and ruins the bearing.
 
 **2. Thread 8mm CF pivot rods** through wing spar → tilt bracket → nacelle bearing. Secure with M3 set screws and Loctite 243. Torque to finger-tight + 1/4 turn. Allow 2h cure before moving.
 
@@ -598,7 +604,7 @@ ip link set can1 up
 
 ```
 
-- Step 36: Verify CAN FD heartbeat ring: with CN1+FC1+CN2+FC2 all powered, run `candump can0` on any node — all 4 node heartbeat frames (IDs 0x001–0x004) must appear within 100ms. Role election (FC master) occurs automatically via highest-priority CAN ID.
+- Step 36: Verify CAN FD heartbeat ring: with CN1+FC1+CN2+FC2 all powered, run `candump can0` on any node — all 4 node heartbeat frames (IDs 0x001–0x004) shall appear within 100ms. Role election (FC master) occurs automatically via highest-priority CAN ID.
 
 - Step 37: Configure MAVLink routing on elected FC master node:
 
@@ -630,6 +636,9 @@ apt install mavlink-router
 - XCVR-49MHZ RC channels show correct direction and travel in QGC RC calibration screen
 - WiFi GCS: connect QGC over WL1837MOD access point, verify telemetry
 
+> **WARNING:** EDFs spin at high speed even at low throttle. Keep hands, tools, and loose
+> clothing clear of the nacelle and fuselage intakes/exhausts before applying any throttle.
+
 - Step 43: Motor spin test (5% throttle, 2 seconds): all 3 motors spin in correct directions:
 - Port nacelle: CCW (tractor)
 - Stbd nacelle: CW (tractor)
@@ -648,7 +657,10 @@ apt install mavlink-router
 
 ### First Flight
 
-> ⚠ **FAA requirement:** Apply registration number (replacing N00000 on decal sheet) BEFORE any untethered flight. 14 CFR Part 48 — registration mark visible without moving any part.
+> **NOTE:** Apply the registration number (replacing N00000 on the decal sheet) BEFORE any untethered flight. 14 CFR Part 48 — registration mark visible without moving any part.
+
+> **WARNING:** A swollen (puffed), punctured, or otherwise damaged LiPo battery is a fire
+> hazard. Do not charge, connect, or fly a battery that fails the checks below.
 
 ## Pre-flight ABCD checklist
 
@@ -763,7 +775,7 @@ echo test > /mnt/flightlog/test.txt   # must return "Read-only file system"
 
 - Step 22: With all 8 nodes powered, verify Ethernet ring via RSTP: run `bridge vlan show` on any node — all 8 switch ports should appear. Disconnect one inter-bay ETH cable and verify traffic re-routes within 1s (RSTP fast-failover).
 
-- Step 23: Verify full CAN FD ring: `candump can0` on any node must show heartbeat frames 0x001–0x008 within 100ms. Role election produces one FC master, one FC standby, one CN master, one CN standby.
+- Step 23: Verify full CAN FD ring: `candump can0` on any node shall show heartbeat frames 0x001–0x008 within 100ms. Role election produces one FC master, one FC standby, one CN master, one CN standby.
 
 - Step 24: MIL-STD-1553 final configuration: FC1 = primary Bus Controller (BC), FC2 = standby BC. FC3, FC4, CN1–CN4 = Remote Terminals (RT). Verify all 8 RT addresses conflict-free and respond to BC poll within 9μs.
 
@@ -786,7 +798,7 @@ echo test > /mnt/flightlog/test.txt   # must return "Read-only file system"
 
 **Goal:** Dual-redundant obstacle avoidance operational. All 12 sensors installed, wired to Bay A (Array B, hosted by FC1) and Bay D (Array A, hosted by FC3), and fused into autonomous navigation.
 
-> Requires Phase 4 complete — FC3 (Bay D) must be installed before Array A can be wired.
+> Requires Phase 4 complete — FC3 (Bay D) shall be installed before Array A can be wired.
 
 ### Buy List for Phase 5
 
@@ -875,7 +887,7 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 1. Epoxy cargo gondola shell into belly void at 4× M3 hard points (installed Phase 1). Shell protrudes 18mm below hull line — matches Serenity canonical cargo module profile. Cure 24h before proceeding.
 
-- Step 2: Install 3mm CF door hinge pins at gondola centerline. Attach clamshell door halves (2× mirrored). Doors must open freely (spring-loaded to open) and close to flush fit.
+- Step 2: Install 3mm CF door hinge pins at gondola centerline. Attach clamshell door halves (2× mirrored). Doors shall open freely (spring-loaded to open) and close to flush fit.
 
 - Step 3: Install the DRV8833 board (door + payload-release servos only) and the STS3215 winch train in the gondola top: both winch pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. The spool is supported at both pedestals — it is never hung off the servo output. Wind 1.5 m Dyneema SK75 onto the spool; reserve 0.5 m slack. **Do not anchor the inboard end** — it is friction-retained so the line sheds at overload. Attach the cargo cradle (cargo_cradle_autolatch.stl) to the Dyneema via a double-bowline knot. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
 
@@ -931,8 +943,13 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 | 4-AWG silicone main bus wire (if not already upgraded)          | ~500mm | ~$8          |
 
 > **Sourcing:** XRP 3660-2700KV available CCW and CW from Turbines-RC (EU) and RC-Castle (global). Order CCW for port nacelle (both FWD+AFT), CW for starboard nacelle (both FWD+AFT) to maintain tractor/pusher balance.
-> ⚠ **ESC mandatory:**XRP 3660-2700KV draws**84A peak per EDF** on 6S. The Hobbywing 120A provides 43% headroom. Do NOT attempt to run XRP on budget 50–60A ESCs — they will overheat and fail. Replace all 4 nacelle ESCs.
-> ⚠ **Power wiring upgrade:**With 4× 84A ESCs, peak nacelle current is 168A/side (336A total). Upgrade main bus to**4-AWG silicone** if not already installed. Each ESC needs an independent XT30 power pigtail with 100A poly fuse at PDB.
+
+> **CAUTION:** XRP 3660-2700KV draws **84A peak per EDF** on 6S. The Hobbywing 120A provides 43% headroom. Do NOT attempt to run XRP on budget 50–60A ESCs — they will overheat and fail. Replace all 4 nacelle ESCs.
+
+> **CAUTION:** With 4× 84A ESCs, peak nacelle current is 168A/side (336A total). Upgrade main bus to **4-AWG silicone** if not already installed. Each ESC needs an independent XT30 power pigtail with 100A poly fuse at PDB.
+
+> **WARNING:** Disconnect the flight battery before servicing the EDFs. An EDF that spins
+> unexpectedly while hands or tools are inside the pod is a serious injury hazard.
 
 ### EDF Swap Sequence (per nacelle — repeat for both)
 
@@ -1072,6 +1089,10 @@ Each run sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), ou
 - **E** — Weathering details, show-accurate stencils
 
 - Step 4: Final airworthiness inspection:
+
+> **WARNING:** A puffed, punctured, or otherwise damaged LiPo battery is a fire hazard — do
+> not fly on a battery that fails this check.
+
 - All fasteners checked (torque per drawing)
 - Propulsion: motor shafts spin free, no blade FOD, nacelles sweep full range
 - Electronics: all panels close, all covers in place, antenna connectors tight

@@ -207,21 +207,21 @@ The TVS is a SOD-123FL package, placed within 2 mm of J2, with the cathode to PG
   digital side is plain GND. The moat is bridged by a 10 nF C0G capacitor (C27)
   for RF, referencing PGND on one side and GND on the other.
 
-- **Shield can wall clearance:** All components inside the EMI can footprint must be
+- **Shield can wall clearance:** All components inside the EMI can footprint shall be
 
   at least 0.5 mm from the can footprint outline to allow the snap-on lid.
 
-- **MCP1703T placement:** The LDO must be outside the shield can (digital section),
+- **MCP1703T placement:** The LDO shall be outside the shield can (digital section),
 
   with its output traces entering the RF section through a ferrite bead (FB2 or
   dedicated 0402 bead). This prevents LDO switching noise from contaminating the
   RF supply path.
 
-- **J1 filter placement:** CM5 common-mode choke and TVS6 array must be within 3 mm
+- **J1 filter placement:** CM5 common-mode choke and TVS6 array shall be within 3 mm
 
   of J1 and outside the shield can.
 
-- **RP-SMA TVS placement:** TVS-SMA (SMAJ5.0A) must be within 2 mm of J2 on the board
+- **RP-SMA TVS placement:** TVS-SMA (SMAJ5.0A) shall be within 2 mm of J2 on the board
 
   edge side, outside the shield can.
 
@@ -359,7 +359,7 @@ the courtyard boundary still flags a DRC error. No trace segments connect to any
 these four vias; they connect through copper pours or the inner GND/+5V planes.
 
 The via at (143, 124.5) was the only cross-net overlap (GND via touching LNA RF_RX
-pad 3), which constitutes a real short-circuit risk and must be corrected.
+pad 3), which constitutes a real short-circuit risk and shall be corrected.
 
 ---
 
@@ -468,7 +468,7 @@ from the actual board the way a hand-maintained BOM can.
 | PB2-P1, PB2-P2 | PB2I 2×18 sockets | 2x18 socket | Rev R1 PocketBeagle2 header rails |
 | **Ethernet (Rev R1 addition — see TODO.md §1.2b)** | | | |
 | ETH-PHY | ADIN1300BCPZ | QFN-48, B.Cu | Second Ethernet PHY, gives Commo (and the XO stack it plugs into) a 2nd port matching Pilot's 2-PHY config; also lets Commo run Ethernet standalone outside Serenity |
-| T-ETH | Würth 749010012A | ETH_XFMR_8P, B.Cu | RMII-side isolation transformer; secondary (`*_ETH2`/`GND2_ETH`/`VCC2_ETH`) is a galvanically isolated domain — **must not be bridged to the main GND/+5V planes** |
+| T-ETH | Würth 749010012A | ETH_XFMR_8P, B.Cu | RMII-side isolation transformer; secondary (`*_ETH2`/`GND2_ETH`/`VCC2_ETH`) is a galvanically isolated domain — **shall not be bridged to the main GND/+5V planes** |
 | J-ETH | JST-GH-4P (custom) | JST_GH_4P | Isolated-side Ethernet line connector |
 | **LoRa (Rev R1 addition — see TODO.md §1.2b, REF-RFMOD-001)** | | | |
 | LoRa | RFM95W | HOPERF_RFM9XW_SMD, B.Cu | 915 MHz LoRa module. Pin mapping corrected 2026-06-20 against the verified HopeRF datasheet; ANT/3V3/DIO0–5 still unassigned and footprint pad geometry/position still need correction — see TODO.md |
@@ -510,7 +510,7 @@ Unchanged from XCVR-49MHZ-1. The 6-element LPF provides additional margin vs. th
 emission limits applied via §15.235(b) (REF-FCC-003) — not Part 95 §95.655, which does
 not apply to this band.  Note: the PA chain (PMBT2222A + 2N3866) is sized for ~100 mW
 output, which exceeds the §15.235 field-strength-equivalent EIRP ceiling of ≈ 30 µW by
-roughly 35 dB; firmware must limit conducted output to ≈ −13 dBm (≈ 48 µW) for
+roughly 35 dB; firmware shall limit conducted output to ≈ −13 dBm (≈ 48 µW) for
 compliance — see `gcs/skipper/hardware/docs/skipper_antenna_spec.md` Link 4 and
 `TODO.md` §0.1.
 

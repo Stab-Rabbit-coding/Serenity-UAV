@@ -55,7 +55,7 @@ decision in this repository.
 9. Pull the payload into the cargo bay and close the clamshells.
 10. Exit the hazardous environment and return to origin.
 
-Throughout the mission, the aircraft must also:
+Throughout the mission, the aircraft shall also:
 
 - Identify, categorize, log, and report rogue or unauthorized C2 commands or malicious logic from
   any transmitter, authorized or not.
@@ -205,7 +205,7 @@ flight, guided by the downward-facing **Observer** node for close-in 3D imaging 
 ## Authoritative Project Instructions
 
 The canonical workspace instructions and design policy are maintained in `AGENTS.md`. All
-contributors and automated tools (including AI assistants) must follow the requirements and
+contributors and automated tools (including AI assistants) shall follow the requirements and
 standards documented there (coding style, fabrication specs, licensing, and attribution).
 `CLAUDE.md` is a one-line pointer to the same file, kept for tooling that looks for that name.
 
@@ -266,7 +266,7 @@ Covered under **CERN-OHL-W 2.0** (hardware):
 - PCB schematics and Gerber files for Pilot, XO, Flight Engineer, and Commo
 - Circuit diagrams, pinout tables, and wiring specifications
 - Mechanical drawings and assembly specifications
-- Any derived hardware must carry CERN-OHL-W 2.0 (or a compatible license) and attribute
+- Any derived hardware shall carry CERN-OHL-W 2.0 (or a compatible license) and attribute
   all upstream authors
 
 Covered under **CC BY-SA 4.0** (documentation, code, scripts, non-hardware drawings):
@@ -274,7 +274,7 @@ Covered under **CC BY-SA 4.0** (documentation, code, scripts, non-hardware drawi
 - Firmware architecture specifications and algorithm descriptions
 - This design document in all its revisions (A–R and beyond)
 - Build automation/tooling scripts and non-hardware SVG diagrams
-- Any derived works must carry CC BY-SA 4.0 and attribute all upstream authors
+- Any derived works shall carry CC BY-SA 4.0 and attribute all upstream authors
 
 Not covered / separate terms:
 

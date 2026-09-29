@@ -210,7 +210,7 @@ the build:** the tray (`airframe/openscad/fuselage/cargo/gateway_door_tray.scad`
 grips the board's two short edges and the bottom long edge in card-edge rails —
 keep parts ≥ 2.5 mm from those three edges on both faces; the tray is
 parametric on the 49.0 × 25.5 mm `N_STACKS=1` outline (`GW_PCB_L/W` in
-`tools/cargo_layout_fit.py`), so a repack that changes the outline must update
+`tools/cargo_layout_fit.py`), so a repack that changes the outline shall update
 those two numbers. Build this instance from the DRC-clean `N_STACKS=1` layout in
 `CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_N1_2026-07-26.kicad_pcb` (the live
 `.kicad_pcb` is the user-packed 2-lane nacelle board).
@@ -223,7 +223,7 @@ osc-native chain if OpenServoCore ships, otherwise `N_STACKS=2` (`END_TO_END`)
 so that two lanes' `FLEX_PWM_IO` + `FLEX_BSHOT_IO` give the four **hardware**
 timer channels an attitude effector needs at loop rate (no bit-banging).
 Fail-closed (all valves shut on heartbeat/MAC loss), `RCS_COMMAND ≥ 50 Hz` —
-the per-frame signing latency on this MCU/TPM must be measured on the door
+the per-frame signing latency on this MCU/TPM shall be measured on the door
 gateway first. `docs/CARGO_DOOR_GATEWAY_SPEC.md` §9; `deferred/WBS.md` §Phase11.
 
 ## Stackable: N complete trust modules on one PCB

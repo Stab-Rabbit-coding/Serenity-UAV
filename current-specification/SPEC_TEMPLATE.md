@@ -74,7 +74,7 @@ test basis.
 When citing a standard requirement:
 
 - **Format:** Use the REF-ID and section number: `[REF-FAA-001 §48.205]`
-- **Verification:** Every citation must be verifiable by looking it up in `REFERENCES.md`
+- **Verification:** Every citation shall be verifiable by looking it up in `REFERENCES.md`
 - **Context:** Explain why that requirement applies to this design
 
 **Example:**
