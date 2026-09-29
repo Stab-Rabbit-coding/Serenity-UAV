@@ -34,6 +34,15 @@
 - [ ] TACCO DTS drift (pre-existing, found 2026-09-28)
 - [ ] Docs sweep: change remaining "1553B" statements to 1553C once the…
 
+##### 1.2a.4 *TACCO DRC backlog — 140 hard violations (2026-09-29)*
+→ full detail: `WBS.md` §1.2a.4
+
+- [ ] Before/after DRC diff: pre-1553C-swap TACCO vs current
+- [ ] Owner: reposition footprints (11 courtyard overlaps + placement shorts)
+- [ ] Clear isolation-domain shorts (PGND/GND2/VCC2/RADIO_ANT_F) + keepout
+- [ ] Clear remaining shorts, clearance, solder-mask bridges
+- [ ] TACCO DRC to 0 hard in tools/validate_kicad.py
+
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 → full detail: `WBS.md` §1.2a
 

@@ -268,6 +268,39 @@ Plan: `docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md` (Claude O
     history, archived DTS, and TACCO's `M1553B_*` cape-B net names. Sweep file by file.
     `avionics/AGENTS.md` already states 1553C.
 
+##### 1.2a.4 *TACCO DRC backlog — 140 hard violations (opened 2026-09-29)*
+
+This is a standalone backlog, separate from the 1553C swap (§1.2a.3) and Commo Rev T (§1.2a.2).
+`tools/validate_kicad.py` (KiCad 9.0.9, CI "KiCad Validation") reports
+**140 hard / 29 soft** DRC findings on `avionics/kicad/TACCO/kicads/TACCO.kicad_pcb`. PR #220
+(merged 2026-09-29) surfaced them when it first touched TACCO. Most of the nets involved are
+outside the 1553 area, so this looks like pre-existing layout debt. That is not proven: no
+before/after run on the pre-swap board has been done.
+
+**Findings by class** (CI log, run 36569510415, 2026-09-29):
+
+| DRC rule | Approx. count | Notable nets / areas |
+| --- | --- | --- |
+| `solder_mask_bridge` | ~55 | Front and rear mask apertures bridging different nets |
+| `shorting_items` | ~45 | RMII0_* ↔ +3V3_RF; PHY1_RSTN / MDIO0 / MDC0 / ETHB_TX± / +3V3 ↔ +5V_IN; PGND ↔ GND2_RS485B / VCC2_RS485B / SD_CD / GND / +3V3_RF; RF_SW1 ↔ TPM_B_* / SPI0_B_* / +3V3 / GND; RADIO_ANT_F ↔ RS485B iso rails; SDIO_CMD ↔ UART_WIOE5_TX_F; WIOE5_BOOT_BTN ↔ WIOE5_SWCLK; GND2_CANB ↔ GND; +3V3 ↔ +5V; FAN_PWM_B ↔ GND / +3V3 |
+| `clearance` | ~25 | POWER / ISOLATION / Default netclasses, down to 0.000 mm |
+| `courtyards_overlap` | 11 | — |
+| `items_not_allowed` | 1 | Keepout "isolation keepout inner" |
+
+The shorts across isolation domains (PGND and RADIO_ANT_F to the RS485B isolated rails, and
+GND2_CANB to GND) break the 5 kV galvanic isolation requirement. They must be fixed, not waived.
+
+- [ ] Run the before/after DRC comparison (pre-§1.2a.3 TACCO vs. current) to separate existing
+      debt from anything the HI-6138 swap introduced.
+- [ ] **Owner:** footprint repositioning for the courtyard overlaps and placement-driven shorts
+      (`avionics/AGENTS.md`: repositioning is referred to the owner).
+- [ ] Clear the isolation-domain shorts (PGND, GND2_*, VCC2_* and RADIO_ANT_F crossings) and
+      the keepout intrusion.
+- [ ] Clear the remaining shorts, clearance and solder-mask-bridge findings (routing, via and
+      mask edits).
+- [ ] Re-run `tools/validate_kicad.py` until it reports 0 hard violations on TACCO, and document
+      any accepted residuals with rule and reason.
+
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 
 - [x] **Wire second Ethernet (ETH2) on Pilot.** `ETH2` / `ETH2-PHY` (ADIN1300) /
