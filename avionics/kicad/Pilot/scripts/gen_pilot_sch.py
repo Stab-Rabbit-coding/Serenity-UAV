@@ -36,9 +36,14 @@ Lineage
       strap, Fig 8-4 decoupling, Fig 8-3 TPI network (device-side centre taps
       0.1 uF + 1 uF to GND, line-side 75 R x2 + 10 nF/2 kV to PGND).  The
       interim ADIN1300 + 0.9 V LDO + 50 MHz-per-port design is superseded.
-    - MIL-STD-1553B: compliant Holt HI-1573 (3.3 V, QFN-44) + Premier
-      PM-DB2791S 1:2.5 direct-coupled stub + 2 x 55 R + 2 x SMAJ33CA; the
-      RS-422 DS26LV31/32 chain (cannot meet §4.5.2 levels) is retired.
+    - MIL-STD-1553C (2026-09-28 fleet swap, avionics/WBS.md §1.2a.3): Holt
+      HI-6138 BC/RT/MT protocol engine with on-chip transceiver (QFN-48 6x6,
+      host SPI0, DS6138 Rev S) replaces the HI-1573 + AM6254 PRU Manchester
+      codec; 50 MHz MCLK from a dedicated ECS-2520MV (not the PHY's RMII clock,
+      so an Ethernet PHY reset cannot stop 1553).  Premier PM-DB2791S 1:2.5
+      direct-coupled stub + 2 x 55 R + 2 x SMAJ33CA are unchanged (DS6138
+      Fig 28; [REF-MIL-001 §4.5.1.5.2]).  Pin table and area budget:
+      avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md.
     - PWM/DSHOT block: Samtec TSM-108-01-L-DV 2x8 SMT 0.1 in header (SIG /
       +5V / GND / PGND-shield per channel) so B.Cu under it stays usable;
       0201 for straps, pull-ups and 10 nF HF bypass.
@@ -59,13 +64,14 @@ per ``avionics/AGENTS.md``):
   ISOW1044BDFMR isow1044.pdf Table 7-1 | ISOW1412DFMR isow1412.pdf Table 7-1 |
   SLB9672 slb9672.pdf §3.1.2 | MAX-M10S MAX-M10S_DataSheet_UBX-20035208.pdf §3.1 |
   DP83825I dp83825i.pdf Table 4-1/6-8..6-11, Fig 8-3/8-4 | 749010012A 749010012A.pdf p.1 |
-  HI-1573 hi-1573.pdf p.1/p.11 | PM-DB2791S PremierMagnetics_DB2791S.pdf | Samtec TSM samtec_tsm-dv-footprint.pdf |
+  HI-6138 hi-6138_v-rev-s.pdf p.1/Table 1/§29 | PM-DB2791S PremierMagnetics_DB2791S.pdf | Samtec TSM samtec_tsm-dv-footprint.pdf |
   ICM-42688-P ds-000347 Table 10 | BMP388 bst-bmp388-ds001.pdf Table 50 |
   SRF2012A SRF2012A.pdf | TPS62933 tps62933.pdf Table 7-1 |
   ECS-2520MV ECS-2520MV.pdf p.1 |
   X2Y (Yageo CX0805) X2Y_15-2237598.pdf Table 3.
 
-Author: Claude Opus 4.8 (2026-07-14); Claude Opus 5 (2026-07-28, 2026-09-19).
+Author: Claude Opus 4.8 (2026-07-14); Claude Opus 5 (2026-07-28, 2026-09-19);
+Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap).
 Human owner: sgriffing (Griffing Technology LLC).  License: CC BY 4.0.
 """
 
@@ -100,7 +106,7 @@ FP_L0805 = "Inductor_SMD:L_0805_2012Metric"
 FP_SOIC20W = "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"
 FP_UQFN32 = "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm"
 FP_WQFN24 = "Package_DFN_QFN:Texas_RMQ0024A_WQFN-24-1EP_3x3mm_P0.4mm_EP1.9x1.9mm"
-FP_QFN44 = "Package_DFN_QFN:QFN-44-1EP_7x7mm_P0.5mm_EP5.2x5.2mm"
+FP_HI6138 = "Serenity-Custom:Holt_HI-6138_QFN-48_6x6mm_P0.4mm_EP4.6mm"
 FP_SMA = "Diode_SMD:D_SMA"
 FP_X1553 = "Serenity-Custom:Xfmr_1553_SMD_0.40in_8pin"
 FP_TSM2X8 = "Serenity-Custom:Samtec_TSM-108-01-x-DV"
@@ -413,50 +419,48 @@ ICS += [
     },
     {
         "ref": "1553-XCVR",
-        "value": "HI-1573PCI",
-        "fp": FP_QFN44,
-        "mpn": "HI-1573PCI",
-        "ds": "hi-1573.pdf p.1 Pin Configurations (44-pin 7x7 QFN) / p.11 package [REF-SENSOR-030]",
-        # MIL-STD-1553B 3.3 V dual transceiver; only bus A is populated on Pilot
-        # (bus B parked: RXENB low, TXINHB high, TXB/TXB* low).  Direct-coupled
-        # stub per hi-1573.pdf Fig 2: 1:2.5 isolation transformer + 2 x 55 R,
-        # primary centre tap to GND.  Manchester II encode/decode is in the
-        # AM6254 PRU (AVIONICS_PB2_REDESIGN.md §94); TXINHA is the PRU's transmit
-        # inhibit (active high) on P1-20.  Owner decision open: single (as
-        # built) vs dual-redundant bus (second transformer + connector).
+        "value": "HI-6138PCIF",
+        "fp": FP_HI6138,
+        "mpn": "HI-6138PCIF",
+        "ds": "hi-6138_v-rev-s.pdf p.1 Pin Configuration (48-pin 6x6 QFN) / Table 1 pp.16-18 / §29 p.263",
+        # MIL-STD-1553 BC/MT/RT protocol engine with shared on-chip dual
+        # transceiver (DS6138 Rev S).  Host SPI0 (CE on P1-20 GPIO), IRQ
+        # open-drain -> P1-7 with 10 k pull-up, MR -> P1-8, TXINHA -> P1-9
+        # (internal pull-up = transmit inhibited until the host drives it low).
+        # Bus A only, as before; TXINHB left on its internal pull-up (bus B
+        # inhibited).  LOCK low (internal pull-down) so the host writes the RT
+        # address; RTA4:0/RTAP left on internal pull-ups.  EEPROM auto-init
+        # port unused.  Every no-connect is justified pin by pin in
+        # avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md §2.
         "pins": [
-            ("36", "TXA", "PRU_1553_TX_P", "L"),
-            ("37", "TXA*", "PRU_1553_TX_N", "L"),
-            ("31", "TXINHA", "M1553_TX_INH", "L"),
-            ("2", "RXENA", "+3V3", "L"),
-            ("30", "RXA", "PRU_1553_RX_P", "L"),
-            ("29", "RXA*", "PRU_1553_RX_N", "L"),
-            ("25", "TXB", "GND", "L"),
-            ("26", "TXB*", "GND", "L"),
-            ("24", "TXINHB", "+3V3", "L"),
-            ("16", "RXENB", "GND", "L"),
-            ("21", "RXB", None, "L"),
-            ("20", "RXB*", None, "L"),
-            ("40", "BUSA", "M1553_P", "R"),
-            ("41", "BUSA", "M1553_P", "R"),
-            ("42", "BUSA*", "M1553_N", "R"),
+            ("2", "IRQ*", "M1553_IRQN", "L"),
+            ("11", "TXINHA", "M1553_TX_INH", "L"),
+            ("15", "CE*", "SPI0_CS_1553", "L"),
+            ("17", "SCK", "SPI0_CLK", "L"),
+            ("18", "SO", "SPI0_MISO", "L"),
+            ("19", "SI", "SPI0_MOSI", "L"),
+            ("21", "MCLK", "M1553_MCLK", "L"),
+            ("23", "MR*", "M1553_MRN", "L"),
+            ("45", "BUSA", "M1553_P", "R"),
             ("43", "BUSA*", "M1553_N", "R"),
-            ("8", "BUSB", None, "R"),
-            ("9", "BUSB", None, "R"),
-            ("10", "BUSB*", None, "R"),
-            ("11", "BUSB*", None, "R"),
-            ("38", "VDDA", "+3V3", "R"),
-            ("39", "VDDA", "+3V3", "R"),
-            ("6", "VDDB", "+3V3", "R"),
-            ("7", "VDDB", "+3V3", "R"),
-            ("3", "GNDA", "GND", "R"),
-            ("4", "GNDA", "GND", "R"),
-            ("5", "GNDA", "GND", "R"),
-            ("17", "GNDB", "GND", "R"),
-            ("18", "GNDB", "GND", "R"),
-            ("19", "GNDB", "GND", "R"),
-            ("45", "EP", "GND", "R"),
-        ] + [(str(n), "NC", None, "R") for n in (1, 12, 13, 14, 15, 22, 23, 27, 28, 32, 33, 34, 35, 44)],
+            ("40", "BUSB", None, "R"),
+            ("42", "BUSB*", None, "R"),
+            ("6", "VCC", "+3V3", "R"),
+            ("16", "VCC", "+3V3", "R"),
+            ("31", "VCC", "+3V3", "R"),
+            ("41", "VCCP", "+3V3", "R"),
+            ("44", "VCCP", "+3V3", "R"),
+            ("7", "GND", "GND", "R"),
+            ("20", "GND", "GND", "R"),
+            ("30", "GND", "GND", "R"),
+            ("49", "EP", "GND", "R"),
+        ] + [(str(n), nm, None, "L") for n, nm in (
+            (1, "MODE"), (3, "ACKIRQ"), (4, "MODE1760"), (5, "READY"), (8, "ACTIVE"),
+            (9, "RTSSF"), (10, "AUTOEN"), (12, "TXINHB"), (13, "RTAP"), (14, "RTA0"),
+            (22, "RTA1"), (24, "RTA2"), (25, "RTA3"), (26, "RTA4"), (27, "LOCK"),
+            (28, "MTTCLK"), (29, "EMISO"), (32, "EMOSI"), (33, "ECS*"), (34, "EECOPY"),
+            (35, "ESCLK"), (36, "TTCLK"), (37, "RTMC8*"), (38, "EE2K"), (39, "MTSTOFF"),
+            (46, "TEST"), (47, "BENDI"), (48, "BCTRIG"))],
     },
     {
         "ref": "1553-XFM",
@@ -464,8 +468,8 @@ ICS += [
         "fp": FP_X1553,
         "mpn": "PM-DB2791S",
         "ds": "PremierMagnetics_DB2791S.pdf Fig 1 schematic (1-3 : 4-8 = 1:2.5) / Fig 2 dims [REF-SENSOR-025]",
-        # Holt-recommended isolation transformer (hi-1573.pdf transformer table).
-        # Primary 1-3 (CT 2 -> GND) on the transceiver, secondary 4-8 to the bus
+        # 1:2.5 isolation transformer per DS6138 Fig 28 (same ratio Holt specifies for HI-1573).
+        # Primary 1-3 (CT 2 -> GND) on the HI-6138 BUSA pins, secondary 4-8 to the bus
         # through the 55 R stub isolation resistors; pads 5/6/7 have no winding.
         "pins": [
             ("1", "PRI_P", "M1553_P", "L"),
@@ -500,14 +504,16 @@ ICS += [
 
 # ---------------------------------------------------------------------------
 # PocketBeagle 2 Industrial stacking headers — the board's established P1/P2
-# map.  Changes 2026-09-19: P1-20 (ex SPI0_CS_1553, unused) -> M1553_TX_EN;
+# map.  Changes 2026-09-28 (HI-6138 swap): P1-7/8/9 PRU 1553 lines -> IRQN /
+# MRN / TX_INH GPIOs, P1-10 freed, P1-20 TX_INH -> SPI0_CS_1553 (GPIO CS).
+# Changes 2026-09-19: P1-20 (ex SPI0_CS_1553, unused) -> M1553_TX_EN;
 # P1-33/34 (PB2 3.3 V) -> +3V3_PB2 (cape now regulates its own +3V3).
 # ---------------------------------------------------------------------------
 PB2_P1 = [
     "GND", "GND", "DSHOT3", "DSHOT2", "DSHOT1", "DSHOT0",
-    "PRU_1553_RX_N", "PRU_1553_RX_P", "PRU_1553_TX_N", "PRU_1553_TX_P",
+    "M1553_IRQN", "M1553_MRN", "M1553_TX_INH", None,
     "RS485_DE", "RS485_RX", "RS485_TX", "CAN_STB", "MCAN0_RX", "MCAN0_TX",
-    "BARO_INT", "IMU_INT2", "IMU_INT1", "M1553_TX_INH", "SPI0_CS_TPM",
+    "BARO_INT", "IMU_INT2", "IMU_INT1", "SPI0_CS_1553", "SPI0_CS_TPM",
     "SPI0_CS_BARO", "SPI0_MISO", "SPI0_MOSI", "SPI0_CLK", "SPI0_CS_IMU",
     None, None, None, None, "UART_GPS_RX",
     "UART_GPS_TX", "+3V3_PB2", "+3V3_PB2", "+5V", "GND",
@@ -631,9 +637,16 @@ SIMPLE: List[Any] = [
     ("MIL-1553", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "Pilot.md §14 J_1553",
      [("1", "BUS_P", "BUS_1553_P"), ("2", "BUS_N", "BUS_1553_N"), ("3", "GND", "GND"), ("4", "SHIELD", "PGND"),
       ("MP", "SHIELD", "PGND")]),
-    ("C-1553A", "100nF", FP_C0402, "", "HI-1573 VDDA bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-1553B", "100nF", FP_C0402, "", "HI-1573 VDDB bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-1553C", "10uF 6.3V X5R", FP_C0805, "", "HI-1573 transmitter bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-1553A", "100nF", FP_C0402, "", "HI-6138 VCC (pins 6/16/31) bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-1553B", "100nF", FP_C0402, "", "HI-6138 VCCP (pins 41/44) bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-1553C", "10uF 6.3V X5R", FP_C0805, "", "HI-6138 transceiver (VCCP) bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-1553D", "100nF", FP_C0402, "", "HI-6138 VCCP second pin bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("R-1553IRQ", "10k", FP_R0402, "", "HI-6138 IRQ open-drain pull-up (DS6138 Table 1)",
+     [("1", "A", "+3V3"), ("2", "B", "M1553_IRQN")]),
+    ("X-50M", "50MHz 3.3V", FP_OSC2520, "ECS-2520MV-500-BN-TR",
+     "HI-6138 MCLK 50.0 MHz +/-100 ppm required (DS6138 Table 1); +/-50 ppm part (ECS-2520MV.pdf)",
+     [("1", "TRI", None), ("2", "GND", "GND"), ("3", "OUT", "M1553_MCLK"), ("4", "VDD", "+3V3")]),
+    ("C-50M", "100nF", FP_C0402, "", "50 MHz oscillator VDD bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     # --- PWM / DSHOT servo-ESC block -------------------------------------------
     # WBS U1 (plan 2026-09-15-001 B1), 2026-09-19: on Serenity the ESCs and tilt
     # actuators live on the isolated CAN-FD / RS-485 trunk, so the dedicated
@@ -647,8 +660,9 @@ SIMPLE: List[Any] = [
     # RS-422 line drivers (~2 V differential) and cannot meet the MIL-STD-1553B
     # §4.5.2 bus voltage levels [REF-MIL-001], and the chain (2 x SOIC-16 +
     # SM1553 + TVS + connector, ~440 mm^2) does not fit the 55 x 35 mm cape.
-    # The PRU_1553_* / M1553_TX_EN balls (P1-7..10, P1-20) stay reserved as
-    # no-connects; a compliant transceiver is a WBS item.
+    # A compliant HI-1573 chain was restored 2026-09-19 and replaced by the
+    # HI-6138 protocol engine on 2026-09-28 (see the ICS table and the field
+    # port block below).
     # --- sensors -------------------------------------------------------------
     ("C-IMU1", "100nF", FP_C0402, "", "ICM-42688-P VDD bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-IMU2", "10nF", FP_C0201, "", "ICM-42688-P VDDIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),

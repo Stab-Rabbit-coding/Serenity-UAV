@@ -11316,6 +11316,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/tools/swap_1553_hi6138.py": {
+      "description": "In-place PCB patch for the fleet MIL-STD-1553C swap (HI-1573 -> HI-6138).",
+      "tags": [
+        "avionics-hardware",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/mosfet-search.txt": {
       "description": "Text file",
       "tags": [
@@ -17397,6 +17406,7 @@
       "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/fix_xcvr_labels.py",
+      "avionics/kicad/tools/swap_1553_hi6138.py",
       "gcs/skipper/software/config/mavlink_router.conf",
       "gcs/skipper/software/install/install_mavlink_router.sh"
     ],
@@ -18579,6 +18589,7 @@
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
+      "avionics/kicad/tools/swap_1553_hi6138.py",
       "tools/precommit_kicad_load.py",
       "tools/validate_kicad.py"
     ],
@@ -19092,6 +19103,7 @@
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
+      "avionics/kicad/tools/swap_1553_hi6138.py",
       "avionics/mosfet-search.txt",
       "avionics/rev-s1/TODO.md",
       "avionics/rev-s1/WBS.md"

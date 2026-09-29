@@ -170,7 +170,13 @@ Plan: `docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md` (Claude O
 - [x] **Phase 1 (U1):** HI-6138 footprint (custom, DS6138 §29), pin table, 50 MHz MCLK
     oscillator, and courtyard area budget. Done 2026-09-28; see
     `avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md`. Net courtyard change is −1.16 mm² per cape.
-- [ ] **Phase 2 (U2):** Pilot schematic regenerate, PCB in-place patch, ERC/DRC gates.
+- [x] **Phase 2 (U2):** Pilot schematic regenerate, PCB in-place patch, ERC/DRC gates.
+    Done 2026-09-28:
+    - ERC: 0.
+    - DRC: 0 violations, 0 schematic-parity issues. Unconnected pads went 388 → 390;
+      routing is still open.
+    - `1553-XCVR` kept its position and side; only the 4 new parts were added
+      (`avionics/kicad/tools/swap_1553_hi6138.py`).
 - [ ] **Phase 3 (U3):** TACCO schematic regenerate, PCB in-place patch, ERC/DRC gates.
 - [ ] **Phase 4 (U4):** DTS (both capes), firmware WBS, Pilot.md, TACCO.md, HDD, and 1553C
     documentation.
