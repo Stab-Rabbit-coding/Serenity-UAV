@@ -71,6 +71,52 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     retained. If "reduce per-PHY glue on Pilot" resurfaces, the on-architecture answer
     is a managed KSZ9477/KSZ9567 switch, tracked as a separate trade — NOT USB.
 
+##### 1.2a.2 *Commo Rev T — standalone MCU bus node (approved 2026-09-29)*
+
+Owner decisions (2026-09-29, S. Griffing):
+- One unit per airframe, co-located with its antennas.
+- Isolated CAN-FD + RS-485 + MIL-STD-1553C RT.
+- No Ethernet.
+- SE instead of TPM.
+- Mass from the PCB roll-up.
+
+Sources: requirements in `docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md`;
+plan in `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`.
+
+Rev S cape items in `TODO.md` §1.2a.1 (Commo gerbers, SIK/ETH-PHY overlap DRC) are
+**superseded** by Rev T and should not be worked. The §15.235 pre-compliance item still applies
+to Rev T.
+
+- **Phase 0 — architecture paperwork**
+  - [x] Amend `avionics/AGENTS.md`: bus-topology 1553 exception, Commo re-classed as a
+      standalone node with an SE (2026-09-29).
+  - [x] Update root `AGENTS.md` §1 and §9 for single-Commo / bus-reachable radios
+      (2026-09-29).
+  - [x] Archive the Rev S cape snapshot to
+      `archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/`
+      and add it to `ARCHIVE_INDEX.md` (2026-09-29).
+- **Phase 1 — part selection** (datasheet-verified)
+  - [ ] Confirm the MCU peripheral budget: MSPM0G3507 vs. the fleet trust-module
+      MSPM0G351x-Q1 (§1.9.3). Needs 1 MCAN, 3 UART, 2 SPI, and I²C.
+  - [ ] Select the Holt 1553C protocol engine (SPI host), and verify its P/N and 1553C
+      conformance against the OEM datasheet.
+  - [ ] Confirm the fleet isolated CAN-FD part (ISOW1044) and RS-485 part (ADM2795E) for reuse.
+  - [ ] Select the SE (OPTIGA Trust M?) and check for an I²C address conflict with Si5351A.
+  - [ ] Define the power input rail and budget (PA and SiK TX peaks).
+- **Phase 2 — schematic (Rev T)**
+  - [ ] Port the RF chains unchanged, remove PB2 / TPM / ETH, add the MCU / buses / SE /
+      power. ERC clean.
+- **Phase 3 — layout**
+  - [ ] Outline to the antenna site; owner does manual placement; RF rules retained.
+  - [ ] Check the 1553 stub length; DRC clean; generate Gerbers.
+- **Phase 4 — integration**
+  - [ ] PCB mass roll-up, then update `airframe/README.md`, `docs/BATTERY_MOUNT.md`, and
+      W&B/CG.
+  - [ ] Fix the antenna-site station against the hull model and the emi-hardening separation
+      checks.
+  - [ ] Log firmware items in `avionics/firmware/WBS.md`: AFSK/AX.25, SiK bridge, PTT lease,
+      1553 RT map / BC schedule, SE signing / secure boot.
+
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 
 - [x] **Wire second Ethernet (ETH2) on Pilot.** `ETH2` / `ETH2-PHY` (ADIN1300) /

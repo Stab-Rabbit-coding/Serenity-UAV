@@ -34,20 +34,6 @@ table. **Known residual:** this board's existing hand-placed layout has no conti
 for the 21x29mm SIK module without touching `ETH-PHY`/`T-ETH` — a real floorplan pass, not a
 netlist-sync task, is still needed before fab. Full detail: `avionics/WBS.md` §1.2a.
 
-**Status update (2026-09-29, S. Griffing) — REV T DIRECTION APPROVED; this Rev S cape design
-is SUPERSEDED:** Commo becomes **one standalone, MCU-driven bus node per airframe**, co-located
-with its antennas, reachable by all four stacks.
-- **Buses:** isolated CAN-FD, RS-485, and MIL-STD-1553C RT.
-- **Removed:** Ethernet (ETH-PHY / T-ETH / J-ETH), the PB2 P1/P2 rails, and the TPM, which is
-  replaced by an SE.
-- **Unchanged:** the 49 MHz AX.25 and SiK RF chains.
-- **Mass:** from the PCB roll-up.
-
-The Rev S files as they stood on 2026-09-29 are snapshotted at
-`archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/`. Rev S work
-items (gerbers, SIK/ETH-PHY floorplan) should not be worked. See `avionics/WBS.md` §1.2a.2 and
-`docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`.
-
 > **Note:** the "As-Built" tables below predate the 2026-07-04 reconciliation and still
 > list J1 "TACCO IF" as present; J1 has since been removed and the modem UART moved to the
 > PB2 rails. `Commo.kicad_sch` (not these tables) is now the source of truth.

@@ -13,6 +13,20 @@
 
 ---
 
+##### 1.2a.2 *Commo Rev T — standalone MCU bus node (2026-09-29)*
+→ full detail: `WBS.md` §1.2a.2
+
+- [ ] Confirm MCU peripheral budget (MSPM0G3507 vs MSPM0G351x-Q1)
+- [ ] Select + datasheet-verify Holt 1553C RT protocol engine
+- [ ] Confirm fleet iso CAN-FD / RS-485 parts for reuse
+- [ ] Select SE; check I²C address vs Si5351A
+- [ ] Define power input rail and budget
+- [ ] Rev T schematic: port RF chains, add MCU/buses/SE; ERC clean
+- [ ] Rev T layout at antenna site; 1553 stub check; DRC; gerbers
+- [ ] PCB mass roll-up → airframe/README, BATTERY_MOUNT, W&B
+- [ ] Fix antenna-site station vs hull model + separation checks
+- [ ] Log Rev T firmware items in firmware/WBS.md
+
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 → full detail: `WBS.md` §1.2a
 
@@ -29,13 +43,11 @@
 - [ ] Add SBUS/UART DIP switch to Pilot — add a 2-position DIP (or…
 - [ ] Generate Pilot gerbers — routed board still needed first
 - [ ] Generate XO/TACCO gerbers — existing set is stale (pre-rebuild/swap)
-- [ ] Generate Commo gerbers — existing set is stale (pre-radio-swap)
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
 - [ ] EMI isolation validation checklist — verify isolation barrier…
 - [ ] Merge `claude/cape-em-harsh-variants-9Yfr1` → master after gerbers…
 - [ ] Design Faraday cages / boxes to protect all PCBs
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
-- [ ] Commo PCB: re-run DRC to confirm/refute the SIK/ETH-PHY overlap claim
 - [ ] Pilot: verify ISOW1044/ISOW1412 SOIC-20W land vs each datasheet's DFM outline
 
 ### §1.9.3 — Trust-Module MCU/TPM Retarget (MSPM0G351x-Q1 + SLB 9672), 2026-08-03

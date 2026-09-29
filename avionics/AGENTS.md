@@ -17,13 +17,15 @@ Regulations Compliance" below.
 **Platform:** four pairs of **PocketBeagle2 Industrial SBCs** (8 nodes total, Rev S placement,
 established at Rev R1).
 
-**Zero Trust Security** Every PB2-I Cape (Pilot, TACCO, and Commo), node carries a **TPM** (Trusted Platform Module) and every other PCB carries an **SE** (Security Element) to provide cryptographic authentication and message integrity in addition to its other functions.
+**Zero Trust Security** Every PB2-I Cape (Pilot and TACCO) node carries a **TPM** (Trusted Platform Module) and every other PCB (including Commo from Rev T) carries an **SE** (Security Element) to provide cryptographic authentication and message integrity in addition to its other functions.
 
-**Bus Topology:** CAN FD, RS-485, Ethernet, and MIL-STD-1553C are galvanically isolated at every Pilot and TACCO node, providing a 4 lane redundant bus ring.  CAN-FD and RS-485 provide connectivity to every PCB, actuator and sensor on the aircraft.  The Observer PCB also has Ethernet to support its higher bandwidth sensor data. The 1553C bus is not extended to the resource constrained nodes lacking an SBC.
+**Bus Topology:** CAN FD, RS-485, Ethernet, and MIL-STD-1553C are galvanically isolated at every Pilot and TACCO node, providing a 4 lane redundant bus ring.  CAN-FD and RS-485 provide connectivity to every PCB, actuator and sensor on the aircraft.  The Observer PCB also has Ethernet to support its higher bandwidth sensor data. The 1553C bus is not extended to the resource constrained nodes lacking an SBC, **with one named exception: Commo (Rev T) is a 1553C remote terminal** because it is the airframe's external 49 MHz / SiK RF link and must be reachable on every onboard bus lane (owner decision 2026-09-29, `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`). Commo carries CAN-FD, RS-485, and 1553C but no Ethernet.
 
-**Commo transceiver cape** (49 MHz Part 15 §15.235 + SiK 915 MHz): installed in **River's
-Room** (Bay C, starboard cargo) and **Simon's Medbay** (Bay D, middle section) only — see "Cape
-Naming and Revision History" below for current build status.
+**Commo transceiver node** (49 MHz Part 15 §15.235 + SiK 915 MHz): **Rev T direction (approved
+2026-09-29):** one standalone, MCU-driven Commo per airframe, co-located with its antennas and
+reachable by all four stacks over the bus. It replaces the two Rev S PB2-I capes in River's Room
+(Bay C) and Simon's Medbay (Bay D). Until Rev T is fabricated, the Rev S cape design remains the
+as-designed hardware; see "Cape Naming and Revision History" below for current build status.
 
 **Power Distribution — Flight Engineer (PDB):** central location in the inner neck of the middle
 section, minimizing power-run lengths to all four nacelles, all four avionics stacks, and the
@@ -37,8 +39,11 @@ alternative tasking** with PACE prioritization (**P**rimary, **A**lternative, **
 `AGENTS.md` §9 "Naming and Roles" — read that table, do not copy it here. Board-level facts it
 does not carry:
 
-- River's Room (Bay C) and Simon's Medbay (Bay D) run **Pilot + TACCO + Commo**; Shepherd's Room
-  (Bay A) and Inara's Shuttle (Bay B) run Pilot + TACCO only.
+- All four stacks run **Pilot + TACCO**. Under Rev S, River's Room (Bay C) and Simon's Medbay
+  (Bay D) also carried a Commo cape. Under Rev T (approved 2026-09-29), no stack carries a Commo
+  cape: the single standalone Commo node sits at its antennas, and every stack reaches it over
+  CAN-FD / RS-485 / 1553C. This is an accepted single point of failure for 49 MHz and SiK, with
+  TACCO's mLRS as the long-range fallback.
 - **Radio assignment resolved (2026-09-21/26):** TACCO carries an **mLRS radio on a Seeed
   Wio-E5 (STM32WLE5) module** (LoRa-class, not RFM95W); Commo carries **SiK (RFD900ux-SMT)** in
   addition to the 49 MHz transceiver. TACCO no longer carries SiK, and Commo no longer carries
@@ -73,12 +78,23 @@ transceivers, onboard data logging to hardware-enforced non-executable microSD, 
 Current build designation: TACCO. Status/history: `avionics/kicad/TACCO/TACCO.md`, TODO.md
 §1.2b.
 
-### Commo — 49 MHz + SiK Transceiver Cape
+### Commo — 49 MHz + SiK Transceiver Node
 
 Unlicensed-band communications for high-RF-field environments: 49 MHz transceiver (47 CFR
-Part 15 §15.235) plus Sik 915 MHz, both galvanically isolated. Installed only in River's Room
-(Bay C) and Simon's Medbay (Bay D). Connects via P1+P2 socket rails (Rev R1; replaces the
-legacy JST GH 6P). Status/history: `avionics/kicad/Commo/Commo.md`, TODO.md §1.2b.
+Part 15 §15.235) plus SiK 915 MHz.
+
+- **Rev S (current as-designed, superseded 2026-09-29):** a PB2-I cape on P1+P2 socket rails,
+  installed in River's Room (Bay C) and Simon's Medbay (Bay D). Snapshot archived at
+  `archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/`.
+- **Rev T (approved direction, in design):** **a standalone PCB, not a PB2-I cape**, like
+  Observer and Bus-Gateway.
+  - One unit per airframe, co-located with its antennas.
+  - MCU-driven: the modem and AX.25/KISS run on-board.
+  - Isolated CAN-FD, RS-485, and MIL-STD-1553C RT; no Ethernet; an SE instead of a TPM.
+  - Mass is taken from the PCB roll-up, not hand-entered.
+  - Plan: `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`.
+
+Status/history: `avionics/kicad/Commo/Commo.md`, TODO.md §1.2b, `avionics/WBS.md` §1.2a.2.
 
 ### Observer — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board
 

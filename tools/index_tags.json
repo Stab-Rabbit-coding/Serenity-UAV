@@ -4936,6 +4936,461 @@
       ],
       "archived": true
     },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md": {
+      "description": "Commo \u2014 EMI-Hardened 49 MHz AX.25 Transceiver",
+      "tags": [
+        "archive",
+        "documentation",
+        "emi-hardening",
+        "pcb-design",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Courtyard.gbr": {
+      "description": "Gerber fabrication layer (b_courtyard)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Cu.gbl": {
+      "description": "Gerber fabrication layer (b_cu)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Fab.gbr": {
+      "description": "Gerber fabrication layer (b_fab)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Mask.gbs": {
+      "description": "Gerber fabrication layer (b_mask)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Paste.gbp": {
+      "description": "Gerber fabrication layer (b_paste)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Silkscreen.gbo": {
+      "description": "Gerber fabrication layer (b_silkscreen)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Edge_Cuts.gm1": {
+      "description": "Gerber fabrication layer (edge_cuts)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Courtyard.gbr": {
+      "description": "Gerber fabrication layer (f_courtyard)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Cu.gtl": {
+      "description": "Gerber fabrication layer (f_cu)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Fab.gbr": {
+      "description": "Gerber fabrication layer (f_fab)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Mask.gts": {
+      "description": "Gerber fabrication layer (f_mask)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Paste.gtp": {
+      "description": "Gerber fabrication layer (f_paste)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Silkscreen.gto": {
+      "description": "Gerber fabrication layer (f_silkscreen)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In1_Cu.g1": {
+      "description": "Gerber fabrication layer (in1_cu)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In2_Cu.g2": {
+      "description": "Gerber fabrication layer (in2_cu)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Margin.gbr": {
+      "description": "Gerber fabrication layer (margin)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-in1-back.drl": {
+      "description": "Drill file (NC drill data)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-job.gbrjob": {
+      "description": "Gerber job file (fabrication job spec)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo.drl": {
+      "description": "Drill file (NC drill data)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Cu.gbr": {
+      "description": "Gerber fabrication layer (b_cu)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Mask.gbr": {
+      "description": "Gerber fabrication layer (b_mask)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Paste.gbr": {
+      "description": "Gerber fabrication layer (b_paste)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Silkscreen.gbr": {
+      "description": "Gerber fabrication layer (b_silkscreen)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-Edge_Cuts.gbr": {
+      "description": "Gerber fabrication layer (edge_cuts)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Cu.gbr": {
+      "description": "Gerber fabrication layer (f_cu)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Mask.gbr": {
+      "description": "Gerber fabrication layer (f_mask)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Paste.gbr": {
+      "description": "Gerber fabrication layer (f_paste)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Silkscreen.gbr": {
+      "description": "Gerber fabrication layer (f_silkscreen)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In1_Cu.gbr": {
+      "description": "Gerber fabrication layer (in1_cu)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In2_Cu.gbr": {
+      "description": "Gerber fabrication layer (in2_cu)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-job.gbrjob": {
+      "description": "Gerber job file (fabrication job spec)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2.drl": {
+      "description": "Drill file (NC drill data)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pcb": {
+      "description": "KiCad PCB layout",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_prl": {
+      "description": "KiCad project-local settings",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pro": {
+      "description": "KiCad project file",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sch": {
+      "description": "KiCad schematic",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/emc.json": {
+      "description": "JSON data (13 top-level keys)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/pcb.json": {
+      "description": "JSON data (36 top-level keys)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/schematic.json": {
+      "description": "JSON data (45 top-level keys)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/thermal.json": {
+      "description": "JSON data (6 top-level keys)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/fp-lib-table": {
+      "description": "(fp_lib_table",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/sym-lib-table": {
+      "description": "(sym_lib_table",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/HDD.md": {
+      "description": "Hardware Design Description",
+      "tags": [
+        "archive",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.json": {
+      "description": "JSON data (1 top-level keys)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/schematics/Commo.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/cleanup_commo_drc.py": {
+      "description": "cleanup_commo_drc.py \u2014 Clear the pre-existing hard DRC debt on Commo.kicad_pcb",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/gen_commo_sch.py": {
+      "description": "gen_commo_sch.py \u2014 Author Commo.kicad_sch from the as-placed Commo.kicad_pcb.",
+      "tags": [
+        "archive",
+        "emi-hardening",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/inject_commo_tpm.py": {
+      "description": "inject_commo_tpm.py -- add an SLB9672 TPM to Commo.kicad_sch via text",
+      "tags": [
+        "archive",
+        "pcb-design",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/mod_commo_pcb.py": {
+      "description": "mod_commo_pcb.py \u2014 Apply the schematic-first reconciliation transform to",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/route_commo_rssi.py": {
+      "description": "route_commo_rssi.py \u2014 Route the RSSI carrier-detect sub-circuit on Commo.kicad_pcb.",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py": {
+      "description": "swap_lora_for_sik.py \u2014 One-off transform: remove Commo's LoRa (RFM95W),",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "emi-hardening",
+        "pcb-design",
+        "security"
+      ],
+      "archived": true
+    },
     "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md": {
       "description": "Pilot \u2014 EMI-Hardened Flight Control & Sensor Cape",
       "tags": [
@@ -14854,6 +15309,8 @@
       "airframe/wings-nacelles/TODO.md",
       "airframe/wings-nacelles/WBS.md",
       "archives/airframe-archives/archive/ARCHIVE-REVQ.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/HDD.md",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-2.md",
@@ -15175,6 +15632,9 @@
       "airframe/placeholders/generate_placeholders.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Assemble.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Subsystem-Assembly.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/gen_commo_sch.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-2.md",
@@ -15318,6 +15778,10 @@
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Assemble.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Subsystem-Assembly.py",
       "archives/airframe-archives/archive/openscad/wings/wing_nacelle_pylon_revo.scad",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/HDD.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/inject_commo_tpm.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/mod_pilot_pcb_reconcile.py",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.md",
@@ -16845,6 +17309,20 @@
       "archives/avionics-archives/gerber-archive/XCVR-49MHZ-1/XCVR-49MHZ-1-drl_map.pdf",
       "archives/avionics-archives/gerber-archive/XCVR-49MHZ-1/XCVR-49MHZ-1-job.gtl",
       "archives/avionics-archives/gerber-archive/XCVR-49MHZ-1/XCVR-49MHZ-1.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-Edge_Cuts.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In1_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In2_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-job.gbrjob",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py",
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.kicad_pcb",
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.kicad_prl",
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.kicad_pro",
@@ -17172,6 +17650,60 @@
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_205610.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_210615.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_211230.zip",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Courtyard.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Cu.gbl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Fab.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Mask.gbs",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Paste.gbp",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Silkscreen.gbo",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Edge_Cuts.gm1",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Courtyard.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Cu.gtl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Fab.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Mask.gts",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Paste.gtp",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Silkscreen.gto",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In1_Cu.g1",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In2_Cu.g2",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Margin.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-in1-back.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-job.gbrjob",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-Edge_Cuts.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In1_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In2_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-job.gbrjob",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pcb",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_prl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pro",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sch",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sym",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/emc.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/pcb.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/schematic.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/thermal.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/fp-lib-table",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/sym-lib-table",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/HDD.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.svg",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/schematics/Commo.svg",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/cleanup_commo_drc.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/gen_commo_sch.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/inject_commo_tpm.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/mod_commo_pcb.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/route_commo_rssi.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_pcb",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_sch",
@@ -17517,6 +18049,60 @@
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_205610.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_210615.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_211230.zip",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Courtyard.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Cu.gbl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Fab.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Mask.gbs",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Paste.gbp",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Silkscreen.gbo",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Edge_Cuts.gm1",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Courtyard.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Cu.gtl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Fab.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Mask.gts",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Paste.gtp",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Silkscreen.gto",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In1_Cu.g1",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In2_Cu.g2",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Margin.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-in1-back.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-job.gbrjob",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-Edge_Cuts.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In1_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In2_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-job.gbrjob",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pcb",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_prl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pro",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sch",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sym",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/emc.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/pcb.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/schematic.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/thermal.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/fp-lib-table",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/sym-lib-table",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/HDD.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.svg",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/schematics/Commo.svg",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/cleanup_commo_drc.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/gen_commo_sch.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/inject_commo_tpm.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/mod_commo_pcb.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/route_commo_rssi.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_pcb",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_sch",
