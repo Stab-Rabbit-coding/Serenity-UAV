@@ -490,6 +490,12 @@ def patch_project_netclasses(pro_path: Path) -> None:
          "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.25, "via_diameter": 0.6, "via_drill": 0.3},
         {"clearance": 0.127, "name": "POWER", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 2,
          "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.4, "via_diameter": 0.6, "via_drill": 0.3},
+        # Plane-fed rails (In1 GND, In4 +3V3, local +3V3_RF/+1V8_RF pours): copper on the
+        # routing layers is only pad-to-via stubs at 0.5 mm-pitch QFN pins ringed by 0201
+        # bypasses, so 0.2 mm (~0.9 A / 10 degC rise, 1 oz) is the width the escape
+        # geometry admits; 0.4 mm left ~70 plane pins unroutable (2026-09-30 routing pass).
+        {"clearance": 0.127, "name": "PLANE", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 4,
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.2, "via_diameter": 0.6, "via_drill": 0.3},
         # 50 Ohm microstrip on the 6-layer stack (TACCO.md §13: ~0.35 mm over the In1 GND plane)
         {"clearance": 0.127, "name": "RF", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 3,
          "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.35, "via_diameter": 0.6, "via_drill": 0.3},
@@ -501,8 +507,10 @@ def patch_project_netclasses(pro_path: Path) -> None:
         patterns.append({"netclass": "DIFF_PAIR", "pattern": n})
     for n in ("GND2_*", "VCC2_*", "CAN_B_H*", "CAN_B_L*", "RS485_B_A*", "RS485_B_B*"):
         patterns.append({"netclass": "ISOLATION", "pattern": n})
-    for n in ("+5V*", "+3V3", "+3V3_RF", "+1V8_RF", "GND", "PGND"):
+    for n in ("+5V*", "PGND"):
         patterns.append({"netclass": "POWER", "pattern": n})
+    for n in ("+3V3", "+3V3_RF", "+1V8_RF", "GND"):
+        patterns.append({"netclass": "PLANE", "pattern": n})
     for n in ("MLRS_RFO_HP", "MLRS_TX*", "MLRS_RX*", "MLRS_RFI_*", "MLRS_ANT*", "RADIO_ANT*"):
         patterns.append({"netclass": "RF", "pattern": n})
     d["net_settings"]["netclass_patterns"] = patterns
