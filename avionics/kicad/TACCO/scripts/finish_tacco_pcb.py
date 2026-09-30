@@ -25,6 +25,11 @@ Phases (avionics/WBS.md §1.2a "TACCO area recovery", U5):
    minimum), refills all zones and saves.  ``kicad-cli pcb drc --severity-all
    --schematic-parity`` is the gate that follows.
 
+Operational notes (2026-09-30): freerouting 1.9 only writes the .ses when it stops, so
+run it with a pass cap (``-mp``) sized to the residue, not open-ended; and re-exporting a
+partly routed board after a netclass width change raises a GUI "net normalization"
+warning that blocks until dismissed (xdotool Return under xvfb).
+
 Same discipline as Pilot's ``finish_pilot_pcb.py``: an autorouted result is accepted
 only if the DRC gate passes; shorts or isolation-rule violations are fixed or the
 result is rejected.

@@ -278,6 +278,16 @@
       },
       {
         "clearance": 0.127,
+        "name": "PLANE",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 4,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.2,
+        "via_diameter": 0.6,
+        "via_drill": 0.3
+      },
+      {
+        "clearance": 0.127,
         "name": "POWER",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 2,
@@ -365,23 +375,23 @@
       },
       {
         "netclass": "POWER",
+        "pattern": "PGND"
+      },
+      {
+        "netclass": "PLANE",
         "pattern": "+3V3"
       },
       {
-        "netclass": "POWER",
+        "netclass": "PLANE",
         "pattern": "+3V3_RF"
       },
       {
-        "netclass": "POWER",
+        "netclass": "PLANE",
         "pattern": "+1V8_RF"
       },
       {
-        "netclass": "POWER",
+        "netclass": "PLANE",
         "pattern": "GND"
-      },
-      {
-        "netclass": "POWER",
-        "pattern": "PGND"
       },
       {
         "netclass": "RF",
