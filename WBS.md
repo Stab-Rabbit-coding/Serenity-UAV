@@ -382,6 +382,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [x] Iris open-radius finding: flow r 23.77 mm, not 26.25 (→ Ph11b)
 - [x] Nacelle mass/CG roll-up re-based to the fixed nozzle
 - [x] PIVOT_Z re-datumed 107.5 → 103.5 mm (D-TW-5); 3.0 in gear clears
+- [ ] [PRINT-BLOCKING] Pod STLs stale; pod SCAD renders non-manifold
 - [ ] Print ×2 fixed nozzle; dry-fit + bond in the Ø72 pod pocket
 - [ ] Thrust-stand exit-radius sweep (23.75 / 25.00 / 26.25 mm)
 - [ ] Quantify the cruise penalty of losing the 75 % convergent exit

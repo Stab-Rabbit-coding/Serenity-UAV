@@ -136,6 +136,7 @@
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 
+- [ ] [PRINT-BLOCKING] Pod STLs stale; pod SCAD renders non-manifold
 - [ ] Print ×2 fixed nozzle; dry-fit + bond in the Ø72 pod pocket
 - [ ] Thrust-stand exit-radius sweep (23.75 / 25.00 / 26.25 mm)
 - [ ] Quantify the cruise penalty of losing the 75 % convergent exit

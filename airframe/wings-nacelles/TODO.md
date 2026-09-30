@@ -27,6 +27,7 @@
 ##### 1.1.3.1 *Nozzle*
 → full detail: `WBS.md` §1.1.3.1
 
+- [ ] [OPEN — PRINT-BLOCKING] Published pod STLs are STALE
 - [ ] [OPEN — PRINT/FIT] Print ×2 and dry-fit in the Ø72 pod exit pocket
 - [ ] [OPEN — STAND, T/W plan TW-1/T3] Exit-radius sweep
 - [ ] [OPEN — CRUISE] Quantify the cruise penalty of losing the 75 %…

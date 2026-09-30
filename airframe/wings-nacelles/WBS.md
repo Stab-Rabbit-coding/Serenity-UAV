@@ -842,11 +842,24 @@
     - [x] **`PIVOT_Z` re-datumed 107.5 → 103.5 mm (owner decision D-TW-5, 2026-09-29).** The
         fixed nozzle moved the rotating-assembly CG 4.0 mm forward. `PIVOT_Z` changed in
         `nacelle_pod_50mm_tandem.scad`, `serenity_assembly.py` and
-        `port_tilt_spar_assembly.scad`; both pods re-rendered and re-baked; fixed point and
-        gates in the Rev T6 PR. **Hover ground clearance, 3.0 in flight-article gear:
+        `port_tilt_spar_assembly.scad`. Fixed point CONVERGED (SCAD 103.5 vs measured CG
+        103.49, residual −0.01 mm); trunnion gates T1–T8 and the ESC-bay gate pass (collar now
+        16.1 mm proud, 4.5 mm clear of the wing tip face). **Hover ground clearance, 3.0 in flight-article gear:
         +39.1 mm static, +32.6 mm at 5° touchdown, +11.6 mm over the 21 mm reserve —
         MEETS MINIMUM** (`tools/landing_gear_ground_clearance.py`). The move costs 4.0 mm of
         clearance against keeping 107.5, and it is not drawn from the 8 mm drift reserve.
+    - [ ] **[OPEN — PRINT-BLOCKING] Published pod STLs are STALE — do NOT print the pods from
+        them.** `nacelle_port/stbd_revs.stl` were last rendered 2026-09-06 and still carry the
+        trunnion collar at `PIVOT_Z` 107.5. Re-rendering them at 103.5 (2026-09-29) exposed a
+        **pre-existing** defect: the current pod SCAD renders NON-MANIFOLD (port 86 / stbd 82
+        non-2-manifold edges, all in the band Z 66–99 mm around the full circumference, i.e.
+        the hollow-wall / ESC-bay zone, not the collar). A control render of the unmodified
+        SCAD at 107.5 shows the same 88-edge band, so it predates Rev T6. It entered with
+        `831b1ea9` (2026-09-08, "fixing the nacelles", ESC bay 62 → 44 mm), after which the
+        pods were never re-rendered. Fix the SCAD, then render both pods per the header
+        commands, bake (`tools/bake_hull_frame.py Nacelle_Port Nacelle_Stbd`), and re-run
+        `nacelle_trunnion_fit.py`, `nacelle_esc_bay_fit.py`, `nacelle_mass_cg.py` and
+        `landing_gear_ground_clearance.py`. The collar move itself adds only +0.6 cm³.
     - [ ] **[OPEN — PRINT/FIT] Print ×2 and dry-fit** in the Ø72 pod exit pocket; bond per
         the iris-housing joint (West System 105/206, 24 h).
     - [ ] **[OPEN — STAND, T/W plan TW-1/T3] Exit-radius sweep** — print
