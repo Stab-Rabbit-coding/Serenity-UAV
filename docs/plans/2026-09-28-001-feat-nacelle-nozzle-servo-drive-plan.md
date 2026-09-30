@@ -12,6 +12,11 @@ origin: docs/ideation/2026-09-28-nozzle-servo-actuation-ideation.html
 
 # feat: Nacelle nozzle servo drive (Option A) and passive-drive retirement
 
+> **STATUS 2026-09-29 — DEFERRED TO PHASE 11b (Rev T6, owner decision D-TW-3).** Phases 5–10
+> fly a fixed open nozzle (`airframe/openscad/nacelles/nacelle_nozzle_fixed.scad`). U1–U3 are
+> complete and stay in the tree; U4–U8 moved to `deferred/WBS.md` §Phase11b. Resume this plan
+> from there, after first fixing the iris open-radius finding recorded in that section.
+
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CEH (GitHub `Stab-Rabbit-coding`) — owner decisions.
 **AI contribution:** analysis, ideation synthesis and plan text by Claude (Claude Opus 5.5, Anthropic);
 ideation and servo research sub-agents Claude Sonnet 5 (Anthropic). Per `AGENTS.md` AI attribution.

@@ -87,7 +87,9 @@ X_SENSOR   =   3;   // AK7455 PCB on the wing pad, chord-aft of the spar
 // modelled with the duct axis on local +Z, intake at local Z=0; the CG pivot /
 // spar axis is at local Z = PIVOT_ZLOC.
 NAC_BAKE   = [47, -64, 63];   // baked translation (rotation = 270° about +X)
-PIVOT_ZLOC = 107.5;           // nacelle-local duct Z of the CG pivot / spar axis.
+PIVOT_ZLOC = 103.5;           // nacelle-local duct Z of the CG pivot / spar axis.
+                              //   Rev T6 (2026-09-29): 107.5 -> 103.5 with the pod
+                              //   (fixed open nozzle moved the CG forward, D-TW-5).
                               //   CORRECTED 2026-09-09: this file carried a
                               //   STALE 111.5 (Rev T CG re-derive 2026-07-19,
                               //   itself up from 104.5).  The AUTHORITATIVE

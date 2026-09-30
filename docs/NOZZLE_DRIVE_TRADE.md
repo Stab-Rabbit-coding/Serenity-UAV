@@ -1,7 +1,9 @@
 # Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19; decided 2026-09-28)
 
-> **Current decision:** servo drive scheduled on measured tilt — see
-> [DECISION AMENDMENT — servo drive (2026-09-28)](#decision-amendment--servo-drive-2026-09-28).
+> **Current decision (Rev T6, 2026-09-29):** Phases 5–10 fly a **fixed open nozzle**; the
+> servo-driven variable nozzle is **deferred to Phase 11b** — see
+> [DECISION AMENDMENT — fixed nozzle, iris deferred (2026-09-29)](#decision-amendment--fixed-nozzle-iris-deferred-2026-09-29).
+> The servo-drive decision below stands as the Phase 11 mechanism.
 
 > *"It's the tilt-nozzle. Passive. Elegant. Right up until a gear's hanging off
 > the side of the ship." — design review, this session.*
@@ -333,3 +335,30 @@ under `archives/airframe-archives/archive/openscad/nacelles/` (see `ARCHIVE_INDE
 
 *Analysis by Claude (Claude Opus 5.5, Anthropic) under the author's direction, 2026-09-28; servo
 research and ideation sub-agents Claude Sonnet 5 (Anthropic). Per `AGENTS.md` AI attribution.*
+
+## DECISION AMENDMENT — fixed nozzle, iris deferred (2026-09-29)
+
+**Owner decisions D-TW-3 and D-TW-5** (`docs/plans/2026-09-29-001-tw-recovery-stem-to-stern-plan.md`
+§6.1), taken to recover hover thrust-to-weight. Analysis by Claude (Claude Opus 5.5,
+Anthropic) under the author's direction.
+
+- **Phases 5–10:** one-piece fixed open nozzle, `airframe/openscad/nacelles/nacelle_nozzle_fixed.scad`,
+  flow exit r 26.25 mm (105 % of the bore radius) at every tilt, on the same pod-pocket
+  interface as the iris housing.
+- **Phase 11b:** the servo-scheduled iris (the 2026-09-28 amendment above, plan
+  `2026-09-28-001`) returns only if thrust-stand data show its cruise benefit is worth its mass
+  and mechanism risk (`deferred/WBS.md` §Phase11b).
+- **Why:** hover is the T/W-critical case, and the servo iris already held its open position
+  from 90° to 145° and failed open, so hover flow is unchanged. The swap saves ≈ 85 g
+  (0.19 lbm) per aircraft against the V1 servo iris and takes the servo, spring, D-NZ-1 and
+  the U8 bench gate off the first-flight path.
+- **Cost:** the 75 % convergent cruise setting is lost. Cruise efficiency and top speed drop by
+  an amount this repo can't yet quantify (no drag polar).
+- **Finding carried to Phase 11:** the modelled iris's open flow radius measures 23.77 mm
+  (95 % radius), not 26.25 mm, because `NOZZLE_OPEN_R` places the flap hinge line rather than
+  the flow surface. The fixed nozzle meets the requirement on the flow surface; the iris must be
+  re-solved before it flies.
+- **Pivot (D-TW-5):** the lighter nozzle moved the rotating-assembly CG 4.0 mm forward;
+  `PIVOT_Z` is re-datumed 107.5 → 103.5 mm. Hover ground clearance on the 3.0 in
+  flight-article gear stays +39.1 mm static and meets the minimum-safe-clearance check with
+  +11.6 mm surplus (`tools/landing_gear_ground_clearance.py`).

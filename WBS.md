@@ -378,18 +378,24 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [x] Re-derive rotating-assembly CG for Rev S2 pushrod/cam drive…
 → also: `airframe/wings-nacelles/WBS.md` §1.1.4 (tilt-spar) and §1.1.5
   (trunnion) — the owner's LOCAL numbering, not root §1.1.4/§1.1.5
-- [ ] [OPEN — VERIFY] Mass/CG impact of the shingle
-- [ ] [OPEN — VERIFY] Seal-flap aerodynamic step
-- [ ] [OPEN — NO-GO, was VERIFY] Spatial RSSR linkage synthesis
-- [ ] [OPEN — IMPLEMENT] Adopted nozzle drive
-- [ ] Re-hub `spar_crank()` onto the pinion
-- [ ] [BLOCKED — needs an owner decision, do NOT assume resolved] The KTD3…
-- [ ] [OPEN — parked, do NOT print] `nacelle_nozzle_sync_gears.scad`
-- [ ] Pushrod clearance/interference check
-- [ ] [OPEN — ACCEPTED RESIDUAL, not fixable by boss sizing] Hinge bosses…
-- [ ] Spar-crank placement in serenity_assembly.py is first-pass (Y=0…
-- [ ] User WIP `gear_option_compare.scad` / `gear_shell_compare.scad`…
-- [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD…
+- [x] Rev T6 fixed open nozzle modelled + validated (33.8 g, 2026-09-29)
+- [x] Iris open-radius finding: flow r 23.77 mm, not 26.25 (→ Ph11b)
+- [x] Nacelle mass/CG roll-up re-based to the fixed nozzle
+- [x] PIVOT_Z re-datumed 107.5 → 103.5 mm (D-TW-5); 3.0 in gear clears
+- [ ] Print ×2 fixed nozzle; dry-fit + bond in the Ø72 pod pocket
+- [ ] Thrust-stand exit-radius sweep (23.75 / 25.00 / 26.25 mm)
+- [ ] Quantify the cruise penalty of losing the 75 % convergent exit
+- [x] Shingle mass/CG + seal-flap step VERIFY → moved to §Phase11b
+- [x] [CLOSED 2026-09-28] Spatial RSSR linkage synthesis (servo drive)
+- [x] [CLOSED 2026-09-28] Adopted nozzle drive (servo; now deferred)
+- [x] [CLOSED 2026-09-28] Re-hub `spar_crank()` onto the pinion
+- [x] [CLOSED 2026-09-28] KTD3 datum blocker (servo decision)
+- [x] [CLOSED 2026-09-28] `nacelle_nozzle_sync_gears.scad` archived
+- [x] [CLOSED 2026-09-28] Pushrod clearance/interference check
+- [x] Hinge-boss accepted residual → iris-only, moved to §Phase11b
+- [x] [CLOSED 2026-09-28] Spar-crank placement in serenity_assembly.py
+- [x] [CLOSED 2026-09-28] User WIP gear-compare SCADs archived
+- [x] [CLOSED 2026-09-28] Nozzle drive protrudes ~10 mm past the OD
 - [ ] [OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not…
 - [ ] [OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still…
 - [ ] [OPEN — VERIFY] `serenity_assembly.py` still places the deleted parts
@@ -401,14 +407,14 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Window structural allowance
 - [ ] [OPEN — cross-subsystem, rescoped 2026-07-26] `Pilot.md` §13 /…
 - [ ] AK7455 off-axis bench validation
-- [ ] SPAR-20-8 (U8) — Re-datum the nozzle drive onto the fixed trunnion…
+- [x] SPAR-20-8 (U8) — superseded: no nozzle drive at Rev T6
 - [ ] SPAR-20-9 (U9) — Mass/CG/T-W re-derive (spar 96.2 → 67.5 g/pair, but…
 - [ ] NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening
 - [ ] SPAR-20-AERO — The re-lofted section is no longer S1223 (root 12.1 →…
 - [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
 - [ ] SPAR-20-ALLOW — No verified CF tube flexural allowable exists in…
 - [ ] SPAR-20-WIREOD — `bom_revS.csv` records no OD for `WIRE-10AWG`
-- [ ] SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision (§1.1.3.1…
+- [x] SPAR-25-5 (U5) — owner decided; first-flight blocker 2 cleared
 - [ ] SPAR-25-6 (U6) — Integration, load check, mass/CG, BOM, and the…
 
 #### 1.1.4 — Landing Gear
@@ -986,6 +992,20 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] 49MHz aft wire post on canonical nozzle; top wire re-strung at…
 - [ ] Forward-thrust test passed; rear EDF NOT used for hover lift; E…
 - [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruis…
+
+### Phase11b — Variable Nacelle Nozzle, Servo-Scheduled Iris (Deferred)
+→ detail: `deferred/WBS.md` §Phase11b
+
+- [ ] Re-decide the iris against thrust-stand data first
+- [ ] Fix the iris open radius (flow r 23.77 vs 26.25 mm required)
+- [ ] Re-converge PIVOT_Z with the iris back in (≈107 mm)
+- [ ] Servo mount, pod pocket, flush cover + fit check (plan U4)
+- [ ] [DECISION D-NZ-1] Gateway variant (plan U6)
+- [ ] BOM + REFERENCES (plan U7) — restore iris rows, add servo rows
+- [ ] Servo-drive bench verification (plan U8)
+- [ ] Mass/CG impact of the shingle
+- [ ] Seal-flap aerodynamic step
+- [ ] Restore the iris Makefile targets + assembly import
 
 ### Phase12 — Cargo-bay Range-Extender Battery Module (Deferred)
 → detail: `deferred/WBS.md` §Phase12

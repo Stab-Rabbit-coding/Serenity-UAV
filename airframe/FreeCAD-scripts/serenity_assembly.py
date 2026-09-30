@@ -362,7 +362,9 @@ AFT_SLV_Z_START = 122.5
 #   107.5  the ESCs sited where they actually FIT (measured bay centroid Z 104)
 #          instead of at plan 003 KTD8's assumed Z 150.6 — a station no board
 #          can occupy, so that lever never existed
-PIVOT_Z = 107.5  # pivot station = full-assembly nacelle CG; see the note above
+#   103.5  Rev T6 (2026-09-29): the fixed open nozzle replaced the heavier iris
+#          set aft of the pivot, moving the CG 4.0 mm FORWARD (owner D-TW-5)
+PIVOT_Z = 103.5  # pivot station = full-assembly nacelle CG; see the note above
 NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
 
 
@@ -856,10 +858,16 @@ def assemble():
         # Option B) -> Rev T3 shingled flaps (2026-08-09); the entire gear
         # train is deleted and archived — see ARCHIVE_INDEX.md and
         # docs/NOZZLE_DRIVE_TRADE.md.
+        # Rev T6 (2026-09-29, owner decision D-TW-3): Phases 5-10 fly the
+        # one-piece FIXED open nozzle; the iris above is DEFERRED to Phase 11b
+        # (deferred/WBS.md) and nozzle_iris_stl() is kept for that phase.  The
+        # fixed nozzle shares the iris's part-local frame and seat at
+        # NOZZLE_RING_Z, and is rotationally symmetric, so the placement below
+        # is unchanged and tilt-independent.
         nozzle = add_mesh(
             doc,
-            nozzle_iris_stl(side),
-            f"Nacelle_{label}_Nozzle_Iris",
+            _stl("nacelles/nozzles/nacelle_nozzle_fixed.stl"),
+            f"Nacelle_{label}_Nozzle_Fixed",
         )
         transform_mesh(
             nozzle,

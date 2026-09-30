@@ -89,6 +89,13 @@ NACELLE_STLS := \
     $(STLS)/nacelles/esc/nacelle_esc_cover_port_b.stl    \
     $(STLS)/nacelles/esc/nacelle_esc_cover_stbd_a.stl    \
     $(STLS)/nacelles/esc/nacelle_esc_cover_stbd_b.stl    \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_fixed.stl
+
+# Rev T6 (2026-09-29, owner decision D-TW-3): the variable-nozzle iris is
+# DEFERRED to Phase 11b (deferred/WBS.md).  Its rules below are kept so the
+# parts can still be built on demand (`make nozzle-iris`), but they are no
+# longer part of the default nacelle build.
+NOZZLE_IRIS_STLS := \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-closed.stl \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-open.stl   \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl   \
@@ -229,6 +236,21 @@ $(STLS)/nacelles/esc/nacelle_esc_cover_stbd_b.stl: \
 	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
 	    -D NACELLE_SIDE=1 -D RENDER_BAY=1 -o $@
 	@echo "[stl] $@"
+
+# Rev T6 fixed open nozzle — one piece, one per nacelle (print x 2).
+# Placed after `all:` on purpose: the first rule in a Makefile is its default
+# goal, and these must not pre-empt `all`.
+$(STLS)/nacelles/nozzles/nacelle_nozzle_fixed.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_fixed.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    $(SCAD)/nacelles/nacelle_nozzle_fixed.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+# Deferred Phase 11b iris parts, on demand only (see NOZZLE_IRIS_STLS).
+.PHONY: nozzle-iris
+nozzle-iris: $(NOZZLE_IRIS_STLS)
 
 $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-closed.stl: \
         $(SCAD)/nacelles/nacelle_nozzle_iris.scad

@@ -816,7 +816,47 @@
 
 ##### 1.1.3.1 *Nozzle*
 
-- **Servo drive (2026-09-28) — per-nacelle servo scheduled on measured tilt** (owner decision;
+- **Rev T6 (2026-09-29) — FIXED OPEN nozzle for Phases 5–10; variable iris DEFERRED to Phase 11b**
+  (owner decisions D-TW-3 and D-TW-5, `docs/plans/2026-09-29-001-tw-recovery-stem-to-stern-plan.md`
+  §6.1). Source `airframe/openscad/nacelles/nacelle_nozzle_fixed.scad`; print
+  `airframe/stls/nacelles/nozzles/nacelle_nozzle_fixed.stl` (×2, one per nacelle, CF-PETG).
+  The servo-driven iris below and every open item under it moved to `deferred/WBS.md`
+  §Phase11b. Analysis by Claude (Claude Opus 5.5, Anthropic) under the author's direction.
+    - [x] **Part modelled and validated** — one piece, same pod-pocket interface as the iris
+        housing (lip Z −3..0, r 27.5..35.6; skin 35.6→33.5), 2.5 mm diffuser cone r 25.0 →
+        26.25 mm over Z 15..44.97 (same overall length as the iris with 30 mm flaps).
+        Watertight, 1 solid + 1 sealed void; 32,150 mm³ → **33.8 g (0.074 lbm)** per nozzle
+        at `RHO_PRINT`; CG local Z 15.34 → nacelle Z 181.6.
+    - [x] **Finding — the modelled iris never met its own open requirement.** Measured on
+        `nacelle_nozzle_iris-open.stl`: flow radius at the trailing edge **23.77 mm (95 %
+        radius, 90 % area)**, because `NOZZLE_OPEN_R` 26.25 locates the flap *hinge line*,
+        and the 2.5 mm flap wall sits inboard of it. The fixed nozzle puts 26.25 mm on the
+        FLOW surface, as `airframe/AGENTS.md` requires. Ideal momentum theory at equal
+        shaft power bounds the resulting static-thrust change at up to +6.8 % over the
+        modelled iris — an upper bound, not a prediction (see the SCAD header).
+    - [x] **Mass/CG roll-up updated** (`tools/nacelle_mass_cg.py`): iris rows (56.5 g
+        printed, measured flap set) kept as `DEFERRED_IRIS`; reach constant re-based to the
+        fixed nozzle (211.2 mm); gear labels corrected (3.0 in = flight article). Per nacelle
+        vs the servo iris: −22.7 g printed, −8.0 g pins, −12.7 g servo drive (V1 estimate) =
+        **−43.4 g; ≈ −85 g (0.19 lbm) per aircraft**.
+    - [x] **`PIVOT_Z` re-datumed 107.5 → 103.5 mm (owner decision D-TW-5, 2026-09-29).** The
+        fixed nozzle moved the rotating-assembly CG 4.0 mm forward. `PIVOT_Z` changed in
+        `nacelle_pod_50mm_tandem.scad`, `serenity_assembly.py` and
+        `port_tilt_spar_assembly.scad`; both pods re-rendered and re-baked; fixed point and
+        gates in the Rev T6 PR. **Hover ground clearance, 3.0 in flight-article gear:
+        +39.1 mm static, +32.6 mm at 5° touchdown, +11.6 mm over the 21 mm reserve —
+        MEETS MINIMUM** (`tools/landing_gear_ground_clearance.py`). The move costs 4.0 mm of
+        clearance against keeping 107.5, and it is not drawn from the 8 mm drift reserve.
+    - [ ] **[OPEN — PRINT/FIT] Print ×2 and dry-fit** in the Ø72 pod exit pocket; bond per
+        the iris-housing joint (West System 105/206, 24 h).
+    - [ ] **[OPEN — STAND, T/W plan TW-1/T3] Exit-radius sweep** — print
+        `-D FIXED_EXIT_R=23.75 / 25.00 / 26.25` and measure static thrust and current at
+        matched throttle; adopt the measured optimum (diffuser half-angle ≤ 2.4° at 26.25).
+    - [ ] **[OPEN — CRUISE] Quantify the cruise penalty** of losing the 75 % convergent
+        setting once a drag polar exists (`docs/flight_envelope.md` §2.2).
+
+- **Servo drive (2026-09-28) — per-nacelle servo scheduled on measured tilt — DEFERRED TO
+  PHASE 11b at Rev T6 (2026-09-29); open items moved to `deferred/WBS.md` §Phase11b** (owner decision;
   `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"; plan
   `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`; ideation
   `docs/ideation/2026-09-28-nozzle-servo-actuation-ideation.html`). Supersedes the Rev S2 passive
@@ -825,30 +865,14 @@
         `airframe/AGENTS.md` requirement reworded ("scheduled on measured nacelle tilt",
         105 % from 90° to 145°, fail to 105 %), sync-gear/pushrod SCADs + gear-compare WIP
         archived, Makefile targets and overlay §6 retired.
-    - [ ] **[OPEN — IMPLEMENT] Servo linkage + schedule tool (plan U2)** —
-        `tools/nozzle_servo_linkage.py`: ring angle vs servo angle, spring/servo margins, and a
-        tilt→ring→PWM table held flat from 90° to 145°.
-    - [ ] **[OPEN — IMPLEMENT] Ring stops, spring seat, full-stroke slotted pull ear (plan U3)**
-        in `nacelle_nozzle_iris.scad`.
-    - [ ] **[OPEN — IMPLEMENT] Servo mount, pod pocket, flush cover + fit check (plan U4)** —
-        BMS-101DMG (8 mm case) forward of the ring inside the canonical shell; faired blister
-        only with owner sign-off.
-    - [ ] **[OPEN — DECISION D-NZ-1] Gateway variant (plan U6)** — V1: the AK7455 encoder lane's
-        spare `FLEX_PWM_IO`. V2: a dedicated N_STACKS=1 gateway. Mounting, wiring, weight and
-        CG are compared in `docs/NACELLE_NOZZLE_SERVO_SPEC.md` (to be written).
-    - [ ] **[OPEN — IMPLEMENT] BOM + REFERENCES (plan U7)** — `SERVO-NOZZLE`, spring, pull link,
-        mount, `FUSE-F_NOZ`, `SW-F_NOZ`, contingent level shifter. Retire `PUSHROD-BALL-M3`,
-        `BALLSTUD-M3`, `PRINT-PUSHROD-CRANK`.
-    - [ ] **[OPEN — BENCH] Servo-drive verification (plan U8)**:
-        - flap hinge moment at the lever ear (fan off and at hover);
-        - servo sweep and µs map;
-        - BMS-101DMG at 6 V, and 3.3 V PWM input;
-        - stall current, to size `F_NOZ`;
-        - spring rate;
-        - **fail-open with the servo unpowered and with it seized at 75/90/105 %** (stop
-          condition);
-        - signal-loss behaviour;
-        - cruise penalty at 105 %, and debounce/re-arm tuning.
+    - [x] **Servo linkage + schedule tool (plan U2)** — `tools/nozzle_servo_linkage.py` +
+        tests, committed `5adc9628` (2026-09-28).
+    - [x] **Ring stops, spring seat, push-only ear (plan U3)** — `nacelle_nozzle_iris.scad`,
+        committed `566b860c` / `6b29b671` / `38615328` (plan marks U3 DONE 2026-09-29).
+    - **Plan U4, U6 (D-NZ-1), U7 and U8 moved to `deferred/WBS.md` §Phase11b** at Rev T6.
+      Note for whoever resumes U4: an UNCOMMITTED
+      `airframe/openscad/nacelles/nacelle_nozzle_servo_mount.scad` was in the shared
+      checkout on 2026-09-29 — it is someone's in-progress work and was not touched.
     - [ ] **[OPEN — FOLLOW-UP] `airframe/FreeCAD-scripts/Makefile` still has a rule for the
         deleted `wing_nacelle_pylon_revo.scad`** (found 2026-09-28; pre-existing, unrelated).
         `make -n` stops on it.
@@ -894,17 +918,8 @@
         2.874 cm³ → 3.7 g at 1.27 g/cm³ PETG); at 2.5 mm wall with 3 × 0.4 mm
         perimeters the section is effectively solid, so the previous 2 g/flap
         figure was an under-estimate.
-    - [ ] **[OPEN — VERIFY] Mass/CG impact of the shingle.** Flap-set mass rises
-        32.0 g → 56.8 g (1.13 oz → 2.00 oz), i.e. **+24.8 g (+0.87 oz) total,
-        +12.4 g (+0.44 oz) per nacelle**, all of it aft of and outboard of the
-        tilt pivot. Re-check the Rev S2 CG band (≈109–112 mm) and the tilt-servo
-        torque margin against this before flight — see §1.1.3 "VERIFY Rev S2 CG".
-    - [ ] **[OPEN — VERIFY] Seal-flap aerodynamic step.** The seal sits 0.2 mm
-        proud of the masters' outer surface, so the flow boundary is no longer a
-        single continuous cone: masters bound it over 4 × 50° of arc, seals over
-        the intervening gaps at +2.7 mm radius. Confirm the residual step is
-        acceptable for the "smooth, low-turbulence exit" goal by bench/CFD before
-        flight; if not, the alternative is a scarfed (tapering-thickness) seal.
+    - **Shingle mass/CG and seal-flap aerodynamic-step VERIFY items moved to
+      `deferred/WBS.md` §Phase11b at Rev T6** — they apply only when the iris flies.
     - [x] **CLOSED 2026-08-25 — the FreeCAD assembly and its Makefile were
         importing the pre-Rev-S3 `nacelle_nozzle_iris.stl`** (2026-07-19, single
         combined render, `FLAP_PHI` not yet exposed — predates this shingle fix
@@ -2028,7 +2043,9 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     gear reaction. The LG-11 coupon is **demoted here** from a gate to a
     packaging convenience (flange FOS 29.2 / 87.6 / 274.6 at 5 / 15 / 47 MPa).
     Full spec: `docs/WING_ATTACH_INTERFACE.md` §3, WA-R1/R1b/R2..R6.
-- [ ] **SPAR-20-8 (U8)** — Re-datum the nozzle drive onto the fixed trunnion
+- [x] **[CLOSED 2026-09-29 — SUPERSEDED: the passive drive was retired for the servo drive
+    (2026-09-28), and the variable nozzle is itself deferred to Phase 11b at Rev T6; the
+    Phases 5–10 nozzle is fixed and needs no drive or datum] SPAR-20-8 (U8)** — Re-datum the nozzle drive onto the fixed trunnion
     (a fixed datum is better than the retired rotating one); delete the spar
     crank; re-verify full iris travel.
 - [ ] **SPAR-20-9 (U9)** — Mass/CG/T-W re-derive (spar 96.2 → 67.5 g/pair, but
@@ -2144,7 +2161,9 @@ DS3225's 2.402 N·m — the servo is ~17× oversized (see SPAR-25-6).
 - [x] **SPAR-25-4 (U4) — BUILT 2026-08-31: integral 50T ring on the trunnion +
     14T pinion (module 0.8).** Original text — Tilt ring gear (sector is sufficient
     — the sweep is only 145°) + pinion; mesh stays outside r = 25 mm.
-- [ ] **SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision** (§1.1.3.1
+- [x] **[CLOSED 2026-09-29 — owner decision taken: option (iii), datum reopened → servo drive
+    (2026-09-28), then fixed nozzle for Phases 5–10 with the iris deferred (Rev T6). First-flight
+    blocker 2 is cleared.] SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision** (§1.1.3.1
     "[BLOCKED] KTD3"; `docs/NOZZLE_DRIVE_TRADE.md` "What is blocked"): the fixed
     sun has no axial home in the as-built joint (bearing-stack margin 0.0 mm).
     Choose (i) spend flux margin, (ii) spend wing geometry, or (iii) reopen the

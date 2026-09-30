@@ -60,6 +60,20 @@
 - [ ] Forward-thrust test passed; rear EDF NOT used for hover lift
 - [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruise power
 
+## §Phase11b — Variable Nacelle Nozzle, Servo-Scheduled Iris (Deferred)
+→ full detail: `WBS.md` §Phase11b
+
+- [ ] Re-decide the iris against thrust-stand data first
+- [ ] Fix the iris open radius before it flies
+- [ ] Re-converge `PIVOT_Z` with the iris back in
+- [ ] Servo mount, pod pocket, flush cover + fit check (plan U4)
+- [ ] [DECISION D-NZ-1] Gateway variant (plan U6) — V1
+- [ ] BOM + REFERENCES (plan U7) — restore `PRINT-NACELLE-THROAT`…
+- [ ] Servo-drive bench verification (plan U8): - flap hinge moment at the…
+- [ ] Mass/CG impact of the shingle (was `[OPEN — VERIFY]` in §1.1.3.1)
+- [ ] Seal-flap aerodynamic step (was `[OPEN — VERIFY]` in §1.1.3.1)
+- [ ] Restore the build and assembly wiring — re-add the iris targets to…
+
 ## §Phase12 — Cargo-bay Range-Extender Battery Module (Deferred)
 → full detail: `WBS.md` §Phase12
 
