@@ -87,6 +87,12 @@ PRINTED = [
      ("local", 90.0)),      # STATOR_SLV_Z_START
     ("Aft spider sleeve", "airframe/stls/nacelles/edf_aft_spider_sleeve.stl",
      ("local", 122.5)),     # AFT_SLV_Z_START
+    # Rev T6 (2026-09-29, T/W plan D-TW-3): one-piece fixed open nozzle in
+    # place of the servo iris for Phases 5-10.  Part-local frame is the iris
+    # frame, whose Z 0 sits at NOZZLE_RING_Z 166.25 (serenity_assembly.py).
+    ("Fixed open nozzle (Rev T6)",
+     "airframe/stls/nacelles/nozzles/nacelle_nozzle_fixed.stl",
+     ("local", 166.25)),    # NOZZLE_RING_Z
 ]
 
 #: Everything the meshes cannot supply: (label, mass g, CG_Z mm, source note).
@@ -125,11 +131,21 @@ FIXED = [
      "measured bay centroid, tools/nacelle_esc_bay_fit.py — NOT KTD8's 150.6"),
     ("4 x ESC access cover", 4 * 6.99 / 2, 95.0,
      "nacelle_esc_cover.stl measured; two covers per nacelle"),
+    # The variable iris (throat + unison ring + 8 flaps + drive) is DEFERRED to
+    # Phase 11b at Rev T6; its rows moved to DEFERRED_IRIS below.  The fixed
+    # nozzle that replaces it is measured from its STL in PRINTED.
+]
+
+#: Variable-nozzle iris rows, DEFERRED to Phase 11b (Rev T6, 2026-09-29).  Kept
+#: so the Rev T6 delta is legible and so Phase 11 can restore them.  Flap mass
+#: is the measured Rev T3 set (4 master 3.4 g + 4 seal 3.7 g = 28.4 g, BOM),
+#: not the stale 21.1 g this tool carried before; the pushrod was already
+#: retired by the servo-drive plan (2026-09-28-001 U1).
+DEFERRED_IRIS = [
     ("Nozzle throat + housing", 21.4, 174.8, "nacelle_nozzle_iris.scad Rev T"),
     ("Unison ring (cam-only)", 6.7, 169.9, "nacelle_nozzle_iris.scad Rev T"),
-    ("8 x nozzle flap (40 mm)", 21.1, 198.2,
-     "PETG; plan 005 R1 proposes 30 mm — see --flap30"),
-    ("Pushrod (COTS + links)", 3.6, 140.8, "nacelle_nozzle_pushrod.scad"),
+    ("8 x nozzle flap (30 mm, measured)", 28.4, 193.2,
+     "Rev T3 master+seal; CG 198.2 at 40 mm moved fwd 5 mm for the 30 mm trim"),
 ]
 
 #: In-nacelle HARNESS.  Added 2026-08-31 — it was missing from every previous
@@ -151,10 +167,10 @@ FIXED = [
 #: lengths at first article.
 HARNESS = [
     ("4 x 10 AWG feed, trunnion->ESCs", 4 * 0.060 * 40.0, 101.0,
-     "trunnion Z 107.5 -> bay Z 95, + service loop at the rotating joint"),
+     "trunnion Z 103.5 -> bay Z 95, + service loop at the rotating joint"),
     ("6 x 16 AWG EDF phase leads", 6 * 0.080 * 13.3, 100.0,
-     "2 ESCs x 3 phases; each bay sits over a spider arm, so the crossing is "
-     "radial with no circumferential run (arms clocked 15/105/195/285)"),
+     ("2 ESCs x 3 phases; each bay sits over a spider arm, so the crossing is "
+      "radial with no circumferential run (arms clocked 15/105/195/285)")),
     ("Signal + gateway pairs, 28 AWG STP", 0.30 * 4.0, 120.0,
      "ESC telemetry + CAN-FD/RS-485 to the wing interface pocket"),
     ("Nav 3-core, 28 AWG", 0.11 * 8.0, 88.0,
@@ -189,11 +205,13 @@ ON_AXIS = [
 #: **66.851**, 1.57 mm lower than the 68.42 that table assumed.  That 1.57 mm is
 #: spent, not recoverable, and it comes off the clearance before `PIVOT_Z` is even
 #: considered.
-ROT_ASSY_TIP_Z = 221.3  # [mm] nacelle-local reach of the rotating assembly AT
-# THE BUILT 40 mm FLAP (iris seats at NOZZLE_RING_Z 166.25, its STL runs to
-# +55.1) — measured, plan 003 R12.  Trimming the flap moves this one-for-one;
-# see `tip_reach()`.
-BUILT_FLAP_LEN = 40.0  # [mm] the flap length ROT_ASSY_TIP_Z was measured at
+ROT_ASSY_TIP_Z = 211.2  # [mm] nacelle-local reach of the rotating assembly,
+# Rev T6 FIXED NOZZLE: seats at NOZZLE_RING_Z 166.25 and its STL runs to
+# +44.97 (measured, nacelle_nozzle_fixed.stl) -> 211.22.  That is the same
+# envelope as the iris with its plan 005 R1 30 mm flaps (was 221.3 at the old
+# 40 mm flap, plan 003 R12), so `--flap` stays a valid length-equivalent
+# what-if: each mm of nozzle length moves the reach one-for-one.
+BUILT_FLAP_LEN = 30.0  # [mm] flap-equivalent length ROT_ASSY_TIP_Z is quoted at
 
 
 def tip_reach(flap_len: float) -> float:
@@ -211,8 +229,11 @@ def tip_reach(flap_len: float) -> float:
 
 WING_SPAR_HULL_Z = 66.851  # [mm] built spar height (merge_cargo_interior.py
 # WING_SPAR_Z, Rev T1c station 28)
-GROUND_PLANES = {"1.5 in gear (ACTIVE default)": -38.1,
-                 "3.0 in gear (kept, not wired in)": -80.0}
+GROUND_PLANES = {"3.0 in gear (FLIGHT ARTICLE)": -80.0,
+                 "1.5 in gear (bench/handling only)": -38.1}
+# Labels corrected 2026-09-29: the 3.0 in leg has been the flight article since
+# 2026-09-06 (docs/LANDING_GEAR_ANALYSIS.md §4.8, bom_revT PRINT-LG-LEG-FRAME-*);
+# the 1.5 in leg is retired to bench use, so its strike is expected, not a fault.
 
 #: Deleted at Rev T4, kept so the delta is legible rather than implied.
 DELETED = [
@@ -256,7 +277,7 @@ def measure(rel: str, frame: tuple) -> tuple[float, float]:
     return float(mesh.volume * RHO_PRINT), cg
 
 
-def roll_up(flap_len: float = 40.0) -> dict:
+def roll_up(flap_len: float = BUILT_FLAP_LEN) -> dict:
     """Compute total mass and CG, iterating the on-axis items to a fixed point."""
     rows: list[tuple[str, float, float, str]] = []
     problems: list[str] = []
@@ -309,8 +330,9 @@ def roll_up(flap_len: float = 40.0) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--json", action="store_true", help="machine-readable output")
-    ap.add_argument("--flap", type=float, default=40.0,
-                    help="nozzle flap length in mm (plan 005 R1 proposes 30)")
+    ap.add_argument("--flap", type=float, default=BUILT_FLAP_LEN,
+                    help="nozzle length what-if, as flap-equivalent mm "
+                         "(Rev T6 fixed nozzle = 30)")
     args = ap.parse_args()
 
     result = roll_up(args.flap)
@@ -389,6 +411,12 @@ def main() -> int:
     print("\nDeleted at Rev T4 (for the record):")
     for label, mass, cg, note in DELETED:
         print(f"  - {label:<32}{mass:6.1f} g @ {cg:.1f} mm   {note}")
+
+    iris = sum(m for _, m, _, _ in DEFERRED_IRIS)
+    print(f"\nVariable iris DEFERRED to Phase 11b at Rev T6 ({iris:.1f} g printed, "
+          "replaced by the fixed nozzle row above; servo drive not counted):")
+    for label, mass, cg, note in DEFERRED_IRIS:
+        print(f"  - {label:<34}{mass:6.1f} g @ {cg:.1f} mm   {note}")
 
     if result["problems"]:
         print("\nUNRESOLVED — this roll-up is INCOMPLETE:")

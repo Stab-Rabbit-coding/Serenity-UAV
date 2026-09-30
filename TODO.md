@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
-**Last updated:** 2026-09-21
+**Last updated:** 2026-09-29
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -136,18 +136,10 @@
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 
-- [ ] [OPEN — VERIFY] Mass/CG impact of the shingle
-- [ ] [OPEN — VERIFY] Seal-flap aerodynamic step
-- [ ] [OPEN — NO-GO, was VERIFY] Spatial RSSR linkage synthesis
-- [ ] [OPEN — IMPLEMENT] Adopted nozzle drive
-- [ ] Re-hub `spar_crank()` onto the pinion
-- [ ] [BLOCKED — needs an owner decision, do NOT assume resolved] The KTD3…
-- [ ] [OPEN — parked, do NOT print] `nacelle_nozzle_sync_gears.scad`
-- [ ] Pushrod clearance/interference check
-- [ ] [OPEN — ACCEPTED RESIDUAL, not fixable by boss sizing] Hinge bosses…
-- [ ] Spar-crank placement in serenity_assembly.py is first-pass (Y=0…
-- [ ] User WIP `gear_option_compare.scad` / `gear_shell_compare.scad`…
-- [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD…
+- [ ] [PRINT-BLOCKING] Pod STLs stale; pod SCAD renders non-manifold
+- [ ] Print ×2 fixed nozzle; dry-fit + bond in the Ø72 pod pocket
+- [ ] Thrust-stand exit-radius sweep (23.75 / 25.00 / 26.25 mm)
+- [ ] Quantify the cruise penalty of losing the 75 % convergent exit
 - [ ] [OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not…
 - [ ] [OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still…
 - [ ] [OPEN — VERIFY] `serenity_assembly.py` still places the deleted parts
@@ -159,14 +151,12 @@
 - [ ] Window structural allowance
 - [ ] [OPEN — cross-subsystem, rescoped 2026-07-26] `Pilot.md` §13 /…
 - [ ] AK7455 off-axis bench validation
-- [ ] SPAR-20-8 (U8) — Re-datum the nozzle drive onto the fixed trunnion…
 - [ ] SPAR-20-9 (U9) — Mass/CG/T-W re-derive (spar 96.2 → 67.5 g/pair, but…
 - [ ] NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening
 - [ ] SPAR-20-AERO — The re-lofted section is no longer S1223 (root 12.1 →…
 - [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
 - [ ] SPAR-20-ALLOW — No verified CF tube flexural allowable exists in…
 - [ ] SPAR-20-WIREOD — `bom_revS.csv` records no OD for `WIRE-10AWG`
-- [ ] SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision (§1.1.3.1…
 - [ ] SPAR-25-6 (U6) — Integration, load check, mass/CG, BOM, and the…
 
 #### 1.1.4 — Landing Gear
@@ -201,11 +191,11 @@
 - [ ] FAR-FT-PANEL PCB design
 - [ ] Link placeholders to BOM entries
 
-### 1.2b — PCB Redesigns: Commo Rev S1 / TACCO Rev S1 / Flight Engineer Rev S1
+### 1.2b — PCB Redesigns: Commo Rev S1 / XO Rev S1 / Flight Engineer Rev S1
 → detail: `avionics/rev-s1/WBS.md` §1.2b
 
 - [ ] Commo Rev S1 — add LoRa, replace JST with P1+P2 socket rails
-- [ ] TACCO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
+- [ ] XO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
 - [ ] Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output
 
 ### 1.2c — PCB Design: Observer (Nose/Cargo-Bay Vision, ToF & Laser)
@@ -240,9 +230,9 @@
 - [ ] Clean up FlightEngineer's ~30 dangling no-connect flags
 - [ ] Close the Observer sch↔pcb parity gap (RS485_DE/TX/RX on U3)
 - [ ] Place gateway lanes 3 and 4 (U1_3/U1_4, U2_3/U2_4 not on the PCB)
-- [ ] Decide whether Commo, Pilot, TACCO follow to the SLB 9672
+- [ ] Decide whether Commo, Pilot, XO follow to the SLB 9672
 
-### 1.2a — PCB Design: Pilot, TACCO, and Commo (EMI-Hardened Variants)
+### 1.2a — PCB Design: Pilot, XO, and Commo (EMI-Hardened Variants)
 → detail: `avionics/WBS.md` §1.2a
 
 - [ ] Reconcile Pilot.md §14 field-connector table with the actual P…
@@ -254,8 +244,8 @@
 - [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
 - [ ] Add SBUS/UART DIP switch to Pilot
 - [ ] Generate Pilot gerbers
-- [ ] Generate TACCO gerbers
-- [ ] Zigbee RF chain was never actually added to TACCO — PCB scope g…
+- [ ] Generate XO gerbers
+- [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
 - [ ] Generate Commo gerbers
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
 - [ ] EMI isolation validation checklist
@@ -267,7 +257,7 @@
 → detail: `avionics/emi-hardening/WBS.md` §1.4
 
 - [ ] PB2-I + Pilot Enclosure
-- [ ] PB2-I + TACCO Enclosure
+- [ ] PB2-I + XO Enclosure
 - [ ] CAN FD
 - [ ] RS-485
 - [ ] MIL-STD-1553B
@@ -612,6 +602,20 @@
 - [ ] 49MHz aft wire post on canonical nozzle; top wire re-strung at…
 - [ ] Forward-thrust test passed; rear EDF NOT used for hover lift; E…
 - [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruis…
+
+### Phase11b — Variable Nacelle Nozzle, Servo-Scheduled Iris (Deferred)
+→ detail: `deferred/WBS.md` §Phase11b
+
+- [ ] Re-decide the iris against thrust-stand data first
+- [ ] Fix the iris open radius (flow r 23.77 vs 26.25 mm required)
+- [ ] Re-converge PIVOT_Z with the iris back in (≈107 mm)
+- [ ] Servo mount, pod pocket, flush cover + fit check (plan U4)
+- [ ] [DECISION D-NZ-1] Gateway variant (plan U6)
+- [ ] BOM + REFERENCES (plan U7) — restore iris rows, add servo rows
+- [ ] Servo-drive bench verification (plan U8)
+- [ ] Mass/CG impact of the shingle
+- [ ] Seal-flap aerodynamic step
+- [ ] Restore the iris Makefile targets + assembly import
 
 ### Phase12 — Cargo-bay Range-Extender Battery Module (Deferred)
 → detail: `deferred/WBS.md` §Phase12

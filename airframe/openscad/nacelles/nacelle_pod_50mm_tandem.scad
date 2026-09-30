@@ -434,7 +434,15 @@ SWIRL_DIR       =  +1;    // [+1 / -1] default port nacelle CW from intake
 // sync gear, servo bracket) do NOT tilt and are excluded.  Y = 0 (bore axis) =
 // Y_cg for the bore-symmetric assembly.  FIRST-PASS (credible band ≈109–112 mm);
 // see the header for the density / nozzle-pocket caveats.
-PIVOT_Z         = 107.5;   // [mm] pivot axial centre = full-assembly CG station
+PIVOT_Z         = 103.5;   // [mm] pivot axial centre = full-assembly CG station
+                           //      Rev T6 (2026-09-29): 107.5 -> 103.5.  The fixed
+                           //      open nozzle (nacelle_nozzle_fixed.scad, 33.8 g at
+                           //      Z 181.6) replaced the 56.5 g iris set (CG ~181-193)
+                           //      and moved the rotating CG 4.0 mm FORWARD; owner
+                           //      decision D-TW-5 re-datums the pivot onto it.
+                           //      Hover clearance on the 3.0 in flight-article gear
+                           //      stays +39 mm static (tools/
+                           //      landing_gear_ground_clearance.py: MEETS MINIMUM).
                            //      Rev T4b (2026-08-31): 111.5 -> 105.8 -> 113.8,
                            //      the first values in this part's history that
                            //      were COMPUTED FROM MEASURED MESHES rather than

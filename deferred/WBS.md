@@ -20,8 +20,9 @@
 | Master § | Branch | Open | First flight |
 |----------|--------|-----:|:------------:|
 | §Phase11 | Phase 11 — Aft EDF Integration (Deferred) | 42 | — |
+| §Phase11b | Phase 11b — Variable Nacelle Nozzle, Servo-Scheduled Iris (Deferred) | 10 | — |
 | §Phase12 | Phase 12 — Cargo-bay Range-Extender Battery Module (Deferred) | 6 | — |
-| | **Total open (this subsystem)** | **48** | |
+| | **Total open (this subsystem)** | **58** | |
 
 ---
 
@@ -77,6 +78,62 @@
 - [ ] Forward-thrust test passed; rear EDF NOT used for hover lift; ESC temps ≤70°C
 - [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruise power
 
+
+## §Phase11b — Variable Nacelle Nozzle, Servo-Scheduled Iris (Deferred)
+
+*(root `WBS.md` §Phase11b)*
+
+Deferred 2026-09-29 at Rev T6 by owner decision D-TW-3
+(`docs/plans/2026-09-29-001-tw-recovery-stem-to-stern-plan.md` §6.1): Phases 5–10 fly
+the one-piece fixed open nozzle (`airframe/openscad/nacelles/nacelle_nozzle_fixed.scad`,
+`airframe/wings-nacelles/WBS.md` §1.1.3.1 Rev T6). The iris source
+(`nacelle_nozzle_iris.scad`), its tools (`tools/nozzle_servo_linkage.py`) and its plan
+(`docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`) are kept intact for
+this phase. Items below moved in scope from `airframe/wings-nacelles/WBS.md` §1.1.3.1
+(plan units U2 and U3 were already complete and stay recorded there). Moved by Claude
+(Claude Opus 5.5, Anthropic) under the author's direction.
+
+- [ ] **Re-decide the iris against thrust-stand data first.** Phase 9 / T/W plan TW-1
+    measures the fixed nozzle's exit sweep; restore the iris only if the measured cruise
+    benefit outweighs its ≈85–125 g (0.19–0.28 lbm) per aircraft and its mechanism risk.
+- [ ] **Fix the iris open radius before it flies.** Measured 2026-09-29 on
+    `nacelle_nozzle_iris-open.stl`: the flow radius at the trailing edge is 23.77 mm
+    (95 % of the bore radius), not the required 26.25 mm, because `NOZZLE_OPEN_R` places
+    the flap hinge line and the 2.5 mm flap wall sits inboard of it. The same offset
+    applies to `NOZZLE_CLOSED_R` (75 % target). Re-solve `PHI_OPEN`/`PHI_CLOSED` against
+    the flap's inner (flow) surface.
+- [ ] **Re-converge `PIVOT_Z` with the iris back in.** Rev T6 moved the pivot 107.5 →
+    103.5 mm for the lighter fixed nozzle; restoring the iris (≈22.7 g more per nacelle,
+    aft) moves the CG back toward ≈107 mm (`tools/nacelle_mass_cg.py` `DEFERRED_IRIS`).
+- [ ] **Servo mount, pod pocket, flush cover + fit check (plan U4)** — BMS-101DMG (8 mm
+    case) forward of the ring inside the canonical shell; faired blister only with owner
+    sign-off. An uncommitted `nacelle_nozzle_servo_mount.scad` existed in the shared
+    checkout on 2026-09-29 (someone's in-progress U4 work).
+- [ ] **[DECISION D-NZ-1] Gateway variant (plan U6)** — V1: the AK7455 encoder lane's
+    spare `FLEX_PWM_IO`. V2: a dedicated N_STACKS=1 gateway. Compare mounting, wiring,
+    weight and CG in `docs/NACELLE_NOZZLE_SERVO_SPEC.md` (to be written).
+- [ ] **BOM + REFERENCES (plan U7)** — restore `PRINT-NACELLE-THROAT`, `-RING`,
+    `-FLAP-MASTER`, `-FLAP-SEAL`, `PIN-3X18`, `PIN-2X4` to qty (set to 0 at Rev T6); add
+    `SERVO-NOZZLE`, spring, pull link, mount, `FUSE-F_NOZ`, `SW-F_NOZ`, contingent level
+    shifter.
+- [ ] **Servo-drive bench verification (plan U8)**:
+    - flap hinge moment at the lever ear (fan off and at hover);
+    - servo sweep and µs map;
+    - BMS-101DMG at 6 V, and 3.3 V PWM input;
+    - stall current, to size `F_NOZ`;
+    - spring rate;
+    - **fail-open with the servo unpowered and with it seized at 75/90/105 %** (stop
+      condition);
+    - signal-loss behaviour;
+    - cruise penalty at 105 %, and debounce/re-arm tuning.
+- [ ] **Mass/CG impact of the shingle** (was `[OPEN — VERIFY]` in §1.1.3.1) — flap set
+    32.0 → 56.8 g per aircraft, all aft of the pivot.
+- [ ] **Seal-flap aerodynamic step** (was `[OPEN — VERIFY]` in §1.1.3.1) — the seal sits
+    0.2 mm proud of the masters; confirm acceptable by bench/CFD or scarf the seal.
+- [ ] **Restore the build and assembly wiring** — re-add the iris targets to
+    `NACELLE_STLS` in `airframe/FreeCAD-scripts/Makefile` (they are on demand via
+    `make nozzle-iris` meanwhile) and point `serenity_assembly.py`'s nozzle import back at
+    `nozzle_iris_stl()`.
 
 ## §Phase12 — Cargo-bay Range-Extender Battery Module (Deferred)
 

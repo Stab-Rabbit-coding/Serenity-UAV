@@ -199,6 +199,13 @@ SETTLE_DUCTILE_MM = 30.7
 #: swing of 8.0 mm across four corrections, every one of which was a correction
 #: rather than a design change.  The arm moves one-for-one with the pivot, so
 #: 8.0 mm of pivot uncertainty is 8.0 mm of clearance.
+#:
+#: Rev T6 (2026-09-29) moved the pivot again, 107.5 -> 103.5, but as a DESIGN
+#: change (fixed open nozzle replaced the iris, owner decision D-TW-5), not a
+#: correction of a wrong number.  The move is applied to the arm directly
+#: (roll-up CG), so it is not drawn from this reserve, and the reserve stays
+#: sized on the correction history.  Counting it anyway, the total swing is
+#: 113.8 -> 103.5 = 10.3 mm; the 3.0 in leg still clears with that reserve.
 PIVOT_DRIFT_MM = 8.0
 
 #: Build tolerance: print/assembly stack across bay, leg and foot, plus static
@@ -307,7 +314,7 @@ def report(flap_len: float, theta_deg: float) -> int:
     print("\n--- Reserve budget (what the tip must still hold at first contact) ---")
     print(f"  hull settle, spring elastic limit ({U_SPRING_LEG_J:.2f} J/leg at "
           f"{F_LEG_ELASTIC_N:.0f} N/leg)   {SETTLE_ELASTIC_MM:6.2f} mm")
-    print(f"  PIVOT_Z drift reserve (observed 111.5/105.8/113.8/107.5)      "
+    print(f"  PIVOT_Z drift reserve (observed 111.5/105.8/113.8/107.5/103.5)      "
           f"{PIVOT_DRIFT_MM:6.2f} mm")
     print(f"  build + TPU tread compression tolerance                       "
           f"{BUILD_TOL_MM:6.2f} mm")

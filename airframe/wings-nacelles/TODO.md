@@ -27,15 +27,11 @@
 ##### 1.1.3.1 *Nozzle*
 → full detail: `WBS.md` §1.1.3.1
 
-- [ ] [OPEN — IMPLEMENT] Servo linkage + schedule tool (plan U2)
-- [ ] [OPEN — IMPLEMENT] Ring stops, spring seat, full-stroke slotted pull…
-- [ ] [OPEN — IMPLEMENT] Servo mount, pod pocket, flush cover + fit check…
-- [ ] [OPEN — DECISION D-NZ-1] Gateway variant (plan U6) — V1
-- [ ] [OPEN — IMPLEMENT] BOM + REFERENCES (plan U7)
-- [ ] [OPEN — BENCH] Servo-drive verification (plan U8)
+- [ ] [OPEN — PRINT-BLOCKING] Published pod STLs are STALE
+- [ ] [OPEN — PRINT/FIT] Print ×2 and dry-fit in the Ø72 pod exit pocket
+- [ ] [OPEN — STAND, T/W plan TW-1/T3] Exit-radius sweep
+- [ ] [OPEN — CRUISE] Quantify the cruise penalty of losing the 75 %…
 - [ ] [OPEN — FOLLOW-UP] `airframe/FreeCAD-scripts/Makefile` still has a…
-- [ ] [OPEN — VERIFY] Mass/CG impact of the shingle
-- [ ] [OPEN — VERIFY] Seal-flap aerodynamic step
 
 ##### 1.1.3.7 *Rev S4 — fixed-spar trunnion, skewer removal, print readiness*
 → full detail: `WBS.md` §1.1.3.7
@@ -62,7 +58,6 @@
 ## §1.1.4 — Tilt-Spar Migration (20 mm fixed CF spar, trunnion pivot, belt drive)
 → full detail: `WBS.md` §1.1.4
 
-- [ ] SPAR-20-8 (U8) — Re-datum the nozzle drive onto the fixed trunnion…
 - [ ] SPAR-20-9 (U9) — Mass/CG/T-W re-derive (spar 96.2 → 67.5 g/pair, but…
 - [ ] NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening
 - [ ] SPAR-20-AERO — The re-lofted section is no longer S1223 (root 12.1 →…
@@ -73,7 +68,6 @@
 ## §1.1.5 — Nacelle Trunnion Pivot and Tilt Drive
 → full detail: `WBS.md` §1.1.5
 
-- [ ] SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision (§1.1.3.1…
 - [ ] SPAR-25-6 (U6) — Integration, load check, mass/CG, BOM, and the…
 
 ---

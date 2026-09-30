@@ -126,6 +126,19 @@ the current revision directly:
 
 ## Nacelle Nozzle Drive
 
+**Phases 5–10 (Rev T6, owner decision D-TW-3, 2026-09-29): each nacelle carries a one-piece
+FIXED OPEN nozzle** whose FLOW exit radius is 105% of the bore radius (26.25 mm) — the hover
+setting of the variable requirement below, held at every tilt. It has no drive and no failure
+mode to manage. Source `nacelle_nozzle_fixed.scad`; rationale and trade in
+`docs/plans/2026-09-29-001-tw-recovery-stem-to-stern-plan.md` §6.1. The exit radius is a
+parameter so the thrust stand can move it; change the requirement here if the stand does.
+The tilt pivot was re-datumed to the resulting CG, `PIVOT_Z` 103.5 mm (D-TW-5).
+
+**The variable-diameter requirement below is DEFERRED to Phase 11b** (`deferred/WBS.md`). It
+stands as the Phase 11 target, unchanged, with one correction to carry: the percentages apply to
+the nozzle's FLOW surface. The modelled iris placed them on the flap hinge line and reached only
+95% at "open".
+
 Each nacelle nozzle is variable-diameter, **scheduled on measured nacelle tilt**, sized 75% of
 bore at 0° (forward) to 105% of bore at every tilt from 90° to the 145° limit (vertical/backing),
 and shall fail to 105% on loss of servo power, command, or tilt-angle validity — a fixed
@@ -137,5 +150,6 @@ Read the current state directly:
 
 - **Trade study and decision record:** `docs/NOZZLE_DRIVE_TRADE.md`
 - **Implementation plan:** `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`
-- **SCAD source:** `nacelle_nozzle_iris.scad`
-- **Open work:** `TODO.md` §1.1.3.1
+- **SCAD source:** `nacelle_nozzle_fixed.scad` (Phases 5–10); `nacelle_nozzle_iris.scad`
+  (deferred, Phase 11b)
+- **Open work:** `TODO.md` §1.1.3.1 (fixed nozzle); `deferred/TODO.md` §Phase11b (iris)
