@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-29",
+  "generated": "2026-10-01",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -10602,6 +10602,30 @@
       ],
       "archived": false
     },
+    "avionics/kicad/TACCO/kicads/TACCO-2.kicad_dru": {
+      "description": "KiCad custom design-rules file",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb": {
+      "description": "KiCad PCB layout",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pro": {
+      "description": "KiCad project file",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/TACCO/kicads/TACCO.kicad_dru": {
       "description": "KiCad custom design-rules file",
       "tags": [
@@ -12560,6 +12584,15 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md": {
+      "description": "feat: Radially scaled 64 mm nacelles with servo-driven variable nozzles",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md": {
       "description": "Fleet MIL-STD-1553C swap: HI-1573 + PRU \u2192 HI-6138 (Pilot, TACCO)",
       "tags": [
@@ -13186,6 +13219,42 @@
       "description": "PCB board file (legacy Eagle/KiCad format)",
       "tags": [
         "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qx-motor 64mm edf/7-2.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qx-motor 64mm edf/8-4.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qx-motor 64mm edf/8-4.webp": {
+      "description": "\u0010E\ud9c4\udc1c-<TAk\u0018",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qx-motor 64mm edf/e-600x600.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion",
         "specification"
       ],
       "archived": false
@@ -15763,6 +15832,7 @@
       "docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md",
       "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
+      "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md",
       "docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md",
       "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
       "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
@@ -15836,6 +15906,10 @@
       "docs/references/nick-henning/top-view-with-wireframe-henning.jpg",
       "docs/references/open-source-hardware-checklist.pdf",
       "docs/references/pocketbeagle2 revA_241205.brd",
+      "docs/references/qx-motor 64mm edf/7-2.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.webp",
+      "docs/references/qx-motor 64mm edf/e-600x600.jpg",
       "docs/references/scservo.zip.zip",
       "docs/references/thingverse-serenity/LICENSE.txt",
       "docs/references/thingverse-serenity/README.txt",
@@ -16014,6 +16088,7 @@
       "docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
       "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
+      "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md",
       "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
@@ -16317,6 +16392,10 @@
       "docs/references/nick-henning/top-view-with-wireframe-henning.jpg",
       "docs/references/open-source-hardware-checklist.pdf",
       "docs/references/pocketbeagle2 revA_241205.brd",
+      "docs/references/qx-motor 64mm edf/7-2.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.webp",
+      "docs/references/qx-motor 64mm edf/e-600x600.jpg",
       "docs/references/scservo.zip.zip",
       "docs/references/thingverse-serenity/LICENSE.txt",
       "docs/references/thingverse-serenity/README.txt",
@@ -17398,6 +17477,7 @@
       "docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md",
       "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
       "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md",
+      "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
@@ -17442,6 +17522,10 @@
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-edf-glider-nacelle-for-swift-2100-827-50mm.webp",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-model-logo-16966716258.jpg",
       "docs/references/Screenshot 2026-08-18 at 09-50-31 EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades 6S Motor 3200KV - Xfly-Model.png",
+      "docs/references/qx-motor 64mm edf/7-2.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.webp",
+      "docs/references/qx-motor 64mm edf/e-600x600.jpg",
       "graphical-build-guide/build_guide_03_print_nacelle.svg",
       "graphical-build-guide/build_guide_06_nacelle_pivot.svg",
       "graphical-build-guide/build_guide_07_edf_install.svg",
@@ -18741,6 +18825,9 @@
       "avionics/kicad/TACCO/gerbers/TACCO-In2_Cu.gbr",
       "avionics/kicad/TACCO/gerbers/TACCO-job.gbrjob",
       "avionics/kicad/TACCO/gerbers/TACCO.drl",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_dru",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pro",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_dru",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_prl",
@@ -19286,6 +19373,9 @@
       "avionics/kicad/TACCO/gerbers/TACCO-In2_Cu.gbr",
       "avionics/kicad/TACCO/gerbers/TACCO-job.gbrjob",
       "avionics/kicad/TACCO/gerbers/TACCO.drl",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_dru",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pro",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_dru",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_prl",

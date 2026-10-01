@@ -1925,6 +1925,28 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     reached by combining the 30 mm flaps with station 28.0 and the ESC1
     relocation. ~1 cm is the accepted margin — downstream geometry changes must
     not silently trade it away. The compact gear stays viable.
+- [ ] **NAC-64-SERVO-01 — radial nacelle scale-up for QX-Motor 64 mm tandem EDFs.**
+    Owner decision, 2026-10-01: scale the nacelle cross-section radially relative
+    to the unchanged aircraft, preserving the QMx canonical nacelle silhouette
+    as closely as the larger propulsion envelope permits; do not uniformly
+    scale the aircraft or nacelle length. Use a 64 mm thrust-tube flow diameter,
+    two QX-Motor 64 mm EDFs in tandem with an interstage stator, and QF2822 spider
+    mounts with four M3 holes on a 16 mm bolt circle. Retain the current axial
+    length only if the measured EDF, motor-projection, stator, mount, and nozzle
+    stack fits within it; otherwise stop for an explicit length/silhouette
+    adjudication before geometry changes. The 41.53 mm EDF drawing dimension is
+    provisional until its datums are confirmed against the physical assembly.
+    QMx *Official Serenity Blueprints Reference Pack* (REFERENCES.md REF-CAD-003)
+    governs exterior proportions; the existing repaired nacelle STL is a build
+    reference, not authority for the enlarged exterior. Implement alongside
+    `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`, which is
+    active work, not deferred to Phase 11b. Scope includes the servo-driven
+    variable nozzle, 64 mm EDF/stator packaging, ESC and Flight Engineer PDB
+    redesign for four 57 A candidate operating points, wiring/connectors/fusing,
+    mass/CG and pivot re-derivation, aerodynamic and structural verification,
+    BOM/reference updates, and bench acceptance. QX figures remain candidate
+    inputs pending primary-source cataloguing and measurement; do not treat the
+    60 A ESC recommendation or assumed 80 A ESC as a final selection.
 - [x] **LG-HOVER-01 — hover ground clearance — RESOLVED 2026-08-29.** Closed by
     NAC-MOULD-01 + the station/pivot move: **+9.8 mm on the existing 1.5 in
     gear**, owner-accepted. No landing-gear change is forced; the 3.0 in variant
