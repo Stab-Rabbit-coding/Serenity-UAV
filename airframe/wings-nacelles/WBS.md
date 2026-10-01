@@ -1947,6 +1947,19 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     BOM/reference updates, and bench acceptance. QX figures remain candidate
     inputs pending primary-source cataloguing and measurement; do not treat the
     60 A ESC recommendation or assumed 80 A ESC as a final selection.
+    **Owner clarification — 2026-10-01:** retain the 50 mm nacelle's printed
+    thrust-tube architecture, scaled to a nominal 64 mm flow diameter. Discard
+    the supplied QX EDF thrust tube/shroud; the nacelle tube is the rotor's flow
+    boundary. Keep the interstage stator sleeve and aft EDF spider sleeve as
+    separate removable service parts, with the aft sleeve retaining the stator
+    and carrying the aft QF2822 motor mount. Change that mount to four M3 holes
+    on the motor drawing's 16 mm bolt circle. The external-shroud packaging
+    alternative is rejected because it is not part of the selected airflow or
+    service architecture. Measure the bare rotor running envelope, rotor-to-
+    motor axial datum, and complete installed stack before accepting fit or
+    releasing flight geometry; the nominal 64 mm flow diameter is not a rotor
+    clearance measurement. Preserve the nacelle axial stations and length
+    unless the owner separately adjudicates a failed measured fit.
 - [x] **LG-HOVER-01 — hover ground clearance — RESOLVED 2026-08-29.** Closed by
     NAC-MOULD-01 + the station/pivot move: **+9.8 mm on the existing 1.5 in
     gear**, owner-accepted. No landing-gear change is forced; the 3.0 in variant
