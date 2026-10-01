@@ -6,10 +6,7 @@ artifact_contract: ce-unified-plan/v1
 product_contract_source: ce-plan-bootstrap
 execution: code
 depth: deep
-origin: docs/ideation/2026-09-28-nozzle-servo-actuation-ideation.html
 ---
-
-# feat: Radially scaled 64 mm nacelles with servo-driven variable nozzles
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CEH (GitHub `Stab-Rabbit-coding`) — owner decisions.
 **AI contribution:** analysis, ideation synthesis and plan text by Claude (Claude Opus 5.5, Anthropic);
@@ -31,16 +28,16 @@ added by GitHub Copilot (model not exposed by this host), 2026-10-01.
   pack (REFERENCES.md REF-CAD-003) for canonical exterior proportions > verified manufacturer
   drawings and datasheets > this plan > derivative STL geometry.
 - **Stop conditions:**
-  - Stop before U6's implementation arm until the owner picks V1 or V2 (D-NZ-1). U6's comparison
+    - Stop before U6's implementation arm until the owner picks V1 or V2 (D-NZ-1). U6's comparison
     spec is not gated.
-  - Stop before releasing geometry if the two complete EDF/motor envelopes, stator, spiders,
+    - Stop before releasing geometry if the two complete EDF/motor envelopes, stator, spiders,
     wiring clearances, nozzle and servo cannot fit inside the current axial length. Do not lengthen
     the nacelle, move aircraft structures, or alter the wing/pylon interface without an owner
     decision.
-  - Stop if the proposed exterior cannot be reconciled with the QMx blueprint silhouette and the
+    - Stop if the proposed exterior cannot be reconciled with the QMx blueprint silhouette and the
     approved radial scale-up; record measured deviations rather than silently reshaping it.
-  - Stop and report if the U2 margin check fails against the U8 bench load.
-  - Stop and report if U8 finds the spring cannot drive the ring to 105 % with the servo
+    - Stop and report if the U2 margin check fails against the U8 bench load.
+    - Stop and report if U8 finds the spring cannot drive the ring to 105 % with the servo
     unpowered or seized at any angle (the full-stroke-slot check in KTD3).
 - **Execution profile:** OpenSCAD geometry, Python sizing/check tools, OpenFOAM screening CFD,
   KiCad power-distribution design, bench measurements, BOM and documentation. Firmware behaviour
@@ -63,11 +60,13 @@ The schedule runs on the gateway that reads the AK7455, as a lookup table from t
 position:
 
 | Tilt | Nozzle exit |
-|---|---|
+| --- | --- |
 | 0° | 75 % of bore |
 | 90° to 145° | 105 % of bore, held flat |
 
-Loss of the AK7455, bus, MAC or heartbeat commands open and then de-energises the servo.
+Loss of servo power opens the nozzle mechanically without electrical power. Reject invalid or
+unauthenticated frames without changing actuator state; faults in valid authenticated heartbeat
+or AK7455 state follow KTD4's debounce and fail-open policy.
 
 ### Problem Frame
 
@@ -92,12 +91,33 @@ proportions, and enlarge the cross-section only as needed for the 64 mm propulsi
 supplied QX-Motor sheet shows a nominal 41.53 mm EDF axial dimension and a separate QF2822 motor
 envelope; verify the drawing datums against an assembled installation before accepting axial fit.
 
+### Provisional Thrust-to-Weight Screen
+
+Using the supplied QF2822-2400KV, 6S table point of 2,135 gf per EDF (4.71 lbf (20.9 N)) and the
+existing 90% tandem-stacking assumption gives 16.94 lbf (75.4 N) total nacelle thrust. This is a
+screening estimate, not measured installed thrust; U12 owns bench confirmation. The evaluation's
+assumed complete-EDF mass of 0.397–0.507 lbm (180–230 g) each, 0.093 lbm (42 g) per ESC, and
+0.088 lbm (40 g) Flight Engineer growth allowance gives an estimated AUW of 10.98–11.42 lbm
+(4,981–5,181 g) when applied to its 9.77 lbm (4,432.6 g) clean baseline, for T/W ≈ 1.48–1.54
+(about 1.52 at 0.441 lbm (200 g) per EDF).
+
+That estimate is not a settled aircraft result. `docs/FIRST_FLIGHT_READINESS.md` separately carries
+an unresolved 12.35–12.79 lbm (5.6–5.8 kg) current-AUW estimate. Applying the same estimated
+propulsion and PDB increment to that basis gives 13.55–14.44 lbm (6,148–6,548 g) and T/W ≈
+1.17–1.25. Both screens exclude the not-yet-measured mass change from radial shell growth, servo
+nozzle hardware, wiring, and any PDB redesign beyond the 0.088 lbm (40 g) allowance; neither is a
+release mass. U5/U12 must reconcile the mass bases using measured components and recompute T/W from
+measured thrust. The first-flight minimum is T/W ≥ 1.2; a result below that floor blocks flight
+release and requires a new owner-approved mass or propulsion decision.
+
 ### Requirements
 
 - **R1.** Nozzle exit is 75 % of bore radius at 0° tilt and 105 % at every tilt from 90° to the
   145° limit (`airframe/AGENTS.md` "Nacelle Nozzle Drive", reworded per R9).
-- **R2.** On loss of servo power, the command bus/heartbeat, AK7455 validity, or command
-  authentication, the nozzle goes to 105 % and stays there without power.
+- **R2.** Servo-rail loss releases the push-only link and the spring drives the nozzle to 105 %
+  without electrical power. Reject invalid or unauthenticated frames without changing actuator
+  state. Apply KTD4's one-time debounce to faults in valid authenticated heartbeat or AK7455 state;
+  an expired heartbeat or invalid sensor state then commands 105 % and disables the servo rail.
 - **R3.** No servo or nozzle-drive hardware may stand proud of the enlarged nacelle shell. The
   exterior shell may grow only by the radial-scale decision in KTD8; document its measured
   deviation from the QMx canonical silhouette.
@@ -132,7 +152,12 @@ envelope; verify the drawing datums against an assembled installation before acc
   aggregate as candidate sizing inputs, not validated aircraft duty.
 - **R15.** Recompute nacelle and aircraft mass, CG, pivot, hover thrust-to-weight, structure, and
   clearances; verify inlet/stator/nozzle flow using sourced or bench-measured boundary conditions.
-  Do not reuse the 50 mm mass table or assume a complete-EDF mass from the motor-only value.
+  Do not reuse the 50 mm mass table or assume a complete-EDF mass from the motor-only value. The
+  measured hover T/W must meet the project's 1.2 minimum before flight release; if it does not, stop
+  and return for an owner-approved mass or propulsion decision.
+- **R16.** Include a monotonic freshness counter in each authenticated `NOZZLE_STATUS` session.
+  Receivers reject duplicate or stale status, and a gateway reset requires a new authenticated
+  session before status is accepted for pre-arm or flight decisions.
 
 ### Scope Boundaries
 
@@ -172,14 +197,16 @@ envelope; verify the drawing datums against an assembled installation before acc
   values shown on the supplied sheet. Continuous aircraft duty, thermal derating, battery
   capability and protective-device coordination remain to be established in U10.
 - **Deferred:**
-  - Spring part number (only McMaster catalogue categories confirmed). U3 carries a
+    - Spring part number (only McMaster catalogue categories confirmed). U3 carries a
     "requires verification" row.
-  - BMS-101DMG full dimensions and voltage rating (only the case thickness and mass were read).
+    - BMS-101DMG full dimensions and voltage rating (only the case thickness and mass were read).
     U7 records them as requiring verification.
 
 ### Sources
 
-- `docs/ideation/2026-09-28-nozzle-servo-actuation-ideation.html` (ideas 1–7 and rejection table)
+- Original ideation artifact: `docs/ideation/2026-09-28-nozzle-servo-actuation-ideation.html`,
+  added in Git commit `aa181e23` but absent from this branch's tree. Recover it with
+  `git show aa181e23:docs/ideation/2026-09-28-nozzle-servo-actuation-ideation.html` if needed.
 - `docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md` (recommendation 1; reject whole-hull scale-up and
   retain its open EDF mass and power-system uncertainties)
 - `docs/references/qx-motor 64mm edf/8-4.jpg`, `8-4.webp`, and `7-2.jpg` (user-supplied QX-Motor
@@ -188,11 +215,11 @@ envelope; verify the drawing datums against an assembled installation before acc
 - `docs/NOZZLE_DRIVE_TRADE.md`, `avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md` §3,
   `docs/CARGO_DOOR_GATEWAY_SPEC.md` (D-GW-4/5, failsafe), `docs/TILT_ENCODER_WIRING_EMI_SPEC.md`
 - Servo specs read on vendor pages 2026-09-28:
-  - Blue Bird BMS-101DMG (hyperflight.co.uk `products.asp?code=BMS-101DMG`): 4.5 g, 1.0 kgf·cm,
+    - Blue Bird BMS-101DMG (hyperflight.co.uk `products.asp?code=BMS-101DMG`): 4.5 g, 1.0 kgf·cm,
     0.07 s/60°, 8 mm case.
-  - Hitec HS-40 (hitec.uk; servodatabase.com): 20 × 8.6 × 17 mm, 4.8 g, 0.8 kgf·cm at 6 V,
+    - Hitec HS-40 (hitec.uk; servodatabase.com): 20 × 8.6 × 17 mm, 4.8 g, 0.8 kgf·cm at 6 V,
     4.8–6.0 V.
-  - AGFRC C1.5CLS linear (amazon.com listing B07QGYBV1H): 21.4 × 15.2 × 6.0 mm, 1.5 g,
+    - AGFRC C1.5CLS linear (amazon.com listing B07QGYBV1H): 21.4 × 15.2 × 6.0 mm, 1.5 g,
     120/240 gf, stroke listed inconsistently (7 vs 9 mm).
 - ArduPilot `SERVOn_FSPWM` per-output failsafe PWM
   (ardupilot.org/plane/docs/apms-failsafe-function.html), cited as precedent for a commanded fail
@@ -210,13 +237,13 @@ envelope; verify the drawing datums against an assembled installation before acc
 - **KTD2 — Servo: Blue Bird BMS-101DMG primary, Hitec HS-40 alternate** *(session-settled:
   user-directed "use the smaller servo you found, unless there's a linear one that works
   better")*.
-  - **BMS-101DMG (4.5 g, 8 mm case, metal gear):** the smallest rotary candidate. Its full L×W and
+    - **BMS-101DMG (4.5 g, 8 mm case, metal gear):** the smallest rotary candidate. Its full L×W and
     voltage range were not published on the page read, so they are "requires verification". The
     HS-40 is the fully dimensioned fall-back if the BMS-101DMG fails the 6 V rating or the U4 fit.
-  - **Force check:** a ~90° servo sweep driving 13.2 mm of lever chord needs an arm of
+    - **Force check:** a ~90° servo sweep driving 13.2 mm of lever chord needs an arm of
     13.2 / (2 sin 45°) ≈ 9.3 mm (0.37 in). At 1.0 kgf·cm (0.098 N·m) that gives a pull of
     ≈ 10.5 N (2.4 lbf).
-  - **Linear servo rejected:** the AGFRC C1.5CLS delivers at most 2.4 N (0.54 lbf) at 6 V. Its
+    - **Linear servo rejected:** the AGFRC C1.5CLS delivers at most 2.4 N (0.54 lbf) at 6 V. Its
     stroke is listed inconsistently, and the lever arm would have to shrink to about 21 mm to match
     that stroke. It cannot hold against any open-spring worth having, so it is recorded as
     rejected unless U8 measures a total closing load under about 1 N.
@@ -224,17 +251,17 @@ envelope; verify the drawing datums against an assembled installation before acc
   user-approved; corrected 2026-09-29, third and final revision)*.
   This remains the selected fail-open topology; its 50 mm ring, hinge, spring and linkage dimensions
   are not valid for the 64 mm design and must be re-derived in U11.
-  - A rigid rod (COTS M3 ball stud, the same part the pre-Option-A pushrod used) drives the ring's
+    - A rigid rod (COTS M3 ball stud, the same part the pre-Option-A pushrod used) drives the ring's
     lever ball at r 32 mm, exactly the chord/angle relationship `tools/nozzle_linkage_check.py`
     already solved for this ring — this is proportional position control, not a hard stop.
-  - The ring-side socket is an **open cup** (a hemisphere plus a clear exit channel, not a
+    - The ring-side socket is an **open cup** (a hemisphere plus a clear exit channel, not a
     captured sphere): the rod can only push the ball in. Nothing retains the ball against the
     cup once the rod stops pushing, so a dead, unpowered, **or seized** servo cannot hold the
     nozzle closed — the ball simply lifts out as the spring cord (wrapped on a rim groove, r
     32.35 mm) drives the ring to its 105 % stop.
-  - Hard stops are additive lugs projecting inward from the housing's own bore wall, just outside
+    - Hard stops are additive lugs projecting inward from the housing's own bore wall, just outside
     the ear's normal 157.5°→133.75° sweep, so the ear only reaches them on overtravel.
-  - **Two earlier corrections, both superseded, kept here as the record so they are not
+    - **Two earlier corrections, both superseded, kept here as the record so they are not
     retried:**
     1. *2026-09-28, first cut* — a pull-only slotted ear. Rejected same day: a seized pull link
        still blocks the ring paying out toward open.
@@ -244,44 +271,51 @@ envelope; verify the drawing datums against an assembled installation before acc
        required contact radius ran past the ear's own tip near both ends of the stroke) and it
        still needed a window straight through the housing's exterior-mould-line wall to reach the
        ear, the same packaging cost item 3 below already flagged.
-  - A direct axial-shaft servo arm remains rejected (2026-09-28 packaging check): the wing servo's
+    - A direct axial-shaft servo arm remains rejected (2026-09-28 packaging check): the wing servo's
     15.3 mm shaft-axis height cannot stand radially in the ~10 mm annulus, and it cannot track the
     ear's arc within the flank's narrow radial span — hence a rod, not an arm, at the ring.
-  - **Packaging cost accepted:** the ear (tip r 35.0 mm, matching the original pre-Option-A
+    - **Packaging cost accepted:** the ear (tip r 35.0 mm, matching the original pre-Option-A
     reach) stands past the housing bore (33.6 mm), so a small window through the housing wall,
     spanning only the ear's own 32.3° stop-to-stop sweep, lets the rod reach it — a fairing-
     covered actuator slot at the inboard flap gap, consistent with how real variable-nozzle
     linkages (REF-CAD-001) cross their cowl. Flagged for the U8 bench check the pre-Option-A
     design also deferred ("Pushrod clearance/interference check").
-  - Spring sizing target: at least 1.5 × (measured opening-side friction) and no more than 40 %
+    - Spring sizing target: at least 1.5 × (measured opening-side friction) and no more than 40 %
     of servo stall push, pending U8.
 
 - **KTD4 — The schedule runs on the gateway that reads the AK7455** *(user-approved at scoping:
   chosen over flight-computer-commanded nozzle position)*.
-  - The tilt-to-ring lookup table holds flat from 90° to 145°. The over-travel is fixed by
+    - The tilt-to-ring lookup table holds flat from 90° to 145°. The over-travel is fixed by
     construction.
-  - The flight computers see a signed `NOZZLE_STATUS` (commanded %, sweep result, fault flags).
-    They do not command the nozzle.
-  - Failsafe polarity is the **inverse of the door gateway's**: loss of the AK7455, heartbeat, MAC
-    or rail commands 105 %, then **opens a gateway-controlled load switch on the `F_NOZ` servo
-    branch**. It does not rely on stopping PWM, because a digital servo may keep holding its last
-    pulse when the signal is lost (doc review 2026-09-28). Door firmware must not be reused
-    unchanged.
-  - **Debounce and re-arm:** the **first** fault shorter than 200 ms in a flight does not trip.
-    The debounce forgives once only: any later fault, of any length, trips immediately (owner
-    decision 2026-09-28). A tripped fault latches
-    open until the AK7455 angle and the bus have both been clean for 2 s and the tilt is ≥ 60°;
-    then the schedule resumes. A second trip in the same flight latches until power cycle. This
-    avoids spending a whole cruise at 105 % after one transient glitch (owner decision
-    2026-09-28, chosen over latching until power cycle). Both timing values are starting points,
-    to be set by U8.
+    - Flight computers receive signed `NOZZLE_STATUS` frames containing commanded position, sweep
+    result, fault flags, and a freshness counter. Receivers reject duplicate and stale status before
+    using it for pre-arm or flight decisions. Flight computers do not command nozzle position.
+    - Reject invalid or unauthenticated frames and log the rejection without changing actuator state.
+    Do not treat a bad MAC by itself as a valid fault command. Loss of the authenticated heartbeat,
+    invalid AK7455 state, servo-rail fault, gateway reset, or watchdog expiry enters the fail-open
+    path.
+    - A gateway watchdog resets the MCU if its control loop stalls. A hardware pull-down holds the
+      `F_NOZ` high-side switch **off during gateway reset, brownout,
+    watchdog reset, or unpowered state**. The gateway may energize the servo only while its health
+    output is valid. This makes a gateway hang or reset remove servo power without requiring gateway
+    firmware to execute. Servo-rail loss mechanically releases the push-only link so the spring
+    drives the ring to 105 %. On a debounced valid-state fault, command 105 % and then disable the
+    switch; do not rely on stopping PWM because a digital servo may hold its last pulse when signal
+    is lost. Door firmware must not be reused unchanged.
+    - **Debounce and re-arm:** the first authenticated-heartbeat or AK7455 fault shorter than 200 ms
+    in a flight does not trip. The debounce forgives once only; a later valid-state fault of any
+    duration trips immediately. Servo-rail loss, gateway reset, and watchdog expiry bypass the
+    debounce and open mechanically through the reset-default-off switch. A tripped valid-state fault
+    latches open until the AK7455 angle and authenticated heartbeat have both been clean for 2 s and
+    the tilt is ≥ 60°; then the schedule resumes. A second debounced fault in the same flight latches
+    until power cycle. Both timing values are starting points for U8 to tune.
 - **KTD5 — Servo forward of the ring, inside the pod** *(user-approved at scoping)*.
-  - The servo lies flat in the annulus: 8 mm case thickness radial, 22 mm axial, and the shaft
+    - The servo lies flat in the annulus: 8 mm case thickness radial, 22 mm axial, and the shaft
     oriented so its 9.31 mm crank arm swings a rigid ball-link rod up to the housing window at the
     ear's sweep. The servo station can sit wherever the rod geometrically reaches, preferably
     behind an existing access cover (R4).
-  - The ear sweeps 157.5° (closed) → 133.75° (open), because the ring opens clockwise.
-  - A faired blister is the fall-back only (R3).
+    - The ear sweeps 157.5° (closed) → 133.75° (open), because the ring opens clockwise.
+    - A faired blister is the fall-back only (R3).
 - **KTD6 — Servo power from a fused branch of the 6 V servo rail in both variants** (door
   precedent D-GW-4). Only signal and GND use `J_FLEX`. The 6 V pair crosses the joint through the
   spar bore with the power feeds, under the same braid/ferrite rule as the encoder pair.
@@ -352,15 +386,15 @@ stateDiagram-v2
 "est." = engineering estimate pending weighing; everything else is from the repo or a vendor page.
 
 | | **V1 — shared AK7455 encoder lane** | **V2 — dedicated N_STACKS=1 gateway** |
-|---|---|---|
-| Board | none added. `FLEX_PWM_IO` (PA25 TIMA0_C3) on the encoder lane's unused `J_FLEX` is a firmware-mode choice ("no hardware change", `CAN-PERIPH-GW-1.md` §3) | +1 board per nacelle, 49.0 × 25.5 × 1.6 mm, ~6 g VERIFY |
+| --- | --- | --- |
+| Board | No additional MCU board. Add one `F_NOZ` high-side switch per nacelle to the shared encoder-lane hardware; `FLEX_PWM_IO` is only the PWM signal, not servo power. | +1 board per nacelle, 49.0 × 25.5 × 1.6 mm, ~6 g VERIFY; include the `F_NOZ` switch and reset-default-off hardware. |
 | Mounting | wherever the encoder gateway lives. **It is not yet placed in any SCAD or in the mass roll-up**, so U6 must place it: nacelle flank near the ESC bays | card-edge tray (door-tray pattern, D-GW-5) at the forward ESC bay, behind the bay cover, next to the servo |
-| Wiring across the joint | + 6 V pair only (KTD6) | + 6 V pair + isolated CAN-FD pair + RS-485 pair + GND + board RAIL-2 feed |
+| Wiring across the joint | + 6 V pair and switch-control/health wiring as required by switch placement (KTD6) | + 6 V pair + isolated CAN-FD pair + RS-485 pair + GND + board RAIL-2 feed |
 | Mass per nacelle (rotating) | servo 4.5 + link ~1 est. + spring ~1 est. + mount ~1.5 est. + lead ~0.5 est. − pushrod 3.6 = **+4.9 g (0.011 lbm)** | V1 + board 6 + tray ~3 est. = **+13.9 g (0.031 lbm)** |
 | Mass per nacelle (fixed wiring) | 6 V pair 22 AWG ~0.7 m ≈ 4.2 g est. | V1 + bus pairs ≈ 11 g est. more |
-| Aircraft total vs deleted drive | **≈ +19 g (0.042 lbm)** | **≈ +59 g (0.13 lbm)**, about +40 g over V1 |
+| Aircraft total vs deleted drive | **≈ +19 g (0.042 lbm)** | **≈ +59 g (0.13 lbm)**, about +40 g over V1; both estimates exclude the new switch hardware until U5 weighs it. |
 | PIVOT_Z shift (560 g assembly) | ≈ +0.34 mm aft from the drive swap; +1.2 mm more from the shingle-flap correction | V1 + board at ~Z 95–120 → ≈ ±0.2 mm |
-| Common-mode exposure | one gateway fault loses tilt feedback **and** nozzle command together. The nozzle fails open (hover-safe), but the tilt loop loses its sensor | nozzle and encoder fail independently |
+| Common-mode exposure | One gateway fault loses tilt feedback and nozzle command together; the hardware-default-off switch releases the nozzle spring-open, while the tilt loop loses its sensor. | Nozzle and encoder fail independently. |
 | Service | servo behind an ESC-bay-adjacent cover; gateway unchanged | same, plus one more board to provision (keys, firmware image) |
 | Assurance | the encoder lane gains a second endpoint class (actuator). SCA mapping must cover mixed sensor/actuator roles on one MCU | same class as the door gateway; the existing mapping is reused |
 
@@ -403,7 +437,9 @@ flowchart LR
   U6 --> U12
   U7 --> U12
   U1 --> U8
-  U12 --> U8
+  U9 --> U8
+  U10 --> U8
+  U11 --> U8
 ```
 
 ---
@@ -421,19 +457,19 @@ are closed.
 
 **Files:**
 - Docs:
-  - `docs/NOZZLE_DRIVE_TRADE.md` — decision amendment, reopened-datum result, over-travel finding.
-  - `airframe/AGENTS.md` — "Nacelle Nozzle Drive" wording.
-  - `airframe/wings-nacelles/WBS.md` — §1.1.3.1, §1.1.3.3.
-  - `airframe/wings-nacelles/TODO.md` — regenerated, not hand-edited.
+    - `docs/NOZZLE_DRIVE_TRADE.md` — decision amendment, reopened-datum result, over-travel finding.
+    - `airframe/AGENTS.md` — "Nacelle Nozzle Drive" wording.
+    - `airframe/wings-nacelles/WBS.md` — §1.1.3.1, §1.1.3.3.
+    - `airframe/wings-nacelles/TODO.md` — regenerated, not hand-edited.
 - Archive:
-  - `airframe/openscad/nacelles/nacelle_nozzle_sync_gears.scad`
-  - `airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad`
-  - `airframe/openscad/nacelles/gear_option_compare.scad`, plus `gear_shell_compare.scad` if it
+    - `airframe/openscad/nacelles/nacelle_nozzle_sync_gears.scad`
+    - `airframe/openscad/nacelles/nacelle_nozzle_pushrod.scad`
+    - `airframe/openscad/nacelles/gear_option_compare.scad`, plus `gear_shell_compare.scad` if it
     is tracked.
-  - Their STLs, Makefile targets, and the `port_tilt_spar_assembly.scad` sync block.
+    - Their STLs, Makefile targets, and the `port_tilt_spar_assembly.scad` sync block.
 - Assembly and indexes:
-  - `airframe/FreeCAD-scripts/serenity_assembly.py` — spar-crank placement.
-  - `PROJECT_INDEX.md` and `ARCHIVE_INDEX.md` — regenerated.
+    - `airframe/FreeCAD-scripts/serenity_assembly.py` — spar-crank placement.
+    - `PROJECT_INDEX.md` and `ARCHIVE_INDEX.md` — regenerated.
 
 **Approach:**
 1. Amend the trade doc with a dated DECISION AMENDMENT (Option A, 2026-09-28). Record:
@@ -478,7 +514,7 @@ Verification Contract still apply.
 
 **Requirements:** R1, R2, R12, R15, KTD2, KTD3, KTD4, KTD9.
 
-**Dependencies:** U1 and U9 (the 64 mm geometry and parameter ownership are known).
+**Dependencies:** U1 and U9 (the 64 mm geometry and provisional servo envelope are known).
 
 **Files:** `tools/nozzle_servo_linkage.py` (new);
 `tools/tests/test_nozzle_servo_linkage.py` (new).
@@ -487,7 +523,8 @@ Verification Contract still apply.
 1. Source the re-derived 64 mm constants from `nacelle_nozzle_iris.scad`, citing file/line as
   `nozzle_linkage_check.py` does. Do not carry forward the 50 mm `RING_LEVER_R`, `R_HINGE`,
   ring, flap or spring dimensions without re-derivation.
-2. Take the servo station from U4 as an input.
+2. Take U9's provisional servo station/envelope candidate as an input. U4 owns final servo
+  placement and verifies the complete shell and service fit after the nozzle geometry is resolved.
 3. Compute:
    - the arm radius and sweep;
    - servo pull against spring force plus measured flap load (U8 value as input, 20 N placeholder
@@ -593,7 +630,8 @@ access cover, and prove the fit.
 **Approach:**
 1. Search the blueprint-guided, radially enlarged shell for a forward servo station using the
   verified servo envelope, installation clearance and required wall thickness. Use the current
-  ESC-bay and cover interfaces, and keep the nacelle's axial length unchanged.
+  ESC-bay and cover interfaces, and keep the nacelle's axial length unchanged. This unit is the
+  sole owner of final servo-mount placement.
 2. Place the servo and its crank so a rigid pushrod (COTS ball-link rod + the M3 ball stud
    already at the ring's lever, U3) reaches the housing window at the ear's sweep (157.5°→133.75°,
    window centred there). Route the spring cord from its housing-side anchor (337.5°, the
@@ -636,7 +674,8 @@ budget, CG and PIVOT_Z and converges.
 **Dependencies:** U3, U4, U9, U10 and U11.
 
 **Files:** `tools/nacelle_mass_cg.py`; `airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad`
-(`PIVOT_Z` iteration); `airframe/wings-nacelles/WBS.md` §1.1.3.1 (closes the shingle mass/CG item).
+(`PIVOT_Z` iteration); `airframe/wings-nacelles/WBS.md` §1.1.3.1 (shingle mass/CG item) and
+§1.1.4 (NAC-64-SERVO-01 mass/CG/T-W acceptance).
 
 **Approach:**
 1. Replace the 50 mm EDF, stator, sleeves, shell and nozzle rows with weighed or mesh-derived 64 mm
@@ -663,7 +702,7 @@ budget, CG and PIVOT_Z and converges.
 **Goal:** A spec in the door-gateway document's shape that lets the owner decide D-NZ-1, then
 records the chosen variant's integration with the 64 mm servo load and redesigned PDB.
 
-**Requirements:** R2, R5, R8, KTD4, KTD6.
+**Requirements:** R2, R5, R8, R16, KTD4, KTD6.
 
 **Dependencies:** U2 (lookup table), U4 (servo station), U5 (masses), and U10 (verified 6 V rail
 and fuse/load-switch design).
@@ -671,22 +710,24 @@ and fuse/load-switch design).
 **Files:**
 - `docs/NACELLE_NOZZLE_SERVO_SPEC.md` (new).
 - After D-NZ-1:
-  - `avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md` (deployment §1/§3);
-  - `docs/TILT_ENCODER_WIRING_EMI_SPEC.md`;
-  - `docs/POWER_DISTRIBUTION.md` (redesigned EDF distribution and the `F_NOZ` 6 V branch);
-  - `avionics/WBS.md`.
+    - `avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md` and its schematic/PCB (V1 shared-lane
+    integration or V2 dedicated gateway, including `F_NOZ` switch control and reset default);
+    - `docs/TILT_ENCODER_WIRING_EMI_SPEC.md`;
+    - `docs/POWER_DISTRIBUTION.md` (redesigned EDF distribution and the `F_NOZ` 6 V branch);
+    - `avionics/WBS.md` and `airframe/wings-nacelles/WBS.md` §1.1.4.
 
 **Approach:**
 1. **Decisions table** (the door spec's D-GW pattern) covering:
-   - the `F_NOZ` load switch: a gateway GPIO drives a high-side switch, and the servo is
-     unpowered whenever the switch is off, which is the fault state;
+   - one high-side `F_NOZ` switch per nacelle, controlled by the gateway and held off by hardware
+     pull-down while the gateway is unpowered, in reset, brownout, or watchdog reset;
    - a contingent 3.3 → 5 V level shifter, fitted only if U8 item 3 fails (cargo-door harness
      precedent);
    - servo pinning, `J_FLEX` pin 4 `FLEX_PWM_IO`;
    - power (`F_NOZ` fuse sized from the measured stall);
    - the joint crossing;
-   - failsafe polarity (KTD4);
-   - messages: `NOZZLE_STATUS` published, no remote command class;
+   - failsafe polarity and invalid-frame behavior (KTD4): reject and log invalid/unauthenticated
+     frames without changing actuator state; fail open on expiry of valid authenticated state;
+   - signed `NOZZLE_STATUS` freshness counter and receiver replay/duplicate rejection (R16);
    - the pre-arm sweep state machine above (R8).
 2. Place the nacelle encoder gateway physically. It is currently unplaced and unweighed.
 3. Write the V1/V2 comparison from the Planning Contract table with U5 numbers substituted. End it
@@ -698,11 +739,19 @@ and fuse/load-switch design).
 `J_FLEX` table, firmware contract, placement table, open items).
 
 **Test scenarios:**
-- Spec review checklist: every failure input in R2 maps to "105 %, then `F_NOZ` load switch
-  off".
+- Spec review checklist: servo-rail loss, authenticated-heartbeat expiry, invalid AK7455 state,
+  gateway reset, and watchdog expiry each map to the specified spring-open behavior; invalid or
+  unauthenticated frames are rejected and logged without changing actuator state.
+- The selected gateway variant contains the per-nacelle `F_NOZ` high-side switch with a
+  reset-default-off control. Verify the switch actually removes power if the MCU is held in reset.
+- Stall the gateway control loop and verify the watchdog resets the MCU, the switch defaults off,
+  and the spring opens the nozzle without a firmware fail-open command.
+- `NOZZLE_STATUS` freshness is signed into the frame, and receivers reject duplicate or stale
+  status; after gateway reset they require a new authenticated session before accepting a pre-arm
+  sweep result.
 - The debounce/re-arm table matches the state diagram: one forgiven sub-200 ms glitch per flight,
-  any later fault trips at once, 2 s clean plus tilt ≥ 60° re-arms once, and a second trip
-  latches.
+  any later valid-state fault trips at once, gateway reset/power faults bypass debounce, 2 s clean
+  plus tilt ≥ 60° re-arms once, and a second debounced trip latches.
 - The `J_FLEX` pin table matches the §3 net names.
 - Each variant's joint-crossing conductor count and mass is listed and summed.
 - No row reuses the door "hold last" failsafe.
@@ -744,8 +793,8 @@ and fuse/load-switch design).
 2. Retire, with Qty 0 and a dated note: `PUSHROD-BALL-M3`, `BALLSTUD-M3`, `PRINT-PUSHROD-CRANK`.
 3. Add REFERENCES entries with validated URLs and cited sections:
    - BMS-101DMG, HS-40, and AGFRC C1.5CLS as the rejected record;
-  - ArduPilot failsafe docs;
-  - QX-Motor manual and dimension drawing, after obtaining a validated manufacturer source and
+- ArduPilot failsafe docs;
+- QX-Motor manual and dimension drawing, after obtaining a validated manufacturer source and
     identifying the dimension datums. Keep the supplied images as evidence, not a substitute for
     the catalogued primary reference.
 4. Mark unread specifications "requires verification", with a TODO §0.x item each.
@@ -765,11 +814,12 @@ and fuse/load-switch design).
 **Goal:** The unknowns this plan cannot settle on paper become tracked WBS bench tasks with
 pass/fail criteria.
 
-**Requirements:** R2, R8, KTD2, KTD3.
+**Requirements:** R2, R8, R16, KTD2, KTD3, KTD4.
 
 **Dependencies:** U1, U9, U10 and U11.
 
-**Files:** `airframe/wings-nacelles/WBS.md` §1.1.3.1; `docs/FIRST_FLIGHT_READINESS.md` (gate row).
+**Files:** `airframe/wings-nacelles/WBS.md` §1.1.3.1 (legacy nozzle bench items) and §1.1.4
+(NAC-64-SERVO-01 bench gates); `docs/FIRST_FLIGHT_READINESS.md` (gate row).
 
 **Approach:** add these items:
 1. Flap hinge moment: lever-ear force at r 32 mm, at 75 % and 105 %, fan off and at hover throttle.
@@ -783,11 +833,16 @@ pass/fail criteria.
 8. **Unpowered and seized servo:** with the servo unpowered, and again with the servo arm locked
    at each of 75 %, 90 % and 105 %, the spring drives the ring to 105 % through the slot within
    0.5 s. This is a stop condition in the Goal Capsule.
-9. BMS-101DMG signal-loss behaviour (hold or go limp), recorded for the record. The failsafe
-   does not depend on it because of the load switch.
-10. Measure cruise penalty of the 105 % fault state at 0° tilt (thrust change and trim), plus tune
+9. Hold the gateway in reset, force brownout, and stall its main loop; verify the hardware-default-
+   off switch removes servo power and the ring reaches 105 % without gateway firmware execution.
+10. Inject invalid-MAC and unauthenticated frames; verify the gateway rejects/logs them without
+  changing nozzle state. Replay duplicate and stale signed `NOZZLE_STATUS` frames; verify
+  receivers reject them for pre-arm and in-flight decisions.
+11. BMS-101DMG signal-loss behaviour (hold or go limp), recorded for the record. The failsafe does
+  not depend on it because the switch removes servo power.
+12. Measure cruise penalty of the 105 % fault state at 0° tilt (thrust change and trim), plus tune
   the 200 ms and 2 s debounce/re-arm timers.
-11. Verify each 64 mm motor/ESC branch current and temperature, PDB/shunt temperature, connector
+13. Verify each 64 mm motor/ESC branch current and temperature, PDB/shunt temperature, connector
   temperature, harness temperature and battery sag at the approved continuous and transient test
   points; compare against U10 limits.
 
@@ -810,7 +865,7 @@ canonical silhouette as close as practical.
 
 **Files:** `airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad`; the applicable EDF sleeve and
 spider sources; `tools/nacelle_axial_fit.py` (new); `tools/nacelle_housing_profile.py`; the nacelle
-build notes and `airframe/wings-nacelles/WBS.md`.
+build notes and `airframe/wings-nacelles/WBS.md` §1.1.4 (NAC-64-SERVO-01).
 
 **Approach:**
 1. Use QMx REF-CAD-003 as the authority for visible proportions. Compare normalized nacelle
@@ -855,7 +910,8 @@ the physical connector and routing envelope is known.
 
 **Files:** `docs/POWER_DISTRIBUTION.md`; `avionics/kicad/FlightEngineer/FlightEngineer.md` and its
 schematic/PCB; `current-specification/bom_revS.csv` and `.json`; the nacelle/wing harness notes;
-`REFERENCES.md`; `avionics/WBS.md`.
+`REFERENCES.md`; `avionics/WBS.md`; `airframe/wings-nacelles/WBS.md` §1.1.4 for nacelle power-route
+and harness integration.
 
 **Approach:**
 1. Use the supplied sheet's QF2822-2400KV row as a candidate: 22.2 V, 57.0 A, 1265.4 W and a
@@ -909,8 +965,9 @@ boundary, retaining the approved servo-scheduled, spring-to-open behavior.
 2. Re-derive flap angles, overlaps, seals, hinge loads, ring stroke, spring rate, servo arm and
   linkage transmission over the complete schedule. Keep the open ball-cup and independent spring
   path so a dead or seized servo cannot mechanically block fail-open motion.
-3. Re-place the servo and service cover in the radial-only shell from U9. Retain the 90–145° flat
-  open schedule, 0° closed endpoint, fault-open behavior, pre-arm sweep and gateway variants.
+3. Provide U4 with the re-sized nozzle, ring, and linkage interface constraints; do not select or
+  place the servo station here. U4 owns final servo placement. Retain the 90–145° flat-open
+  schedule, 0° closed endpoint, fault-open behavior, pre-arm sweep and gateway variants.
 4. Recalculate servo torque, current and spring margins from measured full-scale nozzle forces;
   do not scale the 50 mm force estimates linearly without validating flap-pressure loads.
 
@@ -938,7 +995,7 @@ system meet their engineering gates as an integrated system.
 
 **Files:** `tools/nacelle_mass_cg.py`; `tools/nacelle_axial_fit.py`; OpenFOAM case inputs/results;
 `docs/NOZZLE_DRIVE_TRADE.md`; `docs/POWER_DISTRIBUTION.md`; `docs/FIRST_FLIGHT_READINESS.md`;
-`airframe/wings-nacelles/WBS.md`.
+`airframe/wings-nacelles/WBS.md` §1.1.4 (NAC-64-SERVO-01).
 
 **Approach:**
 1. Re-run structural sizing for the enlarged shell, spiders, stator supports, nozzle hinges, pylon
@@ -961,8 +1018,8 @@ system meet their engineering gates as an integrated system.
   allowable; required coupons/proof tests pass before flight release.
 - CFD runs converge under a documented mesh-sensitivity check and its relevant trend agrees with
   bench pressure/thrust measurements within a stated, justified acceptance band.
-- Measured aircraft mass/CG and thrust yield a recomputed hover margin against the project's
-  current minimum; no assumed complete-EDF mass remains in the roll-up.
+- Measured aircraft mass/CG and thrust yield hover T/W ≥ 1.2; no assumed complete-EDF mass remains
+  in the roll-up. A result below 1.2 blocks flight release and returns for owner adjudication.
 - One EDF/ESC branch fault and one nozzle-servo fault each produce the specified isolated,
   fail-open response without unacceptable loss of control authority.
 

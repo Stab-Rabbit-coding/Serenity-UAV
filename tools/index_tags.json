@@ -12585,7 +12585,7 @@
       "archived": false
     },
     "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md": {
-      "description": "feat: Radially scaled 64 mm nacelles with servo-driven variable nozzles",
+      "description": "Goal Capsule",
       "tags": [
         "documentation",
         "emi-hardening",
