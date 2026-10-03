@@ -133,23 +133,66 @@ owner-approved change to R11 (2026-10-03).
 
 ## 5. Mass, CG and pivot — `tools/nacelle_mass_cg_64.py`
 
-The rotating assembly is 2.10 lbm (954 g) per nacelle. The CG and PIVOT_Z are at 3.87 in
-(98.3 mm), moved from 107.5 mm, converged on both pods (residual ≤ 0.01 mm, iteration 2). The 10 AWG disconnect bay moves to Z
-51 mm to clear the trunnion cavity. Hover clearance is +0.94 in (+23.9 mm) on the 3.0 in flight
-gear; the retired 1.5 in gear strikes (−18 mm). Rows marked ASSUMED or SCALED (rotors, ESCs,
-sleeves, nozzle) must be weighed or re-measured before release.
+| Quantity | Value |
+| --- | --- |
+| Pod (measured) | 0.584 lbm (265 g), CG 94.6 mm |
+| Rotating assembly | **2.05 lbm (929 g)** per nacelle (1.28 × 185.2 mm design: 954 g) |
+| CG = PIVOT_Z | **4.32 in (109.7 mm)**, converged on both pods (residual +0.02 mm, iteration 2) |
+| Hover clearance, 3.0 in flight gear | **+0.54 in (+13.7 mm)** (floor 0.5 in, Claude-chosen); the retired 1.5 in gear strikes |
+| 10 AWG disconnect bay | Z 57.6 mm, between the Z 45.2 and 70.1 bulkheads, clear of the trunnion cavity |
+
+Rows marked ASSUMED or SCALED (rotors, 70 A ESCs, sleeves, nozzle) must be weighed or
+re-measured before release.
+
+## 5b. Tilt-axis inertia and load path — `tools/nacelle_tilt_dynamics.py`
+
+The owner asked for this (2026-10-03): the larger nacelle needs more torque to accelerate about
+its pivot, and the trunnion, bearings, gears, shaft and tilt drive carry the load. Inertia is a
+rigid-body sum: the measured pod's own inertia, plus every component as a shaped body (motors as
+cylinders, rotors as discs, sleeves and nozzle as tubes, ESCs at their off-axis bay positions).
+The old 7.19 × 10⁻⁴ kg·m² point-mass figure (TILT_SPAR_ANALYSIS §2.1.2) understated even the
+50 mm pod by about 1.9×.
+
+| | 50 mm (Rev T4) | 64 mm (adopted) | Ratio |
+| --- | --- | --- | --- |
+| I about the tilt axis | 1.36 × 10⁻³ kg·m² (4.63 lbm·in²) | 2.74 × 10⁻³ kg·m² (9.37 lbm·in²) | ×2.02 |
+| Rotor spin momentum, 2 co-rotating rotors (ASSUMED rotor data) | 0.042 N·m·s | 0.104 N·m·s | ×2.46 |
+| Thrust moment at the trunnion, ultimate | 1.06 N·m | 2.22 N·m (19.6 lbf·in) | ×2.10 |
+
+Governing achievable case: the built drive's 144 °/s with the TILT-CTL-05 acceleration of
+52.6 rad/s², × 1.5 ultimate.
+
+| Load-path item | 64 mm result | Verdict |
+| --- | --- | --- |
+| Tilt drive (1.81 N·m at the nacelle) | 0.216 N·m (1.92 lbf·in) | **8.4× margin**, pass |
+| 50T m0.8 tip ring, Lewis, printed | FOS 12.0 against inertia torque | pass (≥ 4) |
+| Ø4 mm drive shaft torsion | 5.1 MPa | negligible; grade not recorded |
+| Gyroscopic moment | 0.393 N·m ult; normal to the tilt axis, so it loads the bearings, not the drive | — |
+| **2 × 6704-ZZ trunnion bearings, 4.0 mm span** | **653 N (147 lbf) per bearing = 89 % of C0 730 N [REF-BRG-001]; s0 1.12** | **thin; owner decision** |
+
+The 50 mm pod's bearings are at 42 % (s0 2.40). The bearing is the critical item because thrust
+doubles, the arm grows by the 7.14 mm axis shift, and the gyroscopic moment adds on the same
+axis. The repo previously implied a ~907 N "static rating"; that is a dynamic rating, and the
+correction is recorded in WING_ATTACH_INTERFACE §4.3a. The tilt-axis aero moment is still
+unquantified (TILT-CTL-06), and the larger frontal area makes it bigger.
 
 ## 6. Install and removal (owner requirement)
 
-See WBS NAC-64-SVC-01. Rotor 1 services through the intake. Both stages come out **aft** as
-sleeve cartridges after the nozzle is removed. This requires phase-lead bullet connectors in the
-ESC bays and an axial lead-escape slot in the bore. ESCs service through their existing covers;
-the 10 AWG feeds service at the disconnect bay.
+See WBS NAC-64-SVC-01. Rotor 1 now sits in the straight duct behind the lip and services through
+the intake. Both stages come out **aft** as sleeve cartridges after the nozzle is removed. This
+requires phase-lead bullet connectors in the ESC bays and an axial lead-escape slot in the bore.
+ESCs service through their covers, and the 10 AWG feeds at the disconnect bay.
 
 ## 7. Open items raised by this record
 
-- Owner decision: adopt the 6.5 mm elliptical lip (§3) and its exterior change (§4).
-- Zero-volume slivers where the ESC discharge ports graze the sleeve bore (r 34.7 mm, Z 79/83/87):
-  NAC-64-GEOM-02.
-- Packaged OpenFOAM v1912 on this host: every function object aborts with "IOstream sha1". The
-  CFD tool post-processes raw fields instead.
+- **Trunnion bearings at s0 1.12** (§5b, WBS NAC-64-TILT-01): confirm C0 on the JTEKT
+  catalogue, measure rotor spin data and the aero moment, then decide span or bearing.
+- **Stator-as-mount sleeves** are not yet drawn (NAC-64-GEOM-01); 70 A ESC bay fit
+  (NAC-64-ESC-70A).
+- **Zero-volume slivers in the render:** where the ESC cooling ports graze the sleeve bore
+  (r 34.7 mm, Z 91.5/95.5/99.5), and one per pod at the cover-doubler band (r ≈ 40 mm,
+  Z 77–82). NAC-64-GEOM-02.
+- **Bench checks:**
+  - lip on a thrust/pressure bench and a cruise-case CFD (NAC-64-LIP-02);
+  - physical QF2822 and rotor measurements (NAC-64-FIT-02).
+- **Hull-frame bake** for the 7.14 mm axis shift and the new length (NAC-64-GEOM-04).
