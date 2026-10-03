@@ -3754,9 +3754,11 @@ Related: [[project_pe_skills_cc_by_nd]].
 
 Branch feat/nacelle-64mm (worktree .worktrees/nacelle-64mm), 2026-10-03.
 - 64 mm pod is an `include` + parameter override of nacelle_pod_50mm_tandem.scad (RADIAL_K, POD_AUTORENDER hooks, identity at 50 mm). Overrides may only use literals/P64_* constants declared ABOVE the include — OpenSCAD evaluates an override at the variable's FIRST assignment position.
-- Owner decisions 2026-10-03: stator-as-mount (no spiders), intake trim 8 mm, rotor 1 inside the bell, radial scale 1.28 proportional, nacelle axis +9.52 mm outboard (wing iface held at pylon face), pivot re-sited to CG → PIVOT_Z 98.3 converged.
+- Owner decisions 2026-10-03: stator-as-mount (no spiders), wing iface held at pylon face (axis shift = 34·(K−1)), pivot at CG, 70 A ESCs. (Early same-day 1.28/185.2 design superseded.)
 - QF2822 is 58.0 mm body-to-mount-face (vs ~27 mm 2627): axial margin only +2.4 mm, VERIFY by measurement.
-- CFD: the pod's cosine bell meets the front face square → sharp lip separates 87–98 % of bell wall in hover (both 27.5/19.5 bells, 50 mm pod too). 6.5 mm elliptical lip fully attached; owner decision pending.
+- SUPERSEDED same day: proportions optimised (owner) → radial 1.21, axial stretch 1.13, L 209.3 mm; canon L/D from QMx Sheets 3/4 = 2.24 plan / 2.31 side (50 mm pod was skinny in plan, 2.46). PIVOT_Z 109.7 converged, 929 g, hover +13.7 mm.
+- Intake = CFD-picked lipE: 2:1 ellipse 16x8 (CR 1.56), external branch with SAME nose radius (4 mm), ring 42.5, straight duct to rotor at Z 30.5. Lessons: flanged-lip CFD hides separation (model the real exterior); a knife-edged OUTSIDE separates in hover; a forebody proud of the skin is solid unhollowed mass (+66 g).
+- 6704-ZZ static C0 = 730 N (JTEKT, REF-BRG-001); repo's implied 907 N was a DYNAMIC rating. 64 mm trunnion bearings at 89 % C0 (s0 1.12) — open owner decision NAC-64-TILT-01.
 - Packaged OpenFOAM v1912 here: ANY function object aborts "IOstream sha1"; post-process raw ASCII fields (tools/nacelle_intake_cfd.py). Uz residual on wedges is meaningless.
 Related: [[project_nacelle_rev_t4_trunnion]], [[env_openfoam_airfoil_meshing]], [[feedback_shared_checkout_use_worktree]]
 
