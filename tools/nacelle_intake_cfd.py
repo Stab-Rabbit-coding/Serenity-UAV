@@ -126,6 +126,26 @@ VARIANTS = (
     # around from behind — the harder case the flange cannot represent.
     Bell("ell2to1_13_f6p5_rot30p5_fore", "ellipse", 0.013, 0.0065, 0.0305,
          (0.022, 0.0405)),
+    # Rounded-nose lip sweep (2026-10-03).  The 22 x 2 mm forebody above has
+    # an external nose radius B^2/A = 0.18 mm — a knife edge on the outside —
+    # and separates in hover.  Each variant below gives the external branch
+    # the SAME curvature radius as the internal one at the highlight
+    # (A_out = 2 B^2 / F for a 2:1 internal ellipse), so the nose is a true
+    # round.  Internal flare trades against external room under the skin.
+    Bell("lipA_f6p5_b2p0", "ellipse", 0.013, 0.0065, 0.0305, (0.00123, 0.0405)),
+    Bell("lipB_f5p0_b3p5", "ellipse", 0.010, 0.0050, 0.0305, (0.0049, 0.0405)),
+    Bell("lipC_f4p0_b4p5", "ellipse", 0.008, 0.0040, 0.0305, (0.0101, 0.0405)),
+    Bell("lipD_f5p0_b5p5", "ellipse", 0.010, 0.0050, 0.0305, (0.0121, 0.0425)),
+    # Higher contraction, lip ring allowed to the skin's LARGEST first-station
+    # radius (42.5 mm); ahead of Z 24 the canonical dome is narrower anyway.
+    Bell("lipE_f8p0_b2p5", "ellipse", 0.016, 0.0080, 0.0305, (0.00156, 0.0425)),
+    Bell("lipF_f6p5_b4p0", "ellipse", 0.013, 0.0065, 0.0305, (0.00492, 0.0425)),
+    # 3:1 internal ellipse (longer, gentler hand-off to the straight duct;
+    # 2:1 left a bubble at x 13-18 mm).  External A = B^2 / (F^2 / a).
+    Bell("lipG_3to1_f6p5_b4p0", "ellipse", 0.0195, 0.0065, 0.0305,
+         (0.00738, 0.0425)),
+    Bell("lipH_3to1_f8p0_b2p5", "ellipse", 0.024, 0.0080, 0.0305,
+         (0.00234, 0.0425)),
 )
 # Variants run by --only (default: all).
 
@@ -506,7 +526,9 @@ def post_process(case: Path, t: Path, x_le: float) -> tuple[dict, list]:
 
     profile = []
     for c in range(n_cells):
-        if xlo[c] <= x_le <= xhi[c]:
+        # Duct cells only: with an external forebody the outside block spans
+        # the rotor station too, and its far-field air is not rotor inflow.
+        if xlo[c] <= x_le <= xhi[c] and rsum[c] / rcnt[c] < R_BORE + FLARE:
             u = vel[c]
             r = rsum[c] / rcnt[c]
             profile.append((r, u[0], u[1],

@@ -66,7 +66,7 @@ STATOR_SLV = (ROTOR_Z + 11.7, ROTOR_Z + STAGE + 0.5)
 AFT_SLV = (ROTOR_Z + STAGE + 0.5, NOZ_Z)
 ESC_BAY_CG = 95.0 * A    # bays centred with the stretched shell
 DISC_BAY_Z = 51.0 * A    # 10 AWG disconnect bay (wrapper ESC_DISC_Z)
-PIVOT_Z_SET = 109.1      # PIVOT_Z currently set in the 64 mm wrapper
+PIVOT_Z_SET = 109.7      # PIVOT_Z currently set in the 64 mm wrapper
 NOZ_REACH = 221.3 - 166.25   # iris reach aft of its pocket, 40 mm flaps
 
 

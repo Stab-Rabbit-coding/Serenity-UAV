@@ -43,27 +43,24 @@
 //
 // INTAKE LIP — two quarter-ellipses meeting at the highlight
 // ----------------------------------------------------------
-//   internal  2:1 ellipse, P64_LIP_A x P64_LIP_F = 13.0 x 6.5 mm, from the
-//             highlight (Z 0, r 38.5) to the 64 mm throat at Z 13.0.  Nose
-//             radius b^2/a = 3.25 mm.  Contraction ratio (38.5/32)^2 = 1.45.
-//   external  forebody ellipse P64_FORE_A x P64_FORE_B = 22.0 x 2.0 mm, from
-//             the highlight out to the skin's smallest radius at its first
-//             station (40.5 mm), then buried inside the canonical shell by
-//             Z 40 so the shell is the exterior and the cavity hollows it.
-//             (Corrected 2026-10-03: a first cut held 46.2 mm to Z 69, which
-//             stood 1-6 mm proud of the skin as SOLID material — +66 g per pod
-//             forward of the pivot.)  Ahead of Z ~20 the lip is larger than the
-//             canonical dome tip; recorded as a deviation (the canon intake
-//             ring is itself bulbous).
-//   Both branches have a RADIAL tangent at the highlight, so the leading edge
-//   is one smooth curve (no corner, no cusp) — the sharp edge the cosine bell
-//   produced against the front face is gone.  tools/nacelle_intake_cfd.py:
-//   the 6.5 mm elliptical lip stays fully attached in static/hover flow on
-//   both meshes; the cosine bell separated over 87-98 % of its wall.
-//   A straight 64 mm duct then runs to the rotor-1 face at Z 30.5, so the
-//   rotor runs in a constant bore with NO tip-gap growth (the rotor-in-bell
-//   compromise is no longer needed once the nacelle is lengthened).
-//
+//   internal  2:1 ellipse, P64_LIP_A x P64_LIP_F = 16.0 x 8.0 mm, from the
+//             highlight (Z 0, r 40.0) to the 64 mm throat at Z 16.0.
+//             Contraction ratio (40/32)^2 = 1.56.  Nose radius F^2/a = 4.0 mm.
+//   external  ellipse P64_FORE_A x P64_FORE_B = 1.56 x 2.5 mm with the SAME
+//             4.0 mm nose radius, to the ring radius 42.5 mm, held to Z 22,
+//             then faired down inside the canonical shell by Z 40.
+//   Both branches have a RADIAL tangent and equal curvature at the highlight:
+//   the leading edge is a true round nose (no corner, no cusp, no knife edge).
+//   SELECTED BY CFD (tools/nacelle_intake_cfd.py, real external forebody,
+//   static/hover): of eight lip variants, "lipE" (this one) is the only one
+//   with no reversed flow on lip, bell or duct AND <= 4.2 % total-pressure
+//   loss at r/R 0.95 on the rotor face.  The cosine bell (sharp lip) lost the
+//   outer 10 % of radius; a knife-edged outside separated; contraction ratio
+//   1.27-1.45 left tip separation.  A straight 64 mm duct runs from Z 16 to
+//   the rotor at Z 30.5, so the rotor runs in a constant bore (no tip-gap
+//   growth).  The lip ring is hollowed behind a 6 mm solid nose and vented
+//   into the pod cavity (lip_ring_cavity()).
+
 // AXIAL STACK (nacelle-local Z, mm; QF2822 drawing 8-4.jpg, VERIFY)
 // -----------------------------------------------------------------
 //     0.0 – 13.0   elliptical lip (internal contour)
@@ -112,17 +109,26 @@ P64_FACE_PYLON  = 34.0 * P64_K;          // = 41.14 mm pylon face |X|
 P64_AXIS_SHIFT  = P64_FACE_PYLON - 34.0; // = 7.14 mm (0.28 in) per side
 
 // Intake lip (header).
-P64_LIP_A       = 13.0;   // [mm] internal ellipse, axial semi-axis (2:1)
-P64_LIP_F       =  6.5;   // [mm] internal ellipse, radial semi-axis (flare)
-P64_HL_R        = P64_BORE_R + P64_LIP_F;   // = 38.5 mm highlight radius
-P64_FORE_A      = 22.0;   // [mm] external forebody ellipse, axial semi-axis
-P64_FORE_R      = 40.5;   // [mm] forebody end radius = the scaled skin's
-                          //      SMALLEST radius at its first measured station
-                          //      (Z 24.1: 40.5-42.7 mm, nacelle_hollow_profile
-                          //      x 1.21).  Never larger: a forebody proud of the
-                          //      skin is solid, unhollowed, off-canon mass.
-P64_FORE_B      = P64_FORE_R - P64_HL_R;    // = 2.0 mm radial semi-axis
+P64_LIP_A       = 16.0;   // [mm] internal ellipse, axial semi-axis (2:1)
+P64_LIP_F       =  8.0;   // [mm] internal ellipse, radial semi-axis (flare)
+                          //      CFD lip sweep winner "lipE" (header)
+P64_HL_R        = P64_BORE_R + P64_LIP_F;   // = 40.0 mm highlight radius
+P64_FORE_R      = 42.5;   // [mm] lip ring outer radius = the scaled skin's
+                          //      LARGEST radius at its first measured station
+                          //      (Z 24.1: 40.5-42.7 mm); ahead of Z 24 the
+                          //      canonical dome is narrower, so the ring is the
+                          //      exterior there (recorded deviation).
+P64_FORE_B      = P64_FORE_R - P64_HL_R;    // = 2.5 mm external semi-axis
+// External semi-axis chosen so the external nose curvature radius B^2/A equals
+// the internal one F^2/a (= 4.0 mm): a TRUE round nose.  A knife-edged
+// outside (B^2/A = 0.18 mm, first cut) separated in the hover CFD.
+P64_FORE_A      = P64_FORE_B * P64_FORE_B / (P64_LIP_F * P64_LIP_F / P64_LIP_A);
+                          // = 1.5625 mm
+P64_RING_HOLD   = 22.0;   // [mm] ring holds P64_FORE_R to here, then buries
 P64_FAIR_END    = 40.0;   // [mm] Z by which the fairing is buried in the skin
+P64_RING_WALL   =  2.5;   // [mm] lip-ring skin (AGENTS.md §7 2.0 min; 2.5 matches
+                          //      the pod's measured skin)
+P64_RING_CAV_Z0 =  6.0;   // [mm] solid nose ahead of the ring cavity
 
 // Stack.
 P64_ROTOR_Z     = 30.5;   // [mm] rotor-1 hub forward face (trade tool pick)
@@ -174,7 +180,15 @@ AFT_SLV_Z_START    = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;  // = 103.7
 NOZZLE_RING_Z   = 166.25 * P64_A;  // = 187.86, rides on the shell's aft end
 
 // ── Shell-tied stations stretched with the shell ─────────────────────────────
-CAVITY_BULKHEAD_Z = [40.0 * P64_A, 62.0 * P64_A, 70.0 * P64_A, 138.0 * P64_A];
+// The two forward webs ride with the shell.  The two that bracket the ESC
+// bays are tied to the BAYS, which keep a fixed board length: in the 50 mm
+// pod they sat "just forward / just aft of the bays" (plan Rev T4c).  At
+// 70 x 1.13 = 79.1 the third web landed on the bay doubler's forward edge
+// (Z 78.35) and left open slivers in the render; it now sits 4 mm clear of
+// the doubler band (ESC_BAY_Z0 - ESC_LEDGE_W - 4), the fourth 3.5 mm aft of it.
+CAVITY_BULKHEAD_Z = [40.0 * P64_A, 62.0 * P64_A,
+                     95.0 * P64_A - 21.0 - 8.0 - 4.0,     // = 74.35
+                     95.0 * P64_A + 21.0 + 8.0 + 3.5];    // = 139.85
 NAV_LIGHT_Z     = 70.0 * P64_A;    // = 79.1
 BOSS_Z_LO       = 83.0 * P64_A;    // vestigial-boss cleanup, a shell feature
 BOSS_Z_H        = 24.0 * P64_A;
@@ -200,7 +214,7 @@ ESC_MOUNT_R     = P64_BORE_R + P64_WALL + 0.2 + P64_WALL;   // = 37.2 mm
 
 // ── Tilt pivot = rotating-assembly CG (plan 003 KTD7; owner 2026-10-03) ─────
 // tools/nacelle_mass_cg_64.py is the authority; iterate to <= 0.25 mm.
-PIVOT_Z         = 109.1;  // iteration 1 seed from the re-calibrated trade
+PIVOT_Z         = 109.7;  // iteration 2 (iteration 1: 109.1 -> measured 109.72)
 
 // ── 10 AWG disconnect bay — between the stretched Z 40 and Z 62 bulkheads,
 // clear of the trunnion ring-gear cavity (ø42.6 about PIVOT_Z).
@@ -249,13 +263,13 @@ module inlet_bellmouth() {
             [[0, P64_LIP_A]]));
 }
 
-// ADDITIVE — the lip and forebody (replaces the circular intake fairing).
+// ADDITIVE — the lip ring (replaces the circular intake fairing).
 // Bounded in front by ONE smooth curve: the internal branch runs up to the
 // highlight and the external branch continues from it with the same radial
-// tangent.  Its inner side sits 0.05 mm inside the lip contour so the
-// subtractive cut, not this solid, defines the flow surface (no coincident
-// faces).  Aft of the forebody it smooth-steps down inside the skin by
-// P64_FAIR_END and buries itself in the duct wall.
+// tangent and curvature.  Its inner side sits 0.05 mm inside the lip contour
+// so the subtractive cut, not this solid, defines the flow surface (no
+// coincident faces).  The ring holds P64_FORE_R to P64_RING_HOLD, then
+// smooth-steps down inside the skin by P64_FAIR_END and buries in the duct wall.
 module circular_intake_fairing() {
     r_end  = P64_BORE_R + 0.5;    // = 32.5, inside the 34.5 duct wall
     n_fall = 24;
@@ -264,17 +278,44 @@ module circular_intake_fairing() {
             // internal branch, throat -> highlight (0.05 mm proud of the cut)
             [ for (i = [LIP_N : -1 : 0]) let(z = P64_LIP_A * i / LIP_N)
                   [lip_r_in(z) - 0.05, z] ],
-            // external branch, highlight -> forebody shoulder
+            // external branch, highlight -> ring radius
             [ for (i = [1 : LIP_N]) let(z = P64_FORE_A * i / LIP_N)
                   [lip_r_out(z), z] ],
-            // smooth-step from the shoulder down into the duct wall
+            // hold the ring radius, then smooth-step into the duct wall
+            [[P64_FORE_R, P64_RING_HOLD]],
             [ for (i = [1 : n_fall]) let(
                   f = i / n_fall, s = f * f * (3 - 2 * f),
-                  z = P64_FORE_A + (P64_FAIR_END - P64_FORE_A) * f)
+                  z = P64_RING_HOLD + (P64_FAIR_END - P64_RING_HOLD) * f)
                   [P64_FORE_R + (r_end - P64_FORE_R) * s, z] ],
             // back along the duct side to the throat
             [[P64_BORE_R - 0.5, P64_FAIR_END], [P64_BORE_R - 0.5, P64_LIP_A]]));
 }
+
+// SUBTRACTIVE (Zone B, via the 50 mm pod's extra_zone_b_cuts() hook) — the
+// lip ring cavity.  Without it the ring is solid from the nose to the pod's
+// measured cavity (which starts at Z 24.15), ~60 g of material forward of the
+// pivot.  Walls: P64_RING_WALL to the lip flow surface and to the ring's outer
+// surface; a solid nose ahead of P64_RING_CAV_Z0.  NOT a sealed void: four
+// axial vent bores carry it aft into the pod cavity (the same rule as the
+// pod's vented bulkheads — CF-PETG is hygroscopic and a sealed void cannot
+// be drained or inspected).
+module lip_ring_cavity() {
+    z1 = P64_RING_HOLD - P64_RING_WALL;          // stay inside the held ring
+    r_out = P64_FORE_R - P64_RING_WALL;          // = 40.0
+    rotate_extrude(angle = 360, convexity = 4)
+        polygon(concat(
+            [ for (i = [0 : 16]) let(
+                  z = P64_RING_CAV_Z0 + (z1 - P64_RING_CAV_Z0) * i / 16)
+                  [(z < P64_LIP_A ? lip_r_in(z) : P64_BORE_R) + P64_RING_WALL, z] ],
+            [[r_out, z1], [r_out, P64_RING_CAV_Z0]]));
+    // vents into the pod cavity (which starts at Z 24.15, r 34.5-38+)
+    for (i = [0 : 3])
+        rotate([0, 0, 45 + 90 * i])
+            translate([(P64_BORE_R + P64_RING_WALL + r_out) / 2, 0, z1 - 0.5])
+                cylinder(d = 3.0, h = 30.0 * P64_A - z1, $fn = 24);
+}
+
+module extra_zone_b_cuts() { lip_ring_cavity(); }
 
 // ── Parse-time checks specific to the 64 mm pod ──────────────────────────────
 assert(EDF2_Z_EXIT <= NOZZLE_RING_Z,
@@ -290,7 +331,12 @@ assert(NACELLE_FACE_X_PYLON - EDF_BORE_R - WALL_T >= 6.5,
 assert(abs(PIVOT_Z - ESC_DISC_Z) > TRUNNION_CAV_D / 2 + ESC_DISC_H / 2,
        "10 AWG disconnect bay overlaps the trunnion ring-gear cavity");
 assert(abs(lip_r_out(P64_FORE_A) - P64_FORE_R) < 1e-6
-       && P64_FORE_R <= 40.5 && P64_FORE_A < P64_FAIR_END,
-       "forebody must end at (not beyond) the skin's smallest front radius");
+       && P64_FORE_R <= 42.7 && P64_RING_HOLD < P64_FAIR_END,
+       "lip ring must not exceed the skin's largest first-station radius");
+assert(abs(P64_FORE_B * P64_FORE_B / P64_FORE_A
+           - P64_LIP_F * P64_LIP_F / P64_LIP_A) < 1e-9,
+       "external and internal nose radii differ — the nose is not a true round");
+assert(lip_r_in(P64_RING_CAV_Z0) + 2 * P64_RING_WALL < P64_FORE_R,
+       "lip ring too thin for its cavity at the nose end");
 
 if (is_undef(P64_NO_RENDER)) nacelle_pod(swirl_dir = SWIRL_DIR);

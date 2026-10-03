@@ -1505,6 +1505,9 @@ module esc_bay_seat_keepout() {
 }
 
 
+// Extra Zone-B cuts hook — overridden by derived pods; nothing here.
+module extra_zone_b_cuts() {}
+
 // =============================================================================
 // ── Module: nacelle_pod (main assembly) ──────────────────────────────────────
 // =============================================================================
@@ -1672,6 +1675,11 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
             // deliberate: it is what gives the power feed a route from the
             // disconnect bay and the phase leads a route to the spider arms.
             esc_bay_cut();
+
+            // ── Variant hook (empty here) — extra Zone-B cuts a derived pod
+            // (nacelle_pod_64mm_tandem.scad) needs, e.g. its intake-lip
+            // ring cavity.  Identity for the 50 mm pod.
+            extra_zone_b_cuts();
 
         } // end difference (Zone A + Zone B)
 
