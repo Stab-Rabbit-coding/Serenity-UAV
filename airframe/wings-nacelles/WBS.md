@@ -2061,6 +2061,28 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         are open until the part is chosen. Mass rows in
         `tools/nacelle_mass_cg_64.py` carry 42 g ASSUMED meanwhile. Feeds into
         plan U10 (PDB, fusing, conductors).
+    - [x] **NAC-64-PROP-01 — proportions optimised (owner 2026-10-03: "minimum
+        radial scale, lengthen to canon at that diameter, optimised for
+        aerodynamics, thrust, weight and canonical shape").** Done by Claude Opus
+        5.5, `tools/nacelle_64_proportion_trade.py`, re-calibrated on the
+        rendered pod: radial 1.21 (packaging minimum), canonical axial stretch
+        1.13 -> L 8.24 in (209.3 mm). Canon L/D re-measured on QMx Sheets 3/4
+        [REF-CAD-003]: 2.24 plan / 2.31 side; the pod is 2.29 / 2.08 (the 50 mm
+        pod was 2.46 / 2.22 — skinny in plan, as the owner saw; the 1.28 x 185.2
+        mm pod was 1.92 / 1.74). Hover clearance on the 3.0 in gear is held at
+        >= 0.5 in (12.7 mm), a floor Claude chose — owner may revise.
+        Supersedes the 1.28 radial / fixed-length decision of 2026-10-03.
+    - [x] **NAC-64-LIP-01 — rounded intake lip as a proper aerodynamic design
+        (owner 2026-10-03).** CFD-selected (`tools/nacelle_intake_cfd.py`, real
+        external forebody, hover): 2:1 internal ellipse 16 x 8 mm (contraction
+        ratio 1.56), external ellipse with the same 4.0 mm nose radius, ring to
+        42.5 mm, straight 64 mm duct to the rotor at Z 30.5 (no tip-gap growth).
+        Eight variants run; this is the only one with no reversed flow and
+        <= 4.2 % rotor-face loss at r/R 0.95. Lip ring hollowed and vented.
+    - [ ] **NAC-64-LIP-02 — confirm the lip on a bench.** Static thrust and inlet
+        wall-pressure taps on a printed lip + duct section with a QX rotor,
+        against the CFD trend (plan U12). Also run a cruise-condition CFD case
+        (spillage drag of the 42.5 mm ring).
 - [x] **LG-HOVER-01 — hover ground clearance — RESOLVED 2026-08-29.** Closed by
     NAC-MOULD-01 + the station/pivot move: **+9.8 mm on the existing 1.5 in
     gear**, owner-accepted. No landing-gear change is forced; the 3.0 in variant
