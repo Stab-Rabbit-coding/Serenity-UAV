@@ -137,4 +137,4 @@ assert(GEAR_RF - BRG_OD / 2 >= 2.5,
 assert(LIP_D / 2 < BRG_OD / 2 - 1.0,
        "flange base gives the outer race under 1 mm of shoulder");
 
-nacelle_trunnion();
+if (is_undef(T64_NO_RENDER)) nacelle_trunnion();
