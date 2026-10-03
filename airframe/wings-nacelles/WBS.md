@@ -2037,6 +2037,20 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     - [ ] **NAC-64-GEOM-05 — gates on the 64 mm pod.** Port `nacelle_trunnion_fit.py`,
         `nacelle_esc_bay_fit.py` and `nacelle_mass_cg.py` (PIVOT_Z, plan U5) to
         read the 64 mm wrapper; PIVOT_Z 107.5 is carried unchanged until then.
+    - [ ] **NAC-64-SVC-01 — install/remove path (owner requirement 2026-10-03:
+        motors, rotors, ESCs and harnesses must be installable and removable).**
+        Adopted path, analysed by Claude Opus 5.5: rotor 1 services through the
+        intake with nothing removed. Motors cannot leave forward (stator-as-mount
+        plate screws from the front, body hangs aft in the stator hub), so both
+        stages come out AFT as cartridges: remove the nozzle, pull the aft sleeve
+        (motor 2 + rotor 2), then the stator-1 sleeve (motor 1 + rotor 1). Rotor
+        tips (r ~31.6 mm, VERIFY) pass the 32 mm sleeve and nozzle-pocket bores.
+        Required features: (a) phase-lead bullet connectors inside the ESC bays,
+        unplugged through the hinged covers; (b) an axial lead-escape slot in the
+        bore (like the key slots) so the leads slide aft with their sleeve;
+        (c) motor-plate screws reachable with a 2.5 mm hex key from the intake
+        (stage 1) or the sleeve's forward face (stage 2). ESC covers and the
+        trunnion/disconnect-bay feed path are unchanged.
 - [x] **LG-HOVER-01 — hover ground clearance — RESOLVED 2026-08-29.** Closed by
     NAC-MOULD-01 + the station/pivot move: **+9.8 mm on the existing 1.5 in
     gear**, owner-accepted. No landing-gear change is forced; the 3.0 in variant
