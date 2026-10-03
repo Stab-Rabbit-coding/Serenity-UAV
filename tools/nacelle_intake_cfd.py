@@ -98,6 +98,7 @@ class Bell:
     kind: str
     length: float
     flare: float
+    rotor_z: float | None = None   # fixed rotor LE station (straight duct)
 
 
 # Variants compared.  The first two are the pod as drawn (sharp lip); the
@@ -109,7 +110,16 @@ VARIANTS = (
     Bell("cos19p5", "cosine", 0.0195, FLARE),
     Bell("ell19p5_f3p84", "ellipse", 0.0195, FLARE),
     Bell("ell19p5_f6p5", "ellipse", 0.0195, 0.0065),
+    # Proportion-trade pick (tools/nacelle_64_proportion_trade.py): a 2:1
+    # elliptical lip (13 x 6.5 mm, nose radius b^2/a = 3.25 mm) then straight
+    # duct, rotor LE at 30.5 mm in the constant bore — no tip-gap growth.
+    Bell("ell2to1_13_f6p5_rot30p5", "ellipse", 0.013, 0.0065, 0.0305),
+    # The sweep's literal long bell, kept to show why it was not adopted:
+    # 39.5 x 6.5 mm has a 1.07 mm nose radius.
+    Bell("ell39p5_f6p5", "ellipse", 0.0395, 0.0065),
 )
+# Variants run by --only (default: all).
+
 
 
 def bell_r(x: float, bell: Bell) -> float:
@@ -125,7 +135,10 @@ def rotor_entry(bell: Bell) -> float:
     """Forward-most rotor LE station with <= TIP_GROWTH extra tip gap, m.
 
     Bisection on the monotonic bell profile, so it holds for every kind.
+    A variant with a fixed rotor station (straight duct) returns that.
     """
+    if bell.rotor_z is not None:
+        return bell.rotor_z
     lo, hi = 0.0, bell.length
     for _ in range(60):
         midx = 0.5 * (lo + hi)
@@ -529,11 +542,13 @@ def main(argv: list[str] | None = None) -> int:
                     help="directory for the cases (outside the repo)")
     ap.add_argument("--fine", action="store_true",
                     help="1.5x cells in each direction (mesh-sensitivity run)")
+    ap.add_argument("--only", nargs="*", default=None,
+                    help="variant names to run (default: all)")
     args = ap.parse_args(argv)
     print(f"Hover bore velocity {V_BORE:.1f} m/s ({V_BORE / 0.5144:.0f} kt) "
           f"for {THRUST_N} N ({THRUST_N / 4.448:.2f} lbf) per fan")
     ok = True
-    for bell in VARIANTS:
+    for bell in (b for b in VARIANTS if not args.only or b.name in args.only):
         tag = bell.name + ("_fine" if args.fine else "")
         res = run_case(args.workdir / tag, bell, args.fine)
         summarise(res)

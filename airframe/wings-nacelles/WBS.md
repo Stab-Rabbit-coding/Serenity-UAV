@@ -2051,6 +2051,16 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         (c) motor-plate screws reachable with a 2.5 mm hex key from the intake
         (stage 1) or the sleeve's forward face (stage 2). ESC covers and the
         trunnion/disconnect-bay feed path are unchanged.
+    - [ ] **NAC-64-ESC-70A — 70 A ESCs (owner 2026-10-03: "the 2822s will need
+        70A ESCs, not the 50A ones from the previous build").** Select a 70 A,
+        6S part with a published board size, mass and continuous rating, catalogue
+        it in REFERENCES.md, then re-run `tools/nacelle_esc_bay_fit.py` against the
+        64 mm pod. The current bay holds a folded 23 + 10 mm x 44 mm board at a
+        4.0 mm stack, sized for the 50 mm build's ESC; a 70 A board is expected
+        to be larger and hotter, so the bay and its cooling ports (NAC-64-GEOM-02)
+        are open until the part is chosen. Mass rows in
+        `tools/nacelle_mass_cg_64.py` carry 42 g ASSUMED meanwhile. Feeds into
+        plan U10 (PDB, fusing, conductors).
 - [x] **LG-HOVER-01 — hover ground clearance — RESOLVED 2026-08-29.** Closed by
     NAC-MOULD-01 + the station/pivot move: **+9.8 mm on the existing 1.5 in
     gear**, owner-accepted. No landing-gear change is forced; the 3.0 in variant

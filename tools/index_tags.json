@@ -15448,6 +15448,14 @@
       ],
       "archived": false
     },
+    "tools/nacelle_64_proportion_trade.py": {
+      "description": "nacelle_64_proportion_trade.py \u2014 multi-objective sweep of the 64 mm nacelle's",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/nacelle_axial_fit.py": {
       "description": "nacelle_axial_fit.py \u2014 U9 axial-fit gate for the 64 mm QX-Motor tandem nacelle.",
       "tags": [
@@ -17610,6 +17618,7 @@
       "graphical-build-guide/build_guide_07_edf_install.svg",
       "graphical-build-guide/build_guide_08_nozzle_gear.svg",
       "graphical-build-guide/pngs/17_closeup_nacelle.png",
+      "tools/nacelle_64_proportion_trade.py",
       "tools/nacelle_axial_fit.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
@@ -19847,6 +19856,7 @@
       "tools/landing_gear_wing_clearance.py",
       "tools/middle_layout_fit.py",
       "tools/mirror_claude_memory.py",
+      "tools/nacelle_64_proportion_trade.py",
       "tools/nacelle_axial_fit.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
