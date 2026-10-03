@@ -84,6 +84,7 @@ from pathlib import Path
 # Repository root and the nacelle SCAD that owns the axial stations.
 REPO = Path(__file__).resolve().parent.parent
 POD_SCAD = REPO / "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad"
+POD64_SCAD = REPO / "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad"
 
 # Millimetres per inch, for imperial-primary reporting (AGENTS.md units rule).
 MM_PER_IN = 25.4
@@ -116,6 +117,10 @@ CASES = (
     StackCase("CURRENT", QX_DRAWING_18_50, 1.0, 8.0, 2.0),
     StackCase("BEST", SHAFT_PROTRUSION, 1.0, 3.0, 1.0),
     StackCase("ADOPTED", SHAFT_PROTRUSION, 1.0, 3.0, 1.0),
+    # Owner 2026-10-03 "lengthen to canon, optimised": the 64 mm wrapper's own
+    # stack — rotor behind the elliptical lip at P64_ROTOR_Z, nozzle pocket on
+    # the stretched shell at 166.25 x P64_A.  This case is THE GATE.
+    StackCase("LENGTHENED", SHAFT_PROTRUSION, 1.0, 3.0, 1.0),
 )
 
 # Intake-bell trim for the ADOPTED case [mm] — owner adjudication 2026-10-03,
@@ -151,6 +156,14 @@ def scad_param(text: str, name: str) -> float:
     return float(match.group(1))
 
 
+def stations_64() -> dict[str, float]:
+    """The 64 mm wrapper's rotor station and nozzle pocket (P64_* literals)."""
+    text = POD64_SCAD.read_text(encoding="utf-8")
+    a = scad_param(text, "P64_A")
+    return {"ROTOR_Z": scad_param(text, "P64_ROTOR_Z"),
+            "NOZZLE_RING_Z": 166.25 * a, "NACELLE_L": 185.2 * a}
+
+
 def stations() -> dict[str, float]:
     """Read the fixed axial stations (R11) from the nacelle pod SCAD."""
     text = POD_SCAD.read_text(encoding="utf-8")
@@ -176,10 +189,14 @@ def evaluate(case: StackCase, st: dict[str, float]) -> dict[str, float | str]:
     stage = stage_length(case)
     # ADOPTED moves the stack start forward by the owner-approved trim.
     entry = st["EDF1_Z_ENTRY"]
+    nozzle = st["NOZZLE_RING_Z"]
     if case.name == "ADOPTED":
         entry = rotor_entry_in_bell(st["EDF1_Z_ENTRY"] - INTAKE_TRIM)
+    elif case.name == "LENGTHENED":
+        s64 = stations_64()
+        entry, nozzle = s64["ROTOR_Z"], s64["NOZZLE_RING_Z"]
     tail_z = entry + 2.0 * stage + case.interstage_gap
-    available = st["NOZZLE_RING_Z"] - entry
+    available = nozzle - entry
     required = tail_z - entry
     return {
         **asdict(case),
@@ -189,7 +206,7 @@ def evaluate(case: StackCase, st: dict[str, float]) -> dict[str, float | str]:
         "available": available,
         "required": required,
         "margin": available - required,
-        "verdict": "PASS" if tail_z <= st["NOZZLE_RING_Z"] else "FAIL",
+        "verdict": "PASS" if tail_z <= nozzle else "FAIL",
     }
 
 
@@ -206,7 +223,7 @@ def main(argv: list[str] | None = None) -> int:
 
     st = stations()
     results = [evaluate(case, st) for case in CASES]
-    gate = next(r for r in results if r["name"] == "ADOPTED")
+    gate = next(r for r in results if r["name"] == "LENGTHENED")
 
     if args.json:
         print(json.dumps({"stations": st, "results": results}, indent=4))
@@ -223,9 +240,10 @@ def main(argv: list[str] | None = None) -> int:
                   f"available {fmt(r['available'])}")
             print(f"    motor-2 tail at Z {fmt(r['motor2_tail_z'])} -> "
                   f"margin {fmt(r['margin'])}  {r['verdict']}")
-        print(f"\n  ADOPTED intake trim {fmt(INTAKE_TRIM)}, rotor in bell "
-              f"(tip-gap growth <= {fmt(TIP_GAP_GROWTH_MAX)}) -> EDF1 entry "
-              f"Z {fmt(gate['entry_z'])}; margin is VERIFY (drawing values)")
+        print(f"\n  GATE = LENGTHENED (64 mm wrapper, L "
+              f"{fmt(stations_64()['NACELLE_L'])}); margin is VERIFY "
+              "(drawing values). CURRENT/BEST/ADOPTED are the fixed-length "
+              "history.")
         if gate["verdict"] == "FAIL":
             print("\nSTOP (plan Goal Capsule / R11): the adopted stack does "
                   "not fit the fixed axial envelope. Owner adjudication "

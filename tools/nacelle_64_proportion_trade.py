@@ -86,6 +86,12 @@ TIP_GROWTH = 0.1                # mm, rotor-in-bell rule
 BASE_MASS = 954.2
 BASE_K = 1.28
 POD_EXP = math.log(283.4 / 193.3) / math.log(1.28)   # = 1.55
+# Pod calibration point — the RENDERED pick (K 1.21, A 1.15, elliptical lip,
+# forebody inside the skin): 270.6 g, CG 94.9 mm (tools/nacelle_mass_cg_64.py,
+# 2026-10-03).  Re-calibrated after the first pick rendered 66 g heavier than
+# this model predicted, because its forebody stood proud of the skin.
+POD_CAL_G, POD_CAL_A, POD_CAL_CGF = 270.6, 1.15, 94.9 / (185.2 * 1.15)
+POD_CAL_P = (1.21 * X0 + 1.21 * Y0) / (BASE_K * (X0 + Y0))
 SPAR_HULL_Z = 66.851            # built spar height (nacelle_mass_cg.py)
 GROUND_3IN = -80.0              # 3.0 in flight gear ground plane, hull Z
 
@@ -118,7 +124,8 @@ def evaluate(kx: float, ky: float, a: float, bell_l: float,
     # Stations relative to the stack start (baseline z_r = 17.49).
     sh = z_r - 17.49
     rows = [
-        (283.4 * perim ** POD_EXP * a, 0.4854 * length),          # pod
+        (POD_CAL_G * (perim / POD_CAL_P) ** POD_EXP * a / POD_CAL_A,
+         POD_CAL_CGF * length),                                    # pod
         (75.0 * kbar / BASE_K, 59.9 + sh),                         # stator sleeve
         (54.5 * kbar / BASE_K, 129.3 + sh),                        # aft sleeve
         (135.0, 61.2 + sh), (135.0, 134.9 + sh),                   # motors

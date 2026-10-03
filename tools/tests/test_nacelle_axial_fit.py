@@ -39,16 +39,25 @@ def test_fit_passes_when_envelope_is_long_enough():
     assert fit.evaluate(fit.CASES[1], st)["verdict"] == "PASS"
 
 
-def test_gate_exit_code_follows_adopted_case():
-    """Exit code follows the owner-adopted case (R11 stop otherwise)."""
-    adopted = fit.evaluate(fit.CASES[2], fit.stations())
-    assert fit.main([]) == (0 if adopted["verdict"] == "PASS" else 2)
+def test_gate_exit_code_follows_lengthened_case():
+    """Exit code follows the current (lengthened) 64 mm design."""
+    gate = fit.evaluate(fit.CASES[3], fit.stations())
+    assert fit.main([]) == (0 if gate["verdict"] == "PASS" else 2)
+
+
+def test_lengthened_reads_the_wrapper():
+    """LENGTHENED takes its rotor station and nozzle from the 64 mm SCAD."""
+    s64 = fit.stations_64()
+    res = fit.evaluate(fit.CASES[3], fit.stations())
+    assert res["entry_z"] == pytest.approx(s64["ROTOR_Z"])
+    assert res["available"] == pytest.approx(s64["NOZZLE_RING_Z"]
+                                             - s64["ROTOR_Z"])
 
 
 def test_adopted_only_moves_the_entry():
     """ADOPTED = BEST stack started at the in-bell rotor station."""
     st = fit.stations()
-    best, adopted = (fit.evaluate(c, st) for c in fit.CASES[1:])
+    best, adopted = (fit.evaluate(c, st) for c in fit.CASES[1:3])
     assert adopted["required"] == best["required"]
     expected = fit.rotor_entry_in_bell(st["EDF1_Z_ENTRY"] - fit.INTAKE_TRIM)
     assert adopted["entry_z"] == pytest.approx(expected)

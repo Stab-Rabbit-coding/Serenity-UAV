@@ -99,6 +99,10 @@ class Bell:
     length: float
     flare: float
     rotor_z: float | None = None   # fixed rotor LE station (straight duct)
+    # External forebody (axial semi-axis, end radius), m.  None = the
+    # conservative flanged lip face; set = the real slim nacelle exterior,
+    # an elliptical forebody then a cylinder, with open far field around it.
+    fore: tuple[float, float] | None = None
 
 
 # Variants compared.  The first two are the pod as drawn (sharp lip); the
@@ -117,6 +121,11 @@ VARIANTS = (
     # The sweep's literal long bell, kept to show why it was not adopted:
     # 39.5 x 6.5 mm has a 1.07 mm nose radius.
     Bell("ell39p5_f6p5", "ellipse", 0.0395, 0.0065),
+    # The pick with its REAL exterior (nacelle_pod_64mm_tandem.scad
+    # P64_FORE_A 22.0, P64_FORE_R 40.5): a slim lip, which hover inflow wraps
+    # around from behind — the harder case the flange cannot represent.
+    Bell("ell2to1_13_f6p5_rot30p5_fore", "ellipse", 0.013, 0.0065, 0.0305,
+         (0.022, 0.0405)),
 )
 # Variants run by --only (default: all).
 
@@ -180,6 +189,8 @@ def block_mesh(bell: Bell, fine: bool) -> str:
         a0(XU,0)  a1(0,0)  a2(L,0)  a3(XO,0)
         b0(XU,RL) b1(0,RL) b2(L,R)  b3(XO,R)
         c0(XU,RF) c1(0,RF)
+    With an external forebody, two more nodes and a fifth block outside it:
+        e1(XO, R_fore_end)  f1(XO, RF)
     Axis nodes are shared by both wedge faces (collapsed hex, standard wedge).
     """
     bell_l, r_lip = bell.length, R_BORE + bell.flare
@@ -191,6 +202,9 @@ def block_mesh(bell: Bell, fine: bool) -> str:
                "a3": (X_OUT, 0), "b0": (X_UP, r_lip), "b1": (0, r_lip),
                "b2": (bell_l, R_BORE), "b3": (X_OUT, R_BORE),
                "c0": (X_UP, R_FAR), "c1": (0, R_FAR)}
+    if bell.fore is not None:
+        nodes2d["e1"] = (X_OUT, bell.fore[1])
+        nodes2d["f1"] = (X_OUT, R_FAR)
     verts: list[str] = []
     vid: dict[tuple[str, int], int] = {}
     for name, (x, r) in nodes2d.items():
@@ -224,6 +238,9 @@ def block_mesh(bell: Bell, fine: bool) -> str:
         (("a1", "a2", "b2", "b1"), (n_bell, n_r), f"(1 {g_r} 1)"),
         (("a2", "a3", "b3", "b2"), (n_duct, n_r), f"(3 {g_r} 1)"),
     ]
+    if bell.fore is not None:
+        blocks.append((("b1", "e1", "f1", "c1"), (int(60 * f), n_far),
+                       f"(4 {g_far} 1)"))
     blk = "\n".join(f"    hex ({hexv(q)}) ({nx} {ny} 1) simpleGrading {g}"
                     for q, (nx, ny), g in blocks)
 
@@ -238,9 +255,32 @@ def block_mesh(bell: Bell, fine: bool) -> str:
         edges.append(f"    polyLine {vid[('b1', side)]} {vid[('b2', side)]} "
                      f"({inner})")
 
+    if bell.fore is not None:
+        fa, fr = bell.fore
+        fb = fr - r_lip
+
+        def r_ext(x: float) -> float:
+            if x >= fa:
+                return fr
+            u = 1.0 - x / fa
+            return r_lip + fb * math.sqrt(max(0.0, 1.0 - u * u))
+        xs = [fa * (i / pts) ** 2 for i in range(1, pts + 1)] + [
+            fa + (X_OUT - fa) * i / 8 for i in range(1, 8)]
+        for side in (-1, 1):
+            inner = " ".join(f"({x:.9f} {r_ext(x) * c:.12f} "
+                             f"{side * r_ext(x) * s:.12f})" for x in xs)
+            edges.append(f"    polyLine {vid[('b1', side)]} "
+                         f"{vid[('e1', side)]} ({inner})")
+        lip_patch = (f"foreWall {{ type wall;  faces ( "
+                     f"{edge_face('b1', 'e1')} ); }}")
+        far_extra = f" {edge_face('c1', 'f1')} {edge_face('e1', 'f1')}"
+    else:
+        lip_patch = (f"lipFace  {{ type wall;  faces ( "
+                     f"{edge_face('b1', 'c1')} ); }}")
+        far_extra = ""
     wedge_back = " ".join(face(q, -1) for q, _, _ in blocks)
     wedge_front = " ".join(face(q, 1) for q, _, _ in blocks)
-    return header("dictionary", "blockMeshDict") + f"""convertToMeters 1;
+    return header("dictionary", "blockMeshDict") + f"""scale 1;
 
 vertices
 (
@@ -260,8 +300,8 @@ edges
 boundary
 (
     farfield {{ type patch; faces ( {edge_face('a0', 'b0')}
-        {edge_face('b0', 'c0')} {edge_face('c0', 'c1')} ); }}
-    lipFace  {{ type wall;  faces ( {edge_face('b1', 'c1')} ); }}
+        {edge_face('b0', 'c0')} {edge_face('c0', 'c1')}{far_extra} ); }}
+    {lip_patch}
     bellWall {{ type wall;  faces ( {edge_face('b1', 'b2')} ); }}
     ductWall {{ type wall;  faces ( {edge_face('b2', 'b3')} ); }}
     outlet   {{ type patch; faces ( {edge_face('a3', 'b3')} ); }}
@@ -278,7 +318,7 @@ def write_case(case: Path, bell: Bell, fine: bool) -> float:
     x_le = rotor_entry(bell)
     write(case / "system/blockMeshDict", block_mesh(bell, fine))
     k0, w0 = 1.5 * (0.01 * V_BORE) ** 2, 200.0   # 1 % intensity, ambient omega
-    walls = "lipFace|bellWall|ductWall"
+    walls = "lipFace|foreWall|bellWall|ductWall"
     fields = {
         "U": ("volVectorField", "[0 1 -1 0 0 0 0]", "uniform (0 0 0)", {
             "farfield": "type pressureInletOutletVelocity; value uniform (0 0 0);",
@@ -361,7 +401,7 @@ solvers
 }
 SIMPLE
 {
-    nNonOrthogonalCorrectors 1; consistent yes;
+    nNonOrthogonalCorrectors 2; consistent yes;
     residualControl { p 1e-5; U 1e-6; "(k|omega)" 1e-6; }
 }
 relaxationFactors { equations { U 0.7; ".*" 0.7; } fields { p 0.5; } }
@@ -440,8 +480,10 @@ def post_process(case: Path, t: Path, x_le: float) -> tuple[dict, list]:
     # Boundary patches: name -> (startFace, nFaces).
     btext = (mesh / "boundary").read_text(encoding="utf-8")
     walls: dict[str, tuple[float, float]] = {}
-    for patch, tang in (("lipFace", (0.0, -1.0)), ("bellWall", None),
-                        ("ductWall", None)):
+    for patch, tang in (("lipFace", (0.0, -1.0)), ("foreWall", (-1.0, 0.0)),
+                        ("bellWall", None), ("ductWall", None)):
+        if f"    {patch}\n" not in btext:
+            continue
         blk = btext[btext.index(f"    {patch}\n"):]
         n = int(blk.split("nFaces")[1].split(";")[0])
         start = int(blk.split("startFace")[1].split(";")[0])

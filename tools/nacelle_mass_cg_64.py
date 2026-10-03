@@ -19,10 +19,11 @@ ROW PROVENANCE — every row is one of:
   ASSUMED   no source exists yet — stated basis and a VERIFY flag.
 No row is TBD (AGENTS.md engineering requirements).
 
-STATIONS (nacelle-local Z from the intake face, mm) come from the adopted
-stack in nacelle_pod_64mm_tandem.scad (rotor 1 inside the bell, owner
-2026-10-03):  rotor-1 hub 17.49-28.19, motor 1 32.19-90.19, rotor-2 hub
-91.19-101.89, motor 2 105.89-163.89.
+STATIONS (nacelle-local Z from the intake face, mm) mirror
+nacelle_pod_64mm_tandem.scad: proportion-trade pick (radial 1.21, axial
+1.13, L 209.3), elliptical lip + straight duct, rotor-1 hub 30.5-41.2,
+motor 1 45.2-103.2, rotor-2 hub 104.2-114.9, motor 2 118.9-176.9, nozzle
+pocket 187.86.
 
 Usage:
     /usr/bin/python3 tools/nacelle_mass_cg_64.py --pod-stl PATH [--json]
@@ -49,19 +50,24 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import nacelle_mass_cg as base  # sibling tool; path set above
 
-K = 64.0 / 50.0          # proportional radial scale (owner 2026-10-03)
+K = 1.21                 # radial scale — proportion trade pick (owner 2026-10-03)
+A = 1.13                 # canonical axial stretch — proportion trade pick
+ROTOR_Z = 30.5           # rotor-1 hub face, behind the elliptical lip + duct
+STAGE = 72.7             # shaft 10.7 + gap 1 + plate 3 + body 58.0
+NOZ_Z = 166.25 * A       # nozzle pocket rides on the stretched shell
 LBM_PER_G = 1.0 / 453.592
 
 # Adopted stack stations [mm] — mirror nacelle_pod_64mm_tandem.scad.
-ROTOR1 = (17.49, 28.19)
-MOTOR1 = (32.19, 90.19)
-ROTOR2 = (91.19, 101.89)
-MOTOR2 = (105.89, 163.89)
-STATOR_SLV = (29.19, 90.69)
-AFT_SLV = (90.69, 166.25)
-ESC_BAY_CG = 95.0        # bay Z 74-116 unchanged in the wrapper
-DISC_BAY_Z = 51.0        # 10 AWG disconnect bay, re-sited in the wrapper
-PIVOT_Z_SET = 98.3       # PIVOT_Z currently set in the 64 mm wrapper
+ROTOR1 = (ROTOR_Z, ROTOR_Z + 10.7)
+MOTOR1 = (ROTOR_Z + 14.7, ROTOR_Z + STAGE)
+ROTOR2 = (ROTOR_Z + STAGE + 1.0, ROTOR_Z + STAGE + 11.7)
+MOTOR2 = (ROTOR_Z + STAGE + 15.7, ROTOR_Z + 2 * STAGE + 1.0)
+STATOR_SLV = (ROTOR_Z + 11.7, ROTOR_Z + STAGE + 0.5)
+AFT_SLV = (ROTOR_Z + STAGE + 0.5, NOZ_Z)
+ESC_BAY_CG = 95.0 * A    # bays centred with the stretched shell
+DISC_BAY_Z = 51.0 * A    # 10 AWG disconnect bay (wrapper ESC_DISC_Z)
+PIVOT_Z_SET = 109.1      # PIVOT_Z currently set in the 64 mm wrapper
+NOZ_REACH = 221.3 - 166.25   # iris reach aft of its pocket, 40 mm flaps
 
 
 def mid(span: tuple[float, float]) -> float:
@@ -112,18 +118,19 @@ def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
          "ASSUMED 42 g (plan screening figure) until a 70 A part is selected; U10"),
         ("2 x ESC access cover", 4 * 6.99 / 2 * K, ESC_BAY_CG,
          "SCALED est.: 50 mm covers measured x K"),
-        ("Nozzle throat + housing", 21.4 * K, 174.8,
+        ("Nozzle throat + housing", 21.4 * K, NOZ_Z + 8.55,
          "SCALED est.: 50 mm iris x K (thin shell); U11 re-sizes"),
-        ("Unison ring", 6.7 * K, 169.9, "SCALED est.: x K; U11 re-sizes"),
-        ("8 x nozzle flap (40 mm)", 21.1 * K, 198.2,
+        ("Unison ring", 6.7 * K, NOZ_Z + 3.65, "SCALED est.: x K; U11 re-sizes"),
+        ("8 x nozzle flap (40 mm)", 21.1 * K, NOZ_Z + 31.95,
          "SCALED est.: flap width x K, length unchanged; U11"),
-        ("Nozzle servo drive (V1)", 8.0, 150.0,
+        ("Nozzle servo drive (V1)", 8.0, NOZ_Z - 16.25,
          ("ASSUMED: BMS-101DMG 4.5 + link 1 + spring 1 + mount 1.5 g "
          "(plan KTD2 table); station est. fwd of ring (U4)")),
-        ("4 x 10 AWG feed", 4 * (0.060 + 0.018) * 40.0,
+        ("4 x 10 AWG feed",
+         4 * (0.060 + (PIVOT_Z_SET - DISC_BAY_Z - 29.5) / 1000.0) * 40.0,
          0.5 * (PIVOT_Z_SET + DISC_BAY_Z),
-         ("SCALED est.: 50 mm row (4 x 0.060 m x 40 g/m) + 18 mm per lead "
-         "for the bay re-sited to Z 51; CG midway trunnion -> bay")),
+         ("SCALED est.: 50 mm row (4 x 0.060 m x 40 g/m, 29.5 mm route) "
+          "lengthened by the trunnion-to-bay run; CG midway")),
         ("6 x 14 AWG phase leads", phase[1] * 2.08 / 1.31,
          0.5 * (ESC_BAY_CG + 0.5 * (mid(MOTOR1) + mid(MOTOR2))),
          ("SCALED est.: 16 AWG row x copper-area ratio 14/16 AWG for 57 A "
@@ -141,7 +148,7 @@ def roll_up(pod_stl: Path) -> dict:
     on_m = sum(m for _, m, _ in base.ON_AXIS)
     total = off_m + on_m
     assert abs((cg * off_m + cg * on_m) / total - cg) < 1e-9
-    arm = base.tip_reach(base.BUILT_FLAP_LEN) - cg
+    arm = NOZ_Z + NOZ_REACH - cg
     tip = base.WING_SPAR_HULL_Z - arm
     return {"rows": rows, "total_g": total, "cg_z": cg,
             "pivot_z": round(cg, 1), "arm": arm, "tip_hull_z": tip,

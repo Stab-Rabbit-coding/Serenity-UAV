@@ -253,8 +253,12 @@ WALL_T          =   2.5;  // [mm] minimum wall thickness — 0.098 in (2.5 mm) C
 // never fasteners, boards or wall thicknesses.  Added by Claude (Claude Opus
 // 5.5, Anthropic).
 RADIAL_K        =   1.0;   // [-] radial scale of the measured shell geometry
+AXIAL_K         =   1.0;   // [-] axial stretch of the measured shell geometry
+                           //     (canonical silhouette kept; 64 mm wrapper)
 POD_AUTORENDER  = true;    // [bool] render nacelle_pod() at the end of this file
 function radial_k_grid(g) = [ for (row = g) [ for (v = row) v * RADIAL_K ] ];
+// Station list of the measured grids, stretched with the shell.
+function hollow_zs() = [ for (z = HOLLOW_Z) z * AXIAL_K ];
 // Cavity under a radially scaled skin: move the cavity surface out with the
 // scaled skin so the WALL THICKNESS is unchanged (wall = structure, not
 // silhouette).  cavity' = cavity + (K - 1) * skin.  Identity at K = 1.
@@ -790,13 +794,13 @@ $fn = 72;
 module nacelle_shell_imported() {
     if (NACELLE_SIDE > 0) {
         // ── Port (left) nacelle ───────────────────────────────────────────────
-        scale([RADIAL_K, RADIAL_K, 1])
+        scale([RADIAL_K, RADIAL_K, AXIAL_K])
         translate([-BORE_CX_L, BORE_CY, 0])
             import("../../stls/nacelles/eng_left_shell24_50mm_repaired.stl",
                     convexity = 4);
     } else {
         // ── Starboard (right) nacelle ─────────────────────────────────────────
-        scale([RADIAL_K, RADIAL_K, 1])
+        scale([RADIAL_K, RADIAL_K, AXIAL_K])
         translate([-BORE_CX_R, BORE_CY, 0])
             import("../../stls/nacelles/eng_right_shell24_50mm_repaired.stl",
                     convexity = 4);
@@ -1322,7 +1326,7 @@ module hollow_cavity() {
         ? radial_k_cavity(HOLLOW_R_PORT, HOLLOW_SKIN_PORT)
         : radial_k_cavity(HOLLOW_R_STBD, HOLLOW_SKIN_STBD);
     difference() {
-        grid_solid(grid, HOLLOW_Z, HOLLOW_N_AZ);
+        grid_solid(grid, hollow_zs(), HOLLOW_N_AZ);
         cavity_duct_wall();
         // Structural webs, each with its vent holes drilled back through
         difference() {
@@ -1382,8 +1386,8 @@ module esc_boss_cylinders_local(dia) {
 // The shell of material between two radial offsets of the measured skin.
 module _esc_skin_shell(d_out, d_in) {
     difference() {
-        grid_solid(offset_grid(ESC_SKIN, d_out), HOLLOW_Z, HOLLOW_N_AZ);
-        grid_solid(offset_grid(ESC_SKIN, d_in), HOLLOW_Z, HOLLOW_N_AZ);
+        grid_solid(offset_grid(ESC_SKIN, d_out), hollow_zs(), HOLLOW_N_AZ);
+        grid_solid(offset_grid(ESC_SKIN, d_in), hollow_zs(), HOLLOW_N_AZ);
     }
 }
 
@@ -1434,7 +1438,7 @@ module esc_bay_cut() {
                 cylinder(r = 60, h = (ESC_BAY_Z1 - ESC_BAY_Z0)
                                      + 2 * ESC_LEDGE_W + 2, $fn = 96);
             grid_solid(offset_grid(ESC_SKIN, ESC_COVER_T),
-                       HOLLOW_Z, HOLLOW_N_AZ);
+                       hollow_zs(), HOLLOW_N_AZ);
         }
         union() for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0, ESC_LEDGE_W);
     }

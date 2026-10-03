@@ -2,7 +2,8 @@
 // nacelle_pod_64mm_tandem.scad — Serenity nacelle pod, QX-Motor 64 mm tandem
 // =============================================================================
 // Plan: docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md, U9.
-// WBS:  airframe/wings-nacelles/WBS.md §1.1.4 NAC-64-SERVO-01, NAC-64-FIT-01/02.
+// WBS:  airframe/wings-nacelles/WBS.md §1.1.4 NAC-64-SERVO-01, NAC-64-*.
+// Record: docs/NACELLE_64MM_VERIFICATION.md.
 //
 // HOW THIS FILE WORKS
 // -------------------
@@ -10,8 +11,8 @@
 // the LAST assignment of a variable for the whole file scope, and the last
 // definition of a module, so every derived expression and every module in the
 // 50 mm pod sees the 64 mm values.  The 50 mm pod renders unchanged on its own
-// (RADIAL_K = 1, POD_AUTORENDER = true there).  One source of geometry, two
-// parameter sets — no forked copy of the 1,700-line pod to drift.
+// (RADIAL_K = AXIAL_K = 1, POD_AUTORENDER = true there).  One source of
+// geometry, two parameter sets — no forked copy of the pod to drift.
 //
 // ORDERING RULE: an overriding assignment is evaluated at the position of the
 // variable's FIRST assignment in the 50 mm file.  So an override may only use
@@ -20,167 +21,200 @@
 //
 // OWNER DECISIONS APPLIED (Steve Griffing, GitHub Stab-Rabbit-coding)
 // -------------------------------------------------------------------
-//   2026-10-01  KTD8: radial-only scale about the thrust axis; aircraft scale
-//               and nacelle axial length unchanged.  KTD9: 64 mm flow tube,
-//               QF2822 mounts on 4 x M3 / 16 mm bolt circle.  Printed nacelle
-//               tube is the rotor flow boundary; the QX shroud is discarded.
-//   2026-10-03  Axial-fit adjudication: STATOR FRONT PLATE IS THE MOTOR MOUNT
-//               (no separate spider) and the intake bell is trimmed 8.0 mm.
-//               tools/nacelle_axial_fit.py ADOPTED case, margin +0.3 mm on
-//               drawing values — VERIFY by measurement (NAC-64-FIT-02).
-//   2026-10-03  Radial scale = 64/50 = 1.28, proportional (silhouette held).
-//   2026-10-03  Wing interface held: the wing tip face, spar stub, trunnion and
-//               pylon-side wall stay where they are relative to the nacelle's
-//               INBOARD face; the nacelle axis moves outboard by AXIS_SHIFT_X.
+//   2026-10-01  KTD9: 64 mm flow tube, QF2822 mounts on 4 x M3 / 16 mm bolt
+//               circle.  Printed nacelle tube is the rotor flow boundary.
+//   2026-10-03  STATOR FRONT PLATE IS THE MOTOR MOUNT (no separate spider).
+//   2026-10-03  Wing interface held at the pylon face: wing tip, spar stub and
+//               trunnion keep their positions relative to the INBOARD face;
+//               the nacelle axis moves outboard by P64_AXIS_SHIFT.
+//   2026-10-03  Pivot trunnion re-sited to the rotating-assembly CG.
+//   2026-10-03  PROPORTIONS (supersedes the 1.28 radial / fixed-185.2 choice):
+//               "minimum radial scale, lengthen to canon at that diameter,
+//               optimised for aerodynamics, thrust, weight and canonical
+//               shape."  tools/nacelle_64_proportion_trade.py pick: radial
+//               1.21 (packaging minimum: pylon wall >= 41 mm, ESC-bay skin),
+//               canonical axial stretch 1.13 -> L 209.3 mm.  Canon L/D
+//               [REF-CAD-003 Sheets 3/4] 2.24 plan / 2.31 side; this pod
+//               2.29 / 2.08 (was 1.92 / 1.74 at 1.28 x 185.2).
+//   2026-10-03  INTAKE: a proper rounded lip (owner: "implement the rounded
+//               intake bell as a proper aerodynamic design").  See below.
+//   2026-10-03  70 A ESCs (WBS NAC-64-ESC-70A) — bay fit open until a part
+//               is selected.
 //
-// ADOPTED AXIAL STACK (nacelle-local Z, mm; QF2822 drawing 8-4.jpg, VERIFY)
-// -------------------------------------------------------------------------
-//     0.0 – 19.5   intake bell (was 27.5; trimmed 8.0)
-//    17.5 – 28.2   rotor 1 hub (10.7 shaft protrusion), 2.0 inside the bell
-//    29.2 – 32.2   stator-1 front plate = motor-1 mount  } stator sleeve
-//    32.2 – 90.2   motor 1 body (58.0) inside stator-1 hub } 29.2 – 90.7
-//    91.2 – 101.9  rotor 2 hub                            } aft sleeve
-//   102.9 – 105.9  stator-2 front plate = motor-2 mount   } 90.7 – 166.25
-//   105.9 – 163.9  motor 2 body          (2.4 mm margin to the nozzle pocket)
-//   166.25 –       nozzle ring pocket (unchanged station)
+// INTAKE LIP — two quarter-ellipses meeting at the highlight
+// ----------------------------------------------------------
+//   internal  2:1 ellipse, P64_LIP_A x P64_LIP_F = 13.0 x 6.5 mm, from the
+//             highlight (Z 0, r 38.5) to the 64 mm throat at Z 13.0.  Nose
+//             radius b^2/a = 3.25 mm.  Contraction ratio (38.5/32)^2 = 1.45.
+//   external  forebody ellipse P64_FORE_A x P64_FORE_B = 22.0 x 2.0 mm, from
+//             the highlight out to the skin's smallest radius at its first
+//             station (40.5 mm), then buried inside the canonical shell by
+//             Z 40 so the shell is the exterior and the cavity hollows it.
+//             (Corrected 2026-10-03: a first cut held 46.2 mm to Z 69, which
+//             stood 1-6 mm proud of the skin as SOLID material — +66 g per pod
+//             forward of the pivot.)  Ahead of Z ~20 the lip is larger than the
+//             canonical dome tip; recorded as a deviation (the canon intake
+//             ring is itself bulbous).
+//   Both branches have a RADIAL tangent at the highlight, so the leading edge
+//   is one smooth curve (no corner, no cusp) — the sharp edge the cosine bell
+//   produced against the front face is gone.  tools/nacelle_intake_cfd.py:
+//   the 6.5 mm elliptical lip stays fully attached in static/hover flow on
+//   both meshes; the cosine bell separated over 87-98 % of its wall.
+//   A straight 64 mm duct then runs to the rotor-1 face at Z 30.5, so the
+//   rotor runs in a constant bore with NO tip-gap growth (the rotor-in-bell
+//   compromise is no longer needed once the nacelle is lengthened).
+//
+// AXIAL STACK (nacelle-local Z, mm; QF2822 drawing 8-4.jpg, VERIFY)
+// -----------------------------------------------------------------
+//     0.0 – 13.0   elliptical lip (internal contour)
+//    13.0 – 30.5   straight inlet duct, 64 mm
+//    30.5 – 41.2   rotor 1 hub (10.7 shaft protrusion)
+//    42.2 – 45.2   stator-1 front plate = motor-1 mount  } stator sleeve
+//    45.2 – 103.2  motor 1 body (58.0) inside stator-1 hub } 42.2 – 103.7
+//   104.2 – 114.9  rotor 2 hub                            } aft sleeve
+//   115.9 – 118.9  stator-2 front plate = motor-2 mount   } 103.7 – 187.86
+//   118.9 – 176.9  motor 2 body        (11.0 mm margin to the nozzle pocket)
+//   187.86 –       nozzle ring pocket (166.25 x 1.13, rides on the shell)
 //
 // NOT YET RE-DERIVED IN THIS FILE — each is an open WBS item, not an omission:
-//   • edf_stator_sleeve.scad / edf_aft_spider_sleeve.scad — the stator-as-
-//     mount sleeves themselves (this file only cuts the bores they slide into).
-//   • nacelle_nozzle_iris.scad at 64 mm (plan U11) — NOZZLE_RING_OD below is a
+//   • edf_stator_sleeve.scad / edf_aft_spider_sleeve.scad (NAC-64-GEOM-01).
+//   • nacelle_nozzle_iris.scad at 64 mm (plan U11) — NOZZLE_RING_OD is a
 //     proportional placeholder for the pocket only.
-//   • ESC cooling discharge ports (ESC_BLEED_Z) now open onto the stator
-//     sleeve wall, not the duct; the sleeve needs matching ports (plan U9/U10).
+//   • ESC cooling ports onto the sleeve wall (NAC-64-GEOM-02) and the 70 A
+//     board fit (NAC-64-ESC-70A).
 //   • nacelle_esc_cover.scad still builds from the unscaled skin grid.
-//   • Hull-frame bake (tools/bake_hull_frame.py) for AXIS_SHIFT_X.
+//   • Hull-frame bake (tools/bake_hull_frame.py) for P64_AXIS_SHIFT.
 //
 // Render (stbd shown; port = all three -1):
 //   openscad -o nacelle_stbd_64mm.stl nacelle_pod_64mm_tandem.scad \
 //            -D SWIRL_DIR=1 -D PYLON_SIDE=1 -D NACELLE_SIDE=1
 //
 // Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CEH (Stab-Rabbit-coding) —
-// owner decisions above.  Parameter derivation and file by Claude (Claude
-// Opus 5.5, Anthropic) under the author's direction, per AGENTS.md AI
+// owner decisions above.  Parameter derivation, lip design and file by Claude
+// (Claude Opus 5.5, Anthropic) under the author's direction, per AGENTS.md AI
 // attribution.  Derivative of nacelle_pod_50mm_tandem.scad, which carries the
 // full upstream attribution chain (canonical shell: REF-CAD-001/REF-CAD-003).
-// References: [REF-EDF-003] QX-Motor 64 mm EDF manual and QF2822 drawing, user-supplied
-// images docs/references/qx-motor 64mm edf/ (requires verification, plan U7).
+// References: [REF-EDF-003] QX-Motor 64 mm EDF manual and QF2822 drawing;
+// [REF-CAD-003] QMx blueprint pack (canonical proportions).
 // License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
 // =============================================================================
 
 // ── 64 mm constants — declared BEFORE the include (see ORDERING RULE) ──────
-P64_K           = 64.0 / 50.0;  // [-] = 1.28 proportional radial scale (owner)
+P64_K           = 1.21;   // [-] radial scale — packaging minimum (trade tool)
+P64_A           = 1.13;   // [-] canonical axial stretch (trade tool, re-
+                          //     calibrated on the rendered pod; 1.15 gave
+                          //     11.0 mm hover clearance < the 12.7 mm floor)
 P64_BORE_R      = 32.0;   // [mm] 64 mm (2.52 in) nominal flow diameter.  The
                           //      rotor running clearance is NOT this number —
                           //      measure the bare rotor (NAC-64-FIT-02).
 P64_WALL        =  2.5;   // [mm] duct wall = the 50 mm pod's WALL_T
-P64_FACE_PYLON  = 34.0 * P64_K;          // = 43.52 mm pylon face |X|
-P64_AXIS_SHIFT  = P64_FACE_PYLON - 34.0; // = 9.52 mm (0.37 in) per side
-P64_BELL_L      = 27.5 - 8.0;  // [mm] = 19.5, owner-approved 8.0 mm trim
+P64_FACE_PYLON  = 34.0 * P64_K;          // = 41.14 mm pylon face |X|
+P64_AXIS_SHIFT  = P64_FACE_PYLON - 34.0; // = 7.14 mm (0.28 in) per side
+
+// Intake lip (header).
+P64_LIP_A       = 13.0;   // [mm] internal ellipse, axial semi-axis (2:1)
+P64_LIP_F       =  6.5;   // [mm] internal ellipse, radial semi-axis (flare)
+P64_HL_R        = P64_BORE_R + P64_LIP_F;   // = 38.5 mm highlight radius
+P64_FORE_A      = 22.0;   // [mm] external forebody ellipse, axial semi-axis
+P64_FORE_R      = 40.5;   // [mm] forebody end radius = the scaled skin's
+                          //      SMALLEST radius at its first measured station
+                          //      (Z 24.1: 40.5-42.7 mm, nacelle_hollow_profile
+                          //      x 1.21).  Never larger: a forebody proud of the
+                          //      skin is solid, unhollowed, off-canon mass.
+P64_FORE_B      = P64_FORE_R - P64_HL_R;    // = 2.0 mm radial semi-axis
+P64_FAIR_END    = 40.0;   // [mm] Z by which the fairing is buried in the skin
+
+// Stack.
+P64_ROTOR_Z     = 30.5;   // [mm] rotor-1 hub forward face (trade tool pick)
 P64_BODY        = 58.0;   // [mm] QF2822 rear cap to mount face, 8-4.jpg — VERIFY
 P64_SHAFT       = 10.7;   // [mm] 68.7 − 58.0 shaft protrusion — VERIFY
 P64_GAP         =  1.0;   // [mm] running / interstage gap
 P64_PLATE       =  3.0;   // [mm] stator front plate (motor mount) thickness
 P64_STAGE       = P64_SHAFT + P64_GAP + P64_PLATE + P64_BODY;   // = 72.7 mm
-// Rotor 1 INSIDE the bell (owner direction 2026-10-03, "as it would be in the
-// manufacturer's shroud").  Blade tips may go only as far forward as the
-// cosine flare adds <= P64_TIP_GROWTH of radius over the bore; the spinner may
-// overlap further.  Same rule as tools/nacelle_axial_fit.py rotor_entry_in_bell.
-P64_FLARE       = 3.0 * P64_K;   // [mm] = 3.84, bell radius added at the lip
-P64_TIP_GROWTH  = 0.1;           // [mm] allowed extra tip gap — VERIFY
-P64_ROTOR_Z     = P64_BELL_L / 180 * acos(2 * P64_TIP_GROWTH / P64_FLARE - 1);
-                                 // = 17.48 mm rotor-1 hub forward face
 
 include <nacelle_pod_50mm_tandem.scad>
 
 POD_AUTORENDER = false;    // render the 64 mm pod below, not the 50 mm one
 
-// ── Radial scale (owner, 2026-10-03) ─────────────────────────────────────────
-RADIAL_K        = P64_K;   // [-] applied to the measured shell grids
+// ── Shell scale ──────────────────────────────────────────────────────────────
+RADIAL_K        = P64_K;
+AXIAL_K         = P64_A;
+NACELLE_L       = 185.2 * P64_A;   // = 209.28 mm (8.24 in)
 
 // ── Flow tube (KTD9) ────────────────────────────────────────────────────────
 EDF_BORE_R      = P64_BORE_R;              // = 32.0 mm
 EDF_CASING_R    = P64_BORE_R + P64_WALL;   // = 34.5 mm; printed tube is the duct
 
 // ── Outer envelope (reference values, scaled with the shell) ─────────────────
-NACELLE_OD_X    = 75.4 * P64_K;   // = 96.5 mm (3.80 in)
-NACELLE_OD_Y    = 83.3 * P64_K;   // = 106.6 mm (4.20 in)
-NACELLE_FACE_X_PYLON = P64_FACE_PYLON;    // = 43.52 mm
-NACELLE_FACE_X_FAR   = 38.0 * P64_K;      // = 48.64 mm
+NACELLE_OD_X    = 75.4 * P64_K;   // = 91.2 mm (3.59 in)
+NACELLE_OD_Y    = 83.3 * P64_K;   // = 100.8 mm (3.97 in)
+NACELLE_FACE_X_PYLON = P64_FACE_PYLON;    // = 41.14 mm
+NACELLE_FACE_X_FAR   = 38.0 * P64_K;      // = 45.98 mm
 
 // ── Wing interface hold (owner, 2026-10-03) ──────────────────────────────────
-// Every |X| from the nacelle axis to a WING-side feature grows by the distance
-// the pylon face moved outboard, so the wing tip, spar stub, trunnion and the
-// pylon-side wall keep their positions relative to that face.
-TRUNNION_X0     = 28.2 + P64_AXIS_SHIFT;   // = 37.72 mm
-WING_TIP_FACE_X = 41.7 + P64_AXIS_SHIFT;   // = 51.22 mm
-COLLAR_FAIR_X   = 22.0 + P64_AXIS_SHIFT;   // = 31.52 mm
+TRUNNION_X0     = 28.2 + P64_AXIS_SHIFT;   // = 35.34 mm
+WING_TIP_FACE_X = 41.7 + P64_AXIS_SHIFT;   // = 48.84 mm
+COLLAR_FAIR_X   = 22.0 + P64_AXIS_SHIFT;   // = 29.14 mm
 CAVITY_TRUNNION_X0 = 20.0 + P64_AXIS_SHIFT;
 CAVITY_TRUNNION_X1 = 40.0 + P64_AXIS_SHIFT;
 
-// ── Adopted axial stack (see header table) ───────────────────────────────────
-INLET_BELL_L    = P64_BELL_L;          // = 19.5 mm
-INLET_BELL_FLARE= P64_FLARE;
-EDF1_Z_ENTRY    = P64_ROTOR_Z;                              // = 17.48 rotor-1 hub
-EDF1_Z_EXIT     = P64_ROTOR_Z + P64_STAGE;                   // = 90.18 motor-1 tail
-EDF2_Z_ENTRY    = P64_ROTOR_Z + P64_STAGE + P64_GAP;         // = 91.18 rotor-2 hub
-EDF2_Z_EXIT     = P64_ROTOR_Z + 2 * P64_STAGE + P64_GAP;     // = 163.88 motor-2 tail
-STATOR_Z_BOT    = P64_ROTOR_Z + P64_SHAFT + P64_GAP;         // = 29.18 plate
-STATOR_Z_TOP    = P64_ROTOR_Z + P64_STAGE;                   // = 90.18
+// ── Axial stack (header table) ───────────────────────────────────────────────
+// INLET_BELL_L / _FLARE now describe the lip, for cavity_duct_wall().
+INLET_BELL_L    = P64_LIP_A;
+INLET_BELL_FLARE= P64_LIP_F;
+EDF1_Z_ENTRY    = P64_ROTOR_Z;                               // = 30.5
+EDF1_Z_EXIT     = P64_ROTOR_Z + P64_STAGE;                   // = 103.2
+EDF2_Z_ENTRY    = P64_ROTOR_Z + P64_STAGE + P64_GAP;         // = 104.2
+EDF2_Z_EXIT     = P64_ROTOR_Z + 2 * P64_STAGE + P64_GAP;     // = 176.9
+STATOR_Z_BOT    = P64_ROTOR_Z + P64_SHAFT + P64_GAP;         // = 42.2
+STATOR_Z_TOP    = P64_ROTOR_Z + P64_STAGE;                   // = 103.2
+STATOR_SLV_Z_START = P64_ROTOR_Z + P64_SHAFT + P64_GAP;      // = 42.2
+STATOR_SLV_Z_END   = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;  // = 103.7
+AFT_SLV_Z_START    = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;  // = 103.7
+NOZZLE_RING_Z   = 166.25 * P64_A;  // = 187.86, rides on the shell's aft end
 
-// Sleeve zones: the stator-1 sleeve starts at its front plate, so the pod's
-// integral bore carries only rotor 1; rotor 2 runs inside the aft sleeve.
-STATOR_SLV_Z_START = P64_ROTOR_Z + P64_SHAFT + P64_GAP;          // = 29.18
-STATOR_SLV_Z_END   = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;      // = 90.68
-AFT_SLV_Z_START    = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;      // = 90.68
-// AFT_SLV_Z_END stays NOZZLE_RING_Z (166.25), unchanged station.
+// ── Shell-tied stations stretched with the shell ─────────────────────────────
+CAVITY_BULKHEAD_Z = [40.0 * P64_A, 62.0 * P64_A, 70.0 * P64_A, 138.0 * P64_A];
+NAV_LIGHT_Z     = 70.0 * P64_A;    // = 79.1
+BOSS_Z_LO       = 83.0 * P64_A;    // vestigial-boss cleanup, a shell feature
+BOSS_Z_H        = 24.0 * P64_A;
+// ESC bays keep their 42 mm board length, centred where the stretched shell
+// puts the 50 mm bays' centre (95 x 1.13 = 107.35).  Cooling ports move with
+// the bay by the same offset.
+ESC_BAY_Z0      = 95.0 * P64_A - 21.0;   // = 86.35
+ESC_BAY_Z1      = 95.0 * P64_A + 21.0;   // = 128.35
+ESC_BLEED_Z     = [ for (z = [76.0, 80.0, 84.0, 88.0]) z + 95.0 * (P64_A - 1) ];
 
 // ── Motor mounts (KTD9 / R13) ────────────────────────────────────────────────
 MOTOR_BOLT_R    =  8.0;   // [mm] QF2822 4 x M3 on ø16.00 (8-4.jpg) — VERIFY
 R_HUB           = 15.0;   // [mm] stator hub outer radius over the ø27.8 can
-                          //      (13.9 mm) + 1.1 mm — sleeve parts, VERIFY
-SLEEVE_BOSS_R   = 28.0 * P64_K;   // = 35.84 mm, on the nozzle pocket face
+SLEEVE_BOSS_R   = 28.0 * P64_K;   // = 33.88 mm, on the nozzle pocket face
 
 // ── Nozzle pocket — PLACEHOLDER until plan U11 re-sizes the iris ─────────────
-NOZZLE_RING_OD  = 72.0 * P64_K;   // = 92.16 mm
-
-// ── Intake fairing, scaled with the shell it blends into ─────────────────────
-INTAKE_BLEND_R_PEAK = 38.2 * P64_K;   // = 48.9 mm
-INTAKE_BLEND_R_END  = 27.0 * P64_K;   // = 34.56 mm, buried in the duct wall
+NOZZLE_RING_OD  = 72.0 * P64_K;   // = 87.12 mm
 
 // ── Cavity, ESC seat ─────────────────────────────────────────────────────────
-CAVITY_VENT_R   = 30.0 * P64_K;   // = 38.4 mm, inside the scaled annulus
+CAVITY_VENT_R   = 30.0 * P64_K;   // = 36.3 mm
 ESC_MOUNT_R     = P64_BORE_R + P64_WALL + 0.2 + P64_WALL;   // = 37.2 mm
                   // = SLEEVE_BORE_R + CAVITY_DUCT_WALL (pod assert ties them)
 
 // ── Tilt pivot = rotating-assembly CG (plan 003 KTD7; owner 2026-10-03) ─────
-// tools/nacelle_mass_cg_64.py is the authority.  First pass on the rendered
-// pod: 98.6 mm (3.88 in), 8.9 mm forward of the 50 mm pod's 107.5 — the two
-// 135 g QF2822 motors dominate.  Iterate: re-render, re-run, until the
-// residual is <= 0.25 mm (the same fixed-point bar as nacelle_mass_cg.py).
-PIVOT_Z         = 98.3;   // iteration 2 (iteration 1: 98.6 -> measured 98.31)
+// tools/nacelle_mass_cg_64.py is the authority; iterate to <= 0.25 mm.
+PIVOT_Z         = 109.1;  // iteration 1 seed from the re-calibrated trade
 
-// ── 10 AWG disconnect bay re-sited (forced by the pivot move) ────────────────
-// At PIVOT_Z 98.6 the trunnion ring-gear cavity (ø42.6, Z 77.3-119.9) lands on
-// the 50 mm bay window (Z 75-89) on the same inboard face.  The bay moves
-// between the Z 40 and Z 62 bulkheads.  Depth there: NACELLE_FACE_X_PYLON −
-// bore − wall = 43.52 − 32 − 2.5 = 9.0 mm >= the 6.0 mm pocket (asserted by
-// the pod via ESC_DISC_AVAIL).  Feed run from the spar bore grows 29.5 ->
-// 47.6 mm; harness row updated in tools/nacelle_mass_cg_64.py.
-ESC_DISC_Z      = 51.0;
-ESC_DISC_Z_LO   = 41.5;   // aft face of the Z 40 bulkhead
-ESC_DISC_Z_HI   = 60.5;   // fore face of the Z 62 bulkhead
+// ── 10 AWG disconnect bay — between the stretched Z 40 and Z 62 bulkheads,
+// clear of the trunnion ring-gear cavity (ø42.6 about PIVOT_Z).
+ESC_DISC_Z      = 51.0 * P64_A;         // = 57.63
+ESC_DISC_Z_LO   = 40.0 * P64_A + 1.5;   // = 46.7
+ESC_DISC_Z_HI   = 62.0 * P64_A - 1.5;   // = 68.56
 
 // ── Module overrides ─────────────────────────────────────────────────────────
 
-// No pod-integrated spider: the stator-1 front plate carries motor 1
-// (owner adjudication 2026-10-03).
+// No pod-integrated spider: the stator-1 front plate carries motor 1.
 module edf1_nacelle_spider() {}
 
-// The 50 mm keep-out ran from the bay's forward end to the Z 90 bore step and
-// assumed the bay sat forward of the sleeve zone.  Here the whole bay is over
-// the sleeve zone, so the keep-out spans the bay, and its inner bound tracks
-// the larger duct (EDF_BORE_R + 1 instead of the literal 26.0).
+// ESC seat keep-out spans the bay (the whole bay is over the sleeve zone) and
+// tracks the larger duct (EDF_BORE_R + 1 instead of the 50 mm literal 26.0).
 module esc_bay_seat_keepout() {
     for (az_hinge = ESC_BAY_AZ)
         for (side = [0, 1])
@@ -191,12 +225,72 @@ module esc_bay_seat_keepout() {
                 ESC_BAY_Z0 - 1.0, ESC_BAY_Z1 + 1.0);
 }
 
-// ── Parse-time checks specific to the 64 mm stack ────────────────────────────
+// ── Intake lip profile functions (header) ────────────────────────────────────
+// Internal: r = R + F (1 - sqrt(1 - (1 - z/a)^2)),  0 <= z <= a.
+function lip_r_in(z) =
+    let(u = 1 - z / P64_LIP_A)
+    P64_BORE_R + P64_LIP_F * (1 - sqrt(max(0, 1 - u * u)));
+// External: r = R_hl + B sqrt(1 - (1 - z/A)^2),  0 <= z <= A.
+function lip_r_out(z) =
+    let(u = 1 - z / P64_FORE_A)
+    P64_HL_R + P64_FORE_B * sqrt(max(0, 1 - u * u));
+
+LIP_N = 48;   // profile stations per branch
+
+// SUBTRACTIVE — the internal lip contour (replaces the cosine bell cut).
+// Overshoots 0.5 mm forward of Z 0 at the highlight radius so the front of the
+// canonical shell's dome is cleanly removed inside the highlight.
+module inlet_bellmouth() {
+    rotate_extrude(angle = 360, convexity = 4)
+        polygon(concat(
+            [[0, -0.5], [P64_HL_R, -0.5]],
+            [ for (i = [0 : LIP_N]) let(z = P64_LIP_A * i / LIP_N)
+                  [lip_r_in(z), z] ],
+            [[0, P64_LIP_A]]));
+}
+
+// ADDITIVE — the lip and forebody (replaces the circular intake fairing).
+// Bounded in front by ONE smooth curve: the internal branch runs up to the
+// highlight and the external branch continues from it with the same radial
+// tangent.  Its inner side sits 0.05 mm inside the lip contour so the
+// subtractive cut, not this solid, defines the flow surface (no coincident
+// faces).  Aft of the forebody it smooth-steps down inside the skin by
+// P64_FAIR_END and buries itself in the duct wall.
+module circular_intake_fairing() {
+    r_end  = P64_BORE_R + 0.5;    // = 32.5, inside the 34.5 duct wall
+    n_fall = 24;
+    rotate_extrude(angle = 360, convexity = 4)
+        polygon(concat(
+            // internal branch, throat -> highlight (0.05 mm proud of the cut)
+            [ for (i = [LIP_N : -1 : 0]) let(z = P64_LIP_A * i / LIP_N)
+                  [lip_r_in(z) - 0.05, z] ],
+            // external branch, highlight -> forebody shoulder
+            [ for (i = [1 : LIP_N]) let(z = P64_FORE_A * i / LIP_N)
+                  [lip_r_out(z), z] ],
+            // smooth-step from the shoulder down into the duct wall
+            [ for (i = [1 : n_fall]) let(
+                  f = i / n_fall, s = f * f * (3 - 2 * f),
+                  z = P64_FORE_A + (P64_FAIR_END - P64_FORE_A) * f)
+                  [P64_FORE_R + (r_end - P64_FORE_R) * s, z] ],
+            // back along the duct side to the throat
+            [[P64_BORE_R - 0.5, P64_FAIR_END], [P64_BORE_R - 0.5, P64_LIP_A]]));
+}
+
+// ── Parse-time checks specific to the 64 mm pod ──────────────────────────────
 assert(EDF2_Z_EXIT <= NOZZLE_RING_Z,
        "motor-2 tail enters the nozzle pocket — axial fit gate (R11) fails");
+assert(EDF1_Z_ENTRY >= P64_LIP_A,
+       "rotor 1 is inside the lip — it must run in the constant 64 mm bore");
 assert(MOTOR_BOLT_R + M3_CLEAR_D / 2 < R_HUB,
        "QF2822 bolt circle does not land on the stator hub");
 assert(abs(NACELLE_FACE_X_PYLON - TRUNNION_X0 - (34.0 - 28.2)) < 1e-9,
        "pylon-face-to-trunnion distance changed — wing interface not held");
+assert(NACELLE_FACE_X_PYLON - EDF_BORE_R - WALL_T >= 6.5,
+       "pylon wall too thin for the 6.0 mm disconnect pocket + 0.5 material");
+assert(abs(PIVOT_Z - ESC_DISC_Z) > TRUNNION_CAV_D / 2 + ESC_DISC_H / 2,
+       "10 AWG disconnect bay overlaps the trunnion ring-gear cavity");
+assert(abs(lip_r_out(P64_FORE_A) - P64_FORE_R) < 1e-6
+       && P64_FORE_R <= 40.5 && P64_FORE_A < P64_FAIR_END,
+       "forebody must end at (not beyond) the skin's smallest front radius");
 
 if (is_undef(P64_NO_RENDER)) nacelle_pod(swirl_dir = SWIRL_DIR);
