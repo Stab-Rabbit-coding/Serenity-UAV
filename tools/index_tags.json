@@ -13257,6 +13257,15 @@
       ],
       "archived": false
     },
+    "docs/references/qx-motor 64mm edf/64_2822-2300KV_00.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
     "docs/references/qx-motor 64mm edf/7-2.jpg": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -15473,6 +15482,14 @@
       ],
       "archived": false
     },
+    "tools/nacelle_crossflow_cfd.py": {
+      "description": "nacelle_crossflow_cfd.py \u2014 3-D OpenFOAM screen of the tilt-axis aero moment on",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/nacelle_esc_bay_fit.py": {
       "description": "nacelle_esc_bay_fit.py \u2014 site the hinged Open-Secure-ESC boards in the nacelle.",
       "tags": [
@@ -16007,6 +16024,7 @@
       "docs/references/nick-henning/top-view-with-wireframe-henning.jpg",
       "docs/references/open-source-hardware-checklist.pdf",
       "docs/references/pocketbeagle2 revA_241205.brd",
+      "docs/references/qx-motor 64mm edf/64_2822-2300KV_00.png",
       "docs/references/qx-motor 64mm edf/7-2.jpg",
       "docs/references/qx-motor 64mm edf/8-4.jpg",
       "docs/references/qx-motor 64mm edf/8-4.webp",
@@ -16494,6 +16512,7 @@
       "docs/references/nick-henning/top-view-with-wireframe-henning.jpg",
       "docs/references/open-source-hardware-checklist.pdf",
       "docs/references/pocketbeagle2 revA_241205.brd",
+      "docs/references/qx-motor 64mm edf/64_2822-2300KV_00.png",
       "docs/references/qx-motor 64mm edf/7-2.jpg",
       "docs/references/qx-motor 64mm edf/8-4.jpg",
       "docs/references/qx-motor 64mm edf/8-4.webp",
@@ -17629,6 +17648,7 @@
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-edf-glider-nacelle-for-swift-2100-827-50mm.webp",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-model-logo-16966716258.jpg",
       "docs/references/Screenshot 2026-08-18 at 09-50-31 EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades 6S Motor 3200KV - Xfly-Model.png",
+      "docs/references/qx-motor 64mm edf/64_2822-2300KV_00.png",
       "docs/references/qx-motor 64mm edf/7-2.jpg",
       "docs/references/qx-motor 64mm edf/8-4.jpg",
       "docs/references/qx-motor 64mm edf/8-4.webp",
@@ -17640,6 +17660,7 @@
       "graphical-build-guide/pngs/17_closeup_nacelle.png",
       "tools/nacelle_64_proportion_trade.py",
       "tools/nacelle_axial_fit.py",
+      "tools/nacelle_crossflow_cfd.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",
@@ -19879,6 +19900,7 @@
       "tools/mirror_claude_memory.py",
       "tools/nacelle_64_proportion_trade.py",
       "tools/nacelle_axial_fit.py",
+      "tools/nacelle_crossflow_cfd.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",

@@ -1437,6 +1437,23 @@ gauge. See REF-EDF-002 for what a vendor listing adds, and the open items in
 | **Sections applied** | 8-4.jpg: overall 68.7 mm, body to mount face 58.0 mm, can ø27.80 mm, front boss ø20.00 mm, shaft ø3.0 mm, 4 × M3 on ø16.00 mm. 7-2.jpg: model QF2822, KV options 2200/2400/3500/3800/4300, 9N6P, shaft 3.0 mm, motor diameter 28 mm, motor weight 135 g, 3–6S LiPo, max continuous 100 A / 10 s; performance row QF2822-2400KV at 22.2 V: 57.0 A, 1265.4 W, 2135 g thrust, recommended ESC 60 A; EDF outline 41.53 mm axial, ø77.00 and ø65.80 mm, and an unlabelled 18.50 mm feature. |
 | **Provenance caveats** | (1) Drawing datums are not identified; every axial value is **VERIFY** until a physical unit is measured (WBS NAC-64-FIT-02). (2) The product page's "0.2 kg" sits beside a 15 × 12 × 10 cm package size and is read as **shipping weight, not installed mass**. (3) The product page labels its 3500 KV row 14.8 V, but its 1056 W / 1810 g figures match the manual's 16 V row; the manual image is used. (4) The 18.50 mm feature is read as rotor-hub length only as the unfavourable case in `tools/nacelle_axial_fit.py`. |
 
+**Second manufacturer sheet (added 2026-10-03):** the product page for the 64 mm EDF without
+motor, <https://qx-motor.co/product/2365/>, links the QF2822-2300KV instruction-manual image
+<https://cdn.shopify.com/s/files/1/0713/6424/7837/files/64_2822-2300KV_00.png>. The repository
+copy is `docs/references/qx-motor 64mm edf/64_2822-2300KV_00.png`; the owner supplied the page,
+and Claude Opus 5.5 read and translated it.
+
+- **Applied values:**
+  - motor weight (重量) **140 g** (2300 KV);
+  - max continuous 60 A / 10 s, **recommended ESC 80 A**;
+  - 24 V, 100 % throttle: 57.0 A, 1368 W, 2370 g;
+  - outline drawing: 97.5 mm lip-to-motor-tail, 45 mm shroud, ø77 / ø72.4 / ø67.2 / ø66.4 shroud
+    diameters, motor ø28.
+- **Not published there:** the fan-only (no-motor) mass, and any rotor mass. The page's photos
+  and text carry none.
+- **Caveat:** the 2300 KV row is a different winding from the 2400 KV sheet the design uses. The
+  mechanical outline is common to the series.
+
 **Where it is applied:** `tools/nacelle_axial_fit.py`, `tools/tests/test_nacelle_axial_fit.py`,
 `airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad`,
 `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`,
