@@ -45,12 +45,20 @@ def test_gate_exit_code_follows_adopted_case():
     assert fit.main([]) == (0 if adopted["verdict"] == "PASS" else 2)
 
 
-def test_adopted_trim_only_moves_the_entry():
-    """ADOPTED = BEST stack started INTAKE_TRIM further forward."""
+def test_adopted_only_moves_the_entry():
+    """ADOPTED = BEST stack started at the in-bell rotor station."""
     st = fit.stations()
     best, adopted = (fit.evaluate(c, st) for c in fit.CASES[1:])
     assert adopted["required"] == best["required"]
-    assert adopted["margin"] == best["margin"] + fit.INTAKE_TRIM
+    expected = fit.rotor_entry_in_bell(st["EDF1_Z_ENTRY"] - fit.INTAKE_TRIM)
+    assert adopted["entry_z"] == pytest.approx(expected)
+
+
+def test_rotor_in_bell_bounds():
+    """Zero growth puts the rotor at the bell base; full flare at Z 0."""
+    assert fit.rotor_entry_in_bell(19.5, 3.84, 0.0) == pytest.approx(19.5)
+    assert fit.rotor_entry_in_bell(19.5, 3.84, 3.84) == pytest.approx(0.0)
+    assert 17.0 < fit.rotor_entry_in_bell(19.5) < 19.5
 
 
 def test_missing_parameter_fails_loudly():

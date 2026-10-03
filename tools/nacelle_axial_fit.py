@@ -44,7 +44,11 @@ Two cases are reported:
   ADOPTED  — owner adjudication 2026-10-03 (Steve Griffing): the BEST stack
              (stator front plate as the motor mount) with the intake bell
              trimmed by INTAKE_TRIM, moving EDF1_Z_ENTRY forward.  Nacelle
-             length and NOZZLE_RING_Z stay fixed.
+             length and NOZZLE_RING_Z stay fixed.  Owner direction later the
+             same day: rotor 1 may sit INSIDE the bell, as in the QX shroud.
+             The blade tips may only go as far forward as the cosine flare
+             adds no more than TIP_GAP_GROWTH_MAX of radius over the bore
+             (rotor_entry_in_bell()); the spinner may go further.
 CURRENT and BEST are measured against the SCAD's present EDF1_Z_ENTRY and
 reported for the record.  The exit code follows ADOPTED.  Its margin is thin
 on drawing values, so it remains VERIFY until a physical QF2822 and rotor are
@@ -71,6 +75,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from dataclasses import asdict, dataclass
@@ -117,6 +122,22 @@ CASES = (
 # "stator-as-mount + shorter intake" (about 8 mm).
 INTAKE_TRIM = 8.0
 
+# Rotor-in-bell rule — owner direction 2026-10-03.  The 50 mm pod's bell flare
+# INLET_BELL_FLARE (3.0 mm) scales with the shell to 3.0 x 64/50 = 3.84 mm.
+INLET_BELL_FLARE_64 = 3.0 * 64.0 / 50.0   # [mm] radius added at the lip, Z 0
+TIP_GAP_GROWTH_MAX = 0.1                  # [mm] extra tip gap allowed at the
+                                          #      rotor leading edge — VERIFY
+
+
+def rotor_entry_in_bell(bell_l: float, flare: float = INLET_BELL_FLARE_64,
+                        growth: float = TIP_GAP_GROWTH_MAX) -> float:
+    """Forward-most rotor station inside the cosine bell, in mm.
+
+    The pod's bell radius is r(z) = R + (F/2)(1 + cos(pi z / L)), so the
+    excess over the bore is at most `growth` where cos(pi z / L) <= 2g/F - 1.
+    """
+    return bell_l / math.pi * math.acos(2.0 * growth / flare - 1.0)
+
 
 def scad_param(text: str, name: str) -> float:
     """Return the numeric literal assigned to `name` in the SCAD source.
@@ -154,7 +175,9 @@ def evaluate(case: StackCase, st: dict[str, float]) -> dict[str, float | str]:
     """
     stage = stage_length(case)
     # ADOPTED moves the stack start forward by the owner-approved trim.
-    entry = st["EDF1_Z_ENTRY"] - (INTAKE_TRIM if case.name == "ADOPTED" else 0.0)
+    entry = st["EDF1_Z_ENTRY"]
+    if case.name == "ADOPTED":
+        entry = rotor_entry_in_bell(st["EDF1_Z_ENTRY"] - INTAKE_TRIM)
     tail_z = entry + 2.0 * stage + case.interstage_gap
     available = st["NOZZLE_RING_Z"] - entry
     required = tail_z - entry
@@ -200,7 +223,8 @@ def main(argv: list[str] | None = None) -> int:
                   f"available {fmt(r['available'])}")
             print(f"    motor-2 tail at Z {fmt(r['motor2_tail_z'])} -> "
                   f"margin {fmt(r['margin'])}  {r['verdict']}")
-        print(f"\n  ADOPTED intake trim {fmt(INTAKE_TRIM)} -> EDF1 entry "
+        print(f"\n  ADOPTED intake trim {fmt(INTAKE_TRIM)}, rotor in bell "
+              f"(tip-gap growth <= {fmt(TIP_GAP_GROWTH_MAX)}) -> EDF1 entry "
               f"Z {fmt(gate['entry_z'])}; margin is VERIFY (drawing values)")
         if gate["verdict"] == "FAIL":
             print("\nSTOP (plan Goal Capsule / R11): the adopted stack does "

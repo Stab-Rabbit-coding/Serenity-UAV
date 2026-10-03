@@ -36,12 +36,12 @@
 // ADOPTED AXIAL STACK (nacelle-local Z, mm; QF2822 drawing 8-4.jpg, VERIFY)
 // -------------------------------------------------------------------------
 //     0.0 – 19.5   intake bell (was 27.5; trimmed 8.0)
-//    19.5 – 30.2   rotor 1 hub (10.7 shaft protrusion) — runs in the pod bore
-//    31.2 – 34.2   stator-1 front plate = motor-1 mount  } stator sleeve
-//    34.2 – 92.2   motor 1 body (58.0) inside stator-1 hub } 31.2 – 92.7
-//    93.2 – 103.9  rotor 2 hub                            } aft sleeve
-//   104.9 – 107.9  stator-2 front plate = motor-2 mount   } 92.7 – 166.25
-//   107.9 – 165.9  motor 2 body                           }
+//    17.5 – 28.2   rotor 1 hub (10.7 shaft protrusion), 2.0 inside the bell
+//    29.2 – 32.2   stator-1 front plate = motor-1 mount  } stator sleeve
+//    32.2 – 90.2   motor 1 body (58.0) inside stator-1 hub } 29.2 – 90.7
+//    91.2 – 101.9  rotor 2 hub                            } aft sleeve
+//   102.9 – 105.9  stator-2 front plate = motor-2 mount   } 90.7 – 166.25
+//   105.9 – 163.9  motor 2 body          (2.4 mm margin to the nozzle pocket)
 //   166.25 –       nozzle ring pocket (unchanged station)
 //
 // NOT YET RE-DERIVED IN THIS FILE — each is an open WBS item, not an omission:
@@ -83,6 +83,14 @@ P64_SHAFT       = 10.7;   // [mm] 68.7 − 58.0 shaft protrusion — VERIFY
 P64_GAP         =  1.0;   // [mm] running / interstage gap
 P64_PLATE       =  3.0;   // [mm] stator front plate (motor mount) thickness
 P64_STAGE       = P64_SHAFT + P64_GAP + P64_PLATE + P64_BODY;   // = 72.7 mm
+// Rotor 1 INSIDE the bell (owner direction 2026-10-03, "as it would be in the
+// manufacturer's shroud").  Blade tips may go only as far forward as the
+// cosine flare adds <= P64_TIP_GROWTH of radius over the bore; the spinner may
+// overlap further.  Same rule as tools/nacelle_axial_fit.py rotor_entry_in_bell.
+P64_FLARE       = 3.0 * P64_K;   // [mm] = 3.84, bell radius added at the lip
+P64_TIP_GROWTH  = 0.1;           // [mm] allowed extra tip gap — VERIFY
+P64_ROTOR_Z     = P64_BELL_L / 180 * acos(2 * P64_TIP_GROWTH / P64_FLARE - 1);
+                                 // = 17.48 mm rotor-1 hub forward face
 
 include <nacelle_pod_50mm_tandem.scad>
 
@@ -113,19 +121,19 @@ CAVITY_TRUNNION_X1 = 40.0 + P64_AXIS_SHIFT;
 
 // ── Adopted axial stack (see header table) ───────────────────────────────────
 INLET_BELL_L    = P64_BELL_L;          // = 19.5 mm
-INLET_BELL_FLARE= 3.0 * P64_K;
-EDF1_Z_ENTRY    = P64_BELL_L;                               // = 19.5 rotor-1 hub
-EDF1_Z_EXIT     = P64_BELL_L + P64_STAGE;                   // = 92.2 motor-1 tail
-EDF2_Z_ENTRY    = P64_BELL_L + P64_STAGE + P64_GAP;         // = 93.2 rotor-2 hub
-EDF2_Z_EXIT     = P64_BELL_L + 2 * P64_STAGE + P64_GAP;     // = 165.9 motor-2 tail
-STATOR_Z_BOT    = P64_BELL_L + P64_SHAFT + P64_GAP;         // = 31.2 plate
-STATOR_Z_TOP    = P64_BELL_L + P64_STAGE;                   // = 92.2
+INLET_BELL_FLARE= P64_FLARE;
+EDF1_Z_ENTRY    = P64_ROTOR_Z;                              // = 17.48 rotor-1 hub
+EDF1_Z_EXIT     = P64_ROTOR_Z + P64_STAGE;                   // = 90.18 motor-1 tail
+EDF2_Z_ENTRY    = P64_ROTOR_Z + P64_STAGE + P64_GAP;         // = 91.18 rotor-2 hub
+EDF2_Z_EXIT     = P64_ROTOR_Z + 2 * P64_STAGE + P64_GAP;     // = 163.88 motor-2 tail
+STATOR_Z_BOT    = P64_ROTOR_Z + P64_SHAFT + P64_GAP;         // = 29.18 plate
+STATOR_Z_TOP    = P64_ROTOR_Z + P64_STAGE;                   // = 90.18
 
 // Sleeve zones: the stator-1 sleeve starts at its front plate, so the pod's
 // integral bore carries only rotor 1; rotor 2 runs inside the aft sleeve.
-STATOR_SLV_Z_START = P64_BELL_L + P64_SHAFT + P64_GAP;          // = 31.2
-STATOR_SLV_Z_END   = P64_BELL_L + P64_STAGE + P64_GAP / 2;      // = 92.7
-AFT_SLV_Z_START    = P64_BELL_L + P64_STAGE + P64_GAP / 2;      // = 92.7
+STATOR_SLV_Z_START = P64_ROTOR_Z + P64_SHAFT + P64_GAP;          // = 29.18
+STATOR_SLV_Z_END   = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;      // = 90.68
+AFT_SLV_Z_START    = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;      // = 90.68
 // AFT_SLV_Z_END stays NOZZLE_RING_Z (166.25), unchanged station.
 
 // ── Motor mounts (KTD9 / R13) ────────────────────────────────────────────────
@@ -174,4 +182,4 @@ assert(MOTOR_BOLT_R + M3_CLEAR_D / 2 < R_HUB,
 assert(abs(NACELLE_FACE_X_PYLON - TRUNNION_X0 - (34.0 - 28.2)) < 1e-9,
        "pylon-face-to-trunnion distance changed — wing interface not held");
 
-nacelle_pod(swirl_dir = SWIRL_DIR);
+if (is_undef(P64_NO_RENDER)) nacelle_pod(swirl_dir = SWIRL_DIR);
