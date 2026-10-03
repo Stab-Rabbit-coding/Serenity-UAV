@@ -39,10 +39,18 @@ def test_fit_passes_when_envelope_is_long_enough():
     assert fit.evaluate(fit.CASES[1], st)["verdict"] == "PASS"
 
 
-def test_gate_exit_code_matches_best_case():
-    """Exit 2 exactly when the BEST case fails (R11 stop)."""
-    best = fit.evaluate(fit.CASES[1], fit.stations())
-    assert fit.main([]) == (0 if best["verdict"] == "PASS" else 2)
+def test_gate_exit_code_follows_adopted_case():
+    """Exit code follows the owner-adopted case (R11 stop otherwise)."""
+    adopted = fit.evaluate(fit.CASES[2], fit.stations())
+    assert fit.main([]) == (0 if adopted["verdict"] == "PASS" else 2)
+
+
+def test_adopted_trim_only_moves_the_entry():
+    """ADOPTED = BEST stack started INTAKE_TRIM further forward."""
+    st = fit.stations()
+    best, adopted = (fit.evaluate(c, st) for c in fit.CASES[1:])
+    assert adopted["required"] == best["required"]
+    assert adopted["margin"] == best["margin"] + fit.INTAKE_TRIM
 
 
 def test_missing_parameter_fails_loudly():

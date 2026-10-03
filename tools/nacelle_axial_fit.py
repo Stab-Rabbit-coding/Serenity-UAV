@@ -41,14 +41,19 @@ Two cases are reported:
   BEST     — most favourable reading: the stator front plate IS the mount
              (3 mm plate, no separate spider), rotor hub only as long as the
              10.7 mm shaft protrusion, 1 mm running gaps.
-Exit 0 only if BEST fits; CURRENT is reported for the record.  If even BEST
-fails, no measurement can rescue the fixed-length envelope short of a different
-motor — that is the owner decision the plan's Goal Capsule reserves.
+  ADOPTED  — owner adjudication 2026-10-03 (Steve Griffing): the BEST stack
+             (stator front plate as the motor mount) with the intake bell
+             trimmed by INTAKE_TRIM, moving EDF1_Z_ENTRY forward.  Nacelle
+             length and NOZZLE_RING_Z stay fixed.
+CURRENT and BEST are measured against the SCAD's present EDF1_Z_ENTRY and
+reported for the record.  The exit code follows ADOPTED.  Its margin is thin
+on drawing values, so it remains VERIFY until a physical QF2822 and rotor are
+measured (WBS NAC-64-FIT-02).
 
 Usage:
     /usr/bin/python3 tools/nacelle_axial_fit.py [--json]
 
-Exit 0 = BEST case fits.  Exit 2 = BEST case does not fit (STOP, R11).
+Exit 0 = ADOPTED case fits.  Exit 2 = it does not (STOP, R11).
 
 References (see REFERENCES.md):
     QX-Motor 64 mm EDF instruction manual and QF2822 dimension drawing,
@@ -101,11 +106,16 @@ class StackCase:
     interstage_gap: float  # motor-1 tail to rotor-2 hub front face
 
 
-# The two cases described in the module docstring.
+# The cases described in the module docstring.
 CASES = (
     StackCase("CURRENT", QX_DRAWING_18_50, 1.0, 8.0, 2.0),
     StackCase("BEST", SHAFT_PROTRUSION, 1.0, 3.0, 1.0),
+    StackCase("ADOPTED", SHAFT_PROTRUSION, 1.0, 3.0, 1.0),
 )
+
+# Intake-bell trim for the ADOPTED case [mm] — owner adjudication 2026-10-03,
+# "stator-as-mount + shorter intake" (about 8 mm).
+INTAKE_TRIM = 8.0
 
 
 def scad_param(text: str, name: str) -> float:
@@ -143,11 +153,14 @@ def evaluate(case: StackCase, st: dict[str, float]) -> dict[str, float | str]:
     must end, with the stage-2 motor tail, at or before NOZZLE_RING_Z.
     """
     stage = stage_length(case)
-    tail_z = st["EDF1_Z_ENTRY"] + 2.0 * stage + case.interstage_gap
-    available = st["NOZZLE_RING_Z"] - st["EDF1_Z_ENTRY"]
-    required = tail_z - st["EDF1_Z_ENTRY"]
+    # ADOPTED moves the stack start forward by the owner-approved trim.
+    entry = st["EDF1_Z_ENTRY"] - (INTAKE_TRIM if case.name == "ADOPTED" else 0.0)
+    tail_z = entry + 2.0 * stage + case.interstage_gap
+    available = st["NOZZLE_RING_Z"] - entry
+    required = tail_z - entry
     return {
         **asdict(case),
+        "entry_z": entry,
         "stage_l": stage,
         "motor2_tail_z": tail_z,
         "available": available,
@@ -170,7 +183,7 @@ def main(argv: list[str] | None = None) -> int:
 
     st = stations()
     results = [evaluate(case, st) for case in CASES]
-    best = next(r for r in results if r["name"] == "BEST")
+    gate = next(r for r in results if r["name"] == "ADOPTED")
 
     if args.json:
         print(json.dumps({"stations": st, "results": results}, indent=4))
@@ -187,11 +200,13 @@ def main(argv: list[str] | None = None) -> int:
                   f"available {fmt(r['available'])}")
             print(f"    motor-2 tail at Z {fmt(r['motor2_tail_z'])} -> "
                   f"margin {fmt(r['margin'])}  {r['verdict']}")
-        if best["verdict"] == "FAIL":
-            print("\nSTOP (plan Goal Capsule / R11): even the most favourable "
-                  "reading does not fit the fixed axial envelope. Owner "
-                  "adjudication required; do not lengthen the nacelle here.")
-    return 0 if best["verdict"] == "PASS" else 2
+        print(f"\n  ADOPTED intake trim {fmt(INTAKE_TRIM)} -> EDF1 entry "
+              f"Z {fmt(gate['entry_z'])}; margin is VERIFY (drawing values)")
+        if gate["verdict"] == "FAIL":
+            print("\nSTOP (plan Goal Capsule / R11): the adopted stack does "
+                  "not fit the fixed axial envelope. Owner adjudication "
+                  "required; do not lengthen the nacelle here.")
+    return 0 if gate["verdict"] == "PASS" else 2
 
 
 if __name__ == "__main__":

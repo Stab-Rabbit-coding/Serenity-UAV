@@ -2013,6 +2013,12 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         R11:** no 64 mm geometry (U3 resize, U4, U11) is released until the owner
         adjudicates length, motor, or nozzle architecture. Dimensions stay
         VERIFY until a physical unit is measured (U9 step 3).
+        **Owner adjudication — 2026-10-03 (Stab-Rabbit-coding):** stator-as-mount
+        plus a shorter intake. Each stage's stator front plate is the QF2822 mount
+        (no separate spider), and the intake bell is trimmed 0.31 in (8.0 mm), so
+        EDF1_Z_ENTRY becomes 0.77 in (19.5 mm). The gate (ADOPTED case) passes by
+        +0.01 in (+0.3 mm). That margin is too thin to release on drawing
+        values; NAC-64-FIT-02 must confirm it.
     - [ ] **NAC-64-FIT-02 — measure a physical QF2822 and rotor.** Record rear-cap
         to mount-face length, shaft protrusion, rotor hub axial length and the
         bolt-circle datum; re-run `tools/nacelle_axial_fit.py` with the measured
