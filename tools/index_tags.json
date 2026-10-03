@@ -1336,6 +1336,15 @@
       ],
       "archived": false
     },
+    "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad": {
+      "description": "nacelle_pod_64mm_tandem.scad \u2014 Serenity nacelle pod, QX-Motor 64 mm tandem",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/openscad/nacelles/nacelle_servo_bracket.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
@@ -16661,6 +16670,7 @@
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
+      "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",
       "airframe/openscad/nacelles/nacelle_trunnion.scad",
@@ -16946,6 +16956,7 @@
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
+      "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",
       "airframe/openscad/nacelles/nacelle_trunnion.scad",
@@ -17378,6 +17389,7 @@
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
+      "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",
       "airframe/openscad/nacelles/nacelle_trunnion.scad",

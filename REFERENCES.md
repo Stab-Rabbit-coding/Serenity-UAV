@@ -1426,6 +1426,23 @@ gauge. See REF-EDF-002 for what a vendor listing adds, and the open items in
 
 ---
 
+### REF-EDF-003: QX-Motor — 64 mm 12-blade EDF with QF2822 brushless motor (product page, manual and dimension drawing)
+
+| Field | Value |
+|---|---|
+| **Type** | Manufacturer retail product page plus two user-supplied manufacturer images (instruction manual sheet and motor dimension drawing) |
+| **Product URL** | <https://qx-motor.co/product/64mm-edf-12-blade-2822-brushless-motor-set/> |
+| **Retrieved** | 2026-10-03 (product page, read by Claude Opus 5.5 via WebFetch) |
+| **Images** | `docs/references/qx-motor 64mm edf/7-2.jpg` (instruction manual: specifications, performance table, EDF outline); `8-4.jpg` / `8-4.webp` (QF2822 motor dimension drawing). Supplied by the repository owner; **original download URL not recorded — requires verification.** |
+| **Sections applied** | 8-4.jpg: overall 68.7 mm, body to mount face 58.0 mm, can ø27.80 mm, front boss ø20.00 mm, shaft ø3.0 mm, 4 × M3 on ø16.00 mm. 7-2.jpg: model QF2822, KV options 2200/2400/3500/3800/4300, 9N6P, shaft 3.0 mm, motor diameter 28 mm, motor weight 135 g, 3–6S LiPo, max continuous 100 A / 10 s; performance row QF2822-2400KV at 22.2 V: 57.0 A, 1265.4 W, 2135 g thrust, recommended ESC 60 A; EDF outline 41.53 mm axial, ø77.00 and ø65.80 mm, and an unlabelled 18.50 mm feature. |
+| **Provenance caveats** | (1) Drawing datums are not identified; every axial value is **VERIFY** until a physical unit is measured (WBS NAC-64-FIT-02). (2) The product page's "0.2 kg" sits beside a 15 × 12 × 10 cm package size and is read as **shipping weight, not installed mass**. (3) The product page labels its 3500 KV row 14.8 V, but its 1056 W / 1810 g figures match the manual's 16 V row; the manual image is used. (4) The 18.50 mm feature is read as rotor-hub length only as the unfavourable case in `tools/nacelle_axial_fit.py`. |
+
+**Where it is applied:** `tools/nacelle_axial_fit.py`, `tools/tests/test_nacelle_axial_fit.py`,
+`airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad`,
+`docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`,
+`airframe/wings-nacelles/WBS.md` §1.1.4 NAC-64-SERVO-01 / NAC-64-FIT-01 / NAC-64-FIT-02.
+---
+
 ### REF-STD-GEAR-001: ISO 53:1998 — Cylindrical gears for general and heavy engineering — Standard basic rack tooth profile
 
 | Field | Value |

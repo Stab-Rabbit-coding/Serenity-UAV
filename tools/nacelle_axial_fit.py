@@ -55,7 +55,7 @@ Usage:
 
 Exit 0 = ADOPTED case fits.  Exit 2 = it does not (STOP, R11).
 
-References (see REFERENCES.md):
+References (see REFERENCES.md): [REF-EDF-003]
     QX-Motor 64 mm EDF instruction manual and QF2822 dimension drawing,
     user-supplied images, docs/references/qx-motor 64mm edf/ — requires
     verification against a catalogued manufacturer source (plan U7).

@@ -244,6 +244,18 @@ EDF_BORE_R      =  25.0;  // [mm] EDF bore inner radius → 50 mm (1.97 in) ID (
 EDF_CASING_R    =  27.5;  // [mm] EDF casing outer radius → 55 mm (2.17 in) OD
 WALL_T          =   2.5;  // [mm] minimum wall thickness — 0.098 in (2.5 mm) CF-PETG per CLAUDE.md
 
+// ── Radial-scale and render hooks (2026-10-03, plan 2026-09-28-001 U9) ──────
+// Identity here.  nacelle_pod_64mm_tandem.scad includes this file and sets
+// RADIAL_K = 64/50 (owner decision: proportional radial scale about the thrust
+// axis, axial stations fixed) and POD_AUTORENDER = false.  OpenSCAD's
+// last-assignment-wins rule applies the override file-wide.  RADIAL_K scales
+// the MEASURED shell, cavity and skin grids and the measured boss contour,
+// never fasteners, boards or wall thicknesses.  Added by Claude (Claude Opus
+// 5.5, Anthropic).
+RADIAL_K        =   1.0;   // [-] radial scale of the measured shell geometry
+POD_AUTORENDER  = true;    // [bool] render nacelle_pod() at the end of this file
+function radial_k_grid(g) = [ for (row = g) [ for (v = row) v * RADIAL_K ] ];
+
 // ── Outer nacelle dimensions (canonical Serenity shape at 1.25× scale) ───────
 // These are measured from the repaired STL bounding box.  They are provided for
 // reference only; the actual shell geometry comes from the imported STL.
@@ -769,11 +781,13 @@ $fn = 72;
 module nacelle_shell_imported() {
     if (NACELLE_SIDE > 0) {
         // ── Port (left) nacelle ───────────────────────────────────────────────
+        scale([RADIAL_K, RADIAL_K, 1])
         translate([-BORE_CX_L, BORE_CY, 0])
             import("../../stls/nacelles/eng_left_shell24_50mm_repaired.stl",
                     convexity = 4);
     } else {
         // ── Starboard (right) nacelle ─────────────────────────────────────────
+        scale([RADIAL_K, RADIAL_K, 1])
         translate([-BORE_CX_R, BORE_CY, 0])
             import("../../stls/nacelles/eng_right_shell24_50mm_repaired.stl",
                     convexity = 4);
@@ -1167,12 +1181,12 @@ BOSS_Z_H  = 24.0;   // [mm] cutter Z span (covers Z 83..107)
 module smooth_boss_fill() {   // union: solid 25..contour (Y6..25) — closes the socket
     fc = [[25, 6], [37, 6], [36.5, 8], [36, 10], [35, 13], [33.4, 15], [32, 18],
           [30.2, 20], [28, 23], [26.2, 25], [25, 25]];
-    scale([PYLON_SIDE, 1, 1])
+    scale([PYLON_SIDE * RADIAL_K, RADIAL_K, 1])
         translate([0, 0, BOSS_Z_LO]) linear_extrude(BOSS_Z_H) polygon(fc);
 }
 
 module smooth_boss_shave() {  // difference: remove material beyond the contour
-    scale([PYLON_SIDE, 1, 1])
+    scale([PYLON_SIDE * RADIAL_K, RADIAL_K, 1])
         translate([0, 0, BOSS_Z_LO]) linear_extrude(BOSS_Z_H)
             polygon(concat(BOSS_CONTOUR, [[50, 30], [50, 6]]));
 }
@@ -1295,7 +1309,7 @@ module cavity_duct_wall() {
 // drained.  It is also, finally, the volume the wiring architecture has been
 // drawn against since plan 003.
 module hollow_cavity() {
-    grid = (NACELLE_SIDE > 0) ? HOLLOW_R_PORT : HOLLOW_R_STBD;
+    grid = radial_k_grid((NACELLE_SIDE > 0) ? HOLLOW_R_PORT : HOLLOW_R_STBD);
     difference() {
         grid_solid(grid, HOLLOW_Z, HOLLOW_N_AZ);
         cavity_duct_wall();
@@ -1332,7 +1346,7 @@ module hollow_cavity() {
         // Two measured surfaces grazing each other is not something to resolve
         // with more facets; the region is small, it is where the trunnion
         // collar's loads enter the shell, and keeping it solid settles both.
-        scale([PYLON_SIDE, 1, 1])
+        scale([PYLON_SIDE * RADIAL_K, RADIAL_K, 1])
             translate([20, 4, BOSS_Z_LO - 1])
                 cube([40, 28, BOSS_Z_H + 2]);
     }
@@ -1345,7 +1359,7 @@ module hollow_cavity() {
 // Offsets of the MEASURED skin, hoisted so every consumer builds from the same
 // surface.  See nacelle_shell_grid.scad for why a radial offset is legitimate
 // over this Z range and would not be near the nose.
-ESC_SKIN = (NACELLE_SIDE > 0) ? HOLLOW_SKIN_PORT : HOLLOW_SKIN_STBD;
+ESC_SKIN = radial_k_grid((NACELLE_SIDE > 0) ? HOLLOW_SKIN_PORT : HOLLOW_SKIN_STBD);
 
 // Both bays' fastener positions at once, from the shared bay definition — the
 // same module the covers drill their clearance holes with, so a boss and its
@@ -1683,7 +1697,7 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
 // =============================================================================
 // ── Render call ───────────────────────────────────────────────────────────────
 // =============================================================================
-nacelle_pod(swirl_dir = SWIRL_DIR);
+if (POD_AUTORENDER) nacelle_pod(swirl_dir = SWIRL_DIR);
 
 
 // =============================================================================
