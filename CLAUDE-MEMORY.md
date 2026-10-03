@@ -3749,3 +3749,15 @@ which disciplines his GA licence covers — don't assert that on his behalf.
 Related: [[project_pe_skills_cc_by_nd]].
 
 ---
+
+## `project_nacelle_64mm_wrapper.md`
+
+Branch feat/nacelle-64mm (worktree .worktrees/nacelle-64mm), 2026-10-03.
+- 64 mm pod is an `include` + parameter override of nacelle_pod_50mm_tandem.scad (RADIAL_K, POD_AUTORENDER hooks, identity at 50 mm). Overrides may only use literals/P64_* constants declared ABOVE the include — OpenSCAD evaluates an override at the variable's FIRST assignment position.
+- Owner decisions 2026-10-03: stator-as-mount (no spiders), intake trim 8 mm, rotor 1 inside the bell, radial scale 1.28 proportional, nacelle axis +9.52 mm outboard (wing iface held at pylon face), pivot re-sited to CG → PIVOT_Z 98.3 converged.
+- QF2822 is 58.0 mm body-to-mount-face (vs ~27 mm 2627): axial margin only +2.4 mm, VERIFY by measurement.
+- CFD: the pod's cosine bell meets the front face square → sharp lip separates 87–98 % of bell wall in hover (both 27.5/19.5 bells, 50 mm pod too). 6.5 mm elliptical lip fully attached; owner decision pending.
+- Packaged OpenFOAM v1912 here: ANY function object aborts "IOstream sha1"; post-process raw ASCII fields (tools/nacelle_intake_cfd.py). Uz residual on wedges is meaningless.
+Related: [[project_nacelle_rev_t4_trunnion]], [[env_openfoam_airfoil_meshing]], [[feedback_shared_checkout_use_worktree]]
+
+---
