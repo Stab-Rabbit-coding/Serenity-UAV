@@ -2098,12 +2098,27 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         C0 730 N (JTEKT 6704-ZZ, REF-BRG-001), static safety factor 1.12** at
         ultimate (50 mm pod: 42 %, s0 2.40). The ~907 N "static rating" implied by
         WING_ATTACH §4.3a is a DYNAMIC rating — corrected there. Actions:
-        (a) confirm C0 on the JTEKT catalogue and the purchased part; (b) weigh/tach a
-        QX rotor (spin momentum is ASSUMED); (c) quantify the tilt-axis aero
-        moment with tools/nacelle_intake_cfd.py (TILT-CTL-06); (d) if the
-        verified static safety factor is too low, owner decision on a wider
-        bearing span or a different bearing — the 9.0 mm stub space is held by
-        the wing interface.
+        Actions, worked 2026-10-03 (owner: "build in the properly sized bearings and
+        implement all four items"):
+        (a) DONE — C0 0.730 kN confirmed on JTEKT's own 6704 ZZ page (REF-BRG-001);
+            minimum fs 1.0 for an oscillating bearing with impact, from JTEKT CAT.
+            B2001E Table 5-10 (REF-BRG-003); design target fs >= 2 at ultimate.
+        (b) BOUNDED, not measurable here — no QX rotor mass is published (owner
+            supplied qx-motor.co/product/2365; its sheet gives motor 140 g and the
+            97.5 mm outline only). With the 6804 pair the gyroscopic term is ~56 N of
+            ~487 N per bearing, so doubling the ASSUMED spin momentum still leaves
+            fs ~4.5. Weigh/tach a rotor at first article (NAC-64-FIT-02).
+        (c) 3-D crossflow CFD, `tools/nacelle_crossflow_cfd.py` — see NAC-64-TILT-02.
+        (d) DONE — owner chose a longer stub + thicker pylon-side joint: spar stub
+            +7.0 mm (SPAR_TIP_PROTRUSION_64N 20.5), 2 x 6804-ZZ (C0 2.45 kN,
+            REF-BRG-002) in `nacelle_trunnion_64mm.scad`: fs 5.0 at ultimate
+            (aero bound included). The 1 mm flange base (outer-race stop + magnet
+            floor + barrel-to-flange joint) is why +7, not +6. Nacelle +33 g,
+            PIVOT_Z unchanged at 109.7 mm. Wing pinion/shaft unmoved.
+        **Found in the 50 mm trunnion (not repaired, superseded part):** its
+        barrel-to-flange load path runs through the bonded ring magnet (mesh slice at
+        z 8.5 shows only a 0.9 mm ring inside the magnet bore), and its flange plate
+        reaches the wing pad face with no running clearance.
 - [x] **LG-HOVER-01 — hover ground clearance — RESOLVED 2026-08-29.** Closed by
     NAC-MOULD-01 + the station/pivot move: **+9.8 mm on the existing 1.5 in
     gear**, owner-accepted. No landing-gear change is forced; the 3.0 in variant

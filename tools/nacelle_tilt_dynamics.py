@@ -118,6 +118,15 @@ RHO_AIR = 1.225              # kg/m^3 ISA sea level
 # at 20 deg -> 7.8 m/s).  Bound: twice that for gusts / manoeuvre, ASSUMED.
 V_CROSS = {"corridor at V_min (7.8 m/s)": 7.8,
            "bound 2 x corridor (15.6 m/s, ASSUMED)": 15.6}
+# 3-D OpenFOAM results for the 64 mm nacelle (tools/nacelle_crossflow_cfd.py,
+# 2026-10-03, 135,740 cells, k-omega SST; pressure + fan momentum flux, no
+# viscous shear).  (normal force N, tilt-axis moment N.m), limit loads.
+# Hover control: 0.00 N / 0.0005 N.m, axial 40.2 N vs 37.6 N set — validates
+# the fan model.  Crossflow residuals 4e-3 / 1e-2 (unsteady wake): read the
+# loads as good to about +/-10 %.  These REPLACE the momentum-drag screen for
+# the 64 mm pod; the 50 mm pod keeps the screen (no CFD run for it).
+AERO_CFD_64 = {"corridor at V_min (7.8 m/s)": (2.36, 0.339),
+               "bound 2 x corridor (15.6 m/s, ASSUMED)": (5.68, 0.734)}
 ULT = 1.5                    # ultimate factor (docs/structural_analysis.md)
 BUILT_ARRANGEMENT = 3        # index into ARRANGEMENTS — what the CAD builds
 LEGACY_X6 = 6.0              # TILT_SPAR_ANALYSIS's 4 g x 1.5 multiplier
@@ -278,7 +287,15 @@ def analyse(name: str, bodies: list[Body], pivot: float, thrust_n: float,
         n_in = mdot * vc                                       # N, limit
         f_body = 0.5 * RHO_AIR * vc ** 2 * 1.2 * side_area_m2
         aero[tag] = {"N": n_in, "T_tilt": n_in * pivot / 1000.0,
-                     "M_brg": n_in * arm_mm / 1000.0, "F_body": f_body}
+                     "M_brg": n_in * arm_mm / 1000.0, "F_body": f_body,
+                     "src": "momentum-drag screen"}
+        if bore_r_mm == 32.0 and tag in AERO_CFD_64:
+            n_cfd, m_cfd = AERO_CFD_64[tag]
+            # CFD normal force is the TOTAL (inlet + body), so no separate
+            # body-drag term; it acts on the duct axis for the bearing couple.
+            aero[tag] = {"N": n_cfd, "T_tilt": m_cfd,
+                         "M_brg": n_cfd * arm_mm / 1000.0, "F_body": 0.0,
+                         "src": "3-D CFD"}
     rows = []
     for prof, (w, a) in profiles().items():
         t_in = i_tilt * a
@@ -347,7 +364,7 @@ def report(r: dict) -> None:
     print(f"  tip ring Lewis capacity {r['ring_cap']:.3f} N.m (no FOS)")
     print(f"  inlet mass flow {r['mdot']:.3f} kg/s (hover)")
     for tag, a in r["aero"].items():
-        print(f"  aero [{tag}]: momentum-drag N {a['N']:.2f} N "
+        print(f"  aero [{tag}] ({a['src']}): normal force {a['N']:.2f} N "
               f"({a['N'] * LBF_PER_N:.2f} lbf) -> tilt-axis {a['T_tilt']:.3f}"
               f" N.m, bearing couple {a['M_brg']:.3f} N.m; body drag "
               f"{a['F_body']:.2f} N (limit loads)")
@@ -419,8 +436,8 @@ def main(argv: list[str] | None = None) -> int:
     print("\nRESULT, 64 mm, combined ultimate with BOUNDING aero:")
     for label, val, good in checks:
         print(f"  {label:<44} {val:5.2f}  {'PASS' if good else 'FAIL'}")
-    print("  (rotor spin data ASSUMED; bounding aero is an ASSUMED 2 x "
-          "corridor crossflow until the 3-D CFD bounds it)")
+    print("  (rotor spin data ASSUMED; 64 mm aero loads are 3-D CFD at the "
+          "corridor speed and at an ASSUMED 2 x corridor bounding speed)")
     ok = all(good for _, _, good in checks)
     return 0 if ok else 2
 
