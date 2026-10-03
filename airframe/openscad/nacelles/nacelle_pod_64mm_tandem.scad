@@ -49,7 +49,6 @@
 //     mount sleeves themselves (this file only cuts the bores they slide into).
 //   • nacelle_nozzle_iris.scad at 64 mm (plan U11) — NOZZLE_RING_OD below is a
 //     proportional placeholder for the pocket only.
-//   • PIVOT_Z — unchanged 107.5 pending tools/nacelle_mass_cg.py (plan U5).
 //   • ESC cooling discharge ports (ESC_BLEED_Z) now open onto the stator
 //     sleeve wall, not the duct; the sleeve needs matching ports (plan U9/U10).
 //   • nacelle_esc_cover.scad still builds from the unscaled skin grid.
@@ -153,6 +152,24 @@ INTAKE_BLEND_R_END  = 27.0 * P64_K;   // = 34.56 mm, buried in the duct wall
 CAVITY_VENT_R   = 30.0 * P64_K;   // = 38.4 mm, inside the scaled annulus
 ESC_MOUNT_R     = P64_BORE_R + P64_WALL + 0.2 + P64_WALL;   // = 37.2 mm
                   // = SLEEVE_BORE_R + CAVITY_DUCT_WALL (pod assert ties them)
+
+// ── Tilt pivot = rotating-assembly CG (plan 003 KTD7; owner 2026-10-03) ─────
+// tools/nacelle_mass_cg_64.py is the authority.  First pass on the rendered
+// pod: 98.6 mm (3.88 in), 8.9 mm forward of the 50 mm pod's 107.5 — the two
+// 135 g QF2822 motors dominate.  Iterate: re-render, re-run, until the
+// residual is <= 0.25 mm (the same fixed-point bar as nacelle_mass_cg.py).
+PIVOT_Z         = 98.6;
+
+// ── 10 AWG disconnect bay re-sited (forced by the pivot move) ────────────────
+// At PIVOT_Z 98.6 the trunnion ring-gear cavity (ø42.6, Z 77.3-119.9) lands on
+// the 50 mm bay window (Z 75-89) on the same inboard face.  The bay moves
+// between the Z 40 and Z 62 bulkheads.  Depth there: NACELLE_FACE_X_PYLON −
+// bore − wall = 43.52 − 32 − 2.5 = 9.0 mm >= the 6.0 mm pocket (asserted by
+// the pod via ESC_DISC_AVAIL).  Feed run from the spar bore grows 29.5 ->
+// 47.6 mm; harness row updated in tools/nacelle_mass_cg_64.py.
+ESC_DISC_Z      = 51.0;
+ESC_DISC_Z_LO   = 41.5;   // aft face of the Z 40 bulkhead
+ESC_DISC_Z_HI   = 60.5;   // fore face of the Z 62 bulkhead
 
 // ── Module overrides ─────────────────────────────────────────────────────────
 

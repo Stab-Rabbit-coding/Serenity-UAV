@@ -465,6 +465,10 @@ def residuals(log: str) -> dict[str, float]:
     for ln in log.splitlines():
         if "Solving for" in ln and "Initial residual" in ln:
             field = ln.split("Solving for")[1].split(",")[0].strip()
+            if field == "Uz":
+                # Out-of-plane wedge component: ~0 everywhere, so its
+                # normalised residual is meaningless and never decays.
+                continue
             out[field] = float(ln.split("Initial residual =")[1].split(",")[0])
     return out
 

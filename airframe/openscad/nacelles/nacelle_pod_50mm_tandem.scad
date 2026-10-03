@@ -255,6 +255,13 @@ WALL_T          =   2.5;  // [mm] minimum wall thickness — 0.098 in (2.5 mm) C
 RADIAL_K        =   1.0;   // [-] radial scale of the measured shell geometry
 POD_AUTORENDER  = true;    // [bool] render nacelle_pod() at the end of this file
 function radial_k_grid(g) = [ for (row = g) [ for (v = row) v * RADIAL_K ] ];
+// Cavity under a radially scaled skin: move the cavity surface out with the
+// scaled skin so the WALL THICKNESS is unchanged (wall = structure, not
+// silhouette).  cavity' = cavity + (K - 1) * skin.  Identity at K = 1.
+function radial_k_cavity(cav, skin) =
+    [ for (i = [0 : len(cav) - 1])
+        [ for (j = [0 : len(cav[i]) - 1])
+            cav[i][j] + (RADIAL_K - 1) * skin[i][j] ] ];
 
 // ── Outer nacelle dimensions (canonical Serenity shape at 1.25× scale) ───────
 // These are measured from the repaired STL bounding box.  They are provided for
@@ -580,6 +587,8 @@ ESC_DISC_D       =   6.0;  // [mm] bay depth  (X) — 1.10 mm inside the measure
                            //      envelope; 6.0 is the wing's own clear-height
                            //      figure for a disconnect
 ESC_DISC_Z       =  82.0;  // [mm] bay centre, in the measured 7.10 mm window
+ESC_DISC_Z_LO    =  75.0;  // [mm] measured-depth window the bay must stay in —
+ESC_DISC_Z_HI    =  89.0;  //      asserted below; the 64 mm wrapper re-sites it
 ESC_DISC_FILLET  =   3.0;  // [mm] corner radius — a square internal corner in a
                            //      printed part is where the crack starts
 ESC_STUD_N       =   4;    // [count] M3 brass studs (one per 10 AWG feed)
@@ -1309,7 +1318,9 @@ module cavity_duct_wall() {
 // drained.  It is also, finally, the volume the wiring architecture has been
 // drawn against since plan 003.
 module hollow_cavity() {
-    grid = radial_k_grid((NACELLE_SIDE > 0) ? HOLLOW_R_PORT : HOLLOW_R_STBD);
+    grid = (NACELLE_SIDE > 0)
+        ? radial_k_cavity(HOLLOW_R_PORT, HOLLOW_SKIN_PORT)
+        : radial_k_cavity(HOLLOW_R_STBD, HOLLOW_SKIN_STBD);
     difference() {
         grid_solid(grid, HOLLOW_Z, HOLLOW_N_AZ);
         cavity_duct_wall();
@@ -1554,9 +1565,9 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
            "ESC bay is under 40 mm — below the shortest board considered viable");
     assert(ESC_DISC_D < ESC_DISC_AVAIL,
            "disconnect bay is deeper than the MEASURED inboard-face envelope");
-    assert(ESC_DISC_Z - ESC_DISC_H / 2 >= 75.0
-           && ESC_DISC_Z + ESC_DISC_H / 2 <= 89.0,
-           "disconnect bay has left the Z 75-89 window where that depth exists");
+    assert(ESC_DISC_Z - ESC_DISC_H / 2 >= ESC_DISC_Z_LO
+           && ESC_DISC_Z + ESC_DISC_H / 2 <= ESC_DISC_Z_HI,
+           "disconnect bay has left the measured-depth Z window");
 
     union() {
 

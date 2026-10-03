@@ -12628,6 +12628,14 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-10-03-001-feat-nacelle-pour-foam-core-plan.md": {
+      "description": "Goal Capsule",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -15500,6 +15508,14 @@
       ],
       "archived": false
     },
+    "tools/nacelle_mass_cg_64.py": {
+      "description": "nacelle_mass_cg_64.py \u2014 rotating-assembly mass, CG and PIVOT_Z for the 64 mm",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/nacelle_trunnion_fit.py": {
       "description": "nacelle_trunnion_fit.py \u2014 gate for the Rev T4 nacelle tilt joint and sleeves.",
       "tags": [
@@ -15886,6 +15902,7 @@
       "docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md",
       "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
       "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
+      "docs/plans/2026-10-03-001-feat-nacelle-pour-foam-core-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -17529,6 +17546,7 @@
       "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
       "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md",
       "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md",
+      "docs/plans/2026-10-03-001-feat-nacelle-pour-foam-core-plan.md",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
@@ -17590,6 +17608,7 @@
       "tools/nacelle_housing_profile.py",
       "tools/nacelle_intake_cfd.py",
       "tools/nacelle_mass_cg.py",
+      "tools/nacelle_mass_cg_64.py",
       "tools/nacelle_trunnion_fit.py",
       "tools/nozzle_linkage_check.py",
       "tools/nozzle_servo_linkage.py",
@@ -19826,6 +19845,7 @@
       "tools/nacelle_housing_profile.py",
       "tools/nacelle_intake_cfd.py",
       "tools/nacelle_mass_cg.py",
+      "tools/nacelle_mass_cg_64.py",
       "tools/nacelle_trunnion_fit.py",
       "tools/nozzle_linkage_check.py",
       "tools/nozzle_servo_linkage.py",
