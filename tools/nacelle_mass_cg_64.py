@@ -90,6 +90,17 @@ def scaled_sleeve(rel: str, z0_50: float, l_50: float,
     return mass50 * K * l64 / l_50, span64[0] + frac * l64, note
 
 
+# Items ON the tilt axis for the 64 mm joint (CG at PIVOT_Z by construction).
+# 2 x 6704-ZZ (9.8 g) -> 2 x 6804-ZZ, 18 g each [REF-BRG-002]; the trunnion is
+# nacelle_trunnion_64mm.stl measured (9.1 g at RHO_PRINT, 2026-10-03).
+ON_AXIS_64 = [
+    ("Trunnion 64 mm (printed, measured)", 9.1,
+     "nacelle_trunnion_64mm.scad render, 2026-10-03"),
+    ("2 x 6804-ZZ trunnion bearing", 2 * 18.0, "JTEKT 6804-ZZ [REF-BRG-002]"),
+    *[r for r in base.ON_AXIS if not r[0].startswith(("Trunnion", "2 x 6704"))],
+]
+
+
 def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
     """Every off-axis row of the 64 mm rotating assembly."""
     mesh = base.trimesh.load_mesh(pod_stl, force="mesh")
@@ -145,7 +156,7 @@ def roll_up(pod_stl: Path) -> dict:
     rows = rows_64(pod_stl)
     off_m = sum(r[1] for r in rows)
     cg = sum(r[1] * r[2] for r in rows) / off_m
-    on_m = sum(m for _, m, _ in base.ON_AXIS)
+    on_m = sum(m for _, m, _ in ON_AXIS_64)
     total = off_m + on_m
     assert abs((cg * off_m + cg * on_m) / total - cg) < 1e-9
     arm = NOZ_Z + NOZ_REACH - cg
@@ -174,7 +185,7 @@ def main(argv: list[str] | None = None) -> int:
     for label, m, z, _ in res["rows"]:
         print(f"{label:<34}{m * LBM_PER_G:7.3f}{m:8.1f}{z / 25.4:7.2f}"
               f"{z:8.1f}")
-    for label, m, _ in base.ON_AXIS:
+    for label, m, _ in ON_AXIS_64:
         print(f"{label + ' (on axis)':<34}{m * LBM_PER_G:7.3f}{m:8.1f}"
               f"{res['cg_z'] / 25.4:7.2f}{res['cg_z']:8.1f}")
     t = res["total_g"]

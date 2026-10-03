@@ -653,6 +653,15 @@ SPAR_TIP_PROTRUSION   =  13.5;   // [mm] spar stub proud of the wing tip face �
                                  //      SLEEVE-BOUNDED (max 13.5, corrected
                                  //      2026-08-31 from 15.0/15.7 which fouled
                                  //      the stator sleeve by 0.80 mm).
+// 64 mm QX nacelle (owner 2026-10-03, WBS NAC-64-TILT-01): the stub is cut
+// 7.0 mm LONGER so the trunnion can carry 2 x 6804-ZZ (C0 2.45 kN each,
+// JTEKT, REF-BRG-002) in a 15.0 mm stack instead of 2 x 6704-ZZ in 8.0 mm.
+// The spar TIP stays sleeve-bounded; the nacelle axis moves 7.0 mm further
+// outboard of the wing (nacelle_pod_64mm_tandem.scad P64_STUB_EXTRA), so the
+// extra length all lands in the bearing stack.  Tip pad, encoder air gap,
+// magnet and the 14T pinion position relative to the tip face are UNCHANGED.
+// Published requirement for the 64 mm nacelle; 13.5 above stays the 50 mm one.
+SPAR_TIP_PROTRUSION_64N = SPAR_TIP_PROTRUSION + 7.0;   // = 20.5 mm
 
 // ── Wingtip service access (Rev T1) ──────────────────────────────────────────
 // Plan 003 U3 also specified a wingtip "maintenance garage" housing the

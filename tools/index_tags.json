@@ -1373,6 +1373,15 @@
       ],
       "archived": false
     },
+    "airframe/openscad/nacelles/nacelle_trunnion_64mm.scad": {
+      "description": "nacelle_trunnion_64mm.scad \u2014 tilt trunnion for the 64 mm QX nacelle",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/openscad/port_tilt_spar_assembly.scad": {
       "description": "port_tilt_spar_assembly.scad \u2014 ILLUSTRATIVE integration view (2026-07-19)",
       "tags": [
@@ -16724,6 +16733,7 @@
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",
       "airframe/openscad/nacelles/nacelle_trunnion.scad",
+      "airframe/openscad/nacelles/nacelle_trunnion_64mm.scad",
       "airframe/openscad/port_tilt_spar_assembly.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad.backup-2026-07-18",
@@ -17010,6 +17020,7 @@
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",
       "airframe/openscad/nacelles/nacelle_trunnion.scad",
+      "airframe/openscad/nacelles/nacelle_trunnion_64mm.scad",
       "airframe/openscad/port_tilt_spar_assembly.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad.backup-2026-07-18",
@@ -17443,6 +17454,7 @@
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
       "airframe/openscad/nacelles/nacelle_shell_grid.scad",
       "airframe/openscad/nacelles/nacelle_trunnion.scad",
+      "airframe/openscad/nacelles/nacelle_trunnion_64mm.scad",
       "airframe/placeholders/foam/Void_nacelle_pylon_20x80x20mm.stl",
       "airframe/placeholders/propulsion/EDF_120mm_6S_deferred.stl",
       "airframe/placeholders/propulsion/EDF_50mm_6S.stl",

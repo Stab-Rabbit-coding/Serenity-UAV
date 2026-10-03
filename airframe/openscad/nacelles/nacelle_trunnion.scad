@@ -342,7 +342,10 @@ module nacelle_trunnion() {
     }
 }
 
-nacelle_trunnion();
+// Render hook (2026-10-03): nacelle_trunnion_64mm.scad includes this file and
+// sets TRUNNION_AUTORENDER = false.  Identity for this part.
+TRUNNION_AUTORENDER = true;
+if (TRUNNION_AUTORENDER) nacelle_trunnion();
 
 
 // =============================================================================

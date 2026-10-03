@@ -58,8 +58,20 @@ INPUTS — ASSUMED values are labelled; every other value is cited or measured
                    [REF-BRG-001] (distributor-hosted sheet; confirm against the
                    JTEKT catalogue).  The ~907 N implied by WING_ATTACH_INTERFACE
                    §4.3a matches a DYNAMIC rating and is superseded.
-  aero moment      UNQUANTIFIED (TILT-CTL-06), as before — larger frontal area
-                   makes it larger; the OpenFOAM tool can now supply it.
+  aero moment      MOMENTUM DRAG (propulsion.md §1 momentum theory): the fan
+                   turns the duct-normal crossflow v_c axial, so the inlet
+                   carries N = mdot x v_c, mdot = rho A V_bore (hover).  N acts
+                   at the inlet plane: about the TILT axis its arm is PIVOT_Z
+                   (drive load); about the bearing axis its arm is the thrust
+                   arm (bearing couple).  Body crossflow drag on the pod side
+                   area acts near the pivot and is carried as a radial force
+                   only (Cd 1.2, ASSUMED cylinder value).  This is a first-order
+                   screen of TILT-CTL-06, not a 3-D CFD result.
+  bearing sizing   fs = C0 / P0 per JTEKT CAT. B2001E §5-5-3 [REF-BRG-003];
+                   P0 = radial load (no axial load modelled); minimum fs 1.0
+                   (Table 5-10, oscillating with impact); DESIGN TARGET fs >= 2.0
+                   at ultimate load (the catalogue's high-accuracy class, and
+                   about the 50 mm pod's own margin).
 
 Usage:
     /usr/bin/python3 tools/nacelle_tilt_dynamics.py --pod50 STL --pod64 STL
@@ -96,7 +108,18 @@ SIGMA_FLEX, LEWIS_Y, GEAR_FOS = 54.0, 0.40, 4.0
 SHAFT_D = 4.0                # mm
 BRG_SPAN = 4.0               # mm, 2 x 6704ZZ centres (WING_ATTACH §4.3a)
 BRG_C0 = 730.0               # N, JTEKT 6704-ZZ static rating [REF-BRG-001]
+BRG_C0_6804 = 2450.0         # N, JTEKT 6804-ZZ static rating [REF-BRG-002]
+BRG_W_6804, BRG_M_6804 = 7.0, 18.0   # mm width, g mass [REF-BRG-002]
+FS_MIN = 1.0                 # JTEKT CAT. B2001E Table 5-10: oscillating, impact
+FS_TARGET = 2.0              # design target (module docstring)
+RHO_AIR = 1.225              # kg/m^3 ISA sea level
+# Duct-normal crossflow at the inlet, m/s.  Corridor value: max over the
+# V_min(theta) table of V_min sin(theta) (docs/flight_envelope.md §1: 44.4 kt
+# at 20 deg -> 7.8 m/s).  Bound: twice that for gusts / manoeuvre, ASSUMED.
+V_CROSS = {"corridor at V_min (7.8 m/s)": 7.8,
+           "bound 2 x corridor (15.6 m/s, ASSUMED)": 15.6}
 ULT = 1.5                    # ultimate factor (docs/structural_analysis.md)
+BUILT_ARRANGEMENT = 3        # index into ARRANGEMENTS — what the CAD builds
 LEGACY_X6 = 6.0              # TILT_SPAR_ANALYSIS's 4 g x 1.5 multiplier
 
 
@@ -209,7 +232,7 @@ def bodies_64(pod: Path) -> tuple[list[Body], float]:
            Body(*m50.HARNESS[2][:3]), Body(*m50.HARNESS[3][:3])]
     pivot = m64.PIVOT_Z_SET
     bs += [Body(n, mm, pivot, shape="tilt_ring", ri=10.0, ro=20.6)
-           for n, mm, _ in m50.ON_AXIS]
+           for n, mm, _ in m64.ON_AXIS_64]
     return bs, pivot
 
 
@@ -238,13 +261,24 @@ def profiles() -> dict[str, tuple[float, float]]:
 
 
 def analyse(name: str, bodies: list[Body], pivot: float, thrust_n: float,
-            arm_mm: float, h_spin: float) -> dict:
+            arm_mm: float, h_spin: float, bore_r_mm: float,
+            side_area_m2: float) -> dict:
     """All loads for one nacelle."""
     i_tilt = sum(b.i_about(pivot) for b in bodies) * 1e-9     # kg.m^2
     mass = sum(b.m for b in bodies)
     ring_cap = SIGMA_FLEX * RING_FACE * RING_M * LEWIS_Y \
         * (RING_Z * RING_M / 2.0) / 1000.0                     # N.m, no FOS
     m_thrust = thrust_n * ULT * arm_mm / 1000.0                # N.m ultimate
+    # One stream through both fans: total nacelle thrust T = mdot V_e with
+    # V_e = sqrt(T / (rho A)) for an exit area equal to the bore, so
+    # mdot = sqrt(T rho A) (propulsion.md §1).
+    mdot = math.sqrt(thrust_n * RHO_AIR * math.pi * (bore_r_mm / 1000.0) ** 2)
+    aero = {}
+    for tag, vc in V_CROSS.items():
+        n_in = mdot * vc                                       # N, limit
+        f_body = 0.5 * RHO_AIR * vc ** 2 * 1.2 * side_area_m2
+        aero[tag] = {"N": n_in, "T_tilt": n_in * pivot / 1000.0,
+                     "M_brg": n_in * arm_mm / 1000.0, "F_body": f_body}
     rows = []
     for prof, (w, a) in profiles().items():
         t_in = i_tilt * a
@@ -258,9 +292,49 @@ def analyse(name: str, bodies: list[Body], pivot: float, thrust_n: float,
                      "gear_fos": ring_cap / t_in,
                      "M_gyro_ult": m_gyro, "F_brg": f_brg,
                      "brg_frac": f_brg / BRG_C0, "tau_shaft": tau})
+    # Governing combined case: drive envelope + bounding aero, ultimate.
+    env = rows[1]
+    ab = aero["bound 2 x corridor (15.6 m/s, ASSUMED)"]
+    t_drive = env["T_ult"] + ab["T_tilt"] * ULT
+    m_brg = m_thrust + env["M_gyro_ult"] + ab["M_brg"] * ULT
+    f_rad = (thrust_n + ab["N"] + ab["F_body"]) * ULT / 2.0   # per bearing
+    # Pieces for re-evaluating the couple at another bearing-pair centre:
+    # forces that act on the duct axis scale with the arm; gyro does not.
+    f_axis_ult = (thrust_n + ab["N"]) * ULT                   # N on the axis
     return {"name": name, "I": i_tilt, "mass": mass, "pivot": pivot,
             "h_spin": h_spin, "M_thrust_ult": m_thrust, "ring_cap": ring_cap,
-            "rows": rows}
+            "rows": rows, "aero": aero, "mdot": mdot,
+            "T_drive_comb": t_drive, "M_brg_comb": m_brg, "F_rad": f_rad,
+            "F_axis_ult": f_axis_ult, "M_gyro_env": env["M_gyro_ult"],
+            "arm": arm_mm}
+
+
+# Bearing arrangements, all on the 20 mm spar stub (bore fixed by the spar),
+# stacked from the spar tip at TRUNNION_X0.  Stack = bearing length; span =
+# centre-to-centre of the pair; the pair centre sets the thrust arm.
+X0_64 = 28.2 + (34.0 * 1.21 - 34.0)          # = 35.34 mm, spar tip
+ARRANGEMENTS = [
+    ("2 x 6704-ZZ, 8.0 mm stack (50 mm joint carried over)", BRG_C0, 8.0, 4.0),
+    ("2 x 6704-ZZ, magnet nested round the inboard race (10.0 mm)",
+     BRG_C0, 10.0, 4.0),
+    ("2 x 6704-ZZ, 12.5 mm stack (wing pad recessed)", BRG_C0, 12.5, 4.0),
+    ("2 x 6804-ZZ, 14.0 mm stack (BUILT, nacelle_trunnion_64mm)",
+     BRG_C0_6804, 14.0, 7.0),
+    ("2 x 6804-ZZ, 16.0 mm stack", BRG_C0_6804, 16.0, 7.0),
+]
+
+
+def bearing_table(r: dict) -> list[dict]:
+    """fs per arrangement: axis forces x (X0 + stack/2) + gyro, over the span."""
+    out = []
+    for name, c0, stack, width in ARRANGEMENTS:
+        span = stack - width
+        arm = X0_64 + stack / 2.0
+        m = r["F_axis_ult"] * arm / 1000.0 + r["M_gyro_env"]
+        p0 = m / (span / 1000.0) + r["F_rad"]
+        out.append({"name": name, "stack": stack, "span": span, "arm": arm,
+                    "P0": p0, "fs": c0 / p0})
+    return out
 
 
 def report(r: dict) -> None:
@@ -271,6 +345,12 @@ def report(r: dict) -> None:
     print(f"  thrust moment at the trunnion, ultimate {r['M_thrust_ult']:.2f}"
           f" N.m ({r['M_thrust_ult'] * LBF_IN_PER_NM:.1f} lbf.in)")
     print(f"  tip ring Lewis capacity {r['ring_cap']:.3f} N.m (no FOS)")
+    print(f"  inlet mass flow {r['mdot']:.3f} kg/s (hover)")
+    for tag, a in r["aero"].items():
+        print(f"  aero [{tag}]: momentum-drag N {a['N']:.2f} N "
+              f"({a['N'] * LBF_PER_N:.2f} lbf) -> tilt-axis {a['T_tilt']:.3f}"
+              f" N.m, bearing couple {a['M_brg']:.3f} N.m; body drag "
+              f"{a['F_body']:.2f} N (limit loads)")
     for x in r["rows"]:
         print(f"  [{x['profile']}]  peak {math.degrees(x['omega']):.0f} deg/s,"
               f" {x['alpha']:.1f} rad/s^2")
@@ -296,22 +376,52 @@ def main(argv: list[str] | None = None) -> int:
     h64 = 2 * spin(20.0, 10.0, 31.6, 2400.0)
     arm50 = 28.2 + BRG_SPAN          # duct axis -> bearing-pair centre
     arm64 = m64.K * 34.0 - 34.0 + 28.2 + BRG_SPAN
-    r50 = analyse("50 mm (Rev T4)", b50, p50, 21.9, arm50, h50)
-    r64 = analyse("64 mm (adopted)", b64, p64, 2 * 20.9 * 0.90, arm64, h64)
+    r50 = analyse("50 mm (Rev T4)", b50, p50, 21.9, arm50, h50, 25.0,
+                  0.1852 * 0.0833)
+    r64 = analyse("64 mm (adopted)", b64, p64, 2 * 20.9 * 0.90, arm64, h64,
+                  32.0, 0.2093 * 0.1008)
     for r in (r50, r64):
         report(r)
     print(f"\n64 / 50: I_tilt x{r64['I'] / r50['I']:.2f}, spin momentum "
           f"x{r64['h_spin'] / r50['h_spin']:.2f}, thrust moment "
           f"x{r64['M_thrust_ult'] / r50['M_thrust_ult']:.2f}")
 
-    ok = True
-    for x in r64["rows"]:
-        if x["profile"].startswith("legacy"):
-            continue
-        ok &= x["drive_margin"] >= 1.0 and x["gear_fos"] >= GEAR_FOS \
-            and x["brg_frac"] <= 1.0
-    print("\nRESULT (64 mm, achievable profiles):", "PASS" if ok else "FAIL",
-          "- rotor spin data ASSUMED; bearing C0 per REF-BRG-001")
+    print("\nCOMBINED (drive envelope + aero, ultimate):")
+    for r in (r50, r64):
+        ac = r["aero"]["corridor at V_min (7.8 m/s)"]
+        t_c = r["rows"][1]["T_ult"] + ac["T_tilt"] * ULT
+        print(f"  {r['name']} corridor aero: tilt-drive {t_c:.3f} N.m -> "
+              f"margin {T_DRIVE_LIMIT / t_c:.1f}x; tip-gear FOS "
+              f"{r['ring_cap'] / (t_c / ULT):.1f}")
+        print(f"  {r['name']} BOUNDING aero: tilt-drive {r['T_drive_comb']:.3f} N.m "
+              f"-> margin {T_DRIVE_LIMIT / r['T_drive_comb']:.1f}x; tip-gear "
+              f"FOS {r['ring_cap'] / (r['T_drive_comb'] / ULT):.1f}; bearing "
+              f"couple {r['M_brg_comb']:.2f} N.m + radial {r['F_rad']:.0f} N "
+              "per bearing")
+    print(f"\nBearing arrangements, 64 mm combined ultimate (fs = C0/P0; "
+          f"min {FS_MIN}, target {FS_TARGET}) [REF-BRG-001/002/003]:")
+    table = bearing_table(r64)
+    for t in table:
+        flag = ("MEETS TARGET" if t["fs"] >= FS_TARGET else
+                "above min only" if t["fs"] >= FS_MIN else "BELOW MIN")
+        print(f"  {t['name']:<58} span {t['span']:4.1f} arm {t['arm']:4.1f} mm"
+              f"  P0 {t['P0']:5.0f}"
+              f" N  fs {t['fs']:4.2f}  {flag}")
+    built = table[BUILT_ARRANGEMENT]
+    drive = T_DRIVE_LIMIT / r64["T_drive_comb"]
+    gear = r64["ring_cap"] / (r64["T_drive_comb"] / ULT)
+    checks = [("tilt drive (>= 1.0x)", drive, drive >= 1.0),
+              (f"tip ring gear, Lewis (>= {GEAR_FOS:.0f})", gear,
+               gear >= GEAR_FOS),
+              ("trunnion bearings fs, " + built["name"][:11]
+               + f" (>= {FS_TARGET:.0f})", built["fs"],
+               built["fs"] >= FS_TARGET)]
+    print("\nRESULT, 64 mm, combined ultimate with BOUNDING aero:")
+    for label, val, good in checks:
+        print(f"  {label:<44} {val:5.2f}  {'PASS' if good else 'FAIL'}")
+    print("  (rotor spin data ASSUMED; bounding aero is an ASSUMED 2 x "
+          "corridor crossflow until the 3-D CFD bounds it)")
+    ok = all(good for _, _, good in checks)
     return 0 if ok else 2
 
 

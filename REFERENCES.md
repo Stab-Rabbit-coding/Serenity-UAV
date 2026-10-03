@@ -2305,23 +2305,49 @@ the spar's run, not this seat).
 
 ---
 
-### REF-BRG-001: JTEKT (Koyo) — 6704-ZZ deep groove ball bearing, single row (product sheet)
+### REF-BRG-001: JTEKT (Koyo) — 6704 ZZ deep groove ball bearing, single row, product detail
 
 | Field | Value |
 | --- | --- |
-| **Manufacturer / brand** | JTEKT Corporation (Koyo brand) |
-| **Document** | Product technical sheet "6704-ZZ-JTEKT", served by distributor 123bearing (France) |
-| **URL** | <https://www.123bearing.com/bearing-housing/deep-groove-bearing/single-row/6704-zz-jtekt> (PDF: <https://123bearing.com/getTechnicalSheetPdf/226748>) |
+| **Manufacturer** | JTEKT Corporation (Koyo brand) |
+| **URL** | <https://koyo.jtekt.co.jp/en/products/detail/?pno=6704+ZZ> (manufacturer page). Corroborated by distributor sheet <https://123bearing.com/getTechnicalSheetPdf/226748>. |
 | **Retrieved** | 2026-10-03, by Claude Opus 5.5 |
-| **Values applied** | d 20 mm, D 27 mm, B 4 mm, shields both sides; **dynamic load 1.3 kN, static load 0.73 kN** |
-| **Provenance caveat** | A distributor-hosted sheet for a manufacturer part, not JTEKT's own catalogue page. Confirm against the JTEKT/Koyo catalogue before release. The bearing actually purchased must be this part or carry an equal or higher C0. |
+| **Values applied** | d 20 mm, D 27 mm, B 4 mm; Cr 1.30 kN; **C0r 0.730 kN**; limiting speed (grease) 23,000 min⁻¹; mass 0.006 kg |
 
-**Correction recorded:** `docs/WING_ATTACH_INTERFACE.md` §4.3a said "254 N — 28 % of a 6704's
-static rating", which implies about 907 N. 907 N (204 lbf) matches the *dynamic* rating some
-distributors list. Against this sourced 730 N static rating the 50 mm figure is 35 %.
+**Correction recorded:** `docs/WING_ATTACH_INTERFACE.md` §4.3a implied a static rating of about
+907 N; that figure matches a *dynamic* rating some distributors list.
 
-**Where it is applied:** `tools/nacelle_tilt_dynamics.py` (BRG_C0),
-`airframe/wings-nacelles/WBS.md` NAC-64-TILT-01, `docs/NACELLE_64MM_VERIFICATION.md` §5b.
+**Where it is applied:** `tools/nacelle_tilt_dynamics.py` (BRG_C0, the 50 mm joint and the
+rejected 64 mm arrangements), `docs/WING_ATTACH_INTERFACE.md` §4.3a,
+`airframe/wings-nacelles/WBS.md` NAC-64-TILT-01.
+
+### REF-BRG-002: JTEKT (Koyo) — 6804 ZZ deep groove ball bearing, single row, product detail
+
+| Field | Value |
+| --- | --- |
+| **Manufacturer** | JTEKT Corporation (Koyo brand) |
+| **URL** | <https://koyo.jtekt.co.jp/en/products/detail/?pno=6804+ZZ> |
+| **Retrieved** | 2026-10-03, by Claude Opus 5.5 |
+| **Values applied** | d 20 mm, D 32 mm, B 7 mm; Cr 5.00 kN; **C0r 2.45 kN**; limiting speed (grease) 21,000 min⁻¹; mass 0.018 kg |
+
+**Where it is applied:** `airframe/openscad/nacelles/nacelle_trunnion_64mm.scad` (seat Ø32,
+stack 2 × 7 mm), `tools/nacelle_tilt_dynamics.py` (BRG_C0_6804), `tools/nacelle_mass_cg_64.py`
+(ON_AXIS_64), `airframe/openscad/wings/wings_s1223_revo.scad` SPAR_TIP_PROTRUSION_64N,
+`airframe/wings-nacelles/WBS.md` NAC-64-TILT-01.
+
+### REF-BRG-003: JTEKT — Ball & Roller Bearings, CAT. NO. B2001E (general catalogue), §5-5 "Basic static load rating and static equivalent load"
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | JTEKT Corporation |
+| **URL** | <https://koyo.jtekt.co.jp/en/support/bearing-knowledge/pdf/catb2001-8_a.pdf> |
+| **Retrieved** | 2026-10-03 (84-page PDF, read by Claude Opus 5.5) |
+| **Sections applied** | §5-5-3 "Safety coefficient", eq. fs = C0 / P0, and **Table 5-10** (p. A43). For ball bearings: with rotation, high accuracy required fs ≥ 2; with rotation and impact fs ≥ 1.5; without rotation (occasional oscillation), normal fs ≥ 0.5, with impact or uneven load distribution fs ≥ 1. |
+
+**Applied as:** the trunnion oscillates and sees impact, so the catalogue minimum is fs ≥ 1. The
+design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class). Used in
+`tools/nacelle_tilt_dynamics.py` (FS_MIN, FS_TARGET) and
+`airframe/openscad/nacelles/nacelle_trunnion_64mm.scad`.
 
 ### REF-ACT-001: Pololu — 20D mm Metal Gearmotors (datasheet + dimension diagram)
 

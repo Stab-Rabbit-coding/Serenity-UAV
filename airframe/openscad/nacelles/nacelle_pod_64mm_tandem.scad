@@ -40,6 +40,9 @@
 //               intake bell as a proper aerodynamic design").  See below.
 //   2026-10-03  70 A ESCs (WBS NAC-64-ESC-70A) — bay fit open until a part
 //               is selected.
+//   2026-10-03  Trunnion bearings 2 x 6704-ZZ -> 2 x 6804-ZZ: spar stub +7.0 mm
+//               (20.5), joint collar +7.0 mm off the pylon face (WBS
+//               NAC-64-TILT-01, nacelle_trunnion_64mm.scad).
 //
 // INTAKE LIP — two quarter-ellipses meeting at the highlight
 // ----------------------------------------------------------
@@ -107,6 +110,11 @@ P64_BORE_R      = 32.0;   // [mm] 64 mm (2.52 in) nominal flow diameter.  The
 P64_WALL        =  2.5;   // [mm] duct wall = the 50 mm pod's WALL_T
 P64_FACE_PYLON  = 34.0 * P64_K;          // = 41.14 mm pylon face |X|
 P64_AXIS_SHIFT  = P64_FACE_PYLON - 34.0; // = 7.14 mm (0.28 in) per side
+// Trunnion bearing upgrade (owner 2026-10-03, WBS NAC-64-TILT-01): the spar
+// stub is 7.0 mm longer and the joint stands 7.0 mm further off the pylon
+// face, so the trunnion carries 2 x 6804-ZZ in a 15 mm stack.  See
+// nacelle_trunnion_64mm.scad and wings_s1223_revo.scad SPAR_TIP_PROTRUSION_64N.
+P64_STUB_EXTRA  = 7.0;
 
 // Intake lip (header).
 P64_LIP_A       = 16.0;   // [mm] internal ellipse, axial semi-axis (2:1)
@@ -159,10 +167,20 @@ NACELLE_FACE_X_FAR   = 38.0 * P64_K;      // = 45.98 mm
 
 // ── Wing interface hold (owner, 2026-10-03) ──────────────────────────────────
 TRUNNION_X0     = 28.2 + P64_AXIS_SHIFT;   // = 35.34 mm
-WING_TIP_FACE_X = 41.7 + P64_AXIS_SHIFT;   // = 48.84 mm
+WING_TIP_FACE_X = 41.7 + P64_AXIS_SHIFT + P64_STUB_EXTRA;   // = 55.84 mm
 COLLAR_FAIR_X   = 22.0 + P64_AXIS_SHIFT;   // = 29.14 mm
 CAVITY_TRUNNION_X0 = 20.0 + P64_AXIS_SHIFT;
-CAVITY_TRUNNION_X1 = 40.0 + P64_AXIS_SHIFT;
+CAVITY_TRUNNION_X1 = 40.0 + P64_AXIS_SHIFT + P64_STUB_EXTRA;
+// Collar for the 6804 trunnion (mirrors nacelle_trunnion_64mm.scad): register
+// bore Ø38.1 H7 from the trunnion's REG_Z0 (12.5) to its flange face (14.0);
+// collar OD = trunnion flange OD 54; 3 x M3 on Ø45.5.  The register is a
+// 1.5 mm pilot; the bolted, bonded flange reacts the moment (as at 50 mm).
+TRUNNION_REG_D  = 38.1;
+COLLAR_X0       = 28.2 + P64_AXIS_SHIFT + 12.5;   // = 47.84
+COLLAR_X1       = 28.2 + P64_AXIS_SHIFT + 14.0;   // = 49.34
+COLLAR_OD       = 54.0;
+COLLAR_BOLT_D   = 45.5;
+COLLAR_FAIR_D   = 70.0;
 
 // ── Axial stack (header table) ───────────────────────────────────────────────
 // INLET_BELL_L / _FLARE now describe the lip, for cavity_duct_wall().
@@ -325,7 +343,9 @@ assert(EDF1_Z_ENTRY >= P64_LIP_A,
 assert(MOTOR_BOLT_R + M3_CLEAR_D / 2 < R_HUB,
        "QF2822 bolt circle does not land on the stator hub");
 assert(abs(NACELLE_FACE_X_PYLON - TRUNNION_X0 - (34.0 - 28.2)) < 1e-9,
-       "pylon-face-to-trunnion distance changed — wing interface not held");
+       "pylon-face-to-spar-tip distance changed — sleeve bound not held");
+assert(abs(WING_TIP_FACE_X - TRUNNION_X0 - 20.5) < 1e-9,
+       "spar stub != wings_s1223_revo.scad SPAR_TIP_PROTRUSION_64N (20.5 mm)");
 assert(NACELLE_FACE_X_PYLON - EDF_BORE_R - WALL_T >= 6.5,
        "pylon wall too thin for the 6.0 mm disconnect pocket + 0.5 material");
 assert(abs(PIVOT_Z - ESC_DISC_Z) > TRUNNION_CAV_D / 2 + ESC_DISC_H / 2,
