@@ -158,7 +158,7 @@ ESC_MOUNT_R     = P64_BORE_R + P64_WALL + 0.2 + P64_WALL;   // = 37.2 mm
 // pod: 98.6 mm (3.88 in), 8.9 mm forward of the 50 mm pod's 107.5 — the two
 // 135 g QF2822 motors dominate.  Iterate: re-render, re-run, until the
 // residual is <= 0.25 mm (the same fixed-point bar as nacelle_mass_cg.py).
-PIVOT_Z         = 98.6;
+PIVOT_Z         = 98.3;   // iteration 2 (iteration 1: 98.6 -> measured 98.31)
 
 // ── 10 AWG disconnect bay re-sited (forced by the pivot move) ────────────────
 // At PIVOT_Z 98.6 the trunnion ring-gear cavity (ø42.6, Z 77.3-119.9) lands on

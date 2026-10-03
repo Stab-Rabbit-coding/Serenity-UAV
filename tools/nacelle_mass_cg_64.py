@@ -61,7 +61,7 @@ STATOR_SLV = (29.19, 90.69)
 AFT_SLV = (90.69, 166.25)
 ESC_BAY_CG = 95.0        # bay Z 74-116 unchanged in the wrapper
 DISC_BAY_Z = 51.0        # 10 AWG disconnect bay, re-sited in the wrapper
-PIVOT_Z_SET = 98.6       # PIVOT_Z currently set in the 64 mm wrapper
+PIVOT_Z_SET = 98.3       # PIVOT_Z currently set in the 64 mm wrapper
 
 
 def mid(span: tuple[float, float]) -> float:
