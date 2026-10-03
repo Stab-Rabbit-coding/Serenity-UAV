@@ -2023,6 +2023,20 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         to mount-face length, shaft protrusion, rotor hub axial length and the
         bolt-circle datum; re-run `tools/nacelle_axial_fit.py` with the measured
         values before any adjudication is finalised.
+    - [ ] **NAC-64-GEOM-01 — stator-as-mount sleeves.** Re-derive
+        `edf_stator_sleeve.scad` (Z 31.2–92.7, motor-1 front plate + vanes over
+        the ø27.8 can) and `edf_aft_spider_sleeve.scad` (Z 92.7–166.25, rotor-2
+        bore + motor-2 front plate) against `nacelle_pod_64mm_tandem.scad`.
+    - [ ] **NAC-64-GEOM-02 — ESC cooling ports.** ESC_BLEED_Z now opens onto the
+        stator-sleeve wall, not the duct; add matching sleeve ports or move them.
+    - [ ] **NAC-64-GEOM-03 — ESC cover from the scaled skin.** `nacelle_esc_cover.scad`
+        still reads the unscaled grid; give it the RADIAL_K hook.
+    - [ ] **NAC-64-GEOM-04 — hull-frame bake for the 9.52 mm (0.37 in) axis shift**
+        (owner 2026-10-03: wing interface held at the pylon face; span +0.75 in
+        (19 mm)). Update `tools/bake_hull_frame.py` and the assembly placements.
+    - [ ] **NAC-64-GEOM-05 — gates on the 64 mm pod.** Port `nacelle_trunnion_fit.py`,
+        `nacelle_esc_bay_fit.py` and `nacelle_mass_cg.py` (PIVOT_Z, plan U5) to
+        read the 64 mm wrapper; PIVOT_Z 107.5 is carried unchanged until then.
 - [x] **LG-HOVER-01 — hover ground clearance — RESOLVED 2026-08-29.** Closed by
     NAC-MOULD-01 + the station/pivot move: **+9.8 mm on the existing 1.5 in
     gear**, owner-accepted. No landing-gear change is forced; the 3.0 in variant
