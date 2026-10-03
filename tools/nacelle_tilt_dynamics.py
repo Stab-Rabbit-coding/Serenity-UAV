@@ -54,10 +54,10 @@ INPUTS — ASSUMED values are labelled; every other value is cited or measured
   thrust           64 mm: 2 x 20.9 N x 0.90 tandem factor [REF-EDF-003, plan
                    screen]; 50 mm: 21.9 N (WING_ATTACH_INTERFACE §4.3a); x1.5
                    ultimate.  Thrust arm = duct axis to bearing-pair centre.
-  bearing rating   6704ZZ static rating ~907 N, back-computed from
-                   WING_ATTACH_INTERFACE §4.3a ("254 N — 28 % of a 6704's
-                   static rating").  NOT catalogued in REFERENCES.md — REQUIRES
-                   VERIFICATION against a manufacturer datasheet.
+  bearing rating   6704-ZZ static rating C0 = 730 N, dynamic 1.3 kN, JTEKT
+                   [REF-BRG-001] (distributor-hosted sheet; confirm against the
+                   JTEKT catalogue).  The ~907 N implied by WING_ATTACH_INTERFACE
+                   §4.3a matches a DYNAMIC rating and is superseded.
   aero moment      UNQUANTIFIED (TILT-CTL-06), as before — larger frontal area
                    makes it larger; the OpenFOAM tool can now supply it.
 
@@ -95,7 +95,7 @@ RING_M, RING_Z, RING_FACE = 0.8, 50, 5.0      # module, teeth, face width mm
 SIGMA_FLEX, LEWIS_Y, GEAR_FOS = 54.0, 0.40, 4.0
 SHAFT_D = 4.0                # mm
 BRG_SPAN = 4.0               # mm, 2 x 6704ZZ centres (WING_ATTACH §4.3a)
-BRG_C0 = 254.0 / 0.28        # N, REQUIRES VERIFICATION (module docstring)
+BRG_C0 = 730.0               # N, JTEKT 6704-ZZ static rating [REF-BRG-001]
 ULT = 1.5                    # ultimate factor (docs/structural_analysis.md)
 LEGACY_X6 = 6.0              # TILT_SPAR_ANALYSIS's 4 g x 1.5 multiplier
 
@@ -280,7 +280,7 @@ def report(r: dict) -> None:
               f"{x['gear_fos']:.1f}")
         print(f"     gyro moment (ult) {x['M_gyro_ult']:.3f} N.m -> per-bearing"
               f" {x['F_brg']:.0f} N ({x['F_brg'] * LBF_PER_N:.0f} lbf) = "
-              f"{100 * x['brg_frac']:.0f} % of C0 (VERIFY); shaft tau "
+              f"{100 * x['brg_frac']:.0f} % of C0, s0 {1 / x['brg_frac']:.2f}; shaft tau "
               f"{x['tau_shaft']:.1f} MPa")
 
 
@@ -311,7 +311,7 @@ def main(argv: list[str] | None = None) -> int:
         ok &= x["drive_margin"] >= 1.0 and x["gear_fos"] >= GEAR_FOS \
             and x["brg_frac"] <= 1.0
     print("\nRESULT (64 mm, achievable profiles):", "PASS" if ok else "FAIL",
-          "- bearing C0 and rotor spin data REQUIRE VERIFICATION")
+          "- rotor spin data ASSUMED; bearing C0 per REF-BRG-001")
     return 0 if ok else 2
 
 

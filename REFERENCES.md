@@ -2305,6 +2305,24 @@ the spar's run, not this seat).
 
 ---
 
+### REF-BRG-001: JTEKT (Koyo) — 6704-ZZ deep groove ball bearing, single row (product sheet)
+
+| Field | Value |
+| --- | --- |
+| **Manufacturer / brand** | JTEKT Corporation (Koyo brand) |
+| **Document** | Product technical sheet "6704-ZZ-JTEKT", served by distributor 123bearing (France) |
+| **URL** | <https://www.123bearing.com/bearing-housing/deep-groove-bearing/single-row/6704-zz-jtekt> (PDF: <https://123bearing.com/getTechnicalSheetPdf/226748>) |
+| **Retrieved** | 2026-10-03, by Claude Opus 5.5 |
+| **Values applied** | d 20 mm, D 27 mm, B 4 mm, shields both sides; **dynamic load 1.3 kN, static load 0.73 kN** |
+| **Provenance caveat** | A distributor-hosted sheet for a manufacturer part, not JTEKT's own catalogue page. Confirm against the JTEKT/Koyo catalogue before release. The bearing actually purchased must be this part or carry an equal or higher C0. |
+
+**Correction recorded:** `docs/WING_ATTACH_INTERFACE.md` §4.3a said "254 N — 28 % of a 6704's
+static rating", which implies about 907 N. 907 N (204 lbf) matches the *dynamic* rating some
+distributors list. Against this sourced 730 N static rating the 50 mm figure is 35 %.
+
+**Where it is applied:** `tools/nacelle_tilt_dynamics.py` (BRG_C0),
+`airframe/wings-nacelles/WBS.md` NAC-64-TILT-01, `docs/NACELLE_64MM_VERIFICATION.md` §5b.
+
 ### REF-ACT-001: Pololu — 20D mm Metal Gearmotors (datasheet + dimension diagram)
 
 | Field | Value |

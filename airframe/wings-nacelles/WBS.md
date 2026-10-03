@@ -2094,10 +2094,11 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         ring Lewis FOS 12, Ø4 shaft 5.1 MPa — all pass. **Trunnion bearings are
         the critical item:** thrust moment (2.22 N.m ult; thrust x2, arm +7.14 mm)
         plus gyroscopic moment (0.39 N.m ult; two co-rotating rotors, 0.104
-        N.m.s) across the 4.0 mm 6704ZZ span = **653 N (147 lbf) per bearing, 72 %
-        of the ~907 N static rating**, which is back-computed from WING_ATTACH
-        §4.3a and NOT catalogued. Actions: (a) catalogue the 6704ZZ datasheet
-        (C0, Cr, limiting speed) in REFERENCES.md and re-run; (b) weigh/tach a
+        N.m.s) across the 4.0 mm 6704ZZ span = **653 N (147 lbf) per bearing = 89 % of
+        C0 730 N (JTEKT 6704-ZZ, REF-BRG-001), static safety factor 1.12** at
+        ultimate (50 mm pod: 42 %, s0 2.40). The ~907 N "static rating" implied by
+        WING_ATTACH §4.3a is a DYNAMIC rating — corrected there. Actions:
+        (a) confirm C0 on the JTEKT catalogue and the purchased part; (b) weigh/tach a
         QX rotor (spin momentum is ASSUMED); (c) quantify the tilt-axis aero
         moment with tools/nacelle_intake_cfd.py (TILT-CTL-06); (d) if the
         verified static safety factor is too low, owner decision on a wider
