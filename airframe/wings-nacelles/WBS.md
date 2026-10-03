@@ -2001,6 +2001,22 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     releasing flight geometry; the nominal 64 mm flow diameter is not a rotor
     clearance measurement. Preserve the nacelle axial stations and length
     unless the owner separately adjudicates a failed measured fit.
+    - [ ] **NAC-64-FIT-01 — U9 axial-fit gate FAILS on drawing values (2026-10-03,
+        Claude Opus 5.5).** `tools/nacelle_axial_fit.py` reads the stations from
+        the pod SCAD and lays two QF2822 stages from EDF1_Z_ENTRY 1.08 in (27.5 mm)
+        to NOZZLE_RING_Z 6.55 in (166.25 mm). The QF2822 body is 2.28 in (58.0 mm)
+        to its mount face (8-4.jpg) against about 1.06 in (27 mm) for the 50 mm
+        stack's 2627 motor, and it hangs aft of the mount. Margin is −0.30 in
+        (−7.7 mm) in the most favourable reading (stator front plate as the
+        mount, rotor hub = 10.7 mm shaft protrusion) and −1.35 in (−34.2 mm)
+        with the current separate 8 mm spiders. **STOP per plan Goal Capsule /
+        R11:** no 64 mm geometry (U3 resize, U4, U11) is released until the owner
+        adjudicates length, motor, or nozzle architecture. Dimensions stay
+        VERIFY until a physical unit is measured (U9 step 3).
+    - [ ] **NAC-64-FIT-02 — measure a physical QF2822 and rotor.** Record rear-cap
+        to mount-face length, shaft protrusion, rotor hub axial length and the
+        bolt-circle datum; re-run `tools/nacelle_axial_fit.py` with the measured
+        values before any adjudication is finalised.
 - [x] **LG-HOVER-01 — hover ground clearance — RESOLVED 2026-08-29.** Closed by
     NAC-MOULD-01 + the station/pivot move: **+9.8 mm on the existing 1.5 in
     gear**, owner-accepted. No landing-gear change is forced; the 3.0 in variant

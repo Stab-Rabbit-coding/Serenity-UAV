@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-01",
+  "generated": "2026-10-03",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -15423,6 +15423,14 @@
       ],
       "archived": false
     },
+    "tools/nacelle_axial_fit.py": {
+      "description": "nacelle_axial_fit.py \u2014 U9 axial-fit gate for the 64 mm QX-Motor tandem nacelle.",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/nacelle_esc_bay_fit.py": {
       "description": "nacelle_esc_bay_fit.py \u2014 site the hinged Open-Secure-ESC boards in the nacelle.",
       "tags": [
@@ -15545,6 +15553,14 @@
       "description": "Size a hollow spar bore against the conductor bundle it has to swallow.",
       "tags": [
         "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_nacelle_axial_fit.py": {
+      "description": "Tests for tools/nacelle_axial_fit.py (plan 2026-09-28-001 U9).",
+      "tags": [
+        "build-tooling",
+        "propulsion"
       ],
       "archived": false
     },
@@ -17546,6 +17562,7 @@
       "graphical-build-guide/build_guide_07_edf_install.svg",
       "graphical-build-guide/build_guide_08_nozzle_gear.svg",
       "graphical-build-guide/pngs/17_closeup_nacelle.png",
+      "tools/nacelle_axial_fit.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",
@@ -17555,6 +17572,7 @@
       "tools/nacelle_trunnion_fit.py",
       "tools/nozzle_linkage_check.py",
       "tools/nozzle_servo_linkage.py",
+      "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nozzle_servo_linkage.py"
     ],
@@ -19779,6 +19797,7 @@
       "tools/landing_gear_wing_clearance.py",
       "tools/middle_layout_fit.py",
       "tools/mirror_claude_memory.py",
+      "tools/nacelle_axial_fit.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",
@@ -19794,6 +19813,7 @@
       "tools/precommit_sanitize.py",
       "tools/purge_stale_fcstd_objects.py",
       "tools/spar_bundle_fit.py",
+      "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tilt_actuator_options.py",
