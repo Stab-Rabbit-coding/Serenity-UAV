@@ -15532,6 +15532,14 @@
       ],
       "archived": false
     },
+    "tools/nacelle_tilt_dynamics.py": {
+      "description": "nacelle_tilt_dynamics.py \u2014 tilt-axis inertia, gyroscopic moment and drive /",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/nacelle_trunnion_fit.py": {
       "description": "nacelle_trunnion_fit.py \u2014 gate for the Rev T4 nacelle tilt joint and sleeves.",
       "tags": [
@@ -17628,6 +17636,7 @@
       "tools/nacelle_intake_cfd.py",
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_mass_cg_64.py",
+      "tools/nacelle_tilt_dynamics.py",
       "tools/nacelle_trunnion_fit.py",
       "tools/nozzle_linkage_check.py",
       "tools/nozzle_servo_linkage.py",
@@ -19866,6 +19875,7 @@
       "tools/nacelle_intake_cfd.py",
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_mass_cg_64.py",
+      "tools/nacelle_tilt_dynamics.py",
       "tools/nacelle_trunnion_fit.py",
       "tools/nozzle_linkage_check.py",
       "tools/nozzle_servo_linkage.py",

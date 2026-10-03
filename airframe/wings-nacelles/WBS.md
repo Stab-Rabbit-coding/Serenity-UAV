@@ -2083,6 +2083,26 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         wall-pressure taps on a printed lip + duct section with a QX rotor,
         against the CFD trend (plan U12). Also run a cruise-condition CFD case
         (spillage drag of the 42.5 mm ring).
+    - [ ] **NAC-64-TILT-01 — tilt-axis inertia and trunnion loads (owner
+        2026-10-03: "recalculate the moments of inertia for the larger nacelles
+        ... the trunnion, bearings, gears, driveshaft and tilt servos will have
+        to take the load").** `tools/nacelle_tilt_dynamics.py` (Claude Opus
+        5.5): rigid-body I_tilt 2.73e-3 kg.m^2 (9.34 lbm.in^2), x2.02 the 50 mm
+        pod; the old 7.19e-4 point-mass figure (TILT_SPAR_ANALYSIS §2.1.2)
+        understated even the 50 mm pod ~1.9x. At the built drive's envelope
+        (144 deg/s, 52.6 rad/s^2, x1.5 ultimate): drive margin 8.4x, 50T m0.8 tip
+        ring Lewis FOS 12, Ø4 shaft 5.1 MPa — all pass. **Trunnion bearings are
+        the critical item:** thrust moment (2.22 N.m ult; thrust x2, arm +7.14 mm)
+        plus gyroscopic moment (0.39 N.m ult; two co-rotating rotors, 0.104
+        N.m.s) across the 4.0 mm 6704ZZ span = **653 N (147 lbf) per bearing, 72 %
+        of the ~907 N static rating**, which is back-computed from WING_ATTACH
+        §4.3a and NOT catalogued. Actions: (a) catalogue the 6704ZZ datasheet
+        (C0, Cr, limiting speed) in REFERENCES.md and re-run; (b) weigh/tach a
+        QX rotor (spin momentum is ASSUMED); (c) quantify the tilt-axis aero
+        moment with tools/nacelle_intake_cfd.py (TILT-CTL-06); (d) if the
+        verified static safety factor is too low, owner decision on a wider
+        bearing span or a different bearing — the 9.0 mm stub space is held by
+        the wing interface.
 - [x] **LG-HOVER-01 — hover ground clearance — RESOLVED 2026-08-29.** Closed by
     NAC-MOULD-01 + the station/pivot move: **+9.8 mm on the existing 1.5 in
     gear**, owner-accepted. No landing-gear change is forced; the 3.0 in variant
