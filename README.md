@@ -237,8 +237,9 @@ Licensed by Steve Griffing, PE(CSE), CISSP-ISSEP, CPP, according to what each fi
 - **Code whose end result is software or firmware** (firmware, device trees, ground
   software, analysis/verification/CI tools) — **MIT** (SPDX `MIT`). Full text:
   `LICENSES/MIT`.
-- **Documents** (Markdown, text, specifications, SVG/figures, build guides) —
-  **CC BY-SA 4.0** (SPDX `CC-BY-SA-4.0`). Full text: `LICENSES/CC-BY-SA 4.0`.
+- **Documents** (Markdown, text, specifications, build guides, and all images — SVG,
+  PNG, JPG, WebP, including renders produced by hardware tools) — **CC BY-SA 4.0**
+  (SPDX `CC-BY-SA-4.0`). Full text: `LICENSES/CC-BY-SA 4.0`.
 
 See `docs/attribution_and_licensing.md` for the full policy, the per-subsystem `LICENSE`
 federation map, and the CERN-OHL-W "Available Component" treatment of upstream

@@ -102,6 +102,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-LIC-001: CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)](#ref-lic-001-cern-open-hardware-licence-version-2--weakly-reciprocal-cern-ohl-w-20)
     - [REF-LIC-002: OSHWA Open Source Hardware Certification](#ref-lic-002-oshwa-open-source-hardware-certification)
     - [REF-LIC-003: The MIT License](#ref-lic-003-the-mit-license)
+    - [REF-LIC-004: REUSE Specification — Version 3.2](#ref-lic-004-reuse-specification--version-32)
 - [Removed / Superseded Citations](#removed--superseded-citations)
 - [Open Standards Verification Items](#open-standards-verification-items)
 
@@ -129,7 +130,7 @@ licensed by **what each file produces** (owner rule 2026-10-04; earlier correcte
   [REF-LIC-001]. Full terms: root [`LICENSE`](LICENSE).
 - **Code whose end result is software or firmware** — **MIT** [REF-LIC-003]. Full terms:
   `LICENSES/MIT`.
-- **Documents** — **Creative Commons Attribution-ShareAlike 4.0 International
+- **Documents, including all images** — **Creative Commons Attribution-ShareAlike 4.0 International
   (CC BY-SA 4.0)** — <https://creativecommons.org/licenses/by-sa/4.0/>. Full terms:
   `LICENSES/CC-BY-SA 4.0`.
 
@@ -2611,6 +2612,19 @@ OSHWA certification submission (open item).
 tools (per-file headers; full text `LICENSES/MIT`).
 
 **Used in:** `LICENSES/MIT`, `tools/LICENSE`, `docs/attribution_and_licensing.md`, `AGENTS.md` §3.
+
+### REF-LIC-004: REUSE Specification — Version 3.2
+
+| Field | Value |
+|---|---|
+| **Publisher** | Free Software Foundation Europe (FSFE), REUSE project |
+| **Official URL** | <https://reuse.software/spec-3.2/> — fetched 2026-10-04 and read |
+| **Applied requirements** | `REUSE.toml` (schema `version = 1`) `[[annotations]]` tables associate `SPDX-License-Identifier` and `SPDX-FileCopyrightText` with path globs; `precedence = "closest"` (the default) lets licensing information inside a file win, with the table as fallback. |
+| **Note** | Used for images, which cannot carry a header line: original images are declared CC-BY-SA-4.0 by folder glob. Globs cannot exclude, so only the project's own image folders are listed and third-party images stay uncovered. |
+
+**Applied to:** `REUSE.toml` (repository root).
+
+**Used in:** `REUSE.toml`, `docs/attribution_and_licensing.md`.
 
 ## Removed / Superseded Citations
 

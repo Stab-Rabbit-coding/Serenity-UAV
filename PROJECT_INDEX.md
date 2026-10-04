@@ -2182,6 +2182,7 @@ README.md — Serenity UAV [documentation, emi-hardening, redundancy-failover, s
 REFERENCES.md — REFERENCES.md — Serenity UAV Standards and Regulatory Reference Catalog [documentation, security, specification]
 REPO_ENFORCEMENT.md — Repository Enforcement Checklist [documentation]
 requirements-dev.txt — Text file
+REUSE.toml — REUSE Specification 3.2 (FSFE, https://reuse.software/spec-3.2/) — machine-
 SECURITY.md — Security Policy [documentation, security]
 TODO.md — Serenity UAV — TODO (Open Work Only) [documentation, emi-hardening, project-tracking, security]
 WBS.md — Serenity UAV — Work Breakdown Structure (Master Index) [documentation, emi-hardening, project-tracking]

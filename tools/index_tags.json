@@ -210,6 +210,11 @@
       ],
       "archived": false
     },
+    "REUSE.toml": {
+      "description": "REUSE Specification 3.2 (FSFE, https://reuse.software/spec-3.2/) \u2014 machine-",
+      "tags": [],
+      "archived": false
+    },
     "SECURITY.md": {
       "description": "Security Policy",
       "tags": [

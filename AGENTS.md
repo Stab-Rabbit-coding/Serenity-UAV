@@ -87,8 +87,11 @@ federation map:
 - **Code whose end result is software or firmware** (firmware, device trees, ground
   software, analysis/verification/CI tools) — **MIT** (SPDX `MIT`). Full text:
   `LICENSES/MIT`.
-- **Documents** (Markdown, text, specifications, SVG/figures, build guides) —
-  **CC BY-SA 4.0** (SPDX `CC-BY-SA-4.0`). Full text: `LICENSES/CC-BY-SA 4.0`.
+- **Documents** (Markdown, text, specifications, build guides, and **all images** — SVG,
+  PNG, JPG, WebP and every other format, including renders and figures produced by
+  hardware tools) — **CC BY-SA 4.0** (SPDX `CC-BY-SA-4.0`). Full text:
+  `LICENSES/CC-BY-SA 4.0`. Raster images carry it in embedded XMP metadata, SVGs in a
+  header comment, and `REUSE.toml` declares it for the project's image folders.
 
 Every new file's header carries one line: `License: <name> — see LICENSES/<file>
 (SPDX-License-Identifier: <id>)`. Creative Commons advises against CC licences for
