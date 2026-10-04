@@ -15591,7 +15591,7 @@
       "archived": false
     },
     "tools/esc80_cooptimize.py": {
-      "description": "Python script",
+      "description": "esc80_cooptimize.py \u2014 score one 80 A ESC + 64 mm nacelle bay design point.",
       "tags": [
         "build-tooling"
       ],

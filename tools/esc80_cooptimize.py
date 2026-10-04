@@ -55,7 +55,7 @@ Usage:
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP (Stab-Rabbit-coding)
 Harness written by Claude (Claude Opus 5.5, Anthropic) under the author's
 direction, 2026-10-03, per AGENTS.md attribution rules.
-License: CC BY 4.0 - creativecommons.org/licenses/by/4.0
+License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
 """
 
 from __future__ import annotations
