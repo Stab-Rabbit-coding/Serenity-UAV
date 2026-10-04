@@ -290,7 +290,13 @@ def tht_rects(fp: pcbnew.FOOTPRINT) -> List[Rect]:
 ISO_RECTS = [Rect(X0 + 7.5, Y0 + ISO_V0, X0 + 34.2, Y0 + ISO_V1)]
 # Top-face cells between the PB2 rail pins (rails are not stack-through any more):
 # a 0402/0201 fits diagonally in every 2.54 mm cell — owner request 2026-09-29.
-RAIL_CELLS = [(7.18 + 2.54 * k, v) for v in (2.54, 32.46) for k in range(1, 17)]  # k=0 sits next to the square pin-1 pad
+# P1 row only (2026-10-04): the P2 inter-row gap and its 2x2 pin-cell centres are the
+# only escape for the header positions under the isolation band (P2-3..P2-24: MCAN0,
+# MDIO0, TPM/1553/PHY control).  The band blocks every layer to the north and the board
+# edge to the south, so those nets run along the gap, via down at the cell centres, and
+# leave west or east of the band.  Parts parked in P2 cells closed that channel and left
+# 15 nets unroutable in the 2026-09-30 freerouting passes.
+RAIL_CELLS = [(7.18 + 2.54 * k, 2.54) for k in range(1, 17)]  # k=0 sits next to the square pin-1 pad
 
 
 class Placer:
@@ -468,6 +474,31 @@ def text(board: pcbnew.BOARD, s: str, u: float, v: float, layer: int, size: floa
     t.SetTextThickness(mm(0.15))
     t.SetMirrored(mirror)
     board.Add(t)
+
+
+def restore_project_settings(pro_path: Path, prior: dict) -> None:
+    """SaveBoard() rewrites TACCO.kicad_pro from a host-less BOARD, dropping every
+    setting the owner saved from the KiCad GUI (ERC pin map, BOM presets, schematic
+    editor options).  Put back any key the regenerated file lacks; keys the generator
+    owns (net_settings, board design rules) are left as just written."""
+    import json
+
+    def merge(new: dict, old: dict) -> dict:
+        # keep the prior file's key order so the diff shows only real changes
+        out = {}
+        for k, v in old.items():
+            if k not in new:
+                out[k] = v
+            elif isinstance(v, dict) and isinstance(new[k], dict):
+                out[k] = merge(new[k], v)
+            else:
+                out[k] = new[k]
+        for k, v in new.items():
+            out.setdefault(k, v)
+        return out
+
+    d = merge(json.loads(pro_path.read_text()), prior)
+    pro_path.write_text(json.dumps(d, indent=2) + "\n")
 
 
 def patch_project_netclasses(pro_path: Path) -> None:
@@ -753,8 +784,12 @@ def main() -> None:
     text(board, "TACCO Rev S3  Griffing Technology LLC  CC BY 4.0", 27.5, 17.2, pcbnew.B_Fab, 0.9, mirror=True)
     text(board, "ISOLATED CAN-FD | RS-485", 21.0, 24.4, pcbnew.F_Fab, 0.8)
 
+    pro = KICADS / "TACCO.kicad_pro"
+    import json
+    prior = json.loads(pro.read_text()) if pro.exists() else {}
     pcbnew.SaveBoard(str(OUT), board)
-    patch_project_netclasses(KICADS / "TACCO.kicad_pro")
+    patch_project_netclasses(pro)
+    restore_project_settings(pro, prior)
     write_dru(DRU)
     print(f"wrote {OUT}: {len(fps)} footprints, {len(nets)} nets; unplaced: {unplaced}")
 
