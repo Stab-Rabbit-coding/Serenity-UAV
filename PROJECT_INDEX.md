@@ -1432,7 +1432,7 @@ TACCO.svg — Vector diagram [avionics-hardware, pcb-design]
 export_tacco_gerbers.sh — !/usr/bin/env bash [avionics-hardware, pcb-design]
 finish_tacco_pcb.py — finish_tacco_pcb.py — Route TACCO with freerouting through KiCad's Specctra bridge, [avionics-hardware, pcb-design]
 gen_tacco_footprints.py — gen_tacco_footprints.py — Author the project-custom land patterns TACCO needs. [avionics-hardware, pcb-design]
-gen_tacco_pcb.py — Python script [avionics-hardware, pcb-design, security]
+gen_tacco_pcb.py — gen_tacco_pcb.py — Build the TACCO PCB from the schematic netlist. [avionics-hardware, pcb-design, security]
 gen_tacco_sch.py — Python script [avionics-hardware, pcb-design, security]
 ```
 
