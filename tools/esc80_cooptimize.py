@@ -419,14 +419,48 @@ def ring_width_fit(skin, k, phi, d, env, w_nom, side):
     return lo
 
 
+# Volumes other systems own inside the annulus: (az_lo, az_hi, z_lo, z_hi) in
+# the PORT-pod frame this tool uses (port = starboard mirrored in x, so a
+# starboard azimuth a maps to 180 - a).  Default: the dorsal spine/shroud,
+# solid down to r 34.9 over az 226..314 (symmetric about 270, so identical on
+# both pods), from Z 100 to the nozzle housing (tools/dorsal_shroud_resize_64.py,
+# AZ_L/AZ_R/Z_START/R_IN), which also contains the nozzle servo pocket
+# (nacelle_nozzle_servo_64mm.scad NSV_SPINE_AZ 250..292, NSV_SPINE_Z 138..187).
+# A design point may override with "keepouts".
+KEEPOUTS = [(226.0, 314.0, 100.0, 209.0)]
+KEEPOUT_RIB = 3.0      # [deg] printed wall between a bay and a keep-out
+
+
+def _az_overlap(lo, hi, k_lo, k_hi):
+    for turn in (-360.0, 0.0, 360.0):
+        if lo < k_hi + turn and hi > k_lo + turn:
+            return True
+    return False
+
+
+def in_keepout(az_lo, az_hi, z_lo, z_hi):
+    """Does an angular x axial patch touch any keep-out (incl. rib margin)?"""
+    return any(_az_overlap(az_lo - KEEPOUT_RIB, az_hi + KEEPOUT_RIB, a0, a1)
+               and z_lo < z1 and z_hi > z0 for a0, a1, z0, z1 in KEEPOUTS)
+
+
 def bay_profile(zs, skin, phi, env, wp, ws, fmin):
-    """Per-ring fitted widths along the best contiguous run at hinge phi."""
+    """Per-ring fitted widths along the best contiguous run at hinge phi.
+
+    A ring whose panel footprint enters a keep-out gets zero width, so the run
+    stops there (it is another system's space, not a skin limit)."""
     d = MOUNT_R
     if bay.excluded(float(phi), d):
         return None
-    prof = [(float(z), ring_width_fit(skin, k, phi, d, env, wp, +1),
-             ring_width_fit(skin, k, phi, d, env, ws, -1))
-            for k, z in enumerate(zs)]
+    a_p = math.degrees(math.atan2(wp / 2.0, d))
+    a_s = math.degrees(math.atan2(ws / 2.0, d))
+    prof = []
+    for k, z in enumerate(zs):
+        if in_keepout(phi - 2 * a_s, phi + 2 * a_p, float(z), float(z) + DZ):
+            prof.append((float(z), 0.0, 0.0))
+        else:
+            prof.append((float(z), ring_width_fit(skin, k, phi, d, env, wp, +1),
+                         ring_width_fit(skin, k, phi, d, env, ws, -1)))
     best, cur = [], []
     for row in prof:
         if row[1] >= fmin * wp and row[2] >= fmin * ws:
@@ -469,6 +503,8 @@ def free_beyond(zs, skin, phi, prof, od, end):
               if prof[-1][0] + DZ <= z and z + DZ <= LOOP_Z_MAX]
     run = 0.0
     for k in ks:
+        if in_keepout(phi, phi, float(zs[k]), float(zs[k]) + DZ):
+            break                       # a loop may not run into a keep-out
         if bay.skin_at(skin, k, phi) - bay.SKIN_WALL - MOUNT_R >= od:
             run += DZ
         else:
@@ -605,6 +641,9 @@ Z_MIN_V2 = 62.0 * P64_A + 3.0 / 2.0
 
 
 def main_v2(p) -> int:
+    global KEEPOUTS
+    if "keepouts" in p:
+        KEEPOUTS = [tuple(k) for k in p["keepouts"]]
     zs, skin = skin64(p.get("z_min", Z_MIN_V2))
     in_layout = p.get("lane_in_layout", False)
     stack = p["pcb_t"] + p["h_outer"] + p["h_inner"] + p["mount_gap"]

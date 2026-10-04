@@ -2184,6 +2184,27 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             0.76 in (19.4 mm) pack terminal row — 0.2 mm egress margin, confirm
             in placement. Review 2026-10-03 (ce-code-review) moved thermal to
             per-ESC fitted area: T_ch 76.6 °C (hotter ESC, B), still ≤ 125.
+        - [ ] **NAC-64-ESC-80A.k — RE-OPENED 2026-10-04: the dorsal nozzle servo
+            and shroud took variant A's space (Claude Opus 5.5).** The owner's
+            spine servo (`nacelle_nozzle_servo_64mm.scad`, pocket az 250–292,
+            Z 138–187, starboard frame) and the resized dorsal shroud
+            (`tools/dorsal_shroud_resize_64.py`, solid to r 34.9 over az
+            226–314 from Z 100) occupy the sector where variant A's two bays sat
+            (az 232/302, Z 107–154). Both pods are affected (the sector is
+            symmetric about 270). `esc80_cooptimize.py` now carries this as a
+            default keep-out; the 2026-10-03 best point no longer passes.
+            Measured, not blanket: the trunnion/disconnect/nav exclusions were
+            replaced by Z-limited keep-outs, but the inboard skin (146–240) is
+            too thin for a bay at any Z. **Usable annulus per pod is now ONE
+            sector, az 30–114 (port frame), runs 40–70 mm (Z ≈ 84–155)** — room
+            for one hinged bay pair; two 80 A ESCs need four. Owner decision
+            required (options in the 2026-10-04 session report).
+        - [ ] **NAC-64-ESC-80A.l — existing pod conflict, independent of the 80 A
+            boards:** `nacelle_pod_64mm_tandem.scad` still cuts an ESC bay at
+            `ESC_BAY_AZ` 248 (port 292) and the stage-2 motor-lead slot at az
+            248, Z 119→nozzle ring. Both lie inside the new dorsal shroud, and the
+            slot runs along the edge of the servo pocket (250–292). Re-site
+            both when the ESC location is decided.
         - [ ] **NAC-64-ESC-80A.h — Open-Secure-ESC follow-ups found:** the 50 A
             faceted PCB carries an LQFP-64 MCU while the schematic is RHB
             VQFN-32; the decision-matrix Amperage sheet still lists IRFB4110

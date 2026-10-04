@@ -2138,7 +2138,7 @@ build_landing_gear_views.py — RETIRED 2026-07-21 -- Rev R5 tool, superseded by
 cargo_bay_envelope.py — Measure the cargo bay's usable interior envelope, and gate the mission payload. [build-tooling]
 cargo_layout_fit.py — cargo_layout_fit.py -- measure a proposed cargo-section equipment layout [build-tooling]
 compact_bom_entries.py — compact_bom_entries.py [bom, build-tooling]
-esc80_cooptimize.py — esc80_cooptimize.py — score one 80 A ESC + 64 mm nacelle bay design point. [build-tooling]
+esc80_cooptimize.py — Python script [build-tooling]
 esc80_design.json — JSON data (23 top-level keys) [build-tooling]
 esc80_design_m2.json — JSON data (38 top-level keys) [build-tooling]
 export-specctra-dsn.py — Real API name (verified against this pcbnew build): ExportSpecctraDSN, [build-tooling]

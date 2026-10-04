@@ -122,13 +122,24 @@ def test_model1_golden_unchanged():
 
 
 @pytest.mark.slow
-def test_model2_best_point_passes_and_reports_hotter_esc():
+def test_model2_respects_dorsal_servo_keepout():
+    """Owner 2026-10-04: the nozzle servo + dorsal shroud (az 226-314, Z 100-209)
+    took the space variant A used.  The pre-servo best point must no longer
+    pass, and no reported bay may enter a keep-out."""
     code, out = _run("esc80_design_m2.json")
-    assert code == 0
-    assert out["fit_margin_mm"] >= 0
-    hottest = max(e["tch_c"] for e in out["esc"].values())
-    assert out["tch_c"] == pytest.approx(hottest)
-    assert out["tch_c"] <= h.T_CH_DESIGN
+    assert code != 0
+    for esc in (out.get("esc") or {}).values():
+        if esc:
+            for az in esc["bays_az"]:
+                assert not h.in_keepout(az, az, *esc["z_board"])
+
+
+def test_keepout_blocks_profile_rings():
+    h.KEEPOUTS = [(0.0, 360.0, 0.0, 1000.0)]
+    zs = np.arange(100.0, 110.0, h.DZ)
+    skin = _uniform_skin(len(zs), 80.0)
+    assert h.bay_profile(zs, skin, 90.0, 5.0, 23.0, 16.0, 0.6) is None
+    h.KEEPOUTS = [(226.0, 314.0, 100.0, 209.0)]
 
 
 @pytest.mark.slow
