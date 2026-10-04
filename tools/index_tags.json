@@ -13782,6 +13782,14 @@
       ],
       "archived": false
     },
+    "docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md": {
+      "description": "Annular ESC bay length is set by the radial stack, not the panel width",
+      "tags": [
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
     "docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md": {
       "description": "Build every joint in context, through its full motion",
       "tags": [
@@ -15406,6 +15414,20 @@
       ],
       "archived": false
     },
+    "tools/esc80_cooptimize.py": {
+      "description": "esc80_cooptimize.py \u2014 score one 80 A ESC + 64 mm nacelle bay design point.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/esc80_design.json": {
+      "description": "JSON data (23 top-level keys)",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/export-specctra-dsn.py": {
       "description": "Real API name (verified against this pcbnew build): ExportSpecctraDSN,",
       "tags": [
@@ -16148,6 +16170,7 @@
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
+      "docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md",
       "docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md",
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
       "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md",
@@ -17871,6 +17894,7 @@
       "docs/references/vimdrones_esc_s50_v1.0.step",
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
+      "docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md",
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
       "graphical-build-guide/build_guide_10_power_wiring.svg",
       "tools/nacelle_esc_bay_fit.py",
@@ -19964,6 +19988,8 @@
       "tools/cargo_bay_envelope.py",
       "tools/cargo_layout_fit.py",
       "tools/compact_bom_entries.py",
+      "tools/esc80_cooptimize.py",
+      "tools/esc80_design.json",
       "tools/export-specctra-dsn.py",
       "tools/export_landing_gear_stls.py",
       "tools/gen_cargo_void_formers.py",

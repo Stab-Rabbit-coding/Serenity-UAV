@@ -2074,9 +2074,28 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             31.86 mm (1.25 in) creepage width from [9] Table 6). Candidate SMD
             FET: Toshiba TPHR8504PL [Open-Secure-ESC REF 49], already owner-
             selected for the 50 A family.
-        - [ ] **NAC-64-ESC-80A.d — harness and metrics:** radial stack, panel
+        - [x] **NAC-64-ESC-80A.d — harness and metrics:** radial stack, panel
             widths, bay length, nacelle mass/CG shift (PIVOT_Z re-iterate),
-            FET junction margin at 80 A, creepage, part count.
+            FET junction margin at 80 A, creepage, part count. Done 2026-10-03
+            by Claude Opus 5.5: `tools/esc80_cooptimize.py` (ray-cast 64 mm
+            skin, area model from the as-placed 50 A board, lane thermal),
+            design point `tools/esc80_design.json`.
+        - [ ] **NAC-64-ESC-80A.g — co-optimisation result: still SHORT by 0.26 in
+            (6.5 mm).** 20 experiments took the margin from −7.84 in (−199 mm)
+            to −0.26 in: the ESC needs 2.38 in (60.5 mm) and the bay gives
+            2.13 in (54 mm), Z 103–157 at az 72/252. Best point: 23 + 12 mm
+            panels, 2 x TPHR8504PL per leg, duct-side face ≤ 1.1 mm parts,
+            1.5 mm cover (structural VERIFY), packing 0.60, T_ch 120 °C (limit
+            125), hover slack +3.3 mm. The power panel is binding. Owner
+            decisions needed to close it: (1) two bays per ESC (declined for
+            pre-approval), (2) a smaller sourced Faraday frame than WE-SHC
+            3670209 (388 mm² courtyard), (3) a harness revision for an
+            in-layout cooling lane. Lessons:
+            `docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md`.
+        - [ ] **NAC-64-ESC-80A.h — Open-Secure-ESC follow-ups found:** the 50 A
+            faceted PCB carries an LQFP-64 MCU while the schematic is RHB
+            VQFN-32; the decision-matrix Amperage sheet still lists IRFB4110
+            TO-220 although every build uses TPHR8504PL [OSE 49].
         - [ ] **NAC-64-ESC-80A.e — re-run `tools/nacelle_esc_bay_fit.py` and the
             cooling ports (NAC-64-GEOM-02)** against the chosen bay.
         - [ ] **NAC-64-ESC-80A.f — record lessons learned** (ce-compound).
