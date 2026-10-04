@@ -2119,6 +2119,21 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         barrel-to-flange load path runs through the bonded ring magnet (mesh slice at
         z 8.5 shows only a 0.9 mm ring inside the magnet bore), and its flange plate
         reaches the wing pad face with no running clearance.
+    - [ ] **NAC-64-TILT-03 — tilt tip stage has no clearance through the pod
+        (found 2026-10-03, Claude Opus 5.5; PRE-EXISTING in the 50 mm joint).**
+        `nacelle_tilt_joint_context.scad` places the real wing (spar bore and
+        Ø4.4 shaft bore measured on the mesh: shaft 25.6 mm aft, 1.7 mm up of the
+        spar axis) against the 64 mm pod and trunnion; a manifold3d sweep over
+        tilt -5..140 deg finds, worst case: wing-fixed 14T pinion vs pod
+        474-1127 mm3 (every gear variant; clear only near 85-115 deg), Ø4 drive
+        shaft vs the trunnion flange 28 mm3 and vs the pod collar 18 mm3 (all
+        m0.8 variants). The 50 mm joint as rendered from source: pinion/pod
+        581, shaft/collar 42, shaft/flange 9 mm3. `tools/nacelle_trunnion_fit.py`
+        checks module, ratio and centre distance but never the pinion's orbit.
+        Tip-gear variant B (m1.0, CD 32) clears flange and collar but its shaft
+        at chord station 60.0 runs into the wing root tenon (58.5). Needs an
+        owner decision on the relief geometry before any variant is built
+        (image: docs/images/nacelle_64mm_tilt_joint_in_position.png).
 - [x] **LG-HOVER-01 — hover ground clearance — RESOLVED 2026-08-29.** Closed by
     NAC-MOULD-01 + the station/pivot move: **+9.8 mm on the existing 1.5 in
     gear**, owner-accepted. No landing-gear change is forced; the 3.0 in variant

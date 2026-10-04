@@ -65,9 +65,18 @@ module pinion() {
     }
 }
 
-color("SteelBlue") nacelle_trunnion();
-// Mesh phase: a pinion tooth gap faces the ring (half-tooth rotation).
-color("Goldenrod") translate([CENTRE_D, 0, 0])
-    rotate([0, 0, 180 + 180 / PINION_Z]) pinion();
+// Reusable by nacelle_tilt_joint_context.scad (set VARIANT_RENDER = false).
+module variant_trunnion() { nacelle_trunnion(); }
+// Pinion in the TRUNNION PART frame, at centre distance along azimuth `az`
+// (deg) about the part z axis; mesh phase puts a pinion gap on the line.
+module variant_pinion(az = 0) {
+    rotate([0, 0, az]) translate([CENTRE_D, 0, 0])
+        rotate([0, 0, 180 + 180 / PINION_Z]) pinion();
+}
+VARIANT_RENDER = true;
+if (VARIANT_RENDER) {
+    color("SteelBlue") variant_trunnion();
+    color("Goldenrod") variant_pinion();
+}
 echo(VARIANT = VARIANT, gear_module = V_M, face = V_FACE, centre_d = CENTRE_D,
      band = [GEAR_Z0, GEAR_INBOARD], ring_tip_d = 2 * GEAR_RA);
