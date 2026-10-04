@@ -13702,6 +13702,13 @@
       ],
       "archived": false
     },
+    "docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md": {
+      "description": "PB2 socket rails, not connector families, bind field-connector placement on a 55 x 35 mm cape",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/design-patterns/probe-the-published-hull-and-change-the-placement-class-not-the-margins.md": {
       "description": "Ray-probe the published hull at the station before placing anything \u2014 and when a placement misses by fraction\u2026",
       "tags": [
@@ -15963,6 +15970,7 @@
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
       "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md",
       "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
+      "docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md",
       "docs/solutions/design-patterns/probe-the-published-hull-and-change-the-placement-class-not-the-margins.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/design-patterns/self-locking-worm-and-vectoring-bandwidth-are-mutually-exclusive.md",

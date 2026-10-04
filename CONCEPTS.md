@@ -66,7 +66,7 @@ One of the four PocketBeagle 2 Industrial single-board computers that fly the ai
 
 ## Cape Usable Band
 
-The strip of a cape between its two PocketBeagle 2 stacking rails that can actually hold parts and copper — roughly the middle two-thirds of the board's short dimension, on each face. The rails are through-hole, so they consume both faces; component area budgets for a cape are computed against the usable band, per face, using each footprint's courtyard, not against the board outline or against package body sizes.
+The strip of a cape between its two PocketBeagle 2 stacking rails that can actually hold parts and copper — roughly the middle two-thirds of the board's short dimension, on each face. The rails are through-hole, so they consume both faces; component area budgets for a cape are computed against the usable band, per face, using each footprint's courtyard, not against the board outline or against package body sizes. Because the rail pads exist on every copper layer, a part on the opposite face cannot put its pads over a rail even when its courtyard check passes, and no field-connector swap changes that; only a rail socket whose surface-mount pads sit under its own body would widen the band.
 
 ## Isolation Band
 
