@@ -44,6 +44,7 @@ License: CC BY 4.0.
 from __future__ import annotations
 
 import math
+import os
 import re
 import sys
 from pathlib import Path
@@ -56,6 +57,18 @@ KICADS = HERE.parent / "kicads"
 NETLIST = KICADS / "TACCO.net"
 OUT = KICADS / "TACCO.kicad_pcb"
 DRU = KICADS / "TACCO.kicad_dru"
+
+# Layout experiments (ce-optimize runs): TACCO_WHATIF=<file.json> overrides fixed
+# positions ("fixed": {ref: [u, v, rot, "F"|"B"]}), footprints ("fp": {ref:
+# "<abs path>.pretty:Name"}), the rail cells ("rail_cells": false) and writes the
+# board, project and rules into "out_dir" instead of kicads/.  Unset -> no effect.
+WHATIF: dict = {}
+if os.environ.get("TACCO_WHATIF"):
+    import json as _json
+    WHATIF = _json.loads(Path(os.environ["TACCO_WHATIF"]).read_text())
+    if WHATIF.get("out_dir"):
+        _out = Path(WHATIF["out_dir"])
+        OUT, DRU = _out / "TACCO.kicad_pcb", _out / "TACCO.kicad_dru"
 SYSLIB = Path("/usr/share/kicad/footprints")
 CUSTOM = HERE.parent.parent / "Serenity-Custom.pretty"
 
@@ -130,6 +143,12 @@ def read_netlist():
 
 def load_fp(fpid: str) -> pcbnew.FOOTPRINT:
     lib, name = fpid.split(":", 1)
+    if lib.endswith(".pretty"):  # what-if footprints from an absolute library path
+        fp = pcbnew.FootprintLoad(lib, name)
+        if fp is None:
+            raise SystemExit(f"footprint not found: {fpid}")
+        fp.SetFPID(pcbnew.LIB_ID(Path(lib).stem, name))
+        return fp
     path = CUSTOM if lib == "Serenity-Custom" else SYSLIB / f"{lib}.pretty"
     fp = pcbnew.FootprintLoad(str(path), name)
     if fp is None:
@@ -626,9 +645,13 @@ def main() -> None:
         for ref, pin in nodes:
             pad_net[(ref, pin)] = name
 
+    for ref, val in WHATIF.get("fixed", {}).items():
+        FIXED[ref] = (float(val[0]), float(val[1]), float(val[2]), str(val[3]))
+    if WHATIF.get("rail_cells") is False:
+        RAIL_CELLS.clear()
     fps: Dict[str, pcbnew.FOOTPRINT] = {}
     for ref, c in comps.items():
-        fp = load_fp(c["footprint"])
+        fp = load_fp(WHATIF.get("fp", {}).get(ref, c["footprint"]))
         fp.SetReference(ref)
         fp.SetValue(c["value"])
         # library lands such as Tag-Connect carry "exclude from BOM"; the schematic
@@ -679,7 +702,9 @@ def main() -> None:
     for ref in todo:
         fp = fps[ref]
         my_nets = {pad.GetNetname() for pad in fp.Pads() if pad.GetNetname()}
-        sig = [n for n in my_nets if n not in POWER_NETS]
+        # sorted: set order follows PYTHONHASHSEED, so an unsorted walk picked a
+        # different anchor net (and placement) on every run (found 2026-10-04)
+        sig = sorted(n for n in my_nets if n not in POWER_NETS)
         anchor_fp: Optional[pcbnew.FOOTPRINT] = None
         for pre, parent in ANCHOR_PREFIX:
             if ref.startswith(pre):
@@ -784,7 +809,7 @@ def main() -> None:
     text(board, "TACCO Rev S3  Griffing Technology LLC  CC BY 4.0", 27.5, 17.2, pcbnew.B_Fab, 0.9, mirror=True)
     text(board, "ISOLATED CAN-FD | RS-485", 21.0, 24.4, pcbnew.F_Fab, 0.8)
 
-    pro = KICADS / "TACCO.kicad_pro"
+    pro = OUT.parent / "TACCO.kicad_pro"
     import json
     prior = json.loads(pro.read_text()) if pro.exists() else {}
     pcbnew.SaveBoard(str(OUT), board)
