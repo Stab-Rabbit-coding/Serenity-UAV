@@ -2199,6 +2199,20 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             sector, az 30–114 (port frame), runs 40–70 mm (Z ≈ 84–155)** — room
             for one hinged bay pair; two 80 A ESCs need four. Owner decision
             required (options in the 2026-10-04 session report).
+            **Follow-up, same day (owner: Z buffer for unfinished linkage; weigh
+            CG and an ESC forward of the pivot).** Servo/linkage keep-out widened
+            to az 244–298 from **Z 128** (pocket 138, minus a 10 mm buffer) to the
+            nozzle. Shroud surface merged from `nacelle_dorsal_shroud_64_gen.scad`
+            (option `shroud_scad`). The shroud only rises from Z 120, so bays under
+            it run Z ~96–128 (24–32 mm). Best case, 23 + 12 mm panels, two bays
+            per ESC: one ESC fits at +0.55 mm (az 38/98, Z 106–156, centre 124.6);
+            the second, under the shroud, is −24.5 mm. **Forward of Z ~85 no bay fits
+            at any width** — skin r 42–45.6 mm against the ~46 mm a hinged board at
+            r 37.2 needs — so no in-pod ESC can be centred forward of the 109.7 mm
+            pivot. CG (rotating assembly, ESC 52.2 g ESTIMATE): both in pod
+            +1.10 mm; one in pod / one off +1.09 mm; both off-pod +0.23 mm; a
+            hypothetical ESC at Z 90 would balance the servo (−0.06 mm), but there
+            is no room for it.
         - [ ] **NAC-64-ESC-80A.l — existing pod conflict, independent of the 80 A
             boards:** `nacelle_pod_64mm_tandem.scad` still cuts an ESC bay at
             `ESC_BAY_AZ` 248 (port 292) and the stage-2 motor-lead slot at az

@@ -133,7 +133,7 @@ OTHER_G_PER_MM2 = 0.012      # ESTIMATE — non-FET part mass per courtyard mm2
 # 64 mm pod.  Every name it may touch is listed here, and overrides_64mm()
 # snapshots and restores them, so nothing leaks to another caller in the same
 # process (review 2026-10-03, maintainability P1).
-_BAY_NAMES = ("W_POWER", "W_SIGNAL", "duct_r", "DUCT_WALL", "Z_MIN", "SKIN_WALL")
+_BAY_NAMES = ("W_POWER", "W_SIGNAL", "duct_r", "DUCT_WALL", "Z_MIN", "SKIN_WALL", "EXCLUDE")
 _THERMAL_NAMES = ("DUCT_AREA", "NACELLE_THRUST_N", "BAY_WIDTH", "ESC_LEN")
 
 
@@ -632,6 +632,33 @@ def _assess_v2(p, zs, skin, sel, by_phi, by_phi_pow, pow_env_differs, loops,
     return results
 
 
+def merge_shroud(zs, skin, scad_path):
+    """Raise the skin to the dorsal shroud's OUTER surface where it is higher.
+
+    The shroud generator (tools/dorsal_shroud_resize_64.py) writes a starboard-
+    frame polyhedron; this tool works in the port frame (port = starboard
+    mirrored in x, az_port = 180 - az_stbd).  Outer radius per (Z ring, 1 deg)
+    is the max point radius in that cell.  Only meaningful if the shroud is
+    made hollow above the bay (an owner decision the run records)."""
+    import re
+    txt = Path(scad_path).read_text()
+    body = txt[txt.index("points = [") + 10:txt.index("], faces")]
+    pts = np.array([[float(v) for v in t.split(",")] for t in
+                    re.findall(r"\[([-\d.]+,[-\d.]+,[-\d.]+)\]", body)])
+    r = np.hypot(pts[:, 0], pts[:, 1])
+    az = (180.0 - np.degrees(np.arctan2(pts[:, 1], pts[:, 0]))) % 360.0
+    out = skin.copy()
+    for k, z in enumerate(zs):
+        m = (pts[:, 2] >= z) & (pts[:, 2] < z + DZ)
+        if not m.any():
+            continue
+        cells = np.round(az[m]).astype(int) % bay.N_AZ_SAMPLE
+        rmax = np.zeros(bay.N_AZ_SAMPLE)
+        np.maximum.at(rmax, cells, r[m])
+        out[k] = np.maximum(out[k], rmax)
+    return out
+
+
 # Forward limit for model 2: the aft face of the fixed Z 70.06 cavity bulkhead
 # (CAVITY_BULKHEAD_Z[1] = 62 x 1.13, CAVITY_BULKHEAD_T 3.0).  The two webs at
 # Z 74.35 / 139.85 are BAY-TIED (nacelle_pod_64mm_tandem.scad: "tied to the
@@ -645,6 +672,10 @@ def main_v2(p) -> int:
     if "keepouts" in p:
         KEEPOUTS = [tuple(k) for k in p["keepouts"]]
     zs, skin = skin64(p.get("z_min", Z_MIN_V2))
+    if p.get("shroud_scad"):
+        skin = merge_shroud(zs, skin, REPO / p["shroud_scad"])
+    if p.get("measured_exclusions"):
+        bay.EXCLUDE = []        # blanket 50 mm-tool sectors replaced by keepouts
     in_layout = p.get("lane_in_layout", False)
     stack = p["pcb_t"] + p["h_outer"] + p["h_inner"] + p["mount_gap"]
     env = stack + (0.0 if in_layout else p["flow_lane"])
@@ -715,6 +746,7 @@ def main_v2(p) -> int:
             tch_e, p_tot, p_fet, h, r_conv, dt_air = thermal_tch(p, span_e, area_e)
         therm[esc] = (tch_e, p_tot, h, dt_air)
         r["tch_c"] = round(tch_e, 1)
+        r["fwd_of_pivot"] = r["z_centre_mm"] < CG_Z
     hot = max(therm, key=lambda e: therm[e][0])
     tch, p_tot, h, dt_air = therm[hot]
     span = sum(spans) / len(spans)
@@ -743,6 +775,7 @@ def main_v2(p) -> int:
         "h_lane_w_m2k": round(h, 0), "dt_air_k": round(dt_air, 1),
         "esc_mass_g_estimate": round(m_esc, 1), "assy_mass_g": round(m_new, 1),
         "d_cg_mm": round(d_cg, 2),
+        "cg_z_mm": round(CG_Z + d_cg, 2), "pivot_z_mm": CG_Z,
         "hover_slack_after_mm": round(HOVER_SLACK + d_cg, 2),
         "egress_a_ok": ega, "egress_b_ok": egb,
         "creepage_ok": p["isolation"] != "lateral",
