@@ -9,7 +9,7 @@
 > historical reference for the Rev M 18-inch design iteration.
 
 **Author:** Steve Griffing, PE(CSE) \[Control Systems Engineering\], CISSP-ISSEP, CPP
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Year:**2026 |**Status:** Public release
 
 > Fan engineering work inspired by the Firefly-class transport ship _Serenity_

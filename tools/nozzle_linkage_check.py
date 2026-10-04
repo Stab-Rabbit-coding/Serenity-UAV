@@ -138,7 +138,7 @@ Source-of-truth constants (each COPIED here, not re-derived, per this repo's
   SUN_XLOC             airframe/openscad/port_tilt_spar_assembly.scad:324
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CEH
-License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
 Date:    2026-09-08 (reworked 2026-09-09 to the adopted pinion architecture)
 AI contribution: Claude (Sonnet 5 original; Opus 5 rework, Anthropic),
                  directed by Steve Griffing.

@@ -4,7 +4,7 @@
 **AI note:** Rev R6 redesign authored by Claude (model: Claude Fable 5,
 Anthropic) under the author's direction, 2026-07-21; extended for the
 1.5in/3.0in leg-length variant split 2026-07-23, per `AGENTS.md`.
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog).
 Component design generation: **R6** (2026-07-21; variant split 2026-07-23) — "R6" is this
 leg design's own permanent name (like a PCB's "Rev S1"), not a pointer to the project-wide

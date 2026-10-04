@@ -11,7 +11,7 @@ gen_pilot_pcb.py deliberately left F.Cu/B.Cu pour-free for the router.  Then
 re-fills every zone (including the isolated GND2 islands and the In2..In4
 signal/plane layers) and saves in place.
 
-Author: Claude Sonnet 5, 2026-09-19.  Owner: sgriffing.  License: CC BY 4.0.
+Author: Claude Sonnet 5, 2026-09-19.  Owner: sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 from __future__ import annotations
 

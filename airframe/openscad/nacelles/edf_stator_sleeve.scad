@@ -20,7 +20,7 @@
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
-// License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+// License : CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // Date    : 2026-05-29
 // Revision: Rev T4 (2026-08-30) — through-duct spar strut + clearance bore DELETED
 //           (Rev R 2026-06-11; Rev A 2026-05-29)

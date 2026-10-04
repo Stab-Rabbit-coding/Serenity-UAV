@@ -1,7 +1,7 @@
 # Serenity UAV — Work Breakdown Structure (Master Index)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Last updated:** 2026-10-01  
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 

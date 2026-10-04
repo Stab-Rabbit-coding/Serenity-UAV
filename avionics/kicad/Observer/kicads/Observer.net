@@ -12,7 +12,7 @@
         (source "Observer.kicad_sch")
         (comment (number "1") (value "Serenity UAV — STANDALONE board, NOT a PocketBeagle 2 Industrial cape"))
         (comment (number "2") (value "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP | Griffing Technology LLC"))
-        (comment (number "3") (value "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0"))
+        (comment (number "3") (value "License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)"))
         (comment (number "4") (value "SoM carrier: real clean-room symbols; see gen_Observer_carrier_sch.py"))
         (comment (number "5") (value ""))
         (comment (number "6") (value ""))

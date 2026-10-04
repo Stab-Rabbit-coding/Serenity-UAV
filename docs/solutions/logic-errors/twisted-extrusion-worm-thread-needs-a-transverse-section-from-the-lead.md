@@ -23,7 +23,7 @@ tags: [worm-gear, openscad, linear-extrude, twist, thread-profile, lead-angle, m
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP. **AI note:** drafted by
 Claude (model: Claude Opus 5, Anthropic) under the author's direction,
-2026-09-16, per `AGENTS.md` §3. **License:** CC BY-SA 4.0.
+2026-09-16, per `AGENTS.md` §3. **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 ## Problem
 

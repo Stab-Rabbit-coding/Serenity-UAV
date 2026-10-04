@@ -177,6 +177,13 @@
       ],
       "archived": false
     },
+    "LICENSES/MIT": {
+      "description": "MIT License",
+      "tags": [
+        "licensing"
+      ],
+      "archived": false
+    },
     "README.md": {
       "description": "Serenity UAV",
       "tags": [
@@ -201,6 +208,11 @@
       "tags": [
         "documentation"
       ],
+      "archived": false
+    },
+    "REUSE.toml": {
+      "description": "REUSE Specification 3.2 (FSFE, https://reuse.software/spec-3.2/) \u2014 machine-",
+      "tags": [],
       "archived": false
     },
     "SECURITY.md": {
@@ -10204,7 +10216,7 @@
       "archived": false
     },
     "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py": {
-      "description": "Python script",
+      "description": "gen_pilot_pcb.py \u2014 Build the Pilot (CAPE-A-2) PCB from the schematic netlist.",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -15291,7 +15303,7 @@
       "archived": false
     },
     "tools/cargo_layout_fit.py": {
-      "description": "cargo_layout_fit.py -- measure a proposed cargo-section equipment layout",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
@@ -16304,6 +16316,7 @@
       "LICENSES/CC-BY 4.0",
       "LICENSES/CC-BY-SA 4.0",
       "LICENSES/CERN-OHL-W 2.0",
+      "LICENSES/MIT",
       "airframe/LICENSE",
       "archives/stale-20260601/files-revF/LICENSE_AND_ATTRIBUTION.md",
       "archives/stale-20260601/files-revF/serenity-drone-revF/docs/LICENSE_AND_ATTRIBUTION.md",

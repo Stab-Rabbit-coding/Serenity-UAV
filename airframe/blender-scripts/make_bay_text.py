@@ -9,7 +9,7 @@ volume (so it is a valid manifold3d boolean operand).  engrave_plaques.py orient
 and positions each slab onto a section's interior wall.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0  —  creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import os

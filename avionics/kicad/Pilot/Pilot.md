@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CEH
 **Callsign:** Pilot
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** T (schematic-first rebuild, superseding Rev Q)
 **Date:** 2026-09-19
 **Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers. **Routing not yet complete** (see "Routing status" below).

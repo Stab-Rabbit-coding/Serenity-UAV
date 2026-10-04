@@ -3,7 +3,7 @@
 slice_all_batches_cura.py -- Serenity-Class UAV Rev T Prototype Slice Runner (Cura)
 
 Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0 -- creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 Date   : 2026-09-07
 Slicer : CuraEngine 5.0.0 CLI (apt package cura-engine) -- headless, no GUI
 Printer: XYZprinting da Vinci Jr. 1.0 w (150x150x150 mm, 0.4 mm nozzle), Repetier

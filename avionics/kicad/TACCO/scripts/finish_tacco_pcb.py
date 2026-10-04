@@ -34,7 +34,7 @@ Same discipline as Pilot's ``finish_pilot_pcb.py``: an autorouted result is acce
 only if the DRC gate passes; shorts or isolation-rule violations are fixed or the
 result is rejected.
 
-Author: Claude Fable 5.1, 2026-09-29.  Owner: sgriffing.  License: CC BY 4.0.
+Author: Claude Fable 5.1, 2026-09-29.  Owner: sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 from __future__ import annotations
 

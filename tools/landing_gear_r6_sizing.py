@@ -64,7 +64,7 @@ AI note : Authored by Claude (model: Claude Fable 5, Anthropic) under the
           author's direction, 2026-07-21 (Rev R6), extended 2026-07-23 for
           the 1.5in/3.0in leg-length variant split.  Per repository
           AGENTS.md AI attribution policy.
-License : CC BY 4.0 <https://creativecommons.org/licenses/by/4.0/>
+License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
 """
 
 import math
