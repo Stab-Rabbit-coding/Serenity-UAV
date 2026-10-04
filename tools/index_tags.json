@@ -12352,6 +12352,22 @@
       ],
       "archived": false
     },
+    "docs/images/nacelle_64mm_tilt_joint_optionA.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "docs/images/nacelle_64mm_tilt_joint_optionA_cutaway.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "docs/images/nacelle_64mm_tip_gear_variants.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -13755,6 +13771,13 @@
         "documentation",
         "emi-hardening",
         "security"
+      ],
+      "archived": false
+    },
+    "docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md": {
+      "description": "Build every joint in context, through its full motion",
+      "tags": [
+        "documentation"
       ],
       "archived": false
     },
@@ -15947,6 +15970,8 @@
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
       "docs/ideation/7-2.webp",
       "docs/images/nacelle_64mm_tilt_joint_in_position.png",
+      "docs/images/nacelle_64mm_tilt_joint_optionA.png",
+      "docs/images/nacelle_64mm_tilt_joint_optionA_cutaway.png",
       "docs/images/nacelle_64mm_tip_gear_variants.png",
       "docs/img/20260923_065833.jpg",
       "docs/img/20260923_065848.jpg",
@@ -16115,6 +16140,7 @@
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
+      "docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md",
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
       "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md",
       "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
@@ -17635,6 +17661,8 @@
       "docs/NACELLE_64MM_VERIFICATION.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/images/nacelle_64mm_tilt_joint_in_position.png",
+      "docs/images/nacelle_64mm_tilt_joint_optionA.png",
+      "docs/images/nacelle_64mm_tilt_joint_optionA_cutaway.png",
       "docs/images/nacelle_64mm_tip_gear_variants.png",
       "docs/img/nozzle_drive_trade.png",
       "docs/img/port-nacelle-horizontal.png",

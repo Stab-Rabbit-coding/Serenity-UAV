@@ -2119,7 +2119,18 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         barrel-to-flange load path runs through the bonded ring magnet (mesh slice at
         z 8.5 shows only a 0.9 mm ring inside the magnet bore), and its flange plate
         reaches the wing pad face with no running clearance.
-    - [ ] **NAC-64-TILT-03 — tilt tip stage has no clearance through the pod
+    - [x] **NAC-64-TILT-03 — tilt tip stage has no clearance through the pod — RESOLVED
+        2026-10-03 (Claude Opus 5.5): owner chose option A (m0.8, 10.5 mm face) +
+        relief 1. Pod `tilt_drive_relief()` cuts the swept pinion/shaft envelope
+        (part-frame arc -7.2..149.8 deg); trunnion gets a shaft arc slot; collar
+        inserts re-patterned about the SPAR axis at 175/255/335 deg; nav port moved
+        to 210 deg, outside the sweep. Re-sweep (tilt -5..140, +theta sign
+        corrected): pinion/pod 0, shaft/pod 0, shaft/trunnion 0 mm3; pinion/ring
+        35-40 mm3 steady = tooth engagement (root cylinder vs trunnion 0). CG
+        re-converged 109.67 vs PIVOT_Z 109.7. Wing pinion face widens to 10.5 mm
+        (wing-part change still to cut). Images:
+        docs/images/nacelle_64mm_tilt_joint_optionA{,_cutaway}.png.
+        Original finding:
         (found 2026-10-03, Claude Opus 5.5; PRE-EXISTING in the 50 mm joint).**
         `nacelle_tilt_joint_context.scad` places the real wing (spar bore and
         Ø4.4 shaft bore measured on the mesh: shaft 25.6 mm aft, 1.7 mm up of the

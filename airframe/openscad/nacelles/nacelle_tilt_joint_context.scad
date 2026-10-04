@@ -42,7 +42,8 @@ VARIANT  = 1;             // -D VARIANT=n on the command line still wins
 // Wing mesh measurements (hull frame, mm) — see header.
 W_XMIN = -345.18;  W_SPAR_Y = 21.00;  W_SPAR_Z = 64.63;
 SHAFT_Y = 46.60;   SHAFT_Z = 66.31;
-SHAFT_AZ = atan2(SHAFT_Z - W_SPAR_Z, SHAFT_Y - W_SPAR_Y);   // ≈ 3.8 deg up
+J_SHAFT_AZ = atan2(SHAFT_Z - W_SPAR_Z, SHAFT_Y - W_SPAR_Y);  // ≈ 3.8 deg up (own name: an
+// override of the included SHAFT_AZ would evaluate before W_* exist)
 
 // hull -> nacelle-local: x_l = x_h + dx, y_l = -(z_h - spar_z),
 //                        z_l = (y_h - spar_y) + PIVOT_Z
@@ -89,9 +90,9 @@ view() {
     part_to_local() {
         color("SteelBlue") variant_trunnion();
         // shaft azimuth in the part frame: local (+Z aft, -Y up) = part (+x, +y)
-        color("Goldenrod") variant_pinion(az = SHAFT_AZ);
+        color("Goldenrod") variant_pinion(az = J_SHAFT_AZ);
         color("Goldenrod")                             // Ø4 drive shaft stub
-            rotate([0, 0, SHAFT_AZ]) translate([CENTRE_D, 0, GEAR_Z0])
+            rotate([0, 0, J_SHAFT_AZ]) translate([CENTRE_D, 0, GEAR_Z0])
                 cylinder(d = 4, h = 40, $fn = 16);
     }
 }

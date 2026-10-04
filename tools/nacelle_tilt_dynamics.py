@@ -103,7 +103,8 @@ LBF_PER_N = 0.224809
 # ── Drive train (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, nacelle_trunnion) ──
 T_DRIVE_LIMIT = 1.81         # N.m at the nacelle, motor stall ~ tooth limit
 TIP_RATIO, TIP_ETA = 50.0 / 14.0, 0.95
-RING_M, RING_Z, RING_FACE = 0.8, 50, 5.0      # module, teeth, face width mm
+RING_M, RING_Z, RING_FACE = 0.8, 50, 10.5     # 64 mm: option A (owner 2026-10-03)
+RING_FACE_50 = 5.0                            # 50 mm joint as built
 SIGMA_FLEX, LEWIS_Y, GEAR_FOS = 54.0, 0.40, 4.0
 SHAFT_D = 4.0                # mm
 BRG_SPAN = 4.0               # mm, 2 x 6704ZZ centres (WING_ATTACH §4.3a)
@@ -275,7 +276,8 @@ def analyse(name: str, bodies: list[Body], pivot: float, thrust_n: float,
     """All loads for one nacelle."""
     i_tilt = sum(b.i_about(pivot) for b in bodies) * 1e-9     # kg.m^2
     mass = sum(b.m for b in bodies)
-    ring_cap = SIGMA_FLEX * RING_FACE * RING_M * LEWIS_Y \
+    face = RING_FACE if bore_r_mm == 32.0 else RING_FACE_50
+    ring_cap = SIGMA_FLEX * face * RING_M * LEWIS_Y \
         * (RING_Z * RING_M / 2.0) / 1000.0                     # N.m, no FOS
     m_thrust = thrust_n * ULT * arm_mm / 1000.0                # N.m ultimate
     # One stream through both fans: total nacelle thrust T = mdot V_e with

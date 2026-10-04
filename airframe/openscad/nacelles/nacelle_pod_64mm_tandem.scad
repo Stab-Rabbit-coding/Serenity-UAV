@@ -333,7 +333,73 @@ module lip_ring_cavity() {
                 cylinder(d = 3.0, h = 30.0 * P64_A - z1, $fn = 24);
 }
 
-module extra_zone_b_cuts() { lip_ring_cavity(); }
+// ── Tilt drive: pinion + shaft relief, and the collar fasteners (option 1,
+// owner 2026-10-03; WBS NAC-64-TILT-03) ──────────────────────────────────────
+// Must stay in step with nacelle_trunnion_64mm.scad (SHAFT_R, SHAFT_AZ, slot
+// angles, BOLT_ANGLES, gear band).  Geometry is built in the TRUNNION PART
+// frame (z = tilt axis toward the wing from the spar tip, x = aft, y = up)
+// and mapped to the pod by part_frame(): part z -> +X, part x -> +Z,
+// part y -> -Y, origin (TRUNNION_X0, 0, PIVOT_Z).  Starboard / PYLON_SIDE +1.
+T_SHAFT_R = 25.6;  T_SHAFT_AZ = 3.8;
+T_A0 = T_SHAFT_AZ - 5.0 - 6.0;  T_A1 = T_SHAFT_AZ + 140.0 + 6.0;  // -7.2..149.8
+T_PIN_RA = 0.8 * 14 / 2 + 0.8;   // = 6.4 mm, 14T m0.8 tip radius
+T_GEAR_Z = [2.0, 12.5];          // ring/pinion band, part z (option A face 10.5)
+T_BOLTS = [175, 255, 335];
+
+module part_frame() {
+    multmatrix([[0, 0, PYLON_SIDE, PYLON_SIDE * TRUNNION_X0],
+                [0, -1, 0, 0], [1, 0, 0, PIVOT_Z], [0, 0, 0, 1]]) children();
+}
+module t_sector(z0, h, half_w) {     // swept annular sector, round ends
+    translate([0, 0, z0]) rotate([0, 0, T_A0]) {
+        rotate_extrude(angle = T_A1 - T_A0, $fn = 180)
+            translate([T_SHAFT_R - half_w, 0]) square([2 * half_w, h]);
+        for (a = [0, T_A1 - T_A0]) rotate([0, 0, a])
+            translate([T_SHAFT_R, 0, 0]) cylinder(r = half_w, h = h, $fn = 32);
+    }
+}
+// SUBTRACTIVE — the swept volume of the wing-fixed pinion (tip radius + 0.8)
+// over the gear band +/- 0.5, and of the Ø4 shaft (+0.8) from the band out
+// past the wing tip face.  Opens into the joint gap; it is the pod-side half
+// of the clearance the trunnion flange slot provides.
+module tilt_drive_relief() {
+    part_frame() {
+        t_sector(T_GEAR_Z[0] - 0.5, T_GEAR_Z[1] - T_GEAR_Z[0] + 1.0,
+                 T_PIN_RA + 0.8);
+        t_sector(T_GEAR_Z[1] + 0.5 - 0.01,
+                 WING_TIP_FACE_X - TRUNNION_X0 - T_GEAR_Z[1] + 1.0, 2.0 + 0.8);
+    }
+}
+
+module extra_zone_b_cuts() { lip_ring_cavity(); tilt_drive_relief(); }
+
+// Override of the 50 mm trunnion_collar_cut(): identical register bore, gear
+// cavity and nav port, but the 3 x M3 collar inserts are placed about the
+// SPAR axis at the trunnion's BOLT_ANGLES.  The 50 mm module rotates them
+// about the DUCT axis (rotate([0,0,i*120]) applied after translation), which
+// puts two of the three on the wrong side of the pod — found 2026-10-03 by the
+// in-context check (WBS NAC-64-TILT-03).
+module trunnion_collar_cut() {
+    sgn = PYLON_SIDE;
+    translate([sgn * COLLAR_X0, 0, PIVOT_Z]) rotate([0, sgn * 90, 0])
+        cylinder(d = TRUNNION_REG_D, h = (WING_TIP_FACE_X - COLLAR_X0) + 1);
+    translate([sgn * TRUNNION_CAV_X0, 0, PIVOT_Z]) rotate([0, sgn * 90, 0])
+        cylinder(d = TRUNNION_CAV_D, h = COLLAR_X0 - TRUNNION_CAV_X0 + 0.01);
+    part_frame() for (a = T_BOLTS) rotate([0, 0, a])
+        translate([COLLAR_BOLT_D / 2, 0,
+                   COLLAR_X1 - TRUNNION_X0 - M3_INSERT_L - 0.01])
+            cylinder(d = M3_INSERT_D, h = M3_INSERT_L + 0.02, $fn = 24);
+    // Nav 3-core crossing port: the 50 mm module drills it at azimuth 0, which
+    // is INSIDE the drive shaft's sweep — the shaft would cut the nav wire.
+    // Moved to T_NAV_AZ, beside the wing's own nav conduit (measured on the
+    // wing mesh: hull y 1.0, z 61.5 -> 189 deg, r 20.2 about the spar axis),
+    // in the solid sector between the 175 and 255 deg bolts.
+    part_frame() rotate([0, 0, T_NAV_AZ])
+        translate([COLLAR_BOLT_D / 2, 0, COLLAR_FAIR_X - TRUNNION_X0 - 1])
+            cylinder(d = NAV_WIRE_BORE + 1.6,
+                     h = COLLAR_X1 - COLLAR_FAIR_X + 2.01, $fn = 16);
+}
+T_NAV_AZ = 210;   // [deg] part frame; 35 deg from the 175 bolt, 45 from 255
 
 // ── Parse-time checks specific to the 64 mm pod ──────────────────────────────
 assert(EDF2_Z_EXIT <= NOZZLE_RING_Z,

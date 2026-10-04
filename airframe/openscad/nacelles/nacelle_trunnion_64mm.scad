@@ -70,8 +70,28 @@ BRG_SEAT_D      = 32.0;   // H7, printed; ream/scrape to fit
 BRG_SHOULDER_D  = 28.0;   // outer-race abutment bore — VERIFY against the
                           // JTEKT 6804 abutment (Da) before printing
 
-// Ring gear unchanged in size; shifted so it keeps its distance to the pad.
-GEAR_Z0         = 0.5 + T64_STUB_EXTRA;    // = 7.5
+// Ring gear: option A (owner 2026-10-03) — m0.8, 50T/14T, face 5.0 -> 10.5 mm
+// for Lewis FOS 4.1 under the CFD bounding crossflow (tools/
+// nacelle_tilt_dynamics.py; nacelle_tip_gear_variants.scad VARIANT 1).  The
+// band keeps its wing-side edge at part z 12.5 (same distance to the pad as
+// before) and grows toward the spar tip.  The wing's 14T pinion widens to match.
+GEAR_FACE       = 10.5;
+GEAR_Z0         = 12.5 - GEAR_FACE;        // = 2.0
+
+// ── Drive-shaft relief (option 1, owner 2026-10-03; WBS NAC-64-TILT-03) ─────
+// The wing-fixed Ø4 drive shaft sits 25.6 mm off the tilt axis at azimuth
+// 3.8 deg (part frame: x = aft, y = up), measured on the wing mesh.  Going to
+// hover the nacelle turns -theta about the span axis, so in THIS frame the
+// shaft moves +theta: over the -5..140 deg tilt range it sweeps -1.2..143.8
+// deg, and it crosses the flange (r 23.1-28.1).  The flange therefore carries
+// an arc slot over SLOT_A0..SLOT_A1 (6 deg margin each end), and the three
+// M3 bolts move into the solid 205-deg remainder.
+SHAFT_R         = 25.6;    // [mm] centre distance (wings SHAFT_BORE_STATION)
+SHAFT_AZ        = 3.8;     // [deg] measured shaft azimuth at cruise
+SLOT_A0         = SHAFT_AZ - 5.0 - 6.0;     // = -7.2 deg
+SLOT_A1         = SHAFT_AZ + 140.0 + 6.0;   // = 149.8 deg
+SLOT_HALF_W     = 2.0 + 0.8;                // shaft radius + 0.8 running gap
+BOLT_ANGLES     = [175, 255, 335];          // [deg] outside the slot
 
 // Register / flange scaled to the Ø32 seat (2.5 mm walls).
 REG_D           = 38.0;   // collar register bore Ø38.1 in the pod wrapper
@@ -113,14 +133,29 @@ module trunnion_cuts() {
             translate([0, 0, -0.01])
                 cylinder(d = MAG_ID - MAG_FIT, h = MAG_T + 0.03);
         }
-    // 3 x M3 clearance through the flange plate
-    for (i = [0 : N_BOLTS - 1])
-        rotate([0, 0, i * 360 / N_BOLTS])
+    // 3 x M3 clearance through the flange plate, clear of the shaft slot
+    for (a = BOLT_ANGLES)
+        rotate([0, 0, a])
             translate([BOLT_CIRCLE_D / 2, 0, FLANGE_Z - 0.01])
                 cylinder(d = BOLT_CLEAR_D, h = FLANGE_T + 0.02);
+    // drive-shaft arc slot through flange + magnet carrier (see above)
+    shaft_arc(FLANGE_Z - 0.01, FLANGE_T + 1.02, SLOT_HALF_W);
 }
 
 LIP_T = 1.0;   // [mm] flange-base layer between bearings and magnet
+
+// Annular sector about the part z axis: radius SHAFT_R +/- half_w, azimuth
+// SLOT_A0..SLOT_A1, from z0 for height h, with round ends (the shaft's own
+// section at each end of its travel).
+module shaft_arc(z0, h, half_w) {
+    translate([0, 0, z0]) rotate([0, 0, SLOT_A0]) {
+        rotate_extrude(angle = SLOT_A1 - SLOT_A0, $fn = 180)
+            translate([SHAFT_R - half_w, 0]) square([2 * half_w, h]);
+        for (a = [0, SLOT_A1 - SLOT_A0])
+            rotate([0, 0, a]) translate([SHAFT_R, 0, 0])
+                cylinder(r = half_w, h = h, $fn = 32);
+    }
+}
 
 // ── Parse-time checks ────────────────────────────────────────────────────────
 assert(abs(MAGNET_FACE_Z - MAG_T - (BRG_SEAT_L + LIP_T)) < 1e-9,
@@ -134,6 +169,9 @@ assert(BOLT_CIRCLE_D / 2 - 3.5 / 2 - REG_D / 2 >= 2.0 - 1e-9,
        "collar insert wall to the register below 2.0 mm");
 assert(GEAR_RF - BRG_OD / 2 >= 2.5,
        "ring-gear rim over the bearing seat below the 2.5 mm minimum wall");
+for (a = BOLT_ANGLES)
+    assert(a > SLOT_A1 + 8 && a < SLOT_A0 + 360 - 8,
+           "a flange bolt sits inside the drive-shaft slot");
 assert(LIP_D / 2 < BRG_OD / 2 - 1.0,
        "flange base gives the outer race under 1 mm of shoulder");
 

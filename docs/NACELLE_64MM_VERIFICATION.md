@@ -176,6 +176,24 @@ axis. The repo previously implied a ~907 N "static rating"; that is a dynamic ra
 correction is recorded in WING_ATTACH_INTERFACE §4.3a. The tilt-axis aero moment is still
 unquantified (TILT-CTL-06), and the larger frontal area makes it bigger.
 
+## 5c. Tilt joint in context — `nacelle_tilt_joint_context.scad` (option A + relief 1)
+
+The real wing mesh, pod, trunnion and pinion were assembled in position and swept through
+tilt −5 to 140° with manifold3d (tilt maps to +θ in the trunnion part frame).
+
+| Pair | Before | After |
+| --- | --- | --- |
+| Pinion vs pod | 474–1127 mm³ | 0 |
+| Shaft vs pod collar | 18 mm³ | 0 |
+| Shaft vs trunnion flange | 28 mm³ | 0 |
+| Pinion tip vs ring gear | — | 35–40 mm³, constant: tooth engagement (root cylinder 0) |
+
+Ring Lewis capacity is 3.63 N·m, FOS 4.13 on the bound aero case. CG converged to 109.67 mm
+against PIVOT_Z 109.7. The pod shell measures 247.6 cm³. Images:
+`docs/images/nacelle_64mm_tilt_joint_optionA.png` and `_cutaway.png`. The wing's 14T pinion
+must be widened to 10.5 mm in the wing part (open item). Learning:
+`docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md`.
+
 ## 6. Install and removal (owner requirement)
 
 See WBS NAC-64-SVC-01. Rotor 1 now sits in the straight duct behind the lip and services through
@@ -185,13 +203,16 @@ ESCs service through their covers, and the 10 AWG feeds at the disconnect bay.
 
 ## 7. Open items raised by this record
 
+- **Wing pinion face 10.5 mm** (§5c): cut into `wings_s1223_revo.scad`
+  and re-sweep.
+
 - **Trunnion bearings at s0 1.12** (§5b, WBS NAC-64-TILT-01): confirm C0 on the JTEKT
   catalogue, measure rotor spin data and the aero moment, then decide span or bearing.
 - **Stator-as-mount sleeves** are not yet drawn (NAC-64-GEOM-01); 70 A ESC bay fit
   (NAC-64-ESC-70A).
-- **Zero-volume slivers in the render:** where the ESC cooling ports graze the sleeve bore
-  (r 34.7 mm, Z 91.5/95.5/99.5), and one per pod at the cover-doubler band (r ≈ 40 mm,
-  Z 77–82). NAC-64-GEOM-02.
+- **Zero-volume slivers in the render:** where the ESC cooling ports graze
+  the sleeve bore (r 34.7 mm, Z 91.5/95.5/99.5), and one per pod at the
+  cover-doubler band (r ≈ 40 mm, Z 77–82). NAC-64-GEOM-02.
 - **Bench checks:**
   - lip on a thrust/pressure bench and a cruise-case CFD (NAC-64-LIP-02);
   - physical QF2822 and rotor measurements (NAC-64-FIT-02).
