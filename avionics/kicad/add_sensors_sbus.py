@@ -1491,7 +1491,7 @@ def main() -> None:
         print(f"ERROR: {CAPE_A1_PATH} not found", file=sys.stderr)
         sys.exit(1)
 
-    print(f"\nProcessing PilotCAPE_A1_PATH}")
+    print(f"\nProcessing Pilot: {CAPE_A1_PATH}")
     with open(CAPE_A1_PATH, "r", encoding="utf-8") as fh:
         cape_a1_src = fh.read()
     print(f"  Read {len(cape_a1_src):,} characters from source")
