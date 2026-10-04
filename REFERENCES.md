@@ -2455,6 +2455,17 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Values applied** | 18.5 x 7.6 x 15.7 mm (L x W x H); 4.4 g; 0.80 kgf·cm at 4.8 V, 1.00 kgf·cm at 6.0 V; 0.09 / 0.07 s per 60 deg; coreless motor, metal gears |
 | **Caveat** | Aggregator data, not the manufacturer datasheet — **every dimension and the 6 V rating REQUIRE VERIFICATION** on a physical unit before the servo pocket is printed (WBS NAC-64-SERVO-01). Supersedes the plan's earlier "8 mm case, 4.5 g" reading (hyperflight.co.uk). |
 | **Applied to** | `airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad` servo pocket; `tools/nozzle_servo_linkage.py`; plan 2026-09-28-001 KTD2 |
+
+### REF-ACT-005: KST X06 — HV digital micro servo, steel gears, aluminium case (nacelle nozzle servo)
+
+| Field | Value |
+|---|---|
+| **Type** | Secondary sources (specification aggregator + retailer); manufacturer datasheet not retrieved |
+| **URLs** | <https://servodatabase.com/servo/kst/x06>; <https://alofthobbies.com/products/kst-x06-1-8kg-24-99-oz-in-07-sec-wide-voltage> |
+| **Retrieved** | 2026-10-04 (via web search summary, Claude Opus 5.5) |
+| **Values applied** | 20 x 7 x 16.6 mm; 6 g; stall 0.80 / 1.50 / 1.80 kgf·cm at 3.8 / 6.0 / 8.4 V; 3.8–8.4 V; coreless motor; hardened-steel gears; aluminium housing; travel ±60 deg |
+| **Caveat** | Not the manufacturer datasheet — **dimensions, shaft position and the 6 V torque REQUIRE VERIFICATION** on a physical unit before the pocket is printed. Owner selected 2026-10-04 over REF-ACT-004 for force margin. |
+| **Applied to** | `tools/nozzle_servo_linkage_64.py`; `airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad`; plan 2026-09-28-001 KTD2 |
 ### REF-ESC-001: Open-Secure-ESC — 6S/10A brushed build, the nacelle-tilt controller
 
 | Field | Value |

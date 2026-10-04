@@ -31,16 +31,20 @@
 // =============================================================================
 
 include <nozzle_servo_linkage_64_params.scad>
+include <nacelle_dorsal_shroud_64_gen.scad>   // resized canonical dorsal shroud (generated)
 
 NSV_PART  = "asm";
 NSV_SIDE  = 1;              // +1 stbd, -1 port (mirror)
 NSV_SHELL = "../../stls/nacelles/eng_right_shell24_50mm_repaired.stl";
 NSV_CLR   = 0.6;            // [mm] pocket running clearance
 NSV_COVER_T = 1.6;          // [mm] cover skin thickness (>= 1.5)
-NSV_SPINE_Z = [138.0, 187.0];   // cover / opening axial span
+NSV_SPINE_Z = [124.0, 187.0];   // cover / opening axial span (servo body from ~Z 124)
 NSV_SPINE_AZ = [250.0, 292.0];  // cover / opening azimuth span (stbd)
 NSV_FLOOR_R = 36.4;         // bore wall (34.7) + 1.7
 
+// Side: the pod passes its PYLON_SIDE as $nsv_side (a 'use'd file keeps its
+// own NSV_SIDE default otherwise).
+function nsv_side() = is_undef($nsv_side) ? NSV_SIDE : $nsv_side;
 function nsv_er(az) = [cos(az), sin(az), 0];
 function nsv_et(az) = [-sin(az), cos(az), 0];
 function nsv_arm(phi, L) = NSL_C + L * (cos(phi) * NSL_U + sin(phi) * NSL_V);
@@ -86,6 +90,10 @@ module nsv_sweep_aft(d_add) { for (k = [0 : 6]) hull() { nsv_moving_aft(k / 7, d
 module nsv_sweep(d_add) { for (k = [0 : 6]) hull() { nsv_moving(k / 7, d_add); nsv_moving((k + 1) / 7, d_add); } }
 
 module nsv_shell() { scale([1.21, 1.21, 1.13]) translate([-155.02, 190.79, 0]) import(NSV_SHELL, convexity = 6); }
+// Outer mould line over the drive: the canonical shell plus the RESIZED
+// canonical dorsal shroud (owner rule 2026-10-04: height grows only as a
+// uniform resize of the canonical shroud; tools/dorsal_shroud_resize_64.py).
+module nsv_outer() { union() { nsv_shell(); dorsal_shroud_64(); } }
 module nsv_wedge(a0, a1, z0, z1, r1 = 80) {
     translate([0, 0, z0]) linear_extrude(z1 - z0)
         polygon(concat([[0, 0]], [for (a = [a0 : 2 : a1]) r1 * [cos(a), sin(a)]], [r1 * [cos(a1), sin(a1)]]));
@@ -93,17 +101,17 @@ module nsv_wedge(a0, a1, z0, z1, r1 = 80) {
 // Material that stays: everything deeper than (skin - cover) — approximated by
 // the shell shrunk radially by the cover thickness about the duct axis.
 module offset_skin_inner() {
-    k = 1 - NSV_COVER_T / 46.0;
-    scale([k, k, 1]) nsv_shell();
+    k = 1 - NSV_COVER_T / 48.0;
+    scale([k, k, 1]) nsv_outer();
 }
-NSV_COVER_SCREWS = [[252.5, 141.0], [289.5, 141.0], [287.0, 184.0]];   // [az, z] on solid ledge
+NSV_COVER_SCREWS = [[252.5, 127.0], [289.5, 127.0], [287.0, 184.0]];   // [az, z] on solid ledge
 module nsv_cover_screw_axes(d, h0, h1) {
     for (s = NSV_COVER_SCREWS) rotate([0, 0, s[0]]) translate([h0, 0, s[1]])
         rotate([0, 90, 0]) cylinder(d = d, h = h1 - h0, $fn = 16);
 }
 
 module nsv_pod_cuts() {
-    mirror([NSV_SIDE < 0 ? 1 : 0, 0, 0]) {
+    mirror([nsv_side() < 0 ? 1 : 0, 0, 0]) {
         nsv_servo_body(NSV_CLR);
         nsv_sweep(2 * NSV_CLR);
         // service wells: open the servo pocket and the bellcrank area up to
@@ -126,39 +134,29 @@ module nsv_pod_cuts() {
     }
 }
 
-// Spine extension: the canonical spine's last section (Z 182..187.86) blended
-// aft onto the housing by Z 203, kept clear of the housing (r 42.9) and of
-// the rod sweep; counterbores for the 2 captive M3 nozzle screws.
+// Pod-side shroud: the resized canonical dorsal shroud, with the drive's
+// running space, the housing envelope aft of the joint (the nozzle slides off
+// under it), the sleeve bore, the nozzle's retention-boss clearances and the
+// two captive M3 screw counterbores removed.
 module nsv_pod_adds() {
-    mirror([NSV_SIDE < 0 ? 1 : 0, 0, 0]) difference() {
-        // Fairing = hull(canonical spine's last section, the aft mechanism's
-        // sweep + running clearance + a 1.6 mm skin, an end strake on the
-        // housing): wherever the drive leaves canon it is covered by a
-        // printable wall and no more (blend per the QMx side view).
-        hull() {
-            intersection() { nsv_shell(); nsv_wedge(242, 324, 182.0, 187.86); }
-            nsv_sweep_aft(2 * NSV_CLR + 2 * NSV_COVER_T);
-            rotate([0, 0, 280]) translate([42.9, -21, 202.5]) cube([2.0, 42, 0.5]);
-        }
+    mirror([nsv_side() < 0 ? 1 : 0, 0, 0]) difference() {
+        dorsal_shroud_64();
         translate([0, 0, 187.86]) cylinder(r = 42.9, h = 30, $fn = 180);
-        translate([0, 0, 170]) cylinder(r = 34.8, h = 60, $fn = 180);   // sleeve bore / spigot
+        translate([0, 0, 90]) cylinder(r = 34.8, h = 140, $fn = 180);
         nsv_sweep(2 * NSV_CLR);
-        // clearance for the nozzle's retention bosses (nacelle_nozzle_iris_64mm
-        // NZ64_BOSS_*: az 302 / 316, r to 45.6, z 1..9, 7 mm wide) + 0.3,
-        // open aft so the nozzle slides off
         for (a = [302, 316]) rotate([0, 0, a])
             translate([42.0, -3.8, 187.86 + 0.7]) cube([4.0, 7.6, 30]);
         for (a = [302, 316]) rotate([0, 0, a]) translate([42.0, 0, 187.86 + 5.0])
-            rotate([0, 90, 0]) { cylinder(d = 3.4, h = 8, $fn = 16);
-                                 translate([0, 0, 3.6]) cylinder(d = 5.8, h = 6, $fn = 20); }
+            rotate([0, 90, 0]) { cylinder(d = 3.4, h = 12, $fn = 16);
+                                 translate([0, 0, 3.6]) cylinder(d = 5.8, h = 10, $fn = 20); }
     }
 }
 
 // Access cover = the skin removed by the opening, minus the moving sweep,
 // with captive-screw clearance holes.
 module nsv_cover() {
-    mirror([NSV_SIDE < 0 ? 1 : 0, 0, 0]) difference() {
-        intersection() { nsv_shell();
+    mirror([nsv_side() < 0 ? 1 : 0, 0, 0]) difference() {
+        intersection() { nsv_outer();
                          nsv_wedge(NSV_SPINE_AZ[0] + 0.3, NSV_SPINE_AZ[1] - 0.3,
                                    NSV_SPINE_Z[0] + 0.3, NSV_SPINE_Z[1] - 0.3);
                          difference() { cylinder(r = 80, h = 400); offset_skin_inner(); } }
@@ -175,6 +173,15 @@ module nsv_rod_clearance_ring_frame(d = 4.0, z_noz = 187.86) {
                           b = nsv_ball(ps), u = (b - tip) / norm(b - tip))
         rotate([0, 0, -(ps - NSL_PSI_CLOSED)]) translate([0, 0, -z_noz])
             nsv_seg(tip, b - 1.8 * u, d);
+}
+
+// Slide-off clearance in the ring frame: the rod body (minus the ball) at the
+// OPEN pose, swept 14 mm forward relative to the ring (the nozzle sliding aft).
+module nsv_rod_slide_clearance_ring_frame(d = 4.0, z_noz = 187.86, travel = 14) {
+    let(tip = nsv_arm(nsv_phi(1), NSL_L_OUT), b = nsv_ball(nsv_psi(1)), u = (b - tip) / norm(b - tip))
+        rotate([0, 0, -(nsv_psi(1) - NSL_PSI_CLOSED)]) translate([0, 0, -z_noz])
+            hull() { nsv_seg(tip, b - 1.8 * u, d);
+                     translate([0, 0, -travel]) nsv_seg(tip, b - 1.8 * u, d); }
 }
 
 // Printed bellcrank (CF-PETG), in its own frame: pivot at the origin, axis z.
@@ -194,7 +201,7 @@ module nsv_bellcrank() {
 if (is_undef(NSV_NO_RENDER)) {
     if (NSV_PART == "cover") nsv_cover();
     else if (NSV_PART == "bellcrank") nsv_bellcrank();
-    else mirror([NSV_SIDE < 0 ? 1 : 0, 0, 0]) {
+    else mirror([nsv_side() < 0 ? 1 : 0, 0, 0]) {
         color("Red") nsv_servo_body();
         color("Black") nsv_moving(0.5);
     }

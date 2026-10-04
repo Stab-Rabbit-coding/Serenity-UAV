@@ -148,6 +148,7 @@ P64_STAGE       = P64_SHAFT + P64_GAP + P64_PLATE + P64_BODY;   // = 72.7 mm
 
 include <nacelle_pod_50mm_tandem.scad>
 use <edf_motor_mount_64mm.scad>   // stage-1 stator (integrated) + lead channel
+use <nacelle_nozzle_servo_64mm.scad>   // nozzle servo drive in the resized dorsal shroud
 
 POD_AUTORENDER = false;    // render the 64 mm pod below, not the 50 mm one
 
@@ -254,6 +255,10 @@ ESC_DISC_Z_HI   = 62.0 * P64_A - 1.5;   // = 68.56
 module edf1_nacelle_spider() {
     $mm_side = PYLON_SIDE;  $mm_swirl = SWIRL_DIR;
     stator_stage(1);
+    // Zone C is also where the RESIZED canonical dorsal shroud joins the pod
+    // (nacelle_nozzle_servo_64mm.scad nsv_pod_adds; owner rule 2026-10-04).
+    $nsv_side = PYLON_SIDE;
+    nsv_pod_adds();
 }
 // The 50 mm motor-lead exit slot sat at STATOR_SLV_Z_START; at 103.7 it would
 // open the duct at the rotor-2 tips.  The lead vanes replace it.
@@ -403,6 +408,8 @@ module tilt_drive_relief() {
 
 module extra_zone_b_cuts() {
     lip_ring_cavity(); tilt_drive_relief(); motor_lead_routes();
+    $nsv_side = PYLON_SIDE;
+    nsv_pod_cuts();     // nozzle servo pocket, drive sweeps, service wells, cover opening
 }
 
 // Motor phase-lead routes (WBS NAC-64-SVC-01), PYLON_SIDE-mirrored with the

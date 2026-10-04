@@ -17,9 +17,12 @@ Chain (all rigid, all in the pod except the ring):
   * Ring ear ball B(psi): r 39.0, z = nozzle ring Z 187.86 + 4.0, psi from
     292.5 (closed, 75 % exit) to 268.75 (open, 105 %), the 64 mm iris
     (nacelle_nozzle_iris_64mm.scad RING_LEVER_AZ, THETA_RING_REF_OPEN 23.75).
-  * Bellcrank on a RADIAL pivot pin at C (az 255, z 179, r 42), output arm 14
-    to a rod of length fixed at the closed pose (RSSR search 2026-10-04: worst
-    rod-to-ear-motion angle 6 deg over the stroke).
+  * Bellcrank on a RADIAL pivot pin at C (az 266, z 179, r 42), output arm 14
+    to a rod of length fixed at the closed pose; servo shaft at Z 144, horn
+    plane az 280.  Chosen by /ce-optimize run nds-1 (2026-10-04, 14
+    experiments, .context/compound-engineering/ce-optimize/nozzle-drive-shroud/)
+    as the drive that fits a pure resize of the canonical dorsal shroud with the
+    least crest growth (+2.01 mm, K_H 1.449, tail K_Z 4.3 about Z 170).
   * Input arm, tangential at mid-stroke so its tip moves axially, driven by an
     axial link from the servo horn.
   * Servo Blue Bird BMS-101DMG [REF-ACT-004], 18.5 x 7.6 x 15.7 mm (VERIFY),
@@ -51,7 +54,7 @@ OUT = REPO / "airframe/openscad/nacelles/nozzle_servo_linkage_64_params.scad"
 Z_NOZ = 187.86
 B_R, B_Z = 39.0, Z_NOZ + 4.0
 PSI_CLOSED, PSI_OPEN = 292.5, 268.75
-C_AZ, C_Z, C_R = 255.0, 179.0, 42.0
+C_AZ, C_Z, C_R = 266.0, 179.0, 42.7      # ce-optimize nds-1 winner; r 42.7 clears the open stop lug
 L_OUT = 14.0
 HORN, SERVO_SWEEP = 4.0, 90.0           # mm, deg (+/-45: maximises T sin cos)
 SERVO_TORQUE = 0.147                    # N.m, 1.5 kgf.cm at 6 V, KST X06 [REF-ACT-005] (VERIFY)
@@ -101,8 +104,8 @@ def main() -> int:
     ap.add_argument("--pivot", nargs=3, type=float, metavar=("AZ", "Z", "R"),
                     help="trial bellcrank pivot (default: the adopted one)")
     ap.add_argument("--out", type=Path, help="params file (default: the repo one)")
-    ap.add_argument("--servo-z", type=float, default=153.0, help="servo shaft Z")
-    ap.add_argument("--servo-az", type=float, default=None,
+    ap.add_argument("--servo-z", type=float, default=144.0, help="servo shaft Z")
+    ap.add_argument("--servo-az", type=float, default=280.0,
                     help="servo horn-plane azimuth (default: the input tip's)")
     a = ap.parse_args()
     if a.pivot:
