@@ -40,6 +40,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
 - [Part IV — Defense Standards](#part-iv--defense-standards)
     - [REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus](#ref-mil-001-mil-std-1553c--digital-time-division-commandresponse-multiplex-data-bus)
     - [REF-MIL-002: MIL-STD-461G — Requirements for the Control of Electromagnetic Interference Characteristics of Subsystems and Equipment](#ref-mil-002-mil-std-461g--requirements-for-the-control-of-electromagnetic-interference-characteristics-of-subsystems-and-equipment)
+    - [REF-NASA-001: NASA-STD-8739.4A — Workmanship Standard for Crimping, Interconnecting Cables, Harnesses, and Wiring](#ref-nasa-001-nasa-std-87394a--workmanship-standard-for-crimping-interconnecting-cables-harnesses-and-wiring)
 - [Part V — International Standards (ISO, IEC)](#part-v--international-standards-iso-iec)
     - [REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling](#ref-iso-001-iso-11898-12015--road-vehicles--controller-area-network-can--part-1-data-link-layer-and-physical-signalling)
     - [REF-IEC-001: IEC 62368-1 Ed. 3.0 — Audio/Video, Information and Communication Technology Equipment — Part 1: Safety Requirements](#ref-iec-001-iec-62368-1-ed-30--audiovideo-information-and-communication-technology-equipment--part-1-safety-requirements)
@@ -697,6 +698,26 @@ MIL-STD-461G qualification testing is deferred pending airframe integration.
 
 **Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`,
 `docs/AVIONICS_PB2_REDESIGN.md`
+
+---
+
+### REF-NASA-001: NASA-STD-8739.4A — Workmanship Standard for Crimping, Interconnecting Cables, Harnesses, and Wiring
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | NASA Office of Safety and Mission Assurance (OSMA) |
+| **Edition** | NASA-STD-8739.4A with Change 3 (cover: approved 2016-06-30) |
+| **Official access** | <https://standards.nasa.gov/sites/default/files/standards/NASA/A/3/nasa-std-87394a_w_change_3.pdf> — fetched directly 2026-10-03 (HTTP 200) and read |
+| **Note** | U.S. Government work; no purchase required. |
+
+**Requirements applied in this project:**
+
+| Requirement | Title | Application |
+|---|---|---|
+| §7.2.19, Table 7-1 (p. 30 of 114) | Bend Radii for Completed Interconnecting Cable or Harness | Overall harness of AWG 10 or smaller without coax: **minimum 3 × OD**, optimum 10 × OD; AWG 8 or larger: minimum 6 × OD. Sets the harness-loop reservation at every ESC wire-exit end in `tools/esc80_cooptimize.py` (model 2, `bend_k` = 3) |
+
+**Used in:** `tools/esc80_cooptimize.py`, `tools/esc80_design_m2.json`,
+`airframe/wings-nacelles/WBS.md` (NAC-64-ESC-80A)
 
 ---
 

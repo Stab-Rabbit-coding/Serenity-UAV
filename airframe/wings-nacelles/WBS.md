@@ -2112,6 +2112,30 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             3670209 (388 mm² courtyard), (3) a harness revision for an
             in-layout cooling lane. Lessons:
             `docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md`.
+        - [x] **NAC-64-ESC-80A.i — FIT CLOSED at screening level (2026-10-03,
+            Claude Opus 5.5; owner approved two bays/ESC, smaller shield,
+            in-layout lane, longer bay; packing 0.75 both faces with pours and
+            thermal vias; harness loops).** Harness model 2
+            (`tools/esc80_cooptimize.py`, point `tools/esc80_design_m2.json`):
+            each ESC spans TWO neighbouring hinged bays (power bay + logic bay),
+            23 + 16 mm panels. Margins: variant A (all leads fwd) +0.13 in
+            (+3.2 mm) at az 232/302, Z 107–154; variant B (phases aft)
+            +0.12 in (+2.96 mm) at az 38/106, Z 96–148. T_ch 72 °C (limit
+            125), hover slack +0.11 in (+2.7 mm), CG +1.7 mm aft. Findings:
+            both bay ends are SKIN-limited (no other system in the way); the
+            forward limit is the fixed Z 70.06 bulkhead aft face (disconnect bay
+            beyond, not entered); harness loops at 3 x OD minimum
+            [REF-NASA-001 Table 7-1] live in the skin-thin rings beyond the
+            board where possible. Rejected: WE-SHC 3670110 (2.8 mm ref breaks
+            the 2.0 mm power-bay cap), 4 mm in-layout lane (T_ch 379 °C).
+        - [ ] **NAC-64-ESC-80A.j — open items behind that result:** (1) re-site
+            the bay-tied webs (Z 74.35 / 139.85) and the cooling ports to the
+            four new bays; (2) 1210 bulk caps sourced ≤ 2.0 mm tall (power-bay
+            cap); (3) phase/pack/signal lead ODs and bullet length measured
+            (VERIFY); (4) pour widths re-derived with conductor_sizing.py at
+            80 A (pour area is an ESTIMATE); (5) inter-bay interconnect part;
+            (6) place the boards in KiCad (facet_placement.py) to confirm the
+            0.75 packing; (7) PIVOT_Z re-iteration for the +1.7 mm CG shift.
         - [ ] **NAC-64-ESC-80A.h — Open-Secure-ESC follow-ups found:** the 50 A
             faceted PCB carries an LQFP-64 MCU while the schematic is RHB
             VQFN-32; the decision-matrix Amperage sheet still lists IRFB4110

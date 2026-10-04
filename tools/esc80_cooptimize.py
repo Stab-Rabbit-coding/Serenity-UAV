@@ -119,17 +119,19 @@ OZ_MM = 0.0347               # 1 oz copper thickness
 OTHER_G_PER_MM2 = 0.012      # ESTIMATE — non-FET part mass per courtyard mm2
 
 
-def skin64():
+def skin64(z_min=None):
     """Outer-skin radius on a (Z, az) grid for the 64 mm pod, cached."""
-    if CACHE.exists():
-        d = np.load(CACHE)
+    z_lo = Z_MIN if z_min is None else z_min
+    cache = CACHE if z_min is None else CACHE.with_name(f"esc80_skin64_z{z_lo:.2f}.npz")
+    if cache.exists():
+        d = np.load(cache)
         return d["zs"], d["skin"]
     import trimesh
     mesh = trimesh.load_mesh(REPO / "airframe/stls/nacelles" / bay.SHELL["PORT"],
                              force="mesh")
     mesh.apply_translation([-bay.BORE_CX["PORT"], bay.BORE_CY, 0.0])
     mesh.apply_scale([P64_K, P64_K, P64_A])
-    zs = np.arange(Z_MIN, Z_MAX + DZ / 2, DZ)
+    zs = np.arange(z_lo, Z_MAX + DZ / 2, DZ)
     az = np.arange(bay.N_AZ_SAMPLE) * 360.0 / bay.N_AZ_SAMPLE
     org, dirs = [], []
     for z in zs:
@@ -143,7 +145,7 @@ def skin64():
     if (out == 0).any():
         raise ValueError(f"{(out == 0).sum()} rays missed the scaled shell")
     skin = out.reshape(len(zs), bay.N_AZ_SAMPLE)
-    np.savez(CACHE, zs=zs, skin=skin)
+    np.savez(cache, zs=zs, skin=skin)
     return zs, skin
 
 
@@ -471,17 +473,32 @@ def _assess_v2(p, zs, skin, sel, by_phi, loops, order, nb, wp, ws,
         if not bay_ids:
             results[esc] = None
             continue
-        avail = []
-        for b in bay_ids:
-            pr = by_phi[b[0]]
-            od_f = max(p["phase_od"], p["pack_od"]) if fwd else 0.0
-            od_a = p["phase_od"] if aft else 0.0
-            f_free = free_beyond(zs, skin, b[0], pr, od_f, -1) if fwd else 0.0
-            a_free = free_beyond(zs, skin, b[0], pr, od_a, +1) if aft else 0.0
+        def bay_avail(b, fwd_r, aft_r, od_f, od_a, power=False):
+            pr = by_phi["_pow"].get(b[0], by_phi[b[0]]) if power else by_phi[b[0]]
+            f_free = free_beyond(zs, skin, b[0], pr, od_f, -1) if fwd_r else 0.0
+            a_free = free_beyond(zs, skin, b[0], pr, od_a, +1) if aft_r else 0.0
             a_p, a_s, span, zz = area_after_reserve(
-                pr, max(0.0, fwd - f_free), max(0.0, aft - a_free))
+                pr, max(0.0, fwd_r - f_free), max(0.0, aft_r - a_free))
             lane_cost = (p["lane_strip_w"] * span) if in_layout else 0.0
-            avail.append((a_p, a_s, span, zz, lane_cost))
+            return (a_p, a_s, span, zz, lane_cost)
+        od_f = max(p["phase_od"], p["pack_od"]) if fwd else 0.0
+        od_a = p["phase_od"] if aft else 0.0
+        if nb == 1:
+            avail = [bay_avail(bay_ids[0], fwd, aft, od_f, od_a)]
+        else:
+            # Power bay carries the phase + pack leads; the logic bay only the
+            # signal/bus leads (sig_od, no bullet, forward end).  Put the power
+            # group in whichever of the two bays leaves it more area.
+            sig = p["bend_k"] * p.get("sig_od", 2.0)
+            cands = []
+            for pw, lg in ((bay_ids[0], bay_ids[1]), (bay_ids[1], bay_ids[0])):
+                ap = bay_avail(pw, fwd, aft, od_f, od_a, power=True)
+                al = bay_avail(lg, sig, 0.0, p.get("sig_od", 2.0), 0.0)
+                cands.append((min(2 * (ap[0] + ap[1]) - need_p,
+                                  2 * (al[0] + al[1]) - need_l), ap, al, pw, lg))
+            cands.sort(key=lambda c: -c[0])
+            avail = [cands[0][1], cands[0][2]]
+            bay_ids = [cands[0][3], cands[0][4]]
         if nb == 1:
             a_p, a_s, span, zz, lane = avail[0]
             pow_av = 2 * a_p - lane          # both faces of the power panel
@@ -505,8 +522,16 @@ def _assess_v2(p, zs, skin, sel, by_phi, loops, order, nb, wp, ws,
     return results
 
 
+# Forward limit for model 2: the aft face of the fixed Z 70.06 cavity bulkhead
+# (CAVITY_BULKHEAD_Z[1] = 62 x 1.13, CAVITY_BULKHEAD_T 3.0).  The two webs at
+# Z 74.35 / 139.85 are BAY-TIED (nacelle_pod_64mm_tandem.scad: "tied to the
+# BAYS") and move with whatever bay this tool selects; forward of 70.06 is the
+# 10 AWG disconnect bay, another system's space, so nothing here crosses it.
+Z_MIN_V2 = 62.0 * P64_A + 3.0 / 2.0
+
+
 def main_v2(p) -> int:
-    zs, skin = skin64()
+    zs, skin = skin64(p.get("z_min", Z_MIN_V2))
     bay.SKIN_WALL = p.get("cover_t", 2.5) + 0.4
     bay.duct_r = lambda z: DUCT_R_64          # noqa: E731
     bay.DUCT_WALL = MOUNT_R - DUCT_R_64
@@ -523,6 +548,15 @@ def main_v2(p) -> int:
         pr = bay_profile(zs, skin, float(phi), env, wp, ws, p.get("fmin", 0.6))
         if pr:
             profs.append((float(phi), pr, sum(r[1] + r[2] for r in pr) * DZ))
+    # Two bays per ESC: the power bay holds no isolators, so its outer face may
+    # be lower than the logic bay's (h_outer_power, default = h_outer).
+    env_pow = env - p["h_outer"] + p.get("h_outer_power", p["h_outer"])
+    by_phi_pow = {}
+    if nb == 2 and env_pow != env:
+        for phi in np.arange(0.0, 360.0, 2.0):
+            pr = bay_profile(zs, skin, float(phi), env_pow, wp, ws, p.get("fmin", 0.6))
+            if pr:
+                by_phi_pow[float(phi)] = pr
     profs.sort(key=lambda t: -t[2])
     rows = [(phi, len(pr) * DZ, pr[0][0], pr[-1][0] + DZ, MOUNT_R)
             for phi, pr, _ in profs]
@@ -536,6 +570,7 @@ def main_v2(p) -> int:
         p2 = gap(s4[1], s4[2]) + gap(s4[3], s4[0])
         sel = s4 if p1 <= p2 else [s4[1], s4[2], s4[3], s4[0]]
     by_phi = {phi: pr for phi, pr, _ in profs}
+    by_phi["_pow"] = by_phi_pow
 
     def assess(order):
         return _assess_v2(p, zs, skin, sel, by_phi, loops, order, nb, wp, ws,

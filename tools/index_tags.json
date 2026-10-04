@@ -15494,6 +15494,13 @@
       ],
       "archived": false
     },
+    "tools/esc80_design_m2.json": {
+      "description": "JSON data (38 top-level keys)",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/export-specctra-dsn.py": {
       "description": "Real API name (verified against this pcbnew build): ExportSpecctraDSN,",
       "tags": [
@@ -20090,6 +20097,7 @@
       "tools/compact_bom_entries.py",
       "tools/esc80_cooptimize.py",
       "tools/esc80_design.json",
+      "tools/esc80_design_m2.json",
       "tools/export-specctra-dsn.py",
       "tools/export_assembly_meshes.py",
       "tools/export_landing_gear_stls.py",
