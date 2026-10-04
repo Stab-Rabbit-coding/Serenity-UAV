@@ -140,3 +140,14 @@ def test_failing_design_exits_nonzero(tmp_path):
     proc = subprocess.run([sys.executable, str(TOOLS / "esc80_cooptimize.py"), str(f)],
                           capture_output=True, text=True, timeout=1800)
     assert proc.returncode != 0
+
+
+# ── sibling-module overrides ─────────────────────────────────────────────────
+
+def test_overrides_restore_sibling_globals_even_on_error():
+    before = (h.bay.SKIN_WALL, h.bay.duct_r, h.thermal.DUCT_AREA)
+    with pytest.raises(RuntimeError):
+        with h.overrides_64mm(1.5):
+            assert h.bay.SKIN_WALL == pytest.approx(1.9)
+            raise RuntimeError("boom")
+    assert (h.bay.SKIN_WALL, h.bay.duct_r, h.thermal.DUCT_AREA) == before

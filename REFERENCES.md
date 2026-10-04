@@ -37,7 +37,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-NIST-002: NIST SP 800-82 Rev 3 — Guide to Operational Technology (OT) Security](#ref-nist-002-nist-sp-800-82-rev-3--guide-to-operational-technology-ot-security)
     - [REF-NIST-003: NIST SP 800-160 Vol 1 Rev 1 — Engineering Trustworthy Secure Systems](#ref-nist-003-nist-sp-800-160-vol-1-rev-1--engineering-trustworthy-secure-systems)
     - [REF-NIST-004: NIST SP 800-92 — Guide to Computer Security Log Management](#ref-nist-004-nist-sp-800-92--guide-to-computer-security-log-management)
-- [Part IV — Defense Standards](#part-iv--defense-standards)
+- [Part IV — Defense and Government-Agency Standards (DoD, NASA)](#part-iv--defense-and-government-agency-standards-dod-nasa)
     - [REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus](#ref-mil-001-mil-std-1553c--digital-time-division-commandresponse-multiplex-data-bus)
     - [REF-MIL-002: MIL-STD-461G — Requirements for the Control of Electromagnetic Interference Characteristics of Subsystems and Equipment](#ref-mil-002-mil-std-461g--requirements-for-the-control-of-electromagnetic-interference-characteristics-of-subsystems-and-equipment)
     - [REF-NASA-001: NASA-STD-8739.4A — Workmanship Standard for Crimping, Interconnecting Cables, Harnesses, and Wiring](#ref-nasa-001-nasa-std-87394a--workmanship-standard-for-crimping-interconnecting-cables-harnesses-and-wiring)
@@ -619,7 +619,7 @@ cycle); hardware-enforced append-only non-executable log microSD on every XO nod
 
 ---
 
-## Part IV — Defense Standards
+## Part IV — Defense and Government-Agency Standards (DoD, NASA)
 
 ### REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus
 

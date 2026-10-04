@@ -60,6 +60,7 @@ License: CC BY 4.0 - creativecommons.org/licenses/by/4.0
 
 from __future__ import annotations
 
+import contextlib
 import json
 import math
 import os
@@ -126,6 +127,35 @@ OZ_MM = 0.0347               # 1 oz copper thickness
 OTHER_G_PER_MM2 = 0.012      # ESTIMATE — non-FET part mass per courtyard mm2
 
 
+# ── Sibling-module overrides ─────────────────────────────────────────────────
+# nacelle_esc_bay_fit / nacelle_esc_thermal are written for the 50 mm pod and
+# read module-level constants.  This tool re-points those constants at the
+# 64 mm pod.  Every name it may touch is listed here, and overrides_64mm()
+# snapshots and restores them, so nothing leaks to another caller in the same
+# process (review 2026-10-03, maintainability P1).
+_BAY_NAMES = ("W_POWER", "W_SIGNAL", "duct_r", "DUCT_WALL", "Z_MIN", "SKIN_WALL")
+_THERMAL_NAMES = ("DUCT_AREA", "NACELLE_THRUST_N", "BAY_WIDTH", "ESC_LEN")
+
+
+@contextlib.contextmanager
+def overrides_64mm(cover_t=2.5):
+    """Apply the 64 mm pod constants to the sibling modules; restore on exit."""
+    saved = ([(bay, n, getattr(bay, n)) for n in _BAY_NAMES]
+             + [(thermal, n, getattr(thermal, n)) for n in _THERMAL_NAMES])
+    try:
+        bay.duct_r = lambda z: DUCT_R_64       # noqa: E731  64 mm bore everywhere
+        bay.DUCT_WALL = MOUNT_R - DUCT_R_64    # so the d_in floor == ESC_MOUNT_R
+        bay.Z_MIN = Z_MIN
+        # access cover + running clearance (bay tool SKIN_WALL = cover 2.5 + 0.4)
+        bay.SKIN_WALL = cover_t + 0.4
+        thermal.DUCT_AREA = math.pi * (DUCT_R_64 / 1000.0) ** 2
+        thermal.NACELLE_THRUST_N = 2 * 20.9 * 0.90
+        yield
+    finally:
+        for mod, name, val in saved:
+            setattr(mod, name, val)
+
+
 def skin64(z_min=None):
     """Outer-skin radius on a (Z, az) grid for the 64 mm pod, cached."""
     z_lo = Z_MIN if z_min is None else z_min
@@ -161,10 +191,8 @@ def skin64(z_min=None):
 
 def bays(zs, skin, w_pow, w_sig, envelope):
     """Longest run per hinge azimuth with the 64 mm floors; returns sorted rows."""
+    # panel widths are per-call inputs of the bay tool (inside overrides_64mm)
     bay.W_POWER, bay.W_SIGNAL = w_pow, w_sig
-    bay.duct_r = lambda z: DUCT_R_64          # noqa: E731  64 mm bore everywhere
-    bay.DUCT_WALL = MOUNT_R - DUCT_R_64       # so d_in floor == ESC_MOUNT_R
-    bay.Z_MIN = Z_MIN
     rows = []
     for phi in np.arange(0.0, 360.0, 2.0):
         best = None
@@ -265,8 +293,7 @@ def thermal_tch(p, board_len, area_mm2=None):
     p_pour = thermal.P_POUR_50A * k_i * (2.0 / p["copper_oz"]) * p["pour_squares_rel"]
     p_gap = thermal.P_GAP_50A * k_i * (2.0 / p["copper_oz"])
     p_tot = p_fets + p_pour + p_gap
-    thermal.DUCT_AREA = math.pi * (DUCT_R_64 / 1000.0) ** 2
-    thermal.NACELLE_THRUST_N = 2 * 20.9 * 0.90
+    # duct area / thrust are set by overrides_64mm(); lane geometry is per call
     thermal.BAY_WIDTH = (p["w_power"] + p["w_signal"]) / 1000.0
     thermal.ESC_LEN = board_len / 1000.0
     st = thermal.duct_stations()
@@ -292,16 +319,23 @@ def esc_mass(p, board_len, power_a, logic_a):
     return fr4 + cu + fets + other
 
 
+def cg_roll_up(m_esc, z_mean, cover_g):
+    """Rotating-assembly mass and CG shift when the two 42 g ASSUMED ESC rows
+    and the scaled 50 mm cover row are replaced by `m_esc` each (at `z_mean`)
+    plus `cover_g` of covers.  Shared by both models."""
+    base_cover = 4 * 6.99 / 2 * P64_K
+    d_mz = 2 * m_esc * z_mean + cover_g * z_mean \
+        - 2 * ESC_BASE_G * ESC_BASE_Z - base_cover * ESC_BASE_Z
+    m_new = ASSY_G - 2 * ESC_BASE_G + 2 * m_esc - base_cover + cover_g
+    return m_new, (CG_Z * ASSY_G + d_mz) / m_new - CG_Z
+
+
 def main() -> int:
     p = json.loads(Path(sys.argv[1]).read_text())
     l_pow, l_log, power_a, logic_a, parts = length_needed(p)
     l_req = max(l_pow, l_log)
     stack = p["pcb_t"] + p["h_outer"] + p["h_inner"] + p["mount_gap"]
     zs, skin = skin64()
-    # access cover + running clearance over the bay (bay tool SKIN_WALL 2.9 =
-    # ESC_COVER_T 2.5 + 0.4); a design-point parameter because the owner allows
-    # the bay to be restacked
-    bay.SKIN_WALL = p.get("cover_t", 2.5) + 0.4
     rows = bays(zs, skin, p["w_power"], p["w_signal"], stack + p["flow_lane"])
     nb = p.get("bays_per_esc", 1)
     sel = pick_bays(rows, 2 * nb, p["w_power"], p["w_signal"])
@@ -313,11 +347,7 @@ def main() -> int:
     z_c = [(b[2] + b[3]) / 2 for b in sel] if sel else [ESC_BASE_Z] * 2
     z_mean = sum(z_c) / len(z_c)
     cover = COVER_G_PER_MM * l_req * len(z_c)
-    d_mz = 2 * m_esc * z_mean + cover * z_mean \
-        - 2 * ESC_BASE_G * ESC_BASE_Z - 4 * 6.99 / 2 * P64_K * ESC_BASE_Z
-    m_new = ASSY_G - 2 * ESC_BASE_G + 2 * m_esc \
-        - 4 * 6.99 / 2 * P64_K + cover
-    d_cg = (CG_Z * ASSY_G + d_mz) / m_new - CG_Z
+    m_new, d_cg = cg_roll_up(m_esc, z_mean, cover)
     ega, egb = egress_ok(p)
     width_iso_ok = (p["isolation"] != "lateral"
                     or max(p["w_power"], p["w_signal"]) >= LATERAL_FLOOR)
@@ -482,36 +512,49 @@ def loops_v2(p):
     return {"A": a, "B": b}
 
 
+def bay_avail(p, zs, skin, by_phi, by_phi_pow, pow_env_differs, in_layout,
+              b, fwd_r, aft_r, od_f, od_a, power=False):
+    """Usable area of one bay after harness-loop reserves.
+
+    Returns (power-panel area, signal-panel area, span, (z0, z1), lane cost,
+    (fitted power width at the fwd end, at the aft end)).  A power bay with no
+    run at the lower power-bay stack is unusable (all zeros), never silently
+    swapped for the taller-envelope profile.
+    """
+    if power and pow_env_differs:
+        pr = by_phi_pow.get(b[0])
+        if pr is None:
+            return (0.0, 0.0, 0.0, (0.0, 0.0), 0.0, (0.0, 0.0))
+    else:
+        pr = by_phi[b[0]]
+    f_free = free_beyond(zs, skin, b[0], pr, od_f, -1) if fwd_r else 0.0
+    a_free = free_beyond(zs, skin, b[0], pr, od_a, +1) if aft_r else 0.0
+    a_p, a_s, span, zz = area_after_reserve(
+        pr, max(0.0, fwd_r - f_free), max(0.0, aft_r - a_free))
+    lane_cost = (p["lane_strip_w"] * span) if in_layout else 0.0
+    ends = [w for z, w, _ in pr if zz[0] <= z + DZ and z <= zz[1]]
+    end_w = (ends[0], ends[-1]) if ends else (0.0, 0.0)
+    return (a_p, a_s, span, zz, lane_cost, end_w)
+
+
 def _assess_v2(p, zs, skin, sel, by_phi, by_phi_pow, pow_env_differs, loops,
                order, nb, wp, ws, need_p, need_l, creep_len, in_layout):
     """Margins for one variant-to-bay assignment."""
     results = {}
+    def avail_of(b, fwd_r, aft_r, od_f, od_a, power=False):
+        return bay_avail(p, zs, skin, by_phi, by_phi_pow, pow_env_differs,
+                         in_layout, b, fwd_r, aft_r, od_f, od_a, power)
+
     for esc, idx in order:
         fwd, aft = loops[esc]
         bay_ids = sel[idx * nb:(idx + 1) * nb] if len(sel) == 2 * nb else []
         if not bay_ids:
             results[esc] = None
             continue
-        def bay_avail(b, fwd_r, aft_r, od_f, od_a, power=False):
-            if power and pow_env_differs:
-                pr = by_phi_pow.get(b[0])
-                if pr is None:          # no run at the lower power-bay stack:
-                    return (0.0, 0.0, 0.0, (0.0, 0.0), 0.0, (0.0, 0.0))  # unusable
-            else:
-                pr = by_phi[b[0]]
-            f_free = free_beyond(zs, skin, b[0], pr, od_f, -1) if fwd_r else 0.0
-            a_free = free_beyond(zs, skin, b[0], pr, od_a, +1) if aft_r else 0.0
-            a_p, a_s, span, zz = area_after_reserve(
-                pr, max(0.0, fwd_r - f_free), max(0.0, aft_r - a_free))
-            lane_cost = (p["lane_strip_w"] * span) if in_layout else 0.0
-            # fitted power-panel width at the board's two end rings (egress)
-            ends = [w for z, w, _ in pr if zz[0] <= z + DZ and z <= zz[1]]
-            end_w = (ends[0], ends[-1]) if ends else (0.0, 0.0)
-            return (a_p, a_s, span, zz, lane_cost, end_w)
         od_f = max(p["phase_od"], p["pack_od"]) if fwd else 0.0
         od_a = p["phase_od"] if aft else 0.0
         if nb == 1:
-            avail = [bay_avail(bay_ids[0], fwd, aft, od_f, od_a)]
+            avail = [avail_of(bay_ids[0], fwd, aft, od_f, od_a)]
         else:
             # Power bay carries the phase + pack leads; the logic bay only the
             # signal/bus leads (sig_od, no bullet, forward end).  Put the power
@@ -519,8 +562,8 @@ def _assess_v2(p, zs, skin, sel, by_phi, by_phi_pow, pow_env_differs, loops,
             sig = p["bend_k"] * p.get("sig_od", 2.0)
             cands = []
             for pw, lg in ((bay_ids[0], bay_ids[1]), (bay_ids[1], bay_ids[0])):
-                ap = bay_avail(pw, fwd, aft, od_f, od_a, power=True)
-                al = bay_avail(lg, sig, 0.0, p.get("sig_od", 2.0), 0.0)
+                ap = avail_of(pw, fwd, aft, od_f, od_a, power=True)
+                al = avail_of(lg, sig, 0.0, p.get("sig_od", 2.0), 0.0)
                 cands.append((min(2 * (ap[0] + ap[1]) - need_p,
                                   2 * (al[0] + al[1]) - need_l), ap, al, pw, lg))
             cands.sort(key=lambda c: -c[0])
@@ -563,9 +606,6 @@ Z_MIN_V2 = 62.0 * P64_A + 3.0 / 2.0
 
 def main_v2(p) -> int:
     zs, skin = skin64(p.get("z_min", Z_MIN_V2))
-    bay.SKIN_WALL = p.get("cover_t", 2.5) + 0.4
-    bay.duct_r = lambda z: DUCT_R_64          # noqa: E731
-    bay.DUCT_WALL = MOUNT_R - DUCT_R_64
     in_layout = p.get("lane_in_layout", False)
     stack = p["pcb_t"] + p["h_outer"] + p["h_inner"] + p["mount_gap"]
     env = stack + (0.0 if in_layout else p["flow_lane"])
@@ -644,10 +684,7 @@ def main_v2(p) -> int:
     z_c = [r["z_centre_mm"] for r in results.values()]
     z_mean = sum(z_c) / len(z_c)
     cover = COVER_G_PER_MM * span * len(sel)
-    d_mz = 2 * m_esc * z_mean + cover * z_mean \
-        - 2 * ESC_BASE_G * ESC_BASE_Z - 4 * 6.99 / 2 * P64_K * ESC_BASE_Z
-    m_new = ASSY_G - 2 * ESC_BASE_G + 2 * m_esc - 4 * 6.99 / 2 * P64_K + cover
-    d_cg = (CG_Z * ASSY_G + d_mz) / m_new - CG_Z
+    m_new, d_cg = cg_roll_up(m_esc, z_mean, cover)
     # Egress against the FITTED power-panel width at each variant's exit end(s):
     # A exits forward only; B forward (pack) and aft (phases).
     s_t = math.sqrt(p["term_area_scale"])
@@ -682,4 +719,5 @@ def main_v2(p) -> int:
 
 if __name__ == "__main__":
     _p = json.loads(Path(sys.argv[1]).read_text())
-    sys.exit(main_v2(_p) if _p.get("model") == 2 else main())
+    with overrides_64mm(_p.get("cover_t", 2.5)):
+        sys.exit(main_v2(_p) if _p.get("model") == 2 else main())
