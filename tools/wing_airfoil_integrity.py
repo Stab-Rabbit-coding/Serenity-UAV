@@ -47,7 +47,7 @@ Run:
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (model: Claude Opus 5, Anthropic) under the author's
          direction, per `AGENTS.md` SS3 "Attribution and Licensing".
-License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 import os

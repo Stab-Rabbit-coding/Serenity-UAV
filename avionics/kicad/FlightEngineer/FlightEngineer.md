@@ -3,7 +3,7 @@
 *Named after Flight Engineer Frye, ship's mechanic, Firefly-class vessel Serenity.*
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** R (Rev R baseline; carried forward from Rev A, 2026-06-07; no design changes)
 **Date:** 2026-06-11
 **Status (2026-09-20 update, Claude Sonnet 5):** The legacy schematic/PCB pair

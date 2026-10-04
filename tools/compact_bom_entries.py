@@ -32,7 +32,7 @@ exists to undo.  So it needs no hard-coded list of refs and stays correct as the
 BOM evolves.  Override with --rev.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 import argparse

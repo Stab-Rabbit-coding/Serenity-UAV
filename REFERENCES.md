@@ -101,6 +101,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
 - [Part XV — Open Hardware / Software Licensing Standards](#part-xv--open-hardware--software-licensing-standards)
     - [REF-LIC-001: CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)](#ref-lic-001-cern-open-hardware-licence-version-2--weakly-reciprocal-cern-ohl-w-20)
     - [REF-LIC-002: OSHWA Open Source Hardware Certification](#ref-lic-002-oshwa-open-source-hardware-certification)
+    - [REF-LIC-003: The MIT License](#ref-lic-003-the-mit-license)
 - [Removed / Superseded Citations](#removed--superseded-citations)
 - [Open Standards Verification Items](#open-standards-verification-items)
 
@@ -120,14 +121,17 @@ previously named in this file — are acknowledged wherever this catalog is read
 ### Project license (this work)
 
 All original work in this repository is © 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP,
-**dual-licensed** (corrected 2026-08-01 — see "Removed / Superseded Citations"):
+licensed by **what each file produces** (owner rule 2026-10-04; earlier corrected 2026-08-01 — see "Removed / Superseded Citations"):
 
-- **Hardware/CAD/PCB design** (airframe SCAD/STL/FCStd, KiCad schematics/PCB/Gerbers, mechanical
-  drawings) — **CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)**
+- **Hardware, and code that defines, creates or renders hardware** (SCAD/STL/FCStd, KiCad
+  files and generator scripts, FreeCAD/Blender scripts, G-code profiles, hardware-writing
+  tools) — **CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)**
   [REF-LIC-001]. Full terms: root [`LICENSE`](LICENSE).
-- **Documentation, code, scripts, and non-hardware drawings** — **Creative Commons
-  Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)** —
-  <https://creativecommons.org/licenses/by-sa/4.0/>. Full terms: `LICENSES/CC-BY-SA 4.0`.
+- **Code whose end result is software or firmware** — **MIT** [REF-LIC-003]. Full terms:
+  `LICENSES/MIT`.
+- **Documents** — **Creative Commons Attribution-ShareAlike 4.0 International
+  (CC BY-SA 4.0)** — <https://creativecommons.org/licenses/by-sa/4.0/>. Full terms:
+  `LICENSES/CC-BY-SA 4.0`.
 
 You may share and adapt either under its own terms, including commercially, with appropriate
 credit, a link to the license, and an indication of changes; attribution must not imply
@@ -2593,6 +2597,20 @@ airframe reference sources (REF-CAD-002/003/004) — see `docs/attribution_and_l
 OSHWA certification submission (open item).
 
 **Used in:** `docs/OSHW_CERTIFICATION.md`, `TODO.md` §0.9.
+
+### REF-LIC-003: The MIT License
+
+| Field | Value |
+|---|---|
+| **Publisher** | Open Source Initiative (OSI) — OSI-approved licence, SPDX identifier `MIT` |
+| **Official URL** | <https://opensource.org/license/mit> — fetched 2026-10-04 (HTTP 200) |
+| **Applied requirements** | The copyright notice and permission notice must be included in all copies or substantial portions of the software (the attribution condition the owner required); no warranty. |
+| **Note** | Chosen 2026-10-04 by the owner for code whose end result is software or firmware. Creative Commons' own FAQ advises against CC licences other than CC0 for software, and CC0 would waive attribution. Also satisfies REF-LIC-002 requirement (3): software needed for hardware operation must carry an OSI-approved licence. |
+
+**Applied to:** firmware, device trees, ground-station software, and analysis/verification/CI
+tools (per-file headers; full text `LICENSES/MIT`).
+
+**Used in:** `LICENSES/MIT`, `tools/LICENSE`, `docs/attribution_and_licensing.md`, `AGENTS.md` §3.
 
 ## Removed / Superseded Citations
 

@@ -4,7 +4,7 @@
  *
  * Copyright 2026 Steve Griffing
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Full design rationale, citations, and derivation for every threshold in
  * this file are recorded in docs/failsafe_thresholds.md — that document is

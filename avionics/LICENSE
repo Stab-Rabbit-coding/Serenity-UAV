@@ -6,9 +6,9 @@ SERENITY UAV — AVIONICS SUBSYSTEM LICENSING
 See the root LICENSE file for the full text:
   ../LICENSE
 
-**Software/Firmware License:** MIT and/or GPL v3 (see firmware/LICENSE for details)
+**Software/Firmware License:** MIT for original firmware/software; third-party components keep their own licences (e.g. GPL-3.0, see firmware/LICENSE)
 
-**Documentation License:** CC BY 4.0
+**Documentation License:** CC BY-SA 4.0
 
 See docs/attribution_and_licensing.md for complete licensing strategy and subsystem details:
   ../docs/attribution_and_licensing.md
@@ -57,3 +57,18 @@ If you modify PCB designs, add a comment like this to your schematic:
 Questions?
   CERN-OHL-W: https://ohwr.org/cern_ohl_w_v2
   CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+
+---
+
+LICENCE RULE (owner, 2026-10-04) — applies to every file in this folder
+------------------------------------------------------------------------
+* Code that defines, creates or renders HARDWARE (OpenSCAD, KiCad files and
+  scripts, FreeCAD, Blender, G-code/slicer profiles, and tools that write or
+  render meshes/CAD/PCB) — CERN-OHL-W 2.0 (SPDX: CERN-OHL-W-2.0),
+  ../LICENSES/CERN-OHL-W 2.0.
+* Code whose end result is SOFTWARE or FIRMWARE (firmware, device trees, ground
+  software, analysis/verification/CI tools) — MIT (SPDX: MIT), ../LICENSES/MIT.
+* DOCUMENTS (Markdown, text, SVG/figures, specifications) — CC BY-SA 4.0
+  (SPDX: CC-BY-SA-4.0), ../LICENSES/CC-BY-SA 4.0.
+Third-party material keeps its own licence (see REFERENCES.md and
+docs/attribution_and_licensing.md). Each file's header names its licence.

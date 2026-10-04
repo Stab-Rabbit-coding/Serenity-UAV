@@ -22,7 +22,7 @@ USAGE:
     --verbose                 Show detailed progress
 
 Author: Claude Haiku 4.5 (Anthropic) — 2026-07-18
-License: CC BY 4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 Co-Authored-By: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 """
 

@@ -41,7 +41,7 @@
 // Analysis and drafting: Claude (Claude Opus 5, Anthropic) under the author's
 //           direction, per AGENTS.md §3 "Attribution and Licensing"
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
-// License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+// License : CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // Date    : 2026-09-09
 // Revision: Rev T (2026-09-09) — NEW PART PAIR
 //

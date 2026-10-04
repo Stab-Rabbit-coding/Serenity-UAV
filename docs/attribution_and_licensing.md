@@ -17,12 +17,17 @@
 ## 1. The dual-license split
 
 All original work in this repository is © Steve Griffing, PE(CSE), CISSP-ISSEP, CPP, released
-under **two** licenses depending on content type — there is no single project-wide license:
+under **three** licenses chosen by what each file produces (owner rule, 2026-10-04) — there is no single project-wide license:
 
 | Content type | License | Full text |
 |---|---|---|
-| Hardware / CAD / PCB design files — airframe SCAD/STL/FCStd (wings, nacelles, landing gear, cargo system, fuselage, all other original airframe components), avionics KiCad schematics/PCB layouts/Gerbers (Pilot, XO, Flight Engineer, Commo, Observer, CAN-PERIPH-GW-1) | **CERN-OHL-W 2.0** (CERN Open Hardware Licence v2, Weakly Reciprocal) | `LICENSE` (root), `LICENSES/CERN-OHL-W 2.0` |
-| Documentation, code, scripts, drawings, and all other non-hardware items — build guides, firmware/tooling source, SVG diagrams, specifications, this file (**except `tools/`, which is MIT** — see the federation map below) | **CC BY-SA 4.0** (Creative Commons Attribution-ShareAlike 4.0 International) | `LICENSES/CC-BY-SA 4.0`, <https://creativecommons.org/licenses/by-sa/4.0/> |
+| Hardware design files, **and any code that defines, creates or renders hardware** — airframe SCAD/STL/FCStd, KiCad schematics/PCB/footprints/netlists/Gerbers and their generator scripts, FreeCAD and Blender scripts, G-code/slicer profiles, and tools that write or render meshes/CAD/PCB | **CERN-OHL-W 2.0** (CERN Open Hardware Licence v2, Weakly Reciprocal) | `LICENSE` (root), `LICENSES/CERN-OHL-W 2.0` |
+| Code whose end result is **software or firmware** — firmware (C/H), device trees, ground-station software, analysis/verification/CI tools, JS/shell utilities | **MIT** (SPDX `MIT`) | `LICENSES/MIT` |
+| **Documents** — Markdown, text, specifications, revision `.jsx` design documents, SVG diagrams and figures, build guides, this file | **CC BY-SA 4.0** (Creative Commons Attribution-ShareAlike 4.0 International) | `LICENSES/CC-BY-SA 4.0`, <https://creativecommons.org/licenses/by-sa/4.0/> |
+
+Code is MIT, not a CC licence, because Creative Commons' own FAQ advises against CC
+licences other than CC0 for software, and the owner chose a licence that keeps attribution
+(CC0 waives it). Each file's header line names its licence and SPDX identifier.
 
 Rationale: CERN-OHL-W is purpose-built for hardware design files (it defines "Source,"
 "Product," "Make," and "Available Component" in hardware terms that CC licenses don't
@@ -59,10 +64,10 @@ self-contained and license-scanner-friendly.
 | Folder | License | Basis |
 |---|---|---|
 | `airframe/` | CERN-OHL-W 2.0 | Wings, nacelles, landing gear, cargo system, fuselage — all original hardware/CAD |
-| `avionics/` | CERN-OHL-W 2.0 | PCB schematics/layouts/Gerbers (already in place; header added 2026-08-01 for consistency) |
+| `avionics/` | **Mixed** — CERN-OHL-W 2.0 (KiCad files and generator scripts) + MIT (`firmware/`, original code) + CC BY-SA 4.0 (docs) | PCB design plus firmware; third-party firmware keeps its own licence |
 | `docs/` | CC BY-SA 4.0 | Documentation, standards references, build/compliance records |
-| `gcs/` | **Mixed** — CERN-OHL-W 2.0 (Skipper enclosure/gimbal STLs, comms-node hardware) + CC BY-SA 4.0 (firmware, Python control scripts, docs) — both stated in one `LICENSE` file since the folder is genuinely mixed | `gcs/skipper/` contains both hardware and software |
-| `tools/` | **MIT** (SPDX `MIT`) | Build-automation Python/Blender/FreeCAD scripts — code, not hardware. Changed from CC BY-SA 4.0 on 2026-10-04 (owner): Creative Commons advises against CC licences other than CC0 for software, and MIT keeps the attribution requirement CC0 would waive. `tools/LICENSE` already carried the MIT text. |
+| `gcs/` | **Mixed** — CERN-OHL-W 2.0 (Skipper enclosure/gimbal SCAD/STLs, comms-node hardware) + MIT (firmware, device trees, Python control software) + CC BY-SA 4.0 (docs) | `gcs/skipper/` contains both hardware and software |
+| `tools/` | **Mixed** — CERN-OHL-W 2.0 (tools that write/render hardware; listed in `tools/LICENSE`) + MIT (analysis, verification, CI, utilities) + CC BY-SA 4.0 (docs) | Per-file header is authoritative |
 | `current-specification/` | CC BY-SA 4.0 | Active specs, BOM, revision `.jsx` design documents |
 | `graphical-build-guide/` | CC BY-SA 4.0 | Build guide, SVG fabrication diagrams |
 | `deferred/` | **Mixed** — CERN-OHL-W 2.0 (Phase 11 aft-EDF SCAD/STL hardware) + CC BY-SA 4.0 (docs) | `deferred/aft-edf/` contains hardware design files alongside its README |

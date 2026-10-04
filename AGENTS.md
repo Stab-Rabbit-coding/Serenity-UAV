@@ -76,18 +76,24 @@ pick one silently — see §11.
 
 ## 3. Attribution and Licensing
 
-Work is **dual-licensed** by content type — see `docs/attribution_and_licensing.md` for the
-full policy and the per-subsystem `LICENSE` federation map:
+Work is licensed by **what the file produces** (owner rule, 2026-10-04) — see
+`docs/attribution_and_licensing.md` for the full policy and the per-subsystem `LICENSE`
+federation map:
 
-- **Hardware/CAD/PCB design files** (airframe SCAD/STL/FCStd, avionics KiCad
-  schematics/layouts/Gerbers) — **CERN-OHL-W 2.0**. Root `LICENSE`, `airframe/LICENSE`,
-  `avionics/LICENSE`.
-- **Documentation, code, scripts, and non-hardware drawings** — **CC BY-SA 4.0**.
-  `docs/LICENSE` and other subsystem `LICENSE` files.
-- **Code tools in `tools/`** — **MIT** (`tools/LICENSE`; header line
-  `License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)`). Creative
-  Commons advises against CC licences other than CC0 for software; MIT keeps the
-  attribution requirement (owner, 2026-10-04).
+- **Hardware — and any code that defines, creates or renders hardware** (OpenSCAD,
+  KiCad files and scripts, FreeCAD, Blender, G-code/slicer profiles, and tools that
+  write or render meshes/CAD/PCB) — **CERN-OHL-W 2.0** (SPDX `CERN-OHL-W-2.0`).
+  Full text: `LICENSE` (root) / `LICENSES/CERN-OHL-W 2.0`.
+- **Code whose end result is software or firmware** (firmware, device trees, ground
+  software, analysis/verification/CI tools) — **MIT** (SPDX `MIT`). Full text:
+  `LICENSES/MIT`.
+- **Documents** (Markdown, text, specifications, SVG/figures, build guides) —
+  **CC BY-SA 4.0** (SPDX `CC-BY-SA-4.0`). Full text: `LICENSES/CC-BY-SA 4.0`.
+
+Every new file's header carries one line: `License: <name> — see LICENSES/<file>
+(SPDX-License-Identifier: <id>)`. Creative Commons advises against CC licences for
+software, which is why code is MIT (keeps attribution, unlike CC0). Third-party material
+keeps its own licence.
 
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (personal copyright retained; avionics
 boards are marked with his personally owned LLC name).

@@ -28,7 +28,7 @@ Run: /usr/bin/python3 tools/landing_gear_opening_fit.py
 Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note : Authored by Claude (model: Claude Opus 5, Anthropic) under the
           author's direction, 2026-08-09, per AGENTS.md AI attribution.
-License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 import os

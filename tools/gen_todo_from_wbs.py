@@ -33,7 +33,7 @@ Usage::
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP.
 Written by Claude Opus 5 (Anthropic) under the author's direction, 2026-09-15,
 per ``AGENTS.md`` §3 AI attribution.
-License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 from __future__ import annotations

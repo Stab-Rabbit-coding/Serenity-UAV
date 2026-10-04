@@ -28,7 +28,7 @@ Idempotent: objects that are absent are skipped, so a second run is a no-op.
 Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note : Authored by Claude (model: Claude Opus 5, Anthropic) under the
           author's direction, 2026-08-17, per AGENTS.md AI attribution.
-License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 
 Run: freecadcmd tools/purge_stale_fcstd_objects.py
      (FreeCAD's own interpreter -- the FreeCAD module is not importable from

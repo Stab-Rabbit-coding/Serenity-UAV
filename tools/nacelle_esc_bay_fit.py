@@ -50,7 +50,7 @@ Usage:
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 Analysis and tool by Claude (Claude Opus 5, Anthropic) under the author's
 direction, per AGENTS.md S3 "Attribution and Licensing".
-License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 from __future__ import annotations

@@ -22,7 +22,7 @@ Steps:
       the buck output floating; the input-side pad now carries the output
       net (BEC1_PRE_OR / BEC2_PRE_OR / 5V_SERVO) as a buck requires.
 
-Authored by Claude Fable 5 (Anthropic), 2026-07-21.  License: CC BY 4.0.
+Authored by Claude Fable 5 (Anthropic), 2026-07-21.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import re

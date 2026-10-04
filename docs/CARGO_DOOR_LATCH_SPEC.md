@@ -4,7 +4,7 @@
 **AI note:** Drafted by Claude (model: Claude Sonnet 5, Anthropic) under the author's
 direction, 2026-09-21, per `AGENTS.md` §3 AI attribution. Uses the `statics-and-dynamics`
 and `mechanical-engineering` skills.
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 > ⚠️ **ENGINEERING REVIEW REQUIRED — this output is not a substitute for a qualified
 > engineer.** Every result, calculation, and recommendation in this document **must be

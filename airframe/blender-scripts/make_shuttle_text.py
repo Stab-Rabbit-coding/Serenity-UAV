@@ -16,7 +16,7 @@ Pod interior-wall centres (measured): port (X -11, Y -362, Z 103),
                                       stbd (X -197, Y -363, Z 102).
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0  —  creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import os

@@ -1,7 +1,7 @@
 # Serenity UAV — Documentation, Standards & Regulatory Work Breakdown Structure
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev T (2026-09-06)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)

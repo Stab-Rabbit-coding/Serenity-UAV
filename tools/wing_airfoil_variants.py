@@ -33,7 +33,7 @@ the wing that actually gets built.
 Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note : Authored by Claude (model: Claude Opus 5, Anthropic) under the
           author's direction, 2026-08-16, per AGENTS.md AI attribution.
-License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 
 Run: /usr/bin/python3 tools/wing_airfoil_variants.py [--station MM] [--write DIR]
 """

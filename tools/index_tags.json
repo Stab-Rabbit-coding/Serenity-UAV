@@ -177,6 +177,13 @@
       ],
       "archived": false
     },
+    "LICENSES/MIT": {
+      "description": "MIT License",
+      "tags": [
+        "licensing"
+      ],
+      "archived": false
+    },
     "README.md": {
       "description": "Serenity UAV",
       "tags": [
@@ -10204,7 +10211,7 @@
       "archived": false
     },
     "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py": {
-      "description": "Python script",
+      "description": "gen_pilot_pcb.py \u2014 Build the Pilot (CAPE-A-2) PCB from the schematic netlist.",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -16296,6 +16303,7 @@
       "LICENSES/CC-BY 4.0",
       "LICENSES/CC-BY-SA 4.0",
       "LICENSES/CERN-OHL-W 2.0",
+      "LICENSES/MIT",
       "airframe/LICENSE",
       "archives/stale-20260601/files-revF/LICENSE_AND_ATTRIBUTION.md",
       "archives/stale-20260601/files-revF/serenity-drone-revF/docs/LICENSE_AND_ATTRIBUTION.md",

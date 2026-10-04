@@ -5,7 +5,7 @@
  * different operational role: no cargo, no flight-data log, gimbal servo outputs)
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  * Revision: Q1 (2026-06-10)
  *
  * Target:

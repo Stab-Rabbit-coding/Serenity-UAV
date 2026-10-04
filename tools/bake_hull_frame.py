@@ -52,7 +52,7 @@ Binary STL layout per the 3D Systems STL specification (1989):
 (normal 3f, vertices 9f, uint16 attribute byte count).
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import argparse

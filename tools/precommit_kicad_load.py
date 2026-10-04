@@ -28,7 +28,7 @@ Usage:
 
 Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  (Griffing Technology LLC)
 AI-assist: Claude Opus 4.8 (Anthropic) — hook authoring, 2026-07-06.
-License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 import json

@@ -2,7 +2,7 @@
 ## Makefile — Serenity UAV device tree overlay compilation
 ##
 ## Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-## License: CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+## License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 ##
 ## Target: PocketBeagle 2 Industrial (AM6254), BeagleBone Debian Trixie
 ## Requires: dtc ≥ 1.7.x (supports -@ for __symbols__ generation)

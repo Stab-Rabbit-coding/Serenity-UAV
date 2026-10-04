@@ -9,7 +9,7 @@ re-derivation of §0/§4.2/§4.7/§6/§11.6, and open items LG-27…LG-30 author
 Claude (model: Claude Opus 5, Anthropic) under the author's direction,
 2026-09-06** — see
 `docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md`.
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** R6 (2026-07-21, design point; 1.5in/3.0in leg-length variant
 split 2026-07-23; shared R_h 80 mm lever 2026-08-09; **minimum-safe-length
 derivation and 3.0in adopted as the flight article 2026-09-06, §4.8**) —
