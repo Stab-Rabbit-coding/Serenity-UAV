@@ -60,7 +60,7 @@ Units: SI internally (mm, N, deg); reports are imperial-primary with metric in
 parentheses per the repo standard.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CEH (GitHub Stab-Rabbit-coding)
-License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 Date:    2026-09-28
 AI contribution: Claude (Claude Opus 5.5, Anthropic), directed by Steve Griffing.
 """

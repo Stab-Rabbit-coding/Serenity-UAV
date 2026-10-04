@@ -5,7 +5,7 @@ the golden tests run the real harness end to end (the first run ray-casts the
 shell and caches it under ~/.cache/serenity-esc80).
 
 Tests by Claude (Claude Opus 5.5, Anthropic), per AGENTS.md AI attribution.
-License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 import json

@@ -27,7 +27,7 @@
 // servo in the same pocket (WBS NAC-64-SERVO-01).
 //
 // Author: Claude (Claude Opus 5.5, Anthropic) under the direction of
-// Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: CC BY 4.0.
+// Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // =============================================================================
 
 include <nozzle_servo_linkage_64_params.scad>
@@ -55,11 +55,13 @@ function nsv_psi(f) = NSL_PSI_CLOSED + f * (NSL_PSI_OPEN - NSL_PSI_CLOSED);
 module nsv_seg(p, q, d) { hull() { translate(p) sphere(d = d, $fn = 16); translate(q) sphere(d = d, $fn = 16); } }
 
 // Servo body: L along z, W radial (centred on the shaft radius), H tangential
-// on the +az side of the horn plane.  Shaft 4.5 mm from the body's aft end.
+// on the NSL_SERVO_SIDE side of the horn plane (-1: centred on the shroud
+// crest).  Shaft 4.5 mm from the body's aft end.
 module nsv_servo_body(clr = 0) {
     s = NSL_SERVO;
     rotate([0, 0, NSL_SHAFT_AZ])
-        translate([norm([NSL_SHAFT[0], NSL_SHAFT[1]]) - s[1] / 2 - clr, 1.5 - clr,
+        translate([norm([NSL_SHAFT[0], NSL_SHAFT[1]]) - s[1] / 2 - clr,
+                   NSL_SERVO_SIDE > 0 ? 1.5 - clr : -(1.5 + s[2]) - clr,
                    NSL_SHAFT[2] - (s[0] - 4.5) - clr])
             cube([s[1] + 2 * clr, s[2] + 2 * clr, s[0] + 2 * clr]);
 }

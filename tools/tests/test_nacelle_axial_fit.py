@@ -1,7 +1,7 @@
 """Tests for tools/nacelle_axial_fit.py (plan 2026-09-28-001 U9).
 
 Tests by Claude (Claude Opus 5.5, Anthropic), per AGENTS.md AI attribution.
-License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 import sys

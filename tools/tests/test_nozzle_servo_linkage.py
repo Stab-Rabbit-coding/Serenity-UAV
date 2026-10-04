@@ -3,7 +3,7 @@
 Plan: docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md, U2.
 Author: Steve Griffing (GitHub Stab-Rabbit-coding) — requirements and decisions.
 AI contribution: Claude (Claude Opus 5.5, Anthropic) — test authoring.
-License: CC BY 4.0 <https://creativecommons.org/licenses/by/4.0/>
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 import math

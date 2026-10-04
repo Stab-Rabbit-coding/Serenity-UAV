@@ -40,7 +40,7 @@
 // Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CEH (Stab-Rabbit-coding) —
 // direction.  Re-derivation by Claude (Claude Opus 5.5, Anthropic), per
 // AGENTS.md AI attribution.  Derivative of nacelle_nozzle_iris.scad (same
-// author chain).  License: CC BY 4.0.
+// author chain).  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // =============================================================================
 
 include <nacelle_nozzle_iris.scad>

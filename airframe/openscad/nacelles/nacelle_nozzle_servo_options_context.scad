@@ -17,7 +17,7 @@
 //   OPTION 4  RE-SHAPED tail: boat-tail filled from Z 150 to the housing OD
 //
 // Author: Claude (Claude Opus 5.5, Anthropic) under the direction of
-// Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: CC BY 4.0.
+// Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // =============================================================================
 
 OPTION   = 1;

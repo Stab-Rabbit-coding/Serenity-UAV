@@ -37,7 +37,7 @@ Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CEH (GitHub Stab-Rabbit-coding) �
 owner direction to recompute CG and re-site the pivot trunnion (2026-10-03).
 Tool and analysis by Claude (Claude Opus 5.5, Anthropic) under the author's
 direction, per AGENTS.md AI attribution.  Derivative of nacelle_mass_cg.py.
-License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 from __future__ import annotations

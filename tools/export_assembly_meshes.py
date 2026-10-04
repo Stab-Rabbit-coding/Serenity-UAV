@@ -17,7 +17,7 @@ This is the "airframe rules, local informs" half of the joint analysis
 parts, never where a local context file would like them to be.
 
 Author: Claude (Claude Opus 5.5, Anthropic) under the direction of
-Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: CC BY 4.0.
+Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import json

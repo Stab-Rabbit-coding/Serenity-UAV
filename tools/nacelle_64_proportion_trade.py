@@ -55,7 +55,7 @@ Usage:
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CEH (GitHub Stab-Rabbit-coding) —
 optimisation goals and owner decisions.  Tool by Claude (Claude Opus 5.5,
 Anthropic) under the author's direction, per AGENTS.md AI attribution.
-License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 from __future__ import annotations

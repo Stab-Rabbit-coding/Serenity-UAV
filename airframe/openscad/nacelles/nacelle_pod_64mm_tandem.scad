@@ -96,7 +96,7 @@
 // full upstream attribution chain (canonical shell: REF-CAD-001/REF-CAD-003).
 // References: [REF-EDF-003] QX-Motor 64 mm EDF manual and QF2822 drawing;
 // [REF-CAD-003] QMx blueprint pack (canonical proportions).
-// License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+// License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // =============================================================================
 
 // ── 64 mm constants — declared BEFORE the include (see ORDERING RULE) ──────

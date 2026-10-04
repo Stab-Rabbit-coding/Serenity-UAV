@@ -26,7 +26,7 @@
 // Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CEH (Stab-Rabbit-coding) —
 // request.  Assembly by Claude (Claude Opus 5.5, Anthropic) under the
 // author's direction, per AGENTS.md AI attribution.
-// License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+// License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // =============================================================================
 
 CUT      = 0;

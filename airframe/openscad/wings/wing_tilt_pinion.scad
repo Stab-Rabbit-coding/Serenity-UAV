@@ -42,7 +42,7 @@
 //
 // Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CEH (Stab-Rabbit-coding) —
 // direction.  Part by Claude (Claude Opus 5.5, Anthropic), per AGENTS.md AI
-// attribution.  License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+// attribution.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // =============================================================================
 
 TP_M      = 0.8;     // [mm] module

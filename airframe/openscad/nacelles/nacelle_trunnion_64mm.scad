@@ -46,7 +46,7 @@
 // Derivative of nacelle_trunnion.scad (Rev T4), which carries the upstream
 // attribution chain.  References: [REF-BRG-002] JTEKT 6804-ZZ;
 // [REF-BRG-003] JTEKT CAT. B2001E §5-5-3.
-// License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+// License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // =============================================================================
 
 // ── 64 mm constants — declared BEFORE the include ───────────────────────────

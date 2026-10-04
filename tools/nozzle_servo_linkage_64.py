@@ -34,7 +34,7 @@ with cover, monotonic ring vs servo, transmission angles, horn/arm/rod
 clearances, and the force chain against the KTD3 spring.
 
 Author: Claude (Claude Opus 5.5, Anthropic) under the direction of
-Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: CC BY 4.0.
+Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 from __future__ import annotations
 
@@ -53,7 +53,8 @@ PSI_CLOSED, PSI_OPEN = 292.5, 268.75
 C_AZ, C_Z, C_R = 255.0, 179.0, 42.0
 L_OUT = 14.0
 HORN, SERVO_SWEEP = 4.0, 90.0           # mm, deg (+/-45: maximises T sin cos)
-SERVO_TORQUE = 0.098                    # N.m at 6 V [REF-ACT-004] (VERIFY)
+SERVO_TORQUE = 0.147                    # N.m, 1.5 kgf.cm at 6 V, KST X06 [REF-ACT-005] (VERIFY)
+SERVO_DIMS = (20.0, 7.0, 16.6)          # L x W x H mm [REF-ACT-005] (VERIFY)
 SPRING_N = 2.0                          # KTD3 spring at the ball (plan U2)
 
 
@@ -99,6 +100,9 @@ def main() -> int:
     ap.add_argument("--pivot", nargs=3, type=float, metavar=("AZ", "Z", "R"),
                     help="trial bellcrank pivot (default: the adopted one)")
     ap.add_argument("--out", type=Path, help="params file (default: the repo one)")
+    ap.add_argument("--servo-z", type=float, default=153.0, help="servo shaft Z")
+    ap.add_argument("--servo-az", type=float, default=None,
+                    help="servo horn-plane azimuth (default: the input tip's)")
     a = ap.parse_args()
     if a.pivot:
         C_AZ, C_Z, C_R = a.pivot
@@ -141,11 +145,12 @@ def main() -> int:
     # 3. servo: body on the bore-wall floor (r 36.4 .. 44.0, 7.6 radial), shaft
     #    TANGENTIAL at the body's mid-depth, at the input tip's azimuth; horn
     #    radial-outward at mid-stroke; link = measured horn-tip -> input-tip.
-    SERVO_Z = 153.0
+    SERVO_Z = a.servo_z
     t_az = math.degrees(math.atan2(tip_in_mid[1], tip_in_mid[0]))
-    shaft = 40.2 * er(t_az) + np.array([0, 0, SERVO_Z])
+    if a.servo_az is not None:
+        t_az = a.servo_az
+    shaft = (36.4 + SERVO_DIMS[1] / 2) * er(t_az) + np.array([0, 0, SERVO_Z])
     s_az = t_az
-    sax = np.array([-math.sin(math.radians(t_az)), math.cos(math.radians(t_az)), 0])  # shaft axis
     def horn(th):   # th = 0 radial-outward; rotates in the (er, ez) plane
         return shaft + HORN * (math.cos(th) * er(t_az) + math.sin(th) * np.array([0, 0, 1.0]))
     LINK = float(np.linalg.norm(tip_in_mid - horn(0.0)))
@@ -196,7 +201,8 @@ NSL_PHI_CLOSED = {math.degrees(phis[0]):.3f}; NSL_PHI_OPEN = {math.degrees(phis[
 NSL_ARM_OFFSET = {math.degrees(off_in):.3f};   // input arm angle - output arm angle
 NSL_SHAFT = [{shaft[0]:.4f}, {shaft[1]:.4f}, {shaft[2]:.4f}];  NSL_SHAFT_AZ = {s_az:.3f};
 NSL_HORN = {HORN}; NSL_SERVO_SWEEP = {srv_sweep:.2f}; NSL_TH_CLOSED = {math.degrees(ths[0]):.2f}; NSL_TH_OPEN = {math.degrees(ths[-1]):.2f};
-NSL_SERVO = [18.5, 7.6, 15.7];   // BMS-101DMG L x W x H [REF-ACT-004] VERIFY
+NSL_SERVO_SIDE = -1;   // servo body on the -az side of its horn plane (centred on the crest)
+NSL_SERVO = [{SERVO_DIMS[0]}, {SERVO_DIMS[1]}, {SERVO_DIMS[2]}];   // KST X06 L x W x H [REF-ACT-005] VERIFY
 """)
     print(f"wrote {OUT}  ->  {'PASS' if good else 'FAIL'}")
     return 0 if good else 2

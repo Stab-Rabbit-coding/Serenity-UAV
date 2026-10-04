@@ -65,7 +65,7 @@
 // Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CEH (Stab-Rabbit-coding) —
 // direction.  Model by Claude (Claude Opus 5.5, Anthropic), per AGENTS.md AI
 // attribution.  Derivative of edf_stator_sleeve.scad / edf_aft_spider_sleeve.scad
-// (key, insert and vane-count conventions).  License: CC BY 4.0.
+// (key, insert and vane-count conventions).  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0).
 // =============================================================================
 
 STAGE      = 2;      // the cartridge (stage 1 is integrated in the pod)
