@@ -85,6 +85,7 @@ License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 from __future__ import annotations
+from typing import Any
 
 import argparse
 import math
@@ -93,8 +94,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import nacelle_mass_cg as m50  # sibling tool; path set above
-import nacelle_mass_cg_64 as m64
+import nacelle_mass_cg as m50  # noqa: E402 sibling tool; path set above
+import nacelle_mass_cg_64 as m64  # noqa: E402
 
 RHO = m50.RHO_PRINT          # g/mm^3 bulk printed density
 LBF_IN_PER_NM = 8.8507       # lbf.in per N.m
@@ -177,7 +178,7 @@ def pod_body(stl: Path, name: str) -> Body:
     ixx = float(mesh.moment_inertia[0][0]) * RHO      # g.mm^2 about the CG
     mass = float(mesh.volume * RHO)
     b = Body(name, mass, float(cg[2]), float(cg[1]))
-    b.i_own = lambda ixx=ixx: ixx  # type: ignore[method-assign]
+    b.i_own = lambda ixx=ixx: ixx  # type: ignore[method-assign,misc]
     return b
 
 
@@ -291,7 +292,7 @@ def analyse(name: str, bodies: list[Body], pivot: float, thrust_n: float,
     # V_e = sqrt(T / (rho A)) for an exit area equal to the bore, so
     # mdot = sqrt(T rho A) (propulsion.md §1).
     mdot = math.sqrt(thrust_n * RHO_AIR * math.pi * (bore_r_mm / 1000.0) ** 2)
-    aero = {}
+    aero: dict[str, dict[str, Any]] = {}
     for tag, vc in V_CROSS.items():
         n_in = mdot * vc                                       # N, limit
         f_body = 0.5 * RHO_AIR * vc ** 2 * 1.2 * side_area_m2
@@ -305,7 +306,7 @@ def analyse(name: str, bodies: list[Body], pivot: float, thrust_n: float,
             aero[tag] = {"N": n_cfd, "T_tilt": m_cfd,
                          "M_brg": n_cfd * arm_mm / 1000.0, "F_body": 0.0,
                          "src": "3-D CFD"}
-    rows = []
+    rows: list[dict[str, Any]] = []
     for prof, (w, a) in profiles().items():
         t_in = i_tilt * a
         m_gyro = h_spin * w * ULT

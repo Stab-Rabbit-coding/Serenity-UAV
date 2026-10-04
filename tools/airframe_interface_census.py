@@ -34,7 +34,8 @@ Usage::
     /usr/bin/python3 tools/airframe_interface_census.py CENSUS_DIR [--json]
 
 Author: Claude (Claude Opus 5.5, Anthropic) under the direction of
-Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
+Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: MIT —
+    see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 from __future__ import annotations

@@ -27,7 +27,8 @@ Frames (as in nacelle_tilt_joint_context.scad):
   2026-10-03).
 
 Author: Claude (Claude Opus 5.5, Anthropic) under the direction of
-Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
+Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: CERN-OHL-W-2.0 —
+    see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 from __future__ import annotations

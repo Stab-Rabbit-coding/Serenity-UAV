@@ -58,7 +58,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import nacelle_intake_cfd as ic  # FOAM helpers, header(), write(), field parse
+import nacelle_intake_cfd as ic  # noqa: E402  FOAM helpers, header(), write(), field parse
 
 REPO = Path(__file__).resolve().parent.parent
 RHO = 1.225
@@ -235,12 +235,12 @@ mergeTolerance 1e-6;
                       "value uniform (0 0 0);",
             "sides": "type pressureInletOutletVelocity; value uniform (0 0 0);",
             walls: "type noSlip;",
-            "fanIn": f"type flowRateOutletVelocity; "
-                             f"volumetricFlowRate {Q_FAN:.6f}; "
-                             "value uniform (0 0 0);",
-            "fanOut": f"type flowRateInletVelocity; "
-                              f"volumetricFlowRate {Q_FAN:.6f}; "
-                              "value uniform (0 0 0);"}),
+            "fanIn": (f"type flowRateOutletVelocity; "
+                      f"volumetricFlowRate {Q_FAN:.6f}; "
+                      "value uniform (0 0 0);"),
+            "fanOut": (f"type flowRateInletVelocity; "
+                       f"volumetricFlowRate {Q_FAN:.6f}; "
+                       "value uniform (0 0 0);")}),
         "p": ("volScalarField", "[0 2 -2 0 0 0 0]", "uniform 0", {
             "inlet": "type zeroGradient;",
             "outlet": "type fixedValue; value uniform 0;",

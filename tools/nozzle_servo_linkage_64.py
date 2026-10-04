@@ -34,7 +34,8 @@ with cover, monotonic ring vs servo, transmission angles, horn/arm/rod
 clearances, and the force chain against the KTD3 spring.
 
 Author: Claude (Claude Opus 5.5, Anthropic) under the direction of
-Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
+Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: MIT —
+    see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 from __future__ import annotations
 
@@ -107,7 +108,9 @@ def main() -> int:
     if a.pivot:
         C_AZ, C_Z, C_R = a.pivot
         C = C_R * er(C_AZ) + np.array([0, 0, C_Z])
-        AX = er(C_AZ); U = unit(np.cross(AX, [0, 0, 1.0])); V = np.cross(AX, U)
+        AX = er(C_AZ)
+        U = unit(np.cross(AX, [0, 0, 1.0]))
+        V = np.cross(AX, U)
     if a.out:
         OUT = a.out
     # 1. output arm: pick the closed-pose angle maximising worst transmission
@@ -151,23 +154,27 @@ def main() -> int:
         t_az = a.servo_az
     shaft = (36.4 + SERVO_DIMS[1] / 2) * er(t_az) + np.array([0, 0, SERVO_Z])
     s_az = t_az
+
     def horn(th):   # th = 0 radial-outward; rotates in the (er, ez) plane
         return shaft + HORN * (math.cos(th) * er(t_az) + math.sin(th) * np.array([0, 0, 1.0]))
     LINK = float(np.linalg.norm(tip_in_mid - horn(0.0)))
     # full-stroke solve of the servo loop
-    ths, lw = [], 0.0
+    ths: list = []
+    lw = 0.0
     g = 0.0
     for phi in phis:
         tip = arm(phi + off_in, L_in)
-        best = None
+        best = (float("inf"), g)
         span = 90 if not ths else 15        # first point: search the full range
         for d in np.radians(np.arange(-span, span + 0.01, 0.05)):
             e = abs(np.linalg.norm(tip - horn(g + d)) - LINK)
-            if best is None or e < best[0]:
+            if e < best[0]:
                 best = (e, g + d)
         if best[0] > 0.05:
-            print("servo loop: no solution"); return 2
-        g = best[1]; ths.append(g)
+            print("servo loop: no solution")
+            return 2
+        g = best[1]
+        ths.append(g)
         link = unit(tip - horn(g))
         hv = HORN * (-math.sin(g) * er(t_az) + math.cos(g) * np.array([0, 0, 1.0]))
         lw = max(lw, math.degrees(math.acos(min(1, abs(link @ unit(hv))))))
@@ -200,9 +207,12 @@ NSL_L_OUT = {L_OUT}; NSL_L_IN = {L_in:.3f}; NSL_L_ROD = {L_rod:.3f}; NSL_LINK = 
 NSL_PHI_CLOSED = {math.degrees(phis[0]):.3f}; NSL_PHI_OPEN = {math.degrees(phis[-1]):.3f};
 NSL_ARM_OFFSET = {math.degrees(off_in):.3f};   // input arm angle - output arm angle
 NSL_SHAFT = [{shaft[0]:.4f}, {shaft[1]:.4f}, {shaft[2]:.4f}];  NSL_SHAFT_AZ = {s_az:.3f};
-NSL_HORN = {HORN}; NSL_SERVO_SWEEP = {srv_sweep:.2f}; NSL_TH_CLOSED = {math.degrees(ths[0]):.2f}; NSL_TH_OPEN = {math.degrees(ths[-1]):.2f};
+NSL_HORN = {HORN}; NSL_SERVO_SWEEP = {srv_sweep:.2f};
+NSL_TH_CLOSED = {math.degrees(ths[0]):.2f};
+NSL_TH_OPEN = {math.degrees(ths[-1]):.2f};
 NSL_SERVO_SIDE = -1;   // servo body on the -az side of its horn plane (centred on the crest)
-NSL_SERVO = [{SERVO_DIMS[0]}, {SERVO_DIMS[1]}, {SERVO_DIMS[2]}];   // KST X06 L x W x H [REF-ACT-005] VERIFY
+NSL_SERVO = [{SERVO_DIMS[0]}, {SERVO_DIMS[1]}, {SERVO_DIMS[2]}];   // KST X06 L x W x H
+// [REF-ACT-005] VERIFY
 """)
     print(f"wrote {OUT}  ->  {'PASS' if good else 'FAIL'}")
     return 0 if good else 2

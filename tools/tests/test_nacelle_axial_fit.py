@@ -11,7 +11,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-import nacelle_axial_fit as fit
+import nacelle_axial_fit as fit  # noqa: E402
 
 
 def test_stations_read_from_scad():

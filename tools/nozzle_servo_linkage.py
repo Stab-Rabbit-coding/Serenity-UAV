@@ -66,6 +66,7 @@ AI contribution: Claude (Claude Opus 5.5, Anthropic), directed by Steve Griffing
 """
 
 from __future__ import annotations
+from typing import Any
 
 import argparse
 import json
@@ -279,7 +280,7 @@ def check_margins(servo: dict, spring_n: float, flap_load_n: float | None,
     load = PLACEHOLDER_FLAP_LOAD_N if flap_load_n is None else flap_load_n
     spring_ok = spring_n <= SPRING_MAX_FRAC * stall
     hold_ok = hold >= spring_n + load
-    result = {
+    result: dict[str, Any] = {
         "stall_pull_n": stall,
         "hold_pull_n": hold,
         "spring_n": spring_n,

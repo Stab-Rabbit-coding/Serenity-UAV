@@ -577,6 +577,7 @@ def _assess_v2(p, zs, skin, sel, by_phi, by_phi_pow, pow_env_differs, loops,
                order, nb, wp, ws, need_p, need_l, creep_len, in_layout):
     """Margins for one variant-to-bay assignment."""
     results = {}
+
     def avail_of(b, fwd_r, aft_r, od_f, od_a, power=False):
         return bay_avail(p, zs, skin, by_phi, by_phi_pow, pow_env_differs,
                          in_layout, b, fwd_r, aft_r, od_f, od_a, power)

@@ -82,6 +82,7 @@ THRUST_N = 20.9                  # N per fan, QX 2400 KV 6S table [REF-EDF-003]
 NU = 1.5e-5                      # m^2/s air
 V_BORE = math.sqrt(THRUST_N / (RHO * math.pi * R_BORE ** 2))   # = 72.8 m/s
 
+
 @dataclass(frozen=True)
 class Bell:
     """One intake variant: profile kind, axial length L and radial flare F, m.
@@ -150,12 +151,11 @@ VARIANTS = (
 # Variants run by --only (default: all).
 
 
-
 def bell_r(x: float, bell: Bell) -> float:
     """Wall radius of the bell at axial station x (0 <= x <= L), m."""
     if bell.kind == "cosine":
-        return R_BORE + bell.flare * 0.5 * (1.0 + math.cos(math.pi * x
-                                                            / bell.length))
+        return R_BORE + bell.flare * 0.5 * (
+            1.0 + math.cos(math.pi * x / bell.length))
     u = 1.0 - x / bell.length
     return R_BORE + bell.flare * (1.0 - math.sqrt(max(0.0, 1.0 - u * u)))
 

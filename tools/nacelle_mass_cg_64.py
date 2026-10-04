@@ -48,7 +48,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import nacelle_mass_cg as base  # sibling tool; path set above
+import nacelle_mass_cg as base  # noqa: E402 sibling tool; path set above
 
 K = 1.21                 # radial scale — proportion trade pick (owner 2026-10-03)
 A = 1.13                 # canonical axial stretch — proportion trade pick
@@ -139,7 +139,7 @@ def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
          "SCALED est.: flap width x K, length unchanged; U11"),
         ("Nozzle servo drive (V1)", 8.0, NOZ_Z - 16.25,
          ("ASSUMED: BMS-101DMG 4.5 + link 1 + spring 1 + mount 1.5 g "
-         "(plan KTD2 table); station est. fwd of ring (U4)")),
+          "(plan KTD2 table); station est. fwd of ring (U4)")),
         ("4 x 10 AWG feed",
          4 * (0.060 + (PIVOT_Z_SET - DISC_BAY_Z - 29.5) / 1000.0) * 40.0,
          0.5 * (PIVOT_Z_SET + DISC_BAY_Z),

@@ -130,8 +130,8 @@ INTAKE_TRIM = 8.0
 # Rotor-in-bell rule — owner direction 2026-10-03.  The 50 mm pod's bell flare
 # INLET_BELL_FLARE (3.0 mm) scales with the shell to 3.0 x 64/50 = 3.84 mm.
 INLET_BELL_FLARE_64 = 3.0 * 64.0 / 50.0   # [mm] radius added at the lip, Z 0
-TIP_GAP_GROWTH_MAX = 0.1                  # [mm] extra tip gap allowed at the
-                                          #      rotor leading edge — VERIFY
+# [mm] extra tip gap allowed at the rotor leading edge — VERIFY
+TIP_GAP_GROWTH_MAX = 0.1
 
 
 def rotor_entry_in_bell(bell_l: float, flare: float = INLET_BELL_FLARE_64,
