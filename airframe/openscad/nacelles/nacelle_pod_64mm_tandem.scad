@@ -38,7 +38,7 @@
 //               2.29 / 2.08 (was 1.92 / 1.74 at 1.28 x 185.2).
 //   2026-10-03  INTAKE: a proper rounded lip (owner: "implement the rounded
 //               intake bell as a proper aerodynamic design").  See below.
-//   2026-10-03  70 A ESCs (WBS NAC-64-ESC-70A) — bay fit open until a part
+//   2026-10-03  80 A Open-Secure-ESC builds (WBS NAC-64-ESC-80A) — bay fit open until a part
 //               is selected.
 //   2026-10-03  Trunnion bearings 2 x 6704-ZZ -> 2 x 6804-ZZ: spar stub +7.0 mm
 //               (20.5), joint collar +7.0 mm off the pylon face (WBS
@@ -80,8 +80,8 @@
 //   • edf_stator_sleeve.scad / edf_aft_spider_sleeve.scad (NAC-64-GEOM-01).
 //   • nacelle_nozzle_iris.scad at 64 mm (plan U11) — NOZZLE_RING_OD is a
 //     proportional placeholder for the pocket only.
-//   • ESC cooling ports onto the sleeve wall (NAC-64-GEOM-02) and the 70 A
-//     board fit (NAC-64-ESC-70A).
+//   • ESC cooling ports onto the sleeve wall (NAC-64-GEOM-02) and the 80 A
+//     board fit (NAC-64-ESC-80A).
 //   • nacelle_esc_cover.scad still builds from the unscaled skin grid.
 //   • Hull-frame bake (tools/bake_hull_frame.py) for P64_AXIS_SHIFT.
 //

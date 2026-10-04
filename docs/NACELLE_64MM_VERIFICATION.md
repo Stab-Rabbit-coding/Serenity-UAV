@@ -141,7 +141,7 @@ owner-approved change to R11 (2026-10-03).
 | Hover clearance, 3.0 in flight gear | **+0.54 in (+13.7 mm)** (floor 0.5 in, Claude-chosen); the retired 1.5 in gear strikes |
 | 10 AWG disconnect bay | Z 57.6 mm, between the Z 45.2 and 70.1 bulkheads, clear of the trunnion cavity |
 
-Rows marked ASSUMED or SCALED (rotors, 70 A ESCs, sleeves, nozzle) must be weighed or
+Rows marked ASSUMED or SCALED (rotors, 80 A ESCs, sleeves, nozzle) must be weighed or
 re-measured before release.
 
 ## 5b. Tilt-axis inertia and load path — `tools/nacelle_tilt_dynamics.py`
@@ -207,8 +207,8 @@ ESCs service through their covers, and the 10 AWG feeds at the disconnect bay.
 
 - **Trunnion bearings at s0 1.12** (§5b, WBS NAC-64-TILT-01): confirm C0 on the JTEKT
   catalogue, measure rotor spin data and the aero moment, then decide span or bearing.
-- **Stator-as-mount sleeves** are not yet drawn (NAC-64-GEOM-01); 70 A ESC bay fit
-  (NAC-64-ESC-70A).
+- **Stator-as-mount sleeves** are not yet drawn (NAC-64-GEOM-01); 80 A ESC bay fit
+  (NAC-64-ESC-80A).
 - **Zero-volume slivers in the render:** where the ESC cooling ports graze
   the sleeve bore (r 34.7 mm, Z 91.5/95.5/99.5), and one per pod at the
   cover-doubler band (r ≈ 40 mm, Z 77–82). NAC-64-GEOM-02.
