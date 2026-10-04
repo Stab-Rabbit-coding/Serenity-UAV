@@ -186,12 +186,13 @@ tilt −5 to 140° with manifold3d (tilt maps to +θ in the trunnion part frame)
 | Pinion vs pod | 474–1127 mm³ | 0 |
 | Shaft vs pod collar | 18 mm³ | 0 |
 | Shaft vs trunnion flange | 28 mm³ | 0 |
-| Pinion tip vs ring gear | — | 35–40 mm³, constant: tooth engagement (root cylinder 0) |
+| Pinion (real teeth, rolling) vs ring | — | 0.03–0.06 mm³: zero-backlash tangency |
 
 Ring Lewis capacity is 3.63 N·m, FOS 4.13 on the bound aero case. CG converged to 109.67 mm
 against PIVOT_Z 109.7. The pod shell measures 247.6 cm³. Images:
-`docs/images/nacelle_64mm_tilt_joint_optionA.png` and `_cutaway.png`. The wing's 14T pinion
-must be widened to 10.5 mm in the wing part (open item). Learning:
+`docs/images/nacelle_64mm_tilt_joint_optionA.png` and `_cutaway.png`. The wing pinion is the
+released part `wing_tilt_pinion.scad`: brass, because at Lewis Y 0.277 (14T) a
+CF-PETG pinion only reaches FOS 2.86; required allowable ≥ 76 MPa. Learning:
 `docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md`.
 
 ## 6. Install and removal (owner requirement)
@@ -203,8 +204,6 @@ ESCs service through their covers, and the 10 AWG feeds at the disconnect bay.
 
 ## 7. Open items raised by this record
 
-- **Wing pinion face 10.5 mm** (§5c): cut into `wings_s1223_revo.scad`
-  and re-sweep.
 
 - **Trunnion bearings at s0 1.12** (§5b, WBS NAC-64-TILT-01): confirm C0 on the JTEKT
   catalogue, measure rotor spin data and the aero moment, then decide span or bearing.

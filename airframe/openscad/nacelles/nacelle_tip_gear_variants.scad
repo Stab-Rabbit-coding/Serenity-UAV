@@ -47,9 +47,17 @@ function p_rf()  = V_M * PINION_Z / 2 - 1.25 * V_M;
 function p_flank(r) = 90 / PINION_Z
     + (inv_rad(GEAR_PA) - inv_rad(acos(p_rb() / r))) * 180 / PI;
 function p_r(i) = max(p_rf(), p_rb()) + (p_ra() - max(p_rf(), p_rb())) * i / 9;
+// Core at the ROOT circle with radial flanks rf -> rb (14T: rf < rb); a core
+// filled to rb blocks the ring's tips (see wing_tilt_pinion.scad).
 module pinion_2d() {
+    a0 = p_flank(max(p_rf(), p_rb()));
     union() {
-        circle(r = max(p_rf(), p_rb()) + 0.01);
+        circle(r = p_rf() + 0.01);
+        for (k = [0 : PINION_Z - 1]) rotate(k * 360 / PINION_Z)
+            polygon([[0, 0], [p_rf() * cos(-a0), p_rf() * sin(-a0)],
+                     [p_rb() * cos(-a0), p_rb() * sin(-a0)],
+                     [p_rb() * cos(a0), p_rb() * sin(a0)],
+                     [p_rf() * cos(a0), p_rf() * sin(a0)]]);
         for (k = [0 : PINION_Z - 1]) rotate(k * 360 / PINION_Z)
             polygon(concat(
                 [ for (i = [0 : 9]) let(r = p_r(i), a = -p_flank(r))

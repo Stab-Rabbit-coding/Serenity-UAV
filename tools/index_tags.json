@@ -1409,6 +1409,14 @@
       ],
       "archived": false
     },
+    "airframe/openscad/wings/wing_tilt_pinion.scad": {
+      "description": "wing_tilt_pinion.scad \u2014 nacelle tilt drive, wing-side 14T pinion (64 mm, A)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/openscad/wings/wings_s1223_revo.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
@@ -11704,7 +11712,7 @@
       "archived": false
     },
     "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (203 items)",
+      "description": "Bill of materials, CSV (205 items)",
       "tags": [
         "bom",
         "specification"
@@ -11712,7 +11720,7 @@
       "archived": false
     },
     "current-specification/bom_revS.json": {
-      "description": "Bill of materials, JSON (203 items)",
+      "description": "Bill of materials, JSON (205 items)",
       "tags": [
         "bom",
         "specification"
@@ -16818,6 +16826,7 @@
       "airframe/openscad/nacelles/nacelle_trunnion.scad",
       "airframe/openscad/nacelles/nacelle_trunnion_64mm.scad",
       "airframe/openscad/port_tilt_spar_assembly.scad",
+      "airframe/openscad/wings/wing_tilt_pinion.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad.backup-2026-07-18",
       "airframe/placeholders/avionics/Cape_A2_PCB_55x35mm.stl",
@@ -17107,6 +17116,7 @@
       "airframe/openscad/nacelles/nacelle_trunnion.scad",
       "airframe/openscad/nacelles/nacelle_trunnion_64mm.scad",
       "airframe/openscad/port_tilt_spar_assembly.scad",
+      "airframe/openscad/wings/wing_tilt_pinion.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad",
       "airframe/openscad/wings/wings_s1223_revo.scad.backup-2026-07-18",
       "airframe/placeholders/avionics/Cape_A2_PCB_55x35mm.stl",

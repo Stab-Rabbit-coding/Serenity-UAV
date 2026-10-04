@@ -34,6 +34,7 @@ CLASH_STL = "";   // optional nacelle-local clash mesh, drawn red (see header)
 POD_STL  = "nacelle_stbd_64mm.stl";        // pass -D POD_STL="..." to override
 WING_STL = "../../stls/wings/wing_stbd_s1223_revo.stl";
 include <nacelle_tip_gear_variants.scad>
+use <../wings/wing_tilt_pinion.scad>   // the real part (option A, metal)
 
 // Overrides go AFTER the include: OpenSCAD keeps the last assignment.
 VARIANT_RENDER = false;   // suppress the variant file's own free-standing copy
@@ -90,7 +91,12 @@ view() {
     part_to_local() {
         color("SteelBlue") variant_trunnion();
         // shaft azimuth in the part frame: local (+Z aft, -Y up) = part (+x, +y)
-        color("Goldenrod") variant_pinion(az = J_SHAFT_AZ);
+        // VARIANT 1 (option A) draws the released part; others the variant stand-in.
+        color("Goldenrod")
+            if (VARIANT == 1)
+                rotate([0, 0, J_SHAFT_AZ]) translate([CENTRE_D, 0, GEAR_Z0])
+                    rotate([0, 0, 180 + 180 / PINION_Z]) tilt_pinion();
+            else variant_pinion(az = J_SHAFT_AZ);
         color("Goldenrod")                             // Ø4 drive shaft stub
             rotate([0, 0, J_SHAFT_AZ]) translate([CENTRE_D, 0, GEAR_Z0])
                 cylinder(d = 4, h = 40, $fn = 16);

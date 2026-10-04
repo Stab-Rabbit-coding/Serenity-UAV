@@ -2127,8 +2127,12 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         to 210 deg, outside the sweep. Re-sweep (tilt -5..140, +theta sign
         corrected): pinion/pod 0, shaft/pod 0, shaft/trunnion 0 mm3; pinion/ring
         35-40 mm3 steady = tooth engagement (root cylinder vs trunnion 0). CG
-        re-converged 109.67 vs PIVOT_Z 109.7. Wing pinion face widens to 10.5 mm
-        (wing-part change still to cut). Images:
+        re-converged 109.67 vs PIVOT_Z 109.7. Wing pinion: now a released part,
+        `airframe/openscad/wings/wing_tilt_pinion.scad` (BRASS, 10.5 mm face,
+        ISO 8752 Ø1.5x8 spring pin; printed would be FOS 2.86 at Lewis Y 0.277);
+        real-tooth roll vs the ring 0.03-0.06 mm3 over the sweep, pod 0.
+        BOM PINION-TILT-14T + PIN-SPRING-1.5X8; wing stick-out 17.5 mm
+        (TILT_SHAFT_STICKOUT_64N, one value both wings). Images:
         docs/images/nacelle_64mm_tilt_joint_optionA{,_cutaway}.png.
         Original finding:
         (found 2026-10-03, Claude Opus 5.5; PRE-EXISTING in the 50 mm joint).**

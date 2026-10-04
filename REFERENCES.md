@@ -1535,6 +1535,21 @@ which prints that caveat on every run.
 `airframe/openscad/wings/wings_s1223_revo.scad` (`SPAR_BORE_OD` derivation);
 `docs/WING_ATTACH_INTERFACE.md` §2
 
+### REF-STD-PIN-001: ISO 8752:2009 — Spring-type straight pins — Slotted, heavy duty
+
+| Field | Value |
+|---|---|
+| **Designation** | ISO 8752:2009 (supersedes ISO 8752:1997) |
+| **Full title** | *Spring-type straight pins — Slotted, heavy duty* |
+| **Issuing body** | International Organization for Standardization (ISO) |
+| **Official access** | ISO catalogue, <https://www.iso.org/standards.html> — **DIRECT CATALOGUE URL REQUIRES VERIFICATION** (iso.org and webstore.ansi.org returned bot challenges 2026-10-03; designation and title confirmed through the Standards Council of Canada listing <https://scc-ccn.ca/standardsdb/standards/8120407> as returned by search; WBS §0.5) |
+| **Retrieved** | not retrieved — cited by designation only |
+| **Scope applied** | Slotted heavy-duty spring pin, nominal Ø1.5 × 8 mm, steel, as the torque and axial retention of the wing tilt pinion on its Ø4 shaft. Hole and pin dimensions **require verification** against the standard's table before drilling. |
+
+**Where it is applied**
+
+- `airframe/openscad/wings/wing_tilt_pinion.scad` (header, `TP_PIN_D`, `TP_PIN_L`)
+
 ### REF-STD-GEAR-002: Budynas & Nisbett — *Shigley's Mechanical Engineering Design* — worm-gear efficiency and self-locking condition
 
 | Field | Value |
@@ -1544,6 +1559,7 @@ which prints that caveat on every run.
 | **Official URL** | <https://www.mheducation.com/highered/product/shigley-s-mechanical-engineering-design-budynas-nisbett/M9780073398204.html> (publisher page; text not open access) |
 | **Section applied** | Chapter 13 "Gears — General", the worm-gearing force-analysis section (efficiency η = tan λ / tan(λ + φ) with φ = arctan μ, and the statement that a worm gearset is self-locking when the lead angle λ is below the friction angle φ). **Section number REQUIRES VERIFICATION against a physical copy** (§13-16 in the 9th/10th editions is believed correct; not confirmed from the book in hand). |
 | **Retrieved** | 2026-09-15 (publisher page only) |
+| **Also applied** | Chapter 14, Table 14-2, Lewis form factor Y for 20° full-depth teeth: Y = 0.277 at 14 teeth, 0.409 at 50 teeth. **Table number REQUIRES VERIFICATION against a physical copy.** Used in `tools/nacelle_tilt_dynamics.py` (`LEWIS_Y_14`) and `airframe/openscad/wings/wing_tilt_pinion.scad` (2026-10-03). |
 | **Applied to** | `tools/tilt_actuator_options.py` (`worm_eta()`, the self-lock test `tan(λ−φ) ≤ 0`), `docs/TILT_ACTUATOR_SELECTION.md` §3, `airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad` header |
 | **Caveat** | The friction coefficient μ = 0.20 used for the printed PETG wheel / brass or PETG worm pair is an ASSUMPTION, not from this source; the self-locking margin of the built six-start worm (lead 13.0°; Rev T5b 4-start 9.5°) is therefore CONDITIONAL and the design relies on the pin brake (BRK-1..3), not on this condition. |
 

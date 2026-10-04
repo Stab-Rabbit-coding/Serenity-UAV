@@ -663,6 +663,17 @@ SPAR_TIP_PROTRUSION   =  13.5;   // [mm] spar stub proud of the wing tip face �
 // Published requirement for the 64 mm nacelle; 13.5 above stays the 50 mm one.
 SPAR_TIP_PROTRUSION_64N = SPAR_TIP_PROTRUSION + 7.0;   // = 20.5 mm
 
+// 64 mm tilt pinion (option A, 2026-10-03): wing_tilt_pinion.scad — BRASS,
+// m0.8 14T, face 10.5 (was 5.0).  Its WING-side face stays where it was (6.0
+// mm proud of the tip pad), so the face grows toward the nacelle, into the
+// pod's swept relief.  The Ø4 shaft must therefore stick out of the tip pad by
+// TILT_SHAFT_STICKOUT_64N.  ONE value for both wings (this file is mirrored),
+// so port and starboard stay synchronised — a joint fix never moves one side.
+TILT_PINION_FACE_64N     = 10.5;   // [mm]
+TILT_PINION_PAD_GAP_64N  =  6.0;   // [mm] tip pad -> pinion wing-side face
+TILT_SHAFT_STICKOUT_64N  = TILT_PINION_PAD_GAP_64N + TILT_PINION_FACE_64N
+                         + 1.0;    // [mm] = 17.5, +1 chamfer run-out
+
 // ── Wingtip service access (Rev T1) ──────────────────────────────────────────
 // Plan 003 U3 also specified a wingtip "maintenance garage" housing the
 // high-current bullet disconnects.  MOVED TO THE NACELLE, with cause:

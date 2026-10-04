@@ -2526,6 +2526,32 @@
       "Notes": "Rev T1 (2026-08-30). Carries tilt torque along chord station 53.6, parallel to the spar, from the fuselage gear pair (GEAR-TILT-FUS-38T) to the tip pinion (WA-R8). Spur pairs at both ends, no right-angle stage -- the shaft is already parallel to the tilt axis, which is the kinematic argument that selected it over a spanwise belt (plan 004 KTD1). LOADS: 0.050 N.m (0.44 lbf.in), from the 0.177 N.m grounded nacelle requirement divided by the 3.571 tip reduction. Wind-up 0.27 deg over the installed length (J=25.13 mm^4, G=79 GPa) = 0.076 deg referred to the nacelle. Runs in BUSH-TILT-4MM at the fuselage wall and at the wing tip rib. FERROMAGNETIC and it moves -- it sits inside the AK7455 non-ferrous keep-out envelope, so the in-situ INL calibration must be run with the shaft and pinion INSTALLED (docs/TILT_DRIVE_CONTROL_SPEC.md SS7.5). Mass: 4mm steel, 250mm, 7.85 g/cm^3 = 24.7 g/side."
     },
     {
+      "Ref": "PINION-TILT-14T",
+      "Description": "Wing tilt pinion -- m0.8 14T 20 deg PA, 10.5 mm face, O4 H7 bore, cross-drilled O1.5 at mid-face, BRASS (machined)",
+      "Category": "Machined Part",
+      "Qty": "2",
+      "Unit_Mass_g": "7.2",
+      "Total_Mass_g": "14.4",
+      "Supplier": "Machine shop (drawing: wing_tilt_pinion.scad)",
+      "Supplier_PN_or_Search": "airframe/openscad/wings/wing_tilt_pinion.scad",
+      "Est_Unit_Price_USD": "",
+      "Est_Total_Price_USD": "",
+      "Notes": "64 mm option A, 2026-10-03 (WBS NAC-64-TILT-01/-03). METAL because a 14T pinion has Lewis Y 0.277 vs 0.409 at 50T (Shigley Table 14-2, REF-STD-GEAR-002): root stress 18.9 MPa at limit bounding-aero load, so CF-PETG gives FOS 2.86 < 4; material bending allowable must be >= 76 MPa (tools/nacelle_tilt_dynamics.py) -- require a supplier material cert. BRASS preferred over steel: non-ferrous inside the AK7455 keep-out (shaft is already steel; see SHAFT-TILT-4MM). Mass 0.852 cm^3 rendered x 8.5 g/cm^3 (ASSUMED nominal brass). Torque at pinion 0.246 N.m limit. Price not quoted -- obtain machine-shop quote."
+    },
+    {
+      "Ref": "PIN-SPRING-1.5X8",
+      "Description": "Slotted spring pin, heavy duty, O1.5 x 8 mm, steel -- ISO 8752 -- wing tilt pinion to shaft",
+      "Category": "Hardware",
+      "Qty": "2",
+      "Unit_Mass_g": "0.1",
+      "Total_Mass_g": "0.2",
+      "Supplier": "McMaster-Carr / Misumi",
+      "Supplier_PN_or_Search": "ISO 8752 slotted spring pin 1.5 x 8 mm",
+      "Est_Unit_Price_USD": "",
+      "Est_Total_Price_USD": "",
+      "Notes": "2026-10-03. REF-STD-PIN-001 (catalogue URL and hole tolerance require verification, WBS 0.5). Carries pinion torque (double shear 17 MPa at 0.246 N.m limit) and axial location; 8 mm < 9.2 mm pinion root diameter. Mass ASSUMED from O1.5 x 8 steel tube ~ 0.1 g. Price not quoted."
+    },
+    {
       "Ref": "BUSH-TILT-4MM",
       "Description": "Flanged bronze sleeve bushing 4mm ID x 8mm OD x 5mm — tilt drive shaft support",
       "Category": "Bearing",

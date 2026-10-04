@@ -106,6 +106,13 @@ TIP_RATIO, TIP_ETA = 50.0 / 14.0, 0.95
 RING_M, RING_Z, RING_FACE = 0.8, 50, 10.5     # 64 mm: option A (owner 2026-10-03)
 RING_FACE_50 = 5.0                            # 50 mm joint as built
 SIGMA_FLEX, LEWIS_Y, GEAR_FOS = 54.0, 0.40, 4.0
+# Wing 14T pinion: same tangential load as the ring, but the Lewis form
+# factor of a 14-tooth 20 deg full-depth gear is 0.277 (50T: 0.409) --
+# Shigley 10th ed. Table 14-2 [REF-STD-GEAR-002; table number REQUIRES
+# VERIFICATION against a physical copy].  The ring keeps the conservative
+# 0.40 above.  A printed pinion is therefore the weak member; the check
+# below reports the bending allowable the (metal) pinion must meet.
+PINION_Z, LEWIS_Y_14 = 14, 0.277
 SHAFT_D = 4.0                # mm
 BRG_SPAN = 4.0               # mm, 2 x 6704ZZ centres (WING_ATTACH §4.3a)
 BRG_C0 = 730.0               # N, JTEKT 6704-ZZ static rating [REF-BRG-001]
@@ -429,9 +436,23 @@ def main(argv: list[str] | None = None) -> int:
     built = table[BUILT_ARRANGEMENT]
     drive = T_DRIVE_LIMIT / r64["T_drive_comb"]
     gear = r64["ring_cap"] / (r64["T_drive_comb"] / ULT)
+    # Tangential tooth load at the ring pitch circle (N, LIMIT load -- the
+    # ring FOS above is also taken on limit), then the pinion root bending
+    # stress sigma = F / (b m Y) (MPa).
+    f_t = r64["T_drive_comb"] / ULT * 1000.0 / (RING_Z * RING_M / 2.0)
+    sig_pin = f_t / (RING_FACE * RING_M * LEWIS_Y_14)
+    pin_pr = SIGMA_FLEX / sig_pin
+    print(f"\nWing 14T pinion (face {RING_FACE} mm, Y {LEWIS_Y_14}): tooth load "
+          f"{f_t:.1f} N limit, root stress {sig_pin:.1f} MPa; printed CF-PETG "
+          f"FOS {pin_pr:.2f}; so the pinion is METAL (wing_tilt_pinion.scad): bending allowable >= "
+          f"{GEAR_FOS * sig_pin:.0f} MPa")
     checks = [("tilt drive (>= 1.0x)", drive, drive >= 1.0),
               (f"tip ring gear, Lewis (>= {GEAR_FOS:.0f})", gear,
                gear >= GEAR_FOS),
+              # Not a pass/fail on geometry: the value is the bending
+              # allowable (MPa) the metal pinion's material must meet.
+              ("wing pinion: METAL, min allowable [MPa]", GEAR_FOS * sig_pin,
+               True),
               ("trunnion bearings fs, " + built["name"][:11]
                + f" (>= {FS_TARGET:.0f})", built["fs"],
                built["fs"] >= FS_TARGET)]
