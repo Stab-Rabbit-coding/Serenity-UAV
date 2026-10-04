@@ -1,7 +1,7 @@
 # CMakeLists.txt — Skipper GCS PB2-I firmware
 #
 # Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-# License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+# License: CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 # Revision: Q1 (2026-06-10)
 #
 # Cross-compiles for AM6254 (aarch64) on a Linux x86_64 host, or builds

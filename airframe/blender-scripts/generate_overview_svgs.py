@@ -41,7 +41,7 @@ so the bore axis becomes the world Y axis (vertical/hover).  Lateral offsets
 are estimated from the pylon geometry (PYLON_SPAN=88 mm, NACELLE_OD_X/2=34 mm).
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 Date:    2026-05-26
 
 References:

@@ -2,7 +2,7 @@
 # install_qgc.sh — Install QGroundControl on Debian Linux (AppImage method)
 #
 # Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-# License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+# License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 # Revision: Q1 (2026-06-10)
 #
 # Run as non-root (installs to ~/Applications/):

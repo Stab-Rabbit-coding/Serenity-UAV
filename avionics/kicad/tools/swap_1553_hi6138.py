@@ -29,7 +29,7 @@ Usage::
     python3 swap_1553_hi6138.py <board.kicad_pcb> <board.net>
 
 Plan: docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md (U2/U3).
-Author: Claude Opus 5.5 (2026-09-28).  Owner: sgriffing.  License: CC BY 4.0.
+Author: Claude Opus 5.5 (2026-09-28).  Owner: sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import math

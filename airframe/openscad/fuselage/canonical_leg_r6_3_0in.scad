@@ -19,7 +19,7 @@
 //           Split into the 1.5in / 3.0in named variants 2026-07-23 (same
 //           attribution).
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
-// License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+// License : CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // Date    : 2026-07-21 (variant split 2026-07-23)
 // Revision: Rev R6 (supersedes Rev R5 wire_brace_leg.scad -- retained for
 //           reference with a retirement note, per the SS1.1.4.5 pattern)

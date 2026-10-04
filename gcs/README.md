@@ -1,6 +1,6 @@
 # Serenity UAV — Ground Control Station (Skipper)
 
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > Ground control station (GCS) hardware and software for Serenity UAV: multi-radio comms

@@ -74,7 +74,7 @@
 # Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  (design)
 # AI-assist: Claude Opus 4.8 (Anthropic) — cavity-plug / flat-cut face opener,
 #            allowlist library refactor 2026-09-05.
-# License: CC BY 4.0 - creativecommons.org/licenses/by/4.0
+# License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
 # ============================================================================
 """Open (and keep open) the six fuselage-section mating-face apertures.
 

@@ -1,6 +1,6 @@
 # Serenity UAV — Build Tools & Validation Scripts
 
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > Python and shell scripts for design validation, mesh integrity checking, KiCad PCB/ERC/DRC
@@ -324,9 +324,11 @@ git commit -m "Update BOM: [change reason]"
 
 ## License
 
-All tools and scripts are **CC BY 4.0**.
-
-See root [`LICENSE`](../LICENSE) for details.
+Mixed, by what each tool produces (owner rule 2026-10-04): tools that write or
+render hardware (SCAD/STL/FCStd/KiCad, or figures of geometry) are **CERN-OHL-W
+2.0**; analysis, verification, CI and utility tools are **MIT**; documents here are
+**CC BY-SA 4.0**. Each file's header is authoritative; the list is in
+[`LICENSE`](LICENSE).
 
 ---
 

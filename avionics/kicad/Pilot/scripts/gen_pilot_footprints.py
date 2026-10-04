@@ -47,7 +47,7 @@ Footprints and sources
                                   1.0 mm drill, carried over from the prior board
                                   (the PB2 cape rail geometry).
 
-Author: Claude Opus 5, 2026-09-19.  Owner: sgriffing.  License: CC BY 4.0.
+Author: Claude Opus 5, 2026-09-19.  Owner: sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 from __future__ import annotations

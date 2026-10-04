@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — net map from the verified symbol, 2026-07-11
-**License:** CC BY-SA 4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** Rev A (2026-07-11)
 
 Companion to `symbols/PHYCORE-AM62AX-DSC.kicad_sym` (SnapMagic/SnapEDA export of the PHYTEC

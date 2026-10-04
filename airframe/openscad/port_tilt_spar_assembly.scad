@@ -2,7 +2,7 @@
 // port_tilt_spar_assembly.scad — ILLUSTRATIVE integration view (2026-07-19)
 // =============================================================================
 // Author  : Steve Griffing (assembled by Claude Opus 4.8)
-// License : CC BY 4.0
+// License : CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 //
 // Shows how the PORT tilt-spar chain fits together, in the canonical HULL FRAME
 // (X = +port, Y = +aft, Z = +dorsal; origin = SerenityAssembly.FCStd world):

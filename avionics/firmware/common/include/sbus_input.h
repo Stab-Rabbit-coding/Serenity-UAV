@@ -4,7 +4,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * This module implements a background receive thread that reads and decodes
  * Futaba S.BUS frames from a UART device.  It is used by both serenity-fc

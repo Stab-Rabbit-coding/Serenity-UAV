@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — analysis authoring, 2026-07-05
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** Rev B (2026-07-06)
 **Status:** Analysis — feeds Observer laser BOM decision (TODO.md §1.2c); no part sourced yet.
 **Rev A1 correction:** the Rev A conclusion that the nose is inherently Class 3B was

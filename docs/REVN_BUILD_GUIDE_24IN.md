@@ -1,6 +1,6 @@
 # Serenity UAV — 24-Inch Build Guide (Rev S Baseline)
 
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)  
 **Status:** Reference Stub (detailed procedures consolidated into graphical build guide).
 This stub's own procedural content is still scoped to the Rev S hull — it has not been

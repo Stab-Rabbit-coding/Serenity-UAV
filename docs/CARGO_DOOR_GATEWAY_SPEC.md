@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI note:** Drafted by Claude (model: Claude Opus 5, Anthropic) under the author's
 direction, 2026-09-21, per `AGENTS.md` §3 AI attribution.
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 > ⚠️ **ENGINEERING REVIEW REQUIRED.** Rev A is a design specification, not a
 > validated build. Every figure marked VERIFY is an assumption to be replaced by a

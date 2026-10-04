@@ -11,7 +11,7 @@ Generates production Gerber and drill files to:
   - avionics/kicad/gerbers/FlightEngineer-S1/
 
 Author: Claude Haiku 4.5 (Anthropic) — 2026-07-18
-License: CC BY 4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import os

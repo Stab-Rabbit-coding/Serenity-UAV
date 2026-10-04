@@ -26,7 +26,7 @@
 #
 # Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 #         (verification tool authored by Claude Opus 4.8)
-# License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+# License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 # ============================================================
 
 import sys

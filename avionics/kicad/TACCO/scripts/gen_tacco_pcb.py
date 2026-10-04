@@ -39,7 +39,7 @@ positions 3-10 (`PocketBeagle2_2x18_P2_Socket_Gap3-10`), so that patch is free o
 both faces.
 
 Author: Claude Sonnet 5, 2026-09-20; Claude Fable 5.1, 2026-09-29.  Owner: sgriffing.
-License: CC BY 4.0.
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 from __future__ import annotations
 

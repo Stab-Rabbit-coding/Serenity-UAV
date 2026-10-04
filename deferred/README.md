@@ -1,6 +1,6 @@
 # Serenity UAV — Deferred Work & Future Phases
 
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > Phase 11+ design work, aft propulsion system, RCS attitude thrusters, cargo-bay range-extender

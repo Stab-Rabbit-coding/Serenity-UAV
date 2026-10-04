@@ -5,7 +5,7 @@
 ## XYZprinting da Vinci Jr. 1.0 w · PLA · Rev T Baseline
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Date:** 2026-09-07 | **Baseline:** Rev T (current-specification/TODO.md, 2026-09-06 hull-frame bake)
 **Supersedes:** the 2026-06-01 Rev P edition of this guide — every part list, bounding box,
 scale factor, and batch below was re-measured directly from the current `airframe/stls/`

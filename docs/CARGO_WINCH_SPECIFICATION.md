@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Drafted by:** Claude Haiku 4.5 (Anthropic), 2026-07-27
 **Rev C drafted by:** Claude Sonnet 5 (Anthropic), 2026-08-02
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** C (2026-08-02)
 **Supersedes:** the Rev P/Q/R N20 winch train (see "Superseded Hardware" below); Rev C
 additionally supersedes Rev B's servo selection (STS3215 → SPT5425LV + LibreServo v2)

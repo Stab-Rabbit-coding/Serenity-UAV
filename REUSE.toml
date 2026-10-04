@@ -1,0 +1,104 @@
+version = 1
+# REUSE Specification 3.2 (FSFE, https://reuse.software/spec-3.2/) — machine-
+# readable licensing for files that cannot carry, or may lose, a header line.
+#
+# Owner rule 2026-10-04: images (SVG, PNG, JPG, WebP and every other image
+# format) are DOCUMENTS and carry CC BY-SA 4.0 — including renders and figures
+# produced by hardware tools.  Original raster images also carry the licence in
+# their embedded XMP metadata; SVGs carry it in a header comment.  This file
+# keeps regenerated images covered even if a generator drops that metadata.
+#
+# Third-party material is NOT covered by these annotations: everything under
+# docs/references/ and docs/ideation/7-2.webp (QX-Motor vendor manual page)
+# keeps its upstream terms — see REFERENCES.md.  archives/ is historical and
+# out of scope.
+
+[[annotations]]
+# Only the project's own image folders are listed — REUSE globs cannot exclude,
+# so a repo-wide "**/*.png" would wrongly claim the third-party images under
+# docs/references/.  Add a folder here when original images land elsewhere.
+path = [
+    "airframe/**/*.svg",
+    "airframe/**/*.png",
+    "airframe/**/*.jpg",
+    "airframe/**/*.jpeg",
+    "airframe/**/*.webp",
+    "airframe/**/*.gif",
+    "airframe/**/*.bmp",
+    "airframe/**/*.tif",
+    "airframe/**/*.tiff",
+    "airframe/**/*.ico",
+    "avionics/**/*.svg",
+    "avionics/**/*.png",
+    "avionics/**/*.jpg",
+    "avionics/**/*.jpeg",
+    "avionics/**/*.webp",
+    "avionics/**/*.gif",
+    "avionics/**/*.bmp",
+    "avionics/**/*.tif",
+    "avionics/**/*.tiff",
+    "avionics/**/*.ico",
+    "gcs/**/*.svg",
+    "gcs/**/*.png",
+    "gcs/**/*.jpg",
+    "gcs/**/*.jpeg",
+    "gcs/**/*.webp",
+    "gcs/**/*.gif",
+    "gcs/**/*.bmp",
+    "gcs/**/*.tif",
+    "gcs/**/*.tiff",
+    "gcs/**/*.ico",
+    "graphical-build-guide/**/*.svg",
+    "graphical-build-guide/**/*.png",
+    "graphical-build-guide/**/*.jpg",
+    "graphical-build-guide/**/*.jpeg",
+    "graphical-build-guide/**/*.webp",
+    "graphical-build-guide/**/*.gif",
+    "graphical-build-guide/**/*.bmp",
+    "graphical-build-guide/**/*.tif",
+    "graphical-build-guide/**/*.tiff",
+    "graphical-build-guide/**/*.ico",
+    "docs/img/**/*.svg",
+    "docs/img/**/*.png",
+    "docs/img/**/*.jpg",
+    "docs/img/**/*.jpeg",
+    "docs/img/**/*.webp",
+    "docs/img/**/*.gif",
+    "docs/img/**/*.bmp",
+    "docs/img/**/*.tif",
+    "docs/img/**/*.tiff",
+    "docs/img/**/*.ico",
+    "tools/**/*.svg",
+    "tools/**/*.png",
+    "tools/**/*.jpg",
+    "tools/**/*.jpeg",
+    "tools/**/*.webp",
+    "tools/**/*.gif",
+    "tools/**/*.bmp",
+    "tools/**/*.tif",
+    "tools/**/*.tiff",
+    "tools/**/*.ico",
+    "current-specification/**/*.svg",
+    "current-specification/**/*.png",
+    "current-specification/**/*.jpg",
+    "current-specification/**/*.jpeg",
+    "current-specification/**/*.webp",
+    "current-specification/**/*.gif",
+    "current-specification/**/*.bmp",
+    "current-specification/**/*.tif",
+    "current-specification/**/*.tiff",
+    "current-specification/**/*.ico",
+    "deferred/**/*.svg",
+    "deferred/**/*.png",
+    "deferred/**/*.jpg",
+    "deferred/**/*.jpeg",
+    "deferred/**/*.webp",
+    "deferred/**/*.gif",
+    "deferred/**/*.bmp",
+    "deferred/**/*.tif",
+    "deferred/**/*.tiff",
+    "deferred/**/*.ico",
+]
+precedence = "closest"
+SPDX-FileCopyrightText = "2024-2026 Steve Griffing (Stab-Rabbit-coding)"
+SPDX-License-Identifier = "CC-BY-SA-4.0"

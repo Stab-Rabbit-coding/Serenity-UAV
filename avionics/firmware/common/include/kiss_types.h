@@ -4,7 +4,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * KISS (Keep It Simple, Stupid) is the host-to-TNC protocol used between
  * the CN node (AM6254) and the XCVR-49MHZ-1 physical-layer modem board.

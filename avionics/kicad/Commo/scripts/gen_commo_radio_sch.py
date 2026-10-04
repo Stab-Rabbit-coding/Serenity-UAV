@@ -27,7 +27,7 @@ Symbol boxes follow the fleet generators (gen_pilot_sch.py): 2-pin parts get
 the compact 600 x 200 mil box, everything else the 1300 mil IC box.
 
 ENGINEERING REVIEW REQUIRED -- see the design note.
-Author: Claude Opus 5.5 (2026-09-29); owner sgriffing.  License: CC BY 4.0.
+Author: Claude Opus 5.5 (2026-09-29); owner sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import itertools
