@@ -39,7 +39,7 @@ Then:
     python3 tools/bake_hull_frame.py Head_Shell
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0 -- creativecommons.org/licenses/by/4.0
+License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
 """
 
 import math

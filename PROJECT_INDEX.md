@@ -6,7 +6,7 @@
      look, change the generator (tools/precommit_index.py), not this
      file. Machine-readable form: tools/index_tags.json -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last generated: 2026-10-01 -->
+<!-- Last generated: 2026-10-04 -->
 
 ## Tag Index
 
@@ -2099,7 +2099,7 @@ bom_edit_tilt_controller.py — Swap the tilt-controller BOM row: retire LS-TILT
 build_head_shell.py — build_head_shell.py — apply head-shell features (bosses + aperture cuts) to [build-tooling]
 build_landing_gear_views.py — RETIRED 2026-07-21 -- Rev R5 tool, superseded by Rev R6. [build-tooling, landing-gear, security]
 cargo_bay_envelope.py — Measure the cargo bay's usable interior envelope, and gate the mission payload. [build-tooling]
-cargo_layout_fit.py — cargo_layout_fit.py -- measure a proposed cargo-section equipment layout [build-tooling]
+cargo_layout_fit.py — Python script [build-tooling]
 compact_bom_entries.py — compact_bom_entries.py [bom, build-tooling]
 export-specctra-dsn.py — Real API name (verified against this pcbnew build): ExportSpecctraDSN, [build-tooling]
 export_landing_gear_stls.py — Re-export every Rev R6 landing-gear STL from the two canonical leg SCADs. [build-tooling, landing-gear]

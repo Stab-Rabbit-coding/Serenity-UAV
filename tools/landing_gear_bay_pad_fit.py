@@ -79,7 +79,7 @@ References (REFERENCES.md)
 Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note : Authored by Claude (model: Claude Opus 5, Anthropic) under the
           author's direction, 2026-08-08, per AGENTS.md AI attribution.
-License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
 
 Run: python3 tools/landing_gear_bay_pad_fit.py
 """

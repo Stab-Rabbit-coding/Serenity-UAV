@@ -83,7 +83,11 @@ full policy and the per-subsystem `LICENSE` federation map:
   schematics/layouts/Gerbers) — **CERN-OHL-W 2.0**. Root `LICENSE`, `airframe/LICENSE`,
   `avionics/LICENSE`.
 - **Documentation, code, scripts, and non-hardware drawings** — **CC BY-SA 4.0**.
-  `docs/LICENSE`, `tools/LICENSE`, and other subsystem `LICENSE` files.
+  `docs/LICENSE` and other subsystem `LICENSE` files.
+- **Code tools in `tools/`** — **MIT** (`tools/LICENSE`; header line
+  `License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)`). Creative
+  Commons advises against CC licences other than CC0 for software; MIT keeps the
+  attribution requirement (owner, 2026-10-04).
 
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (personal copyright retained; avionics
 boards are marked with his personally owned LLC name).

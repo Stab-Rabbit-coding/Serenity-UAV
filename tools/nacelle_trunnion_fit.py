@@ -43,7 +43,7 @@ Exit 0 = all gates pass.  Exit 2 = at least one gate failed.
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 Analysis and tool by Claude (Claude Opus 5, Anthropic) under the author's
 direction, per AGENTS.md §3 "Attribution and Licensing".
-License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
 """
 
 from __future__ import annotations

@@ -53,7 +53,7 @@ Run:
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (model: Claude Opus 5, Anthropic) under the
 author's direction, 2026-09-15, per `AGENTS.md` §3 AI attribution.
-License: CC BY 4.0 -- creativecommons.org/licenses/by/4.0
+License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
 """
 
 import argparse
