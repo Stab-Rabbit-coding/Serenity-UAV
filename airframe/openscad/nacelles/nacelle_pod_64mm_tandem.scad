@@ -261,6 +261,11 @@ module esc_wire_exit_slot(pylon_side = PYLON_SIDE) {}
 // The 50 mm sleeve-retention bosses reached r 30.4 at 64 mm — inside the bore
 // and the nozzle throat (joint census 2026-10-03).  The nozzle is the aft lock.
 module sleeve_retention_bosses() {}
+// Two anti-rotation keys at 64 mm (owner-approved nozzle-servo packaging,
+// 2026-10-04): the 270 deg key slot lies under the canonical dorsal spine where
+// the nozzle servo pocket goes.  Two 3 x 3 mm keys carry the 0.227 N·m EDF
+// reaction torque with large margin; 30/150 mirror onto each other port/stbd.
+SLEEVE_KEY_ANGLES = [30, 150];
 
 // ESC seat keep-out spans the bay (the whole bay is over the sleeve zone) and
 // tracks the larger duct (EDF_BORE_R + 1 instead of the 50 mm literal 26.0).

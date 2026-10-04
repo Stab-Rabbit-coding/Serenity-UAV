@@ -1044,6 +1044,9 @@ RENDER_PART = "asm";   // "throat" | "ring" | "flap" | "flap_seal" | "asm"
 // 2026-08-09; see TODO.md §1.1.3.)
 FLAP_PHI = PHI_CLOSED;   // [deg] flap swing angle for the asm preview
 
+// IRIS_NO_RENDER: set by derived files (nacelle_nozzle_iris_64mm.scad) that
+// render their own modified parts; undefined here, so 50 mm output is unchanged.
+if (is_undef(IRIS_NO_RENDER)) {
 if (RENDER_PART == "throat") {
     nozzle_throat_and_housing();
 } else if (RENDER_PART == "ring") {
@@ -1070,4 +1073,5 @@ if (RENDER_PART == "throat") {
                     // interpenetrating (see FLAP_SHINGLE_GAP).
                     nozzle_flap(seal = (i % 2) == 1);
     }
+}
 }

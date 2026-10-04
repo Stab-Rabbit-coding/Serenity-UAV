@@ -44,6 +44,8 @@
 // =============================================================================
 
 include <nacelle_nozzle_iris.scad>
+NSV_NO_RENDER = true;
+use <nacelle_nozzle_servo_64mm.scad>   // rod clearance in the ring frame
 
 // ── Radial re-derivation (literals only — see header) ─────────────────────────
 BORE_R             = 32.0;
@@ -62,14 +64,93 @@ HOUSING_INNER_R    = 40.6;
 HOUSING_OUTER_R    = 42.6;
 HOUSING_AFT_R      = 40.5;
 
-// ── 64 mm retention: radial screws into the housing lip ───────────────────────
-NZ64_SCREW_AZ  = [60, 180, 300];   // clear of the ear window (129.5..161.8)
-                                   // and the spring anchor (337.5)
-NZ64_INSERT_D  = 3.5;  NZ64_INSERT_L = 4.0;   // M3 x 4 heat-set (lip is 2 mm
-                                              // proud of the ring + 0.5 clr)
-NZ64_SCREW_Z   = 1.5;              // [mm] axial station in the lip
+// ── Servo drive interface (owner 2026-10-04, WBS NAC-64-SERVO-01) ─────────────
+// Lever ear moved to the 292.5 deg flap gap (starboard; port = mirror, 247.5),
+// 22.5 deg off top-centre under the canonical dorsal spine where the pod's
+// bellcrank rod arrives (tools/nozzle_servo_linkage_64.py).  Stops, window and
+// spring anchor all derive from RING_LEVER_AZ; the anchor stays opposite.
+RING_LEVER_AZ    = 292.5;
+SPRING_ANCHOR_AZ = 112.5;
+// Forward lip deleted: the housing window then runs out through the front
+// face, i.e. a FORWARD-OPEN NOTCH, so the nozzle slides aft off the pod's rod
+// with no linkage part handled (field nozzle swap).  The lip also collided
+// with the pod forward of the joint (joint census 2026-10-04).
+HOUSING_LIP_H    = 0.0;
+IRIS_NO_RENDER   = true;     // this file renders its own (modified) parts
+
+// ── Field-swap retention (2026-10-04): 2 captive M3 screws at the top ─────────
+// Two bosses on the housing OD under the pod's fixed spine extension, at
+// az 302 / 316 (stbd), each with a radial M3 x 4 heat-set insert; the screws are
+// captive in the spine.  A 3 mm throat spigot locates radially in the pod's
+// sleeve bore (the stage-2 cartridge ends 3 mm short for it) and two key lugs
+// in the pod's 30/150 key slots locate in rotation.
+NZ64_BOSS_AZ  = [302, 316];   // both beside the notch (265..296), clear of the bellcrank path
+NZ64_BOSS_R1  = 45.6;  NZ64_BOSS_W = 7.0;  NZ64_BOSS_Z = [1.0, 9.0];
+NZ64_INSERT_D = 3.5;   NZ64_INSERT_L = 4.0;
+NZ64_SPIGOT_L = 3.0;
+NZ64_KEY_AZ   = [30, 150];  NZ64_KEY_W = 3.0;  NZ64_KEY_H = 3.0;
+NZ_SIDE       = 1;        // +1 starboard, -1 port (mirror)
+NZ_PART       = "asm";    // "throat" | "ring" | "flap" | "flap_seal" | "asm"
+
+module nz64_throat() {
+    difference() {
+        union() {
+            nozzle_throat_and_housing();
+            // throat spigot into the pod sleeve bore
+            translate([0, 0, -NZ64_SPIGOT_L]) difference() {
+                cylinder(r = THROAT_OUTER_R, h = NZ64_SPIGOT_L + 0.01, $fn = 120);
+                translate([0, 0, -0.1]) cylinder(r = BORE_R, h = NZ64_SPIGOT_L + 0.3, $fn = 120);
+            }
+            for (a = NZ64_KEY_AZ) rotate([0, 0, a])
+                translate([THROAT_OUTER_R - 0.3, -NZ64_KEY_W / 2, -NZ64_SPIGOT_L])
+                    cube([NZ64_KEY_H + 0.3, NZ64_KEY_W, NZ64_SPIGOT_L + 0.01]);
+            for (a = NZ64_BOSS_AZ)
+                nz_wedge(a - NZ64_BOSS_W / 2 / HOUSING_OUTER_R * 180 / PI,
+                         a + NZ64_BOSS_W / 2 / HOUSING_OUTER_R * 180 / PI,
+                         HOUSING_OUTER_R - 0.2, NZ64_BOSS_R1, NZ64_BOSS_Z[0], NZ64_BOSS_Z[1]);
+        }
+        // notch extension for the bellcrank output arm's tip (pod linkage),
+        // forward-open like the window; starts at r 40.65 so the open-stop lug
+        // (r 40.3..40.6) survives
+        nz_wedge(243.0, 264.5, HOUSING_INNER_R + 0.05, HOUSING_OUTER_R + 1.2, -0.1, 10.0);
+        for (a = NZ64_BOSS_AZ) rotate([0, 0, a])
+            translate([NZ64_BOSS_R1 - NZ64_INSERT_L, 0, (NZ64_BOSS_Z[0] + NZ64_BOSS_Z[1]) / 2])
+                rotate([0, 90, 0]) cylinder(d = NZ64_INSERT_D, h = NZ64_INSERT_L + 0.1, $fn = 20);
+    }
+}
+
+// Unison ring: the 50 mm ring with the ball cup ALSO open axially forward, so
+// the pod's rod ball leaves the cup when the nozzle slides aft and re-enters on
+// refit (ring at its spring-open stop, servo at its open position).  The KTD3
+// radial exit channel (fail-open) is kept unchanged.
+module nz64_ring() {
+    difference() {
+        unison_ring();
+        rotate([0, 0, RING_LEVER_AZ])
+            translate([RING_LEVER_R - (RING_BALL_D + 0.4) / 2, -(RING_BALL_D + 0.4) / 2, -0.1])
+                cube([RING_BALL_D + 0.4, RING_BALL_D + 0.4, RING_H / 2 + 0.1]);
+        // rod-body clearance over the stroke (pod linkage, single-sourced)
+        nsv_rod_clearance_ring_frame();
+    }
+}
+
+module nz64_asm() {
+    nz64_throat();
+    nz64_ring();
+    for (i = [0 : N_FLAPS - 1]) rotate([0, 0, i * 360 / N_FLAPS])
+        translate([R_HINGE, 0, HINGE_Z]) rotate([0, -FLAP_PHI, 0])
+            nozzle_flap(seal = (i % 2) == 1);
+}
+
+mirror([NZ_SIDE < 0 ? 1 : 0, 0, 0]) {
+    if (NZ_PART == "throat") nz64_throat();
+    else if (NZ_PART == "ring") nz64_ring();
+    else if (NZ_PART == "flap") nozzle_flap(seal = false);
+    else if (NZ_PART == "flap_seal") nozzle_flap(seal = true);
+    else nz64_asm();
+}
 
 assert(HOUSING_OUTER_R < 87.12 / 2, "housing must fit the 64 mm pod pocket");
 assert(abs(asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH) - 16.96) < 0.05,
        "closed flap angle must match the validated 50 mm value");
-echo(NZ64 = [R_HINGE, PHI_CLOSED, PHI_OPEN, RING_OUTER_R, HOUSING_OUTER_R]);
+echo(NZ64 = [R_HINGE, PHI_CLOSED, PHI_OPEN, RING_OUTER_R, HOUSING_OUTER_R, RING_LEVER_AZ]);

@@ -2444,6 +2444,17 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Status** | Selected servo body for the SG90 class (with the OpenServoCore swap board, REF-SENSOR-015). Marketplace "SG90" listings are frequently clones; procure against this manufacturer page or re-verify the figures for whichever part is actually bought. |
 | **Caveat** | The page lists 4.8 V only; `docs/POWER_DISTRIBUTION.md` §3.3 feeds the SG90 class from the 6 V servo rail — see "Open Standards Verification Items" (SG90 6 V tolerance). |
 
+
+### REF-ACT-004: Blue Bird BMS-101DMG — micro digital metal-gear servo (nacelle nozzle servo)
+
+| Field | Value |
+|---|---|
+| **Type** | Secondary specification aggregator (manufacturer page not retrieved) |
+| **URL** | <https://servodatabase.com/servo/blue-bird/bms-101dmg> |
+| **Retrieved** | 2026-10-04 (via web search summary, Claude Opus 5.5) |
+| **Values applied** | 18.5 x 7.6 x 15.7 mm (L x W x H); 4.4 g; 0.80 kgf·cm at 4.8 V, 1.00 kgf·cm at 6.0 V; 0.09 / 0.07 s per 60 deg; coreless motor, metal gears |
+| **Caveat** | Aggregator data, not the manufacturer datasheet — **every dimension and the 6 V rating REQUIRE VERIFICATION** on a physical unit before the servo pocket is printed (WBS NAC-64-SERVO-01). Supersedes the plan's earlier "8 mm case, 4.5 g" reading (hyperflight.co.uk). |
+| **Applied to** | `airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad` servo pocket; `tools/nozzle_servo_linkage.py`; plan 2026-09-28-001 KTD2 |
 ### REF-ESC-001: Open-Secure-ESC — 6S/10A brushed build, the nacelle-tilt controller
 
 | Field | Value |
