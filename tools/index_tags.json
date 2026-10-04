@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-01",
+  "generated": "2026-10-04",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -10812,7 +10812,7 @@
       "archived": false
     },
     "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py": {
-      "description": "Python script",
+      "description": "gen_tacco_pcb.py \u2014 Build the TACCO PCB from the schematic netlist.",
       "tags": [
         "avionics-hardware",
         "pcb-design",
