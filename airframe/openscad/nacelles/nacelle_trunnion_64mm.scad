@@ -86,10 +86,18 @@ GEAR_Z0         = 12.5 - GEAR_FACE;        // = 2.0
 // deg, and it crosses the flange (r 23.1-28.1).  The flange therefore carries
 // an arc slot over SLOT_A0..SLOT_A1 (6 deg margin each end), and the three
 // M3 bolts move into the solid 205-deg remainder.
-SHAFT_R         = 25.6;    // [mm] centre distance (wings SHAFT_BORE_STATION)
-SHAFT_AZ        = 3.8;     // [deg] measured shaft azimuth at cruise
-SLOT_A0         = SHAFT_AZ - 5.0 - 6.0;     // = -7.2 deg
-SLOT_A1         = SHAFT_AZ + 140.0 + 6.0;   // = 149.8 deg
+// Wing shaft relative to the spar at the tip, Rev T6 (2026-10-03): both
+// bores are LEVEL on their fuselage datums (wings_s1223_revo.scad spar_bore /
+// tilt_shaft_bore), so the shaft is 25.6 mm aft (station 53.6 - 28.0) and
+// 2.2391 mm above (shaft_y 11.0797 - spar 8.8406) the tilt axis everywhere.
+// Centre distance therefore 25.698 (was 25.6 at the old sloped-bore tip):
+// +0.098 mm, ~0.07 mm extra backlash, closed out by the AK7455 loop.
+SHAFT_DY        = 25.6;    // [mm] shaft aft of the spar
+SHAFT_DZ        = 2.2391;  // [mm] shaft above the spar
+SHAFT_R         = sqrt(SHAFT_DY * SHAFT_DY + SHAFT_DZ * SHAFT_DZ);  // 25.698
+SHAFT_AZ        = atan2(SHAFT_DZ, SHAFT_DY);  // [deg] 5.00 at cruise
+SLOT_A0         = SHAFT_AZ - 5.0 - 6.0;     // = -6.0 deg
+SLOT_A1         = SHAFT_AZ + 140.0 + 6.0;   // = 151.0 deg
 SLOT_HALF_W     = 2.0 + 0.8;                // shaft radius + 0.8 running gap
 BOLT_ANGLES     = [175, 255, 335];          // [deg] outside the slot
 

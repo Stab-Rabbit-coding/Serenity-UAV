@@ -2031,9 +2031,29 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         stator-sleeve wall, not the duct; add matching sleeve ports or move them.
     - [ ] **NAC-64-GEOM-03 — ESC cover from the scaled skin.** `nacelle_esc_cover.scad`
         still reads the unscaled grid; give it the RADIAL_K hook.
-    - [ ] **NAC-64-GEOM-04 — hull-frame bake for the 9.52 mm (0.37 in) axis shift**
-        (owner 2026-10-03: wing interface held at the pylon face; span +0.75 in
-        (19 mm)). Update `tools/bake_hull_frame.py` and the assembly placements.
+    - [x] **NAC-64-GEOM-04 — hull-frame bake — DONE 2026-10-03 (Claude Opus 5.5).**
+        `tools/bake_hull_frame.py` 'Nacelle64_*' / 'Trunnion64_*' / 'TiltPinion64_*'
+        are DERIVED, one rule both sides: tilt axis = level spar line Y 21.000 /
+        Z 66.851; pod pad seat (local ±53.84) on each wing's measured pad face
+        (port +6.700 / stbd -345.182) -> Px +60.540 / -399.022, mirrored about the
+        measured centre plane -169.241 (bake verified mirror-exact). Staged by
+        `tools/prep_nacelle_64_bake.py`; `serenity_assembly.py` NACELLE_GEN = 64
+        (PIVOT_Z 109.7, NOZZLE_RING_Z 187.86, trunnion tilts, pinion wing-fixed;
+        50 mm sleeves/iris reported as COVERAGE GAPs). Re-sweep after the bake,
+        both sides, tilt -5..140: pinion/shaft vs pod/trunnion all 0 mm3.
+    - [x] **WING-T6-BORES — spar and shaft bores SLOPED (found by the joint
+        census work 2026-10-03, PRE-EXISTING; owner chose 1 deg dihedral).**
+        spar_bore() hulled root-midline to tip-midline discs: 1.458 mm slope vs a
+        straight Ø20 spar in a LEVEL socket with 0.2 mm/side clearance (could not
+        assemble); tilt_shaft_bore() sloped 2.66 mm (and so was not parallel to
+        the tilt axis). Fix: WING_DIHEDRAL = 1.45775 (= root - tip midline,
+        asserted), shaft bore level on the root datum (WING_SHAFT_Z 69.09),
+        spar_tip_y() now includes the dihedral (pad/pocket/jog were 1.46 mm low),
+        pad lobe C on the shaft. Re-baked wings: spar Z 66.840 / shaft 69.080
+        level both sides, walls >= 0.79 / 1.69 mm. Tip centre distance 25.698
+        (+0.098, ~0.07 mm backlash); pod relief/trunnion slot re-derived
+        (azimuth 5.0 deg). OPEN: nav and AK7455 conduits still camber-following
+        (flexible runs; walls to be confirmed by the census).
     - [ ] **NAC-64-GEOM-05 — gates on the 64 mm pod.** Port `nacelle_trunnion_fit.py`,
         `nacelle_esc_bay_fit.py` and `nacelle_mass_cg.py` (PIVOT_Z, plan U5) to
         read the 64 mm wrapper; PIVOT_Z 107.5 is carried unchanged until then.

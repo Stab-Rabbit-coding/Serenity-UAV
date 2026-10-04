@@ -340,8 +340,16 @@ module lip_ring_cavity() {
 // frame (z = tilt axis toward the wing from the spar tip, x = aft, y = up)
 // and mapped to the pod by part_frame(): part z -> +X, part x -> +Z,
 // part y -> -Y, origin (TRUNNION_X0, 0, PIVOT_Z).  Starboard / PYLON_SIDE +1.
-T_SHAFT_R = 25.6;  T_SHAFT_AZ = 3.8;
-T_A0 = T_SHAFT_AZ - 5.0 - 6.0;  T_A1 = T_SHAFT_AZ + 140.0 + 6.0;  // -7.2..149.8
+// Wing shaft relative to the spar at the tip, Rev T6 (2026-10-03): both
+// bores are LEVEL on their fuselage datums (wings_s1223_revo.scad spar_bore /
+// tilt_shaft_bore), so the shaft is 25.6 mm aft (station 53.6 - 28.0) and
+// 2.2391 mm above (shaft_y 11.0797 - spar 8.8406) the tilt axis everywhere.
+// Centre distance therefore 25.698 (was 25.6 at the old sloped-bore tip):
+// +0.098 mm, ~0.07 mm extra backlash, closed out by the AK7455 loop.
+T_SHAFT_DY = 25.6;  T_SHAFT_DZ = 2.2391;
+T_SHAFT_R = sqrt(T_SHAFT_DY * T_SHAFT_DY + T_SHAFT_DZ * T_SHAFT_DZ);  // 25.698
+T_SHAFT_AZ = atan2(T_SHAFT_DZ, T_SHAFT_DY);                          // 5.00 deg
+T_A0 = T_SHAFT_AZ - 5.0 - 6.0;  T_A1 = T_SHAFT_AZ + 140.0 + 6.0;  // -6.0..151.0
 T_PIN_RA = 0.8 * 14 / 2 + 0.8;   // = 6.4 mm, 14T m0.8 tip radius
 T_GEAR_Z = [2.0, 12.5];          // ring/pinion band, part z (option A face 10.5)
 T_BOLTS = [175, 255, 335];

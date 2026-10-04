@@ -274,10 +274,24 @@ R_BAKE = (
 # tools/bake_hull_frame.py COMPONENTS['Nacelle_Port'] / ['Nacelle_Stbd']
 # (that file remains the single source of truth for the primary nacelle
 # placement; these values are not re-derived here).
-T_BAKE = {
+T_BAKE_50 = {
     "port": (46.9999060, -63.9998720, 62.9998740),
     "stbd": (-385.0960040, -69.9998600, 64.9719300),
 }
+
+# NACELLE GENERATION (Rev T6, 2026-10-03).  64 = the QX 64 mm EDF nacelle
+# (nacelle_pod_64mm_tandem.scad), the build baseline; 50 keeps the legacy
+# 50 mm pod and its internals for reference.  The 64 mm bake translation is
+# DERIVED in tools/bake_hull_frame.py ('Nacelle64_*': tilt axis = level spar
+# line Y 21.000 / Z 66.851, pod pad seats on each wing's measured pad face,
+# mirrored about the hull centre plane X -169.241); the same numbers are
+# restated here because this file runs under freecadcmd without that module.
+NACELLE_GEN = 64
+T_BAKE_64 = {
+    "port": (6.700 + 53.84, 21.000 - 109.7, 66.851),
+    "stbd": (-345.182 - 53.84, 21.000 - 109.7, 66.851),
+}
+T_BAKE = T_BAKE_64 if NACELLE_GEN == 64 else T_BAKE_50
 
 # Nacelle pylon-side sign, matching nacelle_pod_50mm_tandem.scad's
 # PYLON_SIDE override table (Rev R1/nacelle-swap, 2026-06-11):
@@ -364,6 +378,11 @@ AFT_SLV_Z_START = 122.5
 #          can occupy, so that lever never existed
 PIVOT_Z = 107.5  # pivot station = full-assembly nacelle CG; see the note above
 NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
+# 64 mm (Rev T6): PIVOT_Z converged at 109.7 (tools/nacelle_mass_cg_64.py,
+# measured CG 109.67); nozzle ring at 187.86 (nacelle_pod_64mm_tandem.scad).
+if NACELLE_GEN == 64:
+    PIVOT_Z = 109.7
+    NOZZLE_RING_Z = 187.86
 
 
 # ---------------------------------------------------------------------------
@@ -740,11 +759,12 @@ def assemble():
     # PL_IDENTITY at 0 deg tilt (tilt_placement() reduces to identity there),
     # rotated about the per-side pivot by NACELLE_TILT_PORT_DEG/STBD_DEG
     # otherwise -- see the NACELLE TILT CONFIGURATION block above.
-    port_nac = add_mesh(doc, _stl("nacelles/nacelle_port_revs.stl"), "Nacelle_Port")
+    pod_tag = "64mm" if NACELLE_GEN == 64 else "revs"
+    port_nac = add_mesh(doc, _stl(f"nacelles/nacelle_port_{pod_tag}.stl"), "Nacelle_Port")
     if port_nac is not None:
         port_nac.Placement = tilt_placement("port")
 
-    stbd_nac = add_mesh(doc, _stl("nacelles/nacelle_stbd_revs.stl"), "Nacelle_Stbd")
+    stbd_nac = add_mesh(doc, _stl(f"nacelles/nacelle_stbd_{pod_tag}.stl"), "Nacelle_Stbd")
     if stbd_nac is not None:
         stbd_nac.Placement = tilt_placement("stbd")
 
@@ -770,7 +790,28 @@ def assemble():
     # near the NACELLE TILT CONFIGURATION block -- PIVOT_Z is hoisted there
     # because nacelle_pivot_hull() needs it before assemble() runs).
 
-    for side in ("port", "stbd"):
+    if NACELLE_GEN == 64:
+        # 64 mm tilt joint (baked in hull frame, tools/prep_nacelle_64_bake.py
+        # + bake_hull_frame.py): the trunnion is bolted to the pod and tilts
+        # with it; the tilt pinion rides the WING shaft and does not tilt.
+        for side in ("port", "stbd"):
+            label = "Port" if side == "port" else "Stbd"
+            tr = add_mesh(doc, _stl(f"nacelles/nacelle_trunnion_64mm_{side}.stl"),
+                          f"Nacelle_{label}_Trunnion")
+            if tr is not None:
+                tr.Placement = tilt_placement(side)
+            add_mesh(doc, _stl(f"wings/wing_tilt_pinion_{side}.stl"),
+                     f"Wing_{label}_Tilt_Pinion")
+        # COVERAGE GAPS (joint census, plan 2026-10-03-002 R1): the 50 mm
+        # stator / aft-spider sleeves and the 50 mm nozzle iris do not fit the
+        # 64 mm bore and have no 64 mm counterparts yet (WBS NAC-64-GEOM-01,
+        # nozzle per plan 2026-09-28-001).  Reported, never placed at 50 mm
+        # stations.
+        for gap in ("64 mm stator sleeve", "64 mm aft spider sleeve",
+                    "64 mm nozzle iris", "64 mm EDF rotors/motors", "70 A ESCs"):
+            print(f"[assembly] COVERAGE GAP: {gap} — no placed solid", flush=True)
+
+    for side in (("port", "stbd") if NACELLE_GEN == 50 else ()):
         label = "Port" if side == "port" else "Stbd"
 
         # ── EDF1/EDF2 inter-stage stator sleeve ──────────────────────────

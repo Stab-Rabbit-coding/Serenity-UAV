@@ -3763,3 +3763,23 @@ Branch feat/nacelle-64mm (worktree .worktrees/nacelle-64mm), 2026-10-03.
 Related: [[project_nacelle_rev_t4_trunnion]], [[env_openfoam_airfoil_meshing]], [[feedback_shared_checkout_use_worktree]]
 
 ---
+
+## `feedback_local_informs_airframe_rules.md`
+
+```markdown
+---
+name: feedback_local_informs_airframe_rules
+description: "Joint analysis must be exhaustive/systematic; local joint assemblies INFORM but never RULE the airframe — fixes go through shared params, port/stbd stay synced"
+metadata:
+  node_type: memory
+  type: feedback
+  originSessionId: 6c1fdba2-fca5-4750-bdb1-61d5f9d4a37a
+  modified: 2026-10-04T02:56:39.850Z
+---
+
+Owner direction 2026-10-03: (1) joint/interface analysis must be EXHAUSTIVE and SYSTEMATIC — named joints (pitot, ESC cooling, tilt) are examples, not scope; (2) a local in-context assembly informs the airframe assembly but must not rule it: never fix one joint in a way that desyncs the whole (e.g. never move one wing to a different longitudinal station than the other).
+
+**Why:** local context files had placed parts by locally measured geometry; a correction made there could silently diverge from `serenity_assembly.py` or from the mirrored twin.
+
+**How to apply:** generate interfaces from ALL placed-part pairs (`tools/export_assembly_meshes.py` + `tools/airframe_interface_census.py`), never a hand list; airframe assembly is the position authority; apply fixes only at single-source shared parameters (mirrored wing scad, cargo_layout_fit stations, nacelle wrapper constants); gate port/stbd symmetry. Plan: docs/plans/2026-10-03-002-feat-exhaustive-joint-analysis-plan.md. Related: [[project_nacelle_64mm_wrapper]], [[project_cargo_rev_t5_layout]].
+```

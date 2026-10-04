@@ -337,5 +337,263 @@ def main() -> int:
     return 0
 
 
+# ═════════════════════════════════════════════════════════════════════════════
+# MODEL 2  (owner direction 2026-10-03, after the first loop stopped 6.5 mm short)
+#   * board OUTLINE follows the skin: each 2 mm ring gets the widest panel that
+#     clears the skin, capped at the nominal width (a tapered/notched board end
+#     instead of a rectangle) — "lengthen the bay" without entering any other
+#     system's space, because the diagnosis showed both bay ends are SKIN-limited
+#   * packing 0.75 on BOTH faces, with high-current pour runs and thermal-via
+#     keep-outs counted as occupied area (owner)
+#   * wiring-harness loop space reserved at every wire-exit end of the bay
+#   * optional in-layout cooling lane and two bays per ESC
+# Selected by "model": 2 in the design point; model 1 above is unchanged.
+# ═════════════════════════════════════════════════════════════════════════════
+
+# FET drain land, solid body 4.7 x 3.75 mm (OSE [50] p. 46): the opposite face
+# under it carries the thermal-via field and cannot hold parts.
+VIA_KEEPOUT_PER_FET = 4.7 * 3.75
+# Phase pour 7.5 mm wide at 50 A, 2 oz; un-covered run pour-edge to terminal
+# 15 mm (OSE docs/tools/conductor_sizing.py).  Scaled at constant current
+# density (width x I/50).  ESTIMATE until conductor_sizing.py is re-run at 80 A.
+POUR_W_50A = 7.5
+POUR_RUN = 15.0
+
+
+def ring_width_fit(skin, k, phi, d, env, w_nom, side):
+    """Widest panel (<= w_nom) on `side` (+1 power, -1 signal) of a hinge at
+    azimuth phi that clears the skin at ring k.  Bisection on the corner test."""
+    def ok(w):
+        a = math.degrees(math.atan2(w / 2.0, d))
+        return bay.panel_fits(skin, k, 0.0, phi + side * a, w, d, env)
+    if ok(w_nom):
+        return w_nom
+    lo, hi = 0.0, w_nom
+    for _ in range(18):
+        mid = 0.5 * (lo + hi)
+        lo, hi = (mid, hi) if ok(mid) else (lo, mid)
+    return lo
+
+
+def bay_profile(zs, skin, phi, env, wp, ws, fmin):
+    """Per-ring fitted widths along the best contiguous run at hinge phi."""
+    d = MOUNT_R
+    if bay.excluded(float(phi), d):
+        return None
+    prof = [(float(z), ring_width_fit(skin, k, phi, d, env, wp, +1),
+             ring_width_fit(skin, k, phi, d, env, ws, -1))
+            for k, z in enumerate(zs)]
+    best, cur = [], []
+    for row in prof:
+        if row[1] >= fmin * wp and row[2] >= fmin * ws:
+            cur.append(row)
+            if len(cur) > len(best):
+                best = list(cur)
+        else:
+            cur = []
+    return best or None
+
+
+def area_after_reserve(prof, fwd_mm, aft_mm):
+    """Panel areas (power, signal) after reserving harness-loop length at the
+    forward and aft wire-exit ends, and the remaining Z span."""
+    z0 = prof[0][0] + fwd_mm
+    z1 = prof[-1][0] + DZ - aft_mm
+    a_p = a_s = 0.0
+    for z, wp, ws in prof:
+        lo, hi = max(z, z0), min(z + DZ, z1)
+        if hi > lo:
+            a_p += wp * (hi - lo)
+            a_s += ws * (hi - lo)
+    return a_p, a_s, max(0.0, z1 - z0), (z0, z1)
+
+
+def free_beyond(zs, skin, phi, prof, od, end):
+    """Axial length beyond the board run (fwd: end=-1, aft: end=+1) in which a
+    lead of diameter `od` still clears the duct wall and the cover, at the hinge
+    azimuth — that is where a harness loop can live without costing board."""
+    if end < 0:
+        ks = [k for k, z in enumerate(zs) if z < prof[0][0]][::-1]
+    else:
+        ks = [k for k, z in enumerate(zs) if z >= prof[-1][0] + DZ]
+    run = 0.0
+    for k in ks:
+        if bay.skin_at(skin, k, phi) - bay.SKIN_WALL - MOUNT_R >= od:
+            run += DZ
+        else:
+            break
+    return run
+
+
+def needs_v2(p):
+    """Board area each functional group needs (mm2, both faces counted)."""
+    n, i = p["fet_per_leg"], p["current_a"]
+    eta = p["packing_eta"]
+    term = AREA_50A["term_total"] * p["term_area_scale"]
+    parts_p = (6 * n * AREA_50A["fet_each"]
+               + 3 * p["shunt_per_phase"] * AREA_50A["shunt_each"]
+               + term + AREA_50A["power_other"] + p.get("power_area_delta", 0.0))
+    pour_w = POUR_W_50A * i / 50.0
+    pours = (3 + 2) * pour_w * POUR_RUN          # 3 phase runs F + VM/GND runs B
+    vias = 6 * n * VIA_KEEPOUT_PER_FET
+    need_p = parts_p / eta + pours + vias
+    parts_l = AREA_50A["logic_other"] + p.get("logic_area_delta", 0.0)
+    barriers = {"axial_two": 2, "axial_shared": 1}.get(p["isolation"], 0)
+    creep_len = barriers * (CREEP + 2 * CREEP_INSET)
+    return need_p, parts_l / eta, creep_len, {"pours": pours, "vias": vias}
+
+
+def loops_v2(p):
+    """Harness-loop axial reservations (fwd, aft) per variant, mm.
+
+    Loop length = minimum bend radius + in-bay bullet connector (NAC-64-SVC-01
+    puts the phase bullets inside the bays).  Bend radius = k x conductor OD:
+    NASA-STD-8739.4A Chg 3 §7.2.19 / Table 7-1 (p. 30) — harness of AWG 10 or
+    smaller without coax: minimum 3 x OD, optimum 10 x OD; AWG 8 or larger:
+    minimum 6 x OD.  Conductor ODs are design-point inputs marked VERIFY.
+    Variant A (fwd-motor ESC): every lead leaves the FORWARD end.
+    Variant B (aft-motor ESC): pack + signal forward, phases AFT.
+    """
+    ph = p["bend_k"] * p["phase_od"] + p["bullet_len"]
+    pk = p["bend_k"] * p["pack_od"] + p.get("pack_bullet_len", p["bullet_len"])
+    a = (max(ph, pk), p.get("loop_misc", 0.0))
+    b = (pk, ph)
+    return {"A": a, "B": b}
+
+
+def _assess_v2(p, zs, skin, sel, by_phi, loops, order, nb, wp, ws,
+           need_p, need_l, creep_len, in_layout):
+    """Margins for one variant-to-bay assignment."""
+    results = {}
+    for esc, idx in order:
+        fwd, aft = loops[esc]
+        bay_ids = sel[idx * nb:(idx + 1) * nb] if len(sel) == 2 * nb else []
+        if not bay_ids:
+            results[esc] = None
+            continue
+        avail = []
+        for b in bay_ids:
+            pr = by_phi[b[0]]
+            od_f = max(p["phase_od"], p["pack_od"]) if fwd else 0.0
+            od_a = p["phase_od"] if aft else 0.0
+            f_free = free_beyond(zs, skin, b[0], pr, od_f, -1) if fwd else 0.0
+            a_free = free_beyond(zs, skin, b[0], pr, od_a, +1) if aft else 0.0
+            a_p, a_s, span, zz = area_after_reserve(
+                pr, max(0.0, fwd - f_free), max(0.0, aft - a_free))
+            lane_cost = (p["lane_strip_w"] * span) if in_layout else 0.0
+            avail.append((a_p, a_s, span, zz, lane_cost))
+        if nb == 1:
+            a_p, a_s, span, zz, lane = avail[0]
+            pow_av = 2 * a_p - lane          # both faces of the power panel
+            log_av = 2 * a_s - 2 * ws * creep_len
+            m_pow = (pow_av - need_p) / (2 * wp)
+            m_log = (log_av - need_l) / (2 * ws)
+        else:                                # bay 1 = power, bay 2 = logic
+            (p1, s1, span, zz, lane), (p2, s2, span2, zz2, _) = avail
+            pow_av = 2 * (p1 + s1) - lane
+            log_av = 2 * (p2 + s2) - 2 * (wp + ws) * creep_len \
+                - 2 * (wp + ws) * p.get("interconnect_loop", 6.0)
+            m_pow = (pow_av - need_p) / (2 * (wp + ws))
+            m_log = (log_av - need_l) / (2 * (wp + ws))
+        results[esc] = {"margin_mm": round(min(m_pow, m_log), 2),
+                        "m_power_mm": round(m_pow, 2), "m_logic_mm": round(m_log, 2),
+                        "board_span_mm": round(span, 1),
+                        "z_board": [round(zz[0], 1), round(zz[1], 1)],
+                        "reserve_fwd_aft_mm": [round(fwd, 1), round(aft, 1)],
+                        "bays_az": [b[0] for b in bay_ids]}
+
+    return results
+
+
+def main_v2(p) -> int:
+    zs, skin = skin64()
+    bay.SKIN_WALL = p.get("cover_t", 2.5) + 0.4
+    bay.duct_r = lambda z: DUCT_R_64          # noqa: E731
+    bay.DUCT_WALL = MOUNT_R - DUCT_R_64
+    in_layout = p.get("lane_in_layout", False)
+    stack = p["pcb_t"] + p["h_outer"] + p["h_inner"] + p["mount_gap"]
+    env = stack + (0.0 if in_layout else p["flow_lane"])
+    wp, ws = p["w_power"], p["w_signal"]
+    nb = p.get("bays_per_esc", 1)
+    need_p, need_l, creep_len, extra = needs_v2(p)
+    loops = loops_v2(p)
+
+    profs = []
+    for phi in np.arange(0.0, 360.0, 2.0):
+        pr = bay_profile(zs, skin, float(phi), env, wp, ws, p.get("fmin", 0.6))
+        if pr:
+            profs.append((float(phi), pr, sum(r[1] + r[2] for r in pr) * DZ))
+    profs.sort(key=lambda t: -t[2])
+    rows = [(phi, len(pr) * DZ, pr[0][0], pr[-1][0] + DZ, MOUNT_R)
+            for phi, pr, _ in profs]
+    sel = pick_bays(rows, 2 * nb, wp, ws)
+    if nb == 2 and len(sel) == 4:
+        # each ESC takes two NEIGHBOURING bays (short inter-bay interconnect):
+        # sort by azimuth and pick the pairing with the smaller total gap
+        s4 = sorted(sel, key=lambda r: r[0])
+        gap = lambda a, b: abs((a[0] - b[0] + 180) % 360 - 180)   # noqa: E731
+        p1 = gap(s4[0], s4[1]) + gap(s4[2], s4[3])
+        p2 = gap(s4[1], s4[2]) + gap(s4[3], s4[0])
+        sel = s4 if p1 <= p2 else [s4[1], s4[2], s4[3], s4[0]]
+    by_phi = {phi: pr for phi, pr, _ in profs}
+
+    def assess(order):
+        return _assess_v2(p, zs, skin, sel, by_phi, loops, order, nb, wp, ws,
+                          need_p, need_l, creep_len, in_layout)
+    # which side of the pod gets which variant is free: try both
+    r1, r2 = assess((("A", 0), ("B", 1))), assess((("A", 1), ("B", 0)))
+    score = lambda r: min(v["margin_mm"] for v in r.values()) if all(r.values()) else -999  # noqa: E731
+    results = r1 if score(r1) >= score(r2) else r2
+    pass
+    ok = all(results.values())
+    margin = min(r["margin_mm"] for r in results.values()) if ok else -999.0
+    span = max(r["board_span_mm"] for r in results.values()) if ok else 0.0
+    # thermal on the actual board footprint (none if no bay could be found)
+    if span <= 0:
+        print(json.dumps({"model": 2, "fit_margin_mm": round(margin, 2),
+                          "esc": results, "error": "no usable bay span"}, indent=1))
+        return 0
+    if in_layout:
+        save = (p["flow_lane"], p["w_power"], p["w_signal"])
+        p["flow_lane"] = p["h_outer"]
+        p["w_power"], p["w_signal"] = p["lane_strip_w"], 0.0
+        tch, p_tot, p_fet, h, r_conv, dt_air = thermal_tch(p, span)
+        p["flow_lane"], p["w_power"], p["w_signal"] = save
+        # convection only on the lane strip walls, not the whole board
+        r_conv = 1.0 / (h * 2 * p["lane_strip_w"] * span * nb * 1e-6)
+        tch = T_AMB + dt_air + p_tot * r_conv + p_fet * RTH_CH_C
+    else:
+        tch, p_tot, p_fet, h, r_conv, dt_air = thermal_tch(p, span)
+    m_esc = esc_mass(p, span, need_p * p["packing_eta"], need_l * p["packing_eta"])
+    z_c = [(b[2] + b[3]) / 2 for b in sel] if sel else [ESC_BASE_Z]
+    z_mean = sum(z_c) / len(z_c)
+    cover = COVER_G_PER_MM * span * len(z_c)
+    d_mz = 2 * m_esc * z_mean + cover * z_mean \
+        - 2 * ESC_BASE_G * ESC_BASE_Z - 4 * 6.99 / 2 * P64_K * ESC_BASE_Z
+    m_new = ASSY_G - 2 * ESC_BASE_G + 2 * m_esc - 4 * 6.99 / 2 * P64_K + cover
+    d_cg = (CG_Z * ASSY_G + d_mz) / m_new - CG_Z
+    ega, egb = egress_ok(p)
+    out = {
+        "model": 2,
+        "fit_margin_mm": round(margin, 2),
+        "esc": results,
+        "need_power_mm2": round(need_p, 0),
+        "need_logic_mm2": round(need_l, 0),
+        "pour_mm2": round(extra["pours"], 0), "via_keepout_mm2": round(extra["vias"], 0),
+        "stack_mm": round(stack, 2), "envelope_mm": round(env, 2),
+        "tch_c": round(tch, 1), "p_total_w": round(p_tot, 2),
+        "h_lane_w_m2k": round(h, 0), "dt_air_k": round(dt_air, 1),
+        "esc_mass_g_estimate": round(m_esc, 1), "assy_mass_g": round(m_new, 1),
+        "d_cg_mm": round(d_cg, 2),
+        "hover_slack_after_mm": round(HOVER_SLACK + d_cg, 2),
+        "egress_a_ok": ega, "egress_b_ok": egb,
+        "creepage_ok": p["isolation"] != "lateral",
+        "packing_eta": p["packing_eta"],
+    }
+    print(json.dumps(out, indent=1))
+    return 0
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    _p = json.loads(Path(sys.argv[1]).read_text())
+    sys.exit(main_v2(_p) if _p.get("model") == 2 else main())

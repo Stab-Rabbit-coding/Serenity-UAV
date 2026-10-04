@@ -41,9 +41,13 @@ VARIANT_RENDER = false;   // suppress the variant file's own free-standing copy
 VARIANT  = 1;             // -D VARIANT=n on the command line still wins
 
 // Wing mesh measurements (hull frame, mm) — see header.
-W_XMIN = -345.18;  W_SPAR_Y = 21.00;  W_SPAR_Z = 64.63;
-SHAFT_Y = 46.60;   SHAFT_Z = 66.31;
-J_SHAFT_AZ = atan2(SHAFT_Z - W_SPAR_Z, SHAFT_Y - W_SPAR_Y);  // ≈ 3.8 deg up (own name: an
+// Rev T6 datums (2026-10-03): the spar and shaft bores are LEVEL on the
+// fuselage datums (merge_cargo_interior.py WING_SPAR_Z / WING_SHAFT_Z); the
+// 64.63 used before came from a sloped-bore section and was wrong.
+W_XMIN = -345.18;  W_SPAR_Y = 21.00;  W_SPAR_Z = 66.851;
+SHAFT_Y = 46.60;   SHAFT_Z = 69.090;
+J_SHAFT_R = norm([SHAFT_Y - W_SPAR_Y, SHAFT_Z - W_SPAR_Z]);   // 25.698
+J_SHAFT_AZ = atan2(SHAFT_Z - W_SPAR_Z, SHAFT_Y - W_SPAR_Y);  // ≈ 5.0 deg up (own name: an
 // override of the included SHAFT_AZ would evaluate before W_* exist)
 
 // hull -> nacelle-local: x_l = x_h + dx, y_l = -(z_h - spar_z),
@@ -94,11 +98,11 @@ view() {
         // VARIANT 1 (option A) draws the released part; others the variant stand-in.
         color("Goldenrod")
             if (VARIANT == 1)
-                rotate([0, 0, J_SHAFT_AZ]) translate([CENTRE_D, 0, GEAR_Z0])
+                rotate([0, 0, J_SHAFT_AZ]) translate([J_SHAFT_R, 0, GEAR_Z0])
                     rotate([0, 0, 180 + 180 / PINION_Z]) tilt_pinion();
             else variant_pinion(az = J_SHAFT_AZ);
         color("Goldenrod")                             // Ø4 drive shaft stub
-            rotate([0, 0, J_SHAFT_AZ]) translate([CENTRE_D, 0, GEAR_Z0])
+            rotate([0, 0, J_SHAFT_AZ]) translate([J_SHAFT_R, 0, GEAR_Z0])
                 cylinder(d = 4, h = 40, $fn = 16);
     }
 }

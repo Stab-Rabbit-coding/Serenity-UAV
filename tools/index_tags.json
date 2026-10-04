@@ -2811,6 +2811,15 @@
       ],
       "archived": false
     },
+    "airframe/stls/nacelles/nacelle_port_64mm.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle64_Port 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/nacelles/nacelle_port_revs.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle_Port 2026-06-11",
       "tags": [
@@ -2829,6 +2838,15 @@
       ],
       "archived": false
     },
+    "airframe/stls/nacelles/nacelle_stbd_64mm.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle64_Stbd 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/nacelles/nacelle_stbd_revs.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle_Stbd 2026-06-11",
       "tags": [
@@ -2840,6 +2858,24 @@
     },
     "airframe/stls/nacelles/nacelle_trunnion.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Trunnion64_Port 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Trunnion64_Stbd 2026-06-11",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -2911,6 +2947,22 @@
     },
     "airframe/stls/wings/wing_stbd_s1223_revo.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Wing_Stbd 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/wings/wing_tilt_pinion_port.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 TiltPinion64_Port 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/wings/wing_tilt_pinion_stbd.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 TiltPinion64_Stbd 2026-06-11",
       "tags": [
         "cad-mesh",
         "structural"
@@ -12711,6 +12763,13 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-10-03-002-feat-exhaustive-joint-analysis-plan.md": {
+      "description": "Exhaustive, systematic in-context joint analysis of the airframe",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -15344,6 +15403,13 @@
       ],
       "archived": false
     },
+    "tools/airframe_interface_census.py": {
+      "description": "Exhaustive interface census of the airframe master assembly.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/bake_hull_frame.py": {
       "description": "bake_hull_frame.py \u2014 bake validated FreeCAD placements into STL files.",
       "tags": [
@@ -15430,6 +15496,13 @@
     },
     "tools/export-specctra-dsn.py": {
       "description": "Real API name (verified against this pcbnew build): ExportSpecctraDSN,",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/export_assembly_meshes.py": {
+      "description": "Export every placed part of the airframe master assembly as a hull-frame STL.",
       "tags": [
         "build-tooling"
       ],
@@ -15708,6 +15781,14 @@
       "description": "Pre-commit sanitization and delinting hook for Serenity-UAV.",
       "tags": [
         "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/prep_nacelle_64_bake.py": {
+      "description": "Stage the 64 mm nacelle parts, in NACELLE-LOCAL frame, for the hull bake.",
+      "tags": [
+        "build-tooling",
+        "propulsion"
       ],
       "archived": false
     },
@@ -16045,6 +16126,7 @@
       "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
       "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
       "docs/plans/2026-10-03-001-feat-nacelle-pour-foam-core-plan.md",
+      "docs/plans/2026-10-03-002-feat-exhaustive-joint-analysis-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -17016,10 +17098,14 @@
       "airframe/stls/nacelles/esc/nacelle_esc_cover_port_b.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_a.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_b.stl",
+      "airframe/stls/nacelles/nacelle_port_64mm.stl",
       "airframe/stls/nacelles/nacelle_port_revs.stl",
       "airframe/stls/nacelles/nacelle_servo_bracket.stl",
+      "airframe/stls/nacelles/nacelle_stbd_64mm.stl",
       "airframe/stls/nacelles/nacelle_stbd_revs.stl",
       "airframe/stls/nacelles/nacelle_trunnion.stl",
+      "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
+      "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
@@ -17028,6 +17114,8 @@
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_throat.stl",
       "airframe/stls/wings/wing_port_s1223_revo.stl",
       "airframe/stls/wings/wing_stbd_s1223_revo.stl",
+      "airframe/stls/wings/wing_tilt_pinion_port.stl",
+      "airframe/stls/wings/wing_tilt_pinion_stbd.stl",
       "airframe/wings-nacelles/TODO.md",
       "airframe/wings-nacelles/WBS.md"
     ],
@@ -17298,10 +17386,14 @@
       "airframe/stls/nacelles/esc/nacelle_esc_cover_port_b.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_a.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_b.stl",
+      "airframe/stls/nacelles/nacelle_port_64mm.stl",
       "airframe/stls/nacelles/nacelle_port_revs.stl",
       "airframe/stls/nacelles/nacelle_servo_bracket.stl",
+      "airframe/stls/nacelles/nacelle_stbd_64mm.stl",
       "airframe/stls/nacelles/nacelle_stbd_revs.stl",
       "airframe/stls/nacelles/nacelle_trunnion.stl",
+      "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
+      "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
@@ -17310,6 +17402,8 @@
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_throat.stl",
       "airframe/stls/wings/wing_port_s1223_revo.stl",
       "airframe/stls/wings/wing_stbd_s1223_revo.stl",
+      "airframe/stls/wings/wing_tilt_pinion_port.stl",
+      "airframe/stls/wings/wing_tilt_pinion_stbd.stl",
       "archives/18in-scale-scad/s_cargo_door_scaled18.scad",
       "archives/18in-scale-scad/s_cargo_door_scaled18.stl",
       "archives/18in-scale-scad/s_cargo_door_strutts_scaled18.scad",
@@ -17589,10 +17683,14 @@
       "airframe/stls/nacelles/esc/nacelle_esc_cover_port_b.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_a.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_b.stl",
+      "airframe/stls/nacelles/nacelle_port_64mm.stl",
       "airframe/stls/nacelles/nacelle_port_revs.stl",
       "airframe/stls/nacelles/nacelle_servo_bracket.stl",
+      "airframe/stls/nacelles/nacelle_stbd_64mm.stl",
       "airframe/stls/nacelles/nacelle_stbd_revs.stl",
       "airframe/stls/nacelles/nacelle_trunnion.stl",
+      "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
+      "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
@@ -17778,6 +17876,7 @@
       "tools/nacelle_trunnion_fit.py",
       "tools/nozzle_linkage_check.py",
       "tools/nozzle_servo_linkage.py",
+      "tools/prep_nacelle_64_bake.py",
       "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nozzle_servo_linkage.py"
@@ -19979,6 +20078,7 @@
       "tools/TODO.md",
       "tools/TOOL_REFERENCE.md",
       "tools/add_landing_gear_bosses.py",
+      "tools/airframe_interface_census.py",
       "tools/bake_hull_frame.py",
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
@@ -19991,6 +20091,7 @@
       "tools/esc80_cooptimize.py",
       "tools/esc80_design.json",
       "tools/export-specctra-dsn.py",
+      "tools/export_assembly_meshes.py",
       "tools/export_landing_gear_stls.py",
       "tools/gen_cargo_void_formers.py",
       "tools/gen_todo_from_wbs.py",
@@ -20025,6 +20126,7 @@
       "tools/precommit_index.py",
       "tools/precommit_kicad_load.py",
       "tools/precommit_sanitize.py",
+      "tools/prep_nacelle_64_bake.py",
       "tools/purge_stale_fcstd_objects.py",
       "tools/spar_bundle_fit.py",
       "tools/tests/test_nacelle_axial_fit.py",
