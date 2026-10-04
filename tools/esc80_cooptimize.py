@@ -38,12 +38,15 @@ be placed and routed in KiCad (facet_placement.py, then manual/autoroute) before
 anything is claimed.  Every ESTIMATE / VERIFY constant below is labelled; none
 may be quoted as a verified value.
 
-Sources (IEEE tags are Open-Secure-ESC REFERENCES.md unless REF-*):
-  [49] Toshiba TPHR8504PL datasheet rev 5.0.A — R_DS(on) 0.85 mOhm max at
+Sources (Serenity-UAV REFERENCES.md REF-IDs; bracketed numbers are the same
+documents' tags in Open-Secure-ESC REFERENCES.md, inherited via REF-ESC-001):
+  REF-SEMI-001 / OSE [49] Toshiba TPHR8504PL datasheet rev 5.0.A — R_DS(on) 0.85 mOhm max at
        V_GS 10 V (§6); Rth(ch-c) 0.88 K/W (§5); SOP Advance(N) body
        4.90 x 6.10 mm, height 1.0 +/-0.1 mm, 0.111 g (p. 9); R_DS(on)
        temperature ratio read from Fig. 8.9 (graph read, ~1.65 at 125 C/25 C).
-  [9]  ADM2582E/ADM2587E Table 6 — 7.5 mm creepage (via isolation_envelope.py).
+  REF-ESC-001 / OSE [9]  ADM2582E/ADM2587E Table 6 — 7.5 mm creepage
+       (via Open-Secure-ESC docs/tools/isolation_envelope.py).
+  REF-NASA-001 NASA-STD-8739.4A Chg 3 §7.2.19 Table 7-1 — harness bend radius.
   REF-EDF-003 — QF2822 thrust 20.9 N per fan (NACELLE_64MM_VERIFICATION.md §1).
 
 Usage:
@@ -59,6 +62,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -69,7 +73,10 @@ import nacelle_esc_bay_fit as bay      # noqa: E402  sibling tool, ray-cast + co
 import nacelle_esc_thermal as thermal  # noqa: E402  sibling tool, lane convection
 
 REPO = Path(__file__).resolve().parent.parent
-CACHE = Path("/tmp") / "esc80_skin64_cache.npz"
+# Per-user cache, 0700 (a predictable shared /tmp path could be pre-seeded by
+# another user; np.load keeps allow_pickle=False regardless).
+CACHE_DIR = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "serenity-esc80"
+CACHE = CACHE_DIR / "esc80_skin64_cache.npz"
 
 # ── 64 mm pod (nacelle_pod_64mm_tandem.scad) ─────────────────────────────────
 P64_K = 1.21                 # radial scale of the canonical shell
@@ -122,9 +129,12 @@ OTHER_G_PER_MM2 = 0.012      # ESTIMATE — non-FET part mass per courtyard mm2
 def skin64(z_min=None):
     """Outer-skin radius on a (Z, az) grid for the 64 mm pod, cached."""
     z_lo = Z_MIN if z_min is None else z_min
-    cache = CACHE if z_min is None else CACHE.with_name(f"esc80_skin64_z{z_lo:.2f}.npz")
+    CACHE_DIR.mkdir(mode=0o700, parents=True, exist_ok=True)
+    # key the cache on everything that shapes the grid, not just z_min
+    key = f"K{P64_K}_A{P64_A}_dz{DZ}_n{bay.N_AZ_SAMPLE}_z{z_lo:.2f}_{Z_MAX:.2f}"
+    cache = CACHE_DIR / f"esc80_skin64_{key}.npz"
     if cache.exists():
-        d = np.load(cache)
+        d = np.load(cache, allow_pickle=False)
         return d["zs"], d["skin"]
     import trimesh
     mesh = trimesh.load_mesh(REPO / "airframe/stls/nacelles" / bay.SHELL["PORT"],
@@ -244,7 +254,7 @@ def egress_ok(p):
     return a, b
 
 
-def thermal_tch(p, board_len):
+def thermal_tch(p, board_len, area_mm2=None):
     """Channel temperature at 80 A, aspirated lane, 64 mm duct."""
     n = p["fet_per_leg"]
     i = p["current_a"]
@@ -263,7 +273,9 @@ def thermal_tch(p, board_len):
     throat = p["n_bleed"] * math.pi * (p["d_bleed"] / 2000.0) ** 2
     _, _, _, h, mdot = thermal.channel_flow(-st["p2_gauge"], p["flow_lane"] / 1000.0,
                                             throat)
-    area = board_len * (p["w_power"] + p["w_signal"]) * p.get("bays_per_esc", 1) * 1e-6
+    # model 2 passes the skin-FITTED board area; model 1 keeps nominal widths
+    area = (area_mm2 if area_mm2 is not None else
+            board_len * (p["w_power"] + p["w_signal"]) * p.get("bays_per_esc", 1)) * 1e-6
     r_conv = 1.0 / (h * 2 * area)
     dt_air = p_tot / (p.get("bays_per_esc", 1) * mdot * thermal.CP_AIR)
     tch = T_AMB + dt_air + p_tot * r_conv + p_fet_each * RTH_CH_C
@@ -410,6 +422,12 @@ def area_after_reserve(prof, fwd_mm, aft_mm):
     return a_p, a_s, max(0.0, z1 - z0), (z0, z1)
 
 
+# Aft limit for harness-loop zones: the nozzle servo drive sits at
+# NOZ_Z - 16.25 (nacelle_mass_cg_64.py row "Nozzle servo drive (V1)"); its
+# azimuth is not yet fixed (plan U4), so no loop zone is credited aft of it.
+LOOP_Z_MAX = 166.25 * P64_A - 16.25
+
+
 def free_beyond(zs, skin, phi, prof, od, end):
     """Axial length beyond the board run (fwd: end=-1, aft: end=+1) in which a
     lead of diameter `od` still clears the duct wall and the cover, at the hinge
@@ -417,7 +435,8 @@ def free_beyond(zs, skin, phi, prof, od, end):
     if end < 0:
         ks = [k for k, z in enumerate(zs) if z < prof[0][0]][::-1]
     else:
-        ks = [k for k, z in enumerate(zs) if z >= prof[-1][0] + DZ]
+        ks = [k for k, z in enumerate(zs)
+              if prof[-1][0] + DZ <= z and z + DZ <= LOOP_Z_MAX]
     run = 0.0
     for k in ks:
         if bay.skin_at(skin, k, phi) - bay.SKIN_WALL - MOUNT_R >= od:
@@ -463,8 +482,8 @@ def loops_v2(p):
     return {"A": a, "B": b}
 
 
-def _assess_v2(p, zs, skin, sel, by_phi, loops, order, nb, wp, ws,
-           need_p, need_l, creep_len, in_layout):
+def _assess_v2(p, zs, skin, sel, by_phi, by_phi_pow, pow_env_differs, loops,
+               order, nb, wp, ws, need_p, need_l, creep_len, in_layout):
     """Margins for one variant-to-bay assignment."""
     results = {}
     for esc, idx in order:
@@ -474,13 +493,21 @@ def _assess_v2(p, zs, skin, sel, by_phi, loops, order, nb, wp, ws,
             results[esc] = None
             continue
         def bay_avail(b, fwd_r, aft_r, od_f, od_a, power=False):
-            pr = by_phi["_pow"].get(b[0], by_phi[b[0]]) if power else by_phi[b[0]]
+            if power and pow_env_differs:
+                pr = by_phi_pow.get(b[0])
+                if pr is None:          # no run at the lower power-bay stack:
+                    return (0.0, 0.0, 0.0, (0.0, 0.0), 0.0, (0.0, 0.0))  # unusable
+            else:
+                pr = by_phi[b[0]]
             f_free = free_beyond(zs, skin, b[0], pr, od_f, -1) if fwd_r else 0.0
             a_free = free_beyond(zs, skin, b[0], pr, od_a, +1) if aft_r else 0.0
             a_p, a_s, span, zz = area_after_reserve(
                 pr, max(0.0, fwd_r - f_free), max(0.0, aft_r - a_free))
             lane_cost = (p["lane_strip_w"] * span) if in_layout else 0.0
-            return (a_p, a_s, span, zz, lane_cost)
+            # fitted power-panel width at the board's two end rings (egress)
+            ends = [w for z, w, _ in pr if zz[0] <= z + DZ and z <= zz[1]]
+            end_w = (ends[0], ends[-1]) if ends else (0.0, 0.0)
+            return (a_p, a_s, span, zz, lane_cost, end_w)
         od_f = max(p["phase_od"], p["pack_od"]) if fwd else 0.0
         od_a = p["phase_od"] if aft else 0.0
         if nb == 1:
@@ -500,13 +527,13 @@ def _assess_v2(p, zs, skin, sel, by_phi, loops, order, nb, wp, ws,
             avail = [cands[0][1], cands[0][2]]
             bay_ids = [cands[0][3], cands[0][4]]
         if nb == 1:
-            a_p, a_s, span, zz, lane = avail[0]
+            a_p, a_s, span, zz, lane, end_w = avail[0]
             pow_av = 2 * a_p - lane          # both faces of the power panel
             log_av = 2 * a_s - 2 * ws * creep_len
             m_pow = (pow_av - need_p) / (2 * wp)
             m_log = (log_av - need_l) / (2 * ws)
         else:                                # bay 1 = power, bay 2 = logic
-            (p1, s1, span, zz, lane), (p2, s2, span2, zz2, _) = avail
+            (p1, s1, span, zz, lane, end_w), (p2, s2, _, _, _, _) = avail
             pow_av = 2 * (p1 + s1) - lane
             log_av = 2 * (p2 + s2) - 2 * (wp + ws) * creep_len \
                 - 2 * (wp + ws) * p.get("interconnect_loop", 6.0)
@@ -517,7 +544,11 @@ def _assess_v2(p, zs, skin, sel, by_phi, loops, order, nb, wp, ws,
                         "board_span_mm": round(span, 1),
                         "z_board": [round(zz[0], 1), round(zz[1], 1)],
                         "reserve_fwd_aft_mm": [round(fwd, 1), round(aft, 1)],
-                        "bays_az": [b[0] for b in bay_ids]}
+                        "bays_az": [b[0] for b in bay_ids],
+                        "fitted_area_mm2": round(sum(a[0] + a[1] for a in avail), 0),
+                        "end_power_w_mm": [round(end_w[0], 2), round(end_w[1], 2)],
+                        "z_centre_mm": round(sum((a[3][0] + a[3][1]) / 2 for a in avail)
+                                             / len(avail), 1)}
 
     return results
 
@@ -570,44 +601,60 @@ def main_v2(p) -> int:
         p2 = gap(s4[1], s4[2]) + gap(s4[3], s4[0])
         sel = s4 if p1 <= p2 else [s4[1], s4[2], s4[3], s4[0]]
     by_phi = {phi: pr for phi, pr, _ in profs}
-    by_phi["_pow"] = by_phi_pow
 
     def assess(order):
-        return _assess_v2(p, zs, skin, sel, by_phi, loops, order, nb, wp, ws,
-                          need_p, need_l, creep_len, in_layout)
+        return _assess_v2(p, zs, skin, sel, by_phi, by_phi_pow, env_pow != env,
+                          loops, order, nb, wp, ws, need_p, need_l, creep_len,
+                          in_layout)
+
+    def score(r):
+        return min(v["margin_mm"] for v in r.values()) if all(r.values()) else -999.0
+
     # which side of the pod gets which variant is free: try both
     r1, r2 = assess((("A", 0), ("B", 1))), assess((("A", 1), ("B", 0)))
-    score = lambda r: min(v["margin_mm"] for v in r.values()) if all(r.values()) else -999  # noqa: E731
     results = r1 if score(r1) >= score(r2) else r2
-    pass
     ok = all(results.values())
-    margin = min(r["margin_mm"] for r in results.values()) if ok else -999.0
-    span = max(r["board_span_mm"] for r in results.values()) if ok else 0.0
-    # thermal on the actual board footprint (none if no bay could be found)
-    if span <= 0:
+    margin = score(results)
+    spans = [r["board_span_mm"] for r in results.values()] if ok else [0.0]
+    if min(spans) <= 0:
         print(json.dumps({"model": 2, "fit_margin_mm": round(margin, 2),
                           "esc": results, "error": "no usable bay span"}, indent=1))
-        return 0
-    if in_layout:
-        save = (p["flow_lane"], p["w_power"], p["w_signal"])
-        p["flow_lane"] = p["h_outer"]
-        p["w_power"], p["w_signal"] = p["lane_strip_w"], 0.0
-        tch, p_tot, p_fet, h, r_conv, dt_air = thermal_tch(p, span)
-        p["flow_lane"], p["w_power"], p["w_signal"] = save
-        # convection only on the lane strip walls, not the whole board
-        r_conv = 1.0 / (h * 2 * p["lane_strip_w"] * span * nb * 1e-6)
-        tch = T_AMB + dt_air + p_tot * r_conv + p_fet * RTH_CH_C
-    else:
-        tch, p_tot, p_fet, h, r_conv, dt_air = thermal_tch(p, span)
+        return 2
+    # Thermal is evaluated PER ESC on its own span and skin-fitted area, and the
+    # hotter one is reported (review 2026-10-03: using the longest span and the
+    # nominal widths flattered the binding ESC).
+    therm = {}
+    for esc, r in results.items():
+        span_e, area_e = r["board_span_mm"], r["fitted_area_mm2"]
+        if in_layout:
+            q = dict(p, flow_lane=p["h_outer"], w_power=p["lane_strip_w"], w_signal=0.0)
+            _, p_tot, p_fet, h, _, dt_air = thermal_tch(q, span_e)
+            # convection only on the lane strip walls, not the whole board
+            r_conv = 1.0 / (h * 2 * p["lane_strip_w"] * span_e * nb * 1e-6)
+            tch_e = T_AMB + dt_air + p_tot * r_conv + p_fet * RTH_CH_C
+        else:
+            tch_e, p_tot, p_fet, h, r_conv, dt_air = thermal_tch(p, span_e, area_e)
+        therm[esc] = (tch_e, p_tot, h, dt_air)
+        r["tch_c"] = round(tch_e, 1)
+    hot = max(therm, key=lambda e: therm[e][0])
+    tch, p_tot, h, dt_air = therm[hot]
+    span = sum(spans) / len(spans)
     m_esc = esc_mass(p, span, need_p * p["packing_eta"], need_l * p["packing_eta"])
-    z_c = [(b[2] + b[3]) / 2 for b in sel] if sel else [ESC_BASE_Z]
+    # CG from each ESC's own (reserved) board centre, not the raw bay runs
+    z_c = [r["z_centre_mm"] for r in results.values()]
     z_mean = sum(z_c) / len(z_c)
-    cover = COVER_G_PER_MM * span * len(z_c)
+    cover = COVER_G_PER_MM * span * len(sel)
     d_mz = 2 * m_esc * z_mean + cover * z_mean \
         - 2 * ESC_BASE_G * ESC_BASE_Z - 4 * 6.99 / 2 * P64_K * ESC_BASE_Z
     m_new = ASSY_G - 2 * ESC_BASE_G + 2 * m_esc - 4 * 6.99 / 2 * P64_K + cover
     d_cg = (CG_Z * ASSY_G + d_mz) / m_new - CG_Z
-    ega, egb = egress_ok(p)
+    # Egress against the FITTED power-panel width at each variant's exit end(s):
+    # A exits forward only; B forward (pack) and aft (phases).
+    s_t = math.sqrt(p["term_area_scale"])
+    phase_w, pack_w = 3 * 5.5 * s_t, 2 * 8.5 * s_t
+    ew_a, ew_b = results["A"]["end_power_w_mm"], results["B"]["end_power_w_mm"]
+    ega = max(phase_w, pack_w) <= ew_a[0]
+    egb = pack_w <= ew_b[0] and phase_w <= ew_b[1]
     out = {
         "model": 2,
         "fit_margin_mm": round(margin, 2),
@@ -626,7 +673,11 @@ def main_v2(p) -> int:
         "packing_eta": p["packing_eta"],
     }
     print(json.dumps(out, indent=1))
-    return 0
+    # Non-zero exit when the design point fails, so a caller cannot read a
+    # printed result as a pass.
+    passed = (margin >= 0 and tch <= T_CH_DESIGN and ega and egb
+              and out["creepage_ok"] and HOVER_SLACK + d_cg >= 0)
+    return 0 if passed else 1
 
 
 if __name__ == "__main__":

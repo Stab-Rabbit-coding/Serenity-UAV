@@ -15481,7 +15481,7 @@
       "archived": false
     },
     "tools/esc80_cooptimize.py": {
-      "description": "esc80_cooptimize.py \u2014 score one 80 A ESC + 64 mm nacelle bay design point.",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
@@ -15809,6 +15809,13 @@
     },
     "tools/spar_bundle_fit.py": {
       "description": "Size a hollow spar bore against the conductor bundle it has to swallow.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_esc80_cooptimize.py": {
+      "description": "Tests for tools/esc80_cooptimize.py (WBS NAC-64-ESC-80A).",
       "tags": [
         "build-tooling"
       ],
@@ -20137,6 +20144,7 @@
       "tools/prep_nacelle_64_bake.py",
       "tools/purge_stale_fcstd_objects.py",
       "tools/spar_bundle_fit.py",
+      "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nozzle_servo_linkage.py",

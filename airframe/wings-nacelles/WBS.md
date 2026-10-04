@@ -2087,7 +2087,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         - [ ] **NAC-64-ESC-80A.b — variant B, phase leads leave the opposite
             end from pack + signal** (the "Opposite-end" row, with the signal
             connector moved to the pack end).
-        - [ ] **NAC-64-ESC-80A.c — fit conflict to resolve.** The current bay
+        - [x] **NAC-64-ESC-80A.c — fit conflict to resolve** (RESOLVED by .i, 2026-10-03). The current bay
             (23 + 10 mm = 0.91 + 0.39 in panels x 42 mm (1.65 in), 4.0 mm
             (0.16 in) stack, mount radius 37.2 mm (1.46 in)) cannot take the
             matrix's 80 A row (2 x IRFB4110 TO-220 per leg, 12 FETs; the
@@ -2100,7 +2100,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             by Claude Opus 5.5: `tools/esc80_cooptimize.py` (ray-cast 64 mm
             skin, area model from the as-placed 50 A board, lane thermal),
             design point `tools/esc80_design.json`.
-        - [ ] **NAC-64-ESC-80A.g — co-optimisation result: still SHORT by 0.26 in
+        - [x] **NAC-64-ESC-80A.g — co-optimisation result (SUPERSEDED by .i): was SHORT by 0.26 in
             (6.5 mm).** 20 experiments took the margin from −7.84 in (−199 mm)
             to −0.26 in: the ESC needs 2.38 in (60.5 mm) and the bay gives
             2.13 in (54 mm), Z 103–157 at az 72/252. Best point: 23 + 12 mm
@@ -2135,14 +2135,18 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             (VERIFY); (4) pour widths re-derived with conductor_sizing.py at
             80 A (pour area is an ESTIMATE); (5) inter-bay interconnect part;
             (6) place the boards in KiCad (facet_placement.py) to confirm the
-            0.75 packing; (7) PIVOT_Z re-iteration for the +1.7 mm CG shift.
+            0.75 packing; (7) PIVOT_Z re-iteration for the CG shift; (8) variant
+            A's forward power-panel end tapers to 0.77 in (19.57 mm) against a
+            0.76 in (19.4 mm) pack terminal row — 0.2 mm egress margin, confirm
+            in placement. Review 2026-10-03 (ce-code-review) moved thermal to
+            per-ESC fitted area: T_ch 76.6 °C (hotter ESC, B), still ≤ 125.
         - [ ] **NAC-64-ESC-80A.h — Open-Secure-ESC follow-ups found:** the 50 A
             faceted PCB carries an LQFP-64 MCU while the schematic is RHB
             VQFN-32; the decision-matrix Amperage sheet still lists IRFB4110
             TO-220 although every build uses TPHR8504PL [OSE 49].
         - [ ] **NAC-64-ESC-80A.e — re-run `tools/nacelle_esc_bay_fit.py` and the
             cooling ports (NAC-64-GEOM-02)** against the chosen bay.
-        - [ ] **NAC-64-ESC-80A.f — record lessons learned** (ce-compound).
+        - [x] **NAC-64-ESC-80A.f — record lessons learned** (ce-compound): `docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md`.
     - [x] **NAC-64-PROP-01 — proportions optimised (owner 2026-10-03: "minimum
         radial scale, lengthen to canon at that diameter, optimised for
         aerodynamics, thrust, weight and canonical shape").** Done by Claude Opus

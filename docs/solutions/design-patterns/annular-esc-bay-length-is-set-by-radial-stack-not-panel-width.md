@@ -40,7 +40,7 @@ Authors: Claude Opus 5.5 under Stab-Rabbit-coding.
    Keep the duct-facing (inner) face down to FET-height parts. TPHR8504PL is
    1.0 ± 0.1 mm [OSE 49, p. 9]. Put every tall part (2.65 mm SOIC-20W
    isolators, the shield can) on the outer face. That one move added 32 mm of
-   bay. A thinner access cover (2.5 → 1.5 mm, structurally unverified) added
+   bay. A thinner access cover (0.10 → 0.06 in, 2.5 → 1.5 mm, structurally unverified) added
    10 mm more.
 2. **Don't widen a hinged panel to buy length.** A flat chord of width w on
    radius R stands off the arc by R − √(R² − (w/2)²). Each extra millimetre of
@@ -54,6 +54,13 @@ Authors: Claude Opus 5.5 under Stab-Rabbit-coding.
    faceted `.kicad_pcb` still carries an LQFP-64 MCU, but the schematic's U1 is
    MSPM0G3518-Q1 **RHB (VQFN-32)**. An area model built from the PCB alone
    overstates logic area by 139 mm².
+
+**Update, same day (model 2):** the shortfall above was closed by giving each
+ESC two neighbouring bays (power + logic), capping the power bay's outer face at
+0.08 in (2.0 mm) because it holds no isolators, and parking harness loops in
+the skin-thin rings beyond the board. Result: +0.13 in (+3.2 mm) and
++0.12 in (+2.96 mm) margin, T_ch 76.6 °C, with packing 0.75 counting 80 A pours
+and thermal-via keep-outs (WBS NAC-64-ESC-80A.i).
 
 ## Why This Matters
 
@@ -71,7 +78,7 @@ worse in every case tested.
 
 Best point found, design file `tools/esc80_design.json`: 23 + 12 mm panels,
 2 × TPHR8504PL per leg, inner face ≤ 1.1 mm, cover 1.5 mm, packing 0.60.
-Result: 60.5 mm needed against 54 mm available. T_ch is 120 °C against the
+Result: 2.38 in (60.5 mm) needed against 2.13 in (54 mm) available. T_ch is 120 °C against the
 125 °C design limit. The power panel is now the constraint. The 388 mm²
 WE-SHC 3670209 frame is the biggest single area item. A smaller sourced can, or
 two bays per ESC (both still need owner approval), would close the gap.
