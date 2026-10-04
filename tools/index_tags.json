@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-03",
+  "generated": "2026-10-04",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -1269,6 +1269,15 @@
       ],
       "archived": false
     },
+    "airframe/openscad/nacelles/edf_motor_mount_64mm.scad": {
+      "description": "edf_motor_mount_64mm.scad \u2014 64 mm nacelle stator-as-mount cartridges",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/openscad/nacelles/edf_stator_sleeve.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
@@ -1323,6 +1332,15 @@
         "cad-mesh",
         "propulsion",
         "security",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad": {
+      "description": "nacelle_nozzle_iris_64mm.scad \u2014 spring-open servo iris nozzle, 64 mm (U11)",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
         "structural"
       ],
       "archived": false
@@ -2736,6 +2754,15 @@
       "archived": false
     },
     "airframe/stls/nacelles/edf_aft_spider_sleeve.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
@@ -16930,12 +16957,14 @@
       "airframe/openscad/nacelles/_export_inboard_cut.scad",
       "airframe/openscad/nacelles/_export_pivot_slab.scad",
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
+      "airframe/openscad/nacelles/edf_motor_mount_64mm.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
@@ -17105,6 +17134,7 @@
       "airframe/stls/fuselage/wing_root_flange_port.stl",
       "airframe/stls/fuselage/wing_root_flange_stbd.stl",
       "airframe/stls/nacelles/edf_aft_spider_sleeve.stl",
+      "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/edf_stator_sleeve.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
@@ -17226,12 +17256,14 @@
       "airframe/openscad/nacelles/_export_inboard_cut.scad",
       "airframe/openscad/nacelles/_export_pivot_slab.scad",
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
+      "airframe/openscad/nacelles/edf_motor_mount_64mm.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
@@ -17393,6 +17425,7 @@
       "airframe/stls/fuselage/wing_root_flange_port.stl",
       "airframe/stls/fuselage/wing_root_flange_stbd.stl",
       "airframe/stls/nacelles/edf_aft_spider_sleeve.stl",
+      "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/edf_stator_sleeve.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
@@ -17669,12 +17702,14 @@
       "airframe/openscad/nacelles/_export_inboard_cut.scad",
       "airframe/openscad/nacelles/_export_pivot_slab.scad",
       "airframe/openscad/nacelles/edf_aft_spider_sleeve.scad",
+      "airframe/openscad/nacelles/edf_motor_mount_64mm.scad",
       "airframe/openscad/nacelles/edf_stator_sleeve.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
@@ -17690,6 +17725,7 @@
       "airframe/placeholders/propulsion/ESC_80A_6S_BLHeli32_deferred.stl",
       "airframe/stls/fuselage/middle_canonical_edf_intake.stl",
       "airframe/stls/nacelles/edf_aft_spider_sleeve.stl",
+      "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/edf_stator_sleeve.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",

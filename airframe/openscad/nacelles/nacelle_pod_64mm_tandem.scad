@@ -147,6 +147,7 @@ P64_PLATE       =  3.0;   // [mm] stator front plate (motor mount) thickness
 P64_STAGE       = P64_SHAFT + P64_GAP + P64_PLATE + P64_BODY;   // = 72.7 mm
 
 include <nacelle_pod_50mm_tandem.scad>
+use <edf_motor_mount_64mm.scad>   // stage-1 stator (integrated) + lead channel
 
 POD_AUTORENDER = false;    // render the 64 mm pod below, not the 50 mm one
 
@@ -192,7 +193,10 @@ EDF2_Z_ENTRY    = P64_ROTOR_Z + P64_STAGE + P64_GAP;         // = 104.2
 EDF2_Z_EXIT     = P64_ROTOR_Z + 2 * P64_STAGE + P64_GAP;     // = 176.9
 STATOR_Z_BOT    = P64_ROTOR_Z + P64_SHAFT + P64_GAP;         // = 42.2
 STATOR_Z_TOP    = P64_ROTOR_Z + P64_STAGE;                   // = 103.2
-STATOR_SLV_Z_START = P64_ROTOR_Z + P64_SHAFT + P64_GAP;      // = 42.2
+// Owner 2026-10-03: the forward motor mount/stator is ONE PIECE with the
+// thrust tube, so the removable sleeve zone (and its bore step, key slots and
+// cavity wall offset) starts at the stage-2 cartridge's forward face.
+STATOR_SLV_Z_START = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;  // = 103.7
 STATOR_SLV_Z_END   = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;  // = 103.7
 AFT_SLV_Z_START    = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;  // = 103.7
 NOZZLE_RING_Z   = 166.25 * P64_A;  // = 187.86, rides on the shell's aft end
@@ -243,7 +247,20 @@ ESC_DISC_Z_HI   = 62.0 * P64_A - 1.5;   // = 68.56
 // ── Module overrides ─────────────────────────────────────────────────────────
 
 // No pod-integrated spider: the stator-1 front plate carries motor 1.
-module edf1_nacelle_spider() {}
+// Stage-1 motor mount + stator, INTEGRAL with the thrust tube (owner
+// 2026-10-03; edf_motor_mount_64mm.scad stator_stage(1): QF2822 plate at
+// Z 42.2, 11 free-vortex cambered vanes, hollow lead vane at the ESC-1 bay
+// azimuth).  Zone C, so no cavity cut removes it.
+module edf1_nacelle_spider() {
+    $mm_side = PYLON_SIDE;  $mm_swirl = SWIRL_DIR;
+    stator_stage(1);
+}
+// The 50 mm motor-lead exit slot sat at STATOR_SLV_Z_START; at 103.7 it would
+// open the duct at the rotor-2 tips.  The lead vanes replace it.
+module esc_wire_exit_slot(pylon_side = PYLON_SIDE) {}
+// The 50 mm sleeve-retention bosses reached r 30.4 at 64 mm — inside the bore
+// and the nozzle throat (joint census 2026-10-03).  The nozzle is the aft lock.
+module sleeve_retention_bosses() {}
 
 // ESC seat keep-out spans the bay (the whole bay is over the sleeve zone) and
 // tracks the larger duct (EDF_BORE_R + 1 instead of the 50 mm literal 26.0).
@@ -379,7 +396,31 @@ module tilt_drive_relief() {
     }
 }
 
-module extra_zone_b_cuts() { lip_ring_cavity(); tilt_drive_relief(); }
+module extra_zone_b_cuts() {
+    lip_ring_cavity(); tilt_drive_relief(); motor_lead_routes();
+}
+
+// Motor phase-lead routes (WBS NAC-64-SVC-01), PYLON_SIDE-mirrored with the
+// lead vanes (edf_motor_mount_64mm.scad lead_az: 68 / 248 = ESC_BAY_AZ):
+//  * stage 1: the integrated lead vane's channel, out through the duct wall,
+//    then a Ø5 conduit at r 37.5 through the cavity bulkheads aft to the
+//    ESC-1 bay (ESC_BAY_Z0 86.35).  Motor 1 comes out aft, so its leads are
+//    drawn back through this path one bullet at a time.  The pour-foam core
+//    (plan 2026-10-03-001) must keep this conduit open.
+//  * stage 2: an axial lead-escape slot in the sleeve bore from the lead vane
+//    (Z ~119) to the aft end, so the leads slide out with the cartridge; it
+//    opens into the ESC-2 bay over the bay's Z range.
+LEAD_CONDUIT_R = 37.5;  LEAD_CONDUIT_D = 5.0;
+LEAD_SLOT_W2   = 5.0;   LEAD_SLOT_D2   = 4.8;
+module motor_lead_routes() {
+    $mm_side = PYLON_SIDE;  $mm_swirl = SWIRL_DIR;
+    az1 = PYLON_SIDE * 68;  az2 = PYLON_SIDE * 248;
+    lead_channel_stage(1, LEAD_CONDUIT_R + 1.0);
+    rotate([0, 0, az1]) translate([LEAD_CONDUIT_R, 0, 46.0])
+        cylinder(d = LEAD_CONDUIT_D, h = ESC_BAY_Z0 + 4.0 - 46.0, $fn = 24);
+    rotate([0, 0, az2]) translate([SLEEVE_BORE_R - 0.01, -LEAD_SLOT_W2 / 2, 119.0])
+        cube([LEAD_SLOT_D2, LEAD_SLOT_W2, NOZZLE_RING_Z - 119.0 + 1.0]);
+}
 
 // Override of the 50 mm trunnion_collar_cut(): identical register bore, gear
 // cavity and nav port, but the 3 x M3 collar inserts are placed about the

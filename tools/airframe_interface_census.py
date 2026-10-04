@@ -55,6 +55,9 @@ except ImportError:  # pragma: no cover - reported, never silently skipped
     m3 = None
 
 SPAN_AXIS = 0          # hull X is span (port +X / stbd -X, serenity_assembly.py)
+# Hull centre plane, MEASURED on the baked cargo shell (tools/bake_hull_frame.py
+# Wing_Stbd note): the hull frame origin is NOT on the aircraft centreline.
+CENTRE_X = -169.241
 
 
 def load(census: Path) -> dict[str, trimesh.Trimesh]:
@@ -134,10 +137,10 @@ def symmetry(parts: dict, tol: float) -> list[dict]:
             out.append({"part": name, "status": "NO STBD TWIN"})
             continue
         p = m.bounds.copy()
-        p[:, SPAN_AXIS] = -p[::-1, SPAN_AXIS]           # mirror the box
+        p[:, SPAN_AXIS] = 2 * CENTRE_X - p[::-1, SPAN_AXIS]   # mirror the box
         s = parts[twin].bounds
         cp = m.centroid.copy()
-        cp[SPAN_AXIS] *= -1
+        cp[SPAN_AXIS] = 2 * CENTRE_X - cp[SPAN_AXIS]
         dc = float(np.linalg.norm(cp - parts[twin].centroid))
         db = float(np.abs(p - s).max())
         out.append({"part": name[:-5], "centroid_off_mm": round(dc, 2),

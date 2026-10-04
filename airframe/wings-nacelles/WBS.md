@@ -2023,10 +2023,54 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         to mount-face length, shaft protrusion, rotor hub axial length and the
         bolt-circle datum; re-run `tools/nacelle_axial_fit.py` with the measured
         values before any adjudication is finalised.
-    - [ ] **NAC-64-GEOM-01 — stator-as-mount sleeves.** Re-derive
-        `edf_stator_sleeve.scad` (Z 31.2–92.7, motor-1 front plate + vanes over
-        the ø27.8 can) and `edf_aft_spider_sleeve.scad` (Z 92.7–166.25, rotor-2
-        bore + motor-2 front plate) against `nacelle_pod_64mm_tandem.scad`.
+    - [x] **NAC-64-GEOM-01 — motor mounts — BUILT 2026-10-04 (Claude Opus 5.5).**
+        `edf_motor_mount_64mm.scad`. Owner 2026-10-03: stage 1 is ONE PIECE with
+        the thrust tube (pod `edf1_nacelle_spider()` hook): QF2822 plate at
+        Z 42.2 (4 x M3 CSK on Ø16, front-access), 11 free-vortex cambered vanes
+        (Euler first pass, 12.0 deg at r_m — CFD/bench to confirm), hollow lead
+        vane at the ESC-1 bay azimuth + Ø5 cavity conduit to the bay. Rotor 1
+        services through the intake, motor 1 out AFT (can + removal path vs pod
+        0 mm3). Stage 2 is the rear-removable cartridge (Z 103.7–187.86, 57.7 g)
+        with its own lead vane and an axial lead-escape slot at the ESC-2 bay.
+        Sleeve-zone start moved 42.2 -> 103.7; 50 mm lead-exit slot and
+        retention bosses deleted at 64 mm. Rotating assembly 926 -> 900 g; CG
+        111.25 vs PIVOT_Z 109.7 — RE-CONVERGE after nozzle + servo (NAC-64-PIVOT-RC).
+        - [ ] **NAC-64-PIVOT-RC** — re-converge PIVOT_Z once nozzle, servo and
+            gateway are placed; re-render + re-bake both pods.
+        - [ ] **NAC-64-VANE-CFD** — confirm the 12 deg stator inlet angle (measured
+            loaded rpm / swirl survey), both stages.
+        - [ ] **NAC-64-LEAD-FOAM** — pour-foam plan must keep the stage-1 lead conduit open.
+    - [ ] **NAC-64-NOZ-01 — 64 mm iris nozzle (plan U11) — GEOMETRY BUILT 2026-10-04.**
+        `nacelle_nozzle_iris_64mm.scad` (include + radial-literal override; exit
+        24.0 / 33.6 mm; closed flap angle held at 16.96 deg; all 4 print parts
+        watertight single bodies). OPEN:
+        - [ ] **NAC-64-NOZ-RET** — nozzle-to-pod retention: the pod skin ends at
+            ~Z 187, so there is no pod material for radial screws; axial screws
+            would cross the cam ring. Needs a design (owner input).
+        - [ ] **NAC-64-NOZ-MOULD** — housing OD 85.2 stands ~6 mm (radius) proud of
+            the boat-tail skin (r ~36.5 at Z 186): record against the QMx
+            blueprint or re-shape (plan stop condition).
+        - [ ] **NAC-64-NOZ-LINK** — port `tools/nozzle_servo_linkage.py` to the 64 mm
+            constants (lever r 39.0).
+    - [ ] **NAC-64-SERVO-01 — nozzle servo station: PLAN STOP CONDITION (U4).**
+        The tail aft of Z 168 has only ~1.6 mm between the sleeve bore (r 34.7)
+        and the skin (r ~36.3); the only 8 mm radial room is near az 210 at
+        Z 150–162, and a rod from there to the ring must cross the thin tail.
+        No station fits inside the approved shell -> owner decision (blister /
+        relocation) before U4 proceeds.
+    - [ ] **NAC-64-GW-V2 — dedicated nozzle-servo gateway per nacelle (owner
+        2026-10-03: "give the servos their own bus gateways instead of reusing
+        the tilt sensor ones" = plan D-NZ-1 -> V2).** Spec + board doc + tray
+        (plan U6), placement follows NAC-64-SERVO-01.
+    - [ ] **CENSUS-01 — first airframe joint census (2026-10-04,
+        plan 2026-10-03-002).** 38 placed parts, 703 pairs, 56 interfaces,
+        22 CLASH (to triage one by one in docs/AIRFRAME_JOINT_REGISTER.md).
+        Symmetry about the measured centre plane: wings SYNC (0.00); DESYNC:
+        tilt brackets 1.22 mm (= 2 x the cargo layout's X_CL -169.85 vs
+        measured -169.241), cargo doors 2.25 mm, stbd tilt worm/wheel/brake
+        guide ~90 mm (T5_STBD_DX copy misplaced — explains Tilt_Wheel_Stbd vs
+        Wing_Stbd 2788 mm3 with no port twin). Census must export a symmetric
+        tilt pose (assembly default is stbd 90 / port 0).
     - [ ] **NAC-64-GEOM-02 — ESC cooling ports.** ESC_BLEED_Z now opens onto the
         stator-sleeve wall, not the duct; add matching sleeve ports or move them.
     - [ ] **NAC-64-GEOM-03 — ESC cover from the scaled skin.** `nacelle_esc_cover.scad`

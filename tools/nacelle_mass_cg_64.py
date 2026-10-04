@@ -105,16 +105,19 @@ def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
     """Every off-axis row of the 64 mm rotating assembly."""
     mesh = base.trimesh.load_mesh(pod_stl, force="mesh")
     pod = (float(mesh.volume * base.RHO_PRINT), float(mesh.center_mass[2]))
-    stator = scaled_sleeve("airframe/stls/nacelles/edf_stator_sleeve.stl",
-                           90.0, 32.5, STATOR_SLV)
-    aft = scaled_sleeve("airframe/stls/nacelles/edf_aft_spider_sleeve.stl",
-                        122.5, 43.8, AFT_SLV)
+    # NAC-64-GEOM-01 drawn 2026-10-03 (edf_motor_mount_64mm.scad): MEASURE
+    # the cartridges (cartridge-local z from 0, placed at their forward face).
+    # Stage 1 is INTEGRAL with the pod (owner 2026-10-03), so its plate and
+    # vanes are already inside the measured pod shell row above.
+    af_m, af_cg = base.measure(
+        "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
+        ("local", AFT_SLV[0]))
+    aft = (af_m, af_cg, "MEASURED edf_motor_mount_64mm.scad STAGE=2")
     harness_50 = {r[0]: r for r in base.HARNESS}
     phase = harness_50["6 x 16 AWG EDF phase leads"]
     return [
         ("Pod shell, 64 mm (MEASURED)", pod[0], pod[1], str(pod_stl)),
-        ("Stator-1 sleeve + mount plate", stator[0], stator[1], stator[2]),
-        ("Aft sleeve + stator-2 mount", aft[0], aft[1], aft[2]),
+        ("Stage-2 cartridge (sleeve + stator + plate)", aft[0], aft[1], aft[2]),
         ("QF2822 motor 1", 135.0, mid(MOTOR1),
          "SHEET 135 g [REF-EDF-003]; CG at body midpoint, ASSUMED uniform"),
         ("QF2822 motor 2", 135.0, mid(MOTOR2),
