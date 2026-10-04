@@ -1345,6 +1345,15 @@
       ],
       "archived": false
     },
+    "airframe/openscad/nacelles/nacelle_nozzle_servo_options_context.scad": {
+      "description": "nacelle_nozzle_servo_options_context.scad \u2014 64 mm nozzle-servo packaging",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
@@ -12431,6 +12440,46 @@
       ],
       "archived": false
     },
+    "docs/images/nacelle_64mm_nozzle_servo_option1.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "docs/images/nacelle_64mm_nozzle_servo_option2.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "docs/images/nacelle_64mm_nozzle_servo_option3.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "docs/images/nacelle_64mm_nozzle_servo_option4.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "docs/images/nacelle_64mm_nozzle_servo_options.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "docs/images/nacelle_64mm_tilt_joint_in_position.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -16121,6 +16170,11 @@
       "docs/flight_envelope.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
       "docs/ideation/7-2.webp",
+      "docs/images/nacelle_64mm_nozzle_servo_option1.png",
+      "docs/images/nacelle_64mm_nozzle_servo_option2.png",
+      "docs/images/nacelle_64mm_nozzle_servo_option3.png",
+      "docs/images/nacelle_64mm_nozzle_servo_option4.png",
+      "docs/images/nacelle_64mm_nozzle_servo_options.png",
       "docs/images/nacelle_64mm_tilt_joint_in_position.png",
       "docs/images/nacelle_64mm_tilt_joint_optionA.png",
       "docs/images/nacelle_64mm_tilt_joint_optionA_cutaway.png",
@@ -16965,6 +17019,7 @@
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_servo_options_context.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
@@ -17264,6 +17319,7 @@
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_servo_options_context.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
@@ -17710,6 +17766,7 @@
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_servo_options_context.scad",
       "airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad",
       "airframe/openscad/nacelles/nacelle_servo_bracket.scad",
@@ -17841,6 +17898,11 @@
       "deferred/aft-edf/stls/rear_shell24_2mm_edf_bored.stl",
       "docs/NACELLE_64MM_VERIFICATION.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
+      "docs/images/nacelle_64mm_nozzle_servo_option1.png",
+      "docs/images/nacelle_64mm_nozzle_servo_option2.png",
+      "docs/images/nacelle_64mm_nozzle_servo_option3.png",
+      "docs/images/nacelle_64mm_nozzle_servo_option4.png",
+      "docs/images/nacelle_64mm_nozzle_servo_options.png",
       "docs/images/nacelle_64mm_tilt_joint_in_position.png",
       "docs/images/nacelle_64mm_tilt_joint_optionA.png",
       "docs/images/nacelle_64mm_tilt_joint_optionA_cutaway.png",
