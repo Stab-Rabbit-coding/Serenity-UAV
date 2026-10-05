@@ -22,7 +22,7 @@
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
-// License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+// License : CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // Date    : 2026-05-24
 // Revision: Rev R1 (2026-06-14)
 //   - WING_CHORD_ROOT reduced 161 → 129 mm to match canonical desktop model

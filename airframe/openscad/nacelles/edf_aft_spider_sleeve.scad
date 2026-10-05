@@ -20,7 +20,7 @@
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
-// License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+// License : CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // Date    : 2026-05-29
 // Revision: Rev R (2026-06-11)   [carried forward from Rev A (2026-05-29); no geometry changes]
 //
@@ -38,12 +38,25 @@
 //
 // EDF2 bench pre-assembly (before nacelle installation)
 // -----------------------------------------------------
-//   1. Press 3× M3 heat-set inserts (OLF M3×6) into spider arm aft-face
-//      pockets at MOTOR_BOLT_R = 10 mm radius, accessible from nozzle end.
+//   1. No heat-set inserts required at this interface (CORRECTED 2026-09-28
+//      — the motor supplies its own tapped flange; see "Motor mount" header
+//      below). This sleeve only needs its 4× M2 clearance-and-countersink
+//      through-holes at MOTOR_BOLT_R = 7.5 mm radius, cut in by this file.
 //   2. Seat EDF2 motor forward face against spider arm aft face
 //      (motor shaft extends forward through hub bore, R_HUB_BORE = 2 mm).
-//   3. Drive 3× M3×10 SHCS from nozzle end through motor mounting holes
-//      into the three heat-set inserts.  Motor body protrudes aft past
+//   3. Drive 4× M2x12.5mm flat-head (countersunk) screws through this
+//      sleeve's countersunk clearance holes (forward face) into the motor's
+//      own tapped flange.  Access is via THIS PART'S OWN forward/intake
+//      face with the rotor REMOVED — done at the bench, both before nacelle
+//      installation and, for field service, only after extracting the whole
+//      aft spider sleeve out the nacelle's AFT (nozzle) end per the removal
+//      procedure below (this EDF2 assembly sits buried behind the stator
+//      sleeve and EDF1; there is no in-situ path to it from the nacelle's
+//      own front air intake once installed — owner-confirmed 2026-09-28:
+//      that is WHY this sleeve has to come out the aft end to be serviced
+//      at all). The rotor otherwise covers these screws and must come off
+//      to reach them regardless.
+//      Motor body protrudes aft past
 //      sleeve aft face (Z_local > 43.75 mm) — this is by design; the
 //      motor body occupies nacelle space between SLEEVE_Z_END and the iris
 //      nozzle at NOZZLE_RING_Z.
@@ -59,6 +72,15 @@
 //      in sleeve aft face (nozzle bore access with iris removed).  Screws
 //      thread into M3 inserts in nacelle sleeve_retention_bosses() which
 //      protrude from NOZZLE_RING_Z (Z = 166.25 mm) aft into nozzle ring.
+//
+//   SERVICE NOTE (owner-confirmed 2026-09-28): this retention scheme is what
+//   makes field service possible at all. EDF2's motor-mount screws are only
+//   reachable via THIS sleeve's own forward/intake face with the rotor off
+//   (see "Motor mount" section below) — there is no path to them from the
+//   nacelle's front intake once installed, because this sleeve sits buried
+//   behind EDF1 and the stator sleeve. Removing these 3× M3×20 SHCS and
+//   reversing step 2 (pull the sleeve out the nozzle end) is therefore the
+//   ONLY service path to EDF2's motor screws or rotor.
 //
 // Retention summary
 // -----------------
@@ -147,8 +169,15 @@ SLEEVE_KEY_ANGLES = [30, 150, 270];
 // ── CORRECTED Rev T4c (2026-09-01) — FOUR arms at 90 deg, not three at 120 ──
 // Owner direction.  The Xfly Galaxy X5 motor takes FOUR screws on a square
 // pattern (REF-EDF-002: the packing-list photo shows four motor screws plus one
-// longer spinner screw, and the hub is a disc with four round holes alternating
-// with four slots).  Three arms at 120 deg cannot be made to coincide with four
+// longer spinner screw — CONFIRMED 2026-09-28 off the physical rotor: M1.5×11
+// round-head screw, 1.5 mm Allen (hex) drive, threading axially into the
+// motor shaft to retain the rotor — and the hub is a disc with four round
+// holes alternating with four slots).  Note for any future rotor mass/CG or
+// vibration work: the rotor is factory-balanced by drilling small holes in
+// its face (visible in docs/img/20260923_065933.jpg), so its mass is not
+// azimuthally uniform — treat it as an as-measured vendor part, not an
+// idealized symmetric disc, if it is ever modeled for mass properties.
+// Three arms at 120 deg cannot be made to coincide with four
 // holes at 90 deg — using three of the four would need them at 90/90/180, which
 // 120 deg spacing never provides.  This was PRINT-BLOCKING and is now fixed.
 //
@@ -158,10 +187,9 @@ SLEEVE_KEY_ANGLES = [30, 150, 270];
 // to choose one and give the other a 50 deg circumferential run.  15 and 195
 // fall out of the spacing.
 //
-// ** MOTOR_BOLT_R REMAINS UNVERIFIED. ** The listing publishes the screw COUNT,
-// not the bolt circle; the manufacturer page says "nc".  10.0 mm is inherited
-// from Rev R and is still an assumption.  Measure it off a physical motor before
-// printing for flight.
+// MOTOR_BOLT_R = 7.5 mm — MEASURED 2026-09-28 off the physical motor
+// (15.0 mm caliper diameter / 2, true square confirmed). See the resolved
+// block below for the full measurement note.
 // 16 AWG silicone Ø3 mm per docs/TILT_SPAR_ANALYSIS.md.
 SPIDER_ARM_ANGLES = [15, 105, 195, 285];
 
@@ -173,40 +201,66 @@ SPIDER_ARM_H    =   8.0;    // [mm] spider arm axial height (thickness along Z)
 SPIDER_ARM_W    =   6.0;    // [mm] spider arm tangential width
 N_ARMS          =   len(SPIDER_ARM_ANGLES);  // [count] = 4, at 90° (Rev T4c)
 
-// ── Motor mount — M3 heat-set inserts in spider arm aft faces ─────────────────
-// EDF2 motor mounts on spider aft face using 3× M3×10 SHCS (nozzle-end access).
-// MOTOR_BOLT_R: distance from sleeve axis to M3 screw centre.
-// *** VERIFY against actual Xfly Galaxy X5 2627 motor bolt circle before print ***
-// ############################################################################
-// ## PRINT-BLOCKING (2026-08-31): THE MOTOR MOUNT INTERFACE IS WRONG.       ##
-// ############################################################################
-// This sleeve mounts the EDF2 motor on THREE arms at 120 deg with three M3
-// insert pockets on a bolt circle of radius MOTOR_BOLT_R.  The motor takes
-// FOUR screws.
+// ── Motor mount — clearance holes into the motor's OWN tapped flange ──────────
+// EDF2 motor mounts on spider aft face using 4× M2x12.5mm flat-head screws,
+// driven at the bench with the rotor removed (rotor covers these screws).
+// In the field this means pulling the whole sleeve out the nacelle's AFT
+// end first — see the bench pre-assembly notes above for why this EDF2
+// assembly has no in-situ access from the nacelle's own front intake.
+// MOTOR_BOLT_R: distance from sleeve axis to M2 screw centre.
 //
-// Evidence, from the vendor listing image archived as REF-EDF-002:
-//   * the Packing List panel shows FOUR identical short screws plus ONE longer
-//     screw (the spinner/rotor retainer) — so four motor screws, not three;
-//   * the aft view of the shroud shows its motor hub as a disc carrying FOUR
-//     round holes alternating with FOUR lightening slots.
+// HOLE COUNT / PATTERN — RESOLVED (Rev T4c, 2026-09-01, owner direction).
+// The 3-arm/120° vs. 4-hole/90° mismatch that used to be documented here as
+// PRINT-BLOCKING is fixed: SPIDER_ARM_ANGLES above is already the 4× 90°
+// pattern (15/105/195/285) and the motor-insert loop below already cuts one
+// pocket per arm. Do not re-open that question; see the Rev T4c note above
+// (lines ~147-159) for the REF-EDF-002 evidence.
 //
-// Three holes at 120 deg CANNOT be made to coincide with four holes at 90 deg.
-// This is not a tolerance problem that a bigger clearance hole fixes — the
-// pattern is simply the wrong one, and using three of the four would put the
-// screws at 90/90/180, which these arms are not at either.
+// BOLT-CIRCLE RADIUS — RESOLVED 2026-09-28. The vendor listing publishes
+// screw count but not the bolt circle ("nc"); 10.0 mm was inherited from
+// Rev R and was only an assumption.
 //
-// MOTOR_BOLT_R = 10.0 was ALSO never verified, and the listing does not publish
-// a bolt circle.  So BOTH the hole count and the hole radius are unknown, and
-// changing 3 -> 4 arms now would only swap one unsupported assumption for
-// another.  ** DO NOT PRINT THIS SLEEVE FOR FLIGHT until both are measured off a
-// physical motor: ** the bolt-circle diameter, the screw thread (M2 / M2.5 / M3),
-// and whether the four holes are on a square (90 deg) or rectangular pattern.
-// Five minutes with a caliper closes it.  Tracked in
+// Measured directly off the physical Xfly Galaxy X5 motor with a Vernier
+// caliper, owner re-measurement (superseding a first-pass 14.65 mm read):
+// 15.0 mm spanning screw-centre to diagonally-opposite screw-centre through
+// the shaft boss (bolt-circle DIAMETER, confirmed TRUE SQUARE 4-hole
+// pattern — owner-verified, not just visual). MOTOR_BOLT_R = 15.0 / 2 =
+// 7.5 mm.
+//
+// MOUNTING METHOD CORRECTED 2026-09-28 — no heat-set insert at this
+// interface. Owner measured the motor's own hardware directly: the motor has
+// its own 20 mm dia front flange, 3.5 mm thick, carrying the FOUR TAPPED M2
+// holes (bolt circle above) — i.e. the motor supplies its own female thread.
+// A second, non-tapped, 1.75 mm flange sits 6.5 mm further back (not a
+// mounting feature). 15 mm from the back of the tapped flange to the motor
+// body. So the fastener is 4× M2x12.5mm flat-head (countersunk), passing
+// THROUGH this sleeve's spider arm (clearance hole, countersunk on the aft/
+// nozzle-facing face to seat the flat head flush) and threading directly
+// into the motor's own tapped flange — NOT into a heat-set insert in this
+// part. The earlier "M2 heat-set insert, countersink in the motor's tab"
+// note in this file had both halves backwards: the insert isn't needed at
+// all, and the countersink belongs in THIS sleeve, not the motor.
+// Stack check: 8 mm arm (clearance, unthreaded) + up to 3.5 mm thread
+// engagement in the motor's tapped flange + ~1 mm head recess = 12.5 mm,
+// matching the measured screw length — self-consistent.
+// M2_CLEAR_D is a standard M2 close-fit clearance-hole diameter (fastener
+// engineering convention, not a vendor spec); M2_CSK_D/M2_CSK_DEPTH are
+// sized for a generic M2 flat/countersunk head — verify both against the
+// actual screw's head diameter once a specific SKU is ordered.
+// Square-pattern trueness — RESOLVED 2026-09-28 (owner caliper re-measurement
+// confirms true square). Tracked in
 // docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md.
-MOTOR_BOLT_R    =  10.0;    // [mm] motor bolt circle radius — UNVERIFIED, AND
-                            //      THE HOLE COUNT IS WRONG.  See the block above.
-M3_INSERT_D     =   3.5;    // [mm] M3 OLF heat-set insert outer diameter
-M3_INSERT_L     =   6.0;    // [mm] M3 OLF heat-set insert length (pocket depth)
+MOTOR_BOLT_R    =   7.5;    // [mm] motor bolt circle radius — MEASURED
+                            //      2026-09-28 (15.0 mm caliper diameter / 2,
+                            //      confirmed true square).
+M2_CLEAR_D      =   2.4;    // [mm] M2 close-fit clearance hole (shank passes
+                            //      through; threads into motor's tapped
+                            //      flange, not into this part).
+M2_CSK_D        =   4.0;    // [mm] countersink diameter for M2 flat head —
+                            //      generic fastener-catalog estimate, verify
+                            //      against the actual screw SKU.
+M2_CSK_DEPTH    =   1.2;    // [mm] countersink depth (head recess), same
+                            //      caveat as M2_CSK_D.
 
 // ── Hub dimensions ─────────────────────────────────────────────────────────────
 // Hub bore provides 1 mm diametric clearance for 3 mm EDF2 motor shaft.
@@ -267,23 +321,23 @@ module aft_sleeve_body() {
 // =============================================================================
 // ── Module: edf2_spider ─────────────────────────────────────────────────────
 // =============================================================================
-// EDF2 motor-mount spider: 3-arm radial cross centred at SPIDER_Z_L.
+// EDF2 motor-mount spider: 4-arm radial cross centred at SPIDER_Z_L (Rev T4c).
 //
 // Arm radial span: (R_HUB − 1) → (EDF_BORE_R + 1) = 7 … 26 mm.
 // ±1 mm CGAL volumetric overrun at both ends prevents touching-face
 // non-manifold errors where arms meet the hub cylinder and the sleeve
 // bore wall.
 //
-// Motor bolt M3 insert pockets are NOT in this module; they are subtracted
-// from the unified geometry in edf_aft_spider_sleeve() to avoid nested
-// difference() / union() CGAL conflicts.
+// Motor screw clearance/countersink holes are NOT in this module; they are
+// subtracted from the unified geometry in edf_aft_spider_sleeve() to avoid
+// nested difference() / union() CGAL conflicts.
 module edf2_spider() {
     arm_h  = SPIDER_ARM_H;
     arm_w  = SPIDER_ARM_W;
     z_base = SPIDER_Z_L - arm_h / 2;   // = 21.5 mm
 
     // ── Spider arms (4× at 90°, Rev T4c) ───────────────────────────────────
-    // Arms are plain cuboids (no pockets).  Motor insert pockets are cut by
+    // Arms are plain cuboids (no holes).  Motor screw holes are cut by
     // the parent module after the full union is assembled.
     for (angle = SPIDER_ARM_ANGLES) {
         rotate([0, 0, angle])
@@ -307,15 +361,30 @@ module edf2_spider() {
 // =============================================================================
 // Assembly sequence:
 //   1. Union: sleeve tube + keys + spider arms + spider hub.
-//   2. Difference: subtract 4× M3 motor insert pockets from spider arm aft
-//      faces (Rev T4c — the Galaxy X5 takes four screws at 90°); subtract 3× M3
-//      retention clearance bores through sleeve aft face (still three — those
-//      are OUR fasteners into the pod's bosses, not the motor's).
+//   2. Difference: subtract 4× M2 clearance-and-countersink through-holes
+//      from the spider arms (Rev T4c — the Galaxy X5 takes four screws at
+//      90°, M2 thread, CORRECTED 2026-09-28 to thread into the motor's OWN
+//      tapped flange rather than a heat-set insert in this part — see the
+//      "Motor mount" header comment above); subtract 3× M3 retention
+//      clearance bores through sleeve aft face (still three — those are OUR
+//      fasteners into the pod's bosses, not the motor's).
 //
-// Motor insert pocket geometry (blind, from spider aft face):
-//   Centre radius : MOTOR_BOLT_R = 10 mm (one bolt per arm, at arm angle).
-//   Pocket        : Ø M3_INSERT_D = 3.5 mm × M3_INSERT_L = 6 mm deep.
-//   Opens at      : Z_local = SPIDER_Z_L + SPIDER_ARM_H/2 = 29.5 mm (aft face).
+// Motor screw through-hole geometry (spans the full spider arm thickness):
+//   Centre radius : MOTOR_BOLT_R = 7.5 mm (one bolt per arm, at arm angle).
+//   Clearance     : Ø M2_CLEAR_D = 2.4 mm, full SPIDER_ARM_H = 8 mm span
+//                   (Z_local 21.5 … 29.5 mm) — no threads cut in this part;
+//                   the screw threads into the motor's own tapped flange
+//                   beyond the aft face (Z_local = 29.5).
+//   Countersink   : Ø M2_CSK_D = 4.0 mm × M2_CSK_DEPTH = 1.2 mm, cut into the
+//                   FORWARD face (Z_local = 21.5 mm) so the flat head seats
+//                   flush there — driver access is this part's own
+//                   forward/intake face at the bench, rotor removed. Because
+//                   this sleeve sits buried behind EDF1/the stator sleeve,
+//                   there is no in-situ path to it from the nacelle's own
+//                   front intake once installed: field service means
+//                   extracting the whole sleeve out the nacelle's AFT
+//                   (nozzle) end first (owner-confirmed 2026-09-28 — this is
+//                   WHY this sleeve has to come out the aft end).
 //
 // Retention bore geometry (axial, from sleeve aft face through key body):
 //   Centre radius : BOSS_R = 28 mm (within key rib, 27.5 … 30.5 mm).
@@ -330,16 +399,26 @@ module edf_aft_spider_sleeve() {
             edf2_spider();
         }
 
-        // ── Step 2a: M3 motor insert pockets (spider arm aft faces) ───────
-        // Blind pocket opens at Z_local = 29.5 mm (spider aft face).
-        // One pocket per arm, co-angular with that arm, at MOTOR_BOLT_R.
+        // ── Step 2a: M2 motor screw through-holes + countersinks ──────────
+        // Clearance hole spans the full arm thickness (no threads here —
+        // the screw threads into the motor's tapped flange beyond the aft
+        // face). Countersink opens at the forward face (Z_local = 21.5) for
+        // the flat head. One hole per arm, co-angular with that arm, at
+        // MOTOR_BOLT_R.
         for (angle = SPIDER_ARM_ANGLES) {
-            rotate([0, 0, angle])
-            translate([MOTOR_BOLT_R, 0,
-                       SPIDER_Z_L + SPIDER_ARM_H / 2 - M3_INSERT_L])
-                cylinder(r = M3_INSERT_D / 2,
-                         h = M3_INSERT_L + 0.01,   // +0.01 opens aft face
-                         center = false);
+            rotate([0, 0, angle]) {
+                z_fwd = SPIDER_Z_L - SPIDER_ARM_H / 2;   // = 21.5 mm
+                translate([MOTOR_BOLT_R, 0, z_fwd - 0.01])
+                    cylinder(r = M2_CLEAR_D / 2,
+                             h = SPIDER_ARM_H + 0.02,   // through-hole, both
+                                                          // faces open
+                             center = false);
+                translate([MOTOR_BOLT_R, 0, z_fwd - 0.01])
+                    cylinder(r1 = M2_CSK_D / 2,
+                             r2 = M2_CLEAR_D / 2,
+                             h  = M2_CSK_DEPTH + 0.01,
+                             center = false);
+            }
         }
 
         // ── Step 2b: M3 retention clearance bores (sleeve aft face) ───────
@@ -378,12 +457,18 @@ edf_aft_spider_sleeve();
 //
 // Hardware required per sleeve
 // ----------------------------
-//   Motor mount  : 3× M3 OLF heat-set insert (3.5 mm OD × 6 mm)
-//                  3× M3×10 SHCS (bench assembly — motor to spider)
+//   Motor mount  : 4× M2×12.5 mm flat-head (countersunk) screw — CONFIRMED
+//                  2026-09-28 off the physical motor's packed hardware
+//                  (bench assembly — motor to spider). NO insert required:
+//                  screws thread directly into the motor's OWN tapped
+//                  20 mm dia × 3.5 mm flange (owner-measured 2026-09-28).
+//                  Countersink for the flat head is cut into THIS sleeve's
+//                  forward face (M2_CSK_D/M2_CSK_DEPTH), not the motor.
 //   Retention    : 3× M3×20 SHCS (nacelle installation — sleeve to nacelle)
-//   Motor bolt c.: VERIFY MOTOR_BOLT_R = 10 mm against actual Xfly Galaxy X5
-//                  2627 motor before printing (measure bolt circle on physical
-//                  motor or obtain datasheet).
+//   Motor bolt c.: MOTOR_BOLT_R = 7.5 mm — MEASURED 2026-09-28 off the
+//                  physical Xfly Galaxy X5 motor (15.0 mm caliper diameter
+//                  reading / 2, true square confirmed). Screw thread
+//                  confirmed M2 by owner off the same physical motor.
 //
 // Post-print checks
 // -----------------
@@ -400,11 +485,14 @@ edf_aft_spider_sleeve();
 //      between blade tip and shell (REF-EDF-002), and the shroud ID is 50 mm, so
 //      the rotor is ~Ø49.2.  A bore that prints UNDERSIZE rubs the rotor.  Check
 //      it at three stations before fitting the fan.
-//   5. M3 insert pockets at r ≈ 10 mm, Ø ≈ 3.5 mm: verify insert presses
-//      flush to arm aft face.  Pocket must be ≥ 6 mm deep.
-//   6. Retention bores at r ≈ 28 mm, Ø ≈ 3.3 mm: verify M3×20 SHCS passes
+//   6. M2 clearance/countersink holes at r ≈ 7.5 mm: clearance Ø ≈ 2.4 mm
+//      full arm thickness, countersink Ø ≈ 4.0 mm × 1.2 mm deep on the
+//      forward face. Verify a M2×12.5 flat-head screw seats flush at the
+//      countersink and reaches full thread engagement in the motor's tapped
+//      flange with the sleeve and motor fully mated.
+//   7. Retention bores at r ≈ 28 mm, Ø ≈ 3.3 mm: verify M3×20 SHCS passes
 //      freely and aligns with nacelle boss insert (sleeve fully inserted).
-//   7. Sleeve forward face must contact stator sleeve aft face with no gap
+//   8. Sleeve forward face must contact stator sleeve aft face with no gap
 //      when both sleeves are fully seated in nacelle.
 //
 // Render command

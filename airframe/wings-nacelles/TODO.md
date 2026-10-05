@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Wings and Nacelles TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 > **This file lists only currently-open (unchecked) top-level tasks for
 > this subsystem — one line each, <=70 chars, no prose.** Full detail
@@ -47,7 +47,6 @@
 ##### 1.1.3.8 *Rev S4c — hinged ESC bays, access covers, 90° motor pattern*
 → full detail: `WBS.md` §1.1.3.8
 
-- [ ] [OPEN — PRINT-BLOCKING] `MOTOR_BOLT_R` is still 10.0 mm and still…
 - [ ] [OPEN — NEW, and it is a safety item] The bay is now an unfiltered…
 - [ ] [OPEN — the flow, not the geometry] Bay velocity is not verified
 - [ ] 50 A sustained is not survivable on any path evaluated

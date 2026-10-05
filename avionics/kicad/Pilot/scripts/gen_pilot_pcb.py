@@ -42,7 +42,7 @@ domains is enforced by the ``ISOLATION`` netclass (0.5 mm) in ``Pilot.kicad_pro`
 — see Pilot.md §"PCB Layout Constraints" for why 8 mm creepage is not
 achievable on a 55 x 35 mm cape and what that means for the isolation rating.
 
-Author: Claude Opus 5, 2026-09-19.  Owner: sgriffing.  License: CC BY 4.0.
+Author: Claude Opus 5, 2026-09-19.  Owner: sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 from __future__ import annotations

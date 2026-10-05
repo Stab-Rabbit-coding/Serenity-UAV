@@ -30,7 +30,7 @@ References (see repo REFERENCES.md and ENC-NACELLE-1.md):
       with exception; QFN/0402 footprints used verbatim from the system lib.
 
 Authored by Claude Fable 5 (Anthropic) for Steve Griffing, 2026-07-21.
-License: CC BY 4.0.
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import re

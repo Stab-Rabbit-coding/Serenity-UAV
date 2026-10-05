@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **AI note:** Session record written by Claude (model: Claude Opus 5,
 Anthropic) under the author's direction, per `AGENTS.md` AI-attribution policy.  
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 > **LG-10 is closed.** All eight sub-items (LG-10.1 … LG-10.8) are done and
 > gated by tools. Full detail is `WBS.md` §1.1.4.1; this file is the short

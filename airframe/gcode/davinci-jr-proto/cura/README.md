@@ -1,7 +1,7 @@
 # Rev T Cura Slice Output — da Vinci Jr. microSD
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Date:** 2026-09-07
 
 Companion to `docs/PROTO_PRINT_DAVINCI_JR.md` §5 batches and to the sibling

@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CEH
 **Callsign:** Pilot
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** T (schematic-first rebuild, superseding Rev Q)
 **Date:** 2026-09-19
 **Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers. **Routing not yet complete** (see "Routing status" below).
@@ -206,3 +206,31 @@ and its rejected/harder alternatives), not a layout fix.
    ISOW devices (X2Y bridge capacitor placement).
 7. MIL-STD-1553C [REF-MIL-001] §4.5.1.5.2 / §4.5.2 — direct-coupled stub and bus
    electrical requirements (Holt HI-6138 DS6138 Rev S, Premier Magnetics PM-DB2791S).
+
+## Usage notices
+
+**Intended use:** the Serenity-UAV avionics, including this board, are intended
+for use only on uncrewed aircraft.
+
+**Würth Elektronik usage notice** — applies to the Würth parts on this board
+(749010012A, 742792512, WE-MAPI 3015). Quoted verbatim from Würth Elektronik
+eiSos, *749010012A data sheet* rev 004.000 (2024-04-11), p. 1 [REF-SENSOR-028];
+the same notice appears on every Würth product data sheet. Owner decision
+2026-09-26: the Würth parts are retained (avionics/WBS.md U7.1d).
+
+> This electronic component has been designed and developed for usage in general
+> electronic equipment only. This product is not authorized for use in equipment
+> where a higher safety standard and reliability standard is especially required
+> or where a failure of the product is reasonably expected to cause severe
+> personal injury or death, unless the parties have executed an agreement
+> specifically governing such use. Moreover Würth Elektronik eiSos GmbH & Co KG
+> products are neither designed nor intended for use in areas such as military,
+> aerospace, aviation, nuclear control, submarine, transportation,
+> transportation signal, disaster prevention, medical, public information
+> network etc.. Würth Elektronik eiSos GmbH & Co KG must be informed about the
+> intent of such usage before the design-in stage. In addition, sufficient
+> reliability evaluation checks for safety must be performed on every electronic
+> component which is used in electrical circuits that require high safety and
+> reliability functions or performance.
+
+<!-- /USAGE-NOTICE-2026-09-26 -->

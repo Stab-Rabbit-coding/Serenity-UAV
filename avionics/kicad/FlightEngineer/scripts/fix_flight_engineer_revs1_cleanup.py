@@ -17,7 +17,7 @@
 5. Give U_IS_MAIN's VBUS pin its missing source: R_VSNS 0R Kelvin tap from
    VDIS onto the existing VDIS_SENSE net.
 
-Authored by Claude Fable 5 (Anthropic), 2026-07-21.  License: CC BY 4.0.
+Authored by Claude Fable 5 (Anthropic), 2026-07-21.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import sys

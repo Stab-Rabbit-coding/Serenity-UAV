@@ -25,7 +25,7 @@ Exit status is non-zero if any angle interferes, so this can gate a commit.
 Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note : Authored by Claude (model: Claude Opus 5, Anthropic) under the
           author's direction, 2026-08-09, per AGENTS.md AI attribution.
-License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 
 Run: python3 tools/landing_gear_cowl_clearance.py [--variant 1_5in|3_0in]
 """

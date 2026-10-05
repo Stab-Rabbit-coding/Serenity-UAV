@@ -1,7 +1,7 @@
 # Commo — EMI-Hardened 49 MHz AX.25 Transceiver
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CERN-OHL-W 2.0 (hardware design); status notes/prose in this file are CC BY-SA 4.0 —
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 see `docs/attribution_and_licensing.md`
 **Revision:** S1 (Rev S baseline + schematic-first reconciliation 2026-07-04)
 **Date:** 2026-07-04
@@ -62,7 +62,7 @@ intentional-radiator rule, not Part 95 RCRS — see REFERENCES.md REF-FCC-003); 
 adds conducted and radiated immunity measures to handle the EDF motor and ESC switching
 environment inside the Serenity UAV nacelles.
 
-All Phase 1 IC selections (Si5351A-B-GT DDS, MMBT2222A + 2N3866 PA, MCP4921 DAC,
+All Phase 1 IC selections (Si5351A-B-GT DDS, PMBT2222A + 2N3866 PA, MCP4921 DAC,
 LM393 comparator, MGA-82563 LNA, PE4259-63 T/R switch) are unchanged. The regulatory
 constraints from XCVR-49MHZ-1 apply unchanged.
 
@@ -312,7 +312,7 @@ connector J1, providing the same EMI filtering in both modes.
 | Reference | Part | Package | Net connections | Placement (PCB coords) |
 | --- | --- | --- | --- | --- |
 | INV1 | SN74LVC1G04 (TI DBV) | SOT-23-5 | A=UART_RX_F, Y=SBUS_OUT, VCC=+3V3, GND | (109.5, 125) |
-| MUX1 | SN74LVC1G157 (TI DCT) | SC-70-6 (SOT-363) | A0=UART_RX_F, A1=SBUS_OUT, S=MODE_SEL, Y=UART_RX_MUX, VCC=+3V3 | (113.5, 125) |
+| MUX1 | SN74LVC1G3157DRYR (TI DRY) | USON-6 1.45 x 1.0 mm | B1(3)=UART_RX_F, B2(1)=SBUS_OUT, S(6)=MODE_SEL, A(4)=UART_RX_MUX, VCC(5)=+3V3 | (113.5, 125) |
 | S1 | SPST SMD slide switch | Custom 2-pad, 1.5 mm pitch | pad1=+3V3, pad2=MODE_SEL | (109.5, 128.5) |
 | C_INV | 100 nF C0G 0402 | C_0402_1005Metric | VCC bypass for INV1: +3V3→GND | (112.5, 128.5) |
 | C_MUX | 100 nF C0G 0402 | C_0402_1005Metric | VCC bypass for MUX1: +3V3→GND | (115.5, 128.5) |
@@ -405,7 +405,7 @@ pad 3), which constitutes a real short-circuit risk and shall be corrected.
 | C27 | 10 nF C0G 0402 | GND–PGND moat bridge |
 | Shield | Laird MSA030020T (or equiv) | RF section EMI shield can |
 | INV1 | SN74LVC1G04DBVR (TI, SOT-23-5) | UART_RX_F → SBUS_OUT signal inverter |
-| MUX1 | SN74LVC1G157DCKR (TI, SC-70-6) | 2:1 MUX; selects UART or SBUS polarity |
+| MUX1 | SN74LVC1G3157DRYR (TI, USON-6) | SPDT switch; S low = UART_RX_F, S high = SBUS_OUT |
 | S1 | SPST SMD slide switch, 1.5 mm pitch | UART / SBUS mode selector |
 | C_INV | 100 nF C0G 0402 | INV1 VCC bypass |
 | C_MUX | 100 nF C0G 0402 | MUX1 VCC bypass |
@@ -436,7 +436,7 @@ from the actual board the way a hand-maintained BOM can.
 | OSC By | 100 nF | C 0402 | TCXO +3V3 bypass |
 | U1 ByA, U1 ByB | 100 nF ×2 | C 0402 | Si5351A VDDA/VDD bypass |
 | **PA chain** | | | |
-| PA Drvr | MMBT2222A | SOT-23 | Class-A driver stage |
+| PA Drvr | Nexperia PMBT2222A | SOT-23 | Class-A driver stage (replaces deprecated MMBT2222A, 2026-09-26) |
 | PA 100mW | 2N3866 | SOT-89-3 | Class-AB final, 100 mW |
 | PA Rb1, PA Rc1, PA Rb2, PA Re | 10k / 100R / 1k / 10R | R 0402 | Driver/final bias network |
 | PA Cb1, PA Cb2, PA By, PA By2 | 100 pF / 100 pF / 100 nF / 1 nF | C 0402 | Interstage coupling + bypass |
@@ -465,7 +465,7 @@ from the actual board the way a hand-maintained BOM can.
 | UART TVS | PRTR5V0U2X | SOT-363 | UART TX/RX ESD (Tier 3, §1) |
 | TX Bead, RX Bead, PTT Bead | 742792510 ×3 | L 0402 | Series ferrite beads (Tier 2, §1) |
 | INV1 | SN74LVC1G04 | SOT-23-5 | UART_RX_F → SBUS_OUT inverter (§9) |
-| MUX1 | SN74LVC1G157 | SC-70-6 | UART/SBUS select mux (§9) |
+| MUX1 | SN74LVC1G3157DRYR | USON-6 | UART/SBUS select switch (§9) |
 | S1 | SPST SMD | 2-pin slide | UART/SBUS mode switch (§9) |
 | R_MODE | 10k | R 0402 | MODE_SEL pull-down, default UART |
 | C_INV, C_MUX | 100 nF ×2 | C 0402 | INV1/MUX1 VCC bypass |
@@ -522,7 +522,7 @@ and the existing TACCO/B-2 boards (which already carried this profile).
 Unchanged from XCVR-49MHZ-1. The 6-element LPF provides additional margin vs. the
 5-element version, improving compliance margin for the 47 CFR §15.209 out-of-band
 emission limits applied via §15.235(b) (REF-FCC-003) — not Part 95 §95.655, which does
-not apply to this band.  Note: the PA chain (MMBT2222A + 2N3866) is sized for ~100 mW
+not apply to this band.  Note: the PA chain (PMBT2222A + 2N3866) is sized for ~100 mW
 output, which exceeds the §15.235 field-strength-equivalent EIRP ceiling of ≈ 30 µW by
 roughly 35 dB; firmware shall limit conducted output to ≈ −13 dBm (≈ 48 µW) for
 compliance — see `gcs/skipper/hardware/docs/skipper_antenna_spec.md` Link 4 and
@@ -789,3 +789,58 @@ fixed offsets from the symbol anchor per the lib_symbols definition above.
 - J2 GND pin (285.08, 100.00) → GND power symbol
 - `RF_ANT_F` label at (270.00, 116.19) → C_X2Y pin 1 (top)
 - C_X2Y pin 2 (270.00, 123.81) → GND power symbol
+
+## Usage notices
+
+**Intended use:** the Serenity-UAV avionics, including this board, are intended
+for use only on uncrewed aircraft.
+
+**Würth Elektronik usage notice** — applies to the Würth parts on this board
+(749010012A, 742792510, 742792512). Quoted verbatim from Würth Elektronik eiSos,
+*749010012A data sheet* rev 004.000 (2024-04-11), p. 1 [REF-SENSOR-028]; the
+same notice appears on every Würth product data sheet. Owner decision
+2026-09-26: the Würth parts are retained (avionics/WBS.md U7.1d).
+
+> This electronic component has been designed and developed for usage in general
+> electronic equipment only. This product is not authorized for use in equipment
+> where a higher safety standard and reliability standard is especially required
+> or where a failure of the product is reasonably expected to cause severe
+> personal injury or death, unless the parties have executed an agreement
+> specifically governing such use. Moreover Würth Elektronik eiSos GmbH & Co KG
+> products are neither designed nor intended for use in areas such as military,
+> aerospace, aviation, nuclear control, submarine, transportation,
+> transportation signal, disaster prevention, medical, public information
+> network etc.. Würth Elektronik eiSos GmbH & Co KG must be informed about the
+> intent of such usage before the design-in stage. In addition, sufficient
+> reliability evaluation checks for safety must be performed on every electronic
+> component which is used in electrical circuits that require high safety and
+> reliability functions or performance.
+
+<!-- /USAGE-NOTICE-2026-09-26 -->
+
+## Revision note — MUX1 (2026-09-26)
+
+MUX1 was drawn as an SN74LVC1G157 with +3V3 on pin 4 and MODE_SEL on pin 5,
+which matches neither the '157 nor the '3157 pinout (the output would have
+been tied to +3V3 and the supply pin driven by MODE_SEL). Owner decision
+2026-09-26: replaced with the TI SN74LVC1G3157DRYR SPDT switch and rewired
+per its data sheet (SCES424O, Pin Configuration and Functions: B2 1, GND 2,
+B1 3, A 4, VCC 5, S 6). The GND stitching via under the old package was moved
+to (112.35, 125.0). Change by Claude Opus 5.5 (Anthropic) via
+`tools/kicad_relink.py --rewire`; see avionics/WBS.md U7.1.
+
+## Revision note — antenna ESD and PA driver (2026-09-26)
+
+- **D-ANT-SIK:** Semtech RCLAMP0502B (deprecated) replaced by Infineon
+  ESD101-B1-02ELS (0.1 pF typ at 1 GHz, 0.2 pF max; ±5.5 V; TSSLP-2-4 0201),
+  per the Infineon ESD101-B1-02 Series datasheet Rev 1.4. Moved from (104, 133)
+  -- where the old part's pad 1 overlapped the MH3 hole -- to (104.4, 118.16),
+  rotated 90°, beside J-ANT-SIK. See TACCO.md "RF ESD protection" for why the
+  3 pF RClamp0504FA was rejected for antenna ports.
+- **PA Drvr:** MMBT2222A (deprecated) replaced by Nexperia PMBT2222A
+  (production; same SOT-23 B1/E2/C3 pinout; fT >= 300 MHz; AEC-Q101), per the
+  Nexperia PMBT2222A product data sheet (27 July 2022).
+
+Changes by Claude Opus 5.5 (Anthropic) via `tools/kicad_relink.py`; owner
+decisions 2026-09-26 (avionics/WBS.md U7.1).
+

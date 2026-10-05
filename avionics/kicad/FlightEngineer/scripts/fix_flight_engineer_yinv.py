@@ -14,7 +14,7 @@ every lib pin with a non-zero Y offset, any movable item found at the buggy
 attach point (X+px, Y+py) is moved to the correct point (X+px, Y-py).
 Two-pin horizontal passives (py == 0) are naturally invariant.
 
-Authored by Claude Fable 5 (Anthropic), 2026-07-21.  License: CC BY 4.0.
+Authored by Claude Fable 5 (Anthropic), 2026-07-21.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import re

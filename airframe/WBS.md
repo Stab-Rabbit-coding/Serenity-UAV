@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe (Hull-Frame Standard + Placeholders) Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
@@ -16,9 +16,14 @@
 ---
 
 **Cross-cutting system: Observer (cargo handling)** — doors/winch/latch/gondola geometry is
-in [fuselage-mid/TODO.md](fuselage-mid/TODO.md) §1.1.1; the full Observer subsystem map
-(vision/ToF/laser board, firmware, assembly, deferred range-extender battery) is in
-[avionics/observer/TODO.md](../avionics/observer/TODO.md).
+in [fuselage-mid/TODO.md](fuselage-mid/TODO.md) §1.1.1; the Observer subsystem map
+(vision/ToF/laser board, firmware, assembly, deferred range-extender battery) is tracked
+directly in [avionics/TODO.md](../avionics/TODO.md) and `avionics/WBS.md` — search those
+files for "Observer" — **not** in a separate `avionics/observer/` directory. (2026-09-28:
+this link previously pointed at `avionics/observer/TODO.md`, which does not exist and was
+never created; `docs/WBS_FEDERATION.md` still describes that split as planned. Corrected
+here to the file where the content actually lives; the federation doc has not been
+re-verified as part of this pass.)
 
 ---
 

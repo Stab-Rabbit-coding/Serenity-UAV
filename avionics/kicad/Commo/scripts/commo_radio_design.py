@@ -44,7 +44,7 @@ Sources (all in avionics/datasheets/):
     mspm0g3519-q1.pdf   TI SLASFA6B: DAC_OUT on PA15, A0_7 = PA22 (RGZ 40),
                         A1_7 = PA21 (RGZ 39), two simultaneous-sampling ADCs
 
-Author: Claude Opus 5.5 (2026-09-29); owner sgriffing.  License: CC BY 4.0.
+Author: Claude Opus 5.5 (2026-09-29); owner sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import math

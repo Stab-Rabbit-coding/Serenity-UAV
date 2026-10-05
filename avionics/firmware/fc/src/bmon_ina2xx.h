@@ -5,7 +5,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Drives the Texas Instruments INA219AIDR (Cape-A-1) and INA226AIDGSR
  * (Pilot and Flight Engineer) via Linux userspace i2c-dev.

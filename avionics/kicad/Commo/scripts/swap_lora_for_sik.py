@@ -25,7 +25,7 @@ Verified pre-conditions (checked against the live file before writing this):
     are shared with TPM) — converted to an explicit no_connect rather than
     left as a dangling label.
 
-Author: Claude Sonnet 5, 2026-09-21. Owner: sgriffing. License: CC BY 4.0.
+Author: Claude Sonnet 5, 2026-09-21. Owner: sgriffing. License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 from pathlib import Path
 

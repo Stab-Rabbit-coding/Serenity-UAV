@@ -38,7 +38,7 @@ Exit status is non-zero on any violation, so this can gate a commit.
 Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note : Authored by Claude (model: Claude Opus 5, Anthropic) under the
           author's direction, 2026-08-17, per AGENTS.md AI attribution.
-License : CC BY-SA 4.0  <https://creativecommons.org/licenses/by-sa/4.0/>
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 
 Run: /usr/bin/python3 tools/landing_gear_foot_stance.py
      (system python -- the repo .venv hides trimesh)

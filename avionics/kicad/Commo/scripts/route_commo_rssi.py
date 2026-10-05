@@ -21,7 +21,7 @@ lands DRC-clean (GND/REF/+3V3/+3V3-link/RSSI_ANA); RSSI_DCD is left for the GUI.
 
 Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  (Griffing Technology LLC)
 AI-assist: Claude Opus 4.8 (Anthropic) — routing authoring, 2026-07-05.
-License: CC BY 4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import sys

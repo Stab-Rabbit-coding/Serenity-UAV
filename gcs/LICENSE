@@ -8,7 +8,7 @@ See the root LICENSE file for the full text:
 
 **Software/Firmware License:** MIT (see gcs/LICENSE details below)
 
-**Documentation License:** CC BY 4.0
+**Documentation License:** CC BY-SA 4.0
 
 See docs/attribution_and_licensing.md for complete licensing strategy:
   ../docs/attribution_and_licensing.md
@@ -65,3 +65,19 @@ If you modify GCS hardware or software, add appropriate notices:
 Questions?
   CERN-OHL-W: https://ohwr.org/cern_ohl_w_v2
   CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+
+---
+
+LICENCE RULE (owner, 2026-10-04) — applies to every file in this folder
+------------------------------------------------------------------------
+* Code that defines, creates or renders HARDWARE (OpenSCAD, KiCad files and
+  scripts, FreeCAD, Blender, G-code/slicer profiles, and tools that write or
+  render meshes/CAD/PCB) — CERN-OHL-W 2.0 (SPDX: CERN-OHL-W-2.0),
+  ../LICENSES/CERN-OHL-W 2.0.
+* Code whose end result is SOFTWARE or FIRMWARE (firmware, device trees, ground
+  software, analysis/verification/CI tools) — MIT (SPDX: MIT), ../LICENSES/MIT.
+* DOCUMENTS (Markdown, text, specifications, and ALL IMAGES — SVG, PNG, JPG,
+  WebP, any format, including renders from hardware tools) — CC BY-SA 4.0
+  (SPDX: CC-BY-SA-4.0), ../LICENSES/CC-BY-SA 4.0.
+Third-party material keeps its own licence (see REFERENCES.md and
+docs/attribution_and_licensing.md). Each file's header names its licence.

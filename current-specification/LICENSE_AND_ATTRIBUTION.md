@@ -5,22 +5,23 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Project:** Serenity-Class Tri-Fan Tiltrotor Unmanned Aerial Vehicle
 **Revision:** R1 (current — hull/nozzle source citations below updated 2026-06-16; full Rev O–R1 design changelog lives in TODO.md and REFERENCES.md)
-**License:** Dual-licensed — CERN-OHL-W 2.0 (hardware/CAD/PCB) / CC BY-SA 4.0 (docs/code/scripts/drawings). See `docs/attribution_and_licensing.md` for the full policy (corrected 2026-08-01, TODO.md §0.9 — this document previously stated a single "CC BY 4.0" project-wide license, which was stale).
+**License:** By output (owner rule 2026-10-04) — CERN-OHL-W 2.0 (hardware and hardware-producing code) / MIT (software and firmware code) / CC BY-SA 4.0 (documents, including this one). See `docs/attribution_and_licensing.md` for the full policy (corrected 2026-08-01, TODO.md §0.9 — this document previously stated a single "CC BY 4.0" project-wide license, which was stale).
 
 ---
 
 ## License
 
-This project is **dual-licensed by content type** — full policy and rationale in
+This project is **licensed by what each file produces** — full policy and rationale in
 [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md):
 
 - **Hardware/CAD/PCB design files** — CERN-OHL-W 2.0. Full text: root
   [`LICENSE`](../LICENSE), `airframe/LICENSE`, `avionics/LICENSE`.
-- **Documentation, code, scripts, and non-hardware drawings** (including this document) —
+- **Code whose end result is software or firmware** — MIT. Full text: `LICENSES/MIT`.
+- **Documents** (including this document) —
   CC BY-SA 4.0. Full text: `LICENSES/CC-BY-SA 4.0`,
   <https://creativecommons.org/licenses/by-sa/4.0/legalcode>.
 
-Under both: you are free to share and adapt (including commercially) with attribution, a
+Under all three: you are free to share and adapt (including commercially) with attribution, a
 link to the applicable license, and an indication of changes made; CC BY-SA additionally
 requires derivative works to carry the same license (share-alike). Neither license lets you
 apply legal or technological measures that restrict others from doing what the license
@@ -48,7 +49,7 @@ mark's presence on a given board.
 
 ## Original Creative Work Covered by This License
 
-The following elements are original work by Steve Griffing, dual-licensed per
+The following elements are original work by Steve Griffing, licensed per
 `docs/attribution_and_licensing.md`:
 
 **CERN-OHL-W 2.0** (hardware/CAD/PCB design files):

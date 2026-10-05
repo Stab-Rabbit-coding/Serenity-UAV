@@ -15,7 +15,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 # Serenity-Class Tiltrotor UAV — Build Guide Rev P baseline (24-inch)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Year:** 2026 | **Status:** Public release — Rev S baseline (2026-07-04, integrates all Rev
 R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 

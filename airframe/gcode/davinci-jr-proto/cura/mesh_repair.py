@@ -3,7 +3,7 @@
 mesh_repair.py -- Cura-CLI-specific mesh cleanup for Rev T "heavy" STLs.
 
 Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0 -- creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 Date   : 2026-09-07
 
 Six current-Rev-T STLs (the 4 hull shells + 2 nacelle pods) carry an

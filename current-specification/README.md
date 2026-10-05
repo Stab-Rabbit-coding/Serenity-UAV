@@ -1,6 +1,6 @@
 # Serenity UAV — Current Specification (Rev S BOM Baseline)
 
-**License:** Dual-licensed — CERN-OHL-W 2.0 (hardware/CAD/PCB) / CC BY-SA 4.0 (docs/BOM/scripts).
+**License:** By output — CERN-OHL-W 2.0 (hardware and hardware-producing code) / MIT (software/firmware code) / CC BY-SA 4.0 (documents, BOM).
 See `docs/attribution_and_licensing.md`.  
 **Current design revision (project-wide):** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for
 changelog). **This folder's BOM data is still the Rev S snapshot below** — the Rev S1g

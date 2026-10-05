@@ -31,7 +31,7 @@ PCB) and fully traceable (every pin is named at the pin).  Verified by
 
 Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  (Griffing Technology LLC)
 AI-assist: Claude Opus 4.8 (Anthropic) — generator authoring, 2026-07-04.
-License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import re

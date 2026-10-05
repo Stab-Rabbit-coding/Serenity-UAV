@@ -5,7 +5,7 @@
 # has imported the routing and refilled the zones, and after
 # `kicad-cli pcb drc --severity-all --schematic-parity` is clean.
 #
-# Author: Claude Fable 5.1, 2026-09-29.  Owner: sgriffing.  License: CC BY 4.0.
+# Author: Claude Fable 5.1, 2026-09-29.  Owner: sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 set -euo pipefail
 cd "$(dirname "$0")/../kicads"
 KICAD_CLI="${KICAD_CLI:-kicad-cli}"

@@ -1,7 +1,7 @@
 # Serenity UAV — Battery Mounting & Exchange System
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** Rev T5 (2026-09-15) — Rev R body retained below as the superseded record
 **Date:** 2026-06-11 (Rev R); 2026-09-15 (Rev T5 preface)
 

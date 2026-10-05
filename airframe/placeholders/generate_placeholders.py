@@ -31,7 +31,7 @@ Mesh quality: n=24 segments for small cylinders, n=32 for larger/primary ones.
 All dimensions in millimetres, consistent with the project hull-frame standard.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 
 References:
     [1] current-specification/bom_revR.csv — Rev R BOM (canonical)

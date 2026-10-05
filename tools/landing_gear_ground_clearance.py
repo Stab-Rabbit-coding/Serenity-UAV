@@ -69,7 +69,7 @@ AI note : Authored by Claude (model: Claude Opus 5, Anthropic) under the
           author's direction, 2026-09-06, for plan
           docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-length-plan.md.
           Per repository AGENTS.md section 3 AI-attribution policy.
-License : CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0/>
+License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
 
 Design references (see REFERENCES.md):
   REF-CAD-003  QMx Official Serenity Blueprints Reference Pack (2007), Sheet 5

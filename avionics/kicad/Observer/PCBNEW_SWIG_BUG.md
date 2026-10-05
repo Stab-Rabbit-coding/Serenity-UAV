@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Fable 5 (Anthropic) — diagnosis during the Jayne PCB rebuild, 2026-07-13
-**License:** CC BY 4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Status:** Worked around in `scripts/gen_Jayne_carrier_pcb.py`; upstream fix wanted.
 
 This documents three distinct defects in the **pcbnew Python (SWIG) bindings** that

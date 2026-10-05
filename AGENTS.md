@@ -76,14 +76,27 @@ pick one silently — see §11.
 
 ## 3. Attribution and Licensing
 
-Work is **dual-licensed** by content type — see `docs/attribution_and_licensing.md` for the
-full policy and the per-subsystem `LICENSE` federation map:
+Work is licensed by **what the file produces** (owner rule, 2026-10-04) — see
+`docs/attribution_and_licensing.md` for the full policy and the per-subsystem `LICENSE`
+federation map:
 
-- **Hardware/CAD/PCB design files** (airframe SCAD/STL/FCStd, avionics KiCad
-  schematics/layouts/Gerbers) — **CERN-OHL-W 2.0**. Root `LICENSE`, `airframe/LICENSE`,
-  `avionics/LICENSE`.
-- **Documentation, code, scripts, and non-hardware drawings** — **CC BY-SA 4.0**.
-  `docs/LICENSE`, `tools/LICENSE`, and other subsystem `LICENSE` files.
+- **Hardware — and any code that defines, creates or renders hardware** (OpenSCAD,
+  KiCad files and scripts, FreeCAD, Blender, G-code/slicer profiles, and tools that
+  write or render meshes/CAD/PCB) — **CERN-OHL-W 2.0** (SPDX `CERN-OHL-W-2.0`).
+  Full text: `LICENSE` (root) / `LICENSES/CERN-OHL-W 2.0`.
+- **Code whose end result is software or firmware** (firmware, device trees, ground
+  software, analysis/verification/CI tools) — **MIT** (SPDX `MIT`). Full text:
+  `LICENSES/MIT`.
+- **Documents** (Markdown, text, specifications, build guides, and **all images** — SVG,
+  PNG, JPG, WebP and every other format, including renders and figures produced by
+  hardware tools) — **CC BY-SA 4.0** (SPDX `CC-BY-SA-4.0`). Full text:
+  `LICENSES/CC-BY-SA 4.0`. Raster images carry it in embedded XMP metadata, SVGs in a
+  header comment, and `REUSE.toml` declares it for the project's image folders.
+
+Every new file's header carries one line: `License: <name> — see LICENSES/<file>
+(SPDX-License-Identifier: <id>)`. Creative Commons advises against CC licences for
+software, which is why code is MIT (keeps attribution, unlike CC0). Third-party material
+keeps its own licence.
 
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (personal copyright retained; avionics
 boards are marked with his personally owned LLC name).
@@ -164,6 +177,39 @@ active trade study and must not be assumed.
   report (generalized failure type, affected subsystem, repro steps, observed-vs-expected —
   no filenames/paths/PII), and do not commit the failure pattern until it's been discussed.
   See `.githooks/pre-commit` / `tools/precommit_sanitize.py`.
+
+### Warnings, Cautions, Notes, and Wording
+
+Callout severity and requirement-verb usage follow CNAF M-3710.7 §1.5–1.6 (NATOPS General
+Flight and Operating Instructions Manual) [REF-MIL-003 §1.5, §1.6], adapted for a build/design
+repo rather than a flight-ops manual:
+
+- **WARNING** — a procedure, practice, or condition that may result in injury, death, or loss
+  of the aircraft/vehicle if not carefully observed or followed. Reserve for personnel-safety
+  or airframe-loss risk (e.g., handling a charged spring, using of a soldering iron, releasing a payload near people, a live battery pack, a load-bearing.)
+  joint that can fail catastrophically).
+- **CAUTION** — a procedure, practice, or condition that may result in damage to equipment if
+  not carefully observed or followed, with no personnel-injury or airframe-loss risk. (over torquing a fitting, shorting a circuit)
+- **Note** — information about a procedure, practice, or condition that must be emphasized, but
+  carries no WARNING- or CAUTION-level risk.
+
+Never downgrade a WARNING-level risk into a Note, and never use WARNING/CAUTION for information
+that is merely helpful rather than risk-bearing.
+
+Requirement wording follows the same source [REF-MIL-003 §1.6]:
+
+- **Shall** — the procedure is mandatory.
+- **Should** — the procedure is recommended, not mandatory.
+- **May** / **need not** — the procedure is optional.
+- **Will** — indicates futurity only; it never indicates any degree of requirement. Do not use
+  "will" where "shall" is meant.
+
+**Active vs. passive voice (project addition — not in CNAF M-3710.7):** write procedural and
+instructional text in the active voice ("Torque the fastener to 25 in-lb," not "The fastener
+shall be torqued to 25 in-lb") except where the shall/should/may/will wording above requires the
+passive construction to state the requirement itself (e.g., "The joint shall be inspected before
+final assembly"). Active voice names who or what performs the action; passive requirement
+language states what is required regardless of actor.
 
 ## 7. Fabrication Standards
 
