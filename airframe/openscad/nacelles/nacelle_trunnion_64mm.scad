@@ -50,7 +50,8 @@
 // =============================================================================
 
 // ── 64 mm constants — declared BEFORE the include ───────────────────────────
-T64_AXIS_SHIFT  = 34.0 * 1.21 - 34.0;   // = 7.14 mm, radial-scale axis shift
+include <nacelle_64_scale.scad>
+T64_AXIS_SHIFT  = P64_AXIS_SHIFT_S;     // = 34 x P64_K - 34 (9.61 mm at x1.06; was 7.14)
 T64_STUB_EXTRA  = 7.0;    // [mm] spar stub / joint extension (owner 2026-10-03)
 
 include <nacelle_trunnion.scad>

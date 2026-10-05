@@ -62,10 +62,13 @@ import nacelle_intake_cfd as ic  # noqa: E402  FOAM helpers, header(), write(), 
 
 REPO = Path(__file__).resolve().parent.parent
 RHO = 1.225
-K, A = 1.21, 1.13                     # adopted radial / axial scale
+import nacelle_64_scale  # noqa: E402
+K, A = nacelle_64_scale.get("P64_K"), nacelle_64_scale.get("P64_A")   # single source
+S = nacelle_64_scale.get("P64_SCALE")
 R_BORE = 0.032
 LIP_A, LIP_F = 0.016, 0.008           # lipE internal ellipse
-RING_R, FORE_A, RING_HOLD = 0.0425, 0.0015625, 0.022
+RING_R, RING_HOLD = 0.0425 * S, 0.022 * S       # ring follows the shell (x1.06)
+FORE_A = (RING_R - (R_BORE + LIP_F)) ** 2 / (LIP_F ** 2 / LIP_A)   # round nose = internal 4 mm
 L_NAC = 0.1852 * A                    # 0.20928 m
 R_EXIT_OUT = 0.036
 Z_FAN, FAN_T = 0.0305, 0.002          # rotor station, disc thickness

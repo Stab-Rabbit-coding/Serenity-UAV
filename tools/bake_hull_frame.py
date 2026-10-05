@@ -198,8 +198,14 @@ COMPONENTS = {
 # frame by tools/prep_nacelle_64_bake.py, so they take the same transform.
 # The pinion is WING-fixed: serenity_assembly.py does not tilt it.
 # ---------------------------------------------------------------------------
-_N64_Y, _N64_Z = 21.000 - 109.7, 66.851
-_N64_X = {"Port": 6.700 + 53.84, "Stbd": -345.182 - 53.84}
+# 2026-10-05: pivot and wing-pad seat come from the single sources (the x1.06
+# enlargement moves both).  Seat = WING_TIP_FACE_X - TIP_PAD_PROUD
+#      = (41.7 + axis shift + 7.0 stub) - 2.0  (53.84 at x1.00 shift 7.14).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import nacelle_64_scale  # noqa: E402
+_N64_SEAT = 41.7 + nacelle_64_scale.get("P64_AXIS_SHIFT_S") + 7.0 - 2.0
+_N64_Y, _N64_Z = 21.000 - nacelle_64_scale.pivot_z(), 66.851
+_N64_X = {"Port": 6.700 + _N64_SEAT, "Stbd": -345.182 - _N64_SEAT}
 for _side in ("Port", "Stbd"):
     _pl = (_N64_X[_side], _N64_Y, _N64_Z, _SQ2, 0.0, 0.0, -_SQ2)
     _s = _side.lower()

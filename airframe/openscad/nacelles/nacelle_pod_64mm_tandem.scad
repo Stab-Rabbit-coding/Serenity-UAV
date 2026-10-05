@@ -100,10 +100,9 @@
 // =============================================================================
 
 // ── 64 mm constants — declared BEFORE the include (see ORDERING RULE) ──────
-P64_K           = 1.21;   // [-] radial scale — packaging minimum (trade tool)
-P64_A           = 1.13;   // [-] canonical axial stretch (trade tool, re-
-                          //     calibrated on the rendered pod; 1.15 gave
-                          //     11.0 mm hover clearance < the 12.7 mm floor)
+// P64_K / P64_A (and P64_SCALE, the 2026-10-05 uniform x1.06 enlargement for
+// the 70 A ESC bays) come from the single-source nacelle_64_scale.scad.
+include <nacelle_64_scale.scad>
 P64_BORE_R      = 32.0;   // [mm] 64 mm (2.52 in) nominal flow diameter.  The
                           //      rotor running clearance is NOT this number —
                           //      measure the bare rotor (NAC-64-FIT-02).
@@ -121,19 +120,23 @@ P64_LIP_A       = 16.0;   // [mm] internal ellipse, axial semi-axis (2:1)
 P64_LIP_F       =  8.0;   // [mm] internal ellipse, radial semi-axis (flare)
                           //      CFD lip sweep winner "lipE" (header)
 P64_HL_R        = P64_BORE_R + P64_LIP_F;   // = 40.0 mm highlight radius
-P64_FORE_R      = 42.5;   // [mm] lip ring outer radius = the scaled skin's
+P64_FORE_R      = 42.5 * P64_SCALE;   // [mm] lip ring outer radius (45.05 at x1.06) = the scaled skin's
                           //      LARGEST radius at its first measured station
                           //      (Z 24.1: 40.5-42.7 mm); ahead of Z 24 the
                           //      canonical dome is narrower, so the ring is the
                           //      exterior there (recorded deviation).
-P64_FORE_B      = P64_FORE_R - P64_HL_R;    // = 2.5 mm external semi-axis
+P64_FORE_B      = P64_FORE_R - P64_HL_R;    // = 5.05 mm external semi-axis (2.5 before x1.06)
 // External semi-axis chosen so the external nose curvature radius B^2/A equals
 // the internal one F^2/a (= 4.0 mm): a TRUE round nose.  A knife-edged
 // outside (B^2/A = 0.18 mm, first cut) separated in the hover CFD.
 P64_FORE_A      = P64_FORE_B * P64_FORE_B / (P64_LIP_F * P64_LIP_F / P64_LIP_A);
-                          // = 1.5625 mm
-P64_RING_HOLD   = 22.0;   // [mm] ring holds P64_FORE_R to here, then buries
-P64_FAIR_END    = 40.0;   // [mm] Z by which the fairing is buried in the skin
+                          // = 6.38 mm (1.5625 before x1.06)
+P64_RING_HOLD   = 22.0 * P64_SCALE;   // [mm] ring holds P64_FORE_R to here, then buries
+P64_FAIR_END    = 40.0 * P64_SCALE;   // [mm] Z by which the fairing is buried in the skin
+// 2026-10-05 x1.06: the ring radius and its hold/bury stations follow the
+// shell; the INTERNAL lip (P64_LIP_A/F, highlight r 40, 64 mm throat) does not.
+// P64_FORE_A below keeps the external nose radius equal to the internal 4.0 mm
+// (true round nose, CFD lipE), so the external ellipse lengthens with B.
 P64_RING_WALL   =  2.5;   // [mm] lip-ring skin (AGENTS.md §7 2.0 min; 2.5 matches
                           //      the pod's measured skin)
 P64_RING_CAV_Z0 =  6.0;   // [mm] solid nose ahead of the ring cavity
@@ -478,7 +481,7 @@ assert(NACELLE_FACE_X_PYLON - EDF_BORE_R - WALL_T >= 6.5,
 assert(abs(PIVOT_Z - ESC_DISC_Z) > TRUNNION_CAV_D / 2 + ESC_DISC_H / 2,
        "10 AWG disconnect bay overlaps the trunnion ring-gear cavity");
 assert(abs(lip_r_out(P64_FORE_A) - P64_FORE_R) < 1e-6
-       && P64_FORE_R <= 42.7 && P64_RING_HOLD < P64_FAIR_END,
+       && P64_FORE_R <= 42.7 * P64_SCALE && P64_RING_HOLD < P64_FAIR_END,   // first-station max scales with the shell
        "lip ring must not exceed the skin's largest first-station radius");
 assert(abs(P64_FORE_B * P64_FORE_B / P64_FORE_A
            - P64_LIP_F * P64_LIP_F / P64_LIP_A) < 1e-9,

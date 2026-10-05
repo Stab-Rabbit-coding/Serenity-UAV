@@ -48,13 +48,25 @@ from pathlib import Path
 
 import numpy as np
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 REPO = Path(__file__).resolve().parents[1]
 OUT = REPO / "airframe/openscad/nacelles/nozzle_servo_linkage_64_params.scad"
 
-Z_NOZ = 187.86
+def _scale_param(name):
+    """Single-source scale value (tools/nacelle_64_scale.py)."""
+    import nacelle_64_scale
+    return nacelle_64_scale.get(name)
+
+
+# The drive was designed with the nozzle ring at Z 187.86.  The 2026-10-05
+# x1.06 enlargement moves the ring aft; the whole drive moves RIGIDLY with it
+# (DZ), so every lever length and angle is unchanged.
+Z_NOZ0 = 187.86
+Z_NOZ = _scale_param("P64_Z_NOZ")
+DZ = Z_NOZ - Z_NOZ0
 B_R, B_Z = 39.0, Z_NOZ + 4.0
 PSI_CLOSED, PSI_OPEN = 292.5, 268.75
-C_AZ, C_Z, C_R = 266.0, 179.0, 42.7      # ce-optimize nds-1 winner; r 42.7 clears the open stop lug
+C_AZ, C_Z, C_R = 266.0, 179.0 + DZ, 42.7      # ce-optimize nds-1 winner; r 42.7 clears the open stop lug
 L_OUT = 14.0
 HORN, SERVO_SWEEP = 4.0, 90.0           # mm, deg (+/-45: maximises T sin cos)
 SERVO_TORQUE = 0.147                    # N.m, 1.5 kgf.cm at 6 V, KST X06 [REF-ACT-005] (VERIFY)
@@ -104,7 +116,7 @@ def main() -> int:
     ap.add_argument("--pivot", nargs=3, type=float, metavar=("AZ", "Z", "R"),
                     help="trial bellcrank pivot (default: the adopted one)")
     ap.add_argument("--out", type=Path, help="params file (default: the repo one)")
-    ap.add_argument("--servo-z", type=float, default=144.0, help="servo shaft Z")
+    ap.add_argument("--servo-z", type=float, default=144.0 + DZ, help="servo shaft Z")
     ap.add_argument("--servo-az", type=float, default=280.0,
                     help="servo horn-plane azimuth (default: the input tip's)")
     a = ap.parse_args()

@@ -147,6 +147,12 @@ VARIANTS = (
          (0.00738, 0.0425)),
     Bell("lipH_3to1_f8p0_b2p5", "ellipse", 0.024, 0.0080, 0.0305,
          (0.00234, 0.0425)),
+    # 2026-10-05 uniform x1.06 enlargement (ESC bays): lipE's INTERNAL ellipse
+    # (16 x 8 mm, highlight r 40, 64 mm throat) unchanged; the ring follows the
+    # shell to 42.5 x 1.06 = 45.05 mm, and the external semi-axis keeps the
+    # 4.0 mm round nose: A = B^2 / (F^2 / a) = 5.05^2 / 4.0 = 6.38 mm.
+    Bell("lipE_x1p06_f8p0_b5p05", "ellipse", 0.016, 0.0080, 0.0305,
+         (0.0063756, 0.04505)),
 )
 # Variants run by --only (default: all).
 

@@ -339,7 +339,8 @@ def analyse(name: str, bodies: list[Body], pivot: float, thrust_n: float,
 # Bearing arrangements, all on the 20 mm spar stub (bore fixed by the spar),
 # stacked from the spar tip at TRUNNION_X0.  Stack = bearing length; span =
 # centre-to-centre of the pair; the pair centre sets the thrust arm.
-X0_64 = 28.2 + (34.0 * 1.21 - 34.0)          # = 35.34 mm, spar tip
+import nacelle_64_scale  # noqa: E402
+X0_64 = 28.2 + nacelle_64_scale.get("P64_AXIS_SHIFT_S")   # spar tip (37.81 at x1.06)
 ARRANGEMENTS = [
     ("2 x 6704-ZZ, 8.0 mm stack (50 mm joint carried over)", BRG_C0, 8.0, 4.0),
     ("2 x 6704-ZZ, magnet nested round the inboard race (10.0 mm)",

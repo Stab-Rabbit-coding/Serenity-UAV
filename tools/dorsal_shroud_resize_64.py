@@ -44,19 +44,28 @@ import numpy as np
 import trimesh
 from scipy.interpolate import RegularGridInterpolator as RGI
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 REPO = Path(__file__).resolve().parents[1]
 NAC = REPO / "airframe/openscad/nacelles"
 PARAMS = NAC / "nozzle_servo_linkage_64_params.scad"
 OUT = NAC / "nacelle_dorsal_shroud_64_gen.scad"
 SHELL = REPO / "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl"
 
+def _scale_param(name):
+    """Single-source scale value (tools/nacelle_64_scale.py)."""
+    import nacelle_64_scale
+    return nacelle_64_scale.get(name)
+
+
+S = _scale_param("P64_SCALE")    # 2026-10-05 uniform enlargement (1.0 = as designed)
+P64_K, P64_A, Z_NOZ = _scale_param("P64_K"), _scale_param("P64_A"), _scale_param("P64_Z_NOZ")
 AZ_L, AZ_R = 226.0, 314.0      # shroud edges (canonical spine spans ~+/-44 deg)
-Z0 = 175.0                     # tail-stretch anchor (searched, see main)
-Z_START = 100.0                # the canonical shroud's forward end (crest h ~0)
+Z0 = 175.0 * S                 # tail-stretch anchor (searched, see main); shell station
+Z_START = 100.0 * S            # the canonical shroud's forward end (crest h ~0); shell station
 R_IN = 34.9                    # solid down to just outside the sleeve bore
 CLR, SKIN = 0.6, 1.6           # cavity running clearance, printable wall
 AZ = np.arange(AZ_L, AZ_R + 0.01, 1.0)
-ZG = np.arange(90.0, 209.0, 0.5)
+ZG = np.arange(90.0 * S, 209.0 * S, 0.5)
 
 
 def params() -> dict:
@@ -71,7 +80,7 @@ def params() -> dict:
 def skin_grid():
     sh = trimesh.load(SHELL)
     sh.apply_translation([-155.02, 190.79, 0])
-    sh.apply_transform(np.diag([1.21, 1.21, 1.13, 1]))
+    sh.apply_transform(np.diag([P64_K, P64_K, P64_A, 1]))
     o, d = [], []
     for z in ZG:
         for a in AZ:
@@ -138,7 +147,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument('--params', type=Path); ap.add_argument('--out', type=Path)
     ap.add_argument('--eval-only', action='store_true')
-    ap.add_argument('--z0', type=float, nargs='*', default=[170.0, 174.0, 177.0, 180.0, 182.0, 184.0])
+    ap.add_argument('--z0', type=float, nargs='*', default=[z * S for z in (170.0, 174.0, 177.0, 180.0, 182.0, 184.0)])
     a = ap.parse_args()
     if a.params: PARAMS = a.params
     if a.out: OUT = a.out
@@ -166,7 +175,7 @@ def main() -> int:
             continue
         kh = np.max(np.where(hh > 0.05, (need - bb) / np.maximum(hh, 1e-6), 0.0))
         kh = max(kh, 1.0)
-        Zg, Ag = np.meshgrid(ZG[ZG < 187.86], AZ, indexing="ij")
+        Zg, Ag = np.meshgrid(ZG[ZG < Z_NOZ], AZ, indexing="ij")
         new = base(Ag.ravel(), Zg.ravel()) + kh * h(Ag.ravel(), np.where(Zg.ravel() <= Z0, Zg.ravel(), Z0 + (Zg.ravel() - Z0) / kz))
         rise = np.max(new - skin(np.c_[Zg.ravel(), Ag.ravel()]))
         peak = np.max(new)

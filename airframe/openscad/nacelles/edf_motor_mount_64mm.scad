@@ -77,10 +77,11 @@ BORE_R     = 32.0;               // P64_BORE_R
 WALL       = 2.5;                // P64_WALL
 OD_R       = BORE_R + WALL;      // 34.5 = EDF_CASING_R
 KEY_W      = 3.0;  KEY_H = 3.0;  KEY_ROOT = 0.5;
+include <nacelle_64_scale.scad>   // P64_Z_NOZ (2026-10-05 x1.06)
 KEY_ANGLES = [30, 150];          // SLEEVE_KEY_ANGLES (64 mm: 270 freed for the servo)
 Z_FWD      = 42.2;               // STATOR_SLV_Z_START (bore step)
 Z_JOINT    = 103.7;              // STATOR_SLV_Z_END = AFT_SLV_Z_START
-Z_AFT      = 187.86;             // AFT_SLV_Z_END = NOZZLE_RING_Z
+Z_AFT      = P64_Z_NOZ;          // AFT_SLV_Z_END = NOZZLE_RING_Z (single source)
 Z0         = Z_JOINT;   // cartridge (stage 2)
 Z1         = Z_AFT;
 L          = Z1 - Z0;

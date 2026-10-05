@@ -50,8 +50,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import nacelle_mass_cg as base  # noqa: E402 sibling tool; path set above
 
-K = 1.21                 # radial scale — proportion trade pick (owner 2026-10-03)
-A = 1.13                 # canonical axial stretch — proportion trade pick
+import nacelle_64_scale  # noqa: E402  single-source shell scale (x1.06 on 2026-10-05)
+K = nacelle_64_scale.get("P64_K")    # radial scale
+A = nacelle_64_scale.get("P64_A")    # axial scale
 ROTOR_Z = 30.5           # rotor-1 hub face, behind the elliptical lip + duct
 STAGE = 72.7             # shaft 10.7 + gap 1 + plate 3 + body 58.0
 NOZ_Z = 166.25 * A       # nozzle pocket rides on the stretched shell
@@ -66,7 +67,7 @@ STATOR_SLV = (ROTOR_Z + 11.7, ROTOR_Z + STAGE + 0.5)
 AFT_SLV = (ROTOR_Z + STAGE + 0.5, NOZ_Z)
 ESC_BAY_CG = 95.0 * A    # bays centred with the stretched shell
 DISC_BAY_Z = 51.0 * A    # 10 AWG disconnect bay (wrapper ESC_DISC_Z)
-PIVOT_Z_SET = 109.7      # PIVOT_Z currently set in the 64 mm wrapper
+PIVOT_Z_SET = nacelle_64_scale.pivot_z()   # PIVOT_Z currently set in the 64 mm wrapper
 NOZ_REACH = 221.3 - 166.25   # iris reach aft of its pocket, 40 mm flaps
 
 
@@ -126,20 +127,24 @@ def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
          "ASSUMED 20 g +/-10 g — QX publishes no rotor mass; WEIGH (FIT-02)"),
         ("Rotor 2 (12-blade + spinner)", 20.0, mid(ROTOR2),
          "ASSUMED 20 g +/-10 g — QX publishes no rotor mass; WEIGH (FIT-02)"),
-        ("ESC 1 (70 A, owner 2026-10-03)", 42.0, ESC_BAY_CG,
-         "ASSUMED 42 g (plan screening figure) until a 70 A part is selected; U10"),
-        ("ESC 2 (70 A, owner 2026-10-03)", 42.0, ESC_BAY_CG,
-         "ASSUMED 42 g (plan screening figure) until a 70 A part is selected; U10"),
-        ("2 x ESC access cover", 4 * 6.99 / 2 * K, ESC_BAY_CG,
-         "SCALED est.: 50 mm covers measured x K"),
+        ("ESC A (70 A, fwd motor, 2 bays)", 52.7, 125.4,
+         ("ESTIMATE: tools/esc80_cooptimize.py on tools/esc70_design.json "
+          "(Open-Secure-ESC 70 A, two hinged bays); centre from the bay fit")),
+        ("ESC B (70 A, aft motor, 2 bays)", 52.7, 136.4,
+         ("ESTIMATE: tools/esc80_cooptimize.py on tools/esc70_design.json; "
+          "centre from the bay fit")),
+        ("4 x ESC access cover", 2 * 4 * 6.99 / 2 * K, 0.5 * (125.4 + 136.4),
+         "SCALED est.: 50 mm covers measured x K, two per ESC (four bays)"),
         ("Nozzle throat + housing", 21.4 * K, NOZ_Z + 8.55,
          "SCALED est.: 50 mm iris x K (thin shell); U11 re-sizes"),
         ("Unison ring", 6.7 * K, NOZ_Z + 3.65, "SCALED est.: x K; U11 re-sizes"),
         ("8 x nozzle flap (40 mm)", 21.1 * K, NOZ_Z + 31.95,
          "SCALED est.: flap width x K, length unchanged; U11"),
-        ("Nozzle servo drive (V1)", 8.0, NOZ_Z - 16.25,
-         ("ASSUMED: BMS-101DMG 4.5 + link 1 + spring 1 + mount 1.5 g "
-          "(plan KTD2 table); station est. fwd of ring (U4)")),
+        ("Nozzle servo drive (KST X06 + bellcrank)", 6.0 + 1.0 + 1.0 + 1.5,
+         0.5 * (NOZ_Z - 43.86 + NOZ_Z - 8.86),
+         ("KST X06 6 g [REF-ACT-005] + link 1 + spring 1 + bellcrank/pins 1.5 g "
+          "(ASSUMED); station midway servo shaft (Z_NOZ - 43.86) .. bellcrank "
+          "(Z_NOZ - 8.86), nozzle_servo_linkage_64.py")),
         ("4 x 10 AWG feed",
          4 * (0.060 + (PIVOT_Z_SET - DISC_BAY_Z - 29.5) / 1000.0) * 40.0,
          0.5 * (PIVOT_Z_SET + DISC_BAY_Z),
