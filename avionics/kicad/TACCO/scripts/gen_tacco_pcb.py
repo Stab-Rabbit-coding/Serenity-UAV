@@ -342,6 +342,7 @@ UNDER_BAND_OK = {"1553-XFM", "J-MLRS-SWD", "TPM", "NOR-FLASH", "SD-WB", "1553-XC
 # B.Cu face sits ~5.54 mm above the PB2-I top.  Two PB2-I parts stand proud between the rails:
 # the 12 x 7 x 1 mm microSD socket at the pin-1/2 end and the 3-pin JST-SH UART at the
 # pin-35/36 end (owner photo; positions estimated from it — confirm by measurement).
+PLACEMENT_SEED = 1
 PB2_GAP = 3.0 + 2.54
 H_MARGIN = 0.5
 B_MAX_H = PB2_GAP - H_MARGIN
@@ -791,10 +792,12 @@ def main() -> None:
                 return par if par in fps and par not in FIXED and par != r else None
         return None
 
-    # what-if "seed": jitter the area order (+/-20 %) so a sweep can search orderings the
-    # strict largest-first rule never tries; committed boards are generated without it.
-    rng = random.Random(WHATIF["seed"]) if "seed" in WHATIF else None
-    jit = {r: (1.0 + rng.uniform(-0.2, 0.2)) if rng else 1.0 for r in sorted(fps)}
+    # "seed": jitter the area order (+/-20 %) so a sweep can search orderings the
+    # strict largest-first rule never tries; the committed board uses PLACEMENT_SEED.
+    # PLACEMENT_SEED 1 (2026-10-05): of seeds 1-6, five place every part DRC-clean; seed 1 has
+    # the shortest total half-perimeter wirelength (3116 mm vs 3313-3561 mm).
+    rng = random.Random(WHATIF.get("seed", PLACEMENT_SEED))
+    jit = {r: 1.0 + rng.uniform(-0.2, 0.2) for r in sorted(fps)}
 
     def order_key(r: str) -> Tuple[float, int, float, str]:
         par = parent_of(r)

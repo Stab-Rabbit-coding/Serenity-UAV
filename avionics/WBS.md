@@ -1377,6 +1377,13 @@ REFERENCES.md Removed/Superseded Citations).
       Bottom-face budget 5.0 mm (0.5 mm margin), less over the PB2-I microSD (12 x 7 x 1 mm, pin-1/2
       end) and JST-SH UART (pin-35/36 end; height and both positions to be confirmed by
       measurement). T-ETH (~8.9 mm) is top-face only; J-SD (1.42 mm) moves to the bottom face.
+      **Placement closed 2026-10-05:** J-SD becomes the Molex 105162-0001 1.45 mm microSD header
+      (owner; land per SD-105162-001 sheet 2, cross-checked against the Molex/Ultra Librarian
+      model; -40 to +85 C), and the +1V8_RF buck (TPS62933 + 3015 inductor + 5 passives) becomes
+      a TI TLV75718PDBVR LDO fed from +3V3_RF (owner; tlv757p.pdf; WIFI-BT-ZB AVDD18 typical
+      148-180 mA per TYPE2EL.pdf, ~0.27 W). All 163 parts place: DRC 0 errors before routing,
+      schematic parity 0, ERC unchanged (12 accepted lib_symbol_issues). Open: +3V3_RF budget
+      (TPS63031) now also carries the 1.8 V load — confirm against the power budget.
     - [ ] R4 Learning docs and CONCEPTS.md corrected.
 - [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
     APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift

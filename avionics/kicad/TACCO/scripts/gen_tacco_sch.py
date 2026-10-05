@@ -412,27 +412,22 @@ ICS: List[Dict[str, Any]] = [
     },
     {
         "ref": "U-1V8RF",
-        "value": "TPS62933DRLR",
-        "fp": "Package_TO_SOT_SMD:SOT-583-8",
-        "mpn": "TPS62933DRLR",
-        "ds": "tps62933.pdf Table 7-1 Pin Functions (SOT-583) [REF-PWR-001] — second instance of "
-              "the same buck already used for U-3V3, refactored for a 1.8V output via the FB "
-              "divider below. Added 2026-09-21 because WIFI-BT-ZB's AVDD18 draws up to 1009 mA "
-              "peak (type2el.pdf §9.1) — the pre-existing 150 mA LDO (U-1V8, sized only for SDIO "
-              "signaling level) could not supply this. Rather than run two separate 1.8V "
-              "regulators, U-1V8 was removed entirely: SD_VIO is just 1.8V logic-level signaling "
-              "(a few mA) at the same nominal voltage, so it shares THIS regulator's +1V8_RF "
-              "output directly (own local bypass cap, same as any other rail pin) — one "
-              "regulator for the whole 1.8V domain, less total footprint than two.",
+        "value": "TLV75718PDBVR",
+        "fp": "Package_TO_SOT_SMD:SOT-23-5",
+        "mpn": "TLV75718PDBVR",
+        "ds": "tlv757p.pdf Table 4-1 Pin Functions (DBV: 1 IN, 2 GND, 3 EN, 4 NC, 5 OUT), Table 8-1 "
+              "nomenclature (18 = 1.8 V fixed, P = active discharge), 1 A, CIN/COUT >= 1 uF. Owner "
+              "2026-10-05: replaces the TPS62933 1.8 V buck (and its 3015 inductor, bootstrap, "
+              "soft-start, EN and FB parts) to free board area. Load: WIFI-BT-ZB AVDD18 + SD_VIO, "
+              "TYPE2EL.pdf typical 148-180 mA Tx / 101-130 mA Rx at 1.8 V (rated max 1009 mA); "
+              "dissipation (3.3-1.8) x 0.18 A = 0.27 W, ~62 C rise at the DBV 231 C/W JEDEC "
+              "figure — copper pour on IN/OUT/GND required. Fed from +3V3_RF per the owner's choice.",
         "pins": [
-            ("3", "VIN", "+5V", "L"),
-            ("2", "EN", "U1V8RF_EN", "L"),
-            ("1", "RT", "GND", "L"),
-            ("4", "GND", "GND", "L"),
-            ("5", "SW", "SW_1V8RF", "R"),
-            ("6", "BST", "BST_1V8RF", "R"),
-            ("7", "SS/PG", "SS_1V8RF", "R"),
-            ("8", "FB", "FB_1V8RF", "R"),
+            ("1", "IN", "+3V3_RF", "L"),
+            ("3", "EN", "+3V3_RF", "L"),
+            ("2", "GND", "GND", "L"),
+            ("4", "NC", None, "R"),
+            ("5", "OUT", "+1V8_RF", "R"),
         ],
     },
     # SIK (RFD900ux-SMT) REMOVED 2026-09-21 per owner: relocated to Commo
@@ -901,18 +896,11 @@ SIMPLE: List[Any] = [
     ("R-FB3L", "32.4k 1%", FP_R0201, "", "TPS62933 FB divider bottom (3.27 V)", [("1", "A", "FB_3V3"), ("2", "B", "GND")]),
     ("C-3V3-O1", "22uF 6.3V X5R", FP_C0603, "", "TPS62933 COUT", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-3V3-O2", "22uF 6.3V X5R", FP_C0603, "", "TPS62933 COUT", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    # --- +1V8_RF high-current buck (TPS62933, 2nd instance) — WIFI-BT-ZB AVDD18
+    # --- +1V8_RF LDO (TLV75718P, owner 2026-10-05; was a TPS62933 buck) — WIFI-BT-ZB AVDD18
     # + SD_VIO (added 2026-09-21, replacing the removed 150mA U-1V8 LDO; see
     # U-1V8RF's own docstring above for the one-regulator-not-two rationale)
-    ("R-EN18", "100k", FP_R0201, "", "U-1V8RF EN pull-up to VIN", [("1", "A", "+5V"), ("2", "B", "U1V8RF_EN")]),
-    ("C-1V8RF-IN", "10uF 10V X5R", FP_C0603, "", "U-1V8RF CIN at VIN/GND", [("1", "P", "+5V"), ("2", "N", "GND")]),
-    ("C-1V8RF-HF", "100nF", FP_C0402, "", "U-1V8RF CIN HF", [("1", "P", "+5V"), ("2", "N", "GND")]),
-    ("C-BST18", "100nF", FP_C0402, "", "U-1V8RF BST-SW bootstrap", [("1", "P", "BST_1V8RF"), ("2", "N", "SW_1V8RF")]),
-    ("C-SS18", "10nF", FP_C0201, "", "U-1V8RF soft-start", [("1", "P", "SS_1V8RF"), ("2", "N", "GND")]),
-    ("L-1V8RF", "3.3uH 2.25A", "Serenity-Custom:L_WE-MAPI_3015", "74438335033", "U-1V8RF inductor, same WE-MAPI 3015 part/land as L-3V3",
-     [("1", "A", "SW_1V8RF"), ("2", "B", "+1V8_RF")]),
-    ("R-FB18H", "40.2k 1%", FP_R0201, "", "U-1V8RF FB divider top (Vfb=0.8V -> 1.79V; 0.8*(1+40.2/32.4))", [("1", "A", "+1V8_RF"), ("2", "B", "FB_1V8RF")]),
-    ("R-FB18L", "32.4k 1%", FP_R0201, "", "U-1V8RF FB divider bottom", [("1", "A", "FB_1V8RF"), ("2", "B", "GND")]),
+    ("C-1V8RF-IN", "10uF 10V X5R", FP_C0603, "", "U-1V8RF CIN at IN/GND (tlv757p.pdf: >= 1 uF)", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-1V8RF-HF", "100nF", FP_C0402, "", "U-1V8RF CIN HF", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
     ("C-1V8RF-O1", "22uF 6.3V X5R", FP_C0603, "", "U-1V8RF COUT", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
     ("C-1V8RF-O2", "22uF 6.3V X5R", FP_C0603, "", "U-1V8RF COUT", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
     # --- +3V3_RF buck-boost (TPS63031) --------------------------------------
