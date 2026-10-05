@@ -1012,7 +1012,16 @@ def main() -> None:
     # only — B.Cu under the band is logic copper (see the ISO_V0 comment).
     top_and_inner = pcbnew.LSET.AllCuMask(6)
     top_and_inner.RemoveLayer(pcbnew.B_Cu)
-    for lset, poly in ((top_and_inner, band),):
+    # B.Cu patches around each X2Y bridge (bottom face, straddling the band edge): its GND2
+    # pad's short stub to the island via is an ISOLATION track and must sit inside ISO_BAND.
+    bot = pcbnew.LSET()
+    bot.AddLayer(pcbnew.B_Cu)
+    shapes = [(top_and_inner, band)]
+    for xref in ("X2Y-CAN", "X2Y-RS485"):
+        xu = FIXED[xref][0]
+        # only the G1-G2 (GND2) strip between its two GND end terminals: u +/-0.35 mm
+        shapes.append((bot, [(xu - 0.35, ISO_V0 - 1.1), (xu + 0.35, ISO_V0 - 1.1), (xu + 0.35, ISO_V0 + 1.1), (xu - 0.35, ISO_V0 + 1.1)]))
+    for lset, poly in shapes:
         z = pcbnew.ZONE(board)
         z.SetLayerSet(lset)
         z.SetIsRuleArea(True)
