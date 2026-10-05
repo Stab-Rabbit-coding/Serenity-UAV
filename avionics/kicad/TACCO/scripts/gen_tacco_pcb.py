@@ -329,7 +329,10 @@ RAIL_CELLS = [(7.18 + 2.54 * k, RAIL_V) for k in range(1, 17)]  # k=0 sits next 
 # the band and three to 1553-XCVR north of it; nothing else on the board has room for it.
 # J-MLRS-SWD: the Tag-Connect NL land's six pads run straight north on B.Cu to MLRS-MCU, and
 # its three NPTH alignment holes carry no copper into the band.
-UNDER_BAND_OK = {"1553-XFM", "J-MLRS-SWD"}
+# TPM / NOR-FLASH / SD-WB (owner 2026-10-05, "more parts under band"): SPI parts whose bus nets
+# run to the PB2 rails, which are themselves on B.Cu; their supply and ground pins leave on
+# B.Cu to vias outside the band.
+UNDER_BAND_OK = {"1553-XFM", "J-MLRS-SWD", "TPM", "NOR-FLASH", "SD-WB", "1553-XCVR"}
 
 
 class Placer:

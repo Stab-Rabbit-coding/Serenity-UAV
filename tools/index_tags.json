@@ -10917,7 +10917,7 @@
       "archived": false
     },
     "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py": {
-      "description": "gen_tacco_pcb.py \u2014 Build the TACCO PCB from the schematic netlist.",
+      "description": "Python script",
       "tags": [
         "avionics-hardware",
         "pcb-design",
