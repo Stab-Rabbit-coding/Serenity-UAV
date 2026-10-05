@@ -559,9 +559,9 @@ def main():
     print("%s -> %s:%s  footprint %s  (%d stale segments removed)"
           % (args.ref, NICK, args.symbol, fp_id, removed))
     for num in sorted(new_names, key=lambda x: (len(x), x)):
-        print("   pin %-3s %-10s net %s" % (num, new_names[num],
-                                             name_to_net.get(new_names[num],
-                                                             "(none)")))
+        name = new_names[num]
+        net = name_to_net.get(name, "(none)")
+        print("   pin %-3s %-10s net %s" % (num, name, net))
     return 0
 
 
