@@ -1313,6 +1313,35 @@ REFERENCES.md Removed/Superseded Citations).
     --severity-all --schematic-parity` to 0, then attempt freerouting via
     the Specctra DSN/SES bridge (reject and report if it introduces shorts,
     same discipline as Pilot), then export gerbers.
+- [ ] **PB2 rail geometry correction (Pilot + TACCO) and SMT rail-socket trade study —
+    APPROVED 2026-10-04 (S. Griffing: "Manual is right").** Design-shift record per root
+    `AGENTS.md` §10, written before any KiCad change.
+    **Why.** The PocketBeagle 2 System Reference Manual (REF-SENSOR-022, Fig. 3.45) puts the P1
+    and P2 pin-1 rows 3.53 mm and 6.07 mm from their board edges, 25.4 mm apart, so each rail
+    centre-line is 4.80 mm inside its long edge. Both cape generators placed the rails 2.54 mm
+    from the edges (`FIXED` PB2-P1 v 2.54 / PB2-P2 v 32.46, 29.92 mm apart) with no source on
+    record, so neither cape would have mated with the board. The x positions (pin columns 5.91 mm
+    from each short edge, rotated 180° relative to the manual's view) already match.
+    **What changes.** (1) `FIXED` PB2-P1 v 2.54 -> 4.80 and PB2-P2 v 32.46 -> 30.20 in
+    `gen_tacco_pcb.py` and `gen_pilot_pcb.py`; rail-dependent geometry (rail cells, isolation
+    band, connector floor plan) re-derived from the new rail rows; both boards regenerated and
+    re-gated (ERC 0, DRC 0 errors, parity 0). (2) Trade study, owner-requested 2026-10-04: with
+    the rail 4.80 mm inside the edge the Samtec SSM-DV surface-mount socket (REF-SENSOR-023,
+    outer pad edge 3.94 mm from centre-line) now fits with ~0.86 mm to the edge, which would free
+    the top face and inner layers over the rails for connectors and routing. Mechanical inputs:
+    SSM catalog states Severe Environment Testing aligned with MIL-DTL-55302 and offers -LC
+    locking clip / -A alignment pins; the SSW/TSW through-hole pair is qualified to 7.56 G RMS
+    random vibration and 100 G shock (EIA-364-28 / -27); the PB2's own headers are SMT with
+    through-hole anchors only at positions 1/2 and 35/36. Socket choice comes back to the owner
+    with the routing results before it is committed.
+    **Supersedes.** `docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md`
+    "rails sit 2.54 mm from the cape edge ... the rails stay THT" and the 2026-10-04 learning
+    `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`
+    (its SSM-DV verdict); both to be corrected in the same change.
+    - [ ] R1 TACCO rails moved, re-floor-planned, regenerated, gates 0.
+    - [ ] R2 Pilot rails moved, regenerated, gates 0.
+    - [ ] R3 SMT (SSM-DV) vs THT rail routing study on the corrected geometry; owner decision.
+    - [ ] R4 Learning docs and CONCEPTS.md corrected.
 - [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
     APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift
     record per root `AGENTS.md` §10 (documented before any KiCad change). Supersedes the
