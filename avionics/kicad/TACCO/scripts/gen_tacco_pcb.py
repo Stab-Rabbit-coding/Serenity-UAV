@@ -198,17 +198,17 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     # whole top face is free and the field connectors sit at the board edges over the rails.
     # J-ETH's right MP pad must clear PB2-P1's -LC clip hole at u 47.82; the row packs left.
     "J-FAN": (21.45, 4.2, 0, F),
-    "PWR-IN": (31.75, 4.8, 0, F),
+    "PWR-IN": (31.75, 10.3, 0, F),     # through-hole pins must clear the TSM rail pads (inner edge 0.635 mm from CL)
     "J-ETH": (42.7, 4.2, 0, F),
     "J-ANT-RADIO": (52.0, 9.9, 0, F),
     "J-1553": (3.9, 24.0, 0, F),       # opens left
-    "J-SD": (47.9, 20.8, 0, F),        # card exits the right edge
+    "J-SD": (47.9, 18.8, 0, B),        # card exits the right edge; 1.42 mm tall, clears the PB2-I JST
     "J-ANT-MLRS": (2.9, 8.2, 0, F),    # through-hole MMCX: west of the P1 rail's end pins, below H1
     # --- 2026-10-05 floor-plan anchors on the SSM-DV rails: the auto-placer alone left
     # T-ETH / U-3V3RF / L-1V8RF without a site (largest-first order fills the open pockets
     # before them); each is pinned to the pocket a what-if sweep found for it.
-    "T-ETH": (47.5, 19.9, 0, B),       # under J-SD, beside J-ETH's edge
-    "U-3V3RF": (43.0, 11.2, 0, B),
+    "T-ETH": (47.5, 20.5, 0, F),       # 8.9 mm tall: top face only (PB2-I gap ~5.5 mm)
+    "U-3V3RF": (38.5, 11.2, 0, B),
     "L-1V8RF": (22.0, 23.5, 0, B),     # two-pad, under the band: escapes on B.Cu only
     "J-MLRS-SWD": (29.0, 21.8, 0, B),  # Tag-Connect NL land under the band, pads north to MLRS-MCU
     # --- isolation band: transceivers straddle its top edge, bus connectors at the edge ---
@@ -337,6 +337,43 @@ RAIL_CELLS = [(7.18 + 2.54 * k, RAIL_V) for k in range(1, 17)]  # k=0 sits next 
 UNDER_BAND_OK = {"1553-XFM", "J-MLRS-SWD", "TPM", "NOR-FLASH", "SD-WB", "1553-XCVR"}
 
 
+# Bottom-face height budget (owner 2026-10-05): the PB2-I's female receptacles stand 3.0 mm
+# (owner caliper) and the TSM-DV insulator is 2.54 mm (samtec_tsm_catalog.pdf), so the cape's
+# B.Cu face sits ~5.54 mm above the PB2-I top.  Two PB2-I parts stand proud between the rails:
+# the 12 x 7 x 1 mm microSD socket at the pin-1/2 end and the 3-pin JST-SH UART at the
+# pin-35/36 end (owner photo; positions estimated from it — confirm by measurement).
+PB2_GAP = 3.0 + 2.54
+H_MARGIN = 0.5
+B_MAX_H = PB2_GAP - H_MARGIN
+# (u0, v0, u1, v1, obstruction height) in board u,v; generous boxes around the estimates.
+PB2_OBSTRUCTIONS = [
+    (4.0, 10.5, 18.0, 24.5, 1.0),    # PB2-I microSD socket (owner: 12 x 7 x 1 mm)
+    (45.0, 12.5, 55.0, 22.5, 2.95),  # PB2-I JST-SH 3-pin side-entry (height per JST-SH; confirm)
+]
+# Seated heights above the board (mm), from the archived datasheets where noted; parts not
+# listed are assumed <= 2.0 mm (chip passives, QFN/TSSOP/SOIC, 3015 inductors at 1.5 mm).
+PART_HEIGHT = {
+    "T-ETH": 8.9,        # 749010012A.pdf drawing (to confirm: read from the text layer)
+    "1553-XFM": 4.70,    # PremierMagnetics_DB2791S.pdf Fig. 2, .185 in
+    "TVS-1553P": 2.44, "TVS-1553N": 2.44,  # SMA (DO-214AC) body
+    "J-SD": 1.42,        # Molex 104031-0811 product spec (1.42 mm height)
+}
+
+
+def part_height(fp: pcbnew.FOOTPRINT) -> float:
+    return PART_HEIGHT.get(fp.GetReference(), 2.0)
+
+
+def b_height_ok(r: "Rect", h: float) -> bool:
+    """True when a bottom-face part of height h at courtyard r clears the PB2-I."""
+    if h > B_MAX_H:
+        return False
+    for u0, v0, u1, v1, oh in PB2_OBSTRUCTIONS:
+        if r.hits(Rect(X0 + u0, Y0 + v0, X0 + u1, Y0 + v1)) and h > PB2_GAP - oh - H_MARGIN:
+            return False
+    return True
+
+
 class Placer:
     def __init__(self, board: pcbnew.BOARD):
         self.board = board
@@ -347,6 +384,7 @@ class Placer:
         self.cells = list(RAIL_CELLS)
         self.iso = False
         self.two_pad = False
+        self.height = 2.0
 
     def register(self, fp: pcbnew.FOOTPRINT) -> None:
         side = B if fp.IsFlipped() else F
@@ -371,6 +409,8 @@ class Placer:
         # band is top-face (+ inner) only.  Beneath it on B.Cu only two-pad logic parts
         # may sit: no logic via may enter the band, so whatever lands there must escape on
         # B.Cu alone, which a passive can and a multi-pin IC cannot.
+        if side == B and not b_height_ok(r, self.height):
+            return False
         inside = any(r.hits(o) for o in ISO_RECTS[side])
         if side == B and not self.iso and not self.two_pad and any(r.hits(o) for o in ISO_RECTS[F]):
             return False
@@ -730,6 +770,9 @@ def main() -> None:
             if (same and courtyard(f1).hits(courtyard(f2))) or cross:
                 print(f"  FIXED COLLISION {f1.GetReference()} x {f2.GetReference()}")
     for f1 in fixed_fps:
+        if f1.IsFlipped() and not b_height_ok(courtyard(f1), part_height(f1)):
+            print(f"  FIXED TOO TALL FOR B.Cu {f1.GetReference()} ({part_height(f1)} mm)")
+    for f1 in fixed_fps:
         c = courtyard(f1)
         if c.x1 < X0 + 0.3 or c.y1 < Y0 + 0.3 or c.x2 > X0 + BW - 0.3 or c.y2 > Y0 + BH - 0.3:
             print(f"  FIXED OFF-BOARD {f1.GetReference()} {c.x1-X0:.2f},{c.y1-Y0:.2f}..{c.x2-X0:.2f},{c.y2-Y0:.2f}")
@@ -807,6 +850,7 @@ def main() -> None:
             placer.set(fp, uu, ISO_V0, 0, B)
             placer.register(fp)
             continue
+        placer.height = part_height(fp)
         placer.two_pad = len([p for p in fp.Pads() if p.GetNumber()]) <= 2 or ref in UNDER_BAND_OK
         other = F if side == B else B
         ok = placer.spiral(fp, anchor[0], anchor[1], side, rmax=8.0)

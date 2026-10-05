@@ -1366,6 +1366,17 @@ REFERENCES.md Removed/Superseded Citations).
       the cable needs a tie-down/adhesive strain relief — U.FL is less vibration-tolerant than
       MMCX). A smaller microSD socket was considered; the uploaded Molex 104031 documents are for
       the current part, whose Ultra Librarian land saves only ~11 mm².
+      **Rail gender correction 2026-10-05 (owner):** the PocketBeagle 2 Industrial carries
+      **female** receptacles (owner photo; 3.0 mm tall by caliper), so both capes need **male**
+      pins — the SSM-DV socket above and the earlier THT socket footprint could not mate. Both
+      capes move to Samtec **TSM-118-04-L-DV-LC** SMT male strips (`samtec_tsm-dv-footprint.pdf`
+      Rev F Fig. 1: 1.27 x 3.68 mm pads, centres +/-2.475 mm; -LC holes 1.19 mm NPTH at
+      +/-20.32 mm). Lead style -04 is the shortest post (3.05 mm, for low-profile sockets), so the
+      cape-to-PB2 gap is the minimum the strip allows: 3.0 + 2.54 = ~5.54 mm. Owner rule: keep the
+      stack as low as possible while clearing every obstacle; plan heights from the cape's needs.
+      Bottom-face budget 5.0 mm (0.5 mm margin), less over the PB2-I microSD (12 x 7 x 1 mm, pin-1/2
+      end) and JST-SH UART (pin-35/36 end; height and both positions to be confirmed by
+      measurement). T-ETH (~8.9 mm) is top-face only; J-SD (1.42 mm) moves to the bottom face.
     - [ ] R4 Learning docs and CONCEPTS.md corrected.
 - [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
     APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift

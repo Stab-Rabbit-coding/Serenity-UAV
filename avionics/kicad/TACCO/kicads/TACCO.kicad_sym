@@ -536,8 +536,8 @@
     (symbol "S_PB2-P1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 26.67 0) (effects (font (size 1.27 1.27))))
       (property "Value" "PB2I-P1-2x18" (at 0 -26.67 0) (effects (font (size 1.27 1.27))))
-      (property "Footprint" "Serenity-Custom:PocketBeagle2_2x18_P1_SSM-DV-LC" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "PocketBeagle 2 P1/P2 expansion rails (XO map); Samtec SSM-DV SMT socket, -LC locking clip (manual placement per drawing note 8) [REF-SENSOR-023]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Footprint" "Serenity-Custom:PocketBeagle2_2x18_P1_TSM-DV-LC" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Datasheet" "PocketBeagle 2 P1/P2 expansion rails (XO map); Samtec TSM-DV SMT male strip, -04 post, -LC locking clip (manual placement) [REF-SENSOR-023]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (symbol "S_PB2-P1_0_1"
         (rectangle (start -16.51 25.40) (end 16.51 -25.40) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
@@ -583,8 +583,8 @@
     (symbol "S_PB2-P2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 26.67 0) (effects (font (size 1.27 1.27))))
       (property "Value" "PB2I-P2-2x18" (at 0 -26.67 0) (effects (font (size 1.27 1.27))))
-      (property "Footprint" "Serenity-Custom:PocketBeagle2_2x18_P2_SSM-DV-LC" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "PocketBeagle 2 P1/P2 expansion rails (XO map); Samtec SSM-DV SMT socket, -LC locking clip (manual placement per drawing note 8) [REF-SENSOR-023]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Footprint" "Serenity-Custom:PocketBeagle2_2x18_P2_TSM-DV-LC" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Datasheet" "PocketBeagle 2 P1/P2 expansion rails (XO map); Samtec TSM-DV SMT male strip, -04 post, -LC locking clip (manual placement) [REF-SENSOR-023]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (symbol "S_PB2-P2_0_1"
         (rectangle (start -16.51 25.40) (end 16.51 -25.40) (stroke (width 0.2540) (type default)) (fill (type background)))
       )

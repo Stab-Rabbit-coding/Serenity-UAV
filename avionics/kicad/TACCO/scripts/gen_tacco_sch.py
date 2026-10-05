@@ -179,11 +179,12 @@ FP_QFN48_WL = "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm"
 # Epson TG2520SMN 2.5x2.0 mm TCXO (TG2520SMN_en-2584158.pdf pin map 1 NC, 2 GND, 3 OUT, 4 VCC)
 FP_TG2520 = "Oscillator:Oscillator_SMD_SeikoEpson_TG2520SMN-xxx-xxxxxx-4Pin_2.5x2.0mm"
 # project-custom lands (avionics/kicad/Serenity-Custom.pretty)
-# PB2 rails: Samtec SSM-118-L-DV-LC surface-mount sockets (owner 2026-10-05, WBS R3) —
-# samtec_ssm_footprint.pdf Rev D Fig. 4 land; -LC clips anchor each socket through the
-# board (two NPTH per rail) as the vibration retention, standing in for the THT barrels.
-FP_PB2P1 = "Serenity-Custom:PocketBeagle2_2x18_P1_SSM-DV-LC"
-FP_PB2P2 = "Serenity-Custom:PocketBeagle2_2x18_P2_SSM-DV-LC"
+# PB2 rails: Samtec TSM-118-04-L-DV-LC SMT male terminal strips (owner 2026-10-05: the
+# PocketBeagle 2 Industrial carries female receptacles, so the cape carries the pins).
+# samtec_tsm-dv-footprint.pdf Rev F Fig. 1 land; -04 is the shortest post (3.05 mm, for
+# low-profile sockets), giving a ~5.5 mm cape-to-PB2 gap; -LC clips anchor each strip.
+FP_PB2P1 = "Serenity-Custom:PocketBeagle2_2x18_P1_TSM-DV-LC"
+FP_PB2P2 = "Serenity-Custom:PocketBeagle2_2x18_P2_TSM-DV-LC"
 FP_NANOFIT = "Serenity-Custom:Molex_NanoFit_1x04_Horizontal"
 FP_SRF2012 = "Serenity-Custom:Bourns_SRF2012_4T"
 FP_X2Y0805 = "Serenity-Custom:X2Y_0805_4T"
@@ -861,9 +862,9 @@ def pb2_header(ref: str, value: str, fp: str, nets: List[Optional[str]]) -> Dict
     omitted = PB2_P2_OMITTED if ref == "PB2-P2" else set()
     pins = [(str(i), f"P{i}", net, "L" if i <= 18 else "R")
             for i, net in enumerate(nets, start=1) if i not in omitted]
-    return {"ref": ref, "value": value, "fp": fp, "mpn": "SSM-118-L-DV-LC",
-            "ds": "PocketBeagle 2 P1/P2 expansion rails (XO map); Samtec SSM-DV SMT socket, -LC locking "
-                  "clip (manual placement per drawing note 8) [REF-SENSOR-023]", "pins": pins}
+    return {"ref": ref, "value": value, "fp": fp, "mpn": "TSM-118-04-L-DV-LC",
+            "ds": "PocketBeagle 2 P1/P2 expansion rails (XO map); Samtec TSM-DV SMT male strip, -04 "
+                  "post, -LC locking clip (manual placement) [REF-SENSOR-023]", "pins": pins}
 
 
 ICS += [
