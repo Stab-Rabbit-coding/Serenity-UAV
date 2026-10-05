@@ -832,6 +832,111 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
     with the brake-release command class of `TILT_DRIVE_CONTROL_SPEC.md` §5.5).
 - [ ] **U7** — Per-board ERC/DRC/gerber closeout (Pilot, XO, Commo, Flight Engineer,
     Observer, CAN-PERIPH-GW-1); runs after U1/U2/U3/U5 land on the boards. ★
+    *Baseline 2026-09-26 (kicad-cli 9.0.2, errors+warnings): Pilot 0/0; TACCO
+    ERC 0 / DRC 169; Commo 0 / 257 + 93 parity; Flight Engineer 0 / 31 + 2 parity;
+    Observer 157 / 115 + 21 parity; CAN-PERIPH-GW-1 168 / 829 + 54 parity;
+    ENC-NACELLE-1 52 / 4. Unrouted connections tracked separately (routing ≠ clean).*
+    - [ ] **U7.1** — Shared, datasheet-verified symbol / footprint / 3D library in
+        the SecureControllers repo (`kicad/libraries/`), consumed by every board via
+        the `${SECURE_CONTROLLERS_LIB}` path variable (owner decision 2026-09-26).
+        MPN-named symbols with real pin electrical types; stock `Device:*` passives.
+        Replaces ~500 per-refdes `S_<ref>` symbols and board-prefixed names
+        (`Observer_ISOW1044BDFMR`, `GW_ISOW1412`) that block reuse and have
+        already drifted (ISOW1412, SLB 9672 pin 10/33, PRTR5V0U2X).
+        *2026-09-26: SecureControllers `c61cf51` (branch `feat/shared-kicad-library`)
+        — generator `tools/sclib.py`, 13 of ~75 parts verified with footprint
+        pad checks + package-options ledger (`kicad/libraries/VERIFICATION.md`).*
+        - [ ] U7.1a — Verify + add the remaining ~60 parts (Commo analog/RF,
+            Flight Engineer power, TACCO radios/storage, Pilot sensors/GNSS,
+            Observer KSZ9477/SoM, AK7455, connectors).
+        - [ ] U7.1b — Datasheets not obtainable by download (mark "requires
+            verification" until sourced): SN74LVC1G157, MBRD1045CT, RCLAMP0502B,
+            MGA-82563, TG2520SMN, MMBT2222A, SMBJ33CA, 2N3866.
+        - [ ] U7.1c — STEP models for every `SecureControllers.pretty` footprint;
+            install `kicad-packages3d` on the build workstation (stock
+            `${KICAD9_3DMODEL_DIR}` models are absent — owner action, needs root).
+        - [x] U7.1d — Wurth 749010012A usage notice (excludes aviation use
+            unless Wurth is informed). Owner decision 2026-09-26: keep the Wurth
+            parts; notice quoted verbatim + "uncrewed aircraft only" on Pilot,
+            TACCO, Commo, Flight Engineer, Observer (.md, schematic, PCB
+            Cmts.User, title-block comments 8/9) via `tools/add_board_notices.py`
+            [REF-SENSOR-028]. Generator-owned schematics (gen_*_sch.py) will drop
+            the stamp on regeneration -- re-run the tool after any regen.
+        - [ ] U7.1g — Catalogue the remaining uncited-but-used IDs
+            REF-SENSOR-024/031/032/034/035/036 (020/021 catalogued on main 2026-09-29; 022-040 subset done
+            2026-09-26); ICM-42688-P, PM-DB2791S, HI-1573, SLB 9672 public
+            URLs require verification.
+        - [x] U7.1e — TLV62569 FB/PG swap (gateway, Observer) and 3-pad SOT-23
+            (Flight Engineer). Owner-approved 2026-09-26: all four TLV62569 ->
+            TLV62569PDRLR (SOT-563) and Observer TLV75725 -> TLV75725PDRVR
+            (WSON-6, EP to GND) via `tools/kicad_relink.py` (pin-name remap).
+            Datasheet-driven fixes found on the way (TLV62569 Sec. 8.2.2.2, Eq. 2,
+            VFB 0.6 V): gateway divider 10k/20k set 0.9 V -> 453k/100k (3.318 V);
+            Observer dividers were placeholders -> 453k/100k (3V3), 100k/100k
+            (1V2); Flight Engineer had EN on its own output and FB tied straight
+            to +3V3 -> EN = +5V, divider R_H_FBT 453k / R_H_FBB 100k added.
+            Flight Engineer parity 2 -> 0.
+        - [x] U7.1j — Deprecated parts (owner 2026-09-26): RCLAMP0502B antenna
+            clamps (TACCO D-ANT-WIOE5/D-ANT-RADIO, Commo D-ANT-SIK) ->
+            Infineon ESD101-B1-02ELS 0201 (0.1 pF); RClamp0504FA rejected for
+            RF (3 pF). MMBT2222A -> Nexperia PMBT2222A (drop-in). Commo MUX1
+            (miswired SN74LVC1G157) -> SN74LVC1G3157DRYR, rewired per datasheet.
+        - [x] U7.1m — Library extraction batch 2 (2026-09-27, Claude Sonnet 5):
+            LMV331, MCP1703A, MCP4921, AO3400A, MBRD1045CT, SMAJ/SMBJ-TVS added
+            (24 symbols total). Datasheets extracted for BMP388/ICM-42688-P/
+            INA226/ATF16V8BQL/PM-DB2791S/W25Q128/749010012A already covered by
+            REFERENCES.md entries; TOML library entries for those still pending.
+        - [ ] U7.1n — ★ Commo ref "RX Demod" (Value "LM393 Comparator RX-AFSK
+            Demodulator") is mislabeled: real TI LM393 has no 5-pin package
+            (dual comparator, 8-pin minimum). The drawn symbol has 5 pins with
+            NO output pin -- pin 5 is wired to GND instead of an output net.
+            Likely meant to be a single comparator (LMV331-class, same part as
+            the correctly-wired RSSI_CMP). Do not fabricate the intended output
+            net -- trace AFSK demodulator design intent before relinking.
+        - [ ] U7.1o — Remaining ~35 parts needing library entries (datasheets
+            already in avionics/datasheets/, not yet extracted to TOML):
+            ADIN1300BCPZ (40-pin PHY), BQ76930PWRQ1 (30-pin AFE), Wio-E5
+            (STM32WLE5 module), LBES5PL2EL-923 (Type2EL Wi-Fi/BT module),
+            Si5351A-B-GT, TG2520SMN, PE4259-63, MGA-82563, SN74LVC1G04,
+            TFmini-S, MAX-M10S-00B, RFD900ux-SMT, TPS54540DDAR, TPS54620RGYT,
+            TPS63031DSKR, W25Q128JVSIQ, ATF16V8BQL-15XI, PM-DB2791S,
+            749010012A, BMP388, ICM-42688-P, INA226AIDGSR (REFERENCES.md
+            entries exist for the last 7; TOML library entries still pending).
+            Connectors/mechanical (lower priority, not yet started):
+            PB2I-P1/P2 (PocketBeagle socket), TSM-108-01-L-DV, SM0xB-GHS-TB
+            family, MMCX, U.FL, RPSMA, XH-7P, XT30/XT60, Nano-Fit, microSD,
+            switches, mounting hardware.
+        - [ ] U7.1k — STEP model for SecureControllers
+            Infineon_TSSLP-2-4_0.62x0.32mm (0.62 x 0.32 x 0.31 mm, Fig. 10).
+        - [ ] U7.1l — Commo reference designators contain spaces ("PA Drvr",
+            "PA 100mW", ...); rename to standard refdes in the Commo pass.
+        - [ ] U7.1h — Placement follow-ups from the swaps: gateway U_REG_3V3
+            overlaps U1_1 (pre-existing); Observer R_FB3B/R_FB1T sit on
+            C_VISO/C_VCORE (pre-existing).
+        - [x] U7.1i — Stale-component cleanup: `tools/kicad_prune_stale.py`
+            (kicad-cli parity driven; removes electrical extras/duplicates and
+            only the copper they orphan; mechanical parts get board_only + MHn).
+            Commo parity 93 -> 86, Observer 21 -> 17. Gateway: 423 pad-less
+            copper items on stack 3/4 nets reported, not removed (U7.1h).
+        - [ ] U7.1f — Observer 749010012A symbol/footprint is an invented 8-pin
+            part; replace with the verified 16-lead part.
+    - [x] **U7.2** — PRTR5V0U2X pinout/package blocker: **resolved 2026-09-27.**
+        All 12 instances across Pilot/TACCO/FlightEngineer/Commo/Observer relinked
+        to the shared SecureControllers PRTR5V0U2X (SOT143B, Table 2 pinout) via
+        `tools/kicad_relink.py --rewire`, position/rotation preserved. ERC 0 on
+        all 5 boards; parity flat/improved. Judgment call recorded, not fabricated:
+        Observer's 5 Ethernet/CAN instances and Commo's 2 RF/UART instances had no
+        VCC net in the original wrong-package design — VCC tied to local GND/PGND
+        as a conservative fallback (line/ground clamping preserved, rail-clamp
+        direction inert); flagged for design review, see commit `24f2c315`.
+        One new mechanical-only DRC warning (Pilot TVS-CAN/C-IN1 courtyard overlap)
+        left unresolved rather than guess a placement nudge blind — see U7.1h.
+    - [ ] **U7.3** — Migrate the seven boards' `lib_id`s to the shared library
+        (Pilot, TACCO, Commo, Flight Engineer, Observer, CAN-PERIPH-GW-1,
+        ENC-NACELLE-1); schematic-to-PCB parity 0.
+    - [ ] **U7.4** — ERC 0 and DRC 0 (errors + warnings) on all seven boards.
+    - [ ] **U7.5** — Route remaining unrouted connections per board; gerbers.
+    - [ ] **U7.6** — Per-board README / HDD (kidoc) + WBS/TODO status refresh.
 - [ ] **U8** — Faraday cage / shielded-harness spec (still open). **Tamper-mesh creepage fix
     reframed 2026-09-27:** Rev T's own "Known gaps" note says the anti-tamper mesh was **not
     carried forward at all** in the rebuild — the "13 DRC violations, 0.125 mm vs 8 mm" figure

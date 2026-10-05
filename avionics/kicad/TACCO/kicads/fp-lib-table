@@ -1,4 +1,5 @@
 (fp_lib_table
   (version 7)
   (lib (name "Serenity-Custom")(type "KiCad")(uri "${KIPRJMOD}/../../Serenity-Custom.pretty")(options "")(descr "Serenity project custom footprints (shared with Pilot; XO adds RFD900x, RFM95W, WL1837MOD, TPS6303x VSON-10, Johanson RF filters, RCLAMP0502B)"))
+  (lib (name "SecureControllers")(type "KiCad")(uri "${SECURE_CONTROLLERS_LIB}/SecureControllers.pretty")(options "")(descr "Shared datasheet-verified footprints (SecureControllers repo, kicad/libraries)"))
 )
