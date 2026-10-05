@@ -84,9 +84,12 @@ def skin_mean() -> list[tuple[float, float]]:
     """(z, r) of the canonical skin, azimuth-averaged, scaled, metres."""
     t = (REPO / "airframe/openscad/nacelles/nacelle_hollow_profile.scad"
          ).read_text(encoding="utf-8")
-    zs = [float(v) for v in
-          re.search(r"HOLLOW_Z = \[(.*?)\];", t).group(1).split(",")]
-    body = re.search(r"HOLLOW_SKIN_STBD = \[(.*?)\];", t, re.DOTALL).group(1)
+    m_z = re.search(r"HOLLOW_Z = \[(.*?)\];", t)
+    m_skin = re.search(r"HOLLOW_SKIN_STBD = \[(.*?)\];", t, re.DOTALL)
+    if m_z is None or m_skin is None:
+        raise ValueError("nacelle_hollow_profile.scad: HOLLOW_Z / HOLLOW_SKIN_STBD not found")
+    zs = [float(v) for v in m_z.group(1).split(",")]
+    body = m_skin.group(1)
     rows = [[float(v) for v in r.strip(" [],\n").split(",") if v.strip()]
             for r in body.split("],") if r.strip(" \n[]")]
     return [(z * A / 1000.0, sum(r) / len(r) * K / 1000.0)
@@ -321,6 +324,8 @@ def run(case: Path, np_: int) -> dict:
 def body_loads(case: Path) -> dict:
     """Force and tilt-axis moment on the body from raw fields (see MODEL)."""
     t = ic.last_time(case)
+    if t is None:
+        raise RuntimeError(f"{case}: no solved time directory")
     mesh = case / "constant/polyMesh"
     pts = [ic._vec(v) for v in ic._foam_list(mesh / "points")]
     owner = [int(v) for v in ic._foam_list(mesh / "owner")]

@@ -40,6 +40,7 @@ Author: Claude (Claude Opus 5.5, Anthropic) under the direction of
 Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: MIT —
     see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
+
 from __future__ import annotations
 
 import math
@@ -52,9 +53,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 REPO = Path(__file__).resolve().parents[1]
 OUT = REPO / "airframe/openscad/nacelles/nozzle_servo_linkage_64_params.scad"
 
+
 def _scale_param(name):
     """Single-source scale value (tools/nacelle_64_scale.py)."""
     import nacelle_64_scale
+
     return nacelle_64_scale.get(name)
 
 
@@ -66,12 +69,16 @@ Z_NOZ = _scale_param("P64_Z_NOZ")
 DZ = Z_NOZ - Z_NOZ0
 B_R, B_Z = 39.0, Z_NOZ + 4.0
 PSI_CLOSED, PSI_OPEN = 292.5, 268.75
-C_AZ, C_Z, C_R = 266.0, 179.0 + DZ, 42.7      # ce-optimize nds-1 winner; r 42.7 clears the open stop lug
+C_AZ, C_Z, C_R = (
+    266.0,
+    179.0 + DZ,
+    42.7,
+)  # ce-optimize nds-1 winner; r 42.7 clears the open stop lug
 L_OUT = 14.0
-HORN, SERVO_SWEEP = 4.0, 90.0           # mm, deg (+/-45: maximises T sin cos)
-SERVO_TORQUE = 0.147                    # N.m, 1.5 kgf.cm at 6 V, KST X06 [REF-ACT-005] (VERIFY)
-SERVO_DIMS = (20.0, 7.0, 16.6)          # L x W x H mm [REF-ACT-005] (VERIFY)
-SPRING_N = 2.0                          # KTD3 spring at the ball (plan U2)
+HORN, SERVO_SWEEP = 4.0, 90.0  # mm, deg (+/-45: maximises T sin cos)
+SERVO_TORQUE = 0.147  # N.m, 1.5 kgf.cm at 6 V, KST X06 [REF-ACT-005] (VERIFY)
+SERVO_DIMS = (20.0, 7.0, 16.6)  # L x W x H mm [REF-ACT-005] (VERIFY)
+SPRING_N = 2.0  # KTD3 spring at the ball (plan U2)
 
 
 def unit(v):
@@ -83,12 +90,11 @@ def er(az):
 
 
 def ball(psi):
-    return np.array([B_R * math.cos(math.radians(psi)),
-                     B_R * math.sin(math.radians(psi)), B_Z])
+    return np.array([B_R * math.cos(math.radians(psi)), B_R * math.sin(math.radians(psi)), B_Z])
 
 
 C = C_R * er(C_AZ) + np.array([0, 0, C_Z])
-AX = er(C_AZ)                                   # bellcrank pivot axis (radial)
+AX = er(C_AZ)  # bellcrank pivot axis (radial)
 U = unit(np.cross(AX, [0, 0, 1.0]))
 V = np.cross(AX, U)
 
@@ -111,14 +117,24 @@ def solve_out(psi, L_rod, guess):
 
 def main() -> int:
     import argparse
+
     global C_AZ, C_Z, C_R, C, AX, U, V, OUT
     ap = argparse.ArgumentParser(description="64 mm nozzle servo linkage")
-    ap.add_argument("--pivot", nargs=3, type=float, metavar=("AZ", "Z", "R"),
-                    help="trial bellcrank pivot (default: the adopted one)")
+    ap.add_argument(
+        "--pivot",
+        nargs=3,
+        type=float,
+        metavar=("AZ", "Z", "R"),
+        help="trial bellcrank pivot (default: the adopted one)",
+    )
     ap.add_argument("--out", type=Path, help="params file (default: the repo one)")
     ap.add_argument("--servo-z", type=float, default=144.0 + DZ, help="servo shaft Z")
-    ap.add_argument("--servo-az", type=float, default=280.0,
-                    help="servo horn-plane azimuth (default: the input tip's)")
+    ap.add_argument(
+        "--servo-az",
+        type=float,
+        default=280.0,
+        help="servo horn-plane azimuth (default: the input tip's)",
+    )
     a = ap.parse_args()
     if a.pivot:
         C_AZ, C_Z, C_R = a.pivot
@@ -158,7 +174,7 @@ def main() -> int:
     # input arm angle: tip velocity axial at mid => arm along +/-tangent
     et = np.array([-math.sin(math.radians(C_AZ)), math.cos(math.radians(C_AZ)), 0])
     phi_in_mid = math.atan2(et @ V, et @ U)
-    off_in = phi_in_mid - phi_mid                   # fixed angle between arms
+    off_in = phi_in_mid - phi_mid  # fixed angle between arms
     tip_in_mid = arm(phi_in_mid, L_in)
     # 3. servo: body on the bore-wall floor (r 36.4 .. 44.0, 7.6 radial), shaft
     #    TANGENTIAL at the body's mid-depth, at the input tip's azimuth; horn
@@ -170,8 +186,9 @@ def main() -> int:
     shaft = (36.4 + SERVO_DIMS[1] / 2) * er(t_az) + np.array([0, 0, SERVO_Z])
     s_az = t_az
 
-    def horn(th):   # th = 0 radial-outward; rotates in the (er, ez) plane
+    def horn(th):  # th = 0 radial-outward; rotates in the (er, ez) plane
         return shaft + HORN * (math.cos(th) * er(t_az) + math.sin(th) * np.array([0, 0, 1.0]))
+
     LINK = float(np.linalg.norm(tip_in_mid - horn(0.0)))
     # full-stroke solve of the servo loop
     ths: list = []
@@ -180,7 +197,7 @@ def main() -> int:
     for phi in phis:
         tip = arm(phi + off_in, L_in)
         best = (float("inf"), g)
-        span = 90 if not ths else 15        # first point: search the full range
+        span = 90 if not ths else 15  # first point: search the full range
         for d in np.radians(np.arange(-span, span + 0.01, 0.05)):
             e = abs(np.linalg.norm(tip - horn(g + d)) - LINK)
             if e < best[0]:
@@ -195,22 +212,30 @@ def main() -> int:
         lw = max(lw, math.degrees(math.acos(min(1, abs(link @ unit(hv))))))
     srv_sweep = math.degrees(ths[-1] - ths[0])
     mono = all(np.diff(ths) * np.sign(ths[-1] - ths[0]) > 0)
-    print(f"servo loop: servo sweep {srv_sweep:.1f} deg (monotonic {mono}), worst "
-          f"link-to-horn-motion angle {lw:.1f} deg")
+    print(
+        f"servo loop: servo sweep {srv_sweep:.1f} deg (monotonic {mono}), worst "
+        f"link-to-horn-motion angle {lw:.1f} deg"
+    )
     # 4. force chain at the worst point
     # worst-case chain: horn force x cos(link angle) x arm ratio x cos(rod angle)
     f_horn = SERVO_TORQUE / (HORN / 1000)
     f_out = f_horn * math.cos(math.radians(lw)) * L_in / L_OUT
     f_ear = f_out * math.cos(math.radians(worst))
     hold = 0.5 * f_ear
-    print(f"bellcrank: pivot az {C_AZ} z {C_Z} r {C_R}; output {L_OUT} mm, rod "
-          f"{L_rod:.2f} mm, sweep {bc_sweep:.1f} deg, worst rod-to-ear angle {worst:.1f} deg")
-    print(f"input arm {L_in:.2f} mm (tangential at mid); link {LINK:.2f} mm; "
-          f"servo shaft at r {math.hypot(*shaft[:2]):.2f} az {s_az:.1f} z {shaft[2]:.1f}, "
-          f"horn {HORN} mm, sweep {SERVO_SWEEP} deg")
-    print(f"force at ear: stall {f_ear:.1f} N ({f_ear/4.448:.2f} lbf), holding "
-          f"{hold:.1f} N vs spring {SPRING_N} N -> allowable flap load at ball "
-          f"{hold - SPRING_N:.1f} N  (PENDING-U8 bench load)")
+    print(
+        f"bellcrank: pivot az {C_AZ} z {C_Z} r {C_R}; output {L_OUT} mm, rod "
+        f"{L_rod:.2f} mm, sweep {bc_sweep:.1f} deg, worst rod-to-ear angle {worst:.1f} deg"
+    )
+    print(
+        f"input arm {L_in:.2f} mm (tangential at mid); link {LINK:.2f} mm; "
+        f"servo shaft at r {math.hypot(*shaft[:2]):.2f} az {s_az:.1f} z {shaft[2]:.1f}, "
+        f"horn {HORN} mm, sweep {SERVO_SWEEP} deg"
+    )
+    print(
+        f"force at ear: stall {f_ear:.1f} N ({f_ear/4.448:.2f} lbf), holding "
+        f"{hold:.1f} N vs spring {SPRING_N} N -> allowable flap load at ball "
+        f"{hold - SPRING_N:.1f} N  (PENDING-U8 bench load)"
+    )
     good = worst <= 30 and hold > SPRING_N and mono and lw <= 50 and abs(srv_sweep) <= 130
     OUT.write_text(f"""// GENERATED by tools/nozzle_servo_linkage_64.py — do not hand-edit.
 // 64 mm nozzle servo linkage, STARBOARD nacelle-local frame (port = mirror x).

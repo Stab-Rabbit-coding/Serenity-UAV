@@ -23,6 +23,7 @@ Stab-Rabbit-coding, per AGENTS.md AI attribution.  License: CERN-OHL-W-2.0 —
 
 import json
 import os
+from typing import Any
 import sys
 
 import FreeCAD as App  # noqa: N813  (FreeCAD's own import convention)
@@ -37,7 +38,7 @@ def main(out_dir: str) -> None:
     src = open(ASSEMBLY, encoding="utf-8").read()
     # Namespace with a non-entry __name__ so the module does not auto-run;
     # __file__ keeps its own path arithmetic (AIRFRAME, STL_DIR) correct.
-    ns = {"__name__": "census_export", "__file__": os.path.abspath(ASSEMBLY)}
+    ns: dict[str, Any] = {"__name__": "census_export", "__file__": os.path.abspath(ASSEMBLY)}
     exec(compile(src, ASSEMBLY, "exec"), ns)  # noqa: S102  (trusted repo file)
     ns["OUTPUT"] = os.path.join(out_dir, "SerenityAssembly_census.FCStd")
     ns["assemble"]()

@@ -235,11 +235,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  QF2822 body to mount face {fmt(QF2822_BODY_TO_MOUNT_FACE)}; "
               f"shaft protrusion {fmt(SHAFT_PROTRUSION)}  [VERIFY]")
         for r in results:
-            print(f"\n  {r['name']}: stage {fmt(r['stage_l'])}, "
-                  f"required {fmt(r['required'])}, "
-                  f"available {fmt(r['available'])}")
-            print(f"    motor-2 tail at Z {fmt(r['motor2_tail_z'])} -> "
-                  f"margin {fmt(r['margin'])}  {r['verdict']}")
+            print(f"\n  {r['name']}: stage {fmt(float(r['stage_l']))}, "
+                  f"required {fmt(float(r['required']))}, "
+                  f"available {fmt(float(r['available']))}")
+            print(f"    motor-2 tail at Z {fmt(float(r['motor2_tail_z']))} -> "
+                  f"margin {fmt(float(r['margin']))}  {r['verdict']}")
         print(f"\n  GATE = LENGTHENED (64 mm wrapper, L "
               f"{fmt(stations_64()['NACELLE_L'])}); margin is VERIFY "
               "(drawing values). CURRENT/BEST/ADOPTED are the fixed-length "

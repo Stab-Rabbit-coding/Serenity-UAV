@@ -21,6 +21,7 @@ Read-only with respect to the repo (writes only to /tmp).  Author: Claude
 AGENTS.md AI attribution.  License: MIT — see LICENSES/MIT
 (SPDX-License-Identifier: MIT)
 """
+
 import json
 import re
 import subprocess
@@ -33,29 +34,62 @@ REPO = Path(__file__).resolve().parents[1]
 
 def run(cfg: dict) -> dict:
     out = Path(tempfile.mkstemp(suffix=".scad", prefix="nsl_eval_")[1])
-    cmd = [sys.executable, str(REPO / "tools/nozzle_servo_linkage_64.py"), "--out", str(out),
-           "--pivot", *map(str, cfg["pivot"]), "--servo-z", str(cfg.get("servo_z", 153.0))]
+    cmd = [
+        sys.executable,
+        str(REPO / "tools/nozzle_servo_linkage_64.py"),
+        "--out",
+        str(out),
+        "--pivot",
+        *map(str, cfg["pivot"]),
+        "--servo-z",
+        str(cfg.get("servo_z", 153.0)),
+    ]
     if cfg.get("servo_az") is not None:
         cmd += ["--servo-az", str(cfg["servo_az"])]
     lk = subprocess.run(cmd, capture_output=True, text=True, timeout=600).stdout
-    m = {"linkage_pass": "PASS" in lk, "enclosed": False, "rise_mm": 999.0,
-         "k_h": None, "k_z": None, "z0": None}
+    m = {
+        "linkage_pass": "PASS" in lk,
+        "enclosed": False,
+        "rise_mm": 999.0,
+        "k_h": None,
+        "k_z": None,
+        "z0": None,
+    }
+
     def num(pat):
         g = re.search(pat, lk)
         return float(g.group(1)) if g else None
+
     m["holding_n"] = num(r"holding ([0-9.]+) N")
     m["rod_deg"] = num(r"rod-to-ear angle ([0-9.]+)")
     m["link_deg"] = num(r"link-to-horn-motion angle ([0-9.]+)")
     if m["linkage_pass"]:
-        sr = subprocess.run([sys.executable, str(REPO / "tools/dorsal_shroud_resize_64.py"),
-                             "--params", str(out), "--eval-only"],
-                            capture_output=True, text=True, timeout=900).stdout
-        g = re.search(r"Z0 ([0-9.]+): .*K_H ([0-9.]+).*K_Z ([0-9.]+).*max local rise ([0-9.]+)"
-                      r".*crest increase ([0-9.-]+)", sr)
+        sr = subprocess.run(
+            [
+                sys.executable,
+                str(REPO / "tools/dorsal_shroud_resize_64.py"),
+                "--params",
+                str(out),
+                "--eval-only",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=900,
+        ).stdout
+        g = re.search(
+            r"Z0 ([0-9.]+): .*K_H ([0-9.]+).*K_Z ([0-9.]+).*max local rise ([0-9.]+)"
+            r".*crest increase ([0-9.-]+)",
+            sr,
+        )
         if g:
-            m.update(enclosed=True, z0=float(g.group(1)), k_h=float(g.group(2)),
-                     k_z=float(g.group(3)), station_rise_mm=float(g.group(4)),
-                     rise_mm=float(g.group(5)))
+            m.update(
+                enclosed=True,
+                z0=float(g.group(1)),
+                k_h=float(g.group(2)),
+                k_z=float(g.group(3)),
+                station_rise_mm=float(g.group(4)),
+                rise_mm=float(g.group(5)),
+            )
     out.unlink(missing_ok=True)
     return m
 

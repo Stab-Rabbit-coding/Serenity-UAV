@@ -178,7 +178,7 @@ def pod_body(stl: Path, name: str) -> Body:
     ixx = float(mesh.moment_inertia[0][0]) * RHO      # g.mm^2 about the CG
     mass = float(mesh.volume * RHO)
     b = Body(name, mass, float(cg[2]), float(cg[1]))
-    b.i_own = lambda ixx=ixx: ixx  # type: ignore[method-assign,misc]
+    b.i_own = lambda ixx=ixx: ixx  # type: ignore[method-assign,misc,assignment]
     return b
 
 

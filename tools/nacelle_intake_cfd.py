@@ -57,6 +57,7 @@ License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 from __future__ import annotations
 
 import argparse
+from typing import Any
 import math
 import shutil
 import subprocess
@@ -455,7 +456,7 @@ def _vec(text: str) -> tuple[float, ...]:
     return tuple(float(v) for v in text.strip("()").split())
 
 
-def _internal_field(path: Path) -> list[tuple[float, ...] | float]:
+def _internal_field(path: Path) -> list[Any]:
     """internalField values (nonuniform list) of an ASCII field file."""
     text = path.read_text(encoding="utf-8")
     i = text.index("internalField")
@@ -598,7 +599,8 @@ def summarise(res: dict) -> None:
     r_max = prof[-1][0]
     p0_core = sum(p[3] for p in prof[:5]) / 5
     for frac in (0.5, 0.8, 0.9, 0.95, 0.98):
-        r, ux, ur, p0 = min(prof, key=lambda p, f=frac: abs(p[0] - f * r_max))
+        target = frac * r_max
+        r, ux, ur, p0 = min(prof, key=lambda p: abs(p[0] - target))
         ang = math.degrees(math.atan2(ur, ux))
         loss = (p0_core - p0) / (0.5 * V_BORE ** 2)
         print(f"  r/R {r / r_max:4.2f}: Ux {ux:6.1f} m/s ({ux / 0.5144:5.0f} kt)"
