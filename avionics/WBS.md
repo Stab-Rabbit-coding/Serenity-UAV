@@ -1359,6 +1359,13 @@ REFERENCES.md Removed/Superseded Citations).
       (LPS3015 series per Table 3; the exact 1.5 uH Coilcraft ordering code is to be confirmed —
       the vendor site is unreachable from the build environment). No 2520-size inductor datasheet
       is archived, so no inductor was down-sized.
+      **Follow-up 2026-10-05 (owner):** area still one mid-size part short, so (a) B-routable
+      logic parts (TPM, NOR-FLASH, SD-WB, 1553-XCVR, 1553-XFM, Tag-Connect land) may sit on
+      B.Cu under the band, and (b) J-ANT-RADIO / J-ANT-MLRS change from through-hole Molex MMCX
+      73415-1471 to Hirose U.FL-R-SMT-1(10) (KiCad library land; Hirose drawing to be archived;
+      the cable needs a tie-down/adhesive strain relief — U.FL is less vibration-tolerant than
+      MMCX). A smaller microSD socket was considered; the uploaded Molex 104031 documents are for
+      the current part, whose Ultra Librarian land saves only ~11 mm².
     - [ ] R4 Learning docs and CONCEPTS.md corrected.
 - [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
     APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift

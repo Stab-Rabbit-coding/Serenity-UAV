@@ -44,6 +44,7 @@ License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier
 from __future__ import annotations
 
 import math
+import random
 import os
 import re
 import sys
@@ -747,9 +748,16 @@ def main() -> None:
                 return par if par in fps and par not in FIXED and par != r else None
         return None
 
+    # what-if "seed": jitter the area order (+/-20 %) so a sweep can search orderings the
+    # strict largest-first rule never tries; committed boards are generated without it.
+    rng = random.Random(WHATIF["seed"]) if "seed" in WHATIF else None
+    jit = {r: (1.0 + rng.uniform(-0.2, 0.2)) if rng else 1.0 for r in sorted(fps)}
+
     def order_key(r: str) -> Tuple[float, int, float, str]:
         par = parent_of(r)
-        return (-area(fps[par]), 1, -area(fps[r]), r) if par else (-area(fps[r]), 0, 0.0, r)
+        if par:
+            return (-area(fps[par]) * jit[par], 1, -area(fps[r]) * jit[r], r)
+        return (-area(fps[r]) * jit[r], 0, 0.0, r)
 
     todo.sort(key=order_key)
     unplaced = []

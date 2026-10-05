@@ -1130,8 +1130,10 @@ SIMPLE: List[Any] = [
      [("1", "A", "MLRS_ANT_F"), ("2", "B", "GND")]),
     ("D-ANT-MLRS", "RCLAMP0502B", FP_RCLAMP, "RCLAMP0502BTCL", "RF ESD shunt, same flag as D-ANT-SIK originally carried",
      [("1", "A", "MLRS_ANT_F"), ("2", "K", "PGND")]),
-    ("J-ANT-MLRS", "MMCX vertical", FP_MMCX, "73415-1471",
-     "mLRS antenna jack — same vertical-MMCX board-area rationale as the WiFi/BT/802.15.4 jack",
+    ("J-ANT-MLRS", "U.FL", FP_USMD, "U.FL-R-SMT-1(10)",
+     "mLRS antenna jack — Hirose U.FL SMT (owner 2026-10-05: replaces the through-hole MMCX, whose "
+     "pins blocked both faces; KiCad library land, Hirose drawing to be archived; cable needs "
+     "a tie-down/adhesive strain relief)",
      [("1", "RF", "MLRS_ANT_F"), ("2", "SHIELD", "PGND")]),
     # FL-LORA / D-ANT-LORA / J-SMA-LORA (LoRa antenna filter/ESD/jack chain)
     # REMOVED 2026-09-20 along with LORA itself.
@@ -1159,7 +1161,8 @@ SIMPLE: List[Any] = [
     ("D-ANT-RADIO", "RCLAMP0502B", FP_RCLAMP, "RCLAMP0502BTCL", "RF ESD shunt, same flag as D-ANT-SIK — now the "
      "single shared WiFi/BT/802.15.4 antenna feed (was WiFi-only)",
      [("1", "A", "RADIO_ANT_F"), ("2", "K", "PGND")]),
-    ("J-ANT-RADIO", "MMCX vertical", FP_MMCX, "73415-1471",
+    ("J-ANT-RADIO", "U.FL", FP_USMD, "U.FL-R-SMT-1(10)",
+     "Hirose U.FL SMT (owner 2026-10-05, replaces through-hole MMCX 73415-1471). "
      "Shared WiFi/BT/802.15.4 antenna jack (SANT mode) — was WiFi-only J-SMA-WIFI; Type2EL's single "
      "ANT0 feed now serves all three radios, so XO drops from needing (at minimum) two antenna "
      "jacks/chains down to one",
