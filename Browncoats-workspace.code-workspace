@@ -26,6 +26,9 @@
 		},
 		{
 			"path": "../TidySweep"
+		},
+		{
+			"path": "../../../../Tradecraft/prototyping/Project-Management-skill-for-AI-Agents"
 		}
 	],
 	"settings": {
