@@ -2236,6 +2236,32 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             +1.10 mm; one in pod / one off +1.09 mm; both off-pod +0.23 mm; a
             hypothetical ESC at Z 90 would balance the servo (−0.06 mm), but there
             is no room for it.
+        - [ ] **NAC-64-ESC-80A.m — 70 A is sufficient (2026-10-05, Claude Opus
+            5.5; owner requirement 2135 gf per fan).** REF-EDF-003 2400 KV row: 22.2
+            V, 57.0 A, 1265.4 W, 2135 g. Static fan laws (T ∝ n², P ∝ n³; aero
+            skill propulsion §2): 2135 gf needs the same n and ≈ the same 1265 W
+            at any pack voltage, so I = 1265/V. That is 57.0 A at 22.2 V nominal
+            and 50.2 A at 25.2 V full. Below 22.2 V full throttle cannot reach
+            2135 gf, so 57 A is the requirement's ceiling. An uncapped full
+            throttle on a full pack would draw 57 × (25.2/22.2)² ≈ 73 A (≈2750 gf,
+            more than needed): that is the case behind the 80 A figure, which is
+            also the 2300 KV sheet's recommendation for a different winding.
+            **Decision basis: 70 A continuous rating with a 70 A firmware current
+            limit** (INA240 sense chain). 70/57 = 1.23 margin at the requirement.
+            The 60 A suggestion leaves 5 % and is overrun on a fresh pack.
+            One 0.5 mΩ shunt per phase now suffices (2.45 W < WSLP2512 3 W).
+            **Fit at 70 A**, with the servo keep-out and Z buffer: unscaled pod,
+            one ESC +9.4 mm, the other −15 to −20 mm. **Uniform enlargement
+            (owner-authorised): s = 1.06 (P64_K 1.21→1.283, P64_A 1.13→1.198;
+            duct, lip internal geometry and mount radius unchanged) passes:**
+            20 + 14 mm panels, two bays per ESC, A +12.96 mm (az 324/258), B
+            +18.1 mm (az 80/22), T_ch ≤ 65.6 °C, egress OK. s < 1.06 fails. The
+            logic bays at az 258/264 need the dorsal shroud's solid fill pocketed
+            forward of the servo buffer. HOLD on applying s to the pod:
+            `nozzle_servo_linkage_64.py` (Z_NOZ 187.86 and the servo stations),
+            `nacelle_mass_cg_64.py` (K/A) and the shroud generator are absolute
+            and in active work. The CG shown by the harness for scaled pods is not
+            valid until `nacelle_mass_cg_64.py` is re-run on a re-rendered pod.
         - [ ] **NAC-64-ESC-80A.l — existing pod conflict, independent of the 80 A
             boards:** `nacelle_pod_64mm_tandem.scad` still cuts an ESC bay at
             `ESC_BAY_AZ` 248 (port 292) and the stage-2 motor-lead slot at az

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-04",
+  "generated": "2026-10-05",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -15607,7 +15607,7 @@
       "archived": false
     },
     "tools/esc80_cooptimize.py": {
-      "description": "esc80_cooptimize.py \u2014 score one 80 A ESC + 64 mm nacelle bay design point.",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],

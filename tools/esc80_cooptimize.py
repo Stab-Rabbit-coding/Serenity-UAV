@@ -669,10 +669,18 @@ Z_MIN_V2 = 62.0 * P64_A + 3.0 / 2.0
 
 
 def main_v2(p) -> int:
-    global KEEPOUTS
+    global KEEPOUTS, P64_K, P64_A, LOOP_Z_MAX, Z_MAX
+    # Uniform nacelle enlargement (owner 2026-10-05): the canonical shell and
+    # every pod station scale by `nacelle_scale` about Z 0; the 64 mm duct and
+    # the board mount radius (bore + walls) do NOT scale.  Keep-out Z bands
+    # are pod stations, so they scale too.
+    s_n = p.get("nacelle_scale", 1.0)
+    P64_K, P64_A = 1.21 * s_n, 1.13 * s_n
+    Z_MAX = 160.0 * P64_A
+    LOOP_Z_MAX = (166.25 * 1.13 - 16.25) * s_n
     if "keepouts" in p:
-        KEEPOUTS = [tuple(k) for k in p["keepouts"]]
-    zs, skin = skin64(p.get("z_min", Z_MIN_V2))
+        KEEPOUTS = [(a0, a1, z0 * s_n, z1 * s_n) for a0, a1, z0, z1 in p["keepouts"]]
+    zs, skin = skin64(p.get("z_min", Z_MIN_V2 * s_n))
     if p.get("shroud_scad"):
         skin = merge_shroud(zs, skin, REPO / p["shroud_scad"])
     if p.get("measured_exclusions"):

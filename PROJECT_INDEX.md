@@ -6,7 +6,7 @@
      look, change the generator (tools/precommit_index.py), not this
      file. Machine-readable form: tools/index_tags.json -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last generated: 2026-10-04 -->
+<!-- Last generated: 2026-10-05 -->
 
 ## Tag Index
 
@@ -2140,7 +2140,7 @@ cargo_bay_envelope.py — Measure the cargo bay's usable interior envelope, and 
 cargo_layout_fit.py — cargo_layout_fit.py -- measure a proposed cargo-section equipment layout [build-tooling]
 compact_bom_entries.py — compact_bom_entries.py [bom, build-tooling]
 dorsal_shroud_resize_64.py — Resize the canonical dorsal shroud of the 64 mm nacelle to enclose the [build-tooling]
-esc80_cooptimize.py — esc80_cooptimize.py — score one 80 A ESC + 64 mm nacelle bay design point. [build-tooling]
+esc80_cooptimize.py — Python script [build-tooling]
 esc80_design.json — JSON data (23 top-level keys) [build-tooling]
 esc80_design_m2.json — JSON data (38 top-level keys) [build-tooling]
 eval_nozzle_drive_64.py — Measurement harness for the 64 mm nozzle-drive optimisation (ce-optimize). [build-tooling, propulsion]
