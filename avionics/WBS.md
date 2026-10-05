@@ -1,7 +1,7 @@
 # Serenity UAV — Avionics (Pilot / XO / Commo Cape Hardware) Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
@@ -70,6 +70,256 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     wasting the AM6254/AM62A7 native MAC. Native DP83825I / ADIN1300 / KSZ9477 path
     retained. If "reduce per-PHY glue on Pilot" resurfaces, the on-architecture answer
     is a managed KSZ9477/KSZ9567 switch, tracked as a separate trade — NOT USB.
+
+##### 1.2a.2 *Commo Rev T — standalone MCU bus node (approved 2026-09-29)*
+
+Owner decisions (2026-09-29, S. Griffing):
+
+- One unit per airframe, co-located with its antennas.
+- Isolated CAN-FD + RS-485 + MIL-STD-1553C RT.
+- No Ethernet.
+- SE instead of TPM.
+- Mass from the PCB roll-up.
+
+Sources: requirements in `docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md`;
+plan in `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`.
+
+Rev S cape items in `TODO.md` §1.2a.1 (Commo gerbers, SIK/ETH-PHY overlap DRC) are
+**superseded** by Rev T and should not be worked. The §15.235 pre-compliance item still applies
+to Rev T.
+
+- **Phase 0 — architecture paperwork**
+    - [x] Amend `avionics/AGENTS.md`: bus-topology 1553 exception, Commo re-classed as a
+        standalone node with an SE (2026-09-29).
+    - [x] Update root `AGENTS.md` §1 and §9 for single-Commo / bus-reachable radios
+        (2026-09-29).
+    - [x] Archive the Rev S cape snapshot to
+        `archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/`
+        and add it to `ARCHIVE_INDEX.md` (2026-09-29).
+- **Phase 1 — part selection** (datasheet-verified)
+    - [x] Confirm the MCU peripheral budget (2026-09-28). Result: MSPM0G351x-Q1 in VQFN-48 RGZ
+        fits (1 CAN-FD, 6 UART, 3 I²C, 2 SPI, 44 GPIO against about 30 needed). RHB-32 is too
+        small (28 GPIO). G3519 (512 KB) is recommended for dual-bank OTA headroom. Source: TI
+        SLASFA6B Table 5-1. Detail is in the plan's Phase 1 findings.
+    - [x] Owner sign-off: MCU = M0G3519QRGZRQ1 over G3518 (256 KB). Approved by
+        S. Griffing 2026-09-28.
+    - [ ] Choose 1553 coupling (direct 1:2.5 + 55 Ω, or transformer 1:1.79) once the antenna-site
+        stub length is known (Holt DS1573 p. 2).
+    - [x] Owner decision (S. Griffing, 2026-09-28): use a dedicated 1553 protocol engine
+        (option 2), not MCU-peripheral Manchester. **Candidate: Holt HI-6138** (BC/RT/MT,
+        40 MHz SPI host, on-chip dual-bus transceiver, 3.3 V, 48-pin 6×6 mm QFN or LQFP).
+        Holt's product page states "MIL-STD-1553B/C, MIL-STD-1760, SAE AS15531A and STANAG
+        3838 compliant" (holtic.com/products/3102-hi-6138.aspx, retrieved 2026-09-28).
+    - [x] HI-6138 datasheet on file (S. Griffing, 2026-09-28):
+        `avionics/datasheets/hi-6138_v-rev-s.pdf`, Holt DS6138 Rev S, dated October 2024.
+    - [x] Verify the HI-6138 against DS6138 Rev S (2026-09-28):
+        - **Magnetics:** Figure 28 (p. 255) uses a 1:2.5 isolation transformer for both
+          direct coupling (2 × 55 Ω) and transformer coupling (1:1.4 stub coupler +
+          2 × 52.5 Ω). The fleet's 1:2.5 PM-DB2791S therefore carries over; only the
+          coupler choice depends on stub length.
+        - **Host interface:** 40 MHz 4-wire SPI, modes 0 and 3.
+        - **Control pins:** IRQ is active low, with an ACKIRQ pulse of at least 250 ns in
+          level mode. MR is an active-low reset, minimum 50 ns.
+        - **Transceiver and supply:** dual-bus transceiver on-chip, so the HI-1573 is
+          dropped. Supply is 3.3 V (VCCP).
+    - [x] **1553C conformance resolved (2026-09-28).** DS6138 Rev S says only "1553B", but
+        MIL-STD-1553C (28 Feb 2018) is a document revision with no electrical or protocol
+        change from 1553B [REF-MIL-001]. A 1553B-compliant terminal therefore meets 1553C.
+        Holt's product-page "1553B/C" claim is consistent with this. The one C-specific
+        paragraph, §4.4.3.2 "Superseding valid commands", is a protocol behavior that the
+        HI-6138 RT logic handles. Confirm it during firmware bring-up.
+    - [x] Confirm the fleet isolated CAN-FD part (ISOW1044) and RS-485 part for reuse. Done
+        2026-09-29: ISOW1044BDFMR + **ISOW1412DFMR**, the fleet standard (the plan's ADM2795E is
+        corrected). See `avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md` §1.
+    - [x] Select the SE and check for an I²C address conflict with Si5351A. Done 2026-09-29:
+        OPTIGA Trust M at 0x30 vs. Si5351A at 0x60, so there is no conflict.
+    - [x] Define the power input rail and budget. Done 2026-09-29:
+        - Input is +5 V from the avionics bus.
+        - Logic 3.3 V comes from a TPS62933 buck, sized for the HI-6138's 695 mA max
+            transmit current (DS6138 §24.3).
+        - RF-analog 3.3 V comes from a TPS7A2033 LDO.
+        - Worst case is about 1.9 A at 5 V, a net reduction against two Rev S capes.
+    - [x] Select the Holt 1553C protocol engine. Done 2026-09-28: HI-6138, fleet part
+        (§1.2a.3).
+    - [x] RF-chain datasheet audit. Done 2026-09-29: the Rev S 49 MHz chain is miswired on the
+        Si5351A (9/10 pins), TCXO, PE4259, and MGA-82563, has no receive demodulator, and uses
+        three unbuildable packages (2N3866 SOT-89, MCP4921 SOT-23-8, LM393 SOT-23-5). See
+        `avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md` §3.
+    - [x] **49 MHz architecture decided (owner, 2026-09-29):** discrete receiver. The AX5043
+        single chip is discontinued (onsemi Rev 4, 2026-06-11), and so are the SA605, SA614A,
+        and SA636 FM-IF chips. Build an I/Q direct-conversion receiver with 2 × SA612A and an
+        Si5351B VCXO-FM transmitter with no PA. Plan:
+        `docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md`.
+    - [x] **Background single-chip search (Claude agent, 2026-09-29):**
+        `docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md`. No in-production
+        single chip with a modular grant exists. The best lead is the CML CMX994G receiver,
+        whose datasheet states operation "down to 50 MHz", so 49.86 MHz is unconfirmed.
+    - [ ] Ask CML in writing to confirm CMX994G performance at 49.86 MHz and its production
+        status (owner action).
+    - [ ] Budget full §15.235 certification for Commo. No modular-grant path exists.
+- **Phase 2 — schematic (Rev T)**
+    - [x] **49 MHz radio sheet designed (plan 2026-09-29-002 U2/U3, Claude Opus 5.5,
+        2026-09-29):**
+        - `avionics/kicad/Commo/kicads/Commo_radio.kicad_sch` has 79 parts. It is generated by
+            `scripts/gen_commo_radio_sch.py`, with values from
+            `scripts/commo_radio_design.py` (all checks pass).
+        - ERC: 0 errors, plus 3 expected sheet-boundary labels to the MCU.
+        - Design note: `avionics/kicad/Commo/COMMO_REVT_RF_DESIGN.md`.
+        - The Rev S chain is replaced, not ported (Phase 1 audit). The design also corrects
+            three more Rev S errors: nonexistent 0805HQ-101/-181 inductors, an SMAJ5.0A on the
+            RF port, and a 742792510 bead mis-specified as 600 Ω.
+    - [ ] Rev T top-level schematic (U1): MCU, HI-6138 1553C, ISOW1044, ISOW1412, OPTIGA,
+        power, SiK, SWD. Include the radio sheet. ERC clean.
+    - [ ] **Owner:** accept re-baselined RF current. The requirement was ≤ 15 mA; the design
+        draws 34 mA typical at 5 V while receiving, because of the Si5351B core, and the
+        rail is switched off by `RF_EN` when idle. Design note §4.
+    - [ ] **Owner:** set the 49 MHz channel list inside 49.82–49.90 MHz. 49.860 MHz is
+        provisional.
+    - [ ] **Owner:** confirm the antenna shell bonds to RF GND, not the PGND ring. Design
+        note §7.
+    - [ ] Bench-verify the design-note §7 items (inductor Q, SA612A OSC_E open, I/Q balance,
+        VCXO Kv and deviation, VC input). Set the TX pad at EMC test against §15.235
+        [REF-FCC-003].
+- **Phase 3 — layout**
+    - [ ] Outline to the antenna site; owner does manual placement; RF rules retained.
+    - [ ] Check the 1553 stub length; DRC clean; generate Gerbers.
+- **Phase 4 — integration**
+    - [ ] PCB mass roll-up, then update `airframe/README.md`, `docs/BATTERY_MOUNT.md`, and
+        W&B/CG.
+    - [ ] Fix the antenna-site station against the hull model and the emi-hardening separation
+        checks.
+    - [ ] Log firmware items in `avionics/firmware/WBS.md`: AFSK/AX.25, SiK bridge, PTT lease,
+        1553 RT map / BC schedule, SE signing / secure boot.
+
+##### 1.2a.3 *Fleet MIL-STD-1553C upgrade (approved 2026-09-28)*
+
+Owner decision (S. Griffing, 2026-09-28): upgrade the whole fleet from MIL-STD-1553B to
+MIL-STD-1553C. Today Pilot and TACCO use a Holt HI-1573 transceiver, which claims 1553A/B only
+(DS1573 Rev U p. 1), with Manchester II handled in the AM6254 PRU. The candidate
+replacement is the same protocol engine selected for Commo Rev T (§1.2a.2, HI-6138), so the
+fleet shares one 1553 part.
+
+**Finding 2026-09-28 [REF-MIL-001]:** 1553C is electrically identical to 1553B, so the capes'
+HI-1573 and PM-DB2791S already meet 1553C electrically. The swap to the HI-6138 is therefore
+**not required** for 1553C; it is justified by part commonality and by moving the protocol
+off the PRU. The only C-specific work is §4.4.3.2 (superseding valid commands) in the RT
+logic.
+
+**Owner decision (S. Griffing, 2026-09-28): make the fleet swap.** Pilot and TACCO move from
+HI-1573 + PRU Manchester to the HI-6138 on SPI, for one 1553 part fleet-wide and to take the
+protocol off the PRU. The PM-DB2791S (1:2.5) and 55 Ω isolation resistors carry over (DS6138
+Rev S Fig. 28 p. 255; [REF-MIL-001 §4.5.1.5.2.1]).
+
+Plan: `docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md` (Claude Opus 5.5,
+2026-09-28). Phases 1–4 are listed below; each lands as its own commit.
+
+- [x] **Phase 1 (U1):** HI-6138 footprint (custom, DS6138 §29), pin table, 50 MHz MCLK
+    oscillator, and courtyard area budget. Done 2026-09-28; see
+    `avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md`. Net courtyard change is −1.16 mm² per cape.
+- [x] **Phase 2 (U2):** Pilot schematic regenerate, PCB in-place patch, ERC/DRC gates.
+    Done 2026-09-28:
+    - ERC: 0.
+    - DRC: 0 violations, 0 schematic-parity issues. Unconnected pads went 388 → 390;
+      routing is still open.
+    - `1553-XCVR` kept its position and side; only the 4 new parts were added
+      (`avionics/kicad/tools/swap_1553_hi6138.py`).
+- [x] **Phase 3 (U3):** TACCO schematic regenerate, PCB in-place patch, ERC/DRC gates.
+    Done 2026-09-28:
+    - **Generator drift fixed first.** `gen_tacco_sch.py` still wrote the pre-rename
+        `XO` library, and one datasheet string was stale. After the fix its output matches
+        the committed netlist exactly (0 component and 0 pin-to-net differences).
+    - **Gates:** ERC 0. DRC 169, equal to the pre-change baseline of 169 (no new
+        violations), with 0 schematic-parity issues. Unconnected pads went 480 → 482.
+    - **Placement:** `1553-XCVR` swapped in place.
+- [ ] **TACCO manual placement (owner):** `X-50M`, `C-50M`, `C-1553D`, and `R-1553IRQ` are
+    parked off-board at the right edge. No collision-free site exists within 20 mm of
+    the HI-6138 on either side of the board (TACCO area crisis; see memory
+    project_xo_board_area_crisis). Options:
+    - Free area as the 2026-09-20 area analysis proposes.
+    - Drop `R-1553IRQ` in favor of the AM62x internal pull-up on P1-7, a firmware
+        pinmux change.
+    - Accept a 6-layer or denser-passive respin.
+- [x] **Phase 4 (U4):** DTS (both capes), firmware WBS, Pilot.md, TACCO.md, HDD, and 1553C
+    documentation. Done 2026-09-28:
+    - **DTS:** PRU0 1553 disabled. The HI-6138 is an SPI child using a GPIO chip-select,
+        IRQ, reset, and TXINH. Both DTS files pass a stub-header `cpp`/`dtc` syntax check;
+        no kernel headers are available here for a real build.
+    - **Firmware WBS:** retargeted to an HI-6138 driver, with a §4.4.3.2 conformance test
+        and a response-time test.
+    - **Docs:** REF-MIL-001 "Used in" list updated. `HDD.md` is marked for regeneration.
+- [ ] **Pinmux verification:** the P1-7/8/9/20 GPIO numbers and pad offsets in both DTS
+    files are carried over as `[ESTIMATE]`. Check them against the PB2 pin map / SPRUJ40.
+- [ ] **TACCO DTS drift (pre-existing, found 2026-09-28):** the DTS names the SPI
+    controller `main_spi1` and still lists the retired RFM95W, RFD900x, and WL1837, while
+    the schematic uses SPI0_B with the TPM, flash, ZigBee, and HI-6138. Reconcile the DTS
+    with `gen_tacco_sch.py`.
+- [x] Add MIL-STD-1553C to `REFERENCES.md` (REF-MIL-001 rebuilt against the ASSIST text,
+    2026-09-28).
+- [x] **Footprint and space budget first. Both capes are space-critical (owner, 2026-09-28).**
+    *Closed 2026-09-28 by Phase 1 (U1).*
+    Findings from 2026-09-28:
+    - **Current part:** `1553-XCVR` is HI-1573 in `QFN-44-1EP_7x7mm_P0.5mm_EP5.2x5.2mm` on
+        B.Cu. Pilot has it at (142.5, 98.5), rotated −90°; TACCO at (142.86, 111.49).
+    - **Replacement:** HI-6138PC* is a 48-pin QFN, 6.000 × 6.000 mm BSC, 0.40 mm pitch.
+        Exposed pad 4.700 ± 0.050 mm, electrically isolated. Leads are 0.200 mm wide and
+        0.400 ± 0.050 mm long (DS6138 Rev S §29, p. 263).
+    - **Body area:** drops from 49 mm² to 36 mm², so the part fits inside the existing
+        courtyard. The PQFP option (9 × 9 mm body) is rejected as larger.
+    - **No stock KiCad match.** The closest stock footprint is
+        `QFN-48-1EP_6x6mm_P0.4mm_EP4.66x4.66mm`. Author and verify a custom footprint in the
+        SecureControllers library against DS6138 §29, following
+        `docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md`.
+    - **Routing:** 0.40 mm pitch is finer than today's 0.5 mm, so check the fab's minimum
+        clearance and solder-mask web.
+    - **Extra parts cost area.** The part needs SPI (4 lines), IRQ, and MR to the host.
+        Mode and configuration pins need tie-offs; count those strap resistors against the
+        freed area before layout. The HI-1573's separate VDDA/VDDB decoupling (C-1553A/B/C)
+        gets re-derived from the HI-6138 supply pins.
+- [x] *(Closed 2026-09-28 by Phase 2.)* Pilot: replace HI-1573 with the protocol engine on a PB2 SPI port. Confirm a free SPI
+    chip-select and IRQ on P1/P2. Update `Pilot.md` (1553B → 1553C) and the magnetics if
+    the ratio changes.
+- [x] TACCO: same change as Pilot. *(Closed 2026-09-28 by Phase 3; placement is a separate open item above.)* Update `TACCO.md` and `reports/HDD.md`.
+- [x] *(Closed 2026-09-28 by Phase 4; driver work itself is open in `avionics/firmware/WBS.md`.)* Firmware: replace the PRU-ICSS Manchester RT task (`avionics/firmware/WBS.md`
+    "MIL-STD-1553B RT implementation") with an SPI protocol-engine driver. Retire the
+    PRU0 1553 pinmux in the DT overlays.
+- [ ] Docs sweep: change remaining "1553B" statements to 1553C once the hardware matches.
+    Status on 2026-09-28: the board docs, DTS, firmware WBS, and REFERENCES are done. About
+    470 mentions remain in other active files. Many are legitimate and must not be changed:
+    history, archived DTS, and TACCO's `M1553B_*` cape-B net names. Sweep file by file.
+    `avionics/AGENTS.md` already states 1553C.
+
+##### 1.2a.4 *TACCO DRC backlog — 140 hard violations (opened 2026-09-29)*
+
+This is a standalone backlog, separate from the 1553C swap (§1.2a.3) and Commo Rev T (§1.2a.2).
+`tools/validate_kicad.py` (KiCad 9.0.9, CI "KiCad Validation") reports
+**140 hard / 29 soft** DRC findings on `avionics/kicad/TACCO/kicads/TACCO.kicad_pcb`. PR #220
+(merged 2026-09-29) surfaced them when it first touched TACCO. Most of the nets involved are
+outside the 1553 area, so this looks like pre-existing layout debt. That is not proven: no
+before/after run on the pre-swap board has been done.
+
+**Findings by class** (CI log, run 36569510415, 2026-09-29):
+
+| DRC rule | Approx. count | Notable nets / areas |
+| --- | --- | --- |
+| `solder_mask_bridge` | ~55 | Front and rear mask apertures bridging different nets |
+| `shorting_items` | ~45 | RMII0_* ↔ +3V3_RF; PHY1_RSTN / MDIO0 / MDC0 / ETHB_TX± / +3V3 ↔ +5V_IN; PGND ↔ GND2_RS485B / VCC2_RS485B / SD_CD / GND / +3V3_RF; RF_SW1 ↔ TPM_B_* / SPI0_B_* / +3V3 / GND; RADIO_ANT_F ↔ RS485B iso rails; SDIO_CMD ↔ UART_WIOE5_TX_F; WIOE5_BOOT_BTN ↔ WIOE5_SWCLK; GND2_CANB ↔ GND; +3V3 ↔ +5V; FAN_PWM_B ↔ GND / +3V3 |
+| `clearance` | ~25 | POWER / ISOLATION / Default netclasses, down to 0.000 mm |
+| `courtyards_overlap` | 11 | — |
+| `items_not_allowed` | 1 | Keepout "isolation keepout inner" |
+
+The shorts across isolation domains (PGND and RADIO_ANT_F to the RS485B isolated rails, and
+GND2_CANB to GND) break the 5 kV galvanic isolation requirement. They must be fixed, not waived.
+
+- [ ] Run the before/after DRC comparison (pre-§1.2a.3 TACCO vs. current) to separate existing
+      debt from anything the HI-6138 swap introduced.
+- [ ] **Owner:** footprint repositioning for the courtyard overlaps and placement-driven shorts
+      (`avionics/AGENTS.md`: repositioning is referred to the owner).
+- [ ] Clear the isolation-domain shorts (PGND, GND2_*, VCC2_* and RADIO_ANT_F crossings) and
+      the keepout intrusion.
+- [ ] Clear the remaining shorts, clearance and solder-mask-bridge findings (routing, via and
+      mask edits).
+- [ ] Re-run `tools/validate_kicad.py` until it reports 0 hard violations on TACCO, and document
+      any accepted residuals with rule and reason.
 
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 
@@ -146,8 +396,11 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     pair) to select SBUS vs. plain UART framing on the existing J_SBUS-equivalent
     pad, matching the J_SBUS line item already in Pilot.md §14's field-connector
     table (§1.2, "Reconcile Pilot.md §14...").
-- [ ] **Generate Pilot gerbers** — superseded by the 2026-09-19 schematic-first Rev T
-    rebuild (`avionics/kicad/Pilot/Pilot.md`; `Pilot.kicad_pcb` no longer exists).
+- [ ] **Generate Pilot gerbers** — the 2026-09-19 schematic-first Rev T
+    rebuild (`avionics/kicad/Pilot/Pilot.md`) superseded the pre-Rev-T design. **Correction
+    2026-09-27: `Pilot.kicad_pcb` was re-checked and does exist** (538 KB, current) — the
+    "no longer exists" claim below was stale/wrong, not a description of a real gap; the file
+    was simply regenerated under the same name, not deleted.
     Rev T is fully generated (`gen_pilot_sch.py`/`gen_pilot_footprints.py`/
     `gen_pilot_pcb.py`), datasheet-verified, 6-layer, ERC 0 / DRC 0 at 0%
     routed (388 connections). Two freerouting attempts via the Specctra bridge
@@ -159,9 +412,13 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     isolation-domain `ISO_BAND` rule, unlike the batch Specctra round-trip),
     then `bash scripts/export_pilot_gerbers.sh`.
     - **BLOCKS Pilot fab order**
-- [ ] **Generate XO gerbers** — `TACCOcad_pcb` complete; same DRC + export procedure;
-    export to `avionics/kicad/gerbers/TACCO/`.
-    - **BLOCKS XO fab order**
+- [ ] **Generate XO/TACCO gerbers** — a `gerbers/TACCO/` set exists but its embedded
+    `G04 ... date` line reads 2026-06-04, predating the 2026-09-20 schematic-first rebuild,
+    the WIOE5/mLRS radio swap, and the Type2EL Wi-Fi/BT/Zigbee consolidation — confirmed
+    stale (2026-09-27, checked embedded date, not filesystem mtime which just reflects
+    checkout time). Regenerate against the current `TACCO.kicad_pcb` once routing/DRC
+    closeout (§1.10 U7) is done.
+    - **BLOCKS TACCO fab order**
 
 - [x] remove Wi-Fi, sik, and loRa antennas from XO. Use filtered chokes on rf lines to route all
     RF signals from antennas to Wi-Fi, lora, zigbee,and sik xcvr circuits on XO, and/or use uart
@@ -173,16 +430,17 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - [x] **Re-evaluate space / restore Ethernet to XO** — One DP83825I EMI-hardened PHY
     added to XO at Rev R (introduced Rev Q); J_ETH_B connector populated. Board has adequate
     space; RF SMA connectors remain. *(done 2026-06-07)*
-- [ ] **Zigbee RF chain was never actually added to XO — PCB scope gap (flagged 2026-06-22,
-    cross-ref §1.4.2).** The "remove Wi-Fi, sik, and loRa antennas" item above (2026-06-05)
-    names Zigbee as a target XCVR circuit, but only LoRa/SiK/Wi-Fi filter chains were built;
-    `XO.kicad_sch` has no CC2652R7 (or equivalent Zigbee SoC), no Zigbee antenna filter, and
-    no SMA/diplexer pad. `CLAUDE.md` lists Zigbee 2.4 GHz as one of the 4 required external
-    C2 links — this is a real hardware gap, not yet scheduled to a revision. **Antenna
-    strategy already decided (§1.4.2, 2026-06-22):** restrict WL1837MOD Wi-Fi to 5 GHz only
-    and feed CC2652R7's 2.4 GHz path through a passive 2.4/5 GHz diplexer onto the existing
-    shared Wi-Fi antenna (no separate Zigbee antenna/SMA pad needed). Still open: add
-    CC2652R7 + diplexer to a TACCO schematic revision; decide which bay(s) carry it.
+- [x] **Zigbee RF chain gap (flagged 2026-06-22, cross-ref §1.4.2) — CLOSED, not via the
+    CC2652R7+diplexer route this item originally specified.** Reconciled 2026-09-27: the
+    2026-09-21 Murata Type2EL swap (see below, "XO WiFi/BT + Zigbee consolidated onto one
+    module") closed this same gap by a different, owner-directed path — replacing WL1837MOD
+    with an NXP IW612-based module (Murata Type2EL / LBES5PL2EL-923) that natively adds IEEE
+    802.15.4 (Zigbee) on the existing shared antenna, instead of adding a discrete CC2652R7 +
+    diplexer as originally planned here. Verified against `TACCO.kicad_sch`/`.kicad_pcb`: no
+    CC2652R7, but 15 schematic + 5 PCB references to the Type2EL module including its
+    `Murata_Type2EL_LGA107` footprint. This checkbox and the "XO WiFi/BT + Zigbee consolidated"
+    entry were tracking the same fact from two different checklist entries; closing this one
+    as a duplicate rather than re-doing the CC2652R7 design.
 - [x] **REJECTED (2026-09-20): mLRS as XO's SiK radio-link protocol.** Considered during the
     XO board-area rebuild (via `ce-ideate`) as a possible replacement for the RFD900ux-SMT SiK
     channel. XO's and Commo's radio links provide **redundant multiband connectivity between
@@ -197,8 +455,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     would have made XO's board-area crisis worse, not better. Kept for the record per the
     project's "explicit rejection with reasons" ideation discipline — do not re-propose mLRS for
     XO or any other node carrying a LoRa link elsewhere in the fleet.
-- [ ] **APPROVED DIRECTION (2026-09-21, supersedes the same-day initial
-    rejection below): relocate SiK (RFD900ux-SMT) from XO to Commo, remove
+- [x] **DONE (approved 2026-09-21, implemented and verified 2026-09-27): relocate SiK (RFD900ux-SMT) from XO to Commo, remove
     Commo's LoRa (RFM95W).**
 
     **Radio swap at a glance (unambiguous summary — both boards changed radios,
@@ -351,6 +608,17 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     ETH-PHY/T-ETH or re-siting SIK's neighbors — is still needed before
     Commo's PCB is fab-ready; flagging for the owner's hand-placement
     pass, per the same convention already accepted for XO's own PCB.**
+    - **Re-verified 2026-09-27 against the actual PCB coordinates** (no kicad-cli in this
+      environment, so by footprint position + courtyard size rather than a live DRC run):
+      SIK (anchor 120, 117.5) sits 27–28.5 mm away from ETH-PHY (148.5, 123.5) and T-ETH
+      (147, 108.5), well clear of any plausible bounding-box overlap even at SIK's full
+      21×29 mm courtyard. The specific "SIK's GND thermal pad and edge pads still partially
+      overlap ETH-PHY's/T-ETH's back-layer footprints" claim above looks stale/overstated —
+      geometry does not currently support it. The 93/262 DRC-violation counts themselves
+      could not be reproduced from static text either way. **Recommend the owner re-run
+      `kicad-cli pcb drc --schematic-parity` on Commo before relying on this paragraph's
+      numbers**; leaving this item open pending that confirmation rather than closing it
+      on unverified figures.
 - [x] **REJECTED (2026-09-21, initial pass, superseded above): swap XO's SiK
     (RFD900ux-SMT) with Commo's LoRa (RFM95W) between boards** on three
     findings — footprint asymmetry (RFD900ux-SMT's 666 mm^2 courtyard vs
@@ -366,8 +634,11 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     turned out the one load-bearing finding (footprint) didn't hold once
     verified against Commo's actual PCB instead of a generic estimate.
 
-- [ ] **Generate Commo gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
-    `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
+- [x] **SUPERSEDED 2026-09-29 by Rev T (§1.2a.2) — Generate Commo gerbers** — a gerbers/`XCVR-49MHZ-2` set exists but its embedded
+    `CreationDate` (2026-06-04) and the PCB's own title-block date (2026-06-03) both predate
+    the 2026-09-21 LoRa→SiK radio swap — confirmed stale (2026-09-27). Regenerate against
+    the current `Commo.kicad_pcb` once the floorplan rework above and DRC closeout (§1.10 U7)
+    are done.
     - **BLOCKS Commo fab order**
 - [ ] **FCC Part 15 §15.235 pre-compliance checklist for Commo** — document field strength
     (≤10,000 µV/m at 3 m per §15.235(a), ≈30 µW / −15.2 dBm EIRP-equivalent — requires firmware
@@ -417,77 +688,40 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ---
 
-### Pilot footprint verification and schematic-first rebuild (2026-07-13/14)
+### Pilot footprint verification and schematic-first rebuild (2026-07-13/14) — SUPERSEDED
 
-- [ ] **Rebuild the 7 non-manufacturable Pilot footprints before fab** — *(the
-    verification itself was DONE 2026-07-13, Claude Opus 4.8; the item is re-titled
-    2026-09-15 to name the open work, per the never-leave-a-resolved-item-unchecked
-    rule.)* Full report:
-    `avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md`. Fixing any of these remaps
-    pin→net on flight hardware, so each needs the confirmed schematic pinout first (ERC
-    is not clean — see below) and MUST NOT be guessed.
-    - [ ] **CAN-TR (ISOW1044BDFMR): wrong land — has 16-pad `SOIC-16W`, part is a
-        20-pin DFM (SOIC-20 land).** Datasheet `isow1044.pdf` §7 / Fig 7-1. (This is the
-        fleet-wide ISOW1044 footprint error; confirmed present on Pilot.)
-    - [ ] **TPM (SLB9672): wrong land — has `QFN-32 4×4 P0.4mm EP2.65`, part is UQFN-32
-        0.5 mm pitch, 5×5 body, EP 3.6×3.6.** Datasheet `SLB_9672XU20_Infineon.pdf` p.9/11.
-    - [ ] **ETH1-PHY / ETH2-PHY (ADIN1300BCPZ): wrong land — has `QFN-48 7×7`, part is
-        40-lead LFCSP 6×6 mm (CP-40-26) w/ EP.** Datasheet `adin1300.pdf`.
-    - [ ] **RS485 (ADM2795EBRWZ): wrong land — has 20-pad `SOIC-20W`, part is 16-lead
-        SOIC_W (RW-16).** Datasheet `adm2795e.pdf` Tables 3/4/7. (Also fix `Pilot.md` §3.)
-    - [ ] **BARO (BMP388): wrong land — has 8-pad `LGA-8 2.0×2.5`, part is 10-pin metal-lid
-        LGA 2.0×2.0 mm.** Datasheet `bst-bmp388-ds001.pdf`.
-    - [ ] **GPS (SAM-M10Q-00B): placeholder `Package` (2-pad blob) — author real u-blox
-        SAM-M10Q LGA module footprint.** Datasheet `SAM-M10Q_DataSheet_UBX-22013293.pdf` §3.1.
-    - [ ] **1553-XFM (SM-1553-11): placeholder `Package` (2-pad blob) — author real SM1553
-        transformer footprint. NOTE: SM1553 series is THROUGH-HOLE** (adds THT pads/drills
-        vs current SMD stub). Datasheet `SM1553-Series...RevD.pdf`.
-    - [ ] **U-ISO-RX / U-ISO-TX net mapping is non-functional (ISO6442) — land pattern is
-        FINE, the wiring is not.** Part resolved 2026-07-13: ISO7642FDWRR is EOL, TI
-        replacement is **ISO6442** (drop-in: DW-16 / SOIC-16W, 2-forward/2-reverse,
-        pin-compatible — `iso6442.pdf`), so the `SOIC-16W` land is correct. BUT checked
-        against ISO6442 Table 5-1: (a) power/gnd pins carry signals (pin 2 `GND1`=RMII0_RXD0;
-        U-ISO-TX pin 2 `GND1`=RMII0_REF_CLK) — won't power up; (b) every channel is shorted
-        across the barrier (same net on side-1 input AND side-2 output pin) — no isolation;
-        (c) 50 MHz RMII `REF_CLK` through a general-purpose digital isolator is unworkable.
-        The ETH-isolation subcircuit must be re-architected + re-netted (schematic-first),
-        and the BOM/`Pilot.md`/`REFERENCES.md` strings changed ISO7642FDWRR → ISO6442.
-    - [ ] **Remaining part-number gaps (land OK, part unconfirmed):** (a) X2Y 4.7 nF caps
-        (`X2Y_Cap_4T_0402`) — no mfr P/N supplied; (b) Molex Nano-Fit 4P (PWR-IN) — no
-        datasheet supplied. *(JST GH 4P/3P connectors VERIFIED CORRECT vs `eGH.pdf` — GH
-        1.25 mm pitch, SM0xB-GHS-TB — no action.)*
-    - [ ] **Rewrite `Pilot.md` §§1–3 to the as-built architecture** — board uses ADIN1300 +
-        Würth 749010012A + ISO7642 + ADM2795E(RW-16); `Pilot.md` still documents a stale
-        DP83825I + HX1188NL + TPS62933 design that is not on the PCB.
-    - [ ] **Verified CORRECT (no action):** DS26LV31, DS26LV32, ICM-42688-P, PCA9555DB,
-        SMAJ33CA, PRTR5V0U2X, SRF2012-100Y, 742792512, PB2 P1/P2 sockets, SERVO-PWM header.
-- [ ] **Pilot SCHEMATIC-FIRST REBUILD — decided + started 2026-07-14 (user).**
-    Verification proved the schematic (`Pilot.kicad_sch`) and PCB are *different designs*
-    (schematic = DP83825I + HX1188NL + TPS62933; PCB = ADIN1300 + 749010012A + ISO6442),
-    and that net→pin maps are wrong on multiple parts (TPM signals on NC/VDD/GND pins;
-    ISO6442 channels shorted). Fixing the PCB alone would re-create the Commo/XO sch↔pcb
-    divergence, so the rebuild is **schematic-first** (user choice). **Ethernet PHY =
-    ADIN1300** (the EMI-hardening rework moved to ADI's industrial PHY; it's on the PCB and
-    is the datasheet on hand) — `Pilot.md`/schematic DP83825I baseline is superseded.
-    Auditable generator: `avionics/kicad/Pilot/scripts/gen_wash_sch.py`, datasheet-accurate
-    full-pinout symbols → `kicads/Wash_rebuild.kicad_sch` (loads in kicad-cli 9.0.2; ERC
-    only expected off-sheet-global warnings).
-    - [x] Core isolated-bus + security + GPS ICs authored with full datasheet pinouts:
-        **CAN-TR (ISOW1044, 20-pin), RS485 (ADM2795E, 16-pin RW-16), TPM (SLB9672, 32-pin
-        correct 17–24 SPI map), GPS (SAM-M10Q, 16-pin).**
-    - [ ] Author ETH section on **ADIN1300** (40-LFCSP) + Würth 749010012A magnetics +
-        ISO6442 — redesign the RMII isolation (current scheme shorts the barrier / 50 MHz
-        REF_CLK through a digital isolator is unworkable).
-    - [ ] Add remaining ICs: 1553 (DS26LV31/32 + SM1553 xfmr), IMU (ICM-42688-P), baro
-        (BMP388, 10-pin), compass (MMC5983MA/QMC5883L), INA226, PCA9555, 74LVC1G14.
-    - [ ] Add PB2-P1/P2 (2×36) SoC headers + connectors + passives (TVS/CMC/X2Y-Syfer-0805/
-        Nano-Fit); tie the off-sheet global labels; drive GND/power (PWR_FLAG) to clear ERC.
-    - [ ] Associate corrected footprints (per PILOT_FOOTPRINT_VERIFICATION.md) to each symbol;
-        regenerate/re-sync the PCB; ERC + DRC --schematic-parity to zero.
-    - [ ] Once approved, promote `Wash_rebuild.kicad_sch` → `Pilot.kicad_sch` (archive old).
-- [x] **Finish Pilot PCB (CAPE-A-2) close-out pass** — *duplicate of the §1.2a entry
-    above (identical four sub-items), consolidated 2026-09-15; the §1.2a copy is the
-    live one.*
+**Closed out 2026-09-27.** Everything below this heading described the pre-Rev-T Pilot design
+(schematic = stale DP83825I baseline, PCB = ADIN1300/ISO6442 with broken net↔pin mapping). The
+"Pilot SCHEMATIC-FIRST REBUILD" it called for actually landed as **Rev T (2026-09-19)** —
+verified 2026-09-27 directly against the current `Pilot.kicad_sch`/`.kicad_pcb`: the file is
+already named `Pilot.kicad_sch` (the promote-from-`Wash_rebuild.kicad_sch` step is done), and
+every part this section asked for is present with a real footprint:
+
+- [x] TPM SLB9672: now `QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm` (matches spec exactly).
+- [x] BARO BMP388: now `Bosch_BMP388_LGA-10_2x2mm` (matches spec exactly).
+- [x] GPS: part changed to **MAX-M10S** (Rev T, external-antenna requirement) with a real
+    `ublox_MAX` land pattern — moot rather than fixed in place, but the "2-pad blob" problem
+    no longer exists.
+- [x] ETH PHY: part changed to **DP83825I** (`Texas_RMQ0024A_WQFN-24-1EP_3x3mm`) — ADIN1300
+    was dropped, so the ADIN1300 LFCSP-40 footprint fix is moot.
+- [x] RS485: part changed to **ISOW1412DFMR** (fleet standardization) — ADM2795E was dropped,
+    so its SOIC-16W footprint fix is moot.
+- [x] 1553 transformer: part changed to **Premier Magnetics PM-DB2791S** (SMD), footprint
+    `Xfmr_1553_SMD_0.40in_8pin` — SM-1553-11/THT is no longer the part; **not independently
+    re-verified against the PM-DB2791S datasheet that SMD is the correct package for that
+    specific part** (flagged, not re-checked here).
+- [x] U-ISO-RX/TX ISO6442 net-mapping bug: **moot** — ISO6442 and the whole non-isolated ETH
+    subcircuit it wired were dropped along with ADIN1300; Rev T's ETH isolation is a different
+    design.
+- [x] "Rewrite Pilot.md §§1-3 to as-built": done as part of Rev T's own doc rewrite.
+- [ ] **CAN-TR/RS485 land pattern still genuinely unconfirmed.** Both ISOW1044 (CAN) and
+    ISOW1412 (RS485) now use `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm` — the pin count (20) is
+    now right (fixes the old 16-pad error), but this is a generic wide-SOIC land, not confirmed
+    against either datasheet's specific "DFM" package outline/pitch. **Needs a datasheet
+    land-pattern check before fab** — genuinely open, not closed by the rebuild.
+- [x] X2Y caps / Molex Nano-Fit / JST GH part-number gaps: superseded — Rev T's BOM is a
+    different part list; re-verify against Rev T's own BOM if/when it's assembled, not against
+    this now-obsolete gap list.
 
 ### §1.9.3 — Trust-Module MCU/TPM Retarget (MSPM0G351x-Q1 + SLB 9672), 2026-08-03
 
@@ -544,11 +778,16 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
       (SLAAE76E Table 1-1).
 - [ ] **Add thermal vias under the MCU exposed pad.** Only gateway U1_1 has any (3);
       U1_2 and Observer U3 have none. TI requires the pad be soldered to a board thermal pad
-      and recommends the 3×3 via pattern in the land-pattern drawing.
-- [ ] **Resolve FlightEngineer's ground-net naming.** FlightEngineer's board ground carries the name
-      `CM2_OUT_N` (108 nodes, including every MCU/TPM ground pin), i.e. a current-monitor
-      output label is shorted into, or mis-merged with, `PGND`. Pre-existing; not introduced
-      by this retarget.
+      and recommends the 3×3 via pattern in the land-pattern drawing. *(Re-confirmed 2026-09-27
+      by coordinate-matching all 165 vias in `CAN-PERIPH-GW-1.kicad_pcb`: 3 within 3mm of
+      U1_1, 0 within 3mm of U1_2 — still exactly as stated.)*
+- [x] **FlightEngineer's ground-net naming — CLOSED, no longer reproduces (verified 2026-09-27).**
+      Re-checked directly against `FlightEngineer.kicad_sch`/`.kicad_pcb`/`.net`: zero occurrences
+      of `CM2_OUT_N` anywhere in any of the three files. The board ground net is cleanly named
+      `PGND` (~20 occurrences). A separate `S_CM2` current-monitor symbol exists but is not
+      merged into the ground net. Either this was fixed in a later pass without closing the
+      item, or the original finding didn't hold against the current files — either way, closing
+      rather than re-doing a fix that's already reflected on disk.
 - [ ] **Clean up FlightEngineer's dangling no-connect flags.** The retarget left ~30 `no_connect`
       markers that no longer sit on a pin (ERC warnings only; error count is unchanged at 0).
 - [ ] **Close the Observer sch↔pcb parity gap.** `RS485_DE`, `RS485_TX` and `RS485_RX` exist on
@@ -557,8 +796,13 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] **Place gateway lanes 3 and 4.** `U1_3`/`U1_4` and `U2_3`/`U2_4` exist in the
       schematic but are not on the PCB, so only two of the four tiled lanes were retargeted
       on the board.
-- [ ] **Decide whether Commo, Pilot and XO (formerly Emma, Wash, Zoë) follow to the SLB 9672.** They still carry the
-      SLB9670; this retarget deliberately did not touch them.
+- [x] **Commo, Pilot and TACCO (formerly Emma, Wash, XO) follow to the SLB 9672 — DONE,
+      verified 2026-09-27.** All three now instantiate `SLB9672XU20`/`SLB 9672AU2.0` in both
+      schematic and PCB with zero remaining `SLB9670` references anywhere in any of the six
+      files checked (Pilot, TACCO, Commo × sch + pcb). This happened as part of each board's
+      own later rebuild/rework (Pilot's Rev T schematic-first rebuild 2026-09-19, TACCO's
+      2026-09-20 rebuild, Commo's 2026-09-21 radio swap), not as a dedicated follow-up to this
+      item — closing it as accomplished rather than re-tasking work already done.
 
 ## §1.10 — Avionics close-out plan (2026-08-25-001), unit index
 
@@ -619,7 +863,7 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
             [REF-SENSOR-028]. Generator-owned schematics (gen_*_sch.py) will drop
             the stamp on regeneration -- re-run the tool after any regen.
         - [ ] U7.1g — Catalogue the remaining uncited-but-used IDs
-            REF-SENSOR-020/021/024/031/032/034/035/036 (022-040 subset except these done
+            REF-SENSOR-024/031/032/034/035/036 (020/021 catalogued on main 2026-09-29; 022-040 subset done
             2026-09-26); ICM-42688-P, PM-DB2791S, HI-1573, SLB 9672 public
             URLs require verification.
         - [x] U7.1e — TLV62569 FB/PG swap (gateway, Observer) and 3-pad SOT-23
@@ -693,8 +937,13 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
     - [ ] **U7.4** — ERC 0 and DRC 0 (errors + warnings) on all seven boards.
     - [ ] **U7.5** — Route remaining unrouted connections per board; gerbers.
     - [ ] **U7.6** — Per-board README / HDD (kidoc) + WBS/TODO status refresh.
-- [ ] **U8** — Pilot tamper-mesh creepage fix (13 DRC, 0.125 mm vs 8 mm; fab blocker)
-    and Faraday cage / shielded-harness spec. ★
+- [ ] **U8** — Faraday cage / shielded-harness spec (still open). **Tamper-mesh creepage fix
+    reframed 2026-09-27:** Rev T's own "Known gaps" note says the anti-tamper mesh was **not
+    carried forward at all** in the rebuild — the "13 DRC violations, 0.125 mm vs 8 mm" figure
+    described the old per-domain mesh on the now-superseded schematic/PCB and no longer applies
+    to a mesh that doesn't exist on the current board. This is now an open **owner decision**
+    (re-add the mesh to Rev T and re-fix the creepage violation, or accept Rev T without it) —
+    not a numeric DRC fix to chase. ★
 - [ ] **U9** — REFERENCES.md, WBS/TODO and `avionics/AGENTS.md` closeout for U1–U8.
 
 ## §1.8 — Names
@@ -899,7 +1148,11 @@ REFERENCES.md Removed/Superseded Citations).
     `kicad-cli pcb drc` on Observer, Commo, Flight Engineer,
     CAN-PERIPH-GW-1, Pilot, and XO and compare against the violation counts
     already recorded in this file to confirm the rename introduced no new
-    errors.
+    errors. *(Partial re-check 2026-09-27, static text only — no kicad-cli in this
+    environment either: Pilot, TACCO and Commo's current schematics/PCBs all show SLB9672
+    consistently with zero remaining SLB9670 references — see §1.9.3's "Commo, Pilot and
+    TACCO follow to the SLB 9672" item above. A live ERC/DRC run across all six boards is
+    still the only way to close this item for real.)*
 - [ ] **★ SLB9672 → OPTIGA™ Trust M, `CAN-PERIPH-GW-1` + Flight Engineer only
     (added 2026-08-06), not started.** At the user's direction, citing the
     SLB9672's TPM-2.0 startup/self-test sequence as a boot-latency concern
@@ -1018,27 +1271,18 @@ REFERENCES.md Removed/Superseded Citations).
     dedicated `J_TPM` header (and its unplaced-header open item) is
     removed from both the schematic and `inject_commo_tpm.py`. ERC/DRC 0
     hard after the rewire. Routing TPM/R/C to these nets is still open.
-- [ ] **Pilot: `PB2-P2` header appears fully unwired in ERC (all 36 pins,
-    2026-07-26 finding) — root cause not found.** WBS history (§1.2a.1)
-    records ETH2/`PB2-P2` wiring as completed work, but current ERC shows
-    every `PB2-P2` pin as `pin_not_connected`, and `kicad-cli sch export
-    netlist` confirms zero nets reference `PB2-P2` at all. The nearby
-    `MDIO1` global label sits at the *exact* computed sheet position of pin
-    1 (verified against this project's own "sheet_y = instance_y − lib_y"
-    rule, cross-checked against `PB2-P1`'s working pins on the same
-    `Conn_36` lib symbol) — genuinely coincident, yet KiCad won't merge the
-    nets. Not resolved before session end; needs either sub-millimeter
-    precision inspection or opening the file in the KiCad GUI to see what's
-    visually happening. **If real, this means Pilot's ETH2/MDIO1 wiring has
-    been silently dead** — treat as higher priority than cosmetic ERC noise.
-- [ ] **Pilot full DRC/ERC clean-out — not started.** 48 ERC hard (42
-    `pin_not_connected` + 6 `wire_dangling`, all `PB2-P1`/`PB2-P2`, see
-    above) + 76 DRC hard (ISOLATION/POWER/DIFF_PAIR netclass clearance +
-    `net_conflict` — PCB pad nets don't match schematic in many places).
-    PCB still carries the old ADM2795EBRWZ footprint; schematic already
-    swapped to ISOW1412 (`fix_wash_zoe_isolators.py`) — footprint swap +
-    re-route + gerbers still open. **Keep all legacy connectors** (user
-    instruction) even where superseded by the trust module.
+- [x] **Pilot: `PB2-P2` header "fully unwired in ERC" finding — STALE, superseded by Rev T.**
+    Re-checked 2026-09-27 against the current `Pilot.kicad_sch`/`.net`: `PB2-P2` now appears 6×
+    in the schematic and 33× in `Pilot.net` — this finding was against the pre-Rev-T
+    (2026-07-26) schematic and no longer describes the current file. Closing rather than
+    chasing a root cause in a file that's since been fully rebuilt.
+- [x] **Pilot full DRC/ERC clean-out — STALE, superseded by Rev T.** The 48 ERC / 76 DRC
+    hard-violation counts here were against the pre-Rev-T schematic/PCB pair (same
+    `PB2-P1`/`PB2-P2`/ADM2795EBRWZ-vs-ISOW1412 mismatch as the item above). Rev T's schematic
+    and PCB already carry ISOW1412 consistently and Pilot.md claims ERC 0/DRC 0 for the
+    current files (not independently re-run with a live tool in this pass, but nothing in the
+    current files contradicts it). Real open work for Pilot now lives at §1.2a "Finish Pilot
+    PCB (CAPE-A-2) close-out pass" and the routing/gerbers item above, not here.
 - [x] **XO schematic-first rebuild — ERC 0.** 2026-09-20 (Claude Sonnet 5):
     replaced the legacy schematic (169 refs vs 43 PCB footprints, 564 ERC
     violations) with a fresh generator (`avionics/kicad/XO/scripts/
@@ -1174,6 +1418,156 @@ REFERENCES.md Removed/Superseded Citations).
     --severity-all --schematic-parity` to 0, then attempt freerouting via
     the Specctra DSN/SES bridge (reject and report if it introduces shorts,
     same discipline as Pilot), then export gerbers.
+- [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
+    APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift
+    record per root `AGENTS.md` §10 (documented before any KiCad change). Supersedes the
+    2026-09-21 election to finish placement by hand: the owner authorized full auto-placement
+    and routing on 2026-09-29.
+    **Why.** With true KiCad courtyards (`fp.BuildCourtyardCaches()` + `GetCourtyard()`, not
+    the bounding-box fallback used in earlier area notes) the 147 parts need 3234 mm² total,
+    2709 mm² excluding the PB2 rails, against ~2596 mm² usable between the rails on both faces
+    (104 %). A routable board needs ≤ ~85 % (≈ 2200 mm²), so ~500 mm² had to come out with
+    **no capability lost** and the outline fixed at 55 × 35 mm (2.17 × 1.38 in) by the PB2.
+    Growing the board and splitting into two capes were offered and rejected by the owner.
+    **What changes (owner-approved 2026-09-29):**
+    1. **Ferrite-bead specification defect fixed (−173 mm²).** `FB-SDIO1..6` and
+        `FB-WIOE5-1/2` carried Würth **742792510**, which `avionics/datasheets/wurth-742792510.pdf`
+        shows is the **1812, 5 A, 70 Ω @ 100 MHz power-entry bead** — correct for `FB1`, wrong
+        for eight signal lines whose intent (`TACCO.md` §6, §8) is a **600 Ω @ 100 MHz, 100 mA,
+        0402** bead. The eight signal beads move to the 0402 land with value
+        `600R@100MHz 0402`; the MPN is left for owner selection because no vendor catalog was
+        reachable from this environment (candidates: Würth WE-CBF 0402 600 Ω family; the fleet
+        already uses 742792612 on Flight Engineer, size to be confirmed from its datasheet).
+    2. **Boot/bind switch (−192 mm²).** `SW-WIOE5-BOOT` C&K PTS125 12 mm (213 mm²) → C&K
+        **KMR2**-series side-actuated tact switch (KiCad `SW_Push_1P1T_NO_CK_KMR2`, 21 mm²).
+        Rejected: deleting the switch (loses local bind/boot), host-GPIO-only boot (loses bench
+        access without a PB2 attached).
+    3. **SWD debug port (−33 mm²).** `J-WIOE5-SWD` JST-GH 4-pin (62 mm²) → **Tag-Connect
+        TC2030-IDC-NL** 6-pad footprint (29 mm², no BOM part), ARM Cortex 6-pin pinout
+        (1 VTREF, 2 SWDIO, 3 nRESET, 4 SWCLK, 5 GND, 6 SWO). Rejected: 0.05 in header (larger).
+    4. **mLRS radio: Seeed Wio-E5 module → bare ST STM32WLE5JC (−70 mm² and a sourcing
+        fix).** `wio-e5-datasheet.pdf` is © Seeed Technology Co., Ltd. (Shenzhen); the module
+        is Chinese-built around the ST die, which conflicts with the owner's restricted-country
+        component rule (China, Russia, DPRK, …). Owner decision 2026-09-29: replace it now.
+        New radio block, every pin from `stm32wle5jc.pdf` (DS13105 Rev 9) Figure 9 / Table 19
+        (UFQFPN48, 7 × 7 mm, EP 5.6 mm typ per Table 95 → KiCad
+        `QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm_ThermalVias`):
+        - HSE32 from an **Epson TG2520SMN 32 MHz clipped-sine TCXO** (Japan;
+          `TG2520SMN_en-2584158.pdf` pin map 1 NC, 2 GND, 3 OUT, 4 VCC) supplied by
+          `PB0-VDD_TCXO` (DS13105 Table 58: VTCXO 1.6–3.3 V, ≤ 4 mA), OUT → 10 pF series →
+          `OSC_IN` (Table 58 note 1), `OSC_OUT` NC.
+        - **pSemi PE4259 SPDT** (US; `pe4259.pdf` Table 7: 1 RF1, 2 GND, 3 RF2, 4 CTRL, 5 RFC,
+          6 VDD/CTRL̄), RF1 = receive (RFI_P/RFI_N via LC balun), RF2 = transmit (RFO_HP), RFC →
+          existing `L-WIOE5-SER`/RCLAMP/MMCX antenna chain. Control `PA4`/`PA5`, the same pins
+          the Wio-E5 module drives its internal switch with, so mLRS's
+          `rx-hal-WioE5-Mini-wle5jc.h` stays valid — **verify polarity against that header**.
+        - SMPS mode: `VLXSMPS`→`VFBSMPS` 15 µH, `VFBSMPS` 470 nF (DS13105 SMPS
+          characteristics, Lout/Cout); `VDDRF1V55` tied to `VFBSMPS` (§3.9.1); `VDD`,
+          `VDDRF`, `VDDSMPS`, `VDDA`, `VBAT` on `+3V3_RF` (§3.9.1 note: VDD/VDDRF/VDDSMPS wired
+          together); 100 nF per supply pin plus 4.7 µF bulk; `VR_PA` decoupled.
+        - Host map unchanged: `PA2/PA3` USART2 ↔ `UART_WIOE5_TX/RX` (net names kept so the DTS
+          does not drift), `PB13` bind/boot button, `PA15` green LED, `PB5` red LED,
+          `PA13/PA14` SWD, `NRST` 22 k pull-up + 100 nF, `PH3-BOOT0` 10 k pull-down.
+        - **RF matching and harmonic-filter VALUES REQUIRE VERIFICATION.** The topology
+          (RFO_HP DC-feed inductor from `VR_PA`, DC block, 2-section LC low-pass; RFI_P/RFI_N
+          series-C / shunt-L balun) follows DS13105 Figures 2–4, but the 915 MHz element values
+          come from ST AN5457, which could not be fetched here. Positions are populated with
+          the topology and flagged `[VERIFY AN5457]` in the schematic; **bench-tune before
+          flight** (same discipline as the Type 2EL antenna match). `TODO.md` §0.x item.
+        - Alternative considered, not rejected: **Murata Type 1SJ** (STM32WLE5-based module,
+          Japan) would remove the RF design burden; its datasheet was unobtainable here, so it
+          is logged for the owner as a fallback if bench tuning of the bare chip fails.
+        - Reference-designator prefix `WIOE5-*` → `MLRS-*` (`MLRS-MCU`, `X-MLRS`, `SW-MLRS`,
+          `R-MLRS-*`, `LED-MLRS-*`, `FB-MLRS-*`, `J-MLRS-SWD`, `J-ANT-MLRS`, `D-ANT-MLRS`).
+    5. **PB2 rails are no longer stack-through, and the P2 rail gets an 8-position gap
+        (owner request 2026-09-29).** Commo Rev T is a standalone node (§1.2a.2), so nothing
+        stacks on top of TACCO. The existing socket lands already carry their courtyard only on
+        the component (bottom) side, so the top-face band between rail pins is DRC-free; the
+        placer may put 0402/0201 parts there at 45° (a 1.56 × 0.86 mm 0402 courtyard fits in
+        every 2.54 mm cell with ≥ 0.47 mm hole clearance). **Header-net clustering:** only
+        GPIO-class nets can move (SPI0, MCAN0, SDIO, RMII0, MDIO, both UARTs are fixed to
+        their PB2 balls). The six GPIO nets on P2-5..10 (`FAN_PWM_B`, `PLD_CLK`, `PLD_I1`,
+        `PLD_I2`, `WIFI_EN`, `WIFI_IRQ`) move to the six spare P1 positions
+        (P1-10/18/19/28/29/30), so **P2-3..10 becomes one contiguous 8-position gap**: the new
+        `PocketBeagle2_2x18_P2_Socket_Gap3-10` land has no pads or holes there, the P2 socket
+        is fitted as a 2×1 (pins 1–2) plus a 2×13 (pins 11–36) strip, and the matching PB2
+        header pins 3–10 are left unpopulated. Both faces of that ~10 × 5.6 mm patch are free
+        for parts. **Verification owed:** the repo has no PB2 ball-capability map; P1-10, P2-3,
+        P2-4, P2-27 are GPIO by prior use, but **P1-18/19/28/29/30 must be checked against the
+        PocketBeagle 2 pin map / SPRUJ40 before fab** (on the original PocketBeagle those were
+        analog-reference/ADC positions). Tracked with the existing DTS pinmux `[ESTIMATE]`
+        item in §1.2a.3.
+    6. **Layout:** placement is regenerated by `gen_tacco_pcb.py` with a floor-planned FIXED
+        table (connectors on edges, isolated CAN/RS-485 bus sides in the bottom band so the
+        `ISO_BAND` rule area and GND2 islands match the real transceiver positions, RF at the
+        antenna edge), then freerouting via the Specctra bridge, `kicad-cli pcb drc
+        --severity-all --schematic-parity` to 0, Gerber/drill/position export.
+    **Affected files:** `avionics/kicad/TACCO/scripts/gen_tacco_sch.py`,
+    `gen_tacco_footprints.py`, `gen_tacco_pcb.py`, `avionics/kicad/Serenity-Custom.pretty/`,
+    `avionics/kicad/TACCO/kicads/*`, `avionics/kicad/TACCO/gerbers/`, `TACCO.md`,
+    `reports/HDD.md`, `avionics/firmware/` DTS (net names unchanged; UART_WIOE5_* kept).
+    **Plan (units):** U1 this record + `TACCO.md` note → U2 footprints → U3 schematic
+    generator, ERC 0, netlist → U4 PCB generator + placement DRC-clean → U5 route + DRC 0 →
+    U6 Gerbers/drill/pos + gerber analyzer → U7 docs, HDD regen, TODO regen.
+    - [x] U1 decision record (this entry) and `TACCO.md` status note — 2026-09-29.
+    - [x] U2 footprints — KMR2 / Tag-Connect TC2030-NL / QFN-48 EP 5.6 / TG2520SMN / SC-70-6 from
+        the KiCad 9.0.3 system library; RCLAMP0502B courtyard widened to cover its pads; the
+        rail lands are unchanged (their courtyard is already component-side only). 2026-09-29.
+    - [x] U3 schematic — beads, switch, SWD, STM32WLE5JC block, PB2 map (item 7), DP83825I
+        table (item 8), SDIO removed, Wi-Fi/TPM 100 nF bypasses moved to 0201 (the only free
+        sites left are the rail cells). `kicad-cli sch erc --severity-all`: 0 design violations
+        (12 `lib_symbol_issues` are this container's missing global `power` library, not the
+        schematic). 170 parts, 287 nets. 2026-09-29.
+    - [x] U4 placement — all 170 parts on the 55 × 35 mm outline, `kicad-cli pcb drc
+        --severity-all --schematic-parity` before routing: **0 errors, 4 silkscreen warnings,
+        0 parity issues, 499 unconnected** (unrouted by definition). Floor plan: microSD and
+        Wi-Fi module bottom-right, 1553 block left, isolated CAN/RS-485 band across the bottom
+        with the GND2 islands and `ISO_BAND` derived from the SOIC-20W positions, mLRS radio at
+        the right edge under its MMCX, Tag-Connect at (39.4, 26.0). 2026-09-29.
+    - [ ] U5 routing: freerouting, outer GND pours, DRC 0 incl. `.kicad_dru` isolation rules.
+    - [ ] U6 Gerbers (6 Cu + mask/paste/silk/edge), Excellon drill, pick-and-place, BOM.
+    - [ ] U7 `TACCO.md`, `reports/HDD.md`, `TODO.md` regen, `REFERENCES.md` "Used in".
+    - [ ] Owner: select the 0402 600 Ω bead MPN and the KMR2 variant; verify RF values (AN5457).
+    - [x] ~~Confirm P1-18/19/28/29/30 are GPIO-capable~~ — **resolved by the owner-supplied PB2
+        schematic (2026-09-29, item 7 below)**; the P2-3..10 gap is withdrawn.
+    - [ ] mLRS HAL: BUTTON moves PB13 → PA0 (PB13 is not bonded on UFQFPN48), RF switch
+        PA4 = RX_EN (PE4259 CTRL), PA5 = TX_EN (CTRL̄).
+    7. **PB2 header map was wrong — rebuilt from the real schematic (2026-09-29, owner-supplied
+        `avionics/datasheets/pocketbeagle2_sch.pdf` + `pocketbeagle-2.syscfg`).** The Rev S2
+        `PB2_P1`/`PB2_P2` tables put GND on P1-1 (the PB2's 5 V **VIN**), +3V3/+5V on
+        P1-33..36 (PRU/UART balls), MCAN0 on the GND pins P1-15/16, SPI0 on ADC/GPIO balls and
+        SDIO on MDC/PRU balls; mating that cape would have shorted VIN to ground. The verified
+        ball-by-ball map and the new TACCO allocation are in
+        `avionics/kicad/PB2_HEADER_PINMAP.md` (MCAN0 P2-5/7, UART2 = RS-485 with hardware DE on
+        UART2_RTSn, UART0 = mLRS link, UART1 + flow control = BT, SPI0 P2-25/27/29 + CS1,
+        RMII2 + MDIO0 for the DP83825I, EHRPWM2_A = fan, GPIOs for the rest; net names
+        `RMII0_*` → `RMII2_*`). The header is fully subscribed (24 GPIO-class nets on 25 free
+        positions), so the "gap" clustering asked for on 2026-09-29 is not achievable; the
+        `PocketBeagle2_2x18_P2_Socket_Gap3-10` land was removed again. **Pilot uses the same
+        table family and must be re-derived the same way** (separate item, not done here).
+        **Wi-Fi host interface:** MMC2/SDIO is not on the headers, so the Murata Type 2EL WLAN
+        core (SDIO-only) cannot be hosted; the six SDIO beads are deleted and the module's SDIO
+        pins are NC. **Owner decision 2026-09-29: Wi-Fi moves to a USB module on USB1
+        (P1-9/11, `USB1_DP/DM/VBUS/DRVVBUS`), BT stays on UART1, 802.15.4 on SPI0.** Module
+        selection is open: no vendor catalog or datasheet is reachable from this environment,
+        so the USB Wi-Fi/BT module (non-restricted vendor) and, if Type 2EL is dropped, a
+        separate 802.15.4 SPI radio need owner-selected parts with datasheets before the
+        symbol/land can be authored. **FAB BLOCKER until resolved.**
+    - [ ] Owner: choose the USB Wi-Fi/BT module (and 802.15.4 radio if Type 2EL goes) and
+        supply datasheets; then author symbol/land, re-run the area budget (adds ≈ 100–200 mm²).
+    8. **DP83825I pin table was wrong (found 2026-09-29 while wiring `RMII2_REF_CLK`).** The
+        generator's `dp83825i()` (shared verbatim with Pilot's `gen_pilot_sch.py`) listed X1 on
+        pin 8, X2 on 9, DGND 10, DVDD10 11, RESET 12, MDIO 13, MDC 14, INT 15, TXOP/TXON 17/18,
+        RXIP/RXIN 21/22, RBIAS 24 — a DP83848-family table, not the DP83825I. TI SNLS638C
+        Table 4-1 (WQFN-24 RMQ): 1 TX_EN, 2 50MHzOut/LED2, 3 INTR/PWRDN, 4 LED0, 5 RST_N,
+        6 VDDA3V3, 7 RD_M, 8 RD_P, 9 GND, 10 TD_M, 11 TD_P, 12 XO, 13 XI/50MHzIn, 14 RBIAS,
+        15 MDIO, 16 MDC, 17 RX_D1, 18 RX_D0/PHYAD0, 19 VDDIO, 20 CRS_DV, 21 GND, 22 RX_ER,
+        23 TX_D0, 24 TX_D1, DAP GND. TACCO's table is rebuilt from the datasheet; in RMII
+        Leader mode pin 2 sources the 50 MHz reference clock to `RMII2_REF_CLK` (P1-34).
+        **Pilot's ETH1-PHY/ETH2-PHY carry the same defect (not fixed here).**
+    - [ ] Pilot: re-derive its PB2 header map from `PB2_HEADER_PINMAP.md` and rebuild
+        `dp83825i()` from SNLS638C Table 4-1 (item 8).
+    - [ ] Firmware: TACCO DTS overlay per `PB2_HEADER_PINMAP.md` §4 (console moves off UART0).
 - [x] **Flight Engineer schematic-first rebuild — ERC 0.** 2026-09-20 (Claude
     Sonnet 5): the legacy schematic (586 ERC violations, PCB pad nets not
     matching at all, `gen_flight_engineer.py` itself confirmed drifted per its own

@@ -15,7 +15,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 # Serenity-Class Tiltrotor UAV — Build Guide Rev P baseline (24-inch)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Year:** 2026 | **Status:** Public release — Rev S baseline (2026-07-04, integrates all Rev
 R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
@@ -77,11 +77,15 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
 ## Anti-Rework Rules — Read Before Phase 0
 
+> **CAUTION:** Several rules below (foam pour, nacelle sealing/fiberglass, TPM provisioning)
+> describe irreversible steps. Complete every dependent check first — there is no going back
+> once these are done.
+
 1. **Print everything before first epoxy joint.** Filament costs pennies compared to build time.
 2. **Install every conduit, standoff, void former, and sensor mount before the foam pour.** Once foam cures these cannot be added.
 3. **The foam pour is the point of no return.** Do a full dry-fit with all wiring and components before mixing.
 4. **Do NOT foam the nacelle interior.** Nacelles are CF-PETG structural shells — foam in the bore traps EDF heat and ruins the press-fit.
-5. **Verify EDF rotation direction before nacelle installation.** Port EDFs must rotate CW from the intake end; starboard CCW. Swap any two motor leads to reverse if wrong. Once nacelle is sealed and fiberglassed, this is a full disassembly.
+5. **Verify EDF rotation direction before nacelle installation.** Port EDFs shall rotate CW from the intake end; starboard CCW. Swap any two motor leads to reverse if wrong. Once nacelle is sealed and fiberglassed, this is a full disassembly.
 6. **Gear-mesh the nozzle linkage before bonding the tilt bracket.** Check nozzle opens smoothly through the full 0°–90° sweep before epoxying the sector gear.
 7. **FAA registration on airframe before first untethered flight.** Replace placeholder with your issued number.
 8. **TPM 2.0 provisioning is non-reversible.** Provision all 8 nodes before first flight.
@@ -234,9 +238,9 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
 - Inter-cape standoffs (20mm): Pilot (55×35mm) hole pattern above TACCO
 - Verify 44mm total stack height clears bay void former
 
-**5. Bond wing spar pocket inserts** at wing root stations, both sides. Spar must slide freely in/out for nacelle assembly access.
+**5. Bond wing spar pocket inserts** at wing root stations, both sides. Spar shall slide freely in/out for nacelle assembly access.
 
-**6. Bond tilt servo mount brackets** into fuselage interior at wing root bays (one bracket per nacelle tilt servo). Servo arm must clear all wiring conduits.
+**6. Bond tilt servo mount brackets** into fuselage interior at wing root bays (one bracket per nacelle tilt servo). Servo arm shall clear all wiring conduits.
 
 **7. Install M3 heat-set inserts ×4** at belly cargo hard-point locations.
 
@@ -320,9 +324,12 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
 
 **For each nacelle** (port first, then starboard — VERIFY ROTATION DIRECTION DIFFERS):
 
+> **WARNING:** The EDF spins at high speed on bench power. Keep hands, tools, and loose
+> clothing clear of the duct during the rotation-direction test.
+
 1. **Test EDF rotation direction before installation.** Connect to bench ESC + power supply (safe prop/duct test only).
-   - Port EDF must spin **CW viewed from intake** (fore end).
-   - Starboard EDF must spin **CCW viewed from intake**.
+   - Port EDF shall spin **CW viewed from intake** (fore end).
+   - Starboard EDF shall spin **CCW viewed from intake**.
    - To reverse: swap any two motor phase wires at the ESC.
 
 2. **Install EDF2 (downstream — aft EDF):**
@@ -340,7 +347,7 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
    - Verify stator fins are visible and clear in Z=53–73mm gap between EDFs.
    - Apply 3 dabs epoxy at EDF1 casing at Z=76mm shoulder.
 
-5. **Install ESC pair** against hub bore inner wall or in fuselage (route leads through spar conduit to fuselage bay). ESC heat must not be trapped inside nacelle bore — route ESCs to fuselage bay via spar conduit.
+5. **Install ESC pair** against hub bore inner wall or in fuselage (route leads through spar conduit to fuselage bay). ESC heat shall not be trapped inside nacelle bore — route ESCs to fuselage bay via spar conduit.
 
 6. **Cure 2h minimum** before proceeding.
 
@@ -429,10 +436,10 @@ Crown pinion (R=6mm) → Nozzle inner ring rack (R=28mm)
 
 3. **Slide nacelle pivot housing** onto pivot rod. Verify nacelle rotates freely with <0.5 mm axial play. Add thrust washer (stainless 4×8×0.5mm) if axial play exceeds 1mm.
 
-4. **Install tilt servo** in fuselage servo mount bracket at wing root bay. Servo arm must be accessible through access panel B or D.
+4. **Install tilt servo** in fuselage servo mount bracket at wing root bay. Servo arm shall be accessible through access panel B or D.
 
    > **⚠ ANTI-REWORK — FOAM POUR SEQUENCE:**
-   > The wing spar (CF-TUBE-12MM, 12 mm OD) must be inserted through both
+   > The wing spar (CF-TUBE-12MM, 12 mm OD) shall be inserted through both
    > `spar_bearing_block` annular bosses before the foam pour (Phase 4).
    > Once foam cures, the spar bore is permanently encapsulated and cannot be
    > accessed for spar insertion or retorquing.
@@ -584,6 +591,10 @@ hover rather than losing one nacelle entirely.
 
 **Tethered hover test first — nacelle EDFs only (T/W ≈ 1.61).**
 
+> **WARNING:** Keep all personnel clear of the nacelle intakes/exhausts and the tether radius
+> before applying throttle. Spinning EDFs and a tethered airframe under power are a bodily
+> injury hazard if the tether fails or someone enters the thrust path.
+
 1. Secure tether lines to belly hard points. 11.0 lbm (5 kg) breaking strength minimum, 9.8 ft (3 m) length.
 2. Bring up on throttle to 30% with nacelles at 90° (hover position) — verify all 4 EDF sounds and lift response.
 3. Increase to 60% — verify stable hover and altitude-hold authority on tether.
@@ -612,7 +623,7 @@ Verify full obstacle avoidance in firmware (dual-redundant arrays — A and B co
 
 ## Phase 7 — Cargo System
 
-Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_sect_shell24.stl interior). Install the STS3215 winch train in the aft bay: both pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. **The spool must be supported at both pedestals — never hung off the servo output.** Fit the auto-latch cradle. Wire the HX711 load cell and the STS3215 TTL bus to the cargo-bay CAN-PERIPH-GW (not TACCO). Bench-calibrate the pawl spring to an 8.0 N ± 1.0 N slip threshold, then test release and retrieval with a 250 g dummy load. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
+Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_sect_shell24.stl interior). Install the STS3215 winch train in the aft bay: both pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. **The spool shall be supported at both pedestals — never hung off the servo output.** Fit the auto-latch cradle. Wire the HX711 load cell and the STS3215 TTL bus to the cargo-bay CAN-PERIPH-GW (not TACCO). Bench-calibrate the pawl spring to an 8.0 N ± 1.0 N slip threshold, then test release and retrieval with a 250 g dummy load. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
 
 ---
 
@@ -747,7 +758,7 @@ attitude authority. The rear EDF exhausts aft and contributes no hover lift.
 **Dependency:** Phases 0–10 complete and proven in flight.
 **Design files:** `deferred/aft-edf/` — see `deferred/aft-edf/README.md` for full detail.
 **NOTE (Rev R1 redesign):** the 120mm SCAD/STLs in `deferred/aft-edf/` are superseded. All rear-EDF
-geometry must be regenerated for the 55mm fan, the canonical nozzle, and the RCS system before fabrication.
+geometry shall be regenerated for the 55mm fan, the canonical nozzle, and the RCS system before fabrication.
 
 > This phase was deferred per the project design philosophy: *"The large fuselage EDF is now an
 > optional addition once everything else works."* (root AGENTS.md)

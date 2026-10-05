@@ -4,7 +4,7 @@
  *
  * Copyright 2026 Steve Griffing
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Reference: AX.25 Link Access Protocol for Amateur Packet Radio, Version 2.2,
  *   Tucson Amateur Packet Radio (TAPR) / ARRL, 1998 [REF-PROTO-001].

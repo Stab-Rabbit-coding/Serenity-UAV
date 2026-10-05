@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pre-commit check for CNAF M-3710.7 [REF-MIL-001]-style doc wording.
+"""Pre-commit check for CNAF M-3710.7 [REF-MIL-003]-style doc wording.
 
 Enforces (blocking):
   - No ad hoc callout labels (IMPORTANT:, ATTENTION:, NOTICE:, ALERT:) in
@@ -48,12 +48,12 @@ def check_file(path):
         if m:
             errors.append(
                 f"{path}:{i}: ad hoc callout label '{m.group(1)}:' -- use "
-                "WARNING / CAUTION / Note per REF-MIL-001 SS1.5 instead"
+                "WARNING / CAUTION / Note per REF-MIL-003 SS1.5 instead"
             )
         if WILL_NEAR_MANDATORY.search(line):
             warnings.append(
                 f"{path}:{i}: 'will' near mandatory language -- confirm this "
-                "is futurity, not a requirement (REF-MIL-001 SS1.6: 'will' "
+                "is futurity, not a requirement (REF-MIL-003 SS1.6: 'will' "
                 "never indicates a degree of requirement; use 'shall')"
             )
     return errors, warnings
@@ -69,12 +69,12 @@ def main():
         all_warnings.extend(warnings)
 
     if all_warnings:
-        print("doc-wording advisory (REF-MIL-001 SS1.6, not blocking):", file=sys.stderr)
+        print("doc-wording advisory (REF-MIL-003 SS1.6, not blocking):", file=sys.stderr)
         for w in all_warnings:
             print(f"  {w}", file=sys.stderr)
 
     if all_errors:
-        print("doc-wording check FAILED (REF-MIL-001 SS1.5):", file=sys.stderr)
+        print("doc-wording check FAILED (REF-MIL-003 SS1.5):", file=sys.stderr)
         for e in all_errors:
             print(f"  {e}", file=sys.stderr)
         return 1

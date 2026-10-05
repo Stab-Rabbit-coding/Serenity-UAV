@@ -5,7 +5,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Implements the INA219/INA226 driver described in bmon_ina2xx.h.
  * Both devices expose 16-bit big-endian register values over I2C.

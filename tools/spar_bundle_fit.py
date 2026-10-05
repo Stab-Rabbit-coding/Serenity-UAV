@@ -65,7 +65,7 @@ verified until that happens.
 Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note : Authored by Claude (model: Claude Opus 5, Anthropic) under the
           author's direction, 2026-08-29, per AGENTS.md AI attribution.
-License : CC BY-SA 4.0  <https://creativecommons.org/licenses/by/4.0/>
+License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
 
 Run: /usr/bin/python3 tools/spar_bundle_fit.py
      /usr/bin/python3 tools/spar_bundle_fit.py --tube 20x16.3 --tube 16x14

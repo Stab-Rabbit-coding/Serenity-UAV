@@ -4,7 +4,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Analysis and drafting:** Claude (Claude Opus 5, Anthropic) under the author's
 direction, per `AGENTS.md` §3 "Attribution and Licensing"
-**License:** CC BY-SA 4.0 — <https://creativecommons.org/licenses/by-sa/4.0/>
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 **Status:** SPECIFICATION — the wing side is built
 (`airframe/openscad/wings/wings_s1223_revo.scad`, Rev S1e). **The fuselage side

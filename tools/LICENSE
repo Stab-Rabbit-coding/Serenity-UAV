@@ -1,23 +1,23 @@
 SERENITY UAV — TOOLS & UTILITIES LICENSING
 ===========================================
 
-**License:** MIT (Permissive)
+This folder is MIXED (owner rule 2026-10-04, see below):
 
----
-
-SUMMARY
-
-Validation tools, build scripts, CAD-generation utilities, and testing infrastructure
-are licensed under the MIT License. This is a permissive open-source license allowing
-use, modification, and redistribution with minimal restrictions (attribution required).
-
-See complete MIT text below.
+* Analysis, verification, CI and utility tools — **MIT** (full text below and
+  ../LICENSES/MIT).
+* Tools that write or render hardware (SCAD/STL/FCStd/KiCad output or figures
+  of geometry) — **CERN-OHL-W 2.0**: bake_hull_frame, build_head_shell,
+  cargo_layout_fit, export_landing_gear_stls, gen_cargo_void_formers,
+  middle_layout_fit, nacelle_hollow_profile, nacelle_housing_profile,
+  open_mating_faces, purge_stale_fcstd_objects, tilt_actuator_options,
+  wing_airfoil_variants, wing_section_figure. Each file's header is authoritative.
+* Documents in this folder — **CC BY-SA 4.0**.
 
 ---
 
 MIT License
 
-Copyright (c) 2024–2026 Serenity UAV Project
+Copyright (c) 2024–2026 Steve Griffing (Stab-Rabbit-coding)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,28 +39,24 @@ SOFTWARE.
 
 ---
 
-COVERAGE
-
-| File Type | License | Notes |
-|-----------|---------|-------|
-| validate_*.py | MIT | Mesh, schematic, STL validation |
-| update_*.py | MIT | BOM sync, build artifact updates |
-| FreeCAD/Blender scripts | MIT | CAD export and silhouette generation |
-| Bash/shell scripts | MIT | Build automation, pre-commit hooks |
-| CI/CD workflows (.github/workflows/) | MIT | GitHub Actions definitions |
-| Documentation (this file, READMEs) | CC BY 4.0 | Tools documentation |
+ATTRIBUTION REQUEST
+-------------------
+If you use these tools, credit the Serenity UAV Project (Steve Griffing,
+Stab-Rabbit-coding). The MIT and CERN-OHL-W notices above must be kept with
+any copy or substantial portion, as those licences require.
 
 ---
 
-ATTRIBUTION REQUIREMENT
-
-If you use these tools in your project, credit the Serenity UAV Project:
-
-  "This project uses validation and build tools from the Serenity UAV Project,
-   licensed under the MIT License. See [tools/LICENSE]."
-
----
-
-Questions?
-  MIT License: https://opensource.org/licenses/MIT
-  See ../docs/attribution_and_licensing.md for comprehensive licensing info
+LICENCE RULE (owner, 2026-10-04) — applies to every file in this folder
+------------------------------------------------------------------------
+* Code that defines, creates or renders HARDWARE (OpenSCAD, KiCad files and
+  scripts, FreeCAD, Blender, G-code/slicer profiles, and tools that write or
+  render meshes/CAD/PCB) — CERN-OHL-W 2.0 (SPDX: CERN-OHL-W-2.0),
+  ../LICENSES/CERN-OHL-W 2.0.
+* Code whose end result is SOFTWARE or FIRMWARE (firmware, device trees, ground
+  software, analysis/verification/CI tools) — MIT (SPDX: MIT), ../LICENSES/MIT.
+* DOCUMENTS (Markdown, text, specifications, and ALL IMAGES — SVG, PNG, JPG,
+  WebP, any format, including renders from hardware tools) — CC BY-SA 4.0
+  (SPDX: CC-BY-SA-4.0), ../LICENSES/CC-BY-SA 4.0.
+Third-party material keeps its own licence (see REFERENCES.md and
+docs/attribution_and_licensing.md). Each file's header names its licence.

@@ -4,7 +4,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Drives the QMC5883L 3-axis magnetometer via Linux userspace i2c-dev
  * (ioctl/read/write on /dev/i2c-N).  Used by serenity-fc on Pilot.

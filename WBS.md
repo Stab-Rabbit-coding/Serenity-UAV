@@ -1,8 +1,8 @@
 # Serenity UAV — Work Breakdown Structure (Master Index)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
-**Last updated:** 2026-09-15  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
+**Last updated:** 2026-10-01  
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 > **This is the full historical record — every task ever defined, done or open,**
@@ -27,8 +27,8 @@
 |--------|-------------------|----------------|
 | Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S baseline, carried forward unchanged into Rev T; STLs pending regeneration where noted |
 | Wings | Fixed CF spar (20x16.3mm tube, 35% root chord), S1223-derived section, gear-linked nacelle tilt drive | Rev S1g: spar bonded wing member (not rotating shaft), root joint splits shear(socket)/moment(80x60 flange); 14T/50T reduction drive; SPAR-20-2 station 45.15→28.0mm |
-| Nacelles | 2x 50mm tandem EDF, CG pivot ~Z=107.5mm, M=1.0 gear, iris nozzle, hinged ESC bays | Rev S4c: trunnion skewer deleted, pods hollowed (285→196g fwd-biased), 4 flush ESC covers, 4x90° motor pattern, cooling ports (Rev S4d); nacelle T/W ~1.61 at Phase 5-10 AUW — VTOL hover capable |
-| Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected; unchanged at Rev T |
+| Nacelles | Radially enlarged, QMx-proportioned shell around 2x64mm tandem EDFs, interstage stator, servo variable nozzle; axial length held | Current geometry remains 50mm Rev S4c/S4d; NAC-64-SERVO-01 active, fit/power/structure gates open |
+| Nacelle EDFs | 2x QX-Motor 64mm EDF per nacelle, candidate QF2822-2400KV 6S; nominal 64mm thrust tube; QX 4xM3/16mm spider mounts | Existing 50mm XFly configuration remains current until 64mm fit, power, mass and thrust verification passes |
 | Landing gear | Sponson-mounted bays, canonical 1.5in leg (extended 3.0in variant retained) | Rev T (component design generation "R6" retained as its own permanent name): sponson wells CLOSED, leg length derived from nozzle clearance not belly height |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
 | Cargo bay | Clamshell doors + SG90 servos (OpenServoCore) + DRV8833 + SPT5425LV/LibreServo v2 winch + Dyneema + auto-latch + GPS ring + FPV bezel | N20 winch train retired Rev S; STS3215 winch servo superseded 2026-08-02 by SPT5425LV+LibreServo v2 (envelope gate resolved, 6 winch STLs still unimplemented — see WBS §1.1.1.2.1); other cargo STLs generated; gondola shell open |
@@ -404,6 +404,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] SPAR-20-8 (U8) — Re-datum the nozzle drive onto the fixed trunnion…
 - [ ] SPAR-20-9 (U9) — Mass/CG/T-W re-derive (spar 96.2 → 67.5 g/pair, but…
 - [ ] NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening
+- [ ] NAC-64-SERVO-01 — radial 64 mm tandem-EDF nacelle + servo nozzle
 - [ ] SPAR-20-AERO — The re-lofted section is no longer S1223 (root 12.1 →…
 - [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
 - [ ] SPAR-20-ALLOW — No verified CF tube flexural allowable exists in…
@@ -556,6 +557,11 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Add SBUS/UART DIP switch to Pilot
 - [ ] Generate Pilot gerbers
 - [ ] Generate XO gerbers
+- [ ] TACCO area recovery, mLRS bare-chip radio, fab-ready layout (2026-09-29)
+- [x] TACCO PB2 header map rebuilt from the real PocketBeagle 2 schematic
+- [x] TACCO DP83825I pin table rebuilt from TI SNLS638C Table 4-1
+- [ ] TACCO Wi-Fi host: USB module on USB1 — part selection open (fab blocker)
+- [ ] Pilot: re-derive PB2 header map and DP83825I table the same way
 - [x] remove Wi-Fi, sik, and loRa antennas from XO. Use filtered cho…
 - [x] Re-evaluate space / restore Ethernet to XO
 - [ ] Zigbee RF chain was never actually added to XO — PCB scope g…

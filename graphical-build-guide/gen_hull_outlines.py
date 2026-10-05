@@ -38,7 +38,7 @@ These are standalone geometry references; the four overview_*.svg files
 are updated separately using the paths extracted here.
 
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0  (hull geometry derived from Peter Farrell CC BY 4.0 model)
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 Source STLs: Thingiverse Serenity model scaled to 24 in, modified for
              50 mm EDF bores (Rev O).  See blender_shells_v3.py for scale math.
 """

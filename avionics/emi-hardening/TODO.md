@@ -1,7 +1,7 @@
 # Serenity UAV — Avionics EMI Hardening TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 > **This file lists only currently-open (unchecked) top-level tasks for
 > this subsystem — one line each, <=70 chars, no prose.** Full detail
@@ -17,7 +17,7 @@
 → full detail: `WBS.md` §1.4.1
 
 - [ ] PB2-I + Pilot Enclosure (Shepherd's Room / Inara's Shuttle
-- [ ] PB2-I + XO Enclosure (all 4 bays — TACCO, plus Commo in River's…
+- [ ] PB2-I + XO Enclosure (all 4 bays — TACCO, plus Commo in River's Room…
 
 #### 1.4.2. Antenna Placement and feedlines
 → full detail: `WBS.md` §1.4.2

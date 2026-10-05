@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Rev S reconciliation drafted by:** Claude Opus 4.8 (2026-07-19)
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **BOM designator:** `SKIPPER-TILT-ENC-PCB` (`current-specification/bom_revS.csv`)
 **Revision:** S (2026-07-19) — AKM **AK7455** off-axis sensor selected; pinout verified
 against the AK7455 datasheet (doc 200800064-E-00, `avionics/datasheets/ak7455-en-datasheet-myakm.pdf`)
@@ -40,7 +40,7 @@ the verification section.
 - **Mounting:** 2× M2 self-tap clearance holes (2.2 NPTH,
   `Serenity-Custom:MountingHole_2.2mm_M2_SelfTap_Compact` — compact 3.2 mm courtyard;
   the ~3.8 mm pan head intentionally overhangs the courtyard/board edge; the pocket
-  re-bake must add head relief).
+  re-bake shall add head relief).
 - **Height budget:** the ring/hub swept annulus passes over most of the board at
   magnet-face height ≈ 2.35 mm above the PCB face (IC 0.85 + 1.5 air gap). Screw
   heads (~1.3–1.6 mm) and wire+solder (~1.0 mm) clear it; keep everything < 2.0 mm.
@@ -57,9 +57,9 @@ the verification section.
 
 ## Sensor history — why AK7455 (AS5600 → MT6701 → AK7455)
 
-The tilt-feedback sensor must read the **rotating 8 mm tilt-spar** at the wing/nacelle
+The tilt-feedback sensor shall read the **rotating 8 mm tilt-spar** at the wing/nacelle
 joint. The spar is a **through-shaft** there (it continues into the nacelle — no free
-shaft end), so the sensor IC must sit **off-axis** beside a ring magnet on the spar hub.
+shaft end), so the sensor IC shall sit **off-axis** beside a ring magnet on the spar hub.
 
 1. **Rev Q — AMS AS5600 (retired):** on-axis, end-of-shaft. Invalid — no free shaft end.
 2. **Rev R2f — Magntek MT6701 (rejected):** its datasheet (Rev 1.9 §6) confirms it is
@@ -156,7 +156,7 @@ open-drain. If the node cannot spare the line, ERROR can be dropped to a 6-wire 
 | TAB | Back tab / EP | **OPEN — do NOT ground** (Note5) |
 
 **Decoupling:** 0.1 µF + 1 µF on VDD→VSS (standard practice; confirm final values
-against the AK7455 application/test circuit). **Back-tab/EP:** the exposed pad must be
+against the AK7455 application/test circuit). **Back-tab/EP:** the exposed pad shall be
 left electrically floating — the schematic symbol deliberately has no EP pin so the
 footprint EP stays netless.
 
@@ -169,8 +169,8 @@ The rotor is a ring magnet (`HALL-RING-MAG`) on a **non-ferrous CF-PETG hub**
 rotating 8 mm spar at the nacelle inboard face. The AK7455 sits off-axis on the fixed
 wing-tip pad, reading the ring across a small gap.
 
-- **Field at the IC must be 10–70 mT** (Off-Axis window); the AK7455 raises a low-flux
-  alarm below ~15 mT. The existing Ø22 × Ø10 × 2.5 mm ring must be **re-validated** to
+- **Field at the IC shall be 10–70 mT** (Off-Axis window); the AK7455 raises a low-flux
+  alarm below ~15 mT. The existing Ø22 × Ø10 × 2.5 mm ring shall be **re-validated** to
   present ≥ ~20 mT at the chosen offset/gap — magnetisation (diametric vs radial) and
   the exact geometry are a **bench item** (AK7455 off-axis does not fix a single magnet
   shape; set the sense plane via `R_FIELDSEL`).
@@ -198,7 +198,7 @@ The spar is ferromagnetic (AISI 4130 / 17-4 PH) through the ring center. Mitigat
 Seats in `wing_tip_hall_sensor_pocket()` on the wing-tip mount pad, 2× M2 brass self-tap
 pilots. **Footprint note:** the AK7455 is a **QFN24 4 × 4 mm** — larger than the earlier
 MT6701 3 × 3 QFN. It fits the 7 × 7 mm board, but the wing SCAD `HALL_*` pocket comments
-(sized for the 3 × 3 part) and the 7-wire pigtail exit must be re-checked — see WBS §1.1.3.6.
+(sized for the 3 × 3 part) and the 7-wire pigtail exit shall be re-checked — see WBS §1.1.3.6.
 Wing-tip radial reaction ≈ 19 N (4.3 lbf) dynamic — geometry-limited, not load-limited.
 
 ---

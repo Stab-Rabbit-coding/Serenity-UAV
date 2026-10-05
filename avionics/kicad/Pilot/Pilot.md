@@ -2,10 +2,25 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CEH
 **Callsign:** Pilot
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** T (schematic-first rebuild, superseding Rev Q)
 **Date:** 2026-09-19
 **Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers. **Routing not yet complete** (see "Routing status" below).
+
+**Update 2026-09-28 (MIL-STD-1553C fleet swap, S. Griffing decision; implemented by Claude
+Opus 5.5):** `1553-XCVR` is now the **Holt HI-6138** BC/RT/MT protocol engine, a 48-pin
+6 × 6 mm QFN on SPI0, replacing the HI-1573 and the AM6254 PRU Manchester codec.
+- **Added parts:** a 50 MHz MCLK oscillator (`X-50M`, ECS-2520MV-500-BN-TR), `C-50M`,
+  `R-1553IRQ`, and `C-1553D`.
+- **PB2 P1 remap:** P1-7/8/9 become IRQ#/MR#/TXINHA GPIOs, P1-10 is freed, and P1-20 becomes
+  the HI-6138 chip-select.
+- **Placement:** the PCB was patched in place. The HI-6138 sits at the old site and no other
+  part moved.
+- **Gates:** ERC 0; DRC 0 with 0 schematic-parity issues.
+- **References:** pin table and area budget in
+  `../HI6138_FOOTPRINT_VERIFICATION.md`; plan in
+  `docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md`. MIL-STD-1553C is
+  electrically identical to 1553B [REF-MIL-001].
 
 > **Rev Q archived:** the prior revision's document, whose schematic and PCB
 > had diverged into two different designs, is archived at
@@ -21,7 +36,7 @@
 Pilot is the flight-control and sensor cape for a PocketBeagle 2 Industrial
 (AM6254) node. Per `docs/AVIONICS_PB2_REDESIGN.md` §3, every control node
 (Pilot and XO capes alike) carries a point of presence on all four onboard
-buses — MIL-STD-1553B, isolated CAN-FD, isolated RS-485, and Ethernet — so
+buses — MIL-STD-1553C, isolated CAN-FD, isolated RS-485, and Ethernet — so
 any node can take over any role. Pilot additionally carries the node's GPS,
 IMU, barometer and TPM.
 
@@ -53,14 +68,14 @@ Gates, run in this order after any generator change:
 
 ```bash
 python3 scripts/gen_pilot_sch.py
-kicad-cli sch erc --severity-all kicads/Pilot.kicad_sch          # must be 0
+kicad-cli sch erc --severity-all kicads/Pilot.kicad_sch          # shall be 0
 kicad-cli sch export netlist --format kicadsexpr -o kicads/Pilot.net kicads/Pilot.kicad_sch
 python3 scripts/gen_pilot_footprints.py
 python3 scripts/gen_pilot_pcb.py
-kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # must be 0
+kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # shall be 0
 # route (see "Routing" below), then:
 python3 scripts/finish_pilot_pcb.py kicads/Pilot.kicad_pcb <routed.ses>
-kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # must still be 0
+kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # shall still be 0
 bash scripts/export_pilot_gerbers.sh
 ```
 
@@ -93,7 +108,7 @@ were made via the project's Specctra bridge (`tools/export-specctra-dsn.py` /
   board with real shorts.
 
 `gen_pilot_pcb.py` deliberately leaves the outer F.Cu/B.Cu pour-free (a
-freerouting run treats a filled zone as fixed copper it must route around);
+freerouting run treats a filled zone as fixed copper it shall route around);
 `finish_pilot_pcb.py` adds the top/bottom GND pours back and re-fills all
 zones after a routing pass is imported and accepted.
 
@@ -115,7 +130,7 @@ a patch, and changed several parts along the way:
 | Area | Rev Q | Rev T | Why |
 |---|---|---|---|
 | Ethernet PHY | ADIN1300BCPZ (gigabit, LFCSP-40 6×6) drifted in during EMI-hardening | **DP83825I** (10/100 RMII, WQFN-24 3×3) | `docs/AVIONICS_PB2_REDESIGN.md` §3.1 specifies DP83825I; the ring is 100BASE-TX, never needed gigabit. Removes the 0.9 V core rail, 12 hardware straps, and one oscillator per PHY (RMII Leader mode sources 50MHzOut from a shared 25 MHz reference). |
-| MIL-STD-1553B | DS26LV31/DS26LV32 (RS-422 line drivers) mislabeled as a 1553 transceiver | **Holt HI-1573** (3.3 V, MIL-STD-1553A/B compliant, QFN-44) + **Premier Magnetics PM-DB2791S** 1:2.5 direct-coupled-stub transformer + 2× 55 Ω isolation resistors + 2× SMAJ33CA | RS-422's ~2 V differential swing cannot meet MIL-STD-1553B §4.5.2 bus voltage levels. Bus A only is populated (bus B parked); Manchester II encode/decode stays in the AM6254 PRU per §94, unchanged. |
+| MIL-STD-1553B (→ 1553C, 2026-09-28: HI-1573 + PRU replaced by the **Holt HI-6138** protocol engine on SPI0; see the status update above) | DS26LV31/DS26LV32 (RS-422 line drivers) mislabeled as a 1553 transceiver | **Holt HI-1573** (3.3 V, MIL-STD-1553A/B compliant, QFN-44) + **Premier Magnetics PM-DB2791S** 1:2.5 direct-coupled-stub transformer + 2× 55 Ω isolation resistors + 2× SMAJ33CA | RS-422's ~2 V differential swing cannot meet MIL-STD-1553B §4.5.2 bus voltage levels. Bus A only is populated (bus B parked); Manchester II encode/decode stays in the AM6254 PRU per §94, unchanged. |
 | GPS | u-blox SAM-M10Q (integrated patch antenna module) | **u-blox MAX-M10S** + U.FL to the airframe's dorsal-cup SMA bulkhead, with a bias-T (Table 52-54 of the integration manual) | Pilot flies inside a Faraday pouch (`docs/CARGO_SECTION_LAYOUT.md`) with the antenna in an external cup — an integrated-patch module could never see the sky. |
 | Isolated CAN-FD | ATA6561 (non-isolated) | ISOW1044BDFMR, unchanged from the Rev Q *plan* (Rev Q's PCB never actually carried the right land) | 5 kV reinforced isolated CAN-FD with an integrated isolated DC-DC. |
 | Isolated RS-485 | MAX3485E (non-isolated) / ADM2795EBRWZ (wrong land) | ISOW1412DFMR | Fleet-wide isolated-transceiver standardization (2026-07-26); ADM2795E needs a separate isolated supply ISOW1412 does not. |
@@ -153,7 +168,7 @@ and its rejected/harder alternatives), not a layout fix.
 | PWR-IN | Molex Nano-Fit 4-pin (THT) | +5V_IN ×2, GND ×2 | Power entry |
 | CAN-FD | JST SM04B-GHS-TB | GND2_CAN, CAN_H, CAN_L, VCC2_CAN | Isolated CAN-FD bus |
 | RS-485 | JST SM04B-GHS-TB | GND2_RS485, A, B, VCC2_RS485 | Isolated RS-485 bus |
-| MIL-1553 | JST SM04B-GHS-TB | BUS_P, BUS_N, GND, PGND (shield) | MIL-STD-1553B bus A |
+| MIL-1553 | JST SM04B-GHS-TB | BUS_P, BUS_N, GND, PGND (shield) | MIL-STD-1553C bus A |
 | ETH1 / ETH2 | JST SM04B-GHS-TB | TXP, TXN, RXP, RXN | 10/100 Ethernet line pairs (isolated by the 749010012A magnetics) |
 | J-ANT | U.FL-R-SMT-1 | RF, shield | GNSS active-antenna feed to the dorsal-cup SMA bulkhead |
 | J-PWM | Samtec TSM-108-01-L-DV, 2×8 SMT 0.1 in | 4 × (SIG, +5V, GND, PGND shield) | PWM/DSHOT/BDSHOT-capable servo/ESC port; SIG = PRU DSHOT0-3 balls |
@@ -165,8 +180,8 @@ and its rejected/harder alternatives), not a layout fix.
   detection into the SLB9672 TPM is still required, it needs a per-domain
   redesign (one monitored mesh per isolation region, clear of the 0.5 mm
   ISOLATION moat) — an owner decision, not something to guess back in.
-- **Single-bus 1553.** HI-1573 is a dual-bus transceiver; only bus A is
-  wired (bus B parked). Dual-redundant 1553 would need a second PM-DB2791S
+- **Single-bus 1553.** The HI-6138 has a dual-bus transceiver; only bus A is
+  wired (TXINHB left on its internal pull-up, BUSB/BUSB* open). Dual-redundant 1553 would need a second PM-DB2791S
   transformer, TVS pair, and connector — real area cost, see the ideation
   doc's item #4.
 - **U.FL antenna feed unverified against the physical cup mount** — the
@@ -189,8 +204,8 @@ and its rejected/harder alternatives), not a layout fix.
    the rebuild.
 6. TI Application Note SLLA337A — isolation boundary layout guidelines for
    ISOW devices (X2Y bridge capacitor placement).
-7. MIL-STD-1553B §4.5.1.5.2 / §4.5.2 — direct-coupled stub and bus electrical
-   requirements (Holt HI-1573, Premier Magnetics PM-DB2791S).
+7. MIL-STD-1553C [REF-MIL-001] §4.5.1.5.2 / §4.5.2 — direct-coupled stub and bus
+   electrical requirements (Holt HI-6138 DS6138 Rev S, Premier Magnetics PM-DB2791S).
 
 ## Usage notices
 

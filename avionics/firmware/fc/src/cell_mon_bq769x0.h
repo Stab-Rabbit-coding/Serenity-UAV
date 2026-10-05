@@ -4,7 +4,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Drives the Texas Instruments BQ76930PWRQ1 on the Flight Engineer power
  * distribution board via Linux userspace i2c-dev.  The BQ76930 monitors 6–10

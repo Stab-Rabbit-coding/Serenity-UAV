@@ -26,11 +26,25 @@ cape-on-PocketBeagle2 stack itself) — its courtyard budget in
 (see that script's docstring).  RFM95W and WL1837MOD are flush SMD and budget
 their full body courtyard normally.
 
-Author: Claude Sonnet 5, 2026-09-20.  Owner: sgriffing.  License: CC BY 4.0.
+2026-09-29 rework (Claude Fable 5.1, owner S. Griffing; avionics/WBS.md §1.2a "TACCO
+area recovery"): full auto-placement authorised by the owner.  A hand floor-planned
+FIXED table now places every connector, module, transformer and IC (connectors on
+the edges; isolated CAN-FD / RS-485 bus sides in a bottom band so the ISO_BAND rule
+area and the GND2 islands are derived from where the transceivers actually sit; RF
+at the right edge next to the two MMCX jacks), the passives are anchored to their
+parent part by the courtyard-collision-aware spiral placer, and 0402/0201 parts
+may fall back to the top-face cells between the PB2 rail pins at 45 deg (the rails
+are no longer stack-through — Commo Rev T is standalone).  The P2 rail land omits
+positions 3-10 (`PocketBeagle2_2x18_P2_Socket_Gap3-10`), so that patch is free on
+both faces.
+
+Author: Claude Sonnet 5, 2026-09-20; Claude Fable 5.1, 2026-09-29.  Owner: sgriffing.
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 from __future__ import annotations
 
 import math
+import os
 import re
 import sys
 from pathlib import Path
@@ -43,6 +57,18 @@ KICADS = HERE.parent / "kicads"
 NETLIST = KICADS / "TACCO.net"
 OUT = KICADS / "TACCO.kicad_pcb"
 DRU = KICADS / "TACCO.kicad_dru"
+
+# Layout experiments (ce-optimize runs): TACCO_WHATIF=<file.json> overrides fixed
+# positions ("fixed": {ref: [u, v, rot, "F"|"B"]}), footprints ("fp": {ref:
+# "<abs path>.pretty:Name"}), the rail cells ("rail_cells": false) and writes the
+# board, project and rules into "out_dir" instead of kicads/.  Unset -> no effect.
+WHATIF: dict = {}
+if os.environ.get("TACCO_WHATIF"):
+    import json as _json
+    WHATIF = _json.loads(Path(os.environ["TACCO_WHATIF"]).read_text())
+    if WHATIF.get("out_dir"):
+        _out = Path(WHATIF["out_dir"])
+        OUT, DRU = _out / "TACCO.kicad_pcb", _out / "TACCO.kicad_dru"
 SYSLIB = Path("/usr/share/kicad/footprints")
 CUSTOM = HERE.parent.parent / "Serenity-Custom.pretty"
 
@@ -52,7 +78,7 @@ CORNER_R = 3.0
 EDGE_KEEP = 0.5
 
 POWER_NETS = {"GND", "PGND", "+3V3", "+5V", "+5V_IN", "GND2_CANB", "GND2_RS485B",
-              "VCC2_CANB", "VCC2_RS485B", "+3V3_PB2", "+3V3_RF", "+1V8_IO"}
+              "VCC2_CANB", "VCC2_RS485B", "+3V3_PB2", "+3V3_RF", "+1V8_IO", "+1V8_RF"}
 
 
 def mm(v: float) -> int:
@@ -117,6 +143,12 @@ def read_netlist():
 
 def load_fp(fpid: str) -> pcbnew.FOOTPRINT:
     lib, name = fpid.split(":", 1)
+    if lib.endswith(".pretty"):  # what-if footprints from an absolute library path
+        fp = pcbnew.FootprintLoad(lib, name)
+        if fp is None:
+            raise SystemExit(f"footprint not found: {fpid}")
+        fp.SetFPID(pcbnew.LIB_ID(Path(lib).stem, name))
+        return fp
     path = CUSTOM if lib == "Serenity-Custom" else SYSLIB / f"{lib}.pretty"
     fp = pcbnew.FootprintLoad(str(path), name)
     if fp is None:
@@ -141,38 +173,96 @@ F, B = "F", "B"
 # orientation for guaranteed non-overlap; a follow-up pass can hand-place
 # connectors for cosmetic edge alignment once routing is verified.
 FIXED: Dict[str, Tuple[float, float, float, str]] = {
+    # chassis holes + PB2 rails (identical to Pilot's proven-good positions)
     "H1": (3.0, 3.0, 0, F), "H2": (52.0, 3.0, 0, F), "H3": (3.0, 32.0, 0, F), "H4": (52.0, 32.0, 0, F),
     "PB2-P1": (27.5, 2.54, 0, B), "PB2-P2": (27.5, 32.46, 0, B),
+    # --- left edge: microSD (bottom face, card exits left), 1553 connector (top) ---
+    "J-SD": (47.9, 22.3, 0, B),        # card exits the right edge (bottom-right, bottom face)
+    "J-1553": (3.9, 25.0, 0, F),
+    "TVS-1553P": (3.3, 18.6, 90, B), "TVS-1553N": (3.3, 25.9, 90, B),
+    "1553-XFM": (12.7, 12.5, 0, F),
+    "1553-XCVR": (14.3, 12.0, 0, B),
+    "SD-WB": (22.2, 11.0, 0, B),
+    # --- top edge (top face), connectors opening over the P1 rail pads ---
+    "J-FAN": (23.5, 8.3, 0, F),
+    "PWR-IN": (33.8, 8.7, 0, F),
+    "J-ETH": (44.75, 8.3, 0, F),
+    # --- centre ---
+    "TPM": (24.8, 15.0, 0, F),
+    "ETH-PHY": (34.3, 15.0, 0, F),
+    "T-ETH": (33.5, 11.2, 0, B),
+    "NOR-FLASH": (3.25, 16.0, 90, F),
+    "MLRS-MCU": (41.6, 16.5, 0, F),
+    "J-ANT-MLRS": (52.0, 13.2, 0, F),
+    "RFSW-MLRS": (47.5, 13.2, 0, F),
+    "X-MLRS": (48.0, 19.5, 0, F),
+    "J-MLRS-SWD": (39.4, 26.0, 90, F),
+    "SW-MLRS": (46.8, 27.4, 0, F),
+    # --- right/bottom: WiFi/BT/802.15.4 module (bottom face) + its MMCX (top) ---
+    "WIFI-BT-ZB": (44.8, 11.2, 0, B),   # top-right, bottom face; its MMCX is above it on the top face
+    "J-ANT-RADIO": (52.0, 8.2, 0, F),
+    # --- bottom isolation band: bus-side pin rows face +v (board bottom edge) ---
+    "CAN-TR": (12.5, 23.6, 0, B),
+    "RS485": (25.9, 23.6, 0, B),
+    "J-CAN": (12.5, 27.12, 0, F),
+    "J-485": (25.9, 27.0, 0, F),
+    "TVS-RS485": (32.5, 23.9, 0, F), "CMC-RS485": (33.0, 27.8, 90, F),
+    # --- power: bucks on the bottom face between RS485 and the WiFi module ---
+    "U-3V3": (35.3, 18.6, 0, B), "L-3V3": (34.9, 22.4, 0, B),
+    "U-1V8RF": (39.4, 18.6, 0, B), "L-1V8RF": (35.5, 26.6, 0, B),
+    "U-3V3RF": (4.5, 8.0, 0, B), "L-RF1": (4.5, 12.5, 0, B), "L-RF2": (8.6, 12.5, 0, B),
+    "FB1": (30.0, 15.3, 90, F), "C-IN1": (43.9, 22.4, 0, F),
 }
 
+# pads that must face a direction (d = unit vector in board u,v)
 FACE: Dict[str, Tuple[List[str], Tuple[float, float]]] = {
     "PB2-P1": (["1"], (-1, 0)), "PB2-P2": (["1"], (-1, 0)),
+    "CAN-TR": ([str(i) for i in range(11, 21)], (0, 1)),
+    "RS485": ([str(i) for i in range(11, 21)], (0, 1)),
 }
-EXIT: Dict[str, Tuple[float, float]] = {}
+# connectors / card slot: opening faces this direction (pads are at the back)
+EXIT: Dict[str, Tuple[float, float]] = {
+    "J-SD": (-1, 0), "J-1553": (-1, 0), "J-FAN": (0, -1), "PWR-IN": (0, -1),
+    "J-ETH": (0, -1), "J-CAN": (0, 1), "J-485": (0, 1),
+}
 
-ISO_CAN = [(5.5, 23.0), (17.3, 23.0), (17.3, 30.2), (5.5, 30.2)]
-ISO_485 = [(17.5, 23.0), (33.6, 23.0), (33.6, 30.2), (17.5, 30.2)]
-MAIN_PLANE = [(0.5, 0.5), (54.5, 0.5), (54.5, 34.5), (34.1, 34.5), (34.1, 22.5), (5.0, 22.5), (5.0, 34.5), (0.5, 34.5)]
+# Isolation geometry (u,v) — derived from the FIXED transceiver positions: the band
+# starts at the SOIC-20W body centre line (the package itself is the barrier) and
+# runs to the bottom edge keep-out, plus the P2 rail gap so J-CAN's ISOLATION-net
+# pads can be reached by tracks that stay inside the band.
+ISO_V0 = 21.0          # logic-side pad rows of CAN-TR/RS485 sit at v 19.85; band starts 1.1 mm below them
+ISO_V1 = 30.2          # stops short of the P2 rail pad rings (v >= 30.34)
+ISO_CAN = [(7.5, ISO_V0), (19.7, ISO_V0), (19.7, ISO_V1), (7.5, ISO_V1)]
+ISO_485 = [(20.7, ISO_V0), (34.2, ISO_V0), (34.2, ISO_V1), (20.7, ISO_V1)]
+ISO_BAND_POLY = [(7.5, ISO_V0), (34.2, ISO_V0), (34.2, ISO_V1), (7.5, ISO_V1)]
+MAIN_PLANE = [(0.5, 0.5), (54.5, 0.5), (54.5, 34.5), (34.2, 34.5), (34.2, ISO_V0), (7.5, ISO_V0),
+              (7.5, 34.5), (0.5, 34.5)]
 
 ANCHOR_PREFIX = [
     ("C-PHY-", "ETH-PHY"), ("R-RBIAS", "ETH-PHY"), ("R-AD0", "ETH-PHY"),
-    ("C-25M", "X-25M"),
+    ("C-25M", "X-25M"), ("X-25M", "ETH-PHY"),
     ("C-CAN", "CAN-TR"), ("C-485", "RS485"), ("C-TPM", "TPM"), ("R-TPM", "TPM"),
-    ("C-1553", "1553-XCVR"), ("R-1553", "J-1553"),
+    ("C-1553", "1553-XCVR"), ("R-1553P", "J-1553"), ("R-1553N", "J-1553"), ("R-1553IRQ", "1553-XCVR"),
+    ("X-50M", "1553-XCVR"), ("C-50M", "1553-XCVR"),
     ("C-3V3-", "U-3V3"), ("C-BST", "U-3V3"), ("C-SS", "U-3V3"), ("R-FB3", "U-3V3"), ("R-EN3", "U-3V3"),
     ("C-RF-", "U-3V3RF"), ("L-RF", "U-3V3RF"),
     ("C-IN", "PWR-IN"), ("FB1", "PWR-IN"), ("R-PGND", "PWR-IN"),
     ("CMC-CAN", "J-CAN"), ("TVS-CAN", "J-CAN"), ("X2Y-CAN", "CAN-TR"), ("R-CANT", "J-CAN"),
     ("CMC-RS485", "J-485"), ("TVS-RS485", "J-485"), ("X2Y-RS485", "RS485"), ("R-485T", "J-485"),
     ("R-BS", "T-ETH"), ("C-BS", "J-ETH"),
-    ("FB-SIK", "SIK"), ("C-SIK", "SIK"),
-    ("C-ZB-", "WIFI-BT-ZB"), ("FB-SDIO", "WIFI-BT-ZB"),
+    ("C-ZB-", "WIFI-BT-ZB"),
     ("C-FLASH", "NOR-FLASH"), ("R-FLASH-WP", "NOR-FLASH"), ("C-PLD", "SD-WB"),
     ("C-1V8RF", "U-1V8RF"), ("R-EN18", "U-1V8RF"), ("C-BST18", "U-1V8RF"),
     ("C-SS18", "U-1V8RF"), ("R-FB18", "U-1V8RF"), ("L-1V8RF", "U-1V8RF"),
-    ("FL-SIK", "J-SMA-SIK"), ("D-ANT-SIK", "J-SMA-SIK"),
     ("C-ANT-SH", "J-ANT-RADIO"), ("L-ANT-SER", "J-ANT-RADIO"),
     ("D-ANT-RADIO", "J-ANT-RADIO"), ("C-ANT-SANT", "WIFI-BT-ZB"),
+    # mLRS bare-chip radio block
+    ("C-MLRS-TCXO", "X-MLRS"), ("C-MLRS-HSE", "X-MLRS"),
+    ("C-MLRS-SH", "J-ANT-MLRS"), ("L-MLRS-SER", "J-ANT-MLRS"), ("D-ANT-MLRS", "J-ANT-MLRS"),
+    ("C-MLRS-TX", "RFSW-MLRS"), ("L-MLRS-TX", "RFSW-MLRS"), ("C-MLRS-RX", "RFSW-MLRS"),
+    ("L-MLRS-RX", "RFSW-MLRS"), ("L-MLRS-PA", "MLRS-MCU"), ("C-MLRS-VRPA", "MLRS-MCU"),
+    ("C-MLRS-", "MLRS-MCU"), ("L-MLRS-SMPS", "MLRS-MCU"), ("R-MLRS-", "MLRS-MCU"),
+    ("FB-MLRS-", "MLRS-MCU"), ("LED-MLRS-", "SW-MLRS"),
 ]
 ISO_SIDE_NETS = {"GND2_CANB", "GND2_RS485B", "VCC2_CANB", "VCC2_RS485B",
                  "CAN_B_H", "CAN_B_L", "CAN_B_H_F", "CAN_B_L_F",
@@ -198,6 +288,7 @@ def bbox_rect(bb: pcbnew.BOX2I) -> Rect:
 
 
 def courtyard(fp: pcbnew.FOOTPRINT) -> Rect:
+    fp.BuildCourtyardCaches()
     layer = pcbnew.B_CrtYd if fp.IsFlipped() else pcbnew.F_CrtYd
     poly = fp.GetCourtyard(layer)
     if poly.OutlineCount() > 0:
@@ -213,11 +304,27 @@ def tht_rects(fp: pcbnew.FOOTPRINT) -> List[Rect]:
     return out
 
 
+# Isolation band as rectangles (board u,v) — parts carrying ISOLATION-class nets must
+# sit inside, every other part outside, or the .kicad_dru rules make them unroutable.
+ISO_RECTS = [Rect(X0 + 7.5, Y0 + ISO_V0, X0 + 34.2, Y0 + ISO_V1)]
+# Top-face cells between the PB2 rail pins (rails are not stack-through any more):
+# a 0402/0201 fits diagonally in every 2.54 mm cell — owner request 2026-09-29.
+# P1 row only (2026-10-04): the P2 inter-row gap and its 2x2 pin-cell centres are the
+# only escape for the header positions under the isolation band (P2-3..P2-24: MCAN0,
+# MDIO0, TPM/1553/PHY control).  The band blocks every layer to the north and the board
+# edge to the south, so those nets run along the gap, via down at the cell centres, and
+# leave west or east of the band.  Parts parked in P2 cells closed that channel and left
+# 15 nets unroutable in the 2026-09-30 freerouting passes.
+RAIL_CELLS = [(7.18 + 2.54 * k, 2.54) for k in range(1, 17)]  # k=0 sits next to the square pin-1 pad
+
+
 class Placer:
     def __init__(self, board: pcbnew.BOARD):
         self.board = board
         self.blk: Dict[str, List[Rect]] = {F: [], B: []}
         self.edge = Rect(X0 + EDGE_KEEP, Y0 + EDGE_KEEP, X0 + BW - EDGE_KEEP, Y0 + BH - EDGE_KEEP)
+        self.cells = list(RAIL_CELLS)
+        self.iso = False
 
     def register(self, fp: pcbnew.FOOTPRINT) -> None:
         side = B if fp.IsFlipped() else F
@@ -234,7 +341,26 @@ class Placer:
     def free(self, r: Rect, side: str) -> bool:
         if r.x1 < self.edge.x1 or r.y1 < self.edge.y1 or r.x2 > self.edge.x2 or r.y2 > self.edge.y2:
             return False
+        inside = any(r.hits(o) for o in ISO_RECTS)
+        if self.iso:
+            # must be wholly inside one band rectangle
+            if not any(o.x1 <= r.x1 and r.x2 <= o.x2 and o.y1 <= r.y1 and r.y2 <= o.y2 for o in ISO_RECTS):
+                return False
+        elif inside:
+            return False
         return not any(r.hits(o) for o in self.blk[side])
+
+    def rail_cell(self, fp: pcbnew.FOOTPRINT, au: float, av: float) -> bool:
+        """Fallback for 0402/0201-class parts: nearest free top-face cell between the
+        rail pins, part rotated 45 deg so its courtyard clears the 1.7 mm pads."""
+        r = courtyard(fp)
+        w, h = r.x2 - r.x1, r.y2 - r.y1
+        if max(w, h) > 1.8 or min(w, h) > 1.2 or not self.cells:
+            return False
+        self.cells.sort(key=lambda c: (c[0] - au) ** 2 + (c[1] - av) ** 2)
+        u, v = self.cells.pop(0)
+        self.set(fp, u, v, 45, F)
+        return True
 
     def set(self, fp: pcbnew.FOOTPRINT, u: float, v: float, rot: float, side: str) -> None:
         if (side == B) != fp.IsFlipped():
@@ -369,6 +495,31 @@ def text(board: pcbnew.BOARD, s: str, u: float, v: float, layer: int, size: floa
     board.Add(t)
 
 
+def restore_project_settings(pro_path: Path, prior: dict) -> None:
+    """SaveBoard() rewrites TACCO.kicad_pro from a host-less BOARD, dropping every
+    setting the owner saved from the KiCad GUI (ERC pin map, BOM presets, schematic
+    editor options).  Put back any key the regenerated file lacks; keys the generator
+    owns (net_settings, board design rules) are left as just written."""
+    import json
+
+    def merge(new: dict, old: dict) -> dict:
+        # keep the prior file's key order so the diff shows only real changes
+        out = {}
+        for k, v in old.items():
+            if k not in new:
+                out[k] = v
+            elif isinstance(v, dict) and isinstance(new[k], dict):
+                out[k] = merge(new[k], v)
+            else:
+                out[k] = new[k]
+        for k, v in new.items():
+            out.setdefault(k, v)
+        return out
+
+    d = merge(json.loads(pro_path.read_text()), prior)
+    pro_path.write_text(json.dumps(d, indent=2) + "\n")
+
+
 def patch_project_netclasses(pro_path: Path) -> None:
     """Same rationale as gen_pilot_pcb.py's function of the same name: a
     Python-scripted BOARD() with no host project resets net_settings on save,
@@ -380,15 +531,24 @@ def patch_project_netclasses(pro_path: Path) -> None:
         {"bus_width": 12, "clearance": 0.127, "diff_pair_gap": 0.15, "diff_pair_via_gap": 0.2,
          "diff_pair_width": 0.15, "line_style": 0, "microvia_diameter": 0.3, "microvia_drill": 0.1,
          "name": "Default", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 2147483647,
-         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.127, "via_diameter": 0.5,
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.127, "via_diameter": 0.6,
          "via_drill": 0.3, "wire_width": 6},
         {"clearance": 0.127, "diff_pair_gap": 0.15, "diff_pair_via_gap": 0.2, "diff_pair_width": 0.15,
          "name": "DIFF_PAIR", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 0,
-         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.2, "via_diameter": 0.5, "via_drill": 0.3},
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.2, "via_diameter": 0.6, "via_drill": 0.3},
         {"clearance": 0.127, "name": "ISOLATION", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 1,
-         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.25, "via_diameter": 0.5, "via_drill": 0.3},
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.25, "via_diameter": 0.6, "via_drill": 0.3},
         {"clearance": 0.127, "name": "POWER", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 2,
          "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.4, "via_diameter": 0.6, "via_drill": 0.3},
+        # Plane-fed rails (In1 GND, In4 +3V3, local +3V3_RF/+1V8_RF pours): copper on the
+        # routing layers is only pad-to-via stubs at 0.5 mm-pitch QFN pins ringed by 0201
+        # bypasses, so 0.2 mm (~0.9 A / 10 degC rise, 1 oz) is the width the escape
+        # geometry admits; 0.4 mm left ~70 plane pins unroutable (2026-09-30 routing pass).
+        {"clearance": 0.127, "name": "PLANE", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 4,
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.2, "via_diameter": 0.6, "via_drill": 0.3},
+        # 50 Ohm microstrip on the 6-layer stack (TACCO.md §13: ~0.35 mm over the In1 GND plane)
+        {"clearance": 0.127, "name": "RF", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 3,
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.35, "via_diameter": 0.6, "via_drill": 0.3},
     ]
     d["net_settings"]["classes"] = classes
     patterns = []
@@ -397,8 +557,12 @@ def patch_project_netclasses(pro_path: Path) -> None:
         patterns.append({"netclass": "DIFF_PAIR", "pattern": n})
     for n in ("GND2_*", "VCC2_*", "CAN_B_H*", "CAN_B_L*", "RS485_B_A*", "RS485_B_B*"):
         patterns.append({"netclass": "ISOLATION", "pattern": n})
-    for n in ("+5V*", "+3V3", "+3V3_RF", "GND", "PGND"):
+    for n in ("+5V*", "PGND"):
         patterns.append({"netclass": "POWER", "pattern": n})
+    for n in ("+3V3", "+3V3_RF", "+1V8_RF", "GND"):
+        patterns.append({"netclass": "PLANE", "pattern": n})
+    for n in ("MLRS_RFO_HP", "MLRS_TX*", "MLRS_RX*", "MLRS_RFI_*", "MLRS_ANT*", "RADIO_ANT*"):
+        patterns.append({"netclass": "RF", "pattern": n})
     d["net_settings"]["netclass_patterns"] = patterns
     ds = d["board"]["design_settings"]
     ds["rules"].update({
@@ -414,7 +578,7 @@ def patch_project_netclasses(pro_path: Path) -> None:
 
 
 DRU_TEXT = """(version 1)
-# TACCO Rev S2 custom DRC rules — generated by gen_tacco_pcb.py (CC BY 4.0)
+# TACCO Rev S3 custom DRC rules — generated by gen_tacco_pcb.py (CC BY 4.0)
 # Same isolation-domain scheme as Pilot.kicad_dru (see that file's comments
 # for the full rationale) — CAN-FD/RS-485 isolated pin rows here use the
 # GND2_CANB/GND2_RS485B/VCC2_CANB/VCC2_RS485B nets (XO's _B_ suffix).
@@ -442,7 +606,7 @@ def main() -> None:
     ds.SetBoardThickness(mm(1.6))
     ds.m_MinClearance = mm(0.127)
     ds.m_TrackMinWidth = mm(0.127)
-    ds.m_ViasMinSize = mm(0.5)
+    ds.m_ViasMinSize = mm(0.5)  # netclass vias are 0.6/0.3 so hole-to-copper stays >= 0.25 at 0.127 clearance
     ds.m_MinThroughDrill = mm(0.3)
     ds.m_HoleClearance = mm(0.25)
     ds.m_HoleToHoleMin = mm(0.5)
@@ -462,12 +626,12 @@ def main() -> None:
     board.SetLayerType(pcbnew.In4_Cu, pcbnew.LT_POWER)
 
     tb = board.GetTitleBlock()
-    tb.SetTitle("XO — Comms / Logging / Payload Cape")
-    tb.SetDate("2026-09-20")
-    tb.SetRevision("S2")
+    tb.SetTitle("TACCO — Comms / Logging / Payload Cape")
+    tb.SetDate("2026-09-29")
+    tb.SetRevision("S3")
     tb.SetCompany("Griffing Technology LLC")
     tb.SetComment(0, "PocketBeagle 2 Industrial cape, 55 x 35 mm, 6-layer; generated by gen_tacco_pcb.py")
-    tb.SetComment(1, "Author: Claude Sonnet 5 (2026-09-20); owner sgriffing; CC BY 4.0")
+    tb.SetComment(1, "Authors: Claude Sonnet 5 (2026-09-20), Claude Fable 5.1 (2026-09-29); owner sgriffing; CC BY 4.0")
 
     outline(board)
 
@@ -481,11 +645,19 @@ def main() -> None:
         for ref, pin in nodes:
             pad_net[(ref, pin)] = name
 
+    for ref, val in WHATIF.get("fixed", {}).items():
+        FIXED[ref] = (float(val[0]), float(val[1]), float(val[2]), str(val[3]))
+    if WHATIF.get("rail_cells") is False:
+        RAIL_CELLS.clear()
     fps: Dict[str, pcbnew.FOOTPRINT] = {}
     for ref, c in comps.items():
-        fp = load_fp(c["footprint"])
+        fp = load_fp(WHATIF.get("fp", {}).get(ref, c["footprint"]))
         fp.SetReference(ref)
         fp.SetValue(c["value"])
+        # library lands such as Tag-Connect carry "exclude from BOM"; the schematic
+        # symbols are all in_bom, so keep the attributes in parity (DNP handles the
+        # no-part case).
+        fp.SetAttributes(fp.GetAttributes() & ~pcbnew.FP_EXCLUDE_FROM_BOM)
         if c["dnp"]:
             fp.SetAttributes(fp.GetAttributes() | pcbnew.FP_DNP | pcbnew.FP_EXCLUDE_FROM_POS_FILES)
         for pad in fp.Pads():
@@ -510,7 +682,10 @@ def main() -> None:
     fixed_fps = [fps[r] for r in FIXED if r in fps]
     for i, f1 in enumerate(fixed_fps):
         for f2 in fixed_fps[i + 1:]:
-            if f1.IsFlipped() == f2.IsFlipped() and courtyard(f1).hits(courtyard(f2)):
+            same = f1.IsFlipped() == f2.IsFlipped()
+            cross = (not same) and (any(r.hits(courtyard(f2)) for r in tht_rects(f1))
+                                    or any(r.hits(courtyard(f1)) for r in tht_rects(f2)))
+            if (same and courtyard(f1).hits(courtyard(f2))) or cross:
                 print(f"  FIXED COLLISION {f1.GetReference()} x {f2.GetReference()}")
     for f1 in fixed_fps:
         c = courtyard(f1)
@@ -527,7 +702,9 @@ def main() -> None:
     for ref in todo:
         fp = fps[ref]
         my_nets = {pad.GetNetname() for pad in fp.Pads() if pad.GetNetname()}
-        sig = [n for n in my_nets if n not in POWER_NETS]
+        # sorted: set order follows PYTHONHASHSEED, so an unsorted walk picked a
+        # different anchor net (and placement) on every run (found 2026-10-04)
+        sig = sorted(n for n in my_nets if n not in POWER_NETS)
         anchor_fp: Optional[pcbnew.FOOTPRINT] = None
         for pre, parent in ANCHOR_PREFIX:
             if ref.startswith(pre):
@@ -560,12 +737,22 @@ def main() -> None:
         if my_nets & ISO_SIDE_NETS and anchor_fp is not None and anchor_fp.GetReference() in ("CAN-TR", "RS485"):
             cx, cy = pad_centroid(anchor_fp, [str(i) for i in range(11, 21)])
             anchor = (cx - X0, cy - Y0 + 1.2)
+        placer.iso = bool(my_nets & ISO_SIDE_NETS) and ref not in ("X2Y-CAN", "X2Y-RS485")
+        if ref in ("X2Y-CAN", "X2Y-RS485"):
+            # X2Y bridges GND<->GND2 across the barrier: straddle the band edge.
+            placer.iso = False
+            uu = 14.6 if ref == "X2Y-CAN" else 25.9
+            placer.set(fp, uu, ISO_V0 - 1.4, 0, F)
+            placer.register(fp)
+            continue
+        other = F if side == B else B
         ok = placer.spiral(fp, anchor[0], anchor[1], side, rmax=8.0)
         if not ok:
-            other = F if side == B else B
             ok = placer.spiral(fp, anchor[0], anchor[1], other, rmax=8.0)
         if not ok:
             ok = placer.spiral(fp, anchor[0], anchor[1], side, rmax=40.0) or placer.spiral(fp, anchor[0], anchor[1], other, rmax=40.0)
+        if not ok and not placer.iso:
+            ok = placer.rail_cell(fp, anchor[0], anchor[1])
         if not ok:
             unplaced.append(ref)
             placer.set(fp, 60 + 3 * len(unplaced), 10, 0, F)
@@ -588,7 +775,7 @@ def main() -> None:
         add_zone(board, net, layer, MAIN_PLANE, priority=0, name=name)
     add_zone(board, g2c, pcbnew.In1_Cu, ISO_CAN, priority=1, name="GND2_CANB island")
     add_zone(board, g2r, pcbnew.In1_Cu, ISO_485, priority=1, name="GND2_RS485B island")
-    band = [(5.0, 22.5), (34.1, 22.5), (34.1, 30.2), (5.0, 30.2)]
+    band = ISO_BAND_POLY
     for layer in (pcbnew.In2_Cu, pcbnew.In3_Cu, pcbnew.In4_Cu):
         z = pcbnew.ZONE(board)
         z.SetLayer(layer)
@@ -596,6 +783,8 @@ def main() -> None:
         z.SetDoNotAllowCopperPour(True)
         z.SetDoNotAllowTracks(True)
         z.SetDoNotAllowVias(True)
+        z.SetDoNotAllowPads(False)
+        z.SetDoNotAllowFootprints(False)
         z.SetZoneName("isolation keepout inner")
         ol = z.Outline()
         ol.NewOutline()
@@ -617,11 +806,15 @@ def main() -> None:
         ol.Append(mm(X0 + u), mm(Y0 + v))
     board.Add(z)
 
-    text(board, "XO Rev S2  Griffing Technology LLC  CC BY 4.0", 27.5, 16.5, pcbnew.B_Fab, 0.9, mirror=True)
-    text(board, "ISOLATED CAN-FD | RS-485", 16.0, 30.9, pcbnew.F_Fab, 0.8)
+    text(board, "TACCO Rev S3  Griffing Technology LLC  CC BY 4.0", 27.5, 17.2, pcbnew.B_Fab, 0.9, mirror=True)
+    text(board, "ISOLATED CAN-FD | RS-485", 21.0, 24.4, pcbnew.F_Fab, 0.8)
 
+    pro = OUT.parent / "TACCO.kicad_pro"
+    import json
+    prior = json.loads(pro.read_text()) if pro.exists() else {}
     pcbnew.SaveBoard(str(OUT), board)
-    patch_project_netclasses(KICADS / "XO.kicad_pro")
+    patch_project_netclasses(pro)
+    restore_project_settings(pro, prior)
     write_dru(DRU)
     print(f"wrote {OUT}: {len(fps)} footprints, {len(nets)} nets; unplaced: {unplaced}")
 

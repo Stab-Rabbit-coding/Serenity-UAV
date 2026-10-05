@@ -16,7 +16,7 @@
  * Pan (azimuth) stage for Skipper GCS directional antenna gimbal
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
  * Revision: R (2026-06-11)
  *
  * Description:

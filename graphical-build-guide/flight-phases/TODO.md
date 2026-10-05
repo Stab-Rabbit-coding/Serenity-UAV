@@ -1,7 +1,7 @@
 # Serenity UAV — Phased Physical Build — Flight Phases (Phases 5-10) TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 > **This file lists only currently-open (unchecked) top-level tasks for
 > this subsystem — one line each, <=70 chars, no prose.** Full detail
@@ -142,7 +142,7 @@
 - [ ] Print decal sheet on waterslide decal paper; seal with clear coat
 - [ ] Apply decals per `build_guide_19_decal_placement.svg`
 - [ ] Final airworthiness inspection: all fasteners, propulsion…
-- [ ] Documentation archive: build log (photos + test results), TACCO…
+- [ ] Documentation archive: build log (photos + test results), TACCO CPLD…
 - [ ] FAA compliance final check: registration visible without moving any…
 
 ### Phase 9 — Performance Tuning and Flight Envelope Expansion

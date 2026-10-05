@@ -47,7 +47,7 @@ Footprints and sources
                                   1.0 mm drill, carried over from the prior board
                                   (the PB2 cape rail geometry).
 
-Author: Claude Opus 5, 2026-09-19.  Owner: sgriffing.  License: CC BY 4.0.
+Author: Claude Opus 5, 2026-09-19.  Owner: sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 from __future__ import annotations
@@ -187,6 +187,58 @@ def sm1553() -> None:
     write(name, b)
 
 
+def hi6138_qfn48() -> None:
+    """Holt HI-6138 MIL-STD-1553 protocol engine, 48-pin 6 x 6 mm QFN (48PCS6).
+
+    Package drawing: Holt DS6138 Rev. S (October 2024) §29 "Package Dimensions",
+    p. 263, 48-pin plastic chip-scale package:
+        body            6.000 x 6.000 mm BSC
+        lead pitch      0.40 mm BSC, 12 leads per side
+        lead width      0.200 mm typ
+        lead length     0.400 +/- 0.050 mm
+        exposed pad     4.700 +/- 0.050 mm square, "electrically isolated heat
+                        sink pad ... connect to any ground or power plane"
+    Pin order: DS6138 p. 1 "Pin Configuration (Top)" -- pin 1 (MODE) at the top
+    of the left side, counter-clockwise: 1-12 left, 13-24 bottom, 25-36 right,
+    37-48 top.
+
+    Holt gives no recommended land, so the land is derived (fleet convention
+    docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-
+    courtyard-budget-before-layout.md, rule 2):
+      * perimeter pads 0.20 x 0.80 mm, centre 2.95 mm from package centre ->
+        pad spans 2.55..3.35 mm: 0.05 mm heel inside the 2.60 mm lead root,
+        0.35 mm toe past the 3.00 mm body edge;
+      * exposed pad 4.60 mm (smaller than the 4.65 mm package minimum, so the
+        land can never be wider than the part's pad), 0.25 mm copper gap to the
+        perimeter pads;
+      * solder paste on the exposed pad as a 3 x 3 array of 1.20 mm windows at
+        1.50 mm pitch (61 % coverage) to stop the part floating on the paste.
+    Engineering derivation by Claude Opus 5.5, 2026-09-28; owner to review.
+    """
+    name = "Holt_HI-6138_QFN-48_6x6mm_P0.4mm_EP4.6mm"
+    b = hdr(name, "Holt HI-6138 MIL-STD-1553 BC/RT/MT, 48-pin 6x6 mm QFN 0.4 mm pitch, EP 4.70 mm (land EP 4.60); DS6138 Rev S §29 p.263, pin order p.1")
+    half = 3.0
+    b.append(rect("F.Fab", -half, -half, half, half))
+    b.append(rect("F.CrtYd", -3.6, -3.6, 3.6, 3.6, 0.05))
+    # silk corner ticks outside the pad field plus a pin-1 dot
+    for sx_, sy_ in ((-1, -1), (1, -1), (1, 1), (-1, 1)):
+        b.append(line("F.SilkS", sx_ * 3.1, sy_ * 3.1, sx_ * 2.5, sy_ * 3.1))
+        b.append(line("F.SilkS", sx_ * 3.1, sy_ * 3.1, sx_ * 3.1, sy_ * 2.5))
+    b.append(circ("F.SilkS", -3.6, -2.6, 0.15))
+    pitch, pc, plen, pw = 0.40, 2.95, 0.80, 0.20
+    offs = [(-5.5 + i) * pitch for i in range(12)]           # -2.20 .. +2.20
+    for i, o in enumerate(offs):
+        b.append(smd_pad(str(1 + i), -pc, o, plen, pw))          # left, top->bottom
+        b.append(smd_pad(str(13 + i), o, pc, pw, plen))          # bottom, left->right
+        b.append(smd_pad(str(25 + i), pc, -o, plen, pw))         # right, bottom->top
+        b.append(smd_pad(str(37 + i), -o, -pc, pw, plen))        # top, right->left
+    b.append('\t(pad "49" smd rect (at 0 0) (size 4.600 4.600) (layers "F.Cu" "F.Mask"))')
+    for gx in (-1.5, 0.0, 1.5):
+        for gy in (-1.5, 0.0, 1.5):
+            b.append(f'\t(pad "" smd rect (at {gx:.3f} {gy:.3f}) (size 1.200 1.200) (layers "F.Paste"))')
+    write(name, b)
+
+
 def bmp388() -> None:
     name = "Bosch_BMP388_LGA-10_2x2mm"
     b = hdr(name, "Bosch BMP388 10-pin metal-lid LGA 2.0 x 2.0 x 0.75 mm; land = package bottom view per BST-BMP388-DS001 §7.1/7.2")
@@ -318,6 +370,7 @@ def main() -> None:
     # is no longer regenerated from this board's script.
     we_lan()
     sm1553()
+    hi6138_qfn48()
     bmp388()
     x2y_0805()
     srf2012()

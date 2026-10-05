@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-28",
+  "generated": "2026-10-05",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -177,6 +177,13 @@
       ],
       "archived": false
     },
+    "LICENSES/MIT": {
+      "description": "MIT License",
+      "tags": [
+        "licensing"
+      ],
+      "archived": false
+    },
     "README.md": {
       "description": "Serenity UAV",
       "tags": [
@@ -201,6 +208,11 @@
       "tags": [
         "documentation"
       ],
+      "archived": false
+    },
+    "REUSE.toml": {
+      "description": "REUSE Specification 3.2 (FSFE, https://reuse.software/spec-3.2/) \u2014 machine-",
+      "tags": [],
       "archived": false
     },
     "SECURITY.md": {
@@ -4936,6 +4948,461 @@
       ],
       "archived": true
     },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md": {
+      "description": "Commo \u2014 EMI-Hardened 49 MHz AX.25 Transceiver",
+      "tags": [
+        "archive",
+        "documentation",
+        "emi-hardening",
+        "pcb-design",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Courtyard.gbr": {
+      "description": "Gerber fabrication layer (b_courtyard)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Cu.gbl": {
+      "description": "Gerber fabrication layer (b_cu)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Fab.gbr": {
+      "description": "Gerber fabrication layer (b_fab)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Mask.gbs": {
+      "description": "Gerber fabrication layer (b_mask)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Paste.gbp": {
+      "description": "Gerber fabrication layer (b_paste)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Silkscreen.gbo": {
+      "description": "Gerber fabrication layer (b_silkscreen)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Edge_Cuts.gm1": {
+      "description": "Gerber fabrication layer (edge_cuts)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Courtyard.gbr": {
+      "description": "Gerber fabrication layer (f_courtyard)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Cu.gtl": {
+      "description": "Gerber fabrication layer (f_cu)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Fab.gbr": {
+      "description": "Gerber fabrication layer (f_fab)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Mask.gts": {
+      "description": "Gerber fabrication layer (f_mask)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Paste.gtp": {
+      "description": "Gerber fabrication layer (f_paste)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Silkscreen.gto": {
+      "description": "Gerber fabrication layer (f_silkscreen)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In1_Cu.g1": {
+      "description": "Gerber fabrication layer (in1_cu)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In2_Cu.g2": {
+      "description": "Gerber fabrication layer (in2_cu)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Margin.gbr": {
+      "description": "Gerber fabrication layer (margin)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-in1-back.drl": {
+      "description": "Drill file (NC drill data)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-job.gbrjob": {
+      "description": "Gerber job file (fabrication job spec)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo.drl": {
+      "description": "Drill file (NC drill data)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Cu.gbr": {
+      "description": "Gerber fabrication layer (b_cu)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Mask.gbr": {
+      "description": "Gerber fabrication layer (b_mask)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Paste.gbr": {
+      "description": "Gerber fabrication layer (b_paste)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Silkscreen.gbr": {
+      "description": "Gerber fabrication layer (b_silkscreen)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-Edge_Cuts.gbr": {
+      "description": "Gerber fabrication layer (edge_cuts)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Cu.gbr": {
+      "description": "Gerber fabrication layer (f_cu)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Mask.gbr": {
+      "description": "Gerber fabrication layer (f_mask)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Paste.gbr": {
+      "description": "Gerber fabrication layer (f_paste)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Silkscreen.gbr": {
+      "description": "Gerber fabrication layer (f_silkscreen)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In1_Cu.gbr": {
+      "description": "Gerber fabrication layer (in1_cu)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In2_Cu.gbr": {
+      "description": "Gerber fabrication layer (in2_cu)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-job.gbrjob": {
+      "description": "Gerber job file (fabrication job spec)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2.drl": {
+      "description": "Drill file (NC drill data)",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pcb": {
+      "description": "KiCad PCB layout",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_prl": {
+      "description": "KiCad project-local settings",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pro": {
+      "description": "KiCad project file",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sch": {
+      "description": "KiCad schematic",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/emc.json": {
+      "description": "JSON data (13 top-level keys)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/pcb.json": {
+      "description": "JSON data (36 top-level keys)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/schematic.json": {
+      "description": "JSON data (45 top-level keys)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/thermal.json": {
+      "description": "JSON data (6 top-level keys)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/fp-lib-table": {
+      "description": "(fp_lib_table",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/sym-lib-table": {
+      "description": "(sym_lib_table",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/HDD.md": {
+      "description": "Hardware Design Description",
+      "tags": [
+        "archive",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.json": {
+      "description": "JSON data (1 top-level keys)",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/schematics/Commo.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/cleanup_commo_drc.py": {
+      "description": "cleanup_commo_drc.py \u2014 Clear the pre-existing hard DRC debt on Commo.kicad_pcb",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/gen_commo_sch.py": {
+      "description": "gen_commo_sch.py \u2014 Author Commo.kicad_sch from the as-placed Commo.kicad_pcb.",
+      "tags": [
+        "archive",
+        "emi-hardening",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/inject_commo_tpm.py": {
+      "description": "inject_commo_tpm.py -- add an SLB9672 TPM to Commo.kicad_sch via text",
+      "tags": [
+        "archive",
+        "pcb-design",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/mod_commo_pcb.py": {
+      "description": "mod_commo_pcb.py \u2014 Apply the schematic-first reconciliation transform to",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/route_commo_rssi.py": {
+      "description": "route_commo_rssi.py \u2014 Route the RSSI carrier-detect sub-circuit on Commo.kicad_pcb.",
+      "tags": [
+        "archive",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py": {
+      "description": "swap_lora_for_sik.py \u2014 One-off transform: remove Commo's LoRa (RFM95W),",
+      "tags": [
+        "archive",
+        "comms-protocol",
+        "emi-hardening",
+        "pcb-design",
+        "security"
+      ],
+      "archived": true
+    },
     "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md": {
       "description": "Pilot \u2014 EMI-Hardened Flight Control & Sensor Cape",
       "tags": [
@@ -6886,6 +7353,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/0805cs.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/0805hq.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/100058045.pdf": {
       "description": "PDF document",
       "tags": [
@@ -6949,7 +7430,21 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/Double Row Sockets on Tape and Reel.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/ECS-2520MV.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ECX-2236.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7068,6 +7563,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/SA612A.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/SAM-M10Q_DataSheet_UBX-22013293.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7110,6 +7612,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/Si5351-B.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/TG2520SMN_en-2584158.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7146,6 +7655,13 @@
       "archived": false
     },
     "avionics/datasheets/X2Y_15-2237598.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/a-ssm_sm.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7208,6 +7724,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/ax5043-d.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ax5043.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/bq76930.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7230,6 +7760,13 @@
       "archived": false
     },
     "avionics/datasheets/bth-xxx-xx-x-d-xx-footprint.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/cmx994ds.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7320,6 +7857,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/hi-6138_v-rev-s.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/hm-trp.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7404,6 +7948,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/mcp4901-4911-4921.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/mcp4921.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7475,6 +8026,27 @@
       "archived": false
     },
     "avionics/datasheets/pe4259.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/pocketbeagle-2.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/pocketbeagle-2.syscfg": {
+      "description": "* These arguments were used when this file was generated. They will be automatically applied on subsequent lo\u2026",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/pocketbeagle2_sch.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7593,6 +8165,27 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/ssm-1xx-xxx-dv-xx-xx-xxx-x-xx-mkt.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ssm-1xx-xxx-xx-xx-xx-x-xx-footprint.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ssm_sm.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/stm32wle5jc.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7608,6 +8201,13 @@
       "archived": false
     },
     "avionics/datasheets/tlv757p.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/tlv9062.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7636,6 +8236,20 @@
       "archived": false
     },
     "avionics/datasheets/tps63031.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/tps7a20.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/tsw-sxx.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8325,6 +8939,25 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md": {
+      "description": "Commo Rev T \u2014 Phase 1 Part Selection, Power Budget, and RF-Chain Audit",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/COMMO_REVT_RF_DESIGN.md": {
+      "description": "Commo Rev T \u2014 49 MHz Radio Design (I/Q receiver + VCXO-FM transmitter)",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Commo/Commo.md": {
       "description": "Commo \u2014 EMI-Hardened 49 MHz AX.25 Transceiver",
       "tags": [
@@ -8645,6 +9278,22 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Commo/kicads/Commo_radio.kicad_sch": {
+      "description": "KiCad schematic",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/kicads/Commo_radio.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Commo/kicads/analysis/emc.json": {
       "description": "JSON data (13 top-level keys)",
       "tags": [
@@ -8729,6 +9378,22 @@
     },
     "avionics/kicad/Commo/scripts/cleanup_commo_drc.py": {
       "description": "cleanup_commo_drc.py \u2014 Clear the pre-existing hard DRC debt on Commo.kicad_pcb",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/scripts/commo_radio_design.py": {
+      "description": "Commo Rev T 49 MHz radio -- design calculator and self-check.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Commo/scripts/gen_commo_radio_sch.py": {
+      "description": "gen_commo_radio_sch.py -- Commo Rev T 49 MHz radio sheet (U2 + U3).",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -9198,6 +9863,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md": {
+      "description": "HI-6138 Footprint, Pin Table, and Area Budget \u2014 Verification Report",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md": {
       "description": "Observer \u2194 phyCORE-AM62A SoM \u2014 Pad-Level Net Map",
       "tags": [
@@ -9628,6 +10302,16 @@
       ],
       "archived": false
     },
+    "avionics/kicad/PB2_HEADER_PINMAP.md": {
+      "description": "PocketBeagle 2 Industrial \u2014 P1/P2 expansion header pin map (verified) and TACCO allocation",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md": {
       "description": "Pilot (CAPE-A-2) \u2014 Footprint-vs-Datasheet Verification",
       "tags": [
@@ -9747,7 +10431,7 @@
       "archived": false
     },
     "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py": {
-      "description": "Python script",
+      "description": "gen_pilot_pcb.py \u2014 Build the Pilot (CAPE-A-2) PCB from the schematic netlist.",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -9791,6 +10475,14 @@
       "archived": false
     },
     "avionics/kicad/Serenity-Custom.pretty/Bourns_SRF2012_4T.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/Holt_HI-6138_QFN-48_6x6mm_P0.4mm_EP4.6mm.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
@@ -10137,6 +10829,30 @@
       ],
       "archived": false
     },
+    "avionics/kicad/TACCO/kicads/TACCO-2.kicad_dru": {
+      "description": "KiCad custom design-rules file",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb": {
+      "description": "KiCad PCB layout",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pro": {
+      "description": "KiCad project file",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/TACCO/kicads/TACCO.kicad_dru": {
       "description": "KiCad custom design-rules file",
       "tags": [
@@ -10292,6 +11008,22 @@
     },
     "avionics/kicad/TACCO/reports/figures/schematics/TACCO.svg": {
       "description": "Vector diagram",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/scripts/export_tacco_gerbers.sh": {
+      "description": "!/usr/bin/env bash",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/TACCO/scripts/finish_tacco_pcb.py": {
+      "description": "finish_tacco_pcb.py \u2014 Route TACCO with freerouting through KiCad's Specctra bridge,",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -11066,6 +11798,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/tools/swap_1553_hi6138.py": {
+      "description": "In-place PCB patch for the fleet MIL-STD-1553C swap (HI-1573 -> HI-6138).",
+      "tags": [
+        "avionics-hardware",
+        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/mosfet-search.txt": {
       "description": "Text file",
       "tags": [
@@ -11526,6 +12267,13 @@
       ],
       "archived": false
     },
+    "docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md": {
+      "description": "Serenity UAV \u2014 36in Hull / 64mm EDF Scale-Up Evaluation",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/LANDING_GEAR_ANALYSIS.md": {
       "description": "Serenity UAV \u2014 Landing Gear Structural Analysis",
       "tags": [
@@ -11739,6 +12487,24 @@
       ],
       "archived": false
     },
+    "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md": {
+      "description": "Commo 49 MHz Single-Chip Transceiver Search",
+      "tags": [
+        "comms-protocol",
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md": {
+      "description": "Commo as a Standalone MCU Bus Node \u2014 Requirements Brainstorm",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/electrical_fault_margins.md": {
       "description": "Serenity UAV \u2014 Electrical Fault Margin Validation",
       "tags": [
@@ -11765,6 +12531,13 @@
     },
     "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html": {
       "description": "HTML document",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/ideation/7-2.webp": {
+      "description": "RIFFv\u0001\u0000WEBPVP8 v\u0001\u0000p\u0003\u0001* \u0003\u0003>m2G#)!&\u0019Z",
       "tags": [
         "documentation"
       ],
@@ -12050,6 +12823,41 @@
         "documentation",
         "emi-hardening",
         "power",
+        "security"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md": {
+      "description": "Goal Capsule",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md": {
+      "description": "Fleet MIL-STD-1553C swap: HI-1573 + PRU \u2192 HI-6138 (Pilot, TACCO)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md": {
+      "description": "Commo Standalone Bus Node (Rev T) \u2014 Project Plan",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md": {
+      "description": "Commo Rev T \u2014 49 MHz I/Q radio and full Rev T board",
+      "tags": [
+        "comms-protocol",
+        "documentation",
         "security"
       ],
       "archived": false
@@ -12654,6 +13462,42 @@
       "description": "PCB board file (legacy Eagle/KiCad format)",
       "tags": [
         "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qx-motor 64mm edf/7-2.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qx-motor 64mm edf/8-4.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qx-motor 64mm edf/8-4.webp": {
+      "description": "\u0010E\ud9c4\udc1c-<TAk\u0018",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qx-motor 64mm edf/e-600x600.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion",
         "specification"
       ],
       "archived": false
@@ -14690,7 +15534,7 @@
       "archived": false
     },
     "tools/cargo_layout_fit.py": {
-      "description": "cargo_layout_fit.py -- measure a proposed cargo-section equipment layout",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
@@ -14939,7 +15783,7 @@
       "archived": false
     },
     "tools/precommit_doc_wording.py": {
-      "description": "Pre-commit check for CNAF M-3710.7 [REF-MIL-001]-style doc wording.",
+      "description": "Pre-commit check for CNAF M-3710.7 [REF-MIL-003]-style doc wording.",
       "tags": [
         "build-tooling"
       ],
@@ -15126,6 +15970,8 @@
       "airframe/wings-nacelles/TODO.md",
       "airframe/wings-nacelles/WBS.md",
       "archives/airframe-archives/archive/ARCHIVE-REVQ.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/HDD.md",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-2.md",
@@ -15159,17 +16005,21 @@
       "avionics/firmware/WBS.md",
       "avionics/firmware/dts/README.md",
       "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
+      "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
+      "avionics/kicad/Commo/COMMO_REVT_RF_DESIGN.md",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/reports/HDD.md",
       "avionics/kicad/Encoder/ENC-NACELLE-1.md",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
+      "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
       "avionics/kicad/Observer/observer/TODO.md",
       "avionics/kicad/Observer/observer/WBS.md",
+      "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/README.md",
@@ -15201,6 +16051,7 @@
       "docs/DOC_TEMPLATES.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
+      "docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md",
       "docs/LANDING_GEAR_ANALYSIS.md",
       "docs/LICENSE",
       "docs/MANIFEST.json",
@@ -15227,10 +16078,13 @@
       "docs/WING_ATTACH_INTERFACE.md",
       "docs/attribution_and_licensing.md",
       "docs/bom_revR.json",
+      "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
+      "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
       "docs/flight_envelope.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
+      "docs/ideation/7-2.webp",
       "docs/img/20260923_065833.jpg",
       "docs/img/20260923_065848.jpg",
       "docs/img/20260923_065933.jpg",
@@ -15268,6 +16122,10 @@
       "docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md",
       "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
+      "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md",
+      "docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md",
+      "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
+      "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -15338,6 +16196,10 @@
       "docs/references/nick-henning/top-view-with-wireframe-henning.jpg",
       "docs/references/open-source-hardware-checklist.pdf",
       "docs/references/pocketbeagle2 revA_241205.brd",
+      "docs/references/qx-motor 64mm edf/7-2.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.webp",
+      "docs/references/qx-motor 64mm edf/e-600x600.jpg",
       "docs/references/scservo.zip.zip",
       "docs/references/thingverse-serenity/LICENSE.txt",
       "docs/references/thingverse-serenity/README.txt",
@@ -15445,6 +16307,9 @@
       "airframe/placeholders/generate_placeholders.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Assemble.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Subsystem-Assembly.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/gen_commo_sch.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-2.md",
@@ -15504,6 +16369,7 @@
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/Tilt-Rotor 10AWG Wire Clearance Analysis.md",
       "docs/WBS_FEDERATION.md",
+      "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
       "docs/electrical_fault_margins.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
@@ -15512,6 +16378,8 @@
       "docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
       "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
+      "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md",
+      "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
@@ -15547,8 +16415,10 @@
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
       "docs/REVN_BUILD_GUIDE_24IN.md",
+      "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
+      "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
       "gcs/AGENTS.md",
       "gcs/SKIPPER_SPEC.md",
       "gcs/WBS.md",
@@ -15584,6 +16454,10 @@
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Assemble.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Subsystem-Assembly.py",
       "archives/airframe-archives/archive/openscad/wings/wing_nacelle_pylon_revo.scad",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/HDD.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/inject_commo_tpm.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/mod_pilot_pcb_reconcile.py",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.md",
@@ -15622,6 +16496,7 @@
       "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
+      "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/reports/HDD.md",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
@@ -15638,6 +16513,7 @@
       "avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py",
       "avionics/kicad/Observer/scripts/gen_observer_ic_symbols.py",
       "avionics/kicad/Observer/scripts/gen_observer_pcb.py",
+      "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
@@ -15667,10 +16543,13 @@
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
+      "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
+      "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
+      "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
@@ -15708,6 +16587,7 @@
       "LICENSES/CC-BY 4.0",
       "LICENSES/CC-BY-SA 4.0",
       "LICENSES/CERN-OHL-W 2.0",
+      "LICENSES/MIT",
       "airframe/LICENSE",
       "archives/stale-20260601/files-revF/LICENSE_AND_ATTRIBUTION.md",
       "archives/stale-20260601/files-revF/serenity-drone-revF/docs/LICENSE_AND_ATTRIBUTION.md",
@@ -15806,6 +16686,10 @@
       "docs/references/nick-henning/top-view-with-wireframe-henning.jpg",
       "docs/references/open-source-hardware-checklist.pdf",
       "docs/references/pocketbeagle2 revA_241205.brd",
+      "docs/references/qx-motor 64mm edf/7-2.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.webp",
+      "docs/references/qx-motor 64mm edf/e-600x600.jpg",
       "docs/references/scservo.zip.zip",
       "docs/references/thingverse-serenity/LICENSE.txt",
       "docs/references/thingverse-serenity/README.txt",
@@ -16887,6 +17771,7 @@
       "docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md",
       "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
       "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md",
+      "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
@@ -16931,6 +17816,10 @@
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-edf-glider-nacelle-for-swift-2100-827-50mm.webp",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-model-logo-16966716258.jpg",
       "docs/references/Screenshot 2026-08-18 at 09-50-31 EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades 6S Motor 3200KV - Xfly-Model.png",
+      "docs/references/qx-motor 64mm edf/7-2.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.jpg",
+      "docs/references/qx-motor 64mm edf/8-4.webp",
+      "docs/references/qx-motor 64mm edf/e-600x600.jpg",
       "graphical-build-guide/build_guide_03_print_nacelle.svg",
       "graphical-build-guide/build_guide_06_nacelle_pivot.svg",
       "graphical-build-guide/build_guide_07_edf_install.svg",
@@ -17114,6 +18003,20 @@
       "archives/avionics-archives/gerber-archive/XCVR-49MHZ-1/XCVR-49MHZ-1-drl_map.pdf",
       "archives/avionics-archives/gerber-archive/XCVR-49MHZ-1/XCVR-49MHZ-1-job.gtl",
       "archives/avionics-archives/gerber-archive/XCVR-49MHZ-1/XCVR-49MHZ-1.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-Edge_Cuts.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In1_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In2_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-job.gbrjob",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py",
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.kicad_pcb",
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.kicad_prl",
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.kicad_pro",
@@ -17139,6 +18042,9 @@
       "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/fix_xcvr_labels.py",
+      "avionics/kicad/tools/swap_1553_hi6138.py",
+      "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
+      "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
       "gcs/skipper/software/config/mavlink_router.conf",
       "gcs/skipper/software/install/install_mavlink_router.sh"
     ],
@@ -17441,6 +18347,60 @@
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_205610.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_210615.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_211230.zip",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Courtyard.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Cu.gbl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Fab.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Mask.gbs",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Paste.gbp",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Silkscreen.gbo",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Edge_Cuts.gm1",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Courtyard.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Cu.gtl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Fab.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Mask.gts",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Paste.gtp",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Silkscreen.gto",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In1_Cu.g1",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In2_Cu.g2",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Margin.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-in1-back.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-job.gbrjob",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-Edge_Cuts.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In1_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In2_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-job.gbrjob",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pcb",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_prl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pro",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sch",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sym",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/emc.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/pcb.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/schematic.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/thermal.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/fp-lib-table",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/sym-lib-table",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/HDD.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.svg",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/schematics/Commo.svg",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/cleanup_commo_drc.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/gen_commo_sch.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/inject_commo_tpm.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/mod_commo_pcb.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/route_commo_rssi.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_pcb",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_sch",
@@ -17786,6 +18746,60 @@
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_205610.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_210615.zip",
       "archives/avionics-archives/kicad-archives/CAPE-B-1-backups/CAPE-B-1-2026-05-31_211230.zip",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/Commo.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Courtyard.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Cu.gbl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Fab.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Mask.gbs",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Paste.gbp",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-B_Silkscreen.gbo",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Edge_Cuts.gm1",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Courtyard.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Cu.gtl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Fab.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Mask.gts",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Paste.gtp",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-F_Silkscreen.gto",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In1_Cu.g1",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-In2_Cu.g2",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-Margin.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-in1-back.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo-job.gbrjob",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/Commo.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-B_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-Edge_Cuts.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Mask.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Paste.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-F_Silkscreen.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In1_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-In2_Cu.gbr",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2-job.gbrjob",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/gerbers/XCVR-49MHZ-2.drl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pcb",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_prl",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_pro",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sch",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/Commo.kicad_sym",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/emc.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/pcb.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/schematic.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/analysis/thermal.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/fp-lib-table",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/kicads/sym-lib-table",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/HDD.md",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.json",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/diagrams/bus_topology.svg",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/reports/figures/schematics/Commo.svg",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/cleanup_commo_drc.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/gen_commo_sch.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/inject_commo_tpm.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/mod_commo_pcb.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/route_commo_rssi.py",
+      "archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/scripts/swap_lora_for_sik.py",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot-Rev-Q-doc.md",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_pcb",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_sch",
@@ -17887,6 +18901,8 @@
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
+      "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
+      "avionics/kicad/Commo/COMMO_REVT_RF_DESIGN.md",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/gerbers/Commo-B_Courtyard.gbr",
       "avionics/kicad/Commo/gerbers/Commo-B_Cu.gbl",
@@ -17925,6 +18941,8 @@
       "avionics/kicad/Commo/kicads/Commo.kicad_pro",
       "avionics/kicad/Commo/kicads/Commo.kicad_sch",
       "avionics/kicad/Commo/kicads/Commo.kicad_sym",
+      "avionics/kicad/Commo/kicads/Commo_radio.kicad_sch",
+      "avionics/kicad/Commo/kicads/Commo_radio.kicad_sym",
       "avionics/kicad/Commo/kicads/analysis/emc.json",
       "avionics/kicad/Commo/kicads/analysis/pcb.json",
       "avionics/kicad/Commo/kicads/analysis/schematic.json",
@@ -17936,6 +18954,8 @@
       "avionics/kicad/Commo/reports/figures/diagrams/bus_topology.svg",
       "avionics/kicad/Commo/reports/figures/schematics/Commo.svg",
       "avionics/kicad/Commo/scripts/cleanup_commo_drc.py",
+      "avionics/kicad/Commo/scripts/commo_radio_design.py",
+      "avionics/kicad/Commo/scripts/gen_commo_radio_sch.py",
       "avionics/kicad/Commo/scripts/gen_commo_sch.py",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
       "avionics/kicad/Commo/scripts/mod_commo_pcb.py",
@@ -17991,6 +19011,7 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
+      "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -18041,6 +19062,7 @@
       "avionics/kicad/Observer/scripts/mod_observer_ds_pcb.py",
       "avionics/kicad/Observer/scripts/mod_observer_som_place.py",
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
+      "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_dru",
@@ -18061,6 +19083,7 @@
       "avionics/kicad/Serenity-Custom.pretty/AOSMD_DFN5x6-8L.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bosch_BMP388_LGA-10_2x2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bourns_SRF2012_4T.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Holt_HI-6138_QFN-48_6x6mm_P0.4mm_EP4.6mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/HopeRF_RFM95W_Castellated_16.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_0915LP15B026E_SMD4.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_2450BP15E0100_SMD4.kicad_mod",
@@ -18103,6 +19126,9 @@
       "avionics/kicad/TACCO/gerbers/TACCO-In2_Cu.gbr",
       "avionics/kicad/TACCO/gerbers/TACCO-job.gbrjob",
       "avionics/kicad/TACCO/gerbers/TACCO.drl",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_dru",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pro",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_dru",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_prl",
@@ -18123,6 +19149,8 @@
       "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.json",
       "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.svg",
       "avionics/kicad/TACCO/reports/figures/schematics/TACCO.svg",
+      "avionics/kicad/TACCO/scripts/export_tacco_gerbers.sh",
+      "avionics/kicad/TACCO/scripts/finish_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
@@ -18216,6 +19244,7 @@
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
+      "avionics/kicad/tools/swap_1553_hi6138.py",
       "tools/kicad_add_part.py",
       "tools/kicad_prune_stale.py",
       "tools/kicad_relink.py",
@@ -18244,6 +19273,8 @@
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
+      "avionics/datasheets/0805cs.pdf",
+      "avionics/datasheets/0805hq.pdf",
       "avionics/datasheets/100058045.pdf",
       "avionics/datasheets/2N3866_SERIES.PDF",
       "avionics/datasheets/317990687.pdf",
@@ -18253,7 +19284,9 @@
       "avionics/datasheets/987651-1223.pdf",
       "avionics/datasheets/DS3218 datasheet.pdf",
       "avionics/datasheets/DS3225 datasheet.pdf",
+      "avionics/datasheets/Double Row Sockets on Tape and Reel.pdf",
       "avionics/datasheets/ECS-2520MV.pdf",
+      "avionics/datasheets/ECX-2236.pdf",
       "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf",
       "avionics/datasheets/KSZ9477S-Data-Sheet-DS00002392C.pdf",
       "avionics/datasheets/L-1038e.A5_phyCORE-AM62x_HW Manual.pdf",
@@ -18270,18 +19303,21 @@
       "avionics/datasheets/RFD900ux DataSheet v1.2.pdf",
       "avionics/datasheets/S32K-RM.pdf",
       "avionics/datasheets/S32K1xx.pdf",
+      "avionics/datasheets/SA612A.pdf",
       "avionics/datasheets/SAM-M10Q_DataSheet_UBX-22013293.pdf",
       "avionics/datasheets/SLB_9670VQ20_Infineon.pdf",
       "avionics/datasheets/SLB_9672XU20_Infineon.pdf",
       "avionics/datasheets/SM04B-SRSS-TB.pdf",
       "avionics/datasheets/SM1553-Series_HiRel-Data-Bus-Pulse-Transformer_RevD.pdf",
       "avionics/datasheets/SRF2012A.pdf",
+      "avionics/datasheets/Si5351-B.pdf",
       "avionics/datasheets/TG2520SMN_en-2584158.pdf",
       "avionics/datasheets/TVS-Diode-SMBJ-Datasheet.pdf",
       "avionics/datasheets/TYPE2EL.pdf",
       "avionics/datasheets/Vishay_45273MDSK.pdf",
       "avionics/datasheets/X2YDatasheet.pdf",
       "avionics/datasheets/X2Y_15-2237598.pdf",
+      "avionics/datasheets/a-ssm_sm.pdf",
       "avionics/datasheets/adin1300.pdf",
       "avionics/datasheets/adm2795e.pdf",
       "avionics/datasheets/ak7455-en-datasheet-myakm.pdf",
@@ -18290,10 +19326,13 @@
       "avionics/datasheets/aon6554.pdf",
       "avionics/datasheets/aon6558.pdf",
       "avionics/datasheets/atf16v8bql.pdf",
+      "avionics/datasheets/ax5043-d.pdf",
+      "avionics/datasheets/ax5043.pdf",
       "avionics/datasheets/bq76930.pdf",
       "avionics/datasheets/bsh-bth.pdf",
       "avionics/datasheets/bst-bmp388-ds001.pdf",
       "avionics/datasheets/bth-xxx-xx-x-d-xx-footprint.pdf",
+      "avionics/datasheets/cmx994ds.pdf",
       "avionics/datasheets/dp83825i.pdf",
       "avionics/datasheets/drv8833.pdf",
       "avionics/datasheets/ds-000347-icm-42688-p-v1.6.pdf",
@@ -18306,6 +19345,7 @@
       "avionics/datasheets/esd701.pdf",
       "avionics/datasheets/esd801.pdf",
       "avionics/datasheets/hi-1573.pdf",
+      "avionics/datasheets/hi-6138_v-rev-s.pdf",
       "avionics/datasheets/hm-trp.pdf",
       "avionics/datasheets/hx711.pdf",
       "avionics/datasheets/ina226.pdf",
@@ -18318,6 +19358,7 @@
       "avionics/datasheets/lm393.pdf",
       "avionics/datasheets/lmv331.pdf",
       "avionics/datasheets/mcp1703.pdf",
+      "avionics/datasheets/mcp4901-4911-4921.pdf",
       "avionics/datasheets/mcp4921.pdf",
       "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf",
       "avionics/datasheets/molex-104031.pdf",
@@ -18329,6 +19370,9 @@
       "avionics/datasheets/nexperia-PMBT2222A.pdf",
       "avionics/datasheets/pca9685.pdf",
       "avionics/datasheets/pe4259.pdf",
+      "avionics/datasheets/pocketbeagle-2.pdf",
+      "avionics/datasheets/pocketbeagle-2.syscfg",
+      "avionics/datasheets/pocketbeagle2_sch.pdf",
       "avionics/datasheets/prtr5v0u2x.pdf",
       "avionics/datasheets/rfd900x-datasheet.pdf",
       "avionics/datasheets/rfm95w-datasheet.pdf",
@@ -18345,13 +19389,19 @@
       "avionics/datasheets/smaj-series-tvs-datasheet.pdf",
       "avionics/datasheets/sn74lvc1g04.pdf",
       "avionics/datasheets/sn74lvc1g3157.pdf",
+      "avionics/datasheets/ssm-1xx-xxx-dv-xx-xx-xxx-x-xx-mkt.pdf",
+      "avionics/datasheets/ssm-1xx-xxx-xx-xx-xx-x-xx-footprint.pdf",
+      "avionics/datasheets/ssm_sm.pdf",
       "avionics/datasheets/stm32wle5jc.pdf",
       "avionics/datasheets/tlv62569.pdf",
       "avionics/datasheets/tlv757p.pdf",
+      "avionics/datasheets/tlv9062.pdf",
       "avionics/datasheets/tps54540.pdf",
       "avionics/datasheets/tps54620.pdf",
       "avionics/datasheets/tps62933.pdf",
       "avionics/datasheets/tps63031.pdf",
+      "avionics/datasheets/tps7a20.pdf",
+      "avionics/datasheets/tsw-sxx.pdf",
       "avionics/datasheets/type2el-2dl-2ll-2kl-unified-design-guide.pdf",
       "avionics/datasheets/type2el-2dl-module-footprint-topview.dxf",
       "avionics/datasheets/w25q128jv.pdf",
@@ -18433,6 +19483,8 @@
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
+      "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
+      "avionics/kicad/Commo/COMMO_REVT_RF_DESIGN.md",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/gerbers/Commo-B_Courtyard.gbr",
       "avionics/kicad/Commo/gerbers/Commo-B_Cu.gbl",
@@ -18471,6 +19523,8 @@
       "avionics/kicad/Commo/kicads/Commo.kicad_pro",
       "avionics/kicad/Commo/kicads/Commo.kicad_sch",
       "avionics/kicad/Commo/kicads/Commo.kicad_sym",
+      "avionics/kicad/Commo/kicads/Commo_radio.kicad_sch",
+      "avionics/kicad/Commo/kicads/Commo_radio.kicad_sym",
       "avionics/kicad/Commo/kicads/analysis/emc.json",
       "avionics/kicad/Commo/kicads/analysis/pcb.json",
       "avionics/kicad/Commo/kicads/analysis/schematic.json",
@@ -18482,6 +19536,8 @@
       "avionics/kicad/Commo/reports/figures/diagrams/bus_topology.svg",
       "avionics/kicad/Commo/reports/figures/schematics/Commo.svg",
       "avionics/kicad/Commo/scripts/cleanup_commo_drc.py",
+      "avionics/kicad/Commo/scripts/commo_radio_design.py",
+      "avionics/kicad/Commo/scripts/gen_commo_radio_sch.py",
       "avionics/kicad/Commo/scripts/gen_commo_sch.py",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
       "avionics/kicad/Commo/scripts/mod_commo_pcb.py",
@@ -18537,6 +19593,7 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
+      "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -18587,6 +19644,7 @@
       "avionics/kicad/Observer/scripts/mod_observer_ds_pcb.py",
       "avionics/kicad/Observer/scripts/mod_observer_som_place.py",
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
+      "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_dru",
@@ -18607,6 +19665,7 @@
       "avionics/kicad/Serenity-Custom.pretty/AOSMD_DFN5x6-8L.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bosch_BMP388_LGA-10_2x2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Bourns_SRF2012_4T.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Holt_HI-6138_QFN-48_6x6mm_P0.4mm_EP4.6mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/HopeRF_RFM95W_Castellated_16.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_0915LP15B026E_SMD4.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Johanson_2450BP15E0100_SMD4.kicad_mod",
@@ -18649,6 +19708,9 @@
       "avionics/kicad/TACCO/gerbers/TACCO-In2_Cu.gbr",
       "avionics/kicad/TACCO/gerbers/TACCO-job.gbrjob",
       "avionics/kicad/TACCO/gerbers/TACCO.drl",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_dru",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb",
+      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pro",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_dru",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_prl",
@@ -18669,6 +19731,8 @@
       "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.json",
       "avionics/kicad/TACCO/reports/figures/diagrams/emc_severity.svg",
       "avionics/kicad/TACCO/reports/figures/schematics/TACCO.svg",
+      "avionics/kicad/TACCO/scripts/export_tacco_gerbers.sh",
+      "avionics/kicad/TACCO/scripts/finish_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
@@ -18762,6 +19826,7 @@
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
+      "avionics/kicad/tools/swap_1553_hi6138.py",
       "avionics/mosfet-search.txt",
       "avionics/rev-s1/TODO.md",
       "avionics/rev-s1/WBS.md"

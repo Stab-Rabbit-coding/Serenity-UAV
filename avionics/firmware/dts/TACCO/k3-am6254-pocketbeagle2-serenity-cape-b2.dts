@@ -4,7 +4,7 @@
  * Device tree overlay — Serenity UAV TACCO (EMI-hardened Comms, Logging & Payload)
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Target:
  *   Board  : PocketBeagle 2 Industrial (DigiKey 2820-100003007-ND)
@@ -51,7 +51,7 @@
  *   CPSW3G    — 2× ADIN1300BCPZ 100BASE-TX PHY (isolated via ISO7642FDWRR + Würth 749010012A)
  *   SDIO      — WL1837MOD 5 GHz 802.11ac/b/g/n + BT5 (4-bit MMC)
  *   EHRPWM0   — Cargo servo / gimbal axis (2 channels)
- *   PRU-ICSS0/PRU0 — MIL-STD-1553B Manchester II codec (1 Mbps)
+ *   PRU-ICSS0/PRU0 — unused (1553 moved to the HI-6138 on the TPM's SPI bus, 2026-09-28)
  *   PRU-ICSS0/PRU1 — Cargo servo PWM ch 2-3 + XCVR TDDS timing
  *
  * External comms links on this node:
@@ -77,9 +77,10 @@
  *   [6]  Si5351A/B/C-B Datasheet, Skyworks, Rev 1.4
  *   [7]  Infineon SLB9672 TPM 2.0 Datasheet
  *   [8]  WL1837MOD (TI WL1837) Integration Guide
- *   [9]  MIL-STD-1553B with Notice 2, DoD Interface Standard, 30 Sep 1996
- *        [REF-MIL-001 §4.1 bus characteristics, §4.3 word formats, §4.6 coupling,
- *        Table IV response time 4-12 µs] — 1 Mbps, 78 Ω, Manchester II encoding
+ *   [9]  MIL-STD-1553C, DoD Interface Standard, 28 Feb 2018 (supersedes 1553B)
+ *        [REF-MIL-001 §4.3.3.8 response time 4.0-12.0 µs, §4.5.1.2 Zo 70-85 Ω,
+ *        §4.5.1.5.2 direct-coupled stub] — 1 Mbps Manchester II; implemented by
+ *        the Holt HI-6138 (DS6138 Rev S), not the SoC
  *   [10] ISOW1044BDFMR datasheet, TI SLLSEP5 — isolated CAN FD transceiver
  *        [REF-IEC-001 Cl.5.5.2] / [REF-VDE-001 Cl.4.3, Cl.5.3] — 5 kV RI certification
  *   [11] ADM2795EBRWZ datasheet, Analog Devices — isolated RS-485 transceiver
@@ -141,9 +142,12 @@
 #define CAPE_B_GPIO_PHY2_RST_N      28  /* ADIN1300BCPZ #2 reset (active-low)[ESTIMATE] */
 #define CAPE_B_GPIO_PHY2_INT_N      29  /* ADIN1300BCPZ #2 interrupt         [ESTIMATE] */
 
-/* MIL-STD-1553B DS26LV31/DS26LV32 output-enable lines. */
-#define CAPE_B_GPIO_1553_OE1_N      30  /* DS26LV31 output enable 1# (TX)    [ESTIMATE] */
-#define CAPE_B_GPIO_1553_OE2_N      31  /* DS26LV32 output enable 2# (RX)    [ESTIMATE] */
+/* Holt HI-6138 MIL-STD-1553C engine control lines (2026-09-28 fleet swap;
+ * GPIO numbers 30/31 formerly the retired DS26LV31/32 output enables).    */
+#define CAPE_B_GPIO_1553_IRQ_N      30  /* HI-6138 IRQ (P1-7, open-drain)    [ESTIMATE] */
+#define CAPE_B_GPIO_1553_MR_N       31  /* HI-6138 MR master reset (P1-8)    [ESTIMATE] */
+#define CAPE_B_GPIO_1553_TX_INH     54  /* HI-6138 TXINHA (P1-9, hi=inhibit) [ESTIMATE] */
+#define CAPE_B_GPIO_1553_CS         55  /* HI-6138 CE chip-select (P1-20)    [ESTIMATE] */
 
 /* WL1837MOD WiFi enable. */
 #define CAPE_B_GPIO_WL_EN           32  /* WL1837MOD WL_EN (active-high)     [ESTIMATE] */
@@ -306,15 +310,16 @@
         >;
     };
 
-    /* PRU-ICSS0 PRU0: MIL-STD-1553B Manchester II codec pins.
-     * DS26LV31 TX driven by GPO0/GPO1; DS26LV32 RX read on GPI2/GPI3.   */
-    cape_b_pru0_1553_pins: TACCO-pru0-1553-pins {
+    /* HI-6138 MIL-STD-1553C control GPIOs (2026-09-28 fleet swap): the
+     * P1-7/8/9 pads formerly muxed to PRG0_PRU0, now GPIO (mux mode 7);
+     * P1-10 (pad 0x00d0) freed.  Offsets carried over, still [ESTIMATE].
+     * Source: avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md §3.          */
+    cape_b_1553_gpio_pins: TACCO-1553-gpio-pins {
         pinctrl-single,pins = <
-            /* [ESTIMATE — PRG0 GPIO pad area] */
-            AM62X_IOPAD(0x00d0, PIN_OUTPUT, 5) /* PRG0_PRU0_GPO0 → 1553_TX_P */
-            AM62X_IOPAD(0x00d4, PIN_OUTPUT, 5) /* PRG0_PRU0_GPO1 → 1553_TX_N */
-            AM62X_IOPAD(0x00d8, PIN_INPUT,  5) /* PRG0_PRU0_GPI2 ← 1553_RX_P */
-            AM62X_IOPAD(0x00dc, PIN_INPUT,  5) /* PRG0_PRU0_GPI3 ← 1553_RX_N */
+            /* [ESTIMATE — ex PRG0 GPIO pad area, GPIO mux mode 7] */
+            AM62X_IOPAD(0x00dc, PIN_INPUT_PULLUP, 7) /* P1-7  ← HI-6138 IRQ#   */
+            AM62X_IOPAD(0x00d8, PIN_OUTPUT,       7) /* P1-8  → HI-6138 MR#    */
+            AM62X_IOPAD(0x00d4, PIN_OUTPUT,       7) /* P1-9  → HI-6138 TXINHA */
         >;
     };
 
@@ -339,11 +344,16 @@
 &main_spi1 {
     status = "okay";
     pinctrl-names = "default";
-    pinctrl-0 = <&cape_b_spi1_pins>;
+    pinctrl-0 = <&cape_b_spi1_pins>, <&cape_b_1553_gpio_pins>;
+    /* HI-6138 (CS index 4) joins the TPM's bus: on the TACCO schematic the
+     * TPM, NOR flash, ZigBee, and HI-6138 share SPI0_B.  This DTS still names
+     * the controller main_spi1 and lists the retired RFM95W -- pre-existing
+     * drift tracked in avionics/WBS.md §1.2a.3, not corrected here.         */
     cs-gpios = <&main_gpio0 CAPE_B_GPIO_TPM_CS   GPIO_ACTIVE_LOW>,
                <&main_gpio0 CAPE_B_GPIO_LORA_CS  GPIO_ACTIVE_LOW>,
                <&main_gpio0 CAPE_B_GPIO_FLASH_CS GPIO_ACTIVE_LOW>,
-               <&main_gpio0 CAPE_B_GPIO_SD_CS    GPIO_ACTIVE_LOW>;
+               <&main_gpio0 CAPE_B_GPIO_SD_CS    GPIO_ACTIVE_LOW>,
+               <&main_gpio0 CAPE_B_GPIO_1553_CS  GPIO_ACTIVE_LOW>;
     #address-cells = <1>;
     #size-cells = <0>;
 
@@ -358,6 +368,19 @@
         interrupt-parent = <&main_gpio0>;
         interrupts = <CAPE_B_GPIO_TPM_IRQ IRQ_TYPE_LEVEL_LOW>;
         reset-gpios = <&main_gpio0 CAPE_B_GPIO_TPM_RST GPIO_ACTIVE_LOW>;
+    };
+
+    /* Holt HI-6138 MIL-STD-1553 BC/RT/MT protocol engine (DS6138 Rev S);
+     * same configuration as Pilot's mil1553@3 -- see that node's comment.
+     * On CN nodes the HI-6138 runs RT-only; BC election is on CAN FD.    */
+    mil1553_hi6138: mil1553@4 {
+        compatible = "holt,hi6138";
+        reg = <4>;                           /* CS index 4 (1553_CS GPIO)   */
+        spi-max-frequency = <20000000>;
+        interrupt-parent = <&main_gpio0>;
+        interrupts = <CAPE_B_GPIO_1553_IRQ_N IRQ_TYPE_EDGE_FALLING>;
+        reset-gpios = <&main_gpio0 CAPE_B_GPIO_1553_MR_N GPIO_ACTIVE_LOW>;
+        txinh-gpios = <&main_gpio0 CAPE_B_GPIO_1553_TX_INH GPIO_ACTIVE_HIGH>;
     };
 
     /* RFM95W LoRa 915 MHz — Semtech SX1276 core, SPI mode 0, 10 MHz max.
@@ -663,17 +686,12 @@
 };
 
 /* ───────────────────────────────────────────────────────────────────────────
- * Section 8 — PRU-ICSS0: MIL-STD-1553B (PRU0) and cargo/TDDS (PRU1)
+ * Section 8 — PRU-ICSS0: cargo/TDDS (PRU1); PRU0 unused
  *
- * PRU0 firmware: serenity-pru0-1553.out
- *   Same MIL-STD-1553B Manchester II codec as Pilot PRU0.
- *   On CN nodes this PRU runs exclusively as Remote Terminal (RT).
- *   BC election happens on the CAN FD heartbeat bus; CN nodes do not
- *   participate in BC election.
- *   DS26LV31 TX: PRG0_PRU0_GPO0 (TX_P), GPO1 (TX_N).
- *   DS26LV32 RX: PRG0_PRU0_GPI2 (RX_P), GPI3 (RX_N).
- *   DS26LV31/32 OE#: main_gpio0 CAPE_B_GPIO_1553_OE1_N / OE2_N.
- *   Coupling transformer: PE-68515, 1:1.41, 78 Ω stub resistors.
+ * PRU0: the MIL-STD-1553B Manchester codec is RETIRED (2026-09-28 fleet
+ *   MIL-STD-1553C swap); 1553 is the Holt HI-6138 on SPI (Section 2), RT-only
+ *   on CN nodes, PM-DB2791S 1:2.5 + 2 x 55 R direct-coupled stub
+ *   [REF-MIL-001 §4.5.1.5.2].
  *
  * PRU1 firmware: serenity-pru1-cargo.out
  *   Two 50 Hz servo PWM channels (SERVO2, SERVO3) for cargo bay door
@@ -685,10 +703,7 @@
  * Firmware binaries installed to /lib/firmware/serenity/ on the target.
  * ─────────────────────────────────────────────────────────────────────────*/
 &icssg0_pru0 {
-    status = "okay";
-    pinctrl-names = "default";
-    pinctrl-0 = <&cape_b_pru0_1553_pins>;
-    firmware-name = "serenity/pru0-mil1553.out";
+    status = "disabled";                     /* 1553 codec retired 2026-09-28 */
 };
 
 &icssg0_pru1 {

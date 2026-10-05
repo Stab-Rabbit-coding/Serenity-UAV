@@ -2,10 +2,48 @@
 
 **Callsign:** TACCO (Tactical Coordinator)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CERN-OHL-W 2.0 (hardware design); status notes/prose in this file are CC BY-SA 4.0 —
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 see `docs/attribution_and_licensing.md`
 **Revision:** R (Rev R baseline — TACCO naming finalized; EMI-hardened variant of TACCO Rev M, Ethernet PHY restored)
 **Date:** 2026-06-07
+**Update 2026-09-29 (area recovery + mLRS bare-chip radio + fab-ready layout, S. Griffing
+decisions; implemented by Claude Fable 5.1):** see `avionics/WBS.md` §1.2a "TACCO area recovery,
+mLRS bare-chip radio, non-stack rails, and fab-ready layout" for the full decision record.
+- **Radio:** the Seeed Wio-E5 module (Chinese-built) is replaced by a bare ST **STM32WLE5JC**
+  (`MLRS-MCU`) with an Epson TG2520SMN 32 MHz TCXO and a pSemi PE4259 antenna switch. mLRS pin
+  map and the `UART_WIOE5_*` net names are unchanged. **RF matching values are placeholders
+  pending ST AN5457 verification and bench tuning** — do not fly the radio before that.
+- **Bead defect fixed:** the eight SDIO/UART signal beads were the 1812 5 A power bead
+  (742792510); they are now 0402 600 Ω positions (MPN: owner to select). `FB1` keeps 742792510.
+- **Smaller parts, same function:** boot/bind switch → C&K KMR2; SWD header → Tag-Connect
+  TC2030-NL pads. PB2 rails are non-stack-through (Commo Rev T is standalone).
+- **PB2 header map rebuilt from the real PocketBeagle 2 schematic** (owner-supplied,
+  `avionics/datasheets/pocketbeagle2_sch.pdf`): the Rev S2 map had GND on the PB2's 5 V VIN pin
+  and peripherals on the wrong balls. Verified map and allocation:
+  `avionics/kicad/PB2_HEADER_PINMAP.md`. Ethernet is now RMII2 + MDIO0 (`RMII2_*` nets),
+  CAN-FD on MCAN0 (P2-5/7), RS-485 on UART2 with hardware DE, mLRS on UART0, BT on UART1.
+- **Wi-Fi host interface:** SDIO is not on the PB2 headers, so the Type 2EL WLAN core cannot
+  be hosted; the SDIO beads are deleted. **Owner decision: Wi-Fi moves to a USB module on USB1
+  (P1-9/11); module selection with datasheet is open and blocks fab** (WBS §1.2a).
+- **DP83825I pin table corrected** against TI SNLS638C Table 4-1 (the previous table was not
+  this part's pinout; Pilot shares the defect). Pin 2 (50MHzOut) drives `RMII2_REF_CLK`.
+- **Layout:** owner authorized full auto-placement and autorouting; the §1/§11–13 layout
+  constraints below still apply. All 170 parts are placed on the 55 × 35 mm outline with 0 DRC
+  errors before routing (isolation band and GND2 islands follow the transceiver positions;
+  small bypasses use the top-face cells between the non-stack-through rail pins). Routing,
+  Gerber and remaining gates are tracked in the WBS entry.
+
+**Update 2026-09-28 (MIL-STD-1553C fleet swap, S. Griffing decision; implemented by Claude
+Opus 5.5):** `1553-XCVR` is now the **Holt HI-6138** protocol engine on the SPI0_B bus,
+replacing the HI-1573 and the PRU Manchester codec.
+- **Generator:** `gen_tacco_sch.py` was first brought back in line with the committed
+  schematic, proven netlist-identical. Then the swap was applied.
+- **Gates:** ERC 0; DRC 169, equal to the pre-change baseline (no new violations), with 0
+  schematic-parity issues.
+- **Owner action:** the four new parts (`X-50M` 50 MHz MCLK oscillator, `C-50M`, `C-1553D`,
+  `R-1553IRQ`) are **parked off-board**. No collision-free site exists on either side within
+  20 mm, so they need manual placement (`avionics/WBS.md` §1.2a.3).
+- **References:** pin table in `../HI6138_FOOTPRINT_VERIFICATION.md`.
 **Status (2026-09-23 update, S. Griffing):** The Rev S1 reconciliation described below is
 SUPERSEDED — the legacy schematic/PCB pair (169 sch refs vs 43 PCB footprints, 564 ERC
 violations) was not patchable and has been replaced by a from-scratch schematic-first rebuild
@@ -230,16 +268,16 @@ Additional XO specifics:
 - **RF groundplane moat:** The RFD900x and RFM95W occupy the same RF section as in
 
   TACCO (right 30 mm of board). The isolation moat between the RF groundplane and
-  the digital groundplane must be maintained; the moat capacitors (10 nF X2Y) bridge
+  the digital groundplane shall be maintained; the moat capacitors (10 nF X2Y) bridge
   the moat at RF frequencies, referenced to PGND on the RF side and GND on the digital
   side.
 
-- **SMA shield contacts:** All four SMA connectors must have their shells soldered to
+- **SMA shield contacts:** All four SMA connectors shall have their shells soldered to
 
   a PGND copper pour, NOT to the digital GND pour. Route a 3 mm PGND pour around each
   SMA mounting footprint.
 
-- **Ferrite bead orientation:** SDIO and SPI ferrite beads must be oriented with their
+- **Ferrite bead orientation:** SDIO and SPI ferrite beads shall be oriented with their
 
   axis perpendicular to the associated RF trace runs (per Würth EMC design guide).
 
@@ -325,11 +363,11 @@ copper pour, consistent with §11.
   RFD900x module U.FL/antenna pads respectively (≤ 5 mm trace from ANT pin to filter
   pad). Place FL_WIFI ≤ 5 mm from WL1837MOD ANT pin.
 - **Antenna ESD placement:** Place D_ANT_xxx immediately after the BPF (between BPF output
-  and SMA pin 1). The shunt path to PGND must be as short as possible (via directly
+  and SMA pin 1). The shunt path to PGND shall be as short as possible (via directly
   to PGND plane, no daisy-chain routing).
 - **Keep the RF trace in the BPF-to-SMA segment entirely within the RF groundplane
   moat region** (right 30 mm of board). Do not route it over the digital GND pour.
-- **SMA pad PGND pour:** Each SMA footprint shell must have a ≥ 3 mm PGND copper pour
+- **SMA pad PGND pour:** Each SMA footprint shell shall have a ≥ 3 mm PGND copper pour
   ring as specified in §11.
 
 ---
@@ -417,7 +455,7 @@ All field connectors are shielded JST-GH (or SMA/U.FL for RF). SHIELD pins conne
 | J_PWR | SM04B-GHS-TB-1MP | 1=+5V_IN, 2=GND, 3=GND, 4=+5V_IN, MP=PGND | Power input |
 | J_CAN | SM03B-GHS-TB-1MP | 1=CAN_B_H, 2=CAN_B_L, 3=GND, MP=PGND | CAN FD bus |
 | J_485 | SM03B-GHS-TB-1MP | 1=RS485_B_P, 2=RS485_B_N, 3=GND, MP=PGND | RS-485 |
-| J_1553 | SM04B-GHS-TB-1MP | 1=BUS_1553_B_P, 2=BUS_1553_B_N, 3=GND, 4=PGND, MP=PGND | MIL-STD-1553B |
+| J_1553 | SM04B-GHS-TB-1MP | 1=BUS_1553_B_P, 2=BUS_1553_B_N, 3=GND, 4=PGND, MP=PGND | MIL-STD-1553C |
 | J_FAN | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=FAN_PWM_B, MP=PGND | Bay ventilation fan |
 | J_SD | MicroSD (Molex 503182-1852) | SDIO: CLK/CMD/D0-D3/CD/WP | Logging microSD |
 | J_SMA_LORA | SMA (50 Ω) | RF center conductor = LORA_ANT; shell = PGND | LoRa 915 MHz antenna |

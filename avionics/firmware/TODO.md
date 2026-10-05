@@ -1,7 +1,7 @@
 # Serenity UAV — Avionics Node Firmware TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 > **This file lists only currently-open (unchecked) top-level tasks for
 > this subsystem — one line each, <=70 chars, no prose.** Full detail
@@ -21,14 +21,14 @@
 - [ ] IMU / barometer sensor fusion — ICM-42688-P (SPI), BMP388/BMP390 (SPI)
 - [ ] ToF sensor array management — VL53L5CX ×6 per node via TCA9548A I²C…
 - [ ] u-blox M10Q GNSS integration — UART NMEA/UBX parse
-- [ ] MIL-STD-1553B RT implementation — PRU-ICSS Manchester II…
+- [ ] MIL-STD-1553C BC/RT implementation (HI-6138) — Holt HI-6138 SPI driver
 - [ ] TPM-bound attestation — SLB9672 TPM 2.0 HMAC on all outbound…
 
 ### 4.3 — CN Node (XO) — Phase 7 Firmware
 → full detail: `WBS.md` §4.3
 
 - [ ] CAN FD heartbeat and telemetry forwarding — broadcast 0x001–0x008…
-- [ ] MIL-STD-1553B BC/RT tasks — BC on CN1 (standby), RT on CN2–CN4
+- [ ] MIL-STD-1553C BC/RT tasks — BC on CN1 (standby), RT on CN2–CN4
 - [ ] RS-485 inter-board messaging — structured message format…
 - [ ] Ethernet RSTP ring management — CPSW3G bridge configuration
 - [ ] Signed-log write via CPLD write-blocker — log records written as…

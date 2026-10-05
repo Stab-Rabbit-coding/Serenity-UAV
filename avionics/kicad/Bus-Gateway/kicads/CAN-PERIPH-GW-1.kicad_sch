@@ -4,7 +4,7 @@
     (title "CAN-PERIPH-GW-1 -- TPM-secured Dual-Isolated-Bus (CAN-FD + RS-485) Peripheral Gateway (4x stack)") (date "2026-07-26") (rev "1") (company "Griffing Technology LLC")
     (comment 1 "Serenity UAV -- SKIPPER-CAN-PERIPH-GW-PCB -- standalone board, not a PocketBeagle 2 Industrial cape")
     (comment 2 "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP | Griffing Technology LLC")
-    (comment 3 "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0")
+    (comment 3 "License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)")
     (comment 4 "Concept remix of VimDrones AP_Periph Pico (informational ref only, GPLv3 -- no source copied); see CAN-PERIPH-GW-1.md")
   )
   (lib_symbols

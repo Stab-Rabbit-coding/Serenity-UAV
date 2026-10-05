@@ -24,13 +24,13 @@ python3 tools/bake_hull_frame.py --check    # report baked state only
 - Transform data is baked into vertex coordinates
 - Tool refuses to bake an already-marked file (idempotent — cannot double-apply)
 
-**Important:** Never bake a mesh *derived from* an already-baked file (e.g., a Blender repair of a baked STL loses the header marker and should not be re-baked).
+**CAUTION:** A mesh *derived from* an already-baked file shall not be baked (e.g., a Blender repair of a baked STL loses the header marker).
 
 **Historical transforms:** The bake transforms (position + quaternion per component) are defined in `tools/bake_hull_frame.py` `COMPONENTS` dictionary — do not duplicate them elsewhere in the codebase.
 
 ## SCAD and STL Generation
 
-Generator scripts may model parts in convenient part-local frames, but any **regenerated primary-component STL must be re-baked before publishing**.
+Generator scripts may model parts in convenient part-local frames, but any **regenerated primary-component STL shall be re-baked before publishing**.
 
 **General workflow:**
 
@@ -46,7 +46,7 @@ Generator scripts may model parts in convenient part-local frames, but any **reg
 **Directory:** `airframe/blender-scripts/files-hollowed-24in/`
 **Purpose:** Generate canonical fuselage shells (authoritative source for all fuselage geometry)
 
-The Blender hollowing pipeline is the **authoritative canonical source** for all fuselage geometry. Any future changes must start from the corresponding Blender source file in `files-hollowed-24in/`.
+The Blender hollowing pipeline is the **authoritative canonical source** for all fuselage geometry. Any future changes shall start from the corresponding Blender source file in `files-hollowed-24in/`.
 
 **Usage:**
 

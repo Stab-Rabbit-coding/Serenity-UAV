@@ -1,8 +1,8 @@
 # Serenity UAV — TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
-**Last updated:** 2026-09-21
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
+**Last updated:** 2026-10-01
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -162,6 +162,7 @@
 - [ ] SPAR-20-8 (U8) — Re-datum the nozzle drive onto the fixed trunnion…
 - [ ] SPAR-20-9 (U9) — Mass/CG/T-W re-derive (spar 96.2 → 67.5 g/pair, but…
 - [ ] NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening
+- [ ] NAC-64-SERVO-01 — radial 64 mm tandem-EDF nacelle + servo nozzle
 - [ ] SPAR-20-AERO — The re-lofted section is no longer S1223 (root 12.1 →…
 - [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
 - [ ] SPAR-20-ALLOW — No verified CF tube flexural allowable exists in…
@@ -201,11 +202,11 @@
 - [ ] FAR-FT-PANEL PCB design
 - [ ] Link placeholders to BOM entries
 
-### 1.2b — PCB Redesigns: Commo Rev S1 / TACCO Rev S1 / Flight Engineer Rev S1
+### 1.2b — PCB Redesigns: Commo Rev S1 / XO Rev S1 / Flight Engineer Rev S1
 → detail: `avionics/rev-s1/WBS.md` §1.2b
 
 - [ ] Commo Rev S1 — add LoRa, replace JST with P1+P2 socket rails
-- [ ] TACCO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
+- [ ] XO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
 - [ ] Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output
 
 ### 1.2c — PCB Design: Observer (Nose/Cargo-Bay Vision, ToF & Laser)
@@ -240,9 +241,9 @@
 - [ ] Clean up FlightEngineer's ~30 dangling no-connect flags
 - [ ] Close the Observer sch↔pcb parity gap (RS485_DE/TX/RX on U3)
 - [ ] Place gateway lanes 3 and 4 (U1_3/U1_4, U2_3/U2_4 not on the PCB)
-- [ ] Decide whether Commo, Pilot, TACCO follow to the SLB 9672
+- [ ] Decide whether Commo, Pilot, XO follow to the SLB 9672
 
-### 1.2a — PCB Design: Pilot, TACCO, and Commo (EMI-Hardened Variants)
+### 1.2a — PCB Design: Pilot, XO, and Commo (EMI-Hardened Variants)
 → detail: `avionics/WBS.md` §1.2a
 
 - [ ] Reconcile Pilot.md §14 field-connector table with the actual P…
@@ -254,8 +255,11 @@
 - [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
 - [ ] Add SBUS/UART DIP switch to Pilot
 - [ ] Generate Pilot gerbers
-- [ ] Generate TACCO gerbers
-- [ ] Zigbee RF chain was never actually added to TACCO — PCB scope g…
+- [ ] Generate XO gerbers
+- [ ] TACCO area recovery, mLRS bare-chip radio, fab-ready layout…
+- [ ] TACCO Wi-Fi host: USB module on USB1 — part selection open (fab…
+- [ ] Pilot: re-derive PB2 header map and DP83825I table the same way
+- [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
 - [ ] Generate Commo gerbers
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
 - [ ] EMI isolation validation checklist
@@ -267,7 +271,7 @@
 → detail: `avionics/emi-hardening/WBS.md` §1.4
 
 - [ ] PB2-I + Pilot Enclosure
-- [ ] PB2-I + TACCO Enclosure
+- [ ] PB2-I + XO Enclosure
 - [ ] CAN FD
 - [ ] RS-485
 - [ ] MIL-STD-1553B

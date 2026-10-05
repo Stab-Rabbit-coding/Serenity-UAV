@@ -41,13 +41,17 @@ as-built state):
 
 - 8× PocketBeagle2 Industrial SBC nodes, each carrying **Pilot** (flight control/sensor cape) +
   **TACCO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
-- **Commo** (49 MHz + SiK transceiver cape) is installed only in River's Room and Simon's
-  Medbay.
-- Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected.
+- **Commo** (49 MHz + SiK transceiver): the Rev S design is a PB2-I cape in River's Room and
+  Simon's Medbay. **Rev T (approved 2026-09-29)** replaces it with one standalone MCU node at the
+  antennas, reachable by all stacks over CAN-FD / RS-485 / MIL-STD-1553C (no Ethernet). See
+  `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`.
+- Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected. Commo
+  (Rev T) is the only non-SBC node on 1553.
 - External C2, all 5 usable for command and control: Wi-Fi 5 GHz, Zigbee 2.4 GHz, and mLRS (all
   3 on every TACCO cape, so all 8 nodes), plus MAVLink/SiK 915 MHz and AX.25 49 MHz (47 CFR Part
-  15 §15.235 — unlicensed, **not** Part 95 RCRS [REF-FCC-003]), both via Commo and so limited to
-  River's Room and Simon's Medbay. S-Bus is supported by the capes but unused. Band-by-band FCC
+  15 §15.235 — unlicensed, **not** Part 95 RCRS [REF-FCC-003]), both via Commo. Under Rev S they
+  are limited to River's Room and Simon's Medbay; under Rev T every stack reaches them over the
+  bus. S-Bus is supported by the capes but unused. Band-by-band FCC
   citations: `avionics/AGENTS.md` "External Communications Regulations Compliance".
 - Each nacelle has 2 EDFs in series, independently PID-controlled by two different SBCs. Any
   of the 4 flight-control nodes can take over any EDF.
@@ -72,14 +76,27 @@ pick one silently — see §11.
 
 ## 3. Attribution and Licensing
 
-Work is **dual-licensed** by content type — see `docs/attribution_and_licensing.md` for the
-full policy and the per-subsystem `LICENSE` federation map:
+Work is licensed by **what the file produces** (owner rule, 2026-10-04) — see
+`docs/attribution_and_licensing.md` for the full policy and the per-subsystem `LICENSE`
+federation map:
 
-- **Hardware/CAD/PCB design files** (airframe SCAD/STL/FCStd, avionics KiCad
-  schematics/layouts/Gerbers) — **CERN-OHL-W 2.0**. Root `LICENSE`, `airframe/LICENSE`,
-  `avionics/LICENSE`.
-- **Documentation, code, scripts, and non-hardware drawings** — **CC BY-SA 4.0**.
-  `docs/LICENSE`, `tools/LICENSE`, and other subsystem `LICENSE` files.
+- **Hardware — and any code that defines, creates or renders hardware** (OpenSCAD,
+  KiCad files and scripts, FreeCAD, Blender, G-code/slicer profiles, and tools that
+  write or render meshes/CAD/PCB) — **CERN-OHL-W 2.0** (SPDX `CERN-OHL-W-2.0`).
+  Full text: `LICENSE` (root) / `LICENSES/CERN-OHL-W 2.0`.
+- **Code whose end result is software or firmware** (firmware, device trees, ground
+  software, analysis/verification/CI tools) — **MIT** (SPDX `MIT`). Full text:
+  `LICENSES/MIT`.
+- **Documents** (Markdown, text, specifications, build guides, and **all images** — SVG,
+  PNG, JPG, WebP and every other format, including renders and figures produced by
+  hardware tools) — **CC BY-SA 4.0** (SPDX `CC-BY-SA-4.0`). Full text:
+  `LICENSES/CC-BY-SA 4.0`. Raster images carry it in embedded XMP metadata, SVGs in a
+  header comment, and `REUSE.toml` declares it for the project's image folders.
+
+Every new file's header carries one line: `License: <name> — see LICENSES/<file>
+(SPDX-License-Identifier: <id>)`. Creative Commons advises against CC licences for
+software, which is why code is MIT (keeps attribution, unlike CC0). Third-party material
+keeps its own licence.
 
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (personal copyright retained; avionics
 boards are marked with his personally owned LLC name).
@@ -164,7 +181,7 @@ active trade study and must not be assumed.
 ### Warnings, Cautions, Notes, and Wording
 
 Callout severity and requirement-verb usage follow CNAF M-3710.7 §1.5–1.6 (NATOPS General
-Flight and Operating Instructions Manual) [REF-MIL-001 §1.5, §1.6], adapted for a build/design
+Flight and Operating Instructions Manual) [REF-MIL-003 §1.5, §1.6], adapted for a build/design
 repo rather than a flight-ops manual:
 
 - **WARNING** — a procedure, practice, or condition that may result in injury, death, or loss
@@ -179,7 +196,7 @@ repo rather than a flight-ops manual:
 Never downgrade a WARNING-level risk into a Note, and never use WARNING/CAUTION for information
 that is merely helpful rather than risk-bearing.
 
-Requirement wording follows the same source [REF-MIL-001 §1.6]:
+Requirement wording follows the same source [REF-MIL-003 §1.6]:
 
 - **Shall** — the procedure is mandatory.
 - **Should** — the procedure is recommended, not mandatory.
@@ -271,6 +288,13 @@ Wi-Fi + ZigBee (Murata Type 2EL) and mLRS (Seeed Wio-E5); only River and Simon a
 a Commo cape, which hosts 49 MHz and SiK (RFD900ux-SMT). Shepherd and Inara have no Commo cape,
 so neither has SiK or 49 MHz access — their secondary link is mLRS, the long-range link their
 hardware actually has, not SiK.
+
+**Rev T change (approved 2026-09-29, pending hardware):** Commo becomes a single standalone bus
+node at the antennas, so 49 MHz and SiK stop being tied to River's and Simon's stacks. When Rev T
+is built, any stack can key either radio over CAN-FD / RS-485 / 1553C, and a PACE-aware PTT
+ownership lease decides which stack transmits. Losing the one Commo node drops every stack to
+Wi-Fi / ZigBee / mLRS. The per-stack radio lines below describe Rev S hardware until the Rev T
+firmware lands (`avionics/firmware/WBS.md`).
 
 Shepherd: watchdog/fault-detect/failover/auth; Wi-Fi primary, mLRS secondary.
 Inara: camera/external sensors/high-bandwidth ground link; Wi-Fi primary, mLRS secondary.
@@ -383,3 +407,37 @@ KiCad/STL change be the first place the decision appears in the repo.
 ---
 **Authoritative file.** `CLAUDE.md` (root) points here for tooling that expects that
 filename.
+
+## Word Usage and Documentation Style
+
+This section applies to all documents in this repository, human- and AI-authored alike.
+
+### Voice
+
+- Use **active voice** for all directions and authoritative specification documents.
+- Use **passive voice** for all descriptive as-built documents.
+
+### Mandatory word usage
+
+| Word | Meaning | Example |
+|---|---|---|
+| **shall** | The action is prescribed as mandatory. | "You shall obey the law." |
+| **will** | One thing follows another; no mandatory action is demanded. | "Friday will come after Thursday." |
+| **should** | Preferred but not mandatory. | "You may do it that way, but you should do it this way." |
+| **may** | A permissible action by an entity (AI or human). | |
+| **could** | Used only to describe the physical or performance limits of objects. | |
+
+### Call-out boxes
+
+- A call-out box labeled **WARNING** shall prominently accompany any directive, instruction, or checklist item that, if not followed, creates a hazard to life or bodily injury.
+- A call-out box labeled **CAUTION** shall accompany directives, instructions, and checklist items that, if not followed carefully, create a hazard to objects.
+- A call-out box labeled **NOTE** will accompany other items that need emphasis but do not present hazardous conditions.
+
+### Reference
+
+The shall/should/may definitions and the WARNING/CAUTION/NOTE call-out
+convention above follow CNAF M-3710.7, *NATOPS General Flight and Operating
+Instructions*, issued by Commander, Naval Air Forces (CNAF)
+(<https://www.secnav.navy.mil/doni/SECNAV%20Manuals1/3710.7%20(CNAF).pdf>).
+The will/could definitions and the active-voice/passive-voice distinction
+above are this project's own convention, not drawn from that source.

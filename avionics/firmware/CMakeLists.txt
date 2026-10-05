@@ -2,7 +2,7 @@
 ## CMakeLists.txt — Serenity UAV Firmware top-level build
 ##
 ## Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-## License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+## License: CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 ##
 ## Target platform: PocketBeagle 2 Industrial (TI AM6254, aarch64 Linux)
 ## Build system:    CMake 3.18+

@@ -5,7 +5,8 @@
 ### A flight-worthy, security-hardened EDF tilt-rotor replica of the Firefly-class ship *Serenity*
 
 [![Hardware License: CERN-OHL-W 2.0](https://img.shields.io/badge/hardware-CERN--OHL--W%202.0-004488)](LICENSE)
-[![Docs/Code License: CC BY-SA 4.0](https://img.shields.io/badge/docs%2Fcode-CC%20BY--SA%204.0-8250df)](docs/attribution_and_licensing.md)
+[![Docs License: CC BY-SA 4.0](https://img.shields.io/badge/docs-CC%20BY--SA%204.0-8250df)](docs/attribution_and_licensing.md)
+[![Software License: MIT](https://img.shields.io/badge/software-MIT-2ea44f)](LICENSES/MIT)
 [![CAD: FreeCAD | OpenSCAD | Blender](https://img.shields.io/badge/CAD-FreeCAD%20%7C%20OpenSCAD%20%7C%20Blender-fe7d37)](airframe/README.md)
 [![PCB: KiCad 9](https://img.shields.io/badge/PCB-KiCad%209-1BA94C)](avionics/README.md)
 [![Firmware: C | Python](https://img.shields.io/badge/firmware-C%20%7C%20Python-2f81f7)](avionics/firmware/)
@@ -55,7 +56,7 @@ decision in this repository.
 9. Pull the payload into the cargo bay and close the clamshells.
 10. Exit the hazardous environment and return to origin.
 
-Throughout the mission, the aircraft must also:
+Throughout the mission, the aircraft shall also:
 
 - Identify, categorize, log, and report rogue or unauthorized C2 commands or malicious logic from
   any transmitter, authorized or not.
@@ -205,7 +206,7 @@ flight, guided by the downward-facing **Observer** node for close-in 3D imaging 
 ## Authoritative Project Instructions
 
 The canonical workspace instructions and design policy are maintained in `AGENTS.md`. All
-contributors and automated tools (including AI assistants) must follow the requirements and
+contributors and automated tools (including AI assistants) shall follow the requirements and
 standards documented there (coding style, fabrication specs, licensing, and attribution).
 `CLAUDE.md` is a one-line pointer to the same file, kept for tooling that looks for that name.
 
@@ -227,16 +228,18 @@ Handling write-ups) is preserved verbatim, for historical reference, in
 
 ## License
 
-Dual-licensed by Steve Griffing, PE(CSE), CISSP-ISSEP, CPP:
+Licensed by Steve Griffing, PE(CSE), CISSP-ISSEP, CPP, according to what each file produces:
 
-- **Hardware / CAD / PCB design files** — **CERN Open Hardware Licence Version 2 —
-  Weakly Reciprocal (CERN-OHL-W 2.0)**. Covers airframe SCAD/STL/FCStd, KiCad
-  schematics/PCB/Gerbers, and mechanical drawings. Full text: `LICENSE` (root) /
-  `LICENSES/CERN-OHL-W 2.0`, [ohwr.org/licences](https://ohwr.org/licences/).
-- **Documentation, code, scripts, and non-hardware drawings** — **Creative Commons
-  Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)**. Covers this document,
-  firmware/tooling source, build guides, and SVG diagrams. Full text:
-  `LICENSES/CC-BY-SA 4.0`, [creativecommons.org/licenses/by-sa/4.0](https://creativecommons.org/licenses/by-sa/4.0).
+- **Hardware — and any code that defines, creates or renders hardware** (OpenSCAD,
+  KiCad files and scripts, FreeCAD, Blender, G-code/slicer profiles, and tools that
+  write or render meshes/CAD/PCB) — **CERN-OHL-W 2.0** (SPDX `CERN-OHL-W-2.0`).
+  Full text: `LICENSE` (root) / `LICENSES/CERN-OHL-W 2.0`.
+- **Code whose end result is software or firmware** (firmware, device trees, ground
+  software, analysis/verification/CI tools) — **MIT** (SPDX `MIT`). Full text:
+  `LICENSES/MIT`.
+- **Documents** (Markdown, text, specifications, build guides, and all images — SVG,
+  PNG, JPG, WebP, including renders produced by hardware tools) — **CC BY-SA 4.0**
+  (SPDX `CC-BY-SA-4.0`). Full text: `LICENSES/CC-BY-SA 4.0`.
 
 See `docs/attribution_and_licensing.md` for the full policy, the per-subsystem `LICENSE`
 federation map, and the CERN-OHL-W "Available Component" treatment of upstream
@@ -244,7 +247,7 @@ canonical-reference geometry. Revision T, September 2026.
 
 ## Attribution
 
-> "Serenity Tiltrotor Drone Project — hardware CERN-OHL-W 2.0, docs/code CC BY-SA 4.0, based on:
+> "Serenity Tiltrotor Drone Project — hardware CERN-OHL-W 2.0, software MIT, docs CC BY-SA 4.0, based on:
 > · Serenity Firefly-class hull by misubisu (thingiverse.com/thing:7330462, CC BY-SA 4.0)
 > · Variable-area EDF nozzle by BamJr (thingiverse.com/thing:2991269, CC BY 4.0)
 > Include a link to the applicable license and indicate if changes were made."
@@ -266,7 +269,7 @@ Covered under **CERN-OHL-W 2.0** (hardware):
 - PCB schematics and Gerber files for Pilot, XO, Flight Engineer, and Commo
 - Circuit diagrams, pinout tables, and wiring specifications
 - Mechanical drawings and assembly specifications
-- Any derived hardware must carry CERN-OHL-W 2.0 (or a compatible license) and attribute
+- Any derived hardware shall carry CERN-OHL-W 2.0 (or a compatible license) and attribute
   all upstream authors
 
 Covered under **CC BY-SA 4.0** (documentation, code, scripts, non-hardware drawings):
@@ -274,7 +277,7 @@ Covered under **CC BY-SA 4.0** (documentation, code, scripts, non-hardware drawi
 - Firmware architecture specifications and algorithm descriptions
 - This design document in all its revisions (A–R and beyond)
 - Build automation/tooling scripts and non-hardware SVG diagrams
-- Any derived works must carry CC BY-SA 4.0 and attribute all upstream authors
+- Any derived works shall carry CC BY-SA 4.0 and attribute all upstream authors
 
 Not covered / separate terms:
 

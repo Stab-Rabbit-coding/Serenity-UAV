@@ -39,7 +39,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-NIST-003: NIST SP 800-160 Vol 1 Rev 1 — Engineering Trustworthy Secure Systems](#ref-nist-003-nist-sp-800-160-vol-1-rev-1--engineering-trustworthy-secure-systems)
     - [REF-NIST-004: NIST SP 800-92 — Guide to Computer Security Log Management](#ref-nist-004-nist-sp-800-92--guide-to-computer-security-log-management)
 - [Part IV — Defense Standards](#part-iv--defense-standards)
-    - [REF-MIL-001: MIL-STD-1553B — Aircraft Internal Time Division Command/Response Multiplex Data Bus](#ref-mil-001-mil-std-1553b--aircraft-internal-time-division-commandresponse-multiplex-data-bus)
+    - [REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus](#ref-mil-001-mil-std-1553c--digital-time-division-commandresponse-multiplex-data-bus)
     - [REF-MIL-002: MIL-STD-461G — Requirements for the Control of Electromagnetic Interference Characteristics of Subsystems and Equipment](#ref-mil-002-mil-std-461g--requirements-for-the-control-of-electromagnetic-interference-characteristics-of-subsystems-and-equipment)
 - [Part V — International Standards (ISO, IEC)](#part-v--international-standards-iso-iec)
     - [REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling](#ref-iso-001-iso-11898-12015--road-vehicles--controller-area-network-can--part-1-data-link-layer-and-physical-signalling)
@@ -100,6 +100,8 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-015: OpenServoCore — Open-Source SG90/MG90-Class Smart-Servo Control Board](#ref-sensor-015-openservocore--open-source-sg90mg90-class-smart-servo-control-board)
     - [REF-SENSOR-016: Infineon OPTIGA™ Trust M — I2C Secure Element (planned, CAN-PERIPH-GW-1 + Flight Engineer only)](#ref-sensor-016-infineon-optiga-trust-m--i2c-secure-element-planned-can-periph-gw-1--flight-engineer-only)
     - [REF-SENSOR-019: SMB Bearings F688ZZ — 8x16x5 mm Flanged Miniature Radial Ball Bearing (wing-root tilt-spar bearing)](#ref-sensor-019-smb-bearings-f688zz--8x16x5-mm-flanged-miniature-radial-ball-bearing-wing-root-tilt-spar-bearing)
+    - [REF-SENSOR-020: TI DP83825I — Low-Power 10/100 Mbps Ethernet PHY with RMII (Leader/Follower)](#ref-sensor-020-ti-dp83825i--low-power-10100-mbps-ethernet-phy-with-rmii-leaderfollower)
+    - [REF-SENSOR-021: BeagleBoard.org PocketBeagle 2 — Schematic and SysConfig (P1/P2 expansion header map)](#ref-sensor-021-beagleboardorg-pocketbeagle-2--schematic-and-sysconfig-p1p2-expansion-header-map)
     - [REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6](#ref-sensor-022-tdk-invensense-icm-42688-p--6-axis-imu-data-sheet-ds-000347-v16)
     - [REF-SENSOR-023: Bosch Sensortec BMP388 — barometric pressure sensor data sheet BST-BMP388-DS001](#ref-sensor-023-bosch-sensortec-bmp388--barometric-pressure-sensor-data-sheet-bst-bmp388-ds001)
     - [REF-SENSOR-025: Premier Magnetics PM-DB2791S — MIL-STD-1553 SMD data-bus transformer](#ref-sensor-025-premier-magnetics-pm-db2791s--mil-std-1553-smd-data-bus-transformer)
@@ -129,6 +131,8 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
 - [Part XVI — Documentation and Technical-Writing Standards](#part-xvi--documentation-and-technical-writing-standards)
     - [REF-LIC-001: CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)](#ref-lic-001-cern-open-hardware-licence-version-2--weakly-reciprocal-cern-ohl-w-20)
     - [REF-LIC-002: OSHWA Open Source Hardware Certification](#ref-lic-002-oshwa-open-source-hardware-certification)
+    - [REF-LIC-003: The MIT License](#ref-lic-003-the-mit-license)
+    - [REF-LIC-004: REUSE Specification — Version 3.2](#ref-lic-004-reuse-specification--version-32)
 - [Removed / Superseded Citations](#removed--superseded-citations)
 - [Open Standards Verification Items](#open-standards-verification-items)
 
@@ -148,14 +152,17 @@ previously named in this file — are acknowledged wherever this catalog is read
 ### Project license (this work)
 
 All original work in this repository is © 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP,
-**dual-licensed** (corrected 2026-08-01 — see "Removed / Superseded Citations"):
+licensed by **what each file produces** (owner rule 2026-10-04; earlier corrected 2026-08-01 — see "Removed / Superseded Citations"):
 
-- **Hardware/CAD/PCB design** (airframe SCAD/STL/FCStd, KiCad schematics/PCB/Gerbers, mechanical
-  drawings) — **CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)**
+- **Hardware, and code that defines, creates or renders hardware** (SCAD/STL/FCStd, KiCad
+  files and generator scripts, FreeCAD/Blender scripts, G-code profiles, hardware-writing
+  tools) — **CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)**
   [REF-LIC-001]. Full terms: root [`LICENSE`](LICENSE).
-- **Documentation, code, scripts, and non-hardware drawings** — **Creative Commons
-  Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)** —
-  <https://creativecommons.org/licenses/by-sa/4.0/>. Full terms: `LICENSES/CC-BY-SA 4.0`.
+- **Code whose end result is software or firmware** — **MIT** [REF-LIC-003]. Full terms:
+  `LICENSES/MIT`.
+- **Documents, including all images** — **Creative Commons Attribution-ShareAlike 4.0 International
+  (CC BY-SA 4.0)** — <https://creativecommons.org/licenses/by-sa/4.0/>. Full terms:
+  `LICENSES/CC-BY-SA 4.0`.
 
 You may share and adapt either under its own terms, including commercially, with appropriate
 credit, a link to the license, and an indication of changes; attribution must not imply
@@ -660,34 +667,54 @@ cycle); hardware-enforced append-only non-executable log microSD on every XO nod
 
 ## Part IV — Defense Standards
 
-### REF-MIL-001: MIL-STD-1553B — Aircraft Internal Time Division Command/Response Multiplex Data Bus
+### REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus
 
 | Field | Value |
 |---|---|
-| **Issuing authority** | U.S. Department of Defense (DoD) |
-| **Edition** | MIL-STD-1553B with Notice 2 (30 September 1996); original date 21 September 1978 |
-| **Official access** | DLA ASSIST QuickSearch: <https://assist.dla.mil/> (search "MIL-STD-1553") |
-| **Note** | Public domain per 10 U.S.C. §4252; no purchase required |
+| **Issuing authority** | U.S. Department of Defense (DoD); comments to AFLCMC/EZSS, Wright-Patterson AFB |
+| **Edition** | MIL-STD-1553C, 28 February 2018, superseding MIL-STD-1553B (21 September 1978). AMSC N/A, Area AVCS. |
+| **Official access** | DLA ASSIST: <https://assist.dla.mil/> (search "MIL-STD-1553"). Public mirror of the ASSIST copy: <https://www.altadt.com/wp-content/uploads/dlm_uploads/2020/12/MIL-STD-1553C.pdf> |
+| **Distribution** | Distribution Statement A: approved for public release; distribution is unlimited |
+| **Verified** | Text checked against the ASSIST-sourced copy on 2026-09-28 (Claude Opus 5.5) |
 
-**Sections applied in this project:**
+**Relation to 1553B.** 1553C is a document revision. Its electrical and protocol
+requirements are the same as 1553B. The changes are clarified text and figures, the EMC
+wiring reference moved to MIL-STD-464 (§4.5.1.5.3), and added "superseding valid commands"
+paragraphs for RT and BC operation (§4.4.3.2, §4.6.3.2). Alta Data Technologies, which
+publishes the mirror, says in its cover note: "1553C is a document change only … There
+are no functional changes to 1553B." A terminal that meets 1553B electrically therefore
+meets 1553C electrically. RT firmware must still implement §4.4.3.2.
 
-| Section/Table | Title | Application |
+**Sections applied in this project (verified against the 1553C text):**
+
+| Section | Title | Requirement applied |
 |---|---|---|
-| §3.1 | Definitions | Bus Controller (BC), Remote Terminal (RT), Bus Monitor (BM) — FC1 is primary BC, FC2 is standby BC, all others are RT |
-| §4.1 | Bus Characteristics | 78 Ω characteristic impedance; shielded twisted pair (MIL-C-17/131 or equivalent); Manchester II biphase-level encoding |
-| §4.2 | Terminal Types | One BC per bus at any given time; up to 31 RT addresses |
-| §4.3 | Word Formats | 20-bit Manchester II word: 3-bit sync + 16-bit data + 1-bit parity; 1.0 Mbps ± 1% |
-| §4.4 | Message Formats | BC-to-RT, RT-to-BC, and RT-to-RT transfer formats |
-| §4.6 | Coupling Methods | Transformer coupling required for stub length > 0.9 m (0.03 ft) from the bus; PE-68515 or equivalent 1:1.41 transformer |
-| Table IV | Response Time | RT must begin Status Word response between 4 µs and 12 µs after last bit of last valid Command Word |
+| §4.3.3.8 | Response time | RT responds to a valid command within 4.0–12.0 µs |
+| §4.4.3.2 | Superseding valid commands | RT behavior when a new valid command arrives; required in the RT firmware or protocol engine |
+| §4.5.1.2 | Characteristic impedance | Cable Zo of 70.0–85.0 Ω at 1.0 MHz |
+| §4.5.1.3 | Cable attenuation | ≤ 1.5 dB per 100 ft (30.5 m) at 1.0 MHz |
+| §4.5.1.5.1 | Transformer coupled stubs | Stub should not exceed 20 ft (6.1 m) |
+| §4.5.1.5.1.1 | Coupling transformer | Bus coupler turns ratio 1:1.41 ± 3.0 % |
+| §4.5.1.5.2 | Direct coupled stubs | Stub should not exceed 1 ft (0.305 m) |
+| §4.5.1.5.2.1 | Fault isolation | 55.0 Ω ± 2.0 % isolation resistor in series with each bus connection |
+| §4.5.1.5.3 | Wiring and cabling for EMC | MIL-STD-464 wiring and cabling provisions apply |
+| §4.5.2 | Terminal characteristics | Terminal output and input levels for transformer and direct coupling |
 
-**Applied to:** 8-node linear bus (CN1–FC1–CN2–FC2–CN3–FC3–CN4–FC4); PRU-ICSS Manchester II
-encoder/decoder at 250 MHz (250 cycles per 1 µs bit cell); DS26LV31 driver / DS26LV32 receiver;
-PE-68515 coupling transformer (1:1.41, 78 Ω); 78 Ω termination at CN1 (Bay A) and FC4 (Bay D).
+**Corrected 2026-09-28.** The earlier 1553B entry cited §4.1, §4.2, §4.3, §4.4, §4.6, and
+Table IV. It also gave a transformer-coupling threshold of "0.9 m (0.03 ft)", which is
+wrong: the direct-stub limit is 1 ft (0.305 m). Those citations did not match the
+standard's paragraph numbering and are replaced by the verified rows above. The old
+"Applied to" text described the retired DS26LV31/DS26LV32 and PE-68515 chain. The current
+chain is the HI-1573 or HI-6138 with the PM-DB2791S (`avionics/WBS.md` §1.2a.2 and
+§1.2a.3).
 
-**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`,
-`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-Pilot.dts`,
-`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-TACCO2.dts`
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `avionics/kicad/Pilot/Pilot.md`,
+`avionics/kicad/TACCO/TACCO.md`, `avionics/WBS.md` §1.2a.2 and §1.2a.3,
+`avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md`, `avionics/kicad/Pilot/scripts/gen_pilot_sch.py`,
+`avionics/kicad/TACCO/scripts/gen_tacco_sch.py`, `avionics/firmware/WBS.md`,
+`avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
+`docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`
 
 ---
 
@@ -2418,7 +2445,36 @@ the spar's run, not this seat).
 | **Date accessed** | 2026-09-17 (local checkout, commits afbe2dd…87dc60e) |
 | **AI note** | Build authored by Claude Opus 5 (Anthropic) under the direction of Steve Griffing, PE(CSE), CISSP-ISSEP, CPP; attribution recorded in that repository's commit messages and file headers |
 
-<!-- REF-SENSOR-022..040 catalogued 2026-09-26 by Claude Opus 5.5: these IDs were already cited in board schematics/generator scripts but had never been entered here (avionics/WBS.md U7.1). REF-SENSOR-020/021/024/031/032/034/035/036 remain uncatalogued (037, 039 catalogued 2026-09-27); see Open Standards Verification Items. -->
+### REF-SENSOR-020: TI DP83825I — Low-Power 10/100 Mbps Ethernet PHY with RMII (Leader/Follower)
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Product** | DP83825IRHBR (WQFN-24, RMQ0024A) |
+| **Datasheet** | SNLS638C, December 2018 – revised April 2026, archived at `avionics/datasheets/dp83825i.pdf` |
+| **Package** | WQFN-24 3 × 3 mm, 0.4 mm pitch, exposed DAP = GND, `Package_DFN_QFN:Texas_RMQ0024A_WQFN-24-1EP_3x3mm_P0.4mm_EP1.9x1.9mm` |
+| **Portion applied** | Table 4-1 pin functions (1 TX_EN, 2 50MHzOut/LED2, 3 INTR/PWRDN, 4 LED0, 5 RST_N, 6 VDDA3V3, 7 RD_M, 8 RD_P, 9 GND, 10 TD_M, 11 TD_P, 12 XO, 13 XI/50MHzIn, 14 RBIAS, 15 MDIO, 16 MDC, 17 RX_D1, 18 RX_D0/PHYAD0, 19 VDDIO, 20 CRS_DV, 21 GND, 22 RX_ER, 23 TX_D0, 24 TX_D1); §6 RMII Leader mode (25 MHz on XI, 50 MHz reference out on pin 2); RBIAS 6.49 kΩ ±1 % |
+| **Note** | Added 2026-09-29 when the TACCO generator's `dp83825i()` pin table was found not to be this part's pinout (it cited a non-existent `REF-SENSOR-029`); Pilot's copy of the table carries the same defect (`avionics/WBS.md` §1.2a 2026-09-29 item 8). |
+
+**Used in:** `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`ETH-PHY`), `avionics/kicad/Pilot/scripts/gen_pilot_sch.py` (`ETH1-PHY`, `ETH2-PHY` — table still to be corrected).
+
+---
+
+### REF-SENSOR-021: BeagleBoard.org PocketBeagle 2 — Schematic and SysConfig (P1/P2 expansion header map)
+
+| Field | Value |
+|---|---|
+| **Publisher** | BeagleBoard.org Foundation |
+| **Product** | PocketBeagle 2 (TI AM6254 Sitara), expansion headers P1/P2 |
+| **Source** | <https://github.com/beagleboard/pocketbeagle> (owner-supplied copies archived at `avionics/datasheets/pocketbeagle2_sch.pdf` — sheet "016_BP P1 & P2" v1.0 — and `avionics/datasheets/pocketbeagle-2.syscfg`, TI SysConfig for the AM62x ALW package) |
+| **Portion applied** | P1/P2 header ball assignment and pinmux options, transcribed into `avionics/kicad/PB2_HEADER_PINMAP.md`; MMC2/SDIO not present on the headers; USB1 on P1-3/5/9/11/13 |
+| **Note** | Licence line not present on the schematic sheet; confirm the repository licence before redistributing the archived PDF. Added 2026-09-29. |
+
+**Used in:** `avionics/kicad/PB2_HEADER_PINMAP.md`, `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`PB2_P1`/`PB2_P2`), `avionics/WBS.md` §1.2a.
+
+---
+
+<!-- REF-SENSOR-022..040 catalogued 2026-09-26 by Claude Opus 5.5: these IDs were already cited in board schematics/generator scripts but had never been entered here (avionics/WBS.md U7.1). REF-SENSOR-024/031/032/034/035/036 remain uncatalogued (020/021 were catalogued on `main` 2026-09-29) (037, 039 catalogued 2026-09-27); see Open Standards Verification Items. -->
 
 ### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
 
@@ -2491,6 +2547,7 @@ the spar's run, not this seat).
 | **URL status** | requires verification (holtic.com link serves an HTML page, 2026-09-26) |
 | **Section applied** | p. 1 Pin Configurations (44-pin QFN); heat-sink note |
 | **Cited in** | Pilot, TACCO schematics; SecureControllers library |
+| **Note** | Same part as REF-SENSOR-020 (catalogued independently on `main` 2026-09-29, with the full Table 4-1 pin map). Both IDs resolve to the same TI data sheet; new citations shall use REF-SENSOR-020. Merge note 2026-10-05. |
 
 ### REF-SENSOR-033: Winbond W25Q128JV — 128 Mbit serial NOR flash data sheet
 
@@ -2840,9 +2897,38 @@ OSHWA certification submission (open item).
 
 **Used in:** `docs/OSHW_CERTIFICATION.md`, `TODO.md` §0.9.
 
+### REF-LIC-003: The MIT License
+
+| Field | Value |
+|---|---|
+| **Publisher** | Open Source Initiative (OSI) — OSI-approved licence, SPDX identifier `MIT` |
+| **Official URL** | <https://opensource.org/license/mit> — fetched 2026-10-04 (HTTP 200) |
+| **Applied requirements** | The copyright notice and permission notice must be included in all copies or substantial portions of the software (the attribution condition the owner required); no warranty. |
+| **Note** | Chosen 2026-10-04 by the owner for code whose end result is software or firmware. Creative Commons' own FAQ advises against CC licences other than CC0 for software, and CC0 would waive attribution. Also satisfies REF-LIC-002 requirement (3): software needed for hardware operation must carry an OSI-approved licence. |
+
+**Applied to:** firmware, device trees, ground-station software, and analysis/verification/CI
+tools (per-file headers; full text `LICENSES/MIT`).
+
+**Used in:** `LICENSES/MIT`, `tools/LICENSE`, `docs/attribution_and_licensing.md`, `AGENTS.md` §3.
+
+### REF-LIC-004: REUSE Specification — Version 3.2
+
+| Field | Value |
+|---|---|
+| **Publisher** | Free Software Foundation Europe (FSFE), REUSE project |
+| **Official URL** | <https://reuse.software/spec-3.2/> — fetched 2026-10-04 and read |
+| **Applied requirements** | `REUSE.toml` (schema `version = 1`) `[[annotations]]` tables associate `SPDX-License-Identifier` and `SPDX-FileCopyrightText` with path globs; `precedence = "closest"` (the default) lets licensing information inside a file win, with the table as fallback. |
+| **Note** | Used for images, which cannot carry a header line: original images are declared CC-BY-SA-4.0 by folder glob. Globs cannot exclude, so only the project's own image folders are listed and third-party images stay uncovered. |
+
+**Applied to:** `REUSE.toml` (repository root).
+
+**Used in:** `REUSE.toml`, `docs/attribution_and_licensing.md`.
+
+---
+
 ## Part XVI — Documentation and Technical-Writing Standards
 
-### REF-MIL-001: CNAF M-3710.7 — NATOPS General Flight and Operating Instructions Manual, §1.5 (Warnings, Cautions, and Notes) and §1.6 (Wording)
+### REF-MIL-003: CNAF M-3710.7 — NATOPS General Flight and Operating Instructions Manual, §1.5 (Warnings, Cautions, and Notes) and §1.6 (Wording)
 
 | Field | Value |
 |---|---|
@@ -2854,7 +2940,9 @@ OSHWA certification submission (open item).
 
 **Used in:** `AGENTS.md` §6a "Warnings, Cautions, Notes, and Wording" (this repo), and the
 equivalent section promulgated to every sibling repo's `AGENTS.md`/`CLAUDE.md` in this
-workspace — see each repo's own `REFERENCES.md` for its local REF-MIL-001 entry.
+workspace — see each repo's own `REFERENCES.md` for its local entry. Renumbered from REF-MIL-001 on
+2026-10-05 (merge of `main` into `avionics-docs-audit`): REF-MIL-001 is MIL-STD-1553C in this
+catalogue, and the CNAF entry had been filed under the same ID — see Removed / Superseded Citations.
 
 ---
 
@@ -2873,6 +2961,7 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 | "TI DM38x + remixed OpenIPC firmware" (early Observer design concept from an external AI-assisted brainstorm, never committed) | Not committed to any file — caught during REFERENCES.md drafting 2026-07-03 | **Infeasible as proposed.** TI DM385/DM388 (DaVinci DM38x) are NRND; OpenIPC's supported-hardware list contains no TI part, not even at R&D stage — porting would mean a from-scratch ISP/encoder bring-up on a chip TI is discontinuing, not a firmware port. Also: the same source proposed LAN9355/KSZ9563 for "MRP" ring redundancy (neither chip implements it) and an "ST33GTPMISPI" TPM part number that does not exist. | REF-SENSOR-003 (TI AM62Ax, in-production, TI's own open BSP), REF-SENSOR-005 (KSZ9477, real HSR/PRP support), Infineon SLB9672 (fleet-standard TPM, REFERENCES.md §3.3/§4.2) |
 | ADI ADM2795EBRWZ (isolated RS-485, signal-only) — `Observer`, `CAN-PERIPH-GW-1`, `Flight Engineer`, `Pilot`, `XO` RS-485 transceivers | `avionics/kicad/Observer/kicads/Observer.kicad_sch`, `avionics/kicad/CAN-PERIPH-GW-1/`, `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch`, `avionics/kicad/Pilot/kicads/Pilot.kicad_sch`, `avionics/kicad/XO/kicads/XO.kicad_sch` | **Superseded by design decision, 2026-07-26.** ADM2795E provides signal isolation only and requires a separate external isolated DC-DC supply for its bus-side VDD2. TI ISOW1412 integrates its own isolated DC-DC, eliminating the extra supply and simplifying every "trust module" node fleet-wide. Fleet-wide swap performed 2026-07-26. Separately, while performing this swap on Pilot and XO, found their pre-existing ADM2795EBRWZ symbols had incorrectly numbered pins (and their ISOW1044BDFMR symbols had the wrong footprint, `SOIC-16W` instead of the correct `SOIC-20W` for a 20-pin part) — both defects predate this session and were corrected as part of the same fix (`kicad-cli sch erc` violation counts unchanged before/after: Pilot 48, XO 234 — confirming the fix corrected the target defects with zero regression against these boards' large, pre-existing, out-of-scope ERC backlog). | REF-SENSOR-010 (TI ISOW1412) |
 | "LibreServo_v4.1-TC" tilt-controller variant (`LS-TILT-TC`, `TILT-CTL-08`, `TC-BOARD`, `LS-CR-1`) | `docs/TILT_ACTUATOR_SELECTION.md` §4, `docs/TILT_DRIVE_CONTROL_SPEC.md`, `docs/POWER_DISTRIBUTION.md` §3.3a, `docs/CARGO_SECTION_LAYOUT.md`, `current-specification/bom_revS.*`, `WBS.md` | **Superseded by design decision (2026-09-17), not an error.** A LibreServo variant would fork that board away from its upstream and break the attribution chain, for a device that is no longer a servo controller. | REF-ESC-001 — Open-Secure-ESC build `6s/10A/BRUSHED_CAN_485_isolation`; BOM row `OSESC-TILT-TC` |
+| REF-MIL-001 used for CNAF M-3710.7 (ID collision) | `AGENTS.md` §6a, `tools/precommit_doc_wording.py`, `.githooks/pre-commit` (branch `avionics-docs-audit`) | **Duplicate ID.** REF-MIL-001 is MIL-STD-1553C; the CNAF M-3710.7 entry was filed under the same ID. Found while merging `main` 2026-10-05. | REF-MIL-003 (same CNAF entry, renumbered) |
 
 ---
 
@@ -2883,6 +2972,11 @@ Add verified section numbers to the relevant files and update this table.
 
 | Citation | File | Issue | Action Required |
 |---|---|---|---|
+| STM32WLE5JC RF matching / harmonic-filter values (ST AN5457) | `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`L-MLRS-PA`, `C-MLRS-TX0..2`, `L-MLRS-TX1/2`, `C-MLRS-RXP/RXN`, `L-MLRS-RX1/2`, `C-MLRS-RX1`, `C-MLRS-VRPA`) | **Open (2026-09-29).** Topology follows DS13105 Figures 2–4; the 915 MHz element values come from ST AN5457, which could not be fetched from the build environment. Values are tagged `VERIFY AN5457`. | Obtain AN5457, populate the values, add it as a REF-ID, bench-tune (VSWR/harmonics) before flight. |
+| TACCO signal-line ferrite bead MPN (600 Ω @ 100 MHz, 0402) | `gen_tacco_sch.py` (`FB-MLRS-1/2`) | **Open (2026-09-29).** The 1812 power bead 742792510 had been used on signal lines by mistake; the correct 0402 part is not yet selected (no catalog access). | Owner selects the MPN (Würth WE-CBF 0402 600 Ω family or equivalent), archive its datasheet, cite it. |
+| C&K KMR2 tact-switch variant, Epson TG2520SMN 32 MHz ordering code, pSemi PE4259 datasheet REF-ID | `gen_tacco_sch.py` (`SW-MLRS`, `X-MLRS`, `RFSW-MLRS`) | **Open (2026-09-29).** Footprints are from the KiCad library / `avionics/datasheets/`; exact orderable part numbers are not confirmed. | Owner confirms MPNs; add REF-IDs for TG2520SMN and PE4259 (datasheets already archived). |
+| USB Wi-Fi/BT module for TACCO (owner decision 2026-09-29) | `avionics/WBS.md` §1.2a, `PB2_HEADER_PINMAP.md` §3 | **Open — fab blocker.** SDIO is not on the PB2 headers; Wi-Fi moves to USB1. No non-restricted-vendor module has been selected and no datasheet is archived. | Owner selects the module; archive datasheet; author symbol/land; re-run the area budget. |
+| `[REF-PWR-003]`, `[REF-PWR-004]` cited in `gen_tacco_sch.py` (WE-MAPI inductor, ECS-2520MV oscillator) | `gen_tacco_sch.py` | **Open (2026-09-29).** These REF-IDs do not exist in this catalog; the datasheets are archived (`74438335033.pdf`, `ECS-2520MV.pdf`). | Add catalog entries (or renumber) and fix the citations. |
 | §15.203 antenna restriction (Commo RF connector) | Commo board files, `skipper_wiring.md` | **Confirmed, resolved 2026-06-20.** §15.203 binds the manufacturer directly. J2 used a generic SMA edge connector (Amphenol 132289), a standard jack; no exception applies. | **Resolved:** J2 changed to 132289RP (RP-SMA, same footprint), satisfying §15.203. Board re-spin tracked in TODO.md §0.1 |
 | 14 CFR Part 47 (aircraft registration marks) | `ax25_types.h` | **Resolved 2026-06-21.** README/build guide had no erroneous citation; the miscitation was in `ax25_types.h`, which stated Part 47 governs registration and AX.25 needs an amateur license (Part 97) | Corrected to cite Part 48 §48.205 [REF-FAA-001]; link is license-exempt under Part 15 §15.235 [REF-FCC-003], per REF-PROTO-001 |
 | AUVSI "standards" (unnamed) | `AGENTS.md`, `README.md` | **Resolved 2026-06-22.** No specific numbered AUVSI standard exists (AUVSI publishes frameworks, not numbered design standards). Identified and verified three applicable ASTM F38 standards. | Added REF-ASTM-001 (F2910-22, design/construction/test), REF-ASTM-002 (F3005-22, batteries), REF-ASTM-003 (F3269-21, runtime assurance/failover). `AGENTS.md`/`README.md` AUVSI text is accurate as-is (AUVSI frameworks, not numbered standards) — no doc text change needed there. |

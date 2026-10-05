@@ -3,7 +3,7 @@
 *Named after Flight Engineer Frye, ship's mechanic, Firefly-class vessel Serenity.*
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** R (Rev R baseline; carried forward from Rev A, 2026-06-07; no design changes)
 **Date:** 2026-06-11
 **Status (2026-09-20 update, Claude Sonnet 5):** The legacy schematic/PCB pair
@@ -599,10 +599,14 @@ Default assembly: R_CHGND = 0 Ω (direct chassis bond, single point).
 
 ## Harness Specification
 
-All cables leaving the Flight Engineer must comply with the construction rules below.  The
+> **WARNING:** Under-gauge or non-silicone-rated wire on the battery/propulsion cables can
+> overheat under peak EDF current and start a fire. Build every harness leaving the Flight
+> Engineer to the gauge and insulation rating below — do not substitute a lighter conductor.
+
+All cables leaving the Flight Engineer shall comply with the construction rules below.  The
 500 W/m² EMI design environment mandates shielded twisted-pair construction with
 continuous braid coverage and snap-on ferrite treatment at both cable ends.  All
-wire insulation must be silicone-rated (200 °C continuous) for propulsion cables
+wire insulation shall be silicone-rated (200 °C continuous) for propulsion cables
 and PVC/PTFE acceptable for signal cables.
 
 ### Power Cables (J_BATT, J_ESC1–4)
@@ -668,9 +672,9 @@ not connect to the FlightEngineer.  They are documented here for completeness.
   paths (J_BATT to F1, F1 to ESC fuse holders, ESC fuse holders to J_ESCn).
 - **GND return:** In1.Cu is full-plane PGND. All GND vias stitch through at ≤ 5 mm
   spacing in high-current areas.
-- **Kelvin shunt connections:** Each 4-terminal shunt resistor must be wired with
+- **Kelvin shunt connections:** Each 4-terminal shunt resistor shall be wired with
   Kelvin force and sense pairs on separate traces/vias — do not share via with current
-  path. Sense traces (INA226 IN+ / IN−) must be ≥ 0.3 mm trace on signal layer,
+  path. Sense traces (INA226 IN+ / IN−) shall be ≥ 0.3 mm trace on signal layer,
   routed away from power planes.
 - **BQ76930 isolation:** Maintain ≥ 8 mm creepage between individual VC_n cell
   terminals (each at different potentials). Balance resistors (100 Ω in series with
@@ -679,13 +683,13 @@ not connect to the FlightEngineer.  They are documented here for completeness.
 - **INA226 bypass:** 100 nF + 10 nF at each INA226 VCC pin (0402, within 0.5 mm).
 - **TVS D1 placement:** Within 10 mm of J_BATT positive pin. GND return via ≥ 3 ×
   0.4 mm vias to In1.Cu PGND plane.
-- **BEC switching noise:** TPS54620 and TPS54540 switching nodes (SW pin) must be
+- **BEC switching noise:** TPS54620 and TPS54540 switching nodes (SW pin) shall be
   enclosed in a copper keepout from the GND pour (prevent CM noise injection). Place
   bootstrap capacitor (C_BOOT) within 1 mm of BST pin.
 - **Thermal vias:** Place ≥ 6 × 0.3 mm vias under the TPS54620 PowerPAD exposed
   pad (thermal relief) to In2.Cu; add thermal copper pour on B.Cu under each SMPS.
 - **Chassis ground lugs (J_PGND_BATT, J_SHLD_ESC1–4):** Place M3 threaded insert
-  footprints within 8 mm of their associated power connector. Each lug pad must
+  footprints within 8 mm of their associated power connector. Each lug pad shall
   have ≥ 4 × 0.4 mm vias to In1.Cu PGND plane. Include a 3 mm copper flood
   connecting the via cluster to the nearest GND pour edge.
 - **Shield drain via-pads (J_SHLD_5V, J_SHLD_6V, J_SHLD_I2C, J_SHLD_ALERT,

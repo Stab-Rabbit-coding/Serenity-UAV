@@ -4,7 +4,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Drives the MEMSIC MMC5983MA 3-axis magnetometer via Linux userspace
  * i2c-dev.  Used by serenity-fc on Pilot (EMI-hardened variant).

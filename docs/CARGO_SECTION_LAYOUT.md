@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI note:** Drafted by Claude (model: Claude Opus 5, Anthropic) under the author's
 direction, 2026-09-15 / 2026-09-16, per `AGENTS.md` §3 AI attribution.
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 Single source of every station in this document: `tools/cargo_layout_fit.py`
 (imported by `merge_cargo_interior.py`; exported to
