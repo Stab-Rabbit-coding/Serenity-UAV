@@ -208,7 +208,8 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     # before them); each is pinned to the pocket a what-if sweep found for it.
     "T-ETH": (47.5, 19.9, 0, B),       # under J-SD, beside J-ETH's edge
     "U-3V3RF": (43.0, 11.2, 0, B),
-    "L-1V8RF": (34.0, 23.5, 0, B),     # two-pad, under the band: escapes on B.Cu only
+    "L-1V8RF": (22.0, 23.5, 0, B),     # two-pad, under the band: escapes on B.Cu only
+    "J-MLRS-SWD": (29.0, 21.8, 0, B),  # Tag-Connect NL land under the band, pads north to MLRS-MCU
     # --- isolation band: transceivers straddle its top edge, bus connectors at the edge ---
     "CAN-TR": (14.0, ISO_TR_V, 0, F),
     "RS485": (28.4, ISO_TR_V, 0, F),
@@ -740,13 +741,13 @@ def main() -> None:
     # largest first, but never before the ANCHOR_PREFIX parent it clusters around: a child
     # placed while its parent still sat unplaced at the origin anchored off-board and was
     # dropped (L-RF1 / L-1V8RF before their regulators, found 2026-10-05).
-    def parent_of(r):
+    def parent_of(r: str) -> Optional[str]:
         for pre, par in ANCHOR_PREFIX:
             if r.startswith(pre):
                 return par if par in fps and par not in FIXED and par != r else None
         return None
 
-    def order_key(r):
+    def order_key(r: str) -> Tuple[float, int, float, str]:
         par = parent_of(r)
         return (-area(fps[par]), 1, -area(fps[r]), r) if par else (-area(fps[r]), 0, 0.0, r)
 
