@@ -3783,3 +3783,20 @@ Owner direction 2026-10-03: (1) joint/interface analysis must be EXHAUSTIVE and 
 
 **How to apply:** generate interfaces from ALL placed-part pairs (`tools/export_assembly_meshes.py` + `tools/airframe_interface_census.py`), never a hand list; airframe assembly is the position authority; apply fixes only at single-source shared parameters (mirrored wing scad, cargo_layout_fit stations, nacelle wrapper constants); gate port/stbd symmetry. Plan: docs/plans/2026-10-03-002-feat-exhaustive-joint-analysis-plan.md. Related: [[project_nacelle_64mm_wrapper]], [[project_cargo_rev_t5_layout]].
 ```
+
+## `project_het_motor_rejected.md`
+
+```markdown
+---
+name: project_het_motor_rejected
+description: HET Typhoon EDF 2W-25/2W-30 motors REJECTED for the 64 mm nacelle (2026-10-05); QX QF2822 kept, stages co-rotate in-nacelle
+metadata:
+  type: project
+---
+
+2026-10-05 owner decision: HET Typhoon EDF motors (2W-25 2720 KV, 2W-30 2200 KV, and the "2W-35" link which is really the 1W-35 4000 KV/5S) rejected for the 64 mm nacelle; QX QF2822 + QX 12-blade rotor retained. Stages CO-ROTATE within each nacelle; port/stbd mirrored.
+
+**Why:** with the fixed QX rotor thrust is power/rpm-limited on 6S — 2W-25 hits design only at 95 % of 70 A (0.94x at 10 % margin), 2W-30 voltage-limited (~0.86x), mixed set +7 % only above rating; a HET-matched rotor ≤ +7 % on 6S. Ø4 shafts vs QX 3 mm hub; no published bolt pattern. In-nacelle counter-rotation gives no torque/aero gain with stators on both stages, needs an unconfirmed CCW QX rotor; only removes ~0.5 N·m differential-tilt gyro coupling.
+
+**How to apply:** don't re-propose HET (or motor swaps) on 6S; the real thrust lever is an 8S system (2W-30 1600 W on 8S ≈ 1.3x/stage with an 8S-matched rotor) — scope as a system trade. REFERENCES REF-EDF-004; WBS NAC-64-MOTOR-HET. Related: [[project_nacelle_64mm_wrapper]].
+```

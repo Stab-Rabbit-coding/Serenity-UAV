@@ -1481,6 +1481,17 @@ and Claude Opus 5.5 read and translated it.
 `airframe/wings-nacelles/WBS.md` §1.1.4 NAC-64-SERVO-01 / NAC-64-FIT-01 / NAC-64-FIT-02.
 ---
 
+
+### REF-EDF-004: High End Technologies (HET) — Typhoon EDF 28 mm inrunner motors (2W-25, 2W-30, 1W-35) — CONSIDERED AND REJECTED
+
+| Field | Value |
+|---|---|
+| **Type** | Manufacturer retail product pages (highendrc.com; HTTP only — the HTTPS certificate chain does not verify) |
+| **URLs** | 2W-25 <http://www.highendrc.com/index_eproduct_view.php?products_id=80>; 2W-30 <http://www.highendrc.com/index_eproduct_view.php?products_id=168>; 1W-35 <http://www.highendrc.com/index_eproduct_view.php?products_id=374> (the owner's "2W-35" link resolves to the 1W-35; no 2W-35 was found) |
+| **Retrieved** | 2026-10-05 (Claude Opus 5.5, curl over HTTP) |
+| **Values read** | 2W-25: Ø28 x 48 mm, Ø4 shaft, 110 g, 2720 KV, Io 2.2 A, Rm 0.016 ohm, 70 A max, 87 % max eff., 1100 W on 6S. 2W-30: Ø28 x 52 mm, Ø4 shaft, 130 g, 2200 KV, 80 A max, 1600 W on 8S (Rm/Io not published). 1W-35: Ø28 x 57 mm, Ø4 shaft, 155 g, 4000 KV, 130 A (5S). No mounting-hole pattern published on any page (also absent from turbines-rc.com listings). |
+| **Decision** | **REJECTED 2026-10-05 (owner, Stab-Rabbit-coding)** for the 64 mm nacelle on 6S: with the fixed QX 12-blade rotor, thrust is rpm/power-limited — 2W-25 reaches the QX design point only at 95 % of its 70 A rating (0.94x design thrust at a 10 % current margin); 2W-30 is voltage-limited on 6S (~0.86x); a mixed 2W-25 fwd / 2W-30 aft set gains ~+7 % only by exceeding the 2W-25 rating and loses the in-nacelle torque/gyro cancellation; a HET-matched rotor is power-limited to <= +7 % on 6S (HET motors are designed for 69 mm fans). Plus Ø4 shafts vs the QX 3 mm hub and no published bolt pattern. Analysis: session 2026-10-05, aeronautical-engineering skill (Euler stage model + actuator-disc T ~ P^(2/3)). Revisit only with an 8S power system (2W-30 rated 1600 W on 8S, ~1.3x thrust per stage, needs an 8S-matched rotor). |
+| **Applied to** | Recorded decision only — `airframe/wings-nacelles/WBS.md` NAC-64-MOTOR-HET (rejected); plan 2026-09-28-001 KTD9 note |
 ### REF-STD-GEAR-001: ISO 53:1998 — Cylindrical gears for general and heavy engineering — Standard basic rack tooth profile
 
 | Field | Value |

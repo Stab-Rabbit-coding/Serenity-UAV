@@ -2044,20 +2044,37 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         `nacelle_nozzle_iris_64mm.scad` (include + radial-literal override; exit
         24.0 / 33.6 mm; closed flap angle held at 16.96 deg; all 4 print parts
         watertight single bodies). OPEN:
-        - [ ] **NAC-64-NOZ-RET** — nozzle-to-pod retention: the pod skin ends at
-            ~Z 187, so there is no pod material for radial screws; axial screws
-            would cross the cam ring. Needs a design (owner input).
-        - [ ] **NAC-64-NOZ-MOULD** — housing OD 85.2 stands ~6 mm (radius) proud of
-            the boat-tail skin (r ~36.5 at Z 186): record against the QMx
-            blueprint or re-shape (plan stop condition).
-        - [ ] **NAC-64-NOZ-LINK** — port `tools/nozzle_servo_linkage.py` to the 64 mm
-            constants (lever r 39.0).
-    - [ ] **NAC-64-SERVO-01 — nozzle servo station: PLAN STOP CONDITION (U4).**
-        The tail aft of Z 168 has only ~1.6 mm between the sleeve bore (r 34.7)
-        and the skin (r ~36.3); the only 8 mm radial room is near az 210 at
-        Z 150–162, and a rod from there to the ring must cross the thin tail.
-        No station fits inside the approved shell -> owner decision (blister /
-        relocation) before U4 proceeds.
+    - [ ] **NAC-64-SERVO-01 — nozzle servo drive — DESIGNED + FIT-CLOSED 2026-10-04
+        (Claude Opus 5.5; owner decisions: servo in the canonical dorsal spine,
+        bellcrank, fixed shroud on the pod, slide-off nozzle module, KST X06,
+        "any height increase must be a resizing of the canonical dorsal shroud").**
+        Drive: KST X06 [REF-ACT-005] flat in the spine (shaft Z 144, az 280,
+        4 mm horn ±45°) -> link -> bellcrank on a radial Ø2 pin (az 266, Z 179,
+        r 42.7; arms 4.6/14) -> 18.7 mm rod -> ring ear ball. Single source
+        `tools/nozzle_servo_linkage_64.py` -> `nozzle_servo_linkage_64_params.scad`.
+        Ear 7.9 N stall / 3.7 N holding vs 2.0 N spring (flap allowance 1.7 N,
+        PENDING-U8). Shroud: `tools/dorsal_shroud_resize_64.py` — canonical
+        dorsal shroud ×1.45 in height, tail stretched 4.3× aft of Z 174 (crest
+        +2.02 mm), chosen by /ce-optimize run nds-1 (14 experiments). Fit
+        (manifold3d): drive inside OML 0, shroud vs housing 0, drive vs housing
+        0, ring vs linkage 0/0, stops engage, nozzle slide-off 0.
+        - [ ] **SERVO-01.a** — pod + nozzle + cover + bellcrank re-render, bake,
+            mass/CG (PIVOT_Z re-converge), census re-run.
+        - [ ] **SERVO-01.b** — verify KST X06 + BMS dims/torque on physical units
+            (REF-ACT-004/005 are secondary sources).
+        - [ ] **SERVO-01.c** — U8 bench: flap load at the ball <= 1.7 N, spring
+            cam-out with servo seized (KTD3 fail-open), refit with servo at open.
+        - [ ] **SERVO-01.d** — plan 2026-09-28-001 KTD2/KTD5/U4 text: record KST
+            X06, spine station and bellcrank (supersedes "forward of the ring").
+    - [x] **NAC-64-NOZ-RET — RESOLVED 2026-10-04:** nozzle is a slide-off module:
+        3 mm throat spigot in the sleeve bore, 2 key lugs (30/150), 2 captive M3
+        screws through the fixed shroud into housing bosses (az 302/316);
+        forward-open notch + axial-entry ball cup, so no linkage part is handled.
+    - [x] **NAC-64-NOZ-MOULD — RESOLVED 2026-10-04:** the step at the joint is
+        covered by the resized canonical dorsal shroud (owner rule); the lower
+        housing step remains a recorded deviation vs the boat-tail skin.
+    - [x] **NAC-64-NOZ-LINK — SUPERSEDED 2026-10-04** by
+        `tools/nozzle_servo_linkage_64.py` (64 mm drive, single source).
     - [ ] **NAC-64-GW-V2 — dedicated nozzle-servo gateway per nacelle (owner
         2026-10-03: "give the servos their own bus gateways instead of reusing
         the tilt sensor ones" = plan D-NZ-1 -> V2).** Spec + board doc + tray
@@ -2115,6 +2132,12 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         (c) motor-plate screws reachable with a 2.5 mm hex key from the intake
         (stage 1) or the sleeve's forward face (stage 2). ESC covers and the
         trunnion/disconnect-bay feed path are unchanged.
+    - [x] **NAC-64-MOTOR-HET — HET Typhoon EDF motors — REJECTED 2026-10-05 (owner;
+        analysis Claude Opus 5.5, aeronautical-engineering skill).** Evaluated 2W-25 fwd /
+        2W-30 aft, 2W-30 x2, 2W-25 x2, the linked 1W-35 (4000 KV, 5S — not a "2W-35"), and a
+        HET-matched rotor: no thrust gain over the QX QF2822 on 6S at equal current margin;
+        Ø4 shafts vs the QX 3 mm hub; no published bolt pattern [REF-EDF-004]. Stages stay
+        CO-ROTATING within each nacelle (port/stbd mirrored). Revisit only with 8S.
     - [ ] **NAC-64-ESC-80A — 80 A Open-Secure-ESC builds (owner 2026-10-03,
         Stab-Rabbit-coding: two 80 A 6S ESCs that fit against the 64 mm thrust
         tube; supersedes NAC-64-ESC-70A, the earlier 70 A placeholder).** The
