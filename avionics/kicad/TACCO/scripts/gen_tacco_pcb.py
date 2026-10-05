@@ -172,46 +172,39 @@ F, B = "F", "B"
 # construction — takes the load instead.  This trades hand-picked edge-facing
 # orientation for guaranteed non-overlap; a follow-up pass can hand-place
 # connectors for cosmetic edge alignment once routing is verified.
+# PB2 rail centre-lines: PocketBeagle 2 System Reference Manual Fig. 3.45 (REF-SENSOR-022) puts
+# the P1/P2 pin-1 rows 3.53 / 6.07 mm from their long edges, 25.4 mm apart -> each rail
+# centre-line is 4.80 mm inside the edge.  (Was 2.54 mm, unsourced, until 2026-10-05.)
+RAIL_V = 4.80
+# Isolation band rows (u,v): see the ISO_* geometry block below for the rationale.
+ISO_V0 = 19.2          # logic-side pad rows of CAN-TR/RS485 sit at v 18.05; band starts 1.15 mm below them
+ISO_V1 = 27.9          # stops short of the P2 rail pad rings (v >= 28.08 with the 4.80 mm rails)
+
 FIXED: Dict[str, Tuple[float, float, float, str]] = {
-    # chassis holes + PB2 rails (identical to Pilot's proven-good positions)
+    # chassis holes + PB2 rails (REF-SENSOR-022 geometry; x matches the manual already).
+    # Holes stay at (3, 3): copper clearance to the nearest rail pad is 0.30 mm, drill to
+    # drill 1.1 mm; only the courtyard boxes touch (opposite faces).
     "H1": (3.0, 3.0, 0, F), "H2": (52.0, 3.0, 0, F), "H3": (3.0, 32.0, 0, F), "H4": (52.0, 32.0, 0, F),
-    "PB2-P1": (27.5, 2.54, 0, B), "PB2-P2": (27.5, 32.46, 0, B),
-    # --- left edge: microSD (bottom face, card exits left), 1553 connector (top) ---
-    "J-SD": (47.9, 22.3, 0, B),        # card exits the right edge (bottom-right, bottom face)
-    "J-1553": (3.9, 25.0, 0, F),
-    "TVS-1553P": (3.3, 18.6, 90, B), "TVS-1553N": (3.3, 25.9, 90, B),
-    "1553-XFM": (12.7, 12.5, 0, F),
-    "1553-XCVR": (14.3, 12.0, 0, B),
-    "SD-WB": (22.2, 11.0, 0, B),
-    # --- top edge (top face), connectors opening over the P1 rail pads ---
-    "J-FAN": (23.5, 8.3, 0, F),
-    "PWR-IN": (33.8, 8.7, 0, F),
-    "J-ETH": (44.75, 8.3, 0, F),
-    # --- centre ---
-    "TPM": (24.8, 15.0, 0, F),
-    "ETH-PHY": (34.3, 15.0, 0, F),
-    "T-ETH": (33.5, 11.2, 0, B),
-    "NOR-FLASH": (3.25, 16.0, 90, F),
-    "MLRS-MCU": (41.6, 16.5, 0, F),
-    "J-ANT-MLRS": (52.0, 13.2, 0, F),
-    "RFSW-MLRS": (47.5, 13.2, 0, F),
-    "X-MLRS": (48.0, 19.5, 0, F),
-    "J-MLRS-SWD": (39.4, 26.0, 90, F),
-    "SW-MLRS": (46.8, 27.4, 0, F),
-    # --- right/bottom: WiFi/BT/802.15.4 module (bottom face) + its MMCX (top) ---
-    "WIFI-BT-ZB": (44.8, 11.2, 0, B),   # top-right, bottom face; its MMCX is above it on the top face
-    "J-ANT-RADIO": (52.0, 8.2, 0, F),
-    # --- bottom isolation band: bus-side pin rows face +v (board bottom edge) ---
-    "CAN-TR": (12.5, 23.6, 0, B),
-    "RS485": (25.9, 23.6, 0, B),
-    "J-CAN": (12.5, 27.12, 0, F),
-    "J-485": (25.9, 27.0, 0, F),
-    "TVS-RS485": (32.5, 23.9, 0, F), "CMC-RS485": (33.0, 27.8, 90, F),
-    # --- power: bucks on the bottom face between RS485 and the WiFi module ---
-    "U-3V3": (35.3, 18.6, 0, B), "L-3V3": (34.9, 22.4, 0, B),
-    "U-1V8RF": (39.4, 18.6, 0, B), "L-1V8RF": (35.5, 26.6, 0, B),
-    "U-3V3RF": (4.5, 8.0, 0, B), "L-RF1": (4.5, 12.5, 0, B), "L-RF2": (8.6, 12.5, 0, B),
-    "FB1": (30.0, 15.3, 90, F), "C-IN1": (43.9, 22.4, 0, F),
+    "PB2-P1": (27.5, RAIL_V, 0, B), "PB2-P2": (27.5, BH - RAIL_V, 0, B),
+    # --- edge connectors (re-derived 2026-10-05 for the 4.80 mm rails).  Top-edge connectors
+    # open over the P1 rail: their pads stop 0.13 mm short of the rail pads and the bodies
+    # overhang the flush-trimmed, conformally coated socket tails (owner 2026-10-04).
+    "J-FAN": (23.5, 9.8, 0, F),
+    "PWR-IN": (33.8, 10.3, 0, F),
+    "J-ETH": (44.75, 9.8, 0, F),
+    "J-ANT-RADIO": (52.0, 9.9, 0, F),
+    "J-ANT-MLRS": (52.0, 15.0, 0, F),
+    "J-1553": (3.9, 22.9, 0, F),       # opens left; clears the P2 rail pads
+    "J-SD": (47.9, 20.8, 0, B),        # card exits the right edge (bottom face)
+    # --- isolation band: transceivers straddle its top edge, bus connectors inside it ---
+    "CAN-TR": (12.5, 21.8, 0, B),
+    "RS485": (25.9, 21.8, 0, B),
+    "J-CAN": (12.5, 24.6, 0, F),
+    "J-485": (25.9, 24.6, 0, F),
+    # X2Y GND<->GND2 bridges straddle the band's top edge; fixed so auto-placed parts
+    # cannot land on them first (they were placed late, by area, before 2026-10-05)
+    "X2Y-CAN": (14.6, ISO_V0 - 1.4, 0, F),
+    "X2Y-RS485": (25.9, ISO_V0 - 1.4, 0, F),
 }
 
 # pads that must face a direction (d = unit vector in board u,v)
@@ -230,8 +223,6 @@ EXIT: Dict[str, Tuple[float, float]] = {
 # starts at the SOIC-20W body centre line (the package itself is the barrier) and
 # runs to the bottom edge keep-out, plus the P2 rail gap so J-CAN's ISOLATION-net
 # pads can be reached by tracks that stay inside the band.
-ISO_V0 = 21.0          # logic-side pad rows of CAN-TR/RS485 sit at v 19.85; band starts 1.1 mm below them
-ISO_V1 = 30.2          # stops short of the P2 rail pad rings (v >= 30.34)
 ISO_CAN = [(7.5, ISO_V0), (19.7, ISO_V0), (19.7, ISO_V1), (7.5, ISO_V1)]
 ISO_485 = [(20.7, ISO_V0), (34.2, ISO_V0), (34.2, ISO_V1), (20.7, ISO_V1)]
 ISO_BAND_POLY = [(7.5, ISO_V0), (34.2, ISO_V0), (34.2, ISO_V1), (7.5, ISO_V1)]
@@ -315,7 +306,7 @@ ISO_RECTS = [Rect(X0 + 7.5, Y0 + ISO_V0, X0 + 34.2, Y0 + ISO_V1)]
 # edge to the south, so those nets run along the gap, via down at the cell centres, and
 # leave west or east of the band.  Parts parked in P2 cells closed that channel and left
 # 15 nets unroutable in the 2026-09-30 freerouting passes.
-RAIL_CELLS = [(7.18 + 2.54 * k, 2.54) for k in range(1, 17)]  # k=0 sits next to the square pin-1 pad
+RAIL_CELLS = [(7.18 + 2.54 * k, RAIL_V) for k in range(1, 17)]  # k=0 sits next to the square pin-1 pad
 
 
 class Placer:
