@@ -179,8 +179,11 @@ FP_QFN48_WL = "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm"
 # Epson TG2520SMN 2.5x2.0 mm TCXO (TG2520SMN_en-2584158.pdf pin map 1 NC, 2 GND, 3 OUT, 4 VCC)
 FP_TG2520 = "Oscillator:Oscillator_SMD_SeikoEpson_TG2520SMN-xxx-xxxxxx-4Pin_2.5x2.0mm"
 # project-custom lands (avionics/kicad/Serenity-Custom.pretty)
-FP_PB2P1 = "Serenity-Custom:PocketBeagle2_2x18_P1_Socket"
-FP_PB2P2 = "Serenity-Custom:PocketBeagle2_2x18_P2_Socket"
+# PB2 rails: Samtec SSM-118-L-DV-LC surface-mount sockets (owner 2026-10-05, WBS R3) —
+# samtec_ssm_footprint.pdf Rev D Fig. 4 land; -LC clips anchor each socket through the
+# board (two NPTH per rail) as the vibration retention, standing in for the THT barrels.
+FP_PB2P1 = "Serenity-Custom:PocketBeagle2_2x18_P1_SSM-DV-LC"
+FP_PB2P2 = "Serenity-Custom:PocketBeagle2_2x18_P2_SSM-DV-LC"
 FP_NANOFIT = "Serenity-Custom:Molex_NanoFit_1x04_Horizontal"
 FP_SRF2012 = "Serenity-Custom:Bourns_SRF2012_4T"
 FP_X2Y0805 = "Serenity-Custom:X2Y_0805_4T"
@@ -858,7 +861,9 @@ def pb2_header(ref: str, value: str, fp: str, nets: List[Optional[str]]) -> Dict
     omitted = PB2_P2_OMITTED if ref == "PB2-P2" else set()
     pins = [(str(i), f"P{i}", net, "L" if i <= 18 else "R")
             for i, net in enumerate(nets, start=1) if i not in omitted]
-    return {"ref": ref, "value": value, "fp": fp, "mpn": "", "ds": "PocketBeagle 2 P1/P2 expansion rails (XO map)", "pins": pins}
+    return {"ref": ref, "value": value, "fp": fp, "mpn": "SSM-118-L-DV-LC",
+            "ds": "PocketBeagle 2 P1/P2 expansion rails (XO map); Samtec SSM-DV SMT socket, -LC locking "
+                  "clip (manual placement per drawing note 8) [REF-SENSOR-023]", "pins": pins}
 
 
 ICS += [
@@ -910,13 +915,13 @@ SIMPLE: List[Any] = [
     ("C-1V8RF-O1", "22uF 6.3V X5R", FP_C0603, "", "U-1V8RF COUT", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
     ("C-1V8RF-O2", "22uF 6.3V X5R", FP_C0603, "", "U-1V8RF COUT", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
     # --- +3V3_RF buck-boost (TPS63031) --------------------------------------
-    ("L-RF1", "2.2uH 3A", FP_L3015, "LPS3015-222MRC", "TPS63031 first inductor leg; tps63031.pdf Table 3 "
-     "recommends Coilcraft LPS3015/Murata LQH3NP/Taiyo Yuden NR3015 — \"744042002\" (used here previously) "
-     "could not be found as a real Wurth part and appears fabricated during this rebuild, corrected "
-     "2026-09-20 to a real Coilcraft LPS3015 part",
-     [("1", "A", "RF_SW1"), ("2", "B", "+5V")]),
-    ("L-RF2", "2.2uH 3A", FP_L3015, "LPS3015-222MRC", "TPS63031 second inductor leg, same correction as L-RF1",
-     [("1", "A", "RF_SW2"), ("2", "B", "+3V3_RF")]),
+    ("L-RF1", "1.5uH", FP_L3015, "LPS3015-152MRC", "TPS63031 power inductor between L1 (pin 4) and L2 (pin 2): "
+     "tps63031.pdf Fig. 1/Table 2 (1.5 uH LPS3015-1R5) and Table 3 (LPS3015/LQH3NP/NR3015 series). "
+     "Corrected 2026-10-05: the 2026-09-20 rebuild had split this into two inductors (L1->+5V, "
+     "L2->+3V3_RF), which shorts the switch nodes to the rails through the windings; a buck-boost "
+     "uses one inductor across L1-L2. Coilcraft ordering code for the 1.5 uH value to be confirmed "
+     "against the Coilcraft LPS3015 datasheet (vendor site unreachable from the build environment)",
+     [("1", "A", "RF_SW1"), ("2", "B", "RF_SW2")]),
     ("C-RF-IN1", "10uF 10V X5R", FP_C0603, "", "TPS63031 VIN bulk", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-RF-IN2", "100nF", FP_C0402, "", "TPS63031 VIN HF", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-RF-O1", "22uF 6.3V X5R", FP_C0603, "", "TPS63031 COUT", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),

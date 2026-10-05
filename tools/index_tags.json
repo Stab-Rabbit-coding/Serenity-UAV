@@ -10448,7 +10448,23 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_SSM-DV-LC.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_SSM-DV-LC.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
@@ -18893,7 +18909,9 @@
       "avionics/kicad/Serenity-Custom.pretty/Murata_Type2EL_LGA107.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PGND_ViaPad_1p2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_SSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_SSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RCLAMP0502B_SOD882.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",
@@ -19452,7 +19470,9 @@
       "avionics/kicad/Serenity-Custom.pretty/Murata_Type2EL_LGA107.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PGND_ViaPad_1p2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_SSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_SSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RCLAMP0502B_SOD882.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",

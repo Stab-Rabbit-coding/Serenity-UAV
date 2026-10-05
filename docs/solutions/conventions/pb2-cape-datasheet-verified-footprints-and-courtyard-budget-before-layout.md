@@ -78,7 +78,7 @@ an SOIC-20W is 12 x 13.4 mm (160 mm²); a Würth 749010012A is 12.9 x 11.3 mm.
    anything.** Load each footprint once and read its courtyard
    (`gen_pilot_pcb.py::courtyard()` does this via `GetCourtyard(F_CrtYd)`),
    sum per side, and compare against the usable band. On a PB2 cape the usable
-   band between the two stacking rails is v 5.7–29.3 mm ≈ 1300 mm² per side,
+   band between the two stacking rails (THT rails at the old, wrong 2.54 mm rows) was v 5.7–29.3 mm ≈ 1300 mm² per side,
    not 55 x 35. Anything above ~70 % per side is not routable on two signal
    layers; treat ~85 % as the ceiling even on six.
 
@@ -87,10 +87,14 @@ an SOIC-20W is 12 x 13.4 mm (160 mm²); a Würth 749010012A is 12.9 x 11.3 mm.
    PWM/DSHOT header reserved ≈ 130 mm² on B.Cu for nothing; the Samtec
    TSM-108 -DV SMT 0.1 in header (pads 1.27 x 3.68 mm, verified from the
    Samtec footprint print) keeps the same 0.1 in lead pattern on one face.
-   **Do not** try this on the PB2 stacking rails: Samtec SSM-DV SMT sockets
-   put their outer pad edge 3.94 mm from the rail centre-line and the PB2
-   rails sit 2.54 mm from the cape edge, so the outer pad row would hang
-   1.4 mm off the board. The rails stay THT.
+   The same works on the PB2 stacking rails (corrected 2026-10-05): the PB2
+   System Reference Manual (Fig. 3.45) puts each rail centre-line 4.80 mm
+   inside its long edge, not the 2.54 mm both cape generators had used, so a
+   Samtec SSM-DV SMT socket (outer pad edge 3.94 mm from the centre-line,
+   `samtec_ssm_footprint.pdf` Rev D Fig. 4) sits ~0.86 mm inside the edge.
+   TACCO uses SSM-118-L-DV-LC with the -LC clip holes as the through-board
+   anchor. Check every THT/NPTH hole of a top-face part against the bottom
+   face's pads, including the -LC clip holes.
 
 5. **Isolation is what the board delivers, not what the chip is rated.**
    A 5 kV-reinforced ISOW1044/ISOW1412 terminated on a 0.5 mm ISOLATION

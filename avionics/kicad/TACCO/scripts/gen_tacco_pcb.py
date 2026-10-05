@@ -177,8 +177,15 @@ F, B = "F", "B"
 # centre-line is 4.80 mm inside the edge.  (Was 2.54 mm, unsourced, until 2026-10-05.)
 RAIL_V = 4.80
 # Isolation band rows (u,v): see the ISO_* geometry block below for the rationale.
-ISO_V0 = 19.2          # logic-side pad rows of CAN-TR/RS485 sit at v 18.05; band starts 1.15 mm below them
-ISO_V1 = 27.9          # stops short of the P2 rail pad rings (v >= 28.08 with the 4.80 mm rails)
+# Redrawn 2026-10-05 (owner, WBS R3 option 2): transceivers on the top face, bus
+# connectors at the bottom edge over the SMT P2 rail, band runs to the edge on F.Cu
+# and the inner layers.  B.Cu is NOT part of the band: every isolated pad sits on the
+# top face, In2-In4 are kept out and In1 carries only the GND2 islands, so the bottom
+# face under the band is logic copper separated from the isolated domain by the full
+# laminate (functional bus isolation, not a safety barrier — see TACCO.md §isolation).
+ISO_TR_V = 20.6        # CAN-TR / RS485 centre row (SOIC-20W, pins 11-20 face +v)
+ISO_V0 = ISO_TR_V - 2.6  # band edge between the package centre line and its logic pad row (same 2.6 mm offset as Rev S3)
+ISO_V1 = BH - 0.5      # F.Cu + inner layers: to the copper-edge keep-out
 
 FIXED: Dict[str, Tuple[float, float, float, str]] = {
     # chassis holes + PB2 rails (REF-SENSOR-022 geometry; x matches the manual already).
@@ -186,25 +193,31 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     # drill 1.1 mm; only the courtyard boxes touch (opposite faces).
     "H1": (3.0, 3.0, 0, F), "H2": (52.0, 3.0, 0, F), "H3": (3.0, 32.0, 0, F), "H4": (52.0, 32.0, 0, F),
     "PB2-P1": (27.5, RAIL_V, 0, B), "PB2-P2": (27.5, BH - RAIL_V, 0, B),
-    # --- edge connectors (re-derived 2026-10-05 for the 4.80 mm rails).  Top-edge connectors
-    # open over the P1 rail: their pads stop 0.13 mm short of the rail pads and the bodies
-    # overhang the flush-trimmed, conformally coated socket tails (owner 2026-10-04).
-    "J-FAN": (23.5, 9.8, 0, F),
-    "PWR-IN": (33.8, 10.3, 0, F),
-    "J-ETH": (44.75, 9.8, 0, F),
+    # --- edge connectors (2026-10-05, SSM-DV rails): the rails are bottom-face SMT, so the
+    # whole top face is free and the field connectors sit at the board edges over the rails.
+    # J-ETH's right MP pad must clear PB2-P1's -LC clip hole at u 47.82; the row packs left.
+    "J-FAN": (21.45, 4.2, 0, F),
+    "PWR-IN": (31.75, 4.8, 0, F),
+    "J-ETH": (42.7, 4.2, 0, F),
     "J-ANT-RADIO": (52.0, 9.9, 0, F),
-    "J-ANT-MLRS": (52.0, 15.0, 0, F),
-    "J-1553": (3.9, 22.9, 0, F),       # opens left; clears the P2 rail pads
-    "J-SD": (47.9, 20.8, 0, B),        # card exits the right edge (bottom face)
-    # --- isolation band: transceivers straddle its top edge, bus connectors inside it ---
-    "CAN-TR": (12.5, 21.8, 0, B),
-    "RS485": (25.9, 21.8, 0, B),
-    "J-CAN": (12.5, 24.6, 0, F),
-    "J-485": (25.9, 24.6, 0, F),
-    # X2Y GND<->GND2 bridges straddle the band's top edge; fixed so auto-placed parts
-    # cannot land on them first (they were placed late, by area, before 2026-10-05)
-    "X2Y-CAN": (14.6, ISO_V0 - 1.4, 0, F),
-    "X2Y-RS485": (25.9, ISO_V0 - 1.4, 0, F),
+    "J-1553": (3.9, 24.0, 0, F),       # opens left
+    "J-SD": (47.9, 20.8, 0, F),        # card exits the right edge
+    "J-ANT-MLRS": (2.9, 8.2, 0, F),    # through-hole MMCX: west of the P1 rail's end pins, below H1
+    # --- 2026-10-05 floor-plan anchors on the SSM-DV rails: the auto-placer alone left
+    # T-ETH / U-3V3RF / L-1V8RF without a site (largest-first order fills the open pockets
+    # before them); each is pinned to the pocket a what-if sweep found for it.
+    "T-ETH": (47.5, 19.9, 0, B),       # under J-SD, beside J-ETH's edge
+    "U-3V3RF": (43.0, 11.2, 0, B),
+    "L-1V8RF": (34.0, 23.5, 0, B),     # two-pad, under the band: escapes on B.Cu only
+    # --- isolation band: transceivers straddle its top edge, bus connectors at the edge ---
+    "CAN-TR": (14.0, ISO_TR_V, 0, F),
+    "RS485": (28.4, ISO_TR_V, 0, F),
+    "J-CAN": (14.0, 30.6, 0, F),
+    "J-485": (28.4, 30.6, 0, F),
+    # X2Y GND<->GND2 bridges straddle the band's top edge on the bottom face, under
+    # their transceivers; fixed so auto-placed parts cannot land on them first
+    "X2Y-CAN": (14.0, ISO_V0, 0, B),
+    "X2Y-RS485": (28.4, ISO_V0, 0, B),
 }
 
 # pads that must face a direction (d = unit vector in board u,v)
@@ -223,11 +236,12 @@ EXIT: Dict[str, Tuple[float, float]] = {
 # starts at the SOIC-20W body centre line (the package itself is the barrier) and
 # runs to the bottom edge keep-out, plus the P2 rail gap so J-CAN's ISOLATION-net
 # pads can be reached by tracks that stay inside the band.
-ISO_CAN = [(7.5, ISO_V0), (19.7, ISO_V0), (19.7, ISO_V1), (7.5, ISO_V1)]
-ISO_485 = [(20.7, ISO_V0), (34.2, ISO_V0), (34.2, ISO_V1), (20.7, ISO_V1)]
-ISO_BAND_POLY = [(7.5, ISO_V0), (34.2, ISO_V0), (34.2, ISO_V1), (7.5, ISO_V1)]
-MAIN_PLANE = [(0.5, 0.5), (54.5, 0.5), (54.5, 34.5), (34.2, 34.5), (34.2, ISO_V0), (7.5, ISO_V0),
-              (7.5, 34.5), (0.5, 34.5)]
+ISO_U0, ISO_UM, ISO_U1 = 7.2, 21.2, 37.6   # band west edge, CAN/RS-485 island split, east edge
+ISO_CAN = [(ISO_U0, ISO_V0), (ISO_UM - 0.25, ISO_V0), (ISO_UM - 0.25, ISO_V1), (ISO_U0, ISO_V1)]
+ISO_485 = [(ISO_UM + 0.25, ISO_V0), (ISO_U1, ISO_V0), (ISO_U1, ISO_V1), (ISO_UM + 0.25, ISO_V1)]
+ISO_BAND_POLY = [(ISO_U0, ISO_V0), (ISO_U1, ISO_V0), (ISO_U1, ISO_V1), (ISO_U0, ISO_V1)]
+MAIN_PLANE = [(0.5, 0.5), (54.5, 0.5), (54.5, 34.5), (ISO_U1, 34.5), (ISO_U1, ISO_V0), (ISO_U0, ISO_V0),
+              (ISO_U0, 34.5), (0.5, 34.5)]
 
 ANCHOR_PREFIX = [
     ("C-PHY-", "ETH-PHY"), ("R-RBIAS", "ETH-PHY"), ("R-AD0", "ETH-PHY"),
@@ -297,7 +311,8 @@ def tht_rects(fp: pcbnew.FOOTPRINT) -> List[Rect]:
 
 # Isolation band as rectangles (board u,v) — parts carrying ISOLATION-class nets must
 # sit inside, every other part outside, or the .kicad_dru rules make them unroutable.
-ISO_RECTS = [Rect(X0 + 7.5, Y0 + ISO_V0, X0 + 34.2, Y0 + ISO_V1)]
+ISO_RECTS = {F: [Rect(X0 + ISO_U0, Y0 + ISO_V0, X0 + ISO_U1, Y0 + ISO_V1)],
+             B: []}
 # Top-face cells between the PB2 rail pins (rails are not stack-through any more):
 # a 0402/0201 fits diagonally in every 2.54 mm cell — owner request 2026-09-29.
 # P1 row only (2026-10-04): the P2 inter-row gap and its 2x2 pin-cell centres are the
@@ -309,20 +324,36 @@ ISO_RECTS = [Rect(X0 + 7.5, Y0 + ISO_V0, X0 + 34.2, Y0 + ISO_V1)]
 RAIL_CELLS = [(7.18 + 2.54 * k, RAIL_V) for k in range(1, 17)]  # k=0 sits next to the square pin-1 pad
 
 
+# Multi-pin parts allowed on B.Cu beneath the isolation band: every net must be able to
+# leave on B.Cu alone.  1553-XFM (2026-10-05): eight pins, three nets to J-1553 west of
+# the band and three to 1553-XCVR north of it; nothing else on the board has room for it.
+# J-MLRS-SWD: the Tag-Connect NL land's six pads run straight north on B.Cu to MLRS-MCU, and
+# its three NPTH alignment holes carry no copper into the band.
+UNDER_BAND_OK = {"1553-XFM", "J-MLRS-SWD"}
+
+
 class Placer:
     def __init__(self, board: pcbnew.BOARD):
         self.board = board
         self.blk: Dict[str, List[Rect]] = {F: [], B: []}
+        # copper a through hole from the other face must clear: SMD pads + other holes
+        self.pads: Dict[str, List[Rect]] = {F: [], B: []}
         self.edge = Rect(X0 + EDGE_KEEP, Y0 + EDGE_KEEP, X0 + BW - EDGE_KEEP, Y0 + BH - EDGE_KEEP)
         self.cells = list(RAIL_CELLS)
         self.iso = False
+        self.two_pad = False
 
     def register(self, fp: pcbnew.FOOTPRINT) -> None:
         side = B if fp.IsFlipped() else F
         self.blk[side].append(courtyard(fp))
+        for pad in fp.Pads():
+            if pad.GetAttribute() == pcbnew.PAD_ATTRIB_SMD:
+                self.pads[side].append(bbox_rect(pad.GetBoundingBox()).grow(0.3))
         for r in tht_rects(fp):
             self.blk[F].append(r)
             self.blk[B].append(r)
+            self.pads[F].append(r)
+            self.pads[B].append(r)
         for z in fp.Zones():
             if z.GetIsRuleArea():
                 r = bbox_rect(z.GetBoundingBox()).grow(0.2)
@@ -332,10 +363,15 @@ class Placer:
     def free(self, r: Rect, side: str) -> bool:
         if r.x1 < self.edge.x1 or r.y1 < self.edge.y1 or r.x2 > self.edge.x2 or r.y2 > self.edge.y2:
             return False
-        inside = any(r.hits(o) for o in ISO_RECTS)
+        # band is top-face (+ inner) only.  Beneath it on B.Cu only two-pad logic parts
+        # may sit: no logic via may enter the band, so whatever lands there must escape on
+        # B.Cu alone, which a passive can and a multi-pin IC cannot.
+        inside = any(r.hits(o) for o in ISO_RECTS[side])
+        if side == B and not self.iso and not self.two_pad and any(r.hits(o) for o in ISO_RECTS[F]):
+            return False
         if self.iso:
             # must be wholly inside one band rectangle
-            if not any(o.x1 <= r.x1 and r.x2 <= o.x2 and o.y1 <= r.y1 and r.y2 <= o.y2 for o in ISO_RECTS):
+            if not any(o.x1 <= r.x1 and r.x2 <= o.x2 and o.y1 <= r.y1 and r.y2 <= o.y2 for o in ISO_RECTS[side]):
                 return False
         elif inside:
             return False
@@ -364,13 +400,23 @@ class Placer:
         r = courtyard(fp).grow(0.15)
         return (r.x1 - X0, r.y1 - Y0, r.x2 - X0, r.y2 - Y0)
 
+    def holes(self, fp: pcbnew.FOOTPRINT, side: str, rot: float) -> List[Tuple[float, float, float, float]]:
+        """Through-hole / NPTH pad boxes relative to the footprint origin: they pierce the
+        opposite face too, so they must clear that face's parts (found 2026-10-05: a
+        Tag-Connect NPTH landed on MLRS-MCU's pads on B.Cu)."""
+        self.set(fp, 0.0, 0.0, rot, side)
+        return [(r.x1 - X0, r.y1 - Y0, r.x2 - X0, r.y2 - Y0) for r in tht_rects(fp)]
+
     def spiral(self, fp: pcbnew.FOOTPRINT, au: float, av: float, side: str, rmax: float = 30.0, step: float = 0.25) -> bool:
-        shapes = [(rot, self.shape(fp, side, rot)) for rot in (0, 90)]
+        shapes = [(rot, self.shape(fp, side, rot), self.holes(fp, side, rot)) for rot in (0, 90)]
+        other = B if side == F else F
 
         def fits(u: float, v: float):
-            for rot, (dx1, dy1, dx2, dy2) in shapes:
+            for rot, (dx1, dy1, dx2, dy2), holes in shapes:
                 r = Rect(X0 + u + dx1, Y0 + v + dy1, X0 + u + dx2, Y0 + v + dy2)
-                if self.free(r, side):
+                if self.free(r, side) and not any(
+                        Rect(X0 + u + h1, Y0 + v + k1, X0 + u + h2, Y0 + v + k2).hits(o)
+                        for h1, k1, h2, k2 in holes for o in self.pads[other]):
                     return rot
             return None
 
@@ -688,7 +734,20 @@ def main() -> None:
         return (r.x2 - r.x1) * (r.y2 - r.y1)
 
     todo = [r for r in fps if r not in FIXED]
-    todo.sort(key=lambda r: -area(fps[r]))
+    # largest first, but never before the ANCHOR_PREFIX parent it clusters around: a child
+    # placed while its parent still sat unplaced at the origin anchored off-board and was
+    # dropped (L-RF1 / L-1V8RF before their regulators, found 2026-10-05).
+    def parent_of(r):
+        for pre, par in ANCHOR_PREFIX:
+            if r.startswith(pre):
+                return par if par in fps and par not in FIXED and par != r else None
+        return None
+
+    def order_key(r):
+        par = parent_of(r)
+        return (-area(fps[par]), 1, -area(fps[r]), r) if par else (-area(fps[r]), 0, 0.0, r)
+
+    todo.sort(key=order_key)
     unplaced = []
     for ref in todo:
         fp = fps[ref]
@@ -732,10 +791,11 @@ def main() -> None:
         if ref in ("X2Y-CAN", "X2Y-RS485"):
             # X2Y bridges GND<->GND2 across the barrier: straddle the band edge.
             placer.iso = False
-            uu = 14.6 if ref == "X2Y-CAN" else 25.9
-            placer.set(fp, uu, ISO_V0 - 1.4, 0, F)
+            uu = FIXED["CAN-TR" if ref == "X2Y-CAN" else "RS485"][0]
+            placer.set(fp, uu, ISO_V0, 0, B)
             placer.register(fp)
             continue
+        placer.two_pad = len([p for p in fp.Pads() if p.GetNumber()]) <= 2 or ref in UNDER_BAND_OK
         other = F if side == B else B
         ok = placer.spiral(fp, anchor[0], anchor[1], side, rmax=8.0)
         if not ok:
@@ -782,20 +842,25 @@ def main() -> None:
         for u, v in band:
             ol.Append(mm(X0 + u), mm(Y0 + v))
         board.Add(z)
-    z = pcbnew.ZONE(board)
-    z.SetLayerSet(pcbnew.LSET.AllCuMask(6))
-    z.SetIsRuleArea(True)
-    z.SetDoNotAllowCopperPour(False)
-    z.SetDoNotAllowTracks(False)
-    z.SetDoNotAllowVias(False)
-    z.SetDoNotAllowPads(False)
-    z.SetDoNotAllowFootprints(False)
-    z.SetZoneName("ISO_BAND")
-    ol = z.Outline()
-    ol.NewOutline()
-    for u, v in band:
-        ol.Append(mm(X0 + u), mm(Y0 + v))
-    board.Add(z)
+    # ISO_BAND (named rule area read by the .kicad_dru rules): F.Cu and the inner layers
+    # only — B.Cu under the band is logic copper (see the ISO_V0 comment).
+    top_and_inner = pcbnew.LSET.AllCuMask(6)
+    top_and_inner.RemoveLayer(pcbnew.B_Cu)
+    for lset, poly in ((top_and_inner, band),):
+        z = pcbnew.ZONE(board)
+        z.SetLayerSet(lset)
+        z.SetIsRuleArea(True)
+        z.SetDoNotAllowCopperPour(False)
+        z.SetDoNotAllowTracks(False)
+        z.SetDoNotAllowVias(False)
+        z.SetDoNotAllowPads(False)
+        z.SetDoNotAllowFootprints(False)
+        z.SetZoneName("ISO_BAND")
+        ol = z.Outline()
+        ol.NewOutline()
+        for u, v in poly:
+            ol.Append(mm(X0 + u), mm(Y0 + v))
+        board.Add(z)
 
     text(board, "TACCO Rev S3  Griffing Technology LLC  CC BY 4.0", 27.5, 17.2, pcbnew.B_Fab, 0.9, mirror=True)
     text(board, "ISOLATED CAN-FD | RS-485", 21.0, 24.4, pcbnew.F_Fab, 0.8)

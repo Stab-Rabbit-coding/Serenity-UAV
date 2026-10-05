@@ -1341,6 +1341,24 @@ REFERENCES.md Removed/Superseded Citations).
     - [ ] R1 TACCO rails moved, re-floor-planned, regenerated, gates 0.
     - [ ] R2 Pilot rails moved, regenerated, gates 0.
     - [ ] R3 SMT (SSM-DV) vs THT rail routing study on the corrected geometry; owner decision.
+      **Decided 2026-10-05 (S. Griffing: "Do 1+2").** On the corrected rails the THT layout
+      left T-ETH, three 3015 inductors and CMC-RS485 unplaced, so TACCO moves to Samtec
+      SSM-118-L-DV-LC surface-mount rails (`Serenity-Custom:PocketBeagle2_2x18_P{1,2}_SSM-DV-LC`,
+      `samtec_ssm_footprint.pdf` Rev D Fig. 4: 1.02 x 2.22 mm pads at CL +/-2.825 mm; -LC clip
+      holes 1.19 mm NPTH at +/-20.32 mm, the through-board anchor standing in for the THT barrels;
+      -LC is hand-placed per drawing note 8). Option 2, isolation band redrawn: CAN-TR / RS485 move
+      to the top face at v 20.6 with J-CAN / J-485 at the bottom edge over the P2 rail; the band
+      (F.Cu + In1-In4) runs u 7.2-37.6, v 18.0 to the edge keep-out. B.Cu is no longer part of the
+      band: no isolated pad is on the bottom face, so B.Cu beneath the band carries logic copper
+      separated from the isolated domain by the laminate (functional bus isolation, not a safety
+      barrier); only two-pad parts and 1553-XFM (all nets escape on B.Cu) may sit there, since no
+      logic via may enter the band. Option 1 (smaller inductors) is replaced by a correctness fix
+      found on the way: the 2026-09-20 rebuild wired the TPS63031 with two inductors (L1 -> +5V,
+      L2 -> +3V3_RF), which shorts its switch nodes to the rails; `tps63031.pdf` Fig. 1 / Table 2
+      use one 1.5 uH inductor across L1-L2, so L-RF2 is removed and L-RF1 becomes that inductor
+      (LPS3015 series per Table 3; the exact 1.5 uH Coilcraft ordering code is to be confirmed —
+      the vendor site is unreachable from the build environment). No 2520-size inductor datasheet
+      is archived, so no inductor was down-sized.
     - [ ] R4 Learning docs and CONCEPTS.md corrected.
 - [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
     APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift

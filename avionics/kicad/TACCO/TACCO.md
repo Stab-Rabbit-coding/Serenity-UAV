@@ -441,6 +441,41 @@ antenna cable shielding provide the primary conducted shield path.
 
 ---
 
+## §13a — PB2 Rail Sockets and Isolation Band (2026-10-05)
+
+Decision record: `avionics/WBS.md`, "PB2 rail geometry correction", R3 ("Do 1+2").
+
+**Geometry.** Rail centre-lines 4.80 mm (0.189 in) inside each long edge, 25.4 mm (1.00 in)
+apart [REF-SENSOR-022 Fig. 3.45]. Sockets: Samtec **SSM-118-L-DV-LC**, bottom face,
+`Serenity-Custom:PocketBeagle2_2x18_P{1,2}_SSM-DV-LC` built from `samtec_ssm_footprint.pdf`
+Rev D Fig. 4 (pads 1.02 x 2.22 mm, centres +/-2.825 mm, outer pad edge 3.94 mm from the
+centre-line, ~0.86 mm inside the board edge) [REF-SENSOR-023].
+
+**Mechanical retention (owner request 2026-10-04).**
+- The -LC locking clip puts one clip per socket end through a 1.19 mm (0.047 in) NPTH at
+  +/-20.32 mm on the centre-line, so each socket is anchored through the board at both ends —
+  the same "through-board only at the ends" pattern as the PB2's own SMT headers, which carry
+  through-hole pins only at positions 1/2 and 35/36 [REF-SENSOR-022]. -LC needs manual
+  placement (Samtec drawing note 8): the assembly order must call it out.
+- The SSM catalog cites Severe Environment Testing aligned with MIL-DTL-55302; the mating
+  TSW/SSW family is qualified to 7.56 G RMS random vibration (50–2000 Hz, 2 h/axis,
+  EIA-364-28 V-B) and 100 G / 6 ms shock (EIA-364-27) [REF-SENSOR-023]. No SSM-specific
+  vibration figure is archived; treat the rail as unqualified until the stack passes the
+  airframe vibration test.
+- Cape H1–H4 chassis holes remain the primary load path; the rails carry no structural load.
+- Socket tails are SMT (no protruding tails). Conformal-coat the rail solder fillets with the
+  rest of the board, masking the socket contacts.
+
+**Isolation band.** CAN-TR / RS485 on the top face at v 20.6 mm; J-CAN / J-485 at the bottom
+edge over the P2 rail. `ISO_BAND` covers F.Cu and In1–In4, u 7.2–37.6 mm, v 18.0 mm to the edge
+keep-out; In1 carries the GND2 islands, In2–In4 are kept out. **B.Cu is not part of the band:**
+no isolated pad sits on the bottom face, so B.Cu beneath the band carries logic copper
+(two-pad parts, 1553-XFM and the Tag-Connect land) that must route on B.Cu alone, because no
+logic via may enter the band. The isolated domain is separated from that copper by the
+laminate (In1 to B.Cu), not by surface creepage — functional bus isolation, not a safety
+barrier. The ≥ 8 mm creepage target in the layout constraints above applies to same-surface
+spacing and is still to be verified on the routed board.
+
 ## §14 — Field Connectors Summary
 
 All field connectors are shielded JST-GH (or SMA/U.FL for RF). SHIELD pins connect to PGND.
