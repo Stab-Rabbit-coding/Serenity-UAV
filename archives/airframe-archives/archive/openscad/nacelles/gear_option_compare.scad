@@ -1,3 +1,6 @@
+// ARCHIVED 2026-09-28 — RETIRED by the servo nozzle drive (docs/NOZZLE_DRIVE_TRADE.md
+// "DECISION AMENDMENT — servo drive (2026-09-28)"). Kept for the record only; not built,
+// not imported. Original header and attribution follow unchanged.
 // =============================================================================
 // gear_option_compare.scad — DECISION AID (2026-07-18)
 // Serenity UAV — nacelle-tilt fixed-gear size comparison

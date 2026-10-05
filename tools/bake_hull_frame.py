@@ -173,6 +173,46 @@ COMPONENTS = {
     ),
 }
 
+# ---------------------------------------------------------------------------
+# 64 mm nacelles (Rev T6, 2026-10-03) — DERIVED FROM SHARED DATUMS, mirrored.
+#
+# Unlike the 50 mm entries above (hand-extracted from an FCStd, and known to be
+# asymmetric: X +47 / -385, Y -64 / -70, Z 63.0 / 65.0), these are computed,
+# one rule for both sides, so the pair cannot desync (owner rule 2026-10-03:
+# local joint geometry informs, the airframe rules):
+#
+#   rotation   the same 270 deg about +X as above: hull = (x_l, z_l, -y_l).
+#   Y, Z       the tilt axis IS the spar line.  The spar and its fuselage
+#              socket are LEVEL at hull Y 21.000, Z 66.851
+#              (merge_cargo_interior.py WING_SPAR_Z; wings_s1223_revo.scad
+#              Rev T6 dihedral makes the wing bore level on it).  The pod's
+#              axis point is local (0, 0, PIVOT_Z = 109.7), so
+#              Py = 21.000 - 109.7 = -88.700,  Pz = 66.851.
+#   X          each pod's wing-pad seat (local x = +/-53.84 =
+#              WING_TIP_FACE_X - TIP_PAD_PROUD) on its own wing's pad face,
+#              measured on the baked wings: stbd -345.182, port +6.700, so
+#              Px = -399.022 / +60.540.  Midpoint -169.241 = the measured hull
+#              centre plane (Wing_Stbd note above): symmetric by construction.
+#
+# The trunnion and the wing tilt pinion are staged in the SAME nacelle-local
+# frame by tools/prep_nacelle_64_bake.py, so they take the same transform.
+# The pinion is WING-fixed: serenity_assembly.py does not tilt it.
+# ---------------------------------------------------------------------------
+# 2026-10-05: pivot and wing-pad seat come from the single sources (the x1.06
+# enlargement moves both).  Seat = WING_TIP_FACE_X - TIP_PAD_PROUD
+#      = (41.7 + axis shift + 7.0 stub) - 2.0  (53.84 at x1.00 shift 7.14).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import nacelle_64_scale  # noqa: E402
+_N64_SEAT = 41.7 + nacelle_64_scale.get("P64_AXIS_SHIFT_S") + 7.0 - 2.0
+_N64_Y, _N64_Z = 21.000 - nacelle_64_scale.pivot_z(), 66.851
+_N64_X = {"Port": 6.700 + _N64_SEAT, "Stbd": -345.182 - _N64_SEAT}
+for _side in ("Port", "Stbd"):
+    _pl = (_N64_X[_side], _N64_Y, _N64_Z, _SQ2, 0.0, 0.0, -_SQ2)
+    _s = _side.lower()
+    COMPONENTS[f"Nacelle64_{_side}"] = (f"nacelles/nacelle_{_s}_64mm.stl", _pl)
+    COMPONENTS[f"Trunnion64_{_side}"] = (f"nacelles/nacelle_trunnion_64mm_{_s}.stl", _pl)
+    COMPONENTS[f"TiltPinion64_{_side}"] = (f"wings/wing_tilt_pinion_{_s}.stl", _pl)
+
 
 def quat_to_matrix(qx, qy, qz, qw):
     """

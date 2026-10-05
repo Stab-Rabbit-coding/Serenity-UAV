@@ -244,6 +244,29 @@ EDF_BORE_R      =  25.0;  // [mm] EDF bore inner radius → 50 mm (1.97 in) ID (
 EDF_CASING_R    =  27.5;  // [mm] EDF casing outer radius → 55 mm (2.17 in) OD
 WALL_T          =   2.5;  // [mm] minimum wall thickness — 0.098 in (2.5 mm) CF-PETG per CLAUDE.md
 
+// ── Radial-scale and render hooks (2026-10-03, plan 2026-09-28-001 U9) ──────
+// Identity here.  nacelle_pod_64mm_tandem.scad includes this file and sets
+// RADIAL_K = 64/50 (owner decision: proportional radial scale about the thrust
+// axis, axial stations fixed) and POD_AUTORENDER = false.  OpenSCAD's
+// last-assignment-wins rule applies the override file-wide.  RADIAL_K scales
+// the MEASURED shell, cavity and skin grids and the measured boss contour,
+// never fasteners, boards or wall thicknesses.  Added by Claude (Claude Opus
+// 5.5, Anthropic).
+RADIAL_K        =   1.0;   // [-] radial scale of the measured shell geometry
+AXIAL_K         =   1.0;   // [-] axial stretch of the measured shell geometry
+                           //     (canonical silhouette kept; 64 mm wrapper)
+POD_AUTORENDER  = true;    // [bool] render nacelle_pod() at the end of this file
+function radial_k_grid(g) = [ for (row = g) [ for (v = row) v * RADIAL_K ] ];
+// Station list of the measured grids, stretched with the shell.
+function hollow_zs() = [ for (z = HOLLOW_Z) z * AXIAL_K ];
+// Cavity under a radially scaled skin: move the cavity surface out with the
+// scaled skin so the WALL THICKNESS is unchanged (wall = structure, not
+// silhouette).  cavity' = cavity + (K - 1) * skin.  Identity at K = 1.
+function radial_k_cavity(cav, skin) =
+    [ for (i = [0 : len(cav) - 1])
+        [ for (j = [0 : len(cav[i]) - 1])
+            cav[i][j] + (RADIAL_K - 1) * skin[i][j] ] ];
+
 // ── Outer nacelle dimensions (canonical Serenity shape at 1.25× scale) ───────
 // These are measured from the repaired STL bounding box.  They are provided for
 // reference only; the actual shell geometry comes from the imported STL.
@@ -568,6 +591,8 @@ ESC_DISC_D       =   6.0;  // [mm] bay depth  (X) — 1.10 mm inside the measure
                            //      envelope; 6.0 is the wing's own clear-height
                            //      figure for a disconnect
 ESC_DISC_Z       =  82.0;  // [mm] bay centre, in the measured 7.10 mm window
+ESC_DISC_Z_LO    =  75.0;  // [mm] measured-depth window the bay must stay in —
+ESC_DISC_Z_HI    =  89.0;  //      asserted below; the 64 mm wrapper re-sites it
 ESC_DISC_FILLET  =   3.0;  // [mm] corner radius — a square internal corner in a
                            //      printed part is where the crack starts
 ESC_STUD_N       =   4;    // [count] M3 brass studs (one per 10 AWG feed)
@@ -769,11 +794,13 @@ $fn = 72;
 module nacelle_shell_imported() {
     if (NACELLE_SIDE > 0) {
         // ── Port (left) nacelle ───────────────────────────────────────────────
+        scale([RADIAL_K, RADIAL_K, AXIAL_K])
         translate([-BORE_CX_L, BORE_CY, 0])
             import("../../stls/nacelles/eng_left_shell24_50mm_repaired.stl",
                     convexity = 4);
     } else {
         // ── Starboard (right) nacelle ─────────────────────────────────────────
+        scale([RADIAL_K, RADIAL_K, AXIAL_K])
         translate([-BORE_CX_R, BORE_CY, 0])
             import("../../stls/nacelles/eng_right_shell24_50mm_repaired.stl",
                     convexity = 4);
@@ -1167,12 +1194,12 @@ BOSS_Z_H  = 24.0;   // [mm] cutter Z span (covers Z 83..107)
 module smooth_boss_fill() {   // union: solid 25..contour (Y6..25) — closes the socket
     fc = [[25, 6], [37, 6], [36.5, 8], [36, 10], [35, 13], [33.4, 15], [32, 18],
           [30.2, 20], [28, 23], [26.2, 25], [25, 25]];
-    scale([PYLON_SIDE, 1, 1])
+    scale([PYLON_SIDE * RADIAL_K, RADIAL_K, 1])
         translate([0, 0, BOSS_Z_LO]) linear_extrude(BOSS_Z_H) polygon(fc);
 }
 
 module smooth_boss_shave() {  // difference: remove material beyond the contour
-    scale([PYLON_SIDE, 1, 1])
+    scale([PYLON_SIDE * RADIAL_K, RADIAL_K, 1])
         translate([0, 0, BOSS_Z_LO]) linear_extrude(BOSS_Z_H)
             polygon(concat(BOSS_CONTOUR, [[50, 30], [50, 6]]));
 }
@@ -1295,9 +1322,11 @@ module cavity_duct_wall() {
 // drained.  It is also, finally, the volume the wiring architecture has been
 // drawn against since plan 003.
 module hollow_cavity() {
-    grid = (NACELLE_SIDE > 0) ? HOLLOW_R_PORT : HOLLOW_R_STBD;
+    grid = (NACELLE_SIDE > 0)
+        ? radial_k_cavity(HOLLOW_R_PORT, HOLLOW_SKIN_PORT)
+        : radial_k_cavity(HOLLOW_R_STBD, HOLLOW_SKIN_STBD);
     difference() {
-        grid_solid(grid, HOLLOW_Z, HOLLOW_N_AZ);
+        grid_solid(grid, hollow_zs(), HOLLOW_N_AZ);
         cavity_duct_wall();
         // Structural webs, each with its vent holes drilled back through
         difference() {
@@ -1332,7 +1361,7 @@ module hollow_cavity() {
         // Two measured surfaces grazing each other is not something to resolve
         // with more facets; the region is small, it is where the trunnion
         // collar's loads enter the shell, and keeping it solid settles both.
-        scale([PYLON_SIDE, 1, 1])
+        scale([PYLON_SIDE * RADIAL_K, RADIAL_K, 1])
             translate([20, 4, BOSS_Z_LO - 1])
                 cube([40, 28, BOSS_Z_H + 2]);
     }
@@ -1345,7 +1374,7 @@ module hollow_cavity() {
 // Offsets of the MEASURED skin, hoisted so every consumer builds from the same
 // surface.  See nacelle_shell_grid.scad for why a radial offset is legitimate
 // over this Z range and would not be near the nose.
-ESC_SKIN = (NACELLE_SIDE > 0) ? HOLLOW_SKIN_PORT : HOLLOW_SKIN_STBD;
+ESC_SKIN = radial_k_grid((NACELLE_SIDE > 0) ? HOLLOW_SKIN_PORT : HOLLOW_SKIN_STBD);
 
 // Both bays' fastener positions at once, from the shared bay definition — the
 // same module the covers drill their clearance holes with, so a boss and its
@@ -1357,8 +1386,8 @@ module esc_boss_cylinders_local(dia) {
 // The shell of material between two radial offsets of the measured skin.
 module _esc_skin_shell(d_out, d_in) {
     difference() {
-        grid_solid(offset_grid(ESC_SKIN, d_out), HOLLOW_Z, HOLLOW_N_AZ);
-        grid_solid(offset_grid(ESC_SKIN, d_in), HOLLOW_Z, HOLLOW_N_AZ);
+        grid_solid(offset_grid(ESC_SKIN, d_out), hollow_zs(), HOLLOW_N_AZ);
+        grid_solid(offset_grid(ESC_SKIN, d_in), hollow_zs(), HOLLOW_N_AZ);
     }
 }
 
@@ -1409,7 +1438,7 @@ module esc_bay_cut() {
                 cylinder(r = 60, h = (ESC_BAY_Z1 - ESC_BAY_Z0)
                                      + 2 * ESC_LEDGE_W + 2, $fn = 96);
             grid_solid(offset_grid(ESC_SKIN, ESC_COVER_T),
-                       HOLLOW_Z, HOLLOW_N_AZ);
+                       hollow_zs(), HOLLOW_N_AZ);
         }
         union() for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0, ESC_LEDGE_W);
     }
@@ -1476,6 +1505,9 @@ module esc_bay_seat_keepout() {
 }
 
 
+// Extra Zone-B cuts hook — overridden by derived pods; nothing here.
+module extra_zone_b_cuts() {}
+
 // =============================================================================
 // ── Module: nacelle_pod (main assembly) ──────────────────────────────────────
 // =============================================================================
@@ -1540,9 +1572,9 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
            "ESC bay is under 40 mm — below the shortest board considered viable");
     assert(ESC_DISC_D < ESC_DISC_AVAIL,
            "disconnect bay is deeper than the MEASURED inboard-face envelope");
-    assert(ESC_DISC_Z - ESC_DISC_H / 2 >= 75.0
-           && ESC_DISC_Z + ESC_DISC_H / 2 <= 89.0,
-           "disconnect bay has left the Z 75-89 window where that depth exists");
+    assert(ESC_DISC_Z - ESC_DISC_H / 2 >= ESC_DISC_Z_LO
+           && ESC_DISC_Z + ESC_DISC_H / 2 <= ESC_DISC_Z_HI,
+           "disconnect bay has left the measured-depth Z window");
 
     union() {
 
@@ -1644,6 +1676,11 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
             // disconnect bay and the phase leads a route to the spider arms.
             esc_bay_cut();
 
+            // ── Variant hook (empty here) — extra Zone-B cuts a derived pod
+            // (nacelle_pod_64mm_tandem.scad) needs, e.g. its intake-lip
+            // ring cavity.  Identity for the 50 mm pod.
+            extra_zone_b_cuts();
+
         } // end difference (Zone A + Zone B)
 
         // ══════════════════════════════════════════════════════════════════
@@ -1683,7 +1720,7 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
 // =============================================================================
 // ── Render call ───────────────────────────────────────────────────────────────
 // =============================================================================
-nacelle_pod(swirl_dir = SWIRL_DIR);
+if (POD_AUTORENDER) nacelle_pod(swirl_dir = SWIRL_DIR);
 
 
 // =============================================================================

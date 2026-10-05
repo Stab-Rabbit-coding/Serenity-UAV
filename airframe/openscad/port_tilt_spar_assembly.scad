@@ -14,9 +14,9 @@
 //   • The NACELLE-INTERNAL parts that tilt with the pod: EDF inter-stage stator
 //     sleeve, aft spider sleeve (EDF2 motor mount) + EDF2 motor, and the closed
 //     iris nozzle assembly — placed via the nacelle pose (in_nacelle()).
-//   • The NOZZLE DRIVE, wing-referenced: a wing-fixed SUN gear + nacelle PINION
-//     (geared bellcrank) + pushrod to the cam-only unison ring — the tilt datum
-//     comes off the NON-tilting wing, not the nacelle-keyed spar (see §6).
+//   • The NOZZLE DRIVE marker: servo-in-pod drive (2026-09-28); only
+//     the unison-ring lever pull point is drawn until the servo mount exists
+//     (see §6 for why the wing-referenced sun/pinion drive was retired).
 //   • PLACEHOLDER 8 mm spar + the two bearings (F688ZZ root / MF128ZZ wingtip),
 //     the Ø22 tilt-feedback ring magnet + non-ferrous hub, and the AK7455
 //     off-axis SPI encoder PCB — the Rev R2e tilt-feedback hardware.
@@ -103,12 +103,10 @@ PIVOT_ZLOC = 107.5;           // nacelle-local duct Z of the CG pivot / spar axi
 //        reaches the spar line SPAR_Y.
 //   • Z: drop onto the spar height (bore-centre baked hull Z ≈ 63.2 → SPAR_Z).
 //   • X: +JOINT_GAP_X OUTBOARD sets the wing-tip↔nacelle clearance.  Now that the
-//        sync gearbox is EMBEDDED in the nacelle inboard wall (pinion/bellcrank/
-//        pushrod recessed, cover-plated), the joint no longer has to bay the bulky
-//        gears, so the gap is MINIMISED to ~4 mm — the mechanical floor set by:
-//        the Hall air gap (1.5 mm) + wing-fixed sun ↔ nacelle pinion tooth
-//        engagement at the skin plane + MF128 flange + a tilt-rotation safety
-//        margin.  The nacelle rotates IN-PLANE about the spar, so tilting needs no
+//        nozzle drive is a servo inside the pod (2026-09-28; §6), nothing
+//        of the nozzle drive crosses the joint, and the gap stays at ~4 mm — the
+//        floor set by the Hall air gap (1.5 mm), the wing tip pad and a
+//        tilt-rotation safety margin.  The nacelle rotates IN-PLANE about the spar, so tilting needs no
 //        extra axial gap (the faces stay parallel through the sweep).
 //   AERO (user-requested check): the gap is a spanwise slot between the wing tip
 //   and the pod side; its only flow effect is a weak through-gap jet driven by the
@@ -283,80 +281,31 @@ color([0.95, 0.55, 0.45, 0.90])              // coral petals
                                convexity = 4);
 
 // =============================================================================
-// 6) NOZZLE DRIVE — wing-referenced SYNC GEAR + geared BELLCRANK + pushrod
-//    (hybrid "best of both": Option A wing datum + Option B cam-only ring)
+// 6) NOZZLE DRIVE — per-nacelle SERVO scheduled on measured tilt (2026-09-28)
 // =============================================================================
-// WHY (kinematics): the spar is KEYED to the nacelle, so a crank clamped to the
-// spar shares the nacelle's rotating frame with the unison ring — zero relative
-// motion, no actuation (the flaw in the Rev T spar-crank).  The nozzle is
-// PASSIVELY driven by tilt, so its drive MUST take its datum from the NON-tilting
-// WING.  wings_s1223_revo.scad already provides that: a gear FIXED coaxial with
-// the spar at the wing tip.  The nacelle carries a PINION (Pinion A) meshing it;
-// as the nacelle tilts θ about the spar, the fixed-sun / planet-pinion pair spins
-// the pinion by θ·(N_sun/N_pinion) RELATIVE to the nacelle — the relative motion
-// the spar-crank lacked.  A 1:1 mesh (N_sun = N_pinion) tracks tilt 1:1; the
-// pinion's arm is the bellcrank that drives the Rev T cam-only-ring pushrod
-// UNCHANGED (crank 8.5 mm ↔ ring lever 32 mm ⇒ 90° tilt → ≈23.9° ring).  No
-// internal ring gear → the ring stays under the cowl.
+// SUPERSEDED 2026-09-28 (owner decision, docs/NOZZLE_DRIVE_TRADE.md "DECISION
+// AMENDMENT — servo drive (2026-09-28)"): the wing-fixed sun + nacelle pinion + geared bellcrank
+// drive drawn here until this revision is RETIRED and archived
+// (archives/airframe-archives/archive/openscad/nacelles/nacelle_nozzle_sync_gears.scad,
+// nacelle_nozzle_pushrod.scad).  It was unbuildable: the sun had 0.0 mm axial
+// room in the Rev T4 trunnion, the pinion (26.4 mm aft of the pivot) collided
+// with the Rev T1 tilt-drive shaft (wing station 53.6), and any continuous 1:1
+// drive over-strokes the ring past 90 deg tilt (ring -40.7 deg at 140 deg vs a
+// 23.75 deg stroke).
 //
-// JOINT AXIAL STACK (coaxial with the spar, wing→nacelle, in the ~8 mm gap):
-//   wing-tip MF128ZZ bearing → wing-fixed SUN gear → Hall RING magnet (on the
-//   nacelle non-ferrous stub) / AK7455 (on the wing, off-axis R11).  The PINION
-//   is OFF the spar axis (SYNC_CD aft), so it clears the on-axis Hall stack; the
-//   AK7455 is off-axis chord-aft, clear of both.  This is the coordination the
-//   build needs — bearing, sync gear and tilt sensor share the joint gap.
+// The nozzle is now driven by a sub-micro servo inside the pod, FORWARD of the
+// ring, pulling the unison-ring lever ear (RING_LEVER_AZ 157.5 deg, inboard flap
+// gap) through a pull-only slotted link; a torsion spring drives the ring to its
+// hard 105 % stop whenever the servo stops pulling.  The servo station is set by
+// docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md U4; only the
+// ring-lever ball is marked here until that geometry exists.
 //
-// LINKAGE SOLVED 2026-09-09 (was FIRST-PASS / VERIFY).  The crank/pushrod/ring
-// numbers below are the SOLVED set from tools/nozzle_linkage_check.py (default
-// nacelle-frame model): tilt 0→90° gives a MONOTONIC 23.816° ring stroke against
-// the 23.75° target (0.3 % error), psi(0) = −0.36° (no cam re-clock needed), and
-// a worst-case transmission angle of 76.2° (min(TA, 180−TA), floor 40°).
-// The ring-lever azimuth is RELOCATED to an INBOARD flap gap, 157.5°, so the
-// pushrod hugs the inboard cheek instead of crossing the duct.
-// STILL OPEN (WBS §1.1.3): gear module + tooth counts for the 1:1 mesh (pitch
-// radius 13.0 is fixed), and the joint gap width vs. the bearing+gear+sensor
-// stack.  Gears shown as PITCH cylinders (no teeth).  SOURCE follow-ups:
-// reconcile the wing R22 sector → this 1:1 sun; re-hub the
-// nacelle_nozzle_pushrod.scad spar_crank() part onto the pinion (its numbers are
-// updated, the part geometry is not — see that file's TODO/VERIFY).
-SYNC_R        = 13.0;                 // [mm] pitch radius, wing sun = nacelle pinion (1:1)
-SYNC_CD       = 2 * SYNC_R;           // [mm] centre distance (= 26)
-SUN_XLOC      = -38.0;                // [mm] nacelle-local X of the mesh plane (joint gap)
-CRANK_R       = 8.5;                  // [mm] bellcrank output arm  [pushrod scad]
-CRANK_PHASE   = 206.0;                // [deg] crank clocking about the PINION axis at
-                                      //   zero tilt  [pushrod scad CRANK_PHASE].
-                                      //   Ball: y = CRANK_R*sin(θ+CRANK_PHASE),
-                                      //   z = PIVOT_ZLOC + SYNC_CD
-                                      //       + CRANK_R*cos(θ+CRANK_PHASE).
-                                      //   Drawn here at θ = 0 (cruise/closed pose).
-PUSHROD_LEN   = 48.0;                 // [mm] solved rod length, ball centre to ball
-                                      //   centre (was 45.0)  [pushrod scad].  COTS
-                                      //   turnbuckle-adjustable ball-link rod.
+// AI contribution: Claude (Claude Opus 5.5, Anthropic), directed by Steve Griffing.
 RING_LEVER_R  = 32.0;                 // [mm] ring lever-ear reach  [iris scad]
-RING_LEVER_AZ = 157.5;                // [deg] lever ear RELOCATED to the inboard flap gap
-                                      //   [iris scad RING_LEVER_AZ, 22.5 → 157.5]
-pin_axis   = [SUN_XLOC, 0, PIVOT_ZLOC + SYNC_CD];               // pinion centre (aft of spar)
-crank_ball = [SUN_XLOC,
-              CRANK_R * sin(CRANK_PHASE),
-              PIVOT_ZLOC + SYNC_CD + CRANK_R * cos(CRANK_PHASE)];  // bellcrank ball @ θ=0
+RING_LEVER_AZ = 157.5;                // [deg] lever ear, inboard flap gap  [iris scad]
 ring_ball  = [RING_LEVER_R * cos(RING_LEVER_AZ),
               RING_LEVER_R * sin(RING_LEVER_AZ), NOZZLE_RING_Z + 4];
-
-// wing-fixed SUN gear (pitch Ø26, coaxial with the spar) — does NOT tilt — khaki
-color([0.75, 0.68, 0.35])
-    in_nacelle() translate([SUN_XLOC - 3, 0, PIVOT_ZLOC]) rotate([0, 90, 0])
-        cylinder(d = 2 * SYNC_R, h = 4);
-// nacelle PINION / geared-bellcrank hub (pitch Ø26, SYNC_CD aft) — cyan
-color([0.25, 0.75, 0.85])
-    in_nacelle() translate([SUN_XLOC, 0, PIVOT_ZLOC + SYNC_CD]) rotate([0, 90, 0])
-        cylinder(d = 2 * SYNC_R, h = 4);
-// bellcrank output arm (pinion axis → ball) — cyan
-color([0.25, 0.75, 0.85])
-    in_nacelle() rod(pin_axis, crank_ball, 3.5);
-// COTS pushrod, crank ball → ring-lever ball, hugging the inboard cheek — yellow
-color([0.85, 0.82, 0.20])
-    in_nacelle() rod(crank_ball, ring_ball, 3.0);
-// relocated ring-lever ear ball (inboard flap gap) — red marker
+// ring-lever ear pull point (inboard flap gap) — red marker
 color([0.90, 0.20, 0.20])
     in_nacelle() translate(ring_ball) sphere(d = 4);
 
@@ -365,8 +314,8 @@ color([0.90, 0.20, 0.20])
 // =============================================================================
 // The double-D EDF power/signal cableway (2× Ø7, cargo → wing, drawn as the teal
 // tubes in §1) is re-routed to cross the joint FORWARD of the pivot (hull Y≈5,
-// ahead of the spar at Y=15) so it clears the tilt→nozzle sync pinion/bellcrank
-// (which live aft of the spar).  The wing→nacelle crossing is a SERVICE LOOP: the
+// ahead of the spar at Y=15) so it clears the tilt-drive shaft
+// (which lives aft of the spar).  The wing→nacelle crossing is a SERVICE LOOP: the
 // harness anchors on the FIXED wing (cableway exit) and on a nacelle grommet near
 // the spar axis, with a slack coil that winds/unwinds over the −5..90° (≈95°)
 // tilt.  Anchoring the nacelle end NEAR the spar (small radius) keeps the loop
