@@ -208,9 +208,9 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     # T-ETH / U-3V3RF / L-1V8RF without a site (largest-first order fills the open pockets
     # before them); each is pinned to the pocket a what-if sweep found for it.
     "T-ETH": (47.5, 20.5, 0, F),       # 8.9 mm tall: top face only (PB2-I gap ~5.5 mm)
-    "U-3V3RF": (38.5, 11.2, 0, B),
-    "L-1V8RF": (22.0, 23.5, 0, B),     # two-pad, under the band: escapes on B.Cu only
-    "J-MLRS-SWD": (29.0, 21.8, 0, B),  # Tag-Connect NL land under the band, pads north to MLRS-MCU
+    "MLRS-MCU": (17.5, 13.5, 0, B),    # bottom face between the P1 rail and the band
+    "1553-XFM": (34.5, 18.0, 90, B),   # 4.70 mm: bottom face, clear of both PB2-I obstructions, under the band
+    "J-MLRS-SWD": (22.5, 22.2, 0, B),  # Tag-Connect NL land under the band, pads north to MLRS-MCU
     # --- isolation band: transceivers straddle its top edge, bus connectors at the edge ---
     "CAN-TR": (14.0, ISO_TR_V, 0, F),
     "RS485": (28.4, ISO_TR_V, 0, F),
@@ -218,8 +218,8 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     "J-485": (28.4, 30.6, 0, F),
     # X2Y GND<->GND2 bridges straddle the band's top edge on the bottom face, under
     # their transceivers; fixed so auto-placed parts cannot land on them first
-    "X2Y-CAN": (14.0, ISO_V0, 0, B),
-    "X2Y-RS485": (28.4, ISO_V0, 0, B),
+    "X2Y-CAN": (10.5, ISO_V0, 0, B),    # shifted west of MLRS-MCU; still under CAN-TR, straddling the band edge
+    "X2Y-RS485": (25.0, ISO_V0, 0, B),  # shifted west of 1553-XFM; still under RS485, straddling the band edge
 }
 
 # pads that must face a direction (d = unit vector in board u,v)
@@ -804,6 +804,7 @@ def main() -> None:
 
     todo.sort(key=order_key)
     unplaced = []
+    anchors: Dict[str, Tuple[Tuple[float, float], str]] = {}
     for ref in todo:
         fp = fps[ref]
         my_nets = {pad.GetNetname() for pad in fp.Pads() if pad.GetNetname()}
@@ -850,6 +851,7 @@ def main() -> None:
             placer.set(fp, uu, ISO_V0, 0, B)
             placer.register(fp)
             continue
+        anchors[ref] = (anchor, side)
         placer.height = part_height(fp)
         placer.two_pad = len([p for p in fp.Pads() if p.GetNumber()]) <= 2 or ref in UNDER_BAND_OK
         other = F if side == B else B
@@ -868,6 +870,111 @@ def main() -> None:
             item.SetTextSize(pcbnew.VECTOR2I(mm(0.6), mm(0.6)))
             item.SetTextThickness(mm(0.1))
         fp.Value().SetVisible(False)
+
+    # --- rip-up-and-repair (2026-10-05): at ~95 % fill the greedy pass strands one or two
+    # parts.  For each, find the site whose blockers are fewest small movable parts, lift
+    # them, place the stranded part there and re-place the lifted parts; keep the result only
+    # when every part lands, otherwise restore and try the next site.
+    def flags(ref: str) -> Tuple[bool, bool, float]:
+        fp = fps[ref]
+        nets = {pad.GetNetname() for pad in fp.Pads() if pad.GetNetname()}
+        iso = bool(nets & ISO_SIDE_NETS) and ref not in ("X2Y-CAN", "X2Y-RS485")
+        two = len([q for q in fp.Pads() if q.GetNumber()]) <= 2 or ref in UNDER_BAND_OK
+        return iso, two, part_height(fp)
+
+    def rebuild() -> None:
+        placer.blk = {F: [], B: []}
+        placer.pads = {F: [], B: []}
+        for r2, f2 in fps.items():
+            if r2 not in unplaced:
+                placer.register(f2)
+
+    def movable(r2: str) -> bool:
+        return r2 not in FIXED and area(fps[r2]) < 20.0
+
+    def try_place(ref: str, au: float, av: float, side: str, rmax: float = 40.0) -> bool:
+        placer.iso, placer.two_pad, placer.height = flags(ref)
+        fp = fps[ref]
+        other = B if side == F else F
+        return placer.spiral(fp, au, av, side, rmax=rmax) or placer.spiral(fp, au, av, other, rmax=rmax)
+
+    for ref in list(unplaced):
+        fp = fps[ref]
+        (au, av), side0 = anchors.get(ref, ((27.5, 17.5), F))
+        sites = []
+        for side in (side0, B if side0 == F else F):
+            for rot in (0, 90):
+                placer.set(fp, 0.0, 0.0, rot, side)
+                c = courtyard(fp).grow(0.15)
+                dx1, dy1, dx2, dy2 = c.x1 - X0, c.y1 - Y0, c.x2 - X0, c.y2 - Y0
+                for iu in range(2, 108):
+                    for iv in range(2, 68):
+                        u, v = iu * 0.5, iv * 0.5
+                        r = Rect(X0 + u + dx1, Y0 + v + dy1, X0 + u + dx2, Y0 + v + dy2)
+                        if r.x1 < placer.edge.x1 or r.y1 < placer.edge.y1 or r.x2 > placer.edge.x2 or r.y2 > placer.edge.y2:
+                            continue
+                        iso, two, h = flags(ref)
+                        if side == B and not b_height_ok(r, h):
+                            continue
+                        if any(r.hits(o) for o in ISO_RECTS[side]) and not iso:
+                            continue
+                        if side == B and not two and any(r.hits(o) for o in ISO_RECTS[F]):
+                            continue
+                        hit = []
+                        ok_site = True
+                        for r2, f2 in fps.items():
+                            if r2 == ref or r2 in unplaced:
+                                continue
+                            same = (B if f2.IsFlipped() else F) == side
+                            if (same and courtyard(f2).hits(r)) or any(t.hits(r) for t in tht_rects(f2)):
+                                if not movable(r2):
+                                    ok_site = False
+                                    break
+                                hit.append(r2)
+                        if ok_site and len(hit) <= 12:
+                            sites.append((sum(area(fps[q]) for q in hit), (u - au) ** 2 + (v - av) ** 2, u, v, rot, side, hit))
+        sites.sort()
+        done = False
+        seen: set = set()
+        for _, _, u, v, rot, side, hit in sites:
+            key = (side, tuple(sorted(hit)))
+            if key in seen or len(seen) >= 120:
+                continue
+            seen.add(key)
+            saved = {r2: (fps[r2].GetPosition(), fps[r2].GetOrientationDegrees(), fps[r2].IsFlipped()) for r2 in hit}
+            for r2 in hit:
+                placer.set(fps[r2], 60.0, 40.0, 0, F)
+            unplaced.extend(hit)
+            unplaced.remove(ref)
+            placer.set(fp, u, v, rot, side)
+            rebuild()
+            placer.iso, placer.two_pad, placer.height = flags(ref)
+            good = True
+            for r2 in sorted(hit, key=lambda q: -area(fps[q])):
+                (a2u, a2v), s2 = anchors.get(r2, ((27.5, 17.5), F))
+                if try_place(r2, a2u, a2v, s2):
+                    unplaced.remove(r2)
+                    placer.register(fps[r2])
+                else:
+                    good = False
+                    break
+            if good:
+                done = True
+                print(f"  repair: {ref} placed at ({u:.1f}, {v:.1f}) {side}, re-placed {hit}")
+                break
+            for r2 in hit:
+                pos, rot2, flp = saved[r2]
+                if fps[r2].IsFlipped() != flp:
+                    fps[r2].Flip(fps[r2].GetPosition(), True)
+                fps[r2].SetPosition(pos)
+                fps[r2].SetOrientationDegrees(rot2)
+                if r2 in unplaced:
+                    unplaced.remove(r2)
+            unplaced.append(ref)
+            placer.set(fp, 60 + 3 * len(unplaced), 10, 0, F)
+            rebuild()
+        if not done:
+            print(f"  repair: no site for {ref}")
 
     for ref, fp in fps.items():
         r = fp.Reference()

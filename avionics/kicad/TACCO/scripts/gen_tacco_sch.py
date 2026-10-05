@@ -1106,13 +1106,14 @@ SIMPLE: List[Any] = [
     # --- fan + SD --------------------------------------------------------
     ("J-FAN", "SM03B-GHS-TB", FP_GH3, "SM03B-GHS-TB(LF)(SN)", "XO.md §14 J_FAN (bay ventilation)",
      [("1", "GND", "GND"), ("2", "+5V", "+5V"), ("3", "FAN_PWM", "FAN_PWM_B")]),
-    ("J-SD", "microSD push-pull", FP_MICROSD, "104031-0811",
-     "molex-104031.pdf (Molex 104031-0811) — used in place of XO.md's cited \"Molex 503182-1852\", "
-     "which could not be verified as a real Molex part number this pass; 104031-0811 IS a confirmed, "
-     "datasheet-real microSD connector and is already in KiCad's system library",
-     [("1", "CD/DAT3", None), ("2", "CMD", None), ("3", "VSS1", "GND"), ("4", "VDD", "+3V3"),
-      ("5", "CLK", None), ("6", "VSS2", "GND"), ("7", "DAT0", None), ("8", "DAT1", None),
-      ("9", "DAT2", None), ("10", "SW-COM", "GND"), ("11", "SW-NC", "SD_CD")]),
+    ("J-SD", "microSD header 1.45H", "Serenity-Custom:microSD_Molex_105162-0001", "105162-0001",
+     "Molex 105162-0001 1.45 mm microSD header with detect pin (owner 2026-10-05; replaces the "
+     "104031-0811 push-pull socket to free ~80 mm2). SD-105162-001 sheet 2 pin table: P1 DAT2, "
+     "P2 CD/DAT3, P3 CMD, P4 VDD, P5 CLK, P6 VSS, P7 DAT0, P8 DAT1, P9 DET, G1-G4 GND. Single "
+     "detect pin: DET closes to the shell when a card is seated (firmware polarity to confirm)",
+     [("1", "DAT2", None), ("2", "CD/DAT3", None), ("3", "CMD", None), ("4", "VDD", "+3V3"),
+      ("5", "CLK", None), ("6", "VSS", "GND"), ("7", "DAT0", None), ("8", "DAT1", None),
+      ("9", "DET", "SD_CD"), ("G", "SHELL", "GND")]),
     # --- antenna filter/ESD chains (XO.md §13) ------------------------------
     # FL-SIK/D-ANT-SIK/J-SMA-SIK (RFD900ux-SMT's own antenna chain) REMOVED
     # 2026-09-21 along with SIK itself (relocated to Commo). Wio-E5's antenna

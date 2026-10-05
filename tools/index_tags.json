@@ -7885,6 +7885,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/molex_105162-0001_drawing.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex_105162-0001_spec.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/mspm0g3507-q1.pdf": {
       "description": "PDF document",
       "tags": [
@@ -10581,6 +10595,14 @@
       "tags": [
         "avionics-hardware",
         "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/microSD_Molex_105162-0001.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
         "pcb-design"
       ],
       "archived": false
@@ -18926,6 +18948,7 @@
       "avionics/kicad/Serenity-Custom.pretty/Wurth_749010012A_WE-LAN.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/X2Y_0805_4T.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/microSD_Molex_105162-0001.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/uBlox_SAM-M10Q-00B.kicad_mod",
       "avionics/kicad/TACCO/TACCO.md",
       "avionics/kicad/TACCO/gerbers/TACCO-B_Cu.gbr",
@@ -19160,6 +19183,8 @@
       "avionics/datasheets/mcp4921.pdf",
       "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf",
       "avionics/datasheets/molex-104031.pdf",
+      "avionics/datasheets/molex_105162-0001_drawing.pdf",
+      "avionics/datasheets/molex_105162-0001_spec.pdf",
       "avionics/datasheets/mspm0g3507-q1.pdf",
       "avionics/datasheets/mspm0g3507.pdf",
       "avionics/datasheets/mspm0g3518-q1.pdf",
@@ -19487,6 +19512,7 @@
       "avionics/kicad/Serenity-Custom.pretty/Wurth_749010012A_WE-LAN.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/X2Y_0805_4T.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/microSD_Molex_105162-0001.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/uBlox_SAM-M10Q-00B.kicad_mod",
       "avionics/kicad/TACCO/TACCO.md",
       "avionics/kicad/TACCO/gerbers/TACCO-B_Cu.gbr",
