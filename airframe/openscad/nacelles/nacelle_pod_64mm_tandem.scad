@@ -203,7 +203,7 @@ STATOR_Z_TOP    = P64_ROTOR_Z + P64_STAGE;                   // = 103.2
 STATOR_SLV_Z_START = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;  // = 103.7
 STATOR_SLV_Z_END   = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;  // = 103.7
 AFT_SLV_Z_START    = P64_ROTOR_Z + P64_STAGE + P64_GAP / 2;  // = 103.7
-NOZZLE_RING_Z   = 166.25 * P64_A;  // = 187.86, rides on the shell's aft end
+NOZZLE_RING_Z   = P64_Z_NOZ;       // = 199.13 at x1.06; rides on the shell's aft end
 
 // ── Shell-tied stations stretched with the shell ─────────────────────────────
 // The two forward webs ride with the shell.  The two that bracket the ESC
@@ -228,10 +228,10 @@ ESC_BLEED_Z     = [ for (z = [76.0, 80.0, 84.0, 88.0]) z + 95.0 * (P64_A - 1) ];
 // ── Motor mounts (KTD9 / R13) ────────────────────────────────────────────────
 MOTOR_BOLT_R    =  8.0;   // [mm] QF2822 4 x M3 on ø16.00 (8-4.jpg) — VERIFY
 R_HUB           = 15.0;   // [mm] stator hub outer radius over the ø27.8 can
-SLEEVE_BOSS_R   = 28.0 * P64_K;   // = 33.88 mm, on the nozzle pocket face
+SLEEVE_BOSS_R   = 28.0 * 1.21;    // = 33.88 mm, on the nozzle pocket face. FAN-TIED (aft sleeve screws): NOT scaled by the 2026-10-05 x1.06
 
 // ── Nozzle pocket — PLACEHOLDER until plan U11 re-sizes the iris ─────────────
-NOZZLE_RING_OD  = 72.0 * P64_K;   // = 87.12 mm
+NOZZLE_RING_OD  = 72.0 * 1.21;    // = 87.12 mm. FAN-TIED: the iris housing (r 42.6) is not scaled; 0.96 mm running fit. Scaling it with the shell cut the tail off at Z 209 (2026-10-05)
 
 // ── Cavity, ESC seat ─────────────────────────────────────────────────────────
 CAVITY_VENT_R   = 30.0 * P64_K;   // = 36.3 mm

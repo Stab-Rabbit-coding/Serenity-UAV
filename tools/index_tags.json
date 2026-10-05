@@ -15858,6 +15858,14 @@
       ],
       "archived": false
     },
+    "tools/nacelle_hub_transition_cfd.py": {
+      "description": "Stator-tube -> aft-rotor hub transition, 64 mm nacelle (axisymmetric CFD).",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/nacelle_intake_cfd.py": {
       "description": "nacelle_intake_cfd.py \u2014 axisymmetric OpenFOAM screen of the 64 mm intake bell.",
       "tags": [
@@ -18091,6 +18099,7 @@
       "tools/nacelle_esc_thermal.py",
       "tools/nacelle_hollow_profile.py",
       "tools/nacelle_housing_profile.py",
+      "tools/nacelle_hub_transition_cfd.py",
       "tools/nacelle_intake_cfd.py",
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_mass_cg_64.py",
@@ -20343,6 +20352,7 @@
       "tools/nacelle_esc_thermal.py",
       "tools/nacelle_hollow_profile.py",
       "tools/nacelle_housing_profile.py",
+      "tools/nacelle_hub_transition_cfd.py",
       "tools/nacelle_intake_cfd.py",
       "tools/nacelle_mass_cg.py",
       "tools/nacelle_mass_cg_64.py",

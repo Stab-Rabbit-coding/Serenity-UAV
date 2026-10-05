@@ -1470,6 +1470,12 @@ and Claude Opus 5.5 read and translated it.
   - 24 V, 100 % throttle: 57.0 A, 1368 W, 2370 g;
   - outline drawing: 97.5 mm lip-to-motor-tail, 45 mm shroud, ø77 / ø72.4 / ø67.2 / ø66.4 shroud
     diameters, motor ø28.
+- **Rotor handedness (read 2026-10-05, Claude Opus 5.5):** the outline-dimension panel of
+  `64_2822-2300KV_00.png` draws the 12-blade rotor in both a **CCW** and a **CW** version, so the
+  port/starboard mirrored (counter-handed) nacelles can use QX rotors of both hands.
+- **Rotor hub diameter (scaled, not dimensioned):** the front view's circles scale to Ø63.8 (bore,
+  confirming the scale against the dimensioned Ø77 lip) and a hub of **Ø ≈ 25 mm (±5 %)** —
+  smaller than the QF2822 can (Ø27.8). VERIFY on a physical rotor (WBS NAC-64-FIT-02).
 - **Not published there:** the fan-only (no-motor) mass, and any rotor mass. The page's photos
   and text carry none.
 - **Caveat:** the 2300 KV row is a different winding from the 2400 KV sheet the design uses. The
