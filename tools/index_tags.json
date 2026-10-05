@@ -7430,6 +7430,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/Double Row Sockets on Tape and Reel.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/ECS-2520MV.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7613,6 +7620,13 @@
       "archived": false
     },
     "avionics/datasheets/X2Y_15-2237598.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/a-ssm_sm.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7920,6 +7934,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/pocketbeagle-2.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/pocketbeagle-2.syscfg": {
       "description": "* These arguments were used when this file was generated. They will be automatically applied on subsequent lo\u2026",
       "tags": [
@@ -8053,6 +8074,27 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/ssm-1xx-xxx-dv-xx-xx-xxx-x-xx-mkt.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ssm-1xx-xxx-xx-xx-xx-x-xx-footprint.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ssm_sm.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/stm32wle5jc.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8103,6 +8145,13 @@
       "archived": false
     },
     "avionics/datasheets/tps7a20.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/tsw-sxx.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -19028,6 +19077,7 @@
       "avionics/datasheets/987651-1223.pdf",
       "avionics/datasheets/DS3218 datasheet.pdf",
       "avionics/datasheets/DS3225 datasheet.pdf",
+      "avionics/datasheets/Double Row Sockets on Tape and Reel.pdf",
       "avionics/datasheets/ECS-2520MV.pdf",
       "avionics/datasheets/ECX-2236.pdf",
       "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf",
@@ -19055,6 +19105,7 @@
       "avionics/datasheets/Vishay_45273MDSK.pdf",
       "avionics/datasheets/X2YDatasheet.pdf",
       "avionics/datasheets/X2Y_15-2237598.pdf",
+      "avionics/datasheets/a-ssm_sm.pdf",
       "avionics/datasheets/adin1300.pdf",
       "avionics/datasheets/adm2795e.pdf",
       "avionics/datasheets/ak7455-en-datasheet-myakm.pdf",
@@ -19098,6 +19149,7 @@
       "avionics/datasheets/nexperia-PMBT2222A.pdf",
       "avionics/datasheets/pca9685.pdf",
       "avionics/datasheets/pe4259.pdf",
+      "avionics/datasheets/pocketbeagle-2.pdf",
       "avionics/datasheets/pocketbeagle-2.syscfg",
       "avionics/datasheets/pocketbeagle2_sch.pdf",
       "avionics/datasheets/pocketbeagle2_srm.pdf",
@@ -19117,6 +19169,9 @@
       "avionics/datasheets/slaz742g.pdf",
       "avionics/datasheets/slb9672.pdf",
       "avionics/datasheets/smaj-series-tvs-datasheet.pdf",
+      "avionics/datasheets/ssm-1xx-xxx-dv-xx-xx-xxx-x-xx-mkt.pdf",
+      "avionics/datasheets/ssm-1xx-xxx-xx-xx-xx-x-xx-footprint.pdf",
+      "avionics/datasheets/ssm_sm.pdf",
       "avionics/datasheets/stm32wle5jc.pdf",
       "avionics/datasheets/tlv757p.pdf",
       "avionics/datasheets/tlv9062.pdf",
@@ -19125,6 +19180,7 @@
       "avionics/datasheets/tps62933.pdf",
       "avionics/datasheets/tps63031.pdf",
       "avionics/datasheets/tps7a20.pdf",
+      "avionics/datasheets/tsw-sxx.pdf",
       "avionics/datasheets/type2el-2dl-2ll-2kl-unified-design-guide.pdf",
       "avionics/datasheets/type2el-2dl-module-footprint-topview.dxf",
       "avionics/datasheets/w25q128jv.pdf",
