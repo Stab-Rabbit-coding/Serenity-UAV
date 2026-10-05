@@ -15,7 +15,7 @@ theta), find the unique non-power component pin within 1.5 mm, and translate
 the instance so the two pins coincide.  Ambiguous cases (0 or >1 candidate)
 are left in place and counted.
 
-Authored by Claude Fable 5 (Anthropic), 2026-07-21.  License: CC BY 4.0.
+Authored by Claude Fable 5 (Anthropic), 2026-07-21.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import math

@@ -4,7 +4,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  * Revision: R (2026-06-11)
  *
  * The gimbal controller drives two DS3218MG servos (pan and tilt) via

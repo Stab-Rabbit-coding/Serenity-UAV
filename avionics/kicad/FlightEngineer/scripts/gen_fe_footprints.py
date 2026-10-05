@@ -32,7 +32,7 @@ with no off-the-shelf KiCad footprint are authored here:
                                  the J_SHLD_5V/6V/I2C/ALERT/NTC shield drains,
                                  per FlightEngineer.md's own spec.
 
-Author: Claude Sonnet 5, 2026-09-20.  Owner: sgriffing.  License: CC BY 4.0.
+Author: Claude Sonnet 5, 2026-09-20.  Owner: sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 from __future__ import annotations
 

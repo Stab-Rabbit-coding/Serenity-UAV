@@ -4,7 +4,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Implements the QMC5883L driver described in mag_qmc5883l.h.
  * Uses Linux userspace i2c-dev (ioctl(I2C_SLAVE) + read/write syscalls).

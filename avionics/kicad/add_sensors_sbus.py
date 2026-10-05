@@ -24,7 +24,7 @@ TACCO additions (Y ≥ 540):
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
          Griffing Technology LLC
-License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 Date:    2026-06-04
 Project: Serenity UAV — EDF Tilt-Rotor UAV
 
@@ -1491,7 +1491,7 @@ def main() -> None:
         print(f"ERROR: {CAPE_A1_PATH} not found", file=sys.stderr)
         sys.exit(1)
 
-    print(f"\nProcessing PilotCAPE_A1_PATH}")
+    print(f"\nProcessing Pilot: {CAPE_A1_PATH}")
     with open(CAPE_A1_PATH, "r", encoding="utf-8") as fh:
         cape_a1_src = fh.read()
     print(f"  Read {len(cape_a1_src):,} characters from source")

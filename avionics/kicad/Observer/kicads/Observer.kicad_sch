@@ -4,7 +4,7 @@
     (title "Observer — Nose/Cargo-Bay Vision, ToF & Laser Board (SoM end-state)") (date "2026-07-13") (rev "S1") (company "Griffing Technology LLC")
     (comment 1 "Serenity UAV — STANDALONE board, NOT a PocketBeagle 2 Industrial cape")
     (comment 2 "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP | Griffing Technology LLC")
-    (comment 3 "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0")
+    (comment 3 "License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)")
     (comment 4 "SoM carrier: real clean-room symbols; see gen_Observer_carrier_sch.py")
   )
   (lib_symbols

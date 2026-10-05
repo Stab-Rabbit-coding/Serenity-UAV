@@ -55,7 +55,7 @@ Datasheets (all in ``avionics/datasheets/``):
   ISOW1044BDFMR/ISOW1412DFMR — see gen_pilot_sch.py docstring.
 
 Author: Claude Sonnet 5, 2026-09-20.  Human owner: sgriffing (Griffing
-Technology LLC).  License: CC BY 4.0.
+Technology LLC).  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 from __future__ import annotations

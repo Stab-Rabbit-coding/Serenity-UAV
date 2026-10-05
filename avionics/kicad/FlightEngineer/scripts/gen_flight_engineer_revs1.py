@@ -20,7 +20,7 @@
 Component values marked "verify per TPS54620 DS" are first-pass pending
 per-datasheet verification (same convention as the Observer carrier rails).
 
-Authored by Claude Fable 5 (Anthropic), 2026-07-21.  License: CC BY 4.0.
+Authored by Claude Fable 5 (Anthropic), 2026-07-21.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import re

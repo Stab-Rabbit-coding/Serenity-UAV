@@ -27,7 +27,7 @@ Output: overwrites avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch
 
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI-assist: Claude Fable 5 (Anthropic), 2026-07-26
-License: CC BY 4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 # ---------------------------------------------------------------------------

@@ -19,7 +19,7 @@ plane / B.Cu signal) per FlightEngineer.md's own Board Specification table.
 4oz copper on F.Cu/In2.Cu (power), 1oz on In1.Cu/B.Cu (signal/GND) — also per
 that table.
 
-Author: Claude Sonnet 5, 2026-09-20.  Owner: sgriffing.  License: CC BY 4.0.
+Author: Claude Sonnet 5, 2026-09-20.  Owner: sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 from __future__ import annotations
 

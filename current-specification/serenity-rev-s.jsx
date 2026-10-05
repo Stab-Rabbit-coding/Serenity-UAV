@@ -28,7 +28,7 @@
  *     (Fan engineering work — not an officially licensed product)
  *
  * Author:  Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
- * License: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+ * License: CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
  * Date:    2026-07-04
  */
 

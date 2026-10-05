@@ -39,7 +39,7 @@ the rear mating rim is clean (no ragged fragments / dorsal bite — JOINT-01).
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP   (pipeline)
 AI-assist: Claude Opus 4.8 (Anthropic) — script authoring, 2026-07-06
-License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import importlib.util

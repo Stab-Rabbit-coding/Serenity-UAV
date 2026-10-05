@@ -4,7 +4,7 @@
 # split, drill map).  Run only after finish_pilot_pcb.py has imported routing
 # and re-filled zones.
 #
-# Author: Claude Sonnet 5, 2026-09-19.  Owner: sgriffing.  License: CC BY 4.0.
+# Author: Claude Sonnet 5, 2026-09-19.  Owner: sgriffing.  License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 set -euo pipefail
 cd "$(dirname "$0")/../kicads"
 PCB=Pilot.kicad_pcb

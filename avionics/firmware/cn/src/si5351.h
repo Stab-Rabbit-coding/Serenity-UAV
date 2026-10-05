@@ -4,7 +4,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * The Si5351A (Skyworks / Silicon Labs) is an I²C-programmable clock
  * synthesiser used as the carrier-frequency DDS on the XCVR-49MHZ-1 board.

@@ -17,7 +17,7 @@ probe_stl.py — Report bounding boxes and triangle counts for Serenity hull STL
 Used to calibrate the gen_hull_outlines.py SVG generator.
 
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 import os

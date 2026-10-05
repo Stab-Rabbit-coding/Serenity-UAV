@@ -79,7 +79,7 @@ Use `/usr/bin/python3`: the repository `.venv` hides the system `trimesh`,
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (model: Claude Opus 5, Anthropic) under the author's
          direction, per `AGENTS.md` SS3 "Attribution and Licensing".
-License: CC BY-SA 4.0 - creativecommons.org/licenses/by-sa/4.0
+License: MIT — see tools/LICENSE (SPDX-License-Identifier: MIT)
 """
 
 import os

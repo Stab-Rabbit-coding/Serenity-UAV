@@ -55,7 +55,7 @@
 // AI note: Written by Claude (model: Claude Opus 5, Anthropic) under the
 //   author's direction, 2026-09-15 / 2026-09-16, per AGENTS.md SS3 AI
 //   attribution.
-// License: CC BY 4.0 -- creativecommons.org/licenses/by/4.0
+// License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // ============================================================
 
 include <cargo_layout_t5_params.scad>

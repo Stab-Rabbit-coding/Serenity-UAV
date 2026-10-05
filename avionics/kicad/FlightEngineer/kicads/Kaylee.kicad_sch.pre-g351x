@@ -4,7 +4,7 @@
     (title "FlightEngineer — EMI-Hardened Power Distribution Board") (date "2026-06-10") (rev "A") (company "Griffing Technology LLC")
     (comment 1 "Serenity UAV Power Distribution Board — 90x65mm 4-layer FR4-TG170")
     (comment 2 "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP | Griffing Technology LLC")
-    (comment 3 "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0")
+    (comment 3 "License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)")
     (comment 4 "Approved:                               Checked:")
   )
   (lib_symbols

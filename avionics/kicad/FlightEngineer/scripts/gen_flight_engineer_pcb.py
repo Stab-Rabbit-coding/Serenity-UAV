@@ -39,7 +39,7 @@ Output:
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
          Griffing Technology LLC
-License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 Date:    2026-06-10
 Project: Serenity UAV — EDF Tilt-Rotor UAV
 

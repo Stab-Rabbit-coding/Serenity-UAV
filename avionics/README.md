@@ -1,6 +1,6 @@
 # Serenity UAV — Avionics Subsystem
 
-**License:** CERN-OHL-W 2.0 (hardware) / CC BY-SA 4.0 (documentation, firmware, scripts) —
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 see [License](#license) below.  
 **Current design revision:** tracked per board, not subsystem-wide — see "PCB Boards" below and
 each board's own `avionics/kicad/<board>/<board>.md` status file for its current revision and

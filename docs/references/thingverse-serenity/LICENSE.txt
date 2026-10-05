@@ -12,7 +12,7 @@ Licensed under Creative Commons Attribution-ShareAlike 4.0 International
 
 1. Hull Geometry: misubisu, "Serenity Firefly with landing gear and swivel
    engines" (Thingiverse Thing 7330462, thingiverse.com/thing:7330462)
-   License: CC BY-SA 4.0
+   License: CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
    - Incorporated as an Available Component per CERN-OHL-W 2.0 §1.6 (the
      project's own airframe Covered Source stays CERN-OHL-W 2.0; the
      upstream misubisu geometry keeps its own CC BY-SA 4.0 terms per
@@ -30,7 +30,7 @@ Licensed under Creative Commons Attribution-ShareAlike 4.0 International
 2. Variable-Area EDF Nozzle Mechanism
    Author: BamJr
    Source: thingiverse.com/thing:2991269
-   License: CC BY 4.0
+   License: CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
    Use (nacelle): 70mm ID, servo removed, M0.5 rack teeth added,
                   gear-coupled to nacelle tilt pivot via sector/bevel/crown chain
 

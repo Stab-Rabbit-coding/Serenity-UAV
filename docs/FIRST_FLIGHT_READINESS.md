@@ -1,7 +1,7 @@
 # Serenity UAV — First-Flight Readiness: Open-Item Rollup
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Compiled:** 2026-09-15 by Claude (Claude Opus 5, Anthropic) under the author's
 direction, from the `TODO.md` federation as regenerated that day by
 `tools/gen_todo_from_wbs.py` (baseline Rev T, `docs/WBS.md` §6.4; head `48835ae`).

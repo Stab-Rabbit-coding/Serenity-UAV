@@ -1,7 +1,7 @@
 # Commo — EMI-Hardened 49 MHz AX.25 Transceiver
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CERN-OHL-W 2.0 (hardware design); status notes/prose in this file are CC BY-SA 4.0 —
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 see `docs/attribution_and_licensing.md`
 **Revision:** S1 (Rev S baseline + schematic-first reconciliation 2026-07-04)
 **Date:** 2026-07-04
