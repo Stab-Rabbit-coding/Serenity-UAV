@@ -54,7 +54,6 @@
 ##### 1.1.3.8 *Rev S4c — hinged ESC bays, access covers, 90° motor pattern*
 → full detail: `WBS.md` §1.1.3.8
 
-- [ ] [OPEN — PRINT-BLOCKING] `MOTOR_BOLT_R` is still 10.0 mm and still…
 - [ ] [OPEN — NEW, and it is a safety item] The bay is now an unfiltered…
 - [ ] [OPEN — the flow, not the geometry] Bay velocity is not verified
 - [ ] 50 A sustained is not survivable on any path evaluated

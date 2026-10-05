@@ -7332,7 +7332,7 @@
       "archived": false
     },
     "avionics/TODO.md": {
-      "description": "Serenity UAV \u2014 Avionics (Pilot / XO / Commo Cape Hardware) TODO (Open Work Only)",
+      "description": "Serenity UAV \u2014 Avionics (Pilot / TACCO / Commo Cape Hardware) TODO (Open Work Only)",
       "tags": [
         "avionics-hardware",
         "documentation",
@@ -7486,6 +7486,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/MBRD1045CT.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/MGA-82563-TR1G.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7507,7 +7514,28 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/PESD5V0F1BL.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/PESD5V0X1BL.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/PremierMagnetics_DB2791S.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/RClamp0504FA.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7598,6 +7626,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/TVS-Diode-SMBJ-Datasheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/TYPE2EL.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7648,6 +7683,13 @@
       "archived": false
     },
     "avionics/datasheets/ak7455-en-datasheet-myakm.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ao3400.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7780,6 +7822,34 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/esd501.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/esd601.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/esd701.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/esd801.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/hi-1573.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7857,7 +7927,28 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/lm393.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/lmv331.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/mcp1703.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/mcp4901-4911-4921.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7907,6 +7998,13 @@
       "archived": false
     },
     "avionics/datasheets/mspm0g3519-q1.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/nexperia-MMBT2222A.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7997,6 +8095,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/si5351.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/slaae29a.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8046,6 +8151,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/sn74lvc1g04.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/sn74lvc1g3157.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/ssm-1xx-xxx-dv-xx-xx-xxx-x-xx-mkt.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8068,6 +8187,13 @@
       "archived": false
     },
     "avionics/datasheets/stm32wle5jc.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/tlv62569.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8771,6 +8897,22 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Bus-Gateway/kicads/fp-lib-table": {
+      "description": "(fp_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Bus-Gateway/kicads/sym-lib-table": {
+      "description": "(sym_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py": {
       "description": "gen_can_periph_gw_pcb.py -- generate CAN-PERIPH-GW-1.kicad_pcb.",
       "tags": [
@@ -9356,6 +9498,22 @@
         "avionics-hardware",
         "pcb-design",
         "propulsion"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Encoder/fp-lib-table": {
+      "description": "(fp_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Encoder/sym-lib-table": {
+      "description": "(sym_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9956,6 +10114,14 @@
     },
     "avionics/kicad/Observer/kicads/fp-lib-table": {
       "description": "(fp_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Observer/kicads/sym-lib-table": {
+      "description": "(sym_lib_table",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -11738,6 +11904,22 @@
     },
     "current-specification/bom_revS.json": {
       "description": "Bill of materials, JSON (203 items)",
+      "tags": [
+        "bom",
+        "specification"
+      ],
+      "archived": false
+    },
+    "current-specification/bom_revT.csv": {
+      "description": "Bill of materials, CSV (211 items)",
+      "tags": [
+        "bom",
+        "specification"
+      ],
+      "archived": false
+    },
+    "current-specification/bom_revT.json": {
+      "description": "Bill of materials, JSON (211 items)",
       "tags": [
         "bom",
         "specification"
@@ -15280,6 +15462,13 @@
       ],
       "archived": false
     },
+    "tools/add_board_notices.py": {
+      "description": "Stamp the Wurth usage notice and the uncrewed-only notice onto boards.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/add_landing_gear_bosses.py": {
       "description": "Add 16 Rev R5 landing-gear hull boss sockets (4 per corner, one per wire)",
       "tags": [
@@ -15394,6 +15583,39 @@
       "description": "Companion to export-specctra-dsn.py: import a freerouting-produced",
       "tags": [
         "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/kicad_add_part.py": {
+      "description": "Add one part to a board's schematic AND PCB, nets bound by pin number.",
+      "tags": [
+        "build-tooling",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "tools/kicad_prune_stale.py": {
+      "description": "Remove stale components (and their orphaned copper) from a KiCad PCB.",
+      "tags": [
+        "build-tooling",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "tools/kicad_relink.py": {
+      "description": "Relink a placed part to a SecureControllers library symbol + footprint.",
+      "tags": [
+        "build-tooling",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "tools/kicad_set_value.py": {
+      "description": "Set the Value property of reference designators in a .kicad_sch/.kicad_pcb.",
+      "tags": [
+        "build-tooling",
+        "pcb-design"
       ],
       "archived": false
     },
@@ -15561,7 +15783,7 @@
       "archived": false
     },
     "tools/precommit_doc_wording.py": {
-      "description": "Pre-commit check for CNAF M-3710.7 [REF-MIL-001]-style doc wording.",
+      "description": "Pre-commit check for CNAF M-3710.7 [REF-MIL-003]-style doc wording.",
       "tags": [
         "build-tooling"
       ],
@@ -16354,6 +16576,7 @@
       "tools/add_landing_gear_bosses.py",
       "tools/bom_edit_door_gateway.py",
       "tools/build_landing_gear_views.py",
+      "tools/kicad_relink.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
@@ -16390,6 +16613,8 @@
       "current-specification/TODO.md",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
+      "current-specification/bom_revT.csv",
+      "current-specification/bom_revT.json",
       "current-specification/serenity-rev-s.jsx",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -17629,6 +17854,8 @@
       "code-scanning-files-extracted.csv",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
+      "current-specification/bom_revT.csv",
+      "current-specification/bom_revT.json",
       "docs/bom_revR.json",
       "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md",
       "tools/bom_edit_door_gateway.py",
@@ -18669,6 +18896,8 @@
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.net",
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.ses",
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1_v2.ses",
+      "avionics/kicad/Bus-Gateway/kicads/fp-lib-table",
+      "avionics/kicad/Bus-Gateway/kicads/sym-lib-table",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
@@ -18738,6 +18967,8 @@
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_sch",
       "avionics/kicad/Encoder/ENC-NACELLE-1.md",
       "avionics/kicad/Encoder/ENC-NACELLE-1.net",
+      "avionics/kicad/Encoder/fp-lib-table",
+      "avionics/kicad/Encoder/sym-lib-table",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Adhesive.gba",
@@ -18810,6 +19041,7 @@
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
       "avionics/kicad/Observer/kicads/Observer.net",
       "avionics/kicad/Observer/kicads/fp-lib-table",
+      "avionics/kicad/Observer/kicads/sym-lib-table",
       "avionics/kicad/Observer/mod_vera_corners.py",
       "avionics/kicad/Observer/mod_vera_ds_pcb.py",
       "avionics/kicad/Observer/mod_vera_som_place.py",
@@ -19013,6 +19245,10 @@
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
       "avionics/kicad/tools/swap_1553_hi6138.py",
+      "tools/kicad_add_part.py",
+      "tools/kicad_prune_stale.py",
+      "tools/kicad_relink.py",
+      "tools/kicad_set_value.py",
       "tools/precommit_kicad_load.py",
       "tools/validate_kicad.py"
     ],
@@ -19056,10 +19292,14 @@
       "avionics/datasheets/L-1038e.A5_phyCORE-AM62x_HW Manual.pdf",
       "avionics/datasheets/MAX-M10S_DataSheet_UBX-20035208.pdf",
       "avionics/datasheets/MAX-M10S_IntegrationManual_UBX-20053088.pdf",
+      "avionics/datasheets/MBRD1045CT.pdf",
       "avionics/datasheets/MGA-82563-TR1G.pdf",
       "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf",
       "avionics/datasheets/PCA9555.pdf",
+      "avionics/datasheets/PESD5V0F1BL.pdf",
+      "avionics/datasheets/PESD5V0X1BL.pdf",
       "avionics/datasheets/PremierMagnetics_DB2791S.pdf",
+      "avionics/datasheets/RClamp0504FA.pdf",
       "avionics/datasheets/RFD900ux DataSheet v1.2.pdf",
       "avionics/datasheets/S32K-RM.pdf",
       "avionics/datasheets/S32K1xx.pdf",
@@ -19072,6 +19312,7 @@
       "avionics/datasheets/SRF2012A.pdf",
       "avionics/datasheets/Si5351-B.pdf",
       "avionics/datasheets/TG2520SMN_en-2584158.pdf",
+      "avionics/datasheets/TVS-Diode-SMBJ-Datasheet.pdf",
       "avionics/datasheets/TYPE2EL.pdf",
       "avionics/datasheets/Vishay_45273MDSK.pdf",
       "avionics/datasheets/X2YDatasheet.pdf",
@@ -19080,6 +19321,7 @@
       "avionics/datasheets/adin1300.pdf",
       "avionics/datasheets/adm2795e.pdf",
       "avionics/datasheets/ak7455-en-datasheet-myakm.pdf",
+      "avionics/datasheets/ao3400.pdf",
       "avionics/datasheets/aon6260.pdf",
       "avionics/datasheets/aon6554.pdf",
       "avionics/datasheets/aon6558.pdf",
@@ -19098,6 +19340,10 @@
       "avionics/datasheets/ds26lv32at.pdf",
       "avionics/datasheets/eGH.pdf",
       "avionics/datasheets/esd101-b1.pdf",
+      "avionics/datasheets/esd501.pdf",
+      "avionics/datasheets/esd601.pdf",
+      "avionics/datasheets/esd701.pdf",
+      "avionics/datasheets/esd801.pdf",
       "avionics/datasheets/hi-1573.pdf",
       "avionics/datasheets/hi-6138_v-rev-s.pdf",
       "avionics/datasheets/hm-trp.pdf",
@@ -19109,7 +19355,10 @@
       "avionics/datasheets/isow1412.pdf",
       "avionics/datasheets/johanson-0915lp15b026e.pdf",
       "avionics/datasheets/johanson-2450bp15e0100.pdf",
+      "avionics/datasheets/lm393.pdf",
       "avionics/datasheets/lmv331.pdf",
+      "avionics/datasheets/mcp1703.pdf",
+      "avionics/datasheets/mcp4901-4911-4921.pdf",
       "avionics/datasheets/mcp4921.pdf",
       "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf",
       "avionics/datasheets/molex-104031.pdf",
@@ -19117,6 +19366,7 @@
       "avionics/datasheets/mspm0g3507.pdf",
       "avionics/datasheets/mspm0g3518-q1.pdf",
       "avionics/datasheets/mspm0g3519-q1.pdf",
+      "avionics/datasheets/nexperia-MMBT2222A.pdf",
       "avionics/datasheets/nexperia-PMBT2222A.pdf",
       "avionics/datasheets/pca9685.pdf",
       "avionics/datasheets/pe4259.pdf",
@@ -19129,6 +19379,7 @@
       "avionics/datasheets/samtec_ssm_footprint.pdf",
       "avionics/datasheets/samtec_tsm-dv-footprint.pdf",
       "avionics/datasheets/samtec_tsm_catalog.pdf",
+      "avionics/datasheets/si5351.pdf",
       "avionics/datasheets/slaae29a.pdf",
       "avionics/datasheets/slaae76e.pdf",
       "avionics/datasheets/slaaet8a.pdf",
@@ -19136,10 +19387,13 @@
       "avionics/datasheets/slaz742g.pdf",
       "avionics/datasheets/slb9672.pdf",
       "avionics/datasheets/smaj-series-tvs-datasheet.pdf",
+      "avionics/datasheets/sn74lvc1g04.pdf",
+      "avionics/datasheets/sn74lvc1g3157.pdf",
       "avionics/datasheets/ssm-1xx-xxx-dv-xx-xx-xxx-x-xx-mkt.pdf",
       "avionics/datasheets/ssm-1xx-xxx-xx-xx-xx-x-xx-footprint.pdf",
       "avionics/datasheets/ssm_sm.pdf",
       "avionics/datasheets/stm32wle5jc.pdf",
+      "avionics/datasheets/tlv62569.pdf",
       "avionics/datasheets/tlv757p.pdf",
       "avionics/datasheets/tlv9062.pdf",
       "avionics/datasheets/tps54540.pdf",
@@ -19224,6 +19478,8 @@
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.net",
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.ses",
       "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1_v2.ses",
+      "avionics/kicad/Bus-Gateway/kicads/fp-lib-table",
+      "avionics/kicad/Bus-Gateway/kicads/sym-lib-table",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
@@ -19293,6 +19549,8 @@
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_sch",
       "avionics/kicad/Encoder/ENC-NACELLE-1.md",
       "avionics/kicad/Encoder/ENC-NACELLE-1.net",
+      "avionics/kicad/Encoder/fp-lib-table",
+      "avionics/kicad/Encoder/sym-lib-table",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Adhesive.gba",
@@ -19365,6 +19623,7 @@
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
       "avionics/kicad/Observer/kicads/Observer.net",
       "avionics/kicad/Observer/kicads/fp-lib-table",
+      "avionics/kicad/Observer/kicads/sym-lib-table",
       "avionics/kicad/Observer/mod_vera_corners.py",
       "avionics/kicad/Observer/mod_vera_ds_pcb.py",
       "avionics/kicad/Observer/mod_vera_som_place.py",
@@ -19809,6 +20068,7 @@
       "tools/README.md",
       "tools/TODO.md",
       "tools/TOOL_REFERENCE.md",
+      "tools/add_board_notices.py",
       "tools/add_landing_gear_bosses.py",
       "tools/bake_hull_frame.py",
       "tools/bom_edit_door_gateway.py",
@@ -19824,6 +20084,10 @@
       "tools/gen_cargo_void_formers.py",
       "tools/gen_todo_from_wbs.py",
       "tools/import-specctra-ses.py",
+      "tools/kicad_add_part.py",
+      "tools/kicad_prune_stale.py",
+      "tools/kicad_relink.py",
+      "tools/kicad_set_value.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/landing_gear_bay_seat_fit.py",
       "tools/landing_gear_bay_station_fit.py",

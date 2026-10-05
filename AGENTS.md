@@ -181,7 +181,7 @@ active trade study and must not be assumed.
 ### Warnings, Cautions, Notes, and Wording
 
 Callout severity and requirement-verb usage follow CNAF M-3710.7 §1.5–1.6 (NATOPS General
-Flight and Operating Instructions Manual) [REF-MIL-001 §1.5, §1.6], adapted for a build/design
+Flight and Operating Instructions Manual) [REF-MIL-003 §1.5, §1.6], adapted for a build/design
 repo rather than a flight-ops manual:
 
 - **WARNING** — a procedure, practice, or condition that may result in injury, death, or loss
@@ -196,7 +196,7 @@ repo rather than a flight-ops manual:
 Never downgrade a WARNING-level risk into a Note, and never use WARNING/CAUTION for information
 that is merely helpful rather than risk-bearing.
 
-Requirement wording follows the same source [REF-MIL-001 §1.6]:
+Requirement wording follows the same source [REF-MIL-003 §1.6]:
 
 - **Shall** — the procedure is mandatory.
 - **Should** — the procedure is recommended, not mandatory.
