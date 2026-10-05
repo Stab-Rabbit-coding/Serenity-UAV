@@ -209,8 +209,9 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     # before them); each is pinned to the pocket a what-if sweep found for it.
     "T-ETH": (47.5, 20.5, 0, F),       # 8.9 mm tall: top face only (PB2-I gap ~5.5 mm)
     "MLRS-MCU": (17.5, 13.5, 0, B),    # bottom face between the P1 rail and the band
-    "1553-XFM": (34.5, 18.0, 90, B),   # 4.70 mm: bottom face, clear of both PB2-I obstructions, under the band
-    "J-MLRS-SWD": (22.5, 22.2, 0, B),  # Tag-Connect NL land under the band, pads north to MLRS-MCU
+    "TPM": (39.8, 21.0, 0, B),         # beside its SPI0_B/TPM pins on P2 (u 36-49): B.Cu-only escape stays short
+    "1553-XFM": (31.0, 18.0, 90, B),   # 4.70 mm: bottom face, clear of both PB2-I obstructions, under the band
+    "J-MLRS-SWD": (19.0, 22.4, 0, B),  # Tag-Connect NL land under the band, pads north to MLRS-MCU
     # --- isolation band: transceivers straddle its top edge, bus connectors at the edge ---
     "CAN-TR": (14.0, ISO_TR_V, 0, F),
     "RS485": (28.4, ISO_TR_V, 0, F),
@@ -219,7 +220,7 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     # X2Y GND<->GND2 bridges straddle the band's top edge on the bottom face, under
     # their transceivers; fixed so auto-placed parts cannot land on them first
     "X2Y-CAN": (10.5, ISO_V0, 0, B),    # shifted west of MLRS-MCU; still under CAN-TR, straddling the band edge
-    "X2Y-RS485": (25.0, ISO_V0, 0, B),  # shifted west of 1553-XFM; still under RS485, straddling the band edge
+    "X2Y-RS485": (23.6, ISO_V0, 0, B),  # shifted west of 1553-XFM; still under RS485, straddling the band edge
 }
 
 # pads that must face a direction (d = unit vector in board u,v)
