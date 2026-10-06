@@ -88,6 +88,7 @@ def main() -> int:
     bw = num(GEN, r"^BW, BH = ([\d.]+), [\d.]+")
     bh = num(GEN, r"^BW, BH = [\d.]+, ([\d.]+)")
     flt = r"\s*=\s*(-?[\d.]+)"
+    panel = bw + TRAY_X + PANEL_CLR
     simon_w = num(MIDDLE_PARAMS, r"SIMON_X1" + flt) - num(MIDDLE_PARAMS, r"SIMON_X0" + flt)
     checks = [
         ("cargo TACCO_L (fit tool)", num(CARGO_FIT, r"^TACCO_L" + flt), bw + POUCH_L),
@@ -100,8 +101,8 @@ def main() -> int:
         ("nose CAPE_PCB_X (builder)", num(HEAD_PY, r"^CAPE_PCB_X" + flt), bw),
         ("nose FARADAY_ENC_X (SCAD)", num(HEAD_SCAD, r"^FARADAY_ENC_X" + flt), bw + TRAY_X),
         ("nose FARADAY_ENC_X (builder)", num(HEAD_PY, r"^FARADAY_ENC_X" + flt), bw + TRAY_X),
-        ("nose BOOK_PANEL_X (SCAD)", num(HEAD_SCAD, r"^BOOK_PANEL_X" + flt), bw + TRAY_X + PANEL_CLR),
-        ("nose BOOK_PANEL_X (builder)", num(HEAD_PY, r"^BOOK_PANEL_X" + flt), bw + TRAY_X + PANEL_CLR),
+        ("nose BOOK_PANEL_X (SCAD)", num(HEAD_SCAD, r"^BOOK_PANEL_X" + flt), panel),
+        ("nose BOOK_PANEL_X (builder)", num(HEAD_PY, r"^BOOK_PANEL_X" + flt), panel),
     ]
     print(f"TACCO board {bw:g} x {bh:g} mm ({GEN})")
     bad = 0
@@ -127,7 +128,8 @@ def main() -> int:
         print(f"RESULT: FAIL — {bad} envelope(s) out of step with the TACCO board size")
         return 1
     if stale:
-        print(f"RESULT: {'FAIL' if a.strict else 'PASS with warnings'} — {stale} STL re-export(s) pending")
+        verdict = "FAIL" if a.strict else "PASS with warnings"
+        print(f"RESULT: {verdict} — {stale} STL re-export(s) pending")
         return 1 if a.strict else 0
     print("RESULT: PASS")
     return 0

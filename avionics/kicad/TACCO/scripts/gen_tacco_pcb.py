@@ -323,7 +323,7 @@ def tht_rects(fp: pcbnew.FOOTPRINT) -> List[Rect]:
 
 # Isolation band as rectangles (board u,v) — parts carrying ISOLATION-class nets must
 # sit inside, every other part outside, or the .kicad_dru rules make them unroutable.
-ISO_RECTS = {F: [Rect(X0 + ISO_U0, Y0 + ISO_V0, X0 + ISO_U1, Y0 + ISO_V1)],
+ISO_RECTS: Dict[str, List[Rect]] = {F: [Rect(X0 + ISO_U0, Y0 + ISO_V0, X0 + ISO_U1, Y0 + ISO_V1)],
              B: []}
 # Top-face cells between the PB2 rail pins (rails are not stack-through any more):
 # a 0402/0201 fits diagonally in every 2.54 mm cell — owner request 2026-09-29.
@@ -997,11 +997,11 @@ def main() -> None:
             print(f"  repair: no site for {ref}")
 
     for ref, fp in fps.items():
-        r = fp.Reference()
-        r.SetTextSize(pcbnew.VECTOR2I(mm(0.8), mm(0.8)))
-        r.SetTextThickness(mm(0.12))
-        r.SetLayer(pcbnew.B_Fab if fp.IsFlipped() else pcbnew.F_Fab)
-        r.SetVisible(True)
+        ref_txt = fp.Reference()
+        ref_txt.SetTextSize(pcbnew.VECTOR2I(mm(0.8), mm(0.8)))
+        ref_txt.SetTextThickness(mm(0.12))
+        ref_txt.SetLayer(pcbnew.B_Fab if fp.IsFlipped() else pcbnew.F_Fab)
+        ref_txt.SetVisible(True)
         fp.Value().SetVisible(False)
 
     gnd, g2c, g2r, p3v3 = netmap["GND"], netmap["GND2_CANB"], netmap["GND2_RS485B"], netmap["+3V3"]
