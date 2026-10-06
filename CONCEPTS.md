@@ -40,7 +40,7 @@ A removable printed shape, cut to the exact cavity of a published shell, that is
 
 ## Chin Node Shelf
 
-The printed plate on the cargo-section chin floor, under the battery nose and forward of the hoisted payload, that carries the two remaining control nodes lying flat side by side with a shared cable channel on the centreline. It exists because the chin flanks beside the battery were measured too narrow three times; the chin floor was clear first try.
+The printed plate on the cargo-section chin floor, under the battery nose and forward of the hoisted payload, that carries two comms control nodes lying flat side by side with a shared cable channel on the centreline. It exists because the chin flanks beside the battery were measured too narrow three times; the chin floor was clear first try.
 
 ## Tilt Brake
 
@@ -62,11 +62,11 @@ The per-side bus device that closes the tilt actuator's inner loop: it drives th
 
 ## Control Node
 
-One of the four PocketBeagle 2 Industrial single-board computers that fly the aircraft, each with exactly one cape stacked on its two 0.1 in rails and each carrying a point of presence on all four wired buses (MIL-STD-1553B, CAN-FD, RS-485, Ethernet) so any node can take over any role. Flight-control nodes carry the Pilot cape; comms nodes carry the XO cape. A node lives inside a Faraday pouch in the cargo section; its allowable size is the Layout Envelope's node envelope, which is why a node is one cape, never a stack of two.
+One of the four PocketBeagle 2 Industrial single-board computers that fly the aircraft, each with exactly one cape stacked on its two 0.1 in rails and each carrying a point of presence on all four wired buses (MIL-STD-1553B, CAN-FD, RS-485, Ethernet) so any node can take over any role. Flight-control nodes carry the Pilot cape; comms nodes carry the TACCO cape (formerly called XO). Nodes are spread through the airframe — a Faraday tray in the nose, Faraday pouches in the cargo section, and a saddle in the middle ring — and sit in a different orientation at each station, so a cape's outline is bounded by the node envelope at every station it occupies, not just one. That is why a node is one cape, never a stack of two, and why a cape's board size is never changed without re-proving every station that carries it.
 
 ## Cape Usable Band
 
-The strip of a cape between its two PocketBeagle 2 stacking rails that can actually hold parts and copper. Each rail centre-line sits 4.80 mm inside its long edge (PB2 System Reference Manual Fig. 3.45; the rails are 25.4 mm apart). With through-hole rail sockets the pads exist on every copper layer, so the rails consume both faces and no part on either face may put pads over them; with surface-mount sockets whose pads stay under their own body (Samtec SSM-DV on TACCO) the rails consume only the face they mount on, and the opposite face over them is usable. Component area budgets are computed against the usable band, per face, using each footprint's courtyard and checking every through-hole or NPTH pad against the opposite face's copper, not against the board outline or package body sizes.
+The strip of a cape between its two PocketBeagle 2 stacking rails that can actually hold parts and copper. Each rail centre-line sits 4.80 mm inside its long edge (PB2 System Reference Manual Fig. 3.45; the rails are 25.4 mm apart). With through-hole rail sockets the pads exist on every copper layer, so the rails consume both faces and no part on either face may put pads over them; with surface-mount rail connectors whose pads stay under their own body the rails consume only the face they mount on, and the opposite face over them is usable. Component area budgets are computed against the usable band, per face, using each footprint's courtyard and checking every through-hole or NPTH pad against the opposite face's copper, not against the board outline or package body sizes.
 
 ## Isolation Band
 

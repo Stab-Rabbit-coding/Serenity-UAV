@@ -21,7 +21,8 @@ board used, kept so the PB2 rails land on the same absolute pads).
 Placement strategy
 ------------------
 * PB2 stacking rails, mounting holes and the field connectors are fixed by the
-  cape mechanical envelope (rails on B.Cu at v = 2.54 / 32.46; horizontal GH
+  cape mechanical envelope (Samtec TSM-118-04-L-DV-LC male SMT strips on B.Cu at
+  v = 4.80 / 30.20, PB2 SRM Fig. 3.45 — avionics/WBS.md R2, 2026-10-06; horizontal GH
   connectors on the bottom (CAN, RS-485, 1553) and right (ETH1/ETH2) edges;
   Nano-Fit power entry on the left edge; the 2x8 SMT servo/ESC header along
   the top-left; the MAX-M10S GPS and its U.FL on F.Cu).
@@ -153,27 +154,43 @@ def load_fp(fpid: str) -> pcbnew.FOOTPRINT:
 # fixed placement (u, v, rot, side) — see module docstring
 # ---------------------------------------------------------------------------
 F, B = "F", "B"
+# PB2 rails (REF-SENSOR-041 Fig. 3.45): the P1/P2 pin-1 rows 3.53 / 6.07 mm from their
+# long edges, 25.4 mm apart -> each rail centre-line is 4.80 mm inside the edge.  Was
+# 2.54 mm (unsourced) until 2026-10-06 (avionics/WBS.md R2; TACCO was corrected 2026-10-05).
+RAIL_V = 4.80
+# Isolation band (same scheme as TACCO, 2026-10-05): the P2 rail is a bottom-face SMT strip
+# under the old band, so the isolators move to the top face with their isolated pin rows
+# facing the bottom edge, the bus connectors sit at the edge over the P2 rail, and the band
+# covers F.Cu + the inner layers only.  B.Cu under the band is logic copper (rail pads,
+# two-pad parts) separated from the isolated domain by the laminate.
+ISO_TR_V = 20.6          # CAN-TR / RS485 centre row (SOIC-20W, pins 11-20 face +v)
+ISO_V0 = ISO_TR_V - 2.6  # band top edge, between the package centre line and its logic pad row
+ISO_V1 = 34.5            # to the copper-edge keep-out
+ISO_U0, ISO_UM, ISO_U1 = 7.3, 21.1, 34.9   # band west edge, CAN/RS-485 island split, east edge
 FIXED: Dict[str, Tuple[float, float, float, str]] = {
-    # mechanical (3.6 mm PGND ring on the R3 corner centres; 0.26 mm to the rail corner pins)
+    # mechanical (3.6 mm PGND ring on the R3 corner centres) + PB2 rails (bottom-face SMT)
     "H1": (3.0, 3.0, 0, F), "H2": (52.0, 3.0, 0, F), "H3": (3.0, 32.0, 0, F), "H4": (52.0, 32.0, 0, F),
-    "PB2-P1": (27.5, 2.54, 0, B), "PB2-P2": (27.5, 32.46, 0, B),
-    # connectors (edge exits are fixed up by orient_exit())
-    "J-PWM": (11.2, 10.5, 0, F),
-    "PWR-IN": (3.6, 22.0, 90, F),
-    "CAN-FD": (12.4, 26.0, 0, F), "RS-485": (22.2, 26.0, 0, F), "MIL-1553": (32.0, 26.0, 0, F),
+    "PB2-P1": (27.5, RAIL_V, 0, B), "PB2-P2": (27.5, BH - RAIL_V, 0, B),
+    # --- top face (2026-10-06 re-floor-plan for the 4.80 mm SMT rails, WBS R2): the rails
+    # free the whole top face, the bottom face is height-limited (~5 mm under the PB2-I)
+    "J-PWM": (17.8, 5.15, 0, F),       # pad 1 column clears PB2-P1's -LC clip NPTH at u 7.18 by 0.5 mm
+    "TPM": (31.7, 4.5, 0, F),
+    "PWR-IN": (3.6, 18.2, 90, F),
+    "J-ANT": (3.0, 8.6, 0, F),
+    "IMU": (22.0, 12.2, 0, F),
+    "U-3V3": (28.6, 11.8, 0, F), "L-3V3": (33.0, 11.6, 0, F),
+    "T-ETH": (42.0, 8.65, 0, F), "T-ETH2": (42.0, 20.15, 0, F),   # 8.9 mm tall: top face only
     "ETH1": (51.7, 10.6, 90, F), "ETH2": (51.7, 20.4, 90, F),
-    # F.Cu
-    "GPS": (41.0, 11.3, 0, F), "J-ANT": (39.3, 26.2, 0, F),
-    "TPM": (25.5, 9.0, 0, F),
-    "IMU": (31.0, 8.0, 0, F),
-    "U-3V3": (10.5, 18.2, 0, F), "L-3V3": (14.5, 18.2, 0, F),
-    "TVS-1553P": (29.5, 20.4, 0, F), "TVS-1553N": (29.5, 16.2, 0, F),
-    # B.Cu
-    "1553-XFM": (8.0, 11.25, 0, B), "1553-XCVR": (21.5, 11.0, 0, B),
-    "CAN-TR": (12.0, 23.1, 0, B), "RS485": (26.6, 23.1, 0, B),
-    "ETH1-PHY": (38.5, 9.5, 0, B), "ETH2-PHY": (38.5, 18.5, 0, B),
-    "T-ETH": (47.5, 11.5, 0, B), "T-ETH2": (47.5, 23.2, 0, B),
-    "X-25M": (33.5, 14.0, 0, B),
+    # isolation band: transceivers straddle its top edge, bus connectors at the bottom edge
+    "CAN-TR": (14.2, ISO_TR_V, 0, F), "RS485": (28.0, ISO_TR_V, 0, F),
+    "CAN-FD": (14.2, 30.6, 0, F), "RS-485": (28.0, 30.6, 0, F), "MIL-1553": (40.8, 30.6, 0, F),
+    # --- bottom face ---
+    "GPS": (11.2, 15.4, 0, B),                    # 2.5 mm: clears the PB2-I microSD; under the band
+    "1553-XFM": (39.25, 17.5, 270, B),           # 4.70 mm: between the band and the PB2-I JST-SH, clear of both obstructions
+    "1553-XCVR": (29.0, 13.5, 0, B),
+    "TVS-1553P": (29.0, 23.6, 0, B), "TVS-1553N": (29.0, 19.8, 0, B),
+    "ETH1-PHY": (48.5, 12.5, 0, B), "ETH2-PHY": (48.5, 19.5, 0, B),
+    "X2Y-CAN": (18.4, ISO_V0, 0, B), "X2Y-RS485": (22.6, ISO_V0, 0, B),
 }
 
 # pads that must face a direction after placement: (ref) -> (pad numbers, direction unit vector in (u,v))
@@ -184,8 +201,9 @@ FACE: Dict[str, Tuple[List[str], Tuple[float, float]]] = {
     "T-ETH2": ([str(i) for i in range(9, 17)], (0, -1)),
     "ETH1-PHY": (["7", "8", "10", "11"], (1, 0)),               # MDI pins toward the magnetics
     "ETH2-PHY": (["7", "8", "10", "11"], (1, 0)),
-    "1553-XFM": (["1", "3"], (1, 0)),                           # primary toward the HI-1573 (bus side left)
-    "1553-XCVR": (["40", "41", "42", "43"], (-1, 0)),           # BUSA toward the transformer
+    # 1553-XFM: fixed at 270 deg (11.3 mm wide, primary pins 1/3 on the north side toward the
+    # 1553 transceiver) — the only orientation that fits between the band and the JST-SH
+    "1553-XCVR": (["40", "41", "42", "43"], (1, 0)),            # BUSA toward the transformer (east)
     "PB2-P1": (["1"], (-1, 0)), "PB2-P2": (["1"], (-1, 0)),
     "PWR-IN": (["1"], (0, -1)),
     "J-PWM": (["1"], (-1, -1)),
@@ -197,12 +215,13 @@ EXIT: Dict[str, Tuple[float, float]] = {
     "CAN-FD": (0, 1), "RS-485": (0, 1), "MIL-1553": (0, 1),
 }
 
-# isolated bands: from the isolator body centre-line (v 23) down to just above
-# the P2 rail pins (v 30.2); split between the two domains at u 17.4.  The
-# main planes are notched around the union of the two bands (+0.5 mm moat).
-ISO_CAN = [(5.5, 23.0), (17.3, 23.0), (17.3, 30.2), (5.5, 30.2)]
-ISO_485 = [(17.5, 23.0), (33.6, 23.0), (33.6, 30.2), (17.5, 30.2)]
-MAIN_PLANE = [(0.5, 0.5), (54.5, 0.5), (54.5, 34.5), (34.1, 34.5), (34.1, 22.5), (5.0, 22.5), (5.0, 34.5), (0.5, 34.5)]
+# isolated band (u,v) from the ISO_* rows above, split between the two domains at ISO_UM;
+# the main planes are notched around it.
+ISO_CAN = [(ISO_U0, ISO_V0), (ISO_UM - 0.25, ISO_V0), (ISO_UM - 0.25, ISO_V1), (ISO_U0, ISO_V1)]
+ISO_485 = [(ISO_UM + 0.25, ISO_V0), (ISO_U1, ISO_V0), (ISO_U1, ISO_V1), (ISO_UM + 0.25, ISO_V1)]
+ISO_BAND_POLY = [(ISO_U0, ISO_V0), (ISO_U1, ISO_V0), (ISO_U1, ISO_V1), (ISO_U0, ISO_V1)]
+MAIN_PLANE = [(0.5, 0.5), (54.5, 0.5), (54.5, 34.5), (ISO_U1, 34.5), (ISO_U1, ISO_V0), (ISO_U0, ISO_V0),
+              (ISO_U0, 34.5), (0.5, 34.5)]
 
 # anchor parents for pure-supply passives (ref prefix -> parent ref)
 ANCHOR_PREFIX = [
@@ -257,6 +276,46 @@ def tht_rects(fp: pcbnew.FOOTPRINT) -> List[Rect]:
     return out
 
 
+# Bottom-face height budget (same stack as TACCO, owner 2026-10-05): the PB2-I's female
+# receptacles stand 3.0 mm and the TSM-DV insulator 2.54 mm, so the cape's B.Cu face sits
+# ~5.54 mm above the PB2-I top; its microSD socket (pin-1/2 end) and JST-SH UART
+# (pin-35/36 end) stand proud between the rails (positions estimated from the owner's photo).
+PB2_GAP = 3.0 + 2.54
+H_MARGIN = 0.5
+B_MAX_H = PB2_GAP - H_MARGIN
+PB2_OBSTRUCTIONS = [
+    (4.0, 10.5, 18.0, 24.5, 1.0),    # PB2-I microSD socket (owner: 12 x 7 x 1 mm)
+    (45.0, 12.5, 55.0, 22.5, 2.95),  # PB2-I JST-SH 3-pin side-entry (height per JST-SH; confirm)
+]
+# seated heights (mm); unlisted parts are taken as <= 2.0 mm (chip passives, QFN/SOIC)
+PART_HEIGHT = {
+    "T-ETH": 8.9, "T-ETH2": 8.9,             # Wurth 749010012A drawing
+    "1553-XFM": 4.70,                        # PremierMagnetics_DB2791S.pdf Fig. 2, .185 in
+    "TVS-1553P": 2.44, "TVS-1553N": 2.44,    # SMA (DO-214AC) body
+    "GPS": 2.5,                              # u-blox MAX-M10S 9.7 x 10.1 x 2.5 mm
+}
+# multi-pad parts allowed on B.Cu under the band (their nets escape on B.Cu alone)
+UNDER_BAND_OK = {"X2Y-CAN", "X2Y-RS485", "GPS", "1553-XFM"}
+
+
+def part_height(fp: pcbnew.FOOTPRINT) -> float:
+    return PART_HEIGHT.get(fp.GetReference(), 2.0)
+
+
+def b_height_ok(r: "Rect", h: float) -> bool:
+    """True when a bottom-face part of height h at courtyard r clears the PB2-I."""
+    if h > B_MAX_H:
+        return False
+    for u0, v0, u1, v1, oh in PB2_OBSTRUCTIONS:
+        if r.hits(Rect(X0 + u0, Y0 + v0, X0 + u1, Y0 + v1)) and h > PB2_GAP - oh - H_MARGIN:
+            return False
+    return True
+
+
+def band_rect() -> "Rect":
+    return Rect(X0 + ISO_U0, Y0 + ISO_V0, X0 + ISO_U1, Y0 + ISO_V1)
+
+
 class Placer:
     """Courtyard-collision aware placement on a two-sided board."""
 
@@ -264,6 +323,9 @@ class Placer:
         self.board = board
         self.blk: Dict[str, List[Rect]] = {F: [], B: []}
         self.edge = Rect(X0 + EDGE_KEEP, Y0 + EDGE_KEEP, X0 + BW - EDGE_KEEP, Y0 + BH - EDGE_KEEP)
+        self.height = 2.0      # seated height of the part being placed
+        self.iso = False       # part belongs to the isolated domain (must sit inside the band)
+        self.two_pad = True    # may sit on B.Cu under the band
 
     def register(self, fp: pcbnew.FOOTPRINT) -> None:
         side = B if fp.IsFlipped() else F
@@ -280,6 +342,18 @@ class Placer:
 
     def free(self, r: Rect, side: str) -> bool:
         if r.x1 < self.edge.x1 or r.y1 < self.edge.y1 or r.x2 > self.edge.x2 or r.y2 > self.edge.y2:
+            return False
+        band = band_rect()
+        if side == B:
+            if not b_height_ok(r, self.height):
+                return False
+            # no logic via may enter the band, so only parts that escape on B.Cu alone
+            if not self.iso and not self.two_pad and r.hits(band):
+                return False
+        elif self.iso:
+            if not (band.x1 <= r.x1 and r.x2 <= band.x2 and band.y1 <= r.y1 and r.y2 <= band.y2):
+                return False
+        elif r.hits(band):
             return False
         return not any(r.hits(o) for o in self.blk[side])
 
@@ -561,7 +635,7 @@ def main() -> None:
     tb.SetDate("2026-09-19")
     tb.SetRevision("T")
     tb.SetCompany("Griffing Technology LLC")
-    tb.SetComment(0, "PocketBeagle 2 Industrial cape, 55 x 35 mm, 4-layer; generated by gen_pilot_pcb.py + route_pilot.py")
+    tb.SetComment(0, "PocketBeagle 2 Industrial cape, 55 x 35 mm, 6-layer; generated by gen_pilot_pcb.py + route_pilot.py")
     tb.SetComment(1, "Author: Claude Opus 5 (2026-09-19); owner sgriffing; CC BY 4.0")
 
     outline(board)
@@ -619,8 +693,8 @@ def main() -> None:
                     print(f"  FIXED THT COLLISION {f2.GetReference()} -> {f1.GetReference()}")
     for f1 in fixed_fps:
         c = courtyard(f1)
-        if not placer.free(c, B if f1.IsFlipped() else F) and False:
-            pass
+        if f1.IsFlipped() and not b_height_ok(c, part_height(f1)):
+            print(f"  FIXED TOO TALL FOR B.Cu {f1.GetReference()} ({part_height(f1)} mm)")
         if c.x1 < X0 + 0.3 or c.y1 < Y0 + 0.3 or c.x2 > X0 + BW - 0.3 or c.y2 > Y0 + BH - 0.3:
             print(f"  FIXED OFF-BOARD {f1.GetReference()} {c.x1-X0:.2f},{c.y1-Y0:.2f}..{c.x2-X0:.2f},{c.y2-Y0:.2f}")
 
@@ -671,6 +745,9 @@ def main() -> None:
         if my_nets & ISO_SIDE_NETS and anchor_fp is not None and anchor_fp.GetReference() in ("CAN-TR", "RS485"):
             cx, cy = pad_centroid(anchor_fp, [str(i) for i in range(11, 21)])
             anchor = (cx - X0, cy - Y0 + 1.2)
+        placer.height = part_height(fp)
+        placer.iso = bool(my_nets & ISO_SIDE_NETS)
+        placer.two_pad = len([q for q in fp.Pads() if q.GetNumber()]) <= 2 or ref in UNDER_BAND_OK
         ok = placer.spiral(fp, anchor[0], anchor[1], side, rmax=8.0)
         if not ok:
             other = F if side == B else B
@@ -713,7 +790,7 @@ def main() -> None:
     # (isolated nets route on F/B only) and on the +3V3 plane; a named area
     # "ISO_BAND" on every copper layer feeds the custom DRC rule in
     # Pilot.kicad_dru that forbids non-ISOLATION-class copper inside it.
-    band = [(5.0, 22.5), (34.1, 22.5), (34.1, 30.2), (5.0, 30.2)]
+    band = ISO_BAND_POLY
     for layer in (pcbnew.In2_Cu, pcbnew.In3_Cu, pcbnew.In4_Cu):
         z = pcbnew.ZONE(board)
         z.SetLayer(layer)
@@ -732,25 +809,38 @@ def main() -> None:
     # legitimately-isolated pad/track inside it as "not allowed".  The actual
     # restriction (only ISOLATION-class copper may exist here) is enforced by
     # the custom rule in Pilot.kicad_dru via A.insideArea('ISO_BAND').
-    z = pcbnew.ZONE(board)
-    z.SetLayerSet(pcbnew.LSET.AllCuMask(6))
-    z.SetIsRuleArea(True)
-    z.SetDoNotAllowCopperPour(False)
-    z.SetDoNotAllowTracks(False)
-    z.SetDoNotAllowVias(False)
-    z.SetDoNotAllowPads(False)
-    z.SetDoNotAllowFootprints(False)
-    z.SetZoneName("ISO_BAND")
-    ol = z.Outline()
-    ol.NewOutline()
-    for u, v in band:
-        ol.Append(mm(X0 + u), mm(Y0 + v))
-    board.Add(z)
+    # F.Cu + inner layers only: B.Cu under the band is logic copper (P2 rail pads, two-pad
+    # parts).  A B.Cu patch around each X2Y bridge's GND2 strip keeps its short stub to the
+    # island via inside ISO_BAND.
+    top_and_inner = pcbnew.LSET.AllCuMask(6)
+    top_and_inner.RemoveLayer(pcbnew.B_Cu)
+    bot = pcbnew.LSET()
+    bot.AddLayer(pcbnew.B_Cu)
+    shapes = [(top_and_inner, band)]
+    for xref in ("X2Y-CAN", "X2Y-RS485"):
+        xu = FIXED[xref][0]
+        shapes.append((bot, [(xu - 0.35, ISO_V0 - 1.1), (xu + 0.35, ISO_V0 - 1.1),
+                             (xu + 0.35, ISO_V0 + 1.1), (xu - 0.35, ISO_V0 + 1.1)]))
+    for lset, poly in shapes:
+        z = pcbnew.ZONE(board)
+        z.SetLayerSet(lset)
+        z.SetIsRuleArea(True)
+        z.SetDoNotAllowCopperPour(False)
+        z.SetDoNotAllowTracks(False)
+        z.SetDoNotAllowVias(False)
+        z.SetDoNotAllowPads(False)
+        z.SetDoNotAllowFootprints(False)
+        z.SetZoneName("ISO_BAND")
+        ol = z.Outline()
+        ol.NewOutline()
+        for u, v in poly:
+            ol.Append(mm(X0 + u), mm(Y0 + v))
+        board.Add(z)
 
     # silkscreen ---------------------------------------------------------
     # board legend on the Fab layers (no free silk area at this density)
     text(board, "PILOT Rev T  Griffing Technology LLC  CC BY 4.0", 27.5, 16.5, pcbnew.B_Fab, 0.9, mirror=True)
-    text(board, "ISOLATED CAN-FD | RS-485", 16.0, 30.9, pcbnew.F_Fab, 0.8)
+    text(board, "ISOLATED CAN-FD | RS-485", 19.4, 24.4, pcbnew.F_Fab, 0.8)
 
     pcbnew.SaveBoard(str(OUT), board)
     patch_project_netclasses(KICADS / "Pilot.kicad_pro")

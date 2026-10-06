@@ -1444,7 +1444,24 @@ REFERENCES.md Removed/Superseded Citations).
     `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`
     (its SSM-DV verdict); both to be corrected in the same change.
     - [ ] R1 TACCO rails moved, re-floor-planned, regenerated, gates 0.
-    - [ ] R2 Pilot rails moved, regenerated, gates 0.
+    - [x] R2 Pilot rails moved, regenerated, gates 0. **Done 2026-10-06** (Pilot.md 2026-10-06 update:
+      rails at 4.80 mm on TSM-118-04-L-DV-LC strips, both Ethernet transformers on the top face,
+      TACCO-style isolation band; ERC 0 errors, DRC 0, parity 0, 120/120 placed; routing still
+      open). Original note: **Was open as of 2026-10-06 (owner: "the cape
+      rail measurement error needs to be fixed on the pilot cape as well").** TACCO is done on this
+      item: R1, R3 and the rail gender correction below. Pilot still carries the original error:
+      - Rails: `gen_pilot_pcb.py` `FIXED` has PB2-P1 / PB2-P2 at v 2.54 / 32.46 (29.92 mm apart);
+        they must be v 4.80 / 30.20 (25.4 mm apart, REF-SENSOR-041 Fig. 3.45).
+      - Connector: `gen_pilot_sch.py` still uses the female
+        `PocketBeagle2_2x18_P{1,2}_Socket` footprints. Pilot needs the male Samtec
+        TSM-118-04-L-DV-LC strips, the same as TACCO (`Serenity-Custom:PocketBeagle2_2x18_P{1,2}_TSM-DV-LC`),
+        because the PB2-I carries female receptacles.
+      - Height: apply the same bottom-face height budget (~5.54 mm stack gap; PB2-I microSD and
+        JST-SH obstructions).
+      - Then re-floor-plan the rail-dependent geometry, regenerate, and re-gate (ERC 0, DRC 0
+        errors, parity 0).
+      - Pilot stays 55 x 35 mm. Its mounting holes are the stacking pattern TACCO keeps at
+        60 x 35 (TACCO.md §13b), so the hole positions do not move.
     - [ ] R3 SMT (SSM-DV) vs THT rail routing study on the corrected geometry; owner decision.
       **Decided 2026-10-05 (S. Griffing: "Do 1+2").** On the corrected rails the THT layout
       left T-ETH, three 3015 inductors and CMC-RS485 unplaced, so TACCO moves to Samtec
@@ -1489,6 +1506,14 @@ REFERENCES.md Removed/Superseded Citations).
       148-180 mA per TYPE2EL.pdf, ~0.27 W). All 163 parts place: DRC 0 errors before routing,
       schematic parity 0, ERC unchanged (12 accepted lib_symbol_issues). Open: +3V3_RF budget
       (TPS63031) now also carries the 1.8 V load — confirm against the power budget.
+      **Outline 55 x 35 -> 60 x 35 mm, 2026-10-06 (S. Griffing: "Go with option 2, 60x35 with
+      1.5 mm gap").** Routing at 55 x 35 left 60-90 connections unrouted on 6 layers and ~71 on 8
+      (area-bound at ~95 % courtyard fill). The extra 5 mm overhangs the PB2-I microSD end
+      (`U_LO = -5` in `gen_tacco_pcb.py`); rails, H1-H4 and fixed stations unchanged. Airframe
+      re-proved at all four TACCO stations: nose tray 60 -> 65 mm; cargo chin pair 63 mm pouches at
+      Y -60.3..2.7 with a 1.5 mm static gap and a 9 mm cable channel (`cargo_layout_fit.py` Rev T5g
+      PASS); Simon CN4 slot 63 mm (`middle_layout_fit.py` Rev T6a PASS). Detail: TACCO.md §13b.
+      Open: re-export the chin shelf, Simon saddle, node-bay void former and head-shell STLs.
     - [ ] R4 Learning docs and CONCEPTS.md corrected.
 - [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
     APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift

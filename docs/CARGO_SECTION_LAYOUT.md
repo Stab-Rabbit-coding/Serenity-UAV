@@ -12,6 +12,18 @@ Run `tools/cargo_layout_fit.py --plot` for the proof (`docs/img/cargo_layout_t5_
 
 > ⚠️ **ENGINEERING REVIEW REQUIRED** — see the notice in `docs/TILT_ACTUATOR_SELECTION.md`.
 
+## 0b. Rev T5g (2026-10-06) — what changed
+
+The chin pair (CN2/CN3) are TACCO capes, and TACCO grew from 55 x 35 to 60 x 35 mm
+(`avionics/kicad/TACCO/TACCO.md` §13b). The chin pouches are now **63 x 37 x 22** at
+**Y −60.3..2.7** (2.7 mm aft, still 2.0 mm short of the payload box). The cable channel is
+9 mm, down from 10. The owner accepted a **1.5 mm static gap** on the chin nodes and shelf
+(2.0 mm everywhere else), because the starboard chin wall is the hull's 2.7 mm narrow side.
+The shelf plate now ends at the pouch aft face, with no aft lip.
+`cargo_layout_fit.py` PASS (0 hit, 0 near, 0 pair overlap). The aft FC pair (Pilot, 58 mm) is
+unchanged. STL re-export of `chin_node_shelf.stl` and `void_former_cargo_node_bay.stl` is
+open.
+
 ## 0a. Rev T5f (2026-09-21) — what changed
 
 One addition: the **cargo-door servo gateway** (GW-CARGO-DOOR, a
