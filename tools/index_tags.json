@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-05",
+  "generated": "2026-10-06",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -8144,6 +8144,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/molex_105162-0001_drawing.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex_105162-0001_spec.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/mspm0g3507-q1.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8221,6 +8235,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/pocketbeagle2_srm.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/prtr5v0u2x.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8242,6 +8263,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/samtec_ssm-dv_drawing.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/samtec_ssm_catalog.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/samtec_ssm_footprint.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8257,6 +8292,13 @@
       "archived": false
     },
     "avionics/datasheets/samtec_tsm_catalog.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/samtec_tsw-sxx_drawing.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -10762,7 +10804,23 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_TSM-DV-LC.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_TSM-DV-LC.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
@@ -10871,6 +10929,14 @@
       "tags": [
         "avionics-hardware",
         "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/microSD_Molex_105162-0001.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
         "pcb-design"
       ],
       "archived": false
@@ -11207,7 +11273,7 @@
       "archived": false
     },
     "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py": {
-      "description": "gen_tacco_pcb.py \u2014 Build the TACCO PCB from the schematic netlist.",
+      "description": "Python script",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -14248,6 +14314,13 @@
       ],
       "archived": false
     },
+    "docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md": {
+      "description": "PB2 socket rails, not connector families, bind field-connector placement on a 55 x 35 mm cape",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/design-patterns/probe-the-published-hull-and-change-the-placement-class-not-the-margins.md": {
       "description": "Ray-probe the published hull at the station before placing anything \u2014 and when a placement misses by fraction\u2026",
       "tags": [
@@ -16743,6 +16816,7 @@
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
       "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md",
       "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
+      "docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md",
       "docs/solutions/design-patterns/probe-the-published-hull-and-change-the-placement-class-not-the-margins.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/design-patterns/self-locking-worm-and-vectoring-bandwidth-are-mutually-exclusive.md",
@@ -19673,7 +19747,9 @@
       "avionics/kicad/Serenity-Custom.pretty/PGND_ViaPad_1p2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_TSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_TSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RCLAMP0502B_SOD882.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900x_2x8_THT.kicad_mod",
@@ -19687,6 +19763,7 @@
       "avionics/kicad/Serenity-Custom.pretty/Wurth_749010012A_WE-LAN.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/X2Y_0805_4T.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/microSD_Molex_105162-0001.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/uBlox_SAM-M10Q-00B.kicad_mod",
       "avionics/kicad/TACCO/TACCO.md",
       "avionics/kicad/TACCO/gerbers/TACCO-B_Cu.gbr",
@@ -19938,6 +20015,8 @@
       "avionics/datasheets/mcp4921.pdf",
       "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf",
       "avionics/datasheets/molex-104031.pdf",
+      "avionics/datasheets/molex_105162-0001_drawing.pdf",
+      "avionics/datasheets/molex_105162-0001_spec.pdf",
       "avionics/datasheets/mspm0g3507-q1.pdf",
       "avionics/datasheets/mspm0g3507.pdf",
       "avionics/datasheets/mspm0g3518-q1.pdf",
@@ -19949,12 +20028,16 @@
       "avionics/datasheets/pocketbeagle-2.pdf",
       "avionics/datasheets/pocketbeagle-2.syscfg",
       "avionics/datasheets/pocketbeagle2_sch.pdf",
+      "avionics/datasheets/pocketbeagle2_srm.pdf",
       "avionics/datasheets/prtr5v0u2x.pdf",
       "avionics/datasheets/rfd900x-datasheet.pdf",
       "avionics/datasheets/rfm95w-datasheet.pdf",
+      "avionics/datasheets/samtec_ssm-dv_drawing.pdf",
+      "avionics/datasheets/samtec_ssm_catalog.pdf",
       "avionics/datasheets/samtec_ssm_footprint.pdf",
       "avionics/datasheets/samtec_tsm-dv-footprint.pdf",
       "avionics/datasheets/samtec_tsm_catalog.pdf",
+      "avionics/datasheets/samtec_tsw-sxx_drawing.pdf",
       "avionics/datasheets/si5351.pdf",
       "avionics/datasheets/slaae29a.pdf",
       "avionics/datasheets/slaae76e.pdf",
@@ -20255,7 +20338,9 @@
       "avionics/kicad/Serenity-Custom.pretty/PGND_ViaPad_1p2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_Socket.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_TSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_TSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RCLAMP0502B_SOD882.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900x_2x8_THT.kicad_mod",
@@ -20269,6 +20354,7 @@
       "avionics/kicad/Serenity-Custom.pretty/Wurth_749010012A_WE-LAN.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/X2Y_0805_4T.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/Xfmr_1553_SMD_0.40in_8pin.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/microSD_Molex_105162-0001.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/uBlox_SAM-M10Q-00B.kicad_mod",
       "avionics/kicad/TACCO/TACCO.md",
       "avionics/kicad/TACCO/gerbers/TACCO-B_Cu.gbr",

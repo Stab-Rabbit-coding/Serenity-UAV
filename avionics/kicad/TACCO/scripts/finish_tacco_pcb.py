@@ -168,6 +168,8 @@ def add_band_keepouts(board: pcbnew.BOARD) -> int:
         raise SystemExit("ISO_BAND rule area not found")
     n = 0
     for layer in board.GetEnabledLayers().CuStack():
+        if not band.IsOnLayer(layer):
+            continue  # the band is F.Cu + inner layers only; B.Cu under it is logic copper
         z = pcbnew.ZONE(board)
         z.SetLayer(layer)
         z.SetIsRuleArea(True)

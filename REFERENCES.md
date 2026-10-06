@@ -125,6 +125,8 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-PWR-007: Texas Instruments TPS54540 — 4.5 A synchronous buck converter data sheet](#ref-pwr-007-texas-instruments-tps54540--45-a-synchronous-buck-converter-data-sheet)
 - [Part XII-B — Connector Specifications](#part-xii-b--connector-specifications)
     - [REF-CONN-001: Samtec TSM series — 0.100in surface-mount terminal strip product data](#ref-conn-001-samtec-tsm-series--0100in-surface-mount-terminal-strip-product-data)
+    - [REF-SENSOR-041: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)](#ref-sensor-041-beagleboardorg-pocketbeagle-2--system-reference-manual-mechanical-board-and-header-dimensions)
+    - [REF-SENSOR-042: Samtec SSM / SSW / TSW / TSM — .100 in socket and terminal strips (footprint, drawing, qualification)](#ref-sensor-042-samtec-ssm--ssw--tsw--tsm--100-in-socket-and-terminal-strips-footprint-drawing-qualification)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -2625,6 +2627,31 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Note** | Licence line not present on the schematic sheet; confirm the repository licence before redistributing the archived PDF. Added 2026-09-29. |
 
 **Used in:** `avionics/kicad/PB2_HEADER_PINMAP.md`, `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`PB2_P1`/`PB2_P2`), `avionics/WBS.md` §1.2a.
+
+### REF-SENSOR-041: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)
+
+| Field | Value |
+|---|---|
+| **Publisher** | BeagleBoard.org Foundation |
+| **Product** | PocketBeagle 2, revisions A1 (AM6254, in production) and A0 (AM6232, out of production) |
+| **Source** | Owner-supplied copy archived at `avionics/datasheets/pocketbeagle2_srm.pdf` (55 pp.); published at <https://docs.beagleboard.org/pocketbeagle-2.pdf> |
+| **Portion applied** | §3.8 Mechanical specifications: Table 3.2 (PCB 55 x 35 mm, 1.6 mm, 10 layers, max height 13.6 mm, 12.7 g) and Fig. 3.45 "PocketBeagle 2 RevA Dimensions" — P1 and P2 pin-1 rows 3.53 mm and 6.07 mm from their board edges and 25.4 mm apart, so each rail centre-line is 4.80 mm inside its long edge. The figure also shows the board's own pre-soldered headers as surface-mount tails with round through-hole pins only at positions 1/2 and 35/36. |
+| **Note** | The manual names no "Industrial" variant; the owner confirmed on 2026-10-04 that this geometry applies to the board the capes stack on. Added 2026-10-05. |
+
+**Used in:** `avionics/kicad/TACCO/scripts/gen_tacco_pcb.py` and `avionics/kicad/Pilot/scripts/gen_pilot_pcb.py` (`FIXED` PB2-P1/PB2-P2 positions), `avionics/WBS.md` §1.2a.
+
+### REF-SENSOR-042: Samtec SSM / SSW / TSW / TSM — .100 in socket and terminal strips (footprint, drawing, qualification)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Samtec, Inc. (New Albany, Indiana, USA) |
+| **Product** | SSM "Tiger Claw" surface-mount socket strip (-DV double row); SSW through-hole socket strip; TSW terminal (post) strip, .025 in square post |
+| **Source** | Owner-supplied copies archived at `avionics/datasheets/samtec_ssm_footprint.pdf` (recommended PCB layout, Rev D), `samtec_ssm-dv_drawing.pdf` (SSM-1XX-XXX-DV marketing drawing), `samtec_ssm_catalog.pdf` (SSM series catalog page) and `samtec_tsw-sxx_drawing.pdf` (SSW/TSW product specification, Rev C, 2023-02-08); <https://www.samtec.com/products/ssm> |
+| **Portion applied** | SSM-DV: 02-40 positions per row; mates TSW/TSM; pads .040 in (1.02 mm) wide, inner span .135 in (3.43 mm), outer span .310 in (7.87 mm) (Fig. 4); options -A alignment pin (1.09 mm NPTH), -LC locking clip (1.19 mm NPTH); 5.2 A per pin; -55 to +125 °C with gold; catalog states Severe Environment Testing qualification aligned with MIL-DTL-55302. SSW/TSW spec: random vibration 7.56 G RMS, 50-2000 Hz, 2 h/axis, 3 axes (EIA-364-28 Cond. V-B); mechanical shock 100 G, 6 ms, 18 shocks (EIA-364-27); durability 1000 cycles; LLCR change 15 mOhm max. |
+| **TSM (adopted)** | `avionics/datasheets/samtec_tsm-dv-footprint.pdf` (TSM double-vertical recommended PCB layout, Rev F, 2015-07-16: pads .050 x .145 in (1.27 x 3.68 mm) at .100 in pitch, rows .050 in (1.27 mm) apart at their inner edges; -LC .047 in (1.19 mm) / -A .068 in (1.73 mm) holes on the centre-line at (N-2) x .100 in) and `samtec_tsm_catalog.pdf` (lead style -04 post .120 in (3.05 mm) for SLW/CES/HLE low-profile sockets; insulator .100 in (2.54 mm); -LC not with -TM; -LC manual placement). |
+| **Note** | Used for the rail-socket trade study (THT socket vs surface-mount SSM-DV), then for the male TSM-118-04-L-DV-LC rails adopted 2026-10-05 once the PB2-I was found to carry female receptacles. Added 2026-10-05; renumbered from REF-SENSOR-023 on the main merge (that ID is the BMP388 on main). |
+
+**Used in:** `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`, `avionics/WBS.md` §1.2a.
 
 ---
 
