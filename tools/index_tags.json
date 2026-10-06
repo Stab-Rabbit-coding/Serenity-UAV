@@ -14300,6 +14300,13 @@
       ],
       "archived": false
     },
+    "docs/solutions/design-patterns/decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md": {
+      "description": "Decide a multi-station cape's board size against every mount, and couple board size to airframe envelopes mec\u2026",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md": {
       "description": "One Python module holds every layout station, proves the layout, feeds the mesh merge and emits the SCAD incl\u2026",
       "tags": [
@@ -16821,6 +16828,7 @@
       "docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md",
       "docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md",
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
+      "docs/solutions/design-patterns/decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md",
       "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md",
       "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
       "docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md",
