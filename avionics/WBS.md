@@ -1444,7 +1444,10 @@ REFERENCES.md Removed/Superseded Citations).
     `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`
     (its SSM-DV verdict); both to be corrected in the same change.
     - [ ] R1 TACCO rails moved, re-floor-planned, regenerated, gates 0.
-    - [ ] R2 Pilot rails moved, regenerated, gates 0. **Still open as of 2026-10-06 (owner: "the cape
+    - [x] R2 Pilot rails moved, regenerated, gates 0. **Done 2026-10-06** (Pilot.md 2026-10-06 update:
+      rails at 4.80 mm on TSM-118-04-L-DV-LC strips, both Ethernet transformers on the top face,
+      TACCO-style isolation band; ERC 0 errors, DRC 0, parity 0, 120/120 placed; routing still
+      open). Original note: **Was open as of 2026-10-06 (owner: "the cape
       rail measurement error needs to be fixed on the pilot cape as well").** TACCO is done on this
       item: R1, R3 and the rail gender correction below. Pilot still carries the original error:
       - Rails: `gen_pilot_pcb.py` `FIXED` has PB2-P1 / PB2-P2 at v 2.54 / 32.46 (29.92 mm apart);

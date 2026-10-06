@@ -5,7 +5,31 @@
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** T (schematic-first rebuild, superseding Rev Q)
 **Date:** 2026-09-19
-**Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers. **Routing not yet complete** (see "Routing status" below).
+**Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers on the corrected 4.80 mm SMT rails (2026-10-06). **Routing not yet complete** (see "Routing status" below).
+
+**Update 2026-10-06 (PB2 rail correction, avionics/WBS.md R2, S. Griffing decision;
+implemented by Claude Opus 5.5):** the PB2 rails were 2.54 mm from the long edges
+(29.92 mm apart). That spacing had no source, and the cape could not have mated.
+- **Rails:** now at **4.80 mm** from each edge, 25.4 mm apart (PB2 SRM Fig. 3.45). They are
+  Samtec **TSM-118-04-L-DV-LC** male SMT strips on the bottom face, the same as TACCO, because
+  the PB2-I carries female receptacles. The -LC clip NPTHs are at ±20.32 mm on each rail.
+- **Bottom-face height limit:** the stack gap is ~5.54 mm, which allows ≤ 5.04 mm parts on
+  B.Cu, less over the PB2-I microSD (pin-1/2 end) and JST-SH (pin-35/36 end).
+  - Both Ethernet transformers (8.9 mm) move to the top-right.
+  - The 1553 transformer (4.70 mm) sits on B.Cu between the band and the JST-SH.
+  - The GPS (2.5 mm) moves to B.Cu over the microSD.
+- **Isolation band (TACCO scheme):**
+  - CAN-TR / RS485 move to the top face at v 20.6, with their isolated rows facing the
+    bottom edge.
+  - CAN-FD / RS-485 / MIL-1553 sit at the bottom edge over the P2 rail.
+  - `ISO_BAND` covers F.Cu and In1–In4 over u 7.3–34.9, v 18.0 to the edge. B.Cu under it
+    carries only two-pad parts and the GPS / 1553-XFM, whose nets escape on B.Cu.
+  - The X2Y bridges straddle the band edge on B.Cu.
+- **Position-sensitive parts:** J-PWM moved 1.6 mm east so its pad-1 column clears the P1
+  clip hole.
+- **Gates:** ERC 0 errors (10 accepted `lib_symbol_issues`); DRC 0 violations with schematic
+  parity 0; all 120 parts placed. Every bottom-face part was audited against the height and
+  under-band rules (0 violations). Routing remains open (below).
 
 **Update 2026-09-28 (MIL-STD-1553C fleet swap, S. Griffing decision; implemented by Claude
 Opus 5.5):** `1553-XCVR` is now the **Holt HI-6138** BC/RT/MT protocol engine, a 48-pin
