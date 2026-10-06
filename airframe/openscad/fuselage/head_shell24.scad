@@ -298,13 +298,13 @@ BOSS_AFT_6 = [  99, CY + 38, CZ - 52  ];  // VERIFY: dorsal-stbd quadrant
 //   TACCO.kicad_pcb MH1–MH4; CLAUDE.md Book bay; Ruthex RX-M3x5.7.
 //
 // Cape PCB dimensions (same as cargo SCAD Rev S4):
-CAPE_PCB_X     =  55.0;   // mm, TACCO / Pilot PCB X extent
+CAPE_PCB_X     =  60.0;   // mm, TACCO PCB X extent (2026-10-06: 60 x 35; Pilot stays 55, port-justified)
 CAPE_PCB_Z     =  35.0;   // mm, TACCO / Pilot PCB Z extent
 CAPE_HOLE_DX   =  24.5;   // mm, ±X M2.5 corner hole offset from board centre
 CAPE_HOLE_DZ   =  14.5;   // mm, ±Z M2.5 corner hole offset from board centre
 
 // Faraday enclosure dimensions (same spec as cargo Rev S4):
-FARADAY_ENC_X  =  60.0;   // mm, tray external X
+FARADAY_ENC_X  =  65.0;   // mm, tray external X (TACCO 60 + 2 x 1.5 wall + 2; was 60)
 FARADAY_ENC_Z  =  40.0;   // mm, tray external Z
 FARADAY_ENC_Y  =  55.0;   // mm, tray depth below dorsal face
 FARADAY_WALL   =   1.5;   // mm, tray wall thickness (0.5 mm Al + PETG liner)
@@ -325,7 +325,7 @@ BOOK_X_CEN     = CX;          // mm, bay X centre = 161.33 mm
 BOOK_Z_CEN     = CZ;          // mm, bay Z centre =  69.08 mm
 BOOK_BOSS_DX   =  25.0;       // mm, ±X boss offset (matches cargo AVINICS_BOSS_DX)
 BOOK_BOSS_DZ   =  15.0;       // mm, ±Z boss offset (matches cargo AVINICS_BOSS_DZ)
-BOOK_PANEL_X   =  62.0;       // mm, dorsal access panel opening X (60 mm tray + 1 mm each)
+BOOK_PANEL_X   =  67.0;       // mm, dorsal access panel opening X (65 mm tray + 1 mm each)
 BOOK_PANEL_Z   =  42.0;       // mm, dorsal access panel opening Z (40 mm tray + 1 mm each)
 
 // ----------------------------------------------------------------------------

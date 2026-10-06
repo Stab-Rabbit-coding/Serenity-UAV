@@ -73,7 +73,7 @@ LIP_H      = 6.0;                 // height of the slot walls above each pouch b
 AFT_NECK_ZC = SIMON_ZC;           // aft-neck bore centre (Z 80.5, measured)
 AFT_NECK_R  = 60.5;               // aft-neck bore radius (O121, measured at Y 198)
 
-SX0 = SIMON_X0 - WALL_T;  SX1 = SIMON_X1 + WALL_T;   // block X extent (66.8)
+SX0 = SIMON_X0 - WALL_T;  SX1 = SIMON_X1 + WALL_T;   // block X extent (71.8; T6a: slots sized to the 63 mm TACCO pouch, FC4 rides port-justified)
 SY0 = SIMON_Y0;           SY1 = SIMON_Y1 + WALL_T;   // block Y extent: pouch depth + aft wall
 ZB  = CN4_Z0;                                        // lower pouch bottom (42.0)
 

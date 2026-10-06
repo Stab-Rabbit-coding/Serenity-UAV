@@ -28,7 +28,7 @@ mLRS bare-chip radio, non-stack rails, and fab-ready layout" for the full decisi
 - **DP83825I pin table corrected** against TI SNLS638C Table 4-1 (the previous table was not
   this part's pinout; Pilot shares the defect). Pin 2 (50MHzOut) drives `RMII2_REF_CLK`.
 - **Layout:** owner authorized full auto-placement and autorouting; the §1/§11–13 layout
-  constraints below still apply. All 170 parts are placed on the 55 × 35 mm outline with 0 DRC
+  constraints below still apply (outline now 60 × 35 mm, §13b). All 170 parts are placed on the 55 × 35 mm outline with 0 DRC
   errors before routing (isolation band and GND2 islands follow the transceiver positions;
   small bypasses use the top-face cells between the non-stack-through rail pins). Routing,
   Gerber and remaining gates are tracked in the WBS entry.
@@ -480,6 +480,39 @@ logic via may enter the band. The isolated domain is separated from that copper 
 laminate (In1 to B.Cu), not by surface creepage — functional bus isolation, not a safety
 barrier. The ≥ 8 mm creepage target in the layout constraints above applies to same-surface
 spacing and is still to be verified on the routed board.
+
+## §13b — Outline 60 x 35 mm (2026-10-06)
+
+Owner decision 2026-10-06 ("option 2, 60x35 with 1.5 mm gap"); supersedes the 55 x 35 mm
+hard constraint in §1 for TACCO only (Pilot stays 55 x 35).
+
+**Why.** At 55 x 35 the placed board was about 95 % courtyard-full, and every routing attempt
+left 60–90 connections unrouted on 6 layers and about 71 on 8, so the board was limited by area,
+not layer count. 60 x 35 adds 175 mm² (0.27 in²).
+
+**Where the extra 5 mm (0.20 in) goes.** On the PB2-I microSD (pin-1/2) end: the board spans
+u = −5..55 in the generator's PB2 frame (`U_LO`, `gen_tacco_pcb.py`). The rails, H1–H4 (still
+on the Pilot stacking pattern) and every fixed station are unchanged. The overhang stays clear
+of the PB2's USB-C / JST-SH end. Bottom-face parts wholly past the PB2-I edge (u < −1.0) are
+not held to the 5.04 mm rail-gap height budget; they are capped at 8 mm by the pouch stack.
+The overhang sits 5.54 mm above the PB2-I microSD slot: the card can still be inserted, but
+it is a bench operation.
+
+**Airframe fit (all four TACCO stations, re-proved 2026-10-06).**
+
+| Station | Mount | Change | Gate |
+|---|---|---|---|
+| Nose, CN1 | Faraday tray (with FC1) | tray 60 → 65 mm, access panel 62 → 67 mm (`head_shell24.scad`) | bare-shell section probe: ≥ 4.9 mm (0.19 in) to the skin |
+| Cargo chin, CN2 / CN3 | flat on `chin_node_shelf`, connector edges inboard | pouch 63 mm long at Y −60.3..2.7, cable channel 10 → 9 mm, **static gap 2.0 → 1.5 mm** (owner-accepted), shelf aft lip dropped | `tools/cargo_layout_fit.py` PASS (Rev T5g) |
+| Middle ring, CN4 | Simon saddle, standing, under FC4 | slots 58 → 63 mm, growth to starboard, FC4 port-justified | `tools/middle_layout_fit.py` PASS (Rev T6a) |
+
+**Open (owner).**
+- Re-export the printable STLs from the updated SCAD/params: `chin_node_shelf.stl`,
+  `simon_node_saddle.stl`, `void_former_cargo_node_bay.stl` and `head_shell24.stl`. Neither
+  `openscad` nor `build_head_shell.py`'s `manifold3d` version was available in the
+  generating session.
+- The nose-tray position in `head_shell24.scad` still uses the legacy axes (known issue), so
+  the nose check is against the bare shell only.
 
 ## §14 — Field Connectors Summary
 

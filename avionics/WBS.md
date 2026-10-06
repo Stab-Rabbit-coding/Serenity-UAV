@@ -1489,6 +1489,14 @@ REFERENCES.md Removed/Superseded Citations).
       148-180 mA per TYPE2EL.pdf, ~0.27 W). All 163 parts place: DRC 0 errors before routing,
       schematic parity 0, ERC unchanged (12 accepted lib_symbol_issues). Open: +3V3_RF budget
       (TPS63031) now also carries the 1.8 V load — confirm against the power budget.
+      **Outline 55 x 35 -> 60 x 35 mm, 2026-10-06 (S. Griffing: "Go with option 2, 60x35 with
+      1.5 mm gap").** Routing at 55 x 35 left 60-90 connections unrouted on 6 layers and ~71 on 8
+      (area-bound at ~95 % courtyard fill). The extra 5 mm overhangs the PB2-I microSD end
+      (`U_LO = -5` in `gen_tacco_pcb.py`); rails, H1-H4 and fixed stations unchanged. Airframe
+      re-proved at all four TACCO stations: nose tray 60 -> 65 mm; cargo chin pair 63 mm pouches at
+      Y -60.3..2.7 with a 1.5 mm static gap and a 9 mm cable channel (`cargo_layout_fit.py` Rev T5g
+      PASS); Simon CN4 slot 63 mm (`middle_layout_fit.py` Rev T6a PASS). Detail: TACCO.md §13b.
+      Open: re-export the chin shelf, Simon saddle, node-bay void former and head-shell STLs.
     - [ ] R4 Learning docs and CONCEPTS.md corrected.
 - [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
     APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift
