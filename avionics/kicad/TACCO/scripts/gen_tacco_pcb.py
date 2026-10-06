@@ -803,7 +803,8 @@ def main() -> None:
     # strict largest-first rule never tries; the committed board uses PLACEMENT_SEED.
     # PLACEMENT_SEED 1 (2026-10-05): of seeds 1-6, five place every part DRC-clean; seed 1 has
     # the shortest total half-perimeter wirelength (3116 mm vs 3313-3561 mm).
-    rng = random.Random(WHATIF.get("seed", PLACEMENT_SEED))
+    # Not a security function: a reproducible seed for placement order only (DevSkim DS148264).
+    rng = random.Random(WHATIF.get("seed", PLACEMENT_SEED))  # DevSkim: ignore DS148264
     jit = {r: 1.0 + rng.uniform(-0.2, 0.2) for r in sorted(fps)}
 
     def order_key(r: str) -> Tuple[float, int, float, str]:
