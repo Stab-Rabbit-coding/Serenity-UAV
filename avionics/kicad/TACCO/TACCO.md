@@ -511,6 +511,10 @@ it is a bench operation.
   `simon_node_saddle.stl`, `void_former_cargo_node_bay.stl` and `head_shell24.stl`. Neither
   `openscad` nor `build_head_shell.py`'s `manifold3d` version was available in the
   generating session.
+- `tools/check_tacco_envelope_sync.py` (pre-commit hook and CI) re-derives every airframe
+  TACCO envelope from `BW, BH` and fails on drift; it lists the STLs above as PENDING until
+  re-exported (`--strict` turns that into a failure). Tracked as TACCO-60 in
+  `airframe/fuselage-mid/WBS.md`.
 - The nose-tray position in `head_shell24.scad` still uses the legacy axes (known issue), so
   the nose check is against the bare shell only.
 

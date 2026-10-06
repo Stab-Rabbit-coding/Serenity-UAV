@@ -18,6 +18,9 @@ python3 "$TOPDIR/tools/precommit_sanitize.py" || exit 1
 # Doc wording (REF-MIL-003 CNAF M-3710.7 SS1.5/1.6 callout/verb conventions)
 python3 "$TOPDIR/tools/precommit_doc_wording.py" || exit 1
 
+# TACCO board size <-> airframe mount envelopes (nose tray, chin shelf, Simon saddle)
+python3 "$TOPDIR/tools/check_tacco_envelope_sync.py" || exit 1
+
 # Update indexes
 python3 "$TOPDIR/tools/precommit_index.py" || exit 1
 

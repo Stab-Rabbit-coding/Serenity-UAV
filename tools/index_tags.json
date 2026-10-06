@@ -15923,6 +15923,13 @@
       ],
       "archived": false
     },
+    "tools/check_tacco_envelope_sync.py": {
+      "description": "check_tacco_envelope_sync.py \u2014 keep every airframe TACCO mount in step with the board size.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/compact_bom_entries.py": {
       "description": "compact_bom_entries.py",
       "tags": [
@@ -20741,6 +20748,7 @@
       "tools/build_landing_gear_views.py",
       "tools/cargo_bay_envelope.py",
       "tools/cargo_layout_fit.py",
+      "tools/check_tacco_envelope_sync.py",
       "tools/compact_bom_entries.py",
       "tools/dorsal_shroud_resize_64.py",
       "tools/esc70_design.json",
