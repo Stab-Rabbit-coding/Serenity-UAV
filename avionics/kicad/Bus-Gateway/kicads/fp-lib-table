@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "SecureControllers")(type "KiCad")(uri "${SECURE_CONTROLLERS_LIB}/SecureControllers.pretty")(options "")(descr "Shared datasheet-verified footprints (SecureControllers repo, kicad/libraries)"))
+)

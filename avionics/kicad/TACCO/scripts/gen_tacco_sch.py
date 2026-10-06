@@ -195,6 +195,8 @@ FP_WIOE5 = "Serenity-Custom:Seeed_WioE5_QFN28"
 FP_VSON10 = "Serenity-Custom:TPS6303x_VSON-10_2p5"
 FP_FLLORA = "Serenity-Custom:Johanson_0915LP15B026E_SMD4"
 FP_RCLAMP = "Serenity-Custom:RCLAMP0502B_SOD882"
+# Infineon ESD101-B1-02ELS TSSLP-2-4 (esd101-b1.pdf), shared verified land
+FP_ESD101 = "SecureControllers:Infineon_TSSLP-2-4_0.62x0.32mm"
 FP_SOT89 = "Package_TO_SOT_SMD:SOT-89-3"
 
 
@@ -859,7 +861,7 @@ def pb2_header(ref: str, value: str, fp: str, nets: List[Optional[str]]) -> Dict
             for i, net in enumerate(nets, start=1) if i not in omitted]
     return {"ref": ref, "value": value, "fp": fp, "mpn": "TSM-118-04-L-DV-LC",
             "ds": "PocketBeagle 2 P1/P2 expansion rails (XO map); Samtec TSM-DV SMT male strip, -04 "
-                  "post, -LC locking clip (manual placement) [REF-SENSOR-023]", "pins": pins}
+                  "post, -LC locking clip (manual placement) [REF-SENSOR-042]", "pins": pins}
 
 
 ICS += [
@@ -937,7 +939,7 @@ SIMPLE: List[Any] = [
     ("CMC-CAN", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "CAN_B_H"), ("2", "W1_OUT", "CAN_B_H_F"), ("4", "W2_IN", "CAN_B_L"), ("3", "W2_OUT", "CAN_B_L_F")]),
     ("TVS-CAN", "PRTR5V0U2X", FP_SOT143, "PRTR5V0U2X,315", "prtr5v0u2x.pdf (Nexperia, SOT143B 4-pin) [REF-SENSOR-038]",
-     [("1", "IO1", "CAN_B_H_F"), ("2", "GND", "GND2_CANB"), ("3", "IO2", "CAN_B_L_F"), ("4", "VCC", "VCC2_CANB")]),
+     [("1", "GND", "GND2_CANB"), ("2", "IO1", "CAN_B_H_F"), ("3", "IO2", "CAN_B_L_F"), ("4", "VCC", "VCC2_CANB")]),
     ("R-CANT", "120R", FP_R0402, "", "CAN bus termination — populate ONLY at a bus end node (DNP default); shrunk to 0402, DNP by default so no continuous-power concern",
      [("1", "A", "CAN_B_H_F"), ("2", "B", "CAN_B_L_F")], {"dnp": True}),
     ("J-CAN", "SM03B-GHS-TB", FP_GH3, "SM03B-GHS-TB(LF)(SN)", "XO.md §14 J_CAN",
@@ -954,7 +956,7 @@ SIMPLE: List[Any] = [
     ("CMC-RS485", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "RS485_B_A"), ("2", "W1_OUT", "RS485_B_A_F"), ("4", "W2_IN", "RS485_B_B"), ("3", "W2_OUT", "RS485_B_B_F")]),
     ("TVS-RS485", "PRTR5V0U2X", FP_SOT143, "PRTR5V0U2X,315", "prtr5v0u2x.pdf (Nexperia, SOT143B) [REF-SENSOR-038]",
-     [("1", "IO1", "RS485_B_A_F"), ("2", "GND", "GND2_RS485B"), ("3", "IO2", "RS485_B_B_F"), ("4", "VCC", "VCC2_RS485B")]),
+     [("1", "GND", "GND2_RS485B"), ("2", "IO1", "RS485_B_A_F"), ("3", "IO2", "RS485_B_B_F"), ("4", "VCC", "VCC2_RS485B")]),
     ("R-485T", "120R", FP_R0402, "", "RS-485 termination — populate ONLY at a bus end node (DNP default); shrunk to 0402, DNP by default so no continuous-power concern",
      [("1", "A", "RS485_B_A_F"), ("2", "B", "RS485_B_B_F")], {"dnp": True}),
     ("J-485", "SM03B-GHS-TB", FP_GH3, "SM03B-GHS-TB(LF)(SN)", "XO.md §14 J_485",
@@ -1118,8 +1120,8 @@ SIMPLE: List[Any] = [
      [("1", "A", "MLRS_ANT_RF"), ("2", "B", "MLRS_ANT_F")]),
     ("C-MLRS-SH2", "DNP", FP_C0201, "", "mLRS antenna match shunt 2 (DNP until bench VSWR tuning)",
      [("1", "A", "MLRS_ANT_F"), ("2", "B", "GND")]),
-    ("D-ANT-MLRS", "RCLAMP0502B", FP_RCLAMP, "RCLAMP0502BTCL", "RF ESD shunt, same flag as D-ANT-SIK originally carried",
-     [("1", "A", "MLRS_ANT_F"), ("2", "K", "PGND")]),
+    ("D-ANT-MLRS", "ESD101-B1-02ELS", FP_ESD101, "ESD101-B1-02ELS", "RF ESD shunt, Infineon ESD101-B1-02ELS 0.1 pF (owner 2026-09-26, WBS U7.1j; esd101-b1.pdf) — replaces the deprecated RCLAMP0502B",
+     [("1", "IO", "MLRS_ANT_F"), ("2", "GND", "PGND")]),
     ("J-ANT-MLRS", "U.FL", FP_USMD, "U.FL-R-SMT-1(10)",
      "mLRS antenna jack — Hirose U.FL SMT (owner 2026-10-05: replaces the through-hole MMCX, whose "
      "pins blocked both faces; KiCad library land, Hirose drawing to be archived; cable needs "
@@ -1148,9 +1150,9 @@ SIMPLE: List[Any] = [
      [("1", "A", "RADIO_ANT_RF"), ("2", "B", "RADIO_ANT_F")]),
     ("C-ANT-SH2", "DNP", FP_C0402, "", "Antenna match shunt 2 (DNP until bench VSWR tuning)",
      [("1", "A", "RADIO_ANT_F"), ("2", "B", "GND")]),
-    ("D-ANT-RADIO", "RCLAMP0502B", FP_RCLAMP, "RCLAMP0502BTCL", "RF ESD shunt, same flag as D-ANT-SIK — now the "
+    ("D-ANT-RADIO", "ESD101-B1-02ELS", FP_ESD101, "ESD101-B1-02ELS", "RF ESD shunt, Infineon ESD101-B1-02ELS 0.1 pF (owner 2026-09-26, WBS U7.1j) — now the "
      "single shared WiFi/BT/802.15.4 antenna feed (was WiFi-only)",
-     [("1", "A", "RADIO_ANT_F"), ("2", "K", "PGND")]),
+     [("1", "IO", "RADIO_ANT_F"), ("2", "GND", "PGND")]),
     ("J-ANT-RADIO", "U.FL", FP_USMD, "U.FL-R-SMT-1(10)",
      "Hirose U.FL SMT (owner 2026-10-05, replaces through-hole MMCX 73415-1471). "
      "Shared WiFi/BT/802.15.4 antenna jack (SANT mode) — was WiFi-only J-SMA-WIFI; Type2EL's single "

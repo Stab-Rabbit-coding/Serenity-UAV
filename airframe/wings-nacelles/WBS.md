@@ -816,6 +816,43 @@
 
 ##### 1.1.3.1 *Nozzle*
 
+- **Servo drive (2026-09-28) — per-nacelle servo scheduled on measured tilt** (owner decision;
+  `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"; plan
+  `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`; ideation
+  `docs/ideation/2026-09-28-nozzle-servo-actuation-ideation.html`). Supersedes the Rev S2 passive
+  drive below. Analysis by Claude (Claude Opus 5.5, Anthropic) under the author's direction.
+    - [x] **Decision recorded and passive drive retired (plan U1)** — trade-doc amendment,
+        `airframe/AGENTS.md` requirement reworded ("scheduled on measured nacelle tilt",
+        105 % from 90° to 145°, fail to 105 %), sync-gear/pushrod SCADs + gear-compare WIP
+        archived, Makefile targets and overlay §6 retired.
+    - [ ] **[OPEN — IMPLEMENT] Servo linkage + schedule tool (plan U2)** —
+        `tools/nozzle_servo_linkage.py`: ring angle vs servo angle, spring/servo margins, and a
+        tilt→ring→PWM table held flat from 90° to 145°.
+    - [ ] **[OPEN — IMPLEMENT] Ring stops, spring seat, full-stroke slotted pull ear (plan U3)**
+        in `nacelle_nozzle_iris.scad`.
+    - [ ] **[OPEN — IMPLEMENT] Servo mount, pod pocket, flush cover + fit check (plan U4)** —
+        BMS-101DMG (8 mm case) forward of the ring inside the canonical shell; faired blister
+        only with owner sign-off.
+    - [ ] **[OPEN — DECISION D-NZ-1] Gateway variant (plan U6)** — V1: the AK7455 encoder lane's
+        spare `FLEX_PWM_IO`. V2: a dedicated N_STACKS=1 gateway. Mounting, wiring, weight and
+        CG are compared in `docs/NACELLE_NOZZLE_SERVO_SPEC.md` (to be written).
+    - [ ] **[OPEN — IMPLEMENT] BOM + REFERENCES (plan U7)** — `SERVO-NOZZLE`, spring, pull link,
+        mount, `FUSE-F_NOZ`, `SW-F_NOZ`, contingent level shifter. Retire `PUSHROD-BALL-M3`,
+        `BALLSTUD-M3`, `PRINT-PUSHROD-CRANK`.
+    - [ ] **[OPEN — BENCH] Servo-drive verification (plan U8)**:
+        - flap hinge moment at the lever ear (fan off and at hover);
+        - servo sweep and µs map;
+        - BMS-101DMG at 6 V, and 3.3 V PWM input;
+        - stall current, to size `F_NOZ`;
+        - spring rate;
+        - **fail-open with the servo unpowered and with it seized at 75/90/105 %** (stop
+          condition);
+        - signal-loss behaviour;
+        - cruise penalty at 105 %, and debounce/re-arm tuning.
+    - [ ] **[OPEN — FOLLOW-UP] `airframe/FreeCAD-scripts/Makefile` still has a rule for the
+        deleted `wing_nacelle_pylon_revo.scad`** (found 2026-09-28; pre-existing, unrelated).
+        `make -n` stops on it.
+
 - **Rev S3 (2026-08-09) — flap SHINGLE implemented (master/seal)** (user decision
   2026-08-09; found by CI "STL Validation", not by inspection).
     - [x] **Root cause** — `N_FLAPS` 8 × `FLAP_SPAN_DEG` 50° = 400° of arc on a
@@ -911,7 +948,7 @@
         bevel housing, drive pinion (+STLs) → `airframe/archive/`; Makefile,
         PROJECT_INDEX/ARCHIVE_INDEX, serenity_assembly.py updated.
     - [x] **Pod pocket** grown `NOZZLE_RING_OD` 65→72 to seat the Ø71 housing.
-    - [ ] **[OPEN — NO-GO, was VERIFY] Spatial RSSR linkage synthesis.**
+    - [x] **[CLOSED 2026-09-28 — NO-GO confirmed; superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"] Spatial RSSR linkage synthesis.**
         `tools/nozzle_linkage_check.py --search-dimensions` (2026-09-09)
         exhaustively swept CRANK_R 8.5–28 mm × PUSHROD_LEN 58–90 mm × 24 crank
         mounting phases × 8 spar mounting stations (336 combinations) and
@@ -928,7 +965,7 @@
         `nacelle_nozzle_pushrod.scad` is therefore a **stale implementation of
         a superseded decision**. The adopted replacement (below) is not a new
         trade — it is already decided; do NOT reopen the trade study.
-    - [ ] **[OPEN — IMPLEMENT] Adopted nozzle drive: wing-fixed sun + nacelle
+    - [x] **[CLOSED 2026-09-28 — NOT IMPLEMENTED, superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"] Adopted nozzle drive: wing-fixed sun + nacelle
         pinion + geared bellcrank** (`docs/NOZZLE_DRIVE_TRADE.md` amendment,
         2026-07-19). A gear fixed coaxial with the spar at the **wing tip**
         (non-tilting datum) meshes a nacelle-mounted **pinion**; as the nacelle
@@ -955,7 +992,7 @@
         far above the ≥40–45° rule of thumb. Iris re-renders `Simple: yes`.
         Also corrected `port_tilt_spar_assembly.scad` `PIVOT_ZLOC` 111.5 →
         **107.5** (was stale against `nacelle_pod_50mm_tandem.scad:437`).
-    - [ ] **[OPEN] Re-hub `spar_crank()` onto the pinion.** The linkage
+    - [x] **[CLOSED 2026-09-28 — superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"; `nacelle_nozzle_pushrod.scad` archived] Re-hub `spar_crank()` onto the pinion.** The linkage
         *numbers* are closed but the *part* is not printable as-is: it is still
         drawn as the Ø8 tilt-spar clamp. Needs (a) the Ø8.2 bore + Ø16 clamp hub
         replaced with a hub suited to the pinion shaft — shaft Ø, retention
@@ -979,7 +1016,8 @@
         runs in-plane. **Note:** this repo has no orientation-specific or
         interlayer CF-PETG allowable and the bearing allowable is "requires
         verification" — do not re-label either figure.
-    - [ ] **[BLOCKED — needs an owner decision, do NOT assume resolved] The
+    - [x] **[CLOSED 2026-09-28 — owner decision: datum reopened; no wing-fixed home exists inside the tip
+        airfoil, so the passive drive was retired for the servo drive] The
         KTD3 sync-gear datum does not package in the Rev T4 joint.** Full
         numbers and the lever-by-lever analysis are written up in
         `docs/NOZZLE_DRIVE_TRADE.md` § "PACKAGING BLOCKER — the KTD3 datum does
@@ -996,14 +1034,14 @@
         wing-geometry change**. Choose: spend flux, spend wing geometry, or
         reopen the datum — the linkage solve, gear sizing and print work above
         are all datum-independent and carry over, so reopening is cheap.
-    - [ ] **[OPEN — parked, do NOT print] `nacelle_nozzle_sync_gears.scad`.**
+    - [x] **[CLOSED 2026-09-28 — ARCHIVED to `archives/airframe-archives/archive/openscad/nacelles/`; superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"] `nacelle_nozzle_sync_gears.scad`.**
         The gear pair and the integral pinion+crank are authored and render
         manifold (sun 3741 facets, pinion 7279, both `Simple: yes`), but the
         **sun's bore and mounting are built to the superseded 2026-07-19
         wing-tip datum** (Ø8.4 bore for a rotating Ø8 spar) and are wrong under
         Rev T1's fixed Ø20 spar. Committed for the reusable half only. Fix
         depends entirely on the blocked decision above.
-    - [ ] **[OPEN] Pushrod clearance/interference check.** The linkage checker
+    - [x] **[CLOSED 2026-09-28 — superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"; the servo drive's own link clearance is plan U4] Pushrod clearance/interference check.** The linkage checker
         is kinematics-only by design; it does not verify the rod clears the cowl
         skin, the ESC bays, or the flap sweep across the full tilt range.
     - [x] **Re-bake the pod shells** — DONE 2026-08-31 (Rev S4). Both
@@ -1018,7 +1056,7 @@
         → hull transform) and the outer wall now tracks it: **0 proud
         violations** across 768 outer-wall samples (16 axial × 48 azimuthal),
         worst-case margin 0.5 mm at z=0.
-    - [ ] **[OPEN — ACCEPTED RESIDUAL, not fixable by boss sizing] Hinge
+    - [x] **[CLOSED 2026-09-28 — ACCEPTED RESIDUAL per plan 005 R7, not fixable by boss sizing] Hinge
         bosses remain proud of the canonical shell.** Wall trimmed Rev T5b
         2.5 mm/side → 1.5 mm/side (the minimum this repo's FDM practice treats
         as reliable, ≥3 perimeters at 0.4 mm nozzle), cutting the worst-case
@@ -1034,10 +1072,12 @@
         **Accepted per plan 005 R7**: this is a genuine hinge-circle-vs-
         mould-line geometric conflict, not an under-sized boss. Do not shrink
         the wall further chasing an unreachable zero.
-    - [ ] **[OPEN] Spar-crank placement** in serenity_assembly.py is first-pass
+    - [x] **[CLOSED 2026-09-28 — superseded by the servo drive, owner decision 2026-09-28 — `docs/NOZZLE_DRIVE_TRADE.md` "DECISION AMENDMENT — servo drive (2026-09-28)"; the assembly has placed no spar crank since 2026-07-20] Spar-crank placement** in serenity_assembly.py was first-pass
         (Y=0, Z=PIVOT_Z, X-axis clamp); confirm clock angle + pushrod routing.
-    - [ ] **[OPEN] User WIP** `gear_option_compare.scad` / `gear_shell_compare.scad`
-        (untracked) `use<>` the now-archived gear SCADs — update or archive.
+    - [x] **[CLOSED 2026-09-28 — ARCHIVED] User WIP** `gear_option_compare.scad` / `gear_shell_compare.scad`
+        `use<>` the now-archived gear SCADs. `gear_option_compare.scad` moved to
+        `archives/airframe-archives/archive/openscad/nacelles/`; `gear_shell_compare.scad` no longer
+        exists in the tree.
 
 - [x] **nacelle_nozzle_iris.stl** — `openscad -o ... serenity/stl/nacelle_nozzle_iris.scad`
     *(rendered 2026-06-22)* — Rev R1 50 mm iris: full-circle M=1.0 ring gear
@@ -1288,7 +1328,8 @@
     (only the SCAD source has been authored); render it once the Z-conflict
     above is resolved.
 
-- [ ] **[OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD**
+- [x] **[CLOSED 2026-09-28 — STALE since 2026-07-18: Option B deleted the idler/ring-gear train
+    that protruded; now superseded again by the in-pod servo drive] Nozzle drive protrudes ~10 mm past the nacelle OD**
     *(flagged 2026-07-07, design review)* — the compound idler shaft sits at R43.6 mm
     and its Idler-Out teeth reach R≈51 mm, ~10 mm proud of the Ø82 nozzle housing /
     nacelle OD (the "steampunk accessory"). Root cause: the external 72T ring gear
@@ -1486,12 +1527,104 @@ analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
     285 − 105 = 180 = 2 × 90, so one set holds **both** deep lobes, which the
     120° set could not. Clocked **15/105/195/285**.
 
-- [ ] **[OPEN — PRINT-BLOCKING] `MOTOR_BOLT_R` is still 10.0 mm and still
-    unverified.** The owner direction settles the screw COUNT and the 90°
-    spacing; it does not settle the bolt circle, and the vendor listing publishes
-    "nc". Measure it off a physical motor — five minutes with a caliper — along
-    with the thread size and whether the four holes are on a true square. **Do
-    not print either spider for flight until this is measured.**
+- [x] **`MOTOR_BOLT_R` MEASURED 2026-09-28 — 7.5 mm, true square (was 10.0 mm
+    placeholder).** Photos of the physical Xfly Galaxy X5 EDF were reviewed
+    (`docs/img/20260923_065833.jpg` center-boss/motor-mount, `_065933.jpg`
+    rotor OD, `_065848.jpg` stator/duct with wiring); the analog Vernier scale
+    in the photo itself was not trustworthy to read (oblique angle, not
+    square to the camera), so all numeric readings below are the owner's own
+    caliper reads, not photo estimates. Owner took two passes:
+    - **First pass:** 14.65 mm diameter → `MOTOR_BOLT_R = 7.325 mm` (superseded).
+    - **Re-measurement (final):** **15.0 mm** spanning screw-centre to
+      diagonally-opposite screw-centre through the shaft boss (bolt-circle
+      **diameter**), with the **4-hole pattern confirmed a true square** —
+      not just visually, by caliper. `MOTOR_BOLT_R = 15.0 / 2 = 7.5 mm`, set
+      in `edf_aft_spider_sleeve.scad`.
+    - **Screw thread confirmed M2** (not the M3 previously assumed) off the
+      same physical motor. Renamed `M3_INSERT_D`/`M3_INSERT_L` →
+      `M2_INSERT_D`/`M2_INSERT_L`; `M2_INSERT_D` set to 3.0 mm using this
+      repo's existing M2 heat-set precedent (`FP_INS_D` in
+      `airframe/openscad/fuselage/bow_sensor_pod.scad:367`); `M2_INSERT_L`
+      carried over unchanged at 6.0 mm from the old M3 value — plausible for
+      a short M2 knurled insert but **not independently re-verified**.
+
+    All motor-mount comment blocks (bench pre-assembly steps, pocket geometry,
+    hardware BOM, post-print checks) updated from 3×M3/4×M3 to 4×M2 throughout
+    `edf_aft_spider_sleeve.scad`, including a stale duplicate
+    "PRINT-BLOCKING…THE MOTOR MOUNT INTERFACE IS WRONG" block that still
+    described the already-fixed 3-arm/120° issue as open. Re-rendered after
+    each value change (`openscad -o ... edf_aft_spider_sleeve.scad`): single
+    manifold solid (Simple: yes), no CGAL errors throughout — the final 7.5 mm
+    radius (inside the 8.0 mm `R_HUB` hub OD) still sits on continuous
+    material because the hub ring (0–8 mm) and spider arm (7–26 mm) overlap
+    at that azimuth, so the M2 insert pocket does not break out of the part.
+
+    **2026-09-28 update — motor screw spec confirmed AND mounting method
+    corrected: M2×12.5 mm flat-head (countersunk), no heat-set insert.**
+    Owner read the screw spec directly off the physical motor's packed
+    hardware, then measured the motor's own mounting flange: a 20 mm dia,
+    3.5 mm thick flange carrying the four TAPPED M2 holes (the bolt circle
+    already measured above), a second non-tapped 1.75 mm flange 6.5 mm
+    further back, and 15 mm from the back of the tapped flange to the motor
+    body. **This means the motor supplies its own female thread** — no
+    heat-set insert is needed in this sleeve at all, which reverses the
+    previous (wrong) assumption that the countersink belonged in the motor's
+    tab. The countersink actually belongs in THIS sleeve.
+
+    Reworked `edf_aft_spider_sleeve.scad` accordingly: the motor-mount holes
+    are now a through clearance hole (`M2_CLEAR_D = 2.4 mm`, generic M2
+    close-fit convention) spanning the full 8 mm spider-arm thickness, with a
+    countersink (`M2_CSK_D = 4.0 mm` × `M2_CSK_DEPTH = 1.2 mm`, generic M2
+    flat-head estimate — both flagged to verify against the actual screw SKU)
+    cut into the arm's FORWARD face so the flat head seats flush there; the
+    screw then threads directly into the motor's tapped flange beyond the
+    sleeve's aft face. `M2_INSERT_D`/`M2_INSERT_L` and the blind-pocket
+    geometry from the prior pass are removed — they described a fastening
+    method that doesn't exist on this hardware. Stack check: 8 mm clearance
+    plus up to 3.5 mm thread engagement in the motor's flange plus ~1 mm
+    head recess totals 12.5 mm, matching the confirmed screw length —
+    self-consistent.
+    All affected comment blocks (bench pre-assembly steps, motor-mount
+    header, hardware BOM, post-print checks) updated to match. Re-rendered:
+    still a single manifold solid, no CGAL errors, at every stage of this
+    rework.
+
+    **2026-09-28 — access-direction flag RESOLVED, and the file's older
+    "nozzle-end access" wording was simply wrong, not just stale.** Owner
+    confirmed: forward/intake-face screwdriver access (as the corrected
+    countersink geometry above requires) has always been the standing
+    requirement — it's the only way to remove the rotor, which otherwise
+    covers these screws, on any assembly stage. What that does NOT mean is
+    that a technician reaches down the nacelle's OWN front air intake with
+    everything installed: this EDF2 spider/motor/rotor sits buried behind
+    EDF1 and the stator sleeve, so there is no in-situ path to it once the
+    nacelle is assembled. Field service means pulling the 3× M3×20 SHCS
+    retention screws and extracting the WHOLE aft spider sleeve out the
+    nacelle's AFT (nozzle) end first — already the documented installation
+    path in this file, just now explicitly tied to the reason it has to work
+    that way. Once extracted, the sleeve is serviced at the bench, where its
+    own forward/intake face is freely accessible. All affected comment
+    blocks (bench pre-assembly, motor-mount header, nacelle installation
+    sequence/retention summary, pocket-geometry comment) updated in
+    `edf_aft_spider_sleeve.scad`. Re-rendered: still a single manifold solid.
+
+    **Also captured this pass (informational, no geometry change):** the
+    rotor's spinner/retainer screw — previously just "one longer spinner
+    screw" in the REF-EDF-002 evidence note — is now specified as M1.5×11
+    round-head, 1.5 mm Allen (hex) drive, owner-measured off the physical
+    rotor. Also noted: the rotor is factory-balanced by drilling small holes
+    in its face (visible in `docs/img/20260923_065933.jpg`), so it is not an
+    azimuthally uniform disc — flagged in-file for any future rotor mass/CG
+    or vibration work, no action needed now.
+    The manufacturer datasheet (`docs/references/EDF Ducted Fan XFly Galaxy
+    X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html`) was
+    checked directly and confirms internal (bore) diameter = 50 mm (matches
+    `EDF_BORE_R = 25.0 mm`, already correct in both sleeve files — no change
+    needed) and motor shaft = 3 mm (matches `R_HUB_BORE = 2.0 mm`, 1 mm
+    diametric clearance — also already correct); it publishes external
+    diameter and bolt circle as "nc" (not confirmed by the manufacturer),
+    which is why this was a physical-caliper blocker rather than a datasheet
+    lookup in the first place.
 - [x] **ESC bay thermal path — SIZED 2026-09-06, and the sealed bay is dead.**
     `tools/nacelle_esc_thermal.py`, built for this. Load case from
     Open-Secure-ESC's own copper sizing (6 × 1.75 W FETs + 6.67 W phase pours at
@@ -1960,6 +2093,368 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     releasing flight geometry; the nominal 64 mm flow diameter is not a rotor
     clearance measurement. Preserve the nacelle axial stations and length
     unless the owner separately adjudicates a failed measured fit.
+    - [ ] **NAC-64-FIT-01 — U9 axial-fit gate FAILS on drawing values (2026-10-03,
+        Claude Opus 5.5).** `tools/nacelle_axial_fit.py` reads the stations from
+        the pod SCAD and lays two QF2822 stages from EDF1_Z_ENTRY 1.08 in (27.5 mm)
+        to NOZZLE_RING_Z 6.55 in (166.25 mm). The QF2822 body is 2.28 in (58.0 mm)
+        to its mount face (8-4.jpg) against about 1.06 in (27 mm) for the 50 mm
+        stack's 2627 motor, and it hangs aft of the mount. Margin is −0.30 in
+        (−7.7 mm) in the most favourable reading (stator front plate as the
+        mount, rotor hub = 10.7 mm shaft protrusion) and −1.35 in (−34.2 mm)
+        with the current separate 8 mm spiders. **STOP per plan Goal Capsule /
+        R11:** no 64 mm geometry (U3 resize, U4, U11) is released until the owner
+        adjudicates length, motor, or nozzle architecture. Dimensions stay
+        VERIFY until a physical unit is measured (U9 step 3).
+        **Owner adjudication — 2026-10-03 (Stab-Rabbit-coding):** stator-as-mount
+        plus a shorter intake. Each stage's stator front plate is the QF2822 mount
+        (no separate spider), and the intake bell is trimmed 0.31 in (8.0 mm), so
+        EDF1_Z_ENTRY becomes 0.77 in (19.5 mm). The gate (ADOPTED case) passes by
+        +0.01 in (+0.3 mm). That margin is too thin to release on drawing
+        values; NAC-64-FIT-02 must confirm it.
+    - [ ] **NAC-64-FIT-02 — measure a physical QF2822 and rotor.** Record rear-cap
+        to mount-face length, shaft protrusion, rotor hub axial length and the
+        bolt-circle datum; re-run `tools/nacelle_axial_fit.py` with the measured
+        values before any adjudication is finalised.
+    - [x] **NAC-64-GEOM-01 — motor mounts — BUILT 2026-10-04 (Claude Opus 5.5).**
+        `edf_motor_mount_64mm.scad`. Owner 2026-10-03: stage 1 is ONE PIECE with
+        the thrust tube (pod `edf1_nacelle_spider()` hook): QF2822 plate at
+        Z 42.2 (4 x M3 CSK on Ø16, front-access), 11 free-vortex cambered vanes
+        (Euler first pass, 12.0 deg at r_m — CFD/bench to confirm), hollow lead
+        vane at the ESC-1 bay azimuth + Ø5 cavity conduit to the bay. Rotor 1
+        services through the intake, motor 1 out AFT (can + removal path vs pod
+        0 mm3). Stage 2 is the rear-removable cartridge (Z 103.7–187.86, 57.7 g)
+        with its own lead vane and an axial lead-escape slot at the ESC-2 bay.
+        Sleeve-zone start moved 42.2 -> 103.7; 50 mm lead-exit slot and
+        retention bosses deleted at 64 mm. Rotating assembly 926 -> 900 g; CG
+        111.25 vs PIVOT_Z 109.7 — RE-CONVERGE after nozzle + servo (NAC-64-PIVOT-RC).
+        - [ ] **NAC-64-PIVOT-RC** — re-converge PIVOT_Z once nozzle, servo and
+            gateway are placed; re-render + re-bake both pods.
+        - [ ] **NAC-64-VANE-CFD** — confirm the 12 deg stator inlet angle (measured
+            loaded rpm / swirl survey), both stages.
+        - [ ] **NAC-64-LEAD-FOAM** — pour-foam plan must keep the stage-1 lead conduit open.
+    - [ ] **NAC-64-NOZ-01 — 64 mm iris nozzle (plan U11) — GEOMETRY BUILT 2026-10-04.**
+        `nacelle_nozzle_iris_64mm.scad` (include + radial-literal override; exit
+        24.0 / 33.6 mm; closed flap angle held at 16.96 deg; all 4 print parts
+        watertight single bodies). OPEN:
+    - [ ] **NAC-64-SERVO-01 — nozzle servo drive — DESIGNED + FIT-CLOSED 2026-10-04
+        (Claude Opus 5.5; owner decisions: servo in the canonical dorsal spine,
+        bellcrank, fixed shroud on the pod, slide-off nozzle module, KST X06,
+        "any height increase must be a resizing of the canonical dorsal shroud").**
+        Drive: KST X06 [REF-ACT-005] flat in the spine (shaft Z 144, az 280,
+        4 mm horn ±45°) -> link -> bellcrank on a radial Ø2 pin (az 266, Z 179,
+        r 42.7; arms 4.6/14) -> 18.7 mm rod -> ring ear ball. Single source
+        `tools/nozzle_servo_linkage_64.py` -> `nozzle_servo_linkage_64_params.scad`.
+        Ear 7.9 N stall / 3.7 N holding vs 2.0 N spring (flap allowance 1.7 N,
+        PENDING-U8). Shroud: `tools/dorsal_shroud_resize_64.py` — canonical
+        dorsal shroud ×1.45 in height, tail stretched 4.3× aft of Z 174 (crest
+        +2.02 mm), chosen by /ce-optimize run nds-1 (14 experiments). Fit
+        (manifold3d): drive inside OML 0, shroud vs housing 0, drive vs housing
+        0, ring vs linkage 0/0, stops engage, nozzle slide-off 0.
+        - [ ] **SERVO-01.a** — pod + nozzle + cover + bellcrank re-render, bake,
+            mass/CG (PIVOT_Z re-converge), census re-run.
+        - [ ] **SERVO-01.b** — verify KST X06 + BMS dims/torque on physical units
+            (REF-ACT-004/005 are secondary sources).
+        - [ ] **SERVO-01.c** — U8 bench: flap load at the ball <= 1.7 N, spring
+            cam-out with servo seized (KTD3 fail-open), refit with servo at open.
+        - [ ] **SERVO-01.d** — plan 2026-09-28-001 KTD2/KTD5/U4 text: record KST
+            X06, spine station and bellcrank (supersedes "forward of the ring").
+    - [x] **NAC-64-NOZ-RET — RESOLVED 2026-10-04:** nozzle is a slide-off module:
+        3 mm throat spigot in the sleeve bore, 2 key lugs (30/150), 2 captive M3
+        screws through the fixed shroud into housing bosses (az 302/316);
+        forward-open notch + axial-entry ball cup, so no linkage part is handled.
+    - [x] **NAC-64-NOZ-MOULD — RESOLVED 2026-10-04:** the step at the joint is
+        covered by the resized canonical dorsal shroud (owner rule); the lower
+        housing step remains a recorded deviation vs the boat-tail skin.
+    - [x] **NAC-64-NOZ-LINK — SUPERSEDED 2026-10-04** by
+        `tools/nozzle_servo_linkage_64.py` (64 mm drive, single source).
+    - [ ] **NAC-64-GW-V2 — dedicated nozzle-servo gateway per nacelle (owner
+        2026-10-03: "give the servos their own bus gateways instead of reusing
+        the tilt sensor ones" = plan D-NZ-1 -> V2).** Spec + board doc + tray
+        (plan U6), placement follows NAC-64-SERVO-01.
+    - [ ] **CENSUS-01 — first airframe joint census (2026-10-04,
+        plan 2026-10-03-002).** 38 placed parts, 703 pairs, 56 interfaces,
+        22 CLASH (to triage one by one in docs/AIRFRAME_JOINT_REGISTER.md).
+        Symmetry about the measured centre plane: wings SYNC (0.00); DESYNC:
+        tilt brackets 1.22 mm (= 2 x the cargo layout's X_CL -169.85 vs
+        measured -169.241), cargo doors 2.25 mm, stbd tilt worm/wheel/brake
+        guide ~90 mm (T5_STBD_DX copy misplaced — explains Tilt_Wheel_Stbd vs
+        Wing_Stbd 2788 mm3 with no port twin). Census must export a symmetric
+        tilt pose (assembly default is stbd 90 / port 0).
+    - [ ] **NAC-64-GEOM-02 — ESC cooling ports.** ESC_BLEED_Z now opens onto the
+        stator-sleeve wall, not the duct; add matching sleeve ports or move them.
+    - [ ] **NAC-64-GEOM-03 — ESC cover from the scaled skin.** `nacelle_esc_cover.scad`
+        still reads the unscaled grid; give it the RADIAL_K hook.
+    - [x] **NAC-64-GEOM-04 — hull-frame bake — DONE 2026-10-03 (Claude Opus 5.5).**
+        `tools/bake_hull_frame.py` 'Nacelle64_*' / 'Trunnion64_*' / 'TiltPinion64_*'
+        are DERIVED, one rule both sides: tilt axis = level spar line Y 21.000 /
+        Z 66.851; pod pad seat (local ±53.84) on each wing's measured pad face
+        (port +6.700 / stbd -345.182) -> Px +60.540 / -399.022, mirrored about the
+        measured centre plane -169.241 (bake verified mirror-exact). Staged by
+        `tools/prep_nacelle_64_bake.py`; `serenity_assembly.py` NACELLE_GEN = 64
+        (PIVOT_Z 109.7, NOZZLE_RING_Z 187.86, trunnion tilts, pinion wing-fixed;
+        50 mm sleeves/iris reported as COVERAGE GAPs). Re-sweep after the bake,
+        both sides, tilt -5..140: pinion/shaft vs pod/trunnion all 0 mm3.
+    - [x] **WING-T6-BORES — spar and shaft bores SLOPED (found by the joint
+        census work 2026-10-03, PRE-EXISTING; owner chose 1 deg dihedral).**
+        spar_bore() hulled root-midline to tip-midline discs: 1.458 mm slope vs a
+        straight Ø20 spar in a LEVEL socket with 0.2 mm/side clearance (could not
+        assemble); tilt_shaft_bore() sloped 2.66 mm (and so was not parallel to
+        the tilt axis). Fix: WING_DIHEDRAL = 1.45775 (= root - tip midline,
+        asserted), shaft bore level on the root datum (WING_SHAFT_Z 69.09),
+        spar_tip_y() now includes the dihedral (pad/pocket/jog were 1.46 mm low),
+        pad lobe C on the shaft. Re-baked wings: spar Z 66.840 / shaft 69.080
+        level both sides, walls >= 0.79 / 1.69 mm. Tip centre distance 25.698
+        (+0.098, ~0.07 mm backlash); pod relief/trunnion slot re-derived
+        (azimuth 5.0 deg). OPEN: nav and AK7455 conduits still camber-following
+        (flexible runs; walls to be confirmed by the census).
+    - [ ] **NAC-64-GEOM-05 — gates on the 64 mm pod.** Port `nacelle_trunnion_fit.py`,
+        `nacelle_esc_bay_fit.py` and `nacelle_mass_cg.py` (PIVOT_Z, plan U5) to
+        read the 64 mm wrapper; PIVOT_Z 107.5 is carried unchanged until then.
+    - [ ] **NAC-64-SVC-01 — install/remove path (owner requirement 2026-10-03:
+        motors, rotors, ESCs and harnesses must be installable and removable).**
+        Adopted path, analysed by Claude Opus 5.5: rotor 1 services through the
+        intake with nothing removed. Motors cannot leave forward (stator-as-mount
+        plate screws from the front, body hangs aft in the stator hub), so both
+        stages come out AFT as cartridges: remove the nozzle, pull the aft sleeve
+        (motor 2 + rotor 2), then the stator-1 sleeve (motor 1 + rotor 1). Rotor
+        tips (r ~31.6 mm, VERIFY) pass the 32 mm sleeve and nozzle-pocket bores.
+        Required features: (a) phase-lead bullet connectors inside the ESC bays,
+        unplugged through the hinged covers; (b) an axial lead-escape slot in the
+        bore (like the key slots) so the leads slide aft with their sleeve;
+        (c) motor-plate screws reachable with a 2.5 mm hex key from the intake
+        (stage 1) or the sleeve's forward face (stage 2). ESC covers and the
+        trunnion/disconnect-bay feed path are unchanged.
+    - [x] **NAC-64-MOTOR-HET — HET Typhoon EDF motors — REJECTED 2026-10-05 (owner;
+        analysis Claude Opus 5.5, aeronautical-engineering skill).** Evaluated 2W-25 fwd /
+        2W-30 aft, 2W-30 x2, 2W-25 x2, the linked 1W-35 (4000 KV, 5S — not a "2W-35"), and a
+        HET-matched rotor: no thrust gain over the QX QF2822 on 6S at equal current margin;
+        Ø4 shafts vs the QX 3 mm hub; no published bolt pattern [REF-EDF-004]. Stages stay
+        CO-ROTATING within each nacelle (port/stbd mirrored). Revisit only with 8S.
+    - [ ] **NAC-64-ESC-80A — 80 A Open-Secure-ESC builds (owner 2026-10-03,
+        Stab-Rabbit-coding: two 80 A 6S ESCs that fit against the 64 mm thrust
+        tube; supersedes NAC-64-ESC-70A, the earlier 70 A placeholder).** The
+        ESCs are Open-Secure-ESC builds, not purchased parts. Their other axes
+        are inherited from the 50 A family: 6S, CAN-FD + RS-485, Faraday,
+        sensorless FOC. The owner allows both the bay geometry and the ESC
+        topology to be restacked, and both are co-optimised (ce-optimize).
+        Mass rows in `tools/nacelle_mass_cg_64.py` stay at 42 g (0.093 lbm)
+        ASSUMED until a placed board is weighed. Feeds plan U10 (PDB, fusing,
+        conductors).
+        - [ ] **NAC-64-ESC-80A.a — variant A, all wires leave one end** (Open-
+            Secure-ESC "Same-end, opposite faces" egress row; that row is still
+            Open/unresolved and needs a stackup plus an inner-plane shield fix).
+        - [ ] **NAC-64-ESC-80A.b — variant B, phase leads leave the opposite
+            end from pack + signal** (the "Opposite-end" row, with the signal
+            connector moved to the pack end).
+        - [x] **NAC-64-ESC-80A.c — fit conflict to resolve** (RESOLVED by .i, 2026-10-03). The current bay
+            (23 + 10 mm = 0.91 + 0.39 in panels x 42 mm (1.65 in), 4.0 mm
+            (0.16 in) stack, mount radius 37.2 mm (1.46 in)) cannot take the
+            matrix's 80 A row (2 x IRFB4110 TO-220 per leg, 12 FETs; the
+            31.86 mm (1.25 in) creepage width from [9] Table 6). Candidate SMD
+            FET: Toshiba TPHR8504PL [Open-Secure-ESC REF 49], already owner-
+            selected for the 50 A family.
+        - [x] **NAC-64-ESC-80A.d — harness and metrics:** radial stack, panel
+            widths, bay length, nacelle mass/CG shift (PIVOT_Z re-iterate),
+            FET junction margin at 80 A, creepage, part count. Done 2026-10-03
+            by Claude Opus 5.5: `tools/esc80_cooptimize.py` (ray-cast 64 mm
+            skin, area model from the as-placed 50 A board, lane thermal),
+            design point `tools/esc80_design.json`.
+        - [x] **NAC-64-ESC-80A.g — co-optimisation result (SUPERSEDED by .i): was SHORT by 0.26 in
+            (6.5 mm).** 20 experiments took the margin from −7.84 in (−199 mm)
+            to −0.26 in: the ESC needs 2.38 in (60.5 mm) and the bay gives
+            2.13 in (54 mm), Z 103–157 at az 72/252. Best point: 23 + 12 mm
+            panels, 2 x TPHR8504PL per leg, duct-side face ≤ 1.1 mm parts,
+            1.5 mm cover (structural VERIFY), packing 0.60, T_ch 120 °C (limit
+            125), hover slack +3.3 mm. The power panel is binding. Owner
+            decisions needed to close it: (1) two bays per ESC (declined for
+            pre-approval), (2) a smaller sourced Faraday frame than WE-SHC
+            3670209 (388 mm² courtyard), (3) a harness revision for an
+            in-layout cooling lane. Lessons:
+            `docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md`.
+        - [x] **NAC-64-ESC-80A.i — FIT CLOSED at screening level (2026-10-03,
+            Claude Opus 5.5; owner approved two bays/ESC, smaller shield,
+            in-layout lane, longer bay; packing 0.75 both faces with pours and
+            thermal vias; harness loops).** Harness model 2
+            (`tools/esc80_cooptimize.py`, point `tools/esc80_design_m2.json`):
+            each ESC spans TWO neighbouring hinged bays (power bay + logic bay),
+            23 + 16 mm panels. Margins: variant A (all leads fwd) +0.13 in
+            (+3.2 mm) at az 232/302, Z 107–154; variant B (phases aft)
+            +0.12 in (+2.96 mm) at az 38/106, Z 96–148. T_ch 72 °C (limit
+            125), hover slack +0.11 in (+2.7 mm), CG +1.7 mm aft. Findings:
+            both bay ends are SKIN-limited (no other system in the way); the
+            forward limit is the fixed Z 70.06 bulkhead aft face (disconnect bay
+            beyond, not entered); harness loops at 3 x OD minimum
+            [REF-NASA-001 Table 7-1] live in the skin-thin rings beyond the
+            board where possible. Rejected: WE-SHC 3670110 (2.8 mm ref breaks
+            the 2.0 mm power-bay cap), 4 mm in-layout lane (T_ch 379 °C).
+        - [ ] **NAC-64-ESC-80A.j — open items behind that result:** (1) re-site
+            the bay-tied webs (Z 74.35 / 139.85) and the cooling ports to the
+            four new bays; (2) 1210 bulk caps sourced ≤ 2.0 mm tall (power-bay
+            cap); (3) phase/pack/signal lead ODs and bullet length measured
+            (VERIFY); (4) pour widths re-derived with conductor_sizing.py at
+            80 A (pour area is an ESTIMATE); (5) inter-bay interconnect part;
+            (6) place the boards in KiCad (facet_placement.py) to confirm the
+            0.75 packing; (7) PIVOT_Z re-iteration for the CG shift; (8) variant
+            A's forward power-panel end tapers to 0.77 in (19.57 mm) against a
+            0.76 in (19.4 mm) pack terminal row — 0.2 mm egress margin, confirm
+            in placement. Review 2026-10-03 (ce-code-review) moved thermal to
+            per-ESC fitted area: T_ch 76.6 °C (hotter ESC, B), still ≤ 125.
+        - [ ] **NAC-64-ESC-80A.k — RE-OPENED 2026-10-04: the dorsal nozzle servo
+            and shroud took variant A's space (Claude Opus 5.5).** The owner's
+            spine servo (`nacelle_nozzle_servo_64mm.scad`, pocket az 250–292,
+            Z 138–187, starboard frame) and the resized dorsal shroud
+            (`tools/dorsal_shroud_resize_64.py`, solid to r 34.9 over az
+            226–314 from Z 100) occupy the sector where variant A's two bays sat
+            (az 232/302, Z 107–154). Both pods are affected (the sector is
+            symmetric about 270). `esc80_cooptimize.py` now carries this as a
+            default keep-out; the 2026-10-03 best point no longer passes.
+            Measured, not blanket: the trunnion/disconnect/nav exclusions were
+            replaced by Z-limited keep-outs, but the inboard skin (146–240) is
+            too thin for a bay at any Z. **Usable annulus per pod is now ONE
+            sector, az 30–114 (port frame), runs 40–70 mm (Z ≈ 84–155)** — room
+            for one hinged bay pair; two 80 A ESCs need four. Owner decision
+            required (options in the 2026-10-04 session report).
+            **Follow-up, same day (owner: Z buffer for unfinished linkage; weigh
+            CG and an ESC forward of the pivot).** Servo/linkage keep-out widened
+            to az 244–298 from **Z 128** (pocket 138, minus a 10 mm buffer) to the
+            nozzle. Shroud surface merged from `nacelle_dorsal_shroud_64_gen.scad`
+            (option `shroud_scad`). The shroud only rises from Z 120, so bays under
+            it run Z ~96–128 (24–32 mm). Best case, 23 + 12 mm panels, two bays
+            per ESC: one ESC fits at +0.55 mm (az 38/98, Z 106–156, centre 124.6);
+            the second, under the shroud, is −24.5 mm. **Forward of Z ~85 no bay fits
+            at any width** — skin r 42–45.6 mm against the ~46 mm a hinged board at
+            r 37.2 needs — so no in-pod ESC can be centred forward of the 109.7 mm
+            pivot. CG (rotating assembly, ESC 52.2 g ESTIMATE): both in pod
+            +1.10 mm; one in pod / one off +1.09 mm; both off-pod +0.23 mm; a
+            hypothetical ESC at Z 90 would balance the servo (−0.06 mm), but there
+            is no room for it.
+        - [ ] **NAC-64-ESC-80A.m — 70 A is sufficient (2026-10-05, Claude Opus
+            5.5; owner requirement 2135 gf per fan).** REF-EDF-003 2400 KV row: 22.2
+            V, 57.0 A, 1265.4 W, 2135 g. Static fan laws (T ∝ n², P ∝ n³; aero
+            skill propulsion §2): 2135 gf needs the same n and ≈ the same 1265 W
+            at any pack voltage, so I = 1265/V. That is 57.0 A at 22.2 V nominal
+            and 50.2 A at 25.2 V full. Below 22.2 V full throttle cannot reach
+            2135 gf, so 57 A is the requirement's ceiling. An uncapped full
+            throttle on a full pack would draw 57 × (25.2/22.2)² ≈ 73 A (≈2750 gf,
+            more than needed): that is the case behind the 80 A figure, which is
+            also the 2300 KV sheet's recommendation for a different winding.
+            **Decision basis: 70 A continuous rating with a 70 A firmware current
+            limit** (INA240 sense chain). 70/57 = 1.23 margin at the requirement.
+            The 60 A suggestion leaves 5 % and is overrun on a fresh pack.
+            One 0.5 mΩ shunt per phase now suffices (2.45 W < WSLP2512 3 W).
+            **Fit at 70 A**, with the servo keep-out and Z buffer: unscaled pod,
+            one ESC +9.4 mm, the other −15 to −20 mm. **Uniform enlargement
+            (owner-authorised): s = 1.06 (P64_K 1.21→1.283, P64_A 1.13→1.198;
+            duct, lip internal geometry and mount radius unchanged) passes:**
+            20 + 14 mm panels, two bays per ESC, A +12.96 mm (az 324/258), B
+            +18.1 mm (az 80/22), T_ch ≤ 65.6 °C, egress OK. s < 1.06 fails. The
+            logic bays at az 258/264 need the dorsal shroud's solid fill pocketed
+            forward of the servo buffer. HOLD on applying s to the pod:
+            `nozzle_servo_linkage_64.py` (Z_NOZ 187.86 and the servo stations),
+            `nacelle_mass_cg_64.py` (K/A) and the shroud generator are absolute
+            and in active work. The CG shown by the harness for scaled pods is not
+            valid until `nacelle_mass_cg_64.py` is re-run on a re-rendered pod.
+        - [ ] **NAC-64-ESC-80A.l — existing pod conflict, independent of the 80 A
+            boards:** `nacelle_pod_64mm_tandem.scad` still cuts an ESC bay at
+            `ESC_BAY_AZ` 248 (port 292) and the stage-2 motor-lead slot at az
+            248, Z 119→nozzle ring. Both lie inside the new dorsal shroud, and the
+            slot runs along the edge of the servo pocket (250–292). Re-site
+            both when the ESC location is decided.
+        - [ ] **NAC-64-ESC-80A.h — Open-Secure-ESC follow-ups found:** the 50 A
+            faceted PCB carries an LQFP-64 MCU while the schematic is RHB
+            VQFN-32; the decision-matrix Amperage sheet still lists IRFB4110
+            TO-220 although every build uses TPHR8504PL [OSE 49].
+        - [ ] **NAC-64-ESC-80A.e — re-run `tools/nacelle_esc_bay_fit.py` and the
+            cooling ports (NAC-64-GEOM-02)** against the chosen bay.
+        - [x] **NAC-64-ESC-80A.f — record lessons learned** (ce-compound): `docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md`.
+    - [x] **NAC-64-PROP-01 — proportions optimised (owner 2026-10-03: "minimum
+        radial scale, lengthen to canon at that diameter, optimised for
+        aerodynamics, thrust, weight and canonical shape").** Done by Claude Opus
+        5.5, `tools/nacelle_64_proportion_trade.py`, re-calibrated on the
+        rendered pod: radial 1.21 (packaging minimum), canonical axial stretch
+        1.13 -> L 8.24 in (209.3 mm). Canon L/D re-measured on QMx Sheets 3/4
+        [REF-CAD-003]: 2.24 plan / 2.31 side; the pod is 2.29 / 2.08 (the 50 mm
+        pod was 2.46 / 2.22 — skinny in plan, as the owner saw; the 1.28 x 185.2
+        mm pod was 1.92 / 1.74). Hover clearance on the 3.0 in gear is held at
+        >= 0.5 in (12.7 mm), a floor Claude chose — owner may revise.
+        Supersedes the 1.28 radial / fixed-length decision of 2026-10-03.
+    - [x] **NAC-64-LIP-01 — rounded intake lip as a proper aerodynamic design
+        (owner 2026-10-03).** CFD-selected (`tools/nacelle_intake_cfd.py`, real
+        external forebody, hover): 2:1 internal ellipse 16 x 8 mm (contraction
+        ratio 1.56), external ellipse with the same 4.0 mm nose radius, ring to
+        42.5 mm, straight 64 mm duct to the rotor at Z 30.5 (no tip-gap growth).
+        Eight variants run; this is the only one with no reversed flow and
+        <= 4.2 % rotor-face loss at r/R 0.95. Lip ring hollowed and vented.
+    - [ ] **NAC-64-LIP-02 — confirm the lip on a bench.** Static thrust and inlet
+        wall-pressure taps on a printed lip + duct section with a QX rotor,
+        against the CFD trend (plan U12). Also run a cruise-condition CFD case
+        (spillage drag of the 42.5 mm ring).
+    - [ ] **NAC-64-TILT-01 — tilt-axis inertia and trunnion loads (owner
+        2026-10-03: "recalculate the moments of inertia for the larger nacelles
+        ... the trunnion, bearings, gears, driveshaft and tilt servos will have
+        to take the load").** `tools/nacelle_tilt_dynamics.py` (Claude Opus
+        5.5): rigid-body I_tilt 2.73e-3 kg.m^2 (9.34 lbm.in^2), x2.02 the 50 mm
+        pod; the old 7.19e-4 point-mass figure (TILT_SPAR_ANALYSIS §2.1.2)
+        understated even the 50 mm pod ~1.9x. At the built drive's envelope
+        (144 deg/s, 52.6 rad/s^2, x1.5 ultimate): drive margin 8.4x, 50T m0.8 tip
+        ring Lewis FOS 12, Ø4 shaft 5.1 MPa — all pass. **Trunnion bearings are
+        the critical item:** thrust moment (2.22 N.m ult; thrust x2, arm +7.14 mm)
+        plus gyroscopic moment (0.39 N.m ult; two co-rotating rotors, 0.104
+        N.m.s) across the 4.0 mm 6704ZZ span = **653 N (147 lbf) per bearing = 89 % of
+        C0 730 N (JTEKT 6704-ZZ, REF-BRG-001), static safety factor 1.12** at
+        ultimate (50 mm pod: 42 %, s0 2.40). The ~907 N "static rating" implied by
+        WING_ATTACH §4.3a is a DYNAMIC rating — corrected there. Actions:
+        Actions, worked 2026-10-03 (owner: "build in the properly sized bearings and
+        implement all four items"):
+        (a) DONE — C0 0.730 kN confirmed on JTEKT's own 6704 ZZ page (REF-BRG-001);
+            minimum fs 1.0 for an oscillating bearing with impact, from JTEKT CAT.
+            B2001E Table 5-10 (REF-BRG-003); design target fs >= 2 at ultimate.
+        (b) BOUNDED, not measurable here — no QX rotor mass is published (owner
+            supplied qx-motor.co/product/2365; its sheet gives motor 140 g and the
+            97.5 mm outline only). With the 6804 pair the gyroscopic term is ~56 N of
+            ~487 N per bearing, so doubling the ASSUMED spin momentum still leaves
+            fs ~4.5. Weigh/tach a rotor at first article (NAC-64-FIT-02).
+        (c) 3-D crossflow CFD, `tools/nacelle_crossflow_cfd.py` — see NAC-64-TILT-02.
+        (d) DONE — owner chose a longer stub + thicker pylon-side joint: spar stub
+            +7.0 mm (SPAR_TIP_PROTRUSION_64N 20.5), 2 x 6804-ZZ (C0 2.45 kN,
+            REF-BRG-002) in `nacelle_trunnion_64mm.scad`: fs 5.0 at ultimate
+            (aero bound included). The 1 mm flange base (outer-race stop + magnet
+            floor + barrel-to-flange joint) is why +7, not +6. Nacelle +33 g,
+            PIVOT_Z unchanged at 109.7 mm. Wing pinion/shaft unmoved.
+        **Found in the 50 mm trunnion (not repaired, superseded part):** its
+        barrel-to-flange load path runs through the bonded ring magnet (mesh slice at
+        z 8.5 shows only a 0.9 mm ring inside the magnet bore), and its flange plate
+        reaches the wing pad face with no running clearance.
+    - [x] **NAC-64-TILT-03 — tilt tip stage has no clearance through the pod — RESOLVED
+        2026-10-03 (Claude Opus 5.5): owner chose option A (m0.8, 10.5 mm face) +
+        relief 1. Pod `tilt_drive_relief()` cuts the swept pinion/shaft envelope
+        (part-frame arc -7.2..149.8 deg); trunnion gets a shaft arc slot; collar
+        inserts re-patterned about the SPAR axis at 175/255/335 deg; nav port moved
+        to 210 deg, outside the sweep. Re-sweep (tilt -5..140, +theta sign
+        corrected): pinion/pod 0, shaft/pod 0, shaft/trunnion 0 mm3; pinion/ring
+        35-40 mm3 steady = tooth engagement (root cylinder vs trunnion 0). CG
+        re-converged 109.67 vs PIVOT_Z 109.7. Wing pinion: now a released part,
+        `airframe/openscad/wings/wing_tilt_pinion.scad` (BRASS, 10.5 mm face,
+        ISO 8752 Ø1.5x8 spring pin; printed would be FOS 2.86 at Lewis Y 0.277);
+        real-tooth roll vs the ring 0.03-0.06 mm3 over the sweep, pod 0.
+        BOM PINION-TILT-14T + PIN-SPRING-1.5X8; wing stick-out 17.5 mm
+        (TILT_SHAFT_STICKOUT_64N, one value both wings). Images:
+        docs/images/nacelle_64mm_tilt_joint_optionA{,_cutaway}.png.
+        Original finding:
+        (found 2026-10-03, Claude Opus 5.5; PRE-EXISTING in the 50 mm joint).**
+        `nacelle_tilt_joint_context.scad` places the real wing (spar bore and
+        Ø4.4 shaft bore measured on the mesh: shaft 25.6 mm aft, 1.7 mm up of the
+        spar axis) against the 64 mm pod and trunnion; a manifold3d sweep over
+        tilt -5..140 deg finds, worst case: wing-fixed 14T pinion vs pod
+        474-1127 mm3 (every gear variant; clear only near 85-115 deg), Ø4 drive
+        shaft vs the trunnion flange 28 mm3 and vs the pod collar 18 mm3 (all
+        m0.8 variants). The 50 mm joint as rendered from source: pinion/pod
+        581, shaft/collar 42, shaft/flange 9 mm3. `tools/nacelle_trunnion_fit.py`
+        checks module, ratio and centre distance but never the pinion's orbit.
+        Tip-gear variant B (m1.0, CD 32) clears flange and collar but its shaft
+        at chord station 60.0 runs into the wing root tenon (58.5). Needs an
+        owner decision on the relief geometry before any variant is built
+        (image: docs/images/nacelle_64mm_tilt_joint_in_position.png).
 - [x] **LG-HOVER-01 — hover ground clearance — RESOLVED 2026-08-29.** Closed by
     NAC-MOULD-01 + the station/pivot move: **+9.8 mm on the existing 1.5 in
     gear**, owner-accepted. No landing-gear change is forced; the 3.0 in variant

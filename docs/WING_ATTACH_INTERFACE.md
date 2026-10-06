@@ -381,7 +381,10 @@ RISK-4) and which a plain bushing in the inboard position would not have given.
 **What the shorter stack costs, stated rather than buried.** Bearing centres are
 4.0 mm apart. Nacelle thrust (21.9 N static, 32.8 N at ×1.5 ultimate) acts along
 the duct axis ~31 mm off the trunnion, so the joint carries a 1.02 N·m ultimate
-moment and each bearing sees 254 N — 28 % of a 6704's static rating, and 2.4 MPa
+moment and each bearing sees 254 N — 28 % of a 6704's static rating [**corrected
+2026-10-03: 35 % — the sourced static rating C0 is 730 N (JTEKT 6704-ZZ,
+REF-BRG-001); the ~907 N this sentence implied is a dynamic rating. The 64 mm
+nacelle loads it to 89 %: airframe/wings-nacelles/WBS.md NAC-64-TILT-01**], and 2.4 MPa
 on the printed Ø27 seat. Both pass. But the **span**, not the rating, is the
 governing number, and it is a direct consequence of the duct bound. Angular play
 from bearing internal clearance is ≈ 0.25°; because the AK7455 reads the

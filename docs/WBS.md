@@ -44,6 +44,10 @@
 
 *(root `WBS.md` §0.5)*
 
+    - [ ] **REF-STD-PIN-001 (ISO 8752:2009) and REF-STD-GEAR-002 Table 14-2**
+    (added 2026-10-03, Claude Opus 5.5): confirm the iso.org catalogue URL
+    (bot-blocked from this session), the Ø1.5 pin hole tolerance, and the
+    Shigley Table 14-2 number/values against physical copies.
     - [ ] `build_guide_18_first_flight.svg`'s Part 107/VLOS warning callouts (lines ~59–60)
     need citations but their fixed-width boxes are already near-full; requires either a
     layout change or rendering verification (see `/verify` skill) before editing text length.

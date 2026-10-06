@@ -35,7 +35,7 @@ tags:
 
 > **Correction 2026-10-05.** The rail geometry below (rail centre-line 2.565 mm from the edge,
 > "Samtec SSM-DV fails") came from the generators' unsourced rail rows. The PocketBeagle 2 System
-> Reference Manual (REF-SENSOR-022, Fig. 3.45) puts each rail centre-line 4.80 mm inside its long
+> Reference Manual (REF-SENSOR-041, Fig. 3.45) puts each rail centre-line 4.80 mm inside its long
 > edge; at that position SSM-DV's outer pad edge (3.94 mm) is ~0.86 mm inside the board and TACCO
 > now uses SSM-118-L-DV-LC rails (avionics/WBS.md, PB2 rail geometry correction, R3). The
 > connector-family findings (pads over THT rail pads, overhang screen) still hold for THT rails.

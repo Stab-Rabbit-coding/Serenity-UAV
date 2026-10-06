@@ -334,6 +334,13 @@ release and requires a new owner-approved mass or propulsion decision.
   thrust-tube flow diameter, and four M3 mounting holes on a 16 mm bolt circle at each motor
   spider. The supplied 41.53 mm EDF dimension and motor protrusion must be datum-checked before the
   axial stack is frozen.
+    - **Alternative REJECTED 2026-10-05 (owner):** HET Typhoon EDF 2W-25 / 2W-30 (and the linked
+    1W-35) in place of the QX QF2822 [REF-EDF-004]. On 6S with the QX rotor they give no thrust
+    gain at equal current margin (2W-25 0.94x, 2W-30 ~0.86x; a mixed set +7 % only above the
+    2W-25 rating), have Ø4 shafts and no published bolt pattern. QX QF2822 retained; stages
+    co-rotate within each nacelle, port/starboard mirrored (in-nacelle counter-rotation brings
+    no torque or aerodynamic gain with stators on both stages, needs an unconfirmed CCW QX
+    rotor, and only removes a ~0.5 N·m differential-tilt gyro coupling the FCS can reject).
 - **KTD10 — Size power hardware from verified loads, not placeholder ratings.** The supplied
   sheet's 57 A per EDF and 60 A ESC recommendation are screening inputs only. Do not freeze an
   80 A ESC, fuse, conductor, connector, shunt or battery rating until continuous/transient duty,

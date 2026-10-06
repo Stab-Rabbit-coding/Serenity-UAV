@@ -32,14 +32,16 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-FCC-002: 47 CFR Part 15 Subpart E — Unlicensed National Information Infrastructure Devices (UNII)](#ref-fcc-002-47-cfr-part-15-subpart-e--unlicensed-national-information-infrastructure-devices-unii)
     - [REF-FCC-003: 47 CFR Part 15 §15.235 — Operation Within the Band 49.82–49.90 MHz](#ref-fcc-003-47-cfr-part-15-15235--operation-within-the-band-49824990-mhz)
     - [REF-FCC-004: 47 CFR Part 95 Subpart C — Radio Control Radio Service (RCRS) — Evaluated and Rejected for Commo's 49 MHz Link](#ref-fcc-004-47-cfr-part-95-subpart-c--radio-control-radio-service-rcrs--evaluated-and-rejected-for-commos-49-mhz-link)
+    - [REF-FCC-005: 47 CFR Part 15 Subpart B — Unintentional Radiators](#ref-fcc-005-47-cfr-part-15-subpart-b--unintentional-radiators)
 - [Part III — NIST Security Standards](#part-iii--nist-security-standards)
     - [REF-NIST-001: NIST SP 800-207 — Zero Trust Architecture](#ref-nist-001-nist-sp-800-207--zero-trust-architecture)
     - [REF-NIST-002: NIST SP 800-82 Rev 3 — Guide to Operational Technology (OT) Security](#ref-nist-002-nist-sp-800-82-rev-3--guide-to-operational-technology-ot-security)
     - [REF-NIST-003: NIST SP 800-160 Vol 1 Rev 1 — Engineering Trustworthy Secure Systems](#ref-nist-003-nist-sp-800-160-vol-1-rev-1--engineering-trustworthy-secure-systems)
     - [REF-NIST-004: NIST SP 800-92 — Guide to Computer Security Log Management](#ref-nist-004-nist-sp-800-92--guide-to-computer-security-log-management)
-- [Part IV — Defense Standards](#part-iv--defense-standards)
+- [Part IV — Defense and Government-Agency Standards (DoD, NASA)](#part-iv--defense-and-government-agency-standards-dod-nasa)
     - [REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus](#ref-mil-001-mil-std-1553c--digital-time-division-commandresponse-multiplex-data-bus)
     - [REF-MIL-002: MIL-STD-461G — Requirements for the Control of Electromagnetic Interference Characteristics of Subsystems and Equipment](#ref-mil-002-mil-std-461g--requirements-for-the-control-of-electromagnetic-interference-characteristics-of-subsystems-and-equipment)
+    - [REF-NASA-001: NASA-STD-8739.4A — Workmanship Standard for Crimping, Interconnecting Cables, Harnesses, and Wiring](#ref-nasa-001-nasa-std-87394a--workmanship-standard-for-crimping-interconnecting-cables-harnesses-and-wiring)
 - [Part V — International Standards (ISO, IEC)](#part-v--international-standards-iso-iec)
     - [REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling](#ref-iso-001-iso-11898-12015--road-vehicles--controller-area-network-can--part-1-data-link-layer-and-physical-signalling)
     - [REF-IEC-001: IEC 62368-1 Ed. 3.0 — Audio/Video, Information and Communication Technology Equipment — Part 1: Safety Requirements](#ref-iec-001-iec-62368-1-ed-30--audiovideo-information-and-communication-technology-equipment--part-1-safety-requirements)
@@ -48,6 +50,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-IEC-004: IEC 61000-4-4:2012 — Electromagnetic Compatibility (EMC) — Testing and Measurement Techniques — Electrical Fast Transient/Burst (EFT/Burst) Immunity Test](#ref-iec-004-iec-61000-4-42012--electromagnetic-compatibility-emc--testing-and-measurement-techniques--electrical-fast-transientburst-eftburst-immunity-test)
     - [REF-IEC-005: IEC 61000-4-5:2014+AMD1:2017 — Electromagnetic Compatibility (EMC) — Testing and Measurement Techniques — Surge Immunity Test](#ref-iec-005-iec-61000-4-52014amd12017--electromagnetic-compatibility-emc--testing-and-measurement-techniques--surge-immunity-test)
     - [REF-VDE-001: VDE V 0884-11:2017-01 — Optocouplers for Use in Electrical Equipment — Test and Measurement Methods](#ref-vde-001-vde-v-0884-112017-01--optocouplers-for-use-in-electrical-equipment--test-and-measurement-methods)
+    - [REF-CISPR-001: CISPR 32:2015 — Electromagnetic Compatibility of Multimedia Equipment — Emission Requirements](#ref-cispr-001-cispr-322015--electromagnetic-compatibility-of-multimedia-equipment--emission-requirements)
 - [Part V-A — IPC PCB Design Standards](#part-va--ipc-pcb-design-standards)
     - [REF-IPC-001: IPC-2221 — Design Guidelines for Printed Board Layout (PCB Design Fundamentals)](#ref-ipc-001-ipc-2221--design-guidelines-for-printed-board-layout-pcb-design-fundamentals)
     - [REF-IPC-002: IPC-A-600 — Acceptability of Printed Boards](#ref-ipc-002-ipc-a-600--acceptability-of-printed-boards)
@@ -62,11 +65,15 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
 - [Part IX — Protocol References](#part-ix--protocol-references)
     - [REF-PROTO-001: AX.25 Link Access Protocol for Amateur Packet Radio](#ref-proto-001-ax25-link-access-protocol-for-amateur-packet-radio)
     - [REF-PROTO-002: MAVLink v2 Protocol Specification](#ref-proto-002-mavlink-v2-protocol-specification)
+    - [REF-WGS84-001: NGA.STND.0036 — World Geodetic System 1984 (WGS 84)](#ref-wgs84-001-ngastnd0036--world-geodetic-system-1984-wgs-84)
+    - [REF-HAVERSINE-001: Sinnott, R.W. (1984) — "Virtues of the Haversine," Sky \& Telescope, vol. 68, no. 2, p. 159](#ref-haversine-001-sinnott-rw-1984--virtues-of-the-haversine-sky--telescope-vol-68-no-2-p-159)
 - [Part X — AUVSI, ASTM F38, and Industry Frameworks](#part-x--auvsi-astm-f38-and-industry-frameworks)
     - [REF-AUVSI-001: AUVSI Trusted Operator Program (TOP) and XCELLENCE Safety Standards](#ref-auvsi-001-auvsi-trusted-operator-program-top-and-xcellence-safety-standards)
     - [REF-ASTM-001: ASTM F2910-22 — Design and Construction of a Small Unmanned Aircraft System (sUAS)](#ref-astm-001-astm-f2910-22--design-and-construction-of-a-small-unmanned-aircraft-system-suas)
     - [REF-ASTM-002: ASTM F3005-22 — Batteries for Use in Small Unmanned Aircraft Systems (sUAS)](#ref-astm-002-astm-f3005-22--batteries-for-use-in-small-unmanned-aircraft-systems-suas)
     - [REF-ASTM-003: ASTM F3269-21 — Methods to Safely Bound Behavior of Aircraft Systems Containing Complex Functions Using runtime assurance](#ref-astm-003-astm-f3269-21--methods-to-safely-bound-behavior-of-aircraft-systems-containing-complex-functions-using-runtime-assurance)
+- [Part X-A — Material Allowables and Property Data (Academic / Test Sources)](#part-x-a--material-allowables-and-property-data-academic--test-sources)
+    - [REF-AMS-001: SAE AMS2301 — Steel Cleanliness, Aircraft Quality, Magnetic Particle Inspection Procedure](#ref-ams-001-sae-ams2301--steel-cleanliness-aircraft-quality-magnetic-particle-inspection-procedure)
 - [Part XI — FDA / CDRH Laser Product Regulations](#part-xi--fda--cdrh-laser-product-regulations)
     - [REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products](#ref-fda-001-21-cfr-part-1040--performance-standards-for-light-emitting-products)
 - [Part XII — Sensor and Component Specifications](#part-xii--sensor-and-component-specifications)
@@ -74,6 +81,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-002: Benewake TFmini-S — Long-Range Time-of-Flight Ranging Module Specification](#ref-sensor-002-benewake-tfmini-s--long-range-time-of-flight-ranging-module-specification)
     - [REF-SENSOR-003: TI AM62Ax Sitara Processors — Vision SoC Datasheet](#ref-sensor-003-ti-am62ax-sitara-processors--vision-soc-datasheet)
     - [REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface (SUPERSEDED)](#ref-sensor-004-ti-mspm0g3507--mixed-signal-mcu-with-can-fd-interface-superseded)
+    - [REF-SENSOR-007: STMicroelectronics VL53L5CX — Time-of-Flight 8x8 Multizone Ranging Sensor data sheet](#ref-sensor-007-stmicroelectronics-vl53l5cx--time-of-flight-8x8-multizone-ranging-sensor-data-sheet)
     - [REF-SENSOR-017: TI MSPM0G351x-Q1 — Automotive Mixed-Signal MCU with CAN-FD](#ref-sensor-017-ti-mspm0g351x-q1--automotive-mixed-signal-mcu-with-can-fd)
     - [REF-SENSOR-018: TI MSPM0 G-Series Design and Support Literature](#ref-sensor-018-ti-mspm0-g-series-design-and-support-literature)
     - [REF-SEC-002: Infineon OPTIGA TPM SLB 9672 — SPI TPM 2.0](#ref-sec-002-infineon-optiga-tpm-slb-9672--spi-tpm-20)
@@ -95,12 +103,35 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-019: SMB Bearings F688ZZ — 8x16x5 mm Flanged Miniature Radial Ball Bearing (wing-root tilt-spar bearing)](#ref-sensor-019-smb-bearings-f688zz--8x16x5-mm-flanged-miniature-radial-ball-bearing-wing-root-tilt-spar-bearing)
     - [REF-SENSOR-020: TI DP83825I — Low-Power 10/100 Mbps Ethernet PHY with RMII (Leader/Follower)](#ref-sensor-020-ti-dp83825i--low-power-10100-mbps-ethernet-phy-with-rmii-leaderfollower)
     - [REF-SENSOR-021: BeagleBoard.org PocketBeagle 2 — Schematic and SysConfig (P1/P2 expansion header map)](#ref-sensor-021-beagleboardorg-pocketbeagle-2--schematic-and-sysconfig-p1p2-expansion-header-map)
-    - [REF-SENSOR-022: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)](#ref-sensor-022-beagleboardorg-pocketbeagle-2--system-reference-manual-mechanical-board-and-header-dimensions)
-    - [REF-SENSOR-023: Samtec SSM / SSW / TSW — .100 in socket and terminal strips (footprint, drawing, qualification)](#ref-sensor-023-samtec-ssm--ssw--tsw--100-in-socket-and-terminal-strips-footprint-drawing-qualification)
+    - [REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6](#ref-sensor-022-tdk-invensense-icm-42688-p--6-axis-imu-data-sheet-ds-000347-v16)
+    - [REF-SENSOR-023: Bosch Sensortec BMP388 — barometric pressure sensor data sheet BST-BMP388-DS001](#ref-sensor-023-bosch-sensortec-bmp388--barometric-pressure-sensor-data-sheet-bst-bmp388-ds001)
+    - [REF-SENSOR-025: Premier Magnetics PM-DB2791S — MIL-STD-1553 SMD data-bus transformer](#ref-sensor-025-premier-magnetics-pm-db2791s--mil-std-1553-smd-data-bus-transformer)
+    - [REF-SENSOR-026: Bourns SRF2012A — SMD common-mode choke data sheet](#ref-sensor-026-bourns-srf2012a--smd-common-mode-choke-data-sheet)
+    - [REF-SENSOR-027: u-blox MAX-M10S — GNSS module data sheet UBX-20035208](#ref-sensor-027-u-blox-max-m10s--gnss-module-data-sheet-ubx-20035208)
+    - [REF-SENSOR-028: Würth Elektronik 749010012A — WE-LAN 10/100BASE-TX SMT transformer, data sheet rev 004.000 (2024-04-11)](#ref-sensor-028-würth-elektronik-749010012a--we-lan-10100base-tx-smt-transformer-data-sheet-rev-004000-2024-04-11)
+    - [REF-SENSOR-029: Texas Instruments DP83825I — low-power 10/100 Ethernet PHY data sheet](#ref-sensor-029-texas-instruments-dp83825i--low-power-10100-ethernet-phy-data-sheet)
+    - [REF-SENSOR-030: Holt Integrated Circuits HI-1573/HI-1574 — 3.3 V MIL-STD-1553 dual transceiver, DS1573 Rev U](#ref-sensor-030-holt-integrated-circuits-hi-1573hi-1574--33-v-mil-std-1553-dual-transceiver-ds1573-rev-u)
+    - [REF-SENSOR-033: Winbond W25Q128JV — 128 Mbit serial NOR flash data sheet](#ref-sensor-033-winbond-w25q128jv--128-mbit-serial-nor-flash-data-sheet)
+    - [REF-SENSOR-037: Microchip (Atmel) ATF16V8BQL — programmable logic device data sheet](#ref-sensor-037-microchip-atmel-atf16v8bql--programmable-logic-device-data-sheet)
+    - [REF-SENSOR-039: Texas Instruments INA226 — current/power monitor data sheet](#ref-sensor-039-texas-instruments-ina226--currentpower-monitor-data-sheet)
+    - [REF-SENSOR-038: Nexperia PRTR5V0U2X — dual-line ESD protection product data sheet](#ref-sensor-038-nexperia-prtr5v0u2x--dual-line-esd-protection-product-data-sheet)
+    - [REF-SENSOR-040: Texas Instruments BQ76930 — 6-10 cell battery monitor AFE data sheet](#ref-sensor-040-texas-instruments-bq76930--6-10-cell-battery-monitor-afe-data-sheet)
+- [Part XII-A — Power Supply and Passive Component Specifications](#part-xii-a--power-supply-and-passive-component-specifications)
+    - [REF-PWR-001: Texas Instruments TPS62933 — 3.8-30 V, 3 A synchronous buck converter data sheet](#ref-pwr-001-texas-instruments-tps62933--38-30-v-3-a-synchronous-buck-converter-data-sheet)
+    - [REF-PWR-003: Wurth Elektronik 74438335033 — WE-MAPI 3.3 uH shielded power inductor data sheet](#ref-pwr-003-wurth-elektronik-74438335033--we-mapi-33-uh-shielded-power-inductor-data-sheet)
+    - [REF-PWR-004: ECS Inc. ECS-2520MV — 3.3 V HCMOS SMD oscillator data sheet](#ref-pwr-004-ecs-inc-ecs-2520mv--33-v-hcmos-smd-oscillator-data-sheet)
+    - [REF-PWR-005: Alpha & Omega Semiconductor AON6260 — 60 V N-channel MOSFET data sheet](#ref-pwr-005-alpha--omega-semiconductor-aon6260--60-v-n-channel-mosfet-data-sheet)
+    - [REF-PWR-006: Texas Instruments TPS54620 — 6 A synchronous buck converter data sheet](#ref-pwr-006-texas-instruments-tps54620--6-a-synchronous-buck-converter-data-sheet)
+    - [REF-PWR-007: Texas Instruments TPS54540 — 4.5 A synchronous buck converter data sheet](#ref-pwr-007-texas-instruments-tps54540--45-a-synchronous-buck-converter-data-sheet)
+- [Part XII-B — Connector Specifications](#part-xii-b--connector-specifications)
+    - [REF-CONN-001: Samtec TSM series — 0.100in surface-mount terminal strip product data](#ref-conn-001-samtec-tsm-series--0100in-surface-mount-terminal-strip-product-data)
+    - [REF-SENSOR-041: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)](#ref-sensor-041-beagleboardorg-pocketbeagle-2--system-reference-manual-mechanical-board-and-header-dimensions)
+    - [REF-SENSOR-042: Samtec SSM / SSW / TSW / TSM — .100 in socket and terminal strips (footprint, drawing, qualification)](#ref-sensor-042-samtec-ssm--ssw--tsw--tsm--100-in-socket-and-terminal-strips-footprint-drawing-qualification)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
 - [Part XV — Open Hardware / Software Licensing Standards](#part-xv--open-hardware--software-licensing-standards)
+- [Part XVI — Documentation and Technical-Writing Standards](#part-xvi--documentation-and-technical-writing-standards)
     - [REF-LIC-001: CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)](#ref-lic-001-cern-open-hardware-licence-version-2--weakly-reciprocal-cern-ohl-w-20)
     - [REF-LIC-002: OSHWA Open Source Hardware Certification](#ref-lic-002-oshwa-open-source-hardware-certification)
     - [REF-LIC-003: The MIT License](#ref-lic-003-the-mit-license)
@@ -521,6 +552,18 @@ fix is complete.
 
 ---
 
+### REF-FCC-005: 47 CFR Part 15 Subpart B — Unintentional Radiators
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | FCC |
+| **Official URL** | <https://www.ecfr.gov/current/title-47/chapter-I/subchapter-A/part-15/subpart-B> |
+| **URL status** | validated 2026-09-27 |
+| **Scope** | Class B digital device radiated (§15.109) and conducted (§15.107) emission limits; distinct from the intentional-radiator entries REF-FCC-001/002/003 above (49 MHz, ISM-band, and UNII transmitters), which govern Commo/TACCO's transmitters. This entry governs unintentional-radiator (digital logic) emissions from all avionics boards. |
+| **Note** | Added 2026-09-27 per `docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md` U1 action item. |
+
+---
+
 ## Part III — NIST Security Standards
 
 ### REF-NIST-001: NIST SP 800-207 — Zero Trust Architecture
@@ -625,7 +668,7 @@ cycle); hardware-enforced append-only non-executable log microSD on every XO nod
 
 ---
 
-## Part IV — Defense Standards
+## Part IV — Defense and Government-Agency Standards (DoD, NASA)
 
 ### REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus
 
@@ -704,6 +747,26 @@ MIL-STD-461G qualification testing is deferred pending airframe integration.
 
 **Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`,
 `docs/AVIONICS_PB2_REDESIGN.md`
+
+---
+
+### REF-NASA-001: NASA-STD-8739.4A — Workmanship Standard for Crimping, Interconnecting Cables, Harnesses, and Wiring
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | NASA Office of Safety and Mission Assurance (OSMA) |
+| **Edition** | NASA-STD-8739.4A with Change 3 (cover: approved 2016-06-30) |
+| **Official access** | <https://standards.nasa.gov/sites/default/files/standards/NASA/A/3/nasa-std-87394a_w_change_3.pdf> — fetched directly 2026-10-03 (HTTP 200) and read |
+| **Note** | U.S. Government work; no purchase required. |
+
+**Requirements applied in this project:**
+
+| Requirement | Title | Application |
+|---|---|---|
+| §7.2.19, Table 7-1 (p. 30 of 114) | Bend Radii for Completed Interconnecting Cable or Harness | Overall harness of AWG 10 or smaller without coax: **minimum 3 × OD**, optimum 10 × OD; AWG 8 or larger: minimum 6 × OD. Sets the harness-loop reservation at every ESC wire-exit end in `tools/esc80_cooptimize.py` (model 2, `bend_k` = 3) |
+
+**Used in:** `tools/esc80_cooptimize.py`, `tools/esc80_design_m2.json`,
+`airframe/wings-nacelles/WBS.md` (NAC-64-ESC-80A)
 
 ---
 
@@ -919,6 +982,17 @@ arrays at field connectors on Pilot and XO.
 
 ---
 
+### REF-CISPR-001: CISPR 32:2015 — Electromagnetic Compatibility of Multimedia Equipment — Emission Requirements
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | IEC/CISPR |
+| **Official URL (purchase)** | <https://webstore.iec.ch/publication/22284> — CISPR standards are not freely published |
+| **URL status** | validated 2026-09-27 (webstore listing page only; full text is paywalled) |
+| **Status** | **Design-margin reference only, not a compliance target.** Serenity's applicable emissions limits are the FCC Part 15 entries above (REF-FCC-001/002/003/005); CISPR 32 is consulted informally for EMC design-margin guidance during layout, per `docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md` U1. |
+
+---
+
 ## Part V-A — IPC PCB Design Standards
 
 ### REF-IPC-001: IPC-2221 — Design Guidelines for Printed Board Layout (PCB Design Fundamentals)
@@ -1127,6 +1201,32 @@ The design environment of 500 W/m² (≈434 V/m, equivalent to RF proximity near
 **Applied to:** SiK MAVLink telemetry link (primary ground-to-air C2 channel).
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `TODO.md`
+
+---
+
+### REF-WGS84-001: NGA.STND.0036 — World Geodetic System 1984 (WGS 84)
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | National Geospatial-Intelligence Agency (NGA) |
+| **Official URL** | <https://earth-info.nga.mil/php/download.php?file=coord-wgs84> |
+| **URL status** | validated 2026-09-27 |
+| **Scope** | Defines the geodetic datum (ellipsoid, geocentric origin) that GPS coordinates are expressed in; underlies every lat/lon pair the ground station handles. |
+
+**Used in:** `gcs/README.md` §References, `gcs/skipper/software/tracking/src/tracker.py`
+
+---
+
+### REF-HAVERSINE-001: Sinnott, R.W. (1984) — "Virtues of the Haversine," Sky & Telescope, vol. 68, no. 2, p. 159
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | Sky & Telescope (Sky Publishing Corp.) |
+| **Official URL** | <https://en.wikipedia.org/wiki/Haversine_formula> (cites the original Sinnott 1984 print reference; the 1984 issue itself is not freely hosted online) |
+| **URL status** | validated 2026-09-27 (Wikipedia mirror confirmed; original print citation not independently re-verified — flagged) |
+| **Scope** | Great-circle distance/bearing formula used for ground-station range and bearing calculations from two WGS84 (REF-WGS84-001) lat/lon pairs. |
+
+**Used in:** `gcs/README.md` §References, `gcs/skipper/software/tracking/src/tracker.py`
 
 ---
 
@@ -1433,6 +1533,57 @@ gauge. See REF-EDF-002 for what a vendor listing adds, and the open items in
 
 ---
 
+### REF-EDF-003: QX-Motor — 64 mm 12-blade EDF with QF2822 brushless motor (product page, manual and dimension drawing)
+
+| Field | Value |
+|---|---|
+| **Type** | Manufacturer retail product page plus two user-supplied manufacturer images (instruction manual sheet and motor dimension drawing) |
+| **Product URL** | <https://qx-motor.co/product/64mm-edf-12-blade-2822-brushless-motor-set/> |
+| **Retrieved** | 2026-10-03 (product page, read by Claude Opus 5.5 via WebFetch) |
+| **Images** | `docs/references/qx-motor 64mm edf/7-2.jpg` (instruction manual: specifications, performance table, EDF outline); `8-4.jpg` / `8-4.webp` (QF2822 motor dimension drawing). Supplied by the repository owner; **original download URL not recorded — requires verification.** |
+| **Sections applied** | 8-4.jpg: overall 68.7 mm, body to mount face 58.0 mm, can ø27.80 mm, front boss ø20.00 mm, shaft ø3.0 mm, 4 × M3 on ø16.00 mm. 7-2.jpg: model QF2822, KV options 2200/2400/3500/3800/4300, 9N6P, shaft 3.0 mm, motor diameter 28 mm, motor weight 135 g, 3–6S LiPo, max continuous 100 A / 10 s; performance row QF2822-2400KV at 22.2 V: 57.0 A, 1265.4 W, 2135 g thrust, recommended ESC 60 A; EDF outline 41.53 mm axial, ø77.00 and ø65.80 mm, and an unlabelled 18.50 mm feature. |
+| **Provenance caveats** | (1) Drawing datums are not identified; every axial value is **VERIFY** until a physical unit is measured (WBS NAC-64-FIT-02). (2) The product page's "0.2 kg" sits beside a 15 × 12 × 10 cm package size and is read as **shipping weight, not installed mass**. (3) The product page labels its 3500 KV row 14.8 V, but its 1056 W / 1810 g figures match the manual's 16 V row; the manual image is used. (4) The 18.50 mm feature is read as rotor-hub length only as the unfavourable case in `tools/nacelle_axial_fit.py`. |
+
+**Second manufacturer sheet (added 2026-10-03):** the product page for the 64 mm EDF without
+motor, <https://qx-motor.co/product/2365/>, links the QF2822-2300KV instruction-manual image
+<https://cdn.shopify.com/s/files/1/0713/6424/7837/files/64_2822-2300KV_00.png>. The repository
+copy is `docs/references/qx-motor 64mm edf/64_2822-2300KV_00.png`; the owner supplied the page,
+and Claude Opus 5.5 read and translated it.
+
+- **Applied values:**
+  - motor weight (重量) **140 g** (2300 KV);
+  - max continuous 60 A / 10 s, **recommended ESC 80 A**;
+  - 24 V, 100 % throttle: 57.0 A, 1368 W, 2370 g;
+  - outline drawing: 97.5 mm lip-to-motor-tail, 45 mm shroud, ø77 / ø72.4 / ø67.2 / ø66.4 shroud
+    diameters, motor ø28.
+- **Rotor handedness (read 2026-10-05, Claude Opus 5.5):** the outline-dimension panel of
+  `64_2822-2300KV_00.png` draws the 12-blade rotor in both a **CCW** and a **CW** version, so the
+  port/starboard mirrored (counter-handed) nacelles can use QX rotors of both hands.
+- **Rotor hub diameter (scaled, not dimensioned):** the front view's circles scale to Ø63.8 (bore,
+  confirming the scale against the dimensioned Ø77 lip) and a hub of **Ø ≈ 25 mm (±5 %)** —
+  smaller than the QF2822 can (Ø27.8). VERIFY on a physical rotor (WBS NAC-64-FIT-02).
+- **Not published there:** the fan-only (no-motor) mass, and any rotor mass. The page's photos
+  and text carry none.
+- **Caveat:** the 2300 KV row is a different winding from the 2400 KV sheet the design uses. The
+  mechanical outline is common to the series.
+
+**Where it is applied:** `tools/nacelle_axial_fit.py`, `tools/tests/test_nacelle_axial_fit.py`,
+`airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad`,
+`docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`,
+`airframe/wings-nacelles/WBS.md` §1.1.4 NAC-64-SERVO-01 / NAC-64-FIT-01 / NAC-64-FIT-02.
+---
+
+
+### REF-EDF-004: High End Technologies (HET) — Typhoon EDF 28 mm inrunner motors (2W-25, 2W-30, 1W-35) — CONSIDERED AND REJECTED
+
+| Field | Value |
+|---|---|
+| **Type** | Manufacturer retail product pages (highendrc.com; HTTP only — the HTTPS certificate chain does not verify) |
+| **URLs** | 2W-25 <http://www.highendrc.com/index_eproduct_view.php?products_id=80>; 2W-30 <http://www.highendrc.com/index_eproduct_view.php?products_id=168>; 1W-35 <http://www.highendrc.com/index_eproduct_view.php?products_id=374> (the owner's "2W-35" link resolves to the 1W-35; no 2W-35 was found) |
+| **Retrieved** | 2026-10-05 (Claude Opus 5.5, curl over HTTP) |
+| **Values read** | 2W-25: Ø28 x 48 mm, Ø4 shaft, 110 g, 2720 KV, Io 2.2 A, Rm 0.016 ohm, 70 A max, 87 % max eff., 1100 W on 6S. 2W-30: Ø28 x 52 mm, Ø4 shaft, 130 g, 2200 KV, 80 A max, 1600 W on 8S (Rm/Io not published). 1W-35: Ø28 x 57 mm, Ø4 shaft, 155 g, 4000 KV, 130 A (5S). No mounting-hole pattern published on any page (also absent from turbines-rc.com listings). |
+| **Decision** | **REJECTED 2026-10-05 (owner, Stab-Rabbit-coding)** for the 64 mm nacelle on 6S: with the fixed QX 12-blade rotor, thrust is rpm/power-limited — 2W-25 reaches the QX design point only at 95 % of its 70 A rating (0.94x design thrust at a 10 % current margin); 2W-30 is voltage-limited on 6S (~0.86x); a mixed 2W-25 fwd / 2W-30 aft set gains ~+7 % only by exceeding the 2W-25 rating and loses the in-nacelle torque/gyro cancellation; a HET-matched rotor is power-limited to <= +7 % on 6S (HET motors are designed for 69 mm fans). Plus Ø4 shafts vs the QX 3 mm hub and no published bolt pattern. Analysis: session 2026-10-05, aeronautical-engineering skill (Euler stage model + actuator-disc T ~ P^(2/3)). Revisit only with an 8S power system (2W-30 rated 1600 W on 8S, ~1.3x thrust per stage, needs an 8S-matched rotor). |
+| **Applied to** | Recorded decision only — `airframe/wings-nacelles/WBS.md` NAC-64-MOTOR-HET (rejected); plan 2026-09-28-001 KTD9 note |
 ### REF-STD-GEAR-001: ISO 53:1998 — Cylindrical gears for general and heavy engineering — Standard basic rack tooth profile
 
 | Field | Value |
@@ -1508,6 +1659,21 @@ which prints that caveat on every run.
 `airframe/openscad/wings/wings_s1223_revo.scad` (`SPAR_BORE_OD` derivation);
 `docs/WING_ATTACH_INTERFACE.md` §2
 
+### REF-STD-PIN-001: ISO 8752:2009 — Spring-type straight pins — Slotted, heavy duty
+
+| Field | Value |
+|---|---|
+| **Designation** | ISO 8752:2009 (supersedes ISO 8752:1997) |
+| **Full title** | *Spring-type straight pins — Slotted, heavy duty* |
+| **Issuing body** | International Organization for Standardization (ISO) |
+| **Official access** | ISO catalogue, <https://www.iso.org/standards.html> — **DIRECT CATALOGUE URL REQUIRES VERIFICATION** (iso.org and webstore.ansi.org returned bot challenges 2026-10-03; designation and title confirmed through the Standards Council of Canada listing <https://scc-ccn.ca/standardsdb/standards/8120407> as returned by search; WBS §0.5) |
+| **Retrieved** | not retrieved — cited by designation only |
+| **Scope applied** | Slotted heavy-duty spring pin, nominal Ø1.5 × 8 mm, steel, as the torque and axial retention of the wing tilt pinion on its Ø4 shaft. Hole and pin dimensions **require verification** against the standard's table before drilling. |
+
+**Where it is applied**
+
+- `airframe/openscad/wings/wing_tilt_pinion.scad` (header, `TP_PIN_D`, `TP_PIN_L`)
+
 ### REF-STD-GEAR-002: Budynas & Nisbett — *Shigley's Mechanical Engineering Design* — worm-gear efficiency and self-locking condition
 
 | Field | Value |
@@ -1517,8 +1683,24 @@ which prints that caveat on every run.
 | **Official URL** | <https://www.mheducation.com/highered/product/shigley-s-mechanical-engineering-design-budynas-nisbett/M9780073398204.html> (publisher page; text not open access) |
 | **Section applied** | Chapter 13 "Gears — General", the worm-gearing force-analysis section (efficiency η = tan λ / tan(λ + φ) with φ = arctan μ, and the statement that a worm gearset is self-locking when the lead angle λ is below the friction angle φ). **Section number REQUIRES VERIFICATION against a physical copy** (§13-16 in the 9th/10th editions is believed correct; not confirmed from the book in hand). |
 | **Retrieved** | 2026-09-15 (publisher page only) |
+| **Also applied** | Chapter 14, Table 14-2, Lewis form factor Y for 20° full-depth teeth: Y = 0.277 at 14 teeth, 0.409 at 50 teeth. **Table number REQUIRES VERIFICATION against a physical copy.** Used in `tools/nacelle_tilt_dynamics.py` (`LEWIS_Y_14`) and `airframe/openscad/wings/wing_tilt_pinion.scad` (2026-10-03). |
 | **Applied to** | `tools/tilt_actuator_options.py` (`worm_eta()`, the self-lock test `tan(λ−φ) ≤ 0`), `docs/TILT_ACTUATOR_SELECTION.md` §3, `airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad` header |
 | **Caveat** | The friction coefficient μ = 0.20 used for the printed PETG wheel / brass or PETG worm pair is an ASSUMPTION, not from this source; the self-locking margin of the built six-start worm (lead 13.0°; Rev T5b 4-start 9.5°) is therefore CONDITIONAL and the design relies on the pin brake (BRK-1..3), not on this condition. |
+
+### REF-AMS-001: SAE AMS2301 — Steel Cleanliness, Aircraft Quality, Magnetic Particle Inspection Procedure
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | SAE International |
+| **Official URL** | <https://standards.sae.org/ams2301k/> (current revision AMS2301M: <https://store.accuristech.com/standards/sae-ams2301m?product_id=3064048>) |
+| **URL status** | validated 2026-09-27 |
+| **⚠ Citation mismatch found 2026-09-27** | `airframe/README.md` cites `[REF-AMS-001] AMS 2301 (electroplating standard)`. **AMS2301 is NOT an electroplating specification** — it is a magnetic-particle inspection procedure for aircraft-quality steel cleanliness. It does not apply to the hardened-steel nozzle electroplating context it is cited for. The correct family for electroplating is AMS2400-series (e.g. AMS2403 nickel plating, AMS2404 electroless nickel) — not yet identified/verified for this application. |
+
+**Action required:** Correct `airframe/README.md` §Printing Specifications to either (a) cite the correct AMS2400-series electroplating spec once identified and verified, or (b) remove the citation if no specific AMS spec was actually being invoked. Do not leave AMS2301 attached to an electroplating claim it does not support. (`TODO.md` §0.x)
+
+**Used in:** `airframe/README.md` §Printing Specifications (citation currently incorrect — see above)
+
+---
 
 ## Part XI — FDA / CDRH Laser Product Regulations
 
@@ -2295,6 +2477,50 @@ the spar's run, not this seat).
 
 ---
 
+### REF-BRG-001: JTEKT (Koyo) — 6704 ZZ deep groove ball bearing, single row, product detail
+
+| Field | Value |
+| --- | --- |
+| **Manufacturer** | JTEKT Corporation (Koyo brand) |
+| **URL** | <https://koyo.jtekt.co.jp/en/products/detail/?pno=6704+ZZ> (manufacturer page). Corroborated by distributor sheet <https://123bearing.com/getTechnicalSheetPdf/226748>. |
+| **Retrieved** | 2026-10-03, by Claude Opus 5.5 |
+| **Values applied** | d 20 mm, D 27 mm, B 4 mm; Cr 1.30 kN; **C0r 0.730 kN**; limiting speed (grease) 23,000 min⁻¹; mass 0.006 kg |
+
+**Correction recorded:** `docs/WING_ATTACH_INTERFACE.md` §4.3a implied a static rating of about
+907 N; that figure matches a *dynamic* rating some distributors list.
+
+**Where it is applied:** `tools/nacelle_tilt_dynamics.py` (BRG_C0, the 50 mm joint and the
+rejected 64 mm arrangements), `docs/WING_ATTACH_INTERFACE.md` §4.3a,
+`airframe/wings-nacelles/WBS.md` NAC-64-TILT-01.
+
+### REF-BRG-002: JTEKT (Koyo) — 6804 ZZ deep groove ball bearing, single row, product detail
+
+| Field | Value |
+| --- | --- |
+| **Manufacturer** | JTEKT Corporation (Koyo brand) |
+| **URL** | <https://koyo.jtekt.co.jp/en/products/detail/?pno=6804+ZZ> |
+| **Retrieved** | 2026-10-03, by Claude Opus 5.5 |
+| **Values applied** | d 20 mm, D 32 mm, B 7 mm; Cr 5.00 kN; **C0r 2.45 kN**; limiting speed (grease) 21,000 min⁻¹; mass 0.018 kg |
+
+**Where it is applied:** `airframe/openscad/nacelles/nacelle_trunnion_64mm.scad` (seat Ø32,
+stack 2 × 7 mm), `tools/nacelle_tilt_dynamics.py` (BRG_C0_6804), `tools/nacelle_mass_cg_64.py`
+(ON_AXIS_64), `airframe/openscad/wings/wings_s1223_revo.scad` SPAR_TIP_PROTRUSION_64N,
+`airframe/wings-nacelles/WBS.md` NAC-64-TILT-01.
+
+### REF-BRG-003: JTEKT — Ball & Roller Bearings, CAT. NO. B2001E (general catalogue), §5-5 "Basic static load rating and static equivalent load"
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | JTEKT Corporation |
+| **URL** | <https://koyo.jtekt.co.jp/en/support/bearing-knowledge/pdf/catb2001-8_a.pdf> |
+| **Retrieved** | 2026-10-03 (84-page PDF, read by Claude Opus 5.5) |
+| **Sections applied** | §5-5-3 "Safety coefficient", eq. fs = C0 / P0, and **Table 5-10** (p. A43). For ball bearings: with rotation, high accuracy required fs ≥ 2; with rotation and impact fs ≥ 1.5; without rotation (occasional oscillation), normal fs ≥ 0.5, with impact or uneven load distribution fs ≥ 1. |
+
+**Applied as:** the trunnion oscillates and sees impact, so the catalogue minimum is fs ≥ 1. The
+design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class). Used in
+`tools/nacelle_tilt_dynamics.py` (FS_MIN, FS_TARGET) and
+`airframe/openscad/nacelles/nacelle_trunnion_64mm.scad`.
+
 ### REF-ACT-001: Pololu — 20D mm Metal Gearmotors (datasheet + dimension diagram)
 
 | Field | Value |
@@ -2336,6 +2562,28 @@ the spar's run, not this seat).
 | **Status** | Selected servo body for the SG90 class (with the OpenServoCore swap board, REF-SENSOR-015). Marketplace "SG90" listings are frequently clones; procure against this manufacturer page or re-verify the figures for whichever part is actually bought. |
 | **Caveat** | The page lists 4.8 V only; `docs/POWER_DISTRIBUTION.md` §3.3 feeds the SG90 class from the 6 V servo rail — see "Open Standards Verification Items" (SG90 6 V tolerance). |
 
+
+### REF-ACT-004: Blue Bird BMS-101DMG — micro digital metal-gear servo (nacelle nozzle servo)
+
+| Field | Value |
+|---|---|
+| **Type** | Secondary specification aggregator (manufacturer page not retrieved) |
+| **URL** | <https://servodatabase.com/servo/blue-bird/bms-101dmg> |
+| **Retrieved** | 2026-10-04 (via web search summary, Claude Opus 5.5) |
+| **Values applied** | 18.5 x 7.6 x 15.7 mm (L x W x H); 4.4 g; 0.80 kgf·cm at 4.8 V, 1.00 kgf·cm at 6.0 V; 0.09 / 0.07 s per 60 deg; coreless motor, metal gears |
+| **Caveat** | Aggregator data, not the manufacturer datasheet — **every dimension and the 6 V rating REQUIRE VERIFICATION** on a physical unit before the servo pocket is printed (WBS NAC-64-SERVO-01). Supersedes the plan's earlier "8 mm case, 4.5 g" reading (hyperflight.co.uk). |
+| **Applied to** | `airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad` servo pocket; `tools/nozzle_servo_linkage.py`; plan 2026-09-28-001 KTD2 |
+
+### REF-ACT-005: KST X06 — HV digital micro servo, steel gears, aluminium case (nacelle nozzle servo)
+
+| Field | Value |
+|---|---|
+| **Type** | Secondary sources (specification aggregator + retailer); manufacturer datasheet not retrieved |
+| **URLs** | <https://servodatabase.com/servo/kst/x06>; <https://alofthobbies.com/products/kst-x06-1-8kg-24-99-oz-in-07-sec-wide-voltage> |
+| **Retrieved** | 2026-10-04 (via web search summary, Claude Opus 5.5) |
+| **Values applied** | 20 x 7 x 16.6 mm; 6 g; stall 0.80 / 1.50 / 1.80 kgf·cm at 3.8 / 6.0 / 8.4 V; 3.8–8.4 V; coreless motor; hardened-steel gears; aluminium housing; travel ±60 deg |
+| **Caveat** | Not the manufacturer datasheet — **dimensions, shaft position and the 6 V torque REQUIRE VERIFICATION** on a physical unit before the pocket is printed. Owner selected 2026-10-04 over REF-ACT-004 for force margin. |
+| **Applied to** | `tools/nozzle_servo_linkage_64.py`; `airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad`; plan 2026-09-28-001 KTD2 |
 ### REF-ESC-001: Open-Secure-ESC — 6S/10A brushed build, the nacelle-tilt controller
 
 | Field | Value |
@@ -2380,7 +2628,7 @@ the spar's run, not this seat).
 
 **Used in:** `avionics/kicad/PB2_HEADER_PINMAP.md`, `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`PB2_P1`/`PB2_P2`), `avionics/WBS.md` §1.2a.
 
-### REF-SENSOR-022: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)
+### REF-SENSOR-041: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)
 
 | Field | Value |
 |---|---|
@@ -2392,7 +2640,7 @@ the spar's run, not this seat).
 
 **Used in:** `avionics/kicad/TACCO/scripts/gen_tacco_pcb.py` and `avionics/kicad/Pilot/scripts/gen_pilot_pcb.py` (`FIXED` PB2-P1/PB2-P2 positions), `avionics/WBS.md` §1.2a.
 
-### REF-SENSOR-023: Samtec SSM / SSW / TSW — .100 in socket and terminal strips (footprint, drawing, qualification)
+### REF-SENSOR-042: Samtec SSM / SSW / TSW / TSM — .100 in socket and terminal strips (footprint, drawing, qualification)
 
 | Field | Value |
 |---|---|
@@ -2400,9 +2648,214 @@ the spar's run, not this seat).
 | **Product** | SSM "Tiger Claw" surface-mount socket strip (-DV double row); SSW through-hole socket strip; TSW terminal (post) strip, .025 in square post |
 | **Source** | Owner-supplied copies archived at `avionics/datasheets/samtec_ssm_footprint.pdf` (recommended PCB layout, Rev D), `samtec_ssm-dv_drawing.pdf` (SSM-1XX-XXX-DV marketing drawing), `samtec_ssm_catalog.pdf` (SSM series catalog page) and `samtec_tsw-sxx_drawing.pdf` (SSW/TSW product specification, Rev C, 2023-02-08); <https://www.samtec.com/products/ssm> |
 | **Portion applied** | SSM-DV: 02-40 positions per row; mates TSW/TSM; pads .040 in (1.02 mm) wide, inner span .135 in (3.43 mm), outer span .310 in (7.87 mm) (Fig. 4); options -A alignment pin (1.09 mm NPTH), -LC locking clip (1.19 mm NPTH); 5.2 A per pin; -55 to +125 °C with gold; catalog states Severe Environment Testing qualification aligned with MIL-DTL-55302. SSW/TSW spec: random vibration 7.56 G RMS, 50-2000 Hz, 2 h/axis, 3 axes (EIA-364-28 Cond. V-B); mechanical shock 100 G, 6 ms, 18 shocks (EIA-364-27); durability 1000 cycles; LLCR change 15 mOhm max. |
-| **Note** | Used for the rail-socket trade study (THT socket vs surface-mount SSM-DV). Added 2026-10-05. |
+| **TSM (adopted)** | `avionics/datasheets/samtec_tsm-dv-footprint.pdf` (TSM double-vertical recommended PCB layout, Rev F, 2015-07-16: pads .050 x .145 in (1.27 x 3.68 mm) at .100 in pitch, rows .050 in (1.27 mm) apart at their inner edges; -LC .047 in (1.19 mm) / -A .068 in (1.73 mm) holes on the centre-line at (N-2) x .100 in) and `samtec_tsm_catalog.pdf` (lead style -04 post .120 in (3.05 mm) for SLW/CES/HLE low-profile sockets; insulator .100 in (2.54 mm); -LC not with -TM; -LC manual placement). |
+| **Note** | Used for the rail-socket trade study (THT socket vs surface-mount SSM-DV), then for the male TSM-118-04-L-DV-LC rails adopted 2026-10-05 once the PB2-I was found to carry female receptacles. Added 2026-10-05; renumbered from REF-SENSOR-023 on the main merge (that ID is the BMP388 on main). |
 
 **Used in:** `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`, `avionics/WBS.md` §1.2a.
+
+---
+
+<!-- REF-SENSOR-022..040 catalogued 2026-09-26 by Claude Opus 5.5: these IDs were already cited in board schematics/generator scripts but had never been entered here (avionics/WBS.md U7.1). REF-SENSOR-024/031/032/034/035/036 remain uncatalogued (020/021 were catalogued on `main` 2026-09-29) (037, 039 catalogued 2026-09-27); see Open Standards Verification Items. -->
+
+### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
+
+| Field | Value |
+|---|---|
+| **Official access** | `avionics/datasheets/ds-000347-icm-42688-p-v1.6.pdf` (local copy) |
+| **URL status** | requires verification (TDK URL returned 404, 2026-09-26) |
+| **Section applied** | Pilot IMU pin map |
+| **Cited in** | Pilot.kicad_sch/.kicad_sym, gen_pilot_sch.py |
+
+### REF-SENSOR-023: Bosch Sensortec BMP388 — barometric pressure sensor data sheet BST-BMP388-DS001
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp388-ds001.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Pin configuration / LGA-10 package |
+| **Cited in** | Pilot.kicad_sch/.kicad_sym, gen_pilot_sch.py |
+
+### REF-SENSOR-025: Premier Magnetics PM-DB2791S — MIL-STD-1553 SMD data-bus transformer
+
+| Field | Value |
+|---|---|
+| **Official access** | `avionics/datasheets/PremierMagnetics_DB2791S.pdf` (local copy) |
+| **URL status** | requires verification (no working manufacturer URL found 2026-09-26) |
+| **Section applied** | Fig. 1 schematic (winding pins) |
+| **Cited in** | Pilot, TACCO schematics |
+
+### REF-SENSOR-026: Bourns SRF2012A — SMD common-mode choke data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.bourns.com/docs/Product-Datasheets/SRF2012A.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Windings 1-2 / 4-3; land pattern |
+| **Cited in** | Pilot, TACCO schematics; SecureControllers library |
+
+### REF-SENSOR-027: u-blox MAX-M10S — GNSS module data sheet UBX-20035208
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://content.u-blox.com/sites/default/files/MAX-M10S_DataSheet_UBX-20035208.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Pin assignment |
+| **Cited in** | Pilot schematic |
+
+### REF-SENSOR-028: Würth Elektronik 749010012A — WE-LAN 10/100BASE-TX SMT transformer, data sheet rev 004.000 (2024-04-11)
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.we-online.com/components/products/datasheet/749010012A.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | p. 1 schematic, recommended land pattern, and usage notice (quoted verbatim on every Würth-bearing board, owner decision 2026-09-26) |
+| **Cited in** | Pilot, TACCO, Commo, Observer schematics/PCBs/.md; Flight Engineer notice; tools/add_board_notices.py; SecureControllers library |
+
+### REF-SENSOR-029: Texas Instruments DP83825I — low-power 10/100 Ethernet PHY data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.ti.com/lit/ds/symlink/dp83825i.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Table 4-1 Pin Functions |
+| **Cited in** | Pilot, TACCO schematics; SecureControllers library |
+
+### REF-SENSOR-030: Holt Integrated Circuits HI-1573/HI-1574 — 3.3 V MIL-STD-1553 dual transceiver, DS1573 Rev U
+
+| Field | Value |
+|---|---|
+| **Official access** | `avionics/datasheets/hi-1573.pdf` (local copy) |
+| **URL status** | requires verification (holtic.com link serves an HTML page, 2026-09-26) |
+| **Section applied** | p. 1 Pin Configurations (44-pin QFN); heat-sink note |
+| **Cited in** | Pilot, TACCO schematics; SecureControllers library |
+| **Note** | Same part as REF-SENSOR-020 (catalogued independently on `main` 2026-09-29, with the full Table 4-1 pin map). Both IDs resolve to the same TI data sheet; new citations shall use REF-SENSOR-020. Merge note 2026-10-05. |
+
+### REF-SENSOR-033: Winbond W25Q128JV — 128 Mbit serial NOR flash data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.winbond.com/resource-files/w25q128jv%20revf%2003272018%20plus.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Pin configuration (SOIC-8) |
+| **Cited in** | TACCO schematic |
+
+### REF-SENSOR-038: Nexperia PRTR5V0U2X — dual-line ESD protection product data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Table 2 pinning (SOT143B: 1 GND, 2 I/O1, 3 I/O2, 4 VCC); Sec. 11 outline |
+| **Cited in** | Pilot, TACCO, Flight Engineer, Commo, Observer; SecureControllers library |
+
+### REF-SENSOR-040: Texas Instruments BQ76930 — 6-10 cell battery monitor AFE data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.ti.com/lit/ds/symlink/bq76930.pdf> |
+| **URL status** | validated 2026-09-26 |
+| **Section applied** | Sec. 6.3 pin diagram (30-TSSOP); Table 9-3 |
+| **Cited in** | Flight Engineer schematic |
+
+### REF-SENSOR-037: Microchip (Atmel) ATF16V8BQL — programmable logic device data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-0364-PLD-ATF16V8B-8BQ-8BQL-Datasheet.pdf> |
+| **URL status** | validated 2026-09-27 |
+| **Section applied** | Ordering Information (20X = TSSOP-20, 4.4 mm wide) |
+| **Cited in** | TACCO schematic (NOR flash /WP write-block interlock), `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` |
+
+### REF-SENSOR-039: Texas Instruments INA226 — current/power monitor data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.ti.com/lit/ds/symlink/ina226.pdf> |
+| **URL status** | validated 2026-09-27 |
+| **Section applied** | Table 4-1 (VSSOP-10 pin functions) |
+| **Cited in** | Flight Engineer schematic (U_IS_MAIN, U_IS1-4 current-sense channels) |
+
+---
+
+### REF-SENSOR-007: STMicroelectronics VL53L5CX — Time-of-Flight 8x8 Multizone Ranging Sensor data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.st.com/resource/en/datasheet/vl53l5cx.pdf> |
+| **URL status** | validated 2026-09-27 (st.com listing confirmed via search; direct PDF fetch blocked by st.com's bot protection in this session — use the product page <https://www.st.com/en/imaging-and-photonics-solutions/vl53l5cx.html> if the direct link is unreachable) |
+| **Section applied** | Ranging accuracy and 4 m maximum range figure cited in `docs/failsafe_thresholds.md` §3 |
+| **Cited in** | 12x VL53L5CX obstacle-avoidance array, `docs/failsafe_thresholds.md`, `avionics/firmware/common/include/failsafe_config.h`, `docs/PHASED_BUILD_GUIDE.md` |
+
+---
+
+## Part XII-A — Power Supply and Passive Component Specifications
+
+### REF-PWR-001: Texas Instruments TPS62933 — 3.8-30 V, 3 A synchronous buck converter data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.ti.com/lit/ds/symlink/tps62933.pdf> |
+| **URL status** | validated 2026-09-27 |
+| **Section applied** | Table 7-1 Pin Functions (SOT-583 / DRL) |
+| **Cited in** | Pilot cape-local +3V3 buck (`gen_pilot_sch.py`); also SecureControllers library `TPS62933DRLR` |
+
+### REF-PWR-003: Wurth Elektronik 74438335033 — WE-MAPI 3.3 uH shielded power inductor data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.we-online.com/components/products/datasheet/74438335033.pdf> |
+| **URL status** | validated 2026-09-27 |
+| **Section applied** | Electrical specifications table (3.3 uH, 2.25 A Isat), WE-MAPI 3015 footprint |
+| **Cited in** | Pilot TPS62933 buck inductor (L-3V3), `gen_pilot_sch.py`, `gen_pilot_footprints.py` |
+
+### REF-PWR-004: ECS Inc. ECS-2520MV — 3.3 V HCMOS SMD oscillator data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://ecsxtal.com/store/pdf/ECS-2520MV.pdf> |
+| **URL status** | validated 2026-09-27 |
+| **Section applied** | Electrical characteristics (25 MHz, +/-50 ppm option) |
+| **Cited in** | Pilot / TACCO 25 MHz Ethernet PHY reference clock (X-25M), alongside TI DP83825I data sheet §8.2.1.1.1 (already REF-SENSOR-029) |
+
+### REF-PWR-005: Alpha & Omega Semiconductor AON6260 — 60 V N-channel MOSFET data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <http://www.aosmd.com/pdfs/datasheet/AON6260.pdf> |
+| **URL status** | validated 2026-09-27 |
+| **Section applied** | Package (DFN5x6-8L), VDS/ID ratings (60 V, 85 A) |
+| **Cited in** | Flight Engineer battery charge/discharge FETs (Q_BATT_CHG/DSG). Substituted 2026-09-19 for `FlightEngineer.md`'s fabricated "AON6556" (no such AOSMD part number exists — AOSMD's 30 V DFN5x6 family tops out at AON6554/6558; no 60 V "6556" was found in any AOSMD catalog). AON6260 exceeds the 30 A/60 V requirement. |
+
+### REF-PWR-006: Texas Instruments TPS54620 — 6 A synchronous buck converter data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.ti.com/lit/ds/symlink/tps54620.pdf> |
+| **URL status** | validated 2026-09-27 |
+| **Section applied** | Pin Functions (VQFN-14 RGY) |
+| **Cited in** | Flight Engineer 5.3 V BEC rails (U_BEC_5V_1/2), Schottky-OR drop budget |
+
+### REF-PWR-007: Texas Instruments TPS54540 — 4.5 A synchronous buck converter data sheet
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.ti.com/lit/ds/symlink/tps54540.pdf> |
+| **URL status** | validated 2026-09-27 |
+| **Section applied** | Pin Functions (SO PowerPAD-8) |
+| **Cited in** | Flight Engineer 6.0 V +/-1% setpoint rail |
+
+---
+
+## Part XII-B — Connector Specifications
+
+### REF-CONN-001: Samtec TSM series — 0.100in surface-mount terminal strip product data
+
+| Field | Value |
+|---|---|
+| **Official access** | <https://www.samtec.com/products/tsm-108-01-l-dv> (product family: <https://www.samtec.com/products/tsm>) |
+| **URL status** | validated 2026-09-27 |
+| **Section applied** | Mechanical dimensions (1.27 mm gap, 2.54 mm pitch, TSM-108-01-x-DV body) |
+| **Cited in** | Pilot PocketBeagle 2 socket connector (TSM-108-01-x-DV), `gen_pilot_sch.py`, `gen_pilot_footprints.py`; local copy `avionics/datasheets/samtec_tsm_catalog.pdf` |
 
 ---
 
@@ -2652,6 +3105,28 @@ tools (per-file headers; full text `LICENSES/MIT`).
 
 **Used in:** `REUSE.toml`, `docs/attribution_and_licensing.md`.
 
+---
+
+## Part XVI — Documentation and Technical-Writing Standards
+
+### REF-MIL-003: CNAF M-3710.7 — NATOPS General Flight and Operating Instructions Manual, §1.5 (Warnings, Cautions, and Notes) and §1.6 (Wording)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Department of the Navy, Commander, Naval Air Forces (CNAF) |
+| **Designation** | CNAF M-3710.7 (COMNAVAIRFOR M-3710.7), 2 May 2016, Original |
+| **Official URL** | <https://www.mynatec.navair.navy.mil/> (NATEC NATOPS library, access-restricted); publicly mirrored copy verified against pages 1–52 of the issued manual (front matter, Chapter 1, Glossary, List of Abbreviations/Acronyms) held locally at `docs/cnaf-3710.7_1-52.pdf` in `SecureControllers` |
+| **Applied sections** | §1.5 "Warnings, Cautions, and Notes" (p.1-5) — the WARNING/CAUTION/Note severity definitions; §1.6 "Wording" (p.1-5) — shall/should/may–need not/will requirement-verb usage |
+| **Note** | This project is not a Navy NATOPS publication and does not claim compliance with CNAF M-3710.7 as a whole. Only the §1.5 callout-severity definitions and §1.6 requirement-verb conventions are adopted, as a documentation style standard, for `AGENTS.md`/`CLAUDE.md`/design-doc procedural text across this workspace. The active-vs-passive-voice guidance paired with this citation in each repo's `AGENTS.md` is a project addition, not sourced from CNAF M-3710.7. |
+
+**Used in:** `AGENTS.md` §6a "Warnings, Cautions, Notes, and Wording" (this repo), and the
+equivalent section promulgated to every sibling repo's `AGENTS.md`/`CLAUDE.md` in this
+workspace — see each repo's own `REFERENCES.md` for its local entry. Renumbered from REF-MIL-001 on
+2026-10-05 (merge of `main` into `avionics-docs-audit`): REF-MIL-001 is MIL-STD-1553C in this
+catalogue, and the CNAF entry had been filed under the same ID — see Removed / Superseded Citations.
+
+---
+
 ## Removed / Superseded Citations
 
 The following references appeared in earlier versions of project files but have been removed
@@ -2667,6 +3142,7 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 | "TI DM38x + remixed OpenIPC firmware" (early Observer design concept from an external AI-assisted brainstorm, never committed) | Not committed to any file — caught during REFERENCES.md drafting 2026-07-03 | **Infeasible as proposed.** TI DM385/DM388 (DaVinci DM38x) are NRND; OpenIPC's supported-hardware list contains no TI part, not even at R&D stage — porting would mean a from-scratch ISP/encoder bring-up on a chip TI is discontinuing, not a firmware port. Also: the same source proposed LAN9355/KSZ9563 for "MRP" ring redundancy (neither chip implements it) and an "ST33GTPMISPI" TPM part number that does not exist. | REF-SENSOR-003 (TI AM62Ax, in-production, TI's own open BSP), REF-SENSOR-005 (KSZ9477, real HSR/PRP support), Infineon SLB9672 (fleet-standard TPM, REFERENCES.md §3.3/§4.2) |
 | ADI ADM2795EBRWZ (isolated RS-485, signal-only) — `Observer`, `CAN-PERIPH-GW-1`, `Flight Engineer`, `Pilot`, `XO` RS-485 transceivers | `avionics/kicad/Observer/kicads/Observer.kicad_sch`, `avionics/kicad/CAN-PERIPH-GW-1/`, `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch`, `avionics/kicad/Pilot/kicads/Pilot.kicad_sch`, `avionics/kicad/XO/kicads/XO.kicad_sch` | **Superseded by design decision, 2026-07-26.** ADM2795E provides signal isolation only and requires a separate external isolated DC-DC supply for its bus-side VDD2. TI ISOW1412 integrates its own isolated DC-DC, eliminating the extra supply and simplifying every "trust module" node fleet-wide. Fleet-wide swap performed 2026-07-26. Separately, while performing this swap on Pilot and XO, found their pre-existing ADM2795EBRWZ symbols had incorrectly numbered pins (and their ISOW1044BDFMR symbols had the wrong footprint, `SOIC-16W` instead of the correct `SOIC-20W` for a 20-pin part) — both defects predate this session and were corrected as part of the same fix (`kicad-cli sch erc` violation counts unchanged before/after: Pilot 48, XO 234 — confirming the fix corrected the target defects with zero regression against these boards' large, pre-existing, out-of-scope ERC backlog). | REF-SENSOR-010 (TI ISOW1412) |
 | "LibreServo_v4.1-TC" tilt-controller variant (`LS-TILT-TC`, `TILT-CTL-08`, `TC-BOARD`, `LS-CR-1`) | `docs/TILT_ACTUATOR_SELECTION.md` §4, `docs/TILT_DRIVE_CONTROL_SPEC.md`, `docs/POWER_DISTRIBUTION.md` §3.3a, `docs/CARGO_SECTION_LAYOUT.md`, `current-specification/bom_revS.*`, `WBS.md` | **Superseded by design decision (2026-09-17), not an error.** A LibreServo variant would fork that board away from its upstream and break the attribution chain, for a device that is no longer a servo controller. | REF-ESC-001 — Open-Secure-ESC build `6s/10A/BRUSHED_CAN_485_isolation`; BOM row `OSESC-TILT-TC` |
+| REF-MIL-001 used for CNAF M-3710.7 (ID collision) | `AGENTS.md` §6a, `tools/precommit_doc_wording.py`, `.githooks/pre-commit` (branch `avionics-docs-audit`) | **Duplicate ID.** REF-MIL-001 is MIL-STD-1553C; the CNAF M-3710.7 entry was filed under the same ID. Found while merging `main` 2026-10-05. | REF-MIL-003 (same CNAF entry, renumbered) |
 
 ---
 
@@ -2694,7 +3170,7 @@ Add verified section numbers to the relevant files and update this table.
 | REF-SENSOR-005 (KSZ9477 HSR/PRP) IEC 62439-3 clause numbers | `REFERENCES.md` REF-SENSOR-005 | AN3474 confirms HSR/PRP hardware support but exact IEC 62439-3 Clause 4 (HSR)/Clause 5 (PRP) sub-clause numbers applied have not been cross-checked against the standard text itself | Obtain IEC 62439-3 and confirm clause numbers before final PCB layout citation (TODO.md §1.2c) |
 | Observer laser — single 520 nm green source, **Class 2 both sites**, part/optic ratings | `REFERENCES.md` REF-IEC-002, `avionics/kicad/Observer/Observer.md`, `docs/OBSERVER_LASER_ANALYSIS.md` | Per `docs/OBSERVER_LASER_ANALYSIS.md` Rev A1 (2026-07-05) both installs share ONE 520 nm green diode + driver and are **both Class 2 (≤1 mW)** — the nose is a concentrated dot detected by Observer's camera (strobe + frame-difference), ~0.45 mW, NOT the inherently Class 3B module of Rev A. Differ only by per-location terminal optic (spread) + hardware current limit. No real, sourced part exists yet. | Source a real datasheet with manufacturer-stated mW output and IEC 60825-1 class for the green diode + both optics before procurement; update REF-IEC-002 with the verified citation (TODO.md §1.2c.4). Do not fabricate or procure against the placeholder. Both Class 2 caps must be hardware-enforced; no Class 3B interlock/shutter required unless a human-at-target-in-full-sun requirement is later added. |
 | Commo `RSSI_CMP` carrier-detect comparator part number and pinout | `avionics/kicad/Commo.kicad_sch` / `Commo.kicad_pcb`, `avionics/kicad/mod_commo_pcb.py` | The RSSI→`RSSI_DCD` conversion (2026-07-04 reconciliation) adds an on-board comparator, value placeholder "LMV331-class". No specific part is vetted; the PCB pad→net map is by function only and the SOT-23-5 pin order is unconfirmed. | Select a real comparator, confirm its SOT-23-5 datasheet pinout (and push-pull vs open-drain — add a `RSSI_DCD` pull-up if open-drain), add a `REF-*` catalog entry with a validated URL, and correct the footprint pad map before layout is final (TODO.md §1.2b). Do not fabricate or procure against the placeholder. |
-| VL53L5CX obstacle-avoidance ToF sensor — no REF-ID | `docs/failsafe_thresholds.md`, `avionics/firmware/common/include/failsafe_config.h`, `docs/PHASED_BUILD_GUIDE.md` | Found 2026-07-12 while writing the Failsafe Threshold Document: the 12× VL53L5CX obstacle-avoidance array is cited throughout the repository (4 m range noted informally inside the REF-SENSOR-002 entry above) but has no `REFERENCES.md` catalog entry of its own, unlike the project's other core sensor ICs (REF-SENSOR-002 through -006). | Add a `REF-SENSOR-007` entry for ST Microelectronics VL53L5CX (validated datasheet URL, ranging accuracy, and the 4 m operating range cited in `docs/failsafe_thresholds.md` §3) before final PCB layout citation sign-off (TODO.md §3.0 Phase 0). |
+| REF-SENSOR-007 (VL53L5CX) — **Resolved 2026-09-27.** Catalogued with a validated st.com URL. | `docs/failsafe_thresholds.md`, REFERENCES.md REF-SENSOR-007 | N/A | None — closed. |
 | Tilt-spar material allowables (4130 + trade-study alternates) | `docs/TILT_SPAR_ANALYSIS.md` §3.1–3.2/§3.5, `current-specification/bom_revS.csv` SPAR-TILT-4130 | The §3.5 material trade study uses **typical handbook allowables** for AISI 4130 (~460 MPa yield), 17-4 PH H1075 (~860 MPa), 7075-T6 (~503 MPa), 6061-T6 (~276 MPa), 316 SS, and Ti-6Al-4V (~880 MPa); none are yet tied to a validated MMPDS/AMS product page. Moduli/densities are nominal. | Confirm the **selected** material's design allowable and the two carried alternates (17-4 PH, 7075-T6) vs MMPDS-2023 / AMS (or mill cert) and add `REF-MAT-*` catalog entries with validated URLs before spar procurement (TODO §0.8). |
 | CF plate bending allowable for the SPAR-01 thwarts | `airframe/wings-nacelles/WBS.md` §1.1.2 SPAR-01, `tools/wing_spar_carrythrough.py`, `docs/structural_analysis.md` §1 | The two CF thwarts that replace the wing-spar carry-through (2026-08-23) are sized against a **300 MPa** cross-ply bending stand-in, chosen a factor of 5 below the only CF figure the repository carries — `docs/structural_analysis.md` §1's ~1 500 MPa for **unidirectional pultruded** stock, which is itself marked as requiring supplier certificates. A thwart is loaded in bending across the ship, which is not that layup, so neither number is a verified allowable for this part. The tool prints FOS against both (8.5 and 42.5 at the governing station). | Obtain ASTM D3039 (tensile) and ASTM D695 (compressive) certificates for the actual CF plate stock, add a `REF-MAT-*` catalog entry with a validated URL and the certified flexural allowable, and re-run `tools/wing_spar_carrythrough.py` before cutting the thwarts. Do not fabricate the figure. (root `TODO.md` §0.8) |
 | S1223 airfoil coordinates — the tabulated section is not a valid airfoil | `airframe/openscad/wings/wings_s1223_revo.scad` `S1223_UPPER`/`S1223_LOWER`, `airframe/wings-nacelles/WBS.md` §1.1.2 WING-01, `tools/wing_airfoil_integrity.py` | The tabulated upper surface falls below the lower surface over the aft quarter: section thickness goes **negative from x/c ≈ 0.742**, reaching t/c −0.0152 at x/c 0.90, and the outline self-intersects at (0.7417, 0.0235). The aft upper points sit ~0.03 t/c below published Selig S1223. **No source is recorded for the tables** — they carry no citation, retrieval date, or URL anywhere in the repository, which is how a corrupted aft section went unnoticed. `wing_solid()` lofts with `hull()`, whose convex hull is 1.647× the outline's area, so the defect never reaches the STL and `validate_stls.py` passes. | Retrieve S1223 coordinates from the **UIUC Airfoil Coordinates Database** (<https://m-selig.ae.illinois.edu/ads/coord_database.html>) — URL not yet validated against the issuing site by this repository, so verify before citing — record the retrieval date, add a `REF-CAD-*` entry, and only then replace both tables. `tools/wing_airfoil_integrity.py` must reach PASS. Do **not** transcribe coordinates from memory or from the comparison column in WING-01. (root `TODO.md` §1.1.2) |
@@ -2715,7 +3191,7 @@ Add verified section numbers to the relevant files and update this table.
 | Pilot's own inline "SLB9672" TPM symbol pin numbers | `avionics/kicad/Pilot/kicads/Pilot.kicad_sch` | Found 2026-07-26 while building Commo's TPM addition (which deliberately reused the separately-verified `Observer_SLB9670_TPM` clean-room symbol instead, precisely to avoid this defect): Pilot's own, independently-authored inline "SLB9670" symbol had pin numbers that did not match datasheet Revision 1.4 Tables 3–5. Not fixed at the time — out of scope for the CAN-FD/RS-485 trust-module task. **2026-08-01 SLB9670→SLB9672 migration:** the symbol/lib_id/value text was renamed to "SLB9672" (its pin *numbers* were left exactly as they were — this defect predates and is independent of the chip migration) so it now carries the same wrong-pin-number defect under the new chip's name (REF-SENSOR-011). Still not fixed — still out of scope. | Rebuild Pilot's TPM symbol from REF-SENSOR-011 using the same clean-room `parse_real_symbol`/pin-table method as `SLB9672_TPM`, or replace the instance with that verified symbol outright; re-run `kicad-cli sch erc` to confirm no regression against Pilot's existing 48-violation baseline. |
 | VimDrones `ap_periph_pico` / ESC S50 concept-only inspiration, `CAN-PERIPH-GW-1` and CAN-PERIPH-GW-1's ESC-gateway deployment mode | `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` | **Not a citation defect — documented here for license-boundary auditability.** `CAN-PERIPH-GW-1` was built as a fleet-integrated remix of the *publicly documented product concept* at <https://dev.vimdrones.com/products/vimdrones_can_periph_pico/> and <https://dev.vimdrones.com/products/vimdrones_esc_s50/> (peripheral-bus CAN/servo gateway; per-ESC CAN telemetry). VimDrones' own KiCad source (`VimDrones/AM32_esc_development_board` on GitHub) is licensed GPL-3.0, which is incompatible with this project's CC-BY-4.0-or-better attribution baseline for derivative files — no VimDrones schematic, footprint, or geometry was copied; only the public product specification was used as design inspiration, and the entire trust-module implementation (MCU, TPM, isolators, netlist) is original clean-room work against TI/Infineon datasheets. | N/A — informational; see `CAN-PERIPH-GW-1.md` "Why VimDrones' concept but not VimDrones' hardware" |
 | REF-CAD-004 misubisu hull model license stated as "CC BY 4.0" | REFERENCES.md REF-CAD-004, `current-specification/LICENSE_AND_ATTRIBUTION.md` §2, `README.md` Component License Map + Attribution quote, `docs/references/thingverse-serenity/LICENSE.txt` | **Incorrect attribution, found during TODO.md §0.9 licensing audit (2026-08-01).** The Thingiverse listing for Thing 7330462 is licensed **CC BY-SA 4.0** (ShareAlike), not plain CC BY 4.0 — the two earlier docs that had it right (`current-specification/LICENSE_AND_ATTRIBUTION.md` §2 "CC BY 4.0 SA", `docs/references/thingverse-serenity/LICENSE.txt`) used a garbled/non-standard label that also needed correcting. All four locations corrected to read "CC BY-SA 4.0". | REF-CAD-004 (corrected), REF-LIC-001 (CERN-OHL-W 2.0 Available Component treatment) |
-| REF-AMS-001 (AMS 2301 electroplating standard) — cited, no catalog entry | `airframe/README.md` §Printing Specifications (hardened-steel nozzle plating context) | Found 2026-08-22 during TODO.md §0.10.2 documentation audit: `[REF-AMS-001]` is cited but `REFERENCES.md` has no matching entry — never guess a section/spec number (root `AGENTS.md` §4). | Look up SAE AMS2301 (or confirm the intended AMS spec number) via a validated URL and add a full `REF-AMS-001` catalog entry before citing it further. (`TODO.md` §0.x) |
-| REF-WGS84-001 (WGS84 geodetic datum) — cited, no catalog entry | `gcs/README.md` §References (GPS navigation) | Found 2026-08-22, same audit pass. | Add a `REF-WGS84-001` entry citing NGA's WGS 84 standard (NGA.STND.0036) with a validated URL. (`TODO.md` §0.x) |
-| REF-HAVERSINE-001 (Haversine great-circle distance formula) — cited, no catalog entry | `gcs/README.md` §References (`gcs/skipper/software/tracking/src/tracker.py` bearing/range calculation) | Found 2026-08-22, same audit pass. | Add a `REF-HAVERSINE-001` entry citing the formula's standard reference (e.g. Sinnott 1984, "Virtues of the Haversine," Sky & Telescope) with a validated URL. (`TODO.md` §0.x) |
+| REF-AMS-001 (AMS2301) — catalogued 2026-09-27, but **citation is wrong** | `airframe/README.md` §Printing Specifications, REFERENCES.md REF-AMS-001 | AMS2301 is a magnetic-particle steel-cleanliness inspection procedure, not an electroplating spec as `airframe/README.md` describes it. | Fix `airframe/README.md` to cite the correct AMS2400-series electroplating spec (not yet identified) or drop the citation. See REF-AMS-001 for detail. |
+| REF-WGS84-001 — **Resolved 2026-09-27.** Catalogued with a validated NGA URL. | `gcs/README.md`, REFERENCES.md REF-WGS84-001 | N/A | None — closed. |
+| REF-HAVERSINE-001 — **Resolved 2026-09-27.** Catalogued citing Sinnott 1984; the print original was not independently re-verified (Wikipedia mirror only) — flagged in the entry itself. | `gcs/README.md`, REFERENCES.md REF-HAVERSINE-001 | Original 1984 Sky & Telescope print issue not independently re-verified. | Low priority — the formula itself is public-domain trigonometry; re-verify the print citation if ever challenged. |
 | XO's own local TPM footprint (`QFN-32-1EP_4x4mm_P0.4mm_EP2.65x2.65mm`) | `avionics/kicad/XO/kicads/XO.kicad_pcb` (TPM footprint, renamed SLB9670→SLB9672 in the 2026-08-01 migration) | Found 2026-08-01 while migrating SLB9670→SLB9672: XO's placed TPM footprint uses a generic Renesas-sourced KiCad standard-library QFN-32 land pattern (4x4mm body, 0.4mm pitch, 2.65x2.65mm EP) that does not match either TPM's real package (both SLB9670 and SLB9672 are 5x5mm body, 0.5mm pitch, per their respective datasheets' Fig 6/Fig 3 recommended footprints) — i.e. `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm`, the footprint used everywhere else this part appears (Observer, Commo, Flight Engineer, CAN-PERIPH-GW-1, Pilot). A separate, pre-existing defect from the wrong-pin-number one already tracked above; not fixed this session — out of scope for the chip-migration task (renamed text only; root `AGENTS.md` §5 requires footprint-position/DRC-driven moves to be referred to the user). | Replace XO's TPM footprint with `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm` (refer the footprint swap to the user per `avionics/AGENTS.md` "Footprint and Component Placement"); re-run `kicad-cli pcb drc` to confirm no regression against XO's existing DRC baseline. |

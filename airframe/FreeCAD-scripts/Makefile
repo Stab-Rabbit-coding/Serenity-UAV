@@ -71,6 +71,9 @@ FUSELAGE_STLS := \
 # (bevel housing, bevel pair, Pinion A, Nozzle Drive Pinion, sector gear) is
 # DELETED and archived (airframe/archive/); replaced by the spar-crank pushrod
 # (nacelle_pushrod_crank.stl).  See docs/NOZZLE_DRIVE_TRADE.md.
+# Option A (2026-09-28): the spar-crank/pushrod AND its replacement wing-sun +
+# pinion sync gears are RETIRED and archived (archives/airframe-archives/archive/
+# openscad/nacelles/); the nozzle is servo-driven.  Their targets are removed.
 # Rev T3 (2026-08-09, airframe/wings-nacelles/WBS.md SS1.1.3.1): the nozzle
 # flaps shingled into master+seal pairs, and the combined "asm" preview
 # split into two named-endpoint renders (FLAP_PHI = PHI_CLOSED / PHI_OPEN)
@@ -91,10 +94,7 @@ NACELLE_STLS := \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl   \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_ring.stl     \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl     \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal.stl \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_sync_sun.stl \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_sync_pinion.stl \
-    $(STLS)/nacelles/nacelle_pushrod_crank.stl
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal.stl
 
 # -- Wings (SCAD-sourced part-local prints; the port/stbd wing
 #    shells the ASSEMBLY uses are baked elsewhere) --------------
@@ -285,49 +285,6 @@ $(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal.stl: \
 	$(OPENSCAD) $(SCAD_FLAGS) \
 	    -D 'RENDER_PART="flap_seal"' \
 	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-# Nozzle SYNC GEAR PAIR (Rev T, 2026-09-09) — the two printed members of the
-# ADOPTED hybrid A+B nozzle drive (docs/NOZZLE_DRIVE_TRADE.md "DECISION
-# AMENDMENT -- hybrid A+B adopted (2026-07-19)"): a wing-fixed 33T sun and a
-# nacelle 33T pinion CO-PRINTED WITH ITS CRANK, both module 0.8, 1:1 at a
-# 26.4 mm centre distance.  Each is printed x 2 (one per nacelle).  Both come
-# out of one SCAD file via RENDER_PART, already posed for a flat, teeth-down
-# print.  The COTS members of the drive (M3 ball studs, the ball-link pushrod,
-# the Ø4 steel stub axle) are not printed targets.
-# NOTE the file carries OPEN VERIFY items (spar diameter/motion, the sun's
-# wing-tip attachment, CD 26.4 vs the pushrod file's stale 26.0) — see its
-# header before sending either part to a printer.
-$(STLS)/nacelles/nozzles/nacelle_nozzle_sync_sun.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_sync_gears.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_PART="sun"' \
-	    $(SCAD)/nacelles/nacelle_nozzle_sync_gears.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-$(STLS)/nacelles/nozzles/nacelle_nozzle_sync_pinion.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_sync_gears.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_PART="pinion"' \
-	    $(SCAD)/nacelles/nacelle_nozzle_sync_gears.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-# Rev T (2026-07-18, Option B): the tilt-to-nozzle gear train (Pinion A,
-# Nozzle Drive Pinion, sector gear, bevel pair, bevel housing) is DELETED and
-# archived; the nozzle spar-crank pushrod replaces it (RENDER_PART="crank"
-# from nacelle_nozzle_pushrod.scad).  The COTS pushrod ball-link rod is not a
-# printed target.
-$(STLS)/nacelles/nacelle_pushrod_crank.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_pushrod.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_PART="crank"' \
-	    $(SCAD)/nacelles/nacelle_nozzle_pushrod.scad \
 	    -o $@
 	@echo "[stl] $@"
 

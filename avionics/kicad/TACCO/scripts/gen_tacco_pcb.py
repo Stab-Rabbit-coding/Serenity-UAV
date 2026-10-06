@@ -72,6 +72,7 @@ if os.environ.get("TACCO_WHATIF"):
         OUT, DRU = _out / "TACCO.kicad_pcb", _out / "TACCO.kicad_dru"
 SYSLIB = Path("/usr/share/kicad/footprints")
 CUSTOM = HERE.parent.parent / "Serenity-Custom.pretty"
+SECURE_LIB = Path(os.environ.get("SECURE_CONTROLLERS_LIB", HERE.parents[4] / "SecureControllers" / "kicad" / "libraries"))
 
 X0, Y0 = 121.0, 87.5          # board origin (mm), same absolute sheet coords as the legacy TACCO PCB
 BW, BH = 55.0, 35.0           # board size (mm) — TACCO.md §1 hard constraint
@@ -150,7 +151,12 @@ def load_fp(fpid: str) -> pcbnew.FOOTPRINT:
             raise SystemExit(f"footprint not found: {fpid}")
         fp.SetFPID(pcbnew.LIB_ID(Path(lib).stem, name))
         return fp
-    path = CUSTOM if lib == "Serenity-Custom" else SYSLIB / f"{lib}.pretty"
+    if lib == "Serenity-Custom":
+        path = CUSTOM
+    elif lib == "SecureControllers":  # shared verified library (see kicads/fp-lib-table)
+        path = SECURE_LIB / "SecureControllers.pretty"
+    else:
+        path = SYSLIB / f"{lib}.pretty"
     fp = pcbnew.FootprintLoad(str(path), name)
     if fp is None:
         raise SystemExit(f"footprint not found: {fpid}")
@@ -173,7 +179,7 @@ F, B = "F", "B"
 # construction — takes the load instead.  This trades hand-picked edge-facing
 # orientation for guaranteed non-overlap; a follow-up pass can hand-place
 # connectors for cosmetic edge alignment once routing is verified.
-# PB2 rail centre-lines: PocketBeagle 2 System Reference Manual Fig. 3.45 (REF-SENSOR-022) puts
+# PB2 rail centre-lines: PocketBeagle 2 System Reference Manual Fig. 3.45 (REF-SENSOR-041) puts
 # the P1/P2 pin-1 rows 3.53 / 6.07 mm from their long edges, 25.4 mm apart -> each rail
 # centre-line is 4.80 mm inside the edge.  (Was 2.54 mm, unsourced, until 2026-10-05.)
 RAIL_V = 4.80
@@ -189,7 +195,7 @@ ISO_V0 = ISO_TR_V - 2.6  # band edge between the package centre line and its log
 ISO_V1 = BH - 0.5      # F.Cu + inner layers: to the copper-edge keep-out
 
 FIXED: Dict[str, Tuple[float, float, float, str]] = {
-    # chassis holes + PB2 rails (REF-SENSOR-022 geometry; x matches the manual already).
+    # chassis holes + PB2 rails (REF-SENSOR-041 geometry; x matches the manual already).
     # Holes stay at (3, 3): copper clearance to the nearest rail pad is 0.30 mm, drill to
     # drill 1.1 mm; only the courtyard boxes touch (opposite faces).
     "H1": (3.0, 3.0, 0, F), "H2": (52.0, 3.0, 0, F), "H3": (3.0, 32.0, 0, F), "H4": (52.0, 32.0, 0, F),

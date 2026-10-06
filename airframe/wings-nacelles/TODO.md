@@ -27,22 +27,15 @@
 ##### 1.1.3.1 *Nozzle*
 → full detail: `WBS.md` §1.1.3.1
 
+- [ ] [OPEN — IMPLEMENT] Servo linkage + schedule tool (plan U2)
+- [ ] [OPEN — IMPLEMENT] Ring stops, spring seat, full-stroke slotted pull…
+- [ ] [OPEN — IMPLEMENT] Servo mount, pod pocket, flush cover + fit check…
+- [ ] [OPEN — DECISION D-NZ-1] Gateway variant (plan U6) — V1
+- [ ] [OPEN — IMPLEMENT] BOM + REFERENCES (plan U7)
+- [ ] [OPEN — BENCH] Servo-drive verification (plan U8)
+- [ ] [OPEN — FOLLOW-UP] `airframe/FreeCAD-scripts/Makefile` still has a…
 - [ ] [OPEN — VERIFY] Mass/CG impact of the shingle
 - [ ] [OPEN — VERIFY] Seal-flap aerodynamic step
-- [ ] [OPEN — NO-GO, was VERIFY] Spatial RSSR linkage synthesis
-- [ ] [OPEN — IMPLEMENT] Adopted nozzle drive: wing-fixed sun + nacelle…
-- [ ] Re-hub `spar_crank()` onto the pinion
-- [ ] [BLOCKED — needs an owner decision, do NOT assume resolved] The KTD3…
-- [ ] [OPEN — parked, do NOT print] `nacelle_nozzle_sync_gears.scad`
-- [ ] Pushrod clearance/interference check
-- [ ] [OPEN — ACCEPTED RESIDUAL, not fixable by boss sizing] Hinge bosses…
-- [ ] Spar-crank placement in serenity_assembly.py is first-pass (Y=0…
-- [ ] User WIP `gear_option_compare.scad` / `gear_shell_compare.scad`…
-
-##### 1.1.3.3 *FreeCAD Hull-Frame Placement (gear train, nozzle, sleeves)*
-→ full detail: `WBS.md` §1.1.3.3
-
-- [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD…
 
 ##### 1.1.3.7 *Rev S4 — fixed-spar trunnion, skewer removal, print readiness*
 → full detail: `WBS.md` §1.1.3.7
@@ -54,7 +47,6 @@
 ##### 1.1.3.8 *Rev S4c — hinged ESC bays, access covers, 90° motor pattern*
 → full detail: `WBS.md` §1.1.3.8
 
-- [ ] [OPEN — PRINT-BLOCKING] `MOTOR_BOLT_R` is still 10.0 mm and still…
 - [ ] [OPEN — NEW, and it is a safety item] The bay is now an unfiltered…
 - [ ] [OPEN — the flow, not the geometry] Bay velocity is not verified
 - [ ] 50 A sustained is not survivable on any path evaluated
