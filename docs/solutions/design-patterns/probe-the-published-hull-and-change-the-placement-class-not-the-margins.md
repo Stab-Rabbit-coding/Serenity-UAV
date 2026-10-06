@@ -48,6 +48,18 @@ lesson at least five times, each time paid for in a failed placement:
   2 mm budget on the first probe — because the owner had said "any
   orientation" and nobody had used that freedom.
 
+> **Update 2026-10-06 (Rev T5g).** The chin-floor result below was for the 55 mm cape (58 mm
+> pouch). TACCO grew to 60 x 35 mm, so the chin pouches are now 63 mm. They pass
+> `cargo_layout_fit.py` only with these owner-accepted changes:
+> - a **1.5 mm** static gap on the chin nodes (`CHIN_GAP`);
+> - a 9 mm cable channel;
+> - the pair moved 2.7 mm aft.
+>
+> This is the "smaller gap" move this doc warns against, but it came only after every
+> placement class and station had been re-probed, and the owner recorded it as a named,
+> deliberate trade (`docs/CARGO_SECTION_LAYOUT.md` §0b). `tools/check_tacco_envelope_sync.py`
+> now keeps the pouch envelopes tied to the board size.
+
 ## Guidance
 
 1. **Measure the station, then design.** Before placing anything against the

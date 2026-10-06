@@ -66,7 +66,7 @@ One of the four PocketBeagle 2 Industrial single-board computers that fly the ai
 
 ## Cape Usable Band
 
-The strip of a cape between its two PocketBeagle 2 stacking rails that can actually hold parts and copper. Each rail centre-line sits 4.80 mm inside its long edge (PB2 System Reference Manual Fig. 3.45; the rails are 25.4 mm apart). With through-hole rail sockets the pads exist on every copper layer, so the rails consume both faces and no part on either face may put pads over them; with surface-mount sockets whose pads stay under their own body (Samtec SSM-DV on TACCO) the rails consume only the face they mount on, and the opposite face over them is usable. Component area budgets are computed against the usable band, per face, using each footprint's courtyard and checking every through-hole or NPTH pad against the opposite face's copper, not against the board outline or package body sizes.
+The strip of a cape between its two PocketBeagle 2 stacking rails that can actually hold parts and copper. Each rail centre-line sits 4.80 mm inside its long edge (PB2 System Reference Manual Fig. 3.45; the rails are 25.4 mm apart). With through-hole rail sockets the pads exist on every copper layer, so the rails consume both faces and no part on either face may put pads over them; with surface-mount rail connectors whose pads stay under their own body the rails consume only the face they mount on, and the opposite face over them is usable. Component area budgets are computed against the usable band, per face, using each footprint's courtyard and checking every through-hole or NPTH pad against the opposite face's copper, not against the board outline or package body sizes.
 
 ## Isolation Band
 

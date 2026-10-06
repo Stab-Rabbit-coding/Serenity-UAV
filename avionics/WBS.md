@@ -1444,7 +1444,21 @@ REFERENCES.md Removed/Superseded Citations).
     `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`
     (its SSM-DV verdict); both to be corrected in the same change.
     - [ ] R1 TACCO rails moved, re-floor-planned, regenerated, gates 0.
-    - [ ] R2 Pilot rails moved, regenerated, gates 0.
+    - [ ] R2 Pilot rails moved, regenerated, gates 0. **Still open as of 2026-10-06 (owner: "the cape
+      rail measurement error needs to be fixed on the pilot cape as well").** TACCO is done on this
+      item: R1, R3 and the rail gender correction below. Pilot still carries the original error:
+      - Rails: `gen_pilot_pcb.py` `FIXED` has PB2-P1 / PB2-P2 at v 2.54 / 32.46 (29.92 mm apart);
+        they must be v 4.80 / 30.20 (25.4 mm apart, REF-SENSOR-041 Fig. 3.45).
+      - Connector: `gen_pilot_sch.py` still uses the female
+        `PocketBeagle2_2x18_P{1,2}_Socket` footprints. Pilot needs the male Samtec
+        TSM-118-04-L-DV-LC strips, the same as TACCO (`Serenity-Custom:PocketBeagle2_2x18_P{1,2}_TSM-DV-LC`),
+        because the PB2-I carries female receptacles.
+      - Height: apply the same bottom-face height budget (~5.54 mm stack gap; PB2-I microSD and
+        JST-SH obstructions).
+      - Then re-floor-plan the rail-dependent geometry, regenerate, and re-gate (ERC 0, DRC 0
+        errors, parity 0).
+      - Pilot stays 55 x 35 mm. Its mounting holes are the stacking pattern TACCO keeps at
+        60 x 35 (TACCO.md §13b), so the hole positions do not move.
     - [ ] R3 SMT (SSM-DV) vs THT rail routing study on the corrected geometry; owner decision.
       **Decided 2026-10-05 (S. Griffing: "Do 1+2").** On the corrected rails the THT layout
       left T-ETH, three 3015 inductors and CMC-RS485 unplaced, so TACCO moves to Samtec

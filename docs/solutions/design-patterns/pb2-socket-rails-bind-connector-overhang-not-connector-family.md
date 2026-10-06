@@ -37,8 +37,19 @@ tags:
 > "Samtec SSM-DV fails") came from the generators' unsourced rail rows. The PocketBeagle 2 System
 > Reference Manual (REF-SENSOR-041, Fig. 3.45) puts each rail centre-line 4.80 mm inside its long
 > edge; at that position SSM-DV's outer pad edge (3.94 mm) is ~0.86 mm inside the board and TACCO
-> now uses SSM-118-L-DV-LC rails (avionics/WBS.md, PB2 rail geometry correction, R3). The
+> briefly used SSM-118-L-DV-LC rails (avionics/WBS.md, PB2 rail geometry correction, R3). The
 > connector-family findings (pads over THT rail pads, overhang screen) still hold for THT rails.
+>
+> **Update 2026-10-06.**
+> - **Rail gender.** The PocketBeagle 2 Industrial carries *female* receptacles, so a socket
+>   cannot mate. TACCO now uses Samtec **TSM-118-04-L-DV-LC** male SMT strips (pads
+>   1.27 x 3.68 mm at ±2.475 mm from the centre-line) at the corrected 4.80 mm rows.
+> - **TACCO outline.** TACCO is now **60 x 35 mm**; the extra 5 mm is past the PB2-I's microSD
+>   end (avionics/kicad/TACCO/TACCO.md §13b).
+> - **Pilot still has the old error.** Pilot still has rails at the old 2.54 mm rows on
+>   female-socket footprints; the fix is avionics/WBS.md R2.
+> - **Item 4 below is history.** Its 2.565 mm geometry and "SSM-DV fails" verdict no longer
+>   apply to either board.
 
 ## Context
 

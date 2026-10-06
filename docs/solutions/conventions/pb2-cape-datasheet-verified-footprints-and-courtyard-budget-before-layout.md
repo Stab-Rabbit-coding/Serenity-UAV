@@ -80,7 +80,11 @@ an SOIC-20W is 12 x 13.4 mm (160 mm²); a Würth 749010012A is 12.9 x 11.3 mm.
    sum per side, and compare against the usable band. On a PB2 cape the usable
    band between the two stacking rails (THT rails at the old, wrong 2.54 mm rows) was v 5.7–29.3 mm ≈ 1300 mm² per side,
    not 55 x 35. Anything above ~70 % per side is not routable on two signal
-   layers; treat ~85 % as the ceiling even on six.
+   layers; treat ~85 % as the ceiling even on six. TACCO hit that ceiling: at
+   ~95 % it stayed unroutable on 6 and 8 layers. It grew to 60 x 35 mm
+   (2026-10-06), and that size was proved against every airframe station that
+   carries it first. See
+   `docs/solutions/design-patterns/decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md`.
 
 4. **THT parts cost both sides.** A THT header or connector blocks the
    opposite face too (pins, annular rings, keep-out). The 4x4 0.1 in
@@ -92,8 +96,11 @@ an SOIC-20W is 12 x 13.4 mm (160 mm²); a Würth 749010012A is 12.9 x 11.3 mm.
    inside its long edge, not the 2.54 mm both cape generators had used, so a
    Samtec SSM-DV SMT socket (outer pad edge 3.94 mm from the centre-line,
    `samtec_ssm_footprint.pdf` Rev D Fig. 4) sits ~0.86 mm inside the edge.
-   TACCO uses SSM-118-L-DV-LC with the -LC clip holes as the through-board
-   anchor. Check every THT/NPTH hole of a top-face part against the bottom
+   The PB2-I carries *female* receptacles, so the cape side must be male. TACCO
+   uses Samtec TSM-118-04-L-DV-LC SMT strips (2026-10-05). The -LC clip holes
+   are the through-board anchor, and the stack gap is ~5.54 mm, which sets a
+   bottom-face height budget. Pilot still has the old 2.54 mm rows and female
+   socket footprints until avionics/WBS.md R2 is done. Check every THT/NPTH hole of a top-face part against the bottom
    face's pads, including the -LC clip holes.
 
 5. **Isolation is what the board delivers, not what the chip is rated.**
