@@ -123,8 +123,12 @@ FP_BMP388 = "Serenity-Custom:Bosch_BMP388_LGA-10_2x2mm"
 FP_X2Y0805 = "Serenity-Custom:X2Y_0805_4T"
 FP_SRF2012 = "Serenity-Custom:Bourns_SRF2012_4T"
 FP_NANOFIT = "Serenity-Custom:Molex_NanoFit_1x04_Horizontal"
-FP_PB2P1 = "Serenity-Custom:PocketBeagle2_2x18_P1_Socket"
-FP_PB2P2 = "Serenity-Custom:PocketBeagle2_2x18_P2_Socket"
+# PB2 rails: Samtec TSM-118-04-L-DV-LC SMT male terminal strips, same as TACCO (owner
+# 2026-10-05/06, avionics/WBS.md R2): the PocketBeagle 2 Industrial carries female
+# receptacles, so the cape carries the pins.  samtec_tsm-dv-footprint.pdf Rev F Fig. 1
+# land; -04 is the shortest post, giving a ~5.5 mm cape-to-PB2 gap; -LC clips anchor it.
+FP_PB2P1 = "Serenity-Custom:PocketBeagle2_2x18_P1_TSM-DV-LC"
+FP_PB2P2 = "Serenity-Custom:PocketBeagle2_2x18_P2_TSM-DV-LC"
 FP_L3015 = "Serenity-Custom:L_WE-MAPI_3015"
 
 
@@ -531,7 +535,9 @@ PB2_P2 = [
 
 def pb2_header(ref: str, value: str, fp: str, nets: List[Optional[str]]) -> Dict[str, Any]:
     pins = [(str(i), f"P{i}", net, "L" if i <= 18 else "R") for i, net in enumerate(nets, start=1)]
-    return {"ref": ref, "value": value, "fp": fp, "mpn": "", "ds": "PocketBeagle 2 P1/P2 expansion rails", "pins": pins}
+    return {"ref": ref, "value": value, "fp": fp, "mpn": "TSM-118-04-L-DV-LC",
+            "ds": "PocketBeagle 2 P1/P2 expansion rails; Samtec TSM-DV SMT male strip, -04 post, "
+                  "-LC locking clip (manual placement) [REF-SENSOR-042]", "pins": pins}
 
 
 ICS += [

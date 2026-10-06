@@ -263,11 +263,21 @@ CRADLE_XC = BATT_XC
 # inboard lips (1.6 x 4 mm) stand at the cable channel's floor.
 NODE_L, NODE_H, NODE_T = 58.0, 37.0, 22.0  # pouch-inclusive: board length, board height, stack
 NODE_CABLE = 10.0  # connector-edge clearance
-# chin floor nodes: X = board height (37), Y = board length (58), Z = stack (22)
-N_CHIN_Y0, N_CHIN_Y1 = -58.0, 0.0
+# chin floor nodes: X = board height (37), Y = board length, Z = stack (22).
+# Rev T5g (2026-10-06, owner): the chin pair are TACCO (CN) nodes, and TACCO grew
+# to 60 x 35 mm (routing-bound at 55 x 35; avionics/kicad/TACCO/TACCO.md), so the
+# chin pouch is TACCO_L = 63 long.  To fit it the owner accepted a 1.5 mm static gap
+# on the chin nodes (CHIN_GAP; 2.0 elsewhere -- the starboard chin wall is the 2.7 mm
+# narrow side) and the shared cable channel drops 10 -> 9 mm (CHIN_CABLE).  The pair
+# moves 2.7 mm aft to Y -60.3..2.7, still 2.0 mm short of the payload box (4.7).
+TACCO_L = 63.0  # 60 mm TACCO + pouch, pouch-inclusive (VERIFY at first article)
+CHIN_GAP = 1.5
+CHIN_CABLE = 9.0
+N_CHIN_Y1 = 2.7  # payload box 4.7 - 2.0
+N_CHIN_Y0 = N_CHIN_Y1 - TACCO_L  # -60.3
 N_CHIN_Z1 = BATT_Z0 - 2.0  # 88.0: 2 mm static gap under the battery
 N_CHIN_Z0 = N_CHIN_Z1 - NODE_T  # 66.0
-N_CHIN_X_IN = X_CL + NODE_CABLE / 2  # port node inner face (-164.85); stbd mirrored
+N_CHIN_X_IN = X_CL + CHIN_CABLE / 2  # port node inner face (-165.35); stbd mirrored
 # aft strip nodes: X = board length (58), Y = stack (22), Z = board height (37)
 # Rev T5e: the aft pair moved 8.5 mm aft (91 -> 99.5) so the tilt-controller
 # boards (Y 55..97.9, on the brackets' outboard faces) clear them by 1.6 mm
@@ -287,7 +297,7 @@ SHELF_T = 2.4
 SHELF_Z0 = N_CHIN_Z0 - SHELF_T  # 63.6
 # plate: clear of the head/cargo splice collar ring (Y -61.5..-53.5) and the
 # payload (4.7); the pouches overhang it 6 mm forward
-SHELF_Y0, SHELF_Y1 = -52.0, 1.6
+SHELF_Y0, SHELF_Y1 = -52.0, N_CHIN_Y1  # T5g: plate ends at the pouch aft face (aft lip dropped)
 SHELF_SILL_Y1 = -45.0  # forward of this the plate lies on the floor
 SHELF_BOSS = (
     (X_CL - 30.0, -49.0),
@@ -524,18 +534,18 @@ def layout_t5():
         # flat on the chin floor, port half; the 10 mm cable channel between
         # the pair (X_CL +/- 5) is shared, connector edges inboard
         n1 = box(N_CHIN_X_IN, N_CHIN_X_IN + NODE_H, N_CHIN_Y0, N_CHIN_Y1, N_CHIN_Z0, N_CHIN_Z1)
-        L["node N1 CN2 (port chin)"] = dict(solid=n1, gap=2.0)
-        L["node N3 CN3 (stbd chin)"] = dict(solid=mirror_x(n1), gap=2.0)
+        L["node N1 CN2 (port chin)"] = dict(solid=n1, gap=CHIN_GAP)
+        L["node N3 CN3 (stbd chin)"] = dict(solid=mirror_x(n1), gap=CHIN_GAP)
         L["chin cable channel"] = dict(
             solid=box(
-                X_CL - NODE_CABLE / 2,
-                X_CL + NODE_CABLE / 2,
+                X_CL - CHIN_CABLE / 2,
+                X_CL + CHIN_CABLE / 2,
                 N_CHIN_Y0,
                 N_CHIN_Y1,
                 N_CHIN_Z0,
                 N_CHIN_Z1,
             ),
-            gap=2.0,
+            gap=CHIN_GAP,
             mates=("node N1 CN2 (port chin)", "node N3 CN3 (stbd chin)"),
         )
         # the plate's forward 13 mm is a SILL that lies on the chin floor
@@ -545,7 +555,7 @@ def layout_t5():
         sx0 = 2 * X_CL - sx1  # stbd mirror (-211.85)
         L["chin shelf"] = dict(
             solid=box(sx0, sx1, SHELF_SILL_Y1, SHELF_Y1, SHELF_Z0, SHELF_Z0 + SHELF_T),
-            gap=2.0,
+            gap=CHIN_GAP,
             mates=("node N1 CN2 (port chin)", "node N3 CN3 (stbd chin)", "chin cable channel"),
         )
         L["chin shelf sill"] = dict(
@@ -870,6 +880,8 @@ def write_scad(path):
         "NODE_H",
         "NODE_T",
         "NODE_CABLE",
+        "CHIN_CABLE",
+        "TACCO_L",
         "N_CHIN_X_IN",
         "N_CHIN_Y0",
         "N_CHIN_Z0",

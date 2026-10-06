@@ -1418,6 +1418,103 @@ REFERENCES.md Removed/Superseded Citations).
     --severity-all --schematic-parity` to 0, then attempt freerouting via
     the Specctra DSN/SES bridge (reject and report if it introduces shorts,
     same discipline as Pilot), then export gerbers.
+- [ ] **PB2 rail geometry correction (Pilot + TACCO) and SMT rail-socket trade study —
+    APPROVED 2026-10-04 (S. Griffing: "Manual is right").** Design-shift record per root
+    `AGENTS.md` §10, written before any KiCad change.
+    **Why.** The PocketBeagle 2 System Reference Manual (REF-SENSOR-041, Fig. 3.45) puts the P1
+    and P2 pin-1 rows 3.53 mm and 6.07 mm from their board edges, 25.4 mm apart, so each rail
+    centre-line is 4.80 mm inside its long edge. Both cape generators placed the rails 2.54 mm
+    from the edges (`FIXED` PB2-P1 v 2.54 / PB2-P2 v 32.46, 29.92 mm apart) with no source on
+    record, so neither cape would have mated with the board. The x positions (pin columns 5.91 mm
+    from each short edge, rotated 180° relative to the manual's view) already match.
+    **What changes.** (1) `FIXED` PB2-P1 v 2.54 -> 4.80 and PB2-P2 v 32.46 -> 30.20 in
+    `gen_tacco_pcb.py` and `gen_pilot_pcb.py`; rail-dependent geometry (rail cells, isolation
+    band, connector floor plan) re-derived from the new rail rows; both boards regenerated and
+    re-gated (ERC 0, DRC 0 errors, parity 0). (2) Trade study, owner-requested 2026-10-04: with
+    the rail 4.80 mm inside the edge the Samtec SSM-DV surface-mount socket (REF-SENSOR-042,
+    outer pad edge 3.94 mm from centre-line) now fits with ~0.86 mm to the edge, which would free
+    the top face and inner layers over the rails for connectors and routing. Mechanical inputs:
+    SSM catalog states Severe Environment Testing aligned with MIL-DTL-55302 and offers -LC
+    locking clip / -A alignment pins; the SSW/TSW through-hole pair is qualified to 7.56 G RMS
+    random vibration and 100 G shock (EIA-364-28 / -27); the PB2's own headers are SMT with
+    through-hole anchors only at positions 1/2 and 35/36. Socket choice comes back to the owner
+    with the routing results before it is committed.
+    **Supersedes.** `docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md`
+    "rails sit 2.54 mm from the cape edge ... the rails stay THT" and the 2026-10-04 learning
+    `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`
+    (its SSM-DV verdict); both to be corrected in the same change.
+    - [ ] R1 TACCO rails moved, re-floor-planned, regenerated, gates 0.
+    - [x] R2 Pilot rails moved, regenerated, gates 0. **Done 2026-10-06** (Pilot.md 2026-10-06 update:
+      rails at 4.80 mm on TSM-118-04-L-DV-LC strips, both Ethernet transformers on the top face,
+      TACCO-style isolation band; ERC 0 errors, DRC 0, parity 0, 120/120 placed; routing still
+      open). Original note: **Was open as of 2026-10-06 (owner: "the cape
+      rail measurement error needs to be fixed on the pilot cape as well").** TACCO is done on this
+      item: R1, R3 and the rail gender correction below. Pilot still carries the original error:
+      - Rails: `gen_pilot_pcb.py` `FIXED` has PB2-P1 / PB2-P2 at v 2.54 / 32.46 (29.92 mm apart);
+        they must be v 4.80 / 30.20 (25.4 mm apart, REF-SENSOR-041 Fig. 3.45).
+      - Connector: `gen_pilot_sch.py` still uses the female
+        `PocketBeagle2_2x18_P{1,2}_Socket` footprints. Pilot needs the male Samtec
+        TSM-118-04-L-DV-LC strips, the same as TACCO (`Serenity-Custom:PocketBeagle2_2x18_P{1,2}_TSM-DV-LC`),
+        because the PB2-I carries female receptacles.
+      - Height: apply the same bottom-face height budget (~5.54 mm stack gap; PB2-I microSD and
+        JST-SH obstructions).
+      - Then re-floor-plan the rail-dependent geometry, regenerate, and re-gate (ERC 0, DRC 0
+        errors, parity 0).
+      - Pilot stays 55 x 35 mm. Its mounting holes are the stacking pattern TACCO keeps at
+        60 x 35 (TACCO.md §13b), so the hole positions do not move.
+    - [ ] R3 SMT (SSM-DV) vs THT rail routing study on the corrected geometry; owner decision.
+      **Decided 2026-10-05 (S. Griffing: "Do 1+2").** On the corrected rails the THT layout
+      left T-ETH, three 3015 inductors and CMC-RS485 unplaced, so TACCO moves to Samtec
+      SSM-118-L-DV-LC surface-mount rails (`Serenity-Custom:PocketBeagle2_2x18_P{1,2}_SSM-DV-LC`,
+      `samtec_ssm_footprint.pdf` Rev D Fig. 4: 1.02 x 2.22 mm pads at CL +/-2.825 mm; -LC clip
+      holes 1.19 mm NPTH at +/-20.32 mm, the through-board anchor standing in for the THT barrels;
+      -LC is hand-placed per drawing note 8). Option 2, isolation band redrawn: CAN-TR / RS485 move
+      to the top face at v 20.6 with J-CAN / J-485 at the bottom edge over the P2 rail; the band
+      (F.Cu + In1-In4) runs u 7.2-37.6, v 18.0 to the edge keep-out. B.Cu is no longer part of the
+      band: no isolated pad is on the bottom face, so B.Cu beneath the band carries logic copper
+      separated from the isolated domain by the laminate (functional bus isolation, not a safety
+      barrier); only two-pad parts and 1553-XFM (all nets escape on B.Cu) may sit there, since no
+      logic via may enter the band. Option 1 (smaller inductors) is replaced by a correctness fix
+      found on the way: the 2026-09-20 rebuild wired the TPS63031 with two inductors (L1 -> +5V,
+      L2 -> +3V3_RF), which shorts its switch nodes to the rails; `tps63031.pdf` Fig. 1 / Table 2
+      use one 1.5 uH inductor across L1-L2, so L-RF2 is removed and L-RF1 becomes that inductor
+      (LPS3015 series per Table 3; the exact 1.5 uH Coilcraft ordering code is to be confirmed —
+      the vendor site is unreachable from the build environment). No 2520-size inductor datasheet
+      is archived, so no inductor was down-sized.
+      **Follow-up 2026-10-05 (owner):** area still one mid-size part short, so (a) B-routable
+      logic parts (TPM, NOR-FLASH, SD-WB, 1553-XCVR, 1553-XFM, Tag-Connect land) may sit on
+      B.Cu under the band, and (b) J-ANT-RADIO / J-ANT-MLRS change from through-hole Molex MMCX
+      73415-1471 to Hirose U.FL-R-SMT-1(10) (KiCad library land; Hirose drawing to be archived;
+      the cable needs a tie-down/adhesive strain relief — U.FL is less vibration-tolerant than
+      MMCX). A smaller microSD socket was considered; the uploaded Molex 104031 documents are for
+      the current part, whose Ultra Librarian land saves only ~11 mm².
+      **Rail gender correction 2026-10-05 (owner):** the PocketBeagle 2 Industrial carries
+      **female** receptacles (owner photo; 3.0 mm tall by caliper), so both capes need **male**
+      pins — the SSM-DV socket above and the earlier THT socket footprint could not mate. Both
+      capes move to Samtec **TSM-118-04-L-DV-LC** SMT male strips (`samtec_tsm-dv-footprint.pdf`
+      Rev F Fig. 1: 1.27 x 3.68 mm pads, centres +/-2.475 mm; -LC holes 1.19 mm NPTH at
+      +/-20.32 mm). Lead style -04 is the shortest post (3.05 mm, for low-profile sockets), so the
+      cape-to-PB2 gap is the minimum the strip allows: 3.0 + 2.54 = ~5.54 mm. Owner rule: keep the
+      stack as low as possible while clearing every obstacle; plan heights from the cape's needs.
+      Bottom-face budget 5.0 mm (0.5 mm margin), less over the PB2-I microSD (12 x 7 x 1 mm, pin-1/2
+      end) and JST-SH UART (pin-35/36 end; height and both positions to be confirmed by
+      measurement). T-ETH (~8.9 mm) is top-face only; J-SD (1.42 mm) moves to the bottom face.
+      **Placement closed 2026-10-05:** J-SD becomes the Molex 105162-0001 1.45 mm microSD header
+      (owner; land per SD-105162-001 sheet 2, cross-checked against the Molex/Ultra Librarian
+      model; -40 to +85 C), and the +1V8_RF buck (TPS62933 + 3015 inductor + 5 passives) becomes
+      a TI TLV75718PDBVR LDO fed from +3V3_RF (owner; tlv757p.pdf; WIFI-BT-ZB AVDD18 typical
+      148-180 mA per TYPE2EL.pdf, ~0.27 W). All 163 parts place: DRC 0 errors before routing,
+      schematic parity 0, ERC unchanged (12 accepted lib_symbol_issues). Open: +3V3_RF budget
+      (TPS63031) now also carries the 1.8 V load — confirm against the power budget.
+      **Outline 55 x 35 -> 60 x 35 mm, 2026-10-06 (S. Griffing: "Go with option 2, 60x35 with
+      1.5 mm gap").** Routing at 55 x 35 left 60-90 connections unrouted on 6 layers and ~71 on 8
+      (area-bound at ~95 % courtyard fill). The extra 5 mm overhangs the PB2-I microSD end
+      (`U_LO = -5` in `gen_tacco_pcb.py`); rails, H1-H4 and fixed stations unchanged. Airframe
+      re-proved at all four TACCO stations: nose tray 60 -> 65 mm; cargo chin pair 63 mm pouches at
+      Y -60.3..2.7 with a 1.5 mm static gap and a 9 mm cable channel (`cargo_layout_fit.py` Rev T5g
+      PASS); Simon CN4 slot 63 mm (`middle_layout_fit.py` Rev T6a PASS). Detail: TACCO.md §13b.
+      Open: re-export the chin shelf, Simon saddle, node-bay void former and head-shell STLs.
+    - [ ] R4 Learning docs and CONCEPTS.md corrected.
 - [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
     APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift
     record per root `AGENTS.md` §10 (documented before any KiCad change). Supersedes the

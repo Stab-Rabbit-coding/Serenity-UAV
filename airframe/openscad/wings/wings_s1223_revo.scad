@@ -230,7 +230,17 @@ WING_CHORD_ROOT = 129.0;  // [mm] root chord (at fuselage face) — from canonic
 WING_CHORD_TIP  =  93.0;  // [mm] tip chord  (at pylon face)    — from canonical STL
 WING_SEMI_SPAN  =  85.7;  // [mm] root face to tip face          — maintained from Rev R
 WING_SWEEP_LE   =   0.0;  // [mm] LE sweep: 0 = straight LE (matches Serenity canon)
-WING_DIHEDRAL   =   0.0;  // [mm] tip rise vs. root (+Z in output); Serenity ≈ 0
+WING_DIHEDRAL   = 1.45775; // [mm] tip rise vs. root (+Z in output) = 0.975 deg.
+// REV T6 (owner decision 2026-10-03, joint census): was 0.0.  With zero
+// dihedral, spar_bore() hulls a root disc on the ROOT camber midline (8.8406)
+// to a tip disc on the TIP midline (7.3829): the bore SLOPED 1.458 mm over the
+// span, while the Ø20 CF spar is STRAIGHT and its fuselage socket is LEVEL
+// (merge_cargo_interior.py WING_SPAR_Z, 8.841 above the chord line) with only
+// 0.2 mm/side clearance — the spar could not enter.  A level bore at zero
+// dihedral breaks the tip skin (0.01 mm wall).  Raising the tip by exactly
+// root_mid - tip_mid makes the bore LEVEL on the socket datum and keeps the
+// as-built wall.  One value, this mirrored file: both wings move together.
+// Asserted in spar_bore().
 
 // ── Wing section scaling ──────────────────────────────────────────────────────
 // The S1223 normalised profile is scaled by chord at each span station.
@@ -653,6 +663,26 @@ SPAR_TIP_PROTRUSION   =  13.5;   // [mm] spar stub proud of the wing tip face �
                                  //      SLEEVE-BOUNDED (max 13.5, corrected
                                  //      2026-08-31 from 15.0/15.7 which fouled
                                  //      the stator sleeve by 0.80 mm).
+// 64 mm QX nacelle (owner 2026-10-03, WBS NAC-64-TILT-01): the stub is cut
+// 7.0 mm LONGER so the trunnion can carry 2 x 6804-ZZ (C0 2.45 kN each,
+// JTEKT, REF-BRG-002) in a 15.0 mm stack instead of 2 x 6704-ZZ in 8.0 mm.
+// The spar TIP stays sleeve-bounded; the nacelle axis moves 7.0 mm further
+// outboard of the wing (nacelle_pod_64mm_tandem.scad P64_STUB_EXTRA), so the
+// extra length all lands in the bearing stack.  Tip pad, encoder air gap,
+// magnet and the 14T pinion position relative to the tip face are UNCHANGED.
+// Published requirement for the 64 mm nacelle; 13.5 above stays the 50 mm one.
+SPAR_TIP_PROTRUSION_64N = SPAR_TIP_PROTRUSION + 7.0;   // = 20.5 mm
+
+// 64 mm tilt pinion (option A, 2026-10-03): wing_tilt_pinion.scad — BRASS,
+// m0.8 14T, face 10.5 (was 5.0).  Its WING-side face stays where it was (6.0
+// mm proud of the tip pad), so the face grows toward the nacelle, into the
+// pod's swept relief.  The Ø4 shaft must therefore stick out of the tip pad by
+// TILT_SHAFT_STICKOUT_64N.  ONE value for both wings (this file is mirrored),
+// so port and starboard stay synchronised — a joint fix never moves one side.
+TILT_PINION_FACE_64N     = 10.5;   // [mm]
+TILT_PINION_PAD_GAP_64N  =  6.0;   // [mm] tip pad -> pinion wing-side face
+TILT_SHAFT_STICKOUT_64N  = TILT_PINION_PAD_GAP_64N + TILT_PINION_FACE_64N
+                         + 1.0;    // [mm] = 17.5, +1 chamfer run-out
 
 // ── Wingtip service access (Rev T1) ──────────────────────────────────────────
 // Plan 003 U3 also specified a wingtip "maintenance garage" housing the
@@ -850,8 +880,15 @@ HALL_CABLE_STATION = 44.5; // [mm] chordwise station aft of LE — CONSTANT over
 // thickness envelope about the camber line and leaves the camber unscaled, so
 // multiplying the midline by the thickness scale would put the bore ABOVE the
 // section it is supposed to be centred in.
+// Spar centre height AT THE TIP FACE, where the tip section sits raised by
+// WING_DIHEDRAL (Rev T6).  Every caller is a tip feature (pad, sensor pocket,
+// cable jog), so they ride with the spar; == root midline by spar_bore()'s
+// level-bore assert.
 function spar_tip_y() = midline_frac(SPAR_BORE_STATION / WING_CHORD_TIP)
-                        * WING_CHORD_TIP;
+                        * WING_CHORD_TIP + WING_DIHEDRAL;
+// Levelled shaft centre height (root datum at SHAFT_BORE_STATION), Rev T6.
+function shaft_y() = midline_frac(SHAFT_BORE_STATION / WING_CHORD_ROOT)
+                     * WING_CHORD_ROOT;
 
 // ── WING ROOT LOAD PATH (Rev T1, 2026-08-29) ────────────────────────────────
 // THIS IS THE STRUCTURAL CONSEQUENCE OF THE SPAR BECOMING A WING MEMBER.
@@ -1377,6 +1414,9 @@ module spar_bore() {
                  * WING_CHORD_ROOT;
     tip_y_ctr  = midline_frac(SPAR_BORE_STATION / WING_CHORD_TIP)
                  * WING_CHORD_TIP;
+    // The straight spar needs a LEVEL bore on the root/socket datum.
+    assert(abs(tip_y_ctr + WING_DIHEDRAL - root_y_ctr) < 0.001,
+           "spar bore not level: WING_DIHEDRAL must equal root_mid - tip_mid");
 
     hull() {
         translate([SPAR_BORE_STATION, root_y_ctr, -1.0])       // root disc (1 mm below root face)
@@ -1431,17 +1471,23 @@ module nav_bore() {
 // is at 43.0), which is deliberate — the pad gives the shaft's outboard bushing
 // a thick, supported boss to run in instead of a 1.2 mm skin.
 //
-// Same constant-mm law as every other bore in this wing, so it stays parallel
-// to the spar over the whole span and the webs cannot be eroded by taper.
+// REV T6 (2026-10-03, joint census): LEVEL on the ROOT datum.  The shaft is a
+// straight Ø4 steel rod in a 0.2 mm/side bore, it must be PARALLEL to the
+// tilt axis for the tip spur pair to mesh, and the fuselage drive holds it at
+// merge_cargo_interior.py WING_SHAFT_Z (root midline at station 53.6).  The
+// earlier "constant-mm law ... stays parallel to the spar" claim was false: a
+// hull from the root-midline disc to the tip-midline disc sloped 2.66 mm over
+// the span (measured on the baked mesh).  Now both discs use root_yc, so the
+// bore is parallel to the (also level) spar bore.  Wall at the tip and the
+// resulting tip centre distance are checked by the joint census (WBS).
 module tilt_shaft_bore() {
     xc = SHAFT_BORE_STATION;
-    root_yc = midline_frac(xc / WING_CHORD_ROOT) * WING_CHORD_ROOT;
-    tip_yc  = midline_frac(xc / WING_CHORD_TIP)  * WING_CHORD_TIP;
+    root_yc = shaft_y();
 
     hull() {
         translate([xc, root_yc, -1.0])
             cylinder(r = SHAFT_BORE_D / 2, h = 0.01);
-        translate([xc, tip_yc + WING_DIHEDRAL,
+        translate([xc, root_yc,
                    WING_SEMI_SPAN + TIP_PAD_PROUD + 1.0])
             cylinder(r = SHAFT_BORE_D / 2, h = 0.01);
     }
@@ -1512,8 +1558,9 @@ module wing_tip_nacelle_mount_pad() {
             cylinder(r = TIP_PAD_R, h = TIP_PAD_PROUD, $fn = 64);
         translate([spar_x + HALL_SENS_R, spar_y, spar_z])
             cylinder(r = TIP_PAD_SENS_R, h = TIP_PAD_PROUD, $fn = 48);
-        translate([SHAFT_BORE_STATION, spar_y, spar_z])
-            cylinder(r = TIP_PAD_SHAFT_R, h = TIP_PAD_PROUD, $fn = 48);
+        translate([SHAFT_BORE_STATION, shaft_y(), spar_z])   // lobe C on the
+            cylinder(r = TIP_PAD_SHAFT_R, h = TIP_PAD_PROUD, $fn = 48); // shaft
+
     }
 }
 

@@ -126,11 +126,16 @@ the current revision directly:
 
 ## Nacelle Nozzle Drive
 
-Each nacelle nozzle is variable-diameter, driven by nacelle tilt, sized 75% of bore at 0°
-(forward) to 105% of bore at ≥90° (vertical/backing) — a fixed functional requirement. The
-mechanism that achieves it (gear train vs. linkage alternatives) is an **active trade study**;
-do not assume a specific mechanism here. Read the current state directly:
+Each nacelle nozzle is variable-diameter, **scheduled on measured nacelle tilt**, sized 75% of
+bore at 0° (forward) to 105% of bore at every tilt from 90° to the 145° limit (vertical/backing),
+and shall fail to 105% on loss of servo power, command, or tilt-angle validity — a fixed
+functional requirement. Mechanism (owner decision 2026-09-28, servo drive): one sub-micro servo per
+nacelle inside the pod, commanded from the AK7455 tilt angle by its bus gateway, pulling the
+unison ring through a pull-only link against a spring that opens it to a hard 105% stop. The
+passive gear/linkage drives were retired (unbuildable in the Rev T4 joint; over-travel past 90°).
+Read the current state directly:
 
-- **Trade study and current recommendation:** `docs/NOZZLE_DRIVE_TRADE.md`
+- **Trade study and decision record:** `docs/NOZZLE_DRIVE_TRADE.md`
+- **Implementation plan:** `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`
 - **SCAD source:** `nacelle_nozzle_iris.scad`
 - **Open work:** `TODO.md` §1.1.3.1

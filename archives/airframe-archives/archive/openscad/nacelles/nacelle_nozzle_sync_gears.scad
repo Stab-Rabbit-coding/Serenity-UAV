@@ -1,3 +1,6 @@
+// ARCHIVED 2026-09-28 — RETIRED by the servo nozzle drive (docs/NOZZLE_DRIVE_TRADE.md
+// "DECISION AMENDMENT — servo drive (2026-09-28)"). Kept for the record only; not built,
+// not imported. Original header and attribution follow unchanged.
 // ===========================================================================
 // *** DO NOT PRINT THE SUN — ITS DATUM IS BLOCKED (2026-09-10) ***
 //   The gear PAIR SIZING, the tooth-stress check, the backlash/chamfer work,

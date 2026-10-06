@@ -179,8 +179,12 @@ FP_QFN48_WL = "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm"
 # Epson TG2520SMN 2.5x2.0 mm TCXO (TG2520SMN_en-2584158.pdf pin map 1 NC, 2 GND, 3 OUT, 4 VCC)
 FP_TG2520 = "Oscillator:Oscillator_SMD_SeikoEpson_TG2520SMN-xxx-xxxxxx-4Pin_2.5x2.0mm"
 # project-custom lands (avionics/kicad/Serenity-Custom.pretty)
-FP_PB2P1 = "Serenity-Custom:PocketBeagle2_2x18_P1_Socket"
-FP_PB2P2 = "Serenity-Custom:PocketBeagle2_2x18_P2_Socket"
+# PB2 rails: Samtec TSM-118-04-L-DV-LC SMT male terminal strips (owner 2026-10-05: the
+# PocketBeagle 2 Industrial carries female receptacles, so the cape carries the pins).
+# samtec_tsm-dv-footprint.pdf Rev F Fig. 1 land; -04 is the shortest post (3.05 mm, for
+# low-profile sockets), giving a ~5.5 mm cape-to-PB2 gap; -LC clips anchor each strip.
+FP_PB2P1 = "Serenity-Custom:PocketBeagle2_2x18_P1_TSM-DV-LC"
+FP_PB2P2 = "Serenity-Custom:PocketBeagle2_2x18_P2_TSM-DV-LC"
 FP_NANOFIT = "Serenity-Custom:Molex_NanoFit_1x04_Horizontal"
 FP_SRF2012 = "Serenity-Custom:Bourns_SRF2012_4T"
 FP_X2Y0805 = "Serenity-Custom:X2Y_0805_4T"
@@ -191,6 +195,8 @@ FP_WIOE5 = "Serenity-Custom:Seeed_WioE5_QFN28"
 FP_VSON10 = "Serenity-Custom:TPS6303x_VSON-10_2p5"
 FP_FLLORA = "Serenity-Custom:Johanson_0915LP15B026E_SMD4"
 FP_RCLAMP = "Serenity-Custom:RCLAMP0502B_SOD882"
+# Infineon ESD101-B1-02ELS TSSLP-2-4 (esd101-b1.pdf), shared verified land
+FP_ESD101 = "SecureControllers:Infineon_TSSLP-2-4_0.62x0.32mm"
 FP_SOT89 = "Package_TO_SOT_SMD:SOT-89-3"
 
 
@@ -408,27 +414,22 @@ ICS: List[Dict[str, Any]] = [
     },
     {
         "ref": "U-1V8RF",
-        "value": "TPS62933DRLR",
-        "fp": "Package_TO_SOT_SMD:SOT-583-8",
-        "mpn": "TPS62933DRLR",
-        "ds": "tps62933.pdf Table 7-1 Pin Functions (SOT-583) [REF-PWR-001] — second instance of "
-              "the same buck already used for U-3V3, refactored for a 1.8V output via the FB "
-              "divider below. Added 2026-09-21 because WIFI-BT-ZB's AVDD18 draws up to 1009 mA "
-              "peak (type2el.pdf §9.1) — the pre-existing 150 mA LDO (U-1V8, sized only for SDIO "
-              "signaling level) could not supply this. Rather than run two separate 1.8V "
-              "regulators, U-1V8 was removed entirely: SD_VIO is just 1.8V logic-level signaling "
-              "(a few mA) at the same nominal voltage, so it shares THIS regulator's +1V8_RF "
-              "output directly (own local bypass cap, same as any other rail pin) — one "
-              "regulator for the whole 1.8V domain, less total footprint than two.",
+        "value": "TLV75718PDBVR",
+        "fp": "Package_TO_SOT_SMD:SOT-23-5",
+        "mpn": "TLV75718PDBVR",
+        "ds": "tlv757p.pdf Table 4-1 Pin Functions (DBV: 1 IN, 2 GND, 3 EN, 4 NC, 5 OUT), Table 8-1 "
+              "nomenclature (18 = 1.8 V fixed, P = active discharge), 1 A, CIN/COUT >= 1 uF. Owner "
+              "2026-10-05: replaces the TPS62933 1.8 V buck (and its 3015 inductor, bootstrap, "
+              "soft-start, EN and FB parts) to free board area. Load: WIFI-BT-ZB AVDD18 + SD_VIO, "
+              "TYPE2EL.pdf typical 148-180 mA Tx / 101-130 mA Rx at 1.8 V (rated max 1009 mA); "
+              "dissipation (3.3-1.8) x 0.18 A = 0.27 W, ~62 C rise at the DBV 231 C/W JEDEC "
+              "figure — copper pour on IN/OUT/GND required. Fed from +3V3_RF per the owner's choice.",
         "pins": [
-            ("3", "VIN", "+5V", "L"),
-            ("2", "EN", "U1V8RF_EN", "L"),
-            ("1", "RT", "GND", "L"),
-            ("4", "GND", "GND", "L"),
-            ("5", "SW", "SW_1V8RF", "R"),
-            ("6", "BST", "BST_1V8RF", "R"),
-            ("7", "SS/PG", "SS_1V8RF", "R"),
-            ("8", "FB", "FB_1V8RF", "R"),
+            ("1", "IN", "+3V3_RF", "L"),
+            ("3", "EN", "+3V3_RF", "L"),
+            ("2", "GND", "GND", "L"),
+            ("4", "NC", None, "R"),
+            ("5", "OUT", "+1V8_RF", "R"),
         ],
     },
     # SIK (RFD900ux-SMT) REMOVED 2026-09-21 per owner: relocated to Commo
@@ -858,7 +859,9 @@ def pb2_header(ref: str, value: str, fp: str, nets: List[Optional[str]]) -> Dict
     omitted = PB2_P2_OMITTED if ref == "PB2-P2" else set()
     pins = [(str(i), f"P{i}", net, "L" if i <= 18 else "R")
             for i, net in enumerate(nets, start=1) if i not in omitted]
-    return {"ref": ref, "value": value, "fp": fp, "mpn": "", "ds": "PocketBeagle 2 P1/P2 expansion rails (XO map)", "pins": pins}
+    return {"ref": ref, "value": value, "fp": fp, "mpn": "TSM-118-04-L-DV-LC",
+            "ds": "PocketBeagle 2 P1/P2 expansion rails (XO map); Samtec TSM-DV SMT male strip, -04 "
+                  "post, -LC locking clip (manual placement) [REF-SENSOR-042]", "pins": pins}
 
 
 ICS += [
@@ -895,28 +898,21 @@ SIMPLE: List[Any] = [
     ("R-FB3L", "32.4k 1%", FP_R0201, "", "TPS62933 FB divider bottom (3.27 V)", [("1", "A", "FB_3V3"), ("2", "B", "GND")]),
     ("C-3V3-O1", "22uF 6.3V X5R", FP_C0603, "", "TPS62933 COUT", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-3V3-O2", "22uF 6.3V X5R", FP_C0603, "", "TPS62933 COUT", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    # --- +1V8_RF high-current buck (TPS62933, 2nd instance) — WIFI-BT-ZB AVDD18
+    # --- +1V8_RF LDO (TLV75718P, owner 2026-10-05; was a TPS62933 buck) — WIFI-BT-ZB AVDD18
     # + SD_VIO (added 2026-09-21, replacing the removed 150mA U-1V8 LDO; see
     # U-1V8RF's own docstring above for the one-regulator-not-two rationale)
-    ("R-EN18", "100k", FP_R0201, "", "U-1V8RF EN pull-up to VIN", [("1", "A", "+5V"), ("2", "B", "U1V8RF_EN")]),
-    ("C-1V8RF-IN", "10uF 10V X5R", FP_C0603, "", "U-1V8RF CIN at VIN/GND", [("1", "P", "+5V"), ("2", "N", "GND")]),
-    ("C-1V8RF-HF", "100nF", FP_C0402, "", "U-1V8RF CIN HF", [("1", "P", "+5V"), ("2", "N", "GND")]),
-    ("C-BST18", "100nF", FP_C0402, "", "U-1V8RF BST-SW bootstrap", [("1", "P", "BST_1V8RF"), ("2", "N", "SW_1V8RF")]),
-    ("C-SS18", "10nF", FP_C0201, "", "U-1V8RF soft-start", [("1", "P", "SS_1V8RF"), ("2", "N", "GND")]),
-    ("L-1V8RF", "3.3uH 2.25A", "Serenity-Custom:L_WE-MAPI_3015", "74438335033", "U-1V8RF inductor, same WE-MAPI 3015 part/land as L-3V3",
-     [("1", "A", "SW_1V8RF"), ("2", "B", "+1V8_RF")]),
-    ("R-FB18H", "40.2k 1%", FP_R0201, "", "U-1V8RF FB divider top (Vfb=0.8V -> 1.79V; 0.8*(1+40.2/32.4))", [("1", "A", "+1V8_RF"), ("2", "B", "FB_1V8RF")]),
-    ("R-FB18L", "32.4k 1%", FP_R0201, "", "U-1V8RF FB divider bottom", [("1", "A", "FB_1V8RF"), ("2", "B", "GND")]),
+    ("C-1V8RF-IN", "10uF 10V X5R", FP_C0603, "", "U-1V8RF CIN at IN/GND (tlv757p.pdf: >= 1 uF)", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
+    ("C-1V8RF-HF", "100nF", FP_C0402, "", "U-1V8RF CIN HF", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
     ("C-1V8RF-O1", "22uF 6.3V X5R", FP_C0603, "", "U-1V8RF COUT", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
     ("C-1V8RF-O2", "22uF 6.3V X5R", FP_C0603, "", "U-1V8RF COUT", [("1", "P", "+1V8_RF"), ("2", "N", "GND")]),
     # --- +3V3_RF buck-boost (TPS63031) --------------------------------------
-    ("L-RF1", "2.2uH 3A", FP_L3015, "LPS3015-222MRC", "TPS63031 first inductor leg; tps63031.pdf Table 3 "
-     "recommends Coilcraft LPS3015/Murata LQH3NP/Taiyo Yuden NR3015 — \"744042002\" (used here previously) "
-     "could not be found as a real Wurth part and appears fabricated during this rebuild, corrected "
-     "2026-09-20 to a real Coilcraft LPS3015 part",
-     [("1", "A", "RF_SW1"), ("2", "B", "+5V")]),
-    ("L-RF2", "2.2uH 3A", FP_L3015, "LPS3015-222MRC", "TPS63031 second inductor leg, same correction as L-RF1",
-     [("1", "A", "RF_SW2"), ("2", "B", "+3V3_RF")]),
+    ("L-RF1", "1.5uH", FP_L3015, "LPS3015-152MRC", "TPS63031 power inductor between L1 (pin 4) and L2 (pin 2): "
+     "tps63031.pdf Fig. 1/Table 2 (1.5 uH LPS3015-1R5) and Table 3 (LPS3015/LQH3NP/NR3015 series). "
+     "Corrected 2026-10-05: the 2026-09-20 rebuild had split this into two inductors (L1->+5V, "
+     "L2->+3V3_RF), which shorts the switch nodes to the rails through the windings; a buck-boost "
+     "uses one inductor across L1-L2. Coilcraft ordering code for the 1.5 uH value to be confirmed "
+     "against the Coilcraft LPS3015 datasheet (vendor site unreachable from the build environment)",
+     [("1", "A", "RF_SW1"), ("2", "B", "RF_SW2")]),
     ("C-RF-IN1", "10uF 10V X5R", FP_C0603, "", "TPS63031 VIN bulk", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-RF-IN2", "100nF", FP_C0402, "", "TPS63031 VIN HF", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-RF-O1", "22uF 6.3V X5R", FP_C0603, "", "TPS63031 COUT", [("1", "P", "+3V3_RF"), ("2", "N", "GND")]),
@@ -943,7 +939,7 @@ SIMPLE: List[Any] = [
     ("CMC-CAN", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "CAN_B_H"), ("2", "W1_OUT", "CAN_B_H_F"), ("4", "W2_IN", "CAN_B_L"), ("3", "W2_OUT", "CAN_B_L_F")]),
     ("TVS-CAN", "PRTR5V0U2X", FP_SOT143, "PRTR5V0U2X,315", "prtr5v0u2x.pdf (Nexperia, SOT143B 4-pin) [REF-SENSOR-038]",
-     [("1", "IO1", "CAN_B_H_F"), ("2", "GND", "GND2_CANB"), ("3", "IO2", "CAN_B_L_F"), ("4", "VCC", "VCC2_CANB")]),
+     [("1", "GND", "GND2_CANB"), ("2", "IO1", "CAN_B_H_F"), ("3", "IO2", "CAN_B_L_F"), ("4", "VCC", "VCC2_CANB")]),
     ("R-CANT", "120R", FP_R0402, "", "CAN bus termination — populate ONLY at a bus end node (DNP default); shrunk to 0402, DNP by default so no continuous-power concern",
      [("1", "A", "CAN_B_H_F"), ("2", "B", "CAN_B_L_F")], {"dnp": True}),
     ("J-CAN", "SM03B-GHS-TB", FP_GH3, "SM03B-GHS-TB(LF)(SN)", "XO.md §14 J_CAN",
@@ -960,7 +956,7 @@ SIMPLE: List[Any] = [
     ("CMC-RS485", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "RS485_B_A"), ("2", "W1_OUT", "RS485_B_A_F"), ("4", "W2_IN", "RS485_B_B"), ("3", "W2_OUT", "RS485_B_B_F")]),
     ("TVS-RS485", "PRTR5V0U2X", FP_SOT143, "PRTR5V0U2X,315", "prtr5v0u2x.pdf (Nexperia, SOT143B) [REF-SENSOR-038]",
-     [("1", "IO1", "RS485_B_A_F"), ("2", "GND", "GND2_RS485B"), ("3", "IO2", "RS485_B_B_F"), ("4", "VCC", "VCC2_RS485B")]),
+     [("1", "GND", "GND2_RS485B"), ("2", "IO1", "RS485_B_A_F"), ("3", "IO2", "RS485_B_B_F"), ("4", "VCC", "VCC2_RS485B")]),
     ("R-485T", "120R", FP_R0402, "", "RS-485 termination — populate ONLY at a bus end node (DNP default); shrunk to 0402, DNP by default so no continuous-power concern",
      [("1", "A", "RS485_B_A_F"), ("2", "B", "RS485_B_B_F")], {"dnp": True}),
     ("J-485", "SM03B-GHS-TB", FP_GH3, "SM03B-GHS-TB(LF)(SN)", "XO.md §14 J_485",
@@ -1100,13 +1096,14 @@ SIMPLE: List[Any] = [
     # --- fan + SD --------------------------------------------------------
     ("J-FAN", "SM03B-GHS-TB", FP_GH3, "SM03B-GHS-TB(LF)(SN)", "XO.md §14 J_FAN (bay ventilation)",
      [("1", "GND", "GND"), ("2", "+5V", "+5V"), ("3", "FAN_PWM", "FAN_PWM_B")]),
-    ("J-SD", "microSD push-pull", FP_MICROSD, "104031-0811",
-     "molex-104031.pdf (Molex 104031-0811) — used in place of XO.md's cited \"Molex 503182-1852\", "
-     "which could not be verified as a real Molex part number this pass; 104031-0811 IS a confirmed, "
-     "datasheet-real microSD connector and is already in KiCad's system library",
-     [("1", "CD/DAT3", None), ("2", "CMD", None), ("3", "VSS1", "GND"), ("4", "VDD", "+3V3"),
-      ("5", "CLK", None), ("6", "VSS2", "GND"), ("7", "DAT0", None), ("8", "DAT1", None),
-      ("9", "DAT2", None), ("10", "SW-COM", "GND"), ("11", "SW-NC", "SD_CD")]),
+    ("J-SD", "microSD header 1.45H", "Serenity-Custom:microSD_Molex_105162-0001", "105162-0001",
+     "Molex 105162-0001 1.45 mm microSD header with detect pin (owner 2026-10-05; replaces the "
+     "104031-0811 push-pull socket to free ~80 mm2). SD-105162-001 sheet 2 pin table: P1 DAT2, "
+     "P2 CD/DAT3, P3 CMD, P4 VDD, P5 CLK, P6 VSS, P7 DAT0, P8 DAT1, P9 DET, G1-G4 GND. Single "
+     "detect pin: DET closes to the shell when a card is seated (firmware polarity to confirm)",
+     [("1", "DAT2", None), ("2", "CD/DAT3", None), ("3", "CMD", None), ("4", "VDD", "+3V3"),
+      ("5", "CLK", None), ("6", "VSS", "GND"), ("7", "DAT0", None), ("8", "DAT1", None),
+      ("9", "DET", "SD_CD"), ("G", "SHELL", "GND")]),
     # --- antenna filter/ESD chains (XO.md §13) ------------------------------
     # FL-SIK/D-ANT-SIK/J-SMA-SIK (RFD900ux-SMT's own antenna chain) REMOVED
     # 2026-09-21 along with SIK itself (relocated to Commo). Wio-E5's antenna
@@ -1123,10 +1120,12 @@ SIMPLE: List[Any] = [
      [("1", "A", "MLRS_ANT_RF"), ("2", "B", "MLRS_ANT_F")]),
     ("C-MLRS-SH2", "DNP", FP_C0201, "", "mLRS antenna match shunt 2 (DNP until bench VSWR tuning)",
      [("1", "A", "MLRS_ANT_F"), ("2", "B", "GND")]),
-    ("D-ANT-MLRS", "RCLAMP0502B", FP_RCLAMP, "RCLAMP0502BTCL", "RF ESD shunt, same flag as D-ANT-SIK originally carried",
-     [("1", "A", "MLRS_ANT_F"), ("2", "K", "PGND")]),
-    ("J-ANT-MLRS", "MMCX vertical", FP_MMCX, "73415-1471",
-     "mLRS antenna jack — same vertical-MMCX board-area rationale as the WiFi/BT/802.15.4 jack",
+    ("D-ANT-MLRS", "ESD101-B1-02ELS", FP_ESD101, "ESD101-B1-02ELS", "RF ESD shunt, Infineon ESD101-B1-02ELS 0.1 pF (owner 2026-09-26, WBS U7.1j; esd101-b1.pdf) — replaces the deprecated RCLAMP0502B",
+     [("1", "IO", "MLRS_ANT_F"), ("2", "GND", "PGND")]),
+    ("J-ANT-MLRS", "U.FL", FP_USMD, "U.FL-R-SMT-1(10)",
+     "mLRS antenna jack — Hirose U.FL SMT (owner 2026-10-05: replaces the through-hole MMCX, whose "
+     "pins blocked both faces; KiCad library land, Hirose drawing to be archived; cable needs "
+     "a tie-down/adhesive strain relief)",
      [("1", "RF", "MLRS_ANT_F"), ("2", "SHIELD", "PGND")]),
     # FL-LORA / D-ANT-LORA / J-SMA-LORA (LoRa antenna filter/ESD/jack chain)
     # REMOVED 2026-09-20 along with LORA itself.
@@ -1151,10 +1150,11 @@ SIMPLE: List[Any] = [
      [("1", "A", "RADIO_ANT_RF"), ("2", "B", "RADIO_ANT_F")]),
     ("C-ANT-SH2", "DNP", FP_C0402, "", "Antenna match shunt 2 (DNP until bench VSWR tuning)",
      [("1", "A", "RADIO_ANT_F"), ("2", "B", "GND")]),
-    ("D-ANT-RADIO", "RCLAMP0502B", FP_RCLAMP, "RCLAMP0502BTCL", "RF ESD shunt, same flag as D-ANT-SIK — now the "
+    ("D-ANT-RADIO", "ESD101-B1-02ELS", FP_ESD101, "ESD101-B1-02ELS", "RF ESD shunt, Infineon ESD101-B1-02ELS 0.1 pF (owner 2026-09-26, WBS U7.1j) — now the "
      "single shared WiFi/BT/802.15.4 antenna feed (was WiFi-only)",
-     [("1", "A", "RADIO_ANT_F"), ("2", "K", "PGND")]),
-    ("J-ANT-RADIO", "MMCX vertical", FP_MMCX, "73415-1471",
+     [("1", "IO", "RADIO_ANT_F"), ("2", "GND", "PGND")]),
+    ("J-ANT-RADIO", "U.FL", FP_USMD, "U.FL-R-SMT-1(10)",
+     "Hirose U.FL SMT (owner 2026-10-05, replaces through-hole MMCX 73415-1471). "
      "Shared WiFi/BT/802.15.4 antenna jack (SANT mode) — was WiFi-only J-SMA-WIFI; Type2EL's single "
      "ANT0 feed now serves all three radios, so XO drops from needing (at minimum) two antenna "
      "jacks/chains down to one",
@@ -1331,7 +1331,7 @@ TITLE_BLOCK = """  (title_block
     (date "2026-09-29")
     (rev "S2")
     (company "Griffing Technology LLC")
-    (comment 1 "TACCO — PocketBeagle 2 Industrial cape, 55 x 35 mm, 6-layer")
+    (comment 1 "TACCO — PocketBeagle 2 Industrial cape, 60 x 35 mm, 6-layer")
     (comment 2 "Generated by avionics/kicad/TACCO/scripts/gen_tacco_sch.py — do not hand-edit; edit the generator")
     (comment 3 "Authors: Claude Sonnet 5 (2026-09-20), Claude Fable 5.1 (2026-09-29); owner sgriffing")
     (comment 4 "CC BY 4.0 — pinouts transcribed from OEM datasheets in avionics/datasheets/")

@@ -28,7 +28,7 @@ mLRS bare-chip radio, non-stack rails, and fab-ready layout" for the full decisi
 - **DP83825I pin table corrected** against TI SNLS638C Table 4-1 (the previous table was not
   this part's pinout; Pilot shares the defect). Pin 2 (50MHzOut) drives `RMII2_REF_CLK`.
 - **Layout:** owner authorized full auto-placement and autorouting; the §1/§11–13 layout
-  constraints below still apply. All 170 parts are placed on the 55 × 35 mm outline with 0 DRC
+  constraints below still apply (outline now 60 × 35 mm, §13b). All 170 parts are placed on the 55 × 35 mm outline with 0 DRC
   errors before routing (isolation band and GND2 islands follow the transceiver positions;
   small bypasses use the top-face cells between the non-stack-through rail pins). Routing,
   Gerber and remaining gates are tracked in the WBS entry.
@@ -445,6 +445,78 @@ FL_WIFI, FL_SIK) as documented in §13. The SMA connector shell PGND connection 
 antenna cable shielding provide the primary conducted shield path.
 
 ---
+
+## §13a — PB2 Rail Sockets and Isolation Band (2026-10-05)
+
+Decision record: `avionics/WBS.md`, "PB2 rail geometry correction", R3 ("Do 1+2").
+
+**Geometry.** Rail centre-lines 4.80 mm (0.189 in) inside each long edge, 25.4 mm (1.00 in)
+apart [REF-SENSOR-041 Fig. 3.45]. Sockets: Samtec **SSM-118-L-DV-LC**, bottom face,
+`Serenity-Custom:PocketBeagle2_2x18_P{1,2}_SSM-DV-LC` built from `samtec_ssm_footprint.pdf`
+Rev D Fig. 4 (pads 1.02 x 2.22 mm, centres +/-2.825 mm, outer pad edge 3.94 mm from the
+centre-line, ~0.86 mm inside the board edge) [REF-SENSOR-042].
+
+**Mechanical retention (owner request 2026-10-04).**
+- The -LC locking clip puts one clip per socket end through a 1.19 mm (0.047 in) NPTH at
+  +/-20.32 mm on the centre-line, so each socket is anchored through the board at both ends —
+  the same "through-board only at the ends" pattern as the PB2's own SMT headers, which carry
+  through-hole pins only at positions 1/2 and 35/36 [REF-SENSOR-041]. -LC needs manual
+  placement (Samtec drawing note 8): the assembly order must call it out.
+- The SSM catalog cites Severe Environment Testing aligned with MIL-DTL-55302; the mating
+  TSW/SSW family is qualified to 7.56 G RMS random vibration (50–2000 Hz, 2 h/axis,
+  EIA-364-28 V-B) and 100 G / 6 ms shock (EIA-364-27) [REF-SENSOR-042]. No SSM-specific
+  vibration figure is archived; treat the rail as unqualified until the stack passes the
+  airframe vibration test.
+- Cape H1–H4 chassis holes remain the primary load path; the rails carry no structural load.
+- Socket tails are SMT (no protruding tails). Conformal-coat the rail solder fillets with the
+  rest of the board, masking the socket contacts.
+
+**Isolation band.** CAN-TR / RS485 on the top face at v 20.6 mm; J-CAN / J-485 at the bottom
+edge over the P2 rail. `ISO_BAND` covers F.Cu and In1–In4, u 7.2–37.6 mm, v 18.0 mm to the edge
+keep-out; In1 carries the GND2 islands, In2–In4 are kept out. **B.Cu is not part of the band:**
+no isolated pad sits on the bottom face, so B.Cu beneath the band carries logic copper
+(two-pad parts, 1553-XFM and the Tag-Connect land) that must route on B.Cu alone, because no
+logic via may enter the band. The isolated domain is separated from that copper by the
+laminate (In1 to B.Cu), not by surface creepage — functional bus isolation, not a safety
+barrier. The ≥ 8 mm creepage target in the layout constraints above applies to same-surface
+spacing and is still to be verified on the routed board.
+
+## §13b — Outline 60 x 35 mm (2026-10-06)
+
+Owner decision 2026-10-06 ("option 2, 60x35 with 1.5 mm gap"); supersedes the 55 x 35 mm
+hard constraint in §1 for TACCO only (Pilot stays 55 x 35).
+
+**Why.** At 55 x 35 the placed board was about 95 % courtyard-full, and every routing attempt
+left 60–90 connections unrouted on 6 layers and about 71 on 8, so the board was limited by area,
+not layer count. 60 x 35 adds 175 mm² (0.27 in²).
+
+**Where the extra 5 mm (0.20 in) goes.** On the PB2-I microSD (pin-1/2) end: the board spans
+u = −5..55 in the generator's PB2 frame (`U_LO`, `gen_tacco_pcb.py`). The rails, H1–H4 (still
+on the Pilot stacking pattern) and every fixed station are unchanged. The overhang stays clear
+of the PB2's USB-C / JST-SH end. Bottom-face parts wholly past the PB2-I edge (u < −1.0) are
+not held to the 5.04 mm rail-gap height budget; they are capped at 8 mm by the pouch stack.
+The overhang sits 5.54 mm above the PB2-I microSD slot: the card can still be inserted, but
+it is a bench operation.
+
+**Airframe fit (all four TACCO stations, re-proved 2026-10-06).**
+
+| Station | Mount | Change | Gate |
+|---|---|---|---|
+| Nose, CN1 | Faraday tray (with FC1) | tray 60 → 65 mm, access panel 62 → 67 mm (`head_shell24.scad`) | bare-shell section probe: ≥ 4.9 mm (0.19 in) to the skin |
+| Cargo chin, CN2 / CN3 | flat on `chin_node_shelf`, connector edges inboard | pouch 63 mm long at Y −60.3..2.7, cable channel 10 → 9 mm, **static gap 2.0 → 1.5 mm** (owner-accepted), shelf aft lip dropped | `tools/cargo_layout_fit.py` PASS (Rev T5g) |
+| Middle ring, CN4 | Simon saddle, standing, under FC4 | slots 58 → 63 mm, growth to starboard, FC4 port-justified | `tools/middle_layout_fit.py` PASS (Rev T6a) |
+
+**Open (owner).**
+- Re-export the printable STLs from the updated SCAD/params: `chin_node_shelf.stl`,
+  `simon_node_saddle.stl`, `void_former_cargo_node_bay.stl` and `head_shell24.stl`. Neither
+  `openscad` nor `build_head_shell.py`'s `manifold3d` version was available in the
+  generating session.
+- `tools/check_tacco_envelope_sync.py` (pre-commit hook and CI) re-derives every airframe
+  TACCO envelope from `BW, BH` and fails on drift; it lists the STLs above as PENDING until
+  re-exported (`--strict` turns that into a failure). Tracked as TACCO-60 in
+  `airframe/fuselage-mid/WBS.md`.
+- The nose-tray position in `head_shell24.scad` still uses the legacy axes (known issue), so
+  the nose check is against the bare shell only.
 
 ## §14 — Field Connectors Summary
 

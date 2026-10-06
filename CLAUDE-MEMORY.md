@@ -1529,7 +1529,7 @@ Supersedes the RunCam Nano 4 analog camera (REF-SENSOR-001) originally in the bo
 design (TODO.md §1.1.1.1a). Full architecture in `avionics/CLAUDE.md` "Jayne" section; hardware
 WBS at TODO.md §1.2c; firmware WBS at TODO.md §4.6.
 
-**Important: Jayne is NOT a PocketBeagle 2 Industrial cape** (unlike Wash/Zoë/Emma). It's a
+**Note: Jayne is NOT a PocketBeagle 2 Industrial cape** (unlike Wash/Zoë/Emma). It's a
 standalone, compact PCB with its own power input and processors, connecting to the rest of the
 airframe only via the shielded JST-GH Ethernet ring and CAN-FD trunk connectors as a peer
 network node — it does not use the P1+P2 header stack or mount onto a Wash/Zoë node. This was
@@ -3821,3 +3821,54 @@ which disciplines his GA licence covers — don't assert that on his behalf.
 Related: [[project_pe_skills_cc_by_nd]].
 
 ---
+
+## `project_nacelle_64mm_wrapper.md`
+
+Branch feat/nacelle-64mm (worktree .worktrees/nacelle-64mm), 2026-10-03.
+- 64 mm pod is an `include` + parameter override of nacelle_pod_50mm_tandem.scad (RADIAL_K, POD_AUTORENDER hooks, identity at 50 mm). Overrides may only use literals/P64_* constants declared ABOVE the include — OpenSCAD evaluates an override at the variable's FIRST assignment position.
+- Owner decisions 2026-10-03: stator-as-mount (no spiders), wing iface held at pylon face (axis shift = 34·(K−1)), pivot at CG, 70 A ESCs. (Early same-day 1.28/185.2 design superseded.)
+- QF2822 is 58.0 mm body-to-mount-face (vs ~27 mm 2627): axial margin only +2.4 mm, VERIFY by measurement.
+- SUPERSEDED same day: proportions optimised (owner) → radial 1.21, axial stretch 1.13, L 209.3 mm; canon L/D from QMx Sheets 3/4 = 2.24 plan / 2.31 side (50 mm pod was skinny in plan, 2.46). PIVOT_Z 109.7 converged, 929 g, hover +13.7 mm.
+- Intake = CFD-picked lipE: 2:1 ellipse 16x8 (CR 1.56), external branch with SAME nose radius (4 mm), ring 42.5, straight duct to rotor at Z 30.5. Lessons: flanged-lip CFD hides separation (model the real exterior); a knife-edged OUTSIDE separates in hover; a forebody proud of the skin is solid unhollowed mass (+66 g).
+- 6704-ZZ static C0 = 730 N (JTEKT, REF-BRG-001); repo's implied 907 N was a DYNAMIC rating. 64 mm trunnion bearings at 89 % C0 (s0 1.12) — open owner decision NAC-64-TILT-01.
+- Packaged OpenFOAM v1912 here: ANY function object aborts "IOstream sha1"; post-process raw ASCII fields (tools/nacelle_intake_cfd.py). Uz residual on wedges is meaningless.
+Related: [[project_nacelle_rev_t4_trunnion]], [[env_openfoam_airfoil_meshing]], [[feedback_shared_checkout_use_worktree]]
+
+---
+
+## `feedback_local_informs_airframe_rules.md`
+
+```markdown
+---
+name: feedback_local_informs_airframe_rules
+description: "Joint analysis must be exhaustive/systematic; local joint assemblies INFORM but never RULE the airframe — fixes go through shared params, port/stbd stay synced"
+metadata:
+  node_type: memory
+  type: feedback
+  originSessionId: 6c1fdba2-fca5-4750-bdb1-61d5f9d4a37a
+  modified: 2026-10-04T02:56:39.850Z
+---
+
+Owner direction 2026-10-03: (1) joint/interface analysis must be EXHAUSTIVE and SYSTEMATIC — named joints (pitot, ESC cooling, tilt) are examples, not scope; (2) a local in-context assembly informs the airframe assembly but must not rule it: never fix one joint in a way that desyncs the whole (e.g. never move one wing to a different longitudinal station than the other).
+
+**Why:** local context files had placed parts by locally measured geometry; a correction made there could silently diverge from `serenity_assembly.py` or from the mirrored twin.
+
+**How to apply:** generate interfaces from ALL placed-part pairs (`tools/export_assembly_meshes.py` + `tools/airframe_interface_census.py`), never a hand list; airframe assembly is the position authority; apply fixes only at single-source shared parameters (mirrored wing scad, cargo_layout_fit stations, nacelle wrapper constants); gate port/stbd symmetry. Plan: docs/plans/2026-10-03-002-feat-exhaustive-joint-analysis-plan.md. Related: [[project_nacelle_64mm_wrapper]], [[project_cargo_rev_t5_layout]].
+```
+
+## `project_het_motor_rejected.md`
+
+```markdown
+---
+name: project_het_motor_rejected
+description: HET Typhoon EDF 2W-25/2W-30 motors REJECTED for the 64 mm nacelle (2026-10-05); QX QF2822 kept, stages co-rotate in-nacelle
+metadata:
+  type: project
+---
+
+2026-10-05 owner decision: HET Typhoon EDF motors (2W-25 2720 KV, 2W-30 2200 KV, and the "2W-35" link which is really the 1W-35 4000 KV/5S) rejected for the 64 mm nacelle; QX QF2822 + QX 12-blade rotor retained. Stages CO-ROTATE within each nacelle; port/stbd mirrored.
+
+**Why:** with the fixed QX rotor thrust is power/rpm-limited on 6S — 2W-25 hits design only at 95 % of 70 A (0.94x at 10 % margin), 2W-30 voltage-limited (~0.86x), mixed set +7 % only above rating; a HET-matched rotor ≤ +7 % on 6S. Ø4 shafts vs QX 3 mm hub; no published bolt pattern. In-nacelle counter-rotation gives no torque/aero gain with stators on both stages, needs an unconfirmed CCW QX rotor; only removes ~0.5 N·m differential-tilt gyro coupling.
+
+**How to apply:** don't re-propose HET (or motor swaps) on 6S; the real thrust lever is an 8S system (2W-30 1600 W on 8S ≈ 1.3x/stage with an 8S-matched rotor) — scope as a system trade. REFERENCES REF-EDF-004; WBS NAC-64-MOTOR-HET. Related: [[project_nacelle_64mm_wrapper]].
+```

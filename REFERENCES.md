@@ -38,9 +38,10 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-NIST-002: NIST SP 800-82 Rev 3 — Guide to Operational Technology (OT) Security](#ref-nist-002-nist-sp-800-82-rev-3--guide-to-operational-technology-ot-security)
     - [REF-NIST-003: NIST SP 800-160 Vol 1 Rev 1 — Engineering Trustworthy Secure Systems](#ref-nist-003-nist-sp-800-160-vol-1-rev-1--engineering-trustworthy-secure-systems)
     - [REF-NIST-004: NIST SP 800-92 — Guide to Computer Security Log Management](#ref-nist-004-nist-sp-800-92--guide-to-computer-security-log-management)
-- [Part IV — Defense Standards](#part-iv--defense-standards)
+- [Part IV — Defense and Government-Agency Standards (DoD, NASA)](#part-iv--defense-and-government-agency-standards-dod-nasa)
     - [REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus](#ref-mil-001-mil-std-1553c--digital-time-division-commandresponse-multiplex-data-bus)
     - [REF-MIL-002: MIL-STD-461G — Requirements for the Control of Electromagnetic Interference Characteristics of Subsystems and Equipment](#ref-mil-002-mil-std-461g--requirements-for-the-control-of-electromagnetic-interference-characteristics-of-subsystems-and-equipment)
+    - [REF-NASA-001: NASA-STD-8739.4A — Workmanship Standard for Crimping, Interconnecting Cables, Harnesses, and Wiring](#ref-nasa-001-nasa-std-87394a--workmanship-standard-for-crimping-interconnecting-cables-harnesses-and-wiring)
 - [Part V — International Standards (ISO, IEC)](#part-v--international-standards-iso-iec)
     - [REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling](#ref-iso-001-iso-11898-12015--road-vehicles--controller-area-network-can--part-1-data-link-layer-and-physical-signalling)
     - [REF-IEC-001: IEC 62368-1 Ed. 3.0 — Audio/Video, Information and Communication Technology Equipment — Part 1: Safety Requirements](#ref-iec-001-iec-62368-1-ed-30--audiovideo-information-and-communication-technology-equipment--part-1-safety-requirements)
@@ -124,6 +125,8 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-PWR-007: Texas Instruments TPS54540 — 4.5 A synchronous buck converter data sheet](#ref-pwr-007-texas-instruments-tps54540--45-a-synchronous-buck-converter-data-sheet)
 - [Part XII-B — Connector Specifications](#part-xii-b--connector-specifications)
     - [REF-CONN-001: Samtec TSM series — 0.100in surface-mount terminal strip product data](#ref-conn-001-samtec-tsm-series--0100in-surface-mount-terminal-strip-product-data)
+    - [REF-SENSOR-041: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)](#ref-sensor-041-beagleboardorg-pocketbeagle-2--system-reference-manual-mechanical-board-and-header-dimensions)
+    - [REF-SENSOR-042: Samtec SSM / SSW / TSW / TSM — .100 in socket and terminal strips (footprint, drawing, qualification)](#ref-sensor-042-samtec-ssm--ssw--tsw--tsm--100-in-socket-and-terminal-strips-footprint-drawing-qualification)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -665,7 +668,7 @@ cycle); hardware-enforced append-only non-executable log microSD on every XO nod
 
 ---
 
-## Part IV — Defense Standards
+## Part IV — Defense and Government-Agency Standards (DoD, NASA)
 
 ### REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus
 
@@ -744,6 +747,26 @@ MIL-STD-461G qualification testing is deferred pending airframe integration.
 
 **Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`,
 `docs/AVIONICS_PB2_REDESIGN.md`
+
+---
+
+### REF-NASA-001: NASA-STD-8739.4A — Workmanship Standard for Crimping, Interconnecting Cables, Harnesses, and Wiring
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | NASA Office of Safety and Mission Assurance (OSMA) |
+| **Edition** | NASA-STD-8739.4A with Change 3 (cover: approved 2016-06-30) |
+| **Official access** | <https://standards.nasa.gov/sites/default/files/standards/NASA/A/3/nasa-std-87394a_w_change_3.pdf> — fetched directly 2026-10-03 (HTTP 200) and read |
+| **Note** | U.S. Government work; no purchase required. |
+
+**Requirements applied in this project:**
+
+| Requirement | Title | Application |
+|---|---|---|
+| §7.2.19, Table 7-1 (p. 30 of 114) | Bend Radii for Completed Interconnecting Cable or Harness | Overall harness of AWG 10 or smaller without coax: **minimum 3 × OD**, optimum 10 × OD; AWG 8 or larger: minimum 6 × OD. Sets the harness-loop reservation at every ESC wire-exit end in `tools/esc80_cooptimize.py` (model 2, `bend_k` = 3) |
+
+**Used in:** `tools/esc80_cooptimize.py`, `tools/esc80_design_m2.json`,
+`airframe/wings-nacelles/WBS.md` (NAC-64-ESC-80A)
 
 ---
 
@@ -1510,6 +1533,57 @@ gauge. See REF-EDF-002 for what a vendor listing adds, and the open items in
 
 ---
 
+### REF-EDF-003: QX-Motor — 64 mm 12-blade EDF with QF2822 brushless motor (product page, manual and dimension drawing)
+
+| Field | Value |
+|---|---|
+| **Type** | Manufacturer retail product page plus two user-supplied manufacturer images (instruction manual sheet and motor dimension drawing) |
+| **Product URL** | <https://qx-motor.co/product/64mm-edf-12-blade-2822-brushless-motor-set/> |
+| **Retrieved** | 2026-10-03 (product page, read by Claude Opus 5.5 via WebFetch) |
+| **Images** | `docs/references/qx-motor 64mm edf/7-2.jpg` (instruction manual: specifications, performance table, EDF outline); `8-4.jpg` / `8-4.webp` (QF2822 motor dimension drawing). Supplied by the repository owner; **original download URL not recorded — requires verification.** |
+| **Sections applied** | 8-4.jpg: overall 68.7 mm, body to mount face 58.0 mm, can ø27.80 mm, front boss ø20.00 mm, shaft ø3.0 mm, 4 × M3 on ø16.00 mm. 7-2.jpg: model QF2822, KV options 2200/2400/3500/3800/4300, 9N6P, shaft 3.0 mm, motor diameter 28 mm, motor weight 135 g, 3–6S LiPo, max continuous 100 A / 10 s; performance row QF2822-2400KV at 22.2 V: 57.0 A, 1265.4 W, 2135 g thrust, recommended ESC 60 A; EDF outline 41.53 mm axial, ø77.00 and ø65.80 mm, and an unlabelled 18.50 mm feature. |
+| **Provenance caveats** | (1) Drawing datums are not identified; every axial value is **VERIFY** until a physical unit is measured (WBS NAC-64-FIT-02). (2) The product page's "0.2 kg" sits beside a 15 × 12 × 10 cm package size and is read as **shipping weight, not installed mass**. (3) The product page labels its 3500 KV row 14.8 V, but its 1056 W / 1810 g figures match the manual's 16 V row; the manual image is used. (4) The 18.50 mm feature is read as rotor-hub length only as the unfavourable case in `tools/nacelle_axial_fit.py`. |
+
+**Second manufacturer sheet (added 2026-10-03):** the product page for the 64 mm EDF without
+motor, <https://qx-motor.co/product/2365/>, links the QF2822-2300KV instruction-manual image
+<https://cdn.shopify.com/s/files/1/0713/6424/7837/files/64_2822-2300KV_00.png>. The repository
+copy is `docs/references/qx-motor 64mm edf/64_2822-2300KV_00.png`; the owner supplied the page,
+and Claude Opus 5.5 read and translated it.
+
+- **Applied values:**
+  - motor weight (重量) **140 g** (2300 KV);
+  - max continuous 60 A / 10 s, **recommended ESC 80 A**;
+  - 24 V, 100 % throttle: 57.0 A, 1368 W, 2370 g;
+  - outline drawing: 97.5 mm lip-to-motor-tail, 45 mm shroud, ø77 / ø72.4 / ø67.2 / ø66.4 shroud
+    diameters, motor ø28.
+- **Rotor handedness (read 2026-10-05, Claude Opus 5.5):** the outline-dimension panel of
+  `64_2822-2300KV_00.png` draws the 12-blade rotor in both a **CCW** and a **CW** version, so the
+  port/starboard mirrored (counter-handed) nacelles can use QX rotors of both hands.
+- **Rotor hub diameter (scaled, not dimensioned):** the front view's circles scale to Ø63.8 (bore,
+  confirming the scale against the dimensioned Ø77 lip) and a hub of **Ø ≈ 25 mm (±5 %)** —
+  smaller than the QF2822 can (Ø27.8). VERIFY on a physical rotor (WBS NAC-64-FIT-02).
+- **Not published there:** the fan-only (no-motor) mass, and any rotor mass. The page's photos
+  and text carry none.
+- **Caveat:** the 2300 KV row is a different winding from the 2400 KV sheet the design uses. The
+  mechanical outline is common to the series.
+
+**Where it is applied:** `tools/nacelle_axial_fit.py`, `tools/tests/test_nacelle_axial_fit.py`,
+`airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad`,
+`docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`,
+`airframe/wings-nacelles/WBS.md` §1.1.4 NAC-64-SERVO-01 / NAC-64-FIT-01 / NAC-64-FIT-02.
+---
+
+
+### REF-EDF-004: High End Technologies (HET) — Typhoon EDF 28 mm inrunner motors (2W-25, 2W-30, 1W-35) — CONSIDERED AND REJECTED
+
+| Field | Value |
+|---|---|
+| **Type** | Manufacturer retail product pages (highendrc.com; HTTP only — the HTTPS certificate chain does not verify) |
+| **URLs** | 2W-25 <http://www.highendrc.com/index_eproduct_view.php?products_id=80>; 2W-30 <http://www.highendrc.com/index_eproduct_view.php?products_id=168>; 1W-35 <http://www.highendrc.com/index_eproduct_view.php?products_id=374> (the owner's "2W-35" link resolves to the 1W-35; no 2W-35 was found) |
+| **Retrieved** | 2026-10-05 (Claude Opus 5.5, curl over HTTP) |
+| **Values read** | 2W-25: Ø28 x 48 mm, Ø4 shaft, 110 g, 2720 KV, Io 2.2 A, Rm 0.016 ohm, 70 A max, 87 % max eff., 1100 W on 6S. 2W-30: Ø28 x 52 mm, Ø4 shaft, 130 g, 2200 KV, 80 A max, 1600 W on 8S (Rm/Io not published). 1W-35: Ø28 x 57 mm, Ø4 shaft, 155 g, 4000 KV, 130 A (5S). No mounting-hole pattern published on any page (also absent from turbines-rc.com listings). |
+| **Decision** | **REJECTED 2026-10-05 (owner, Stab-Rabbit-coding)** for the 64 mm nacelle on 6S: with the fixed QX 12-blade rotor, thrust is rpm/power-limited — 2W-25 reaches the QX design point only at 95 % of its 70 A rating (0.94x design thrust at a 10 % current margin); 2W-30 is voltage-limited on 6S (~0.86x); a mixed 2W-25 fwd / 2W-30 aft set gains ~+7 % only by exceeding the 2W-25 rating and loses the in-nacelle torque/gyro cancellation; a HET-matched rotor is power-limited to <= +7 % on 6S (HET motors are designed for 69 mm fans). Plus Ø4 shafts vs the QX 3 mm hub and no published bolt pattern. Analysis: session 2026-10-05, aeronautical-engineering skill (Euler stage model + actuator-disc T ~ P^(2/3)). Revisit only with an 8S power system (2W-30 rated 1600 W on 8S, ~1.3x thrust per stage, needs an 8S-matched rotor). |
+| **Applied to** | Recorded decision only — `airframe/wings-nacelles/WBS.md` NAC-64-MOTOR-HET (rejected); plan 2026-09-28-001 KTD9 note |
 ### REF-STD-GEAR-001: ISO 53:1998 — Cylindrical gears for general and heavy engineering — Standard basic rack tooth profile
 
 | Field | Value |
@@ -1585,6 +1659,21 @@ which prints that caveat on every run.
 `airframe/openscad/wings/wings_s1223_revo.scad` (`SPAR_BORE_OD` derivation);
 `docs/WING_ATTACH_INTERFACE.md` §2
 
+### REF-STD-PIN-001: ISO 8752:2009 — Spring-type straight pins — Slotted, heavy duty
+
+| Field | Value |
+|---|---|
+| **Designation** | ISO 8752:2009 (supersedes ISO 8752:1997) |
+| **Full title** | *Spring-type straight pins — Slotted, heavy duty* |
+| **Issuing body** | International Organization for Standardization (ISO) |
+| **Official access** | ISO catalogue, <https://www.iso.org/standards.html> — **DIRECT CATALOGUE URL REQUIRES VERIFICATION** (iso.org and webstore.ansi.org returned bot challenges 2026-10-03; designation and title confirmed through the Standards Council of Canada listing <https://scc-ccn.ca/standardsdb/standards/8120407> as returned by search; WBS §0.5) |
+| **Retrieved** | not retrieved — cited by designation only |
+| **Scope applied** | Slotted heavy-duty spring pin, nominal Ø1.5 × 8 mm, steel, as the torque and axial retention of the wing tilt pinion on its Ø4 shaft. Hole and pin dimensions **require verification** against the standard's table before drilling. |
+
+**Where it is applied**
+
+- `airframe/openscad/wings/wing_tilt_pinion.scad` (header, `TP_PIN_D`, `TP_PIN_L`)
+
 ### REF-STD-GEAR-002: Budynas & Nisbett — *Shigley's Mechanical Engineering Design* — worm-gear efficiency and self-locking condition
 
 | Field | Value |
@@ -1594,6 +1683,7 @@ which prints that caveat on every run.
 | **Official URL** | <https://www.mheducation.com/highered/product/shigley-s-mechanical-engineering-design-budynas-nisbett/M9780073398204.html> (publisher page; text not open access) |
 | **Section applied** | Chapter 13 "Gears — General", the worm-gearing force-analysis section (efficiency η = tan λ / tan(λ + φ) with φ = arctan μ, and the statement that a worm gearset is self-locking when the lead angle λ is below the friction angle φ). **Section number REQUIRES VERIFICATION against a physical copy** (§13-16 in the 9th/10th editions is believed correct; not confirmed from the book in hand). |
 | **Retrieved** | 2026-09-15 (publisher page only) |
+| **Also applied** | Chapter 14, Table 14-2, Lewis form factor Y for 20° full-depth teeth: Y = 0.277 at 14 teeth, 0.409 at 50 teeth. **Table number REQUIRES VERIFICATION against a physical copy.** Used in `tools/nacelle_tilt_dynamics.py` (`LEWIS_Y_14`) and `airframe/openscad/wings/wing_tilt_pinion.scad` (2026-10-03). |
 | **Applied to** | `tools/tilt_actuator_options.py` (`worm_eta()`, the self-lock test `tan(λ−φ) ≤ 0`), `docs/TILT_ACTUATOR_SELECTION.md` §3, `airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad` header |
 | **Caveat** | The friction coefficient μ = 0.20 used for the printed PETG wheel / brass or PETG worm pair is an ASSUMPTION, not from this source; the self-locking margin of the built six-start worm (lead 13.0°; Rev T5b 4-start 9.5°) is therefore CONDITIONAL and the design relies on the pin brake (BRK-1..3), not on this condition. |
 
@@ -2387,6 +2477,50 @@ the spar's run, not this seat).
 
 ---
 
+### REF-BRG-001: JTEKT (Koyo) — 6704 ZZ deep groove ball bearing, single row, product detail
+
+| Field | Value |
+| --- | --- |
+| **Manufacturer** | JTEKT Corporation (Koyo brand) |
+| **URL** | <https://koyo.jtekt.co.jp/en/products/detail/?pno=6704+ZZ> (manufacturer page). Corroborated by distributor sheet <https://123bearing.com/getTechnicalSheetPdf/226748>. |
+| **Retrieved** | 2026-10-03, by Claude Opus 5.5 |
+| **Values applied** | d 20 mm, D 27 mm, B 4 mm; Cr 1.30 kN; **C0r 0.730 kN**; limiting speed (grease) 23,000 min⁻¹; mass 0.006 kg |
+
+**Correction recorded:** `docs/WING_ATTACH_INTERFACE.md` §4.3a implied a static rating of about
+907 N; that figure matches a *dynamic* rating some distributors list.
+
+**Where it is applied:** `tools/nacelle_tilt_dynamics.py` (BRG_C0, the 50 mm joint and the
+rejected 64 mm arrangements), `docs/WING_ATTACH_INTERFACE.md` §4.3a,
+`airframe/wings-nacelles/WBS.md` NAC-64-TILT-01.
+
+### REF-BRG-002: JTEKT (Koyo) — 6804 ZZ deep groove ball bearing, single row, product detail
+
+| Field | Value |
+| --- | --- |
+| **Manufacturer** | JTEKT Corporation (Koyo brand) |
+| **URL** | <https://koyo.jtekt.co.jp/en/products/detail/?pno=6804+ZZ> |
+| **Retrieved** | 2026-10-03, by Claude Opus 5.5 |
+| **Values applied** | d 20 mm, D 32 mm, B 7 mm; Cr 5.00 kN; **C0r 2.45 kN**; limiting speed (grease) 21,000 min⁻¹; mass 0.018 kg |
+
+**Where it is applied:** `airframe/openscad/nacelles/nacelle_trunnion_64mm.scad` (seat Ø32,
+stack 2 × 7 mm), `tools/nacelle_tilt_dynamics.py` (BRG_C0_6804), `tools/nacelle_mass_cg_64.py`
+(ON_AXIS_64), `airframe/openscad/wings/wings_s1223_revo.scad` SPAR_TIP_PROTRUSION_64N,
+`airframe/wings-nacelles/WBS.md` NAC-64-TILT-01.
+
+### REF-BRG-003: JTEKT — Ball & Roller Bearings, CAT. NO. B2001E (general catalogue), §5-5 "Basic static load rating and static equivalent load"
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | JTEKT Corporation |
+| **URL** | <https://koyo.jtekt.co.jp/en/support/bearing-knowledge/pdf/catb2001-8_a.pdf> |
+| **Retrieved** | 2026-10-03 (84-page PDF, read by Claude Opus 5.5) |
+| **Sections applied** | §5-5-3 "Safety coefficient", eq. fs = C0 / P0, and **Table 5-10** (p. A43). For ball bearings: with rotation, high accuracy required fs ≥ 2; with rotation and impact fs ≥ 1.5; without rotation (occasional oscillation), normal fs ≥ 0.5, with impact or uneven load distribution fs ≥ 1. |
+
+**Applied as:** the trunnion oscillates and sees impact, so the catalogue minimum is fs ≥ 1. The
+design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class). Used in
+`tools/nacelle_tilt_dynamics.py` (FS_MIN, FS_TARGET) and
+`airframe/openscad/nacelles/nacelle_trunnion_64mm.scad`.
+
 ### REF-ACT-001: Pololu — 20D mm Metal Gearmotors (datasheet + dimension diagram)
 
 | Field | Value |
@@ -2428,6 +2562,28 @@ the spar's run, not this seat).
 | **Status** | Selected servo body for the SG90 class (with the OpenServoCore swap board, REF-SENSOR-015). Marketplace "SG90" listings are frequently clones; procure against this manufacturer page or re-verify the figures for whichever part is actually bought. |
 | **Caveat** | The page lists 4.8 V only; `docs/POWER_DISTRIBUTION.md` §3.3 feeds the SG90 class from the 6 V servo rail — see "Open Standards Verification Items" (SG90 6 V tolerance). |
 
+
+### REF-ACT-004: Blue Bird BMS-101DMG — micro digital metal-gear servo (nacelle nozzle servo)
+
+| Field | Value |
+|---|---|
+| **Type** | Secondary specification aggregator (manufacturer page not retrieved) |
+| **URL** | <https://servodatabase.com/servo/blue-bird/bms-101dmg> |
+| **Retrieved** | 2026-10-04 (via web search summary, Claude Opus 5.5) |
+| **Values applied** | 18.5 x 7.6 x 15.7 mm (L x W x H); 4.4 g; 0.80 kgf·cm at 4.8 V, 1.00 kgf·cm at 6.0 V; 0.09 / 0.07 s per 60 deg; coreless motor, metal gears |
+| **Caveat** | Aggregator data, not the manufacturer datasheet — **every dimension and the 6 V rating REQUIRE VERIFICATION** on a physical unit before the servo pocket is printed (WBS NAC-64-SERVO-01). Supersedes the plan's earlier "8 mm case, 4.5 g" reading (hyperflight.co.uk). |
+| **Applied to** | `airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad` servo pocket; `tools/nozzle_servo_linkage.py`; plan 2026-09-28-001 KTD2 |
+
+### REF-ACT-005: KST X06 — HV digital micro servo, steel gears, aluminium case (nacelle nozzle servo)
+
+| Field | Value |
+|---|---|
+| **Type** | Secondary sources (specification aggregator + retailer); manufacturer datasheet not retrieved |
+| **URLs** | <https://servodatabase.com/servo/kst/x06>; <https://alofthobbies.com/products/kst-x06-1-8kg-24-99-oz-in-07-sec-wide-voltage> |
+| **Retrieved** | 2026-10-04 (via web search summary, Claude Opus 5.5) |
+| **Values applied** | 20 x 7 x 16.6 mm; 6 g; stall 0.80 / 1.50 / 1.80 kgf·cm at 3.8 / 6.0 / 8.4 V; 3.8–8.4 V; coreless motor; hardened-steel gears; aluminium housing; travel ±60 deg |
+| **Caveat** | Not the manufacturer datasheet — **dimensions, shaft position and the 6 V torque REQUIRE VERIFICATION** on a physical unit before the pocket is printed. Owner selected 2026-10-04 over REF-ACT-004 for force margin. |
+| **Applied to** | `tools/nozzle_servo_linkage_64.py`; `airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad`; plan 2026-09-28-001 KTD2 |
 ### REF-ESC-001: Open-Secure-ESC — 6S/10A brushed build, the nacelle-tilt controller
 
 | Field | Value |
@@ -2471,6 +2627,31 @@ the spar's run, not this seat).
 | **Note** | Licence line not present on the schematic sheet; confirm the repository licence before redistributing the archived PDF. Added 2026-09-29. |
 
 **Used in:** `avionics/kicad/PB2_HEADER_PINMAP.md`, `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`PB2_P1`/`PB2_P2`), `avionics/WBS.md` §1.2a.
+
+### REF-SENSOR-041: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)
+
+| Field | Value |
+|---|---|
+| **Publisher** | BeagleBoard.org Foundation |
+| **Product** | PocketBeagle 2, revisions A1 (AM6254, in production) and A0 (AM6232, out of production) |
+| **Source** | Owner-supplied copy archived at `avionics/datasheets/pocketbeagle2_srm.pdf` (55 pp.); published at <https://docs.beagleboard.org/pocketbeagle-2.pdf> |
+| **Portion applied** | §3.8 Mechanical specifications: Table 3.2 (PCB 55 x 35 mm, 1.6 mm, 10 layers, max height 13.6 mm, 12.7 g) and Fig. 3.45 "PocketBeagle 2 RevA Dimensions" — P1 and P2 pin-1 rows 3.53 mm and 6.07 mm from their board edges and 25.4 mm apart, so each rail centre-line is 4.80 mm inside its long edge. The figure also shows the board's own pre-soldered headers as surface-mount tails with round through-hole pins only at positions 1/2 and 35/36. |
+| **Note** | The manual names no "Industrial" variant; the owner confirmed on 2026-10-04 that this geometry applies to the board the capes stack on. Added 2026-10-05. |
+
+**Used in:** `avionics/kicad/TACCO/scripts/gen_tacco_pcb.py` and `avionics/kicad/Pilot/scripts/gen_pilot_pcb.py` (`FIXED` PB2-P1/PB2-P2 positions), `avionics/WBS.md` §1.2a.
+
+### REF-SENSOR-042: Samtec SSM / SSW / TSW / TSM — .100 in socket and terminal strips (footprint, drawing, qualification)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Samtec, Inc. (New Albany, Indiana, USA) |
+| **Product** | SSM "Tiger Claw" surface-mount socket strip (-DV double row); SSW through-hole socket strip; TSW terminal (post) strip, .025 in square post |
+| **Source** | Owner-supplied copies archived at `avionics/datasheets/samtec_ssm_footprint.pdf` (recommended PCB layout, Rev D), `samtec_ssm-dv_drawing.pdf` (SSM-1XX-XXX-DV marketing drawing), `samtec_ssm_catalog.pdf` (SSM series catalog page) and `samtec_tsw-sxx_drawing.pdf` (SSW/TSW product specification, Rev C, 2023-02-08); <https://www.samtec.com/products/ssm> |
+| **Portion applied** | SSM-DV: 02-40 positions per row; mates TSW/TSM; pads .040 in (1.02 mm) wide, inner span .135 in (3.43 mm), outer span .310 in (7.87 mm) (Fig. 4); options -A alignment pin (1.09 mm NPTH), -LC locking clip (1.19 mm NPTH); 5.2 A per pin; -55 to +125 °C with gold; catalog states Severe Environment Testing qualification aligned with MIL-DTL-55302. SSW/TSW spec: random vibration 7.56 G RMS, 50-2000 Hz, 2 h/axis, 3 axes (EIA-364-28 Cond. V-B); mechanical shock 100 G, 6 ms, 18 shocks (EIA-364-27); durability 1000 cycles; LLCR change 15 mOhm max. |
+| **TSM (adopted)** | `avionics/datasheets/samtec_tsm-dv-footprint.pdf` (TSM double-vertical recommended PCB layout, Rev F, 2015-07-16: pads .050 x .145 in (1.27 x 3.68 mm) at .100 in pitch, rows .050 in (1.27 mm) apart at their inner edges; -LC .047 in (1.19 mm) / -A .068 in (1.73 mm) holes on the centre-line at (N-2) x .100 in) and `samtec_tsm_catalog.pdf` (lead style -04 post .120 in (3.05 mm) for SLW/CES/HLE low-profile sockets; insulator .100 in (2.54 mm); -LC not with -TM; -LC manual placement). |
+| **Note** | Used for the rail-socket trade study (THT socket vs surface-mount SSM-DV), then for the male TSM-118-04-L-DV-LC rails adopted 2026-10-05 once the PB2-I was found to carry female receptacles. Added 2026-10-05; renumbered from REF-SENSOR-023 on the main merge (that ID is the BMP388 on main). |
+
+**Used in:** `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`, `avionics/WBS.md` §1.2a.
 
 ---
 

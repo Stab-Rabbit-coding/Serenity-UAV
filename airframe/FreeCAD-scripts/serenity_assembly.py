@@ -274,10 +274,24 @@ R_BAKE = (
 # tools/bake_hull_frame.py COMPONENTS['Nacelle_Port'] / ['Nacelle_Stbd']
 # (that file remains the single source of truth for the primary nacelle
 # placement; these values are not re-derived here).
-T_BAKE = {
+T_BAKE_50 = {
     "port": (46.9999060, -63.9998720, 62.9998740),
     "stbd": (-385.0960040, -69.9998600, 64.9719300),
 }
+
+# NACELLE GENERATION (Rev T6, 2026-10-03).  64 = the QX 64 mm EDF nacelle
+# (nacelle_pod_64mm_tandem.scad), the build baseline; 50 keeps the legacy
+# 50 mm pod and its internals for reference.  The 64 mm bake translation is
+# DERIVED in tools/bake_hull_frame.py ('Nacelle64_*': tilt axis = level spar
+# line Y 21.000 / Z 66.851, pod pad seats on each wing's measured pad face,
+# mirrored about the hull centre plane X -169.241); the same numbers are
+# restated here because this file runs under freecadcmd without that module.
+NACELLE_GEN = 64
+T_BAKE_64 = {
+    "port": (6.700 + 53.84, 21.000 - 109.7, 66.851),
+    "stbd": (-345.182 - 53.84, 21.000 - 109.7, 66.851),
+}
+T_BAKE = T_BAKE_64 if NACELLE_GEN == 64 else T_BAKE_50
 
 # Nacelle pylon-side sign, matching nacelle_pod_50mm_tandem.scad's
 # PYLON_SIDE override table (Rev R1/nacelle-swap, 2026-06-11):
@@ -364,6 +378,11 @@ AFT_SLV_Z_START = 122.5
 #          can occupy, so that lever never existed
 PIVOT_Z = 107.5  # pivot station = full-assembly nacelle CG; see the note above
 NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
+# 64 mm (Rev T6): PIVOT_Z converged at 109.7 (tools/nacelle_mass_cg_64.py,
+# measured CG 109.67); nozzle ring at 187.86 (nacelle_pod_64mm_tandem.scad).
+if NACELLE_GEN == 64:
+    PIVOT_Z = 109.7
+    NOZZLE_RING_Z = 187.86
 
 
 # ---------------------------------------------------------------------------
@@ -740,11 +759,12 @@ def assemble():
     # PL_IDENTITY at 0 deg tilt (tilt_placement() reduces to identity there),
     # rotated about the per-side pivot by NACELLE_TILT_PORT_DEG/STBD_DEG
     # otherwise -- see the NACELLE TILT CONFIGURATION block above.
-    port_nac = add_mesh(doc, _stl("nacelles/nacelle_port_revs.stl"), "Nacelle_Port")
+    pod_tag = "64mm" if NACELLE_GEN == 64 else "revs"
+    port_nac = add_mesh(doc, _stl(f"nacelles/nacelle_port_{pod_tag}.stl"), "Nacelle_Port")
     if port_nac is not None:
         port_nac.Placement = tilt_placement("port")
 
-    stbd_nac = add_mesh(doc, _stl("nacelles/nacelle_stbd_revs.stl"), "Nacelle_Stbd")
+    stbd_nac = add_mesh(doc, _stl(f"nacelles/nacelle_stbd_{pod_tag}.stl"), "Nacelle_Stbd")
     if stbd_nac is not None:
         stbd_nac.Placement = tilt_placement("stbd")
 
@@ -770,7 +790,28 @@ def assemble():
     # near the NACELLE TILT CONFIGURATION block -- PIVOT_Z is hoisted there
     # because nacelle_pivot_hull() needs it before assemble() runs).
 
-    for side in ("port", "stbd"):
+    if NACELLE_GEN == 64:
+        # 64 mm tilt joint (baked in hull frame, tools/prep_nacelle_64_bake.py
+        # + bake_hull_frame.py): the trunnion is bolted to the pod and tilts
+        # with it; the tilt pinion rides the WING shaft and does not tilt.
+        for side in ("port", "stbd"):
+            label = "Port" if side == "port" else "Stbd"
+            tr = add_mesh(doc, _stl(f"nacelles/nacelle_trunnion_64mm_{side}.stl"),
+                          f"Nacelle_{label}_Trunnion")
+            if tr is not None:
+                tr.Placement = tilt_placement(side)
+            add_mesh(doc, _stl(f"wings/wing_tilt_pinion_{side}.stl"),
+                     f"Wing_{label}_Tilt_Pinion")
+        # COVERAGE GAPS (joint census, plan 2026-10-03-002 R1): the 50 mm
+        # stator / aft-spider sleeves and the 50 mm nozzle iris do not fit the
+        # 64 mm bore and have no 64 mm counterparts yet (WBS NAC-64-GEOM-01,
+        # nozzle per plan 2026-09-28-001).  Reported, never placed at 50 mm
+        # stations.
+        for gap in ("64 mm stator sleeve", "64 mm aft spider sleeve",
+                    "64 mm nozzle iris", "64 mm EDF rotors/motors", "70 A ESCs"):
+            print(f"[assembly] COVERAGE GAP: {gap} — no placed solid", flush=True)
+
+    for side in (("port", "stbd") if NACELLE_GEN == 50 else ()):
         label = "Port" if side == "port" else "Stbd"
 
         # ── EDF1/EDF2 inter-stage stator sleeve ──────────────────────────
@@ -830,8 +871,16 @@ def assemble():
         # a crank on it shares the ring's rotating frame (zero relative motion).
         # Replaced by a WING-REFERENCED sync gear + geared bellcrank (hybrid A+B,
         # docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT"; overlay
-        # port_tilt_spar_assembly.scad §6).  The new pinion-mounted crank is not
-        # placed here until nacelle_nozzle_pushrod.scad is reworked (TODO §1.1.3).
+        # port_tilt_spar_assembly.scad §6).
+        # RETIRED 2026-09-28 (servo drive, docs/NOZZLE_DRIVE_TRADE.md
+        # "DECISION AMENDMENT — servo drive (2026-09-28)"): that sync-gear
+        # drive could not be packaged either (0.0 mm axial room for the sun; pinion vs tilt-drive-shaft
+        # collision; ring over-travel past 90 deg tilt).  Both
+        # nacelle_nozzle_sync_gears.scad and nacelle_nozzle_pushrod.scad are
+        # archived.  The nozzle is now servo-driven from inside the pod; the
+        # servo mount is placed here once
+        # docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md U4
+        # produces it.  Nothing is placed for the nozzle drive until then.
 
         # ── Nozzle iris assembly ──────────────────────────────────────────
         # nacelle_nozzle_iris-{closed,open}.stl are the combined renders
@@ -839,8 +888,8 @@ def assemble():
         # flaps, Rev T3) from nacelle_nozzle_iris.scad, one per petal-state
         # endpoint -- see nozzle_iris_stl() above for the tilt->file
         # selection and its "not continuous" caveat. Rev T: the ring is a
-        # plain CAM disc (no gear teeth) driven by the spar-crank pushrod
-        # above; the housing has no drive-pinion relief and is rotationally
+        # plain CAM disc (no gear teeth), servo-driven via a pull-only link
+        # since 2026-09-28; the housing has no drive-pinion relief and is rotationally
         # symmetric, so identity rotation is fine. Translate to
         # NOZZLE_RING_Z.
         # History: Rev R1 compound idler (2026-06-22) -> Rev S1 internal ring
