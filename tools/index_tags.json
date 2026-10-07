@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-06",
+  "generated": "2026-10-07",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -1064,6 +1064,14 @@
       "tags": [
         "cad-mesh",
         "power",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/fuselage/cargo/cargo_bulkhead_context.scad": {
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See AGENTS.md.",
+      "tags": [
+        "cad-mesh",
         "structural"
       ],
       "archived": false
@@ -12546,6 +12554,13 @@
       ],
       "archived": false
     },
+    "docs/CARGO_BULKHEAD_FIT_CHECK.md": {
+      "description": "Cargo Bay Bulkheads \u2014 In-Context Fit Check (2026-10-07)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/CARGO_DOOR_GATEWAY_SPEC.md": {
       "description": "Cargo-Door Servo Gateway (GW-CARGO-DOOR) \u2014 Specification, Rev A (2026-09-21)",
       "tags": [
@@ -12881,6 +12896,34 @@
     },
     "docs/ideation/7-2.webp": {
       "description": "RIFFv\u0001\u0000WEBPVP8 v\u0001\u0000p\u0003\u0001* \u0003\u0003>m2G#)!&\u0019Z",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/cargo_bulkhead_context_aft_door_swing.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/cargo_bulkhead_context_iso_aft.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/cargo_bulkhead_context_port_inboard.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/cargo_bulkhead_context_stbd_inboard.png": {
+      "description": "Rendered image / reference photo",
       "tags": [
         "documentation"
       ],
@@ -14403,6 +14446,13 @@
     },
     "docs/solutions/design-patterns/decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md": {
       "description": "Decide a multi-station cape's board size against every mount, and couple board size to airframe envelopes mec\u2026",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/design-patterns/envelope-gates-pass-while-real-parts-clash.md": {
+      "description": "Context",
       "tags": [
         "documentation"
       ],
@@ -16024,6 +16074,14 @@
       ],
       "archived": false
     },
+    "tools/cargo_bulkhead_context.py": {
+      "description": "In-context fit of the port and starboard cargo-bay bulkheads (side walls).",
+      "tags": [
+        "build-tooling",
+        "security"
+      ],
+      "archived": false
+    },
     "tools/cargo_layout_fit.py": {
       "description": "Python script",
       "tags": [
@@ -16705,6 +16763,7 @@
       "docs/AGENTS.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/BATTERY_MOUNT.md",
+      "docs/CARGO_BULKHEAD_FIT_CHECK.md",
       "docs/CARGO_DOOR_GATEWAY_SPEC.md",
       "docs/CARGO_DOOR_LATCH_SPEC.md",
       "docs/CARGO_SECTION_LAYOUT.md",
@@ -16747,6 +16806,10 @@
       "docs/flight_envelope.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
       "docs/ideation/7-2.webp",
+      "docs/images/cargo_bulkhead_context_aft_door_swing.png",
+      "docs/images/cargo_bulkhead_context_iso_aft.png",
+      "docs/images/cargo_bulkhead_context_port_inboard.png",
+      "docs/images/cargo_bulkhead_context_stbd_inboard.png",
       "docs/images/nacelle_64mm_nozzle_servo_option1.png",
       "docs/images/nacelle_64mm_nozzle_servo_option2.png",
       "docs/images/nacelle_64mm_nozzle_servo_option3.png",
@@ -16930,6 +16993,7 @@
       "docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md",
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
       "docs/solutions/design-patterns/decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md",
+      "docs/solutions/design-patterns/envelope-gates-pass-while-real-parts-clash.md",
       "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md",
       "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
       "docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md",
@@ -17256,6 +17320,7 @@
       "tools/add_landing_gear_bosses.py",
       "tools/bom_edit_door_gateway.py",
       "tools/build_landing_gear_views.py",
+      "tools/cargo_bulkhead_context.py",
       "tools/kicad_relink.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/nozzle_servo_linkage.py",
@@ -17572,6 +17637,7 @@
       "airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad",
       "airframe/openscad/fuselage/cargo/_export_cargo_port_root_chunk.scad",
       "airframe/openscad/fuselage/cargo/battery_cradle.scad",
+      "airframe/openscad/fuselage/cargo/cargo_bulkhead_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_context_sections.scad",
       "airframe/openscad/fuselage/cargo/cargo_door_hinge_params.scad",
       "airframe/openscad/fuselage/cargo/cargo_layout_t5_params.scad",
@@ -17876,6 +17942,7 @@
       "airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad",
       "airframe/openscad/fuselage/cargo/_export_cargo_port_root_chunk.scad",
       "airframe/openscad/fuselage/cargo/battery_cradle.scad",
+      "airframe/openscad/fuselage/cargo/cargo_bulkhead_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_context_sections.scad",
       "airframe/openscad/fuselage/cargo/cargo_door_hinge_params.scad",
       "airframe/openscad/fuselage/cargo/cargo_layout_t5_params.scad",
@@ -20873,6 +20940,7 @@
       "tools/build_head_shell.py",
       "tools/build_landing_gear_views.py",
       "tools/cargo_bay_envelope.py",
+      "tools/cargo_bulkhead_context.py",
       "tools/cargo_layout_fit.py",
       "tools/check_tacco_envelope_sync.py",
       "tools/compact_bom_entries.py",
