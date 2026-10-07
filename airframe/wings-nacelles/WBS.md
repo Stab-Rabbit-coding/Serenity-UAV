@@ -2058,6 +2058,16 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     reached by combining the 30 mm flaps with station 28.0 and the ESC1
     relocation. ~1 cm is the accepted margin — downstream geometry changes must
     not silently trade it away. The compact gear stays viable.
+- [ ] **EDF-DATA-01 — back every EDF and ESC figure with a manufacturer datasheet or a
+    user-verified measurement (opened 2026-10-07, owner rule).** Root `AGENTS.md` §5 now forbids
+    unsupported component measurements, and the propulsion figures that used to sit in `AGENTS.md`
+    moved to the descriptive documents. Audit these and cite the source beside each, or replace
+    the value: the 50 mm nacelle EDF thrust (1240 g each), unit mass (70 g), and 90% stator
+    efficiency behind the 2232 g per nacelle and 4464 g total used in `README.md`,
+    `airframe/README.md`, and `bom_revT`; the 64 mm QX-Motor figures in NAC-64; the 55 mm
+    rear-EDF thrust and the ~15% bleed split in `deferred/aft-edf/README.md`. Flag any figure with
+    only a seller listing as its source, and request a user measurement (thrust stand) where no
+    datasheet exists.
 - [ ] **NAC-64-SERVO-01 — radial nacelle scale-up for QX-Motor 64 mm tandem EDFs.**
     Owner decision, 2026-10-01: scale the nacelle cross-section radially relative
     to the unchanged aircraft, preserving the QMx canonical nacelle silhouette

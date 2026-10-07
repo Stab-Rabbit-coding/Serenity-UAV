@@ -29,7 +29,7 @@ matures; do not record them in any `AGENTS.md`. Read them in `airframe/README.md
 
 ### Current Build Phase (5–10)
 
-**Current capability:** Full vertical-takeoff-and-landing (VTOL) hover with two nacelles per pylon, networked avionics, autonomous command and control, redundant communications, and full secure logging.
+**Scope:** The current phase builds the capability for full vertical-takeoff-and-landing (VTOL) hover, networked avionics, autonomous command and control, redundant communications, and secure logging. Each phase guide shall state the as-built capability it verifies, with measured values taken from the descriptive documents.
 
 **Excluded from the current phase** — the rear fuselage EDF, the RCS thrusters, the aft EDF
 intake scoops into the middle-section inner neck, and advanced autonomous maneuvers requiring

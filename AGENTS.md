@@ -24,35 +24,34 @@ Non-negotiable, project-wide requirements:
 - Avionics, comms, and software are designed for reuse on other UAV/UGV/USV/robot platforms,
   not just this airframe.
 
-**Propulsion baseline** (use for all thrust calculations):
+**Propulsion:** every thrust, mass, and dimension figure for an EDF, ESC, motor, or any other
+component is a descriptive measurement and shall not be recorded in this file. Each such figure
+shall come from the manufacturer's datasheet or from a user-verified measurement, and shall carry
+a citation to that source. Take values for calculations from `current-specification/bom_revT.json`
+and `airframe/README.md`; flag any value that lacks a datasheet or user-verified source in the
+owning `WBS.md` instead of propagating it. Each nacelle carries two EDFs in series. The Phase 11
+fuselage EDF (optional, deferred) feeds the **fixed** canonical elliptical tail nozzle — **never**
+an iris — plus RCS bleed-air thrusters for pitch/yaw; its remainder is longitudinal forward thrust
+only and shall not be counted toward hover lift. Details: `deferred/AGENTS.md`,
+`deferred/aft-edf/README.md`.
 
-- Nacelle EDF: 50 mm 6S, x-fly 2627-3200kv, 12-fin rotor / 11-fin stator, 1240 g thrust each;
-  2 EDFs in series per nacelle, 90% stator efficiency → **2232 g per nacelle**.
-- Fuselage EDF (Phase 11, optional/deferred): 55 mm 6S, feeds the **fixed** canonical
-  elliptical tail nozzle — 2.06 in (52.3 mm) × 1.76 in (44.7 mm) — **never** an iris — plus 4
-  RCS bleed-air thrusters (~15% mass flow) for pitch/yaw. Remainder is longitudinal forward
-  thrust only and shall not be counted toward hover lift. Details: `deferred/AGENTS.md`,
-  `deferred/aft-edf/README.md`.
-
-**Avionics architecture** (8-node, PACE failover — stable facts only; for current
-implementation/PCB status see `avionics/AGENTS.md` and each board's own `.md` under
-`avionics/kicad/<board>/`, which is updated more often than this file and is authoritative for
-as-built state):
+**Avionics architecture** (8-node, PACE failover — requirements only; for implementation and PCB
+status see `avionics/README.md` and each board's own `.md` under `avionics/kicad/<board>/`, which
+is authoritative for as-built state):
 
 - 8× PocketBeagle2 Industrial SBC nodes, each carrying **Pilot** (flight control/sensor cape) +
   **TACCO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
-- **Commo** (49 MHz + SiK transceiver): the Rev S design is a PB2-I cape in River's Room and
-  Simon's Medbay. **Rev T (approved 2026-09-29)** replaces it with one standalone MCU node at the
-  antennas, reachable by all stacks over CAN-FD / RS-485 / MIL-STD-1553C (no Ethernet). See
+- **Commo** (49 MHz + SiK transceiver) is one standalone MCU node at the antennas, reachable by
+  all stacks over CAN-FD / RS-485 / MIL-STD-1553C (no Ethernet). Its decision record and revision
+  history are in `avionics/kicad/Commo/Commo.md` and
   `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`.
 - Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected. Commo
   (Rev T) is the only non-SBC node on 1553.
 - External C2, all 5 usable for command and control: Wi-Fi 5 GHz, Zigbee 2.4 GHz, and mLRS (all
   3 on every TACCO cape, so all 8 nodes), plus MAVLink/SiK 915 MHz and AX.25 49 MHz (47 CFR Part
-  15 §15.235 — unlicensed, **not** Part 95 RCRS [REF-FCC-003]), both via Commo. Under Rev S they
-  are limited to River's Room and Simon's Medbay; under Rev T every stack reaches them over the
-  bus. S-Bus is supported by the capes but unused. Band-by-band FCC
-  citations: `avionics/AGENTS.md` "External Communications Regulations Compliance".
+  15 §15.235 — unlicensed, **not** Part 95 RCRS [REF-FCC-003]), both via Commo. S-Bus is not a
+  C2 channel. Band-by-band FCC citations: `avionics/AGENTS.md` "External Communications
+  Regulations Compliance".
 - Each nacelle has 2 EDFs in series, independently PID-controlled by two different SBCs. Any
   of the 4 flight-control nodes can take over any EDF.
 
@@ -137,6 +136,10 @@ legal/regulatory matters are US jurisdiction.
   "lb." Thrust/lift/aerodynamic loads are forces (lbf/N); component weight and payload capacity
   are masses (lbm/kg). Airspeed and wind speed are always **kt** (never mph/km/h).
 - Failover: every system needs a fallback or redundant path where feasible.
+- **Component measurements** (mass, thrust, dimensions, ratings): take them only from the
+  manufacturer's datasheet or other manufacturer document, or from a user-verified measurement,
+  and cite the source where the value is recorded. Never take a figure from a seller listing,
+  memory, or an earlier estimate without that support.
 - EDF housings are structural, printed as part of the build — specify wall thickness, infill,
   and material for each.
 - PCBs are packed tight; final footprint positions are placed manually by the user after
@@ -281,27 +284,16 @@ here; canonical source is `docs/OBSERVER_LASER_ANALYSIS.md` (current revision) a
 | River | C | E | P | A |
 | Simon | A | C | A | P |
 
-Radio assignment follows the hardware each stack actually carries, not a fixed link name — see
-`avionics/AGENTS.md` "Cape Naming and Revision History" for the current per-board radio
-complement. As of the 2026-09-21 TACCO/Commo radio relocation: every stack's TACCO cape carries
-Wi-Fi + ZigBee (Murata Type 2EL) and mLRS (Seeed Wio-E5); only River and Simon additionally carry
-a Commo cape, which hosts 49 MHz and SiK (RFD900ux-SMT). Shepherd and Inara have no Commo cape,
-so neither has SiK or 49 MHz access — their secondary link is mLRS, the long-range link their
-hardware actually has, not SiK.
+Radio assignment follows the hardware each stack actually carries, not a fixed link name. The
+current per-board radio complement and per-stack link priority are in `avionics/README.md`
+"External Comms" and each board's own `.md`; this file does not restate them.
 
-**Rev T change (approved 2026-09-29, pending hardware):** Commo becomes a single standalone bus
-node at the antennas, so 49 MHz and SiK stop being tied to River's and Simon's stacks. When Rev T
-is built, any stack can key either radio over CAN-FD / RS-485 / 1553C, and a PACE-aware PTT
-ownership lease decides which stack transmits. Losing the one Commo node drops every stack to
-Wi-Fi / ZigBee / mLRS. The per-stack radio lines below describe Rev S hardware until the Rev T
-firmware lands (`avionics/firmware/WBS.md`).
+Per-stack tasking:
 
-Shepherd: watchdog/fault-detect/failover/auth; Wi-Fi primary, mLRS secondary.
-Inara: camera/external sensors/high-bandwidth ground link; Wi-Fi primary, mLRS secondary.
-River: forward EDF + nacelle tilt sync + most resilient comms; 49 MHz primary, SiK secondary,
-both via Commo.
-Simon: aft EDF + alternate watchdog + Observer/cargo oversight; 49 MHz primary, SiK secondary,
-both via Commo.
+- Shepherd: watchdog/fault-detect/failover/authentication.
+- Inara: camera/external sensors/high-bandwidth ground link.
+- River: forward EDF + nacelle tilt sync + most resilient comms.
+- Simon: aft EDF + alternate watchdog + Observer/cargo oversight.
 
 ## 10. Workflow
 
