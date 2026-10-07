@@ -41,7 +41,7 @@ each board's own `.md` (`avionics/kicad/Commo/Commo.md`, `avionics/kicad/XO/XO.m
   concept only; sizing is blocked pending rear-EDF motor selection and thrust-curve validation.
 - **Build phasing:** Phase 11 requires Phases 5–10 complete, and covers rear fuselage EDF bay
   fabrication and intake duct carving, RCS plumbing and thruster integration, flight-control
-  firmware for multi-axis thrust vectoring, and revised T/W and hover performance calculations.
+  firmware for multi-axis thrust vectoring, and revised hover performance calculations (results are recorded in the descriptive documents, not here).
 
 ### Phase 12+ (Lower Priority — Extended Capabilities)
 

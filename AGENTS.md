@@ -31,7 +31,7 @@ Non-negotiable, project-wide requirements:
 - Fuselage EDF (Phase 11, optional/deferred): 55 mm 6S, feeds the **fixed** canonical
   elliptical tail nozzle — 2.06 in (52.3 mm) × 1.76 in (44.7 mm) — **never** an iris — plus 4
   RCS bleed-air thrusters (~15% mass flow) for pitch/yaw. Remainder is longitudinal forward
-  thrust only, excluded from hover T/W. Details: `deferred/AGENTS.md`,
+  thrust only and shall not be counted toward hover lift. Details: `deferred/AGENTS.md`,
   `deferred/aft-edf/README.md`.
 
 **Avionics architecture** (8-node, PACE failover — stable facts only; for current

@@ -17,11 +17,15 @@ Serenity-UAV is constructed in sequential **phases**, each adding specific capab
 
 ### Phases Overview
 
-| Phase | What's Built | Goal | T/W | Status |
-| --- | --- | --- | --- | --- |
-| **1–4** | Fuselage, landing gear, wing attachment | Physical airframe | — | Archived/prototype |
-| **5–10** | Avionics (4 stacks), nacelles, battery, power dist | Full VTOL hover | 1.61 | **Current** |
-| **11+** | Rear EDF + RCS, autonomous mission system | Cruise + hover | 1.43 | Deferred |
+| Phase | What's Built | Goal | Status |
+| --- | --- | --- | --- |
+| **1–4** | Fuselage, landing gear, wing attachment | Physical airframe | Archived/prototype |
+| **5–10** | Avionics (4 stacks), nacelles, battery, power dist | Full VTOL hover | **Current** |
+| **11+** | Rear EDF + RCS, autonomous mission system | Cruise + hover | Deferred |
+
+Thrust-to-weight and other measured performance figures are descriptive and change as the design
+matures; do not record them in any `AGENTS.md`. Read them in `airframe/README.md`,
+`current-specification/README.md`, and `docs/WBS.md` §0.10.1.
 
 ### Current Build Phase (5–10)
 
