@@ -219,9 +219,20 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     "J-FAN": (21.45, 4.2, 0, F),
     "PWR-IN": (31.75, 10.3, 0, F),     # through-hole pins must clear the TSM rail pads (inner edge 0.635 mm from CL)
     "J-ETH": (42.7, 4.2, 0, F),
-    "J-ANT-RADIO": (52.0, 9.9, 0, F),
+    # --- 2026-10-07 grouping pins (owner: route TACCO; ce: airwire what-ifs): auto-placement had
+    # scattered three functional groups across the board.  Pinned beside their partners, total
+    # MST airwire drops 2535 -> 2371 mm and the long runs shrink: RADIO_ANT_RF 41 -> 7 mm,
+    # MLRS_TX_F 45 -> 13 mm, M1553B_P 32 -> 9 mm (scored with an MST-airwire what-if sweep).
+    # U.FL beside WIFI-BT-ZB (was 52.0, 9.9: 41 mm of RF trace).  Its footprint carries a 2.1 x
+    # 1.9 mm keepout on every copper layer, so it cannot sit over the P1 rail (the B.Cu rail
+    # pads, 1.27 mm apart, fall inside it) or over B.Cu parts: this is the free pocket the
+    # 1553-XCVR move left west of the module.  Pin 1 (RF) faces the module.
+    "J-ANT-RADIO": (5.2, 13.5, 180, F),
+    "U-3V3RF": (23.0, 11.5, 0, F),     # +3V3_RF buck-boost beside its MLRS / WIFI loads (was u ~40)
+    "1553-XCVR": (40.45, 13.2, 0, B),  # between 1553-XFM and J-SD (was auto-placed at u ~5)
+    "ETH-PHY": (38.0, 16.0, 0, F),     # between its PB2 RMII pins and T-ETH
     "J-1553": (3.9, 24.0, 0, F),       # opens left
-    "J-SD": (47.9, 18.8, 0, B),        # card exits the right edge; 1.42 mm tall, clears the PB2-I JST
+    "J-SD": (48.55, 18.8, 0, B),        # card exits the right edge; 1.42 mm tall, clears the PB2-I JST
     "J-ANT-MLRS": (2.9, 8.2, 0, F),    # through-hole MMCX: west of the P1 rail's end pins, below H1
     # --- 2026-10-05 floor-plan anchors on the SSM-DV rails: the auto-placer alone left
     # T-ETH / U-3V3RF / L-1V8RF without a site (largest-first order fills the open pockets
