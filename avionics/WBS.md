@@ -231,7 +231,10 @@ Plan: `docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md` (Claude O
     - **Gates:** ERC 0. DRC 169, equal to the pre-change baseline of 169 (no new
         violations), with 0 schematic-parity issues. Unconnected pads went 480 → 482.
     - **Placement:** `1553-XCVR` swapped in place.
-- [ ] **TACCO manual placement (owner):** `X-50M`, `C-50M`, `C-1553D`, and `R-1553IRQ` are
+- [x] **TACCO manual placement (owner):** **CLOSED 2026-10-05** — the regenerated 163-part TACCO
+    board places `X-50M`, `C-50M`, `C-1553D`, and `R-1553IRQ` beside the HI-6138 (all within 10 mm;
+    see the TACCO area-recovery entry in §1.2a). Original problem: `X-50M`, `C-50M`, `C-1553D`, and
+    `R-1553IRQ` were
     parked off-board at the right edge. No collision-free site exists within 20 mm of
     the HI-6138 on either side of the board (TACCO area crisis; see memory
     project_xo_board_area_crisis). Options:
@@ -290,6 +293,13 @@ Plan: `docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md` (Claude O
 
 ##### 1.2a.4 *TACCO DRC backlog — 140 hard violations (opened 2026-09-29)*
 
+**Status 2026-10-07:** the 140-violation count was measured on the pre-regeneration layout and no
+longer describes the board. The 2026-10-05/06 regeneration (163 parts, 60 × 35 mm) reports **0 DRC
+errors and 0 schematic-parity issues before routing**, so the placement-driven items below are
+closed as superseded. The isolation-shorts and clearance items stay open because routing
+(`TACCO area recovery` U5, §1.2a) can reintroduce them. Re-run `tools/validate_kicad.py` after
+routing.
+
 This is a standalone backlog, separate from the 1553C swap (§1.2a.3) and Commo Rev T (§1.2a.2).
 `tools/validate_kicad.py` (KiCad 9.0.9, CI "KiCad Validation") reports
 **140 hard / 29 soft** DRC findings on `avionics/kicad/TACCO/kicads/TACCO.kicad_pcb`. PR #220
@@ -310,10 +320,12 @@ before/after run on the pre-swap board has been done.
 The shorts across isolation domains (PGND and RADIO_ANT_F to the RS485B isolated rails, and
 GND2_CANB to GND) break the 5 kV galvanic isolation requirement. They must be fixed, not waived.
 
-- [ ] Run the before/after DRC comparison (pre-§1.2a.3 TACCO vs. current) to separate existing
-      debt from anything the HI-6138 swap introduced.
-- [ ] **Owner:** footprint repositioning for the courtyard overlaps and placement-driven shorts
-      (`avionics/AGENTS.md`: repositioning is referred to the owner).
+- [x] Run the before/after DRC comparison (pre-§1.2a.3 TACCO vs. current) to separate existing
+      debt from anything the HI-6138 swap introduced. *(Superseded 2026-10-05: board regenerated
+      from scratch; the comparison is moot.)*
+- [x] **Owner:** footprint repositioning for the courtyard overlaps and placement-driven shorts
+      (`avionics/AGENTS.md`: repositioning is referred to the owner). *(Superseded 2026-10-05:
+      generator placement is DRC-clean; owner approved the placement rules.)*
 - [ ] Clear the isolation-domain shorts (PGND, GND2_*, VCC2_* and RADIO_ANT_F crossings) and
       the keepout intrusion.
 - [ ] Clear the remaining shorts, clearance and solder-mask-bridge findings (routing, via and
@@ -1382,7 +1394,11 @@ REFERENCES.md Removed/Superseded Citations).
     the full before/after numbers). (3) The PCB has now been regenerated
     twice (once per improvement) — no longer stale; see the PCB-placement
     entry below for current placement/area/DRC state.
-- [ ] **XO PCB placement + DRC 0 + routing — IN PROGRESS.** Follow-on to the
+- [ ] **XO PCB placement + DRC 0 + routing — placement and DRC 0 CLOSED 2026-10-05; routing open.**
+    *("XO" is the legacy name for TACCO. Status 2026-10-07: the regenerated board has all 163 parts
+    placed on a 60 × 35 mm outline, 0 DRC errors and 0 parity issues before routing, and no
+    routed copper yet. Routing is tracked under U5 of the TACCO area-recovery entry below. The
+    narrative that follows is the 2026-09-21 history.)* Follow-on to the
     rebuild + radio-swap + WiFi/BT/Zigbee consolidation above. **Regenerated
     2026-09-21 against the 135-part post-Type2EL-swap schematic** (owner
     approved), **then again after a second owner-prompted improvement**: the
@@ -1418,7 +1434,7 @@ REFERENCES.md Removed/Superseded Citations).
     --severity-all --schematic-parity` to 0, then attempt freerouting via
     the Specctra DSN/SES bridge (reject and report if it introduces shorts,
     same discipline as Pilot), then export gerbers.
-- [ ] **PB2 rail geometry correction (Pilot + TACCO) and SMT rail-socket trade study —
+- [x] **PB2 rail geometry correction (Pilot + TACCO) and SMT rail-socket trade study — CLOSED 2026-10-06 (R1–R4 done) —
     APPROVED 2026-10-04 (S. Griffing: "Manual is right").** Design-shift record per root
     `AGENTS.md` §10, written before any KiCad change.
     **Why.** The PocketBeagle 2 System Reference Manual (REF-SENSOR-041, Fig. 3.45) puts the P1
@@ -1443,7 +1459,8 @@ REFERENCES.md Removed/Superseded Citations).
     "rails sit 2.54 mm from the cape edge ... the rails stay THT" and the 2026-10-04 learning
     `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`
     (its SSM-DV verdict); both to be corrected in the same change.
-    - [ ] R1 TACCO rails moved, re-floor-planned, regenerated, gates 0.
+    - [x] R1 TACCO rails moved, re-floor-planned, regenerated, gates 0. **Done 2026-10-05**
+      (rails at v 4.80 / 30.20 on male TSM-118-04-L-DV-LC strips; 163 parts placed, DRC 0, parity 0).
     - [x] R2 Pilot rails moved, regenerated, gates 0. **Done 2026-10-06** (Pilot.md 2026-10-06 update:
       rails at 4.80 mm on TSM-118-04-L-DV-LC strips, both Ethernet transformers on the top face,
       TACCO-style isolation band; ERC 0 errors, DRC 0, parity 0, 120/120 placed; routing still
@@ -1462,7 +1479,9 @@ REFERENCES.md Removed/Superseded Citations).
         errors, parity 0).
       - Pilot stays 55 x 35 mm. Its mounting holes are the stacking pattern TACCO keeps at
         60 x 35 (TACCO.md §13b), so the hole positions do not move.
-    - [ ] R3 SMT (SSM-DV) vs THT rail routing study on the corrected geometry; owner decision.
+    - [x] R3 SMT (SSM-DV) vs THT rail routing study on the corrected geometry; owner decision.
+      **Closed 2026-10-05:** SMT rails adopted; the female SSM-DV choice was then replaced by male
+      TSM-DV-LC strips (rail gender correction below).
       **Decided 2026-10-05 (S. Griffing: "Do 1+2").** On the corrected rails the THT layout
       left T-ETH, three 3015 inductors and CMC-RS485 unplaced, so TACCO moves to Samtec
       SSM-118-L-DV-LC surface-mount rails (`Serenity-Custom:PocketBeagle2_2x18_P{1,2}_SSM-DV-LC`,
@@ -1514,7 +1533,7 @@ REFERENCES.md Removed/Superseded Citations).
       Y -60.3..2.7 with a 1.5 mm static gap and a 9 mm cable channel (`cargo_layout_fit.py` Rev T5g
       PASS); Simon CN4 slot 63 mm (`middle_layout_fit.py` Rev T6a PASS). Detail: TACCO.md §13b.
       Open: re-export the chin shelf, Simon saddle, node-bay void former and head-shell STLs.
-    - [ ] R4 Learning docs and CONCEPTS.md corrected.
+    - [x] R4 Learning docs and CONCEPTS.md corrected. **Done 2026-10-06** (commit e9ba004).
 - [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
     APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift
     record per root `AGENTS.md` §10 (documented before any KiCad change). Supersedes the
@@ -1622,6 +1641,8 @@ REFERENCES.md Removed/Superseded Citations).
         with the GND2 islands and `ISO_BAND` derived from the SOIC-20W positions, mLRS radio at
         the right edge under its MMCX, Tag-Connect at (39.4, 26.0). 2026-09-29.
     - [ ] U5 routing: freerouting, outer GND pours, DRC 0 incl. `.kicad_dru` isolation rules.
+      *Status 2026-10-07: board has 0 routed segments; the placed outline is 60 × 35 mm with 163
+      parts (U4 below recorded 170 parts on 55 × 35 mm at 2026-09-29).*
     - [ ] U6 Gerbers (6 Cu + mask/paste/silk/edge), Excellon drill, pick-and-place, BOM.
     - [ ] U7 `TACCO.md`, `reports/HDD.md`, `TODO.md` regen, `REFERENCES.md` "Used in".
     - [ ] Owner: select the 0402 600 Ω bead MPN and the KMR2 variant; verify RF values (AN5457).

@@ -63,7 +63,7 @@ PAIRS: tuple[str, ...] = (
     "avionics/WBS.md",
     "avionics/rev-s1/WBS.md",
     "avionics/emi-hardening/WBS.md",
-    "avionics/observer/WBS.md",
+    "avionics/kicad/Observer/observer/WBS.md",
     "avionics/firmware/WBS.md",
     "graphical-build-guide/WBS.md",
     "graphical-build-guide/flight-phases/WBS.md",

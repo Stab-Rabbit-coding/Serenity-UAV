@@ -46,6 +46,19 @@
 - [ ] **Gimbal servo wind-load torque check** — compute worst-case wind torque on a 9 dBi Yagi
     (~1.2 m boom, ~0.04 m² front area) at 30 kt crosswind.  Verify DS3218MG (25 kg·cm @ 6 V)
     provides ≥2× safety factor.  Document in `gcs/skipper/hardware/docs/skipper_power_budget.md`.
+- [ ] **Decide Skipper's ground-side radio loadout against the aircraft radio changes
+    (design-shift gate; opened 2026-10-07, owner decision needed).** The aircraft changed after
+    this branch's radio plan was written: TACCO dropped SiK in the 2026-09-21 relocation, carries
+    mLRS (bare STM32WLE5JC since 2026-09-29) plus Wi-Fi on a USB module and ZigBee, and Commo
+    (49 MHz + SiK) becomes a standalone Rev T node. Skipper's documented comms node still
+    assumes a TACCO carrying SiK (RFD900x), LoRa (RFM95W on SPI1), Wi-Fi (WL1837MOD) and a
+    Commo sub-module on UART5. Considered: (a) mirror the aircraft TACCO + a Rev T-style Commo
+    on the ground; (b) keep a separate ground-radio bench. Record the decision here before any
+    wiring, antenna, DTS, or firmware change; then update `skipper_wiring.md`,
+    `skipper_antenna_spec.md`, `skipper_power_budget.md`, `gcs/skipper/README.md`, and the
+    TACCO overlay item below. mLRS has no ground-side antenna or link-budget entry yet.
+    Also re-check the field enclosure item above: TACCO is now 60 x 35 mm (the stacking hole
+    pattern is unchanged).
 - [ ] **Procure Skipper comms node hardware:**
     - 1× PocketBeagle 2 Industrial (AM6254) — same DigiKey PN 2820-100003007-ND
     - 1× TACCO (XO) PCB — order 1 additional unit when placing aircraft PCB order at JLCPCB
