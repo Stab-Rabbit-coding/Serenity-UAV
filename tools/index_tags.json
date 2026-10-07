@@ -2507,6 +2507,14 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/cargo/tilt_brake_guide_stbd.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/cargo/void_former_cargo_batt_chimney.stl": {
       "description": "STL mesh (binary)",
       "tags": [
@@ -17807,6 +17815,7 @@
       "airframe/stls/fuselage/cargo/tilt_actuator_wheel.stl",
       "airframe/stls/fuselage/cargo/tilt_actuator_worm.stl",
       "airframe/stls/fuselage/cargo/tilt_brake_guide.stl",
+      "airframe/stls/fuselage/cargo/tilt_brake_guide_stbd.stl",
       "airframe/stls/fuselage/cargo/void_former_cargo_batt_chimney.stl",
       "airframe/stls/fuselage/cargo/void_former_cargo_collar_rim.stl",
       "airframe/stls/fuselage/cargo/void_former_cargo_harness_trunk_port.stl",
@@ -18106,6 +18115,7 @@
       "airframe/stls/fuselage/cargo/tilt_actuator_wheel.stl",
       "airframe/stls/fuselage/cargo/tilt_actuator_worm.stl",
       "airframe/stls/fuselage/cargo/tilt_brake_guide.stl",
+      "airframe/stls/fuselage/cargo/tilt_brake_guide_stbd.stl",
       "airframe/stls/fuselage/cargo/void_former_cargo_batt_chimney.stl",
       "airframe/stls/fuselage/cargo/void_former_cargo_collar_rim.stl",
       "airframe/stls/fuselage/cargo/void_former_cargo_harness_trunk_port.stl",

@@ -14,13 +14,12 @@ What is assembled (hull frame, mm; X = +port, Y = +aft, Z = +dorsal):
 * Real meshes, identity placement (all are baked in hull frame; bounds are
   printed so a stale bake shows): cargo shell (with the merged LG bays, root
   bosses and harness bores), wings, bonded root flanges, tilt brackets,
-  brake guides, battery cradle, chin shelf, door gateway tray, doors, hinge
-  retention, latch brackets, both splice collars, 3.0 in gear legs.  The
-  starboard brake guide is TRANSLATED, as in serenity_assembly.py (the worm
-  has a hand).
+  brake guides (starboard is its own mirrored print, BHD-05),
+  battery cradle, chin shelf, door gateway tray, doors, hinge
+  retention, latch brackets, both splice collars, 3.0 in gear legs.
 * Rotating parts as their SWEPT envelopes: worm-wheel tip cylinder, worm tip
-  cylinder, the O4 tilt drive shaft, and each door swept 0..180 deg about its
-  own hinge pin (CARGO_DOOR_LATCH_SPEC.md: 180 deg swing).
+  cylinder, the O4 tilt drive shaft, and each door swept 0..145 deg about its
+  own hinge pin (owner limit 2026-10-07, BHD-07).
 * Non-printed parts from tools/cargo_layout_fit.layout_t5() (single source):
   gearmotors, tilt controller boards, brake collars and solenoids, battery,
   payload, the TACCO chin pair, the Pilot aft pair, cargo Observer, door
@@ -83,8 +82,10 @@ HARN_INB = {"port": -125.0, "stbd": -213.0}      # harness bore inboard exits
 WALL_OUT = {"port": -79.6, "stbd": -260.0}       # root-flange outer bbox = wall skin
 EXIT_STUB = 10.0           # straight run inboard of a bore exit before a turn
 
-DOOR_SWING = 180.0         # CARGO_DOOR_LATCH_SPEC.md / airframe WBS 1.1.0
-DOOR_STEPS = 19            # 10 deg steps
+# Owner 2026-10-07 (BHD-07): 145 deg is adequate; the 3.0 in gear stops a
+# 180 deg swing at 148 deg (stbd).
+DOOR_SWING = 145.0
+DOOR_STEPS = 30            # 5 deg steps
 SPAR_TIP_STUB = 13.5       # wings_s1223_revo.scad SPAR_TIP_PROTRUSION
 
 
@@ -161,10 +162,9 @@ def build() -> dict[str, dict]:
         add(f"root flange {side}", load(f"fuselage/wing_root_flange_{side}.stl"), side)
         add(f"tilt bracket {side}", load(f"fuselage/cargo/tilt_actuator_bracket_{side}.stl"),
             side)
-        g = guide.copy()
-        if side == "stbd":
-            g.apply_translation([STBD_DX, 0, 0])
-        add(f"brake guide {side}", g, side)
+        # BHD-05: the starboard guide is its own mirrored print
+        add(f"brake guide {side}", guide if side == "port" else
+            load("fuselage/cargo/tilt_brake_guide_stbd.stl"), side)
         lb = load(f"fuselage/cargo/door_latch_bracket_{side}.stl")
         if not lb.is_watertight:
             trimesh.repair.fill_holes(lb)
@@ -173,7 +173,7 @@ def build() -> dict[str, dict]:
         hx = hinge.HINGE_X_PORT if side == "port" else hinge.HINGE_X_STBD
         hz = hinge.HINGE_Z_PORT if side == "port" else hinge.HINGE_Z_STBD
         add(f"door {side} (closed)", door, side)
-        add(f"door {side} swept 0-180", door_sweep(door, hx, hz, door_sign(door, hx, hz)),
+        add(f"door {side} swept", door_sweep(door, hx, hz, door_sign(door, hx, hz)),
             side, "swept")
 
     # --- swept rotating parts and procured solids ---------------------
@@ -211,8 +211,10 @@ def build() -> dict[str, dict]:
         s = L[k]["solid"].copy()
         # Board and motor are mirrored in cargo_layout_fit; the worm-side parts
         # follow the TRANSLATED actuator, so translate them the same way.
-        s = clf.mirror_x(s) if k == "tilt controller board" else s.apply_translation(
-            [STBD_DX, 0, 0])
+        # The motor and collar sit on the worm axis, where mirror and
+        # translate coincide; the board and the solenoid are mirrored (BHD-05).
+        s = clf.mirror_x(s) if k in ("tilt controller board", "brake solenoid") \
+            else s.apply_translation([STBD_DX, 0, 0])
         add(f"{label} stbd", s, "stbd", "procured")
     for k, label, side in (
             ("battery", "battery", "cl"), ("payload", "payload keep-out", "cl"),
@@ -279,8 +281,6 @@ EXPECTED = {
     ("nav harness exit", "wing"): (10.0, "in its O3.2 wing conduit"),
     ("hoist line", "payload"): (1e9, "line attaches to the payload"),
     ("hoist line", "winch drum"): (1e9, "line on its drum"),
-    ("door port swept", "door stbd swept"): (
-        25.0, "seam: unsynchronised states only; each swept door vs the other CLOSED is 0"),
     ("Pilot", "cable zone"): (1e9, "node and its own cable zone"),
 }
 CLASH_MM3 = 0.5

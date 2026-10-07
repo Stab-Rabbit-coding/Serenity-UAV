@@ -157,8 +157,32 @@ Designed contacts confirmed (0 or bounded overlap): wing to flange gap
 0.002 in (0.04 mm); wing to shell gap 0.005 in (0.12 mm); bracket feet on their
 bosses; worm/wheel mesh 95 mm³; motor face plate 4.3 mm³; board rails;
 cradle hangers; chin shelf; gateway tray; hinge knuckles; splice collars.
-The door seam (20 mm³) arises only in unsynchronised states: each door swept
-against the other closed is 0 mm³.
+The door seam is NOT benign (corrected 2026-10-07, BHD-13): opened together,
+as the gateway firmware drives them, the doors overlap up to 41 mm³ at 5° and
+clear by 15°. The closed doors meet edge to edge at the centreline with no gap,
+and each door's crown corner swings inboard across the seam as it starts to
+open.
+
+## 2a. Status update (2026-10-07, after owner review)
+
+- **BHD-01 CLOSED.** `generate_wing_root_flange.py` now subtracts the merge
+  script's own wing-root negatives (spar socket, shaft bushing seat, nav and
+  encoder ports). The spar, shaft, encoder and nav overlaps with the flange
+  are 0 mm³. Each flange loses 2,030 mm³: −1.1 g (0.0023 lbm) as printed at
+  40 % infill, −2.6 g solid. The flange centroid moves 0.5 mm or less.
+- **BHD-05 CLOSED.** `tilt_brake.scad` now mirrors the starboard parts about
+  X_CL (`SIDE = -1`) instead of translating them.
+  `tilt_brake_guide_stbd.stl` is a separate mirrored print, placed in
+  `serenity_assembly.py`. The guide and solenoid have 0 mm³ overlap and are
+  SYNC with port. The port guide re-renders identical to the committed STL.
+  Mass is unchanged, 2.1 g per side.
+- **BHD-07 DECIDED: 145° is adequate** (owner). The gate now sweeps 0–145° in
+  5° steps, and the doors clear the gear. The latch spec is updated. A
+  mechanical stop and the servo end-point remain open.
+- **BHD-13 NEW:** the door seam interferes during synchronised opening (see
+  above). Fix with a seam gap or chamfer, or open the doors in sequence
+  (DOOR-SEAM-1 will need sequencing anyway).
+- **BHD-02 IN WORK:** the gear blocks are being reshaped per owner direction.
 
 ## 3. 10 AWG route — the corridor answer
 

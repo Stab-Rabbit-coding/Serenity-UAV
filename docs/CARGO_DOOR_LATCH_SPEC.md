@@ -103,8 +103,12 @@ M_design = 3.0 × 0.202 = 0.605 N·m per door
 | Door horn (bonded to the door panel, projects toward the crank) | `r_H` = 8 mm |
 
 **Kinematics.** The bell-crank rotates through the SG90's ~180° native range: `φ = 0` =
-door closed (hook fully engaged in the mortise); `φ → 180°` = door open (matches the
-doors' own documented 180° swing, `airframe/WBS.md` §1.1.0). The drive arm and door horn
+door closed (hook fully engaged in the mortise); `φ → 180°` = door open. **Door travel is
+limited to 145° (owner decision 2026-10-07, BHD-07)**: with the 3.0 in landing gear fitted a
+180° swing strikes the gear at 148° stbd / 156° port
+(`docs/CARGO_BULKHEAD_FIT_CHECK.md`), so the open end-point is set at the door's 145° and a
+mechanical stop is required (WBS BHD-07). The originally documented 180° swing
+(`airframe/WBS.md` §1.1.0) is superseded. The drive arm and door horn
 form a standard 4-bar (crank–rocker) linkage via the 2 mm steel pushrod — the same
 part class already in procurement ("Steel pushrod 2mm, Z-bend ends"). The latch arm is
 rigidly fixed to the *same* crank, `20°` offset from the drive arm (`ANG_LATCH = 20°`,
@@ -301,7 +305,7 @@ pass rather than computed to a false precision here.
 | **DOOR-LATCH-3** | Column/buckling check on the 2 mm pushrod in its actual unsupported length once the bracket-to-horn geometry is dry-fit (flagged, not computed, §2/§3). |
 | **DOOR-LATCH-4** | Print the hook root with a real ≥ 1.5 mm fillet (OpenSCAD CSG attempt produced a non-manifold mesh, §7) — via FreeCAD/slicer post-process, and print-orient so the governing shear plane runs with the layer lines, not across them. |
 | **DOOR-LATCH-5** | Dry-fit the bracket against the printed door panel and the published cargo shell (`tools/cargo_layout_fit.py`-style boolean check) once `SERVO-PLACE` (`docs/CARGO_DOOR_GATEWAY_SPEC.md` §8) resolves the SG90 hull-frame station — this document's `BRACKET_Y = 39.33` places the mechanism at a hinge knuckle station but has not yet been checked against the actual servo body/horn envelope. |
-| **DOOR-SEAM-1** | Implement the §4.2(b) tongue-and-groove seam in `generate_cargo_doors.py`, regenerate both door STLs, re-verify (watertight, coaxial hinge bores unaffected, no interference through the 180° swing). |
+| **DOOR-SEAM-1** | Implement the §4.2(b) tongue-and-groove seam in `generate_cargo_doors.py`, regenerate both door STLs, re-verify (watertight, coaxial hinge bores unaffected, no interference through the 145° swing, BHD-07). |
 | **DOOR-LATCH-6** | Firmware: the gateway's `DOOR_COMMAND` handler must sequence CLOSE as "drive to `φ ≈ 5°`, then creep to `φ = 0`" (a soft final approach) rather than a single full-speed move, so the hook doesn't repeatedly slam the lip at full SG90 slew rate — a fatigue/wear item for the CF-PETG lip, not a static-strength one. |
 
 ## 7. Verification
@@ -362,7 +366,7 @@ byte-identical coordinates and geometry to the hand-fixed values above.
 ## 8. References
 
 - `docs/CARGO_DOOR_GATEWAY_SPEC.md` — the gateway this mechanism's servos hang off, `DOOR_COMMAND` frame
-- `airframe/WBS.md` §1.1.0 — door geometry, 180° swing, hinge stations
+- `airframe/WBS.md` §1.1.0 — door geometry, hinge stations (swing now 145°, BHD-07)
 - `airframe/stls/fuselage/cargo/generate_cargo_doors.py` — door panel + knuckle generator (DOOR-SEAM-1 target)
 - `docs/flight_envelope.md` §2.1 — V_max = 87 kt (REF-FAA-002)
 - `REFERENCES.md`: REF-FAA-002 (14 CFR §107.51(a)), REF-ACT-003 (TowerPro SG90), REF-MAT-001

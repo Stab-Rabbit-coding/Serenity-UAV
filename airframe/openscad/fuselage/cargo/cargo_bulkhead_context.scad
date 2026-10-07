@@ -20,7 +20,7 @@
 //
 // VIEW: 0 = port bulkhead from inboard, 1 = starboard bulkhead from inboard,
 //       2 = iso from above-aft (both sides), 3 = along the hinge axis from
-//       aft (door 0..180 deg swing against the gear).
+//       aft (door 0..145 deg swing against the gear).
 // Cameras used for docs/images/cargo_bulkhead_context_*.png (eye, centre):
 //   0: -560,30,75,-110,30,75    1: 220,30,75,-230,30,75
 //   2: 180,560,430,-170,40,60   3: -170,760,20,-170,50,20
@@ -69,7 +69,7 @@ for (s = SIDES) {
     }
     part(str("latch_bracket_", s), [0.60, 0.30, 0.70, 0.85]);
     part(str("door_", s, "__closed_"), [0.70, 0.70, 0.70, 0.60]);
-    if (VIEW >= 2) part(str("door_", s, "_swept_0-180"), [0.60, 0.80, 1.00, 0.25]);
+    if (VIEW >= 2) part(str("door_", s, "_swept"), [0.60, 0.80, 1.00, 0.25]);
     part(str("gear_legs_", s), [0.35, 0.35, 0.35, 0.55]);
 }
 if (VIEW == 0) {
