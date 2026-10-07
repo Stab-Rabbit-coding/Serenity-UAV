@@ -42,7 +42,8 @@ is authoritative for as-built state):
 - 8× PocketBeagle2 Industrial SBC nodes, each carrying **Pilot** (flight control/sensor cape) +
   **TACCO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
 - **Commo** (49 MHz + SiK transceiver) is one standalone MCU node at the antennas, reachable by
-  all stacks over CAN-FD / RS-485 / MIL-STD-1553C (no Ethernet). Its decision record and revision
+  all stacks over CAN-FD / RS-485 / MIL-STD-1553C (no Ethernet). Decision (Rev T, approved
+  2026-09-29): it replaces the Rev S PB2-I capes in River's Room and Simon's Medbay. Its decision record and revision
   history are in `avionics/kicad/Commo/Commo.md` and
   `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`.
 - Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected. Commo
