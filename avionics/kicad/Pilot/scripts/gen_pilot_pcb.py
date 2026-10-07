@@ -511,11 +511,11 @@ def patch_project_netclasses(pro_path: Path) -> None:
         {"bus_width": 12, "clearance": 0.127, "diff_pair_gap": 0.15, "diff_pair_via_gap": 0.2,
          "diff_pair_width": 0.15, "line_style": 0, "microvia_diameter": 0.3, "microvia_drill": 0.1,
          "name": "Default", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 2147483647,
-         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.127, "via_diameter": 0.5,
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.127, "via_diameter": 0.6,
          "via_drill": 0.3, "wire_width": 6},
         {"clearance": 0.127, "diff_pair_gap": 0.15, "diff_pair_via_gap": 0.2, "diff_pair_width": 0.15,
          "name": "DIFF_PAIR", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 0,
-         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.2, "via_diameter": 0.5, "via_drill": 0.3},
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.2, "via_diameter": 0.6, "via_drill": 0.3},
         # ISOLATION and POWER keep the BOARD MINIMUM clearance here (0.127 mm) —
         # a wider netclass-level clearance would apply uniformly to every pair of
         # different nets in the class, including the two pads of one 0402/0201
@@ -525,7 +525,7 @@ def patch_project_netclasses(pro_path: Path) -> None:
         # same-class rule, so it lives in Pilot.kicad_dru as a custom DRC rule
         # keyed on NetClass difference, not in this flat per-class clearance.
         {"clearance": 0.127, "name": "ISOLATION", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 1,
-         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.25, "via_diameter": 0.5, "via_drill": 0.3},
+         "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.25, "via_diameter": 0.6, "via_drill": 0.3},
         {"clearance": 0.127, "name": "POWER", "pcb_color": "rgba(0, 0, 0, 0.000)", "priority": 2,
          "schematic_color": "rgba(0, 0, 0, 0.000)", "track_width": 0.4, "via_diameter": 0.6, "via_drill": 0.3},
     ]

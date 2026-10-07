@@ -17,15 +17,19 @@ Serenity-UAV is constructed in sequential **phases**, each adding specific capab
 
 ### Phases Overview
 
-| Phase | What's Built | Goal | T/W | Status |
-| --- | --- | --- | --- | --- |
-| **1–4** | Fuselage, landing gear, wing attachment | Physical airframe | — | Archived/prototype |
-| **5–10** | Avionics (4 stacks), nacelles, battery, power dist | Full VTOL hover | 1.61 | **Current** |
-| **11+** | Rear EDF + RCS, autonomous mission system | Cruise + hover | 1.43 | Deferred |
+| Phase | What's Built | Goal | Status |
+| --- | --- | --- | --- |
+| **1–4** | Fuselage, landing gear, wing attachment | Physical airframe | Archived/prototype |
+| **5–10** | Avionics (4 stacks), nacelles, battery, power dist | Full VTOL hover | **Current** |
+| **11+** | Rear EDF + RCS, autonomous mission system | Cruise + hover | Deferred |
+
+Thrust-to-weight and other measured performance figures are descriptive and change as the design
+matures; do not record them in any `AGENTS.md`. Read them in `airframe/README.md`,
+`current-specification/README.md`, and `docs/WBS.md` §0.10.1.
 
 ### Current Build Phase (5–10)
 
-**Current capability:** Full vertical-takeoff-and-landing (VTOL) hover with two nacelles per pylon, networked avionics, autonomous command and control, redundant communications, and full secure logging.
+**Scope:** The current phase builds the capability for full vertical-takeoff-and-landing (VTOL) hover, networked avionics, autonomous command and control, redundant communications, and secure logging. Each phase guide shall state the as-built capability it verifies, with measured values taken from the descriptive documents.
 
 **Excluded from the current phase** — the rear fuselage EDF, the RCS thrusters, the aft EDF
 intake scoops into the middle-section inner neck, and advanced autonomous maneuvers requiring

@@ -28,12 +28,10 @@ Skipper is responsible for:
 
 ### External Communications Channels
 
-Skipper reaches Serenity over the four external C2 channels listed in root `AGENTS.md` §1 —
-that list is not restated here, and band-by-band FCC citations are in `avionics/AGENTS.md`
-"External Communications Regulations Compliance". Ground-side roles: Wi-Fi is the primary
-high-bandwidth link for telemetry and camera feed; Zigbee is the secondary mesh for command
-retry and extended range; SiK/MAVLink is the backup control channel; 49 MHz is the
-ultra-reliable emergency command/response channel for harsh RF environments.
+Skipper reaches Serenity over the external C2 channels listed in root `AGENTS.md` §1 — that list
+is not restated here, and band-by-band FCC citations are in `avionics/AGENTS.md` "External
+Communications Regulations Compliance". The ground-side radio loadout, link roles, and antennas
+are design decisions recorded in `gcs/WBS.md` §4.5 and `gcs/skipper/README.md`.
 
 All channels support full command and control capability in both directions. Channel selection is automatic based on signal quality and command priority.
 

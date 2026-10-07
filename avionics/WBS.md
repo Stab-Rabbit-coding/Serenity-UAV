@@ -1478,7 +1478,7 @@ REFERENCES.md Removed/Superseded Citations).
       - Then re-floor-plan the rail-dependent geometry, regenerate, and re-gate (ERC 0, DRC 0
         errors, parity 0).
       - Pilot stays 55 x 35 mm. Its mounting holes are the stacking pattern TACCO keeps at
-        60 x 35 (TACCO.md §13b), so the hole positions do not move.
+        55 x 35 (TACCO.md §13b), so the hole positions do not move.
     - [x] R3 SMT (SSM-DV) vs THT rail routing study on the corrected geometry; owner decision.
       **Closed 2026-10-05:** SMT rails adopted; the female SSM-DV choice was then replaced by male
       TSM-DV-LC strips (rail gender correction below).
@@ -1525,14 +1525,14 @@ REFERENCES.md Removed/Superseded Citations).
       148-180 mA per TYPE2EL.pdf, ~0.27 W). All 163 parts place: DRC 0 errors before routing,
       schematic parity 0, ERC unchanged (12 accepted lib_symbol_issues). Open: +3V3_RF budget
       (TPS63031) now also carries the 1.8 V load — confirm against the power budget.
-      **Outline 55 x 35 -> 60 x 35 mm, 2026-10-06 (S. Griffing: "Go with option 2, 60x35 with
-      1.5 mm gap").** Routing at 55 x 35 left 60-90 connections unrouted on 6 layers and ~71 on 8
-      (area-bound at ~95 % courtyard fill). The extra 5 mm overhangs the PB2-I microSD end
-      (`U_LO = -5` in `gen_tacco_pcb.py`); rails, H1-H4 and fixed stations unchanged. Airframe
-      re-proved at all four TACCO stations: nose tray 60 -> 65 mm; cargo chin pair 63 mm pouches at
-      Y -60.3..2.7 with a 1.5 mm static gap and a 9 mm cable channel (`cargo_layout_fit.py` Rev T5g
-      PASS); Simon CN4 slot 63 mm (`middle_layout_fit.py` Rev T6a PASS). Detail: TACCO.md §13b.
-      Open: re-export the chin shelf, Simon saddle, node-bay void former and head-shell STLs.
+      **Outline 60 x 35 mm tried 2026-10-06, reverted 2026-10-07 (owner rule: revert unless the
+      fix relies on the extra 5 mm).** Second routing pass: 60 x 35 / original band 92 logic +
+      13 isolated unrouted; 55 x 35 / notched band 93 + 18. Kept: DSN export no longer turns the
+      ISO_BAND marker into a keepout (open-band phase had routed 0 of 51 isolated connections),
+      band notched under the bus connectors so the outer P2 row can via, repair pass keeps
+      isolated parts in the band, and the board-size sync guard. Airframe envelopes restored
+      (cargo / middle gates PASS). ~90 logic connections remain: hand-route the MLRS-MCU,
+      WIFI-BT-ZB, SPI0_B and +3V3_RF escapes next. TACCO.md §13b.
     - [x] R4 Learning docs and CONCEPTS.md corrected. **Done 2026-10-06** (commit e9ba004).
 - [ ] **TACCO area recovery, mLRS bare-chip radio, non-stack rails, and fab-ready layout —
     APPROVED 2026-09-29 (S. Griffing decisions; implemented by Claude Fable 5.1).** Design-shift

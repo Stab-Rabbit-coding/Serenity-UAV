@@ -6,9 +6,7 @@
 //   into serenity_assembly.py at identity placement.
 // ===========================================================================
 // ============================================================
-// chin_node_shelf.scad -- Rev T5g (2026-10-06; Rev T5e 2026-09-16)
-// T5g: the chin nodes are TACCO (CN) capes, now 60 x 35 mm -> 63 x 37 x 22 pouches at
-// Y -60.3..2.7, 9 mm cable channel, 1.5 mm static gap (owner); aft lip dropped.
+// chin_node_shelf.scad -- Rev T5e (2026-09-16)
 // Shelf for the two remaining cargo-section avionics nodes (N1 CN2 Inara,
 // N3 CN3 River: PB2I + cape in a Faraday pouch, 58 x 37 x 22 each) lying
 // FLAT on the chin floor under the battery nose, Y -58..0, Z 66..88, side by
@@ -73,11 +71,11 @@ module plate() {
         for (b = SHELF_BOSS) translate([b[0], b[1], Z0 - 1]) cylinder(d = M3_CLR, h = SHELF_T + 2);
         // strap slots: 2 straps per node, at the pouch's outboard and inboard thirds
         for (y = STRAP_Y, sx = [-1, 1], k = [1, 2])
-            translate([X_CL + sx * (CHIN_CABLE / 2 + k * NODE_H / 3) - STRAP_SLOT[1] / 2, y - STRAP_SLOT[0] / 2, Z0 - 1])
+            translate([X_CL + sx * (NODE_CABLE / 2 + k * NODE_H / 3) - STRAP_SLOT[1] / 2, y - STRAP_SLOT[0] / 2, Z0 - 1])
                 cube([STRAP_SLOT[1], STRAP_SLOT[0], SHELF_T + 2]);
         // lightening windows under each pouch centre
         for (sx = [-1, 1])
-            translate([X_CL + sx * (CHIN_CABLE / 2 + NODE_H / 2) - 10, Y0 + 20, Z0 - 1]) cube([20, 18, SHELF_T + 2]);
+            translate([X_CL + sx * (NODE_CABLE / 2 + NODE_H / 2) - 10, Y0 + 20, Z0 - 1]) cube([20, 18, SHELF_T + 2]);
     }
 }
 
@@ -89,10 +87,10 @@ module lips() {
     // overhangs the plate's forward edge by 6 mm over the collar ring, and
     // the two cam straps take the lateral and forward load.
     for (sx = [-1, 1]) {
-        xi = X_CL + sx * CHIN_CABLE / 2;                 // pocket inboard face
-        xo = X_CL + sx * (CHIN_CABLE / 2 + NODE_H);      // pocket outboard face
+        xi = X_CL + sx * NODE_CABLE / 2;                 // pocket inboard face
+        xo = X_CL + sx * (NODE_CABLE / 2 + NODE_H);      // pocket outboard face
         xa = min(xi, xo); xb = max(xi, xo);
-        // Rev T5g: no aft lip -- the 63 mm TACCO pouch ends 2.0 mm short of the payload box
+        translate([xa, N_CHIN_Y1, Z0 + SHELF_T - EPS]) cube([xb - xa, LIP_T, LIP_H]);   // aft lip, behind the pouch
         translate([sx > 0 ? xi - LIP_T : xi, Y0, Z0 + SHELF_T - EPS]) cube([LIP_T, Y1 - Y0, LIP_H]);
     }
 }
