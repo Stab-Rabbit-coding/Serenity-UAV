@@ -13,7 +13,7 @@ This folder contains all hardware design for the airframe structure: printed she
 All design artifacts in this folder — SCAD sources, STLs, Blender/FreeCAD scripts, and documentation — use the **single validated hull frame**:
 
 - **X** — positive port (left) — the lateral axis
-- **Y** — positive aft (back) — the longitudinal axis (nose tip at Y ≈ −305.6 mm)
+- **Y** — positive aft (back) — the longitudinal axis (nose-tip position: `airframe/HULL_FRAME_REFERENCE.md`)
 - **Z** — positive dorsal (up)
 - **Origin** — the `airframe/freecad/assembly/SerenityAssembly.FCStd` world origin
 
@@ -27,9 +27,9 @@ eight primary components. Read it before regenerating or placing any primary STL
 
 The fuselage has four canonical sections, each with specific spatial properties:
 
-- **Head** — forwardmost; tapers to a narrow nose (most negative Y extent, Y ≈ −305.6 mm)
+- **Head** — forwardmost; tapers to a narrow nose (most negative Y extent)
 - **Cargo** — immediately aft of head; largest cross-section; wing attachment flanges on upper outer edges; bay door opens toward −Z (ventral)
-- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); houses the inner-neck tube and Flight Engineer's room (power distribution); aft EDF intake scoops deferred to Phase 11
+- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); houses the inner-neck tube and Flight Engineer's room (power distribution); aft EDF intake scoops belong to Phase 11 (`deferred/AGENTS.md`)
 - **Rear** — aftmost; houses engine room, dorsal pod, and two landing skids extending aft
 
 **Wings and nacelles:**
@@ -112,30 +112,27 @@ PCB and avionics footprint placement is governed by root `AGENTS.md` §5 and
 
 ## Landing Gear
 
-The landing-leg design (post/wire geometry, materials, energy sizing) changes as testing
-matures — do not restate its specifics here or in any other file; they will go stale. Read
-the current revision directly:
+The landing-leg design (post/wire geometry, materials, energy sizing, selected variant) changes as
+testing matures and is descriptive. Do not restate it here or in any other `AGENTS.md`. Read it
+directly:
 
 - **Canonical design and structural analysis:** `docs/LANDING_GEAR_ANALYSIS.md`
-- **SCAD source:** `airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad` (THE FLIGHT
-  ARTICLE, adopted 2026-09-06 — nozzle belly-clearance driver, `docs/LANDING_GEAR_ANALYSIS.md`
-  §4.8) and `canonical_leg_r6_1_5in.scad` (RETIRED to bench/ground-handling use — below the
-  minimum safe nozzle clearance). The Rev R5 `wire_brace_leg.scad`
-  this file used to name is superseded — corrected 2026-08-23.
-- **Open work:** `airframe/landing-gear/TODO.md` §1.1.4
+- **SCAD source and variants:** `airframe/openscad/fuselage/`. Decision (2026-09-06): the 3.0 in
+  leg (`canonical_leg_r6_3_0in.scad`) is the flight article, driven by nozzle belly clearance
+  (`docs/LANDING_GEAR_ANALYSIS.md` §4.8); the 1.5 in leg (`canonical_leg_r6_1_5in.scad`) is
+  retired to bench and ground-handling use. The Rev R5 `wire_brace_leg.scad` is superseded.
+- **Open work:** `airframe/landing-gear/TODO.md`
 
 ## Nacelle Nozzle Drive
 
-Each nacelle nozzle is variable-diameter, **scheduled on measured nacelle tilt**, sized 75% of
+Each nacelle nozzle is variable-diameter and **scheduled on measured nacelle tilt**, sized 75% of
 bore at 0° (forward) to 105% of bore at every tilt from 90° to the 145° limit (vertical/backing),
 and shall fail to 105% on loss of servo power, command, or tilt-angle validity — a fixed
-functional requirement. Mechanism (owner decision 2026-09-28, servo drive): one sub-micro servo per
-nacelle inside the pod, commanded from the AK7455 tilt angle by its bus gateway, pulling the
-unison ring through a pull-only link against a spring that opens it to a hard 105% stop. The
-passive gear/linkage drives were retired (unbuildable in the Rev T4 joint; over-travel past 90°).
-Read the current state directly:
+functional requirement. Decision (owner, 2026-09-28, servo drive): one sub-micro servo per nacelle
+inside the pod, commanded from the tilt angle by its bus gateway, pulling the unison ring through a
+pull-only link against a spring that opens it to a hard 105% stop; the passive gear and linkage
+drives were retired. The trade study holds the rationale. Read the current state directly:
 
 - **Trade study and decision record:** `docs/NOZZLE_DRIVE_TRADE.md`
 - **Implementation plan:** `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`
-- **SCAD source:** `nacelle_nozzle_iris.scad`
-- **Open work:** `TODO.md` §1.1.3.1
+- **Open work:** `airframe/wings-nacelles/TODO.md`
