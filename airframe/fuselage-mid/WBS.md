@@ -785,7 +785,7 @@ Record: `docs/CARGO_SECTION_LAYOUT.md`, `docs/TILT_ACTUATOR_SELECTION.md`,
     - [ ] **BHD-08 — payload keep-out Z0 8.72 vs measured closed-door floor 10.86.** Correct the datum in `cargo_layout_fit.py`; the box top then reaches Z 87.06 vs Pilot FC2/FC3 at Z 87.0 (0.06 mm interference, 2 mm budget).
     - [ ] **BHD-09 — cargo Observer envelope ∩ cargo/middle splice collar 1,186 mm³** (lower 10.5 mm of the tray inside the ring). Re-shape/raise the tray (OBS-CARGO).
     - [ ] **BHD-10 — Pilot FC2/FC3 + cable zones 0.5 mm into the collar** (22/24/19/19 mm³); moving forward hits the tilt controller boards — owner decision on the aft-strip layout (NODE-SADDLE).
-    - [ ] **BHD-11 — TACCO CN2/CN3 tops vs real cradle nose** (21 mm³ P/S, cradle mesh to Z 87.6 vs envelope Z ≥ 90): T5g regression; trim the node station or relieve the cradle.
+    - [x] **BHD-11 — TACCO CN2/CN3 tops vs real cradle nose** — CLOSED 2026-10-07: TACCO reverted to 55 × 35 (chin pouch Y −58..0) on main; gate shows 0 mm³. (21 mm³ P/S, cradle mesh to Z 87.6 vs envelope Z ≥ 90): T5g regression; trim the node station or relieve the cradle.
     - [ ] **BHD-12 — stbd root flange 0.76 mm inboard of mirror → ∩ stbd tilt bracket 10.5 mm³**; desyncs follow CENSUS-01's two centre planes (−169.85 vs −169.241). Fix at the shared parameter, both sides.
     - [ ] **BHD-GATE — add `cargo_bulkhead_context.py` to pre-commit/CI** once BHD-01..12 close; make `cargo_layout_fit.py` read the real cradle/collar meshes.
 - [ ] **GPS-ANT — Ø36 patch antenna part** for the dorsal cups (legacy ANN-MB-00 is 82 × 60 mm and does not fit).

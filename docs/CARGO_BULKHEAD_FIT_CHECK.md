@@ -182,6 +182,8 @@ open.
 - **BHD-13 NEW:** the door seam interferes during synchronised opening (see
   above). Fix with a seam gap or chamfer, or open the doors in sequence
   (DOOR-SEAM-1 will need sequencing anyway).
+- **BHD-11 CLOSED.** TACCO reverted to 55 × 35 mm on main (chin pouch
+  Y −58..0); TACCO vs cradle is 0 mm³. Gate now reports 40 clashes.
 - **BHD-02 IN WORK:** the gear blocks are being reshaped per owner direction.
 
 ## 3. 10 AWG route — the corridor answer
