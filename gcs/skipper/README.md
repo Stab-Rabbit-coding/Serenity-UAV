@@ -6,7 +6,12 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Revision:** R (2026-06-11)
+**Revision:** R (2026-06-11); status note added 2026-10-07
+
+> **Status note 2026-10-07:** the Skipper comms-node link table below predates the aircraft radio
+> relocation (2026-09-21) and the Commo Rev T node (2026-09-29). Whether the ground side mirrors
+> the aircraft (mLRS, Wi-Fi USB module, standalone Commo) is an open owner decision tracked in
+> `gcs/WBS.md` §4.5. Until it closes, treat the table as the Rev R plan, not the design.
 
 ---
 
@@ -33,7 +38,7 @@ tracking software stack.
 
 ### Skipper Comms Node
 
-One PocketBeagle 2 Industrial (AM6254) + TACCO (XO) stack, USB-tethered to the host
+One PocketBeagle 2 Industrial (AM6254) + TACCO stack, USB-tethered to the host
 PC.  This is the same hardware and firmware base used in the aircraft, providing a
 symmetric, tested ground-side interface for every radio link.
 

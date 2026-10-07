@@ -9,8 +9,27 @@ section number is stable enough to cite here; search the file instead of citing 
 
 > Avionics subsystem for the Serenity UAV: 8-node cooperative flight control,
 > PACE failover architecture, EMI-hardened PCBs, multi-link comms (CAN FD, RS-485,
-> Ethernet, 49 MHz / LoRa), and signed telemetry logging with hardware-enforced
-> write protection.
+> Ethernet, MIL-STD-1553C, 49 MHz / SiK / mLRS), and signed telemetry logging with
+> hardware-enforced write protection.
+
+## Current Status (2026-10-07)
+
+The design revision is Rev T. Hardware is in PCB layout; nothing is fabricated yet.
+
+| Item | State |
+|------|-------|
+| Pilot | Schematic and PCB generated together; ERC 0, DRC 0, parity 0; 120 of 120 parts placed; **routing and Gerbers open** |
+| TACCO | 163 parts placed on a 60 × 35 mm outline; ERC 0, DRC 0, parity 0 before routing; **routing, Gerbers, and USB Wi-Fi module selection (fab blocker) open** |
+| PB2 rails (Pilot, TACCO) | Corrected 2026-10-05/06 to 4.80 mm from each long edge on Samtec TSM-118-04-L-DV-LC male strips; the earlier 2.54 mm placement could not mate with the PB2-I |
+| Fleet 1553C | Holt HI-6138 protocol engine on Pilot and TACCO (decision 2026-09-28) |
+| Flight Engineer | ERC 0; 29–31 DRC items open; not routed |
+| Commo | Rev T standalone bus node approved 2026-09-29; Rev S cape design superseded; Rev T schematic and PCB in design |
+| Observer | Schematic ahead of PCB; PCB resync not started (124 DRC) |
+| Bus-Gateway | `N_STACKS=4` generated; about 84% routed; 1 DRC item |
+| Encoder | Schematic, PCB, ERC 0, DRC 0; bench calibration open |
+| Firmware | `serenity-cn` Phase 6 done; `serenity-fc` Phase 6 stub; Phase 7 open (`firmware/WBS.md`) |
+
+Per-board detail: `kicad/README.md` and each board's `.md` file. Open work: `TODO.md`.
 
 ## Architecture Overview
 
@@ -29,8 +48,9 @@ Each node runs a **PocketBeagle2 Industrial (PB2-I) SBC** carrying:
 - **TACCO** cape: comms/logging/payload interface (Cape-B-2). "XO" is a legacy/internal working
   name still present in some script and file names (e.g. `gen_xo_sch.py`) — TACCO is the
   canonical current name; see `avionics/AGENTS.md` "Cape Naming and Revision History."
-- Optional: **Commo** cape (49 MHz + SiK transceivers) — installed only on River's Room (Bay C) and
-  Simon's Medbay (Bay D); see `avionics/AGENTS.md` for the current per-bay cape loadout.
+- **Commo** (49 MHz + SiK transceivers). Rev S was a PB2-I cape in River's Room (Bay C) and
+  Simon's Medbay (Bay D). **Rev T (approved 2026-09-29)** replaces both with one standalone
+  MCU node at the antennas, reachable by all four stacks; see `avionics/AGENTS.md`.
 
 **Flight Engineer** (Power Distribution Board) sits in the middle-section inner neck, minimizing
 power-run length to all four nacelles and the battery.
@@ -57,31 +77,33 @@ by Pilot — see `avionics/kicad/Encoder/ENC-NACELLE-1.md`.
 
 | Bus | Protocol | Nodes | Purpose |
 |-----|----------|-------|---------|
-| CAN FD | 1 Mbps nominal / 8 Mbps data | 8 PACE nodes + Bus-Gateway instances + Observer | Primary telemetry, ESC heartbeat, sensor fusion, failover signaling |
-| RS-485 | Half-duplex | 8 PACE nodes + Bus-Gateway instances | Backup command/telemetry (fallback if CAN FD fails) |
+| CAN FD | 1 Mbps nominal / 8 Mbps data | 8 PACE nodes + Bus-Gateway instances + Observer + Commo (Rev T) + Flight Engineer | Primary telemetry, ESC heartbeat, sensor fusion, failover signaling |
+| RS-485 | Half-duplex | 8 PACE nodes + Bus-Gateway instances + Commo (Rev T) + Flight Engineer | Backup command/telemetry (fallback if CAN FD fails) |
 | Ethernet | RSTP ring | 8 PACE nodes (via Pilot's dual PHYs, J_ETH1/J_ETH2) + Observer | High-bandwidth sensor data, inter-node video/imaging streams |
-| MIL-STD-1553C | Dual redundant buses | 8 PACE nodes | Deterministic real-time control (legacy compatibility, backup) |
+| MIL-STD-1553C | Dual redundant buses | 8 PACE nodes + Commo (Rev T) as a remote terminal | Deterministic real-time control; Holt HI-6138 protocol engine on every Pilot and TACCO |
 | UART | Various | Cape headers | Serial debugging, bootloader, optional mission-specific sensors |
 
 ## External Comms (5 Independent Paths)
 
-All five paths are **authenticated, signed, logged**. Availability differs by stack: every
-stack's TACCO cape carries Wi-Fi, ZigBee, and mLRS; only River and Simon additionally carry a
-Commo cape (49 MHz + SiK) — see root `AGENTS.md` §9 for the per-stack primary/secondary
-assignment.
+All five paths are **authenticated, signed, logged**. Every stack's TACCO cape carries Wi-Fi,
+ZigBee, and mLRS. Under Rev S only River and Simon carried a Commo cape (49 MHz + SiK); under
+Rev T every stack reaches the one standalone Commo node over the bus. See root `AGENTS.md` §9 for
+the per-stack primary/secondary assignment.
 
 1. **Wi-Fi 5 GHz** — MAVLink to QGroundControl; primary for higher-bandwidth development
-   flights; range limited (<500 m line-of-sight); all 4 stacks (TACCO)
+   flights; range limited (<500 m line-of-sight); all 4 stacks (TACCO). Host interface moved to a
+   USB module on the PB2's USB1 (the SDIO bus is not on the PB2 headers); module selection is open
 2. **ZigBee 2.4 GHz** — MAVLink fallback; robust link in congested RF environments; all 4 stacks
-   (TACCO, Murata Type 2EL module shared with Wi-Fi)
-3. **mLRS (Seeed Wio-E5 / STM32WLE5)** — LoRa-class long-range link; all 4 stacks (TACCO). Moved
-   here from TACCO's prior SiK radio in the 2026-09-21 relocation; serves as Shepherd's and
-   Inara's long-range fallback since neither stack carries a Commo cape
+   (TACCO, Murata Type 2EL module; 802.15.4 is hosted on SPI0)
+3. **mLRS (bare ST STM32WLE5JC)** — LoRa-class long-range link; all 4 stacks (TACCO). Replaced
+   the Seeed Wio-E5 module on 2026-09-29 (restricted-country sourcing rule); RF matching values
+   need bench tuning before flight. Replaced TACCO's SiK radio in the 2026-09-21 relocation and
+   is the long-range fallback if the single Commo node is lost
 4. **MAVLink/SiK 915 MHz** — Licensed ISM band; range ~5 km (open field, typical line-of-sight);
-   **River and Simon only**, via Commo (RFD900ux-SMT) — moved here from TACCO in the same
-   2026-09-21 relocation
-5. **49 MHz (Part 15 §15.235)** — Unlicensed, extremely low power (~30 µW EIRP); **River and
-   Simon only**, via Commo; forward and aft wire antennas (see `XCVR-49MHZ` in BOM); carries
+   via Commo (RFD900ux-SMT) — moved there from TACCO in the 2026-09-21 relocation. Rev S: River
+   and Simon only; Rev T: all stacks
+5. **49 MHz (Part 15 §15.235)** — Unlicensed, extremely low power (~30 µW EIRP); via Commo (Rev S: River and
+   Simon only; Rev T: all stacks); forward and aft wire antennas (see `XCVR-49MHZ` in BOM); carries
    encrypted command/telemetry; requires FCC pre-compliance (energy-limited but not
    power-limited per Part 15)
 
@@ -108,10 +130,14 @@ on them for fab, BOM, or integration decisions.
 
 ### TACCO (Cape-B-2) — Comms / Logging / Payload
 
-- **Radio:** mLRS on a Seeed Wio-E5 (STM32WLE5) module, replacing this board's prior SiK radio
-  in the 2026-09-21 relocation (SiK moved to Commo — see below); dedicated UART also serves the
-  49 MHz transceiver module (XCVR-49MHZ-1/2). This board carries neither SiK nor LoRa/RFM95W now
-- **Logging:** eMMC mass storage (OS + runtime logs); μSD slot (flight logs, write-blocked)
+- **Radio:** mLRS on a bare ST STM32WLE5JC (pSemi PE4259 antenna switch, Epson TCXO), replacing
+  this board's prior SiK radio in the 2026-09-21 relocation and the Wio-E5 module on 2026-09-29;
+  Wi-Fi/Bluetooth on a USB module (selection open); ZigBee via the Type 2EL module; a header for
+  the 49 MHz sub-module. This board carries neither SiK nor LoRa/RFM95W
+- **Logging:** μSD header (Molex 105162-0001; flight logs, write-blocked); OS and runtime logs
+  on the PB2-I's eMMC
+- **MIL-STD-1553C:** Holt HI-6138 protocol engine on SPI0 (since 2026-09-28)
+- **Form factor:** 60 × 35 mm, male TSM-DV-LC rails; U.FL antenna jacks
 - **Payload Interface:** cargo door/winch servo and sensor-expansion I/O — see Pilot note above;
   much of this is moving to Bus-Gateway rather than local GPIO
 - **Isolation:** galvanic isolation on all buses
@@ -121,14 +147,15 @@ on them for fab, BOM, or integration decisions.
 ### Commo — 49 MHz + SiK Transceiver
 
 - **Radios:** 49 MHz transceiver (Si5351A-based tunable DDS/PLL, MMBT2222A + 2N3866 PA,
-  ~30 µW max EIRP) **plus SiK (RFD900ux-SMT)**, relocated here from TACCO in the 2026-09-21
-  radio swap in exchange for Commo's prior LoRa/RFM95W module (removed)
-- **Installed only on:** River's Room (Bay C) and Simon's Medbay (Bay D) — maximizes antenna
-  diversity and geographic spread for robust long-range comms
-- **Isolation:** galvanic isolation
-- **Known open item:** the existing hand-placed PCB layout has no contiguous free area for the
-  SiK module without touching the Ethernet PHY footprint — a floorplan pass is still needed
-  before fab; see status file
+  ~30 µW max EIRP) **plus SiK (RFD900ux-SMT)**, relocated from TACCO in the 2026-09-21 radio
+  swap in exchange for Commo's prior LoRa/RFM95W module (removed)
+- **Rev S (superseded 2026-09-29):** PB2-I cape in River's Room (Bay C) and Simon's Medbay
+  (Bay D); snapshot archived under `archives/avionics-archives/kicad-archives/`
+- **Rev T (approved 2026-09-29, in design):** one standalone MCU-driven board per airframe at
+  the antennas, with isolated CAN-FD, RS-485, and a MIL-STD-1553C remote terminal; no Ethernet;
+  an SE replaces the TPM. A PACE-aware PTT ownership lease picks which stack transmits. Losing
+  the node drops every stack to Wi-Fi / ZigBee / mLRS. Plan:
+  `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`
 - Status: `avionics/kicad/Commo/Commo.md`
 
 ### Flight Engineer (Power Distribution Board)
@@ -152,8 +179,8 @@ sensor pod (nose) and cargo-bay nadir FPV mount.
 - **Laser Indicator:** single shared 520 nm green source; per-site optics and IEC 60825-1 class
   are a live engineering analysis, not a fixed spec — see `docs/OBSERVER_LASER_ANALYSIS.md`
 - **Comms:** Gigabit Ethernet (KSZ9477 switch), CAN FD, TPM 2.0 (SLB9672) for signed image
-  metadata; an RS-485 addition is in the schematic but not yet synced to the PCB layout — see
-  status file
+  metadata; the ISOW1412 RS-485 addition is in the schematic but not yet synced to the PCB layout
+  (PCB resync not started; 124 DRC items) — see status file
 - **Mounting:** Nose sensor pod + cargo-bay FPV housing; connected via shielded Ethernet ring
 - Status: `avionics/kicad/Observer/Observer.md`
 
@@ -182,11 +209,11 @@ sensor pod (nose) and cargo-bay nadir FPV mount.
   - RS-485 backup messaging
   - Ethernet RSTP ring management  
   - Signed-log write via CPLD write-blocker
-  - Radio (49 MHz, SiK, LoRa) telemetry encoding/decoding
+  - Radio (49 MHz and mLRS) telemetry encoding/decoding
   - Cargo control GPIO sequencing
   - MAVLink routing configuration
 
-- **serenity-fc** (Flight Control) — runs on Pilot/Pilot boards (4× FC nodes: Shepherd, Inara, River, Simon)
+- **serenity-fc** (Flight Control) — runs on Pilot boards (4× FC nodes: Shepherd, Inara, River, Simon)
   - ESC PID governor (nacelle thrust control)
   - Nacelle tilt servo PWM generation + sync across all 4 nacelles
   - IMU + barometer + GPS sensor fusion
@@ -218,7 +245,7 @@ sensor pod (nose) and cargo-bay nadir FPV mount.
 | `AGENTS.md` | Avionics subsystem policy: PCB design, firmware architecture, comms topology |
 | `WBS.md` | Avionics work breakdown structure |
 | `TODO.md` | Avionics task tracker, federated from `WBS.md` — per-board status subsections |
-| `kicad/` | KiCad source schematics and PCB layouts (all boards) |
+| `kicad/` | KiCad source schematics and PCB layouts (all boards); `kicad/README.md` is the board index and status snapshot |
 | `kicad/Pilot/` | Pilot cape: schematic/PCB source, `Pilot.md` status file |
 | `kicad/TACCO/` | TACCO cape: schematic/PCB source, `TACCO.md` status file |
 | `kicad/Commo/` | Commo board: schematic/PCB source, `Commo.md` status file |
@@ -243,9 +270,9 @@ See root [`REFERENCES.md`](../REFERENCES.md) for complete reference catalog.
 
 ## License
 
-**Hardware (PCB schematics, layouts, Gerbers):** CERN-OHL-W 2.0  
-**Firmware and Scripts:** CC BY-SA 4.0  
-**All documentation:** CC BY-SA 4.0
+**Hardware (PCB schematics, layouts, Gerbers) and the scripts that generate them:** CERN-OHL-W 2.0  
+**Firmware, device trees, and analysis/verification tools:** MIT  
+**All documentation and images:** CC BY-SA 4.0
 
 See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md)
 for full licensing details.

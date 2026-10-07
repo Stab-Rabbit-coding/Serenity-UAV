@@ -5,7 +5,12 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** R (Rev R baseline; carried forward from Rev A, 2026-06-07; no design changes)
-**Date:** 2026-06-11
+**Date:** 2026-10-07 (status re-verified; Rev R design content dated 2026-06-11)
+**Status check 2026-10-07:** unchanged since the 2026-09-20 rebuild below except for the 2026-10-05
+schematic fixes (TLV62569 EN/FB divider; PRTR5V0U2X relink). ERC 0; DRC still 29–31 hard
+violations (D_OR1/D_OR2 and U_RS485 placement); not routed; no Gerbers. The planned 6 V servo
+BEC removal (Flight Engineer Rev S1, `avionics/rev-s1/WBS.md`) is still open, so §"6 V Servo Bus Cable" and the `J_6V`
+rows describe the current Rev R design.
 **Status (2026-09-20 update, Claude Sonnet 5):** The legacy schematic/PCB pair
 (586 ERC violations, PCB pad nets not matching the schematic at all,
 `gen_flight_engineer.py` itself confirmed drifted from the checked-in design per its own

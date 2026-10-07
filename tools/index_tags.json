@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-06",
+  "generated": "2026-10-07",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -6180,6 +6180,14 @@
       ],
       "archived": true
     },
+    "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md": {
+      "description": "Rev M-era content formerly in `docs/README.md` (archived 2026-10-07)",
+      "tags": [
+        "archive",
+        "documentation"
+      ],
+      "archived": true
+    },
     "archives/docs-superseded/serenity-rev-q.jsx": {
       "description": "React/JSX specification component",
       "tags": [
@@ -10760,7 +10768,7 @@
       "archived": false
     },
     "avionics/kicad/README.md": {
-      "description": "Serenity Avionics \u2014 KiCad Cape Status & Build Notes",
+      "description": "Serenity Avionics \u2014 KiCad Board Index and Status",
       "tags": [
         "avionics-hardware",
         "documentation",
@@ -12203,7 +12211,7 @@
       "archived": false
     },
     "current-specification/README.md": {
-      "description": "Serenity UAV \u2014 Current Specification (Rev S BOM Baseline)",
+      "description": "Serenity UAV \u2014 Current Specification (Rev T BOM Baseline)",
       "tags": [
         "documentation",
         "redundancy-failover",
@@ -16645,6 +16653,7 @@
       "archives/docs-superseded/PYLON_INTEGRATION_2026-07-18.md",
       "archives/docs-superseded/README.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
+      "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md",
       "archives/root-readme-deep-dive-2026-08-03/README.md",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity/README.md",
@@ -19241,6 +19250,7 @@
       "archives/docs-superseded/README.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/bom_revQ.csv",
+      "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md",
       "archives/docs-superseded/serenity-rev-q.jsx",
       "archives/files.zip",
       "archives/generate_foam_svgs.py",

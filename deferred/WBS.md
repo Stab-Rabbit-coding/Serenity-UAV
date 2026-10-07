@@ -26,7 +26,7 @@
 ---
 
 
-> **Phase 12 (Range-Extender Battery Module)** rides in the cargo bay on the same Observer hooks/release and adds a `J_BATT2` input to Flight Engineer — a cruise-range, not hover, enhancement. See the Observer cross-cutting map in [avionics/observer/TODO.md](../avionics/observer/TODO.md).
+> **Phase 12 (Range-Extender Battery Module)** rides in the cargo bay on the same Observer hooks/release and adds a `J_BATT2` input to Flight Engineer — a cruise-range, not hover, enhancement. See the Observer cross-cutting map in [avionics/kicad/Observer/observer/TODO.md](../avionics/kicad/Observer/observer/TODO.md).
 
 
 ## §Phase11 — Aft EDF Integration (Deferred)

@@ -3,8 +3,8 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 see `docs/attribution_and_licensing.md`
-**Revision:** S1 (Rev S baseline + schematic-first reconciliation 2026-07-04)
-**Date:** 2026-07-04
+**Revision:** S1 as a PB2-I cape (Rev S baseline + schematic-first reconciliation 2026-07-04) — **superseded 2026-09-29 by the standalone Rev T node; see the 2026-09-29 status update below**
+**Date:** 2026-09-29
 **Status:** Schematic-first reconciliation COMPLETE — `Commo.kicad_sch` authored from the
 as-placed PCB (`gen_commo_sch.py`), PCB transformed to match (`mod_commo_pcb.py`); sch↔pcb
 parity exact (74 refs / 104 nets / 0 pin-count mismatches), ERC 0 errors. J1 (JST-GH-6P)
