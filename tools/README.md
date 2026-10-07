@@ -1,7 +1,8 @@
 # Serenity UAV — Build Tools & Validation Scripts
 
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)  
+**Last updated:** 2026-10-07
 
 > Python and shell scripts for design validation, mesh integrity checking, KiCad PCB/ERC/DRC
 > verification, STL export, and repository linting. All tools support the design-to-fabrication
@@ -17,6 +18,11 @@
 | `ci.yml` (GitHub Actions) | YAML | CI pipeline: lint, validate, test | Git commits | CI status checks, PR feedback |
 | `.super-lintignore` | Text | Exclusion list for super-linter | — | Config (managed by maintainers) |
 | `precommit_sanitize.py` | Python 3 | Pre-commit hook to scrub sensitive data from commits | Staged files | Clean commits (no PII, credentials) |
+| `gen_todo_from_wbs.py` | Python 3 | Regenerate every `TODO.md` from its owning `WBS.md`; `--check` reports drift | `WBS.md` files | `TODO.md` files, exit code |
+| `precommit_index.py` | Python 3 | Regenerate `PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`, `index_tags.json` | File tree | Index files |
+| `precommit_doc_wording.py` | Python 3 | Enforce the CNAF M-3710.7 WARNING/CAUTION/NOTE wording gate | Staged Markdown | Pass/fail |
+| `check_tacco_envelope_sync.py` | Python 3 | Re-derive every airframe TACCO envelope from `gen_tacco_pcb.py` board size; fail on drift (`--strict` fails on pending STL re-exports) | `avionics/kicad/TACCO/scripts/gen_tacco_pcb.py`, airframe SCAD | Pass/fail, pending-STL list |
+| `cargo_layout_fit.py`, `middle_layout_fit.py` | Python 3 | Fit gates for the cargo section (Rev T5g) and middle ring (Rev T6a) | Layout parameters | PASS/FAIL |
 
 ## Core Validation Tools
 
@@ -51,7 +57,7 @@ Passing STLs are reported with their Z-range and vertex count (for tracking phys
 **Usage:**
 
 ```bash
-python3 tools/validate_kicad.py --boards "Pilot,XO,FlightEngineer,Observer" --output report.json
+python3 tools/validate_kicad.py --boards "Pilot,TACCO,FlightEngineer,Observer" --output report.json
 ```
 
 **Requires:** KiCad ≥9.0 (`kicad-cli` available on PATH)
@@ -111,44 +117,49 @@ frame directly into vertex data, every tool sees identical coordinates regardles
 
 **Jobs:**
 
-1. **Lint (super-linter)** — code style, formatting, documentation
-   - `PYTHON_BLACK`, `PYTHON_ISORT`, `CLANG_FORMAT`, `MARKDOWN`, etc.
+1. **Python lint** (`lint`) — flake8; gates STL validation
+   **C/C++ format** (`clang-format`) — pinned clang-format release (`requirements-dev.txt`)
+   **Lint Code Base** (`super-linter.yml`, separate workflow) — super-linter on changed files;
+   flake8, clang-format, and the Markdown, Black, isort, pylint, editorconfig, natural-language, and
+   jscpd validators are disabled there, with the reasons recorded in the workflow file
    - Configuration: `.super-lintignore`, `super-linter.yml`
 
 2. **KiCad Validation**
-   - Runs `validate_kicad.py` on all `avionics/kicad/*/` boards
+   - Runs the ERC/DRC validator on changed KiCad files only
    - Uploads ERC/DRC report as artifact
 
 3. **STL Validation**
    - Runs `validate_stls.py` on all `airframe/stls/` meshes
    - Validates coordinate system markers
 
-4. **Python Tests** (if present in `tests/`)
-   - pytest with coverage reporting
+4. **Project/Archive Index sync** (`index-check`)
+   - Verifies the TACCO board size agrees with the airframe mount envelopes
+   - Verifies `PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`, and `index_tags.json` are in sync
 
-5. **C/C++ Compile Check**
-   - GCC syntax check on firmware files (`avionics/firmware/*/src/`)
+Unit tests live in `tools/tests/` (nacelle axial fit, ESC service, nozzle servo linkage, ESC
+co-optimization harness). CI does not yet run `gen_todo_from_wbs.py --check`
+(`docs/WBS.md` §1.5).
 
 **Status:** CI shall pass (all checks green) before PR merge. Maintainers may override
 documented violations (recorded in `.github/workflows/ci.yml`).
 
 ### Pre-Commit Hook (`.githooks/pre-commit`)
 
-**Purpose:** Prevent accidental commits of secrets, large files, or malformed data.
+**Purpose:** Block unloadable KiCad files, scrub sensitive content, enforce documentation
+wording, keep the airframe and TACCO envelopes in sync, and keep the indexes current.
 
-**Checks:**
+**Checks, in order:**
 
-- No commit messages with "WIP" or "DEBUG" (catches incomplete work)
-- No `.env`, `secrets.json`, or API key files
-- No STL files >50 MB (likely corrupted or accidentally committed twice)
-- No `.o`, `.pyc`, `__pycache__` build artifacts
-- Runs `precommit_sanitize.py` to scrub any stray credentials or PII
+1. `tools/precommit_kicad_load.py` — blocks corrupt or unloadable KiCad files
+2. `tools/precommit_sanitize.py` — sanitizes code comments, design specs, and bug reports
+   (TODO/issue references, PII) and flags exploitable failure patterns
+3. `tools/precommit_doc_wording.py` — CNAF M-3710.7 callout and requirement-verb conventions
+   [REF-MIL-003 §1.5, §1.6]
+4. `tools/check_tacco_envelope_sync.py` — TACCO board size versus airframe mount envelopes
+5. `tools/precommit_index.py` — regenerates and stages `PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`,
+   and `tools/index_tags.json`
 
-**Bypass** (with caution):
-
-```bash
-git commit --no-verify
-```
+Enable it once per clone with `git config core.hooksPath .githooks`.
 
 ## Design Scripts (Non-Validation)
 
@@ -158,8 +169,8 @@ Located in subsystem directories:
 
 - **`airframe/FreeCAD-scripts/serenity_assembly.py`** — FreeCAD Python macro to regenerate the
   master assembly from component STLs
-- **`airframe/blender-scripts/serenity_render_views.py`** — Blender headless renderer for
-  isometric/cardinal silhouettes (used in build-guide SVG generation)
+- **`airframe/blender-scripts/`** — Blender headless scripts (hollowing, bores, nozzles, intake cuts);
+  `graphical-build-guide/gen_hull_outlines.py` derives the hull outline SVGs
 - **`airframe/stls/fuselage/generate_*.py`** — Per-component generators (head shell, cargo
   doors, access panels)
 - **`landing_gear_*.py`** (`_r6_sizing`, `_bay_pad_fit`, `_bay_seat_fit`, `_bay_station_fit`,
@@ -188,9 +199,14 @@ Located in subsystem directories:
   `avionics/kicad/Commo/scripts/mod_commo_pcb.py`,
   `avionics/kicad/Pilot/scripts/mod_pilot_pcb_reconcile.py`,
   `avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py`
-- **`avionics/kicad/export-specctra-dsn.py`** / **`import-specctra-ses.py`** — Specctra DSN/SES
+- **`tools/export-specctra-dsn.py`** / **`tools/import-specctra-ses.py`** — Specctra DSN/SES
   export/import for external autorouters
-- **`avionics/kicad/precommit_kicad_load.py`** — pre-commit KiCad file load/sanity check
+- **`tools/precommit_kicad_load.py`** — pre-commit KiCad file load/sanity check
+- **`tools/kicad_add_part.py`**, **`kicad_relink.py`**, **`kicad_set_value.py`**,
+  **`kicad_prune_stale.py`**, **`add_board_notices.py`** — scripted KiCad edits that keep
+  schematic and PCB in parity
+- **`avionics/kicad/<Board>/scripts/gen_<board>_pcb.py`** — PCB generators (placement, rails,
+  isolation band) for Pilot, TACCO, and Flight Engineer
 
 ### GCS Scripts
 
@@ -202,8 +218,13 @@ Located in subsystem directories:
 
 ### Other Maintenance Scripts
 
-- **`compact_bom_entries.py`** — re-compacts `docs/bom_*.json` files
-- **`export-specctra-dsn.py`**, **`import-specctra-ses.py`** — see Avionics Scripts above
+- **`compact_bom_entries.py`**, **`bom_edit_*.py`** — re-compact and edit BOM JSON entries
+- **Nacelle 64 mm tools** — `nacelle_64_scale.py`, `nacelle_mass_cg_64.py`,
+  `nozzle_servo_linkage_64.py`, `dorsal_shroud_resize_64.py`, `esc80_cooptimize.py`,
+  `prep_nacelle_64_bake.py` (fit, mass/CG, nozzle servo linkage, and ESC bay co-optimization
+  for the NAC-64 redesign)
+- **Airframe interface checks** — `airframe_interface_census.py`, `spar_bundle_fit.py`,
+  `wing_*.py`, `nacelle_*.py` fit, CFD, and clearance scripts
 - **`mirror_claude_memory.py`** — mirrors the AI assistant's memory directory to
   `CLAUDE-MEMORY.md`
 - **`precommit_index.py`** — regenerates `PROJECT_INDEX.md`/`ARCHIVE_INDEX.md` (see
@@ -301,14 +322,14 @@ clang-format -i avionics/firmware/cn/src/*.c
 
 ```bash
 # Edit the JSON source
-nano current-specification/bom_revS.json
+nano current-specification/bom_revT.json
 
 # Sync to CSV -- no automated sync script exists yet (tools/update_bom.py is
-# not implemented); edit current-specification/bom_revS.csv by hand to match,
+# not implemented); edit current-specification/bom_revT.csv by hand to match,
 # field-for-field, until one is written.
 
 # Commit both
-git add current-specification/bom_revS.*
+git add current-specification/bom_revT.*
 git commit -m "Update BOM: [change reason]"
 ```
 

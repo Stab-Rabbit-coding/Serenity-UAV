@@ -6,7 +6,7 @@
      look, change the generator (tools/precommit_index.py), not this
      file. Machine-readable form: tools/index_tags.json -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last generated: 2026-10-06 -->
+<!-- Last generated: 2026-10-07 -->
 
 ## Tag Index
 
@@ -927,7 +927,7 @@ generate_gerbers.py — generate_gerbers.py [avionics-hardware, pcb-design]
 generate_gerbers_rev_s1.py — generate_gerbers_rev_s1.py — Generate Gerber files for Rev S1 boards (Commo, TACCO, Flight Engineer) [avionics-hardware, pcb-design]
 HI6138_FOOTPRINT_VERIFICATION.md — HI-6138 Footprint, Pin Table, and Area Budget — Verification Report [avionics-hardware, documentation, pcb-design]
 PB2_HEADER_PINMAP.md — PocketBeagle 2 Industrial — P1/P2 expansion header pin map (verified) and TACCO allocation [avionics-hardware, documentation, pcb-design, security]
-README.md — Serenity Avionics — KiCad Cape Status & Build Notes [avionics-hardware, documentation, pcb-design, security]
+README.md — Serenity Avionics — KiCad Board Index and Status [avionics-hardware, documentation, pcb-design, security]
 replace_footprints.py — Replace placeholder IC footprints in KiCad PCB files with proper library footprints. [avionics-hardware, pcb-design, security]
 retarget_mspm0g351x_slb9672.py — Retarget the Serenity trust-module MCU and TPM (2026-08-03). [avionics-hardware, pcb-design, security]
 retarget_pcb_footprints.py — PCB-side companion to `retarget_mspm0g351x_slb9672.py` (2026-08-03). [avionics-hardware, pcb-design, security]
@@ -1529,7 +1529,7 @@ bom_revT.csv — Bill of materials, CSV (211 items) [bom, specification]
 bom_revT.json — Bill of materials, JSON (211 items) [bom, specification]
 LICENSE — SERENITY UAV — SPECIFICATION & BOM LICENSING [licensing, specification]
 LICENSE_AND_ATTRIBUTION.md — Serenity-Class Tiltrotor UAV — License & Attribution [documentation, licensing, security, specification]
-README.md — Serenity UAV — Current Specification (Rev S BOM Baseline) [documentation, redundancy-failover, security, specification]
+README.md — Serenity UAV — Current Specification (Rev T BOM Baseline) [documentation, redundancy-failover, security, specification]
 serenity-rev-s.jsx — React/JSX specification component [emi-hardening, security, specification]
 SPEC_TEMPLATE.md — Specification Document Template and Approval Workflow [documentation, specification]
 TODO.md — Serenity UAV — Current Specification Work Breakdown Structure [documentation, project-tracking, specification]

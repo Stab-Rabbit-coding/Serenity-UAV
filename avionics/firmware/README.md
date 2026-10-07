@@ -21,18 +21,21 @@ are standard Linux processes that use POSIX APIs, i2c-dev, libgpiod 2.x, and pth
 | FC nodes | 4 | Pilot | Flight control, navigation, obstacle avoidance, ESC/actuator drive |
 | CN nodes | 4 | TACCO | Radio links, system logging, payload/cargo management |
 
-## Cape Variant Placement
+## Cape Placement
 
-The eight nodes use a **v2 · v2 · v2 · v2** (nose → tail) cape variant layout — Rev R all-EMI-hardened:
+Every bay carries the same cape pair: a **Pilot** cape (FC node) and a **TACCO** cape (CN node).
+Rev R introduced uniform EMI hardening, and Rev T keeps it.
 
-| Bay | Room name | Pair | FC cape | CN cape | Rationale |
-|-----|-----------|------|---------|---------|-----------|
-| A (nose) | Shepherd's room | FC1 / CN1 | Pilot | XO | Bus start termination; 5 kV isolated CAN FD / RS-485 / Ethernet at forward bus endpoint |
-| B | Inara's shuttle | FC2 / CN2 | Pilot | XO | Rev R: uniform EMI hardening across all bays |
-| C | River's room | FC3 / CN3 | Pilot | XO | Rev R: uniform EMI hardening across all bays |
-| D (tail) | Simon's medbay | FC4 / CN4 | Pilot | XO | Bus end termination; 5 kV isolation closest to nacelle motor wiring / rear EDF |
+| Bay | Room name | Pair | FC cape | CN cape | Note |
+|-----|-----------|------|---------|---------|------|
+| A (nose) | Shepherd's Room | FC1 / CN1 | Pilot | TACCO | Bus start termination; 5 kV isolated CAN FD / RS-485 / Ethernet at the forward bus endpoint |
+| B | Inara's Shuttle | FC2 / CN2 | Pilot | TACCO | Uniform EMI hardening across all bays |
+| C | River's Room | FC3 / CN3 | Pilot | TACCO | Uniform EMI hardening across all bays |
+| D (tail) | Simon's Medbay | FC4 / CN4 | Pilot | TACCO | Bus end termination; 5 kV isolation closest to the nacelle motor wiring |
 
-Rev R places 5 kV galvanic isolation at every node. Pilot / TACCO are archived (Rev Q, 2026-06-05).
+Every node has 5 kV galvanic isolation. The Rev Q Pilot/TACCO variants are archived (2026-06-05).
+Commo is not part of this firmware tree: under Rev T it is a standalone MCU node on the bus
+(`WBS.md` lists its firmware items).
 
 ## Directory Layout
 

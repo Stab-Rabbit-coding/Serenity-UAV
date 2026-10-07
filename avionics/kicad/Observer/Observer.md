@@ -4,7 +4,13 @@
 **Callsign:** Observer (Observer's rifle — "she's a good gun.")
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** S1 (SoM end-state — PCM-071 carrier, real symbols/footprints)
-**Date:** 2026-07-13
+**Date:** 2026-10-07 (status re-verified against `avionics/WBS.md`; design content dated 2026-07-13)
+**Status check 2026-10-07:** the schematic is ahead of the PCB. The schematic gained the ISOW1412
+isolated RS-485 transceiver (Section H, 2026-07-26) and the MSPM0G351x-Q1 / SLB9672 trust-module
+retarget; `Observer.kicad_pcb` (2026-07-14) predates both, has no RS-485 footprint, and reports
+**124 hard DRC violations**. The PCB resync is **not started** (`avionics/WBS.md` §1.2a, "Observer
+PCB resync"; sch↔pcb parity gap in §1.9.3). The board is not fabrication-ready. Where the
+"Status" paragraph below claims clean parity, this note governs.
 **Status:** **SoM end-state built** by `scripts/gen_observer_carrier_sch.py` +
 `gen_observer_carrier_pcb.py`. Schematic uses REAL clean-room symbols (PCM-071 SoM + KSZ9477 +
 MSPM0G3507 + ISOW1044BDFMR + SLB9672) wired by signal name — **ERC = 0 errors**. PCB has REAL

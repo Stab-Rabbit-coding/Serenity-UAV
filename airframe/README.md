@@ -2,10 +2,36 @@
 
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
+**Last updated:** 2026-10-07
 
 > Structural design, 3D CAD, STL generation, and fabrication guidance for the Serenity UAV
 > airframe: 24-inch CF-PETG printed fuselage, carbon-fiber wings with tilt-drive nacelles, and
 > integrated landing gear.
+
+## Current Status (2026-10-07)
+
+- **Hull:** all four fuselage SCAD shells are at the Rev S baseline and carry into Rev T
+  unchanged. The cargo-shell mesh-validation defect (MESH-01) and several STL re-exports remain
+  open (`TODO.md`, `fuselage-mid/TODO.md`).
+- **TACCO envelope (2026-10-06):** the TACCO board grew to 60 × 35 mm, so the airframe
+  stations were re-proved: nose Faraday tray 65 mm, cargo chin pouches 63 mm with a 1.5 mm
+  static gap (`tools/cargo_layout_fit.py` Rev T5g), Simon's CN4 slot 63 mm
+  (`tools/middle_layout_fit.py` Rev T6a). The printable STLs (`chin_node_shelf`,
+  `simon_node_saddle`, `void_former_cargo_node_bay`, `head_shell24`) still need re-export
+  (item TACCO-60); `tools/check_tacco_envelope_sync.py` reports them as pending.
+- **Nacelles:** the 50 mm Rev S4c/S4d geometry is current. The 64 mm tandem-EDF nacelle
+  (NAC-64-SERVO-01) is the active design: a servo-driven variable nozzle was designed and
+  fit-closed 2026-10-04, and a uniform ×1.06 enlargement through a single source was wired
+  2026-10-05. Pivot, CFD, mass/CG, and bench gates are open, so the 50 mm figures below stay the
+  baseline until the 64 mm thrust, power, and mass verification passes.
+- **Nozzle drive:** one sub-micro servo per nacelle (owner decision 2026-09-28) replaced the
+  passive gear and linkage drives (`docs/NOZZLE_DRIVE_TRADE.md`).
+- **Tilt drive:** Pololu 20D 25:1 motor with a six-start worm and a pin brake (Rev T5e,
+  2026-09-16).
+- **Landing gear:** the 3.0 in (76 mm) canonical leg is the flight article (2026-09-06); the
+  1.5 in (38 mm) leg is retired to bench use (`docs/LANDING_GEAR_ANALYSIS.md`).
+- **Cargo winch:** SPT5425LV with LibreServo v2 replaced the STS3215 on 2026-08-02; winch STL
+  status is tracked in `fuselage-mid/WBS.md`.
 
 ## Design Philosophy
 
@@ -24,25 +50,25 @@
 All design artifacts (SCAD, STL, Blender/FreeCAD scripts) use the **hull frame** coordinate
 system:
 
-- **X-axis:** +port (lateral); origin at centerline
-- **Y-axis:** +aft (longitudinal); origin at nose
-- **Z-axis:** +dorsal (vertical); origin at keel
-- **Reference origin:** SerenityAssembly.FCStd world origin
+- **X-axis:** +port (lateral)
+- **Y-axis:** +aft (longitudinal); the nose tip is at Y ≈ −305.6 mm
+- **Z-axis:** +dorsal (vertical)
+- **Origin:** the `SerenityAssembly.FCStd` world origin
 
 All primary component STLs are **baked to hull frame** by `tools/bake_hull_frame.py` (header
 marker: `SerenityUAV HULL-FRAME R1`); component positions are embedded in the STL vertex data.
-See `AGENTS.md` "Airframe Geometry" for the validated component placement extents table.
+See `HULL_FRAME_REFERENCE.md` for the validated component placement extents table.
 
 ## Structure Overview
 
 | Section | Role | Length | Key Features |
 |---------|------|--------|--------------|
 | **Head** | Nose cone + sensor mount | ~90 mm | Bow sensor pod apertures; cockpit cap (GPS antenna access) |
-| **Cargo Bay** | Payload + winch + door actuation | ~150 mm | Gondola shell; clamshell doors; STS3215 winch mount; DRV8833 H-bridge tray |
-| **Middle / Neck** | Avionics + power + fuel (battery) | ~230 mm | Horseshoe ring frame; Kaylee PDB mount; battery bay; 4× avionics bays (A–D); foam fill; keel rod |
+| **Cargo Bay** | Payload + winch + door actuation | ~150 mm | Clamshell doors; SPT5425LV/LibreServo v2 winch mount; DRV8833 H-bridge tray (the gondola shell was superseded 2026-09-15) |
+| **Middle / Neck** | Avionics + power + fuel (battery) | ~230 mm | Horseshoe ring frame; Flight Engineer PDB mount; battery bay; 4× avionics bays (A–D); foam fill; keel rod |
 | **Rear** | Tail cone + tail boom | ~140 mm | Optional Phase 11 aft-EDF intake; twin rear-nozzle pods; landing-gear hard points |
 | **Wings** | Port + stbd lift surfaces | 486 mm span (19.1 in) | Carbon-composite skin + foam core; tilt-servo mounts at roots; spar pocket inserts |
-| **Nacelles** | Two tilting propulsion pods | ~200 mm each | 50 mm tandem EDF pair (X-Fly Galaxy X5, 12-blade, 3200 kV); variable-nozzle iris; tilt pivot (MF104ZZ bearing + 4 mm CF rod) |
+| **Nacelles** | Two tilting propulsion pods | ~200 mm each | 50 mm tandem EDF pair (X-Fly Galaxy X5, 12-blade, 3200 kV; 64 mm redesign in progress); servo-driven variable nozzle; tilt pivot (MF104ZZ bearing + 4 mm CF rod) |
 
 ## Mass Budget (Phase 5–10, Nacelles Only)
 
@@ -53,7 +79,7 @@ See `AGENTS.md` "Airframe Geometry" for the validated component placement extent
 | Nacelle assembly (2× complete: EDFs + shells + pivot + iris) | ~625 | 22.0 | Includes 4× XFly Galaxy X5 (70g mass each), shells, hubs, pivot, iris mechanism |
 | Tilt mechanism (servos, linkage, frame) | ~200 | 7.1 | 2× SPT5425LV (converted with LibreServo v2, ≥25 kg·cm @ 6V), rods, brackets |
 | Landing gear (wire + mounts) | ~436 | 15.4 | R6 canonical (1.5 in): leg+bay+foot 310g + wires 91g + pins/bolts 34g; see docs/LANDING_GEAR_ANALYSIS.md §11.6 (open item LG-18: target ≤300g pending mass-reduction pass) |
-| Avionics (all 8 nodes, capes, TPM, SD cards) | ~432 | 15.2 | 8× PB2-I (104g) + 4× Pilot (124g) + 4× TACCO (160g) + 2× Commo (40g) + 4× microSD (4g); excludes cable/conduit |
+| Avionics (all 8 nodes, capes, TPM, SD cards) | ~432 | 15.2 | 8× PB2-I (104g) + 4× Pilot (124g) + 4× TACCO (160g) + Commo (Rev T: one standalone node, mass pending PCB roll-up; the two Rev S capes were 40g) + 4× microSD (4g); excludes cable/conduit |
 | Power (battery + PDB + ESCs) | ~925 | 32.6 | 6S 4000 mAh LiPo (750g) + Flight Engineer PDB (75g) + 4× 40A BLHeli32 ESCs (100g) |
 | Cargo bay internals (gondola, door, winch, servo) | ~180 | 6.3 | SPT5425LV winch servo (LibreServo v2), ratchet, latch, Dyneema line |
 | Payload bay (empty) | — | — | Rated for 226 g (8 oz) cargo |
@@ -61,7 +87,7 @@ See `AGENTS.md` "Airframe Geometry" for the validated component placement extent
 | **Phase 11 addition (aft EDF, RCS)** | ~+362 | ~+12.8 | 55 mm EDF, RCS solenoids/valves, rear nozzle housing |
 | **AUW Phase 11** | ~4,273 | ~150.7 | Full system with rear propulsion |
 
-Thrust: 4,464 g (9.84 lbf) nacelles-only; T/W ≈ 1.61 (VTOL capable).
+Thrust: 9.84 lbf (4,464 g) nacelles-only; hover T/W ≈ 1.14 at 8.62 lbm (3,911 g) AUW — VTOL capable with a thin margin. The earlier 1.61 used the stale 2,768 g AUW. Phase 11 hover T/W is ≈ 1.04 at 9.42 lbm (4,273 g), because the rear EDF adds mass but no hover thrust. Both figures are provisional until the bottom-up AUW recompute closes (`docs/WBS.md` §0.10.1).
 
 ## Printing Specifications
 
@@ -105,19 +131,22 @@ Phases 5–10 add avionics, comms, cargo, and flight testing.
 | File / Tool | Purpose | Input | Output |
 |-------------|---------|-------|--------|
 | `freecad/assembly/SerenityAssembly.FCStd` | Master FreeCAD assembly (all components, bill of materials) | — | Placement reference, mass, CG, rendered views |
-| `freecad-scripts/serenity_assembly.py` | FreeCAD Python script to regenerate/modify assembly | SerenityAssembly.FCStd | Updated FCStd, exported STLs, mass report |
+| `FreeCAD-scripts/serenity_assembly.py` | FreeCAD Python script to regenerate/modify assembly | SerenityAssembly.FCStd | Updated FCStd, exported STLs, mass report |
 | `blender-scripts/serenity_render_views.py` | Blender Python script (headless) to render isometric/cardinal views for build guides | STL geometry | PNG/SVG silhouettes for graphical build guide |
-| `freecad-scripts/` (SCAD generators) | OpenSCAD → STL pipeline for non-printable parts (e.g., FreeCAD sketch exports, legacy compatibility) | *.scad scripts | *.stl files |
+| `FreeCAD-scripts/` (placeholder and flat-pattern generators) | OpenSCAD → STL pipeline for non-printable parts (e.g., FreeCAD sketch exports, legacy compatibility) | *.scad scripts | *.stl files |
 
 ## STL Outputs
 
 All generated STLs go to `stls/` subdirectories by section:
 
-- `stls/fuselage/` — head_shell24.stl, cargo_sect_shell24.stl, middle_canonical_shell24.stl, rear_shell24.stl, access panels
-- `stls/nacelles/` — nacelle_pod_50mm_tandem.stl (×2), nacelle_nozzle_iris.stl (×2), hub assemblies
-- `stls/wings/` — wings_s1223_revo.stl (×2)
-- `stls/landing_gear/` — [CF rod channels, bushing bosses embedded in fuselage; wire is procured]
-- `stls/internals/` — battery_tray.stl, kaylee_pdb_tray.stl, avionics_bay_frames, cable_clips, bosses
+- `stls/fuselage/` — head, cargo, middle, and rear shells; splice collars; access covers;
+  wing-root flanges; battery tray; belly panel; bow sensor faceplate
+- `stls/fuselage/cargo/` — cargo doors, hinges, latches, winch parts, FPV bezel, chin node shelf,
+  tilt-actuator parts
+- `stls/fuselage/landing-gear/` — landing-gear parts
+- `stls/nacelles/` — 50 mm and 64 mm nacelle shells, trunnions, EDF sleeves and mounts,
+  servo bracket; `esc/` and `nozzles/` subfolders
+- `stls/wings/` — `wing_{port,stbd}_s1223_revo.stl`, tilt pinions
 
 **Mesh validation:** All STLs are validated for watertightness, manifold topology, and correct
 normals by `tools/validate_stls.py` before commit. Findings and any manual repairs are logged
@@ -137,19 +166,20 @@ in `TODO.md`.
 
 ## References
 
-- **Standards:** [REF-ISO-001] ISO 527-2 (polymers mechanical testing), [REF-ASTM-001] ASTM
-  F963-17 (toy safety), [REF-AMS-001] AMS 2301 (electroplating standard)
+- **Standards and materials:** [REF-ASTM-001] ASTM F2910-22 (sUAS design and construction),
+  [REF-MAT-002] CF-PETG process-parameter study
 - **Regulatory:** [REF-FAA-001] 14 CFR Part 48 (sUAS registration), [REF-FAA-002] Part 107
   (remote pilot cert)
-- **Design reference:** [REF-CAD-001] QMx 2007 Firefly blueprints, [REF-CAD-002] Nick Henning
-  Serenity renders, [REF-CAD-003] misubisu Thingiverse model (CC-BY-SA 4.0)
+- **Design reference** (authority order): [REF-CAD-003] QMx 2007 Official Serenity Blueprints
+  Reference Pack, [REF-CAD-002] Nick Henning Serenity renders, [REF-CAD-004] misubisu
+  Thingiverse model (CC BY-SA 4.0); [REF-CAD-001] BamJr variable-area EDF nozzle concept
 
 See root [`REFERENCES.md`](../REFERENCES.md) for complete reference catalog.
 
 ## License
 
 **Airframe CAD, SCAD, STL files, and scripts:** CERN-OHL-W 2.0  
-**Documentation:** CC BY 4.0  
+**Documentation and images:** CC BY-SA 4.0  
 **Third-party CAD references:** [REF-CAD-002] [REF-CAD-003] (see REFERENCES.md for license chains)
 
 See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md)

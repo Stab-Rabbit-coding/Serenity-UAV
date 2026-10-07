@@ -1,5 +1,10 @@
 # Todo Item 1.2b — PCB Redesigns Status Report
 
+> **SUPERSEDED 2026-10-07 — historical snapshot.** This file records the state of its date and is
+> no longer maintained. Its Rev S1 board plans (XO/Commo as PB2-I capes, LoRa on Commo)
+> were overtaken by the 2026-09-21 radio relocation, the Rev T Commo node, and the
+> schematic-first rebuilds. The live record is `avionics/WBS.md` (open work: `avionics/TODO.md`).
+
 **Date:** 2026-07-18  
 **Branch:** `claude/todo-item-1-2b-e89qrb`  
 **Status:** BLOCKED — Awaiting KiCad tools and user interaction
