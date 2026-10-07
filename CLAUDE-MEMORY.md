@@ -3872,3 +3872,11 @@ metadata:
 
 **How to apply:** don't re-propose HET (or motor swaps) on 6S; the real thrust lever is an 8S system (2W-30 1600 W on 8S ≈ 1.3x/stage with an 8S-matched rotor) — scope as a system trade. REFERENCES REF-EDF-004; WBS NAC-64-MOTOR-HET. Related: [[project_nacelle_64mm_wrapper]].
 ```
+
+## 2026-10-07 — cargo bulkhead fit check (Claude Opus 5.5)
+
+
+tools/cargo_bulkhead_context.py (branch cargo-bulkhead-context-fit, worktree .worktrees/cargo-bulkhead-fit) FAILS: 53 clash, 12 desync. Build-blockers: root flange never bored (spar/shaft/encoder/nav), fore gear bay inside CF spar+wing, stbd brake guide translated not mirrored (mirror = 0 mm3), latch bracket inside closed door. Also doors stop 156/148 deg on gear (spec 180), payload datum Z 8.72 vs floor 10.86, Observer inside cargo/middle collar, 10AWG exit in worm-wheel plane — corridor search found a 20 mm route via the shoulder pocket (wall at X −85 at Y 40, not −115).
+
+**Why:** cargo_layout_fit / landing_gear_wing_clearance / wing_root_deconflict test idealisations, not real parts vs each other.
+**How to apply:** owner decisions pending on BHD-02/07/10; make the gate pass before releasing cargo parts. Related [[project_cargo_rev_t5_layout]], [[feedback_local_informs_airframe_rules]], [[feedback_gates_mask_tool_bugs]].

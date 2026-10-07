@@ -1,7 +1,7 @@
 // ===========================================================================
 // HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See AGENTS.md.
 //   X = +port (left), Y = +aft (back), Z = +dorsal (up).  Modelled directly
-//   in hull frame (port side; SIDE = -1 translates to starboard).
+//   in hull frame (port side; SIDE = -1 MIRRORS to starboard about X_CL, BHD-05).
 // ===========================================================================
 // ============================================================
 // tilt_brake.scad -- Rev T5e (2026-09-16; Rev T5b 2026-09-15 base)
@@ -95,7 +95,18 @@ GUIDE_Y0 = CY + 1.0;                     // 1 mm running clearance to the collar
 MAGNET_D = 6.0 + 0.2;
 MAGNET_L = 2.5;
 
-module translate_side() { if (SIDE < 0) translate([2 * (X_CL - WORM_X), 0, 0]) children(); else children(); }
+// BHD-05 (2026-10-07): starboard is a MIRROR about X_CL, not a translate.
+// The worm has a hand and is translated (tilt_actuator_bracket.scad), but the
+// guide block and solenoid saddle are NOT symmetric about the worm axis, so a
+// translated copy put the guide through the starboard bracket web and into the
+// tilt controller board (385 mm^3, tools/cargo_bulkhead_context.py).  Every
+// feature that must stay coaxial with the worm (pin bore, AEAT pocket, collar)
+// lies ON the worm axis, and the mirror maps that axis to the same place the
+// translate does (2*X_CL - WORM_X), so the mesh with the worm is unchanged.
+module mirror_side() {
+    if (SIDE < 0) translate([X_CL, 0, 0]) mirror([1, 0, 0]) translate([-X_CL, 0, 0]) children();
+    else children();
+}
 
 // Face-castellated collar (integral with the worm's aft stub; drawn here for
 // the view -- the printable copy lives in tilt_actuator_bracket.scad worm())
@@ -148,7 +159,7 @@ module solenoid_env() {
     color("firebrick", 0.6) translate([BRAKE_SOL_X, BRAKE_SOL_Y0, WORM_Z]) rotate([-90, 0, 0]) cylinder(d = BRAKE_SOL_D, h = BRAKE_SOL_L);
 }
 
-translate_side() {
+mirror_side() {
     if (PART == "guide") guide();
     else if (PART == "pin") pin();
     else { color("goldenrod") collar(); color("gray") guide(); pin(); solenoid_env(); }

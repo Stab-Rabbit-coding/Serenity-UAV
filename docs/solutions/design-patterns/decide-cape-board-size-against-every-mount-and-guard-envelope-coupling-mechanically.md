@@ -36,6 +36,22 @@ tags: [tacco, board-size, multi-station, envelope-sync, cargo-section, middle-ri
 **AI note:** Drafted by Claude (Anthropic) under the author's direction, 2026-10-06, per `AGENTS.md` §3 AI attribution.
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
+> **Outcome, 2026-10-07: the resize was reverted.** The 60 x 35 board routed no better than
+> 55 x 35. Second routing pass: 92 logic + 13 isolated connections unrouted at 60 x 35, against
+> 93 + 18 at 55 x 35 with a notched isolation band. What actually limited routing was the band
+> covering the P2 rail (no logic via could reach the in-band P2 pins) and a DSN export that
+> turned the band's DRC marker into a router keepout. Area was not the limit. TACCO is back at
+> 55 x 35 and the airframe envelopes are back at their originals
+> (`avionics/kicad/TACCO/TACCO.md` §13b). The constants and line numbers cited below for the
+> 60 x 35 change (`U_LO = -5`, `TACCO_L`, `CHIN_GAP`, `CHIN_CABLE`, `B_OVERHANG_MAX_H`) are
+> as merged in PR #234 and no longer exist on main.
+>
+> The extra lesson: **before growing a board for routability, show that the bottleneck is
+> area.** Map where the unrouted connections sit, and make sure the router can reach every
+> region, before resizing. Here the unrouted connections clustered on pins that the isolation
+> band walled off, which no outline change could fix. Re-proving every mount and the sync
+> guard (below) still hold. The guard is what made the revert a mechanical, checked change.
+
 ## Context
 
 TACCO, the comms-node cape, flies at several airframe stations, and its orientation is different at each one. The nose (CN1) holds it in a Faraday tray. On the cargo chin (CN2/CN3) it sits as a pair of foil pouches on the chin shelf. In the middle ring (CN4) it goes in the Simon saddle slot. Each envelope is written in a different file (`tools/check_tacco_envelope_sync.py:4-11`). At 55 x 35 mm the board was routing-bound: courtyard fill was about 95%, 60-90 nets stayed unrouted on 6 layers, and about 71 stayed unrouted on 8 layers. The board needed more area. The open question was which dimension should grow, and how to keep every airframe mount and every printable STL in step with the change.

@@ -1108,6 +1108,9 @@ if (PART == "leg_frame") {
     hull_legs();
 } else if (PART == "hull_stance") {
     hull_stance();
+} else if (PART == "none") {
+    // library mode: emit nothing, so a context file can include this one and
+    // pose bay() / leg_moving() itself (tools/landing_gear_bay_function.py)
 } else {
     assert(false, str("Unknown PART: ", PART));
 }
