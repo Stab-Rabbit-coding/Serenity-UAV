@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-06",
+  "generated": "2026-10-07",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -6180,6 +6180,14 @@
       ],
       "archived": true
     },
+    "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md": {
+      "description": "Rev M-era content formerly in `docs/README.md` (archived 2026-10-07)",
+      "tags": [
+        "archive",
+        "documentation"
+      ],
+      "archived": true
+    },
     "archives/docs-superseded/serenity-rev-q.jsx": {
       "description": "React/JSX specification component",
       "tags": [
@@ -7542,6 +7550,27 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/1040310811_sd.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/1051620001.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/1051620001_sd.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/2N3866_SERIES.PDF": {
       "description": "PDF document",
       "tags": [
@@ -8032,6 +8061,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/hiro-s-a0003496442-1.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/hm-trp.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8138,6 +8174,13 @@
       "archived": false
     },
     "avionics/datasheets/molex-104031.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex-1040310811.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8475,6 +8518,72 @@
     },
     "avionics/datasheets/type2el-2dl-module-footprint-topview.dxf": {
       "description": "2D DXF drawing",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ul_1040310811.zip": {
+      "description": "Archived snapshot bundle",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ul_1040310811/1040310811.stl": {
+      "description": "STL mesh \u2014 header: STL Exported by Open CASCADE Technology [dev.opencascade.org]",
+      "tags": [
+        "avionics-hardware",
+        "cad-mesh"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ul_1040310811/1040310811.stp": {
+      "description": "1=DIRECTION('',(0.E0,0.E0,1.E0));",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ul_1040310811/ImportGuides.html": {
+      "description": "HTML document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ul_1040310811/KiCADv6/2026-10-05_14-13-00.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ul_1040310811/KiCADv6/ImportGuide.html": {
+      "description": "HTML document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ul_1040310811/KiCADv6/footprints.pretty/104031-0811_MOL.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ul_1040310811/readme.txt": {
+      "description": "Text file",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ul_1051620001.zip": {
+      "description": "Archived snapshot bundle",
       "tags": [
         "avionics-hardware"
       ],
@@ -10659,7 +10768,7 @@
       "archived": false
     },
     "avionics/kicad/README.md": {
-      "description": "Serenity Avionics \u2014 KiCad Cape Status & Build Notes",
+      "description": "Serenity Avionics \u2014 KiCad Board Index and Status",
       "tags": [
         "avionics-hardware",
         "documentation",
@@ -12102,7 +12211,7 @@
       "archived": false
     },
     "current-specification/README.md": {
-      "description": "Serenity UAV \u2014 Current Specification (Rev S BOM Baseline)",
+      "description": "Serenity UAV \u2014 Current Specification (Rev T BOM Baseline)",
       "tags": [
         "documentation",
         "redundancy-failover",
@@ -16544,6 +16653,7 @@
       "archives/docs-superseded/PYLON_INTEGRATION_2026-07-18.md",
       "archives/docs-superseded/README.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
+      "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md",
       "archives/root-readme-deep-dive-2026-08-03/README.md",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity/README.md",
@@ -18198,6 +18308,7 @@
       "archives/stl/sector_gear_22mm.stl",
       "archives/stl/sensorhat_mounting_tray.stl",
       "archives/stl/tilt_bracket_cf_petg.stl",
+      "avionics/datasheets/ul_1040310811/1040310811.stl",
       "deferred/aft-edf/openscad/aft_edf_plenum.scad",
       "deferred/aft-edf/openscad/edf_120_motor_mount.scad",
       "deferred/aft-edf/openscad/edf_120_thrust_tube.scad",
@@ -19139,6 +19250,7 @@
       "archives/docs-superseded/README.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/bom_revQ.csv",
+      "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md",
       "archives/docs-superseded/serenity-rev-q.jsx",
       "archives/files.zip",
       "archives/generate_foam_svgs.py",
@@ -19532,6 +19644,8 @@
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/COMMS-HAT-1/COMMS-HAT-1.kicad_sch",
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/TRIHAT-1/TRIHAT-1.kicad_pcb",
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/TRIHAT-1/TRIHAT-1.kicad_sch",
+      "avionics/datasheets/ul_1040310811/KiCADv6/2026-10-05_14-13-00.kicad_sym",
+      "avionics/datasheets/ul_1040310811/KiCADv6/footprints.pretty/104031-0811_MOL.kicad_mod",
       "avionics/kicad/.gitignore",
       "avionics/kicad/4_Run KiCad ERC_DRC validator (changed files only).txt",
       "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
@@ -19944,6 +20058,9 @@
       "avionics/datasheets/0805cs.pdf",
       "avionics/datasheets/0805hq.pdf",
       "avionics/datasheets/100058045.pdf",
+      "avionics/datasheets/1040310811_sd.pdf",
+      "avionics/datasheets/1051620001.pdf",
+      "avionics/datasheets/1051620001_sd.pdf",
       "avionics/datasheets/2N3866_SERIES.PDF",
       "avionics/datasheets/317990687.pdf",
       "avionics/datasheets/6391731564544371956530548.pdf",
@@ -20014,6 +20131,7 @@
       "avionics/datasheets/esd801.pdf",
       "avionics/datasheets/hi-1573.pdf",
       "avionics/datasheets/hi-6138_v-rev-s.pdf",
+      "avionics/datasheets/hiro-s-a0003496442-1.pdf",
       "avionics/datasheets/hm-trp.pdf",
       "avionics/datasheets/hx711.pdf",
       "avionics/datasheets/ina226.pdf",
@@ -20030,6 +20148,7 @@
       "avionics/datasheets/mcp4921.pdf",
       "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf",
       "avionics/datasheets/molex-104031.pdf",
+      "avionics/datasheets/molex-1040310811.pdf",
       "avionics/datasheets/molex_105162-0001_drawing.pdf",
       "avionics/datasheets/molex_105162-0001_spec.pdf",
       "avionics/datasheets/mspm0g3507-q1.pdf",
@@ -20078,6 +20197,15 @@
       "avionics/datasheets/tsw-sxx.pdf",
       "avionics/datasheets/type2el-2dl-2ll-2kl-unified-design-guide.pdf",
       "avionics/datasheets/type2el-2dl-module-footprint-topview.dxf",
+      "avionics/datasheets/ul_1040310811.zip",
+      "avionics/datasheets/ul_1040310811/1040310811.stl",
+      "avionics/datasheets/ul_1040310811/1040310811.stp",
+      "avionics/datasheets/ul_1040310811/ImportGuides.html",
+      "avionics/datasheets/ul_1040310811/KiCADv6/2026-10-05_14-13-00.kicad_sym",
+      "avionics/datasheets/ul_1040310811/KiCADv6/ImportGuide.html",
+      "avionics/datasheets/ul_1040310811/KiCADv6/footprints.pretty/104031-0811_MOL.kicad_mod",
+      "avionics/datasheets/ul_1040310811/readme.txt",
+      "avionics/datasheets/ul_1051620001.zip",
       "avionics/datasheets/w25q128jv.pdf",
       "avionics/datasheets/wio-e5-datasheet.pdf",
       "avionics/datasheets/wl1837mod.pdf",

@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-10-01  
+**Last updated:** 2026-10-07  
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 > **This is the full historical record — every task ever defined, done or open,**
@@ -27,12 +27,12 @@
 |--------|-------------------|----------------|
 | Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S baseline, carried forward unchanged into Rev T; STLs pending regeneration where noted |
 | Wings | Fixed CF spar (20x16.3mm tube, 35% root chord), S1223-derived section, gear-linked nacelle tilt drive | Rev S1g: spar bonded wing member (not rotating shaft), root joint splits shear(socket)/moment(80x60 flange); 14T/50T reduction drive; SPAR-20-2 station 45.15→28.0mm |
-| Nacelles | Radially enlarged, QMx-proportioned shell around 2x64mm tandem EDFs, interstage stator, servo variable nozzle; axial length held | Current geometry remains 50mm Rev S4c/S4d; NAC-64-SERVO-01 active, fit/power/structure gates open |
+| Nacelles | Radially enlarged, QMx-proportioned shell around 2x64mm tandem EDFs, interstage stator, servo variable nozzle; axial length held | Current geometry remains 50mm Rev S4c/S4d; NAC-64-SERVO-01 active: servo nozzle drive designed and fit-closed 2026-10-04, uniform x1.06 enlargement wired through a single source 2026-10-05 (pivot, CFD, mass/CG and bench gates open) |
 | Nacelle EDFs | 2x QX-Motor 64mm EDF per nacelle, candidate QF2822-2400KV 6S; nominal 64mm thrust tube; QX 4xM3/16mm spider mounts | Existing 50mm XFly configuration remains current until 64mm fit, power, mass and thrust verification passes |
 | Landing gear | Sponson-mounted bays, canonical 1.5in leg (extended 3.0in variant retained) | Rev T (component design generation "R6" retained as its own permanent name): sponson wells CLOSED, leg length derived from nozzle clearance not belly height |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
 | Cargo bay | Clamshell doors + SG90 servos (OpenServoCore) + DRV8833 + SPT5425LV/LibreServo v2 winch + Dyneema + auto-latch + GPS ring + FPV bezel | N20 winch train retired Rev S; STS3215 winch servo superseded 2026-08-02 by SPT5425LV+LibreServo v2 (envelope gate resolved, 6 winch STLs still unimplemented — see WBS §1.1.1.2.1); other cargo STLs generated; gondola shell open |
-| PCBs | Rev Q: all 8 nodes use EM-hardened Pilot/XO capes. Flight Engineer is the PDB. Two Commo boards give 49 MHz connectivity. Rev S adds Observer (standalone vision/ToF/laser board). | Rev S schematics complete; Flight Engineer PCB DRC clean, gerbers generated; manual placement/routing remain (see avionics detail files) |
+| PCBs | 8 nodes each carry a Pilot + TACCO cape pair; Flight Engineer is the PDB; one standalone Commo node (Rev T) at the antennas; Observer is a standalone vision/ToF/laser board | Rev T 2026-10-07: Pilot (120/120 placed) and TACCO (163 placed, 60 x 35 mm) are ERC 0 / DRC 0 / parity 0 before routing on corrected 4.80 mm PB2 rails; routing and Gerbers open on both. Flight Engineer DRC items open; Observer PCB resync not started; Commo Rev T in design; Bus-Gateway ~84% routed |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 done; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
 | Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002, REF-FCC-003 §15.235] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending |
@@ -276,7 +276,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
 - [x] Mounting hardware — 8 STLs
-- [ ] Cargo gondola shell
+- [x] Cargo gondola shell
 - [ ] Clamshell door halves
 - [x] cargo_sect_shell24.scad Rev S
 - [x] cargo_sect_shell24.scad Rev S1
@@ -285,7 +285,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [x] nacelle_servo_bracket.scad
 - [x] REVN_BUILD_GUIDE_24IN.md Phase 3 anti-rework
 - [ ] cargo_sect_shell24.scad — shuttle exterior fairing profiles on…
-- [ ] Avionics dorsal access covers / Faraday tray lids for Inara and…
+- [x] Avionics dorsal access covers / Faraday tray lids for Inara and…
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate cargo_sect_shell24.stl
 - [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
@@ -481,11 +481,11 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output
 
 ### 1.2c — PCB Design: Observer (Nose/Cargo-Bay Vision, ToF & Laser)
-→ detail: `avionics/observer/WBS.md` §1.2c
+→ detail: `avionics/kicad/Observer/observer/WBS.md` §1.2c
 
 - [x] Create avionics/kicad/Observer/kicads/Observer.kicad_sch
 - [x] SoM re-scope — Observer = PHYTEC phyCORE PCM-071 SoM on a trapez…
-- [ ] FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error…
+- [x] FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error…
 - [x] Confirm PCB fab/assembly house can handle the AM62Ax 484-ball F…
 - [x] Source and cite a real Class 3B nose crosshair laser module
 - [x] Design Class 3B interlock circuit for the nose laser
@@ -562,6 +562,13 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [x] TACCO DP83825I pin table rebuilt from TI SNLS638C Table 4-1
 - [ ] TACCO Wi-Fi host: USB module on USB1 — part selection open (fab blocker)
 - [ ] Pilot: re-derive PB2 header map and DP83825I table the same way
+- [x] PB2 rail fix: Pilot + TACCO rails at 4.80 mm, male TSM-DV-LC
+- [x] TACCO placed: 163 parts, 60 x 35 mm, DRC 0, parity 0 (2026-10-06)
+- [x] TACCO manual placement, HI-6138 support parts (superseded)
+- [ ] TACCO routing: freerouting, GND pours, DRC 0, Gerbers (U5/U6)
+- [ ] Pilot routing + Gerbers (120/120 placed, DRC 0)
+- [ ] Flight Engineer PCB: last DRC items, route, Gerbers
+- [ ] Observer PCB resync to the ISOW1412/Section H schematic
 - [x] remove Wi-Fi, sik, and loRa antennas from XO. Use filtered cho…
 - [x] Re-evaluate space / restore Ethernet to XO
 - [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
@@ -1056,6 +1063,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 #### 4.5.1 — Skipper Hardware Design
 → detail: `gcs/WBS.md` §4.5
 
+- [ ] Decide Skipper ground radio loadout vs aircraft radio changes
 - [ ] Create Skipper host computer specification
 - [ ] Skipper field enclosure — print and fit-check
 - [ ] Gimbal STL generation and mesh verification
@@ -1110,7 +1118,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 ### 4.6 — Observer Node (Nose/Cargo Vision, ToF & Laser) — Firmware
 
 #### 4.6.1 — TI AM62Ax Vision Pipeline Bring-Up
-→ detail: `avionics/observer/WBS.md` §4.6.1
+→ detail: `avionics/kicad/Observer/observer/WBS.md` §4.6.1
 
 - [ ] MIPI CSI-2 camera sensor bring-up
 - [ ] VPAC/ISP pipeline configuration
@@ -1119,7 +1127,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Bench test:
 
 #### 4.6.2 — TI MSPM0G3507 Control Firmware
-→ detail: `avionics/observer/WBS.md` §4.6.2
+→ detail: `avionics/kicad/Observer/observer/WBS.md` §4.6.2
 
 - [ ] MCAN (CAN-FD) driver bring-up
 - [ ] TFmini-S UART driver
@@ -1130,7 +1138,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Signed telemetry:
 
 #### 4.6.3 — Integration Testing
-→ detail: `avionics/observer/WBS.md` §4.6.3
+→ detail: `avionics/kicad/Observer/observer/WBS.md` §4.6.3
 
 - [ ] Bench test:
 - [ ] Ring failure test:

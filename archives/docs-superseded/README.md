@@ -72,3 +72,10 @@ Rev S1g/S4).
 Described a fixed 4 mm CF press-fit spar with a sector gear on a wing bracket; replaced
 within a day of being written (its own banner said so from 2026-08-22). Retained as the
 record of the geometry that `wings_s1223_revo.scad` Rev R1a was integrated against.
+
+## `docs-README-revM-tail-2026-10-07.md` — Rev M quick-spec tail of `docs/README.md`
+
+Archived 2026-10-07. The Rev M (18-inch hull, 80 mm EDF) quick-spec, attribution table, and
+Rev J–M change tables that trailed the documentation index. They described a superseded design
+and carried attribution data that disagrees with the current REF-CAD-004 record, so they left
+the live index. Kept verbatim for history.

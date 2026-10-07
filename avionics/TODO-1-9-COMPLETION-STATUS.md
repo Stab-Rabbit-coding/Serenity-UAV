@@ -1,5 +1,10 @@
 # Task 1.9 — Avionics Workload Balancing: Completion Status
 
+> **SUPERSEDED 2026-10-07 — historical snapshot.** This file records the state of its date and is
+> no longer maintained. Its Rev S1 board plans (XO/Commo as PB2-I capes, LoRa on Commo)
+> were overtaken by the 2026-09-21 radio relocation, the Rev T Commo node, and the
+> schematic-first rebuilds. The live record is `avionics/WBS.md` (open work: `avionics/TODO.md`).
+
 **Branch:** `claude/todo-1-9-subtasks-s6j73e`  
 **Date:** 2026-08-01  
 **Status:** Phase 1 (Quick Wins & Documentation) COMPLETE; Phase 2-4 (PCB Critical Path) QUEUED

@@ -80,19 +80,37 @@ Throughout the mission, the aircraft shall also:
 | Thrust — nacelles only (hover) | 9.84 lbf (4,464 g) |
 | Thrust — Phase 11 rear EDF (cruise) | ~2.81 lbf (1,275 g) net after RCS bleed |
 | T/W — nacelles only (hover) | ≈ 1.14 (VTOL hover capable; margin corrected 2026-08-22, see TODO.md §0.10.1) |
-| T/W — Phase 11 (hover, nacelles only) | ≈ 1.43 (rear EDF is forward-thrust only) |
+| T/W — Phase 11 (hover, nacelles only) | ≈ 1.04 (rear EDF adds mass but is forward-thrust only) |
 | Compute | 8× PocketBeagle 2 Industrial (AM6254), PACE failover |
-| Onboard buses | CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring |
-| External comms | Wi-Fi 5 GHz, Zigbee 2.4 GHz, SiK/MAVLink 915 MHz, 49 MHz AX.25 |
+| Onboard buses | CAN FD, MIL-STD-1553C, RS-485, Ethernet RSTP ring |
+| External comms | Five C2 links: Wi-Fi 5 GHz, Zigbee 2.4 GHz, mLRS, SiK/MAVLink 915 MHz, 49 MHz AX.25 |
 | EMI design objective | 500 W/m² RF field, correct operation |
 
-*Mass/thrust/T-W figures are the Rev S BOM baseline, not yet recomputed for Rev S4c nacelle
-hollowing (−179 g/pair) or the Rev S1g wing spar — see `current-specification/README.md` and
-`docs/WBS.md` §0.10.2.*
+*Mass/thrust/T-W figures are the corrected 2026-08-22 baseline (the earlier 1.61 hover T/W used a
+stale 2,768 g AUW) and remain provisional until the bottom-up AUW ledger recompute closes — see
+`current-specification/README.md` and `docs/WBS.md` §0.10.1.*
 
 </td>
 </tr>
 </table>
+
+## Project Status (2026-10-07)
+
+**Rev T, design and PCB layout. Nothing is fabricated or assembled; the physical build has not
+started.** The path to first flight is in `docs/FIRST_FLIGHT_READINESS.md`; open work is in
+[`TODO.md`](TODO.md), generated from the full record in [`WBS.md`](WBS.md).
+
+| Area | State |
+|------|-------|
+| Airframe | SCAD shells at Rev S baseline, carried into Rev T; STL re-exports pending after the TACCO 60 × 35 mm change; cargo-shell mesh defect open |
+| Nacelles | 50 mm Rev S4c is current; 64 mm tandem-EDF redesign (NAC-64-SERVO-01) with a servo-driven nozzle is designed and fit-closed, with pivot, CFD, mass, and bench gates open |
+| Avionics PCBs | Pilot and TACCO placed with ERC 0 / DRC 0 before routing, on corrected 4.80 mm PB2 rails; routing and Gerbers open. Flight Engineer, Observer, and Commo Rev T need further PCB work |
+| Buses | Fleet MIL-STD-1553C via the Holt HI-6138 on every Pilot and TACCO (2026-09-28) |
+| Comms | mLRS on a bare STM32WLE5JC; Wi-Fi USB module selection is a fab blocker; Commo becomes one standalone node (Rev T, 2026-09-29) |
+| Firmware | `serenity-cn` Phase 6 done; `serenity-fc` Phase 6 stub; Phase 7 open |
+| Ground station | Skipper in design; ground-side radio loadout decision open |
+| BOM | `bom_revT` published 2026-09-28; avionics rows lag the 2026-10 PCB changes |
+| Build guide | Hand-drawn pre-Rev-T art; rebuild open (task 1.5.6) |
 
 ## Subsystems
 
@@ -129,9 +147,10 @@ deliberately progressive, field-replaceable failure mode rated for a 6 ft full-A
 
 **Nacelles**
 
-Two tilting pods each carry a tandem 50 mm EDF pair behind an 11-fin stator, with an 8-petal
-variable-area nozzle gear-linked passively to the 0°–140° tilt pivot. Rev S4c hollowed the
-pods (−179 g/pair) and added hinged ESC bays with flush access covers on a 4×90° motor pattern.
+Two tilting pods each carry a tandem 50 mm EDF pair behind an 11-fin stator, with a variable-area
+nozzle scheduled on measured tilt (0°–145° pivot) and driven by one sub-micro servo per pod. Rev S4c
+hollowed the pods (−179 g/pair) and added hinged ESC bays with flush access covers on a 4×90° motor
+pattern; a 64 mm tandem-EDF redesign is in progress.
 
 [Nozzle-Drive Trade Study →](docs/NOZZLE_DRIVE_TRADE.md)
 
@@ -155,8 +174,8 @@ the EMI-hardened Flight Engineer power distribution board.
 **Avionics**
 
 Eight PocketBeagle 2 Industrial nodes in four PACE-redundant stacks handle flight control, comms,
-and payload functions, all with 5 kV galvanic isolation, TPM-backed signed logging, and the
-**Skipper** ground control station.
+and payload functions, all with 5 kV galvanic isolation, TPM-backed signed logging, MIL-STD-1553C,
+and a standalone **Commo** radio node (Rev T), plus the **Skipper** ground control station.
 
 [Avionics README →](avionics/README.md)
 
@@ -192,6 +211,7 @@ flight, guided by the downward-facing **Observer** node for close-in 3D imaging 
 
 ## Table of Contents
 
+- [Project Status](#project-status-2026-10-07)
 - [Authoritative Project Instructions](#authoritative-project-instructions)
 - [References](#references)
 - [License](#license)
@@ -222,7 +242,7 @@ Handling write-ups) is preserved verbatim, for historical reference, in
 ## References
 
 - Design conversation: [claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666](https://claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666)
-- Latest design revision spec: `current-specification/serenity-rev-s.jsx`
+- Latest design revision BOM: `current-specification/bom_revT.json` (Rev T, 2026-09-28)
 
 ---
 
@@ -266,7 +286,7 @@ canonical-reference geometry. Revision T, September 2026.
 Covered under **CERN-OHL-W 2.0** (hardware):
 
 - 3D-printable hull, nacelle, and nozzle design files (STL/SCAD/FCStd)
-- PCB schematics and Gerber files for Pilot, XO, Flight Engineer, and Commo
+- PCB schematics and Gerber files for Pilot, TACCO, Flight Engineer, Commo, and Observer
 - Circuit diagrams, pinout tables, and wiring specifications
 - Mechanical drawings and assembly specifications
 - Any derived hardware shall carry CERN-OHL-W 2.0 (or a compatible license) and attribute
