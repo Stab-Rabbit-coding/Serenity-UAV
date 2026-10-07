@@ -44,7 +44,8 @@ tags:
 > - **Rail gender.** The PocketBeagle 2 Industrial carries *female* receptacles, so a socket
 >   cannot mate. TACCO now uses Samtec **TSM-118-04-L-DV-LC** male SMT strips (pads
 >   1.27 x 3.68 mm at ±2.475 mm from the centre-line) at the corrected 4.80 mm rows.
-> - **TACCO outline.** TACCO is now **60 x 35 mm**; the extra 5 mm is past the PB2-I's microSD
+> - **TACCO outline.** TACCO stays **55 x 35 mm** (a 60 x 35 trial, 2026-10-06, was reverted
+>   2026-10-07 because it routed no better; TACCO.md §13b). The trial put the extra 5 mm past the PB2-I's microSD
 >   end (avionics/kicad/TACCO/TACCO.md §13b).
 > - **Pilot still has the old error.** Pilot still has rails at the old 2.54 mm rows on
 >   female-socket footprints; the fix is avionics/WBS.md R2.
