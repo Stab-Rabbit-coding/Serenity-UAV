@@ -862,7 +862,7 @@ do not restate its dimensions here.
     `make_winch_spool()` in `generate_cargo_mounts.py` converted to documented
     `NotImplementedError` stubs and dropped from the build list; prose updated in
     `README.md`, root `WBS.md`/`TODO.md`, `airframe/WBS.md`,
-    `airframe/VERIFY_PLACEMENT_CHECKLIST.md`, `avionics/observer/WBS.md`,
+    `airframe/VERIFY_PLACEMENT_CHECKLIST.md`, `avionics/kicad/Observer/observer/WBS.md`,
     `graphical-build-guide/` (REVN guide + flight-phases + SVG task),
     `docs/PHASED_BUILD_GUIDE.md`, `docs/PROTO_PRINT_DAVINCI_JR.md`,
     `docs/AVIONICS_PB2_REDESIGN.md`, `docs/POWER_DISTRIBUTION.md`, `PROJECT_INDEX.md`.

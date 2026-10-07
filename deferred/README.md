@@ -1,7 +1,8 @@
 # Serenity UAV — Deferred Work & Future Phases
 
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)  
+**Last updated:** 2026-10-07
 
 > Phase 11+ design work, aft propulsion system, RCS attitude thrusters, cargo-bay range-extender
 > battery module, and other deferred upgrades planned for post-Phase-10 operations.
@@ -12,6 +13,22 @@ This directory contains design specifications and work planning for system upgra
 enhancements that are **deferred beyond Phase 10** (Advanced Autonomy and Long-Range Operations).
 These features are **not required** for first flight (Phase 5) or initial autonomous operations
 (Phases 6–10), but enable extended-mission capabilities once the baseline platform is flight-proven.
+
+## Current Status (2026-10-07)
+
+Nothing in this folder is built. The physical aircraft has not been assembled, so every Phase 11
+and Phase 12 date below is conditional on Phase 5–10 flight validation, not scheduled.
+
+- **Phase 11 (aft EDF + RCS):** CAD and plumbing concepts only. All items in `WBS.md` §Phase11
+  are open. The RCS bleed-valve gateway (`GW-RCS`) was specified 2026-09-21 and is not built.
+  The rear EDF's motor, ESC, and duct geometry are not settled.
+- **Phase 12 (range-extender battery):** concept only; no schematic or CAD exists.
+- **Planned PCB revisions** formerly listed here (Commo R1, XO R1, Flight Engineer A1) were
+  overtaken: Commo is now a standalone Rev T node, "XO" is TACCO, and the Flight Engineer 6 V
+  BEC removal is tracked in `avionics/rev-s1/WBS.md`.
+- **Known open inconsistency:** `WBS.md` sizes the rear-EDF ESC at 50 A and routes ESC5 to
+  Inara's FC2, while `aft-edf/README.md` says 80 A, and root `AGENTS.md` §9 assigns the aft EDF
+  to Simon. The owner must adjudicate before Phase 11 work starts.
 
 ## Deferred Phases & Features
 
@@ -26,10 +43,10 @@ bleed-jet thrusters for pitch/yaw attitude authority in forward flight.
 - **Nozzle:** Fixed canonical elliptical nozzle (2.06" × 1.76", 52.3 × 44.7 mm)
 - **RCS system:** 4× SG90 proportional valves, rcs_distribution_manifold, ~15% EDF mass flow diverted
 - **Mass impact:** +362 g (55mm EDF, RCS servos, manifold, nozzle housing)
-- **Phase 11 AUW:** ~3,130 g (~110.4 oz) including rear EDF (but rear EDF thrust is **not** in hover budget)
+- **Phase 11 AUW:** ~9.42 lbm (4,273 g) including the rear EDF; the rear EDF thrust is **not** in the hover budget, so the hover T/W falls from ≈1.14 to ≈1.04 (provisional pending the AUW ledger recompute, `docs/WBS.md` §0.10.1)
 
 **Design documents:**
-- `docs/DEFERRED_PHASE_11_AFT_EDF.md` (if created; currently in `deferred/AGENTS.md`)
+- `deferred/AGENTS.md` and `deferred/aft-edf/README.md`
 - `deferred/WBS.md` §Phase11
 - `deferred/TODO.md` — open Phase 11 tasks
 
@@ -45,7 +62,7 @@ missions or support higher-altitude operations.
 **Concept:**
 - **Secondary 6S LiPo:** 2,000–4,000 mAh, ~400–600 g (tunable; mission-dependent)
 - **Placement:** Cargo gondola interior, side bays (non-structural)
-- **Integration:** Kaylee power distribution system (dual-rail failover model; RBM is third rail)
+- **Integration:** Flight Engineer power distribution board (dual-rail failover model; RBM is third rail)
 - **Current sharing:** Load-sharing across primary + secondary with reverse-polarity diodes
   (no active balancing; passive parallel connection like main battery rail)
 - **Field swappability:** Quick-disconnect XT90-S connector in gondola nose
@@ -54,12 +71,12 @@ missions or support higher-altitude operations.
 **Phase 12 impact:**
 - Endurance extension: +2–4 minutes typical hover time (TBD via flight testing)
 - No structural changes (cargo bay already open)
-- No additional avionics (uses existing Kaylee + PB2-I monitoring)
+- No additional avionics (uses the existing Flight Engineer + PB2-I monitoring)
 - Cost: ~$30–50 for secondary battery pack
 
 **Design documents:**
 - `deferred/WBS.md` §Phase12
-- Kaylee PDB schematic (shows third-rail header for RBM connector)
+- Flight Engineer schematic (`avionics/kicad/FlightEngineer/`); the `J_BATT2` input it needs is an open item in `WBS.md`
 
 **Status:** Concept-phase only; deferred pending Phase 5–6 endurance baseline characterization.
 
@@ -71,7 +88,7 @@ Possible additions beyond Phase 12 (not yet formally scoped):
 
 - **Advanced gimbal tracking** — motorized antenna platform on ground station (partially
   designed; gimbal mechanics in `gcs/hardware/`)
-- **Vision-based landing** — TI AM62A7 (Jayne) could implement automated visual-servoing landing
+- **Vision-based landing** — the TI AM62A7 on Observer could implement automated visual-servoing landing
 - **Cooperative multi-UAV** — mesh networking via Ethernet + CAN; one aircraft could relay
   telemetry from others (requires flight test data + new firmware architecture)
 - **Search-and-rescue sensor suite** — thermal imaging, acoustic locator (external payload bay
@@ -90,9 +107,11 @@ Possible additions beyond Phase 12 (not yet formally scoped):
 | `WBS.md` | Work breakdown structure for Phases 11–13 (full task narrative) |
 | `TODO.md` | Open items for deferred work (checked items stay for history) |
 | `aft-edf/` | Phase 11 aft-EDF design documents and CAD source files |
-| `rcs-thrusters/` | RCS system design, valve selection, bleed-air manifold |
-| `cargo-rbm/` | Phase 12 range-extender battery module schematics |
-| `archive/` | Older design iterations, rejected concepts, obsolete components |
+| `DEFERRED_ITEM_TEMPLATE.md` | Required field template for every deferred item |
+| `LICENSE` | Folder license file |
+
+RCS and range-extender design material is carried in `WBS.md`, `AGENTS.md`, and
+`aft-edf/`; no separate `rcs-thrusters/`, `cargo-rbm/`, or `archive/` folders exist yet.
 
 ---
 
@@ -105,7 +124,7 @@ Possible additions beyond Phase 12 (not yet formally scoped):
 **Key difference from nacelle EDFs:** Rear EDF has no stator efficiency factor (unlike 50mm nacelle EDFs with 90% efficiency); 1,500g is raw thrust. The 4 RCS jets bleed ~15% of mass flow (not an efficiency factor, but a flow diversion).
 
 **Design constraints:**
-1. **Fixed nozzle** — Unlike nacelle iris (variable), the aft nozzle is canonical and fixed shape
+1. **Fixed nozzle** — Unlike the nacelle nozzles (variable), the aft nozzle is canonical and fixed shape
    (2.06" × 1.76" elliptical)
 2. **Forward thrust only** — Does not contribute to hover T/W (decoupled from VTOL authority)
 3. **RCS bleed integration:** ~15% of EDF mass flow diverted to 4 RCS jets → 1,275 g net forward thrust (1,500 × 0.85)
@@ -168,7 +187,7 @@ Possible additions beyond Phase 12 (not yet formally scoped):
 | EDF over-thrust damages rear fuselage | Load-test STL with weights before flight; bond plenum with structural epoxy |
 | Bleed-air backpressure damages intake | Design intake frame with pressure-relief divert (or over-size manifold for low loss) |
 | RCS valve stiction or blockage | Use proportional servos (not on-off); test bleed-air pressure with manometer before flight |
-| Loss of rear-EDF power during flight | Graceful degradation; aircraft can VTOL-return on nacelle EDFs alone (T/W ≈1.61) |
+| Loss of rear-EDF power during flight | Graceful degradation; aircraft can VTOL-return on nacelle EDFs alone (T/W ≈ 1.04 at Phase 11 mass; provisional) |
 | Nacelle/RCS cross-control confusion | Separate PWM channels; firmware explicitly cross-fade between modes (test on bench) |
 
 ---
@@ -180,14 +199,14 @@ Possible additions beyond Phase 12 (not yet formally scoped):
 **Concept:** Parallel a second 6S LiPo in the cargo gondola to extend endurance.
 
 **Parallel connection strategy:**
-1. Main battery → Kaylee main input (40A fuse, dual-rail failover, primary)
-2. RBM battery → Kaylee RBM input (separate 40A fuse, tertiary power rail)
+1. Main battery → Flight Engineer main input (40A fuse, dual-rail failover, primary)
+2. RBM battery → Flight Engineer RBM input (separate 40A fuse, tertiary power rail)
 3. **No active balancing** — passive parallel with reverse-polarity diodes (like main dual-rail)
-4. **Voltage monitoring:** PB2-I reads both battery voltages via Kaylee GPIO (ADC)
+4. **Voltage monitoring:** PB2-I reads both battery voltages via Flight Engineer GPIO (ADC)
 5. **Load sharing:** Diode-OR'd outputs; main battery supplies first ~100%, then RBM kicks in
    as main voltage droops under load
 
-**Advantage:** Simple, no added complexity (Kaylee already has current-sharing diodes for dual rails).
+**Advantage:** Simple, no added complexity (Flight Engineer already has current-sharing diodes for dual rails).
 
 **Field operation:**
 - Nominal endurance: 8 minutes hover (Phase 5 baseline with 4000 mAh primary)
@@ -214,7 +233,7 @@ Minimal changes to `pwr_fault` watchdog node:
 if (battery_main < 5.5V && battery_rbm > 5.5V) {
     // Main battery low; RBM is healthy
     log("RBM failover active");
-    // No special action; Kaylee's diode-OR handling voltage automatically
+    // No special action; Flight Engineer's diode-OR handling voltage automatically
 }
 if (battery_main < 5.5V && battery_rbm < 5.5V) {
     // Both batteries low; RTL immediately
@@ -249,7 +268,7 @@ if (battery_main < 5.5V && battery_rbm < 5.5V) {
 |------|-------------|--------|------------|
 | RBM battery procure spec | Capacity, C-rating, vendor lock-in | 10% | 2–3 |
 | Gondola battery tray CAD | Fold-down mount, strain relief | 0% | 3–5 |
-| Diode-OR circuit verification | Kaylee schematic review, loss analysis | 30% | 2–3 |
+| Diode-OR circuit verification | Flight Engineer schematic review, loss analysis | 30% | 2–3 |
 | ADC firmware (voltage read) | GPIO input, telemetry logging | 0% | 2–3 |
 | Endurance modeling | Flight-test data required; deferred | 0% | 4–6 |
 | Bench discharge test | Verify parallel load-sharing, no crosstalk | 0% | 2–3 |
@@ -265,14 +284,14 @@ if (battery_main < 5.5V && battery_rbm < 5.5V) {
 
 **Prerequisite:** Phase 5–10 baseline flight testing complete and documented.
 
-**Go/no-go criteria:**
-1. ✅ Phase 5 first hover achieved; vehicle stable at ±15° tilt
-2. ✅ Phase 6 all 8 nodes operating; OA working
-3. ✅ Phase 7 cargo door + winch fully functional
-4. ✅ Phase 9 performance envelope documented (thrust stand calibrated, T/W measured, endurance logged)
-5. ✅ Phase 10 BVLOS mission successful; node failover proven
+**Go/no-go criteria (none met yet):**
+1. Phase 5 first hover achieved; vehicle stable at ±15° tilt
+2. Phase 6 all 8 nodes operating; OA working
+3. Phase 7 cargo door + winch fully functional
+4. Phase 9 performance envelope documented (thrust stand calibrated, T/W measured, endurance logged)
+5. Phase 10 BVLOS mission successful; node failover proven
 
-**Expected Phase 11 start:** 2026-Q4 (after summer field testing, assuming baseline is flight-proven)
+**Phase 11 start:** no date; it follows flight validation of the baseline, and the aircraft is not yet built
 
 ### When to Start Phase 12?
 
@@ -280,8 +299,8 @@ if (battery_main < 5.5V && battery_rbm < 5.5V) {
 
 **Trigger:** If Phase 9–10 endurance is <10 min and missions need >12 min loiter time.
 
-**Expected Phase 12 start:** 2027-Q1 (conditional; may defer indefinitely if Phase 5–10
-endurance meets mission needs)
+**Phase 12 start:** no date; conditional, and may defer indefinitely if Phase 5–10
+endurance meets mission needs
 
 ---
 
@@ -300,7 +319,8 @@ endurance meets mission needs)
 
 ## License
 
-All deferred-phase documentation is **CC BY 4.0**.
+All deferred-phase documentation is **CC BY-SA 4.0**; deferred hardware and CAD follow the
+by-output rule in `docs/attribution_and_licensing.md`.
 
 See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md)
 for details.
