@@ -6,6 +6,7 @@ Usage:
     python3 finish_tacco_pcb.py prepare <board.kicad_pcb>
     python3 finish_tacco_pcb.py export  <board.kicad_pcb> <out.dsn> [--band-keepout]
     python3 finish_tacco_pcb.py import  <board.kicad_pcb> <routed.ses>
+    python3 finish_tacco_pcb.py clean   <board.kicad_pcb>
     python3 finish_tacco_pcb.py finish  <board.kicad_pcb>
 
 Phases (avionics/WBS.md §1.2a "TACCO area recovery", U5):
@@ -234,6 +235,38 @@ def add_qfn_thermal_vias(board: pcbnew.BOARD, ref: str = "MLRS-MCU", pitch: floa
     return added
 
 
+def clean_band(board: pcbnew.BOARD) -> "tuple[int, int]":
+    """Remove routed copper that breaks the band rules after the open-band phase.
+
+    Freerouting cannot restrict a keepout to some nets, so once the ISO_BAND markers are
+    left out of the DSN (open-band phase) it may route logic tracks/vias through the band
+    and isolated tracks/vias outside it.  Strip both, so a following band-closed phase
+    reroutes the logic connections and the isolated ones keep only in-band copper.
+    """
+    bands = [z for z in board.Zones() if z.GetIsRuleArea() and z.GetZoneName() == "ISO_BAND"]
+
+    def in_band(item) -> bool:
+        layers = item.GetLayerSet()
+        for z in bands:
+            for layer in z.GetLayerSet().Seq():
+                if layers.Contains(layer) and z.GetBoundingBox().Intersects(item.GetBoundingBox()) \
+                        and z.Outline().Collide(item.GetEffectiveShape(layer)):
+                    return True
+        return False
+
+    logic = iso = 0
+    for t in list(board.GetTracks()):
+        isolated = "ISOLATION" in t.GetNetClassName()
+        inside = in_band(t)
+        if not isolated and inside:
+            board.Remove(t)
+            logic += 1
+        elif isolated and not inside:
+            board.Remove(t)
+            iso += 1
+    return logic, iso
+
+
 def main() -> None:
     if len(sys.argv) < 3:
         sys.exit(__doc__)
@@ -289,6 +322,12 @@ def main() -> None:
         add_edge_keepout(board)
         ok = pcbnew.ExportSpecctraDSN(board, dsn)
         print("exported", dsn, ok)
+        return
+    if cmd == "clean":
+        n_logic, n_iso = clean_band(board)
+        pcbnew.SaveBoard(pcb_path, board)
+        print(f"clean: removed {n_logic} logic item(s) inside ISO_BAND and "
+              f"{n_iso} ISOLATION item(s) outside it; saved {pcb_path}")
         return
     if cmd == "import":
         ses = sys.argv[3]
