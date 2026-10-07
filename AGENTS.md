@@ -287,7 +287,13 @@ here; canonical source is `docs/OBSERVER_LASER_ANALYSIS.md` (current revision) a
 
 Radio assignment follows the hardware each stack actually carries, not a fixed link name. The
 current per-board radio complement and per-stack link priority are in `avionics/README.md`
-"External Comms" and each board's own `.md`; this file does not restate them.
+"External Comms" and each board's own `.md`; this file does not restate them. Decisions:
+
+- 2026-09-21 TACCO/Commo radio relocation: every stack's TACCO cape carries Wi-Fi + ZigBee and
+  mLRS; Commo hosts 49 MHz and SiK.
+- Rev T (approved 2026-09-29): any stack can key either Commo radio over CAN-FD / RS-485 / 1553C,
+  and a PACE-aware PTT ownership lease decides which stack transmits. Losing the one Commo node
+  drops every stack to Wi-Fi / ZigBee / mLRS.
 
 Per-stack tasking:
 

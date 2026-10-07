@@ -117,8 +117,10 @@ testing matures and is descriptive. Do not restate it here or in any other `AGEN
 directly:
 
 - **Canonical design and structural analysis:** `docs/LANDING_GEAR_ANALYSIS.md`
-- **SCAD source and variants:** `airframe/openscad/fuselage/` (the analysis document names the
-  flight article)
+- **SCAD source and variants:** `airframe/openscad/fuselage/`. Decision (2026-09-06): the 3.0 in
+  leg (`canonical_leg_r6_3_0in.scad`) is the flight article, driven by nozzle belly clearance
+  (`docs/LANDING_GEAR_ANALYSIS.md` §4.8); the 1.5 in leg (`canonical_leg_r6_1_5in.scad`) is
+  retired to bench and ground-handling use. The Rev R5 `wire_brace_leg.scad` is superseded.
 - **Open work:** `airframe/landing-gear/TODO.md`
 
 ## Nacelle Nozzle Drive
@@ -126,8 +128,10 @@ directly:
 Each nacelle nozzle is variable-diameter and **scheduled on measured nacelle tilt**, sized 75% of
 bore at 0° (forward) to 105% of bore at every tilt from 90° to the 145° limit (vertical/backing),
 and shall fail to 105% on loss of servo power, command, or tilt-angle validity — a fixed
-functional requirement. The drive mechanism that achieves it is a design decision recorded in the
-trade study, not here. Read the current state directly:
+functional requirement. Decision (owner, 2026-09-28, servo drive): one sub-micro servo per nacelle
+inside the pod, commanded from the tilt angle by its bus gateway, pulling the unison ring through a
+pull-only link against a spring that opens it to a hard 105% stop; the passive gear and linkage
+drives were retired. The trade study holds the rationale. Read the current state directly:
 
 - **Trade study and decision record:** `docs/NOZZLE_DRIVE_TRADE.md`
 - **Implementation plan:** `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`

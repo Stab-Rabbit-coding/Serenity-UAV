@@ -22,7 +22,8 @@ Regulations Compliance" below.
 
 **Commo transceiver node** (49 MHz Part 15 §15.235 + SiK 915 MHz): one standalone, MCU-driven
 Commo per airframe, co-located with its antennas and reachable by all four stacks over the bus. It
-does not mount on a PB2-I. Revision history and as-built status: `avionics/kicad/Commo/Commo.md`.
+does not mount on a PB2-I. Decision (Rev T, approved 2026-09-29): it replaces the two Rev S PB2-I
+capes in River's Room (Bay C) and Simon's Medbay (Bay D). Revision history and as-built status: `avionics/kicad/Commo/Commo.md`.
 
 **Power Distribution — Flight Engineer (PDB):** central location in the inner neck of the middle
 section, minimizing power-run lengths to all four nacelles, all four avionics stacks, and the
@@ -39,8 +40,10 @@ does not carry:
 - All four stacks run **Pilot + TACCO**. No stack carries a Commo cape; every stack reaches the
   standalone Commo node over CAN-FD / RS-485 / 1553C. Loss of that node is an accepted single
   point of failure for 49 MHz and SiK, with TACCO's mLRS as the long-range fallback.
-- Per-board radio complement, per-stack link priority, and the history of radio assignments are
-  descriptive and live in `avionics/README.md` "External Comms" and the board files
+- Decisions: radio assignment resolved 2026-09-21/26 (TACCO carries mLRS; Commo carries SiK in
+  addition to 49 MHz; TACCO no longer carries SiK and Commo no longer carries LoRa/RFM95W); per-stack
+  radio priority rebalanced 2026-09-26 so Shepherd and Inara list mLRS as their long-range link.
+- Per-board radio complement and per-stack link priority are descriptive and live in `avionics/README.md` "External Comms" and the board files
   (`avionics/kicad/TACCO/TACCO.md`, `avionics/kicad/Commo/Commo.md`), not here.
 
 ## Cape Naming and Revision History
@@ -70,7 +73,9 @@ Current build designation: TACCO. Status/history: `avionics/kicad/TACCO/TACCO.md
 Unlicensed-band communications for high-RF-field environments: 49 MHz transceiver (47 CFR
 Part 15 §15.235) plus SiK 915 MHz.
 
-A **standalone PCB, not a PB2-I cape**, like Observer and Bus-Gateway:
+The Rev S PB2-I cape design was superseded 2026-09-29 (snapshot archived at
+`archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/`). Rev T is a
+**standalone PCB, not a PB2-I cape**, like Observer and Bus-Gateway:
 
 - One unit per airframe, co-located with its antennas.
 - MCU-driven: the modem and AX.25/KISS run on-board.
