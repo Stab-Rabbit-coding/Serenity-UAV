@@ -6,7 +6,7 @@
 
 This folder contains the active (in-progress) design specifications and requirements documents for the current revision of Serenity-UAV. These files define the current design baseline and are subject to change as the design evolves.
 
-**Important:** This folder is for **active, current work**. Completed specifications are archived in the `archives/` folder and referenced in `ARCHIVE_INDEX.md`.
+**Note:** This folder is for **active, current work**. Completed specifications are archived in the `archives/` folder and referenced in `ARCHIVE_INDEX.md`.
 
 ## Revision Policy
 
@@ -43,11 +43,10 @@ revise a specification in this folder.
 
 ## Known Deferred Items
 
-This folder may include a `DEFERRED_ITEMS.md` document listing:
-
-- **Phase 11+:** Rear EDF + RCS (deferred), aft intake scoop carving (deferred)
-- **Planned revisions:** Commo Rev R1, XO Rev R1, Flight Engineer Rev A1 (planned but not yet implemented)
-- **Known limitations:** Open issues that do not block the current baseline
+This folder may include a `DEFERRED_ITEMS.md` document listing deferred work (Phase 11+),
+planned board revisions, and known limitations that do not block the current baseline. The
+content is descriptive and lives in `deferred/` and the owning board `.md` files; do not restate
+it here.
 
 Deferred items should reference `TODO.md` for the specific work items; the deferred work itself
 is described in `deferred/AGENTS.md` "Status Categories".
