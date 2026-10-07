@@ -276,6 +276,16 @@ def main() -> None:
         dsn = sys.argv[3]
         if "--band-keepout" in sys.argv:
             print("band keepouts added:", add_band_keepouts(board))
+        else:
+            # ISO_BAND is a DRC name marker (no keepout flags), but KiCad's Specctra
+            # exporter writes every rule area as a keepout, which walled the isolated
+            # pads off from freerouting in the "open band" phase (found 2026-10-06:
+            # phase 2 routed 0 of 51 isolated connections).  Drop the markers from
+            # this in-memory copy only; the saved board keeps them for DRC.
+            markers = [z for z in board.Zones() if z.GetIsRuleArea() and z.GetZoneName() == "ISO_BAND"]
+            for z in markers:
+                board.Remove(z)
+            print("ISO_BAND markers left out of the DSN:", len(markers))
         add_edge_keepout(board)
         ok = pcbnew.ExportSpecctraDSN(board, dsn)
         print("exported", dsn, ok)
