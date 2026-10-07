@@ -75,10 +75,10 @@ CUSTOM = HERE.parent.parent / "Serenity-Custom.pretty"
 SECURE_LIB = Path(os.environ.get("SECURE_CONTROLLERS_LIB", HERE.parents[4] / "SecureControllers" / "kicad" / "libraries"))
 
 X0, Y0 = 121.0, 87.5          # board origin (mm), same absolute sheet coords as the legacy TACCO PCB
-BW, BH = 60.0, 35.0           # board size (mm) — owner 2026-10-06: 60 x 35 (was 55 x 35, routing-bound)
-U_LO = -5.0                   # board spans u = U_LO..U_LO + BW: the extra 5 mm overhangs the PB2-I's
-                              # microSD (pin-1/2) end, clear of its USB-C / JST-SH end; u/v keep the
-                              # 55 x 35 PB2 frame so the rails and every fixed station are unchanged
+BW, BH = 55.0, 35.0           # board size (mm) — TACCO.md §1 / §13b: 55 x 35 (60 x 35 was tried
+                              # 2026-10-06 and reverted 2026-10-07: it routed no better)
+U_LO = 0.0                    # board spans u = U_LO..U_LO + BW in the PB2 frame (kept as a
+                              # parameter so an outline what-if needs one line, not a re-frame)
 CORNER_R = 3.0
 EDGE_KEEP = 0.5
 
@@ -195,7 +195,17 @@ RAIL_V = 4.80
 # laminate (functional bus isolation, not a safety barrier — see TACCO.md §isolation).
 ISO_TR_V = 20.6        # CAN-TR / RS485 centre row (SOIC-20W, pins 11-20 face +v)
 ISO_V0 = ISO_TR_V - 2.6  # band edge between the package centre line and its logic pad row (same 2.6 mm offset as Rev S3)
-ISO_V1 = BH - 0.5      # F.Cu + inner layers: to the copper-edge keep-out
+# Band bottom edge (2026-10-07, owner: "shrink the band to below the connectors"): the band
+# used to run to the board edge over both P2 rail rows (v 27.725 / 32.675), so no logic via
+# could reach the in-band P2 pins; they had to escape on B.Cu between the rail pads (16 of
+# them stayed unrouted).  The band still runs to the edge beside and between the bus
+# connectors, where the TVS / CMC / terminators sit, but under each connector body it now
+# stops just past the signal-pad row (v 28.75): the outer rail row there is outside the band
+# and its pins can take a via.  ISO_V1 is the band's edge-side limit, ISO_VCUT the cut-back
+# line under the connectors, ISO_CUT_HW the cut half-width about each connector centre.
+ISO_V1 = BH - 0.5      # beside the connectors: to the copper-edge keep-out
+ISO_VCUT = 29.6
+ISO_CUT_HW = 5.0       # J-CAN / J-485 courtyards are 9.6 mm wide
 
 FIXED: Dict[str, Tuple[float, float, float, str]] = {
     # chassis holes + PB2 rails (REF-SENSOR-041 geometry; x matches the manual already).
@@ -249,11 +259,27 @@ EXIT: Dict[str, Tuple[float, float]] = {
 # runs to the bottom edge keep-out, plus the P2 rail gap so J-CAN's ISOLATION-net
 # pads can be reached by tracks that stay inside the band.
 ISO_U0, ISO_UM, ISO_U1 = 7.2, 21.2, 37.6   # band west edge, CAN/RS-485 island split, east edge
-ISO_CAN = [(ISO_U0, ISO_V0), (ISO_UM - 0.25, ISO_V0), (ISO_UM - 0.25, ISO_V1), (ISO_U0, ISO_V1)]
-ISO_485 = [(ISO_UM + 0.25, ISO_V0), (ISO_U1, ISO_V0), (ISO_U1, ISO_V1), (ISO_UM + 0.25, ISO_V1)]
-ISO_BAND_POLY = [(ISO_U0, ISO_V0), (ISO_U1, ISO_V0), (ISO_U1, ISO_V1), (ISO_U0, ISO_V1)]
+CUT_CAN = (FIXED["J-CAN"][0] - ISO_CUT_HW, FIXED["J-CAN"][0] + ISO_CUT_HW)
+CUT_485 = (FIXED["J-485"][0] - ISO_CUT_HW, FIXED["J-485"][0] + ISO_CUT_HW)
+
+
+def _band_poly(u0: float, u1: float, cut: Tuple[float, float]) -> List[Tuple[float, float]]:
+    """Band outline from u0 to u1 with the connector cut-back (cut) taken out of its edge side."""
+    return [(u0, ISO_V0), (u1, ISO_V0), (u1, ISO_V1), (cut[1], ISO_V1), (cut[1], ISO_VCUT),
+            (cut[0], ISO_VCUT), (cut[0], ISO_V1), (u0, ISO_V1)]
+
+
+ISO_CAN = _band_poly(ISO_U0, ISO_UM - 0.25, CUT_CAN)
+ISO_485 = _band_poly(ISO_UM + 0.25, ISO_U1, CUT_485)
+ISO_BAND_POLY = [(ISO_U0, ISO_V0), (ISO_U1, ISO_V0), (ISO_U1, ISO_V1), (CUT_485[1], ISO_V1),
+                 (CUT_485[1], ISO_VCUT), (CUT_485[0], ISO_VCUT), (CUT_485[0], ISO_V1),
+                 (CUT_CAN[1], ISO_V1), (CUT_CAN[1], ISO_VCUT), (CUT_CAN[0], ISO_VCUT),
+                 (CUT_CAN[0], ISO_V1), (ISO_U0, ISO_V1)]
+# main planes: the board minus the band (notch to the edge), plus the two pockets under
+# the connectors, which are logic again
 MAIN_PLANE = [(U_LO + 0.5, 0.5), (U_LO + BW - 0.5, 0.5), (U_LO + BW - 0.5, 34.5), (ISO_U1, 34.5), (ISO_U1, ISO_V0),
               (ISO_U0, ISO_V0), (ISO_U0, 34.5), (U_LO + 0.5, 34.5)]
+MAIN_PLANE_POCKETS = [[(c[0], ISO_VCUT), (c[1], ISO_VCUT), (c[1], 34.5), (c[0], 34.5)] for c in (CUT_CAN, CUT_485)]
 
 ANCHOR_PREFIX = [
     ("C-PHY-", "ETH-PHY"), ("R-RBIAS", "ETH-PHY"), ("R-AD0", "ETH-PHY"),
@@ -323,8 +349,12 @@ def tht_rects(fp: pcbnew.FOOTPRINT) -> List[Rect]:
 
 # Isolation band as rectangles (board u,v) — parts carrying ISOLATION-class nets must
 # sit inside, every other part outside, or the .kicad_dru rules make them unroutable.
-ISO_RECTS: Dict[str, List[Rect]] = {F: [Rect(X0 + ISO_U0, Y0 + ISO_V0, X0 + ISO_U1, Y0 + ISO_V1)],
-             B: []}
+ISO_RECTS: Dict[str, List[Rect]] = {F: [
+    Rect(X0 + ISO_U0, Y0 + ISO_V0, X0 + ISO_U1, Y0 + ISO_VCUT),          # across the band to the cut line
+    Rect(X0 + ISO_U0, Y0 + ISO_VCUT, X0 + CUT_CAN[0], Y0 + ISO_V1),      # edge strips beside/between
+    Rect(X0 + CUT_CAN[1], Y0 + ISO_VCUT, X0 + CUT_485[0], Y0 + ISO_V1),  # the two connectors
+    Rect(X0 + CUT_485[1], Y0 + ISO_VCUT, X0 + ISO_U1, Y0 + ISO_V1)],
+    B: []}
 # Top-face cells between the PB2 rail pins (rails are not stack-through any more):
 # a 0402/0201 fits diagonally in every 2.54 mm cell — owner request 2026-09-29.
 # P1 row only (2026-10-04): the P2 inter-row gap and its 2x2 pin-cell centres are the
@@ -563,7 +593,8 @@ def outline(board: pcbnew.BOARD) -> None:
 
 
 def add_zone(board: pcbnew.BOARD, net: pcbnew.NETINFO_ITEM, layer: int, pts: List[Tuple[float, float]],
-             priority: int = 0, name: str = "") -> pcbnew.ZONE:
+             priority: int = 0, name: str = "",
+             hole: Optional[List[Tuple[float, float]]] = None) -> pcbnew.ZONE:
     z = pcbnew.ZONE(board)
     z.SetLayer(layer)
     z.SetNet(net)
@@ -579,6 +610,10 @@ def add_zone(board: pcbnew.BOARD, net: pcbnew.NETINFO_ITEM, layer: int, pts: Lis
     ol.NewOutline()
     for u, v in pts:
         ol.Append(mm(X0 + u), mm(Y0 + v))
+    if hole:
+        ol.NewHole()
+        for u, v in hole:
+            ol.Append(mm(X0 + u), mm(Y0 + v), 0, 0)
     board.Add(z)
     return z
 
@@ -729,7 +764,7 @@ def main() -> None:
     tb.SetDate("2026-09-29")
     tb.SetRevision("S3")
     tb.SetCompany("Griffing Technology LLC")
-    tb.SetComment(0, "PocketBeagle 2 Industrial cape, 60 x 35 mm, 6-layer; generated by gen_tacco_pcb.py")
+    tb.SetComment(0, "PocketBeagle 2 Industrial cape, 55 x 35 mm, 6-layer; generated by gen_tacco_pcb.py")
     tb.SetComment(1, "Authors: Claude Sonnet 5 (2026-09-20), Claude Fable 5.1 (2026-09-29); owner sgriffing; CC BY 4.0")
 
     outline(board)
@@ -938,6 +973,9 @@ def main() -> None:
                             continue
                         if any(r.hits(o) for o in ISO_RECTS[side]) and not iso:
                             continue
+                        if iso and not any(o.x1 <= r.x1 and r.x2 <= o.x2 and o.y1 <= r.y1 and r.y2 <= o.y2
+                                           for o in ISO_RECTS[side]):
+                            continue  # isolated parts: wholly inside the band (F.Cu) or nowhere
                         if side == B and not two and any(r.hits(o) for o in ISO_RECTS[F]):
                             continue
                         hit = []
@@ -1007,6 +1045,8 @@ def main() -> None:
     gnd, g2c, g2r, p3v3 = netmap["GND"], netmap["GND2_CANB"], netmap["GND2_RS485B"], netmap["+3V3"]
     for layer, net, name in ((pcbnew.In1_Cu, gnd, "GND plane"), (pcbnew.In4_Cu, p3v3, "+3V3 plane")):
         add_zone(board, net, layer, MAIN_PLANE, priority=0, name=name)
+        for pocket in MAIN_PLANE_POCKETS:
+            add_zone(board, net, layer, pocket, priority=0, name=name + " (under bus connector)")
     add_zone(board, g2c, pcbnew.In1_Cu, ISO_CAN, priority=1, name="GND2_CANB island")
     add_zone(board, g2r, pcbnew.In1_Cu, ISO_485, priority=1, name="GND2_RS485B island")
     band = ISO_BAND_POLY

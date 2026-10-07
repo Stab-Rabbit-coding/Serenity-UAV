@@ -4,8 +4,18 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 see `docs/attribution_and_licensing.md`
-**Revision:** R (Rev R baseline — TACCO naming finalized; EMI-hardened variant of TACCO Rev M, Ethernet PHY restored)
-**Date:** 2026-06-07
+**Revision:** T (schematic-first rebuild of the Rev R baseline; Rev R was the TACCO naming finalization, an EMI-hardened variant of TACCO Rev M with the Ethernet PHY restored)
+**Date:** 2026-10-07
+**Current status (2026-10-07):** The board is **placed but not routed**. The generator
+(`scripts/gen_tacco_sch.py`, `scripts/gen_tacco_pcb.py`) produces a **55 × 35 mm** outline
+(§13b: 60 × 35 was tried and reverted) carrying **163 parts**, all placed, with ERC 0 errors (12 accepted `lib_symbol_issues`),
+DRC 0 errors, and 0 schematic-parity issues before routing. Routing, Gerbers, and the owner
+items in `avionics/WBS.md` §1.2a (USB Wi-Fi module selection — a **fab blocker** — plus the
+bead MPN and the STM32WLE5JC RF values) remain open. The checked-in `gerbers/` set predates the
+rebuild and is **not** fabrication data. The PB2 rails are Samtec TSM-118-04-L-DV-LC male SMT
+strips at 4.80 mm from each long edge (§13a). Radios: Wi-Fi/ZigBee (USB module, selection open),
+mLRS (bare STM32WLE5JC), and the 49 MHz header only; SiK lives on Commo. Where a dated update
+below conflicts with this block, this block governs.
 **Update 2026-09-29 (area recovery + mLRS bare-chip radio + fab-ready layout, S. Griffing
 decisions; implemented by Claude Fable 5.1):** see `avionics/WBS.md` §1.2a "TACCO area recovery,
 mLRS bare-chip radio, non-stack rails, and fab-ready layout" for the full decision record.
@@ -28,8 +38,9 @@ mLRS bare-chip radio, non-stack rails, and fab-ready layout" for the full decisi
 - **DP83825I pin table corrected** against TI SNLS638C Table 4-1 (the previous table was not
   this part's pinout; Pilot shares the defect). Pin 2 (50MHzOut) drives `RMII2_REF_CLK`.
 - **Layout:** owner authorized full auto-placement and autorouting; the §1/§11–13 layout
-  constraints below still apply (outline now 60 × 35 mm, §13b). All 170 parts are placed on the 55 × 35 mm outline with 0 DRC
-  errors before routing (isolation band and GND2 islands follow the transceiver positions;
+  constraints below still apply. The 2026-09-29 build placed all 170 parts on a 55 × 35 mm outline with 0 DRC
+  errors before routing; later changes (2026-10-05/06: LDO replaces the 1.8 V buck, U.FL antenna jacks,
+  Molex microSD header, male TSM-DV-LC rails; 60 × 35 tried and reverted per §13b) leave **163 parts on 55 × 35 mm** (isolation band and GND2 islands follow the transceiver positions;
   small bypasses use the top-face cells between the non-stack-through rail pins). Routing,
   Gerber and remaining gates are tracked in the WBS entry.
 
@@ -44,7 +55,7 @@ replacing the HI-1573 and the PRU Manchester codec.
   `R-1553IRQ`) are **parked off-board**. No collision-free site exists on either side within
   20 mm, so they need manual placement (`avionics/WBS.md` §1.2a.3).
 - **References:** pin table in `../HI6138_FOOTPRINT_VERIFICATION.md`.
-**Status (2026-09-23 update, S. Griffing):** The Rev S1 reconciliation described below is
+**Status (2026-09-23 update, S. Griffing; its LoRa and hand-placement statements are superseded by the 2026-09-26 and 2026-09-29 updates):** The Rev S1 reconciliation described below is
 SUPERSEDED — the legacy schematic/PCB pair (169 sch refs vs 43 PCB footprints, 564 ERC
 violations) was not patchable and has been replaced by a from-scratch schematic-first rebuild
 (`avionics/kicad/TACCO/scripts/gen_tacco_sch.py` / `gen_tacco_pcb.py`), the same method used for Pilot.
@@ -99,8 +110,8 @@ reference-designator remap** before edits — see TODO.md §1.2b and `avionics/A
 
 TACCO is the electromagnetic-environment-hardened communications, logging, and payload cape
 designed for the same harsh nacelle and fuselage EM environment as Pilot.
-The communications payload of this cape (SiK 915 MHz, LoRa 915 MHz, WiFi 2.4/5 GHz,
-49 MHz Part 15 §15.235) is inherently more susceptible to radiated interference than the purely
+The communications payload of this cape (Wi-Fi 5 GHz, ZigBee 2.4 GHz, mLRS, and the
+49 MHz Part 15 §15.235 sub-module header) is inherently more susceptible to radiated interference than the purely
 digital Pilot, so hardening concentrates on conducted immunity for the wired
 buses and supply rails, and on keeping the RF subsystem's susceptibility low through
 better supply filtering and digital-interface isolation from the RF groundplane.
@@ -157,6 +168,9 @@ RF ingress into the UART lines.
 
 ### 6. SiK 915 MHz module supply and signal filtering
 
+> **Superseded 2026-09-21:** SiK moved to Commo. This board carries no SiK module; the
+> section is retained as the filtering design Commo inherited.
+
 The SiK module (RFD900x form-factor UART-connected radio) has its power and control
 lines treated as follows:
 
@@ -174,6 +188,9 @@ lines treated as follows:
 
 ### 7. LoRa (RFM95W) SPI bus filtering
 
+> **Superseded 2026-09-21/29:** no LoRa/RFM95W on this board. The mLRS radio is a bare
+> STM32WLE5JC (`MLRS-MCU`); see the Current status block and `avionics/WBS.md` §1.2a.
+
 The RFM95W module SPI lines are a potential EMI ingress path because the module PCB
 antenna radiates at 915 MHz. A common-mode choke (CM3, Bourns SRF2012-100Y) is inserted
 on the SPI clock + MOSI pair at the module side. The SPI chip-select (SPI1_CS_LORA)
@@ -182,6 +199,9 @@ filtering) to suppress RF common-mode currents — this is a minimal-footprint a
 that avoids adding inductors on timing-sensitive SPI lines.
 
 ### 8. WL1837MOD SDIO bus filtering
+
+> **Superseded 2026-09-29:** SDIO is not on the PB2 headers, so the SDIO beads were deleted.
+> Wi-Fi moves to a USB module on USB1 (module selection open, fab blocker).
 
 The TI WL1837MOD WiFi module uses SDIO at up to 50 MHz. The 2.4/5 GHz transmit power
 (peak 550 mA on +3V3_RF) creates a strong local interference source. To prevent
@@ -450,8 +470,14 @@ antenna cable shielding provide the primary conducted shield path.
 
 Decision record: `avionics/WBS.md`, "PB2 rail geometry correction", R3 ("Do 1+2").
 
+> **Superseded 2026-10-05 (rail gender correction):** the PB2-I carries female receptacles, so the
+> rails are now Samtec **TSM-118-04-L-DV-LC male SMT strips** (`PocketBeagle2_2x18_P{1,2}_TSM-DV-LC`,
+> `samtec_tsm-dv-footprint.pdf` Rev F Fig. 1). The SSM-DV socket text below is the superseded
+> intermediate decision; the rail geometry, -LC clip holes, and retention notes still apply. See
+> `avionics/WBS.md` "PB2 rail geometry correction".
+
 **Geometry.** Rail centre-lines 4.80 mm (0.189 in) inside each long edge, 25.4 mm (1.00 in)
-apart [REF-SENSOR-041 Fig. 3.45]. Sockets: Samtec **SSM-118-L-DV-LC**, bottom face,
+apart [REF-SENSOR-041 Fig. 3.45]. Sockets (superseded; see note above): Samtec **SSM-118-L-DV-LC**, bottom face,
 `Serenity-Custom:PocketBeagle2_2x18_P{1,2}_SSM-DV-LC` built from `samtec_ssm_footprint.pdf`
 Rev D Fig. 4 (pads 1.02 x 2.22 mm, centres +/-2.825 mm, outer pad edge 3.94 mm from the
 centre-line, ~0.86 mm inside the board edge) [REF-SENSOR-042].
@@ -481,42 +507,41 @@ laminate (In1 to B.Cu), not by surface creepage — functional bus isolation, no
 barrier. The ≥ 8 mm creepage target in the layout constraints above applies to same-surface
 spacing and is still to be verified on the routed board.
 
-## §13b — Outline 60 x 35 mm (2026-10-06)
+## §13b — Outline: 60 x 35 mm tried and reverted; isolation band notched (2026-10-06/07)
 
-Owner decision 2026-10-06 ("option 2, 60x35 with 1.5 mm gap"); supersedes the 55 x 35 mm
-hard constraint in §1 for TACCO only (Pilot stays 55 x 35).
+**Outcome: TACCO stays 55 x 35 mm** (§1). On 2026-10-06 the owner approved 60 x 35 mm (the
+extra 5 mm past the PB2-I microSD end, with a 1.5 mm chin-mount gap) because 55 x 35 left
+60–90 logic connections unrouted. Owner rule 2026-10-07: "if the solution isn't based on the
+extra 5 mm of length, return the board to its original size." It wasn't:
 
-**Why.** At 55 x 35 the placed board was about 95 % courtyard-full, and every routing attempt
-left 60–90 connections unrouted on 6 layers and about 71 on 8, so the board was limited by area,
-not layer count. 60 x 35 adds 175 mm² (0.27 in²).
+| Second routing pass (30 passes, freerouting 1.9) | Logic unrouted | Isolated unrouted |
+|---|---|---|
+| 60 x 35, original band | 92 | 13 |
+| 55 x 35, notched band (below) | 93 | 18 |
 
-**Where the extra 5 mm (0.20 in) goes.** On the PB2-I microSD (pin-1/2) end: the board spans
-u = −5..55 in the generator's PB2 frame (`U_LO`, `gen_tacco_pcb.py`). The rails, H1–H4 (still
-on the Pilot stacking pattern) and every fixed station are unchanged. The overhang stays clear
-of the PB2's USB-C / JST-SH end. Bottom-face parts wholly past the PB2-I edge (u < −1.0) are
-not held to the 5.04 mm rail-gap height budget; they are capped at 8 mm by the pouch stack.
-The overhang sits 5.54 mm above the PB2-I microSD slot: the card can still be inserted, but
-it is a bench operation.
+The airframe changes for 60 x 35 (63 mm pouches, 1.5 mm chin gap, 9 mm cable channel, Simon
+slots 63 mm, nose tray 65 mm) were reverted with it; the cargo and middle fit gates pass again
+at the original envelopes.
 
-**Airframe fit (all four TACCO stations, re-proved 2026-10-06).**
+**What did matter (kept).**
+- **Router setup.** `finish_tacco_pcb.py export` without `--band-keepout` now leaves the
+  `ISO_BAND` DRC markers out of the DSN. KiCad's Specctra exporter writes every rule area as
+  a keepout, so the "open band" phase had been routing 0 of 51 isolated connections.
+- **Band notched under the bus connectors** (owner 2026-10-07). The band covered F.Cu and the
+  inner layers down to the board edge over both P2 rail rows, so no logic via could reach the
+  in-band P2 pins; 16 of them stayed unrouted. Under each bus connector the band now stops at
+  v 29.6 mm, just past the connectors' signal-pad row (v 28.75), so the outer rail row
+  (v 32.675) there can take a via; beside and between the connectors it still runs to the
+  edge, where the TVS / CMC / terminators sit (`ISO_VCUT`, `ISO_CUT_HW`, `gen_tacco_pcb.py`).
+- **Repair pass** can no longer place an isolated-domain part outside the band.
 
-| Station | Mount | Change | Gate |
-|---|---|---|---|
-| Nose, CN1 | Faraday tray (with FC1) | tray 60 → 65 mm, access panel 62 → 67 mm (`head_shell24.scad`) | bare-shell section probe: ≥ 4.9 mm (0.19 in) to the skin |
-| Cargo chin, CN2 / CN3 | flat on `chin_node_shelf`, connector edges inboard | pouch 63 mm long at Y −60.3..2.7, cable channel 10 → 9 mm, **static gap 2.0 → 1.5 mm** (owner-accepted), shelf aft lip dropped | `tools/cargo_layout_fit.py` PASS (Rev T5g) |
-| Middle ring, CN4 | Simon saddle, standing, under FC4 | slots 58 → 63 mm, growth to starboard, FC4 port-justified | `tools/middle_layout_fit.py` PASS (Rev T6a) |
+**Still open.** About 90 logic connections remain unrouted at either size, concentrated around
+MLRS-MCU, WIFI-BT-ZB, the TPM's SPI0_B bus and +3V3_RF. Next: hand-route those escapes, then
+autoroute the remainder.
 
-**Open (owner).**
-- Re-export the printable STLs from the updated SCAD/params: `chin_node_shelf.stl`,
-  `simon_node_saddle.stl`, `void_former_cargo_node_bay.stl` and `head_shell24.stl`. Neither
-  `openscad` nor `build_head_shell.py`'s `manifold3d` version was available in the
-  generating session.
-- `tools/check_tacco_envelope_sync.py` (pre-commit hook and CI) re-derives every airframe
-  TACCO envelope from `BW, BH` and fails on drift; it lists the STLs above as PENDING until
-  re-exported (`--strict` turns that into a failure). Tracked as TACCO-60 in
-  `airframe/fuselage-mid/WBS.md`.
-- The nose-tray position in `head_shell24.scad` still uses the legacy axes (known issue), so
-  the nose check is against the bare shell only.
+**Sync guard (kept).** `tools/check_tacco_envelope_sync.py` (pre-commit hook and CI)
+re-derives every airframe TACCO envelope from `BW, BH` and fails on drift, so any future
+outline change has to carry its airframe changes with it.
 
 ## §14 — Field Connectors Summary
 
@@ -529,8 +554,8 @@ All field connectors are shielded JST-GH (or SMA/U.FL for RF). SHIELD pins conne
 | J_485 | SM03B-GHS-TB-1MP | 1=RS485_B_P, 2=RS485_B_N, 3=GND, MP=PGND | RS-485 |
 | J_1553 | SM04B-GHS-TB-1MP | 1=BUS_1553_B_P, 2=BUS_1553_B_N, 3=GND, 4=PGND, MP=PGND | MIL-STD-1553C |
 | J_FAN | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=FAN_PWM_B, MP=PGND | Bay ventilation fan |
-| J_SD | MicroSD (Molex 503182-1852) | SDIO: CLK/CMD/D0-D3/CD/WP | Logging microSD |
-| J_SMA_LORA | SMA (50 Ω) | RF center conductor = LORA_ANT; shell = PGND | LoRa 915 MHz antenna |
+| J_SD | MicroSD (Molex 105162-0001, 1.45 mm header, bottom face) | SDIO: CLK/CMD/D0-D3/CD/WP | Logging microSD |
+| J_SMA_LORA | SMA (50 Ω) | RF center conductor = LORA_ANT; shell = PGND | mLRS 915 MHz antenna (U.FL `J-ANT-MLRS` since 2026-10-05; the table row name is legacy) |
 | J_SMA_WIFI | SMA (50 Ω) | RF center = WIFI_ANT; shell = PGND | WiFi 2.4/5 GHz antenna |
 | J_SIK_ANT | Hirose U.FL | RF center = SIK_ANT; shell = PGND | SiK 915 MHz module pigtail |
 | J_SMA_SIK | SMA (50 Ω) | RF center via FL_SIK; shell = PGND | SiK 915 MHz antenna output |

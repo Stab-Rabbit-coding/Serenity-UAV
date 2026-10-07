@@ -87,10 +87,8 @@
 - [ ] ★ CARGO-03c coupon gates tenon vs second spar (15 MPa)
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
-- [ ] Cargo gondola shell
 - [ ] Clamshell door halves
 - [ ] cargo_sect_shell24.scad — shuttle exterior fairing profiles on…
-- [ ] Avionics dorsal access covers / Faraday tray lids for Inara and…
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate cargo_sect_shell24.stl
 - [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
@@ -162,6 +160,7 @@
 - [ ] SPAR-20-8 (U8) — Re-datum the nozzle drive onto the fixed trunnion…
 - [ ] SPAR-20-9 (U9) — Mass/CG/T-W re-derive (spar 96.2 → 67.5 g/pair, but…
 - [ ] NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening
+- [ ] EDF-DATA-01 — datasheet or measured source for every EDF figure
 - [ ] NAC-64-SERVO-01 — radial 64 mm tandem-EDF nacelle + servo nozzle
 - [ ] SPAR-20-AERO — The re-lofted section is no longer S1223 (root 12.1 →…
 - [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
@@ -210,9 +209,8 @@
 - [ ] Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output
 
 ### 1.2c — PCB Design: Observer (Nose/Cargo-Bay Vision, ToF & Laser)
-→ detail: `avionics/observer/WBS.md` §1.2c
+→ detail: `avionics/kicad/Observer/observer/WBS.md` §1.2c
 
-- [ ] FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error…
 - [ ] Final component placement (user-reserved) + impedance-controlle…
 - [ ] Generate production-ready Gerber files to avionics/kicad/Observer/…
 - [ ] Flag stale laser bore dimensions:
@@ -259,6 +257,10 @@
 - [ ] TACCO area recovery, mLRS bare-chip radio, fab-ready layout…
 - [ ] TACCO Wi-Fi host: USB module on USB1 — part selection open (fab…
 - [ ] Pilot: re-derive PB2 header map and DP83825I table the same way
+- [ ] TACCO routing: freerouting, GND pours, DRC 0, Gerbers (U5/U6)
+- [ ] Pilot routing + Gerbers (120/120 placed, DRC 0)
+- [ ] Flight Engineer PCB: last DRC items, route, Gerbers
+- [ ] Observer PCB resync to the ISOW1412/Section H schematic
 - [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
 - [ ] Generate Commo gerbers
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
@@ -662,6 +664,7 @@
 #### 4.5.1 — Skipper Hardware Design
 → detail: `gcs/WBS.md` §4.5
 
+- [ ] Decide Skipper ground radio loadout vs aircraft radio changes
 - [ ] Create Skipper host computer specification
 - [ ] Skipper field enclosure — print and fit-check
 - [ ] Gimbal STL generation and mesh verification
@@ -714,7 +717,7 @@
 - [ ] Node loss with Skipper active:
 
 #### 4.6.1 — TI AM62Ax Vision Pipeline Bring-Up
-→ detail: `avionics/observer/WBS.md` §4.6.1
+→ detail: `avionics/kicad/Observer/observer/WBS.md` §4.6.1
 
 - [ ] MIPI CSI-2 camera sensor bring-up
 - [ ] VPAC/ISP pipeline configuration
@@ -723,7 +726,7 @@
 - [ ] Bench test:
 
 #### 4.6.2 — TI MSPM0G3507 Control Firmware
-→ detail: `avionics/observer/WBS.md` §4.6.2
+→ detail: `avionics/kicad/Observer/observer/WBS.md` §4.6.2
 
 - [ ] MCAN (CAN-FD) driver bring-up
 - [ ] TFmini-S UART driver
@@ -734,7 +737,7 @@
 - [ ] Signed telemetry:
 
 #### 4.6.3 — Integration Testing
-→ detail: `avionics/observer/WBS.md` §4.6.3
+→ detail: `avionics/kicad/Observer/observer/WBS.md` §4.6.3
 
 - [ ] Bench test:
 - [ ] Ring failure test:

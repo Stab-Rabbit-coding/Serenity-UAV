@@ -1,10 +1,10 @@
 # Pilot — Flight Control & Sensor Cape
 
-**Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CEH
+**Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Callsign:** Pilot
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** T (schematic-first rebuild, superseding Rev Q)
-**Date:** 2026-09-19
+**Date:** 2026-10-06
 **Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers on the corrected 4.80 mm SMT rails (2026-10-06). **Routing not yet complete** (see "Routing status" below).
 
 **Update 2026-10-06 (PB2 rail correction, avionics/WBS.md R2, S. Griffing decision;

@@ -1,11 +1,23 @@
 # Serenity UAV — Graphical Build Guide
 
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)  
+**Last updated:** 2026-10-07
 
 > Step-by-step visual assembly guide for Serenity UAV, organized by build phase (0–10).
 > SVG diagrams, checklists, and mechanical callouts for each major assembly milestone from
 > printing all parts through autonomous flight operations.
+
+## Current Status (2026-10-07)
+
+The 27 numbered cards (`build_guide_00`–`26`), `build_plan.svg`, and `components_overview.svg`
+are hand-drawn pre-Rev-T art. Their last commit (2026-10-04) only stamped the license. Nothing has
+been rebuilt from Rev T geometry, and no phase has been built or tested (every phase below is
+Open). Rev T changes the cards do not yet show: the worm-driven tilt actuator with a pin brake,
+the servo-driven nacelle nozzle (the passive gear drive was retired 2026-09-28), the 64 mm
+nacelle redesign, TACCO at 60 × 35 mm on male TSM-DV-LC rails, MIL-STD-1553C (HI-6138), mLRS
+on a bare STM32WLE5JC, and the standalone Commo node. The rebuild is task 1.5.6 in `WBS.md`.
+Per-card status is under "File Status and Maintenance" below.
 
 ## Guide Organization
 
@@ -16,12 +28,12 @@ integration checkpoints:
 |-------|-------|-------|--------|-----------|
 | **0** | Print All Parts + CF Cuts | Fabrication | Open | STL export, calibration, cutting carbon-fiber components |
 | **1** | Hull Structure + Provisions | Assembly | Open | Keel bonding, ring frames, cable routing, access panels |
-| **2** | Nacelle Assembly | Assembly | Open | EDF installation, nozzle iris, gearing, hall encoder |
-| **3** | Tilt Mechanism | Assembly | Open | Pivot rod, servo installation, hard stops, synchronization |
+| **2** | Nacelle Assembly | Assembly | Open | EDF installation, servo-driven nozzle, hall encoder |
+| **3** | Tilt Mechanism | Assembly | Open | Pivot, worm-drive tilt actuator, pin brake, hard stops, synchronization |
 | **4** | Hull Foam Pour + Close-up | Fabrication | Open | Foam fill, panel lid installation, final hull closure |
 | **5** | Minimum Viable Flyer | Flight Testing | Open | First 4-node avionics, ESC calibration, tethered hover ★ |
 | **6** | Full 8-Node Architecture | Flight Testing | Open | All 8 nodes, Ethernet ring, ToF obstacle avoidance |
-| **7** | Cargo System | Flight Testing | Open | Gondola installation, winch, door servo, delivery mission |
+| **7** | Cargo System | Flight Testing | Open | Cargo shell, winch, door servo, delivery mission |
 | **8** | Finishing | Documentation | Open | Decals, airworthiness inspection, documentation archive |
 | **9** | Performance Tuning | Flight Testing | Open | Thrust stand, PID governor, endurance testing |
 | **10** | Advanced Autonomy + LR Ops | Flight Testing | Open | BVLOS comms, 10-waypoint missions, node failover validation |
@@ -34,34 +46,37 @@ Phases 11+ (aft EDF, cargo-bay battery module) are deferred. See [`deferred/`](.
 
 ### Overview Diagrams (Component-Level)
 
-Located in root of this directory:
+Located in the root of this directory:
 
 | SVG File | Content | Purpose |
 |----------|---------|---------|
-| `overview_port_view.svg` | Side view (port nacelle visible) | Dimensional reference, external profile |
-| `overview_stbd_view.svg` | Side view (stbd nacelle visible) | Dimensional reference |
-| `overview_isometric.svg` | 3D isometric view | Proportional understanding, nacelle tilt |
-| `overview_exploded.svg` | Component breakdown (major assemblies) | Assembly sequence overview |
-| `components_overview.svg` | All procured + printed + machined parts | BOM cross-reference |
+| `overview_front.svg`, `overview_side.svg`, `overview_top.svg`, `overview_bottom.svg` | Silhouettes from the 24 in hull | Dimensional reference, external profile |
+| `hull_front.svg`, `hull_side.svg`, `hull_top.svg`, `hull_bottom.svg` | Hull outlines derived by `gen_hull_outlines.py` | Outline source for the overview views |
+| `overview_svgs/serenity_*.svg` | Ten rendered views (port, starboard, bow, stern, top, bottom, four isometrics) | Proportional understanding |
+| `pngs/01_port.png` … `17_closeup_nacelle.png` | Rendered stills used by the root README and cards | Visual reference |
+| `components_overview.svg`, `build_plan.svg` | Parts map and master construction sequence | BOM cross-reference; build sequence |
+| `decal_sheet.svg` | Decal artwork | Phase 8 |
 
-### Phase-Specific Build Guide Cards (`build_guide_XX_*.svg`)
+### Phase-Specific Build Guide Cards (`build_guide_NN_*.svg`)
 
-Numbered sequence of detailed assembly steps:
+| Card | Topic |
+|------|-------|
+| `00`–`04` | Cover, print prep, hull print, nacelle print, CF cuts |
+| `05`–`08` | CF skeleton, nacelle pivot, EDF install, nozzle gear |
+| `09`–`13` | Avionics, power wiring, inter-board wiring, security hardware, nav lights |
+| `14`–`18` | Antennas, software, calibration, ground test, first flight |
+| `19`–`21` | Decal placement, node placement, node install |
+| `22`–`24` | Void formers, foam fill, access panels |
+| `25`–`26` | Obstacle sensors, cargo bay winch |
 
-| Range | Type | Coverage |
-|-------|------|----------|
-| `00–04` | Fabrication prep | Phase 0: printing, calibration, carbon-fiber cuts |
-| `05–08` | Hull & structure | Phase 1: keel, ring frames, cable routing, access panels |
-| `09–15` | Subsystem integration | Phases 2–4: nacelles, tilt, nozzle, landing gear |
-| `16–18` | Avionics & wiring | Phase 5: ESC power, node placement, inter-board wiring |
-| `19–25` | Comms & sensing | Phase 6–7: antenna placement, ToF sensors, cargo system |
-| `26+` | Flight operations | Phases 8–10: calibration, pre-flight, autonomous missions |
+The mapping of cards to build phases is in `WBS.md`; the card numbering is the drawing
+sequence, not necessarily the build sequence.
 
-### Referenced Standard Files
+### Referenced Files
 
-- `flight_phases/build_guide_flight_phases.svg` — Overview of Phases 5–10 flight testing sequence
-- `LEGEND.svg` — Color coding, symbol reference, callout format
-- `REVN_BUILD_GUIDE_24IN.md` — Detailed text supplement (dimensions, fastener specs, epoxy cure times)
+- `flight-phases/WBS.md`, `flight-phases/TODO.md` — Phases 5–10 flight-testing record
+- `REVN_BUILD_GUIDE_24IN.md` — detailed text supplement (dimensions, fastener specs, cure times)
+- `BUILD_GUIDE_TEMPLATE.md` — authoritative template for every phase guide
 
 ## File Naming Convention
 
@@ -107,7 +122,7 @@ Where applicable, each diagram includes:
 
 ### Source Format
 
-The original SVG files are hand-drawn in Inkscape with:
+The numbered cards are hand-drawn in Inkscape with:
 
 - **No external image links** (all geometry is vector)
 - **Embedded fonts** (system fonts may not render; uses SVG text elements)
@@ -127,10 +142,10 @@ Inkscape template overlay (callouts, BOM links)
 Final diagram (build_guide_XX_*.svg)
 ```
 
-**Status:** Partial. The outline-derivation pipeline (`airframe/blender-scripts/gen_hull_outlines.py`)
-currently covers 4 overview SVGs; the 26+ build-guide cards remain hand-drawn.
+**Status:** Partial. The outline-derivation pipeline (`graphical-build-guide/gen_hull_outlines.py`)
+currently covers the four `hull_*.svg` outlines; the numbered build-guide cards remain hand-drawn.
 
-**Task 1.5.6 (Documentation)** plans to rebuild all 38 SVGs from Blender/FreeCAD-derived geometry.
+**Task 1.5.6 (Documentation)** plans to rebuild all 38 SVGs (a count that predates the current file set) from Blender/FreeCAD-derived geometry.
 
 ### Updating the Diagrams
 
@@ -160,60 +175,27 @@ currently covers 4 overview SVGs; the 26+ build-guide cards remain hand-drawn.
 | `graphical-build-guide/WBS.md` | Detailed work on diagram generation, rebuild pipeline, archive management |
 | `graphical-build-guide/TODO.md` | Open diagram work (staleness of artwork, missing callouts, etc.) |
 
-## File Status & Maintenance
+## File Status and Maintenance
 
-### Phase 0 (Fabrication)
+Status is judged against the Rev T design and the grep of each card's text on 2026-10-07. A card
+marked "Rev T review" has not been compared with Rev T and is unverified, not known-good.
 
-- ✅ `build_guide_00_cover.svg` — Title page (updated 2026-07-15)
-- ✅ `build_guide_01_print_prep.svg` — Calibration, filament, settings (current)
-- ✅ `build_guide_02_print_hull.svg` — Hull printing sequence (current)
-- ✅ `build_guide_03_print_nacelle.svg` — Nacelle printing (current)
-- ✅ `build_guide_04_carbon_cuts.svg` — CF rod / skid channels (current)
+| Status | Cards | Defect or action |
+|--------|-------|------------------|
+| Stale — superseded hardware | `build_guide_09_avionics`, `11_inter_board`, `12_security_hw`, `20_node_placement`, `21_node_install`, `build_plan`, `components_overview` | Show archived capes or 1553B and, in the last two, LoRa/RFM95 and iris/gear nozzle; regenerate (task 1.5.6) |
+| Stale — retired mechanism | `build_guide_08_nozzle_gear` | The passive gear nozzle drive was retired 2026-09-28; redraw for the servo drive |
+| Stale — LoRa | `build_guide_14_antennas` | Names LoRa/RFM95W; Commo no longer carries LoRa and TACCO carries mLRS |
+| Stale — 1553B wording | `build_guide_15_software` | Change to 1553C when the hardware matches (`avionics/WBS.md` §1.2a.3) |
+| Placeholder | `build_guide_19_decal_placement`, `decal_sheet` | FAA registration number is a placeholder; replace before flight |
+| Rev T review | `00`–`07`, `10`, `13`, `16`–`18`, `22`–`26` | Verify against Rev T (tilt actuator, 64 mm nacelle, TACCO size, winch); re-render if affected |
 
-### Phase 1–4 (Assembly)
-
-- ✅ `build_guide_05_keel_bond.svg` — Keel installation (current)
-- ✅ `build_guide_06_nacelle_pivot.svg` — Pivot mechanism (current)
-- ✅ `build_guide_07_tilt_servo.svg` — Servo linkage (current)
-- ✅ `build_guide_08_nozzle_gear.svg` — Nozzle iris gearing (current)
-- ⚠️ `build_guide_09_avionics.svg` — **STALE** (depicts old Pilot/B-1, not Rev S Wash/Zoë)
-
-### Phase 5–7 (Electrical & Flight)
-
-- ⚠️ `build_guide_10_power_wiring.svg` — **NEEDS REVIEW** (PDC harness updated; diagram may be stale)
-- ⚠️ `build_guide_11_inter_board.svg` — **STALE** (old cape depictions)
-- ⚠️ `build_guide_12_security_hw.svg` — **STALE** (TPM placement, old capes)
-- ⚠️ `build_guide_13_nav_lights.svg` — **NEEDS REVIEW** (WS2812C light placement)
-- ✅ `build_guide_14_antennas.svg` — 49 MHz antenna placement (current)
-- ✅ `build_guide_15_ground_test.svg` — Bench testing (current)
-- ✅ `build_guide_16_calibration.svg` — ESC & servo calibration (current)
-- ✅ `build_guide_17_ground_test.svg` — Pre-flight checklist (current)
-- ✅ `build_guide_18_first_flight.svg` — First flight profile (current)
-
-### Phase 8+ (Finishing & Advanced)
-
-- ⚠️ `build_guide_19_decals.svg` — **PLACEHOLDER** (FAA registration number pending)
-- ⚠️ `build_guide_20_node_placement.svg` — **STALE** (old cape depictions)
-- ⚠️ `build_guide_21_node_install.svg` — **STALE** (old cape depictions)
-- 🔲 `build_guide_22_cargo_system.svg` — **PENDING** (Phase 7 cargo assembly)
-- 🔲 `build_guide_23_obstacle_avoidance.svg` — **PENDING** (Phase 6 ToF sensors)
-- 🔲 `build_guide_24_autonomous_mission.svg` — **PENDING** (Phase 9 mission planning)
-- 🔲 `build_guide_25_obstacle_sensors.svg` — **PENDING** (ToF array placement)
-
-### Status Summary
-
-| Status | Count | Action |
-|--------|-------|--------|
-| ✅ Current | 12 | No action needed |
-| ⚠️ Stale (Cape-A/B-1 depictions) | 7 | Regenerate from Rev S Wash/Zoë schematics (task 1.5.6) |
-| ⚠️ Needs review | 2 | Verify against current design, re-render if needed |
-| 🔲 Pending | 4 | Create new diagrams as phases progress |
-
-**Overall:** ~30% of diagram set needs updating (7–9 out of 26 active cards).
+**Overall:** 9 of the 27 numbered cards, plus `build_plan.svg` and `components_overview.svg`, need
+correction or a rebuild before any phase begins. The hull outline pipeline (`gen_hull_outlines.py`, in this
+directory) produces the four `hull_*.svg` outlines; all other cards are hand-drawn.
 
 ## License
 
-All SVG files and derivative graphics are **CC BY 4.0**.
+All SVG files and derivative graphics are **CC BY-SA 4.0** (images are documents under the by-output rule).
 
 See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md)
 for details.
