@@ -110,6 +110,16 @@ def build(side):
 
     footprint = mci.to_man(mci.box(x_lo, x_hi, y0, y1, z0, z1))
     plate = (footprint ^ env_local) - env_local.translate([dx, 0.0, 0.0])
+    # BHD-01 (2026-10-07): bore every wing-root penetration through the plate.
+    # Rev T1c generated a SOLID plate; it sits on the inner wall face right over
+    # the spar socket, the tilt-shaft bushing seat and the nav/encoder ports, so
+    # the spar could not be inserted (spar x flange 1,566 mm^3 per side,
+    # tools/cargo_bulkhead_context.py).  The cuts are the merge's OWN negatives
+    # -- the same solids that bore the hull -- so the two parts cannot drift.
+    for label, cut in mci.wing_keepout_negatives():
+        if label.startswith("mortise"):
+            continue                     # tenon/mortise is below the plate's job
+        plate = plate - mci.to_man(cut)
     return keep_plate(mci.from_man(plate), side)
 
 

@@ -942,7 +942,8 @@ def assemble():
     # cargo_layout_t5_params.scad).  Worm and wheel are one part each: the
     # starboard copies are TRANSLATED by 2*(X_CL - WORM_X) = -89.2 mm (Rev
     # T5e, WORM_X -125.25), never mirrored (the worm has a hand; see
-    # tilt_actuator_bracket.scad header).  Rev T5e adds the chin node shelf
+    # tilt_actuator_bracket.scad header).  The brake guide is the exception
+    # (BHD-05): it is mirrored, from its own stbd STL.  Rev T5e adds the chin node shelf
     # (chin_node_shelf.scad); the cargo Observer tray is an ENVELOPE only until
     # cargo_vera_faraday.scad is re-authored in hull frame (OBS-CARGO).
     # -------------------------------------------------------------------
@@ -952,11 +953,17 @@ def assemble():
     add_mesh(doc, _stl("fuselage/cargo/tilt_actuator_bracket_stbd.stl"), "Tilt_Bracket_Stbd")
     for side, dx in (("Port", 0.0), ("Stbd", T5_STBD_DX)):
         for part, label in (("tilt_actuator_worm", "Tilt_Worm"),
-                            ("tilt_actuator_wheel", "Tilt_Wheel"),
-                            ("tilt_brake_guide", "Tilt_Brake_Guide")):
+                            ("tilt_actuator_wheel", "Tilt_Wheel")):
             obj = add_mesh(doc, _stl(f"fuselage/cargo/{part}.stl"), f"{label}_{side}")
             if obj is not None and dx:
                 place_mesh(obj, (dx, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0))
+        # BHD-05 (2026-10-07): the brake guide is NOT symmetric about the worm
+        # axis, so starboard is a MIRRORED print (tilt_brake.scad SIDE=-1),
+        # already in hull frame -- never the translated port part, which put
+        # the guide through the bracket web into the controller board.
+        add_mesh(doc, _stl("fuselage/cargo/tilt_brake_guide"
+                           + ("_stbd" if dx else "") + ".stl"),
+                 f"Tilt_Brake_Guide_{side}")
     add_mesh(doc, _stl("fuselage/cargo/battery_cradle.stl"), "Battery_Cradle")
     add_mesh(doc, _stl("fuselage/cargo/chin_node_shelf.stl"), "Chin_Node_Shelf")
 

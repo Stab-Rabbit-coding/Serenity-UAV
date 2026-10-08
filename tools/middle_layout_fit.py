@@ -140,12 +140,7 @@ SIMON_STACK_H = 2 * NODE_H + SIMON_STACK_GAP  # 77
 SIMON_Z0 = SIMON_ZC - SIMON_STACK_H / 2  # 42.0
 CN4_Z0, CN4_Z1 = SIMON_Z0, SIMON_Z0 + NODE_H  # 42..79
 FC4_Z0, FC4_Z1 = CN4_Z1 + SIMON_STACK_GAP, CN4_Z1 + SIMON_STACK_GAP + NODE_H  # 82..119
-SIMON_X1 = SIMON_XC + NODE_L / 2  # -140.85: port (cable-side) face, both pouches
-# Rev T6a (2026-10-06): CN4 is a TACCO cape, now 60 x 35 mm (cargo.TACCO_L = 63 pouch-
-# inclusive).  Its connector edge stays on the port cable zone, so it grows to stbd;
-# the saddle slots are sized to it and FC4 (Pilot, 58) rides port-justified in its slot.
-SIMON_X0 = SIMON_X1 - cargo.TACCO_L  # -203.85 (was -198.85)
-FC4_X0 = SIMON_X1 - NODE_L  # -198.85
+SIMON_X0, SIMON_X1 = SIMON_XC - NODE_L / 2, SIMON_XC + NODE_L / 2  # -198.85..-140.85
 SIMON_CABLE_X1 = SIMON_X1 + NODE_CABLE  # -130.85 (port cable zone)
 # Saddle: floor-standing slotted block, 4 x M3 heat-set floor bosses
 SADDLE_T = 2.4
@@ -282,7 +277,7 @@ def layout_t6():
         section="middle",
     )
     L["FC4 (Pilot) pouch"] = dict(
-        solid=box(FC4_X0, SIMON_X1, SIMON_Y0, SIMON_Y1, FC4_Z0, FC4_Z1), gap=STATIC_GAP,
+        solid=box(SIMON_X0, SIMON_X1, SIMON_Y0, SIMON_Y1, FC4_Z0, FC4_Z1), gap=STATIC_GAP,
         section="middle",
     )
     L["Simon cable zone"] = dict(

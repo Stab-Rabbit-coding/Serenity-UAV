@@ -81,9 +81,10 @@ an SOIC-20W is 12 x 13.4 mm (160 mm²); a Würth 749010012A is 12.9 x 11.3 mm.
    band between the two stacking rails (THT rails at the old, wrong 2.54 mm rows) was v 5.7–29.3 mm ≈ 1300 mm² per side,
    not 55 x 35. Anything above ~70 % per side is not routable on two signal
    layers; treat ~85 % as the ceiling even on six. TACCO hit that ceiling: at
-   ~95 % it stayed unroutable on 6 and 8 layers. It grew to 60 x 35 mm
-   (2026-10-06), and that size was proved against every airframe station that
-   carries it first. See
+   ~95 % it stayed unroutable on 6 and 8 layers. A 60 x 35 mm trial (2026-10-06,
+   reverted 2026-10-07) routed no better: the limit was the isolation band over the P2
+   rail, not area. The trial size was proved against every airframe station
+   that carries TACCO before the board changed. See
    `docs/solutions/design-patterns/decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md`.
 
 4. **THT parts cost both sides.** A THT header or connector blocks the
