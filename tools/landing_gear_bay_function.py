@@ -17,9 +17,10 @@ build-every-joint-in-context-through-its-full-motion.md, rules 1-4):
    2026-10-10 with the printed part proven unchanged), once per bay station
    because the fore and aft back-face datums differ (BAY_STANDOFF).
 2. It is posed at each of the four CORNERS exactly as hull_legs() poses it --
-   translate(hip) * rotZ(azimuth).  Note this is a ROTATION for the
-   starboard corners, not a mirror, so a feature's clash side in leg-local Y
-   flips port vs starboard (option C, shared vs handed bays).
+   translate(hip) * rotZ(azimuth) * mirrorY(hand).  Since 2026-10-10 the
+   starboard bays are the port bays MIRRORED (owner decision, BHD-02); before
+   that they were the same part ROTATED, which flips a one-sided feature to
+   the wrong side.
 3. The moving leg is swept 0..SWEEP_DEG about the hip pin (leg-local Y) and
    unioned, so the thigh is checked through its whole stroke plus margin
    (FLEX_DEG 22 + 4 = 26 deg, the margin tools/landing_gear_cowl_clearance.py
@@ -65,7 +66,7 @@ REPO = os.path.abspath(os.path.join(HERE, ".."))
 SCAD = os.path.join(REPO, "airframe", "openscad", "fuselage", "canonical_leg_r6_3_0in.scad")
 CACHE = os.path.join(os.path.expanduser("~"), ".cache", "serenity", "lg_bay_function")
 
-# Mirrors canonical_leg_r6_3_0in.scad CORNERS -- [hip x, y, z, azimuth deg].
+# Mirrors canonical_leg_r6_3_0in.scad CORNERS -- [hip x, y, z, azimuth deg, hand].
 # Read back from the SCAD at run time (parse_corners) so the two cannot drift;
 # the literal here is only the fallback documentation.
 CORNER_NAMES = ("fore-port", "fore-stbd", "aft-port", "aft-stbd")
@@ -92,8 +93,17 @@ FEATURES = {
     # M3 clearance bore grown to a O8.4 keep-out: washer face / nut / driver.
     "M3 bolt keep-out": ("bay_bolts(BAY_M3_D + 2 * 2.5);", True),
     "bay (printed part)": ("bay();", False),
+    # pieces the conforming-bay generator (tools/generate_lg_bays.py) builds from
+    "liner": ("bay_cowl(flange = false);", False),
+    "flange outline": ("bay_flange_outline(-40, 40);", False),
+    "liner outline": ("bay_liner_outline(-40, 40);", False),
+    "body": ("bay_body();", False),
+    "cuts": ("bay_cuts();", False),
     "leg (thigh+shin+foot)": ("leg_moving(0);", True),
 }
+
+# Generator inputs, not features to census on their own.
+BUILD_ONLY = ("liner", "body", "cuts", "flange outline", "liner outline")
 
 # Context solids the gear is EXPECTED to touch, with why (unordered substrings).
 EXPECTED = (
@@ -111,14 +121,14 @@ def parse_corners(path: str) -> dict[str, list[float]]:
     """Read CORNERS out of the SCAD so placement cannot drift from hull_legs()."""
     txt = open(path, encoding="utf-8").read()
     blk = txt[txt.index("CORNERS = ["):]
-    blk = blk[:blk.index("];")]
+    blk = blk[:blk.index("\n];")]          # the closing line, not a "];" in a comment
     rows = []
     for line in blk.splitlines()[1:]:
         line = line.split("//")[0].strip()
         if line.startswith("["):
             rows.append([float(v) for v in line.strip("[],").split(",")])
-    if len(rows) != 4:
-        raise RuntimeError(f"expected 4 CORNERS rows, parsed {len(rows)}")
+    if len(rows) != 4 or any(len(r) not in (4, 5) for r in rows):
+        raise RuntimeError(f"expected 4 CORNERS rows of 4-5 values, parsed {rows}")
     return dict(zip(CORNER_NAMES, rows, strict=True))
 
 
@@ -152,10 +162,17 @@ def render(scad: str, station: str, name: str, expr: str,
 
 
 def corner_tf(c: list[float]) -> np.ndarray:
-    """Leg-local -> hull: translate(hip) * rotZ(az), as hull_legs()."""
+    """Leg-local -> hull: translate(hip) * rotZ(az) * mirrorY(hand), as hull_legs().
+
+    hand (5th column, owner 2026-10-10) is +1 for a port part and -1 for a
+    starboard part, which is the port part MIRRORED in leg-local y.  A 4-column
+    row (older SCAD) is treated as hand +1, i.e. the old rotated placement.
+    The matrix then has determinant -1; trimesh re-winds faces itself.
+    """
     t = trimesh.transformations.translation_matrix(c[:3])
     r = trimesh.transformations.rotation_matrix(np.radians(c[3]), [0, 0, 1])
-    return t @ r
+    hand = c[4] if len(c) > 4 else 1.0
+    return t @ r @ np.diag([1.0, 1.0 if hand > 0 else -1.0, 1.0, 1.0])
 
 
 def posed(path: str, tf: np.ndarray) -> Manifold:
@@ -216,6 +233,8 @@ def census(scad: str, P: dict, export: str | None = None,
         own = (leg ^ bay).volume()
         func.append(dict(corner=cn, bay_bodies=bodies, leg_sweep_vs_own_bay_mm3=round(own, 1)))
         for fn in FEATURES:
+            if fn in BUILD_ONLY:
+                continue
             m = leg if fn.startswith("leg") else posed(paths[(st, fn)], tf)
             for tn, tm in T.items():
                 if SIDE[cn] not in tn and not tn.startswith(("shell", "collar")):

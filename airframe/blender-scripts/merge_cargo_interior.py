@@ -842,6 +842,8 @@ LG_PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
 
 # Corner stations, RECESSED 15 mm along each corner's own swing axis (LG-10.2).
 # (label, hip_x, hip_y, hip_z, swing_azimuth_deg, station)
+# FORE station move PENDING (BHD-02, docs/BHD02_OPTION_STUDY.md SS10).  MUST match canonical_leg_r6_3_0in.scad CORNERS (gated by
+# tools/landing_gear_bay_function.py corner_sync()).
 LG_CORNERS = [
     ("fore-port", -103.87, -1.28, 38.0, -22.4, "fore"),
     ("fore-stbd", -235.93, -1.28, 38.0, -157.6, "fore"),
@@ -1369,7 +1371,15 @@ def _plate_frame(hx, hy, hz, az_deg, station):
                    [np.sin(t), np.cos(t), 0.0],
                    [0.0, 0.0, 1.0]])
     hip = np.array([hx, hy, hz])
-    return rz @ p0_l + hip, rz @ ex_l, rz @ ey_l, rz @ ez_l
+    # Owner 2026-10-10 (BHD-02): the starboard bays are the port bays MIRRORED,
+    # not rotated.  A starboard corner is recognised by its azimuth (swing
+    # pointing to -X, cos az < 0); its plate-frame e_y is flipped so a
+    # one-sided feature (a relocated bolt, a trim) lands on the same physical
+    # side -- forward -- at both corners.  Everything symmetric in u is
+    # unaffected.  The frame is then left-handed; nothing here takes a cross
+    # product of it.
+    hand = -1.0 if np.cos(t) < 0.0 else 1.0
+    return rz @ p0_l + hip, rz @ ex_l, hand * (rz @ ey_l), rz @ ez_l
 
 
 def seat_offset(shell_tm, org, ex, ey, ez):
@@ -1444,6 +1454,62 @@ def _plate_trap(org, ex, ey, ez, w_bot, w_top, zb0, zb1, x0, x1):
     return trimesh.convex.convex_hull(trimesh.PointCloud(np.array(pts)))
 
 
+# --- BHD-02 (owner 2026-10-10): CONFORMING bay seat -------------------------
+#
+# Moving the fore station forward put the bays on a more curved flank: the
+# skin varies 17.1 mm across the fore footprint (was 10.8), more than the
+# 12 mm flat rebate can shave.  The owner chose a back face that FOLLOWS the
+# curve.  Every bay-seat solid is therefore a SKIN-FOLLOWING LAYER: the
+# material between depths d0 and d1 below the outer skin, measured along the
+# plate normal e_x, inside the bay's trapezoidal footprint.  The same function
+# builds the hull rebate (0..T), the hull collar (T..T+LG_SEAT_D) and -- in
+# tools/generate_lg_bays.py -- the printed flange (0..T) and liner
+# (0..T+COWL_H), so the hull and the part cannot disagree.  Depth along e_x,
+# not the local skin normal: the bolts run along e_x too, and on the 21-24 deg
+# yawed flank the normal thickness is T cos(yaw) ~ 4.6 mm for T = 5.
+LG_CONFORM = True
+LG_LAYER_PAD = 12.0        # mm, crop margin beyond the footprint (keeps the
+                           # crop box's own faces out of the final layer)
+LG_LAYER_CROP = 26.0       # mm, +/- plate-frame x kept around the plate origin.
+                           # 45 caught a SECOND skin surface (the rising chin
+                           # belly) inside the fore footprint and added a loose
+                           # 134 mm^3 chip; the liner reaches only ~22 mm deep.
+
+# Per-corner M3 positions in the plate frame (u along e_y, v along e_z),
+# written by tools/generate_lg_bays.py when a corner relocates a bolt (the
+# fore bays clear the TACCO chin pouch).  Missing file -> nominal pattern.
+try:
+    from lg_bay_corner_params import BOLTS as LG_CORNER_BOLTS   # noqa: E402
+except ImportError:
+    LG_CORNER_BOLTS = {}
+
+
+def lg_nominal_bolts():
+    """The 4 nominal M3 centres (u, v), as canonical_leg_r6_3_0in.scad bay_bolts()."""
+    return [(s * BAY_BOLT_YB[i], BAY_BOLT_ZB[i]) for i in (0, 1) for s in (-1.0, 1.0)]
+
+
+def lg_skin_layer(env_man, org, ex, ey, ez, w_bot, w_top, zb0, zb1, d0, d1):
+    """Manifold: material d0..d1 mm below the skin (along -e_x) in a footprint."""
+    pad, crop = LG_LAYER_PAD, LG_LAYER_CROP
+    big = to_man(_plate_trap(org, ex, ey, ez, w_bot + 2 * pad, w_top + 2 * pad,
+                             zb0 - pad, zb1 + pad, -crop - abs(d1) - 5.0, crop + 5.0))
+    env_l = big ^ env_man
+    near = env_l.translate(list(-d0 * ex))
+    far = env_l.translate(list(-d1 * ex))
+    foot = to_man(_plate_trap(org, ex, ey, ez, w_bot, w_top, zb0, zb1, -crop, crop))
+    return (near - far) ^ foot
+
+
+def lg_bay_frame(label):
+    """(org, ex, ey, ez) of a corner's plate frame, origin at the measured seat
+    median -- the datum every conforming solid of that corner hangs from."""
+    for lab, hx, hy, hz, az, station in LG_CORNERS:
+        if lab == label:
+            return _plate_frame(hx, hy, hz, az, station)
+    raise KeyError(label)
+
+
 def lg_bay_features(shell_tm, envelope_tm=None):
     """Return (positives, negatives, note) for the four landing-gear bays.
 
@@ -1511,12 +1577,18 @@ def lg_bay_features(shell_tm, envelope_tm=None):
         # Seat collar: the bolts' bearing material, inboard of the flange.
         # LG-10.4: trimmed clear of the spar bore and the wing-root mortises,
         # so the collar can never block the spar rod or the root tenon.
-        collar, cut_v = _subtract_all(
-            _plate_trap(org, ex, ey, ez,
-                        BAY_PLATE_WB, BAY_PLATE_W,
-                        BAY_PLATE_ZB0, zb1,
-                        -LG_SEAT_D, 0.0),
-            keep_neg)
+        # BHD-02 conforming seat: a skin-following layer T..T+LG_SEAT_D deep.
+        env_man = to_man(envelope_tm) if (LG_CONFORM and envelope_tm is not None) else None
+        if env_man is not None:
+            collar_raw = from_man(lg_skin_layer(
+                env_man, org, ex, ey, ez, BAY_PLATE_WB, BAY_PLATE_W,
+                BAY_PLATE_ZB0, zb1, BAY_PLATE_T, BAY_PLATE_T + LG_SEAT_D))
+        else:
+            collar_raw = _plate_trap(org, ex, ey, ez,
+                                     BAY_PLATE_WB, BAY_PLATE_W,
+                                     BAY_PLATE_ZB0, zb1,
+                                     -LG_SEAT_D, 0.0)
+        collar, cut_v = _subtract_all(collar_raw, keep_neg)
         pos.append(collar)
         if cut_v > 0.0:
             report.append(f"{label}: collar relieved {cut_v:.1f} mm^3 "
@@ -1536,25 +1608,34 @@ def lg_bay_features(shell_tm, envelope_tm=None):
         # Flange rebate: BAY_PLATE_T deep, so the frame finishes flush.
         # LG-10.4: likewise stops at wing material.  Where it does, the skin
         # is left proud and the PRINTED frame carries the relief instead.
-        rebate, reb_v = _subtract_all(
-            _plate_trap(org, ex, ey, ez,
-                        BAY_PLATE_WB + 2 * LG_FIT_CLR,
-                        BAY_PLATE_W + 2 * LG_FIT_CLR,
-                        BAY_PLATE_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR,
-                        0.0, 12.0),
-            keep_pos)
+        # BHD-02 conforming seat: the rebate is the skin layer 0..T (from 1 mm
+        # proud, so no skin film survives), widened by the fit clearance; the
+        # printed flange is the same layer without the clearance.
+        if env_man is not None:
+            rebate_raw = from_man(lg_skin_layer(
+                env_man, org, ex, ey, ez,
+                BAY_PLATE_WB + 2 * LG_FIT_CLR, BAY_PLATE_W + 2 * LG_FIT_CLR,
+                BAY_PLATE_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR, -1.0, BAY_PLATE_T))
+        else:
+            rebate_raw = _plate_trap(org, ex, ey, ez,
+                                     BAY_PLATE_WB + 2 * LG_FIT_CLR,
+                                     BAY_PLATE_W + 2 * LG_FIT_CLR,
+                                     BAY_PLATE_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR,
+                                     0.0, 12.0)
+        rebate, reb_v = _subtract_all(rebate_raw, keep_pos)
         neg.append(rebate)
         if aper_v + reb_v > 0.0:
             report.append(f"{label}: {aper_v + reb_v:.1f} mm^3 of wing "
                           f"material protected from the bay cuts")
 
-        # 4x M3, on the flange centreline, following the trapezoid.
-        for i in (0, 1):
-            for s in (-1.0, 1.0):
-                pt = (org + ey * (s * BAY_BOLT_YB[i])
-                      + ez * BAY_BOLT_ZB[i])
-                neg.append(axis_cylinder(pt, ex, -LG_SEAT_D - 8.0, 12.0,
-                                         LG_M3_D / 2.0))
+        # 4x M3, on the flange centreline, following the trapezoid -- or the
+        # corner's relocated pattern from tools/generate_lg_bays.py (BHD-02).
+        # Conforming: bored from 20 mm proud to 30 mm deep, which spans the
+        # whole skin layer + collar across the footprint's 17 mm relief.
+        t0, t1 = ((-30.0, 20.0) if env_man is not None else (-LG_SEAT_D - 8.0, 12.0))
+        for u, v in LG_CORNER_BOLTS.get(label, lg_nominal_bolts()):
+            pt = org + ey * u + ez * v
+            neg.append(axis_cylinder(pt, ex, t0, t1, LG_M3_D / 2.0))
 
     note = (f"{len(pos)} bay seat collars + {len(neg)} cuts "
             f"(aperture, flange rebate, 16 M3 bores)")

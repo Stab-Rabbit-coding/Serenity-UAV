@@ -329,6 +329,11 @@ BAY_PLATE_T  = 5.0;         // frame thickness -- MUST be assigned before
 // The shallower corner (fore-port, 1.14 mm) takes a feeler shim at assembly;
 // aft is 0.02 mm, i.e. identical.  The frame's OUTER face lands on the seat
 // and sits BAY_PLATE_T out from the datum, so datum = standoff - thickness.
+// 2026-10-10 (BHD-02): at a moved fore station this must be re-measured (at
+// hip Y -38 it would be 1.61: x0 -10.99, fore-stbd the deeper).  Since the
+// owner's conforming-seat decision the printed FLANGE and LINER follow the
+// skin (tools/generate_lg_bays.py) and this datum only places the hip-relative
+// body (ears, gussets, carrier) -- it is kept so the seat-fit gate still holds.
 BAY_STANDOFF = (BAY_STATION == "fore") ? 4.91 : 1.85;
 BAY_BACK_X   = BAY_STANDOFF - BAY_PLATE_T;
 BAY_CANT     = -11.5;       // deg; NEGATIVE = leans outboard at the top, which
@@ -801,7 +806,7 @@ module trap_prism(w_bot, w_top, z0, z1, x0, x1) {
     }
 }
 
-module bay_cowl() {
+module bay_cowl(flange = true) {
     z0 = BAY_APER_ZB0 - BAY_PLATE_ZB0;          // aperture, plate-local z
     z1 = z0 + BAY_APER_L;
     iw_bot = COWL_W_BOT - 2 * COWL_T;
@@ -817,9 +822,13 @@ module bay_cowl() {
             translate([0, -BAY_PLATE_W / 2, BAY_PLATE_ZB0])
                 difference() {
                     union() {
-                        // bolt flange slab, full plate outline
-                        trap_prism(BAY_PLATE_WB, BAY_PLATE_W,
-                                   0, BAY_PLATE_L, 0, BAY_PLATE_T);
+                        // bolt flange slab, full plate outline (omitted for
+                        // the CONFORMING bay: tools/generate_lg_bays.py
+                        // builds the flange as a skin-following layer and
+                        // takes only the liner from here -- BHD-02, 2026-10-10)
+                        if (flange)
+                            trap_prism(BAY_PLATE_WB, BAY_PLATE_W,
+                                       0, BAY_PLATE_L, 0, BAY_PLATE_T);
                         // liner block: aperture outline, running INBOARD
                         // through the skin and collar, up into the flange
                         trap_prism(COWL_W_BOT, COWL_W_TOP, z0, z1,
@@ -965,52 +974,102 @@ module bay_bolts(d) {
                         cylinder(h = BAY_PLATE_T + 8.2, d = d);
 }
 
+// Every positive of the bay except the cowl (flange + liner): clevis ears,
+// gussets, boss carrier, wire bosses, retention pads.  Split out 2026-10-10
+// so the conforming-bay generator can union them with its own flange.
+module bay_body() {
+    boss_carrier();
+    clevis_gussets();
+    for (i = [0 : 3]) {
+        y = (i - 1.5) * WIRE_STAGGER;
+        retention_pad(y, abs(y) > 3, false);
+    }
+    // Clevis ears astride the thigh lug (carry both pins)
+    bay_clevis_ears();
+    // Wire bosses along each chord (see bay_wire_bosses)
+    bay_wire_bosses();
+}
+
+// Every cut of the bay except the 4 M3 bolts (which the generator places per
+// corner, because a corner may relocate one -- BHD-02 / TACCO chin pouch).
+module bay_cuts() {
+    // Hip pin bore through both ears
+    ycyl([0, 0, 0], LUG_W + 2 * (EAR_CLR + EAR_T) + 0.2, PIN_D);
+    // Extension-stop cross-pin bore through both ears
+    ycyl(STOP_PIN_R * azv(STOP_PIN_AZ),
+         LUG_W + 2 * (EAR_CLR + EAR_T) + 0.2, PIN_D);
+    // Wire seats: blind bores into each boss along the chord
+    bay_wire_seats();
+    // LG-13 retention tap pilots + counterbores
+    for (i = [0 : 3]) {
+        y = (i - 1.5) * WIRE_STAGGER;
+        retention_pad(y, abs(y) > 3, true);
+    }
+}
+
+// Flange OUTLINE as a prism x0..x1 (plate frame, measured out from the back
+// face): the plate trapezoid minus the aperture bore, the open mouth and the
+// thigh notch -- i.e. exactly where bay_cowl() puts flange material, but
+// extruded through any depth.  The conforming generator intersects this with
+// the skin layer to get the flange.
+module bay_flange_outline(x0, x1) {
+    z0 = BAY_APER_ZB0 - BAY_PLATE_ZB0;
+    z1 = z0 + BAY_APER_L;
+    iw_bot = COWL_W_BOT - 2 * COWL_T;
+    iw_top = COWL_W_TOP - 2 * COWL_T;
+    translate([BAY_BACK_X, 0, 12])
+        rotate([0, -BAY_CANT, 0])
+            translate([0, -BAY_PLATE_W / 2, BAY_PLATE_ZB0])
+                difference() {
+                    trap_prism(BAY_PLATE_WB, BAY_PLATE_W, 0, BAY_PLATE_L, x0, x1);
+                    trap_prism(iw_bot, iw_top, z0 + COWL_T, z1 - COWL_T,
+                               x0 - 0.1, x1 + 0.1);
+                    translate([x0 - 0.1, BAY_PLATE_W / 2 - iw_bot / 2, z0 - 0.1])
+                        cube([x1 - x0 + 0.2, iw_bot, COWL_T + 0.2]);
+                    translate([x0 - 0.1, BAY_PLATE_W / 2 - BAY_NOTCH_W / 2, -0.1])
+                        cube([x1 - x0 + 0.2, BAY_NOTCH_W, z0 + 0.1]);
+                }
+}
+
+// Liner OUTLINE as a prism x0..x1 (plate frame): the aperture-wall ring the
+// liner occupies (outer face = aperture, bore = aperture - 2 COWL_T, open at
+// the mouth).  The conforming generator intersects it with a skin-following
+// layer BAY_PLATE_T + COWL_H deep, so the liner runs from the skin inboard
+// through the collar whatever the local curvature.
+module bay_liner_outline(x0, x1) {
+    z0 = BAY_APER_ZB0 - BAY_PLATE_ZB0;
+    z1 = z0 + BAY_APER_L;
+    iw_bot = COWL_W_BOT - 2 * COWL_T;
+    iw_top = COWL_W_TOP - 2 * COWL_T;
+    translate([BAY_BACK_X, 0, 12])
+        rotate([0, -BAY_CANT, 0])
+            translate([0, -BAY_PLATE_W / 2, BAY_PLATE_ZB0])
+                difference() {
+                    trap_prism(COWL_W_BOT, COWL_W_TOP, z0, z1, x0, x1);
+                    trap_prism(iw_bot, iw_top, z0 + COWL_T, z1 - COWL_T,
+                               x0 - 0.1, x1 + 0.1);
+                    translate([x0 - 0.1, BAY_PLATE_W / 2 - iw_bot / 2, z0 - 0.1])
+                        cube([x1 - x0 + 0.2, iw_bot, COWL_T + 0.2]);
+                }
+}
+
 module bay() {
     difference() {
         union() {
             bay_cowl();
-            boss_carrier();
-            clevis_gussets();
-            for (i = [0 : 3]) {
-                y = (i - 1.5) * WIRE_STAGGER;
-                retention_pad(y, abs(y) > 3, false);
-            }
-            // NOTE: the bolt flange is emitted by bay_cowl() above, together
-            // with the liner, as one union-then-bore solid.  Rev R6 had a
-            // separate solid plate here with a "recess pocket" that removed
-            // ZERO material -- it was translated to plate-local
-            // x = BAY_PLATE_T, i.e. entirely outside the 5 mm plate it
-            // claimed to pocket.  See LG-18.
-            // Clevis ears astride the thigh lug (carry both pins)
-            bay_clevis_ears();
-            // Wire bosses along each chord (see bay_wire_bosses)
-            bay_wire_bosses();
+            bay_body();
         }
-        // Hip pin bore through both ears
-        ycyl([0, 0, 0], LUG_W + 2 * (EAR_CLR + EAR_T) + 0.2, PIN_D);
-        // Extension-stop cross-pin bore through both ears
-        ycyl(STOP_PIN_R * azv(STOP_PIN_AZ),
-             LUG_W + 2 * (EAR_CLR + EAR_T) + 0.2, PIN_D);
-        // Wire seats: blind bores into each boss along the chord
-        bay_wire_seats();
+        bay_cuts();
         // 4x M3 shell mounting through-bolts (internal backing plate: LG-02)
         bay_bolts(BAY_M3_D);
-        // LG-13 retention tap pilots + counterbores
-        for (i = [0 : 3]) {
-            y = (i - 1.5) * WIRE_STAGGER;
-            retention_pad(y, abs(y) > 3, true);
-        }
-        // NOTE: no thigh-sweep sector cut here.  The leg already exits through
-        // the cowl rim's hollow interior, and an xz_sector centred on the hip
-        // reaches the plate itself at large radius (the plate spans s -34..+48,
-        // i.e. radius ~50 across the very azimuths the thigh sweeps), so it
-        // gouged the plate open rather than notching the rim.  Rim-vs-thigh
-        // clearance is verified numerically instead -- see
-        // tools/landing_gear_cowl_clearance.py.
-        // NOTE: no conforming back-face cut here.  LG-10.6 retired it -- the
-        // hull's flange rebate already presents a flat seat, so the flat back
-        // face IS the conforming one.  See the BAY_STANDOFF datum note above;
-        // tools/landing_gear_bay_seat_fit.py proves the pair still meet.
+        // NOTE: no thigh-sweep sector cut here -- rim-vs-thigh clearance is
+        // verified numerically (tools/landing_gear_cowl_clearance.py,
+        // tools/landing_gear_bay_function.py).
+        // NOTE: this flat-backed bay is the DESIGN SOURCE.  The printed bay
+        // is the CONFORMING part built from it per corner by
+        // tools/generate_lg_bays.py (owner decision 2026-10-10, BHD-02): the
+        // flange follows the skin, so the flat seat datum below no longer
+        // places the printed flange.
     }
 }
 
@@ -1049,21 +1108,32 @@ module leg_assembly(flex = 0, h_duct = H_NOM, h_spring = H_NOM) {
 // Hull-frame corner placement (verification view only -- final placements
 // are LG-10).  Hull frame: X=+port, Y=+aft, Z=+dorsal; centreline
 // X=-169.9; cargo belly Z=0; ground plane Z=-80.
-// Corner format: [hip_x, hip_y, hip_z, swing_azimuth_deg]
+// Corner format: [hip_x, hip_y, hip_z, swing_azimuth_deg, hand]
 //   swing azimuth: direction of foot from hip in plan, deg from hull +X
 //   (port-outboard); fore legs swing fore-of-outboard, aft legs aft-of-
-//   outboard, feet landing within 5 mm of the canonical QMx stations.
+//   outboard, feet landing within 5 mm of the canonical QMx stations (a
+//   fore station move, BHD-02 pending, would change that for the fore feet).
 // ---------------------------------------------------------------------------
 X_CL = -169.9;
 CORNERS = [
-    // Hip stations RECESSED 15 mm along each corner's own swing axis (LG-10.2).
-    // Pre-recess: [-90, -7], [-249.8, -7], [-79, 107], [-260.8, 107].
-    // Feet are UNCHANGED by the recess -- that is the point of translating
-    // along the swing axis rather than the panel normal.
-    [-103.87,  -1.28, 38,  -22.4 ],   // fore-port
-    [-235.93,  -1.28, 38, -157.6 ],   // fore-stbd  (mirror)
-    [ -92.24,  99.96, 38,   28.0 ],   // aft-port
-    [-247.56,  99.96, 38,  152.0 ],   // aft-stbd   (mirror)
+    // [hip_x, hip_y, hip_z, swing_azimuth_deg, hand] -- hand +1 = port part,
+    // -1 = starboard part, the MIRROR image of port (owner 2026-10-10,
+    // BHD-02: distinct mirrored port/starboard bays, not one part rotated).
+    // A starboard row is the port row mirrored about X_CL: x -> 2 X_CL - x,
+    // az -> 180 - az, and the part itself mirrored in leg-local y.
+    //
+    // FORE station move PENDING (BHD-02, owner decision A, 2026-10-10): the
+    // swept candidates are in docs/BHD02_OPTION_STUDY.md SS10.  Y -38 (first
+    // clear of the root flange) puts a third of the bay footprint off the hull
+    // (the flank curls under into the chin ramp) and the bay into the TACCO
+    // chin pouch; no Y clears the flange AND keeps the footprint on the hull.
+    // The rows below stay at the LG-10.2 station until the owner chooses.
+    // AFT rows: hip stations RECESSED 15 mm along each corner's own swing
+    // axis (LG-10.2); pre-recess [-79, 107], [-260.8, 107].
+    [-103.87,  -1.28, 38,  -22.4,  1 ],   // fore-port  (station move PENDING, see above)
+    [-235.93,  -1.28, 38, -157.6, -1 ],   // fore-stbd  (mirror of fore-port)
+    [ -92.24,  99.96, 38,   28.0,  1 ],   // aft-port
+    [-247.56,  99.96, 38,  152.0, -1 ],   // aft-stbd   (mirror of aft-port)
 ];
 
 // All 4 corners, gear only (no ground/ghost slabs) -- consumed by
@@ -1073,7 +1143,8 @@ module hull_legs() {
     for (c = CORNERS)
         translate([c[0], c[1], c[2]])
             rotate([0, 0, c[3]])
-                leg_assembly(0);
+                mirror([0, c[4] < 0 ? 1 : 0, 0])
+                    leg_assembly(0);
 }
 
 module hull_stance() {

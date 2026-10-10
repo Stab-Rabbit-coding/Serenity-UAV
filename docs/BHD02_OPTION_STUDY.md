@@ -337,6 +337,42 @@ Seat-solved hip X by station: Y −34 → −124.0, −36 → −125.0,
 350, 357, 298, 294, 331 mm³. At Y −40 and −42 the head/cargo collar is
 also touched (0.6 and 7.6 mm³).
 
+### No clean fore station (2026-10-10, while implementing)
+
+Building the curve-following bay at Y −38 showed that the lower-forward third
+of the fore footprint is **off the hull**. Below the hip the flank curls
+under into the chin ramp, and the skin there falls 16–50 mm inboard of the
+seat plane or is absent. The lower-forward M3 then has no flange material
+(0 mm³) and the forward clevis ear and gusset come off as a loose
+1,561 mm³ body. Re-swept with hip X solved per Y. Coverage is the fraction
+of the footprint with skin within ±12 mm of the seat:
+
+- Y −36: X −125.0, coverage 0.72. Flange 0, TACCO 890 mm³.
+- Y −32: X −123.0, coverage 0.79. Flange 117, TACCO 783.
+- Y −28: X −121.5, coverage 0.80. Flange 601, TACCO 524.
+- Y −24: X −119.5, coverage 0.87. Flange 688, TACCO 237.
+- Y −20: X −117.5, coverage 0.89. Flange 739, TACCO 61, nav port 44.
+- **Y −16: X −115.0, coverage 0.92. Flange 511, TACCO 0, spar 0, wing 0,
+  nav port 71.**
+- Y −12: X −112.0, coverage 0.92. Flange 488, spar 1, nav port 36.
+
+No Y both clears the flange and keeps the footprint on the hull. The
+cleanest compromise is a **hybrid: hip Y −16 plus a smaller flange notch.**
+That notch removes 5,361 mm³ (option A at today's station removes 8,848),
+leaves a 3,332 mm² footprint, and the governing bond FOS is **16.1**
+(σ 0.311 MPa; option A 10.3; target 4.0). The cut stays off the spar and
+leaves no islands larger than 5 mm³. The feet move about 15 mm forward and
+11 mm inboard. The nav port crossing is BHD-03/04's move anyway. At Y −20
+the notch is smaller (4,282 mm³, FOS 17.3), but the bay still hits TACCO
+by 61 mm³.
+
+The canonical gear and hull stay at the original fore station until the
+owner chooses. The mirrored handedness, the curve-following seat
+(`merge_cargo_interior.lg_skin_layer`, `LG_CONFORM`) and the generator
+(`tools/generate_lg_bays.py`) are in place. On the generator's first run,
+both aft bays came out as **one body each**: the curve-following liner
+reaches the boss carrier, which fixes BHD-14 at the aft station.
+
 Census JSONs:
 [120°](images/bhd02/bhd02_wire_rot_120.json),
 [180°](images/bhd02/bhd02_wire_rot_180.json),

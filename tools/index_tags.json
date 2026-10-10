@@ -16350,6 +16350,13 @@
       ],
       "archived": false
     },
+    "tools/generate_lg_bays.py": {
+      "description": "Generate the four CONFORMING 3.0 in landing-gear bays (BHD-02, 2026-10-10).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/import-specctra-ses.py": {
       "description": "Companion to export-specctra-dsn.py: import a freerouting-produced",
       "tags": [
@@ -21156,6 +21163,7 @@
       "tools/export_landing_gear_stls.py",
       "tools/gen_cargo_void_formers.py",
       "tools/gen_todo_from_wbs.py",
+      "tools/generate_lg_bays.py",
       "tools/import-specctra-ses.py",
       "tools/kicad_add_part.py",
       "tools/kicad_prune_stale.py",
