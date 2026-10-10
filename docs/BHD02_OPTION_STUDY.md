@@ -307,6 +307,36 @@ plate height, not the wires. Dropping the upper bolts to plate z ≈ 20
 (lever 57 mm) gives T 428 N. With the 4 mm backing plate (2,310 N) that is
 bearing FOS 5.1, assuming the same 152 N shear.
 
+### Fore station at the seat-solved hip X (correction)
+
+The first sweep held hip X at −103.87, and it left the hull out of the
+targets. Forward of Y −20 the cargo hull narrows and the belly rises (belly
+Z 0 at Y −20, 19 at −30, 44 at −40). The hip X was therefore re-solved per
+Y so the seat sits at today's depth (seat median −0.15 mm in the plate
+frame, `mci.seat_offset`). At Y −38 the hip comes to **X −125.5**
+(stbd −214.3), 21.6 mm inboard of today's.
+
+- The bay is 50 % inside the hull envelope (today 51 %). The leg still
+  reaches Z −80, so the 3 in belly clearance is kept at hip Z 38.
+- **New clash:** the upper-forward liner corner and its upper M3 keep-out
+  hit the TACCO CN2 chin pouch (237 + 64 mm³, up to 7.7 mm into its
+  outboard edge at X −127.8). They also hit the chin shelf (20 mm³). The
+  chin pair cannot move inboard: 2 × 37 mm plus the 10 mm channel fills the
+  chin. This needs an **upper-forward corner trim** and a relocated upper
+  M3 on the forward side only.
+- **Seat curvature:** p10–p90 is 17.1 mm (today 10.8). The hull's flange
+  rebate is 12 mm deep, so a flat-backed bay would leave skin standing
+  proud. The rebate must deepen, or the back face must conform again.
+- **Stance:** the feet move with the hip. The track narrows by about 43 mm
+  (port foot 140 → 118 mm from the centreline) and the wheelbase grows from
+  170 to 207 mm. The rollover margin has to be re-checked
+  (`tools/landing_gear_foot_stance.py`).
+
+Seat-solved hip X by station: Y −34 → −124.0, −36 → −125.0,
+−38 → −125.5, −40 → −126.5, −42 → −127.5. TACCO overlap at those Y:
+350, 357, 298, 294, 331 mm³. At Y −40 and −42 the head/cargo collar is
+also touched (0.6 and 7.6 mm³).
+
 Census JSONs:
 [120°](images/bhd02/bhd02_wire_rot_120.json),
 [180°](images/bhd02/bhd02_wire_rot_180.json),
