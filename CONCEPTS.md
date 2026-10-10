@@ -71,3 +71,16 @@ The strip of a cape between its two PocketBeagle 2 stacking rails that can actua
 ## Isolation Band
 
 The region of a cape that belongs to the isolated (bus-side) reference of the isolated CAN-FD and RS-485 transceivers: their isolated pin rows, the field connectors and the filters between them. Only isolated-domain nets and chassis ground may have copper inside it on the layers it covers, and the main ground and supply planes are cut away beneath it; the gap between the band and logic-side copper is the barrier the board actually delivers, whatever the transceiver's own isolation rating says. A band need not cover every layer: when every isolated pad sits on one face, the opposite outer layer may carry logic copper beneath it, separated by the laminate, provided no logic via enters the band — so whatever sits there must route on that face alone.
+
+## Bay Station
+
+One of the two fore-aft positions — fore and aft — at which a landing-gear bay
+is mounted on each side of the cargo section. The bay is one printed design
+shared by both sides of a station but not across stations: each station has its
+own back-face datum (how far the bay's mounting face stands off the hip pin),
+measured where that station's hull pocket was actually cut, so the fore and aft
+bays are different solids from the same source. The starboard bays are the port
+bays rotated about the vertical, not mirrored, so a feature's clash side flips
+between port and starboard. Any property claimed for "the bay" (one body,
+clearance, fit) has to be shown at both stations, because the datum alone can
+change it.

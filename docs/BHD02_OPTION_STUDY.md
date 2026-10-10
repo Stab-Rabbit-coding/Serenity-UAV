@@ -221,6 +221,42 @@ import-only; the cameras are in its header. The numbers are in
 [bhd02_option_study.json](images/bhd02/bhd02_option_study.json) and
 [bhd02_b2_wing_section.json](images/bhd02/bhd02_b2_wing_section.json).
 
+## 9. BHD-10 — Pilot aft-strip nodes vs the splice collar (pictures)
+
+The Pilot nodes (FC2 port, FC3 stbd; pouched PocketBeagle 2 + cape,
+58 × 22 × 37 mm, `tools/cargo_layout_fit.py`) reach 0.5 mm into the
+cargo/middle splice collar. The overlap is **only at each node's
+upper-outboard corner** (X −124.6…−110.8 port, Z 103.7…124), where the
+collar ring follows the skin. The rest of the face is clear.
+`tools/bhd10_aft_strip_options.py` builds each option against every
+bulkhead-context solid. The static-gap target is 2 mm.
+
+- **Baseline:** collar ∩ nodes 22 / 24 mm³, ∩ cable zones 19 / 19 mm³. The
+  tilt controller boards are 1.6 mm forward.
+  [BHD10_baseline.png](images/bhd02/BHD10_baseline.png)
+- **O1, move the pair 2.5 mm forward:** clears the collar, but ∩ tilt
+  controller boards 201 / 216 mm³ and ∩ tilt brackets 43 / 43 mm³.
+  **Rejected.**
+  [BHD10_O1_shift_fwd.png](images/bhd02/BHD10_O1_shift_fwd.png)
+- **O2, relieve the collar ring behind each corner:** the pocket is the
+  corner overlap plus 5 mm each side and 2 mm deep. It removes 596 mm³,
+  8.9 % of the collar's cargo-side bond band (6,702 mm³, Y 121–129), and
+  the collar stays one body. Every clash is gone. The minimum gap is
+  1.05 mm, short of the 2 mm target. Closing that means a bigger pocket and
+  more lost bond band. The collar's bond capacity has not been
+  re-evaluated: do that before choosing this.
+  [BHD10_O2_collar_relief.png](images/bhd02/BHD10_O2_collar_relief.png)
+- **O3, a 2.5 mm thinner pouched stack (22 → 19.5 mm):** clears everything,
+  with only the existing 1.6 mm to the boards. It is legal only if the
+  first-article stack measures that. `cargo_layout_fit.py` marks the 22 mm
+  figure VERIFY, and nobody has measured it yet.
+  [BHD10_O3_thin_stack.png](images/bhd02/BHD10_O3_thin_stack.png)
+
+Recommendation: **measure the first-article stack (O3) first.** It costs
+nothing if the stack is ≤ 19.5 mm. Fall back to O2 only after a bond check
+on the collar. Numbers are in
+[bhd10_aft_strip_options.json](images/bhd02/bhd10_aft_strip_options.json).
+
 AI attribution: analysis, tools and text by Claude (Claude Opus 5.5,
 Anthropic) on 2026-10-10, under the direction of Stab-Rabbit-coding.
 Method: [build every joint in context through its full motion](solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md).

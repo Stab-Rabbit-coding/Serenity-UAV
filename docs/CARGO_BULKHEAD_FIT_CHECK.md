@@ -186,6 +186,20 @@ open.
   Y −58..0); TACCO vs cradle is 0 mm³. Gate now reports 40 clashes.
 - **BHD-02 IN WORK:** the gear blocks are being reshaped per owner direction.
 
+### 2b. Status update (2026-10-10)
+
+- **BHD-02 analysed, three owner decisions open:**
+  [BHD02_OPTION_STUDY.md](BHD02_OPTION_STUDY.md). A per-feature census
+  (`tools/landing_gear_bay_function.py`) shows the fore bays sit wholly
+  inside the bonded root-flange footprint and the wire-seat clusters hit the
+  wing at all four corners. `landing_gear_wing_clearance.py` no longer
+  reports a false CLEAR (check 5, real meshes).
+- **BHD-14 NEW:** the aft-station bay, which is the published
+  `lg_r6_common_bay.stl`, prints as two bodies. Its wire-boss block is
+  loose. BUILD-BLOCKING.
+- **BHD-10 options pictured** (study §9): moving forward is rejected. A
+  thinner measured stack, or a collar ring relief after a bond check.
+
 ## 3. 10 AWG route — the corridor answer
 
 No route from the spar exit to Flight Engineer (middle-section neck,

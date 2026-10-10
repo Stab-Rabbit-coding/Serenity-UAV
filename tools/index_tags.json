@@ -1076,6 +1076,14 @@
       ],
       "archived": false
     },
+    "airframe/openscad/fuselage/cargo/bhd10_aft_strip_context.scad": {
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See AGENTS.md.",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/openscad/fuselage/cargo/cargo_bulkhead_context.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See AGENTS.md.",
       "tags": [
@@ -12960,6 +12968,34 @@
       ],
       "archived": false
     },
+    "docs/images/bhd02/BHD10_O1_shift_fwd.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/BHD10_O2_collar_relief.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/BHD10_O3_thin_stack.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/BHD10_baseline.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/images/bhd02/C_handed_vs_shared.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -12976,6 +13012,13 @@
     },
     "docs/images/bhd02/bhd02_option_study.json": {
       "description": "JSON data (4 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/bhd10_aft_strip_options.json": {
+      "description": "JSON data (5 top-level keys)",
       "tags": [
         "documentation"
       ],
@@ -14532,6 +14575,13 @@
       "archived": false
     },
     "docs/solutions/design-patterns/envelope-gates-pass-while-real-parts-clash.md": {
+      "description": "Context",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/design-patterns/gate-a-part-invariant-at-every-selector-value-it-is-published-at.md": {
       "description": "Context",
       "tags": [
         "documentation"
@@ -16113,6 +16163,13 @@
       ],
       "archived": false
     },
+    "tools/bhd10_aft_strip_options.py": {
+      "description": "BHD-10 option study: the Pilot FC2/FC3 aft-strip nodes vs the splice collar.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/bom_edit_door_gateway.py": {
       "description": "Wire the cargo-door servo gateway into the BOM (docs/CARGO_DOOR_GATEWAY_SPEC.md).",
       "tags": [
@@ -16907,9 +16964,14 @@
       "docs/images/bhd02/B1_rejected_thigh_strike.png",
       "docs/images/bhd02/B2_aft_port_wing_relief.png",
       "docs/images/bhd02/B2_fore_port_wing_relief.png",
+      "docs/images/bhd02/BHD10_O1_shift_fwd.png",
+      "docs/images/bhd02/BHD10_O2_collar_relief.png",
+      "docs/images/bhd02/BHD10_O3_thin_stack.png",
+      "docs/images/bhd02/BHD10_baseline.png",
       "docs/images/bhd02/C_handed_vs_shared.png",
       "docs/images/bhd02/bhd02_b2_wing_section.json",
       "docs/images/bhd02/bhd02_option_study.json",
+      "docs/images/bhd02/bhd10_aft_strip_options.json",
       "docs/images/cargo_bulkhead_context_aft_door_swing.png",
       "docs/images/cargo_bulkhead_context_iso_aft.png",
       "docs/images/cargo_bulkhead_context_port_inboard.png",
@@ -17098,6 +17160,7 @@
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
       "docs/solutions/design-patterns/decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md",
       "docs/solutions/design-patterns/envelope-gates-pass-while-real-parts-clash.md",
+      "docs/solutions/design-patterns/gate-a-part-invariant-at-every-selector-value-it-is-published-at.md",
       "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md",
       "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
       "docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md",
@@ -17742,6 +17805,7 @@
       "airframe/openscad/fuselage/cargo/_export_cargo_port_root_chunk.scad",
       "airframe/openscad/fuselage/cargo/battery_cradle.scad",
       "airframe/openscad/fuselage/cargo/bhd02_options_context.scad",
+      "airframe/openscad/fuselage/cargo/bhd10_aft_strip_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_bulkhead_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_context_sections.scad",
       "airframe/openscad/fuselage/cargo/cargo_door_hinge_params.scad",
@@ -18049,6 +18113,7 @@
       "airframe/openscad/fuselage/cargo/_export_cargo_port_root_chunk.scad",
       "airframe/openscad/fuselage/cargo/battery_cradle.scad",
       "airframe/openscad/fuselage/cargo/bhd02_options_context.scad",
+      "airframe/openscad/fuselage/cargo/bhd10_aft_strip_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_bulkhead_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_context_sections.scad",
       "airframe/openscad/fuselage/cargo/cargo_door_hinge_params.scad",
@@ -21045,6 +21110,7 @@
       "tools/airframe_interface_census.py",
       "tools/bake_hull_frame.py",
       "tools/bhd02_option_study.py",
+      "tools/bhd10_aft_strip_options.py",
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
       "tools/bom_edit_tilt_controller.py",

@@ -61,6 +61,20 @@ still gated two ways: the budget caps how far it may grow, and the bores are
 checked against the servo M3 PILOT bores with no allowance at all, since a
 bore breaking into a pilot would ruin the servo mount.
 
+5. **Printed gear vs the REAL wing-root parts** (BHD-02, 2026-10-10).
+   Checks 1-4 test the HULL's bay features (what `lg_bay_features()` cuts
+   into the shell) against keep-outs rebuilt from constants.  They never
+   see the printed bay, the swinging leg, the real wing mesh, the bonded
+   root flange or the CF spar -- and so reported CLEAR while the fore bays
+   sat inside the root flange (954 / 1,616 mm^3), on the spar (913 / 907)
+   and under the wing (278 / 444), with the thigh sweeping through the
+   flange (607 / 542).  Check 5 runs the per-feature census of
+   `tools/landing_gear_bay_function.py` (each bay feature rendered from the
+   real SCAD, posed at all four corners, leg swept 0..26 deg) and fails on
+   any clash with a wing, root flange, CF spar, drive shaft or harness
+   exit.  `--nominal-only` skips it and the run then reports
+   "NOMINAL ONLY -- not a clearance", never CLEAR.
+
 Exit status is non-zero on any unbudgeted interference, so this can gate a
 commit.
 
@@ -238,6 +252,38 @@ def servo_pilot_bores():
     return out
 
 
+# Context solids check 5 holds the printed gear against.  The hull shell is
+# NOT one of them: the bay is designed to seat in it, and checks 1-4 already
+# own the hull side.
+REAL_TARGETS = ("wing ", "root flange ", "CF spar ", "drive shaft ",
+                "10AWG bundle exit ", "encoder harness exit ", "nav harness exit ")
+
+
+def real_mesh_report():
+    """Check 5: per-feature census of the printed gear vs the real meshes."""
+    print("\n5. printed gear (each feature, leg swept) vs real wing / flange / "
+          "spar / harness (tools/landing_gear_bay_function.py)")
+    sys.path.insert(0, SCRIPT_DIR)
+    import cargo_bulkhead_context as cbc  # noqa: E402,PLC0415
+    import landing_gear_bay_function as lgbf  # noqa: E402,PLC0415
+    rep = lgbf.census(lgbf.SCAD, cbc.build())
+    fails, worst = [], 0.0
+    for r in sorted(rep["rows"], key=lambda r: -r["mm3"]):
+        if r["verdict"] != "CLASH" or not r["target"].startswith(REAL_TARGETS):
+            continue
+        fails.append(f"{r['corner']} {r['feature']} x {r['target']}: {r['mm3']:.1f} mm^3")
+        worst = max(worst, r["mm3"])
+        print(f"  FOUL  {r['corner']:<10} {r['feature']:<24} x {r['target']:<26} "
+              f"{r['mm3']:10.1f} mm^3")
+    for f in rep["function"]:
+        if f["bay_bodies"] != 1:
+            fails.append(f"{f['corner']} bay prints as {f['bay_bodies']} bodies")
+            print(f"  FOUL  {f['corner']:<10} bay prints as {f['bay_bodies']} bodies")
+    if not fails:
+        print("  clear -- printed gear touches no wing-root part")
+    return fails, worst
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--shell", default=CARGO_STL,
@@ -247,6 +293,9 @@ def main():
     ap.add_argument("--spar-station", type=float, default=None,
                     help="try a candidate spar station, mm aft of the root LE "
                          "(WING_LE_ROOT_Y); overrides the module's 30%% chord")
+    ap.add_argument("--nominal-only", action="store_true",
+                    help="skip check 5 (real meshes); the result is then NOT "
+                         "a clearance and is reported as such")
     args = ap.parse_args()
 
     if not os.path.exists(args.shell):
@@ -317,15 +366,21 @@ def main():
     if args.proud:
         proud_report(shell, envelope)
 
+    f5, w5 = ([], 0.0) if args.nominal_only else real_mesh_report()
+
     print()
-    failures = f1 + f2 + f3 + f4
+    failures = f1 + f2 + f3 + f4 + f5
     if acc:
         print(f"  {len(acc)} accepted pad nick(s), worst {w3:.3f} mm^3 "
               f"of the {BORE_PAD_BUDGET_MM3:.0f} mm^3 budget")
     if failures:
         print(f"  INTERFERES -- {len(failures)} fouling pair(s), "
-              f"worst {max(w1, w2, w3, w4):.3f} mm^3")
+              f"worst {max(w1, w2, w3, w4, w5):.3f} mm^3")
         sys.exit(1)
+    if args.nominal_only:
+        print("  NOMINAL ONLY -- not a clearance: check 5 (printed gear vs the "
+              "real wing, flange and spar) was skipped")
+        sys.exit(3)
     print("  CLEAR -- LG-10.4 wing clearance satisfied")
 
 
