@@ -257,6 +257,61 @@ nothing if the stack is ≤ 19.5 mm. Fall back to O2 only after a bond check
 on the collar. Numbers are in
 [bhd10_aft_strip_options.json](images/bhd02/bhd10_aft_strip_options.json).
 
+## 10. Owner decisions (2026-10-10) and what they imply
+
+Decided by Stab-Rabbit-coding on 2026-10-10:
+
+- **A: move the fore bay station.** Not the flange cut.
+- **B: redesign the wire geometry.** Not a wing relief.
+- **C: handed fore bays plus a 4 mm backing plate.**
+
+### Fore station sweep
+
+`bhd02_option_study.py --sweep fore-port` slides the hip along Y. It checks
+the posed bay, the M3 keep-outs and the leg swept 0–26°.
+
+- The first clear station is **hip Y −36**: 0 mm³ to the flange, spar,
+  wing, head/cargo collar, chin nodes, cradle, harnesses and tilt drive.
+- At −32 there is 1 mm³ into the flange, and at −28, 116 mm³.
+- The feet move about 35 mm forward with the hip, so the wheelbase goes
+  from 170 to 205 mm.
+- The level four-point aft share rises from 43.1 % to 44.3 % per leg
+  (24.2 → 24.9 J at 6 ft). The governing 6 ft tail-down case is unchanged
+  (50 %, 28.07 J), so the wire schedule holds.
+- **Consequence for C:** at that station the bay no longer touches the CF
+  spar (spar 0 mm³ for hip Y ≤ −16). The relocated upper bolt that C
+  answered for is not needed there. That has to be confirmed with the
+  owner before any handed part is drawn.
+- Still to check at the new station: the hull's sponson seat, the swept
+  doors, and the re-cut hull pocket.
+
+### Aft corners
+
+Moving the aft station does not clear the wing. The wing clash is 874 mm³
+at Y 100 and still 43 mm³ at Y 132. Rotating the whole wire cluster about
+the hip by a large angle (crank and chord together, transmission angle
+held) gives:
+
+- 120°: the thigh strikes the cluster (2,729 mm³). Rejected.
+- 180°: the cluster clears the wing and the bay is 1 body, but the bosses,
+  carrier and pads hit the hull wall (189–211 mm³). The hull pocket would
+  have to grow.
+- **240°: the cluster clears the wing, the hull and the thigh sweep.** The
+  carrier separates from the liner (2 bodies) and needs a new path to it.
+  The wires and the extension-stop pin, now close together, are not yet
+  checked.
+
+At every angle, the **aft bay's top flange band and upper M3 keep-out still
+hit the wing** (cowl 267 / 339 mm³, keep-out 60 / 61 mm³). That is the
+plate height, not the wires. Dropping the upper bolts to plate z ≈ 20
+(lever 57 mm) gives T 428 N. With the 4 mm backing plate (2,310 N) that is
+bearing FOS 5.1, assuming the same 152 N shear.
+
+Census JSONs:
+[120°](images/bhd02/bhd02_wire_rot_120.json),
+[180°](images/bhd02/bhd02_wire_rot_180.json),
+[240°](images/bhd02/bhd02_wire_rot_240.json).
+
 AI attribution: analysis, tools and text by Claude (Claude Opus 5.5,
 Anthropic) on 2026-10-10, under the direction of Stab-Rabbit-coding.
 Method: [build every joint in context through its full motion](solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md).

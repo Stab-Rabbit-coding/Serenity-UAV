@@ -67,6 +67,7 @@ import os
 import sys
 
 import numpy as np
+import trimesh
 from manifold3d import CrossSection, JoinType, Manifold, OpType
 from matplotlib.path import Path
 
@@ -370,13 +371,55 @@ def option_c(P: dict, corners: dict, out: str | None) -> dict:
     return res
 
 
+# Station sweeps (owner decision 2026-10-10: move the fore bay station).
+# Each sweep slides one corner's hip along hull Y with X, Z and azimuth fixed
+# and reports the posed bay + M3 keep-outs + swept leg against the context.
+# The hull shell is NOT a target: the bay pocket is re-cut wherever the bay
+# goes.  Feet translate with the hip, so the stance changes with the station.
+SWEEPS = {
+    "fore-port": (np.arange(-60.0, -4.0, 4.0),
+                  ("root flange port", "CF spar port", "wing port", "collar head-cargo",
+                   "TACCO CN2 port", "battery cradle", "chin shelf", "door port swept",
+                   "door port (closed)", "10AWG bundle exit port", "nav harness exit port",
+                   "encoder harness exit port", "drive shaft port", "tilt bracket port")),
+    "aft-port": (np.arange(92.0, 136.0, 4.0),
+                 ("wing port", "collar cargo-middle", "door port swept", "door port (closed)",
+                  "Pilot FC2 port", "tilt controller board port", "tilt bracket port",
+                  "latch bracket port", "hinge retention", "root flange port")),
+}
+
+
+def station_sweep(P: dict, corners: dict, cn: str) -> list[dict]:
+    ys, tgts = SWEEPS[cn]
+    st = lgbf.STATION[cn]
+    bay = trimesh.load(lgbf.render(lgbf.SCAD, st, "bay (printed part)",
+                                   lgbf.FEATURES["bay (printed part)"][0]), force="mesh")
+    key = trimesh.load(lgbf.render(lgbf.SCAD, st, "M3 bolt keep-out",
+                                   lgbf.FEATURES["M3 bolt keep-out"][0]), force="mesh")
+    legp = lgbf.render(lgbf.SCAD, st, "leg (thigh+shin+foot)",
+                       lgbf.FEATURES["leg (thigh+shin+foot)"][0])
+    rows = []
+    for y in ys:
+        c = list(corners[cn])
+        c[1] = float(y)
+        tf = lgbf.corner_tf(c)
+        g = cbc.man(bay.copy().apply_transform(tf)) + \
+            cbc.man(key.copy().apply_transform(tf)) + lgbf.swept_leg(legp, tf)
+        hits = {t: round((g ^ P[t]["m"]).volume(), 1) for t in tgts
+                if lgbf.bbox_hit(g, P[t]["m"])}
+        rows.append(dict(hip_y=float(y), clash_mm3={k: v for k, v in hits.items() if v > 0.05}))
+    return rows
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--export", help="write option solids here (for the renders)")
     ap.add_argument("--json", help="write the study as JSON")
     ap.add_argument("--b1", action="append", default=[],
                     help="DELTA=census.json from a rotated-cluster census run")
-    ap.add_argument("--only", choices=("A", "B", "C"), action="append")
+    ap.add_argument("--only", choices=("A", "B", "C", "none"), action="append")
+    ap.add_argument("--sweep", choices=tuple(SWEEPS), action="append", default=[],
+                    help="slide this corner's hip along Y and report clashes")
     a = ap.parse_args()
     if a.export:
         os.makedirs(a.export, exist_ok=True)
@@ -392,6 +435,8 @@ def main() -> int:
         S["B2"] = option_b2(P, corners, a.export)
         if a.b1:
             S["B1"] = b1_summary(dict(kv.split("=", 1) for kv in a.b1))
+    for cn in a.sweep:
+        S[f"sweep {cn}"] = station_sweep(P, corners, cn)
     print(json.dumps(S, indent=2, default=float))
     if a.json:
         with open(a.json, "w", encoding="utf-8") as fh:

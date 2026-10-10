@@ -13017,6 +13017,27 @@
       ],
       "archived": false
     },
+    "docs/images/bhd02/bhd02_wire_rot_120.json": {
+      "description": "JSON data (6 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/bhd02_wire_rot_180.json": {
+      "description": "JSON data (6 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/bhd02_wire_rot_240.json": {
+      "description": "JSON data (6 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/images/bhd02/bhd10_aft_strip_options.json": {
       "description": "JSON data (5 top-level keys)",
       "tags": [
@@ -16971,6 +16992,9 @@
       "docs/images/bhd02/C_handed_vs_shared.png",
       "docs/images/bhd02/bhd02_b2_wing_section.json",
       "docs/images/bhd02/bhd02_option_study.json",
+      "docs/images/bhd02/bhd02_wire_rot_120.json",
+      "docs/images/bhd02/bhd02_wire_rot_180.json",
+      "docs/images/bhd02/bhd02_wire_rot_240.json",
       "docs/images/bhd02/bhd10_aft_strip_options.json",
       "docs/images/cargo_bulkhead_context_aft_door_swing.png",
       "docs/images/cargo_bulkhead_context_iso_aft.png",
