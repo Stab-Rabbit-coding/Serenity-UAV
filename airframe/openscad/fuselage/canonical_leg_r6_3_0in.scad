@@ -894,6 +894,77 @@ module clevis_gussets() {
                   BAY_GUSSET_Z[1] - BAY_GUSSET_Z[0]]);
 }
 
+// ---------------------------------------------------------------------------
+// Bay feature modules.  Split out of bay() 2026-10-10 (BHD-02) so that
+// tools/landing_gear_bay_function.py can render each feature ALONE and report
+// its clash with the wing, spar and root flange per feature.  bay() unions /
+// subtracts exactly these, so the printed part is unchanged by the split
+// (gated: rendered volume identical before and after).
+// ---------------------------------------------------------------------------
+
+// Clevis ears astride the thigh lug (carry both pins)
+module bay_clevis_ears() {
+    for (s = [-1, 1])
+        translate([0, s * (LUG_W / 2 + EAR_CLR + EAR_T / 2), 0])
+            hull() {
+                ycyl([0, 0, 0], EAR_T, HUB_D + 5);
+                ycyl(STOP_PIN_R * azv(STOP_PIN_AZ), EAR_T,
+                     PIN_D + 4);
+                translate([BAY_BACK_X + 1, -EAR_T / 2, -9])
+                    cube([2, EAR_T, 24]);
+            }
+}
+
+// Wire bosses on riser wedges at each chord's far end
+module bay_wire_bosses() {
+    for (i = [0 : 3]) {
+        y = (i - 1.5) * WIRE_STAGGER;
+        spring = (abs(y) > 3);
+        l = spring ? SPRING_L : DUCTILE_L;
+        st = spring ? SPRING_SEAT : DUCTILE_SEAT;
+        m = boss_mouth(l, st, y);
+        // Plain boss along the chord.  Rev R6 hulled each boss down to
+        // a "riser root on the canted plate plane" -- a 2 mm cube
+        // parked at BAY_BACK_X.  That plane was solid plate then; since
+        // LG-10.3 cut the wells open it is the middle of the OPEN
+        // aperture, so the riser rooted in nothing and the bosses came
+        // out as free-floating bodies.  The load path is now real: the
+        // carrier slab crosses every boss over its full length and
+        // lands in both liner side walls, which are continuous with
+        // the bolt flange.  Nothing is hulled to a datum any more.
+        translate(m - BAY_CARRIER_T / 2 * azv(CHORD_AZ))
+            rotate([0, 90 - CHORD_AZ, 0])
+                cylinder(h = st + 3 + BAY_CARRIER_T / 2, d = BOSS_OD);
+    }
+}
+
+// Wire seats: blind bores into each boss along the chord.  These are the
+// FUNCTIONAL surfaces of the spring/ductile energy absorber -- a relief may
+// never cut them (BHD-02).
+module bay_wire_seats() {
+    for (i = [0 : 3]) {
+        y = (i - 1.5) * WIRE_STAGGER;
+        spring = (abs(y) > 3);
+        l = spring ? SPRING_L : DUCTILE_L;
+        wd = spring ? SPRING_D : DUCTILE_D;
+        st = spring ? SPRING_SEAT : DUCTILE_SEAT;
+        translate(boss_mouth(l, st, y) - 0.1 * azv(CHORD_AZ))
+            rotate([0, 90 - CHORD_AZ, 0])
+                cylinder(h = st + 0.2, d = wd + SOCK_CLR);
+    }
+}
+
+// 4x M3 shell mounting through-bolts.  d = BAY_M3_D for the clearance hole;
+// a larger d gives a fastener keep-out (head / nut / tool access).
+module bay_bolts(d) {
+    translate([BAY_BACK_X, 0, 12]) rotate([0, -BAY_CANT, 0])
+        for (i = [0 : 1])
+            for (s = [-1, 1])
+                translate([-4.1, s * BAY_BOLT_YB[i], BAY_BOLT_ZB[i]])
+                    rotate([0, 90, 0])
+                        cylinder(h = BAY_PLATE_T + 8.2, d = d);
+}
+
 module bay() {
     difference() {
         union() {
@@ -911,35 +982,9 @@ module bay() {
             // x = BAY_PLATE_T, i.e. entirely outside the 5 mm plate it
             // claimed to pocket.  See LG-18.
             // Clevis ears astride the thigh lug (carry both pins)
-            for (s = [-1, 1])
-                translate([0, s * (LUG_W / 2 + EAR_CLR + EAR_T / 2), 0])
-                    hull() {
-                        ycyl([0, 0, 0], EAR_T, HUB_D + 5);
-                        ycyl(STOP_PIN_R * azv(STOP_PIN_AZ), EAR_T,
-                             PIN_D + 4);
-                        translate([BAY_BACK_X + 1, -EAR_T / 2, -9])
-                            cube([2, EAR_T, 24]);
-                    }
-            // Wire bosses on riser wedges at each chord's far end
-            for (i = [0 : 3]) {
-                y = (i - 1.5) * WIRE_STAGGER;
-                spring = (abs(y) > 3);
-                l = spring ? SPRING_L : DUCTILE_L;
-                st = spring ? SPRING_SEAT : DUCTILE_SEAT;
-                m = boss_mouth(l, st, y);
-                // Plain boss along the chord.  Rev R6 hulled each boss down to
-                // a "riser root on the canted plate plane" -- a 2 mm cube
-                // parked at BAY_BACK_X.  That plane was solid plate then; since
-                // LG-10.3 cut the wells open it is the middle of the OPEN
-                // aperture, so the riser rooted in nothing and the bosses came
-                // out as free-floating bodies.  The load path is now real: the
-                // carrier slab crosses every boss over its full length and
-                // lands in both liner side walls, which are continuous with
-                // the bolt flange.  Nothing is hulled to a datum any more.
-                translate(m - BAY_CARRIER_T / 2 * azv(CHORD_AZ))
-                    rotate([0, 90 - CHORD_AZ, 0])
-                        cylinder(h = st + 3 + BAY_CARRIER_T / 2, d = BOSS_OD);
-            }
+            bay_clevis_ears();
+            // Wire bosses along each chord (see bay_wire_bosses)
+            bay_wire_bosses();
         }
         // Hip pin bore through both ears
         ycyl([0, 0, 0], LUG_W + 2 * (EAR_CLR + EAR_T) + 0.2, PIN_D);
@@ -947,23 +992,9 @@ module bay() {
         ycyl(STOP_PIN_R * azv(STOP_PIN_AZ),
              LUG_W + 2 * (EAR_CLR + EAR_T) + 0.2, PIN_D);
         // Wire seats: blind bores into each boss along the chord
-        for (i = [0 : 3]) {
-            y = (i - 1.5) * WIRE_STAGGER;
-            spring = (abs(y) > 3);
-            l = spring ? SPRING_L : DUCTILE_L;
-            wd = spring ? SPRING_D : DUCTILE_D;
-            st = spring ? SPRING_SEAT : DUCTILE_SEAT;
-            translate(boss_mouth(l, st, y) - 0.1 * azv(CHORD_AZ))
-                rotate([0, 90 - CHORD_AZ, 0])
-                    cylinder(h = st + 0.2, d = wd + SOCK_CLR);
-        }
+        bay_wire_seats();
         // 4x M3 shell mounting through-bolts (internal backing plate: LG-02)
-        translate([BAY_BACK_X, 0, 12]) rotate([0, -BAY_CANT, 0])
-            for (i = [0 : 1])
-                for (s = [-1, 1])
-                    translate([-4.1, s * BAY_BOLT_YB[i], BAY_BOLT_ZB[i]])
-                        rotate([0, 90, 0])
-                            cylinder(h = BAY_PLATE_T + 8.2, d = BAY_M3_D);
+        bay_bolts(BAY_M3_D);
         // LG-13 retention tap pilots + counterbores
         for (i = [0 : 3]) {
             y = (i - 1.5) * WIRE_STAGGER;

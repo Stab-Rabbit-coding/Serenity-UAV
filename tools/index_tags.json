@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-07",
+  "generated": "2026-10-10",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -1064,6 +1064,14 @@
       "tags": [
         "cad-mesh",
         "power",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/fuselage/cargo/bhd02_options_context.scad": {
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See AGENTS.md.",
+      "tags": [
+        "cad-mesh",
         "structural"
       ],
       "archived": false
@@ -12570,6 +12578,13 @@
       ],
       "archived": false
     },
+    "docs/BHD02_OPTION_STUDY.md": {
+      "description": "BHD-02 Option Study \u2014 Landing-Gear Bays vs Wing Root",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/CARGO_BULKHEAD_FIT_CHECK.md": {
       "description": "Cargo Bay Bulkheads \u2014 In-Context Fit Check (2026-10-07)",
       "tags": [
@@ -12912,6 +12927,55 @@
     },
     "docs/ideation/7-2.webp": {
       "description": "RIFFv\u0001\u0000WEBPVP8 v\u0001\u0000p\u0003\u0001* \u0003\u0003>m2G#)!&\u0019Z",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/A_flange_cut_port.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/B1_rejected_thigh_strike.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/B2_aft_port_wing_relief.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/B2_fore_port_wing_relief.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/C_handed_vs_shared.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/bhd02_b2_wing_section.json": {
+      "description": "JSON data (4 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/bhd02_option_study.json": {
+      "description": "JSON data (4 top-level keys)",
       "tags": [
         "documentation"
       ],
@@ -16042,6 +16106,13 @@
       ],
       "archived": false
     },
+    "tools/bhd02_option_study.py": {
+      "description": "BHD-02 option study: geometry and loads for the three owner decisions.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/bom_edit_door_gateway.py": {
       "description": "Wire the cargo-door servo gateway into the BOM (docs/CARGO_DOOR_GATEWAY_SPEC.md).",
       "tags": [
@@ -16238,6 +16309,14 @@
       "tags": [
         "build-tooling",
         "pcb-design"
+      ],
+      "archived": false
+    },
+    "tools/landing_gear_bay_function.py": {
+      "description": "Per-feature, in-context clash census of the 3.0 in landing-gear bays (BHD-02).",
+      "tags": [
+        "build-tooling",
+        "landing-gear"
       ],
       "archived": false
     },
@@ -16780,6 +16859,7 @@
       "docs/AGENTS.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/BATTERY_MOUNT.md",
+      "docs/BHD02_OPTION_STUDY.md",
       "docs/CARGO_BULKHEAD_FIT_CHECK.md",
       "docs/CARGO_DOOR_GATEWAY_SPEC.md",
       "docs/CARGO_DOOR_LATCH_SPEC.md",
@@ -16823,6 +16903,13 @@
       "docs/flight_envelope.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
       "docs/ideation/7-2.webp",
+      "docs/images/bhd02/A_flange_cut_port.png",
+      "docs/images/bhd02/B1_rejected_thigh_strike.png",
+      "docs/images/bhd02/B2_aft_port_wing_relief.png",
+      "docs/images/bhd02/B2_fore_port_wing_relief.png",
+      "docs/images/bhd02/C_handed_vs_shared.png",
+      "docs/images/bhd02/bhd02_b2_wing_section.json",
+      "docs/images/bhd02/bhd02_option_study.json",
       "docs/images/cargo_bulkhead_context_aft_door_swing.png",
       "docs/images/cargo_bulkhead_context_iso_aft.png",
       "docs/images/cargo_bulkhead_context_port_inboard.png",
@@ -17654,6 +17741,7 @@
       "airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad",
       "airframe/openscad/fuselage/cargo/_export_cargo_port_root_chunk.scad",
       "airframe/openscad/fuselage/cargo/battery_cradle.scad",
+      "airframe/openscad/fuselage/cargo/bhd02_options_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_bulkhead_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_context_sections.scad",
       "airframe/openscad/fuselage/cargo/cargo_door_hinge_params.scad",
@@ -17960,6 +18048,7 @@
       "airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad",
       "airframe/openscad/fuselage/cargo/_export_cargo_port_root_chunk.scad",
       "airframe/openscad/fuselage/cargo/battery_cradle.scad",
+      "airframe/openscad/fuselage/cargo/bhd02_options_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_bulkhead_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_context_sections.scad",
       "airframe/openscad/fuselage/cargo/cargo_door_hinge_params.scad",
@@ -18757,6 +18846,7 @@
       "tools/add_landing_gear_bosses.py",
       "tools/build_landing_gear_views.py",
       "tools/export_landing_gear_stls.py",
+      "tools/landing_gear_bay_function.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/landing_gear_bay_seat_fit.py",
       "tools/landing_gear_bay_station_fit.py",
@@ -20954,6 +21044,7 @@
       "tools/add_landing_gear_bosses.py",
       "tools/airframe_interface_census.py",
       "tools/bake_hull_frame.py",
+      "tools/bhd02_option_study.py",
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
       "tools/bom_edit_tilt_controller.py",
@@ -20980,6 +21071,7 @@
       "tools/kicad_prune_stale.py",
       "tools/kicad_relink.py",
       "tools/kicad_set_value.py",
+      "tools/landing_gear_bay_function.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/landing_gear_bay_seat_fit.py",
       "tools/landing_gear_bay_station_fit.py",
