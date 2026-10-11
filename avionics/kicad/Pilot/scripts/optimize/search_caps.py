@@ -26,14 +26,12 @@ License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier
 """
 from __future__ import annotations
 
+import argparse
 import json
 import math
-import sys
 
 from eval_placement import GROUNDS, ISO_HF, TARGETS, in_poly
 
-EDGE = (120.975, 87.475, 176.025, 122.525)
-BAND = [(128.3, 105.5), (155.9, 105.5), (155.9, 122.0), (128.3, 122.0)]
 ISO_NETS = ("GND2_", "VCC2_", "CAN_", "RS485_")
 BOTH_SIDES = ("PWR-IN", "H1", "H2", "H3", "H4")
 OPPOSITE_PENALTY = 1.0
@@ -52,15 +50,18 @@ def rot_offsets(offs, drot):
 
 
 def main() -> None:
-    args = sys.argv[1:]
-    only = None
-    base = {"moves": {}}
-    if "--only" in args:
-        only = set(args[args.index("--only") + 1].split(","))
-    if "--base" in args:
-        base = json.load(open(args[args.index("--base") + 1]))
-    band = [tuple(pt) for pt in base.get("band_outline", BAND)]
-    d = json.load(open(args[0]))
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("place")
+    ap.add_argument("out")
+    ap.add_argument("--only", default=None)
+    ap.add_argument("--base", default=None)
+    a = ap.parse_args()
+    only = set(a.only.split(",")) if a.only else None
+    base = json.load(open(a.base)) if a.base else {"moves": {}}
+    d = json.load(open(a.place))
+    # band and edge come from the same geometry dump (review finding #6)
+    band = [tuple(pt) for pt in base.get("band_outline", d["band"])]
+    edge = tuple(d["edge"])
     F = {f["ref"]: f for f in d["fps"]}
     P: dict = {}
     for p in d["pads"]:
@@ -88,7 +89,7 @@ def main() -> None:
 
     def legal(ref, side, box, pads, iso):
         x1, y1, x2, y2 = box
-        if x1 < EDGE[0] + 0.3 or y1 < EDGE[1] + 0.3 or x2 > EDGE[2] - 0.3 or y2 > EDGE[3] - 0.3:
+        if x1 < edge[0] + 0.3 or y1 < edge[1] + 0.3 or x2 > edge[2] - 0.3 or y2 > edge[3] - 0.3:
             return False
         for r, (s, a1, b1, a2, b2) in boxes.items():
             if r == ref or (s != side and r not in BOTH_SIDES):
@@ -124,12 +125,14 @@ def main() -> None:
                     for i in range(-30, 31):
                         for j in range(-30, 31):
                             cx, cy = round(q["x"] + i * 0.1, 2), round(q["y"] + j * 0.1, 2)
-                            pads = [dict(net=p["net"], x=cx + dx, y=cy + dy) for p, (dx, dy) in zip(P[ref], o)]
+                            pads = [dict(net=p["net"], x=cx + dx, y=cy + dy)
+                                    for p, (dx, dy) in zip(P[ref], o)]
                             sc = score(ref, ic, net, side, pads)
                             if sc >= best[0]:
                                 continue
                             if legal(ref, side, (cx - w, cy - h, cx + w, cy + h), pads, iso):
-                                best = (sc, (side, drot, cx, cy, pads, (cx - w, cy - h, cx + w, cy + h)))
+                                box = (cx - w, cy - h, cx + w, cy + h)
+                                best = (sc, (side, drot, cx, cy, pads, box))
         if best[1] is None:
             continue
         side, drot, cx, cy, pads, box = best[1]
@@ -138,8 +141,8 @@ def main() -> None:
         P[ref] = [dict(p, x=n["x"], y=n["y"]) for p, n in zip(P[ref], pads)]
         F[ref] = dict(f, x=cx, y=cy, side=side, rot=(f["rot"] + drot) % 360, cy=list(box))
         print(f"{ref:10s} {cur_score[ref]:5.2f} -> {best[0]:5.2f}  {side} rot+{drot} ({cx}, {cy})")
-    json.dump({"moves": moves, **({"band_outline": base["band_outline"]} if "band_outline" in base else {})},
-              open(args[1], "w"), indent=1)
+    extra = {"band_outline": base["band_outline"]} if "band_outline" in base else {}
+    json.dump({"moves": moves, **extra}, open(a.out, "w"), indent=1)
 
 
 if __name__ == "__main__":

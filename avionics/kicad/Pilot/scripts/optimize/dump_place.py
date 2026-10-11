@@ -25,12 +25,22 @@ fps = []
 for f in b.GetFootprints():
     f.BuildCourtyardCaches()
     c = f.GetCourtyard(pcbnew.B_CrtYd if f.IsFlipped() else pcbnew.F_CrtYd).BBox()
-    fps.append(dict(ref=f.GetReference(), fp=f.GetFPIDAsString(), x=f.GetPosition().x/s, y=f.GetPosition().y/s,
+    fps.append(dict(ref=f.GetReference(), fp=f.GetFPIDAsString(),
+                    x=f.GetPosition().x/s, y=f.GetPosition().y/s,
                     rot=f.GetOrientationDegrees(), side='B' if f.IsFlipped() else 'F',
-                    cy=[c.GetX()/s, c.GetY()/s, (c.GetX()+c.GetWidth())/s, (c.GetY()+c.GetHeight())/s]))
+                    cy=[c.GetX()/s, c.GetY()/s,
+                        (c.GetX()+c.GetWidth())/s, (c.GetY()+c.GetHeight())/s]))
 pads = [dict(ref=p.GetParentFootprint().GetReference(), num=p.GetNumber(), net=p.GetNetname(),
-             x=p.GetPosition().x/s, y=p.GetPosition().y/s, drill=p.GetDrillSize().x/s) for p in b.GetPads()]
-json.dump(dict(fps=fps, pads=pads), open({sys.argv[2]!r}, 'w'))
+             x=p.GetPosition().x/s, y=p.GetPosition().y/s, drill=p.GetDrillSize().x/s)
+        for p in b.GetPads()]
+band = []
+for z in b.Zones():
+    if z.GetIsRuleArea() and z.GetZoneName() == 'ISO_BAND' and z.IsOnLayer(pcbnew.In1_Cu):
+        ol = z.Outline().Outline(0)
+        band = [(ol.CPoint(i).x/s, ol.CPoint(i).y/s) for i in range(ol.PointCount())]
+e = b.GetBoardEdgesBoundingBox()
+edge = [e.GetX()/s, e.GetY()/s, (e.GetX()+e.GetWidth())/s, (e.GetY()+e.GetHeight())/s]
+json.dump(dict(fps=fps, pads=pads, band=band, edge=edge), open({sys.argv[2]!r}, 'w'))
 """
 subprocess.run([sys.executable, "-c", code], check=True, capture_output=True)
 print("wrote", sys.argv[2])

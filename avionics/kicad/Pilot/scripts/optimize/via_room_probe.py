@@ -31,23 +31,23 @@ import sys
 from eval_placement import in_poly
 
 VIA_R = 0.3
-EDGE = (120.975, 87.475, 176.025, 122.525)
 
 
 def main() -> None:
     d = json.load(open(sys.argv[1]))
     reach = float(sys.argv[sys.argv.index("--reach") + 1]) if "--reach" in sys.argv else 2.5
-    band = [(128.3, 111.0), (137.6, 111.0), (137.6, 105.5), (155.9, 105.5), (155.9, 122.0), (128.3, 122.0)]
+    band, edge = d["band"], d["edge"]  # same dump as search_caps (review finding #6)
     fp = {f["ref"]: f for f in d["fps"]}
     small = {r for r, f in fp.items() if "0201" in f["fp"] or "0402" in f["fp"]}
-    copper = [(p["x"], p["y"], 0.35 if p["ref"] in small else 0.6, p["net"]) for p in d["pads"] if p["num"]]
+    copper = [(p["x"], p["y"], 0.35 if p["ref"] in small else 0.6, p["net"])
+              for p in d["pads"] if p["num"]]
     holes = [(p["x"], p["y"], p["drill"] / 2) for p in d["pads"] if p.get("drill", 0) > 0]
     boxes = [f["cy"] for f in d["fps"]]
     plane = [p for p in d["pads"] if p["net"] in ("GND", "+3V3") and p["num"] and not p.get("drill")
              and not p["ref"].startswith(("PB2-", "H"))]
 
     def ok(x, y, net, mode, placed):
-        if not (EDGE[0] + 0.6 < x < EDGE[2] - 0.6 and EDGE[1] + 0.6 < y < EDGE[3] - 0.6):
+        if not (edge[0] + 0.6 < x < edge[2] - 0.6 and edge[1] + 0.6 < y < edge[3] - 0.6):
             return False
         if in_poly(x, y, band):
             return False
@@ -56,8 +56,10 @@ def main() -> None:
         if any(math.hypot(x - hx, y - hy) < hr + 0.25 + VIA_R for hx, hy, hr in holes):
             return False
         if mode == "courtyard":
-            return not any(c[0] - VIA_R < x < c[2] + VIA_R and c[1] - VIA_R < y < c[3] + VIA_R for c in boxes)
-        return all(n == net or math.hypot(x - cx, y - cy) >= r + VIA_R + 0.127 for cx, cy, r, n in copper)
+            return not any(c[0] - VIA_R < x < c[2] + VIA_R and c[1] - VIA_R < y < c[3] + VIA_R
+                           for c in boxes)
+        return all(n == net or math.hypot(x - cx, y - cy) >= r + VIA_R + 0.127
+                   for cx, cy, r, n in copper)
 
     out = {"plane_pads": len(plane), "reach_mm": reach}
     for mode in ("courtyard", "copper"):

@@ -10816,6 +10816,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/scripts/optimize/test_optimize.py": {
+      "description": "test_optimize.py \u2014 Regression tests for the Pilot placement-optimisation tooling.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/scripts/optimize/via_room_probe.py": {
       "description": "via_room_probe.py \u2014 How many GND/+3V3 plane pads can get a plane via, under two rule sets.",
       "tags": [
@@ -17345,6 +17354,7 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
+      "avionics/kicad/Pilot/scripts/optimize/test_optimize.py",
       "avionics/kicad/README.md",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
@@ -20005,6 +20015,7 @@
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
       "avionics/kicad/Pilot/scripts/optimize/search_caps.py",
+      "avionics/kicad/Pilot/scripts/optimize/test_optimize.py",
       "avionics/kicad/Pilot/scripts/optimize/via_room_probe.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
@@ -20617,6 +20628,7 @@
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
       "avionics/kicad/Pilot/scripts/optimize/search_caps.py",
+      "avionics/kicad/Pilot/scripts/optimize/test_optimize.py",
       "avionics/kicad/Pilot/scripts/optimize/via_room_probe.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
