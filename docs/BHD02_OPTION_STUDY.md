@@ -366,8 +366,10 @@ leaves no islands larger than 5 mm³. The feet move about 15 mm forward and
 the notch is smaller (4,282 mm³, FOS 17.3), but the bay still hits TACCO
 by 61 mm³.
 
-The canonical gear and hull stay at the original fore station until the
-owner chooses. The mirrored handedness, the curve-following seat
+The owner chose the hybrid (2026-10-10). It is now canonical: fore hip
+Y −16, X −114.90 / −224.90 mirrored; flange notch FOS 17.1 / 17.3 as built
+(`generate_wing_root_flange.py` Rev T1d). The mirrored handedness, the
+curve-following seat
 (`merge_cargo_interior.lg_skin_layer`, `LG_CONFORM`) and the generator
 (`tools/generate_lg_bays.py`) are in place. On the generator's first run,
 both aft bays came out as **one body each**: the curve-following liner

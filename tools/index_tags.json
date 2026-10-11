@@ -14717,6 +14717,13 @@
       ],
       "archived": false
     },
+    "docs/solutions/design-patterns/re-solve-placement-against-the-mating-surface-at-every-sweep-step.md": {
+      "description": "Context",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md": {
       "description": "Reducing token cost of a federated AGENTS.md set \u2014 relocate before you compress",
       "tags": [
@@ -17278,6 +17285,7 @@
       "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
       "docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md",
       "docs/solutions/design-patterns/probe-the-published-hull-and-change-the-placement-class-not-the-margins.md",
+      "docs/solutions/design-patterns/re-solve-placement-against-the-mating-surface-at-every-sweep-step.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/design-patterns/self-locking-worm-and-vectoring-bandwidth-are-mutually-exclusive.md",
       "docs/solutions/design-patterns/void-formers-are-cut-from-the-shell-mesh-by-a-seeded-boolean.md",
