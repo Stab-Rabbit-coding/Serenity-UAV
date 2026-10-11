@@ -204,6 +204,18 @@ def evaluate(tD, tS, stop_az, poly):
 # ---------------------------------------------------------------------------
 CARRIER_H, CARRIER_T = 16.0, 12.0          # BAY_CARRIER_H (perp to chord), _T (along)
 MARGIN = 1.0                               # mm, clearance demanded of every pair
+HW_THIGH_SLACK = 2.5                       # mm^2 of projected overlap left to the 3-D census
+_SWEPT_THIGH = []
+
+
+def _unary(parts):
+    return _shapely()[4](parts)
+
+
+def _swept_thigh():
+    if not _SWEPT_THIGH:
+        _SWEPT_THIGH.append(swept(thigh_shape()))
+    return _SWEPT_THIGH[0]
 
 
 def _shapely():
@@ -214,7 +226,41 @@ def _shapely():
 
 
 def thigh_shape():
-    """The thigh's XZ outline near the hip (leg_frame(), r < ~50), no horns."""
+    """The thigh's XZ outline near the hip: the REAL rendered leg_frame() mesh
+    projected onto the swing plane (r < 55), cached.  The hand-rebuilt outline
+    below (thigh_shape_model) over-reported by ~2 mm at the upper cylinder
+    (z 5.55 modelled vs 3.39 rendered, 2026-10-11), enough to reject the Rev R6
+    row the 3-D census clears -- so the screen projects the real part."""
+    import json  # noqa: PLC0415
+    import os  # noqa: PLC0415
+    import sys  # noqa: PLC0415
+    from shapely import wkt  # noqa: PLC0415
+    from shapely.geometry import Polygon  # noqa: PLC0415
+    from shapely.ops import unary_union  # noqa: PLC0415
+    here = os.path.dirname(os.path.abspath(__file__))
+    sys.path.insert(0, here)
+    import landing_gear_bay_function as lgbf  # noqa: PLC0415
+    import trimesh  # noqa: PLC0415
+    defs = ("CRANK_AZ_D=-22", "CRANK_AZ_S=-22")
+    path = lgbf.render(lgbf.SCAD, "aft", "leg (thigh+shin+foot)",
+                       lgbf.FEATURES["leg (thigh+shin+foot)"][0], defs)
+    cache = path + ".xz55v2.json"
+    if os.path.exists(cache):
+        return wkt.loads(json.load(open(cache, encoding="utf-8"))["wkt"])
+    m = trimesh.load(path, force="mesh")
+    v = m.vertices[:, [0, 2]]
+    keep = np.any(np.linalg.norm(v[m.faces], axis=2) < 60.0, axis=1)   # clip, don't drop
+    tris = [Polygon(v[f]) for f in m.faces[keep]]
+    shp = unary_union([t for t in tris if t.area > 1e-9]).buffer(0)
+    shp = shp.intersection(Polygon([(55 * math.cos(math.radians(a)), 55 * math.sin(math.radians(a)))
+                                    for a in range(0, 360, 5)]))
+    json.dump({"wkt": shp.wkt}, open(cache, "w", encoding="utf-8"))
+    return shp
+
+
+def thigh_shape_model():
+    """Hand-rebuilt XZ outline (superseded by the mesh projection; kept for
+    reference -- see thigh_shape())."""
     _a, LineString, Point, Polygon, unary_union = _shapely()
     axis = KNEE / np.linalg.norm(KNEE)
     perp = np.array([-axis[1], axis[0]])
@@ -234,9 +280,16 @@ def thigh_shape():
 
 
 def horn_shape(t, row):
+    """Crank horn: hub + the WHOLE socket bore (mouth back `seat` along -chord),
+    1.5 mm wall.  v2 first drew only the mouth circle; the bore's far end then
+    left the part and, at crank 165, the seated wire end ran through the stop
+    pin (42.5 mm^3 in the 3-D census, 2026-10-11)."""
     _a, _L, Point, _P, unary_union = _shapely()
     rb = (ROWS[row]["d"] + SOCK_CLR) / 2 + 1.5
-    return unary_union([Point(0, 0).buffer(HUB_R), Point(*(CRANK_R * az(t))).buffer(rb)]).convex_hull
+    s0 = CRANK_R * az(t)
+    s1 = s0 - ROWS[row]["seat"] * az(t + 90)
+    return unary_union([Point(0, 0).buffer(HUB_R), Point(*s0).buffer(rb),
+                        Point(*s1).buffer(rb)]).convex_hull
 
 
 def swept(shape, a0=0.0, a1=FLEX + FLEX_MARGIN, step=2.0):
@@ -260,8 +313,23 @@ def row_hardware(t, row):
     hard = unary_union([car, boss])
     # wire band: chord from socket to mouth, bowed outward up to h, + radius
     bands = [LineString([s + out * r["h"] * k, m + out * r["h"] * k]) for k in np.linspace(0, 1, 6)]
-    band = unary_union([b.buffer(r["d"] / 2 + 0.5) for b in bands]).convex_hull
+    # + the seated ends: the wire runs `seat` past each mouth, into the thigh
+    # socket and into the boss bore
+    bands += [LineString([s - r["seat"] * u, s]), LineString([m, m + r["seat"] * u])]
+    band = unary_union([b.buffer(r["d"] / 2 + 0.5) for b in bands])
     return hard, band, s
+
+
+def ear_shape(stop_az, back_x=0.0):
+    """Clevis ear XZ outline (bay_clevis_ears): hull of the O14 hub boss, the
+    O7.2 stop-pin boss and the 2 x 24 back block at BAY_BACK_X + 1.  The ears
+    sit at |y| 7.5..10.5, clear of the thigh and wires in Y.  NOT a constraint
+    on the row carriers: ears and carriers are the same printed bay part, so
+    where they meet they simply union (kept for drawing / reference)."""
+    _a, _L, Point, Polygon, unary_union = _shapely()
+    blk = Polygon([(back_x + 1, -9), (back_x + 3, -9), (back_x + 3, 15), (back_x + 1, 15)])
+    return unary_union([Point(0, 0).buffer(7.0), Point(*(STOP_PIN_R * az(stop_az))).buffer(3.6),
+                        blk]).convex_hull
 
 
 def evaluate2(tD, tS, stop_az):
@@ -271,15 +339,11 @@ def evaluate2(tD, tS, stop_az):
     pin = Point(*(STOP_PIN_R * az(stop_az))).buffer(STOP_PIN_RAD)
     notes, gaps = [], []
     hw = {row: row_hardware(t, row) for row, t in (("D", tD), ("S", tS))}
-    # leg_frame() cuts a wire-chord relief scallop along each row's chord (first
-    # 14 mm, O d + 2.5): without it the 2-D thigh over-reports -- calibration
-    # 2026-10-11, the Rev R6 -22 deg row read 13.4 mm^2 into the swept upper
-    # cylinder where the 3-D census measures 0.
-    scallops = unary_union([_shapely()[1]([CRANK_R * az(t), CRANK_R * az(t) + 14 * az(t + 90)])
-                            .buffer((ROWS[row]["d"] + 2.5) / 2)
-                            for row, t in (("D", tD), ("S", tS))])
-    th = th.difference(scallops)
-    moving = swept(unary_union([th, horn_shape(tD, "D"), horn_shape(tS, "S")]).difference(scallops))
+    # The thigh outline is the projected REAL mesh (thigh_shape), swept ONCE and
+    # cached; each candidate's horns are swept and added.  The candidate's own
+    # scallops are not subtracted -- they only remove thigh material, so leaving
+    # them in is conservative.
+    moving = _unary([_swept_thigh(), swept(horn_shape(tD, "D")), swept(horn_shape(tS, "S"))])
     rb = {k: (v["d"] + SOCK_CLR) / 2 for k, v in ROWS.items()}
     sock_gap = np.linalg.norm(CRANK_R * (az(tD) - az(tS))) - rb["D"] - rb["S"] - WALL
     if sock_gap < 0:
@@ -287,8 +351,12 @@ def evaluate2(tD, tS, stop_az):
     for row in ("D", "S"):
         hard, band, s = hw[row]
         other = "S" if row == "D" else "D"
-        g = [("hardware vs swept thigh+horns", hard.distance(moving) if not hard.intersects(moving)
-              else -hard.intersection(moving).area),
+        ov = hard.intersection(moving).area
+        # 2-D projection ignores Y, so it over-reports a few mm^2 that the 3-D
+        # census clears (Rev R6 row: 1.8 mm^2 at flex 26 here, 0 mm^3 in 3-D).
+        # Up to HW_THIGH_SLACK is passed on to the census to decide.
+        g = [("hardware vs swept thigh+horns", MARGIN if ov <= HW_THIGH_SLACK
+              else -ov),
              ("hardware vs other row hardware", hard.distance(hw[other][0])
               if not hard.intersects(hw[other][0]) else -1.0),
              ("hardware vs stop pin", hard.distance(pin)),

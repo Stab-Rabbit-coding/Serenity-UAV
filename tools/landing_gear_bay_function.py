@@ -247,9 +247,11 @@ def wire_pairs(path: str, tf: np.ndarray) -> float:
 
 def targets(P: dict) -> dict[str, Manifold]:
     """Bulkhead-context solids a gear feature could hit (not the gear itself)."""
-    skip = ("gear legs", "door ", "hoist", "winch", "payload", "battery", "TACCO",
-            "Observer", "door gateway", "chin shelf")
-    return {n: e["m"] for n, e in P.items() if not n.startswith(skip)}
+    # Only the gear itself is excluded.  The doors, payload, battery, chin nodes,
+    # Observer and door gateway were excluded until 2026-10-11, when the
+    # two-row wire layout (BHD-02g) put a boss cluster INSIDE the hull above
+    # the belly -- the region those parts occupy.
+    return {n: e["m"] for n, e in P.items() if not n.startswith("gear legs")}
 
 
 def bbox_hit(a: Manifold, b: Manifold) -> bool:
@@ -318,7 +320,10 @@ def census(scad: str, P: dict, export: str | None = None,
             else:
                 m = posed(paths[(st, fn)], tf)
             for tn, tm in T.items():
-                if SIDE[cn] not in tn and not tn.startswith(("shell", "collar")):
+                # skip only the OPPOSITE side's parts: centreline parts (payload,
+                # battery, door gateway, hinge retention) carry no side name and
+                # were silently skipped at every corner before 2026-10-11
+                if ("stbd" if SIDE[cn] == "port" else "port") in tn:
                     continue
                 if not bbox_hit(m, tm):
                     continue
