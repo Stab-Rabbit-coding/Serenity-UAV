@@ -10801,7 +10801,7 @@
       "archived": false
     },
     "avionics/kicad/Pilot/scripts/optimize/placement_moves.json": {
-      "description": "JSON data (2 top-level keys)",
+      "description": "JSON data (1 top-level keys)",
       "tags": [
         "avionics-hardware",
         "pcb-design"

@@ -1368,7 +1368,7 @@ route_pilot.sh — !/usr/bin/env bash [avionics-hardware, pcb-design]
 ```text
 dump_place.py — dump_place.py — Write place.json (footprints + pads) for the committed Pilot board with a [avionics-hardware, pcb-design]
 eval_placement.py — eval_placement.py — Measurement harness for the Pilot placement optimisation loop. [avionics-hardware, pcb-design, security]
-placement_moves.json — JSON data (2 top-level keys) [avionics-hardware, pcb-design]
+placement_moves.json — JSON data (1 top-level keys) [avionics-hardware, pcb-design]
 search_caps.py — search_caps.py — Greedy legal-site search that pulls Pilot bypass caps toward their pins. [avionics-hardware, pcb-design]
 test_optimize.py — test_optimize.py — Regression tests for the Pilot placement-optimisation tooling. [avionics-hardware, pcb-design, security]
 via_room_probe.py — via_room_probe.py — How many GND/+3V3 plane pads can get a plane via, under two rule sets. [avionics-hardware, pcb-design]
