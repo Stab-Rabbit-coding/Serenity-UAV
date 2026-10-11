@@ -276,9 +276,10 @@ def real_mesh_report():
         print(f"  FOUL  {r['corner']:<10} {r['feature']:<24} x {r['target']:<26} "
               f"{r['mm3']:10.1f} mm^3")
     for f in rep["function"]:
-        if f["bay_bodies"] != 1:
-            fails.append(f"{f['corner']} bay prints as {f['bay_bodies']} bodies")
-            print(f"  FOUL  {f['corner']:<10} bay prints as {f['bay_bodies']} bodies")
+        if not lgbf.function_ok(f):   # one body + every wire / stop-pin / leg check
+            bad = {k: f[k] for k in lgbf.FUNCTION_LIMITS if f[k] >= lgbf.CLASH_MM3}
+            fails.append(f"{f['corner']} gear function: bodies {f['bay_bodies']} {bad}")
+            print(f"  FOUL  {f['corner']:<10} gear function: bodies {f['bay_bodies']} {bad}")
     if not fails:
         print("  clear -- printed gear touches no wing-root part")
     return fails, worst

@@ -110,7 +110,19 @@ FEATURES = {
 }
 
 # Generator inputs, not features to census on their own.
-BUILD_ONLY = ("liner", "body", "cuts", "flange outline", "liner outline", "wires", "stop pin")
+BUILD_ONLY = ("liner", "body", "cuts", "flange outline", "liner outline")
+
+# Every function check below must be < CLASH_MM3 for a PASS.  One list, used by
+# both the printout and the exit code, so a check can never be computed and
+# then silently left out of the gate (security review 2026-10-11: the wire /
+# stop-pin checks were printed but did not fail the run).
+FUNCTION_LIMITS = ("leg_sweep_vs_own_bay_mm3", "wires_x_stop_pin_mm3", "wires_x_bay_mm3",
+                   "wires_x_leg_rest_mm3", "stop_pin_x_leg_sweep_mm3")
+
+
+def function_ok(f: dict) -> bool:
+    """True when the bay is one body and every interference check is clear."""
+    return f["bay_bodies"] == 1 and all(f[k] < CLASH_MM3 for k in FUNCTION_LIMITS)
 
 # Context solids the gear is EXPECTED to touch, with why (unordered substrings).
 EXPECTED = (
@@ -331,7 +343,7 @@ def main() -> int:
               f"{r['verdict']}{tag} {r['why']}")
     print("\nFunction checks:")
     for f in R["function"]:
-        ok = f["bay_bodies"] == 1 and f["leg_sweep_vs_own_bay_mm3"] < CLASH_MM3
+        ok = function_ok(f)
         print(f"  {'OK  ' if ok else 'FAIL'} {f['corner']:10s} bay bodies {f['bay_bodies']}, "
               f"leg sweep x own bay {f['leg_sweep_vs_own_bay_mm3']} mm3, wires x stop pin "
               f"{f['wires_x_stop_pin_mm3']} / x bay {f['wires_x_bay_mm3']} / x leg "
@@ -340,9 +352,8 @@ def main() -> int:
     if a.json:
         with open(a.json, "w", encoding="utf-8") as fh:
             json.dump(R, fh, indent=2)
-    bad = any(r["verdict"] == "CLASH" for r in R["rows"]) or any(
-        f["bay_bodies"] != 1 or f["leg_sweep_vs_own_bay_mm3"] >= CLASH_MM3
-        for f in R["function"])
+    bad = any(r["verdict"] == "CLASH" for r in R["rows"]) or not all(
+        function_ok(f) for f in R["function"])
     print(f"\nRESULT: {'FAIL' if bad else 'PASS'}")
     return 2 if bad else 0
 

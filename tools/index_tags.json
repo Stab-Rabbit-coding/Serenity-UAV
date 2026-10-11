@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-10",
+  "generated": "2026-10-11",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -16482,7 +16482,8 @@
       "description": "Per-feature, in-context clash census of the 3.0 in landing-gear bays (BHD-02).",
       "tags": [
         "build-tooling",
-        "landing-gear"
+        "landing-gear",
+        "security"
       ],
       "archived": false
     },
@@ -17602,6 +17603,7 @@
       "tools/cargo_bulkhead_context.py",
       "tools/generate_lg_bays.py",
       "tools/kicad_relink.py",
+      "tools/landing_gear_bay_function.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
