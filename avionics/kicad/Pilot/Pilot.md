@@ -116,7 +116,26 @@ kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # s
 bash scripts/export_pilot_gerbers.sh
 ```
 
-## Routing status — NOT complete, tried and rejected an automated result
+## Routing status (2026-10-11): 196 unconnected, DRC 0, parity 0 — interactive finish needed
+
+Owner hand placement (2026-10-09) + 34 optimised bypass-cap moves
+(`scripts/optimize/placement_moves.json`, ISO_BAND notch held for creepage review) +
+the owner's freerouting run repaired to DRC 0 + 11 plane vias. Automated routing results
+on this placement (Claude Opus 5.5):
+
+| Strategy | Result |
+|---|---|
+| keep routing, plane fanout, repair (**committed**) | 196 unconnected |
+| strip, plane fanout first, freerouting | hung in pass 1 (normalize loop); killed |
+| strip, freerouting 15 passes, plane fanout after | 240 after phase 1, phase 2 hung; 222 after fanout |
+
+freerouting 2.2.4 hangs whenever it starts from existing copper (phase 2, or pre-placed
+fanout), so `scripts/route_pilot.sh` now caps each phase at 150 min and never lets a
+worse/empty phase-2 session replace phase 1. The remainder is for KiCad's interactive
+router: isolated-band nets (GND2/VCC2/CAN/RS-485), plane drops at the dense ICs (use
+under-body via alleys, ideation idea 9), then the remaining logic nets.
+
+## Routing history — earlier automated result tried and rejected
 
 The board above is fully placed (0 courtyard collisions, 0 DRC errors) but
 **0% routed** — all 388 connections are still ratsnest. Two freerouting runs
