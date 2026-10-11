@@ -10783,6 +10783,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/scripts/grid_route_pilot.py": {
+      "description": "grid_route_pilot.py \u2014 Rule-aware grid router for Pilot's remaining unconnected items.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/scripts/notch_iso_band.py": {
       "description": "notch_iso_band.py \u2014 Cut the CAN isolation band back from under the GPS module.",
       "tags": [
@@ -17369,6 +17378,7 @@
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/grid_route_pilot.py",
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/test_optimize.py",
       "avionics/kicad/README.md",
@@ -20027,6 +20037,7 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/grid_route_pilot.py",
       "avionics/kicad/Pilot/scripts/notch_iso_band.py",
       "avionics/kicad/Pilot/scripts/optimize/dump_place.py",
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
@@ -20642,6 +20653,7 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/grid_route_pilot.py",
       "avionics/kicad/Pilot/scripts/notch_iso_band.py",
       "avionics/kicad/Pilot/scripts/optimize/dump_place.py",
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
