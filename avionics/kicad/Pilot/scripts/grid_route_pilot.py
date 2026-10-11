@@ -50,7 +50,9 @@ LAYERS = ["F.Cu", "In2.Cu", "In3.Cu", "B.Cu"]
 CLR, ISO_CLR, EDGE_CLR, HOLE_CLR, HOLE_HOLE = 0.127, 0.5, 0.3, 0.25, 0.5
 VIA_D, VIA_DRILL = 0.6, 0.3
 CORNER_R = 3.0         # board corner radius, mm (Edge.Cuts gr_arc)
-VIA_COST = 2.0          # mm-equivalent penalty per layer change
+VIA_COST = 2.0         # mm-equivalent penalty per layer change
+RIP_COST = 0.25         # mm-equivalent per grid cell that needs an existing track ripped
+RIP_MAX = 8             # most pre-existing items one rip-up route may remove
 ISO_RE = re.compile(r"^(GND2_|VCC2_|CAN_|RS485_)")
 PLANES = {"GND": "In1.Cu", "+3V3": "In4.Cu"}
 POWER = {"GND", "+3V3", "+5V", "+5V_IN", "PGND"}
@@ -74,11 +76,12 @@ tracks, vias = [], []
 for t in b.GetTracks():
     if t.Type() == pcbnew.PCB_VIA_T:
         vias.append(dict(net=t.GetNetname(), x=t.GetPosition().x / s, y=t.GetPosition().y / s,
-                         r=t.GetWidth(pcbnew.F_Cu) / s / 2, drill=t.GetDrillValue() / s))
+                         r=t.GetWidth(pcbnew.F_Cu) / s / 2, drill=t.GetDrillValue() / s,
+                         uuid=t.m_Uuid.AsString()))
     else:
         tracks.append(dict(net=t.GetNetname(), layer=pcbnew.LayerName(t.GetLayer()),
                            x1=t.GetStart().x / s, y1=t.GetStart().y / s, x2=t.GetEnd().x / s,
-                           y2=t.GetEnd().y / s, w=t.GetWidth() / s))
+                           y2=t.GetEnd().y / s, w=t.GetWidth() / s, uuid=t.m_Uuid.AsString()))
 bands = []
 for z in b.Zones():
     if z.GetIsRuleArea() and z.GetZoneName() == "ISO_BAND":
@@ -133,6 +136,8 @@ class Board:
         # owner grids: 0 = free, -1 = edge/blocked, else netid+1 (last writer; conflicts rare)
         self.own = np.zeros((len(LAYERS), self.ny, self.nx), np.int32)
         self.exempt = np.zeros((len(LAYERS), self.ny, self.nx), bool)  # X2Y pad copper
+        # cells painted by pre-existing tracks/vias: rip-up may cross these at a cost
+        self.movable = np.zeros((len(LAYERS), self.ny, self.nx), bool)
         self.holes = [(p["x"], p["y"], p["drill"] / 2) for p in g["pads"] if p["drill"] > 0]
         self.holes += [(v["x"], v["y"], v["drill"] / 2) for v in g["vias"]]
         for p in g["pads"]:
@@ -141,10 +146,10 @@ class Board:
         for t in g["tracks"]:
             if t["layer"] in LAYERS:
                 self._capsule(LAYERS.index(t["layer"]), t["x1"], t["y1"], t["x2"], t["y2"],
-                              t["w"] / 2, t["net"])
+                              t["w"] / 2, t["net"], movable=True)
         for v in g["vias"]:
             for k in range(len(LAYERS)):
-                self._capsule(k, v["x"], v["y"], v["x"], v["y"], v["r"], v["net"])
+                self._capsule(k, v["x"], v["y"], v["x"], v["y"], v["r"], v["net"], movable=True)
         band_f = next(b["pts"] for b in g["bands"] if "In1.Cu" in b["layers"])
         self.band = in_poly_grid(self.X, self.Y, band_f)
         self.band_b = np.zeros_like(self.band)
@@ -186,7 +191,8 @@ class Board:
         if exempt:
             self.exempt[sl] = True
 
-    def _capsule(self, k, x1, y1, x2, y2, r, net, keep_foreign=False) -> None:
+    def _capsule(self, k, x1, y1, x2, y2, r, net, keep_foreign=False, movable=False,
+                 erase=False) -> None:
         pad = r + self.res
         bx1, bx2 = min(x1, x2) - pad, max(x1, x2) + pad
         by1, by2 = min(y1, y2) - pad, max(y1, y2) + pad
@@ -201,9 +207,16 @@ class Board:
         d = np.hypot(X - (x1 + t * dx), Y - (y1 + t * dy))
         sub = self.own[k, iy1:iy2, ix1:ix2]
         hit = d <= r
+        mov = self.movable[k, iy1:iy2, ix1:ix2]
+        if erase:  # rip-up: clear this item's movable cells
+            hit &= (sub == self._ids(net)) & mov
+            sub[hit] = 0
+            mov[hit] = False
+            return
         if keep_foreign:  # router copper never relabels another net's copper
             hit &= (sub == 0) | (sub == self._ids(net))
         sub[hit] = self._ids(net)
+        mov[hit] = movable
 
     def add_route(self, net, segs, vias, w) -> None:
         for k, a, b in segs:
@@ -216,7 +229,7 @@ class Board:
             new = np.hypot(self.X - x, self.Y - y) - VIA_DRILL / 2
             self.hole_dist = np.minimum(self.hole_dist, new)
 
-    def clearance_maps(self, net: str, win) -> "tuple[np.ndarray, np.ndarray]":
+    def clearance_maps(self, net: str, win, soft=False) -> "tuple[np.ndarray, np.ndarray]":
         """Per layer: distance to other-net copper of the same domain / of the other domain."""
         iy1, iy2, ix1, ix2 = win
         nid = self._ids(net)
@@ -228,6 +241,8 @@ class Board:
         for k in range(len(LAYERS)):
             o = self.own[k, iy1:iy2, ix1:ix2]
             foreign = (o != 0) & (o != nid)
+            if soft:  # ignore pre-existing tracks/vias of other nets (rip-up candidates)
+                foreign &= ~self.movable[k, iy1:iy2, ix1:ix2]
             o_iso = iso_lookup[np.clip(o, 0, None)] & (o > 0)
             dom_diff = foreign & (o_iso != iso) & ~self.exempt[k, iy1:iy2, ix1:ix2]
             dom_same = foreign & ~dom_diff
@@ -239,7 +254,7 @@ class Board:
 
 
 def route_pair(B: Board, net: str, a: dict, b: "dict | None", margin=6.0, plane=False,
-               cap=400000):
+               cap=400000, ripup=False):
     """A* from item a to item b (or, for a plane net, to the nearest legal via site)."""
     res = B.res
     iso = bool(ISO_RE.match(net))
@@ -278,6 +293,17 @@ def route_pair(B: Board, net: str, a: dict, b: "dict | None", margin=6.0, plane=
     walk = (track_ok & allowed) | (own_net & allowed)
     via_ok = np.all(same >= CLR + VIA_D / 2 + slack, axis=0) & np.all(
         other >= ISO_CLR + VIA_D / 2 + slack, axis=0)
+    soft_cost = None
+    if ripup:
+        # cells blocked only by pre-existing tracks/vias are walkable at RIP_COST per cell
+        s2, o2 = B.clearance_maps(net, (iy1, iy2, ix1, ix2), soft=True)
+        t2 = (s2 >= CLR + w / 2 + slack) & (o2 >= ISO_CLR + w / 2 + slack)
+        t2 &= (edge >= EDGE_CLR + w / 2)[None] & (holed >= HOLE_CLR + w / 2)[None]
+        walk2 = (t2 & allowed) | (own_net & allowed)
+        soft_cost = np.where(walk, 0.0, RIP_COST)
+        walk = walk2
+        via_ok = np.all(s2 >= CLR + VIA_D / 2 + slack, axis=0) & np.all(
+            o2 >= ISO_CLR + VIA_D / 2 + slack, axis=0)
     via_ok &= (edge >= EDGE_CLR + VIA_D / 2) & (holed >= HOLE_HOLE + VIA_DRILL / 2 + slack)
     if iso:
         via_ok[:] = False      # In2-In4 band keep-outs forbid vias; outside the band is barred
@@ -322,7 +348,7 @@ def route_pair(B: Board, net: str, a: dict, b: "dict | None", margin=6.0, plane=
             ny_, nx_ = y + dy, x + dx
             if 0 <= ny_ < H and 0 <= nx_ < W and walk[k, ny_, nx_]:
                 n = (k, ny_, nx_)
-                ng = g0 + c * res
+                ng = g0 + c * res + (soft_cost[k, ny_, nx_] if soft_cost is not None else 0.0)
                 if ng < dist.get(n, 1e18):
                     dist[n], prev[n] = ng, s
                     h = 0.0 if plane else math.hypot(ny_ - gy, nx_ - gx) * res
@@ -377,6 +403,57 @@ def _segments(run, xy):
     return [s for s in out if s[1] != s[2]]
 
 
+def _pt_seg(px, py, x1, y1, x2, y2) -> float:
+    dx, dy = x2 - x1, y2 - y1
+    L2 = dx * dx + dy * dy
+    t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((px - x1) * dx + (py - y1) * dy) / L2))
+    return math.hypot(px - (x1 + t * dx), py - (y1 + t * dy))
+
+
+def _seg_seg(a1, a2, b1, b2) -> float:
+    def ccw(p, q, r):
+        return (r[1] - p[1]) * (q[0] - p[0]) - (q[1] - p[1]) * (r[0] - p[0])
+    if (ccw(a1, a2, b1) * ccw(a1, a2, b2) < 0) and (ccw(b1, b2, a1) * ccw(b1, b2, a2) < 0):
+        return 0.0
+    return min(_pt_seg(*a1, *b1, *b2), _pt_seg(*a2, *b1, *b2),
+               _pt_seg(*b1, *a1, *a2), _pt_seg(*b2, *a1, *a2))
+
+
+def conflicts(g: dict, net: str, segs, vias, w, gone: set) -> list:
+    """Pre-existing tracks/vias of other nets that the new route would violate."""
+    iso = bool(ISO_RE.match(net))
+    hit = []
+
+    def need(other_net):
+        return ISO_CLR if bool(ISO_RE.match(other_net)) != iso else CLR
+
+    for t in g["tracks"]:
+        if t["net"] == net or t["uuid"] in gone or t["layer"] not in LAYERS:
+            continue
+        k, c = LAYERS.index(t["layer"]), need(t["net"])
+        for sk, a, b in segs:
+            if sk == k and _seg_seg(a, b, (t["x1"], t["y1"]), (t["x2"], t["y2"])) < \
+                    c + w / 2 + t["w"] / 2:
+                hit.append(t["uuid"])
+                break
+        else:
+            for x, y in vias:
+                if _pt_seg(x, y, t["x1"], t["y1"], t["x2"], t["y2"]) < c + VIA_D / 2 + t["w"] / 2:
+                    hit.append(t["uuid"])
+                    break
+    for v in g["vias"]:
+        if v["net"] == net or v["uuid"] in gone:
+            continue
+        c = need(v["net"])
+        bad = any(_pt_seg(v["x"], v["y"], *a, *b) < c + w / 2 + v["r"] for _, a, b in segs)
+        bad = bad or any(math.hypot(v["x"] - x, v["y"] - y) <
+                         max(c + VIA_D / 2 + v["r"], HOLE_HOLE + (VIA_DRILL + v["drill"]) / 2)
+                         for x, y in vias)
+        if bad:
+            hit.append(v["uuid"])
+    return hit
+
+
 def emit(net_code: int, segs, vias, w) -> str:
     blocks = []
     for k, a, b in segs:
@@ -398,6 +475,8 @@ def main() -> None:
     ap.add_argument("--only", default=None)
     ap.add_argument("--margin", type=float, default=6.0)
     ap.add_argument("--cap", type=int, default=400000)
+    ap.add_argument("--ripup", action="store_true",
+                    help="retry failures crossing pre-existing tracks/vias, ripping them")
     a = ap.parse_args()
     pcb = Path(a.pcb)
     g = geometry(pcb)
@@ -408,6 +487,7 @@ def main() -> None:
     codes = {m.group(2): int(m.group(1))
              for m in re.finditer(r'^\t\(net (\d+) "([^"]*)"\)', text, re.M)}
     added, ok, fail = [], 0, []
+    failed_items: list = []
     placed: dict = {}   # net -> via sites already emitted (two pads may pick one site)
 
     def fresh(net, r):
@@ -443,6 +523,7 @@ def main() -> None:
             ok += 1 if r else 0
             if not r:
                 fail.append(net)
+                failed_items.append(u)
             continue
         r = route_pair(B, net, ia, ib, margin=a.margin, cap=a.cap)
         if r:
@@ -452,9 +533,54 @@ def main() -> None:
             ok += 1
         else:
             fail.append(net)
+            failed_items.append(u)
+    ripped: set = set()
+    rerouted = 0
+    if a.ripup:
+        by_uuid = {t["uuid"]: ("t", t) for t in g["tracks"]}
+        by_uuid.update({v["uuid"]: ("v", v) for v in g["vias"]})
+        for u in failed_items:
+            ia, ib = u["items"][0], u["items"][-1]
+            net = re.search(r"\[([^\]]+)\]", ia["description"]).group(1)
+            plane = net in PLANES
+            ends = [it for it in (ia, ib) if it["description"].startswith("Pad")] if plane \
+                else [ia]
+            for it in ends:
+                r = route_pair(B, net, it, None if plane else ib, margin=a.margin, cap=a.cap,
+                               plane=plane, ripup=True)
+                if not r:
+                    continue
+                r = fresh(net, r)
+                c = conflicts(g, net, *r, ripped)
+                if len(c) > RIP_MAX:
+                    continue
+                for uid in c:
+                    kind, it2 = by_uuid[uid]
+                    if kind == "t":
+                        B._capsule(LAYERS.index(it2["layer"]), it2["x1"], it2["y1"], it2["x2"],
+                                   it2["y2"], it2["w"] / 2, it2["net"], erase=True)
+                    else:
+                        for k in range(len(LAYERS)):
+                            B._capsule(k, it2["x"], it2["y"], it2["x"], it2["y"], it2["r"],
+                                       it2["net"], erase=True)
+                ripped.update(c)
+                B.add_route(net, *r)
+                added.append(emit(codes[net], *r))
+                rerouted += 1
+        if ripped:
+            out, last = [], 0
+            for m in re.finditer(r"^\t\((segment|arc|via)(?: \w+)?\n.*?^\t\)\n", text,
+                                 re.S | re.M):
+                u_ = re.search(r'\(uuid "([^"]+)"\)', m.group(0)).group(1)
+                if u_ in ripped:
+                    out.append(text[last:m.start()])
+                    last = m.end()
+            out.append(text[last:])
+            text = "".join(out)
     i = text.index("\n\t(zone\n") + 1
     pcb.write_text(text[:i] + "".join(added) + text[i:])
-    print(f"routed {ok} of {ok + len(fail)}; failed: {sorted(set(fail))}")
+    print(f"routed {ok} of {ok + len(fail)}; rip-up rerouted {rerouted}, ripped {len(ripped)} "
+          f"item(s); failed: {sorted(set(fail))}")
 
 
 if __name__ == "__main__":
