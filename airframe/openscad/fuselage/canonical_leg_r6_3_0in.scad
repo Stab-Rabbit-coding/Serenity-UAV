@@ -147,10 +147,22 @@ STOP_TAB_AZ2 = 146;         // thigh tab sector end
 
 // Bellcrank wire sockets (in the thigh root, around the pin)
 CRANK_R      = 6.0;         // socket centre radius from pin axis
-CRANK_AZ     = -22;         // socket azimuth in XZ (deg from +X; down-outboard)
-CHORD_AZ     = 68;          // wire chord direction (deg from +X; up the bay wall)
-WIRE_STAGGER = 3.5;         // socket pitch along pin axis Y
-                            // ductile pair at Y +/-1.75, spring pair at Y +/-5.25
+// BHD-02k / BHD-02g (2026-10-10, owner B "redesign the wire geometry"): the
+// Rev R6 single row -- 4 sockets at 3.5 mm pitch, CRANK_AZ -22 -- could not
+// be built: the wires (O4.26 / O3.59) are thicker than the pitch and four
+// O4.9 bores need 19.6 mm across the 14 mm lug.  TWO ROWS of two: the ductile
+// row and the spring row, each at its own crank azimuth, 6 mm in-row pitch
+// (y +/-3), crank radius and 90 deg crank-to-chord transmission unchanged --
+// so every wire's force, arm and stroke, and therefore the sizing, are as
+// tools/landing_gear_r6_sizing.py solved them.  A row's chord points crank +
+// 90 (flexion turns the thigh counter-clockwise in XZ, so the chord shortens
+// and the wire bows in compression).  The azimuths come from the swing-plane
+// screen tools/lg_wire_layout_study.py, then the 3-D census.
+CRANK_AZ_D   = -22;         // ductile-row crank azimuth (deg, XZ from +X)
+CRANK_AZ_S   = -22;         // spring-row crank azimuth
+ROW_PITCH    = 6.0;         // in-row socket pitch along Y (bore 4.91 + 1.1 wall)
+HORN_WALL    = 1.5;         // crank-horn wall around a socket bore that leaves
+                            // the root lug (the horn rides on the thigh)
 
 // Wire schedule -- tools/landing_gear_r6_sizing.py output.  Each wire is
 // straight stock with ONE shallow mid-span bow; the ENDS STAY STRAIGHT
@@ -470,12 +482,21 @@ FLEX_DEG     = 22.0;
 // Unit vector in the XZ swing plane at azimuth az (deg from +X toward +Z)
 function azv(az) = [cos(az), 0, sin(az)];
 
-// Thigh-side socket MOUTH centre for a wire at stagger y
-function crank_socket(y) = CRANK_R * azv(CRANK_AZ) + [0, y, 0];
+// Wire table, i = 0..3: 0-1 the DUCTILE row, 2-3 the SPRING row, each pair at
+// y -/+ ROW_PITCH/2.
+function w_spring(i) = i >= 2;
+function w_y(i)      = (i % 2 == 0 ? -1 : 1) * ROW_PITCH / 2;
+function w_crank(i)  = w_spring(i) ? CRANK_AZ_S : CRANK_AZ_D;
+function w_chord(i)  = w_crank(i) + 90;
+function w_l(i)      = w_spring(i) ? SPRING_L : DUCTILE_L;
+function w_seat(i)   = w_spring(i) ? SPRING_SEAT : DUCTILE_SEAT;
+function w_d(i)      = w_spring(i) ? SPRING_D : DUCTILE_D;
 
-// Bay boss bore MOUTH centre for a wire of stock length l seated `seat`
-// deep at both ends: exposed span between mouths = l - 2*seat
-function boss_mouth(l, seat, y) = crank_socket(y) + (l - 2 * seat) * azv(CHORD_AZ);
+// Thigh-side socket MOUTH centre of wire i
+function crank_socket(i) = CRANK_R * azv(w_crank(i)) + [0, w_y(i), 0];
+
+// Bay boss bore MOUTH centre of wire i: exposed span between mouths = l - 2 seat
+function boss_mouth(i) = crank_socket(i) + (w_l(i) - 2 * w_seat(i)) * azv(w_chord(i));
 
 // Solid rod between two points
 module rod_between(a, b, d) {
@@ -536,15 +557,17 @@ module bowed_wire(d, L, h, e = 0) {
     polyhedron(points = points, faces = faces, convexity = 4);
 }
 
-// A wire posed in the leg-local frame, SEATED: the stock runs from `seat`
-// deep inside the thigh socket, along the chord (azimuth CHORD_AZ in XZ),
-// to `seat` deep inside its bay boss bore.  Bow bulges in-plane.
-module posed_wire(l, seat, y, d, h) {
-    a = crank_socket(y);
-    translate(a + (l / 2 - seat) * azv(CHORD_AZ))
-        rotate([0, 90 - CHORD_AZ, 0])       // local +Z -> chord direction
-            rotate([0, 0, 90])              // bow bulge into the swing plane
-                bowed_wire(d, l, h, seat + END_RUN_IN);
+// Wire i posed in the leg-local frame, SEATED: the stock runs from `seat` deep
+// inside the thigh socket, along its row's chord, to `seat` deep inside its bay
+// boss bore.  The bow bulges IN THE SWING PLANE, radially outward (toward the
+// crank arm's own azimuth).  Rev R6 had an extra rotate([0, 0, 90]) here that
+// its comment said put the bow "into the swing plane"; it put it along the
+// PIN axis instead, into the neighbouring wire and the clevis ear (BHD-02k).
+module posed_wire(i, h) {
+    a = crank_socket(i);
+    translate(a + (w_l(i) / 2 - w_seat(i)) * azv(w_chord(i)))
+        rotate([0, 90 - w_chord(i), 0])     // local +Z -> chord; local +X -> crank azimuth
+            bowed_wire(w_d(i), w_l(i), h, w_seat(i) + END_RUN_IN);
 }
 
 // Wedge sector in the XZ plane: azimuth az1..az2, radius r1..r2, width w
@@ -601,6 +624,14 @@ module leg_frame() {
             ycyl([0, 0, 0], LUG_W, HUB_D);
             // Extension-stop tab (rests on the bay's stop cross-pin)
             xz_sector(STOP_TAB_AZ1, STOP_TAB_AZ2, 3.0, 10.0, LUG_W);
+            // Crank horns (BHD-02g): a local boss around each ROW's sockets,
+            // hulled to the hub, so a row may sit outside the root lug.
+            for (az = [CRANK_AZ_D, CRANK_AZ_S])
+                hull() {
+                    ycyl([0, 0, 0], LUG_W, HUB_D);
+                    ycyl(CRANK_R * azv(az), LUG_W,
+                         DUCTILE_D + SOCK_CLR + 2 * HORN_WALL);
+                }
             // Root lug: blend hub into the cluster.  The hull() stays in
             // the down-outboard quadrant, out of the wire-chord corridor.
             hull() {
@@ -687,26 +718,18 @@ module leg_frame() {
                             THIGH_BORE_D);
         // Hip pin bore
         ycyl([0, 0, 0], LUG_W + 0.2, PIN_D);
-        // 4 bellcrank wire sockets: bore along the chord, into the root
+        // 4 bellcrank wire sockets: bore along each row's chord, into the root
         for (i = [0 : 3]) {
-            y = (i - 1.5) * WIRE_STAGGER;
-            spring = (abs(y) > 3);                      // outer=spring
-            wd = spring ? SPRING_D : DUCTILE_D;
-            seat = spring ? SPRING_SEAT : DUCTILE_SEAT;
-            a = crank_socket(y);
-            translate(a + 0.1 * azv(CHORD_AZ))
-                rotate([0, 90 - CHORD_AZ, 0])
-                    translate([0, 0, -seat - 0.1])
-                        cylinder(h = seat + 0.2, d = wd + SOCK_CLR);
+            translate(crank_socket(i) + 0.1 * azv(w_chord(i)))
+                rotate([0, 90 - w_chord(i), 0])
+                    translate([0, 0, -w_seat(i) - 0.1])
+                        cylinder(h = w_seat(i) + 0.2, d = w_d(i) + SOCK_CLR);
         }
-        // Wire-chord relief scallop across the root's up-outboard shoulder
-        // (guarantees the chords' first 14 mm clear the lug blend)
-        for (i = [0 : 3]) {
-            y = (i - 1.5) * WIRE_STAGGER;
-            a = crank_socket(y);
-            translate(a) rotate([0, 90 - CHORD_AZ, 0])
-                cylinder(h = 14, d = DUCTILE_D + 2.5);
-        }
+        // Wire-chord relief scallop across the root shoulder (the chords'
+        // first 14 mm clear the lug blend and the crank horn)
+        for (i = [0 : 3])
+            translate(crank_socket(i)) rotate([0, 90 - w_chord(i), 0])
+                cylinder(h = 14, d = w_d(i) + 2.5);
         // Canonical vent-slot pockets, both shin faces
         mid = (KNEE + ANKLE) / 2;
         for (sy = [-1, 1]) for (xo = [-4.5, 4.5])
@@ -859,15 +882,13 @@ module bay_cowl(flange = true) {
 // thread is carried on a raised pad.  Axis is radial to the wire (normal to
 // the chord) and set back RET_DEPTH_* from the boss mouth so the screw always
 // bears on the STRAIGHT seat, including after the 1.62 mm inward slide.
-module retention_pad(y, spring, cut) {
-    l    = spring ? SPRING_L : DUCTILE_L;
-    st   = spring ? SPRING_SEAT : DUCTILE_SEAT;
-    dep  = spring ? RET_DEPTH_S : RET_DEPTH_D;
-    m    = boss_mouth(l, st, y);
-    // step `dep` INTO the boss along the chord, then go radial (+Z-ish in the
-    // swing plane, i.e. perpendicular to the chord, clear of the neighbours).
-    seat = m + dep * azv(CHORD_AZ);
-    translate(seat) rotate([0, 90 - CHORD_AZ, 0]) rotate([0, 90, 0])
+module retention_pad(i, cut) {
+    dep  = w_spring(i) ? RET_DEPTH_S : RET_DEPTH_D;
+    m    = boss_mouth(i);
+    // step `dep` INTO the boss along the chord, then go radial (in the swing
+    // plane, perpendicular to the chord, clear of the row neighbour).
+    seat = m + dep * azv(w_chord(i));
+    translate(seat) rotate([0, 90 - w_chord(i), 0]) rotate([0, 90, 0])
         if (cut) {
             // tap pilot: through the pad and the boss wall into the bore
             translate([0, 0, -0.1])
@@ -885,11 +906,13 @@ module retention_pad(y, spring, cut) {
 // enough along the pin axis to bite into both liner walls.  Placed at the boss
 // MID-LENGTH so it bonds the full 4-boss cluster rather than clipping its root.
 module boss_carrier() {
-    m = boss_mouth(DUCTILE_L, DUCTILE_SEAT, 0);
-    translate(m + ((DUCTILE_SEAT + 3) / 2 - BAY_CARRIER_T / 4)
-                 * azv(CHORD_AZ))
-        rotate([0, 90 - CHORD_AZ, 0])
-            cube([BAY_CARRIER_H, BAY_CARRIER_W, BAY_CARRIER_T], center = true);
+    // one carrier per ROW (BHD-02g), centred between the row's two bosses
+    for (i = [0, 2]) {
+        m = (boss_mouth(i) + boss_mouth(i + 1)) / 2;
+        translate(m + ((w_seat(i) + 3) / 2 - BAY_CARRIER_T / 4) * azv(w_chord(i)))
+            rotate([0, 90 - w_chord(i), 0])
+                cube([BAY_CARRIER_H, BAY_CARRIER_W, BAY_CARRIER_T], center = true);
+    }
 }
 
 // Clevis root gussets: one per side, bridging the ear out to the liner wall.
@@ -927,11 +950,8 @@ module bay_clevis_ears() {
 // Wire bosses on riser wedges at each chord's far end
 module bay_wire_bosses() {
     for (i = [0 : 3]) {
-        y = (i - 1.5) * WIRE_STAGGER;
-        spring = (abs(y) > 3);
-        l = spring ? SPRING_L : DUCTILE_L;
-        st = spring ? SPRING_SEAT : DUCTILE_SEAT;
-        m = boss_mouth(l, st, y);
+        st = w_seat(i);
+        m = boss_mouth(i);
         // Plain boss along the chord.  Rev R6 hulled each boss down to
         // a "riser root on the canted plate plane" -- a 2 mm cube
         // parked at BAY_BACK_X.  That plane was solid plate then; since
@@ -941,8 +961,8 @@ module bay_wire_bosses() {
         // carrier slab crosses every boss over its full length and
         // lands in both liner side walls, which are continuous with
         // the bolt flange.  Nothing is hulled to a datum any more.
-        translate(m - BAY_CARRIER_T / 2 * azv(CHORD_AZ))
-            rotate([0, 90 - CHORD_AZ, 0])
+        translate(m - BAY_CARRIER_T / 2 * azv(w_chord(i)))
+            rotate([0, 90 - w_chord(i), 0])
                 cylinder(h = st + 3 + BAY_CARRIER_T / 2, d = BOSS_OD);
     }
 }
@@ -952,13 +972,10 @@ module bay_wire_bosses() {
 // never cut them (BHD-02).
 module bay_wire_seats() {
     for (i = [0 : 3]) {
-        y = (i - 1.5) * WIRE_STAGGER;
-        spring = (abs(y) > 3);
-        l = spring ? SPRING_L : DUCTILE_L;
-        wd = spring ? SPRING_D : DUCTILE_D;
-        st = spring ? SPRING_SEAT : DUCTILE_SEAT;
-        translate(boss_mouth(l, st, y) - 0.1 * azv(CHORD_AZ))
-            rotate([0, 90 - CHORD_AZ, 0])
+        wd = w_d(i);
+        st = w_seat(i);
+        translate(boss_mouth(i) - 0.1 * azv(w_chord(i)))
+            rotate([0, 90 - w_chord(i), 0])
                 cylinder(h = st + 0.2, d = wd + SOCK_CLR);
         // FREE-SPAN RELIEF (found 2026-10-10, tools/landing_gear_bay_function.py
         // wires x bay = 277 mm^3 at every corner): the boss is centred on the
@@ -968,8 +985,8 @@ module bay_wire_seats() {
         // absorber flexes over.  Counterbore the root back to the carrier's
         // near face, 1.5 mm over the seat bore; the seat itself (st beyond the
         // mouth) is untouched, so the boss bearing margin is unchanged.
-        translate(boss_mouth(l, st, y) - (BAY_CARRIER_T / 2 + 0.5) * azv(CHORD_AZ))
-            rotate([0, 90 - CHORD_AZ, 0])
+        translate(boss_mouth(i) - (BAY_CARRIER_T / 2 + 0.5) * azv(w_chord(i)))
+            rotate([0, 90 - w_chord(i), 0])
                 cylinder(h = BAY_CARRIER_T / 2 + 0.5, d = wd + SOCK_CLR + 1.5);
     }
 }
@@ -991,10 +1008,8 @@ module bay_bolts(d) {
 module bay_body() {
     boss_carrier();
     clevis_gussets();
-    for (i = [0 : 3]) {
-        y = (i - 1.5) * WIRE_STAGGER;
-        retention_pad(y, abs(y) > 3, false);
-    }
+    for (i = [0 : 3])
+        retention_pad(i, false);
     // Clevis ears astride the thigh lug (carry both pins)
     bay_clevis_ears();
     // Wire bosses along each chord (see bay_wire_bosses)
@@ -1012,10 +1027,8 @@ module bay_cuts() {
     // Wire seats: blind bores into each boss along the chord
     bay_wire_seats();
     // LG-13 retention tap pilots + counterbores
-    for (i = [0 : 3]) {
-        y = (i - 1.5) * WIRE_STAGGER;
-        retention_pad(y, abs(y) > 3, true);
-    }
+    for (i = [0 : 3])
+        retention_pad(i, true);
 }
 
 // Flange OUTLINE as a prism x0..x1 (plate frame, measured out from the back
@@ -1104,15 +1117,9 @@ module leg_moving(flex) {
 module leg_assembly(flex = 0, h_duct = H_NOM, h_spring = H_NOM) {
     color("OliveDrab", 0.8) bay();
     leg_moving(flex);
-    for (i = [0 : 3]) {
-        y = (i - 1.5) * WIRE_STAGGER;
-        spring = (abs(y) > 3);
-        color(spring ? "Goldenrod" : "FireBrick")
-            posed_wire(spring ? SPRING_L : DUCTILE_L,
-                       spring ? SPRING_SEAT : DUCTILE_SEAT, y,
-                       spring ? SPRING_D : DUCTILE_D,
-                       spring ? h_spring : h_duct);
-    }
+    for (i = [0 : 3])
+        color(w_spring(i) ? "Goldenrod" : "FireBrick")
+            posed_wire(i, w_spring(i) ? h_spring : h_duct);
 }
 
 // ---------------------------------------------------------------------------

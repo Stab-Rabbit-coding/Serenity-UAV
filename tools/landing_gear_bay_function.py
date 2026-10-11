@@ -102,9 +102,11 @@ FEATURES = {
     "leg (thigh+shin+foot)": ("leg_moving(0);", True),
     # the 4 energy-absorber wires at rest (H_NOM) and the extension-stop
     # cross-pin: procured parts, modelled as solids (joint-in-context rule 2)
-    "wires": ("for (i = [0:3]) let(y = (i - 1.5) * WIRE_STAGGER, sp = abs(y) > 3) "
-              "posed_wire(sp ? SPRING_L : DUCTILE_L, sp ? SPRING_SEAT : DUCTILE_SEAT, y, "
-              "sp ? SPRING_D : DUCTILE_D, H_NOM);", True),
+    "wires": ("for (i = [0:3]) posed_wire(i, H_NOM);", True),
+    # full-stroke bow on the rest chord: a conservative envelope of the bow
+    # sweep (the real chord is 2.3 mm shorter there, which bows LESS sideways)
+    "wires deformed": ("for (i = [0:3]) posed_wire(i, w_spring(i) ? H_DEF_SPRING : H_DEF_DUCT);",
+                       True),
     "stop pin": ("ycyl(STOP_PIN_R * azv(STOP_PIN_AZ), LUG_W + 2 * (EAR_CLR + EAR_T), "
                  "PIN_D - 0.2);", True),
 }
@@ -117,7 +119,7 @@ BUILD_ONLY = ("liner", "body", "cuts", "flange outline", "liner outline")
 # then silently left out of the gate (security review 2026-10-11: the wire /
 # stop-pin checks were printed but did not fail the run).
 FUNCTION_LIMITS = ("leg_sweep_vs_own_bay_mm3", "wires_x_stop_pin_mm3", "wires_x_bay_mm3",
-                   "wires_x_leg_rest_mm3", "stop_pin_x_leg_sweep_mm3")
+                   "wires_x_leg_rest_mm3", "stop_pin_x_leg_sweep_mm3", "wire_x_wire_mm3")
 
 
 def function_ok(f: dict) -> bool:
@@ -229,6 +231,20 @@ def swept_leg(path: str, tf: np.ndarray, a1: float = SWEEP_DEG) -> Manifold:
     return Manifold.batch_boolean(poses, OpType.Add)
 
 
+def wire_pairs(path: str, tf: np.ndarray) -> float:
+    """Sum of pairwise overlaps between the 4 posed wires (BHD-02k: the Rev R6
+    3.5 mm pitch put them inside each other)."""
+    parts = sorted(cbc.man(trimesh.load(path, force="mesh").apply_transform(tf)).decompose(),
+                   key=lambda m: -m.volume())
+    tot = 0.0
+    for i in range(len(parts)):
+        for j in range(i + 1, len(parts)):
+            tot += (parts[i] ^ parts[j]).volume()
+    if len(parts) < 4:      # merged on render = they already overlap
+        tot += 1e3
+    return tot
+
+
 def targets(P: dict) -> dict[str, Manifold]:
     """Bulkhead-context solids a gear feature could hit (not the gear itself)."""
     skip = ("gear legs", "door ", "hoist", "winch", "payload", "battery", "TACCO",
@@ -281,14 +297,15 @@ def census(scad: str, P: dict, export: str | None = None,
         # Thigh corridor: the swept leg against its OWN bay, minus the hip pin
         # contact (the lug sits between the ears on the pin -- designed).
         own = (leg ^ bay).volume()
-        wires = posed(paths[(st, "wires")], tf)
+        wires = posed(paths[(st, "wires")], tf) + posed(paths[(st, "wires deformed")], tf)
         pin = posed(paths[(st, "stop pin")], tf)
         leg0 = posed(paths[(st, "leg (thigh+shin+foot)")], tf)
         func.append(dict(corner=cn, bay_bodies=bodies, leg_sweep_vs_own_bay_mm3=round(own, 1),
                          wires_x_stop_pin_mm3=round((wires ^ pin).volume(), 1),
                          wires_x_bay_mm3=round((wires ^ bay).volume(), 1),
                          wires_x_leg_rest_mm3=round((wires ^ leg0).volume(), 1),
-                         stop_pin_x_leg_sweep_mm3=round((pin ^ leg).volume(), 1)))
+                         stop_pin_x_leg_sweep_mm3=round((pin ^ leg).volume(), 1),
+                         wire_x_wire_mm3=round(wire_pairs(paths[(st, "wires deformed")], tf), 1)))
         for fn in FEATURES:
             if fn in BUILD_ONLY or (conforming and fn == "cowl (flange+liner)"):
                 continue

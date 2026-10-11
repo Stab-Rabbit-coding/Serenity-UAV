@@ -16567,6 +16567,13 @@
       ],
       "archived": false
     },
+    "tools/lg_wire_layout_study.py": {
+      "description": "Two-row energy-absorber wire layout pre-filter (BHD-02g / BHD-02k).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/middle_layout_fit.py": {
       "description": "middle_layout_fit.py -- Rev T6 middle-section equipment layout and the",
       "tags": [
@@ -21297,6 +21304,7 @@
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",
+      "tools/lg_wire_layout_study.py",
       "tools/middle_layout_fit.py",
       "tools/mirror_claude_memory.py",
       "tools/nacelle_64_proportion_trade.py",
