@@ -78,7 +78,8 @@ def geometry(pcb: str) -> dict:
             band.append([(ol.CPoint(i).x / s, ol.CPoint(i).y / s) for i in range(ol.PointCount())])
     netcodes = {n: b.FindNet(n).GetNetCode() for n in PLANE_NETS}
     return dict(pads=pads, segs=segs, vias=vias, netcodes=netcodes,
-                edge=(e.GetX() / s, e.GetY() / s, (e.GetX() + e.GetWidth()) / s, (e.GetY() + e.GetHeight()) / s),
+                edge=(e.GetX() / s, e.GetY() / s,
+                      (e.GetX() + e.GetWidth()) / s, (e.GetY() + e.GetHeight()) / s),
                 band=band)
 
 
@@ -120,7 +121,8 @@ def stub_ok(g: dict, net: str, x1: float, y1: float, x2: float, y2: float, back:
             if p["net"] != net and box_dist(px, py, p["x1"], p["y1"], p["x2"], p["y2"]) < need:
                 return False
         for t in g["segs"]:
-            if t["net"] != net and seg_dist(px, py, t["x1"], t["y1"], t["x2"], t["y2"]) < need + t["w"] / 2:
+            d = seg_dist(px, py, t["x1"], t["y1"], t["x2"], t["y2"])
+            if t["net"] != net and d < need + t["w"] / 2:
                 return False
     return True
 
@@ -140,10 +142,12 @@ def site_ok(g: dict, net: str, vx: float, vy: float, placed: list) -> bool:
         if p["drill"] > 0 and math.hypot(vx - p["x"], vy - p["y"]) < DRILL_PITCH + p["drill"] / 2:
             return False
     for t in g["segs"]:
-        if t["net"] != net and seg_dist(vx, vy, t["x1"], t["y1"], t["x2"], t["y2"]) < r + t["w"] / 2 + CLEAR:
+        d = seg_dist(vx, vy, t["x1"], t["y1"], t["x2"], t["y2"])
+        if t["net"] != net and d < r + t["w"] / 2 + CLEAR:
             return False
     for v in g["vias"] + placed:
-        if math.hypot(vx - v["x"], vy - v["y"]) < max(DRILL_PITCH, r + v["r"] + CLEAR if v["net"] != net else 0):
+        keep = r + v["r"] + CLEAR if v["net"] != net else 0
+        if math.hypot(vx - v["x"], vy - v["y"]) < max(DRILL_PITCH, keep):
             return False
     return True
 
@@ -171,12 +175,14 @@ def main() -> None:
                  for step in (0.0, 0.25, 0.5, 0.75, 1.0) for k in range(16)]
         for reach, a in sites:
             vx, vy = round(p["x"] + reach * math.cos(a), 4), round(p["y"] + reach * math.sin(a), 4)
-            if site_ok(g, p["net"], vx, vy, placed) and stub_ok(g, p["net"], p["x"], p["y"], vx, vy, p["back"]):
+            if site_ok(g, p["net"], vx, vy, placed) and \
+                    stub_ok(g, p["net"], p["x"], p["y"], vx, vy, p["back"]):
                 placed.append(dict(net=p["net"], x=vx, y=vy, r=VIA_D / 2))
                 code = g["netcodes"][p["net"]]
                 layer = "B.Cu" if p["back"] else "F.Cu"
-                blocks.append(f'\t(via\n\t\t(at {vx} {vy})\n\t\t(size {VIA_D})\n\t\t(drill {VIA_DRILL})\n'
-                              f'\t\t(layers "F.Cu" "B.Cu")\n\t\t(net {code})\n\t\t(uuid "{uuid.uuid4()}")\n\t)\n')
+                blocks.append(f'\t(via\n\t\t(at {vx} {vy})\n\t\t(size {VIA_D})\n'
+                              f'\t\t(drill {VIA_DRILL})\n\t\t(layers "F.Cu" "B.Cu")\n'
+                              f'\t\t(net {code})\n\t\t(uuid "{uuid.uuid4()}")\n\t)\n')
                 blocks.append(f'\t(segment\n\t\t(start {p["x"]} {p["y"]})\n\t\t(end {vx} {vy})\n'
                               f'\t\t(width {STUB_W})\n\t\t(layer "{layer}")\n\t\t(net {code})\n'
                               f'\t\t(uuid "{uuid.uuid4()}")\n\t)\n')

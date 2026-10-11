@@ -123,7 +123,8 @@ def main() -> None:
             break
         pcb.write_text(text)
     rep = drc(pcb)
-    print("remaining violations:", len(rep["violations"]), "unconnected:", len(rep["unconnected_items"]))
+    print("remaining violations:", len(rep["violations"]),
+          "unconnected:", len(rep["unconnected_items"]))
 
 
 if __name__ == "__main__":
