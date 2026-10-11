@@ -7,6 +7,25 @@
 **Date:** 2026-10-06
 **Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers on the corrected 4.80 mm SMT rails (2026-10-06). **Routing not yet complete** (see "Routing status" below).
 
+**Update 2026-10-11 (ISO_BAND GPS notch, S. Griffing decision after creepage review;
+implemented by Claude Opus 5.5 with `scripts/notch_iso_band.py`):** the band's corner over
+the GPS (MAX-M10S, B.Cu) is cut back. Its edge moves from y 105.5 to y 111.0 mm over
+x 128.3–137.6 mm, so GPS pins 1–9 are no longer inside the band.
+- **Outlines changed:** ISO_BAND, the In2/In3/In4 isolation keep-outs, the GND2_CAN island,
+  and the GND and +3V3 plane cut-outs. No part moved.
+- **Under the module:** In1 is now the logic GND plane and In4 the +3V3 plane. This follows
+  u-blox UBX-20053088 R05 §4: "ground the area below the module, on the top and second layer".
+- **Spacing:** the tightest new gap is 0.725 mm, from the notch edge to the CAN-TR isolated
+  pins on F.Cu. The project rule is 0.5 mm, and the existing B.Cu gap from the GPS pins to
+  CMC-CAN is also 0.725 mm. The isolation class is unchanged (functional, see "Isolation"
+  below).
+- **Cost:** the GND2_CAN island shrinks by 23 %, from 223.6 to 172.4 mm².
+- **Gates:** DRC 0 errors, parity 0, 195 unconnected. GND/+3V3 pads inside the band drop
+  from 9 to 5.
+- **Not done:** the GPS caps found no closer legal site, because CAN-TR's body sits above
+  the module and the band and CMC-CAN sit below its pin row. `gen_pilot_pcb.py` still carries
+  the rectangular band, like the rest of the post-2026-10-09 placement.
+
 **Update 2026-10-10 (TPM header pins, S. Griffing decision; implemented by Claude
 Opus 5.5):** `TPM_RSTN` moved from PB2 P2-11 to **P1-28** (GPIO0_43, ball K22) and
 `TPM_IRQN` from P2-12 to **P1-29** (GPIO0_62, ball Y20), per the PocketBeagle 2 SRM
@@ -116,10 +135,10 @@ kicad-cli pcb drc --severity-all --schematic-parity kicads/Pilot.kicad_pcb   # s
 bash scripts/export_pilot_gerbers.sh
 ```
 
-## Routing status (2026-10-11): 196 unconnected, DRC 0, parity 0 — interactive finish needed
+## Routing status (2026-10-11): 195 unconnected, DRC 0, parity 0 — interactive finish needed
 
 Owner hand placement (2026-10-09) + 34 optimised bypass-cap moves
-(`scripts/optimize/placement_moves.json`, ISO_BAND notch held for creepage review) +
+(`scripts/optimize/placement_moves.json`) + the ISO_BAND GPS notch (2026-10-11, below) +
 the owner's freerouting run repaired to DRC 0 + 11 plane vias. Automated routing results
 on this placement (Claude Opus 5.5):
 

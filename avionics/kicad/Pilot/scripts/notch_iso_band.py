@@ -42,7 +42,8 @@ NOTCHED = ("(xy 128.3 111) (xy 137.6 111) (xy 137.6 105.5) (xy 155.9 105.5) "
 CAN_RECT = "(xy 128.3 105.5) (xy 141.85 105.5) (xy 141.85 122) (xy 128.3 122)"
 CAN_NOTCHED = ("(xy 128.3 111) (xy 137.6 111) (xy 137.6 105.5) (xy 141.85 105.5) "
                "(xy 141.85 122) (xy 128.3 122)")
-# plane outlines walk the band cut-out counter-clockwise: ... 155.9,105.5 -> 128.3,105.5 -> 128.3,122
+# plane outlines walk the band cut-out counter-clockwise:
+#   ... 155.9,105.5 -> 128.3,105.5 -> 128.3,122
 PLANE_CUT = "(xy 155.9 105.5) (xy 128.3 105.5) (xy 128.3 122)"
 PLANE_NOTCHED = "(xy 155.9 105.5) (xy 137.6 105.5) (xy 137.6 111) (xy 128.3 111) (xy 128.3 122)"
 
@@ -94,7 +95,8 @@ def main() -> None:
     out.append(text[last:])
     for k, (want, _, _) in EDITS.items():
         if done[k] != want:
-            raise SystemExit(f"{k}: edited {done[k]} outline(s), expected {want} — board left unchanged")
+            raise SystemExit(f"{k}: edited {done[k]} outline(s), expected {want} "
+                             "— board left unchanged")
     pcb.write_text("".join(out))
     fill = (f"import pcbnew; b = pcbnew.LoadBoard({str(pcb)!r}); "
             f"pcbnew.ZONE_FILLER(b).Fill(b.Zones()); pcbnew.SaveBoard({str(pcb)!r}, b)")
