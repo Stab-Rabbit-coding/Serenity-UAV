@@ -10783,6 +10783,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/scripts/optimize/dump_place.py": {
+      "description": "dump_place.py \u2014 Write place.json (footprints + pads) for the committed Pilot board with a",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/scripts/optimize/eval_placement.py": {
       "description": "eval_placement.py \u2014 Measurement harness for the Pilot placement optimisation loop.",
       "tags": [
@@ -10793,7 +10801,7 @@
       "archived": false
     },
     "avionics/kicad/Pilot/scripts/optimize/placement_moves.json": {
-      "description": "JSON data (1 top-level keys)",
+      "description": "JSON data (2 top-level keys)",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -19977,6 +19985,7 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/optimize/dump_place.py",
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
       "avionics/kicad/Pilot/scripts/optimize/search_caps.py",
@@ -20587,6 +20596,7 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/optimize/dump_place.py",
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
       "avionics/kicad/Pilot/scripts/optimize/search_caps.py",

@@ -56,6 +56,7 @@ def main() -> None:
         only = set(args[args.index("--only") + 1].split(","))
     if "--base" in args:
         base = json.load(open(args[args.index("--base") + 1]))
+    band = [tuple(pt) for pt in base.get("band_outline", BAND)]
     d = json.load(open(args[0]))
     F = {f["ref"]: f for f in d["fps"]}
     P: dict = {}
@@ -91,7 +92,7 @@ def main() -> None:
             if x1 < a2 and a1 < x2 and y1 < b2 and b1 < y2:
                 return False
         for p in pads:
-            if in_poly(p["x"], p["y"], BAND) != iso:
+            if in_poly(p["x"], p["y"], band) != iso:
                 return False
         return True
 
