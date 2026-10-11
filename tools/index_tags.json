@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-10",
+  "generated": "2026-10-11",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -10833,6 +10833,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/scripts/plane_fanout_pilot.py": {
+      "description": "plane_fanout_pilot.py \u2014 Drop a plane via beside every unconnected plane-net pad.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/scripts/repair_pilot_routing.py": {
       "description": "repair_pilot_routing.py \u2014 Rip up the DRC-violating copper of a partly routed Pilot",
       "tags": [
@@ -20017,6 +20025,7 @@
       "avionics/kicad/Pilot/scripts/optimize/search_caps.py",
       "avionics/kicad/Pilot/scripts/optimize/test_optimize.py",
       "avionics/kicad/Pilot/scripts/optimize/via_room_probe.py",
+      "avionics/kicad/Pilot/scripts/plane_fanout_pilot.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/README.md",
@@ -20630,6 +20639,7 @@
       "avionics/kicad/Pilot/scripts/optimize/search_caps.py",
       "avionics/kicad/Pilot/scripts/optimize/test_optimize.py",
       "avionics/kicad/Pilot/scripts/optimize/via_room_probe.py",
+      "avionics/kicad/Pilot/scripts/plane_fanout_pilot.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/README.md",
