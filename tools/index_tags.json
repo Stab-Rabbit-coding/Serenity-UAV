@@ -10783,6 +10783,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/scripts/notch_iso_band.py": {
+      "description": "notch_iso_band.py \u2014 Cut the CAN isolation band back from under the GPS module.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/scripts/optimize/dump_place.py": {
       "description": "dump_place.py \u2014 Write place.json (footprints + pads) for the committed Pilot board with a",
       "tags": [
@@ -20019,6 +20027,7 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/notch_iso_band.py",
       "avionics/kicad/Pilot/scripts/optimize/dump_place.py",
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
@@ -20633,6 +20642,7 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/notch_iso_band.py",
       "avionics/kicad/Pilot/scripts/optimize/dump_place.py",
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
