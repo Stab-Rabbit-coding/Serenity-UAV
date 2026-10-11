@@ -960,6 +960,17 @@ module bay_wire_seats() {
         translate(boss_mouth(l, st, y) - 0.1 * azv(CHORD_AZ))
             rotate([0, 90 - CHORD_AZ, 0])
                 cylinder(h = st + 0.2, d = wd + SOCK_CLR);
+        // FREE-SPAN RELIEF (found 2026-10-10, tools/landing_gear_bay_function.py
+        // wires x bay = 277 mm^3 at every corner): the boss is centred on the
+        // carrier slab, so its root starts BAY_CARRIER_T/2 = 6 mm BEFORE the
+        // seat mouth -- inside the wire's free span.  ~4.8 mm of each wire ran
+        // through solid boss + carrier, a quarter of the 20 mm bow span the
+        // absorber flexes over.  Counterbore the root back to the carrier's
+        // near face, 1.5 mm over the seat bore; the seat itself (st beyond the
+        // mouth) is untouched, so the boss bearing margin is unchanged.
+        translate(boss_mouth(l, st, y) - (BAY_CARRIER_T / 2 + 0.5) * azv(CHORD_AZ))
+            rotate([0, 90 - CHORD_AZ, 0])
+                cylinder(h = BAY_CARRIER_T / 2 + 0.5, d = wd + SOCK_CLR + 1.5);
     }
 }
 

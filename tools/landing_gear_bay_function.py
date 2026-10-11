@@ -100,10 +100,17 @@ FEATURES = {
     "body": ("bay_body();", False),
     "cuts": ("bay_cuts();", False),
     "leg (thigh+shin+foot)": ("leg_moving(0);", True),
+    # the 4 energy-absorber wires at rest (H_NOM) and the extension-stop
+    # cross-pin: procured parts, modelled as solids (joint-in-context rule 2)
+    "wires": ("for (i = [0:3]) let(y = (i - 1.5) * WIRE_STAGGER, sp = abs(y) > 3) "
+              "posed_wire(sp ? SPRING_L : DUCTILE_L, sp ? SPRING_SEAT : DUCTILE_SEAT, y, "
+              "sp ? SPRING_D : DUCTILE_D, H_NOM);", True),
+    "stop pin": ("ycyl(STOP_PIN_R * azv(STOP_PIN_AZ), LUG_W + 2 * (EAR_CLR + EAR_T), "
+                 "PIN_D - 0.2);", True),
 }
 
 # Generator inputs, not features to census on their own.
-BUILD_ONLY = ("liner", "body", "cuts", "flange outline", "liner outline")
+BUILD_ONLY = ("liner", "body", "cuts", "flange outline", "liner outline", "wires", "stop pin")
 
 # Context solids the gear is EXPECTED to touch, with why (unordered substrings).
 EXPECTED = (
@@ -262,7 +269,14 @@ def census(scad: str, P: dict, export: str | None = None,
         # Thigh corridor: the swept leg against its OWN bay, minus the hip pin
         # contact (the lug sits between the ears on the pin -- designed).
         own = (leg ^ bay).volume()
-        func.append(dict(corner=cn, bay_bodies=bodies, leg_sweep_vs_own_bay_mm3=round(own, 1)))
+        wires = posed(paths[(st, "wires")], tf)
+        pin = posed(paths[(st, "stop pin")], tf)
+        leg0 = posed(paths[(st, "leg (thigh+shin+foot)")], tf)
+        func.append(dict(corner=cn, bay_bodies=bodies, leg_sweep_vs_own_bay_mm3=round(own, 1),
+                         wires_x_stop_pin_mm3=round((wires ^ pin).volume(), 1),
+                         wires_x_bay_mm3=round((wires ^ bay).volume(), 1),
+                         wires_x_leg_rest_mm3=round((wires ^ leg0).volume(), 1),
+                         stop_pin_x_leg_sweep_mm3=round((pin ^ leg).volume(), 1)))
         for fn in FEATURES:
             if fn in BUILD_ONLY or (conforming and fn == "cowl (flange+liner)"):
                 continue
@@ -319,7 +333,10 @@ def main() -> int:
     for f in R["function"]:
         ok = f["bay_bodies"] == 1 and f["leg_sweep_vs_own_bay_mm3"] < CLASH_MM3
         print(f"  {'OK  ' if ok else 'FAIL'} {f['corner']:10s} bay bodies {f['bay_bodies']}, "
-              f"leg sweep x own bay {f['leg_sweep_vs_own_bay_mm3']} mm3")
+              f"leg sweep x own bay {f['leg_sweep_vs_own_bay_mm3']} mm3, wires x stop pin "
+              f"{f['wires_x_stop_pin_mm3']} / x bay {f['wires_x_bay_mm3']} / x leg "
+              f"{f['wires_x_leg_rest_mm3']}, stop pin x leg sweep "
+              f"{f['stop_pin_x_leg_sweep_mm3']} mm3")
     if a.json:
         with open(a.json, "w", encoding="utf-8") as fh:
             json.dump(R, fh, indent=2)
