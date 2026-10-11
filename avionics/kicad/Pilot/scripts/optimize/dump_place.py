@@ -29,7 +29,7 @@ for f in b.GetFootprints():
                     rot=f.GetOrientationDegrees(), side='B' if f.IsFlipped() else 'F',
                     cy=[c.GetX()/s, c.GetY()/s, (c.GetX()+c.GetWidth())/s, (c.GetY()+c.GetHeight())/s]))
 pads = [dict(ref=p.GetParentFootprint().GetReference(), num=p.GetNumber(), net=p.GetNetname(),
-             x=p.GetPosition().x/s, y=p.GetPosition().y/s) for p in b.GetPads()]
+             x=p.GetPosition().x/s, y=p.GetPosition().y/s, drill=p.GetDrillSize().x/s) for p in b.GetPads()]
 json.dump(dict(fps=fps, pads=pads), open({sys.argv[2]!r}, 'w'))
 """
 subprocess.run([sys.executable, "-c", code], check=True, capture_output=True)

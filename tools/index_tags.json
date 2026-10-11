@@ -10816,6 +10816,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/scripts/optimize/via_room_probe.py": {
+      "description": "via_room_probe.py \u2014 How many GND/+3V3 plane pads can get a plane via, under two rule sets.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/scripts/repair_pilot_routing.py": {
       "description": "repair_pilot_routing.py \u2014 Rip up the DRC-violating copper of a partly routed Pilot",
       "tags": [
@@ -12953,6 +12961,13 @@
       "archived": false
     },
     "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html": {
+      "description": "HTML document",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/ideation/2026-10-10-pilot-placement-routability-ideation.html": {
       "description": "HTML document",
       "tags": [
         "documentation"
@@ -16871,6 +16886,7 @@
       "docs/failsafe_thresholds.md",
       "docs/flight_envelope.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
+      "docs/ideation/2026-10-10-pilot-placement-routability-ideation.html",
       "docs/ideation/7-2.webp",
       "docs/images/cargo_bulkhead_context_aft_door_swing.png",
       "docs/images/cargo_bulkhead_context_iso_aft.png",
@@ -19989,6 +20005,7 @@
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
       "avionics/kicad/Pilot/scripts/optimize/search_caps.py",
+      "avionics/kicad/Pilot/scripts/optimize/via_room_probe.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/README.md",
@@ -20600,6 +20617,7 @@
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
       "avionics/kicad/Pilot/scripts/optimize/search_caps.py",
+      "avionics/kicad/Pilot/scripts/optimize/via_room_probe.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/README.md",

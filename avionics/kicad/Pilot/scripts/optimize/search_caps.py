@@ -11,7 +11,8 @@ within 3 mm of a same-net pin of its IC is tried on both sides at 0° and 90°. 
 is legal when the cap's courtyard bbox:
 
 * stays ≥ 0.3 mm inside the board edge,
-* overlaps no other courtyard on that side (THT parts and mounting holes block both),
+* overlaps no other courtyard on that side by more than 0.015 mm (THT parts and mounting
+  holes block both), and keeps its pads clear of every drilled hole (NPTH clips included),
 * puts its pads inside the In1 ISO_BAND outline only if the cap is an isolated-domain
   cap, and outside it otherwise.
 
@@ -36,6 +37,8 @@ BAND = [(128.3, 105.5), (155.9, 105.5), (155.9, 122.0), (128.3, 122.0)]
 ISO_NETS = ("GND2_", "VCC2_", "CAN_", "RS485_")
 BOTH_SIDES = ("PWR-IN", "H1", "H2", "H3", "H4")
 OPPOSITE_PENALTY = 1.0
+TOUCH = 0.015      # courtyard contact KiCad DRC accepts (measured: 0.01 mm overlap -> 0 errors)
+HOLE_CLEAR = 0.25  # board min hole clearance, pad copper to any drilled hole
 
 
 def rot_offsets(offs, drot):
@@ -63,6 +66,7 @@ def main() -> None:
     for p in d["pads"]:
         if p["num"]:
             P.setdefault(p["ref"], []).append(p)
+    holes = [(p["x"], p["y"], p.get("drill", 0) / 2) for p in d["pads"] if p.get("drill", 0) > 0]
     boxes = {}  # ref -> (side, x1, y1, x2, y2)
     for f in d["fps"]:
         boxes[f["ref"]] = (f["side"], *f["cy"])
@@ -89,8 +93,12 @@ def main() -> None:
         for r, (s, a1, b1, a2, b2) in boxes.items():
             if r == ref or (s != side and r not in BOTH_SIDES):
                 continue
-            if x1 < a2 and a1 < x2 and y1 < b2 and b1 < y2:
+            if x1 < a2 - TOUCH and a1 < x2 - TOUCH and y1 < b2 - TOUCH and b1 < y2 - TOUCH:
                 return False
+        for hx, hy, hr in holes:
+            for p in pads:
+                if math.hypot(p["x"] - hx, p["y"] - hy) < hr + HOLE_CLEAR + 0.35:
+                    return False
         for p in pads:
             if in_poly(p["x"], p["y"], band) != iso:
                 return False
