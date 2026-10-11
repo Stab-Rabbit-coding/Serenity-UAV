@@ -10783,6 +10783,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/scripts/optimize/dump_place.py": {
+      "description": "dump_place.py \u2014 Write place.json (footprints + pads) for the committed Pilot board with a",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/scripts/optimize/eval_placement.py": {
       "description": "eval_placement.py \u2014 Measurement harness for the Pilot placement optimisation loop.",
       "tags": [
@@ -10793,7 +10801,23 @@
       "archived": false
     },
     "avionics/kicad/Pilot/scripts/optimize/placement_moves.json": {
-      "description": "JSON data (1 top-level keys)",
+      "description": "JSON data (2 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/optimize/search_caps.py": {
+      "description": "search_caps.py \u2014 Greedy legal-site search that pulls Pilot bypass caps toward their pins.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/optimize/via_room_probe.py": {
+      "description": "via_room_probe.py \u2014 How many GND/+3V3 plane pads can get a plane via, under two rule sets.",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -12937,6 +12961,13 @@
       "archived": false
     },
     "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html": {
+      "description": "HTML document",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/ideation/2026-10-10-pilot-placement-routability-ideation.html": {
       "description": "HTML document",
       "tags": [
         "documentation"
@@ -16855,6 +16886,7 @@
       "docs/failsafe_thresholds.md",
       "docs/flight_envelope.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
+      "docs/ideation/2026-10-10-pilot-placement-routability-ideation.html",
       "docs/ideation/7-2.webp",
       "docs/images/cargo_bulkhead_context_aft_door_swing.png",
       "docs/images/cargo_bulkhead_context_iso_aft.png",
@@ -19969,8 +20001,11 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/optimize/dump_place.py",
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
+      "avionics/kicad/Pilot/scripts/optimize/search_caps.py",
+      "avionics/kicad/Pilot/scripts/optimize/via_room_probe.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/README.md",
@@ -20578,8 +20613,11 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/optimize/dump_place.py",
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
+      "avionics/kicad/Pilot/scripts/optimize/search_caps.py",
+      "avionics/kicad/Pilot/scripts/optimize/via_room_probe.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/README.md",
