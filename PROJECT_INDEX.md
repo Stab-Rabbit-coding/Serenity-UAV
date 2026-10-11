@@ -1921,7 +1921,7 @@ pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md —
 
 ```text
 annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md — Annular ESC bay length is set by the radial stack, not the panel width [documentation, power]
-build-every-joint-in-context-through-its-full-motion.md — Build every joint in context, through its full motion [documentation]
+build-every-joint-in-context-through-its-full-motion.md — Context [documentation]
 coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md — A motor coaxial with its worm clears the wheel by WORM_PD/2 − MOTOR_D/2 − m, whatever you do with C or the wo… [documentation]
 decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md — Decide a multi-station cape's board size against every mount, and couple board size to airframe envelopes mec… [documentation]
 envelope-gates-pass-while-real-parts-clash.md — Context [documentation]
