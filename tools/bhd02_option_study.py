@@ -296,7 +296,8 @@ def aper_half(zb: float) -> float:
     return (APER_W[0] + t * (APER_W[1] - APER_W[0])) / 2.0
 
 
-def bolt_group(levers: list[float], n_bolts: int = 4) -> dict:
+def bolt_group(levers: list[float], n_bolts: int = 4,
+               cap: float = BOLT_CAP_BEARING) -> dict:
     """LG-02 prying: T_i = M d_i / sum d^2 about the lower bolt line; the leg
     force is shared in shear by all n_bolts (lower bolts have d = 0)."""
     s2 = sum(d * d for d in levers)
@@ -306,7 +307,7 @@ def bolt_group(levers: list[float], n_bolts: int = 4) -> dict:
     return dict(levers_mm=[round(d, 1) for d in levers], tension_n=[round(t) for t in T],
                 shear_n=round(V), resultant_max_n=round(max(R)),
                 fos_tension=round(M3_TENSION / max(T), 1),
-                fos_bearing=round(BOLT_CAP_BEARING / max(R), 2))
+                fos_bearing=round(cap / max(R), 2))
 
 
 def option_c(P: dict, corners: dict, out: str | None) -> dict:

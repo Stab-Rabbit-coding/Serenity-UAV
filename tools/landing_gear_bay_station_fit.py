@@ -62,9 +62,11 @@ X_CL = -169.9              # hull centreline (airframe/AGENTS.md)
 # RECESSED 15 mm along each corner's own swing axis (LG-10.2, 2026-08-09).
 # Pre-recess stations were [-90,-7], [-249.8,-7], [-79,107], [-260.8,107]; run
 # with --pre-recess to measure those instead.
+# FORE moved 2026-10-10 (BHD-02) from [-103.87 / -235.93, -1.28]; must match
+# canonical_leg_r6_3_0in.scad CORNERS and merge_cargo_interior.LG_CORNERS.
 LG_CORNERS = [
-    ("fore-port", -103.87, -1.28, 38.0, -22.4),
-    ("fore-stbd", -235.93, -1.28, 38.0, -157.6),
+    ("fore-port", -114.90, -16.00, 38.0, -22.4),
+    ("fore-stbd", -224.90, -16.00, 38.0, -157.6),
     ("aft-port", -92.24, 99.96, 38.0, 28.0),
     ("aft-stbd", -247.56, 99.96, 38.0, 152.0),
 ]

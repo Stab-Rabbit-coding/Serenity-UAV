@@ -842,11 +842,12 @@ LG_PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
 
 # Corner stations, RECESSED 15 mm along each corner's own swing axis (LG-10.2).
 # (label, hip_x, hip_y, hip_z, swing_azimuth_deg, station)
-# FORE station move PENDING (BHD-02, docs/BHD02_OPTION_STUDY.md SS10).  MUST match canonical_leg_r6_3_0in.scad CORNERS (gated by
+# FORE station moved 2026-10-10 (BHD-02, owner "hybrid", docs/BHD02_OPTION_STUDY.md
+# SS10-11) from Y -1.28 / X -103.87, -235.93 to Y -16.  MUST match canonical_leg_r6_3_0in.scad CORNERS (gated by
 # tools/landing_gear_bay_function.py corner_sync()).
 LG_CORNERS = [
-    ("fore-port", -103.87, -1.28, 38.0, -22.4, "fore"),
-    ("fore-stbd", -235.93, -1.28, 38.0, -157.6, "fore"),
+    ("fore-port", -114.90, -16.00, 38.0, -22.4, "fore"),
+    ("fore-stbd", -224.90, -16.00, 38.0, -157.6, "fore"),
     ("aft-port", -92.24, 99.96, 38.0, 28.0, "aft"),
     ("aft-stbd", -247.56, 99.96, 38.0, 152.0, "aft"),
 ]

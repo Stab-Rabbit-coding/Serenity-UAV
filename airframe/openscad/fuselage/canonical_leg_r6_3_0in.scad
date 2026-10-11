@@ -329,12 +329,12 @@ BAY_PLATE_T  = 5.0;         // frame thickness -- MUST be assigned before
 // The shallower corner (fore-port, 1.14 mm) takes a feeler shim at assembly;
 // aft is 0.02 mm, i.e. identical.  The frame's OUTER face lands on the seat
 // and sits BAY_PLATE_T out from the datum, so datum = standoff - thickness.
-// 2026-10-10 (BHD-02): at a moved fore station this must be re-measured (at
-// hip Y -38 it would be 1.61: x0 -10.99, fore-stbd the deeper).  Since the
+// 2026-10-10 (BHD-02): fore re-measured at the moved station (hip Y -16):
+// x0 -6.53 (fore-stbd, the deeper) -> 6.07; was 4.91 at Y -1.28.  Since the
 // owner's conforming-seat decision the printed FLANGE and LINER follow the
 // skin (tools/generate_lg_bays.py) and this datum only places the hip-relative
 // body (ears, gussets, carrier) -- it is kept so the seat-fit gate still holds.
-BAY_STANDOFF = (BAY_STATION == "fore") ? 4.91 : 1.85;
+BAY_STANDOFF = (BAY_STATION == "fore") ? 6.07 : 1.85;
 BAY_BACK_X   = BAY_STANDOFF - BAY_PLATE_T;
 BAY_CANT     = -11.5;       // deg; NEGATIVE = leans outboard at the top, which
                             // is what the real cargo flank does (was +22)
@@ -1111,8 +1111,9 @@ module leg_assembly(flex = 0, h_duct = H_NOM, h_spring = H_NOM) {
 // Corner format: [hip_x, hip_y, hip_z, swing_azimuth_deg, hand]
 //   swing azimuth: direction of foot from hip in plan, deg from hull +X
 //   (port-outboard); fore legs swing fore-of-outboard, aft legs aft-of-
-//   outboard, feet landing within 5 mm of the canonical QMx stations (a
-//   fore station move, BHD-02 pending, would change that for the fore feet).
+//   outboard.  The AFT feet land within 5 mm of the canonical QMx stations;
+//   the FORE feet no longer do -- the 2026-10-10 station move (BHD-02) put
+//   them at Y -46.5, 129 mm off the centreline (were -31.8 / 140).
 // ---------------------------------------------------------------------------
 X_CL = -169.9;
 CORNERS = [
@@ -1122,16 +1123,18 @@ CORNERS = [
     // A starboard row is the port row mirrored about X_CL: x -> 2 X_CL - x,
     // az -> 180 - az, and the part itself mirrored in leg-local y.
     //
-    // FORE station move PENDING (BHD-02, owner decision A, 2026-10-10): the
-    // swept candidates are in docs/BHD02_OPTION_STUDY.md SS10.  Y -38 (first
-    // clear of the root flange) puts a third of the bay footprint off the hull
-    // (the flank curls under into the chin ramp) and the bay into the TACCO
-    // chin pouch; no Y clears the flange AND keeps the footprint on the hull.
-    // The rows below stay at the LG-10.2 station until the owner chooses.
+    // FORE station moved 2026-10-10 (BHD-02; owner chose the "hybrid", study
+    // SS10-11): hip Y -16, X re-solved so the seat lands at the old depth (seat
+    // median -0.14 mm, plate frame).  Was [-103.87, -1.28] / [-235.93, -1.28]:
+    // there the fore bays sat inside the bonded wing-root flange and on the CF
+    // spar.  At Y -16 the bay is off the spar, the wing and the TACCO chin
+    // pouch, 92 % of its footprint is on the hull, and the remaining 511 mm^3
+    // into the flange is cleared by a notch in the flange (FOS 16.1).  Y -38
+    // was rejected: a third of the footprint is off the hull there.
     // AFT rows: hip stations RECESSED 15 mm along each corner's own swing
     // axis (LG-10.2); pre-recess [-79, 107], [-260.8, 107].
-    [-103.87,  -1.28, 38,  -22.4,  1 ],   // fore-port  (station move PENDING, see above)
-    [-235.93,  -1.28, 38, -157.6, -1 ],   // fore-stbd  (mirror of fore-port)
+    [-114.90, -16.00, 38,  -22.4,  1 ],   // fore-port
+    [-224.90, -16.00, 38, -157.6, -1 ],   // fore-stbd  (mirror of fore-port)
     [ -92.24,  99.96, 38,   28.0,  1 ],   // aft-port
     [-247.56,  99.96, 38,  152.0, -1 ],   // aft-stbd   (mirror of aft-port)
 ];

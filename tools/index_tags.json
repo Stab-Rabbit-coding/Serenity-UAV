@@ -696,6 +696,14 @@
       ],
       "archived": false
     },
+    "airframe/blender-scripts/lg_bay_corner_params.py": {
+      "description": "Per-corner landing-gear bay M3 positions -- GENERATED, do not hand-edit.",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/blender-scripts/make_bay_text.py": {
       "description": "make_bay_text.py \u2014 origin-centred watertight text slabs for avionics-bay marks.",
       "tags": [
@@ -2671,6 +2679,78 @@
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port_print.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port_print.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd_print.stl": {
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -16353,7 +16433,8 @@
     "tools/generate_lg_bays.py": {
       "description": "Generate the four CONFORMING 3.0 in landing-gear bays (BHD-02, 2026-10-10).",
       "tags": [
-        "build-tooling"
+        "build-tooling",
+        "security"
       ],
       "archived": false
     },
@@ -17519,6 +17600,7 @@
       "tools/bom_edit_door_gateway.py",
       "tools/build_landing_gear_views.py",
       "tools/cargo_bulkhead_context.py",
+      "tools/generate_lg_bays.py",
       "tools/kicad_relink.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/nozzle_servo_linkage.py",
@@ -17789,6 +17871,7 @@
       "airframe/blender-scripts/generate_overview_svgs.py",
       "airframe/blender-scripts/hollow_manifold.py",
       "airframe/blender-scripts/inspect_shell_center.py",
+      "airframe/blender-scripts/lg_bay_corner_params.py",
       "airframe/blender-scripts/make_bay_text.py",
       "airframe/blender-scripts/make_shuttle_text.py",
       "airframe/blender-scripts/merge_cargo_interior.py",
@@ -18026,6 +18109,14 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd_print.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
@@ -18123,6 +18214,7 @@
       "airframe/blender-scripts/generate_overview_svgs.py",
       "airframe/blender-scripts/hollow_manifold.py",
       "airframe/blender-scripts/inspect_shell_center.py",
+      "airframe/blender-scripts/lg_bay_corner_params.py",
       "airframe/blender-scripts/make_bay_text.py",
       "airframe/blender-scripts/make_shuttle_text.py",
       "airframe/blender-scripts/merge_cargo_interior.py",
@@ -18326,6 +18418,14 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd_print.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
@@ -18906,6 +19006,14 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd_print.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
