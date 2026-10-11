@@ -108,6 +108,7 @@ BUILD_ONLY = ("liner", "body", "cuts", "flange outline", "liner outline")
 # Context solids the gear is EXPECTED to touch, with why (unordered substrings).
 EXPECTED = (
     ("bay (printed part)", "shell", "bay seats in the merged hull pocket"),
+    ("M3 bolt keep-out", "shell", "M3 through-bolts pass through the hull wall and collar"),
 )
 
 
@@ -158,6 +159,24 @@ def render(scad: str, station: str, name: str, expr: str,
         os.replace(out + ".tmp.stl", out)
     finally:
         os.unlink(wrap)
+    return out
+
+
+GENERATED = os.path.join(REPO, "airframe", "stls", "fuselage", "landing-gear",
+                         "lg_r6_3_0in_bay_{}.stl")
+
+
+def corner_keepout(cn: str) -> Manifold:
+    """The corner's O8.4 M3 keep-outs at its generated bolt pattern."""
+    sys.path.insert(0, os.path.join(REPO, "airframe", "blender-scripts"))
+    import generate_lg_bays as glb  # noqa: PLC0415
+    import merge_cargo_interior as mci  # noqa: PLC0415
+    org, ex, ey, ez = mci.lg_bay_frame(cn)
+    pts = mci.LG_CORNER_BOLTS.get(cn, mci.lg_nominal_bolts())
+    out = None
+    for u, v in pts:
+        k = glb.bolt_cyl(org, ex, ey, ez, u, v, glb.BOLT_KEEP_D)
+        out = k if out is None else out + k
     return out
 
 
@@ -224,18 +243,37 @@ def census(scad: str, P: dict, export: str | None = None,
     rows, func = [], []
     for cn, c in corners.items():
         st, tf = STATION[cn], corner_tf(c)
-        bay = posed(paths[(st, "bay (printed part)")], tf)
+        # The PRINTED bay is the conforming per-corner part from
+        # tools/generate_lg_bays.py when it has been generated (owner
+        # 2026-10-10, BHD-02); the flat SCAD bay is then only its design
+        # source, and its flat cowl and nominal bolts are not what is built.
+        gen = GENERATED.format(cn)
+        conforming = os.path.exists(gen) and scad == SCAD and not defines
+        if conforming:
+            bay = cbc.man(trimesh.load(gen, force="mesh"))
+            keep = corner_keepout(cn)
+        else:
+            bay = posed(paths[(st, "bay (printed part)")], tf)
+            keep = None
         leg = swept_leg(paths[(st, "leg (thigh+shin+foot)")], tf)
-        bodies = len(trimesh.load(paths[(st, "bay (printed part)")], force="mesh")
-                     .split(only_watertight=False))
+        bodies = len(bay.decompose()) if conforming else len(
+            trimesh.load(paths[(st, "bay (printed part)")], force="mesh")
+            .split(only_watertight=False))
         # Thigh corridor: the swept leg against its OWN bay, minus the hip pin
         # contact (the lug sits between the ears on the pin -- designed).
         own = (leg ^ bay).volume()
         func.append(dict(corner=cn, bay_bodies=bodies, leg_sweep_vs_own_bay_mm3=round(own, 1)))
         for fn in FEATURES:
-            if fn in BUILD_ONLY:
+            if fn in BUILD_ONLY or (conforming and fn == "cowl (flange+liner)"):
                 continue
-            m = leg if fn.startswith("leg") else posed(paths[(st, fn)], tf)
+            if fn.startswith("leg"):
+                m = leg
+            elif conforming and fn == "bay (printed part)":
+                m = bay
+            elif conforming and fn == "M3 bolt keep-out":
+                m = keep
+            else:
+                m = posed(paths[(st, fn)], tf)
             for tn, tm in T.items():
                 if SIDE[cn] not in tn and not tn.startswith(("shell", "collar")):
                     continue
