@@ -10783,6 +10783,23 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/scripts/optimize/eval_placement.py": {
+      "description": "eval_placement.py \u2014 Measurement harness for the Pilot placement optimisation loop.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/optimize/placement_moves.json": {
+      "description": "JSON data (1 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/scripts/repair_pilot_routing.py": {
       "description": "repair_pilot_routing.py \u2014 Rip up the DRC-violating copper of a partly routed Pilot",
       "tags": [
@@ -17295,6 +17312,7 @@
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/README.md",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
@@ -19951,6 +19969,8 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
+      "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/README.md",
@@ -20558,6 +20578,8 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
+      "avionics/kicad/Pilot/scripts/optimize/placement_moves.json",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/README.md",

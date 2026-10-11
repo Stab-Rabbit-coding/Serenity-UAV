@@ -512,6 +512,13 @@ ICS += [
 # MRN / TX_INH GPIOs, P1-10 freed, P1-20 TX_INH -> SPI0_CS_1553 (GPIO CS).
 # Changes 2026-09-19: P1-20 (ex SPI0_CS_1553, unused) -> M1553_TX_EN;
 # P1-33/34 (PB2 3.3 V) -> +3V3_PB2 (cape now regulates its own +3V3).
+# Changes 2026-10-10 (owner-directed, ideation idea 10; Claude Opus 5.5):
+# TPM_RSTN P2-11 -> P1-28 (GPIO0_43, ball K22) and TPM_IRQN P2-12 -> P1-29
+# (GPIO0_62, ball Y20), per PocketBeagle 2 SRM sec 4.2 "P1.27 - P1.28" /
+# "P1.29 - P1.31" mux tables (avionics/datasheets/pocketbeagle2_srm.pdf).  The
+# TPM sits over the P1 rail (6-7 mm away) while P2-11/12 were 26-31 mm away and
+# inside ISO_BAND, where they could not take a via.  P1-27 (AIN4 shared) and
+# P1-30 (UART0_TXD console) were rejected.  Device-tree pin mux must follow.
 # ---------------------------------------------------------------------------
 PB2_P1 = [
     "GND", "GND", "DSHOT3", "DSHOT2", "DSHOT1", "DSHOT0",
@@ -519,12 +526,12 @@ PB2_P1 = [
     "RS485_DE", "RS485_RX", "RS485_TX", "CAN_STB", "MCAN0_RX", "MCAN0_TX",
     "BARO_INT", "IMU_INT2", "IMU_INT1", "SPI0_CS_1553", "SPI0_CS_TPM",
     "SPI0_CS_BARO", "SPI0_MISO", "SPI0_MOSI", "SPI0_CLK", "SPI0_CS_IMU",
-    None, None, None, None, "UART_GPS_RX",
+    None, "TPM_RSTN", "TPM_IRQN", None, "UART_GPS_RX",
     "UART_GPS_TX", "+3V3_PB2", "+3V3_PB2", "+5V", "GND",
 ]
 PB2_P2 = [
     "MDIO1", "MDC1", None, None, None, None, None,
-    None, "GPS_RESETN", "GPS_TIMEPULSE", "TPM_RSTN", "TPM_IRQN",
+    None, "GPS_RESETN", "GPS_TIMEPULSE", None, None,
     "PHY2_RSTN", "PHY2_INTRN", "PHY1_RSTN", "PHY1_INTRN", "MDIO0", "MDC0",
     "RMII1_REF_CLK", "RMII1_RX_ER", "RMII1_CRS_DV", "RMII1_RXD1",
     "RMII1_RXD0", "RMII1_TX_EN", "RMII1_TXD1", "RMII1_TXD0",

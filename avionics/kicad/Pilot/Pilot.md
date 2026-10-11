@@ -7,6 +7,19 @@
 **Date:** 2026-10-06
 **Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers on the corrected 4.80 mm SMT rails (2026-10-06). **Routing not yet complete** (see "Routing status" below).
 
+**Update 2026-10-10 (TPM header pins, S. Griffing decision; implemented by Claude
+Opus 5.5):** `TPM_RSTN` moved from PB2 P2-11 to **P1-28** (GPIO0_43, ball K22) and
+`TPM_IRQN` from P2-12 to **P1-29** (GPIO0_62, ball Y20), per the PocketBeagle 2 SRM
+§4.2 mux tables (`../../datasheets/pocketbeagle2_srm.pdf`).
+- **Why:** the TPM sits over the P1 rail, 6–7 mm from the new pins, whereas P2-11/12 were
+  26–31 mm away and inside `ISO_BAND`, where no via is legal.
+- **Rejected pins:** P1-27 is shared with AIN4, and P1-30 is UART0_TXD (the console).
+- **Gates:** ERC 0, DRC 0 errors, parity 0. The PCB pad nets were edited in place, so the
+  2026-10-09 hand placement is untouched.
+- **Commo:** wires its own TPM to P2-11/12 and leaves P1-28/29 unconnected, so the two
+  capes no longer share TPM reset/IRQ lines if they are ever stacked on one host.
+- **Follow-up:** the host device-tree pin mux must move with the pins.
+
 **Update 2026-10-06 (PB2 rail correction, avionics/WBS.md R2, S. Griffing decision;
 implemented by Claude Opus 5.5):** the PB2 rails were 2.54 mm from the long edges
 (29.92 mm apart). That spacing had no source, and the cape could not have mated.

@@ -18917,7 +18917,6 @@
 			(size 1.27 3.68)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.15)
-			(net 111 "TPM_RSTN")
 			(uuid "7443a367-8d6d-46f3-b504-2d7682fbf366")
 		)
 		(pad "12" smd roundrect
@@ -18925,7 +18924,6 @@
 			(size 1.27 3.68)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.15)
-			(net 109 "TPM_IRQN")
 			(uuid "86c8e0f9-1d5f-4c96-9d3c-64109dfd8d08")
 		)
 		(pad "13" smd roundrect
@@ -27026,6 +27024,7 @@
 			(size 1.27 3.68)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.15)
+			(net 111 "TPM_RSTN")
 			(uuid "abad5c5d-be8c-4250-b7f4-3eff52e459b4")
 		)
 		(pad "29" smd roundrect
@@ -27033,6 +27032,7 @@
 			(size 1.27 3.68)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.15)
+			(net 109 "TPM_IRQN")
 			(uuid "5fb91e29-db02-4a2a-9d7d-aa6894be260c")
 		)
 		(pad "30" smd roundrect
