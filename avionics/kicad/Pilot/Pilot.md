@@ -7,6 +7,44 @@
 **Date:** 2026-10-06
 **Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers on the corrected 4.80 mm SMT rails (2026-10-06). **Routing not yet complete** (see "Routing status" below).
 
+**Update 2026-10-12 (ISOW §13.1 made binding, GNSS moved off the cape; S. Griffing decisions,
+analysis and implementation by Claude Opus 5.5).** The schematic is ahead of the PCB until the
+re-floorplan below lands (branch `pilot-refloorplan`).
+
+- **§13.1 is binding.** TI ISOW1044 SLLSFF7A §13.1 p. 36 [REF-SENSOR-009] and ISOW1412
+  SLLSF86C §13.1 p. 41 [REF-SENSOR-010] require:
+  - a 10 nF 0402 cap within 1 mm of VDD and of VISOOUT;
+  - a ≥ 10 µF bulk cap after it, at 2–4 mm;
+  - symmetric supply/ground traces up to those caps;
+  - BLM15EX331SN1 beads from VISOOUT to VISOIN and from GND2 (pin 11) to GISOIN
+    [REF-SENSOR-043];
+  - "no metal traces or ground pour within 4 mm of" VISOOUT (pin 12) and GND2 (pin 11).
+
+  This board reads the last item as covering every layer, measured from pad edge to metal
+  edge.
+- **Schematic (done, ERC 0).**
+  - Four beads `FB-CAN-V/G` and `FB-485-V/G` added.
+  - The converter side now has its own nets: `VCC2_*_DCDC` and `GND2_*_DCDC`.
+  - `C-CAN4` and `C-485-4` move from 0201 to 0402.
+  - ISOW1412 MODE (pin 13) is tied to GND2 per §13.1.
+  - The MAX-M10S, its bias-T (`R-ANT`, `C-ANT`, `L-ANT`), `J-ANT` and `C-GPS1/2` are removed.
+  - P1-31/32 (GPS UART) and P2-9/10 (GPS RESET_N / TIMEPULSE) are now NC.
+  - Result: 117 parts.
+- **Why GNSS left.** The 4 mm bubbles can only sit in the strip between the B.Cu PB2 rail pads
+  (inner rows end at y 96.6 mm and 113.4 mm). Across that strip, PWR-IN's THT pads and T-ETH2
+  leave about 0 mm to spare beside the two isolators. The bubbles displace the 3V3 buck,
+  IMU/BARO, the GPS and the 1553 transceiver, and on 55 × 35 mm there was no room for all of
+  them. The two dorsal GPS cups get **isolated CAN-FD GPS pucks** instead (owner choice;
+  `avionics/WBS.md`). Each cup has room for a Ø28 mm × 8 mm board under the cup floor, which
+  was measured against the T5 cargo shell.
+- **PGND perimeter fence (owner request, 2026-10-12).** A PGND ring with stitching vias along
+  the edge, gapped at the PB2 rail pads, the bubbles and the isolated band. To be added after
+  placement and before routing.
+- **PCB (in progress).** Both isolators go to rot 180, which puts the isolated column on the
+  west with pins 11/12 at the top. CAN-TR sits at x 135.1 mm and RS485 at x 150.5 mm, both at
+  y 107.1 mm. The displaced logic parts are being re-placed, and the band, islands and planes
+  will be redrawn.
+
 **Update 2026-10-11 (ISO_BAND GPS notch, S. Griffing decision after creepage review;
 implemented by Claude Opus 5.5 with `scripts/notch_iso_band.py`):** the band's corner over
 the GPS (MAX-M10S, B.Cu) is cut back. Its edge moves from y 105.5 to y 111.0 mm over
@@ -93,8 +131,9 @@ Pilot is the flight-control and sensor cape for a PocketBeagle 2 Industrial
 (AM6254) node. Per `docs/AVIONICS_PB2_REDESIGN.md` §3, every control node
 (Pilot and XO capes alike) carries a point of presence on all four onboard
 buses — MIL-STD-1553C, isolated CAN-FD, isolated RS-485, and Ethernet — so
-any node can take over any role. Pilot additionally carries the node's GPS,
-IMU, barometer and TPM.
+any node can take over any role. Pilot additionally carries the node's
+IMU, barometer and TPM. GNSS moved off the cape on 2026-10-12 to isolated CAN-FD GPS
+pucks in the dorsal cups (see the update above).
 
 ## Board
 
@@ -245,7 +284,6 @@ and its rejected/harder alternatives), not a layout fix.
 | RS-485 | JST SM04B-GHS-TB | GND2_RS485, A, B, VCC2_RS485 | Isolated RS-485 bus |
 | MIL-1553 | JST SM04B-GHS-TB | BUS_P, BUS_N, GND, PGND (shield) | MIL-STD-1553C bus A |
 | ETH1 / ETH2 | JST SM04B-GHS-TB | TXP, TXN, RXP, RXN | 10/100 Ethernet line pairs (isolated by the 749010012A magnetics) |
-| J-ANT | U.FL-R-SMT-1 | RF, shield | GNSS active-antenna feed to the dorsal-cup SMA bulkhead |
 | J-PWM | Samtec TSM-108-01-L-DV, 2×8 SMT 0.1 in | 4 × (SIG, +5V, GND, PGND shield) | PWM/DSHOT/BDSHOT-capable servo/ESC port; SIG = PRU DSHOT0-3 balls |
 
 ## Known gaps (tracked in `avionics/WBS.md`)
@@ -259,9 +297,8 @@ and its rejected/harder alternatives), not a layout fix.
   wired (TXINHB left on its internal pull-up, BUSB/BUSB* open). Dual-redundant 1553 would need a second PM-DB2791S
   transformer, TVS pair, and connector — real area cost, see the ideation
   doc's item #4.
-- **U.FL antenna feed unverified against the physical cup mount** — the
-  U.FL-to-SMA-bulkhead pigtail length and routing inside the pouch has not
-  been checked against `docs/CARGO_SECTION_LAYOUT.md`'s dorsal-cup geometry.
+- ~~U.FL antenna feed unverified against the physical cup mount~~ — moot since
+  2026-10-12: GNSS is off the cape (GPS pucks in the dorsal cups, `avionics/WBS.md`).
 
 ## References
 
