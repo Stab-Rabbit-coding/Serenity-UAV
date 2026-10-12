@@ -298,6 +298,9 @@ def swept(shape, a0=0.0, a1=FLEX + FLEX_MARGIN, step=2.0):
                         for a in np.arange(a0, a1 + 1e-9, step)])
 
 
+_PARTS = {}
+
+
 def row_hardware(t, row):
     """(carrier+bosses polygon, wire band polygon) of a row at crank t, rest pose."""
     _a, LineString, _Pt, Polygon, unary_union = _shapely()
@@ -311,6 +314,7 @@ def row_hardware(t, row):
                    for a, b in ((-1, -1), (1, -1), (1, 1), (-1, 1))])
     boss = LineString([m - CARRIER_T / 2 * u, m + (r["seat"] + 3) * u]).buffer(BOSS_R)
     hard = unary_union([car, boss])
+    _PARTS[(round(float(t), 3), row)] = (car, boss)
     # wire band: chord from socket to mouth, bowed outward up to h, + radius
     bands = [LineString([s + out * r["h"] * k, m + out * r["h"] * k]) for k in np.linspace(0, 1, 6)]
     # + the seated ends: the wire runs `seat` past each mouth, into the thigh
@@ -318,6 +322,13 @@ def row_hardware(t, row):
     bands += [LineString([s - r["seat"] * u, s]), LineString([m, m + r["seat"] * u])]
     band = unary_union([b.buffer(r["d"] / 2 + 0.5) for b in bands])
     return hard, band, s
+
+
+def _tab_polygon(stop_az):
+    """The thigh's extension-stop tab sector (stop + 13..28 deg, r 3..10)."""
+    _a, _L, _Pt, Polygon, _u = _shapely()
+    pts = [rr * az(aa) for aa in np.linspace(stop_az + 13, stop_az + 28, 8) for rr in (3.0, 10.0)]
+    return Polygon(pts).convex_hull
 
 
 def ear_shape(stop_az, back_x=0.0):
@@ -332,7 +343,57 @@ def ear_shape(stop_az, back_x=0.0):
                         blk]).convex_hull
 
 
-def evaluate2(tD, tS, stop_az):
+_OBST = {}
+
+
+def station_obstacles(station: str, half_y: float = 15.0):
+    """Swing-plane keep-out for a bay STATION: every cargo-context solid except
+    the hull shell and the gear, cut to the bay's |y| <= 15 slab in the leg-
+    local frame of BOTH corners of the station, projected onto XZ and unioned.
+    (The shell is left to the 3-D census: a small pocket there is a hull edit,
+    not a show-stopper.)  Cached per station for the run."""
+    key = (station, half_y)
+    if key in _OBST:
+        return _OBST[key]
+    import os  # noqa: PLC0415
+    import sys  # noqa: PLC0415
+    from shapely.geometry import Polygon  # noqa: PLC0415
+    from shapely.ops import unary_union  # noqa: PLC0415
+    from manifold3d import Manifold  # noqa: PLC0415
+    here = os.path.dirname(os.path.abspath(__file__))
+    sys.path.insert(0, here)
+    import cargo_bulkhead_context as cbc  # noqa: PLC0415
+    import landing_gear_bay_function as lgbf  # noqa: PLC0415
+    P = cbc.build()
+    corners = lgbf.parse_corners(lgbf.SCAD)
+    # slab = the widest bay hardware in Y: the row carrier, BAY_CARRIER_W 30 ->
+    # |y| <= 15.  A 16 mm slab let door material at |y| 15..16 project onto a
+    # carrier it never meets (3-D: 1.98 mm clear, 2-D: 41 mm^2 "overlap").
+    box = Manifold.cube([120.0, 2 * half_y, 120.0]).translate([-60.0, -half_y, -60.0])
+    swap = [[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0]]          # (x,y,z) -> (x,z,y)
+    polys = []
+    for cn, c in corners.items():
+        if lgbf.STATION[cn] != station:
+            continue
+        inv = np.linalg.inv(lgbf.corner_tf(c))[:3, :].tolist()
+        for n, e in P.items():
+            if n.startswith(("gear legs", "shell")):
+                continue
+            loc = e["m"].transform(inv) ^ box
+            if loc.volume() <= 0.05:
+                continue
+            # project() returns outer AND hole rings: combine them even-odd, or
+            # a hollow door outline fills in solid (found 2026-10-11)
+            g = Polygon()
+            for ring in loc.transform(swap).project().to_polygons():
+                if len(ring) >= 3:
+                    g = g.symmetric_difference(Polygon(np.asarray(ring)).buffer(0))
+            polys.append(g)
+    _OBST[key] = unary_union(polys) if polys else Polygon()
+    return _OBST[key]
+
+
+def evaluate2(tD, tS, stop_az, station=None):
     """v2 feasibility: returns (ok, notes, min clearance, cluster azimuths)."""
     _a, _L, Point, _P, unary_union = _shapely()
     th = thigh_shape()
@@ -372,6 +433,37 @@ def evaluate2(tD, tS, stop_az):
             gaps.append(v)
             if v < MARGIN:
                 notes.append(f"{row} {name} {v:+.1f}")
+    # stop pin vs the swept thigh body (2026-10-11: at 290 the pin sat INSIDE
+    # the root lug -- 98.6 mm^3 in the 3-D census).  The projected thigh carries
+    # the base render's tab (131..146); remove it, add this candidate's tab
+    # (stop + 13..28), and require the pin clear of the sweep everywhere except
+    # the tab's own contact face, which is allowed to touch at rest.
+    old_tab = _tab_polygon(118.0)
+    body = th.difference(old_tab.buffer(0.3))
+    pin_gap = pin.distance(swept(body))
+    if pin_gap < 0.5:
+        notes.append(f"stop pin vs swept thigh {pin_gap:+.1f}")
+    new_tab = _tab_polygon(stop_az)
+    tab_gap = new_tab.distance(_unary([hw["D"][0], hw["S"][0]]))
+    if tab_gap < MARGIN:
+        notes.append(f"stop tab vs row hardware {tab_gap:+.1f}")
+    soft = []
+    if station:
+        # each kind of hardware against the cargo parts in ITS OWN Y slab: the
+        # carrier spans |y| <= 15 (BAY_CARRIER_W 30), the bosses |y| <= 8.5
+        # (rows at +/-3, O11), the wires |y| <= 5.2 -- one 15 mm slab put door
+        # material at |y| 9..15 onto bosses it never meets (2026-10-11)
+        for row, t in (("D", tD), ("S", tS)):
+            car, boss = _PARTS[(round(float(t), 3), row)]
+            for name, shp, hy in (("carrier", car, 15.0), ("bosses", boss, 8.5),
+                                  ("wire band", hw[row][1], 5.2)):
+                obst = station_obstacles(station, hy)
+                gap = shp.distance(obst) if not shp.intersects(obst) else -shp.intersection(obst).area
+                if gap < MARGIN:
+                    # SOFT: the projection ignores how a round boss narrows away
+                    # from its axis in Y, so it over-reports; ranked, and the 3-D
+                    # census decides (aft 165/30: 2-D -14.6 mm^2, 3-D 0)
+                    soft.append(min(gap, 0.0))
     # horns vs stop pin over the flex range (pin is bay-fixed, horns ride the thigh)
     for row, t in (("D", tD), ("S", tS)):
         sw = swept(horn_shape(t, row))
@@ -381,6 +473,7 @@ def evaluate2(tD, tS, stop_az):
     for row in ("D", "S"):
         c = np.array(hw[row][0].centroid.coords[0])
         cl[row] = (round(math.degrees(math.atan2(c[1], c[0])), 1), round(float(np.linalg.norm(c)), 1))
+    cl["soft_mm2"] = round(-sum(soft), 1)
     return (not notes), notes, round(min(gaps), 2), cl
 
 

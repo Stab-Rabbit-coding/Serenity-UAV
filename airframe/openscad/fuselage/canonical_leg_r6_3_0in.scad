@@ -102,6 +102,9 @@
 // ===========================================================================
 
 PART = "leg_assembled";      // override with -D on the CLI
+BAY_STATION  = "aft";       // "fore" | "aft" -- selects the back-face datum, the
+                            // wire-row azimuths and the stop-pin azimuth; MUST
+                            // precede every assignment that reads it
 $fn = 48;
 
 // ---------------------------------------------------------------------------
@@ -140,10 +143,14 @@ EAR_CLR      = 0.5;         // lug-to-ear side clearance each side
 
 // Extension stop: M3 SS cross-pin through both clevis ears; a tab on the
 // thigh root rests on it at nominal extension.  Flexion lifts the tab off.
-STOP_PIN_AZ  = 118;         // pin centre azimuth in XZ (deg from +X)
+// 2026-10-11 (BHD-02g): the two-row wire layout needs the stop elsewhere --
+// at 118 the rows' horns and seated wire ends cross it.  Pin and tab rotate
+// TOGETHER about the hip (tab = pin + 13..28 deg), so the rest pose is
+// unchanged.  Was 118 / 131..146 at both stations.
+STOP_PIN_AZ  = (BAY_STATION == "aft") ? 290 : 195;  // pin centre azimuth (deg)
 STOP_PIN_R   = 8.0;         // pin centre radius from hip axis
-STOP_TAB_AZ1 = 131;         // thigh tab sector start (contact face)
-STOP_TAB_AZ2 = 146;         // thigh tab sector end
+STOP_TAB_AZ1 = STOP_PIN_AZ + 13;   // thigh tab sector start (contact face)
+STOP_TAB_AZ2 = STOP_PIN_AZ + 28;   // thigh tab sector end
 
 // Bellcrank wire sockets (in the thigh root, around the pin)
 CRANK_R      = 6.0;         // socket centre radius from pin axis
@@ -158,8 +165,13 @@ CRANK_R      = 6.0;         // socket centre radius from pin axis
 // 90 (flexion turns the thigh counter-clockwise in XZ, so the chord shortens
 // and the wire bows in compression).  The azimuths come from the swing-plane
 // screen tools/lg_wire_layout_study.py, then the 3-D census.
-CRANK_AZ_D   = -22;         // ductile-row crank azimuth (deg, XZ from +X)
-CRANK_AZ_S   = -22;         // spring-row crank azimuth
+// PER STATION (2026-10-11): the fore and aft clusters must avoid different
+// things (aft: the wing root above; fore: the hull belly and the doors below),
+// so each station has its own thigh -- one leg part number per station, as
+// the bays already are.  Values from the swing-plane screen, confirmed by
+// the 3-D census (docs/BHD02_OPTION_STUDY.md SS12).
+CRANK_AZ_D   = (BAY_STATION == "aft") ? 165 : -20;   // ductile row
+CRANK_AZ_S   = (BAY_STATION == "aft") ?  30 :  70;   // spring row
 ROW_PITCH    = 6.0;         // in-row socket pitch along Y (bore 4.91 + 1.1 wall)
 HORN_WALL    = 1.5;         // crank-horn wall around a socket bore that leaves
                             // the root lug (the horn rides on the thigh)
@@ -314,7 +326,9 @@ assert(abs((ANKLE[2] - ANKLE_DISC_D / 2) - (GROUND_Z + FOOT_HUB_H)) < 0.05,
 // shared-BOM claim holds.  BAY_CONFORM and its patch generator are retired;
 // what the two files must now agree on is the DATUM, gated by
 // tools/landing_gear_bay_seat_fit.py.
-BAY_STATION  = "aft";       // "fore" | "aft" -- selects the back-face datum
+// BAY_STATION is assigned near the top of the file (before the stop-pin and
+// wire-row parameters that also depend on it -- a forward reference to it
+// would silently read undef and give every station the fore values).
 
 BAY_PLATE_T  = 5.0;         // frame thickness -- MUST be assigned before
                             // BAY_BACK_X below, which reads it (OpenSCAD
