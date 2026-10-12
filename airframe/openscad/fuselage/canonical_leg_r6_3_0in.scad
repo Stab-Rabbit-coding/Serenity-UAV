@@ -1005,6 +1005,28 @@ module bay_wire_seats() {
     }
 }
 
+// BOW RELIEF (2026-10-11): the wire's bow sweeps sideways in the swing plane;
+// 4.5-7 mm before the boss mouth it is already 2.4 mm (rest) to 4.0 mm (full
+// stroke) off the chord -- more than the straight free-span counterbore allows
+// (wires x bay 20 / 57 mm^3 in the census).  Cut the envelope of the wire at
+// full-stroke bow + 0.5 mm, O d + 1.0, but ONLY between the two socket mouths:
+// the seats beyond each mouth keep their tight bore.
+module bay_bow_relief() {
+    for (i = [0 : 3]) {
+        h = (w_spring(i) ? H_DEF_SPRING : H_DEF_DUCT) + 0.5;
+        span = w_l(i) - 2 * w_seat(i);               // mouth to mouth
+        intersection() {
+            translate(crank_socket(i) + (w_l(i) / 2 - w_seat(i)) * azv(w_chord(i)))
+                rotate([0, 90 - w_chord(i), 0])
+                    bowed_wire(w_d(i) + 1.0, w_l(i), h, w_seat(i) + END_RUN_IN);
+            // the free span only, mouth + 0.1 .. mouth - 0.1, as a fat slab
+            translate(crank_socket(i) + 0.1 * azv(w_chord(i)))
+                rotate([0, 90 - w_chord(i), 0])
+                    translate([-30, -30, 0]) cube([60, 60, span - 0.2]);
+        }
+    }
+}
+
 // 4x M3 shell mounting through-bolts.  d = BAY_M3_D for the clearance hole;
 // a larger d gives a fastener keep-out (head / nut / tool access).
 module bay_bolts(d) {
@@ -1040,6 +1062,8 @@ module bay_cuts() {
          LUG_W + 2 * (EAR_CLR + EAR_T) + 0.2, PIN_D);
     // Wire seats: blind bores into each boss along the chord
     bay_wire_seats();
+    // Bow sweep relief through the carrier / boss roots (free span only)
+    bay_bow_relief();
     // LG-13 retention tap pilots + counterbores
     for (i = [0 : 3])
         retention_pad(i, true);
