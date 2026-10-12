@@ -251,7 +251,11 @@ def _thigh_shape_load():
     sys.path.insert(0, here)
     import landing_gear_bay_function as lgbf  # noqa: PLC0415
     import trimesh  # noqa: PLC0415
-    defs = ("CRANK_AZ_D=-22", "CRANK_AZ_S=-22")
+    # base render: Rev R6 rows AND the Rev R6 stop (118 / tab 131..146), which
+    # evaluate2() removes from the projection before adding each candidate's own
+    # tab -- the SCAD default stop is now per station, so it must be pinned here
+    defs = ("CRANK_AZ_D=-22", "CRANK_AZ_S=-22", "STOP_PIN_AZ=118",
+            "STOP_TAB_AZ1=131", "STOP_TAB_AZ2=146")
     path = lgbf.render(lgbf.SCAD, "aft", "leg (thigh+shin+foot)",
                        lgbf.FEATURES["leg (thigh+shin+foot)"][0], defs)
     cache = path + ".xz55v2.json"
