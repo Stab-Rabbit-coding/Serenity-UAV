@@ -85,6 +85,7 @@ joint still works.
 ## Examples
 
 **Result (2026-10-12).**
+
 - Seat-collar volume against the previous shell: fore −3.5 %, aft
   −9.8 / −8.6 %.
 - Every collar is one piece, and its wall bond is unchanged (fore 513.9 /
