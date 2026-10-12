@@ -75,7 +75,16 @@ STATIC_GAP = 2.0          # mm, the layout tool's static gap to fixed parts
 # Every bolt that then fails slides down its flange; the bay is trimmed clear.
 KEEPOUTS = ("TACCO CN2 port", "TACCO CN3 stbd", "chin shelf",
             "wing port", "wing stbd", "tilt bracket port", "tilt bracket stbd",
-            "door port (closed)", "door stbd (closed)", "door port swept", "door stbd swept")
+            "door port (closed)", "door stbd (closed)", "door port swept", "door stbd swept",
+            "hinge retention")       # 2026-10-12: the aft bay grazed it (5 / 14 mm^3)
+# REMOVABLE envelopes: not fitted when the bays are bolted up, so the M3 DRIVER
+# access may pass them, but the bay and the bolt HARDWARE (backing plate, nut)
+# may not.  2026-10-12: the full 30 mm driver keep-out reached the payload
+# keep-out by 77 / 68 mm^3 at the aft bays and no bolt could find a seat.
+REMOVABLE = ("payload keep-out",)
+# Bolt hardware below the skin: flange T + collar LG_SEAT_D + 4 mm backing plate
+# (owner 2026-10-10) + M3 nut 2.4 + 2 mm thread run-out.
+HW_DEPTH = mci.BAY_PLATE_T + mci.LG_SEAT_D + 4.0 + 2.4 + 2.0
 BOLT_KEEP_D = 3.4 + 2 * 2.5   # O8.4 washer / nut / driver, as the census
 BOLT_T = (-30.0, 20.0)    # bore extent along e_x, as the hull merge
 BOLT_SLIDE_MAX = 30.0     # mm a blocked bolt may slide down its side flange
@@ -106,7 +115,8 @@ def bolt_cyl(org, ex, ey, ez, u, v, d) -> Manifold:
                                         BOLT_T[0], BOLT_T[1], d / 2.0))
 
 
-def build_corner(label: str, c: list[float], env: Manifold, keep: Manifold) -> dict:
+def build_corner(label: str, c: list[float], env: Manifold, keep: Manifold,
+                 removable: Manifold) -> dict:
     st = lgbf.STATION[label]
     tf = lgbf.corner_tf(c)
     org, ex, ey, ez = mci.lg_bay_frame(label)
@@ -117,7 +127,8 @@ def build_corner(label: str, c: list[float], env: Manifold, keep: Manifold) -> d
                               mci.BAY_APER_ZB0, mci.BAY_APER_ZB0 + mci.BAY_APER_L,
                               0.0, T + COWL_H) ^ feat(st, "liner outline", tf)
     body = feat(st, "body", tf)
-    bay = Manifold.batch_boolean([flange, liner, body], OpType.Add) - keep
+    bay = Manifold.batch_boolean([flange, liner, body], OpType.Add) - keep - removable
+    hw_layer = mci.lg_skin_layer(env, org, ex, ey, ez, 90.0, 90.0, -90.0, 90.0, -20.0, HW_DEPTH)
     # Bolts (BHD-02 / BHD-02i).  Each starts at its nominal centre; it is
     # accepted only when (1) its O8.4 keep-out clears the keep-outs, (2) the
     # printed flange surrounds the hole, and (3) the hull's seat COLLAR lies
@@ -136,7 +147,9 @@ def build_corner(label: str, c: list[float], env: Manifold, keep: Manifold) -> d
             v = v0 + dv
             u = u0 if dv == 0.0 else np.sign(u0) * (aper_half(v) + mci.BAY_FLANGE / 2.0)
             k = bolt_cyl(org, ex, ey, ez, u, v, BOLT_KEEP_D)
-            ok = ((k ^ keep).volume() <= 0.05
+            hw = k ^ hw_layer                       # washer / plate / nut, static
+            ok = ((k ^ keep).volume() <= 0.05       # driver access vs fixed structure
+                  and (hw ^ removable).volume() <= 0.05   # hardware vs removable envelopes
                   and (k ^ flange).volume() >= BOLT_MIN_FLANGE
                   and (k ^ collar).volume() >= BOLT_MIN_COLLAR)
             if ok:
@@ -217,12 +230,14 @@ def main() -> int:
     env = mci.to_man(mci.extract_envelope(mci.bake(src)))
     P = cbc.build()
     keep = dilate(Manifold.batch_boolean([P[k]["m"] for k in KEEPOUTS], OpType.Add), STATIC_GAP)
+    removable = dilate(Manifold.batch_boolean([P[k]["m"] for k in REMOVABLE], OpType.Add),
+                       STATIC_GAP)
     corners = lgbf.parse_corners(lgbf.SCAD)
     rows, bad = [], False
     for label, c in corners.items():
         if a.only and label not in a.only:
             continue
-        r = build_corner(label, c, env, keep)
+        r = build_corner(label, c, env, keep, removable)
         ok = (r["bodies"] == 1 and r["leg_sweep_x_bay_mm3"] < lgbf.CLASH_MM3
               and min(r["bolt_flange_mm3"]) >= BOLT_MIN_FLANGE
               and min(r["bolt_collar_mm3"]) >= BOLT_MIN_COLLAR

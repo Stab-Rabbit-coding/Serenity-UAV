@@ -93,6 +93,8 @@ FEATURES = {
     # M3 clearance bore grown to a O8.4 keep-out: washer face / nut / driver.
     "M3 bolt keep-out": ("bay_bolts(BAY_M3_D + 2 * 2.5);", True),
     "bay (printed part)": ("bay();", False),
+    # conforming bays only: the full M3 driver cylinder (vs fixed structure)
+    "M3 driver access": ("bay_bolts(BAY_M3_D + 2 * 2.5);", True),
     # pieces the conforming-bay generator (tools/generate_lg_bays.py) builds from
     "liner": ("bay_cowl(flange = false);", False),
     "flange outline": ("bay_flange_outline(-40, 40);", False),
@@ -110,6 +112,9 @@ FEATURES = {
     "stop pin": ("ycyl(STOP_PIN_R * azv(STOP_PIN_AZ), LUG_W + 2 * (EAR_CLR + EAR_T), "
                  "PIN_D - 0.2);", True),
 }
+
+# Removable envelopes (generate_lg_bays.REMOVABLE): driver access may pass them.
+REMOVABLE = ("payload keep-out",)
 
 # Generator inputs, not features to census on their own.
 BUILD_ONLY = ("liner", "body", "cuts", "flange outline", "liner outline")
@@ -130,6 +135,7 @@ def function_ok(f: dict) -> bool:
 EXPECTED = (
     ("bay (printed part)", "shell", "bay seats in the merged hull pocket"),
     ("M3 bolt keep-out", "shell", "M3 through-bolts pass through the hull wall and collar"),
+    ("M3 driver access", "shell", "the driver passes through the bolt's own bore"),
 )
 
 
@@ -188,8 +194,14 @@ GENERATED = os.path.join(REPO, "airframe", "stls", "fuselage", "landing-gear",
                          "lg_r6_3_0in_bay_{}.stl")
 
 
-def corner_keepout(cn: str) -> Manifold:
-    """The corner's O8.4 M3 keep-outs at its generated bolt pattern."""
+def corner_keepout(cn: str, hardware_only: bool = True) -> Manifold:
+    """The corner's O8.4 M3 keep-outs at its generated bolt pattern.
+
+    hardware_only: just the static stack below the skin (washer / backing
+    plate / nut, generate_lg_bays.HW_DEPTH), which must clear everything.
+    False: the full driver-access cylinder, which must clear FIXED structure
+    but may pass removable envelopes (the payload keep-out) -- the payload is
+    not fitted when the bays are bolted up (2026-10-12)."""
     sys.path.insert(0, os.path.join(REPO, "airframe", "blender-scripts"))
     import generate_lg_bays as glb  # noqa: PLC0415
     import merge_cargo_interior as mci  # noqa: PLC0415
@@ -199,7 +211,25 @@ def corner_keepout(cn: str) -> Manifold:
     for u, v in pts:
         k = glb.bolt_cyl(org, ex, ey, ez, u, v, glb.BOLT_KEEP_D)
         out = k if out is None else out + k
+    if hardware_only:
+        env = _env()
+        out = out ^ mci.lg_skin_layer(env, org, ex, ey, ez, 90.0, 90.0, -90.0, 90.0,
+                                      -20.0, glb.HW_DEPTH)
     return out
+
+
+_ENV = []
+
+
+def _env() -> Manifold:
+    """Outer-skin envelope of the source hull (cached)."""
+    if not _ENV:
+        sys.path.insert(0, os.path.join(REPO, "airframe", "blender-scripts"))
+        import merge_cargo_interior as mci  # noqa: PLC0415
+        src = trimesh.load(mci.BLENDER_SRC, process=False)
+        src.merge_vertices()
+        _ENV.append(cbc.man(mci.extract_envelope(mci.bake(src))))
+    return _ENV[0]
 
 
 def corner_tf(c: list[float]) -> np.ndarray:
@@ -290,9 +320,10 @@ def census(scad: str, P: dict, export: str | None = None,
         if conforming:
             bay = cbc.man(trimesh.load(gen, force="mesh"))
             keep = corner_keepout(cn)
+            driver = corner_keepout(cn, hardware_only=False)
         else:
             bay = posed(paths[(st, "bay (printed part)")], tf)
-            keep = None
+            keep = driver = None
         leg = swept_leg(paths[(st, "leg (thigh+shin+foot)")], tf)
         bodies = len(bay.decompose()) if conforming else len(
             trimesh.load(paths[(st, "bay (printed part)")], force="mesh")
@@ -318,6 +349,10 @@ def census(scad: str, P: dict, export: str | None = None,
                 m = bay
             elif conforming and fn == "M3 bolt keep-out":
                 m = keep
+            elif fn == "M3 driver access":
+                if not conforming:
+                    continue
+                m = driver
             else:
                 m = posed(paths[(st, fn)], tf)
             for tn, tm in T.items():
@@ -325,6 +360,8 @@ def census(scad: str, P: dict, export: str | None = None,
                 # battery, door gateway, hinge retention) carry no side name and
                 # were silently skipped at every corner before 2026-10-11
                 if ("stbd" if SIDE[cn] == "port" else "port") in tn:
+                    continue
+                if fn == "M3 driver access" and tn.startswith(REMOVABLE):
                     continue
                 if not bbox_hit(m, tm):
                     continue
