@@ -173,11 +173,12 @@ def render(scad: str, station: str, name: str, expr: str,
         fh.write(f"include <{scad}>\n{expr}\n")
         wrap = fh.name
     try:
-        subprocess.run(["openscad", "-o", out + ".tmp.stl",  # noqa: S603, S607 # nosec
+        tmp = f"{out}.{os.getpid()}.tmp.stl"   # per-process: concurrent runs share the cache
+        subprocess.run(["openscad", "-o", tmp,  # noqa: S603, S607 # nosec
                         "-D", 'PART="none"', "-D", f'BAY_STATION="{station}"',
                         *[a for d in defines for a in ("-D", d)], wrap],
                        check=True, capture_output=True, timeout=900)
-        os.replace(out + ".tmp.stl", out)
+        os.replace(tmp, out)
     finally:
         os.unlink(wrap)
     return out

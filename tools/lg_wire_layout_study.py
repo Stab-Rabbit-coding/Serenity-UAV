@@ -225,7 +225,17 @@ def _shapely():
     return affinity, LineString, Point, Polygon, unary_union
 
 
+_THIGH = []
+
+
 def thigh_shape():
+    """Cached for the run (see _thigh_shape_load)."""
+    if not _THIGH:
+        _THIGH.append(_thigh_shape_load())
+    return _THIGH[0]
+
+
+def _thigh_shape_load():
     """The thigh's XZ outline near the hip: the REAL rendered leg_frame() mesh
     projected onto the swing plane (r < 55), cached.  The hand-rebuilt outline
     below (thigh_shape_model) over-reported by ~2 mm at the upper cylinder
