@@ -94,6 +94,7 @@ _uid = itertools.count(1)
 # --- footprint library nicknames -------------------------------------------
 FP_C0201 = "Capacitor_SMD:C_0201_0603Metric"
 FP_C0402 = "Capacitor_SMD:C_0402_1005Metric"
+FP_L0402 = "Inductor_SMD:L_0402_1005Metric"
 FP_C0603 = "Capacitor_SMD:C_0603_1608Metric"
 FP_C0805 = "Capacitor_SMD:C_0805_2012Metric"
 FP_C1210 = "Capacitor_SMD:C_1210_3225Metric"
@@ -174,9 +175,12 @@ ICS: List[Dict[str, Any]] = [
             ("16", "GISOIN", "GND2_CAN", "R"),
             ("15", "GISOIN", "GND2_CAN", "R"),
             ("14", "OUT", None, "R"),
-            ("13", "VSIN", "VCC2_CAN", "R"),
-            ("12", "VISOOUT", "VCC2_CAN", "R"),
-            ("11", "GND2", "GND2_CAN", "R"),
+            # 2026-10-12 ISOW1044 SLLSFF7A sec 13.1 item 4: the DC-DC side (VISOOUT/VSIN,
+            # GND2) is split from the transceiver side (VISOIN, GISOIN) by two
+            # BLM15EX331SN1D beads, FB-CAN-V / FB-CAN-G (owner decision, Claude Opus 5.5).
+            ("13", "VSIN", "VCC2_CAN_DCDC", "R"),
+            ("12", "VISOOUT", "VCC2_CAN_DCDC", "R"),
+            ("11", "GND2", "GND2_CAN_DCDC", "R"),
         ],
     },
     {
@@ -205,9 +209,12 @@ ICS: List[Dict[str, Any]] = [
             ("16", "VISOIN", "VCC2_RS485", "R"),
             ("15", "GISOIN", "GND2_RS485", "R"),
             ("14", "IN", None, "R"),
-            ("13", "MODE", "GND2_RS485", "R"),
-            ("12", "VISOOUT", "VCC2_RS485", "R"),
-            ("11", "GND2", "GND2_RS485", "R"),
+            # 2026-10-12 ISOW1412 SLLSF86C sec 13.1 items 4/5: DC-DC side split from the
+            # transceiver side by FB-485-V / FB-485-G; MODE stays in the VISOOUT domain
+            # (shorted to pin 11 -> 3.3 V transceiver supply, unchanged).
+            ("13", "MODE", "GND2_RS485_DCDC", "R"),
+            ("12", "VISOOUT", "VCC2_RS485_DCDC", "R"),
+            ("11", "GND2", "GND2_RS485_DCDC", "R"),
         ],
     },
     {
@@ -585,8 +592,16 @@ SIMPLE: List[Any] = [
     ("C-CAN1", "10nF", FP_C0201, "", "ISOW1044 VDD HF bypass (<1 mm) §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-CAN2", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VDD bulk §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-CAN3", "100nF", FP_C0402, "", "ISOW1044 VIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-CAN4", "10nF", FP_C0201, "", "ISOW1044 VISOOUT HF bypass (<1 mm)", [("1", "P", "VCC2_CAN"), ("2", "N", "GND2_CAN")]),
-    ("C-CAN5", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VISOOUT bulk", [("1", "P", "VCC2_CAN"), ("2", "N", "GND2_CAN")]),
+    ("C-CAN4", "10nF", FP_C0402, "", "ISOW1044 VISOOUT HF bypass, 0402 <1 mm (SLLSFF7A 13.1 #1)",
+     [("1", "P", "VCC2_CAN_DCDC"), ("2", "N", "GND2_CAN_DCDC")]),
+    ("C-CAN5", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VISOOUT bulk, 2-4 mm (SLLSFF7A 13.1 item 2)",
+     [("1", "P", "VCC2_CAN_DCDC"), ("2", "N", "GND2_CAN_DCDC")]),
+    ("FB-CAN-V", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+     "ISOW1044 VISOOUT->VISOIN bead (SLLSFF7A 13.1 item 4) [REF-SENSOR-043]",
+     [("1", "A", "VCC2_CAN_DCDC"), ("2", "B", "VCC2_CAN")]),
+    ("FB-CAN-G", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+     "ISOW1044 GND2(11)->GISOIN(15) bead (SLLSFF7A 13.1 item 4) [REF-SENSOR-043]",
+     [("1", "A", "GND2_CAN_DCDC"), ("2", "B", "GND2_CAN")]),
     ("C-CAN6", "100nF", FP_C0402, "", "ISOW1044 VISOIN bypass", [("1", "P", "VCC2_CAN"), ("2", "N", "GND2_CAN")]),
     ("CMC-CAN", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "CAN_H"), ("2", "W1_OUT", "CAN_H_F"), ("4", "W2_IN", "CAN_L"), ("3", "W2_OUT", "CAN_L_F")]),
@@ -604,8 +619,16 @@ SIMPLE: List[Any] = [
     ("C-485-1", "10nF", FP_C0201, "", "ISOW1412 VDD HF bypass", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-485-2", "10uF 10V X5R", FP_C0805, "", "ISOW1412 VDD bulk", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-485-3", "100nF", FP_C0402, "", "ISOW1412 VIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-485-4", "10nF", FP_C0201, "", "ISOW1412 VISOOUT HF bypass", [("1", "P", "VCC2_RS485"), ("2", "N", "GND2_RS485")]),
-    ("C-485-5", "10uF 10V X5R", FP_C0805, "", "ISOW1412 VISOOUT bulk", [("1", "P", "VCC2_RS485"), ("2", "N", "GND2_RS485")]),
+    ("C-485-4", "10nF", FP_C0402, "", "ISOW1412 VISOOUT HF bypass, 0402 <1 mm (SLLSF86C 13.1 #1)",
+     [("1", "P", "VCC2_RS485_DCDC"), ("2", "N", "GND2_RS485_DCDC")]),
+    ("C-485-5", "10uF 10V X5R", FP_C0805, "", "ISOW1412 VISOOUT bulk (SLLSF86C 13.1 item 2)",
+     [("1", "P", "VCC2_RS485_DCDC"), ("2", "N", "GND2_RS485_DCDC")]),
+    ("FB-485-V", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+     "ISOW1412 VISOOUT->VISOIN bead (SLLSF86C 13.1 item 4) [REF-SENSOR-043]",
+     [("1", "A", "VCC2_RS485_DCDC"), ("2", "B", "VCC2_RS485")]),
+    ("FB-485-G", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+     "ISOW1412 GND2(11)->GISOIN(15) bead (SLLSF86C 13.1 item 4) [REF-SENSOR-043]",
+     [("1", "A", "GND2_RS485_DCDC"), ("2", "B", "GND2_RS485")]),
     ("C-485-6", "100nF", FP_C0402, "", "ISOW1412 VISOIN bypass", [("1", "P", "VCC2_RS485"), ("2", "N", "GND2_RS485")]),
     ("CMC-RS485", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "RS485_A"), ("2", "W1_OUT", "RS485_A_F"), ("4", "W2_IN", "RS485_B"), ("3", "W2_OUT", "RS485_B_F")]),
@@ -863,7 +886,8 @@ def emit_instance(ic, X, Y, left, right, half_w, half_h, sheet_uuid) -> List[str
 # and VCC2_* are generated inside the isolators; +3V3 comes from U-3V3 whose
 # pins are passive in these box symbols; PGND is chassis.
 PWR_FLAG_RAILS = ["GND", "+3V3", "+5V", "+5V_IN", "GND2_CAN", "GND2_RS485",
-                  "VCC2_CAN", "VCC2_RS485", "PGND", "+3V3_PB2"]
+                  "VCC2_CAN", "VCC2_RS485", "PGND", "+3V3_PB2",
+                  "VCC2_CAN_DCDC", "GND2_CAN_DCDC", "VCC2_RS485_DCDC", "GND2_RS485_DCDC"]
 
 PWR_FLAG_LIB = """    (symbol "power:PWR_FLAG" (power) (pin_numbers (hide yes)) (pin_names (offset 0) (hide yes)) \
 (exclude_from_sim no) (in_bom yes) (on_board yes)

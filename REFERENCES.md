@@ -127,6 +127,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-CONN-001: Samtec TSM series — 0.100in surface-mount terminal strip product data](#ref-conn-001-samtec-tsm-series--0100in-surface-mount-terminal-strip-product-data)
     - [REF-SENSOR-041: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)](#ref-sensor-041-beagleboardorg-pocketbeagle-2--system-reference-manual-mechanical-board-and-header-dimensions)
     - [REF-SENSOR-042: Samtec SSM / SSW / TSW / TSM — .100 in socket and terminal strips (footprint, drawing, qualification)](#ref-sensor-042-samtec-ssm--ssw--tsw--tsm--100-in-socket-and-terminal-strips-footprint-drawing-qualification)
+    - [REF-SENSOR-043: Murata BLM15EX331SN1 — 0402 chip ferrite bead specification JENF243A-0023M-01](#ref-sensor-043-murata-blm15ex331sn1--0402-chip-ferrite-bead-specification-jenf243a-0023m-01)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -2652,6 +2653,20 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Note** | Used for the rail-socket trade study (THT socket vs surface-mount SSM-DV), then for the male TSM-118-04-L-DV-LC rails adopted 2026-10-05 once the PB2-I was found to carry female receptacles. Added 2026-10-05; renumbered from REF-SENSOR-023 on the main merge (that ID is the BMP388 on main). |
 
 **Used in:** `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`, `avionics/WBS.md` §1.2a.
+
+---
+
+### REF-SENSOR-043: Murata BLM15EX331SN1 — 0402 chip ferrite bead specification JENF243A-0023M-01
+
+| Field | Value |
+|---|---|
+| **Publisher** | Murata Manufacturing Co., Ltd. (Kyoto, Japan) |
+| **Product** | BLM15EX331SN1D (BLM15EX series, 0402 / 1005 metric, for power lines) |
+| **Source** | Reference specification JENF243A-0023M-01, archived at `avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf` (MD5 f77aaa952ec45d0ddc5e8539b21ad8ca); product page <https://www.murata.com/en-us/products/productdetail?partno=BLM15EX331SN1%23> (redirects to pim.murata.com, verified HTTP 200 2026-10-12); distributor mirror <https://datasheet.octopart.com/BLM15EX331SN1D-Murata-datasheet-180806479.pdf> |
+| **Portion applied** | Rating table: impedance 330 Ω ±25 % at 100 MHz, 450 Ω ±40 % at 1 GHz; rated current 1.1 A at 85 °C, 700 mA at 125 °C; DC resistance 0.205 Ω max; operating temperature −55 to +125 °C; 0402 (1.0 x 0.5 mm, 0.039 x 0.020 in) body. |
+| **Note** | Part number is the one named by TI ISOW1044 SLLSFF7A §13.1 item 4 [REF-SENSOR-009] and ISOW1412 SLLSF86C §13.1 [REF-SENSOR-010] for the beads between VISOOUT and VISOIN and between GND2 and GISOIN. Added 2026-10-12 by Claude Opus 5.5 for the Pilot §13.1 re-floorplan. |
+
+**Used in:** `avionics/kicad/Pilot/scripts/gen_pilot_sch.py` (FB-CAN-V, FB-CAN-G, FB-485-V, FB-485-G), `avionics/kicad/Pilot/kicads/Pilot.kicad_sch`.
 
 ---
 

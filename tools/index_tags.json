@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-11",
+  "generated": "2026-10-12",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -7714,6 +7714,13 @@
       "archived": false
     },
     "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -20270,6 +20277,7 @@
       "avionics/datasheets/MBRD1045CT.pdf",
       "avionics/datasheets/MGA-82563-TR1G.pdf",
       "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf",
+      "avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf",
       "avionics/datasheets/PCA9555.pdf",
       "avionics/datasheets/PESD5V0F1BL.pdf",
       "avionics/datasheets/PESD5V0X1BL.pdf",
