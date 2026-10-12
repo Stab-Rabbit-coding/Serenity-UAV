@@ -996,6 +996,7 @@ metadata:
 Owner decisions (2026-10-10): **hybrid fore station** (hip Y −16, X −114.90 / −224.90 mirrored, plus a root-flange notch, FOS 17.1 / 17.3); **mirrored port/stbd bays**; **conforming back face**. Y −38 was rejected: a third of the footprint is off the hull and it hits the TACCO pouch.
 
 State at 2026-10-12 (worktree `.worktrees/bhd02`, branch `cargo-bulkhead-bhd02`, NOT pushed):
+
 - **Bays.** Generated per corner by `tools/generate_lg_bays.py` (skin-layer flange and liner from `merge_cargo_interior.lg_skin_layer`). Each bolt is seated on flange AND collar. Keep-outs: wings, tilt brackets, doors, TACCO, chin shelf, hinge retention. Payload is REMOVABLE: the driver may pass it, the hardware may not.
 - **Absorber.** The Rev R6 single row was impossible (3.5 mm pitch for Ø4.26 wires, bow along the pin axis). It is now **two rows of two** on crank horns, with the bow in the swing plane, a counterbore and a bow relief. **Aft rows 30/120, stop 210:** census function checks all 0.0. **Fore OPEN:** no layout clears the payload and doors; options F1 (lighter fore absorber, needs a nose-down case), F2 (narrow the payload envelope), F3 (hull/door rework). Fore bays are still the old single-row ones.
 - **Hull.** The merge trims each bay's own seat collar by the bay's Minkowski offset 0.4 mm, keeping the flange bearing band. `tools/lg_collar_integrity.py` gates it: one piece, M3 bearing ≥ 150 mm³, splice collars untouched.
