@@ -463,7 +463,7 @@ def evaluate2(tD, tS, stop_az, station=None):
                     # SOFT: the projection ignores how a round boss narrows away
                     # from its axis in Y, so it over-reports; ranked, and the 3-D
                     # census decides (aft 165/30: 2-D -14.6 mm^2, 3-D 0)
-                    soft.append(min(gap, 0.0))
+                    soft.append((f"{row} {name}", min(gap, 0.0)))
     # horns vs stop pin over the flex range (pin is bay-fixed, horns ride the thigh)
     for row, t in (("D", tD), ("S", tS)):
         sw = swept(horn_shape(t, row))
@@ -473,7 +473,8 @@ def evaluate2(tD, tS, stop_az, station=None):
     for row in ("D", "S"):
         c = np.array(hw[row][0].centroid.coords[0])
         cl[row] = (round(math.degrees(math.atan2(c[1], c[0])), 1), round(float(np.linalg.norm(c)), 1))
-    cl["soft_mm2"] = round(-sum(soft), 1)
+    cl["soft_mm2"] = round(-sum(g for _n, g in soft), 1)
+    cl["soft_parts"] = sorted({n for n, g in soft if g < 0})
     return (not notes), notes, round(min(gaps), 2), cl
 
 
