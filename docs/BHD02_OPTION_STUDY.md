@@ -426,6 +426,28 @@ Survivors then go to the full census.
   / 526 mm³). The hull merge now gives way to the generated bay, with the
   seat collar under the flange kept.
 
+**Aft station, made buildable (2026-10-12).** Four further changes:
+
+- **Seat collar.** The two-row cluster runs through the bay's own seat
+  collar, so the hull merge trims each collar by the generated bay offset
+  0.4 mm (a true Minkowski offset). It keeps the bearing band the flange
+  bolts onto. Cutting the whole shell instead left it non-manifold; see
+  [cut-the-local-solid-with-a-true-offset-and-gate-the-joint.md](solutions/design-patterns/cut-the-local-solid-with-a-true-offset-and-gate-the-joint.md).
+- **Collar-integrity gate.** `tools/lg_collar_integrity.py` checks:
+  - every seat collar is one piece, with its wall bond unchanged;
+  - there is bearing under every M3 (172–368 mm³, minimum 150);
+  - the head/cargo and cargo/middle splice-collar joints are untouched
+    (0.00 mm³).
+- **Bolt keep-out split.**
+  - Static hardware (washer, 4 mm plate, nut, run-out: 21.4 mm below the
+    skin) must clear everything.
+  - Driver access must clear fixed structure but may pass the payload
+    envelope, which is not fitted when the bays are bolted up.
+- **Carrier trim.** The wire-cluster carrier is trimmed 0.4 mm clear of the
+  hull wall (43 / 32 mm³, under 1 %). The bosses and pads are not trimmed,
+  so seat bearing is unchanged.
+- **Census, aft corners:** every function check 0.0 mm³, one body each.
+
 **Fore station: OPEN, owner input needed.** No fore layout clears the
 cargo interior.
 

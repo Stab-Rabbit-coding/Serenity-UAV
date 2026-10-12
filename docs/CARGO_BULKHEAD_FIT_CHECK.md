@@ -200,6 +200,16 @@ open.
 - **BHD-10 options pictured** (study §9): moving forward is rejected. A
   thinner measured stack, or a collar ring relief after a bond check.
 
+### 2c. Status update (2026-10-12)
+
+- **BHD-02 aft corners resolved** (two-row wire layout, conforming bays,
+  hull re-merged; study §12). The **fore corners wait on the owner's
+  fore-absorber choice** (F1–F3).
+- **BHD-14 and BHD-02i closed.** The aft bays are one body, and every M3 is
+  seated on flange and hull collar.
+- New gate `tools/lg_collar_integrity.py`: seat collars one piece with
+  bearing under every M3, and the splice-collar joints untouched.
+
 ## 3. 10 AWG route — the corridor answer
 
 No route from the spar exit to Flight Engineer (middle-section neck,
