@@ -404,6 +404,38 @@ GND2_CANB to GND) break the 5 kV galvanic isolation requirement. They must be fi
         Commo's +5V boundary, §1.2/§1.3 Phase 3).
     - [ ] Verify isolation caps/creepage moat (0.5 mm `ISOLATION`) are intact after the
         per-domain tamper-mesh rework (§1.2, "Redesign the tamper mesh").
+- [ ] **Pilot ISOW §13.1 compliance re-floorplan (owner 2026-10-12: §13.1 is binding).**
+    TI SLLSFF7A §13.1 p. 36 [REF-SENSOR-009] / SLLSF86C §13.1 p. 41 [REF-SENSOR-010]: 10 nF
+    0402 < 1 mm from VISOOUT (12) / GND2 (11), bulk >= 10 uF 2-4 mm away, BLM15EX331SN1 beads
+    VISOOUT->VISOIN and GND2->GISOIN [REF-SENSOR-043], and **no metal traces or ground pour
+    within 4 mm of pins 11/12 on any layer**. Analysis 2026-10-12 (Claude Opus 5.5): the B.Cu
+    PB2 rail pads (inner rows end y 96.6 / 113.4 mm) leave one strip where the bubbles can sit,
+    and PWR-IN's THT pads + T-ETH2 leave ~0 mm spare across it, so the two 4 mm bubbles displace
+    the 3V3 buck, IMU/BARO, GPS and the 1553 transceiver. Owner chose to move GNSS off the cape
+    (next item). Measured from pad edge to metal edge (conservative).
+    - [x] Schematic: four beads, split `*_DCDC` nets, 0402 HF caps, MODE -> GND2 (d1196555).
+    - [x] Schematic: MAX-M10S, bias-T, J-ANT, C-GPS1/2 removed; P1-31/32, P2-9/10 NC.
+    - [ ] PCB: both isolators rot 180 (isolated column west, pins 11/12 at the top), pin 11
+        x >= 130.4 mm (PWR-IN THT clearance), RS485 centre x ~150.2 mm (T-ETH2 clearance).
+    - [ ] PCB: re-place buck, IMU/BARO, 1553-XCVR/TVS/X-50M outside both bubbles; re-draw the
+        ISO_BAND, GND2 islands and plane cut-outs; bubble rule areas + DRC rule.
+    - [ ] PCB: PGND perimeter ring + stitching-via fence (owner 2026-10-12, EMI), gapped at the
+        PB2 rail pads, the bubbles and the isolated band.
+    - [ ] PCB: re-route (plane vias first, grid router + rip-up), DRC 0, parity 0.
+    - [ ] Pilot.md, PROJECT_INDEX, memory updated; device tree drops the GPS UART.
+- [ ] **Isolated CAN-FD GPS pucks for the two dorsal GPS cups (owner 2026-10-12).** Replaces the
+    on-cape MAX-M10S (previous item). Each puck: patch antenna in the existing O36 x 6 mm flush
+    recess; electronics board under the cup floor through the O6.5 mm SMA bore. Envelope check
+    2026-10-12 (scratch run of `tools/cargo_layout_fit.py` geometry, Claude Opus 5.5): **O28 mm x
+    8 mm** fits under each cup centred 4 mm aft of the station (X -135 / -205, Y 96), 1 mm to the
+    skin, 2 mm to the battery-cradle aft hanger and the aft-node cable zone; O30 does not fit.
+    - [ ] Owner chose an **isolated** puck (ISOW1044 in the puck). Prove it fits: ISOW1044
+        SOIC-20W + its own §13.1 4 mm bubble + MAX-M10S + MSPM0G3518 + OPTIGA Trust M + LDO +
+        GH connector on a O28 mm board, and keep the isolated DC-DC away from the GNSS front end.
+    - [ ] Power: the Pilot's ISOW1044 offers only 20 mA extra on VISOOUT (SLLSFF7A §8.9), so each
+        puck needs its own 5 V feed from the cargo rail (harness + connector pinout).
+    - [ ] Add the puck as a fleet trust-module node (§1.9.2): own MCU + secure element.
+    - [ ] Schematic, PCB, enclosure/cup adapter, `tools/cargo_layout_fit.py` envelope + gate.
 - [ ] **Add SBUS/UART DIP switch to Pilot** — add a 2-position DIP (or solder-jumper
     pair) to select SBUS vs. plain UART framing on the existing J_SBUS-equivalent
     pad, matching the J_SBUS line item already in Pilot.md §14's field-connector

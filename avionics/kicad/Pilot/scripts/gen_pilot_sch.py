@@ -58,11 +58,18 @@ Lineage
     - PGND<->GND single-point 0 R link, mounting holes on PGND (Pilot.md §7).
     - GPIO ports + J_ESC/J_SERVO replaced by ONE 3x6 servo/ESC header on the
       PRU DSHOT0-3 / SERVO0-1 balls (PWM/DSHOT-capable), PCA9555 removed.
+* 2026-10-12 (Claude Opus 5.5) — GNSS moved OFF the cape (owner decision): the
+  MAX-M10S, its bias-T (R-ANT / C-ANT / L-ANT), U.FL J-ANT and C-GPS1/2 are
+  removed and P1-31/32 (UART) + P2-9/10 (RESET_N / TIMEPULSE) become NC.  The
+  two dorsal GPS cups get isolated CAN-FD GPS pucks instead (avionics/WBS.md).
+  Reason: two ISOW §13.1 4 mm metal-free bubbles [REF-SENSOR-009/010] do not
+  fit the 55 x 35 mm cape with the GPS aboard.  The same pass adds the §13.1
+  ferrite beads and splits the DC-DC output nets (see FB-CAN-* / FB-485-*).
 
 Datasheets (all in ``avionics/datasheets/``; OEM documents are authoritative
 per ``avionics/AGENTS.md``):
   ISOW1044BDFMR isow1044.pdf Table 7-1 | ISOW1412DFMR isow1412.pdf Table 7-1 |
-  SLB9672 slb9672.pdf §3.1.2 | MAX-M10S MAX-M10S_DataSheet_UBX-20035208.pdf §3.1 |
+  SLB9672 slb9672.pdf §3.1.2 | BLM15EX331SN1D Murata_BLM15EX_JENF243A-0023M-01.pdf |
   DP83825I dp83825i.pdf Table 4-1/6-8..6-11, Fig 8-3/8-4 | 749010012A 749010012A.pdf p.1 |
   HI-6138 hi-6138_v-rev-s.pdf p.1/Table 1/§29 | PM-DB2791S PremierMagnetics_DB2791S.pdf | Samtec TSM samtec_tsm-dv-footprint.pdf |
   ICM-42688-P ds-000347 Table 10 | BMP388 bst-bmp388-ds001.pdf Table 50 |
@@ -71,7 +78,7 @@ per ``avionics/AGENTS.md``):
   X2Y (Yageo CX0805) X2Y_15-2237598.pdf Table 3.
 
 Author: Claude Opus 4.8 (2026-07-14); Claude Opus 5 (2026-07-28, 2026-09-19);
-Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap).
+Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap; 2026-10-12, §13.1 beads + GNSS off-board).
 Human owner: sgriffing (Griffing Technology LLC).  License: CC BY 4.0.
 """
 
@@ -259,41 +266,6 @@ ICS: List[Dict[str, Any]] = [
             ("27", "NCI", None, "R"),
             ("28", "NCI", None, "R"),
             ("31", "NCI", None, "R"),
-        ],
-    },
-    {
-        "ref": "GPS",
-        "value": "MAX-M10S-00B",
-        "fp": "RF_GPS:ublox_MAX",
-        "mpn": "MAX-M10S-00B",
-        "ds": "MAX-M10S_DataSheet_UBX-20035208.pdf §3.1 Fig 2 / Table 10 (18-pin LCC) [REF-SENSOR-027]",
-        # External-antenna receiver: the nodes fly inside Faraday pouches in the
-        # cargo bay with the GNSS patch antennas in the dorsal cups
-        # (CARGO_SECTION_LAYOUT.md, AVIONICS_PB2_REDESIGN.md "GPS-ANT U.FL ->
-        # SMA bulkhead"), so the earlier integrated-patch SAM-M10Q could never
-        # see the sky.  Typical 3.3 V design (integration manual B.1 Fig 35):
-        # VCC = V_IO = +3V3, VIO_SEL open, V_BCKP on +3V3 (no backup cell),
-        # active antenna fed from VCC_RF through the 10 R / 27 nH bias-T
-        # (integration manual Fig 37, Tables 52-54).
-        "pins": [
-            ("8", "VCC", "+3V3", "L"),
-            ("7", "V_IO", "+3V3", "L"),
-            ("6", "V_BCKP", "+3V3", "L"),
-            ("2", "TXD", "UART_GPS_TX", "L"),
-            ("3", "RXD", "UART_GPS_RX", "L"),
-            ("4", "TIMEPULSE", "GPS_TIMEPULSE", "L"),
-            ("9", "RESET_N", "GPS_RESETN", "L"),
-            ("5", "EXTINT", None, "L"),
-            ("18", "SAFEBOOT_N", None, "L"),
-            ("11", "RF_IN", "GPS_RF", "R"),
-            ("14", "VCC_RF", "GPS_VCC_RF", "R"),
-            ("13", "LNA_EN", None, "R"),
-            ("15", "VIO_SEL", None, "R"),
-            ("16", "SDA", None, "R"),
-            ("17", "SCL", None, "R"),
-            ("1", "GND", "GND", "R"),
-            ("10", "GND", "GND", "R"),
-            ("12", "GND", "GND", "R"),
         ],
     },
 ]
@@ -533,12 +505,12 @@ PB2_P1 = [
     "RS485_DE", "RS485_RX", "RS485_TX", "CAN_STB", "MCAN0_RX", "MCAN0_TX",
     "BARO_INT", "IMU_INT2", "IMU_INT1", "SPI0_CS_1553", "SPI0_CS_TPM",
     "SPI0_CS_BARO", "SPI0_MISO", "SPI0_MOSI", "SPI0_CLK", "SPI0_CS_IMU",
-    None, "TPM_RSTN", "TPM_IRQN", None, "UART_GPS_RX",
-    "UART_GPS_TX", "+3V3_PB2", "+3V3_PB2", "+5V", "GND",
+    None, "TPM_RSTN", "TPM_IRQN", None, None,
+    None, "+3V3_PB2", "+3V3_PB2", "+5V", "GND",
 ]
 PB2_P2 = [
     "MDIO1", "MDC1", None, None, None, None, None,
-    None, "GPS_RESETN", "GPS_TIMEPULSE", None, None,
+    None, None, None, None, None,
     "PHY2_RSTN", "PHY2_INTRN", "PHY1_RSTN", "PHY1_INTRN", "MDIO0", "MDC0",
     "RMII1_REF_CLK", "RMII1_RX_ER", "RMII1_CRS_DV", "RMII1_RXD1",
     "RMII1_RXD0", "RMII1_TX_EN", "RMII1_TXD1", "RMII1_TXD0",
@@ -704,16 +676,6 @@ SIMPLE: List[Any] = [
     ("C-IMU2", "10nF", FP_C0201, "", "ICM-42688-P VDDIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-BARO1", "100nF", FP_C0402, "", "BMP388 VDD bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-BARO2", "100nF", FP_C0402, "", "BMP388 VDDIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-GPS1", "10uF 6.3V X5R", FP_C0805, "", "MAX-M10S VCC bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-GPS2", "100nF", FP_C0402, "", "MAX-M10S VCC/V_IO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("R-ANT", "10R", FP_R0201, "", "MAX-M10S antenna supply current limiter R8 (integration manual Table 53)",
-     [("1", "A", "GPS_VCC_RF"), ("2", "B", "GPS_ANT_BIAS")]),
-    ("C-ANT", "10nF X7R", FP_C0402, "", "MAX-M10S RF bias-T filter C14 (Table 52)", [("1", "P", "GPS_ANT_BIAS"), ("2", "N", "GND")]),
-    ("L-ANT", "27nH", "Inductor_SMD:L_0402_1005Metric", "LQG15HN27NJ02D", "MAX-M10S RF bias-T inductor L3 (Table 54, Murata LQG15H)",
-     [("1", "A", "GPS_ANT_BIAS"), ("2", "B", "GPS_RF")]),
-    ("J-ANT", "U.FL-R-SMT-1", "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical", "U.FL-R-SMT-1(10)",
-     "GNSS active-antenna feed to the dorsal-cup SMA bulkhead (AVIONICS_PB2_REDESIGN.md GPS-ANT)",
-     [("1", "RF", "GPS_RF"), ("2", "SHIELD", "GND")]),
     # --- TPM -----------------------------------------------------------------
     ("C-TPM1", "1uF", FP_C0402, "", "SLB9672 §3.1.3 typical schematic bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-TPM2", "100nF", FP_C0402, "", "SLB9672 VDD bypass (pin 1)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
