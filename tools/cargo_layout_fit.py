@@ -333,7 +333,12 @@ HOIST_Y = 55.5  # box Y 4.7..106.3 in the 2..108 aperture
 LINE_R = 0.5  # 1 mm Dyneema
 HOIST_DX = BATT_W / 2 + CRADLE_T + GAP_MM + LINE_R  # 30.9 from the battery centre
 HOIST_XS = (BATT_XC - HOIST_DX, BATT_XC + HOIST_DX)
-DOOR_CROWN_Z = 8.72
+# BHD-08 (corrected 2026-10-12): the payload rests on the CLOSED DOORS, whose
+# highest point is Z 10.86 (tools/cargo_bay_envelope.door_top(), measured from
+# cargo_door_port/stbd.stl).  8.72 put the box 2.14 mm low -- inside the doors
+# (571 / 986 mm^3) and 2 mm short of its real conflict with the aft Pilot
+# nodes.  main() re-measures the doors and fails if this drifts.
+DOOR_CROWN_Z = 10.86
 DRUM_D, DRUM_L = 16.0, 12.0
 SPOOL_Z0 = BATT_Z1 + CRADLE_T + GAP_MM  # 133.4, above the cradle ceiling
 # Canonical forward cargo-ramp fairing: opening measured by ray map
@@ -1115,6 +1120,15 @@ def main():
     assert shell_tm.is_watertight, "published cargo shell is not watertight"
     shell_tm = shell_after_merge(shell_tm)
     ok = report(layout_t5(), shell_tm, plot=a.plot)
+    # payload floor datum vs the real closed doors (BHD-08)
+    import cargo_bay_envelope as cbe  # noqa: PLC0415
+    floor = cbe.door_top([trimesh.load(q, force="mesh") for q in cbe.DOOR_PATHS])
+    if abs(floor - DOOR_CROWN_Z) > 0.05:
+        print(f"FAIL payload floor DOOR_CROWN_Z {DOOR_CROWN_Z:.2f} != measured door top "
+              f"{floor:.2f} (BHD-08)")
+        ok = False
+    else:
+        print(f"ok   payload floor DOOR_CROWN_Z {DOOR_CROWN_Z:.2f} = measured door top {floor:.2f}")
     sys.exit(0 if ok else 1)
 
 
