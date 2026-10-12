@@ -69,7 +69,13 @@ PARAMS = os.path.join(REPO, "airframe", "blender-scripts", "lg_bay_corner_params
 
 SLIVER_MM3 = 1.0          # mm^3; below this a split-off piece is boolean residue
 STATIC_GAP = 2.0          # mm, the layout tool's static gap to fixed parts
-KEEPOUTS = ("TACCO CN2 port", "TACCO CN3 stbd", "chin shelf")
+# 2026-10-11: + the wings (the aft plate top and upper M3 sat under the wing
+# root, 267/339 + 60/61 mm^3), the tilt brackets (fore M3 nut/driver access,
+# 81 mm^3) and the doors closed and swept 0..145 (aft M3 keep-outs, 2-6 mm^3).
+# Every bolt that then fails slides down its flange; the bay is trimmed clear.
+KEEPOUTS = ("TACCO CN2 port", "TACCO CN3 stbd", "chin shelf",
+            "wing port", "wing stbd", "tilt bracket port", "tilt bracket stbd",
+            "door port (closed)", "door stbd (closed)", "door port swept", "door stbd swept")
 BOLT_KEEP_D = 3.4 + 2 * 2.5   # O8.4 washer / nut / driver, as the census
 BOLT_T = (-30.0, 20.0)    # bore extent along e_x, as the hull merge
 BOLT_SLIDE_MAX = 30.0     # mm a blocked bolt may slide down its side flange
