@@ -1653,10 +1653,33 @@ def lg_bay_features(shell_tm, envelope_tm=None):
                            f"lg_r6_3_0in_bay_{label}.stl")
         if env_man is not None and os.path.exists(gen):
             bay_tm = trimesh.load(gen, force="mesh")
-            # ... except the seat collar: the flange's back face BEARS on it, so
-            # a dilated bay must not shave it (the M3s would clamp across the
-            # clearance); the collar keeps its own skin-layer definition
-            neg.append(from_man(to_man(_dilate_tm(bay_tm, LG_FIT_CLR)) - to_man(collar_raw)))
+            # Only where the bay actually overlaps the hull, piece by piece, as
+            # CONVEX HULLS of each piece's points shifted +/-LG_FIT_CLR.  The
+            # first version subtracted the whole bay dilated by 15 shifted
+            # copies: near-coincident faces left the merged shell non-manifold
+            # (9,373 bodies, open_mating_faces crashed) -- 2026-10-11.
+            # ... and never the seat collar: the flange's back face BEARS on it.
+            # minus the bay's own skin layers (flange 0..T and liner 0..T+COWL_H
+            # sit IN the skin by design and are handled by the rebate and the
+            # aperture) -- a convex hull of that curved layer would gouge the
+            # whole footprint
+            own = lg_skin_layer(env_man, org, ex, ey, ez,
+                                BAY_PLATE_WB + 4.0, BAY_PLATE_W + 4.0,
+                                BAY_PLATE_ZB0 - 2.0, zb1 + 2.0, -1.0, BAY_PLATE_T + COWL_H + 0.5)
+            over = (to_man(bay_tm) ^ to_man(shell_tm)) - own
+            for piece in over.decompose():
+                if piece.volume() < 1.0:
+                    continue
+                v = np.asarray(piece.to_mesh().vert_properties)[:, :3]
+                pts = np.vstack([v + d for d in
+                                 [np.zeros(3)] + [s * LG_FIT_CLR * e for s in (-1, 1)
+                                                  for e in np.eye(3)]])
+                hull_tm = trimesh.convex.convex_hull(trimesh.PointCloud(pts))
+                cut = to_man(hull_tm) - to_man(collar_raw)
+                if cut.volume() > 0.5:
+                    neg.append(from_man(cut))
+                    report.append(f"{label}: hull gives way to the bay, "
+                                  f"{piece.volume():.0f} mm^3 piece")
         # 4x M3, on the flange centreline, following the trapezoid -- or the
         # corner's relocated pattern from tools/generate_lg_bays.py (BHD-02).
         # Conforming: bored from 20 mm proud to 30 mm deep, which spans the

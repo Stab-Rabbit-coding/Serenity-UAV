@@ -380,6 +380,75 @@ Census JSONs:
 [180°](images/bhd02/bhd02_wire_rot_180.json),
 [240°](images/bhd02/bhd02_wire_rot_240.json).
 
+## 12. Energy-absorber wire redesign (BHD-02g / BHD-02k, 2026-10-11)
+
+**Why.** Once the census modelled the four absorber wires as solids, it
+showed the Rev R6 layout could not be built. It also showed the bow ran
+along the pin axis rather than in the swing plane. See BHD-02k.
+
+**New layout.** Two rows of two wires, a ductile row and a spring row:
+
+- 6 mm in-row pitch.
+- 6 mm crank and a 90° crank-to-chord angle per wire, so every wire's
+  force, arm and stroke, and therefore the sizing, are unchanged.
+- Crank horns around each whole socket bore.
+- Bow in the swing plane.
+- One carrier per row, with the boss root counterbored and the bow sweep
+  relieved through the carrier.
+
+The extension stop pin and tab rotate together about the hip, so the rest
+pose is unchanged.
+
+**How the azimuths were chosen.** `tools/lg_wire_layout_study.py` screens
+row and stop azimuths in the swing plane. Its 2-D model was calibrated
+against the 3-D census until the census's findings were reproduced:
+
+- the thigh outline is projected from the rendered leg mesh;
+- the full wire length is used, seated ends included;
+- the horns enclose the whole socket bore;
+- the stop pin is checked against the swept thigh;
+- each station's cargo parts are projected per Y slab and used as a soft
+  score.
+
+Survivors then go to the full census.
+
+**Aft station: resolved.** Ductile row 30°, spring row 120°, stop pin 210°
+(tab 223–238°).
+
+- Census: wires against the stop pin, the bay and the leg, and the stop pin
+  against the leg sweep, are all 0.0 mm³.
+- The conforming aft bays are one body each, the leg sweep is clear, and
+  every bolt sits on flange and hull collar.
+- The upper M3s drop below the wing. Bearing FOS is 4.42–4.49 on the 4 mm
+  plate.
+- Each bay is 13.7–13.8 g (was 11.4–11.5).
+- The inboard-down boss cluster sits in the hull wall (carrier ∩ shell 620
+  / 526 mm³). The hull merge now gives way to the generated bay, with the
+  seat collar under the flange kept.
+
+**Fore station: OPEN, owner input needed.** No fore layout clears the
+cargo interior.
+
+- The best (D −15° / S 75° / stop 195°) puts the spring cluster 252–256 mm³
+  into the payload keep-out and the bay into the door sweep.
+- The others are worse.
+- The fore legs carry 6.5 % static share (4-point level) against the aft
+  legs' 43.5 %. `tools/landing_gear_r6_sizing.py` loads them only through
+  that level case; its design case (tail-down two-point) loads the aft pair.
+  There is no fore-critical (nose-down) case.
+- Options:
+  - **F1:** a lighter fore absorber in one row of two wires (6 mm pitch
+    fits the lug), with the cluster where the Rev R6 one sat. This needs a
+    fore drop case, for example a nose-down two-point landing, so it is a
+    design-basis decision.
+  - **F2:** narrow the payload keep-out at the fore gear corners. This
+    changes the payload envelope.
+  - **F3:** accept a hull and door rework around a down-inboard fore
+    cluster.
+
+  Until then the fore bays stay as published (single-row wires, BHD-02k
+  open at the fore station).
+
 AI attribution: analysis, tools and text by Claude (Claude Opus 5.5,
 Anthropic) on 2026-10-10, under the direction of Stab-Rabbit-coding.
 Method: [build every joint in context through its full motion](solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md).
