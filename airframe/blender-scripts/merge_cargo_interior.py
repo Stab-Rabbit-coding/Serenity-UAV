@@ -1502,21 +1502,6 @@ def lg_skin_layer(env_man, org, ex, ey, ez, w_bot, w_top, zb0, zb1, d0, d1):
     return (near - far) ^ foot
 
 
-def _dilate_tm(tm, r):
-    """Cheap outward offset of a mesh: union of it shifted +/-r on each axis
-    and the 8 cube diagonals (under-reports a true offset by < 0.3 r on oblique
-    faces; r is a fit clearance, so that is acceptable)."""
-    m = to_man(tm)
-    d = r / np.sqrt(3.0)
-    shifts = [(s * r, 0, 0) for s in (-1, 1)] + [(0, s * r, 0) for s in (-1, 1)] + \
-        [(0, 0, s * r) for s in (-1, 1)] + \
-        [(a * d, b * d, c * d) for a in (-1, 1) for b in (-1, 1) for c in (-1, 1)]
-    out = m
-    for s in shifts:
-        out = out + m.translate(list(s))
-    return from_man(out)
-
-
 def lg_bay_frame(label):
     """(org, ex, ey, ez) of a corner's plate frame, origin at the measured seat
     median -- the datum every conforming solid of that corner hangs from."""
@@ -1604,6 +1589,31 @@ def lg_bay_features(shell_tm, envelope_tm=None):
                                      BAY_PLATE_WB, BAY_PLATE_W,
                                      BAY_PLATE_ZB0, zb1,
                                      -LG_SEAT_D, 0.0)
+        # BHD-02g (2026-10-11): the two-row wire layout runs a boss cluster
+        # through the bay's OWN seat collar (aft: 625 mm^3).  Where the corner's
+        # conforming bay has been generated, the collar gives way to the bay
+        # offset by LG_FIT_CLR (true Minkowski offset of a 0.05 mm-simplified
+        # bay) -- EXCEPT the bearing band under the flange (skin layer
+        # -1..T+0.5 inside the flange outline), which the M3s clamp onto.  Done
+        # on the collar, a small local solid; cutting the whole merged shell with
+        # the offset bays left it non-manifold (1,195 edges) and the export
+        # repair failed -- tools/lg_collar_integrity.py gates the result.
+        gen = os.path.join(REPO_ROOT, "airframe", "stls", "fuselage", "landing-gear",
+                           f"lg_r6_3_0in_bay_{label}.stl")
+        if env_man is not None and os.path.exists(gen):
+            off = to_man(trimesh.load(gen, force="mesh")).simplify(0.05).minkowski_sum(
+                Manifold.sphere(LG_FIT_CLR, 8))
+            bearing = lg_skin_layer(env_man, org, ex, ey, ez, BAY_PLATE_WB, BAY_PLATE_W,
+                                    BAY_PLATE_ZB0, zb1, -1.0, BAY_PLATE_T + 0.5)
+            aper_p = to_man(_plate_trap(org, ex, ey, ez,
+                                        BAY_APER_W_BOT + 2 * LG_FIT_CLR,
+                                        BAY_APER_W_TOP + 2 * LG_FIT_CLR,
+                                        BAY_APER_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR,
+                                        -40.0, 40.0))
+            before = abs(collar_raw.volume)
+            collar_raw = from_man(to_man(collar_raw) - (off - (bearing - aper_p)))
+            report.append(f"{label}: seat collar gives way to the bay + {LG_FIT_CLR} mm: "
+                          f"{before:.0f} -> {abs(collar_raw.volume):.0f} mm^3")
         collar, cut_v = _subtract_all(collar_raw, keep_neg)
         pos.append(collar)
         if cut_v > 0.0:
@@ -1644,42 +1654,6 @@ def lg_bay_features(shell_tm, envelope_tm=None):
             report.append(f"{label}: {aper_v + reb_v:.1f} mm^3 of wing "
                           f"material protected from the bay cuts")
 
-        # BHD-02g (2026-10-11): the two-row wire layout puts a boss cluster
-        # INSIDE the hull wall at some corners (aft: carrier x shell 620 / 526
-        # mm^3).  Where the corner's conforming bay has been generated, the
-        # hull gives way to the printed bay itself + LG_FIT_CLR -- the bay then
-        # closes the opening it sits in, as the flange does the rebate.
-        gen = os.path.join(REPO_ROOT, "airframe", "stls", "fuselage", "landing-gear",
-                           f"lg_r6_3_0in_bay_{label}.stl")
-        if env_man is not None and os.path.exists(gen):
-            bay_tm = trimesh.load(gen, force="mesh")
-            # Only where the bay actually overlaps the hull, piece by piece, as
-            # CONVEX HULLS of each piece's points shifted +/-LG_FIT_CLR.  The
-            # first version subtracted the whole bay dilated by 15 shifted
-            # copies: near-coincident faces left the merged shell non-manifold
-            # (9,373 bodies, open_mating_faces crashed) -- 2026-10-11.
-            # ... and never the seat collar: the flange's back face BEARS on it.
-            # minus the bay's own skin layers (flange 0..T and liner 0..T+COWL_H
-            # sit IN the skin by design and are handled by the rebate and the
-            # aperture) -- a convex hull of that curved layer would gouge the
-            # whole footprint
-            own = lg_skin_layer(env_man, org, ex, ey, ez,
-                                BAY_PLATE_WB + 4.0, BAY_PLATE_W + 4.0,
-                                BAY_PLATE_ZB0 - 2.0, zb1 + 2.0, -1.0, BAY_PLATE_T + COWL_H + 0.5)
-            over = (to_man(bay_tm) ^ to_man(shell_tm)) - own
-            for piece in over.decompose():
-                if piece.volume() < 1.0:
-                    continue
-                v = np.asarray(piece.to_mesh().vert_properties)[:, :3]
-                pts = np.vstack([v + d for d in
-                                 [np.zeros(3)] + [s * LG_FIT_CLR * e for s in (-1, 1)
-                                                  for e in np.eye(3)]])
-                hull_tm = trimesh.convex.convex_hull(trimesh.PointCloud(pts))
-                cut = to_man(hull_tm) - to_man(collar_raw)
-                if cut.volume() > 0.5:
-                    neg.append(from_man(cut))
-                    report.append(f"{label}: hull gives way to the bay, "
-                                  f"{piece.volume():.0f} mm^3 piece")
         # 4x M3, on the flange centreline, following the trapezoid -- or the
         # corner's relocated pattern from tools/generate_lg_bays.py (BHD-02).
         # Conforming: bored from 20 mm proud to 30 mm deep, which spans the

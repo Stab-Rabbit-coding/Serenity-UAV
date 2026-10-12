@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-11",
+  "generated": "2026-10-12",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -16575,6 +16575,13 @@
       ],
       "archived": false
     },
+    "tools/lg_collar_integrity.py": {
+      "description": "Gate: the hull merge's landing-gear cuts keep every collar joint intact.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/lg_wire_layout_study.py": {
       "description": "Two-row energy-absorber wire layout pre-filter (BHD-02g / BHD-02k).",
       "tags": [
@@ -21314,6 +21321,7 @@
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",
+      "tools/lg_collar_integrity.py",
       "tools/lg_wire_layout_study.py",
       "tools/middle_layout_fit.py",
       "tools/mirror_claude_memory.py",
