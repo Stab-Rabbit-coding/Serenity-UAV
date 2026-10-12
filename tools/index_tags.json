@@ -16350,7 +16350,7 @@
       "archived": false
     },
     "tools/cargo_layout_fit.py": {
-      "description": "cargo_layout_fit.py -- measure a proposed cargo-section equipment layout",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],

@@ -2259,7 +2259,7 @@ build_head_shell.py — build_head_shell.py — apply head-shell features (bosse
 build_landing_gear_views.py — RETIRED 2026-07-21 -- Rev R5 tool, superseded by Rev R6. [build-tooling, landing-gear, security]
 cargo_bay_envelope.py — Measure the cargo bay's usable interior envelope, and gate the mission payload. [build-tooling]
 cargo_bulkhead_context.py — In-context fit of the port and starboard cargo-bay bulkheads (side walls). [build-tooling, security]
-cargo_layout_fit.py — cargo_layout_fit.py -- measure a proposed cargo-section equipment layout [build-tooling]
+cargo_layout_fit.py — Python script [build-tooling]
 check_tacco_envelope_sync.py — check_tacco_envelope_sync.py — keep every airframe TACCO mount in step with the board size. [build-tooling]
 compact_bom_entries.py — compact_bom_entries.py [bom, build-tooling]
 dorsal_shroud_resize_64.py — Resize the canonical dorsal shroud of the 64 mm nacelle to enclose the [build-tooling]
