@@ -84,6 +84,7 @@ KEEPOUTS = ("TACCO CN2 port", "TACCO CN3 stbd", "chin shelf",
 REMOVABLE = ("payload keep-out",)
 # Bolt hardware below the skin: flange T + collar LG_SEAT_D + 4 mm backing plate
 # (owner 2026-10-10) + M3 nut 2.4 + 2 mm thread run-out.
+HULL_CLR = 0.4           # mm, printed body to hull (= mci.LG_FIT_CLR)
 HW_DEPTH = mci.BAY_PLATE_T + mci.LG_SEAT_D + 4.0 + 2.4 + 2.0
 BOLT_KEEP_D = 3.4 + 2 * 2.5   # O8.4 washer / nut / driver, as the census
 BOLT_T = (-30.0, 20.0)    # bore extent along e_x, as the hull merge
@@ -116,7 +117,7 @@ def bolt_cyl(org, ex, ey, ez, u, v, d) -> Manifold:
 
 
 def build_corner(label: str, c: list[float], env: Manifold, keep: Manifold,
-                 removable: Manifold) -> dict:
+                 removable: Manifold, hull: Manifold | None = None) -> dict:
     st = lgbf.STATION[label]
     tf = lgbf.corner_tf(c)
     org, ex, ey, ez = mci.lg_bay_frame(label)
@@ -126,7 +127,26 @@ def build_corner(label: str, c: list[float], env: Manifold, keep: Manifold,
     liner = mci.lg_skin_layer(env, org, ex, ey, ez, mci.BAY_APER_W_BOT, mci.BAY_APER_W_TOP,
                               mci.BAY_APER_ZB0, mci.BAY_APER_ZB0 + mci.BAY_APER_L,
                               0.0, T + COWL_H) ^ feat(st, "liner outline", tf)
-    body = feat(st, "body", tf)
+    # BODY = clevis ears + gussets (untrimmed: they join the liner where it
+    # passes through the hull wall -- trimming them against the hull cut them
+    # loose, 605 / 237 mm^3 bodies, 2026-10-12) + the wire CLUSTER (carriers,
+    # bosses, pads), which is trimmed clear of the hull below
+    cluster = Manifold.batch_boolean([feat(st, n, tf) for n in
+                                      ("boss carrier", "wire bosses", "retention pads")],
+                                     OpType.Add)
+    fixed = feat(st, "clevis ears", tf) + feat(st, "clevis gussets", tf)
+    if hull is not None:
+        # 2026-10-12: the two-row carrier pokes 15 mm deep into the hull wall
+        # (4.9 / 5.3 mm^3 at the aft corners).  Trim the CLUSTER clear of the
+        # source hull + HULL_CLR, with the hull cropped to the cluster's box so
+        # the Minkowski offset stays small.  Flange and liner seat in the hull
+        # by design and are not trimmed.
+        lo, hi = np.array(cluster.bounding_box()).reshape(2, 3)
+        crop = Manifold.cube(list(hi - lo + 4.0)).translate(list(lo - 2.0))
+        local = (hull ^ crop).simplify(0.05)
+        if local.volume() > 0.05:
+            cluster = cluster - local.minkowski_sum(Manifold.sphere(HULL_CLR, 8))
+    body = fixed + cluster
     bay = Manifold.batch_boolean([flange, liner, body], OpType.Add) - keep - removable
     hw_layer = mci.lg_skin_layer(env, org, ex, ey, ez, 90.0, 90.0, -90.0, 90.0, -20.0, HW_DEPTH)
     # Bolts (BHD-02 / BHD-02i).  Each starts at its nominal centre; it is
@@ -230,6 +250,7 @@ def main() -> int:
     env = mci.to_man(mci.extract_envelope(mci.bake(src)))
     P = cbc.build()
     keep = dilate(Manifold.batch_boolean([P[k]["m"] for k in KEEPOUTS], OpType.Add), STATIC_GAP)
+    hull = mci.to_man(mci.bake(src))
     removable = dilate(Manifold.batch_boolean([P[k]["m"] for k in REMOVABLE], OpType.Add),
                        STATIC_GAP)
     corners = lgbf.parse_corners(lgbf.SCAD)
@@ -237,7 +258,7 @@ def main() -> int:
     for label, c in corners.items():
         if a.only and label not in a.only:
             continue
-        r = build_corner(label, c, env, keep, removable)
+        r = build_corner(label, c, env, keep, removable, hull)
         ok = (r["bodies"] == 1 and r["leg_sweep_x_bay_mm3"] < lgbf.CLASH_MM3
               and min(r["bolt_flange_mm3"]) >= BOLT_MIN_FLANGE
               and min(r["bolt_collar_mm3"]) >= BOLT_MIN_COLLAR
