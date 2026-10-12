@@ -188,7 +188,10 @@ def bolt_loads(bolts) -> dict:
 
 
 def write_params(rows: list[dict]) -> None:
-    body = {r["label"]: r["bolts"] for r in rows}
+    """MERGE this run's corners into the params file: an --only run must not
+    drop the bolt patterns of the corners it did not build (found 2026-10-11)."""
+    body = dict(mci.LG_CORNER_BOLTS)
+    body.update({r["label"]: r["bolts"] for r in rows})
     with open(PARAMS, "w", encoding="utf-8") as fh:
         fh.write('''"""Per-corner landing-gear bay M3 positions -- GENERATED, do not hand-edit.
 

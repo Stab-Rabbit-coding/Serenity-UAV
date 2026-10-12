@@ -147,7 +147,7 @@ EAR_CLR      = 0.5;         // lug-to-ear side clearance each side
 // at 118 the rows' horns and seated wire ends cross it.  Pin and tab rotate
 // TOGETHER about the hip (tab = pin + 13..28 deg), so the rest pose is
 // unchanged.  Was 118 / 131..146 at both stations.
-STOP_PIN_AZ  = (BAY_STATION == "aft") ? 290 : 195;  // pin centre azimuth (deg)
+STOP_PIN_AZ  = (BAY_STATION == "aft") ? 210 : 195;  // pin centre azimuth (deg)
 STOP_PIN_R   = 8.0;         // pin centre radius from hip axis
 STOP_TAB_AZ1 = STOP_PIN_AZ + 13;   // thigh tab sector start (contact face)
 STOP_TAB_AZ2 = STOP_PIN_AZ + 28;   // thigh tab sector end
@@ -170,8 +170,8 @@ CRANK_R      = 6.0;         // socket centre radius from pin axis
 // so each station has its own thigh -- one leg part number per station, as
 // the bays already are.  Values from the swing-plane screen, confirmed by
 // the 3-D census (docs/BHD02_OPTION_STUDY.md SS12).
-CRANK_AZ_D   = (BAY_STATION == "aft") ? 165 : -20;   // ductile row
-CRANK_AZ_S   = (BAY_STATION == "aft") ?  30 :  70;   // spring row
+CRANK_AZ_D   = (BAY_STATION == "aft") ?  30 : -20;   // ductile row
+CRANK_AZ_S   = (BAY_STATION == "aft") ? 120 :  70;   // spring row
 ROW_PITCH    = 6.0;         // in-row socket pitch along Y (bore 4.91 + 1.1 wall)
 HORN_WALL    = 1.5;         // crank-horn wall around a socket bore that leaves
                             // the root lug (the horn rides on the thigh)

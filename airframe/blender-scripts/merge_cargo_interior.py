@@ -1502,6 +1502,21 @@ def lg_skin_layer(env_man, org, ex, ey, ez, w_bot, w_top, zb0, zb1, d0, d1):
     return (near - far) ^ foot
 
 
+def _dilate_tm(tm, r):
+    """Cheap outward offset of a mesh: union of it shifted +/-r on each axis
+    and the 8 cube diagonals (under-reports a true offset by < 0.3 r on oblique
+    faces; r is a fit clearance, so that is acceptable)."""
+    m = to_man(tm)
+    d = r / np.sqrt(3.0)
+    shifts = [(s * r, 0, 0) for s in (-1, 1)] + [(0, s * r, 0) for s in (-1, 1)] + \
+        [(0, 0, s * r) for s in (-1, 1)] + \
+        [(a * d, b * d, c * d) for a in (-1, 1) for b in (-1, 1) for c in (-1, 1)]
+    out = m
+    for s in shifts:
+        out = out + m.translate(list(s))
+    return from_man(out)
+
+
 def lg_bay_frame(label):
     """(org, ex, ey, ez) of a corner's plate frame, origin at the measured seat
     median -- the datum every conforming solid of that corner hangs from."""
@@ -1629,6 +1644,19 @@ def lg_bay_features(shell_tm, envelope_tm=None):
             report.append(f"{label}: {aper_v + reb_v:.1f} mm^3 of wing "
                           f"material protected from the bay cuts")
 
+        # BHD-02g (2026-10-11): the two-row wire layout puts a boss cluster
+        # INSIDE the hull wall at some corners (aft: carrier x shell 620 / 526
+        # mm^3).  Where the corner's conforming bay has been generated, the
+        # hull gives way to the printed bay itself + LG_FIT_CLR -- the bay then
+        # closes the opening it sits in, as the flange does the rebate.
+        gen = os.path.join(REPO_ROOT, "airframe", "stls", "fuselage", "landing-gear",
+                           f"lg_r6_3_0in_bay_{label}.stl")
+        if env_man is not None and os.path.exists(gen):
+            bay_tm = trimesh.load(gen, force="mesh")
+            # ... except the seat collar: the flange's back face BEARS on it, so
+            # a dilated bay must not shave it (the M3s would clamp across the
+            # clearance); the collar keeps its own skin-layer definition
+            neg.append(from_man(to_man(_dilate_tm(bay_tm, LG_FIT_CLR)) - to_man(collar_raw)))
         # 4x M3, on the flange centreline, following the trapezoid -- or the
         # corner's relocated pattern from tools/generate_lg_bays.py (BHD-02).
         # Conforming: bored from 20 mm proud to 30 mm deep, which spans the
