@@ -40,6 +40,9 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-NIST-004: NIST SP 800-92 — Guide to Computer Security Log Management](#ref-nist-004-nist-sp-800-92--guide-to-computer-security-log-management)
 - [Part IV — Defense and Government-Agency Standards (DoD, NASA)](#part-iv--defense-and-government-agency-standards-dod-nasa)
     - [REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus](#ref-mil-001-mil-std-1553c--digital-time-division-commandresponse-multiplex-data-bus)
+    - [REF-LAW-001: Public Law 117-263 (FY2023 NDAA) §5949 — Prohibition on certain semiconductor products and services](#ref-law-001-public-law-117-263-fy2023-ndaa-5949--prohibition-on-certain-semiconductor-products-and-services)
+    - [REF-LAW-002: Public Law 118-31 (FY2024 NDAA) Div. A Title XVIII Subtitle B — American Security Drone Act of 2023](#ref-law-002-public-law-118-31-fy2024-ndaa-div-a-title-xviii-subtitle-b--american-security-drone-act-of-2023)
+    - [REF-LAW-003: 15 U.S.C. §4651(7) "foreign country of concern" and 10 U.S.C. §4872 "covered nation"](#ref-law-003-15-usc-46517-foreign-country-of-concern-and-10-usc-4872-covered-nation)
     - [REF-MIL-002: MIL-STD-461G — Requirements for the Control of Electromagnetic Interference Characteristics of Subsystems and Equipment](#ref-mil-002-mil-std-461g--requirements-for-the-control-of-electromagnetic-interference-characteristics-of-subsystems-and-equipment)
     - [REF-NASA-001: NASA-STD-8739.4A — Workmanship Standard for Crimping, Interconnecting Cables, Harnesses, and Wiring](#ref-nasa-001-nasa-std-87394a--workmanship-standard-for-crimping-interconnecting-cables-harnesses-and-wiring)
 - [Part V — International Standards (ISO, IEC)](#part-v--international-standards-iso-iec)
@@ -670,6 +673,33 @@ cycle); hardware-enforced append-only non-executable log microSD on every XO nod
 ---
 
 ## Part IV — Defense and Government-Agency Standards (DoD, NASA)
+
+### REF-LAW-001: Public Law 117-263 (FY2023 NDAA) §5949 — Prohibition on certain semiconductor products and services
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | 117th U.S. Congress; James M. Inhofe National Defense Authorization Act for Fiscal Year 2023, Public Law 117-263, 136 Stat. 2395 (2022); §5949 at 136 Stat. 3485 ff., codified as a note to 41 U.S.C. §4713 |
+| **Official access** | <https://www.congress.gov/117/plaws/publ263/PLAW-117publ263.htm> (enrolled text, HTTP 200, read 2026-10-17) |
+| **Section applied** | §5949(a)(1) prohibition on executive-agency procurement of electronic parts that include "covered semiconductor products or services"; §5949(c)(1) effective five years after enactment; §5949(j)(3)(A)-(C) definition (SMIC, CXMT, YMTC, and entities owned/controlled by or connected to the government of a foreign country of concern); §5949(j)(5) foreign country of concern -> 15 U.S.C. §4651(7) (REF-LAW-003) |
+| **Cited in** | `AGENTS.md` §5 "Component sourcing and openness" |
+
+### REF-LAW-002: Public Law 118-31 (FY2024 NDAA) Div. A Title XVIII Subtitle B — American Security Drone Act of 2023
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | 118th U.S. Congress; National Defense Authorization Act for Fiscal Year 2024, Public Law 118-31, 137 Stat. 136 (2023); Subtitle B "Drone Security", §§1821-1833, at 137 Stat. 691 ff., codified as a note preceding 41 U.S.C. §3901 |
+| **Official access** | <https://www.congress.gov/118/plaws/publ31/PLAW-118publ31.htm> (enrolled text, HTTP 200, read 2026-10-17) |
+| **Section applied** | §1821 short title; §1822(1)(A)-(E) "covered foreign entity" (incl. (D) entities domiciled in, or subject to influence or control by the government or Communist Party of, the People's Republic of China, and (E) their subsidiaries/affiliates); §1823(a) prohibition on executive-agency procurement of unmanned aircraft systems "manufactured or assembled by a covered foreign entity", including "communication links and the components that control the unmanned aircraft" |
+| **Cited in** | `AGENTS.md` §5 "Component sourcing and openness" |
+
+### REF-LAW-003: 15 U.S.C. §4651(7) "foreign country of concern" and 10 U.S.C. §4872 "covered nation"
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | United States Code (Office of the Law Revision Counsel); read via Cornell LII |
+| **Official access** | <https://www.law.cornell.edu/uscode/text/15/4651>; <https://www.law.cornell.edu/uscode/text/10/4872> (both HTTP 200, read 2026-10-17); authoritative text at <https://uscode.house.gov/> |
+| **Section applied** | 15 U.S.C. §4651(7)(A)-(B): a "covered nation" under 10 U.S.C. §4872, plus any country the Secretary of Commerce determines to be engaged in conduct detrimental to U.S. national security or foreign policy. 10 U.S.C. §4872 "covered nation" = the Democratic People's Republic of Korea, the People's Republic of China, the Russian Federation and the Islamic Republic of Iran. §4651(7)(A) cites §4872(d); in the current code the definition is at §4872(f)(2) (renumbered by later amendment). §4872 itself restricts magnets, tungsten, tantalum, molybdenum, germanium and gallium, not semiconductors; it is used here only for its country list |
+| **Cited in** | `AGENTS.md` §5 "Component sourcing and openness" |
 
 ### REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus
 
@@ -3091,7 +3121,7 @@ airframe reference sources (REF-CAD-002/003/004) — see `docs/attribution_and_l
 **Applied to:** `docs/OSHW_CERTIFICATION.md` readiness checklist; not yet applied to an actual
 OSHWA certification submission (open item).
 
-**Used in:** `docs/OSHW_CERTIFICATION.md`, `TODO.md` §0.9.
+**Used in:** `docs/OSHW_CERTIFICATION.md`, `TODO.md` §0.9; `AGENTS.md` §5 "Component sourcing and openness" (NDA-free datasheet rule, re-read 2026-10-17).
 
 ### REF-LIC-003: The MIT License
 

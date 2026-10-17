@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-12",
+  "generated": "2026-10-17",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -10669,7 +10669,6 @@
       "tags": [
         "avionics-hardware",
         "documentation",
-        "emi-hardening",
         "pcb-design",
         "security"
       ],
@@ -17216,7 +17215,6 @@
       "avionics/kicad/Observer/scripts/gen_observer.py",
       "avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py",
       "avionics/kicad/Observer/scripts/gen_observer_pcb.py",
-      "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/TACCO/TACCO.md",
       "avionics/kicad/complete_xcvr_49mhz2.py",
