@@ -1778,10 +1778,13 @@ REFERENCES.md Removed/Superseded Citations).
             SCK/UART1_TX, MISO/UART6_RX, MOSI/UART6_TX, SS1/UART1_RX, GND on the SPI2 pins);
             drop J-GPS (owner allowed 2026-10-17).
         - [ ] Regenerate schematic (ERC 0), then PCB: sync, re-place, re-route, DRC 0 + parity 0.
-        - [ ] With the re-sync: rename the ring parts and nets to TI interface naming (owner
-            2026-10-17), e.g. `ETH1-PHY` -> RMII2 leg and `ETH2-USB` -> USB1 leg, including
-            `T-ETH*`, `R-BS*`, `C-BS*`, `C-P1-*`, `C-U2-*`, `PHY1_*`, `ETH_*`, `ETH2_*`; exact
-            designators to be agreed before the rename.
+        - [x] Pin and net name alignment, Pilot + TACCO (owner 2026-10-17): PB2 header pins
+            P1.01..P2.36 (BeagleBoard SRM), Ethernet ring parts/nets to TI interface names
+            (`PHY-RMII2`, `NIC-USB1`, `T-RMII2`, `T-USB1`, `RMII2_PHY_*`, `ETH_RMII2_*`,
+            `ETH_USB1_*`, ...) in generators, schematics, symbol libraries, PCBs, netlists,
+            project netclasses and scripts via `avionics/kicad/align_pb2_ti_names.py`. ERC /
+            DRC / parity counts unchanged (Pilot 0 / 43 / 112 pre-existing; TACCO 0 / 5 / 0).
+            Map in Pilot.md and TACCO.md.
         - [ ] Firmware: Pilot DTS overlay for the new pin mux.
         - [x] AM625 capability check against the SoC data sheet, 2026-10-17 (owner: "page 2 of its
             datasheet says that it supports 2 ethernet ports"): recorded in
@@ -1789,11 +1792,11 @@ REFERENCES.md Removed/Superseded Citations).
             CPSW3G has 2 external ports but port 1 has no header balls; RGMII2 (gigabit) is fully
             on the header; 3 CAN-FD (MCAN0, MCU_MCAN0 P1-26/28, MCU_MCAN1 P2-9/11) reachable;
             P1-2/4/6 second balls added to `PB2_HEADER_PINMAP.md` §1.
-        - [ ] Owner decision: adopt a second/third CAN-FD bus on MCU_MCAN0 (P1-26/P1-28) and/or
-            MCU_MCAN1 (P2-9/P2-11)? Needs the TPM CS/RST and 1553/BARO CS nets moved to spare
-            pins first, and the I/O supply of MCU-domain balls D6/B3/D4/E5 checked on the PB2-I
-            schematic (requires verification).
-        - [ ] MSPM0L1105 on the PB2-I AIN pins (owner 2026-10-17; capability doc §6): Pilot RMII2
+        - [x] REJECTED 2026-10-17 (owner): second/third CAN-FD bus on MCU_MCAN0 (P1-26/P1-28) or
+            MCU_MCAN1 (P2-9/P2-11). The fleet already has four buses per node (CAN-FD, RS-485,
+            MIL-STD-1553B, Ethernet ring); another CAN-FD bus adds no needed capability.
+        - [x] MSPM0L1105 on the PB2-I AIN pins — pin move REJECTED 2026-10-17 (owner); pins stay,
+            RMII2 timing with the extra load is checked at bring-up. (capability doc §6): Pilot RMII2
             (P1-2/19/25/27) and DSHOT0/3 (P1-21/23) each also load an MSPM0 pin (5 pF + stub)
             whose post-boot state depends on BeagleBoard's MSPM0 firmware. Owner decision: accept
             (verify RMII2 timing with the extra load at bring-up), or move those nets off AIN
@@ -1803,6 +1806,7 @@ REFERENCES.md Removed/Superseded Citations).
             GPO pin, but the free ones (P2-30, P2-34) are on the P2 rail under ISO_BAND while
             J-PWM sits over the P1 rail, so a move lengthens routes and crosses the band; DShot
             is not sensitive to 5 pF. Recommendation: keep the pins and verify RMII2 at bring-up.
+            - [ ] Bring-up: verify RMII2 timing/eye on P1-2/19/25/27 with the PB2-I MSPM0 load.
         - [ ] Pilot + TACCO DTS: hold the unused second ball of every dual-ball header pin
             (P1-2/4/6/10/12/26/28/33/36, P2-1/3/5/7/9/11/29/31) as a GPIO input with no pull
             (PB2I_AM625_HEADER_CAPABILITIES.md §2 CAUTION).

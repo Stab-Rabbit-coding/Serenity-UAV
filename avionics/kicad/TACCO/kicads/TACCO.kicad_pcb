@@ -108,20 +108,20 @@
 	(net 16 "CAN_B_L")
 	(net 17 "CAN_B_L_F")
 	(net 18 "CAN_B_STB")
-	(net 19 "ETH-PHY_RBIAS")
-	(net 20 "ETHB_BS")
-	(net 21 "ETHB_CRD")
-	(net 22 "ETHB_CTD")
-	(net 23 "ETHB_LINE_CRX")
-	(net 24 "ETHB_LINE_CTX")
-	(net 25 "ETHB_LINE_RXN")
-	(net 26 "ETHB_LINE_RXP")
-	(net 27 "ETHB_LINE_TXN")
-	(net 28 "ETHB_LINE_TXP")
-	(net 29 "ETHB_RXN")
-	(net 30 "ETHB_RXP")
-	(net 31 "ETHB_TXN")
-	(net 32 "ETHB_TXP")
+	(net 19 "PHY-RMII2_RBIAS")
+	(net 20 "ETH_RMII2_BS")
+	(net 21 "ETH_RMII2_CRD")
+	(net 22 "ETH_RMII2_CTD")
+	(net 23 "ETH_RMII2_LINE_CRX")
+	(net 24 "ETH_RMII2_LINE_CTX")
+	(net 25 "ETH_RMII2_LINE_RXN")
+	(net 26 "ETH_RMII2_LINE_RXP")
+	(net 27 "ETH_RMII2_LINE_TXN")
+	(net 28 "ETH_RMII2_LINE_TXP")
+	(net 29 "ETH_RMII2_RXN")
+	(net 30 "ETH_RMII2_RXP")
+	(net 31 "ETH_RMII2_TXN")
+	(net 32 "ETH_RMII2_TXP")
 	(net 33 "FAN_PWM_B")
 	(net 34 "FB_3V3")
 	(net 35 "FLASH_WP_N")
@@ -171,8 +171,8 @@
 	(net 79 "MLRS_VLX")
 	(net 80 "MLRS_VR_PA")
 	(net 81 "PGND")
-	(net 82 "PHY1_INTRN")
-	(net 83 "PHY1_RSTN")
+	(net 82 "RMII2_PHY_INTRN")
+	(net 83 "RMII2_PHY_RSTN")
 	(net 84 "PHY_XI_25M")
 	(net 85 "PLD_CLK")
 	(net 86 "PLD_I1")
@@ -2290,7 +2290,7 @@
 		(at 158.60768 103.445099)
 		(descr "Texas RMQ0024A WQFN, 24 Pin (https://www.ti.com/jp/lit/ml/mpqf398a/mpqf398a.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py")
 		(tags "Texas WQFN NoLead")
-		(property "Reference" "ETH-PHY"
+		(property "Reference" "PHY-RMII2"
 			(at 0 -2.45 0)
 			(layer "F.Fab")
 			(uuid "e1e00672-d1e8-473c-9fad-53c2b04ff4db")
@@ -2561,7 +2561,7 @@
 			(size 0.675 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 82 "PHY1_INTRN")
+			(net 82 "RMII2_PHY_INTRN")
 			(uuid "09f24f23-e877-47ca-964a-3f2711baf881")
 		)
 		(pad "4" smd roundrect
@@ -2576,7 +2576,7 @@
 			(size 0.675 0.2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 83 "PHY1_RSTN")
+			(net 83 "RMII2_PHY_RSTN")
 			(uuid "eeeed724-d61e-45c3-9f16-a6ce6f563152")
 		)
 		(pad "6" smd roundrect
@@ -2592,7 +2592,7 @@
 			(size 0.2 0.675)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 29 "ETHB_RXN")
+			(net 29 "ETH_RMII2_RXN")
 			(uuid "55560fa5-357b-45aa-aef8-b1d8cad9fc95")
 		)
 		(pad "8" smd roundrect
@@ -2600,7 +2600,7 @@
 			(size 0.2 0.675)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 30 "ETHB_RXP")
+			(net 30 "ETH_RMII2_RXP")
 			(uuid "84b1ae1c-0508-4a5d-8785-08bd0c2792fb")
 		)
 		(pad "9" smd roundrect
@@ -2616,7 +2616,7 @@
 			(size 0.2 0.675)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 31 "ETHB_TXN")
+			(net 31 "ETH_RMII2_TXN")
 			(uuid "88d20e39-4e16-49a0-a4cc-0cd33029063c")
 		)
 		(pad "11" smd roundrect
@@ -2624,7 +2624,7 @@
 			(size 0.2 0.675)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 32 "ETHB_TXP")
+			(net 32 "ETH_RMII2_TXP")
 			(uuid "9ebb4553-a39f-46d1-8dec-75f9938fbcca")
 		)
 		(pad "12" smd roundrect
@@ -2647,7 +2647,7 @@
 			(size 0.675 0.2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 19 "ETH-PHY_RBIAS")
+			(net 19 "PHY-RMII2_RBIAS")
 			(uuid "9b011286-fdd3-4378-b6cf-69b300fa6a41")
 		)
 		(pad "15" smd roundrect
@@ -4422,7 +4422,7 @@
 		(at 168.5 108)
 		(descr "Wurth 749010012A WE-LAN 10/100Base-TX SMT transformer, 16-pad SOIC-style 1.27 mm, land per datasheet p.1")
 		(tags "Serenity Pilot Wurth_749010012A_WE-LAN")
-		(property "Reference" "T-ETH"
+		(property "Reference" "T-RMII2"
 			(at 0 -1 0)
 			(layer "F.Fab")
 			(uuid "66f0e321-9783-4675-8e1b-5dc2e10bdb79")
@@ -4528,7 +4528,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 32 "ETHB_TXP")
+			(net 32 "ETH_RMII2_TXP")
 			(uuid "8a427cea-c9a2-40b2-beea-182398949119")
 		)
 		(pad "2" smd roundrect
@@ -4536,7 +4536,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 22 "ETHB_CTD")
+			(net 22 "ETH_RMII2_CTD")
 			(uuid "c6a73a8d-4b0d-4d49-bfe8-4f6f6d07e008")
 		)
 		(pad "3" smd roundrect
@@ -4544,7 +4544,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 31 "ETHB_TXN")
+			(net 31 "ETH_RMII2_TXN")
 			(uuid "9f3234d1-a707-4755-885c-282e8625052d")
 		)
 		(pad "4" smd roundrect
@@ -4566,7 +4566,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 30 "ETHB_RXP")
+			(net 30 "ETH_RMII2_RXP")
 			(uuid "abd3a90a-d890-4e0e-a870-43129f3084f9")
 		)
 		(pad "7" smd roundrect
@@ -4574,7 +4574,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 21 "ETHB_CRD")
+			(net 21 "ETH_RMII2_CRD")
 			(uuid "ea574373-52b0-4a52-8984-e4d64c1b8798")
 		)
 		(pad "8" smd roundrect
@@ -4582,7 +4582,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 29 "ETHB_RXN")
+			(net 29 "ETH_RMII2_RXN")
 			(uuid "67aba5c3-3761-4408-a990-35ac07f5019e")
 		)
 		(pad "9" smd roundrect
@@ -4590,7 +4590,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 25 "ETHB_LINE_RXN")
+			(net 25 "ETH_RMII2_LINE_RXN")
 			(uuid "84b6f8ad-a7bb-49ad-a47a-99d1d8d48d68")
 		)
 		(pad "10" smd roundrect
@@ -4598,7 +4598,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 23 "ETHB_LINE_CRX")
+			(net 23 "ETH_RMII2_LINE_CRX")
 			(uuid "89622d35-51b5-488e-9a90-2ac445efb947")
 		)
 		(pad "11" smd roundrect
@@ -4606,7 +4606,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 26 "ETHB_LINE_RXP")
+			(net 26 "ETH_RMII2_LINE_RXP")
 			(uuid "ccf15f33-738b-4762-9bdd-822fe8d47cff")
 		)
 		(pad "12" smd roundrect
@@ -4628,7 +4628,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 27 "ETHB_LINE_TXN")
+			(net 27 "ETH_RMII2_LINE_TXN")
 			(uuid "9898c44f-c512-43ed-9c26-c9acc7026a62")
 		)
 		(pad "15" smd roundrect
@@ -4636,7 +4636,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 24 "ETHB_LINE_CTX")
+			(net 24 "ETH_RMII2_LINE_CTX")
 			(uuid "1195d46d-1cda-4598-bafd-cc3c6fe52933")
 		)
 		(pad "16" smd roundrect
@@ -4644,7 +4644,7 @@
 			(size 0.64 1.91)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 28 "ETHB_LINE_TXP")
+			(net 28 "ETH_RMII2_LINE_TXP")
 			(uuid "feab9e90-855c-4655-8c66-bd6c4760bd3a")
 		)
 		(embedded_fonts no)
@@ -5037,7 +5037,7 @@
 		(at 160.080178 99.725993)
 		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
-		(property "Reference" "C-PHY-A2"
+		(property "Reference" "C-RMII2-A2"
 			(at 0 -1.16 0)
 			(layer "F.Fab")
 			(uuid "84ff4849-fc80-4a28-b9fe-ea3df429fbbc")
@@ -5357,7 +5357,7 @@
 		(at 160.21516 100.912115)
 		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
-		(property "Reference" "C-PHY-A3"
+		(property "Reference" "C-RMII2-A3"
 			(at 0 -1.16 0)
 			(layer "F.Fab")
 			(uuid "40cecf9c-a7c3-42ba-8d2d-1bd402851411")
@@ -7090,7 +7090,7 @@
 		(at 159.911888 98.618191)
 		(descr "Capacitor SMD 0201 (0603 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: https://www.vishay.com/docs/20052/crcw0201e3.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
-		(property "Reference" "C-PHY-A1"
+		(property "Reference" "C-RMII2-A1"
 			(at 0 -1.05 0)
 			(layer "F.Fab")
 			(uuid "c0ef01f5-8fef-463f-b7f6-c46e6cff796e")
@@ -7517,7 +7517,7 @@
 		(at 172.003895 115.521765)
 		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
-		(property "Reference" "C-PHY-CRD2"
+		(property "Reference" "C-RMII2-CRD2"
 			(at 0 -1.16 0)
 			(layer "F.Fab")
 			(uuid "3ffae4b1-b6f2-464b-8a30-c8bd56ac2581")
@@ -7681,7 +7681,7 @@
 			(size 0.56 0.62)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 21 "ETHB_CRD")
+			(net 21 "ETH_RMII2_CRD")
 			(uuid "27c371d9-f6df-4162-89c6-ffee5848e5bb")
 		)
 		(pad "2" smd roundrect
@@ -8363,7 +8363,7 @@
 			(size 0.46 0.4)
 			(layers "F.Cu" "F.Mask")
 			(roundrect_rratio 0.25)
-			(net 19 "ETH-PHY_RBIAS")
+			(net 19 "PHY-RMII2_RBIAS")
 			(uuid "948086ee-afe9-4b79-b9dc-5f7eb4ebe452")
 		)
 		(pad "2" smd roundrect
@@ -12021,7 +12021,7 @@
 		(at 172.049763 114.349575)
 		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
-		(property "Reference" "C-PHY-CRD1"
+		(property "Reference" "C-RMII2-CRD1"
 			(at 0 -1.16 0)
 			(layer "F.Fab")
 			(uuid "d785bdd2-0406-4f93-b036-04550354bc35")
@@ -12185,7 +12185,7 @@
 			(size 0.56 0.62)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 21 "ETHB_CRD")
+			(net 21 "ETH_RMII2_CRD")
 			(uuid "1a628c9d-3b15-42a0-a706-419ac0faec0b")
 		)
 		(pad "2" smd roundrect
@@ -12753,7 +12753,7 @@
 			(size 0.6 1.7)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 28 "ETHB_LINE_TXP")
+			(net 28 "ETH_RMII2_LINE_TXP")
 			(uuid "d255557c-b248-4532-9f4e-3316db21d047")
 		)
 		(pad "2" smd roundrect
@@ -12761,7 +12761,7 @@
 			(size 0.6 1.7)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 27 "ETHB_LINE_TXN")
+			(net 27 "ETH_RMII2_LINE_TXN")
 			(uuid "95dd4288-c3e3-4503-9f46-cecd0fed4c84")
 		)
 		(pad "3" smd roundrect
@@ -12769,7 +12769,7 @@
 			(size 0.6 1.7)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 26 "ETHB_LINE_RXP")
+			(net 26 "ETH_RMII2_LINE_RXP")
 			(uuid "83c894b6-7b2b-4060-bc8a-b710752d0b3c")
 		)
 		(pad "4" smd roundrect
@@ -12777,7 +12777,7 @@
 			(size 0.6 1.7)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 25 "ETHB_LINE_RXN")
+			(net 25 "ETH_RMII2_LINE_RXN")
 			(uuid "e7a2eeb7-d78c-40d8-b962-610d941359be")
 		)
 		(pad "MP" smd roundrect
@@ -12815,7 +12815,7 @@
 		(at 168.065458 115.6753)
 		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
-		(property "Reference" "C-PHY-CTD1"
+		(property "Reference" "C-RMII2-CTD1"
 			(at 0 -1.16 0)
 			(layer "F.Fab")
 			(uuid "b067018a-f976-4e0e-910f-36c27561a8e3")
@@ -12979,7 +12979,7 @@
 			(size 0.56 0.62)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 22 "ETHB_CTD")
+			(net 22 "ETH_RMII2_CTD")
 			(uuid "0c9af2f7-9402-4d47-94fb-877351393900")
 		)
 		(pad "2" smd roundrect
@@ -15791,7 +15791,7 @@
 		(at 168.111326 114.50311)
 		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
-		(property "Reference" "C-PHY-CTD2"
+		(property "Reference" "C-RMII2-CTD2"
 			(at 0 -1.16 0)
 			(layer "F.Fab")
 			(uuid "d3951d7e-54bf-4afc-95e8-94ec50b6c4e7")
@@ -15955,7 +15955,7 @@
 			(size 0.56 0.62)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 22 "ETHB_CTD")
+			(net 22 "ETH_RMII2_CTD")
 			(uuid "9272bf43-6586-453e-b2d6-5a4b7fbd91e3")
 		)
 		(pad "2" smd roundrect
@@ -16419,7 +16419,7 @@
 			(size 0.54 0.64)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 24 "ETHB_LINE_CTX")
+			(net 24 "ETH_RMII2_LINE_CTX")
 			(uuid "85cdd2a2-cd64-4cab-bcd6-90db4619a098")
 		)
 		(pad "2" smd roundrect
@@ -16427,7 +16427,7 @@
 			(size 0.54 0.64)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 20 "ETHB_BS")
+			(net 20 "ETH_RMII2_BS")
 			(uuid "0218fc2b-1cfe-4a23-9701-9d290aea21de")
 		)
 		(embedded_fonts no)
@@ -22172,7 +22172,7 @@
 			(size 0.54 0.64)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 23 "ETHB_LINE_CRX")
+			(net 23 "ETH_RMII2_LINE_CRX")
 			(uuid "d4e3d92e-24b8-48f3-861b-9dd5e86b334e")
 		)
 		(pad "2" smd roundrect
@@ -22180,7 +22180,7 @@
 			(size 0.54 0.64)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 20 "ETHB_BS")
+			(net 20 "ETH_RMII2_BS")
 			(uuid "4bcfcf52-1843-47fd-a8f2-61f215b3860c")
 		)
 		(embedded_fonts no)
@@ -22934,7 +22934,7 @@
 			(size 1.55 2.3)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.16129)
-			(net 20 "ETHB_BS")
+			(net 20 "ETH_RMII2_BS")
 			(uuid "f81d303f-a2f4-4022-b92b-6a0f96ec543a")
 		)
 		(pad "2" smd roundrect
@@ -25683,7 +25683,7 @@
 			(size 1.27 3.68)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.15)
-			(net 83 "PHY1_RSTN")
+			(net 83 "RMII2_PHY_RSTN")
 			(uuid "d2b34590-b5bc-4553-b13a-e0cc90027d7f")
 		)
 		(pad "5" smd roundrect
@@ -25699,7 +25699,7 @@
 			(size 1.27 3.68)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.15)
-			(net 82 "PHY1_INTRN")
+			(net 82 "RMII2_PHY_INTRN")
 			(uuid "9d80ba3e-3485-46f3-bc42-89fdd11a66db")
 		)
 		(pad "7" smd roundrect

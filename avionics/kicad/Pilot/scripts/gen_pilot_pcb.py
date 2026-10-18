@@ -23,7 +23,7 @@ Placement strategy
 * PB2 stacking rails, mounting holes and the field connectors are fixed by the
   cape mechanical envelope (Samtec TSM-118-04-L-DV-LC male SMT strips on B.Cu at
   v = 4.80 / 30.20, PB2 SRM Fig. 3.45 — avionics/WBS.md R2, 2026-10-06; horizontal GH
-  connectors on the bottom (CAN, RS-485, 1553) and right (ETH1/ETH2) edges;
+  connectors on the bottom (CAN, RS-485, 1553) and right (J-ETH-RMII2/J-ETH-USB1) edges;
   Nano-Fit power entry on the left edge; the 2x8 SMT servo/ESC header along
   the top-left; the MAX-M10S GPS and its U.FL on F.Cu).
 * ICs are placed by hand in this table so each isolator's isolated pin row
@@ -50,7 +50,6 @@ from __future__ import annotations
 
 import math
 import re
-import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -179,8 +178,8 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     "J-ANT": (3.0, 8.6, 0, F),
     "IMU": (22.0, 12.2, 0, F),
     "U-3V3": (28.6, 11.8, 0, F), "L-3V3": (33.0, 11.6, 0, F),
-    "T-ETH": (42.0, 8.65, 0, F), "T-ETH2": (42.0, 20.15, 0, F),   # 8.9 mm tall: top face only
-    "ETH1": (51.7, 10.6, 90, F), "ETH2": (51.7, 20.4, 90, F),
+    "T-RMII2": (42.0, 8.65, 0, F), "T-USB1": (42.0, 20.15, 0, F),   # 8.9 mm tall: top face only
+    "J-ETH-RMII2": (51.7, 10.6, 90, F), "J-ETH-USB1": (51.7, 20.4, 90, F),
     # isolation band: transceivers straddle its top edge, bus connectors at the bottom edge
     "CAN-TR": (14.2, ISO_TR_V, 0, F), "RS485": (28.0, ISO_TR_V, 0, F),
     "CAN-FD": (14.2, 30.6, 0, F), "RS-485": (28.0, 30.6, 0, F), "MIL-1553": (40.8, 30.6, 0, F),
@@ -189,7 +188,7 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     "1553-XFM": (39.25, 17.5, 270, B),           # 4.70 mm: between the band and the PB2-I JST-SH, clear of both obstructions
     "1553-XCVR": (29.0, 13.5, 0, B),
     "TVS-1553P": (29.0, 23.6, 0, B), "TVS-1553N": (29.0, 19.8, 0, B),
-    "ETH1-PHY": (48.5, 12.5, 0, B), "ETH2-PHY": (48.5, 19.5, 0, B),
+    "PHY-RMII2": (48.5, 12.5, 0, B), "ETH2-PHY": (48.5, 19.5, 0, B),
     "X2Y-CAN": (18.4, ISO_V0, 0, B), "X2Y-RS485": (22.6, ISO_V0, 0, B),
 }
 
@@ -197,9 +196,9 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
 FACE: Dict[str, Tuple[List[str], Tuple[float, float]]] = {
     "CAN-TR": ([str(i) for i in range(11, 21)], (0, 1)),      # isolated row toward the bottom edge
     "RS485": ([str(i) for i in range(11, 21)], (0, 1)),
-    "T-ETH": ([str(i) for i in range(9, 17)], (0, 1)),         # line sides meet mid-board beside ETH1/ETH2
-    "T-ETH2": ([str(i) for i in range(9, 17)], (0, -1)),
-    "ETH1-PHY": (["7", "8", "10", "11"], (1, 0)),               # MDI pins toward the magnetics
+    "T-RMII2": ([str(i) for i in range(9, 17)], (0, 1)),         # line sides meet mid-board beside J-ETH-RMII2/J-ETH-USB1
+    "T-USB1": ([str(i) for i in range(9, 17)], (0, -1)),
+    "PHY-RMII2": (["7", "8", "10", "11"], (1, 0)),               # MDI pins toward the magnetics
     "ETH2-PHY": (["7", "8", "10", "11"], (1, 0)),
     # 1553-XFM: fixed at 270 deg (11.3 mm wide, primary pins 1/3 on the north side toward the
     # 1553 transceiver) — the only orientation that fits between the band and the JST-SH
@@ -211,7 +210,7 @@ FACE: Dict[str, Tuple[List[str], Tuple[float, float]]] = {
 }
 # horizontal connectors: housing (cable exit) must point off-board
 EXIT: Dict[str, Tuple[float, float]] = {
-    "ETH1": (1, 0), "ETH2": (1, 0),
+    "J-ETH-RMII2": (1, 0), "J-ETH-USB1": (1, 0),
     "CAN-FD": (0, 1), "RS-485": (0, 1), "MIL-1553": (0, 1),
 }
 
@@ -225,7 +224,7 @@ MAIN_PLANE = [(0.5, 0.5), (54.5, 0.5), (54.5, 34.5), (ISO_U1, 34.5), (ISO_U1, IS
 
 # anchor parents for pure-supply passives (ref prefix -> parent ref)
 ANCHOR_PREFIX = [
-    ("C-P1-", "ETH1-PHY"), ("R-P1-", "ETH1-PHY"),
+    ("C-RMII2-A", "PHY-RMII2"), ("C-RMII2-C", "PHY-RMII2"), ("C-RMII2-IO", "PHY-RMII2"), ("R-RMII2-RBIAS", "PHY-RMII2"), ("R-RMII2-AD0", "PHY-RMII2"),
     ("C-P2-", "ETH2-PHY"), ("R-P2-", "ETH2-PHY"),
     ("C-25M", "X-25M"),
     ("C-CAN", "CAN-TR"), ("C-485", "RS485"), ("C-TPM", "TPM"), ("R-TPM", "TPM"),
@@ -235,7 +234,7 @@ ANCHOR_PREFIX = [
     ("C-IN", "PWR-IN"), ("FB1", "PWR-IN"), ("R-PGND", "PWR-IN"),
     ("CMC-CAN", "CAN-FD"), ("TVS-CAN", "CAN-FD"), ("X2Y-CAN", "CAN-TR"), ("R-CANT", "CAN-FD"),
     ("CMC-RS485", "RS-485"), ("TVS-RS485", "RS-485"), ("X2Y-RS485", "RS485"), ("R-485T", "RS-485"),
-    ("R-BS1", "T-ETH"), ("C-BS1", "ETH1"), ("R-BS2", "T-ETH2"), ("C-BS2", "ETH2"),
+    ("R-RMII2-BS", "T-RMII2"), ("C-RMII2-BS", "J-ETH-RMII2"), ("R-USB1-BS", "T-USB1"), ("C-USB1-BS", "J-ETH-USB1"),
 ]
 # passives the isolated domain owns: force onto the isolated side of their IC
 ISO_SIDE_NETS = {"GND2_CAN", "GND2_RS485", "VCC2_CAN", "VCC2_RS485", "CAN_H", "CAN_L", "CAN_H_F", "CAN_L_F",
@@ -289,7 +288,7 @@ PB2_OBSTRUCTIONS = [
 ]
 # seated heights (mm); unlisted parts are taken as <= 2.0 mm (chip passives, QFN/SOIC)
 PART_HEIGHT = {
-    "T-ETH": 8.9, "T-ETH2": 8.9,             # Wurth 749010012A drawing
+    "T-RMII2": 8.9, "T-USB1": 8.9,             # Wurth 749010012A drawing
     "1553-XFM": 4.70,                        # PremierMagnetics_DB2791S.pdf Fig. 2, .185 in
     "TVS-1553P": 2.44, "TVS-1553N": 2.44,    # SMA (DO-214AC) body
     "GPS": 2.5,                              # u-blox MAX-M10S 9.7 x 10.1 x 2.5 mm
@@ -531,9 +530,9 @@ def patch_project_netclasses(pro_path: Path) -> None:
     ]
     d["net_settings"]["classes"] = classes
     patterns = []
-    for n in ("ETH_TXP", "ETH_TXN", "ETH_RXP", "ETH_RXN", "ETH2_TXP", "ETH2_TXN", "ETH2_RXP", "ETH2_RXN",
-              "ETH_LINE_TXP", "ETH_LINE_TXN", "ETH_LINE_RXP", "ETH_LINE_RXN",
-              "ETH2_LINE_TXP", "ETH2_LINE_TXN", "ETH2_LINE_RXP", "ETH2_LINE_RXN"):
+    for n in ("ETH_RMII2_TXP", "ETH_RMII2_TXN", "ETH_RMII2_RXP", "ETH_RMII2_RXN", "ETH_USB1_TXP", "ETH_USB1_TXN", "ETH_USB1_RXP", "ETH_USB1_RXN",
+              "ETH_RMII2_LINE_TXP", "ETH_RMII2_LINE_TXN", "ETH_RMII2_LINE_RXP", "ETH_RMII2_LINE_RXN",
+              "ETH_USB1_LINE_TXP", "ETH_USB1_LINE_TXN", "ETH_USB1_LINE_RXP", "ETH_USB1_LINE_RXN"):
         patterns.append({"netclass": "DIFF_PAIR", "pattern": n})
     for n in ("GND2_*", "VCC2_*", "CAN_H*", "CAN_L*", "RS485_A*", "RS485_B*"):
         patterns.append({"netclass": "ISOLATION", "pattern": n})

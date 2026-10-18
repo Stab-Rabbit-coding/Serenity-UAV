@@ -47,7 +47,6 @@ import math
 import random
 import os
 import re
-import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -224,9 +223,9 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     "J-SD": (47.9, 18.8, 0, B),        # card exits the right edge; 1.42 mm tall, clears the PB2-I JST
     "J-ANT-MLRS": (2.9, 8.2, 0, F),    # through-hole MMCX: west of the P1 rail's end pins, below H1
     # --- 2026-10-05 floor-plan anchors on the SSM-DV rails: the auto-placer alone left
-    # T-ETH / U-3V3RF / L-1V8RF without a site (largest-first order fills the open pockets
+    # T-RMII2 / U-3V3RF / L-1V8RF without a site (largest-first order fills the open pockets
     # before them); each is pinned to the pocket a what-if sweep found for it.
-    "T-ETH": (47.5, 20.5, 0, F),       # 8.9 mm tall: top face only (PB2-I gap ~5.5 mm)
+    "T-RMII2": (47.5, 20.5, 0, F),       # 8.9 mm tall: top face only (PB2-I gap ~5.5 mm)
     "MLRS-MCU": (17.5, 13.5, 0, B),    # bottom face between the P1 rail and the band
     "TPM": (39.8, 21.0, 0, B),         # beside its SPI0_B/TPM pins on P2 (u 36-49): B.Cu-only escape stays short
     "1553-XFM": (31.0, 18.0, 90, B),   # 4.70 mm: bottom face, clear of both PB2-I obstructions, under the band
@@ -282,8 +281,8 @@ MAIN_PLANE = [(U_LO + 0.5, 0.5), (U_LO + BW - 0.5, 0.5), (U_LO + BW - 0.5, 34.5)
 MAIN_PLANE_POCKETS = [[(c[0], ISO_VCUT), (c[1], ISO_VCUT), (c[1], 34.5), (c[0], 34.5)] for c in (CUT_CAN, CUT_485)]
 
 ANCHOR_PREFIX = [
-    ("C-PHY-", "ETH-PHY"), ("R-RBIAS", "ETH-PHY"), ("R-AD0", "ETH-PHY"),
-    ("C-25M", "X-25M"), ("X-25M", "ETH-PHY"),
+    ("C-RMII2-", "PHY-RMII2"), ("R-RBIAS", "PHY-RMII2"), ("R-AD0", "PHY-RMII2"),
+    ("C-25M", "X-25M"), ("X-25M", "PHY-RMII2"),
     ("C-CAN", "CAN-TR"), ("C-485", "RS485"), ("C-TPM", "TPM"), ("R-TPM", "TPM"),
     ("C-1553", "1553-XCVR"), ("R-1553P", "J-1553"), ("R-1553N", "J-1553"), ("R-1553IRQ", "1553-XCVR"),
     ("X-50M", "1553-XCVR"), ("C-50M", "1553-XCVR"),
@@ -292,7 +291,7 @@ ANCHOR_PREFIX = [
     ("C-IN", "PWR-IN"), ("FB1", "PWR-IN"), ("R-PGND", "PWR-IN"),
     ("CMC-CAN", "J-CAN"), ("TVS-CAN", "J-CAN"), ("X2Y-CAN", "CAN-TR"), ("R-CANT", "J-CAN"),
     ("CMC-RS485", "J-485"), ("TVS-RS485", "J-485"), ("X2Y-RS485", "RS485"), ("R-485T", "J-485"),
-    ("R-BS", "T-ETH"), ("C-BS", "J-ETH"),
+    ("R-BS", "T-RMII2"), ("C-BS", "J-ETH"),
     ("C-ZB-", "WIFI-BT-ZB"),
     ("C-FLASH", "NOR-FLASH"), ("R-FLASH-WP", "NOR-FLASH"), ("C-PLD", "SD-WB"),
     ("C-1V8RF", "U-1V8RF"), ("R-EN18", "U-1V8RF"), ("C-BST18", "U-1V8RF"),
@@ -398,7 +397,7 @@ B_OVERHANG_MAX_H = 8.0   # stays inside the 22 mm pouch stack (CARGO_SECTION_LAY
 # Seated heights above the board (mm), from the archived datasheets where noted; parts not
 # listed are assumed <= 2.0 mm (chip passives, QFN/TSSOP/SOIC, 3015 inductors at 1.5 mm).
 PART_HEIGHT = {
-    "T-ETH": 8.9,        # 749010012A.pdf drawing (to confirm: read from the text layer)
+    "T-RMII2": 8.9,        # 749010012A.pdf drawing (to confirm: read from the text layer)
     "1553-XFM": 4.70,    # PremierMagnetics_DB2791S.pdf Fig. 2, .185 in
     "TVS-1553P": 2.44, "TVS-1553N": 2.44,  # SMA (DO-214AC) body
     "J-SD": 1.42,        # Molex 104031-0811 product spec (1.42 mm height)
@@ -686,8 +685,8 @@ def patch_project_netclasses(pro_path: Path) -> None:
     ]
     d["net_settings"]["classes"] = classes
     patterns = []
-    for n in ("ETHB_TXP", "ETHB_TXN", "ETHB_RXP", "ETHB_RXN",
-              "ETHB_LINE_TXP", "ETHB_LINE_TXN", "ETHB_LINE_RXP", "ETHB_LINE_RXN"):
+    for n in ("ETH_RMII2_TXP", "ETH_RMII2_TXN", "ETH_RMII2_RXP", "ETH_RMII2_RXN",
+              "ETH_RMII2_LINE_TXP", "ETH_RMII2_LINE_TXN", "ETH_RMII2_LINE_RXP", "ETH_RMII2_LINE_RXN"):
         patterns.append({"netclass": "DIFF_PAIR", "pattern": n})
     for n in ("GND2_*", "VCC2_*", "CAN_B_H*", "CAN_B_L*", "RS485_B_A*", "RS485_B_B*"):
         patterns.append({"netclass": "ISOLATION", "pattern": n})

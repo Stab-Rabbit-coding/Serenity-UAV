@@ -65,7 +65,12 @@ both.
 > the PB2-I schematic check (I/O voltage domain of the ball, any on-board pull, filter or
 > second ball) before a cape wire is committed.
 
-## 3. Pin-allocation opportunities for the Pilot cape (not yet adopted)
+## 3. Pin-allocation opportunities for the Pilot cape
+
+> **NOTE** — Owner decisions 2026-10-17: the extra CAN-FD buses below are **rejected** (the
+> fleet's four buses already cover the need), and moving RMII2 or DSHOT off the MSPM0-shared
+> pins is **rejected** (§6). The items stay here as capability records only.
+
 
 - **Up to three CAN-FD buses.** MCU_MCAN0 is on P1-26/P1-28 (Pilot today: SPI0_CS_TPM and
   TPM_RSTN, both GPIO-driven, so they can move to spare GPIO pins). MCU_MCAN1 is on P2-9/P2-11

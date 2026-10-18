@@ -7,6 +7,25 @@
 **Date:** 2026-10-06
 **Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers on the corrected 4.80 mm SMT rails (2026-10-06). **Routing not yet complete** (see "Routing status" below).
 
+**Name alignment 2026-10-17 (S. Griffing decision; implemented by Claude Opus 5.5 with
+`avionics/kicad/align_pb2_ti_names.py`).** Header pins and the Ethernet ring now use
+BeagleBoard and TI naming [REF-SENSOR-041 §4.2] [REF-SENSOR-049 §5.3.1]. The rename is nominal
+only: ERC, DRC and schematic-parity counts were identical before and after. Earlier update
+blocks below keep the old names as they were written.
+
+| Old | New (TI interface name) | Board |
+| --- | --- | --- |
+| Header symbol pins `P1`..`P36` | `P1.01`..`P1.36`, `P2.01`..`P2.36` (BeagleBoard SRM §4.2) | Pilot, TACCO |
+| `PHY1_RSTN` / `PHY1_INTRN` | `RMII2_PHY_RSTN` / `RMII2_PHY_INTRN` | Pilot, TACCO |
+| `ETH1-PHY` (Pilot), `ETH-PHY` (TACCO) | `PHY-RMII2` (DP83825I) | Pilot, TACCO |
+| `T-ETH` | `T-RMII2` | Pilot, TACCO |
+| `ETH_*` (Pilot), `ETHB_*` (TACCO) | `ETH_RMII2_*` | Pilot, TACCO |
+| `C-P1-*`, `R-P1-*` (Pilot), `C-PHY-*` (TACCO) | `C-RMII2-*`, `R-RMII2-*` | Pilot, TACCO |
+| `ETH1` connector, `R-BS1T`/`R-BS1R`/`C-BS1` | `J-ETH-RMII2`, `R-RMII2-BST`/`R-RMII2-BSR`/`C-RMII2-BS` | Pilot |
+| `ETH2-USB` (USB NIC), `T-ETH2`, `ETH2` connector | `NIC-USB1`, `T-USB1`, `J-ETH-USB1` | Pilot |
+| `ETH2_*`, `ETH2-USB_AVDDK`/`_DVDDK` | `ETH_USB1_*`, `NIC-USB1_AVDDK`/`_DVDDK` | Pilot |
+| `C-U2-*`, `R-BS2T`/`R-BS2R`/`C-BS2` | `C-USB1-*`, `R-USB1-BST`/`R-USB1-BSR`/`C-USB1-BS` | Pilot |
+
 **Update 2026-10-17 (PB2-I header re-map, Ethernet ring architecture, sourcing rules; S.
 Griffing decisions, implemented by Claude Opus 5.5) — schematic ahead of the PCB.**
 
@@ -26,16 +45,19 @@ Griffing decisions, implemented by Claude Opus 5.5) — schematic ahead of the P
       fixed, and TACCO is affected too (WBS).
 - **Ethernet ring** (named by TI interface, owner 2026-10-17 — the ring's two legs are not
   "port 1/port 2", because TI numbers the AM625 CPSW3G ports and only its port 2 is used):
-    - **CPSW3G port 2 / RMII2 leg:** DP83825I on RMII2 + MDIO0 (schematic `ETH1-PHY`). RMII2 is
+    - **CPSW3G port 2 / RMII2 leg:** DP83825I on RMII2 + MDIO0 (schematic `PHY-RMII2`). RMII2 is
       the only CPSW interface in use; the 12 RGMII2 balls also reach the header but are unused.
       CPSW3G port 1 (RGMII1/RMII1) does not reach the PB2-I header.
     - **USB1 leg:** a USB 10/100 controller on USB1 (P1-5 VBUS, P1-9 D-, P1-11 D+; schematic
-      `ETH2-USB`). It is not a CPSW port. Linux bridges the two legs, so forwarding stops if
+      `NIC-USB1`). It is not a CPSW port. Linux bridges the two legs, so forwarding stops if
       this node's CPU is down (owner accepted).
-    - The schematic reference designators `ETH1-*`/`ETH2-*`, `T-ETH`/`T-ETH2` and the nets
-      `PHY1_*`, `ETH_*`, `ETH2_*` still carry the old 1/2 numbering; renaming them is an
-      `avionics/WBS.md` item tied to the PCB re-sync.
+    - Parts and nets use these TI names since 2026-10-17 (table below).
 - **Rejected candidates** (do not re-propose):
+    - Second/third CAN-FD bus on MCU_MCAN0 (P1-26/28) or MCU_MCAN1 (P2-9/11) (owner
+      2026-10-17): the fleet's four buses (CAN-FD, RS-485, MIL-STD-1553B, Ethernet ring)
+      already cover the need.
+    - Moving RMII2 or DSHOT0/3 off the MSPM0-shared AIN header pins (owner 2026-10-17): RMII2
+      has no other balls, and the free PRU pins sit under the P2 isolation band.
     - Microchip KSZ8863RLLI 3-port switch: no 10.5 mm courtyard site; the largest free square
       is ~6 mm.
     - Microchip LAN9303: also too large (8 x 8 QFN), and its RMII clock direction depends on

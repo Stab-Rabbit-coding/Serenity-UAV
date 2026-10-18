@@ -46,7 +46,7 @@ BOARD = HERE.parents[1] / "kicads" / "Pilot.kicad_pcb"
 
 # cap-ref prefix -> IC it decouples (from the Datasheet field text in Pilot.net)
 TARGETS = [("C-485-", "RS485"), ("C-CAN", "CAN-TR"), ("C-1553", "1553-XCVR"), ("C-TPM", "TPM"),
-           ("C-P1-", "ETH1-PHY"), ("C-P2-", "ETH2-PHY"), ("C-IMU", "IMU"), ("C-BARO", "BARO"),
+           ("C-RMII2-", "PHY-RMII2"), ("C-P2-", "ETH2-PHY"), ("C-IMU", "IMU"), ("C-BARO", "BARO"),
            ("C-GPS", "GPS"), ("C-3V3-", "U-3V3"), ("C-BST", "U-3V3"), ("C-SS", "U-3V3"),
            ("C-25M", "X-25M"), ("C-50M", "X-50M"), ("C-ANT", "L-ANT")]
 ISO_HF = ("C-CAN1", "C-CAN4", "C-485-1", "C-485-4")

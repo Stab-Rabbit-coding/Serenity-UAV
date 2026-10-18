@@ -10954,7 +10954,7 @@
       "archived": false
     },
     "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py": {
-      "description": "gen_pilot_pcb.py \u2014 Build the Pilot (CAPE-A-2) PCB from the schematic netlist.",
+      "description": "Python script",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -10963,7 +10963,7 @@
       "archived": false
     },
     "avionics/kicad/Pilot/scripts/gen_pilot_sch.py": {
-      "description": "Python script",
+      "description": "gen_pilot_sch.py \u2014 Author the datasheet-accurate Pilot (CAPE-A-2) schematic.",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -11843,6 +11843,14 @@
         "avionics-hardware",
         "pcb-design",
         "sensors-vision"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/align_pb2_ti_names.py": {
+      "description": "Align Pilot and TACCO names with BeagleBoard / TI naming (owner decision 2026-10-17).",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
       ],
       "archived": false
     },
@@ -20458,6 +20466,7 @@
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
       "avionics/kicad/add_eth_phy.py",
       "avionics/kicad/add_sensors_sbus.py",
+      "avionics/kicad/align_pb2_ti_names.py",
       "avionics/kicad/apply_netlist.py",
       "avionics/kicad/check_impedance.py",
       "avionics/kicad/complete_1_2b.py",
@@ -21114,6 +21123,7 @@
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
       "avionics/kicad/add_eth_phy.py",
       "avionics/kicad/add_sensors_sbus.py",
+      "avionics/kicad/align_pb2_ti_names.py",
       "avionics/kicad/apply_netlist.py",
       "avionics/kicad/check_impedance.py",
       "avionics/kicad/complete_1_2b.py",

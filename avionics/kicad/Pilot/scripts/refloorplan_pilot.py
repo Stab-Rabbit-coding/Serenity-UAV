@@ -86,7 +86,7 @@ STRADDLE = {"X2Y-CAN", "X2Y-RS485"}
 # isolated pin k (11..20) at (cx - 4.65, cy - 5.715 + (k - 11) * 1.27), logic pin k (1..10)
 # at (cx + 4.65, cy + 5.715 - (k - 1) * 1.27); SOIC-20W pads 1.95 x 0.6 mm.
 CAN_C = (135.1, 107.1)        # pin 11 x 130.45: PWR-IN THT pads end x 125.35 (+4 mm)
-RS_C = (150.5, 107.1)         # pin 11 pad 4 mm clear of CAN-TR logic pads; T-ETH2 at 156.6
+RS_C = (150.5, 107.1)         # pin 11 pad 4 mm clear of CAN-TR logic pads; T-USB1 at 156.6
 FIXED: Dict[str, Tuple[float, float, float, str]] = {
     # PB2-I rails at their established poses; their library pads were mirrored on
     # 2026-10-17 (pin 1 rows per the official drawing), so sync() reloads them
@@ -146,8 +146,8 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
 X0, Y0 = 121.0, 87.5
 PB2_GAP, H_MARGIN = 3.0 + 2.54, 0.5
 OBSTRUCTIONS = [(4.0, 10.5, 18.0, 24.5, 1.0), (45.0, 12.5, 55.0, 22.5, 2.95)]
-HEIGHT = {"T-ETH": 8.9, "T-ETH2": 8.9, "1553-XFM": 4.70, "TVS-1553P": 2.44, "TVS-1553N": 2.44}
-F_ONLY = {"T-ETH", "T-ETH2", "J-GPS", "J-SPI"}     # tall, or cable connectors (B faces the PB2-I)
+HEIGHT = {"T-RMII2": 8.9, "T-USB1": 8.9, "1553-XFM": 4.70, "TVS-1553P": 2.44, "TVS-1553N": 2.44}
+F_ONLY = {"T-RMII2", "T-USB1", "J-GPS", "J-SPI"}     # tall, or cable connectors (B faces the PB2-I)
 # footprints whose library geometry changed under the same name: always reloaded
 FORCE_RELOAD = {"PB2-P1", "PB2-P2"}
 EDGE_CONN = {"J-GPS", "J-SPI"}                    # GH cable connectors: board edge, F side
@@ -157,7 +157,10 @@ FIRST = {"X-50M"}                                  # re-placed before everything
 MOUNT_KO = 2.75                                    # M2.5 standoff radius keep-out (mm)
 POWER = {"GND", "PGND", "+3V3", "+5V", "+5V_IN", "+3V3_PB2", ""}
 # pure-supply parts -> the part they serve (anchor)
-PARENT = [("C-P1-", "ETH1-PHY"), ("R-P1-", "ETH1-PHY"), ("C-U2-", "ETH2-USB"),
+# RMII2 / USB1 leg prefixes are specific so the Bob-Smith parts (R-RMII2-BS*, C-*-BS) stay with
+# their line-side transformer/connector (TI interface naming, 2026-10-17)
+PARENT = [("C-RMII2-A", "PHY-RMII2"), ("C-RMII2-C", "PHY-RMII2"), ("C-RMII2-IO", "PHY-RMII2"), ("R-RMII2-RBIAS", "PHY-RMII2"), ("R-RMII2-AD0", "PHY-RMII2"),
+          ("C-USB1-V5", "NIC-USB1"), ("C-USB1-A", "NIC-USB1"), ("C-USB1-DK", "NIC-USB1"), ("C-USB1-IO", "NIC-USB1"), ("C-USB1-C", "NIC-USB1"),
           ("ESD-GPS", "J-GPS"), ("F-GPS", "J-GPS"), ("C-GPS5", "J-GPS"), ("R-I2C", "J-GPS"),
           ("ESD-S", "J-SPI"), ("F-SPI", "J-SPI"), ("C-SPI5", "J-SPI"),
           ("C-3V3", "U-3V3"), ("C-IMU", "IMU"), ("C-BARO", "BARO"),
@@ -356,7 +359,7 @@ class Checker:
         c = g.cy
         if not g.ref.startswith(("H", "PB2")):
             if c[0] < EDGE[0] or c[1] < EDGE[1] or c[2] > EDGE[2] or c[3] > EDGE[3]:
-                if not g.ref.startswith(("ETH", "CAN-FD", "RS-485", "MIL", "PWR", "J-GPS", "J-SPI")):
+                if not g.ref.startswith(("J-ETH", "CAN-FD", "RS-485", "MIL", "PWR", "J-GPS", "J-SPI")):
                     out.append("edge")
             # cable connectors must reach the board edge (courtyard within 0.6 mm of it)
             if g.ref in EDGE_CONN and min(c[0] - 121.0, c[1] - 87.5, 176.0 - c[2], 122.5 - c[3]) > 0.6:
@@ -501,8 +504,8 @@ def main() -> None:
     # what the committed board already tolerates (e.g. J-PWM's courtyard over the PB2-P1
     # clip hole) is not this script's business: record it, move only for new breaks
     # a problem the old board already had is tolerated only while the part it involves
-    # stayed put: R-BS1R overlapped RS485's courtyard before, and RS485's new FIXED pose
-    # put its pads onto R-BS1R's (2026-10-17, a short on the first keep-copper run)
+    # stayed put: R-RMII2-BSR overlapped RS485's courtyard before, and RS485's new FIXED pose
+    # put its pads onto R-RMII2-BSR's (2026-10-17, a short on the first keep-copper run)
     moved_fixed = {r for r in FIXED if r in base_geos and
                    math.dist(((base_geos[r].cy[0] + base_geos[r].cy[2]) / 2,
                               (base_geos[r].cy[1] + base_geos[r].cy[3]) / 2),

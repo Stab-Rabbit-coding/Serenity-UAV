@@ -515,67 +515,67 @@
     "netclass_patterns": [
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH_TXP"
+        "pattern": "ETH_RMII2_TXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH_TXN"
+        "pattern": "ETH_RMII2_TXN"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH_RXP"
+        "pattern": "ETH_RMII2_RXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH_RXN"
+        "pattern": "ETH_RMII2_RXN"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH2_TXP"
+        "pattern": "ETH_USB1_TXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH2_TXN"
+        "pattern": "ETH_USB1_TXN"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH2_RXP"
+        "pattern": "ETH_USB1_RXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH2_RXN"
+        "pattern": "ETH_USB1_RXN"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH_LINE_TXP"
+        "pattern": "ETH_RMII2_LINE_TXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH_LINE_TXN"
+        "pattern": "ETH_RMII2_LINE_TXN"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH_LINE_RXP"
+        "pattern": "ETH_RMII2_LINE_RXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH_LINE_RXN"
+        "pattern": "ETH_RMII2_LINE_RXN"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH2_LINE_TXP"
+        "pattern": "ETH_USB1_LINE_TXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH2_LINE_TXN"
+        "pattern": "ETH_USB1_LINE_TXN"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH2_LINE_RXP"
+        "pattern": "ETH_USB1_LINE_RXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETH2_LINE_RXN"
+        "pattern": "ETH_USB1_LINE_RXN"
       },
       {
         "netclass": "ISOLATION",

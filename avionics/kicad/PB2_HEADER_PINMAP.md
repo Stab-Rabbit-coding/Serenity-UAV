@@ -112,7 +112,7 @@ gap idea is withdrawn — P2-5/7 are the only MCAN0 pins).
 | | RMII2_RX_ER / RXD1 / RXD0 | P1-19 / P1-25 / P1-27 | AD22 / AB20 / AE23 | |
 | | RMII2_REF_CLK / CRS_DV | P1-34 / P1-35 | AD23 / AE21 | |
 | MDIO | MDC0 / MDIO0 | P2-1 / P2-3 | AD24 / AB22 | |
-| PHY control | PHY1_RSTN / PHY1_INTRN | P2-4 / P2-6 | V24 / W25 | |
+| PHY control | RMII2_PHY_RSTN / RMII2_PHY_INTRN | P2-4 / P2-6 | V24 / W25 | renamed from PHY1_* 2026-10-17 |
 | 1553 control | M1553B_IRQN / MRN / TX_INH | P2-8 / P2-10 / P2-17 | W24 / AD21 / AC24 | |
 | TPM control | TPM_B_RSTN / TPM_B_IRQN | P2-18 / P2-19 | V21 / AC20 | |
 | microSD detect | SD_CD | P2-20 | Y25 | |

@@ -416,10 +416,10 @@ def eth_xfmr(ref: str, eth: str) -> Dict[str, Any]:
 
 
 ICS += [
-    dp83825i("ETH1-PHY", "RMII2", "PHY1_RSTN", "PHY1_INTRN", "ETH", "MDIO0", "MDC0"),
-    ch397a("ETH2-USB", "ETH2"),
-    eth_xfmr("T-ETH", "ETH"),
-    eth_xfmr("T-ETH2", "ETH2"),
+    dp83825i("PHY-RMII2", "RMII2", "RMII2_PHY_RSTN", "RMII2_PHY_INTRN", "ETH_RMII2", "MDIO0", "MDC0"),
+    ch397a("NIC-USB1", "ETH_USB1"),
+    eth_xfmr("T-RMII2", "ETH_RMII2"),
+    eth_xfmr("T-USB1", "ETH_USB1"),
 ]
 
 ICS += [
@@ -641,7 +641,7 @@ PB2_P2 = [
     "M1553_IRQN",     # 17 AC24 GPIO0_64
     "BARO_INT",       # 18 V21 GPIO0_53
     "IMU_INT1",       # 19 AC20 GPIO1_0
-    "PHY1_RSTN",      # 20 Y25 GPIO0_49 (DP83825I reset)
+    "RMII2_PHY_RSTN",      # 20 Y25 GPIO0_49 (DP83825I reset)
     "GND",            # 21
     "IMU_INT2",       # 22 AC25 GPIO0_63
     None,             # 23 VDD_3V3 out of the PB2
@@ -649,7 +649,7 @@ PB2_P2 = [
     "SPI0_MOSI",      # 25 B14 SPI0_D1
     None,             # 26 RESET#
     "SPI0_MISO",      # 27 B13 SPI0_D0
-    "PHY1_INTRN",     # 28 AB24 GPIO0_61 (DP83825I interrupt)
+    "RMII2_PHY_INTRN",     # 28 AB24 GPIO0_61 (DP83825I interrupt)
     "SPI0_CLK",       # 29 A14 SPI0_CLK (M22 left input)
     None,             # 30 AA24 GPIO0_58 — spare
     "RMII2_TXD1",     # 31 AA18 RMII2_TXD1 (A13 SPI0_CS0 left input)
@@ -662,7 +662,9 @@ PB2_P2 = [
 
 
 def pb2_header(ref: str, value: str, fp: str, nets: List[Optional[str]]) -> Dict[str, Any]:
-    pins = [(str(i), f"P{i}", net, "L" if i <= 18 else "R") for i, net in enumerate(nets, start=1)]
+    rail = ref.split("-")[-1]  # "P1" / "P2"
+    # pin names = BeagleBoard SRM designators P1.01..P2.36 [REF-SENSOR-041 sec 4.2]
+    pins = [(str(i), f"{rail}.{i:02d}", net, "L" if i <= 18 else "R") for i, net in enumerate(nets, start=1)]
     return {"ref": ref, "value": value, "fp": fp, "mpn": "TSM-118-04-L-DV-LC",
             "ds": "PocketBeagle 2 P1/P2 expansion rails; Samtec TSM-DV SMT male strip, -04 post, "
                   "-LC locking clip (manual placement) [REF-SENSOR-042]", "pins": pins}
@@ -760,20 +762,20 @@ SIMPLE: List[Any] = [
     ("X2Y-RS485", "4.7nF X2Y", FP_X2Y0805, "CX0805MRX7R0BB472", "Pilot.md §3 GND1<->GND2 RF bridge (Yageo X2Y 0805)",
      [("1", "A", "GND"), ("2", "B", "GND"), ("3", "G1", "GND2_RS485"), ("4", "G2", "GND2_RS485")]),
     # --- Ethernet line-side connectors + Bob-Smith terminations ------------
-    ("ETH1", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "ETH1 line pair to T-ETH secondary",
-     [("1", "TXP", "ETH_LINE_TXP"), ("2", "TXN", "ETH_LINE_TXN"), ("3", "RXP", "ETH_LINE_RXP"), ("4", "RXN", "ETH_LINE_RXN"),
+    ("J-ETH-RMII2", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-RMII2 line pair to T-RMII2 secondary",
+     [("1", "TXP", "ETH_RMII2_LINE_TXP"), ("2", "TXN", "ETH_RMII2_LINE_TXN"), ("3", "RXP", "ETH_RMII2_LINE_RXP"), ("4", "RXN", "ETH_RMII2_LINE_RXN"),
       ("MP", "SHIELD", "PGND")]),
-    ("ETH2", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "ETH2 line pair to T-ETH2 secondary",
-     [("1", "TXP", "ETH2_LINE_TXP"), ("2", "TXN", "ETH2_LINE_TXN"), ("3", "RXP", "ETH2_LINE_RXP"), ("4", "RXN", "ETH2_LINE_RXN"),
+    ("J-ETH-USB1", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-USB1 line pair to T-USB1 secondary",
+     [("1", "TXP", "ETH_USB1_LINE_TXP"), ("2", "TXN", "ETH_USB1_LINE_TXN"), ("3", "RXP", "ETH_USB1_LINE_RXP"), ("4", "RXN", "ETH_USB1_LINE_RXN"),
       ("MP", "SHIELD", "PGND")]),
     # TPI network per dp83825i.pdf Fig 8-3: 75 R from each line-side centre tap to a
     # common node, 10 nF (2 kV) to chassis.
-    ("R-BS1T", "75R", FP_R0402, "", "ETH1 line TX centre tap Bob-Smith (Fig 8-3 R135)", [("1", "A", "ETH_LINE_CTX"), ("2", "B", "ETH_BS")]),
-    ("R-BS1R", "75R", FP_R0402, "", "ETH1 line RX centre tap Bob-Smith (Fig 8-3 R143)", [("1", "A", "ETH_LINE_CRX"), ("2", "B", "ETH_BS")]),
-    ("C-BS1", "10nF 2kV", FP_C1808, "", "ETH1 Bob-Smith HV cap to chassis (Fig 8-3 C38)", [("1", "P", "ETH_BS"), ("2", "N", "PGND")]),
-    ("R-BS2T", "75R", FP_R0402, "", "ETH2 line TX centre tap Bob-Smith", [("1", "A", "ETH2_LINE_CTX"), ("2", "B", "ETH2_BS")]),
-    ("R-BS2R", "75R", FP_R0402, "", "ETH2 line RX centre tap Bob-Smith", [("1", "A", "ETH2_LINE_CRX"), ("2", "B", "ETH2_BS")]),
-    ("C-BS2", "10nF 2kV", FP_C1808, "", "ETH2 Bob-Smith HV cap to chassis", [("1", "P", "ETH2_BS"), ("2", "N", "PGND")]),
+    ("R-RMII2-BST", "75R", FP_R0402, "", "J-ETH-RMII2 line TX centre tap Bob-Smith (Fig 8-3 R135)", [("1", "A", "ETH_RMII2_LINE_CTX"), ("2", "B", "ETH_RMII2_BS")]),
+    ("R-RMII2-BSR", "75R", FP_R0402, "", "J-ETH-RMII2 line RX centre tap Bob-Smith (Fig 8-3 R143)", [("1", "A", "ETH_RMII2_LINE_CRX"), ("2", "B", "ETH_RMII2_BS")]),
+    ("C-RMII2-BS", "10nF 2kV", FP_C1808, "", "J-ETH-RMII2 Bob-Smith HV cap to chassis (Fig 8-3 C38)", [("1", "P", "ETH_RMII2_BS"), ("2", "N", "PGND")]),
+    ("R-USB1-BST", "75R", FP_R0402, "", "J-ETH-USB1 line TX centre tap Bob-Smith", [("1", "A", "ETH_USB1_LINE_CTX"), ("2", "B", "ETH_USB1_BS")]),
+    ("R-USB1-BSR", "75R", FP_R0402, "", "J-ETH-USB1 line RX centre tap Bob-Smith", [("1", "A", "ETH_USB1_LINE_CRX"), ("2", "B", "ETH_USB1_BS")]),
+    ("C-USB1-BS", "10nF 2kV", FP_C1808, "", "J-ETH-USB1 Bob-Smith HV cap to chassis", [("1", "P", "ETH_USB1_BS"), ("2", "N", "PGND")]),
     # one 25 MHz oscillator drives both Ethernet controllers' XI pins (XO pins open)
     ("X-25M", "25MHz 3.3V", FP_OSC2520, "ECS-2520MV-250-BN-TR", "25 MHz reference for the DP83825I XI (RMII Leader, +/-50 ppm, SNLS638C) and the CH397A XI (external clock input, CH397 Table 1-3); ECS-2520MV.pdf [REF-PWR-004]",
      [("1", "TRI", None), ("2", "GND", "GND"), ("3", "OUT", "XI_25M"), ("4", "VDD", "+3V3")]),
@@ -857,7 +859,7 @@ SIMPLE += [
 
 def phy_support(tag: str, ref: str, rmii: str, eth: str) -> List[Any]:
     """DP83825I per-PHY passives (dp83825i.pdf Table 4-1, Table 6-8/6-9, Fig 8-3, Fig 8-4)."""
-    p = f"P{tag}"
+    p = tag  # TI interface name of the leg, e.g. "RMII2" (2026-10-17 naming alignment)
     return [
         (f"R-{p}-RBIAS", "6.49k 1%", FP_R0201, "", "DP83825I RBIAS to GND (pin 14)", [("1", "A", f"{ref}_RBIAS"), ("2", "B", "GND")]),
         (f"R-{p}-AD0", "2.49k", FP_R0201, "", "PhyAdd[0] strap mode 1 -> PHY address 1 (Table 6-8/6-9)", [("1", "A", "+3V3"), ("2", "B", f"{rmii}_RXD0")]),
@@ -874,18 +876,18 @@ def phy_support(tag: str, ref: str, rmii: str, eth: str) -> List[Any]:
     ]
 
 
-SIMPLE += phy_support("1", "ETH1-PHY", "RMII2", "ETH")
+SIMPLE += phy_support("RMII2", "PHY-RMII2", "RMII2", "ETH_RMII2")
 
 # --- CH397A support (CH397 datasheet V1.2 sec 3.7 table, sec 6.1 circuit) [REF-SENSOR-048] --
 SIMPLE += [
-    ("C-U2-V5A", "10uF 6.3V X6S", FP_C0603, "MSASJ168BC6226MTNA01", "V5 / AVDD33 (pins 11/10) bulk, 3.3 V supply (sec 6.1 C8)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-U2-V5B", "100nF", FP_C0201, "", "V5 / AVDD33 (pins 11/10) HF (sec 6.1 C2)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-U2-A1", "1uF", FP_C0402, "", "AVDD33 pin 1 decoupling (Table 1-3)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-U2-IO", "100nF", FP_C0201, "", "VDDIO pins 13/18 decoupling (Table 1-3)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-U2-AK", "1uF", FP_C0402, "", "AVDDK core-analog decoupling, pin 23 (Table 1-3)", [("1", "P", "ETH2-USB_AVDDK"), ("2", "N", "GND")]),
-    ("C-U2-DK", "100nF", FP_C0201, "", "DVDDK core-digital decoupling, pin 9 (Table 1-3)", [("1", "P", "ETH2-USB_DVDDK"), ("2", "N", "GND")]),
-    ("C-U2-CTD", "1uF", FP_C0402, "", "T-ETH2 device-side TX centre tap to GND (sec 6.1 C11; no supply on the CT)", [("1", "P", "ETH2_CTD"), ("2", "N", "GND")]),
-    ("C-U2-CRD", "1uF", FP_C0402, "", "T-ETH2 device-side RX centre tap to GND (sec 6.1 C12)", [("1", "P", "ETH2_CRD"), ("2", "N", "GND")]),
+    ("C-USB1-V5A", "10uF 6.3V X6S", FP_C0603, "MSASJ168BC6226MTNA01", "V5 / AVDD33 (pins 11/10) bulk, 3.3 V supply (sec 6.1 C8)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-USB1-V5B", "100nF", FP_C0201, "", "V5 / AVDD33 (pins 11/10) HF (sec 6.1 C2)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-USB1-A1", "1uF", FP_C0402, "", "AVDD33 pin 1 decoupling (Table 1-3)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-USB1-IO", "100nF", FP_C0201, "", "VDDIO pins 13/18 decoupling (Table 1-3)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-USB1-AK", "1uF", FP_C0402, "", "AVDDK core-analog decoupling, pin 23 (Table 1-3)", [("1", "P", "NIC-USB1_AVDDK"), ("2", "N", "GND")]),
+    ("C-USB1-DK", "100nF", FP_C0201, "", "DVDDK core-digital decoupling, pin 9 (Table 1-3)", [("1", "P", "NIC-USB1_DVDDK"), ("2", "N", "GND")]),
+    ("C-USB1-CTD", "1uF", FP_C0402, "", "T-USB1 device-side TX centre tap to GND (sec 6.1 C11; no supply on the CT)", [("1", "P", "ETH_USB1_CTD"), ("2", "N", "GND")]),
+    ("C-USB1-CRD", "1uF", FP_C0402, "", "T-USB1 device-side RX centre tap to GND (sec 6.1 C12)", [("1", "P", "ETH_USB1_CRD"), ("2", "N", "GND")]),
 ]
 
 # --- JST-GH expansion headers replacing the GNSS (owner 2026-10-17) -------------------

@@ -105,15 +105,15 @@
         (pin passive line (at 19.05 -27.94 180) (length 2.54) (name "NCI" (effects (font (size 1.27 1.27)))) (number "31" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_ETH1-PHY" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_PHY-RMII2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 20.32 0) (effects (font (size 1.27 1.27))))
       (property "Value" "DP83825IRMQR" (at 0 -20.32 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Package_DFN_QFN:Texas_RMQ0024A_WQFN-24-1EP_3x3mm_P0.4mm_EP1.9x1.9mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "dp83825i.pdf Table 4-1 Pin Functions / Table 6-8..6-11 straps (WQFN-24 RMQ) [REF-SENSOR-029]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_ETH1-PHY_0_1"
+      (symbol "S_PHY-RMII2_0_1"
         (rectangle (start -16.51 19.05) (end 16.51 -19.05) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_ETH1-PHY_1_1"
+      (symbol "S_PHY-RMII2_1_1"
         (pin passive line (at -19.05 16.51 0) (length 2.54) (name "TX_EN" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 13.97 0) (length 2.54) (name "TX_D0" (effects (font (size 1.27 1.27)))) (number "23" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 11.43 0) (length 2.54) (name "TX_D1" (effects (font (size 1.27 1.27)))) (number "24" (effects (font (size 1.27 1.27)))))
@@ -141,15 +141,15 @@
         (pin power_in line (at 19.05 -11.43 180) (length 2.54) (name "EP" (effects (font (size 1.27 1.27)))) (number "25" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_ETH2-USB" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_NIC-USB1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 21.59 0) (effects (font (size 1.27 1.27))))
       (property "Value" "CH397A" (at 0 -21.59 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "CH397 datasheet V1.2 Table 1-3 / Fig. 1-1 (CH397A QFN24) [REF-SENSOR-048]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_ETH2-USB_0_1"
+      (symbol "S_NIC-USB1_0_1"
         (rectangle (start -16.51 20.32) (end 16.51 -20.32) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_ETH2-USB_1_1"
+      (symbol "S_NIC-USB1_1_1"
         (pin passive line (at -19.05 17.78 0) (length 2.54) (name "UDP" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 15.24 0) (length 2.54) (name "UDM" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 12.70 0) (length 2.54) (name "XI" (effects (font (size 1.27 1.27)))) (number "21" (effects (font (size 1.27 1.27)))))
@@ -177,15 +177,15 @@
         (pin power_in line (at 19.05 -15.24 180) (length 2.54) (name "EP" (effects (font (size 1.27 1.27)))) (number "25" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_T-ETH" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_T-RMII2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 13.97 0) (effects (font (size 1.27 1.27))))
       (property "Value" "749010012A" (at 0 -13.97 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Serenity-Custom:Wurth_749010012A_WE-LAN" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "749010012A.pdf p.1 Schematic + Recommended Land Pattern [REF-SENSOR-028]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_T-ETH_0_1"
+      (symbol "S_T-RMII2_0_1"
         (rectangle (start -16.51 12.70) (end 16.51 -12.70) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_T-ETH_1_1"
+      (symbol "S_T-RMII2_1_1"
         (pin passive line (at -19.05 10.16 0) (length 2.54) (name "TD+" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 7.62 0) (length 2.54) (name "CTD" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 5.08 0) (length 2.54) (name "TD-" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
@@ -204,15 +204,15 @@
         (pin passive line (at 19.05 -7.62 180) (length 2.54) (name "RX-" (effects (font (size 1.27 1.27)))) (number "9" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_T-ETH2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_T-USB1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 13.97 0) (effects (font (size 1.27 1.27))))
       (property "Value" "749010012A" (at 0 -13.97 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Serenity-Custom:Wurth_749010012A_WE-LAN" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "749010012A.pdf p.1 Schematic + Recommended Land Pattern [REF-SENSOR-028]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_T-ETH2_0_1"
+      (symbol "S_T-USB1_0_1"
         (rectangle (start -16.51 12.70) (end 16.51 -12.70) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_T-ETH2_1_1"
+      (symbol "S_T-USB1_1_1"
         (pin passive line (at -19.05 10.16 0) (length 2.54) (name "TD+" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 7.62 0) (length 2.54) (name "CTD" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 5.08 0) (length 2.54) (name "TD-" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
@@ -386,42 +386,42 @@
         (rectangle (start -16.51 25.40) (end 16.51 -25.40) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
       (symbol "S_PB2-P1_1_1"
-        (pin passive line (at -19.05 22.86 0) (length 2.54) (name "P1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 20.32 0) (length 2.54) (name "P2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 17.78 0) (length 2.54) (name "P3" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 15.24 0) (length 2.54) (name "P4" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 12.70 0) (length 2.54) (name "P5" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 10.16 0) (length 2.54) (name "P6" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 7.62 0) (length 2.54) (name "P7" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 5.08 0) (length 2.54) (name "P8" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 2.54 0) (length 2.54) (name "P9" (effects (font (size 1.27 1.27)))) (number "9" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 0.00 0) (length 2.54) (name "P10" (effects (font (size 1.27 1.27)))) (number "10" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -2.54 0) (length 2.54) (name "P11" (effects (font (size 1.27 1.27)))) (number "11" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -5.08 0) (length 2.54) (name "P12" (effects (font (size 1.27 1.27)))) (number "12" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -7.62 0) (length 2.54) (name "P13" (effects (font (size 1.27 1.27)))) (number "13" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -10.16 0) (length 2.54) (name "P14" (effects (font (size 1.27 1.27)))) (number "14" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -12.70 0) (length 2.54) (name "P15" (effects (font (size 1.27 1.27)))) (number "15" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -15.24 0) (length 2.54) (name "P16" (effects (font (size 1.27 1.27)))) (number "16" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -17.78 0) (length 2.54) (name "P17" (effects (font (size 1.27 1.27)))) (number "17" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -20.32 0) (length 2.54) (name "P18" (effects (font (size 1.27 1.27)))) (number "18" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 22.86 180) (length 2.54) (name "P19" (effects (font (size 1.27 1.27)))) (number "19" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 20.32 180) (length 2.54) (name "P20" (effects (font (size 1.27 1.27)))) (number "20" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 17.78 180) (length 2.54) (name "P21" (effects (font (size 1.27 1.27)))) (number "21" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 15.24 180) (length 2.54) (name "P22" (effects (font (size 1.27 1.27)))) (number "22" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 12.70 180) (length 2.54) (name "P23" (effects (font (size 1.27 1.27)))) (number "23" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 10.16 180) (length 2.54) (name "P24" (effects (font (size 1.27 1.27)))) (number "24" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 7.62 180) (length 2.54) (name "P25" (effects (font (size 1.27 1.27)))) (number "25" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 5.08 180) (length 2.54) (name "P26" (effects (font (size 1.27 1.27)))) (number "26" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 2.54 180) (length 2.54) (name "P27" (effects (font (size 1.27 1.27)))) (number "27" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 0.00 180) (length 2.54) (name "P28" (effects (font (size 1.27 1.27)))) (number "28" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -2.54 180) (length 2.54) (name "P29" (effects (font (size 1.27 1.27)))) (number "29" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -5.08 180) (length 2.54) (name "P30" (effects (font (size 1.27 1.27)))) (number "30" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -7.62 180) (length 2.54) (name "P31" (effects (font (size 1.27 1.27)))) (number "31" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -10.16 180) (length 2.54) (name "P32" (effects (font (size 1.27 1.27)))) (number "32" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -12.70 180) (length 2.54) (name "P33" (effects (font (size 1.27 1.27)))) (number "33" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -15.24 180) (length 2.54) (name "P34" (effects (font (size 1.27 1.27)))) (number "34" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -17.78 180) (length 2.54) (name "P35" (effects (font (size 1.27 1.27)))) (number "35" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -20.32 180) (length 2.54) (name "P36" (effects (font (size 1.27 1.27)))) (number "36" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 22.86 0) (length 2.54) (name "P1.01" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 20.32 0) (length 2.54) (name "P1.02" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 17.78 0) (length 2.54) (name "P1.03" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 15.24 0) (length 2.54) (name "P1.04" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 12.70 0) (length 2.54) (name "P1.05" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 10.16 0) (length 2.54) (name "P1.06" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 7.62 0) (length 2.54) (name "P1.07" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 5.08 0) (length 2.54) (name "P1.08" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 2.54 0) (length 2.54) (name "P1.09" (effects (font (size 1.27 1.27)))) (number "9" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 0.00 0) (length 2.54) (name "P1.10" (effects (font (size 1.27 1.27)))) (number "10" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -2.54 0) (length 2.54) (name "P1.11" (effects (font (size 1.27 1.27)))) (number "11" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -5.08 0) (length 2.54) (name "P1.12" (effects (font (size 1.27 1.27)))) (number "12" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -7.62 0) (length 2.54) (name "P1.13" (effects (font (size 1.27 1.27)))) (number "13" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -10.16 0) (length 2.54) (name "P1.14" (effects (font (size 1.27 1.27)))) (number "14" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -12.70 0) (length 2.54) (name "P1.15" (effects (font (size 1.27 1.27)))) (number "15" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -15.24 0) (length 2.54) (name "P1.16" (effects (font (size 1.27 1.27)))) (number "16" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -17.78 0) (length 2.54) (name "P1.17" (effects (font (size 1.27 1.27)))) (number "17" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -20.32 0) (length 2.54) (name "P1.18" (effects (font (size 1.27 1.27)))) (number "18" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 22.86 180) (length 2.54) (name "P1.19" (effects (font (size 1.27 1.27)))) (number "19" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 20.32 180) (length 2.54) (name "P1.20" (effects (font (size 1.27 1.27)))) (number "20" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 17.78 180) (length 2.54) (name "P1.21" (effects (font (size 1.27 1.27)))) (number "21" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 15.24 180) (length 2.54) (name "P1.22" (effects (font (size 1.27 1.27)))) (number "22" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 12.70 180) (length 2.54) (name "P1.23" (effects (font (size 1.27 1.27)))) (number "23" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 10.16 180) (length 2.54) (name "P1.24" (effects (font (size 1.27 1.27)))) (number "24" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 7.62 180) (length 2.54) (name "P1.25" (effects (font (size 1.27 1.27)))) (number "25" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 5.08 180) (length 2.54) (name "P1.26" (effects (font (size 1.27 1.27)))) (number "26" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 2.54 180) (length 2.54) (name "P1.27" (effects (font (size 1.27 1.27)))) (number "27" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 0.00 180) (length 2.54) (name "P1.28" (effects (font (size 1.27 1.27)))) (number "28" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -2.54 180) (length 2.54) (name "P1.29" (effects (font (size 1.27 1.27)))) (number "29" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -5.08 180) (length 2.54) (name "P1.30" (effects (font (size 1.27 1.27)))) (number "30" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -7.62 180) (length 2.54) (name "P1.31" (effects (font (size 1.27 1.27)))) (number "31" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -10.16 180) (length 2.54) (name "P1.32" (effects (font (size 1.27 1.27)))) (number "32" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -12.70 180) (length 2.54) (name "P1.33" (effects (font (size 1.27 1.27)))) (number "33" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -15.24 180) (length 2.54) (name "P1.34" (effects (font (size 1.27 1.27)))) (number "34" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -17.78 180) (length 2.54) (name "P1.35" (effects (font (size 1.27 1.27)))) (number "35" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -20.32 180) (length 2.54) (name "P1.36" (effects (font (size 1.27 1.27)))) (number "36" (effects (font (size 1.27 1.27)))))
       )
     )
     (symbol "S_PB2-P2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
@@ -433,42 +433,42 @@
         (rectangle (start -16.51 25.40) (end 16.51 -25.40) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
       (symbol "S_PB2-P2_1_1"
-        (pin passive line (at -19.05 22.86 0) (length 2.54) (name "P1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 20.32 0) (length 2.54) (name "P2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 17.78 0) (length 2.54) (name "P3" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 15.24 0) (length 2.54) (name "P4" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 12.70 0) (length 2.54) (name "P5" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 10.16 0) (length 2.54) (name "P6" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 7.62 0) (length 2.54) (name "P7" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 5.08 0) (length 2.54) (name "P8" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 2.54 0) (length 2.54) (name "P9" (effects (font (size 1.27 1.27)))) (number "9" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 0.00 0) (length 2.54) (name "P10" (effects (font (size 1.27 1.27)))) (number "10" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -2.54 0) (length 2.54) (name "P11" (effects (font (size 1.27 1.27)))) (number "11" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -5.08 0) (length 2.54) (name "P12" (effects (font (size 1.27 1.27)))) (number "12" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -7.62 0) (length 2.54) (name "P13" (effects (font (size 1.27 1.27)))) (number "13" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -10.16 0) (length 2.54) (name "P14" (effects (font (size 1.27 1.27)))) (number "14" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -12.70 0) (length 2.54) (name "P15" (effects (font (size 1.27 1.27)))) (number "15" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -15.24 0) (length 2.54) (name "P16" (effects (font (size 1.27 1.27)))) (number "16" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -17.78 0) (length 2.54) (name "P17" (effects (font (size 1.27 1.27)))) (number "17" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -19.05 -20.32 0) (length 2.54) (name "P18" (effects (font (size 1.27 1.27)))) (number "18" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 22.86 180) (length 2.54) (name "P19" (effects (font (size 1.27 1.27)))) (number "19" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 20.32 180) (length 2.54) (name "P20" (effects (font (size 1.27 1.27)))) (number "20" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 17.78 180) (length 2.54) (name "P21" (effects (font (size 1.27 1.27)))) (number "21" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 15.24 180) (length 2.54) (name "P22" (effects (font (size 1.27 1.27)))) (number "22" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 12.70 180) (length 2.54) (name "P23" (effects (font (size 1.27 1.27)))) (number "23" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 10.16 180) (length 2.54) (name "P24" (effects (font (size 1.27 1.27)))) (number "24" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 7.62 180) (length 2.54) (name "P25" (effects (font (size 1.27 1.27)))) (number "25" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 5.08 180) (length 2.54) (name "P26" (effects (font (size 1.27 1.27)))) (number "26" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 2.54 180) (length 2.54) (name "P27" (effects (font (size 1.27 1.27)))) (number "27" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 0.00 180) (length 2.54) (name "P28" (effects (font (size 1.27 1.27)))) (number "28" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -2.54 180) (length 2.54) (name "P29" (effects (font (size 1.27 1.27)))) (number "29" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -5.08 180) (length 2.54) (name "P30" (effects (font (size 1.27 1.27)))) (number "30" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -7.62 180) (length 2.54) (name "P31" (effects (font (size 1.27 1.27)))) (number "31" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -10.16 180) (length 2.54) (name "P32" (effects (font (size 1.27 1.27)))) (number "32" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -12.70 180) (length 2.54) (name "P33" (effects (font (size 1.27 1.27)))) (number "33" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -15.24 180) (length 2.54) (name "P34" (effects (font (size 1.27 1.27)))) (number "34" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -17.78 180) (length 2.54) (name "P35" (effects (font (size 1.27 1.27)))) (number "35" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at 19.05 -20.32 180) (length 2.54) (name "P36" (effects (font (size 1.27 1.27)))) (number "36" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 22.86 0) (length 2.54) (name "P2.01" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 20.32 0) (length 2.54) (name "P2.02" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 17.78 0) (length 2.54) (name "P2.03" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 15.24 0) (length 2.54) (name "P2.04" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 12.70 0) (length 2.54) (name "P2.05" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 10.16 0) (length 2.54) (name "P2.06" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 7.62 0) (length 2.54) (name "P2.07" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 5.08 0) (length 2.54) (name "P2.08" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 2.54 0) (length 2.54) (name "P2.09" (effects (font (size 1.27 1.27)))) (number "9" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 0.00 0) (length 2.54) (name "P2.10" (effects (font (size 1.27 1.27)))) (number "10" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -2.54 0) (length 2.54) (name "P2.11" (effects (font (size 1.27 1.27)))) (number "11" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -5.08 0) (length 2.54) (name "P2.12" (effects (font (size 1.27 1.27)))) (number "12" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -7.62 0) (length 2.54) (name "P2.13" (effects (font (size 1.27 1.27)))) (number "13" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -10.16 0) (length 2.54) (name "P2.14" (effects (font (size 1.27 1.27)))) (number "14" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -12.70 0) (length 2.54) (name "P2.15" (effects (font (size 1.27 1.27)))) (number "15" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -15.24 0) (length 2.54) (name "P2.16" (effects (font (size 1.27 1.27)))) (number "16" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -17.78 0) (length 2.54) (name "P2.17" (effects (font (size 1.27 1.27)))) (number "17" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -19.05 -20.32 0) (length 2.54) (name "P2.18" (effects (font (size 1.27 1.27)))) (number "18" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 22.86 180) (length 2.54) (name "P2.19" (effects (font (size 1.27 1.27)))) (number "19" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 20.32 180) (length 2.54) (name "P2.20" (effects (font (size 1.27 1.27)))) (number "20" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 17.78 180) (length 2.54) (name "P2.21" (effects (font (size 1.27 1.27)))) (number "21" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 15.24 180) (length 2.54) (name "P2.22" (effects (font (size 1.27 1.27)))) (number "22" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 12.70 180) (length 2.54) (name "P2.23" (effects (font (size 1.27 1.27)))) (number "23" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 10.16 180) (length 2.54) (name "P2.24" (effects (font (size 1.27 1.27)))) (number "24" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 7.62 180) (length 2.54) (name "P2.25" (effects (font (size 1.27 1.27)))) (number "25" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 5.08 180) (length 2.54) (name "P2.26" (effects (font (size 1.27 1.27)))) (number "26" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 2.54 180) (length 2.54) (name "P2.27" (effects (font (size 1.27 1.27)))) (number "27" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 0.00 180) (length 2.54) (name "P2.28" (effects (font (size 1.27 1.27)))) (number "28" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -2.54 180) (length 2.54) (name "P2.29" (effects (font (size 1.27 1.27)))) (number "29" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -5.08 180) (length 2.54) (name "P2.30" (effects (font (size 1.27 1.27)))) (number "30" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -7.62 180) (length 2.54) (name "P2.31" (effects (font (size 1.27 1.27)))) (number "31" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -10.16 180) (length 2.54) (name "P2.32" (effects (font (size 1.27 1.27)))) (number "32" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -12.70 180) (length 2.54) (name "P2.33" (effects (font (size 1.27 1.27)))) (number "33" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -15.24 180) (length 2.54) (name "P2.34" (effects (font (size 1.27 1.27)))) (number "34" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -17.78 180) (length 2.54) (name "P2.35" (effects (font (size 1.27 1.27)))) (number "35" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 19.05 -20.32 180) (length 2.54) (name "P2.36" (effects (font (size 1.27 1.27)))) (number "36" (effects (font (size 1.27 1.27)))))
       )
     )
     (symbol "S_PWR-IN" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
@@ -963,15 +963,15 @@
         (pin passive line (at 19.05 0.00 180) (length 2.54) (name "G2" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_ETH1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_J-ETH-RMII2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
       (property "Value" "SM04B-GHS-TB" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Connector_JST:JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "ETH1 line pair to T-ETH secondary" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_ETH1_0_1"
+      (property "Datasheet" "J-ETH-RMII2 line pair to T-RMII2 secondary" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "S_J-ETH-RMII2_0_1"
         (rectangle (start -16.51 6.35) (end 16.51 -6.35) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_ETH1_1_1"
+      (symbol "S_J-ETH-RMII2_1_1"
         (pin passive line (at -19.05 3.81 0) (length 2.54) (name "TXP" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 1.27 0) (length 2.54) (name "TXN" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 -1.27 0) (length 2.54) (name "RXP" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
@@ -979,15 +979,15 @@
         (pin passive line (at 19.05 1.27 180) (length 2.54) (name "SHIELD" (effects (font (size 1.27 1.27)))) (number "MP" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_ETH2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_J-ETH-USB1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
       (property "Value" "SM04B-GHS-TB" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Connector_JST:JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "ETH2 line pair to T-ETH2 secondary" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_ETH2_0_1"
+      (property "Datasheet" "J-ETH-USB1 line pair to T-USB1 secondary" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "S_J-ETH-USB1_0_1"
         (rectangle (start -16.51 6.35) (end 16.51 -6.35) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_ETH2_1_1"
+      (symbol "S_J-ETH-USB1_1_1"
         (pin passive line (at -19.05 3.81 0) (length 2.54) (name "TXP" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 1.27 0) (length 2.54) (name "TXN" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -19.05 -1.27 0) (length 2.54) (name "RXP" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
@@ -995,80 +995,80 @@
         (pin passive line (at 19.05 1.27 180) (length 2.54) (name "SHIELD" (effects (font (size 1.27 1.27)))) (number "MP" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_R-BS1T" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_R-RMII2-BST" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "75R" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "ETH1 line TX centre tap Bob-Smith (Fig 8-3 R135)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_R-BS1T_0_1"
+      (property "Datasheet" "J-ETH-RMII2 line TX centre tap Bob-Smith (Fig 8-3 R135)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "S_R-RMII2-BST_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_R-BS1T_1_1"
+      (symbol "S_R-RMII2-BST_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "A" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "B" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_R-BS1R" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_R-RMII2-BSR" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "75R" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "ETH1 line RX centre tap Bob-Smith (Fig 8-3 R143)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_R-BS1R_0_1"
+      (property "Datasheet" "J-ETH-RMII2 line RX centre tap Bob-Smith (Fig 8-3 R143)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "S_R-RMII2-BSR_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_R-BS1R_1_1"
+      (symbol "S_R-RMII2-BSR_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "A" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "B" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-BS1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-RMII2-BS" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "10nF 2kV" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_1808_4520Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "ETH1 Bob-Smith HV cap to chassis (Fig 8-3 C38)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-BS1_0_1"
+      (property "Datasheet" "J-ETH-RMII2 Bob-Smith HV cap to chassis (Fig 8-3 C38)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "S_C-RMII2-BS_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-BS1_1_1"
+      (symbol "S_C-RMII2-BS_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_R-BS2T" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_R-USB1-BST" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "75R" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "ETH2 line TX centre tap Bob-Smith" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_R-BS2T_0_1"
+      (property "Datasheet" "J-ETH-USB1 line TX centre tap Bob-Smith" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "S_R-USB1-BST_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_R-BS2T_1_1"
+      (symbol "S_R-USB1-BST_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "A" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "B" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_R-BS2R" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_R-USB1-BSR" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "75R" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "ETH2 line RX centre tap Bob-Smith" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_R-BS2R_0_1"
+      (property "Datasheet" "J-ETH-USB1 line RX centre tap Bob-Smith" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "S_R-USB1-BSR_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_R-BS2R_1_1"
+      (symbol "S_R-USB1-BSR_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "A" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "B" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-BS2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-USB1-BS" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "10nF 2kV" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_1808_4520Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "ETH2 Bob-Smith HV cap to chassis" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-BS2_0_1"
+      (property "Datasheet" "J-ETH-USB1 Bob-Smith HV cap to chassis" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "S_C-USB1-BS_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-BS2_1_1"
+      (symbol "S_C-USB1-BS_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
@@ -1467,262 +1467,262 @@
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "PGND" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_R-P1-RBIAS" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_R-RMII2-RBIAS" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "6.49k 1%" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Resistor_SMD:R_0201_0603Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "DP83825I RBIAS to GND (pin 14)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_R-P1-RBIAS_0_1"
+      (symbol "S_R-RMII2-RBIAS_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_R-P1-RBIAS_1_1"
+      (symbol "S_R-RMII2-RBIAS_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "A" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "B" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_R-P1-AD0" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_R-RMII2-AD0" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "2.49k" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Resistor_SMD:R_0201_0603Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "PhyAdd[0] strap mode 1 -> PHY address 1 (Table 6-8/6-9)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_R-P1-AD0_0_1"
+      (symbol "S_R-RMII2-AD0_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_R-P1-AD0_1_1"
+      (symbol "S_R-RMII2-AD0_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "A" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "B" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-P1-A1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-RMII2-A1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "10nF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0201_0603Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "VDDA3V3 HF bypass (Fig 8-4)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-P1-A1_0_1"
+      (symbol "S_C-RMII2-A1_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-P1-A1_1_1"
+      (symbol "S_C-RMII2-A1_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-P1-A2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-RMII2-A2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "100nF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "VDDA3V3 bypass (Fig 8-4)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-P1-A2_0_1"
+      (symbol "S_C-RMII2-A2_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-P1-A2_1_1"
+      (symbol "S_C-RMII2-A2_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-P1-A3" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-RMII2-A3" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "1uF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "VDDA3V3 bulk (Fig 8-4)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-P1-A3_0_1"
+      (symbol "S_C-RMII2-A3_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-P1-A3_1_1"
+      (symbol "S_C-RMII2-A3_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-P1-IO1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-RMII2-IO1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "10nF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0201_0603Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "VDDIO HF bypass (Fig 8-4)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-P1-IO1_0_1"
+      (symbol "S_C-RMII2-IO1_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-P1-IO1_1_1"
+      (symbol "S_C-RMII2-IO1_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-P1-IO2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-RMII2-IO2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "100nF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "VDDIO bypass (Fig 8-4)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-P1-IO2_0_1"
+      (symbol "S_C-RMII2-IO2_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-P1-IO2_1_1"
+      (symbol "S_C-RMII2-IO2_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-P1-IO3" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-RMII2-IO3" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "1uF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "VDDIO bulk (Fig 8-4)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-P1-IO3_0_1"
+      (symbol "S_C-RMII2-IO3_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-P1-IO3_1_1"
+      (symbol "S_C-RMII2-IO3_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-P1-CTD1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-RMII2-CTD1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "100nF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "device-side TX centre tap to GND (Fig 8-3 C41)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-P1-CTD1_0_1"
+      (symbol "S_C-RMII2-CTD1_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-P1-CTD1_1_1"
+      (symbol "S_C-RMII2-CTD1_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-P1-CTD2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-RMII2-CTD2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "1uF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "device-side TX centre tap to GND (Fig 8-3 C44)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-P1-CTD2_0_1"
+      (symbol "S_C-RMII2-CTD2_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-P1-CTD2_1_1"
+      (symbol "S_C-RMII2-CTD2_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-P1-CRD1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-RMII2-CRD1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "100nF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "device-side RX centre tap to GND (Fig 8-3 C75)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-P1-CRD1_0_1"
+      (symbol "S_C-RMII2-CRD1_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-P1-CRD1_1_1"
+      (symbol "S_C-RMII2-CRD1_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-P1-CRD2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-RMII2-CRD2" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "1uF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "device-side RX centre tap to GND (Fig 8-3 C74)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-P1-CRD2_0_1"
+      (symbol "S_C-RMII2-CRD2_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-P1-CRD2_1_1"
+      (symbol "S_C-RMII2-CRD2_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-U2-V5A" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-USB1-V5A" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "10uF 6.3V X6S" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "V5 / AVDD33 (pins 11/10) bulk, 3.3 V supply (sec 6.1 C8)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-U2-V5A_0_1"
+      (symbol "S_C-USB1-V5A_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-U2-V5A_1_1"
+      (symbol "S_C-USB1-V5A_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-U2-V5B" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-USB1-V5B" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "100nF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0201_0603Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "V5 / AVDD33 (pins 11/10) HF (sec 6.1 C2)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-U2-V5B_0_1"
+      (symbol "S_C-USB1-V5B_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-U2-V5B_1_1"
+      (symbol "S_C-USB1-V5B_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-U2-A1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-USB1-A1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "1uF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "AVDD33 pin 1 decoupling (Table 1-3)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-U2-A1_0_1"
+      (symbol "S_C-USB1-A1_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-U2-A1_1_1"
+      (symbol "S_C-USB1-A1_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-U2-IO" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-USB1-IO" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "100nF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0201_0603Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "VDDIO pins 13/18 decoupling (Table 1-3)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-U2-IO_0_1"
+      (symbol "S_C-USB1-IO_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-U2-IO_1_1"
+      (symbol "S_C-USB1-IO_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-U2-AK" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-USB1-AK" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "1uF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "AVDDK core-analog decoupling, pin 23 (Table 1-3)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-U2-AK_0_1"
+      (symbol "S_C-USB1-AK_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-U2-AK_1_1"
+      (symbol "S_C-USB1-AK_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-U2-DK" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-USB1-DK" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "100nF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0201_0603Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "DVDDK core-digital decoupling, pin 9 (Table 1-3)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-U2-DK_0_1"
+      (symbol "S_C-USB1-DK_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-U2-DK_1_1"
+      (symbol "S_C-USB1-DK_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-U2-CTD" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-USB1-CTD" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "1uF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "T-ETH2 device-side TX centre tap to GND (sec 6.1 C11; no supply on the CT)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-U2-CTD_0_1"
+      (property "Datasheet" "T-USB1 device-side TX centre tap to GND (sec 6.1 C11; no supply on the CT)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "S_C-USB1-CTD_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-U2-CTD_1_1"
+      (symbol "S_C-USB1-CTD_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "S_C-U2-CRD" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "S_C-USB1-CRD" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
       (property "Value" "1uF" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "T-ETH2 device-side RX centre tap to GND (sec 6.1 C12)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "S_C-U2-CRD_0_1"
+      (property "Datasheet" "T-USB1 device-side RX centre tap to GND (sec 6.1 C12)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "S_C-USB1-CRD_0_1"
         (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke (width 0.2540) (type default)) (fill (type background)))
       )
-      (symbol "S_C-U2-CRD_1_1"
+      (symbol "S_C-USB1-CRD_1_1"
         (pin passive line (at -10.16 0.00 0) (length 2.54) (name "P" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at 10.16 0.00 180) (length 2.54) (name "N" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
       )

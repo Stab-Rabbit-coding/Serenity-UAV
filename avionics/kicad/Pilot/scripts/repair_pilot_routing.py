@@ -11,8 +11,8 @@ starts returning unwrapped ``SwigPyObject``s even from ``BOARD.GetTracks()``
 (see ``avionics/kicad/PCBNEW_SWIG_BUG.md``).  In order:
 
 1. Clears the two courtyard overlaps left by the 2026-10-09 manual placement pass
-   (owner S. Griffing): ETH1 aligns with ETH2 at x = 172.7 mm (0.204 mm overlap with
-   T-ETH) and C-P2-A3 steps 0.15 mm east (0.100 mm overlap with 1553-XFM).
+   (owner S. Griffing): J-ETH-RMII2 aligns with J-ETH-USB1 at x = 172.7 mm (0.204 mm overlap with
+   T-RMII2) and C-P2-A3 steps 0.15 mm east (0.100 mm overlap with 1553-XFM).
 2. Removes every via that is not a 0.3 mm-drill through via.  The freerouting DSN
    offered 0.2/0.1 mm microvia/blind padstacks this board's rules forbid (min via
    0.5 mm, min drill 0.3 mm); ``route_pilot.sh`` now strips them from the DSN.
@@ -34,7 +34,7 @@ import tempfile
 from pathlib import Path
 
 # Placement fixes: reference -> (new x mm or None, new y mm or None).
-MOVES = {"ETH1": (172.7, None), "C-P2-A3": (166.9, None)}
+MOVES = {"J-ETH-RMII2": (172.7, None), "C-P2-A3": (166.9, None)}
 # DRC types whose track/via items are ripped up.
 RIP_TYPES = {"hole_to_hole", "track_width", "connection_width", "clearance", "hole_clearance",
              "shorting_items", "tracks_crossing", "annular_width", "drill_out_of_range",
