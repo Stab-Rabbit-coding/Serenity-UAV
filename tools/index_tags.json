@@ -5630,6 +5630,24 @@
       ],
       "archived": true
     },
+    "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/sync_wash_pcb_nets.py": {
+      "description": "sync_wash_pcb_nets.py \u2014 Push verified nets from the schematic onto Wash.kicad_pcb.",
+      "tags": [
+        "archive",
+        "flight-control",
+        "pcb-design"
+      ],
+      "archived": true
+    },
+    "archives/avionics-archives/kicad-archives/Wash-superseded-2026-07-28/Wash.kicad_sch": {
+      "description": "KiCad schematic",
+      "tags": [
+        "archive",
+        "flight-control",
+        "pcb-design"
+      ],
+      "archived": true
+    },
     "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md": {
       "description": "Avionics KiCad Archive \u2014 Rev Q (2026-06-05 / updated 2026-06-10)",
       "tags": [
@@ -7587,6 +7605,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/21-100699a.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/2893159.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8234,6 +8259,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/feetech-sts3215-c018.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/hi-1573.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8326,6 +8358,13 @@
       "archived": false
     },
     "avionics/datasheets/lmv331.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/max42408-max42410.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -9232,6 +9271,363 @@
       ],
       "archived": false
     },
+    "avionics/firmware/mspm0/CMakeLists.txt": {
+      "description": "CMakeLists.txt \u2014 Serenity UAV MSPM0G3507 trust-node firmware",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/README.md": {
+      "description": "Serenity UAV \u2014 MSPM0G3507 Trust-Node Firmware",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "firmware",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/README2.md": {
+      "description": "Security design",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/agent/README.md": {
+      "description": "Micro XRCE-DDS Agent \u2014 DDS-Security configuration for the MSPM0 trust nodes",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/agent/profiles.xml": {
+      "description": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>",
+      "tags": [
+        "avionics-hardware",
+        "firmware"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/boards/can_periph_gw/app.c": {
+      "description": "@brief The node this application runs on; set by `board_app_init()`. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/boards/can_periph_gw/board.c": {
+      "description": "QoS shorthand, in the order of `ser_qos_t`: reliable, transient, keep_all,",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/boards/can_periph_gw/board_config.h": {
+      "description": "@brief Which stack on the PCB this image is built for (1..4). */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/boards/flight_engineer/app.c": {
+      "description": "TODO(WBS \u00a74.7.6): BQ76930 cell-monitor I2C driver. Blocked upstream:",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/boards/flight_engineer/board.c": {
+      "description": "C source",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/boards/flight_engineer/board_config.h": {
+      "description": "@brief FlightEngineer occupies 0x0400..0x04FF; it is a single node. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/boards/observer/app.c": {
+      "description": "TODO(WBS \u00a74.6.2): drive the laser enable GPIO low once the pin is",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/boards/observer/board.c": {
+      "description": "C source",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/boards/observer/board_config.h": {
+      "description": "@brief Observer nodes occupy 0x0300..0x03FF. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/cmake/arm-none-eabi.cmake": {
+      "description": "arm-none-eabi.cmake \u2014 cross toolchain for the MSPM0G3507 (Cortex-M0+).",
+      "tags": [
+        "avionics-hardware",
+        "firmware"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/cmake/mspm0g3507.ld": {
+      "description": "* mspm0g3507.ld \u2014 link script for the TI MSPM0G3507.",
+      "tags": [
+        "avionics-hardware",
+        "firmware"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/cmake/uxrclient.cmake": {
+      "description": "uxrclient.cmake \u2014 vendored Micro XRCE-DDS Client + Micro-CDR",
+      "tags": [
+        "avionics-hardware",
+        "firmware"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/hal/mspm0/hal_mspm0.c": {
+      "description": "C source",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/hal/mspm0/syscalls.c": {
+      "description": "Provided by the link script. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/hal/sim/hal_sim.c": {
+      "description": "--- State ---------------------------------------------------------------*/",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/include/serenity/aes_gcm.h": {
+      "description": "@brief GCM authentication tag length, bytes (SP 800-38D \u00a75.2.1.2). */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/include/serenity/board.h": {
+      "description": "Board-specific constants: pin map, identity, topic set, publication rates. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/include/serenity/hal.h": {
+      "description": "C header",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/include/serenity/link.h": {
+      "description": "C header",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/include/serenity/node.h": {
+      "description": "C header",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/include/serenity/sec_envelope.h": {
+      "description": "C header",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/include/serenity/sha256.h": {
+      "description": "@brief SHA-256 digest length in bytes (FIPS 180-4 \u00a71). */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/include/serenity/tpm2.h": {
+      "description": "C header",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/include/serenity/tpm_tis.h": {
+      "description": "C header",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/src/aes_gcm.c": {
+      "description": "@brief AES S-box, FIPS 197 \u00a75.1.1 Figure 7. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/src/link.c": {
+      "description": "@brief Default silence before failing over to the standby bearer. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/src/main.c": {
+      "description": "@brief Milliseconds of XRCE session servicing per main-loop pass. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/src/node.c": {
+      "description": "@brief Largest sealed sample the node will build. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/src/sec_envelope.c": {
+      "description": "Header field offsets; see the table in sec_envelope.h. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/src/sha256.c": {
+      "description": "@brief Rotate a 32-bit word right by @p n bits (FIPS 180-4 \u00a73.2). */",
+      "tags": [
+        "avionics-hardware",
+        "firmware"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/src/tpm2.c": {
+      "description": "TPM_RC_VER1-based response codes used below [REF-TCG-001 Part 2 \u00a76.6.2]. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/template/src/tpm_tis.c": {
+      "description": "@brief Byte 0 of the SPI header: direction plus zero-based length. */",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/test/CPPLINT.cfg": {
+      "description": "Inherits the repo-root CPPLINT.cfg. test_crypto.c carries published known-answer",
+      "tags": [
+        "avionics-hardware",
+        "firmware"
+      ],
+      "archived": false
+    },
+    "avionics/firmware/mspm0/test/test_crypto.c": {
+      "description": "The hex strings in the vector tables and checks below are published",
+      "tags": [
+        "avionics-hardware",
+        "firmware",
+        "security"
+      ],
+      "archived": false
+    },
     "avionics/kicad/.gitignore": {
       "description": "KiCad runtime / generated files \u2014 do not commit",
       "tags": [
@@ -10078,6 +10474,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Encoder/gen_enc_nacelle_pcb.py": {
+      "description": "Generate ENC-NACELLE-1.kicad_pcb \u2014 AK7455 off-axis nacelle tilt-encoder board.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Encoder/sym-lib-table": {
       "description": "(sym_lib_table",
       "tags": [
@@ -10891,6 +11296,16 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md": {
+      "description": "kicad-cli 9.0.2 \u2014 `sch erc` SIGSEGV on an unresolvable `lib_id`",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md": {
       "description": "Pilot (CAPE-A-2) \u2014 Footprint-vs-Datasheet Verification",
       "tags": [
@@ -10908,6 +11323,73 @@
         "documentation",
         "pcb-design",
         "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch": {
+      "description": "KiCad schematic",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/B_present_0pins.kicad_sch": {
+      "description": "KiCad schematic",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/C_absent_1pin.kicad_sch.crashes": {
+      "description": "(kicad_sch (version 20240101) (generator eeschema)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/D_absent_2pins.kicad_sch.crashes": {
+      "description": "(kicad_sch (version 20240101) (generator eeschema)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/E_present_extra_pin.kicad_sch": {
+      "description": "KiCad schematic",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/README.md": {
+      "description": "kicad-cli `sch erc` SIGSEGV \u2014 reproduction set",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md": {
+      "description": "Upstream submission package \u2014 kicad-cli `sch erc` SIGSEGV",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/run_repro.sh": {
+      "description": "!/bin/sh",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
       ],
       "archived": false
     },
@@ -12023,15 +12505,6 @@
       "tags": [
         "avionics-hardware",
         "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/gen_enc_nacelle_pcb.py": {
-      "description": "Generate ENC-NACELLE-1.kicad_pcb \u2014 AK7455 off-axis nacelle tilt-encoder board.",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "propulsion"
       ],
       "archived": false
     },
@@ -17292,6 +17765,9 @@
       "avionics/firmware/TODO.md",
       "avionics/firmware/WBS.md",
       "avionics/firmware/dts/README.md",
+      "avionics/firmware/mspm0/README.md",
+      "avionics/firmware/mspm0/README2.md",
+      "avionics/firmware/mspm0/agent/README.md",
       "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
       "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
       "avionics/kicad/Commo/COMMO_REVT_RF_DESIGN.md",
@@ -17309,8 +17785,11 @@
       "avionics/kicad/Observer/observer/WBS.md",
       "avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md",
       "avionics/kicad/PB2_HEADER_PINMAP.md",
+      "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/README.md",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md",
       "avionics/kicad/README.md",
       "avionics/kicad/TACCO/TACCO.md",
       "avionics/kicad/TACCO/reports/HDD.md",
@@ -17724,6 +18203,23 @@
       "avionics/firmware/AK7455_CALIBRATION_SPECIFICATION.md",
       "avionics/firmware/WBS.md",
       "avionics/firmware/common/include/failsafe_config.h",
+      "avionics/firmware/mspm0/README.md",
+      "avionics/firmware/mspm0/boards/can_periph_gw/app.c",
+      "avionics/firmware/mspm0/boards/can_periph_gw/board.c",
+      "avionics/firmware/mspm0/boards/flight_engineer/app.c",
+      "avionics/firmware/mspm0/boards/flight_engineer/board.c",
+      "avionics/firmware/mspm0/boards/observer/app.c",
+      "avionics/firmware/mspm0/boards/observer/board.c",
+      "avionics/firmware/mspm0/hal/mspm0/hal_mspm0.c",
+      "avionics/firmware/mspm0/hal/mspm0/syscalls.c",
+      "avionics/firmware/mspm0/hal/sim/hal_sim.c",
+      "avionics/firmware/mspm0/template/include/serenity/board.h",
+      "avionics/firmware/mspm0/template/include/serenity/hal.h",
+      "avionics/firmware/mspm0/template/include/serenity/link.h",
+      "avionics/firmware/mspm0/template/include/serenity/node.h",
+      "avionics/firmware/mspm0/template/src/link.c",
+      "avionics/firmware/mspm0/template/src/main.c",
+      "avionics/firmware/mspm0/template/src/tpm_tis.c",
       "current-specification/README.md",
       "deferred/README.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
@@ -17811,6 +18307,31 @@
       "avionics/firmware/dts/TACCO/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts",
       "avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
       "avionics/firmware/fc/src/main.c",
+      "avionics/firmware/mspm0/CMakeLists.txt",
+      "avionics/firmware/mspm0/README.md",
+      "avionics/firmware/mspm0/README2.md",
+      "avionics/firmware/mspm0/agent/README.md",
+      "avionics/firmware/mspm0/boards/can_periph_gw/board.c",
+      "avionics/firmware/mspm0/boards/can_periph_gw/board_config.h",
+      "avionics/firmware/mspm0/boards/flight_engineer/board_config.h",
+      "avionics/firmware/mspm0/boards/observer/app.c",
+      "avionics/firmware/mspm0/hal/mspm0/hal_mspm0.c",
+      "avionics/firmware/mspm0/hal/sim/hal_sim.c",
+      "avionics/firmware/mspm0/template/include/serenity/aes_gcm.h",
+      "avionics/firmware/mspm0/template/include/serenity/board.h",
+      "avionics/firmware/mspm0/template/include/serenity/hal.h",
+      "avionics/firmware/mspm0/template/include/serenity/link.h",
+      "avionics/firmware/mspm0/template/include/serenity/node.h",
+      "avionics/firmware/mspm0/template/include/serenity/sec_envelope.h",
+      "avionics/firmware/mspm0/template/include/serenity/sha256.h",
+      "avionics/firmware/mspm0/template/include/serenity/tpm2.h",
+      "avionics/firmware/mspm0/template/include/serenity/tpm_tis.h",
+      "avionics/firmware/mspm0/template/src/main.c",
+      "avionics/firmware/mspm0/template/src/node.c",
+      "avionics/firmware/mspm0/template/src/sec_envelope.c",
+      "avionics/firmware/mspm0/template/src/tpm2.c",
+      "avionics/firmware/mspm0/template/src/tpm_tis.c",
+      "avionics/firmware/mspm0/test/test_crypto.c",
       "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
@@ -17833,8 +18354,10 @@
       "avionics/kicad/Observer/scripts/gen_observer_pcb.py",
       "avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md",
       "avionics/kicad/PB2_HEADER_PINMAP.md",
+      "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
       "avionics/kicad/Pilot/scripts/grid_route_pilot.py",
@@ -19121,7 +19644,7 @@
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_sch",
       "avionics/kicad/Encoder/ENC-NACELLE-1.md",
       "avionics/kicad/Encoder/ENC-NACELLE-1.net",
-      "avionics/kicad/gen_enc_nacelle_pcb.py",
+      "avionics/kicad/Encoder/gen_enc_nacelle_pcb.py",
       "deferred/aft-edf/README.md",
       "deferred/aft-edf/openscad/aft_edf_plenum.scad",
       "deferred/aft-edf/openscad/edf_120_motor_mount.scad",
@@ -19822,6 +20345,8 @@
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_sch",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot_rebuild.kicad_sch",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/mod_pilot_pcb_reconcile.py",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/sync_wash_pcb_nets.py",
+      "archives/avionics-archives/kicad-archives/Wash-superseded-2026-07-28/Wash.kicad_sch",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-1-no-comment.kicad_pcb",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-1-no-comment.kicad_sch",
@@ -20222,6 +20747,8 @@
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot.kicad_sch",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/Pilot_rebuild.kicad_sch",
       "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/mod_pilot_pcb_reconcile.py",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/sync_wash_pcb_nets.py",
+      "archives/avionics-archives/kicad-archives/Wash-superseded-2026-07-28/Wash.kicad_sch",
       "archives/avionics-archives/kicad-archives/archive/ARCHIVE-REVQ.md",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-1-no-comment.kicad_pcb",
       "archives/avionics-archives/kicad-archives/archive/CAPE-A-1-no-comment.kicad_sch",
@@ -20389,6 +20916,7 @@
       "avionics/kicad/Encoder/ENC-NACELLE-1.md",
       "avionics/kicad/Encoder/ENC-NACELLE-1.net",
       "avionics/kicad/Encoder/fp-lib-table",
+      "avionics/kicad/Encoder/gen_enc_nacelle_pcb.py",
       "avionics/kicad/Encoder/sym-lib-table",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
@@ -20485,8 +21013,17 @@
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
       "avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md",
       "avionics/kicad/PB2_HEADER_PINMAP.md",
+      "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/B_present_0pins.kicad_sch",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/C_absent_1pin.kicad_sch.crashes",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/D_absent_2pins.kicad_sch.crashes",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/E_present_extra_pin.kicad_sch",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/README.md",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/run_repro.sh",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_dru",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_pcb",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_prl",
@@ -20623,7 +21160,6 @@
       "avionics/kicad/fix_starved_thermal_pads.py",
       "avionics/kicad/fix_xcvr_labels.py",
       "avionics/kicad/fp-lib-table",
-      "avionics/kicad/gen_enc_nacelle_pcb.py",
       "avionics/kicad/generate_gerbers.py",
       "avionics/kicad/generate_gerbers_rev_s1.py",
       "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Courtyard.gbr",
@@ -20720,7 +21256,9 @@
       "archives/avionics-archives/TACCO-old/kicads/Zo\u00eb-backups/Zo\u00eb-2026-07-21_092301.zip",
       "archives/avionics-archives/TACCO-old/kicads/Zo\u00eb-backups/Zo\u00eb-2026-07-21_111155.zip",
       "archives/avionics-archives/TACCO-old/kicads/~Zo\u00eb.kicad_sch.lck",
-      "archives/avionics-archives/TACCO-old/kicads/~_autosave-Zo\u00eb.kicad_pcb.lck"
+      "archives/avionics-archives/TACCO-old/kicads/~_autosave-Zo\u00eb.kicad_pcb.lck",
+      "archives/avionics-archives/kicad-archives/Pilot-superseded-2026-09-19/sync_wash_pcb_nets.py",
+      "archives/avionics-archives/kicad-archives/Wash-superseded-2026-07-28/Wash.kicad_sch"
     ],
     "avionics-hardware": [
       "avionics/AGENTS.md",
@@ -20735,6 +21273,7 @@
       "avionics/datasheets/1040310811_sd.pdf",
       "avionics/datasheets/1051620001.pdf",
       "avionics/datasheets/1051620001_sd.pdf",
+      "avionics/datasheets/21-100699a.pdf",
       "avionics/datasheets/2893159.pdf",
       "avionics/datasheets/2N3866_SERIES.PDF",
       "avionics/datasheets/317990687.pdf",
@@ -20827,6 +21366,7 @@
       "avionics/datasheets/extracted/AM625_PB2I_header_mux.json",
       "avionics/datasheets/extracted/TPSM828224SILR_c2607d.json",
       "avionics/datasheets/extracted/manifest.json",
+      "avionics/datasheets/feetech-sts3215-c018.pdf",
       "avionics/datasheets/hi-1573.pdf",
       "avionics/datasheets/hi-6138_v-rev-s.pdf",
       "avionics/datasheets/hiro-s-a0003496442-1.pdf",
@@ -20841,6 +21381,7 @@
       "avionics/datasheets/johanson-2450bp15e0100.pdf",
       "avionics/datasheets/lm393.pdf",
       "avionics/datasheets/lmv331.pdf",
+      "avionics/datasheets/max42408-max42410.pdf",
       "avionics/datasheets/mcp1703.pdf",
       "avionics/datasheets/mcp4901-4911-4921.pdf",
       "avionics/datasheets/mcp4921.pdf",
@@ -20958,6 +21499,45 @@
       "avionics/firmware/fc/tools/.gitignore",
       "avionics/firmware/fc/tools/governor_cal.py",
       "avionics/firmware/fc/tools/requirements.txt",
+      "avionics/firmware/mspm0/CMakeLists.txt",
+      "avionics/firmware/mspm0/README.md",
+      "avionics/firmware/mspm0/README2.md",
+      "avionics/firmware/mspm0/agent/README.md",
+      "avionics/firmware/mspm0/agent/profiles.xml",
+      "avionics/firmware/mspm0/boards/can_periph_gw/app.c",
+      "avionics/firmware/mspm0/boards/can_periph_gw/board.c",
+      "avionics/firmware/mspm0/boards/can_periph_gw/board_config.h",
+      "avionics/firmware/mspm0/boards/flight_engineer/app.c",
+      "avionics/firmware/mspm0/boards/flight_engineer/board.c",
+      "avionics/firmware/mspm0/boards/flight_engineer/board_config.h",
+      "avionics/firmware/mspm0/boards/observer/app.c",
+      "avionics/firmware/mspm0/boards/observer/board.c",
+      "avionics/firmware/mspm0/boards/observer/board_config.h",
+      "avionics/firmware/mspm0/cmake/arm-none-eabi.cmake",
+      "avionics/firmware/mspm0/cmake/mspm0g3507.ld",
+      "avionics/firmware/mspm0/cmake/uxrclient.cmake",
+      "avionics/firmware/mspm0/hal/mspm0/hal_mspm0.c",
+      "avionics/firmware/mspm0/hal/mspm0/syscalls.c",
+      "avionics/firmware/mspm0/hal/sim/hal_sim.c",
+      "avionics/firmware/mspm0/template/include/serenity/aes_gcm.h",
+      "avionics/firmware/mspm0/template/include/serenity/board.h",
+      "avionics/firmware/mspm0/template/include/serenity/hal.h",
+      "avionics/firmware/mspm0/template/include/serenity/link.h",
+      "avionics/firmware/mspm0/template/include/serenity/node.h",
+      "avionics/firmware/mspm0/template/include/serenity/sec_envelope.h",
+      "avionics/firmware/mspm0/template/include/serenity/sha256.h",
+      "avionics/firmware/mspm0/template/include/serenity/tpm2.h",
+      "avionics/firmware/mspm0/template/include/serenity/tpm_tis.h",
+      "avionics/firmware/mspm0/template/src/aes_gcm.c",
+      "avionics/firmware/mspm0/template/src/link.c",
+      "avionics/firmware/mspm0/template/src/main.c",
+      "avionics/firmware/mspm0/template/src/node.c",
+      "avionics/firmware/mspm0/template/src/sec_envelope.c",
+      "avionics/firmware/mspm0/template/src/sha256.c",
+      "avionics/firmware/mspm0/template/src/tpm2.c",
+      "avionics/firmware/mspm0/template/src/tpm_tis.c",
+      "avionics/firmware/mspm0/test/CPPLINT.cfg",
+      "avionics/firmware/mspm0/test/test_crypto.c",
       "avionics/kicad/.gitignore",
       "avionics/kicad/4_Run KiCad ERC_DRC validator (changed files only).txt",
       "avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md",
@@ -21059,6 +21639,7 @@
       "avionics/kicad/Encoder/ENC-NACELLE-1.md",
       "avionics/kicad/Encoder/ENC-NACELLE-1.net",
       "avionics/kicad/Encoder/fp-lib-table",
+      "avionics/kicad/Encoder/gen_enc_nacelle_pcb.py",
       "avionics/kicad/Encoder/sym-lib-table",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
@@ -21155,8 +21736,17 @@
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
       "avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md",
       "avionics/kicad/PB2_HEADER_PINMAP.md",
+      "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/B_present_0pins.kicad_sch",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/C_absent_1pin.kicad_sch.crashes",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/D_absent_2pins.kicad_sch.crashes",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/E_present_extra_pin.kicad_sch",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/README.md",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md",
+      "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/run_repro.sh",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_dru",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_pcb",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_prl",
@@ -21293,7 +21883,6 @@
       "avionics/kicad/fix_starved_thermal_pads.py",
       "avionics/kicad/fix_xcvr_labels.py",
       "avionics/kicad/fp-lib-table",
-      "avionics/kicad/gen_enc_nacelle_pcb.py",
       "avionics/kicad/generate_gerbers.py",
       "avionics/kicad/generate_gerbers_rev_s1.py",
       "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Courtyard.gbr",
@@ -21415,6 +22004,45 @@
       "avionics/firmware/fc/tools/.gitignore",
       "avionics/firmware/fc/tools/governor_cal.py",
       "avionics/firmware/fc/tools/requirements.txt",
+      "avionics/firmware/mspm0/CMakeLists.txt",
+      "avionics/firmware/mspm0/README.md",
+      "avionics/firmware/mspm0/README2.md",
+      "avionics/firmware/mspm0/agent/README.md",
+      "avionics/firmware/mspm0/agent/profiles.xml",
+      "avionics/firmware/mspm0/boards/can_periph_gw/app.c",
+      "avionics/firmware/mspm0/boards/can_periph_gw/board.c",
+      "avionics/firmware/mspm0/boards/can_periph_gw/board_config.h",
+      "avionics/firmware/mspm0/boards/flight_engineer/app.c",
+      "avionics/firmware/mspm0/boards/flight_engineer/board.c",
+      "avionics/firmware/mspm0/boards/flight_engineer/board_config.h",
+      "avionics/firmware/mspm0/boards/observer/app.c",
+      "avionics/firmware/mspm0/boards/observer/board.c",
+      "avionics/firmware/mspm0/boards/observer/board_config.h",
+      "avionics/firmware/mspm0/cmake/arm-none-eabi.cmake",
+      "avionics/firmware/mspm0/cmake/mspm0g3507.ld",
+      "avionics/firmware/mspm0/cmake/uxrclient.cmake",
+      "avionics/firmware/mspm0/hal/mspm0/hal_mspm0.c",
+      "avionics/firmware/mspm0/hal/mspm0/syscalls.c",
+      "avionics/firmware/mspm0/hal/sim/hal_sim.c",
+      "avionics/firmware/mspm0/template/include/serenity/aes_gcm.h",
+      "avionics/firmware/mspm0/template/include/serenity/board.h",
+      "avionics/firmware/mspm0/template/include/serenity/hal.h",
+      "avionics/firmware/mspm0/template/include/serenity/link.h",
+      "avionics/firmware/mspm0/template/include/serenity/node.h",
+      "avionics/firmware/mspm0/template/include/serenity/sec_envelope.h",
+      "avionics/firmware/mspm0/template/include/serenity/sha256.h",
+      "avionics/firmware/mspm0/template/include/serenity/tpm2.h",
+      "avionics/firmware/mspm0/template/include/serenity/tpm_tis.h",
+      "avionics/firmware/mspm0/template/src/aes_gcm.c",
+      "avionics/firmware/mspm0/template/src/link.c",
+      "avionics/firmware/mspm0/template/src/main.c",
+      "avionics/firmware/mspm0/template/src/node.c",
+      "avionics/firmware/mspm0/template/src/sec_envelope.c",
+      "avionics/firmware/mspm0/template/src/sha256.c",
+      "avionics/firmware/mspm0/template/src/tpm2.c",
+      "avionics/firmware/mspm0/template/src/tpm_tis.c",
+      "avionics/firmware/mspm0/test/CPPLINT.cfg",
+      "avionics/firmware/mspm0/test/test_crypto.c",
       "gcs/skipper/firmware/pb2i/CMakeLists.txt",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "gcs/skipper/firmware/pb2i/src/skipper_config.h",
