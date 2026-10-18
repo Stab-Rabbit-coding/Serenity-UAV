@@ -161,7 +161,7 @@ def main() -> int:
             pnum = pnum_match.group(1)
             if not pnum.strip():
                 return padblock
-            net = netmap.get((ref, pnum))
+            net = netmap.get((ref or "", pnum))
             new_net = (
                 f'(net {name_to_num[net]} "{net}")' if net else None
             )
