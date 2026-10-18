@@ -7661,6 +7661,29 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx": {
+      "description": "u)(",
+      "tags": [
+        "avionics-hardware",
+        "bom"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/AX88772E_Application_DesignNote_v110.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/AX88772E_Datasheet_v103.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7711,6 +7734,13 @@
       "archived": false
     },
     "avionics/datasheets/ECS-2520MV.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ECS_ECX-32.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -19801,6 +19831,7 @@
       "archives/bom_revQ.json",
       "archives/bom_revR.csv",
       "archives/docs-superseded/bom_revQ.csv",
+      "avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx",
       "avionics/kicad/Observer/Observer_som_pinmap.csv",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
       "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
@@ -20832,6 +20863,7 @@
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/COMMS-HAT-1/COMMS-HAT-1.kicad_sch",
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/TRIHAT-1/TRIHAT-1.kicad_pcb",
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/TRIHAT-1/TRIHAT-1.kicad_sch",
+      "avionics/datasheets/AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf",
       "avionics/datasheets/KiCADv6/2026-10-17_14-51-28.kicad_sym",
       "avionics/datasheets/KiCADv6/footprints.pretty/SIL0010D-MFG.kicad_mod",
       "avionics/datasheets/ul_1040310811/KiCADv6/2026-10-05_14-13-00.kicad_sym",
@@ -21302,6 +21334,9 @@
       "avionics/datasheets/74438335033.pdf",
       "avionics/datasheets/749010012A.pdf",
       "avionics/datasheets/987651-1223.pdf",
+      "avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx",
+      "avionics/datasheets/AX88772E_Application_DesignNote_v110.pdf",
+      "avionics/datasheets/AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf",
       "avionics/datasheets/AX88772E_Datasheet_v103.pdf",
       "avionics/datasheets/Bourns_CDSOT23-SM712.pdf",
       "avionics/datasheets/Bourns_MF-PSMF.pdf",
@@ -21310,6 +21345,7 @@
       "avionics/datasheets/DS3225 datasheet.pdf",
       "avionics/datasheets/Double Row Sockets on Tape and Reel.pdf",
       "avionics/datasheets/ECS-2520MV.pdf",
+      "avionics/datasheets/ECS_ECX-32.pdf",
       "avionics/datasheets/ECX-2236.pdf",
       "avionics/datasheets/ESD2CANxx24-Q1_SLVSFW5D.pdf",
       "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf",

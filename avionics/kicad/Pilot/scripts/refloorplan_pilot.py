@@ -147,10 +147,10 @@ X0, Y0 = 121.0, 87.5
 PB2_GAP, H_MARGIN = 3.0 + 2.54, 0.5
 OBSTRUCTIONS = [(4.0, 10.5, 18.0, 24.5, 1.0), (45.0, 12.5, 55.0, 22.5, 2.95)]
 HEIGHT = {"T-RMII2": 8.9, "T-USB1": 8.9, "1553-XFM": 4.70, "TVS-1553P": 2.44, "TVS-1553N": 2.44}
-F_ONLY = {"T-RMII2", "T-USB1", "J-GPS", "J-SPI"}     # tall, or cable connectors (B faces the PB2-I)
+F_ONLY = {"T-RMII2", "T-USB1", "J-SPI"}     # tall, or cable connectors (B faces the PB2-I)
 # footprints whose library geometry changed under the same name: always reloaded
 FORCE_RELOAD = {"PB2-P1", "PB2-P2"}
-EDGE_CONN = {"J-GPS", "J-SPI"}                    # GH cable connectors: board edge, F side
+EDGE_CONN = {"J-SPI"}                             # GH cable connector: board edge, F side
 EDGE = (121.3, 87.8, 175.7, 122.2)                 # 0.3 mm copper-edge rule
 CORNERS = [(124.0, 90.5), (173.0, 90.5), (124.0, 119.5), (173.0, 119.5)]   # R3 arc centres
 FIRST = {"X-50M"}                                  # re-placed before everything else
@@ -160,9 +160,13 @@ POWER = {"GND", "PGND", "+3V3", "+5V", "+5V_IN", "+3V3_PB2", ""}
 # RMII2 / USB1 leg prefixes are specific so the Bob-Smith parts (R-RMII2-BS*, C-*-BS) stay with
 # their line-side transformer/connector (TI interface naming, 2026-10-17)
 PARENT = [("C-RMII2-A", "PHY-RMII2"), ("C-RMII2-C", "PHY-RMII2"), ("C-RMII2-IO", "PHY-RMII2"), ("R-RMII2-RBIAS", "PHY-RMII2"), ("R-RMII2-AD0", "PHY-RMII2"),
-          ("C-USB1-V5", "NIC-USB1"), ("C-USB1-A", "NIC-USB1"), ("C-USB1-DK", "NIC-USB1"), ("C-USB1-IO", "NIC-USB1"), ("C-USB1-C", "NIC-USB1"),
-          ("ESD-GPS", "J-GPS"), ("F-GPS", "J-GPS"), ("C-GPS5", "J-GPS"), ("R-I2C", "J-GPS"),
-          ("ESD-S", "J-SPI"), ("F-SPI", "J-SPI"), ("C-SPI5", "J-SPI"),
+          # AX88772E support (2026-10-18): no prefix here may match C-USB1-BS / R-USB1-BS*
+          ("C-USB1-LX", "NIC-USB1"), ("C-USB1-D", "NIC-USB1"), ("C-USB1-A", "NIC-USB1"),
+          ("C-USB1-BK", "NIC-USB1"), ("C-USB1-IO", "NIC-USB1"), ("C-USB1-X", "NIC-USB1"),
+          ("C-USB1-C", "NIC-USB1"), ("L-USB1", "NIC-USB1"), ("FB-USB1-", "NIC-USB1"),
+          ("Y-USB1", "NIC-USB1"), ("R-USB1-XO", "NIC-USB1"), ("R-USB1-RSET", "NIC-USB1"),
+          ("R-USB1-VBUS", "NIC-USB1"), ("R-USB1-PU", "NIC-USB1"), ("R-USB1-PME", "NIC-USB1"),
+          ("ESD-SPI", "J-SPI"), ("F-SPI", "J-SPI"), ("C-SPI5", "J-SPI"),
           ("C-3V3", "U-3V3"), ("C-IMU", "IMU"), ("C-BARO", "BARO"),
           ("C-1553", "1553-XCVR"), ("C-50M", "X-50M"), ("C-IN", "PWR-IN"), ("FB1", "PWR-IN"),
           ("R-PGND", "PWR-IN")]

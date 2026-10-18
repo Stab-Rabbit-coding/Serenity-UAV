@@ -152,6 +152,10 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-054: Bourns CDSOT23-SM712 — surface mount TVS diode (asymmetric 7 V / 12 V, RS-485)](#ref-sensor-054-bourns-cdsot23-sm712--surface-mount-tvs-diode-asymmetric-7-v--12-v-rs-485)
     - [REF-SENSOR-055: Bourns SMAJ series — 400 W surface mount transient voltage suppressor diodes](#ref-sensor-055-bourns-smaj-series--400-w-surface-mount-transient-voltage-suppressor-diodes)
     - [REF-SENSOR-056: ASIX AX88772E — USB 2.0 to 10/100 Fast Ethernet controller data sheet v1.03](#ref-sensor-056-asix-ax88772e--usb-20-to-10100-fast-ethernet-controller-data-sheet-v103)
+    - [REF-SENSOR-057: ASIX AX88772E USB2.0 to Fast Ethernet Application Design Note, Revision 1.10](#ref-sensor-057-asix-ax88772e-usb20-to-fast-ethernet-application-design-note-revision-110)
+    - [REF-SENSOR-058: ASIX AX88772E Demo Board schematic V1.01](#ref-sensor-058-asix-ax88772e-demo-board-schematic-v101)
+    - [REF-SENSOR-059: ECS Inc. ECX-32 SMD crystal data sheet](#ref-sensor-059-ecs-inc-ecx-32-smd-crystal-data-sheet)
+    - [REF-SENSOR-060: ASIX AX88772E / AX88772D demo board BOM (2025-11-28)](#ref-sensor-060-asix-ax88772e--ax88772d-demo-board-bom-2025-11-28)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -2814,7 +2818,8 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Official access** | <https://www.wch.cn/downloads/CH397DS1_PDF.html> (WCH's page renders the download through JavaScript and could not be fetched by script, 2026-10-17); copy retrieved from WCH's distributor LCSC: <https://atta.szlcsc.com/upload/public/pdf/source/20240813/7579B736A93AD62F1FA2079FDA525BA1.pdf> (HTTP 200) — re-download from wch.cn and compare before fabrication |
 | **Local copy** | `avionics/datasheets/WCH_CH397_datasheet_V1.2.pdf` (MD5 380b7f0ec12b25f124630525670b3209) |
 | **Section applied** | Fig. 1-1 / Table 1-3 CH397A QFN24 pinout (no RSTB; NC 12/16/19/20; EP = GND); sec 3.1 (25 MHz XI: crystal or external clock; internal POR); sec 3.2 (default CDC-ECM firmware); sec 3.3 (internal 50 ohm MDI termination); sec 3.7 + sec 6.1 (supply and decoupling; V5 and AVDD33 on 3.3 V for industrial use; transformer centre taps to GND through capacitors, no supply); sec 4.1 (TA -40..85 C at V5 = AVDD33 = 3.3 V); sec 5.1 QFN24 4 x 4 mm, 0.5 mm pitch, 2.8 mm EP |
-| **Cited in** | Pilot `ETH2-USB` and its support parts (`gen_pilot_sch.py`) |
+| **Cited in** | Formerly Pilot `NIC-USB1` (`ETH2-USB` before 2026-10-17) and its support parts. Removed from Pilot 2026-10-18, replaced by the ASIX AX88772E (REF-SENSOR-056) |
+| **Openness / sourcing** | FAILS AGENTS.md §5: WCH (Nanjing Qinheng Microelectronics) is PRC-domiciled. Kept here only as the record of the rejected candidate |
 | **Note** | Contains a RISC-V core running vendor firmware on the network path (supply-chain / security review item, avionics/WBS.md) |
 
 ### REF-SENSOR-049: Texas Instruments SPRSP58C — AM62x Sitara Processors data sheet
@@ -2902,8 +2907,52 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Official access** | Product page <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); the PDF is behind the free MyASIX registration (owner-downloaded) |
 | **Local copy** | `avionics/datasheets/AX88772E_Datasheet_v103.pdf` (owner-supplied, MD5 3f5b6da32a9b2e9716e8298d467459aa) |
 | **Section applied** | §1.3 pinout (32-pin QFN, 4 x 4 mm, E-PAD); §1.4 signal description (RSET 24 kΩ 1 %, VBUS pin 6 is a 3.3 V input, PU pin 7 to 3.3 V, LX pin 12 drives the on-die 1.1 V buck's external inductor); §5.1.2 recommended operating conditions; §5.2 power (25 mA at 1.1 V, 35.3 mA at 3.3 V full load); §5.4 power-up sequence; §6 recommended footprint (0.40 mm pitch); §7 ordering (AX88772EQF only, 0 °C to +70 °C) |
-| **Cited in** | `avionics/kicad/Pilot/Pilot.md` (NIC selection); the schematic swap waits for ASIX's reference schematic and application design note (avionics/WBS.md §1.2a Pilot) |
+| **Cited in** | Pilot `NIC-USB1` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py` `ax88772e()`, 2026-10-18); land `QFN-32-1EP_4x4mm_P0.4mm_EP2.9x2.9mm` checked against §6; `avionics/kicad/Pilot/Pilot.md` |
 | **Openness / sourcing** | No confidentiality or NDA marking (copyright notice only), checked 2026-10-17. Free MyASIX registration wall, acceptable under AGENTS.md §5. ASIX is Taiwan-domiciled (Hsinchu) |
+
+### REF-SENSOR-057: ASIX AX88772E USB2.0 to Fast Ethernet Application Design Note, Revision 1.10
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, *AX88772E USB2.0 to Fast Ethernet Application Design Note*, Revision 1.10 (September 30, 2026) |
+| **Official access** | Listed on the product page <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); download behind the free MyASIX registration (owner-downloaded 2026-10-18) |
+| **Local copy** | `avionics/datasheets/AX88772E_Application_DesignNote_v110.pdf` (MD5 c967893114b9af31f6a998b6f4c1bb3b) |
+| **Section applied** | §4 VBUS pin (3.3 V input; on-board designs connect it to a host-controllable GPIO); §5 crystal (reference NXK20.000AC20F-BK4: 20 MHz, CL 20 pF, ±30 ppm, ESR 100 Ω max., 10 µW; note 2: no external oscillator source); §8 items 5 and 8 (a decoupling capacitor per power pin; regulator input trace > 40 mil, output > 20 mil); §9 USB layout (90 Ω differential); §10 MDI layout (100 Ω differential); §13 ESD |
+| **Cited in** | Pilot `NIC-USB1` support block, `Y-USB1` (`gen_pilot_sch.py`); `avionics/kicad/Pilot/Pilot.md` update 2026-10-18; `avionics/WBS.md` §1.2a Pilot |
+| **Openness / sourcing** | No confidentiality or NDA marking (copyright notice only), checked 2026-10-18. Free registration wall, acceptable under AGENTS.md §5 |
+
+### REF-SENSOR-058: ASIX AX88772E Demo Board schematic V1.01
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, *AX88772E Demo Board* schematic, Rev V1.01 (September 30, 2026), 3 sheets |
+| **Official access** | Listed on the product page as "Reference Schematic (Demo Board)" <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); download behind the free MyASIX registration (owner-downloaded 2026-10-18 as `AX88772E_DEMO_BOARD_SCHEMATIC_V101.zip`, MD5 1d6ca492f7a0f866333a3a2e86768911, which also holds the OrCAD `.DSN`) |
+| **Local copy** | `avionics/datasheets/AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf` (extracted from the zip, MD5 73fe544a2319557fa0abde9a15851413) |
+| **Section applied** | Sheet 2: power tree (pin 13 AVDD33_BUCK on DVDD_33 with C5 4.7 µF + C6 0.1 µF at the pin; pin 14 to GND; LX pin 12 -> L1 2.2 µH -> DVDD11 with C2 10 µF + C3 0.1 µF; DVDD11 pins 4/10/11/22 with 0.1 µF each; bead L4 -> AVDD11 pin 32 with 10 µF + 2 x 0.1 µF; bead L5 -> AVDD_33 pins 1/25/29 with 4.7 µF + 4 x 0.1 µF; DVDD_33 pins 5/18 with 2 x 0.1 µF); crystal (C11/C12 15 pF, R7 200 Ω in XTAL_OUT); RSET R20 24 kΩ 1 %; VBUS R4 4.7 kΩ to DVDD_33; PME/GPIO8 and PU 4.7 kΩ pull-ups; LED_0/LED_1 4.7 kΩ pull-ups; transformer centre taps 0.1 µF to GND; notes 2-1 to 2-14. Part numbers for L1, L4, L5 are not given here; see the demo BOM (REF-SENSOR-060) |
+| **Cited in** | Pilot `NIC-USB1` and every `C-USB1-*` / `R-USB1-*` / `L-USB1` / `FB-USB1-*` / `Y-USB1` support part (`gen_pilot_sch.py`, demo designators in each part's description); `avionics/kicad/Pilot/Pilot.md` update 2026-10-18 |
+| **Openness / sourcing** | No confidentiality or NDA marking, checked 2026-10-18. Free registration wall, acceptable under AGENTS.md §5 |
+
+### REF-SENSOR-059: ECS Inc. ECX-32 SMD crystal data sheet
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ECS Inc. International (Lenexa, Kansas), ECX-32 SMD Crystal data sheet (Rev. 2017) |
+| **Official access** | <https://ecsxtal.com/store/pdf/ECX-32.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/ECS_ECX-32.pdf` (MD5 401b18c1bfb0b440c1a6ef9d7723762d) |
+| **Section applied** | Electrical characteristics (fundamental mode, 10 to 54 MHz, load capacitance specified in P/N, drive level 100 µW max, aging ±5 ppm first year); ESR table (20.000 to 23.999 MHz: 60 Ω max); pad connections (1 In/Out, 2 GND, 3 Out/In, 4 GND); part numbering guide (ECS-200-20-33-AGM-TR = 20 MHz, CL 20 pF, A = ±25 ppm tolerance, G = ±30 ppm stability, M = -20 to +70 °C, tape and reel); 3.2 x 2.5 mm package |
+| **Cited in** | Pilot `Y-USB1` (`gen_pilot_sch.py`) |
+| **Openness / sourcing** | Public, no NDA. ECS Inc. is US-domiciled. Option-code availability (AGM) to be confirmed with a distributor before ordering |
+
+### REF-SENSOR-060: ASIX AX88772E / AX88772D demo board BOM (2025-11-28)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, `AX88772E_AX88772D_DEMO_BORAD_BOM_20251128` (reference schematic V2.01 BOM; ASIX's spelling of the file name) |
+| **Official access** | Listed on the product page as "Demo Board BOM" <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); owner-downloaded 2026-10-18 as a zip (MD5 f5b95480be78e00e926472b10df6baca) |
+| **Local copy** | `avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx` (extracted from the zip, MD5 4b23301c931db152df277b4a3554848d) |
+| **Section applied** | Items 2-11, 13, 15, 17 and 25: C11/C12 15 pF; 0.1 µF / 4.7 µF / 10 µF decoupling; L1 Darfon IP20162R2MP59 2.2 µH (2016); L4/L5 Chilisin PBY160808T-110Y-N bead; R7 200 Ω; 4.7 kΩ pull-ups; R20 24 kΩ 1 %; Y1 "NSK 20M CRYSTAL" (no part number) |
+| **Cited in** | `gen_pilot_sch.py` AX88772E support block comment; `avionics/kicad/Pilot/Pilot.md` update 2026-10-18 |
+| **Openness / sourcing** | No confidentiality marking. The BOM's own MPNs are not adopted where their maker or data sheet could not be verified (beads, crystal); the inductor MPN is open (avionics/WBS.md) |
 
 ### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
 

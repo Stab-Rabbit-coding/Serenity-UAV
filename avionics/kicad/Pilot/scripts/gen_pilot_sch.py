@@ -83,6 +83,12 @@ Lineage
       CDSOT23-SM712 (-7 / +12 V VWM, the RS-485 common-mode range; the
       ISOW1412 bus pins are rated -12..+15 V) [REF-SENSOR-054].  The 1553
       SMAJ33CA now names a compliant manufacturer, Bourns [REF-SENSOR-055].
+    - USB1 ring-leg NIC: WCH CH397A (PRC, AGENTS.md §5) -> ASIX AX88772E
+      [REF-SENSOR-056], built to the ASIX demo board V1.01 [REF-SENSOR-058] and
+      app note v1.10 [REF-SENSOR-057]: own 20 MHz ECS crystal (no external clock
+      input), on-die 1.1 V buck with a 2.2 uH inductor, two BLM15EX331 beads, per-pin
+      decoupling, RSET 24 k 1 %.  VBUS pin: 4.7 k pull-up plus P1-31 GPIO0_59 (owner).
+      X-25M now clocks only the DP83825I.
 
 Datasheets (all in ``avionics/datasheets/``; OEM documents are authoritative
 per ``avionics/AGENTS.md``):
@@ -95,7 +101,9 @@ per ``avionics/AGENTS.md``):
   ECS-2520MV ECS-2520MV.pdf p.1 |
   X2Y (Yageo CX0805) X2Y_15-2237598.pdf Table 3 |
   ESD2CAN24-Q1 ESD2CANxx24-Q1_SLVSFW5D.pdf Table 4-1 | CDSOT23-SM712 Bourns_CDSOT23-SM712.pdf p.1 |
-  SMAJ33CA Bourns_SMAJ.pdf (REV. 09/20) | TPD4E05U06 TPDxE05U06_SLVSBO7O.pdf Table 4-2.
+  SMAJ33CA Bourns_SMAJ.pdf (REV. 09/20) | TPD4E05U06 TPDxE05U06_SLVSBO7O.pdf Table 4-2 |
+  AX88772E AX88772E_Datasheet_v103.pdf, AX88772E_Application_DesignNote_v110.pdf,
+  AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf sheet 2 | ECS ECX-32 ECS_ECX-32.pdf.
 
 Author: Claude Opus 4.8 (2026-07-14); Claude Opus 5 (2026-07-28, 2026-09-19);
 Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap; 2026-10-12, §13.1 beads + GNSS off-board;
@@ -147,7 +155,12 @@ FP_SOT23 = "Package_TO_SOT_SMD:SOT-23"           # JEDEC SOT23 (Bourns CDSOT23)
 FP_OSC2520 = "Oscillator:Oscillator_SMD_ECS_2520MV-xxx-xx-4Pin_2.5x2.0mm"
 FP_GH4 = "Connector_JST:JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal"
 FP_GH6 = "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
-FP_QFN24_4X4 = "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm"
+# AX88772E: matches the data sheet sec 6 recommended land (pads 0.22 x 0.71 mm, 2.90 mm
+# E-pad, 3.30 mm inner span) to 0.02 mm [REF-SENSOR-056]
+FP_QFN32_4X4 = "Package_DFN_QFN:QFN-32-1EP_4x4mm_P0.4mm_EP2.9x2.9mm"
+FP_XTAL3225 = "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm"   # ECS ECX-32: pads 1/3 crystal, 2/4 GND
+# 2.0 x 1.6 mm (0806) power-inductor land, placeholder until the L-USB1 MPN is chosen
+FP_L2016 = "Inductor_SMD:L_Murata_DFE201610P"
 FP_DQA10 = "Serenity-Custom:TI_DQA0010A_USON-10_2.5x1.0mm_P0.5mm"
 FP_F0805 = "Fuse:Fuse_0805_2012Metric"
 FP_HOLE = "Serenity-Custom:MountingHole_2.7mm_M2.5_PGND_Ring"
@@ -352,53 +365,71 @@ def dp83825i(ref: str, rmii: str, rstn: str, intn: str, eth: str, mdio: str, mdc
     }
 
 
-def ch397a(ref: str, eth: str) -> Dict[str, Any]:
-    """WCH CH397A USB 2.0 to 10/100 Ethernet controller with integrated MAC + PHY,
-    QFN24 4x4 mm, built-in SPI flash (MAC address / configuration).  Owner decision
-    2026-10-17 (S. Griffing, "Option 1"): the Ethernet ring's second port runs on the
-    PB2-I's USB1 (D+/D- on P1-11/P1-9, official schematic sheets 14/16), bridged in
-    Linux with ring port 1 (DP83825I on RMII2).  Implemented by Claude Opus 5.5.
+def ax88772e(ref: str, eth: str) -> Dict[str, Any]:
+    """ASIX AX88772E USB 2.0 to 10/100 Ethernet controller with integrated MAC + PHY,
+    32-pin QFN 4 x 4 mm, 0.4 mm pitch, 2.7 mm E-pad.  Ring leg on the PB2-I's USB1
+    (D+/D- on P1-11 / P1-9), bridged in Linux with the RMII2 leg (owner 2026-10-17).
+    Replaces the CH397A (WCH is PRC-domiciled, AGENTS.md §5) on 2026-10-18; Claude
+    Opus 5.5, owner decisions S. Griffing.
 
-    Pinout: CH397 datasheet V1.2 Fig. 1-1 / Table 1-3, CH397A column [REF-SENSOR-048];
-    no RSTB pin on the CH397A (internal POR, sec 3.1.2).  Supply per sec 3.7 / sec 6.1:
-    for industrial use V5 and AVDD33 both on the 3.3 V supply (TA -40..85 C, sec 4.1);
-    XI takes "a 25 MHz crystal or an external clock input" (Table 1-3) -> the shared
-    X-25M oscillator, XO open.  50 ohm MDI termination is internal (sec 3.3, sec 6.1),
-    transformer centre taps to GND through capacitors only (sec 6.1 note on T1).
-    Firmware default CDC-ECM (sec 3.2) -> Linux cdc_ether.
+    Pinout: AX88772E data sheet v1.03 Fig. 1-2 / Tables 1-1..1-5 [REF-SENSOR-056].
+    Supply tree per the ASIX demo board V1.01 sheet 2 [REF-SENSOR-058]: DVDD33 /
+    AVDD33_BUCK on +3V3; LX (pin 12) drives the on-die 1.1 V buck through an external
+    2.2 uH inductor to the DVDD11 pins; AVDD11_GBE behind a bead from DVDD11; the 3.3 V
+    analog pins (AVDD33_USB / _XTAL / _GBE) behind a bead from +3V3.
+    Clock: own 20 MHz crystal.  The part "does not support external oscillator clock
+    source" (app note §5 note 2 [REF-SENSOR-057]), so it cannot share X-25M.
+    MDI0 = transmit pair and MDI1 = receive pair, as wired to the RJ-45 TX/RX pins on the
+    demo board (auto-MDIX is supported either way).  Device-side centre taps go to GND
+    through 0.1 uF only (demo C4 / C7).
+    VBUS (pin 6) is a 3.3 V attach/detach sense input (app note §4).  Owner 2026-10-18:
+    4.7 k pull-up to +3V3 (demo R4) so the NIC attaches with no firmware, plus PB2-I
+    GPIO P1-31 (GPIO0_59) on the same net so Linux can pull it low to force a USB
+    detach / re-attach.  RST_N (internal pull-up + on-chip POR) and GPIO2/3/4 (no SPI
+    flash or I2C EEPROM fitted) are left open, as on the demo board's default fit.
+    LED_0 / LED_1 are left open (no LEDs on the cape).  The demo's LED pull-ups only
+    serve its RJ-45 LEDs.
     """
     return {
         "ref": ref,
-        "value": "CH397A",
-        "fp": FP_QFN24_4X4,
-        "mpn": "CH397A",
-        "ds": "CH397 datasheet V1.2 Table 1-3 / Fig. 1-1 (CH397A QFN24) [REF-SENSOR-048]",
+        "value": "AX88772EQF",
+        "fp": FP_QFN32_4X4,
+        "mpn": "AX88772EQF",
+        "ds": "AX88772E data sheet v1.03 Tables 1-1..1-5 (QFN-32 4x4) [REF-SENSOR-056]",
         "pins": [
-            ("8", "UDP", "USB1_DP", "L"),
-            ("7", "UDM", "USB1_DM", "L"),
-            ("21", "XI", "XI_25M", "L"),
-            ("22", "XO", None, "L"),
-            ("15", "LED0", None, "L"),
-            ("17", "LED1", None, "L"),
-            ("14", "GPIO6", None, "L"),
-            ("12", "NC", None, "L"),
-            ("16", "NC", None, "L"),
-            ("19", "NC", None, "L"),
-            ("20", "NC", None, "L"),
-            ("2", "MDITP", f"{eth}_TXP", "R"),
-            ("3", "MDITN", f"{eth}_TXN", "R"),
-            ("4", "MDIRP", f"{eth}_RXP", "R"),
-            ("5", "MDIRN", f"{eth}_RXN", "R"),
-            ("11", "V5", "+3V3", "R"),
-            ("10", "AVDD33", "+3V3", "R"),
-            ("1", "AVDD33", "+3V3", "R"),
-            ("13", "VDDIO", "+3V3", "R"),
-            ("18", "VDDIO", "+3V3", "R"),
-            ("23", "AVDDK", f"{ref}_AVDDK", "R"),
-            ("9", "DVDDK", f"{ref}_DVDDK", "R"),
-            ("6", "GND", "GND", "R"),
-            ("24", "GND", "GND", "R"),
-            ("25", "EP", "GND", "R"),
+            ("2", "USB_DP", "USB1_DP", "L"),
+            ("3", "USB_DM", "USB1_DM", "L"),
+            ("6", "VBUS", f"{ref}_VBUS", "L"),
+            ("7", "PU", f"{ref}_PU", "L"),
+            ("8", "GPIO_8/PME", f"{ref}_PME", "L"),
+            ("21", "RST_N", None, "L"),
+            ("23", "XTAL_IN", f"{ref}_XI", "L"),
+            ("24", "XTAL_OUT", f"{ref}_XO", "L"),
+            ("26", "RSET", f"{ref}_RSET", "L"),
+            ("15", "LED_0", None, "L"),
+            ("16", "LED_1", None, "L"),
+            ("17", "GPIO_2", None, "L"),
+            ("19", "GPIO_3", None, "L"),
+            ("20", "GPIO_4", None, "L"),
+            ("9", "NC", None, "L"),
+            ("27", "MDIP0", f"{eth}_TXP", "R"),
+            ("28", "MDIN0", f"{eth}_TXN", "R"),
+            ("30", "MDIP1", f"{eth}_RXP", "R"),
+            ("31", "MDIN1", f"{eth}_RXN", "R"),
+            ("12", "LX", f"{ref}_LX", "R"),
+            ("13", "AVDD33_BUCK", "+3V3", "R"),
+            ("14", "AVSS33_BUCK", "GND", "R"),
+            ("5", "DVDD33", "+3V3", "R"),
+            ("18", "DVDD33", "+3V3", "R"),
+            ("1", "AVDD33_USB", f"{ref}_AVDD33", "R"),
+            ("25", "AVDD33_XTAL", f"{ref}_AVDD33", "R"),
+            ("29", "AVDD33_GBE", f"{ref}_AVDD33", "R"),
+            ("4", "DVDD11", f"{ref}_DVDD11", "R"),
+            ("10", "DVDD11", f"{ref}_DVDD11", "R"),
+            ("11", "DVDD11", f"{ref}_DVDD11", "R"),
+            ("22", "DVDD11", f"{ref}_DVDD11", "R"),
+            ("32", "AVDD11_GBE", f"{ref}_AVDD11", "R"),
+            ("33", "EP", "GND", "R"),
         ],
     }
 
@@ -436,7 +467,7 @@ def eth_xfmr(ref: str, eth: str) -> Dict[str, Any]:
 
 ICS += [
     dp83825i("PHY-RMII2", "RMII2", "RMII2_PHY_RSTN", "RMII2_PHY_INTRN", "ETH_RMII2", "MDIO0", "MDC0"),
-    ch397a("NIC-USB1", "ETH_USB1"),
+    ax88772e("NIC-USB1", "ETH_USB1"),
     eth_xfmr("T-RMII2", "ETH_RMII2"),
     eth_xfmr("T-USB1", "ETH_USB1"),
 ]
@@ -598,7 +629,7 @@ ICS += [
 # ball must be left as an input by the device tree (noted).  Not driven by the cape: P1-14
 # / P2-23 (PB2 3V3 out), P1-24 / P2-13 (VSYS), P2-14 (VBAT), P2-16 (BAT_TS), P2-12
 # (PWR_BTN), P2-26 (RESET#), P1-7 (VIN.USB), P1-17/18 (AIN refs), P1-30/32 (UART0 = the
-# PB2 console).  USB1 (P1-5 VBUS, P1-9 D-, P1-11 D+) carries ring port 2 (CH397A); its
+# PB2 console).  USB1 (P1-5 VBUS, P1-9 D-, P1-11 D+) carries ring port 2 (AX88772E); its
 # DRVVBUS (P1-3) and ID (P1-13) balls are plain GPIO here, USB1 runs host-only.  P1-19/21/23/25/27 and P2-35/36 are also MSPM0 AIN inputs: the MSPM0
 # must keep them high-impedance (firmware requirement).
 # ---------------------------------------------------------------------------
@@ -607,13 +638,13 @@ PB2_P1 = [
     "RMII2_TX_EN",    # 2  AA19 RMII2_TX_EN (E18 GPIO1_10 left input)
     "SPI0_CS_IMU",    # 3  F18 GPIO1_51 (GPIO chip select, next to the IMU)
     "RMII2_TXD0",     # 4  Y18 RMII2_TXD0 (D20 left input)
-    "+5V",            # 5  USB1_VBUS: cape-supplied VBUS (PB2-I divides it 1k/20k to AB10) — USB1 host to the CH397A
+    "+5V",            # 5  USB1_VBUS: cape-supplied VBUS (PB2-I divides 1k/20k to AB10)
     "EXT_SPI_SS1",    # 6  E19 SPI2_CS0 (AD18 left input)
     None,             # 7  VIN.USB
     "EXT_SPI_SCK",    # 8  A20 SPI2_CLK
-    "USB1_DM",        # 9  AD10 USB1_DM -> CH397A UDM
+    "USB1_DM",        # 9  AD10 USB1_DM -> AX88772E USB_DM
     "EXT_SPI_MISO",   # 10 B19 SPI2_D0 (A18 left input)
-    "USB1_DP",        # 11 AE9 USB1_DP -> CH397A UDP
+    "USB1_DP",        # 11 AE9 USB1_DP -> AX88772E USB_DP
     "EXT_SPI_MOSI",   # 12 A19 SPI2_D1 (AE18 left input)
     "DSHOT1",         # 13 N20 PR0_PRU0_GPO13
     None,             # 14 VDD_3V3 out of the PB2 (cape has its own +3V3)
@@ -633,7 +664,7 @@ PB2_P1 = [
     "TPM_RSTN",       # 28 K22 GPIO0_43 (B3 left input)
     "DSHOT2",         # 29 Y20 PR0_PRU0_GPO7
     None,             # 30 E14 UART0_TXD — PB2 console, left free
-    None,             # 31 Y22 GPIO0_59 — spare (was J-SPI SS2, removed 2026-10-18)
+    "NIC-USB1_VBUS",  # 31 Y22 GPIO0_59 — AX88772E VBUS detach over 4.7 k pull-up (owner)
     None,             # 32 D14 UART0_RXD — PB2 console, left free
     None,             # 33 A17 I2C1_SDA (AA23 left input) — spare (was J-GPS, removed 2026-10-18)
     "RMII2_REF_CLK",  # 34 AD23 RMII2_REF_CLK
@@ -805,8 +836,10 @@ SIMPLE: List[Any] = [
     ("R-USB1-BST", "75R", FP_R0402, "", "J-ETH-USB1 line TX centre tap Bob-Smith", [("1", "A", "ETH_USB1_LINE_CTX"), ("2", "B", "ETH_USB1_BS")]),
     ("R-USB1-BSR", "75R", FP_R0402, "", "J-ETH-USB1 line RX centre tap Bob-Smith", [("1", "A", "ETH_USB1_LINE_CRX"), ("2", "B", "ETH_USB1_BS")]),
     ("C-USB1-BS", "10nF 2kV", FP_C1808, "", "J-ETH-USB1 Bob-Smith HV cap to chassis", [("1", "P", "ETH_USB1_BS"), ("2", "N", "PGND")]),
-    # one 25 MHz oscillator drives both Ethernet controllers' XI pins (XO pins open)
-    ("X-25M", "25MHz 3.3V", FP_OSC2520, "ECS-2520MV-250-BN-TR", "25 MHz reference for the DP83825I XI (RMII Leader, +/-50 ppm, SNLS638C) and the CH397A XI (external clock input, CH397 Table 1-3); ECS-2520MV.pdf [REF-PWR-004]",
+    # 25 MHz oscillator for the DP83825I XI only (XO open); the AX88772E has its own crystal
+    ("X-25M", "25MHz 3.3V", FP_OSC2520, "ECS-2520MV-250-BN-TR",
+     "25 MHz reference for the DP83825I XI (RMII Leader, +/-50 ppm, SNLS638C); "
+     "ECS-2520MV.pdf [REF-PWR-004]",
      [("1", "TRI", None), ("2", "GND", "GND"), ("3", "OUT", "XI_25M"), ("4", "VDD", "+3V3")]),
     ("C-25M", "100nF", FP_C0402, "", "oscillator VDD bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     # --- MIL-STD-1553B field port ------------------------------------------
@@ -910,16 +943,283 @@ def phy_support(tag: str, ref: str, rmii: str, eth: str) -> List[Any]:
 
 SIMPLE += phy_support("RMII2", "PHY-RMII2", "RMII2", "ETH_RMII2")
 
-# --- CH397A support (CH397 datasheet V1.2 sec 3.7 table, sec 6.1 circuit) [REF-SENSOR-048] --
+# --- AX88772E support (ASIX demo board V1.01 sheet 2 [REF-SENSOR-058]; app note v1.10
+# [REF-SENSOR-057]; owner 2026-10-18).  Demo designators in parentheses.  The app note
+# §8 item 5 wants a decoupling capacitor on every power pin, so the demo's per-pin
+# 0.1 uF set is kept; 0.1 uF goes in 0201 to save area.  Beads: the demo's Chilisin
+# PBY160808T-110Y-N (110 R) has no datasheet on file, so the cape reuses the vetted
+# Murata BLM15EX331SN1D (330 R at 100 MHz, 0.205 R max DCR, 1.1 A) [REF-SENSOR-043];
+# the drop at the ~25 mA rail load is about 5 mV.  Crystal: the demo's "NSK 20M
+# CRYSTAL" has no part number and no identifiable maker (AGENTS.md §5), so ECS
+# ECS-200-20-33-AGM-TR (Lenexa KS; 20 MHz, CL 20 pF, +/-25 ppm tol, +/-30 ppm
+# stability, -20..+70 C, ESR 60 R max; ECX-32 data sheet [REF-SENSOR-059]) meets the
+# app note §5 spec (CL 20 pF, +/-30 ppm, ESR <= 100 R).  Smaller ECS packages list a
+# CL of 8 pF typical, which the demo's 15 pF load caps cannot load to 20 pF.
 SIMPLE += [
-    ("C-USB1-V5A", "10uF 6.3V X6S", FP_C0603, "MSASJ168BC6226MTNA01", "V5 / AVDD33 (pins 11/10) bulk, 3.3 V supply (sec 6.1 C8)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-USB1-V5B", "100nF", FP_C0201, "", "V5 / AVDD33 (pins 11/10) HF (sec 6.1 C2)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-USB1-A1", "1uF", FP_C0402, "", "AVDD33 pin 1 decoupling (Table 1-3)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-USB1-IO", "100nF", FP_C0201, "", "VDDIO pins 13/18 decoupling (Table 1-3)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-USB1-AK", "1uF", FP_C0402, "", "AVDDK core-analog decoupling, pin 23 (Table 1-3)", [("1", "P", "NIC-USB1_AVDDK"), ("2", "N", "GND")]),
-    ("C-USB1-DK", "100nF", FP_C0201, "", "DVDDK core-digital decoupling, pin 9 (Table 1-3)", [("1", "P", "NIC-USB1_DVDDK"), ("2", "N", "GND")]),
-    ("C-USB1-CTD", "1uF", FP_C0402, "", "T-USB1 device-side TX centre tap to GND (sec 6.1 C11; no supply on the CT)", [("1", "P", "ETH_USB1_CTD"), ("2", "N", "GND")]),
-    ("C-USB1-CRD", "1uF", FP_C0402, "", "T-USB1 device-side RX centre tap to GND (sec 6.1 C12)", [("1", "P", "ETH_USB1_CRD"), ("2", "N", "GND")]),
+    # 1.1 V buck: LX -> L1 2.2 uH -> DVDD11 (demo L1, C2, C3; note 2-5: at pin 12)
+    (
+        "L-USB1",
+        "2.2uH",
+        FP_L2016,
+        "",
+        "AX88772E 1.1 V buck inductor, LX pin 12 (demo L1 2.2 uH 2016, Darfon IP20162R2MP59); "
+        "MPN to be confirmed against a downloaded data sheet (avionics/WBS.md)",
+        [("1", "A", "NIC-USB1_LX"), ("2", "B", "NIC-USB1_DVDD11")],
+    ),
+    (
+        "C-USB1-LXB",
+        "10uF 6.3V X5R",
+        FP_C0603,
+        "",
+        "DVDD11 buck output bulk at pin 12 (demo C2)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-LXH",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD11 buck output HF at pin 12 (demo C3)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-D04",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD11 pin 4 (demo C20)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-D10",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD11 pin 10 (demo C18)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-D11",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD11 pin 11 (demo C24)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-D22",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD11 pin 22 (demo C19)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    # AVDD11_GBE behind a bead (demo L4, C15, C14, C17)
+    (
+        "FB-USB1-A11",
+        "330R@100MHz",
+        FP_L0402,
+        "BLM15EX331SN1D",
+        "DVDD11 -> AVDD11_GBE bead (demo L4) [REF-SENSOR-043]",
+        [("1", "A", "NIC-USB1_DVDD11"), ("2", "B", "NIC-USB1_AVDD11")],
+    ),
+    (
+        "C-USB1-A11B",
+        "10uF 6.3V X5R",
+        FP_C0603,
+        "",
+        "AVDD11_GBE pin 32 bulk (demo C15)",
+        [("1", "P", "NIC-USB1_AVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A11H1",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD11_GBE pin 32 (demo C14)",
+        [("1", "P", "NIC-USB1_AVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A11H2",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD11_GBE pin 32 (demo C17)",
+        [("1", "P", "NIC-USB1_AVDD11"), ("2", "N", "GND")],
+    ),
+    # 3.3 V: buck input at pin 13 (note 2-4), DVDD33 pins 5 / 18
+    (
+        "C-USB1-BKB",
+        "4.7uF 10V X5R",
+        FP_C0603,
+        "",
+        "AVDD33_BUCK pin 13 bulk (demo C5, note 2-4)",
+        [("1", "P", "+3V3"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-BKH",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD33_BUCK pin 13 HF (demo C6, note 2-4)",
+        [("1", "P", "+3V3"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-IO5",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD33 pin 5 (demo C23)",
+        [("1", "P", "+3V3"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-IO18",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD33 pin 18 (demo C16)",
+        [("1", "P", "+3V3"), ("2", "N", "GND")],
+    ),
+    # 3.3 V analog behind a bead (demo L5, C27, C21, C22, C25, C26)
+    (
+        "FB-USB1-A33",
+        "330R@100MHz",
+        FP_L0402,
+        "BLM15EX331SN1D",
+        "+3V3 -> AVDD33 analog bead (demo L5) [REF-SENSOR-043]",
+        [("1", "A", "+3V3"), ("2", "B", "NIC-USB1_AVDD33")],
+    ),
+    (
+        "C-USB1-A33B",
+        "4.7uF 10V X5R",
+        FP_C0603,
+        "",
+        "AVDD33 analog bulk (demo C27)",
+        [("1", "P", "NIC-USB1_AVDD33"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A33H1",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD33_USB pin 1 (demo C21)",
+        [("1", "P", "NIC-USB1_AVDD33"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A33H2",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD33_XTAL pin 25 (demo C22)",
+        [("1", "P", "NIC-USB1_AVDD33"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A33H3",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD33_GBE pin 29 (demo C25)",
+        [("1", "P", "NIC-USB1_AVDD33"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A33H4",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD33 bead output (demo C26)",
+        [("1", "P", "NIC-USB1_AVDD33"), ("2", "N", "GND")],
+    ),
+    # 20 MHz crystal: XTAL_IN on pad 1; XTAL_OUT through 200 R to pad 3 (demo Y1, C11, C12, R7)
+    (
+        "Y-USB1",
+        "20MHz CL20pF",
+        FP_XTAL3225,
+        "ECS-200-20-33-AGM-TR",
+        "AX88772E 20 MHz crystal, ECX-32: CL 20 pF, +/-25 ppm, +/-30 ppm, ESR 60 R max "
+        "(app note §5) [REF-SENSOR-059]",
+        [
+            ("1", "X1", "NIC-USB1_XI"),
+            ("2", "GND", "GND"),
+            ("3", "X2", "NIC-USB1_XO_R"),
+            ("4", "GND", "GND"),
+        ],
+        {"mfr": "ECS Inc."},
+    ),
+    (
+        "C-USB1-XI",
+        "15pF C0G",
+        FP_C0402,
+        "",
+        "XTAL_IN load cap (demo C11; trim per app note §5 note 1)",
+        [("1", "P", "NIC-USB1_XI"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-XO",
+        "15pF C0G",
+        FP_C0402,
+        "",
+        "XTAL_OUT load cap, crystal side of R-USB1-XO (demo C12)",
+        [("1", "P", "NIC-USB1_XO_R"), ("2", "N", "GND")],
+    ),
+    (
+        "R-USB1-XO",
+        "200R",
+        FP_R0402,
+        "",
+        "XTAL_OUT drive-level resistor (demo R7)",
+        [("1", "A", "NIC-USB1_XO"), ("2", "B", "NIC-USB1_XO_R")],
+    ),
+    # bias and straps
+    (
+        "R-USB1-RSET",
+        "24k 1%",
+        FP_R0402,
+        "",
+        "RSET pin 26 to analog GND, 24 kOhm 1 % (data sheet Table 1-4; demo note 2-8)",
+        [("1", "A", "NIC-USB1_RSET"), ("2", "B", "GND")],
+    ),
+    (
+        "R-USB1-VBUS",
+        "4.7k",
+        FP_R0201,
+        "",
+        "VBUS pin 6 pull-up to 3.3 V (demo R4); PB2-I P1-31 GPIO0_59 can pull it low "
+        "(owner 2026-10-18)",
+        [("1", "A", "+3V3"), ("2", "B", "NIC-USB1_VBUS")],
+    ),
+    (
+        "R-USB1-PU",
+        "4.7k",
+        FP_R0201,
+        "",
+        "PU pin 7 pull-up to 3.3 V (data sheet Table 1-4; demo R3)",
+        [("1", "A", "+3V3"), ("2", "B", "NIC-USB1_PU")],
+    ),
+    (
+        "R-USB1-PME",
+        "4.7k",
+        FP_R0201,
+        "",
+        "GPIO_8/PME pin 8 must be pulled high (demo note 2-7, R2)",
+        [("1", "A", "+3V3"), ("2", "B", "NIC-USB1_PME")],
+    ),
+    # device-side transformer centre taps: 0.1 uF to GND, no supply (demo C4, C7)
+    (
+        "C-USB1-CTD",
+        "100nF",
+        FP_C0402,
+        "",
+        "T-USB1 device-side TX centre tap to GND (demo C7)",
+        [("1", "P", "ETH_USB1_CTD"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-CRD",
+        "100nF",
+        FP_C0402,
+        "",
+        "T-USB1 device-side RX centre tap to GND (demo C4)",
+        [("1", "P", "ETH_USB1_CRD"), ("2", "N", "GND")],
+    ),
 ]
 
 # --- JST-GH expansion port replacing the GNSS (owner 2026-10-17) ----------------------

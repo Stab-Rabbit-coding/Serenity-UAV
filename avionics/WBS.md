@@ -1771,9 +1771,19 @@ REFERENCES.md Removed/Superseded Citations).
                 confidentiality marking. The 0-70 C rating is accepted: the -40..85 C figure in
                 docs/AVIONICS_PB2_REDESIGN.md is the PB2-I module's rating, not a board
                 requirement (owner 2026-10-17).
-            - [ ] Reference schematic + application design note still needed: the datasheet gives
-                no LX inductor value, crystal load caps, decoupling, PU-pin network or VBUS
-                handling (pin 6 is a 3.3 V input; the PB2 drives 5 V on P1-5).
+            - [x] Reference schematic, application design note and demo BOM received 2026-10-18
+                (owner) and catalogued as REF-SENSOR-057 / 058 / 060 (no confidentiality
+                marking). CH397A block replaced in `gen_pilot_sch.py` (`ax88772e()` + support
+                block, Claude Opus 5.5): ERC 0, 134 parts. Own ECS 20 MHz crystal
+                [REF-SENSOR-059]; BLM15EX331 beads; VBUS = 4.7 k pull-up + P1-31 GPIO0_59 (owner
+                2026-10-18). Pilot.md update 2026-10-18.
+            - [ ] `L-USB1` 2.2 uH (2016) part number: the demo BOM's Darfon IP20162R2MP59 has no
+                data sheet on file (vendor sites block scripted download). Owner to download a
+                data sheet (Darfon, or an equivalent such as TDK MLP2016 / Coilcraft XFL2010),
+                then set the MPN and replace the placeholder `L_Murata_DFE201610P` land.
+            - [ ] Confirm ECS-200-20-33-AGM-TR option-code availability with a distributor.
+            - [ ] DTS: hold P1-31 GPIO0_59 as an input (high-Z) by default; drive it low only to
+                force an AX88772E USB detach.
         - [x] ~~Two JST-GH expansion headers replacing the GNSS~~ — superseded 2026-10-17 by the
             single-port item below (only one board-edge site).
         - [x] Sourcing rule (AGENTS.md §5, 2026-10-17), Pilot — done 2026-10-18 (Claude Opus 5.5):
@@ -1786,10 +1796,14 @@ REFERENCES.md Removed/Superseded Citations).
             GND on the SPI2 pins); J-GPS, F-GPS, C-GPS5, R-I2C-SCL/SDA, ESD-GPS, ESD-SS2 removed;
             P1-31/33/36 and P2-2/4 spare.
         - [ ] Regenerate schematic (ERC 0), then PCB: sync, re-place, re-route, DRC 0 + parity 0.
-            - [x] Schematic regenerated 2026-10-18: ERC 0, 111 parts (after the GH and TVS items).
-            - [ ] PCB sync waits for the AX88772E swap so the board is re-placed and re-routed
-                once: the TVS footprints change (SOT-363 -> SC-70-3 / SOT-23) and seven
-                expansion parts leave the board.
+            - [x] Schematic regenerated 2026-10-18: ERC 0, 111 parts after the GH and TVS items,
+                134 after the AX88772E swap.
+            - [ ] PCB sync, re-place, re-route (DRC 0 + parity 0). The board gains 23 parts for
+                the AX88772E (own crystal, buck inductor, two beads, per-pin decoupling) on a
+                cape whose largest free square was ~6 mm. TVS footprints change (SOT-363 ->
+                SC-70-3 / SOT-23); seven expansion parts leave. `refloorplan_pilot.py`
+                PARENT anchors updated for the new `*-USB1` parts. Best done after the
+                `L-USB1` MPN fixes its land.
         - [x] Pin and net name alignment, Pilot + TACCO (owner 2026-10-17): PB2 header pins
             P1.01..P2.36 (BeagleBoard SRM), Ethernet ring parts/nets to TI interface names
             (`PHY-RMII2`, `NIC-USB1`, `T-RMII2`, `T-USB1`, `RMII2_PHY_*`, `ETH_RMII2_*`,

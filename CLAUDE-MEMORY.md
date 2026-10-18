@@ -100,7 +100,7 @@ Mirrored: 85 memory files plus the index.
 - [Sourcing + NDA rules (2026-10-17)](feedback_sourcing_rules.md) — no PRC/RU/IR/DPRK-domiciled or -controlled silicon makers; no NDA datasheets; check before proposing parts; Nexperia fails
 - [AM625 header capabilities (2026-10-17)](project_am625_header_capabilities.md) — only CPSW port 2 on header; extra CAN-FD + AIN pin move REJECTED; TI/BeagleBoard names (PHY-RMII2, NIC-USB1, P1.01) on Pilot+TACCO
 - [Module spec ≠ requirement](feedback_component_spec_not_requirement.md) — PB2-I −40..85 °C is a module rating, not an owner requirement; AX88772E 0–70 °C accepted (2026-10-17)
-- [Pilot TVS + single GH (2026-10-18)](project_pilot_tvs_gh_swap.md) — ESD2CAN24/CDSOT23-SM712/Bourns SMAJ33CA; PRTR5V0U2X was a 5 V rail clamp (wrong for CAN/485); fleet boards still carry it; PCB sync waits for AX88772E
+- [Pilot TVS + GH + AX88772E (2026-10-18)](project_pilot_tvs_gh_swap.md) — ESD2CAN24/SM712/Bourns SMAJ; AX88772E per ASIX demo (own ECS crystal, VBUS pull-up+P1-31); L-USB1 MPN open; PRTR5V0U2X still on fleet boards
 
 ---
 
@@ -3173,7 +3173,7 @@ GNSS still on the PCB). See [[project_pilot_isow_13_1_gnss_puck]], [[feedback_fr
 
 ---
 name: project-pilot-tvs-gh-swap
-description: 2026-10-18 Pilot field-port TVS swap (ESD2CAN24 / CDSOT23-SM712 / Bourns SMAJ33CA) + single 6-pin J-SPI; PRTR5V0U2X was also electrically wrong for CAN/RS-485
+description: 2026-10-18 Pilot TVS swap + single J-SPI + CH397A→AX88772E (own crystal, VBUS pull-up+GPIO); L-USB1 MPN open; PRTR5V0U2X was electrically wrong for CAN/RS-485
 metadata:
   node_type: memory
   type: project
@@ -3199,6 +3199,15 @@ a 5 V rail clamp, which pins CAN/RS-485 lines to 0..5 V. The repo's old
 - Bourns docs download fine at bourns.com/docs/Product-Datasheets/; littelfuse.com returns 403.
 - The PCB re-sync deliberately waits for the AX88772E swap so the board is re-placed and
   re-routed only once.
+
+**AX88772E swap (2026-10-18, same branch):**
+- CH397A → AX88772EQF, built to the ASIX demo board V1.01 + BOM (REF-SENSOR-056..060);
+  134 parts, ERC 0.
+- The chip has no external-clock input, so it needs its own crystal (ECS-200-20-33-AGM-TR).
+- Beads reuse BLM15EX331.
+- VBUS = 4.7 k pull-up + P1-31 GPIO (owner).
+- Open: L-USB1 MPN (Darfon/TDK/Würth/Coilcraft sites all block curl; owner must download).
+- `refloorplan_pilot.py` PARENT prefixes must never match C-USB1-BS / R-USB1-BS*.
 
 ---
 
