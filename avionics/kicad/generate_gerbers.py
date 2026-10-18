@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 generate_gerbers.py
-Regenerate production Gerber and drill files for Cape-A-1, Cape-B-1, and
+Regenerate production Gerber and drill files for Pilotape-B-1, and
 XCVR-49MHZ-1 from their .kicad_pcb source files using the KiCad pcbnew API.
 
 Run headlessly (no display required):
@@ -10,7 +10,7 @@ Run headlessly (no display required):
 Outputs to serenity/kicad/gerbers/<BOARD>/
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 Date:    2026-05-31
 """
 
@@ -26,14 +26,14 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 BOARDS = [
     {
-        "pcb": os.path.join(SCRIPT_DIR, "CAPE-A-1.kicad_pcb"),
-        "name": "CAPE-A-1",
-        "out": os.path.join(SCRIPT_DIR, "gerbers", "CAPE-A-1"),
+        "pcb": os.path.join(SCRIPT_DIR, "Pilot.kicad_pcb"),
+        "name": "Pilot",
+        "out": os.path.join(SCRIPT_DIR, "gerbers", "Pilot"),
     },
     {
-        "pcb": os.path.join(SCRIPT_DIR, "CAPE-B-1.kicad_pcb"),
-        "name": "CAPE-B-1",
-        "out": os.path.join(SCRIPT_DIR, "gerbers", "CAPE-B-1"),
+        "pcb": os.path.join(SCRIPT_DIR, "TACCO.kicad_pcb"),
+        "name": "TACCO",
+        "out": os.path.join(SCRIPT_DIR, "gerbers", "TACCO"),
     },
     {
         "pcb": os.path.join(SCRIPT_DIR, "XCVR-49MHZ-1.kicad_pcb"),

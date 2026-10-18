@@ -49,7 +49,7 @@
 //   Carrier board pocket (14x14x3 mm) is on the interior face.
 //
 // Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-// License: CC BY 4.0 -- creativecommons.org/licenses/by/4.0
+// License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 //
 // Scoop locations: 90 deg spacing (dorsal, port, ventral, starboard).
 // Neck station: approx X = -129 mm in 24"-scaled STL space (sta 413 mm from nose).

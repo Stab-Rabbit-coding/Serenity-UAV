@@ -12,7 +12,7 @@ PCB constraints: XCVR-49MHZ-2.md §PCB Layout Constraints
 50 Ohm microstrip: W=2.75mm on F.Cu (verified Z0=52.26 Ohm, FR4 1.6mm)
 
 Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import os
@@ -798,7 +798,7 @@ def main():
 
     # -----------------------------------------------------------------------
     # BACK-SILK ATTRIBUTION BLOCK  (B.SilkS, mirrored)
-    # Matches CAPE-A/B format for consistency across the avionics suite.
+    # Matches Pilot/B format for consistency across the avionics suite.
     # -----------------------------------------------------------------------
     attr = (
         "49 MHz AX.25 KISS Transceiver\n"

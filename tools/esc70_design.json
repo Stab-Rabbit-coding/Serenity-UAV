@@ -1,0 +1,71 @@
+{
+ "current_a": 70.0,
+ "fet_per_leg": 2,
+ "shunt_per_phase": 1,
+ "copper_oz": 2,
+ "pour_squares_rel": 1.0,
+ "term_area_scale": 1.14,
+ "w_power": 20.0,
+ "w_signal": 14.0,
+ "power_faces": 2,
+ "logic_faces": 2,
+ "packing_eta": 0.75,
+ "isolation": "axial_two",
+ "pcb_t": 1.6,
+ "h_outer": 2.65,
+ "h_inner": 1.1,
+ "mount_gap": 0.3,
+ "flow_lane": 1.0,
+ "n_bleed": 4,
+ "d_bleed": 5.5,
+ "cover_t": 1.5,
+ "logic_area_delta": -138.6,
+ "_swaps": "U1 PM->RHB -138.6; INA240 D->PW -31.2",
+ "power_area_delta": -31.2,
+ "model": 2,
+ "fmin": 0.6,
+ "bend_k": 3.0,
+ "phase_od": 2.9,
+ "pack_od": 4.0,
+ "bullet_len": 15.0,
+ "loop_misc": 0.0,
+ "lane_in_layout": false,
+ "lane_strip_w": 4.0,
+ "interconnect_loop": 6.0,
+ "pack_bullet_len": 0.0,
+ "bays_per_esc": 2,
+ "h_outer_power": 2.0,
+ "sig_od": 2.0,
+ "_notes": {
+  "owner_2026-10-03": "two bays/ESC, smaller shield, in-layout lane, lengthen bay all approved; packing 0.75 both faces incl. pours + thermal vias; account for harness loops; verify bay limits before extending",
+  "h_outer_power": "power bay holds no isolators: tallest = WE-SHC 3670209/3671209 shield, 1.7 ref assembled (OSE docs/datasheets); FET 1.0+/-0.1 [OSE 49]; WSLP2512 0.635+/-0.254; INA240 PW 1.2 max; 1210 bulk caps must be sourced <= 2.0 mm (OPEN)",
+  "bend_k": "NASA-STD-8739.4A Chg 3 Table 7-1 minimum 3x OD (AWG 10 and smaller); optimum 10x",
+  "phase_od/pack_od/sig_od/bullet_len": "VERIFY - not from a datasheet",
+  "rejected": "3670110 shield (2.8 ref height breaks the 2.0 power-bay cap); in-layout 4 mm lane (Tch 379 C - strip-wall convection only)",
+  "2026-10-05_70A": "Owner: 2135 gf per fan. REF-EDF-003 2400 KV: 57.0 A at 22.2 V; 70 A rating + 70 A firmware limit (WBS NAC-64-ESC-80A.m). One 0.5 mOhm shunt/phase (2.45 W < 3 W).",
+  "keepouts": "Unscaled stations (harness multiplies z by nacelle_scale). Servo: cover Z 135.3 at x1.06 minus 10 mm owner buffer to past the ball (~203). Inboard/nav measured.",
+  "nacelle_scale": "Uniform x1.06 from airframe/openscad/nacelles/nacelle_64_scale.scad"
+ },
+ "keepouts": [
+  [
+   244.0,
+   298.0,
+   118.2075471698113,
+   202.83018867924528
+  ],
+  [
+   146.0,
+   214.0,
+   40.0,
+   136.0
+  ],
+  [
+   350.0,
+   370.0,
+   70.0,
+   110.0
+  ]
+ ],
+ "measured_exclusions": true,
+ "nacelle_scale": 1.06
+}

@@ -7,7 +7,7 @@
  * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
- * Hardware: `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`.
+ * Hardware: `avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md`.
  * U1 MSPM0G3507, U2 SLB9670 TPM, U3 ISOW1044 (CAN-FD), U4 ISOW1412 (RS-485),
  * J_ENC (AK7455 SPI pigtail), J_FLEX (UART/TTL/PWM/BDSHOT).
  *

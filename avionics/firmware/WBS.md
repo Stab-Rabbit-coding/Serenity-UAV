@@ -1,8 +1,8 @@
-# Serenity UAV — Avionics Node Firmware (Wash / Zoe, Both Nodes) Work Breakdown Structure (Detail)
+# Serenity UAV — Avionics Node Firmware (Pilot / XO, Both Nodes) Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Current design revision:** Rev S (2026-07-04)
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items
@@ -11,11 +11,11 @@
 > the root index as a commit prerequisite (root `AGENTS.md` "Revisions and Version
 > Control").
 
-*"That's a real shame, doctor, seeing how well engineered it is. — Wash"*
+*"That's a real shame, doctor, seeing how well engineered it is. — Pilot"*
 
 ---
 
-## §4.1 — §4.4 — Firmware: FC Node (Wash), CN Node (Zoe), Shared
+## §4.1 — §4.4 — Firmware: FC Node (Pilot), CN Node (XO), Shared
 *(root `TODO.md` §4.1-§4.4)*
 
 
@@ -25,13 +25,13 @@
 
 - [x] Si5351A I²C driver — `serenity/firmware/cn/src/si5351.c/.h` *(done 2026-05-25)*
 
-- [x] AM6254 device tree overlays — Cape-A and Cape-B DTSs *(done 2026-05-25)*
+- [x] AM6254 device tree overlays — Pilot and TACCO DTSs *(done 2026-05-25)*
 
 - [x] serenity-cn Phase 6 daemon (XCVR KISS driver + argparse + SIGTERM) *(done 2026-05-25)*
 
 - [x] serenity-fc Phase 6 stub (signal handling, idle loop placeholder) *(done 2026-05-25)*
 
-### 4.2 — FC Node (Wash) — Phase 7 Firmware
+### 4.2 — FC Node (Pilot) — Phase 7 Firmware
 
 - [ ] **EDF ESC PID governor** — BDSHOT600 telemetry input on PRU-ICSS, EHRPWM output to ESCs, CAN FD cross-node synchronisation. Targets: settle <200ms, overshoot <5%; equalization |RPM_FWD − RPM_AFT| <100 RPM; fault latch on overtemp/overcurrent (no auto-recovery, GCS ack required).
     - [ ] PRU-ICSS BDSHOT600 telemetry decoder (RPM, voltage, current, temp frames).
@@ -66,14 +66,18 @@
     - [ ] Multi-node cross-check consumer (flag/exclude outliers >2m, feeds §4.4 "GPS cross-check").
     - [ ] Bench/field test: static fix HDOP and 4-node position agreement.
 
-- [ ] **MIL-STD-1553B RT implementation** — PRU-ICSS Manchester II encoder/decoder; RT address assignment per node role; BC arbitration on FC1 and FC2.
-    - [ ] PRU-ICSS Manchester II encode/decode driver.
+- [ ] **MIL-STD-1553C BC/RT implementation (HI-6138)** — Holt HI-6138 SPI driver; RT address assignment per node role; BC arbitration on FC1 and FC2. *(Retargeted 2026-09-28: the fleet 1553C swap, `avionics/WBS.md` §1.2a.3, replaced the PRU-ICSS Manchester codec with the HI-6138 protocol engine on SPI0; see the cape DTS `mil1553@3`.)*
+    - [x] ~~PRU-ICSS Manchester II encode/decode driver.~~ Superseded 2026-09-28 by the HI-6138, which encodes and decodes in hardware.
+    - [ ] HI-6138 SPI driver: reset (MR#), wait for READY, register and RAM configuration, pulse-mode IRQ handler, TXINHA release after configuration (DS6138 Rev S).
+    - [ ] Schedule SPI0 so IMU reads keep priority over HI-6138 accesses (shared bus).
+    - [ ] RT §4.4.3.2 "superseding valid commands" conformance test [REF-MIL-001].
+    - [ ] Response-time check, 4.0–12.0 µs [REF-MIL-001 §4.3.3.8], measured at the stub on the bench.
     - [ ] RT address assignment table per node role (FC1–FC4).
     - [ ] BC arbitration logic for FC1 (primary) / FC2 (standby).
     - [ ] Bench test against the 1553-XFM transformer coupling hardware (§1.2 "Wire the MIL-1553 connector + transformer").
 
-- [ ] **TPM-bound attestation** — SLB9670 TPM 2.0 HMAC on all outbound flight-critical CAN FD messages; pcrs extend on each boot; boot measurement chain.
-    - [ ] SLB9670 TPM 2.0 driver (HMAC key derivation, PCR extend calls).
+- [ ] **TPM-bound attestation** — SLB9672 TPM 2.0 HMAC on all outbound flight-critical CAN FD messages; pcrs extend on each boot; boot measurement chain.
+    - [ ] SLB9672 TPM 2.0 driver (HMAC key derivation, PCR extend calls).
     - [ ] Boot measurement chain (PCR extend at each boot stage).
     - [ ] Outbound CAN FD HMAC signing hook for flight-critical message classes.
     - [ ] Bench test: tamper/replay rejection unit test against signed vs. unsigned frames.
@@ -82,21 +86,21 @@
 
 - [x] **governor_config.h** — template with calibrated k values per EDF; compile-time constants. *(done 2026-06-04)*
 
-### 4.3 — CN Node (Zoë) — Phase 7 Firmware
+### 4.3 — CN Node (XO) — Phase 7 Firmware
 
 - [ ] **CAN FD heartbeat and telemetry forwarding** — broadcast 0x001–0x008 node health frames; relay MAVLink telemetry from elected FC master to SiK GCS link.
     - [ ] 0x001–0x008 node health frame broadcaster (per-node heartbeat content/period).
     - [ ] MAVLink telemetry relay path: FC master CAN FD → CN master → SiK GCS link.
     - [ ] Bench test: heartbeat timeout detection feeding §4.4 "Node role election protocol."
 
-- [ ] **MIL-STD-1553B BC/RT tasks** — BC on CN1 (standby), RT on CN2–CN4; mirror FC bus controller arbitration.
+- [ ] **MIL-STD-1553C BC/RT tasks** — BC on CN1 (standby), RT on CN2–CN4; mirror FC bus controller arbitration. *(HI-6138 on the TACCO SPI bus since 2026-09-28.)*
     - [ ] BC standby logic on CN1 (mirrors FC1/FC2 arbitration, §4.2).
-    - [ ] RT implementation on CN2–CN4 (shares PRU-ICSS Manchester II driver with §4.2).
+    - [ ] RT implementation on CN2–CN4 (shares the HI-6138 SPI driver with §4.2).
     - [ ] Bench test against 1553-XFM transformer coupling hardware (§1.2).
 
 - [ ] **RS-485 inter-board messaging** — structured message format (header/payload/CRC); inter-node command and status relay.
     - [ ] Define structured frame format (header/payload/CRC) shared across all 8 nodes.
-    - [ ] Driver for the RS485_A/B footprint pinout already fixed on Wash/Zoë (§1.2).
+    - [ ] Driver for the RS485_A/B footprint pinout already fixed on Pilot/XO (§1.2).
     - [ ] Bench test: CRC-reject malformed frame, command/status round-trip between two nodes.
 
 - [ ] **Ethernet RSTP ring management** — CPSW3G bridge configuration; RSTP fast-failover (<1s) verification; ring segment health monitoring.
@@ -111,8 +115,8 @@
     - [ ] W25Q128JV NOR flash circular buffer driver for overflow when microSD is full/unavailable.
     - [ ] Bench test: attempt out-of-order/overwrite write, verify CPLD blocks it.
 
-- [ ] **TPM-bound HMAC on all outbound AX.25 payloads** — each 49 MHz (Part 15 §15.235) packet includes HMAC-SHA256 computed from SLB9670 stored key; receiver nodes verify before acting.
-    - [ ] SLB9670 stored-key HMAC-SHA256 signer for outbound AX.25/49 MHz frames (Emma boards, River/Simon).
+- [ ] **TPM-bound HMAC on all outbound AX.25 payloads** — each 49 MHz (Part 15 §15.235) packet includes HMAC-SHA256 computed from SLB9672 stored key; receiver nodes verify before acting.
+    - [ ] SLB9672 stored-key HMAC-SHA256 signer for outbound AX.25/49 MHz frames (Commo boards, River/Simon).
     - [ ] Receiver-side verification gate (discard unsigned/invalid before acting, mirrors §4.4 "Security message signing").
     - [ ] Bench test: signed/unsigned/corrupted-signature frame acceptance matrix.
 
@@ -125,8 +129,8 @@
 
 - [ ] **MAVLink routing configuration** — mavlink-router config: elected CN master routes FC master telemetry to all 4 radio links (SiK, LoRa, Wi-Fi, 49 MHz (Part 15 §15.235) backup).
     - [ ] mavlink-router config file per CN role (master vs. standby).
-    - [ ] Per-link output adapter: SiK, LoRa (Emma), Wi-Fi, 49 MHz (Part 15 §15.235) (Emma, backup).
-    - [ ] Bench test: verify telemetry reaches Malcolm GCS over each of the 4 links independently.
+    - [ ] Per-link output adapter: SiK, LoRa (Commo), Wi-Fi, 49 MHz (Part 15 §15.235) (Commo, backup).
+    - [ ] Bench test: verify telemetry reaches Skipper GCS over each of the 4 links independently.
 
 ### 4.4 — Both Nodes
 
@@ -153,7 +157,7 @@
     - [ ] Bench test: inject a synthetic outlier fix, verify exclusion from blend.
 
 - [ ] **Security message signing** — every inter-node CAN FD message signed; unauthenticated messages discarded; signing key material bound to node TPM endorsement key.
-    - [ ] CAN FD message signing hook bound to each node's TPM endorsement key (SLB9670, §4.2).
+    - [ ] CAN FD message signing hook bound to each node's TPM endorsement key (SLB9672, §4.2).
     - [ ] Receiver-side verification gate; discard unauthenticated frames before acting.
     - [ ] Bench test: inject unsigned/forged frame on the bus, verify it is discarded and logged.
 

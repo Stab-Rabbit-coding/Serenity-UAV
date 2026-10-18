@@ -1,0 +1,127 @@
+M48
+; DRILL file {KiCad 9.0.2+dfsg-1} date 2026-06-10T17:28:55-0400
+; FORMAT={-:-/ absolute / metric / decimal}
+; #@! TF.CreationDate,2026-06-10T17:28:55-04:00
+; #@! TF.GenerationSoftware,Kicad,Pcbnew,9.0.2+dfsg-1
+; #@! TF.FileFunction,MixedPlating,1,3
+FMAT,2
+METRIC
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T1C1.000
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T2C1.200
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T3C1.780
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T4C1.800
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T5C2.000
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T6C2.500
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T7C3.200
+; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill
+T8C1.200
+; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill
+T9C1.300
+; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill
+T10C1.500
+; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill
+T11C3.200
+%
+G90
+G05
+T1
+X22.0Y-24.0
+X27.0Y-24.0
+X29.0Y-24.0
+X34.0Y-24.0
+X60.0Y-19.0
+X60.0Y-39.0
+X65.0Y-19.0
+X65.0Y-39.0
+X68.0Y-12.0
+X69.0Y-8.0
+X69.0Y-28.0
+X69.0Y-48.0
+X70.0Y-56.0
+X73.0Y-12.0
+X74.0Y-8.0
+X74.0Y-28.0
+X74.0Y-48.0
+X75.0Y-56.0
+X79.0Y-16.0
+X84.0Y-16.0
+T2
+X28.46Y-9.46
+X28.46Y-14.54
+X33.54Y-9.46
+X33.54Y-14.54
+X41.46Y-9.46
+X41.46Y-14.54
+X46.54Y-9.46
+X46.54Y-14.54
+X81.0Y-54.0
+X81.0Y-56.5
+X81.0Y-59.0
+X81.0Y-61.5
+X83.5Y-35.0
+X83.5Y-37.5
+X83.5Y-40.0
+X83.5Y-42.5
+T3
+X3.0Y-40.5
+X3.0Y-43.9
+X12.92Y-40.5
+X12.92Y-43.9
+X17.0Y-40.5
+X17.0Y-43.9
+X26.92Y-40.5
+X26.92Y-43.9
+X31.0Y-40.5
+X31.0Y-43.9
+X40.92Y-40.5
+X40.92Y-43.9
+X45.0Y-40.5
+X45.0Y-43.9
+X54.92Y-40.5
+X54.92Y-43.9
+T4
+X56.0Y-9.0
+X65.9Y-9.0
+T5
+X8.0Y-61.0
+X13.0Y-61.0
+X22.0Y-61.0
+X27.0Y-61.0
+X36.0Y-61.0
+X41.0Y-61.0
+X50.0Y-61.0
+X55.0Y-61.0
+T6
+X13.0Y-19.0
+X20.2Y-19.0
+T7
+X5.0Y-20.0
+X5.0Y-32.0
+T8
+X5.0Y-56.0
+X16.0Y-56.0
+X19.0Y-56.0
+X30.0Y-56.0
+X33.0Y-56.0
+X44.0Y-56.0
+X47.0Y-56.0
+X58.0Y-56.0
+T9
+X78.9Y-57.75
+X81.4Y-38.75
+T10
+X2.65Y-13.0
+X16.15Y-13.0
+T11
+X4.0Y-4.0
+X4.0Y-61.0
+X86.0Y-4.0
+X86.0Y-61.0
+M30

@@ -1,7 +1,7 @@
 # Rotating Tilt-Spar Analysis — 8 mm Through-Spar Option
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (analysis drafted by Claude Opus 4.8)
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Date:** 2026-07-18
 **Status:** DECISION SUPPORT — pre-implementation. Presents loading + airflow +
 nav-wire feasibility for the rotating 8 mm tilt-spar mechanism before the wing
@@ -15,9 +15,40 @@ SCAD is reworked.
 
 ## 1. Mechanism (as specified by user, 2026-07-18)
 
+> **SUPERSEDED 2026-08-25 (SPAR-01, `airframe/wings-nacelles/WBS.md` §1.1.2;
+> `docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md`).** The
+> single-spar/single-servo/cargo-bay-root-bearing model below is retired.
+> Each side now has its **own independent spar and servo** — the "servo
+> stays inside the fuselage" part of the mechanism is unchanged, but it is
+> now **two servos, one per port/stbd bulkhead**, not one servo in the
+> cargo bay driving a spar that crosses the whole ship. The **root bearing
+> moves from "inside the cargo bay" to in the fuselage SIDE WALL** (F688ZZ
+> seat, terminating at X −100 port / −240 stbd) — the spar no longer
+> crosses the bay at all, which is what closes CARGO-01. §3.2's torsion
+> path is correspondingly short (bulkhead servo → wingtip), not
+> cargo-bay-servo → wingtip. The nacelle-CG pivot, wingtip bearing, nozzle
+> drive, and Hall tilt feedback below are **unchanged** — only the spar's
+> inboard end and its drive servo's per-side count moved.
+>
+> - The **wing is fixed** to the fuselage and does **not** tilt.
+> - **Two independent rotating spars** (one per side) run: fuselage wall
+>   bearing → wing → **nacelle CG pivot** (duct Z = 111.5 mm; Rev S2 CG
+>   re-derive 2026-07-19, was 104.5 mm), each **fixed (keyed) to its own
+>   nacelle**.
+> - **One servo per side, mounted on the port/stbd bulkhead**, rotates its
+>   own spar → tilts its own nacelle. The spar *is* the drive shaft (no
+>   external pushrod/lever).
+> - **Two bearings per side** carry wing/spar loads and allow rotation:
+>     - **Root bearing** — **in the fuselage side wall** (F688ZZ, spar ↔
+>       fuselage), not free-floating inside the cargo bay.
+>     - **Wingtip bearing** — at the wingtip/nacelle joint (spar ↔ fixed wing).
+
+The mechanism as originally specified (2026-07-18), retained for the
+record:
+
 - The **wing is fixed** to the fuselage and does **not** tilt.
 - A **single rotating spar** runs: cargo bay → wing → **nacelle CG pivot**
-  (duct Z = 111.5 mm; Rev T CG re-derive 2026-07-19, was 104.5 mm), and is
+  (duct Z = 111.5 mm; Rev S2 CG re-derive 2026-07-19, was 104.5 mm), and is
   **fixed (keyed) to the nacelle**.
 - **Servo in the cargo bay** rotates the spar → tilts the nacelle. The spar *is*
   the drive shaft (no external pushrod/lever).
@@ -28,7 +59,7 @@ SCAD is reworked.
   **sync gear** (Pinion A orbits a gear fixed to the non-rotating wingtip — §6,
   kept at **R22**) and the now-adopted **Option B pushrod** (a crank clamped to
   the rotating spar strokes the nozzle unison ring — `nacelle_nozzle_pushrod.scad`,
-  BOM Rev T). **Either way the nozzle datum is taken at the nacelle/tip** — the
+  BOM Rev S2). **Either way the nozzle datum is taken at the nacelle/tip** — the
   gear meshes the fixed wingtip; the crank shares the nacelle-keyed spar end — so
   nozzle position tracks *true nacelle tilt* and is **not** corrupted by spar
   torsional wind-up, which lives upstream between the cargo-bay servo and the tip.
@@ -47,8 +78,8 @@ SCAD is reworked.
 | Quantity | Value | Source |
 |---|---|---|
 | Thrust per nacelle (hover) | 2,232 gf = **21.9 N (4.92 lbf)** | `serenity-rev-r.jsx` L346 |
-| Nacelle mass (rotating assy) | 393.4 g = **0.867 lbm** (Rev T) | `nacelle_pod_50mm_tandem.scad` header mass breakdown |
-| Nacelle CG (duct axis) | Z = 111.5 mm (4.39 in) (Rev T; was 104.5) | ibid — pivot at CG |
+| Nacelle mass (rotating assy) | 393.4 g = **0.867 lbm** (Rev S2) | `nacelle_pod_50mm_tandem.scad` header mass breakdown |
+| Nacelle CG (duct axis) | Z = 111.5 mm (4.39 in) (Rev S2; was 104.5) | ibid — pivot at CG |
 | Wing lift per side (40 kt) | ≈ **3.8 N (0.85 lbf)** | `wings_s1223_revo.scad` L35 (7.6 N ÷ 2) |
 | Servo torque (tilt drive) | ≥ 25 kg·cm = **2.45 N·m (21.7 lbf·in)** | `serenity-rev-r.jsx` L383 |
 | EDF bore ID | 50 mm (1.97 in), r = 25 mm | `nacelle_pod…scad` L221 |
@@ -58,6 +89,165 @@ SCAD is reworked.
 Nacelle spanwise half-width ≈ OD_X/2 = 30.25 mm; the duct axis (thrust resultant)
 sits ≈ 30 mm outboard of the wingtip bearing. Add ~5 mm mount gap →
 **cantilever arm a ≈ 35 mm (1.38 in)** from wingtip bearing to nacelle load line.
+(Superseded for the exact figure by the measured `tools/wing_spar_carrythrough.py`
+overhang `a` = 38.3 mm used in §2.1 below; kept here as the original hand estimate.)
+
+---
+
+## 2.1 Torque Requirement Re-Derivation (2026-08-25, SPAR-02, KTD5)
+
+**Why re-derive.** The ≥ 25 kgf·cm figure in §2 above is cited only to
+`serenity-rev-r.jsx` L383 (a spec-pick table: *"Servo, ≥25 kg·cm @ 6V digital
+metal-gear, 2×, Fuselage-mounted, one per nacelle"*, `archives/serenity-rev-r.jsx`
+line 383) — it carries no load derivation. Per the owner's direction
+(`airframe/wings-nacelles/WBS.md` §1.1.2 SPAR-02), the tilt pivot is sited at the
+nacelle CG specifically to null the gravity moment, so the true torque
+requirement is aero + inertia only. This section re-derives it and compares
+against DS3225's own cleared figure (24.5 kgf·cm at 6.8 V, `REFERENCES.md`
+"Open Standards Verification Items" DS3225 row).
+
+**Load-factor convention (reused, not invented):** `docs/structural_analysis.md`
+§3 — 4 g limit factor (3 g gust + 1 g maneuver) × 1.5 ultimate factor, the same
+convention `tools/wing_spar_carrythrough.py` already applies to this exact
+nacelle/pivot geometry.
+
+### 2.1.1 Gravity term — verify the nulling claim algebraically, not by assertion
+
+The tilt pivot is the spar's own axis: a line through the nacelle at duct
+station `PIVOT_Z = 111.5 mm`, transverse offset `Y ≈ 0`
+(`nacelle_pod_50mm_tandem.scad` header + line 243), running spanwise (the
+repo's hull-frame X). Gravity produces zero moment about a line L if and only
+if the body's CG lies *on* L (the position vector from any point on L to the
+CG is then the zero vector, so `τ = r × F = 0` for any F, at any orientation of
+the body about L — this holds for **all** tilt angles, not just the neutral
+position, since rotating a zero vector about any axis is still zero).
+
+The nacelle assembly's own mass table (`nacelle_pod_50mm_tandem.scad` header,
+Rev S2, 11 components, 393.4 g) gives axial CG:
+
+```text
+CG_Z = Σ(m_i · Z_i) / Σm_i = 43,879 g·mm / 393.4 g = 111.5 mm = PIVOT_Z
+```
+
+— exact by construction: `PIVOT_Z` was *set* to this computed CG_Z (line 383's
+comment: "pivot axial centre = full-assembly CG station"), so the axial
+(duct-length) coordinate is nulled by definition, not approximation, provided
+the underlying 11-item mass/CG table is accurate.
+
+**Residual term — the transverse (Y) coordinate is not tabulated.** The mass
+table only reports each component's axial (Z) position; it does not report a
+transverse (Y) CG offset. Most components (both EDFs, ESC1/2, shell+stator,
+nozzle throat/housing, unison ring, 8× flaps) are nominally axisymmetric about
+the duct centerline, so their individual Y-contribution is ≈0 by geometry. Two
+components are **not** axisymmetric — they exist at a single clock position to
+drive the nozzle unison ring: the **spar crank (1.4 g)** and **pushrod
+(3.6 g)**, both cited in the same mass table. Their exact transverse offset is
+not measured in the repo. Bounding it conservatively at the full nacelle
+half-width (`NACELLE_OD_X/2 = 37.7 mm`, `nacelle_pod_50mm_tandem.scad` line
+~229) as a worst case:
+
+```text
+M_residual ≤ (1.4 + 3.6) g × 9.80665 m/s² × 0.0377 m ≈ 0.00185 N·m (0.016 lbf·in)
+```
+
+This is ≈ 0.08 % of the DS3225's 6.8 V stall torque (2.402 N·m) — negligible,
+but it is a **bound on an unmeasured offset, not a verified-zero figure**. The
+"pivot at CG nulls gravity" claim holds to within this bound; the exact
+transverse CG position is an open item (flag, not a fabricated coincidence).
+
+### 2.1.2 Inertia term — mass moment of inertia about the pivot, from the same table
+
+Treating each of the 11 mass-table items as a point mass at its axial offset
+`r_i = |Z_i − PIVOT_Z|` from the pivot line (a lumped/point-mass
+approximation — it omits each part's own moment of inertia about its own
+centroid, which understates I for extended parts like the rotating spar span
+and the 8× flap ring; conservative in the sense that it is the minimum bound
+consistent with the tabulated masses and positions, not a full rigid-body
+tensor):
+
+```text
+I = Σ m_i · r_i²  = 718,861 g·mm² = 7.189 × 10⁻⁴ kg·m²
+```
+
+(component-by-component: EDF1 70 g @ r=52.1mm, EDF2 70 g @ r=39.1mm, ESC1
+25 g @ r=52.1mm, ESC2 25 g @ r=39.1mm, shell/stator/cowl 130 g @ r=18.7mm,
+nozzle throat/housing 21.4 g @ r=63.3mm, unison ring 6.7 g @ r=58.4mm, 8×
+flaps 21.1 g @ r=86.7mm, spar crank 1.4 g @ r=0, pushrod 3.6 g @ r=29.3mm,
+rotating spar span 19.2 g @ r=0 — spar crank and rotating spar span sit at the
+pivot itself, r=0, contributing nothing to I about this axis).
+
+**Angular acceleration — no cited design profile exists.** The repo has two
+tilt-rate figures, neither a design acceleration spec: a bench **monitoring**
+rate (`docs/TILT_ENCODER_WIRING_EMI_SPEC.md` §7.3, "Nacelle sweep at 10°/s"
+during a tethered-hover CAN-message-rate test — an instrumentation check, not
+a commanded transition profile) and a **stale** Phase-3 build-guide test step
+(`docs/REVN_BUILD_GUIDE_24IN.md` "Test servo response time (<500 ms slew)"
+over the −5°→140° = 145° range, written against the pre-Rev-S2 DS3218MG/Z=83mm
+pivot). Using the 145°/500 ms figure with a triangular (accelerate-then-
+decelerate, no cruise) velocity-profile assumption — a standard kinematic
+model applied to the repo's own cited angle/time pair, not a fabricated
+physical constant — bounds the worst-case (highest-α) case:
+
+```text
+θ = 145° = 2.531 rad,  t = 0.5 s
+α = θ / (t/2)² = 40.49 rad/s²   (peak ω = 10.12 rad/s = 580°/s)
+T_inertia = I·α = 7.189×10⁻⁴ kg·m² × 40.49 rad/s² = 0.0291 N·m (0.257 lbf·in)
+```
+
+At the repo's own 4 g / 1.5× ultimate convention applied as a margin multiplier
+(×6): **T_inertia,ultimate ≈ 0.175 N·m (1.78 kgf·cm, 1.55 lbf·in)** — about
+7 % of DS3225's 24.5 kgf·cm 6.8 V stall figure, and the α input itself is
+already the *highest* cited tilt rate in the repo (the 10°/s bench-monitoring
+rate would give an α roughly two orders of magnitude smaller). **This θ/t
+figure is stale (pre-Rev-S2 geometry) and not a confirmed commanded design
+profile — flag for owner confirmation of the actual intended transition
+time**, but given the 14× margin already present, only a ~14× faster
+transition would put inertia alone at risk of the requirement.
+
+### 2.1.3 Aero term — cannot be grounded; explicitly out of scope, not fabricated
+
+No nacelle drag coefficient, frontal area, or dynamic-pressure figure for the
+tilting assembly exists anywhere in `docs/` or `airframe/` (searched for
+`drag`, `Cd`, `dynamic pressure`, `frontal area` near "nacelle" — no hits
+besides an unrelated wing-airfoil drag note). Per root `AGENTS.md` §4, this
+term is **not fabricated**. It is left as an explicit open item: aero moment
+about the tilt axis during a transition (cross-flow load on the duct's
+frontal/side area, not the axial thrust component — thrust itself acts along
+the duct centerline, which passes through the pivot point by the same
+CG-pivot geometry, so it contributes ~zero moment about the tilt axis at the
+static condition) requires real repo aero data (a wind-tunnel figure, a CFD
+result once `tools/wing_cfd_openfoam.py` is unblocked, or a bench thrust-stand
+measurement at an angled inflow) before it can be added to this derivation.
+**This bounds the analysis to inertia + the residual gravity term only, per
+the owner's Scope Boundaries direction** — it is not asserted that aero is
+negligible, only that no repo data exists to quantify it.
+
+### 2.1.4 Comparison against DS3225
+
+| Term | Value (ultimate, ×6 margin where applicable) | Basis |
+|---|---|---|
+| Gravity | ≤ 0.00185 N·m (0.019 kgf·cm) | §2.1.1, unmeasured-transverse-CG bound |
+| Inertia | ≈ 0.175 N·m (1.78 kgf·cm) | §2.1.2, triangular-profile bound on stale 145°/500ms figure |
+| Aero | **not grounded — open item** | §2.1.3 |
+| **Grounded total** | **≈ 0.177 N·m (1.80 kgf·cm)** | sum of the two grounded terms |
+| DS3225 stall (6.8 V, cited) | 24.5 kgf·cm (2.402 N·m) | REFERENCES.md DS3225 row |
+
+The grounded requirement (gravity + inertia) is **≈ 7.3 % of DS3225's cited
+24.5 kgf·cm** — a wide margin, not the 98 % the uncorrected ≥25 kgf·cm spec
+pick implied. **Conclusion: DS3225 stands.** The 2 % shortfall against the
+old ≥25 kgf·cm figure that motivated the servo-swap conversation
+(`airframe/wings-nacelles/WBS.md` §1.1.2) is not a real structural shortfall —
+it was measured against an undermined requirement. No servo change is needed
+on load grounds. The aero term remains an explicit, unquantified open item
+(§2.1.3); if a future aero figure is obtained and is large enough to erode the
+~14× margin above, this conclusion would need revisiting — but nothing in the
+repo today supports assuming that.
+
+**Author's note:** this re-derivation reuses `docs/structural_analysis.md` §3's
+load-factor convention and `tools/wing_spar_carrythrough.py`'s measured pivot/
+overhang geometry (run 2026-08-25: `L=86.7mm`, `a=38.3mm`, `d=126.3mm`) rather
+than re-deriving them; those tools remain the source of record for the
+underlying spar/overhang geometry.
 
 ---
 
@@ -83,6 +273,13 @@ keyway); the 5 mm bore carries the nav-light harness (§5).
   → **FOS ≈ 12.8** on yield at the 2× design load.
 
 ### 3.2 Torsion (servo drive)
+
+**Re-checked 2026-08-25 (SPAR-01):** the torsion figures below are unaffected
+by the root bearing's move from the cargo bay to the fuselage side wall — the
+section (8 mm OD × 1.5 mm wall) and the applied torque are unchanged, and the
+now-per-side bulkhead servo shortens the drive path (bulkhead → wingtip)
+versus the original cargo-bay-servo → wingtip run, which can only reduce
+wind-up, not increase it. This FOS stands.
 
 - τ = T/Zp = 2,450 N·mm / 85.2 mm³ = **28.8 MPa (4.2 ksi)**
 - Shear yield ≈ 0.577 × 460 = 265 MPa → **FOS ≈ 9.2**.
@@ -110,7 +307,7 @@ The bore (nav wires, §5) and the keyway wall (§3, §8) are **functional
 requirements**, so the *section* is held fixed and only the material is traded.
 With geometry fixed, bending σ = 35.9 MPa and torsion τ = 28.8 MPa are identical
 for every candidate (§3.1–3.2); only the allowables, moduli, and fatigue/joint
-behaviour move.
+behavior move.
 
 > Allowables below are **typical handbook values — require MMPDS-2023 / AMS /
 > mill-cert verification before release** (REFERENCES.md requires-verification
@@ -154,7 +351,7 @@ the discriminators.**
 - **CF (either form)** — fails the functional gate: cannot take a keyed torque
   joint (delaminates) and abrades the bearing journals. Out regardless of its
   mass advantage. Confirms §3.4.
-- **6061 / 7075 aluminium & 316 SS** — **no fatigue endurance limit** → a
+- **6061 / 7075 aluminum & 316 SS** — **no fatigue endurance limit** → a
   rotating, gust-cycled, keyed shaft in these is a finite-life, inspection-
   interval part. **7075-T6** is the honest lightweight fallback (−63 g/pair,
   static FOS 14/10) now that the Hall sensor removes the wind-up penalty; 6061
@@ -177,12 +374,111 @@ H1075** as the qualified plating-free alternative and **7075-T6** as the mass-
 critical (life-limited) fallback. All allowables pending MMPDS/AMS verification
 (§7, TODO §0.8).
 
+### 3.6 Re-derivation for a FIXED spar (Rev S1e, 2026-08-29)
+
+> **This section supersedes §3.1–§3.5 for the adopted architecture.** Plan
+> `docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md`
+> replaces the rotating Ø8 mm shaft with a **fixed, bonded 20 × 16.3 mm
+> roll-wrapped carbon-fibre tube** that is a structural member of the wing.
+> §3.1's bending case survives in form; §3.2 (torsion) and §3.5's keyability and
+> bearing-journal discriminators **do not apply at all** and are marked
+> superseded below.
+
+#### 3.6.1 What stops being a requirement
+
+Three of the four gates that selected 4130 were consequences of the spar
+*rotating* and *transmitting torque*, not of the loads it carries:
+
+| §3.5 discriminator | Status under a fixed spar |
+|---|---|
+| **Keyed torque joint** ("CF delaminates at a keyway") | **VOID** — there is no keyway. The spar transmits no torque; the nacelle pivots on its own trunnion ring and tilt torque travels a separate Ø4 mm shaft. |
+| **Bearing journal** ("CF abrades the F688ZZ race") | **VOID** — there is no journal. The spar is bonded in the wing and clamped in the fuselage; the bearings moved to the nacelle. |
+| **Drive wind-up θ** (§3.2, §3.5) | **VOID** — no torque path, so no wind-up. The Hall-sensor de-rating argument in §3.5 is moot rather than merely reinforced. |
+| **Fatigue endurance limit** | **Still relevant**, but the load is now gust-cycled bending on a non-rotating member, not fully-reversed rotating-bending. A fixed spar does not see stress reversal every revolution, which is the case an endurance limit exists to bound. |
+
+CF was rejected in §3.5 on the **functional** gate, explicitly not on strength.
+With that gate gone, its mass advantage becomes available — and the *larger*
+spar comes out *lighter* than the small steel one it replaces.
+
+#### 3.6.2 What sizes the section instead
+
+**Wire volume, not torque.** The bore must carry four 10 AWG ESC conductors on
+the tilt axis. Four Ø5.5 mm circles circumscribe **13.28 mm** (exact 4-circle
+packing ratio 1 + √2, [REF-MATH-001], computed by `tools/spar_bundle_fit.py`);
+with 1.5 mm radial clearance so the bundle can twist through the −5…+140° sweep,
+the minimum bore is **16.28 mm**. On a ~1.85 mm wall that is a **20 mm OD** tube.
+
+This is why §3.4's rejection of the "12 mm unified structural" candidate as
+*"overbuilt; heavier, bigger duct crossing"* does not carry forward: both of its
+objections were about a spar that crossed the duct and was sized past its loads.
+The Rev S1e spar **never enters the duct** (the trunnion ring at the nacelle
+inboard face removes the crossing entirely — see §4), and it is not overbuilt for
+its bending duty so much as *sized by a different requirement altogether*.
+
+#### 3.6.3 Section properties and margins
+
+20 mm OD × 16.3 mm ID:
+
+```text
+I = π(20⁴ − 16.3⁴)/64 = 4,389 mm⁴        (was 170 mm⁴)
+Z = I/c = 438.9 mm³                      (was 42.6 mm³ — up 10.3×)
+A = 105.5 mm²
+```
+
+| Case | M | σ | FOS |
+|---|---|---|---|
+| 1 g | 0.73 N·m | 1.7 MPa | 179 |
+| limit (4 g) | 2.94 N·m | 6.7 MPa | 45 |
+| ultimate, two-support bound | 4.41 N·m | 10.0 MPa | 30 |
+| **ultimate, cantilever bound** | **14.60 N·m** | **33.28 MPa** | **9.0** |
+
+**The cantilever bound is the quoted figure.** It takes the whole wing-root
+moment on the spar alone and credits the printed skin with nothing, because the
+skin's share is not characterised for a bonded FDM part. The two-support bound
+(load reacted between the wingtip and the fuselage socket) is the physically
+likelier case and is 3.3× kinder.
+
+> **The allowable is a stand-in, not a qualified figure.** 300 MPa is the same
+> conservative cross-ply placeholder `tools/wing_spar_carrythrough.py` already
+> uses for the CF thwart plate — this repo holds no ASTM D3039/D695 certificate
+> for any CF stock (plan 003 DEP-1; `REFERENCES.md` "requires verification").
+> §7's caveat on the 4130 figure applied to one number; this applies to the
+> whole row. **Obtain supplier certificates before fabrication.**
+
+#### 3.6.4 Mass
+
+| | Rev R2 (8 × 5 4130) | **Rev S1e (20 × 16.3 CF)** |
+|---|---|---|
+| Density | 7.85 g/cm³ | 1.60 g/cm³ |
+| Installed length, per side | ~200 mm | 173 mm (55 socket + 85.7 wing + 32 stub) |
+| **Mass per pair** | **96.2 g (0.212 lbm)** | **58.2 g (0.128 lbm)** |
+
+**−38.0 g (−0.084 lbm) per pair**, against a section modulus 10.3× larger. The
+re-lofted wing skin adds ~8.1 g (0.018 lbm) per side and the retired tie-rod
+couple removes ~5.1 g per side, so the airframe-structure change is a net
+saving; the new Ø4 mm steel drive shaft (~18.7 g per side) spends most of it
+back, leaving the whole migration close to mass-neutral before gears.
+
+#### 3.6.5 Procurement note
+
+Standard metric CF tube steps are **20 × 16** and **20 × 18**, not 20 × 16.3.
+`20 × 16` (2.0 mm wall) gives 1.36 mm radial clearance around the bundle against
+the 1.5 mm target — marginally under, and acceptable *provided the bundle can
+still twist*, which is the actual requirement the clearance serves. `20 × 18`
+(1.0 mm wall) clears easily but halves the wall. **Confirm against a real
+supplier** (plan 003 OQ6) before committing, and re-run
+`tools/spar_bundle_fit.py --tube ...` against the procured item — and against
+the **measured** wire OD, since the 5.5 mm figure is itself an assumption
+(plan 003 DEP-2 / OQ4).
+
+---
+
 ---
 
 ## 4. Airflow — Spar Crossing the Thrust Duct
 
 The spar crosses the 50 mm duct **spanwise (X), perpendicular to flow (Z)**, at
-**Z = 111.5 mm — the inter-EDF stator station** (stator spans 90–122.5 mm; Rev T
+**Z = 111.5 mm — the inter-EDF stator station** (stator spans 90–122.5 mm; Rev S2
 CG re-derive, was 104.5 mm — still well inside the stator span). This is the key
 finding: **the duct core is already obstructed there.**
 
@@ -232,7 +528,7 @@ existing shell, no OML change.
 housing is **unchanged**; the sector simply relocates from the retired pylon to
 the fixed wingtip (coaxial with the spar), and Pinion A meshes it as before.
 Reason: shrinking to R14 breaks the one-shaft nozzle drive (`PINION_A_Y = 30.5`
-does double duty as the sector-mesh AND internal-ring-mesh centre distance), so
+does double duty as the sector-mesh AND internal-ring-mesh center distance), so
 it would need a reintroduced idler for marginal gain. The shell-overlay study
 (`airframe/openscad/nacelles/gear_option_compare.scad`) confirmed R22's Pinion A
 stays within the existing nacelle housing blister, while R14 only fits by adding
@@ -321,7 +617,7 @@ Dependencies opened by adopting 8 mm:
 
 ### 8.1 Rev R2d implementation notes (2026-07-19)
 
-The wingtip interface has since been modelled in `wings_s1223_revo.scad`, and three
+The wingtip interface has since been modeled in `wings_s1223_revo.scad`, and three
 geometry issues were found and fixed **using the parametric numbers** (no STL guesswork):
 
 - **Wingtip bearing downsized F688ZZ → MF128ZZ (Ø16 → Ø12).** The Ø16 seat radius
@@ -329,13 +625,15 @@ geometry issues were found and fixed **using the parametric numbers** (no STL gu
   even at `THICKNESS_SCALE_TIP` = 1.25) and cut a ~0.21 mm crescent through **both**
   airfoil skins. MF128ZZ seats with **+1.79 mm** margin. Wingtip radial reaction
   ≈ 19 N (dyn) ≪ MF128 capacity (~700 N) — load-safe. Root bearing stays F688ZZ.
-- **Tilt-feedback Hall sensor = Magntek MT6701** (I²C, off-axis) on a compact
+- **Tilt-feedback Hall sensor = AK7455** (SPI, magnetoresistive, off-axis/ferrous-through-shaft)
+  — supersedes the Magntek MT6701 (I²C) originally considered here; MT6701 was rejected this
+  same day in favor of AK7455 (see `avionics/kicad/ENC-NACELLE-1.md`, REF-SENSOR-008, and
+  `docs/TILT_ENCODER_WIRING_EMI_SPEC.md` for the current wiring/EMI spec), on a compact
   **7×7 mm** in-house PCB, seated off-axis at **R = 11 mm**, reading a **Ø22**
   diametric ring on the nacelle hub. The tip is congested — the pocket threads the
   ~8.4 mm chordwise gap between the Ø13.5 bearing flange (X≈28.75) and the forward
   EDF double-D bore (X≈37.1): echo-verified clearances 0.75 mm (flange) / 0.64 mm
   (EDF) / **4.01 mm** (top skin); pad OD 26→**29.5** (kept clear of the EDF bore).
-  Off-axis geometry pending MT6701-datasheet verification.
 - **EDF double-D drilled through the root tenon — STRAIGHT.** The `fuselage_root_tab`
   blocked the Ø7 double-D 1 mm in. The pass-through is a **separate straight axial
   bore** (constant X,Y) continuing each conduit through the tenon's inboard face —
@@ -360,7 +658,7 @@ It clears all three gates:
 (zinc/cadmium plate, journals ground) — the bare tube rusts at the bearing
 journals; add it to the BOM finish spec. **17-4 PH H1075 stainless is the
 qualified plating-free alternative** (same section/mass/stiffness, higher FOS, no
-plating; higher cost + make-from-bar). **7075-T6 aluminium** is the mass-critical
+plating; higher cost + make-from-bar). **7075-T6 aluminum** is the mass-critical
 fallback (−63 g/pair) now that the joint Hall sensor (§1, §3.5) removes the
 torsional-wind-up penalty — but with no fatigue endurance limit it is a
 life-limited, inspected part. All allowables pending MMPDS/AMS verification (§7,
@@ -368,9 +666,9 @@ TODO §0.8).
 
 **Open the go-ahead decision** on §8 rework + §6 regear before I edit geometry.
 
-> Mal: Wash, you gotta give me an Ivan.
-> Wash: I'll see what I can do.
+> Skipper: Pilot, you gotta give me an Ivan.
+> Pilot: I'll see what I can do.
 > (over the intercom)
-> Wash: Kaylee, how would you feel about pullin' a Crazy Ivan?
-> Kaylee: (sounds weak but positive) Always wanted to try one.
+> Pilot: Flight Engineer, how would you feel about pullin' a Crazy Ivan?
+> Flight Engineer: (sounds weak but positive) Always wanted to try one.
   

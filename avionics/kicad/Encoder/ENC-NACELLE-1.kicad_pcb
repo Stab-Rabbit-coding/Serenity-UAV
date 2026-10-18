@@ -8,7 +8,7 @@
 	)
 	(paper "A4")
 	(title_block
-		(title "ENC-NACELLE-1 / MAL-TILT-ENC-PCB")
+		(title "ENC-NACELLE-1 / SKIPPER-TILT-ENC-PCB")
 		(date "2026-07-21")
 		(rev "S")
 		(comment 1 "Serenity UAV — nacelle tilt-angle encoder (AKM AK7455, off-axis)")

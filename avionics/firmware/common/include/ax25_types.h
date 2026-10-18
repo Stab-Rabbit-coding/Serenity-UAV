@@ -4,13 +4,13 @@
  *
  * Copyright 2026 Steve Griffing
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Reference: AX.25 Link Access Protocol for Amateur Packet Radio, Version 2.2,
  *   Tucson Amateur Packet Radio (TAPR) / ARRL, 1998 [REF-PROTO-001].
  *   Available: https://www.tapr.org/pdf/AX25.2.2.pdf
  *
- * Only the subset of AX.25 needed for the Serenity UAV 49 MHz link (Emma,
+ * Only the subset of AX.25 needed for the Serenity UAV 49 MHz link (Commo,
  * 47 CFR Part 15 §15.235 [REF-FCC-003]) is defined here.  The UAV uses
  * UI (unnumbered information) frames for telemetry and command packets;
  * connection-oriented modes are not required.

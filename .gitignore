@@ -7,6 +7,26 @@ __pycache__/
 *.pyc
 *.pyo
 
+# Python virtual environments (never commit).  The local .venv here is 351 MB of
+# third-party packages; a single `git add -A` would push the lot.  Nothing under
+# it has ever been tracked, so this is a guard rather than a cleanup.
+#
+# It also matters to CI: `.github/workflows/ci.yml` runs `flake8` with an
+# explicit --exclude list that does NOT name .venv, so lint only passes today
+# because CI checks out a fresh tree with no virtualenv in it.  Were one ever
+# committed, the lint job would immediately fail on thousands of findings in
+# vendored code.  (Locally, `flake8 .` does report those — run it over
+# `git ls-files '*.py'` instead to see only this repo's own code.)
+#
+# NOTE for anyone running the tools: this .venv SHADOWS system Python packages
+# the repo's tools rely on (manifold3d, sympy, matplotlib are installed
+# system-wide).  Invoke tools as `/usr/bin/python3 tools/<name>.py`, not through
+# the venv.
+.venv/
+venv/
+env/
+ENV/
+
 # Claude Code agent worktrees and session data
 .claude/
 
@@ -28,8 +48,15 @@ avionics/kicad/symbols/QFN50P700X700X90-49N.kicad_mod
 avionics/kicad/symbols/QFP40P1600X1600X120-129N.kicad_mod
 avionics/kicad/symbols/SLB 9670VQ2.0.lbr
 avionics/kicad/symbols/XCVR_ISOW1044BDFMR.kicad_mod
-avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md
+avionics/kicad/Observer/PCBNEW_SWIG_BUG.md
 docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf
 .continue/agents/new-config.yaml
 docs/references/pocketbeagle2 revA_241205.brd
 docs/references/POCKETBEAGLE2 V10_241220.DSN
+
+# Local working backups written by the 2026-08-03 trust-module retarget scripts.
+# The pre-change state is in git history (see TODO.md 1.2d); these are not artefacts.
+*.pre-g351x
+code-scanning-files-extracted.csv
+denominations.odg
+*.rpt

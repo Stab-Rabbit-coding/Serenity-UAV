@@ -34,10 +34,42 @@ Nacelle bore analysis (s_eng_left_shell24.stl, 24" scale):
   Outer hull OD ~58-60mm at Z=22-100mm → clear bore ~55mm for EDF casing
   Stator OD = 55.0mm → presses into nacelle bore at EDF seat ring
 
-Fin angle calculation (50mm EDF at 6S, ~35,000 RPM):
-  Tip velocity  = 2π × 0.025m × (35000/60) = 91.6 m/s
-  Exit velocity = sqrt(T / (ρ·A)) = sqrt(8.94 / 0.00240) ≈ 61 m/s
-  Tip swirl angle = atan(61/91.6) ≈ 33°  → VANE_ANGLE = 33°
+Fin angle calculation — SUPERSEDED 2026-08-31, ALL THREE INPUTS WERE WRONG.
+
+  The original derivation, kept verbatim for the record:
+      Fin angle calculation (50mm EDF at 6S, ~35,000 RPM):
+        Tip velocity  = 2pi x 0.025m x (35000/60) = 91.6 m/s
+        Exit velocity = sqrt(T / (rho.A)) = sqrt(8.94 / 0.00240) ~= 61 m/s
+        Tip swirl angle = atan(61/91.6) ~= 33 deg  -> VANE_ANGLE = 33 deg
+
+  What is wrong with it:
+    1. RPM.  The motor is a 2627-**3200KV** (owner-confirmed against the
+       manufacturer's page, 2026-08-31).  On 6S nominal 22.2 V that is
+       **71,040 rpm** no-load, not 35,000 — a factor of 2.03.  Tip speed is
+       186 m/s, not 91.6.
+    2. THRUST AND AREA.  T = 8.94 N and A = 0.00240 m^2 were used.  The
+       published static thrust is 1240 gf = **12.16 N**, and the duct is O50,
+       so A = **1.9635e-3 m^2** (0.00240 m^2 corresponds to O55.3, the CASING
+       diameter, not the bore).  Corrected, the exit velocity is
+       sqrt(12.16 / (1.225 x 1.9635e-3)) = **71.1 m/s**, not 61.
+    3. THE FORMULA.  atan(V_exit / U_tip) is the angle of the RELATIVE flow from
+       the TANGENTIAL direction.  The angle a stator must remove is the ABSOLUTE
+       swirl from AXIAL, atan(V_theta / V_axial), and V_theta follows from the
+       Euler work equation P = mdot . U . V_theta — it is not U_tip.
+
+  A first-pass Euler re-derivation gives a materially DIFFERENT and SMALLER
+  angle, but it rests on two numbers this project does not have:
+      mdot = rho.A.Ve = 1.225 x 1.9635e-3 x 71.1        = 0.1710 kg/s
+      U_tip at an ASSUMED 80% of no-load (56,800 rpm)    = 148.7 m/s
+      P_shaft at an ASSUMED 85% motor efficiency of 843 W = 717 W
+      V_theta,tip = P / (mdot . U_tip)                   = 28.2 m/s
+      swirl from axial = atan(28.2 / 71.1)               = 21.6 deg
+  The loaded RPM and the motor efficiency are both assumptions.  **So the vane
+  angle is NOT changed here.**  33 deg stands as built until it is re-derived
+  from a measured loaded RPM (the BDSHOT telemetry can supply it on the bench)
+  or from a CFD/bench swirl survey.  Changing it is cheap — the stator sleeve is
+  one small re-render — but changing it on an assumption would just replace one
+  unsupported number with another.
 
 Fin twist: each fin is properly twisted (more angular offset at small radius)
   so the vane angle is geometrically correct at every radius, not just at the tip.

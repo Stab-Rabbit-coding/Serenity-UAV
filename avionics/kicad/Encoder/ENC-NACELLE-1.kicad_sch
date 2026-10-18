@@ -4,7 +4,7 @@
   (generator_version "7.0")
   (paper "A4")
   (title_block
-    (title "ENC-NACELLE-1 / MAL-TILT-ENC-PCB — Nacelle Tilt-Angle Encoder (AK7455, off-axis)")
+    (title "ENC-NACELLE-1 / SKIPPER-TILT-ENC-PCB — Nacelle Tilt-Angle Encoder (AK7455, off-axis)")
     (date "2026-07-19")
     (rev "S")
     (company "Serenity UAV — Steve Griffing, PE(CSE), CISSP-ISSEP, CPP")
@@ -199,7 +199,7 @@
     )
   )
 
-  (text "MAL-TILT-ENC-PCB  —  AK7455 OFF-AXIS nacelle tilt-angle encoder (7 x 7 mm in-house PCB)"
+  (text "SKIPPER-TILT-ENC-PCB  —  AK7455 OFF-AXIS nacelle tilt-angle encoder (7 x 7 mm in-house PCB)"
     (at 24.00 22.00 0)
     (effects (font (size 2.0 2.0) (bold yes)) (justify left))
     (uuid "e2000000-0000-0000-0000-0000000000a1"))

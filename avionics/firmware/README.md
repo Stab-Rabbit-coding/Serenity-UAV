@@ -1,7 +1,7 @@
 # Serenity UAV — Firmware
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Status:** Phase 6 — Minimum Viable Firmware for First Flight
 
 ---
@@ -18,21 +18,24 @@ are standard Linux processes that use POSIX APIs, i2c-dev, libgpiod 2.x, and pth
 
 | Group | Count | Cape | Responsibilities |
 | ------- | ------- | ------ | ----------------- |
-| FC nodes | 4 | Cape-A | Flight control, navigation, obstacle avoidance, ESC/actuator drive |
-| CN nodes | 4 | Cape-B | Radio links, system logging, payload/cargo management |
+| FC nodes | 4 | Pilot | Flight control, navigation, obstacle avoidance, ESC/actuator drive |
+| CN nodes | 4 | TACCO | Radio links, system logging, payload/cargo management |
 
-## Cape Variant Placement
+## Cape Placement
 
-The eight nodes use a **v2 · v2 · v2 · v2** (nose → tail) cape variant layout — Rev R all-EMI-hardened:
+Every bay carries the same cape pair: a **Pilot** cape (FC node) and a **TACCO** cape (CN node).
+Rev R introduced uniform EMI hardening, and Rev T keeps it.
 
-| Bay | Room name | Pair | FC cape | CN cape | Rationale |
-|-----|-----------|------|---------|---------|-----------|
-| A (nose) | Shepherd's room | FC1 / CN1 | Wash | Zoë | Bus start termination; 5 kV isolated CAN FD / RS-485 / Ethernet at forward bus endpoint |
-| B | Inara's shuttle | FC2 / CN2 | Wash | Zoë | Rev R: uniform EMI hardening across all bays |
-| D | River's room | FC3 / CN3 | Wash | Zoë | Rev R: uniform EMI hardening across all bays |
-| E (tail) | Simon's medbay | FC4 / CN4 | Wash | Zoë | Bus end termination; 5 kV isolation closest to nacelle motor wiring / rear EDF |
+| Bay | Room name | Pair | FC cape | CN cape | Note |
+|-----|-----------|------|---------|---------|------|
+| A (nose) | Shepherd's Room | FC1 / CN1 | Pilot | TACCO | Bus start termination; 5 kV isolated CAN FD / RS-485 / Ethernet at the forward bus endpoint |
+| B | Inara's Shuttle | FC2 / CN2 | Pilot | TACCO | Uniform EMI hardening across all bays |
+| C | River's Room | FC3 / CN3 | Pilot | TACCO | Uniform EMI hardening across all bays |
+| D (tail) | Simon's Medbay | FC4 / CN4 | Pilot | TACCO | Bus end termination; 5 kV isolation closest to the nacelle motor wiring |
 
-Rev R places 5 kV galvanic isolation at every node. Cape-A-1 / Cape-B-1 are archived (Rev Q, 2026-06-05).
+Every node has 5 kV galvanic isolation. The Rev Q Pilot/TACCO variants are archived (2026-06-05).
+Commo is not part of this firmware tree: under Rev T it is a standalone MCU node on the bus
+(`WBS.md` lists its firmware items).
 
 ## Directory Layout
 
@@ -41,9 +44,12 @@ Rev R places 5 kV galvanic isolation at every node. Cape-A-1 / Cape-B-1 are arch
 firmware/
 ├── common/
 │   └── include/         # Shared headers used by both FC and CN daemons
-│       ├── kiss_types.h # KISS protocol constants (RFC 1055 / Chepponis & Karn 1987)
-│       └── ax25_types.h # AX.25 v2.2 frame type definitions
-├── cn/                  # CN node daemon (runs on all 4 Cape-B / AM6254 nodes)
+│       ├── kiss_types.h        # KISS protocol constants (RFC 1055 / Chepponis & Karn 1987)
+│       ├── ax25_types.h        # AX.25 v2.2 frame type definitions
+│       ├── failsafe_config.h   # Failsafe threshold constants (docs/failsafe_thresholds.md)
+│       ├── sbus_input.h        # S-Bus input decoding API
+│       └── sbus_input.c        # S-Bus frame parsing
+├── cn/                  # CN node daemon (runs on all 4 TACCO / AM6254 nodes)
 │   ├── CMakeLists.txt
 │   └── src/
 │       ├── main.c       # Daemon entry point, argument parsing, signal handling
@@ -51,10 +57,18 @@ firmware/
 │       ├── si5351.c     # Si5351A frequency programming (49 MHz Part 15 §15.235 channels)
 │       ├── xcvr_kiss.h  # XCVR-49MHZ-1 KISS/AX.25 driver API
 │       └── xcvr_kiss.c  # KISS framing, PTT sequencing, UART I/O
-├── fc/                  # FC node daemon (stub — Phase 7)
+├── fc/                  # FC node daemon (Phase 6 sensor/monitor work done; PID governor Phase 7)
 │   ├── CMakeLists.txt
+│   ├── tools/
+│   │   ├── governor_cal.py     # PID governor calibration tool
+│   │   └── requirements.txt
 │   └── src/
-│       └── main.c       # FC node entry point stub
+│       ├── main.c              # FC node entry point
+│       ├── bmon_ina2xx.c/.h    # INA2xx bus-voltage/current monitor driver
+│       ├── cell_mon_bq769x0.c/.h  # BQ769x0 per-cell battery monitor driver
+│       ├── governor_config.h   # PID governor tuning constants
+│       ├── mag_mmc5983ma.c/.h  # MMC5983MA magnetometer driver
+│       └── mag_qmc5883l.c/.h   # QMC5883L magnetometer driver
 └── CMakeLists.txt       # Top-level build
 
 ```
@@ -101,7 +115,7 @@ sudo apt install cmake gcc-aarch64-linux-gnu libc6-dev-arm64-cross
 
 sudo apt install cmake build-essential libgpiod-dev
 
-git clone <repo> && cd Serenity-UAV/serenity/firmware
+git clone <repo> && cd Serenity-UAV/avionics/firmware
 mkdir build && cd build
 cmake ..
 cmake --build .
@@ -134,7 +148,7 @@ Systemd unit files are in `cn/serenity-cn.service` and `fc/serenity-fc.service` 
 
 ## Security
 
-All inter-node messages are digitally signed using the node's TPM 2.0 (SLB9670).
+All inter-node messages are digitally signed using the node's TPM 2.0 (SLB9672).
 The signing key is bound to the TPM's PCR state at boot (measured boot).
 The AX.25 payload carries a SHA-256 HMAC before KISS framing; the CN node
 verifies the HMAC on received frames before forwarding to the AX.25 stack.

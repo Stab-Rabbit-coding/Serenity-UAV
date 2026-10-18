@@ -4,7 +4,7 @@
  *
  * Copyright 2026 Steve Griffing
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Full design rationale, citations, and derivation for every threshold in
  * this file are recorded in docs/failsafe_thresholds.md — that document is
@@ -31,7 +31,7 @@
  *   yet applied to governor_config.h.
  *
  * Target platform: PocketBeagle 2 Industrial (AM6254), Debian Trixie.
- * Shared across FC (Wash) and CN (Zoe) node firmware.
+ * Shared across FC (Pilot) and CN (XO) node firmware.
  */
 
 #ifndef AVIONICS_FIRMWARE_COMMON_INCLUDE_FAILSAFE_CONFIG_H_
@@ -46,8 +46,8 @@ extern "C" {
  * ============================================================================
  *
  * The PRU0 MIL-STD-1553B bus controller role and general node-primary role
- * are elected via CAN FD heartbeat (see avionics/firmware/dts/cape-a/
- * k3-am6254-pocketbeagle2-serenity-cape-a2.dts S8, and
+ * are elected via CAN FD heartbeat (see avionics/firmware/dts/Pilot/
+ * k3-am6254-pocketbeagle2-serenity-Pilot2.dts S8, and
  * docs/POWER_DISTRIBUTION.md S10 "T+30s: CAN FD heartbeat election
  * complete; FC1 assumes primary role").  This constant governs the
  * steady-state re-election path: if the current primary's heartbeat frame
@@ -81,9 +81,9 @@ extern "C" {
 #define FAILSAFE_RADIO_LOSS_RTL_SIK_LORA_MS       (5000U)
 
 /**
- * 49 MHz (Emma, 47 CFR Part 15 S15.235) link-loss timer before autonomous
+ * 49 MHz (Commo, 47 CFR Part 15 S15.235) link-loss timer before autonomous
  * RTL (ms).  Longer than the SiK/LoRa timer because 49 MHz is the
- * designated backup/high-RF-environment link (River/Simon Emma boards,
+ * designated backup/high-RF-environment link (River/Simon Commo boards,
  * CLAUDE.md) — a slower AFSK/KISS link legitimately has more inter-frame
  * gap, so the timer must not nuisance-trigger RTL during normal operation.
  */

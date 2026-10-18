@@ -3,7 +3,7 @@
 check_impedance.py — Microstrip characteristic-impedance calculator.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 
 Implements the IPC-2141A / Hammerstad-Jensen closed-form microstrip
 formulas with a Wheeler thick-conductor width correction.  Used to

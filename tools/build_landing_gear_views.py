@@ -3,8 +3,9 @@
 
 The Rev R6 canonical articulated leg builds its assembled / deformed /
 hull-stance views directly as PARTs of
-airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad (default) /
-canonical_leg_r6_3_0in.scad (extended) -- "leg_assembled", "leg_deformed",
+airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad (THE FLIGHT ARTICLE,
+2026-09-06) / canonical_leg_r6_1_5in.scad (RETIRED, bench/handling only) --
+"leg_assembled", "leg_deformed",
 "hull_legs", "hull_stance" -- so this script has no successor role.  Kept
 for reference only; do not run -- its inputs
 (wire_brace_leg.scad renders) are archived and its outputs were moved to

@@ -1,4 +1,4 @@
-** Drc report for Kaylee.kicad_pcb **
+** Drc report for FlightEngineer.kicad_pcb **
 ** Created on 2026-06-10T17:28:22-0400 **
 
 ** Found 221 DRC violations **
@@ -397,13 +397,13 @@
 [lib_footprint_mismatch]: Footprint 'AMASS_XT60PW-F_1x02_P7.20mm_Horizontal' does not match copy in library 'Connector_AMASS'.
     Local override; warning
     @(13.0000 mm, 19.0000 mm): Footprint J_BATT
-[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Flight Engineer'.
     Local override; warning
     @(31.0000 mm, 12.0000 mm): Footprint CM1
-[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Flight Engineer'.
     Local override; warning
     @(44.0000 mm, 12.0000 mm): Footprint CM2
-[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Flight Engineer'.
     Local override; warning
     @(56.0000 mm, 9.0000 mm): Footprint F1
 [lib_footprint_mismatch]: Footprint 'CP_Radial_D10.0mm_P5.00mm' does not match copy in library 'Capacitor_THT'.
@@ -442,7 +442,7 @@
 [lib_footprint_mismatch]: Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.
     Local override; warning
     @(30.5000 mm, 33.0000 mm): Footprint R_CHGND
-[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Flight Engineer'.
     Local override; warning
     @(39.0000 mm, 33.0000 mm): Footprint RS_MAIN
 [lib_footprint_mismatch]: Footprint 'MSOP-10_3x3mm_P0.5mm' does not match copy in library 'Package_SO'.
@@ -451,7 +451,7 @@
 [lib_footprint_mismatch]: Footprint 'Fuseholder_Blade_Mini_Keystone_3568' does not match copy in library 'Fuse'.
     Local override; warning
     @(3.0000 mm, 40.5000 mm): Footprint F_ESC1
-[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Flight Engineer'.
     Local override; warning
     @(8.0000 mm, 47.0000 mm): Footprint RS_1
 [lib_footprint_mismatch]: Footprint 'MSOP-10_3x3mm_P0.5mm' does not match copy in library 'Package_SO'.
@@ -463,7 +463,7 @@
 [lib_footprint_mismatch]: Footprint 'Fuseholder_Blade_Mini_Keystone_3568' does not match copy in library 'Fuse'.
     Local override; warning
     @(17.0000 mm, 40.5000 mm): Footprint F_ESC2
-[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Flight Engineer'.
     Local override; warning
     @(22.0000 mm, 47.0000 mm): Footprint RS_2
 [lib_footprint_mismatch]: Footprint 'MSOP-10_3x3mm_P0.5mm' does not match copy in library 'Package_SO'.
@@ -475,7 +475,7 @@
 [lib_footprint_mismatch]: Footprint 'Fuseholder_Blade_Mini_Keystone_3568' does not match copy in library 'Fuse'.
     Local override; warning
     @(31.0000 mm, 40.5000 mm): Footprint F_ESC3
-[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Flight Engineer'.
     Local override; warning
     @(36.0000 mm, 47.0000 mm): Footprint RS_3
 [lib_footprint_mismatch]: Footprint 'MSOP-10_3x3mm_P0.5mm' does not match copy in library 'Package_SO'.
@@ -487,7 +487,7 @@
 [lib_footprint_mismatch]: Footprint 'Fuseholder_Blade_Mini_Keystone_3568' does not match copy in library 'Fuse'.
     Local override; warning
     @(45.0000 mm, 40.5000 mm): Footprint F_ESC4
-[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Flight Engineer'.
     Local override; warning
     @(50.0000 mm, 47.0000 mm): Footprint RS_4
 [lib_footprint_mismatch]: Footprint 'MSOP-10_3x3mm_P0.5mm' does not match copy in library 'Package_SO'.

@@ -13,7 +13,7 @@
  *
  *   - `hal/mspm0/` — TI MSPM0G3507 port, built on the TI MSPM0 SDK DriverLib.
  *                    This is the flight port; it is what runs on
- *                    `MAL-CAN-PERIPH-GW-PCB`, Jayne (U3) and Kaylee (U_MCU).
+ *                    `MAL-CAN-PERIPH-GW-PCB`, Observer (U3) and FlightEngineer (U_MCU).
  *   - `hal/sim/`   — POSIX host port (SocketCAN vcan + a TPM simulator or a
  *                    real /dev/tpm0).  Used for unit and integration test on a
  *                    workstation; never flown.

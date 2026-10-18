@@ -1,9 +1,36 @@
 """
 serenity_assembly.py — Serenity UAV full-airframe FreeCAD assembly.
-Revision: R1.2 (2026-07-18)
+Revision: R1.3 (2026-08-25)
 
-Imports all printed airframe STL components and saves a single
-Serenity-Assembled.FCStd for review in FreeCAD.
+Imports all printed airframe STL components and saves a single assembly
+file for review in FreeCAD.
+
+R1.3 Changes (2026-08-25):
+    - OUTPUT now targets airframe/freecad/assembly/SerenityAssembly.FCStd
+      directly (was airframe/Serenity-Assembled.FCStd). That file was
+      previously a hand-built, manually-placed reference (17 objects, several
+      stale/duplicated across revisions — e.g. both the current
+      nacelle_port_revs and the superseded nacelle_port_revq were present)
+      that this script's own docstring cited as the historical SOURCE for
+      the baked hull-frame placements. This script is now the maintained,
+      single source of truth for that file instead: it already imports every
+      current canonical STL (shells, wings, nacelles, splice collars, cargo
+      interior accessories, EDF sleeves, nozzle iris, landing gear, dorsal
+      fin, bow sensor faceplate) with validated or explicitly-marked-VERIFY
+      hull-frame placements. The old hand-built file's content is preserved
+      in git history and in the pre-existing `.FCStd.bak2`/`.FCBak` files
+      alongside it; nothing is lost by this switch.
+    - Added a NACELLE TILT CONFIGURATION block (see NACELLE_TILT_PORT_DEG /
+      NACELLE_TILT_STBD_DEG below): each side's nacelle body, EDF stator
+      sleeve, EDF aft spider sleeve, and nozzle iris now rotate together as
+      one rigid group about that side's tilt pivot (hull +X axis, through
+      the nacelle's own CG/pivot station), driven by that one per-side
+      degree value. 0 deg = forward/cruise (the stored/baked attitude);
+      90 deg = vertical/hover (duct axis vertical, nozzle exit facing -Z/
+      down, for lift). The rotation SIGN was reverse-engineered from the old
+      hand-built file's own Nacelle_Stbd placement (axis (-1,0,0), angle
+      90 deg = -90 deg about hull +X) rather than assumed, and reproduces
+      that file's stbd-vertical/port-forward configuration by default.
 
 R1.2 Changes (2026-07-18):
     Initial hull-frame VERIFY-tier placements added for all unpositioned parts:
@@ -30,7 +57,7 @@ you try), and prefer `freecadcmd` over `freecad --background --python`:
 the latter starts the GUI event loop, which on some platforms does not exit
 cleanly after the script finishes, so the command appears to hang.
 
-Output: <repo>/airframe/Serenity-Assembled.FCStd
+Output: <repo>/airframe/freecad/assembly/SerenityAssembly.FCStd
         (overwrites any existing file)
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
@@ -66,8 +93,9 @@ EDF sleeves, nozzles, pylons, tip caps) are approximations and carry
 a VERIFY marker indicating they require confirmation in FreeCAD.
 
 References:
-    [1] airframe/freecad/assembly/SerenityAssembly.FCStd — validated
-        positions (pre-bake; placements now identity after R1).
+    [1] airframe/freecad/assembly/SerenityAssembly.FCStd — this script's own
+        output (R1.3+); pre-bake it was the hand-placed source the R1 bake
+        extracted from (see git history for that revision).
     [2] tools/bake_hull_frame.py — canonical bake transforms.
     [3] airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad
     [4] CLAUDE.md — project standards.
@@ -90,6 +118,24 @@ except ModuleNotFoundError as exc:  # not inside FreeCAD's interpreter
         "--python` may not exit cleanly headless — use freecadcmd."
     )
 
+# FreeCADGui (2026-09-05 fix): plain `freecadcmd` never attaches GUI
+# ViewObjects to the objects it creates, so every Mesh::Feature this script
+# adds silently defaults to ViewObject is None / Visibility False once a GUI
+# does open the file — the tree lists everything but the 3D view is empty.
+# Starting a headless GUI session (needs an X/Xvfb display: run this script
+# under `xvfb-run -a freecadcmd ...` if $DISPLAY isn't already set) lets us
+# force every object's Visibility = True before saving. If FreeCADGui truly
+# can't be started (no display at all), fall back to saving without it —
+# geometry and placements are unaffected, only the stored visibility flag.
+try:
+    import FreeCADGui  # type: ignore[import-not-found]
+
+    FreeCADGui.showMainWindow()
+    HAVE_GUI = True
+except Exception:  # pragma: no cover - depends on display availability
+    FreeCADGui = None  # type: ignore[assignment]
+    HAVE_GUI = False
+
 # ---------------------------------------------------------------------------
 # Path setup — resolved relative to this script file so the script works
 # regardless of the current working directory.
@@ -97,7 +143,7 @@ except ModuleNotFoundError as exc:  # not inside FreeCAD's interpreter
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 AIRFRAME = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 STL_DIR = os.path.join(AIRFRAME, "stls")
-OUTPUT = os.path.join(AIRFRAME, "Serenity-Assembled.FCStd")
+OUTPUT = os.path.join(AIRFRAME, "freecad", "assembly", "SerenityAssembly.FCStd")
 
 
 # ---------------------------------------------------------------------------
@@ -228,10 +274,24 @@ R_BAKE = (
 # tools/bake_hull_frame.py COMPONENTS['Nacelle_Port'] / ['Nacelle_Stbd']
 # (that file remains the single source of truth for the primary nacelle
 # placement; these values are not re-derived here).
-T_BAKE = {
+T_BAKE_50 = {
     "port": (46.9999060, -63.9998720, 62.9998740),
     "stbd": (-385.0960040, -69.9998600, 64.9719300),
 }
+
+# NACELLE GENERATION (Rev T6, 2026-10-03).  64 = the QX 64 mm EDF nacelle
+# (nacelle_pod_64mm_tandem.scad), the build baseline; 50 keeps the legacy
+# 50 mm pod and its internals for reference.  The 64 mm bake translation is
+# DERIVED in tools/bake_hull_frame.py ('Nacelle64_*': tilt axis = level spar
+# line Y 21.000 / Z 66.851, pod pad seats on each wing's measured pad face,
+# mirrored about the hull centre plane X -169.241); the same numbers are
+# restated here because this file runs under freecadcmd without that module.
+NACELLE_GEN = 64
+T_BAKE_64 = {
+    "port": (6.700 + 53.84, 21.000 - 109.7, 66.851),
+    "stbd": (-345.182 - 53.84, 21.000 - 109.7, 66.851),
+}
+T_BAKE = T_BAKE_64 if NACELLE_GEN == 64 else T_BAKE_50
 
 # Nacelle pylon-side sign, matching nacelle_pod_50mm_tandem.scad's
 # PYLON_SIDE override table (Rev R1/nacelle-swap, 2026-06-11):
@@ -286,6 +346,137 @@ def nacelle_rows(side, r_local, t_local):
         [r_total[0][0], r_total[0][1], r_total[0][2], t_total[0]],
         [r_total[1][0], r_total[1][1], r_total[1][2], t_total[1]],
         [r_total[2][0], r_total[2][1], r_total[2][2], t_total[2]],
+    ]
+
+
+# Nacelle local-frame Z stations, mm (nacelle_pod_50mm_tandem.scad):
+#   intake Z=0 .. STATOR_SLV_Z_START=90.0 .. AFT_SLV_Z_START=122.5 ..
+#   NOZZLE_RING_Z(=CROWN_Z)=166.25 .. NACELLE_L=185.2 (nozzle exit).
+#   PIVOT_Z is the spar-crank / CG station, inside the sleeve span.
+# Hoisted to module level (was local to assemble()) so nacelle_pivot_hull()
+# can use PIVOT_Z; kept together since they share one source (the SCAD).
+STATOR_SLV_Z_START = 90.0
+AFT_SLV_Z_START = 122.5
+# PIVOT_Z — the tilt pivot sits at the rotating assembly's CG, so this is an
+# OUTPUT of a mass roll-up and not a chosen number.  `tools/nacelle_mass_cg.py`
+# is the authority for it; this constant must track that tool's result and the
+# SCAD's own PIVOT_Z, or the assembly tilts the nacelle about the wrong station.
+#
+# UPDATED 2026-09-06 (Rev T4c/T4d): 111.5 -> 107.5.  Raised as LG-33 by the
+# landing-gear session, which found this file still carrying the 2026-07-19
+# figure while the measured CG had moved twice underneath it.
+#
+# The history is worth keeping, because every move was a correction rather than
+# a redesign, and the direction was not always the same:
+#   111.5  2026-07-19, from an ESTIMATED header table that put the pod shell and
+#          both sleeves at 130 g combined
+#   105.8  the pod MEASURED, solid, at 285 g — the CG moved FORWARD
+#   113.8  the pod hollowed with a forward-biased wall (Rev T4b), plus the
+#          in-nacelle harness, which no earlier roll-up had counted at all
+#   107.5  the ESCs sited where they actually FIT (measured bay centroid Z 104)
+#          instead of at plan 003 KTD8's assumed Z 150.6 — a station no board
+#          can occupy, so that lever never existed
+PIVOT_Z = 107.5  # pivot station = full-assembly nacelle CG; see the note above
+NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
+# 64 mm (Rev T6): PIVOT_Z converged at 109.7 (tools/nacelle_mass_cg_64.py,
+# measured CG 109.67); nozzle ring at 187.86 (nacelle_pod_64mm_tandem.scad).
+if NACELLE_GEN == 64:
+    PIVOT_Z = 109.7
+    NOZZLE_RING_Z = 187.86
+
+
+# ---------------------------------------------------------------------------
+# NACELLE TILT CONFIGURATION (R1.3, 2026-08-25)
+#
+# Set each side's tilt angle here. 0 deg = forward/cruise (the stored/baked
+# attitude every nacelle STL and every nacelle_rows() placement below is
+# modelled in). 90 deg = vertical/hover: duct axis vertical, nozzle exit
+# (the local +Z end, NACELLE_L = 185.2 mm) facing hull -Z (down), pushing
+# air down for lift.
+#
+# The rotation SIGN below (TILT_SIGN = -1, i.e. rotate -tilt_deg about hull
+# +X) was reverse-engineered from the pre-R1.3 hand-built
+# airframe/freecad/assembly/SerenityAssembly.FCStd, whose Nacelle_Stbd
+# object carried Placement.Rotation = (axis (-1,0,0), angle 90 deg) — the
+# same rotation as (axis (1,0,0), angle -90 deg). Reproduced here as the
+# STBD default so this script's default output matches that file's own
+# configuration (stbd vertical, port forward) rather than an assumed
+# convention. Confirmed to point the nozzle exit down (not up) via
+# R_BAKE's own local->hull mapping (hull_y = local_z at cruise; a -90 deg
+# rotation about hull +X sends hull_z' = -hull_y = -local_z, so the +Z/exit
+# end ends up at negative hull Z).
+NACELLE_TILT_PORT_DEG = 0.0     # port: forward / cruise
+NACELLE_TILT_STBD_DEG = 90.0    # stbd: vertical / hover
+NACELLE_TILT_DEG = {"port": NACELLE_TILT_PORT_DEG, "stbd": NACELLE_TILT_STBD_DEG}
+TILT_SIGN = -1.0
+
+
+def nacelle_pivot_hull(side):
+    """Hull-frame tilt pivot for `side`: local (0, 0, PIVOT_Z) through the
+    same R_BAKE/T_BAKE composition nacelle_rows() uses for every other
+    nacelle-local point. PIVOT_Z (the spar-crank / nacelle CG station) is
+    defined in the Main assembly section below and read here as a module
+    global set before assemble() runs."""
+    off = _mat3_vec(R_BAKE, (0.0, 0.0, PIVOT_Z))
+    t_bake = T_BAKE[side]
+    return tuple(t_bake[i] + off[i] for i in range(3))
+
+
+def tilt_rotation(side):
+    """FreeCAD Rotation for this side's configured tilt, about hull +X."""
+    return App.Rotation(App.Vector(1.0, 0.0, 0.0), TILT_SIGN * NACELLE_TILT_DEG[side])
+
+
+def tilt_placement(side):
+    """Placement rotating a hull-frame-native (cruise/identity) mesh by this
+    side's configured tilt about its own pivot -- identity when the
+    configured tilt is 0 deg, so untilted sides are visually unchanged."""
+    piv = App.Vector(*nacelle_pivot_hull(side))
+    rot = tilt_rotation(side)
+    base = piv - rot.multVec(piv)
+    return App.Placement(base, rot)
+
+
+def nozzle_iris_stl(side):
+    """Nozzle iris STL matching this side's configured tilt.
+
+    Rev T3 (2026-08-09, airframe/wings-nacelles/WBS.md SS1.1.3.1) exposed
+    `FLAP_PHI` in nacelle_nozzle_iris.scad specifically so each published
+    assembly STL is reproducible from source at a given flap angle, and the
+    two committed renders are the two endpoints: nacelle_nozzle_iris-
+    closed.stl (FLAP_PHI = PHI_CLOSED, petals shut, 0 deg tilt) and
+    nacelle_nozzle_iris-open.stl (FLAP_PHI = PHI_OPEN, petals full open,
+    90 deg tilt). This picks the nearer endpoint by a 45 deg threshold --
+    it is NOT a continuous interpolation. A tilt strictly between 0 and 90
+    deg would need a fresh `openscad -D 'FLAP_PHI=<computed>'` render (the
+    SCAD supports it; this script does not invoke openscad) rather than a
+    third discrete asset, since the flap angle is a continuous function of
+    tilt, not a third fixed pose.
+
+    The single-file nacelle_nozzle_iris.stl this script imported before
+    R1.3 predates Rev T3 (2026-07-19 vs the 2026-08-09 shingle fix) and is
+    stale -- superseded by the closed/open pair, not reintroduced here.
+    """
+    return _stl(
+        "nacelles/nozzles/nacelle_nozzle_iris-open.stl"
+        if NACELLE_TILT_DEG[side] >= 45.0
+        else "nacelles/nozzles/nacelle_nozzle_iris-closed.stl"
+    )
+
+
+def apply_tilt_to_rows(rows, side):
+    """Compose this side's configured tilt (about its own pivot) onto
+    nacelle_rows()'s local->hull-cruise transform, for transform_mesh()
+    callers (the EDF sleeves and nozzle iris -- rigidly attached to the
+    nacelle body, so they must tilt with it as one group)."""
+    flat = [v for row in rows for v in row]
+    base_m = App.Matrix(*flat, 0.0, 0.0, 0.0, 1.0)
+    total = tilt_placement(side).multiply(App.Placement(base_m))
+    tm = total.Matrix
+    return [
+        [tm.A11, tm.A12, tm.A13, tm.A14],
+        [tm.A21, tm.A22, tm.A23, tm.A24],
+        [tm.A31, tm.A32, tm.A33, tm.A34],
     ]
 
 
@@ -360,20 +551,33 @@ def assemble():
     place_mesh(splice3, PL_IDENTITY)
 
     # Landing gear — Rev R6 canonical articulated legs (2026-07-21; split
-    # into 1.5in/3.0in belly-clearance variants 2026-07-23 — see
-    # docs/LANDING_GEAR_ANALYSIS.md Rev R6 §4.7).  The lg_r6_1_5in_hull_legs
-    # compound is the ACTIVE (compact, default) variant and is ALREADY in
-    # hull frame (all 4 corners at the canonical QMx Sheet 5 bay stations,
-    # identity placement); see
-    # airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad "hull_legs"
-    # PART.  The extended 3.0in variant
-    # (canonical_leg_r6_3_0in.scad -> lg_r6_3_0in_hull_legs.stl) is kept for
-    # rough-field missions but is not wired into this default assembly.  The
-    # prior Thingiverse-derived feet_x_4/legs parts are archived
+    # into 1.5in/3.0in belly-clearance variants 2026-07-23).
+    #
+    # ** THE ACTIVE VARIANT IS NOW THE 3.0 in LEG (LG-31, 2026-09-06). **
+    # It was the 1.5 in compound, and that configuration struck the ground with
+    # the nozzle on every vertical takeoff and landing.  See
+    # docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md
+    # and docs/LANDING_GEAR_ANALYSIS.md §4.8: the governing case is TOUCHDOWN
+    # ROLL, not static clearance, because each nozzle sits ~73 mm outboard of its
+    # own foot line, so roll costs 1.30 mm/deg (pitch and a four-feet-planted
+    # slope cost nothing — the feet define the plane).  Minimum safe belly
+    # clearance is 74.41 mm at the 5 deg attitude case with the built 40 mm
+    # flaps; the 3.0 in leg gives 80.0 mm.
+    #
+    # Leg length is very nearly free, which was not previously understood: since
+    # the 2026-08-09 hip-recess fix BOTH variants run R_h = 80 mm, so they carry
+    # identical wire loads (39.7/79.4 g) and `M = 2.P.r` has no R_h term.  The
+    # older "1.5 in runs hotter" note in LANDING_GEAR_ANALYSIS.md was four weeks
+    # stale when it was quoted; it has been corrected there.
+    #
+    # The 1.5 in compound (canonical_leg_r6_1_5in.scad) is RETIRED to a non-flight
+    # variant — kept for bench/handling use, not wired in here.  Both are already
+    # in hull frame at the canonical QMx Sheet 5 bay stations (identity
+    # placement).  The prior Thingiverse-derived feet_x_4/legs parts are archived
     # (ARCHIVE_INDEX.md).
     gear = add_mesh(
         doc,
-        _stl("fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl"),
+        _stl("fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl"),
         "Landing_Gear_R6",
     )
     place_mesh(gear, PL_IDENTITY)
@@ -409,29 +613,111 @@ def assemble():
     # Hinge retention blocks — baked into hull frame (already at identity).
     add_mesh(doc, _stl("fuselage/cargo/cargo_hinge_retention.stl"), "Cargo_Hinge_Retention")
 
-    # Cargo accessories — VERIFY placements (import at origin for manual positioning).
-    add_mesh(doc, _stl("fuselage/cargo/cargo_cradle_autolatch.stl"), "Cargo_Cradle")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_fpv_bezel.stl"), "Cargo_FPV_Bezel")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_gps_retention_ring.stl"), "Cargo_GPS_Ring")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_winch_motor_mount.stl"), "Cargo_Winch_Mount")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_winch_spool.stl"), "Cargo_Winch_Spool")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_drv8833_tray.stl"), "Cargo_DRV8833_Tray")
-    add_mesh(doc, _stl("fuselage/cargo/cargo_door_servo_bracket.stl"), "Cargo_Door_Servo_Bracket")
-    add_mesh(
+    # Cargo accessories — VERIFY placements (2026-09-05 fix).
+    # These previously imported at origin/identity with no place_mesh() call
+    # at all — since world origin (0,0,0) sits inside Nacelle_Port's own
+    # bounding box (+4..+86, -58..+108, +21..+105) and Wing_Port's (-93..+5,
+    # -7..+122, +48..+77), every one of these "unplaced" parts rendered
+    # stacked on top of the port wing/nacelle instead of inside the cargo
+    # bay — this is what the owner spotted after the visibility fix above.
+    # None of these parts has a .scad source (VERIFY_PLACEMENT_CHECKLIST.md
+    # §1 confirms), so there is no documented local-axis convention to
+    # derive a correct orientation from; the estimates below are position-
+    # only (identity rotation), taken from that checklist's own Y/Z
+    # estimates but re-centred on the CARGO SECTION'S ACTUAL hull-frame
+    # centreline (X ~ -170, the mean of Cargo_Shell's measured bbox
+    # -266.97..-72.68 — the checklist's original "X ~ -170" text was already
+    # centreline-correct; only the never-applied code was missing). Rough
+    # placement only — orientation and fine position still need the
+    # checklist's own visual-fit pass in FreeCAD.
+    CARGO_X_CL = -170.0  # cargo/middle section lateral centreline, hull frame
+
+    cradle = add_mesh(doc, _stl("fuselage/cargo/cargo_cradle_autolatch.stl"), "Cargo_Cradle")
+    place_mesh(cradle, (CARGO_X_CL, 45.0, 1.0, 0.0, 0.0, 0.0, 1.0))
+
+    fpv = add_mesh(doc, _stl("fuselage/cargo/cargo_fpv_bezel.stl"), "Cargo_FPV_Bezel")
+    place_mesh(fpv, (CARGO_X_CL, 60.0, 160.0, 0.0, 0.0, 0.0, 1.0))
+
+    gps = add_mesh(doc, _stl("fuselage/cargo/cargo_gps_retention_ring.stl"), "Cargo_GPS_Ring")
+    place_mesh(gps, (CARGO_X_CL, 20.0, 161.5, 0.0, 0.0, 0.0, 1.0))
+
+    winch_mount = add_mesh(
+        doc, _stl("fuselage/cargo/cargo_winch_motor_mount.stl"), "Cargo_Winch_Mount"
+    )
+    place_mesh(winch_mount, (-140.0, 55.0, 1.0, 0.0, 0.0, 0.0, 1.0))
+
+    winch_spool = add_mesh(doc, _stl("fuselage/cargo/cargo_winch_spool.stl"), "Cargo_Winch_Spool")
+    place_mesh(winch_spool, (-140.0, 55.0, 27.0, 0.0, 0.0, 0.0, 1.0))  # coaxial, above mount
+
+    drv8833 = add_mesh(doc, _stl("fuselage/cargo/cargo_drv8833_tray.stl"), "Cargo_DRV8833_Tray")
+    place_mesh(drv8833, (-200.0, 55.0, 12.0, 0.0, 0.0, 0.0, 1.0))
+
+    door_servo = add_mesh(
+        doc, _stl("fuselage/cargo/cargo_door_servo_bracket.stl"), "Cargo_Door_Servo_Bracket"
+    )
+    place_mesh(door_servo, (-125.0, 85.0, 110.0, 0.0, 0.0, 0.0, 1.0))
+
+    release_servo = add_mesh(
         doc, _stl("fuselage/cargo/cargo_release_servo_bracket.stl"), "Cargo_Release_Servo_Bracket"
     )
+    place_mesh(release_servo, (-210.0, 85.0, 110.0, 0.0, 0.0, 0.0, 1.0))
 
     # -------------------------------------------------------------------
-    # FUSELAGE ACCESSORIES (battery tray and belly panel)
-    # VERIFY: all parts imported at origin (identity placement).
-    # User will manually position these in FreeCAD, then AI extracts
-    # final placements from the corrected file.
-    # See VERIFY_PLACEMENT_CHECKLIST.md §2 for positioning guidance.
-    # -------------------------------------------------------------------
-    print("[assembly] Battery tray and belly panel ...", flush=True)
+    # FUSELAGE ACCESSORIES (battery tray and belly panel) — VERIFY (2026-09-05
+    # fix). Same never-applied-placement bug as the cargo accessories above:
+    # both parts imported at world origin, landing inside Nacelle_Port/
+    # Wing_Port's bounding boxes instead of the cargo bay's keel.
+    #
+    # Unlike the cargo accessories, both of these DO have a documented
+    # part-local axis convention in their own .scad header (battery_tray.scad
+    # line 97, belly_panel.scad — same convention, part-local origin):
+    #   local X — longitudinal, +X = forward (toward nose)  => hull -Y
+    #   local Y — vertical,     +Y = up                     => hull +Z
+    #   local Z — lateral,      +Z = toward port             => hull +X
+    # That mapping (hull_x=local_z, hull_y=-local_x, hull_z=local_y) is an
+    # IMPROPER rotation (det = -1, a mirror) — transform_mesh() supports this
+    # per its own docstring, but a mirror flips any left/right-asymmetric
+    # feature. belly_panel is stated port/stbd-symmetric (safe to mirror);
+    # battery_tray.scad's own detent screw bores are cut through only "the
+    # stbd outer wall" (line 236) despite the header's generic +Z=port
+    # convention, an inconsistency already flagged in that file's own Rev R1
+    # note (conflicting cargo-vs-middle-section placement, never reconciled).
+    # Applying the documented convention as-is may put those bores on the
+    # wrong (port) wall — flag for visual confirmation in FreeCAD, per this
+    # checklist's own established VERIFY workflow.
+    #
+    # Position: centred on the cargo/middle centreline (X ~ -170, see
+    # CARGO_X_CL above) and placed within the cargo section per
+    # battery_tray.scad's own current operative note ("place this tray in
+    # the CARGO section, on the cargo keel segment") rather than the older,
+    # explicitly-superseded middle-section note in the same header — Y
+    # centred on Cargo_Shell's own Y span (-69.5..+129, mean +29.75) so the
+    # 154 mm-long tray fits inside it; Z near the belly floor (Cargo_Shell
+    # Z min ~ 0).
+    # Rev T5 (2026-09-15): the keel-rail tray and its belly panel are
+    # SUPERSEDED by Battery_Cradle (roof-hung, cargo roof band, imported in
+    # the Rev T5 block below; docs/BATTERY_MOUNT.md Rev T5).  Kept, gated off.
+    LEGACY_BATTERY_TRAY = False
+    if LEGACY_BATTERY_TRAY:
+        battery_tray = add_mesh(doc, _stl("fuselage/battery_tray.stl"), "Battery_Tray")
+        transform_mesh(
+            battery_tray,
+            (
+                (0.0, 0.0, 1.0, CARGO_X_CL - 31.0),  # hull_x = local_z + tx (tray Z half-width 31)
+                (-1.0, 0.0, 0.0, 106.75),  # hull_y = -local_x + ty
+                (0.0, 1.0, 0.0, 2.0),  # hull_z = local_y + tz (tray bottom ~2 mm off the floor)
+            ),
+        )
 
-    add_mesh(doc, _stl("fuselage/battery_tray.stl"), "Battery_Tray")
-    add_mesh(doc, _stl("fuselage/belly_panel.stl"), "Belly_Panel")
+        belly_panel = add_mesh(doc, _stl("fuselage/belly_panel.stl"), "Belly_Panel")
+        transform_mesh(
+            belly_panel,
+            (
+                (0.0, 0.0, 1.0, CARGO_X_CL - 32.5),  # panel is 65 mm wide, half-width 32.5
+                (-1.0, 0.0, 0.0, 106.75),  # same X/Y centre as Battery_Tray (covers its opening)
+                (0.0, 1.0, 0.0, 0.0),  # flush with the belly (Z ~ 0) below the tray
+            ),
+        )
 
     # -------------------------------------------------------------------
     # WINGS
@@ -470,11 +756,17 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Nacelle pods ...", flush=True)
 
-    port_nac = add_mesh(doc, _stl("nacelles/nacelle_port_revs.stl"), "Nacelle_Port")
-    place_mesh(port_nac, PL_IDENTITY)
+    # PL_IDENTITY at 0 deg tilt (tilt_placement() reduces to identity there),
+    # rotated about the per-side pivot by NACELLE_TILT_PORT_DEG/STBD_DEG
+    # otherwise -- see the NACELLE TILT CONFIGURATION block above.
+    pod_tag = "64mm" if NACELLE_GEN == 64 else "revs"
+    port_nac = add_mesh(doc, _stl(f"nacelles/nacelle_port_{pod_tag}.stl"), "Nacelle_Port")
+    if port_nac is not None:
+        port_nac.Placement = tilt_placement("port")
 
-    stbd_nac = add_mesh(doc, _stl("nacelles/nacelle_stbd_revs.stl"), "Nacelle_Stbd")
-    place_mesh(stbd_nac, PL_IDENTITY)
+    stbd_nac = add_mesh(doc, _stl(f"nacelles/nacelle_stbd_{pod_tag}.stl"), "Nacelle_Stbd")
+    if stbd_nac is not None:
+        stbd_nac.Placement = tilt_placement("stbd")
 
     # -------------------------------------------------------------------
     # NACELLE INTERNAL COMPONENTS (gear train, nozzle iris, EDF sleeves)
@@ -493,23 +785,33 @@ def assemble():
         flush=True,
     )
 
-    # Nacelle local-frame Z stations, mm (nacelle_pod_50mm_tandem.scad):
-    #   intake Z=0 .. STATOR_SLV_Z_START=90.0 .. AFT_SLV_Z_START=122.5 ..
-    #   NOZZLE_RING_Z(=CROWN_Z)=166.25 .. NACELLE_L=185.2 (nozzle exit).
-    #   PIVOT_Z is the spar-crank / CG station, inside the sleeve span.
-    STATOR_SLV_Z_START = 90.0
-    AFT_SLV_Z_START = 122.5
-    # PIVOT_Z re-derived 2026-07-19 for the Rev T rotating assembly: CG_Z =
-    # 111.5 mm.  See nacelle_pod_50mm_tandem.scad header mass breakdown.  The
-    # earlier 104.5 mm figure predates the Rev T nozzle changes: deleting the
-    # gear train alone left the pivot CG ~unchanged, but doubling the flaps
-    # 20→40 mm (CG ~198 mm), making the Ø71 throat+housing a discrete pocket
-    # part (~175 mm), and adding the ~19 g steel spar (on the pivot) net-move
-    # the CG +7.0 mm aft to 111.5 mm.  The spar crank clamps at this station.
-    PIVOT_Z = 111.5  # pivot / spar-crank station = full-assembly nacelle CG
-    NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
+    # Nacelle local-frame Z stations -- module-level (STATOR_SLV_Z_START,
+    # AFT_SLV_Z_START, PIVOT_Z, NOZZLE_RING_Z; see their definitions above,
+    # near the NACELLE TILT CONFIGURATION block -- PIVOT_Z is hoisted there
+    # because nacelle_pivot_hull() needs it before assemble() runs).
 
-    for side in ("port", "stbd"):
+    if NACELLE_GEN == 64:
+        # 64 mm tilt joint (baked in hull frame, tools/prep_nacelle_64_bake.py
+        # + bake_hull_frame.py): the trunnion is bolted to the pod and tilts
+        # with it; the tilt pinion rides the WING shaft and does not tilt.
+        for side in ("port", "stbd"):
+            label = "Port" if side == "port" else "Stbd"
+            tr = add_mesh(doc, _stl(f"nacelles/nacelle_trunnion_64mm_{side}.stl"),
+                          f"Nacelle_{label}_Trunnion")
+            if tr is not None:
+                tr.Placement = tilt_placement(side)
+            add_mesh(doc, _stl(f"wings/wing_tilt_pinion_{side}.stl"),
+                     f"Wing_{label}_Tilt_Pinion")
+        # COVERAGE GAPS (joint census, plan 2026-10-03-002 R1): the 50 mm
+        # stator / aft-spider sleeves and the 50 mm nozzle iris do not fit the
+        # 64 mm bore and have no 64 mm counterparts yet (WBS NAC-64-GEOM-01,
+        # nozzle per plan 2026-09-28-001).  Reported, never placed at 50 mm
+        # stations.
+        for gap in ("64 mm stator sleeve", "64 mm aft spider sleeve",
+                    "64 mm nozzle iris", "64 mm EDF rotors/motors", "70 A ESCs"):
+            print(f"[assembly] COVERAGE GAP: {gap} — no placed solid", flush=True)
+
+    for side in (("port", "stbd") if NACELLE_GEN == 50 else ()):
         label = "Port" if side == "port" else "Stbd"
 
         # ── EDF1/EDF2 inter-stage stator sleeve ──────────────────────────
@@ -523,7 +825,10 @@ def assemble():
             f"Nacelle_{label}_Stator_Sleeve",
         )
         transform_mesh(
-            sleeve, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, STATOR_SLV_Z_START))
+            sleeve,
+            apply_tilt_to_rows(
+                nacelle_rows(side, _IDENTITY3, (0.0, 0.0, STATOR_SLV_Z_START)), side
+            ),
         )
 
         # ── EDF2 aft spider sleeve ────────────────────────────────────────
@@ -535,7 +840,10 @@ def assemble():
             f"Nacelle_{label}_Aft_Spider_Sleeve",
         )
         transform_mesh(
-            aft_sleeve, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, AFT_SLV_Z_START))
+            aft_sleeve,
+            apply_tilt_to_rows(
+                nacelle_rows(side, _IDENTITY3, (0.0, 0.0, AFT_SLV_Z_START)), side
+            ),
         )
 
         # ── Nozzle pushrod drive — Rev T (Option B) ───────────────────────
@@ -563,27 +871,42 @@ def assemble():
         # a crank on it shares the ring's rotating frame (zero relative motion).
         # Replaced by a WING-REFERENCED sync gear + geared bellcrank (hybrid A+B,
         # docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT"; overlay
-        # port_tilt_spar_assembly.scad §6).  The new pinion-mounted crank is not
-        # placed here until nacelle_nozzle_pushrod.scad is reworked (TODO §1.1.3).
+        # port_tilt_spar_assembly.scad §6).
+        # RETIRED 2026-09-28 (servo drive, docs/NOZZLE_DRIVE_TRADE.md
+        # "DECISION AMENDMENT — servo drive (2026-09-28)"): that sync-gear
+        # drive could not be packaged either (0.0 mm axial room for the sun; pinion vs tilt-drive-shaft
+        # collision; ring over-travel past 90 deg tilt).  Both
+        # nacelle_nozzle_sync_gears.scad and nacelle_nozzle_pushrod.scad are
+        # archived.  The nozzle is now servo-driven from inside the pod; the
+        # servo mount is placed here once
+        # docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md U4
+        # produces it.  Nothing is placed for the nozzle drive until then.
 
         # ── Nozzle iris assembly ──────────────────────────────────────────
-        # nacelle_nozzle_iris.stl is the combined render (cam-only unison ring
-        # + outer housing + 8 flaps at the closed position) from
-        # nacelle_nozzle_iris.scad.  Rev T: the ring is a plain CAM disc (no
-        # gear teeth) driven by the spar-crank pushrod above; the housing has
-        # no drive-pinion relief and is rotationally symmetric, so identity
-        # rotation is fine.  Translate to NOZZLE_RING_Z.
+        # nacelle_nozzle_iris-{closed,open}.stl are the combined renders
+        # (cam-only unison ring + outer housing + 8 shingled master/seal
+        # flaps, Rev T3) from nacelle_nozzle_iris.scad, one per petal-state
+        # endpoint -- see nozzle_iris_stl() above for the tilt->file
+        # selection and its "not continuous" caveat. Rev T: the ring is a
+        # plain CAM disc (no gear teeth), servo-driven via a pull-only link
+        # since 2026-09-28; the housing has no drive-pinion relief and is rotationally
+        # symmetric, so identity rotation is fine. Translate to
+        # NOZZLE_RING_Z.
         # History: Rev R1 compound idler (2026-06-22) -> Rev S1 internal ring
         # gear (2026-07-07) -> Rev T pushrod/cam-only drive (2026-07-18,
-        # Option B); the entire gear train is deleted and archived — see
-        # ARCHIVE_INDEX.md and docs/NOZZLE_DRIVE_TRADE.md.
+        # Option B) -> Rev T3 shingled flaps (2026-08-09); the entire gear
+        # train is deleted and archived — see ARCHIVE_INDEX.md and
+        # docs/NOZZLE_DRIVE_TRADE.md.
         nozzle = add_mesh(
             doc,
-            _stl("nacelles/nozzles/nacelle_nozzle_iris.stl"),
+            nozzle_iris_stl(side),
             f"Nacelle_{label}_Nozzle_Iris",
         )
         transform_mesh(
-            nozzle, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, NOZZLE_RING_Z))
+            nozzle,
+            apply_tilt_to_rows(
+                nacelle_rows(side, _IDENTITY3, (0.0, 0.0, NOZZLE_RING_Z)), side
+            ),
         )
 
         # Tip cap (outboard X-face end cap) — ARCHIVED 2026-06-22, legacy
@@ -601,12 +924,48 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Nacelle servo brackets (fuselage-mounted tilt actuators) ...", flush=True)
 
-    add_mesh(
-        doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Port"
-    )
-    add_mesh(
-        doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Stbd"
-    )
+    # Rev T5b (2026-09-15, docs/TILT_ACTUATOR_SELECTION.md): the DS3225 saddle
+    # brackets are SUPERSEDED by the worm-drive actuator brackets below.  The
+    # legacy import is kept, gated off, so the retired part stays traceable.
+    LEGACY_SERVO_BRACKETS = False
+    if LEGACY_SERVO_BRACKETS:
+        add_mesh(
+            doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Port"
+        )
+        add_mesh(
+            doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Stbd"
+        )
+
+    # -------------------------------------------------------------------
+    # REV T5 CARGO SECTION EQUIPMENT — all modelled DIRECTLY in hull frame
+    # (identity placement; single-sourced from tools/cargo_layout_fit.py via
+    # cargo_layout_t5_params.scad).  Worm and wheel are one part each: the
+    # starboard copies are TRANSLATED by 2*(X_CL - WORM_X) = -89.2 mm (Rev
+    # T5e, WORM_X -125.25), never mirrored (the worm has a hand; see
+    # tilt_actuator_bracket.scad header).  The brake guide is the exception
+    # (BHD-05): it is mirrored, from its own stbd STL.  Rev T5e adds the chin node shelf
+    # (chin_node_shelf.scad); the cargo Observer tray is an ENVELOPE only until
+    # cargo_vera_faraday.scad is re-authored in hull frame (OBS-CARGO).
+    # -------------------------------------------------------------------
+    print("[assembly] Rev T5e cargo equipment (tilt actuators, brake, battery cradle, chin shelf) ...", flush=True)
+    T5_STBD_DX = 2.0 * (-169.85 - (-125.25))   # -89.2 mm, port -> starboard translate
+    add_mesh(doc, _stl("fuselage/cargo/tilt_actuator_bracket_port.stl"), "Tilt_Bracket_Port")
+    add_mesh(doc, _stl("fuselage/cargo/tilt_actuator_bracket_stbd.stl"), "Tilt_Bracket_Stbd")
+    for side, dx in (("Port", 0.0), ("Stbd", T5_STBD_DX)):
+        for part, label in (("tilt_actuator_worm", "Tilt_Worm"),
+                            ("tilt_actuator_wheel", "Tilt_Wheel")):
+            obj = add_mesh(doc, _stl(f"fuselage/cargo/{part}.stl"), f"{label}_{side}")
+            if obj is not None and dx:
+                place_mesh(obj, (dx, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0))
+        # BHD-05 (2026-10-07): the brake guide is NOT symmetric about the worm
+        # axis, so starboard is a MIRRORED print (tilt_brake.scad SIDE=-1),
+        # already in hull frame -- never the translated port part, which put
+        # the guide through the bracket web into the controller board.
+        add_mesh(doc, _stl("fuselage/cargo/tilt_brake_guide"
+                           + ("_stbd" if dx else "") + ".stl"),
+                 f"Tilt_Brake_Guide_{side}")
+    add_mesh(doc, _stl("fuselage/cargo/battery_cradle.stl"), "Battery_Cradle")
+    add_mesh(doc, _stl("fuselage/cargo/chin_node_shelf.stl"), "Chin_Node_Shelf")
 
     # -------------------------------------------------------------------
     # DORSAL ANTENNA FIN
@@ -618,6 +977,19 @@ def assemble():
     print("[assembly] Dorsal antenna fin ...", flush=True)
 
     add_mesh(doc, _stl("fuselage/dorsal_antenna_fin.stl"), "Dorsal_Antenna_Fin")
+
+    # -------------------------------------------------------------------
+    # Visibility (2026-09-05 fix)
+    # This script builds the document headless (freecadcmd), which never
+    # attaches GUI ViewObjects unless FreeCADGui is explicitly loaded first
+    # (see main() below). Every object defaulted to ViewObject.Visibility =
+    # False, so opening either output FCStd in the FreeCAD GUI showed an
+    # empty 3D viewport — the tree was fully populated, but nothing was
+    # switched on to draw. Force every object visible before saving.
+    # -------------------------------------------------------------------
+    for _obj in doc.Objects:
+        if _obj.ViewObject is not None:
+            _obj.ViewObject.Visibility = True
 
     # -------------------------------------------------------------------
     # Recompute and save

@@ -5,7 +5,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Implements the BQ76930 driver described in cell_mon_bq769x0.h.
  *
@@ -22,7 +22,8 @@
  *
  * References:
  *   [1] BQ76930 Datasheet SLUSBB2C, Texas Instruments.
- *   [2] Kaylee.md — Serenity UAV Power Distribution Board specification.
+ *   [2] FlightEngineer.md — Serenity UAV Power Distribution Board
+ * specification.
  *
  * Target platform: PocketBeagle 2 Industrial (AM6254), Debian Trixie.
  */

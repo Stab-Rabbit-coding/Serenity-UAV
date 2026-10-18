@@ -1,0 +1,38 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../LibreServo_v4"
+		},
+		{
+			"path": "../open-servo-core-secure"
+		},
+		{
+			"path": "../Open-Secure-ESC"
+		},
+		{
+			"path": "../SecureControllers"
+		},
+		{
+			"path": "../dasGoat-USV"
+		},
+		{
+			"path": "../Tactical-WX-RX"
+		},
+		{
+			"path": "../engineering-pe-skills"
+		},
+		{
+			"path": "../TidySweep"
+		},
+		{
+			"path": "../../../../Tradecraft/prototyping/Project-Management-skill-for-AI-Agents"
+		}
+	],
+	"settings": {
+		"debug.allowBreakpointsEverywhere": true,
+		"debug.closeReadonlyTabsOnEnd": true
+	}
+}

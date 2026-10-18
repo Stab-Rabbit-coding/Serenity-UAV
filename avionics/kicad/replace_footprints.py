@@ -122,12 +122,12 @@ def replace_footprints(pcb_path, ref_map, out_path=None):
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "both"
     base = os.path.dirname(os.path.abspath(__file__))
-    cape_a = os.path.join(base, "CAPE-A-1.kicad_pcb")
-    cape_b = os.path.join(base, "CAPE-B-1.kicad_pcb")
+    cape_a = os.path.join(base, "Pilot.kicad_pcb")
+    cape_b = os.path.join(base, "TACCO.kicad_pcb")
 
     if mode in ("a", "both"):
-        print("\n=== CAPE-A ===")
+        print("\n=== Pilot ===")
         replace_footprints(cape_a, CAPE_A_MAP)
     if mode in ("b", "both"):
-        print("\n=== CAPE-B ===")
+        print("\n=== TACCO ===")
         replace_footprints(cape_b, CAPE_B_MAP)

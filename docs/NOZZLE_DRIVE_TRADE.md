@@ -1,4 +1,7 @@
-# Nozzle-Drive Mechanism Trade Study (Rev R1a, 2026-07-07)
+# Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19; decided 2026-09-28)
+
+> **Current decision:** servo drive scheduled on measured tilt — see
+> [DECISION AMENDMENT — servo drive (2026-09-28)](#decision-amendment--servo-drive-2026-09-28).
 
 > *"It's the tilt-nozzle. Passive. Elegant. Right up until a gear's hanging off
 > the side of the ship." — design review, this session.*
@@ -91,10 +94,10 @@ ring. Spatial (RSSR-class) linkage — tilt axis (X) ⟂ ring axis (Z).
 > the aft cowl.  Option B deletes the ring gear, freeing the now cam-only ring
 > to shrink to Ø66 (housing Ø71), which tucks under the cowl.
 >
-> Implementation (Rev T, 2026-07-18): the entire tilt-to-nozzle gear train
+> Implementation (Rev S2, 2026-07-18): the entire tilt-to-nozzle gear train
 > (sector gear, Pinion A, bevel pair, bevel housing, Nozzle Drive Pinion) is
 > archived; the ring becomes cam-only with a single pushrod lever ear
-> (`nacelle_nozzle_iris.scad` Rev T); a spar crank + COTS ball-link pushrod is
+> (`nacelle_nozzle_iris.scad` Rev S2); a spar crank + COTS ball-link pushrod is
 > added (`nacelle_nozzle_pushrod.scad`).  The current pod spar ROTATES with
 > tilt, so the crank is a direct tilt-angle input (a simplification over this
 > study's "fixed crank on a non-rotating spar" assumption).
@@ -111,7 +114,7 @@ ring. Spatial (RSSR-class) linkage — tilt axis (X) ⟂ ring axis (Z).
 > nacelle**, so a crank clamped to the spar shares the nacelle's rotating frame
 > with the unison ring — they swing together through the whole 0→90° tilt with
 > **zero relative motion**, so the pushrod never strokes the ring.  A passive,
-> tilt-driven nozzle **must take its datum from the non-tilting WING**; the Rev T
+> tilt-driven nozzle **must take its datum from the non-tilting WING**; the Rev S2
 > header's "rotating-spar pod makes the crank a plain driven link" was the error.
 >
 > **Adopted (user 2026-07-19): "a gear at the wingtip that engages a bellcrank in
@@ -164,5 +167,169 @@ the selected option is pending user decision — see TODO.md §1.1.3.3.
   derivation, 44T/15T tooth counts.
 - `airframe/openscad/nacelles/nacelle_sector_gear.scad` — sector R22, 420° Pinion A.
 - `airframe/openscad/nacelles/nacelle_bevel_pair.scad` — 1:1 90° redirect.
-- `airframe/AGENTS.md` "Nacelle Nozzle Drive" — variable diameter exhaust nozzle, driven passively by gear
-  train, based on nacelle tilt."
+- `airframe/AGENTS.md` "Nacelle Nozzle Drive" — states the fixed nozzle-diameter functional
+  requirement; the drive mechanism that achieves it is an open trade study and must not be
+  assumed to be a fixed "gear train" (see this document's adopted hybrid design above).
+
+---
+
+## PACKAGING BLOCKER — the KTD3 datum does not fit (2026-09-10)
+
+> **The linkage is solved. The datum has nowhere to live. These are separate
+> problems and only the first one is closed.**
+
+### What is closed
+
+The linkage geometry for the adopted pinion-driven architecture is **solved and
+verified** by `tools/nozzle_linkage_check.py` (default run passes). Sweeping tilt
+0→90° at 1° steps and root-finding the ring angle that holds the rod length
+constant:
+
+| parameter | value | note |
+|---|---|---|
+| `CRANK_R` | 8.5 mm | unchanged, as the 2026-07-19 amendment predicted |
+| `CRANK_PHASE` | 206.4° | new — crank clocking on the pinion at zero tilt |
+| `PUSHROD_LEN` | 47.6 mm | COTS turnbuckle-adjustable rod: a spec change, not new hardware |
+| `RING_LEVER_AZ` | 157.5° | inboard flap gap (gaps at 22.5 + k·45) |
+
+Ring stroke **23.742°** against the 23.75° target (0.03 % error); **ψ(0) = −0.25°**
+so the ring cam needs **no re-clocking**; **monotonic** throughout, no toggle or
+dead point; transmission angle 88.1–103.8°, worst-case min(TA, 180−TA) = **76.2°**,
+far above the ≥40–45° rule of thumb.
+
+Gear sizing is also settled and is **datum-independent**: a 1:1 pair, **module
+0.8** (matching the existing repo-wide tilt-drivetrain module — wing 14T pinion,
+trunnion 50T ring WA-R8, fuselage 38T/38T), **33T**, PD 26.4, tip Ø28.0, root
+Ø24.4, 20° full depth, no profile shift (33T ≫ the 17T undercut floor). Root Ø24.4
+clears a Ø20.6 spar bore with 1.9 mm of rim (2.4 × m), so the sizing survives any
+datum choice. Lewis bending at a deliberately generous 20 N rod force gives
+10.94 MPa → FOS **7.04** against 77 MPa (REF-MAT-002 Table 4, ASTM D790 flexural —
+the correct test type for a tooth in bending) and **4.43** against the conservative
+48.41 MPa unreinforced-PETG proxy (REF-MAT-001). Teeth are not the governing
+concern on any candidate allowable. *Note: this repo has no print-orientation-
+specific or interlayer (Z-axis) CF-PETG allowable, and the bearing allowable is
+carried as "requires verification" — do not re-label either figure.*
+
+### What is blocked
+
+**KTD3** (plan 004, 2026-08-29) re-datums the nozzle sync gear to be *"coaxial at
+the trunnion, one rotating and one fixed"*, superseding this document's
+2026-07-19 wing-tip sun. **That fixed sun has no axial home in the as-built Rev T4
+joint.** Recomputed at the values `nacelle_trunnion.scad` actually builds:
+
+```
+wing tip face                       |X| 41.7    BUILT WING GEOMETRY
+ − pad proud 2.0                 →      39.7    BUILT WING GEOMETRY
+ − Hall air gap 1.5              →      38.2    flux-coupled, AK7455 window 10–70 mT
+ − ring magnet 2.0               →      36.2    already cut 2.5 → 2.0 on 2026-08-31
+ − spar tip                      |X| 28.2       SLEEVE-bounded, 0.70 mm to sleeve OD r27.5
+ = space for the bearing stack          8.0 mm
+   bearing stack (2 × 6704ZZ)           8.0 mm
+   MARGIN IN HAND                      +0.0 mm
+```
+
+The spar stub is only **13.5 mm** proud of the wing tip face and is fully
+consumed: bearings z 0–8.0, tilt ring band z 0.5–5.5, register z 5.5+, magnet face
+z 10.0, pilot z 11.2. The only remaining window (z 8.0–11.2 = 3.2 mm) is occupied
+by *rotating* trunnion structure and is narrower than a 4.0 mm sun face anyway.
+There is **zero** fixed-frame space inboard of the spar tip, because the spar
+terminates there.
+
+**Every lever is at a floor:**
+
+| lever | frees | why not |
+|---|---|---|
+| (a) spar stub → "duct bound" 26.0 | **0.0 mm** | The 26.0 figure is **stale** — it was *"taken against the Ø50 EDF bore"*, ignoring the stator sleeve, and was superseded by the SLEEVE bound on 2026-08-31. Reaching r 26.0 drives the spar 1.5 mm into `edf_stator_sleeve`'s **2.5 mm** wall (`SLEEVE_OD` 55.0, `EDF_BORE_R` 25.0), leaving 1.0 mm — 60 % below the project minimum wall, on the Ø50 EDF flow boundary, whose ID cannot move inward (R6 invariant). |
+| (b) shrink Hall air gap | 1:1 | Raises flux toward the **70 mT ceiling**; re-validation already flagged "load-bearing, not a formality". |
+| (c) thin the magnet again | 1:1 | Lowers flux toward the **10 mT floor**; already cut once for exactly this reason. Pushes flux *opposite* to (b). |
+| (d) grow the 4.0 mm joint gap | 1:1 | Pushes the nacelle outboard — track/span and wing-attach ripple into plan 003. |
+| (e) single bearing | 4.0 mm | **Not available.** OI-8's own analysis makes bearing-centre *span* the governing number (254 N/brg at 4.0 mm span from the 1.02 N·m ultimate); one bearing has no span and cannot react the moment. |
+
+**There is no cheap lever.** Honouring KTD3 costs either a flux re-validation or a
+wing-geometry change. This is very likely *why* plan 004 records KTD3 as only
+"half-holding" with U5 unbuilt: the intent was recorded while the axial budget
+still appeared to have 1.0 mm in hand — a figure corrected to **0.0 mm** on
+2026-09-10 (`nacelle_trunnion.scad` OI-8 block), which is what makes this cost
+visible at all.
+
+### Decision required (do NOT assume this is resolved)
+
+Someone must choose to either (i) spend flux margin (b/c), (ii) spend wing
+geometry (d), or (iii) **reopen the datum** — noting that the linkage solve, gear
+sizing, tooth stress and print work above are all datum-independent and carry
+over, so reopening is cheaper than it sounds. Under Rev T1's **fixed** spar the
+2026-07-19 "zero relative motion" objection to a spar-mounted pickup no longer
+applies as written, so that option is not disqualified on the old grounds either.
+
+*Analysis by Claude (Claude Opus 5, Anthropic) under the author's direction,
+2026-09-10, per `AGENTS.md` AI attribution.*
+
+## DECISION AMENDMENT — servo drive (2026-09-28)
+
+> **Supersedes the 2026-07-19 hybrid A+B drive and resolves the 2026-09-10 PACKAGING BLOCKER.**
+> Owner decision (Steve Griffing, 2026-09-28). In the 2026-09-28 session this choice was
+> labelled "Option A". It is **not** this document's 2026-07-07 "Option A" (internal ring gear).
+
+### Decision
+
+The nozzle is driven by one sub-micro servo per nacelle, inside the pod, forward of the unison
+ring. The servo is **scheduled on the measured AK7455 tilt angle** by the gateway that reads the
+encoder:
+
+| Tilt | Nozzle exit |
+|---|---|
+| 0° | 75 % of bore |
+| 90° to 145° | 105 % of bore, held flat |
+
+The servo pulls the ring toward 75 % through a pull-only slotted link. The slot is at least as
+long as the full stroke. A torsion spring drives the ring to a hard 105 % stop whenever the servo
+stops pulling:
+
+- On a fault, the gateway commands 105 % and then opens a load switch on the servo's fused 6 V
+  branch.
+- The first sub-200 ms glitch in a flight is forgiven. Any later fault trips at once.
+- A tripped fault re-arms once, after 2 s clean at tilt ≥ 60°. A second trip latches until power
+  cycle.
+
+Implementation: `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`. The gateway
+variant (share the AK7455's lane, or a dedicated board) is open there as D-NZ-1.
+
+### Why the passive drive was retired (three independent defects)
+
+1. **No home for the fixed sun.** The Rev T4 joint has +0.0 mm of axial margin (PACKAGING
+   BLOCKER, above). The owner chose to reopen the datum. Under Rev T1 the spar is fixed, so a
+   wing-frame pickup is valid again in principle. But the only nacelle structure reaching the joint
+   gap is fore and aft of the pivot along the duct axis:
+   - **Aft** is swept by the tilt-drive pinion and shaft (wing station 53.6, r 25.6 mm).
+   - **Forward**, the pushrod would have to pass through the Ø50 collar.
+   - **Any wing-fixed sector or cam at r ≥ 26 mm** stands out of the tip airfoil (±13 mm at the
+     spar, 3–9 mm aft) into the airstream.
+2. **The pinion collides with the tilt-drive shaft.** The drawn pinion axis sits 26.4 mm aft of
+   the pivot. At 0° tilt that is 0.8 mm from the Rev T1 tilt-drive shaft centre (25.6 mm aft of the
+   spar).
+3. **Over-travel past 90°.** The tilt drive sweeps 145°. The solved 1:1 linkage
+   (`tools/nozzle_linkage_check.py` default geometry) keeps driving the unison ring past its
+   23.75° stroke:
+
+   | Tilt | 0° | 30° | 60° | 90° | 105° | 120° | 135° | 145° |
+   |---|---|---|---|---|---|---|---|---|
+   | Ring ψ | −0.36° | −5.48° | −14.05° | −24.18° | −29.42° | −34.51° | −39.22° | −42.01° |
+
+   At 145° that is 177 % of the stroke. That violates "105 % at ≥ 90°" and would jam or back-drive
+   the flaps. Any continuous mechanical 1:1 drive has this defect, and it needs a dwell (cam) or a
+   spring cartridge to fix.
+
+### Alternatives costed (2026-09-28, owner-reviewed)
+
+| Option | Mass change, per aircraft | Parts outside the mould line | Service | Worst failure |
+|---|---|---|---|---|
+| **Servo scheduled on the AK7455 (adopted)** | ≈ +19 g (0.042 lbm) (shared gateway) | 0 if the servo fits the annulus (plan U4) | plug-in servo behind a cover | loss of power or command → spring to 105 % (hover-safe) |
+| Wing-tip sector + spring-cartridge rod | +16 to +36 g est. | 3 (large faired sector, pinion, rod slot) | exposed sector | a jam back-drives the tilt worm |
+| Wider joint gap + spring-cartridge rod | ≈ +28 g est. plus plan-003 structure | 2 | nacelle-off | as above; nacelle 4.5 mm outboard |
+
+`tools/nozzle_linkage_check.py` is kept as the negative-result record for both passive
+architectures. `nacelle_nozzle_sync_gears.scad` and `nacelle_nozzle_pushrod.scad` are archived
+under `archives/airframe-archives/archive/openscad/nacelles/` (see `ARCHIVE_INDEX.md`).
+
+*Analysis by Claude (Claude Opus 5.5, Anthropic) under the author's direction, 2026-09-28; servo
+research and ideation sub-agents Claude Sonnet 5 (Anthropic). Per `AGENTS.md` AI attribution.*

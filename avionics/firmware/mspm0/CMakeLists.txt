@@ -8,7 +8,7 @@
 ## One template, three boards.  Select with:
 ##
 ##   cmake -B build -DSERENITY_BOARD=can_periph_gw -DSERENITY_HAL=sim
-##   cmake -B build -DSERENITY_BOARD=jayne -DSERENITY_HAL=mspm0 \
+##   cmake -B build -DSERENITY_BOARD=observer -DSERENITY_HAL=mspm0 \
 ##         -DCMAKE_TOOLCHAIN_FILE=cmake/arm-none-eabi.cmake
 ##
 ## This is a separate CMake project from `avionics/firmware/`, which builds
@@ -26,9 +26,9 @@ set(CMAKE_C_EXTENSIONS OFF)
 ## Options
 ## ---------------------------------------------------------------------------
 set(SERENITY_BOARD "can_periph_gw" CACHE STRING
-    "Board to build: can_periph_gw | jayne | kaylee")
+    "Board to build: can_periph_gw | observer | flight_engineer")
 set_property(CACHE SERENITY_BOARD PROPERTY STRINGS
-    can_periph_gw jayne kaylee)
+    can_periph_gw observer flight_engineer)
 
 set(SERENITY_HAL "sim" CACHE STRING "HAL port: mspm0 | sim")
 set_property(CACHE SERENITY_HAL PROPERTY STRINGS mspm0 sim)
@@ -37,8 +37,8 @@ set_property(CACHE SERENITY_HAL PROPERTY STRINGS mspm0 sim)
 set(GW_STACK_INDEX "1" CACHE STRING "CAN-PERIPH-GW stack index, 1..4")
 set(GW_ROLE "1" CACHE STRING "Gateway role: 1=encoder 2=esc 3=servo")
 
-## Jayne install site — see boards/jayne/board_config.h
-set(JAYNE_SITE "1" CACHE STRING "Jayne site: 1=nose 2=cargo")
+## Observer install site — see boards/observer/board_config.h
+set(OBSERVER_SITE "1" CACHE STRING "Observer site: 1=nose 2=cargo")
 
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/boards/${SERENITY_BOARD}")
     message(FATAL_ERROR "Unknown SERENITY_BOARD '${SERENITY_BOARD}'")
@@ -98,7 +98,7 @@ target_include_directories(serenity-node PRIVATE
 target_compile_definitions(serenity-node PRIVATE
     GW_STACK_INDEX=${GW_STACK_INDEX}
     GW_ROLE=${GW_ROLE}
-    JAYNE_SITE=${JAYNE_SITE}
+    OBSERVER_SITE=${OBSERVER_SITE}
 )
 
 target_link_libraries(serenity-node PRIVATE uxrclient)

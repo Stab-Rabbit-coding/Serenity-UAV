@@ -9,7 +9,7 @@
 > historical reference for the Rev M 18-inch design iteration.
 
 **Author:** Steve Griffing, PE(CSE) \[Control Systems Engineering\], CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Year:**2026 |**Status:** Public release
 
 > Fan engineering work inspired by the Firefly-class transport ship _Serenity_
@@ -25,7 +25,8 @@
 | Hull geometry         | Peter Farell                     | CC BY 4.0  | printables.com/model/548545    |
 | EDF nozzles           | BamJr                            | CC BY 4.0  | thingiverse.com/thing:2991269  |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269 ft × 170 ft × 79 ft ratios |
-| All other design      | Steve Griffing                   | CC BY 4.0  | This project                   |
+| All other design (hardware/CAD/PCB) | Steve Griffing     | CERN-OHL-W 2.0 | This project                |
+| All other design (docs/code/scripts) | Steve Griffing    | CC BY-SA 4.0 | This project                  |
 
 ---
 
@@ -42,7 +43,7 @@
 | Hover thrust | **24.80 lbf (11,250 gf)** (23.37 lbf / 10,600 gf nacelles + 1.43 lbf / 650 gf fuselage) |
 | ESCs | **4× Hobbywing Platinum PRO V4 120A** (nacelles, one per EDF) + 1× BLHeli32 40A (fuselage) |
 | Governor (Rev L new) | **PID closed-loop RPM per EDF · 500 Hz M4F · BDSHOT 1 kHz feedback** |
-| Avionics dry mass | **0.926 lbm (420 g)** (8× PocketBeagle 2 Industrial + 4× Cape-A + 4× Cape-B + 4× XCVR-49MHZ sub-modules + GPS ×4 + radios) |
+| Avionics dry mass | **0.926 lbm (420 g)** (8× PocketBeagle 2 Industrial + 4× Pilot + 4× TACCO + 4× XCVR-49MHZ sub-modules + GPS ×4 + radios) |
 | Airframe dry mass | **7.08 lbm (3,213 g)** (Rev L 7.05 lbm / 3,197 g + 0.035 lbm / 16 g PB2-I net delta) |
 | T/W empty | **3.11:1** (6S 4000mAh, 7.99 lbm / 3,623 g AUW) |
 | T/W with 250 g cargo | **2.99:1** (6S 2800mAh, 8.29 lbm / 3,758 g AUW) |
@@ -50,16 +51,16 @@
 | T/W one nacelle lost | **1.64:1** — FC RTH |
 | Max payload | **3.07 lbm (1,392 g)** at T/W = 2.0 |
 | Compute nodes | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload) |
-| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Wash 55×35mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** · DK 2820-100003007-ND |
-| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + Zoë 55×35mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, XCVR-49MHZ sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
+| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Pilot 55×35mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9672 TPM 2.0** · DK 2820-100003007-ND |
+| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + XO 55×35mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, XCVR-49MHZ sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9672 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
 | Bay assignments | Shepherd's room (Bay A): CN1+FC1 · Inara's shuttle (Bay B): CN2+FC2 · River's room (Bay D): CN3+FC3 · Simon's medbay (Bay E): CN4+FC4 (CN lower, FC upper per bay) |
-| Cape variant layout | **v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 positions use Wash / Zoë (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Single-SKU procurement; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived as of Rev Q. |
+| Cape variant layout | **v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 positions use Pilot / XO (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Single-SKU procurement; Pilot / TACCO / XCVR-49MHZ-1 archived as of Rev Q. |
 | Bus order | CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 — CN and FC interleaved on all data buses (CAN FD, RS-485, 1553) and power distribution; any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break |
 | Node role election | CAN FD heartbeat priority arbitration at boot — all 8 nodes identical hardware; master elected dynamically with automatic failover |
 | Radios | SiK 915MHz MAVLink + LoRa RFM95W 915MHz backup + TI WL1837MOD WiFi/BT GCS + 49MHz XCVR-49MHZ RC; all 4 on every CN node; software-elected master per link |
 | Obstacle avoidance | 12× VL53L5CX 8×8 ToF sensors, dual redundant arrays (A on FC3 River's room / Bay D, B on FC1 Shepherd's room / Bay A) |
 | Cargo | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, STS3215 winch + safety ratchet + auto-latch cradle |
-| Security | ATF16V8BQL CPLD write-blocker (log μSD, all Cape-B nodes) + **SLB9670 TPM 2.0 on all 8 nodes** (Cape-A and Cape-B) + W25Q128JV NOR flash circular log buffer |
+| Security | ATF16V8BQL CPLD write-blocker (log μSD, all TACCO nodes) + **SLB9672 TPM 2.0 on all 8 nodes** (Cape-A and TACCO) + W25Q128JV NOR flash circular log buffer |
 | Navigation lights | ICAO Annex 2 / 14 CFR 91.209 (6-position) |
 | Access panels | 6 removable panels A–F (bayonet/screw/hinge/magnet) |
 | Build estimate | 100–130 hours across all phases |
@@ -72,7 +73,10 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 
 1. **Print EVERYTHING in Phase 0.** Print both nacelle pod variants (80 mm and 83 mm ID). Resin-print or source all M0.5 gears. Filament costs pennies compared to build time.
 
-- Step 2: **Install ALL conduits, voids, and mounts before the foam pour.**All 8 PTFE conduit tubes, all EPS void formers, all access-panel frames, all PCB standoffs, all SMA bulkhead pass-throughs, all ToF sensor flush-mounts, and all M3 cargo hard points must be in place before any foam is poured.**Once foam cures, these cannot be added.**
+- Step 2: **Install ALL conduits, voids, and mounts before the foam pour.**All 8 PTFE conduit tubes, all EPS void formers, all access-panel frames, all PCB standoffs, all SMA bulkhead pass-throughs, all ToF sensor flush-mounts, and all M3 cargo hard points shall be in place before any foam is poured.**Once foam cures, these cannot be added.**
+
+> **CAUTION:** The foam pour is irreversible. A missing conduit, void former, or mount cannot
+> be added after the foam cures without cutting into the hull, destroying the shell.
 
 - Step 3: **The foam pour is the point of no return.** Verify every provision with a test fit BEFORE mixing foam.
 
@@ -82,7 +86,7 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 
 - Step 6: **Nacelle pod swaps are acceptable rework.** The pod attaches externally to the pivot bracket; swapping it requires only disconnecting motor leads, not cutting foam or hull.
 
-- Step 7: **Security provisioning is non-reversible.** Program the Cape-B CPLD write-blocker (ATF16V8BQL) and provision all TPM 2.0 keys on every node before first untethered flight. The CPLD latch clears only on hard power cycle; TPM endorsement keys cannot be regenerated without physical node replacement.
+- Step 7: **Security provisioning is non-reversible.** Program the TACCO CPLD write-blocker (ATF16V8BQL) and provision all TPM 2.0 keys on every node before first untethered flight. The CPLD latch clears only on hard power cycle; TPM endorsement keys cannot be regenerated without physical node replacement.
 
 - Step 8: **FAA registration on the airframe before first untethered flight.** Replace N00000 placeholder on decal sheet with your issued number.
 
@@ -148,7 +152,8 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 | `spar_bracket.stl`              | CF-PETG  | 0.15mm | 40%        | 1     | 4 walls                                                                                     |
 | `nozzle_outer_housing.stl`      | PETG     | 0.20mm | 20% gyroid | 3     | 2 nacelle + 1 fuselage                                                                      |
 | `nozzle_inner_ring.stl`         | CF-PETG  | 0.15mm | vertical   | 3     | Print vertical for tooth accuracy                                                           |
-| `nozzle_flap.stl`               | PETG     | 0.20mm | 20%        | 48    | 8 per nozzle × 3 sets = 24; print flat                                                      |
+| `nacelle_nozzle_flap.stl`       | PETG     | 0.20mm | 20%        | 8     | MASTER flap: 4 per nozzle × 2 nacelles; print flat [REF-CAD-005]                            |
+| `nacelle_nozzle_flap_seal.stl`  | PETG     | 0.20mm | 20%        | 8     | SEAL flap: alternates w/ master, lapped 0.2mm out; 4 per nozzle × 2 [REF-CAD-005]           |
 | `sector_gear_22mm.stl`          | PETG     | 0.12mm | 40%        | 2     | 0.12mm layer for tooth accuracy                                                             |
 | `access_panel_frames.stl`       | PETG     | 0.20mm | 100%       | 1 set | 6 frames + 6 lids; 2mm wall                                                                 |
 | `cargo_gondola_shell.stl`       | PETG     | 0.20mm | 15% gyroid | 1     | 112×85×22mm belly pod                                                                       |
@@ -205,7 +210,8 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 
 ### Installation Sequence — Follow Exactly
 
-> **Critical:** Steps 1–10 must all be complete before mixing any foam (Step 11).
+> **CAUTION:** Steps 1–10 shall all be complete before mixing any foam (Step 11). The foam pour
+> cannot be undone — an omitted provision means cutting into the cured shell to correct it.
 
 **1. Epoxy ring frames to keel** at stations 91, 165, 251, 320, 388mm. Cure 2h minimum.
 
@@ -220,18 +226,18 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 | E — Aft Service | 12.60–15.28 in (320–388 mm) | CN4+FC4 (CN lower, FC upper) | 3.82×2.48×2.68 in (97×63×68 mm) EPS | 4× M2.5 screws     |
 | F — Engine Bell | 15.28–17.99 in (388–457 mm) | EDF access               | **NO FOAM**                  | Bayonet PETG frame |
 
-All 4 node bays use a uniform 62×42mm footprint — sized for Cape-B (55×35mm) + 7mm clearance. This simplifies void former fabrication: bays A–E (except cargo C) share the same footprint jig template.
+All 4 node bays use a uniform 62×42mm footprint — sized for TACCO (55×35mm) + 7mm clearance. This simplifies void former fabrication: bays A–E (except cargo C) share the same footprint jig template.
 
-**3. Install M2.5 nylon standoffs in all four node bays** before hulls are joined. Each bay holds one CN node (Cape-B, lower) and one FC node (Cape-A, upper). Install floor standoffs at the Cape-B (55×35mm) hole pattern; install inter-cape standoffs at the Cape-A (55×35mm) hole pattern above:
+**3. Install M2.5 nylon standoffs in all four node bays** before hulls are joined. Each bay holds one CN node (Cape-B, lower) and one FC node (Cape-A, upper). Install floor standoffs at the TACCO (55×35mm) hole pattern; install inter-cape standoffs at the Pilot (55×35mm) hole pattern above:
 
 | Bay                      | Station   | Nodes (lower→upper)     | Lower footprint | Floor standoffs   | Inter-cape standoffs |
 | ------------------------ | --------- | ----------------------- | --------------- | ----------------- | -------------------- |
-| A (Nose, panel A)        | 0–91mm    | CN1 Cape-B → FC1 Cape-A | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
-| B (Dorsal Fwd, panel B)  | 91–165mm  | CN2 Cape-B → FC2 Cape-A | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
-| D (Dorsal Aft, panel D)  | 251–320mm | CN3 Cape-B → FC3 Cape-A | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
-| E (Aft Service, panel E) | 320–388mm | CN4 Cape-B → FC4 Cape-A | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
+| A (Nose, panel A)        | 0–91mm    | CN1 TACCO → FC1 Pilot | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
+| B (Dorsal Fwd, panel B)  | 91–165mm  | CN2 TACCO → FC2 Pilot | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
+| D (Dorsal Aft, panel D)  | 251–320mm | CN3 TACCO → FC3 Pilot | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
+| E (Aft Service, panel E) | 320–388mm | CN4 TACCO → FC4 Pilot | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
 
-Cape-B (CN) mounts on 6mm floor standoffs. Cape-A (FC) mounts on 20mm inter-cape standoffs threaded into the Cape-B upper holes — ~44mm total stack height. Cape-A and Cape-B share the same 55×35mm form factor; verify inter-cape standoff hole alignment against PCB layout before ordering standoffs.
+TACCO (CN) mounts on 6mm floor standoffs. Pilot (FC) mounts on 20mm inter-cape standoffs threaded into the TACCO upper holes — ~44mm total stack height. Pilot and TACCO share the same 55×35mm form factor; verify inter-cape standoff hole alignment against PCB layout before ordering standoffs.
 
 **Bus interleave benefit:** Each bay contains one CN and one FC node, sharing the same power tap and data bus segment. A power short, connector failure, or flooded bay takes out exactly one of each type — never all of either.
 
@@ -280,12 +286,12 @@ Insert PTFE sleeves in all 4 holes, seal each with silicone. Mount GPS patch ant
 | -------- | -------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | CAN-FD   | Port keel rail, full length                  | CAN FD — CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4; 120Ω at CN1 and FC4                            |
 | RS-485   | Starboard keel rail, full length             | RS-485 — CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 multidrop; 120Ω at CN1 and FC4                  |
-| MIL-1553 | Dorsal centre spine, full length             | 1553B twisted shielded pair (78Ω) — FC1=BC, FC2=standby BC                               |
+| MIL-1553 | Dorsal center spine, full length             | 1553B twisted shielded pair (78Ω) — FC1=BC, FC2=standby BC                               |
 | ETH-AB   | Port forward section: Bay A → Bay B          | Ethernet — FC1↔CN2 ring link                                                             |
 | ETH-BD   | Port mid-section: Bay B → Bay D (skip Bay C) | Ethernet — FC2↔CN3 ring link                                                             |
 | ETH-DE   | Starboard aft: Bay D → Bay E                 | Ethernet — FC3↔CN4 ring link                                                             |
 | ETH-EA   | Starboard full length: Bay E → Bay A         | Ethernet — FC4↔CN1 ring-close link                                                       |
-| PWR      | Belly centre: battery → BEC → bay taps       | 14AWG power + 20AWG servo bundle; one power tap per bay — each tap feeds one CN + one FC |
+| PWR      | Belly center: battery → BEC → bay taps       | 14AWG power + 20AWG servo bundle; one power tap per bay — each tap feeds one CN + one FC |
 
 Label each conduit at BOTH ends with permanent marker. Immediately thread pull string through each tube and tie off at both ends.
 
@@ -294,11 +300,11 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 ## 10. Prepare EPS void formers
 
 - Cut formers A–E from 25mm EPS board using craft knife + printed jig templates
-- Each former must clear its panel frame by ≥5mm on all sides
+- Each former shall clear its panel frame by ≥5mm on all sides
 - Apply 2 coats Johnson's Paste Wax to ALL EPS surfaces; buff between coats; 15min dry
 - Do NOT wax PTFE conduit tubes (foam bond to tube is fine)
 
-**11. Insert void formers A–E** through open dorsal-forward hull seam. Secure each with 2 toothpick pins into hull ribs. Test-fit all 6 access panel lids — all must close flush (≤0.2mm gap).
+**11. Insert void formers A–E** through open dorsal-forward hull seam. Secure each with 2 toothpick pins into hull ribs. Test-fit all 6 access panel lids — all shall close flush (≤0.2mm gap).
 
 ## 12. Hull section bonding
 
@@ -359,13 +365,15 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 | Kynar wire 28AWG for nav lights                          | ~300mm | ~$2                |
 | 5-minute epoxy (LED sealing)                             | —      | carry from Phase 1 |
 
-> **Budget EDF housing OD note:** All 4 budget EDFs must fit in the **`nacelle_pod_dual_80mm.stl`** 230mm tandem pod. Measure OD with calipers. Typical generic 80mm 6S EDF housing OD = 80–82mm. The dual pod has 83mm ID — add a thin (0.5–1mm) PETG liner ring if needed. This is the only Phase 2 variable.
+> **Budget EDF housing OD note:** All 4 budget EDFs shall fit in the **`nacelle_pod_dual_80mm.stl`** 230mm tandem pod. Measure OD with calipers. Typical generic 80mm 6S EDF housing OD = 80–82mm. The dual pod has 83mm ID — add a thin (0.5–1mm) PETG liner ring if needed. This is the only Phase 2 variable.
 >
 > **ESC note for Phases 2–6:** 50–60A BLHeli32 ESCs are adequate for budget EDFs (≤50A peak). You will replace these with 4× Hobbywing 120A in Phase 7. Do not spend on premium ESCs until Phase 7 — budget ESCs are a deliberate temporary choice.
 
 ### Nacelle Assembly Sequence
 
-**1. Press 4× MR63ZZ bearings** into nacelle pivot sockets — must be flush ±0.2mm. Use a printed bearing-press jig or M5 bolt as press tool. Do not apply side load to bearing.
+**1. Press 4× MR63ZZ bearings** into nacelle pivot sockets — shall be flush ±0.2mm. Use a printed bearing-press jig or M5 bolt as press tool.
+
+> **CAUTION:** Do not apply side load to the bearing while pressing — side loading cracks the race and ruins the bearing.
 
 **2. Thread 8mm CF pivot rods** through wing spar → tilt bracket → nacelle bearing. Secure with M3 set screws and Loctite 243. Torque to finger-tight + 1/4 turn. Allow 2h cure before moving.
 
@@ -403,7 +411,14 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Bevel block → longitudinal shaft → crown pinion → ring gear
 - Install sector gear on bracket; rotate by hand to verify mesh; adjust for 0.1–0.2mm backlash
-- Install 8 nozzle flaps per set
+- Install 8 nozzle flaps per nozzle, **alternating 4 master and 4 seal** around the ring (Rev S3):
+  the seal flap laps 0.2 mm (0.008 in) OUTBOARD of its two neighbouring masters, closing the gap
+  between them from outside.  Both types share the same PIN-3X18 hinge and PIN-2X4 follower, so
+  they differ only in the panel — check the part label before fitting.  See REFERENCES.md
+  [REF-CAD-005].  **NOTE:** the gear-train steps in this section are pre-Rev S2 and describe the
+  deleted sector/bevel/crown chain plus a third fuselage nozzle; the current drive is a
+  pushrod/bellcrank to a single ring lever, and there are 2 nozzles, not 3 — this section still
+  needs a Rev S2 rewrite (TODO.md §1.1.3).
 - Install SG90 nozzle servos (2 nacelle + 1 fuselage); cap servo leads at hull/bay E
 
 **8. Install nacelle tip caps** (with WS2812C LEDs embedded) — M2.5 screws or press-fit per drawing.
@@ -441,8 +456,8 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 | 16AWG silicone wire 0.5m                                              | 1×       | ~$4                              |
 | JST-XH 6S balance tap → XT30 (cells 1–4, 4S tap)                      | 1×       | ~$3                              |
 | PocketBeagle 2 Industrial (AM6254)                                    | 4×       | $51.03 ea (DK 2820-100003007-ND) |
-| Cape-A PCB 55×35mm 4L (JLCPCB assembled) — FC nodes                   | 2×       | ~$42ea                           |
-| Cape-B PCB 55×35mm 4L (JLCPCB assembled) — CN nodes                   | 2×       | ~$80ea                           |
+| Pilot PCB 55×35mm 4L (JLCPCB assembled) — FC nodes                   | 2×       | ~$42ea                           |
+| TACCO PCB 55×35mm 4L (JLCPCB assembled) — CN nodes                   | 2×       | ~$80ea                           |
 | XCVR-49MHZ sub-module PCB (49MHz TDDS RC transceiver)                    | 2×       | ~$20ea                           |
 | SiK 915MHz ground station radio                                       | 1×       | ~$15                             |
 | microSD 32GB (log — 1 per CN node, write-blocked)                     | 2×       | ~$8ea                            |
@@ -469,19 +484,19 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Step 7: Install 4S balance tap pigtail: JST-XH balance connector cells 1–4 of 6S pack → XT30 → fuselage ESC. 16AWG, 150mm.
 
-- Step 8: CAN FD bus termination: CN1 end = 120Ω bridge**SOLDERED** to Cape-B termination pad at Bay A (CN1 is the bus start — first node on the chain). FC2 gets a temporary far-end termination resistor (120Ω at FC2 Cape-A, Bay B) for Phase 3. Termination will shift permanently to FC4 (Bay E, final node) in Phase 4 — remove the Phase 3 FC2 resistor at that time.
+- Step 8: CAN FD bus termination: CN1 end = 120Ω bridge**SOLDERED** to TACCO termination pad at Bay A (CN1 is the bus start — first node on the chain). FC2 gets a temporary far-end termination resistor (120Ω at FC2 Pilot, Bay B) for Phase 3. Termination will shift permanently to FC4 (Bay E, final node) in Phase 4 — remove the Phase 3 FC2 resistor at that time.
 
 ### CN1 + FC1 Installation (Bay A — Nose)
 
 > **Use NYLON standoffs throughout Bay A — metal standoffs degrade GPS and RF performance.**
 
-- Step 9: Mount CN1 Cape-B PCB on Bay A floor standoffs (4× M2.5 nylon 6mm, Cape-B hole pattern). Insert PocketBeagle 2 Industrial into CN1 Cape-B expansion connector. Secure with M2.5 nylon screws.
+- Step 9: Mount CN1 TACCO PCB on Bay A floor standoffs (4× M2.5 nylon 6mm, TACCO hole pattern). Insert PocketBeagle 2 Industrial into CN1 TACCO expansion connector. Secure with M2.5 nylon screws.
 
-- Step 10: Thread FC1 inter-cape standoffs (4× M2.5 nylon 20mm, Cape-A hole pattern) into CN1 Cape-B upper mounting holes. Mount FC1 Cape-A on inter-cape standoffs. Insert second PocketBeagle 2.
+- Step 10: Thread FC1 inter-cape standoffs (4× M2.5 nylon 20mm, Pilot hole pattern) into CN1 TACCO upper mounting holes. Mount FC1 Pilot on inter-cape standoffs. Insert second PocketBeagle 2.
 
-- Step 11: PB2-I boots from 64GB eMMC —**no OS microSD required.**Flash OS to eMMC on CN1 and FC1 via USB-C before installation.**Install log μSD (64GB) in CN1 Cape-B log slot.** Label: CN1-LOG. ⚠ Log μSD is write-blocked hardware flight recorder — do not use as OS card.
+- Step 11: PB2-I boots from 64GB eMMC —**no OS microSD required.**Flash OS to eMMC on CN1 and FC1 via USB-C before installation.**Install log μSD (64GB) in CN1 TACCO log slot.** Label: CN1-LOG. ⚠ Log μSD is write-blocked hardware flight recorder — do not use as OS card.
 
-- Step 12: Seat XCVR-49MHZ sub-module onto CN1 Cape-B sub-module header. Connect XCVR-49MHZ coaxial lead through dorsal fin SMA bulkhead. Install 49MHz helical coil antenna in dorsal fin enclosure.
+- Step 12: Seat XCVR-49MHZ sub-module onto CN1 TACCO sub-module header. Connect XCVR-49MHZ coaxial lead through dorsal fin SMA bulkhead. Install 49MHz helical coil antenna in dorsal fin enclosure.
 
 - Step 13: Connect CN1 radio antenna pigtails:
 - SiK 915MHz → belly port SMA bulkhead (sta 253.7mm)
@@ -497,17 +512,17 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Step 17: Pull MIL-1553 conduit to Bay A. Connect to CN1 and FC1 DS26LV31/DS26LV32 headers. FC1 is configured as MIL-STD-1553 Bus Controller (BC); CN1 as RT address 0x01.
 
-- Step 18: Pull ETH-EA conduit (Bay E→Bay A ring-close end) to Bay A. Terminate at CN1 Cape-B ETH-2 port (ring-close link FC4↔CN1 — cap the Bay E end until Phase 4).
+- Step 18: Pull ETH-EA conduit (Bay E→Bay A ring-close end) to Bay A. Terminate at CN1 TACCO ETH-2 port (ring-close link FC4↔CN1 — cap the Bay E end until Phase 4).
 
-- Step 19: Install nav light WS2812C chain: PORT nacelle (RED), STBD nacelle (GREEN), tail cone (WHITE steady), belly strobe (WHITE flash). Signal wire routes through PWR conduit; connect to CN1 Cape-B GPIO header.
+- Step 19: Install nav light WS2812C chain: PORT nacelle (RED), STBD nacelle (GREEN), tail cone (WHITE steady), belly strobe (WHITE flash). Signal wire routes through PWR conduit; connect to CN1 TACCO GPIO header.
 
 ### CN2 + FC2 Installation (Bay B — Dorsal Forward)
 
-- Step 20: Open Bay B panel (4× M2.5 screws). Mount CN2 Cape-B on Bay B floor standoffs (4× M2.5 nylon 6mm). Insert PocketBeagle 2 Industrial. Mount FC2 Cape-A on inter-cape standoffs (4× M2.5 nylon 20mm). Insert second PocketBeagle 2.
+- Step 20: Open Bay B panel (4× M2.5 screws). Mount CN2 TACCO on Bay B floor standoffs (4× M2.5 nylon 6mm). Insert PocketBeagle 2 Industrial. Mount FC2 Pilot on inter-cape standoffs (4× M2.5 nylon 20mm). Insert second PocketBeagle 2.
 
-- Step 21: PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN2 and FC2 before installation.**Install log μSD (64GB) in CN2 Cape-B log slot.** Label: CN2-LOG.
+- Step 21: PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN2 and FC2 before installation.**Install log μSD (64GB) in CN2 TACCO log slot.** Label: CN2-LOG.
 
-- Step 22: Seat XCVR-49MHZ sub-module onto CN2 Cape-B header.
+- Step 22: Seat XCVR-49MHZ sub-module onto CN2 TACCO header.
 
 - Step 23: Route FC2 GPS U.FL coax through the PTFE-sleeved dorsal hole at sta ~130mm. Mount GPS patch antenna on dorsal hull exterior, antenna face UP.
 
@@ -517,9 +532,9 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Step 26: Continue MIL-1553 daisy-chain from Bay A to Bay B: CN2 and FC2 as RT nodes. FC2 is configured as standby Bus Controller.
 
-- Step 27: Pull ETH-AB conduit (Bay A→Bay B): terminate Bay A end at FC1 Cape-A ETH-1 port. Terminate Bay B end at CN2 Cape-B ETH-2 port. This completes the FC1↔CN2 Ethernet ring link.
+- Step 27: Pull ETH-AB conduit (Bay A→Bay B): terminate Bay A end at FC1 Pilot ETH-1 port. Terminate Bay B end at CN2 TACCO ETH-2 port. This completes the FC1↔CN2 Ethernet ring link.
 
-- Step 28: Pull ETH-BD conduit (Bay B→Bay D): terminate Bay B end at FC2 Cape-A ETH-1 port. Cap the Bay D end — will connect to CN3 in Phase 4.
+- Step 28: Pull ETH-BD conduit (Bay B→Bay D): terminate Bay B end at FC2 Pilot ETH-1 port. Cap the Bay D end — will connect to CN3 in Phase 4.
 
 - Step 29: Power tap: connect CN2 and FC2 power leads from PWR conduit Bay B branch. Verify 5V ±0.05V at each node power header.
 
@@ -527,9 +542,9 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 > ⚠ **TPM key provisioning is per-node and unique.** Provision each node separately with distinct key material. Do not copy key files between nodes.
 
-- Step 30: Power each node via USB-C (3.3V/5V rail from Cape BEC) and boot from OS μSD. SSH in via USB-UART adapter (CP2102 on Cape-A/B debug UART header).
+- Step 30: Power each node via USB-C (3.3V/5V rail from Cape BEC) and boot from OS μSD. SSH in via USB-UART adapter (CP2102 on Pilot/B debug UART header).
 
-- Step 31: On each node, provision TPM 2.0 (SLB9670 on Cape-A and Cape-B):
+- Step 31: On each node, provision TPM 2.0 (SLB9672 on Pilot and TACCO):
 
 ```bash
 
@@ -543,7 +558,7 @@ tpm2_evictcontrol -C o -c key.ctx 0x81000001
 
 Run on **all 4 nodes** (CN1, FC1, CN2, FC2) — separate SSH sessions, separate key material per node.
 
-- Step 32: Verify Cape-B CPLD write-blocker on CN1 and CN2. The ATF16V8BQL latch is SET automatically at power-on by the boot sequence — no JTAG required. Verify log μSD is write-blocked:
+- Step 32: Verify TACCO CPLD write-blocker on CN1 and CN2. The ATF16V8BQL latch is SET automatically at power-on by the boot sequence — no JTAG required. Verify log μSD is write-blocked:
 
 ```bash
 
@@ -589,7 +604,7 @@ ip link set can1 up
 
 ```
 
-- Step 36: Verify CAN FD heartbeat ring: with CN1+FC1+CN2+FC2 all powered, run `candump can0` on any node — all 4 node heartbeat frames (IDs 0x001–0x004) must appear within 100ms. Role election (FC master) occurs automatically via highest-priority CAN ID.
+- Step 36: Verify CAN FD heartbeat ring: with CN1+FC1+CN2+FC2 all powered, run `candump can0` on any node — all 4 node heartbeat frames (IDs 0x001–0x004) shall appear within 100ms. Role election (FC master) occurs automatically via highest-priority CAN ID.
 
 - Step 37: Configure MAVLink routing on elected FC master node:
 
@@ -621,6 +636,9 @@ apt install mavlink-router
 - XCVR-49MHZ RC channels show correct direction and travel in QGC RC calibration screen
 - WiFi GCS: connect QGC over WL1837MOD access point, verify telemetry
 
+> **WARNING:** EDFs spin at high speed even at low throttle. Keep hands, tools, and loose
+> clothing clear of the nacelle and fuselage intakes/exhausts before applying any throttle.
+
 - Step 43: Motor spin test (5% throttle, 2 seconds): all 3 motors spin in correct directions:
 - Port nacelle: CCW (tractor)
 - Stbd nacelle: CW (tractor)
@@ -639,7 +657,10 @@ apt install mavlink-router
 
 ### First Flight
 
-> ⚠ **FAA requirement:** Apply registration number (replacing N00000 on decal sheet) BEFORE any untethered flight. 14 CFR Part 48 — registration mark visible without moving any part.
+> **NOTE:** Apply the registration number (replacing N00000 on the decal sheet) BEFORE any untethered flight. 14 CFR Part 48 — registration mark visible without moving any part.
+
+> **WARNING:** A swollen (puffed), punctured, or otherwise damaged LiPo battery is a fire
+> hazard. Do not charge, connect, or fly a battery that fails the checks below.
 
 ## Pre-flight ABCD checklist
 
@@ -673,7 +694,7 @@ apt install mavlink-router
 - [ ] Flight log written to both CN node log μSDs; CPLD write-block verified (write attempt returns read-only error)
 - [ ] FC1 and FC2 GPS HDOP ≤1.5, positions agree within 2m
 
-**Phase 3 cost estimate:**ESCs ~$68 + PDB/BEC/wiring ~$38 + 4× PB2-I ~$204 + 2× Cape-A ~$84 + 2× Cape-B ~$160 + 2× XCVR-49MHZ ~$40 + SiK GS radio ~$15 + log μSD ×2 ~$24 + battery ~$60 + nav lights ~$8 + tools ~$8 + misc ~$23 =**~$732** (log μSD only — no OS microSD; eMMC handles OS)
+**Phase 3 cost estimate:**ESCs ~$68 + PDB/BEC/wiring ~$38 + 4× PB2-I ~$204 + 2× Pilot ~$84 + 2× TACCO ~$160 + 2× XCVR-49MHZ ~$40 + SiK GS radio ~$15 + log μSD ×2 ~$24 + battery ~$60 + nav lights ~$8 + tools ~$8 + misc ~$23 =**~$732** (log μSD only — no OS microSD; eMMC handles OS)
 
 ## Cumulative cost at first flight: ~$1,030
 
@@ -688,8 +709,8 @@ apt install mavlink-router
 | Item                                               | Qty      | Approx. Cost                     |
 | -------------------------------------------------- | -------- | -------------------------------- |
 | PocketBeagle 2 Industrial (AM6254)                 | 4×       | $51.03 ea (DK 2820-100003007-ND) |
-| Cape-A PCB 55×35mm 4L (JLCPCB assembled) — FC3+FC4 | 2×       | ~$42ea                           |
-| Cape-B PCB 55×35mm 4L (JLCPCB assembled) — CN3+CN4 | 2×       | ~$80ea                           |
+| Pilot PCB 55×35mm 4L (JLCPCB assembled) — FC3+FC4 | 2×       | ~$42ea                           |
+| TACCO PCB 55×35mm 4L (JLCPCB assembled) — CN3+CN4 | 2×       | ~$80ea                           |
 | XCVR-49MHZ sub-module PCB                             | 2×       | ~$20ea                           |
 | microSD 32GB log (CN3+CN4 only, write-blocked)     | 2×       | ~$8ea                            |
 | JST-GH CAN/RS-485/1553/ETH cables 150mm            | assorted | ~$20                             |
@@ -698,43 +719,43 @@ apt install mavlink-router
 
 > **Use NYLON standoffs throughout Bay D — metal standoffs degrade GPS performance.**
 
-1. Open Bay D panel (dorsal aft, 4× N42 magnets). Mount CN3 Cape-B on Bay D floor standoffs (4× M2.5 nylon 6mm, Cape-B hole pattern). Insert PocketBeagle 2 Industrial. Mount FC3 Cape-A on inter-cape standoffs (4× M2.5 nylon 20mm) above CN3. Insert second PocketBeagle 2.
+1. Open Bay D panel (dorsal aft, 4× N42 magnets). Mount CN3 TACCO on Bay D floor standoffs (4× M2.5 nylon 6mm, TACCO hole pattern). Insert PocketBeagle 2 Industrial. Mount FC3 Pilot on inter-cape standoffs (4× M2.5 nylon 20mm) above CN3. Insert second PocketBeagle 2.
 
-- Step 2: PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN3 and FC3 before installation.**Install log μSD (64GB) in CN3 Cape-B log slot.** Label: CN3-LOG.
+- Step 2: PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN3 and FC3 before installation.**Install log μSD (64GB) in CN3 TACCO log slot.** Label: CN3-LOG.
 
-- Step 3: Seat XCVR-49MHZ sub-module onto CN3 Cape-B sub-module header.
+- Step 3: Seat XCVR-49MHZ sub-module onto CN3 TACCO sub-module header.
 
 - Step 4: Route FC3 GPS U.FL coax through the PTFE-sleeved dorsal hole at sta ~275mm. Mount GPS patch antenna on dorsal hull exterior, antenna face UP.
 
-- Step 5: Remove the temporary Phase 3 FC2 120Ω CAN termination resistor from FC2 Cape-A in Bay B. Continue CAN-FD daisy-chain from Bay B (FC2 CAN out) into Bay D: CN3 CAN in → CN3 CAN out → FC3 CAN in → FC3 CAN out → cable exits Bay D toward Bay E via CAN conduit.
+- Step 5: Remove the temporary Phase 3 FC2 120Ω CAN termination resistor from FC2 Pilot in Bay B. Continue CAN-FD daisy-chain from Bay B (FC2 CAN out) into Bay D: CN3 CAN in → CN3 CAN out → FC3 CAN in → FC3 CAN out → cable exits Bay D toward Bay E via CAN conduit.
 
 - Step 6: Continue RS-485 daisy-chain from Bay B into Bay D: CN3 → FC3 ports. Cable exits toward Bay E.
 
 - Step 7: Continue MIL-1553 from Bay B into Bay D: CN3 and FC3 as Remote Terminal nodes.
 
-- Step 8: Pull ETH-BD conduit (Bay B→Bay D) — uncap the Bay D end. Terminate at CN3 Cape-B ETH-2 port (FC2↔CN3 Ethernet ring link).
+- Step 8: Pull ETH-BD conduit (Bay B→Bay D) — uncap the Bay D end. Terminate at CN3 TACCO ETH-2 port (FC2↔CN3 Ethernet ring link).
 
 - Step 9: Power tap: connect CN3 and FC3 power leads from PWR conduit Bay D branch. Verify 5V ±0.05V at each node power header.
 
 ### CN4 + FC4 Installation (Bay E — Aft Service)
 
-- Step 10: Open Bay E panel (aft service, 4× M2.5 screws). Mount CN4 Cape-B on Bay E floor standoffs (4× M2.5 nylon 6mm, Cape-B hole pattern). Insert PocketBeagle 2 Industrial. Mount FC4 Cape-A on inter-cape standoffs (4× M2.5 nylon 20mm) above CN4. Insert second PocketBeagle 2.
+- Step 10: Open Bay E panel (aft service, 4× M2.5 screws). Mount CN4 TACCO on Bay E floor standoffs (4× M2.5 nylon 6mm, TACCO hole pattern). Insert PocketBeagle 2 Industrial. Mount FC4 Pilot on inter-cape standoffs (4× M2.5 nylon 20mm) above CN4. Insert second PocketBeagle 2.
 
-- Step 11: PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN4 and FC4 before installation.**Install log μSD (64GB) in CN4 Cape-B log slot.** Label: CN4-LOG.
+- Step 11: PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN4 and FC4 before installation.**Install log μSD (64GB) in CN4 TACCO log slot.** Label: CN4-LOG.
 
-- Step 12: Seat XCVR-49MHZ sub-module onto CN4 Cape-B sub-module header.
+- Step 12: Seat XCVR-49MHZ sub-module onto CN4 TACCO sub-module header.
 
 - Step 13: Route FC4 GPS U.FL coax through the PTFE-sleeved dorsal hole at sta ~350mm. Mount GPS patch antenna on dorsal hull exterior, antenna face UP.
 
-- Step 14: Terminate CAN FD bus end: CN4 CAN in → CN4 CAN out → FC4 CAN in → FC4 CAN out +**120Ω PERMANENT termination** soldered to FC4 Cape-A termination pad (FC4 is the far-end terminus of the CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 chain).
+- Step 14: Terminate CAN FD bus end: CN4 CAN in → CN4 CAN out → FC4 CAN in → FC4 CAN out +**120Ω PERMANENT termination** soldered to FC4 Pilot termination pad (FC4 is the far-end terminus of the CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 chain).
 
 - Step 15: Continue RS-485 daisy-chain from Bay D into Bay E: CN4 → FC4 ports. Bus termination is already at CN1 (start, Bay A) and FC4 (end, Bay E) — no additional resistors needed.
 
 - Step 16: Connect MIL-1553 to CN4 and FC4. Both as Remote Terminal nodes.
 
-- Step 17: Pull ETH-DE conduit (Bay D→Bay E): terminate Bay D end at FC3 Cape-A ETH-1 port. Terminate Bay E end at CN4 Cape-B ETH-2 port. This completes the FC3↔CN4 Ethernet ring link.
+- Step 17: Pull ETH-DE conduit (Bay D→Bay E): terminate Bay D end at FC3 Pilot ETH-1 port. Terminate Bay E end at CN4 TACCO ETH-2 port. This completes the FC3↔CN4 Ethernet ring link.
 
-- Step 18: Terminate ETH-EA conduit ring-close (Bay E→Bay A): terminate Bay E end at FC4 Cape-A ETH-1 port. The Bay A end is already connected to CN1 Cape-B ETH-2 (connected in Phase 3, Step 18). This closes the FC4↔CN1 link and completes the 8-node RSTP ring.
+- Step 18: Terminate ETH-EA conduit ring-close (Bay E→Bay A): terminate Bay E end at FC4 Pilot ETH-1 port. The Bay A end is already connected to CN1 TACCO ETH-2 (connected in Phase 3, Step 18). This closes the FC4↔CN1 link and completes the 8-node RSTP ring.
 
 - Step 19: Power tap: connect CN4 and FC4 power leads from PWR conduit Bay E branch. Verify 5V ±0.05V at each node power header.
 
@@ -742,7 +763,7 @@ apt install mavlink-router
 
 - Step 20: Provision TPM 2.0 on CN3, FC3, CN4, FC4 via same procedure as Phase 3 Step 31. Each node receives unique key material.
 
-- Step 21: Verify Cape-B CPLD write-blocker on CN3 and CN4:
+- Step 21: Verify TACCO CPLD write-blocker on CN3 and CN4:
 
 ```bash
 
@@ -754,7 +775,7 @@ echo test > /mnt/flightlog/test.txt   # must return "Read-only file system"
 
 - Step 22: With all 8 nodes powered, verify Ethernet ring via RSTP: run `bridge vlan show` on any node — all 8 switch ports should appear. Disconnect one inter-bay ETH cable and verify traffic re-routes within 1s (RSTP fast-failover).
 
-- Step 23: Verify full CAN FD ring: `candump can0` on any node must show heartbeat frames 0x001–0x008 within 100ms. Role election produces one FC master, one FC standby, one CN master, one CN standby.
+- Step 23: Verify full CAN FD ring: `candump can0` on any node shall show heartbeat frames 0x001–0x008 within 100ms. Role election produces one FC master, one FC standby, one CN master, one CN standby.
 
 - Step 24: MIL-STD-1553 final configuration: FC1 = primary Bus Controller (BC), FC2 = standby BC. FC3, FC4, CN1–CN4 = Remote Terminals (RT). Verify all 8 RT addresses conflict-free and respond to BC poll within 9μs.
 
@@ -769,7 +790,7 @@ echo test > /mnt/flightlog/test.txt   # must return "Read-only file system"
 - [ ] Full hover with all 8 nodes: no interference or command jitter
 - [ ] Any single node power-kill: remaining nodes maintain flight control within 100ms
 
-**Phase 4 cost estimate:**4× PB2-I ~$204 + 2× Cape-A ~$84 + 2× Cape-B ~$160 + 2× XCVR-49MHZ ~$40 + log μSD ×2 ~$24 + cables ~$20 =**~$532** (no OS microSD; eMMC handles OS)
+**Phase 4 cost estimate:**4× PB2-I ~$204 + 2× Pilot ~$84 + 2× TACCO ~$160 + 2× XCVR-49MHZ ~$40 + log μSD ×2 ~$24 + cables ~$20 =**~$532** (no OS microSD; eMMC handles OS)
 
 ---
 
@@ -777,7 +798,7 @@ echo test > /mnt/flightlog/test.txt   # must return "Read-only file system"
 
 **Goal:** Dual-redundant obstacle avoidance operational. All 12 sensors installed, wired to Bay A (Array B, hosted by FC1) and Bay D (Array A, hosted by FC3), and fused into autonomous navigation.
 
-> Requires Phase 4 complete — FC3 (Bay D) must be installed before Array A can be wired.
+> Requires Phase 4 complete — FC3 (Bay D) shall be installed before Array A can be wired.
 
 ### Buy List for Phase 5
 
@@ -803,7 +824,7 @@ echo test > /mnt/flightlog/test.txt   # must return "Read-only file system"
 | S5B    | Dorsal keel (panel D area, aft of S5A) | 260mm   |
 | S6B    | Belly blister (aft of S6A)             | 220mm   |
 
-- Step 2: Connect each VL53L5CX via JST-SH1.0 4-wire (GND/VCC/SDA/SCL) to TCA9548A channels 0–5 in Bay A. Wire MCP23008 GP0–GP5 to XSHUT pins. I2C bus connects to FC1 Cape-A I2C header.
+- Step 2: Connect each VL53L5CX via JST-SH1.0 4-wire (GND/VCC/SDA/SCL) to TCA9548A channels 0–5 in Bay A. Wire MCP23008 GP0–GP5 to XSHUT pins. I2C bus connects to FC1 Pilot I2C header.
 
 Boot sequence: assert all XSHUT LOW → enable one sensor → assign I2C address 0x54–0x59 → repeat for all 6.
 
@@ -820,7 +841,7 @@ Boot sequence: assert all XSHUT LOW → enable one sensor → assign I2C address
 | S5A    | Dorsal keel (panel B area, fwd of S5B) | 180mm   |
 | S6A    | Forward belly blister (fwd of S6B)     | 160mm   |
 
-- Step 4: Connect to TCA9548A + MCP23008 in Bay D, wired to FC3 Cape-A I2C header. Array A I2C bus is**electrically isolated** from Array B — same addresses on separate buses is intentional.
+- Step 4: Connect to TCA9548A + MCP23008 in Bay D, wired to FC3 Pilot I2C header. Array A I2C bus is**electrically isolated** from Array B — same addresses on separate buses is intentional.
 
 ### Navigation Configuration
 
@@ -866,7 +887,7 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 1. Epoxy cargo gondola shell into belly void at 4× M3 hard points (installed Phase 1). Shell protrudes 18mm below hull line — matches Serenity canonical cargo module profile. Cure 24h before proceeding.
 
-- Step 2: Install 3mm CF door hinge pins at gondola centreline. Attach clamshell door halves (2× mirrored). Doors must open freely (spring-loaded to open) and close to flush fit.
+- Step 2: Install 3mm CF door hinge pins at gondola centerline. Attach clamshell door halves (2× mirrored). Doors shall open freely (spring-loaded to open) and close to flush fit.
 
 - Step 3: Install the DRV8833 board (door + payload-release servos only) and the STS3215 winch train in the gondola top: both winch pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. The spool is supported at both pedestals — it is never hung off the servo output. Wind 1.5 m Dyneema SK75 onto the spool; reserve 0.5 m slack. **Do not anchor the inboard end** — it is friction-retained so the line sheds at overload. Attach the cargo cradle (cargo_cradle_autolatch.stl) to the Dyneema via a double-bowline knot. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
 
@@ -874,11 +895,11 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 - Step 5: Install SG90 payload-release servo to control DRV8833 IN1/IN2 and nSLEEP via PWM → resistor divider → GPIO.
 
-- Step 6: Route DRV8833 control leads and servo cables through PWR conduit belly tap to the elected CN master node Cape-B GPIO header (CN1 in Bay A or CN2 in Bay B — whichever won CN master election).
+- Step 6: Route DRV8833 control leads and servo cables through PWR conduit belly tap to the elected CN master node TACCO GPIO header (CN1 in Bay A or CN2 in Bay B — whichever won CN master election).
 
 - Step 7: Seal gondola-to-hull perimeter joint with 3M foam gasket tape (dust and moisture seal).
 
-- Step 8: Configure CN master node GPIO: door open/close command, winch deploy/retract, payload latch status (microswitched auto-latch). The Cape-B DRV8833 and HX711 load-cell interfaces are used directly for winch motor and payload weight sensing.
+- Step 8: Configure CN master node GPIO: door open/close command, winch deploy/retract, payload latch status (microswitched auto-latch). The TACCO DRV8833 and HX711 load-cell interfaces are used directly for winch motor and payload weight sensing.
 
 ### Phase 6 Pass Criteria
 
@@ -922,8 +943,13 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 | 4-AWG silicone main bus wire (if not already upgraded)          | ~500mm | ~$8          |
 
 > **Sourcing:** XRP 3660-2700KV available CCW and CW from Turbines-RC (EU) and RC-Castle (global). Order CCW for port nacelle (both FWD+AFT), CW for starboard nacelle (both FWD+AFT) to maintain tractor/pusher balance.
-> ⚠ **ESC mandatory:**XRP 3660-2700KV draws**84A peak per EDF** on 6S. The Hobbywing 120A provides 43% headroom. Do NOT attempt to run XRP on budget 50–60A ESCs — they will overheat and fail. Replace all 4 nacelle ESCs.
-> ⚠ **Power wiring upgrade:**With 4× 84A ESCs, peak nacelle current is 168A/side (336A total). Upgrade main bus to**4-AWG silicone** if not already installed. Each ESC needs an independent XT30 power pigtail with 100A poly fuse at PDB.
+
+> **CAUTION:** XRP 3660-2700KV draws **84A peak per EDF** on 6S. The Hobbywing 120A provides 43% headroom. Do NOT attempt to run XRP on budget 50–60A ESCs — they will overheat and fail. Replace all 4 nacelle ESCs.
+
+> **CAUTION:** With 4× 84A ESCs, peak nacelle current is 168A/side (336A total). Upgrade main bus to **4-AWG silicone** if not already installed. Each ESC needs an independent XT30 power pigtail with 100A poly fuse at PDB.
+
+> **WARNING:** Disconnect the flight battery before servicing the EDFs. An EDF that spins
+> unexpectedly while hands or tools are inside the pod is a serious injury hazard.
 
 ### EDF Swap Sequence (per nacelle — repeat for both)
 
@@ -958,8 +984,8 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 - Step 12: For each Hobbywing ESC:
 - Connect independent XT30 power pigtail with 100A poly fuse to PDB rail
 - Solder 14AWG motor leads from XRP EDF
-- Connect DSHOT signal lead to FC1 Cape-A (for ESC-NAC-L-FWD/AFT) or FC4 Cape-A (for ESC-NAC-R-FWD/AFT)
-- Connect BLHeli32 serial telem JST-GH 3-pin to Cape-A telem port
+- Connect DSHOT signal lead to FC1 Pilot (for ESC-NAC-L-FWD/AFT) or FC4 Pilot (for ESC-NAC-R-FWD/AFT)
+- Connect BLHeli32 serial telem JST-GH 3-pin to Pilot telem port
 
 - Step 13: In BLHeli32 Suite (via FC USB passthrough):
 - Enable BDSHOT on all 4 nacelle ESCs
@@ -1063,6 +1089,10 @@ Each run sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), ou
 - **E** — Weathering details, show-accurate stencils
 
 - Step 4: Final airworthiness inspection:
+
+> **WARNING:** A puffed, punctured, or otherwise damaged LiPo battery is a fire hazard — do
+> not fly on a battery that fails this check.
+
 - All fasteners checked (torque per drawing)
 - Propulsion: motor shafts spin free, no blade FOD, nacelles sweep full range
 - Electronics: all panels close, all covers in place, antenna connectors tight
@@ -1071,7 +1101,7 @@ Each run sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), ou
 
 - Step 5: Documentation archive:
 - File build log (photos, test results) in project archive
-- Store Cape-B CPLD bitstream and all node TPM endorsement key fingerprints with build record
+- Store TACCO CPLD bitstream and all node TPM endorsement key fingerprints with build record
 - Record final AUW, CG position, and ESC settings for each configuration (empty, cargo)
 
 - Step 6: FAA compliance final check:
@@ -1119,12 +1149,12 @@ The phased approach reaches first flight at **~$1,030** and defers the $590 moto
 | -------- | -------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | CAN-FD   | Port keel rail, full length      | 4-pin JST-GH (CANH/CANL/GND/VCC) — 120Ω at CN1 (start, Bay A) and FC4 (end, Bay E) | 3 (CN1+FC1+CN2+FC2), 4 (full ring)                   |
 | RS-485   | Stbd keel rail, full length      | 4-pin JST-GH (A/B/GND/VCC) — 120Ω at CN1 (start, Bay A) and FC4 (end, Bay E)       | 3 (CN1+FC1+CN2+FC2), 4 (full ring)                   |
-| MIL-1553 | Dorsal centre spine, full length | 4-pin shielded JST-GH, 78Ω — FC1=BC, FC2=standby BC                                | 3 (CN1+FC1+CN2+FC2), 4 (full ring)                   |
+| MIL-1553 | Dorsal center spine, full length | 4-pin shielded JST-GH, 78Ω — FC1=BC, FC2=standby BC                                | 3 (CN1+FC1+CN2+FC2), 4 (full ring)                   |
 | ETH-AB   | Port forward: Bay A → Bay B      | 8-pin JST-GH Cat5e — FC1↔CN2 ring link                                             | 3 (connected Phase 3 Step 27)                        |
 | ETH-BD   | Port mid: Bay B → Bay D          | 8-pin JST-GH Cat5e — FC2↔CN3 ring link                                             | 3 (Bay B end connected, Bay D capped), 4 (connected) |
 | ETH-DE   | Stbd aft: Bay D → Bay E          | 8-pin JST-GH Cat5e — FC3↔CN4 ring link                                             | 4 (CN3+FC3+CN4+FC4 install)                          |
 | ETH-EA   | Stbd full: Bay E → Bay A         | 8-pin JST-GH Cat5e — FC4↔CN1 ring-close link                                       | 3 (Bay A end connected, Bay E capped), 4 (connected) |
-| PWR      | Belly centre                     | 14AWG power + 20AWG servo bundle; one tap per bay, each tap feeds one CN + one FC  | 3 (ESCs, BEC, nav lights)                            |
+| PWR      | Belly center                     | 14AWG power + 20AWG servo bundle; one tap per bay, each tap feeds one CN + one FC  | 3 (ESCs, BEC, nav lights)                            |
 
 ---
 
@@ -1132,11 +1162,11 @@ The phased approach reaches first flight at **~$1,030** and defers the $590 moto
 
 | Panel | Location    | Station   | Closure        | What's Inside                                                                                                                                                   |
 | ----- | ----------- | --------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A     | Nose, top   | 0–91mm    | Bayonet        | CN1 Cape-B (lower) + FC1 Cape-A (upper); CN1 radios (SiK/LoRa/WiFi/XCVR-49MHZ); FC1 GPS coax (~59mm); ETH-AB/ETH-EA conduit ends; CAN FD 120Ω at CN1; Array B mux  |
-| B     | Dorsal fwd  | 91–165mm  | 4× M2.5        | CN2 Cape-B (lower) + FC2 Cape-A (upper); CN2 XCVR-49MHZ; FC2 GPS coax (~130mm); ETH-AB/ETH-BD conduit ends                                                         |
+| A     | Nose, top   | 0–91mm    | Bayonet        | CN1 TACCO (lower) + FC1 Pilot (upper); CN1 radios (SiK/LoRa/WiFi/XCVR-49MHZ); FC1 GPS coax (~59mm); ETH-AB/ETH-EA conduit ends; CAN FD 120Ω at CN1; Array B mux  |
+| B     | Dorsal fwd  | 91–165mm  | 4× M2.5        | CN2 TACCO (lower) + FC2 Pilot (upper); CN2 XCVR-49MHZ; FC2 GPS coax (~130mm); ETH-AB/ETH-BD conduit ends                                                         |
 | C     | Cargo belly | 160–251mm | Hinge          | Cargo gondola, clamshell doors, winch motor                                                                                                                     |
-| D     | Dorsal aft  | 251–320mm | 4× N42 magnets | CN3 Cape-B (lower) + FC3 Cape-A (upper); CN3 XCVR-49MHZ; FC3 GPS coax (~275mm); ETH-BD/ETH-DE conduit ends; CN3 log μSD; Array A mux                               |
-| E     | Aft service | 320–388mm | 4× M2.5        | CN4 Cape-B (lower) + FC4 Cape-A (upper); CN4 XCVR-49MHZ; FC4 GPS coax (~350mm); ETH-DE/ETH-EA conduit ends; CAN FD 120Ω at FC4; CN4 log μSD; budget→Hobbywing ESCs |
+| D     | Dorsal aft  | 251–320mm | 4× N42 magnets | CN3 TACCO (lower) + FC3 Pilot (upper); CN3 XCVR-49MHZ; FC3 GPS coax (~275mm); ETH-BD/ETH-DE conduit ends; CN3 log μSD; Array A mux                               |
+| E     | Aft service | 320–388mm | 4× M2.5        | CN4 TACCO (lower) + FC4 Pilot (upper); CN4 XCVR-49MHZ; FC4 GPS coax (~350mm); ETH-DE/ETH-EA conduit ends; CAN FD 120Ω at FC4; CN4 log μSD; budget→Hobbywing ESCs |
 | F     | Engine bell | 388–457mm | Bayonet        | 55mm fuselage EDF, fixed canonical elliptical nozzle, 4× RCS bleed-jet valves (Phase 11)                                                                        |
 
 ---
@@ -1147,18 +1177,18 @@ Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** (inte
 
 | Node | Bay             | Position           | Hardware                                   | Role (elected)                                                        | Security                                        |
 | ---- | --------------- | ------------------ | ------------------------------------------ | --------------------------------------------------------------------- | ----------------------------------------------- |
-| CN1  | A — Nose        | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN master or standby; radios master; CAN FD bus start (120Ω soldered) | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC1  | A — Nose        | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC master or standby; OA Array B host; 1553 primary BC                | SLB9670 TPM 2.0                                 |
-| CN2  | B — Dorsal Fwd  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN master or standby                                                  | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC2  | B — Dorsal Fwd  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC master or standby; 1553 standby BC                                 | SLB9670 TPM 2.0                                 |
-| CN3  | D — Dorsal Aft  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN node                                                               | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC3  | D — Dorsal Aft  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC node; OA Array A host                                              | SLB9670 TPM 2.0                                 |
-| CN4  | E — Aft Service | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN node; cargo control                                                | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC4  | E — Aft Service | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC node; CAN FD bus end (120Ω soldered)                               | SLB9670 TPM 2.0                                 |
+| CN1  | A — Nose        | Lower (floor)      | PocketBeagle 2 Industrial + TACCO 55×35mm | CN master or standby; radios master; CAN FD bus start (120Ω soldered) | SLB9672 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC1  | A — Nose        | Upper (inter-cape) | PocketBeagle 2 Industrial + Pilot 55×35mm | FC master or standby; OA Array B host; 1553 primary BC                | SLB9672 TPM 2.0                                 |
+| CN2  | B — Dorsal Fwd  | Lower (floor)      | PocketBeagle 2 Industrial + TACCO 55×35mm | CN master or standby                                                  | SLB9672 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC2  | B — Dorsal Fwd  | Upper (inter-cape) | PocketBeagle 2 Industrial + Pilot 55×35mm | FC master or standby; 1553 standby BC                                 | SLB9672 TPM 2.0                                 |
+| CN3  | D — Dorsal Aft  | Lower (floor)      | PocketBeagle 2 Industrial + TACCO 55×35mm | CN node                                                               | SLB9672 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC3  | D — Dorsal Aft  | Upper (inter-cape) | PocketBeagle 2 Industrial + Pilot 55×35mm | FC node; OA Array A host                                              | SLB9672 TPM 2.0                                 |
+| CN4  | E — Aft Service | Lower (floor)      | PocketBeagle 2 Industrial + TACCO 55×35mm | CN node; cargo control                                                | SLB9672 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC4  | E — Aft Service | Upper (inter-cape) | PocketBeagle 2 Industrial + Pilot 55×35mm | FC node; CAN FD bus end (120Ω soldered)                               | SLB9672 TPM 2.0                                 |
 
-**All FC nodes (Cape-A):** ICM-42688-P IMU · BMP388 baro · u-blox M10Q GPS · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9670 TPM 2.0 · 8× servo PWM rail
+**All FC nodes (Cape-A):** ICM-42688-P IMU · BMP388 baro · u-blox M10Q GPS · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9672 TPM 2.0 · 8× servo PWM rail
 
-**All CN nodes (Cape-B):** SiK 915MHz · LoRa RFM95W 915MHz · TI WL1837MOD WiFi/BT · XCVR-49MHZ sub-module · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9670 TPM 2.0 · ATF16V8BQL CPLD write-blocker · W25Q128JV NOR flash log · DRV8833 winch · HX711 load cell · 2× cargo servo PWM
+**All CN nodes (Cape-B):** SiK 915MHz · LoRa RFM95W 915MHz · TI WL1837MOD WiFi/BT · XCVR-49MHZ sub-module · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9672 TPM 2.0 · ATF16V8BQL CPLD write-blocker · W25Q128JV NOR flash log · DRV8833 winch · HX711 load cell · 2× cargo servo PWM
 
 ---
 

@@ -4,5 +4,6 @@
     "markdown.validate.enabled": true,
     "markdownlint.config": {
         "MD007": { "indent": 4 }
-    }
+    },
+    "cmake.sourceDirectory": "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/firmware"
 }

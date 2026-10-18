@@ -35,7 +35,7 @@
 #   too; freecadcmd is the scriptable equivalent.)
 #
 # Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-# License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+# License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 # ============================================================
 
 # ---- Tool paths -----------------------------------------------
@@ -48,7 +48,7 @@ AIRFRAME := $(ROOT)/..
 SCAD     := $(AIRFRAME)/openscad
 STLS     := $(AIRFRAME)/stls
 SCRIPT   := $(ROOT)/serenity_assembly.py
-OUTPUT   := $(AIRFRAME)/Serenity-Assembled.FCStd
+OUTPUT   := $(AIRFRAME)/freecad/assembly/SerenityAssembly.FCStd
 
 # ---- OpenSCAD flags -------------------------------------------
 # --hardwarnings: treat parameter warnings as errors
@@ -71,14 +71,30 @@ FUSELAGE_STLS := \
 # (bevel housing, bevel pair, Pinion A, Nozzle Drive Pinion, sector gear) is
 # DELETED and archived (airframe/archive/); replaced by the spar-crank pushrod
 # (nacelle_pushrod_crank.stl).  See docs/NOZZLE_DRIVE_TRADE.md.
+# Option A (2026-09-28): the spar-crank/pushrod AND its replacement wing-sun +
+# pinion sync gears are RETIRED and archived (archives/airframe-archives/archive/
+# openscad/nacelles/); the nozzle is servo-driven.  Their targets are removed.
+# Rev T3 (2026-08-09, airframe/wings-nacelles/WBS.md SS1.1.3.1): the nozzle
+# flaps shingled into master+seal pairs, and the combined "asm" preview
+# split into two named-endpoint renders (FLAP_PHI = PHI_CLOSED / PHI_OPEN)
+# so serenity_assembly.py can pick the one matching each nacelle's
+# configured tilt (see nozzle_iris_stl() there). The old single
+# nacelle_nozzle_iris.stl (no suffix, always PHI_CLOSED) is superseded by
+# -closed.stl and no longer built here or imported by the assembly.
 NACELLE_STLS := \
     $(STLS)/nacelles/edf_stator_sleeve.stl               \
     $(STLS)/nacelles/edf_aft_spider_sleeve.stl           \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_iris.stl     \
+    $(STLS)/nacelles/nacelle_trunnion.stl                \
+    $(STLS)/nacelles/esc/nacelle_esc_cover_port_a.stl    \
+    $(STLS)/nacelles/esc/nacelle_esc_cover_port_b.stl    \
+    $(STLS)/nacelles/esc/nacelle_esc_cover_stbd_a.stl    \
+    $(STLS)/nacelles/esc/nacelle_esc_cover_stbd_b.stl    \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-closed.stl \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-open.stl   \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl   \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_ring.stl     \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl     \
-    $(STLS)/nacelles/nacelle_pushrod_crank.stl
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal.stl
 
 # -- Wings (SCAD-sourced part-local prints; the port/stbd wing
 #    shells the ASSEMBLY uses are baked elsewhere) --------------
@@ -150,10 +166,84 @@ $(STLS)/nacelles/edf_aft_spider_sleeve.stl: \
 	    -o $@
 	@echo "[stl] $@"
 
-$(STLS)/nacelles/nozzles/nacelle_nozzle_iris.stl: \
+# Rev T4 (2026-08-30): the nacelle now hangs on a FIXED wing spar, so the
+# tilt bearing, the 50T ring gear and the encoder ring magnet all move into
+# this one printed part.  It is separate from the pod ON PURPOSE — its axis is
+# nacelle-local X, so integral gear teeth would print as stacked overhangs and
+# the bearing seat as a bridged horizontal bore.  See its header.
+$(STLS)/nacelles/nacelle_trunnion.stl: \
+        $(SCAD)/nacelles/nacelle_trunnion.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    $(SCAD)/nacelles/nacelle_trunnion.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+# -- Hinged-ESC bay access covers (Rev T4c) --------------------
+# FOUR distinct parts, not one printed four times.  The shell is not
+# axisymmetric, so the bay at azimuth 69 and the bay at 249 sit on different
+# surface, and port and starboard are mirror images rather than copies.
+#
+# ** NACELLE_SIDE IS INVERTED RELATIVE TO THE FILENAME. ** The Rev R1
+# nacelle-swap renamed the pod outputs to their PHYSICAL mounting side without
+# changing the shell selector, so nacelle_port_revs.stl is rendered with
+# NACELLE_SIDE=-1.  A cover MUST use the same value as the pod it closes;
+# building it on the other shell puts ~440 mm3 of cover inside the pod, which
+# tools/nacelle_esc_bay_fit.py --check-fit measures.
+$(STLS)/nacelles/esc/nacelle_esc_cover_port_a.stl: \
+        $(SCAD)/nacelles/nacelle_esc_cover.scad \
+        $(SCAD)/nacelles/nacelle_esc_bay.scad \
+        $(SCAD)/nacelles/nacelle_shell_grid.scad \
+        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
+	    -D NACELLE_SIDE=-1 -D RENDER_BAY=0 -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/esc/nacelle_esc_cover_port_b.stl: \
+        $(SCAD)/nacelles/nacelle_esc_cover.scad \
+        $(SCAD)/nacelles/nacelle_esc_bay.scad \
+        $(SCAD)/nacelles/nacelle_shell_grid.scad \
+        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
+	    -D NACELLE_SIDE=-1 -D RENDER_BAY=1 -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/esc/nacelle_esc_cover_stbd_a.stl: \
+        $(SCAD)/nacelles/nacelle_esc_cover.scad \
+        $(SCAD)/nacelles/nacelle_esc_bay.scad \
+        $(SCAD)/nacelles/nacelle_shell_grid.scad \
+        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
+	    -D NACELLE_SIDE=1 -D RENDER_BAY=0 -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/esc/nacelle_esc_cover_stbd_b.stl: \
+        $(SCAD)/nacelles/nacelle_esc_cover.scad \
+        $(SCAD)/nacelles/nacelle_esc_bay.scad \
+        $(SCAD)/nacelles/nacelle_shell_grid.scad \
+        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
+	    -D NACELLE_SIDE=1 -D RENDER_BAY=1 -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/nozzles/nacelle_nozzle_iris-closed.stl: \
         $(SCAD)/nacelles/nacelle_nozzle_iris.scad
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'FLAP_PHI=PHI_CLOSED' \
+	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/nozzles/nacelle_nozzle_iris-open.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'FLAP_PHI=PHI_OPEN' \
 	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
 	    -o $@
 	@echo "[stl] $@"
@@ -187,17 +277,14 @@ $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl: \
 	    -o $@
 	@echo "[stl] $@"
 
-# Rev T (2026-07-18, Option B): the tilt-to-nozzle gear train (Pinion A,
-# Nozzle Drive Pinion, sector gear, bevel pair, bevel housing) is DELETED and
-# archived; the nozzle spar-crank pushrod replaces it (RENDER_PART="crank"
-# from nacelle_nozzle_pushrod.scad).  The COTS pushrod ball-link rod is not a
-# printed target.
-$(STLS)/nacelles/nacelle_pushrod_crank.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_pushrod.scad
+# Rev T3 (2026-08-09) seal flap -- 4 per nozzle, lapped 0.2 mm radially
+# outboard of the 4 master flaps (PRINT-NACELLE-FLAP-MASTER/-SEAL, 4+4).
+$(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_PART="crank"' \
-	    $(SCAD)/nacelles/nacelle_nozzle_pushrod.scad \
+	    -D 'RENDER_PART="flap_seal"' \
+	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
 	    -o $@
 	@echo "[stl] $@"
 

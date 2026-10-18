@@ -5,10 +5,10 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * This header provides all compile-time tuning constants for the EDF PID RPM
- * controller implemented in the Cape-A / FC node Phase 7 firmware.  The
+ * controller implemented in the Pilot / FC node Phase 7 firmware.  The
  * governing thrust equation for each EDF is:
  *
  *   T [N]  =  EDF_THRUST_K_<ID>  ×  RPM²

@@ -4,13 +4,19 @@
 **AI note:** Rev R6 analysis and geometry authored by Claude (model: Claude
 Fable 5, Anthropic) under the author's direction, 2026-07-21; extended for
 the 1.5in/3.0in leg-length variant split 2026-07-23, per `AGENTS.md`
-AI-attribution policy.
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+AI-attribution policy. **§4.8 (minimum safe belly clearance), the as-built
+re-derivation of §0/§4.2/§4.7/§6/§11.6, and open items LG-27…LG-30 authored by
+Claude (model: Claude Opus 5, Anthropic) under the author's direction,
+2026-09-06** — see
+`docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md`.
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** R6 (2026-07-21, design point; 1.5in/3.0in leg-length variant
-split 2026-07-23) — Canonical articulated hip-pivot leg, spring + ductile
-bowed-wire energy absorption retained
+split 2026-07-23; shared R_h 80 mm lever 2026-08-09; **minimum-safe-length
+derivation and 3.0in adopted as the flight article 2026-09-06, §4.8**) —
+Canonical articulated hip-pivot leg, spring + ductile bowed-wire energy
+absorption retained
 
-*"She's tore up plenty, but she'll fly true." — Mal, on a ship that's seen worse landings than this one's rated for.*
+*"She's tore up plenty, but she'll fly true." — Skipper, on a ship that's seen worse landings than this one's rated for.*
 
 > **Rev R5** (vertical post + 4-wire brace) **superseded 2026-07-21.** The
 > R5 post geometry — like every revision before it — descended from the
@@ -62,18 +68,32 @@ identical to Rev R5. What the articulation adds is a **lever between foot
 and wires** (65 : 6 for the 3.0in leg, 41.9 : 6 for the compact 1.5in leg),
 so millimetres of wire stroke become tens of millimetres of hull settle:
 
-| Quantity | Rev R5 (rigid post) | **Rev R6, 1.5in (default)** | **Rev R6, 3.0in (extended)** |
+| Quantity | Rev R5 (rigid post) | **Rev R6, 1.5in (non-flight)** | **Rev R6, 3.0in (flight article)** |
 | --- | --- | --- | --- |
-| Peak decel, 6 ft tail-down / level | ≈1,000 g | **81 g / 162 g** | **52 g / 104 g** |
-| Hull settle absorbing the drop | ≈1.8 mm | **22.6 mm** (of 38.1 mm) | **35.1 mm** (of 80 mm) |
-| Ground clearance | 31 mm (1.22 in) | **38.1 mm (1.50 in)** | **80.0 mm (3.15 in)** |
+| Hip→foot arm `R_h` | n/a | **80.0 mm** | **80.0 mm** (shared since 2026-08-09) |
+| Peak decel, 4 ft tail-down / level | ≈1,000 g | **39.7 g / 79.4 g** | **39.7 g / 79.4 g** |
+| Hull settle absorbing the drop | ≈1.8 mm | **30.7 mm** (of 38.1 mm) | **30.7 mm** (of 80 mm) |
+| Residual clearance after settle | — | **7.4 mm** | **49.3 mm** |
+| Belly clearance | 31 mm (1.22 in) | **38.1 mm (1.50 in)** | **80.0 mm (3.15 in)** |
 | Leg appearance | Thingiverse blade derivative | Canonical articulated leg, canonical bay stations | (same, longer leg) |
 
-Both variants reuse the **same wire hardware** (solved once against the
-3.0in lever, §4.7) and the **same bay/foot** — only the printed leg-frame
-length differs, so the shorter lever of the compact leg trades ground
-clearance for a higher peak deceleration. Both are still far below the Rev
-R5 rigid post's ≈1,000 g.
+**The two variants no longer differ in crash dynamics at all.** Since the
+2026-08-09 LG-10.2 hip recess and the canonical-foot-spread correction both
+run the same hip→foot arm `R_H_BUILT = 80 mm`, so plateau force, hull settle,
+peak deceleration, hip moment and every bay-bolt load are **identical**. They
+differ only in **belly clearance** and printed leg-frame length. Longer legs do
+**not** raise the bending moment at the bay bolts: the hip moment is
+`M = 2·P·r` — wire collapse force times the 6 mm bellcrank radius — and carries
+no `R_h` term (§4.6). All numbers regenerate from
+`tools/landing_gear_r6_sizing.py`.
+
+> **Which variant flies — decided 2026-09-06.** The **3.0 in leg is the flight
+> article**; the 1.5 in leg is retained as a **non-flight** variant. It is not
+> a stance preference: with the nacelles vertical the nozzle stack hangs 47.0 mm
+> below the belly datum and the 1.5 in gear strikes the ground on every takeoff
+> and landing. The derivation of the minimum safe length is **§4.8**, gated by
+> `tools/landing_gear_ground_clearance.py`, and the trade of the alternatives is
+> `docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md`.
 
 An M3 **extension-stop cross-pin** through the bay clevis ears carries the
 opposite rotation (leg hanging under gravity, in-flight loads); landing
@@ -93,10 +113,9 @@ parts (§16).
 The landing gear system must:
 
 1. **Survive a vertical drop test onto hard level ground at design AUW**
-   without cracking the hull shell. Height: **6 ft (1.829 m) baseline; a
-   4 ft (1.219 m) reduction is under consideration** — §4.4 carries both
-   schedules; the difference is wire stock diameter only. **Decision open:
-   LG-17.**
+   without cracking the hull shell. Height: **4 ft (1.219 m) — adopted
+   2026-08-09 (LG-17, closed).** §4.4 keeps the 6 ft schedule alongside it for
+   the record; the difference between them is wire stock diameter only.
 2. **Absorb lateral loads** from not-quite-vertical landings (±15° design case).
 3. **Fail internally, progressively, not catastrophically** — overload must
    produce defined, observable, partial degradation that still leaves the
@@ -113,9 +132,15 @@ The landing gear system must:
    box's height. Extra height beyond what flight safety needs (avoiding a
    belly/tail strike, keeping the hull clear of ground debris through the
    absorption stroke) is not required. This replaces the ≥76 mm (3.0 in)
-   payload-mission requirement carried since Rev R1 — see §4.7 for both
-   the resulting 1.5 in default and the 3.0 in option kept for rough-field
-   use.
+   payload-mission requirement carried since Rev R1.
+
+   **Amended 2026-09-06.** Retiring the cargo driver was right; what replaced
+   it is harder. With the nacelles vertical — every takeoff and landing — the
+   nozzle stack hangs 47.0 mm below the belly datum, and clearing it *through a
+   real landing* (attitude, absorption stroke, `PIVOT_Z` drift reserve, build
+   tolerance) sets the minimum at **65–78 mm** depending on flap length and the
+   attitude case. **§4.8** derives it; the **3.0 in leg is the flight article**
+   and the 1.5 in leg is retained as a non-flight variant.
 
 The landing gear does NOT need to be reusable after a worst-case drop
 (ductile wires are consumables).
@@ -141,8 +166,8 @@ The landing gear does NOT need to be reusable after a worst-case drop
 
 Measured from [REF-CAD-003] Sheet 5 "Ventral Surface Plan View": fore feet
 at **39.2%** of hull length, aft feet at **63.9%**, feet **≈1.45× hull
-half-width** off centreline. Mapped to the baked 24-in hull (Y −305.7 …
-+384.3 mm, centreline X = −169.9, cargo belly Z = 0). **Bay hip height is
+half-width** off centerline. Mapped to the baked 24-in hull (Y −305.7 …
++384.3 mm, centerline X = −169.9, cargo belly Z = 0). **Bay hip height is
 identical for both leg-length variants** (Z +38 above the belly on the
 cargo flank) — only the leg below the hip changes length:
 
@@ -154,7 +179,7 @@ cargo flank) — only the leg below the hip changes length:
 | Aft-stbd | −260.8, +107.0, +38 | +152.0° | −318.2, +137.5 |
 
 Feet land within 5 mm of the exact canonical stations (Y −35.2 / +135.2,
-X ±144 from centreline); the small shift unifies the hip→foot moment arm
+X ±144 from centerline); the small shift unifies the hip→foot moment arm
 (41.9 mm or 65 mm, per variant) on all four corners so **one leg part
 serves every corner**. All four bays sit on the **cargo-shell flanks**
 (fore: pod nose slope at Y ≈ −7; aft: pod aft flank at Y ≈ +107; flank
@@ -166,7 +191,7 @@ variants (unchanged by leg length).
 ### 2.3 Load Share — the CG Correction
 
 Build CG is at hull-frame **Y = +111.5 mm** (nacelle pivot = canonical
-"Engine Pivots 360°" balance centre). Against the canonical wheelbase this
+"Engine Pivots 360°" balance center). Against the canonical wheelbase this
 is **86% aft**:
 
 ```text
@@ -199,6 +224,148 @@ Deviations (functional, deliberate):
    bending stays in the layer plane).
 3. **Fixed-down gear** — no retraction; the bay plate supplies the
    canonical recess look.
+
+### 2.4a Henning-Derived Geometry Corrections (2026-08-09, OPEN)
+
+Owner confirmed [REF-CAD-003] **Sheet 1** agrees with the Nick Henning model
+[REF-CAD-002], so the Henning gear drawings are authoritative for detail shape.
+Read from `docs/references/nick-henning/nick-henning-close-gear-combine.jpg`
+(in-situ render) and `nick-henning-uvdisplay-gear.jpg` (shaded, UV, wireframe
+and UV-layout views of the isolated leg).
+
+**What Rev R6 already gets right.** The architecture is confirmed:
+cylinder-cluster thigh at ~50-55°, a disc knee, a disc ankle, and a tri-pad
+arrowhead foot. The concept does not need rework — the corrections below are
+proportion and detail.
+
+**Corrections required:**
+
+1. **Mounting surface — the big one. The bay is in the WING-ROOT SPONSON, not
+   the cargo shell.** `nick-henning-uvdisplay-wing.jpg` shows the wing root as
+   a large wedge-shaped sponson with the **empty gear bay recessed into its
+   underside/outboard face** — a trapezoidal aperture (wider at top, narrowing
+   downward, confirming the owner's description), with a raised lip framing it
+   and stepped panel detail on the bay floor.
+
+   This reconciles the whole integration problem. `airframe/AGENTS.md` records
+   that the wings attach to the **cargo section lateral walls** — so the bay
+   sits in wing-root structure mounted at roughly the station Rev R6 has been
+   targeting, but it belongs to the **wing part, not the cargo shell**. That
+   is why the bay bolt axes measure 5.6-64.1° off the local *cargo skin*
+   normal: they are being projected onto a surface that is not the mounting
+   face at all.
+
+   **Do NOT split the bay onto the wing part.** The wing-root sponson is the
+   *outer shape* the bay aperture appears in; it is not where the bay should
+   structurally live. The original lower-detail model merged the gear bay into
+   the cargo hold as a single piece, and that is the structurally correct
+   arrangement:
+
+   - **Load path.** Each leg delivers 827 N (4 ft schedule) plus a 34.7 N·m
+     hip moment. If the bay were carried on the wing root, all of that would
+     pass through the wing attachment — the Ø12.3 mm spar and the two root
+     mortises at Y +38.15 / +57.5 (spar moved 30 % → 35 % root chord, Rev S1b
+     2026-08-16) — which are sized for *flight* loads, not
+     landing impact. That inserts a joint directly into the impact path and
+     creates the weak point the merged design avoids.
+   - **Mass.** Splitting duplicates the bay walls, adds a structural joint and
+     its fasteners, and works against LG-18.
+
+   So the bay stays **continuous with the cargo shell** (i.e. still
+   `merge_cargo_interior.py`), and the wing-root sponson fairs around it. The
+   16 bolt bosses added in `d83c806` are therefore on the right *component*;
+   what is wrong is their **placement and axes** — they sit on the bare cargo
+   flank rather than on the bay aperture inside the sponson envelope, which is
+   why they measure 5.6-64.1° off the local normal. Relocate them to the
+   aperture and aim each along its own local surface normal.
+
+   **RESOLVED (owner, 2026-08-09): the sponsons are already modeled in the
+   cargo section STLs.** No new envelope is needed and there is no
+   double-walling risk. Owner's description of the lower front of the cargo
+   section: the rectangular canonical cargo door in the center, then vertical
+   corners, then vertical sides running back to an internal corner each side,
+   then a trapezoidal flat that runs into a sloped side — and the run with the
+   **trapezoidal cross-section is the sponson**.
+
+   Measured on the baked `cargo_sect_shell24_2mm_repaired.stl`, port side
+   (half-width = X − centerline −169.9):
+
+   | Station | Face | Z span | half-width | outer X |
+   | --- | --- | --- | --- | --- |
+   | Y −7 (fore) | belly turn | 0–7.5 | 52.8→56.2 | — |
+   | Y −7 | **vertical side (flat)** | **10–40** | **56.04** (const ±0.02) | **−113.86** |
+   | Y −7 | internal corner | ~42.5 | 56.0→66.9 | step ~11 mm outboard |
+   | Y −7 | trapezoidal flat | 45–48 | 67.1→67.7 | −102.8→−102.2 |
+   | Y −7 | sloped side | 50+ | 70.2 → flare | — |
+   | Y +107 (aft) | **vertical side (flat)** | **57.5–72.5** | 84.3→83.5 | −85.6→−86.4 |
+   | Y +107 | flat | 80–85 | 87.29 (const) | −82.61 |
+
+   **Which face is which (owner, 2026-08-09) — do not confuse these:**
+
+   - The **vertical walls** squared to port/starboard (Y −7: Z 10–40 at
+     half-width 56.04) are the **hull sides forward of the sponson**. They are
+     NOT the sponson and NOT a mounting face.
+   - The **angled trapezoidal flats** are the **modeled landing-gear
+     openings** — this is where the gear mounts. At Y −7 the fore flat measures
+     Z 45–48, half-width 67.1→67.7, outer X −102.8→−102.2.
+   - The **sponson** is the volume **between the two trapezoidal flats on each
+     side** (fore opening and aft opening). It may be hollowed and/or
+     reinforced as needed to carry the gear attachment.
+
+   So the mounting face is **angled, not vertical** — the bolt axis is normal
+   to the trapezoidal flat. This also means the earlier `BAY_CANT` solve
+   (−11.5°, §2.2 / `tools/landing_gear_bay_pad_fit.py`) was fitting the right
+   *kind* of surface after all; what was wrong was fitting it to the whole
+   82 × 40 flank footprint instead of to the actual opening.
+
+   **Wing interference is a hard constraint.** The wings attach to the cargo
+   lateral walls with the Ø12.3 spar and the two root mortises, and the sponson
+   sits between the fore and aft openings — i.e. spanning the wing-root
+   station. Any hollowing or reinforcement of the sponson must clear those.
+
+   **Stations (Rev S1b, 2026-08-16).** Spar **Y +38.15, Z 68.42**; mortises
+   **Y +57.5, Z 62.5**. Two corrections to the figures previously carried here:
+   the spar moved from 30 % to 35 % root chord (Y +31.7 → +38.15), and its
+   height is **not** the mortise height — the bore rides the S1223 camber
+   midline, so Z is 68.42, not 62.5. Conflating the two is why the fuselage
+   bore never lined up with the wing (`airframe/wings-nacelles/WBS.md` §1.1.2).
+
+   **This was not merely a caution — it was violated.** When the sponson work
+   was first treated as complete, measurement found the bay collars intruding
+   347/349 mm³ into the mortises across their full height, a collar blocking
+   the spar bore by 0.84 mm, and the flange rebate thinning the Ø22 spar
+   bearing wall from 4.85 mm to 2.59 mm. Do not take "check before cutting" on
+   trust: run `tools/landing_gear_wing_clearance.py --proud`, which certifies
+   this by boolean intersection against the same solids the hull is built
+   with, and exits non-zero on any unbudgeted overlap.
+
+   Still to do: re-measure both trapezoidal flats properly (the aft station's
+   outline is noisier than the fore and was not cleanly segmented), fit the
+   opening outline on each, and re-derive the §2.2 hip stations onto those
+   faces.
+2. **The bay "recess" is a hinged DOOR**, a separate gridded panel, not a rim
+   molded into the skin. Its outline is an irregular pentagon with one clipped
+   corner — not the symmetric trapezoid currently in `bay_cowl()`. The
+   trapezoid is a fair first approximation of the aperture but the door itself
+   is a distinct part that Rev R6 does not model at all.
+3. **Foot pads** are much longer, thinner and more sharply tapered than
+   `FOOT_PAD_T = 8` implies — flat blade-like wedges radiating from a central
+   hub, with small louvre/rib groups near each tip. Current pads are stubby by
+   comparison.
+4. **Knee and ankle are real disc joints** with circular hub/cap detail, not
+   the flat styling discs Rev R6 uses. (They can stay cosmetic structurally —
+   Rev R6 articulates at the hip only — but the *shape* should read as a hub.)
+5. **Thigh** is a large main tube plus two or three smaller parallel piston
+   rods, with visible hose runs alongside. Rev R6's twin-Ø14 cluster is close;
+   the rods and hoses are missing.
+6. **Shin is short** relative to the thigh, and boxy/slotted rather than the
+   current long stadium-section blade.
+
+**Status: NOT YET IMPLEMENTED.** Item 1 gates the rest — if the bays move to a
+ventral overhang, the corner stations, the bolt-normal fix (LG-02), the
+bay seat datum (LG-10.6 — the conforming hull patch it originally called
+for was retired) and the pad-fit study all get re-derived
+against the new surface. Do not re-aim the bay bolts before settling it.
 
 ---
 
@@ -258,10 +425,14 @@ Wire stroke                    s = d · r / R_h  =  U_wire / P   (R_h-independen
 ```
 
 Because stroke s = U_wire/P has no R_h term, **the wire itself does the
-same job in either leg** — but the resulting ground force F, hull settle
-d, and peak deceleration all scale with R_h. The wire schedule below is
-solved once against the **3.0in lever (design point)**; §4.7 shows what
-the *same hardware* delivers when reused in the 1.5in leg.
+same job in either leg** — and since 2026-08-09 **`R_h` is the same 80 mm in
+both variants**, so the resulting ground force F, hull settle d and peak
+deceleration are the same too. Two owner decisions landed them there: the
+LG-10.2 15 mm hip recess (pivot moved inside the bay), and extending the compact
+leg to the *canonical* foot spread, which its old 41.9 mm arm could not reach.
+The wire schedule is therefore solved against the **clearance-limited variant** —
+the arrest must stop inside the compact leg's 38.1 mm — not against a
+peak-deceleration target on one variant and reused on the other.
 
 ### 4.3 Spring Pair (elastic phase — solved at the 3.0in design point)
 
@@ -277,7 +448,7 @@ Reused in each variant (§4.7): **3.0in** — 350 N/leg elastic limit, 10.0 mm
 settle at limit, 46 g onset (level). **1.5in** — 543 N/leg elastic limit,
 6.5 mm settle at limit, 71 g onset (level).
 
-### 4.4 Ductile Pair — the 6 ft vs 4 ft Decision (LG-17)
+### 4.4 Ductile Pair — the 6 ft vs 4 ft Decision (LG-17, CLOSED 2026-08-09: 4 ft adopted)
 
 Both drop-height schedules share **bow span 55 mm, stock L = 75 mm,
 h₀ = 3.5 mm, and every printed part unchanged** — the choice is wire stock
@@ -294,12 +465,12 @@ diameter only, solved at the 3.0in design point:
 | 6 ft drop capability | 1.0× (design point) | **not covered** (0.67×) |
 | 4 ft drop capability | 1.5× margin | 1.0× (design point) |
 
-Decision guidance: the 6 ft schedule flown and **tested at 4 ft**
-demonstrates a 1.5× energy margin — arguably the best of both, though the
-1.5in variant's residual clearance margin (§4.7) is worth weighing before
-committing. Choosing the 4 ft schedule trades away 6 ft survivability for
-lower peak deceleration and less wire mass in both variants. Either way
-the printed geometry is frozen — **LG-15 procurement is the only gate.**
+**Decided 2026-08-09 (LG-17): the 4 ft schedule is adopted** — lower peak
+deceleration and less wire mass, at the cost of 6 ft survivability. The table
+above is retained as the record of the trade, not as an open question. The
+printed geometry is frozen either way; **LG-15 procurement is the only gate**,
+and it must re-check wire Ø against the *as-weighed* AUW (d ∝ AUW^⅓) — see the
+AUW ledger caveat in §2.1.
 
 ### 4.5 Stroke Reserve and Fired Shape
 
@@ -311,6 +482,64 @@ unambiguous field-inspection indicator**
 30.9° in both variants. During full flex the foot skids outboard (more so
 in the shorter-radius 1.5in leg); TPU treads slide rather than grab —
 intended.
+
+### 4.5a Stroke ↔ Bow-Rise Relation — Correction (2026-08-09)
+
+**`wire_stroke_available()` in `tools/landing_gear_r6_sizing.py` is a factor of
+4 too small.** The script models the wire as a two-hinge mechanism (two rigid
+half-links, plastic hinge at mid-span) but implements the chord shortening as
+`Δ = (h² − h₀²) / (2B)`. Re-deriving that mechanism symbolically (SymPy: series
+expansion of the exact chord `2√(ℓ² − h²)` about `h = 0`, with `ℓ = B/2`) gives
+
+```text
+Δ_exact  = 2√(ℓ² − h₀²) − 2√(ℓ² − h²)          (ℓ = B/2)
+Δ_approx = 2(h² − h₀²) / B
+```
+
+The implemented form divides by `2B` where the mechanism divides by `B/2`. The
+ratio `Δ_approx / Δ_script` is exactly **4.00** at every bow rise, confirming an
+algebra slip rather than a modeling choice. At the ductile design point
+(B = 55 mm, h₀ = 3.5 mm):
+
+| h (mm) | 2-hinge exact | 2-hinge approx | parabola, const. arc | script |
+| --- | --- | --- | --- | --- |
+| 6.0 | 0.878 | 0.864 | 1.145 | 0.216 |
+| 10.0 | 3.318 | 3.191 | 4.262 | 0.798 |
+| 14.0 | 7.214 | 6.682 | 9.061 | 1.670 |
+| 19.2 | 15.177 | 12.960 | 18.281 | 3.240 |
+
+**Consequences (open — the wire schedule is NOT re-solved here; that is LG-15 /
+LG-17 owner territory):**
+
+1. `H_DEF_DUCT = 19.2 mm` — the "visibly bent" field-inspection indicator and
+   the `leg_deformed` / `ductile_wire_deformed` renders — is wrong. The bow that
+   actually delivers the required 3.24 mm stroke is **9.90 mm** (exact two-hinge)
+   or 10.07 mm (approx).
+2. `wire_stroke_available()` under-credits every wire 4×, so the solver grew the
+   ductile bow span to 55 mm where ≈14 mm meets the same energy demand. Stock
+   could fall 75 mm → ≈40 mm, worth **≈33 g** against LG-18.
+3. Knock-on to LG-02/LG-10: the 82 mm bay plate length is set by that 75 mm
+   wire (bosses sit ≈59 mm from the hip along `CHORD_AZ`). A correctly-sized
+   wire shrinks the bay enough to clear the wing-spar boss, wing-root mortise
+   and nacelle-servo pad interior conflicts recorded in §7.
+
+**What does NOT change:** the required stroke itself. It comes from energy,
+`s = U/P = 3.24 mm`, independent of the bow geometry. That is what LG-13 is
+sized against — see below.
+
+**LG-13 consequence.** The chord shortens by the full stroke as the bow deepens,
+so each wire end slides **1.62 mm deeper into its bore** at full ductile stroke
+(3.24 mm ÷ 2 ends), against an 8 mm ductile seat with 2 mm run-in. The seat is a
+**sliding** interface. A set screw torqued onto it would clamp that motion and
+fight the fuse, so retention is a **nylon-tipped M2 drag screw** (≈5 N friction:
+enough to stop vibration walk-out, and 0.12 % of the 4,333 N chord force, so it
+does not impede the stroke). Bay side only — with the bay end captive the wire
+cannot leave the thigh-side blind bore either, since escape requires axial
+translation.
+
+Source: SymPy derivation, 2026-08-09. Reproduce with the derivation block in
+`tools/landing_gear_r6_sizing.py` (run under `/usr/bin/python3` — the repo
+`.venv` hides the system SymPy).
 
 ### 4.6 Structure Checks — R_h-Independent Part (both variants)
 
@@ -333,32 +562,142 @@ Leg frame print: CF-PETG, **100% infill**, 0.15 mm layers, **lying on the
 Full matrix at the 6 ft ductile schedule, generated by
 `tools/landing_gear_r6_sizing.py`:
 
-| Quantity | **1.5in (default)** | **3.0in (extended)** |
+*(Re-derived 2026-09-06 from the tool as it stands. The pre-2026-08-09 version
+of this table — R_h 41.9/65.0, F_leg 1,241/800 N, 81/162 vs 52/104 g — was
+correct before the hip recess and the canonical-spread correction and has been
+wrong since. It is not reproduced here; git history holds it.)*
+
+| Quantity | **1.5in (non-flight)** | **3.0in (flight article)** |
 | --- | --- | --- |
-| Hip→foot arm R_h | 41.9 mm | 65.0 mm |
-| Lever ratio R_h : r | 6.98 : 1 | 10.83 : 1 |
+| Hip→foot arm R_h | **80.0 mm** | **80.0 mm** |
+| Lever ratio R_h : r | 13.33 : 1 | 13.33 : 1 |
 | Belly clearance | 38.1 mm (1.50 in) | 80.0 mm (3.15 in) |
-| Ground force F_leg | 1,241 N (279 lbf) | 800 N (180 lbf) |
-| Hull settle | 22.6 mm | 35.1 mm |
-| **Residual clearance after settle** | **15.5 mm (0.61 in)** | **44.9 mm (1.77 in)** |
-| Hip rotation at full stroke | 30.9° | 30.9° |
-| Peak decel, tail-down / level | **81 g / 162 g** | **52 g / 104 g** |
-| Hip pin double-shear margin | 3.4× | 5.3× |
-| Bay boss bearing margin | 1.45× (shared hardware) | 1.45× (shared hardware) |
-| Lateral ±15° load into hip pin | 333 N/leg | 214 N/leg |
-| Static stance load / wire | 23.1 N | 35.8 N |
-| Thigh bending margin | 1.17× (identical, §4.6) | 1.17× (identical, §4.6) |
+| Ground force F_leg (4 ft schedule) | 609.5 N (137.0 lbf) | 609.5 N (137.0 lbf) |
+| Hull settle | 30.7 mm | 30.7 mm |
+| **Residual clearance after settle** | **7.4 mm (0.29 in)** | **49.3 mm (1.94 in)** |
+| Hip rotation at full stroke | 22.0° | 22.0° |
+| Peak decel, tail-down / level | **39.7 g / 79.4 g** | **39.7 g / 79.4 g** |
+| Hip pin double-shear margin | 7.0× | 7.0× |
+| Bay boss bearing margin (vs wire P) | 1.55× | 1.55× |
+| Lateral ±15° load into hip pin | 163 N/leg | 163 N/leg |
+| Static stance load / wire | 44.1 N | 44.1 N |
+| Thigh bending margin | 1.09× (identical, §4.6) | 1.09× (identical, §4.6) |
 | Leg-frame mass (printed) | 36.0 g | 52.8 g |
 | **System mass (§11.6)** | **≈436 g (14% AUW)** | **≈503 g (16% AUW)** |
 
+**Bay-bolt FOS against the repo's 4.0 impact target** (`lg02_bay_attachment()`,
+identical demand in both variants — M3 A2-70, 390 N resultant per bolt):
+bolt tension 9.8×, bolt shear 13.9×, net-section tension 6.9×, head
+pull-through 10.1× — all comfortable. **Bolt-hole bearing in CF-PETG is the one
+that binds:** bare 2 mm wall 1.08×, wall + 5 mm boss **3.77× (short of 4.0)**,
+wall + boss + 3 mm backing plate 5.39×. **The backing plate is REQUIRED, not
+optional (LG-02).**
+
 **Safety note on the "either wire alone" fallback (§6, level 3):** if one
 of the two ductile wires fails to engage, the surviving wire alone must
-absorb roughly double the settle. For the **3.0in** leg this still fits
-(70 mm of 80 mm clearance). For the **1.5in** leg it does **not**
-(45 mm needed vs 38.1 mm available) — the compact variant has no margin
-for a single-wire-only arrest. This is the primary engineering trade of
-choosing the compact default; LG-13 (wire retention) and LG-14
-(instrumented test) carry extra weight for the 1.5in variant as a result.
+absorb roughly double the settle — ~61 mm. The **3.0in** leg fits it inside its
+80 mm. The **1.5in** leg does not, and after the 2026-08-09 lever change it is
+further from doing so than it was (residual after a *normal* full arrest is
+7.4 mm, not 15.5). This was already the primary engineering objection to the
+compact leg; §4.8 makes it moot by retiring the 1.5in variant from the flight
+configuration for an unrelated and harder reason.
+
+---
+
+### 4.8 Minimum Safe Belly Clearance — the Nozzle Case (new, 2026-09-06)
+
+*Derivation and gate: `tools/landing_gear_ground_clearance.py`. Trade of the
+alternatives:
+`docs/plans/2026-09-06-001-fix-minimum-safe-landing-gear-leg-length-plan.md`.*
+
+§1 requirement 7 (2026-07-23) correctly retired the *cargo-clearance* driver.
+It did not anticipate the driver that replaced it. **The nacelles tilt to
+vertical for every takeoff and landing, and in that attitude the nozzle stack
+hangs below the belly datum** — 47.00 mm at the built 40 mm flap, 38.05 mm at
+plan 005 R1's proposed 30 mm flap, measured by `tools/nacelle_mass_cg.py` from
+the live mass roll-up. The landing gear is the only thing holding it off the
+ground.
+
+**Why a static number is not the answer.** Every clearance figure published
+before this section — plan 005 R3's accepted "+9.8 mm", its replacement
+"+6.41 mm", the current "+0.07 mm at 30 mm flaps" — is *nacelles vertical, level
+ground, nothing moving*. A landing is none of those.
+
+**The geometry nobody had put in the budget.** In hover the nozzle tips project
+to hull (47.0, 43.4) port and (−385.1, 37.4) starboard. The foot track runs
+X −21.6…−30.4 port and −309.4…−318.2 starboard, and the wheelbase runs
+Y −31.8…+137.5. So each nozzle sits **~73 mm outboard of its own foot line** and
+**inside the wheelbase**. Three consequences follow from the station table
+rather than from judgement:
+
+- **Ground slope with all four feet planted costs nothing.** The feet define the
+  plane and the airframe is rigid.
+- **Pitch never costs nozzle clearance.** Both nozzles are on the *uphill* side
+  of either the fore or the aft foot line.
+- **Roll is the entire attitude penalty — 1.30 mm per degree** — whether it
+  comes from touchdown attitude, one foot in a hollow, or a cross-slope taken on
+  two feet.
+
+**The budget.**
+
+```text
+belly clearance C  (ground plane at hull Z = −C)
+   ├── nozzle depth below the belly datum      47.00 mm @ 40 mm flap
+   │      = tip_reach(flap) − PIVOT_Z − SPAR_Z  38.05 mm @ 30 mm flap
+   ├── attitude penalty  r_roll·sin θ           1.30 mm per degree of roll
+   └── reserve surviving at first contact             21.03 mm
+          ├── hull settle, spring elastic limit        10.03 mm
+          │      (3.51 J/leg at 350 N/leg, R_h 80 — an ORDINARY landing,
+          │       not the ductile fuse)
+          ├── PIVOT_Z drift reserve                     8.00 mm
+          │      (observed swing 111.5 / 105.8 / 113.8 / 107.5)
+          └── build + TPU tread compression             3.00 mm
+```
+
+The attitude term is computed exactly, not allowed for: the tilted ground plane
+normal is `n = (−sinθ·cosψ, −sinθ·sinψ, cosθ)`, the airframe rests on whichever
+foot minimises `p·n`, and the tool sweeps `ψ` over the full circle rather than
+assuming which way the aircraft leans.
+
+**Result.**
+
+| flap length | attitude case | minimum safe belly clearance | 3.0 in surplus | 1.5 in |
+| --- | --- | ---: | ---: | ---: |
+| 40 mm (as built) | 5° | 74.41 mm (2.93 in) | +5.45 mm | −36.29 mm |
+| 40 mm (as built) | 8° | 78.35 mm (3.08 in) | +1.44 mm | −40.05 mm |
+| **30 mm (plan 005 R1)** | **5°** | **65.46 mm (2.58 in)** | **+14.37 mm** | −27.37 mm |
+| 30 mm (plan 005 R1) | 8° | 69.41 mm (2.73 in) | +10.30 mm | −31.19 mm |
+
+**The 1.5 in gear is below the minimum by 27–40 mm in every case** and cannot be
+rescued: closing it would need the nozzle stack to hang only ~10 mm below the
+belly, i.e. ~36.5 mm off a stack whose whole remaining trim budget is the 20 mm
+flap trim plus KD5's ~7 mm stator compression. Aft ballast would cost ~161 g
+*per nacelle*. **The 3.0 in leg is the flight article.**
+
+**Two attitude cases, not one.** §1 requirement 2 sizes the *structure* to ±15°
+of lateral landing, and that stands. ±15° costs 19.6 mm of nozzle clearance and
+**no leg in this family can pay it** — the 3.0 in gear is 8.1 mm short at 15°.
+These are different requirements on one event: the gear must **survive** ±15°;
+the nozzle must not be **struck** at the attitude the flight-control system is
+permitted to touch down at. The 5° figure above is a **project assumption**
+pending owner confirmation and a verified standards citation — **LG-27** — and
+it carries a paired flight-control requirement: a declared touchdown roll limit
+with a go-around trigger, into `docs/TILT_DRIVE_CONTROL_SPEC.md`.
+
+**The survival case is deliberately excluded.** Clearing the full 30.7 mm
+ductile-fuse stroke as well would need 86.2 mm (3.39 in) at 30 mm flaps — beyond
+the catalogue. That case is a 4 ft free drop with the sacrificial wires fired and
+scrap; the printed flaps are the cheaper sacrificial element. Recorded as an
+owner decision, **LG-28**.
+
+**Mass and T/W cost of the decision.** +67 g (0.148 lbm) — entirely printed
+leg-frame length; bay, foot, wires and fasteners are bit-identical shared parts.
+Symmetric fore/aft, so no X/Y CG shift; the vertical CG and the belly both rise
+41.9 mm (see **LG-29**). Against the ~1.19 hover T/W recorded in
+`docs/plans/2026-08-30-001` (already under the stated 1.2 floor), +67 g is a
+further ≈0.021 down. That cost is real and this document does not hide it — but
+a nozzle that strikes the ground on every landing is not tradeable against 2% of
+T/W.
 
 ---
 
@@ -370,10 +709,11 @@ choosing the compact default; LG-13 (wire retention) and LG-14
 
 | Level | Element | Activates at | Behavior |
 | --- | --- | --- | --- |
-| 1 (elastic, no damage) | Spring pair + leg frame | ≤350 N/leg (3.0in) / ≤543 N/leg (1.5in) | Fully recoverable; ordinary hard landings, zero permanent set |
-| 2 (primary sacrificial fuse) | Ductile pair | 800 N/leg (3.0in) / 1,241 N/leg (1.5in) plateau, 6 ft schedule | Bows deepen progressively; visibly bent afterward; field-replaceable stock |
-| 3 (rotation limit) | Belly + variant clearance | beyond full stroke | 3.0in: 44.9 mm residual — comfortable. 1.5in: 15.5 mm residual — tight, see §4.7 single-wire-fallback note |
-| 4 (lateral retention) | Wire socket retention (LG-13) + hip pin | §4.6/§4.7 lateral case | Wires cannot walk out of sockets; pin margin 5.3× (3.0in) / 3.4× (1.5in) |
+| 1 (elastic, no damage) | Spring pair + leg frame | ≤350 N/leg (both variants) | Fully recoverable; ordinary hard landings, zero permanent set. 10.0 mm hull settle at the limit |
+| 2 (primary sacrificial fuse) | Ductile pair | 609.5 N/leg plateau, 4 ft schedule (both variants) | Bows deepen progressively; visibly bent afterward; field-replaceable stock |
+| 2a (nozzle flaps) | Printed nozzle flaps | any arrest deeper than §4.8's budget | Sacrificial by design and cheaper than the leg — see §4.8 and LG-28 |
+| 3 (rotation limit) | Belly + variant clearance | beyond full stroke | 3.0in: 49.3 mm residual — comfortable. 1.5in: 7.4 mm residual — tight, and a non-flight variant (§4.8) |
+| 4 (lateral retention) | Wire socket retention (LG-13) + hip pin | §4.6/§4.7 lateral case | Wires cannot walk out of sockets; pin margin 7.0×, both variants |
 | 5 (protected) | Bay bosses / cargo shell | >1.45× wire collapse | Hull is not expected to see damaging load, either variant |
 
 ---
@@ -412,7 +752,7 @@ the build's analog of canon's "Cargo Bay Landing Pad".
 
 | Parameter | 1.5in (default) | 3.0in (extended) |
 | --- | --- | --- |
-| Geometry | One-piece: hip hub + bellcrank sockets + stop tab, twin-Ø14 mm cylinder thigh @ 18 mm centres + web (canonical telescope collars + piston rods), knee/ankle styling discs, slotted shin, square foot spigot | Same geometry family, longer thigh/shin |
+| Geometry | One-piece: hip hub + bellcrank sockets + stop tab, twin-Ø14 mm cylinder thigh @ 18 mm centers + web (canonical telescope collars + piston rods), knee/ankle styling discs, slotted shin, square foot spigot | Same geometry family, longer thigh/shin |
 | Infill / layers | 100%, 0.15 mm, print lying on −Y face | Same |
 | Mass (STL volume) | 27.65 cm³ → ≈36.0 g each × 4 = 144 g | 40.64 cm³ → ≈52.8 g each × 4 = 211 g |
 
@@ -467,6 +807,19 @@ the hip); it is symmetric fore/aft and does not shift the aircraft's X/Y
 CG, only trims Z (vertical) CG height slightly upward for the 1.5in
 variant. No verified precision claim beyond that is made here.
 
+**Cost of adopting the 3.0in leg as the flight article (§4.8):** +67 g
+(0.148 lbm), and the vertical CG *and* the rear-skid tip-back backstop both rise
+41.9 mm. Against the ~1.19 hover T/W recorded in `docs/plans/2026-08-30-001`
+(already under the stated 1.2 floor) that is a further ≈0.021 down. Track
+(288 mm) and wheelbase (170 mm) are unchanged, so the stability cone narrows with
+the raised CG — **and it cannot be re-derived here, because the aircraft's
+vertical CG station is not recorded anywhere in the repo. LG-29.**
+
+**AUW ledger caveat (see §2.1).** This document sizes the gear at a 3,130 g
+design AUW. A hover T/W of 1.19 against 4,464 gf of thrust implies ≈3,751 g.
+Wire diameter scales as AUW^⅓, so the schedule is ≈6.4% light against the implied
+mass. **LG-15 must not procure wire until the AUW ledger is reconciled.**
+
 **Open item LG-18:** mass-reduction pass (target ≤350 g for the 3.0in
 variant, ≤300 g for 1.5in) — candidate cuts: bay plate lightening,
 shin/collar slimming, hollow thigh with CF tube insert. Until closed, the
@@ -492,7 +845,7 @@ Dyneema SK75 2 mm, ≥750 N — one per leg, foot hub → bay → hull anchor
 | M3 × 30 SS pin | 8 | Hip pin + stop pin, 2 per corner |
 | M3 × 12 SS bolt + backing | 16 | Bay-to-shell mounts, 4 per bay (LG-02) |
 | M2.5 × 30 SS bolt | 4 | Foot retention |
-| Wire retention (LG-13, TBD) | 16 | Pin / set screw / adhesive at bay bosses |
+| Wire retention (LG-13, pending sign-off) | 16 | Nylon-tipped M2 drag screw at bay bosses (candidate, §4.5a) |
 | Dyneema SK75 2 mm | 1.6 m | Safety cords |
 
 ---
@@ -530,13 +883,13 @@ Dyneema SK75 2 mm, ≥750 N — one per leg, foot hub → bay → hull anchor
 
 ## 15. Open Items and Verification Requirements
 
+*Closed since the last revision: **LG-17** (2026-08-09, 4 ft adopted) and **LG-10** (2026-08-17, all eight sub-items — see `airframe/landing-gear/WBS.md` §1.1.4.1). LG-10's "flank conforming" clause was **retired** rather than built: the hull-side flange rebate presents a flat seat, so the printed bay keeps a flat back face and the two are held together by a shared datum instead (`tools/landing_gear_bay_seat_fit.py`). Its "Z-level rule" turned out not to be about the four feet, which were always level — see §1.1.4.1 LG-10.8.*
+
 | ID | Item | Blocks |
 | --- | --- | --- |
-| LG-17 | **Drop-height decision: 6 ft vs 4 ft schedule** (§4.4 — wire Ø only, both variants) | LG-15 procurement |
 | LG-15 | Procure both wire grades to the §11.2/11.3 schedule; re-check Ø against as-weighed AUW; coupon test | Leg fabrication |
 | LG-16 | Confirm ductile temper survives jig-forming without cracking | Leg fabrication |
 | LG-13 | Wire-end retention detail at bay bosses (pin/set screw/adhesive) vs §4.6/§4.7 lateral load — extra weight for the 1.5in variant's tighter single-wire-fallback margin | First flight |
-| LG-10 | Finalize 4 bay placements in `SerenityAssembly.FCStd` (flank conforming, Z-level rule); remove retired Strong-Leg `Union…003` objects; bake | LG-02, printing |
 | LG-02 | Bay mounting integration: internal backing plates, through-bolts, flank conforming spacer or shell recess; DRC mesh check | Hull print |
 | LG-03 | Rear-skid CF rod channel (unchanged, unrelated) | Taxi test |
 | LG-06 | **Revised elastic bench check:** quarter-AUW fixture **1.73 lbm (783 g)** dropped 1.5 ft onto one corner = 3.51 J → zero permanent set anywhere, either variant. (R5 protocol used full AUW = 14 J — it would fire the fuses; superseded.) | First flight |
@@ -545,6 +898,10 @@ Dyneema SK75 2 mm, ≥750 N — one per leg, foot hub → bay → hull anchor
 | LG-07 | Avionics shock rating vs 35–162 g profile (variant- and schedule-dependent, §4.7 — was ~1,000 g for Rev R5, much relaxed; re-derive from LG-14 data on the as-built variant) | PCB fab |
 | LG-18 | **Mass-reduction pass** (§11.6): 436 g (1.5in) / 503 g (3.0in) → reduced targets | AUW ledger |
 | LG-19 | Styling refinement pass vs [REF-CAD-002] (slimmer collars, piston detail) — cosmetic only | — |
+| LG-27 | **Touchdown-attitude / uneven-ground design case (§4.8).** Two parts: (a) owner confirmation of the 5° assumption — it moves the answer 1.30 mm per degree; (b) a **verified** standards citation for a limit descent velocity and landing attitude, added to `REFERENCES.md` with an exact section — never a guessed one (`AGENTS.md` §4). Carries a paired flight-control requirement: a declared touchdown roll limit + go-around trigger into `docs/TILT_DRIVE_CONTROL_SPEC.md` | First flight |
+| LG-28 | **Owner decision: is a nozzle strike acceptable during a full ductile-fuse arrest?** §4.8 says yes (the flaps are the cheaper sacrificial element). If no, the stack must shorten a further ~6 mm and KD5's stator compression comes off plan 005's deferred list | First flight |
+| LG-29 | **Re-derive tip-over and the rear-skid tip-back backstop at the 3.0in stance.** Blocked on an input that does not exist: the aircraft's vertical CG station in hull frame. The published "≈12° to skid contact" (§2.3) was computed at the shorter leg | First flight |
+| LG-30 | **Ground effect and FOD.** At the 3.0in gear with 30 mm flaps the nozzle exit sits ≈42 mm above the deck — **less than one duct diameter (50 mm)**. Exhaust impingement, recirculation and debris lofting into the intake are unquantified. Needs CFD or a bench hover; no number is asserted here | First flight |
 
 ---
 

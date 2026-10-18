@@ -48,7 +48,7 @@ Output:
   stls/fuselage/middle_canonical_edf_intake.stl
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 Date:    2026-06-02  (Rev C — correct Z-longitudinal axis)
 
 References:

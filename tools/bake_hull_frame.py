@@ -52,7 +52,7 @@ Binary STL layout per the 3D Systems STL specification (1989):
 (normal 3f, vertices 9f, uint16 attribute byte count).
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import argparse
@@ -115,14 +115,39 @@ COMPONENTS = {
     # Wings: identity rotation, translation only.
     # Filenames use the no-"s_"-prefix convention (Rev R1, 2026-06-11).
     # Chord updated to 129/93 mm (root/tip) and LE sweep zeroed in Rev R1
-    # 2026-06-14; bake translation unchanged (LE root stays at hull Y=-7).
+    # 2026-06-14; PORT bake translation unchanged (LE root stays at hull Y=-7).
+    #
+    # REV S1c (2026-08-18) — Wing_Stbd MIRROR-CORRECTED.  It had been baked
+    # 5.00 mm AFT-of-mirror in Y (-12.0 vs the port -7.0) and 4.52 mm outboard
+    # in X, so the two wings were not mirror images of each other.  That is not
+    # canonical asymmetry -- Serenity is symmetric here -- and it broke the spar
+    # interface: airframe/blender-scripts/merge_cargo_interior.py derives ONE
+    # WING_SPAR_Y (+38.15) from ONE WING_LE_ROOT_Y (-7.0) and cuts BOTH spar
+    # bores, BOTH bearing bosses and BOTH nacelle-servo pads on it, so the
+    # starboard spar was 5 mm out of line with its own wing.  Correcting the
+    # bake is what lets that single constant stay correct for both sides.
+    #
+    #   Y: -11.9999760 -> -6.9999860, i.e. identical to port.  Y is the
+    #      fore/aft axis and is NOT mirrored; both wings share one station.
+    #   X: -261.9994760 -> -257.4822.  Derived, not guessed: mirrored about the
+    #      hull's own symmetry plane MEASURED on the baked cargo shell at the
+    #      spar station (trimesh Y-sections over hull Y 37..41 at Z 55/58/62.5
+    #      give centreline X = -169.241, sd 0.03), as
+    #        Px_stbd = 2 * (-169.241) - (-80.9998380).
+    #      Check: this puts the starboard root face 2.28 mm outboard of the
+    #      starboard skin, against 2.24 mm for port -- symmetric.  The cargo
+    #      shell is the right reference because the wing root is a mortise/tenon
+    #      plus spar-bore joint into it; the nacelle-pair midpoint (-171.05)
+    #      disagrees by 1.8 mm, but that bake is itself known-stale pending the
+    #      Rev T CG re-bake (wings-nacelles WBS SS1.1.3), so it is not used here.
+    #   Z: unchanged -- both wings already shared 57.9998840.
     "Wing_Port": (
         "wings/wing_port_s1223_revo.stl",
         (-80.9998380, -6.9999860, 57.9998840, 0.0, 0.0, 0.0, 1.0),
     ),
     "Wing_Stbd": (
         "wings/wing_stbd_s1223_revo.stl",
-        (-261.9994760, -11.9999760, 57.9998840, 0.0, 0.0, 0.0, 1.0),
+        (-257.4822000, -6.9999860, 57.9998840, 0.0, 0.0, 0.0, 1.0),
     ),
     # Nacelles: 270 deg about +X = cruise / forward-flight attitude.
     # This is the canonical stored attitude; hover tilt is applied
@@ -147,6 +172,46 @@ COMPONENTS = {
         (-385.0960040, -69.9998600, 64.9719300, _SQ2, 0.0, 0.0, -_SQ2),
     ),
 }
+
+# ---------------------------------------------------------------------------
+# 64 mm nacelles (Rev T6, 2026-10-03) — DERIVED FROM SHARED DATUMS, mirrored.
+#
+# Unlike the 50 mm entries above (hand-extracted from an FCStd, and known to be
+# asymmetric: X +47 / -385, Y -64 / -70, Z 63.0 / 65.0), these are computed,
+# one rule for both sides, so the pair cannot desync (owner rule 2026-10-03:
+# local joint geometry informs, the airframe rules):
+#
+#   rotation   the same 270 deg about +X as above: hull = (x_l, z_l, -y_l).
+#   Y, Z       the tilt axis IS the spar line.  The spar and its fuselage
+#              socket are LEVEL at hull Y 21.000, Z 66.851
+#              (merge_cargo_interior.py WING_SPAR_Z; wings_s1223_revo.scad
+#              Rev T6 dihedral makes the wing bore level on it).  The pod's
+#              axis point is local (0, 0, PIVOT_Z = 109.7), so
+#              Py = 21.000 - 109.7 = -88.700,  Pz = 66.851.
+#   X          each pod's wing-pad seat (local x = +/-53.84 =
+#              WING_TIP_FACE_X - TIP_PAD_PROUD) on its own wing's pad face,
+#              measured on the baked wings: stbd -345.182, port +6.700, so
+#              Px = -399.022 / +60.540.  Midpoint -169.241 = the measured hull
+#              centre plane (Wing_Stbd note above): symmetric by construction.
+#
+# The trunnion and the wing tilt pinion are staged in the SAME nacelle-local
+# frame by tools/prep_nacelle_64_bake.py, so they take the same transform.
+# The pinion is WING-fixed: serenity_assembly.py does not tilt it.
+# ---------------------------------------------------------------------------
+# 2026-10-05: pivot and wing-pad seat come from the single sources (the x1.06
+# enlargement moves both).  Seat = WING_TIP_FACE_X - TIP_PAD_PROUD
+#      = (41.7 + axis shift + 7.0 stub) - 2.0  (53.84 at x1.00 shift 7.14).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import nacelle_64_scale  # noqa: E402
+_N64_SEAT = 41.7 + nacelle_64_scale.get("P64_AXIS_SHIFT_S") + 7.0 - 2.0
+_N64_Y, _N64_Z = 21.000 - nacelle_64_scale.pivot_z(), 66.851
+_N64_X = {"Port": 6.700 + _N64_SEAT, "Stbd": -345.182 - _N64_SEAT}
+for _side in ("Port", "Stbd"):
+    _pl = (_N64_X[_side], _N64_Y, _N64_Z, _SQ2, 0.0, 0.0, -_SQ2)
+    _s = _side.lower()
+    COMPONENTS[f"Nacelle64_{_side}"] = (f"nacelles/nacelle_{_s}_64mm.stl", _pl)
+    COMPONENTS[f"Trunnion64_{_side}"] = (f"nacelles/nacelle_trunnion_64mm_{_s}.stl", _pl)
+    COMPONENTS[f"TiltPinion64_{_side}"] = (f"wings/wing_tilt_pinion_{_s}.stl", _pl)
 
 
 def quat_to_matrix(qx, qy, qz, qw):

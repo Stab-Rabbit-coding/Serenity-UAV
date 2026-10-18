@@ -8,154 +8,133 @@ This folder contains all electronics design and implementation: KiCad schematics
 
 ## Onboard Avionics Architecture — 8-Node Cooperative System
 
-**Platform:** Four pairs of **PocketBeagle2 Industrial SBCs** (8 nodes total, Rev S placement,
-established at Rev R1):
-- All 8 nodes carry **Wash** (Flight Control and Sensor Cape) and **Zoë** (Communications, Logging, and Payload Cape)
-- All 8 nodes carry **TPM** (Trusted Platform Module) for cryptographic operations
+Root `AGENTS.md` §1 owns the node roster, the onboard bus list, and the external C2 channel
+list (including S-Bus status); root §9 "Naming and Roles" owns the bay/role naming table and
+the PACE assignment table. Read them there — this file carries only the electrical and
+board-level detail, plus the band-by-band FCC citations under "External Communications
+Regulations Compliance" below.
 
-**Emma Transceiver Cape** (49 MHz Part 15 §15.235 + LoRa 915 MHz — see "Cape Naming and
-Revision History" below for current build status):
-- Installed in **River's Room** (Bay C, starboard cargo) and **Simon's Medbay** (Bay D, middle section) only
+**Platform:** four pairs of **PocketBeagle2 Industrial SBCs** (8 nodes total).
 
-**Power Distribution — Kaylee (PDB):**
-- Central location: inner neck of middle section, minimizes power run lengths to all four nacelles, all four avionics stacks, and the battery
-- Interfaces with all four flight-control nodes for EDF and servo control
+**Zero Trust Security** Every PB2-I Cape (Pilot and TACCO) node carries a **TPM** (Trusted Platform Module) and every other PCB (including Commo from Rev T) carries an **SE** (Security Element) to provide cryptographic authentication and message integrity in addition to its other functions.
+
+**Bus Topology:** CAN FD, RS-485, Ethernet, and MIL-STD-1553C are galvanically isolated at every Pilot and TACCO node, providing a 4 lane redundant bus ring.  CAN-FD and RS-485 provide connectivity to every PCB, actuator and sensor on the aircraft.  The Observer PCB also has Ethernet to support its higher bandwidth sensor data. The 1553C bus is not extended to the resource constrained nodes lacking an SBC, **with one named exception: Commo (Rev T) is a 1553C remote terminal** because it is the airframe's external 49 MHz / SiK RF link and must be reachable on every onboard bus lane (owner decision 2026-09-29, `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`). Commo carries CAN-FD, RS-485, and 1553C but no Ethernet.
+
+**Commo transceiver node** (49 MHz Part 15 §15.235 + SiK 915 MHz): one standalone, MCU-driven
+Commo per airframe, co-located with its antennas and reachable by all four stacks over the bus. It
+does not mount on a PB2-I. Decision (Rev T, approved 2026-09-29): it replaces the two Rev S PB2-I
+capes in River's Room (Bay C) and Simon's Medbay (Bay D). Revision history and as-built status: `avionics/kicad/Commo/Commo.md`.
+
+**Power Distribution — Flight Engineer (PDB):** central location in the inner neck of the middle
+section, minimizing power-run lengths to all four nacelles, all four avionics stacks, and the
+battery; interfaces with all four flight-control nodes for EDF and servo control.
 
 ### Node Workload Balancing and PACE Failover
 
-All Wash capes are identical and all Zoë capes are identical, but each stack has **primary and alternative tasking** with PACE prioritization (Primary, Alternative, Contingency, Emergency):
+All Pilot capes are identical and all TACCO capes are identical, but each stack has **primary and
+alternative tasking** with PACE prioritization (**P**rimary, **A**lternative, **C**ontingency,
+**E**mergency). The per-stack PACE assignment, primary tasking, and radio priority are in root
+`AGENTS.md` §9 "Naming and Roles" — read that table, do not copy it here. Board-level facts it
+does not carry:
 
-#### Shepherd's Room (Bay A) — Forward Avionics
-**Primary tasking:** watchdog, fault detection, failover, authentication  
-**Stack:** Wash + Zoë  
-**Comms:** SiK primary / Wi-Fi secondary  
-**PACE assignments:**
-- Watchdog: **P**rimary
-- Comms: **A**lternative
-- Flight Control: **C**ontingency
-- Payload Control: **E**mergency
-
-#### Inara's Shuttle (Bay B) — Port Avionics
-**Primary tasking:** camera, external sensors, high-bandwidth ground communications  
-**Stack:** Wash + Zoë  
-**Comms:** Wi-Fi primary / LoRa secondary (LoRa is migrating from Zoë to Emma on River/Simon —
-see "Cape Naming and Revision History" below for current build status)  
-**PACE assignments:**
-- Watchdog: **A**lternative
-- Comms: **P**rimary
-- Flight Control: **E**mergency
-- Payload Control: **C**ontingency
-
-#### River's Room (Bay C) — Starboard Avionics
-**Primary tasking:** forward EDF control, nacelle tilt command/sync, resilient comms  
-**Stack:** Wash + Zoë + **Emma** (49 MHz primary; LoRa secondary migrating onto Emma — see
-"Cape Naming and Revision History" below for current build status)  
-**Comms:** 49 MHz (Part 15 §15.235) primary / LoRa 915 MHz secondary  
-**PACE assignments:**
-- Watchdog: **C**ontingency
-- Comms: **E**mergency
-- Flight Control: **P**rimary
-- Payload Control: **A**lternative
-
-#### Simon's Medbay (Bay D) — Aft Avionics
-**Primary tasking:** aft EDF control, alternate watchdog, cargo/payload oversight  
-**Stack:** Wash + Zoë + **Emma** (49 MHz primary; LoRa secondary migrating onto Emma — see
-"Cape Naming and Revision History" below for current build status)  
-**Comms:** 49 MHz (Part 15 §15.235) primary / SiK secondary  
-**PACE assignments:**
-- Watchdog: **A**lternative
-- Comms: **C**ontingency
-- Flight Control: **A**lternative
-- Payload Control: **P**rimary
-
-### Communication Protocols
-
-**Onboard:**
-- CAN FD (galvanically isolated at every node via Cape-A-2 and Cape-B-2)
-- MIL-STD 1553 (legacy, being phased)
-- RS-485 (galvanically isolated at every node)
-- Ethernet (galvanically isolated at every node)
-
-**External command and control (all four usable for autonomous or manual C2):**
-- Wi-Fi at 5 GHz
-- Zigbee at 2.4 GHz
-- MAVLink / SiK at 915 MHz
-- AX.25 on 49 MHz channel (47 CFR Part 15 §15.235 — unlicensed, not Part 95 RCRS)
-
-**S-Bus:** Supported by avionics capes but not currently used.
+- All four stacks run **Pilot + TACCO**. No stack carries a Commo cape; every stack reaches the
+  standalone Commo node over CAN-FD / RS-485 / 1553C. Loss of that node is an accepted single
+  point of failure for 49 MHz and SiK, with TACCO's mLRS as the long-range fallback.
+- Decisions: radio assignment resolved 2026-09-21/26 (TACCO carries mLRS; Commo carries SiK in
+  addition to 49 MHz; TACCO no longer carries SiK and Commo no longer carries LoRa/RFM95W); per-stack
+  radio priority rebalanced 2026-09-26 so Shepherd and Inara list mLRS as their long-range link.
+- Per-board radio complement and per-stack link priority are descriptive and live in `avionics/README.md` "External Comms" and the board files
+  (`avionics/kicad/TACCO/TACCO.md`, `avionics/kicad/Commo/Commo.md`), not here.
 
 ## Cape Naming and Revision History
 
 Board architecture, sch↔pcb parity status, and reconciliation progress change frequently and
 are tracked at the source, not duplicated here. **For any board, the authoritative,
 most-current status is that board's own `.md` file** under `avionics/kicad/<board>/` (e.g.
-`Wash.md`, `Zoë.md`, `Emma.md`, `Kaylee.md`, `Jayne.md`) plus the matching `TODO.md` §1.2
+`Pilot.md`, `TACCO.md`, `Commo.md`, `FlightEngineer.md`, `Observer.md`) plus the matching `TODO.md` §1.2
 subsection — read those before starting work, and do not assume this file's stable-fact
 summary below reflects today's as-built state.
 
-### Wash — Flight Control and Sensor Cape
+### Pilot — Flight Control and Sensor Cape
 
 Flight control input, sensor fusion, and PID motor speed control: GPS, IMU, compass,
 barometer, anti-collision range sensors, airspeed sensor, EDF PID control, nacelle tilt servo
-control. Current build designation: Cape-A-2. Status/history: `avionics/kicad/Wash/Wash.md`.
+control. Current build designation: Pilot. Status/history: `avionics/kicad/Pilot/Pilot.md`.
 
-### Zoë — Communications, Logging, and Payload Cape
+### TACCO (Tactical Coordinator) — Communications, Logging, and Payload Cape
 
 External communications, onboard logging, payload interface: all four external radio
 transceivers, onboard data logging to hardware-enforced non-executable microSD, payload I/O.
-Current build designation: Cape-B-2. Status/history: `avionics/kicad/Zoë/Zoë.md`, TODO.md
+Current build designation: TACCO. Status/history: `avionics/kicad/TACCO/TACCO.md`, TODO.md
 §1.2b.
 
-### Emma — 49 MHz + LoRa Transceiver Cape
+### Commo — 49 MHz + SiK Transceiver Node
 
 Unlicensed-band communications for high-RF-field environments: 49 MHz transceiver (47 CFR
-Part 15 §15.235) plus LoRa 915 MHz, both galvanically isolated. Installed only in River's Room
-(Bay C) and Simon's Medbay (Bay D). Connects via P1+P2 socket rails (Rev R1; replaces the
-legacy JST GH 6P). Status/history: `avionics/kicad/Emma/Emma.md`, TODO.md §1.2b.
+Part 15 §15.235) plus SiK 915 MHz.
 
-### Jayne — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board
+The Rev S PB2-I cape design was superseded 2026-09-29 (snapshot archived at
+`archives/avionics-archives/kicad-archives/Commo-cape-RevS-superseded-2026-09-29/`). Rev T is a
+**standalone PCB, not a PB2-I cape**, like Observer and Bus-Gateway:
+
+- One unit per airframe, co-located with its antennas.
+- MCU-driven: the modem and AX.25/KISS run on-board.
+- Isolated CAN-FD, RS-485, and MIL-STD-1553C RT; no Ethernet; an SE instead of a TPM.
+- Mass is taken from the PCB roll-up, not hand-entered.
+- Plan: `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`.
+
+Status and history: `avionics/kicad/Commo/Commo.md`, `avionics/WBS.md` §1.2a.2.
+
+### Observer — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board
 
 One integrated subsystem covering both the mechanical cargo-handling hardware (winch, latch,
 cargo bay door) and the vision/ToF/laser sensing board. Historical references to "Vera" (an
 earlier working name for the sensing board) refer to this same board.
 
-**Jayne is a standalone PCB — not a PocketBeagle 2 Industrial cape.** It does not use the
-P1+P2 header stack and does not mount on a Wash/Zoë node; it connects to the rest of the
+**Observer is a standalone PCB — not a PocketBeagle 2 Industrial cape.** It does not use the
+P1+P2 header stack and does not mount on a Pilot/TACCO node; it connects to the rest of the
 airframe only via the shielded JST-GH Ethernet ring and CAN-FD trunk connectors, with its own
 5V power input. One shared board design is installed at two physical locations: the bow
 sensor pod (nose) and the cargo bay nadir FPV mount, the latter co-located with the mechanical
-cargo-handling hardware it supervises. It supersedes the RunCam Nano 4 analog camera
-(REF-SENSOR-001, superseded).
+cargo-handling hardware it supervises.
 
-**Do not restate Jayne's chip-level architecture, EMI hardening, or fabrication status here —
+**Do not restate Observer's chip-level architecture, EMI hardening, or fabrication status here —
 it has changed materially between doc passes and this section has gone stale before.**
-Canonical source: `avionics/kicad/Jayne/Jayne.md`, TODO.md §1.2c (hardware) and §4.6
+Canonical source: `avionics/kicad/Observer/Observer.md`, TODO.md §1.2c (hardware) and §4.6
 (firmware).
 
 **Laser indicator:** single shared 520 nm green source; per-site optics and IEC 60825-1
 class are a live engineering analysis, not a fixed spec — canonical source:
-`docs/JAYNE_LASER_ANALYSIS.md` (current revision), TODO.md §1.2c.4.
+`docs/OBSERVER_LASER_ANALYSIS.md` (current revision), TODO.md §1.2c.4.
 
-### Kaylee — Power Distribution Board (PDB)
+### Flight Engineer — Power Distribution Board (PDB)
 
 Battery management, EDF power distribution, and PID control-line routing to all
-flight-control nodes. Location: inner neck of the middle section (Kaylee's room), adjacent to
+flight-control nodes. Location: inner neck of the middle section (Flight Engineer's room), adjacent to
 Simon's Medbay — minimizes power-run length to all nacelles, all four stacks, and the battery.
-Status/history (including the planned 6V-servo-BEC removal): `avionics/kicad/Kaylee/Kaylee.md`,
-TODO.md §1.2b.
+Status and history: `avionics/kicad/FlightEngineer/FlightEngineer.md`.
+
+### Bus-Gateway (CAN-PERIPH-GW-1) - Secure CAN-FD and RS-485 edge node
+
+Provides secure bus connection for sensors and actuators lacking native capability, specifically
+the nacelle tilt Hall effect sensors and SG90 microservos (winch, cargo door), plus per-EDF ESC
+telemetry gateways. Folder/file/BOM designator is `CAN-PERIPH-GW-1`
+(`avionics/kicad/Bus-Gateway/`); "Bus-Gateway" is the board-class name used here. Status/history:
+`avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md`, TODO.md §1.2.
 
 ## PCB Design Standards
 
 ### Design Rules Checker (DRC) Workflow
 
-Every schematic and PCB modification **must** be verified:
+Every schematic and PCB modification **must** be verified: run **ERC** on the `.kicad_sch` and
+resolve all violations and warnings, then run **DRC** on the `.kicad_pcb` and resolve all
+violations and errors. Document anything that cannot be resolved in `TODO.md` with the specific
+DRC rule and reason; commit only after every violation is resolved or documented. All routing
+and component spacing will maintain 0.3mm minimum copper spacing (as enforced by the
+min_copper_edge_clearance DRC check) per [REF-IPC-001]. Root `AGENTS.md` §7 states the
+production-completeness bar for every cape (schematic, PCB layout, copper traces, correct IC
+footprints, production-ready Gerbers).
 
-1. Open the schematic file in KiCad
-2. Run **Electrical Rules Checker** (ERC) — resolve all violations and warnings
-3. Open the PCB layout
-4. Run **Design Rules Checker** (DRC) — resolve all violations and errors
-5. Document any violations that cannot be resolved in `TODO.md` with the specific DRC rule and reason
-6. Commit only after all DRC violations are either resolved or documented
 7. **Two separate 0.3 mm floors, both driven by the 500 W/m² EMI-hardening design
    objective (REF-NIST-002 §6.2.5) per REF-IPC-001 (IPC-2221B §3–4.2):**
    - **Copper-to-edge clearance** (`min_copper_edge_clearance`, KiCad board setup) — 0.3 mm minimum, all boards.
@@ -181,58 +160,43 @@ Every schematic and PCB modification **must** be verified:
    `kicad-cli pcb drc` report is wanted — this project's kicad-cli-based tooling has no
    scriptable way to author a valid DRC exclusion entry, so this step is GUI-only.
 
-- Each deviation must be explicity justified in the md file of the affected pcb.
+- Each deviation shall be explicitly justified in the md file of the affected pcb.
 
 ### Footprint and Component Placement
 
-**Critical note:** PCBs are tightly packed. All final component footprint positions will be placed manually after PCBs are populated and nets are built by script.
+**Critical note:** PCBs are tightly packed. All final component footprint positions will be
+placed manually after PCBs are populated and nets are built by script (root `AGENTS.md` §5).
 
 - If a DRC violation requires repositioning a component footprint, **refer the action to the user**
 - Other modifications (net routing, trace widening, via placement) are allowed without user confirmation
 
-### Schematics and PCB Files
-
-- Every cape requires:
-    - Complete schematic file (`.kicad_sch`)
-    - Complete PCB layout (`.kicad_pcb`)
-    - Copper traces ready for production
-    - Proper IC footprints for all components
-    - Production-ready Gerber files
-
 ## Security and Cryptography Requirements
 
-Every message, internal and external, must be:
-- **Digitally signed** and authenticated
-- **Logged** for forensic analysis
-- **Timestamped** by the TPM
+Every message, internal and external, must be **digitally signed** and authenticated,
+**logged** for forensic analysis, and **timestamped** by the TPM.
 
-### TPM (Trusted Platform Module)
-
-- Every node carries a TPM for cryptographic operations
-- All keys are generated and stored on the TPM, never in software
-- All messages are signed using TPM-held keys
-
-### Data Logging
-
-- Everything is logged: sensor data, CAN messages, MAVLink commands, camera feed, authentication events
-- Logs are saved to **hardware-enforced non-executable microSD cards** (write-once, never executable)
-- All logs are signed and timestamped
+- **TPM:** every CAPE carries a TPM, all other nodes cary an SE; all keys are generated and stored on the TPM, never in
+  software; all messages are signed using TPM-held keys.
+- **Data logging:** everything is logged — sensor data, CAN messages, MAVLink commands, camera
+  feed, authentication events — to **hardware-enforced non-executable microSD cards**
+  (write-once, never executable). All logs are signed and timestamped.
 
 ### Zero Trust Architecture Compliance
 
 All avionics design shall comply with **NIST SP 800-207 Zero Trust Architecture** [REF-NIST-001 §2.1, §2.2, §3.3]:
+
 - Assume breach: expect both external and internal attacks
 - Verify every transaction: no implicit trust based on network location
 - Authenticate every message and every node state change
 - Least privilege: each node operates with minimum required permissions
-- Micro-segmentation: isolate avionics bays with galvanic isolation and message authentication
+- Micro-segmentation: Each node, even if it's just an HE Sensor or sg90 microservo, is a microsegment that must be authenticated at startup and throughout missions.  Isolate avionics bays with galvanic isolation and message authentication
 
 ## External Communications Regulations Compliance
 
 All radio transmissions must comply with **FCC regulations**:
 
 - **49 MHz band:** 47 CFR Part 15 §15.235 (unlicensed ISM, not Part 95 RCRS) — used for high-RF-field environments
-- **915 MHz SiK/MAVLink:** 47 CFR Part 15 §15.247 (unlicensed ISM)
+- **915 MHz SiK/MAVLink:** 47 CFR Part 15 §15.247 (900 MHz unlicensed ISM band)
 - **2.4 GHz Zigbee:** 47 CFR Part 15 §15.247 (unlicensed ISM)
 - **5 GHz Wi-Fi:** 47 CFR Part 15 §15.407 (unlicensed UNII)
 
@@ -246,11 +210,7 @@ When modifying or creating cape designs:
 2. Run ERC and DRC; document any violations in `TODO.md` with the reason
 3. Update the cape description in `REFERENCES.md` if the design scope has changed
 4. If planning a new cape revision, record it in `TODO.md` and cite this file
-5. Keep `PROJECT_INDEX.md` up to date with new KiCad files
-6. Archive old cape revisions in `archives/` with a note in `ARCHIVE_INDEX.md`
-7. Check for component datasheets in the `avionics/datasheets` folder, kicad symbols in the `avionics/kicad/symbols` folder, and footprints in the `avionics/kicad/symbols/footprints` folder before searching online.
-8. Use OEM Datasheets as authitative component references.
-
----
-
-For project-wide standards, see the root `AGENTS.md`.
+5. Archive old cape revisions in `archives/`; index and archive upkeep (`PROJECT_INDEX.md`,
+   `ARCHIVE_INDEX.md`) follows root `AGENTS.md` §10
+6. Check for component datasheets in the `avionics/datasheets` folder, kicad symbols in the `avionics/kicad/symbols` folder, and footprints in the `avionics/kicad/symbols/footprints` folder before searching online
+7. Use OEM Datasheets as authitative component references.

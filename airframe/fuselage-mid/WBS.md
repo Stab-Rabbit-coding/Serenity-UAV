@@ -1,8 +1,8 @@
-# Serenity UAV — Airframe Fuselage — Head/Cargo/Middle Shells, Kaylee/Simon Bays Work Breakdown Structure (Detail)
+# Serenity UAV — Airframe Fuselage — Head/Cargo/Middle Shells, FlightEngineer/Simon Bays Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Current design revision:** Rev S (2026-07-04)
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items
@@ -41,7 +41,7 @@
     dedicated copper counterpoise wire (AWG 22 stranded, < 2 g) bonded alongside the keel
     is more reliable than relying on CF conductivity.  Decide: (a) keep CF keel as structural
     only and add a separate copper counterpoise wire in the wiring trunk, or (b) embed a
-    copper braid in the keel lap joint.  Update Emma/XCVR antenna design accordingly.
+    copper braid in the keel lap joint.  Update Commo/XCVR antenna design accordingly.
 
     **Step 5 — Update BOM, battery tray, and build guide.**
     - Update CF-BAR-6X3 Notes: confirmed form, span, Z routing, cross-section, mass.
@@ -56,11 +56,11 @@
 
 - [x] **Access panel frames + covers (24" Rev R)** — `airframe/openscad/fuselage/access_panels_24in.scad` created 2026-06-11. Geometries derived from authoritative shell SCADs (Rev R baseline):
     - 4× Faraday-bay covers (Shepherd/Inara/River/Simon): 72×52 mm, 4× M3 clearance bores, positive-stop shoulder; Inara + River covers include Ø42 mm GPS retention-ring recess.
-    - 2× ventral hatch covers: battery 160×60 mm, Kaylee 115×100 mm; M2.5 pilots into bonded frames.
-    - 2× ventral hatch frames: battery + Kaylee; 6 mm CF-PETG wall, West System 105/206 epoxy-bonded to hull.
+    - 2× ventral hatch covers: battery 160×60 mm, Flight Engineer 115×100 mm; M2.5 pilots into bonded frames.
+    - 2× ventral hatch frames: battery + Flight Engineer; 6 mm CF-PETG wall, West System 105/206 epoxy-bonded to hull.
     - **SUB-TASKS:**
         - [ ] Export individual STLs (set RENDER variable in SCAD): shepherd, inara, river, simon,
-            battery, battery_f, kaylee, kaylee_f → `airframe/stls/fuselage/` — **NOT DONE
+            battery, battery_f, flight_engineer, flight_engineer_f → `airframe/stls/fuselage/` — **NOT DONE
             2026-07-03**: `openscad -o` export could not be run this session (sandboxed sub-agent
             Bash permission hook blocks any command containing `-o`, and the main session hit a
             separate OpenSCAD-render permission block); must be run by the user or an unrestricted
@@ -77,13 +77,13 @@
             clearance bore"; clears the Ø36 GPS body). Rendered + verified watertight, single
             body. **ANTENNAS MOVED OUTBOARD 2026-07-06 (user directive):** `GPS_SEP` 30 → 37.5
             mm in both `cargo_sect_shell24.scad` and `access_panels_24in.scad`, co-locating
-            each GPS with its bay/cover centre (= `BAY_SEP_X`/2). The ~46 mm-wide (OML-trimmed)
+            each GPS with its bay/cover center (= `BAY_SEP_X`/2). The ~46 mm-wide (OML-trimmed)
             cover only keeps a Ø38 bore fully enclosed if the antenna is within ~±4 mm of the
-            cover centre; at the old 30 mm it sat 7.5 mm inboard and the bore broke the cover's
+            cover center; at the old 30 mm it sat 7.5 mm inboard and the bore broke the cover's
             inboard edge (scallop). Re-rendered + verified: GPS bore is now a **fully-enclosed
             interior hole** (6 section loops = outer + 4 M3 + 1 GPS; single watertight body;
             `inara_access_cover.stl` 4604 mm³, `river_access_cover.stl` 4456 mm³; 26 mm to each
-            cover edge, 7 mm bore margin). New GPS centre-to-centre = 75 mm; Ø44 retention rings
+            cover edge, 7 mm bore margin). New GPS center-to-center = 75 mm; Ø44 retention rings
             still clear (31 mm gap). VERIFY-in-slicer: confirm each antenna still lands on flat
             enough dorsal skin at the outboard station and the SMA pocket clears the Faraday
             tray below.
@@ -91,14 +91,14 @@
             The dorsal-Z covers cut their 4× M3 bores at ±`AVZ_SCREW_DX`(15, X) ×
             `AVZ_SCREW_DY`(25, Y) = `cargo_sect_shell24.scad` `AVINICS_BOSS_DX/DY` exactly
             (was mismatched 25/15 in the wrong X-Z axes). Verified geometrically from the
-            rendered STL: bore centres at (±15, ±25) mm, Ø3.3 M3 clearance. (Shepherd/Simon
+            rendered STL: bore centers at (±15, ±25) mm, Ø3.3 M3 clearance. (Shepherd/Simon
             covers stay on the legacy Y-normal `av_cover_dorsal` until the head/middle
             avionics bays get the same dorsal-axis fix — the still-open head/middle
             axis-bug items in this section.)
 
 - [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11.
     Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top.
-    **Relocated 2026-06-22 (§1.4.2):** dorsal-centreline mount superseded — print FOUR posts (two antennas, two posts each):
+    **Relocated 2026-06-22 (§1.4.2):** dorsal-centerline mount superseded — print FOUR posts (two antennas, two posts each):
     River's antenna forward (sta ≈ 120 mm) + aft (sta ≈ 580 mm) on the **port flank**, Simon's antenna forward + aft (same
     stations) on the **starboard flank**, both at shoulder height.
     Reasons: (a) a single shared dorsal run put River's and Simon's independent 49 MHz antennas (§1.4.2) too close together;
@@ -118,14 +118,17 @@
             Y=−305.6), which sits entirely inside the post run (sta 120–580 mm) — the mid-run
             wire, not just the two discrete posts, crosses the door's swing zone and must clear
             it. Door swing envelope = a semicircle radius ≈52–55 mm (measured door width)
-            centered at hinge (X=−117.6 port/−222.5 stbd, Z≈5.1–5.2), spanning only hull Y 2–108.
+            centered at hinge (X=−117.53 port/−222.68 stbd, Z≈3.0–3.5 — corrected 2026-09-21
+            after the doors were regenerated against the current shell, was Z≈5.1–5.2;
+            `docs/CARGO_DOOR_LATCH_SPEC.md` §7a; the ≈2 mm Z shift does not change the
+            recommended Z ≥ 65 mm margin below), spanning only hull Y 2–108.
             `rcrs49_wire_post.scad` still has **no defined shoulder-height Z value** (flagged open
             in its own header) — cannot compute a real clearance margin until that Z is set;
             recommend Z ≥ 65 mm (hinge Z + envelope radius + margin) at any station falling within
             hull Y 2–108, then re-verify numerically. **Still BLOCKS bonding both antennas'
             posts.**
-        - [ ] Bond River's forward post to the port flank at sta 120 mm; dress wire aft to River's Emma J2
-        - [ ] Bond Simon's forward post to the starboard flank at sta 120 mm; dress wire aft to Simon's Emma J2
+        - [ ] Bond River's forward post to the port flank at sta 120 mm; dress wire aft to River's Commo J2
+        - [ ] Bond Simon's forward post to the starboard flank at sta 120 mm; dress wire aft to Simon's Commo J2
         - [ ] Install both temporary aft posts (port + starboard) at sta 580 mm; remove and replace with integrated mounts in Phase 11
 
 ##### 1.1.1.1 *Head*
@@ -176,7 +179,507 @@
     - [ ] create mounting bracket for camera/tof/laser control pcb
     - Verify Faraday tray cutout and all other non-boss geometry unchanged after SCAD re-render.
 
+- [x] **★ CARGO-03 — the wing root mortise does not penetrate the bulkhead.**
+    **CLOSED 2026-08-24.**
+    *(found 2026-08-23 while checking that the nacelle ESC cableway is not blocked,
+    owner direction; gated by `tools/wing_root_deconflict.py`)*  **BLOCKS wing
+    attachment, the ESC cableway, and the cargo shell print.**
+
+    `merge_cargo_interior.py` cuts the two wing root mortises as
+    `box(PORT_INB + 1.0, PORT_OUTB - 10.0, …)` = hull **X −99…−70** port and
+    **X −270…−241** starboard, described in the source as cutting "through each
+    wall".  It does not.  At the mortise station (Y +57.5, Z +62.5) the port wall
+    material actually lies at **X −115…−99** — the cut begins exactly where the
+    wall *ends* and runs outboard into free air.  Swept corridor test, from well
+    inboard of the wall to well outboard of it:
+
+    | Penetration | Cut X span | Material left in the corridor | Verdict |
+    | --- | --- | --- | --- |
+    | wing root mortise, port | −99.0…−70.0 | **1 781.7 mm³** | **BLIND** |
+    | wing root mortise, stbd | −270.0…−241.0 | **1 676.0 mm³** | **BLIND** |
+    | spar bore, port | −270.0…−70.0 | 0.0 mm³ | THROUGH |
+    | spar bore, stbd | −270.0…−70.0 | 0.0 mm³ | THROUGH |
+
+    The spar bore is cut across the **full** lateral span, so it does pass through;
+    the mortise is the only wing-root penetration sized to a local X band, and that
+    band is wrong.  Note the trap this hid behind: probing *inside* the cut region
+    reports 0 mm³ of material and looks correct — emptiness proves nothing when the
+    cut is outboard of the wall.  Only the swept corridor exposes it, which is why
+    the check now lives in a tool rather than a one-off probe.
+
+    **Consequences.**  The wing root tenon cannot enter; the 40 A EDF ESC conduit
+    has no path into the fuselage (CARGO-04); and any prior "mortise cut verified"
+    claim rests on a region test, not a through test.  This predates Rev S1b —
+    `WING_MORT_Y` (0.50 chord) and `WING_ROOT_Z` were untouched by that change, so
+    the defect has been latent since the mortises were first cut.
+
+    **FIXED 2026-08-24.**  Both mortise cutters now span the same inboard
+    references the Rev S1c harness ports already derived for this wall
+    (`WING_HARNESS_INB_PORT` −125.0 / `WING_HARNESS_INB_STBD` −213.0, "past the
+    −115.2 encoder-line wall") out to `PORT_OUTB` / `STBD_OUTB`.  One measured
+    fact now drives every wing-root penetration instead of three different
+    guesses.  Re-merged and published; swept-corridor test on the published shell:
+
+    | Penetration | Material left in the corridor | Verdict |
+    | --- | --- | --- |
+    | wing root mortise, port | **0.0 mm³** (was 1 682.8) | **THROUGH** |
+    | wing root mortise, stbd | **0.0 mm³** (was 1 643.8) | **THROUGH** |
+
+    `PORT_INB`/`PORT_OUTB` are deep-embed spans for **bosses** and were never the
+    wall; treating them as the wall is what caused this, and the fix removes that
+    conflation rather than patching the numbers.
+
+    **CARGO-03b — and the tenon that enters it is on a different datum. CLOSED 2026-08-24.**
+    *(owner direction 2026-08-23: the wing root tenon has to be accounted for
+    alongside the bearing seat.)*  The mortise is only half the joint;
+    `wings_s1223_revo.scad` `fuselage_root_tab()` is the other half.  It fits in Y
+    and fouls in Z:
+
+    | Axis | Tenon span | Mortise span | Clearance each side |
+    | --- | --- | --- | --- |
+    | Y (chordwise) | +42.50…+72.50 | +42.10…+72.90 | +0.40 / +0.40 — correct |
+    | Z (thickness) | +48.01…+68.01 | +52.10…+72.90 | **−4.09** / +4.89 — **FOULS** |
+
+    Root cause is a **datum disagreement, not a size error**: `fuselage_root_tab()`
+    centres the tenon on the wing **chord line** (hull Z **+58.01**), while
+    `merge_cargo_interior.py` centres the mortise on **`WING_ROOT_Z`** (hull Z
+    **+62.50**).  The two are 4.49 mm apart, against a 0.4 mm design clearance, so
+    the tenon's lower 4.09 mm lands on solid wall.  The sizes themselves are right
+    — 30.0 × 20.0 tenon in a 30.8 × 20.8 mortise is a sensible 0.4 mm/side fit.
+    All three `WING_ROOT_TAB_*` constants still carry their original `VERIFY`
+    comments in the SCAD; they were flagged as unchecked when written and never
+    were.  Pick **one** datum for the joint and drive both files from it.
+
+    **FIXED 2026-08-24 — the chord line is now the single datum.**
+    `WING_ROOT_Z` 62.5 → `WING_CHORD_LINE_Z` (58.01), so the mortise is centred
+    where `fuselage_root_tab()` already centres the tenon.  The chord line won
+    because the tenon is a *wing* feature and the chord line is the wing's own
+    datum; `WING_ROOT_Z` was a fuselage-side number with no geometric claim on the
+    joint.  Nothing else reads it — the spar bore and the servo pad are both
+    spar-relative — so the move disturbs nothing.  Measured after the re-cut:
+
+    | Axis | Tenon span | Mortise span | Clearance each side |
+    | --- | --- | --- | --- |
+    | Y | +42.50…+72.50 | +42.10…+72.90 | +0.40 / +0.40 |
+    | Z | +48.01…+68.01 | +47.61…+68.41 | **+0.40 / +0.40** |
+
+    The joint now has the symmetric 0.4 mm/side fit its sizes were always chosen
+    for.
+
+    **Tenon depth is fine.**  Measured wall face at the mortise station is hull
+    X −99.0 (port); a 12 mm `WING_ROOT_TAB_L` reaches X −111.0, still inside the
+    wall band (−115…−99), so the tenon does **not** protrude into the cargo bay and
+    clears the servo body by 10.66 mm and its horn swing by 12.66 mm.
+
+    **Tenon vs the spar bearing seat — 0.23 mm, and that is the real number.**
+    The tenon's forward face sits at 49.5 mm chordwise; the Rev S1b spar bore's aft
+    edge sits at 45.15 + 4.15 = 49.3 mm.  Measured gap **0.226 mm** to the bore and
+    **0.376 mm** to the spar tube itself.  Before Rev S1b the spar was at 0.171 c
+    and the gap was ~23 mm; moving it to 0.35 c closed it to nothing.  At that
+    spacing there is no material between the rotating bearing seat and the tenon's
+    load-bearing face — treat it as zero and resolve it with the datum fix, because
+    any correction that moves the tenon aft or the seat forward consumes it.
+
+    **The tenon is not a plain block** — `wing_one_side()` drills the EDF ESC
+    conduits straight through it axially ("tenon pass-through"), grooving its crown
+    while the lower ~30 × 15 mm stays solid.  With those modelled, both ESC conduits
+    pass the tenon cleanly (0.0 mm³); the blockage in CARGO-04 is the wall, not the
+    wing.
+
+    **CARGO-03c — the tenon is a STRUCTURAL joint element, and it has never been
+    sized as one.** *(owner, 2026-08-23: "that mortise/tenon joint provides part of
+    the structural joint at the wing root, since the wings don't rotate with the
+    nacelles.")*  This contradicts `fuselage_root_tab()`'s own comment — "The tab
+    provides radial restraint; the CF spar carries spanwise load" — which was
+    written when the spar carried through.  Under SPAR-01 it does not: spanwise
+    load terminates at the wall, and the tenon is part of how it gets there.
+    **Correct that comment when the tenon is re-datumed.**
+
+    Quantified by `tools/wing_spar_carrythrough.py` (tip bearing to root face
+    88.0 mm; the wing is supported at the tenon and at the wingtip bearing, so
+    whatever the spar hands the wing at the tip, the tenon reacts at the root):
+
+    | Case | R_tip | Tenon shear | Tenon moment | Bearing stress |
+    | --- | --- | --- | --- | --- |
+    | limit (4 g) | 110.6 N | 110.6 N (24.9 lbf) | 9.74 N·m | 6.76 MPa |
+    | ultimate | 165.9 N | 165.9 N (37.3 lbf) | 14.60 N·m | **10.14 MPa** |
+
+    Bearing stress assumes the moment is reacted as a couple on the tenon's top and
+    bottom faces over the 12 mm insertion, effective arm ⅔ of depth, bearing area
+    = width × half depth.
+
+    **The problem is that no CF-PETG bearing allowable exists in this repository.**
+    The only CF-PETG number it carries is ≈5 MPa, and that is **bond**-limited
+    (`docs/structural_analysis.md` §7.3), not bearing — against it the tenon is
+    under-strength at FOS 0.49.  Bearing on a printed tenon in a printed slot is a
+    different mode and almost certainly a higher allowable, but inventing one is
+    exactly what root `AGENTS.md` §4 forbids.  So the sizing is inverted instead:
+    for the §3 joint FOS target of **4.0** at the present 12 mm insertion the
+    bearing allowable must be **≥ 40.6 MPa**; otherwise the depth has to grow:
+
+    Bearing stress falls as **1/(W · L²)** — insertion depth is a *quadratic*
+    lever, width only a *linear* one.  Both are capped by what the airframe will
+    physically accept, measured by bisection against real parts in
+    `tools/wing_root_deconflict.py` `max_tenon_envelope()`:
+
+    - **Max width 39.2 mm.**  The forward face cannot move at all — the spar bore's
+      aft edge leaves **0.20 mm** — so every millimetre of width has to be taken
+      aft, and aft runs out at hull Y +81.7 against the **aft landing-gear bay**.
+    - **Max insertion 20.1 mm.**  Past the ~16 mm wall band the tenon protrudes
+      into the bay; it stays clear of the servo, both gear bays and the avionics
+      bay, and what finally stops it is the **CARGO-01 payload envelope** at
+      X −119.1.  Staying buried in the wall instead caps it at 16.0 mm.
+
+    | If the coupon test returns | Depth @ W = 30 (present) | Depth @ W = 39.2 (max) | Verdict |
+    | --- | --- | --- | --- |
+    | 5 MPa | 34.2 mm | 29.9 mm | **impossible** — over max depth even at max width |
+    | 10 MPa | 24.2 mm | 21.1 mm | **impossible** — over max depth even at max width |
+    | 15 MPa | 19.7 mm | 17.3 mm | fits, deeper tenon |
+    | 20 MPa | 17.1 mm | 14.9 mm | fits, deeper tenon |
+    | 30 MPa | 14.0 mm | 12.2 mm | fits, deeper tenon |
+    | 40.6 MPa | 12.0 mm | 10.5 mm | fits as-built |
+    | 60 MPa | 9.9 mm | 8.6 mm | fits as-built |
+
+    **The maximum tenon this airframe accepts is 39.2 × 20.1 mm (width ×
+    insertion).**  At that size the joint reaches FOS 4.0 only if the measured
+    bearing allowable is **≥ 11.1 MPa** — that number is the hard floor the coupon
+    test has to clear.  Below it the tenon cannot be grown into compliance at all
+    and the joint needs a different answer: a bonded doubler, a second tenon
+    forward of the spar, or a metal insert.
+
+    Note how little the width buys: going from 30 → 39.2 mm, the entire aft room
+    available, takes only **13 %** off the required depth, because width enters
+    linearly while depth enters squared.  Width is the lever to reach for only when
+    depth is already against the payload envelope — i.e. between roughly 11 and
+    15 MPa, where it is the difference between feasible and not.
+
+    **DECISION RULE (owner, 2026-08-23): if CF-PETG cannot be sourced at ≥ 15 MPa
+    fusion strength, the joint gets a second spar instead of a bigger tenon.**
+    "Fusion strength" is the right property to name — the tenon reacts its couple
+    on faces loaded across the print layers, so interlayer fusion governs, not bulk
+    compressive.  15 MPa is a sound threshold: it is the first row in the table
+    above that fits (19.7 mm at the present width, 17.3 mm at maximum width, both
+    inside the 20.1 mm cap), and it sits above the 11.1 mm-floor with enough room
+    that the joint is not built on the last millimetre of envelope.
+
+    **The fallback is feasible, and it must go FORWARD of the main spar.**  First
+    pass, Ø6 assumed, ultimate root moment 14.60 N·m, couple force = M / separation:
+
+    | Station (mm from LE) | Separation from main spar | Couple force | Min bore wall | Nearest feature |
+    | --- | --- | --- | --- | --- |
+    | **14.0** | 31.15 mm | **469 N** | **3.23 mm** | Hall conduit, +11.25 mm |
+    | 18.0 | 27.15 mm | 538 N | 4.14 mm | Hall conduit, +7.25 mm |
+    | 20.0 | 25.15 mm | 581 N | 4.51 mm | Hall conduit, +5.25 mm |
+    | 24.0 | 21.15 mm | 690 N | 5.10 mm | Hall conduit, +1.25 mm |
+    | 85.0 | 39.85 mm | 366 N | **−1.69 mm** | tenon, +2.50 mm |
+    | 90.0 | 44.85 mm | 326 N | **−2.37 mm** | tenon, +7.50 mm |
+
+    Aft stations are **not available at any separation** — the section is too thin
+    behind the tenon and the bore breaks out of the skin (negative wall).  Forward
+    works, and further forward is better because separation grows and the force
+    falls; **14.0 mm** is the pick, giving the largest separation still on a healthy
+    3.23 mm bore wall and 11 mm of room to the Hall conduit at its new 30 mm
+    station.
+
+    **Why this actually fixes the problem, where a bigger tenon does not.**  The
+    tenon reacts a couple on shallow faces; a rod reacts shear along an embedded
+    length, and the wall can give it the same deep boss the main spar already has
+    (`PORT_INB` −100 to `PORT_OUTB` −60 = 40 mm of embed):
+
+    | Rod | Embed | Bearing | vs the tenon's 10.14 MPa |
+    | --- | --- | --- | --- |
+    | Ø6 | 16 mm | 4.88 MPa | 2.1× better |
+    | Ø6 | 40 mm | 1.95 MPa | 5.2× better |
+    | Ø8 | 25 mm | 2.34 MPa | 4.3× better |
+    | **Ø8** | **40 mm** | **1.46 MPa** | **6.9× better** |
+
+    At Ø8 × 40 mm embed the FOS 4.0 target needs an allowable of only **≈5.9 MPa**,
+    against 40.6 MPa for the present tenon — so the second spar takes the joint out
+    of the fusion-strength question almost entirely, and would clear even the
+    repository's pessimistic 5 MPa bond-limited figure at FOS 3.4.
+
+    It also **restores the tenon to the job its own comment already claims** —
+    radial restraint and location, not moment reaction — which means
+    `fuselage_root_tab()`'s wording becomes correct again rather than needing the
+    CARGO-03c correction.
+
+    **Costs to carry if this branch is taken:** 2 × 4130 rod (~24 g each at 100 mm
+    of Ø8 × 1.5, so ≈**48 g / 0.106 lbm** added), 2 more wall bosses, 2 more wing
+    bores, and a second bore through the tenon region — and the rod length and
+    embed both still need sizing, since the table above assumes 40 mm by analogy
+    with the main spar rather than deriving it.
+
+    **Open:** add CF-PETG **fusion/bearing** coupons to the LG-11 coupon-test
+    schedule (root `TODO.md` §1.1.4 already carries "Coupon-test CF-PETG"),
+    printed in the tenon's own layer orientation.  **≥ 15 MPa → grow the tenon per
+    the table; < 15 MPa → second spar at 14 mm.**  Re-run
+    `tools/wing_spar_carrythrough.py` either way.
+
+    **BUILT 2026-08-24, U5/KTD1: two-rod system, not a single rod vs. the
+    tenon.** A feasibility pass against the corrected S1223 geometry (WING-01
+    fix) found a matching Ø8.2 mm AFT rod does not fit anywhere aft of the
+    main spar (spar bore aft edge 49.30 mm and the Hall conduit's fixed
+    52.25..55.75 mm span leave no room); a smaller **Ø6.2 mm aft rod** fits
+    **root-only** at **62.0 mm from LE** (picked within the 60..62 mm feasible
+    band for maximum clearance margin to the Hall conduit's trailing edge —
+    `tools/wing_spar_station_fit.py`), with the forward Ø8.2 mm rod unchanged
+    at 14.0 mm. Both rods are root-only embeds (not full-span like the main
+    spar — a root-reacting tie rod has no structural reason to reach the
+    tip).
+
+    The couple-force split is **not** the single-rod `F = M / separation from
+    spar` method above: with two dedicated rods and no third reaction (the
+    main spar rides in a rotating CLEARANCE bore at the wing root and reacts
+    no moment about this axis), pure statics for two pin reactions gives
+    **equal-magnitude forces**, `F = M / (rod-to-rod separation)`, independent
+    of the spar's position — `tools/wing_spar_carrythrough.py
+    report_two_rod_couple()`:
+
+    | Rod | Station | D (nominal) | Embed | F (ultimate) | Bearing | FOS vs 5 MPa |
+    | --- | --- | --- | --- | --- | --- | --- |
+    | fwd | 14.0 mm | 8 mm | 40 mm | 304.3 N | 0.951 MPa | **5.26** |
+    | aft | 62.0 mm | 6 mm | 42 mm | 304.3 N | 1.207 MPa | **4.14** |
+
+    (48.00 mm rod-to-rod separation; ultimate root moment 14.60 N·m unchanged
+    from the table above.) Both clear the §3 FOS 4.0 target against the
+    existing 5 MPa bond-limited CF-PETG allowable — the aft rod needed its
+    embed bumped from the WBS-convention 40 mm to 42 mm to clear (at 40 mm,
+    FOS is 3.945, just under target).  No new coupon data required.
+
+    **REF-MAT-001 added 2026-08-25** (`REFERENCES.md`) — the first peer-
+    reviewed data point for CF-PETG in this repository (Batista et al. 2023,
+    *Appl. Sci.* 13(23), 12701, ASTM D695 bulk compressive strength on 20%
+    short-CF-reinforced PETG, ≈47–60 MPa).  It does not change anything
+    above — bulk unnotched compression is not the bearing-in-a-hole mode
+    either the tenon or the tie rods actually see, so it is not substituted
+    into the FOS figures here — but it is real evidence the `enlarged_tenon`
+    alternative's ≥11.1–40.6 MPa bar is plausibly clearable, which the
+    coupon-test decision is still the correct way to confirm.
+
+    **The tenon is traded out of the load path entirely** (not merely
+    "restored" pending a coupon result, as the single-rod branch above
+    described) — `fuselage_root_tab()` is now a pure locating/index feature,
+    gated behind `TENON_LOAD_PATH = "two_rod"` in
+    `wings_s1223_revo.scad` (default); the enlarged-tenon sizing above stays
+    documented and buildable under `TENON_LOAD_PATH = "enlarged_tenon"` if a
+    future coupon clears ≥ 15 MPa. Geometry: `wings_s1223_revo.scad`
+    (`ROD_FWD_*`/`ROD_AFT_*`, `wing_root_tie_rod_fwd_bore()`/
+    `_aft_bore()`), `merge_cargo_interior.py` (`ROD_FWD_*`/`ROD_AFT_*`
+    wall bosses, mirroring the `PORT_INB`/`PORT_OUTB` main-spar-boss embed
+    pattern — the forward boss's fuselage-side embed is 41 mm, not 40, to
+    avoid an exact end-cap coincidence with the main spar boss that produced
+    a non-manifold seam in the merged shell). CARGO-03c is CLOSED under this
+    branch; the coupon test remains open only to *enable* the
+    `enlarged_tenon` alternative, not to close this one.
+
+- [x] **CARGO-04 — the aft EDF ESC conduit is blocked, and the Hall conduit runs
+    inside the rotating spar. CLOSED 2026-08-24.** *(found 2026-08-23 with CARGO-03; same tool)*
+    **BLOCKS the nacelle ESC harness and the tilt-encoder harness.**
+
+    Owner requirement: the nacelle ESC and nav-light cableways must stay open.  The
+    nav light is satisfied — it routes through the spar's ~5 mm ID and the spar bore
+    is verified THROUGH (above).  The other two are not:
+
+    | Route | Station (hull) | Obstruction | Blocked |
+    | --- | --- | --- | --- |
+    | EDF ESC conduit #1 (fwd) | Y +50.92, Z +66.92, Ø7 | — | clear |
+    | EDF ESC conduit #2 (aft) | Y +58.92, Z +66.92, Ø7 | published shell | **172.3 / 172.9 mm³** |
+    | Hall/encoder conduit | Y +35.57, Z +68.47, Ø3.5 | **rotating spar tube** | **468.1 / 450.1 mm³** |
+    | spar bore / nav-light | Y +38.15, Z +68.42, Ø8.3 | — | clear |
+
+    **EDF #2** is blocked by the same uncut wall as CARGO-03 (the blockage sits at
+    X −112…−99 port, inboard of where the mortise cut starts), so fixing CARGO-03
+    should clear it — **re-verify, do not assume**.  Both conduits lie inside the
+    mortise footprint in Y and Z, so a correctly-cut mortise is their intended path
+    and no separate penetration is needed.
+
+    **The Hall conduit is a genuine Rev S1b regression.**  `HALL_CABLE_XFR` = 0.33 c
+    and the spar moved to `SPAR_BORE_STATION` = 45.15 mm = 0.35 c — 2.58 mm apart,
+    against a 4.15 mm spar radius plus 1.75 mm conduit radius, so the conduit lies
+    **entirely inside the spar bore** and the rotating spar occupies it.  Before
+    Rev S1b the spar sat at 0.171 c and the two were well separated; the S1b note in
+    `wings_s1223_revo.scad` lists its consequential fixes but the Hall conduit is not
+    among them.  Its own comment still reads "HALL_CABLE_XFR = 0.30c", which also
+    disagrees with the 0.33 in force — fix the comment with the station.
+
+    **RESOLVED 2026-08-23 by merging `feat/wing-spar-s1c-cableway-reroute`.**
+    The owner's instruction — route the Hall 4-core **aft of the spar**, because
+    the steel spar then shields it from the power feeds — was correct, and my
+    analysis of it was wrong.  I evaluated "aft of the spar" against the EDF pair
+    where it *then* sat (0.48 c, aft of the spar) and concluded the shielding could
+    only work forward.  That branch had already moved the EDF pair **forward**, and
+    with both moves applied the ordering is:
+
+    | Feature | Station (mm from LE) | Hull Y |
+    | --- | --- | --- |
+    | EDF #1 — 40 A POWER | 22.75 | +15.75 |
+    | EDF #2 — signal | 32.25 | +25.25 |
+    | **spar bore** | **41.00…49.30** | **+38.15** |
+    | Hall/encoder | 54.00 | +47.00 |
+
+    The ferromagnetic spar now sits **between** the power pair and the sensor line,
+    exactly as intended, and the Hall conduit is aft of it exactly as instructed.
+    My Rev S1c edit (`HALL_CABLE_XFR` → 0.23256, 30 mm **forward**) is superseded
+    and was dropped in the merge.
+
+    The branch's reasoning is also better than mine on a point I missed entirely:
+    both conduits are now **constant-mm stations**, matching the spar's own law.
+    As chord-fraction bores they converged on the constant-mm spar as the chord
+    tapered 129 → 93 mm, so the EDF pair entered the spar bore from 29.6 % span
+    outboard and merged with it at the tip — a defect invisible at the root, which
+    is the only station I checked.  `tools/wing_internal_clearance.py` (from that
+    branch) samples the whole span and reports **PASS** on the merged source.
+
+    **Two consequences the merge creates, both open:**
+
+    1. **The Hall conduit now needs a tenon pass-through.**  At 54.0 mm it lands
+        inside the tenon's chordwise span (49.5…79.5), and `wing_one_side()` cuts
+        pass-throughs only for the EDF pair — `tools/wing_root_deconflict.py`
+        reports the tenon blocking it by **65.0 mm³**.  Cut it the same way the
+        EDF bores are cut.  (This is the consequence flagged when the aft option
+        was first tabled; it has now materialised.)
+    2. **The EDF pair no longer rides the mortise.**  At 22.75/32.25 mm they sit
+        **forward** of the mortise (hull Y +42.10…+72.90), so they need their own
+        wall penetrations.
+
+    **BOTH CLOSED 2026-08-24, and one of them was never a defect.**
+
+    * The **wall penetrations already existed** — the Rev S1c branch added
+      `wing_harness_ports()` (2 × Ø8.0 EDF + 1 × Ø4.5 encoder per side) and wires
+      them into `build_negatives()` through `wing_keepout_negatives()`, so the
+      same solids the gear bay is trimmed against are the ones the hull is cut
+      with.  The 10.4 / 0.5 mm³ residuals reported here were **a bug in
+      `tools/wing_root_deconflict.py`, not in the shell**: it evaluated one camber
+      midline for both EDF bores, when each is camber-centred at its own station
+      and the two differ by ~0.8 mm in Z.  Fixed; both now read 0.0 mm³.
+    * The **Hall tenon pass-through already existed too** — `wing_one_side()`
+      cuts it at the 54.0 mm station.  The same tool was hardcoded to subtract
+      *EDF* pass-throughs from its tenon model, which was correct before Rev S1c
+      and wrong after it: the reroute moved the EDF pair clear of the tenon and
+      moved the sensor conduit into it.  The model is now **station-driven** — it
+      cuts a pass-through for whichever conduit actually falls inside the tenon —
+      so a future reroute cannot invert it again.
+
+    Verified against the re-cut published shell: all four routes read **0.0 mm³**
+    on both sides, and `tools/wing_root_deconflict.py` reports
+    **"CLEAR — servo mounts deconflict and every cableway stays open"**.
+
 ##### 1.1.1.2 *Cargo*
+
+- [x] **★ CARGO-01 — the mission payload does not fit past the wing spar. CLOSED 2026-08-25 (U3/U4).**
+    *(found 2026-08-23 while placing the VERIFY-tier cargo accessories against the
+    baked hull, root `WBS.md` §1.1.0; measured by `tools/cargo_bay_envelope.py`)*
+    **BLOCKS the cargo mission, the cradle/winch placements, and the §1.1.1.2.1
+    winch build.  Needs an owner decision — do not resolve unilaterally.**
+
+    `README.md` mission steps 6 and 9 require a **4 in × 3 in × 3 in
+    (101.6 × 76.2 × 76.2 mm)** payload to be winched up through the clamshell
+    aperture and carried inside the bay.  The wing spar crosses the bay laterally
+    at the Rev S1b station (`merge_cargo_interior.WING_SPAR_Y` = **+38.15 mm**,
+    `WING_SPAR_Z` = **+68.42 mm**), and its bore is cut the **full lateral span**
+    (hull X −270…−70), so it sits directly across the payload's vertical path.
+    The spar is continuous through the fuselage by design — `wings_s1223_revo.scad`
+    Rev R2 makes it the unified rotating tilt-spar serving *both* nacelles, with
+    "the second bearing … in the cargo bay" — so it cannot simply be routed around.
+    Clearances below use the **wing's Ø8.0 mm** spar (the generous case; see
+    CARGO-02 — the cargo shell still bores Ø12.3, which is worse), measured against
+    the published shell and the baked door STLs (bay floor = closed-door crown,
+    hull Z **+8.72**; aperture `merge_cargo_interior.APERTURE` = Y +2…+108):
+
+    | Path into the bay | Clear | Needed | Result |
+    | --- | --- | --- | --- |
+    | Under the spar (Z +8.72 → +64.42) | 55.7 mm (2.19 in) | 76.2 mm (3.00 in) | short 20.5 mm |
+    | Forward of the spar (Y +2 → +34.2) | 32.1 mm (1.27 in) | 76.2 mm (3.00 in) | short 44.1 mm |
+    | Aft of the spar (Y +42.2 → +108) | 65.8 mm (2.59 in) | 76.2 mm (3.00 in) | short 10.4 mm |
+
+    Every orientation is blocked; the **best case is 10.4 mm short**.  Rotating the
+    payload does not help — its two smaller dimensions are equal, so 76.2 mm is the
+    smallest face it can ever present.  This is **not** a Rev S1b regression: the
+    pre-S1b spar (Y +31.7, Z ≈ +66.5) also crossed the bay, so the conflict has been
+    latent since the spar was first routed through the cargo section.
+
+    **RESOLUTION SELECTED 2026-08-23 (owner) — resolution 1, in the stronger
+    form.**  The spars now **terminate at the fuselage wall** on a bearing in the
+    side, rotate independently, and are driven by the nacelle servos; the couple
+    they used to carry across is closed by a **CF thwart fore and aft of the bay**
+    instead.  Verified adequate in `airframe/wings-nacelles/WBS.md` §1.1.2
+    **SPAR-01** (`tools/wing_spar_carrythrough.py`).  With the spar stopping at
+    X −100 / −240 the bay clear span is **X −240…−100 = 140 mm** at full bay
+    height, and the 4 × 3 × 3 in payload fits.
+
+    **CLOSED 2026-08-25.** The shell was re-cut (U3, `7bfccd3`) and the two CF
+    thwarts closing the couple were added (U4). `tools/cargo_bay_envelope.py`
+    now PASSES against the published, re-merged STL: measured interior
+    170.6 mm (X) x 150.7 mm (Z), aperture 106.0 mm (Y) — the
+    101.6 x 76.2 x 76.2 mm payload fits with margin on every axis. Closed
+    together with **CARGO-02** below, the same shell edit.
+
+    Candidate resolutions as originally tabled, retained for the record (the owner
+    took 1; each of the others trades against a requirement that is currently
+    fixed):
+
+    1. **Split the spar at the centreline** into two stub spars landing on a
+        centre rib, clearing the bay volume.  Cost: the continuous through-member
+        that today carries nacelle tilt loads across the fuselage is lost, so the
+        rib must take the full spar bending moment; re-opens the
+        `CF-PLATE-2MM` cargo Y +30 ring sizing and `docs/structural_analysis.md` §3.
+    2. **Move the spar station** clear of the aperture (forward of Y +2 or aft of
+        Y +108).  Cost: breaks the 35 %-root-chord station that Rev S1b just fixed
+        to match `wings_s1223_revo.scad` `SPAR_BORE_STATION`; both parts move.
+    3. **Raise the spar** above the payload.  Requires spar Z ≥ +8.72 + 76.2 + 6.0
+        = **+90.9 mm**, i.e. +22.5 mm above today's axis — well off the S1223
+        camber midline, so the wing structure changes, not just the fuselage.
+    4. **Re-scope the payload** to ≤ 63.9 mm (2.51 in) in its two smaller
+        dimensions, carried aft of the spar.  Cost: amends `README.md` mission
+        steps 6 and 9 and the `docs/CARGO_WINCH_SPECIFICATION.md` envelope.
+    5. **Carry the payload slung below the hull** rather than inside it.  Cost:
+        contradicts README step 9 ("pull the payload into the cargo bay and close
+        the clamshells") and re-opens the drag/CG case.
+
+    Until this is settled the cargo cradle cannot be placed: `cargo_cradle_autolatch`
+    (110 × 80 × 72 mm) is sized for the 4 × 3 × 3 in payload and inherits the same
+    obstruction.
+
+- [x] **CARGO-02 — the cargo shell bores for a spar the wing retired. CLOSED 2026-08-25 (U3).**
+    *(found 2026-08-23 alongside CARGO-01; gated by `tools/cargo_bay_envelope.py`,
+    which fails loudly on the mismatch)*  **BLOCKS cargo shell print.**
+
+    `airframe/openscad/wings/wings_s1223_revo.scad` Rev R2 (2026-07-18) states
+    plainly that **"the 12 mm fixed CF tube is retired"**: the wing's single spar
+    is now an **8 mm rotating AISI 4130 tilt-spar** (hollow ≈5 mm ID, carrying the
+    nav-light 3-core), which is simultaneously the wing structural spar and the
+    nacelle tilt axis, and it declares `SPAR_BORE_OD = 8.3` (8.0 mm OD + 0.15
+    mm/side rotating clearance).  Three places still carry the retired 12 mm part:
+
+    | File | Constant | Carries | Should be |
+    | --- | --- | --- | --- |
+    | `airframe/blender-scripts/merge_cargo_interior.py` | `WING_SPAR_BORE_D` | 12.3 | 8.3 |
+    | `airframe/blender-scripts/merge_cargo_interior.py` | `WING_SPAR_BOSS_OD` | 22.0 | re-derive for a bearing seat, not a press-fit |
+    | `current-specification/bom_revS.csv` | `CF-TUBE-12MM` | 12 mm OD CF tube ×2 | 8 mm OD AISI 4130, hollow 5 mm ID |
+
+    A 4.0 mm diametral over-bore on a **rotating** spar is not a slip fit, it is a
+    missing bearing: the Rev R2 note is explicit that the cargo-bay end carries the
+    **second bearing** of the tilt axis, so the shell needs a bearing seat sized to
+    the chosen bearing, not a clearance hole.  Rev S1b reconciled the spar
+    **station** across the wing and the cargo shell (that was the §1.1.2
+    spar-interface blocker) but left the **diameter** unreconciled, so this is the
+    same defect class re-appearing on the other dimension.
+
+    Sequencing — **settled 2026-08-23.**  CARGO-01 took resolution 1 (spars stop
+    at the wall, independently rotating, nacelle-servo driven; see
+    `airframe/wings-nacelles/WBS.md` §1.1.2 **SPAR-01**), so the shell edit is now
+    fully specified and CARGO-01/CARGO-02 close together in it.  The bore is no
+    longer a full-span clearance hole at all: it becomes a **bearing seat in the
+    lateral wall** sized to the chosen bearing for an 8 mm rotating spar, and it
+    stops at the wall (inboard end X −100 port / −240 starboard) instead of
+    crossing the bay.  `WING_SPAR_BOSS_OD` is re-derived from that bearing's OD
+    rather than from the retired Ø12 press fit.
+
+    **CLOSED 2026-08-25.** `WING_SPAR_BORE_D` is 8.3 mm (matching the wing's
+    `SPAR_BORE_OD`); `WING_SPAR_BOSS_OD` is 27.7 mm, derived from the F688ZZ
+    bearing seat, not the retired Ø22 press fit; `bom_revS.csv`'s
+    `CF-TUBE-12MM` row is marked SUPERSEDED (qty 0), retained for
+    traceability, citing `SPAR-TILT-4130` as the single active spar row.
 
 **Rev R shell updates (sensor/antenna mounts; carried fwd from Rev O, 2026-05-24):**
 
@@ -190,7 +693,7 @@
 - [x] **Mounting hardware — 8 STLs** generated by `serenity/stl/generate_cargo_mounts.py` (Python/trimesh/manifold3d). Output: `thingverse-serenity/files-hollowed-18in/cargo_*.stl` *(done 2026-05-30, PR #21)*
     - [x] cargo_winch_motor_mount (CF-PETG), cargo_winch_spool (PETG), cargo_door_servo_bracket (CF-PETG), cargo_release_servo_bracket (CF-PETG), cargo_drv8833_tray (PETG), cargo_cradle_autolatch (PETG), cargo_gps_retention_ring (PETG), cargo_fpv_bezel (PETG)
 
-- [ ] **Cargo gondola shell** — create `serenity/stl/s_cargo_gondola_shell.scad`: 112×85×22 mm belly pod, 4× M3 hard point pattern, 18 mm protrusion below hull line
+- [x] **Cargo gondola shell** — SUPERSEDED 2026-09-15 (plan 2026-08-25-002 U6): the published shell is `cargo_sect_shell24_2mm_repaired.stl` from `merge_cargo_interior.py`; no gondola part exists or is needed. Was: create `serenity/stl/s_cargo_gondola_shell.scad`: 112×85×22 mm belly pod, 4× M3 hard point pattern, 18 mm protrusion below hull line
 - [ ] **Clamshell door halves** — `cargo_door_port.stl` + `cargo_door_stbd.stl` generated by
     `serenity/stl/generate_cargo_doors.py` Doors hinge on port and starboard sides and meet at the centerline.  Doors open out to 180 deg, allowing landing over and loading 4"x3"x3" cargo payload, or raising/lowering it in flight via the internal winch. (trimesh/scipy bilinear interpolation from Rev-O shell belly faces). 8-barrel piano hinge, 3 mm CF rod, 3.15 mm bore.
 - [x] **`cargo_sect_shell24.scad` Rev S** — belly opening (100×9×165 mm), 2× hinge-pin blocks
@@ -202,12 +705,12 @@
     All 4 spatial conflicts resolved (NSVMT_X_CEN moved AFT to −147.6 mm). Load FOS ≥ 11 vs 4.0
     AUVSI target. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S2** — Inara and River avionics bay dorsal standoffs
-    (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (62×42 mm each) for Cape-B
+    (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (62×42 mm each) for TACCO
     (55×35 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
     colocated for minimal SMA routing. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
-    Panel cuts enlarged 55×35 → 62×42 mm; boss offsets updated ±40×±25 → [TBD pending PCB layout — hole pattern must be derived from Wash.kicad_pcb / Zoë.kicad_pcb once layout is complete] to match
-    Faraday tray corner mounts; bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
+    Panel cuts enlarged 55×35 → 62×42 mm; boss offsets updated ±40×±25 → [TBD pending PCB layout — hole pattern must be derived from Pilot.kicad_pcb / XO.kicad_pcb once layout is complete] to match
+    Faraday tray corner mounts; bay Z centers adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
     inter-bay gap; FARADAY_* envelope parameters (95×65×65 mm, 1.5 mm Al wall, 25 mm fan) added.
     *(done 2026-06-08, PR #42)*
 - [x] **`nacelle_servo_bracket.scad`** — U-channel saddle clamp for DS3218MG nacelle tilt servo;
@@ -223,12 +726,12 @@
     interior. Reference the Thingiverse low-detail hull for shuttle fairing geometry.
     **BLOCKS canonical hull fidelity (CLAUDE.md requirement: keep skin geometry true to reference).**
 
-- [ ] **Avionics dorsal access covers / Faraday tray lids for Inara and River bays (two parts).**
+- [x] **Avionics dorsal access covers / Faraday tray lids for Inara and River bays (two parts).** SUPERSEDED 2026-09-15 by D-T5-3 (`docs/CARGO_SECTION_LAYOUT.md`): both trays leave the cargo section; the covers move with them (owner to confirm the relocation target).
     Create `inara_access_cover.scad` and `river_access_cover.scad` (or a single parametric SCAD):
     Cover footprint 105×75 mm with 5 mm shoulder lip seating on hull skin around 95×65 mm opening.
     Copper-foil-lined PETG or 0.5 mm Al sheet; Ø38 mm GPS clearance bore at GPS offset from cover
-    centre (Inara: offset −13.3 mm in Z from bay centre; River: offset +0.7 mm in Z from bay centre).
-    4× M2 flathead captive screws at ±40 mm (X) × ±25 mm (Z) from cover centre for EMI-seal clamping.
+    center (Inara: offset −13.3 mm in Z from bay center; River: offset +0.7 mm in Z from bay center).
+    4× M2 flathead captive screws at ±40 mm (X) × ±25 mm (Z) from cover center for EMI-seal clamping.
     Must be removable with common hand tools per CLAUDE.md field disassembly requirement.
     Ref: FARADAY_* parameters in cargo_sect_shell24.scad Rev S3; CLAUDE.md §1.4.1.
     Add to Phase 0 print schedule.
@@ -239,7 +742,7 @@
     older layout that does not match the cargo-section dorsal placement in Rev S (formerly
     Rev R — the axis-bug fix in §1.1.1.0a doesn't change the bay positions this item refers to).
 
-- [ ] **Regenerate `cargo_sect_shell24.stl`** from the current Rev S SCAD source (includes the
+- [x] **Regenerate `cargo_sect_shell24.stl`** — SUPERSEDED 2026-09-15 (U6): the SCAD path is retired; the shell is regenerated by `merge_cargo_interior.py` (Rev T5, 2026-09-15). Was: from the current Rev S SCAD source (includes the
     Rev R2/Rev S GPS/avionics/nadir-camera axis-bug fix, §1.1.1.0a). Run:
     `openscad -o airframe/stls/fuselage/cargo_sect_shell24.stl
         airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad`
@@ -253,6 +756,107 @@
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for pushrod attachment.
     - Export gondola shell to `thingverse-serenity/files-hollowed-18in/`
     - **BLOCKS Phase 8**
+
+###### 1.1.1.2.2 *Cargo Section Rev T5 / T5b / T5e Layout (2026-09-15 / 2026-09-16)*
+
+Record: `docs/CARGO_SECTION_LAYOUT.md`, `docs/TILT_ACTUATOR_SELECTION.md`,
+`docs/TILT_ACTUATOR_OPTIONS.md`; proof `tools/cargo_layout_fit.py` (PASS 2026-09-16, Rev T5e shell).
+
+- [x] **Canonical forward cargo ramp sealed** (plan 2026-08-25-002 U2, KTD1) — fused fairing on the measured flank profile with recessed panel lines; ray map 100 % closed. *(done 2026-09-15)*
+- [x] **Tilt actuator worm-drive bracket + worm + wheel** — `tilt_actuator_bracket.scad`, STLs exported, six foot bosses merged. *(done 2026-09-15; re-cut 2026-09-16 Rev T5e: 20D + six-start Ø26 worm, board rails outboard, worm slot, feet moved)*
+- [x] **Battery cradle** — `battery_cradle.scad`, four roof hangers merged; cradle-vs-straps evaluated. *(done 2026-09-15)*
+- [x] **GPS ×2 dorsal cups, winch pedestal reservation** — merged in hull frame. *(done 2026-09-15)*
+- [x] **Void formers for the optional chin pour** — `tools/gen_cargo_void_formers.py`, 4 STLs. *(done 2026-09-15; 5 STLs from 2026-09-16 — `node_bay` added)*
+- [x] **D-T5-3 — avionics nodes in the cargo section** — CLOSED 2026-09-16 (Rev T5e): all four nodes placed and proven — FC2/FC3 aft strip Y 99.5..121.5 / Z 87..124; CN2/CN3 flat on the chin floor Y −58..0 / Z 66..88 on `chin_node_shelf.stl` (4 floor bosses merged). The chin FLANKS were measured short three times (2026-09-15 ×2, 2026-09-16); the shoulder pockets were rejected (55 × 31 window). `docs/CARGO_SECTION_LAYOUT.md` §0/§3a.
+- [ ] **WINCH-D — `CARGO_WINCH_SPECIFICATION.md` Rev D**: twin-drum bridle at Y 55.5, lines at X −200.75/−138.95, drums Z 133.4..149.4, pedestal bosses at X −211.75/−127.95.
+- [ ] **OBS-CARGO — cargo Observer tray SCAD in hull frame** (envelope PLACED 2026-09-16, Rev T5e: standing behind the payload box at Y 108.5..128.5, Z 14.2..85, X_CL ± 38.4; 4 belly bosses merged at (X_CL ± 30, Y 112.5 / 117), M2.5). Re-author `cargo_vera_faraday.scad` (legacy Y-as-dorsal frame) to these bosses, with the 28 mm nadir camera on the tray's top edge looking forward-down through the clamshell aperture (hoist monitor; no belly window).
+- [x] **T5e — tilt bracket re-cut** — DONE 2026-09-16. The tilted-motor idea was tried in `cargo_layout_fit.py` and REJECTED (a coaxial motor's gap to the wheel tip is `WORM_PD/2 − MOTOR_D/2 − m` at any worm angle, and a worm swung ≥ 5° aft lands on the port hoist line at Y 55.5). Built instead: Pololu 20D 25:1 CB (#3712) + six-start m1 Ø26 worm (C 33, 144 °/s no-load), motor 2.0 mm above the wheel tip. Closes **T5d-1**; also found and closed **T5d-2** (T5b board rails ran through the worm — board now on the web's OUTBOARD face, Y 55..97.9 / Z 83..119.5) and **T5d-3** (web not cut for the worm; brake guide straddled the web). Shell re-merged (287.2 cm³ / 301.6 g), all gates PASS, STLs exported (bracket 16.3 g, worm 6.0, wheel 6.9, guide 2.1, chin shelf 9.4).
+- [ ] **NODE-SADDLE — author `node_saddle.scad`** for N2/N4 (2 off). Rev T5e moved the aft pair to Y 99.5..121.5, 13 mm behind the cradle aft wall — a floor- or aft-thwart-mounted saddle is now the likelier design; the 8 × M3 holes in `battery_cradle.scad`'s aft wall stay as an option.
+- [ ] **HARN-CLIP — encoder-harness turn-down clip** on the tilt bracket (the Y 37.5 wall bore exits inside the wheel disc; 9 mm to turn). 2026-10-07: a clip alone cannot meet it — superseded in substance by **BHD-04** (move the exit into the shoulder pocket).
+- [ ] **BHD — cargo bulkhead in-context fit check (2026-10-07, Claude Opus 5.5).** `tools/cargo_bulkhead_context.py` (58 solids, 1,653 pairs, door 0–180° sweep, 10 AWG corridor search) FAILS: 53 clashes, 12 desyncs. Record + renders: `docs/CARGO_BULKHEAD_FIT_CHECK.md`. Close each sub-item, then make the gate pass.
+    - [x] **BHD-01 — bore the bonded root flanges** — DONE 2026-10-07: generator subtracts `mci.wing_keepout_negatives()` (less mortise); flange overlaps 0; −2.6 g solid per flange. (`generate_wing_root_flange.py` cuts no spar Ø20.4 / shaft Ø4.4 / encoder Ø7.5 / nav Ø4.2 penetrations; spar ∩ flange 1,566 mm³ P/S). BUILD-BLOCKING. Reuse `merge_cargo_interior` bore cuts; −2.1 g per flange.
+    - [ ] **BHD-02 — fore gear bays vs wing root** (bay ∩ CF spar 973/968 mm³, ∩ flange 1,579/1,526, ∩ wing 1,181/1,467, ∩ 10 AWG and nav bores). BUILD-BLOCKING; reopens LG-10.4. Owner decision: move the fore bay station or re-shape the bay top. Fix `landing_gear_wing_clearance.py` to test the real flange/spar/wing meshes.
+    - [ ] **BHD-03 — 10 AWG bundle exit in the worm-wheel plane** (∩ wheel 138 mm³ P/S, 6.8/5.0 mm to the payload keep-out). Stop the Ø16.3 continuation in the shoulder pocket and route aft per the corridor path (Ø20 bottleneck, 192 mm). Bend radius from the wire datasheet (not yet set).
+    - [ ] **BHD-04 — encoder conduit exit** (∩ wheel 165 mm³ P/S, ∩ payload 108/164): move into the shoulder pocket with BHD-03.
+    - [x] **BHD-05 — starboard brake guide must be MIRRORED, not translated** — DONE 2026-10-07: `tilt_brake.scad` mirror_side(), `tilt_brake_guide_stbd.stl`, assembly + gate updated, 0 mm³, SYNC. (∩ stbd controller board 385 mm³, solenoid ∩ web 149). Export `tilt_brake_guide_stbd.stl` (mirror) and place it in `serenity_assembly.py`; mirrored copy verified 0 mm³.
+    - [ ] **BHD-06 — latch pivot brackets inside the closed doors** (252/254 mm³ at X −123.5..−117.5, Y 33..45, Z 3..6.5) and 102/35 mm³ into the payload keep-out. Re-seat the bracket base above the door panel.
+    - [ ] **BHD-07 — door swing limited to 145°** (owner 2026-10-07; gear stops a 180° swing at 148° S). Spec + gate updated, doors clear the gear at 145°. OPEN: mechanical stop + servo end-point.
+    - [ ] **BHD-13 — door seam jams on synchronised opening** (41 mm³ at 5°, clear by 15°; zero seam gap, crown corner swings inboard). Seam gap/chamfer or sequenced opening.
+    - [ ] **BHD-08 — payload keep-out Z0 8.72 vs measured closed-door floor 10.86.** Correct the datum in `cargo_layout_fit.py`; the box top then reaches Z 87.06 vs Pilot FC2/FC3 at Z 87.0 (0.06 mm interference, 2 mm budget).
+    - [ ] **BHD-09 — cargo Observer envelope ∩ cargo/middle splice collar 1,186 mm³** (lower 10.5 mm of the tray inside the ring). Re-shape/raise the tray (OBS-CARGO).
+    - [ ] **BHD-10 — Pilot FC2/FC3 + cable zones 0.5 mm into the collar** (22/24/19/19 mm³); moving forward hits the tilt controller boards — owner decision on the aft-strip layout (NODE-SADDLE).
+    - [ ] **BHD-11 — TACCO CN2/CN3 tops vs real cradle nose** (21 mm³ P/S, cradle mesh to Z 87.6 vs envelope Z ≥ 90): T5g regression; trim the node station or relieve the cradle.
+    - [ ] **BHD-12 — stbd root flange 0.76 mm inboard of mirror → ∩ stbd tilt bracket 10.5 mm³**; desyncs follow CENSUS-01's two centre planes (−169.85 vs −169.241). Fix at the shared parameter, both sides.
+    - [ ] **BHD-GATE — add `cargo_bulkhead_context.py` to pre-commit/CI** once BHD-01..12 close; make `cargo_layout_fit.py` read the real cradle/collar meshes.
+- [ ] **GPS-ANT — Ø36 patch antenna part** for the dorsal cups (legacy ANN-MB-00 is 82 × 60 mm and does not fit).
+- [x] **MOTOR_ENC_L — verify the 25D encoder-version length** — VOID 2026-09-16: the 25D is retired (T5d-1); the 20D #3712's 41 mm body + 6 mm rear shaft are confirmed from the product page (REF-ACT-001).
+- [ ] **TC-BOARD — Open-Secure-ESC tilt controller fit on the T5e rails** (REF-ESC-001, 2026-09-17): the build carries the 42.9 × 36.5 mm outline, ≤ 4 mm parts on the web-facing side, bare back and aft/inboard connectors as hard host constraints; layout not started; the buck inductors are the height risk (re-check `cargo_layout_fit.py` if the build ever asks for more than `RAIL_H`).
+- [ ] **ENC-DAUGHTER — AEAT-8800-Q24 sensor daughter** for the brake-guide pocket (QFN-24 carrier, Ø6 diametric magnet on the collar axis, 6-pin 1.25 mm lead ≈ 35 mm to the controller's J7; `symbols/AEAT_8800_Q24` in the Open-Secure-ESC repo) — a Serenity print/PCB item, not in the controller BOM.
+- [ ] **20D VERIFY — mounting-hole spacing (15 mm assumed) and Ø7 boss** against the Pololu 20D dimension diagram before printing the face plate; output-shaft axial rating unpublished (27 N worm thrust at stall — thrust washer fallback).
+- [x] **TACCO-60 — VOID 2026-10-07.** TACCO returned to 55 x 35 mm (avionics/kicad/TACCO/TACCO.md §13b); the Rev T5g / T6a envelope changes and the nose-tray widening were reverted to their pre-2026-10-06 text, so no re-export is owed for them. `tools/check_tacco_envelope_sync.py` stays in the pre-commit hook and CI; the PENDING lines it still prints come from earlier non-geometric edits (licence headers, gateway constants) to those sources, not from this change.
+- [ ] **CHIN-STRAPS — add 4 × BATT-STRAP-CAM** to the order for the chin node shelf (BOM note on PRINT-CHIN-SHELF).
+- [ ] **Cargo door re-fit (U1)** still open — see 1.1.1.2.1 "Clamshell door halves"; the T5 shell moved no aperture geometry.
+- [x] **Rev T5f — cargo-door servo gateway mount points (2026-09-21, Claude Opus 5).**
+    `GW-CARGO-DOOR` (`docs/CARGO_DOOR_GATEWAY_SPEC.md`) placed standing transverse on the
+    solid 6.2 mm belly slab at the forward aperture rim: board X_CL ± 24.5 / Y −14.5..−12.9 /
+    Z 15.6..41.1, tray `gateway_door_tray.scad` → `.stl` (5.0 g, watertight) at Y −17.25..−2,
+    Z 10.2..44.1; four 7 × 7 mm M3 slab bosses at (X_CL ± 19, Y −13 / −6) merged
+    (`merge_cargo_interior.py` `t5_gw_door_bosses` — UNCLIPPED because the slab lies in the
+    ramp void of the outer-skin envelope, and carved out of `DUCT_CUT`, which otherwise
+    truncates them at Z 8). Ray-probed pocket: 4 mm to the aperture rim, 2.75 mm to the
+    ramp-fairing wall at floor level, 19.5 mm to the chin shelf. `cargo_layout_fit.py` PASS
+    (0 hit / 0 near / 0 overlap); all Rev T5 gates re-run PASS; `validate_stls.py` 80/80.
+    - [ ] **SERVO-PLACE — hull-frame placement of the three SG90s** (port door, stbd door,
+        release) and their brackets. `cargo_door_servo_bracket.stl` /
+        `cargo_release_servo_bracket.stl` are legacy-frame and unplaced (§1.1.0 VERIFY parts);
+        the bell-crank boss item in §1.1.1.2.1 is still open. Candidate: the pocket flanking
+        the gateway tray, X ±(27..45) at Z ≤ 20, Y −20..0 (measured 2026-09-21). Add them as
+        envelopes in `cargo_layout_fit.py`; pigtail lengths in the spec §6 follow.
+    - [x] **DOOR-LATCH — CLOSED 2026-09-21.** `docs/CARGO_DOOR_LATCH_SPEC.md`: each door's
+        bell-crank carries a hook that engages a mortise on a FIXED bracket at the closed
+        position — a hard mechanical stop, not friction or an over-centre linkage; the
+        hook/lip load path bypasses the servo gear train entirely once latched. Quantified:
+        SG90 stall torque (0.177 N·m) < the door-opening moment at V_max=87 kt
+        (0.202 N·m, REF-FAA-002) even at FOS=1 — gear-train-only retention genuinely could
+        not have held at cruise speed. New parts: `door_latch_mechanism.scad` →
+        `door_latch_bracket_{port,stbd}.stl` (3.55 g ea, stbd watertight, port has one
+        cosmetic non-manifold edge — DOOR-LATCH verification §7), `door_horn.stl`
+        (0.92 g ea). FOS_bearing 10.4, FOS_shear ≈3.0 (order-of-magnitude, FDM
+        anisotropic — bench pull-test open, DOOR-LATCH-1). BOM: `PRINT-DOOR-LATCH-BRACKET`,
+        `PRINT-DOOR-HORN`, `PIN-3X10` (`tools/bom_edit_door_latch.py`).
+        - [ ] DOOR-LATCH-1..6 (`docs/CARGO_DOOR_LATCH_SPEC.md` §6): bench pull-test the
+            hook, source/cite the pushrod wire spec, pushrod buckling check, print a real
+            ≥1.5mm hook-root fillet (OpenSCAD CSG attempt was non-manifold), dry-fit against
+            the door + shell once SERVO-PLACE resolves, soft-approach CLOSE sequencing in
+            firmware.
+        - [ ] **DOOR-SEAM-1 — tongue-and-groove interlock at the door-to-door mating edges**
+            (`docs/CARGO_DOOR_LATCH_SPEC.md` §4.2b): the structural half of the cross-link
+            (the software half — one `DOOR_COMMAND` frame drives both doors — already
+            exists). Needs a `generate_cargo_doors.py` edit + both door STLs regenerated;
+            3.0mm tongue/groove, 4.0mm wide, 0.3mm/side clearance, full Y 2..108 seam.
+            **Deliberately NOT a rigid crank-to-crank rod** — two independent open-loop
+            SG90s would fight each other through one (§4.1 of the same doc).
+    - [x] **GW-DOOR-4 — resolved by design, 2026-09-21.** Two independent door actuators
+        (`SERVO-CARGO` qty 3 stands); the cross-link is software (shared `DOOR_COMMAND`
+        frame) + the DOOR-SEAM-1 seam, not a shared actuator — see DOOR-LATCH above.
+    - [ ] **PRINT-GW-DOOR-TRAY hardware at order:** 4 × RX-M3x5.7 inserts, 4 × M3×8 SHCS,
+        3 cable ties (BOM row note).
+    - [x] **CARGO-HINGE-SYNC — CLOSED 2026-09-21, single-sourced.**
+        `generate_cargo_doors.py` now writes `cargo_door_hinge_params.py`
+        (`airframe/stls/fuselage/cargo/`) and `cargo_door_hinge_params.scad`
+        (`airframe/openscad/fuselage/cargo/`) every run — `make_door()` returns
+        `z_hinge` alongside the mesh, and `write_hinge_params()` emits both files from
+        the same four numbers, matching `cargo_layout_t5_params.scad`'s
+        generated-include pattern. `generate_cargo_hinge_retention.py` now `import`s
+        `ROD_AXES`/`BAY_Y_FWD`/`BAY_Y_AFT` from the generated module (fails loudly
+        with a "run generate_cargo_doors.py first" message if it's missing, rather
+        than silently falling back to a stale guess); `door_latch_mechanism.scad` now
+        `include`s the generated `.scad` file instead of hardcoding
+        `HINGE_X_*`/`HINGE_Z_*`. Regression-verified: re-running both generators and
+        re-merging the shell after the switch reproduced byte-identical hinge
+        coordinates and geometry (port X −117.53/Z 3.00, stbd X −222.68/Z 3.49, same
+        as the hand-fixed values) — the refactor changed *how* the numbers reach their
+        consumers, not the numbers themselves.
 
 ###### 1.1.1.2.1a *Cargo Winch — STS3215 Conversion (Rev B, 2026-07-27)*
 
@@ -273,7 +877,7 @@ do not restate its dimensions here.
     `make_winch_spool()` in `generate_cargo_mounts.py` converted to documented
     `NotImplementedError` stubs and dropped from the build list; prose updated in
     `README.md`, root `WBS.md`/`TODO.md`, `airframe/WBS.md`,
-    `airframe/VERIFY_PLACEMENT_CHECKLIST.md`, `avionics/jayne/WBS.md`,
+    `airframe/VERIFY_PLACEMENT_CHECKLIST.md`, `avionics/kicad/Observer/observer/WBS.md`,
     `graphical-build-guide/` (REVN guide + flight-phases + SVG task),
     `docs/PHASED_BUILD_GUIDE.md`, `docs/PROTO_PRINT_DAVINCI_JR.md`,
     `docs/AVIONICS_PB2_REDESIGN.md`, `docs/POWER_DISTRIBUTION.md`, `PROJECT_INDEX.md`.
@@ -284,13 +888,11 @@ do not restate its dimensions here.
     `BRG-MR84ZZ` ×2, `SHAFT-SS-4MM`, `SPRING-PAWL`, `DOWEL-M2-10`, `SS34-CATCH`) added to
     `docs/bom_revR.json` with masses, notes and cost roll-up.
 
-- [ ] **★ BLOCKER — STS3215 datasheet verification (REFERENCES.md REF-SENSOR-012, TODO §0.x).**
-    The datasheet is in the repo but is a scanned/CID-encoded PDF that could not be extracted
-    (no OCR toolchain in the build environment). Read off and record: **(a)** case envelope +
-    mounting-boss pattern, **(b)** torque vs. the ≥ 3.2 kgf·cm requirement, **(c)** mass
-    (60 g assumed — dominates the +98.6 g delta and T/W 1.613 → 1.557), **(d)** stall current
-    (1.2 A budgeted; resize RAIL-2 if > ~2.5 A). **Blocks STL generation and procurement.**
-    Do not fabricate these values.
+- [x] **BLOCKER RESOLVED via servo supersession, not datasheet recovery (2026-08-02).**
+    The STS3215 datasheet remains unreadable, but the servo itself is superseded — see
+    §1.1.1.2.1b below. Case envelope, mass, and torque are now published COTS figures for the
+    replacement (SPT5425LV, REF-SENSOR-013); stall current remains unverified under the new
+    part too (§1.1.1.2.1b).
 - [ ] **★ CONTAINMENT — the spool must never leave the cargo bay (spec §3.10).**
     Designating the spool sacrificial (§3.8) made it a planned-degradation part
     sitting directly above clamshell doors that open 180° to free air. Rev B
@@ -303,7 +905,7 @@ do not restate its dimensions here.
     - **FM2** continuous steel sleeve through the hub bore, bearings pressed into
       the sleeve rather than into printed plastic — total loss of the printed
       material still leaves sleeve + bearings captive on the axle.
-    - **FM3** pedestal through-bolts + aluminium backing plates, replacing
+    - **FM3** pedestal through-bolts + aluminum backing plates, replacing
       heat-set inserts in printed shell.
     - **FM4** keeper bar spanning both pedestals — independent secondary capture
       that holds even if FM1–FM3 all fail or a retainer is omitted at assembly.
@@ -323,10 +925,10 @@ do not restate its dimensions here.
 - [ ] **Containment checks on the assembly and pre-flight cards** — circlips
     seated, keeper bar fitted and torqued, backing plates present, slip-collar
     witness-mark intact. Doors-open inspection.
-- [ ] **★ Flight-envelope decision — shed threshold vs manoeuvre envelope.** At
-    `F_shed` = 8.0 N a **2.0 g** manoeuvre on the slung payload reaches **0.98×**
+- [ ] **★ Flight-envelope decision — shed threshold vs maneuver envelope.** At
+    `F_shed` = 8.0 N a **2.0 g** maneuver on the slung payload reaches **0.98×**
     the threshold and **2.5 g sheds the load**. Choose: declare a ≈1.5 g slung-load
-    manoeuvre limit (recommended — free, and matches crewed-rotorcraft practice),
+    maneuver limit (recommended — free, and matches crewed-rotorcraft practice),
     raise `F_shed` to ~12 N (3.06× static, still only 72 % of the 16.64 N excess
     lift), or reduce payload. **A flight-envelope call, not a winch call** — refer
     to `docs/flight_envelope.md`. Blocks the pawl-spring calibration target.
@@ -349,16 +951,17 @@ do not restate its dimensions here.
 - [ ] **Set the servo torque ceiling below `T_slip`** — protection layer 1 of 4, so
     routine lifting never reaches the friction interface and the sacrificial hub is
     consumed only by genuine overload events. Spec §3.8.3.
-- [ ] **Servo mode: encoded continuous rotation** (position/servo mode cannot
-    express 23.2 turns; stepper mode's open-loop count becomes fiction after a hub
-    slip). Gateway closes position on the AK7455. Confirm mode indices, selecting
-    register, and per-mode torque-ceiling settability against the datasheet — part
-    of the §3.1 gate; **no register number is invented in the spec**. Spec §3.9.
+- [ ] **Servo mode: continuous rotation by construction** (Rev C — the STS3215's
+    register-selected mode scheme no longer applies; SPT5425LV + LibreServo v2 is
+    continuous-rotation by construction once the limit pin is removed, §1.1.1.2.1b).
+    Gateway closes position on the AK7455. Confirm LibreServo v2 wire-protocol
+    commands (rate, torque-ceiling, readback) against its protocol docs — **no
+    command/register value is invented in the spec**. Spec §3.9.
 - [ ] **Mark the spool a consumable** — wear item in the build guide, inspection
     interval, slip witness-mark, spare in the field kit; hand-tool replacement per
     root `AGENTS.md` §7.
 - [ ] **AK7455 spool encoder integration (spec §3.7.3).** Diametric-magnet pocket in
-    the port flange hub, off-axis (the fixed axle occupies the centreline); mates the
+    the port flange hub, off-axis (the fixed axle occupies the centerline); mates the
     gateway's existing `J_ENC` pigtail on its dedicated SPI bus — no board change and
     no new part number [REF-SENSOR-008]. Confirm flux at the IC for the chosen
     magnet/gap (same bench item already open for the nacelle encoders). Firmware:
@@ -373,10 +976,13 @@ do not restate its dimensions here.
 - [ ] **Pedestal mounting stations in `cargo_sect_shell24.scad`.** The retired mount used 4× M2
     self-taps into the gondola *ceiling*; the two pedestals need real M3 heat-set boss stations
     on the bay floor, FreeCAD-verified against the cargo-door 180° swing envelope
-    (`generate_cargo_doors.py`) and clear of `CARGO_CAM_POS` / the Jayne nadir bosses.
-- [ ] **Half-duplex TTL bus wiring.** Confirm the MSPM0G3507 can drive a single-wire UART on
-    `FLEX_TTL_GPIO`, or add a direction-steering resistor/buffer at the harness. Same pinmux
-    caveat as `CAN-PERIPH-GW-1.md` open item 4. Cross-ref `avionics/WBS.md`.
+    (`generate_cargo_doors.py`) and clear of `CARGO_CAM_POS` / the Observer nadir bosses.
+- [ ] **RS-485 differential bus wiring (Rev C — supersedes the Rev B half-duplex TTL item).**
+    LibreServo v2 needs a true differential RS-485 pair, not the STS3215's single-wire
+    half-duplex TTL scheme `FLEX_TTL_GPIO` was sized for. Decide: add a local RS-485
+    transceiver fed from `J_FLEX.FLEX_UART_TX/RX`, or extend the gateway's own isolated
+    RS-485 trunk (ISOW1412) to this drop — not decided in the spec. Cross-ref
+    `avionics/WBS.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`.
 - [ ] **Catch solenoid drive circuit.** AO3400 N-FET + 100 Ω gate + **10 kΩ gate pull-down**
     (undriven/resetting MCU must leave the catch ENGAGED) + SS34 flyback across the coil.
 - [ ] **Bench-calibrate the ratchet slip threshold to 8.0 N ± 1.0 N** measured at the line, via
@@ -387,16 +993,78 @@ do not restate its dimensions here.
     inboard end is **not** anchored.
 - [ ] **Firmware — winch state machine** (Simon payload-primary, gateway-side control).
     `WINCH_STATUS` / `WINCH_COMMAND` frames, TPM-signed per [REF-NIST-001 §2.1]; STS3215 bus
-    driver; HX711 re-hosted from Cape-B to the gateway; Shepherd watchdog cuts RAIL-2 on
+    driver; HX711 re-hosted from TACCO to the gateway; Shepherd watchdog cuts RAIL-2 on
     heartbeat timeout (which *engages* the catch). Bus IDs assigned in firmware, not in the
     spec. Cross-ref `avionics/firmware/WBS.md`.
-- [ ] **Re-run the §6 mass/CG table** once the real STS3215 mass is known; propagate to
-    `docs/flight_envelope.md` if AUW moves materially.
-- [ ] *(Optional, out of scope for this change)* Move the door/release SG90s onto the
-    gateway's spare `FLEX_PWM_IO` and retire `DRV8833-CARGO` + `cargo_drv8833_tray.stl`.
+- [ ] **Re-run the §6 mass/CG table** once the SPT5425LV+LibreServo v2 unit is bench-weighed;
+    propagate to `docs/flight_envelope.md` if AUW moves materially.
+- [x] ~~*(Optional, out of scope for this change)* Move the door/release SG90s onto the
+    gateway's spare `FLEX_PWM_IO` and retire `DRV8833-CARGO` + `cargo_drv8833_tray.stl`.~~
+    **CLOSED 2026-09-21, differently** — `FLEX_PWM_IO` on the winch gateway is the catch
+    solenoid, not spare; the door/release SG90s got their OWN gateway (`GW-CARGO-DOOR`,
+    `docs/CARGO_DOOR_GATEWAY_SPEC.md`) and `DRV8833-CARGO` + its tray are retired (qty 0).
 
 **BLOCKS:** Phase 8 cargo winch assembly; `build_guide_23_winch_latch.svg` rebuild;
-Kaylee RAIL-2 third BEC channel (`docs/POWER_DISTRIBUTION.md` §11.1).
+Flight Engineer RAIL-2 third BEC channel (`docs/POWER_DISTRIBUTION.md` §11.1).
+
+###### 1.1.1.2.1b *Servo Fleet Standardisation — SPT5425LV + LibreServo v2 (Rev C, 2026-08-02)*
+
+Supersedes §1.1.1.2.1a's STS3215 servo selection and extends the same treatment to the
+2× nacelle tilt servos (previously DS3218MG, uncited). All three high-torque servos on the
+airframe now share one physical part (SPT5425LV, REF-SENSOR-013) running one open-source
+control board (LibreServo v2, REF-SENSOR-014), each with the servo's internal
+rotation-limiting pin removed. Canonical source:
+[`docs/CARGO_WINCH_SPECIFICATION.md`](../../docs/CARGO_WINCH_SPECIFICATION.md) **Rev C**
+§3.1/§3.1.1/§3.1.2/§3.9/§5.1 (winch-specific) and `REFERENCES.md` "Servo Fleet
+Standardisation, 2026-08-02" (fleet-wide rationale) — do not restate their content here.
+
+- [x] **`docs/CARGO_WINCH_SPECIFICATION.md` Rev C authored** *(2026-08-02)* — servo section
+    rewrite; STS3215-era open items (datasheet gate, half-duplex TTL wiring, mode-register
+    semantics) closed or superseded by SPT5425LV/LibreServo v2-specific equivalents.
+- [x] **`REFERENCES.md` updated** *(2026-08-02)* — REF-SENSOR-012 (STS3215) marked
+    SUPERSEDED; REF-SENSOR-013 (SPT5425LV), REF-SENSOR-014 (LibreServo v2), REF-SENSOR-015
+    (OpenServoCore, for the SG90 cargo servos — separate board, separate servo class) added
+    with sourced specifications; four new rows added to "Open Standards Verification Items."
+- [x] **Nacelle tilt bracket updated** *(2026-08-02)* — `nacelle_servo_bracket.scad`
+    `SERVO_BODY_X`/`SERVO_BODY_Z` updated 40.0/38.0 → 40.5/40.5 mm (SPT5425LV envelope);
+    `SERVO_BODY_Y` unchanged at 20.0 mm; stall-torque/FOS check re-run at 2.55 N·m
+    (26 kgf·cm @ 6 V) — FOS 82.4, still far above the 4.0 design-judgment target.
+- [x] **`generate_cargo_mounts.py` comments updated** *(2026-08-02)* — case-envelope gate
+    that blocked `make_winch_pedestal_port()` under the STS3215 selection is resolved
+    (SPT5425LV envelope is a published figure); SG90 bracket docstring notes the
+    OpenServoCore control board and its pre-production status.
+- [ ] **★ Bench-verify the SPT5425LV/LibreServo v2 conversion.** Neither sourced listing
+    publishes stall current or the exact rotation-pin removal procedure. Blocks final RAIL-2
+    sizing (`docs/POWER_DISTRIBUTION.md` §3.2.1) and the nacelle-tilt servo rail, and the
+    build-guide step for pin removal. Do not fabricate either figure.
+- [ ] **RS-485 gateway integration (both winch and nacelle-tilt applications) — interim.**
+    LibreServo v2's differential RS-485 bus has no local transceiver on `CAN-PERIPH-GW-1`'s
+    `J_FLEX` header (which was sized for the STS3215's single-wire half-duplex TTL scheme).
+    Decide: add a transceiver fed from `FLEX_UART_TX/RX`, or extend the gateway's own
+    isolated RS-485 uplink trunk (ISOW1412) to this local servo drop. Cross-ref
+    `avionics/WBS.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`.
+    **Watch before committing:** the LibreServo v2 fork maintainer confirmed (2026-08-02)
+    the fork's in-progress isolated-RS-485/CAN-FD/SLB9672-TPM upgrade is intended to let a
+    converted servo attach directly to the airframe's isolated CAN-FD/RS-485 trunks as its
+    own self-signing node, eliminating the gateway-bridge need for this application entirely
+    — not shipped yet (schematic-only, TPM not started). If it lands before this item is
+    implemented, re-scope to direct-attach instead of building an interim bridge.
+- [ ] **Nacelle tilt firmware — command scheme change.** Pilot's servo-PWM generation
+    (`avionics/firmware/WBS.md` §4.2) moves to LibreServo v2's RS-485 protocol; the servo's
+    real range limit stays the external CF-PETG hard-stop blocks in the gear train
+    (`docs/NOZZLE_DRIVE_TRADE.md`), not the (now-removed) internal servo pin — firmware still
+    needs its own soft-limit enforcement, not a hardware guarantee from the servo alone.
+- [ ] **`current-specification/bom_revS.json`/`.csv` reconciliation.** These files still
+    carried the retired N20 winch train (never updated to STS3215 under Rev B); reconciled
+    directly to the Rev C SPT5425LV/LibreServo v2 state as part of this change rather than
+    passing through an intermediate STS3215 BOM entry that was never accurate to begin with.
+- [ ] **OpenServoCore maturity re-check before SG90 procurement.** Upstream project status
+    at time of writing is "in active development, nothing here is shippable yet," hardware
+    validated to rev B only. Re-check `github.com/OpenServoCore/open-servo-core` before
+    ordering in flight-article quantity.
+
+**BLOCKS:** Same as §1.1.1.2.1a above, plus Pilot's nacelle-tilt servo firmware
+(`avionics/firmware/WBS.md` §4.2) and the RS-485 gateway decision.
 
 ###### 1.1.1.2.2 *Wing Root*
 
@@ -409,7 +1077,7 @@ The middle section is defined by `airframe/blender-scripts/files-hollowed-24in/m
 It is **ONE printed piece** comprising two distinct structural elements:
 1. **Outer horseshoe ring** — the U-shaped exterior frame surrounding the middle section, open at −Z (ventral).
     The two lower arms of the horseshoe continue aft as the landing skids into the rear section.
-2. **Inner neck** — a tube-like enclosed passage running through the centre of the horseshoe,
+2. **Inner neck** — a tube-like enclosed passage running through the center of the horseshoe,
     connecting the cargo bay interior to the rear engine room interior within the hull skin.
     Canonically this is a pressurised passage within the ship; in the UAV context it provides
     structural continuity and a wiring/keel routing path through the narrowest hull section.
@@ -429,39 +1097,39 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     - Z-range +1.3..+166.1 mm in hull frame; total height ≈ 165 mm — fits build-volume vertical
     **BLOCKS middle section printing.**
 
-- [ ] **Kaylee's room — PDB mounting in inner neck** — the Kaylee Power Distribution Board
-    (Kaylee Rev A1; 75 g) is housed inside the inner neck of the middle section, accessible
+- [ ] **Flight Engineer's room — PDB mounting in inner neck** — the Flight Engineer Power Distribution Board
+    (Flight Engineer Rev A1; 75 g) is housed inside the inner neck of the middle section, accessible
     through the open ventral face of the horseshoe ring.  The inner neck central location
     minimises power run lengths to all four nacelles, all four avionics stacks, and the battery.
     Required additions to the Blender middle mesh (or as bonded inserts):
-    - 4× M3 standoff boss posts for Kaylee PCB (55×35 mm board; ±20×±12.5 mm pattern from bore centre)
+    - 4× M3 standoff boss posts for Flight Engineer PCB (55×35 mm board; ±20×±12.5 mm pattern from bore center)
     - Power cable exit notches (6 AWG leads, 4× nacelle ESC runs + avionics BEC tap)
     - Ventilation opening or clearance to allow heat dissipation from TPS54620 regulators
-    - Access clearance from horseshoe ventral opening (confirm Kaylee can be inserted and removed
+    - Access clearance from horseshoe ventral opening (confirm Flight Engineer can be inserted and removed
         with hand tools — field disassembly requirement per CLAUDE.md)
     - Confirm inner neck bore dimensions from baked `middle_shell24_2mm_repaired.stl` cross-section
         at hull Y ≈ +165 mm (midpoint of middle section) before adding boss features.
-    **BLOCKS middle section Blender mesh update; BLOCKS Kaylee installation.**
+    **BLOCKS middle section Blender mesh update; BLOCKS Flight Engineer installation.**
 
 - [ ] **CF skid rod channels** — add 4.2 mm bore channel along each horseshoe-to-skid arm (lower
     legs of the horseshoe) in the Blender mesh, coaxial with the matching channels in the rear shell.
     Export updated STL, re-bake, verify watertight.  See §1.1.0a skid task.  **BLOCKS taxi test.**
 
 - [ ] **Simon bay — define avionics bay in the MIDDLE section (moved here from §1.1.1.2, 2026-06-13).**
-    Simon's stack (Cape-B-2 + Cape-A-2, 55×35 mm both, 39.2 mm stack height) + Faraday tray (60×40×55 mm)
+    Simon's stack (Cape-B-2 + Pilot, 55×35 mm both, 39.2 mm stack height) + Faraday tray (60×40×55 mm)
     mounts in the **middle inner-neck dorsal** interior. Add boss standoffs + dorsal access panel to the
     middle Blender/SCAD source. Verify the inner-neck dorsal band has clearance (middle Z ≈ 1.3..166 mm,
     thin horseshoe section — confirm the inscribed cavity holds the 60×40×55 tray before placing bosses).
     Ref: CLAUDE.md PACE (Simon = alternate watchdog, aft EDF control); shuttle Faraday-fit method in
     `engrave_plaques.py`/cavity-profile check. **BLOCKS Phase 6 full 8-node installation.**
 
-- [ ] **Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).**
-    The Kaylee power-distribution board and the main battery mount together in the middle section's
+- [ ] **Flight Engineer room — PDB + battery bay, middle VENTRAL (2026-06-13).**
+    The Flight Engineer power-distribution board and the main battery mount together in the middle section's
     ventral region (the open −Z side of the horseshoe). Define the mounting bay / strap points there;
     keep mass low and central for CG. Coordinate with §1.4.5 (power distribution).
 
 - [ ] **Avionics-bay interior name marks (DEFERRED, 2026-06-13).** Engrave/emboss bay identifiers
-    (INARA port shuttle, RIVER stbd shuttle, SHEPHERD head fwd, SIMON middle dorsal, KAYLEE middle
+    (INARA port shuttle, RIVER stbd shuttle, SHEPHERD head fwd, SIMON middle dorsal, FLIGHT ENGINEER middle
     ventral) on each bay interior. First attempt (flat recessed plaque via `engrave_plaques.py`) did
     not read cleanly on the morph-opened organic cavity walls; pending a method decision (raised letters
     on a flat boss pad, or smooth the bay wall first). Mechanism is watertight and stays inside the 2 mm
@@ -497,7 +1165,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
     - [ ] Create cableways from mount point to avionics bay
 
-    - [ ] Wire strobe to led pwd output on Wash cape in Simon's medbay
+    - [ ] Wire strobe to led pwd output on Pilot cape in Simon's medbay
 
 ##### 1.1.1.4 *Rear Engine Cone*
 
@@ -507,5 +1175,216 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
     - [ ] Create cableways from mount point to avionics bay
 
-    - [ ] Wire strobe to led pwd output on Wash cape in Simon's medbay
+    - [ ] Wire strobe to led pwd output on Pilot cape in Simon's medbay
 
+
+---
+
+## §1.1.1.5 — Wing-Root Spar Socket (Rev S1e joint requirements)
+
+**Owning specification:** [`docs/WING_ATTACH_INTERFACE.md`](../../docs/WING_ATTACH_INTERFACE.md)
+**Owning plans:** `docs/plans/2026-08-29-003-...` U7; `airframe/wings-nacelles/WBS.md` §1.1.4 SPAR-20-7
+
+**Why this section exists.** The wing side of the Rev S1e tilt-spar migration is
+BUILT (2026-08-29); the fuselage side is not. The spar is no longer a rotating
+drive shaft that the wing rides on — it is a **fixed 20 × 16.3 mm CF tube bonded
+into the wing**, and it is now the wing's primary bending member. That makes the
+fuselage socket the wing's structural root joint, replacing both the enlarged
+tenon (FOS 0.49, CARGO-03c) and the two-rod couple (FOS 4.14, U5/KTD1) that
+existed only because a spar on bearings could not react a moment.
+
+**LANDED 2026-08-30 (Rev S1g).** The gate was RED on three findings that were
+all one cause — the fuselage still carried `WING_SPAR_Y = +38.15` and
+`WING_SPAR_BORE_D = 8.3`. All of `merge_cargo_interior.py`'s wing-root geometry
+is rebuilt against the Rev S1e wing and the cargo shell regenerated.
+
+Fixing the fuselage also exposed three genuine defects in the CHECKING tool,
+masked while the geometry was wrong — most importantly `tenon_params()`
+selecting the enlarged 30 mm tenon for the Rev S1e default load path, which
+reported an 8.60 mm/side mortise foul against a correctly-sized mortise. See
+`docs/WING_ATTACH_INTERFACE.md` §7.
+
+- [x] **WA-R1 — Spar socket (SHEAR path). DONE 2026-08-30.** Hull **Y +21.00**, **Z +66.85**,
+    bore **Ø20.4** (20.0 OD + 0.2 mm/side epoxy gap), **18.5 mm** deep — all the
+    cargo bay allows, and all the shear needs (σ = 0.31 MPa, **FOS 16**). Both stations are DERIVED, not chosen: the wing LE root bakes to hull
+    Y −7.0 and the spar is at chord station 28.0 → +21.0; the chord line bakes
+    to Z +58.01 and the spar rides the **unscaled** camber midline (+8.84 mm at
+    this station) → +66.85. **Do not apply `THICKNESS_SCALE` to the midline** —
+    `s1223_section()` opens the thickness envelope *about* an unscaled camber
+    line, so scaling it would lift the socket 4.07 mm above the spar.
+    Update `WING_SPAR_Y` / `WING_SPAR_Z` / `WING_SPAR_BORE_D` in
+    `airframe/blender-scripts/merge_cargo_interior.py`.
+
+- [x] **WA-R1b — Bonded root flange (MOMENT path). DONE 2026-08-30 — as a SEPARATE BONDED PART, not printed hull.** **80 mm (hull Z) × 60 mm
+    (hull Y)** bonded to the INNER face of the sidewall, concentric with the
+    socket. σ = 0.17 MPa, **FOS 29.2**.
+    **This replaces the 55 mm socket the first revision of this section asked
+    for, and the bay requirement is why.** A socket's capacity goes as 1/L² and
+    the bay caps L at 18.67 mm, where the socket gives FOS 0.51 on the moment —
+    unrecoverable by any depth the bay permits. A flange reacts over wall AREA
+    instead, needs no inboard reach at all (it protrudes only its own ~5 mm, to
+    X ≈ −86 against a bay edge at −100), and lands at FOS 29.2. The constraint
+    forced a better joint, not a compromise.
+    **BUILD NOTE 2026-08-30 — it is a bonded PART, not printed hull material,
+    and that was settled by measurement.** Ray-casting the baked envelope on a
+    13 × 17 grid over the footprint (221/221 hits) shows the sidewall skin moving
+    through **34.3 mm (port) / 37.0 mm (stbd)** of hull X across the 80 × 60
+    window. So "internal thickening to a plane" — the idiom every other positive
+    in `merge_cargo_interior.py` uses — would make the flange up to 34 mm thick,
+    and a plane at the nominal inner face is *tangent* to the skin inside the
+    footprint (measured: a 0.46 mm non-manifold edge, 4 incident faces, at
+    (−86.33, +8.6, +52.2), plus a sliver body). A conforming plate cut from the
+    full 900k-face shell was worse still. Done LOCALLY it is clean:
+    `airframe/stls/fuselage/generate_wing_root_flange.py` →
+    `wing_root_flange_port/stbd.stl`, **24.3 / 24.4 cm³, 12.7 g each at 40 %
+    gyroid**, both watertight single bodies. The shell's only obligation is to
+    reserve the volume, which `wing_keepout_positives()` does.
+
+- [x] **WA-R2 — Delete the F688ZZ root bearing. DONE 2026-08-30.** A bearing here is no longer
+    merely unnecessary, it is wrong: it would let the fixed spar spin under the
+    tilt pinion's gear reaction. Replace with a bonded/clamped socket.
+
+- [ ] **WA-R3 — Split-collar pinch clamp.** ≥ 5 mm wall over Ø20 (≈ Ø30 outside),
+    M3 heat-set inserts, 2 screws. **No set screws** — CF tube splinters under a
+    point load. The split must retain a **positive gap when clamped**; if the
+    halves close on each other first, the collar grips itself and the spar is
+    free. This is the joint that makes wing + bonded spar removable as one
+    assembly (the spar is bonded in the wing, clamped in the fuselage).
+
+- [x] **WA-R4 — Re-size the mortise. DONE 2026-08-30.** 30.8 → **12.8 mm** wide. The tenon is now
+    a locating feature at 12 × 20 × 8 mm (`TENON_LOAD_PATH = "spar_carrythrough"`),
+    not a 30 mm structural tenon. The current mortise is oversize for it.
+
+- [x] **WA-R5 — CLOSED by design, 2026-08-29.** The joint no longer enters the
+    bay at all, so the envelope is unchanged and needs no re-verification. The
+    spar still stops at X −100 and the flange protrudes to X ≈ −86.
+
+- [x] **WA-R6 — Fuselage-side conduits. DONE 2026-08-30.** to match the wing's new bore set:
+    nav 3-core at hull Y +1.0 (Ø3.2), AK7455 shielded pair at Y +37.5 (Ø6.5),
+    tilt drive shaft at Y +46.6 (Ø4.4). The retired Ø7 EDF double-D ports can go
+    — the four 10 AWG feeds now enter the spar bore directly at the socket.
+
+- [x] **WA-R15 — Tilt actuator re-select and fuselage drive stage. DONE
+    2026-08-30.** The actuator is a **DS3225 body + LibreServo_v4 with the
+    rotation-limit pin removed**, run continuous-rotation (multi-turn) and closed
+    on the AK7455 — the architecture the cargo winch already uses. The *body* is
+    unchanged, so the Rev S1d pad footprint (61.5 × 27.0), the 49.5 × 10 mm bolt
+    pattern and the 60 g mass all carry over; what is new is the mode, the
+    position, and a gear stage.
+    - Pad re-datumed from the (now non-rotating) spar to the **drive shaft**:
+        axis at hull **Y +46.60, Z +99.49**. The old spar-relative datum existed
+        to preserve a horn-and-pushrod linkage that no longer exists.
+    - **Fuselage spur stage, module 0.8, 38T/38T, C = 30.40 mm, 1:1.** A coaxial
+        coupling was tried first and does not fit — the body overlaps the Ø30.1
+        socket boss by 13.5 mm in Y at either shaft orientation.
+    - C is set by the **landing-gear bays** (seats top out at Z +82.39; the 3.0 mm
+        budget puts the pad bottom at ≥ +85.39, so C ≥ 29.80; 36T and 37T fall
+        under budget, 38T clears at 3.60 mm).
+    - **The stage is 1:1 deliberately.** A step-up would trade the 48× torque
+        surplus for slew rate but pulls the actuator back to 260° — under one
+        revolution — re-opening the question `WING_ATTACH_INTERFACE.md` §4.3b
+        closed.
+    - **COST — 18 mm/side of extra reach into the cargo bay.** The gear plane is
+        forced 11 mm inboard of X −100/−240 because the wing root **tenon**
+        (X −100…−108) leaves only 4.90 mm to the shaft axis, and no gear that can
+        transmit at C = 30.40 clears it in Y. The actuator follows the gear and
+        reaches X −158.5 / −221.5, in the hull Z band +85.99…+112.99 — above the
+        bay's working floor, so the loss is roof volume, not floor footprint.
+
+- [ ] **WA-R18 — Mass/CG/T-W re-derivation after Rev S1g.** **REVISED 2026-08-30
+    by the weight audit — the first figure was low.** The rework is
+    **+102.8 g (+0.227 lbm) net**, +2.63 % on the 3,911 g (8.62 lbm) AUW, and it
+    is *not* concentrated at the CG — it sits at the wing root, outboard and low.
+
+    | | Δ mass |
+    |---|---|
+    | Cargo shell (Ø30.1 sockets, 18 mm actuator standoffs, less the retired tie-rod bosses) | **+56.0 g** — 301,145 → 354,486 mm³ |
+    | New parts: `SPAR-CF-20X16` 58.2, `SHAFT-TILT-4MM` 49.4, `GEAR-TILT-FUS-38T` 16.0, `BUSH-TILT-4MM` 6.0, `PRINT-WING-ROOT-FLANGE` **51.2** | +180.8 g |
+    | Retired: `SPAR-TILT-4130` 96, `BRG-F688ZZ` 10, `PRINT-PUSHROD-CRANK` 6, `CF-ROD-8MM` 14, `CF-ROD-6MM` 8 | −134.0 g |
+    | **Net** | **+46.8 g** parts, **+102.8 g** with the shell |
+
+    The flange was under-massed by 25.6 g at Rev S1g: it was costed as
+    `RHO_SOLID × 40 % infill`, but at 5 mm thick with 4 perimeters at 0.6 mm the
+    plate is 4.8 mm of *wall* and 0.2 mm of infill — essentially solid, and infill
+    barely touches it. Use `RHO_PRINT` (1.05e-3 g/mm³).
+
+    Hover T/W was ~1.19 (~1.25 with `BATT-6S-2800`) against the 1.2 minimum
+    (§1.1.5 mass notice), so **this puts the un-swapped case below the minimum**.
+    Re-derive T/W and the CG envelope before flight release.
+    **`docs/MASS_AUDIT_CARGO_WING_ROOT.md` §6 identifies −32.9 g of low-risk
+    recovery** (hollow the actuator standoffs), which lands Rev S1g at +69.9 g on
+    the corrected basis. **BLOCKS flight release.**
+
+- [ ] **MA-1 — Reconcile every `PRINT-*` BOM row to its STL.** The weight audit
+    measured 23 matched rows and found the BOM understates printed mass by
+    **+521.6 g — 13.3 % of AUW**. `PRINT-CARGO-SECT` (+207), `FOAM-PU-2LB` (kit
+    mass, −878) and `PRINT-WING-ROOT-FLANGE` (+12.9) are corrected; the rest are
+    measured and reported in `docs/MASS_AUDIT_CARGO_WING_ROOT.md` §5 for their
+    owning branches. Add a CI check so a regenerated STL cannot silently diverge
+    from its BOM row again. **BLOCKS any weight statement.**
+
+- [x] **MA-5 — Hollow the actuator standoffs (−32.9 g).** CLOSED 2026-09-15: the standoffs are gone — the DS3225 pads (53.5 g) were removed with the Rev T5b worm-drive bracket (six 12 mm foot bosses, 23.4 g). They are 109.5 g of
+    solid block reacting a 5.0 N worst-case combined load; deflection at the gear
+    mesh is 1.4 × 10⁻⁵ mm, three-plus orders inside the 0.05 mm that would matter.
+    2.5 mm wall + 2.5 mm face. Do **not** instead shrink `NSVMT_STANDOFF` (it is
+    11 + 6 + 1, all of it accounted) or the 6 mm gear face (already 7.5 × module).
+    `docs/MASS_AUDIT_CARGO_WING_ROOT.md` §6.
+
+- [x] **MA-6 — `PRINT-BATT-TRAY` measures 140.2 g against a 22 g BOM row.** CLOSED 2026-09-15: tray retired (qty 0); `PRINT-BATT-CRADLE` 39.4 g, roof-hung in the cargo roof band (`docs/BATTERY_MOUNT.md` Rev T5). It is
+    in the cargo section, it is 3.6 % of AUW, and it is 30 % of its own bounding
+    box for a part whose job is to locate a LiPo and react 4 g × 1.5 through
+    straps. Re-measure, then lighten on its merits.
+
+- [ ] **MA-7 — The BOM mass column mixes installed mass, consumable stock and
+    ground equipment.** Summing `Total_Mass_g` returns 12.7 kg, which is the mass
+    of nothing. Add an `Installed` flag before any weight statement uses it.
+
+- [x] **WA-R15a — Cargo-bay envelope re-measure after the actuator standoff.** CLOSED 2026-09-15: standoffs removed; `tools/cargo_layout_fit.py` proves the Rev T5 layout (PASS) and `cargo_bay_envelope.py` still PASS.
+    `tools/cargo_bay_envelope.py` measured the 140 mm lateral limit against pads
+    at X −100/−240. The actuator bodies now reach −158.5/−221.5 in the
+    Z +85.99…+112.99 band. Re-measure and record the roof-band clear width before
+    the five roof/wall-mounted CARGO-01 accessories are placed.
+
+- [x] **WA-R16 — Tilt drive holding provision (TILT-CTL-01).** CLOSED 2026-09-15 by BRK-1..3: spring-applied pin brake on each worm shaft, own fused feed (`tilt_brake.scad`, `docs/TILT_ACTUATOR_SELECTION.md` §3). Solenoid part (BRK-4) and bench (BRK-5) tracked in the root WBS §0.8.1. The train is two
+    spur stages at a total reduction of 3.571 and is **not self-locking**; with
+    the motor unpowered the nacelle back-drives under any residual moment. The
+    gravity term is nulled by the pivot-at-CG, but the **aero moment is
+    unquantified**, and an unquantified moment on a non-self-locking train is an
+    unbounded rate. Candidates, in preference order: motor short-brake held by
+    LibreServo_v4; a detent at the hover/cruise ends; a self-locking worm stage
+    (rejected on the plan-004 KTD1 right-angle argument unless nothing else
+    works). **Do not close by assuming the motor holds** — see
+    `docs/TILT_DRIVE_CONTROL_SPEC.md` §7.3 for the bench test that decides it.
+    **BLOCKS flight release.**
+
+- [ ] **WA-R17 — Split-collar pinch clamp (WA-R3) is still not a part.** The
+    Ø30.1 socket boss now matches the ~Ø30 clamp envelope WA-R3 specifies, but
+    the clamp itself has no SCAD, no STL and no BOM row. ≥ 5 mm wall over Ø20,
+    M3 heat-set inserts, 2 screws, **positive split gap when clamped** (if the
+    halves close on each other first the collar grips itself and the spar is
+    free), **no set screws** (CF tube splinters under a point load). This is the
+    joint that makes wing + bonded spar removable as one assembly.
+    **BLOCKS wing removal/refit.**
+
+### RESOLVED 2026-08-29 — no bay intrusion, and no decision needed
+
+The first revision of this section asked the owner to choose between intruding
+36 mm into the bay, waiting on the LG-11 coupon, or splitting the socket into
+two collars. **The owner instead ruled the bay clear, and that ruling produced a
+better joint than any of the three options.**
+
+Splitting the load by TYPE rather than stretching one feature — socket for
+shear, flange for moment — moves the moment off a 1/L² depth term onto a linear
+area term:
+
+| | socket, 55 mm (was) | **socket 18.5 + flange 80 × 60 (now)** |
+|---|---|---|
+| Bay clear span | 140 → ~104 mm | **140 mm, unchanged** |
+| Moment FOS | 4.02 | **29.2** |
+| Reaches inboard to | X −136 | **X ≈ −86** |
+
+**The LG-11 coupon is demoted here** from a gate to a packaging convenience:
+the flange gives FOS 29.2 / 87.6 / 274.6 at 5 / 15 / 47 MPa, so it clears the
+FOS 4.0 target by 7× on the *standing* figure. The coupon would only decide how
+small the flange could shrink. It remains a gate elsewhere (root `TODO.md`
+§0.8).

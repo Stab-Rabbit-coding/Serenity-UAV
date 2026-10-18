@@ -1,7 +1,7 @@
 # Serenity UAV — Device Tree Overlays
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Status:** Phase 6 — Minimum Viable Firmware for First Flight
 
 ---
@@ -9,13 +9,16 @@
 ## Overview
 
 This directory contains the AM62X device tree overlays that configure the
-PocketBeagle 2 Industrial (AM6254) peripherals for the Serenity UAV Cape-A
-and Cape-B expansion boards.
+PocketBeagle 2 Industrial (AM6254) peripherals for the Serenity UAV Pilot
+and TACCO expansion boards.
 
 | Overlay | Cape | Node | Peripherals |
 | --------- | ------ | ------ | ------------- |
-| `cape-a/k3-am6254-pocketbeagle2-serenity-cape-a.dtbo` | Cape-A | FC nodes (4×) | IMU, barometer, TPM, ToF, GNSS, RS-485, CAN FD, Ethernet, EHRPWM, MIL-STD-1553 |
-| `cape-b/k3-am6254-pocketbeagle2-serenity-cape-b.dtbo` | Cape-B | CN nodes (4×) | TPM, LoRa, NOR flash, logging SD, SiK radio, RS-485, 49 MHz (Part 15 §15.235), CAN FD, Ethernet, WiFi, cargo servo, MIL-STD-1553 |
+| `Pilot/k3-am6254-pocketbeagle2-serenity-Pilot2.dtbo` |Pilot | FC nodes (4×) | IMU, barometer, TPM, ToF, GNSS, RS-485, CAN FD, Ethernet, EHRPWM, MIL-STD-1553 |
+| `TACCO/k3-am6254-pocketbeagle2-serenity-cape-b2.dtbo` | TACCO (XO) | CN nodes (4×) | TPM, LoRa, NOR flash, logging SD, SiK radio, RS-485, 49 MHz (Part 15 §15.235), CAN FD, Ethernet, WiFi, cargo servo, MIL-STD-1553 |
+
+The non-"2" `Pilot`/`TACCO` (Rev Q, Pilot/TACCO) overlays are archived under
+`Pilot/archive/` and `TACCO/archive/` — superseded, not built by default.
 
 ## Prerequisites
 
@@ -34,12 +37,12 @@ sudo apt install device-tree-compiler    # provides dtc 1.7.x
 
 ```bash
 
-cd serenity/firmware/dts
+cd avionics/firmware/dts
 make
 
 ```
 
-This produces `cape-a/*.dtbo` and `cape-b/*.dtbo`.
+This produces `Pilot/*.dtbo` and `TACCO/*.dtbo`.
 
 ## Install
 
@@ -60,11 +63,11 @@ Then edit `/boot/firmware/extlinux/extlinux.conf` and add the appropriate
 
 # FC nodes (Cape-A):
 
-fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-cape-a.dtbo
+fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-Pilot.dtbo
 
 # CN nodes (Cape-B):
 
-fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-cape-b.dtbo
+fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-TACCO.dtbo
 
 ```
 
@@ -87,13 +90,13 @@ Linux 6.x kernel tree and have been validated against production hardware.
 GPIO line numbers are logical (relative to `main_gpio0`) and must also
 be verified against the PocketBeagle 2 expansion header pin map.
 
-## Cape-A Peripheral Details
+## Pilot Peripheral Details
 
 | Peripheral | Interface | Linux Driver | Notes |
 | ------------ | ----------- | -------------- | ------- |
 | ICM-42688-P IMU | SPI0 CS0 | `invensense,icm42688p` | SPI mode 3, 24 MHz |
 | BMP388 barometer | SPI0 CS1 | `bosch,bmp388` | SPI mode 0, 10 MHz |
-| SLB9670 TPM 2.0 | SPI0 CS2 | `infineon,slb9670` | 33 MHz, IRQ + RST GPIO |
+| SLB9672 TPM 2.0 | SPI0 CS2 | `infineon,slb9670` | 33 MHz, IRQ + RST GPIO |
 | TCA9548A I²C mux | I2C2 0x70 | `nxp,pca9548` | 8-ch, 400 kHz |
 | VL53L5CX ToF ×2 | I2C2 mux ch0/1 | `st,vl53l5cx` | 0x29, share addr |
 | MS4525DO airspeed | I2C2 mux ch2 | `ms4525do` | FC1 only |
@@ -107,11 +110,11 @@ be verified against the PocketBeagle 2 expansion header pin map.
 | MIL-STD-1553B | PRU-ICSS0 PRU0 | n/a | Manchester II 1 Mbps |
 | Extra PWM ch 6-7 | PRU-ICSS0 PRU1 | n/a | 1 µs resolution |
 
-## Cape-B Peripheral Details
+## TACCO Peripheral Details
 
 | Peripheral | Interface | Linux Driver | Notes |
 | ------------ | ----------- | -------------- | ------- |
-| SLB9670 TPM 2.0 | SPI1 CS0 | `infineon,slb9670` | HMAC keys for radio frames |
+| SLB9672 TPM 2.0 | SPI1 CS0 | `infineon,slb9670` | HMAC keys for radio frames |
 | RFM95W LoRa 915 | SPI1 CS1 | `semtech,sx1276` | 47 CFR Part 15 Subpart C |
 | W25Q128JV NOR flash | SPI1 CS2 | `jedec,spi-nor` | 16 MiB, 3 partitions |
 | Logging microSD | SPI1 CS3 | `mmc-spi-slot` | ext4, noexec, CPLD WP |
@@ -134,12 +137,12 @@ the target before loading the overlays:
 
 sudo mkdir -p /lib/firmware/serenity/
 sudo cp pru0-mil1553.out   /lib/firmware/serenity/
-sudo cp pru1-servo-pwm.out /lib/firmware/serenity/    # Cape-A PRU1
-sudo cp pru1-cargo-servo.out /lib/firmware/serenity/  # Cape-B PRU1
+sudo cp pru1-servo-pwm.out /lib/firmware/serenity/    # Pilot PRU1
+sudo cp pru1-cargo-servo.out /lib/firmware/serenity/  # TACCO PRU1
 
 ```
 
-PRU firmware source is in `serenity/firmware/pru/` (Phase 7).
+PRU firmware source is in `avionics/firmware/pru/` (Phase 7).
 
 ## References
 

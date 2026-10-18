@@ -4,7 +4,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * This module implements a background receive thread that reads and decodes
  * Futaba S.BUS frames from a UART device.  It is used by both serenity-fc
@@ -20,7 +20,7 @@
  *   Parity    : Even (PARENB, no PARODD)
  *   Stop bits : 2 (CSTOPB)
  *   Logic     : Inverted — idle = low, start bit = high
- *               (On Cape-A / Cape-B, the 74LVC1G14 Schmitt-trigger inverter
+ *               (On Pilot / TACCO, the 74LVC1G14 Schmitt-trigger inverter
  *               re-inverts the signal to standard idle-high UART logic.)
  *
  * Frame structure (25 bytes total):
@@ -44,12 +44,12 @@
  *
  * ── Hardware Signal Path ──────────────────────────────────────────────────
  *
- * Cape-A SBUS path (UART2):
+ * Pilot SBUS path (UART2):
  *   RC receiver → J_SBUS (JST-GH 3P) → 100 Ω R_SBUS
  *   → U_SBUS (74LVC1G14 Schmitt inverter) → UART2_RXD
  *
- * Cape-B SBUS path (UART5, SW1-2 position):
- *   J_XCVR JST-GH 6P → PRTR5V0U2X TVS (Zoë) → 74LVC1G14 U_SBUS_B
+ * TACCO SBUS path (UART5, SW1-2 position):
+ *   J_XCVR JST-GH 6P → PRTR5V0U2X TVS (XO) → 74LVC1G14 U_SBUS_B
  *   → 100 Ω R_SBUS_RX → UART5_RX
  *
  * ── Baud Rate Configuration ───────────────────────────────────────────────

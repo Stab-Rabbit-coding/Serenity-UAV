@@ -17,12 +17,12 @@ is verified watertight (no boundary edges) afterward.
 Placements (part-local mm; see CLAUDE.md bay naming):
   cargo  : INARA  port shuttle wall,  RIVER  stbd shuttle wall
   head   : SHEPHERD forward dorsal interior
-  middle : SIMON dorsal interior,     KAYLEE ventral interior (PDB + battery)
+  middle : SIMON dorsal interior,     FLIGHT ENGINEER ventral interior (PDB + battery)
 
 All booleans use manifold3d (guaranteed watertight).
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0  —  creativecommons.org/licenses/by/4.0
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 import os
@@ -58,7 +58,7 @@ PLAQUES = {
     ],
     "middle_shell24_2mm_repaired": [
         ("simon", (180.0, -70.0, 55.0), (0, 0, 1), (1, 0, 0)),  # dorsal ceiling
-        ("kaylee", (180.0, -70.0, 18.0), (0, 0, -1), (1, 0, 0)),  # ventral floor
+        ("flight_engineer", (180.0, -70.0, 18.0), (0, 0, -1), (1, 0, 0)),  # ventral floor
     ],
 }
 

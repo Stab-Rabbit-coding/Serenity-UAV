@@ -2,7 +2,7 @@
 ## CMakeLists.txt — Serenity UAV common firmware library
 ##
 ## Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-## License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+## License: CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 ##
 ## Builds the serenity-common static library shared by serenity-fc and
 ## serenity-cn.  Contains protocol decoders and utility code that both

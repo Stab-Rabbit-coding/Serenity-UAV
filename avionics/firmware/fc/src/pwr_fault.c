@@ -4,11 +4,11 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Implements the power fault state machine described in pwr_fault.h.
  *
- * INA226 I2C address layout on Kaylee (all on i2c_dev_pdb bus):
+ * INA226 I2C address layout on Flight Engineer (all on i2c_dev_pdb bus):
  *   0x40 — ESC1 (Port Fwd, EDF0)
  *   0x41 — ESC2 (Port Aft,  EDF1)
  *   0x42 — ESC3 (Stbd Fwd,  EDF2)
@@ -16,7 +16,7 @@
  *   0x44 — Main bus monitor
  *   0x08 — BQ76930 cell monitor
  *
- * Shunt resistor values (see Kaylee.md §INA226 Calibration):
+ * Shunt resistor values (see FlightEngineer.md §INA226 Calibration):
  *   ESC channels: 1 mΩ, I_max = 60 A
  *   Main bus:     1 mΩ, I_max = 75 A
  *
@@ -38,7 +38,7 @@
  * INA226 I2C addresses and shunt configuration
  * ---------------------------------------------------------------------------*/
 
-/** I2C addresses for ESC current monitors on Kaylee. */
+/** I2C addresses for ESC current monitors on FlightEngineer. */
 static const uint8_t ESC_I2C_ADDR[PWR_FAULT_ESC_COUNT] = {0x40U, 0x41U, 0x42U,
                                                           0x43U};
 
@@ -202,7 +202,7 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out) {
         return -EINVAL;
     }
 
-    ctx = calloc(1U, sizeof(*ctx));
+    ctx = (pwr_fault_ctx_t *)calloc(1U, sizeof(*ctx));
     if (ctx == NULL) {
         return -ENOMEM;
     }
@@ -210,9 +210,9 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out) {
     /* Open INA226 contexts for each ESC channel. */
     for (i = 0U; i < PWR_FAULT_ESC_COUNT; i++) {
         /*
-         * Each INA226 on the Kaylee shares the same I2C bus but has a distinct
-         * address (0x40–0x43 for ESC1–ESC4).  Each bmon_ina2xx_open() call
-         * opens a separate file descriptor and programs the address via
+         * Each INA226 on the Flight Engineer shares the same I2C bus but has a
+         * distinct address (0x40–0x43 for ESC1–ESC4).  Each bmon_ina2xx_open()
+         * call opens a separate file descriptor and programs the address via
          * ioctl I2C_SLAVE, so all contexts are fully independent.
          */
         rc = bmon_ina2xx_open(i2c_dev_pdb, ESC_I2C_ADDR[i], BMON_INA_INA226,
@@ -436,7 +436,12 @@ int pwr_fault_get_snapshot(const pwr_fault_ctx_t *ctx,
     if (ctx == NULL || snap == NULL) {
         return -EINVAL;
     }
-    memcpy(snap, &ctx->snap, sizeof(*snap));
+    /* Plain struct assignment rather than memcpy(): source and destination are
+     * the same complete type, so the compiler emits the copy with full type
+     * checking and no dependence on the size argument matching the pointee.  A
+     * mismatched sizeof() in a memcpy() here would silently over- or under-copy
+     * the snapshot; this form cannot. */
+    *snap = ctx->snap;
     return 0;
 }
 

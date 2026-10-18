@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "Commo")(type "KiCad")(uri "${KIPRJMOD}/Commo.kicad_sym")(options "")(descr "Commo project symbols, extracted from the schematic's own embedded lib_symbols block (2026-09-20 fix: lib_id refs previously had no project prefix, causing 79 lib_symbol_issues ERC errors)"))
+)

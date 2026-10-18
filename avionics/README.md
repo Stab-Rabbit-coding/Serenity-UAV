@@ -1,0 +1,282 @@
+# Serenity UAV — Avionics Subsystem
+
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
+see [License](#license) below.  
+**Current design revision:** tracked per board, not subsystem-wide — see "PCB Boards" below and
+each board's own `avionics/kicad/<board>/<board>.md` status file for its current revision and
+sch↔PCB parity state. `avionics/WBS.md` carries the subsystem-wide work breakdown (no changelog
+section number is stable enough to cite here; search the file instead of citing a section).
+
+> Avionics subsystem for the Serenity UAV: 8-node cooperative flight control,
+> PACE failover architecture, EMI-hardened PCBs, multi-link comms (CAN FD, RS-485,
+> Ethernet, MIL-STD-1553C, 49 MHz / SiK / mLRS), and signed telemetry logging with
+> hardware-enforced write protection.
+
+## Current Status (2026-10-07)
+
+The design revision is Rev T. Hardware is in PCB layout; nothing is fabricated yet.
+
+| Item | State |
+|------|-------|
+| Pilot | Schematic and PCB generated together; ERC 0, DRC 0, parity 0; 120 of 120 parts placed; **routing and Gerbers open** |
+| TACCO | 163 parts placed on a 60 × 35 mm outline; ERC 0, DRC 0, parity 0 before routing; **routing, Gerbers, and USB Wi-Fi module selection (fab blocker) open** |
+| PB2 rails (Pilot, TACCO) | Corrected 2026-10-05/06 to 4.80 mm from each long edge on Samtec TSM-118-04-L-DV-LC male strips; the earlier 2.54 mm placement could not mate with the PB2-I |
+| Fleet 1553C | Holt HI-6138 protocol engine on Pilot and TACCO (decision 2026-09-28) |
+| Flight Engineer | ERC 0; 29–31 DRC items open; not routed |
+| Commo | Rev T standalone bus node approved 2026-09-29; Rev S cape design superseded; Rev T schematic and PCB in design |
+| Observer | Schematic ahead of PCB; PCB resync not started (124 DRC) |
+| Bus-Gateway | `N_STACKS=4` generated; about 84% routed; 1 DRC item |
+| Encoder | Schematic, PCB, ERC 0, DRC 0; bench calibration open |
+| Firmware | `serenity-cn` Phase 6 done; `serenity-fc` Phase 6 stub; Phase 7 open (`firmware/WBS.md`) |
+
+Per-board detail: `kicad/README.md` and each board's `.md` file. Open work: `TODO.md`.
+
+## Architecture Overview
+
+**8-Node PACE Failover System** (Primary / Alternative / Contingency / Emergency):
+
+| Stack | Watchdog | Comms | Flight Control | Payload |
+|-------|----------|-------|----------------|---------|
+| Shepherd (Bay A) | P | A | C | E |
+| Inara (Bay B) | A | P | E | C |
+| River (Bay C) | C | E | P | A |
+| Simon (Bay D) | A | C | A | P |
+
+Each node runs a **PocketBeagle2 Industrial (PB2-I) SBC** carrying:
+
+- **Pilot** cape: flight control + sensor interface (Cape-A-2)
+- **TACCO** cape: comms/logging/payload interface (Cape-B-2). "XO" is a legacy/internal working
+  name still present in some script and file names (e.g. `gen_xo_sch.py`) — TACCO is the
+  canonical current name; see `avionics/AGENTS.md` "Cape Naming and Revision History."
+- **Commo** (49 MHz + SiK transceivers). Rev S was a PB2-I cape in River's Room (Bay C) and
+  Simon's Medbay (Bay D). **Rev T (approved 2026-09-29)** replaces both with one standalone
+  MCU node at the antennas, reachable by all four stacks; see `avionics/AGENTS.md`.
+
+**Flight Engineer** (Power Distribution Board) sits in the middle-section inner neck, minimizing
+power-run length to all four nacelles and the battery.
+
+**Observer** (standalone vision/ToF/laser board — not a PB2-I cape) installs at the nose and
+cargo-bay mounting sites, connected via the Ethernet ring and CAN FD trunk. It shares the
+Ethernet ring with the 8 PACE nodes but is not itself one of them, so the ring's actual physical
+node count exceeds 8 — see `avionics/AGENTS.md` and `avionics/kicad/Observer/Observer.md`.
+
+**Bus-Gateway** (CAN-PERIPH-GW-1) is a secure CAN-FD/RS-485 edge node that brings bus connectivity
+to sensors/actuators that lack it natively — nacelle tilt Hall-effect encoders, SG90
+micro-servos (winch, cargo door), and per-EDF ESC telemetry. It is deployed in multiple physical
+instances (per-nacelle encoder gateway, per-EDF ESC gateway, cargo-door servo gateway); see
+`avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md`. The Pilot/TACCO README bullets below describe
+these signals as if read/driven locally; several have since moved to bus-networked control
+through Bus-Gateway — check the per-board `.md` files for current wiring before assuming a
+local GPIO/analog connection.
+
+**Encoder** (ENC-NACELLE-1) is the nacelle tilt-angle sensor PCB (AK7455 off-axis magnetoresistive
+encoder); it now reports over CAN-FD/RS-485 through Bus-Gateway rather than being read directly
+by Pilot — see `avionics/kicad/Encoder/ENC-NACELLE-1.md`.
+
+## Onboard Bus Architecture
+
+| Bus | Protocol | Nodes | Purpose |
+|-----|----------|-------|---------|
+| CAN FD | 1 Mbps nominal / 8 Mbps data | 8 PACE nodes + Bus-Gateway instances + Observer + Commo (Rev T) + Flight Engineer | Primary telemetry, ESC heartbeat, sensor fusion, failover signaling |
+| RS-485 | Half-duplex | 8 PACE nodes + Bus-Gateway instances + Commo (Rev T) + Flight Engineer | Backup command/telemetry (fallback if CAN FD fails) |
+| Ethernet | RSTP ring | 8 PACE nodes (via Pilot's dual PHYs, J_ETH1/J_ETH2) + Observer | High-bandwidth sensor data, inter-node video/imaging streams |
+| MIL-STD-1553C | Dual redundant buses | 8 PACE nodes + Commo (Rev T) as a remote terminal | Deterministic real-time control; Holt HI-6138 protocol engine on every Pilot and TACCO |
+| UART | Various | Cape headers | Serial debugging, bootloader, optional mission-specific sensors |
+
+## External Comms (5 Independent Paths)
+
+All five paths are **authenticated, signed, logged**. Every stack's TACCO cape carries Wi-Fi,
+ZigBee, and mLRS. Under Rev S only River and Simon carried a Commo cape (49 MHz + SiK); under
+Rev T every stack reaches the one standalone Commo node over the bus. See root `AGENTS.md` §9 for
+the per-stack primary/secondary assignment.
+
+1. **Wi-Fi 5 GHz** — MAVLink to QGroundControl; primary for higher-bandwidth development
+   flights; range limited (<500 m line-of-sight); all 4 stacks (TACCO). Host interface moved to a
+   USB module on the PB2's USB1 (the SDIO bus is not on the PB2 headers); module selection is open
+2. **ZigBee 2.4 GHz** — MAVLink fallback; robust link in congested RF environments; all 4 stacks
+   (TACCO, Murata Type 2EL module; 802.15.4 is hosted on SPI0)
+3. **mLRS (bare ST STM32WLE5JC)** — LoRa-class long-range link; all 4 stacks (TACCO). Replaced
+   the Seeed Wio-E5 module on 2026-09-29 (restricted-country sourcing rule); RF matching values
+   need bench tuning before flight. Replaced TACCO's SiK radio in the 2026-09-21 relocation and
+   is the long-range fallback if the single Commo node is lost
+4. **MAVLink/SiK 915 MHz** — Licensed ISM band; range ~5 km (open field, typical line-of-sight);
+   via Commo (RFD900ux-SMT) — moved there from TACCO in the 2026-09-21 relocation. Rev S: River
+   and Simon only; Rev T: all stacks
+5. **49 MHz (Part 15 §15.235)** — Unlicensed, extremely low power (~30 µW EIRP); via Commo (Rev S: River and
+   Simon only; Rev T: all stacks); forward and aft wire antennas (see `XCVR-49MHZ` in BOM); carries
+   encrypted command/telemetry; requires FCC pre-compliance (energy-limited but not
+   power-limited per Part 15)
+
+## PCB Boards
+
+Board revisions, sch↔PCB parity, ERC/DRC status, and exact IC/rail specs move fast and are
+tracked at the source — each board's own `avionics/kicad/<board>/<board>.md`, cross-referenced
+from `avionics/TODO.md` §1.2. The summaries below are architectural (what the board does, not
+its exact current bring-up state); confirm specifics against the per-board `.md` before relying
+on them for fab, BOM, or integration decisions.
+
+### Pilot (Cape-A-2) — Flight Control + Sensors
+
+- **Processor:** PocketBeagle2 Industrial (Cortex-A53, dual PRU real-time subsystem)
+- **Sensors:** 9-DOF IMU, barometric altimeter, GPS (u-blox M10Q)
+- **Motor Control:** 4× PWM outputs (ESC1–4) for nacelle EDFs; isolated gate drivers
+- **Actuators/feedback:** tilt servo, door servo, and winch servo control, plus nacelle tilt
+  angle feedback (AK7455 encoder) are being migrated to bus-networked control via Bus-Gateway
+  rather than driven/read locally — see `avionics/kicad/Pilot/Pilot.md` and
+  `avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md` for current wiring
+- **Isolation:** galvanic isolation on external buses (CAN FD, RS-485, Ethernet)
+- **Security:** TPM 2.0 (SLB9672) for attestation; CPLD write-blocker on log μSD
+- Status: `avionics/kicad/Pilot/Pilot.md`
+
+### TACCO (Cape-B-2) — Comms / Logging / Payload
+
+- **Radio:** mLRS on a bare ST STM32WLE5JC (pSemi PE4259 antenna switch, Epson TCXO), replacing
+  this board's prior SiK radio in the 2026-09-21 relocation and the Wio-E5 module on 2026-09-29;
+  Wi-Fi/Bluetooth on a USB module (selection open); ZigBee via the Type 2EL module; a header for
+  the 49 MHz sub-module. This board carries neither SiK nor LoRa/RFM95W
+- **Logging:** μSD header (Molex 105162-0001; flight logs, write-blocked); OS and runtime logs
+  on the PB2-I's eMMC
+- **MIL-STD-1553C:** Holt HI-6138 protocol engine on SPI0 (since 2026-09-28)
+- **Form factor:** 60 × 35 mm, male TSM-DV-LC rails; U.FL antenna jacks
+- **Payload Interface:** cargo door/winch servo and sensor-expansion I/O — see Pilot note above;
+  much of this is moving to Bus-Gateway rather than local GPIO
+- **Isolation:** galvanic isolation on all buses
+- **Security:** TPM 2.0; CPLD write-blocker on μSD
+- Status: `avionics/kicad/TACCO/TACCO.md`
+
+### Commo — 49 MHz + SiK Transceiver
+
+- **Radios:** 49 MHz transceiver (Si5351A-based tunable DDS/PLL, MMBT2222A + 2N3866 PA,
+  ~30 µW max EIRP) **plus SiK (RFD900ux-SMT)**, relocated from TACCO in the 2026-09-21 radio
+  swap in exchange for Commo's prior LoRa/RFM95W module (removed)
+- **Rev S (superseded 2026-09-29):** PB2-I cape in River's Room (Bay C) and Simon's Medbay
+  (Bay D); snapshot archived under `archives/avionics-archives/kicad-archives/`
+- **Rev T (approved 2026-09-29, in design):** one standalone MCU-driven board per airframe at
+  the antennas, with isolated CAN-FD, RS-485, and a MIL-STD-1553C remote terminal; no Ethernet;
+  an SE replaces the TPM. A PACE-aware PTT ownership lease picks which stack transmits. Losing
+  the node drops every stack to Wi-Fi / ZigBee / mLRS. Plan:
+  `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`
+- Status: `avionics/kicad/Commo/Commo.md`
+
+### Flight Engineer (Power Distribution Board)
+
+- **Inputs:** Dual 6S LiPo battery rails (independent, cross-tied with fault-tolerant diodes)
+- **Outputs:** 5V avionics rail, 6V servo rail, and a dedicated 5V Observer payload rail
+  (`U_BEC_OBS` → `J_OBS`, separate from the shared avionics bus)
+- **Protection:** 40A main fuses (one per battery rail); over-current monitoring
+- **Security:** TPM 2.0 (SLB9672) + isolated CAN-FD/RS-485, per the zero-trust cape policy
+- **Placement:** Middle-section inner neck (ventral, open access for field maintenance)
+- Status: `avionics/kicad/FlightEngineer/FlightEngineer.md`
+
+### Observer (Vision / ToF / Laser Board)
+
+Standalone board (not a PB2-I cape); one shared design installed at two physical sites — bow
+sensor pod (nose) and cargo-bay nadir FPV mount.
+
+- **Vision:** TI AM62A7 SoC (PCM-071 SoM carrier) with ISP/VP8 encoder for onboard H.265 video
+- **ToF Sensors:** TFmini-S UART (nose) + 12× VL53L5CX (8×2 Array) for obstacle avoidance and
+  precision landing
+- **Laser Indicator:** single shared 520 nm green source; per-site optics and IEC 60825-1 class
+  are a live engineering analysis, not a fixed spec — see `docs/OBSERVER_LASER_ANALYSIS.md`
+- **Comms:** Gigabit Ethernet (KSZ9477 switch), CAN FD, TPM 2.0 (SLB9672) for signed image
+  metadata; the ISOW1412 RS-485 addition is in the schematic but not yet synced to the PCB layout
+  (PCB resync not started; 124 DRC items) — see status file
+- **Mounting:** Nose sensor pod + cargo-bay FPV housing; connected via shielded Ethernet ring
+- Status: `avionics/kicad/Observer/Observer.md`
+
+### Bus-Gateway (CAN-PERIPH-GW-1) — Secure CAN-FD/RS-485 Edge Node
+
+- **Purpose:** brings authenticated bus connectivity to sensors/actuators without native bus
+  interfaces — nacelle tilt Hall-effect encoders, SG90 micro-servos (winch, cargo door),
+  per-EDF ESC telemetry
+- **Security:** TPM 2.0 (SLB9672), isolated CAN-FD (ISOW1044) and RS-485 (ADM2795E)
+- **Deployment:** multiple physical instances, one per gateway role (see status file for the
+  current list)
+- Status: `avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md`
+
+### Encoder (ENC-NACELLE-1) — Nacelle Tilt Encoder PCB
+
+- **Sensor:** AK7455 off-axis magnetoresistive tilt encoder, one per nacelle
+- **Interface:** reports over CAN-FD/RS-485 through Bus-Gateway, not read directly by Pilot
+- Status: `avionics/kicad/Encoder/ENC-NACELLE-1.md`
+
+## Firmware
+
+### Node Firmware (`avionics/firmware/`)
+
+- **serenity-cn** (Comms Node) — runs on TACCO boards (all 8 nodes)
+  - CAN FD heartbeat relay and telemetry forwarding
+  - RS-485 backup messaging
+  - Ethernet RSTP ring management  
+  - Signed-log write via CPLD write-blocker
+  - Radio (49 MHz and mLRS) telemetry encoding/decoding
+  - Cargo control GPIO sequencing
+  - MAVLink routing configuration
+
+- **serenity-fc** (Flight Control) — runs on Pilot boards (4× FC nodes: Shepherd, Inara, River, Simon)
+  - ESC PID governor (nacelle thrust control)
+  - Nacelle tilt servo PWM generation + sync across all 4 nacelles
+  - IMU + barometer + GPS sensor fusion
+  - 12× ToF sensor array fusion for obstacle avoidance
+  - MIL-STD-1553C Bus Controller (Shepherd primary) / Remote Terminal (backup FC nodes)
+  - Autonomous waypoint navigation (GPS + IMU)
+  - failover detection and graceful mode transitions
+
+### Ground Station Firmware (`gcs/`)
+
+- **Skipper** (GCS PB2-I + comms node) — antenna gimbal tracking, telemetry decoding, mission
+  planning interface; integrates QGroundControl via MAVLink-router
+
+## Security & Integrity
+
+- **Every message signed:** all CAN FD, RS-485, MIL-1553, and radio packets carry HMAC-SHA256
+  signatures bound to TPM attestation keys (one per node)
+- **Zero-trust comms:** every external command verified against key material before execution
+- **Tamper-evident logging:** flight logs write to μSD via CPLD-mediated write-blocker
+  (hardware-enforced, no post-flight modification)
+- **EMI hardening:** all PCBs conform to NIST SP 800-207 (zero trust) and IEC 62368-1 creepage/
+  clearance specs; all external connectors shielded; rated for operation in 500 W/m² RF
+  environment
+
+## Documentation Files
+
+| File | Purpose |
+|------|---------|
+| `AGENTS.md` | Avionics subsystem policy: PCB design, firmware architecture, comms topology |
+| `WBS.md` | Avionics work breakdown structure |
+| `TODO.md` | Avionics task tracker, federated from `WBS.md` — per-board status subsections |
+| `kicad/` | KiCad source schematics and PCB layouts (all boards); `kicad/README.md` is the board index and status snapshot |
+| `kicad/Pilot/` | Pilot cape: schematic/PCB source, `Pilot.md` status file |
+| `kicad/TACCO/` | TACCO cape: schematic/PCB source, `TACCO.md` status file |
+| `kicad/Commo/` | Commo board: schematic/PCB source, `Commo.md` status file |
+| `kicad/FlightEngineer/` | Flight Engineer PDB: schematic/PCB source, `FlightEngineer.md` status file |
+| `kicad/Observer/` | Observer board specs, TI SoC bring-up scripts, laser/ToF driver code |
+| `kicad/Bus-Gateway/` | Bus-Gateway (CAN-PERIPH-GW-1): schematic/PCB source, status file |
+| `kicad/Encoder/` | Nacelle tilt encoder PCB (ENC-NACELLE-1): schematic/PCB source, status file |
+| `firmware/` | C source code for Pilot/TACCO node firmware; CMake build system |
+| `emi-hardening/` | EMI isolation analysis, shielding specs, harness routing rules |
+| `rev-s1/` | Historical Rev S1 PCB redesign notes (superseded by later per-board revisions) |
+
+## References
+
+- **Regulatory:** [REF-FAA-001] 14 CFR Part 48, [REF-FAA-002] Part 107, [REF-FAA-003] §91.209,
+  [REF-FCC-001] 47 CFR Part 15, [REF-FCC-003] §15.235
+- **Security:** [REF-NIST-001] NIST SP 800-207 (Zero Trust), [REF-NIST-002] SP 800-82 (Cybersecurity
+  for Industrial Control Systems), [REF-NIST-003] SP 800-160 (Systems Security Engineering)
+- **IC standards:** [REF-IEC-001] IEC 62368-1 (EMI / Creepage & Clearance), [REF-IEEE-001] IEEE 802.15.4
+  (ZigBee)
+
+See root [`REFERENCES.md`](../REFERENCES.md) for complete reference catalog.
+
+## License
+
+**Hardware (PCB schematics, layouts, Gerbers) and the scripts that generate them:** CERN-OHL-W 2.0  
+**Firmware, device trees, and analysis/verification tools:** MIT  
+**All documentation and images:** CC BY-SA 4.0
+
+See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md)
+for full licensing details.
+
+---
+
+*"Can't stop the signal." — River Tam*

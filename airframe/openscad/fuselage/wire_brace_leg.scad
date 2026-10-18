@@ -12,8 +12,9 @@
 // *** RETIRED 2026-07-21 -- superseded by Rev R6 ***
 // The Rev R5 post geometry descended from the misubisu Thingiverse leg,
 // which does not resemble the canonical Serenity landing gear.  Rev R6
-// (airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad, default; also
-// canonical_leg_r6_3_0in.scad, extended-clearance option) rebuilds the leg
+// (airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad, THE FLIGHT
+// ARTICLE since 2026-09-06; also canonical_leg_r6_1_5in.scad, RETIRED to
+// bench/ground-handling use) rebuilds the leg
 // to the canonical articulated form at the canonical bay stations while
 // keeping this file's spring + ductile bowed-wire mechanism (the
 // bowed_wire sweep is carried forward there with its face winding
@@ -25,7 +26,7 @@
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
-// License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
+// License : CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 // Date    : 2026-06-20
 // Revision: Rev R5
 //

@@ -53,17 +53,21 @@
 // ── Flap pivot kinematics ──────────────────────────────────────────────────
 //   Flap hinge circle radius R_HINGE = THROAT_OUTER_R = 27.5 mm (right at
 //   the throat tube's OD — see THROAT geometry below).  Flap axial length
-//   FLAP_LENGTH = 40 mm, hinge to trailing edge.  Trailing-edge exit radius
-//   as a function of flap swing angle phi (phi = 0 -> flap parallel to duct
-//   axis, flush extension of the throat tube; phi > 0 -> flap swings
-//   inward/downstream, converging):
+//   FLAP_LENGTH = 30 mm (Rev T5, plan 005 R1 — was 40 mm; the shorter flap
+//   cuts the aft overhang and buys ~10 mm of hover ground clearance on the
+//   3.0 in gear, per docs/plans/2026-08-29-005-...), hinge to trailing edge.
+//   Trailing-edge exit radius as a function of flap swing angle phi (phi = 0
+//   -> flap parallel to duct axis, flush extension of the throat tube;
+//   phi > 0 -> flap swings inward/downstream, converging):
 //     exit_r(phi) = R_HINGE - FLAP_LENGTH * sin(phi)
 //   Solving for the two bore-percentage targets (CLAUDE.md: 75 % of the
-//   25 mm bore radius at 0 deg/cruise tilt, 105 % at 90 deg/hover tilt):
+//   25 mm bore radius at 0 deg/cruise tilt, 105 % at 90 deg/hover tilt) —
+//   these targets (NOZZLE_CLOSED_R/NOZZLE_OPEN_R) are unchanged by the flap
+//   trim per plan 005 R2/R6; only phi moves to reach them:
 //     phi_closed = asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH)
-//                = asin((27.5 - 18.75) / 40) = asin(0.21875) = 12.64 deg
+//                = asin((27.5 - 18.75) / 30) = asin(0.29167) = 16.96 deg
 //     phi_open   = asin((R_HINGE - NOZZLE_OPEN_R)   / FLAP_LENGTH)
-//                = asin((27.5 - 26.25) / 40) = asin(0.03125) =  1.79 deg
+//                = asin((27.5 - 26.25) / 30) = asin(0.04167) =  2.39 deg
 //   Both angles are POSITIVE (always at least slightly converging from the
 //   throat) — there is no sign change to handle, unlike an earlier draft of
 //   this derivation that put the hinge at the bore radius itself.  Both
@@ -117,6 +121,10 @@
 //   flap printed/assembled on top at each seam) so the OUTER, flow-facing
 //   surface stays continuous at every position — there is no facet gap to
 //   open up, unlike the old iris where opening the petals opened gaps.
+//   Rev T3 (2026-08-09) actually IMPLEMENTS that shingle: until then every
+//   flap was carved from the same radial band, so the 5 deg overlap was an
+//   interpenetration rather than a lap joint (see the FLAP_SHINGLE_GAP block
+//   for the failure it caused and the master/seal fix).
 //
 // Three separately-printable parts, each in its own module:
 //   1. nozzle_throat_and_housing() — fixed: throat tube (flow liner, with
@@ -125,8 +133,11 @@
 //   2. unison_ring()               — rotating: Rev S1 INTERNAL 136T M=0.5
 //      ring gear (meshed from inside by the Nozzle Drive Pinion), plus
 //      8 spiral cam slots on its downstream face.
-//   3. nozzle_flap()                — one flap (print x 8): tangential
-//      hinge knuckle (clevis) + compound lever tab + follower pin.
+//   3. nozzle_flap(seal)            — one flap: tangential hinge knuckle
+//      (clevis) + compound lever tab + follower pin.  Rev T3: two variants —
+//      MASTER (seal = false, print x 4) and SEAL (seal = true, print x 4,
+//      panel lapped FLAP_SHINGLE_GAP outboard).  Was one part x 8 before the
+//      shingle was implemented.
 //
 // Mating interfaces (pushrod drive, Rev T — Option B):
 //   Pushrod: a ball-ended rod from a fixed crank on the nacelle pivot spar
@@ -153,10 +164,13 @@
 //   Orient:      Print flat (gear face down) for tooth quality
 //   Nozzle:      Hardened steel
 //
-// Print specification — Flaps:
+// Print specification — Flaps (Rev T3: master x 4 AND seal x 4):
 //   Material:    PETG (non-structural aerodynamic surface; slight flex OK)
 //   Layers:      0.15 mm, 3 perimeters, 25 % gyroid infill
 //   Orient:      Print flat (concave/flow face down)
+//   Quantity:    RENDER_PART "flap" x 4 (master) + "flap_seal" x 4 (seal).
+//                The two differ ONLY in the panel's radial band; clevis, lever
+//                tab and follower pin are identical, so they share hardware.
 //   Color note:  Flow-facing (concave) face marked "TRANSLUCENT-BLUE" — use
 //                translucent blue PETG filament for visual airflow
 //                reference.  Convex (outer) face matches nacelle hull
@@ -179,6 +193,17 @@
 //   tangential-hinge overlapping conical flaps, unison ring gear, spiral
 //   cam actuation) is original work authored for this project; no BamJr
 //   geometry, mesh, or source is copied.  See REFERENCES.md [REF-CAD-001].
+//
+// Prior-art attribution (REFERENCES.md REF-CAD-005):
+//   The Rev T3 master-flap / seal-flap arrangement — alternate flaps lapped
+//   radially outboard so a circumferential flap overlap is realisable instead
+//   of interpenetrating — follows the principle disclosed in E. W. Ryan and
+//   G. H. Israel, Jr., "Exhaust nozzle flap seal arrangement," U.S. Patent
+//   4,128,208, Dec. 5, 1978 (assigned to General Electric Co.; EXPIRED, public
+//   domain — verified 2026-08-09).  Cited for the principle ONLY: that patent
+//   centres its seals with a bellcrank linkage, whereas each seal flap here
+//   rides its own hinge identically to a master flap.  No patent text, figure,
+//   or geometry is copied.  See REFERENCES.md [REF-CAD-005].
 //
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
@@ -226,6 +251,31 @@
 //          (archive the gear-train parts), Stage 5 (pod pocket, assembly,
 //          docs) — tracked in the WBS.  AI contribution: Claude (Opus 4.8,
 //          Anthropic), directed by Steve Griffing.
+// Rev:     T3 (2026-08-09): FLAP SHINGLE implemented.  All 8 flaps had been carved
+//          from one radial band, so the deliberate 5 deg inter-flap overlap was a
+//          solid interpenetration — physically unbuildable, and it exported STLs
+//          with coincident cylindrical surfaces (17 non-manifold edges closed /
+//          12 open) that failed CI "STL Validation".  Alternate flaps are now
+//          SEAL flaps lapped FLAP_SHINGLE_GAP = 0.2 mm outboard of the MASTER
+//          flaps (master/seal arrangement per real variable-area nozzles); the
+//          master flaps' band, the hinge circle, the hinge bosses and the housing
+//          are all unchanged, so exit_r(phi) and the CLAUDE.md 75 %/105 % bore
+//          targets are numerically unaffected.  Flap print count becomes 4 + 4.
+//          Also exposed FLAP_PHI so each published asm STL is reproducible.
+//          Found by CI, not by inspection — the header had claimed shingling since
+//          Rev R2 while the geometry never implemented it.  AI contribution:
+//          Claude (Opus 5, Anthropic), directed by Steve Griffing.
+// Rev:     T4 (2026-09-09): RING_LEVER_AZ relocated 22.5 -> 157.5 deg, per
+//          docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT — hybrid A+B adopted
+//          (2026-07-19)".  The drive crank now rides a nacelle sync PINION on
+//          the INBOARD side of the pod, so the lever ear moves to the inboard
+//          flap gap and the pushrod hugs the inboard cheek instead of crossing
+//          the duct.  157.5 is a legal gap (8 flaps -> gaps at 22.5 + k*45), so
+//          cam slots, flap sweep and all exit-radius kinematics are numerically
+//          UNCHANGED; the solved linkage gives psi(0) = -0.36 deg so no cam
+//          re-clocking is needed either (tools/nozzle_linkage_check.py).
+//          AI contribution: Claude (Opus 5, Anthropic), directed by
+//          Steve Griffing.
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 
@@ -280,18 +330,24 @@ THROAT_LEN       = 15.0;   // [mm] axial length, inboard face (Z=0) to hinge lin
 // ── Flap Pivot Geometry ────────────────────────────────────────────────────────
 
 R_HINGE      = THROAT_OUTER_R;   // [mm] = 27.5, tangential hinge circle radius
-FLAP_LENGTH  = 40.0;             // [mm] hinge to trailing edge, axial-ish length
+FLAP_LENGTH  = 30.0;             // [mm] hinge to trailing edge, axial-ish length
                                  //   Rev T2 (2026-07-18): doubled 20 -> 40 per
                                  //   user direction — a longer flap sweeps the
-                                 //   same exit-radius range over HALF the swing
-                                 //   arc (PHI 1.79..12.64 deg vs the old
-                                 //   3.58..25.94), a gentler cone / lower
-                                 //   turbulence and less follower travel demand.
+                                 //   same exit-radius range over a smaller swing
+                                 //   arc, a gentler cone / lower turbulence and
+                                 //   less follower travel demand.
+                                 //   Rev T5 (2026-09-08, plan 005 R1): trimmed
+                                 //   40 -> 30 to cut the aft nozzle overhang and
+                                 //   recover hover ground clearance (see
+                                 //   docs/plans/2026-08-29-005-...). Widens the
+                                 //   swing arc to PHI 2.39..16.96 deg (was
+                                 //   1.79..12.64); re-verified non-locking by
+                                 //   tools/nozzle_linkage_check.py.
 HINGE_Z      = THROAT_LEN;       // [mm] = 15.0, hinge line Z station
 
 // phi(exit_r) = asin((R_HINGE - exit_r) / FLAP_LENGTH) — see header derivation.
-PHI_CLOSED = asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH);   // = 12.64 deg (L=40)
-PHI_OPEN   = asin((R_HINGE - NOZZLE_OPEN_R)   / FLAP_LENGTH);   // =  1.79 deg (L=40)
+PHI_CLOSED = asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH);   // = 16.96 deg (L=30)
+PHI_OPEN   = asin((R_HINGE - NOZZLE_OPEN_R)   / FLAP_LENGTH);   // =  2.39 deg (L=30)
 
 // ── Lever Tab / Follower Pin (drives the flap from the ring's spiral cam) ────
 //
@@ -387,6 +443,42 @@ HINGE_PIN_D     =  3.0;     // [mm] stainless steel hinge pin OD (tangential)
 HINGE_BORE_D    =  3.2;     // [mm] clearance bore for 3 mm hinge pin (0.2 mm clr)
 HINGE_KNUCKLE_W =  6.0;     // [mm] width (tangential) of each hinge knuckle half
 
+// ── Shingle (master / seal flap alternation) — Rev T3 ─────────────────────────
+//
+// Rev T3 (2026-08-09): the 5 deg overlap above is only realisable if alternate
+// flaps sit at DIFFERENT radii.  8 flaps x FLAP_SPAN_DEG 50 = 400 deg of arc on
+// a 360 deg circle, so with every flap carved from the same radial band
+// (R_HINGE-FLAP_THICKNESS .. R_HINGE) each neighbouring pair overlapped by 5 deg
+// IN THE SAME MATERIAL — the parts interpenetrated.  That is physically
+// impossible in hardware, and in the exported mesh the two coincident
+// cylindrical surfaces produced edges shared by four facets (17 on the closed
+// asm, 12 on the open), so trimesh reported the STL non-watertight AND
+// mesh.split() returned zero bodies, defeating validate_stls.py's multi-body
+// fallback.  (Found 2026-08-09 by CI "STL Validation"; the header's Overlap
+// section had specified shingling since Rev R2 but the geometry never
+// implemented it.)
+//
+// Fix — the master/seal flap arrangement real variable-area jet nozzles use:
+//   * EVEN-index flaps ("master") keep the ORIGINAL band, unchanged.  All the
+//     published exit-radius kinematics (exit_r = R_HINGE - FLAP_LENGTH*sin(phi),
+//     and hence the CLAUDE.md 75 %/105 % bore-percentage targets) are defined by
+//     these flaps and are therefore NUMERICALLY UNCHANGED by this revision.
+//   * ODD-index flaps ("seal") are carved from a band FLAP_SHINGLE_GAP outboard
+//     of the master band, so they lap OVER the master flaps' outer surface and
+//     close the 40 deg gap between adjacent masters from outside — the standard
+//     arrangement, which keeps the master flaps' inner surface as the
+//     flow-facing boundary rather than putting a seal in the airstream.
+//   * Both types keep an IDENTICAL hinge clevis on the local origin, so all 8
+//     still pivot on the same R_HINGE circle and straddle the same unmodified
+//     hinge bosses in nozzle_throat_and_housing().  No housing change.
+//
+// Consequence for printing: the flap is no longer one part x8.  It is now
+// master x4 + seal x4 (see RENDER_PART "flap" / "flap_seal").
+FLAP_SHINGLE_GAP = 0.2;     // [mm] radial running clearance between the master
+                            //   flap's outer surface and the seal flap's inner
+                            //   surface (matches the 0.2 mm/side running fit used
+                            //   at the hinge clevis and the cam follower)
+
 // ── Ring (Unison Disc) Dimensions — Rev T CAM-ONLY ring (pushrod drive) ───────
 //
 // Rev T (2026-07-18): Option B (docs/NOZZLE_DRIVE_TRADE.md, user decision
@@ -415,12 +507,108 @@ CAM_FLANGE_INNER_R = 28.5;   // [mm] cam-flange inner radius (clears throat OD
                              //   27.5 by 1.0; slot_in = 29 − 1.2 = 27.8 > 27.5)
 
 // ── Pushrod lever (single drive input; replaces the internal ring gear) ──────
-RING_LEVER_AZ   = 22.5;   // [deg] azimuth of the lever ear (in a flap gap,
-                          //   between slots at 0°/45°)
-RING_LEVER_R    = 32.0;   // [mm] radial reach of the ball-socket centre on the
-                          //   lever (effective moment arm for the pushrod)
+RING_LEVER_AZ   = 157.5;  // [deg] azimuth of the lever ear.  Flap gaps sit at
+                          //   22.5 + k*45 (8 flaps), so 157.5 is a legal gap and
+                          //   the ear still clears all 8 cam slots and the flap
+                          //   sweep exactly as 22.5 did.
+                          //   RELOCATED 22.5 -> 157.5 (2026-07-19 amendment,
+                          //   docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT —
+                          //   hybrid A+B adopted"): the drive crank now lives on
+                          //   the nacelle-mounted sync PINION on the INBOARD
+                          //   side of the pod, so putting the ear in the inboard
+                          //   flap gap lets the pushrod hug the inboard cheek
+                          //   instead of crossing the duct.
+                          //   The cam slots need NO re-clocking for this move:
+                          //   the solved linkage gives psi(0 deg tilt) = -0.36
+                          //   deg, i.e. essentially zero ring rotation at the
+                          //   closed/cruise reference pose (tools/
+                          //   nozzle_linkage_check.py, default run).
 RING_LEVER_W    =  5.0;   // [mm] lever ear tangential width
-RING_BALL_D     =  3.0;   // [mm] pushrod ball-end nominal (socket = +clearance)
+                          // (RING_LEVER_R is defined below, in the "Servo
+                          //   push-only drive" block — it is a live dimension
+                          //   again as of 2026-09-29, not a historical one.)
+
+// ── Servo drive, ball-cup pushrod (2026-09-28/29, docs/NOZZLE_DRIVE_TRADE.md "DECISION
+//    AMENDMENT — servo drive (2026-09-28)"; plan
+//    docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md U3) ─────
+// OPENING ROTATES THE RING CLOCKWISE (negative world azimuth): the cam slots are
+// cut with radius rising with ring-local angle (spiral_pts), so the flap pin
+// only reaches the open-end radius when the ring turns by -THETA_RING_REF_OPEN.
+// The ear therefore sweeps az 157.5 (75 %, closed) -> 133.75 (105 %, open).
+//
+// FAIL-OPEN BY CONSTRUCTION: this restores the ORIGINAL (pre-2026-09-28)
+// ball-and-pushrod geometry (RING_LEVER_R, RING_BALL_D, the COTS M3 ball
+// stud already in the BOM) — a rigid rod from the servo's own crank drives
+// the ring through a proven chord/angle relationship, the SAME math family
+// `tools/nozzle_linkage_check.py` already solved for this ring.  The single
+// change from the pre-Option-A design: the ring-side ball SOCKET is now an
+// OPEN CUP (a hemisphere plus a clear exit channel — see the "Pushrod ball
+// cup" comment below), not a captured sphere.  A rigid PUSH-only rod can
+// press the ball into the cup, but nothing holds the ball IN the cup when
+// the rod is not pushing — the exact mechanism an OHV valve-train pushrod
+// cup uses.  A dead, unpowered, or SEIZED servo therefore cannot hold the
+// ring closed: the spring cord (below) simply lifts the ball out of the
+// open cup and drives the ring to 105 %.  (A CAPTURED socket, or a pull-only
+// slot, both fail this: either can hold the ring at whatever position the
+// rod stopped at — owner-approved correction 2026-09-28.)
+//
+// HISTORY OF THIS SECTION (for the record — do not repeat these dead ends):
+// 2026-09-28 first cut: a "pull-only slotted ear" — rejected same day, a
+//   seized pull link still blocks the ring paying out toward open.
+// 2026-09-28 second cut: a push-only WIRE tangent to the ear's flat flank —
+//   kinematically broken (a fixed point contacting a ROTATING FLAT FACE is
+//   only coincident with it at one angle, not a continuous range; verified
+//   2026-09-29 when the wire's required contact radius ran past the ear's
+//   own tip near both ends of the stroke) AND still required a window clear
+//   through the housing's outer (mould-line) wall to reach the ear at all.
+// 2026-09-29 (this revision): an open-cup pushrod restores continuous,
+//   already-solved proportional kinematics AND keeps the fail-open property,
+//   at the cost of the SAME housing window the pre-Option-A pushrod always
+//   needed (see HOUSING_OUTER_R note: "ear never stands proud of the housing
+//   OD" already assumed one) — accepted as a small fairing-covered actuator
+//   slot at the inboard flap gap, consistent with how real variable-nozzle
+//   linkages (e.g. REF-CAD-001) cross their cowl.  Flagged in plan U4/U8 for
+//   the pushrod-clearance bench check the pre-Option-A design also deferred.
+//
+// Ear sweeps az 157.5 (75 %, closed) -> 133.75 (105 %, open); opening rotates
+// the ring CLOCKWISE (the cam slots are cut with radius rising with
+// ring-local angle, spiral_pts).
+//
+// HARD STOPS are additive lugs on the housing's inner wall, just outside the
+// ear's normal sweep, so the ear only reaches them on overtravel.
+RING_LEVER_R     = 32.0;   // [mm] radial reach of the ball-cup centre on the
+                           //   ear (moment arm for the push-rod) — restores the
+                           //   ORIGINAL (pre-2026-09-28) pushrod geometry.
+RING_BALL_D      =  3.0;   // [mm] COTS M3 ball-stud ball (BOM BALLSTUD-M3),
+                           //   same physical part the pre-Option-A pushrod used.
+EAR_HALF_ANG     = RING_LEVER_W / 2 / (RING_OUTER_R + 0.5) * 180 / PI;
+                           // [deg] = 4.26, ear flank half-angle at the housing bore
+STOP_LUG_R       = 33.3;   // [mm] stop-lug projection radius: housing bore
+                           //   (33.6) inward to here.  Clears the plain ring
+                           //   rim (33.1) by 0.2 mm; engages the ear (tip 35.0)
+                           //   comfortably.
+STOP_LUG_HALF_ANG =  1.5;  // [deg] each stop lug's own angular half-width
+AZ_CLOSED        = RING_LEVER_AZ;                         // [deg] 157.5
+AZ_OPEN          = RING_LEVER_AZ - THETA_RING_REF_OPEN;    // [deg] 133.75
+WIN_AZ_CLOSED_EDGE = AZ_CLOSED + EAR_HALF_ANG;              // [deg] 161.76, 75 % stop
+WIN_AZ_OPEN_EDGE   = AZ_OPEN   - EAR_HALF_ANG;              // [deg] 129.49, 105 % stop
+// Opening-spring cord (Dyneema, Ø0.5) on a rim groove below the cam slots.
+// Anchored ring-side to the knot below; housing-side to a fixed rib on the
+// housing's OWN inner wall (SPRING_ANCHOR_*), well clear of the ball-rod
+// window on the OPPOSITE side of the ring.
+SPRING_GROOVE_R  = 32.1;   // [mm] groove root radius (rim 33.1, depth 1.0)
+SPRING_GROOVE_W  =  1.2;   // [mm] groove axial width
+SPRING_GROOVE_Z  =  1.5;   // [mm] groove centre (cam slots occupy Z 5..8)
+SPRING_CORD_D    =  0.5;   // [mm] cord diameter
+SPRING_CORD_R    = SPRING_GROOVE_R + SPRING_CORD_D / 2;   // [mm] cord centre
+SPRING_ANCHOR_AZ = 337.5;  // [deg] fixed housing-side anchor azimuth — the flap
+                           //   gap diametrically OPPOSITE the lever ear
+                           //   (157.5 + 180), clear of the ball-rod window
+SPRING_ANCHOR_R0 = 33.3;   // [mm] anchor rib inner (free) radius — the cord
+                           //   loops and knots around this rib's inner edge
+SPRING_ANCHOR_HALF_ANG = 1.2;   // [deg] anchor rib angular half-width
+CORD_ANCHOR_D    =  1.0;   // [mm] radial anchor hole through the rim at the ear
+CORD_KNOT_D      =  2.2;   // [mm] knot counterbore on the ring's inner face
 
 // ── Outer Housing Dimensions ──────────────────────────────────────────────────
 // Rev T: bore shrinks to clear the Ø66 cam ring; outer wall 2.0 mm (piloting
@@ -472,6 +660,16 @@ RIB_ANG_OFFSET = 22.5;   // [deg] angular offset from flap centrelines (avoids
 //     part-local→hull transform — deferred VERIFY (serenity_assembly.py).
 //
 //   Origin: centre of inboard (nacelle-side) face, Z = 0.
+// Annular sector [az0, az1] x [r0, r1] x [z0, z1] (az in degrees, az1 > az0).
+module nz_wedge(az0, az1, r0, r1, z0, z1) {
+    n = max(2, ceil((az1 - az0) / 2));
+    translate([0, 0, z0])
+        linear_extrude(height = z1 - z0)
+            polygon(concat(
+                [for (i = [0 : n]) let(a = az0 + (az1 - az0) * i / n) [r1 * cos(a), r1 * sin(a)]],
+                [for (i = [n : -1 : 0]) let(a = az0 + (az1 - az0) * i / n) [r0 * cos(a), r0 * sin(a)]]));
+}
+
 module nozzle_throat_and_housing() {
     union() {
         difference() {
@@ -516,7 +714,28 @@ module nozzle_throat_and_housing() {
                 // the existing tube wall (solid from THROAT_INNER_R=25 to
                 // THROAT_OUTER_R=27.5) already provides the bore's inner
                 // bearing surface "for free."
-                HINGE_BOSS_OD = HINGE_BORE_D + 5.0;
+                // Rev T5b (2026-09-09, plan 005 R4): wall trimmed 2.5mm/side
+                // (+5.0 OD) -> 1.5mm/side (+3.0 OD), the minimum this repo's
+                // FDM practice treats as reliable (>=3 perimeters at 0.4mm
+                // nozzle, matches the flap-shingle "effectively solid at
+                // 2.5mm + 3x0.4mm perimeters" precedent scaled down for this
+                // much smaller, lighter-loaded pin joint). This cuts the
+                // mould-line overshoot from 6.1mm to ~4.1mm worst-case (see
+                // tools/nacelle_housing_profile.py --check) but CANNOT reach
+                // zero: the inner-fusion formula below holds the boss's inner
+                // edge fixed at R_HINGE - 1.0 regardless of OD, so even a
+                // notional zero-wall bore (OD = HINGE_BORE_D = 3.2mm) still
+                // reaches outer edge R_HINGE - 1.0 + 3.2 = 29.7mm, which
+                // already exceeds the canonical shell's ~28.55mm worst-case
+                // radius at this station by 1.15mm. R_HINGE=27.5 is fixed by
+                // the flap kinematics (R2 invariant) and itself leaves only
+                // ~1.05mm clearance to the canonical mould line here -- this
+                // residual is a genuine hinge-circle-vs-mould-line conflict,
+                // not a boss-sizing problem, and is accepted per plan 005 R7
+                // (WBS Sec 1.1.3). Do not shrink the wall further chasing an
+                // unreachable zero -- the remaining ~4mm buys nothing once
+                // the wall drops below print-integrity margin.
+                HINGE_BOSS_OD = HINGE_BORE_D + 3.0;
                 HINGE_BOSS_X_CEN = R_HINGE + HINGE_BOSS_OD / 2 - 1.0;
                 for (i = [0 : N_FLAPS - 1]) {
                     rotate([0, 0, i * 360 / N_FLAPS]) {
@@ -568,7 +787,39 @@ module nozzle_throat_and_housing() {
                             cylinder(h = HINGE_KNUCKLE_W + 0.2, d = HINGE_BORE_D, center = true);
                 }
             }
+
+            // ── 2026-09-29 pushrod-access window ──────────────────────────────
+            // The ear (tip RING_LEVER_R+RING_BALL_D = 35.0) sweeps past the
+            // housing bore (33.6) by design — "ear never stands proud of the
+            // housing OD (35.6)" already assumed this.  A small fairing-
+            // covered slot lets the rigid push-rod reach the ball cup from
+            // outside, spanning exactly the ear's stop-to-stop sweep (no
+            // wider): plan U4/U8 sizes and verifies the fairing.
+            nz_wedge(WIN_AZ_OPEN_EDGE, WIN_AZ_CLOSED_EDGE,
+                     HOUSING_INNER_R - 0.5, HOUSING_OUTER_R + 1.0,
+                     -0.1, RING_CAVITY_Z_HI);
         }
+
+        // ── 2026-09-29 additive stop lugs + spring anchor rib ─────────────────
+        // All three project INWARD from the housing's own inner wall into
+        // the pre-existing open annular bore, so they are unioned onto the
+        // differenced housing (below), not cut into it.  The stop lugs sit
+        // just OUTSIDE the window above (in solid housing territory), so the
+        // ear only reaches them on overtravel past its normal stop-to-stop
+        // sweep.
+        nz_wedge(WIN_AZ_CLOSED_EDGE, WIN_AZ_CLOSED_EDGE + 2 * STOP_LUG_HALF_ANG,
+                 STOP_LUG_R, HOUSING_INNER_R, 0, RING_H);
+        nz_wedge(WIN_AZ_OPEN_EDGE - 2 * STOP_LUG_HALF_ANG, WIN_AZ_OPEN_EDGE,
+                 STOP_LUG_R, HOUSING_INNER_R, 0, RING_H);
+        // Spring-cord housing-side anchor rib (opposite the lever ear) — a
+        // narrow radial rib fused to the housing bore wall, same pattern as
+        // the stop lugs above; the cord loops and knots around its free
+        // (inner) edge at SPRING_ANCHOR_R0.
+        nz_wedge(SPRING_ANCHOR_AZ - SPRING_ANCHOR_HALF_ANG,
+                 SPRING_ANCHOR_AZ + SPRING_ANCHOR_HALF_ANG,
+                 SPRING_ANCHOR_R0, HOUSING_INNER_R,
+                 SPRING_GROOVE_Z - SPRING_GROOVE_W / 2 - 0.5,
+                 SPRING_GROOVE_Z + SPRING_GROOVE_W / 2 + 0.5);
     }
 }
 
@@ -596,17 +847,38 @@ module unison_ring() {
             cylinder(h = RING_H, r = RING_OUTER_R);
 
             // ── Pushrod lever ear (single drive input) ──────────────────────
-            // A radial tab off the rim carrying the pushrod ball socket at
-            // RING_LEVER_R.  Sits in a flap gap (RING_LEVER_AZ) so it clears
-            // all 8 cam slots and the flap sweep.
+            // A radial tab off the rim carrying the pushrod's open ball cup
+            // at RING_LEVER_R.  Sits in a flap gap (RING_LEVER_AZ) so it
+            // clears all 8 cam slots and the flap sweep.  Starts 1 mm inside
+            // the rim for fusion; tip at RING_LEVER_R + RING_BALL_D (the
+            // original pre-2026-09-28 formula — the ear's own reach is
+            // unchanged, only its socket is open now, see below).
             rotate([0, 0, RING_LEVER_AZ])
-                translate([0, -RING_LEVER_W / 2, 0])
-                    cube([RING_LEVER_R + RING_BALL_D, RING_LEVER_W, RING_H]);
+                translate([RING_OUTER_R - 1.0, -RING_LEVER_W / 2, 0])
+                    cube([(RING_LEVER_R + RING_BALL_D) - (RING_OUTER_R - 1.0),
+                          RING_LEVER_W, RING_H]);
         }
 
         // Cam-flange through-bore — clears the throat tube full height
         translate([0, 0, -0.1])
             cylinder(h = RING_H + 0.2, r = CAM_FLANGE_INNER_R);
+
+        // ── Pushrod ball cup (OPEN, not captured — plan KTD3) ────────────────
+        // A hemispherical seat sized for the COTS M3 ball stud (RING_BALL_D,
+        // +0.4 mm clearance) at RING_LEVER_R, UNIONED with a clear exit
+        // channel extending radially outward (local +X in this rotated
+        // frame) through the rest of the ear's own material.  A rigid
+        // push-rod presses the ball IN against the cup's remaining (inward)
+        // wall; nothing retains it on the outward side, so it lifts straight
+        // out — along the same direction the rod approaches from — the
+        // moment the rod stops pushing.  This is what makes the linkage
+        // push-only / fail-open (see the header comment above).
+        rotate([0, 0, RING_LEVER_AZ])
+            translate([RING_LEVER_R, 0, RING_H / 2]) {
+                sphere(d = RING_BALL_D + 0.4);
+                translate([0, -(RING_BALL_D + 0.4) / 2, -(RING_BALL_D + 0.4) / 2])
+                    cube([RING_BALL_D + 4.0, RING_BALL_D + 0.4, RING_BALL_D + 0.4]);
+            }
 
         // ── Spiral cam slots (×N_FLAPS) ──────────────────────────────────────
         for (i = [0 : N_FLAPS - 1]) {
@@ -619,10 +891,22 @@ module unison_ring() {
             }
         }
 
-        // ── Pushrod ball socket (blind, in the lever ear) ────────────────────
-        rotate([0, 0, RING_LEVER_AZ])
-            translate([RING_LEVER_R, 0, RING_H / 2])
-                sphere(d = RING_BALL_D + 0.4);   // 0.2 mm/side clearance ball seat
+        // ── Opening-spring cord groove (full circumference) ──────────────────
+        translate([0, 0, SPRING_GROOVE_Z - SPRING_GROOVE_W / 2])
+            difference() {
+                cylinder(h = SPRING_GROOVE_W, r = RING_OUTER_R + 0.1);
+                translate([0, 0, -0.1])
+                    cylinder(h = SPRING_GROOVE_W + 0.2, r = SPRING_GROOVE_R);
+            }
+        // ── Cord anchor: radial hole just under the ear's low (open-side) flank,
+        //    knot counterbore on the ring's inner face ────────────────────────
+        rotate([0, 0, RING_LEVER_AZ - EAR_HALF_ANG + 1.0])
+            translate([CAM_FLANGE_INNER_R - 0.1, 0, SPRING_GROOVE_Z])
+                rotate([0, 90, 0]) {
+                    cylinder(h = SPRING_GROOVE_R - CAM_FLANGE_INNER_R + 0.3,
+                             d = CORD_ANCHOR_D);
+                    cylinder(h = 0.9, d = CORD_KNOT_D);
+                }
     }
 }
 
@@ -645,7 +929,7 @@ module unison_ring() {
 //   (X, Y) = (-R_HINGE, 0).  Assembly applies rotate([0,0,i*360/N_FLAPS])
 //   then rotate([0, phi, 0]) per flap (about local Y, the tangential hinge)
 //   — see assembly preview below.
-module nozzle_flap() {
+module nozzle_flap(seal = false) {
     // ── Main flap body — curved channel, constant section, extruded along
     //    local Z by FLAP_LENGTH (see header: same curved-sector technique
     //    Rev R1 used, just extruded along the flap's length instead of its
@@ -654,10 +938,21 @@ module nozzle_flap() {
     //    (radius R_HINGE) passes exactly through the local origin — that is
     //    where the hinge line sits.  Built with annular_wedge() (defined
     //    above) rather than a circle/square mask, for an unambiguous wedge.
+    //
+    //    Rev T3 shingle (see FLAP_SHINGLE_GAP block): seal = false is the
+    //    MASTER flap and keeps the original band exactly; seal = true shifts
+    //    the band FLAP_SHINGLE_GAP outboard of the master's outer surface so
+    //    the two never share a surface.  Only this panel moves — the clevis
+    //    and lever tab below are identical for both types, so both pivot on
+    //    the same R_HINGE hinge circle.
+    flap_r_in  = seal ? R_HINGE + FLAP_SHINGLE_GAP
+                      : R_HINGE - FLAP_THICKNESS;
+    flap_r_out = seal ? R_HINGE + FLAP_SHINGLE_GAP + FLAP_THICKNESS
+                      : R_HINGE;
     linear_extrude(height = FLAP_LENGTH) {
         translate([-R_HINGE, 0]) {
             polygon(annular_wedge(
-                R_HINGE - FLAP_THICKNESS, R_HINGE,
+                flap_r_in, flap_r_out,
                 -FLAP_SPAN_DEG / 2, FLAP_SPAN_DEG / 2,
                 12
             ));
@@ -732,27 +1027,51 @@ module nozzle_flap() {
 // Assembly-per-flap (applied right-to-left): rotate by PHI_CLOSED about the
 // hinge's own tangential (local Y) axis, THEN translate the tilted flap so its
 // hinge lands at (R_HINGE, 0, HINGE_Z), THEN sweep around Z by the flap index.
-RENDER_PART = "asm";   // "throat" | "ring" | "flap" | "asm"
+RENDER_PART = "asm";   // "throat" | "ring" | "flap" | "flap_seal" | "asm"
 
+// Flap swing angle used by the "asm" preview.  Exposed as a parameter (Rev T3)
+// so each published assembly STL is reproducible from this one source rather
+// than by hand-editing the tilt:
+//   airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl
+//       openscad -D 'RENDER_PART="asm"' -o <out> nacelle_nozzle_iris.scad
+//   airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl
+//       openscad -D 'RENDER_PART="asm"' -D 'FLAP_PHI=PHI_OPEN' -o <out> …
+// (nacelle_nozzle_iris-closed-5deg.stl was DISCARDED 2026-08-09: it was an
+// earlier, abandoned attempt at shingling the flaps, exported from a source
+// revision no longer in the tree — rendering this file at phi = 5 deg
+// reproduced neither its facet count nor its volume.  Superseded by the Rev T3
+// master/seal shingle, which is generated from this source.  User decision
+// 2026-08-09; see TODO.md §1.1.3.)
+FLAP_PHI = PHI_CLOSED;   // [deg] flap swing angle for the asm preview
+
+// IRIS_NO_RENDER: set by derived files (nacelle_nozzle_iris_64mm.scad) that
+// render their own modified parts; undefined here, so 50 mm output is unchanged.
+if (is_undef(IRIS_NO_RENDER)) {
 if (RENDER_PART == "throat") {
     nozzle_throat_and_housing();
 } else if (RENDER_PART == "ring") {
     unison_ring();
 } else if (RENDER_PART == "flap") {
-    nozzle_flap();
+    nozzle_flap(seal = false);      // master flap — print x 4
+} else if (RENDER_PART == "flap_seal") {
+    nozzle_flap(seal = true);       // seal flap   — print x 4
 } else {
-    // asm — full closed-position assembly preview
+    // asm — full assembly preview at FLAP_PHI
     nozzle_throat_and_housing();
     unison_ring();
     for (i = [0 : N_FLAPS - 1]) {
         rotate([0, 0, i * 360 / N_FLAPS])
             translate([R_HINGE, 0, HINGE_Z])
-                // −PHI_CLOSED: the flap body extrudes +Z just inside R_HINGE, so a
+                // −FLAP_PHI: the flap body extrudes +Z just inside R_HINGE, so a
                 // POSITIVE tilt throws the tips radially OUTWARD (diverging).  The
                 // closed nozzle must CONVERGE (exit_r = R_HINGE − FLAP_LENGTH·sin φ
-                // = 18.75 < 27.5), so the assembly tilt is −PHI_CLOSED.  (Sign-bug
+                // = 18.75 < 27.5), so the assembly tilt is −FLAP_PHI.  (Sign-bug
                 // fix 2026-07-20; preview only — print parts are unaffected.)
-                rotate([0, -PHI_CLOSED, 0])
-                    nozzle_flap();
+                rotate([0, -FLAP_PHI, 0])
+                    // Rev T3: alternate flaps are seals, lapped outboard of the
+                    // masters so the 5 deg overlap is realisable instead of
+                    // interpenetrating (see FLAP_SHINGLE_GAP).
+                    nozzle_flap(seal = (i % 2) == 1);
     }
+}
 }

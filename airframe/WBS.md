@@ -1,8 +1,8 @@
 # Serenity UAV — Airframe (Hull-Frame Standard + Placeholders) Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Current design revision:** Rev S (2026-07-04)
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
+**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items
@@ -15,10 +15,15 @@
 
 ---
 
-**Cross-cutting system: Jayne (cargo handling)** — doors/winch/latch/gondola geometry is
-in [fuselage-mid/TODO.md](fuselage-mid/TODO.md) §1.1.1; the full Jayne subsystem map
-(vision/ToF/laser board, firmware, assembly, deferred range-extender battery) is in
-[avionics/jayne/TODO.md](../avionics/jayne/TODO.md).
+**Cross-cutting system: Observer (cargo handling)** — doors/winch/latch/gondola geometry is
+in [fuselage-mid/TODO.md](fuselage-mid/TODO.md) §1.1.1; the Observer subsystem map
+(vision/ToF/laser board, firmware, assembly, deferred range-extender battery) is tracked
+directly in [avionics/TODO.md](../avionics/TODO.md) and `avionics/WBS.md` — search those
+files for "Observer" — **not** in a separate `avionics/observer/` directory. (2026-09-28:
+this link previously pointed at `avionics/observer/TODO.md`, which does not exist and was
+never created; `docs/WBS_FEDERATION.md` still describes that split as planned. Corrected
+here to the file where the content actually lives; the federation doc has not been
+re-verified as part of this pass.)
 
 ---
 
@@ -53,17 +58,17 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     comment updated, SCAD build commands corrected (port: SWIRL_DIR=−1/PYLON_SIDE=−1,
     stbd: SWIRL_DIR=+1/PYLON_SIDE=+1), CLAUDE.md extents table corrected.
     *(done 2026-06-11)*
-- [x] **Re-verify head↔cargo joint bosses in hull Y. — RESOLVED 2026-07-27.** The joint
-    boss pins were REMOVED entirely 2026-07-06; the head/cargo joint is now made by the
-    internal bonded splice collar (`generate_conforming_collars.py`, Rev R3), which both
-    secures and aligns the sections. The head-aft mating face (a rounded closure still
-    capped on the published shell) and the middle-fwd face were opened by
-    `tools/open_mating_faces.py` (2026-07-27); the head/cargo mate plane moved to hull
-    Y = −72.95. All four sections + all three collars pass `validate_stls.py` watertight.
-    Historical notes below retained.
-    The 2026-06-10 joint analysis
-    used hull X as the longitudinal mating axis; in the validated frame the longitudinal
-    axis is Y (sections mate at hull Y ≈ −71 mm; X is lateral). Re-check
+- [x] **Re-verify head↔cargo joint bosses in hull Y.** **CLOSED 2026-08-23** — the
+    verification below completed 2026-06-29 and the underlying design was superseded
+    2026-07-06 (boss-pins removed entirely in favour of the splice collar), so the
+    checkbox was stale; the sub-notes already said so.  Re-confirmed before closing:
+    `verify_shells.py --published` returns ALL PASS on head and cargo (both watertight,
+    0 boundary, 0 non-manifold, 1 body), and no boss-pin bore is cut by either
+    `add_structural_features.py` or `merge_cargo_interior.py`.  The **head/cargo
+    printing blocker is lifted** — head/cargo alignment is carried by
+    `head_cargo_splice_collar.stl`, not by pins.  Original text: the 2026-06-10 joint
+    analysis used hull X as the longitudinal mating axis; in the validated frame the
+    longitudinal axis is Y (sections mate at hull Y ≈ −71 mm; X is lateral). Re-check
     BOSS_FORE/BOSS_AFT positions in `head_shell24.scad` / `cargo_sect_shell24.scad`
     against the baked meshes.
     - **Verification DONE 2026-06-29 (trimesh Y-cross-sections of the baked shells).**
@@ -111,9 +116,9 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     `s_cargo_sect_shell24_2mm_repaired.stl` and verify the belly faces hull −Z.
     **DONE 2026-06-16**: `generate_cargo_doors.py` rewritten for hull frame (Rev R1a).
     Belly faces detected by normal Z < −0.5.  Both doors watertight.
-- [x] **Correct hinge location: outboard flank, not centreline.** Rev R1a (above)
-    placed both doors' piano-hinge knuckles at the ship centreline X_CL (≈ −169.85 mm)
-    with the free edges at the hull sides — backwards from the door behaviour already
+- [x] **Correct hinge location: outboard flank, not centerline.** Rev R1a (above)
+    placed both doors' piano-hinge knuckles at the ship centerline X_CL (≈ −169.85 mm)
+    with the free edges at the hull sides — backwards from the door behavior already
     documented everywhere else in the repository (TODO.md §1.4.2, README.md, `rcrs49_wire_post.scad`),
     all of which describe the doors hinging at the **outboard flank/belly edge** and
     swinging **down and out from the aircraft, full 180° range of motion**, to open the
@@ -122,7 +127,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     outboard belly edge with its free edge at X_CL — see corner-curvature note below
     for why the hinge X is NOT the cargo-section bounding box (X_SHELL_MIN/MAX). Removed
     the port/stbd knuckle Y-interleaving (no longer meaningful — each door is now its
-    own independent piano hinge pinned to the fuselage, not a shared centreline hinge
+    own independent piano hinge pinned to the fuselage, not a shared centerline hinge
     joining the two panels). Knuckle Z is now sampled from the belly interpolator at
     each hinge X rather than a bare literal.
     - [x] **Fix door-surface discontinuity found during verification.** First Rev R1b
@@ -154,9 +159,12 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
         55.7×106.0×9.2 mm (hinge X ≈ −222.5 mm, hinge Z ≈ 5.22 mm); both verified as a
         single connected watertight body (`trimesh` `split()` → 1 body each).
     - [ ] **Verify cargo door fit in slicer** — open `cargo_door_port.stl` and
-        `cargo_door_stbd.stl` in slicer; confirm hinge knuckles align at X ≈ −117.6 mm
-        (port) and X ≈ −222.5 mm (stbd), free edges meet at X ≈ −169.85 mm, and panels
-        cover Y = 2..108 mm at Z ≈ 0..5 mm. Pay particular attention to the aft-outboard
+        `cargo_door_stbd.stl` in slicer; confirm hinge knuckles align at X ≈ −117.53 mm
+        (port) and X ≈ −222.68 mm (stbd), free edges meet at X ≈ −169.85 mm, and panels
+        cover Y = 2..108 mm at Z ≈ 0..5 mm (coordinates corrected 2026-09-21 — the doors
+        were regenerated against the current shell after many re-merges moved the
+        sampled belly surface; see the note after the 2026-06-29 cross-check below).
+        Pay particular attention to the aft-outboard
         corner of each door (Y → 108, near the hinge edge) — this is where the despike
         safety net (above) is masking real but algorithmically-unresolved hull
         curvature; confirm by eye it isn't flattened in a way that leaves a gap against
@@ -171,15 +179,27 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
             HULL_ATTACH_POS Y=25/100 boss-overlap check — the latter references the
             *retired* `landing_leg_assy.scad`; redo against the Rev R5 wire-brace hull
             bosses once those are finalized in the cargo shell (§1.1.4).
+        - **SUPERSEDED 2026-09-21 — the numbers above are the 2026-06-22 figures.**
+            The cargo shell has been re-merged many times since (Rev T5–T5f); a fresh
+            `generate_cargo_doors.py` run against the *current* shell found the belly
+            surface had shifted (hinge Z: port 5.11→3.00, stbd 5.22→3.49; hinge X:
+            port −117.6→−117.53, stbd −222.5→−222.68). Both doors and
+            `cargo_hinge_retention.stl` were regenerated and re-merged against the
+            current shell so the CF rod hinge pin actually aligns between the door
+            knuckles and the fixed retention bores — it did not, against what was
+            committed, before this fix. See `docs/CARGO_DOOR_LATCH_SPEC.md` §7a.
     - [ ] **Piano-hinge CF rod (×2, independent)** — verify 3 mm CF rod passes through
         each door's own 4 knuckle bores (3.15 mm bore) — port and stbd are now two
-        separate pins/rods, not one shared centreline pin; test in printed prototype
+        separate pins/rods, not one shared centerline pin; test in printed prototype
         before final assembly.
-        - **Geometry cross-check DONE 2026-06-29:** each door's 4 knuckle bores (Ø3.15)
+        - **Geometry cross-check DONE 2026-06-29 (RE-VERIFIED 2026-09-21 after the
+            hinge-coordinate correction below):** each door's 4 knuckle bores (Ø3.15)
             and the two Rev R1c shell-side retention-block bores (Ø3.3,
             `cargo_hinge_retention.stl`) are coaxial on the door's rod axis (port
-            X=−117.6/Z=5.11, stbd X=−222.5/Z=5.22), rod span Y +2..+108.  Printed-prototype
-            insertion test still required (physical).
+            X=−117.53/Z=3.00, stbd X=−222.68/Z=3.49 — was X=−117.6/Z=5.11,
+            X=−222.5/Z=5.22 before the 2026-09-21 re-merge, `docs/CARGO_DOOR_LATCH_SPEC.md`
+            §7a), rod span Y +2..+108. Printed-prototype insertion test still required
+            (physical).
     - [x] **Sync `cargo_sect_shell24.scad` hinge-pin blocks to the Rev R1b hinge lines.**
         **DONE 2026-06-29 (Rev R1c).**  The legacy `hinge_pin_block()` /
         `HINGE_Y`/`HINGE_Z` parameters describe a single shared hinge along the legacy
@@ -234,11 +254,44 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
         (battery_tray, belly_panel) and `nacelles/nacelle_servo_bracket.stl`; corrected
         the landing-gear feet/legs paths to the `landing-gear/` subdir (flagged RETIRED —
         Rev R5 wire-brace supersedes; hull placement is §1.1.4).
+    - **2026-08-23 — the cargo-bay envelope is now MEASURED, and placing the eight
+        cargo accessories is BLOCKED by a design conflict, not by missing data.**
+        New tool `tools/cargo_bay_envelope.py` measures the usable interior directly
+        from the published shell (per-station free X and Z spans, floor taken as the
+        crown of the *closed* clamshell doors, hull Z **+8.72**).  Two results:
+
+        1. **Usable envelope, hull frame.** Through the bay (Y +14…+116) the interior
+            is roughly **X −240…−100 (140 mm wide)** narrowing to ~123 mm at the aft
+            rim, **Z +10 up to +150…+161**.  The 140 mm lateral limit is set by the
+            interior wing-spar bosses and nacelle-servo pads at `PORT_INB` = −100 and
+            `STBD_INB` = −240, not by the skin — the skin is 170 mm apart there.  Any
+            accessory wider than 140 mm cannot sit at the spar station at all.
+        2. **The bay is crossed by the wing spar**, so the cradle and winch cannot be
+            placed until that is resolved — logged as **CARGO-01** in
+            `airframe/fuselage-mid/WBS.md` §1.1.1.2 with the measured clearances.
+            `cargo_cradle_autolatch` (110 × 80 × 72 mm), `cargo_winch_motor_mount`
+            and `cargo_winch_spool` all depend on the outcome, because CARGO-01's
+            candidate resolutions change the bay's clear volume.  The five remaining
+            accessories (FPV bezel, GPS ring, DRV8833 tray, two servo brackets) are
+            roof/wall-mounted, do not depend on CARGO-01, and are the ones to place
+            once it is settled.
+
+        Method note for whoever picks this up: a closed cavity solid does **not**
+        work here.  The bay is open at the belly aperture and at both mating rims, so
+        `outer − shell` returns a single region spanning the inside and the outside of
+        the ship; plugging the apertures one at a time does not converge, because the
+        spar bore, both wing mortises, the ring pockets and the four landing-gear bay
+        apertures are all through-holes as well.  Section-and-probe, as the tool does
+        it, is the approach that works.  Second trap: `trimesh` `Path3D.to_2D()`
+        returns the **2-D → 3-D** matrix; applying its inverse yields zero-area
+        polygons that read as "this shell has no cavity" rather than as an error.
+
     - **REMAINING (FreeCAD-manual, user step per CLAUDE.md):** visual fit-validation of
         the part-local items still placed by estimate (cargo mounts ×8, pylons, tip caps,
         dorsal antenna fin, battery tray/belly panel transforms) against the baked hull,
         then bake or commit final placements.  The assembly loading cleanly is the
-        prerequisite that was blocking this.
+        prerequisite that was blocking this; **CARGO-01 is now the second prerequisite
+        for the cargo-bay subset.**
 - [x] **Generate `battery_tray.stl` and `belly_panel.stl`** from their SCAD sources —
     **DONE 2026-06-29.**  Rendered from `airframe/openscad/fuselage/battery_tray.scad`
     and `belly_panel.scad` to `airframe/stls/fuselage/`.  Both watertight, single body
@@ -279,16 +332,16 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Servos (DS3218MG, SG90) | 2 | `airframe/placeholders/servos/` |
 | Bearings (MF104ZZ, MR63ZZ, 6804) | 3 | `airframe/placeholders/bearings/` |
 | Structural CF (rods, tube, bar, plate, PTFE) | 6 | `airframe/placeholders/structural/` |
-| Avionics PCBs (PB2-I, Cape-A-2/B-2, Emma, Kaylee, microSD) | 6 | `airframe/placeholders/avionics/` |
+| Avionics PCBs (PB2-I, Pilot/B-2, Commo, Flight Engineer, microSD) | 6 | `airframe/placeholders/avionics/` |
 | Power (LiPos, fuses, shunt) | 7 | `airframe/placeholders/power/` |
 | Cargo (STS3215, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` — N20 placeholder retired, STS3215 placeholder pending envelope |
 | Gears M=1.0 (sector, pinion, bevel, housing) | 4 | `airframe/placeholders/gears/` |
 | Hardware (pins, inserts, screws, straps, wire ring) | 6 | `airframe/placeholders/hardware/` |
 | Lighting (WS2812C SMD nav LED) | 1 | `airframe/placeholders/lighting/` |
 | Wiring (conduit, harnesses, antenna wire, posts) | 6 | `airframe/placeholders/wiring/` |
-| GCS / Malcolm (enclosure, BECs, antennas, tripod, encoders) | 15 | `airframe/placeholders/gcs/` |
+| GCS / Skipper (enclosure, BECs, antennas, tripod, encoders) | 15 | `airframe/placeholders/gcs/` |
 | Foam fill + interior voids (head/cargo/middle/rear fill; avbay, cargo bay, wiring trunk, power bus, ventilation, pylon pockets; Faraday cage pockets + vent duct spurs) | 13 | `airframe/placeholders/foam/` |
-| EMC / Faraday shielding (cage, gasket, fan, EMI vent, bond strap, feed-through panel, ferrite; Malcolm fan + gasket) | 9 (×2 STL files share gen_far_fan_40) | `airframe/placeholders/faraday/` |
+| EMC / Faraday shielding (cage, gasket, fan, EMI vent, bond strap, feed-through panel, ferrite; Skipper fan + gasket) | 9 (×2 STL files share gen_far_fan_40) | `airframe/placeholders/faraday/` |
 
 **Completed (2026-06-12):**
 - [x] **Generate all 65 component placeholder STLs** — `generate_placeholders.py` created;
@@ -297,7 +350,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
     component grid layout; run with `freecadcmd`. *(done 2026-06-12)*
 - [x] **Faraday shielding hardware** — 9 new generators; 11 new STL files in `airframe/placeholders/faraday/`:
     FAR-CAGE-AV (cage), FAR-GASKET-AV, FAR-FAN-40, FAR-EMI-VENT-40, FAR-BOND-STRAP,
-    FAR-FT-PANEL, FAR-FERRITE-4MM; MAL-FAR-FAN, MAL-FAR-GASKET (GCS).
+    FAR-FT-PANEL, FAR-FERRITE-4MM; SKIPPER-FAR-FAN, SKIPPER-FAR-GASKET (GCS).
     BOM entries added to `current-specification/bom_revR.csv`.
     **⚠ MASS NOTICE: Faraday aircraft system now 364 g (0.80 lbm) after
     ferrite reduction to 4/cage and 1 bond strap/cage. Full Rev R1 weight
@@ -394,8 +447,8 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Johnson's Paste Wax | 1 tin | Void former release agent (2 coats) |
 | 3M 4016 closed-cell gasket tape | 1 roll | Access panel frame lips |
 | PTFE tube 5mm OD × 3mm ID | 6 m | 8 conduits (CAN FD, RS-485, 1553A, 1553B, ETH×2, SERVO-PWR, MAIN-PWR) |
-| M2.5 nylon hex standoff 6mm | 16× | Cape-B floor mounts (4 per bay × 4 bays) |
-| M2.5 nylon hex standoff 20mm | 16× | Cape-A inter-cape spacing |
+| M2.5 nylon hex standoff 6mm | 16× | TACCO floor mounts (4 per bay × 4 bays) |
+| M2.5 nylon hex standoff 20mm | 16× | Pilot inter-cape spacing |
 | M2.5 × 8mm SS button screws | 64× | Standoff attachment + panel B/E fasteners |
 | M3 heat-set threaded inserts | 4× | Cargo gondola belly hard points |
 | N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |
@@ -413,7 +466,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | 50A 6S BLHeli32 ESC | 1× | ~$18–28 | Fuselage EDF; **Phase 11 deferred** |
 | Digital tilt servo ≥25 kg·cm @ 6V, metal gear | 2× | ~$20–30ea | Nacelle tilt; prefer 30+ kg·cm |
 | SG90 micro servo | 2× | ~$3ea | Nacelle nozzle ×2 (redundant) |
-| SG90-class proportional valve servo | 4× | ~$3ea | RCS bleed jets; **Phase 11 deferred** |
+| SG90-class proportional valve servo | 4× | ~$3ea | RCS bleed jets; **Phase 11 deferred**; hosted by the Phase 11 `GW-RCS` gateway (`docs/CARGO_DOOR_GATEWAY_SPEC.md` §9), not FC2 PWM |
 | MF104ZZ flanged bearing 4×10×4mm | 4× | ~$8 total | 2 per nacelle pivot |
 | 4mm OD CF rod (pivot) | 2× cut lengths | — | From 2.3 CF stock above |
 | Steel pushrod 2mm OD × ~60mm | 2× | ~$3 total | Longitudinal nozzle shaft per nacelle |
@@ -434,8 +487,8 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
 | STS3215 serial-bus servo | 1× | ~$25 | Winch drive (supersedes N20 DC motor) |
-| DRV8833 dual H-bridge driver | 1× | ~$2 | |
-| SG90 servo | 2× | ~$6 | Door actuator + payload release |
+| ~~DRV8833 dual H-bridge driver~~ | 0× | — | RETIRED 2026-09-21 — servos are gateway-driven |
+| SG90 servo | 3× | ~$9 | Port door + stbd door + payload release, on `CAN-PERIPH-GW-DOOR` (`docs/CARGO_DOOR_GATEWAY_SPEC.md`, 2026-09-21) |
 | Dyneema SK75 0.5mm braid | 2 m | ~$4 | Winch line |
 | 3mm CF rod | ~60 mm | — | Clamshell door hinge pin |
 | Closed-cell foam gasket tape | — | — | Gondola-to-hull perimeter seal |

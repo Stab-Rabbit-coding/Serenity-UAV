@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "SecureControllers")(type "KiCad")(uri "${SECURE_CONTROLLERS_LIB}/SecureControllers.kicad_sym")(options "")(descr "Shared datasheet-verified symbols (SecureControllers repo, kicad/libraries)"))
+)

@@ -1,0 +1,26 @@
+{
+  "categories": [
+    {
+      "counts": {
+        "ERROR": 1,
+        "WARNING": 1
+      },
+      "name": "thermal_safety",
+      "pretty_name": "Thermal Safety"
+    },
+    {
+      "counts": {
+        "INFO": 1
+      },
+      "name": "thermal_proximity",
+      "pretty_name": "Thermal Proximity"
+    },
+    {
+      "counts": {
+        "INFO": 1
+      },
+      "name": "thermal",
+      "pretty_name": "Thermal"
+    }
+  ]
+}

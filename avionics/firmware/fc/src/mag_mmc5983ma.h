@@ -4,10 +4,10 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Copyright 2026 Steve Griffing
- * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
  *
  * Drives the MEMSIC MMC5983MA 3-axis magnetometer via Linux userspace
- * i2c-dev.  Used by serenity-fc on Wash (EMI-hardened variant).
+ * i2c-dev.  Used by serenity-fc on Pilot (EMI-hardened variant).
  *
  * ── Device Overview ───────────────────────────────────────────────────────
  *
@@ -15,7 +15,7 @@
  * It provides 18-bit resolution per axis via a split 8+8+2 register scheme,
  * and includes internal SET/RESET coils for bridge sensitivity refresh.
  *
- *   I2C address      : 0x30 (SA0 tied to GND on Wash; SA0 = 1 → 0x31)
+ *   I2C address      : 0x30 (SA0 tied to GND on Pilot; SA0 = 1 → 0x31)
  *   Supply voltage   : 1.71–3.6 V (I/O), 1.71–1.89 V (VDD) typical
  *   Full-scale range : ±8 G (fixed)
  *   Resolution       : 18-bit (4 mG / LSB at full-scale center)
@@ -63,7 +63,7 @@
  *
  * ODR and bandwidth are configured via CTRL0 (0x09), CTRL1 (0x0A), and
  * CTRL2 (0x0B).  This driver initialises to:
- *   BW  = 100 Hz bandwidth (fastest settling, matches QMC5883L on Cape-A-1)
+ *   BW  = 100 Hz bandwidth (fastest settling, matches QMC5883L on Pilot)
  *   ODR = 100 Hz continuous measurement
  *   CMM_freq_en = 1, Take_meas_M = 1 (enable continuous measurement)
  *
@@ -94,7 +94,7 @@ extern "C" {
  * Device constants
  * ---------------------------------------------------------------------------*/
 
-/** I2C bus address with SA0 = 0 (Wash hardware strapping). */
+/** I2C bus address with SA0 = 0 (Pilot hardware strapping). */
 #define MMC5983MA_I2C_ADDR       (0x30U)
 
 /** Product ID register value that confirms MMC5983MA identity. */

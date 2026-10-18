@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- License: CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0). © 2024–2026 Steve Griffing (Stab-Rabbit-coding), Serenity UAV Project. -->
 <!-- Serenity-Class Tiltrotor UAV — Build Guide — Step 14 — Antennas -->
 <!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
 <!-- Hull: misubisu CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
@@ -58,7 +59,7 @@
 <text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install SMA-RP bulkhead in flush cutout at belly port, sta 260mm</text>
 <circle cx="776" cy="323" r="9" fill="#006db7"/>
 <text x="776" y="327" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
-<text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Thread SiK 915MHz antenna to SMA-RP (belly port) · route coax to CAPE-B-1</text>
+<text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Thread SiK 915MHz antenna to SMA-RP (belly port) · route coax to TACCO</text>
 <circle cx="776" cy="347" r="9" fill="#006db7"/>
 <text x="776" y="351" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
 <text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install GPS 25×25mm patch in recess at mid-fuselage dorsal, sta 140mm</text>

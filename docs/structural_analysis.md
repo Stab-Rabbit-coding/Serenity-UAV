@@ -2,18 +2,18 @@
 
 **Revision:** R1 (2026-06-14)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 **Standards and regulatory references:**
 
 | Reference | Role in This Analysis |
 | --- | --- |
 | ASTM F2910-14 [ASTM F38] | Primary design specification for sUAS construction. Used as design intent reference; formal compliance matrix is a pre-certification task (see §9). |
-| ASTM F3264-18 [ASTM F44] | Normal category aeroplane airworthiness. The 1.5× ultimate/limit load factor methodology (cf. 14 CFR Part 23.303) is adapted here as a conservative engineering baseline. This is NOT a compliance claim — F3264 applies to manned aircraft. |
+| ASTM F3264-18 [ASTM F44] | Normal category aeroplane airworthiness. The 1.5× ultimate/limit load factor methodology (**14 CFR §23.2230** [REF-FAA-004] — *corrected 2026-08-29 from "Part 23.303", which belonged to the pre-2017 Part 23 and does not exist in the current rule*) is adapted here as a conservative engineering baseline. This is NOT a compliance claim — F3264 applies to manned aircraft, and Part 23 is an adopted baseline, not Serenity's certification basis. |
 | 14 CFR Part 107 | FAA Small UAS operating rules. Defines the legal operational envelope (altitude, VLOS, pilot certification, registration, lighting). Structural requirements are not in Part 107; this is cited for operational context only. |
 | ISO 21384-1:2022 | UAS general requirements standard. Cited as design intent; ISO 21384-1 compliance review is a pre-certification task. |
 | IEEE 1936.1-2021 | Drone applications framework (operational category classification). Referenced for operational envelope classification; does not provide structural load data. |
-| Commercial CF product data | CF structural members (keel bar, boss pins, ring frames, skid rods) are commercial pultruded carbon fibre stock. σ_u ≈ 1 500 N/mm² (1 500 MPa) used here is a conservative estimate typical of unidirectional pultruded CF rod/flat bar. **Supplier test certificates (ASTM D3039 tensile, ASTM D695 compressive) must be obtained and verified before fabrication.** |
+| Commercial CF product data | CF structural members (keel bar, boss pins, ring frames, skid rods) are commercial pultruded carbon fiber stock. σ_u ≈ 1 500 N/mm² (1 500 MPa) used here is a conservative estimate typical of unidirectional pultruded CF rod/flat bar. **Supplier test certificates (ASTM D3039 tensile, ASTM D695 compressive) must be obtained and verified before fabrication.** |
 | West System 105/206 TDS | Epoxy bond properties. Specific values (bond shear strength, cure time, mix ratio) from the published West System technical data sheet. |
 
 ---
@@ -31,8 +31,21 @@ All measurements are imperial-primary with metric in parentheses per AGENTS.md c
 
 ## 2. Aircraft Mass Budget (Phase 5–10)
 
-Total static thrust: 4× nacelle × 2232 gf = 8928 gf = **19.68 lbf (87.5 N)**.
-Design T/W = 1.19 → AUW = 87.5 / 1.19 = **73.5 N (7.49 kgf / 16.5 lbm)**.
+> **Correction (2026-08-22, TODO.md §0.10.1):** this section previously double-counted
+> thrust — there are **2** nacelles (port + starboard), each already representing the
+> 2232 gf tandem-EDF-pair figure, not 4. The corrected total below drops AUW from a
+> fabricated 16.5 lbm to ≈8.27 lbm — closer to, but not identical to, the BOM-derived
+> Phase 5–10 AUW of ~8.62 lbm (3,911 g) established in `README.md`/`airframe/README.md`
+> (this section's AUW is a design-margin back-calculation, not a BOM sum — the two
+> should agree within rounding once both are current). **Every load case, margin, and
+> FOS number in §3 through §7 below was computed from the old, doubled mass budget and
+> has not yet been re-derived from the corrected baseline — treat them as stale until
+> re-verified.** Since the true mass is lower than what was analyzed, the existing
+> numbers are likely conservative (understating margin), not unsafe, but they should
+> not be cited as current until recomputed.
+
+Total static thrust: 2× nacelle × 2232 gf = 4464 gf = **9.84 lbf (43.79 N)**.
+Design T/W = 1.19 → AUW = 43.79 / 1.19 = **36.8 N (3.75 kgf / 8.27 lbm)**.
 
 Shell material volume and mass (CF-PETG, ρ = 1.27 g/cm³):
 
@@ -53,10 +66,21 @@ weight-reduction pass that yields T/W ≈ 1.19 per TODO.md §1.1.5.
 ## 3. Design Load Cases
 
 All sizing uses a 2.0× design factor (loads × 2.0g) with an additional 1.5× safety factor
-where specified.  Load factor methodology is adapted from 14 CFR Part 23.303 (ultimate
-load = 1.5 × limit load) as a conservative engineering baseline.  Joint FOS target of 4.0
-is a design-team judgment value; no published FDM-specific knockdown factor standard
-exists for CF-PETG at the time of writing.  CF structural member (keel bar, boss pins,
+where specified.  Load factor methodology is adapted from **14 CFR §23.2230**
+[REF-FAA-004] (ultimate load = 1.5 × limit load) as a conservative engineering baseline.
+*(Corrected 2026-08-29: this previously cited "14 CFR Part 23.303", a pre-2017 section
+number removed by the Amdt. 23-64 restructure — same class of stale citation as the
+§23.1401 case already recorded in REFERENCES.md.)*
+
+Joint FOS target of 4.0 remains a design-team judgment value, and no published
+FDM-specific knockdown-factor standard exists for CF-PETG at the time of writing —
+but it now has a citable regulatory basis rather than resting on judgment alone.
+**14 CFR §23.2265** [REF-FAA-004] requires a *special* factor of safety beyond the
+basic 1.5 for any part "subject to appreciable variability because of uncertainties in
+manufacturing processes or inspection methods", and FDM-printed polymer structure —
+layer adhesion, raster orientation, moisture uptake, machine-to-machine variation — sits
+squarely in that clause.  The *requirement* for an extra factor is cited; its numeric
+value (4.0) stays this project's own choice.  CF structural member (keel bar, boss pins,
 ring frames, skid rods) material allowable σ_u = 1 500 N/mm² is an estimate for
 commercial unidirectional pultruded CF stock; supplier test certificates are required
 before fabrication (see §2 References).
@@ -97,7 +121,7 @@ Vertices sampled at X = −170 ± 3 mm (hull centerline):
 The middle section's outer *horseshoe ring* is open at −Z (ventral) for 73 mm (hull
 Y +130 → +203 mm), so there is no belly floor at the keel's low-Z level to bond to.
 **Note (2026-06-29):** the middle is NOT only the open horseshoe — it also carries the
-**closed inner-neck tube** running the full length along the centreline (X ≈ −170 mm),
+**closed inner-neck tube** running the full length along the centerline (X ≈ −170 mm),
 connecting the cargo-bay interior to the rear engine-room interior (see §7.3 and AGENTS.md).
 The keel passes *through* this closed neck, so "held by foam alone" is a worst-case
 assumption: **bonding the keel to the inner-neck wall is an available hard load path**
@@ -120,7 +144,7 @@ mid-span attachment needed.
 
 **Selected: segmented lap-splice flat bar.**
 
-Two straight segments of CF-BAR-6X3 (carbon fibre flat bar, 6 mm wide × 3 mm thick):
+Two straight segments of CF-BAR-6X3 (carbon fiber flat bar, 6 mm wide × 3 mm thick):
 
 | Segment | Hull Y range | Length |
 | --- | --- | --- |
@@ -145,7 +169,7 @@ Y ≈ +30 mm to head/cargo joint Y ≈ −71 mm, arm L = 101 mm):
 Head section mass (forward of wing station):  m_fwd ≈ 237 g (shell) + ~300 g (avionics, wiring) ≈ 537 g
 2g load:  F = 2 × 0.537 × 9.81 = 10.5 N
 Bending moment at wing station:  M = F × L = 10.5 × 101 = 1061 N·mm
-Extreme fibre stress:  σ = M × c / I = 1061 × 3 / 54 = 58.9 N/mm²
+Extreme fiber stress:  σ = M × c / I = 1061 × 3 / 54 = 58.9 N/mm²
 CF tensile strength:  σ_u = 1500 N/mm²
 FOS = 1500 / 58.9 = 25.5  ✓  PASS (>1.5 required)
 ```
@@ -167,7 +191,7 @@ At 49 MHz (λ = 6.12 m), a 455 mm bar is λ/13 — well below a useful counterpo
 
 Counterpoise: WIRE-COUNTERPOISE-49MHZ, AWG 22 stranded copper (< 2 g), λ/4 = 1.53 m,
 dressed alongside the keel in the wiring trunk (PTFE conduit), bent and routed as needed.
-Emma/XCVR antenna designs should reference this counterpoise wire, not the CF bar.
+Commo/XCVR antenna designs should reference this counterpoise wire, not the CF bar.
 
 ### 4.5 Keel Locating Channel (implemented in shells)
 
@@ -250,9 +274,9 @@ plate DXF:
 1. Import CSV into FreeCAD (Spreadsheet workbench → Draft → Import Points).
 2. Create a closed wire from the points (BSpline or polyline).
 3. Add 3 mm clearance offset outward (so ring can be inserted without force-fitting).
-4. Add keel-bar notch: 3.5 mm wide × 6 mm deep slot centred at X = −170 mm, Z_bottom.
+4. Add keel-bar notch: 3.5 mm wide × 6 mm deep slot centered at X = −170 mm, Z_bottom.
 5. Export as DXF to `airframe/diagrams/ring_frames/`.
-6. Water-jet or CNC-cut from 2 mm carbon fibre plate stock (CF-PLATE-2MM BOM item).
+6. Water-jet or CNC-cut from 2 mm carbon fiber plate stock (CF-PLATE-2MM BOM item).
 
 ### 5.5 Ring Pocket Features (implemented in shells)
 
@@ -262,15 +286,41 @@ See §7 for the exact cutter geometry applied to each shell.
 
 ### 5.6 BOM and Build Guide (Step 5)
 
+**SUPERSEDED 2026-08-25 (U4, SPAR-01) — the cargo Y=+30 ring is retired, not
+finalized.** §1 and §5.1's own load-station table already anticipated this
+station's job (anti-ovalisation at the spar pin), but the wing-root repair
+plan (`docs/plans/2026-08-24-001-fix-wing-repair-root-joint-plan.md`) found
+the load itself had changed: the spar no longer carries through the
+fuselage (SPAR-01, `airframe/wings-nacelles/WBS.md` §1.1.2), and this
+station's own bottom chord is cut away by the clamshell aperture (a
+three-sided frame, not a ring — see that WBS.md's SPAR-01 finding 3), so it
+never actually closed the couple it was sized for. Two new CF thwarts (fore
+Y −40, aft Y +118, same 2 mm CF-PLATE-2MM stock and locating-groove pattern
+as this section) replace it — sized and re-verified in
+`tools/wing_spar_carrythrough.py`'s `report_thwart()` (FOS 8.5/8.7 against
+the same conservative 300 MPa stand-in this section used) and cut in
+`add_structural_features.py` `RING_POCKETS["cargo_Yn40"]`/`["cargo_Y118"]`.
+The cargo_Y30 pocket is gated off in `merge_cargo_interior.py`
+(`RING_Y30_ENABLED = False`), not deleted — its own DXF was already
+PROVISIONAL (§5.4, blocked on the MESH-01 fragmented-mesh defect), so no
+finalized part is lost by retiring it.
+
 CF-PLATE-2MM notes update:
-- Station count: 2 (down from 5 estimated pre-Rev N)
-- Hull-Y positions: +30 mm (cargo, wing spar zone), +290 mm (rear, landing zone)
-- Ring types: both full closed rings
-- Estimated mass: 2 × (176 × 158 × 2 mm³ × 1.6 g/cm³ × 0.85 fill factor) ≈ 2 × 150 g = **300 g (10.6 oz)**
-  (fill factor 0.85 accounts for outer profile vs bounding rectangle)
+
+- Station count: 3 total tracked (2 active + 1 retired) — active: cargo
+  Y −40 mm (fore thwart) and Y +118 mm (aft thwart); retired: cargo Y +30 mm
+  (superseded above); unchanged: rear Y +290 mm (landing zone, still active)
+- Ring types: rear Y +290 remains a full closed ring; the two thwarts are
+  narrower bands (2 × 25 mm CF plate section, not a full-profile plate) —
+  see `wing_spar_carrythrough.py` `report_thwart()`, not the §5.2/§5.3
+  full-ring-profile method (that method still applies unchanged to Y +290)
+- Estimated mass: thwart pair ≈ 28 g (0.062 lbm) combined (2 × 14 g,
+  `wing_spar_carrythrough.py`), replacing the retired Y +30 ring's
+  ~78 g estimate (§5.1/WBS.md SPAR-01) — a net saving of ≈50 g (0.11 lbm)
+- Y +290 rear ring: unchanged from this section's original figures
 
 `REVN_BUILD_GUIDE_24IN.md` keel datum table: replace stale 91/165/251/320/388 mm
-stations with the new hull-Y ring stations +30 mm and +290 mm.
+stations with the new hull-Y ring/thwart stations −40 mm, +118 mm, and +290 mm.
 
 ---
 
@@ -352,7 +402,7 @@ FOS = 205  ✓  PASS  (extreme margin; CF-ROD-4MM is more than adequate as tie-r
 Bore depth: 30 mm into EACH section (middle + rear) = 60 mm total rod engagement.
 CF rod length: 62 mm per skid arm (allowing 1 mm insertion clearance each end).
 
-Bore centres (hull frame, Y-axis aligned):
+Bore centers (hull frame, Y-axis aligned):
 
 | Skid | X_bore (mm) | Z_bore (mm) | Y range (mm) |
 | --- | --- | --- | --- |
@@ -360,6 +410,128 @@ Bore centres (hull frame, Y-axis aligned):
 | Stbd | −135.0 | 20.0 | +173 → +233 |
 
 Bore diameter: 4.2 mm (CF rod 4.0 mm OD + 0.1 mm clearance each side).
+
+### 6.4 Re-derivation against a nose-high/asymmetric strike (2026-08-25)
+
+*(Owner-directed: "canonically [the skids are] part of the propulsion
+system, not landing gear, but they'll be the first things hitting if the
+aircraft lands nose high." §6.2's own case is symmetric-only — both skids
+sharing the load, wings level — and never covered a single-skid-first
+touchdown. This unit re-derives §6.2 with the corrected AUW first, since
+§2's own 2026-08-22 note already flags every number in §3–§7 as computed
+from a stale, doubled mass budget, then adds the case §6.2 never had.)*
+
+**Mass basis:** the owner directed using the **Phase 11 (full system) AUW,
+4,273 g (9.42 lbm, `README.md`)** for this re-derivation specifically, so it
+does not need re-deriving again once the aircraft reaches its final,
+heaviest configuration. Total weight W = 4.273 kg × 9.80665 m/s² = **41.90 N**.
+This supersedes §2's own Phase 5–10 corrected figure (36.8 N) *for this
+section only* — §2 stays as the Phase 5–10 basis for the rest of this
+document; do not silently propagate the Phase 11 figure elsewhere.
+
+**Geometry re-measured directly from the published STL, not assumed.** §6.1's
+"low-Z vertices" survey and §6.2's "approx 76 × 23 mm²" box-shell estimate
+both predate this re-derivation and are **superseded by direct measurement**
+below — they were never geometrically verified against a specific cross-
+section, and the direct measurement found meaningful discrepancies with
+both.
+
+Sectioning `rear_shell24_2mm_repaired.stl` at 8 mm Y-intervals from the
+middle/rear joint (Y = 204) to the tip (Y = 384) and identifying the two
+discrete inner/outer loop pairs (not the whole-hull cross-section, which
+also spans this X range and can be mistaken for the skid at a glance):
+
+- The skid arm is a genuinely separate, thin-walled cantilevered tube only
+  from roughly **Y ≈ 250 onward** to the tip — consistent with §6.2's
+  177 mm moment-arm assumption (tip-to-joint), which this re-derivation
+  therefore keeps.
+- Measured outer cross-section near the tip: **≈ 24 mm (X) × 23 mm (Z)**,
+  wall thickness ≈ 2 mm, material (annulus) area ≈ 138 mm² — matching
+  independently via both a direct polygon slice and a `trimesh.split()`
+  body-area check. **This is roughly 3× narrower than §6.2's assumed
+  76 mm width** (76 was never a measurement; the "approx" in §6.2's own
+  text was accurate self-disclosure).
+- Approximated as a thin rectangular tube (24 × 23 mm outer, 2 mm wall) for
+  a bending second moment of area about the horizontal (X) axis:
+  `I = (24×23³ - 20×19³)/12 ≈ 12,900 mm⁴` — this **replaces** §6.2's
+  `I_PETG ≈ 438,080 mm⁴` box-shell estimate, which used the wrong width.
+
+**Independent finding, FIXED 2026-08-25 — the CF rod did not run through the
+measured skid tube.** Probing `X = -202, Z = 18` (the previously documented/
+bored station, §6.3) against the sectioned loops at Y = 210 (inside the
+bore's own Y-range, 173–233): the nearest material was the **main horseshoe
+ring's own wall**, 2.09–3.46 mm away — the discrete skid tube (centered ≈
+X = -224 at this Y) was 13.17 mm away, outside the bore's clearance
+entirely. **Root cause found and corrected** (`LG-26`,
+`airframe/landing-gear/WBS.md`): the tube's own hollow-cavity centerline was
+re-measured continuously across its full span (`middle_shell24_2mm_
+repaired.stl` Y=188–202, `rear_shell24_2mm_repaired.stl` Y=208–233 — it is
+not yet a separate feature below Y≈188), and `SKID_ROD_BORES` in
+`add_structural_features.py` re-sited to it: port moved to (-223.7, 18.5),
+stbd to a deliberate compromise center (-122.0, 19.0) since stbd's measured
+centerline has a genuine ~10 mm discontinuity at the print-split joint too
+large for one straight rod to stay centered on both sides. Both shells
+re-verified: `tools/validate_stls.py` 61/61 PASS, and the bore's nearest
+material at 8 sampled stations per side is now 2.09–7.03 mm (was 13+ mm
+everywhere) — the bore is inside the tube's cavity, not the ring wall, at
+every checked station. The stbd compromise is a real improvement, not a
+perfect fit; a slicer/test-fit check before fabrication is still warranted,
+and building the rod as two independently-anchored segments (rather than one
+straight rod) remains an option if the compromise proves inadequate — see
+LG-26.
+
+**Allowable:** **54 MPa (ASTM D790 three-point flexural strength, unreinforced
+PETG, REF-MAT-002)** — superseding this section's initial use of REF-MAT-001's
+48.41 MPa tensile strength as a bending proxy. REF-MAT-002 (added 2026-08-25,
+`REFERENCES.md`) is a genuine flexural test (the correct test type for this
+failure mode), not a proxy, and its 50 MPa ANSYS FEA cross-check for pure
+PETG (7.4% error vs. the 54 MPa experimental figure) supports citing it with
+confidence. **What it does not resolve:** no print-orientation-specific data
+(loading axis vs. layer-stack axis) exists in this source either — its own
+conclusions cite "anisotropic fibre orientation" as a source of nonlinearity
+but give no interlayer/Z-axis strength figure, and this repo has no record of
+the rear shell's actual print orientation. Treat the FOS figures below as
+upper bounds pending (a) confirmation the skid tube's bending axis sees the
+tested (in-plane) direction rather than the weaker interlayer direction, and
+(b) a coupon test of the actual tube geometry, not a bulk bar/dog-bone.
+
+**Load cases** (2.5 g factor per §3's existing "hard landing (vertical)"
+convention — kept, not re-derived, since no bound on nose-high pitch angle
+or sink rate exists anywhere in this repo's flight-envelope docs to justify
+a different factor). With the rod now geometrically coupled to the tube (the
+fix above), its stiffness share is credited via a simple parallel-EI split
+(`EI_skin = E·I_skin`, `EI_rod = 135,000 MPa × 12.57 mm⁴` for the solid
+4 mm CF rod) instead of assuming it carries zero load:
+
+| Case | Skin material (flexural) | F | M = F × 177 mm | Skin share of M | σ = M·c/I (c = 11.5 mm) | FOS |
+| --- | --- | --- | --- | --- | --- | --- |
+| Symmetric flat landing | plain PETG, 54 MPa / 2.76 GPa | 52.4 N | 9,275 N·mm | 94.1% | 7.78 MPa | **6.94 — PASS** |
+| Nose-high, single skid | plain PETG, 54 MPa / 2.76 GPa | 104.75 N | 18,541 N·mm | 94.1% | 15.55 MPa | **3.47 — still below the 4.0 target** |
+| Nose-high, single skid | **20% CF-PETG, 77 MPa / 6.67 GPa (REF-MAT-002 Table 4)** | 104.75 N | 18,541 N·mm | 98.1% | 16.20 MPa | **4.75 — PASS** |
+| Symmetric flat landing | 20% CF-PETG, 77 MPa / 6.67 GPa | 52.4 N | 9,275 N·mm | 98.1% | 8.11 MPa | **9.49 — PASS** |
+
+**Conclusion.** The rod-siting fix alone is not enough to close the nose-high
+gap: a solid 4 mm CF rod is too slender to meaningfully stiffen even this
+thin shell (it carries only ~2–6% of the moment once actually coupled), so
+correcting its position improves plain-PETG FOS only from 3.27 to 3.47 —
+real, but short of the 4.0 target. **What closes it is the material switch**
+(owner-directed, 2026-08-25): specifying 20% CF-PETG for the rear (and
+middle) fuselage skin, per REF-MAT-002's measured 77 MPa flexural strength /
+6.67 GPa flexural modulus at that fiber fraction, gets to FOS 4.75. This is
+fiber-fraction-specific — REF-MAT-002's own data shows **10% CF-PETG is
+*worse* than plain PETG** (43 MPa flexural, likely poor fiber-matrix cohesion
+at low loading) and that a nominal 30% blend (80 MPa/7.01 GPa) was the
+paper's own custom lab specimen, not a normal retail product — so the BOM
+and every citation must say **20% CF**, not a bare "CF-PETG" that could be
+read as any fraction. 20% was selected over the paper's stronger 30% figure
+specifically because a genuine, explicitly-labeled 20%-CF filament is a real,
+verifiable commercial product ("3D Maker Engineering" PETG-CF Pro Series,
+confirmed via direct vendor-page quote), whereas a true 30%-CF retail
+filament could not be verified to exist. See the BOM/material-spec update
+this drove (`current-specification/bom_revS.csv`, `REFERENCES.md`
+REF-MAT-002). The symmetric case was never actually a concern (FOS 6.94–9.49
+across all variants checked here) — it's included for completeness, not
+because it was ever in doubt.
 
 ---
 
@@ -385,7 +557,7 @@ Boss pin specification:
 
 ### 7.2 Boss Pin Positions (hull frame)
 
-Pins are positioned on an r = 35 mm circle centred on the joint cross-section centroid,
+Pins are positioned on an r = 35 mm circle centered on the joint cross-section centroid,
 at 0°/120°/240° (top / lower-stbd / lower-port pattern).
 
 **Joint 1: Head/Cargo — hull Y = −71 mm**
@@ -456,18 +628,20 @@ hull Y = −71, arm to head CG = 86 mm, ultimate = limit × joint-FOS 4.0:
 | 9g crash × 1.5 | 13.5g | 78 N | 6 712 N·mm |
 
 The joint ring (perimeter ≈ 350 mm, t = 2 mm) has S_x ≈ 7 000–10 000 mm³, so even the
-9 g crash moment gives a peak fibre stress **M/S ≈ 0.7 MPa** — far below the CF-PETG and
-epoxy allowables (≈ 5 MPa for the PETG-bond-limited case).  **The joint is not
-strength-limited.**  What is actually required is peel resistance, alignment, and
+9 g crash moment gives a peak fiber stress **M/S ≈ 0.7 MPa** — far below the CF-PETG and
+epoxy allowables (≈ 5 MPa for the PETG-bond-limited case; this figure predates any cited
+source and is carried here as the repository's conservative working placeholder for a
+bonded/adhesive-limited joint — **REF-MAT-001** (`REFERENCES.md`) now provides a real,
+peer-reviewed ASTM D695 *bulk compressive* figure for 20 %-CF-PETG, ≈47–60 MPa, an order
+of magnitude above this placeholder, but bulk compression is not the bond/peel mode this
+figure is meant to bound, so it does not replace it here — see REF-MAT-001's own entry for
+what it does and does not cover).  **The joint is not strength-limited.**  What is actually required is peel resistance, alignment, and
 anti-ovalisation of the thin section, plus the AGENTS.md fabrication standard's
 "minimum 2-wall contact annulus and positive-stop shoulder."
 
 **Design — internal bonded splice collar (`PRINT-HEAD-CARGO-COLLAR`).**  A printed
-CF-PETG ring generated by `airframe/stls/fuselage/generate_conforming_collars.py`
-(Rev R3): profile = the intersection of the head-lap and cargo-lap inner cavities
-(each the running intersection of the section's cavity over its 8 mm insertion span),
-inset 1 mm (BOND_GAP), 2 mm wall, 8 mm into each section (hull Y −80.9..−61.5, ~14.4 g).
-It:
+CF-PETG ring, profile = the head inner-wall contour at Y = −79 mm inset 2 mm, 2 mm wall,
+L = 16 mm (8 mm into each section), centered on the joint (hull Y −79..−63).  It:
 
 - turns the peel-loaded butt joint into a **shear-loaded bonded double-lap** — the head
   skin, the collar, and the cargo skin form a continuous 2-wall contact annulus over the
@@ -476,20 +650,17 @@ It:
 - the closed ring **stiffens the joint cross-section** (anti-ovalisation).
 
 Bond: West System 105/206 thickened with 406 colloidal silica — a structural bonded
-doubler designed to bridge the 1–2 mm bondline (the collar has a 1 mm slip-fit clearance
-so it inserts past the section taper; the collar itself pilots the sections concentric).
-Bonded double-lap shear area ≈ 350 mm × 8 mm × 2 sides ≈ 5 600 mm²; the worst-case bending
-couple tension (~125 N over a ~54 mm lever) gives a bond shear < 0.05 MPa → **FOS > 100 on
-the bond**; the collar is sized by handling/printability (~14.4 g), not stress.
+doubler designed to bridge the 1–2 mm bondline (the collar is intentionally 2 mm clear of
+the skin so it inserts cleanly past the bore-opened aft face and the section taper; the
+boss dowel pins do the concentric piloting).  Bonded double-lap shear area ≈ 350 mm × 8 mm
+× 2 sides ≈ 5 600 mm²; the worst-case bending couple tension (~125 N over a ~54 mm lever)
+gives a bond shear < 0.05 MPa → **FOS > 100 on the bond**; the collar is sized by
+handling/printability (~13.4 g), not stress.
 
-Geometry verified watertight, single body, spanning both open sections
-(`generate_conforming_collars.py`, Rev R3).  **The joint boss pins were REMOVED entirely
-2026-07-06** (not re-roled) — the splice collar provides both securing AND alignment.
-**The head aft mating face was a rounded closure still capped on the published shell; it was
-opened to a full bore by `tools/open_mating_faces.py` (2026-07-27), moving the mate plane
-inboard to hull Y = −72.95.**  Residual `collar∩head` = 87 mm³ (a thin near-face
-wall-contact band eased with a light chamfer of the collar ends at bond-up).  Cargo/Middle
-(Joint 2) and Middle/Rear (Joint 3) use the same generator and method.
+Geometry verified watertight and clearing the head inner wall over the bonding span
+(`generate_head_cargo_splice_collar.py`).  The **3 boss dowel pins are retained for
+registration only** (re-roled from "structural").  Cargo/Middle (Joint 2) and Middle/Rear
+(Joint 3) require the same first-principles treatment — see TODO.md §1.1.1.0b.
 
 ### 7.4 Cargo/Middle Joint — Splice Collar (Rev R1, 2026-07-03)
 
@@ -502,14 +673,13 @@ does not begin until further aft (multiple separated loops appear only past hull
 Y ≈ +175 mm).  **A full-perimeter ring collar is feasible here**, exactly as at the
 head/cargo joint.
 
-**MESH-01 — RESOLVED 2026-07-27.** `airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl`
-is now watertight (single body, 0 boundary / 0 non-manifold edges, identical volume
-298 576 mm³), fixed by the weld+clean finalization added to `merge_cargo_interior.py`
-(`--repair-only`).  The cargo-side fit is therefore now verified directly by the
-`generate_conforming_collars.py` boolean over the true bonding span (residual
-`collar∩cargo` = 377 mm³, a thin near-face contact band).  The middle-fwd mating face,
-which the published shell still carried as a closure cap, was opened by
-`tools/open_mating_faces.py` (`collar∩middle` = 0 mm³ afterward).
+**MESH-01 caveat.** `airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl` is
+not watertight as of this writing (TODO.md MESH-01; 41 disconnected bodies), and the defect
+band overlaps this collar's cargo-side bonding span (hull Y +123.7..+139.7).  The nearest
+clean cargo station (Y = +122 mm) is used below as a size sanity check only, not a true
+fit verification over the cargo-side bonding span; re-verify once MESH-01 is resolved for
+cargo. The MIDDLE shell is fully watertight (single body) and its side of the fit is
+verified directly.
 
 **Load check.** This joint is a fabrication split, but not load-free: everything aft of it
 (middle shell + rear shell + avionics/wiring, using the same "~300 g avionics per section"
@@ -526,13 +696,13 @@ Arm = half the aft-of-joint fuselage length (uniform-distributed-load convention
 
 Real section modulus computed from the digitized middle profile at Y = +137 mm (thin-wall
 line integral about the lateral bending axis, wall t = 2 mm): perimeter 454 mm,
-S_x = 31 984 mm³.  Peak fibre stress at 9g crash = 20 260 / 31 984 = **0.63 MPa** — well
+S_x = 31 984 mm³.  Peak fiber stress at 9g crash = 20 260 / 31 984 = **0.63 MPa** — well
 below the ~5 MPa CF-PETG/epoxy allowable.  **Not strength-limited**, same conclusion as
 Joint 1; governing requirements are peel resistance, alignment, and anti-ovalisation.
 
 **Design — internal bonded splice collar (`PRINT-CARGO-MIDDLE-COLLAR`).**  Profile = MIDDLE
 inner-wall contour at hull Y = +137 mm (clean, 5.9 mm aft of the joint), inset by a 2 mm
-bond gap, 2 mm wall.  L = 16 mm (8 mm into each section), centred on hull Y = +131.1 mm
+bond gap, 2 mm wall.  L = 16 mm (8 mm into each section), centered on hull Y = +131.1 mm
 (midpoint of the measured cargo aft face, +131.74 mm, and middle fwd face, +130.40 mm).
 Middle is the narrower section here (inner area ≈ 14 300 mm² vs cargo's ≈ 19 000 mm² at the
 nearest clean cargo station), so the collar slips into cargo with a larger, epoxy-filled
@@ -540,10 +710,10 @@ gap — the same asymmetric-fit pattern as the head/cargo collar.
 
 Bond: West System 105/206 + 406 filler.  Double-lap shear area ≈ 454 mm perim × 8 mm ×
 2 sides ≈ 7264 mm²; worst-case bending couple tension (~160 N at 9g crash over a ~70 mm
-lever) gives bond shear ≪ 0.1 MPa → **FOS > 100 on the bond**; the collar (~19.3 g,
-watertight, single body, verified via `generate_conforming_collars.py`, Rev R3) is sized by
-handling/printability, not stress.  **The Joint 2 boss pins were REMOVED 2026-07-06** — the
-collar provides both securing and alignment.
+lever) gives bond shear ≪ 0.1 MPa → **FOS > 100 on the bond**; the collar (~17.0 g,
+watertight, single body, verified via `generate_cargo_middle_splice_collar.py`) is sized by
+handling/printability, not stress.  The 3 boss dowel pins (Joint 2, §7.2) are retained for
+registration only.
 
 ### 7.5 Middle/Rear Joint — Splice Collar (Rev R1, 2026-07-03)
 
@@ -556,13 +726,13 @@ full-perimeter ring collar covering the WHOLE section is feasible**, exactly as 
 and 2, because the section has not yet opened into the horseshoe-plus-inner-neck topology
 at the joint plane.
 
-**MESH-01 — RESOLVED.** Both `rear_shell24_2mm_repaired.stl` (opened + repaired by
-`regen_rear_interior.py`) and `middle_shell24_2mm_repaired.stl` are now watertight single
-bodies, so both sides of this joint's fit are verified directly by the
-`generate_conforming_collars.py` boolean over the true bonding span (residual
-`collar∩middle` = 632, `collar∩rear` = 607 mm³ — thin near-face wall-contact bands).  Both
-mating faces here (middle-aft, rear-fwd) were already open on the published shells; the head
-and middle *other* faces were opened by `tools/open_mating_faces.py` (2026-07-27).
+**MESH-01 caveat.** `airframe/stls/fuselage/rear_shell24_2mm_repaired.stl` is not
+watertight as of this writing (TODO.md MESH-01; 36 disconnected bodies), and the defect
+band (hull Y ≈ +205..+230 mm) overlaps this collar's rear-side bonding span (hull
+Y +203.4..+219.4).  The nearest clean rear station (Y = +233 mm, ≈ 30 mm aft of the joint)
+is used below as a size sanity check only; re-verify once MESH-01 is resolved for rear.
+The MIDDLE shell is fully watertight (single body) and its side of the fit is verified
+directly.
 
 **Load check — shell bending only.**  The skid-tip impact load is carried by the CF skid
 rods (Ø4 mm, hull Y +173..+233, FOS 205 in axial tension, §6.2) and the closed inner-neck
@@ -578,13 +748,13 @@ itself, mirroring §7.1's "form, not strength" framing.  Mass aft of this joint 
 | 9g crash × 1.5 | 13.5g | 81.3 N | 7 362 N·mm |
 
 Real section modulus computed from the digitized middle profile at Y = +195 mm: perimeter
-442 mm, S_x = 27 713 mm³.  Peak fibre stress at 9g crash = 7 362 / 27 713 =
+442 mm, S_x = 27 713 mm³.  Peak fiber stress at 9g crash = 7 362 / 27 713 =
 **0.27 MPa** — even lower than Joint 2, well below the ~5 MPa allowable.  **Not
 strength-limited.**
 
 **Design — internal bonded splice collar (`PRINT-MIDDLE-REAR-COLLAR`).**  Profile = MIDDLE
 inner-wall contour at hull Y = +195 mm (clean, 8.4 mm forward of the joint), inset by a
-2 mm bond gap, 2 mm wall.  L = 16 mm (8 mm into each section), centred on hull
+2 mm bond gap, 2 mm wall.  L = 16 mm (8 mm into each section), centered on hull
 Y = +203.4 mm (midpoint of the measured middle aft face, +203.62 mm, and rear fwd face,
 +203.20 mm).  Middle is again the narrower section (inner area ≈ 11 400 mm² at Y = +195 mm
 vs the rear's ≈ 13 600–13 800 mm² at the nearest clean rear stations), so the collar slips
@@ -593,11 +763,10 @@ Z = 18/20 mm) sit well outside the collar's wall ring at this Y — no interfere
 
 Bond: West System 105/206 + 406 filler.  Double-lap shear area ≈ 442 mm perim × 8 mm ×
 2 sides ≈ 7072 mm²; worst-case bending couple tension (~81 N at 9g crash over a ~65 mm
-lever) gives bond shear ≪ 0.05 MPa → **FOS > 100 on the bond**; the collar (~17.1 g,
-watertight, single body, verified via `generate_conforming_collars.py`, Rev R3) is sized by
-handling/printability, not stress.  **The Joint 3 boss pins were REMOVED 2026-07-06** — the
-collar provides both securing and alignment; the CF skid rods remain the primary
-skid-impact load path.
+lever) gives bond shear ≪ 0.05 MPa → **FOS > 100 on the bond**; the collar (~15.9 g,
+watertight, single body, verified via `generate_middle_rear_splice_collar.py`) is sized by
+handling/printability, not stress.  The 3 boss dowel pins (Joint 3, §7.2) are retained for
+registration only; the CF skid rods remain the primary skid-impact load path.
 
 ---
 
@@ -621,7 +790,7 @@ Ring frame inner-profile CSVs exported to `airframe/diagrams/ring_frames/`.
 
 - [ ] Ring-frame DXF generation (FreeCAD, from CSV profiles) — `airframe/diagrams/ring_frames/`
 - [ ] Verify all feature positions in slicer cross-section (confirm bores do not exit outer skin)
-- [ ] Add Kaylee/battery boss pattern to `middle_canonical_shell24.scad` (§1.4.5)
+- [ ] Add FlightEngineer/battery boss pattern to `middle_canonical_shell24.scad` (§1.4.5)
 - [ ] Add ventral battery-swap hatch cut to middle shell (§1.4.5)
 - [ ] Merge SCAD interior boss features (wing mortises, spar bore, servo mounts, avionics
   standoffs) back into Blender-canonical cargo shell (§1.1.1.0a)

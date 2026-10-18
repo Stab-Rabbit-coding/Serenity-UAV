@@ -238,7 +238,7 @@ module bow_camera_cut(pos) {
 //     on the combined faceplate (bow_sensor_faceplate.scad); legacy
 //     TOF_RING_*/TOF_M16_* constants below are reference only (unused).
 //   PMMA window: 8 mm dia × 2 mm thick; PMMA transmits 905 nm IR ✓.
-//   Avionics interface: UART routed to Shepherd (Wash UART2, I2C fallback).
+//   Avionics interface: UART routed to Shepherd (Pilot UART2, I2C fallback).
 //   [REF-NIST-001 §2.1] all sensor telemetry authenticated per ZTA policy.
 
 TOF_APER_D    =  8.0;   // mm — PMMA aperture bore (8 mm sensor lens)
@@ -307,7 +307,7 @@ module bow_tof_cut(pos, roll = 0) {
 //   module bore is behind the skin.  See bow_laser_cut().
 //
 // Enable circuit: laser anode → 10 Ω current-set resistor → drain of
-//   2N7002 N-channel MOSFET → GND.  Gate driven by Shepherd Wash
+//   2N7002 N-channel MOSFET → GND.  Gate driven by Shepherd Pilot
 //   GPIO with 10 kΩ pull-down; software must set GPIO HIGH to
 //   energise.  Default state: disabled.
 //

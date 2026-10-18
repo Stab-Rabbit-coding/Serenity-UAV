@@ -3,7 +3,7 @@
 # slice_all_batches.sh — Serenity-Class UAV Rev T Prototype Slice Runner
 # =============================================================================
 # Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-# License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+# License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 # Date   : 2026-06-02
 # Slicer : PrusaSlicer (apt) — CLI-compatible fork of Slic3r
 # Printer: XYZprinting da Vinci Jr. 1.0 w (150×150×150 mm, 0.4 mm nozzle)

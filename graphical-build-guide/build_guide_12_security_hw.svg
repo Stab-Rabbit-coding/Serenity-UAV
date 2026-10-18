@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- License: CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0). © 2024–2026 Steve Griffing (Stab-Rabbit-coding), Serenity UAV Project. -->
 <!-- Serenity-Class Tiltrotor UAV — Build Guide — Step 12 — Security Hardware -->
 <!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
 <!-- Hull: misubisu CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
@@ -28,7 +29,7 @@
 <text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">12 / 26</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
 <text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 7 — SECURITY HARDWARE SETUP (ALL 8 NODES)</text>
-<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">SLB9670 TPM 2.0 · write-blocker μSD · signed messages</text>
+<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">SLB9672 TPM 2.0 · write-blocker μSD · signed messages</text>
 <rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
 <text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: misubisu CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 <rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
@@ -55,13 +56,13 @@
 <text x="968" y="283" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
 <circle cx="776" cy="299" r="9" fill="#006db7"/>
 <text x="776" y="303" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
-<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Provision SLB9670 TPM 2.0 on CAPE-A-1 and CAPE-B-1 of each node (8 total)</text>
+<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Provision SLB9672 TPM 2.0 on Pilot and TACCO of each node (8 total)</text>
 <circle cx="776" cy="323" r="9" fill="#006db7"/>
 <text x="776" y="327" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
 <text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Generate unique key material per node; seal to TPM non-reversible</text>
 <circle cx="776" cy="347" r="9" fill="#006db7"/>
 <text x="776" y="351" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
-<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Enable μSD hardware write-blocker on log card slot of each CAPE-B-1</text>
+<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Enable μSD hardware write-blocker on log card slot of each TACCO</text>
 <circle cx="776" cy="371" r="9" fill="#006db7"/>
 <text x="776" y="375" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
 <text x="792" y="376" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Enable signed-message enforcement: all CAN/ETH/1553 traffic authenticated</text>
@@ -76,7 +77,7 @@
 <polygon points="176.0,411.0 232.3,378.5 187.3,352.5 131.0,385.0"   fill="#dde4ea"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="176.0,408.0 232.3,375.5 232.3,378.5 176.0,411.0" fill="#90a4ae" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="232.3,375.5 187.3,349.5 187.3,352.5 232.3,378.5" fill="#78909c" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
-<text x="208" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">CAPE-A-1</text>
+<text x="208" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">Pilot</text>
 <polygon points="196.0,383.0 211.6,374.0 196.0,365.0 180.4,374.0"   fill="#a3e635"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="196.0,378.0 211.6,369.0 211.6,374.0 196.0,383.0" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="211.6,369.0 196.0,360.0 196.0,365.0 211.6,374.0" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
@@ -92,7 +93,7 @@
 <polygon points="456.0,411.0 512.3,378.5 470.7,354.5 414.4,387.0"   fill="#dde4ea"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="456.0,408.0 512.3,375.5 512.3,378.5 456.0,411.0" fill="#90a4ae" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="512.3,375.5 470.7,351.5 470.7,354.5 512.3,378.5" fill="#78909c" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
-<text x="488" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">CAPE-B-1</text>
+<text x="488" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">TACCO</text>
 <polygon points="466.0,383.0 478.1,376.0 466.0,369.0 453.9,376.0"   fill="#ffe0c0"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="466.0,378.0 478.1,371.0 478.1,376.0 466.0,383.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="478.1,371.0 466.0,364.0 466.0,369.0 478.1,376.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
@@ -112,11 +113,11 @@
 <polygon points="296.0,488.0 311.6,479.0 311.6,483.0 296.0,492.0" fill="#f5c518" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="311.6,479.0 299.5,472.0 299.5,476.0 311.6,483.0" fill="#f5c518" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <text x="305" y="498" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="7" fill="#222222">TPM 2.0</text>
-<text x="305" y="518" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#607080">SLB9670 on both boards</text>
+<text x="305" y="518" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#607080">SLB9672 on both boards</text>
 <rect x="96" y="528" width="620" height="90" rx="6" fill="#fffdf6" stroke="#a3e635" stroke-width="2"/>
 <text x="126" y="546" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#2e7d32">SECURITY VERIFICATION CHECKLIST</text>
 <rect x="106" y="550" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.6"/>
-<text x="124" y="562" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">JP2 installed on CAPE-A-1 → LED1 (green) illuminated</text>
+<text x="124" y="562" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">JP2 installed on Pilot → LED1 (green) illuminated</text>
 <rect x="106" y="569" width="14" height="14" rx="2" fill="#ff7518" opacity="0.6"/>
 <text x="124" y="581" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">NX_LATCH measures HIGH at TP_NX test point on COMMS-HAT</text>
 <rect x="106" y="588" width="14" height="14" rx="2" fill="#c62828" opacity="0.6"/>

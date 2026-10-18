@@ -12,16 +12,25 @@
 // ===========================================================================
 // ============================================================
 // nacelle_servo_bracket.scad
-// U-channel saddle clamp for mounting a DS3218MG-class nacelle tilt servo
-// to the nacelle_servo_mount_block pads in cargo_sect_shell24.scad.
+// U-channel saddle clamp for mounting a nacelle tilt servo to the
+// nacelle_servo_mount_block pads in cargo_sect_shell24.scad.
 //
+// Rev T (2026-08-02): Servo fleet standardisation — DS3218MG -> SPT5425LV
+//   (converted with LibreServo v2 control board; rotation-limiting pin
+//   removed for fleet commonality with the cargo winch servo).  See
+//   REFERENCES.md "Servo Fleet Standardisation, 2026-08-02" and
+//   REF-SENSOR-013.  SPT5425LV body (40.5 x 20 x 40.5 mm) is dimensionally
+//   near-identical to the retired DS3218MG (40 x 20 x 38 mm) in the two axes
+//   the U-channel actually constrains (X length, Y width); channel depth
+//   (Z) was already stated as "not constrained by bracket" under the prior
+//   design, so this is a minimal parametric update, not a redesign.
 // Rev R (2026-06-11): Rev R baseline — initial design (Rev S1) carried forward; no geometry changes.
 // Rev S1 (2026-06-08): Initial release.
 //   Design for field disassembly per CLAUDE.md (common hand-tools only).
 //   Fasteners: 4× M3×10 SHCS into heat-set inserts on mount block.
 //
 // FUNCTION:
-//   The bracket clamps around the DS3218MG servo body (40×20×38 mm) and
+//   The bracket clamps around the SPT5425LV servo body (40.5×20×40.5 mm) and
 //   bolts flush to the 52×30×8 mm NSVMT pad on the interior Z-wall of the
 //   cargo gondola.  The servo output shaft points outboard (Z direction)
 //   toward the nacelle tilt pivot.  Output shaft is concentric with
@@ -45,11 +54,13 @@
 //   Lead notch: 10×6 mm slot on channel closed face for servo lead exit.
 //
 // LOAD / FOS:
-//   Servo stall: 2.45 N·m (DS3218MG, 6 V min spec).
-//   Couple arm (bolt pair): 2×17.5 = 35 mm → F_pair = 70 N → 35 N/bolt.
+//   Servo stall: 2.55 N·m (SPT5425LV, 26 kgf·cm @ 6 V, REFERENCES.md
+//     REF-SENSOR-013 -- servodatabase.com listing; up slightly from the
+//     retired DS3218MG's 2.45 N·m, re-checked below).
+//   Couple arm (bolt pair): 2×17.5 = 35 mm → F_pair = 72.9 N → 36.4 N/bolt.
 //   M3×10 SHCS in CF-PETG direct shear: ≥ 3000 N (8.8 grade, ISO 4762).
-//   FOS_shear = 3000 / 35 = 85.7  ✓✓ (>> 4.0 design-judgment target for FDM joints).
-//   Ref: ISO 4762 M3×10 SHCS; DS3218MG datasheet; ASTM F2910-14 [ASTM F38].
+//   FOS_shear = 3000 / 36.4 = 82.4  ✓✓ (>> 4.0 design-judgment target for FDM joints).
+//   Ref: ISO 4762 M3×10 SHCS; REF-SENSOR-013 (SPT5425LV); ASTM F2910-14 [ASTM F38].
 //
 // MATERIAL: CF-PETG, 0.15 mm layer height, 4 perimeters, ≥ 40% infill.
 //   Print orientation: channel mouth facing up (−Y in print bed coords) to
@@ -57,16 +68,21 @@
 //
 // Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0 -- creativecommons.org/licenses/by/4.0
-// Ref: DS3218MG datasheet; cargo_sect_shell24.scad NSVMT_* parameters;
-//      PHASED_BUILD_GUIDE.md Phase 3; ISO 4762; CLAUDE.md fabrication standards.
+// Ref: REFERENCES.md REF-SENSOR-013 (SPT5425LV), REF-SENSOR-014 (LibreServo v2);
+//      cargo_sect_shell24.scad NSVMT_* parameters; PHASED_BUILD_GUIDE.md
+//      Phase 3; ISO 4762; CLAUDE.md fabrication standards.
 // ============================================================
 
 $fn = 64;
 
-// DS3218MG body dimensions (nominal; verified against datasheet Rev 1.0)
-SERVO_BODY_X       = 40.0;   // mm, body length (X, longitudinal)
+// SPT5425LV body dimensions (nominal; REFERENCES.md REF-SENSOR-013 --
+// manufacturer product page + servodatabase.com independent listing).
+// Was DS3218MG 40.0x20.0x38.0 mm prior to the 2026-08-02 servo fleet
+// standardisation; SPT5425LV is 0.5 mm larger in X and 2.5 mm larger in Z,
+// unchanged in Y.
+SERVO_BODY_X       = 40.5;   // mm, body length (X, longitudinal)
 SERVO_BODY_Y       = 20.0;   // mm, body width  (Y, vertical)
-SERVO_BODY_Z       = 38.0;   // mm, body depth  (Z, into nacelle — not constrained by bracket)
+SERVO_BODY_Z       = 40.5;   // mm, body depth  (Z, into nacelle — not constrained by bracket)
 
 // Clearance on each inner face of channel (ISO 286 loose fit for CF-PETG shrinkage)
 SERVO_CLR          =  0.2;   // mm, clearance per side in X and Y
@@ -75,11 +91,11 @@ SERVO_CLR          =  0.2;   // mm, clearance per side in X and Y
 BKRT_WALL          =  2.0;   // mm, CF-PETG structural minimum per CLAUDE.md
 
 // U-channel inner dimensions
-BKRT_CH_IW         = SERVO_BODY_X + 2 * SERVO_CLR;   // = 40.4 mm, inner width (X)
+BKRT_CH_IW         = SERVO_BODY_X + 2 * SERVO_CLR;   // = 40.9 mm, inner width (X)
 BKRT_CH_IH         = SERVO_BODY_Y + 2 * SERVO_CLR;   // = 20.4 mm, inner height (Y)
 
 // U-channel outer dimensions
-BKRT_CH_OW         = BKRT_CH_IW + 2 * BKRT_WALL;    // = 44.4 mm, outer width
+BKRT_CH_OW         = BKRT_CH_IW + 2 * BKRT_WALL;    // = 44.9 mm, outer width
 BKRT_CH_OH         = BKRT_CH_IH + BKRT_WALL;         // = 22.4 mm, outer height (open at −Z face)
 
 // Channel depth in Z (covers servo output-shaft boss side)
@@ -92,7 +108,7 @@ BKRT_CH_D          = 10.0;   // mm, channel depth in Z (not full servo depth; fl
 //   BKRT_FLNG_H: flange height in Y (must span ±NSVMT_HOLE_S_Y = ±8.0 mm → ≥ 16 mm + margins).
 BKRT_FLNG_T        =  8.0;   // mm, flange thickness in Z (8 mm pad engagement)
 BKRT_FLNG_H        = BKRT_CH_OH;     // = 22.4 mm, same as channel outer height
-BKRT_FLNG_W        = BKRT_CH_OW;     // = 44.4 mm, full channel outer width
+BKRT_FLNG_W        = BKRT_CH_OW;     // = 44.9 mm, full channel outer width
 
 // M3 through-hole in flange
 //   ISO 273 medium fit: 3.4 mm clearance hole.
@@ -188,7 +204,7 @@ module bracket_body() {
 //   No supports needed: channel walls bridge the inner bore overhang.
 //
 // Assembly fit check:
-//   Verify channel inner 40.4×20.4 mm clears DS3218MG body 40×20 mm.
+//   Verify channel inner 40.9×20.4 mm clears SPT5425LV body 40.5×20 mm.
 //   Verify M3 hole pattern ±17.5 mm × ±8.0 mm matches NSVMT insert pattern.
 //   Verify BKRT_FLNG_T = 8 mm matches NSVMT_PAD_T = 8 mm for flush seating.
 //   VERIFY all dimensions in slicer measurement tool before printing.

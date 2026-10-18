@@ -7,7 +7,7 @@
  * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
- * Identical on CAN-PERIPH-GW-1, Jayne U3 and Kaylee U_MCU.  Everything that
+ * Identical on CAN-PERIPH-GW-1, Observer U3 and FlightEngineer U_MCU.  Everything that
  * differs between them is in `boards/<board>/`.
  */
 

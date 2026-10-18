@@ -30,7 +30,7 @@ The four overview SVGs already carry all annotations; this script ONLY replaces
 the hull shape polygon/path elements, leaving every other SVG element intact.
 
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
 import os

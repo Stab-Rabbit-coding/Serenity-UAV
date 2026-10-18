@@ -7,15 +7,23 @@
 
 ---
 
+> **Target note (reconcile 2026-10-18):** this tree was written against the MSPM0G3507 and
+> SLB9670. Main has since retargeted the fleet trust module to the **MSPM0G3519-Q1**
+> (Observer, FlightEngineer) and **MSPM0G3518-Q1** (Bus-Gateway) with the **SLB9672**
+> (`avionics/kicad/Observer/Observer.md`, "2026-08-03 — Trust-module MCU/TPM retarget"). The
+> RGZ-48 pin map is identical, but the IOMUX differs (`CAN0_TX`/`CAN0_RX` are **PF12** on this
+> family, not PA12/PA13). The linker script, HAL pin tables and TPM driver have **not** been
+> re-targeted yet; do not flash this to retargeted hardware until they are.
+
 ## Scope
 
 One firmware template shared by every TI MSPM0G3507 in the fleet:
 
 | Board | MCU ref | Role | Hardware source |
 | --- | --- | --- | --- |
-| `MAL-CAN-PERIPH-GW-PCB` | U1 (×N stacks) | Encoder / ESC / servo gateway | `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` |
-| Jayne | U3 | Nose & cargo vision-board control MCU | `avionics/kicad/Jayne/Jayne.md` |
-| Kaylee | U_MCU | PDB Section H trust module | `avionics/kicad/Kaylee/Kaylee.md` |
+| `MAL-CAN-PERIPH-GW-PCB` | U1 (×N stacks) | Encoder / ESC / servo gateway | `avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md` |
+| Observer | U3 | Nose & cargo vision-board control MCU | `avionics/kicad/Observer/Observer.md` |
+| FlightEngineer | U_MCU | PDB Section H trust module | `avionics/kicad/FlightEngineer/FlightEngineer.md` |
 
 The boards differ only in `boards/<board>/` — identity, pin map, topic table
 and application.  Everything else is shared, so a change to the security or
@@ -75,7 +83,7 @@ mspm0/
 │   │   ├── tpm2.h           TPM 2.0 command layer
 │   │   └── tpm_tis.h        SLB9670 TIS-over-SPI transport
 │   └── src/                 Implementations + main.c
-├── boards/{can_periph_gw,jayne,kaylee}/   board_config.h, board.c, app.c
+├── boards/{can_periph_gw,observer,flight_engineer}/   board_config.h, board.c, app.c
 ├── hal/{mspm0,sim}/     Flight port and POSIX host port
 ├── agent/               Agent-side DDS-Security profiles
 ├── cmake/               Cross toolchain, link script, vendored client
@@ -106,7 +114,7 @@ cmake --build build-fw
 ```
 
 Board variants: `-DGW_ROLE=1|2|3` (encoder/ESC/servo), `-DGW_STACK_INDEX=1..4`,
-`-DJAYNE_SITE=1|2` (nose/cargo).
+`-DOBSERVER_SITE=1|2` (nose/cargo).
 
 ## Verification status
 

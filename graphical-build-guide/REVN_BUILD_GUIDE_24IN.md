@@ -15,7 +15,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 # Serenity-Class Tiltrotor UAV — Build Guide Rev P baseline (24-inch)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Year:** 2026 | **Status:** Public release — Rev S baseline (2026-07-04, integrates all Rev
 R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
@@ -37,11 +37,12 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
 | Work | Author | License | Source |
 |------|--------|---------|--------|
-| Hull geometry | misubisu | CC BY 4.0 | thingiverse.com/thing:7330462 |
+| Hull geometry | misubisu | CC BY-SA 4.0 | thingiverse.com/thing:7330462 |
 | Hull geometry (historical, Rev M and earlier 18") | Peter Farell | CC BY 4.0 | printables.com/model/548545 |
 | Iris nozzle concept (nacelle) | BamJr | CC BY 4.0 | thingiverse.com/thing:2991269 |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269 ft × 170 ft × 79 ft ratios |
-| All other design | Steve Griffing | CC BY 4.0 | This project |
+| All other design (hardware/CAD/PCB) | Steve Griffing | CERN-OHL-W 2.0 | This project |
+| All other design (docs/code/scripts) | Steve Griffing | CC BY-SA 4.0 | This project |
 
 ---
 
@@ -76,11 +77,15 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
 ## Anti-Rework Rules — Read Before Phase 0
 
+> **CAUTION:** Several rules below (foam pour, nacelle sealing/fiberglass, TPM provisioning)
+> describe irreversible steps. Complete every dependent check first — there is no going back
+> once these are done.
+
 1. **Print everything before first epoxy joint.** Filament costs pennies compared to build time.
 2. **Install every conduit, standoff, void former, and sensor mount before the foam pour.** Once foam cures these cannot be added.
 3. **The foam pour is the point of no return.** Do a full dry-fit with all wiring and components before mixing.
 4. **Do NOT foam the nacelle interior.** Nacelles are CF-PETG structural shells — foam in the bore traps EDF heat and ruins the press-fit.
-5. **Verify EDF rotation direction before nacelle installation.** Port EDFs must rotate CW from the intake end; starboard CCW. Swap any two motor leads to reverse if wrong. Once nacelle is sealed and fiberglassed, this is a full disassembly.
+5. **Verify EDF rotation direction before nacelle installation.** Port EDFs shall rotate CW from the intake end; starboard CCW. Swap any two motor leads to reverse if wrong. Once nacelle is sealed and fiberglassed, this is a full disassembly.
 6. **Gear-mesh the nozzle linkage before bonding the tilt bracket.** Check nozzle opens smoothly through the full 0°–90° sweep before epoxying the sector gear.
 7. **FAA registration on airframe before first untethered flight.** Replace placeholder with your issued number.
 8. **TPM 2.0 provisioning is non-reversible.** Provision all 8 nodes before first flight.
@@ -157,7 +162,7 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
 | Part | Material | Dimension | Notes |
 |------|----------|-----------|-------|
-| Keel | CF flat bar 6×3mm, 2 lap-spliced segments | Cargo 8.0 in (203 mm) + Rear 7.1 in (181 mm); spans hull Y −71..+384 mm (17.9 in / 455 mm) — head and middle sections are keelless (docs/structural_analysis.md §4.1–§4.2) | Bar oriented 3mm lateral (X) × 6mm vertical (Z), strong axis vertical; 100 mm (3.9 in) lap-splice overlap centred at the middle/rear joint (hull Y ≈ +203 mm); ring-notch positions at hull Y = +30 mm and +290 mm (replaces stale 91/165/251/320/388 mm nose-station marks) |
+| Keel | CF flat bar 6×3mm, 2 lap-spliced segments | Cargo 8.0 in (203 mm) + Rear 7.1 in (181 mm); spans hull Y −71..+384 mm (17.9 in / 455 mm) — head and middle sections are keelless (docs/structural_analysis.md §4.1–§4.2) | Bar oriented 3mm lateral (X) × 6mm vertical (Z), strong axis vertical; 100 mm (3.9 in) lap-splice overlap centered at the middle/rear joint (hull Y ≈ +203 mm); ring-notch positions at hull Y = +30 mm and +290 mm (replaces stale 91/165/251/320/388 mm nose-station marks) |
 | Wing spars | CF tube 12mm OD / 1.5mm wall | 2× 14.96 in (380 mm) | Sand spar ends to fit wing-root spar pockets |
 | Pivot rods | CF solid rod 4mm OD | 2× cut to length per pivot housing drawing | Deburr ends; press-fit into MF104ZZ bearings |
 | Ring frames | CF plate 2mm | 2 profiles: hull Y = +30 mm (cargo) and +290 mm (rear) — down from 5 pre-Rev N stations; see airframe/diagrams/ring_frames/*.dxf | Fit to keel slot-notches; cargo profile is PROVISIONAL pending cargo-mesh fix (TODO §1.1.1) |
@@ -191,8 +196,8 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 | Johnson's Paste Wax | 1 tin | 2 coats on all EPS void surfaces (release agent) |
 | 3M 4016 closed-cell gasket tape | 1 roll | Seal all access panel frame lips |
 | PTFE tube 5mm OD × 3mm ID | 6 m | 8 conduits (CAN FD, RS-485, 1553, ETH×4, PWR) |
-| M2.5 nylon hex standoffs 6mm | 16× | Cape-B floor mounts (4 per bay × 4 bays) |
-| M2.5 nylon hex standoffs 20mm | 16× | Cape-A inter-cape spacing |
+| M2.5 nylon hex standoffs 6mm | 16× | TACCO floor mounts (4 per bay × 4 bays) |
+| M2.5 nylon hex standoffs 20mm | 16× | Pilot inter-cape spacing |
 | M2.5 × 8mm SS button screws | 64× | Standoff attachment + panel B/E fasteners |
 | M3 heat-set inserts | 4× | Cargo gondola belly hard points |
 | N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |
@@ -210,7 +215,7 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 keelless — see docs/structural_analysis.md §4.1–§4.2). Keel spans hull Y −71 mm → +384 mm
 (455 mm / 17.9 in) as two lap-spliced CF-BAR-6X3 segments: cargo (hull Y −71..+132 mm) and rear
 (hull Y +203..+384 mm), bar oriented 3 mm lateral (X) × 6 mm vertical (Z). Lap-splice the two
-segments with a 100 mm (3.9 in) overlap centred on the middle/rear joint (hull Y ≈ +203 mm),
+segments with a 100 mm (3.9 in) overlap centered on the middle/rear joint (hull Y ≈ +203 mm),
 bonded with West System 105/206 + peel-ply prep. Ring-notch datum marks at hull Y = +30 mm and
 +290 mm (supersedes the stale 91/165/251/320/388 mm nose-station marks, which were tied to the
 pre-Rev N ring-plate layout). Cure 2 h minimum.
@@ -229,24 +234,24 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
 | F — Rear | 15.28–23.98 in (388–609 mm) | EDF access | Bayonet PETG frame |
 
 **4. Install M2.5 nylon standoffs in bays A, B, D, E.**
-- Floor standoffs (6mm): Cape-B (55×35mm) hole pattern
-- Inter-cape standoffs (20mm): Cape-A (55×35mm) hole pattern above Cape-B
+- Floor standoffs (6mm): TACCO (55×35mm) hole pattern
+- Inter-cape standoffs (20mm): Pilot (55×35mm) hole pattern above TACCO
 - Verify 44mm total stack height clears bay void former
 
-**5. Bond wing spar pocket inserts** at wing root stations, both sides. Spar must slide freely in/out for nacelle assembly access.
+**5. Bond wing spar pocket inserts** at wing root stations, both sides. Spar shall slide freely in/out for nacelle assembly access.
 
-**6. Bond tilt servo mount brackets** into fuselage interior at wing root bays (one bracket per nacelle tilt servo). Servo arm must clear all wiring conduits.
+**6. Bond tilt servo mount brackets** into fuselage interior at wing root bays (one bracket per nacelle tilt servo). Servo arm shall clear all wiring conduits.
 
 **7. Install M3 heat-set inserts ×4** at belly cargo hard-point locations.
 
 **8. Install antenna posts and SMA bulkhead pass-throughs:**
 - Belly port, X≈**260mm**: SiK 915MHz SMA-RP bulkhead *(relocated forward from 310mm — station 310mm is now the neck intake ring; 260mm is in cargo bay belly, Panel C, clear of intake frame)*
 - Belly stbd, X≈260mm: LoRa RFM95W 915MHz SMA-RP bulkhead
-- Dorsal, X≈**120mm**: **49MHz (Part 15 §15.235) forward wire post** — PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A Emma (XCVR-49MHZ-2) module *(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
+- Dorsal, X≈**120mm**: **49MHz (Part 15 §15.235) forward wire post** — PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A Commo (XCVR-49MHZ-2) module *(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
 - Aft dorsal hull, X≈580mm: **49MHz (Part 15 §15.235) temporary aft wire post** — PETG hook post (~10mm tall) bonded to aft dorsal hull skin near station ~580mm with 5-min epoxy; electrically open (insulated end). *(Note: the permanent aft post on the canonical tail nozzle (`rear_nozzle_canonical.stl`) is a Phase 11 item. This temporary post is removed and replaced in Phase 11.)*
 - Dorsal fwd, X≈140mm: Wi-Fi 2.4/5GHz antenna
-- **49MHz top wire**: 0.3mm stainless steel wire or 22AWG enamelled copper, strung from forward post hook (~120mm) to temporary aft post hook (~580mm) with light tension (~20g); CF keel bar connected to Emma (XCVR-49MHZ-2) GND as counterpoise
-- **⚠ GPS clearance check**: forward wire post at ~120mm is ~43mm from GPS patch (both dorsal face). Bench-verify GPS HDOP ≤1.5 with Emma (49 MHz) transmitting before flight. If GPS degrades, move GPS patch to ≥165mm from nose.
+- **49MHz top wire**: 0.3mm stainless steel wire or 22AWG enamelled copper, strung from forward post hook (~120mm) to temporary aft post hook (~580mm) with light tension (~20g); CF keel bar connected to Commo (XCVR-49MHZ-2) GND as counterpoise
+- **⚠ GPS clearance check**: forward wire post at ~120mm is ~43mm from GPS patch (both dorsal face). Bench-verify GPS HDOP ≤1.5 with Commo (49 MHz) transmitting before flight. If GPS degrades, move GPS patch to ≥165mm from nose.
 
 **9. Install 12× ToF sensor flush-mount PETG frames** (6.5mm hull cutouts):
 
@@ -319,9 +324,12 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
 
 **For each nacelle** (port first, then starboard — VERIFY ROTATION DIRECTION DIFFERS):
 
+> **WARNING:** The EDF spins at high speed on bench power. Keep hands, tools, and loose
+> clothing clear of the duct during the rotation-direction test.
+
 1. **Test EDF rotation direction before installation.** Connect to bench ESC + power supply (safe prop/duct test only).
-   - Port EDF must spin **CW viewed from intake** (fore end).
-   - Starboard EDF must spin **CCW viewed from intake**.
+   - Port EDF shall spin **CW viewed from intake** (fore end).
+   - Starboard EDF shall spin **CCW viewed from intake**.
    - To reverse: swap any two motor phase wires at the ESC.
 
 2. **Install EDF2 (downstream — aft EDF):**
@@ -339,7 +347,7 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
    - Verify stator fins are visible and clear in Z=53–73mm gap between EDFs.
    - Apply 3 dabs epoxy at EDF1 casing at Z=76mm shoulder.
 
-5. **Install ESC pair** against hub bore inner wall or in fuselage (route leads through spar conduit to fuselage bay). ESC heat must not be trapped inside nacelle bore — route ESCs to fuselage bay via spar conduit.
+5. **Install ESC pair** against hub bore inner wall or in fuselage (route leads through spar conduit to fuselage bay). ESC heat shall not be trapped inside nacelle bore — route ESCs to fuselage bay via spar conduit.
 
 6. **Cure 2h minimum** before proceeding.
 
@@ -428,10 +436,10 @@ Crown pinion (R=6mm) → Nozzle inner ring rack (R=28mm)
 
 3. **Slide nacelle pivot housing** onto pivot rod. Verify nacelle rotates freely with <0.5 mm axial play. Add thrust washer (stainless 4×8×0.5mm) if axial play exceeds 1mm.
 
-4. **Install tilt servo** in fuselage servo mount bracket at wing root bay. Servo arm must be accessible through access panel B or D.
+4. **Install tilt servo** in fuselage servo mount bracket at wing root bay. Servo arm shall be accessible through access panel B or D.
 
    > **⚠ ANTI-REWORK — FOAM POUR SEQUENCE:**
-   > The wing spar (CF-TUBE-12MM, 12 mm OD) must be inserted through both
+   > The wing spar (CF-TUBE-12MM, 12 mm OD) shall be inserted through both
    > `spar_bearing_block` annular bosses before the foam pour (Phase 4).
    > Once foam cures, the spar bore is permanently encapsulated and cannot be
    > accessed for spar insertion or retorquing.
@@ -520,13 +528,13 @@ After cure:
 Install **CN1 + FC1** in Shepherd's room / Bay A (nose), **CN2 + FC2** in Inara's shuttle / Bay B (dorsal fwd).
 
 **For each bay:**
-1. Seat Cape-B (CN node) on floor standoffs (M2.5 × 6mm). 4 screws.
-2. Seat Cape-A (FC node) on 20mm inter-cape standoffs above Cape-B. 4 screws.
+1. Seat TACCO (CN node) on floor standoffs (M2.5 × 6mm). 4 screws.
+2. Seat Pilot (FC node) on 20mm inter-cape standoffs above TACCO. 4 screws.
 3. Plug 72-pin expansion connector between PB2-I and Cape.
 4. Connect CAN FD, RS-485, 1553, ETH chain connectors per bus harness.
-5. Connect ESC DSHOT signal leads to Cape-A PRU-ICSS header.
-6. Connect servo signal leads (2× tilt servos; 4× RCS valve servos are Phase 11) to Cape-A servo rail.
-7. Connect GPS patch antenna coax to Cape-A GPS header. Mount GPS patch antenna on hull dorsal surface at nearest bay location.
+5. Connect ESC DSHOT signal leads to Pilot PRU-ICSS header.
+6. Connect servo signal leads (2× tilt servos; 4× RCS valve servos are Phase 11) to Pilot servo rail.
+7. Connect GPS patch antenna coax to Pilot GPS header. Mount GPS patch antenna on hull dorsal surface at nearest bay location.
 
 ### ESC Assignment — Cross-Nacelle Redundancy
 
@@ -550,15 +558,15 @@ hover rather than losing one nacelle entirely.
 
 | Signal | From | To | Via |
 |--------|------|----|-----|
-| ESC1 DSHOT (port EDF1) | Cape-A FC1 PRU Ch.0 | ESC1 | Conduit Shepherd's room (Bay A) → port wing root |
-| ESC3 DSHOT (stbd EDF1) | Cape-A FC1 PRU Ch.1 | ESC3 | Conduit Shepherd's room (Bay A) → stbd wing root |
-| ESC2 DSHOT (port EDF2) | Cape-A FC2 PRU Ch.0 | ESC2 | Conduit Inara's shuttle (Bay B) → port wing root |
-| ESC4 DSHOT (stbd EDF2) | Cape-A FC2 PRU Ch.1 | ESC4 | Conduit Inara's shuttle (Bay B) → stbd wing root |
+| ESC1 DSHOT (port EDF1) | Pilot FC1 PRU Ch.0 | ESC1 | Conduit Shepherd's room (Bay A) → port wing root |
+| ESC3 DSHOT (stbd EDF1) | Pilot FC1 PRU Ch.1 | ESC3 | Conduit Shepherd's room (Bay A) → stbd wing root |
+| ESC2 DSHOT (port EDF2) | Pilot FC2 PRU Ch.0 | ESC2 | Conduit Inara's shuttle (Bay B) → port wing root |
+| ESC4 DSHOT (stbd EDF2) | Pilot FC2 PRU Ch.1 | ESC4 | Conduit Inara's shuttle (Bay B) → stbd wing root |
 | ESC5 / rear EDF | — | — | **DEFERRED — Phase 11** (PRU Ch.2 reserved) |
-| Nacelle tilt servo 1 (port) | Cape-A FC1 servo rail | Servo-tilt-port | SERVO-PWR conduit |
-| Nacelle tilt servo 2 (stbd) | Cape-A FC2 servo rail | Servo-tilt-stbd | SERVO-PWR conduit |
+| Nacelle tilt servo 1 (port) | Pilot FC1 servo rail | Servo-tilt-port | SERVO-PWR conduit |
+| Nacelle tilt servo 2 (stbd) | Pilot FC2 servo rail | Servo-tilt-stbd | SERVO-PWR conduit |
 | 4× RCS valve servos | — | — | **DEFERRED — Phase 11** |
-| LED strips | Cape-B CN1 GPIO | WS2812B ×3 | LED wiring harness |
+| LED strips | TACCO CN1 GPIO | WS2812B ×3 | LED wiring harness |
 | CAN FD bus | CN1→FC1→CN2→FC2 | Ring (open at FC2 end) | CAN conduit, 120Ω term at CN1 |
 
 ### Firmware Flash
@@ -583,6 +591,10 @@ hover rather than losing one nacelle entirely.
 
 **Tethered hover test first — nacelle EDFs only (T/W ≈ 1.61).**
 
+> **WARNING:** Keep all personnel clear of the nacelle intakes/exhausts and the tether radius
+> before applying throttle. Spinning EDFs and a tethered airframe under power are a bodily
+> injury hazard if the tether fails or someone enters the thrust path.
+
 1. Secure tether lines to belly hard points. 11.0 lbm (5 kg) breaking strength minimum, 9.8 ft (3 m) length.
 2. Bring up on throttle to 30% with nacelles at 90° (hover position) — verify all 4 EDF sounds and lift response.
 3. Increase to 60% — verify stable hover and altitude-hold authority on tether.
@@ -596,13 +608,13 @@ hover rather than losing one nacelle entirely.
 
 **Goal:** All 8 nodes installed, full ring redundancy, obstacle avoidance operational.
 
-Install **CN3 + FC3** in River's room / Bay D (dorsal aft), **CN4 + FC4** in Simon's medbay / Bay E (aft service). Same procedure as Phase 6 for each bay.
+Install **CN3 + FC3** in River's room / Bay C (dorsal aft), **CN4 + FC4** in Simon's medbay / Bay D (aft service). Same procedure as Phase 6 for each bay.
 
 Connect remaining CAN FD / RS-485 / 1553 / ETH ring segments (CN3→FC3→CN4→FC4). Terminate CAN FD bus at FC4 (120Ω).
 
 Install 12× ToF sensor array:
 
-- Array A sensors on FC3 (River's room / Bay D): S1A, S3A, S4A, S5A, S6A, S2A
+- Array A sensors on FC3 (River's room / Bay C): S1A, S3A, S4A, S5A, S6A, S2A
 - Array B sensors on FC1 (Shepherd's room / Bay A): S1B, S3B, S4B, S5B, S6B, S2B
 
 Verify full obstacle avoidance in firmware (dual-redundant arrays — A and B cover identical fields, any single FC failure leaves full coverage on the other).
@@ -611,20 +623,20 @@ Verify full obstacle avoidance in firmware (dual-redundant arrays — A and B co
 
 ## Phase 7 — Cargo System
 
-Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_sect_shell24.stl interior). Install the STS3215 winch train in the aft bay: both pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. **The spool must be supported at both pedestals — never hung off the servo output.** Fit the auto-latch cradle. Wire the HX711 load cell and the STS3215 TTL bus to the cargo-bay CAN-PERIPH-GW (not Cape-B). Bench-calibrate the pawl spring to an 8.0 N ± 1.0 N slip threshold, then test release and retrieval with a 250 g dummy load. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
+Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_sect_shell24.stl interior). Install the STS3215 winch train in the aft bay: both pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. **The spool shall be supported at both pedestals — never hung off the servo output.** Fit the auto-latch cradle. Wire the HX711 load cell and the STS3215 TTL bus to the cargo-bay CAN-PERIPH-GW (not TACCO). Bench-calibrate the pawl spring to an 8.0 N ± 1.0 N slip threshold, then test release and retrieval with a 250 g dummy load. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
 
 ---
 
 ## Phase 8 — Finishing
 
-1. **Decals and paint.** Airbrush or hand-paint hull sections in Serenity's distinctive brown. Panel lines with thin wash.
+1. **Decals and paint.** Airbrush or hand-paint hull sections in Serenity's distinctive brown. Panel lines with thin pilot.
 2. **NAV lights.** Port = red, starboard = green, aft/top = white strobe
-   [REF-FAA-003 §91.209(a)] / [REF-ICAO-001 Ch.3 §3.1.9]. Wire to Cape-B CN4 GPIO.
+   [REF-FAA-003 §91.209(a)] / [REF-ICAO-001 Ch.3 §3.1.9]. Wire to TACCO CN4 GPIO.
 3. **FAA registration.** Display on hull exterior per 14 CFR Part 48 §48.205(b)(1)
    [REF-FAA-001 §48.205] — minimum 3 in (76 mm) characters, clearly visible.
    Replace N00000 on decal sheet with your FAA-issued number.
    Note: 14 CFR Part 47 applies to manned aircraft; the applicable UAS regulation is Part 48.
-4. **Firmware security provisioning.** Program Cape-B CPLD write-blocker (ATF16V8BQL). Provision SLB9670 TPM 2.0 endorsement keys on all 8 nodes. Keys cannot be regenerated without physical node replacement.
+4. **Firmware security provisioning.** Program TACCO CPLD write-blocker (ATF16V8BQL). Provision SLB9672 TPM 2.0 endorsement keys on all 8 nodes. Keys cannot be regenerated without physical node replacement.
 5. **Weight and balance.** Measure actual AUW with battery. CG should be at 40–45% of hull length from nose. Adjust battery position in cargo bay for trim if needed.
 6. **Documentation.** Log all configuration in `governor_config.h`. Archive MAVLink parameter file. Photograph completed build for insurance / forensic baseline.
 
@@ -635,7 +647,7 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 | Component | Spec | Analysis |
 |-----------|------|----------|
 | Wing spar | CF tube 12mm OD / 1.5mm wall | Bending stress at full nacelle torque (~0.13 Nm) ≈ 18 MPa — allowable CF ≥600 MPa |
-| Keel | CF flat bar 6×3mm | Carries fuselage bending; adequate for 24-inch hull at <5g manoeuvre |
+| Keel | CF flat bar 6×3mm | Carries fuselage bending; adequate for 24-inch hull at <5g maneuver |
 | Pivot rod | 4mm OD solid CF | Shear stress at 0.749 lbm (340 g) nacelle weight ≈ 27 MPa — allowable CF ≥300 MPa shear |
 | Pivot bearings | MF104ZZ 4×10×4mm × 2 per nacelle | Static capacity 110 lbf (490 N) >> 0.74 lbf (3.3 N) nacelle weight — fine |
 | Foam fill | 2 lb/ft³ closed-cell PU | Provides hull rigidity, crash absorption; adds ~0.397 lbm (~180 g) to total AUW |
@@ -717,7 +729,7 @@ regulatory readiness for real-world deployment.
 **Dependency:** Phase 9 complete.
 
 1. **Multi-link failover mission** — fly 5-waypoint mission; disable each radio link in sequence
-   (SiK → LoRa → Wi-Fi → 49 MHz Emma); verify mission continues on surviving link.
+   (SiK → LoRa → Wi-Fi → 49 MHz Commo); verify mission continues on surviving link.
 2. **10-waypoint autonomous mission** — full mission at ≤120m AGL including obstacle avoidance halts.
 3. **Autonomous cargo delivery** — takeoff → transit → deploy payload at waypoint → return → land;
    cradle auto-latched on return.
@@ -746,7 +758,7 @@ attitude authority. The rear EDF exhausts aft and contributes no hover lift.
 **Dependency:** Phases 0–10 complete and proven in flight.
 **Design files:** `deferred/aft-edf/` — see `deferred/aft-edf/README.md` for full detail.
 **NOTE (Rev R1 redesign):** the 120mm SCAD/STLs in `deferred/aft-edf/` are superseded. All rear-EDF
-geometry must be regenerated for the 55mm fan, the canonical nozzle, and the RCS system before fabrication.
+geometry shall be regenerated for the 55mm fan, the canonical nozzle, and the RCS system before fabrication.
 
 > This phase was deferred per the project design philosophy: *"The large fuselage EDF is now an
 > optional addition once everything else works."* (root AGENTS.md)
@@ -810,7 +822,7 @@ geometry must be regenerated for the 55mm fan, the canonical nozzle, and the RCS
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verification
 - [ ] Intake frame tongues fully seated; shoulder flanges bonded flush; no gaps
 - [ ] Plenum + RCS manifold pressure-test passed — draft at EDF inlet and all 4 RCS jets; no leakage
-- [ ] EDF at station ~430mm, centreline ±2mm; rotation verified before sealing
+- [ ] EDF at station ~430mm, centerline ±2mm; rotation verified before sealing
 - [ ] 50A ESC installed; ESC5 DSHOT signal to FC2 PRU Ch.2
 - [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.06×1.76 in verified
 - [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on bench

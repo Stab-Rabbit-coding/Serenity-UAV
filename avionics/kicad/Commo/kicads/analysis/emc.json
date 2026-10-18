@@ -1,0 +1,804 @@
+{
+  "analyzer_type": "emc",
+  "schema_version": "1.3.0",
+  "summary": {
+    "total_findings": 9,
+    "categories_checked": 4,
+    "active": 9,
+    "suppressed": 0,
+    "by_severity": {
+      "error": 2,
+      "warning": 1,
+      "info": 6
+    },
+    "emc_risk_score": 85.0
+  },
+  "target_standard": "fcc-class-b",
+  "findings": [
+    {
+      "category": "ground_plane",
+      "severity": "info",
+      "rule_id": "GP-001",
+      "confidence": "deterministic",
+      "title": "Return path analysis data not available",
+      "description": "PCB analysis did not include return path continuity data. Run the PCB analyzer with --full flag to enable GP-001 reference plane coverage checking.",
+      "components": [],
+      "nets": [],
+      "recommendation": "Re-run PCB analysis with: python3 analyze_pcb.py <file> --full",
+      "detector": "emc_ground_plane",
+      "summary": "Return path analysis data not available",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Ground Plane",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "ground_plane",
+      "severity": "warning",
+      "rule_id": "GP-005",
+      "confidence": "deterministic",
+      "title": "2 ground domains detected",
+      "description": "Board has 2 separate ground domains: ?, ?. Multiple ground domains require careful single-point connection to avoid ground loops and EMI.",
+      "components": [],
+      "nets": [
+        "?",
+        "?"
+      ],
+      "recommendation": "Verify ground domains connect at a single, intentional point (typically near the ADC for analog/digital split). Ensure no signal traces cross the domain boundary.",
+      "detector": "emc_ground_plane",
+      "summary": "2 ground domains detected",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Ground Plane",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "decoupling",
+      "severity": "error",
+      "rule_id": "DC-002",
+      "confidence": "heuristic",
+      "title": "No decoupling cap found near U1 ByA",
+      "description": "U1 ByA (100nF +3V3 U1-VDDA Bypass) has no capacitor within 10mm. Every IC with power pins needs at least one decoupling capacitor.",
+      "components": [
+        "U1 ByA"
+      ],
+      "nets": [],
+      "recommendation": "Add 100nF X7R 0402 + 1\u00b5F X5R 0603 close to U1 ByA power pins. For high-speed ICs, add 10nF C0G for high-frequency decoupling. Place caps on the same side as U1 ByA with short, wide traces to vias.",
+      "detector": "emc_decoupling",
+      "summary": "No decoupling cap found near U1 ByA",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Decoupling",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "fix_params": {
+        "type": "add_component",
+        "components": [
+          {
+            "type": "capacitor",
+            "value": "100n"
+          }
+        ],
+        "basis": "Standard 100nF decoupling per IC"
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "decoupling",
+      "severity": "error",
+      "rule_id": "DC-002",
+      "confidence": "heuristic",
+      "title": "No decoupling cap found near U1 ByB",
+      "description": "U1 ByB (100nF +3V3 U1-VDD Bypass) has no capacitor within 10mm. Every IC with power pins needs at least one decoupling capacitor.",
+      "components": [
+        "U1 ByB"
+      ],
+      "nets": [],
+      "recommendation": "Add 100nF X7R 0402 + 1\u00b5F X5R 0603 close to U1 ByB power pins. For high-speed ICs, add 10nF C0G for high-frequency decoupling. Place caps on the same side as U1 ByB with short, wide traces to vias.",
+      "detector": "emc_decoupling",
+      "summary": "No decoupling cap found near U1 ByB",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Decoupling",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "fix_params": {
+        "type": "add_component",
+        "components": [
+          {
+            "type": "capacitor",
+            "value": "100n"
+          }
+        ],
+        "basis": "Standard 100nF decoupling per IC"
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on J-ETH",
+      "description": "J-ETH (JST-GH-4P-ETH) has 0 ground pin(s) for 4 signal pins. Recommended: at least 2 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "J-ETH"
+      ],
+      "nets": [],
+      "recommendation": "Ensure J-ETH has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on J-ETH",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on PB2-P2",
+      "description": "PB2-P2 (PB2I-P2-2x18) has 1 ground pin(s) for 34 signal pins. Recommended: at least 9 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "PB2-P2"
+      ],
+      "nets": [],
+      "recommendation": "Ensure PB2-P2 has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on PB2-P2",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on PB2-P1",
+      "description": "PB2-P1 (PB2I-P1-2x18) has 3 ground pin(s) for 30 signal pins. Recommended: at least 8 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "PB2-P1"
+      ],
+      "nets": [],
+      "recommendation": "Ensure PB2-P1 has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on PB2-P1",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on PA 100mW",
+      "description": "PA 100mW (2N3866  NPN BJT  PA Class-AB Final 100mW) has 0 ground pin(s) for 3 signal pins. Recommended: at least 2 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "PA 100mW"
+      ],
+      "nets": [],
+      "recommendation": "Ensure PA 100mW has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on PA 100mW",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "emission_estimate",
+      "severity": "info",
+      "rule_id": "EE-001",
+      "confidence": "heuristic",
+      "title": "Board cavity resonance frequencies",
+      "description": "Board (55\u00d735mm, \u03b5r=4.4) cavity resonances: (1,0) at 1299 MHz; (0,1) at 2042 MHz; (1,1) at 2420 MHz; (2,0) at 2599 MHz. PDN impedance spikes at these frequencies. Ensure adequate decoupling at and around these frequencies.",
+      "components": [],
+      "nets": [],
+      "recommendation": "Add decoupling capacitors with SRF near these frequencies.",
+      "detector": "emc_emission_estimate",
+      "summary": "Board cavity resonance frequencies",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Emission Estimate",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "schematic"
+      ]
+    }
+  ],
+  "per_net_scores": [
+    {
+      "net": "?",
+      "score": 94.0,
+      "finding_count": 2,
+      "rules": [
+        "GP-005"
+      ]
+    }
+  ],
+  "test_plan": {
+    "frequency_bands": [
+      {
+        "band": "30-88 MHz",
+        "freq_min_hz": 30000000.0,
+        "freq_max_hz": 88000000.0,
+        "risk_level": "none",
+        "source_count": 0,
+        "sources": []
+      },
+      {
+        "band": "88-216 MHz",
+        "freq_min_hz": 88000000.0,
+        "freq_max_hz": 216000000.0,
+        "risk_level": "none",
+        "source_count": 0,
+        "sources": []
+      },
+      {
+        "band": "216-960 MHz",
+        "freq_min_hz": 216000000.0,
+        "freq_max_hz": 960000000.0,
+        "risk_level": "none",
+        "source_count": 0,
+        "sources": []
+      },
+      {
+        "band": "960-40000 MHz",
+        "freq_min_hz": 960000000.0,
+        "freq_max_hz": 40000000000.0,
+        "risk_level": "none",
+        "source_count": 0,
+        "sources": []
+      }
+    ],
+    "interface_risks": [
+      {
+        "connector": "PGND 10n",
+        "value": "10nF C0G 0402  GND-PGND Moat Bridge",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-ETH",
+        "value": "JST-GH-4P-ETH",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PA By",
+        "value": "100nF +5V U3 PA VCC Bypass",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PA Re",
+        "value": "10 Ohm  U3B Emitter Degeneration",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PA Cb2",
+        "value": "100pF  PA Interstage Bypass",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "ANT RPSMA",
+        "value": "RPSMA-EDGE-50R",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PA By2",
+        "value": "1nF  U3B Collector RF Bypass",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PB2-P2",
+        "value": "PB2I-P2-2x18",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PB2-P1",
+        "value": "PB2I-P1-2x18",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PA Cb1",
+        "value": "100pF  DDS-RF Coupling Cap to U3A",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PA Rc1",
+        "value": "100 Ohm  U3A Collector Load",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PA Drvr",
+        "value": "MMBT2222A  NPN BJT  PA Class-A Driver",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PA Rb2",
+        "value": "1k Ohm  U3B Base Bias Resistor",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PA 100mW",
+        "value": "2N3866  NPN BJT  PA Class-AB Final 100mW",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PA Rb1",
+        "value": "10k Ohm  U3A Base Bias Resistor",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PTT Bead",
+        "value": "742792510  0402 Ferrite Bead 600Ohm@100MHz",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-ANT-SIK",
+        "value": "MMCX vertical",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      }
+    ],
+    "probe_points": [
+      {
+        "x": 109.0,
+        "y": 120.5,
+        "type": "inductor",
+        "ref": "LDO By",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 140.5,
+        "y": 121.0,
+        "type": "inductor",
+        "ref": "LNA By",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 133.5,
+        "y": 121.5,
+        "type": "inductor",
+        "ref": "L2 180n",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 133.5,
+        "y": 117.5,
+        "type": "inductor",
+        "ref": "L3 180n",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 133.5,
+        "y": 119.5,
+        "type": "inductor",
+        "ref": "L1 100n",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 143.9,
+        "y": 122.5,
+        "type": "inductor",
+        "ref": "LNA",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 114.1,
+        "y": 121.5,
+        "type": "inductor",
+        "ref": "LDO 3V3",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 104.5,
+        "y": 111.0,
+        "type": "inductor",
+        "ref": "L-SIK-SER",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      }
+    ]
+  },
+  "regulatory_coverage": {
+    "market": "us",
+    "applicable_standards": [
+      "FCC Part 15 Class B",
+      "FCC Part 15 Class B"
+    ],
+    "coverage_matrix": [
+      {
+        "standard": "FCC Part 15 Class B",
+        "test_type": "radiated",
+        "coverage": "minimal",
+        "checked_rules": [
+          "GP-001",
+          "GP-005",
+          "DC-002",
+          "EE-001"
+        ],
+        "total_applicable_rules": 23,
+        "note": "Design rule checks identify common radiation sources. Cannot predict absolute emission levels."
+      },
+      {
+        "standard": "FCC Part 15 Class B",
+        "test_type": "conducted",
+        "coverage": "minimal",
+        "checked_rules": [
+          "DC-002"
+        ],
+        "total_applicable_rules": 4,
+        "note": "Switching harmonic analysis and decoupling checks. EMI filter verification not yet implemented."
+      }
+    ]
+  },
+  "category_summary": {
+    "ground_plane": {
+      "count": 2,
+      "max_severity": "warning",
+      "severities": {
+        "error": 0,
+        "warning": 1,
+        "info": 1
+      },
+      "suppressed_count": 0
+    },
+    "decoupling": {
+      "count": 2,
+      "max_severity": "error",
+      "severities": {
+        "error": 2,
+        "warning": 0,
+        "info": 0
+      },
+      "suppressed_count": 0
+    },
+    "io_filtering": {
+      "count": 4,
+      "max_severity": "info",
+      "severities": {
+        "error": 0,
+        "warning": 0,
+        "info": 4
+      },
+      "suppressed_count": 0
+    },
+    "emission_estimate": {
+      "count": 1,
+      "max_severity": "info",
+      "severities": {
+        "error": 0,
+        "warning": 0,
+        "info": 1
+      },
+      "suppressed_count": 0
+    }
+  },
+  "board_info": {
+    "board_width_mm": 55.0,
+    "board_height_mm": 35.0,
+    "layer_count": 4,
+    "footprint_count": 88,
+    "via_count": 90,
+    "has_stackup": false,
+    "total_components": 84,
+    "total_nets": 153
+  },
+  "elapsed_s": 0.002,
+  "audience_summary": {
+    "designer": {
+      "total_findings": 9,
+      "by_severity": {
+        "error": 2,
+        "warning": 1,
+        "info": 6
+      },
+      "by_category": {
+        "ground_plane": 2,
+        "decoupling": 2,
+        "io_filtering": 4,
+        "emission_estimate": 1
+      },
+      "top_issues": [
+        {
+          "category": "decoupling",
+          "severity": "error",
+          "rule_id": "DC-002",
+          "confidence": "heuristic",
+          "title": "No decoupling cap found near U1 ByA",
+          "description": "U1 ByA (100nF +3V3 U1-VDDA Bypass) has no capacitor within 10mm. Every IC with power pins needs at least one decoupling capacitor.",
+          "components": [
+            "U1 ByA"
+          ],
+          "nets": [],
+          "recommendation": "Add 100nF X7R 0402 + 1\u00b5F X5R 0603 close to U1 ByA power pins. For high-speed ICs, add 10nF C0G for high-frequency decoupling. Place caps on the same side as U1 ByA with short, wide traces to vias.",
+          "detector": "emc_decoupling",
+          "summary": "No decoupling cap found near U1 ByA",
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Decoupling",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "fix_params": {
+            "type": "add_component",
+            "components": [
+              {
+                "type": "capacitor",
+                "value": "100n"
+              }
+            ],
+            "basis": "Standard 100nF decoupling per IC"
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "decoupling",
+          "severity": "error",
+          "rule_id": "DC-002",
+          "confidence": "heuristic",
+          "title": "No decoupling cap found near U1 ByB",
+          "description": "U1 ByB (100nF +3V3 U1-VDD Bypass) has no capacitor within 10mm. Every IC with power pins needs at least one decoupling capacitor.",
+          "components": [
+            "U1 ByB"
+          ],
+          "nets": [],
+          "recommendation": "Add 100nF X7R 0402 + 1\u00b5F X5R 0603 close to U1 ByB power pins. For high-speed ICs, add 10nF C0G for high-frequency decoupling. Place caps on the same side as U1 ByB with short, wide traces to vias.",
+          "detector": "emc_decoupling",
+          "summary": "No decoupling cap found near U1 ByB",
+          "pins": [],
+          "evidence_source": "heuristic_rule",
+          "report_context": {
+            "section": "Decoupling",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "fix_params": {
+            "type": "add_component",
+            "components": [
+              {
+                "type": "capacitor",
+                "value": "100n"
+              }
+            ],
+            "basis": "Standard 100nF decoupling per IC"
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "ground_plane",
+          "severity": "warning",
+          "rule_id": "GP-005",
+          "confidence": "deterministic",
+          "title": "2 ground domains detected",
+          "description": "Board has 2 separate ground domains: ?, ?. Multiple ground domains require careful single-point connection to avoid ground loops and EMI.",
+          "components": [],
+          "nets": [
+            "?",
+            "?"
+          ],
+          "recommendation": "Verify ground domains connect at a single, intentional point (typically near the ADC for analog/digital split). Ensure no signal traces cross the domain boundary.",
+          "detector": "emc_ground_plane",
+          "summary": "2 ground domains detected",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Ground Plane",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        }
+      ]
+    },
+    "reviewer": {
+      "total_findings": 3,
+      "by_category": {
+        "ground_plane": 1,
+        "decoupling": 2
+      },
+      "top_issues": [
+        {
+          "rule_id": "DC-002",
+          "severity": "error",
+          "summary": "No decoupling cap found near U1 ByA",
+          "recommendation": "Add 100nF X7R 0402 + 1\u00b5F X5R 0603 close to U1 ByA power pins. For high-speed ICs, add 10nF C0G for high-frequency decoupling. Place caps on the same side as U1 ByA with short, wide traces to vias.",
+          "category": "decoupling"
+        },
+        {
+          "rule_id": "DC-002",
+          "severity": "error",
+          "summary": "No decoupling cap found near U1 ByB",
+          "recommendation": "Add 100nF X7R 0402 + 1\u00b5F X5R 0603 close to U1 ByB power pins. For high-speed ICs, add 10nF C0G for high-frequency decoupling. Place caps on the same side as U1 ByB with short, wide traces to vias.",
+          "category": "decoupling"
+        },
+        {
+          "rule_id": "GP-005",
+          "severity": "warning",
+          "summary": "2 ground domains detected",
+          "recommendation": "Verify ground domains connect at a single, intentional point (typically near the ADC for analog/digital split). Ensure no signal traces cross the domain boundary.",
+          "category": "ground_plane"
+        }
+      ]
+    },
+    "manager": {
+      "risk_level": "moderate",
+      "blocker_count": 2,
+      "warning_count": 1,
+      "stage_readiness": {
+        "schematic": "pass",
+        "layout": "needs_work",
+        "pre_fab": "pass",
+        "bring_up": "pass"
+      },
+      "one_liner": "2 errors, 1 warning across 2 categories. Layout stage has blockers."
+    }
+  },
+  "trust_summary": {
+    "total_findings": 9,
+    "trust_level": "low",
+    "by_confidence": {
+      "deterministic": 2,
+      "heuristic": 7,
+      "datasheet-backed": 0
+    },
+    "by_evidence_source": {
+      "datasheet": 0,
+      "topology": 2,
+      "heuristic_rule": 7,
+      "symbol_footprint": 0,
+      "bom": 0,
+      "geometry": 0,
+      "api_lookup": 0
+    },
+    "provenance_coverage_pct": 0.0
+  }
+}

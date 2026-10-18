@@ -1,7 +1,7 @@
 # Serenity UAV — Flight Envelope Document
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** Rev S (2026-07-12)
 
 Resolves `TODO.md` Phase 0 pre-print documentation gate item "Flight Envelope
@@ -27,12 +27,40 @@ result materially.
 | T/W, Phase 11 (hover, nacelles only) | 1.43 | `README.md` |
 | Nacelle tilt range | −5° to 140° hard stops; 0° = cruise (horizontal), 90° = hover (vertical), 120° = backing thrust | `README.md` "Nacelles" |
 | Wing area (both wings) | 19,025 mm² (0.019025 m², 0.2048 ft²) | `airframe/openscad/wings/wings_s1223_revo.scad` |
-| Airfoil | Selig S1223, t/c = 12.14%, camber = 8.65% | `wings_s1223_revo.scad`; UIUC Airfoil Database |
-| CL_max | ≈ 2.0 at Re = 100,000 | Selig & Guglielmo wind-tunnel data, cited in `wings_s1223_revo.scad` |
+| Airfoil | **S1223/t17.7 (root) / S1223/t26.7 (tip)** — S1223 camber line, thickness envelope scaled ×1.46 / ×2.20. **NOT an S1223.** t/c 17.72 % / 26.71 % at 19.8 % chord; camber 8.67 % at 49.0 % chord (unscaled) | `wings_s1223_revo.scad` "SECTION DESIGNATION AND DATA"; `docs/WING_ATTACH_INTERFACE.md` §4A |
+| CL_max | **UNKNOWN for the built section** — see the banner below. The 2.0 figure used throughout this document is true-S1223 wind-tunnel data and is retained only so the numbers remain reproducible | Selig & Guglielmo, for the *unmodified* S1223 |
 | Root/tip chord, semi-span | 129 mm / 93 mm, 85.7 mm | `wings_s1223_revo.scad` |
 | Air density (ISA sea level) | ρ = 1.225 kg/m³ | Standard atmosphere |
 
 ---
+
+> ## ⚠ EVERY AERODYNAMIC RESULT IN THIS DOCUMENT IS UNVERIFIED AS OF REV S1e
+>
+> **The wing section changed on 2026-08-29 and this document has not been
+> re-derived against it.** The Rev S1e spar migration scales the thickness
+> envelope ×1.46 at the root and ×2.20 at the tip to swallow a Ø20.4 spar, so
+> the built sections are **S1223/t17.7** and **S1223/t26.7** — not S1223.
+>
+> The **camber line is preserved exactly** (8.67 % at 49.0 % chord), which is
+> the reason to expect the change to be less severe than the thickness numbers
+> alone suggest: thin-airfoil theory makes zero-lift angle and lift-curve slope
+> depend on the camber line and not on thickness. But that theory is valid for
+> *thin* sections, and at 26.71 % t/c the tip is far outside its range.
+>
+> **`CL_max ≈ 2.0` does not carry over.** `c_l,max` depends on the thickness
+> distribution, the leading-edge radius (now 2.1× the baseline at the root and
+> 4.8× at the tip), and the laminar separation bubble — all three changed. It
+> can only come from measurement or computation at the actual Re, never from
+> theory and never from a different section.
+>
+> Every V_min, stall-speed, and lift figure below therefore rests on an input
+> that no longer describes the aircraft. They are retained unchanged so the
+> derivations stay reproducible and so re-running them is a substitution rather
+> than a rewrite. **Do not fly to these numbers.**
+>
+> Closing this needs XFOIL or a transition-sensitive RANS run at
+> Re 1.3–1.8 × 10⁵ (the operating range — a fully-turbulent model will
+> misrepresent the bubble), or a bench/tunnel result. Tracked in `TODO.md` §0.8.
 
 ## 1. V_min — Minimum Control Airspeed vs. Nacelle Tilt Angle
 
@@ -71,12 +99,15 @@ with zero forward airspeed (θ_hover, solving sin(θ) = W/T):
 | 120° (backing thrust) | 0 kt | 0 kt | Vertical component still exceeds weight (sin 120° = 0.866) |
 | 140° (hard stop) | 0 kt | ≈ 0 kt, thin margin | Vertical component only 1.0 N above weight at Phase 5–10 AUW — **do not rely on 140° for sustained hover margin**; treat as a transient/backing-thrust extreme, not a hover trim point |
 
-**Important caveat on CL_max:** the 2.0 figure is wind-tunnel data at
-Re ≈ 100,000; this airframe's cruise Reynolds number at the wing root is
-≈ 177,000 at 40 kt (`wings_s1223_revo.scad`), where CL_max is expected to be
-at least as good, typically better, for the S1223 — using the lower-Re
-figure here is conservative (over-predicts V_min slightly rather than
-under-predicting it). No wind-tunnel or CFD validation at the actual
+**Important caveat on CL_max — strengthened at Rev S1e.** The 2.0 figure is
+wind-tunnel data at Re ≈ 100,000 for the **unmodified** S1223. This airframe's
+cruise Reynolds number at the wing root is ≈ 182,000 at 40 kt (ISA SL;
+≈ 177,000 at 20 °C), and for a *true* S1223 the higher Re would make the
+lower-Re figure conservative.
+**That argument no longer applies**, because the built section is not an S1223
+(see the banner at the top of this document). The Re comparison is still valid;
+the section comparison is not, and the section change is the larger effect.
+Treat CL_max as UNKNOWN rather than conservative. No wind-tunnel or CFD validation at the actual
 operating Re has been performed for this specific planform; treat the table
 above as a design estimate pending flight test, not a flight-tested limit.
 
@@ -272,7 +303,7 @@ here.
 |---|---|---|
 | V_min at 0° (cruise) | 66.3 kt | Computed from design data |
 | V_min at θ_hover ≈ 38.3° and above | 0 kt (thrust-borne) | Computed from design data |
-| V_NE (never-exceed) | 87 kt | Regulatory ceiling (§107.51(a)); actual top speed TBD, Phase 9 |
+| V_NE (never-exceed) | 87 kt | Regulatory ceiling (§107.51(a)); actual top speed pending flight test (Phase 9) |
 | AGL ceiling | 400 ft | Regulatory (§107.51(b)) |
 | MSL / density-altitude margin | ≈ 15,000 ft density altitude before T/W < 1.0 | Computed, first-order estimate |
 | Max demonstrated crosswind | Pending flight test | Phase 9 WBS acceptance target ≥ 10 kt (hover) |
@@ -282,4 +313,4 @@ here.
 
 *"We're on the leading edge of a new age." Also, apparently, of a fairly
 generous V_NE margin over what a 50 mm EDF tilt-rotor can actually manage.
-— paraphrasing Mal, not verifying his airspeed indicator*
+— paraphrasing Skipper, not verifying his airspeed indicator*
