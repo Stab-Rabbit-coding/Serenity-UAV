@@ -48,7 +48,7 @@ CAPS = "/usr/share/kicad/footprints/Capacitor_SMD.pretty"
 # ref -> (library path, footprint name, new value, {pad number: net name or None})
 # The library nickname for each path (FootprintLoad drops it; parity needs it).
 NICK = {CUSTOM: "Serenity-Custom", CAPS: "Capacitor_SMD"}
-SWAPS = {
+SWAPS: dict = {
     "U-3V3": (CUSTOM, "TI_SIL0010D_uSiP-10_2.0x2.5mm_P0.5mm", "TPSM828224SILR",
               {"1": "+5V", "2": "+5V", "3": "+5V", "4": None,
                "5": "+3V3", "6": "+3V3", "7": "+3V3", "8": "+3V3",

@@ -29,6 +29,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+from typing import Any
 
 from eval_placement import GROUNDS, ISO_HF, TARGETS, in_poly
 
@@ -115,7 +116,7 @@ def main() -> None:
         offs = [(p["x"] - f["x"], p["y"] - f["y"]) for p in P[ref]]
         hw, hh = (f["cy"][2] - f["cy"][0]) / 2, (f["cy"][3] - f["cy"][1]) / 2
         iso = net.startswith(ISO_NETS)
-        best = (cur_score[ref] - 0.2, None)
+        best: "tuple[Any, Any]" = (cur_score[ref] - 0.2, None)
         targets = [q for q in P[ic] if q["net"] == net]
         for side in ("F", "B"):
             for drot in (0, 90):

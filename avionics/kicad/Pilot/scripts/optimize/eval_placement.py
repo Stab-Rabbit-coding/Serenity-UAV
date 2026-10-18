@@ -60,6 +60,7 @@ def fp_block(text: str, ref: str) -> "tuple[int, int]":
     i = text.index(f'(property "Reference" "{ref}"')
     s = text.rfind("\n\t(footprint ", 0, i) + 1
     m = re.compile(r"^\t\)\n", re.M).search(text, i)
+    assert m is not None, f"{ref}: unterminated footprint block"
     return s, m.end()
 
 
@@ -88,6 +89,7 @@ def apply_moves(text: str, spec: dict) -> str:
                 blk = re.sub(r"(\t\t\t\(effects\n(?:\t\t\t\t.*\n)*?)(\t\t\t\))",
                              lambda m: m.group(1) + "\t\t\t\t(justify mirror)\n" + m.group(2), blk)
         m = re.search(r"\n\t\t\(at ([-\d.]+) ([-\d.]+)((?: [-\d.]+)?)\)", blk)
+        assert m is not None, f"{ref}: footprint block has no (at x y) line"
         x = mv.get("x", float(m.group(1)))
         y = mv.get("y", float(m.group(2)))
         old_rot = float(m.group(3)) if m.group(3).strip() else 0.0

@@ -5,17 +5,19 @@ import pcbnew
 import math
 
 # ---- user‑adjustable parameters ---------------------------------
-spacing_mm      = 2.5               # distance between consecutive vias
+spacing_mm = 2.5               # distance between consecutive vias
 via_diameter_mm = 0.6               # via drill + pad size (adjust to your design)
-net_name        = "GND"             # net to which the stitching vias belong
+net_name = "GND"             # net to which the stitching vias belong
 # ------------------------------------------------------------------
 
 board = pcbnew.GetBoard()
 edge = board.GetBoardEdges()          # returns a list of EDGE_SEGMENTS (the board outline)
 
+
 # Helper: convert millimeters to internal KiCad units (nanometers)
 def mm_to_nm(value):
     return int(value * pcbnew.IU_PER_MM)
+
 
 # ------------------------------------------------------------------
 # 1. Build a list of points that follow the whole board perimeter
@@ -33,6 +35,8 @@ if perimeter:
 # ------------------------------------------------------------------
 # 2. Walk along the perimeter and place a via every *spacing_mm*
 # ------------------------------------------------------------------
+
+
 def place_via_at(pos):
     via = pcbnew.VIA(board)
     via.SetPosition(pos)
@@ -50,12 +54,13 @@ def place_via_at(pos):
 
     board.Add(via)
 
+
 # walk the polyline
 if len(perimeter) < 2:
     raise RuntimeError("Board outline not found.")
 
 dist_acc = 0.0                 # accumulated distance along current edge
-last_pt  = perimeter[0]
+last_pt = perimeter[0]
 
 for pt in perimeter[1:]:
     # vector for this edge

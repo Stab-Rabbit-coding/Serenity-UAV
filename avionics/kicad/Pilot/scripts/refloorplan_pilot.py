@@ -282,11 +282,11 @@ def sync(b: pcbnew.BOARD) -> List[str]:
         if b.FindNet(n) is None:
             b.Add(pcbnew.NETINFO_ITEM(b, n))
     for pad in b.GetPads():
-        n = pin_net.get((pad.GetParentFootprint().GetReference(), pad.GetNumber()))
-        if n is None:
+        pad_net = pin_net.get((pad.GetParentFootprint().GetReference(), pad.GetNumber()))
+        if pad_net is None:
             pad.SetNetCode(0)
         else:
-            pad.SetNet(b.FindNet(n))
+            pad.SetNet(b.FindNet(pad_net))
     return log
 
 

@@ -22,7 +22,7 @@ WORK=$(realpath -m "$2")
 HERE=$(cd "$(dirname "$0")" && pwd)
 KICADS="$HERE/../kicads"
 LIBS="$HERE/../.."
-PY=/usr/bin/python3   # system Python: pcbnew + shapely (the repo .venv hides them)
+PY=/usr/bin/python3 # system Python: pcbnew + shapely (the repo .venv hides them)
 
 mkdir -p "$WORK/kicads"
 # the project fp-lib-table resolves ${KIPRJMOD}/../../Serenity-Custom.pretty
@@ -33,7 +33,7 @@ cp "$KICADS/Pilot.kicad_dru" "$WORK/stage1.kicad_dru"
 
 "$PY" "$HERE/refloorplan_pilot.py" --keep-copper --rmax 35 "$IN" "$WORK/stage1.kicad_pcb" \
     --png "$WORK/stage1.png" 2>&1 | grep -v "memory leak"
-"$PY" "$HERE/iso_zones_pilot.py" "$WORK/stage1.kicad_pcb" "$WORK/kicads/Pilot.kicad_pcb" 2>&1 \
-    | grep -v "memory leak"
+"$PY" "$HERE/iso_zones_pilot.py" "$WORK/stage1.kicad_pcb" "$WORK/kicads/Pilot.kicad_pcb" 2>&1 |
+    grep -v "memory leak"
 python3 "$HERE/cleanup_pilot_copper.py" "$WORK/kicads/Pilot.kicad_pcb"
 python3 "$HERE/repair_pilot_routing.py" "$WORK/kicads/Pilot.kicad_pcb" 200

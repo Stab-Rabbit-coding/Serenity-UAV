@@ -101,7 +101,8 @@ def main() -> None:
                for i in range(n)]
         ok = [via_ok[cell(*p)] for p in pts]
         # components of legal vias joined by a legal F or B segment
-        comps, cur = [], []
+        comps: list = []
+        cur: list = []
         for i, p in enumerate(pts):
             if not ok[i]:
                 if cur:
@@ -139,7 +140,9 @@ def main() -> None:
             for k in link[0]:
                 segs.append((k, link[1], link[2]))
     text = pcb.read_text()
-    code = int(re.search(rf'^\t\(net (\d+) "{re.escape(NET)}"\)', text, re.M).group(1))
+    net_m = re.search(rf'^\t\(net (\d+) "{re.escape(NET)}"\)', text, re.M)
+    assert net_m is not None, f"net block for {NET!r} not found in {pcb}"
+    code = int(net_m.group(1))
     blocks = []
     for k, p, q in segs:
         blocks.append(f'\t(segment\n\t\t(start {p[0]} {p[1]})\n\t\t(end {q[0]} {q[1]})\n'

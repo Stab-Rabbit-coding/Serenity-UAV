@@ -176,7 +176,7 @@ class Board:
                 self.band_b |= in_poly_grid(self.X, self.Y, b["pts"])
         self.in_band_b = distance_transform_edt(self.band_b) * res
         # §13.1 bubbles: per bubble, distance from each cell to the bubble
-        self.bubbles = {}
+        self.bubbles: dict = {}
         for bub in g.get("bubbles", []):
             m = in_poly_grid(self.X, self.Y, bub["pts"])
             prev = self.bubbles.get(bub["name"])
@@ -383,7 +383,9 @@ def route_pair(B: Board, net: str, a: dict, b: "dict | None", margin=6.0, plane=
         goals = {(k, gy, gx) for k in lay(b)}
     dirs = [(-1, 0, 1), (1, 0, 1), (0, -1, 1), (0, 1, 1), (-1, -1, 1.4142), (-1, 1, 1.4142),
             (1, -1, 1.4142), (1, 1, 1.4142)]
-    dist, prev, pq = {}, {}, []
+    dist: dict = {}
+    prev: dict = {}
+    pq: list = []
     for s in starts:
         dist[s] = 0.0
         heapq.heappush(pq, (0.0, 0.0, s))
@@ -553,15 +555,20 @@ def main() -> None:
         placed.setdefault(net, []).extend(keep)
         return segs, keep, w
 
+    def net_of(description: str) -> str:
+        m = re.search(r"\[([^\]]+)\]", description)
+        assert m is not None, f"unconnected-item description has no [net]: {description!r}"
+        return m.group(1)
+
     # route plane drops first, then short connections before long ones
     def span(u):
         p, q = u["items"][0]["pos"], u["items"][-1]["pos"]
-        net = re.search(r"\[([^\]]+)\]", u["items"][0]["description"]).group(1)
+        net = net_of(u["items"][0]["description"])
         return (net not in PLANES, math.hypot(p["x"] - q["x"], p["y"] - q["y"]))
     items.sort(key=span)
     for u in items[:a.max]:
         ia, ib = u["items"][0], u["items"][-1]
-        net = re.search(r"\[([^\]]+)\]", ia["description"]).group(1)
+        net = net_of(ia["description"])
         if only and net not in only:
             continue
         plane = net in PLANES
@@ -606,7 +613,7 @@ def main() -> None:
         by_uuid.update({v["uuid"]: ("v", v) for v in g["vias"]})
         for u in failed_items:
             ia, ib = u["items"][0], u["items"][-1]
-            net = re.search(r"\[([^\]]+)\]", ia["description"]).group(1)
+            net = net_of(ia["description"])
             plane = net in PLANES
             ends = [it for it in (ia, ib) if it["description"].startswith("Pad")] if plane \
                 else [ia]
@@ -615,8 +622,8 @@ def main() -> None:
                                plane=plane, ripup=True)
                 if not r:
                     continue
-                r = fresh(net, r)
-                c = conflicts(g, net, *r, ripped)
+                segs, keep, w = fresh(net, r)
+                c = conflicts(g, net, segs, keep, w, ripped)
                 if len(c) > RIP_MAX:
                     continue
                 for uid in c:
@@ -629,14 +636,16 @@ def main() -> None:
                             B._capsule(k, it2["x"], it2["y"], it2["x"], it2["y"], it2["r"],
                                        it2["net"], erase=True)
                 ripped.update(c)
-                B.add_route(net, *r)
-                added.append(emit(codes[net], *r))
+                B.add_route(net, segs, keep, w)
+                added.append(emit(codes[net], segs, keep, w))
                 rerouted += 1
         if ripped:
             out, last = [], 0
             for m in re.finditer(r"^\t\((segment|arc|via)(?: \w+)?\n.*?^\t\)\n", text,
                                  re.S | re.M):
-                u_ = re.search(r'\(uuid "([^"]+)"\)', m.group(0)).group(1)
+                uuid_m = re.search(r'\(uuid "([^"]+)"\)', m.group(0))
+                assert uuid_m is not None, f"track/via block has no uuid: {m.group(0)!r}"
+                u_ = uuid_m.group(1)
                 if u_ in ripped:
                     out.append(text[last:m.start()])
                     last = m.end()

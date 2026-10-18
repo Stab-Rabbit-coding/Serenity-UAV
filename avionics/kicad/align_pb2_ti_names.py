@@ -158,12 +158,11 @@ def rename_header_pins(text: str) -> Tuple[str, int]:
         rail = None
         if kind == "symbol":
             # generator symbols are named "<lib>:S_PB2-P1" (value "PB2I-P1-2x18")
-            hit = re.search(r"(?:^|:)S_PB2-(P[12])$|PB2I-(P[12])-2x18", name)
-            hit = (hit.group(1) or hit.group(2)) if hit else None
-            rail = hit
+            sym_m = re.search(r"(?:^|:)S_PB2-(P[12])$|PB2I-(P[12])-2x18", name)
+            rail = (sym_m.group(1) or sym_m.group(2)) if sym_m else None
         else:
-            hit = re.search(r'\(property "Reference" "PB2-(P[12])"', block)
-            rail = hit.group(1) if hit else None
+            ref_m = re.search(r'\(property "Reference" "PB2-(P[12])"', block)
+            rail = ref_m.group(1) if ref_m else None
         if rail is None:
             continue
         if kind == "symbol":

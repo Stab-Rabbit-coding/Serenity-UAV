@@ -166,7 +166,9 @@ def main() -> None:
             m = re.match(r"Pad (\S+) \[([^\]]+)\] of (\S+)", it["description"])
             if m and m.group(2) in PLANE_NETS:
                 want.add((m.group(3), m.group(1), m.group(2)))
-    placed, blocks, skipped = [], [], []
+    placed: list = []
+    blocks: list = []
+    skipped: list = []
     for p in g["pads"]:
         if (p["ref"], p["num"], p["net"]) not in want or p["drill"] > 0:
             continue

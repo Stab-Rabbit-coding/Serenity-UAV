@@ -56,6 +56,7 @@ def move_footprints(text: str) -> str:
         i = text.index(tag)
         fp = text.rfind("\n\t(footprint ", 0, i)
         m = re.compile(r"\n\t\t\(at ([-\d.]+) ([-\d.]+)((?: [-\d.]+)?)\)").search(text, fp)
+        assert m is not None, f"{ref}: footprint block has no (at x y) line"
         x, y = float(m.group(1)), float(m.group(2))
         x, y = nx if nx is not None else x, ny if ny is not None else y
         text = text[:m.start()] + f"\n\t\t(at {x:g} {y:g}{m.group(3)})" + text[m.end():]
@@ -65,9 +66,12 @@ def move_footprints(text: str) -> str:
 
 def drop(text: str, uuids: set) -> "tuple[str, int]":
     """Remove the routed blocks whose uuid is in ``uuids``."""
-    out, last, n = [], 0, 0
+    out: list = []
+    last, n = 0, 0
     for s, e, _kind, body in blocks(text):
-        u = re.search(r'\(uuid "([^"]+)"\)', body).group(1)
+        u_m = re.search(r'\(uuid "([^"]+)"\)', body)
+        assert u_m is not None, f"routed block has no uuid: {body!r}"
+        u = u_m.group(1)
         if u in uuids:
             out.append(text[last:s])
             last = e
@@ -82,9 +86,13 @@ def odd_vias(text: str) -> set:
     for _s, _e, kind, body in blocks(text):
         if kind != "via":
             continue
-        drill = float(re.search(r"\(drill ([\d.]+)\)", body).group(1))
+        drill_m = re.search(r"\(drill ([\d.]+)\)", body)
+        assert drill_m is not None, f"via block has no drill: {body!r}"
+        drill = float(drill_m.group(1))
         if re.search(r"^\t\t(blind|micro)\b", body, re.M) or "(type " in body or drill < 0.3:
-            bad.add(re.search(r'\(uuid "([^"]+)"\)', body).group(1))
+            uuid_m = re.search(r'\(uuid "([^"]+)"\)', body)
+            assert uuid_m is not None, f"via block has no uuid: {body!r}"
+            bad.add(uuid_m.group(1))
     return bad
 
 
@@ -96,7 +104,7 @@ def drc(pcb: Path) -> dict:
 
 
 def rip_set(report: dict) -> set:
-    doomed = set()
+    doomed: set = set()
     for v in report.get("violations", []):
         if v["type"] not in RIP_TYPES:
             continue

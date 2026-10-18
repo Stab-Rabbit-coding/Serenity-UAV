@@ -5,15 +5,17 @@ import pcbnew
 import math
 
 # -------------------- USER SETTINGS --------------------
-spacing_mm      = 2.5               # spacing between vias
+spacing_mm = 2.5               # spacing between vias
 via_diameter_mm = 0.6               # overall via pad diameter
-via_drill_mm    = 0.3               # drill size (adjust to your fab house)
-net_name        = "GND"             # net name for the stitching vias
+via_drill_mm = 0.3               # drill size (adjust to your fab house)
+net_name = "GND"             # net name for the stitching vias
 # -----------------------------------------------------
+
 
 # Helper to convert mm → internal KiCad units (nanometers)
 def mm_to_nm(v: float) -> int:
     return int(v * pcbnew.IU_PER_MM)
+
 
 # -----------------------------------------------------------------
 # 1️⃣ Get the current board and its outline (Edge‑Cuts)
@@ -36,6 +38,7 @@ if net is None:
     net = pcbnew.NETINFO_ITEM(board, net_name)
     board.Add(net)
 
+
 # -----------------------------------------------------------------
 # 3️⃣ Function that actually places a via at a VECTOR2I position
 # -----------------------------------------------------------------
@@ -48,6 +51,7 @@ def place_via(pos: pcbnew.VECTOR2I):
     via.SetNet(net)
 
     board.Add(via)
+
 
 # -----------------------------------------------------------------
 # 4️⃣ Walk the outline and drop a via every *spacing_mm*

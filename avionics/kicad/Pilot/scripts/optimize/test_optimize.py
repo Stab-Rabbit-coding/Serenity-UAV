@@ -64,6 +64,8 @@ class GeometryHelpers(unittest.TestCase):
 class TextTransforms(unittest.TestCase):
     """S-expression edits on the committed board."""
 
+    text: str
+
     @classmethod
     def setUpClass(cls) -> None:
         cls.text = BOARD.read_text()

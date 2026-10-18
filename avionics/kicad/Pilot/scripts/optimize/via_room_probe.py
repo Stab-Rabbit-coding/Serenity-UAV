@@ -63,7 +63,8 @@ def main() -> None:
 
     out = {"plane_pads": len(plane), "reach_mm": reach}
     for mode in ("courtyard", "copper"):
-        placed, found = [], 0
+        placed: list = []
+        found = 0
         for p in plane:
             best = None
             for i in range(-25, 26):
