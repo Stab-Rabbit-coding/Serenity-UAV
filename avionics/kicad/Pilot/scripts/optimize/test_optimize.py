@@ -90,8 +90,9 @@ class TextTransforms(unittest.TestCase):
     def test_apply_moves_matches_pcbnew(self) -> None:
         cases = {"C-SS": (0, False), "C-IN2": (0, False),
                  "C-485-1": (90, True), "BARO": (90, False)}
-        moves = {r: {"rot": rot, **({"side": "F"} if flip else {})}
-                 for r, (rot, flip) in cases.items()}
+        moves: dict = {}
+        for r, (rot, flip) in cases.items():
+            moves[r] = {"rot": rot, **({"side": "F"} if flip else {})}
         work = Path(tempfile.mkdtemp(prefix="pilot-test-"))
         (work / "t.kicad_pcb").write_text(apply_moves(self.text, {"moves": moves}))
         code = f"""
@@ -111,8 +112,9 @@ for ref, (rot, flip) in {cases!r}.items():
     res[ref] = [pads(t, ref), pads(o, ref)]
 print(json.dumps(res))
 """
-        r = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=True)
-        for ref, (text_pads, pcb_pads) in json.loads(r.stdout.strip().splitlines()[-1]).items():
+        proc = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True,
+                               check=True)
+        for ref, (text_pads, pcb_pads) in json.loads(proc.stdout.strip().splitlines()[-1]).items():
             for a, b in zip(text_pads, pcb_pads):
                 self.assertEqual(a[0], b[0], ref)
                 self.assertAlmostEqual(a[1], b[1], delta=0.002, msg=ref)
