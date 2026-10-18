@@ -26,6 +26,35 @@ blocks below keep the old names as they were written.
 | `ETH2_*`, `ETH2-USB_AVDDK`/`_DVDDK` | `ETH_USB1_*`, `NIC-USB1_AVDDK`/`_DVDDK` | Pilot |
 | `C-U2-*`, `R-BS2T`/`R-BS2R`/`C-BS2` | `C-USB1-*`, `R-USB1-BST`/`R-USB1-BSR`/`C-USB1-BS` | Pilot |
 
+**Update 2026-10-18 (single expansion port, compliant field-port TVS; S. Griffing decisions
+2026-10-17, implemented by Claude Opus 5.5) — schematic only; the PCB is not yet re-synced.**
+`scripts/gen_pilot_sch.py` regenerates to ERC 0 with 111 parts (was 118).
+
+- **One JST-GH expansion port.** `J-SPI` is now a 6-pin SM06B-GHS-TB: 5V, SCK, MISO, MOSI,
+  !SS1, GND, in Pixhawk DS-009 "SPI port" order without !SS2 [REF-CONN-002]. The four signals
+  sit on SPI2 balls that also mux to UART1 / UART6 (SPRSP58C Table 5-1, recorded in
+  `../PB2I_AM625_HEADER_CAPABILITIES.md` §4), so an external GNSS can use the port as a UART.
+  Removed: `J-GPS`, `F-GPS`, `C-GPS5`, `R-I2C-SCL`, `R-I2C-SDA`, `ESD-GPS`, `ESD-SS2`. Header
+  pins P1-31, P1-33, P1-36, P2-2 and P2-4 are now spare.
+- **Field-port TVS replaced** (AGENTS.md §5: Nexperia is owned by PRC-domiciled Wingtech).
+  The PRTR5V0U2X was also the wrong clamp for these buses: a 5 V rail-referenced array holds a
+  line inside 0 to 5 V, while CAN and RS-485 must ride a wider common-mode range.
+
+| Ref | Was | Now | Basis |
+| --- | --- | --- | --- |
+| `TVS-CAN` | PRTR5V0U2X,115 (Nexperia) | TI ESD2CAN24DCKRQ1, SC-70, ±24 V VRWM, 3 pF | ISOW1044 bus pins rated ±58 V [REF-SENSOR-009]; [REF-SENSOR-053] Table 4-1 |
+| `TVS-RS485` | PRTR5V0U2X,115 (Nexperia) | Bourns CDSOT23-SM712, SOT-23, −7 V / +12 V VWM | Matches the RS-485 common-mode range; ISOW1412 bus pins rated −12 V to +15 V [REF-SENSOR-010]; [REF-SENSOR-054] |
+| `TVS-1553P/N` | SMAJ33CA, no maker named (local PDF from an unnamed maker) | Bourns SMAJ33CA | [REF-SENSOR-055]; same SMA land and ratings |
+
+- **Note:** The SM712 clamps to 19 V at 1 A [REF-SENSOR-054], above the ISOW1412's +15 V
+  absolute maximum. The ISOW1412's own IEC 61000-4-2 ±8 kV bus rating and the CMC between the
+  clamp and the transceiver take that residual. This is the standard RS-485 arrangement, not a
+  margin.
+- Each TVS symbol now carries a `Manufacturer` property, so the BOM names the maker of record.
+- **Temperature (owner, 2026-10-17):** the −40 °C to +85 °C figure in
+  `docs/AVIONICS_PB2_REDESIGN.md` is the PB2-I module's rating, not a board requirement. The
+  AX88772E's 0 °C to +70 °C rating therefore does not disqualify it.
+
 **Update 2026-10-17 (PB2-I header re-map, Ethernet ring architecture, sourcing rules; S.
 Griffing decisions, implemented by Claude Opus 5.5) — schematic ahead of the PCB.**
 
@@ -66,8 +95,8 @@ Griffing decisions, implemented by Claude Opus 5.5) — schematic ahead of the P
     - Realtek RTL8152B-VB-CG: datasheet marked "CONFIDENTIAL: Development Partners Only"
       (fails the NDA-free rule).
     - Microchip LAN9500Ai: 8 x 8 QFN-56 does not fit.
-    - ASIX AX88772E is selected (public datasheet, 4 x 4 QFN-32, 0-70 °C); it waits for ASIX's
-      reference schematic.
+    - ASIX AX88772E is selected (public datasheet v1.03 [REF-SENSOR-056], 4 x 4 QFN-32,
+      0-70 °C, accepted by the owner 2026-10-17); it waits for ASIX's reference schematic.
 - **Expansion:** the GNSS's place goes to one 6-pin JST-GH on the PB2-I SPI2 pins (SPI /
   UART1 / UART6 / PWM / GPIO) with fused 5 V and ESD. There is room for only one edge
   connector.

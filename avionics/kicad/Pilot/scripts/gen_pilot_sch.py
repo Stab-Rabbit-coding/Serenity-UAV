@@ -66,6 +66,23 @@ Lineage
   Reason: two ISOW §13.1 4 mm metal-free bubbles [REF-SENSOR-009/010] do not
   fit the 55 x 35 mm cape with the GPS aboard.  The same pass adds the §13.1
   ferrite beads and splits the DC-DC output nets (see FB-CAN-* / FB-485-*).
+* 2026-10-18 (Claude Opus 5.5; owner decisions S. Griffing 2026-10-17):
+    - One JST-GH expansion port only (no second board-edge site): J-SPI becomes
+      a 6-pin SM06B-GHS-TB (5V, SCK, MISO, MOSI, SS1, GND on the SPI2 pins; the
+      same pins also mux to UART1 / UART6).  J-GPS, its PTC / bypass / I2C
+      pull-ups / ESD array and the SS2 line are removed; P1-31/33/36 and
+      P2-2/4 become spare.
+    - Sourcing rule (AGENTS.md §5): the Nexperia PRTR5V0U2X (Nexperia is owned
+      by PRC-domiciled Wingtech) at the CAN and RS-485 field connectors is
+      replaced.  It was also the wrong clamp: a 5 V rail-referenced array holds
+      the bus inside 0..5 V, far narrower than the ISOW1044 receiver's +/-12 V and
+      the RS-485 -7..+12 V common-mode ranges.  Each TVS row now carries a
+      ``Manufacturer`` property (new optional ``mfr`` flag).  CAN: TI
+      ESD2CAN24-Q1, SC-70 (+/-24 V VRWM, 3 pF; the ISOW1044 bus pins are rated
+      +/-58 V) [REF-SENSOR-053].  RS-485: Bourns
+      CDSOT23-SM712 (-7 / +12 V VWM, the RS-485 common-mode range; the
+      ISOW1412 bus pins are rated -12..+15 V) [REF-SENSOR-054].  The 1553
+      SMAJ33CA now names a compliant manufacturer, Bourns [REF-SENSOR-055].
 
 Datasheets (all in ``avionics/datasheets/``; OEM documents are authoritative
 per ``avionics/AGENTS.md``):
@@ -76,10 +93,13 @@ per ``avionics/AGENTS.md``):
   ICM-42688-P ds-000347 Table 10 | BMP388 bst-bmp388-ds001.pdf Table 50 |
   SRF2012A SRF2012A.pdf | TPSM828224SILR tpsm82822.pdf (SLVSEP0F) Table 6-1 |
   ECS-2520MV ECS-2520MV.pdf p.1 |
-  X2Y (Yageo CX0805) X2Y_15-2237598.pdf Table 3.
+  X2Y (Yageo CX0805) X2Y_15-2237598.pdf Table 3 |
+  ESD2CAN24-Q1 ESD2CANxx24-Q1_SLVSFW5D.pdf Table 4-1 | CDSOT23-SM712 Bourns_CDSOT23-SM712.pdf p.1 |
+  SMAJ33CA Bourns_SMAJ.pdf (REV. 09/20) | TPD4E05U06 TPDxE05U06_SLVSBO7O.pdf Table 4-2.
 
 Author: Claude Opus 4.8 (2026-07-14); Claude Opus 5 (2026-07-28, 2026-09-19);
-Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap; 2026-10-12, §13.1 beads + GNSS off-board).
+Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap; 2026-10-12, §13.1 beads + GNSS off-board;
+2026-10-18, single GH port + compliant TVS).
 Human owner: sgriffing (Griffing Technology LLC).  License: CC BY 4.0.
 """
 
@@ -122,14 +142,13 @@ FP_TSM2X8 = "Serenity-Custom:Samtec_TSM-108-01-x-DV"
 FP_LGA14 = "Package_LGA:Bosch_LGA-14_3x2.5mm_P0.5mm"
 FP_SOT583 = "Package_TO_SOT_SMD:SOT-583-8"
 FP_SIL0010D = "Serenity-Custom:TI_SIL0010D_uSiP-10_2.0x2.5mm_P0.5mm"
-FP_SOT363 = "Package_TO_SOT_SMD:SOT-363_SC-70-6"
+FP_SOT323 = "Package_TO_SOT_SMD:SOT-323_SC-70"   # TI DCK (SC-70, 3)
+FP_SOT23 = "Package_TO_SOT_SMD:SOT-23"           # JEDEC SOT23 (Bourns CDSOT23)
 FP_OSC2520 = "Oscillator:Oscillator_SMD_ECS_2520MV-xxx-xx-4Pin_2.5x2.0mm"
 FP_GH4 = "Connector_JST:JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal"
 FP_GH6 = "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
-FP_GH7 = "Connector_JST:JST_GH_SM07B-GHS-TB_1x07-1MP_P1.25mm_Horizontal"
 FP_QFN24_4X4 = "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm"
 FP_DQA10 = "Serenity-Custom:TI_DQA0010A_USON-10_2.5x1.0mm_P0.5mm"
-FP_SOD523 = "Diode_SMD:D_SOD-523"
 FP_F0805 = "Fuse:Fuse_0805_2012Metric"
 FP_HOLE = "Serenity-Custom:MountingHole_2.7mm_M2.5_PGND_Ring"
 # project-custom lands (avionics/kicad/Serenity-Custom.pretty)
@@ -614,18 +633,18 @@ PB2_P1 = [
     "TPM_RSTN",       # 28 K22 GPIO0_43 (B3 left input)
     "DSHOT2",         # 29 Y20 PR0_PRU0_GPO7
     None,             # 30 E14 UART0_TXD — PB2 console, left free
-    "EXT_SPI_SS2",    # 31 Y22 GPIO0_59
+    None,             # 31 Y22 GPIO0_59 — spare (was J-SPI SS2, removed 2026-10-18)
     None,             # 32 D14 UART0_RXD — PB2 console, left free
-    "EXT_I2C_SDA",    # 33 A17 I2C1_SDA (AA23 left input)
+    None,             # 33 A17 I2C1_SDA (AA23 left input) — spare (was J-GPS, removed 2026-10-18)
     "RMII2_REF_CLK",  # 34 AD23 RMII2_REF_CLK
     "RMII2_CRS_DV",   # 35 AE21 RMII2_CRS_DV
-    "EXT_I2C_SCL",    # 36 B17 I2C1_SCL (V20 left input)
+    None,             # 36 B17 I2C1_SCL (V20 left input) — spare (was J-GPS, removed 2026-10-18)
 ]
 PB2_P2 = [
     "MDC0",           # 1  AD24 MDIO0_MDC (B20 left input)
-    "EXT_UART_RX",    # 2  U22 UART2_RXD
+    None,             # 2  U22 UART2_RXD — spare (was J-GPS, removed 2026-10-18)
     "MDIO0",          # 3  AB22 MDIO0_MDIO (B18 left input)
-    "EXT_UART_TX",    # 4  V24 UART2_TXD
+    None,             # 4  V24 UART2_TXD — spare (was J-GPS, removed 2026-10-18)
     "MCAN0_TX",       # 5  C15 MCAN0_TX (B5 left input)
     "M1553_MRN",      # 6  W25 GPIO0_47
     "MCAN0_RX",       # 7  E15 MCAN0_RX (A5 left input)
@@ -724,9 +743,13 @@ SIMPLE: List[Any] = [
     ("C-CAN6", "100nF", FP_C0402, "", "ISOW1044 VISOIN bypass", [("1", "P", "VCC2_CAN"), ("2", "N", "GND2_CAN")]),
     ("CMC-CAN", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "CAN_H"), ("2", "W1_OUT", "CAN_H_F"), ("4", "W2_IN", "CAN_L"), ("3", "W2_OUT", "CAN_L_F")]),
-    ("TVS-CAN", "PRTR5V0U2X", FP_SOT363, "PRTR5V0U2X,115", "Pilot.md §5 dual TVS at CAN field connector",
-     [("1", "IO1", "CAN_H_F"), ("2", "GND", "GND2_CAN"), ("3", "IO2", "CAN_L_F"), ("4", "NC", None),
-      ("5", "VCC", "VCC2_CAN"), ("6", "NC", None)]),
+    # 2026-10-18: TI ESD2CAN24-Q1, SC-70 DCK (SLVSFW5D Table 4-1: IO 1, 2; GND 3).
+    # +/-24 V VRWM clears the CAN common-mode range; 37 V clamp (5.7 A 8/20 us) sits
+    # below the ISOW1044 +/-58 V bus rating (SLLSFF7A sec 8.1) [REF-SENSOR-053].
+    ("TVS-CAN", "ESD2CAN24-Q1", FP_SOT323, "ESD2CAN24DCKRQ1",
+     "Dual-line CAN TVS at the field connector, +/-24 V, 3 pF (TI SLVSFW5D) [REF-SENSOR-053]",
+     [("1", "IO1", "CAN_H_F"), ("2", "IO2", "CAN_L_F"), ("3", "GND", "GND2_CAN")],
+     {"mfr": "Texas Instruments"}),
     ("R-CANT", "120R", FP_R0603, "", "CAN bus termination — populate ONLY at a bus end node (DNP default)",
      [("1", "A", "CAN_H_F"), ("2", "B", "CAN_L_F")], {"dnp": True}),
     ("CAN-FD", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "Pilot.md §14 J_CAN",
@@ -751,9 +774,15 @@ SIMPLE: List[Any] = [
     ("C-485-6", "100nF", FP_C0402, "", "ISOW1412 VISOIN bypass", [("1", "P", "VCC2_RS485"), ("2", "N", "GND2_RS485")]),
     ("CMC-RS485", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "RS485_A"), ("2", "W1_OUT", "RS485_A_F"), ("4", "W2_IN", "RS485_B"), ("3", "W2_OUT", "RS485_B_F")]),
-    ("TVS-RS485", "PRTR5V0U2X", FP_SOT363, "PRTR5V0U2X,115", "Pilot.md §5 dual TVS at RS-485 field connector",
-     [("1", "IO1", "RS485_A_F"), ("2", "GND", "GND2_RS485"), ("3", "IO2", "RS485_B_F"), ("4", "NC", None),
-      ("5", "VCC", "VCC2_RS485"), ("6", "NC", None)]),
+    # 2026-10-18: Bourns CDSOT23-SM712 (lines on pins 1, 2; common pin 3 to GND2).
+    # VWM -7 V / +12 V = the RS-485 common-mode range; VC 19 V at 1 A.  The ISOW1412
+    # bus pins are rated -12..+15 V (SLLSF86C sec 8.1), so the part's own IEC
+    # 61000-4-2 +/-8 kV bus protection and the CMC take the residual above the
+    # clamp [REF-SENSOR-054] [REF-SENSOR-010].
+    ("TVS-RS485", "CDSOT23-SM712", FP_SOT23, "CDSOT23-SM712",
+     "Asymmetric -7/+12 V RS-485 TVS at the field connector (Bourns) [REF-SENSOR-054]",
+     [("1", "IO1", "RS485_A_F"), ("2", "IO2", "RS485_B_F"), ("3", "COM", "GND2_RS485")],
+     {"mfr": "Bourns"}),
     ("R-485T", "120R", FP_R0603, "", "RS-485 termination — populate ONLY at a bus end node (DNP default)",
      [("1", "A", "RS485_A_F"), ("2", "B", "RS485_B_F")], {"dnp": True}),
     ("RS-485", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "Pilot.md §14 J_485",
@@ -785,10 +814,13 @@ SIMPLE: List[Any] = [
      [("1", "A", "M1553_SEC_P"), ("2", "B", "BUS_1553_P")]),
     ("R-1553N", "55R 2%", FP_R0603, "", "MIL-STD-1553B §4.5.1.5.2 direct-coupled stub isolation resistor",
      [("1", "A", "M1553_SEC_N"), ("2", "B", "BUS_1553_N")]),
-    ("TVS-1553P", "SMAJ33CA", FP_SMA, "SMAJ33CA", "Pilot.md §5 bidirectional TVS, BUS_P to PGND",
-     [("1", "A", "BUS_1553_P"), ("2", "K", "PGND")]),
-    ("TVS-1553N", "SMAJ33CA", FP_SMA, "SMAJ33CA", "Pilot.md §5 bidirectional TVS, BUS_N to PGND",
-     [("1", "A", "BUS_1553_N"), ("2", "K", "PGND")]),
+    # Generic SMAJ33CA: manufacturer named per AGENTS.md §5 (2026-10-18) — Bourns, US.
+    ("TVS-1553P", "SMAJ33CA", FP_SMA, "SMAJ33CA",
+     "Pilot.md §5 bidirectional TVS, BUS_P to PGND [REF-SENSOR-055]",
+     [("1", "A", "BUS_1553_P"), ("2", "K", "PGND")], {"mfr": "Bourns"}),
+    ("TVS-1553N", "SMAJ33CA", FP_SMA, "SMAJ33CA",
+     "Pilot.md §5 bidirectional TVS, BUS_N to PGND [REF-SENSOR-055]",
+     [("1", "A", "BUS_1553_N"), ("2", "K", "PGND")], {"mfr": "Bourns"}),
     ("MIL-1553", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "Pilot.md §14 J_1553",
      [("1", "BUS_P", "BUS_1553_P"), ("2", "BUS_N", "BUS_1553_N"), ("3", "GND", "GND"), ("4", "SHIELD", "PGND"),
       ("MP", "SHIELD", "PGND")]),
@@ -890,37 +922,28 @@ SIMPLE += [
     ("C-USB1-CRD", "1uF", FP_C0402, "", "T-USB1 device-side RX centre tap to GND (sec 6.1 C12)", [("1", "P", "ETH_USB1_CRD"), ("2", "N", "GND")]),
 ]
 
-# --- JST-GH expansion headers replacing the GNSS (owner 2026-10-17) -------------------
-# Pin order per Pixhawk DS-009 rev 0.1.0 [REF-CONN-002] "Basic GPS port" and "SPI port"
-# (pin-compatible only; this is not a Pixhawk-branded product).  Deviation: VCC is the
-# cape +5V through a 0.35 A PTC per port, not DS-009's 2.5 A, because +5V feeds the PB2-I
-# (VIN, 1 A) and the 3V3 module through FB1 (2 A).  ESD on every signal at the connector
-# (TI TPD4E05U06 / TPD1E05U06, SLVSBO7O [REF-SENSOR-044]); I2C 1.5 k pull-ups on the
-# cape side as DS-009 sec "I2C port" specifies.  Signals: UART2 + I2C1 (GPS port), SPI2
-# with SS1 = SPI2_CS0 and SS2 = GPIO (SPI port) — see PB2_P1 / PB2_P2.
+# --- JST-GH expansion port replacing the GNSS (owner 2026-10-17) ----------------------
+# ONE port: the placer found a single free board-edge site, so J-GPS was dropped and
+# J-SPI reduced to 6 pins (owner allowed 2026-10-17; avionics/WBS.md §1.2a Pilot).
+# Pin order follows Pixhawk DS-009 rev 0.1.0 [REF-CONN-002] "SPI port" minus !SS2
+# (pin-compatible only; this is not a Pixhawk-branded product).  All four signals sit on
+# SPI2 balls that also mux to UART1 / UART6 (SCK = UART1_TX, MISO = UART6_RX, MOSI =
+# UART6_TX, SS1 = UART1_RX; PB2I_AM625_HEADER_CAPABILITIES.md §4), so the port serves an
+# SPI or a UART peripheral (e.g. an external GNSS) by device-tree mux alone.  Deviation:
+# VCC is the cape +5V through a 0.35 A PTC, not DS-009's 2.5 A, because +5V feeds the
+# PB2-I (VIN, 1 A) and the 3V3 module through FB1 (2 A).  ESD on every signal at the
+# connector (TI TPD4E05U06, SLVSBO7O [REF-SENSOR-044]).
 SIMPLE += [
-    ("J-GPS", "SM06B-GHS-TB", FP_GH6, "SM06B-GHS-TB(LF)(SN)", "DS-009 Basic GPS port: 5V, TX, RX, SCL, SDA, GND (eGH.pdf)",
-     [("1", "VCC", "EXT_GPS_5V"), ("2", "TX", "EXT_UART_TX"), ("3", "RX", "EXT_UART_RX"), ("4", "SCL", "EXT_I2C_SCL"),
-      ("5", "SDA", "EXT_I2C_SDA"), ("6", "GND", "GND"), ("MP", "SHIELD", "PGND")]),
-    ("J-SPI", "SM07B-GHS-TB", FP_GH7, "SM07B-GHS-TB(LF)(SN)", "DS-009 SPI port: 5V, SCK, MISO, MOSI, !SS1, !SS2, GND (eGH.pdf)",
+    ("J-SPI", "SM06B-GHS-TB", FP_GH6, "SM06B-GHS-TB(LF)(SN)",
+     "Expansion port, DS-009 SPI order less SS2: 5V, SCK, MISO, MOSI, !SS1, GND (eGH.pdf)",
      [("1", "VCC", "EXT_SPI_5V"), ("2", "SCK", "EXT_SPI_SCK"), ("3", "MISO", "EXT_SPI_MISO"), ("4", "MOSI", "EXT_SPI_MOSI"),
-      ("5", "SS1", "EXT_SPI_SS1"), ("6", "SS2", "EXT_SPI_SS2"), ("7", "GND", "GND"), ("MP", "SHIELD", "PGND")]),
-    ("F-GPS", "MF-PSMF035X", FP_F0805, "MF-PSMF035X-2", "GPS port VCC PTC, 0.35 A hold / 0.75 A trip (Bourns MF-PSMF) [REF-PWR-013]",
-     [("1", "A", "+5V"), ("2", "B", "EXT_GPS_5V")]),
+      ("5", "SS1", "EXT_SPI_SS1"), ("6", "GND", "GND"), ("MP", "SHIELD", "PGND")]),
     ("F-SPI", "MF-PSMF035X", FP_F0805, "MF-PSMF035X-2", "SPI port VCC PTC, 0.35 A hold / 0.75 A trip (Bourns MF-PSMF) [REF-PWR-013]",
      [("1", "A", "+5V"), ("2", "B", "EXT_SPI_5V")]),
-    ("C-GPS5", "1uF 10V", FP_C0402, "", "GPS port VCC bypass at the connector", [("1", "P", "EXT_GPS_5V"), ("2", "N", "GND")]),
     ("C-SPI5", "1uF 10V", FP_C0402, "", "SPI port VCC bypass at the connector", [("1", "P", "EXT_SPI_5V"), ("2", "N", "GND")]),
-    ("R-I2C-SCL", "1.5k", FP_R0201, "", "DS-009 I2C port: 1.5 k pull-up on the autopilot side", [("1", "A", "+3V3"), ("2", "B", "EXT_I2C_SCL")]),
-    ("R-I2C-SDA", "1.5k", FP_R0201, "", "DS-009 I2C port: 1.5 k pull-up on the autopilot side", [("1", "A", "+3V3"), ("2", "B", "EXT_I2C_SDA")]),
-    ("ESD-GPS", "TPD4E05U06DQAR", FP_DQA10, "TPD4E05U06DQAR", "GPS port ESD, 4 ch (SLVSBO7O Table 4-2) [REF-SENSOR-044]",
-     [("1", "D1+", "EXT_UART_TX"), ("2", "D1-", "EXT_UART_RX"), ("3", "GND", "GND"), ("4", "D2+", "EXT_I2C_SCL"),
-      ("5", "D2-", "EXT_I2C_SDA"), ("6", "NC", None), ("7", "NC", None), ("8", "GND", "GND"), ("9", "NC", None), ("10", "NC", None)]),
     ("ESD-SPI", "TPD4E05U06DQAR", FP_DQA10, "TPD4E05U06DQAR", "SPI port ESD, 4 ch (SLVSBO7O Table 4-2) [REF-SENSOR-044]",
      [("1", "D1+", "EXT_SPI_SCK"), ("2", "D1-", "EXT_SPI_MISO"), ("3", "GND", "GND"), ("4", "D2+", "EXT_SPI_MOSI"),
       ("5", "D2-", "EXT_SPI_SS1"), ("6", "NC", None), ("7", "NC", None), ("8", "GND", "GND"), ("9", "NC", None), ("10", "NC", None)]),
-    ("ESD-SS2", "TPD1E05U06DYAR", FP_SOD523, "TPD1E05U06DYAR", "SPI port SS2 ESD, 1 ch (SLVSBO7O Table 4-1) [REF-SENSOR-044]",
-     [("1", "IO", "EXT_SPI_SS2"), ("2", "GND", "GND")]),
 ]
 
 for _entry in SIMPLE:
@@ -931,6 +954,7 @@ for _entry in SIMPLE:
     ICS.append({
         "ref": _ref, "value": _val, "fp": _fp, "mpn": _mpn, "ds": _ds,
         "dnp": bool(_flags.get("dnp")),
+        "mfr": _flags.get("mfr", ""),
         "pins": [(pn, fn, net, "L" if i < _half else "R") for i, (pn, fn, net) in enumerate(_pins)],
     })
 
@@ -1013,6 +1037,13 @@ def emit_instance(ic, X, Y, left, right, half_w, half_h, sheet_uuid) -> List[str
         f'    (property "Datasheet" "{esc(ic["ds"])}" (at {X:.2f} {Y:.2f} 0) (effects (font (size {SIZE} {SIZE})) (hide yes)))',
         f'    (property "MPN" "{esc(ic.get("mpn", ""))}" (at {X:.2f} {Y:.2f} 0) (effects (font (size {SIZE} {SIZE})) (hide yes)))',
     ]
+    # Manufacturer of record, emitted only where set: a generic part number (e.g.
+    # SMAJ33CA) meets the AGENTS.md §5 sourcing rule only once its maker is named.
+    if ic.get("mfr"):
+        out.append(
+            f'    (property "Manufacturer" "{esc(ic["mfr"])}" (at {X:.2f} {Y:.2f} 0) '
+            f'(effects (font (size {SIZE} {SIZE})) (hide yes)))'
+        )
     for pn, *_ in left + right:
         out.append(f'    (pin "{esc(pn)}" (uuid "{uid()}"))')
     out.append(f'    (instances (project "Pilot" (path "/{sheet_uuid}" (reference "{esc(ref)}") (unit 1))))')

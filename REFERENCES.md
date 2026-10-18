@@ -148,6 +148,10 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-050: Texas Instruments SPRUIV7C — AM62x Processors Technical Reference Manual](#ref-sensor-050-texas-instruments-spruiv7c--am62x-processors-technical-reference-manual)
     - [REF-SENSOR-051: Texas Instruments SLASEX5C — MSPM0L1105, MSPM0L1106 data sheet](#ref-sensor-051-texas-instruments-slasex5c--mspm0l1105-mspm0l1106-data-sheet)
     - [REF-SENSOR-052: Texas Instruments SLAU847F — MSPM0 L-Series 32-MHz Microcontrollers Technical Reference Manual](#ref-sensor-052-texas-instruments-slau847f--mspm0-l-series-32-mhz-microcontrollers-technical-reference-manual)
+    - [REF-SENSOR-053: Texas Instruments SLVSFW5D — ESD2CAN24-Q1 / ESD2CANFD24-Q1 / ESD2CANXL24-Q1 24 V 2-channel ESD protection diode](#ref-sensor-053-texas-instruments-slvsfw5d--esd2can24-q1--esd2canfd24-q1--esd2canxl24-q1-24-v-2-channel-esd-protection-diode)
+    - [REF-SENSOR-054: Bourns CDSOT23-SM712 — surface mount TVS diode (asymmetric 7 V / 12 V, RS-485)](#ref-sensor-054-bourns-cdsot23-sm712--surface-mount-tvs-diode-asymmetric-7-v--12-v-rs-485)
+    - [REF-SENSOR-055: Bourns SMAJ series — 400 W surface mount transient voltage suppressor diodes](#ref-sensor-055-bourns-smaj-series--400-w-surface-mount-transient-voltage-suppressor-diodes)
+    - [REF-SENSOR-056: ASIX AX88772E — USB 2.0 to 10/100 Fast Ethernet controller data sheet v1.03](#ref-sensor-056-asix-ax88772e--usb-20-to-10100-fast-ethernet-controller-data-sheet-v103)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -977,7 +981,8 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 | §5 | Classification of ESD generators | Contact discharge ±8 kV (Level 4), air discharge ±15 kV (Level 4) at all field connectors |
 | §8 | Test levels | Level 4 is the highest defined test level; selected as design target for the 500 W/m² hostile EMI environment [REF-NIST-002 §6.2.5] |
 
-**Applied to:** TVS arrays (PRTR5V0U2X) at all JST-GH field connectors on Pilot and XO;
+**Applied to:** TVS arrays at all JST-GH field connectors on Pilot (ESD2CAN24-Q1 on CAN, CDSOT23-SM712
+on RS-485 since 2026-10-18) and XO (PRTR5V0U2X, pending the fleet sourcing audit);
 shielded Flight Engineer enclosure provides ESD isolation for PDB connectors.
 
 **Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`
@@ -1023,8 +1028,9 @@ shielded Flight Engineer enclosure provides ESD isolation for PDB connectors.
 | Annex A | Combination wave generator | Defines the 1.2/50 µs (voltage) / 8/20 µs (current) surge waveform |
 
 **Applied to:** ADM2795EBRWZ RS-485 transceiver (rated ±42 V bus fault — exceeds IEC 61000-4-5
-Level 3 ±2 kV CM surge on bus); SMBJ33CA TVS (D1) on Flight Engineer VBAT line; PRTR5V0U2X TVS
-arrays at field connectors on Pilot and XO.
+Level 3 ±2 kV CM surge on bus); SMBJ33CA TVS (D1) on Flight Engineer VBAT line; TVS arrays at
+field connectors on Pilot (ESD2CAN24-Q1 / CDSOT23-SM712, both rated to IEC 61000-4-5 surge per
+REF-SENSOR-053 / REF-SENSOR-054) and XO (PRTR5V0U2X).
 
 **Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`
 
@@ -2855,6 +2861,50 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Cited in** | `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` §6 |
 | **Openness / sourcing** | Public, no NDA. TI is US-domiciled. |
 
+### REF-SENSOR-053: Texas Instruments SLVSFW5D — ESD2CAN24-Q1 / ESD2CANFD24-Q1 / ESD2CANXL24-Q1 24 V 2-channel ESD protection diode
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | Texas Instruments, SLVSFW5D (April 2022, revised March 2026) |
+| **Official access** | <https://www.ti.com/lit/ds/symlink/esd2can24-q1.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/ESD2CANxx24-Q1_SLVSFW5D.pdf` (MD5 0acd622da485487c1761daa7c86ba84a) |
+| **Section applied** | Fig. 4-1 / Table 4-1 pin functions (IO 1, 2; GND 3; DBZ and DCK identical); §5.7 Electrical Characteristics (VRWM ±24 V, VBR 25.5 V min, VCLAMP 37 V at 5.7 A 8/20 µs for ESD2CAN24-Q1); §6.3.4 IO capacitance 3 pF typical, data rate up to 10 Mbps; Packaging Information (ESD2CAN24DCKRQ1, SC70 DCK, −55 °C to 150 °C) |
+| **Cited in** | Pilot `TVS-CAN` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py`, `avionics/kicad/Pilot/Pilot.md` update 2026-10-18) |
+| **Openness / sourcing** | Public, no NDA. TI is US-domiciled. |
+
+### REF-SENSOR-054: Bourns CDSOT23-SM712 — surface mount TVS diode (asymmetric 7 V / 12 V, RS-485)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | Bourns, Inc., CDSOT23-SM712 data sheet (REV. 06/24) |
+| **Official access** | <https://www.bourns.com/docs/Product-Datasheets/CDSOT23-SM712.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/Bourns_CDSOT23-SM712.pdf` (MD5 129fc9f976111703cf731b109c6434b8) |
+| **Section applied** | p. 1 internal circuit (lines on pins 1, 2; common pin 3); Electrical Characteristics (VWM 7.0 V pins 3-1 / 3-2 and 12.0 V pins 1-3 / 2-3; VC 11 V / 19 V at 1 A; CD 75 pF typical; IEC 61000-4-2 ±8 kV contact min.); Absolute Maximum Ratings (PPK 400 W, IPP 17 A, 8/20 µs); How to Order |
+| **Cited in** | Pilot `TVS-RS485` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py`, `avionics/kicad/Pilot/Pilot.md` update 2026-10-18) |
+| **Openness / sourcing** | Public, no NDA. Bourns, Inc. is US-domiciled (Riverside, California). |
+
+### REF-SENSOR-055: Bourns SMAJ series — 400 W surface mount transient voltage suppressor diodes
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | Bourns, Inc., SMAJ Transient Voltage Suppressor Diode Series data sheet (REV. 09/20) |
+| **Official access** | <https://www.bourns.com/docs/Product-Datasheets/smaj.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/Bourns_SMAJ.pdf` (MD5 c596481475b507b3cc19c43438710252) |
+| **Section applied** | Electrical Characteristics row SMAJ33CA (VBR 36.7 V to 40.6 V, VRWM 33 V, VC 53.3 V at IPP 7.5 A 10/1000 µs); How to Order ("CA" = 5 % bidirectional, no suffix = 13 in reel); DO-214AC (SMA) package |
+| **Cited in** | Pilot `TVS-1553P`, `TVS-1553N` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py`) |
+| **Openness / sourcing** | Public, no NDA. Bourns, Inc. is US-domiciled. Names the compliant manufacturer for the generic SMAJ33CA (AGENTS.md §5). The older `avionics/datasheets/smaj-series-tvs-datasheet.pdf` names no manufacturer (PDF author field "可靠性实验室", "reliability laboratory") and does not satisfy the rule |
+
+### REF-SENSOR-056: ASIX AX88772E — USB 2.0 to 10/100 Fast Ethernet controller data sheet v1.03
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, AX88772E data sheet, Document No. AX88772E/V1.03/09/23/26 |
+| **Official access** | Product page <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); the PDF is behind the free MyASIX registration (owner-downloaded) |
+| **Local copy** | `avionics/datasheets/AX88772E_Datasheet_v103.pdf` (owner-supplied, MD5 3f5b6da32a9b2e9716e8298d467459aa) |
+| **Section applied** | §1.3 pinout (32-pin QFN, 4 x 4 mm, E-PAD); §1.4 signal description (RSET 24 kΩ 1 %, VBUS pin 6 is a 3.3 V input, PU pin 7 to 3.3 V, LX pin 12 drives the on-die 1.1 V buck's external inductor); §5.1.2 recommended operating conditions; §5.2 power (25 mA at 1.1 V, 35.3 mA at 3.3 V full load); §5.4 power-up sequence; §6 recommended footprint (0.40 mm pitch); §7 ordering (AX88772EQF only, 0 °C to +70 °C) |
+| **Cited in** | `avionics/kicad/Pilot/Pilot.md` (NIC selection); the schematic swap waits for ASIX's reference schematic and application design note (avionics/WBS.md §1.2a Pilot) |
+| **Openness / sourcing** | No confidentiality or NDA marking (copyright notice only), checked 2026-10-17. Free MyASIX registration wall, acceptable under AGENTS.md §5. ASIX is Taiwan-domiciled (Hsinchu) |
+
 ### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
 
 | Field | Value |
@@ -2944,7 +2994,8 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Official access** | <https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf> |
 | **URL status** | validated 2026-09-26 |
 | **Section applied** | Table 2 pinning (SOT143B: 1 GND, 2 I/O1, 3 I/O2, 4 VCC); Sec. 11 outline |
-| **Cited in** | Pilot, TACCO, Flight Engineer, Commo, Observer; SecureControllers library |
+| **Cited in** | TACCO, Flight Engineer, Commo, Observer; SecureControllers library. Removed from Pilot 2026-10-18 (replaced by REF-SENSOR-053 / REF-SENSOR-054) |
+| **Openness / sourcing** | FAILS AGENTS.md §5: Nexperia is owned by PRC-domiciled Wingtech Technology. Replace on the remaining boards (avionics/WBS.md fleet sourcing audit) |
 
 ### REF-SENSOR-040: Texas Instruments BQ76930 — 6-10 cell battery monitor AFE data sheet
 

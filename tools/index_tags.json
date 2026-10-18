@@ -7668,7 +7668,21 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/Bourns_CDSOT23-SM712.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/Bourns_MF-PSMF.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/Bourns_SMAJ.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7704,6 +7718,13 @@
       "archived": false
     },
     "avionics/datasheets/ECX-2236.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ESD2CANxx24-Q1_SLVSFW5D.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -11541,7 +11562,7 @@
       "archived": false
     },
     "avionics/kicad/Pilot/scripts/gen_pilot_sch.py": {
-      "description": "gen_pilot_sch.py \u2014 Author the datasheet-accurate Pilot (CAPE-A-2) schematic.",
+      "description": "Python script",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -21282,12 +21303,15 @@
       "avionics/datasheets/749010012A.pdf",
       "avionics/datasheets/987651-1223.pdf",
       "avionics/datasheets/AX88772E_Datasheet_v103.pdf",
+      "avionics/datasheets/Bourns_CDSOT23-SM712.pdf",
       "avionics/datasheets/Bourns_MF-PSMF.pdf",
+      "avionics/datasheets/Bourns_SMAJ.pdf",
       "avionics/datasheets/DS3218 datasheet.pdf",
       "avionics/datasheets/DS3225 datasheet.pdf",
       "avionics/datasheets/Double Row Sockets on Tape and Reel.pdf",
       "avionics/datasheets/ECS-2520MV.pdf",
       "avionics/datasheets/ECX-2236.pdf",
+      "avionics/datasheets/ESD2CANxx24-Q1_SLVSFW5D.pdf",
       "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf",
       "avionics/datasheets/GRM188Z71A106MA73#_EC-data.pdf",
       "avionics/datasheets/GRM188Z71A106MA73-01A-EN.pdf",

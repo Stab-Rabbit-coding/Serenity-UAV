@@ -1767,17 +1767,29 @@ REFERENCES.md Removed/Superseded Citations).
             (free MyASIX login) into avionics/datasheets/, then replace the CH397A block (WCH =
             PRC, fails the AGENTS.md sourcing rule) and verify the 20 MHz crystal, buck inductor
             and decoupling against them.
-        - [ ] Two JST-GH expansion headers replacing the GNSS (owner 2026-10-17): DS-009 Basic
-            GPS 6-pin (5V, TX, RX, SCL, SDA, GND) + DS-009 SPI 7-pin (5V, SCK, MISO, MOSI, SS1,
-            SS2, GND) on PB2 SPI2 / UART / I2C, VCC current-limited, ESD on all lines.
-        - [ ] Sourcing rule (AGENTS.md §5, 2026-10-17): replace TVS-CAN / TVS-RS485
-            PRTR5V0U2X,115 (Nexperia, owned by PRC-domiciled Wingtech Technology) with a
-            compliant-manufacturer equivalent; name a compliant manufacturer for TVS-1553P/N
-            SMAJ33CA (generic part number).
-        - [ ] Only one GH header fits at a board edge: keep J-SPI as a 6-pin generic port (5V,
-            SCK/UART1_TX, MISO/UART6_RX, MOSI/UART6_TX, SS1/UART1_RX, GND on the SPI2 pins);
-            drop J-GPS (owner allowed 2026-10-17).
+            - [x] Datasheet v1.03 received 2026-10-17 (owner) and catalogued as REF-SENSOR-056: no
+                confidentiality marking. The 0-70 C rating is accepted: the -40..85 C figure in
+                docs/AVIONICS_PB2_REDESIGN.md is the PB2-I module's rating, not a board
+                requirement (owner 2026-10-17).
+            - [ ] Reference schematic + application design note still needed: the datasheet gives
+                no LX inductor value, crystal load caps, decoupling, PU-pin network or VBUS
+                handling (pin 6 is a 3.3 V input; the PB2 drives 5 V on P1-5).
+        - [x] ~~Two JST-GH expansion headers replacing the GNSS~~ — superseded 2026-10-17 by the
+            single-port item below (only one board-edge site).
+        - [x] Sourcing rule (AGENTS.md §5, 2026-10-17), Pilot — done 2026-10-18 (Claude Opus 5.5):
+            TVS-CAN -> TI ESD2CAN24DCKRQ1 [REF-SENSOR-053]; TVS-RS485 -> Bourns CDSOT23-SM712
+            [REF-SENSOR-054] (the PRTR5V0U2X also clamped both buses to 0..5 V, far narrower than
+            their common-mode ranges); TVS-1553P/N -> Bourns SMAJ33CA [REF-SENSOR-055], with a new
+            `Manufacturer` schematic property. Pilot.md update 2026-10-18.
+        - [x] Only one GH header fits at a board edge — done 2026-10-18 (Claude Opus 5.5): J-SPI is
+            a 6-pin SM06B-GHS-TB (5V, SCK/UART1_TX, MISO/UART6_RX, MOSI/UART6_TX, SS1/UART1_RX,
+            GND on the SPI2 pins); J-GPS, F-GPS, C-GPS5, R-I2C-SCL/SDA, ESD-GPS, ESD-SS2 removed;
+            P1-31/33/36 and P2-2/4 spare.
         - [ ] Regenerate schematic (ERC 0), then PCB: sync, re-place, re-route, DRC 0 + parity 0.
+            - [x] Schematic regenerated 2026-10-18: ERC 0, 111 parts (after the GH and TVS items).
+            - [ ] PCB sync waits for the AX88772E swap so the board is re-placed and re-routed
+                once: the TVS footprints change (SOT-363 -> SC-70-3 / SOT-23) and seven
+                expansion parts leave the board.
         - [x] Pin and net name alignment, Pilot + TACCO (owner 2026-10-17): PB2 header pins
             P1.01..P2.36 (BeagleBoard SRM), Ethernet ring parts/nets to TI interface names
             (`PHY-RMII2`, `NIC-USB1`, `T-RMII2`, `T-USB1`, `RMII2_PHY_*`, `ETH_RMII2_*`,
