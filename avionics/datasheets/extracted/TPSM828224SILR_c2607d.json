@@ -1,0 +1,258 @@
+{
+  "mpn": "TPSM828224SILR",
+  "manufacturer": "Texas Instruments",
+  "category": "switching_regulator",
+  "package": "uSiP SIL0010D (10-pin, 2.0 x 2.5 x 1.1 mm max)",
+  "description": "2 A step-down converter MicroSiP power module with integrated inductor, fixed 3.3 V output",
+  "topology": "buck",
+  "pins": [
+    {
+      "number": "1",
+      "name": "VIN",
+      "function": "VIN",
+      "type": "power",
+      "direction": "passive",
+      "description": "Input voltage",
+      "voltage_abs_max": 6.0,
+      "required_external": "CIN >= 3 uF effective to GND"
+    },
+    {
+      "number": "2",
+      "name": "VIN",
+      "function": "VIN",
+      "type": "power",
+      "direction": "passive",
+      "description": "Input voltage",
+      "voltage_abs_max": 6.0,
+      "required_external": "CIN >= 3 uF effective to GND"
+    },
+    {
+      "number": "3",
+      "name": "EN",
+      "function": "EN",
+      "type": "digital",
+      "direction": "input",
+      "description": "Device enable; do not leave floating",
+      "voltage_abs_max": 6.0,
+      "required_external": "Pull high or tie to VIN"
+    },
+    {
+      "number": "4",
+      "name": "PG",
+      "function": "PG",
+      "type": "digital",
+      "direction": "output",
+      "description": "Power-good open drain, window comparator",
+      "voltage_abs_max": 6.0,
+      "required_external": "Pull-up <= 5.5 V, or leave floating if unused"
+    },
+    {
+      "number": "5",
+      "name": "VOUT",
+      "function": "VOUT",
+      "type": "power",
+      "direction": "passive",
+      "description": "Output voltage",
+      "voltage_abs_max": 6.0,
+      "required_external": "COUT >= 5 uF effective"
+    },
+    {
+      "number": "6",
+      "name": "VOUT",
+      "function": "VOUT",
+      "type": "power",
+      "direction": "passive",
+      "description": "Output voltage",
+      "voltage_abs_max": 6.0,
+      "required_external": "COUT >= 5 uF effective"
+    },
+    {
+      "number": "7",
+      "name": "VOUT",
+      "function": "VOUT",
+      "type": "power",
+      "direction": "passive",
+      "description": "Output voltage",
+      "voltage_abs_max": 6.0,
+      "required_external": "COUT >= 5 uF effective"
+    },
+    {
+      "number": "8",
+      "name": "FB",
+      "function": "FB",
+      "type": "analog",
+      "direction": "input",
+      "description": "Feedback; fixed-output devices: connect directly to VOUT",
+      "voltage_abs_max": 6.0,
+      "required_external": "Tie to VOUT (no divider)"
+    },
+    {
+      "number": "9",
+      "name": "GND",
+      "function": "GND",
+      "type": "ground",
+      "direction": "passive",
+      "description": "Ground",
+      "voltage_abs_max": 6.0,
+      "required_external": null
+    },
+    {
+      "number": "10",
+      "name": "GND",
+      "function": "GND",
+      "type": "ground",
+      "direction": "passive",
+      "description": "Ground",
+      "voltage_abs_max": 6.0,
+      "required_external": null
+    }
+  ],
+  "features": {
+    "has_pg": true,
+    "has_soft_start": true,
+    "soft_start_internal": true,
+    "has_enable": true,
+    "fixed_output": true,
+    "integrated_inductor": true,
+    "output_discharge": true
+  },
+  "peripherals": null,
+  "absolute_maximum_ratings": {
+    "pin_voltage_v": {
+      "min": -0.3,
+      "max": 6.0,
+      "pins": "VIN, VOUT, FB, EN, PG"
+    },
+    "pg_sink_current_ma": 1,
+    "tj_c": [
+      -40,
+      125
+    ],
+    "tstg_c": [
+      -55,
+      125
+    ],
+    "junction_temp_max_c": 125,
+    "vin_max_v": 6.0,
+    "vout_max_v": 6.0,
+    "en_max_v": 6.0,
+    "pg_max_v": 6.0,
+    "fb_max_v": 6.0
+  },
+  "recommended_operating_conditions": {
+    "vin_v": [
+      2.4,
+      5.5
+    ],
+    "iout_a": [
+      0,
+      2
+    ],
+    "tj_c": [
+      -40,
+      125
+    ],
+    "vpg_pullup_max_v": 5.5,
+    "vin_min_v": 2.4,
+    "vin_max_v": 5.5,
+    "temp_min_c": -40,
+    "temp_max_c": 125,
+    "temp_note": "junction temperature"
+  },
+  "electrical_characteristics": {
+    "vout_v": {
+      "min": 3.267,
+      "typ": 3.3,
+      "max": 3.333,
+      "condition": "TPSM828214/TPSM828224, PWM mode"
+    },
+    "iq_ua": {
+      "typ": 4,
+      "max": 10,
+      "condition": "EN high, no load, not switching"
+    },
+    "isd_ua": {
+      "typ": 0.05,
+      "max": 0.5
+    },
+    "uvlo_falling_v": {
+      "min": 2.1,
+      "typ": 2.2,
+      "max": 2.3
+    },
+    "uvlo_hysteresis_mv": 160,
+    "tsd_c": 150,
+    "tsd_hysteresis_c": 20,
+    "en_vih_v": 1.0,
+    "en_vil_v": 0.4,
+    "soft_start_ms": 1.25,
+    "ilim_high_side_a": {
+      "min": 2.7,
+      "typ": 3.3,
+      "max": 3.9
+    },
+    "fsw_mhz": {
+      "typ": 4,
+      "condition": "IOUT = 1 A"
+    },
+    "pg_thresholds_pct_of_vfb": {
+      "low_rising": [
+        94,
+        96,
+        98
+      ],
+      "low_falling": [
+        90,
+        92,
+        94
+      ],
+      "high_falling": [
+        103,
+        105,
+        107
+      ],
+      "high_rising": [
+        108,
+        110,
+        112
+      ]
+    },
+    "rtheta_ja_c_per_w": {
+      "jedec": 92.6,
+      "evm": 64.3
+    },
+    "psi_jb_c_per_w": {
+      "jedec": 26.9,
+      "evm": 22.4
+    },
+    "vref_v": 0.6,
+    "vref_note": "0.6 V is the family feedback reference (adjustable devices, Eq. 5); the fixed 3.3 V device senses VOUT on FB directly",
+    "switching_frequency_khz": 4000,
+    "quiescent_current_ua": 4,
+    "output_current_max_ma": 2000
+  },
+  "application_circuit": {
+    "cin": "4.7 uF 6.3 V X7R 0603 (JMK107BB7475MA); >= 3 uF effective",
+    "cout": "22 uF X5R/X6S (AMK105EBJ226MV-F 0402 or JMK107BC6226MA-T 0603); >= 5 uF effective",
+    "fb": "tied to VOUT, no R1/R2/C3 for fixed-output devices",
+    "layout": "solder-mask-defined pads on VIN/VOUT/GND; output cap ground close to VOUT and GND pins, no vias",
+    "topology": "buck",
+    "input_cap_recommended": "4.7 uF 6.3 V X7R 0603 (JMK107BB7475MA); >= 3 uF effective",
+    "output_cap_recommended": "22 uF X5R/X6S (AMK105EBJ226MV-F 0402 or JMK107BC6226MA-T 0603); >= 5 uF effective",
+    "notes": "Fixed 3.3 V device: FB to VOUT, R1/R2/C3 not needed (SLVSEP0F 9.2.1.2.1); internal feed-forward cap. EN must not float. Effective CIN >= 3 uF, COUT >= 5 uF after DC bias (9.2.2)."
+  },
+  "spice_specs": null,
+  "extraction_metadata": {
+    "source_pdf": "tpsm82822.pdf",
+    "source_doc": "TI SLVSEP0F (Aug 2019, rev Nov 2021)",
+    "source_md5": "df684d387cf85ef14c3154b81424f4e2",
+    "pages": "1-5, 11-13, 42, 47-49",
+    "extracted_by": "Claude Opus 5.5 (claude-opus-5-5), 2026-10-17",
+    "extraction_version": 2,
+    "reference": "REF-PWR-008",
+    "extraction_score": 9.5,
+    "source_pdf_hash": "sha256:e872dfc8b0894be4c2a8a5a3c29bbfd33674d4902f157ea484f19c8765ed3167",
+    "extraction_date": "2026-10-17T15:15:15.760339+00:00",
+    "retry_count": 0
+  }
+}

@@ -535,35 +535,35 @@
     "netclass_patterns": [
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETHB_TXP"
+        "pattern": "ETH_RMII2_TXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETHB_TXN"
+        "pattern": "ETH_RMII2_TXN"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETHB_RXP"
+        "pattern": "ETH_RMII2_RXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETHB_RXN"
+        "pattern": "ETH_RMII2_RXN"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETHB_LINE_TXP"
+        "pattern": "ETH_RMII2_LINE_TXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETHB_LINE_TXN"
+        "pattern": "ETH_RMII2_LINE_TXN"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETHB_LINE_RXP"
+        "pattern": "ETH_RMII2_LINE_RXP"
       },
       {
         "netclass": "DIFF_PAIR",
-        "pattern": "ETHB_LINE_RXN"
+        "pattern": "ETH_RMII2_LINE_RXN"
       },
       {
         "netclass": "ISOLATION",

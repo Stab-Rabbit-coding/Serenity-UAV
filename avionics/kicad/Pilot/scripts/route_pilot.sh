@@ -37,21 +37,43 @@ only_through_vias() {
 route() {
     local dsn=$1 ses=$2
     only_through_vias "$dsn"
-    java -Xss256m -jar "$JAR" --gui.enabled=false -de "$dsn" -do "$ses" -mp "$PASSES" \
-        > "${ses%.ses}.log" 2>&1 || true
-    test -s "$ses" || { echo "freerouting wrote no session: ${ses%.ses}.log"; exit 1; }
+    # hard wall-clock cap: freerouting 2.2.4 can hang in PolylineTrace.combine and only
+    # writes the session at exit, so a hung run would otherwise block forever
+    timeout "${ROUTE_TIMEOUT:-150m}" java -Xss256m -jar "$JAR" --gui.enabled=false \
+        -de "$dsn" -do "$ses" -mp "$PASSES" >"${ses%.ses}.log" 2>&1 || true
+    test -s "$ses" || echo "freerouting wrote no session: ${ses%.ses}.log"
 }
 
 echo "== phase 1: logic nets, band closed"
 python3 "$FLOW" export "$PCB" "$WORK/p1.dsn" --band-keepout
 route "$WORK/p1.dsn" "$WORK/p1.ses"
+test -s "$WORK/p1.ses" || {
+    echo "phase 1 produced no session; board unchanged"
+    exit 1
+}
 python3 "$FLOW" import "$PCB" "$WORK/p1.ses"
 python3 "$HERE/repair_pilot_routing.py" "$PCB"
+
+unconnected() {
+    kicad-cli pcb drc --format json -o "$WORK/u.json" "$PCB" >/dev/null 2>&1
+    python3 -c "import json; print(len(json.load(open('$WORK/u.json'))['unconnected_items']))"
+}
+cp "$PCB" "$WORK/after_p1.kicad_pcb"
+U1=$(unconnected)
+echo "after phase 1: $U1 unconnected"
 
 echo "== phase 2: ISOLATION nets, band open"
 python3 "$FLOW" export "$PCB" "$WORK/p2.dsn"
 route "$WORK/p2.dsn" "$WORK/p2.ses"
-python3 "$FLOW" import "$PCB" "$WORK/p2.ses"
-python3 "$HERE/repair_pilot_routing.py" "$PCB"
+if [ -s "$WORK/p2.ses" ] && python3 "$FLOW" import "$PCB" "$WORK/p2.ses"; then
+    python3 "$HERE/repair_pilot_routing.py" "$PCB"
+fi
+U2=$(unconnected)
+echo "after phase 2: $U2 unconnected"
+# an import REPLACES all routing; a crashed/truncated phase-2 session must not win
+if [ "$U2" -gt "$U1" ]; then
+    echo "phase 2 worse ($U2 > $U1): keeping the phase-1 board"
+    cp "$WORK/after_p1.kicad_pcb" "$PCB"
+fi
 
 echo "sessions and logs kept in $WORK"

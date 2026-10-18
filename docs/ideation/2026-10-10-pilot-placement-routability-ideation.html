@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pilot Placement Ideation</title>
+<style>
+:root{--bg:#fbfaf7;--fg:#1d1f22;--muted:#5b6068;--card:#ffffff;--line:#d9d6cf;--accent:#2f5d8a;--accent-soft:#e3ecf5;--warn-soft:#f6ebdc;--warn:#8a5a1c;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#16181b;--fg:#e6e4df;--muted:#a3a7ad;--card:#1e2125;--line:#33373d;--accent:#8fb6dd;--accent-soft:#1f2e3d;--warn-soft:#33281a;--warn:#e0b27a;}}
+:root[data-theme="dark"]{--bg:#16181b;--fg:#e6e4df;--muted:#a3a7ad;--card:#1e2125;--line:#33373d;--accent:#8fb6dd;--accent-soft:#1f2e3d;--warn-soft:#33281a;--warn:#e0b27a;}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0 16px;}
+main{max-width:900px;margin-inline:auto;padding:2rem 0 3rem;}
+p,li,dd{max-width:72ch}
+h1{font-size:1.6rem;margin:.2rem 0 .4rem}h2{font-size:1.25rem;margin-top:2.2rem;border-bottom:1px solid var(--line);padding-bottom:.3rem}h3{font-size:1.05rem;margin:.2rem 0 .6rem}
+.eyebrow{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meta{color:var(--muted);font-size:.9rem}
+article{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:1rem 1.2rem;margin:1rem 0}
+dl{display:grid;grid-template-columns:8.5rem 1fr;gap:.35rem .8rem;margin:0}dt{font-weight:600;color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}dd{margin:0}
+.chips span{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.8rem;background:var(--accent-soft);color:var(--accent);margin-right:.4rem}
+table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{border:1px solid var(--line);padding:.4rem .5rem;text-align:left;vertical-align:top}
+code{font-size:.88em}
+.callout{background:var(--warn-soft);border-radius:8px;padding:.7rem 1rem}.callout .eyebrow{color:var(--warn)}
+svg text{font:12px ui-sans-serif,system-ui,sans-serif;fill:var(--fg)}
+footer.composition-signal{color:var(--muted);font-size:.8rem;margin-top:3rem;border-top:1px solid var(--line);padding-top:.6rem}
+strong{color:inherit}
+</style>
+</head>
+<body><main>
+<p class="eyebrow">Ideation</p>
+<h1>Ideation: Pilot cape placement for via room, decoupling and routability</h1>
+<p class="meta">Date: <time datetime="2026-10-10">2026-10-10</time> · Topic: pilot-placement-routability · Mode: repo-grounded<br>
+Focus: adjust placement to open room for vias, get isolation/bypass caps close to their supported pins, and otherwise improve routability and design (lenses: pcb-designer, pcb-routing-best-practices, pcb-engineer).</p>
+<p class="meta">Coordinates below are KiCad board coordinates in millimetres (y down); physical sizes are given inch-first with mm in parentheses.</p>
+
+<section id="grounding">
+<h2>Grounding Context</h2>
+<p><strong>Codebase Context.</strong> <code>avionics/kicad/Pilot/kicads/Pilot.kicad_pcb</code> on branch <code>pilot-routing-repair</code>: PocketBeagle 2 cape, 2.17 × 1.38 in (55 × 35 mm), 6 layers (F sig / In1 GND + GND2_CAN, GND2_RS485 islands / In2 sig / In3 sig / In4 +3V3 / B sig). DRC 0 errors, parity 0, 136 unconnected (+3V3 23, GND 13, GND2_CAN 10, GND2_RS485 9, VCC2 13, PGND 4, ~55 logic). Courtyard fill 79 % F, 75 % B. In2/In3 carry 165/133 segments against 430/525 on F/B.</p>
+<p>ISO_BAND covers F.Cu and In1–In4 for x ≥ 128.3, y ≥ 105.5; only ISOLATION nets and PGND may have copper there, with a 0.5 mm (0.020 in) cross-domain moat (<code>Pilot.kicad_dru</code>). Through vias only, 0.6/0.3 mm (0.024/0.012 in).</p>
+<p>Measured cap-to-pin distances (cap pad to nearest same-net pin of the IC it serves): GPS 7.4–10.6 mm, C-1553C 8.5, C-50M 8.4 (opposite side), BARO 7.3–8.3, C-485-2 6.4, IMU 4.6–5.9, TPM 2–5.5, ISOW HF caps 2.7–4.8 (datasheet: under 1 mm). An automated plane-via fanout found free sites for only 4–7 of 39 plane pads.</p>
+<p>The owner's 2026-10-09 hand moves are in the committed PCB but not yet back-ported into <code>gen_pilot_pcb.py</code>.</p>
+</section>
+
+<section id="axes">
+<h2>Topic Axes</h2>
+<ol>
+<li>Bypass/isolation-cap proximity to supported pins</li>
+<li>Via and escape room around dense ICs (PHYs, TPM, HI-6138, ISOW1044/1412, GPS)</li>
+<li>Functional-block floorplan and F/B side assignment</li>
+<li>Layer and routing strategy (inner layers, planes, via technology)</li>
+<li>Design-level part reduction or package change that buys area</li>
+</ol>
+</section>
+
+<section id="ranked-ideas">
+<h2>Ranked Ideas</h2>
+<ul>
+<li><a href="#i1">1. Fix the GPS supply pins that sit inside the isolation band</a></li>
+<li><a href="#i2">2. Pour GND2/VCC2 islands on F.Cu inside the band</a></li>
+<li><a href="#i3">3. Put the four ISOW HF caps within 1 mm of their pins</a></li>
+<li><a href="#i4">4. Send every bypass cap home: empty the y 96.6 parking row and re-home the PHY centre-tap caps</a></li>
+<li><a href="#i5">5. Make the generator own decoupling placement, with a cap-distance gate</a></li>
+<li><a href="#i6">6. Buy via room with a smaller via class and inner-layer bus seeding</a></li>
+<li><a href="#i7">7. Shrink or drop J-PWM, the largest non-flight block on F.Cu</a></li>
+<li><a href="#i8">8. Free the PB2-P2 logic pins that the isolation band also traps</a></li>
+<li><a href="#i9">9. Put vias where the courtyards are: under-body via alleys</a></li>
+<li><a href="#i10">10. Move TPM reset and IRQ to the P1 rail under the TPM</a></li>
+<li><a href="#i11">11. Clock the HI-6138 from the PHY's 50 MHz output and delete X-50M</a></li>
+</ul>
+
+<article id="i1">
+<h3>1. Fix the GPS supply pins that sit inside the isolation band</h3>
+<p class="chips"><span>Axis 3 · floorplan</span><span>Confidence 75%</span><span>Complexity Medium</span></p>
+<dl>
+<dt>Description</dt><dd>The GPS (B.Cu, rot 90 at 132.25, 104.75) has +3V3 pins 6–8 at y 109.5, x 128.95–131.15, and GND pin 1 at (136.65, 109.5). All are inside the ISO_BAND footprint on In1–In4, so no through via from them to the GND or +3V3 plane is legal; their caps sit 7.4–10.6 mm away on B.Cu detours. Notch the band's south-west corner on In1–In4 to clear the GPS pin row (south edge ≈ y 110.3 over x 127–137.6). That still leaves about 0.055 in (1.4 mm) to the CAN-TR isolated pad tips, above the 0.5 mm rule. Then put C-GPS1/C-GPS2 beside pins 6–8 with their own plane vias.</dd>
+<dt>Basis</dt><dd>direct: <code>place.json</code> GPS pad 6 "+3V3" at (131.15, 109.5), pad 1 "GND" at (136.65, 109.5); <code>bands.json</code> band polygon from [128.3, 105.5]; capfit "(10.58, C-GPS1, GPS.6, +3V3, B, B)". All three ideation lenses found this independently, and the verifier re-derived it.</dd>
+<dt>Rationale</dt><dd>This is a rule conflict, not congestion. No amount of cap shuffling can connect these pins to their planes, so it explains part of the +3V3/GND residue and part of the failed fanout.</dd>
+<dt>Improvements (second round)</dt><dd>The pcb-designer lens found a second reason for the notch. The u-blox MAX-M10S Integration Manual (UBX-20053088 R05 p.80) says "ground the area below the module, on the top and second layer". Today the south half of the module sits over the GND2_CAN island, not GND. After the notch, add a GND area under the module on In4 and B.Cu. Route GPS_RF as grounded coplanar waveguide, with a GND via fence around its single layer-change via near J-ANT; the trace width must come from the fab's stackup. If the notch is refused, the fallback is to join pins 6–8 on B.Cu and drop one +3V3 via just west of the band at about (127.6, 110.2), under the PWR-IN body clear of its pins.<br><strong>Optimization result:</strong> a notch with its south edge at y 111.0 over x 128.3–137.6 passes DRC on the stripped board and cuts GND/+3V3 pads inside the band from 9 to 5. The GPS caps still found no legal site, because the courtyards around the module are full.</dd>
+<dt>Downsides</dt><dd>A band notch changes the isolation geometry and needs a DRU and creepage review. Rotating the GPS 180° instead was refuted: it moves GPS_RF into the band and lengthens the RF line from about 4 to about 15 mm. Sliding the GPS west was refuted too: only about 1 mm to PWR-IN.</dd>
+</dl>
+<svg viewBox="0 0 520 170" role="img" aria-label="GPS pin row relative to the isolation band edge before and after a notch">
+<rect x="10" y="20" width="230" height="130" fill="none" stroke="var(--line)"/><text x="18" y="38">Today</text>
+<rect x="60" y="80" width="175" height="65" fill="var(--warn-soft)"/><text x="150" y="140">ISO_BAND</text>
+<line x1="60" y1="80" x2="235" y2="80" stroke="var(--warn)" stroke-dasharray="4 3"/>
+<rect x="40" y="50" width="120" height="60" fill="none" stroke="var(--accent)"/><text x="46" y="66">GPS</text>
+<circle cx="70" cy="100" r="5" fill="var(--accent)"/><circle cx="85" cy="100" r="5" fill="var(--accent)"/><circle cx="100" cy="100" r="5" fill="var(--accent)"/><text x="112" y="104">+3V3 pins</text>
+<rect x="280" y="20" width="230" height="130" fill="none" stroke="var(--line)"/><text x="288" y="38">Band notched</text>
+<path d="M330 80 H370 V118 H475 V80 H505 V145 H330 Z" fill="var(--warn-soft)"/>
+<path d="M330 80 V145" stroke="var(--warn)" stroke-dasharray="4 3"/>
+<rect x="310" y="50" width="120" height="60" fill="none" stroke="var(--accent)"/><text x="316" y="66">GPS</text>
+<circle cx="340" cy="100" r="5" fill="var(--accent)"/><circle cx="355" cy="100" r="5" fill="var(--accent)"/><circle cx="370" cy="100" r="5" fill="var(--accent)"/><text x="440" y="140">ISO_BAND</text>
+</svg>
+</article>
+
+<article id="i2">
+<h3>2. Pour GND2/VCC2 islands on F.Cu inside the band</h3>
+<p class="chips"><span>Axis 4 · layers</span><span>Confidence 80%</span><span>Complexity Low</span></p>
+<dl>
+<dt>Description</dt><dd>Add F.Cu zones for GND2_CAN (about x 128.5–141.5, y 112–122) and GND2_RS485 (about x 142.5–155.5), each held 0.5 mm from other-domain copper. Add a small VCC2 pour finger per transceiver tied to its VISOOUT pins. Stitch each to its In1 GND2 island with a few vias. Neighbouring isolated-side pads then connect through the pour instead of needing one via each.</dd>
+<dt>Basis</dt><dd>direct: <code>unconnected.txt</code> "Pad 16 [GND2_CAN] of CAN-TR on F.Cu || Pad 15 [GND2_CAN] of CAN-TR on F.Cu" and the GND2_RS485 pairs; grounding: ISOLATION nets are allowed copper inside the band. external: TI SLLA337A (Pilot.md reference 6) covers ISOW isolation-boundary layout; section not verified.</dd>
+<dt>Rationale</dt><dd>It targets about 32 of the 136 unconnects (GND2 19, VCC2 13) with zone fills rather than vias, in the one region where via sites are scarcest.</dd>
+<dt>Downsides</dt><dd>Pours must respect the 0.5 mm moat and the X2Y bridge exemption; the DRU <code>iso_nets_stay_in_band</code> rule will flag any pour edge that leaves the band.</dd>
+</dl>
+</article>
+
+<article id="i3">
+<h3>3. Put the four ISOW HF caps within 1 mm of their pins</h3>
+<p class="chips"><span>Axis 1 · decoupling</span><span>Confidence 75%</span><span>Complexity Low</span></p>
+<dl>
+<dt>Description</dt><dd>The four ISOW HF caps, with corrected targets:
+<ul>
+<li><strong>C-CAN1</strong> (0201, 10 nF): put it on F at (130.12, 101.72) after nudging C-IN2 0.42 mm north. That bridges CAN-TR pin 9 (+5V) and pin 10 (GND).</li>
+<li><strong>C-485-1:</strong> move it from B (4.8 mm away) to F at (143.92, 101.72), between pins 9 and 10 of RS485. The window is 0.78 mm against a 0.8 mm 0201 courtyard, so IMU or RS485 must shift about 0.02 mm.</li>
+<li><strong>C-CAN4:</strong> put it between CAN-TR isolated pins 11 and 12 at y ≥ 114.48.</li>
+<li><strong>C-485-4:</strong> already meets the target.</li>
+</ul>
+Also pull C-485-1 and C-485-2 out of the band: their +5V pads are inside it, so their vias would cross In1–In4.</dd>
+<dt>Basis</dt><dd>direct: ISOW1044 and ISOW1412 datasheets (verified by the verifier via pdftotext): the 10 nF caps go "&lt; 1 mm" from VDD/VISOOUT; capfit C-CAN1 2.73 mm, C-485-1 4.78 mm (B vs F), C-CAN4 3.03 mm.</dd>
+<dt>Rationale</dt><dd>These are the only caps on the board with a hard datasheet distance limit, and three of the four miss it. The integrated isolated DC-DC switching loop is the board's main radiated-emissions source.</dd>
+<dt>Optimization result</dt><dd>The legal-site search moved C-485-1 to B directly under RS485 pin 9 (1.4 mm), C-CAN4 to B directly under CAN-TR pin 12 (via-in-pad distance), and C-CAN1 to F at 90° (1.8 mm). The worst ISOW HF cap went from 4.78 to 1.79 mm. The F-side targets between IC and IMU are 0.01 mm short of legal, so getting all four under 1 mm needs a 0.02 mm IMU or RS485 nudge, or via-in-pad (idea 6).</dd>
+<dt>Downsides</dt><dd>Every target is a 0.01–0.18 mm near-touch against existing courtyards; small neighbour nudges are needed and each must be re-checked by DRC.</dd>
+</dl>
+</article>
+
+<article id="i4">
+<h3>4. Send every bypass cap home: empty the y 96.6 parking row and re-home the PHY centre-tap caps</h3>
+<p class="chips"><span>Axis 1 · decoupling</span><span>Confidence 75%</span><span>Complexity Medium</span></p>
+<dl>
+<dt>Description</dt><dd>C-SS, C-50M, C-1553B, C-1553D and C-BARO1 sit in one F.Cu row at y 96.6, x 151.4–155.4. Only C-SS belongs there; the others serve X-50M (B, 8.4 mm), the HI-6138 (B) and BARO (8.3 mm). Move them in this order:
+<ol>
+<li>C-1553B and C-1553D to B next to HI-6138 pins 31 and 41. C-1553D goes in the 0.95 mm XCVR–XFM gap as a 0201 rotated 90°.</li>
+<li>C-50M to B beside X-50M pin 4, or delete it, since C-485-3 already decouples +3V3 1.6 mm away.</li>
+<li>C-BARO1 and C-BARO2 beside BARO.</li>
+<li>C-TPM2 into the freed strip at (153.6, 95.66) under TPM pin 14.</li>
+</ol>
+The CT/CRD centre-tap caps (C-P1-CTD/CRD, C-P2-CTD/CRD) belong to the T-ETH/T-ETH2 centre taps, not the PHYs: capfit shows they share no net with the PHY. Place them under the transformer CT pins and free the PHY corner for the PHY's own pin 6/19 supply caps.</dd>
+<dt>Basis</dt><dd>direct: <code>footprints.txt</code> shows C-50M, C-1553B, C-1553D, C-BARO1 and C-SS all on F at y 96.40–96.60. capfit gives "(8.44, C-50M, X-50M.4, +3V3, F, B)", "(8.27, C-BARO1, BARO.10 …)" and "C-P1-CTD1 ETH1-PHY (no shared net)". external: pcb-routing-best-practices §1A, caps "directly adjacent to the power pins".</dd>
+<dt>Rationale</dt><dd>Four 100 nF caps currently decouple nothing useful. Re-homing them shrinks 8 mm (0.31 in) loops to about 1 mm and releases the most crowded F.Cu strip under the P1 rail.</dd>
+<dt>Improvements (second round)</dt><dd>Also move the TPS62933 feedback divider R-FB3H/R-FB3L, now about 10.4 mm from FB pin 8 on the far side of L-3V3, into the freed row at about (152.65, 96.7) and (154.23, 96.7). tps62933.pdf §12: "Place the feedback divider as close as possible to the FB pin." Resistors are not in the cap metric, so this still needs its own check.<br><strong>Optimization result:</strong> two greedy search passes moved 30 caps and emptied the parking row into TPM, BARO and C-SS sites. The total cap-to-pin distance fell from 178.8 to 121.5 mm. C-50M only reaches 4.0 mm, because X-50M's neighbourhood is full (see idea 11).</dd>
+<dt>Downsides</dt><dd>The move order matters, because C-TPM2's target overlaps C-1553B/D until they leave. A T-ETH shift west is capped at 0.52 mm by L-3V3.</dd>
+</dl>
+</article>
+
+<article id="i5">
+<h3>5. Make the generator own decoupling placement, with a cap-distance gate</h3>
+<p class="chips"><span>Axis 3 · floorplan</span><span>Confidence 85%</span><span>Complexity Medium</span></p>
+<dl>
+<dt>Description</dt><dd>First back-port the 2026-10-09 hand moves (and ideas 1–4) into <code>gen_pilot_pcb.py</code>. Then replace absolute cap coordinates with records of the form (cap, IC, pin, side, offset), so caps are computed from where their IC actually sits. Add a gate next to the DRC step that fails when any cap is more than 1.5 mm (0.06 in) from its pin, or is on the opposite side without a through-pin justification. The capfit table built for this ideation is the prototype for that gate.</dd>
+<dt>Basis</dt><dd>direct: Pilot.md "Do not hand-edit <code>Pilot.kicad_sch</code> or <code>Pilot.kicad_pcb</code>. A part or placement change is a table edit in the generator"; grounding: hand moves "NOT yet back-ported".</dd>
+<dt>Rationale</dt><dd>Without this, the next regeneration silently undoes every placement fix in this list, and the next IC move re-creates 8 mm loops. With it, decoupling stays correct at no extra cost.</dd>
+<dt>Improvements (second round)</dt><dd>Add two more gates beside the distance gate:
+<ul>
+<li>A band-legality gate: fail when a non-ISOLATION pad lies inside a band polygon. A scan found 25 such pads (GPS 1–8, PB2-P2 9–24, C-485-1/2, C-GPS2). The DRC rule area only fires on copper, so it never sees these.</li>
+<li>A wrong-side gate: fail when an HF cap is on the opposite side from its IC without a recorded via path of 1 mm or less.</li>
+</ul>
+The optimization harness <code>scripts/optimize/eval_placement.py</code> already measures the distance and band metrics, so it can become this gate.</dd>
+<dt>Downsides</dt><dd>It is a generator refactor. Caps whose pin target is ambiguous (shared rails, centre taps) need an explicit target rather than nearest-pin inference.</dd>
+</dl>
+</article>
+
+<article id="i6">
+<h3>6. Buy via room with a smaller via class and inner-layer bus seeding</h3>
+<p class="chips"><span>Axis 4 · layers</span><span>Confidence 55%</span><span>Complexity Medium</span></p>
+<dl>
+<dt>Description</dt><dd>Add a 0.018/0.008 in (0.45/0.2 mm) through-via class for plane fanout. Optionally use filled-and-capped via-in-pad (IPC-4761 Type VII) on the QFN exposed pads (HI-6138, TPM, PHYs) and the PHY cap pads. Re-run <code>plane_fanout_pilot.py</code> with the new via; its placed count is the decision metric. Separately, pre-route the SPI0/IRQ bus and RMII onto In2/In3, which carry about a third of the outer-layer copper, before handing the rest to the autorouter.</dd>
+<dt>Basis</dt><dd>direct: grounding "vias 0.6/0.3 through only"; fanout found sites for 4–7 of 39 pads; segment counts F 430 / B 525 / In2 165 / In3 133. external: pcb-routing-best-practices DFM table lists 0.20/0.45 mm as advanced capability. reasoned: at 1.6 mm board thickness a 0.2 mm drill is an 8:1 aspect ratio.</dd>
+<dt>Rationale</dt><dd>It is the cheapest lever on the 36 GND/+3V3 plane unconnects, and it is measurable with a tool that already exists.</dd>
+<dt>Downsides</dt><dd>Fab capability and cost for 0.2 mm drills and VIPPO on a 6-layer board are unverified and must be quoted. VIPPO is a cost adder.</dd>
+</dl>
+</article>
+
+<article id="i7">
+<h3>7. Shrink or drop J-PWM, the largest non-flight block on F.Cu</h3>
+<p class="chips"><span>Axis 5 · part reduction</span><span>Confidence 55%</span><span>Complexity Low</span></p>
+<dl>
+<dt>Description</dt><dd>J-PWM (Samtec TSM-108, 2×8 at 0.1 in) takes a 0.84 × 0.37 in (21.4 × 9.3 mm) courtyard, 199 mm² or about 10 % of the F face, directly above IMU, BARO and the crowded cap row. Options: leave it DNP with a test-pad row, or replace it with one 1×6 JST-GH carrying DSHOT0–3, GND and PGND. The replacement part number must be verified before use.</dd>
+<dt>Basis</dt><dd>direct: <code>footprints.txt</code> J-PWM courtyard [128.09, 88.00 → 149.50, 97.30]; Pilot.md: the header is "a platform-portability port, not the flight actuation path".</dd>
+<dt>Rationale</dt><dd>It is the only large F.Cu block the design document already calls non-essential to flight, and it sits exactly where ideas 3 and 4 need room.</dd>
+<dt>Downsides</dt><dd>It reverses an owner requirement (2026-09-19 portability to other PWM/DSHOT platforms), so this is an owner decision, not a layout fix.</dd>
+</dl>
+</article>
+<article id="i8">
+<h3>8. Free the PB2-P2 logic pins that the isolation band also traps</h3>
+<p class="chips"><span>Axis 2 · escape room</span><span>Confidence 60%</span><span>Complexity Medium</span></p>
+<dl>
+<dt>Description</dt><dd>PB2-P2 pins 9–24 (B.Cu, x 137.07–154.85, y 115.2/120.2) all carry non-isolated logic nets, but they lie inside the In1–In4 ISO_BAND. They can never take a via, so they escape on B.Cu only. Eleven unconnected RMII/MDIO/reset items start there. A full rectangular notch is not viable: it would also take band coverage away from the CAN-FD/RS-485 connector pads, whose isolated traces must stay in the band. The workable form is per-pin via keep-ins: small holes in the band, each with the 0.5 mm moat, at a via site beside each logic pin, checked against the connector and TVS pads on F.Cu.</dd>
+<dt>Basis</dt><dd>direct: <code>place.json</code> pad 19 "RMII1_REF_CLK" at (149.77, 120.175) and pad 11 "TPM_RSTN" at (139.61, 120.175); <code>unconnected.txt</code> lists 11 PB2-P2 items, for example "Pad 19 [RMII1_REF_CLK] of PB2-P2 on B.Cu || Pad 2 [RMII1_REF_CLK] of ETH2-PHY". Found by the pcb-engineer lens.</dd>
+<dt>Rationale</dt><dd>It is the same class of trap as idea 1 but larger. It is why the RMII nets crowd B.Cu, and it explains part of the 55 logic unconnects.</dd>
+<dt>Downsides</dt><dd>It needs an isolation review, because the holes move logic copper within 0.5 mm of field-side pads, and there is a lot of DRU geometry to verify. The harness did not attempt it.</dd>
+</dl>
+</article>
+
+<article id="i9">
+<h3>9. Put vias where the courtyards are: under-body via alleys</h3>
+<p class="chips"><span>Axis 2 · escape room</span><span>Confidence 65%</span><span>Complexity Low</span></p>
+<dl>
+<dt>Description</dt><dd>A 0.25 mm grid scan found no courtyard-free through-board site at all between x 138 and x 171. Plane fanout searched outside courtyards, so it was impossible as framed. Instead, put vias in pad-free space under part bodies, where courtyards forbid parts but not vias:
+<ul>
+<li><strong>J-PWM / PB2-P1 alley:</strong> the pad-free centre gaps of J-PWM (F) and PB2-P1 (B) line up at y 92.475 over x 129.5–147.5. A 0.6 mm via there clears both pad rows by 0.16 mm. That leaves room for 10–20 tented vias under the IMU, BARO and TPM, the area with the worst cap loops.</li>
+<li><strong>T-ETH2 / 1553-XFM block:</strong> at x 157–163.5, y 104.3–109.4, both sides are pad-free, giving room for roughly 20–30 vias for ETH2/RMII layer changes and In1 stitching.</li>
+</ul>
+Change <code>plane_fanout_pilot.py</code> to test pad and copper clearance only, not courtyards.</dd>
+<dt>Basis</dt><dd>direct: J-PWM and PB2-P1 pad geometry ("1.27 3.68" pads at ±2.475 mm); T-ETH2 pad rows at y 103.27 and 112.03; 1553-XFM pads at y 99.54 and 110.46. external: pcb-designer §17 (tented and in-pad vias). Found by the pcb-designer lens.</dd>
+<dt>Rationale</dt><dd>At 79 %/75 % courtyard fill, moving parts until gaps appear is not going to work. This uses space the layout already has, next to the densest unrouted clusters.</dd>
+<dt>Downsides</dt><dd>Vias under the PocketBeagle body and the magnetics must be tented. Keep at least 1 mm from the T-ETH2 line-side pads and the 1553 secondary pads.</dd>
+</dl>
+</article>
+
+<article id="i10">
+<h3>10. Move TPM reset and IRQ to the P1 rail under the TPM</h3>
+<p class="chips"><span>Axis 3 · floorplan</span><span>Confidence 50%</span><span>Complexity Low</span></p>
+<dl>
+<dt>Description</dt><dd>The TPM sits on F at the top edge, directly over PB2-P1. Its TPM_RSTN and TPM_IRQN come from PB2-P2 pins 11/12 at the bottom edge, inside the band. Each net crosses about 1.0 in (26 mm) through the densest part of the board. Move both to free P1 GPIOs: Pilot.md frees P1-10 after the HI-6138 swap, and a second free pin is needed.</dd>
+<dt>Basis</dt><dd>direct: Pilot.md "P1-10 is freed"; <code>unconnected.txt</code> "Pad 12 [TPM_IRQN] of PB2-P2 … Pad 18 [TPM_IRQN] of TPM on F.Cu". The pin-mux capability of the target pins requires verification against the PocketBeagle 2 pinout.</dd>
+<dt>Rationale</dt><dd>A schematic and device-tree change with no placement move removes 2 band-trapped nets and 2 long crossings.</dd>
+<dt>Downsides</dt><dd>It touches the generator schematic and the firmware pin map.</dd>
+</dl>
+</article>
+
+<article id="i11">
+<h3>11. Clock the HI-6138 from the PHY's 50 MHz output and delete X-50M</h3>
+<p class="chips"><span>Axis 5 · part reduction</span><span>Confidence 40%</span><span>Complexity Medium</span></p>
+<dl>
+<dt>Description</dt><dd>The HI-6138 needs a 50.0 MHz ±100 ppm master clock. The DP83825I in RMII leader mode already outputs 50 MHz from the ±50 ppm X-25M. Sharing that output deletes X-50M and C-50M and frees B.Cu at 143.3–146.2 × 99.3–102.7. That is exactly the neighbourhood where the optimization could not get C-50M closer than 4 mm.</dd>
+<dt>Basis</dt><dd>direct: hi-6138 rev S MCLK pin table "Master clock input, 50.0MHz +/-100 ppm"; dp83825i.pdf pin 2 "RMII Leader Mode: 50MHz Clock Out (default)". Found by the pcb-engineer lens.</dd>
+<dt>Rationale</dt><dd>It removes two parts and a cross-side cap in the most congested B.Cu block.</dd>
+<dt>Downsides</dt><dd>It couples faults: a PHY reset or power-down stops the 1553 clock. Jitter, duty cycle and fan-out against HI-6138 MCLK timing require verification. It adds about 20 mm of 50 MHz trace, and it is a schematic change that needs owner sign-off.</dd>
+</dl>
+</article>
+</section>
+
+<section id="rejection-summary">
+<h2>Rejection Summary</h2>
+<table>
+<thead><tr><th>#</th><th>Idea</th><th>Reason Rejected</th></tr></thead>
+<tbody>
+<tr><td>R1</td><td>Rotate GPS 180° to lift its pin row out of the band</td><td>Refuted: moves GPS_RF pin 11 to (135.55, 109.5) inside the band and stretches the RF line from about 4 to about 15 mm with no valid reference plane; idea 1's notch replaces it.</td></tr>
+<tr><td>R2</td><td>Slide GPS west out of the band</td><td>Refuted: only about 1 mm to PWR-IN's courtyard at x 128.15.</td></tr>
+<tr><td>R3</td><td>Shift HI-6138 0.5 mm south to open a B.Cu cap strip</td><td>Weak: pins 6/7 lose their south escape (0.25 mm left for a via); idea 4 re-homes the same caps without it.</td></tr>
+<tr><td>R4</td><td>Move U-3V3/L-3V3 to the free F strip at x 156–158 to de-stack the 1553 QFN</td><td>Refuted: the strip is occupied by T-ETH, T-ETH2 and R-BS1R; only 0.52 mm is free.</td></tr>
+<tr><td>R5</td><td>Power-via skeleton placed by the generator before routing</td><td><strong>Overturned by experiment 7, now recommended.</strong> The "no free sites" basis was an artifact of existing routing: on the stripped placement, 54 plane vias fit with DRC 0. Fold into idea 9 as the first routing step.</td></tr>
+<tr><td>R6</td><td>Flip the plane stack (+3V3 to In2)</td><td>Weak: undermines the In1 GND reference and the band scheme; the local-pour part is covered by idea 2.</td></tr>
+<tr><td>R7</td><td>Merge C-3V3-O1/O2 into one bulk cap</td><td>Refuted: the TPS62933 datasheet reference design uses 2 × 22 µF, and a single 0805 derates heavily at 3.3 V. The C-50M deletion part is folded into idea 4.</td></tr>
+<tr><td>R9</td><td>Relocate BARO to the free F window at (167.6, 118.0) to clear the TPS62933 input loop</td><td>Refuted by experiment: the window ignored the PB2-P2 clip NPTH and the MIL-1553/R-1553N courtyards. The only legal site is y ≥ 119.8, where C-BARO1 has no site and the total cap distance rises 119.4 → 130.3 mm.</td></tr>
+<tr><td>R10</td><td>Full rectangular PB2-P2 band notch</td><td>Strips band coverage from the CAN-FD/RS-485 connector pads; replaced by idea 8's per-pin keep-ins.</td></tr>
+<tr><td>R8</td><td>Smaller 1553 TVS package</td><td>Weak: small area gain, and surge rating against the 1553 stub requirement is unverified.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="optimization-results">
+<h2>Optimization Results</h2>
+<p>A ce-optimize loop scored ideas 1, 3 and 4 against <code>scripts/optimize/eval_placement.py</code>. The harness applies <code>placement_moves.json</code> to a routing-stripped copy of the board and measures: DRC errors and parity as gates, and the summed bypass-cap-to-pin distance as the primary metric. The committed PCB is unchanged; the moves live on branch <code>optimize/pilot-placement</code>.</p>
+<table>
+<thead><tr><th>#</th><th>Experiment</th><th>Outcome</th><th>Cap-to-pin sum</th><th>Caps &gt; 1.5 mm</th><th>Worst ISOW HF</th><th>Plane pads in band</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Baseline</td><td>—</td><td>186.1 mm</td><td>43</td><td>4.78 mm</td><td>12</td></tr>
+<tr><td>1</td><td>ISOW HF caps (idea 3)</td><td>kept</td><td>178.8</td><td>41</td><td>1.79</td><td>11</td></tr>
+<tr><td>2</td><td>Greedy legal-site search, all caps (idea 4)</td><td>kept</td><td>125.4</td><td>30</td><td>1.79</td><td>9</td></tr>
+<tr><td>3</td><td>Search pass 2</td><td>kept</td><td>121.5</td><td>28</td><td>1.79</td><td>9</td></tr>
+<tr><td>4</td><td>GPS band notch + search (idea 1)</td><td>kept, owner review</td><td>119.4</td><td>28</td><td>1.79</td><td>5</td></tr>
+<tr><td>5</td><td>BARO relocation</td><td>degenerate (4 DRC)</td><td>130.3</td><td>25</td><td>1.79</td><td>5</td></tr>
+<tr><td>6</td><td>Search pass 3, hole-aware, 0.015 mm courtyard touch</td><td>kept</td><td>118.5</td><td>28</td><td>1.79</td><td>5</td></tr>
+</tbody>
+</table>
+<p><strong>Via room (experiment 7, diagnostic).</strong> On the stripped best placement, 163 of 166 GND/+3V3 pads have a via site within 0.10 in (2.5 mm) under copper-clearance rules, but only 14 do if courtyards must be clear. The existing <code>plane_fanout_pilot.py</code> places 54 plane vias that pass DRC with 0 errors on that board, against 4–7 on the routed board. The fanout failure was caused by the earlier freerouting copper, not by the placement. The power-via skeleton (R5) is therefore revived: place plane vias before signal routing.</p>
+<p>The best result, experiment 6, cuts the cap-to-pin sum by 36 % (186.1 → 118.5 mm) with 0 DRC errors and 0 parity issues. The second search pass and the notch gained only 3.9 and 2.1 mm, so cap moves are nearly exhausted at the current IC placement. The remaining losses (GPS caps, C-50M, C-485-5, C-3V3-IN) need ideas 8, 9 and 11 or IC moves.</p>
+</section>
+
+<section class="callout">
+<p class="eyebrow">Coverage note</p>
+<p>In the first round, two of the three ideation agents did not load their assigned skill. They were rerun with the pcb-engineer and pcb-designer skills loaded, which produced ideas 8–11 and the second-round improvements to ideas 1, 4 and 5. A fresh-context verifier checked every first-round candidate against the board data and the ISOW1044/ISOW1412/TPS62933/MAX-M10S datasheets.</p>
+</section>
+
+<footer class="composition-signal">Composed 2026-10-10T23:20Z, updated 2026-10-11T02:55Z with the skill-loaded rerun and ce-optimize results, by ce-ideate (Claude Opus 5.5) from the session prompt and measured data on <a href="https://github.com/Stab-Rabbit-coding/Serenity-UAV/blob/pilot-routing-repair/avionics/kicad/Pilot/kicads/Pilot.kicad_pcb"><code>avionics/kicad/Pilot/kicads/Pilot.kicad_pcb</code></a> (branch pilot-routing-repair).</footer>
+</main></body>
+</html>

@@ -68,6 +68,11 @@ One of the four PocketBeagle 2 Industrial single-board computers that fly the ai
 
 The strip of a cape between its two PocketBeagle 2 stacking rails that can actually hold parts and copper. Each rail centre-line sits 4.80 mm inside its long edge (PB2 System Reference Manual Fig. 3.45; the rails are 25.4 mm apart). With through-hole rail sockets the pads exist on every copper layer, so the rails consume both faces and no part on either face may put pads over them; with surface-mount rail connectors whose pads stay under their own body the rails consume only the face they mount on, and the opposite face over them is usable. Component area budgets are computed against the usable band, per face, using each footprint's courtyard and checking every through-hole or NPTH pad against the opposite face's copper, not against the board outline or package body sizes.
 
+## Shared Header Pin
+
+A PocketBeagle 2 stacking-rail pin that is wired on the PocketBeagle itself to more than one active pin: two SoC balls, an analog-input pin of the board's co-processor, or both. The board documentation names the second SoC ball with an "A" suffix (for example P1.02A). A cape owns only one function on a shared header pin. Every other pin tied to it must be held as a high-impedance input. Its load and stub stay on the cape's signal whatever the cape does, so fast signals on a shared header pin are budgeted with that load. Whether the other pins stay quiet is a firmware setting, so it is never the basis for a wiring decision.
+*Avoid: dual-ball pin, A-pin*
+
 ## Isolation Band
 
 The region of a cape that belongs to the isolated (bus-side) reference of the isolated CAN-FD and RS-485 transceivers: their isolated pin rows, the field connectors and the filters between them. Only isolated-domain nets and chassis ground may have copper inside it on the layers it covers, and the main ground and supply planes are cut away beneath it; the gap between the band and logic-side copper is the barrier the board actually delivers, whatever the transceiver's own isolation rating says. A band need not cover every layer: when every isolated pad sits on one face, the opposite outer layer may carry logic copper beneath it, separated by the laminate, provided no logic via enters the band — so whatever sits there must route on that face alone.

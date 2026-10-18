@@ -47,8 +47,12 @@ tags:
 > - **TACCO outline.** TACCO stays **55 x 35 mm** (a 60 x 35 trial, 2026-10-06, was reverted
 >   2026-10-07 because it routed no better; TACCO.md §13b). The trial put the extra 5 mm past the PB2-I's microSD
 >   end (avionics/kicad/TACCO/TACCO.md §13b).
-> - **Pilot still has the old error.** Pilot still has rails at the old 2.54 mm rows on
->   female-socket footprints; the fix is avionics/WBS.md R2.
+> - **Pilot rails corrected 2026-10-06.** Pilot now uses the same TSM-DV-LC strips at the
+>   4.80 mm rows (avionics/WBS.md R2, done 2026-10-06).
+> - **Pin-1 row on B.Cu (2026-10-17).** The `PocketBeagle2_2x18_P1/P2_TSM-DV-LC` footprints put
+>   pin 1 on the wrong row once flipped to B.Cu. The official drawing has P1 pin 1 on the outer
+>   row and P2 pin 1 on the inner row; the library footprints were mirrored in y to match, and
+>   TACCO's placed copies still need the update (avionics/WBS.md FLEET item).
 > - **Item 4 below is history.** Its 2.565 mm geometry and "SSM-DV fails" verdict no longer
 >   apply to either board.
 

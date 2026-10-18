@@ -555,6 +555,8 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Route the rearranged capes.
 - [ ] Clear residual DRC after mesh + routing
 - [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
+- [ ] Pilot ISOW §13.1 compliance re-floorplan (2026-10-12)
+- [ ] Isolated CAN-FD GPS pucks for the two dorsal GPS cups
 - [ ] Add SBUS/UART DIP switch to Pilot
 - [ ] Generate Pilot gerbers
 - [ ] Generate XO gerbers

@@ -719,7 +719,7 @@ def dp83825i(ref: str, rmii: str, rstn: str, intn: str, eth: str, mdio: str, mdc
     REBUILT 2026-09-29: the previous table (X1 on 8, X2 on 9, DGND 10, DVDD10 11, RESET 12,
     MDIO 13, MDC 14, INT 15, TXOP/TXON 17/18, RXIP/RXIN 21/22, RBIAS 24, RX_D0 on 1 ...) was
     NOT the DP83825I pinout (it resembles a DP83848-family table) and is shared with Pilot's
-    ETH1/ETH2-PHY — see avionics/WBS.md §1.2a 2026-09-29 item 8.  Datasheet Table 4-1:
+    J-ETH-RMII2/ETH2-PHY — see avionics/WBS.md §1.2a 2026-09-29 item 8.  Datasheet Table 4-1:
     1 TX_EN, 2 50MHzOut/LED2, 3 INTR/PWRDN, 4 LED0, 5 RST_N, 6 VDDA3V3, 7 RD_M, 8 RD_P, 9 GND,
     10 TD_M, 11 TD_P, 12 XO, 13 XI/50MHzIn, 14 RBIAS, 15 MDIO, 16 MDC, 17 RX_D1, 18 RX_D0
     (PhyAdd[0] strap), 19 VDDIO, 20 CRS_DV, 21 GND, 22 RX_ER, 23 TX_D0, 24 TX_D1, DAP = GND.
@@ -761,7 +761,7 @@ def dp83825i(ref: str, rmii: str, rstn: str, intn: str, eth: str, mdio: str, mdc
 
 def eth_xfmr(ref: str, eth: str) -> Dict[str, Any]:
     """Wurth 749010012A WE-LAN 10/100 SMT transformer (749010012A.pdf p.1) — identical part/pin
-    table to Pilot's T-ETH/T-ETH2 (16 mechanical pads; 4/5/12/13 no winding; PHY side 1-3/6-8,
+    table to Pilot's T-RMII2/T-USB1 (16 mechanical pads; 4/5/12/13 no winding; PHY side 1-3/6-8,
     line side 9-11/14-16, 1:1 CT, 1500 V isolation barrier)."""
     return {
         "ref": ref, "value": "749010012A", "fp": FP_WELAN, "mpn": "749010012A",
@@ -788,8 +788,8 @@ def eth_xfmr(ref: str, eth: str) -> Dict[str, Any]:
 
 
 ICS += [
-    dp83825i("ETH-PHY", "RMII2", "PHY1_RSTN", "PHY1_INTRN", "ETHB", "MDIO0", "MDC0"),
-    eth_xfmr("T-ETH", "ETHB"),
+    dp83825i("PHY-RMII2", "RMII2", "RMII2_PHY_RSTN", "RMII2_PHY_INTRN", "ETH_RMII2", "MDIO0", "MDC0"),
+    eth_xfmr("T-RMII2", "ETH_RMII2"),
 ]
 
 # ---------------------------------------------------------------------------
@@ -832,8 +832,8 @@ PB2_P1 = [
 ]
 PB2_P2 = [
     "MDC0", "CAN_B_STB",                     # 1 AD24 MDIO0_MDC, 2 U22 GPIO0_45
-    "MDIO0", "PHY1_RSTN",                    # 3 AB22 MDIO0_MDIO, 4 V24 GPIO0_46
-    "MCAN0_B_TX", "PHY1_INTRN",              # 5 C15 MCAN0_TX, 6 W25 GPIO0_47
+    "MDIO0", "RMII2_PHY_RSTN",                    # 3 AB22 MDIO0_MDIO, 4 V24 GPIO0_46
+    "MCAN0_B_TX", "RMII2_PHY_INTRN",              # 5 C15 MCAN0_TX, 6 W25 GPIO0_47
     "MCAN0_B_RX", "M1553B_IRQN",             # 7 E15 MCAN0_RX, 8 W24 GPIO0_48
     "RS485_B_RX", "M1553B_MRN",              # 9 A15 UART2_RXD, 10 AD21 GPIO0_91
     "RS485_B_TX", None,                      # 11 B15 UART2_TXD, 12 PWR_BTN
@@ -857,7 +857,9 @@ PB2_P2_OMITTED: set = set()  # gap idea withdrawn 2026-09-29: P2-5/7 are the onl
 
 def pb2_header(ref: str, value: str, fp: str, nets: List[Optional[str]]) -> Dict[str, Any]:
     omitted = PB2_P2_OMITTED if ref == "PB2-P2" else set()
-    pins = [(str(i), f"P{i}", net, "L" if i <= 18 else "R")
+    rail = ref.split("-")[-1]  # "P1" / "P2"
+    # pin names = BeagleBoard SRM designators P1.01..P2.36 [REF-SENSOR-041 sec 4.2]
+    pins = [(str(i), f"{rail}.{i:02d}", net, "L" if i <= 18 else "R")
             for i, net in enumerate(nets, start=1) if i not in omitted]
     return {"ref": ref, "value": value, "fp": fp, "mpn": "TSM-118-04-L-DV-LC",
             "ds": "PocketBeagle 2 P1/P2 expansion rails (XO map); Samtec TSM-DV SMT male strip, -04 "
@@ -964,25 +966,25 @@ SIMPLE: List[Any] = [
     ("X2Y-RS485", "4.7nF X2Y", FP_X2Y0805, "CX0805MRX7R0BB472", "GND1<->GND2 RF bridge (Yageo X2Y 0805)",
      [("1", "A", "GND"), ("2", "B", "GND"), ("3", "G1", "GND2_RS485B"), ("4", "G2", "GND2_RS485B")]),
     # --- Ethernet line side (single PHY, Bob-Smith termination) -------------
-    ("J-ETH", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "ETH line pair to T-ETH secondary",
-     [("1", "TXP", "ETHB_LINE_TXP"), ("2", "TXN", "ETHB_LINE_TXN"), ("3", "RXP", "ETHB_LINE_RXP"), ("4", "RXN", "ETHB_LINE_RXN"),
+    ("J-ETH", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "ETH line pair to T-RMII2 secondary",
+     [("1", "TXP", "ETH_RMII2_LINE_TXP"), ("2", "TXN", "ETH_RMII2_LINE_TXN"), ("3", "RXP", "ETH_RMII2_LINE_RXP"), ("4", "RXN", "ETH_RMII2_LINE_RXN"),
       ("MP", "SHIELD", "PGND")]),
-    ("R-BST", "75R", FP_R0402, "", "ETH line TX centre tap Bob-Smith (Fig 8-3 R135)", [("1", "A", "ETHB_LINE_CTX"), ("2", "B", "ETHB_BS")]),
-    ("R-BSR", "75R", FP_R0402, "", "ETH line RX centre tap Bob-Smith (Fig 8-3 R143)", [("1", "A", "ETHB_LINE_CRX"), ("2", "B", "ETHB_BS")]),
-    ("C-BS", "10nF 2kV", FP_C1808, "", "ETH Bob-Smith HV cap to chassis (Fig 8-3 C38)", [("1", "P", "ETHB_BS"), ("2", "N", "PGND")]),
+    ("R-BST", "75R", FP_R0402, "", "ETH line TX centre tap Bob-Smith (Fig 8-3 R135)", [("1", "A", "ETH_RMII2_LINE_CTX"), ("2", "B", "ETH_RMII2_BS")]),
+    ("R-BSR", "75R", FP_R0402, "", "ETH line RX centre tap Bob-Smith (Fig 8-3 R143)", [("1", "A", "ETH_RMII2_LINE_CRX"), ("2", "B", "ETH_RMII2_BS")]),
+    ("C-BS", "10nF 2kV", FP_C1808, "", "ETH Bob-Smith HV cap to chassis (Fig 8-3 C38)", [("1", "P", "ETH_RMII2_BS"), ("2", "N", "PGND")]),
     ("X-25M", "25MHz 3.3V", "Oscillator:Oscillator_SMD_ECS_2520MV-xxx-xx-4Pin_2.5x2.0mm", "ECS-2520MV-250-BN-TR",
      "PHY 25 MHz reference (dp83825i.pdf §8.2.1.1.1) [REF-PWR-004]",
      [("1", "TRI", None), ("2", "GND", "GND"), ("3", "OUT", "PHY_XI_25M"), ("4", "VDD", "+3V3")]),
     ("C-25M", "100nF", FP_C0402, "", "oscillator VDD bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("R-RBIAS", "6.49k 1%", FP_R0201, "", "DP83825I RBIAS to GND (pin 24)", [("1", "A", "ETH-PHY_RBIAS"), ("2", "B", "GND")]),
+    ("R-RBIAS", "6.49k 1%", FP_R0201, "", "DP83825I RBIAS to GND (pin 24)", [("1", "A", "PHY-RMII2_RBIAS"), ("2", "B", "GND")]),
     ("R-AD0", "2.49k", FP_R0201, "", "PhyAdd[0] strap mode 1 -> PHY address 1", [("1", "A", "+3V3"), ("2", "B", "RMII2_RXD0")]),
-    ("C-PHY-A1", "10nF", FP_C0201, "", "VDDA3V3 HF bypass (Fig 8-4)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-PHY-A2", "100nF", FP_C0402, "", "VDDA3V3 bypass (Fig 8-4)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-PHY-A3", "1uF", FP_C0402, "", "VDDA3V3 bulk (Fig 8-4)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-PHY-CTD1", "100nF", FP_C0402, "", "device-side TX centre tap to GND (Fig 8-3 C41)", [("1", "P", "ETHB_CTD"), ("2", "N", "GND")]),
-    ("C-PHY-CTD2", "1uF", FP_C0402, "", "device-side TX centre tap to GND (Fig 8-3 C44)", [("1", "P", "ETHB_CTD"), ("2", "N", "GND")]),
-    ("C-PHY-CRD1", "100nF", FP_C0402, "", "device-side RX centre tap to GND (Fig 8-3 C75)", [("1", "P", "ETHB_CRD"), ("2", "N", "GND")]),
-    ("C-PHY-CRD2", "1uF", FP_C0402, "", "device-side RX centre tap to GND (Fig 8-3 C74)", [("1", "P", "ETHB_CRD"), ("2", "N", "GND")]),
+    ("C-RMII2-A1", "10nF", FP_C0201, "", "VDDA3V3 HF bypass (Fig 8-4)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-RMII2-A2", "100nF", FP_C0402, "", "VDDA3V3 bypass (Fig 8-4)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-RMII2-A3", "1uF", FP_C0402, "", "VDDA3V3 bulk (Fig 8-4)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-RMII2-CTD1", "100nF", FP_C0402, "", "device-side TX centre tap to GND (Fig 8-3 C41)", [("1", "P", "ETH_RMII2_CTD"), ("2", "N", "GND")]),
+    ("C-RMII2-CTD2", "1uF", FP_C0402, "", "device-side TX centre tap to GND (Fig 8-3 C44)", [("1", "P", "ETH_RMII2_CTD"), ("2", "N", "GND")]),
+    ("C-RMII2-CRD1", "100nF", FP_C0402, "", "device-side RX centre tap to GND (Fig 8-3 C75)", [("1", "P", "ETH_RMII2_CRD"), ("2", "N", "GND")]),
+    ("C-RMII2-CRD2", "1uF", FP_C0402, "", "device-side RX centre tap to GND (Fig 8-3 C74)", [("1", "P", "ETH_RMII2_CRD"), ("2", "N", "GND")]),
     # --- MIL-STD-1553B field port -------------------------------------------
     ("R-1553P", "55R 2%", FP_R0603, "", "MIL-STD-1553B §4.5.1.5.2 direct-coupled stub isolation resistor",
      [("1", "A", "M1553B_SEC_P"), ("2", "B", "BUS_1553_B_P")]),

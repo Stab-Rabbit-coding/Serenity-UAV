@@ -124,6 +124,10 @@ telemetry gateways. Folder/file/BOM designator is `CAN-PERIPH-GW-1`
 
 ## PCB Design Standards
 
+**Part selection gate:** every IC, discrete semiconductor and module must pass the root
+`AGENTS.md` §5 "Component sourcing and openness" rules (no restricted-country silicon by
+manufacturer domicile/control; public, NDA-free datasheets) before it enters a schematic.
+
 ### Design Rules Checker (DRC) Workflow
 
 Every schematic and PCB modification **must** be verified: run **ERC** on the `.kicad_sch` and

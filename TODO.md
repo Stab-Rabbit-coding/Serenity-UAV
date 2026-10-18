@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-10-07
+**Last updated:** 2026-10-17
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -262,6 +262,8 @@
 - [ ] Route the rearranged capes.
 - [ ] Clear residual DRC after mesh + routing
 - [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
+- [ ] Pilot ISOW §13.1 compliance re-floorplan (2026-10-12)
+- [ ] Isolated CAN-FD GPS pucks for the two dorsal GPS cups
 - [ ] Add SBUS/UART DIP switch to Pilot
 - [ ] Generate Pilot gerbers
 - [ ] Generate XO gerbers

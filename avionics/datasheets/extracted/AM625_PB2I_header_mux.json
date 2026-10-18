@@ -1,0 +1,829 @@
+{
+ "_source": {
+  "datasheet": "TI SPRSP58C AM62x data sheet, rev. Oct 2025, Table 5-1 (ALW)",
+  "doc": "avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md",
+  "extracted_by": "Claude Opus 5.5, 2026-10-17",
+  "header_ball_list": "BeagleBoard.org PocketBeagle 2 SRM Ch. 4 + schematic sheet 016_BP P1 & P2",
+  "local_copy": "avionics/datasheets/am625.pdf",
+  "md5": "0bf05eb5e8fe8649fe010b244d7ef6e6",
+  "note": "Pins suffixed A are the second SoC ball tied to the same header pin"
+ },
+ "balls": {
+  "A13": {
+   "modes": {
+    "0": "SPI0_CS0",
+    "2": "EHRPWM0_A",
+    "6": "PR0_ECAP0_SYNC_IN",
+    "7": "GPIO1_15"
+   },
+   "pin": "P2.31"
+  },
+  "A14": {
+   "modes": {
+    "0": "SPI0_CLK",
+    "1": "CP_GEMAC_CPTS0_TS_SYNC",
+    "2": "EHRPWM1_A",
+    "7": "GPIO1_17"
+   },
+   "pin": "P2.29"
+  },
+  "A15": {
+   "modes": {
+    "0": "UART0_CTSn",
+    "1": "SPI0_CS2",
+    "2": "I2C3_SCL",
+    "3": "UART2_RXD",
+    "4": "TIMER_IO6",
+    "5": "AUDIO_EXT_REFCLK0",
+    "6": "PR0_ECAP0_SYNC_OUT",
+    "7": "GPIO1_22",
+    "8": "MCASP2_AFSX",
+    "9": "MMC2_SDCD"
+   },
+   "pin": "P2.09"
+  },
+  "A17": {
+   "modes": {
+    "0": "I2C1_SDA",
+    "1": "UART1_TXD",
+    "2": "TIMER_IO1",
+    "3": "SPI2_CLK",
+    "4": "EHRPWM0_SYNCO",
+    "7": "GPIO1_29",
+    "8": "EHRPWM2_B",
+    "9": "MMC2_SDWP"
+   },
+   "pin": "P1.33"
+  },
+  "A18": {
+   "modes": {
+    "0": "EXT_REFCLK1",
+    "1": "SYNC1_OUT",
+    "2": "SPI2_CS3",
+    "3": "SYSCLKOUT0",
+    "4": "TIMER_IO4",
+    "5": "CLKOUT0",
+    "6": "CP_GEMAC_CPTS0_RFT_CLK",
+    "7": "GPIO1_30",
+    "8": "ECAP0_IN_APWM_OUT"
+   },
+   "pin": "P1.10"
+  },
+  "A19": {
+   "modes": {
+    "0": "MCASP0_AXR2",
+    "1": "SPI2_D1",
+    "2": "UART1_RTSn",
+    "3": "UART6_TXD",
+    "4": "PR0_IEP0_EDIO_DATA_IN_OUT29",
+    "5": "ECAP2_IN_APWM_OUT",
+    "6": "PR0_UART0_TXD",
+    "7": "GPIO1_8",
+    "8": "EQEP0_B"
+   },
+   "pin": "P1.12"
+  },
+  "A20": {
+   "modes": {
+    "0": "MCASP0_ACLKR",
+    "1": "SPI2_CLK",
+    "2": "UART1_TXD",
+    "6": "EHRPWM0_B",
+    "7": "GPIO1_14",
+    "8": "EQEP1_I"
+   },
+   "pin": "P1.08"
+  },
+  "A5": {
+   "modes": {
+    "0": "MCU_UART0_TXD",
+    "7": "MCU_GPIO0_6"
+   },
+   "pin": "P2.07A"
+  },
+  "AA18": {
+   "modes": {
+    "0": "RGMII2_TD1",
+    "1": "RMII2_TXD1",
+    "2": "MCASP2_ACLKR",
+    "3": "PR0_PRU1_GPO3",
+    "4": "PR0_PRU1_GPI3",
+    "5": "MCASP2_AXR8",
+    "7": "GPIO0_90"
+   },
+   "pin": "P2.31A"
+  },
+  "AA19": {
+   "modes": {
+    "0": "RGMII2_TX_CTL",
+    "1": "RMII2_TX_EN",
+    "2": "MCASP2_AXR4",
+    "3": "PR0_PRU1_GPO0",
+    "4": "PR0_PRU1_GPI0",
+    "7": "GPIO0_87"
+   },
+   "pin": "P1.02A"
+  },
+  "AA21": {
+   "modes": {
+    "0": "VOUT0_DATA15",
+    "1": "GPMC0_A15",
+    "2": "PR0_PRU1_GPO14",
+    "3": "PR0_PRU1_GPI14",
+    "4": "UART4_CTSn",
+    "5": "PR0_PRU0_GPO5",
+    "6": "PR0_PRU0_GPI5",
+    "7": "GPIO0_60"
+   },
+   "pin": "P2.34"
+  },
+  "AA23": {
+   "modes": {
+    "0": "VOUT0_DATA11",
+    "1": "GPMC0_A11",
+    "2": "PR0_PRU1_GPO10",
+    "3": "PR0_PRU1_GPI10",
+    "4": "UART6_CTSn",
+    "5": "PR0_PRU0_GPO1",
+    "6": "PR0_PRU0_GPI1",
+    "7": "GPIO0_56"
+   },
+   "pin": "P1.33A"
+  },
+  "AA24": {
+   "modes": {
+    "0": "VOUT0_DATA13",
+    "1": "GPMC0_A13",
+    "2": "PR0_PRU1_GPO12",
+    "3": "PR0_PRU1_GPI12",
+    "4": "UART5_CTSn",
+    "5": "PR0_PRU0_GPO3",
+    "6": "PR0_PRU0_GPI3",
+    "7": "GPIO0_58"
+   },
+   "pin": "P2.30"
+  },
+  "AA25": {
+   "modes": {
+    "0": "VOUT0_DATA7",
+    "1": "GPMC0_A7",
+    "2": "PR0_PRU1_GPO7",
+    "3": "PR0_PRU1_GPI7",
+    "4": "UART5_TXD",
+    "5": "PR0_PRU0_GPO15",
+    "6": "PR0_PRU0_GPI15",
+    "7": "GPIO0_52"
+   },
+   "pin": "P2.33"
+  },
+  "AB10": {
+   "modes": {},
+   "pin": "P1.05"
+  },
+  "AB20": {
+   "modes": {
+    "0": "RGMII2_RD1",
+    "1": "RMII2_RXD1",
+    "2": "MCASP2_AFSR",
+    "3": "PR0_PRU0_GPO3",
+    "4": "PR0_PRU0_GPI3",
+    "5": "MCASP2_AXR7",
+    "7": "GPIO1_4"
+   },
+   "pin": "P1.25"
+  },
+  "AB22": {
+   "modes": {
+    "0": "MDIO0_MDIO",
+    "7": "GPIO0_85"
+   },
+   "pin": "P2.03"
+  },
+  "AB24": {
+   "modes": {
+    "0": "VOUT0_HSYNC",
+    "1": "GPMC0_A16",
+    "2": "PR0_PRU1_GPO15",
+    "3": "PR0_PRU1_GPI15",
+    "4": "UART3_RTSn",
+    "5": "PR0_PRU0_GPO6",
+    "6": "PR0_PRU0_GPI6",
+    "7": "GPIO0_61"
+   },
+   "pin": "P2.28"
+  },
+  "AB25": {
+   "modes": {
+    "0": "VOUT0_DATA12",
+    "1": "GPMC0_A12",
+    "2": "PR0_PRU1_GPO11",
+    "3": "PR0_PRU1_GPI11",
+    "4": "UART5_RTSn",
+    "5": "PR0_PRU0_GPO2",
+    "6": "PR0_PRU0_GPI2",
+    "7": "GPIO0_57"
+   },
+   "pin": "P2.32"
+  },
+  "AC20": {
+   "modes": {
+    "0": "RGMII2_TD3",
+    "2": "MCASP2_ACLKX",
+    "3": "PR0_PRU1_GPO16",
+    "4": "PR0_PRU1_GPI16",
+    "5": "PR0_ECAP0_SYNC_OUT",
+    "6": "PR0_UART0_CTSn",
+    "7": "GPIO1_0",
+    "8": "EQEP2_S"
+   },
+   "pin": "P2.19"
+  },
+  "AC21": {
+   "modes": {
+    "0": "RGMII2_RD2",
+    "2": "MCASP2_AXR0",
+    "3": "PR0_PRU0_GPO4",
+    "4": "PR0_PRU0_GPI4",
+    "5": "PR0_UART0_RXD",
+    "7": "GPIO1_5",
+    "8": "EQEP2_A"
+   },
+   "pin": "P1.23"
+  },
+  "AC24": {
+   "modes": {
+    "0": "VOUT0_PCLK",
+    "1": "GPMC0_A19",
+    "2": "PR0_PRU1_GPO19",
+    "3": "PR0_PRU1_GPI19",
+    "4": "UART2_CTSn",
+    "5": "PR0_PRU0_GPO19",
+    "6": "PR0_PRU0_GPI19",
+    "7": "GPIO0_64",
+    "8": "PR0_ECAP0_IN_APWM_OUT"
+   },
+   "pin": "P2.17"
+  },
+  "AC25": {
+   "modes": {
+    "0": "VOUT0_VSYNC",
+    "1": "GPMC0_A18",
+    "2": "PR0_PRU1_GPO18",
+    "3": "PR0_PRU1_GPI18",
+    "4": "UART2_RTSn",
+    "5": "PR0_PRU0_GPO18",
+    "6": "PR0_PRU0_GPI18",
+    "7": "GPIO0_63"
+   },
+   "pin": "P2.22"
+  },
+  "AD10": {
+   "modes": {},
+   "pin": "P1.09"
+  },
+  "AD18": {
+   "modes": {
+    "0": "RGMII1_TD3",
+    "2": "PR0_UART0_TXD",
+    "7": "GPIO0_78"
+   },
+   "pin": "P1.06A"
+  },
+  "AD21": {
+   "modes": {
+    "0": "RGMII2_TD2",
+    "2": "MCASP2_AFSX",
+    "3": "PR0_PRU1_GPO4",
+    "4": "PR0_PRU1_GPI4",
+    "5": "PR0_ECAP0_IN_APWM_OUT",
+    "7": "GPIO0_91",
+    "8": "EQEP2_I"
+   },
+   "pin": "P2.10"
+  },
+  "AD22": {
+   "modes": {
+    "0": "RGMII2_RX_CTL",
+    "1": "RMII2_RX_ER",
+    "2": "MCASP2_AXR3",
+    "3": "PR0_PRU0_GPO0",
+    "4": "PR0_PRU0_GPI0",
+    "7": "GPIO1_1"
+   },
+   "pin": "P1.19"
+  },
+  "AD23": {
+   "modes": {
+    "0": "RGMII2_RXC",
+    "1": "RMII2_REF_CLK",
+    "2": "MCASP2_AXR1",
+    "3": "PR0_PRU0_GPO1",
+    "4": "PR0_PRU0_GPI1",
+    "5": "PR0_ECAP0_SYNC_IN",
+    "7": "GPIO1_2"
+   },
+   "pin": "P1.34"
+  },
+  "AD24": {
+   "modes": {
+    "0": "MDIO0_MDC",
+    "7": "GPIO0_86"
+   },
+   "pin": "P2.01A"
+  },
+  "AE18": {
+   "modes": {
+    "0": "RGMII1_TD2",
+    "2": "PR0_UART0_RXD",
+    "7": "GPIO0_77"
+   },
+   "pin": "P1.12A"
+  },
+  "AE21": {
+   "modes": {
+    "0": "RGMII2_TXC",
+    "1": "RMII2_CRS_DV",
+    "2": "MCASP2_AXR5",
+    "3": "PR0_PRU1_GPO1",
+    "4": "PR0_PRU1_GPI1",
+    "7": "GPIO0_88"
+   },
+   "pin": "P1.35"
+  },
+  "AE22": {
+   "modes": {
+    "0": "RGMII2_RD3",
+    "2": "AUDIO_EXT_REFCLK0",
+    "3": "PR0_PRU0_GPO16",
+    "4": "PR0_PRU0_GPI16",
+    "5": "PR0_UART0_TXD",
+    "7": "GPIO1_6",
+    "8": "EQEP2_B"
+   },
+   "pin": "P1.21"
+  },
+  "AE23": {
+   "modes": {
+    "0": "RGMII2_RD0",
+    "1": "RMII2_RXD0",
+    "2": "MCASP2_AXR2",
+    "3": "PR0_PRU0_GPO2",
+    "4": "PR0_PRU0_GPI2",
+    "6": "PR0_UART0_RTSn",
+    "7": "GPIO1_3"
+   },
+   "pin": "P1.27"
+  },
+  "AE9": {
+   "modes": {},
+   "pin": "P1.11"
+  },
+  "B13": {
+   "modes": {
+    "0": "SPI0_D0",
+    "1": "CP_GEMAC_CPTS0_HW1TSPUSH",
+    "2": "EHRPWM1_B",
+    "7": "GPIO1_18"
+   },
+   "pin": "P2.27"
+  },
+  "B14": {
+   "modes": {
+    "0": "SPI0_D1",
+    "1": "CP_GEMAC_CPTS0_HW2TSPUSH",
+    "2": "EHRPWM_TZn_IN0",
+    "7": "GPIO1_19"
+   },
+   "pin": "P2.25"
+  },
+  "B15": {
+   "modes": {
+    "0": "UART0_RTSn",
+    "1": "SPI0_CS3",
+    "2": "I2C3_SDA",
+    "3": "UART2_TXD",
+    "4": "TIMER_IO7",
+    "5": "AUDIO_EXT_REFCLK1",
+    "6": "PR0_ECAP0_IN_APWM_OUT",
+    "7": "GPIO1_23",
+    "8": "MCASP2_ACLKX",
+    "9": "MMC2_SDWP"
+   },
+   "pin": "P2.11"
+  },
+  "B17": {
+   "modes": {
+    "0": "I2C1_SCL",
+    "1": "UART1_RXD",
+    "2": "TIMER_IO0",
+    "3": "SPI2_CS1",
+    "4": "EHRPWM0_SYNCI",
+    "7": "GPIO1_28",
+    "8": "EHRPWM2_A",
+    "9": "MMC2_SDCD"
+   },
+   "pin": "P1.36A"
+  },
+  "B18": {
+   "modes": {
+    "0": "MCASP0_AXR1",
+    "1": "SPI2_CS2",
+    "2": "ECAP1_IN_APWM_OUT",
+    "5": "PR0_UART0_RXD",
+    "6": "EHRPWM1_A",
+    "7": "GPIO1_9",
+    "8": "EQEP0_S"
+   },
+   "pin": "P2.03A"
+  },
+  "B19": {
+   "modes": {
+    "0": "MCASP0_AXR3",
+    "1": "SPI2_D0",
+    "2": "UART1_CTSn",
+    "3": "UART6_RXD",
+    "4": "PR0_IEP0_EDIO_DATA_IN_OUT28",
+    "5": "ECAP1_IN_APWM_OUT",
+    "6": "PR0_UART0_RXD",
+    "7": "GPIO1_7",
+    "8": "EQEP0_A"
+   },
+   "pin": "P1.10A"
+  },
+  "B20": {
+   "modes": {
+    "0": "MCASP0_ACLKX",
+    "1": "SPI2_CS1",
+    "2": "ECAP2_IN_APWM_OUT",
+    "7": "GPIO1_11",
+    "8": "EQEP1_A"
+   },
+   "pin": "P2.01"
+  },
+  "B3": {
+   "modes": {
+    "0": "MCU_MCAN0_RX",
+    "1": "MCU_TIMER_IO0",
+    "2": "MCU_SPI1_CS3",
+    "7": "MCU_GPIO0_14"
+   },
+   "pin": "P1.28A"
+  },
+  "B5": {
+   "modes": {
+    "0": "MCU_UART0_RXD",
+    "7": "MCU_GPIO0_5"
+   },
+   "pin": "P2.05A"
+  },
+  "C13": {
+   "modes": {
+    "0": "SPI0_CS1",
+    "1": "CP_GEMAC_CPTS0_TS_COMP",
+    "2": "EHRPWM0_B",
+    "3": "ECAP0_IN_APWM_OUT",
+    "7": "GPIO1_16",
+    "9": "EHRPWM_TZn_IN5"
+   },
+   "pin": "P2.36"
+  },
+  "C15": {
+   "modes": {
+    "0": "MCAN0_TX",
+    "1": "UART5_RXD",
+    "2": "TIMER_IO2",
+    "3": "SYNC2_OUT",
+    "4": "UART1_DTRn",
+    "5": "EQEP2_I",
+    "6": "PR0_UART0_RXD",
+    "7": "GPIO1_24",
+    "8": "MCASP2_AXR0",
+    "9": "EHRPWM_TZn_IN3"
+   },
+   "pin": "P2.05"
+  },
+  "D14": {
+   "modes": {
+    "0": "UART0_RXD",
+    "1": "ECAP1_IN_APWM_OUT",
+    "2": "SPI2_D0",
+    "3": "EHRPWM2_A",
+    "7": "GPIO1_20"
+   },
+   "pin": "P1.32"
+  },
+  "D20": {
+   "modes": {
+    "0": "MCASP0_AFSX",
+    "1": "SPI2_CS3",
+    "2": "AUDIO_EXT_REFCLK1",
+    "7": "GPIO1_12",
+    "8": "EQEP1_B"
+   },
+   "pin": "P1.04"
+  },
+  "D4": {
+   "modes": {
+    "0": "MCU_MCAN1_RX",
+    "1": "MCU_TIMER_IO3",
+    "2": "MCU_SPI0_CS2",
+    "3": "MCU_SPI1_CS2",
+    "4": "MCU_SPI1_CLK",
+    "7": "MCU_GPIO0_16"
+   },
+   "pin": "P2.09A"
+  },
+  "D6": {
+   "modes": {
+    "0": "MCU_MCAN0_TX",
+    "1": "WKUP_TIMER_IO0",
+    "2": "MCU_SPI0_CS3",
+    "7": "MCU_GPIO0_13"
+   },
+   "pin": "P1.26A"
+  },
+  "E14": {
+   "modes": {
+    "0": "UART0_TXD",
+    "1": "ECAP2_IN_APWM_OUT",
+    "2": "SPI2_D1",
+    "3": "EHRPWM2_B",
+    "7": "GPIO1_21"
+   },
+   "pin": "P1.30"
+  },
+  "E15": {
+   "modes": {
+    "0": "MCAN0_RX",
+    "1": "UART5_TXD",
+    "2": "TIMER_IO3",
+    "3": "SYNC3_OUT",
+    "4": "UART1_RIn",
+    "5": "EQEP2_S",
+    "6": "PR0_UART0_TXD",
+    "7": "GPIO1_25",
+    "8": "MCASP2_AXR1",
+    "9": "EHRPWM_TZn_IN4"
+   },
+   "pin": "P2.07"
+  },
+  "E18": {
+   "modes": {
+    "0": "MCASP0_AXR0",
+    "1": "PR0_ECAP0_IN_APWM_OUT",
+    "2": "AUDIO_EXT_REFCLK0",
+    "5": "PR0_UART0_TXD",
+    "6": "EHRPWM1_B",
+    "7": "GPIO1_10",
+    "8": "EQEP0_I"
+   },
+   "pin": "P1.02"
+  },
+  "E19": {
+   "modes": {
+    "0": "MCASP0_AFSR",
+    "1": "SPI2_CS0",
+    "2": "UART1_RXD",
+    "6": "EHRPWM0_A",
+    "7": "GPIO1_13",
+    "8": "EQEP1_S"
+   },
+   "pin": "P1.06"
+  },
+  "E5": {
+   "modes": {
+    "0": "MCU_MCAN1_TX",
+    "1": "MCU_TIMER_IO2",
+    "3": "MCU_SPI1_CS1",
+    "4": "MCU_EXT_REFCLK0",
+    "7": "MCU_GPIO0_15"
+   },
+   "pin": "P2.11A"
+  },
+  "F18": {
+   "modes": {
+    "0": "USB1_DRVVBUS",
+    "7": "GPIO1_51"
+   },
+   "pin": "P1.03"
+  },
+  "K22": {
+   "modes": {
+    "0": "GPMC0_CSn2",
+    "1": "I2C2_SCL",
+    "2": "MCASP1_AXR4",
+    "3": "UART4_RXD",
+    "4": "PR0_PRU0_GPO19",
+    "5": "PR0_PRU0_GPI19",
+    "6": "TRC_DATA17",
+    "7": "GPIO0_43",
+    "8": "MCASP1_AFSR"
+   },
+   "pin": "P1.28"
+  },
+  "K24": {
+   "modes": {
+    "0": "GPMC0_CSn3",
+    "1": "I2C2_SDA",
+    "2": "GPMC0_A20",
+    "3": "UART4_TXD",
+    "4": "MCASP1_AXR5",
+    "6": "TRC_DATA18",
+    "7": "GPIO0_44",
+    "8": "MCASP1_ACLKR"
+   },
+   "pin": "P1.26"
+  },
+  "M22": {
+   "modes": {
+    "0": "GPMC0_DIR",
+    "1": "PR0_ECAP0_IN_APWM_OUT",
+    "3": "MCASP2_AXR13",
+    "4": "PR0_PRU0_GPO16",
+    "5": "PR0_PRU0_GPI16",
+    "6": "TRC_DATA14",
+    "7": "GPIO0_40",
+    "8": "EQEP2_S"
+   },
+   "pin": "P2.29A"
+  },
+  "N20": {
+   "modes": {
+    "0": "GPMC0_BE1n",
+    "3": "MCASP2_AXR12",
+    "4": "PR0_PRU0_GPO13",
+    "5": "PR0_PRU0_GPI13",
+    "6": "TRC_DATA11",
+    "7": "GPIO0_36"
+   },
+   "pin": "P1.13"
+  },
+  "U22": {
+   "modes": {
+    "0": "VOUT0_DATA0",
+    "1": "GPMC0_A0",
+    "2": "PR0_PRU1_GPO0",
+    "3": "PR0_PRU1_GPI0",
+    "4": "UART2_RXD",
+    "5": "PR0_PRU0_GPO8",
+    "6": "PR0_PRU0_GPI8",
+    "7": "GPIO0_45"
+   },
+   "pin": "P2.02"
+  },
+  "V20": {
+   "modes": {
+    "0": "VOUT0_DATA10",
+    "1": "GPMC0_A10",
+    "2": "PR0_PRU1_GPO9",
+    "3": "PR0_PRU1_GPI9",
+    "4": "UART6_RTSn",
+    "5": "PR0_PRU0_GPO0",
+    "6": "PR0_PRU0_GPI0",
+    "7": "GPIO0_55"
+   },
+   "pin": "P1.36"
+  },
+  "V21": {
+   "modes": {
+    "0": "VOUT0_DATA8",
+    "1": "GPMC0_A8",
+    "2": "PR0_PRU1_GPO16",
+    "3": "PR0_PRU1_GPI16",
+    "4": "UART6_RXD",
+    "5": "PR0_PRU0_GPO17",
+    "6": "PR0_PRU0_GPI17",
+    "7": "GPIO0_53"
+   },
+   "pin": "P2.18"
+  },
+  "V24": {
+   "modes": {
+    "0": "VOUT0_DATA1",
+    "1": "GPMC0_A1",
+    "2": "PR0_PRU1_GPO1",
+    "3": "PR0_PRU1_GPI1",
+    "4": "UART2_TXD",
+    "5": "PR0_PRU0_GPO9",
+    "6": "PR0_PRU0_GPI9",
+    "7": "GPIO0_46"
+   },
+   "pin": "P2.04"
+  },
+  "W21": {
+   "modes": {
+    "0": "VOUT0_DATA9",
+    "1": "GPMC0_A9",
+    "2": "PR0_PRU1_GPO8",
+    "3": "PR0_PRU1_GPI8",
+    "4": "UART6_TXD",
+    "5": "PR0_PRU0_GPO16",
+    "6": "PR0_PRU0_GPI16",
+    "7": "GPIO0_54"
+   },
+   "pin": "P2.35"
+  },
+  "W24": {
+   "modes": {
+    "0": "VOUT0_DATA3",
+    "1": "GPMC0_A3",
+    "2": "PR0_PRU1_GPO3",
+    "3": "PR0_PRU1_GPI3",
+    "4": "UART3_TXD",
+    "5": "PR0_PRU0_GPO11",
+    "6": "PR0_PRU0_GPI11",
+    "7": "GPIO0_48"
+   },
+   "pin": "P2.08"
+  },
+  "W25": {
+   "modes": {
+    "0": "VOUT0_DATA2",
+    "1": "GPMC0_A2",
+    "2": "PR0_PRU1_GPO2",
+    "3": "PR0_PRU1_GPI2",
+    "4": "UART3_RXD",
+    "5": "PR0_PRU0_GPO10",
+    "6": "PR0_PRU0_GPI10",
+    "7": "GPIO0_47"
+   },
+   "pin": "P2.06"
+  },
+  "Y18": {
+   "modes": {
+    "0": "RGMII2_TD0",
+    "1": "RMII2_TXD0",
+    "2": "MCASP2_AXR6",
+    "3": "PR0_PRU1_GPO2",
+    "4": "PR0_PRU1_GPI2",
+    "7": "GPIO0_89"
+   },
+   "pin": "P1.04A"
+  },
+  "Y20": {
+   "modes": {
+    "0": "VOUT0_DE",
+    "1": "GPMC0_A17",
+    "2": "PR0_PRU1_GPO17",
+    "3": "PR0_PRU1_GPI17",
+    "4": "UART3_CTSn",
+    "5": "PR0_PRU0_GPO7",
+    "6": "PR0_PRU0_GPI7",
+    "7": "GPIO0_62"
+   },
+   "pin": "P1.29"
+  },
+  "Y22": {
+   "modes": {
+    "0": "VOUT0_DATA14",
+    "1": "GPMC0_A14",
+    "2": "PR0_PRU1_GPO13",
+    "3": "PR0_PRU1_GPI13",
+    "4": "UART4_RTSn",
+    "5": "PR0_PRU0_GPO4",
+    "6": "PR0_PRU0_GPI4",
+    "7": "GPIO0_59"
+   },
+   "pin": "P1.31"
+  },
+  "Y23": {
+   "modes": {
+    "0": "VOUT0_DATA6",
+    "1": "GPMC0_A6",
+    "2": "PR0_PRU1_GPO6",
+    "3": "PR0_PRU1_GPI6",
+    "4": "UART5_RXD",
+    "5": "PR0_PRU0_GPO14",
+    "6": "PR0_PRU0_GPI14",
+    "7": "GPIO0_51"
+   },
+   "pin": "P2.24"
+  },
+  "Y24": {
+   "modes": {
+    "0": "VOUT0_DATA5",
+    "1": "GPMC0_A5",
+    "2": "PR0_PRU1_GPO5",
+    "3": "PR0_PRU1_GPI5",
+    "4": "UART4_TXD",
+    "5": "PR0_PRU0_GPO13",
+    "6": "PR0_PRU0_GPI13",
+    "7": "GPIO0_50"
+   },
+   "pin": "P1.20"
+  },
+  "Y25": {
+   "modes": {
+    "0": "VOUT0_DATA4",
+    "1": "GPMC0_A4",
+    "2": "PR0_PRU1_GPO4",
+    "3": "PR0_PRU1_GPI4",
+    "4": "UART4_RXD",
+    "5": "PR0_PRU0_GPO12",
+    "6": "PR0_PRU0_GPI12",
+    "7": "GPIO0_49"
+   },
+   "pin": "P2.20"
+  }
+ }
+}

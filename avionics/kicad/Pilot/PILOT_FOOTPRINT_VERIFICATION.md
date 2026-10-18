@@ -3,6 +3,9 @@
 **Author:** Claude (Opus 4.8), 2026-07-13
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Board:** `avionics/kicad/Pilot/kicads/Pilot.kicad_pcb`
+**Note (2026-10-17):** reference designators below are as of 2026-07-13. The Ethernet parts
+were renamed to TI interface names on 2026-10-17 (`ETH1-PHY` -> `PHY-RMII2`, `T-ETH` ->
+`T-RMII2`, `C-P1-*` -> `C-RMII2-*`; full table in `Pilot.md`).
 **Method:** Every placed footprint's pad geometry (count, pitch, body, EP) was
 extracted from the PCB and compared against the manufacturer datasheet in
 `avionics/datasheets/`. Datasheets were text-extracted with `pdftotext`.

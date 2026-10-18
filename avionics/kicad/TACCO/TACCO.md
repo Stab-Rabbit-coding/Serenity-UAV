@@ -16,6 +16,24 @@ rebuild and is **not** fabrication data. The PB2 rails are Samtec TSM-118-04-L-D
 strips at 4.80 mm from each long edge (§13a). Radios: Wi-Fi/ZigBee (USB module, selection open),
 mLRS (bare STM32WLE5JC), and the 49 MHz header only; SiK lives on Commo. Where a dated update
 below conflicts with this block, this block governs.
+**Name alignment 2026-10-17 (S. Griffing decision; implemented by Claude Opus 5.5 with
+`avionics/kicad/align_pb2_ti_names.py`).** Header pins and the Ethernet ring now use
+BeagleBoard and TI naming [REF-SENSOR-041 §4.2] [REF-SENSOR-049 §5.3.1]. The rename is nominal
+only: ERC, DRC and schematic-parity counts were identical before and after. Earlier update blocks below keep the old names as they were written.
+
+| Old | New (TI interface name) | Board |
+| --- | --- | --- |
+| Header symbol pins `P1`..`P36` | `P1.01`..`P1.36`, `P2.01`..`P2.36` (BeagleBoard SRM §4.2) | Pilot, TACCO |
+| `PHY1_RSTN` / `PHY1_INTRN` | `RMII2_PHY_RSTN` / `RMII2_PHY_INTRN` | Pilot, TACCO |
+| `ETH1-PHY` (Pilot), `ETH-PHY` (TACCO) | `PHY-RMII2` (DP83825I) | Pilot, TACCO |
+| `T-ETH` | `T-RMII2` | Pilot, TACCO |
+| `ETH_*` (Pilot), `ETHB_*` (TACCO) | `ETH_RMII2_*` | Pilot, TACCO |
+| `C-P1-*`, `R-P1-*` (Pilot), `C-PHY-*` (TACCO) | `C-RMII2-*`, `R-RMII2-*` | Pilot, TACCO |
+| `ETH1` connector, `R-BS1T`/`R-BS1R`/`C-BS1` | `J-ETH-RMII2`, `R-RMII2-BST`/`R-RMII2-BSR`/`C-RMII2-BS` | Pilot |
+| `ETH2-USB` (USB NIC), `T-ETH2`, `ETH2` connector | `NIC-USB1`, `T-USB1`, `J-ETH-USB1` | Pilot |
+| `ETH2_*`, `ETH2-USB_AVDDK`/`_DVDDK` | `ETH_USB1_*`, `NIC-USB1_AVDDK`/`_DVDDK` | Pilot |
+| `C-U2-*`, `R-BS2T`/`R-BS2R`/`C-BS2` | `C-USB1-*`, `R-USB1-BST`/`R-USB1-BSR`/`C-USB1-BS` | Pilot |
+
 **Update 2026-09-29 (area recovery + mLRS bare-chip radio + fab-ready layout, S. Griffing
 decisions; implemented by Claude Fable 5.1):** see `avionics/WBS.md` §1.2a "TACCO area recovery,
 mLRS bare-chip radio, non-stack rails, and fab-ready layout" for the full decision record.

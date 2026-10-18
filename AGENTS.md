@@ -147,6 +147,45 @@ legal/regulatory matters are US jurisdiction.
   script-driven population and net-building. If a DRC violation requires moving a footprint,
   **refer it to the user**; other DRC fixes may be made directly.
 
+### Component sourcing and openness (owner rule, 2026-10-17)
+
+These rules gate every part selection, on every board, before a part enters a schematic or BOM.
+A part that fails either rule **shall not** be designed in. Existing parts that fail are
+replaced and tracked in the owning WBS.
+
+- **No restricted-country silicon.** No integrated circuit, discrete semiconductor, or
+  semiconductor-bearing module shall be used whose manufacturer (the design owner / brand of
+  record) meets any of the following:
+    - It is domiciled in a restricted country: the People's Republic of China (including Hong
+      Kong and Macau), the Russian Federation, the Islamic Republic of Iran, the Democratic
+      People's Republic of Korea, or any country later designated a "foreign country of
+      concern" [REF-LAW-003].
+    - It is owned by, controlled by, or subject to the direction of the government or ruling
+      party of a restricted country, or it is a subsidiary or affiliate of such an entity
+      [REF-LAW-002 §1822(1)(D)-(E)].
+    - It is a named or determined covered entity [REF-LAW-001 §5949(j)(3)] [REF-LAW-002
+      §1822(1)].
+
+  **Scope.** The test is the manufacturer's domicile and control (owner decision 2026-10-17).
+  The wafer-fab and assembly/test sites are recorded wherever the vendor publishes them, but
+  they do not disqualify a part. The rule is stricter than the statutes, which bind federal
+  procurement only. It exists because this airframe's avionics are "the components that
+  control the unmanned aircraft" and its "communication links" [REF-LAW-002 §1823(a)], and
+  because the fleet trust architecture assumes an auditable supply chain.
+
+  **Generic part numbers.** A part number sold by many manufacturers (for example SMAJ33CA)
+  satisfies the rule only once a compliant manufacturer is named in its MPN / BOM entry.
+- **Open, NDA-free documentation only.** Every IC and module shall have a datasheet, and any
+  design information its circuit depends on, that is publicly available and shareable without
+  a non-disclosure agreement, a confidentiality marking such as "CONFIDENTIAL: Development
+  Partners Only", or redistribution terms that would stop the repository from citing and
+  archiving it. This is the OSHWA certification condition: "third-party components such as
+  chips must have fully accessible and shareable datasheets" [REF-LIC-002]. A free
+  registration wall is acceptable only if the documents carry no confidentiality terms; record
+  the access route in `REFERENCES.md`.
+- When a candidate fails either rule, record it as rejected, with the reason, in the board's
+  design document, so it is not proposed again.
+
 ### Airframe geometry
 
 Serenity's hull is complex — bounding-box/centroid math is inadequate for part placement, and
@@ -190,10 +229,10 @@ repo rather than a flight-ops manual:
 
 - **WARNING** — a procedure, practice, or condition that may result in injury, death, or loss
   of the aircraft/vehicle if not carefully observed or followed. Reserve for personnel-safety
-  or airframe-loss risk (e.g., handling a charged spring, using of a soldering iron, releasing a payload near people, a live battery pack, a load-bearing.)
+  or airframe-loss risk (e.g., handling a charged spring, using a soldering iron, releasing a payload near people, a live battery pack, or a load-bearing
   joint that can fail catastrophically).
 - **CAUTION** — a procedure, practice, or condition that may result in damage to equipment if
-  not carefully observed or followed, with no personnel-injury or airframe-loss risk. (over torquing a fitting, shorting a circuit)
+  not carefully observed or followed, with no personnel-injury or airframe-loss risk (e.g., overtorquing a fitting, shorting a circuit).
 - **Note** — information about a procedure, practice, or condition that must be emphasized, but
   carries no WARNING- or CAUTION-level risk.
 

@@ -100,8 +100,8 @@ an SOIC-20W is 12 x 13.4 mm (160 mm²); a Würth 749010012A is 12.9 x 11.3 mm.
    The PB2-I carries *female* receptacles, so the cape side must be male. TACCO
    uses Samtec TSM-118-04-L-DV-LC SMT strips (2026-10-05). The -LC clip holes
    are the through-board anchor, and the stack gap is ~5.54 mm, which sets a
-   bottom-face height budget. Pilot still has the old 2.54 mm rows and female
-   socket footprints until avionics/WBS.md R2 is done. Check every THT/NPTH hole of a top-face part against the bottom
+   bottom-face height budget. Pilot moved to the same strips at the 4.80 mm rows
+   on 2026-10-06 (avionics/WBS.md R2). Check every THT/NPTH hole of a top-face part against the bottom
    face's pads, including the -LC clip holes.
 
 5. **Isolation is what the board delivers, not what the chip is rated.**

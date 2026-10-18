@@ -136,7 +136,8 @@ to Rev T.
     - [x] Define the power input rail and budget. Done 2026-09-29:
         - Input is +5 V from the avionics bus.
         - Logic 3.3 V comes from a TPS62933 buck, sized for the HI-6138's 695 mA max
-            transmit current (DS6138 §24.3).
+            transmit current (DS6138 §24.3). (Pilot only: replaced 2026-10-17 by the 2 A
+            TPSM828224SILR module [REF-PWR-008], see the §13.1 re-floorplan item.)
         - RF-analog 3.3 V comes from a TPS7A2033 LDO.
         - Worst case is about 1.9 A at 5 V, a net reduction against two Rev S capes.
     - [x] Select the Holt 1553C protocol engine. Done 2026-09-28: HI-6138, fleet part
@@ -404,6 +405,65 @@ GND2_CANB to GND) break the 5 kV galvanic isolation requirement. They must be fi
         Commo's +5V boundary, §1.2/§1.3 Phase 3).
     - [ ] Verify isolation caps/creepage moat (0.5 mm `ISOLATION`) are intact after the
         per-domain tamper-mesh rework (§1.2, "Redesign the tamper mesh").
+- [ ] **Pilot ISOW §13.1 compliance re-floorplan (owner 2026-10-12: §13.1 is binding).**
+    TI SLLSFF7A §13.1 p. 36 [REF-SENSOR-009] / SLLSF86C §13.1 p. 41 [REF-SENSOR-010]: 10 nF
+    0402 < 1 mm from VISOOUT (12) / GND2 (11), bulk >= 10 uF 2-4 mm away, BLM15EX331SN1 beads
+    VISOOUT->VISOIN and GND2->GISOIN [REF-SENSOR-043], and **no metal traces or ground pour
+    within 4 mm of pins 11/12 on any layer**. Analysis 2026-10-12 (Claude Opus 5.5): the B.Cu
+    PB2 rail pads (inner rows end y 96.6 / 113.4 mm) leave one strip where the bubbles can sit,
+    and PWR-IN's THT pads + T-ETH2 leave ~0 mm spare across it, so the two 4 mm bubbles displace
+    the 3V3 buck, IMU/BARO, GPS and the 1553 transceiver. Owner chose to move GNSS off the cape
+    (next item). Measured from pad edge to metal edge (conservative).
+    - [x] Schematic: four beads, split `*_DCDC` nets, 0402 HF caps, MODE -> GND2 (d1196555).
+    - [x] Schematic: MAX-M10S, bias-T, J-ANT, C-GPS1/2 removed; P1-31/32, P2-9/10 NC.
+    - [x] Schematic + land: 3V3 buck TPS62933 + WE-MAPI 3015 -> **TI TPSM828224SILR** fixed-3.3 V,
+        2 A MicroSiP module [REF-PWR-008] (owner 2026-10-17; Claude Opus 5.5). FB to VOUT, EN to
+        VIN, PG open; R-EN3, C-BST, C-SS, L-3V3, R-FB3H/L removed; CIN/COUT to 0603 TI Table 9-1
+        parts (CIN later moved to the 22 uF part, below); land `TI_SIL0010D_uSiP-10_2.0x2.5mm_P0.5mm` (solder-mask-defined, STEP linked);
+        111 parts, ERC 0. PCB swapped in place by `scripts/inject_tpsm828224.py`.
+    - [x] PCB: `U-3V3` at B (138.0, 100.6) with CIN south, COUT east/north, hand-placed per
+        SLVSEP0F sec 11.1 (2026-10-17).
+    - [x] C-3V3-O1/O2 DC bias (2026-10-17): Taiyo Yuden MSASJ168BC6226MTNA01 curve [REF-PWR-011]
+        -51 % at 3.333 V -> worst case 7.2 uF per cap (tol, bias, X6S 105 C) >= 5 uF.
+    - [x] C-3V3-IN DC bias (2026-10-17): Murata GRM188Z71A106MA73 [REF-PWR-012] fails worst case
+        (2.65 uF at 5.5 V < 3 uF); owner approved the swap to MSASJ168BC6226MTNA01 22 uF 6.3 V X6S
+        [REF-PWR-011] -> 4.2 uF worst. Same 0603 land; schematic ERC 0, PCB value updated.
+    - [x] TPSM828224 3D body pin-1 orientation: done 2026-10-17 (kicad-cli top render of the
+        footprint alone); the body's pin-1 dot sits over pad 1, on the silk pin-1 marker side.
+    - [x] PCB: both isolators rot 180 at (135.1, 107.1) / (150.5, 107.1); GNSS removal synced
+        to the PCB (2026-10-17, `scripts/refloorplan_keep_copper.sh`, owner chose keep-copper).
+    - [x] PCB: 21 displaced parts re-placed (supply caps follow their moved parent; X-50M first;
+        C-1553C hand-placed at VCCP; 2.75 mm M2.5 hole keep-out); ISO_BAND / GND2 islands /
+        notched planes / BUBBLE_CAN + BUBBLE_485 redrawn by `scripts/iso_zones_pilot.py`, DRC
+        rules `bubble_*` + named §13.1 courtyard exemption in Pilot.kicad_dru.
+    - [ ] OWNER DECISION — logic parts on B.Cu under the isolated F/inner domains: X-50M
+        (50 MHz), C-50M, BARO + caps, HI-6138 west pads, X2Y-RS485 GND pad sit below GND2_*
+        island copper with no logic plane and no legal via (band). EMC: their returns couple to
+        the isolated grounds. Options: accept; shrink the F domains; or move them (board full).
+    - [ ] PCB: B.Cu ground under the IMU's new west-edge site (F, 126.45 / 95.86) and the
+        C-P1-CTD1/2 pads 2.48 / 2.57 mm from H2 (M2.5 standoff keep-out 2.75 mm, owner placement).
+    - [ ] PCB: PGND fence PARTIAL (`scripts/fence_pgnd_pilot.py`): 20 vias + F/B ring in 8 runs tied to
+        H1-H4, ~40 of 180 mm perimeter; the rest is PB2 rail pads, edge connectors, the band.
+        Re-run after the remaining routing to fill any edge it frees.
+    - [ ] PCB: re-route. 2026-10-17: DRC 0 errors, parity 0, 107 unconnected (66 signal, 41
+        plane) after grid router + rip-up rounds; the signal core (RMII0/1, MDC/MDIO, PHY
+        reset/INT, SPI fan-in, RS485 logic) was already open on the owner's board (73) and is
+        walled in at ETH1/ETH2-PHY and the P2 rail under the band. Needs KiCad interactive
+        routing or a regional strip-and-reroute of the PHY corridor (owner decision).
+    - [ ] Pilot.md, PROJECT_INDEX, memory updated; device tree drops the GPS UART.
+- [ ] **Isolated CAN-FD GPS pucks for the two dorsal GPS cups (owner 2026-10-12).** Replaces the
+    on-cape MAX-M10S (previous item). Each puck: patch antenna in the existing O36 x 6 mm flush
+    recess; electronics board under the cup floor through the O6.5 mm SMA bore. Envelope check
+    2026-10-12 (scratch run of `tools/cargo_layout_fit.py` geometry, Claude Opus 5.5): **O28 mm x
+    8 mm** fits under each cup centred 4 mm aft of the station (X -135 / -205, Y 96), 1 mm to the
+    skin, 2 mm to the battery-cradle aft hanger and the aft-node cable zone; O30 does not fit.
+    - [ ] Owner chose an **isolated** puck (ISOW1044 in the puck). Prove it fits: ISOW1044
+        SOIC-20W + its own §13.1 4 mm bubble + MAX-M10S + MSPM0G3518 + OPTIGA Trust M + LDO +
+        GH connector on a O28 mm board, and keep the isolated DC-DC away from the GNSS front end.
+    - [ ] Power: the Pilot's ISOW1044 offers only 20 mA extra on VISOOUT (SLLSFF7A §8.9), so each
+        puck needs its own 5 V feed from the cargo rail (harness + connector pinout).
+    - [ ] Add the puck as a fleet trust-module node (§1.9.2): own MCU + secure element.
+    - [ ] Schematic, PCB, enclosure/cup adapter, `tools/cargo_layout_fit.py` envelope + gate.
 - [ ] **Add SBUS/UART DIP switch to Pilot** — add a 2-position DIP (or solder-jumper
     pair) to select SBUS vs. plain UART framing on the existing J_SBUS-equivalent
     pad, matching the J_SBUS line item already in Pilot.md §14's field-connector
@@ -1683,8 +1743,78 @@ REFERENCES.md Removed/Superseded Citations).
         23 TX_D0, 24 TX_D1, DAP GND. TACCO's table is rebuilt from the datasheet; in RMII
         Leader mode pin 2 sources the 50 MHz reference clock to `RMII2_REF_CLK` (P1-34).
         **Pilot's ETH1-PHY/ETH2-PHY carry the same defect (not fixed here).**
-    - [ ] Pilot: re-derive its PB2 header map from `PB2_HEADER_PINMAP.md` and rebuild
-        `dp83825i()` from SNLS638C Table 4-1 (item 8).
+    - [ ] Pilot: PB2 header re-map against the OFFICIAL BeagleBoard references (owner
+        2026-10-17: verify against BeagleBoard sources, not project files). Sources: openbeagle
+        pocketbeagle/pocketbeagle-2 @ be5f0a4 (`pocketbeagle2_sch.pdf` V10 sheet 16,
+        `design/pocketbeagle2 revA_dimension.pdf`, `images/pocketbeagle2-back.jpg`) and the
+        PocketBeagle 2 SRM (docs.beagleboard.org/pocketbeagle-2.pdf) §4.2. Work items:
+        - [ ] FLEET: `PocketBeagle2_2x18_P1/P2_TSM-DV-LC` footprints put pin 1 on the wrong row
+            once placed on B.Cu (KiCad flip mirrors y): official drawing + silkscreen = P1 pin 1
+            OUTER row, P2 pin 1 INNER row. Fix the library footprints; Pilot updated here.
+        - [ ] FLEET: TACCO.kicad_pcb carries the same row swap (P1 pin 1 inner) — update its
+            rails from the fixed footprints and re-check its routing.
+        - [ ] Pilot `PB2_P1` / `PB2_P2`: power/GND/VIN/VOUT/3V3/USB/BAT/PWR_BTN/RESET# pins per
+            SRM; hardware-fixed functions (RMII2 + MDIO0, SPI0, MCAN0, UART for RS-485, SPI2 /
+            I2C / UART for the GH headers) on their mux pins; GPIO roles placed to shorten
+            routes (firmware pin mux follows; no wiring decision rests on firmware alone).
+        - [x] Ethernet ring, 2026-10-17: KSZ8863RLLI switch evaluated and REJECTED (10.5 mm
+            courtyard; largest free square ~6 mm). Owner chose two NICs: CPSW3G port 2 / RMII2 leg =
+            DP83825I on RMII2 + MDIO0 (TI SNLS638C re-verified); USB1 leg = USB 10/100 controller on USB1
+            (P1-5/9/11), bridged in Linux (ring forwarding depends on this node's CPU — owner
+            accepted). Candidates in Pilot.md "Rejected candidates".
+        - [ ] ETH2 USB NIC = ASIX AX88772E (owner 2026-10-17; public datasheet v1.03, 0-70 C):
+            owner to download the reference schematic, application design note v1.10 and demo BOM
+            (free MyASIX login) into avionics/datasheets/, then replace the CH397A block (WCH =
+            PRC, fails the AGENTS.md sourcing rule) and verify the 20 MHz crystal, buck inductor
+            and decoupling against them.
+        - [ ] Two JST-GH expansion headers replacing the GNSS (owner 2026-10-17): DS-009 Basic
+            GPS 6-pin (5V, TX, RX, SCL, SDA, GND) + DS-009 SPI 7-pin (5V, SCK, MISO, MOSI, SS1,
+            SS2, GND) on PB2 SPI2 / UART / I2C, VCC current-limited, ESD on all lines.
+        - [ ] Sourcing rule (AGENTS.md §5, 2026-10-17): replace TVS-CAN / TVS-RS485
+            PRTR5V0U2X,115 (Nexperia, owned by PRC-domiciled Wingtech Technology) with a
+            compliant-manufacturer equivalent; name a compliant manufacturer for TVS-1553P/N
+            SMAJ33CA (generic part number).
+        - [ ] Only one GH header fits at a board edge: keep J-SPI as a 6-pin generic port (5V,
+            SCK/UART1_TX, MISO/UART6_RX, MOSI/UART6_TX, SS1/UART1_RX, GND on the SPI2 pins);
+            drop J-GPS (owner allowed 2026-10-17).
+        - [ ] Regenerate schematic (ERC 0), then PCB: sync, re-place, re-route, DRC 0 + parity 0.
+        - [x] Pin and net name alignment, Pilot + TACCO (owner 2026-10-17): PB2 header pins
+            P1.01..P2.36 (BeagleBoard SRM), Ethernet ring parts/nets to TI interface names
+            (`PHY-RMII2`, `NIC-USB1`, `T-RMII2`, `T-USB1`, `RMII2_PHY_*`, `ETH_RMII2_*`,
+            `ETH_USB1_*`, ...) in generators, schematics, symbol libraries, PCBs, netlists,
+            project netclasses and scripts via `avionics/kicad/align_pb2_ti_names.py`. ERC /
+            DRC / parity counts unchanged (Pilot 0 / 43 / 112 pre-existing; TACCO 0 / 5 / 0).
+            Map in Pilot.md and TACCO.md.
+        - [ ] Firmware: Pilot DTS overlay for the new pin mux.
+        - [x] AM625 capability check against the SoC data sheet, 2026-10-17 (owner: "page 2 of its
+            datasheet says that it supports 2 ethernet ports"): recorded in
+            `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` [REF-SENSOR-049] [REF-SENSOR-050].
+            CPSW3G has 2 external ports but port 1 has no header balls; RGMII2 (gigabit) is fully
+            on the header; 3 CAN-FD (MCAN0, MCU_MCAN0 P1-26/28, MCU_MCAN1 P2-9/11) reachable;
+            P1-2/4/6 second balls added to `PB2_HEADER_PINMAP.md` §1.
+        - [x] REJECTED 2026-10-17 (owner): second/third CAN-FD bus on MCU_MCAN0 (P1-26/P1-28) or
+            MCU_MCAN1 (P2-9/P2-11). The fleet already has four buses per node (CAN-FD, RS-485,
+            MIL-STD-1553B, Ethernet ring); another CAN-FD bus adds no needed capability.
+        - [x] MSPM0L1105 on the PB2-I AIN pins — pin move REJECTED 2026-10-17 (owner); pins stay,
+            RMII2 timing with the extra load is checked at bring-up. (capability doc §6): Pilot RMII2
+            (P1-2/19/25/27) and DSHOT0/3 (P1-21/23) each also load an MSPM0 pin (5 pF + stub)
+            whose post-boot state depends on BeagleBoard's MSPM0 firmware. Owner decision: accept
+            (verify RMII2 timing with the extra load at bring-up), or move those nets off AIN
+            pins in the next re-map. P2-35 carries the MSPM0 SWCLK pull-down — keep it spare.
+            Analysis 2026-10-17: RMII2 cannot move (each RMII2 signal has one AM625 ball, SPRSP58C
+            Table 5-5, wired only to its current header pin). DSHOT0/3 could move to another PRU0
+            GPO pin, but the free ones (P2-30, P2-34) are on the P2 rail under ISO_BAND while
+            J-PWM sits over the P1 rail, so a move lengthens routes and crosses the band; DShot
+            is not sensitive to 5 pF. Recommendation: keep the pins and verify RMII2 at bring-up.
+            - [ ] Bring-up: verify RMII2 timing/eye on P1-2/19/25/27 with the PB2-I MSPM0 load.
+        - [ ] Pilot + TACCO DTS: hold the unused second ball of every dual-ball header pin
+            (P1-2/4/6/10/12/26/28/33/36, P2-1/3/5/7/9/11/29/31) as a GPIO input with no pull
+            (PB2I_AM625_HEADER_CAPABILITIES.md §2 CAUTION).
+    - [ ] FLEET sourcing audit (AGENTS.md §5 "Component sourcing and openness", owner
+        2026-10-17): check every board's ICs / semiconductors / modules for manufacturer
+        domicile/control in a restricted country and for NDA-only datasheets — TACCO, XO, Commo,
+        Observer, Flight Engineer, CAN-PERIPH-GW-1, ESC / servo boards. Nexperia parts
+        (PRTR5V0U2X, PMBT2222A in the shared library) are the first known hits.
     - [ ] Firmware: TACCO DTS overlay per `PB2_HEADER_PINMAP.md` §4 (console moves off UART0).
 - [x] **Flight Engineer schematic-first rebuild — ERC 0.** 2026-09-20 (Claude
     Sonnet 5): the legacy schematic (586 ERC violations, PCB pad nets not

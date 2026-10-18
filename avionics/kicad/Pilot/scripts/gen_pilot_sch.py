@@ -47,7 +47,8 @@ Lineage
     - PWM/DSHOT block: Samtec TSM-108-01-L-DV 2x8 SMT 0.1 in header (SIG /
       +5V / GND / PGND-shield per channel) so B.Cu under it stays usable;
       0201 for straps, pull-ups and 10 nF HF bypass.
-    - Cape-local +3V3 buck (TPS62933, [REF-PWR-001]) so the cape does not
+    - Cape-local +3V3 module (TPSM828224SILR, [REF-PWR-008]; was TPS62933
+      [REF-PWR-001] until 2026-10-17) so the cape does not
       depend on the PocketBeagle 2's 3.3 V rail budget; PB2 3.3 V pins are
       renamed ``+3V3_PB2`` and left unloaded.
     - ISOW1044 / ISOW1412 DC-DC input (VDD) moved to +5V, logic VIO on
@@ -58,20 +59,27 @@ Lineage
     - PGND<->GND single-point 0 R link, mounting holes on PGND (Pilot.md §7).
     - GPIO ports + J_ESC/J_SERVO replaced by ONE 3x6 servo/ESC header on the
       PRU DSHOT0-3 / SERVO0-1 balls (PWM/DSHOT-capable), PCA9555 removed.
+* 2026-10-12 (Claude Opus 5.5) — GNSS moved OFF the cape (owner decision): the
+  MAX-M10S, its bias-T (R-ANT / C-ANT / L-ANT), U.FL J-ANT and C-GPS1/2 are
+  removed and P1-31/32 (UART) + P2-9/10 (RESET_N / TIMEPULSE) become NC.  The
+  two dorsal GPS cups get isolated CAN-FD GPS pucks instead (avionics/WBS.md).
+  Reason: two ISOW §13.1 4 mm metal-free bubbles [REF-SENSOR-009/010] do not
+  fit the 55 x 35 mm cape with the GPS aboard.  The same pass adds the §13.1
+  ferrite beads and splits the DC-DC output nets (see FB-CAN-* / FB-485-*).
 
 Datasheets (all in ``avionics/datasheets/``; OEM documents are authoritative
 per ``avionics/AGENTS.md``):
   ISOW1044BDFMR isow1044.pdf Table 7-1 | ISOW1412DFMR isow1412.pdf Table 7-1 |
-  SLB9672 slb9672.pdf §3.1.2 | MAX-M10S MAX-M10S_DataSheet_UBX-20035208.pdf §3.1 |
+  SLB9672 slb9672.pdf §3.1.2 | BLM15EX331SN1D Murata_BLM15EX_JENF243A-0023M-01.pdf |
   DP83825I dp83825i.pdf Table 4-1/6-8..6-11, Fig 8-3/8-4 | 749010012A 749010012A.pdf p.1 |
   HI-6138 hi-6138_v-rev-s.pdf p.1/Table 1/§29 | PM-DB2791S PremierMagnetics_DB2791S.pdf | Samtec TSM samtec_tsm-dv-footprint.pdf |
   ICM-42688-P ds-000347 Table 10 | BMP388 bst-bmp388-ds001.pdf Table 50 |
-  SRF2012A SRF2012A.pdf | TPS62933 tps62933.pdf Table 7-1 |
+  SRF2012A SRF2012A.pdf | TPSM828224SILR tpsm82822.pdf (SLVSEP0F) Table 6-1 |
   ECS-2520MV ECS-2520MV.pdf p.1 |
   X2Y (Yageo CX0805) X2Y_15-2237598.pdf Table 3.
 
 Author: Claude Opus 4.8 (2026-07-14); Claude Opus 5 (2026-07-28, 2026-09-19);
-Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap).
+Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap; 2026-10-12, §13.1 beads + GNSS off-board).
 Human owner: sgriffing (Griffing Technology LLC).  License: CC BY 4.0.
 """
 
@@ -94,6 +102,7 @@ _uid = itertools.count(1)
 # --- footprint library nicknames -------------------------------------------
 FP_C0201 = "Capacitor_SMD:C_0201_0603Metric"
 FP_C0402 = "Capacitor_SMD:C_0402_1005Metric"
+FP_L0402 = "Inductor_SMD:L_0402_1005Metric"
 FP_C0603 = "Capacitor_SMD:C_0603_1608Metric"
 FP_C0805 = "Capacitor_SMD:C_0805_2012Metric"
 FP_C1210 = "Capacitor_SMD:C_1210_3225Metric"
@@ -112,9 +121,16 @@ FP_X1553 = "Serenity-Custom:Xfmr_1553_SMD_0.40in_8pin"
 FP_TSM2X8 = "Serenity-Custom:Samtec_TSM-108-01-x-DV"
 FP_LGA14 = "Package_LGA:Bosch_LGA-14_3x2.5mm_P0.5mm"
 FP_SOT583 = "Package_TO_SOT_SMD:SOT-583-8"
+FP_SIL0010D = "Serenity-Custom:TI_SIL0010D_uSiP-10_2.0x2.5mm_P0.5mm"
 FP_SOT363 = "Package_TO_SOT_SMD:SOT-363_SC-70-6"
 FP_OSC2520 = "Oscillator:Oscillator_SMD_ECS_2520MV-xxx-xx-4Pin_2.5x2.0mm"
 FP_GH4 = "Connector_JST:JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal"
+FP_GH6 = "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
+FP_GH7 = "Connector_JST:JST_GH_SM07B-GHS-TB_1x07-1MP_P1.25mm_Horizontal"
+FP_QFN24_4X4 = "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm"
+FP_DQA10 = "Serenity-Custom:TI_DQA0010A_USON-10_2.5x1.0mm_P0.5mm"
+FP_SOD523 = "Diode_SMD:D_SOD-523"
+FP_F0805 = "Fuse:Fuse_0805_2012Metric"
 FP_HOLE = "Serenity-Custom:MountingHole_2.7mm_M2.5_PGND_Ring"
 # project-custom lands (avionics/kicad/Serenity-Custom.pretty)
 FP_SAM = "Serenity-Custom:uBlox_SAM-M10Q-00B"
@@ -174,9 +190,12 @@ ICS: List[Dict[str, Any]] = [
             ("16", "GISOIN", "GND2_CAN", "R"),
             ("15", "GISOIN", "GND2_CAN", "R"),
             ("14", "OUT", None, "R"),
-            ("13", "VSIN", "VCC2_CAN", "R"),
-            ("12", "VISOOUT", "VCC2_CAN", "R"),
-            ("11", "GND2", "GND2_CAN", "R"),
+            # 2026-10-12 ISOW1044 SLLSFF7A sec 13.1 item 4: the DC-DC side (VISOOUT/VSIN,
+            # GND2) is split from the transceiver side (VISOIN, GISOIN) by two
+            # BLM15EX331SN1D beads, FB-CAN-V / FB-CAN-G (owner decision, Claude Opus 5.5).
+            ("13", "VSIN", "VCC2_CAN_DCDC", "R"),
+            ("12", "VISOOUT", "VCC2_CAN_DCDC", "R"),
+            ("11", "GND2", "GND2_CAN_DCDC", "R"),
         ],
     },
     {
@@ -205,9 +224,12 @@ ICS: List[Dict[str, Any]] = [
             ("16", "VISOIN", "VCC2_RS485", "R"),
             ("15", "GISOIN", "GND2_RS485", "R"),
             ("14", "IN", None, "R"),
-            ("13", "MODE", "GND2_RS485", "R"),
-            ("12", "VISOOUT", "VCC2_RS485", "R"),
-            ("11", "GND2", "GND2_RS485", "R"),
+            # 2026-10-12 ISOW1412 SLLSF86C sec 13.1 items 4/5: DC-DC side split from the
+            # transceiver side by FB-485-V / FB-485-G; MODE stays in the VISOOUT domain
+            # (shorted to pin 11 -> 3.3 V transceiver supply, unchanged).
+            ("13", "MODE", "GND2_RS485_DCDC", "R"),
+            ("12", "VISOOUT", "VCC2_RS485_DCDC", "R"),
+            ("11", "GND2", "GND2_RS485_DCDC", "R"),
         ],
     },
     {
@@ -254,46 +276,17 @@ ICS: List[Dict[str, Any]] = [
             ("31", "NCI", None, "R"),
         ],
     },
-    {
-        "ref": "GPS",
-        "value": "MAX-M10S-00B",
-        "fp": "RF_GPS:ublox_MAX",
-        "mpn": "MAX-M10S-00B",
-        "ds": "MAX-M10S_DataSheet_UBX-20035208.pdf §3.1 Fig 2 / Table 10 (18-pin LCC) [REF-SENSOR-027]",
-        # External-antenna receiver: the nodes fly inside Faraday pouches in the
-        # cargo bay with the GNSS patch antennas in the dorsal cups
-        # (CARGO_SECTION_LAYOUT.md, AVIONICS_PB2_REDESIGN.md "GPS-ANT U.FL ->
-        # SMA bulkhead"), so the earlier integrated-patch SAM-M10Q could never
-        # see the sky.  Typical 3.3 V design (integration manual B.1 Fig 35):
-        # VCC = V_IO = +3V3, VIO_SEL open, V_BCKP on +3V3 (no backup cell),
-        # active antenna fed from VCC_RF through the 10 R / 27 nH bias-T
-        # (integration manual Fig 37, Tables 52-54).
-        "pins": [
-            ("8", "VCC", "+3V3", "L"),
-            ("7", "V_IO", "+3V3", "L"),
-            ("6", "V_BCKP", "+3V3", "L"),
-            ("2", "TXD", "UART_GPS_TX", "L"),
-            ("3", "RXD", "UART_GPS_RX", "L"),
-            ("4", "TIMEPULSE", "GPS_TIMEPULSE", "L"),
-            ("9", "RESET_N", "GPS_RESETN", "L"),
-            ("5", "EXTINT", None, "L"),
-            ("18", "SAFEBOOT_N", None, "L"),
-            ("11", "RF_IN", "GPS_RF", "R"),
-            ("14", "VCC_RF", "GPS_VCC_RF", "R"),
-            ("13", "LNA_EN", None, "R"),
-            ("15", "VIO_SEL", None, "R"),
-            ("16", "SDA", None, "R"),
-            ("17", "SCL", None, "R"),
-            ("1", "GND", "GND", "R"),
-            ("10", "GND", "GND", "R"),
-            ("12", "GND", "GND", "R"),
-        ],
-    },
 ]
 
 
 def dp83825i(ref: str, rmii: str, rstn: str, intn: str, eth: str, mdio: str, mdc: str) -> Dict[str, Any]:
     """TI DP83825I 10/100 RMII PHY, WQFN-24 (RMQ0024A) — dp83825i.pdf Table 4-1.
+
+    2026-10-17 (Claude Opus 5.5): re-checked against TI SNLS638C (rev. April 2026) Table
+    4-1 and the strap table: pin 17 RX_D1 is the Leader/Follower strap, default 0 =
+    RMII Leader (internal pull-down), so the 50 MHz RMII reference on pin 2 is set by
+    hardware.  Used once, on the PB2-I's only header MAC (RMII2 + MDIO0, official
+    BeagleBoard schematic sheet 16) for ring port 1.
 
     The PHY the architecture specified (AVIONICS_PB2_REDESIGN.md §3.1 "U8 |
     DP83825I x 2 | CPSW3G RMII"); replaces the ADIN1300 drift of Rev T (2026-09-19
@@ -324,7 +317,7 @@ def dp83825i(ref: str, rmii: str, rstn: str, intn: str, eth: str, mdio: str, mdc
             ("5", "RST_N", rstn, "L"),
             ("3", "INTR/PWRDN", intn, "L"),
             ("4", "LED0/ANEG", None, "L"),
-            ("13", "XI", "PHY_XI_25M", "R"),
+            ("13", "XI", "XI_25M", "R"),
             ("12", "XO", None, "R"),
             ("14", "RBIAS", f"{ref}_RBIAS", "R"),
             ("11", "TD_P", f"{eth}_TXP", "R"),
@@ -335,6 +328,57 @@ def dp83825i(ref: str, rmii: str, rstn: str, intn: str, eth: str, mdio: str, mdc
             ("19", "VDDIO", "+3V3", "R"),
             ("9", "GND", "GND", "R"),
             ("21", "GND", "GND", "R"),
+            ("25", "EP", "GND", "R"),
+        ],
+    }
+
+
+def ch397a(ref: str, eth: str) -> Dict[str, Any]:
+    """WCH CH397A USB 2.0 to 10/100 Ethernet controller with integrated MAC + PHY,
+    QFN24 4x4 mm, built-in SPI flash (MAC address / configuration).  Owner decision
+    2026-10-17 (S. Griffing, "Option 1"): the Ethernet ring's second port runs on the
+    PB2-I's USB1 (D+/D- on P1-11/P1-9, official schematic sheets 14/16), bridged in
+    Linux with ring port 1 (DP83825I on RMII2).  Implemented by Claude Opus 5.5.
+
+    Pinout: CH397 datasheet V1.2 Fig. 1-1 / Table 1-3, CH397A column [REF-SENSOR-048];
+    no RSTB pin on the CH397A (internal POR, sec 3.1.2).  Supply per sec 3.7 / sec 6.1:
+    for industrial use V5 and AVDD33 both on the 3.3 V supply (TA -40..85 C, sec 4.1);
+    XI takes "a 25 MHz crystal or an external clock input" (Table 1-3) -> the shared
+    X-25M oscillator, XO open.  50 ohm MDI termination is internal (sec 3.3, sec 6.1),
+    transformer centre taps to GND through capacitors only (sec 6.1 note on T1).
+    Firmware default CDC-ECM (sec 3.2) -> Linux cdc_ether.
+    """
+    return {
+        "ref": ref,
+        "value": "CH397A",
+        "fp": FP_QFN24_4X4,
+        "mpn": "CH397A",
+        "ds": "CH397 datasheet V1.2 Table 1-3 / Fig. 1-1 (CH397A QFN24) [REF-SENSOR-048]",
+        "pins": [
+            ("8", "UDP", "USB1_DP", "L"),
+            ("7", "UDM", "USB1_DM", "L"),
+            ("21", "XI", "XI_25M", "L"),
+            ("22", "XO", None, "L"),
+            ("15", "LED0", None, "L"),
+            ("17", "LED1", None, "L"),
+            ("14", "GPIO6", None, "L"),
+            ("12", "NC", None, "L"),
+            ("16", "NC", None, "L"),
+            ("19", "NC", None, "L"),
+            ("20", "NC", None, "L"),
+            ("2", "MDITP", f"{eth}_TXP", "R"),
+            ("3", "MDITN", f"{eth}_TXN", "R"),
+            ("4", "MDIRP", f"{eth}_RXP", "R"),
+            ("5", "MDIRN", f"{eth}_RXN", "R"),
+            ("11", "V5", "+3V3", "R"),
+            ("10", "AVDD33", "+3V3", "R"),
+            ("1", "AVDD33", "+3V3", "R"),
+            ("13", "VDDIO", "+3V3", "R"),
+            ("18", "VDDIO", "+3V3", "R"),
+            ("23", "AVDDK", f"{ref}_AVDDK", "R"),
+            ("9", "DVDDK", f"{ref}_DVDDK", "R"),
+            ("6", "GND", "GND", "R"),
+            ("24", "GND", "GND", "R"),
             ("25", "EP", "GND", "R"),
         ],
     }
@@ -372,10 +416,10 @@ def eth_xfmr(ref: str, eth: str) -> Dict[str, Any]:
 
 
 ICS += [
-    dp83825i("ETH1-PHY", "RMII0", "PHY1_RSTN", "PHY1_INTRN", "ETH", "MDIO0", "MDC0"),
-    dp83825i("ETH2-PHY", "RMII1", "PHY2_RSTN", "PHY2_INTRN", "ETH2", "MDIO1", "MDC1"),
-    eth_xfmr("T-ETH", "ETH"),
-    eth_xfmr("T-ETH2", "ETH2"),
+    dp83825i("PHY-RMII2", "RMII2", "RMII2_PHY_RSTN", "RMII2_PHY_INTRN", "ETH_RMII2", "MDIO0", "MDC0"),
+    ch397a("NIC-USB1", "ETH_USB1"),
+    eth_xfmr("T-RMII2", "ETH_RMII2"),
+    eth_xfmr("T-USB1", "ETH_USB1"),
 ]
 
 ICS += [
@@ -488,53 +532,139 @@ ICS += [
     },
     {
         "ref": "U-3V3",
-        "value": "TPS62933DRLR",
-        "fp": FP_SOT583,
-        "mpn": "TPS62933DRLR",
-        "ds": "tps62933.pdf Table 7-1 Pin Functions (SOT-583) [REF-PWR-001]",
-        # 5 V -> 3.3 V, 1.2 MHz (RT tied to GND), Vout = 0.8 V x (1 + R1/R2).
+        "value": "TPSM828224SILR",
+        "fp": FP_SIL0010D,
+        "mpn": "TPSM828224SILR",
+        "ds": "tpsm82822.pdf SLVSEP0F Table 6-1 Pin Functions (uSiL SIL0010D) [REF-PWR-008]",
+        # 2026-10-17 (S. Griffing decision; Claude Opus 5.5): TPS62933 + WE-MAPI
+        # 3015 replaced by the TI TPSM828224SILR fixed-3.3 V, 2 A MicroSiP module
+        # (inductor inside, 2.0 x 2.5 x 1.1 mm) to fit the 3V3 supply between the
+        # ISOW sec 13.1 bubbles.  Fixed-output device: FB (8) ties to VOUT and
+        # R1/R2/C3 are not needed (SLVSEP0F sec 9.2.1.2.1).  EN (3) "do not leave
+        # floating" -> tied to VIN.  PG (4) unused -> floating per Table 6-1.
+        # VIN 2.4-5.5 V (abs max 6 V); +5V is held 4.5-5.5 V by the ISOW VDD limit.
         "pins": [
-            ("3", "VIN", "+5V", "L"),
-            ("2", "EN", "U3V3_EN", "L"),
-            ("1", "RT", "GND", "L"),
-            ("4", "GND", "GND", "L"),
-            ("5", "SW", "SW_3V3", "R"),
-            ("6", "BST", "BST_3V3", "R"),
-            ("7", "SS/PG", "SS_3V3", "R"),
-            ("8", "FB", "FB_3V3", "R"),
+            ("1", "VIN", "+5V", "L"),
+            ("2", "VIN", "+5V", "L"),
+            ("3", "EN", "+5V", "L"),
+            ("4", "PG", None, "L"),
+            ("5", "VOUT", "+3V3", "R"),
+            ("6", "VOUT", "+3V3", "R"),
+            ("7", "VOUT", "+3V3", "R"),
+            ("8", "FB", "+3V3", "R"),
+            ("9", "GND", "GND", "R"),
+            ("10", "GND", "GND", "R"),
         ],
     },
 ]
 
 # ---------------------------------------------------------------------------
-# PocketBeagle 2 Industrial stacking headers — the board's established P1/P2
-# map.  Changes 2026-09-28 (HI-6138 swap): P1-7/8/9 PRU 1553 lines -> IRQN /
-# MRN / TX_INH GPIOs, P1-10 freed, P1-20 TX_INH -> SPI0_CS_1553 (GPIO CS).
-# Changes 2026-09-19: P1-20 (ex SPI0_CS_1553, unused) -> M1553_TX_EN;
-# P1-33/34 (PB2 3.3 V) -> +3V3_PB2 (cape now regulates its own +3V3).
+# PocketBeagle 2 Industrial (PB2-I) P1 / P2 cape headers — rebuilt 2026-10-17 from the
+# OFFICIAL BeagleBoard references (owner directive: not project files), by Claude Opus 5.5:
+#   * openbeagle.org/pocketbeagle/pocketbeagle-2 @ be5f0a4 (CC BY-SA 4.0):
+#     pocketbeagle2_sch.pdf V10 (2024-12-20) sheet 16 "P1 / P2", sheet 15 (AIN0-7 run
+#     straight to the MSPM0L1105, no RC), sheet 12 (EMMC_RSTn = F23, not a header ball);
+#     design/pocketbeagle2 revA_dimension.pdf + images/pocketbeagle2-back.jpg (pin 1 rows);
+#   * PocketBeagle 2 SRM (docs.beagleboard.org/pocketbeagle-2.pdf) sec 4.2 pin/ball/mux
+#     tables [REF-SENSOR-041];
+#   * beagleboard.org/boards/pocketbeagle-2-industrial: PB2-I = PB2 + 1 GB DDR4 + 64 GB
+#     eMMC + -40..85 C; its "Design" link is the same repository, so the header map is the
+#     PB2's.
+# The previous table (GND on P1-1 = PB2 VIN, +3V3/+5V on PRU balls, PHY resets on
+# P2-13..16 = VSYS / VBAT / GND / BAT_TS, RMII0/1 that the headers do not carry) is gone.
+# Rules: power / ground / USB / battery / reset pins are hardware and are wired per the
+# schematic or left open; peripheral functions sit on the pins that carry that function's
+# ball (mux mode in the SRM table); remappable GPIO roles are placed on the header pins
+# nearest their consumer to shorten routes.  Where a header pin has two balls, the second
+# ball must be left as an input by the device tree (noted).  Not driven by the cape: P1-14
+# / P2-23 (PB2 3V3 out), P1-24 / P2-13 (VSYS), P2-14 (VBAT), P2-16 (BAT_TS), P2-12
+# (PWR_BTN), P2-26 (RESET#), P1-7 (VIN.USB), P1-17/18 (AIN refs), P1-30/32 (UART0 = the
+# PB2 console).  USB1 (P1-5 VBUS, P1-9 D-, P1-11 D+) carries ring port 2 (CH397A); its
+# DRVVBUS (P1-3) and ID (P1-13) balls are plain GPIO here, USB1 runs host-only.  P1-19/21/23/25/27 and P2-35/36 are also MSPM0 AIN inputs: the MSPM0
+# must keep them high-impedance (firmware requirement).
 # ---------------------------------------------------------------------------
 PB2_P1 = [
-    "GND", "GND", "DSHOT3", "DSHOT2", "DSHOT1", "DSHOT0",
-    "M1553_IRQN", "M1553_MRN", "M1553_TX_INH", None,
-    "RS485_DE", "RS485_RX", "RS485_TX", "CAN_STB", "MCAN0_RX", "MCAN0_TX",
-    "BARO_INT", "IMU_INT2", "IMU_INT1", "SPI0_CS_1553", "SPI0_CS_TPM",
-    "SPI0_CS_BARO", "SPI0_MISO", "SPI0_MOSI", "SPI0_CLK", "SPI0_CS_IMU",
-    None, None, None, None, "UART_GPS_RX",
-    "UART_GPS_TX", "+3V3_PB2", "+3V3_PB2", "+5V", "GND",
+    "+5V",            # 1  VIN 5 V in (cape powers the PB2-I)
+    "RMII2_TX_EN",    # 2  AA19 RMII2_TX_EN (E18 GPIO1_10 left input)
+    "SPI0_CS_IMU",    # 3  F18 GPIO1_51 (GPIO chip select, next to the IMU)
+    "RMII2_TXD0",     # 4  Y18 RMII2_TXD0 (D20 left input)
+    "+5V",            # 5  USB1_VBUS: cape-supplied VBUS (PB2-I divides it 1k/20k to AB10) — USB1 host to the CH397A
+    "EXT_SPI_SS1",    # 6  E19 SPI2_CS0 (AD18 left input)
+    None,             # 7  VIN.USB
+    "EXT_SPI_SCK",    # 8  A20 SPI2_CLK
+    "USB1_DM",        # 9  AD10 USB1_DM -> CH397A UDM
+    "EXT_SPI_MISO",   # 10 B19 SPI2_D0 (A18 left input)
+    "USB1_DP",        # 11 AE9 USB1_DP -> CH397A UDP
+    "EXT_SPI_MOSI",   # 12 A19 SPI2_D1 (AE18 left input)
+    "DSHOT1",         # 13 N20 PR0_PRU0_GPO13
+    None,             # 14 VDD_3V3 out of the PB2 (cape has its own +3V3)
+    "GND",            # 15
+    "GND",            # 16
+    None,             # 17 AIN.VREF-
+    None,             # 18 AIN.VREF+
+    "RMII2_RX_ER",    # 19 AD22 RMII2_RX_ER (+AIN0)
+    "TPM_IRQN",       # 20 Y24 GPIO0_50
+    "DSHOT3",         # 21 AE22 PR0_PRU0_GPO16 (+AIN1)
+    "GND",            # 22
+    "DSHOT0",         # 23 AC21 PR0_PRU0_GPO4 (+AIN2)
+    None,             # 24 VOUT (VSYS)
+    "RMII2_RXD1",     # 25 AB20 RMII2_RXD1 (+AIN3)
+    "SPI0_CS_TPM",    # 26 K24 GPIO0_44 (D6 left input) — beside the TPM
+    "RMII2_RXD0",     # 27 AE23 RMII2_RXD0 (+AIN4)
+    "TPM_RSTN",       # 28 K22 GPIO0_43 (B3 left input)
+    "DSHOT2",         # 29 Y20 PR0_PRU0_GPO7
+    None,             # 30 E14 UART0_TXD — PB2 console, left free
+    "EXT_SPI_SS2",    # 31 Y22 GPIO0_59
+    None,             # 32 D14 UART0_RXD — PB2 console, left free
+    "EXT_I2C_SDA",    # 33 A17 I2C1_SDA (AA23 left input)
+    "RMII2_REF_CLK",  # 34 AD23 RMII2_REF_CLK
+    "RMII2_CRS_DV",   # 35 AE21 RMII2_CRS_DV
+    "EXT_I2C_SCL",    # 36 B17 I2C1_SCL (V20 left input)
 ]
 PB2_P2 = [
-    "MDIO1", "MDC1", None, None, None, None, None,
-    None, "GPS_RESETN", "GPS_TIMEPULSE", "TPM_RSTN", "TPM_IRQN",
-    "PHY2_RSTN", "PHY2_INTRN", "PHY1_RSTN", "PHY1_INTRN", "MDIO0", "MDC0",
-    "RMII1_REF_CLK", "RMII1_RX_ER", "RMII1_CRS_DV", "RMII1_RXD1",
-    "RMII1_RXD0", "RMII1_TX_EN", "RMII1_TXD1", "RMII1_TXD0",
-    "RMII0_REF_CLK", "RMII0_RX_ER", "RMII0_CRS_DV", "RMII0_RXD1",
-    "RMII0_RXD0", "RMII0_TX_EN", "RMII0_TXD1", "RMII0_TXD0", "+5V", "GND",
+    "MDC0",           # 1  AD24 MDIO0_MDC (B20 left input)
+    "EXT_UART_RX",    # 2  U22 UART2_RXD
+    "MDIO0",          # 3  AB22 MDIO0_MDIO (B18 left input)
+    "EXT_UART_TX",    # 4  V24 UART2_TXD
+    "MCAN0_TX",       # 5  C15 MCAN0_TX (B5 left input)
+    "M1553_MRN",      # 6  W25 GPIO0_47
+    "MCAN0_RX",       # 7  E15 MCAN0_RX (A5 left input)
+    "M1553_TX_INH",   # 8  W24 GPIO0_48
+    "SPI0_CS_1553",   # 9  A15 SPI0_CS2 (D4 left input)
+    "CAN_STB",        # 10 AD21 GPIO0_91
+    "SPI0_CS_BARO",   # 11 B15 SPI0_CS3 (E5 left input)
+    None,             # 12 PWR_BTN
+    None,             # 13 VOUT (VSYS)
+    None,             # 14 BAT.VIN
+    "GND",            # 15
+    None,             # 16 BAT.TEMP
+    "M1553_IRQN",     # 17 AC24 GPIO0_64
+    "BARO_INT",       # 18 V21 GPIO0_53
+    "IMU_INT1",       # 19 AC20 GPIO1_0
+    "RMII2_PHY_RSTN",      # 20 Y25 GPIO0_49 (DP83825I reset)
+    "GND",            # 21
+    "IMU_INT2",       # 22 AC25 GPIO0_63
+    None,             # 23 VDD_3V3 out of the PB2
+    "RS485_RX",       # 24 Y23 UART5_RXD
+    "SPI0_MOSI",      # 25 B14 SPI0_D1
+    None,             # 26 RESET#
+    "SPI0_MISO",      # 27 B13 SPI0_D0
+    "RMII2_PHY_INTRN",     # 28 AB24 GPIO0_61 (DP83825I interrupt)
+    "SPI0_CLK",       # 29 A14 SPI0_CLK (M22 left input)
+    None,             # 30 AA24 GPIO0_58 — spare
+    "RMII2_TXD1",     # 31 AA18 RMII2_TXD1 (A13 SPI0_CS0 left input)
+    "RS485_DE",       # 32 AB25 UART5_RTSn (hardware RS-485 direction)
+    "RS485_TX",       # 33 AA25 UART5_TXD
+    None,             # 34 AA21 GPIO0_60 — spare
+    None,             # 35 W21 GPIO0_54 (+AIN5) — spare
+    None,             # 36 C13 SPI0_CS1 (+AIN7) — spare
 ]
 
 
 def pb2_header(ref: str, value: str, fp: str, nets: List[Optional[str]]) -> Dict[str, Any]:
-    pins = [(str(i), f"P{i}", net, "L" if i <= 18 else "R") for i, net in enumerate(nets, start=1)]
+    rail = ref.split("-")[-1]  # "P1" / "P2"
+    # pin names = BeagleBoard SRM designators P1.01..P2.36 [REF-SENSOR-041 sec 4.2]
+    pins = [(str(i), f"{rail}.{i:02d}", net, "L" if i <= 18 else "R") for i, net in enumerate(nets, start=1)]
     return {"ref": ref, "value": value, "fp": fp, "mpn": "TSM-118-04-L-DV-LC",
             "ds": "PocketBeagle 2 P1/P2 expansion rails; Samtec TSM-DV SMT male strip, -04 post, "
                   "-LC locking clip (manual placement) [REF-SENSOR-042]", "pins": pins}
@@ -562,24 +692,35 @@ SIMPLE: List[Any] = [
     ("C-IN3", "100nF", FP_C0402, "", "Pilot.md §6 C12 HF bypass", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("R-PGND", "0R", FP_R0805, "", "Pilot.md §7 single-point GND<->PGND link",
      [("1", "A", "GND"), ("2", "B", "PGND")]),
-    # --- +3V3 buck (TPS62933) ----------------------------------------------
-    ("R-EN3", "100k", FP_R0201, "", "TPS62933 EN pull-up to VIN", [("1", "A", "+5V"), ("2", "B", "U3V3_EN")]),
-    ("C-3V3-IN", "10uF 10V X5R", FP_C0805, "", "TPS62933 CIN at VIN/GND", [("1", "P", "+5V"), ("2", "N", "GND")]),
-    ("C-3V3-HF", "100nF", FP_C0402, "", "TPS62933 CIN HF", [("1", "P", "+5V"), ("2", "N", "GND")]),
-    ("C-BST", "100nF", FP_C0402, "", "TPS62933 BST-SW bootstrap", [("1", "P", "BST_3V3"), ("2", "N", "SW_3V3")]),
-    ("C-SS", "10nF", FP_C0201, "", "TPS62933 soft-start (>=6.8 nF)", [("1", "P", "SS_3V3"), ("2", "N", "GND")]),
-    ("L-3V3", "3.3uH 2.25A", FP_L3015, "74438335033", "TPS62933 inductor, WE-MAPI 3015 (74438335033.pdf) [REF-PWR-003]",
-     [("1", "A", "SW_3V3"), ("2", "B", "+3V3")]),
-    ("R-FB3H", "100k 1%", FP_R0201, "", "TPS62933 FB divider top", [("1", "A", "+3V3"), ("2", "B", "FB_3V3")]),
-    ("R-FB3L", "32.4k 1%", FP_R0201, "", "TPS62933 FB divider bottom (3.27 V)", [("1", "A", "FB_3V3"), ("2", "B", "GND")]),
-    ("C-3V3-O1", "22uF 6.3V X5R", FP_C0805, "", "TPS62933 COUT", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-3V3-O2", "22uF 6.3V X5R", FP_C0805, "", "TPS62933 COUT", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    # --- +3V3 module (TPSM828224SILR, REF-PWR-008) -------------------------
+    # SLVSEP0F sec 9.2.2: effective CIN >= 3 uF and COUT >= 5 uF after DC bias.
+    # Parts are TI's own Table 9-1 BOM entries (C1 / C2).  C-3V3-O2 is kept as
+    # load-step margin for the HI-6138 transmit bursts.
+    # CIN DC bias (2026-10-17, owner decision S. Griffing; Claude Opus 5.5): the first pick,
+    # Murata GRM188Z71A106MA73D, keeps only 2.65 uF worst case at 5.5 V [REF-PWR-012] and
+    # fails the >= 3 uF floor.  Taiyo Yuden 22 uF: -71 % at 5.5 V [REF-PWR-011] ->
+    # 22 x 0.80 x 0.29 x 0.83 = 4.2 uF worst case.  Same 0603 land; one cap part on the rail.
+    ("C-3V3-IN", "22uF 6.3V X6S", FP_C0603, "MSASJ168BC6226MTNA01", "TPSM828224 CIN at VIN/GND [REF-PWR-008] [REF-PWR-011]", [("1", "P", "+5V"), ("2", "N", "GND")]),
+    ("C-3V3-HF", "100nF", FP_C0402, "", "TPSM828224 CIN HF", [("1", "P", "+5V"), ("2", "N", "GND")]),
+    # COUT DC bias (2026-10-17, Claude Opus 5.5): Taiyo Yuden curve [REF-PWR-011] digitized
+    # -51 % at 3.333 V; worst case 22 uF x 0.80 (tol) x 0.49 (bias) x 0.83 (X6S, 105 C)
+    # = 7.2 uF per cap, so even one cap meets the >= 5 uF effective floor.
+    ("C-3V3-O1", "22uF 6.3V X6S", FP_C0603, "MSASJ168BC6226MTNA01", "TPSM828224 COUT (TI Table 9-1 JMK107BC6226MA-T, renumbered) [REF-PWR-008] [REF-PWR-011]", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-3V3-O2", "22uF 6.3V X6S", FP_C0603, "MSASJ168BC6226MTNA01", "TPSM828224 COUT, load-step margin [REF-PWR-008] [REF-PWR-011]", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     # --- CAN FD field port -------------------------------------------------
-    ("C-CAN1", "10nF", FP_C0201, "", "ISOW1044 VDD HF bypass (<1 mm) §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
+    ("C-CAN1", "10nF", FP_C0402, "", "ISOW1044 VDD HF bypass, 0402 <1 mm (SLLSFF7A 13.1 #1)", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-CAN2", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VDD bulk §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-CAN3", "100nF", FP_C0402, "", "ISOW1044 VIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-CAN4", "10nF", FP_C0201, "", "ISOW1044 VISOOUT HF bypass (<1 mm)", [("1", "P", "VCC2_CAN"), ("2", "N", "GND2_CAN")]),
-    ("C-CAN5", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VISOOUT bulk", [("1", "P", "VCC2_CAN"), ("2", "N", "GND2_CAN")]),
+    ("C-CAN4", "10nF", FP_C0402, "", "ISOW1044 VISOOUT HF bypass, 0402 <1 mm (SLLSFF7A 13.1 #1)",
+     [("1", "P", "VCC2_CAN_DCDC"), ("2", "N", "GND2_CAN_DCDC")]),
+    ("C-CAN5", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VISOOUT bulk, 2-4 mm (SLLSFF7A 13.1 item 2)",
+     [("1", "P", "VCC2_CAN_DCDC"), ("2", "N", "GND2_CAN_DCDC")]),
+    ("FB-CAN-V", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+     "ISOW1044 VISOOUT->VISOIN bead (SLLSFF7A 13.1 item 4) [REF-SENSOR-043]",
+     [("1", "A", "VCC2_CAN_DCDC"), ("2", "B", "VCC2_CAN")]),
+    ("FB-CAN-G", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+     "ISOW1044 GND2(11)->GISOIN(15) bead (SLLSFF7A 13.1 item 4) [REF-SENSOR-043]",
+     [("1", "A", "GND2_CAN_DCDC"), ("2", "B", "GND2_CAN")]),
     ("C-CAN6", "100nF", FP_C0402, "", "ISOW1044 VISOIN bypass", [("1", "P", "VCC2_CAN"), ("2", "N", "GND2_CAN")]),
     ("CMC-CAN", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "CAN_H"), ("2", "W1_OUT", "CAN_H_F"), ("4", "W2_IN", "CAN_L"), ("3", "W2_OUT", "CAN_L_F")]),
@@ -594,11 +735,19 @@ SIMPLE: List[Any] = [
     ("X2Y-CAN", "4.7nF X2Y", FP_X2Y0805, "CX0805MRX7R0BB472", "Pilot.md §2 GND1<->GND2 RF bridge (Yageo X2Y 0805)",
      [("1", "A", "GND"), ("2", "B", "GND"), ("3", "G1", "GND2_CAN"), ("4", "G2", "GND2_CAN")]),
     # --- RS-485 field port -------------------------------------------------
-    ("C-485-1", "10nF", FP_C0201, "", "ISOW1412 VDD HF bypass", [("1", "P", "+5V"), ("2", "N", "GND")]),
+    ("C-485-1", "10nF", FP_C0402, "", "ISOW1412 VDD HF bypass, 0402 <1 mm (SLLSF86C 13.1 #1)", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-485-2", "10uF 10V X5R", FP_C0805, "", "ISOW1412 VDD bulk", [("1", "P", "+5V"), ("2", "N", "GND")]),
     ("C-485-3", "100nF", FP_C0402, "", "ISOW1412 VIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-485-4", "10nF", FP_C0201, "", "ISOW1412 VISOOUT HF bypass", [("1", "P", "VCC2_RS485"), ("2", "N", "GND2_RS485")]),
-    ("C-485-5", "10uF 10V X5R", FP_C0805, "", "ISOW1412 VISOOUT bulk", [("1", "P", "VCC2_RS485"), ("2", "N", "GND2_RS485")]),
+    ("C-485-4", "10nF", FP_C0402, "", "ISOW1412 VISOOUT HF bypass, 0402 <1 mm (SLLSF86C 13.1 #1)",
+     [("1", "P", "VCC2_RS485_DCDC"), ("2", "N", "GND2_RS485_DCDC")]),
+    ("C-485-5", "10uF 10V X5R", FP_C0805, "", "ISOW1412 VISOOUT bulk (SLLSF86C 13.1 item 2)",
+     [("1", "P", "VCC2_RS485_DCDC"), ("2", "N", "GND2_RS485_DCDC")]),
+    ("FB-485-V", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+     "ISOW1412 VISOOUT->VISOIN bead (SLLSF86C 13.1 item 4) [REF-SENSOR-043]",
+     [("1", "A", "VCC2_RS485_DCDC"), ("2", "B", "VCC2_RS485")]),
+    ("FB-485-G", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+     "ISOW1412 GND2(11)->GISOIN(15) bead (SLLSF86C 13.1 item 4) [REF-SENSOR-043]",
+     [("1", "A", "GND2_RS485_DCDC"), ("2", "B", "GND2_RS485")]),
     ("C-485-6", "100nF", FP_C0402, "", "ISOW1412 VISOIN bypass", [("1", "P", "VCC2_RS485"), ("2", "N", "GND2_RS485")]),
     ("CMC-RS485", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "RS485_A"), ("2", "W1_OUT", "RS485_A_F"), ("4", "W2_IN", "RS485_B"), ("3", "W2_OUT", "RS485_B_F")]),
@@ -613,23 +762,23 @@ SIMPLE: List[Any] = [
     ("X2Y-RS485", "4.7nF X2Y", FP_X2Y0805, "CX0805MRX7R0BB472", "Pilot.md §3 GND1<->GND2 RF bridge (Yageo X2Y 0805)",
      [("1", "A", "GND"), ("2", "B", "GND"), ("3", "G1", "GND2_RS485"), ("4", "G2", "GND2_RS485")]),
     # --- Ethernet line-side connectors + Bob-Smith terminations ------------
-    ("ETH1", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "ETH1 line pair to T-ETH secondary",
-     [("1", "TXP", "ETH_LINE_TXP"), ("2", "TXN", "ETH_LINE_TXN"), ("3", "RXP", "ETH_LINE_RXP"), ("4", "RXN", "ETH_LINE_RXN"),
+    ("J-ETH-RMII2", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-RMII2 line pair to T-RMII2 secondary",
+     [("1", "TXP", "ETH_RMII2_LINE_TXP"), ("2", "TXN", "ETH_RMII2_LINE_TXN"), ("3", "RXP", "ETH_RMII2_LINE_RXP"), ("4", "RXN", "ETH_RMII2_LINE_RXN"),
       ("MP", "SHIELD", "PGND")]),
-    ("ETH2", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "ETH2 line pair to T-ETH2 secondary",
-     [("1", "TXP", "ETH2_LINE_TXP"), ("2", "TXN", "ETH2_LINE_TXN"), ("3", "RXP", "ETH2_LINE_RXP"), ("4", "RXN", "ETH2_LINE_RXN"),
+    ("J-ETH-USB1", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-USB1 line pair to T-USB1 secondary",
+     [("1", "TXP", "ETH_USB1_LINE_TXP"), ("2", "TXN", "ETH_USB1_LINE_TXN"), ("3", "RXP", "ETH_USB1_LINE_RXP"), ("4", "RXN", "ETH_USB1_LINE_RXN"),
       ("MP", "SHIELD", "PGND")]),
     # TPI network per dp83825i.pdf Fig 8-3: 75 R from each line-side centre tap to a
     # common node, 10 nF (2 kV) to chassis.
-    ("R-BS1T", "75R", FP_R0402, "", "ETH1 line TX centre tap Bob-Smith (Fig 8-3 R135)", [("1", "A", "ETH_LINE_CTX"), ("2", "B", "ETH_BS")]),
-    ("R-BS1R", "75R", FP_R0402, "", "ETH1 line RX centre tap Bob-Smith (Fig 8-3 R143)", [("1", "A", "ETH_LINE_CRX"), ("2", "B", "ETH_BS")]),
-    ("C-BS1", "10nF 2kV", FP_C1808, "", "ETH1 Bob-Smith HV cap to chassis (Fig 8-3 C38)", [("1", "P", "ETH_BS"), ("2", "N", "PGND")]),
-    ("R-BS2T", "75R", FP_R0402, "", "ETH2 line TX centre tap Bob-Smith", [("1", "A", "ETH2_LINE_CTX"), ("2", "B", "ETH2_BS")]),
-    ("R-BS2R", "75R", FP_R0402, "", "ETH2 line RX centre tap Bob-Smith", [("1", "A", "ETH2_LINE_CRX"), ("2", "B", "ETH2_BS")]),
-    ("C-BS2", "10nF 2kV", FP_C1808, "", "ETH2 Bob-Smith HV cap to chassis", [("1", "P", "ETH2_BS"), ("2", "N", "PGND")]),
-    # one shared 25 MHz reference for both PHYs (RMII Leader mode, XI input, XO open)
-    ("X-25M", "25MHz 3.3V", FP_OSC2520, "ECS-2520MV-250-BN-TR", "PHY 25 MHz reference, +/-50 ppm (dp83825i.pdf §8.2.1.1.1; ECS-2520MV.pdf) [REF-PWR-004]",
-     [("1", "TRI", None), ("2", "GND", "GND"), ("3", "OUT", "PHY_XI_25M"), ("4", "VDD", "+3V3")]),
+    ("R-RMII2-BST", "75R", FP_R0402, "", "J-ETH-RMII2 line TX centre tap Bob-Smith (Fig 8-3 R135)", [("1", "A", "ETH_RMII2_LINE_CTX"), ("2", "B", "ETH_RMII2_BS")]),
+    ("R-RMII2-BSR", "75R", FP_R0402, "", "J-ETH-RMII2 line RX centre tap Bob-Smith (Fig 8-3 R143)", [("1", "A", "ETH_RMII2_LINE_CRX"), ("2", "B", "ETH_RMII2_BS")]),
+    ("C-RMII2-BS", "10nF 2kV", FP_C1808, "", "J-ETH-RMII2 Bob-Smith HV cap to chassis (Fig 8-3 C38)", [("1", "P", "ETH_RMII2_BS"), ("2", "N", "PGND")]),
+    ("R-USB1-BST", "75R", FP_R0402, "", "J-ETH-USB1 line TX centre tap Bob-Smith", [("1", "A", "ETH_USB1_LINE_CTX"), ("2", "B", "ETH_USB1_BS")]),
+    ("R-USB1-BSR", "75R", FP_R0402, "", "J-ETH-USB1 line RX centre tap Bob-Smith", [("1", "A", "ETH_USB1_LINE_CRX"), ("2", "B", "ETH_USB1_BS")]),
+    ("C-USB1-BS", "10nF 2kV", FP_C1808, "", "J-ETH-USB1 Bob-Smith HV cap to chassis", [("1", "P", "ETH_USB1_BS"), ("2", "N", "PGND")]),
+    # one 25 MHz oscillator drives both Ethernet controllers' XI pins (XO pins open)
+    ("X-25M", "25MHz 3.3V", FP_OSC2520, "ECS-2520MV-250-BN-TR", "25 MHz reference for the DP83825I XI (RMII Leader, +/-50 ppm, SNLS638C) and the CH397A XI (external clock input, CH397 Table 1-3); ECS-2520MV.pdf [REF-PWR-004]",
+     [("1", "TRI", None), ("2", "GND", "GND"), ("3", "OUT", "XI_25M"), ("4", "VDD", "+3V3")]),
     ("C-25M", "100nF", FP_C0402, "", "oscillator VDD bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     # --- MIL-STD-1553B field port ------------------------------------------
     ("R-1553P", "55R 2%", FP_R0603, "", "MIL-STD-1553B §4.5.1.5.2 direct-coupled stub isolation resistor (hi-1573.pdf Fig 2)",
@@ -674,16 +823,6 @@ SIMPLE: List[Any] = [
     ("C-IMU2", "10nF", FP_C0201, "", "ICM-42688-P VDDIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-BARO1", "100nF", FP_C0402, "", "BMP388 VDD bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-BARO2", "100nF", FP_C0402, "", "BMP388 VDDIO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-GPS1", "10uF 6.3V X5R", FP_C0805, "", "MAX-M10S VCC bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-GPS2", "100nF", FP_C0402, "", "MAX-M10S VCC/V_IO bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("R-ANT", "10R", FP_R0201, "", "MAX-M10S antenna supply current limiter R8 (integration manual Table 53)",
-     [("1", "A", "GPS_VCC_RF"), ("2", "B", "GPS_ANT_BIAS")]),
-    ("C-ANT", "10nF X7R", FP_C0402, "", "MAX-M10S RF bias-T filter C14 (Table 52)", [("1", "P", "GPS_ANT_BIAS"), ("2", "N", "GND")]),
-    ("L-ANT", "27nH", "Inductor_SMD:L_0402_1005Metric", "LQG15HN27NJ02D", "MAX-M10S RF bias-T inductor L3 (Table 54, Murata LQG15H)",
-     [("1", "A", "GPS_ANT_BIAS"), ("2", "B", "GPS_RF")]),
-    ("J-ANT", "U.FL-R-SMT-1", "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical", "U.FL-R-SMT-1(10)",
-     "GNSS active-antenna feed to the dorsal-cup SMA bulkhead (AVIONICS_PB2_REDESIGN.md GPS-ANT)",
-     [("1", "RF", "GPS_RF"), ("2", "SHIELD", "GND")]),
     # --- TPM -----------------------------------------------------------------
     ("C-TPM1", "1uF", FP_C0402, "", "SLB9672 §3.1.3 typical schematic bulk", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     ("C-TPM2", "100nF", FP_C0402, "", "SLB9672 VDD bypass (pin 1)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
@@ -720,7 +859,7 @@ SIMPLE += [
 
 def phy_support(tag: str, ref: str, rmii: str, eth: str) -> List[Any]:
     """DP83825I per-PHY passives (dp83825i.pdf Table 4-1, Table 6-8/6-9, Fig 8-3, Fig 8-4)."""
-    p = f"P{tag}"
+    p = tag  # TI interface name of the leg, e.g. "RMII2" (2026-10-17 naming alignment)
     return [
         (f"R-{p}-RBIAS", "6.49k 1%", FP_R0201, "", "DP83825I RBIAS to GND (pin 14)", [("1", "A", f"{ref}_RBIAS"), ("2", "B", "GND")]),
         (f"R-{p}-AD0", "2.49k", FP_R0201, "", "PhyAdd[0] strap mode 1 -> PHY address 1 (Table 6-8/6-9)", [("1", "A", "+3V3"), ("2", "B", f"{rmii}_RXD0")]),
@@ -737,8 +876,52 @@ def phy_support(tag: str, ref: str, rmii: str, eth: str) -> List[Any]:
     ]
 
 
-SIMPLE += phy_support("1", "ETH1-PHY", "RMII0", "ETH")
-SIMPLE += phy_support("2", "ETH2-PHY", "RMII1", "ETH2")
+SIMPLE += phy_support("RMII2", "PHY-RMII2", "RMII2", "ETH_RMII2")
+
+# --- CH397A support (CH397 datasheet V1.2 sec 3.7 table, sec 6.1 circuit) [REF-SENSOR-048] --
+SIMPLE += [
+    ("C-USB1-V5A", "10uF 6.3V X6S", FP_C0603, "MSASJ168BC6226MTNA01", "V5 / AVDD33 (pins 11/10) bulk, 3.3 V supply (sec 6.1 C8)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-USB1-V5B", "100nF", FP_C0201, "", "V5 / AVDD33 (pins 11/10) HF (sec 6.1 C2)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-USB1-A1", "1uF", FP_C0402, "", "AVDD33 pin 1 decoupling (Table 1-3)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-USB1-IO", "100nF", FP_C0201, "", "VDDIO pins 13/18 decoupling (Table 1-3)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+    ("C-USB1-AK", "1uF", FP_C0402, "", "AVDDK core-analog decoupling, pin 23 (Table 1-3)", [("1", "P", "NIC-USB1_AVDDK"), ("2", "N", "GND")]),
+    ("C-USB1-DK", "100nF", FP_C0201, "", "DVDDK core-digital decoupling, pin 9 (Table 1-3)", [("1", "P", "NIC-USB1_DVDDK"), ("2", "N", "GND")]),
+    ("C-USB1-CTD", "1uF", FP_C0402, "", "T-USB1 device-side TX centre tap to GND (sec 6.1 C11; no supply on the CT)", [("1", "P", "ETH_USB1_CTD"), ("2", "N", "GND")]),
+    ("C-USB1-CRD", "1uF", FP_C0402, "", "T-USB1 device-side RX centre tap to GND (sec 6.1 C12)", [("1", "P", "ETH_USB1_CRD"), ("2", "N", "GND")]),
+]
+
+# --- JST-GH expansion headers replacing the GNSS (owner 2026-10-17) -------------------
+# Pin order per Pixhawk DS-009 rev 0.1.0 [REF-CONN-002] "Basic GPS port" and "SPI port"
+# (pin-compatible only; this is not a Pixhawk-branded product).  Deviation: VCC is the
+# cape +5V through a 0.35 A PTC per port, not DS-009's 2.5 A, because +5V feeds the PB2-I
+# (VIN, 1 A) and the 3V3 module through FB1 (2 A).  ESD on every signal at the connector
+# (TI TPD4E05U06 / TPD1E05U06, SLVSBO7O [REF-SENSOR-044]); I2C 1.5 k pull-ups on the
+# cape side as DS-009 sec "I2C port" specifies.  Signals: UART2 + I2C1 (GPS port), SPI2
+# with SS1 = SPI2_CS0 and SS2 = GPIO (SPI port) — see PB2_P1 / PB2_P2.
+SIMPLE += [
+    ("J-GPS", "SM06B-GHS-TB", FP_GH6, "SM06B-GHS-TB(LF)(SN)", "DS-009 Basic GPS port: 5V, TX, RX, SCL, SDA, GND (eGH.pdf)",
+     [("1", "VCC", "EXT_GPS_5V"), ("2", "TX", "EXT_UART_TX"), ("3", "RX", "EXT_UART_RX"), ("4", "SCL", "EXT_I2C_SCL"),
+      ("5", "SDA", "EXT_I2C_SDA"), ("6", "GND", "GND"), ("MP", "SHIELD", "PGND")]),
+    ("J-SPI", "SM07B-GHS-TB", FP_GH7, "SM07B-GHS-TB(LF)(SN)", "DS-009 SPI port: 5V, SCK, MISO, MOSI, !SS1, !SS2, GND (eGH.pdf)",
+     [("1", "VCC", "EXT_SPI_5V"), ("2", "SCK", "EXT_SPI_SCK"), ("3", "MISO", "EXT_SPI_MISO"), ("4", "MOSI", "EXT_SPI_MOSI"),
+      ("5", "SS1", "EXT_SPI_SS1"), ("6", "SS2", "EXT_SPI_SS2"), ("7", "GND", "GND"), ("MP", "SHIELD", "PGND")]),
+    ("F-GPS", "MF-PSMF035X", FP_F0805, "MF-PSMF035X-2", "GPS port VCC PTC, 0.35 A hold / 0.75 A trip (Bourns MF-PSMF) [REF-PWR-013]",
+     [("1", "A", "+5V"), ("2", "B", "EXT_GPS_5V")]),
+    ("F-SPI", "MF-PSMF035X", FP_F0805, "MF-PSMF035X-2", "SPI port VCC PTC, 0.35 A hold / 0.75 A trip (Bourns MF-PSMF) [REF-PWR-013]",
+     [("1", "A", "+5V"), ("2", "B", "EXT_SPI_5V")]),
+    ("C-GPS5", "1uF 10V", FP_C0402, "", "GPS port VCC bypass at the connector", [("1", "P", "EXT_GPS_5V"), ("2", "N", "GND")]),
+    ("C-SPI5", "1uF 10V", FP_C0402, "", "SPI port VCC bypass at the connector", [("1", "P", "EXT_SPI_5V"), ("2", "N", "GND")]),
+    ("R-I2C-SCL", "1.5k", FP_R0201, "", "DS-009 I2C port: 1.5 k pull-up on the autopilot side", [("1", "A", "+3V3"), ("2", "B", "EXT_I2C_SCL")]),
+    ("R-I2C-SDA", "1.5k", FP_R0201, "", "DS-009 I2C port: 1.5 k pull-up on the autopilot side", [("1", "A", "+3V3"), ("2", "B", "EXT_I2C_SDA")]),
+    ("ESD-GPS", "TPD4E05U06DQAR", FP_DQA10, "TPD4E05U06DQAR", "GPS port ESD, 4 ch (SLVSBO7O Table 4-2) [REF-SENSOR-044]",
+     [("1", "D1+", "EXT_UART_TX"), ("2", "D1-", "EXT_UART_RX"), ("3", "GND", "GND"), ("4", "D2+", "EXT_I2C_SCL"),
+      ("5", "D2-", "EXT_I2C_SDA"), ("6", "NC", None), ("7", "NC", None), ("8", "GND", "GND"), ("9", "NC", None), ("10", "NC", None)]),
+    ("ESD-SPI", "TPD4E05U06DQAR", FP_DQA10, "TPD4E05U06DQAR", "SPI port ESD, 4 ch (SLVSBO7O Table 4-2) [REF-SENSOR-044]",
+     [("1", "D1+", "EXT_SPI_SCK"), ("2", "D1-", "EXT_SPI_MISO"), ("3", "GND", "GND"), ("4", "D2+", "EXT_SPI_MOSI"),
+      ("5", "D2-", "EXT_SPI_SS1"), ("6", "NC", None), ("7", "NC", None), ("8", "GND", "GND"), ("9", "NC", None), ("10", "NC", None)]),
+    ("ESD-SS2", "TPD1E05U06DYAR", FP_SOD523, "TPD1E05U06DYAR", "SPI port SS2 ESD, 1 ch (SLVSBO7O Table 4-1) [REF-SENSOR-044]",
+     [("1", "IO", "EXT_SPI_SS2"), ("2", "GND", "GND")]),
+]
 
 for _entry in SIMPLE:
     _ref, _val, _fp, _mpn, _ds, _pins = _entry[:6]
@@ -856,7 +1039,8 @@ def emit_instance(ic, X, Y, left, right, half_w, half_h, sheet_uuid) -> List[str
 # and VCC2_* are generated inside the isolators; +3V3 comes from U-3V3 whose
 # pins are passive in these box symbols; PGND is chassis.
 PWR_FLAG_RAILS = ["GND", "+3V3", "+5V", "+5V_IN", "GND2_CAN", "GND2_RS485",
-                  "VCC2_CAN", "VCC2_RS485", "PGND", "+3V3_PB2"]
+                  "VCC2_CAN", "VCC2_RS485", "PGND",
+                  "VCC2_CAN_DCDC", "GND2_CAN_DCDC", "VCC2_RS485_DCDC", "GND2_RS485_DCDC"]
 
 PWR_FLAG_LIB = """    (symbol "power:PWR_FLAG" (power) (pin_numbers (hide yes)) (pin_names (offset 0) (hide yes)) \
 (exclude_from_sim no) (in_bom yes) (on_board yes)

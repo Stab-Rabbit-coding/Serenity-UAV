@@ -1,0 +1,27 @@
+{
+ "version": 2,
+ "last_updated": "2026-10-17T19:53:34-04:00",
+ "extractions": {
+  "TPSM828224SILR_c2607d": {
+   "file": "TPSM828224SILR_c2607d.json",
+   "mpn": "TPSM828224SILR",
+   "category": "switching_regulator",
+   "source_pdf": "tpsm82822.pdf",
+   "source_pdf_hash": "sha256:e872dfc8b0894be4c2a8a5a3c29bbfd33674d4902f157ea484f19c8765ed3167",
+   "extraction_date": "2026-10-17T15:15:15.760339+00:00",
+   "extraction_score": 9.5,
+   "extraction_version": 2,
+   "pin_count": 10
+  },
+  "AM625_PB2I_header_mux": {
+   "file": "AM625_PB2I_header_mux.json",
+   "mpn": "AM625 (ALW)",
+   "category": "soc_pinmux_subset",
+   "source_pdf": "am625.pdf",
+   "source_pdf_hash": "sha256:8cd9eccd795f4e8b908bd9ec9656a189b9b3940e95f89949beb7abbfed8177ef",
+   "extraction_date": "2026-10-17T23:53:34.165986+00:00",
+   "note": "Header-ball subset of Table 5-1 only; not a full schema extraction (unscored)",
+   "pin_count": 72
+  }
+ }
+}
