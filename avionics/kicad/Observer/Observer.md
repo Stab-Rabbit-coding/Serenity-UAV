@@ -10,10 +10,14 @@ the 2026-10-07 note below calls "not started" **was done on that branch (2026-07
 merged: `Observer.kicad_pcb` carries U6 (ISOW1412), the RS-485 trunk connectors and their nets, and
 the branch's scoped `Observer.kicad_dru` pad-pitch exceptions. The 2026-08-03 trust-module retarget
 (`avionics/kicad/retarget_pcb_footprints.py --apply`, Observer job only) was then re-applied on top
-of it: U3 -> `VQFN-48-1EP ... EP4.1x4.1mm`, U5 -> `QFN-32-1EP ... EP3.6x3.6mm`. KiCad 9.0.2 DRC
-with default rules reports 0 copper/clearance/shorting errors (silkscreen and library-footprint
-warnings only) and 305 unrouted connections; routing is still open and the board is **not
-fabrication-ready**. Sch<->PCB parity was not re-verified in this pass (`avionics/WBS.md` §1.9.3).
+of it: U3 -> `VQFN-48-1EP ... EP4.1x4.1mm`, U5 -> `QFN-32-1EP ... EP3.6x3.6mm`. Because main's schematic had moved on since the branch PCB was laid out, eight footprints were then
+swapped to the schematic's packages at the branch's own positions: the five PRTR5V0U2X TVS diodes
+(D5, T1_D1/D2, T2_D1/D2: SOT-363 -> SOT-143) and the three regulators (U_REG_1V2/3V3: SOT-23-6 ->
+SOT-563; U_REG_2V5: SOT-23-5 -> WSON-6-1EP 2x2), with pad nets taken from main's PCB for the same
+parts. KiCad 9.0.2 with the project rules and `--schematic-parity` (the `tools/validate_kicad.py`
+check): 0 hard violations (161 accepted-class soft findings). Routing is still open and the board is
+**not fabrication-ready**. The five swapped TVS/regulator placements were not re-optimised, and the
+footprint-library prefix on some parts is still `Jayne:` (soft parity mismatch).
 Superseded record, kept for history:
 - 2026-10-07: the schematic is ahead of the PCB. The schematic gained the ISOW1412
 isolated RS-485 transceiver (Section H, 2026-07-26) and the MSPM0G351x-Q1 / SLB9672 trust-module

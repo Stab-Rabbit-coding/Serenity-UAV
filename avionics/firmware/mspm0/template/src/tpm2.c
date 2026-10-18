@@ -286,12 +286,11 @@ static void wr_hmac_key_template(tpm_wr_t *w) {
 
     wr_u16(&t, TPM2_ALG_KEYEDHASH); /* type.                              */
     wr_u16(&t, TPM2_ALG_SHA256);    /* nameAlg.                           */
+    /* objectAttributes; note that RESTRICTED is deliberately clear -- see
+     * `tpm2.h`. */
     wr_u32(&t, TPM2_OBJ_FIXEDTPM | TPM2_OBJ_FIXEDPARENT |
                    TPM2_OBJ_SENSITIVEDATAORIGIN | TPM2_OBJ_USERWITHAUTH |
-                   TPM2_OBJ_NODA |
-                   TPM2_OBJ_SIGN_ENCRYPT); /* objectAttributes; note that
-                                            * RESTRICTED is deliberately clear —
-                                            * see `tpm2.h`. */
+                   TPM2_OBJ_NODA | TPM2_OBJ_SIGN_ENCRYPT);
     wr_u16(&t, 0U);              /* authPolicy: empty TPM2B_DIGEST.    */
     wr_u16(&t, TPM2_ALG_HMAC);   /* scheme.scheme.                     */
     wr_u16(&t, TPM2_ALG_SHA256); /* scheme.details.hmac.hashAlg.       */

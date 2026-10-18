@@ -26,29 +26,29 @@
         },
         "fab_line_width": 0.1,
         "fab_text_italic": false,
-        "fab_text_size_h": 0.7,
-        "fab_text_size_v": 0.7,
+        "fab_text_size_h": 1.0,
+        "fab_text_size_v": 1.0,
         "fab_text_thickness": 0.15,
         "fab_text_upright": false,
-        "other_line_width": 0.15,
+        "other_line_width": 0.1,
         "other_text_italic": false,
-        "other_text_size_h": 0.7,
-        "other_text_size_v": 0.7,
+        "other_text_size_h": 1.0,
+        "other_text_size_v": 1.0,
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 3.2,
-          "height": 3.2,
-          "width": 3.2
+          "drill": 0.8,
+          "height": 1.27,
+          "width": 2.54
         },
-        "silk_line_width": 0.15,
+        "silk_line_width": 0.1,
         "silk_text_italic": false,
-        "silk_text_size_h": 0.7,
-        "silk_text_size_v": 0.7,
-        "silk_text_thickness": 0.15,
+        "silk_text_size_h": 1.0,
+        "silk_text_size_v": 1.0,
+        "silk_text_thickness": 0.1,
         "silk_text_upright": false,
         "zones": {
-          "min_clearance": 0.2
+          "min_clearance": 0.5
         }
       },
       "diff_pair_dimensions": [],
@@ -116,11 +116,10 @@
         "zones_intersect": "error"
       },
       "rules": {
-        "clearance": 0.127,
         "max_error": 0.005,
         "min_clearance": 0.0,
         "min_connection": 0.0,
-        "min_copper_edge_clearance": 0.3,
+        "min_copper_edge_clearance": 0.5,
         "min_groove_width": 0.0,
         "min_hole_clearance": 0.25,
         "min_hole_to_hole": 0.25,
@@ -131,11 +130,9 @@
         "min_text_height": 0.8,
         "min_text_thickness": 0.08,
         "min_through_hole_diameter": 0.3,
-        "min_track_width": 0.127,
+        "min_track_width": 0.0,
         "min_via_annular_width": 0.1,
-        "min_via_diameter": 0.4,
-        "solder_mask_clearance": 0.0,
-        "solder_mask_min_width": 0.0,
+        "min_via_diameter": 0.5,
         "solder_mask_to_copper_clearance": 0.0,
         "use_height_for_length_calcs": true
       },
@@ -183,15 +180,7 @@
           "td_width_to_size_filter_ratio": 0.9
         }
       ],
-      "track_widths": [
-        0.127,
-        0.15,
-        0.2,
-        0.25,
-        0.3,
-        0.5,
-        1.0
-      ],
+      "track_widths": [],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
           "corner_radius_percentage": 80,
@@ -218,18 +207,8 @@
           "spacing": 0.6
         }
       },
-      "via_dimensions": [
-        {
-          "diameter": 0.6,
-          "drill": 0.3
-        },
-        {
-          "diameter": 0.8,
-          "drill": 0.4
-        }
-      ],
-      "zones_allow_external_fillets": false,
-      "zones_min_antigap_margin": 0.0
+      "via_dimensions": [],
+      "zones_allow_external_fillets": false
     },
     "ipc2581": {
       "dist": "",
@@ -246,14 +225,6 @@
   "cvpcb": {
     "equivalence_files": []
   },
-  "erc": {
-    "erc_exclusions": [],
-    "meta": {
-      "version": 0
-    },
-    "pin_map": [],
-    "rule_severities": []
-  },
   "libraries": {
     "pinned_footprint_libs": [],
     "pinned_symbol_libs": []
@@ -266,9 +237,9 @@
     "classes": [
       {
         "bus_width": 12,
-        "clearance": 0.3,
-        "diff_pair_gap": 0.15,
-        "diff_pair_via_gap": 0.15,
+        "clearance": 0.2,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
         "line_style": 0,
         "microvia_diameter": 0.3,
@@ -281,50 +252,6 @@
         "via_diameter": 0.6,
         "via_drill": 0.3,
         "wire_width": 6
-      },
-      {
-        "clearance": 0.3,
-        "diff_pair_gap": 0.2,
-        "diff_pair_width": 0.2,
-        "name": "CANFD_DIFF_120R",
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 2,
-        "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.2,
-        "via_diameter": 0.6,
-        "via_drill": 0.3
-      },
-      {
-        "clearance": 0.3,
-        "diff_pair_gap": 0.15,
-        "diff_pair_width": 0.15,
-        "name": "ETH_DIFF_100R",
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 2,
-        "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.15,
-        "via_diameter": 0.6,
-        "via_drill": 0.3
-      },
-      {
-        "clearance": 0.3,
-        "name": "PGND",
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 0,
-        "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.4,
-        "via_diameter": 0.8,
-        "via_drill": 0.4
-      },
-      {
-        "clearance": 0.3,
-        "name": "POWER_5V",
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 1,
-        "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.4,
-        "via_diameter": 0.8,
-        "via_drill": 0.4
       }
     ],
     "meta": {
@@ -332,44 +259,7 @@
     },
     "net_colors": null,
     "netclass_assignments": null,
-    "netclass_patterns": [
-      {
-        "netclass": "PGND",
-        "pattern": "PGND"
-      },
-      {
-        "netclass": "PGND",
-        "pattern": "GND"
-      },
-      {
-        "netclass": "POWER_5V",
-        "pattern": "+5V*"
-      },
-      {
-        "netclass": "POWER_5V",
-        "pattern": "+3V3*"
-      },
-      {
-        "netclass": "POWER_5V",
-        "pattern": "VDD_CORE"
-      },
-      {
-        "netclass": "ETH_DIFF_100R",
-        "pattern": "ETH_IN_*"
-      },
-      {
-        "netclass": "ETH_DIFF_100R",
-        "pattern": "ETH_OUT_*"
-      },
-      {
-        "netclass": "ETH_DIFF_100R",
-        "pattern": "RGMII_*"
-      },
-      {
-        "netclass": "CANFD_DIFF_120R",
-        "pattern": "CANFD_*"
-      }
-    ]
+    "netclass_patterns": []
   },
   "pcbnew": {
     "last_paths": {
@@ -386,51 +276,9 @@
     "page_layout_descr_file": ""
   },
   "schematic": {
-    "annotate_start_num": 0,
-    "bom_fmt_preset": "",
-    "bom_fmt_settings": {
-      "fields_ordered": [],
-      "filter": "",
-      "group_by": [],
-      "sort_asc": true,
-      "sort_field": "Reference"
-    },
-    "connection_grid_size": 50.0,
-    "drawing": {
-      "dashed_lines_dash_length_ratio": 12.0,
-      "dashed_lines_gap_length_ratio": 3.0,
-      "default_line_thickness": 6.0,
-      "default_text_size": 50.0,
-      "field_names": [],
-      "intersheets_ref_own_page": false,
-      "intersheets_ref_prefix": "",
-      "intersheets_ref_short": false,
-      "intersheets_ref_show": false,
-      "intersheets_ref_suffix": "",
-      "junction_size_choice": 3,
-      "label_size_ratio": 0.25,
-      "op_value_scale_factor": 1.0,
-      "overbar_offset_ratio": 1.23,
-      "pin_symbol_size": 25.0,
-      "text_offset_ratio": 0.08
-    },
     "legacy_lib_dir": "",
-    "legacy_lib_list": [],
-    "meta": {
-      "version": 1
-    },
-    "net_format_name": "",
-    "page_layout_descr_file": "",
-    "plot_directory": "",
-    "spice_current_sheet_as_root": false,
-    "subpart_first_id": 65,
-    "subpart_id_separator": 0
+    "legacy_lib_list": []
   },
-  "sheets": [
-    [
-      "7e5a0000-0000-0000-0000-000000000001",
-      ""
-    ]
-  ],
+  "sheets": [],
   "text_variables": {}
 }

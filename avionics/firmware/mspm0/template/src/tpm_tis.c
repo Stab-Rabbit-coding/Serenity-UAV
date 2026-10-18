@@ -247,9 +247,9 @@ int ser_tpm_tis_init(ser_tpm_tis_t *tis) {
     }
 
     memset(tis, 0, sizeof(*tis));
-    tis->locality = 0U; /* The SLB 9670 in every Serenity board is used
-                         * from locality 0 only; nothing in this firmware
-                         * runs at a higher locality. */
+    /* The SLB 9670 in every Serenity board is used from locality 0 only;
+     * nothing in this firmware runs at a higher locality. */
+    tis->locality = 0U;
 
     /*
      * _TPM_INIT: for an SPI-packaged TPM this is the low-to-high transition

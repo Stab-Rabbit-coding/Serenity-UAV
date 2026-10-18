@@ -28,11 +28,11 @@ cd "$(dirname "$0")" || exit 1
 
 TMP=$(mktemp -d) || exit 1
 trap 'rm -rf "$TMP"' EXIT
-cp A_absent_0pins.kicad_sch            "$TMP/A_absent_0pins.kicad_sch"
-cp B_present_0pins.kicad_sch           "$TMP/B_present_0pins.kicad_sch"
-cp C_absent_1pin.kicad_sch.crashes     "$TMP/C_absent_1pin.kicad_sch"
-cp D_absent_2pins.kicad_sch.crashes    "$TMP/D_absent_2pins.kicad_sch"
-cp E_present_extra_pin.kicad_sch       "$TMP/E_present_extra_pin.kicad_sch"
+cp A_absent_0pins.kicad_sch "$TMP/A_absent_0pins.kicad_sch"
+cp B_present_0pins.kicad_sch "$TMP/B_present_0pins.kicad_sch"
+cp C_absent_1pin.kicad_sch.crashes "$TMP/C_absent_1pin.kicad_sch"
+cp D_absent_2pins.kicad_sch.crashes "$TMP/D_absent_2pins.kicad_sch"
+cp E_present_extra_pin.kicad_sch "$TMP/E_present_extra_pin.kicad_sch"
 
 run() {
     kicad-cli sch erc -o /dev/null --format json "$TMP/$1" >/dev/null 2>&1
@@ -45,8 +45,8 @@ run() {
 }
 
 printf 'kicad-cli %s\n\n' "$(kicad-cli --version 2>/dev/null)"
-run A_absent_0pins.kicad_sch      "A absent / 0 pins"
-run B_present_0pins.kicad_sch     "B present / 0 pins"
-run C_absent_1pin.kicad_sch       "C absent / 1 pin"
-run D_absent_2pins.kicad_sch      "D absent / 2 pins"
+run A_absent_0pins.kicad_sch "A absent / 0 pins"
+run B_present_0pins.kicad_sch "B present / 0 pins"
+run C_absent_1pin.kicad_sch "C absent / 1 pin"
+run D_absent_2pins.kicad_sch "D absent / 2 pins"
 run E_present_extra_pin.kicad_sch "E present(1) / refs 1,2"

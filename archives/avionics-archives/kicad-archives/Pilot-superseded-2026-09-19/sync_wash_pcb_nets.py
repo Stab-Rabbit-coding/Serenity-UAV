@@ -103,7 +103,7 @@ def schematic_netmap() -> dict[tuple[str, str], str]:
         if not name:
             continue
         for node in net.findall("node"):
-            netmap[(node.get("ref"), node.get("pin"))] = name
+            netmap[(node.get("ref") or "", node.get("pin") or "")] = name
     return netmap
 
 
@@ -155,7 +155,10 @@ def main() -> int:
         def fix_pad(pm: re.Match) -> str:
             nonlocal count
             padblock = sexp_block(block, pm.start())
-            pnum = re.match(r'\(pad "([^"]*)"', padblock).group(1)
+            pnum_match = re.match(r'\(pad "([^"]*)"', padblock)
+            if pnum_match is None:
+                return padblock
+            pnum = pnum_match.group(1)
             if not pnum.strip():
                 return padblock
             net = netmap.get((ref, pnum))
@@ -202,7 +205,7 @@ def main() -> int:
             last = i
         elif first is not None:
             break
-    if first is None:
+    if first is None or last is None:
         raise SystemExit("could not locate the board net table")
     table = [
         f'\t(net {num} "{name}")'

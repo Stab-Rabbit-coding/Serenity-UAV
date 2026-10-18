@@ -9249,15 +9249,6 @@
       ],
       "archived": false
     },
-    "avionics/firmware/mspm0/template/include/serenity/hal2.h": {
-      "description": "C header",
-      "tags": [
-        "avionics-hardware",
-        "firmware",
-        "security"
-      ],
-      "archived": false
-    },
     "avionics/firmware/mspm0/template/include/serenity/link.h": {
       "description": "C header",
       "tags": [
@@ -9287,15 +9278,6 @@
       ],
       "archived": false
     },
-    "avionics/firmware/mspm0/template/include/serenity/sec_envelope2.h": {
-      "description": "@brief Signing and Encryption context. One per node. */",
-      "tags": [
-        "avionics-hardware",
-        "firmware",
-        "security"
-      ],
-      "archived": false
-    },
     "avionics/firmware/mspm0/template/include/serenity/sha256.h": {
       "description": "@brief SHA-256 digest length in bytes (FIPS 180-4 \u00a71). */",
       "tags": [
@@ -9307,15 +9289,6 @@
     },
     "avionics/firmware/mspm0/template/include/serenity/tpm2.h": {
       "description": "C header",
-      "tags": [
-        "avionics-hardware",
-        "firmware",
-        "security"
-      ],
-      "archived": false
-    },
-    "avionics/firmware/mspm0/template/include/serenity/tpm2_.h": {
-      "description": "Additional Command codes, Part 2 \u00a76.5.2 (TPM_CC)[cite: 8]. */",
       "tags": [
         "avionics-hardware",
         "firmware",
@@ -17798,14 +17771,11 @@
       "avionics/firmware/mspm0/template/include/serenity/aes_gcm.h",
       "avionics/firmware/mspm0/template/include/serenity/board.h",
       "avionics/firmware/mspm0/template/include/serenity/hal.h",
-      "avionics/firmware/mspm0/template/include/serenity/hal2.h",
       "avionics/firmware/mspm0/template/include/serenity/link.h",
       "avionics/firmware/mspm0/template/include/serenity/node.h",
       "avionics/firmware/mspm0/template/include/serenity/sec_envelope.h",
-      "avionics/firmware/mspm0/template/include/serenity/sec_envelope2.h",
       "avionics/firmware/mspm0/template/include/serenity/sha256.h",
       "avionics/firmware/mspm0/template/include/serenity/tpm2.h",
-      "avionics/firmware/mspm0/template/include/serenity/tpm2_.h",
       "avionics/firmware/mspm0/template/include/serenity/tpm_tis.h",
       "avionics/firmware/mspm0/template/src/main.c",
       "avionics/firmware/mspm0/template/src/node.c",
@@ -20932,14 +20902,11 @@
       "avionics/firmware/mspm0/template/include/serenity/aes_gcm.h",
       "avionics/firmware/mspm0/template/include/serenity/board.h",
       "avionics/firmware/mspm0/template/include/serenity/hal.h",
-      "avionics/firmware/mspm0/template/include/serenity/hal2.h",
       "avionics/firmware/mspm0/template/include/serenity/link.h",
       "avionics/firmware/mspm0/template/include/serenity/node.h",
       "avionics/firmware/mspm0/template/include/serenity/sec_envelope.h",
-      "avionics/firmware/mspm0/template/include/serenity/sec_envelope2.h",
       "avionics/firmware/mspm0/template/include/serenity/sha256.h",
       "avionics/firmware/mspm0/template/include/serenity/tpm2.h",
-      "avionics/firmware/mspm0/template/include/serenity/tpm2_.h",
       "avionics/firmware/mspm0/template/include/serenity/tpm_tis.h",
       "avionics/firmware/mspm0/template/src/aes_gcm.c",
       "avionics/firmware/mspm0/template/src/link.c",
@@ -21409,14 +21376,11 @@
       "avionics/firmware/mspm0/template/include/serenity/aes_gcm.h",
       "avionics/firmware/mspm0/template/include/serenity/board.h",
       "avionics/firmware/mspm0/template/include/serenity/hal.h",
-      "avionics/firmware/mspm0/template/include/serenity/hal2.h",
       "avionics/firmware/mspm0/template/include/serenity/link.h",
       "avionics/firmware/mspm0/template/include/serenity/node.h",
       "avionics/firmware/mspm0/template/include/serenity/sec_envelope.h",
-      "avionics/firmware/mspm0/template/include/serenity/sec_envelope2.h",
       "avionics/firmware/mspm0/template/include/serenity/sha256.h",
       "avionics/firmware/mspm0/template/include/serenity/tpm2.h",
-      "avionics/firmware/mspm0/template/include/serenity/tpm2_.h",
       "avionics/firmware/mspm0/template/include/serenity/tpm_tis.h",
       "avionics/firmware/mspm0/template/src/aes_gcm.c",
       "avionics/firmware/mspm0/template/src/link.c",
