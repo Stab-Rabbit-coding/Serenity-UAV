@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-17",
+  "generated": "2026-10-18",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -7587,6 +7587,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/2893159.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/2N3866_SERIES.PDF": {
       "description": "PDF document",
       "tags": [
@@ -7623,6 +7630,13 @@
       "archived": false
     },
     "avionics/datasheets/987651-1223.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/AX88772E_Datasheet_v103.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7692,6 +7706,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/ImportGuides.html": {
+      "description": "HTML document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/KSZ8863MLL-FLL-RLL_DS00002335B.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7710,6 +7731,29 @@
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/KiCADv6/2026-10-17_14-51-28.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/KiCADv6/ImportGuide.html": {
+      "description": "HTML document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/KiCADv6/footprints.pretty/SIL0010D-MFG.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7735,6 +7779,13 @@
       "archived": false
     },
     "avionics/datasheets/MBRD1045CT.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/MED-16x2_000-Solenoid.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7904,6 +7955,13 @@
       "archived": false
     },
     "avionics/datasheets/TG2520SMN_en-2584158.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/TP6x12-DC-Push-Soleniod.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8442,6 +8500,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/readme.txt": {
+      "description": "Text file",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/rfd900x-datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8761,6 +8826,13 @@
       "archived": false
     },
     "avionics/datasheets/ul_1051620001.zip": {
+      "description": "Archived snapshot bundle",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ul_XPSM82822SILR.zip": {
       "description": "Archived snapshot bundle",
       "tags": [
         "avionics-hardware"
@@ -10903,8 +10975,32 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/kicads/freerouting1.ses": {
+      "description": "Specctra session file (autorouter output)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicads/freerouting2.ses": {
+      "description": "Specctra session file (autorouter output)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/kicads/sym-lib-table": {
       "description": "(sym_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicads/temp-freerouting.dsn": {
+      "description": "Specctra design file (autorouter input)",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -13278,6 +13374,13 @@
       ],
       "archived": false
     },
+    "docs/conversation histories/2026-10-17-103355-this-session-is-being-continued-from-a-previous-c.txt": {
+      "description": "Text file",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/electrical_fault_margins.md": {
       "description": "Serenity UAV \u2014 Electrical Fault Margin Validation",
       "tags": [
@@ -14186,6 +14289,14 @@
     },
     "docs/references/POCKETBEAGLE2 V10_241220.DSN": {
       "description": "Specctra design file (autorouter input)",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/PocketBeagle.step": {
+      "description": "3D STEP model",
       "tags": [
         "documentation",
         "specification"
@@ -16954,6 +17065,13 @@
       ],
       "archived": false
     },
+    "tools/stitch_vias.py": {
+      "description": "stitch_vias.py \u2013 place stitching vias every 2.5 mm around the board edge",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_esc80_cooptimize.py": {
       "description": "Tests for tools/esc80_cooptimize.py (WBS NAC-64-ESC-80A).",
       "tags": [
@@ -16993,6 +17111,13 @@
       ],
       "archived": false
     },
+    "tools/try-via-again.py": {
+      "description": "KiCad 9 (kicad-cli) \u2013 perimeter stitching via generator",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/validate_kicad.py": {
       "description": "validate_kicad.py \u2014 KiCad schematic/PCB validator for CI.",
       "tags": [
@@ -17011,6 +17136,20 @@
     },
     "tools/verify_bow_pod.py": {
       "description": "verify_bow_pod.py \u2014 Rev R1 (2026-06-30)",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/via-stitcher.py": {
+      "description": "KiCad 9 \u2013 perimeter stitching via generator",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/via-stitcher2.py": {
+      "description": "KiCad 9 \u2013 perimeter stitching via generator (IPC API)",
       "tags": [
         "build-tooling"
       ],
@@ -17232,6 +17371,7 @@
       "docs/bom_revR.json",
       "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
+      "docs/conversation histories/2026-10-17-103355-this-session-is-being-continued-from-a-previous-c.txt",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
       "docs/flight_envelope.md",
@@ -17343,6 +17483,7 @@
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-edf-glider-nacelle-for-swift-2100-827-50mm.webp",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-model-logo-16966716258.jpg",
       "docs/references/POCKETBEAGLE2 V10_241220.DSN",
+      "docs/references/PocketBeagle.step",
       "docs/references/ST3215 memory register map-EN.xls",
       "docs/references/ST3215-2D.zip",
       "docs/references/ST3215-3D.zip",
@@ -17847,6 +17988,7 @@
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-edf-glider-nacelle-for-swift-2100-827-50mm.webp",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-model-logo-16966716258.jpg",
       "docs/references/POCKETBEAGLE2 V10_241220.DSN",
+      "docs/references/PocketBeagle.step",
       "docs/references/ST3215 memory register map-EN.xls",
       "docs/references/ST3215-2D.zip",
       "docs/references/ST3215-3D.zip",
@@ -20142,6 +20284,8 @@
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/COMMS-HAT-1/COMMS-HAT-1.kicad_sch",
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/TRIHAT-1/TRIHAT-1.kicad_pcb",
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/TRIHAT-1/TRIHAT-1.kicad_sch",
+      "avionics/datasheets/KiCADv6/2026-10-17_14-51-28.kicad_sym",
+      "avionics/datasheets/KiCADv6/footprints.pretty/SIL0010D-MFG.kicad_mod",
       "avionics/datasheets/ul_1040310811/KiCADv6/2026-10-05_14-13-00.kicad_sym",
       "avionics/datasheets/ul_1040310811/KiCADv6/footprints.pretty/104031-0811_MOL.kicad_mod",
       "avionics/kicad/.gitignore",
@@ -20351,7 +20495,10 @@
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sym",
       "avionics/kicad/Pilot/kicads/Pilot.net",
       "avionics/kicad/Pilot/kicads/fp-lib-table",
+      "avionics/kicad/Pilot/kicads/freerouting1.ses",
+      "avionics/kicad/Pilot/kicads/freerouting2.ses",
       "avionics/kicad/Pilot/kicads/sym-lib-table",
+      "avionics/kicad/Pilot/kicads/temp-freerouting.dsn",
       "avionics/kicad/Pilot/scripts/cleanup_pilot_copper.py",
       "avionics/kicad/Pilot/scripts/export_pilot_gerbers.sh",
       "avionics/kicad/Pilot/scripts/fence_pgnd_pilot.py",
@@ -20588,12 +20735,14 @@
       "avionics/datasheets/1040310811_sd.pdf",
       "avionics/datasheets/1051620001.pdf",
       "avionics/datasheets/1051620001_sd.pdf",
+      "avionics/datasheets/2893159.pdf",
       "avionics/datasheets/2N3866_SERIES.PDF",
       "avionics/datasheets/317990687.pdf",
       "avionics/datasheets/6391731564544371956530548.pdf",
       "avionics/datasheets/74438335033.pdf",
       "avionics/datasheets/749010012A.pdf",
       "avionics/datasheets/987651-1223.pdf",
+      "avionics/datasheets/AX88772E_Datasheet_v103.pdf",
       "avionics/datasheets/Bourns_MF-PSMF.pdf",
       "avionics/datasheets/DS3218 datasheet.pdf",
       "avionics/datasheets/DS3225 datasheet.pdf",
@@ -20603,13 +20752,18 @@
       "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf",
       "avionics/datasheets/GRM188Z71A106MA73#_EC-data.pdf",
       "avionics/datasheets/GRM188Z71A106MA73-01A-EN.pdf",
+      "avionics/datasheets/ImportGuides.html",
       "avionics/datasheets/KSZ8863MLL-FLL-RLL_DS00002335B.pdf",
       "avionics/datasheets/KSZ8863_Daughter_Board_DS50002767B.pdf",
       "avionics/datasheets/KSZ9477S-Data-Sheet-DS00002392C.pdf",
+      "avionics/datasheets/KiCADv6/2026-10-17_14-51-28.kicad_sym",
+      "avionics/datasheets/KiCADv6/ImportGuide.html",
+      "avionics/datasheets/KiCADv6/footprints.pretty/SIL0010D-MFG.kicad_mod",
       "avionics/datasheets/L-1038e.A5_phyCORE-AM62x_HW Manual.pdf",
       "avionics/datasheets/MAX-M10S_DataSheet_UBX-20035208.pdf",
       "avionics/datasheets/MAX-M10S_IntegrationManual_UBX-20053088.pdf",
       "avionics/datasheets/MBRD1045CT.pdf",
+      "avionics/datasheets/MED-16x2_000-Solenoid.pdf",
       "avionics/datasheets/MGA-82563-TR1G.pdf",
       "avionics/datasheets/MSASJ168BC6226MTNA01.pdf",
       "avionics/datasheets/MSASJ168BC6226MTNA01_SS.pdf",
@@ -20634,6 +20788,7 @@
       "avionics/datasheets/SRF2012A.pdf",
       "avionics/datasheets/Si5351-B.pdf",
       "avionics/datasheets/TG2520SMN_en-2584158.pdf",
+      "avionics/datasheets/TP6x12-DC-Push-Soleniod.pdf",
       "avionics/datasheets/TPDxE05U06_SLVSBO7O.pdf",
       "avionics/datasheets/TVS-Diode-SMBJ-Datasheet.pdf",
       "avionics/datasheets/TYPE2EL.pdf",
@@ -20710,6 +20865,7 @@
       "avionics/datasheets/pocketbeagle2_sch.pdf",
       "avionics/datasheets/pocketbeagle2_srm.pdf",
       "avionics/datasheets/prtr5v0u2x.pdf",
+      "avionics/datasheets/readme.txt",
       "avionics/datasheets/rfd900x-datasheet.pdf",
       "avionics/datasheets/rfm95w-datasheet.pdf",
       "avionics/datasheets/samtec_ssm-dv_drawing.pdf",
@@ -20756,6 +20912,7 @@
       "avionics/datasheets/ul_1040310811/KiCADv6/footprints.pretty/104031-0811_MOL.kicad_mod",
       "avionics/datasheets/ul_1040310811/readme.txt",
       "avionics/datasheets/ul_1051620001.zip",
+      "avionics/datasheets/ul_XPSM82822SILR.zip",
       "avionics/datasheets/w25q128jv.pdf",
       "avionics/datasheets/wio-e5-datasheet.pdf",
       "avionics/datasheets/wl1837mod.pdf",
@@ -21008,7 +21165,10 @@
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sym",
       "avionics/kicad/Pilot/kicads/Pilot.net",
       "avionics/kicad/Pilot/kicads/fp-lib-table",
+      "avionics/kicad/Pilot/kicads/freerouting1.ses",
+      "avionics/kicad/Pilot/kicads/freerouting2.ses",
       "avionics/kicad/Pilot/kicads/sym-lib-table",
+      "avionics/kicad/Pilot/kicads/temp-freerouting.dsn",
       "avionics/kicad/Pilot/scripts/cleanup_pilot_copper.py",
       "avionics/kicad/Pilot/scripts/export_pilot_gerbers.sh",
       "avionics/kicad/Pilot/scripts/fence_pgnd_pilot.py",
@@ -21519,14 +21679,18 @@
       "tools/prep_nacelle_64_bake.py",
       "tools/purge_stale_fcstd_objects.py",
       "tools/spar_bundle_fit.py",
+      "tools/stitch_vias.py",
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tilt_actuator_options.py",
+      "tools/try-via-again.py",
       "tools/validate_kicad.py",
       "tools/validate_stls.py",
       "tools/verify_bow_pod.py",
+      "tools/via-stitcher.py",
+      "tools/via-stitcher2.py",
       "tools/wing_airfoil_integrity.py",
       "tools/wing_airfoil_variants.py",
       "tools/wing_cfd_openfoam.py",

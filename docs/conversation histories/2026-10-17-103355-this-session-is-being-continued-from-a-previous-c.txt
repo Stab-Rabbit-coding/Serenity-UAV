@@ -1,0 +1,2557 @@
+
+✻ Conversation compacted (ctrl+o for history)
+
+
+● I'll update the generator's floorplan parameters and regenerate the board
+  cleanly, rather than hand-patching the drifted layout, so the generator
+  remains the source of truth. Reading its floorplan section now.
+
+  Read 1 file (ctrl+o to expand)
+  ⎿  Read avionics/kicad/Pilot/scripts/iso_via_windows.py (122 lines)
+  ⎿  Referenced file avionics/kicad/Pilot/scripts/grid_route_pilot.py
+  ⎿  Read ../../../../../../.claude/projects/-home-steve-Documents-Vocation-Empl
+     oyers-Griffing-tech-designs-Serenity-UAV/memory/feedback_freerouting_existi
+     ng_copper.md (33 lines)
+  ⎿  Read avionics/kicad/Pilot/scripts/notch_iso_band.py (109 lines)
+  ⎿  Referenced file ../../../../../../../../tmp/claude-1000/-home-steve-Documen
+     ts-Vocation-Employers-Griffing-tech-designs-Serenity-UAV/276b9551-3ffe-432e
+     -9723-032c85773bb7/scratchpad/gps-notch.html
+
+● Task "Wait until both routing experiments finish" still running in background
+
+● Schematic update for the §13.1 fix is done (4 ferrite beads, split isolated
+  supply nets, 0402 HF caps, ERC clean). Next I'll re-export the netlist, cite
+  the bead datasheet, checkpoint-commit, and begin the re-floorplan.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/kicad/Pilot && kicad-cli sch export netlist --format
+      kicadsexpr -o kicad…)
+  ⎿  Warning: schematic has annotation errors, please use the schematic edi
+     tor to fix them
+     124
+     … +21 lines (ctrl+o to expand)
+  ⎿  1 file changed (binary, mode only or too large to show)
+
+● Bash(git stash -q -- kicads/Pilot.kicad_sch kicads/Pilot.kicad_sym &&
+      kicad-cli sch export netlist --format kicadsexpr -o
+      /tmp/claude-1000/old.net kicads/Pilot.kicad…)
+  ⎿  Warning: schematic has annotation errors, please use the schematic edi
+     tor to fix them
+     Found 0 violations
+     … +39 lines (ctrl+o to expand)
+
+● Annotation warning is pre-existing (same on HEAD); ERC 0. Adding the citation
+  now.
+
+● Bash(cd /tmp/claude-1000 && for u in "https://www.murata.com/en-us/products/pr
+      oductdetail?partno=BLM15EX331SN1%23"
+      "https://datasheet.octopart.com/BLM15EX331SN1D-Mur…)
+  ⎿  HTTP/2 301
+     location: https://pim.murata.com/en-us/pim/details/?partNum=BLM15EX331
+     SN1%23
+     … +7 lines (ctrl+o to expand)
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV && python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿  91:    - [REF-SENSOR-009: TI ISOW1044BDFMR — 5 kVrms Isolated CAN-FD T
+     ransceiver with Integrated Isolated DC-DC](#ref-sensor-009-ti-isow1044
+     bdfmr--5-kvrms-isolated-can-fd-transceiver-with-integrated-isolated-dc
+     … +13 lines (ctrl+o to expand)
+  ⎿  Updated REFERENCES.md (+15 -0)
+      127      - [REF-CONN-001: Samtec TSM series — 0.100in surface-mount
+            terminal strip product data](#ref-conn-001-samtec-tsm-series-
+           -0100in-surface-mount-terminal-strip-product-data)
+      128      - [REF-SENSOR-041: BeagleBoard.org PocketBeagle 2 — System
+            Reference Manual (mechanical: board and header dimensions)](#
+           ref-sensor-041-beagleboardorg-pocketbeagle-2--system-reference
+           -manual-mechanical-board-and-header-dimensions)
+      129      - [REF-SENSOR-042: Samtec SSM / SSW / TSW / TSM — .100 in
+           socket and terminal strips (footprint, drawing, qualification)
+           ](#ref-sensor-042-samtec-ssm--ssw--tsw--tsm--100-in-socket-and
+           -terminal-strips-footprint-drawing-qualification)
+      130 +    - [REF-SENSOR-043: Murata BLM15EX331SN1 — 0402 chip ferrit
+          +e bead specification JENF243A-0023M-01](#ref-sensor-043-murata
+          +-blm15ex331sn1--0402-chip-ferrite-bead-specification-jenf243a-
+          +0023m-01)
+      131  - [Part XIII — Telecommunications Standards](#part-xiii--telec
+           ommunications-standards)
+      132      - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristic
+           s of Generators and Receivers for Use in Balanced Digital Mult
+           ipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrica
+           l-characteristics-of-generators-and-receivers-for-use-in-balan
+           ced-digital-multipoint-systems-rs-485)
+      133  - [Part XIV — Upstream CAD / Derivative-Source Attributions](#
+           part-xiv--upstream-cad--derivative-source-attributions)
+     ...
+      2656
+      2657  ---
+      2658
+      2659 +### REF-SENSOR-043: Murata BLM15EX331SN1 — 0402 chip ferrite
+           +bead specification JENF243A-0023M-01
+      2660 +
+      2661 +| Field | Value |
+      2662 +|---|---|
+      2663 +| **Publisher** | Murata Manufacturing Co., Ltd. (Kyoto, Japa
+           +n) |
+      2664 +| **Product** | BLM15EX331SN1D (BLM15EX series, 0402 / 1005 m
+           +etric, for power lines) |
+      2665 +| **Source** | Reference specification JENF243A-0023M-01, arc
+           +hived at `avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-0
+           +1.pdf` (MD5 f77aaa952ec45d0ddc5e8539b21ad8ca); product page <
+           +https://www.murata.com/en-us/products/productdetail?partno=BL
+           +M15EX331SN1%23> (redirects to pim.murata.com, verified HTTP 2
+           +00 2026-10-12); distributor mirror <https://datasheet.octopar
+           +t.com/BLM15EX331SN1D-Murata-datasheet-180806479.pdf> |
+      2666 +| **Portion applied** | Rating table: impedance 330 Ω ±25 % a
+           +t 100 MHz, 450 Ω ±40 % at 1 GHz; rated current 1.1 A at 85 °C
+           +, 700 mA at 125 °C; DC resistance 0.205 Ω max; operating temp
+           +erature −55 to +125 °C; 0402 (1.0 x 0.5 mm, 0.039 x 0.020 in)
+           + body. |
+      2667 +| **Note** | Part number is the one named by TI ISOW1044 SLLS
+           +FF7A §13.1 item 4 and ISOW1412 SLLSF86C §13.1 [REF-SENSOR-009
+           +] for the beads between VISOOUT and VISOIN and between GND2 a
+           +nd GISOIN. Added 2026-10-12 by Claude Opus 5.5 for the Pilot
+           +§13.1 re-floorplan. |
+      2668 +
+      2669 +**Used in:** `avionics/kicad/Pilot/scripts/gen_pilot_sch.py`
+           +(FB-CAN-V, FB-CAN-G, FB-485-V, FB-485-G), `avionics/kicad/Pil
+           +ot/kicads/Pilot.kicad_sch`.
+      2670 +
+      2671 +---
+      2672 +
+      2673  <!-- REF-SENSOR-022..040 catalogued 2026-09-26 by Claude Opus
+             5.5: these IDs were already cited in board schematics/genera
+            tor scripts but had never been entered here (avionics/WBS.md
+            U7.1). REF-SENSOR-024/031/032/034/035/036 remain uncatalogued
+             (020/021 were catalogued on `main` 2026-09-29) (037, 039 cat
+            alogued 2026-09-27); see Open Standards Verification Items. -
+            ->
+      2674
+      2675  ### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU d
+            ata sheet DS-000347 v1.6
+
+● Bash(grep -n "^### REF.*ISOW1412" REFERENCES.md; git stash -q --
+      REFERENCES.md; npx --no-install markdownlint-cli2 REFERENCES.md 2>&1 |
+      grep -c error; git stash pop…)
+  ⎿  Error: Exit code 1
+     2120:### REF-SENSOR-010: TI ISOW1412 — 5 kVrms Isolated RS-485/RS-422
+     Transceiver with Integrated Isolated DC-DC
+     1762
+     1772
+     (eval):1: no matches found: .markdownlint*
+
+● Bash(sed -i 's/ISOW1412 SLLSF86C §13.1 \[REF-SENSOR-009\]/ISOW1412 SLLSF86C
+      §13.1 [REF-SENSOR-010]/; s/ISOW1044 SLLSFF7A §13.1 item 4 and
+      ISOW1412/ISOW1044 SLLSFF7A…)
+  ⎿  REFERENCES.md:2662:1 error MD060/table-column-style Table column style
+      [Table pipe is missing space to the right for style "compact"]
+     REFERENCES.md:2662:5 error MD060/table-column-style Table column style
+     … +10 lines (ctrl+o to expand)
+  ⎿  Updated REFERENCES.md (+1 -1)
+      2664  | **Product** | BLM15EX331SN1D (BLM15EX series, 0402 / 1005 m
+            etric, for power lines) |
+      2665  | **Source** | Reference specification JENF243A-0023M-01, arc
+            hived at `avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-0
+            1.pdf` (MD5 f77aaa952ec45d0ddc5e8539b21ad8ca); product page <
+            https://www.murata.com/en-us/products/productdetail?partno=BL
+            M15EX331SN1%23> (redirects to pim.murata.com, verified HTTP 2
+            00 2026-10-12); distributor mirror <https://datasheet.octopar
+            t.com/BLM15EX331SN1D-Murata-datasheet-180806479.pdf> |
+      2666  | **Portion applied** | Rating table: impedance 330 Ω ±25 % a
+            t 100 MHz, 450 Ω ±40 % at 1 GHz; rated current 1.1 A at 85 °C
+            , 700 mA at 125 °C; DC resistance 0.205 Ω max; operating temp
+            erature −55 to +125 °C; 0402 (1.0 x 0.5 mm, 0.039 x 0.020 in)
+             body. |
+      2667 -| **Note** | Part number is the one named by TI ISOW1044 SLLS
+           -FF7A §13.1 item 4 and ISOW1412 SLLSF86C §13.1 [REF-SENSOR-009
+           -] for the beads between VISOOUT and VISOIN and between GND2 a
+           -nd GISOIN. Added 2026-10-12 by Claude Opus 5.5 for the Pilot
+           -§13.1 re-floorplan. |
+      2667 +| **Note** | Part number is the one named by TI ISOW1044 SLLS
+           +FF7A §13.1 item 4 [REF-SENSOR-009] and ISOW1412 SLLSF86C §13.
+           +1 [REF-SENSOR-010] for the beads between VISOOUT and VISOIN a
+           +nd between GND2 and GISOIN. Added 2026-10-12 by Claude Opus 5
+           +.5 for the Pilot §13.1 re-floorplan. |
+      2668
+      2669  **Used in:** `avionics/kicad/Pilot/scripts/gen_pilot_sch.py`
+            (FB-CAN-V, FB-CAN-G, FB-485-V, FB-485-G), `avionics/kicad/Pil
+            ot/kicads/Pilot.kicad_sch`.
+      2670
+
+● The |---|---| separator style matches every other entry in the file
+  (pre-existing convention), so the lint noise is unchanged in kind. Committing
+  the schematic checkpoint.
+
+● Bash(flake8 avionics/kicad/Pilot/scripts/gen_pilot_sch.py && git add
+      REFERENCES.md avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf
+      avionics/kicad/Pilot/scri…)
+  ⎿  avionics/kicad/Pilot/scripts/gen_pilot_sch.py:67:101: E501 line too lo
+     ng (130 > 100 characters)
+     avionics/kicad/Pilot/scripts/gen_pilot_sch.py:269:101: E501 line too l
+     … +157 lines (ctrl+o to expand)
+
+● The generator file was already over 100 columns throughout on HEAD; I'll check
+  that my edit added no new lint failures, then commit.
+
+● Bash(git show HEAD:avionics/kicad/Pilot/scripts/gen_pilot_sch.py | flake8
+      --stdin-display-name x - | grep -v E501 | wc -l; git show
+      HEAD:avionics/kicad/Pilot/scripts…)
+  ⎿  0
+     112
+     0
+     … +2 lines (ctrl+o to expand)
+
+● Bash(git diff -U0 avionics/kicad/Pilot/scripts/gen_pilot_sch.py | grep -n '^+'
+      | awk 'length>104')
+  ⎿  30:+    ("C-CAN4", "10nF", FP_C0402, "", "ISOW1044 VISOOUT HF bypass,
+     0402 within 1 mm (SLLSFF7A 13.1 item 1)",
+     35:+     "ISOW1044 VISOOUT->VISOIN bead (SLLSFF7A 13.1 item 4; Murata
+     … +9 lines (ctrl+o to expand)
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/kicad/Pilot && sed -i 's/; Murata JENF243A-0023M-01)
+      \[REF-SENSOR-043\]/…)
+  ⎿  Wrote /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/S
+     erenity-UAV/avionics/kicad/Pilot/kicads/Pilot.kicad_sch
+       parts: 124   pins: 599   columns: 7
+     … +9 lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/scripts/gen_pilot_sch.py (+6 -6)
+      592      ("C-CAN1", "10nF", FP_C0201, "", "ISOW1044 VDD HF bypass (
+           <1 mm) §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
+      593      ("C-CAN2", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VDD bul
+           k §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
+      594      ("C-CAN3", "100nF", FP_C0402, "", "ISOW1044 VIO bypass", [
+           ("1", "P", "+3V3"), ("2", "N", "GND")]),
+      595 -    ("C-CAN4", "10nF", FP_C0402, "", "ISOW1044 VISOOUT HF bypa
+          -ss, 0402 within 1 mm (SLLSFF7A 13.1 item 1)",
+      595 +    ("C-CAN4", "10nF", FP_C0402, "", "ISOW1044 VISOOUT HF bypa
+          +ss, 0402 <1 mm (SLLSFF7A 13.1 #1)",
+      596       [("1", "P", "VCC2_CAN_DCDC"), ("2", "N", "GND2_CAN_DCDC")
+           ]),
+      597      ("C-CAN5", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VISOOUT
+            bulk, 2-4 mm (SLLSFF7A 13.1 item 2)",
+      598       [("1", "P", "VCC2_CAN_DCDC"), ("2", "N", "GND2_CAN_DCDC")
+           ]),
+      599      ("FB-CAN-V", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+      600 -     "ISOW1044 VISOOUT->VISOIN bead (SLLSFF7A 13.1 item 4; Mur
+          -ata JENF243A-0023M-01) [REF-SENSOR-043]",
+      600 +     "ISOW1044 VISOOUT->VISOIN bead (SLLSFF7A 13.1 item 4) [RE
+          +F-SENSOR-043]",
+      601       [("1", "A", "VCC2_CAN_DCDC"), ("2", "B", "VCC2_CAN")]),
+      602      ("FB-CAN-G", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+      603 -     "ISOW1044 GND2(11)->GISOIN(15) bead (SLLSFF7A 13.1 item 4
+          -; Murata JENF243A-0023M-01) [REF-SENSOR-043]",
+      603 +     "ISOW1044 GND2(11)->GISOIN(15) bead (SLLSFF7A 13.1 item 4
+          +) [REF-SENSOR-043]",
+      604       [("1", "A", "GND2_CAN_DCDC"), ("2", "B", "GND2_CAN")]),
+      605      ("C-CAN6", "100nF", FP_C0402, "", "ISOW1044 VISOIN bypass"
+           , [("1", "P", "VCC2_CAN"), ("2", "N", "GND2_CAN")]),
+      606      ("CMC-CAN", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "
+           SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
+     ...
+      619      ("C-485-1", "10nF", FP_C0201, "", "ISOW1412 VDD HF bypass"
+           , [("1", "P", "+5V"), ("2", "N", "GND")]),
+      620      ("C-485-2", "10uF 10V X5R", FP_C0805, "", "ISOW1412 VDD bu
+           lk", [("1", "P", "+5V"), ("2", "N", "GND")]),
+      621      ("C-485-3", "100nF", FP_C0402, "", "ISOW1412 VIO bypass",
+           [("1", "P", "+3V3"), ("2", "N", "GND")]),
+      622 -    ("C-485-4", "10nF", FP_C0402, "", "ISOW1412 VISOOUT HF byp
+          -ass, 0402 <1 mm (SLLSF86C 13.1 item 1)",
+      622 +    ("C-485-4", "10nF", FP_C0402, "", "ISOW1412 VISOOUT HF byp
+          +ass, 0402 <1 mm (SLLSF86C 13.1 #1)",
+      623       [("1", "P", "VCC2_RS485_DCDC"), ("2", "N", "GND2_RS485_DC
+           DC")]),
+      624      ("C-485-5", "10uF 10V X5R", FP_C0805, "", "ISOW1412 VISOOU
+           T bulk (SLLSF86C 13.1 item 2)",
+      625       [("1", "P", "VCC2_RS485_DCDC"), ("2", "N", "GND2_RS485_DC
+           DC")]),
+      626      ("FB-485-V", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+      627 -     "ISOW1412 VISOOUT->VISOIN bead (SLLSF86C 13.1 item 4; Mur
+          -ata JENF243A-0023M-01) [REF-SENSOR-043]",
+      627 +     "ISOW1412 VISOOUT->VISOIN bead (SLLSF86C 13.1 item 4) [RE
+          +F-SENSOR-043]",
+      628       [("1", "A", "VCC2_RS485_DCDC"), ("2", "B", "VCC2_RS485")]
+           ),
+      629      ("FB-485-G", "330R@100MHz", FP_L0402, "BLM15EX331SN1D",
+      630 -     "ISOW1412 GND2(11)->GISOIN(15) bead (SLLSF86C 13.1 item 4
+          -; Murata JENF243A-0023M-01) [REF-SENSOR-043]",
+      630 +     "ISOW1412 GND2(11)->GISOIN(15) bead (SLLSF86C 13.1 item 4
+          +) [REF-SENSOR-043]",
+      631       [("1", "A", "GND2_RS485_DCDC"), ("2", "B", "GND2_RS485")]
+           ),
+      632      ("C-485-6", "100nF", FP_C0402, "", "ISOW1412 VISOIN bypass
+           ", [("1", "P", "VCC2_RS485"), ("2", "N", "GND2_RS485")]),
+      633      ("CMC-RS485", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA",
+            "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
+  ⎿  Updated avionics/kicad/Pilot/kicads/Pilot.kicad_sch (+12 -12)
+      779        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      780        (property "Value" "10nF" (at 0 -3.81 0) (effects (font (
+           size 1.27 1.27))))
+      781        (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+           (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      782 -      (property "Datasheet" "ISOW1044 VISOOUT HF bypass, 0402
+          -within 1 mm (SLLSFF7A 13.1 item 1)" (at 0 0 0) (effects (font
+          -(size 1.27 1.27)) (hide yes)))
+      782 +      (property "Datasheet" "ISOW1044 VISOOUT HF bypass, 0402
+          +<1 mm (SLLSFF7A 13.1 #1)" (at 0 0 0) (effects (font (size 1.27
+          + 1.27)) (hide yes)))
+      783        (symbol "S_C-CAN4_0_1"
+      784          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      785        )
+     ...
+      805        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      806        (property "Value" "330R@100MHz" (at 0 -3.81 0) (effects
+           (font (size 1.27 1.27))))
+      807        (property "Footprint" "Inductor_SMD:L_0402_1005Metric" (
+           at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      808 -      (property "Datasheet" "ISOW1044 VISOOUT->VISOIN bead (SL
+          -LSFF7A 13.1 item 4; Murata JENF243A-0023M-01) [REF-SENSOR-043]
+          -" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      808 +      (property "Datasheet" "ISOW1044 VISOOUT->VISOIN bead (SL
+          +LSFF7A 13.1 item 4) [REF-SENSOR-043]" (at 0 0 0) (effects (fon
+          +t (size 1.27 1.27)) (hide yes)))
+      809        (symbol "S_FB-CAN-V_0_1"
+      810          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      811        )
+     ...
+      818        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      819        (property "Value" "330R@100MHz" (at 0 -3.81 0) (effects
+           (font (size 1.27 1.27))))
+      820        (property "Footprint" "Inductor_SMD:L_0402_1005Metric" (
+           at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      821 -      (property "Datasheet" "ISOW1044 GND2(11)->GISOIN(15) bea
+          -d (SLLSFF7A 13.1 item 4; Murata JENF243A-0023M-01) [REF-SENSOR
+          --043]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))
+          -)
+      821 +      (property "Datasheet" "ISOW1044 GND2(11)->GISOIN(15) bea
+          +d (SLLSFF7A 13.1 item 4) [REF-SENSOR-043]" (at 0 0 0) (effects
+          + (font (size 1.27 1.27)) (hide yes)))
+      822        (symbol "S_FB-CAN-G_0_1"
+      823          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      824        )
+     ...
+      959        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      960        (property "Value" "10nF" (at 0 -3.81 0) (effects (font (
+           size 1.27 1.27))))
+      961        (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+           (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      962 -      (property "Datasheet" "ISOW1412 VISOOUT HF bypass, 0402
+          -<1 mm (SLLSF86C 13.1 item 1)" (at 0 0 0) (effects (font (size
+          -1.27 1.27)) (hide yes)))
+      962 +      (property "Datasheet" "ISOW1412 VISOOUT HF bypass, 0402
+          +<1 mm (SLLSF86C 13.1 #1)" (at 0 0 0) (effects (font (size 1.27
+          + 1.27)) (hide yes)))
+      963        (symbol "S_C-485-4_0_1"
+      964          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      965        )
+     ...
+      985        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      986        (property "Value" "330R@100MHz" (at 0 -3.81 0) (effects
+           (font (size 1.27 1.27))))
+      987        (property "Footprint" "Inductor_SMD:L_0402_1005Metric" (
+           at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      988 -      (property "Datasheet" "ISOW1412 VISOOUT->VISOIN bead (SL
+          -LSF86C 13.1 item 4; Murata JENF243A-0023M-01) [REF-SENSOR-043]
+          -" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      988 +      (property "Datasheet" "ISOW1412 VISOOUT->VISOIN bead (SL
+          +LSF86C 13.1 item 4) [REF-SENSOR-043]" (at 0 0 0) (effects (fon
+          +t (size 1.27 1.27)) (hide yes)))
+      989        (symbol "S_FB-485-V_0_1"
+      990          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      991        )
+     … 56 more lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/kicads/Pilot.kicad_sym (+6 -6)
+      751        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      752        (property "Value" "10nF" (at 0 -3.81 0) (effects (font (
+           size 1.27 1.27))))
+      753        (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+           (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      754 -      (property "Datasheet" "ISOW1044 VISOOUT HF bypass, 0402
+          -within 1 mm (SLLSFF7A 13.1 item 1)" (at 0 0 0) (effects (font
+          -(size 1.27 1.27)) (hide yes)))
+      754 +      (property "Datasheet" "ISOW1044 VISOOUT HF bypass, 0402
+          +<1 mm (SLLSFF7A 13.1 #1)" (at 0 0 0) (effects (font (size 1.27
+          + 1.27)) (hide yes)))
+      755        (symbol "S_C-CAN4_0_1"
+      756          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      757        )
+     ...
+      777        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      778        (property "Value" "330R@100MHz" (at 0 -3.81 0) (effects
+           (font (size 1.27 1.27))))
+      779        (property "Footprint" "Inductor_SMD:L_0402_1005Metric" (
+           at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      780 -      (property "Datasheet" "ISOW1044 VISOOUT->VISOIN bead (SL
+          -LSFF7A 13.1 item 4; Murata JENF243A-0023M-01) [REF-SENSOR-043]
+          -" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      780 +      (property "Datasheet" "ISOW1044 VISOOUT->VISOIN bead (SL
+          +LSFF7A 13.1 item 4) [REF-SENSOR-043]" (at 0 0 0) (effects (fon
+          +t (size 1.27 1.27)) (hide yes)))
+      781        (symbol "S_FB-CAN-V_0_1"
+      782          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      783        )
+     ...
+      790        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      791        (property "Value" "330R@100MHz" (at 0 -3.81 0) (effects
+           (font (size 1.27 1.27))))
+      792        (property "Footprint" "Inductor_SMD:L_0402_1005Metric" (
+           at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      793 -      (property "Datasheet" "ISOW1044 GND2(11)->GISOIN(15) bea
+          -d (SLLSFF7A 13.1 item 4; Murata JENF243A-0023M-01) [REF-SENSOR
+          --043]" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))
+          -)
+      793 +      (property "Datasheet" "ISOW1044 GND2(11)->GISOIN(15) bea
+          +d (SLLSFF7A 13.1 item 4) [REF-SENSOR-043]" (at 0 0 0) (effects
+          + (font (size 1.27 1.27)) (hide yes)))
+      794        (symbol "S_FB-CAN-G_0_1"
+      795          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      796        )
+     ...
+      931        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      932        (property "Value" "10nF" (at 0 -3.81 0) (effects (font (
+           size 1.27 1.27))))
+      933        (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+           (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      934 -      (property "Datasheet" "ISOW1412 VISOOUT HF bypass, 0402
+          -<1 mm (SLLSF86C 13.1 item 1)" (at 0 0 0) (effects (font (size
+          -1.27 1.27)) (hide yes)))
+      934 +      (property "Datasheet" "ISOW1412 VISOOUT HF bypass, 0402
+          +<1 mm (SLLSF86C 13.1 #1)" (at 0 0 0) (effects (font (size 1.27
+          + 1.27)) (hide yes)))
+      935        (symbol "S_C-485-4_0_1"
+      936          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      937        )
+     ...
+      957        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      958        (property "Value" "330R@100MHz" (at 0 -3.81 0) (effects
+           (font (size 1.27 1.27))))
+      959        (property "Footprint" "Inductor_SMD:L_0402_1005Metric" (
+           at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      960 -      (property "Datasheet" "ISOW1412 VISOOUT->VISOIN bead (SL
+          -LSF86C 13.1 item 4; Murata JENF243A-0023M-01) [REF-SENSOR-043]
+          -" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      960 +      (property "Datasheet" "ISOW1412 VISOOUT->VISOIN bead (SL
+          +LSF86C 13.1 item 4) [REF-SENSOR-043]" (at 0 0 0) (effects (fon
+          +t (size 1.27 1.27)) (hide yes)))
+      961        (symbol "S_FB-485-V_0_1"
+      962          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      963        )
+     … 8 more lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/kicads/Pilot.net (+25 -25)
+      1  (export (version "E")
+      2    (design
+      3      (source "/home/steve/Documents/Vocation/Employers/Griffing.t
+         ech/designs/Serenity-UAV/avionics/kicad/Pilot/kicads/Pilot.kicad
+         _sch")
+      4 -    (date "2026-10-12T05:42:04-0400")
+      4 +    (date "2026-10-12T05:43:45-0400")
+      5      (tool "Eeschema 9.0.2+dfsg-1")
+      6      (sheet (number "1") (name "/") (tstamps "/")
+      7        (title_block
+     ...
+      203      (comp (ref "C-485-4")
+      204        (value "10nF")
+      205        (footprint "Capacitor_SMD:C_0402_1005Metric")
+      206 -      (datasheet "ISOW1412 VISOOUT HF bypass, 0402 <1 mm (SLLS
+          -F86C 13.1 item 1)")
+      206 +      (datasheet "ISOW1412 VISOOUT HF bypass, 0402 <1 mm (SLLS
+          +F86C 13.1 #1)")
+      207        (fields
+      208          (field (name "MPN"))
+      209          (field (name "Footprint") "Capacitor_SMD:C_0402_1005Me
+           tric")
+      210 -        (field (name "Datasheet") "ISOW1412 VISOOUT HF bypass,
+          - 0402 <1 mm (SLLSF86C 13.1 item 1)")
+      210 +        (field (name "Datasheet") "ISOW1412 VISOOUT HF bypass,
+          + 0402 <1 mm (SLLSF86C 13.1 #1)")
+      211          (field (name "Description")))
+      212        (libsource (lib "Pilot") (part "S_C-485-4") (description
+            ""))
+      213        (property (name "MPN") (value ""))
+     ...
+      443      (comp (ref "C-CAN4")
+      444        (value "10nF")
+      445        (footprint "Capacitor_SMD:C_0402_1005Metric")
+      446 -      (datasheet "ISOW1044 VISOOUT HF bypass, 0402 within 1 mm
+          - (SLLSFF7A 13.1 item 1)")
+      446 +      (datasheet "ISOW1044 VISOOUT HF bypass, 0402 <1 mm (SLLS
+          +FF7A 13.1 #1)")
+      447        (fields
+      448          (field (name "MPN"))
+      449          (field (name "Footprint") "Capacitor_SMD:C_0402_1005Me
+           tric")
+      450 -        (field (name "Datasheet") "ISOW1044 VISOOUT HF bypass,
+          - 0402 within 1 mm (SLLSFF7A 13.1 item 1)")
+      450 +        (field (name "Datasheet") "ISOW1044 VISOOUT HF bypass,
+          + 0402 <1 mm (SLLSFF7A 13.1 #1)")
+      451          (field (name "Description")))
+      452        (libsource (lib "Pilot") (part "S_C-CAN4") (description
+           ""))
+      453        (property (name "MPN") (value ""))
+     ...
+      1088      (comp (ref "FB-485-G")
+      1089        (value "330R@100MHz")
+      1090        (footprint "Inductor_SMD:L_0402_1005Metric")
+      1091 -      (datasheet "ISOW1412 GND2(11)->GISOIN(15) bead (SLLSF86
+           -C 13.1 item 4; Murata JENF243A-0023M-01) [REF-SENSOR-043]")
+      1091 +      (datasheet "ISOW1412 GND2(11)->GISOIN(15) bead (SLLSF86
+           +C 13.1 item 4) [REF-SENSOR-043]")
+      1092        (fields
+     … 127 more lines (ctrl+o to expand)
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV && kicad-cli sch erc --format json -o /tmp/claude-1000/erc.json
+      avionics/kicad/Pi…)
+  ⎿  Saved ERC Report to /tmp/claude-1000/erc.json
+     precommit_kicad_load: 1 KiCad file(s) load OK.
+     … +45 lines (ctrl+o to expand)
+  ⎿  Updated tools/index_tags.json (+9 -1)
+      1  {
+      2 -  "generated": "2026-10-11",
+      2 +  "generated": "2026-10-12",
+      3    "files": {
+      4      ".clang-format": {
+      5        "description": "clang-format configuration for the Serenit
+         y UAV firmware sources.",
+     ...
+      7720        ],
+      7721        "archived": false
+      7722      },
+      7723 +    "avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf
+           +": {
+      7724 +      "description": "PDF document",
+      7725 +      "tags": [
+      7726 +        "avionics-hardware"
+      7727 +      ],
+      7728 +      "archived": false
+      7729 +    },
+      7730      "avionics/datasheets/PCA9555.pdf": {
+      7731        "description": "PDF document",
+      7732        "tags": [
+     ...
+      20277        "avionics/datasheets/MBRD1045CT.pdf",
+      20278        "avionics/datasheets/MGA-82563-TR1G.pdf",
+      20279        "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf",
+      20280 +      "avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.
+            +pdf",
+      20281        "avionics/datasheets/PCA9555.pdf",
+      20282        "avionics/datasheets/PESD5V0F1BL.pdf",
+      20283        "avionics/datasheets/PESD5V0X1BL.pdf",
+  ⎿  … 1 more file changed
+
+● Schematic checkpoint committed (d1196555). Now the PCB: first a snapshot of
+  what currently sits in the bottom half of the board, where the isolators,
+  connectors and GPS will move.
+
+● Bash(ls avionics/kicad/Pilot/scripts/optimize/
+      avionics/kicad/Pilot/kicads/Pilot-backups/ | head -40; sed -n 1,40p
+      avionics/kicad/Pilot/scripts/optimize/dump_place.p…)
+  ⎿  avionics/kicad/Pilot/kicads/Pilot-backups/:
+     total 15M
+     -rw-rw-r-- 1 steve steve  142K Sep 20 13:18 Pilot-2026-09-20_131816.zi
+     … +76 lines (ctrl+o to expand)
+
+● Bash(cd avionics/kicad/Pilot/scripts/optimize && echo '[]' >
+      /tmp/claude-1000/nomoves.json && python3 dump_place.py
+      /tmp/claude-1000/nomoves.json /tmp/claude-1000/pl…)  ⎿  Error: Exit code 1
+                        ^^^^^^^^
+     AttributeError: 'list' object has no attribute 'get'
+     Traceback (most recent call last):
+       File "<string>", line 2, in <module>
+         import json;d=json.load(open('/tmp/claude-1000/place.json'))
+                                 ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     FileNotFoundError: [Errno 2] No such file or directory:
+     '/tmp/claude-1000/place.json'
+
+● Bash(cd avionics/kicad/Pilot/scripts/optimize && echo '{"moves":[]}' >
+      /tmp/claude-1000/nomoves.json && head -c 300 placement_moves.json; echo;
+      python3 dump_place.py…)
+  ⎿  {"moves": {"C-485-1": {"x": 143.46, "y": 103.45, "rot": 0.0, "side": "
+     B"}, "C-CAN4": {"x": 130.43, "y": 112.75, "rot": 180.0, "side": "B"},
+     "C-CAN1": {"x": 130.95, "y": 101.35, "rot": 90.0, "side": "F"}, "C-50M
+     … +4 lines (ctrl+o to expand)
+
+● Bash(echo '{"moves":{}}' > /tmp/claude-1000/nomoves.json && python3
+      dump_place.py /tmp/claude-1000/nomoves.json /tmp/claude-1000/place.json
+      2>&1 | grep -v -e assert…)
+  ⎿  wrote /tmp/claude-1000/place.json
+     dict_keys(['fps', 'pads', 'band', 'edge'])
+     R-PGND       B  123.25  113.75 r  -90  cy 122.3,112.0-124.2,115.5  R_0
+     … +105 lines (ctrl+o to expand)
+
+● The isolators are already upright (rot −90). Next I'm getting the pin 11/12
+  positions and listing everything inside the 4 mm bubble on every layer.
+
+● Bash(python3 -c "
+      import json;d=json.load(open('/tmp/claude-1000/place.json'))…)
+  ⎿  {'ref': 'RS485', 'num': '1', 'net': '+3V3', 'x': 154.715, 'y': 103.45,
+      'drill': 0.0}
+     {'ref': 'RS485', 'num': '9', 'net': '+5V', 'x': 144.555, 'y': 103.45,
+     … +27 lines (ctrl+o to expand)
+
+● The isolators are already upright, but pins 11/12 at the bottom-left of each
+  chip put the 4mm bubble over the PB2-P2 rail pads, connectors, and GPS. Before
+  finalizing a placement, I'll map out both board faces.
+
+● Bash(cd /tmp/claude-1000 && /usr/bin/python3 - <<'EOF'
+      import json, matplotlib…)
+  ⎿  ok
+
+  Read 1 file (ctrl+o to expand)
+
+● The map confirms both 4mm metal-free bubbles must fit in the narrow
+  y≈100.9–109.2 mm strip between PB2's rail pads, requiring clearing parts of
+  the buck/IMU/1553 cluster. I'll check what apply_moves supports to quickly
+  evaluate a scripted floorplan.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/kicad/Pilot/scripts/optimize && cat eval_placement.py | sed
+      -n 1,200p)
+  ⎿  #!/usr/bin/env python3
+     """eval_placement.py — Measurement harness for the Pilot placement opt
+     imisation loop.
+     … +197 lines (ctrl+o to expand)
+
+● apply_moves can only flip 2-pad passives. Since the floorplan will flip and
+  rotate multi-pad parts, I'll test whether the pcbnew binding can
+  move/flip/save safely on a stripped copy.
+
+● Bash(mkdir -p /tmp/claude-1000/fp && cd /tmp/claude-1000/fp && python3 -
+      <<'EOF' 2>&1 | grep -v -e "^swig" | tail -20
+      import sys…)
+  ⎿  05:47:31: Debug: Adding duplicate image handler for 'PNG file'
+     05:47:31: Debug: Adding duplicate image handler for 'JPEG file'
+     05:47:31: Debug: Adding duplicate image handler for 'TIFF file'
+     … +14 lines (ctrl+o to expand)
+
+● Rotating CAN-TR by 180° puts pin 11 at the top-left with the isolated column
+  facing west, the orientation I need. Next I'll list all parts on the isolated
+  nets along with their connections.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/kicad/Pilot && python3 - <<'EOF'
+      import sys…)
+  ⎿  Error: Exit code 1
+     Traceback (most recent call last):
+       File "<stdin>", line 11, in <module>
+       File "<string>", line 16, in read_netlist
+     NameError: name 'sexp' is not defined
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/kicad/Pilot && python3 - <<'EOF'
+      import re…)
+  ⎿  C-485-4    C_0402_1005Metric    1:VCC2_RS485_DCDC 2:GND2_RS485_DCDC
+     C-485-5    C_0805_2012Metric    1:VCC2_RS485_DCDC 2:GND2_RS485_DCDC
+     C-485-6    C_0402_1005Metric    1:VCC2_RS485 2:GND2_RS485
+     … +29 lines (ctrl+o to expand)
+
+● I've drafted the isolated-domain netlist and spotted a potential clearance
+  issue: PWR-IN pads sit close to pins 11/12 with the isolated column facing
+  west. I'll now sweep isolator positions, checking pad-edge to metal-edge
+  clearance on every layer for the fixed parts.
+
+● Bash(cd /tmp/claude-1000/fp && python3 - <<'EOF' 2>&1 | grep -v Debug
+      import pcbnew, json…)
+  ⎿  H3 1 PGND F TH [122.2, 117.7, 125.8, 121.3]
+     J-ANT 1 GPS_RF F  [125.03, 95.5, 126.08, 96.5]
+     J-ANT 2 GND F  [122.92, 96.95, 125.12, 98.0]
+     … +26 lines (ctrl+o to expand)
+
+❯ If possible,  add pgnd stitching vias along the entire perimeter of the board
+  to improve the emi
+
+● Noted: PGND perimeter stitching. I'll add it as a step after the re-floorplan,
+  since placement decides where vias fit. First, a quick check of what PGND
+  copper the board has today.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/kicad/Pilot && python3 - <<'EOF'
+      import re…)
+  ⎿  ISO_BAND |  | "F.Cu" "In1.Cu" "In2.Cu" "In3.Cu" "In4.Cu" | (xy 128.3 1
+     11) (xy 137.6 111) (xy 137.6 105.5) (xy 155.9 105.5) (xy 155.9 122) (x
+     y 128.3 122)
+     … +33 lines (ctrl+o to expand)
+
+● PGND currently only exists at mounting holes and shield pads, so I'll add a
+  perimeter PGND ring with vias routed around the PB2 rail pads after placement
+  settles but before routing. Since the bubble analysis shows the 3V3 buck,
+  IMU/BARO, 1553 transceiver, and GPS all need to move, I'm now reviewing the
+  generator's placer to decide whether to drive this re-floorplan through it.
+
+● Bash(sed -n 1,57p scripts/gen_pilot_pcb.py; sed -n 377,560p
+      scripts/gen_pilot_pcb.py)
+  ⎿  #!/usr/bin/env python3
+     """gen_pilot_pcb.py — Build the Pilot (CAPE-A-2) PCB from the schemati
+     c netlist.
+     … +238 lines (ctrl+o to expand)
+
+● I've hit a hard limit and need your decision before moving parts. First, I'll
+  verify which middle rail pads are unconnected and check whether the ISOW1412
+  datasheet permits its isolated output to power an external load.
+
+● Bash(cd /tmp/claude-1000/fp && python3 -c "
+      import json;d=json.load(open('pads.json'))…)
+  ⎿  PB2-P1 1:GND@126.9 2:GND@126.9 3:DSHOT3@129.4 4:DSHOT2@129.4 5:DSHOT1@
+     132.0 6:DSHOT0@132.0 7:M1553_IRQN@134.5 8:M1553_MRN@134.5 9:M1553_TX_I
+     NH@137.1 10:NC@137.1 11:RS485_DE@139.6 12:RS485_RX@139.6 13:RS485_TX@1
+     … +17 lines (ctrl+o to expand)
+
+● Bash(pdftotext -layout /home/steve/Documents/Vocation/Employers/Griffing.tech/
+      designs/Serenity-UAV/avionics/datasheets/isow1412.pdf i1412.txt && grep -n
+      -i -E "exter…)
+  ⎿  (No output)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(sed -n 335,360p i1412.txt; grep -n -i "MODE" i1412.txt | sed -n 1,30p)  ⎿   RL               Differential load resistance on bus
+                                           54
+     Ω
+     … +79 lines (ctrl+o to expand)
+
+● A strict §13.1 layout won't fit the current board: only one narrow strip
+  qualifies for the isolation bubbles, the isolators already fill the full
+  width, seven existing parts (3V3 buck, IMU, BARO, GPS, 1553 transceiver, TVS
+  diodes) would need to be displaced with nowhere to relocate them, and sharing
+  one isolated supply across the CAN transceiver isn't viable per the ISOW1412
+  datasheet. I'm pausing before moving any parts so you can decide how to
+  proceed.
+
+● User answered Claude's questions:
+  ⎿  · Strict §13.1 doesn't fit with the current parts. Which way should I go? →
+     Currently,  there are 2 round GPS antenna mounts on the roof of the cargo
+     bay.  Can each of these be a puck that thas a bus gateway? Is there enough
+     room?  If so, then moving the gpd off the board makes sense.
+
+● You're asking whether each cargo-roof GPS mount could hold a puck with its own
+  bus gateway. To answer, I'll look up the mount geometry and the gateway board
+  size in the repo.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV && grep -rli "gps" --include=*.scad --include=*.py --include=*.md
+      airframe tools…)
+  ⎿  (eval):1: no matches found: --include=*.scad
+
+● Bash(git ls-files | grep -v -i -e archive -e datasheet | grep -E
+      "\.(scad|py|md)$" | xargs grep -li "gps" 2>/dev/null | head -50)
+  ⎿  CLAUDE-MEMORY.md
+     PROJECT_INDEX.md
+     REFERENCES.md
+     … +47 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Found the mounts are Ø36 mm × 6 mm flush recesses for a 35 mm patch antenna
+  with an SMA bore, and the bus gateway outline measures 49.0 × 25.5 mm. Next
+  I'll check what the gateway carries and how much clearance exists behind each
+  mount inside the cargo roof.
+
+● Bash(sed -n 1,60p avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md; sed -n
+      200,260p avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md)
+  ⎿  # CAN-PERIPH-GW-1 — TPM-Secured Dual-Isolated-Bus (CAN-FD + RS-485) Pe
+     ripheral Gateway
+     … +118 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(sed -n 205,300p tools/cargo_layout_fit.py; grep -n -i "gps"
+      tools/cargo_layout_fit.py)
+  ⎿  # shoulder's curve-in; Y 55..97.9 overlaps the aft node N2's Y band, s
+     o N2's
+     # outboard face moved to X -113.85 (N_AFT_XC).  Grid-searched 2026-09-
+     … +94 lines (ctrl+o to expand)
+
+● Checking the cargo-roof geometry under the two GPS mounts to see if a puck
+  with GPS, MCU, secure element, and isolated CAN fits behind each antenna. I'm
+  reading how the layout checker models the GPS cups so I can test the volume
+  against the hull, battery, winch, and cradle.
+
+● Bash(sed -n 395,440p airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad;
+      grep -n -i "gps" airframe/blender-scripts/merge_cargo_interior.py | head;
+      grep -n -E "…)
+  ⎿  // the nadir/dorsal distinction, so it is dropped, not reused.)
+     CARGO_CAM_POS = [ CX, CY, NADIR_Z_EXT ];   // VERIFY in slicer before
+     printing
+     … +80 lines (ctrl+o to expand)
+
+● Bash(sed -n 985,1130p tools/cargo_layout_fit.py; sed -n 1082,1100p
+      airframe/blender-scripts/merge_cargo_interior.py)
+  ⎿  def report(L, shell_tm, plot=False):
+         shell = to_man(shell_tm)
+         solids = {}
+     … +154 lines (ctrl+o to expand)
+
+● Bash(mkdir -p /tmp/claude-1000/puck && cd /tmp/claude-1000/puck && cat >
+      puck_fit.py <<'EOF'
+      """Scratch: how tall a GPS+gateway puck fits under each T5 dorsal GPS cu…)
+  ⎿  Traceback (most recent call last):
+       File "/tmp/claude-1000/puck/puck_fit.py", line 21, in <module>
+         z_skin = float(np.asarray(loc).reshape(-1, 3)[0, 2])
+     … +2 lines (ctrl+o to expand)
+
+● Bash(sed -i 's/np.array(\[\[x, y, 200.0\]\])/np.array([[x + 12.0, y,
+      200.0]])/' puck_fit.py && /usr/bin/python3 puck_fit.py 2>&1 | tail -20)
+  ⎿  station X-135.0 Y92.0: skin Z 149.1, cup underside Z 140.1
+     Traceback (most recent call last):
+       File "/tmp/claude-1000/puck/puck_fit.py", line 24, in <module>
+     … +4 lines (ctrl+o to expand)
+
+● Bash(python3 - <<'EOF'
+      p = "puck_fit.py"…)
+  ⎿  station X-135.0 Y92.0: skin Z 149.1, cup underside Z 146.1
+        O40 cyl              max height    0 mm below the cup
+        40x40 box            max height    0 mm below the cup
+     … +7 lines (ctrl+o to expand)
+
+● Status: running a clearance sweep in the cargo shell model to see how tall a
+  puck fits under each GPS cup. The first pass flagged the cup's own floor, so
+  I'm starting the volume 1.5 mm below it.
+
+● Bash(python3 - <<'EOF'
+      p = "puck_fit.py"…)
+  ⎿  station X-135.0 Y92.0: skin Z 149.1, cup underside Z 144.6
+        O40 cyl              h    2 blocked by the shell/skin (1 mm gap)
+        O40 cyl              max height    0 mm below the cup
+     … +15 lines (ctrl+o to expand)
+
+● Bash(cat > puck_plot.py <<'EOF'
+      import sys…)
+  ⎿  (No output)
+
+  Read 1 file (ctrl+o to expand)
+
+● The sections confirm each GPS cup is a Ø40 mm boss on the roof skin with clear
+  space below down to the winch drum and cable zone—the earlier "blocked"
+  result was just the test volume grazing the outboard wall curve. I'll re-run
+  the check with smaller pucks.
+
+● Bash(python3 - <<'EOF'
+      p = "puck_fit.py"…)
+  ⎿  station X-135.0 Y92.0: skin Z 149.1, cup underside Z 144.6
+        O36 cyl              h    1 blocked by the shell/skin (1 mm gap)
+        O36 cyl              max height    0 mm below the cup
+     … +15 lines (ctrl+o to expand)
+
+● Bash(cat > probe.py <<'EOF'
+      import sys…)
+  ⎿  station X-135.0 Y92.0: lowest ceiling (first shell hit going UP from Z
+      100) on a 2 mm grid
+             dX   -24   -20   -16   -12    -8    -4    +0    +4    +8   +12
+     … +35 lines (ctrl+o to expand)
+
+● The cup underside is flat at Z 146 out to ~16 mm radius, with the wall
+  dropping outboard (Z 137–142) and the battery-cradle aft hanger sitting about
+  20 mm inboard-forward. I'll now run one more sweep to confirm diameter, centre
+  offset, and height.
+
+● Bash(cat > sweep.py <<'EOF'
+      import sys…)  ⎿  station X-135.0 Y92.0
+       O30 inboard 0 mm: max  0 mm deep (stops on skin)
+       O30 inboard 2 mm: max  0 mm deep (stops on skin)
+     … +17 lines (ctrl+o to expand)
+
+● Status: still sizing a GPS puck for the cargo-roof mounts. The clearance check
+  fails even on tiny volumes, which smells like a measurement artifact, so I'm
+  finding where the cup floor actually sits.
+
+● Bash(grep -n "def dilate" -A8 /home/steve/Documents/Vocation/Employers/Griffin
+      g.tech/designs/Serenity-UAV/tools/cargo_layout_fit.py; cat > z.py <<'EOF'
+      import sys…)
+  ⎿  101:def dilate(tm, d):
+     102-    """Cheap dilation: scale about the centroid so every face move
+     s out by
+     … +10 lines (ctrl+o to expand)
+
+● Bash(sed -i 's/^Z_TOP = 146.1 - 1.0 .*/Z_TOP = 146.05 - 1.2        # 1.2 mm
+      under the cup floor underside (146.05-146.10)/' sweep.py &&
+      /usr/bin/python3 sweep.py)
+  ⎿  station X-135.0 Y92.0
+       O30 inboard 0 mm: max  0 mm deep (stops on cradle aft hanger 1)
+       O30 inboard 2 mm: max  0 mm deep (stops on cradle aft hanger 1)
+     … +17 lines (ctrl+o to expand)
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV && grep -n "cradle aft hanger" -B12 tools/cargo_layout_fit.py | head
+      -40)
+  ⎿  (No output)
+
+● Bash(grep -n "hanger" tools/cargo_layout_fit.py | head; sed -n 480,500p
+      tools/cargo_layout_fit.py; /usr/bin/python3 -c "
+      import sys; sys.path.insert(0,'tools')…)
+  ⎿  228:CRADLE_FWD_BOSS_Y = -50.0  # roof hangers, chin roof (Z ~143)
+     229:CRADLE_AFT_BOSS_Y = 80.0  # roof hangers (roof Z ~161)
+     483:            L[f"cradle {tag} hanger {i}"] = dict(
+     … +26 lines (ctrl+o to expand)
+
+● Bash(cd /tmp/claude-1000/puck && python3 - <<'EOF'
+      t = open("sweep.py").read()…)
+  ⎿  station X-135.0 Y92.0
+       O30 inboard +0 aft +4 mm: max  0 mm deep (stops on skin)
+       O30 inboard -2 aft +4 mm: max  0 mm deep (stops on skin)
+     … +29 lines (ctrl+o to expand)
+
+● I confirmed each cup has usable volume (Ø28×8 mm, offset 4 mm aft) clear of
+  the battery-cradle hanger, outboard wall, and aft-node cable zone with proper
+  clearances, and the Ø36×6 mm recess above the floor remains open for the patch
+  antenna. Next I'll check whether the Pilot's ISOW1044 can power a puck
+  through the CAN connector's VCC2 pin.
+
+● Bash(cd /tmp/claude-1000/fp && grep -n -i -E "extra current|external
+      load|available on VISO|VISOIN.*load|load.*VISO" i1044.txt | head; grep -n
+      -i "Ambient operating…)
+  ⎿  372:    PD2          Maximum power dissipation by (side-2)        Extr
+     a load on VISOOUT= 20 mA
+          570      mW
+     … +14 lines (ctrl+o to expand)
+
+● Bash(sed -n 528,545p i1044.txt; sed -n 2028,2045p i1044.txt)
+  ⎿  8.9 Electrical Characteristics
+     over recommended operating conditions, typical values are at VDD = 5V,
+      GND1 = GNDIO, GND2 = GISOIN, VIO = 3.3 V and
+     … +46 lines (ctrl+o to expand)
+
+● Yes, the GPS/electronics fit within the T5 cup envelopes with required
+  clearances, and the component budget fits a Ø28 mm board using both faces.
+  However, I'd skip the ISOW1044 in the puck (insufficient bus power, extra
+  space/noise near the antenna) and instead use a non-isolated CAN-FD
+  transceiver with local 5 V power, keeping isolation at the Pilot/XO ends.
+
+● User answered Claude's questions:
+  ⎿  · Go ahead with GPS pucks and remove the MAX-M10S from Pilot? → Yes, but
+     isolated puck
+
+● Noted the decision for isolated pucks with ISOW1044 — I'll flag the puck
+  fit/§13.1 bubble question as an open WBS item rather than resolving it now,
+  and move on to removing the GPS chain from the Pilot schematic.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/kicad/Pilot && grep -n -E "GPS|ANT"
+      scripts/gen_pilot_sch.py | head -40)
+  ⎿  14:* 2026-07-14 (Claude Opus 4.8) — first pass: CAN-TR, RS485, TPM, GP
+     S.
+     265:        "ref": "GPS",
+     … +24 lines (ctrl+o to expand)
+
+● Bash(sed -n 1,40p scripts/gen_pilot_sch.py; sed -n 255,300p
+      scripts/gen_pilot_sch.py; sed -n 525,545p scripts/gen_pilot_sch.py; sed -n
+      700,720p scripts/gen_pilot_sch…)
+  ⎿  #!/usr/bin/env python3
+     """gen_pilot_sch.py — Author the datasheet-accurate Pilot (CAPE-A-2) s
+     chematic.
+     … +125 lines (ctrl+o to expand)
+
+● Bash(python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿  14:* 2026-07-14 (Claude Opus 4.8) — first pass: CAN-TR, RS485, TPM, GP
+     S.
+     77:  MAX-M10S, its bias-T (R-ANT / C-ANT / L-ANT), U.FL J-ANT and C-GP
+     … +12 lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/scripts/gen_pilot_sch.py (+10 -48)
+      73  Author: Claude Opus 4.8 (2026-07-14); Claude Opus 5 (2026-07-28
+          , 2026-09-19);
+      74  Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap).
+      75  Human owner: sgriffing (Griffing Technology LLC).  License: CC
+          BY 4.0.
+      76 +* 2026-10-12 (Claude Opus 5.5) — GNSS moved OFF the cape (owner
+         + decision): the
+      77 +  MAX-M10S, its bias-T (R-ANT / C-ANT / L-ANT), U.FL J-ANT and
+         +C-GPS1/2 are
+      78 +  removed and P1-31/32 (UART) + P2-9/10 (RESET_N / TIMEPULSE) b
+         +ecome NC.  The
+      79 +  two dorsal GPS cups get isolated CAN-FD GPS pucks instead (av
+         +ionics/WBS.md).
+      80 +  Reason: two ISOW §13.1 4 mm metal-free bubbles [REF-SENSOR-00
+         +9/010] do not
+      81 +  fit the 55 x 35 mm cape with the GPS aboard.  The same pass a
+         +dds the §13.1
+      82 +  ferrite beads and splits the DC-DC output nets (see FB-CAN-*
+         +/ FB-485-*).
+      83  """
+      84
+      85  from __future__ import annotations
+     ...
+      268              ("31", "NCI", None, "R"),
+      269          ],
+      270      },
+      264 -    {
+      265 -        "ref": "GPS",
+      266 -        "value": "MAX-M10S-00B",
+      267 -        "fp": "RF_GPS:ublox_MAX",
+      268 -        "mpn": "MAX-M10S-00B",
+      269 -        "ds": "MAX-M10S_DataSheet_UBX-20035208.pdf §3.1 Fig 2
+          -/ Table 10 (18-pin LCC) [REF-SENSOR-027]",
+      270 -        # External-antenna receiver: the nodes fly inside Fara
+          -day pouches in the
+      271 -        # cargo bay with the GNSS patch antennas in the dorsal
+          - cups
+      272 -        # (CARGO_SECTION_LAYOUT.md, AVIONICS_PB2_REDESIGN.md "
+          -GPS-ANT U.FL ->
+      273 -        # SMA bulkhead"), so the earlier integrated-patch SAM-
+          -M10Q could never
+      274 -        # see the sky.  Typical 3.3 V design (integration manu
+          -al B.1 Fig 35):
+      275 -        # VCC = V_IO = +3V3, VIO_SEL open, V_BCKP on +3V3 (no
+          -backup cell),
+      276 -        # active antenna fed from VCC_RF through the 10 R / 27
+          - nH bias-T
+      277 -        # (integration manual Fig 37, Tables 52-54).
+      278 -        "pins": [
+      279 -            ("8", "VCC", "+3V3", "L"),
+      280 -            ("7", "V_IO", "+3V3", "L"),
+      281 -            ("6", "V_BCKP", "+3V3", "L"),
+      282 -            ("2", "TXD", "UART_GPS_TX", "L"),
+      283 -            ("3", "RXD", "UART_GPS_RX", "L"),
+      284 -            ("4", "TIMEPULSE", "GPS_TIMEPULSE", "L"),
+      285 -            ("9", "RESET_N", "GPS_RESETN", "L"),
+      286 -            ("5", "EXTINT", None, "L"),
+      287 -            ("18", "SAFEBOOT_N", None, "L"),
+     … 45 more lines (ctrl+o to expand)
+  ⎿  … 3 more files changed
+
+● Bash(python3 -c "
+      import json;d=json.load(open('/tmp/claude-1000/erc.json'));v=[x for s in
+      d['sheets'] for x in s['violations']];print('ERC',len(v),
+      [x['description'…)
+  ⎿  ERC 0 []
+       ECS-2520MV ECS-2520MV.pdf p.1 |
+       X2Y (Yageo CX0805) X2Y_15-2237598.pdf Table 3.
+     … +26 lines (ctrl+o to expand)
+
+● Bash(sed -n 40,69p scripts/gen_pilot_sch.py)
+  ⎿        HI-6138 BC/RT/MT protocol engine with on-chip transceiver (QFN-4
+     8 6x6,
+           host SPI0, DS6138 Rev S) replaces the HI-1573 + AM6254 PRU Manch
+     … +28 lines (ctrl+o to expand)
+
+● Status: the schematic now drops the onboard GPS chain (117 parts, ERC 0). I'm
+  tidying the generator's history note before committing.
+
+● Bash(python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿      - PGND<->GND single-point 0 R link, mounting holes on PGND (Pilot.
+     md §7).
+         - GPIO ports + J_ESC/J_SERVO replaced by ONE 3x6 servo/ESC header
+     … +19 lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/scripts/gen_pilot_sch.py (+9 -9)
+      58      - PGND<->GND single-point 0 R link, mounting holes on PGND
+          (Pilot.md §7).
+      59      - GPIO ports + J_ESC/J_SERVO replaced by ONE 3x6 servo/ESC
+          header on the
+      60        PRU DSHOT0-3 / SERVO0-1 balls (PWM/DSHOT-capable), PCA955
+          5 removed.
+      61 +* 2026-10-12 (Claude Opus 5.5) — GNSS moved OFF the cape (owner
+         + decision): the
+      62 +  MAX-M10S, its bias-T (R-ANT / C-ANT / L-ANT), U.FL J-ANT and
+         +C-GPS1/2 are
+      63 +  removed and P1-31/32 (UART) + P2-9/10 (RESET_N / TIMEPULSE) b
+         +ecome NC.  The
+      64 +  two dorsal GPS cups get isolated CAN-FD GPS pucks instead (av
+         +ionics/WBS.md).
+      65 +  Reason: two ISOW §13.1 4 mm metal-free bubbles [REF-SENSOR-00
+         +9/010] do not
+      66 +  fit the 55 x 35 mm cape with the GPS aboard.  The same pass a
+         +dds the §13.1
+      67 +  ferrite beads and splits the DC-DC output nets (see FB-CAN-*
+         +/ FB-485-*).
+      68
+      69  Datasheets (all in ``avionics/datasheets/``; OEM documents are
+          authoritative
+      70  per ``avionics/AGENTS.md``):
+      71    ISOW1044BDFMR isow1044.pdf Table 7-1 | ISOW1412DFMR isow1412.
+          pdf Table 7-1 |
+      65 -  SLB9672 slb9672.pdf §3.1.2 | MAX-M10S MAX-M10S_DataSheet_UBX-
+         -20035208.pdf §3.1 |
+      72 +  SLB9672 slb9672.pdf §3.1.2 | BLM15EX331SN1D Murata_BLM15EX_JE
+         +NF243A-0023M-01.pdf |
+      73    DP83825I dp83825i.pdf Table 4-1/6-8..6-11, Fig 8-3/8-4 | 7490
+          10012A 749010012A.pdf p.1 |
+      74    HI-6138 hi-6138_v-rev-s.pdf p.1/Table 1/§29 | PM-DB2791S Prem
+          ierMagnetics_DB2791S.pdf | Samtec TSM samtec_tsm-dv-footprint.p
+          df |
+      75    ICM-42688-P ds-000347 Table 10 | BMP388 bst-bmp388-ds001.pdf
+          Table 50 |
+     ...
+      78    X2Y (Yageo CX0805) X2Y_15-2237598.pdf Table 3.
+      79
+      80  Author: Claude Opus 4.8 (2026-07-14); Claude Opus 5 (2026-07-28
+          , 2026-09-19);
+      74 -Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap).
+      81 +Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap; 2026-10-12, §1
+         +3.1 beads + GNSS off-board).
+      82  Human owner: sgriffing (Griffing Technology LLC).  License: CC
+          BY 4.0.
+      76 -* 2026-10-12 (Claude Opus 5.5) — GNSS moved OFF the cape (owner
+         - decision): the
+      77 -  MAX-M10S, its bias-T (R-ANT / C-ANT / L-ANT), U.FL J-ANT and
+         -C-GPS1/2 are
+      78 -  removed and P1-31/32 (UART) + P2-9/10 (RESET_N / TIMEPULSE) b
+         -ecome NC.  The
+      79 -  two dorsal GPS cups get isolated CAN-FD GPS pucks instead (av
+         -ionics/WBS.md).
+      80 -  Reason: two ISOW §13.1 4 mm metal-free bubbles [REF-SENSOR-00
+         -9/010] do not
+      81 -  fit the 55 x 35 mm cape with the GPS aboard.  The same pass a
+         -dds the §13.1
+      82 -  ferrite beads and splits the DC-DC output nets (see FB-CAN-*
+         -/ FB-485-*).
+      83  """
+      84
+      85  from __future__ import annotations
+  ⎿  Updated avionics/kicad/Pilot/kicads/Pilot.net (+1 -1)
+      1  (export (version "E")
+      2    (design
+      3      (source "/home/steve/Documents/Vocation/Employers/Griffing.t
+         ech/designs/Serenity-UAV/avionics/kicad/Pilot/kicads/Pilot.kicad
+         _sch")
+      4 -    (date "2026-10-12T06:18:26-0400")
+      4 +    (date "2026-10-12T06:18:49-0400")
+      5      (tool "Eeschema 9.0.2+dfsg-1")
+      6      (sheet (number "1") (name "/") (tstamps "/")
+      7        (title_block
+
+● Now the WBS entries: the isolated GPS puck (new work item) and the Pilot §13.1
+  re-floorplan with the PGND fence.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV && grep -n -E "^#{1,4} " avionics/WBS.md | sed -n 1,80p; grep -n -i
+      -E "13\.1|Pil…)
+  ⎿  1:# Serenity UAV — Avionics (Pilot / XO / Commo Cape Hardware) Work Br
+     eakdown Structure (Detail)
+     18:## §1.2 — PCB Design: Pilot and Cape-B-1 (archived)
+     … +15 lines (ctrl+o to expand)
+
+● Bash(sed -n 395,440p avionics/WBS.md; grep -n -i "pilot" avionics/WBS.md | sed
+      -n 1,60p | grep -E "\[ \]|^[0-9]+:#" )
+  ⎿  - [ ] **Finish Pilot PCB (CAPE-A-2) close-out pass:**
+         - [ ] Verify every external-facing connector (SERVO-PWM, ESC-PWM,
+     MIL-1553, CAN-FD,
+     … +59 lines (ctrl+o to expand)
+
+● Bash(sed -n 1500,1560p avionics/WBS.md)  ⎿        (LPS3015 series per Table 3; the exact 1.5 uH Coilcraft ordering
+      code is to be confirmed —
+           the vendor site is unreachable from the build environment). No 2
+     … +75 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(sed -n 550,575p WBS.md; ls tools/gen_todo_from_wbs.py && python3
+      tools/gen_todo_from_wbs.py --help 2>&1 | head -15)
+  ⎿  - [x] Add an ESC-PWM output connector for DSHOT0–3.
+     - [ ] Reconcile Pilot.md §14 field-connector table with the actual P…
+     - [ ] Wire the MIL-1553 connector + transformer.
+     … +34 lines (ctrl+o to expand)
+
+● Bash(grep -rln "…" tools/*.py | head; sed -n 1,30p WBS.md | head -30)
+  ⎿  tools/precommit_index.py
+     tools/wing_cfd_openfoam.py
+     tools/gen_todo_from_wbs.py
+     … +31 lines (ctrl+o to expand)
+
+● Status: adding the GPS-puck and §13.1 re-floorplan work items to the avionics
+  WBS (detail) and the master index, then regenerating the TODO files.
+
+● Bash(python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿  ok       graphical-build-guide/flight-phases/TODO.md  (139 open)
+     ok       gcs/TODO.md  (35 open)
+     ok       deferred/TODO.md  (49 open)
+     … +10 lines (ctrl+o to expand)
+  ⎿  Updated avionics/WBS.md (+32 -0)
+      404          Commo's +5V boundary, §1.2/§1.3 Phase 3).
+      405      - [ ] Verify isolation caps/creepage moat (0.5 mm `ISOLATI
+           ON`) are intact after the
+      406          per-domain tamper-mesh rework (§1.2, "Redesign the tam
+           per mesh").
+      407 +- [ ] **Pilot ISOW §13.1 compliance re-floorplan (owner 2026-1
+          +0-12: §13.1 is binding).**
+      408 +    TI SLLSFF7A §13.1 p. 36 [REF-SENSOR-009] / SLLSF86C §13.1
+          +p. 41 [REF-SENSOR-010]: 10 nF
+      409 +    0402 < 1 mm from VISOOUT (12) / GND2 (11), bulk >= 10 uF 2
+          +-4 mm away, BLM15EX331SN1 beads
+      410 +    VISOOUT->VISOIN and GND2->GISOIN [REF-SENSOR-043], and **n
+          +o metal traces or ground pour
+      411 +    within 4 mm of pins 11/12 on any layer**. Analysis 2026-10
+          +-12 (Claude Opus 5.5): the B.Cu
+      412 +    PB2 rail pads (inner rows end y 96.6 / 113.4 mm) leave one
+          + strip where the bubbles can sit,
+      413 +    and PWR-IN's THT pads + T-ETH2 leave ~0 mm spare across it
+          +, so the two 4 mm bubbles displace
+      414 +    the 3V3 buck, IMU/BARO, GPS and the 1553 transceiver. Owne
+          +r chose to move GNSS off the cape
+      415 +    (next item). Measured from pad edge to metal edge (conserv
+          +ative).
+      416 +    - [x] Schematic: four beads, split `*_DCDC` nets, 0402 HF
+          +caps, MODE -> GND2 (d1196555).
+      417 +    - [x] Schematic: MAX-M10S, bias-T, J-ANT, C-GPS1/2 removed
+          +; P1-31/32, P2-9/10 NC.
+      418 +    - [ ] PCB: both isolators rot 180 (isolated column west, p
+          +ins 11/12 at the top), pin 11
+      419 +        x >= 130.4 mm (PWR-IN THT clearance), RS485 centre x ~
+          +150.2 mm (T-ETH2 clearance).
+      420 +    - [ ] PCB: re-place buck, IMU/BARO, 1553-XCVR/TVS/X-50M ou
+          +tside both bubbles; re-draw the
+      421 +        ISO_BAND, GND2 islands and plane cut-outs; bubble rule
+          + areas + DRC rule.
+      422 +    - [ ] PCB: PGND perimeter ring + stitching-via fence (owne
+          +r 2026-10-12, EMI), gapped at the
+      423 +        PB2 rail pads, the bubbles and the isolated band.
+      424 +    - [ ] PCB: re-route (plane vias first, grid router + rip-u
+          +p), DRC 0, parity 0.
+      425 +    - [ ] Pilot.md, PROJECT_INDEX, memory updated; device tree
+          + drops the GPS UART.
+      426 +- [ ] **Isolated CAN-FD GPS pucks for the two dorsal GPS cups
+          +(owner 2026-10-12).** Replaces the
+      427 +    on-cape MAX-M10S (previous item). Each puck: patch antenna
+          + in the existing O36 x 6 mm flush
+      428 +    recess; electronics board under the cup floor through the
+          +O6.5 mm SMA bore. Envelope check
+      429 +    2026-10-12 (scratch run of `tools/cargo_layout_fit.py` geo
+          +metry, Claude Opus 5.5): **O28 mm x
+      430 +    8 mm** fits under each cup centred 4 mm aft of the station
+          + (X -135 / -205, Y 96), 1 mm to the
+      431 +    skin, 2 mm to the battery-cradle aft hanger and the aft-no
+          +de cable zone; O30 does not fit.
+      432 +    - [ ] Owner chose an **isolated** puck (ISOW1044 in the pu
+          +ck). Prove it fits: ISOW1044
+      433 +        SOIC-20W + its own §13.1 4 mm bubble + MAX-M10S + MSPM
+          +0G3518 + OPTIGA Trust M + LDO +
+      434 +        GH connector on a O28 mm board, and keep the isolated
+          +DC-DC away from the GNSS front end.
+      435 +    - [ ] Power: the Pilot's ISOW1044 offers only 20 mA extra
+          +on VISOOUT (SLLSFF7A §8.9), so each
+      436 +        puck needs its own 5 V feed from the cargo rail (harne
+          +ss + connector pinout).
+      437 +    - [ ] Add the puck as a fleet trust-module node (§1.9.2):
+          +own MCU + secure element.
+      438 +    - [ ] Schematic, PCB, enclosure/cup adapter, `tools/cargo_
+          +layout_fit.py` envelope + gate.
+      439  - [ ] **Add SBUS/UART DIP switch to Pilot** — add a 2-position
+            DIP (or solder-jumper
+      440      pair) to select SBUS vs. plain UART framing on the existin
+           g J_SBUS-equivalent
+      441      pad, matching the J_SBUS line item already in Pilot.md §14
+           's field-connector
+  ⎿  Updated WBS.md (+2 -0)
+      555  - [ ] Route the rearranged capes.
+      556  - [ ] Clear residual DRC after mesh + routing
+      557  - [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
+      558 +- [ ] Pilot ISOW §13.1 compliance re-floorplan (2026-10-12)
+      559 +- [ ] Isolated CAN-FD GPS pucks for the two dorsal GPS cups
+      560  - [ ] Add SBUS/UART DIP switch to Pilot
+      561  - [ ] Generate Pilot gerbers
+      562  - [ ] Generate XO gerbers
+  ⎿  Updated TODO.md (+3 -1)
+      2
+      3  **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+      4  **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4
+         .0 (SPDX-License-Identifier: CC-BY-SA-4.0)
+      5 -**Last updated:** 2026-10-07
+      5 +**Last updated:** 2026-10-12
+      6
+      7  > **This file lists only currently-open (unchecked) tasks — one
+         line each,
+      8  > <=70 chars, no prose — for a fast "what's actually left" view.
+         ** Every
+     ...
+      251  - [ ] Route the rearranged capes.
+      252  - [ ] Clear residual DRC after mesh + routing
+      253  - [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
+      254 +- [ ] Pilot ISOW §13.1 compliance re-floorplan (2026-10-12)
+      255 +- [ ] Isolated CAN-FD GPS pucks for the two dorsal GPS cups
+      256  - [ ] Add SBUS/UART DIP switch to Pilot
+      257  - [ ] Generate Pilot gerbers
+      258  - [ ] Generate XO gerbers
+  ⎿  Updated avionics/TODO.md (+2 -0)
+      57  - [ ] Route the rearranged capes
+      58  - [ ] Clear residual DRC after mesh + routing (counts measured
+          2026-06-12…
+      59  - [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
+      60 +- [ ] Pilot ISOW §13.1 compliance re-floorplan (owner 2026-10-1
+         +2
+      61 +- [ ] Isolated CAN-FD GPS pucks for the two dorsal GPS cups (ow
+         +ner…
+      62  - [ ] Add SBUS/UART DIP switch to Pilot — add a 2-position DIP
+          (or…
+      63  - [ ] Generate Pilot gerbers — the 2026-09-19 schematic-first R
+          ev T…
+      64  - [ ] Generate XO/TACCO gerbers — a `gerbers/TACCO/` set exists
+           but its…
+
+● Bash(git add TODO.md WBS.md avionics/TODO.md avionics/WBS.md
+      avionics/kicad/Pilot/kicads/Pilot.kicad_sch
+      avionics/kicad/Pilot/kicads/Pilot.kicad_sym avionics/kicad/P…)
+  ⎿  RESULT: PASS with warnings — 4 STL re-export(s) pending
+     3f55d588 Pilot sch: GNSS off-board for ISOW §13.1 (117 parts, ERC 0);
+     WBS puck item
+
+● Committed (3f55d588). Saving the decision to memory, then the PCB
+  re-floorplan.
+
+  Wrote 1 memory (ctrl+o to expand)
+
+● Bash(cd /home/steve/.claude/projects/-home-steve-Documents-Vocation-Employers-
+      Griffing-tech-designs-Serenity-UAV/memory && echo "- [Pilot §13.1 binding
+      → GNSS pucks…)
+  ⎿  - [Pilot §13.1 binding → GNSS pucks (2026-10-12)](project_pilot_isow_1
+     3_1_gnss_puck.md) — 4 mm all-layer bubble only fits between PB2 rails;
+      GPS off-cape to ISOLATED CAN pucks (O28x8 under each cup, fit unprove
+     n); PGND fence wanted
+  ⎿  Shell cwd was reset to /home/steve/Documents/Vocation/Employers/Griffi
+     ng.tech/designs/Serenity-UAV
+
+● Memory saved — now moving to the PCB work. I'm writing refloorplan_pilot.py in
+  stages: Stage 1 syncs a stripped board copy to the new netlist (dropping the
+  GPS chain, swapping in 0402 HF caps, adding the four beads, re-netting pads)
+  and rotates the isolators 180° to get real pad positions.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/kicad/Pilot && grep -n "def \|^[A-Z_]* = "
+      scripts/repair_pilot_routing.…)
+  ⎿  37:MOVES = {"ETH1": (172.7, None), "C-P2-A3": (166.9, None)}
+     39:RIP_TYPES = {"hole_to_hole", "track_width", "connection_width", "cl
+     earance", "hole_clearance",
+     … +21 lines (ctrl+o to expand)
+
+● Write(/tmp/claude-1000/fp/sync.py)
+  ⎿  Wrote 56 lines to ../../../../../../../../tmp/claude-1000/fp/sync.py
+       1 """Scratch stage 1: sync the stripped Pilot board to the 2026-10
+         -12 netlist."""
+       3 import sys
+       4 from pathlib import Path
+       5
+       7
+       8 PILOT = Path("/home/steve/Documents/Vocation/Employers/Griffing.
+         tech/designs/Serenity-UAV/avionics/kicad/Pilot")
+      10 g = {"re": re, "List": list, "Dict": dict, "Tuple": tuple, "NETL
+         IST": PILOT / "kicads/Pilot.net"}
+     … +54 lines (ctrl+o to expand)
+
+● Bash(cd /tmp/claude-1000/fp && python3 sync.py strip.kicad_pcb
+      synced.kicad_pcb 2>&1 | grep -v Debug | tail -3)
+  ⎿  swig/python detected a memory leak of type 'FOOTPRINT *', no destructo
+     r found.
+     swig/python detected a memory leak of type 'FOOTPRINT *', no destructo
+     … +3 lines (ctrl+o to expand)
+  ⎿  You've hit your session limit · resets 10:30am (America/New_York)
+     /upgrade to increase your usage limit.
+
+❯ continue
+
+● Bash(python3 sync.py strip.kicad_pcb synced.kicad_pcb 2>&1 | grep -E
+      "^removed|Error|Traceback" ; ls -la synced.kicad_pcb; grep -c
+      "pilot_isow_13_1" /home/steve/.cla…)
+  ⎿  removed ['C-ANT', 'C-GPS1', 'C-GPS2', 'GPS', 'J-ANT', 'L-ANT', 'R-ANT'
+     ] loaded ['C-485-4', 'C-CAN4', 'FB-485-G', 'FB-485-V', 'FB-CAN-G', 'FB
+     -CAN-V']
+     … +2 lines (ctrl+o to expand)
+
+● The board sync completed successfully: 7 GPS-chain parts removed, 2 HF caps
+  re-footprinted, and 4 beads added. Next, I'll run the evaluator to apply the
+  placement table and check for courtyard overlaps, foreign metal in the 4 mm
+  bubbles, edge violations, and B-side height clashes, then generate the map.
+
+● Write(/tmp/claude-1000/fp/place.py)
+  ⎿  Wrote 124 lines to ../../../../../../../../tmp/claude-1000/fp/place.py
+       1 """Scratch stage 2: apply a placement table to synced.kicad_pcb
+         and check it.
+       2
+       3 Usage: python3 place.py table.json out.kicad_pcb [png]
+       4 table.json: {"REF": [x, y, rot, "F"|"B"], ...}
+       6 import json
+       7 import math
+       8 import sys
+       9
+      10 import pcbnew
+     … +149 lines (ctrl+o to expand)
+
+● Bash(python3 - <<'EOF'
+      t = open("place.py").read()…)
+  ⎿  courtyard F: C-TPM2 x C-TPM1
+     courtyard F: MIL-1553 x R-1553P
+     courtyard F: FB-485-V x FB-485-G
+     … +148 lines (ctrl+o to expand)
+
+● I'll shift pins 11/12 down ~0.35mm to clear the J-PWM bottom pads and move
+  RS485 ~0.15mm east to clear CAN-TR's logic pads, then re-check the map.
+
+● Bash(echo '{"CAN-TR": [135.1, 107.1, 180, "F"], "RS485": [150.5, 107.1, 180,
+      "F"]}' > t0.json && python3 place.py t0.json t0.kicad_pcb t0.png 2>&1 |
+      grep -v -e Debug…)
+  ⎿  courtyard F: RS485 x C-BST
+     courtyard F: RS485 x C-50M
+     courtyard F: RS485 x IMU
+     … +5 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● Status: the strict layout works for the two isolators themselves. The open
+  question is whether every displaced part has somewhere to go, so I'm doing an
+  area budget before hand-placing anything.
+
+● Bash(python3 - <<'EOF'
+      import json…)
+  ⎿  bubble area each side (both bubbles) 248
+     courtyard sum F 1435 B 475
+     usable F 1669  usable B 838
+     density F 86%  B 57%
+
+● The area budget confirms the strict layout should fit overall (~73% usable
+  area on both sides), though B-side space under the isolators is tight. I'll
+  re-check the exact §13.1 wording on bulk-cap distance before hand-placing the
+  isolated caps and beads.
+
+  Searched for 1 pattern (ctrl+o to expand)
+❯ commit your work periodically and don't forget to update the docs
+
+● Noted the §13.1 constraints I'd missed: a 10 nF HF cap also needed on VDD (pin
+  9) within 1 mm, and the ≥10 µF bulk cap at 2–4 mm applies to both VDD and
+  VISOOUT—CAN-TR's HF cap will go just north of pin 10 given its layout.
+  Updating Pilot.md with these decisions now, then committing.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/kicad/Pilot && grep -n -i -E
+      "gps|gnss|max-m10|13\.1|bubble|ferrite|^#"…)
+  ⎿  1:# Pilot — Flight Control & Sensor Cape
+     10:**Update 2026-10-11 (ISO_BAND GPS notch, S. Griffing decision after
+      creepage review;
+     … +23 lines (ctrl+o to expand)
+
+● Bash(sed -n 1,30p Pilot.md; sed -n 88,100p Pilot.md; sed -n 205,265p Pilot.md)
+  ⎿  # Pilot — Flight Control & Sensor Cape
+
+     **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+     … +118 lines (ctrl+o to expand)
+
+● Bash(python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿  markdownlint-cli2 v0.22.1 (markdownlint v0.40.0)
+     Finding: Pilot.md
+     Linting: 1 file(s)
+     … +7 lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/Pilot.md (+42 -6)
+       7  **Date:** 2026-10-06
+       8  **Status:** Schematic and PCB unified from one generator; ERC 0
+          , DRC 0, fully placed on 6 layers on the corrected 4.80 mm SMT
+          rails (2026-10-06). **Routing not yet complete** (see "Routing
+          status" below).
+       9
+      10 +**Update 2026-10-12 (ISOW §13.1 made binding, GNSS moved off th
+         +e cape; S. Griffing decisions,
+      11 +analysis and implementation by Claude Opus 5.5).** The schemati
+         +c is ahead of the PCB until the
+      12 +re-floorplan below lands (branch `pilot-refloorplan`).
+      13 +- **§13.1 is binding.** TI ISOW1044 SLLSFF7A §13.1 p. 36 [REF-S
+         +ENSOR-009] and ISOW1412
+      14 +  SLLSF86C §13.1 p. 41 [REF-SENSOR-010] require:
+      15 +  - a 10 nF 0402 cap within 1 mm of VDD and of VISOOUT;
+      16 +  - a ≥ 10 µF bulk cap after it, at 2–4 mm;
+      17 +  - symmetric supply/ground traces up to those caps;
+      18 +  - BLM15EX331SN1 beads from VISOOUT to VISOIN and from GND2 (p
+         +in 11) to GISOIN
+      19 +    [REF-SENSOR-043];
+      20 +  - "no metal traces or ground pour within 4 mm of" VISOOUT (pi
+         +n 12) and GND2 (pin 11).
+      21 +
+      22 +  This board reads the last item as covering every layer, measu
+         +red from pad edge to metal
+      23 +  edge.
+      24 +- **Schematic (done, ERC 0).**
+      25 +  - Four beads `FB-CAN-V/G` and `FB-485-V/G` added.
+      26 +  - The converter side now has its own nets: `VCC2_*_DCDC` and
+         +`GND2_*_DCDC`.
+      27 +  - `C-CAN4` and `C-485-4` move from 0201 to 0402.
+      28 +  - ISOW1412 MODE (pin 13) is tied to GND2 per §13.1.
+      29 +  - The MAX-M10S, its bias-T (`R-ANT`, `C-ANT`, `L-ANT`), `J-AN
+         +T` and `C-GPS1/2` are removed.
+      30 +  - P1-31/32 (GPS UART) and P2-9/10 (GPS RESET_N / TIMEPULSE) a
+         +re now NC.
+      31 +  - Result: 117 parts.
+      32 +- **Why GNSS left.** The 4 mm bubbles can only sit in the strip
+         + between the B.Cu PB2 rail pads
+      33 +  (inner rows end at y 96.6 mm and 113.4 mm). Across that strip
+         +, PWR-IN's THT pads and T-ETH2
+      34 +  leave about 0 mm to spare beside the two isolators. The bubbl
+         +es displace the 3V3 buck,
+      35 +  IMU/BARO, the GPS and the 1553 transceiver, and on 55 × 35 mm
+         + there was no room for all of
+      36 +  them. The two dorsal GPS cups get **isolated CAN-FD GPS pucks
+         +** instead (owner choice;
+      37 +  `avionics/WBS.md`). Each cup has room for a Ø28 mm × 8 mm boa
+         +rd under the cup floor, which
+      38 +  was measured against the T5 cargo shell.
+      39 +- **PGND perimeter fence (owner request, 2026-10-12).** A PGND
+         +ring with stitching vias along
+      40 +  the edge, gapped at the PB2 rail pads, the bubbles and the is
+         +olated band. To be added after
+      41 +  placement and before routing.
+      42 +- **PCB (in progress).** Both isolators go to rot 180, which pu
+         +ts the isolated column on the
+      43 +  west with pins 11/12 at the top. CAN-TR sits at x 135.1 mm an
+         +d RS485 at x 150.5 mm, both at
+      44 +  y 107.1 mm. The displaced logic parts are being re-placed, an
+         +d the band, islands and planes
+      45 +  will be redrawn.
+      46 +
+     … 32 more lines (ctrl+o to expand)
+
+● Bash(python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿  RESULT: PASS with warnings — 4 STL re-export(s) pending
+     e88be543 Pilot.md: record ISOW §13.1 binding, GNSS off-cape, PGND fenc
+     e plan (2026-10-12)
+  ⎿  Updated avionics/kicad/Pilot/Pilot.md (+1 -0)
+      10  **Update 2026-10-12 (ISOW §13.1 made binding, GNSS moved off th
+          e cape; S. Griffing decisions,
+      11  analysis and implementation by Claude Opus 5.5).** The schemati
+          c is ahead of the PCB until the
+      12  re-floorplan below lands (branch `pilot-refloorplan`).
+      13 +
+      14  - **§13.1 is binding.** TI ISOW1044 SLLSFF7A §13.1 p. 36 [REF-S
+          ENSOR-009] and ISOW1412
+      15    SLLSF86C §13.1 p. 41 [REF-SENSOR-010] require:
+      16    - a 10 nF 0402 cap within 1 mm of VDD and of VISOOUT;
+
+● Status: Pilot.md is committed (e88be543). Next is the hand table for the
+  isolated parts. First I'm checking the logic-side VDD caps against §13.1 item
+  1, which calls for a 0402 within 1 mm of VDD.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/kicad/Pilot && grep -n -E '\("C-(CAN|485-)[0-9]' -A1
+      scripts/gen_pilot_s…)
+  ⎿  564:    ("C-CAN1", "10nF", FP_C0201, "", "ISOW1044 VDD HF bypass (<1 m
+     m) §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
+     565:    ("C-CAN2", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VDD bulk §1
+     … +24 lines (ctrl+o to expand)
+
+● C-CAN1 and C-485-1 are the VDD 10 nF HF caps, and they're 0201. Item 1 asks
+  for 0402, so I'm changing both in the schematic.
+
+● Bash(sed -i 's|("C-CAN1", "10nF", FP_C0201, "", "ISOW1044 VDD HF bypass (<1
+      mm) §13.1"|("C-CAN1", "10nF", FP_C0402, "", "ISOW1044 VDD HF bypass, 0402
+      <1 mm (SLLSFF7A…)
+  ⎿  138
+     139
+       parts: 117   pins: 569   columns: 7
+     … +5 lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/scripts/gen_pilot_sch.py (+2 -2)
+      561      ("C-3V3-O1", "22uF 6.3V X5R", FP_C0805, "", "TPS62933 COUT
+           ", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+      562      ("C-3V3-O2", "22uF 6.3V X5R", FP_C0805, "", "TPS62933 COUT
+           ", [("1", "P", "+3V3"), ("2", "N", "GND")]),
+      563      # --- CAN FD field port ----------------------------------
+           ---------------
+      564 -    ("C-CAN1", "10nF", FP_C0201, "", "ISOW1044 VDD HF bypass (
+          -<1 mm) §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
+      564 +    ("C-CAN1", "10nF", FP_C0402, "", "ISOW1044 VDD HF bypass,
+          +0402 <1 mm (SLLSFF7A 13.1 #1)", [("1", "P", "+5V"), ("2", "N",
+          + "GND")]),
+      565      ("C-CAN2", "10uF 10V X5R", FP_C0805, "", "ISOW1044 VDD bul
+           k §13.1", [("1", "P", "+5V"), ("2", "N", "GND")]),
+      566      ("C-CAN3", "100nF", FP_C0402, "", "ISOW1044 VIO bypass", [
+           ("1", "P", "+3V3"), ("2", "N", "GND")]),
+      567      ("C-CAN4", "10nF", FP_C0402, "", "ISOW1044 VISOOUT HF bypa
+           ss, 0402 <1 mm (SLLSFF7A 13.1 #1)",
+     ...
+      588      ("X2Y-CAN", "4.7nF X2Y", FP_X2Y0805, "CX0805MRX7R0BB472",
+           "Pilot.md §2 GND1<->GND2 RF bridge (Yageo X2Y 0805)",
+      589       [("1", "A", "GND"), ("2", "B", "GND"), ("3", "G1", "GND2_
+           CAN"), ("4", "G2", "GND2_CAN")]),
+      590      # --- RS-485 field port ----------------------------------
+           ---------------
+      591 -    ("C-485-1", "10nF", FP_C0201, "", "ISOW1412 VDD HF bypass"
+          -, [("1", "P", "+5V"), ("2", "N", "GND")]),
+      591 +    ("C-485-1", "10nF", FP_C0402, "", "ISOW1412 VDD HF bypass,
+          + 0402 <1 mm (SLLSF86C 13.1 #1)", [("1", "P", "+5V"), ("2", "N"
+          +, "GND")]),
+      592      ("C-485-2", "10uF 10V X5R", FP_C0805, "", "ISOW1412 VDD bu
+           lk", [("1", "P", "+5V"), ("2", "N", "GND")]),
+      593      ("C-485-3", "100nF", FP_C0402, "", "ISOW1412 VIO bypass",
+           [("1", "P", "+3V3"), ("2", "N", "GND")]),
+      594      ("C-485-4", "10nF", FP_C0402, "", "ISOW1412 VISOOUT HF byp
+           ass, 0402 <1 mm (SLLSF86C 13.1 #1)",
+  ⎿  Updated avionics/kicad/Pilot/kicads/Pilot.kicad_sch (+8 -8)
+      710      (symbol "Pilot:S_C-CAN1" (pin_names (offset 1.016)) (exclu
+           de_from_sim no) (in_bom yes) (on_board yes)
+      711        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      712        (property "Value" "10nF" (at 0 -3.81 0) (effects (font (
+           size 1.27 1.27))))
+      713 -      (property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+          -(at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      714 -      (property "Datasheet" "ISOW1044 VDD HF bypass (<1 mm) §1
+          -3.1" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      713 +      (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+          +(at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      714 +      (property "Datasheet" "ISOW1044 VDD HF bypass, 0402 <1 m
+          +m (SLLSFF7A 13.1 #1)" (at 0 0 0) (effects (font (size 1.27 1.2
+          +7)) (hide yes)))
+      715        (symbol "S_C-CAN1_0_1"
+      716          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      717        )
+     ...
+      890      (symbol "Pilot:S_C-485-1" (pin_names (offset 1.016)) (excl
+           ude_from_sim no) (in_bom yes) (on_board yes)
+      891        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      892        (property "Value" "10nF" (at 0 -3.81 0) (effects (font (
+           size 1.27 1.27))))
+      893 -      (property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+          -(at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      894 -      (property "Datasheet" "ISOW1412 VDD HF bypass" (at 0 0 0
+          -) (effects (font (size 1.27 1.27)) (hide yes)))
+      893 +      (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+          +(at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      894 +      (property "Datasheet" "ISOW1412 VDD HF bypass, 0402 <1 m
+          +m (SLLSF86C 13.1 #1)" (at 0 0 0) (effects (font (size 1.27 1.2
+          +7)) (hide yes)))
+      895        (symbol "S_C-485-1_0_1"
+      896          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      897        )
+     ...
+      3125      (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no
+            ) (uuid "a3000000-0000-0000-0000-000000001000")
+      3126      (property "Reference" "C-CAN1" (at 203.20 217.17 0) (effe
+            cts (font (size 1.27 1.27))))
+      3127      (property "Value" "10nF" (at 203.20 224.79 0) (effects (f
+            ont (size 1.27 1.27))))
+      3128 -    (property "Footprint" "Capacitor_SMD:C_0201_0603Metric" (
+           -at 203.20 220.98 0) (effects (font (size 1.27 1.27)) (hide ye
+           -s)))
+      3129 -    (property "Datasheet" "ISOW1044 VDD HF bypass (<1 mm) §13
+           -.1" (at 203.20 220.98 0) (effects (font (size 1.27 1.27)) (hi
+           -de yes)))
+      3128 +    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (
+           +at 203.20 220.98 0) (effects (font (size 1.27 1.27)) (hide ye
+           +s)))
+      3129 +    (property "Datasheet" "ISOW1044 VDD HF bypass, 0402 <1 mm
+           + (SLLSFF7A 13.1 #1)" (at 203.20 220.98 0) (effects (font (siz
+           +e 1.27 1.27)) (hide yes)))
+      3130      (property "MPN" "" (at 203.20 220.98 0) (effects (font (s
+            ize 1.27 1.27)) (hide yes)))
+      3131      (pin "1" (uuid "a3000000-0000-0000-0000-000000001001"))
+      3132      (pin "2" (uuid "a3000000-0000-0000-0000-000000001002"))
+     ...
+      3351      (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no
+            ) (uuid "a3000000-0000-0000-0000-000000001122")
+      3352      (property "Reference" "C-485-1" (at 203.20 506.73 0) (eff
+            ects (font (size 1.27 1.27))))
+      3353      (property "Value" "10nF" (at 203.20 514.35 0) (effects (f
+            ont (size 1.27 1.27))))
+      3354 -    (property "Footprint" "Capacitor_SMD:C_0201_0603Metric" (
+           -at 203.20 510.54 0) (effects (font (size 1.27 1.27)) (hide ye
+           -s)))
+      3355 -    (property "Datasheet" "ISOW1412 VDD HF bypass" (at 203.20
+           - 510.54 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      3354 +    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (
+           +at 203.20 510.54 0) (effects (font (size 1.27 1.27)) (hide ye
+           +s)))
+      3355 +    (property "Datasheet" "ISOW1412 VDD HF bypass, 0402 <1 mm
+           + (SLLSF86C 13.1 #1)" (at 203.20 510.54 0) (effects (font (siz
+           +e 1.27 1.27)) (hide yes)))
+      3356      (property "MPN" "" (at 203.20 510.54 0) (effects (font (s
+            ize 1.27 1.27)) (hide yes)))
+      3357      (pin "1" (uuid "a3000000-0000-0000-0000-000000001123"))
+      3358      (pin "2" (uuid "a3000000-0000-0000-0000-000000001124"))
+  ⎿  Updated avionics/kicad/Pilot/kicads/Pilot.kicad_sym (+4 -4)
+      682      (symbol "S_C-CAN1" (pin_names (offset 1.016)) (exclude_fro
+           m_sim no) (in_bom yes) (on_board yes)
+      683        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      684        (property "Value" "10nF" (at 0 -3.81 0) (effects (font (
+           size 1.27 1.27))))
+      685 -      (property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+          -(at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      686 -      (property "Datasheet" "ISOW1044 VDD HF bypass (<1 mm) §1
+          -3.1" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      685 +      (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+          +(at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      686 +      (property "Datasheet" "ISOW1044 VDD HF bypass, 0402 <1 m
+          +m (SLLSFF7A 13.1 #1)" (at 0 0 0) (effects (font (size 1.27 1.2
+          +7)) (hide yes)))
+      687        (symbol "S_C-CAN1_0_1"
+      688          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      689        )
+     ...
+      862      (symbol "S_C-485-1" (pin_names (offset 1.016)) (exclude_fr
+           om_sim no) (in_bom yes) (on_board yes)
+      863        (property "Reference" "U" (at 0 3.81 0) (effects (font (
+           size 1.27 1.27))))
+      864        (property "Value" "10nF" (at 0 -3.81 0) (effects (font (
+           size 1.27 1.27))))
+      865 -      (property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+          -(at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      866 -      (property "Datasheet" "ISOW1412 VDD HF bypass" (at 0 0 0
+          -) (effects (font (size 1.27 1.27)) (hide yes)))
+      865 +      (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+          +(at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      866 +      (property "Datasheet" "ISOW1412 VDD HF bypass, 0402 <1 m
+          +m (SLLSF86C 13.1 #1)" (at 0 0 0) (effects (font (size 1.27 1.2
+          +7)) (hide yes)))
+      867        (symbol "S_C-485-1_0_1"
+      868          (rectangle (start -7.62 2.54) (end 7.62 -2.54) (stroke
+            (width 0.2540) (type default)) (fill (type background)))
+      869        )
+  ⎿  Updated avionics/kicad/Pilot/kicads/Pilot.net (+15 -15)
+      1  (export (version "E")
+      2    (design
+      3      (source "/home/steve/Documents/Vocation/Employers/Griffing.t
+         ech/designs/Serenity-UAV/avionics/kicad/Pilot/kicads/Pilot.kicad
+         _sch")
+      4 -    (date "2026-10-12T06:18:49-0400")
+      4 +    (date "2026-10-12T10:56:54-0400")
+      5      (tool "Eeschema 9.0.2+dfsg-1")
+      6      (sheet (number "1") (name "/") (tstamps "/")
+      7        (title_block
+     ...
+      157        (tstamps "a3000000-0000-0000-0000-000000001428"))
+      158      (comp (ref "C-485-1")
+      159        (value "10nF")
+      160 -      (footprint "Capacitor_SMD:C_0201_0603Metric")
+      161 -      (datasheet "ISOW1412 VDD HF bypass")
+      160 +      (footprint "Capacitor_SMD:C_0402_1005Metric")
+      161 +      (datasheet "ISOW1412 VDD HF bypass, 0402 <1 mm (SLLSF86C
+          + 13.1 #1)")
+      162        (fields
+      163          (field (name "MPN"))
+      164 -        (field (name "Footprint") "Capacitor_SMD:C_0201_0603Me
+          -tric")
+      165 -        (field (name "Datasheet") "ISOW1412 VDD HF bypass")
+      164 +        (field (name "Footprint") "Capacitor_SMD:C_0402_1005Me
+          +tric")
+      165 +        (field (name "Datasheet") "ISOW1412 VDD HF bypass, 040
+          +2 <1 mm (SLLSF86C 13.1 #1)")
+      166          (field (name "Description")))
+      167        (libsource (lib "Pilot") (part "S_C-485-1") (description
+            ""))
+      168        (property (name "MPN") (value ""))
+     ...
+      382        (tstamps "a3000000-0000-0000-0000-000000000951"))
+      383      (comp (ref "C-CAN1")
+      384        (value "10nF")
+      385 -      (footprint "Capacitor_SMD:C_0201_0603Metric")
+      386 -      (datasheet "ISOW1044 VDD HF bypass (<1 mm) §13.1")
+      385 +      (footprint "Capacitor_SMD:C_0402_1005Metric")
+      386 +      (datasheet "ISOW1044 VDD HF bypass, 0402 <1 mm (SLLSFF7A
+          + 13.1 #1)")
+      387        (fields
+      388          (field (name "MPN"))
+      389 -        (field (name "Footprint") "Capacitor_SMD:C_0201_0603Me
+          -tric")
+      390 -        (field (name "Datasheet") "ISOW1044 VDD HF bypass (<1
+          -mm) §13.1")
+      389 +        (field (name "Footprint") "Capacitor_SMD:C_0402_1005Me
+          +tric")
+      390 +        (field (name "Datasheet") "ISOW1044 VDD HF bypass, 040
+          +2 <1 mm (SLLSFF7A 13.1 #1)")
+      391          (field (name "Description")))
+      392        (libsource (lib "Pilot") (part "S_C-CAN1") (description
+           ""))
+      393        (property (name "MPN") (value ""))
+     … 30 more lines (ctrl+o to expand)
+
+● Both VDD HF caps are updated to 0402 with a clean ERC and resynced board. Now
+  I'll build scripts/refloorplan_pilot.py to automate the placement workflow:
+  syncing the board, applying the hand table for isolated/critical parts,
+  auto-placing displaced logic outside both bubbles and domains, then reporting
+  and plotting.
+
+● Write(avionics/kicad/Pilot/scripts/refloorplan_pilot.py)
+  ⎿  Wrote 510 lines to avionics/kicad/Pilot/scripts/refloorplan_pilot.py
+       1 #!/usr/bin/env python3
+         ape (2026-10-12).
+       3
+       4 Usage:
+         [--png map.png]
+       6
+          ISOW1044 SLLSFF7A §13.1
+       8 p. 36 [REF-SENSOR-009] and ISOW1412 SLLSF86C §13.1 p. 41 [REF-SE
+         NSOR-010] are binding:
+      10 1. 10 nF 0402 within 1 mm of VDD and of VISOOUT;
+     … +616 lines (ctrl+o to expand)
+
+● Before running it, three cleanups: a dead branch, a duplicated domain-rect
+  line, and a slow per-call pad scan in anchor().
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/kicad/Pilot/scripts && python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿  refloorplan_pilot.py:45:1: F401 'typing.Optional' imported but unused
+     refloorplan_pilot.py:339:17: F841 local variable 'inside' is assigned
+     to but never used
+     … +30 lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/scripts/refloorplan_pilot.py (+11 -11)
+      296                  if (px < 124.0 or px > 173.0) and (py < 90.5 o
+           r py > 119.5):
+      297                      if math.hypot(px - cx, py - cy_) > 3.0 - 0
+           .3 + 1e-6:
+      298                          out.append("corner arc")
+      299 -        if g.side == "F" and False:
+      300 -            pass
+      299          if g.side == "B":
+      300              h = HEIGHT.get(g.ref, 2.0)
+      301              if g.ref in F_ONLY or h > PB2_GAP - H_MARGIN:
+     ...
+      335              iso_dom = "CAN" if any("CAN" in n for n in nets if
+            ISO_NET.match(n)) else "RS485"
+      336          if g.ref not in STRADDLE:
+      337              for dom, sides in DOMAINS.items():
+      340 -                rects = sides["F"] + (sides["B"] if g.side ==
+          -"B" else [])
+      341 -                rects = sides[g.side] if g.side == "B" else si
+          -des["F"]
+      338 +                rects = sides[g.side]
+      339                  inside = [rhit(c, r) for r in rects]
+      340                  if dom == iso_dom:
+      341                      for _, net, _, _, r in g.pads:
+     ...
+      349          return out
+      350
+      351
+      355 -def anchor(ref: str, b: pcbnew.BOARD, nets_of: Dict[str, set],
+          - placed: set,
+      352 +def anchor(ref: str, nets_of: Dict[str, set], placed: set,
+      353             geos: Dict[str, Geo]) -> Tuple[float, float]:
+      354 +    """Mean position of the placed pads that share a signal ne
+          +t with ``ref``."""
+      355      pts = []
+      356      for net in nets_of.get(ref, ()):
+      357          if net in POWER:
+      358              continue
+      361 -        for p in b.FindNet(net).GetNetCode() and [q for q in b
+          -.GetPads() if q.GetNetname() == net]:
+      362 -            r = p.GetParentFootprint().GetReference()
+      363 -            if r != ref and r in placed:
+      364 -                pts.append((p.GetPosition().x / S, p.GetPositi
+          -on().y / S))
+      359 +        for r, g in geos.items():
+      360 +            if r == ref or r not in placed:
+      361 +                continue
+      362 +            for _, n, _, _, q in g.pads:
+      363 +                if n == net:
+      364 +                    pts.append(((q[0] + q[2]) / 2, (q[1] + q[3
+          +]) / 2))
+      365      if not pts:
+      366          par = next((t for pre, t in PARENT if ref.startswith(p
+           re)), None)
+     … 17 more lines (ctrl+o to expand)
+
+● That's the known pcbnew 9.0.2 binding failure: objects come back unwrapped
+  after a Remove. The fix is to save the synced board and reload it before
+  placing anything.
+
+● Bash(python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿  Traceback (most recent call last):
+       File "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs
+     /Serenity-UAV/avionics/kicad/Pilot/scripts/refloorplan_pilot.py", line
+     … +14 lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/scripts/refloorplan_pilot.py (+5 -3)
+      42  import re
+      43  import sys
+      44  from pathlib import Path
+      45 -from typing import Dict, List, Optional, Tuple
+      45 +from typing import Dict, List, Tuple
+      46
+      47  import pcbnew  # type: ignore
+      48
+     ...
+      336          if g.ref not in STRADDLE:
+      337              for dom, sides in DOMAINS.items():
+      338                  rects = sides[g.side]
+      339 -                inside = [rhit(c, r) for r in rects]
+      339                  if dom == iso_dom:
+      340                      for _, net, _, _, r in g.pads:
+      341                          if net and ISO_NET.match(net) and not
+           any(
+     ...
+      382      tmp = Path(a.out).with_suffix(".stripped.kicad_pcb")
+      383      tmp.write_text(strip(Path(a.inp).read_text()))
+      384      b = pcbnew.LoadBoard(str(tmp))
+      386 -    tmp.unlink()
+      385      for line in sync(b):
+      386          print("sync:", line)
+      387 +    # pcbnew 9.0.2 hands back unwrapped SwigPyObjects after Re
+          +move(): save and reload
+      388 +    pcbnew.SaveBoard(str(tmp), b)
+      389 +    b = pcbnew.LoadBoard(str(tmp))
+      390 +    tmp.unlink()
+      391      fps = {f.GetReference(): f for f in b.GetFootprints()}
+      392      for ref, (x, y, rot, side) in FIXED.items():
+      393          pose(fps[ref], x, y, rot, side)
+
+● The whole BOARD object comes back unwrapped too, so the sync has to run in a
+  separate process. Restructuring to do that:
+
+● Bash(python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿  Running in the background (↓ to manage)
+
+● Bash(sleep 60; grep -v -e Debug -e leak -e "^sync"
+      /tmp/claude-1000/-home-steve-Documents-Vocation-Employers-Griffing-tech-de
+      signs-Serenity-UAV/276b9551-3ffe-432e-97…)
+  ⎿  Error: Blocked: sleep 60 followed by: grep -v -e Debug -e leak -e "^sync"
+     /tmp/claude-1000/-home-steve-Documents-Vocation-Employers-Griffing-tech-des
+     igns-Serenity-UAV/276b9551-3ffe-432e-9723-032c85773bb7/tasks/bgwm9xiuh.outp
+     ut tail -20. To wait for a condition, use Monitor with an until-loop (e.g.
+     `until <check>; do sleep 2; done`). To wait for a command you started, use
+     run_in_background: true. Do not chain shorter sleeps to work around this
+     block.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● The run is too slow: every candidate recomputes the bubbles and runs every
+  check. While it's still going, I'm adding a fast early-exit check for the
+  search and caching the bubble sources.
+
+● Bash(pgrep -f "^python3 scripts/refloorplan_pilot.py" | xargs -r kill; cd
+      /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UA
+      V/avionics/kicad/…)
+  ⎿  Updated avionics/kicad/Pilot/scripts/refloorplan_pilot.py (+17 -8)
+      275  class Checker:
+      276      def __init__(self, geos: Dict[str, Geo]):
+      277          self.geos = geos
+      278 +        self._bubbles = {iso: [r for n, _, _, _, r in geos[iso
+          +].pads if n in ("11", "12")]
+      279 +                         for iso in ISO_OWN}
+      280
+      281      def bubble_src(self):
+      280 -        out = {}
+      281 -        for iso in ISO_OWN:
+      282 -            g = self.geos[iso]
+      283 -            out[iso] = [r for n, _, _, _, r in g.pads if n in
+          -("11", "12")]
+      284 -        return out
+      282 +        return self._bubbles
+      283
+      284 +    def ok(self, g: Geo, skip: set) -> bool:
+      285 +        """Fast yes/no form of problems() for the site search
+          +(cheapest tests first)."""
+      286 +        c = g.cy
+      287 +        if c[0] < EDGE[0] or c[1] < EDGE[1] or c[2] > EDGE[2]
+          +or c[3] > EDGE[3]:
+      288 +            return False
+      289 +        for o in self.geos.values():
+      290 +            if o.side == g.side and o.ref != g.ref and o.ref n
+          +ot in skip and rhit(c, o.cy):
+      291 +                if not (o.ref.startswith("H") and not g.ref.st
+          +artswith("H")):
+      292 +                    return False
+      293 +        return not self.problems(g, skip)
+      294 +
+      295      def problems(self, g: Geo, skip: set) -> List[str]:
+      296          """Rule breaks of one part against everything else (re
+           fs in skip ignored)."""
+      297          out = []
+     ...
+      386      ap.add_argument("inp")
+      387      ap.add_argument("out")
+      388      ap.add_argument("--png")
+      380 -    ap.add_argument("--rmax", type=float, default=30.0)
+      389 +    ap.add_argument("--rmax", type=float, default=20.0)
+      390      ap.add_argument("--sync-only", action="store_true", help=a
+           rgparse.SUPPRESS)
+      391      a = ap.parse_args()
+      392
+     ...
+      437          if ref in F_ONLY:
+      438              sides = ["F"]
+      439          shp = {s: shapes(f, s) for s in sides}
+      440 +        others = {q for q in movable if q not in placed}
+     … 12 more lines (ctrl+o to expand)
+
+● Background command "python3 - <<'EOF'
+from pathlib import Path
+p = Path("scripts/refloorplan_pilot.py"); t = p.read_text()
+old = t[t.index("    tmp =
+Path(a.out).with_suffix(\".stripped.kicad_pcb\")"):t.index("    fps =
+{f.GetReference(): f for f in b.GetFootprints()}")]
+new = '''    tmp = Path(a.out).with_suffix(".synced.kicad_pcb")
+    if a.sync_only:
+        # strip + sync run in their own process: after Remove() the pcbnew 9.0.2
+binding
+        # hands back unwrapped SwigPyObjects, even for the BOARD
+(PCBNEW_SWIG_BUG.md)
+        Path(a.out).write_text(strip(Path(a.inp).read_text()))
+        b = pcbnew.LoadBoard(a.out)
+        for line in sync(b):
+            print("sync:", line)
+        pcbnew.SaveBoard(a.out, b)
+        return
+    subprocess.run([sys.executable, __file__, "--sync-only", a.inp, str(tmp)],
+check=True)
+    b = pcbnew.LoadBoard(str(tmp))
+    tmp.unlink()
+'''
+t = t.replace(old, new)
+t = t.replace('    ap.add_argument("--rmax", type=float, default=30.0)\n',
+              '    ap.add_argument("--rmax", type=float, default=30.0)\n'
+              '    ap.add_argument("--sync-only", action="store_true",
+help=argparse.SUPPRESS)\n')
+t = t.replace("import re\nimport sys\n", "import re\nimport subprocess\nimport
+sys\n")
+p.write_text(t)
+EOF
+time python3 scripts/refloorplan_pilot.py kicads/Pilot.kicad_pcb
+/tmp/claude-1000/fp/r1.kicad_pcb --png /tmp/claude-1000/fp/r1.png 2>&1 | grep -v
+-e Debug -e leak -e "^sync" | tail -70" completed (exit code 0)
+
+● Bash(timeout 600 python3 -u scripts/refloorplan_pilot.py
+      kicads/Pilot.kicad_pcb /tmp/claude-1000/fp/r1.kicad_pcb --png
+      /tmp/claude-1000/fp/r1.png > /tmp/claude-1000/…)
+  ⎿  exit 1
+       C-3V3-O2: NO legal site within 20.0 mm of (169.5, 89.2)
+       C-IN2: F (128.11, 89.64)  8.0 mm from anchor
+     … +68 lines (ctrl+o to expand)
+
+● Found three issues: the movable set is too broad due to pre-existing
+  tolerances, domain tops are too high and clip J-PWM, and the domain test is
+  too coarse since it checks courtyards instead of pads. I'll fix these,
+  accepting the hand-placed §13.1 cap overlaps as expected, and switch to pad
+  clearance testing.
+
+● Bash(python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿  298:    def problems(self, g: Geo, skip: set) -> List[str]:
+     299-        """Rule breaks of one part against everything else (refs i
+     n skip ignored)."""
+     … +24 lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/scripts/refloorplan_pilot.py (+16 -13)
+      63  # Isolated domains per side.  "F" rects also hold on In1-In4; B
+          .Cu carries only the upper
+      64  # part (the PB2 P2 rail pads below y 113.39 are logic copper).
+      65  DOMAINS: Dict[str, Dict[str, List[Rect]]] = {
+      66 -    "CAN": {"F": [(126.3, 97.3, 135.1, 113.7), (126.3, 113.7, 1
+         -42.1, 114.5),
+      67 -                  (126.3, 114.5, 144.0, 118.45), (126.3, 118.45
+         -, 139.9, 122.2)],
+      68 -            "B": [(126.3, 97.3, 135.1, 108.6)]},
+      69 -    "RS485": {"F": [(142.6, 97.3, 150.5, 114.5), (144.5, 114.5,
+         - 155.9, 118.95),
+      70 -                    (140.4, 118.95, 155.9, 122.2)],
+      71 -              "B": [(142.6, 97.3, 150.5, 108.6)]},
+      66 +    # above the isolator bodies (y < 100.4) only the bulk-cap c
+         +orner is isolated, so the
+      67 +    # logic VDD caps can sit beside it; J-PWM's courtyard ends
+         +at y 97.5
+      68 +    "CAN": {"F": [(126.3, 98.0, 132.6, 100.4), (126.3, 100.4, 1
+         +35.1, 113.7),
+      69 +                  (126.3, 113.7, 142.1, 114.5), (126.3, 114.5,
+         +144.0, 118.45),
+      70 +                  (126.3, 118.45, 139.9, 122.2)],
+      71 +            "B": [(126.3, 98.0, 132.6, 100.4), (126.3, 100.4, 1
+         +35.1, 108.6)]},
+      72 +    "RS485": {"F": [(142.6, 98.0, 148.0, 100.4), (142.6, 100.4,
+         + 150.5, 114.5),
+      73 +                    (144.5, 114.5, 155.9, 118.95), (140.4, 118.
+         +95, 155.9, 122.2)],
+      74 +              "B": [(142.6, 98.0, 148.0, 100.4), (142.6, 100.4,
+         + 150.5, 108.6)]},
+      75  }
+      76  ISO_NET = re.compile(r"^(GND2_|VCC2_|CAN_H|CAN_L|RS485_A|RS485_
+          B)")
+      77  # X2Y GND<->GND2 bridges straddle a domain edge on purpose (Pil
+          ot.md "Isolation")
+     ...
+       91      "FB-CAN-G": (128.85, 107.0, 270, "B"),    # GND2_DCDC pad
+           up, GND2_CAN pad >= 4 mm away
+       92      "FB-CAN-V": (127.4, 107.0, 270, "B"),
+       93      "C-CAN6": (128.75, 110.6, 90, "F"),       # VISOIN (pin 20
+           ) bypass
+       91 -    "CMC-CAN": (128.3, 113.6, 90, "F"),       # CANH/L pins 19
+          -/18 -> connector
+       92 -    "X2Y-CAN": (126.3, 111.8, 90, "B"),       # GND (PWR-IN pi
+          -ns 3/4) <-> GND2_CAN, west edge
+       94 +    "CMC-CAN": (128.3, 113.75, 90, "F"),       # CANH/L pins 1
+          +9/18 -> connector
+       95 +    "X2Y-CAN": (126.9, 111.4, 90, "B"),       # GND (PWR-IN pi
+          +ns 3/4) <-> GND2_CAN, west edge
+       96      "TVS-CAN": (142.0, 116.8, 90, "F"),
+       97      "CAN-FD": (134.4, 118.8, 0, "F"),
+       95 -    "R-CANT": (127.6, 119.8, 270, "F"),
+       98 +    "R-CANT": (128.0, 121.0, 0, "F"),      # clear of the P2 c
+          +lip NPTH
+       99      # --- CAN, logic side (east) ---
+      100      "C-CAN1": (139.75, 100.45, 0, "F"),       # VDD 10 nF just
+            north of pin 10, < 1 mm
+       98 -    "C-CAN2": (137.3, 99.0, 0, "F"),          # VDD 10 uF bulk
+          -, 2-4 mm
+       99 -    "C-CAN3": (141.25, 112.8, 90, "F"),       # VIO (pin 1) by
+          -pass
+      101 +    "C-CAN2": (137.2, 98.75, 0, "F"),        # VDD 10 uF bulk,
+          + 2-4 mm, 4 mm off the bubble
+      102 +    "C-CAN3": (141.25, 112.15, 90, "F"),       # VIO (pin 1) b
+          +ypass
+      103      # --- RS-485, isolated side (west) ---
+      104      "C-485-4": (144.15, 102.02, 90, "F"),
+     … 11 more lines (ctrl+o to expand)
+● Bash(python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿  430:    base_geos = {r: Geo(f) for r, f in fps.items() if f.GetPositio
+     n().y < 100 * S}
+  ⎿  Updated avionics/kicad/Pilot/scripts/refloorplan_pilot.py (+45 -20)
+      145      return math.hypot(dx, dy)
+      146
+      147
+      148 +def in_union(r: Rect, rects: List[Rect]) -> bool:
+      149 +    """True when every corner of r lies inside some rect of th
+          +e union."""
+      150 +    for x, y in ((r[0], r[1]), (r[2], r[1]), (r[0], r[3]), (r[
+          +2], r[3])):
+      151 +        if not any(q[0] - 1e-6 <= x <= q[2] + 1e-6 and q[1] -
+          +1e-6 <= y <= q[3] + 1e-6
+      152 +                   for q in rects):
+      153 +            return False
+      154 +    return True
+      155 +
+      156 +
+      157  def box(bb) -> Rect:
+      158      return (bb.GetX() / S, bb.GetY() / S, (bb.GetX() + bb.GetW
+           idth()) / S,
+      159              (bb.GetY() + bb.GetHeight()) / S)
+     ...
+      285
+      286
+      287  class Checker:
+      279 -    def __init__(self, geos: Dict[str, Geo]):
+      288 +    def __init__(self, geos: Dict[str, Geo], bubbles: bool = T
+          +rue):
+      289          self.geos = geos
+      290 +        self.domains = bubbles
+      291          self._bubbles = {iso: [r for n, _, _, _, r in geos[iso
+           ].pads if n in ("11", "12")]
+      282 -                         for iso in ISO_OWN}
+      292 +                         for iso in ISO_OWN} if bubbles else {
+          +}
+      293
+      294      def bubble_src(self):
+      295          return self._bubbles
+     ...
+      301              return False
+      302          for o in self.geos.values():
+      303              if o.side == g.side and o.ref != g.ref and o.ref n
+           ot in skip and rhit(c, o.cy):
+      294 -                if not (o.ref.startswith("H") and not g.ref.st
+          -artswith("H")):
+      304 +                if not o.ref.startswith("H"):
+      305                      return False
+      306          return not self.problems(g, skip)
+      307
+     ...
+      332              if o.ref.startswith("H") and not g.ref.startswith(
+           "H"):
+      333                  continue
+      334              if rhit(c, o.cy):
+      335 +                pair = {g.ref, o.ref}
+     … 81 more lines (ctrl+o to expand)
+
+● Bash(sed -i 's/    base_geos = {r: Geo(f) for r, f in fps.items() if
+      f.GetPosition().y < 100 \* S}/    # parts parked off-board by sync() (y 80
+      mm) have no baseline\…)
+  ⎿  exit 1
+     re-placing 26: PWR-IN 1553-XCVR TVS-1553N TVS-1553P IMU X-50M BARO U-3
+     V3 R-1553P R-1553IRQ L-3V3 C-IN1 C-3V3-O1 C-3V3-O2 C-IN2 C-3V3-IN C-15
+     … +36 lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/scripts/refloorplan_pilot.py (+2 -1)
+      427      b = pcbnew.LoadBoard(str(tmp))
+      428      tmp.unlink()
+      429      fps = {f.GetReference(): f for f in b.GetFootprints()}
+      430 -    base_geos = {r: Geo(f) for r, f in fps.items() if f.GetPos
+          -ition().y < 100 * S}
+      430 +    # parts parked off-board by sync() (y 80 mm) have no basel
+          +ine
+      431 +    base_geos = {r: Geo(f) for r, f in fps.items() if f.GetPos
+          +ition().y > 87 * S}
+      432      chk_base = Checker({r: Geo(f) for r, f in fps.items()}, bu
+           bbles=False)
+      433      for ref, (x, y, rot, side) in FIXED.items():
+      434          pose(fps[ref], x, y, rot, side)
+
+● 25 of 26 displaced parts now have legal placement sites, but the 1553
+  transceiver (7.2mm QFN) still has none, and PWR-IN was moved despite needing
+  to stay fixed as the power connector. Let me check the map to resolve these
+  two issues.
+
+  Read 1 file (ctrl+o to expand)
+
+● Isolated domains are clean; next I'll pin PWR-IN (shifting CMC-CAN down 0.25
+  mm), hand-place the 1553 transceiver on B.Cu in the clear spot above the P2
+  rail, and hand-place the buck converter in the B.Cu pocket to keep its SW node
+  short.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(python3 - <<'EOF'
+      from pathlib import Path…)
+  ⎿  exit 1
+     re-placing 23: TVS-1553N TVS-1553P IMU X-50M BARO R-1553P R-1553IRQ C-
+     IN1 C-3V3-O1 C-3V3-O2 C-IN2 C-3V3-IN C-1553C FB1 C-IN3 C-3V3-HF C-IMU1
+     … +27 lines (ctrl+o to expand)
+  ⎿  Updated avionics/kicad/Pilot/scripts/refloorplan_pilot.py (+12 -3)
+      68      "CAN": {"F": [(126.3, 98.0, 132.6, 100.4), (126.3, 100.4, 1
+          35.1, 113.7),
+      69                    (126.3, 113.7, 142.1, 114.5), (126.3, 114.5,
+          144.0, 118.45),
+      70                    (126.3, 118.45, 139.9, 122.2)],
+      71 -            "B": [(126.3, 98.0, 132.6, 100.4), (126.3, 100.4, 1
+         -35.1, 108.6)]},
+      71 +            # B.Cu holds only the bulk cap and beads, so it sto
+         +ps short of the 1553 QFN
+      72 +            "B": [(126.3, 98.0, 132.6, 104.0), (126.3, 104.0, 1
+         +33.0, 108.6)]},
+      73      "RS485": {"F": [(142.6, 98.0, 148.0, 100.4), (142.6, 100.4,
+           150.5, 114.5),
+      74                      (144.5, 114.5, 155.9, 118.95), (140.4, 118.
+          95, 155.9, 122.2)],
+      75                "B": [(142.6, 98.0, 148.0, 100.4), (142.6, 100.4,
+           150.5, 108.6)]},
+     ...
+      92      "FB-CAN-G": (128.85, 107.0, 270, "B"),    # GND2_DCDC pad u
+          p, GND2_CAN pad >= 4 mm away
+      93      "FB-CAN-V": (127.4, 107.0, 270, "B"),
+      94      "C-CAN6": (128.75, 110.6, 90, "F"),       # VISOIN (pin 20)
+           bypass
+      94 -    "CMC-CAN": (128.3, 113.75, 90, "F"),       # CANH/L pins 19
+         -/18 -> connector
+      95 +    "CMC-CAN": (128.3, 114.0, 90, "F"),       # CANH/L pins 19/
+         +18 -> connector
+      96      "X2Y-CAN": (126.9, 111.4, 90, "B"),       # GND (PWR-IN pin
+          s 3/4) <-> GND2_CAN, west edge
+      97      "TVS-CAN": (142.0, 116.8, 90, "F"),
+      98      "CAN-FD": (134.4, 118.8, 0, "F"),
+     ...
+      100      # --- CAN, logic side (east) ---
+      101      "C-CAN1": (139.75, 100.45, 0, "F"),       # VDD 10 nF just
+            north of pin 10, < 1 mm
+      102      "C-CAN2": (137.2, 98.75, 0, "F"),        # VDD 10 uF bulk,
+            2-4 mm, 4 mm off the bubble
+      102 -    "C-CAN3": (141.25, 112.15, 90, "F"),       # VIO (pin 1) b
+          -ypass
+      103 +    "C-CAN3": (141.4, 112.15, 90, "F"),       # VIO (pin 1) by
+          +pass
+      104 +    # --- logic parts placed by hand ---
+      105 +    "PWR-IN": (124.6, 105.7, 270, "F"),       # power entry st
+          +ays put (harness interface)
+      106 +    # HI-6138 QFN-48 on B under CAN-TR's logic half: pads x 13
+          +4.0-140.8 are 4 mm clear of
+      107 +    # both bubbles, y 106.2-113.0 sits above the P2 rail pads
+          +(113.39)
+      108 +    "1553-XCVR": (137.4, 109.6, 90, "B"),
+      109 +    # TPS62933 cluster (one layer, SLUSEA4D §12.1 [REF-PWR-001
+          +]) in the B.Cu pocket above it
+      110 +    "U-3V3": (138.0, 100.6, 0, "B"),
+      111 +    "L-3V3": (138.0, 103.9, 0, "B"),
+      112      # --- RS-485, isolated side (west) ---
+      113      "C-485-4": (144.15, 102.02, 90, "F"),
+      114      "C-485-5": (145.85, 98.9, 0, "B"),        # bulk north of
+           pin 11, ~2 mm
+
+● I'm down to 0 unplaced parts and 4 problems, but the buck converter still
+  isn't right—its input cap is 12.5 mm from the IC and an output cap 10.5 mm
+  away, while the available pocket is only 5.4 mm wide. I'll pull the actual
+  courtyard dimensions for the buck parts to pack them in properly.
+
+● Bash(cd /tmp/claude-1000/fp && python3 - <<'EOF' 2>&1 | grep -v -e Debug -e
+      leak
+      import pcbnew…)
+  ⎿  U-3V3      B pos (138.00,100.60) rot 0 cy 2.73 x 2.69  pads 1:GND@(137
+     .26,101.35) 2:U3V3_EN@(137.26,100.85) 3:+5V@(137.26,100.35) 4:GND@(137
+     .26,99.85) 5:SW_3V3@(138.74,99.85) 6:BST_3V3@(138.74,100.35) 7:SS_3V3@
+     … +34 lines (ctrl+o to expand)
+
+● The buck won't fit—the B.Cu pocket is only ~49 mm² while the TPS62933 cluster
+  needs ~53 mm², and moving PWR-IN or RS485 to B.Cu both hit hard geometry
+  conflicts. Next I'll check the TPS62933 datasheet to see what the output
+  capacitor really requires, since the two 22 µF 0805s are the components I'd
+  need to fold.
+
+● Bash(ls /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/datasheets | grep -i -E "tps6293|62933"; pdftotext -layout
+      /home/steve/D…)
+  ⎿  -rw-rw-r-- 1 steve steve  3.9M Sep 26 15:25 tps62933.pdf
+     36:       compensation
+     … +40 lines (ctrl+o to expand)
+  ⎿  You've hit your session limit · resets 3:30pm (America/New_York)
+     /upgrade to increase your usage limit.
+
+❯ Research and see if there are any bucks that have a better footprint and the
+  capability required.
+
+● I'll pin down the current the cape's 3V3 rail actually needs, then look for
+  smaller buck options with datasheets I can verify.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV && grep -n -i -E "3v3.*(budget|ma\b|load)|budget|TPS62933"
+      avionics/kicad/Pilot/P…)
+  ⎿  avionics/kicad/Pilot/Pilot.md:114:- **References:** pin table and area
+      budget in
+     avionics/kicad/Pilot/Pilot.md:158:`docs/solutions/conventions/pb2-cape
+     … +68 lines (ctrl+o to expand)
+
+● Bash(sed -n 134,150p avionics/WBS.md; sed -n 151,185p
+      docs/AVIONICS_PB2_REDESIGN.md)
+  ⎿      - [x] Select the SE and check for an I²C address conflict with Si5
+     351A. Done 2026-09-29:
+             OPTIGA Trust M at 0x30 vs. Si5351A at 0x60, so there is no con
+     … +49 lines (ctrl+o to expand)
+
+● I've confirmed the 3V3 rail sizing was based on the HI-6138's 695 mA max
+  transmit current. Before shopping, I'll review the datasheets for the other
+  3V3 loads to get an accurate total.
+
+● Bash(cd /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenit
+      y-UAV/avionics/datasheets && ls | grep -i -E
+      "6138|dp83825|slb|9672|42688|bmp388|2520|i…)
+  ⎿  -rw-rw-r-- 1 steve steve  2.0M Jul 14 15:52 bst-bmp388-ds001.pdf
+     -rw-rw-r-- 1 steve steve  2.4M Sep 21 06:24 dp83825i.pdf
+     -rw-rw-r-- 1 steve steve  1.8M Jul 14 15:52 ds-000347-icm-42688-p-v1.6
+     … +21 lines (ctrl+o to expand)
+
+● Bash(sed -n 17868,17885p /tmp/claude-1000/h6138.txt; grep -n -i -E "Power
+      consumption|mW|I\(VDD|IAVDD|IVDDIO|100BASE-TX.*mA|supply current"
+      /tmp/claude-1000/dp.txt |…)
+  ⎿  VDD = 3.3V, GND = 0V, TA = Operating Temperature Range (unless otherwi
+     se stated)
+     … +39 lines (ctrl+o to expand)
+
+● Bash(sed -n 440,520p /tmp/claude-1000/dp.txt | grep -E "mA|I\(|100BASE|Mode" |
+      head -30)
+  ⎿      POWER CONSUMPTION (Power Optimized Mode )
+         I(AVDD3
+                 RMII Leader (100BaseTx)                      Traffic = 50%
+     … +29 lines (ctrl+o to expand)
+
+● I've tallied worst-case current draw across the HI-6138, Ethernet PHYs,
+  SLB9672, and other components at roughly 875 mA, so a 2 A buck off the 5 V
+  rail gives comfortable margin without new voltage constraints. Now I'll search
+  for small integrated-inductor buck modules that fit.
+
+● Searching for small integrated-inductor buck modules (5 V in, 3.3 V out, ≥ 1.5
+  A).
+
+● Web Search("TI TPSM82822 2A step-down module integrated inductor MicroSiP
+            datasheet")
+  ⎿  Did 1 search in 6s
+
+● Web Search("TPSM82823 3A buck module integrated inductor 2.0 x 2.5 mm
+            datasheet")
+  ⎿  Did 1 search in 5s
+
+● Web Search("TPSM82813 3A step-down module integrated inductor 5.5V input
+            datasheet")
+  ⎿  Did 1 search in 5s
+● Two strong TI families. Downloading the datasheets to verify the real numbers
+  (input limits, required caps, fixed-3.3 V options, land size):
+
+● Bash(mkdir -p /tmp/claude-1000/dl && cd /tmp/claude-1000/dl && for p in
+      tpsm82822 tpsm82813 tpsm828303; do curl -sL -m 60 -A "Mozilla/5.0" -o
+      $p.pdf "https://www.ti.…)
+  ⎿  tpsm82822.pdf: PDF document, version 1.4, 10 page(s)
+     tpsm82813.pdf: PDF document, version 1.4, 10 page(s)
+     tpsm828303.pdf: PDF document, version 1.4, 10 page(s)
+
+● Bash(for p in *.pdf; do pdftotext -layout $p - | head -30 | tr -s ' ' | head
+      -12; echo ======; done)
+  ⎿  Error: Exit code 1
+     Syntax Error (54556): Bad block header in flate stream
+     Syntax Error (77638): Bad block header in flate stream
+     Syntax Error (153504): Bad block header in flate stream
+     Syntax Error (54556): Bad block header in flate stream
+     Syntax Error (77638): Bad block header in flate stream
+     Syntax Error (153504): Bad block header in flate stream
+      Note: This datasheet may be out of date.
+      Product Search Data Sheet Please download the latest datasheet of
+     BLM15EX331SN1# from the official website of Murata
+      Manufacturing Co., Ltd.
+     … +13 lines (ctrl+o to expand)
+
+● Bash(ls -la; md5sum *.pdf
+      /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UA
+      V/avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf; curl…)
+  ⎿  total 12M
+     drwxrwxr-x  2 steve steve  180 Oct 12 16:04 .
+     drwx------ 18 steve steve 1.8K Oct 12 16:03 ..
+     … +19 lines (ctrl+o to expand)
+
+● The downloads are fine; my second command just globbed some older files in the
+  same folder. Extracting the three TI datasheets:
+
+● Bash(for p in tpsm82822 tpsm82813 tpsm828303; do pdftotext -layout $p.pdf
+      $p.txt 2>/dev/null; echo "== $p: $(grep -m1 -o
+      'SLUS[A-Z0-9]*\|SLVS[A-Z0-9]*' $p.txt) $(gre…)
+  ⎿  == tpsm82822: SLVSEP0F REVISED NOVEMBER 2021
+      TPSM82823, TPSM82822, TPSM82821, TPSM82823A, TPSM82822A, TPSM82821A
+      SLVSEP0F – AUGUST 2019 – REVISED NOVEMBER 2021
+     … +36 lines (ctrl+o to expand)
+
+● Bash(for p in tpsm82822 tpsm828303 tpsm82813; do echo "######## $p"; grep -n
+      -i -E "Absolute Maximum" -A12 $p.txt | grep -i -E "VIN|PVIN|voltage" |
+      head -4; grep -n…)
+  ⎿  ######## tpsm82822
+     112-  7.6 Typical Characteristics.....................................
+     ........... 6             12.3 Receiving Notification of Documentation
+     … +114 lines (ctrl+o to expand)
+
+● The TPSM8282x family has a fixed-3.3 V version. Reading its ordering table and
+  recommended components:
+
+● Bash(sed -n 150,172p tpsm82822.txt | tr -s ' '; grep -n -i -E "Recommended
+      Operating" -A16 tpsm82822.txt | tr -s ' ' | head -20; grep -n -E "List of
+      Components|Induc…)
+  ⎿  www.ti.com SLVSEP0F – AUGUST 2019 – REVISED NOVEMBER 2021
+     … +48 lines (ctrl+o to expand)
+
+● Bash(sed -n 228,262p tpsm82822.txt | tr -s ' ' | grep -v "^ *$" | head -30;
+      sed -n 750,775p tpsm82822.txt | tr -s ' '; grep -n -i -E "Land
+      Pattern|recommended land|P…)
+  ⎿   Recommended Operating Conditions. Exposure to absolute-maximum-rated
+     conditions for extended periods may affect device
+      reliability.
+     … +57 lines (ctrl+o to expand)
+
+● TPSM828224 (fixed 3.3 V, 2 A) looks best. Checking whether KiCad ships its
+  land and what the thermal derating says for 5 V → 3.3 V:
+
+● Bash(ls /usr/share/kicad/footprints/ | grep -i -E
+      "package_.*sip|Converter|Module" | head; find /usr/share/kicad/footprints
+      -iname "*SIL0010*" -o -iname "*MicroSiP*"…)
+  ⎿  drwxr-xr-x 1 root root   96 Mar 27  2026 Audio_Module.pretty
+     drwxr-xr-x 1 root root 3.7K Mar 27  2026 Converter_ACDC.pretty
+     drwxr-xr-x 1 root root  11K Mar 27  2026 Converter_DCDC.pretty
+     … +33 lines (ctrl+o to expand)
+
+● KiCad has no SIL0010D land, so I'd author it from the datasheet's land-pattern
+  page. Reading the pin table, thermal note and land dimensions:
+
+● Bash(sed -n 176,215p tpsm82822.txt | tr -s ' ' | grep -v "^ *$"; sed -n
+      3270,3290p tpsm82822.txt | tr -s ' ')
+  ⎿   VIN 1 10 GND
+      VIN 2 9 GND
+      EN 3 8 FB
+     … +46 lines (ctrl+o to expand)
+
+● Fetch(https://www.ti.com/product/TPSM82822)
+  ⎿  Received 310.2KB (200 OK)
+
+● Web Search(""TPSM828224SILR" 3.3V")
+  ⎿  Did 1 search in 5s
+
+● DigiKey lists the TPSM828224SILR as orderable. The search also turned up a
+  newer TI family, TPSM82A82x. Quick check whether it beats the TPSM8282x:
+
+● Fetch(https://www.ti.com/product/TPSM82A823)
+  ⎿  Received 0 bytes (404 Not Found)
+
+● I recommend the TI TPSM828224SILR: a fixed-3.3 V, 2 A buck module with the
+  inductor built in, 2.0 × 2.5 × 1.1 mm. It brings the 3V3 supply down from
+  about 54 mm² to about 15 mm² and has the current headroom the cape needs.
+
+  Current needed. From the datasheets on file, the worst-case 3V3 load is about
+  875 mA:
+
+  ┌────────────────────────────────────┬─────────────┐
+  │                Load                │ Max current │
+  ├────────────────────────────────────┼─────────────┤
+  │ HI-6138 transmitting at 100 % duty │ 695 mA      │
+  ├────────────────────────────────────┼─────────────┤
+  │ 2 × DP83825I                       │ ≈ 115 mA    │
+  ├────────────────────────────────────┼─────────────┤
+  │ SLB9672 TPM                        │ 35 mA       │
+  ├────────────────────────────────────┼─────────────┤
+  │ IMU, BARO, oscillators, ISOW VIO   │ the rest    │
+  └────────────────────────────────────┴─────────────┘
+
+  A 2 A part gives about 2.3× margin.
+
+  Input voltage. The 5.5 V input ceiling these modules share adds no new limit.
+  The ISOW1044 VDD on this board is already capped at 4.5–5.5 V, so the 5 V rail
+  must stay below 5.5 V regardless.
+
+  Option: TPS62933 (today)
+  Size / height: SOT-583 plus a 3 × 3 mm inductor
+  Current: 3 A
+  External parts: inductor, 4–5 caps, 4 resistors
+  Approx. area: ≈ 54 mm²
+  ────────────────────────────────────────
+  Option: TPSM828224SILR
+  Size / height: 2.0 × 2.5 × 1.1 mm
+  Current: 2 A
+  External parts: 4.7 µF 0603 input + 22 µF output cap; EN tied to VIN, PG left
+  open
+  Approx. area: ≈ 15 mm²
+  ────────────────────────────────────────
+  Option: TPSM828302 (MagPack)
+  Size / height: 2.6 × 2.5 × 1.95 mm, shielded
+  Current: 2 A
+  External parts: ≥ 12 µF effective output (two 22 µF), plus two divider
+  resistors (fixed 3.3 V only through TI)
+  Approx. area: ≈ 20 mm²
+  ────────────────────────────────────────
+  Option: TPSM82813
+  Size / height: 3 × 4 × 2.4 mm or 2.5 × 3 × 1.95 mm
+  Current: 3 A
+  External parts: ≥ 27 µF effective output (three 22 µF); the only one rated to
+  6
+  V in
+  Approx. area: ≈ 30 mm²
+
+  Facts for the TPSM8282x family (TI SLVSEP0F, Rev. F, Nov 2021):
+  - Input 2.4–5.5 V, absolute maximum 6 V.
+  - Fixed 3.3 V version listed in Table 5; DigiKey stocks it.
+  - At least 3 µF effective input and 5 µF effective output capacitance.
+  - Rated CISPR 11 Class B.
+
+  Effect on the floorplan. The B.Cu pocket between the bubbles is about 49 mm²,
+  so the whole 3V3 supply would fit there with room to spare. That solves the
+  buck problem that blocked me.
+
+  Caveats:
+  - No KiCad land. KiCad doesn't ship the SIL0010D land pattern. I'd draw it
+    from the datasheet's land-pattern page into Serenity-Custom.pretty.
+  - Thermal margin is thin at the extreme. Assuming about 85 % efficiency (my
+    estimate, not read off TI's curve), 1553 transmitting continuously at 85 °C
+    ambient lands near 119 °C. The limit is 125 °C, and that uses TI's EVM
+    thermal resistance, not this board's. Real 1553 traffic is bursty, so in
+    practice it runs much cooler.
+  - Not considered. I checked TI's newer TPSM82A82x family but couldn't get a
+    product page or datasheet, so I left it out.
+
+  Nothing on the board has changed for this yet. If you approve, I'll swap the
+  part into the schematic, archive the datasheet with a new reference entry,
+  draw the land, and resume the re-floorplan.
+
+  Sources:
+  - TI TPSM82822 product page (https://www.ti.com/product/TPSM82822) and its
+    datasheet SLVSEP0F (https://www.ti.com/lit/ds/symlink/tpsm82822.pdf)
+  - TPSM82823 product page (https://www.ti.com/product/TPSM82823) (family
+    datasheet as above)
+  - TPSM82813 product page (https://www.ti.com/product/TPSM82813) and its
+    datasheet SLUSDN6D (https://www.ti.com/lit/ds/symlink/tpsm82813.pdf)
+  - TPSM828302 family datasheet SLVSGM1D
+    (https://www.ti.com/lit/ds/symlink/tpsm828303.pdf)
+  - DigiKey listing for TPSM828224SILR (https://punchouttest.digikey.de/en/produ
+    cts/detail/texas-instruments/TPSM828224SILR/14123992)
+
+● Background shell command didn't finish before the previous session ended
