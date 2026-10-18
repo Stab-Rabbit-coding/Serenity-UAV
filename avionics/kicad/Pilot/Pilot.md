@@ -24,11 +24,17 @@ Griffing decisions, implemented by Claude Opus 5.5) — schematic ahead of the P
     - The PB2-I and PB2 share one design repository and header map.
     - The rail footprints had pin 1 on the wrong row once flipped to B.Cu; the library is
       fixed, and TACCO is affected too (WBS).
-- **Ethernet ring:**
-    - Port 1 is the DP83825I on RMII2 + MDIO0. RMII2 is the only header MAC in use (CPSW port 2); the 12
-      RGMII2 balls also reach the header but are unused.
-    - Port 2 is a USB 10/100 controller on USB1 (P1-5 VBUS, P1-9 D-, P1-11 D+). Linux bridges
-      the two, so forwarding stops if this node's CPU is down (owner accepted).
+- **Ethernet ring** (named by TI interface, owner 2026-10-17 — the ring's two legs are not
+  "port 1/port 2", because TI numbers the AM625 CPSW3G ports and only its port 2 is used):
+    - **CPSW3G port 2 / RMII2 leg:** DP83825I on RMII2 + MDIO0 (schematic `ETH1-PHY`). RMII2 is
+      the only CPSW interface in use; the 12 RGMII2 balls also reach the header but are unused.
+      CPSW3G port 1 (RGMII1/RMII1) does not reach the PB2-I header.
+    - **USB1 leg:** a USB 10/100 controller on USB1 (P1-5 VBUS, P1-9 D-, P1-11 D+; schematic
+      `ETH2-USB`). It is not a CPSW port. Linux bridges the two legs, so forwarding stops if
+      this node's CPU is down (owner accepted).
+    - The schematic reference designators `ETH1-*`/`ETH2-*`, `T-ETH`/`T-ETH2` and the nets
+      `PHY1_*`, `ETH_*`, `ETH2_*` still carry the old 1/2 numbering; renaming them is an
+      `avionics/WBS.md` item tied to the PCB re-sync.
 - **Rejected candidates** (do not re-propose):
     - Microchip KSZ8863RLLI 3-port switch: no 10.5 mm courtyard site; the largest free square
       is ~6 mm.

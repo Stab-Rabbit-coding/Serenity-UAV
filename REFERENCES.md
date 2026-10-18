@@ -2736,7 +2736,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Official access** | <https://ww1.microchip.com/downloads/en/DeviceDoc/00002335B.pdf> (HTTP 200, 2026-10-17) |
 | **Local copy** | `avionics/datasheets/KSZ8863MLL-FLL-RLL_DS00002335B.pdf` (MD5 342959b711f1037d63fb764cff41d220) |
 | **Section applied** | Fig. 2-1 / Table 2-1 pin functions and straps; sec 3.3.9 + Table 3-5 RMII clock setting (25 MHz on X1, REFCLKO_3 looped to REFCLKI_3); sec 6 note (transformer current at 3.3 V); sec 9 Table 9-1 transformer criteria; Fig. 10-1 recommended land (0.25 x 1.30 mm pads, 8.70 mm span); industrial -40..85 C |
-| **Cited in** | Evaluated 2026-10-17 for the Pilot ring switch and NOT used (no 10.5 mm site on the cape; ring port 2 moved to USB1, see REF-SENSOR-048); the verified land is kept as `ksz8863_lqfp48()` in `gen_pilot_footprints.py` (not generated) |
+| **Cited in** | Evaluated 2026-10-17 for the Pilot ring switch and NOT used (no 10.5 mm site on the cape; the second ring leg moved to USB1, see REF-SENSOR-048); the verified land is kept as `ksz8863_lqfp48()` in `gen_pilot_footprints.py` (not generated) |
 | **Open item** | The 749010012A magnetics' DCR (1.0 ohm max) exceeds Table 9-1's 0.9 ohm and their leakage inductance / interwinding capacitance are unspecified (avionics/WBS.md) |
 
 ### REF-SENSOR-046: Microchip KSZ8863 Daughter Board Information Sheet (DS50002767B) — reference schematic
@@ -2777,7 +2777,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Publisher** | Texas Instruments, *AM625, AM625-Q1, AM623, AM620-Q1 — AM62x Sitara Processors*, literature number SPRSP58C (June 2022, revised October 2025) |
 | **Official access** | <https://www.ti.com/lit/ds/symlink/am625.pdf> (HTTP 200, 2026-10-17); product page <https://www.ti.com/product/AM625> |
 | **Local copy** | `avionics/datasheets/am625.pdf` (owner-supplied, MD5 0bf05eb5e8fe8649fe010b244d7ef6e6) |
-| **Section applied** | §1 Features (CPSW3G: 2 external ports, RMII or RGMII; 3x MCAN with CAN FD); Table 4-1 Device Comparison (MCAN 3, I2C 6); §5.2 Table 5-1 Pin Attributes, ALW column (mux modes of every PB2-I header ball); §5.3.1 Tables 5-2 to 5-5 (RGMII1/RGMII2/RMII1/RMII2 ball assignments; port 1 has no alternate balls) |
+| **Section applied** | §1 Features (CPSW3G: 2 external ports, RMII or RGMII; 3x MCAN with CAN FD); Table 4-1 Device Comparison (MCAN 3, I2C 6); §5.2 Table 5-1 Pin Attributes, ALW column (mux modes of every PB2-I header ball); §5.3.1 Tables 5-2 to 5-5 (RGMII1/RGMII2/RMII1/RMII2 ball assignments; CPSW3G port 1 has no alternate balls) |
 | **Cited in** | `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md`; `avionics/kicad/PB2_HEADER_PINMAP.md` §1; `avionics/datasheets/extracted/AM625_PB2I_header_mux.json`; `avionics/kicad/Pilot/Pilot.md` (2026-10-17 block) |
 | **Openness / sourcing** | Public data sheet, no NDA. TI is US-domiciled (AGENTS.md §5 passes). |
 

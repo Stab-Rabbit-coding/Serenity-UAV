@@ -1758,8 +1758,8 @@ REFERENCES.md Removed/Superseded Citations).
             I2C / UART for the GH headers) on their mux pins; GPIO roles placed to shorten
             routes (firmware pin mux follows; no wiring decision rests on firmware alone).
         - [x] Ethernet ring, 2026-10-17: KSZ8863RLLI switch evaluated and REJECTED (10.5 mm
-            courtyard; largest free square ~6 mm). Owner chose two NICs: ETH1 = DP83825I on
-            RMII2 + MDIO0 (TI SNLS638C re-verified); ETH2 = USB 10/100 controller on USB1
+            courtyard; largest free square ~6 mm). Owner chose two NICs: CPSW3G port 2 / RMII2 leg =
+            DP83825I on RMII2 + MDIO0 (TI SNLS638C re-verified); USB1 leg = USB 10/100 controller on USB1
             (P1-5/9/11), bridged in Linux (ring forwarding depends on this node's CPU — owner
             accepted). Candidates in Pilot.md "Rejected candidates".
         - [ ] ETH2 USB NIC = ASIX AX88772E (owner 2026-10-17; public datasheet v1.03, 0-70 C):
@@ -1778,6 +1778,10 @@ REFERENCES.md Removed/Superseded Citations).
             SCK/UART1_TX, MISO/UART6_RX, MOSI/UART6_TX, SS1/UART1_RX, GND on the SPI2 pins);
             drop J-GPS (owner allowed 2026-10-17).
         - [ ] Regenerate schematic (ERC 0), then PCB: sync, re-place, re-route, DRC 0 + parity 0.
+        - [ ] With the re-sync: rename the ring parts and nets to TI interface naming (owner
+            2026-10-17), e.g. `ETH1-PHY` -> RMII2 leg and `ETH2-USB` -> USB1 leg, including
+            `T-ETH*`, `R-BS*`, `C-BS*`, `C-P1-*`, `C-U2-*`, `PHY1_*`, `ETH_*`, `ETH2_*`; exact
+            designators to be agreed before the rename.
         - [ ] Firmware: Pilot DTS overlay for the new pin mux.
         - [x] AM625 capability check against the SoC data sheet, 2026-10-17 (owner: "page 2 of its
             datasheet says that it supports 2 ethernet ports"): recorded in
@@ -1794,6 +1798,11 @@ REFERENCES.md Removed/Superseded Citations).
             whose post-boot state depends on BeagleBoard's MSPM0 firmware. Owner decision: accept
             (verify RMII2 timing with the extra load at bring-up), or move those nets off AIN
             pins in the next re-map. P2-35 carries the MSPM0 SWCLK pull-down — keep it spare.
+            Analysis 2026-10-17: RMII2 cannot move (each RMII2 signal has one AM625 ball, SPRSP58C
+            Table 5-5, wired only to its current header pin). DSHOT0/3 could move to another PRU0
+            GPO pin, but the free ones (P2-30, P2-34) are on the P2 rail under ISO_BAND while
+            J-PWM sits over the P1 rail, so a move lengthens routes and crosses the band; DShot
+            is not sensitive to 5 pF. Recommendation: keep the pins and verify RMII2 at bring-up.
         - [ ] Pilot + TACCO DTS: hold the unused second ball of every dual-ball header pin
             (P1-2/4/6/10/12/26/28/33/36, P2-1/3/5/7/9/11/29/31) as a GPIO input with no pull
             (PB2I_AM625_HEADER_CAPABILITIES.md §2 CAUTION).

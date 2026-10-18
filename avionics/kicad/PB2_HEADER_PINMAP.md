@@ -18,54 +18,58 @@ redistribution). **Owner:** S. Griffing. **License (this file):** CC BY-SA 4.0.
 ## 1. Header map (PB2 P1 / P2 as built)
 
 Each position lists the AM6254 ball(s) wired to it and the pinmux options printed on the PB2
-schematic. "+" means two balls are tied to one header pin (only one may be muxed active). ADC
-positions (AIN0..AIN7) are 3.3 V-tolerant analog inputs that share the pin with a GPIO ball.
+schematic. Ball naming follows the BeagleBoard SRM [REF-SENSOR-041 §4.2]: the first ball is
+the SRM's `Px.yy` column and **A:** marks the second ball tied to the same header pin (the SRM's
+`Px.yyA` column); only one of the two may be muxed as an output. AINn marks the header pins
+also wired directly to the PB2-I's MSPM0L1105 (3.3 V analog/GPIO; see
+[`PB2I_AM625_HEADER_CAPABILITIES.md`](PB2I_AM625_HEADER_CAPABILITIES.md) §6). Ball names are
+TI's AM625 ALW ball designators [REF-SENSOR-049 Table 5-1].
 
 ### P1
 
 | Pin | Net / ball | Mux options (as printed) | Pin | Net / ball | Mux options |
 | --- | --- | --- | --- | --- | --- |
-| 1 | **VIN** (5 V in) | power | 2 | AA19 (+E18, +AIN6) | RMII2_TX_EN, GPIO0_87 (+MCASP0_AXR0, EHRPWM1_B, GPIO1_10) |
-| 3 | F18 | USB1_DRVVBUS, GPIO1_51 | 4 | Y18 (+D20) | RMII2_TXD0, GPIO0_89 (+MCASP0_AFSX, SPI2_CS3, GPIO1_12) |
-| 5 | USB1 VBUS | power | 6 | E19 (+AD18) | SPI2_CS0, UART1_RXD, EHRPWM0_A, GPIO1_13 (+RGMII1_TD3, GPIO0_78) |
+| 1 | **VIN** (5 V in) | power | 2 | E18; **A:** AA19; AIN6 | MCASP0_AXR0, EHRPWM1_B, GPIO1_10; **A:** RMII2_TX_EN, GPIO0_87 |
+| 3 | F18 | USB1_DRVVBUS, GPIO1_51 | 4 | D20; **A:** Y18 | MCASP0_AFSX, SPI2_CS3, GPIO1_12; **A:** RMII2_TXD0, GPIO0_89 |
+| 5 | USB1 VBUS | power | 6 | E19; **A:** AD18 | SPI2_CS0, UART1_RXD, EHRPWM0_A, GPIO1_13; **A:** RGMII1_TD3, GPIO0_78 |
 | 7 | VIN.USB (USB_5V) | power | 8 | A20 | SPI2_CLK, UART1_TXD, EHRPWM0_B, GPIO1_14 |
-| 9 | USB1 D− | USB | 10 | B19 (+A18) | SPI2_D0, UART1_CTSn, UART6_RXD, GPIO1_7 (+EXT_REFCLK1, GPIO1_30) |
-| 11 | USB1 D+ | USB | 12 | A19 (+AE18) | SPI2_D1, UART1_RTSn, UART6_TXD, GPIO1_8 (+GPIO0_77) |
+| 9 | USB1 D− | USB | 10 | A18; **A:** B19 | EXT_REFCLK1, GPIO1_30; **A:** SPI2_D0, UART1_CTSn, UART6_RXD, GPIO1_7 |
+| 11 | USB1 D+ | USB | 12 | A19; **A:** AE18 | SPI2_D1, UART1_RTSn, UART6_TXD, GPIO1_8; **A:** GPIO0_77 |
 | 13 | N20 | USB1_ID, GPIO0_36 | 14 | **VDD_3V3** (out) | power |
-| 15 | **GND** | | 16 | **GND** | |
+| 15 | **GND** |  | 16 | **GND** |  |
 | 17 | AIN VREF− | analog | 18 | AIN VREF+ (0 Ω to 3V3) | analog |
-| 19 | AIN0 + AD22 | RMII2_RX_ER, GPIO1_1 | 20 | Y24 | UART4_TXD, GPIO0_50 |
-| 21 | AIN1 + AE22 | GPIO1_6 | 22 | **GND** | |
-| 23 | AIN2 + AC21 | GPIO1_5 | 24 | **VOUT** (VSYS) | power |
-| 25 | AIN3 + AB20 | RMII2_RXD1, GPIO1_4 | 26 | K24 (+D6) | I2C2_SDA, UART4_TXD, GPIO0_44 (+MCU_MCAN0_TX) |
-| 27 | AIN4 + AE23 | RMII2_RXD0, GPIO1_3 | 28 | K22 (+B3) | I2C2_SCL, UART4_RXD, GPIO0_43 (+MCU_MCAN0_RX) |
+| 19 | AD22; AIN0 | RMII2_RX_ER, GPIO1_1 | 20 | Y24 | UART4_TXD, GPIO0_50 |
+| 21 | AE22; AIN1 | GPIO1_6 | 22 | **GND** |  |
+| 23 | AC21; AIN2 | GPIO1_5 | 24 | **VOUT** (VSYS) | power |
+| 25 | AB20; AIN3 | RMII2_RXD1, GPIO1_4 | 26 | K24; **A:** D6 | I2C2_SDA, UART4_TXD, GPIO0_44; **A:** MCU_MCAN0_TX |
+| 27 | AE23; AIN4 | RMII2_RXD0, GPIO1_3 | 28 | K22; **A:** B3 | I2C2_SCL, UART4_RXD, GPIO0_43; **A:** MCU_MCAN0_RX |
 | 29 | Y20 | PRU0.7, UART3_CTSn, GPIO0_62 | 30 | E14 | UART0_TXD, EHRPWM2_B, GPIO1_21 |
 | 31 | Y22 | PRU0.4, UART4_RTSn, GPIO0_59 | 32 | D14 | UART0_RXD, EHRPWM2_A, GPIO1_20 |
-| 33 | AA23 (+A17) | PRU0.1, UART6_CTSn, GPIO0_56 (+I2C1_SDA, UART1_TXD, GPIO1_29) | 34 | AD23 | RMII2_REF_CLK, GPIO1_2 |
-| 35 | AE21 | PRU1.1, RMII2_CRS_DV, GPIO0_88 | 36 | V20 (+B17) | UART6_RTSn, GPIO0_55 (+I2C1_SCL, UART1_RXD, EHRPWM2_A, GPIO1_28) |
+| 33 | A17; **A:** AA23 | I2C1_SDA, UART1_TXD, GPIO1_29; **A:** PRU0.1, UART6_CTSn, GPIO0_56 | 34 | AD23 | RMII2_REF_CLK, GPIO1_2 |
+| 35 | AE21 | PRU1.1, RMII2_CRS_DV, GPIO0_88 | 36 | V20; **A:** B17 | UART6_RTSn, GPIO0_55; **A:** I2C1_SCL, UART1_RXD, EHRPWM2_A, GPIO1_28 |
 
 ### P2
 
 | Pin | Net / ball | Mux options | Pin | Net / ball | Mux options |
 | --- | --- | --- | --- | --- | --- |
-| 1 | B20 (+AD24) | ECAP2_IN_APWM_OUT, GPIO1_11 (+MDIO0_MDC) | 2 | U22 | PRU1.0, UART2_RXD, GPIO0_45 |
-| 3 | B18 (+AB22) | EHRPWM1_A, GPIO1_9 (+MDIO0_MDIO) | 4 | V24 | PRU1.1, UART2_TXD, GPIO0_46 |
-| 5 | C15 (+B5) | **MCAN0_TX**, UART5_RXD, GPIO1_24 (+MCU_UART0_RXD) | 6 | W25 | PRU1.2, UART3_RXD, GPIO0_47 |
-| 7 | E15 (+A5) | **MCAN0_RX**, UART5_TXD, GPIO1_25 (+MCU_UART0_TXD) | 8 | W24 | PRU1.3, UART3_TXD, GPIO0_48 |
-| 9 | A15 (+D4) | UART0_CTSn, SPI0_CS2, I2C3_SCL, UART2_RXD, GPIO1_22 (+MCU_MCAN1_RX) | 10 | AD21 | PRU1.4, GPIO0_91 |
-| 11 | B15 (+E5) | UART0_RTSn, SPI0_CS3, I2C3_SDA, UART2_TXD, GPIO1_23 (+MCU_MCAN1_TX) | 12 | PWR_BTN | control |
+| 1 | B20; **A:** AD24 | ECAP2_IN_APWM_OUT, GPIO1_11; **A:** MDIO0_MDC | 2 | U22 | PRU1.0, UART2_RXD, GPIO0_45 |
+| 3 | AB22; **A:** B18 | MDIO0_MDIO; **A:** EHRPWM1_A, GPIO1_9 | 4 | V24 | PRU1.1, UART2_TXD, GPIO0_46 |
+| 5 | C15; **A:** B5 | **MCAN0_TX**, UART5_RXD, GPIO1_24; **A:** MCU_UART0_RXD | 6 | W25 | PRU1.2, UART3_RXD, GPIO0_47 |
+| 7 | E15; **A:** A5 | **MCAN0_RX**, UART5_TXD, GPIO1_25; **A:** MCU_UART0_TXD | 8 | W24 | PRU1.3, UART3_TXD, GPIO0_48 |
+| 9 | A15; **A:** D4 | UART0_CTSn, SPI0_CS2, I2C3_SCL, UART2_RXD, GPIO1_22; **A:** MCU_MCAN1_RX | 10 | AD21 | PRU1.4, GPIO0_91 |
+| 11 | B15; **A:** E5 | UART0_RTSn, SPI0_CS3, I2C3_SDA, UART2_TXD, GPIO1_23; **A:** MCU_MCAN1_TX | 12 | PWR_BTN | control |
 | 13 | **VOUT** (VSYS) | power | 14 | BAT VIN | power |
-| 15 | **GND** | | 16 | BAT TEMP | analog |
+| 15 | **GND** |  | 16 | BAT TEMP | analog |
 | 17 | AC24 | PRU1.19, UART2_CTSn, GPIO0_64 | 18 | V21 | UART6_RXD, GPIO0_53 |
 | 19 | AC20 | PRU1.16, PR0_UART0_CTSn, GPIO1_0 | 20 | Y25 | UART4_RXD, GPIO0_49 |
-| 21 | **GND** | | 22 | AC25 | UART2_RTSn, GPIO0_63 |
+| 21 | **GND** |  | 22 | AC25 | UART2_RTSn, GPIO0_63 |
 | 23 | **VDD_3V3** (out) | power | 24 | Y23 | UART5_RXD, GPIO0_51 |
 | 25 | B14 | **SPI0_D1 (MOSI)**, GPIO1_19 | 26 | nRESET | control |
 | 27 | B13 | **SPI0_D0 (MISO)**, GPIO1_18 | 28 | AB24 | PRU1.15, UART3_RTSn, GPIO0_61 |
-| 29 | A14 (+M22) | **SPI0_CLK**, GPIO1_17 (+GPIO0_40) | 30 | AA24 | PRU1.12, UART5_CTSn, GPIO0_58 |
-| 31 | A13 (+AA18) | SPI0_CS0, GPIO1_15 (+**RMII2_TXD1**, GPIO0_90) | 32 | AB25 | PRU1.11, UART5_RTSn, GPIO0_57 |
+| 29 | A14; **A:** M22 | **SPI0_CLK**, GPIO1_17; **A:** GPIO0_40 | 30 | AA24 | PRU1.12, UART5_CTSn, GPIO0_58 |
+| 31 | A13; **A:** AA18 | SPI0_CS0, GPIO1_15; **A:** **RMII2_TXD1**, GPIO0_90 | 32 | AB25 | PRU1.11, UART5_RTSn, GPIO0_57 |
 | 33 | AA25 | UART5_TXD, GPIO0_52 | 34 | AA21 | PRU1.14, UART4_CTSn, GPIO0_60 |
-| 35 | AIN5 + W21 | UART6_TXD, GPIO0_54 | 36 | AIN7 + C13 | SPI0_CS1, GPIO1_16 |
+| 35 | W21; AIN5 | UART6_TXD, GPIO0_54 | 36 | C13; AIN7 | SPI0_CS1, GPIO1_16 |
 
 **Not on the headers:** MMC2 (SDIO) CLK/CMD/DAT0..3 (balls D25, C24, B24, C25, E23, D24 stay on
 the PB2), CPSW port 1 (RGMII1/RMII1 — only RGMII1_TD2/TD3 reach P1-12/P1-6 as second balls, which
