@@ -70,7 +70,7 @@ def hdr(name: str, descr: str, smd: bool = True) -> List[str]:
         f'\t(descr "{descr}")',
         f'\t(tags "Serenity Pilot {name}")',
         f"\t(attr {attr})",
-        f'\t(property "Reference" "REF**" (at 0 -1 0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))',
+        '\t(property "Reference" "REF**" (at 0 -1 0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))',
         f'\t(property "Value" "{name}" (at 0 1 0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))',
         '\t(property "Datasheet" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1 1) (thickness 0.15))))',
         '\t(property "Description" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1 1) (thickness 0.15))))',
@@ -359,8 +359,110 @@ def tsm_2x8_dv() -> None:
     write(name, b)
 
 
+def tpsm8282x_sil0010d() -> None:
+    """TI TPSM8282x / TPSM828224SILR MicroSiP buck module, package SIL0010D (uSiP-10,
+    2.0 x 2.5 x 1.1 mm max).  Added 2026-10-17 (Claude Opus 5.5; part choice
+    S. Griffing) to replace the TPS62933 + WE-MAPI 3015 3V3 buck.
+
+    Land per TI SLVSEP0F (Nov 2021) [REF-PWR-008] p. 48 "Example Board Layout"
+    (drawing 4223961/D): 10 pads 0.65 x 0.25 mm, 0.5 mm pitch, rows 1.25 mm apart,
+    R0.05 corners; package outline p. 47 (body 1.9-2.1 x 2.4-2.6 mm).  Pin order per
+    Table 6-1 / Fig 6-1 (top view): 1-5 down the left column, 6-10 up the right.
+
+    Pads are SOLDER-MASK DEFINED, following SLVSEP0F sec 11.1 ("create the pads as
+    solder mask defined (SMD) when some pins (such as VIN, VOUT, and GND) are
+    connected to large copper planes"): copper 0.75 x 0.35 mm, mask opening and
+    paste aperture pulled back 0.05 mm all round to TI's 0.65 x 0.25 mm (p. 48
+    "0.05 MIN all around"; p. 49 stencil is 1:1 at 0.125 mm thick).  Copper gap
+    between adjacent pads is 0.15 mm.
+
+    Cross-checked against the Ultra Librarian export for the same package
+    (avionics/datasheets/KiCADv6/footprints.pretty/SIL0010D-MFG.kicad_mod): pad
+    centres and opening size identical.  3D body is TI's SIL0010D_ASM STEP (via
+    Ultra Librarian), solid bbox measured in FreeCAD: x +/-1.0, y +/-1.25,
+    z 0..1.1 mm, i.e. already in KiCad footprint coordinates (no offset/rotation).
+    """
+    name = "TI_SIL0010D_uSiP-10_2.0x2.5mm_P0.5mm"
+    b = hdr(name, "TI MicroSiP SIL0010D 10-pin 2.0 x 2.5 x 1.1 mm (TPSM8282x); land per SLVSEP0F p.48, solder-mask-defined pads per sec 11.1")
+    b.append(rect("F.Fab", -1.0, -1.25, 1.0, 1.25))
+    b.append(line("F.Fab", -1.0, -0.95, -0.7, -1.25))
+    b.append(rect("F.CrtYd", -1.3, -1.55, 1.3, 1.55, 0.05))
+    b.append(line("F.SilkS", -1.1, -1.4, 1.1, -1.4))
+    b.append(line("F.SilkS", -1.1, 1.4, 1.1, 1.4))
+    b.append(circ("F.SilkS", -1.45, -1.0, 0.1))
+    for i in range(5):
+        y = -1.0 + 0.5 * i
+        for num, x in ((str(1 + i), -0.625), (str(10 - i), 0.625)):
+            b.append(f'\t(pad "{num}" smd roundrect (at {x:.3f} {y:.3f}) (size 0.750 0.350) '
+                     '(layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.15) '
+                     '(solder_mask_margin -0.05) (solder_paste_margin -0.05))')
+    b.append('\t(model "${KIPRJMOD}/../../Serenity-Custom.3dshapes/TI_SIL0010D_uSiP-10.step" '
+             "(offset (xyz 0 0 0)) (scale (xyz 1 1 1)) (rotate (xyz 0 0 0)))")
+    write(name, b)
+
+
+def ksz8863_lqfp48() -> None:
+    """Microchip KSZ8863RLLI 48-lead LQFP 7 x 7 mm.  Written 2026-10-17 (Claude Opus 5.5)
+    for the 3-port-switch option; NOT USED (no 10.5 mm site on the board) and not called
+    from main(), kept as the verified land in case the switch returns on another board.
+
+    Land per DS00002335B (Rev B, 2017) [REF-SENSOR-045] Fig. 10-1, drawing
+    LQFP7x7-48LD-PL-1 "Recommended land pattern": 0.25 x 1.30 mm pads, 0.50 mm pitch,
+    8.70 mm between opposite pad-row centres (pads 3.70-5.00 mm from the centre).  This
+    differs from KiCad's IPC LQFP-48_7x7mm (1.475 x 0.30 mm at +/-4.1625 mm), so the
+    device datasheet governs.  Body D1/E1 7.00 mm, lead tips D/E 9.00 mm nominal.
+    Pin 1 top-left, counter-clockwise (Fig. 2-1 top view).
+    """
+    name = "Microchip_LQFP-48_7x7mm_P0.5mm_LQFP7x7-48LD-PL-1"
+    b = hdr(name, "Microchip 48-lead LQFP 7x7 mm, 0.5 mm pitch; land per KSZ8863 DS00002335B Fig. 10-1 (0.25 x 1.30 mm pads, 8.70 mm row span)")
+    b.append(rect("F.Fab", -3.5, -3.5, 3.5, 3.5))
+    b.append(line("F.Fab", -3.5, -2.5, -2.5, -3.5))
+    b.append(rect("F.CrtYd", -5.25, -5.25, 5.25, 5.25, 0.05))
+    for x1, y1, x2, y2 in ((-3.6, -3.6, -3.1, -3.6), (-3.6, -3.6, -3.6, -3.1), (3.6, -3.6, 3.1, -3.6),
+                           (3.6, -3.6, 3.6, -3.1), (-3.6, 3.6, -3.1, 3.6), (-3.6, 3.6, -3.6, 3.1),
+                           (3.6, 3.6, 3.1, 3.6), (3.6, 3.6, 3.6, 3.1)):
+        b.append(line("F.SilkS", x1, y1, x2, y2))
+    b.append(circ("F.SilkS", -4.9, -3.4, 0.15))
+    c = 4.35
+    for i in range(12):
+        off = -2.75 + 0.5 * i
+        b.append(smd_pad(str(1 + i), -c, off, 1.30, 0.25))        # left, top to bottom
+        b.append(smd_pad(str(13 + i), off, c, 0.25, 1.30))        # bottom, left to right
+        b.append(smd_pad(str(25 + i), c, -off, 1.30, 0.25))       # right, bottom to top
+        b.append(smd_pad(str(37 + i), -off, -c, 0.25, 1.30))      # top, right to left
+    write(name, b)
+
+
+def tpd4e05u06_dqa() -> None:
+    """TI TPD4E05U06 4-channel ESD array, DQA (USON-10, 2.5 x 1.0 mm, 0.55 mm max).
+    Added 2026-10-17 (Claude Opus 5.5) for the two JST-GH expansion headers.
+
+    Land per TI SLVSBO7O (Aug 2024) [REF-SENSOR-044] "Example board layout" DQA0010A
+    (4220328/A): 10 pads 0.565 mm long, 0.5 mm pitch, rows 0.835 mm apart (centres),
+    signal pads 0.2 mm wide, the two GND pads (3, 8) 0.4 mm wide.  Pin order Fig. 4-3
+    (top view): 1-5 down the left, 6-10 up the right.  KiCad's USON-10_2.5x1.0mm uses
+    0.3 mm pads at +/-0.385 mm, so the TI land governs.
+    """
+    name = "TI_DQA0010A_USON-10_2.5x1.0mm_P0.5mm"
+    b = hdr(name, "TI DQA0010A USON-10 2.5 x 1.0 mm (TPD4E05U06); land per SLVSBO7O example board layout")
+    b.append(rect("F.Fab", -0.5, -1.25, 0.5, 1.25))
+    b.append(rect("F.CrtYd", -0.95, -1.55, 0.95, 1.55, 0.05))
+    b.append(circ("F.SilkS", -0.95, -1.45, 0.1))
+    x = 0.835 / 2
+    for i in range(5):
+        y = -1.0 + 0.5 * i
+        for num, sx in ((str(1 + i), -x), (str(10 - i), x)):
+            w = 0.4 if num in ("3", "8") else 0.2
+            b.append(smd_pad(num, sx, y, 0.565, w))
+    write(name, b)
+
+
 def main() -> None:
     LIB.mkdir(exist_ok=True)
+    # ksz8863_lqfp48() — evaluated 2026-10-17, not used: the 3-port switch did not fit
+    # (largest free square ~6 mm); ring port 2 moved to USB1 (CH397A) instead
+    tpd4e05u06_dqa()
+    tpsm8282x_sil0010d()
     tsm_2x8_dv()
     pgnd_hole()
     # sam_m10q() retired 2026-09-19: Pilot's GPS moved to MAX-M10S (external

@@ -25,9 +25,9 @@ positions (AIN0..AIN7) are 3.3 V-tolerant analog inputs that share the pin with 
 
 | Pin | Net / ball | Mux options (as printed) | Pin | Net / ball | Mux options |
 | --- | --- | --- | --- | --- | --- |
-| 1 | **VIN** (5 V in) | power | 2 | AA19 (+AIN6) | RMII2_TX_EN, GPIO0_87 |
-| 3 | F18 | USB1_DRVVBUS, GPIO1_51 | 4 | Y18 | RMII2_TXD0, GPIO0_89 |
-| 5 | USB1 VBUS | power | 6 | E19 | SPI2_CS0, UART1_RXD, EHRPWM0_A, GPIO1_13 |
+| 1 | **VIN** (5 V in) | power | 2 | AA19 (+E18, +AIN6) | RMII2_TX_EN, GPIO0_87 (+MCASP0_AXR0, EHRPWM1_B, GPIO1_10) |
+| 3 | F18 | USB1_DRVVBUS, GPIO1_51 | 4 | Y18 (+D20) | RMII2_TXD0, GPIO0_89 (+MCASP0_AFSX, SPI2_CS3, GPIO1_12) |
+| 5 | USB1 VBUS | power | 6 | E19 (+AD18) | SPI2_CS0, UART1_RXD, EHRPWM0_A, GPIO1_13 (+RGMII1_TD3, GPIO0_78) |
 | 7 | VIN.USB (USB_5V) | power | 8 | A20 | SPI2_CLK, UART1_TXD, EHRPWM0_B, GPIO1_14 |
 | 9 | USB1 D− | USB | 10 | B19 (+A18) | SPI2_D0, UART1_CTSn, UART6_RXD, GPIO1_7 (+EXT_REFCLK1, GPIO1_30) |
 | 11 | USB1 D+ | USB | 12 | A19 (+AE18) | SPI2_D1, UART1_RTSn, UART6_TXD, GPIO1_8 (+GPIO0_77) |
@@ -68,9 +68,17 @@ positions (AIN0..AIN7) are 3.3 V-tolerant analog inputs that share the pin with 
 | 35 | AIN5 + W21 | UART6_TXD, GPIO0_54 | 36 | AIN7 + C13 | SPI0_CS1, GPIO1_16 |
 
 **Not on the headers:** MMC2 (SDIO) CLK/CMD/DAT0..3 (balls D25, C24, B24, C25, E23, D24 stay on
-the PB2), RMII0/RGMII1 (used by the PB2's own Ethernet), OSPI, MCASP data. **USB1** (D−/D+,
-VBUS, DRVVBUS, ID) is on P1-3/5/9/11/13 and is the only high-bandwidth peripheral interface
-available to a cape besides SPI0.
+the PB2), CPSW port 1 (RGMII1/RMII1 — only RGMII1_TD2/TD3 reach P1-12/P1-6 as second balls, which
+is not a usable interface), OSPI. **USB1** (D−/D+, VBUS, DRVVBUS, ID) is on P1-3/5/9/11/13.
+
+> **NOTE (2026-10-17, Claude Opus 5.5)** — The mux options in the tables above are the ones
+> printed on the PB2 schematic and are not exhaustive. The full AM625 mux list for every header
+> ball (SPRSP58C Table 5-1), the second-ball corrections to P1-2/P1-4/P1-6, RGMII2 (gigabit) on
+> the header, the three CAN-FD controllers (MCAN0, MCU_MCAN0, MCU_MCAN1), McASP and MMC2
+> card-detect/write-protect are in [`PB2I_AM625_HEADER_CAPABILITIES.md`](PB2I_AM625_HEADER_CAPABILITIES.md)
+> [REF-SENSOR-049] [REF-SENSOR-050]. The earlier sentence here, that MCASP data was not on the
+> headers and that USB1 was the only high-bandwidth interface besides SPI0, was wrong: McASP0
+> and RGMII2 are both reachable.
 
 ## 2. TACCO allocation (2026-09-29 proposal, replaces `PB2_P1`/`PB2_P2` in `gen_tacco_sch.py`)
 

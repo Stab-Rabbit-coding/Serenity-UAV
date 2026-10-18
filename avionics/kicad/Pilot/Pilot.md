@@ -7,6 +7,125 @@
 **Date:** 2026-10-06
 **Status:** Schematic and PCB unified from one generator; ERC 0, DRC 0, fully placed on 6 layers on the corrected 4.80 mm SMT rails (2026-10-06). **Routing not yet complete** (see "Routing status" below).
 
+**Update 2026-10-17 (PB2-I header re-map, Ethernet ring architecture, sourcing rules; S.
+Griffing decisions, implemented by Claude Opus 5.5) — schematic ahead of the PCB.**
+
+- **AM625 SoC capabilities re-checked against the data sheet** (SPRSP58C Table 5-1, TRM
+  SPRUIV7C §1.4.12; REF-SENSOR-049/050): see
+  [`../PB2I_AM625_HEADER_CAPABILITIES.md`](../PB2I_AM625_HEADER_CAPABILITIES.md). The SoC has
+  two external Ethernet ports, but only port 2 (RMII2 or gigabit RGMII2) reaches the PB2-I
+  header, so the two-NIC ring below stands. Three CAN-FD controllers reach the header (MCAN0
+  in use; MCU_MCAN0 and MCU_MCAN1 share pins with the TPM and SPI0 chip-select nets) — open
+  owner decision in `avionics/WBS.md`.
+- **Header map rebuilt from official BeagleBoard sources** (REF-SENSOR-047, SRM §4.2):
+    - The previous map put GND on P1-1, which is the PB2-I's VIN.
+    - It put PHY resets on P2-13..16 (VSYS / VBAT / GND / BAT_TS).
+    - It used RMII0/RMII1, which the headers do not carry.
+    - The PB2-I and PB2 share one design repository and header map.
+    - The rail footprints had pin 1 on the wrong row once flipped to B.Cu; the library is
+      fixed, and TACCO is affected too (WBS).
+- **Ethernet ring:**
+    - Port 1 is the DP83825I on RMII2 + MDIO0. RMII2 is the only header MAC in use (CPSW port 2); the 12
+      RGMII2 balls also reach the header but are unused.
+    - Port 2 is a USB 10/100 controller on USB1 (P1-5 VBUS, P1-9 D-, P1-11 D+). Linux bridges
+      the two, so forwarding stops if this node's CPU is down (owner accepted).
+- **Rejected candidates** (do not re-propose):
+    - Microchip KSZ8863RLLI 3-port switch: no 10.5 mm courtyard site; the largest free square
+      is ~6 mm.
+    - Microchip LAN9303: also too large (8 x 8 QFN), and its RMII clock direction depends on
+      register setup.
+    - WCH CH397A: manufacturer domiciled in the PRC (AGENTS.md §5 sourcing rule).
+    - Realtek RTL8152B-VB-CG: datasheet marked "CONFIDENTIAL: Development Partners Only"
+      (fails the NDA-free rule).
+    - Microchip LAN9500Ai: 8 x 8 QFN-56 does not fit.
+    - ASIX AX88772E is selected (public datasheet, 4 x 4 QFN-32, 0-70 °C); it waits for ASIX's
+      reference schematic.
+- **Expansion:** the GNSS's place goes to one 6-pin JST-GH on the PB2-I SPI2 pins (SPI /
+  UART1 / UART6 / PWM / GPIO) with fused 5 V and ESD. There is room for only one edge
+  connector.
+
+**Update 2026-10-17 (ISOW §13.1 re-floorplan applied to the PCB, keeping valid manual
+routing; S. Griffing chose keep-copper; implemented by Claude Opus 5.5).** One script,
+`scripts/refloorplan_keep_copper.sh`, rebuilds the board from the owner's routed board:
+
+1. `refloorplan_pilot.py --keep-copper` syncs the PCB to the netlist (GNSS parts off, four
+   §13.1 beads on), applies the hand poses and re-places displaced parts:
+    - Both isolators are at rot 180, at (135.1, 107.1) and (150.5, 107.1) mm.
+    - The §13.1 caps are within 1 mm of pins 11/12.
+    - U-3V3 sits on B at (138.0, 100.6) with CIN on its south side and COUT on its east and
+      north sides.
+    - C-1553C sits at the HI-6138's VCCP pins.
+    - 21 more parts were moved. Supply caps follow their parent, and no pad sits within
+      2.75 mm of a mounting hole.
+2. `iso_zones_pilot.py` redraws the isolation copper and adds the rules:
+    - ISO_BAND, the GND2 islands, and the GND / +3V3 planes notched with the 0.5 mm moat.
+    - The 4 mm `BUBBLE_CAN` / `BUBBLE_485` areas on every layer, with no pour.
+    - The `bubble_*` DRC rules, and a courtyard exemption limited to the §13.1 part pairs.
+3. `cleanup_pilot_copper.py` removes the 184 items on deleted GNSS nets.
+4. `repair_pilot_routing.py` rips out copper that is now illegal or dangling.
+
+Then `grid_route_pilot.py` (now aware of the bubbles and plane outlines), the rip-up rounds and
+`fence_pgnd_pilot.py` ran. The PGND fence is partial: 20 vias in 8 runs tied to H1–H4, about
+40 of the 180 mm perimeter.
+
+- **Gates:**
+    - DRC: 0 errors, 43 silkscreen warnings.
+    - Schematic parity: 0.
+    - 107 unconnected: 66 signal, 41 plane.
+- **Before this pass,** the owner's board had 73 signal connections open; 66 are open now.
+  The remaining core was already open before the re-floorplan:
+    - RMII0/1, MDC/MDIO and PHY reset/interrupt lines;
+    - SPI fan-in;
+    - the RS485 logic lines.
+- **Why it doesn't route:** the escapes around ETH1-PHY on B are fully used, and the P2-rail
+  pads under the band can only escape on B.
+- **Open owner decisions** (avionics/WBS.md): logic parts on B under the isolated domains
+  (X-50M, BARO, HI-6138 west pads) have no logic plane or via, so they couple to GND2*. The
+  PHY corridor needs interactive routing or a regional strip-and-reroute.
+- **Backup:** the pre-change board is
+  `kicads/Pilot-backups/Pilot.pre-refloorplan-2026-10-17.kicad_pcb`. That folder is gitignored.
+
+**Update 2026-10-17 (3V3 supply → TPSM828224SILR module; S. Griffing decision, implemented by
+Claude Opus 5.5).** The TPS62933 buck, its WE-MAPI 3015 inductor and six support parts (about
+54 mm²) are replaced by TI's **TPSM828224SILR**. It is a fixed-3.3 V, 2 A MicroSiP module with
+the inductor inside, 2.0 × 2.5 × 1.1 mm [REF-PWR-008]. The goal is to fit the 3V3 supply in
+the B.Cu pocket between the §13.1 bubbles.
+
+- **Load:** worst case about 875 mA (HI-6138 transmit 695 mA, 2 × DP83825I about 115 mA, TPM
+    35 mA), so a 2 A part has about 2.3× margin. Input 2.4–5.5 V (abs. max 6 V); +5V is already
+    held at 4.5–5.5 V by the ISOW VDD limit.
+- **Schematic (ERC 0, 111 parts):**
+    - FB (pin 8) ties to VOUT, as SLVSEP0F §9.2.1.2.1 requires for the fixed-output devices.
+    - EN ties to VIN, and PG is left open.
+    - Removed: `R-EN3`, `C-BST`, `C-SS`, `L-3V3`, `R-FB3H`, `R-FB3L`.
+    - `C-3V3-IN` and `C-3V3-O1/O2` are all Taiyo Yuden MSASJ168BC6226MTNA01, 22 µF 6.3 V X6S
+        0603 (TI's Table 9-1 output cap under its new part number) [REF-PWR-011].
+    - DC bias checked against SLVSEP0F §9.2.2, worst case with −20 % tolerance and the
+        temperature limit:
+        - Input: 4.2 µF at 5.5 V, against a 3 µF minimum.
+        - Output: 7.2 µF per cap at 3.333 V, against a 5 µF minimum.
+    - The first input pick, Murata GRM188Z71A106MA73 10 µF, kept only 2.65 µF at 5.5 V and was
+        rejected [REF-PWR-012].
+- **Land:** `Serenity-Custom:TI_SIL0010D_uSiP-10_2.0x2.5mm_P0.5mm` (`gen_pilot_footprints.py`):
+    - Taken from SLVSEP0F p. 48. The pads are solder-mask-defined, as §11.1 asks for pads tied to
+        planes.
+    - Cross-checked against the Ultra Librarian export.
+    - The STEP body is in `../Serenity-Custom.3dshapes/`.
+- **PCB:** swapped in place by `scripts/inject_tpsm828224.py`, which keeps the manual routing.
+    It deleted the copper on the five dead nets and the old SOT-583 escapes under the new pads.
+    - DRC with parity: 320 violations / 96 unconnected / 33 footprint errors, against 306 / 89 /
+        33 before the swap.
+    - Every new violation is in this area:
+        - `U-3V3` courtyard overlaps `C-BARO1`;
+        - 12 silk hits;
+        - dangling +5V / +3V3 / GND copper waiting to be re-routed.
+    - No shorts.
+- **Open:**
+    - Re-place the module and its caps into the pocket.
+    - Thermal margin is thin only at the extreme: continuous 1553 transmit at 85 °C ambient
+        reaches about 119 °C against 125 °C. That uses an estimated 85 % efficiency and TI's EVM
+        θJA.
+
 **Update 2026-10-12 (ISOW §13.1 made binding, GNSS moved off the cape; S. Griffing decisions,
 analysis and implementation by Claude Opus 5.5).** The schematic is ahead of the PCB until the
 re-floorplan below lands (branch `pilot-refloorplan`).
@@ -68,6 +187,8 @@ x 128.3–137.6 mm, so GPS pins 1–9 are no longer inside the band.
 Opus 5.5):** `TPM_RSTN` moved from PB2 P2-11 to **P1-28** (GPIO0_43, ball K22) and
 `TPM_IRQN` from P2-12 to **P1-29** (GPIO0_62, ball Y20), per the PocketBeagle 2 SRM
 §4.2 mux tables (`../../datasheets/pocketbeagle2_srm.pdf`).
+- **Superseded 2026-10-17:** the PB2-I header re-map (top of this file) puts `TPM_IRQN` on
+  P1-20 (ball Y24) and `DSHOT2` on P1-29; `gen_pilot_sch.py` `PB2_P1` is authoritative.
 - **Why:** the TPM sits over the P1 rail, 6–7 mm from the new pins, whereas P2-11/12 were
   26–31 mm away and inside `ISO_BAND`, where no via is legal.
 - **Rejected pins:** P1-27 is shared with AIN4, and P1-30 is UART0_TXD (the console).

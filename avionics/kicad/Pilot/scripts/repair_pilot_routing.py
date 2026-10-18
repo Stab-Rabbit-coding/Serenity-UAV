@@ -3,7 +3,7 @@
 board so the next freerouting pass can finish it cleanly.
 
 Usage:
-    python3 repair_pilot_routing.py <board.kicad_pcb>
+    python3 repair_pilot_routing.py <board.kicad_pcb> [max_rounds, default 29]
 
 Works on the S-expression text and on ``kicad-cli pcb drc`` JSON only.  The pcbnew
 SWIG binding in KiCad 9.0.2 is not usable for this: after one geometry call it
@@ -108,14 +108,16 @@ def rip_set(report: dict) -> set:
 
 
 def main() -> None:
-    if len(sys.argv) != 2:
+    if len(sys.argv) not in (2, 3):
         sys.exit(__doc__)
     pcb = Path(sys.argv[1])
     text = move_footprints(pcb.read_text())
     text, n = drop(text, odd_vias(text))
     print("non-through / undersized vias removed:", n)
     pcb.write_text(text)
-    for rnd in range(1, 30):
+    # dangling chains shrink one segment per DRC round, so long orphaned runs (the
+    # 2026-10-17 keep-copper re-floorplan) need many rounds; a round costs ~2 s
+    for rnd in range(1, int(sys.argv[2]) + 1 if len(sys.argv) > 2 else 30):
         doomed = rip_set(drc(pcb))
         text, n = drop(pcb.read_text(), doomed)
         print(f"round {rnd}: ripped {n} item(s)")

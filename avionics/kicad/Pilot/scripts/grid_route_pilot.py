@@ -54,7 +54,13 @@ VIA_COST = 2.0         # mm-equivalent penalty per layer change
 RIP_COST = 0.25         # mm-equivalent per grid cell that needs an existing track ripped
 RIP_MAX = 8             # most pre-existing items one rip-up route may remove
 ISO_RE = re.compile(r"^(GND2_|VCC2_|CAN_|RS485_)")
-PLANES = {"GND": "In1.Cu", "+3V3": "In4.Cu"}
+# plane nets: a pad needs only a via that lands inside a zone of its net on this layer
+# (the GND2_* islands joined the list with the 2026-10-17 re-floorplan)
+PLANES = {"GND": "In1.Cu", "+3V3": "In4.Cu", "GND2_CAN": "In1.Cu", "GND2_RS485": "In1.Cu"}
+# ISOW §13.1 bubbles (iso_zones_pilot.py): only these nets may have copper inside
+BUBBLE_NETS = {"BUBBLE_CAN": {"GND2_CAN_DCDC", "VCC2_CAN_DCDC"},
+               "BUBBLE_485": {"GND2_RS485_DCDC", "VCC2_RS485_DCDC"}}
+PLANE_INSET = 0.5      # plane via centre this far inside the zone outline (fill clearance)
 POWER = {"GND", "+3V3", "+5V", "+5V_IN", "PGND"}
 EXEMPT = ("X2Y-CAN", "X2Y-RS485")
 
@@ -82,16 +88,26 @@ for t in b.GetTracks():
         tracks.append(dict(net=t.GetNetname(), layer=pcbnew.LayerName(t.GetLayer()),
                            x1=t.GetStart().x / s, y1=t.GetStart().y / s, x2=t.GetEnd().x / s,
                            y2=t.GetEnd().y / s, w=t.GetWidth() / s, uuid=t.m_Uuid.AsString()))
-bands = []
+bands, bubbles, zones = [], [], []
+def pts(ch):
+    return [(ch.CPoint(i).x / s, ch.CPoint(i).y / s) for i in range(ch.PointCount())]
 for z in b.Zones():
+    sp = z.Outline()
+    outl = [pts(sp.Outline(k)) for k in range(sp.OutlineCount())]
+    holes = [pts(sp.Hole(k, h)) for k in range(sp.OutlineCount()) for h in range(sp.HoleCount(k))]
+    lays = [pcbnew.LayerName(l) for l in z.GetLayerSet().Seq()]
     if z.GetIsRuleArea() and z.GetZoneName() == "ISO_BAND":
-        ol = z.Outline().Outline(0)
-        bands.append(dict(layers=[pcbnew.LayerName(l) for l in z.GetLayerSet().Seq()],
-                          pts=[(ol.CPoint(i).x / s, ol.CPoint(i).y / s)
-                               for i in range(ol.PointCount())]))
+        for o in outl:
+            bands.append(dict(layers=lays, pts=o))
+    elif z.GetIsRuleArea() and z.GetZoneName().startswith("BUBBLE_"):
+        for o in outl:
+            bubbles.append(dict(name=z.GetZoneName(), pts=o))
+    elif not z.GetIsRuleArea():
+        zones.append(dict(net=z.GetNetname(), layers=lays, outlines=outl, holes=holes))
 e = b.GetBoardEdgesBoundingBox()
 nets = {{b.GetNetInfo().GetNetItem(i).GetNetname(): i for i in range(b.GetNetCount())}}
 print(json.dumps(dict(pads=pads, tracks=tracks, vias=vias, bands=bands, nets=nets,
+    bubbles=bubbles, zones=zones,
     edge=[e.GetX() / s, e.GetY() / s,
           (e.GetX() + e.GetWidth()) / s, (e.GetY() + e.GetHeight()) / s])))
 """
@@ -150,12 +166,23 @@ class Board:
         for v in g["vias"]:
             for k in range(len(LAYERS)):
                 self._capsule(k, v["x"], v["y"], v["x"], v["y"], v["r"], v["net"], movable=True)
-        band_f = next(b["pts"] for b in g["bands"] if "In1.Cu" in b["layers"])
-        self.band = in_poly_grid(self.X, self.Y, band_f)
-        self.band_b = np.zeros_like(self.band)
+        # ISO_BAND is several polygons since the 2026-10-17 re-floorplan (one per domain)
+        self.band = np.zeros(self.X.shape, bool)
+        self.band_b = np.zeros(self.X.shape, bool)
         for b in g["bands"]:
+            if "In1.Cu" in b["layers"]:
+                self.band |= in_poly_grid(self.X, self.Y, b["pts"])
             if b["layers"] == ["B.Cu"]:
                 self.band_b |= in_poly_grid(self.X, self.Y, b["pts"])
+        self.in_band_b = distance_transform_edt(self.band_b) * res
+        # §13.1 bubbles: per bubble, distance from each cell to the bubble
+        self.bubbles = {}
+        for bub in g.get("bubbles", []):
+            m = in_poly_grid(self.X, self.Y, bub["pts"])
+            prev = self.bubbles.get(bub["name"])
+            self.bubbles[bub["name"]] = m if prev is None else (prev | m)
+        self.bubble_dist = {n: distance_transform_edt(~m) * res for n, m in self.bubbles.items()}
+        self._plane_cache: dict = {}
         # distance from a cell to the band (outside cells) and to its boundary (inside cells),
         # so a whole via disc / track width, not just its centre, is checked against the band
         self.to_band = distance_transform_edt(~self.band) * res
@@ -177,6 +204,28 @@ class Board:
         for hx, hy, hr in self.holes:
             hole_mask |= np.hypot(self.X - hx, self.Y - hy) <= hr
         self.hole_dist = distance_transform_edt(~hole_mask) * res
+
+    def plane_inside(self, net: str) -> np.ndarray:
+        """Distance (mm) from each cell to the outside of the zones of ``net`` on its plane."""
+        if net not in self._plane_cache:
+            m = np.zeros(self.X.shape, bool)
+            for z in self.g.get("zones", []):
+                if z["net"] == net and PLANES.get(net) in z["layers"]:
+                    for o in z["outlines"]:
+                        m |= in_poly_grid(self.X, self.Y, o)
+                    for h in z["holes"]:
+                        m &= ~in_poly_grid(self.X, self.Y, h)
+            self._plane_cache[net] = distance_transform_edt(m) * self.res
+        return self._plane_cache[net]
+
+    def bubble_clear(self, net: str, win) -> np.ndarray:
+        """Distance to the nearest bubble this net may not enter (99 when none)."""
+        iy1, iy2, ix1, ix2 = win
+        d = np.full((iy2 - iy1, ix2 - ix1), 99.0)
+        for name, dist in self.bubble_dist.items():
+            if net not in BUBBLE_NETS.get(name, set()):
+                d = np.minimum(d, dist[iy1:iy2, ix1:ix2])
+        return d
 
     def _ids(self, net: str) -> int:
         return self.netid.get(net, -2) + 1 if net else -1
@@ -270,9 +319,10 @@ def route_pair(B: Board, net: str, a: dict, b: "dict | None", margin=6.0, plane=
     edge = B.edge_dist[iy1:iy2, ix1:ix2]
     holed = B.hole_dist[iy1:iy2, ix1:ix2]
     band = B.band[iy1:iy2, ix1:ix2]
-    band_b = B.band_b[iy1:iy2, ix1:ix2]
     to_band, in_band = B.to_band[iy1:iy2, ix1:ix2], B.in_band[iy1:iy2, ix1:ix2]
     to_band_b = B.to_band_b[iy1:iy2, ix1:ix2]
+    in_band_b = B.in_band_b[iy1:iy2, ix1:ix2]
+    bub = B.bubble_clear(net, (iy1, iy2, ix1, ix2))
     slack = res + 0.01   # grid cells measure to centres: allow one full cell of error
     track_ok = (same >= CLR + w / 2 + slack) & (other >= ISO_CLR + w / 2 + slack)
     track_ok &= (edge >= EDGE_CLR + w / 2)[None] & (holed >= HOLE_CLR + w / 2)[None]
@@ -280,14 +330,16 @@ def route_pair(B: Board, net: str, a: dict, b: "dict | None", margin=6.0, plane=
     hw, vr = w / 2 + slack, VIA_D / 2 + slack       # copper extent past the cell centre
     out_band, out_band_b = to_band >= hw, to_band_b >= hw
     if iso:
-        allowed[0] &= in_band >= hw
-        allowed[1:3] = False
-        allowed[3] = band_b & (to_band_b == 0)
+        # the In2-In4 keep-outs are gone (iso_zones_pilot.py): isolated copper may use the
+        # inner layers inside the band; B.Cu only inside the B.Cu band patches
+        allowed[0:3] &= (in_band >= hw)[None]
+        allowed[3] &= in_band_b >= hw
     elif net == "PGND":
         allowed[1:3] &= out_band[None]
     else:
         allowed[0:3] &= out_band[None]
         allowed[3] &= out_band_b
+    allowed &= (bub >= hw)[None]
     nid = B._ids(net)
     own_net = np.stack([B.own[k, iy1:iy2, ix1:ix2] == nid for k in range(len(LAYERS))])
     walk = (track_ok & allowed) | (own_net & allowed)
@@ -306,9 +358,13 @@ def route_pair(B: Board, net: str, a: dict, b: "dict | None", margin=6.0, plane=
             o2 >= ISO_CLR + VIA_D / 2 + slack, axis=0)
     via_ok &= (edge >= EDGE_CLR + VIA_D / 2) & (holed >= HOLE_HOLE + VIA_DRILL / 2 + slack)
     if iso:
-        via_ok[:] = False      # In2-In4 band keep-outs forbid vias; outside the band is barred
+        # a via is on every layer: it must sit inside the band AND the B.Cu band patch
+        via_ok &= (in_band >= vr) & (in_band_b >= vr)
     else:
         via_ok &= (to_band >= vr) & (to_band_b >= vr)
+    via_ok &= bub >= vr
+    if plane:
+        via_ok &= B.plane_inside(net)[iy1:iy2, ix1:ix2] >= PLANE_INSET
 
     def cell(p):
         return (int(round((p["y"] - B.y0) / res)) - iy1, int(round((p["x"] - B.x0) / res)) - ix1)
@@ -520,6 +576,15 @@ def main() -> None:
                         B.add_route(net, *r1)
                         added.append(emit(codes[net], *r1))
                         r = r1
+            if not r:
+                # no plane under the pad (e.g. a B.Cu logic part below an isolated domain,
+                # where the planes are notched and vias are barred): route on the copper
+                # layers to the other item DRC names, like a signal net
+                r = route_pair(B, net, ia, ib, margin=a.margin, cap=a.cap)
+                if r:
+                    r = fresh(net, r)
+                    B.add_route(net, *r)
+                    added.append(emit(codes[net], *r))
             ok += 1 if r else 0
             if not r:
                 fail.append(net)

@@ -32,3 +32,20 @@
 (rule iso_cross_domain_clearance
     (condition "A.NetClass == 'ISOLATION' && B.NetClass != 'ISOLATION' && B.NetName != '' && A.Reference != 'X2Y-CAN' && A.Reference != 'X2Y-RS485' && B.Reference != 'X2Y-CAN' && B.Reference != 'X2Y-RS485'")
     (constraint clearance (min 0.5mm)))
+
+# ISOW §13.1 bubbles (iso_zones_pilot.py, 2026-10-17): no foreign metal within 4 mm of
+# pins 11 / 12 on any layer.  The isolator's own pins and its converter-side nets (the
+# 10 nF cap and the bead pads, per the datasheet's own layout) are the only exceptions.
+(rule bubble_can
+    (condition "A.intersectsArea('BUBBLE_CAN') && A.Reference != 'CAN-TR' && A.NetName != 'GND2_CAN_DCDC' && A.NetName != 'VCC2_CAN_DCDC'")
+    (constraint disallow track via pad))
+(rule bubble_485
+    (condition "A.intersectsArea('BUBBLE_485') && A.Reference != 'RS485' && A.NetName != 'GND2_RS485_DCDC' && A.NetName != 'VCC2_RS485_DCDC'")
+    (constraint disallow track via pad))
+# §13.1 item 1 puts the 10 nF caps < 1 mm from pins 11 / 12, i.e. inside the SOIC-20W
+# courtyard margin, and the VDD / VIO caps and the bus CMCs sit as close to their pins.
+# Only these named pairs are exempt; their pads still keep the normal clearances.
+(rule iso_section_13_1_courtyard
+    (condition "(A.Reference == 'CAN-TR' && (B.Reference == 'C-CAN1' || B.Reference == 'C-CAN3' || B.Reference == 'C-CAN4' || B.Reference == 'C-CAN6' || B.Reference == 'CMC-CAN')) || (A.Reference == 'RS485' && (B.Reference == 'C-485-1' || B.Reference == 'C-485-4' || B.Reference == 'C-485-6' || B.Reference == 'CMC-RS485'))")
+    (constraint courtyard_clearance (min 0mm))
+    (severity ignore))
