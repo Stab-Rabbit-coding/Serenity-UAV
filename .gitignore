@@ -51,6 +51,8 @@ avionics/kicad/symbols/XCVR_ISOW1044BDFMR.kicad_mod
 avionics/kicad/Observer/PCBNEW_SWIG_BUG.md
 docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf
 .continue/agents/new-config.yaml
+docs/references/pocketbeagle2 revA_241205.brd
+docs/references/POCKETBEAGLE2 V10_241220.DSN
 
 # Local working backups written by the 2026-08-03 trust-module retarget scripts.
 # The pre-change state is in git history (see TODO.md 1.2d); these are not artefacts.

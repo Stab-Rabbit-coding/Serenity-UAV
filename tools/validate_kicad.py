@@ -22,20 +22,19 @@ board in this project this session -- Pilot/XO/FlightEngineer/Commo/Observer):
   schematic-parity "extra footprint" / "footprint symbol mismatch" categories
   that fire on footprints not yet back-annotated to the schematic.
 
-Scope: by default checks every .kicad_sch/.kicad_pcb in the repo EXCEPT
-archive/archives directories (frozen historical boards, e.g. the pre-Rev-Q
-Pilot family, are not held to ongoing standards -- see root CLAUDE.md
-revision/archival policy). Several currently-active boards (Pilot, Flight Engineer,
-Commo) predate this validator and carry a large pre-existing backlog of real
-DRC findings (matching this project's own long-standing practice of tracking
-open ERC/DRC items rather than blocking on them, e.g. Flight Engineer's 701 open
-items) -- retroactively fixing that backlog is a separate, large hardware
-task, not something a CI script should silently paper over or suddenly
-block on. So in CI, pass --changed-since <base-ref> to scope the HARD check
-to only the KiCad files actually touched by the current push/PR: this
-catches regressions and any new board (like Observer, which is fully clean) at
-the moment they're introduced, without failing every future PR on
-pre-existing debt in boards it never touched.
+Scope: by default checks every .kicad_sch/.kicad_pcb in the repo EXCEPT archive/archives
+directories (frozen historical boards, e.g. the pre-Rev-Q Pilot family, are not held to
+ongoing standards -- see root CLAUDE.md revision/archival policy) and upstream bug-report
+reproduction fixtures (kicad_cli_erc_segfault_repro/), which are deliberately malformed.
+Several currently-active boards (Pilot, Flight Engineer, Commo) predate this validator and
+carry a large pre-existing backlog of real DRC findings (matching this project's own
+long-standing practice of tracking open ERC/DRC items rather than blocking on them, e.g. Flight
+Engineer's 701 open items) -- retroactively fixing that backlog is a separate, large
+hardware task, not something a CI script should silently paper over or suddenly block on. So
+in CI, pass --changed-since <base-ref> to scope the HARD check to only the KiCad files
+actually touched by the current push/PR: this catches regressions and any new board (like
+Observer, which is fully clean) at the moment they're introduced, without failing every
+future PR on pre-existing debt in boards it never touched.
 
 Ref: TODO.md (KiCad DRC/ERC workflow used throughout this project); CLAUDE.md
 "For any KiCad PCB design... run DRC after every modification and document
@@ -85,9 +84,24 @@ def _is_archived(path):
     return any(part in ARCHIVE_DIR_NAMES for part in path.relative_to(REPO_ROOT).parts)
 
 
+# Minimal reproduction fixtures for upstream bug reports (e.g. the kicad-cli
+# `sch erc` SIGSEGV set in avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/).
+# They are deliberately malformed one-symbol schematics (floating pins, dangling
+# lib_ids), not boards, so ERC findings on them are the point of the fixture.
+_FIXTURE_DIR_MARKERS = ("kicad_cli_erc_segfault_repro",)
+
+
+def _is_fixture(path):
+    return any(marker in path.parts for marker in _FIXTURE_DIR_MARKERS)
+
+
+def _is_checked(path):
+    return not _is_archived(path) and not _is_fixture(path)
+
+
 def find_kicad_files():
-    sch = sorted(p for p in REPO_ROOT.rglob("*.kicad_sch") if not _is_archived(p))
-    pcb = sorted(p for p in REPO_ROOT.rglob("*.kicad_pcb") if not _is_archived(p))
+    sch = sorted(p for p in REPO_ROOT.rglob("*.kicad_sch") if _is_checked(p))
+    pcb = sorted(p for p in REPO_ROOT.rglob("*.kicad_pcb") if _is_checked(p))
     return sch, pcb
 
 

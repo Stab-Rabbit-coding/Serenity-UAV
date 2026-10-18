@@ -1736,9 +1736,20 @@ REFERENCES.md Removed/Superseded Citations).
     `kicad-cli pcb drc --severity-all --schematic-parity` to 0, freerouting
     attempt via the Specctra bridge (reject/report on any shorts, same
     discipline as Pilot/XO), then gerbers.
-- [ ] **Observer PCB resync — not started.** 124 DRC hard. PCB (`Observer.kicad_pcb`,
-    dated 2026-07-14) predates the schematic's ISOW1412/Section H addition
-    (2026-07-26) entirely — no RS-485 footprint on the board yet.
+- [x] **Observer PCB resync — done 2026-07-27 on `don't-let-all-the-air-out`; merged and
+    retargeted 2026-10-18.** The branch's resynced PCB (ISOW1412 U6 + trunk connectors, nets
+    from the schematic netlist, 124 pre-existing DRC violations fixed, scoped `Observer.kicad_dru`
+    pad-pitch exceptions) replaced the 2026-07-14 PCB, and `retarget_pcb_footprints.py --apply`
+    (Observer job) re-applied the MCU/TPM footprint retarget on top. KiCad 9.0.2, default rules:
+    0 copper/clearance errors, 305 unrouted connections. Open: route, re-verify sch<->PCB parity
+    (§1.9.3), regenerate gerbers (the branch's pre-retarget `Jayne/gerbers` were dropped as stale).
+- [ ] **Reconcile 2026-10-18 — branch work NOT carried into main (decision: main wins).**
+    Recorded here so it is not rediscovered as "missing". All of it remains in git history on
+    `don't-let-all-the-air-out`: (a) the Kaylee MAX42408/LM76005 buck architecture (4x MAX42408
+    36 V/8 A, 1x LM76005, 6x INA226, per-ESC CMC) vs FlightEngineer's TPS54540/TPS54620 BEC
+    design; (b) the Wash Jul-28 rebuild (DS26LV31/32 1553, SAM-M10Q) superseded by Pilot Rev T
+    (HI-6138, MAX-M10S); (c) CAN-PERIPH-GW-1 2-stack alignment placement vs Bus-Gateway
+    `N_STACKS=4`; (d) the Rev R3 fuselage splice-collar redesign vs main's Sep-5 collars.
 - [x] **Commo schematic file-corruption fix — lib_id prefix, ERC 127 -> 48.**
     2026-09-20/21 (Claude Sonnet 5): `Commo.kicad_sch` had no
     `sym-lib-table`/`fp-lib-table` and used bare (unprefixed) `lib_id`s

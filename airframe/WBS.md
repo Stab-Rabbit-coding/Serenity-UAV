@@ -230,9 +230,12 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     Y −71.5..132.0, Z 0..163.2 mm, matching the CLAUDE.md table).  All active references
     (`serenity_assembly.py`, `tools/bake_hull_frame.py`, `serenity_render_views.py`,
     `bom_revR.csv`) use the `fuselage/cargo/` path; the stale `s_cargo…` reference in
-    `serenity_assembly.py` was corrected.  NOTE: the canonical copy still carries the
-    **MESH-01 fragmentation defect** (71,131 disconnected bodies, `is_watertight=False`) —
-    that is the separately-tracked MESH-01 blocker above, not a consolidation issue.
+    `serenity_assembly.py` was corrected.  **MESH-01 RESOLVED 2026-07-27:** the canonical
+    cargo copy is now a watertight single body (0 boundary / 0 non-manifold edges, volume
+    298 576 mm³ unchanged), fixed by the weld+clean finalization added to
+    `merge_cargo_interior.py` (`--repair-only` reloads the float32-exported STL, welds the
+    boolean-seam duplicate vertices, drops the zero-area slivers, keeps the largest body,
+    re-stamps the marker).  All 59 STLs pass `tools/validate_stls.py`.
 - [ ] **Hull-frame placements for VERIFY parts** (assembly-load blocker resolved; visual
     fit-validation remains). Cargo mounts (8), pylons, EDF sleeves,
     nozzles/gears, battery tray, belly panel, tip caps, dorsal antenna fin, landing

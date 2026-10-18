@@ -5,7 +5,21 @@
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** S1 (SoM end-state — PCM-071 carrier, real symbols/footprints)
 **Date:** 2026-10-07 (status re-verified against `avionics/WBS.md`; design content dated 2026-07-13)
-**Status check 2026-10-07:** the schematic is ahead of the PCB. The schematic gained the ISOW1412
+**Status check 2026-10-18 (reconcile of `don't-let-all-the-air-out` into main):** the PCB resync
+the 2026-10-07 note below calls "not started" **was done on that branch (2026-07-27)** and is now
+merged: `Observer.kicad_pcb` carries U6 (ISOW1412), the RS-485 trunk connectors and their nets, and
+the branch's scoped `Observer.kicad_dru` pad-pitch exceptions. The 2026-08-03 trust-module retarget
+(`avionics/kicad/retarget_pcb_footprints.py --apply`, Observer job only) was then re-applied on top
+of it: U3 -> `VQFN-48-1EP ... EP4.1x4.1mm`, U5 -> `QFN-32-1EP ... EP3.6x3.6mm`. Because main's schematic had moved on since the branch PCB was laid out, eight footprints were then
+swapped to the schematic's packages at the branch's own positions: the five PRTR5V0U2X TVS diodes
+(D5, T1_D1/D2, T2_D1/D2: SOT-363 -> SOT-143) and the three regulators (U_REG_1V2/3V3: SOT-23-6 ->
+SOT-563; U_REG_2V5: SOT-23-5 -> WSON-6-1EP 2x2), with pad nets taken from main's PCB for the same
+parts. KiCad 9.0.2 with the project rules and `--schematic-parity` (the `tools/validate_kicad.py`
+check): 0 hard violations (161 accepted-class soft findings). Routing is still open and the board is
+**not fabrication-ready**. The five swapped TVS/regulator placements were not re-optimised, and the
+footprint-library prefix on some parts is still `Jayne:` (soft parity mismatch).
+Superseded record, kept for history:
+- 2026-10-07: the schematic is ahead of the PCB. The schematic gained the ISOW1412
 isolated RS-485 transceiver (Section H, 2026-07-26) and the MSPM0G351x-Q1 / SLB9672 trust-module
 retarget; `Observer.kicad_pcb` (2026-07-14) predates both, has no RS-485 footprint, and reports
 **124 hard DRC violations**. The PCB resync is **not started** (`avionics/WBS.md` §1.2a, "Observer
@@ -115,8 +129,15 @@ or wrong and were caught before being committed to any citation-tracked file —
   as part of the fleet-wide trust-module rollout (schematic "Section H: ISOW1412 Isolated
   RS-485 (U6)"). Integrates its own isolated DC-DC for the bus-side supply, run half-duplex
   on RS485_A/RS485_B by shorting Y-to-A and Z-to-B; RS485_DE drives both DE and RE_N.
-  J_RS485_IN/J_RS485_OUT trunk connectors added alongside. **PCB layout not yet synced** —
-  Observer.kicad_pcb predates this schematic addition (open work, root `TODO.md` §1.2a).
+  J_RS485_IN/J_RS485_OUT trunk connectors added alongside. **PCB synced 2026-07-27** —
+  U6 + C_ADM1/C_ADM2/R_485TERM/SJ_485/J_RS485_IN/J_RS485_OUT all placed with nets assigned
+  from the schematic netlist; DRC 0 hard at the fleet's 0.3 mm clearance policy (AGENTS.md),
+  with a scoped `Observer.kicad_dru` exception for U6's own SOIC-20W pad pitch. Also fixed
+  124 pre-existing DRC hard violations found while touching this file: two overlapping
+  0402 pairs (moved apart), U2 (KSZ9477)/U_SOM (PHYTEC SoM connector)/U5 (SLB9670) fine-pitch
+  pad clearance (same `.kicad_dru` scoped-exception pattern), and U3's RS485_DE/TX/RX pads +
+  U5's unmodeled EP pad net mismatches. User hand-placed U6 into its final board position
+  after an initial off-board staging pass (front layer had no clear ~12×13 mm site).
 - **Y1** — 25 MHz crystal for U2's reference clock.
 
 ### EMI hardening (added 2026-07-03 — see "EMI Hardening Status" below)
