@@ -98,7 +98,7 @@ Mirrored: 83 memory files plus the index.
 - [NoNFO-Pilot (2026-10-12)](project_nonfo_pilot.md) — Pilot+TACCO merged per stack (8→4 nodes); BBE plan + PB2-I ideation on SecureControllers feat/nonfo-pilot-requirements; only RMII2 on PB2 header → dual-PHY ring unbuildable
 - [Pilot keep-copper re-floorplan (2026-10-17)](project_pilot_refloorplan_keep_copper.md) — §13.1 applied, owner routing kept; DRC 0/parity 0/107 unconnected; PHY corridor core was already open; B logic parts under iso domains = EMC decision
 - [Sourcing + NDA rules (2026-10-17)](feedback_sourcing_rules.md) — no PRC/RU/IR/DPRK-domiciled or -controlled silicon makers; no NDA datasheets; check before proposing parts; Nexperia fails
-- [AM625 header capabilities (2026-10-17)](project_am625_header_capabilities.md) — 2 CPSW ports but only port 2 on header (RGMII2 ok); 3 CAN-FD reachable; 17 dual-ball pins; use DS Table 5-1 not SRM
+- [AM625 header capabilities (2026-10-17)](project_am625_header_capabilities.md) — only CPSW port 2 on header; extra CAN-FD + AIN pin move REJECTED; TI/BeagleBoard names (PHY-RMII2, NIC-USB1, P1.01) on Pilot+TACCO
 
 ---
 
@@ -972,12 +972,14 @@ metadata:
 Owner flagged (2026-10-17) that AM625 datasheet p.2 says 2 Ethernet ports. Verified against TI SPRSP58C Table 5-1 / §5.3.1 and TRM SPRUIV7C §1.4.12, recorded in `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` (REF-SENSOR-049/050) and JSON `avionics/datasheets/extracted/AM625_PB2I_header_mux.json`.
 
 - CPSW3G = 2 external ports, but port 1 (RGMII1/RMII1) balls have NO alternates and aren't on the header → ring still needs PHY-on-RMII2 + USB NIC (Linux bridge). RGMII2 (gigabit) IS fully on the header.
-- 3 CAN-FD reachable: MCAN0 P2-5/7, MCU_MCAN0 P1-26/28 (balls D6/B3), MCU_MCAN1 P2-9/11 (D4/E5) — currently Pilot TPM CS/RST + 1553/BARO CS; MCU-domain IO voltage unverified. Owner decision open in avionics/WBS.md.
+- 3 CAN-FD reachable: MCAN0 P2-5/7, MCU_MCAN0 P1-26/28 (balls D6/B3), MCU_MCAN1 P2-9/11 (D4/E5); MCU-domain balls are 3.3 V (VDDSHV_CANUART = VDD_3V3). Extra buses REJECTED by owner (below).
 - 17 header pins carry two SoC balls (P1-2 also AIN6); PINMAP §1 had missed E18/D20/AD18 on P1-2/4/6. Unused ball must stay GPIO input.
 - SRM "SPI2_DI" on P1-12 is a typo for SPI2_D1. SRM does list P2.32–34 modes (an earlier claim it didn't was my parser's error).
 
 **Why:** earlier work took SoC capability from the SRM/schematic summary, which lists only board-printed mux options.
 **How to apply:** for any PB2/PB2-I pin question, read the SoC data sheet Table 5-1 (or the JSON), not the SRM summary; my pdftotext table parser dropped P2.35/P2.36 once — cross-count balls. See [[project_nonfo_pilot]], [[project_pilot_refloorplan_keep_copper]].
+
+**Owner decisions 2026-10-17 (later):** extra CAN-FD bus REJECTED (four buses — CAN-FD, RS-485, 1553, Eth ring — suffice); RMII2/DSHOT pin move off MSPM0 pins REJECTED. Names aligned on Pilot + TACCO (commit c43bcccd, tool `avionics/kicad/align_pb2_ti_names.py`): header pins P1.01..P2.36; PHY-RMII2, NIC-USB1, T-RMII2/T-USB1, J-ETH-RMII2/J-ETH-USB1, nets ETH_RMII2_*, ETH_USB1_*, RMII2_PHY_RSTN/INTRN, passives C-/R-RMII2-*, C-USB1-*. Don't re-propose "ETH1/ETH2" or "port 1/port 2" names; refdes-prefix tables must stay specific (Bob-Smith parts share the RMII2/USB1 prefix).
 
 ---
 
