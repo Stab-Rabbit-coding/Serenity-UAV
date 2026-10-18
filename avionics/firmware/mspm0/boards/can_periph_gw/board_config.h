@@ -22,7 +22,7 @@
 
 /** @brief Which stack on the PCB this image is built for (1..4). */
 #ifndef GW_STACK_INDEX
-#define GW_STACK_INDEX      (1U)
+#define GW_STACK_INDEX (1U)
 #endif
 
 /**
@@ -33,15 +33,15 @@
  *   2 = per-EDF ESC gateway (DSHOT out, BDSHOT telemetry in, over J_FLEX)
  *   3 = servo actuator gateway (PWM/TTL command out, over J_FLEX)
  */
-#define GW_ROLE_ENCODER     (1U)
-#define GW_ROLE_ESC         (2U)
-#define GW_ROLE_SERVO       (3U)
+#define GW_ROLE_ENCODER (1U)
+#define GW_ROLE_ESC     (2U)
+#define GW_ROLE_SERVO   (3U)
 
 #ifndef GW_ROLE
-#define GW_ROLE             GW_ROLE_ENCODER
+#define GW_ROLE GW_ROLE_ENCODER
 #endif
 
-#define BOARD_NAME          "CAN-PERIPH-GW-1"
+#define BOARD_NAME            "CAN-PERIPH-GW-1"
 
 /**
  * @brief Fleet node identifier.
@@ -50,7 +50,7 @@
  * README's node-identity table; keeping the blocks disjoint is what stops two
  * boards silently claiming one identity on the bus.
  */
-#define BOARD_NODE_ID       (0x0200U + GW_STACK_INDEX)
+#define BOARD_NODE_ID         (0x0200U + GW_STACK_INDEX)
 
 /**
  * @brief 29-bit extended CAN identifier for this node's XRCE session.
@@ -59,10 +59,10 @@
  * arrived on, so two nodes sharing one would interleave into a single XRCE
  * session and corrupt both.
  */
-#define BOARD_XRCE_CAN_ID   (0x1000200U + GW_STACK_INDEX)
+#define BOARD_XRCE_CAN_ID     (0x1000200U + GW_STACK_INDEX)
 
 /** @brief XRCE client key; must be unique per Agent. */
-#define BOARD_XRCE_CLIENT_KEY   (0xA5000200UL + GW_STACK_INDEX)
+#define BOARD_XRCE_CLIENT_KEY (0xA5000200UL + GW_STACK_INDEX)
 
 /**
  * @brief Fast DDS participant profile the Agent resolves for this node.
@@ -71,40 +71,40 @@
  * permissions — see `agent/README.md` and `agent/profiles.xml`.
  */
 #if GW_ROLE == GW_ROLE_ENCODER
-#define BOARD_PARTICIPANT_REF   "serenity_gw_encoder"
+#define BOARD_PARTICIPANT_REF "serenity_gw_encoder"
 #elif GW_ROLE == GW_ROLE_ESC
-#define BOARD_PARTICIPANT_REF   "serenity_gw_esc"
+#define BOARD_PARTICIPANT_REF "serenity_gw_esc"
 #else
-#define BOARD_PARTICIPANT_REF   "serenity_gw_servo"
+#define BOARD_PARTICIPANT_REF "serenity_gw_servo"
 #endif
 
-#define BOARD_ROS_DOMAIN_ID     (42U)
+#define BOARD_ROS_DOMAIN_ID    (42U)
 
 /*
  * CAN-FD bit timing.  5 Mbit/s data phase is the ISOW1044 rating
  * [REF-SENSOR-009] and matches the trunk rate recorded in
  * `avionics/kicad/Wash/Wash.md`.
  */
-#define BOARD_CAN_NOMINAL_BPS   (1000000UL)
-#define BOARD_CAN_DATA_BPS      (5000000UL)
+#define BOARD_CAN_NOMINAL_BPS  (1000000UL)
+#define BOARD_CAN_DATA_BPS     (5000000UL)
 
 /** @brief RS-485 standby bearer rate. */
-#define BOARD_RS485_BAUD        (1000000UL)
+#define BOARD_RS485_BAUD       (1000000UL)
 
 /* --- Fleet topic identifiers ---------------------------------------------
  * Bound into every envelope MAC, so a value must never be reused for a
  * different meaning once flown.
  * --------------------------------------------------------------------------*/
 
-#define TOPIC_ID_TILT_ANGLE     (0x0210U)
-#define TOPIC_ID_ESC_STATUS     (0x0211U)
-#define TOPIC_ID_ESC_COMMAND    (0x0212U)
-#define TOPIC_ID_SERVO_COMMAND  (0x0213U)
-#define TOPIC_ID_NODE_HEALTH    (0x0201U)
+#define TOPIC_ID_TILT_ANGLE    (0x0210U)
+#define TOPIC_ID_ESC_STATUS    (0x0211U)
+#define TOPIC_ID_ESC_COMMAND   (0x0212U)
+#define TOPIC_ID_SERVO_COMMAND (0x0213U)
+#define TOPIC_ID_NODE_HEALTH   (0x0201U)
 
 /** @brief Publication periods, milliseconds. */
-#define PERIOD_TILT_MS          (50U)      /* 20 Hz */
-#define PERIOD_ESC_STATUS_MS    (50U)      /* 20 Hz */
-#define PERIOD_HEALTH_MS        (1000U)    /* 1 Hz  */
+#define PERIOD_TILT_MS         (50U)   /* 20 Hz */
+#define PERIOD_ESC_STATUS_MS   (50U)   /* 20 Hz */
+#define PERIOD_HEALTH_MS       (1000U) /* 1 Hz  */
 
 #endif /* BOARD_CONFIG_H_ */

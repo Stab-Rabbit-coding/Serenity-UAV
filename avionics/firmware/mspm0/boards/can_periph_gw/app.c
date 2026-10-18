@@ -108,14 +108,13 @@ static int publish_health(ser_node_t *node, uint64_t now_ms) {
     put_be16(&p[18], (uint16_t)node->publish_errors);
     p[20] = (uint8_t)can.tx_error_count;
     p[21] = (uint8_t)can.rx_error_count;
-    p[22] = (uint8_t)((can.bus_off ? 0x01U : 0U)
-                      | (can.error_passive ? 0x02U : 0U));
+    p[22] = (uint8_t)((can.bus_off ? 0x01U : 0U) |
+                      (can.error_passive ? 0x02U : 0U));
     p[23] = 0U;
     put_be16(&p[24], (uint16_t)((now_ms - node->joined_at_ms) / 1000U));
 
     return ser_node_publish(node, TOPIC_ID_NODE_HEALTH, p, sizeof(p),
-                            g_safe ? SER_ENV_FLAG_DEGRADED
-                                   : SER_ENV_FLAG_NONE);
+                            g_safe ? SER_ENV_FLAG_DEGRADED : SER_ENV_FLAG_NONE);
 }
 
 int board_app_step(uint64_t now_ms) {

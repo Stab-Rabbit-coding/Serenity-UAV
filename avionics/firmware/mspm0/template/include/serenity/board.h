@@ -14,11 +14,12 @@
  *     trust-module gateway, 1..N independent stacks per PCB, bridging a tilt
  *     encoder, an ESC or a servo onto the isolated CAN-FD and RS-485 trunks.
  *     See `avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md`.
- *   - Observer U3 (`boards/observer/`) — the control half of the nose/cargo vision
- *     board: CAN-FD trunk, TFmini-S UART, KSZ9477 management SPI, laser GPIO.
- *     See `avionics/kicad/Observer/Observer.md`.
- *   - FlightEngineer U_MCU (`boards/flight_engineer/`) — the power-distribution board's Section
- *     H trust module.  See `avionics/kicad/FlightEngineer/FlightEngineer.md`.
+ *   - Observer U3 (`boards/observer/`) — the control half of the nose/cargo
+ * vision board: CAN-FD trunk, TFmini-S UART, KSZ9477 management SPI, laser
+ * GPIO. See `avionics/kicad/Observer/Observer.md`.
+ *   - FlightEngineer U_MCU (`boards/flight_engineer/`) — the power-distribution
+ * board's Section H trust module.  See
+ * `avionics/kicad/FlightEngineer/FlightEngineer.md`.
  *
  * What a board supplies is deliberately small: a static description of itself
  * (`board_config.h`), a HAL pin map, and an application (`app.c`) with three

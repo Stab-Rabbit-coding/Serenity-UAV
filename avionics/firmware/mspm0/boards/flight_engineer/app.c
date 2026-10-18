@@ -44,8 +44,8 @@ int board_app_init(void) {
     (void)ser_hal_gpio_write(SER_GPIO_RS485_DE, false);
 
     /* TODO(WBS §4.7.6): BQ76930 cell-monitor I2C driver.  Blocked upstream:
-     * `FlightEngineer.md` records U_CELL as still missing from the PCB, so there is
-     * no hardware to talk to yet. */
+     * `FlightEngineer.md` records U_CELL as still missing from the PCB, so
+     * there is no hardware to talk to yet. */
     return SER_OK;
 }
 
@@ -62,8 +62,7 @@ static int publish_health(ser_node_t *node, uint64_t now_ms) {
     put_be16(&p[14], (uint16_t)((now_ms - node->joined_at_ms) / 1000U));
 
     return ser_node_publish(node, TOPIC_ID_NODE_HEALTH, p, sizeof(p),
-                            g_safe ? SER_ENV_FLAG_DEGRADED
-                                   : SER_ENV_FLAG_NONE);
+                            g_safe ? SER_ENV_FLAG_DEGRADED : SER_ENV_FLAG_NONE);
 }
 
 int board_app_step(uint64_t now_ms) {
@@ -94,8 +93,8 @@ int board_app_step(uint64_t now_ms) {
 
 void board_app_safe_state(void) {
     g_safe = true;
-    /* FlightEngineer's power stages are hardware-latched; the trust module does not
-     * gate them, so there is nothing for it to shed here.  Dropping the
+    /* FlightEngineer's power stages are hardware-latched; the trust module does
+     * not gate them, so there is nothing for it to shed here.  Dropping the
      * RS-485 driver keeps a faulted node off the standby bus. */
     (void)ser_hal_gpio_write(SER_GPIO_RS485_DE, false);
     (void)ser_hal_gpio_write(SER_GPIO_STATUS_LED, true);

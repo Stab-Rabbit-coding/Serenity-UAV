@@ -8,12 +8,13 @@
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * This header is the ONLY interface the shared firmware template
- * (the sources under template/src) is permitted to use to touch hardware.  Every
+ * (the sources under template/src) is permitted to use to touch hardware. Every
  * board and every MCU port implements it:
  *
  *   - `hal/mspm0/` — TI MSPM0G3507 port, built on the TI MSPM0 SDK DriverLib.
  *                    This is the flight port; it is what runs on
- *                    `MAL-CAN-PERIPH-GW-PCB`, Observer (U3) and FlightEngineer (U_MCU).
+ *                    `MAL-CAN-PERIPH-GW-PCB`, Observer (U3) and FlightEngineer
+ * (U_MCU).
  *   - `hal/sim/`   — POSIX host port (SocketCAN vcan + a TPM simulator or a
  *                    real /dev/tpm0).  Used for unit and integration test on a
  *                    workstation; never flown.
@@ -31,9 +32,10 @@
  *
  * References (see repository-root `REFERENCES.md`):
  *   [REF-SENSOR-004] TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface.
- *   [REF-SENSOR-009] TI ISOW1044BDFMR — isolated CAN-FD transceiver (5 Mbps max).
- *   [REF-SENSOR-011] Infineon OPTIGA SLB 9670 — SPI TPM 2.0 (SPI clock <= 43 MHz).
- *   [REF-ISO-001]    ISO 11898-1:2015 — CAN data link layer, CAN-FD DLC coding.
+ *   [REF-SENSOR-009] TI ISOW1044BDFMR — isolated CAN-FD transceiver (5 Mbps
+ * max). [REF-SENSOR-011] Infineon OPTIGA SLB 9670 — SPI TPM 2.0 (SPI clock <=
+ * 43 MHz). [REF-ISO-001]    ISO 11898-1:2015 — CAN data link layer, CAN-FD DLC
+ * coding.
  */
 
 #ifndef SERENITY_HAL_H_
@@ -55,15 +57,15 @@ extern "C" {
  * across firmware revisions because ground software decodes it.
  * ---------------------------------------------------------------------------*/
 
-#define SER_OK              (0)     /**< Operation completed successfully.     */
-#define SER_EINVAL          (-1)    /**< Caller passed an invalid argument.    */
-#define SER_EIO             (-2)    /**< Peripheral-level transfer failure.    */
-#define SER_ETIMEDOUT       (-3)    /**< Operation did not complete in time.   */
-#define SER_ENOSPC          (-4)    /**< Destination buffer too small.         */
-#define SER_ENODEV          (-5)    /**< Expected device did not respond.      */
-#define SER_EPROTO          (-6)    /**< Peer violated the wire protocol.      */
-#define SER_EBUSY           (-7)    /**< Resource in use; retry later.         */
-#define SER_ENOTSUP         (-8)    /**< Not implemented on this port.         */
+#define SER_OK        (0)  /**< Operation completed successfully.     */
+#define SER_EINVAL    (-1) /**< Caller passed an invalid argument.    */
+#define SER_EIO       (-2) /**< Peripheral-level transfer failure.    */
+#define SER_ETIMEDOUT (-3) /**< Operation did not complete in time.   */
+#define SER_ENOSPC    (-4) /**< Destination buffer too small.         */
+#define SER_ENODEV    (-5) /**< Expected device did not respond.      */
+#define SER_EPROTO    (-6) /**< Peer violated the wire protocol.      */
+#define SER_EBUSY     (-7) /**< Resource in use; retry later.         */
+#define SER_ENOTSUP   (-8) /**< Not implemented on this port.         */
 
 /* ---------------------------------------------------------------------------
  * Time base
@@ -133,8 +135,8 @@ void ser_hal_watchdog_pet(void);
  * transaction can hold the bus for the duration of a TPM command.
  */
 typedef enum {
-    SER_SPI_TPM = 0,        /**< Dedicated bus to U_TPM / U2 / U5 SLB9670.     */
-    SER_SPI_SENSOR = 1,     /**< Board-local sensor bus (e.g. AK7455, KSZ9477).*/
+    SER_SPI_TPM = 0,    /**< Dedicated bus to U_TPM / U2 / U5 SLB9670.     */
+    SER_SPI_SENSOR = 1, /**< Board-local sensor bus (e.g. AK7455, KSZ9477).*/
     SER_SPI_COUNT
 } ser_spi_bus_t;
 
@@ -153,11 +155,8 @@ typedef enum {
  *       [REF-TCG-002 §7.4.6 rule 6]; the port configures it, the caller does
  *       not select it.
  */
-int ser_hal_spi_xfer(ser_spi_bus_t bus,
-                     uint8_t cs,
-                     const uint8_t *tx,
-                     uint8_t *rx,
-                     size_t len);
+int ser_hal_spi_xfer(ser_spi_bus_t bus, uint8_t cs, const uint8_t *tx,
+                     uint8_t *rx, size_t len);
 
 /**
  * @brief Begin a multi-transfer SPI transaction, holding chip select asserted
@@ -170,9 +169,7 @@ int ser_hal_spi_xfer(ser_spi_bus_t bus,
 int ser_hal_spi_begin(ser_spi_bus_t bus, uint8_t cs);
 
 /** @brief Transfer bytes inside an open transaction (CS# stays asserted). */
-int ser_hal_spi_xfer_cont(ser_spi_bus_t bus,
-                          const uint8_t *tx,
-                          uint8_t *rx,
+int ser_hal_spi_xfer_cont(ser_spi_bus_t bus, const uint8_t *tx, uint8_t *rx,
                           size_t len);
 
 /** @brief End the transaction and deassert chip select. */
@@ -213,7 +210,7 @@ int ser_hal_gpio_read(ser_gpio_t line, bool *level);
  * ---------------------------------------------------------------------------*/
 
 /** @brief Maximum CAN-FD payload, ISO 11898-1:2015 [REF-ISO-001]. */
-#define SER_CANFD_MAX_DLEN  (64U)
+#define SER_CANFD_MAX_DLEN (64U)
 
 /**
  * @brief One CAN-FD frame as the firmware handles it.
@@ -224,9 +221,9 @@ int ser_hal_gpio_read(ser_gpio_t line, bool *level);
  * harmless to the peer.
  */
 typedef struct {
-    uint32_t id;                        /**< 29-bit identifier (extended).    */
-    uint8_t  len;                       /**< True payload length, 0..64.      */
-    uint8_t  data[SER_CANFD_MAX_DLEN];  /**< Payload.                         */
+    uint32_t id;                       /**< 29-bit identifier (extended).    */
+    uint8_t  len;                      /**< True payload length, 0..64.      */
+    uint8_t  data[SER_CANFD_MAX_DLEN]; /**< Payload.                         */
 } ser_can_frame_t;
 
 /**
@@ -243,7 +240,8 @@ typedef struct {
  * CAN endpoint model: the Agent addresses each client by that client's own
  * identifier, and replies to the identifier it saw a frame arrive on.
  */
-int ser_hal_can_init(uint32_t nominal_bps, uint32_t data_bps, uint32_t accept_id);
+int ser_hal_can_init(uint32_t nominal_bps, uint32_t data_bps,
+                     uint32_t accept_id);
 
 /**
  * @brief Queue one frame for transmission.  Non-blocking.
@@ -265,11 +263,11 @@ int ser_hal_can_recv(ser_can_frame_t *frame, int timeout_ms);
 
 /** @brief CAN controller error/health counters, for node health telemetry. */
 typedef struct {
-    uint16_t tx_error_count;    /**< CAN TEC.                                 */
-    uint16_t rx_error_count;    /**< CAN REC.                                 */
-    bool     bus_off;           /**< Controller is bus-off.                   */
-    bool     error_passive;     /**< Controller is error-passive.             */
-    uint32_t rx_overflow;       /**< Frames dropped for lack of queue space.  */
+    uint16_t tx_error_count; /**< CAN TEC.                                 */
+    uint16_t rx_error_count; /**< CAN REC.                                 */
+    bool     bus_off;        /**< Controller is bus-off.                   */
+    bool     error_passive;  /**< Controller is error-passive.             */
+    uint32_t rx_overflow;    /**< Frames dropped for lack of queue space.  */
 } ser_can_status_t;
 
 /** @brief Read CAN controller health. */
@@ -281,8 +279,8 @@ int ser_hal_can_status(ser_can_status_t *status);
 
 /** @brief Logical UARTs the template may use. */
 typedef enum {
-    SER_UART_RS485 = 0,     /**< Isolated RS-485 trunk via ISOW1412.          */
-    SER_UART_FLEX,          /**< Board flexible header / local serial device. */
+    SER_UART_RS485 = 0, /**< Isolated RS-485 trunk via ISOW1412.          */
+    SER_UART_FLEX,      /**< Board flexible header / local serial device. */
     SER_UART_COUNT
 } ser_uart_t;
 
@@ -300,10 +298,7 @@ int ser_hal_uart_write(ser_uart_t uart, const uint8_t *data, size_t len);
  *
  * @return SER_OK (possibly with *got == 0), or a negative `SER_E*` code.
  */
-int ser_hal_uart_read(ser_uart_t uart,
-                      uint8_t *data,
-                      size_t len,
-                      size_t *got,
+int ser_hal_uart_read(ser_uart_t uart, uint8_t *data, size_t len, size_t *got,
                       int timeout_ms);
 
 /* ---------------------------------------------------------------------------

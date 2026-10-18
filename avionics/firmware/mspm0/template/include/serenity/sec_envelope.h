@@ -85,38 +85,38 @@ extern "C" {
 #endif
 
 /** @brief High nibble of byte 0; identifies an envelope. */
-#define SER_ENV_MAGIC       (0x50U)
+#define SER_ENV_MAGIC          (0x50U)
 
 /** @brief Wire-format version, low nibble of byte 0.  Bump on any change. */
-#define SER_ENV_VERSION     (1U)
+#define SER_ENV_VERSION        (1U)
 
 /** @brief Serialised header length in bytes, excluding the MAC. */
-#define SER_ENV_HDR_LEN     (24U)
+#define SER_ENV_HDR_LEN        (24U)
 
 /**
  * @brief Truncated MAC length in bytes.  Range 4..32 [REF-NIST-006 §5.3.3].
  *
  * Do not reduce without recording the analysis in the subsystem README.
  */
-#define SER_ENV_MAC_LEN     (16U)
+#define SER_ENV_MAC_LEN        (16U)
 
 /** @brief Total envelope overhead prepended to and appended to a payload. */
-#define SER_ENV_TOTAL_LEN   (SER_ENV_HDR_LEN + SER_ENV_MAC_LEN)
+#define SER_ENV_TOTAL_LEN      (SER_ENV_HDR_LEN + SER_ENV_MAC_LEN)
 
 /** @brief Envelope flag bits. */
-#define SER_ENV_FLAG_NONE       (0x00U)
-#define SER_ENV_FLAG_SAFETY     (0x01U) /**< Safety-relevant; log verbatim.   */
-#define SER_ENV_FLAG_FAULT      (0x02U) /**< Reports a latched fault.         */
-#define SER_ENV_FLAG_DEGRADED   (0x04U) /**< Sender is running degraded.      */
-#define SER_ENV_FLAG_ENCRYPTED  (0x08U) /**< Payload is AES-GCM ciphertext.   */
+#define SER_ENV_FLAG_NONE      (0x00U)
+#define SER_ENV_FLAG_SAFETY    (0x01U) /**< Safety-relevant; log verbatim.   */
+#define SER_ENV_FLAG_FAULT     (0x02U) /**< Reports a latched fault.         */
+#define SER_ENV_FLAG_DEGRADED  (0x04U) /**< Sender is running degraded.      */
+#define SER_ENV_FLAG_ENCRYPTED (0x08U) /**< Payload is AES-GCM ciphertext. */
 
 /** @brief Signing context.  One per node. */
 typedef struct {
-    ser_tpm2_t *tpm;        /**< Open TPM context; not owned.                 */
-    uint16_t    node_id;    /**< This node's fleet identifier.                */
-    uint32_t    epoch;      /**< TPM-random, redrawn every boot.              */
-    uint32_t    counter;    /**< Increments per signed message.               */
-    uint8_t     key_id[4];  /**< Leading 4 bytes of the TPM key Name.         */
+    ser_tpm2_t *tpm;       /**< Open TPM context; not owned.                 */
+    uint16_t    node_id;   /**< This node's fleet identifier.                */
+    uint32_t    epoch;     /**< TPM-random, redrawn every boot.              */
+    uint32_t    counter;   /**< Increments per signed message.               */
+    uint8_t     key_id[4]; /**< Leading 4 bytes of the TPM key Name.         */
     bool        ready;
 } ser_env_t;
 
@@ -153,14 +153,9 @@ int ser_env_init(ser_env_t *env, ser_tpm2_t *tpm, uint16_t node_id);
  * @return SER_OK, else `SER_E*`.  A TPM failure is reported, never silently
  *         downgraded to an unsigned message.
  */
-int ser_env_seal(ser_env_t *env,
-                 uint16_t topic_id,
-                 uint8_t flags,
-                 const uint8_t *payload,
-                 size_t len,
-                 uint8_t *out,
-                 size_t out_cap,
-                 size_t *out_len);
+int ser_env_seal(ser_env_t *env, uint16_t topic_id, uint8_t flags,
+                 const uint8_t *payload, size_t len, uint8_t *out,
+                 size_t out_cap, size_t *out_len);
 
 /**
  * @brief Verify a sealed message against the local TPM key.
@@ -170,12 +165,8 @@ int ser_env_seal(ser_env_t *env,
  * self-test that proves the signing path works before the node is permitted
  * to join the bus.
  */
-int ser_env_verify(ser_env_t *env,
-                   uint16_t topic_id,
-                   const uint8_t *msg,
-                   size_t msg_len,
-                   ser_env_hdr_t *hdr,
-                   const uint8_t **body,
+int ser_env_verify(ser_env_t *env, uint16_t topic_id, const uint8_t *msg,
+                   size_t msg_len, ser_env_hdr_t *hdr, const uint8_t **body,
                    size_t *body_len);
 
 /**
@@ -184,8 +175,7 @@ int ser_env_verify(ser_env_t *env,
  * Never gate an action on the result; an unverified header is
  * attacker-controlled data.
  */
-int ser_env_parse_header(const uint8_t *msg,
-                         size_t msg_len,
+int ser_env_parse_header(const uint8_t *msg, size_t msg_len,
                          ser_env_hdr_t *hdr);
 
 #ifdef __cplusplus

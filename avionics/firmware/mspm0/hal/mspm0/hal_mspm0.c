@@ -73,10 +73,10 @@ void Default_Handler(void);
  */
 void Reset_Handler(void) {
     const uint32_t *src = &_etext;
-    for (uint32_t *dst = &_sdata; dst < &_edata; ) {
+    for (uint32_t *dst = &_sdata; dst < &_edata;) {
         *dst++ = *src++;
     }
-    for (uint32_t *dst = &_sbss; dst < &_ebss; ) {
+    for (uint32_t *dst = &_sbss; dst < &_ebss;) {
         *dst++ = 0U;
     }
 
@@ -121,15 +121,21 @@ void SysTick_Handler(void) ALIAS_DEFAULT;
  */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-__attribute__((section(".isr_vector"), used))
-static void *const g_vectors[] = {
+__attribute__((section(".isr_vector"), used)) static void *const g_vectors[] = {
     (void *)&_estack,
     (void *)Reset_Handler,
     (void *)NMI_Handler,
     (void *)HardFault_Handler,
-    0, 0, 0, 0, 0, 0, 0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     (void *)SVC_Handler,
-    0, 0,
+    0,
+    0,
     (void *)PendSV_Handler,
     (void *)SysTick_Handler,
 };
@@ -146,13 +152,9 @@ static void *const g_vectors[] = {
 
 static volatile uint64_t g_ticks_ns;
 
-uint64_t ser_hal_time_ns(void) {
-    return g_ticks_ns;
-}
+uint64_t ser_hal_time_ns(void) { return g_ticks_ns; }
 
-uint64_t ser_hal_time_ms(void) {
-    return g_ticks_ns / 1000000ULL;
-}
+uint64_t ser_hal_time_ms(void) { return g_ticks_ns / 1000000ULL; }
 
 uint32_t ser_hal_time_resolution_ns(void) {
     /* TIMG12 off an 80 MHz MCLK gives 12.5 ns; reported as 13 ns until the
@@ -177,12 +179,9 @@ void ser_hal_delay_us(uint32_t us) {
  * Watchdog — TODO(WBS §4.7.2): WWDT0, windowed mode
  * ---------------------------------------------------------------------------*/
 
-int ser_hal_watchdog_start(void) {
-    return SER_ENOTSUP;
-}
+int ser_hal_watchdog_start(void) { return SER_ENOTSUP; }
 
-void ser_hal_watchdog_pet(void) {
-}
+void ser_hal_watchdog_pet(void) {}
 
 /* ---------------------------------------------------------------------------
  * SPI — TODO(WBS §4.7.2)
@@ -200,8 +199,8 @@ int ser_hal_spi_begin(ser_spi_bus_t bus, uint8_t cs) {
     return SER_ENOTSUP;
 }
 
-int ser_hal_spi_xfer_cont(ser_spi_bus_t bus, const uint8_t *tx,
-                          uint8_t *rx, size_t len) {
+int ser_hal_spi_xfer_cont(ser_spi_bus_t bus, const uint8_t *tx, uint8_t *rx,
+                          size_t len) {
     (void)bus;
     (void)tx;
     (void)rx;
@@ -304,8 +303,8 @@ int ser_hal_uart_write(ser_uart_t uart, const uint8_t *data, size_t len) {
     return SER_ENOTSUP;
 }
 
-int ser_hal_uart_read(ser_uart_t uart, uint8_t *data, size_t len,
-                      size_t *got, int timeout_ms) {
+int ser_hal_uart_read(ser_uart_t uart, uint8_t *data, size_t len, size_t *got,
+                      int timeout_ms) {
     (void)uart;
     (void)data;
     (void)len;

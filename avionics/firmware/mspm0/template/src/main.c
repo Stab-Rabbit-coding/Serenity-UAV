@@ -7,8 +7,8 @@
  * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
- * Identical on CAN-PERIPH-GW-1, Observer U3 and FlightEngineer U_MCU.  Everything that
- * differs between them is in `boards/<board>/`.
+ * Identical on CAN-PERIPH-GW-1, Observer U3 and FlightEngineer U_MCU.
+ * Everything that differs between them is in `boards/<board>/`.
  */
 
 #include "serenity/board.h"
@@ -18,10 +18,10 @@
 #include <string.h>
 
 /** @brief Milliseconds of XRCE session servicing per main-loop pass. */
-#define MAIN_SPIN_BUDGET_MS     (10U)
+#define MAIN_SPIN_BUDGET_MS (10U)
 
 /** @brief Delay between restart attempts after a fault, milliseconds. */
-#define MAIN_FAULT_RETRY_MS     (1000U)
+#define MAIN_FAULT_RETRY_MS (1000U)
 
 static ser_node_t g_node;
 
@@ -33,9 +33,8 @@ int main(void) {
         }
     }
 
-    ser_hal_log("\n%s starting (node %u, domain %u)\n",
-                BOARD_NAME, (unsigned)BOARD_NODE_ID,
-                (unsigned)BOARD_ROS_DOMAIN_ID);
+    ser_hal_log("\n%s starting (node %u, domain %u)\n", BOARD_NAME,
+                (unsigned)BOARD_NODE_ID, (unsigned)BOARD_ROS_DOMAIN_ID);
 
     (void)ser_hal_watchdog_start();
 
@@ -63,8 +62,8 @@ int main(void) {
          * bus or Agent outage needs, without losing the fault log to a reset.
          */
         ser_hal_watchdog_pet();
-        ser_hal_log("%s: restarting after fault rc=%d\n",
-                    BOARD_NAME, g_node.last_error);
+        ser_hal_log("%s: restarting after fault rc=%d\n", BOARD_NAME,
+                    g_node.last_error);
         ser_hal_delay_us(MAIN_FAULT_RETRY_MS * 1000U);
     }
 }

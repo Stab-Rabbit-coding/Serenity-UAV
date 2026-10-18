@@ -64,23 +64,15 @@ static uint64_t now_ns_raw(void) {
 
 /* --- Time ----------------------------------------------------------------*/
 
-uint64_t ser_hal_time_ns(void) {
-    return now_ns_raw() - g_epoch_ns;
-}
+uint64_t ser_hal_time_ns(void) { return now_ns_raw() - g_epoch_ns; }
 
-uint64_t ser_hal_time_ms(void) {
-    return ser_hal_time_ns() / 1000000ULL;
-}
+uint64_t ser_hal_time_ms(void) { return ser_hal_time_ns() / 1000000ULL; }
 
-uint32_t ser_hal_time_resolution_ns(void) {
-    return 1U;
-}
+uint32_t ser_hal_time_resolution_ns(void) { return 1U; }
 
 void ser_hal_delay_us(uint32_t us) {
-    struct timespec ts = {
-        .tv_sec = (time_t)(us / 1000000U),
-        .tv_nsec = (long)((us % 1000000U) * 1000U)
-    };
+    struct timespec ts = {.tv_sec = (time_t)(us / 1000000U),
+                          .tv_nsec = (long)((us % 1000000U) * 1000U)};
     (void)nanosleep(&ts, NULL);
 }
 
@@ -91,12 +83,9 @@ void ser_hal_delay_us(uint32_t us) {
  * rather than silently restart, which would hide the very stall being
  * investigated.
  */
-int ser_hal_watchdog_start(void) {
-    return SER_OK;
-}
+int ser_hal_watchdog_start(void) { return SER_OK; }
 
-void ser_hal_watchdog_pet(void) {
-}
+void ser_hal_watchdog_pet(void) {}
 
 /* --- SPI / TPM -----------------------------------------------------------*/
 
@@ -114,9 +103,7 @@ int ser_hal_spi_begin(ser_spi_bus_t bus, uint8_t cs) {
     return SER_ENOTSUP;
 }
 
-int ser_hal_spi_xfer_cont(ser_spi_bus_t bus,
-                          const uint8_t *tx,
-                          uint8_t *rx,
+int ser_hal_spi_xfer_cont(ser_spi_bus_t bus, const uint8_t *tx, uint8_t *rx,
                           size_t len) {
     (void)bus;
     (void)tx;
@@ -130,11 +117,8 @@ int ser_hal_spi_end(ser_spi_bus_t bus) {
     return SER_ENOTSUP;
 }
 
-int ser_hal_spi_xfer(ser_spi_bus_t bus,
-                     uint8_t cs,
-                     const uint8_t *tx,
-                     uint8_t *rx,
-                     size_t len) {
+int ser_hal_spi_xfer(ser_spi_bus_t bus, uint8_t cs, const uint8_t *tx,
+                     uint8_t *rx, size_t len) {
     (void)bus;
     (void)cs;
     (void)tx;
@@ -202,8 +186,8 @@ int ser_hal_can_init(uint32_t nominal_bps, uint32_t data_bps,
     }
 
     int enable_fd = 1;
-    if (setsockopt(g_can_fd, SOL_CAN_RAW, CAN_RAW_FD_FRAMES,
-                   &enable_fd, sizeof(enable_fd)) < 0) {
+    if (setsockopt(g_can_fd, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &enable_fd,
+                   sizeof(enable_fd)) < 0) {
         (void)close(g_can_fd);
         g_can_fd = -1;
         return SER_ENOTSUP;
@@ -216,8 +200,8 @@ int ser_hal_can_init(uint32_t nominal_bps, uint32_t data_bps,
     struct can_filter filter;
     filter.can_id = g_can_id;
     filter.can_mask = CAN_EFF_MASK | CAN_EFF_FLAG;
-    (void)setsockopt(g_can_fd, SOL_CAN_RAW, CAN_RAW_FILTER,
-                     &filter, sizeof(filter));
+    (void)setsockopt(g_can_fd, SOL_CAN_RAW, CAN_RAW_FILTER, &filter,
+                     sizeof(filter));
 
     return SER_OK;
 }
@@ -245,8 +229,8 @@ int ser_hal_can_recv(ser_can_frame_t *frame, int timeout_ms) {
         return SER_EINVAL;
     }
 
-    struct pollfd pfd = { .fd = g_can_fd, .events = POLLIN, .revents = 0 };
-    const int pr = poll(&pfd, 1, timeout_ms);
+    struct pollfd pfd = {.fd = g_can_fd, .events = POLLIN, .revents = 0};
+    const int     pr = poll(&pfd, 1, timeout_ms);
     if (pr == 0) {
         return SER_ETIMEDOUT;
     }
@@ -255,7 +239,7 @@ int ser_hal_can_recv(ser_can_frame_t *frame, int timeout_ms) {
     }
 
     struct canfd_frame cf;
-    const ssize_t n = read(g_can_fd, &cf, sizeof(cf));
+    const ssize_t      n = read(g_can_fd, &cf, sizeof(cf));
     if (n < (ssize_t)offsetof(struct canfd_frame, data)) {
         return SER_EIO;
     }
@@ -286,8 +270,8 @@ int ser_hal_uart_init(ser_uart_t uart, uint32_t baud) {
         return SER_EINVAL;
     }
 
-    const char *dev = getenv((uart == SER_UART_RS485)
-                             ? "SERENITY_RS485_DEV" : "SERENITY_UART_DEV");
+    const char *dev = getenv((uart == SER_UART_RS485) ? "SERENITY_RS485_DEV"
+                                                      : "SERENITY_UART_DEV");
     if (dev == NULL) {
         /* No device configured: report absence rather than inventing a
          * bearer, so link failover behaviour is exercised honestly. */
@@ -309,17 +293,14 @@ int ser_hal_uart_write(ser_uart_t uart, const uint8_t *data, size_t len) {
     if (g_uart_fd[uart] <= 0) {
         return SER_ENODEV;
     }
-    return (write(g_uart_fd[uart], data, len) == (ssize_t)len)
-           ? SER_OK : SER_EIO;
+    return (write(g_uart_fd[uart], data, len) == (ssize_t)len) ? SER_OK
+                                                               : SER_EIO;
 }
 
-int ser_hal_uart_read(ser_uart_t uart,
-                      uint8_t *data,
-                      size_t len,
-                      size_t *got,
+int ser_hal_uart_read(ser_uart_t uart, uint8_t *data, size_t len, size_t *got,
                       int timeout_ms) {
-    if (((unsigned)uart >= (unsigned)SER_UART_COUNT) ||
-        (data == NULL) || (got == NULL)) {
+    if (((unsigned)uart >= (unsigned)SER_UART_COUNT) || (data == NULL) ||
+        (got == NULL)) {
         return SER_EINVAL;
     }
     *got = 0U;
@@ -327,12 +308,10 @@ int ser_hal_uart_read(ser_uart_t uart,
         return SER_ENODEV;
     }
 
-    struct pollfd pfd = {
-        .fd = g_uart_fd[uart], .events = POLLIN, .revents = 0
-    };
-    const int pr = poll(&pfd, 1, timeout_ms);
+    struct pollfd pfd = {.fd = g_uart_fd[uart], .events = POLLIN, .revents = 0};
+    const int     pr = poll(&pfd, 1, timeout_ms);
     if (pr <= 0) {
-        return SER_OK;      /* No data is not an error. */
+        return SER_OK; /* No data is not an error. */
     }
 
     const ssize_t n = read(g_uart_fd[uart], data, len);
@@ -403,5 +382,5 @@ void ser_hal_log(const char *fmt, ...) {
 
 void ser_hal_reset(void) {
     (void)fflush(NULL);
-    _exit(70);      /* EX_SOFTWARE: distinguishable from a clean exit. */
+    _exit(70); /* EX_SOFTWARE: distinguishable from a clean exit. */
 }

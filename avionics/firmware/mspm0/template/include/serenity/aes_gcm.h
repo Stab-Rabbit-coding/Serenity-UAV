@@ -1,6 +1,7 @@
 /**
  * @file    aes_gcm.h
- * @brief   AES-GCM authenticated encryption — portable reference implementation.
+ * @brief   AES-GCM authenticated encryption — portable reference
+ * implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * Drafted by: Claude Opus 5 (Anthropic), 2026-07-29
@@ -43,16 +44,17 @@ extern "C" {
 #endif
 
 /** @brief GCM authentication tag length, bytes (SP 800-38D §5.2.1.2). */
-#define SER_GCM_TAG_LEN     (16U)
+#define SER_GCM_TAG_LEN (16U)
 
-/** @brief IV length this firmware uses; the value SP 800-38D §8.2 recommends. */
-#define SER_GCM_IV_LEN      (12U)
+/** @brief IV length this firmware uses; the value SP 800-38D §8.2 recommends.
+ */
+#define SER_GCM_IV_LEN  (12U)
 
 /** @brief Expanded AES key schedule; AES-256 is 15 round keys of 16 bytes. */
 typedef struct {
-    uint32_t rk[60];        /**< Round keys, big-endian words.                */
-    uint8_t  rounds;        /**< 10 for AES-128, 14 for AES-256.              */
-    uint8_t  h[16];         /**< GHASH subkey H = AES_K(0^128).               */
+    uint32_t rk[60]; /**< Round keys, big-endian words.                */
+    uint8_t  rounds; /**< 10 for AES-128, 14 for AES-256.              */
+    uint8_t  h[16];  /**< GHASH subkey H = AES_K(0^128).               */
 } ser_aes_gcm_t;
 
 /**
@@ -73,11 +75,9 @@ int ser_aes_gcm_init(ser_aes_gcm_t *ctx, const uint8_t *key, size_t key_len);
  * @param ct      Ciphertext out, @p pt_len bytes.
  * @param tag     Out: 16-byte authentication tag.
  */
-int ser_aes_gcm_encrypt(ser_aes_gcm_t *ctx,
-                        const uint8_t iv[SER_GCM_IV_LEN],
-                        const uint8_t *aad, size_t aad_len,
-                        const uint8_t *pt, size_t pt_len,
-                        uint8_t *ct,
+int ser_aes_gcm_encrypt(ser_aes_gcm_t *ctx, const uint8_t iv[SER_GCM_IV_LEN],
+                        const uint8_t *aad, size_t aad_len, const uint8_t *pt,
+                        size_t pt_len, uint8_t *ct,
                         uint8_t tag[SER_GCM_TAG_LEN]);
 
 /**
@@ -89,11 +89,9 @@ int ser_aes_gcm_encrypt(ser_aes_gcm_t *ctx,
  *
  * @return SER_OK, or SER_EPROTO if the tag does not verify.
  */
-int ser_aes_gcm_decrypt(ser_aes_gcm_t *ctx,
-                        const uint8_t iv[SER_GCM_IV_LEN],
-                        const uint8_t *aad, size_t aad_len,
-                        const uint8_t *ct, size_t ct_len,
-                        const uint8_t tag[SER_GCM_TAG_LEN],
+int ser_aes_gcm_decrypt(ser_aes_gcm_t *ctx, const uint8_t iv[SER_GCM_IV_LEN],
+                        const uint8_t *aad, size_t aad_len, const uint8_t *ct,
+                        size_t ct_len, const uint8_t tag[SER_GCM_TAG_LEN],
                         uint8_t *pt);
 
 #ifdef __cplusplus

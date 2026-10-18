@@ -21,9 +21,9 @@
  * worthless to a control loop, so retransmitting one costs bus time and
  * delivers stale data.  Commands are RELIABLE: a dropped setpoint is not
  * self-correcting. */
-#define QOS_SENSOR      { 0U, 0U, 0U, 1U }
-#define QOS_COMMAND     { 1U, 0U, 0U, 4U }
-#define QOS_HEALTH      { 1U, 1U, 0U, 1U }
+#define QOS_SENSOR  {0U, 0U, 0U, 1U}
+#define QOS_COMMAND {1U, 0U, 0U, 4U}
+#define QOS_HEALTH  {1U, 1U, 0U, 1U}
 
 /**
  * @brief This node's topics.
@@ -115,6 +115,4 @@ void board_configure_link(ser_link_t *link) {
  * table it consults; see `hal/mspm0/hal_mspm0.c` and the board's KiCad
  * schematic for the authoritative pin assignment.
  */
-int board_hal_configure(void) {
-    return SER_OK;
-}
+int board_hal_configure(void) { return SER_OK; }

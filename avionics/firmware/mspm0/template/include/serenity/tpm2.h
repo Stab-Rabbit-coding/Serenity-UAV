@@ -69,59 +69,59 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /* Structure tags, Part 2 §6.9 (TPM_ST). */
-#define TPM2_ST_NO_SESSIONS         (0x8001U)
-#define TPM2_ST_SESSIONS            (0x8002U)
+#define TPM2_ST_NO_SESSIONS          (0x8001U)
+#define TPM2_ST_SESSIONS             (0x8002U)
 
 /* Command codes, Part 2 §6.5.2 (TPM_CC). */
-#define TPM2_CC_EVICT_CONTROL       (0x00000120UL)
-#define TPM2_CC_CREATE_PRIMARY      (0x00000131UL)
-#define TPM2_CC_SELF_TEST           (0x00000143UL)
-#define TPM2_CC_STARTUP             (0x00000144UL)
-#define TPM2_CC_SHUTDOWN            (0x00000145UL)
-#define TPM2_CC_HMAC                (0x00000155UL)
-#define TPM2_CC_FLUSH_CONTEXT       (0x00000165UL)
-#define TPM2_CC_READ_PUBLIC         (0x00000173UL)
-#define TPM2_CC_GET_CAPABILITY      (0x0000017AUL)
-#define TPM2_CC_GET_RANDOM          (0x0000017BUL)
-#define TPM2_CC_PCR_READ            (0x0000017EUL)
-#define TPM2_CC_PCR_EXTEND          (0x00000182UL)
+#define TPM2_CC_EVICT_CONTROL        (0x00000120UL)
+#define TPM2_CC_CREATE_PRIMARY       (0x00000131UL)
+#define TPM2_CC_SELF_TEST            (0x00000143UL)
+#define TPM2_CC_STARTUP              (0x00000144UL)
+#define TPM2_CC_SHUTDOWN             (0x00000145UL)
+#define TPM2_CC_HMAC                 (0x00000155UL)
+#define TPM2_CC_FLUSH_CONTEXT        (0x00000165UL)
+#define TPM2_CC_READ_PUBLIC          (0x00000173UL)
+#define TPM2_CC_GET_CAPABILITY       (0x0000017AUL)
+#define TPM2_CC_GET_RANDOM           (0x0000017BUL)
+#define TPM2_CC_PCR_READ             (0x0000017EUL)
+#define TPM2_CC_PCR_EXTEND           (0x00000182UL)
 
 /* Algorithm identifiers, Part 2 §6.3 (TPM_ALG_ID). */
-#define TPM2_ALG_HMAC               (0x0005U)
-#define TPM2_ALG_KEYEDHASH          (0x0008U)
-#define TPM2_ALG_SHA256             (0x000BU)
-#define TPM2_ALG_NULL               (0x0010U)
+#define TPM2_ALG_HMAC                (0x0005U)
+#define TPM2_ALG_KEYEDHASH           (0x0008U)
+#define TPM2_ALG_SHA256              (0x000BU)
+#define TPM2_ALG_NULL                (0x0010U)
 
 /* Permanent handles, Part 2 §7.4 (TPM_RH). */
-#define TPM2_RH_OWNER               (0x40000001UL)
-#define TPM2_RH_NULL                (0x40000007UL)
-#define TPM2_RS_PW                  (0x40000009UL)   /**< Password session.   */
+#define TPM2_RH_OWNER                (0x40000001UL)
+#define TPM2_RH_NULL                 (0x40000007UL)
+#define TPM2_RS_PW                   (0x40000009UL) /**< Password session.   */
 
 /* Handle ranges, Part 2 §7.2/§7.3. */
-#define TPM2_PERSISTENT_FIRST       (0x81000000UL)
-#define TPM2_PERSISTENT_LAST        (0x81FFFFFFUL)
+#define TPM2_PERSISTENT_FIRST        (0x81000000UL)
+#define TPM2_PERSISTENT_LAST         (0x81FFFFFFUL)
 
 /* Startup types, Part 2 §6.9 (TPM_SU). */
-#define TPM2_SU_CLEAR               (0x0000U)
-#define TPM2_SU_STATE               (0x0001U)
+#define TPM2_SU_CLEAR                (0x0000U)
+#define TPM2_SU_STATE                (0x0001U)
 
 /* Object attributes, Part 2 §8.3 (TPMA_OBJECT). */
-#define TPM2_OBJ_FIXEDTPM           (0x00000002UL)
-#define TPM2_OBJ_FIXEDPARENT        (0x00000010UL)
+#define TPM2_OBJ_FIXEDTPM            (0x00000002UL)
+#define TPM2_OBJ_FIXEDPARENT         (0x00000010UL)
 #define TPM2_OBJ_SENSITIVEDATAORIGIN (0x00000020UL)
-#define TPM2_OBJ_USERWITHAUTH       (0x00000040UL)
-#define TPM2_OBJ_NODA               (0x00000400UL)
-#define TPM2_OBJ_RESTRICTED         (0x00010000UL)
-#define TPM2_OBJ_SIGN_ENCRYPT       (0x00040000UL)
+#define TPM2_OBJ_USERWITHAUTH        (0x00000040UL)
+#define TPM2_OBJ_NODA                (0x00000400UL)
+#define TPM2_OBJ_RESTRICTED          (0x00010000UL)
+#define TPM2_OBJ_SIGN_ENCRYPT        (0x00040000UL)
 
 /* Session attributes, Part 2 §8.4 (TPMA_SESSION). */
-#define TPM2_SESSION_CONTINUE       (0x01U)
+#define TPM2_SESSION_CONTINUE        (0x01U)
 
 /** @brief Successful responseCode, Part 2 §6.6 (TPM_RC_SUCCESS). */
-#define TPM2_RC_SUCCESS             (0x00000000UL)
+#define TPM2_RC_SUCCESS              (0x00000000UL)
 
 /** @brief SHA-256 digest length in bytes. */
-#define TPM2_SHA256_LEN             (32U)
+#define TPM2_SHA256_LEN              (32U)
 
 /**
  * @brief Persistent handle the node's HMAC signing key is evicted to.
@@ -132,7 +132,7 @@ extern "C" {
  * behind the handle is of course unique per TPM, which is exactly what makes
  * the handle a usable per-node identity.
  */
-#define SER_TPM_SIGNING_KEY_HANDLE  (0x81010010UL)
+#define SER_TPM_SIGNING_KEY_HANDLE   (0x81010010UL)
 
 /**
  * @brief PCR index this firmware extends with its own boot measurement.
@@ -143,7 +143,7 @@ extern "C" {
  * for the platform's own measured-boot chain and this firmware does not
  * touch them.
  */
-#define SER_TPM_BOOT_PCR            (16U)
+#define SER_TPM_BOOT_PCR             (16U)
 
 /* ---------------------------------------------------------------------------
  * Context
@@ -157,13 +157,13 @@ extern "C" {
  * telemetry rather than a generic failure.
  */
 typedef struct {
-    ser_tpm_tis_t tis;              /**< Underlying TIS transport.            */
-    uint32_t      last_rc;          /**< responseCode of the last command.    */
-    uint8_t       cmd[TPM_TIS_BUF_SIZE];  /**< Command marshalling buffer.    */
-    uint8_t       rsp[TPM_TIS_BUF_SIZE];  /**< Response buffer.               */
+    ser_tpm_tis_t tis;     /**< Underlying TIS transport.            */
+    uint32_t      last_rc; /**< responseCode of the last command.    */
+    uint8_t       cmd[TPM_TIS_BUF_SIZE]; /**< Command marshalling buffer.    */
+    uint8_t       rsp[TPM_TIS_BUF_SIZE]; /**< Response buffer.               */
     uint8_t       key_name[TPM2_SHA256_LEN + 2U]; /**< Signing key Name.      */
-    size_t        key_name_len;     /**< Bytes valid in `key_name`.           */
-    bool          ready;            /**< Startup + self-test completed.       */
+    size_t        key_name_len; /**< Bytes valid in `key_name`.           */
+    bool          ready;        /**< Startup + self-test completed.       */
 } ser_tpm2_t;
 
 /* ---------------------------------------------------------------------------
@@ -240,9 +240,7 @@ int ser_tpm2_load_key_name(ser_tpm2_t *ctx);
  * @param mac   Out: 32-byte HMAC-SHA256.
  * @return SER_OK, or a negative `SER_E*` code.
  */
-int ser_tpm2_hmac(ser_tpm2_t *ctx,
-                  const uint8_t *data,
-                  size_t len,
+int ser_tpm2_hmac(ser_tpm2_t *ctx, const uint8_t *data, size_t len,
                   uint8_t mac[TPM2_SHA256_LEN]);
 
 /**
@@ -261,13 +259,11 @@ int ser_tpm2_get_random(ser_tpm2_t *ctx, uint8_t *out, size_t len);
  * Called once at boot with a measurement of the running firmware image, so
  * the node's PCR state reflects what code is actually signing messages.
  */
-int ser_tpm2_pcr_extend(ser_tpm2_t *ctx,
-                        uint32_t pcr_index,
+int ser_tpm2_pcr_extend(ser_tpm2_t *ctx, uint32_t pcr_index,
                         const uint8_t digest[TPM2_SHA256_LEN]);
 
 /** @brief Read the current SHA-256 value of @p pcr_index. */
-int ser_tpm2_pcr_read(ser_tpm2_t *ctx,
-                      uint32_t pcr_index,
+int ser_tpm2_pcr_read(ser_tpm2_t *ctx, uint32_t pcr_index,
                       uint8_t digest[TPM2_SHA256_LEN]);
 
 #ifdef __cplusplus

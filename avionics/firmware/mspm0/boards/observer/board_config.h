@@ -7,10 +7,10 @@
  * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
- * Hardware: `avionics/kicad/Observer/Observer.md`.  U3 MSPM0G3507 owns the CAN-FD
- * trunk (native MCAN → U4 ISOW1044), UART1 to the TFmini-S ToF sensor, the
- * SPI management link to U2 KSZ9477, the SPI link to U5 SLB9670, UART0 to the
- * AM62A7 SoM, and the laser enable GPIO.
+ * Hardware: `avionics/kicad/Observer/Observer.md`.  U3 MSPM0G3507 owns the
+ * CAN-FD trunk (native MCAN → U4 ISOW1044), UART1 to the TFmini-S ToF sensor,
+ * the SPI management link to U2 KSZ9477, the SPI link to U5 SLB9670, UART0 to
+ * the AM62A7 SoM, and the laser enable GPIO.
  *
  * One board design is installed at two sites — the bow sensor pod and the
  * cargo-bay nadir mount — which differ in laser class and therefore in
@@ -20,46 +20,46 @@
 #ifndef BOARD_CONFIG_H_
 #define BOARD_CONFIG_H_
 
-#define OBSERVER_SITE_NOSE     (1U)
-#define OBSERVER_SITE_CARGO    (2U)
+#define OBSERVER_SITE_NOSE  (1U)
+#define OBSERVER_SITE_CARGO (2U)
 
 #ifndef OBSERVER_SITE
-#define OBSERVER_SITE          OBSERVER_SITE_NOSE
+#define OBSERVER_SITE OBSERVER_SITE_NOSE
 #endif
 
-#define BOARD_NAME          "Observer"
+#define BOARD_NAME "Observer"
 
 /** @brief Observer nodes occupy 0x0300..0x03FF. */
 #if OBSERVER_SITE == OBSERVER_SITE_NOSE
-#define BOARD_NODE_ID           (0x0301U)
-#define BOARD_XRCE_CAN_ID       (0x1000301U)
-#define BOARD_XRCE_CLIENT_KEY   (0xA5000301UL)
-#define BOARD_PARTICIPANT_REF   "serenity_observer_nose"
+#define BOARD_NODE_ID         (0x0301U)
+#define BOARD_XRCE_CAN_ID     (0x1000301U)
+#define BOARD_XRCE_CLIENT_KEY (0xA5000301UL)
+#define BOARD_PARTICIPANT_REF "serenity_observer_nose"
 #else
-#define BOARD_NODE_ID           (0x0302U)
-#define BOARD_XRCE_CAN_ID       (0x1000302U)
-#define BOARD_XRCE_CLIENT_KEY   (0xA5000302UL)
-#define BOARD_PARTICIPANT_REF   "serenity_observer_cargo"
+#define BOARD_NODE_ID         (0x0302U)
+#define BOARD_XRCE_CAN_ID     (0x1000302U)
+#define BOARD_XRCE_CLIENT_KEY (0xA5000302UL)
+#define BOARD_PARTICIPANT_REF "serenity_observer_cargo"
 #endif
 
-#define BOARD_ROS_DOMAIN_ID     (42U)
+#define BOARD_ROS_DOMAIN_ID    (42U)
 
-#define BOARD_CAN_NOMINAL_BPS   (1000000UL)
-#define BOARD_CAN_DATA_BPS      (5000000UL)
-#define BOARD_RS485_BAUD        (1000000UL)
+#define BOARD_CAN_NOMINAL_BPS  (1000000UL)
+#define BOARD_CAN_DATA_BPS     (5000000UL)
+#define BOARD_RS485_BAUD       (1000000UL)
 
 /** @brief TFmini-S default UART rate [REF-SENSOR-002]. */
-#define BOARD_TFMINI_BAUD       (115200UL)
+#define BOARD_TFMINI_BAUD      (115200UL)
 
 /* --- Fleet topic identifiers ---------------------------------------------*/
 
-#define TOPIC_ID_TOF_RANGE      (0x0310U)
-#define TOPIC_ID_LASER_STATE    (0x0311U)
-#define TOPIC_ID_LASER_COMMAND  (0x0312U)
-#define TOPIC_ID_NODE_HEALTH    (0x0201U)
+#define TOPIC_ID_TOF_RANGE     (0x0310U)
+#define TOPIC_ID_LASER_STATE   (0x0311U)
+#define TOPIC_ID_LASER_COMMAND (0x0312U)
+#define TOPIC_ID_NODE_HEALTH   (0x0201U)
 
-#define PERIOD_TOF_MS           (100U)     /* 10 Hz */
-#define PERIOD_LASER_STATE_MS   (200U)     /* 5 Hz  */
-#define PERIOD_HEALTH_MS        (1000U)    /* 1 Hz  */
+#define PERIOD_TOF_MS          (100U)  /* 10 Hz */
+#define PERIOD_LASER_STATE_MS  (200U)  /* 5 Hz  */
+#define PERIOD_HEALTH_MS       (1000U) /* 1 Hz  */
 
 #endif /* BOARD_CONFIG_H_ */

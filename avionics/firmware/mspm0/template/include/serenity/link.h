@@ -83,23 +83,23 @@ extern "C" {
  * @brief Transport MTU, bytes.  Must equal `UCLIENT_CUSTOM_TRANSPORT_MTU`
  *        in the build's client configuration.
  */
-#define SER_LINK_MTU        (63U)
+#define SER_LINK_MTU (63U)
 
 /** @brief Bearer kinds. */
 typedef enum {
-    SER_LINK_CANFD = 0,     /**< Packet bearer: MCAN + isolated transceiver.  */
-    SER_LINK_STREAM,        /**< Framed byte stream: RS-485, UART bearers.    */
+    SER_LINK_CANFD = 0, /**< Packet bearer: MCAN + isolated transceiver.  */
+    SER_LINK_STREAM,    /**< Framed byte stream: RS-485, UART bearers.    */
     SER_LINK_KIND_COUNT
 } ser_link_kind_t;
 
 /** @brief Per-bearer configuration. */
 typedef struct {
     ser_link_kind_t kind;
-    uint32_t        can_id;         /**< CAN only: 29-bit client identifier.  */
-    uint32_t        nominal_bps;    /**< CAN only: arbitration bit rate.      */
-    uint32_t        data_bps;       /**< CAN only: data-phase bit rate.       */
-    ser_uart_t      uart;           /**< Stream only: which logical UART.     */
-    uint32_t        baud;           /**< Stream only: bit rate.               */
+    uint32_t        can_id;      /**< CAN only: 29-bit client identifier.  */
+    uint32_t        nominal_bps; /**< CAN only: arbitration bit rate.      */
+    uint32_t        data_bps;    /**< CAN only: data-phase bit rate.       */
+    ser_uart_t      uart;        /**< Stream only: which logical UART.     */
+    uint32_t        baud;        /**< Stream only: bit rate.               */
 } ser_link_cfg_t;
 
 /** @brief Health counters, published as node telemetry. */
@@ -108,7 +108,7 @@ typedef struct {
     uint32_t tx_fail;
     uint32_t rx_ok;
     uint32_t rx_malformed;
-    uint64_t last_rx_ms;    /**< Monotonic time of the last accepted frame.   */
+    uint64_t last_rx_ms; /**< Monotonic time of the last accepted frame.   */
 } ser_link_stats_t;
 
 /**
@@ -123,13 +123,13 @@ typedef struct {
  * and the TPM envelope makes the choice of bearer irrelevant to a subscriber.
  */
 typedef struct ser_link {
-    ser_link_cfg_t  cfg[2];         /**< [0] primary, [1] standby.            */
-    uint8_t         count;          /**< 1 or 2 bearers configured.           */
-    uint8_t         active;         /**< Index of the bearer in use.          */
-    uint32_t        failover_ms;    /**< Silence before switching bearers.    */
-    uint32_t        failovers;      /**< Times the node has switched.         */
+    ser_link_cfg_t   cfg[2];      /**< [0] primary, [1] standby.            */
+    uint8_t          count;       /**< 1 or 2 bearers configured.           */
+    uint8_t          active;      /**< Index of the bearer in use.          */
+    uint32_t         failover_ms; /**< Silence before switching bearers.    */
+    uint32_t         failovers;   /**< Times the node has switched.         */
     ser_link_stats_t stats[2];
-    bool            open;
+    bool             open;
 } ser_link_t;
 
 /**

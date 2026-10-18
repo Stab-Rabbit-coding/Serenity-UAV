@@ -27,7 +27,7 @@
 #include <string.h>
 
 /** @brief Default silence before failing over to the standby bearer. */
-#define LINK_DEFAULT_FAILOVER_MS    (2000U)
+#define LINK_DEFAULT_FAILOVER_MS (2000U)
 
 /**
  * @brief Per-bearer transport instances.
@@ -37,7 +37,7 @@
  * pair.  Index matches `ser_link_t.cfg`.
  */
 static uxrCustomTransport g_transport[2];
-static ser_link_t *g_link;
+static ser_link_t        *g_link;
 
 /**
  * @brief Round a CAN-FD data-field length up to a legal value.
@@ -69,12 +69,12 @@ static uint8_t index_of(const uxrCustomTransport *t) {
  * ---------------------------------------------------------------------------*/
 
 static bool link_open_cb(uxrCustomTransport *t) {
-    const uint8_t i = index_of(t);
+    const uint8_t         i = index_of(t);
     const ser_link_cfg_t *cfg = &g_link->cfg[i];
 
     if (cfg->kind == SER_LINK_CANFD) {
-        return ser_hal_can_init(cfg->nominal_bps, cfg->data_bps,
-                                cfg->can_id) == SER_OK;
+        return ser_hal_can_init(cfg->nominal_bps, cfg->data_bps, cfg->can_id) ==
+               SER_OK;
     }
     return ser_hal_uart_init(cfg->uart, cfg->baud) == SER_OK;
 }
@@ -84,13 +84,11 @@ static bool link_close_cb(uxrCustomTransport *t) {
     return true;
 }
 
-static size_t link_write_cb(uxrCustomTransport *t,
-                            const uint8_t *buf,
-                            size_t len,
-                            uint8_t *errcode) {
-    const uint8_t i = index_of(t);
+static size_t link_write_cb(uxrCustomTransport *t, const uint8_t *buf,
+                            size_t len, uint8_t *errcode) {
+    const uint8_t         i = index_of(t);
     const ser_link_cfg_t *cfg = &g_link->cfg[i];
-    ser_link_stats_t *st = &g_link->stats[i];
+    ser_link_stats_t     *st = &g_link->stats[i];
 
     if (len > SER_LINK_MTU) {
         /* Upstream never asks for more than the MTU it was configured with;
@@ -135,22 +133,19 @@ static size_t link_write_cb(uxrCustomTransport *t,
     return len;
 }
 
-static size_t link_read_cb(uxrCustomTransport *t,
-                           uint8_t *buf,
-                           size_t len,
-                           int timeout,
-                           uint8_t *errcode) {
-    const uint8_t i = index_of(t);
+static size_t link_read_cb(uxrCustomTransport *t, uint8_t *buf, size_t len,
+                           int timeout, uint8_t *errcode) {
+    const uint8_t         i = index_of(t);
     const ser_link_cfg_t *cfg = &g_link->cfg[i];
-    ser_link_stats_t *st = &g_link->stats[i];
+    ser_link_stats_t     *st = &g_link->stats[i];
 
     *errcode = 0U;
 
     if (cfg->kind == SER_LINK_CANFD) {
         ser_can_frame_t frame;
-        const int rc = ser_hal_can_recv(&frame, timeout);
+        const int       rc = ser_hal_can_recv(&frame, timeout);
         if (rc == SER_ETIMEDOUT) {
-            return 0U;      /* Idle is normal, not an error. */
+            return 0U; /* Idle is normal, not an error. */
         }
         if (rc != SER_OK) {
             *errcode = 1U;
@@ -165,8 +160,7 @@ static size_t link_read_cb(uxrCustomTransport *t,
          * the stream.
          */
         const uint8_t declared = frame.data[0];
-        if ((frame.len < 1U) ||
-            ((size_t)declared > (size_t)(frame.len - 1U)) ||
+        if ((frame.len < 1U) || ((size_t)declared > (size_t)(frame.len - 1U)) ||
             ((size_t)declared > len)) {
             st->rx_malformed++;
             *errcode = 1U;
@@ -180,7 +174,7 @@ static size_t link_read_cb(uxrCustomTransport *t,
         return (size_t)declared;
     }
 
-    size_t got = 0U;
+    size_t    got = 0U;
     const int rc = ser_hal_uart_read(cfg->uart, buf, len, &got, timeout);
     if (rc != SER_OK) {
         *errcode = 1U;
@@ -238,10 +232,9 @@ int ser_link_open(ser_link_t *link) {
         return SER_ENODEV;
     }
 
-    ser_hal_log("link: up on bearer %u (%s)\n",
-                (unsigned)link->active,
-                (link->cfg[link->active].kind == SER_LINK_CANFD)
-                    ? "CAN-FD" : "stream");
+    ser_hal_log(
+        "link: up on bearer %u (%s)\n", (unsigned)link->active,
+        (link->cfg[link->active].kind == SER_LINK_CANFD) ? "CAN-FD" : "stream");
     return SER_OK;
 }
 
@@ -275,7 +268,7 @@ bool ser_link_maintain(ser_link_t *link, uint64_t now_ms) {
 
     link->active = (uint8_t)((link->active + 1U) % link->count);
     link->failovers++;
-    link->stats[link->active].last_rx_ms = now_ms;   /* Grant a fresh window. */
+    link->stats[link->active].last_rx_ms = now_ms; /* Grant a fresh window. */
 
     ser_hal_log("link: failover -> bearer %u (%lu total)\n",
                 (unsigned)link->active, (unsigned long)link->failovers);

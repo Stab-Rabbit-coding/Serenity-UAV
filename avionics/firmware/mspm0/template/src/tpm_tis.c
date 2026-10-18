@@ -39,8 +39,8 @@
  * ---------------------------------------------------------------------------*/
 
 /** @brief Byte 0 of the SPI header: direction plus zero-based length. */
-#define TIS_HDR0(read, len)  ((uint8_t)(((read) ? 0x80U : 0x00U) | \
-                                        (uint8_t)((len) - 1U)))
+#define TIS_HDR0(read, len) \
+    ((uint8_t)(((read) ? 0x80U : 0x00U) | (uint8_t)((len) - 1U)))
 
 /**
  * @brief Number of wait-state polling windows before giving up.
@@ -52,7 +52,7 @@
  * reboot loop with no diagnostic.  Exceeding this bound is reported as
  * SER_ETIMEDOUT so the node lifecycle can latch a TPM fault instead.
  */
-#define TIS_WAIT_POLLS_MAX   (64U)
+#define TIS_WAIT_POLLS_MAX (64U)
 
 /**
  * @brief Absolute address of a TIS register in the current locality.
@@ -61,9 +61,9 @@
  * base + n * 0x1000.
  */
 static uint32_t tis_addr(const ser_tpm_tis_t *tis, uint16_t reg) {
-    return (uint32_t)(TPM_TIS_SPI_BASE
-                      + ((uint32_t)tis->locality * TPM_TIS_LOCALITY_STRIDE)
-                      + (uint32_t)reg);
+    return (uint32_t)(TPM_TIS_SPI_BASE +
+                      ((uint32_t)tis->locality * TPM_TIS_LOCALITY_STRIDE) +
+                      (uint32_t)reg);
 }
 
 /**
@@ -84,19 +84,16 @@ static uint32_t tis_addr(const ser_tpm_tis_t *tis, uint16_t reg) {
  * time until it reads a 1.  Once a 1 is seen there is no further flow
  * control and the whole data phase proceeds.
  */
-static int tis_xfer(ser_tpm_tis_t *tis,
-                    bool read,
-                    uint16_t reg,
-                    uint8_t *buf,
+static int tis_xfer(ser_tpm_tis_t *tis, bool read, uint16_t reg, uint8_t *buf,
                     size_t len) {
-    if ((tis == NULL) || (buf == NULL) ||
-        (len == 0U) || (len > TPM_TIS_MAX_XFER)) {
+    if ((tis == NULL) || (buf == NULL) || (len == 0U) ||
+        (len > TPM_TIS_MAX_XFER)) {
         return SER_EINVAL;
     }
 
     const uint32_t addr = tis_addr(tis, reg);
-    uint8_t header[4];
-    uint8_t hdr_miso[4];
+    uint8_t        header[4];
+    uint8_t        hdr_miso[4];
 
     header[0] = TIS_HDR0(read, len);
     header[1] = (uint8_t)((addr >> 16) & 0xFFU);
@@ -172,15 +169,13 @@ static int tis_write8(ser_tpm_tis_t *tis, uint16_t reg, uint8_t value) {
  * conflating the two is the classic TIS porting bug.
  */
 static int tis_read_sts(ser_tpm_tis_t *tis, uint32_t *sts) {
-    uint8_t raw[4] = {0U, 0U, 0U, 0U};
+    uint8_t   raw[4] = {0U, 0U, 0U, 0U};
     const int rc = tis_xfer(tis, true, TPM_TIS_REG_STS, raw, sizeof(raw));
     if (rc != SER_OK) {
         return rc;
     }
-    *sts = (uint32_t)raw[0]
-           | ((uint32_t)raw[1] << 8)
-           | ((uint32_t)raw[2] << 16)
-           | ((uint32_t)raw[3] << 24);
+    *sts = (uint32_t)raw[0] | ((uint32_t)raw[1] << 8) |
+           ((uint32_t)raw[2] << 16) | ((uint32_t)raw[3] << 24);
     return SER_OK;
 }
 
@@ -202,17 +197,14 @@ static uint16_t tis_burst_count(uint32_t sts) {
  *                       and Expect are only meaningful when stsValid is 1
  *                       [REF-TCG-002 Table 21, "Valid indicator"].
  */
-static int tis_wait_sts(ser_tpm_tis_t *tis,
-                        uint8_t mask,
-                        bool require_valid,
-                        uint32_t timeout_ms,
-                        uint32_t *last_sts) {
+static int tis_wait_sts(ser_tpm_tis_t *tis, uint8_t mask, bool require_valid,
+                        uint32_t timeout_ms, uint32_t *last_sts) {
     const uint64_t deadline = ser_hal_time_ms() + (uint64_t)timeout_ms;
-    const uint8_t want = require_valid ? (uint8_t)(mask | TPM_TIS_STS_VALID)
-                                       : mask;
+    const uint8_t  want =
+        require_valid ? (uint8_t)(mask | TPM_TIS_STS_VALID) : mask;
 
     for (;;) {
-        uint32_t sts = 0U;
+        uint32_t  sts = 0U;
         const int rc = tis_read_sts(tis, &sts);
         if (rc != SER_OK) {
             return rc;
@@ -255,9 +247,9 @@ int ser_tpm_tis_init(ser_tpm_tis_t *tis) {
     }
 
     memset(tis, 0, sizeof(*tis));
-    tis->locality = 0U;     /* The SLB 9670 in every Serenity board is used
-                             * from locality 0 only; nothing in this firmware
-                             * runs at a higher locality. */
+    tis->locality = 0U; /* The SLB 9670 in every Serenity board is used
+                         * from locality 0 only; nothing in this firmware
+                         * runs at a higher locality. */
 
     /*
      * _TPM_INIT: for an SPI-packaged TPM this is the low-to-high transition
@@ -283,7 +275,7 @@ int ser_tpm_tis_init(ser_tpm_tis_t *tis) {
      * Software may assume that the TPM is broken and should not use it."
      */
     const uint64_t valid_deadline = ser_hal_time_ms() + TPM_TIS_TIMEOUT_A_MS;
-    uint8_t access = 0U;
+    uint8_t        access = 0U;
     for (;;) {
         rc = tis_read8(tis, TPM_TIS_REG_ACCESS, &access);
         if (rc != SER_OK) {
@@ -298,7 +290,8 @@ int ser_tpm_tis_init(ser_tpm_tis_t *tis) {
         ser_hal_delay_us(1000U);
     }
 
-    /* Claim the locality if we do not already hold it [REF-TCG-002 Table 20]. */
+    /* Claim the locality if we do not already hold it [REF-TCG-002 Table 20].
+     */
     if ((access & TPM_TIS_ACCESS_ACTIVE_LOC) == 0U) {
         rc = tis_write8(tis, TPM_TIS_REG_ACCESS, TPM_TIS_ACCESS_REQUEST_USE);
         if (rc != SER_OK) {
@@ -310,8 +303,8 @@ int ser_tpm_tis_init(ser_tpm_tis_t *tis) {
             if (rc != SER_OK) {
                 return rc;
             }
-            if ((access & (TPM_TIS_ACCESS_VALID | TPM_TIS_ACCESS_ACTIVE_LOC))
-                == (TPM_TIS_ACCESS_VALID | TPM_TIS_ACCESS_ACTIVE_LOC)) {
+            if ((access & (TPM_TIS_ACCESS_VALID | TPM_TIS_ACCESS_ACTIVE_LOC)) ==
+                (TPM_TIS_ACCESS_VALID | TPM_TIS_ACCESS_ACTIVE_LOC)) {
                 break;
             }
             if (ser_hal_time_ms() >= loc_deadline) {
@@ -332,10 +325,8 @@ int ser_tpm_tis_init(ser_tpm_tis_t *tis) {
     if (rc != SER_OK) {
         return rc;
     }
-    tis->did_vid = (uint32_t)id[0]
-                   | ((uint32_t)id[1] << 8)
-                   | ((uint32_t)id[2] << 16)
-                   | ((uint32_t)id[3] << 24);
+    tis->did_vid = (uint32_t)id[0] | ((uint32_t)id[1] << 8) |
+                   ((uint32_t)id[2] << 16) | ((uint32_t)id[3] << 24);
     if ((tis->did_vid == 0xFFFFFFFFUL) || (tis->did_vid == 0UL)) {
         return SER_ENODEV;
     }
@@ -347,8 +338,7 @@ int ser_tpm_tis_init(ser_tpm_tis_t *tis) {
 
     tis->open = true;
     ser_hal_log("tpm: DID_VID=0x%08lx RID=0x%02x locality=%u\n",
-                (unsigned long)tis->did_vid,
-                (unsigned)tis->rid,
+                (unsigned long)tis->did_vid, (unsigned)tis->rid,
                 (unsigned)tis->locality);
     return SER_OK;
 }
@@ -357,19 +347,16 @@ int ser_tpm_tis_close(ser_tpm_tis_t *tis) {
     if ((tis == NULL) || !tis->open) {
         return SER_EINVAL;
     }
-    /* Writing 1 to activeLocality relinquishes control [REF-TCG-002 Table 20]. */
-    const int rc = tis_write8(tis, TPM_TIS_REG_ACCESS,
-                              TPM_TIS_ACCESS_ACTIVE_LOC);
+    /* Writing 1 to activeLocality relinquishes control [REF-TCG-002 Table 20].
+     */
+    const int rc =
+        tis_write8(tis, TPM_TIS_REG_ACCESS, TPM_TIS_ACCESS_ACTIVE_LOC);
     tis->open = false;
     return rc;
 }
 
-int ser_tpm_tis_transmit(ser_tpm_tis_t *tis,
-                         const uint8_t *cmd,
-                         size_t cmd_len,
-                         uint8_t *rsp,
-                         size_t rsp_cap,
-                         size_t *rsp_len,
+int ser_tpm_tis_transmit(ser_tpm_tis_t *tis, const uint8_t *cmd, size_t cmd_len,
+                         uint8_t *rsp, size_t rsp_cap, size_t *rsp_len,
                          uint32_t timeout_ms) {
     if ((tis == NULL) || !tis->open || (cmd == NULL) || (rsp == NULL) ||
         (rsp_len == NULL) || (cmd_len < 10U) || (rsp_cap < 10U)) {
@@ -452,8 +439,8 @@ int ser_tpm_tis_transmit(ser_tpm_tis_t *tis,
      * driver disagree about the command length. */
     {
         uint32_t sts = 0U;
-        rc = tis_wait_sts(tis, TPM_TIS_STS_VALID, false,
-                          TPM_TIS_TIMEOUT_C_MS, &sts);
+        rc = tis_wait_sts(tis, TPM_TIS_STS_VALID, false, TPM_TIS_TIMEOUT_C_MS,
+                          &sts);
         if (rc != SER_OK) {
             return rc;
         }
@@ -509,10 +496,8 @@ int ser_tpm_tis_transmit(ser_tpm_tis_t *tis,
     }
 
     /* responseSize is bytes 2..5, big-endian [REF-TCG-002 §7.5]. */
-    const size_t rsp_size = ((size_t)rsp[2] << 24)
-                            | ((size_t)rsp[3] << 16)
-                            | ((size_t)rsp[4] << 8)
-                            | (size_t)rsp[5];
+    const size_t rsp_size = ((size_t)rsp[2] << 24) | ((size_t)rsp[3] << 16) |
+                            ((size_t)rsp[4] << 8) | (size_t)rsp[5];
     if (rsp_size < 10U) {
         (void)tis_command_ready(tis);
         return SER_EPROTO;

@@ -82,8 +82,7 @@ static int publish_health(ser_node_t *node, uint64_t now_ms) {
     put_be16(&p[14], (uint16_t)((now_ms - node->joined_at_ms) / 1000U));
 
     return ser_node_publish(node, TOPIC_ID_NODE_HEALTH, p, sizeof(p),
-                            g_safe ? SER_ENV_FLAG_DEGRADED
-                                   : SER_ENV_FLAG_NONE);
+                            g_safe ? SER_ENV_FLAG_DEGRADED : SER_ENV_FLAG_NONE);
 }
 
 int board_app_step(uint64_t now_ms) {
@@ -106,7 +105,7 @@ int board_app_step(uint64_t now_ms) {
         /* Laser state is publishable today because the safe state is known
          * and enforced: the emitter is off. */
         uint8_t p[2];
-        p[0] = 0U;                              /* 0 = off. */
+        p[0] = 0U; /* 0 = off. */
         p[1] = (uint8_t)OBSERVER_SITE;
         (void)ser_node_publish(node, TOPIC_ID_LASER_STATE, p, sizeof(p),
                                SER_ENV_FLAG_NONE);

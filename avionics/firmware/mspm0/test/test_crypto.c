@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 /* ---------------------------------------------------------------------------
  * AES-256-GCM against the NIST CAVP `gcmEncryptExtIV256` response file
  *
@@ -45,18 +44,25 @@ typedef struct {
 } gcm_vector_t;
 
 static const gcm_vector_t GCM_VECTORS[] = {
-    {
-        "AES-256-GCM CAVP PTlen=128 AADlen=128",
-        "92e11dcdaa866f5ce790fd24501f92509aacf4cb8b1339d50c9c1240935dd08b", "ac93a1a6145299bde902f21a", "2d71bcfa914e4ac045b2aa60955fad24", "1e0889016f67601c8ebea4943bc23ad6", "8995ae2e6df3dbf96fac7b7137bae67f", "eca5aa77d51d4a0a14d9c51e1da474ab"
-    },
-    {
-        "AES-256-GCM CAVP PTlen=128 AADlen=160",
-        "83688deb4af8007f9b713b47cfa6c73e35ea7a3aa4ecdb414dded03bf7a0fd3a", "0b459724904e010a46901cf3", "33d893a2114ce06fc15d55e454cf90c3", "794a14ccd178c8ebfd1379dc704c5e208f9d8424", "cc66bee423e3fcd4c0865715e9586696", "0fb291bd3dba94a1dfd8b286cfb97ac5"
-    },
-    {
-        "AES-256-GCM CAVP PTlen=408 AADlen=128",
-        "5fe01c4baf01cbe07796d5aaef6ec1f45193a98a223594ae4f0ef4952e82e330", "bd587321566c7f1a5dd8652d", "881dc6c7a5d4509f3c4bd2daab08f165ddc204489aa8134562a4eac3d0bcad7965847b102733bb63d1e5c598ece0c3e5dadddd", "9013617817dda947e135ee6dd3653382", "16e375b4973b339d3f746c1c5a568bc7526e909ddff1e19c95c94a6ccff210c9a4a40679de5760c396ac0e2ceb1234f9f5fe26", "abd3d26d65a6275f7a4f56b422acab49"
-    },
+    {"AES-256-GCM CAVP PTlen=128 AADlen=128",
+     "92e11dcdaa866f5ce790fd24501f92509aacf4cb8b1339d50c9c1240935dd08b",
+     "ac93a1a6145299bde902f21a", "2d71bcfa914e4ac045b2aa60955fad24",
+     "1e0889016f67601c8ebea4943bc23ad6", "8995ae2e6df3dbf96fac7b7137bae67f",
+     "eca5aa77d51d4a0a14d9c51e1da474ab"},
+    {"AES-256-GCM CAVP PTlen=128 AADlen=160",
+     "83688deb4af8007f9b713b47cfa6c73e35ea7a3aa4ecdb414dded03bf7a0fd3a",
+     "0b459724904e010a46901cf3", "33d893a2114ce06fc15d55e454cf90c3",
+     "794a14ccd178c8ebfd1379dc704c5e208f9d8424",
+     "cc66bee423e3fcd4c0865715e9586696", "0fb291bd3dba94a1dfd8b286cfb97ac5"},
+    {"AES-256-GCM CAVP PTlen=408 AADlen=128",
+     "5fe01c4baf01cbe07796d5aaef6ec1f45193a98a223594ae4f0ef4952e82e330",
+     "bd587321566c7f1a5dd8652d",
+     "881dc6c7a5d4509f3c4bd2daab08f165ddc204489aa8134562a4eac3d0bcad7965847b102"
+     "733bb63d1e5c598ece0c3e5dadddd",
+     "9013617817dda947e135ee6dd3653382",
+     "16e375b4973b339d3f746c1c5a568bc7526e909ddff1e19c95c94a6ccff210c9a4a40679d"
+     "e5760c396ac0e2ceb1234f9f5fe26",
+     "abd3d26d65a6275f7a4f56b422acab49"},
 };
 
 /** @brief Decode @p hex into @p out; returns the byte count. */
@@ -74,10 +80,11 @@ static size_t unhex(const char *hex, uint8_t *out, size_t cap) {
 static int run_gcm_vectors(void) {
     int failures = 0;
 
-    for (size_t i = 0U; i < (sizeof(GCM_VECTORS) / sizeof(GCM_VECTORS[0])); ++i) {
+    for (size_t i = 0U; i < (sizeof(GCM_VECTORS) / sizeof(GCM_VECTORS[0]));
+         ++i) {
         const gcm_vector_t *v = &GCM_VECTORS[i];
-        uint8_t key[32], iv[12], pt[64], aad[64], ct[64], tag[16];
-        uint8_t got_ct[64], got_tag[16], back[64];
+        uint8_t             key[32], iv[12], pt[64], aad[64], ct[64], tag[16];
+        uint8_t             got_ct[64], got_tag[16], back[64];
 
         const size_t key_len = unhex(v->key_hex, key, sizeof(key));
         (void)unhex(v->iv_hex, iv, sizeof(iv));
@@ -92,8 +99,8 @@ static int run_gcm_vectors(void) {
             ++failures;
             continue;
         }
-        if (ser_aes_gcm_encrypt(&ctx, iv, aad, aad_len, pt, pt_len,
-                                got_ct, got_tag) != SER_OK) {
+        if (ser_aes_gcm_encrypt(&ctx, iv, aad, aad_len, pt, pt_len, got_ct,
+                                got_tag) != SER_OK) {
             (void)printf("FAIL %s (encrypt)\n", v->label);
             ++failures;
             continue;
@@ -112,8 +119,8 @@ static int run_gcm_vectors(void) {
         /* Round trip, and then confirm a single flipped ciphertext bit is
          * rejected — a GCM implementation that never fails a tag check is
          * indistinguishable from one with no authentication at all. */
-        if (ser_aes_gcm_decrypt(&ctx, iv, aad, aad_len, ct, pt_len,
-                                tag, back) != SER_OK) {
+        if (ser_aes_gcm_decrypt(&ctx, iv, aad, aad_len, ct, pt_len, tag,
+                                back) != SER_OK) {
             (void)printf("FAIL %s (decrypt)\n", v->label);
             ++failures;
             continue;
@@ -127,8 +134,8 @@ static int run_gcm_vectors(void) {
             uint8_t bad[64];
             memcpy(bad, ct, pt_len);
             bad[0] ^= 0x01U;
-            if (ser_aes_gcm_decrypt(&ctx, iv, aad, aad_len, bad, pt_len,
-                                    tag, back) != SER_EPROTO) {
+            if (ser_aes_gcm_decrypt(&ctx, iv, aad, aad_len, bad, pt_len, tag,
+                                    back) != SER_EPROTO) {
                 (void)printf("FAIL %s (tampered ciphertext accepted)\n",
                              v->label);
                 ++failures;
@@ -141,16 +148,15 @@ static int run_gcm_vectors(void) {
     return failures;
 }
 
-static int check(const char *label,
-                 const uint8_t *digest,
+static int check(const char *label, const uint8_t *digest,
                  const char *expect_hex) {
     char got[(SER_SHA256_DIGEST_LEN * 2U) + 1U];
     for (unsigned i = 0U; i < SER_SHA256_DIGEST_LEN; ++i) {
         (void)snprintf(&got[i * 2U], 3U, "%02x", digest[i]);
     }
     if (strcmp(got, expect_hex) != 0) {
-        (void)printf("FAIL %s\n  got      %s\n  expected %s\n",
-                     label, got, expect_hex);
+        (void)printf("FAIL %s\n  got      %s\n  expected %s\n", label, got,
+                     expect_hex);
         return 1;
     }
     (void)printf("ok   %s\n", label);
@@ -158,34 +164,34 @@ static int check(const char *label,
 }
 
 int main(void) {
-    int failures = 0;
+    int     failures = 0;
     uint8_t digest[SER_SHA256_DIGEST_LEN];
 
     /* FIPS 180-4 one-block message example. */
     ser_sha256((const uint8_t *)"abc", 3U, digest);
     failures += check("sha256(\"abc\")", digest,
-        "ba7816bf8f01cfea414140de5dae2223"
-        "b00361a396177a9cb410ff61f20015ad");
+                      "ba7816bf8f01cfea414140de5dae2223"
+                      "b00361a396177a9cb410ff61f20015ad");
 
     /* FIPS 180-4 two-block message example (448 bits). */
     static const char two_block[] =
         "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq";
     ser_sha256((const uint8_t *)two_block, sizeof(two_block) - 1U, digest);
     failures += check("sha256(two-block example)", digest,
-        "248d6a61d20638b8e5c026930c3e6039"
-        "a33ce45964ff2167f6ecedd419db06c1");
+                      "248d6a61d20638b8e5c026930c3e6039"
+                      "a33ce45964ff2167f6ecedd419db06c1");
 
     /* The empty message — the boundary case where padding is the entire
      * block, and the one most often wrong in a hand-written implementation. */
     ser_sha256((const uint8_t *)"", 0U, digest);
     failures += check("sha256(\"\")", digest,
-        "e3b0c44298fc1c149afbf4c8996fb924"
-        "27ae41e4649b934ca495991b7852b855");
+                      "e3b0c44298fc1c149afbf4c8996fb924"
+                      "27ae41e4649b934ca495991b7852b855");
 
     /* One million 'a', fed in awkward chunk sizes so the streaming path's
      * block-straddling logic is exercised rather than only the one-shot. */
     {
-        ser_sha256_t ctx;
+        ser_sha256_t   ctx;
         static uint8_t chunk[1000];
         memset(chunk, 'a', sizeof(chunk));
         ser_sha256_init(&ctx);
@@ -194,8 +200,8 @@ int main(void) {
         }
         ser_sha256_final(&ctx, digest);
         failures += check("sha256(1e6 x 'a', streamed)", digest,
-            "cdc76e5c9914fb9281a1c7e284d73e67"
-            "f1809a48a497200e046d39ccc7112cd0");
+                          "cdc76e5c9914fb9281a1c7e284d73e67"
+                          "f1809a48a497200e046d39ccc7112cd0");
     }
 
     /* Streaming with a deliberately awkward split across a block boundary. */
@@ -207,13 +213,13 @@ int main(void) {
         ser_sha256_update(&ctx, (const uint8_t *)"c", 1U);
         ser_sha256_final(&ctx, digest);
         failures += check("sha256(\"abc\", byte-at-a-time)", digest,
-            "ba7816bf8f01cfea414140de5dae2223"
-            "b00361a396177a9cb410ff61f20015ad");
+                          "ba7816bf8f01cfea414140de5dae2223"
+                          "b00361a396177a9cb410ff61f20015ad");
     }
 
     failures += run_gcm_vectors();
 
-    (void)printf("\n%s\n", (failures == 0) ? "all vectors passed"
-                                           : "VECTOR FAILURES");
+    (void)printf("\n%s\n",
+                 (failures == 0) ? "all vectors passed" : "VECTOR FAILURES");
     return (failures == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

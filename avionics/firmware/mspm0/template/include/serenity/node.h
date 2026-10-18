@@ -63,11 +63,11 @@ extern "C" {
 
 /** @brief Node lifecycle states. */
 typedef enum {
-    SER_NODE_BOOT = 0,  /**< HAL up, nothing else.                            */
-    SER_NODE_TPM,       /**< TPM open, key provisioned, self-test passed.     */
-    SER_NODE_JOIN,      /**< XRCE session up, DDS entities being created.     */
-    SER_NODE_RUN,       /**< Joined; publishing.                              */
-    SER_NODE_FAULT      /**< Latched fault; hardware in its safe state.       */
+    SER_NODE_BOOT = 0, /**< HAL up, nothing else.                            */
+    SER_NODE_TPM,      /**< TPM open, key provisioned, self-test passed.     */
+    SER_NODE_JOIN,     /**< XRCE session up, DDS entities being created.     */
+    SER_NODE_RUN,      /**< Joined; publishing.                              */
+    SER_NODE_FAULT     /**< Latched fault; hardware in its safe state.       */
 } ser_node_state_t;
 
 /**
@@ -85,8 +85,8 @@ typedef struct {
 
 /** @brief Direction of a topic from this node's point of view. */
 typedef enum {
-    SER_TOPIC_PUB = 0,  /**< Node publishes it.                               */
-    SER_TOPIC_SUB       /**< Node subscribes to it.                           */
+    SER_TOPIC_PUB = 0, /**< Node publishes it.                               */
+    SER_TOPIC_SUB      /**< Node subscribes to it.                           */
 } ser_topic_dir_t;
 
 /**
@@ -97,16 +97,16 @@ typedef enum {
  * endpoints.
  */
 typedef struct {
-    uint16_t        id;         /**< Fleet topic identifier; bound into MACs. */
-    const char     *name;       /**< DDS topic name.                          */
-    const char     *type_name;  /**< DDS type name.                           */
+    uint16_t        id;        /**< Fleet topic identifier; bound into MACs. */
+    const char     *name;      /**< DDS topic name.                          */
+    const char     *type_name; /**< DDS type name.                           */
     ser_topic_dir_t dir;
     ser_qos_t       qos;
-    uint8_t         env_flags;  /**< Default `SER_ENV_FLAG_*` for this topic. */
+    uint8_t         env_flags; /**< Default `SER_ENV_FLAG_*` for this topic. */
 } ser_topic_t;
 
 /** @brief Maximum topics a single node may declare. */
-#define SER_NODE_MAX_TOPICS     (8U)
+#define SER_NODE_MAX_TOPICS (8U)
 
 /** @brief Node context. */
 typedef struct {
@@ -118,15 +118,15 @@ typedef struct {
     const ser_topic_t *topics;
     uint8_t            topic_count;
 
-    uint16_t         node_id;
-    uint16_t         domain_id;
-    const char      *participant_ref;    /**< Agent-side profile name.        */
+    uint16_t    node_id;
+    uint16_t    domain_id;
+    const char *participant_ref; /**< Agent-side profile name.        */
 
-    uint32_t         published;
-    uint32_t         publish_errors;
-    uint32_t         rejoins;
-    uint64_t         joined_at_ms;
-    int              last_error;
+    uint32_t published;
+    uint32_t publish_errors;
+    uint32_t rejoins;
+    uint64_t joined_at_ms;
+    int      last_error;
 } ser_node_t;
 
 /**
@@ -156,13 +156,11 @@ int ser_node_spin(ser_node_t *node, uint32_t budget_ms);
  * directly.  A signing failure is reported and nothing is published — the
  * node does not fall back to sending unsigned data.
  */
-int ser_node_publish(ser_node_t *node,
-                     uint16_t topic_id,
-                     const uint8_t *payload,
-                     size_t len,
-                     uint8_t extra_flags);
+int ser_node_publish(ser_node_t *node, uint16_t topic_id,
+                     const uint8_t *payload, size_t len, uint8_t extra_flags);
 
-/** @brief Latch a fault, drive the board to its safe state, and stop publishing. */
+/** @brief Latch a fault, drive the board to its safe state, and stop
+ * publishing. */
 void ser_node_fault(ser_node_t *node, int error);
 
 /**

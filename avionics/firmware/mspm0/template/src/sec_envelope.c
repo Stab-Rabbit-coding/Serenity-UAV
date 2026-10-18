@@ -19,19 +19,20 @@
 #include <string.h>
 
 /* Header field offsets; see the table in sec_envelope.h. */
-#define ENV_OFF_MAGIC_VER   (0U)
-#define ENV_OFF_FLAGS       (1U)
-#define ENV_OFF_NODE_ID     (2U)
-#define ENV_OFF_EPOCH       (4U)
-#define ENV_OFF_COUNTER     (8U)
-#define ENV_OFF_TIMESTAMP   (12U)
-#define ENV_OFF_KEY_ID      (20U)
+#define ENV_OFF_MAGIC_VER (0U)
+#define ENV_OFF_FLAGS     (1U)
+#define ENV_OFF_NODE_ID   (2U)
+#define ENV_OFF_EPOCH     (4U)
+#define ENV_OFF_COUNTER   (8U)
+#define ENV_OFF_TIMESTAMP (12U)
+#define ENV_OFF_KEY_ID    (20U)
 
 #if (ENV_OFF_KEY_ID + 4U) != SER_ENV_HDR_LEN
 #error "sec_envelope: field offsets disagree with SER_ENV_HDR_LEN"
 #endif
 #if (SER_ENV_MAC_LEN < 4U) || (SER_ENV_MAC_LEN > TPM2_SHA256_LEN)
-#error "sec_envelope: SER_ENV_MAC_LEN outside NIST SP 800-107 Rev 1 §5.3.3 range"
+#error \
+    "sec_envelope: SER_ENV_MAC_LEN outside NIST SP 800-107 Rev 1 §5.3.3 range"
 #endif
 
 /* --- Big-endian accessors -------------------------------------------------*/
@@ -58,8 +59,8 @@ static uint16_t get_be16(const uint8_t *p) {
 }
 
 static uint32_t get_be32(const uint8_t *p) {
-    return ((uint32_t)p[0] << 24) | ((uint32_t)p[1] << 16)
-           | ((uint32_t)p[2] << 8) | (uint32_t)p[3];
+    return ((uint32_t)p[0] << 24) | ((uint32_t)p[1] << 16) |
+           ((uint32_t)p[2] << 8) | (uint32_t)p[3];
 }
 
 static uint64_t get_be64(const uint8_t *p) {
@@ -94,14 +95,11 @@ static bool ct_equal(const uint8_t *a, const uint8_t *b, size_t len) {
  * `topic_id` is appended to the hash input but never transmitted, binding the
  * MAC to the topic without spending wire bytes.
  */
-static int env_mac(ser_env_t *env,
-                   const uint8_t *hdr,
-                   const uint8_t *payload,
-                   size_t payload_len,
-                   uint16_t topic_id,
+static int env_mac(ser_env_t *env, const uint8_t *hdr, const uint8_t *payload,
+                   size_t payload_len, uint16_t topic_id,
                    uint8_t mac_out[SER_ENV_MAC_LEN]) {
-    uint8_t digest[SER_SHA256_DIGEST_LEN];
-    uint8_t topic_be[2];
+    uint8_t      digest[SER_SHA256_DIGEST_LEN];
+    uint8_t      topic_be[2];
     ser_sha256_t sha;
 
     put_be16(topic_be, topic_id);
@@ -114,7 +112,7 @@ static int env_mac(ser_env_t *env,
     ser_sha256_update(&sha, topic_be, sizeof(topic_be));
     ser_sha256_final(&sha, digest);
 
-    uint8_t full[TPM2_SHA256_LEN];
+    uint8_t   full[TPM2_SHA256_LEN];
     const int rc = ser_tpm2_hmac(env->tpm, digest, sizeof(digest), full);
     memset(digest, 0, sizeof(digest));
     if (rc != SER_OK) {
@@ -150,7 +148,7 @@ int ser_env_init(ser_env_t *env, ser_tpm2_t *tpm, uint16_t node_id) {
     }
     memcpy(env->key_id, tpm->key_name, sizeof(env->key_id));
 
-    uint8_t seed[4];
+    uint8_t   seed[4];
     const int rc = ser_tpm2_get_random(tpm, seed, sizeof(seed));
     if (rc != SER_OK) {
         return rc;
@@ -160,20 +158,14 @@ int ser_env_init(ser_env_t *env, ser_tpm2_t *tpm, uint16_t node_id) {
     env->ready = true;
 
     ser_hal_log("env: node=%u epoch=%08lx key=%02x%02x%02x%02x\n",
-                (unsigned)node_id, (unsigned long)env->epoch,
-                env->key_id[0], env->key_id[1],
-                env->key_id[2], env->key_id[3]);
+                (unsigned)node_id, (unsigned long)env->epoch, env->key_id[0],
+                env->key_id[1], env->key_id[2], env->key_id[3]);
     return SER_OK;
 }
 
-int ser_env_seal(ser_env_t *env,
-                 uint16_t topic_id,
-                 uint8_t flags,
-                 const uint8_t *payload,
-                 size_t len,
-                 uint8_t *out,
-                 size_t out_cap,
-                 size_t *out_len) {
+int ser_env_seal(ser_env_t *env, uint16_t topic_id, uint8_t flags,
+                 const uint8_t *payload, size_t len, uint8_t *out,
+                 size_t out_cap, size_t *out_len) {
     if ((env == NULL) || !env->ready || (out == NULL) || (out_len == NULL) ||
         ((payload == NULL) && (len > 0U))) {
         return SER_EINVAL;
@@ -207,8 +199,8 @@ int ser_env_seal(ser_env_t *env,
         memcpy(&out[SER_ENV_HDR_LEN], payload, len);
     }
 
-    const int rc = env_mac(env, out, payload, len, topic_id,
-                           &out[SER_ENV_HDR_LEN + len]);
+    const int rc =
+        env_mac(env, out, payload, len, topic_id, &out[SER_ENV_HDR_LEN + len]);
     if (rc != SER_OK) {
         /* Zero the buffer rather than leave a well-formed header with a
          * garbage MAC where a caller ignoring the return code could publish
@@ -222,8 +214,7 @@ int ser_env_seal(ser_env_t *env,
     return SER_OK;
 }
 
-int ser_env_parse_header(const uint8_t *msg,
-                         size_t msg_len,
+int ser_env_parse_header(const uint8_t *msg, size_t msg_len,
                          ser_env_hdr_t *hdr) {
     if ((msg == NULL) || (hdr == NULL)) {
         return SER_EINVAL;
@@ -250,24 +241,20 @@ int ser_env_parse_header(const uint8_t *msg,
     return SER_OK;
 }
 
-int ser_env_verify(ser_env_t *env,
-                   uint16_t topic_id,
-                   const uint8_t *msg,
-                   size_t msg_len,
-                   ser_env_hdr_t *hdr,
-                   const uint8_t **body,
+int ser_env_verify(ser_env_t *env, uint16_t topic_id, const uint8_t *msg,
+                   size_t msg_len, ser_env_hdr_t *hdr, const uint8_t **body,
                    size_t *body_len) {
     if ((env == NULL) || !env->ready || (msg == NULL)) {
         return SER_EINVAL;
     }
 
     ser_env_hdr_t parsed;
-    int rc = ser_env_parse_header(msg, msg_len, &parsed);
+    int           rc = ser_env_parse_header(msg, msg_len, &parsed);
     if (rc != SER_OK) {
         return rc;
     }
 
-    const size_t payload_len = msg_len - SER_ENV_TOTAL_LEN;
+    const size_t   payload_len = msg_len - SER_ENV_TOTAL_LEN;
     const uint8_t *payload = (payload_len > 0U) ? &msg[SER_ENV_HDR_LEN] : NULL;
 
     uint8_t expected[SER_ENV_MAC_LEN];
@@ -276,8 +263,7 @@ int ser_env_verify(ser_env_t *env,
         return rc;
     }
 
-    const bool match = ct_equal(expected,
-                                &msg[SER_ENV_HDR_LEN + payload_len],
+    const bool match = ct_equal(expected, &msg[SER_ENV_HDR_LEN + payload_len],
                                 SER_ENV_MAC_LEN);
     memset(expected, 0, sizeof(expected));
     if (!match) {

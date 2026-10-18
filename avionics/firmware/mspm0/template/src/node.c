@@ -27,42 +27,42 @@
  * defaults.  History must be a power of two (upstream requirement).
  * ---------------------------------------------------------------------------*/
 
-#define NODE_STREAM_HISTORY     (4U)
-#define NODE_OUT_STREAM_SIZE    (SER_LINK_MTU * NODE_STREAM_HISTORY)
-#define NODE_IN_STREAM_SIZE     (SER_LINK_MTU * NODE_STREAM_HISTORY)
+#define NODE_STREAM_HISTORY    (4U)
+#define NODE_OUT_STREAM_SIZE   (SER_LINK_MTU * NODE_STREAM_HISTORY)
+#define NODE_IN_STREAM_SIZE    (SER_LINK_MTU * NODE_STREAM_HISTORY)
 
 /** @brief Largest sealed sample the node will build. */
-#define NODE_SEAL_BUF_SIZE      (SER_ENV_TOTAL_LEN + 96U)
+#define NODE_SEAL_BUF_SIZE     (SER_ENV_TOTAL_LEN + 96U)
 
 /** @brief Milliseconds the session waits for the Agent to confirm entities. */
-#define NODE_ENTITY_TIMEOUT_MS  (2000)
+#define NODE_ENTITY_TIMEOUT_MS (2000)
 
 /** @brief XRCE object-id index base for the per-topic entities. */
-#define NODE_OBJ_PARTICIPANT    (0x01U)
-#define NODE_OBJ_PUBLISHER      (0x01U)
-#define NODE_OBJ_SUBSCRIBER     (0x01U)
-#define NODE_OBJ_TOPIC_BASE     (0x10U)
-#define NODE_OBJ_WRITER_BASE    (0x20U)
-#define NODE_OBJ_READER_BASE    (0x30U)
+#define NODE_OBJ_PARTICIPANT   (0x01U)
+#define NODE_OBJ_PUBLISHER     (0x01U)
+#define NODE_OBJ_SUBSCRIBER    (0x01U)
+#define NODE_OBJ_TOPIC_BASE    (0x10U)
+#define NODE_OBJ_WRITER_BASE   (0x20U)
+#define NODE_OBJ_READER_BASE   (0x30U)
 
 /* Session state kept out of `ser_node_t` so `node.h` stays free of the
  * Micro XRCE-DDS headers; one node per MCU makes file scope safe. */
-static uxrSession    g_session;
-static uxrStreamId   g_out_stream;
-static uxrStreamId   g_in_stream;
-static uint8_t       g_out_buf[NODE_OUT_STREAM_SIZE];
-static uint8_t       g_in_buf[NODE_IN_STREAM_SIZE];
-static uxrObjectId   g_writer[SER_NODE_MAX_TOPICS];
-static uxrObjectId   g_reader[SER_NODE_MAX_TOPICS];
-static ser_node_t   *g_node;
+static uxrSession  g_session;
+static uxrStreamId g_out_stream;
+static uxrStreamId g_in_stream;
+static uint8_t     g_out_buf[NODE_OUT_STREAM_SIZE];
+static uint8_t     g_in_buf[NODE_IN_STREAM_SIZE];
+static uxrObjectId g_writer[SER_NODE_MAX_TOPICS];
+static uxrObjectId g_reader[SER_NODE_MAX_TOPICS];
+static ser_node_t *g_node;
 
 /** @brief Translate this project's QoS struct into upstream's. */
 static uxrQoS_t to_uxr_qos(const ser_qos_t *q) {
     uxrQoS_t out;
-    out.durability = q->transient ? UXR_DURABILITY_TRANSIENT_LOCAL
-                                  : UXR_DURABILITY_VOLATILE;
-    out.reliability = q->reliable ? UXR_RELIABILITY_RELIABLE
-                                  : UXR_RELIABILITY_BEST_EFFORT;
+    out.durability =
+        q->transient ? UXR_DURABILITY_TRANSIENT_LOCAL : UXR_DURABILITY_VOLATILE;
+    out.reliability =
+        q->reliable ? UXR_RELIABILITY_RELIABLE : UXR_RELIABILITY_BEST_EFFORT;
     out.history = q->keep_all ? UXR_HISTORY_KEEP_ALL : UXR_HISTORY_KEEP_LAST;
     out.depth = q->depth;
     return out;
@@ -79,13 +79,9 @@ static uxrQoS_t to_uxr_qos(const ser_qos_t *q) {
  * envelope header for the ground-side forensic record.  This is recorded as
  * an explicit limitation in the subsystem README rather than papered over.
  */
-static void on_topic(uxrSession *session,
-                     uxrObjectId object_id,
-                     uint16_t request_id,
-                     uxrStreamId stream_id,
-                     struct ucdrBuffer *ub,
-                     uint16_t length,
-                     void *args) {
+static void on_topic(uxrSession *session, uxrObjectId object_id,
+                     uint16_t request_id, uxrStreamId stream_id,
+                     struct ucdrBuffer *ub, uint16_t length, void *args) {
     (void)session;
     (void)request_id;
     (void)stream_id;
@@ -98,7 +94,7 @@ static void on_topic(uxrSession *session,
     for (uint8_t i = 0U; i < g_node->topic_count; ++i) {
         if ((g_node->topics[i].dir == SER_TOPIC_SUB) &&
             (g_reader[i].id == object_id.id)) {
-            uint8_t buf[NODE_SEAL_BUF_SIZE];
+            uint8_t      buf[NODE_SEAL_BUF_SIZE];
             const size_t take = (length > sizeof(buf)) ? sizeof(buf) : length;
             ucdr_deserialize_array_uint8_t(ub, buf, (uint32_t)take);
 
@@ -106,8 +102,7 @@ static void on_topic(uxrSession *session,
             if (ser_env_parse_header(buf, take, &hdr) == SER_OK) {
                 ser_hal_log("rx: topic=%u from node=%u ctr=%lu\n",
                             (unsigned)g_node->topics[i].id,
-                            (unsigned)hdr.node_id,
-                            (unsigned long)hdr.counter);
+                            (unsigned)hdr.node_id, (unsigned long)hdr.counter);
             }
             return;
         }
@@ -131,11 +126,9 @@ static int create_entities(ser_node_t *node) {
     uint8_t  status[1 + (SER_NODE_MAX_TOPICS * 2U) + 2U];
     uint8_t  n = 0U;
 
-    reqs[n++] = uxr_buffer_create_participant_ref(&g_session, g_out_stream,
-                                                  participant,
-                                                  node->domain_id,
-                                                  node->participant_ref,
-                                                  UXR_REPLACE | UXR_REUSE);
+    reqs[n++] = uxr_buffer_create_participant_ref(
+        &g_session, g_out_stream, participant, node->domain_id,
+        node->participant_ref, UXR_REPLACE | UXR_REUSE);
 
     bool need_pub = false;
     bool need_sub = false;
@@ -173,7 +166,7 @@ static int create_entities(ser_node_t *node) {
      * is attributable rather than failing the whole batch anonymously. */
     for (uint8_t i = 0U; i < node->topic_count; ++i) {
         const ser_topic_t *t = &node->topics[i];
-        const uxrObjectId topic =
+        const uxrObjectId  topic =
             uxr_object_id((uint16_t)(NODE_OBJ_TOPIC_BASE + i), UXR_TOPIC_ID);
         uint16_t r[2];
         uint8_t  s[2];
@@ -186,22 +179,19 @@ static int create_entities(ser_node_t *node) {
         if (t->dir == SER_TOPIC_PUB) {
             g_writer[i] = uxr_object_id((uint16_t)(NODE_OBJ_WRITER_BASE + i),
                                         UXR_DATAWRITER_ID);
-            r[1] = uxr_buffer_create_datawriter_bin(&g_session, g_out_stream,
-                                                    g_writer[i], publisher,
-                                                    topic, qos,
-                                                    UXR_REPLACE | UXR_REUSE);
+            r[1] = uxr_buffer_create_datawriter_bin(
+                &g_session, g_out_stream, g_writer[i], publisher, topic, qos,
+                UXR_REPLACE | UXR_REUSE);
         } else {
             g_reader[i] = uxr_object_id((uint16_t)(NODE_OBJ_READER_BASE + i),
                                         UXR_DATAREADER_ID);
-            r[1] = uxr_buffer_create_datareader_bin(&g_session, g_out_stream,
-                                                    g_reader[i], subscriber,
-                                                    topic, qos,
-                                                    UXR_REPLACE | UXR_REUSE);
+            r[1] = uxr_buffer_create_datareader_bin(
+                &g_session, g_out_stream, g_reader[i], subscriber, topic, qos,
+                UXR_REPLACE | UXR_REUSE);
         }
 
-        if (!uxr_run_session_until_all_status(&g_session,
-                                              NODE_ENTITY_TIMEOUT_MS,
-                                              r, s, 2U)) {
+        if (!uxr_run_session_until_all_status(
+                &g_session, NODE_ENTITY_TIMEOUT_MS, r, s, 2U)) {
             ser_hal_log("node: topic '%s' creation failed\n", t->name);
             return SER_ETIMEDOUT;
         }
@@ -209,8 +199,8 @@ static int create_entities(ser_node_t *node) {
         if (t->dir == SER_TOPIC_SUB) {
             uxrDeliveryControl ctrl = {0};
             ctrl.max_samples = UXR_MAX_SAMPLES_UNLIMITED;
-            (void)uxr_buffer_request_data(&g_session, g_out_stream,
-                                          g_reader[i], g_in_stream, &ctrl);
+            (void)uxr_buffer_request_data(&g_session, g_out_stream, g_reader[i],
+                                          g_in_stream, &ctrl);
         }
     }
 
@@ -230,16 +220,15 @@ static int join(ser_node_t *node) {
     uxr_set_topic_callback(&g_session, on_topic, node);
 
     if (!uxr_create_session(&g_session)) {
-        ser_hal_log("node: no Agent on bearer %u\n", (unsigned)node->link.active);
+        ser_hal_log("node: no Agent on bearer %u\n",
+                    (unsigned)node->link.active);
         return SER_ETIMEDOUT;
     }
 
-    g_out_stream = uxr_create_output_reliable_stream(&g_session, g_out_buf,
-                                                     sizeof(g_out_buf),
-                                                     NODE_STREAM_HISTORY);
-    g_in_stream = uxr_create_input_reliable_stream(&g_session, g_in_buf,
-                                                   sizeof(g_in_buf),
-                                                   NODE_STREAM_HISTORY);
+    g_out_stream = uxr_create_output_reliable_stream(
+        &g_session, g_out_buf, sizeof(g_out_buf), NODE_STREAM_HISTORY);
+    g_in_stream = uxr_create_input_reliable_stream(
+        &g_session, g_in_buf, sizeof(g_in_buf), NODE_STREAM_HISTORY);
 
     const int rc = create_entities(node);
     if (rc != SER_OK) {
@@ -260,8 +249,7 @@ static int join(ser_node_t *node) {
 }
 
 int ser_node_start(ser_node_t *node) {
-    if ((node == NULL) || (node->topics == NULL) ||
-        (node->topic_count == 0U) ||
+    if ((node == NULL) || (node->topics == NULL) || (node->topic_count == 0U) ||
         (node->topic_count > SER_NODE_MAX_TOPICS) ||
         (node->participant_ref == NULL)) {
         return SER_EINVAL;
@@ -295,18 +283,16 @@ int ser_node_start(ser_node_t *node) {
      * telemetry and only be caught on the far side of the bus.
      */
     {
-        static const uint8_t probe[8] = {
-            0xA5U, 0x5AU, 0x00U, 0xFFU, 0x12U, 0x34U, 0x56U, 0x78U
-        };
-        uint8_t sealed[SER_ENV_TOTAL_LEN + sizeof(probe)];
-        size_t sealed_len = 0U;
+        static const uint8_t probe[8] = {0xA5U, 0x5AU, 0x00U, 0xFFU,
+                                         0x12U, 0x34U, 0x56U, 0x78U};
+        uint8_t              sealed[SER_ENV_TOTAL_LEN + sizeof(probe)];
+        size_t               sealed_len = 0U;
 
-        rc = ser_env_seal(&node->env, 0xFFFFU, SER_ENV_FLAG_NONE,
-                          probe, sizeof(probe),
-                          sealed, sizeof(sealed), &sealed_len);
+        rc = ser_env_seal(&node->env, 0xFFFFU, SER_ENV_FLAG_NONE, probe,
+                          sizeof(probe), sealed, sizeof(sealed), &sealed_len);
         if (rc == SER_OK) {
-            rc = ser_env_verify(&node->env, 0xFFFFU, sealed, sealed_len,
-                                NULL, NULL, NULL);
+            rc = ser_env_verify(&node->env, 0xFFFFU, sealed, sealed_len, NULL,
+                                NULL, NULL);
         }
         if (rc != SER_OK) {
             ser_hal_log("node: signing self-test FAILED rc=%d\n", rc);
@@ -340,16 +326,13 @@ int ser_node_start(ser_node_t *node) {
     }
 
     node->state = SER_NODE_RUN;
-    ser_hal_log("node: joined domain %u as '%s'\n",
-                (unsigned)node->domain_id, node->participant_ref);
+    ser_hal_log("node: joined domain %u as '%s'\n", (unsigned)node->domain_id,
+                node->participant_ref);
     return SER_OK;
 }
 
-int ser_node_publish(ser_node_t *node,
-                     uint16_t topic_id,
-                     const uint8_t *payload,
-                     size_t len,
-                     uint8_t extra_flags) {
+int ser_node_publish(ser_node_t *node, uint16_t topic_id,
+                     const uint8_t *payload, size_t len, uint8_t extra_flags) {
     if ((node == NULL) || (node->state != SER_NODE_RUN)) {
         return SER_EINVAL;
     }
@@ -366,13 +349,12 @@ int ser_node_publish(ser_node_t *node,
         return SER_EINVAL;
     }
 
-    uint8_t sealed[NODE_SEAL_BUF_SIZE];
-    size_t sealed_len = 0U;
-    const int rc = ser_env_seal(&node->env, topic_id,
-                                (uint8_t)(node->topics[idx].env_flags
-                                          | extra_flags),
-                                payload, len,
-                                sealed, sizeof(sealed), &sealed_len);
+    uint8_t   sealed[NODE_SEAL_BUF_SIZE];
+    size_t    sealed_len = 0U;
+    const int rc =
+        ser_env_seal(&node->env, topic_id,
+                     (uint8_t)(node->topics[idx].env_flags | extra_flags),
+                     payload, len, sealed, sizeof(sealed), &sealed_len);
     if (rc != SER_OK) {
         /* Signing failed: publish nothing.  Unsigned telemetry is worse than
          * silence, because a subscriber cannot tell it from forged data. */
@@ -387,7 +369,7 @@ int ser_node_publish(ser_node_t *node,
      * never re-encoded in transit, so the MAC still covers exactly the bytes
      * that were signed when it reaches a subscriber.
      */
-    ucdrBuffer ub;
+    ucdrBuffer     ub;
     const uint32_t topic_size = (uint32_t)(4U + sealed_len);
     (void)uxr_prepare_output_stream(&g_session, g_out_stream, g_writer[idx],
                                     &ub, topic_size);
@@ -416,7 +398,7 @@ int ser_node_spin(ser_node_t *node, uint32_t budget_ms) {
         node->state = SER_NODE_JOIN;
         const int rc = join(node);
         if (rc != SER_OK) {
-            return rc;      /* Stay in JOIN; the next spin retries. */
+            return rc; /* Stay in JOIN; the next spin retries. */
         }
         node->rejoins++;
         node->state = SER_NODE_RUN;
@@ -432,9 +414,7 @@ int ser_node_spin(ser_node_t *node, uint32_t budget_ms) {
     return SER_OK;
 }
 
-ser_node_t *ser_node_current(void) {
-    return g_node;
-}
+ser_node_t *ser_node_current(void) { return g_node; }
 
 void ser_node_fault(ser_node_t *node, int error) {
     if (node == NULL) {

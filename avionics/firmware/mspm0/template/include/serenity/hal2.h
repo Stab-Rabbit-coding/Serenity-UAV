@@ -6,7 +6,7 @@
  * ---------------------------------------------------------------------------*/
 
 /**
- * @brief Load the symmetric session key derived from the TPM ECDH handshake 
+ * @brief Load the symmetric session key derived from the TPM ECDH handshake
  *        into the hardware AES accelerator.
  *
  * @param key       AES session key (16 or 32 bytes).
@@ -27,10 +27,6 @@ int ser_hal_aes_gcm_set_key(const uint8_t *key, size_t key_len);
  * @param tag       Out: 16-byte GCM authentication tag.
  * @return SER_OK, or SER_EBUSY if the AES engine is locked.
  */
-int ser_hal_aes_gcm_encrypt(const uint8_t *iv,
-                            const uint8_t *aad,
-                            size_t aad_len,
-                            const uint8_t *pt,
-                            size_t pt_len,
-                            uint8_t *ct,
-                            uint8_t tag[16]);
+int ser_hal_aes_gcm_encrypt(const uint8_t *iv, const uint8_t *aad,
+                            size_t aad_len, const uint8_t *pt, size_t pt_len,
+                            uint8_t *ct, uint8_t tag[16]);

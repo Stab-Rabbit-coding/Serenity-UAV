@@ -34,17 +34,17 @@
  * so the prototypes are restated here.  Without them -Wmissing-prototypes
  * (which this project enables fleet-wide) rejects every definition below.
  */
-int clock_gettime(clockid_t clk_id, struct timespec *tp);
-void *_sbrk(ptrdiff_t incr);
-int _close(int fd);
-int _fstat(int fd, struct stat *st);
-int _isatty(int fd);
-off_t _lseek(int fd, off_t off, int whence);
+int     clock_gettime(clockid_t clk_id, struct timespec *tp);
+void   *_sbrk(ptrdiff_t incr);
+int     _close(int fd);
+int     _fstat(int fd, struct stat *st);
+int     _isatty(int fd);
+off_t   _lseek(int fd, off_t off, int whence);
 ssize_t _read(int fd, void *buf, size_t len);
 ssize_t _write(int fd, const void *buf, size_t len);
-int _getpid(void);
-int _kill(int pid, int sig);
-void _exit(int status) __attribute__((noreturn));
+int     _getpid(void);
+int     _kill(int pid, int sig);
+void    _exit(int status) __attribute__((noreturn));
 clock_t _times(struct tms *buf);
 
 #undef errno
@@ -159,9 +159,7 @@ ssize_t _write(int fd, const void *buf, size_t len) {
     return (ssize_t)len;
 }
 
-int _getpid(void) {
-    return 1;
-}
+int _getpid(void) { return 1; }
 
 int _kill(int pid, int sig) {
     (void)pid;

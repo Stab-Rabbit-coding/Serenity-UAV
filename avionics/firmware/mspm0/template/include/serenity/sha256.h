@@ -31,17 +31,17 @@ extern "C" {
 #endif
 
 /** @brief SHA-256 digest length in bytes (FIPS 180-4 §1). */
-#define SER_SHA256_DIGEST_LEN   (32U)
+#define SER_SHA256_DIGEST_LEN (32U)
 
 /** @brief SHA-256 block length in bytes (FIPS 180-4 §5.1.1: 512 bits). */
-#define SER_SHA256_BLOCK_LEN    (64U)
+#define SER_SHA256_BLOCK_LEN  (64U)
 
 /** @brief Streaming SHA-256 state. */
 typedef struct {
-    uint32_t state[8];                      /**< Working variables H0..H7.    */
-    uint64_t bit_count;                     /**< Total message length, bits.  */
-    uint8_t  block[SER_SHA256_BLOCK_LEN];   /**< Partial block buffer.        */
-    size_t   block_len;                     /**< Bytes buffered in `block`.   */
+    uint32_t state[8];                    /**< Working variables H0..H7.    */
+    uint64_t bit_count;                   /**< Total message length, bits.  */
+    uint8_t  block[SER_SHA256_BLOCK_LEN]; /**< Partial block buffer.        */
+    size_t   block_len;                   /**< Bytes buffered in `block`.   */
 } ser_sha256_t;
 
 /** @brief Initialise to the FIPS 180-4 §5.3.3 initial hash value. */
@@ -59,8 +59,7 @@ void ser_sha256_update(ser_sha256_t *ctx, const uint8_t *data, size_t len);
 void ser_sha256_final(ser_sha256_t *ctx, uint8_t digest[SER_SHA256_DIGEST_LEN]);
 
 /** @brief One-shot convenience wrapper over init/update/final. */
-void ser_sha256(const uint8_t *data,
-                size_t len,
+void ser_sha256(const uint8_t *data, size_t len,
                 uint8_t digest[SER_SHA256_DIGEST_LEN]);
 
 #ifdef __cplusplus

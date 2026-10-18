@@ -23,9 +23,9 @@
 #include <string.h>
 
 /* TPM_RC_VER1-based response codes used below [REF-TCG-001 Part 2 §6.6.2]. */
-#define TPM2_RC_VER1                (0x00000100UL)
-#define TPM2_RC_INITIALIZE          (TPM2_RC_VER1 + 0x000UL)  /**< 0x100. */
-#define TPM2_RC_NV_DEFINED          (TPM2_RC_VER1 + 0x04CUL)  /**< 0x14C. */
+#define TPM2_RC_VER1           (0x00000100UL)
+#define TPM2_RC_INITIALIZE     (TPM2_RC_VER1 + 0x000UL) /**< 0x100. */
+#define TPM2_RC_NV_DEFINED     (TPM2_RC_VER1 + 0x04CUL) /**< 0x14C. */
 
 /**
  * @brief Execution budget for a TPM command, milliseconds.
@@ -34,8 +34,8 @@
  * completes every command this firmware issues well inside it.  Provisioning
  * (TPM2_CreatePrimary) is the slow one and gets its own longer budget.
  */
-#define TPM2_CMD_TIMEOUT_MS         (TPM_TIS_TIMEOUT_B_MS)
-#define TPM2_CREATE_TIMEOUT_MS      (20000U)
+#define TPM2_CMD_TIMEOUT_MS    (TPM_TIS_TIMEOUT_B_MS)
+#define TPM2_CREATE_TIMEOUT_MS (20000U)
 
 /* ---------------------------------------------------------------------------
  * Marshalling helpers
@@ -47,10 +47,10 @@
  * ---------------------------------------------------------------------------*/
 
 typedef struct {
-    uint8_t *buf;   /**< Destination buffer.                                  */
-    size_t   cap;   /**< Capacity of `buf`.                                   */
-    size_t   len;   /**< Bytes written so far.                                */
-    bool     ok;    /**< False once an append has overflowed.                 */
+    uint8_t *buf; /**< Destination buffer.                                  */
+    size_t   cap; /**< Capacity of `buf`.                                   */
+    size_t   len; /**< Bytes written so far.                                */
+    bool     ok;  /**< False once an append has overflowed.                 */
 } tpm_wr_t;
 
 static void wr_init(tpm_wr_t *w, uint8_t *buf, size_t cap) {
@@ -102,8 +102,8 @@ static uint16_t rd_u16(const uint8_t *p) {
 
 /** @brief Read a big-endian UINT32 from @p p. */
 static uint32_t rd_u32(const uint8_t *p) {
-    return ((uint32_t)p[0] << 24) | ((uint32_t)p[1] << 16)
-           | ((uint32_t)p[2] << 8) | (uint32_t)p[3];
+    return ((uint32_t)p[0] << 24) | ((uint32_t)p[1] << 16) |
+           ((uint32_t)p[2] << 8) | (uint32_t)p[3];
 }
 
 /**
@@ -121,9 +121,7 @@ static uint32_t rd_u32(const uint8_t *p) {
  * @return SER_OK if the TPM returned TPM_RC_SUCCESS.  A non-success
  *         responseCode yields SER_EIO with the code in `ctx->last_rc`.
  */
-static int tpm_run(ser_tpm2_t *ctx,
-                   tpm_wr_t *w,
-                   uint32_t timeout_ms,
+static int tpm_run(ser_tpm2_t *ctx, tpm_wr_t *w, uint32_t timeout_ms,
                    size_t *rsp_len) {
     if (!w->ok) {
         return SER_ENOSPC;
@@ -134,12 +132,9 @@ static int tpm_run(ser_tpm2_t *ctx,
     w->buf[4] = (uint8_t)((w->len >> 8) & 0xFFU);
     w->buf[5] = (uint8_t)(w->len & 0xFFU);
 
-    size_t got = 0U;
-    const int rc = ser_tpm_tis_transmit(&ctx->tis,
-                                        w->buf, w->len,
-                                        ctx->rsp, sizeof(ctx->rsp),
-                                        &got,
-                                        timeout_ms);
+    size_t    got = 0U;
+    const int rc = ser_tpm_tis_transmit(&ctx->tis, w->buf, w->len, ctx->rsp,
+                                        sizeof(ctx->rsp), &got, timeout_ms);
     if (rc != SER_OK) {
         return rc;
     }
@@ -159,13 +154,11 @@ static int tpm_run(ser_tpm2_t *ctx,
  *
  * Leaves a four-byte placeholder for commandSize that `tpm_run()` fills in.
  */
-static void tpm_begin(ser_tpm2_t *ctx,
-                      tpm_wr_t *w,
-                      uint16_t tag,
+static void tpm_begin(ser_tpm2_t *ctx, tpm_wr_t *w, uint16_t tag,
                       uint32_t code) {
     wr_init(w, ctx->cmd, sizeof(ctx->cmd));
     wr_u16(w, tag);
-    wr_u32(w, 0UL);         /* commandSize placeholder. */
+    wr_u32(w, 0UL); /* commandSize placeholder. */
     wr_u32(w, code);
 }
 
@@ -182,11 +175,11 @@ static void tpm_begin(ser_tpm2_t *ctx,
  * + 2 (password size).
  */
 static void wr_password_auth(tpm_wr_t *w) {
-    wr_u32(w, 9UL);                         /* authorizationSize.             */
-    wr_u32(w, TPM2_RS_PW);                  /* sessionHandle.                 */
-    wr_u16(w, 0U);                          /* nonce: empty.                  */
-    wr_u8(w, TPM2_SESSION_CONTINUE);        /* sessionAttributes.             */
-    wr_u16(w, 0U);                          /* hmac/password: empty.          */
+    wr_u32(w, 9UL);                  /* authorizationSize.             */
+    wr_u32(w, TPM2_RS_PW);           /* sessionHandle.                 */
+    wr_u16(w, 0U);                   /* nonce: empty.                  */
+    wr_u8(w, TPM2_SESSION_CONTINUE); /* sessionAttributes.             */
+    wr_u16(w, 0U);                   /* hmac/password: empty.          */
 }
 
 /* ---------------------------------------------------------------------------
@@ -215,7 +208,7 @@ static int tpm2_startup(ser_tpm2_t *ctx, uint16_t startup_type) {
 static int tpm2_self_test(ser_tpm2_t *ctx, bool full_test) {
     tpm_wr_t w;
     tpm_begin(ctx, &w, TPM2_ST_NO_SESSIONS, TPM2_CC_SELF_TEST);
-    wr_u8(&w, full_test ? 1U : 0U);         /* fullTest, a TPMI_YES_NO.       */
+    wr_u8(&w, full_test ? 1U : 0U); /* fullTest, a TPMI_YES_NO.       */
     return tpm_run(ctx, &w, TPM2_CMD_TIMEOUT_MS, NULL);
 }
 
@@ -234,8 +227,8 @@ int ser_tpm2_open(ser_tpm2_t *ctx) {
 
     rc = tpm2_startup(ctx, TPM2_SU_CLEAR);
     if (rc != SER_OK) {
-        ser_hal_log("tpm: startup failed rc=%d tpm_rc=0x%08lx\n",
-                    rc, (unsigned long)ctx->last_rc);
+        ser_hal_log("tpm: startup failed rc=%d tpm_rc=0x%08lx\n", rc,
+                    (unsigned long)ctx->last_rc);
         return rc;
     }
 
@@ -247,8 +240,8 @@ int ser_tpm2_open(ser_tpm2_t *ctx) {
      */
     rc = tpm2_self_test(ctx, false);
     if (rc != SER_OK) {
-        ser_hal_log("tpm: self-test failed rc=%d tpm_rc=0x%08lx\n",
-                    rc, (unsigned long)ctx->last_rc);
+        ser_hal_log("tpm: self-test failed rc=%d tpm_rc=0x%08lx\n", rc,
+                    (unsigned long)ctx->last_rc);
         return rc;
     }
 
@@ -287,24 +280,22 @@ int ser_tpm2_close(ser_tpm2_t *ctx) {
  * scratch buffer first and then emitted as a TPM2B.
  */
 static void wr_hmac_key_template(tpm_wr_t *w) {
-    uint8_t inner[64];
+    uint8_t  inner[64];
     tpm_wr_t t;
     wr_init(&t, inner, sizeof(inner));
 
-    wr_u16(&t, TPM2_ALG_KEYEDHASH);     /* type.                              */
-    wr_u16(&t, TPM2_ALG_SHA256);        /* nameAlg.                           */
-    wr_u32(&t, TPM2_OBJ_FIXEDTPM
-               | TPM2_OBJ_FIXEDPARENT
-               | TPM2_OBJ_SENSITIVEDATAORIGIN
-               | TPM2_OBJ_USERWITHAUTH
-               | TPM2_OBJ_NODA
-               | TPM2_OBJ_SIGN_ENCRYPT); /* objectAttributes; note that
-                                          * RESTRICTED is deliberately clear —
-                                          * see `tpm2.h`. */
-    wr_u16(&t, 0U);                     /* authPolicy: empty TPM2B_DIGEST.    */
-    wr_u16(&t, TPM2_ALG_HMAC);          /* scheme.scheme.                     */
-    wr_u16(&t, TPM2_ALG_SHA256);        /* scheme.details.hmac.hashAlg.       */
-    wr_u16(&t, 0U);                     /* unique: empty TPM2B_DIGEST.        */
+    wr_u16(&t, TPM2_ALG_KEYEDHASH); /* type.                              */
+    wr_u16(&t, TPM2_ALG_SHA256);    /* nameAlg.                           */
+    wr_u32(&t, TPM2_OBJ_FIXEDTPM | TPM2_OBJ_FIXEDPARENT |
+                   TPM2_OBJ_SENSITIVEDATAORIGIN | TPM2_OBJ_USERWITHAUTH |
+                   TPM2_OBJ_NODA |
+                   TPM2_OBJ_SIGN_ENCRYPT); /* objectAttributes; note that
+                                            * RESTRICTED is deliberately clear —
+                                            * see `tpm2.h`. */
+    wr_u16(&t, 0U);              /* authPolicy: empty TPM2B_DIGEST.    */
+    wr_u16(&t, TPM2_ALG_HMAC);   /* scheme.scheme.                     */
+    wr_u16(&t, TPM2_ALG_SHA256); /* scheme.details.hmac.hashAlg.       */
+    wr_u16(&t, 0U);              /* unique: empty TPM2B_DIGEST.        */
 
     if (!t.ok) {
         w->ok = false;
@@ -343,7 +334,7 @@ int ser_tpm2_provision_signing_key(ser_tpm2_t *ctx) {
     /* ---- TPM2_CreatePrimary [REF-TCG-001 Part 3 §24.1] ------------------ */
     tpm_wr_t w;
     tpm_begin(ctx, &w, TPM2_ST_SESSIONS, TPM2_CC_CREATE_PRIMARY);
-    wr_u32(&w, TPM2_RH_OWNER);          /* primaryHandle (handle area).       */
+    wr_u32(&w, TPM2_RH_OWNER); /* primaryHandle (handle area).       */
     wr_password_auth(&w);
 
     /*
@@ -352,19 +343,19 @@ int ser_tpm2_provision_signing_key(ser_tpm2_t *ctx) {
      * no authValue on the key, and no caller-supplied seed (the key material
      * comes from the TPM's own RNG because sensitiveDataOrigin is SET).
      */
-    wr_u16(&w, 4U);                     /* size of the TPMS_SENSITIVE_CREATE. */
-    wr_u16(&w, 0U);                     /* userAuth: empty.                   */
-    wr_u16(&w, 0U);                     /* data: empty.                       */
+    wr_u16(&w, 4U); /* size of the TPMS_SENSITIVE_CREATE. */
+    wr_u16(&w, 0U); /* userAuth: empty.                   */
+    wr_u16(&w, 0U); /* data: empty.                       */
 
-    wr_hmac_key_template(&w);           /* inPublic.                          */
-    wr_u16(&w, 0U);                     /* outsideInfo: empty TPM2B_DATA.     */
-    wr_u32(&w, 0UL);                    /* creationPCR: empty TPML_PCR_SEL.   */
+    wr_hmac_key_template(&w); /* inPublic.                          */
+    wr_u16(&w, 0U);           /* outsideInfo: empty TPM2B_DATA.     */
+    wr_u32(&w, 0UL);          /* creationPCR: empty TPML_PCR_SEL.   */
 
     size_t rsp_len = 0U;
-    int rc = tpm_run(ctx, &w, TPM2_CREATE_TIMEOUT_MS, &rsp_len);
+    int    rc = tpm_run(ctx, &w, TPM2_CREATE_TIMEOUT_MS, &rsp_len);
     if (rc != SER_OK) {
-        ser_hal_log("tpm: CreatePrimary failed rc=%d tpm_rc=0x%08lx\n",
-                    rc, (unsigned long)ctx->last_rc);
+        ser_hal_log("tpm: CreatePrimary failed rc=%d tpm_rc=0x%08lx\n", rc,
+                    (unsigned long)ctx->last_rc);
         return rc;
     }
     if (rsp_len < 14U) {
@@ -376,10 +367,10 @@ int ser_tpm2_provision_signing_key(ser_tpm2_t *ctx) {
 
     /* ---- TPM2_EvictControl [REF-TCG-001 Part 3 §28.5] ------------------- */
     tpm_begin(ctx, &w, TPM2_ST_SESSIONS, TPM2_CC_EVICT_CONTROL);
-    wr_u32(&w, TPM2_RH_OWNER);          /* auth (handle area).                */
-    wr_u32(&w, transient);              /* objectHandle (handle area).        */
+    wr_u32(&w, TPM2_RH_OWNER); /* auth (handle area).                */
+    wr_u32(&w, transient);     /* objectHandle (handle area).        */
     wr_password_auth(&w);
-    wr_u32(&w, SER_TPM_SIGNING_KEY_HANDLE);  /* persistentHandle (parameter). */
+    wr_u32(&w, SER_TPM_SIGNING_KEY_HANDLE); /* persistentHandle (parameter). */
 
     rc = tpm_run(ctx, &w, TPM2_CMD_TIMEOUT_MS, NULL);
     if ((rc == SER_EIO) && (ctx->last_rc == TPM2_RC_NV_DEFINED)) {
@@ -390,8 +381,8 @@ int ser_tpm2_provision_signing_key(ser_tpm2_t *ctx) {
     (void)tpm2_flush_context(ctx, transient);
 
     if (rc != SER_OK) {
-        ser_hal_log("tpm: EvictControl failed rc=%d tpm_rc=0x%08lx\n",
-                    rc, (unsigned long)ctx->last_rc);
+        ser_hal_log("tpm: EvictControl failed rc=%d tpm_rc=0x%08lx\n", rc,
+                    (unsigned long)ctx->last_rc);
         return rc;
     }
 
@@ -408,7 +399,7 @@ int ser_tpm2_load_key_name(ser_tpm2_t *ctx) {
     tpm_begin(ctx, &w, TPM2_ST_NO_SESSIONS, TPM2_CC_READ_PUBLIC);
     wr_u32(&w, SER_TPM_SIGNING_KEY_HANDLE);
 
-    size_t rsp_len = 0U;
+    size_t    rsp_len = 0U;
     const int rc = tpm_run(ctx, &w, TPM2_CMD_TIMEOUT_MS, &rsp_len);
     if (rc != SER_OK) {
         return (ctx->last_rc != TPM2_RC_SUCCESS) ? SER_ENODEV : rc;
@@ -445,9 +436,7 @@ int ser_tpm2_load_key_name(ser_tpm2_t *ctx) {
  * In-flight operations
  * ---------------------------------------------------------------------------*/
 
-int ser_tpm2_hmac(ser_tpm2_t *ctx,
-                  const uint8_t *data,
-                  size_t len,
+int ser_tpm2_hmac(ser_tpm2_t *ctx, const uint8_t *data, size_t len,
                   uint8_t mac[TPM2_SHA256_LEN]) {
     if ((ctx == NULL) || !ctx->ready || (data == NULL) || (mac == NULL)) {
         return SER_EINVAL;
@@ -456,12 +445,12 @@ int ser_tpm2_hmac(ser_tpm2_t *ctx,
     /* ---- TPM2_HMAC [REF-TCG-001 Part 3 §15.4] --------------------------- */
     tpm_wr_t w;
     tpm_begin(ctx, &w, TPM2_ST_SESSIONS, TPM2_CC_HMAC);
-    wr_u32(&w, SER_TPM_SIGNING_KEY_HANDLE);     /* handle (handle area).      */
+    wr_u32(&w, SER_TPM_SIGNING_KEY_HANDLE); /* handle (handle area).      */
     wr_password_auth(&w);
-    wr_tpm2b(&w, data, len);                    /* buffer (TPM2B_MAX_BUFFER). */
-    wr_u16(&w, TPM2_ALG_SHA256);                /* hashAlg.                   */
+    wr_tpm2b(&w, data, len);     /* buffer (TPM2B_MAX_BUFFER). */
+    wr_u16(&w, TPM2_ALG_SHA256); /* hashAlg.                   */
 
-    size_t rsp_len = 0U;
+    size_t    rsp_len = 0U;
     const int rc = tpm_run(ctx, &w, TPM2_CMD_TIMEOUT_MS, &rsp_len);
     if (rc != SER_OK) {
         return rc;
@@ -508,7 +497,7 @@ int ser_tpm2_get_random(ser_tpm2_t *ctx, uint8_t *out, size_t len) {
         tpm_begin(ctx, &w, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_RANDOM);
         wr_u16(&w, (uint16_t)want);
 
-        size_t rsp_len = 0U;
+        size_t    rsp_len = 0U;
         const int rc = tpm_run(ctx, &w, TPM2_CMD_TIMEOUT_MS, &rsp_len);
         if (rc != SER_OK) {
             return rc;
@@ -527,8 +516,7 @@ int ser_tpm2_get_random(ser_tpm2_t *ctx, uint8_t *out, size_t len) {
     return SER_OK;
 }
 
-int ser_tpm2_pcr_extend(ser_tpm2_t *ctx,
-                        uint32_t pcr_index,
+int ser_tpm2_pcr_extend(ser_tpm2_t *ctx, uint32_t pcr_index,
                         const uint8_t digest[TPM2_SHA256_LEN]) {
     if ((ctx == NULL) || !ctx->ready || (digest == NULL)) {
         return SER_EINVAL;
@@ -537,7 +525,7 @@ int ser_tpm2_pcr_extend(ser_tpm2_t *ctx,
     /* ---- TPM2_PCR_Extend [REF-TCG-001 Part 3 §22.2] --------------------- */
     tpm_wr_t w;
     tpm_begin(ctx, &w, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
-    wr_u32(&w, pcr_index);              /* pcrHandle (handle area).           */
+    wr_u32(&w, pcr_index); /* pcrHandle (handle area).           */
     wr_password_auth(&w);
     /* digests is a TPML_DIGEST_VALUES: UINT32 count, then each entry is a
      * TPMT_HA of { hashAlg, digest bytes } [REF-TCG-001 Part 2 §10.3.2]. */
@@ -548,11 +536,9 @@ int ser_tpm2_pcr_extend(ser_tpm2_t *ctx,
     return tpm_run(ctx, &w, TPM2_CMD_TIMEOUT_MS, NULL);
 }
 
-int ser_tpm2_pcr_read(ser_tpm2_t *ctx,
-                      uint32_t pcr_index,
+int ser_tpm2_pcr_read(ser_tpm2_t *ctx, uint32_t pcr_index,
                       uint8_t digest[TPM2_SHA256_LEN]) {
-    if ((ctx == NULL) || !ctx->ready || (digest == NULL) ||
-        (pcr_index > 23U)) {
+    if ((ctx == NULL) || !ctx->ready || (digest == NULL) || (pcr_index > 23U)) {
         return SER_EINVAL;
     }
 
@@ -573,7 +559,7 @@ int ser_tpm2_pcr_read(ser_tpm2_t *ctx,
     wr_u8(&w, (uint8_t)sizeof(select));
     wr_bytes(&w, select, sizeof(select));
 
-    size_t rsp_len = 0U;
+    size_t    rsp_len = 0U;
     const int rc = tpm_run(ctx, &w, TPM2_CMD_TIMEOUT_MS, &rsp_len);
     if (rc != SER_OK) {
         return rc;
@@ -585,7 +571,7 @@ int ser_tpm2_pcr_read(ser_tpm2_t *ctx,
      * to reach the digest list rather than assuming a fixed offset, because
      * pcrSelectionOut's length depends on what the TPM echoes back.
      */
-    size_t off = 10U + 4U;              /* header + pcrUpdateCounter.         */
+    size_t off = 10U + 4U; /* header + pcrUpdateCounter.         */
     if ((off + 4U) > rsp_len) {
         return SER_EPROTO;
     }
