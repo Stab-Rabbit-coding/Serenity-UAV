@@ -9405,7 +9405,7 @@
       "archived": false
     },
     "avionics/firmware/mspm0/test/test_crypto.c": {
-      "description": "C source",
+      "description": "The hex strings in the vector tables and checks below are published",
       "tags": [
         "avionics-hardware",
         "firmware",

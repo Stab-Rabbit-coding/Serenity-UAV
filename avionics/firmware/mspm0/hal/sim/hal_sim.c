@@ -168,7 +168,12 @@ int ser_hal_can_init(uint32_t nominal_bps, uint32_t data_bps,
 
     struct ifreq ifr;
     memset(&ifr, 0, sizeof(ifr));
-    (void)strncpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name) - 1U);
+    size_t name_len = strlen(ifname);
+    if (name_len >= sizeof(ifr.ifr_name)) {
+        name_len = sizeof(ifr.ifr_name) - 1U;
+    }
+    (void)memcpy(ifr.ifr_name, ifname,
+                 name_len); /* ifr zeroed above: NUL-terminated */
     if (ioctl(g_can_fd, SIOCGIFINDEX, &ifr) < 0) {
         (void)close(g_can_fd);
         g_can_fd = -1;

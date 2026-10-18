@@ -1004,7 +1004,7 @@ tpm_tis.c — @brief Byte 0 of the SPI header: direction plus zero-based length.
 ## avionics/firmware/mspm0/test/
 
 ```text
-test_crypto.c — C source [avionics-hardware, firmware, security]
+test_crypto.c — The hex strings in the vector tables and checks below are published [avionics-hardware, firmware, security]
 ```
 
 ## avionics/kicad/

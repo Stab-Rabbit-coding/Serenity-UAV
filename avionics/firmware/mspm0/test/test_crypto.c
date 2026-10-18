@@ -33,6 +33,11 @@
  * interoperate with nothing — only an external vector catches that.
  * ---------------------------------------------------------------------------*/
 
+/* The hex strings in the vector tables and checks below are published
+ * known-answer vectors (FIPS 180-4, NIST CAVP GCM), not secrets or low-entropy
+ * hash inputs, so the DevSkim key/low-entropy-hash rules are suppressed per
+ * line. */
+
 typedef struct {
     const char *label;
     const char *key_hex;
@@ -43,27 +48,29 @@ typedef struct {
     const char *tag_hex;
 } gcm_vector_t;
 
+/* clang-format off */
 static const gcm_vector_t GCM_VECTORS[] = {
     {"AES-256-GCM CAVP PTlen=128 AADlen=128",
-     "92e11dcdaa866f5ce790fd24501f92509aacf4cb8b1339d50c9c1240935dd08b",
-     "ac93a1a6145299bde902f21a", "2d71bcfa914e4ac045b2aa60955fad24",
-     "1e0889016f67601c8ebea4943bc23ad6", "8995ae2e6df3dbf96fac7b7137bae67f",
-     "eca5aa77d51d4a0a14d9c51e1da474ab"},
+     "92e11dcdaa866f5ce790fd24501f92509aacf4cb8b1339d50c9c1240935dd08b", /* DevSkim: ignore DS173237 */
+     "ac93a1a6145299bde902f21a", "2d71bcfa914e4ac045b2aa60955fad24", /* DevSkim: ignore DS173237 */
+     "1e0889016f67601c8ebea4943bc23ad6", "8995ae2e6df3dbf96fac7b7137bae67f", /* DevSkim: ignore DS173237 */
+     "eca5aa77d51d4a0a14d9c51e1da474ab"}, /* DevSkim: ignore DS173237 */
     {"AES-256-GCM CAVP PTlen=128 AADlen=160",
-     "83688deb4af8007f9b713b47cfa6c73e35ea7a3aa4ecdb414dded03bf7a0fd3a",
-     "0b459724904e010a46901cf3", "33d893a2114ce06fc15d55e454cf90c3",
-     "794a14ccd178c8ebfd1379dc704c5e208f9d8424",
-     "cc66bee423e3fcd4c0865715e9586696", "0fb291bd3dba94a1dfd8b286cfb97ac5"},
+     "83688deb4af8007f9b713b47cfa6c73e35ea7a3aa4ecdb414dded03bf7a0fd3a", /* DevSkim: ignore DS173237 */
+     "0b459724904e010a46901cf3", "33d893a2114ce06fc15d55e454cf90c3", /* DevSkim: ignore DS173237 */
+     "794a14ccd178c8ebfd1379dc704c5e208f9d8424", /* DevSkim: ignore DS173237 */
+     "cc66bee423e3fcd4c0865715e9586696", "0fb291bd3dba94a1dfd8b286cfb97ac5"}, /* DevSkim: ignore DS173237 */
     {"AES-256-GCM CAVP PTlen=408 AADlen=128",
-     "5fe01c4baf01cbe07796d5aaef6ec1f45193a98a223594ae4f0ef4952e82e330",
-     "bd587321566c7f1a5dd8652d",
-     "881dc6c7a5d4509f3c4bd2daab08f165ddc204489aa8134562a4eac3d0bcad7965847b102"
-     "733bb63d1e5c598ece0c3e5dadddd",
-     "9013617817dda947e135ee6dd3653382",
-     "16e375b4973b339d3f746c1c5a568bc7526e909ddff1e19c95c94a6ccff210c9a4a40679d"
-     "e5760c396ac0e2ceb1234f9f5fe26",
-     "abd3d26d65a6275f7a4f56b422acab49"},
+     "5fe01c4baf01cbe07796d5aaef6ec1f45193a98a223594ae4f0ef4952e82e330", /* DevSkim: ignore DS173237 */
+     "bd587321566c7f1a5dd8652d", /* DevSkim: ignore DS173237 */
+     "881dc6c7a5d4509f3c4bd2daab08f165ddc204489aa8134562a4eac3d0bcad7965847b102" /* DevSkim: ignore DS173237 */
+     "733bb63d1e5c598ece0c3e5dadddd", /* DevSkim: ignore DS173237 */
+     "9013617817dda947e135ee6dd3653382", /* DevSkim: ignore DS173237 */
+     "16e375b4973b339d3f746c1c5a568bc7526e909ddff1e19c95c94a6ccff210c9a4a40679d" /* DevSkim: ignore DS173237 */
+     "e5760c396ac0e2ceb1234f9f5fe26", /* DevSkim: ignore DS173237 */
+     "abd3d26d65a6275f7a4f56b422acab49"}, /* DevSkim: ignore DS173237 */
 };
+/* clang-format on */
 
 /** @brief Decode @p hex into @p out; returns the byte count. */
 static size_t unhex(const char *hex, uint8_t *out, size_t cap) {
@@ -168,25 +175,26 @@ int main(void) {
     uint8_t digest[SER_SHA256_DIGEST_LEN];
 
     /* FIPS 180-4 one-block message example. */
+    /* clang-format off */
     ser_sha256((const uint8_t *)"abc", 3U, digest);
-    failures += check("sha256(\"abc\")", digest,
-                      "ba7816bf8f01cfea414140de5dae2223"
-                      "b00361a396177a9cb410ff61f20015ad");
+    failures += check("sha256(\"abc\")", digest, /* DevSkim: ignore DS197836 */
+                      "ba7816bf8f01cfea414140de5dae2223" /* DevSkim: ignore DS173237 */
+                      "b00361a396177a9cb410ff61f20015ad"); /* DevSkim: ignore DS173237 */
 
     /* FIPS 180-4 two-block message example (448 bits). */
     static const char two_block[] =
         "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq";
     ser_sha256((const uint8_t *)two_block, sizeof(two_block) - 1U, digest);
     failures += check("sha256(two-block example)", digest,
-                      "248d6a61d20638b8e5c026930c3e6039"
-                      "a33ce45964ff2167f6ecedd419db06c1");
+                      "248d6a61d20638b8e5c026930c3e6039" /* DevSkim: ignore DS173237 */
+                      "a33ce45964ff2167f6ecedd419db06c1"); /* DevSkim: ignore DS173237 */
 
     /* The empty message — the boundary case where padding is the entire
      * block, and the one most often wrong in a hand-written implementation. */
     ser_sha256((const uint8_t *)"", 0U, digest);
     failures += check("sha256(\"\")", digest,
-                      "e3b0c44298fc1c149afbf4c8996fb924"
-                      "27ae41e4649b934ca495991b7852b855");
+                      "e3b0c44298fc1c149afbf4c8996fb924" /* DevSkim: ignore DS173237 */
+                      "27ae41e4649b934ca495991b7852b855"); /* DevSkim: ignore DS173237 */
 
     /* One million 'a', fed in awkward chunk sizes so the streaming path's
      * block-straddling logic is exercised rather than only the one-shot. */
@@ -200,8 +208,8 @@ int main(void) {
         }
         ser_sha256_final(&ctx, digest);
         failures += check("sha256(1e6 x 'a', streamed)", digest,
-                          "cdc76e5c9914fb9281a1c7e284d73e67"
-                          "f1809a48a497200e046d39ccc7112cd0");
+                          "cdc76e5c9914fb9281a1c7e284d73e67" /* DevSkim: ignore DS173237 */
+                          "f1809a48a497200e046d39ccc7112cd0"); /* DevSkim: ignore DS173237 */
     }
 
     /* Streaming with a deliberately awkward split across a block boundary. */
@@ -212,12 +220,13 @@ int main(void) {
         ser_sha256_update(&ctx, (const uint8_t *)"b", 1U);
         ser_sha256_update(&ctx, (const uint8_t *)"c", 1U);
         ser_sha256_final(&ctx, digest);
-        failures += check("sha256(\"abc\", byte-at-a-time)", digest,
-                          "ba7816bf8f01cfea414140de5dae2223"
-                          "b00361a396177a9cb410ff61f20015ad");
+        failures += check("sha256(\"abc\", byte-at-a-time)", digest, /* DevSkim: ignore DS197836 */
+                          "ba7816bf8f01cfea414140de5dae2223" /* DevSkim: ignore DS173237 */
+                          "b00361a396177a9cb410ff61f20015ad"); /* DevSkim: ignore DS173237 */
     }
 
     failures += run_gcm_vectors();
+    /* clang-format on */
 
     (void)printf("\n%s\n",
                  (failures == 0) ? "all vectors passed" : "VECTOR FAILURES");
