@@ -26,8 +26,8 @@ Scope: by default checks every .kicad_sch/.kicad_pcb in the repo EXCEPT
 archive/archives directories (frozen historical boards, e.g. the pre-Rev-Q
 Pilot family, are not held to ongoing standards -- see root CLAUDE.md
 revision/archival policy) and upstream bug-report reproduction fixtures
-(kicad_cli_erc_segfault_repro/), which are deliberately malformed. Several currently-active boards (Pilot, Flight Engineer,
-Commo) predate this validator and carry a large pre-existing backlog of real
+(kicad_cli_erc_segfault_repro/), which are deliberately malformed. Several
+currently-active boards (Pilot, Flight Engineer, Commo) predate this validator and carry a large pre-existing backlog of real
 DRC findings (matching this project's own long-standing practice of tracking
 open ERC/DRC items rather than blocking on them, e.g. Flight Engineer's 701 open
 items) -- retroactively fixing that backlog is a separate, large hardware

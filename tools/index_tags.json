@@ -9377,6 +9377,14 @@
       ],
       "archived": false
     },
+    "avionics/firmware/mspm0/test/CPPLINT.cfg": {
+      "description": "Inherits the repo-root CPPLINT.cfg. test_crypto.c carries published known-answer",
+      "tags": [
+        "avionics-hardware",
+        "firmware"
+      ],
+      "archived": false
+    },
     "avionics/firmware/mspm0/test/test_crypto.c": {
       "description": "The hex strings in the vector tables and checks below are published",
       "tags": [
@@ -20916,6 +20924,7 @@
       "avionics/firmware/mspm0/template/src/sha256.c",
       "avionics/firmware/mspm0/template/src/tpm2.c",
       "avionics/firmware/mspm0/template/src/tpm_tis.c",
+      "avionics/firmware/mspm0/test/CPPLINT.cfg",
       "avionics/firmware/mspm0/test/test_crypto.c",
       "avionics/kicad/.gitignore",
       "avionics/kicad/4_Run KiCad ERC_DRC validator (changed files only).txt",
@@ -21390,6 +21399,7 @@
       "avionics/firmware/mspm0/template/src/sha256.c",
       "avionics/firmware/mspm0/template/src/tpm2.c",
       "avionics/firmware/mspm0/template/src/tpm_tis.c",
+      "avionics/firmware/mspm0/test/CPPLINT.cfg",
       "avionics/firmware/mspm0/test/test_crypto.c",
       "gcs/skipper/firmware/pb2i/CMakeLists.txt",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
