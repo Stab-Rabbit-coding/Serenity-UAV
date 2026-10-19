@@ -218,7 +218,7 @@ BATT_XC = X_CL
 BATT_X0, BATT_X1 = BATT_XC - BATT_W / 2, BATT_XC + BATT_W / 2
 BATT_Y0 = -58.0  # head/cargo collar ends at -61.5
 BATT_Y1 = BATT_Y0 + BATT_L  # +84.0
-BATT_Z0 = 90.0  # payload crown 84.92 + cradle + gap
+BATT_Z0 = 90.0  # payload crown (DOOR_CROWN_Z + PAYLOAD Z = 87.06 since BHD-08) + cradle + gap
 BATT_Z1 = BATT_Z0 + BATT_H  # 128.0
 CRADLE_T = 2.4
 # The cradle is an INVERTED U hung from the roof: the battery is pushed up
@@ -275,7 +275,8 @@ N_CHIN_X_IN = X_CL + NODE_CABLE / 2  # port node inner face (-164.85); stbd mirr
 # X; the nodes' aft faces at Y 121.5 reach 0.5 mm into the middle-section
 # splice collar's ring zone (Y 121..129), checked at 4.5 mm below.
 N_AFT_Y0 = 99.5
-N_AFT_Z0 = 87.0  # payload crown 84.92 + 2 (static gap); keeps the top under the wall's curve-in
+N_AFT_Z0 = 87.0  # was payload crown 84.92 + 2; since BHD-08 the crown is 87.06, so this
+#   overlaps the payload (owner decision with BHD-10 -- raising it costs shoulder gap)
 # port / stbd centres (3 mm apart; the pair sits 0.5 mm stbd of centre -- the
 # port shoulder curves in earlier); GPS cups (Z >= 139) are above
 N_AFT_XC = (X_CL + 30.0, X_CL - 31.0)
@@ -333,7 +334,12 @@ HOIST_Y = 55.5  # box Y 4.7..106.3 in the 2..108 aperture
 LINE_R = 0.5  # 1 mm Dyneema
 HOIST_DX = BATT_W / 2 + CRADLE_T + GAP_MM + LINE_R  # 30.9 from the battery centre
 HOIST_XS = (BATT_XC - HOIST_DX, BATT_XC + HOIST_DX)
-DOOR_CROWN_Z = 8.72
+# BHD-08 (corrected 2026-10-12): the payload rests on the CLOSED DOORS, whose
+# highest point is Z 10.86 (tools/cargo_bay_envelope.door_top(), measured from
+# cargo_door_port/stbd.stl).  8.72 put the box 2.14 mm low -- inside the doors
+# (571 / 986 mm^3) and 2 mm short of its real conflict with the aft Pilot
+# nodes.  main() re-measures the doors and fails if this drifts.
+DOOR_CROWN_Z = 10.86
 DRUM_D, DRUM_L = 16.0, 12.0
 SPOOL_Z0 = BATT_Z1 + CRADLE_T + GAP_MM  # 133.4, above the cradle ceiling
 # Canonical forward cargo-ramp fairing: opening measured by ray map
@@ -1103,6 +1109,16 @@ def main():
         MOTOR_BODY_L, MOTOR_ENC_L = 43.2, 6.0
         MOTOR_L = MOTOR_BODY_L + MOTOR_ENC_L
         print("checking OPTION 1 envelope (20D, worm PD 18, C 29, single-start)")
+    # BHD-08 payload floor datum vs the real closed doors -- checked FIRST, so
+    # neither --write-scad nor the report can run on a stale datum (security
+    # review 2026-10-12: the check used to run after both).
+    import cargo_bay_envelope as cbe  # noqa: PLC0415
+    floor = cbe.door_top([trimesh.load(q, force="mesh") for q in cbe.DOOR_PATHS])
+    if abs(floor - DOOR_CROWN_Z) > 0.05:
+        print(f"FAIL payload floor DOOR_CROWN_Z {DOOR_CROWN_Z:.2f} != measured door top "
+              f"{floor:.2f} (BHD-08) -- fix the datum before anything else")
+        sys.exit(1)
+    print(f"ok   payload floor DOOR_CROWN_Z {DOOR_CROWN_Z:.2f} = measured door top {floor:.2f}")
     if a.write_scad:
         p = os.path.join(
             REPO, "airframe", "openscad", "fuselage", "cargo", "cargo_layout_t5_params.scad"

@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-10-17
+**Last updated:** 2026-10-19
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -66,10 +66,8 @@
 - [ ] Wire gen_todo_from_wbs.py --check into pre-commit/CI beside the…
 - [ ] Rewrite docs/AVIONICS_PB2_REDESIGN.md as a Rev T overview, then…
 
-### 0.9 — Upstream KiCad Defect: `sch erc` SIGSEGV on unresolvable `lib_id`
-
+### 0.11 — Upstream KiCad Defect: `sch erc` SIGSEGV on unresolvable `lib_id`
 → detail: `avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md`
-→ submission pack: `avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md`
 
 - [ ] Install `gdb` + `systemd-coredump` (+ dbgsym if available)
 - [ ] Capture backtrace of the crash (command in submission pack §2)

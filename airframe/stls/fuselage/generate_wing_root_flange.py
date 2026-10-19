@@ -21,6 +21,19 @@ FOS 0.51 on the moment.  The flange gives FOS 29.2:
     FOS   = 5.0 MPa / 0.17 = 29.2      (5 MPa bond-limited CF-PETG,
                                         docs/structural_analysis.md SS7.3)
 
+REV T1d (2026-10-10, BHD-02): FORE-GEAR NOTCH
+--------------------------------------------
+The fore landing-gear bays sat inside this plate's footprint (the plate came
+after LG-10 sited them).  The owner moved the fore station to hip Y -16 and
+accepted a notch for what still passes through: the plate now has a through-
+notch around the generated conforming fore bay, its M3 keep-outs and the
+thigh swept 0..26 deg (fore_gear_notch()).  The 29.2 above is the nominal
+80 x 60 plate on the docstring's method; on the measured, bored, notched
+footprint the governing BONDED-PEEL stress (linear about the net centroid,
+docs/BHD02_OPTION_STUDY.md SS2) is 0.293 / 0.290 MPa -> FOS 17.1 port /
+17.3 stbd against the 4.0 target, re-evaluated on every run (fos_report()).
+Order matters: tools/generate_lg_bays.py first (this reads its fore bays).
+
 WHY IT IS A SEPARATE PART AND NOT SHELL GEOMETRY
 ------------------------------------------------
 Measured 2026-08-30 by ray-casting the baked cargo envelope on a 13 x 17 grid
@@ -56,7 +69,8 @@ Use `/usr/bin/python3`: the repo .venv hides trimesh and manifold3d.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (model: Claude Opus 5, Anthropic) under the author's
-         direction, per `AGENTS.md` SS3 "Attribution and Licensing".
+         direction, per `AGENTS.md` SS3 "Attribution and Licensing".  Rev T1d
+         notch by Claude (Claude Opus 5.5, Anthropic), 2026-10-10.
 License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
@@ -120,7 +134,49 @@ def build(side):
         if label.startswith("mortise"):
             continue                     # tenon/mortise is below the plate's job
         plate = plate - mci.to_man(cut)
+    # BHD-02 (owner 2026-10-10, "hybrid"): the fore gear bay moved to hip Y -16,
+    # off the CF spar, but its upper part and the swinging thigh still pass
+    # through this plate's footprint (511 mm^3 at the study).  The plate gets
+    # a clean THROUGH-NOTCH: the wall-plane projection of everything the fore
+    # gear puts through the plate's slab -- the generated conforming bay, its
+    # M3 keep-outs (the corner's own bolt pattern) and the leg swept 0..26 deg
+    # -- offset by NOTCH_CLR.  Through, not sculpted: a bonded printed plate
+    # wants a pocket it can be laid up against.
+    plate = plate - fore_gear_notch(side, plate)
     return keep_plate(mci.from_man(plate), side)
+
+
+NOTCH_CLR = 1.5     # mm, printed-part clearance around the notch
+
+
+def fore_gear_notch(side, plate):
+    """Through-notch (Manifold) clearing the fore gear of this side's plate."""
+    sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
+    import numpy as np                                   # noqa: PLC0415
+    from manifold3d import JoinType, Manifold, OpType    # noqa: PLC0415
+    import landing_gear_bay_function as lgbf             # noqa: PLC0415
+    import generate_lg_bays as glb                       # noqa: PLC0415
+    import bhd02_option_study as bos                     # noqa: PLC0415
+    label = f"fore-{side}"
+    corner = lgbf.parse_corners(lgbf.SCAD)[label]
+    tf = lgbf.corner_tf(corner)
+    bay = mci.to_man(trimesh.load(os.path.join(
+        REPO_ROOT, "airframe", "stls", "fuselage", "landing-gear",
+        f"lg_r6_3_0in_bay_{label}.stl"), force="mesh"))
+    org, ex, ey, ez = mci.lg_bay_frame(label)
+    keep = Manifold.batch_boolean(
+        [glb.bolt_cyl(org, ex, ey, ez, u, v, glb.BOLT_KEEP_D)
+         for u, v in mci.LG_CORNER_BOLTS.get(label, mci.lg_nominal_bolts())], OpType.Add)
+    legp = lgbf.render(lgbf.SCAD, "fore", "leg (thigh+shin+foot)",
+                       lgbf.FEATURES["leg (thigh+shin+foot)"][0])
+    gear = Manifold.batch_boolean([bay, keep, lgbf.swept_leg(legp, tf)], OpType.Add)
+    lo, hi = (np.array(plate.bounding_box()).reshape(2, 3))
+    slab = Manifold.cube(list(hi - lo + [0.0, 40.0, 40.0])).translate(list(lo - [0.0, 20.0, 20.0]))
+    through = gear ^ slab
+    if through.volume() <= 0.05:
+        return Manifold()
+    cs = bos.wall_section(through).offset(NOTCH_CLR, JoinType.Round)
+    return cs.extrude(float(hi[0] - lo[0]) + 2.0).transform(bos.from_yzx(float(lo[0]) - 1.0))
 
 
 def keep_plate(mesh, side):
@@ -167,8 +223,25 @@ def report(mesh, name):
     return ok
 
 
+def fos_report(mesh):
+    """Bonded-footprint stress under the ultimate root moment (BHD-02 method).
+
+    Three models, docs/BHD02_OPTION_STUDY.md SS2: the docstring's own (F =
+    3M/2h over A/3), bonded linear stress about the net centroid (peel --
+    governs), and rigid-plate edge bearing.  Allowable 5 MPa (ASSUMED,
+    structural_analysis.md), target FOS 4.0.
+    """
+    sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
+    import bhd02_option_study as bos                     # noqa: PLC0415
+    m = bos.flange_models(bos.wall_section(mci.to_man(mesh)))
+    print(f"      bond area {m['area_mm2']:.0f} mm^2, sigma bonded {m['sigma_bonded_mpa']} MPa, "
+          f"bearing {m['sigma_bearing_mpa']} MPa -> FOS {m['fos_gov']} (target 4.0) "
+          f"{'PASS' if m['passes'] else 'FAIL'}")
+    return bool(m["passes"])
+
+
 def main():
-    print("=== generate_wing_root_flange.py  Rev T1c  2026-08-30 ===")
+    print("=== generate_wing_root_flange.py  Rev T1d  2026-10-10 (fore-gear notch) ===")
     print(f"  footprint {mci.ROOT_FLANGE_W:.0f} (Y) x {mci.ROOT_FLANGE_H:.0f} (Z) mm, "
           f"thickness {mci.ROOT_FLANGE_T:.1f} mm, centred on the spar axis "
           f"(Y {mci.WING_SPAR_Y:+.2f}, Z {mci.WING_SPAR_Z:+.2f})")
@@ -178,6 +251,7 @@ def main():
         out = os.path.join(OUT_DIR, f"wing_root_flange_{side}.stl")
         mesh.export(out)
         all_ok &= report(mesh, f"wing_root_flange_{side}")
+        all_ok &= fos_report(mesh)
         print(f"      written -> {out}")
     return 0 if all_ok else 1
 

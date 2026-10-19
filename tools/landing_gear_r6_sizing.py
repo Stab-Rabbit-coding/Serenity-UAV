@@ -82,7 +82,10 @@ DROPS_FT = [6.0, 4.0]     # candidate full-AUW drop-test heights
 # Hull-frame geometry (mm) -- canonical stations mapped from QMx Sheet 5
 # (fore feet at 39.2% of hull length, aft feet at 63.9%, hull Y span
 # -305.7 .. +384.3 measured from the baked shells)
-Y_FOOT_FORE = -35.0
+# FORE feet moved 2026-10-10 (BHD-02 fore-station move, hip Y -1.28 -> -16):
+# foot Y = hip Y + R_H sin(az) = -16 + 80 sin(-22.4 deg) = -46.5 (was the
+# canonical -35; the as-built hip gave -31.8).  Aft feet stay on QMx.
+Y_FOOT_FORE = -46.5
 Y_FOOT_AFT = 135.0
 Y_CG = 111.5              # nacelle pivot = balance centre (project memory)
 WHEELBASE = Y_FOOT_AFT - Y_FOOT_FORE

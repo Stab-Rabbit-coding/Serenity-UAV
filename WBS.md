@@ -195,6 +195,17 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Wire gen_todo_from_wbs.py --check into pre-commit/CI beside the index check
 - [ ] Rewrite docs/AVIONICS_PB2_REDESIGN.md as a Rev T overview, then archive Rev Q/R
 
+### 0.11 — Upstream KiCad Defect: `sch erc` SIGSEGV on unresolvable `lib_id`
+
+→ detail: `avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md`
+→ submission pack: `avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md`
+
+- [ ] Install `gdb` + `systemd-coredump` (+ dbgsym if available)
+- [ ] Capture backtrace of the crash (command in submission pack §2)
+- [ ] Re-test on newest reachable KiCad — if already fixed, do NOT file
+- [ ] Search KiCad GitLab for a duplicate before filing
+- [ ] File at gitlab.com/kicad/code/kicad/-/issues, attach repro zip
+
 ---
 
 ## 1.0 — Design Artifacts (Pre-Fabrication)

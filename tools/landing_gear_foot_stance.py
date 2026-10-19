@@ -67,7 +67,8 @@ TOL_MM = 0.05
 # times, so anything above export round-off is a placement bug.
 LEVEL_TOL_MM = 1e-3
 
-CORNERS_XY = {"fore-port": (-103.87, -1.28), "fore-stbd": (-235.93, -1.28),
+# FORE moved 2026-10-10 (BHD-02) from (-103.87 / -235.93, -1.28).
+CORNERS_XY = {"fore-port": (-114.90, -16.00), "fore-stbd": (-224.90, -16.00),
               "aft-port": (-92.24, 99.96), "aft-stbd": (-247.56, 99.96)}
 
 try:

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-18",
+  "generated": "2026-10-19",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -696,6 +696,14 @@
       ],
       "archived": false
     },
+    "airframe/blender-scripts/lg_bay_corner_params.py": {
+      "description": "Per-corner landing-gear bay M3 positions -- GENERATED, do not hand-edit.",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/blender-scripts/make_bay_text.py": {
       "description": "make_bay_text.py \u2014 origin-centred watertight text slabs for avionics-bay marks.",
       "tags": [
@@ -1064,6 +1072,22 @@
       "tags": [
         "cad-mesh",
         "power",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/fuselage/cargo/bhd02_options_context.scad": {
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See AGENTS.md.",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/fuselage/cargo/bhd10_aft_strip_context.scad": {
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See AGENTS.md.",
+      "tags": [
+        "cad-mesh",
         "structural"
       ],
       "archived": false
@@ -2655,6 +2679,78 @@
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port_print.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port_print.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd_print.stl": {
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -13538,6 +13634,13 @@
       ],
       "archived": false
     },
+    "docs/BHD02_OPTION_STUDY.md": {
+      "description": "BHD-02 Option Study \u2014 Landing-Gear Bays vs Wing Root",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/CARGO_BULKHEAD_FIT_CHECK.md": {
       "description": "Cargo Bay Bulkheads \u2014 In-Context Fit Check (2026-10-07)",
       "tags": [
@@ -13894,6 +13997,111 @@
     },
     "docs/ideation/7-2.webp": {
       "description": "RIFFv\u0001\u0000WEBPVP8 v\u0001\u0000p\u0003\u0001* \u0003\u0003>m2G#)!&\u0019Z",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/A_flange_cut_port.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/B1_rejected_thigh_strike.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/B2_aft_port_wing_relief.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/B2_fore_port_wing_relief.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/BHD10_O1_shift_fwd.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/BHD10_O2_collar_relief.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/BHD10_O3_thin_stack.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/BHD10_baseline.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/C_handed_vs_shared.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/bhd02_b2_wing_section.json": {
+      "description": "JSON data (4 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/bhd02_option_study.json": {
+      "description": "JSON data (4 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/bhd02_wire_rot_120.json": {
+      "description": "JSON data (6 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/bhd02_wire_rot_180.json": {
+      "description": "JSON data (6 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/bhd02_wire_rot_240.json": {
+      "description": "JSON data (6 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/bhd02/bhd10_aft_strip_options.json": {
+      "description": "JSON data (5 top-level keys)",
       "tags": [
         "documentation"
       ],
@@ -15419,6 +15627,14 @@
       ],
       "archived": false
     },
+    "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md": {
+      "description": "Context",
+      "tags": [
+        "documentation",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md": {
       "description": "PocketBeagle 2 capes: verify every land against its OEM datasheet and budget real courtyards before layout",
       "tags": [
@@ -15444,7 +15660,7 @@
       "archived": false
     },
     "docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md": {
-      "description": "Build every joint in context, through its full motion",
+      "description": "Context",
       "tags": [
         "documentation"
       ],
@@ -15452,6 +15668,13 @@
     },
     "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md": {
       "description": "A motor coaxial with its worm clears the wheel by WORM_PD/2 \u2212 MOTOR_D/2 \u2212 m, whatever you do with C or the wo\u2026",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/design-patterns/cut-the-local-solid-with-a-true-offset-and-gate-the-joint.md": {
+      "description": "Context",
       "tags": [
         "documentation"
       ],
@@ -15465,6 +15688,13 @@
       "archived": false
     },
     "docs/solutions/design-patterns/envelope-gates-pass-while-real-parts-clash.md": {
+      "description": "Context",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/design-patterns/gate-a-part-invariant-at-every-selector-value-it-is-published-at.md": {
       "description": "Context",
       "tags": [
         "documentation"
@@ -15494,6 +15724,13 @@
     },
     "docs/solutions/design-patterns/probe-the-published-hull-and-change-the-placement-class-not-the-margins.md": {
       "description": "Ray-probe the published hull at the station before placing anything \u2014 and when a placement misses by fraction\u2026",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/design-patterns/re-solve-placement-against-the-mating-surface-at-every-sweep-step.md": {
+      "description": "Context",
       "tags": [
         "documentation"
       ],
@@ -17039,6 +17276,20 @@
       ],
       "archived": false
     },
+    "tools/bhd02_option_study.py": {
+      "description": "BHD-02 option study: geometry and loads for the three owner decisions.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/bhd10_aft_strip_options.py": {
+      "description": "BHD-10 option study: the Pilot FC2/FC3 aft-strip nodes vs the splice collar.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/bom_edit_door_gateway.py": {
       "description": "Wire the cargo-door servo gateway into the BOM (docs/CARGO_DOOR_GATEWAY_SPEC.md).",
       "tags": [
@@ -17198,6 +17449,14 @@
       ],
       "archived": false
     },
+    "tools/generate_lg_bays.py": {
+      "description": "Generate the four CONFORMING 3.0 in landing-gear bays (BHD-02, 2026-10-10).",
+      "tags": [
+        "build-tooling",
+        "security"
+      ],
+      "archived": false
+    },
     "tools/import-specctra-ses.py": {
       "description": "Companion to export-specctra-dsn.py: import a freerouting-produced",
       "tags": [
@@ -17235,6 +17494,15 @@
       "tags": [
         "build-tooling",
         "pcb-design"
+      ],
+      "archived": false
+    },
+    "tools/landing_gear_bay_function.py": {
+      "description": "Per-feature, in-context clash census of the 3.0 in landing-gear bays (BHD-02).",
+      "tags": [
+        "build-tooling",
+        "landing-gear",
+        "security"
       ],
       "archived": false
     },
@@ -17308,6 +17576,20 @@
       "tags": [
         "build-tooling",
         "landing-gear"
+      ],
+      "archived": false
+    },
+    "tools/lg_collar_integrity.py": {
+      "description": "Gate: the hull merge's landing-gear cuts keep every collar joint intact.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/lg_wire_layout_study.py": {
+      "description": "Two-row energy-absorber wire layout pre-filter (BHD-02g / BHD-02k).",
+      "tags": [
+        "build-tooling"
       ],
       "archived": false
     },
@@ -17812,6 +18094,7 @@
       "docs/AGENTS.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/BATTERY_MOUNT.md",
+      "docs/BHD02_OPTION_STUDY.md",
       "docs/CARGO_BULKHEAD_FIT_CHECK.md",
       "docs/CARGO_DOOR_GATEWAY_SPEC.md",
       "docs/CARGO_DOOR_LATCH_SPEC.md",
@@ -17857,6 +18140,21 @@
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
       "docs/ideation/2026-10-10-pilot-placement-routability-ideation.html",
       "docs/ideation/7-2.webp",
+      "docs/images/bhd02/A_flange_cut_port.png",
+      "docs/images/bhd02/B1_rejected_thigh_strike.png",
+      "docs/images/bhd02/B2_aft_port_wing_relief.png",
+      "docs/images/bhd02/B2_fore_port_wing_relief.png",
+      "docs/images/bhd02/BHD10_O1_shift_fwd.png",
+      "docs/images/bhd02/BHD10_O2_collar_relief.png",
+      "docs/images/bhd02/BHD10_O3_thin_stack.png",
+      "docs/images/bhd02/BHD10_baseline.png",
+      "docs/images/bhd02/C_handed_vs_shared.png",
+      "docs/images/bhd02/bhd02_b2_wing_section.json",
+      "docs/images/bhd02/bhd02_option_study.json",
+      "docs/images/bhd02/bhd02_wire_rot_120.json",
+      "docs/images/bhd02/bhd02_wire_rot_180.json",
+      "docs/images/bhd02/bhd02_wire_rot_240.json",
+      "docs/images/bhd02/bhd10_aft_strip_options.json",
       "docs/images/cargo_bulkhead_context_aft_door_swing.png",
       "docs/images/cargo_bulkhead_context_iso_aft.png",
       "docs/images/cargo_bulkhead_context_port_inboard.png",
@@ -18040,17 +18338,21 @@
       "docs/references/vimdrones_esc_s50_v1.0.step",
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
+      "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/conventions/pb2-header-capability-from-soc-datasheet-not-srm-summary.md",
       "docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md",
       "docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md",
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
+      "docs/solutions/design-patterns/cut-the-local-solid-with-a-true-offset-and-gate-the-joint.md",
       "docs/solutions/design-patterns/decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md",
       "docs/solutions/design-patterns/envelope-gates-pass-while-real-parts-clash.md",
+      "docs/solutions/design-patterns/gate-a-part-invariant-at-every-selector-value-it-is-published-at.md",
       "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md",
       "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
       "docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md",
       "docs/solutions/design-patterns/probe-the-published-hull-and-change-the-placement-class-not-the-margins.md",
+      "docs/solutions/design-patterns/re-solve-placement-against-the-mating-surface-at-every-sweep-step.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/design-patterns/self-locking-worm-and-vectoring-bandwidth-are-mutually-exclusive.md",
       "docs/solutions/design-patterns/void-formers-are-cut-from-the-shell-mesh-by-a-seeded-boolean.md",
@@ -18395,6 +18697,7 @@
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
       "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
       "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
+      "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
@@ -18422,7 +18725,9 @@
       "tools/bom_edit_door_gateway.py",
       "tools/build_landing_gear_views.py",
       "tools/cargo_bulkhead_context.py",
+      "tools/generate_lg_bays.py",
       "tools/kicad_relink.py",
+      "tools/landing_gear_bay_function.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
@@ -18693,6 +18998,7 @@
       "airframe/blender-scripts/generate_overview_svgs.py",
       "airframe/blender-scripts/hollow_manifold.py",
       "airframe/blender-scripts/inspect_shell_center.py",
+      "airframe/blender-scripts/lg_bay_corner_params.py",
       "airframe/blender-scripts/make_bay_text.py",
       "airframe/blender-scripts/make_shuttle_text.py",
       "airframe/blender-scripts/merge_cargo_interior.py",
@@ -18739,6 +19045,8 @@
       "airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad",
       "airframe/openscad/fuselage/cargo/_export_cargo_port_root_chunk.scad",
       "airframe/openscad/fuselage/cargo/battery_cradle.scad",
+      "airframe/openscad/fuselage/cargo/bhd02_options_context.scad",
+      "airframe/openscad/fuselage/cargo/bhd10_aft_strip_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_bulkhead_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_context_sections.scad",
       "airframe/openscad/fuselage/cargo/cargo_door_hinge_params.scad",
@@ -18928,6 +19236,14 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd_print.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
@@ -19025,6 +19341,7 @@
       "airframe/blender-scripts/generate_overview_svgs.py",
       "airframe/blender-scripts/hollow_manifold.py",
       "airframe/blender-scripts/inspect_shell_center.py",
+      "airframe/blender-scripts/lg_bay_corner_params.py",
       "airframe/blender-scripts/make_bay_text.py",
       "airframe/blender-scripts/make_shuttle_text.py",
       "airframe/blender-scripts/merge_cargo_interior.py",
@@ -19045,6 +19362,8 @@
       "airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad",
       "airframe/openscad/fuselage/cargo/_export_cargo_port_root_chunk.scad",
       "airframe/openscad/fuselage/cargo/battery_cradle.scad",
+      "airframe/openscad/fuselage/cargo/bhd02_options_context.scad",
+      "airframe/openscad/fuselage/cargo/bhd10_aft_strip_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_bulkhead_context.scad",
       "airframe/openscad/fuselage/cargo/cargo_context_sections.scad",
       "airframe/openscad/fuselage/cargo/cargo_door_hinge_params.scad",
@@ -19226,6 +19545,14 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd_print.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
@@ -19807,6 +20134,14 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port_print.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd_print.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
@@ -19843,6 +20178,7 @@
       "tools/add_landing_gear_bosses.py",
       "tools/build_landing_gear_views.py",
       "tools/export_landing_gear_stls.py",
+      "tools/landing_gear_bay_function.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/landing_gear_bay_seat_fit.py",
       "tools/landing_gear_bay_station_fit.py",
@@ -22244,6 +22580,8 @@
       "tools/add_landing_gear_bosses.py",
       "tools/airframe_interface_census.py",
       "tools/bake_hull_frame.py",
+      "tools/bhd02_option_study.py",
+      "tools/bhd10_aft_strip_options.py",
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
       "tools/bom_edit_tilt_controller.py",
@@ -22265,11 +22603,13 @@
       "tools/export_landing_gear_stls.py",
       "tools/gen_cargo_void_formers.py",
       "tools/gen_todo_from_wbs.py",
+      "tools/generate_lg_bays.py",
       "tools/import-specctra-ses.py",
       "tools/kicad_add_part.py",
       "tools/kicad_prune_stale.py",
       "tools/kicad_relink.py",
       "tools/kicad_set_value.py",
+      "tools/landing_gear_bay_function.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/landing_gear_bay_seat_fit.py",
       "tools/landing_gear_bay_station_fit.py",
@@ -22279,6 +22619,8 @@
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",
+      "tools/lg_collar_integrity.py",
+      "tools/lg_wire_layout_study.py",
       "tools/middle_layout_fit.py",
       "tools/mirror_claude_memory.py",
       "tools/nacelle_64_proportion_trade.py",
