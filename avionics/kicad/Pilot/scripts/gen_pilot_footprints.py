@@ -457,8 +457,41 @@ def tpd4e05u06_dqa() -> None:
     write(name, b)
 
 
+def pulse_tc1g00() -> None:
+    """YAGEO/Pulse TC1G00 PulseChip wire-wound chip LAN transformer, 4.70 x 3.20 x 3.15 mm,
+    one per Ethernet pair.  Added 2026-10-19 (Claude Opus 5.5) to replace the 749010012A
+    WE-LAN modules (owner choice "smaller LAN magnetics", 2026-10-19).
+
+    Land per YAGEO TC002.C (10/25) p. 2 "Recommended footprint 1 (component side shown)",
+    Fig. A [REF-SENSOR-061]: pads 1.20 x 0.41 mm with inner edges 1.39 mm either side of
+    the centre line (pad centres x = +/-1.99 mm); left column top pad at y 1.35-1.76 mm
+    from the centre line, pads 2 and 1 at 0.70-1.11 / 1.35-1.76 mm on the other side
+    (0.65 mm pitch); right column mirrors it, its bottom pad 0.50 mm tall.  Pad numbering
+    per the same page: left column "3 4", 2, 1; right column 5, 6, "7 8".  Pins 3/4 and
+    7/8 are the centre taps ("Short on PCB") and share one pad each, named "3" and "7".
+    KiCad y points down, so the drawing's upper pads get negative y.  The dimension
+    reading is transcribed from the drawing; re-check it against the PDF before release.
+    """
+    name = "Pulse_TC1G00_PulseChip_4.7x3.2mm"
+    b = hdr(name, "YAGEO/Pulse TC1G00 PulseChip LAN transformer 4.70 x 3.20 mm; land per TC002.C Fig. A")
+    b.append(rect("F.Fab", -2.35, -1.6, 2.35, 1.6))
+    b.append(rect("F.CrtYd", -2.85, -2.1, 2.85, 2.1, 0.05))
+    b.append(line("F.SilkS", -1.2, -1.75, 1.2, -1.75))
+    b.append(line("F.SilkS", -1.2, 1.75, 1.2, 1.75))
+    b.append(circ("F.SilkS", -2.65, 2.0, 0.1))           # pin 1 (bottom-left pad)
+    x = 1.39 + 1.20 / 2
+    b.append(smd_pad("3", -x, -(1.35 + 0.41 / 2), 1.20, 0.41))   # pins 3/4, line-side CT
+    b.append(smd_pad("2", -x, 0.70 + 0.41 / 2, 1.20, 0.41))
+    b.append(smd_pad("1", -x, 1.35 + 0.41 / 2, 1.20, 0.41))
+    b.append(smd_pad("5", x, -(1.35 + 0.41 / 2), 1.20, 0.41))
+    b.append(smd_pad("6", x, -(0.70 + 0.41 / 2), 1.20, 0.41))
+    b.append(smd_pad("7", x, 1.76 - 0.50 / 2, 1.20, 0.50))      # pins 7/8, PHY-side CT
+    write(name, b)
+
+
 def main() -> None:
     LIB.mkdir(exist_ok=True)
+    pulse_tc1g00()
     # ksz8863_lqfp48() — evaluated 2026-10-17, not used: the 3-port switch did not fit
     # (largest free square ~6 mm); ring port 2 moved to USB1 (CH397A) instead
     tpd4e05u06_dqa()

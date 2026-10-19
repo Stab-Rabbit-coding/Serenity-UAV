@@ -89,6 +89,11 @@ Lineage
       input), on-die 1.1 V buck with a 2.2 uH inductor, two BLM15EX331 beads, per-pin
       decoupling, RSET 24 k 1 %.  VBUS pin: 4.7 k pull-up plus P1-31 GPIO0_59 (owner).
       X-25M now clocks only the DP83825I.
+* 2026-10-19 (Claude Opus 5.5; owner choice "smaller LAN magnetics"): each
+  749010012A WE-LAN module (146 mm^2 courtyard) becomes two YAGEO/Pulse TC1G00
+  PulseChip transformers, one per pair (1CT:1CT, 1500 Vac 60 s) [REF-SENSOR-061]:
+  T-RMII2-TX/-RX and T-USB1-TX/-RX.  Same nets, so the centre-tap caps and the
+  Bob-Smith networks are unchanged.
 
 Datasheets (all in ``avionics/datasheets/``; OEM documents are authoritative
 per ``avionics/AGENTS.md``):
@@ -103,7 +108,8 @@ per ``avionics/AGENTS.md``):
   ESD2CAN24-Q1 ESD2CANxx24-Q1_SLVSFW5D.pdf Table 4-1 | CDSOT23-SM712 Bourns_CDSOT23-SM712.pdf p.1 |
   SMAJ33CA Bourns_SMAJ.pdf (REV. 09/20) | TPD4E05U06 TPDxE05U06_SLVSBO7O.pdf Table 4-2 |
   AX88772E AX88772E_Datasheet_v103.pdf, AX88772E_Application_DesignNote_v110.pdf,
-  AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf sheet 2 | ECS ECX-32 ECS_ECX-32.pdf.
+  AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf sheet 2 | ECS ECX-32 ECS_ECX-32.pdf |
+  TC1G00 Pulse_TC002_PulseChip.pdf p.1-2.
 
 Author: Claude Opus 4.8 (2026-07-14); Claude Opus 5 (2026-07-28, 2026-09-19);
 Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap; 2026-10-12, §13.1 beads + GNSS off-board;
@@ -166,7 +172,8 @@ FP_F0805 = "Fuse:Fuse_0805_2012Metric"
 FP_HOLE = "Serenity-Custom:MountingHole_2.7mm_M2.5_PGND_Ring"
 # project-custom lands (avionics/kicad/Serenity-Custom.pretty)
 FP_SAM = "Serenity-Custom:uBlox_SAM-M10Q-00B"
-FP_WELAN = "Serenity-Custom:Wurth_749010012A_WE-LAN"
+FP_WELAN = "Serenity-Custom:Wurth_749010012A_WE-LAN"   # retired 2026-10-19 (TC1G00 chips)
+FP_TC1G00 = "Serenity-Custom:Pulse_TC1G00_PulseChip_4.7x3.2mm"
 FP_BMP388 = "Serenity-Custom:Bosch_BMP388_LGA-10_2x2mm"
 FP_X2Y0805 = "Serenity-Custom:X2Y_0805_4T"
 FP_SRF2012 = "Serenity-Custom:Bourns_SRF2012_4T"
@@ -434,33 +441,35 @@ def ax88772e(ref: str, eth: str) -> Dict[str, Any]:
     }
 
 
-def eth_xfmr(ref: str, eth: str) -> Dict[str, Any]:
-    """Wurth 749010012A WE-LAN 10/100 SMT transformer (749010012A.pdf p.1).
-    16 mechanical pads; 4/5/12/13 have no winding.  PHY side 1-3 / 6-8,
-    line side 9-11 / 14-16, 1:1 CT, 1500 V — this IS the Ethernet barrier."""
+def pulse_xfmr(ref: str, eth: str, pair: str) -> Dict[str, Any]:
+    """YAGEO/Pulse TC1G00 PulseChip LAN transformer, one per pair (TC002.C (10/25)
+    [REF-SENSOR-061]): 1CT:1CT, 240 uH min, 1500 Vac / 60 s isolation, -40..+85 C,
+    4.70 x 3.20 x 3.15 mm.  Replaces the 749010012A WE-LAN modules on 2026-10-19
+    (owner choice "smaller LAN magnetics"; Claude Opus 5.5): the two modules' 146 mm^2
+    courtyards each could not leave room for the AX88772E cluster.  Like the WE-LAN it
+    is transformer-only (no common-mode choke).
+
+    Windings per the TC002.C schematic: 2 - (8/7) - 1 and 5 - (3/4) - 6, dots at 8 and 3,
+    so 2 and 5 are like-phased; 8/7 and 3/4 are centre taps shorted on the PCB (one land
+    pad each, named "7" and "3").  The 2/1 winding faces the PHY / NIC, 5/6 the line.
+    ``pair`` is "TX" or "RX"; the net names match the old eth_xfmr() so the device-side
+    centre-tap caps and the line-side Bob-Smith network are unchanged.
+    """
+    ct_dev, ct_line = ("CTD", "LINE_CTX") if pair == "TX" else ("CRD", "LINE_CRX")
     return {
         "ref": ref,
-        "value": "749010012A",
-        "fp": FP_WELAN,
-        "mpn": "749010012A",
-        "ds": "749010012A.pdf p.1 Schematic + Recommended Land Pattern [REF-SENSOR-028]",
+        "value": "TC1G00",
+        "fp": FP_TC1G00,
+        "mpn": "TC1G00",
+        "mfr": "YAGEO (Pulse Electronics)",
+        "ds": "TC002.C PulseChip LAN Transformer Overview p.1-2, Fig. A / Circuit A [REF-SENSOR-061]",
         "pins": [
-            ("1", "TD+", f"{eth}_TXP", "L"),
-            ("2", "CTD", f"{eth}_CTD", "L"),
-            ("3", "TD-", f"{eth}_TXN", "L"),
-            ("4", "NC", None, "L"),
-            ("5", "NC", None, "L"),
-            ("6", "RD+", f"{eth}_RXP", "L"),
-            ("7", "CRD", f"{eth}_CRD", "L"),
-            ("8", "RD-", f"{eth}_RXN", "L"),
-            ("16", "TX+", f"{eth}_LINE_TXP", "R"),
-            ("15", "CTX", f"{eth}_LINE_CTX", "R"),
-            ("14", "TX-", f"{eth}_LINE_TXN", "R"),
-            ("13", "NC", None, "R"),
-            ("12", "NC", None, "R"),
-            ("11", "RX+", f"{eth}_LINE_RXP", "R"),
-            ("10", "CRX", f"{eth}_LINE_CRX", "R"),
-            ("9", "RX-", f"{eth}_LINE_RXN", "R"),
+            ("2", f"{pair}D+", f"{eth}_{pair}P", "L"),
+            ("7", "CT_DEV", f"{eth}_{ct_dev}", "L"),
+            ("1", f"{pair}D-", f"{eth}_{pair}N", "L"),
+            ("5", f"{pair}L+", f"{eth}_LINE_{pair}P", "R"),
+            ("3", "CT_LINE", f"{eth}_{ct_line}", "R"),
+            ("6", f"{pair}L-", f"{eth}_LINE_{pair}N", "R"),
         ],
     }
 
@@ -468,8 +477,10 @@ def eth_xfmr(ref: str, eth: str) -> Dict[str, Any]:
 ICS += [
     dp83825i("PHY-RMII2", "RMII2", "RMII2_PHY_RSTN", "RMII2_PHY_INTRN", "ETH_RMII2", "MDIO0", "MDC0"),
     ax88772e("NIC-USB1", "ETH_USB1"),
-    eth_xfmr("T-RMII2", "ETH_RMII2"),
-    eth_xfmr("T-USB1", "ETH_USB1"),
+    pulse_xfmr("T-RMII2-TX", "ETH_RMII2", "TX"),
+    pulse_xfmr("T-RMII2-RX", "ETH_RMII2", "RX"),
+    pulse_xfmr("T-USB1-TX", "ETH_USB1", "TX"),
+    pulse_xfmr("T-USB1-RX", "ETH_USB1", "RX"),
 ]
 
 ICS += [
@@ -822,10 +833,10 @@ SIMPLE: List[Any] = [
     ("X2Y-RS485", "4.7nF X2Y", FP_X2Y0805, "CX0805MRX7R0BB472", "Pilot.md §3 GND1<->GND2 RF bridge (Yageo X2Y 0805)",
      [("1", "A", "GND"), ("2", "B", "GND"), ("3", "G1", "GND2_RS485"), ("4", "G2", "GND2_RS485")]),
     # --- Ethernet line-side connectors + Bob-Smith terminations ------------
-    ("J-ETH-RMII2", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-RMII2 line pair to T-RMII2 secondary",
+    ("J-ETH-RMII2", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-RMII2 line pairs to the T-RMII2-TX / -RX line windings",
      [("1", "TXP", "ETH_RMII2_LINE_TXP"), ("2", "TXN", "ETH_RMII2_LINE_TXN"), ("3", "RXP", "ETH_RMII2_LINE_RXP"), ("4", "RXN", "ETH_RMII2_LINE_RXN"),
       ("MP", "SHIELD", "PGND")]),
-    ("J-ETH-USB1", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-USB1 line pair to T-USB1 secondary",
+    ("J-ETH-USB1", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-USB1 line pairs to the T-USB1-TX / -RX line windings",
      [("1", "TXP", "ETH_USB1_LINE_TXP"), ("2", "TXN", "ETH_USB1_LINE_TXN"), ("3", "RXP", "ETH_USB1_LINE_RXP"), ("4", "RXN", "ETH_USB1_LINE_RXN"),
       ("MP", "SHIELD", "PGND")]),
     # TPI network per dp83825i.pdf Fig 8-3: 75 R from each line-side centre tap to a
@@ -1209,7 +1220,7 @@ SIMPLE += [
         "100nF",
         FP_C0402,
         "",
-        "T-USB1 device-side TX centre tap to GND (demo C7)",
+        "T-USB1-TX device-side centre tap to GND (demo C7)",
         [("1", "P", "ETH_USB1_CTD"), ("2", "N", "GND")],
     ),
     (
@@ -1217,7 +1228,7 @@ SIMPLE += [
         "100nF",
         FP_C0402,
         "",
-        "T-USB1 device-side RX centre tap to GND (demo C4)",
+        "T-USB1-RX device-side centre tap to GND (demo C4)",
         [("1", "P", "ETH_USB1_CRD"), ("2", "N", "GND")],
     ),
 ]

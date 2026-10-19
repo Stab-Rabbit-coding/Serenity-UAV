@@ -43,6 +43,7 @@ from __future__ import annotations
 
 import argparse
 import math
+import os
 import re
 import subprocess
 import sys
@@ -52,7 +53,9 @@ from typing import Dict, List, Tuple
 import pcbnew  # type: ignore
 
 HERE = Path(__file__).resolve().parent
-NETLIST = HERE.parent / "kicads" / "Pilot.net"
+# PILOT_NETLIST overrides the netlist for what-if placement trials (2026-10-19); the
+# --sync-only child process inherits it through the environment
+NETLIST = Path(os.environ.get("PILOT_NETLIST", HERE.parent / "kicads" / "Pilot.net"))
 SYSLIB = Path("/usr/share/kicad/footprints")
 CUSTOM = HERE.parents[1] / "Serenity-Custom.pretty"
 S = 1e6

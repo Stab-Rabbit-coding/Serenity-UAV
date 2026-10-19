@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-18",
+  "generated": "2026-10-19",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -7931,6 +7931,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/Pulse_TC002_PulseChip.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/RClamp0504FA.pdf": {
       "description": "PDF document",
       "tags": [
@@ -11592,7 +11599,7 @@
       "archived": false
     },
     "avionics/kicad/Pilot/scripts/gen_pilot_sch.py": {
-      "description": "Python script",
+      "description": "gen_pilot_sch.py \u2014 Author the datasheet-accurate Pilot (CAPE-A-2) schematic.",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -11942,6 +11949,14 @@
       "archived": false
     },
     "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_TSM-DV-LC.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/Pulse_TC1G00_PulseChip_4.7x3.2mm.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
@@ -21139,6 +21154,7 @@
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_TSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_TSM-DV-LC.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Pulse_TC1G00_PulseChip_4.7x3.2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RCLAMP0502B_SOD882.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900x_2x8_THT.kicad_mod",
@@ -21372,6 +21388,7 @@
       "avionics/datasheets/PESD5V0F1BL.pdf",
       "avionics/datasheets/PESD5V0X1BL.pdf",
       "avionics/datasheets/PremierMagnetics_DB2791S.pdf",
+      "avionics/datasheets/Pulse_TC002_PulseChip.pdf",
       "avionics/datasheets/RClamp0504FA.pdf",
       "avionics/datasheets/RFD900ux DataSheet v1.2.pdf",
       "avionics/datasheets/S32K-RM.pdf",
@@ -21869,6 +21886,7 @@
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_TSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_TSM-DV-LC.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Pulse_TC1G00_PulseChip_4.7x3.2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RCLAMP0502B_SOD882.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900x_2x8_THT.kicad_mod",
