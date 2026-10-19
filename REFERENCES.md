@@ -3397,6 +3397,17 @@ workspace — see each repo's own `REFERENCES.md` for its local entry. Renumbere
 2026-10-05 (merge of `main` into `avionics-docs-audit`): REF-MIL-001 is MIL-STD-1553C in this
 catalogue, and the CNAF entry had been filed under the same ID — see Removed / Superseded Citations.
 
+### REF-NCEES-009: NCEES — FE Reference Handbook (rigid-body dynamics)
+
+| Field | Value |
+|---|---|
+| **Publisher** | National Council of Examiners for Engineering and Surveying (NCEES) |
+| **Official URL** | <https://ncees.org/engineering/fe/> (landing page VERIFIED; the handbook is distributed through the NCEES account portal) |
+| **Applied sections** | "Dynamics" — rigid-body plane motion (Newton–Euler: ΣF = m·a_G, ΣM_G = I_G·α) and mass moment of inertia with the parallel-axis theorem. **Section and page numbers, and the current handbook version, REQUIRE VERIFICATION** (TODO §0.x item `REF-NCEES-009 version`). |
+| **Catalog source** | Entry carried over from the `engineering-pe-skills` repository `REFERENCES.md` REF-NCEES-009 (statics-and-dynamics skill). |
+
+**Used in:** `tools/auw_ledger.py` (pitch moment of inertia about the CG, parallel-axis), `tools/landing_gear_r6_sizing.py` `effective_mass_ratio()` (two-point drop effective mass, m_eff = m·k²/(k²+d²), derived from plane-motion Newton–Euler).
+
 ---
 
 ## Removed / Superseded Citations

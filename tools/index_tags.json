@@ -13317,6 +13317,13 @@
       ],
       "archived": false
     },
+    "current-specification/auw_ledger.json": {
+      "description": "JSON data (5 top-level keys)",
+      "tags": [
+        "specification"
+      ],
+      "archived": false
+    },
     "current-specification/bom_revS.csv": {
       "description": "Bill of materials, CSV (205 items)",
       "tags": [
@@ -17269,6 +17276,14 @@
       ],
       "archived": false
     },
+    "tools/auw_ledger.py": {
+      "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
+      "tags": [
+        "build-tooling",
+        "emi-hardening"
+      ],
+      "archived": false
+    },
     "tools/bake_hull_frame.py": {
       "description": "bake_hull_frame.py \u2014 bake validated FreeCAD placements into STL files.",
       "tags": [
@@ -17564,7 +17579,7 @@
       "archived": false
     },
     "tools/landing_gear_r6_sizing.py": {
-      "description": "Serenity UAV -- Landing Gear Rev R6 sizing study (hip-pivot canonical leg).",
+      "description": "Python script",
       "tags": [
         "build-tooling",
         "landing-gear"
@@ -18483,6 +18498,7 @@
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
+      "tools/auw_ledger.py",
       "tools/gen_todo_from_wbs.py",
       "tools/nacelle_mass_cg.py",
       "tools/precommit_index.py",
@@ -18764,6 +18780,7 @@
       "current-specification/README.md",
       "current-specification/SPEC_TEMPLATE.md",
       "current-specification/TODO.md",
+      "current-specification/auw_ledger.json",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
       "current-specification/bom_revT.csv",
@@ -22579,6 +22596,7 @@
       "tools/add_board_notices.py",
       "tools/add_landing_gear_bosses.py",
       "tools/airframe_interface_census.py",
+      "tools/auw_ledger.py",
       "tools/bake_hull_frame.py",
       "tools/bhd02_option_study.py",
       "tools/bhd10_aft_strip_options.py",

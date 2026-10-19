@@ -120,11 +120,18 @@
 - [ ] TILT-CTL-09 — brake-release authorization + asymmetric MAC fail policy (spec §5.5; controller firmware)
 - [ ] TILT-CTL-02a — trip response executor and its independence from the loop MCU (controller `TRIP_IN`)
 - [ ] ENC-DAUGHTER — AEAT-8800-Q24 sensor daughter for the brake-guide pocket + 6-pin lead (spec §4 / §7)
-- [ ] ★ WA-R18 — Rev S1g +102.8 g; hover T/W ~1.19 vs 1.2 min; re-derive mass/CG
-- [ ] ★ MA-1 — BOM printed-part masses understate by +521.6 g (13.3 % AUW)
+- [x] ★ WA-R18 — CLOSED 2026-10-19: mass/CG re-derived bottom-up (`tools/auw_ledger.py`): AUW 14.25 lbm (6,466 g) hover / 14.75 lbm (6,692 g) heaviest, CG Y +39.2, hover T/W 1.32 (1.28 heaviest) at 4 × 2135 gf
+- [x] ★ A0 — CLOSED 2026-10-19: one AUW/CG/pitch-inertia ledger, `tools/auw_ledger.py` → `current-specification/auw_ledger.json`; every airborne BOM row classified (installed / in nacelle roll-up / excluded with reason) or the run fails
+- [ ] ★ MA-1 — printed masses are now MEASURED in the ledger; BOM `Unit_Mass_g` rows themselves still stale; add the CI check (`auw_ledger.py --check`)
+- [ ] ★ CG-SIZING — gear sizing used Y_CG 111.5 (nacelle-LOCAL pivot) and AUW 3.13 kg; now ledger-fed: fore leg 26 % static, thigh margin 0.51× at 4 ft → gear redesign (`airframe/landing-gear/WBS.md` LG-REMASS)
+- [ ] ★ HOVER-TRIM — CG Y +39.2 is 18.2 mm aft of the tilt-pivot thrust line (Y +21.0); establish the pitch-trim authority / battery move
+- [ ] ★ LEDGER-GAPS — no BOM rows for: Observer, 2 × CAN-PERIPH-GW-1, node pouches, FE can, epoxy (250.6 g estimated in the ledger); add rows and weigh
+- [ ] ★ LEDGER-STATUS — owner confirm: PRINT-PYLON excluded (no Rev T source), PRINT-PISTONS kept (no source), belly panels kept (roof battery), Faraday cage 1 of 4 bays
+- [ ] REF-NCEES-009 version — confirm FE Reference Handbook version and the Dynamics section numbers cited in `REFERENCES.md`
+- [ ] ★ ASM-EXPORT-01 — `tools/export_assembly_meshes.py` double-applies placements (stbd tilt worm/wheel exported at dX −178.4 not −89.2); census sees them outside the hull
 - [x] MA-5 — CLOSED 2026-09-15: standoff pads removed with the worm-drive bracket (−53.5 g + 23.4 g bosses)
 - [x] MA-6 — CLOSED 2026-09-15: PRINT-BATT-TRAY retired; PRINT-BATT-CRADLE 39.4 g (`battery_cradle.scad`)
-- [ ] MA-7 — add an `Installed` flag to the BOM mass column
+- [x] MA-7 — CLOSED 2026-10-19: met by the `tools/auw_ledger.py` classification gate (installed qty + reason per row, unclassified rows fail the run) instead of a BOM column
 - [ ] ★ BOM-SYNC — `bom_revS.json` vs `.csv` parity: the "canonical" JSON had dropped 14 rows and an in-place CSV rewrite truncated the file (2026-09-16, `docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md`); write `tools/bom_sync.py` (parity assertion, temp-file + `os.replace`, overflow fold) or amend `current-specification/README.md` to name the CSV as the edited file
 - [ ] W1..W8 — ranked weight-reduction targets (W2 BOM reconciliation gates all)
 - [x] WA-R15a — CLOSED 2026-09-15: pads gone; roof band re-proved by `tools/cargo_layout_fit.py` (PASS)
