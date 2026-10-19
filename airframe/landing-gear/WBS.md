@@ -814,7 +814,7 @@ Derivation: `docs/LANDING_GEAR_ANALYSIS.md` §4.8. Gate:
         Ø5.27, spring Ø4.06 (LG-06 ordinary case at the worst static share, stops
         inside the 13.7 mm nozzle clearance), crash hip moment 91.9 N·m
         (`tools/landing_gear_r6_sizing.py`, `tools/lg_thigh_variants.py`).
-    - [ ] LG-REMASS-b — owner choice of thigh: GROWN printed 17/22 (crash margin
+    - [x] LG-REMASS-b — DECIDED 2026-10-19 (owner): GROW THE PRINTED THIGH (17/22). Was: owner choice of thigh: GROWN printed 17/22 (crash margin
         1.09×) vs anchored CF core (anchor fails the crash case: rod net section
         0.60×, lug bearing 0.58×; breaks at 52.9 N·m). Renders + failure/repair
         comparison presented 2026-10-19.

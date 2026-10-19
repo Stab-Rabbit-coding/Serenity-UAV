@@ -41,7 +41,9 @@ except ImportError:  # pragma: no cover - dependency guard
 
 # Head_Shell bake translation (identity rotation) — must match
 # tools/bake_hull_frame.py COMPONENTS["Head_Shell"].  Hull = local + BAKE_T.
-BAKE_T = np.array([-331.9993360, -17.9999640, 60.9998780])
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
+import hull_datums as hd  # noqa: E402  single source (2026-10-19)
+BAKE_T = np.array(hd.bake_translation("Head_Shell"))
 
 HEAD_STL = "airframe/stls/fuselage/head_shell24_2mm_repaired.stl"
 

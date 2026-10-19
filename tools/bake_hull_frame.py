@@ -68,6 +68,8 @@ import numpy as np
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 STL_DIR = os.path.join(REPO_ROOT, "airframe", "stls")
+sys.path.insert(0, SCRIPT_DIR)
+import hull_datums as hd  # noqa: E402  single-source hull datums (X_CL)
 
 # Marker stamped into the 80-byte binary STL header after baking.
 # Its presence means "vertices are already hull-frame" — do not re-bake.
@@ -95,7 +97,12 @@ COMPONENTS = {
     # into the single Cargo_Shell below (per the TODO.md mesh-repair log).
     "Head_Shell": (
         "fuselage/head_shell24_2mm_repaired.stl",
-        (-331.9993360, -17.9999640, 60.9998780, 0.0, 0.0, 0.0, 1.0),
+        # 2026-10-19 RE-CENTRED: Px -331.9993360 -> -333.6383 (-1.639 mm).  The
+        # head's own symmetry plane measured X -168.211 (median of 147 section
+        # samples, IQR 0.17 mm) -- 1.6 mm port of the hull centreline hd.X_CL.
+        # QMx Sheet 5 [REF-CAD-003] shows a symmetric hull; owner direction:
+        # correct to symmetric unless canonically justified.
+        (-331.9993360 + (hd.X_CL - (-168.211)), -17.9999640, 60.9998780, 0.0, 0.0, 0.0, 1.0),
     ),
     # Cargo: 180 deg about +Z flips the section hull-forward.
     "Cargo_Shell": (
@@ -110,7 +117,10 @@ COMPONENTS = {
     ),
     "Rear_Shell": (
         "fuselage/rear_shell24_2mm_repaired.stl",
-        (0.0, 203.1999999, -31.9999360, -_SQ2, 0.0, 0.0, _SQ2),
+        # 2026-10-19 RE-CENTRED: Px 0.0 -> +5.914.  The rear measured symmetric
+        # about X -175.764 (194 samples, IQR 0.06 mm) -- 5.9 mm starboard of the
+        # centreline, a 5.7 mm lateral step at the middle/rear joint.
+        (0.0 + (hd.X_CL - (-175.764)), 203.1999999, -31.9999360, -_SQ2, 0.0, 0.0, _SQ2),
     ),
     # Wings: identity rotation, translation only.
     # Filenames use the no-"s_"-prefix convention (Rev R1, 2026-06-11).
@@ -147,7 +157,10 @@ COMPONENTS = {
     ),
     "Wing_Stbd": (
         "wings/wing_stbd_s1223_revo.stl",
-        (-257.4822000, -6.9999860, 57.9998840, 0.0, 0.0, 0.0, 1.0),
+        # 2026-10-19: DERIVED as the mirror of Wing_Port about hd.X_CL (was
+        # -257.4822, mirrored about a measured -169.241 that disagreed with the
+        # centreline every other generator used).
+        (hd.mirror_x(-80.9998380), -6.9999860, 57.9998840, 0.0, 0.0, 0.0, 1.0),
     ),
     # Nacelles: 270 deg about +X = cruise / forward-flight attitude.
     # This is the canonical stored attitude; hover tilt is applied
@@ -203,9 +216,19 @@ COMPONENTS = {
 #      = (41.7 + axis shift + 7.0 stub) - 2.0  (53.84 at x1.00 shift 7.14).
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import nacelle_64_scale  # noqa: E402
-_N64_SEAT = 41.7 + nacelle_64_scale.get("P64_AXIS_SHIFT_S") + 7.0 - 2.0
-_N64_Y, _N64_Z = 21.000 - nacelle_64_scale.pivot_z(), 66.851
-_N64_X = {"Port": 6.700 + _N64_SEAT, "Stbd": -345.182 - _N64_SEAT}
+_N64_SEAT_SCALED = 41.7 + nacelle_64_scale.get("P64_AXIS_SHIFT_S") + 7.0 - 2.0
+# 2026-10-19 (drift found by fitting the published pods' duct bore): the pods
+# under airframe/stls/nacelles/ were baked at the x1.00 seat, axis X +60.540 /
+# -399.022, NOT at the x1.06 seat the scale file now gives (+63.01) -- the
+# x1.06 enlargement is in nacelle_64_scale.scad but the pods were never
+# re-rendered (owner HOLD until the servo linkage is finished).  This table
+# describes the meshes that are actually published; the re-render is WBS
+# NAC-64-REBAKE, and tools/check_datum_drift.py compares the two.
+_N64_SEAT = 53.84            # as baked (x1.00, axis shift 7.14)
+_N64_Y, _N64_Z = hd.SPAR_Y - nacelle_64_scale.pivot_z(), hd.SPAR_Z
+# 2026-10-19: starboard DERIVED as the mirror of port about hd.X_CL (was the
+# separately measured stbd pad face -345.182, mirrored about -169.241).
+_N64_X = {"Port": 6.700 + _N64_SEAT, "Stbd": hd.mirror_x(6.700 + _N64_SEAT)}
 for _side in ("Port", "Stbd"):
     _pl = (_N64_X[_side], _N64_Y, _N64_Z, _SQ2, 0.0, 0.0, -_SQ2)
     _s = _side.lower()

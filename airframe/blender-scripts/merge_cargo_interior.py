@@ -204,7 +204,9 @@ MARKER = b"SerenityUAV HULL-FRAME R1"
 
 # Cargo_Shell bake transform — MUST match tools/bake_hull_frame.py COMPONENTS.
 #   180 deg about +Z → (x,y,z)→(−x,−y,z);  T = (−274.4, −282.8, 0)
-BAKE_T = np.array([-274.4000100, -282.8000440, 0.0])
+
+import hull_datums as hd  # noqa: E402  (tools/ is on sys.path above)
+BAKE_T = np.array(hd.bake_translation("Cargo_Shell"))  # single source, 2026-10-19
 
 WALL_MM = 2.0  # 2 mm foam-fill wall (Blender hollowing pitch / SCAD)
 
