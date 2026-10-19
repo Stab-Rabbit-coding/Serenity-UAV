@@ -33,8 +33,10 @@ import sys
 import tempfile
 from pathlib import Path
 
-# Placement fixes: reference -> (new x mm or None, new y mm or None).
-MOVES = {"J-ETH-RMII2": (172.7, None), "C-P2-A3": (166.9, None)}
+# Placement fixes: reference -> (new x mm or None, new y mm or None).  The 2026-10-09
+# entries (J-ETH-RMII2 x 172.7, C-P2-A3 x 166.9) were retired 2026-10-19: refloorplan_pilot.py
+# now fixes J-ETH-RMII2's pose and C-P2-A3 left the netlist (item 1 above is historical).
+MOVES: "dict[str, tuple]" = {}
 # DRC types whose track/via items are ripped up.
 RIP_TYPES = {"hole_to_hole", "track_width", "connection_width", "clearance", "hole_clearance",
              "shorting_items", "tracks_crossing", "annular_width", "drill_out_of_range",
@@ -53,7 +55,10 @@ def move_footprints(text: str) -> str:
     """Rewrite the footprint-level (at x y [rot]) of each MOVES reference."""
     for ref, (nx, ny) in MOVES.items():
         tag = f'(property "Reference" "{ref}"'
-        i = text.index(tag)
+        i = text.find(tag)
+        if i < 0:
+            print(f"{ref}: not on the board, move skipped")
+            continue
         fp = text.rfind("\n\t(footprint ", 0, i)
         m = re.compile(r"\n\t\t\(at ([-\d.]+) ([-\d.]+)((?: [-\d.]+)?)\)").search(text, fp)
         assert m is not None, f"{ref}: footprint block has no (at x y) line"

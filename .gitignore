@@ -61,3 +61,6 @@ code-scanning-files-extracted.csv
 denominations.odg
 *.rpt
 avionics/datasheets/spruiv7c.pdf
+
+# Pilot placement/routing trial runs (refloorplan_keep_copper.sh <in> <workdir>), 2026-10-19
+/avionics/kicad/Pilot/work/

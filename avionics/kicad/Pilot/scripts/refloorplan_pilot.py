@@ -137,20 +137,49 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     "C-485-6": (144.15, 107.9, 90, "F"),      # VISOIN (pin 16) bypass
     "CMC-RS485": (143.7, 111.3, 90, "F"),     # A/B pins 17-20
     "X2Y-RS485": (148.0, 108.6, 0, "B"),      # straddles the B domain's south edge
-    "TVS-RS485": (142.0, 120.6, 90, "F"),
+    # SOT-23 since 2026-10-18 (CDSOT23-SM712): at 0 deg its pads sit inside the RS485
+    # domain (x >= 140.4, y >= 118.95) and its courtyard clears TVS-CAN and the edge
+    "TVS-RS485": (142.2, 120.45, 0, "F"),
     "RS-485": (149.2, 118.6, 0, "F"),
     # --- RS-485, logic side (east) ---
     "C-485-1": (155.15, 100.45, 0, "F"),
     "C-485-2": (152.0, 98.75, 0, "F"),
     "C-485-3": (155.15, 99.25, 0, "F"),       # VIO bypass (pins 1/8 +3V3, joined under the body)
+    # --- Ethernet magnetics + USB1 NIC (2026-10-19, Claude Opus 5.5) ---
+    # TC1G00 chips (one per pair) replace the WE-LAN modules; line pads (5/6) face the J-ETH
+    # connectors at x 169.46.  USB1 takes the north connector so the NIC can sit in the
+    # strip below J-SPI, where its LX side (west at 270 deg) has 2.2 mm for L-USB1
+    # (ASIX note 2-5); the two GH4 connectors are identical, so they swap poses.
+    "J-ETH-USB1": (172.7, 98.1, 90, "F"),
+    "J-ETH-RMII2": (172.7, 107.9, 90, "F"),
+    "T-USB1-TX": (166.56, 96.6, 0, "F"),
+    "T-USB1-RX": (166.56, 101.0, 0, "F"),
+    # RMII2 pair on F: B under J-ETH is over the PB2-I JST-SH (2.95 mm, OBSTRUCTIONS), which
+    # leaves 2.09 mm there, below the TC1G00's 3.15 mm
+    "T-RMII2-TX": (166.56, 105.4, 0, "F"),
+    "T-RMII2-RX": (166.56, 109.8, 0, "F"),
+    # expansion port on the top edge: clear of the TPM (x 155.8) and of the PB2-P1 clip
+    # hole at (168.82, 92.3); opening toward the edge
+    "J-SPI": (161.95, 91.05, 180, "F"),
+    # AX88772E: at 270 deg USB (pins 2/3) faces the P1 rail, MDI (27-31) the magnetics,
+    # XTAL (23/24) south to Y-USB1, LX (12) west to L-USB1
+    "NIC-USB1": (161.0, 99.1, 270, "F"),       # 2.1 mm strip left under J-SPI for its caps
+    "Y-USB1": (161.45, 104.1, 0, "F"),         # 0.07 mm clear of the TC1G00 courtyards
+    "L-USB1": (157.25, 98.9, 90, "F"),
+    # 1553 transformer 1.5 mm south (to 0.06 mm off the PB2-P2 rail courtyard) so the B strip
+    # under the NIC (y 96.8-99.9) can hold its HF decoupling, caps under the QFN
+    "1553-XFM": (160.25, 106.5, 270, "B"),
+    # 25 MHz reference stays on B by the DP83825I (its committed pose)
+    "X-25M": (173.4, 111.2, 90, "B"),
 }
 
 # B.Cu height budget under the PocketBeagle 2 Industrial (gen_pilot_pcb.py PB2_OBSTRUCTIONS)
 X0, Y0 = 121.0, 87.5
 PB2_GAP, H_MARGIN = 3.0 + 2.54, 0.5
 OBSTRUCTIONS = [(4.0, 10.5, 18.0, 24.5, 1.0), (45.0, 12.5, 55.0, 22.5, 2.95)]
-HEIGHT = {"T-RMII2": 8.9, "T-USB1": 8.9, "1553-XFM": 4.70, "TVS-1553P": 2.44, "TVS-1553N": 2.44}
-F_ONLY = {"T-RMII2", "T-USB1", "J-SPI"}     # tall, or cable connectors (B faces the PB2-I)
+HEIGHT = {"1553-XFM": 4.70, "TVS-1553P": 2.44, "TVS-1553N": 2.44}
+# TC1G00 magnetics (B under J-ETH is over the PB2-I JST-SH) and the cable connector
+F_ONLY = {"T-RMII2-TX", "T-RMII2-RX", "T-USB1-TX", "T-USB1-RX", "J-SPI"}
 # footprints whose library geometry changed under the same name: always reloaded
 FORCE_RELOAD = {"PB2-P1", "PB2-P2"}
 EDGE_CONN = {"J-SPI"}                             # GH cable connector: board edge, F side
@@ -173,6 +202,35 @@ PARENT = [("C-RMII2-A", "PHY-RMII2"), ("C-RMII2-C", "PHY-RMII2"), ("C-RMII2-IO",
           ("C-3V3", "U-3V3"), ("C-IMU", "IMU"), ("C-BARO", "BARO"),
           ("C-1553", "1553-XCVR"), ("C-50M", "X-50M"), ("C-IN", "PWR-IN"), ("FB1", "PWR-IN"),
           ("R-PGND", "PWR-IN")]
+# pad-targeted placement (2026-10-19, Claude Opus 5.5): a part listed here is placed by
+# spiral search from the named pad of its parent, not from the centroid of its nets, and
+# the table order is the placement priority (buck loop first, then per-pin decoupling,
+# then straps), so the parts the ASIX notes call out get the nearest sites
+# (AX88772E demo board notes 2-4 / 2-5 [REF-SENSOR-058]; app note sec 8 [REF-SENSOR-057])
+TARGET: Dict[str, Tuple[str, str]] = {
+    "C-USB1-LXH": ("L-USB1", "2"), "C-USB1-LXB": ("L-USB1", "2"),
+    "C-USB1-BKH": ("NIC-USB1", "13"), "C-USB1-BKB": ("NIC-USB1", "13"),
+    "C-USB1-D10": ("NIC-USB1", "10"), "C-USB1-D11": ("NIC-USB1", "11"),
+    "C-USB1-D04": ("NIC-USB1", "4"), "C-USB1-D22": ("NIC-USB1", "22"),
+    "C-USB1-XI": ("Y-USB1", "1"), "C-USB1-XO": ("Y-USB1", "3"), "R-USB1-XO": ("NIC-USB1", "24"),
+    "FB-USB1-A11": ("NIC-USB1", "32"), "C-USB1-A11H1": ("NIC-USB1", "32"),
+    "C-USB1-A11H2": ("NIC-USB1", "32"), "C-USB1-A11B": ("NIC-USB1", "32"),
+    "FB-USB1-A33": ("NIC-USB1", "1"), "C-USB1-A33H1": ("NIC-USB1", "1"),
+    "C-USB1-A33H2": ("NIC-USB1", "25"), "C-USB1-A33H3": ("NIC-USB1", "29"),
+    "C-USB1-A33H4": ("NIC-USB1", "29"), "C-USB1-A33B": ("NIC-USB1", "29"),
+    "C-USB1-IO5": ("NIC-USB1", "5"), "C-USB1-IO18": ("NIC-USB1", "18"),
+    "R-USB1-RSET": ("NIC-USB1", "26"), "R-USB1-VBUS": ("NIC-USB1", "6"),
+    "R-USB1-PU": ("NIC-USB1", "7"), "R-USB1-PME": ("NIC-USB1", "8"),
+    "C-USB1-CTD": ("T-USB1-TX", "7"), "C-USB1-CRD": ("T-USB1-RX", "7"),
+    "ESD-SPI": ("J-SPI", "3"), "F-SPI": ("J-SPI", "1"), "C-SPI5": ("J-SPI", "1"),
+    # centre-tap caps and Bob-Smith resistors follow their (moved) TC1G00 pad
+    "C-RMII2-CTD1": ("T-RMII2-TX", "7"), "C-RMII2-CTD2": ("T-RMII2-TX", "7"),
+    "C-RMII2-CRD1": ("T-RMII2-RX", "7"), "C-RMII2-CRD2": ("T-RMII2-RX", "7"),
+    "R-RMII2-BST": ("T-RMII2-TX", "3"), "R-RMII2-BSR": ("T-RMII2-RX", "3"),
+    "R-USB1-BST": ("T-USB1-TX", "3"), "R-USB1-BSR": ("T-USB1-RX", "3"),
+}
+TARGET_RANK = {r: i for i, r in enumerate(TARGET)}
+
 # the 3V3 module and its CIN / COUT share one layer, output-cap ground straight to the
 # module GND pins without vias (SLVSEP0F sec 11.1 [REF-PWR-008])
 SAME_LAYER_AS = {"C-3V3-IN": "U-3V3", "C-3V3-O1": "U-3V3",
@@ -448,7 +506,13 @@ class Checker:
 
 def anchor(ref: str, nets_of: Dict[str, set], placed: set,
            geos: Dict[str, Geo]) -> Tuple[float, float]:
-    """Mean position of the placed pads that share a signal net with ``ref``."""
+    """Mean position of the placed pads that share a signal net with ``ref``, or the
+    ``TARGET`` pad when the part has one and its parent is placed."""
+    if ref in TARGET and TARGET[ref][0] in placed:
+        par_ref, pad_no = TARGET[ref]
+        for num, _, _, _, q in geos[par_ref].pads:
+            if num == pad_no:
+                return ((q[0] + q[2]) / 2, (q[1] + q[3]) / 2)
     pts = []
     for net in nets_of.get(ref, ()):
         if net in POWER:
@@ -527,6 +591,8 @@ def main() -> None:
             continue
         if set(chk.problems(g, set())) - base.get(ref, set()):
             movable.append(ref)
+    # pad-targeted parts are always re-placed, so they track their parent pad
+    movable += [r for r in TARGET if r in geos and r not in movable and r not in FIXED]
     for ref, pre in SAME_LAYER_AS.items():
         if pre in movable and ref not in movable:
             movable.append(ref)
@@ -549,6 +615,8 @@ def main() -> None:
     # locality-critical parts first: the 50 MHz MCLK source belongs beside the HI-6138
     # (short clock trace), the IMU / BARO have no such tie and take what is left
     movable.sort(key=lambda r: 0 if r in FIRST else 1)
+    # pad-targeted parts go last (after their parents), in TARGET priority order
+    movable.sort(key=lambda r: (1, TARGET_RANK[r]) if r in TARGET else (0, 0))
     print(f"re-placing {len(movable)}: {' '.join(movable)}")
     placed = set(geos) - set(movable)
     unplaced = []
