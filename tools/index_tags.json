@@ -11715,7 +11715,7 @@
       "archived": false
     },
     "avionics/kicad/Pilot/scripts/refloorplan_pilot.py": {
-      "description": "PILOT_NETLIST overrides the netlist for what-if placement trials (2026-10-19); the",
+      "description": "refloorplan_pilot.py \u2014 ISOW \u00a713.1 re-floorplan of the Pilot cape (2026-10-12).",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -11739,8 +11739,24 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/scripts/route_loop_pilot.sh": {
+      "description": "!/usr/bin/env bash",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/scripts/route_pilot.sh": {
       "description": "!/usr/bin/env bash",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py": {
+      "description": "silk_refs_to_fab_pilot.py \u2014 Move footprint reference designators from silkscreen to Fab.",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -21129,7 +21145,9 @@
       "avionics/kicad/Pilot/scripts/refloorplan_pilot.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_logs/refloorplan-2026-10-17.png",
+      "avionics/kicad/Pilot/scripts/route_loop_pilot.sh",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
+      "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py",
       "avionics/kicad/README.md",
       "avionics/kicad/Serenity-Custom.3dshapes/ISOW1044BDFMR.step",
       "avionics/kicad/Serenity-Custom.3dshapes/KSZ9477STXI.step",
@@ -21861,7 +21879,9 @@
       "avionics/kicad/Pilot/scripts/refloorplan_pilot.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_logs/refloorplan-2026-10-17.png",
+      "avionics/kicad/Pilot/scripts/route_loop_pilot.sh",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
+      "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py",
       "avionics/kicad/README.md",
       "avionics/kicad/Serenity-Custom.3dshapes/ISOW1044BDFMR.step",
       "avionics/kicad/Serenity-Custom.3dshapes/KSZ9477STXI.step",

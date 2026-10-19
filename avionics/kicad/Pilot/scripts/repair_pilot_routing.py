@@ -120,6 +120,17 @@ def rip_set(report: dict) -> set:
     return doomed
 
 
+def refill(pcb: Path) -> None:
+    """Refill every zone in a child /usr/bin/python3 process (kicad-cli 9.0.2 has no
+    refill, and in-process pcbnew is unsafe here, PCBNEW_SWIG_BUG.md).  Without it a
+    plane via or stub that only reaches an unfilled zone reads as dangling and gets
+    ripped, segment by segment (2026-10-19: this undid most plane fan-out vias)."""
+    code = ("import pcbnew, sys; b = pcbnew.LoadBoard(sys.argv[1]); "
+            "pcbnew.ZONE_FILLER(b).Fill(b.Zones()); pcbnew.SaveBoard(sys.argv[1], b)")
+    subprocess.run(["/usr/bin/python3", "-c", code, str(pcb)], check=True,
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
 def main() -> None:
     if len(sys.argv) not in (2, 3):
         sys.exit(__doc__)
@@ -128,6 +139,8 @@ def main() -> None:
     text, n = drop(text, odd_vias(text))
     print("non-through / undersized vias removed:", n)
     pcb.write_text(text)
+    # ripping never moves a zone, so one fill before the loop keeps plane copper valid
+    refill(pcb)
     # dangling chains shrink one segment per DRC round, so long orphaned runs (the
     # 2026-10-17 keep-copper re-floorplan) need many rounds; a round costs ~2 s
     for rnd in range(1, int(sys.argv[2]) + 1 if len(sys.argv) > 2 else 30):

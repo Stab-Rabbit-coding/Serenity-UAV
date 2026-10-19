@@ -152,20 +152,28 @@ FIXED: Dict[str, Tuple[float, float, float, str]] = {
     # (ASIX note 2-5); the two GH4 connectors are identical, so they swap poses.
     "J-ETH-USB1": (172.7, 98.1, 90, "F"),
     "J-ETH-RMII2": (172.7, 107.9, 90, "F"),
-    "T-USB1-TX": (166.56, 96.6, 0, "F"),
-    "T-USB1-RX": (166.56, 101.0, 0, "F"),
+    # RX chip north, TX south: the NIC's RX pins (30/31) sit north of its TX pins (27/28)
+    # at 270 deg, and J-ETH-USB1's RX pins (3/4) are its east pair, so neither side of
+    # the magnetics has crossing pairs (2026-10-19 routing diagnosis)
+    "T-USB1-RX": (166.56, 96.6, 0, "F"),
+    "T-USB1-TX": (166.56, 101.0, 0, "F"),
     # RMII2 pair on F: B under J-ETH is over the PB2-I JST-SH (2.95 mm, OBSTRUCTIONS), which
     # leaves 2.09 mm there, below the TC1G00's 3.15 mm
-    "T-RMII2-TX": (166.56, 105.4, 0, "F"),
-    "T-RMII2-RX": (166.56, 109.8, 0, "F"),
+    # RX north / TX south like USB1: J-ETH-RMII2's TX pins (1/2) are its south pair
+    "T-RMII2-RX": (166.56, 105.4, 0, "F"),
+    "T-RMII2-TX": (166.56, 109.8, 0, "F"),
     # expansion port on the top edge: clear of the TPM (x 155.8) and of the PB2-P1 clip
     # hole at (168.82, 92.3); opening toward the edge
     "J-SPI": (161.95, 91.05, 180, "F"),
     # AX88772E: at 270 deg USB (pins 2/3) faces the P1 rail, MDI (27-31) the magnetics,
     # XTAL (23/24) south to Y-USB1, LX (12) west to L-USB1
-    "NIC-USB1": (161.0, 99.1, 270, "F"),       # 2.1 mm strip left under J-SPI for its caps
-    "Y-USB1": (161.45, 104.1, 0, "F"),         # 0.07 mm clear of the TC1G00 courtyards
-    "L-USB1": (157.25, 98.9, 90, "F"),
+    # 0.6 mm west of the first trial: its MDI pad tips then sit 1.22 mm from the TC1G00
+    # pads, a routing corridor (0.62 mm was too narrow for one DIFF_PAIR track)
+    "NIC-USB1": (160.4, 99.1, 270, "F"),       # 2.1 mm strip left under J-SPI for its caps
+    "Y-USB1": (160.85, 104.1, 0, "F"),
+    # buck inductor on B under the NIC's LX corner (one via from pin 12), in the strip the
+    # 1553-XFM shift opened; F west of the NIC keeps room for the buck input caps
+    "L-USB1": (157.6, 98.35, 0, "B"),
     # 1553 transformer 1.5 mm south (to 0.06 mm off the PB2-P2 rail courtyard) so the B strip
     # under the NIC (y 96.8-99.9) can hold its HF decoupling, caps under the QFN
     "1553-XFM": (160.25, 106.5, 270, "B"),
@@ -210,6 +218,8 @@ PARENT = [("C-RMII2-A", "PHY-RMII2"), ("C-RMII2-C", "PHY-RMII2"), ("C-RMII2-IO",
 TARGET: Dict[str, Tuple[str, str]] = {
     "C-USB1-LXH": ("L-USB1", "2"), "C-USB1-LXB": ("L-USB1", "2"),
     "C-USB1-BKH": ("NIC-USB1", "13"), "C-USB1-BKB": ("NIC-USB1", "13"),
+    # RSET sets the PHY bias current: next to pin 26 before the caps take the sites
+    "R-USB1-RSET": ("NIC-USB1", "26"),
     "C-USB1-D10": ("NIC-USB1", "10"), "C-USB1-D11": ("NIC-USB1", "11"),
     "C-USB1-D04": ("NIC-USB1", "4"), "C-USB1-D22": ("NIC-USB1", "22"),
     "C-USB1-XI": ("Y-USB1", "1"), "C-USB1-XO": ("Y-USB1", "3"), "R-USB1-XO": ("NIC-USB1", "24"),
@@ -219,7 +229,7 @@ TARGET: Dict[str, Tuple[str, str]] = {
     "C-USB1-A33H2": ("NIC-USB1", "25"), "C-USB1-A33H3": ("NIC-USB1", "29"),
     "C-USB1-A33H4": ("NIC-USB1", "29"), "C-USB1-A33B": ("NIC-USB1", "29"),
     "C-USB1-IO5": ("NIC-USB1", "5"), "C-USB1-IO18": ("NIC-USB1", "18"),
-    "R-USB1-RSET": ("NIC-USB1", "26"), "R-USB1-VBUS": ("NIC-USB1", "6"),
+    "R-USB1-VBUS": ("NIC-USB1", "6"),
     "R-USB1-PU": ("NIC-USB1", "7"), "R-USB1-PME": ("NIC-USB1", "8"),
     "C-USB1-CTD": ("T-USB1-TX", "7"), "C-USB1-CRD": ("T-USB1-RX", "7"),
     "ESD-SPI": ("J-SPI", "3"), "F-SPI": ("J-SPI", "1"), "C-SPI5": ("J-SPI", "1"),

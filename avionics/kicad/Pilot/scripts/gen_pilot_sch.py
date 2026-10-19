@@ -450,8 +450,12 @@ def pulse_xfmr(ref: str, eth: str, pair: str) -> Dict[str, Any]:
     is transformer-only (no common-mode choke).
 
     Windings per the TC002.C schematic: 2 - (8/7) - 1 and 5 - (3/4) - 6, dots at 8 and 3,
-    so 2 and 5 are like-phased; 8/7 and 3/4 are centre taps shorted on the PCB (one land
-    pad each, named "7" and "3").  The 2/1 winding faces the PHY / NIC, 5/6 the line.
+    so 2 and 5 are like-phased, and therefore 1 and 6 are too; 8/7 and 3/4 are centre
+    taps shorted on the PCB (one land pad each, named "7" and "3").  The 2/1 winding faces
+    the PHY / NIC, 5/6 the line.  Pin 1 is the device-side "+" and pin 6 the line-side
+    "+" (2026-10-19): with the land's pad order this matches the NIC / PHY pin order and
+    the J-ETH pin order, so neither side of a pair has to cross over.  Both windings are
+    relabelled together, so end-to-end polarity is unchanged (1 and 6 are like-phased).
     ``pair`` is "TX" or "RX"; the net names match the old eth_xfmr() so the device-side
     centre-tap caps and the line-side Bob-Smith network are unchanged.
     """
@@ -464,12 +468,12 @@ def pulse_xfmr(ref: str, eth: str, pair: str) -> Dict[str, Any]:
         "mfr": "YAGEO (Pulse Electronics)",
         "ds": "TC002.C PulseChip LAN Transformer Overview p.1-2, Fig. A / Circuit A [REF-SENSOR-061]",
         "pins": [
-            ("2", f"{pair}D+", f"{eth}_{pair}P", "L"),
+            ("1", f"{pair}D+", f"{eth}_{pair}P", "L"),
             ("7", "CT_DEV", f"{eth}_{ct_dev}", "L"),
-            ("1", f"{pair}D-", f"{eth}_{pair}N", "L"),
-            ("5", f"{pair}L+", f"{eth}_LINE_{pair}P", "R"),
+            ("2", f"{pair}D-", f"{eth}_{pair}N", "L"),
+            ("6", f"{pair}L+", f"{eth}_LINE_{pair}P", "R"),
             ("3", "CT_LINE", f"{eth}_{ct_line}", "R"),
-            ("6", f"{pair}L-", f"{eth}_LINE_{pair}N", "R"),
+            ("5", f"{pair}L-", f"{eth}_LINE_{pair}N", "R"),
         ],
     }
 
