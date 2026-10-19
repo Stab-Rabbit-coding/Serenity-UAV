@@ -810,6 +810,22 @@ Derivation: `docs/LANDING_GEAR_ANALYSIS.md` §4.8. Gate:
     tips sit only 13.7 mm above ground (any settle past that lands the
     nozzles). Nose-down = tail-down within 2 % (rigid-body m_eff), so one
     schedule serves all four corners. **BLOCKS LG-15, BHD-02g fore.**
+    - [x] LG-REMASS-a — sizing at the 13.0 lbm owner target (2026-10-19): ductile
+        Ø5.27, spring Ø4.06 (LG-06 ordinary case at the worst static share, stops
+        inside the 13.7 mm nozzle clearance), crash hip moment 91.9 N·m
+        (`tools/landing_gear_r6_sizing.py`, `tools/lg_thigh_variants.py`).
+    - [ ] LG-REMASS-b — owner choice of thigh: GROWN printed 17/22 (crash margin
+        1.09×) vs anchored CF core (anchor fails the crash case: rod net section
+        0.60×, lug bearing 0.58×; breaks at 52.9 N·m). Renders + failure/repair
+        comparison presented 2026-10-19.
+    - [ ] ★ LG-HIERARCHY — owner rule 2026-10-19: wire fuse < leg < bay/hull; any
+        option where the bay or hull fails before the leg is an automatic fail.
+        Bay WIRE BOSSES fail first today (bearing 6,300 N vs 7,655 N plateau,
+        0.82×): grow to ≥ 137 mm² bearing (≈ OD 14 × L 14). Bolts / pin / bearing
+        stack pass vs the grown leg's 197 N·m breaking moment (≥ 1.33×). Gate:
+        `tools/lg_thigh_variants.py` (exit 2 on a mount-first failure).
+    - [ ] LG-REMASS-c — re-solve the two-row layout at Ø5.27/Ø4.06 (ROW_PITCH ≈ 7.1),
+        regenerate bays (`generate_lg_bays.py`), re-merge, census both stations.
   *LG-32 original text:* **Reconcile the AUW ledger before LG-15 procures wire.**
     `docs/LANDING_GEAR_ANALYSIS.md` §2.1 sizes the gear at a **3,130 g** design
     AUW; the ~1.19 hover T/W in `docs/plans/2026-08-30-001` against 4,464 gf of

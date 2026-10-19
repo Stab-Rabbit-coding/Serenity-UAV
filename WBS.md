@@ -127,6 +127,11 @@
 - [ ] ★ HOVER-TRIM — CG Y +39.2 is 18.2 mm aft of the tilt-pivot thrust line (Y +21.0); establish the pitch-trim authority / battery move
 - [ ] ★ LEDGER-GAPS — no BOM rows for: Observer, 2 × CAN-PERIPH-GW-1, node pouches, FE can, epoxy (250.6 g estimated in the ledger); add rows and weigh
 - [ ] ★ LEDGER-STATUS — owner confirm: PRINT-PYLON excluded (no Rev T source), PRINT-PISTONS kept (no source), belly panels kept (roof battery), Faraday cage 1 of 4 bays
+- [ ] ★ WEIGHT-13LB — owner target 13.0 lbm heaviest config (2026-10-19). Applied: bookkeeping −126 g, BOM cuts (pistons, Faraday cages→pouches, cradle, belly panel, tube shafts) + FE can 0.5 mm, battery → 624 g pack. Heaviest now ≈ 13.8 lbm with the pack; still open: nacelle pod foam core (−115 g, plan 2026-10-03-001), FE PDB forward re-route (−60 g), and ≈ 0.4 lbm more to find
+- [ ] ★ BATT-01 — verify the Admiral Pro EPR40006PRO listing (624 g, 139×44×48, 60C) on a live page and weigh a pack
+- [ ] ★ BATT-02 — grow the battery cradle from 142×50×38 to fit a real 6S 4000 pack (≈ 139×44×48); re-prove cargo layout (chin nodes, spool, Observer)
+- [ ] ★ PWR-CONN-01 — WARNING: battery/FE PDB path is specified XT60 at ~150 A hover; move to XT90 / AS150 class (fire risk)
+- [ ] FE-CAN-05 — EMC pass to confirm the 0.5 mm FE can (low-frequency H-field absorption halves vs 1.0 mm)
 - [ ] REF-NCEES-009 version — confirm FE Reference Handbook version and the Dynamics section numbers cited in `REFERENCES.md`
 - [ ] ★ ASM-EXPORT-01 — `tools/export_assembly_meshes.py` double-applies placements (stbd tilt worm/wheel exported at dX −178.4 not −89.2); census sees them outside the hull
 - [x] MA-5 — CLOSED 2026-09-15: standoff pads removed with the worm-drive bracket (−53.5 g + 23.4 g bosses)

@@ -229,8 +229,20 @@ H_DEF_DUCT   = 5.70;        // mm, fired ductile bow at full stroke, on
 SOCK_CLR     = 0.65;        // socket bore diametral clearance over wire d
 
 // Thigh cylinder cluster (structural section: sizing script "2x14 @ 18")
-THIGH_CYL_D  = 14.0;        // main cylinder OD
-THIGH_CYL_C  = 18.0;        // main cylinder centre spacing (in swing plane)
+// THIGH_VARIANT (LG-REMASS, 2026-10-19; owner evaluating, default unchanged):
+//   "baseline" -- Rev R6 14 mm cylinders @ 18 mm, 6 mm bores from 20 mm out.
+//   "grown"    -- 17 mm cylinders @ 22 mm: ~1.9x section modulus, all printed.
+//   "cf_core"  -- baseline envelope; the bores run from the knee end through
+//                 the root lug and a 6 mm pultruded CF rod is bonded in each,
+//                 anchored by a 3 mm steel cross-pin through the lug so the
+//                 hip moment reaches the rods by bearing, not by bond alone.
+THIGH_VARIANT = "baseline";
+THIGH_CYL_D  = (THIGH_VARIANT == "grown") ? 17.0 : 14.0;   // main cylinder OD
+THIGH_CYL_C  = (THIGH_VARIANT == "grown") ? 22.0 : 18.0;   // centre spacing, swing plane
+CF_ROD_D     = 6.0;         // cf_core: rod OD (bore = CF_ROD_D + 2 x 0.1 bond gap)
+CF_ROD_START = 6.0;         // cf_core: rod root station along the hip->knee axis
+CF_PIN_D     = 3.0;         // cf_core: steel cross-pin through lug + rod
+CF_PIN_AT    = 11.0;        // cf_core: cross-pin station along the axis
 THIGH_BORE_D = 6.0;         // LG-18: axial bore through each main cylinder.
                             // MUST equal THIGH_BORE_D in
                             // tools/landing_gear_r6_sizing.py, which
@@ -725,7 +737,18 @@ module leg_frame() {
         // along the thigh, so the CRITICAL section at the hip -- where the
         // bending moment is greatest -- stays SOLID.  The 1.09x margin from
         // the sizing script applies the bored section at the full hip moment.
-        if (THIGH_BORE_D > 0)
+        if (THIGH_VARIANT == "cf_core") {
+            // Rod bores run through the root lug to CF_ROD_START (clear of the
+            // hub: rod edge at perp 9 - 3.1 = 5.9 > HUB_D/2 4.5), out the knee.
+            for (s = [-1, 1])
+                rod_between(CF_ROD_START * axis + s * THIGH_CYL_C / 2 * perp,
+                            KNEE + 4 * axis + s * THIGH_CYL_C / 2 * perp,
+                            CF_ROD_D + 0.2);
+            // Cross-pin bore through the lug and both rods, along the pin (Y).
+            for (s = [-1, 1])
+                ycyl(CF_PIN_AT * axis + s * THIGH_CYL_C / 2 * perp, LUG_W + 0.2,
+                     CF_PIN_D + 0.1);
+        } else if (THIGH_BORE_D > 0)
             for (s = [-1, 1])
                 rod_between(20 * axis + s * THIGH_CYL_C / 2 * perp,
                             KNEE + 4 * axis + s * THIGH_CYL_C / 2 * perp,
@@ -1139,9 +1162,25 @@ module bay() {
 // MODULE: leg_moving(flex) -- leg frame + foot as one rigid group, rotated
 // flex deg into flexion about the hip pin (foot swings up-outboard).
 // ---------------------------------------------------------------------------
+// cf_core inserts (procured, not printed): CF rods + steel cross-pins.
+module thigh_cf_inserts() {
+    axis = KNEE / norm(KNEE);
+    perp = [-axis[2], 0, axis[0]];
+    for (s = [-1, 1]) {
+        color([0.05, 0.05, 0.05])
+            rod_between(CF_ROD_START * axis + s * THIGH_CYL_C / 2 * perp,
+                        KNEE + 2 * axis + s * THIGH_CYL_C / 2 * perp, CF_ROD_D);
+        color("Silver")
+            ycyl(CF_PIN_AT * axis + s * THIGH_CYL_C / 2 * perp, LUG_W, CF_PIN_D);
+    }
+}
+
+LEG_ALPHA = 0.95;           // render-only: <1 shows the CF core through the frame
+
 module leg_moving(flex) {
     rotate([0, -flex, 0]) {
-        color("DimGray", 0.95) leg_frame();
+        color("DimGray", LEG_ALPHA) leg_frame();
+        if (THIGH_VARIANT == "cf_core") thigh_cf_inserts();
         // foot: print frame -> assembly (sole at GROUND_Z, toe +X outboard)
         color([0.15, 0.15, 0.15], 0.95)
             translate([ANKLE[0], ANKLE[1], GROUND_Z]) foot();

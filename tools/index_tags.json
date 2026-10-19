@@ -17279,8 +17279,7 @@
     "tools/auw_ledger.py": {
       "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
       "tags": [
-        "build-tooling",
-        "emi-hardening"
+        "build-tooling"
       ],
       "archived": false
     },
@@ -17327,6 +17326,15 @@
       "tags": [
         "bom",
         "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/bom_edit_weight_pass_13lbm.py": {
+      "description": "Apply the 2026-10-19 weight pass (13.0 lbm target) to the Rev T BOM.",
+      "tags": [
+        "bom",
+        "build-tooling",
+        "emi-hardening"
       ],
       "archived": false
     },
@@ -17601,6 +17609,13 @@
       ],
       "archived": false
     },
+    "tools/lg_thigh_variants.py": {
+      "description": "Serenity UAV -- landing-gear thigh: grown printed section vs anchored CF-rod core.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/lg_wire_layout_study.py": {
       "description": "Two-row energy-absorber wire layout pre-filter (BHD-02g / BHD-02k).",
       "tags": [
@@ -17777,6 +17792,13 @@
       "tags": [
         "build-tooling",
         "security"
+      ],
+      "archived": false
+    },
+    "tools/placement_audit.py": {
+      "description": "Serenity UAV -- verify every placed part sits where it belongs in the hull frame.",
+      "tags": [
+        "build-tooling"
       ],
       "archived": false
     },
@@ -18498,7 +18520,7 @@
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
-      "tools/auw_ledger.py",
+      "tools/bom_edit_weight_pass_13lbm.py",
       "tools/gen_todo_from_wbs.py",
       "tools/nacelle_mass_cg.py",
       "tools/precommit_index.py",
@@ -20140,6 +20162,7 @@
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
       "tools/bom_edit_tilt_controller.py",
+      "tools/bom_edit_weight_pass_13lbm.py",
       "tools/compact_bom_entries.py"
     ],
     "landing-gear": [
@@ -22603,6 +22626,7 @@
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
       "tools/bom_edit_tilt_controller.py",
+      "tools/bom_edit_weight_pass_13lbm.py",
       "tools/build_head_shell.py",
       "tools/build_landing_gear_views.py",
       "tools/cargo_bay_envelope.py",
@@ -22638,6 +22662,7 @@
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",
       "tools/lg_collar_integrity.py",
+      "tools/lg_thigh_variants.py",
       "tools/lg_wire_layout_study.py",
       "tools/middle_layout_fit.py",
       "tools/mirror_claude_memory.py",
@@ -22660,6 +22685,7 @@
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
       "tools/open_mating_faces.py",
+      "tools/placement_audit.py",
       "tools/precommit_doc_wording.py",
       "tools/precommit_index.py",
       "tools/precommit_kicad_load.py",

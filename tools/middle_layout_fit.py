@@ -99,9 +99,14 @@ REAR_RESERVED_Y = MID_Y1  # nothing of this layout may pass the rear face (Phase
 # FlightEngineer.md, which does not fit (see module docstring).
 FE_BOARD_X, FE_BOARD_Z = 65.0, 90.0
 FE_HOLE_DX, FE_HOLE_DZ = 57.0 / 2, 82.0 / 2  # +-28.5 x +-41 from the board centre
-FE_CAN_X, FE_CAN_Z, FE_CAN_Y = 75.0, 94.0, 28.0  # external; 1.0 mm 6061-T6, R12 Y-parallel edges
+FE_CAN_X, FE_CAN_Z, FE_CAN_Y = 75.0, 94.0, 28.0  # external; 6061-T6, R12 Y-parallel edges
 FE_CAN_R = 12.0
-FE_WALL = 1.0
+# Wall 1.0 -> 0.5 mm (weight pass 2026-10-19, -31.8 g).  Shielding is still
+# absorption-dominated above ~10 MHz (Al skin depth ~26 um at 10 MHz -> >150 dB
+# absorption at 0.5 mm).  The trade is low-frequency magnetic absorption near
+# the PDB's buck switching frequency, which halves in dB with the wall -- WBS
+# FE-CAN-05 asks the EMC pass to confirm.  External envelope unchanged.
+FE_WALL = 0.5
 FE_STANDOFF = 4.0
 FE_PCB_T = 1.6
 FE_COMP_MAX = 16.0  # ICD: tallest component above the board top face

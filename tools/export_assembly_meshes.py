@@ -47,8 +47,12 @@ def main(out_dir: str) -> None:
     for obj in doc.Objects:
         if obj.TypeId != "Mesh::Feature":
             continue
+        # A Mesh::Feature's Mesh property already carries obj.Placement: its
+        # copy's points are in the placed position.  Transforming the copy by
+        # the Placement again double-applied every non-identity placement
+        # (stbd tilt worm/wheel exported at dX -178.4 instead of -89.2;
+        # ASM-EXPORT-01, verified 2026-10-19 under FreeCAD 1.0).
         mesh = obj.Mesh.copy()
-        mesh.transform(obj.Placement.toMatrix())
         safe = "".join(c if c.isalnum() or c in "_-" else "_" for c in obj.Label)
         path = os.path.join(out_dir, safe + ".stl")
         mesh.write(path)

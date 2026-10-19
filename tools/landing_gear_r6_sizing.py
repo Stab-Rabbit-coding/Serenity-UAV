@@ -92,7 +92,13 @@ def _ledger() -> tuple[float, float, float, float]:
     return cfg["mass_g"] / 1000.0, cfg["cg"][1], cfg["cg"][2], cfg["k_pitch_mm"]
 
 
-M_AUW_KG, Y_CG, Z_CG, K_PITCH = _ledger()
+LEDGER_AUW_KG, Y_CG, Z_CG, K_PITCH = _ledger()
+# DESIGN mass: owner target 13.0 lbm (2026-10-19, "go to 13.0 lbm; aggressively
+# pursue ways to cut weight without capability").  The schedule is solved at
+# the target; the run FAILS while the measured ledger is heavier than it,
+# because the gear is only valid once the weight pass has been achieved.
+DESIGN_AUW_LBM = 13.0
+M_AUW_KG = DESIGN_AUW_LBM * 0.45359237
 G = 9.807                 # m/s^2
 
 FT = 0.3048               # m per ft
@@ -502,8 +508,9 @@ def main() -> None:
     print("=" * 78)
     print("Serenity UAV landing gear Rev R6 sizing -- hip-pivot canonical leg")
     print("=" * 78)
-    print(f"AUW {M_AUW_KG:.3f} kg ({M_AUW_KG/0.45359:.2f} lbm), weight "
-          f"{w_n:.1f} N ({w_n/4.448:.2f} lbf)")
+    print(f"DESIGN AUW {M_AUW_KG:.3f} kg ({DESIGN_AUW_LBM:.2f} lbm, owner target), "
+          f"weight {w_n:.1f} N ({w_n/4.448:.2f} lbf); measured ledger "
+          f"{LEDGER_AUW_KG:.3f} kg ({LEDGER_AUW_KG/0.45359237:.2f} lbm, {LEDGER_CONFIG})")
     print(f"Feet Y: fore {Y_FOOT_FORE:+.0f} / aft {Y_FOOT_AFT:+.0f} mm; "
           f"CG Y {Y_CG:+.1f} mm; wheelbase {WHEELBASE:.0f} mm")
     print(f"Static share per leg: aft {share_aft*100:.1f}%  "
@@ -597,12 +604,15 @@ def main() -> None:
                   f"rotation {rot:4.1f} deg, decel tail-down/level "
                   f"{g_taildown:5.1f} / {g_level:5.1f} g{flag}")
 
-    # Spring wires: elastic-phase, sized so spring pair absorbs the
-    # ordinary-hard-landing energy fully elastically (Rev R5 3.51 J/leg
-    # kept), solved against the design variant.
-    u_spring_leg = 3.51
+    # Spring wires: elastic phase.  ORDINARY landing = the LG-06 protocol,
+    # a 1.5 ft drop at the corner's static share (docs/LANDING_GEAR_ANALYSIS.md
+    # LG-06), now at the WORST corner's ledger share rather than a quarter.
+    # Owner rule 2026-10-19: an ordinary landing must stop inside the hover
+    # nozzle-tip clearance; only the crash case may put the flaps down.
+    share_worst = max(share_aft, share_fore)
+    u_spring_leg = share_worst * M_AUW_KG * G * 1.5 * FT
     u_spring_wire = u_spring_leg / 2.0
-    f_leg_el = 350.0
+    f_leg_el = u_spring_leg * 1000.0 / NOZZLE_TIP_CLEAR_3IN
     p_spring = f_leg_el * r_h_design / (2.0 * R_WIRE)
     d_s = (16.0 * p_spring * H0 / (SIGMA_WORK_SPRING * math.pi)) ** (1 / 3.0)
     stroke_s = u_spring_wire * 1000.0 / p_spring

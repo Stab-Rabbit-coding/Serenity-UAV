@@ -167,8 +167,6 @@ PRINTED = [
      ("st", (X_CL, -46.5, -78.0), "foot station Y_FOOT_FORE (landing_gear_r6_sizing)")),
     ("PRINT-LG-FOOT", "fuselage/landing-gear/lg_r6_common_foot.stl", 2,
      ("st", (X_CL, 135.0, -78.0), "foot station Y_FOOT_AFT (landing_gear_r6_sizing)")),
-    ("PRINT-CARGO-CRADLE", "fuselage/cargo/cargo_cradle_autolatch.stl", 1,
-     ("st", (X_CL, clf.HOIST_Y, 40.0), "ESTIMATE: payload station (placement unvalidated)")),
     ("PRINT-GPS-RETENTION", "fuselage/cargo/cargo_gps_retention_ring.stl", 1,
      ("st", (X_CL, 110.0, 145.0), "ESTIMATE: GPS cups Z >= 139 over the aft strip")),
     ("PRINT-FPV-BEZEL", "fuselage/cargo/cargo_fpv_bezel.stl", 1,
@@ -187,8 +185,6 @@ PRINTED = [
      ("st", DOOR_ST[0], DOOR_ST[1])),
     ("PRINT-DORSAL-ANTENNA-FIN", "fuselage/dorsal_antenna_fin.stl", 1,
      ("st", (X_CL, 0.0, 170.0), "ESTIMATE: dorsal, cargo")),
-    ("PRINT-BELLY-PANEL", "fuselage/belly_panel.stl", 2,
-     ("st", (X_CL, 55.0, 2.0), "ESTIMATE: belly; status after D-T5-1 roof battery UNVERIFIED")),
 ]
 
 # Non-printed installed rows: ref -> (qty, station, source).  A station of
@@ -234,11 +230,9 @@ INSTALLED = {
     "PRINT-CARGO-WINCH-FAIRLEAD": (1, WINCH_ST),
     "PRINT-NODE-SADDLE": (2, NODE_ST["aft"]),           # SCAD only, no STL yet
     "PRINT-HALL-HUB": (2, "pivot"),                     # no STL in tree: BOM mass
-    "PRINT-PISTONS": (2, "pivot"),                      # decorative fairing, no source
     "FOAM-GASKET-CARGO": (1, DOOR_ST),
     "PIN-3X10": (2, DOOR_ST),
     "CF-BAR-6X3": (1, KEEL_ST),
-    "CF-PLATE-2MM": (1, ((X_CL, 30.0, 80.0), "ring frame, cargo Y +30 (BOM note)")),
     "WIRE-6AWG": (1, WIRE_ST),
     "WIRE-10AWG": (1, WIRE_ST),
     "WIRE-28AWG-STP": (1, ((X_CL, 40.0, 90.0), "ESTIMATE: full-length signal run")),
@@ -252,14 +246,7 @@ INSTALLED = {
     "BATT-STRAP-CAM": (2, BATT_ST),
     "BATT-FOAM-SILICONE": (1, BATT_ST),
     "MESH-VENT-SS": (1, BATT_ST),
-    "SCREW-M3-8-BTN": (4, ((X_CL, 55.0, 2.0), "belly panel")),
-    "SEAL-EPDM-2MM": (1, ((X_CL, 55.0, 2.0), "belly panel")),
-    "FAR-CAGE-AV": (1, NODE_ST["A"]),
-    "FAR-GASKET-AV": (1, NODE_ST["A"]),
-    "FAR-FAN-40": (1, NODE_ST["A"]),
-    "FAR-EMI-VENT-40": (2, NODE_ST["A"]),
-    "FAR-BOND-STRAP": (1, NODE_ST["A"]),
-    "FAR-FT-PANEL": (1, NODE_ST["A"]),
+    "FAR-BOND-STRAP": (4, "nodes"),                     # one per node-stack pouch
     "FAR-FERRITE-4MM": (16, ((X_CL, 60.0, 90.0), "ESTIMATE: cable exits, all nodes")),
     "SKIPPER-TILT-ENC-PCB": (2, "pivot"),
     "HALL-SCR-M2-BRASS": (8, "pivot"),
@@ -303,6 +290,8 @@ NACELLE = {
 }
 
 EXCLUDED = {
+    "CF-PLATE-2MM": "procurement sheet mass; installed thwarts + ring are GAP-style rows "
+                    "(CF_PLATE_PARTS)",
     "BATT-6S-2800": "alternate pack; the configurations pick ONE battery",
     "BATT-6S-4000": "the configurations pick ONE battery",
     "BRG-MF104ZZ": "50 mm pivot bearing, superseded by the trunnion (Rev T4)",
@@ -330,6 +319,21 @@ EXCLUDED = {
     "INSERT-M25-BRASS": "sector-gear mount inserts, deleted with the gear train",
     "PRINT-VOID-FORMER-CARGO": "PLA foam-pour tooling, removed after cure",
 }
+
+# CF-PLATE-2MM installed parts (docs/structural_analysis.md SS5.6: the cargo Y +30
+# ring retired 2026-08-25 for two thwarts, fore Y -40 / aft Y +118, 2 x 25 mm
+# (tools/wing_spar_carrythrough.py THWART_T/H) across ~170 mm; the rear Y +290
+# ring stays, ~10 mm band on the 397 mm inner profile).  CF laminate 1.6e-3
+# g/mm^3 ESTIMATE.  The BOM row carries two whole 200 x 300 sheets (114 g).
+RHO_CF = 1.6e-3
+CF_PLATE_PARTS = [
+    ("CF thwart fore (CF-PLATE-2MM)", 2.0 * 25.0 * 170.0 * RHO_CF, ((X_CL, -40.0, 80.0),
+     "structural_analysis SS5.6, thwart Y -40")),
+    ("CF thwart aft (CF-PLATE-2MM)", 2.0 * 25.0 * 170.0 * RHO_CF, ((X_CL, 118.0, 80.0),
+     "structural_analysis SS5.6, thwart Y +118")),
+    ("CF ring frame rear Y +290 (CF-PLATE-2MM)", 397.0 * 10.0 * 2.0 * RHO_CF,
+     ((X_CL, 290.0, 82.0), "structural_analysis SS5.2, ~10 mm band ESTIMATE")),
+]
 
 # Coverage gaps: installed items with no BOM row.  Stated estimates.
 GAPS = [
@@ -447,7 +451,8 @@ def station_items(bom: dict[str, dict]) -> list[Item]:
 
 
 def gap_items() -> list[Item]:
-    items = []
+    items = [Item(n, "CF-PLATE-2MM", m, st[0], None, f"ESTIMATE; {st[1]}", "BOM")
+             for n, m, st in CF_PLATE_PARTS]
     for name, m, st, src in GAPS:
         if st == "nodes":
             for site, (p, _s) in NODE_ST.items():

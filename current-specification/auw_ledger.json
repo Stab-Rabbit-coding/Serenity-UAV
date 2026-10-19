@@ -1,37 +1,37 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 70860565.11275306,
-   "T_W": 1.3204891661132843,
+   "I_pitch_gmm2": 65539555.932396516,
+   "T_W": 1.3826180724435686,
    "cg": [
-    -167.24145892544186,
-    40.70925297014055,
-    75.28960081201784
+    -167.12365710981234,
+    43.717588975268846,
+    76.05839211788633
    ],
-   "k_pitch_mm": 104.67447506540101,
-   "mass_g": 6467.300315031404
+   "k_pitch_mm": 103.00870480716127,
+   "mass_g": 6176.687669724178
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 71679754.11360413,
-   "T_W": 1.2760933607265839,
+   "I_pitch_gmm2": 65915496.85752444,
+   "T_W": 1.3608070460866866,
    "cg": [
-    -167.32915997203972,
-    39.777647748498254,
-    76.42296893063916
+    -167.1666656150684,
+    43.23301398228082,
+    76.57805137308833
    ],
-   "k_pitch_mm": 103.4928966794398,
-   "mass_g": 6692.300315031404
+   "k_pitch_mm": 102.48566048667121,
+   "mass_g": 6275.687669724178
   },
   "hover_4000": {
-   "I_pitch_gmm2": 71444668.00488932,
-   "T_W": 1.3208567912595515,
+   "I_pitch_gmm2": 65700609.069158,
+   "T_W": 1.411829821661974,
    "cg": [
-    -167.24073270570548,
-    39.226131343441324,
-    77.38632846199488
+    -167.06605534228243,
+    42.77306951302841,
+    77.61357631476773
    ],
-   "k_pitch_mm": 105.11963460762244,
-   "mass_g": 6465.500315031404
+   "k_pitch_mm": 104.21900871782256,
+   "mass_g": 6048.8876697241785
   }
  },
  "rows_hover": [
@@ -446,18 +446,6 @@
   {
    "cg": [
     -169.8,
-    55.5,
-    40.0
-   ],
-   "kind": "PRINT",
-   "mass_g": 80.63,
-   "name": "cargo_cradle_autolatch",
-   "ref": "PRINT-CARGO-CRADLE",
-   "source": "MEASURED mass; station ESTIMATE: payload station (placement unvalidated)"
-  },
-  {
-   "cg": [
-    -169.8,
     110.0,
     145.0
    ],
@@ -562,18 +550,6 @@
    "name": "dorsal_antenna_fin",
    "ref": "PRINT-DORSAL-ANTENNA-FIN",
    "source": "MEASURED mass; station ESTIMATE: dorsal, cargo"
-  },
-  {
-   "cg": [
-    -169.8,
-    55.0,
-    2.0
-   ],
-   "kind": "PRINT",
-   "mass_g": 49.07,
-   "name": "belly_panel",
-   "ref": "PRINT-BELLY-PANEL",
-   "source": "MEASURED mass; station ESTIMATE: belly; status after D-T5-1 roof battery UNVERIFIED"
   },
   {
    "cg": [
@@ -1297,30 +1273,6 @@
   },
   {
    "cg": [
-    60.5,
-    21.0,
-    66.9
-   ],
-   "kind": "BOM",
-   "mass_g": 25.0,
-   "name": "PRINT-PISTONS (port)",
-   "ref": "PRINT-PISTONS",
-   "source": "BOM Unit_Mass_g; at the port nacelle pivot"
-  },
-  {
-   "cg": [
-    -399.0,
-    21.0,
-    66.9
-   ],
-   "kind": "BOM",
-   "mass_g": 25.0,
-   "name": "PRINT-PISTONS (stbd)",
-   "ref": "PRINT-PISTONS",
-   "source": "BOM Unit_Mass_g; at the stbd nacelle pivot"
-  },
-  {
-   "cg": [
     -169.8,
     55.0,
     8.0
@@ -1354,18 +1306,6 @@
    "name": "CF-BAR-6X3",
    "ref": "CF-BAR-6X3",
    "source": "BOM Unit_Mass_g; ESTIMATE: keel bar mid-length"
-  },
-  {
-   "cg": [
-    -169.8,
-    30.0,
-    80.0
-   ],
-   "kind": "BOM",
-   "mass_g": 57.0,
-   "name": "CF-PLATE-2MM",
-   "ref": "CF-PLATE-2MM",
-   "source": "BOM Unit_Mass_g; ring frame, cargo Y +30 (BOM note)"
   },
   {
    "cg": [
@@ -1538,98 +1478,50 @@
   {
    "cg": [
     -169.8,
-    55.0,
-    2.0
-   ],
-   "kind": "BOM",
-   "mass_g": 1.2,
-   "name": "SCREW-M3-8-BTN",
-   "ref": "SCREW-M3-8-BTN",
-   "source": "BOM Unit_Mass_g; belly panel"
-  },
-  {
-   "cg": [
-    -169.8,
-    55.0,
-    2.0
-   ],
-   "kind": "BOM",
-   "mass_g": 2.0,
-   "name": "SEAL-EPDM-2MM",
-   "ref": "SEAL-EPDM-2MM",
-   "source": "BOM Unit_Mass_g; belly panel"
-  },
-  {
-   "cg": [
-    -169.8,
-    -260.0,
-    120.0
-   ],
-   "kind": "BOM",
-   "mass_g": 17.0,
-   "name": "FAR-CAGE-AV",
-   "ref": "FAR-CAGE-AV",
-   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
-  },
-  {
-   "cg": [
-    -169.8,
-    -260.0,
-    120.0
-   ],
-   "kind": "BOM",
-   "mass_g": 3.0,
-   "name": "FAR-GASKET-AV",
-   "ref": "FAR-GASKET-AV",
-   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
-  },
-  {
-   "cg": [
-    -169.8,
-    -260.0,
-    120.0
-   ],
-   "kind": "BOM",
-   "mass_g": 17.0,
-   "name": "FAR-FAN-40",
-   "ref": "FAR-FAN-40",
-   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
-  },
-  {
-   "cg": [
-    -169.8,
-    -260.0,
-    120.0
-   ],
-   "kind": "BOM",
-   "mass_g": 16.0,
-   "name": "FAR-EMI-VENT-40",
-   "ref": "FAR-EMI-VENT-40",
-   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
-  },
-  {
-   "cg": [
-    -169.8,
     -260.0,
     120.0
    ],
    "kind": "BOM",
    "mass_g": 10.0,
-   "name": "FAR-BOND-STRAP",
+   "name": "FAR-BOND-STRAP (node A)",
    "ref": "FAR-BOND-STRAP",
    "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
   },
   {
    "cg": [
     -169.8,
-    -260.0,
-    120.0
+    -29.0,
+    77.0
    ],
    "kind": "BOM",
-   "mass_g": 8.0,
-   "name": "FAR-FT-PANEL",
-   "ref": "FAR-FT-PANEL",
-   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+   "mass_g": 10.0,
+   "name": "FAR-BOND-STRAP (node chin)",
+   "ref": "FAR-BOND-STRAP",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)"
+  },
+  {
+   "cg": [
+    -169.8,
+    110.5,
+    105.6
+   ],
+   "kind": "BOM",
+   "mass_g": 10.0,
+   "name": "FAR-BOND-STRAP (node aft)",
+   "ref": "FAR-BOND-STRAP",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)"
+  },
+  {
+   "cg": [
+    -169.8,
+    189.0,
+    80.5
+   ],
+   "kind": "BOM",
+   "mass_g": 10.0,
+   "name": "FAR-BOND-STRAP (node simon)",
+   "ref": "FAR-BOND-STRAP",
+   "source": "BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)"
   },
   {
    "cg": [
@@ -1854,7 +1746,7 @@
     69.1
    ],
    "kind": "BOM",
-   "mass_g": 49.4,
+   "mass_g": 21.6,
    "name": "SHAFT-TILT-4MM",
    "ref": "SHAFT-TILT-4MM",
    "source": "BOM Unit_Mass_g; cargo_layout_fit SHAFT_Y/Z"
@@ -1970,6 +1862,42 @@
   {
    "cg": [
     -169.8,
+    -40.0,
+    80.0
+   ],
+   "kind": "BOM",
+   "mass_g": 13.6,
+   "name": "CF thwart fore (CF-PLATE-2MM)",
+   "ref": "CF-PLATE-2MM",
+   "source": "ESTIMATE; structural_analysis SS5.6, thwart Y -40"
+  },
+  {
+   "cg": [
+    -169.8,
+    118.0,
+    80.0
+   ],
+   "kind": "BOM",
+   "mass_g": 13.6,
+   "name": "CF thwart aft (CF-PLATE-2MM)",
+   "ref": "CF-PLATE-2MM",
+   "source": "ESTIMATE; structural_analysis SS5.6, thwart Y +118"
+  },
+  {
+   "cg": [
+    -169.8,
+    290.0,
+    82.0
+   ],
+   "kind": "BOM",
+   "mass_g": 12.7,
+   "name": "CF ring frame rear Y +290 (CF-PLATE-2MM)",
+   "ref": "CF-PLATE-2MM",
+   "source": "ESTIMATE; structural_analysis SS5.2, ~10 mm band ESTIMATE"
+  },
+  {
+   "cg": [
+    -169.8,
     -260.0,
     120.0
    ],
@@ -2022,7 +1950,7 @@
     78.8
    ],
    "kind": "GAP",
-   "mass_g": 98.62,
+   "mass_g": 66.81,
    "name": "FE can (1.0 mm 6061) + entry plate + hardware",
    "ref": "GAP",
    "source": "middle_layout_fit.py can_mass(), M_FE_PLATE, M_FE_HW; middle_layout_fit FE_CAN_*"
@@ -2070,17 +1998,17 @@
     109.0
    ],
    "kind": "BOM",
-   "mass_g": 750.0,
+   "mass_g": 624.0,
    "name": "BATT-6S-4000",
    "ref": "BATT-6S-4000",
    "source": "BOM; cargo_layout_fit BATT_*; solid box"
   }
  ],
  "subtotals_hover_g": {
-  "BOM": 2596.6800000000003,
-  "GAP": 250.6228,
+  "BOM": 2341.584,
+  "GAP": 218.8114,
   "NACELLE": 1852.758505451262,
-  "PRINT": 1765.4390095801427
+  "PRINT": 1635.7337642729167
  },
  "thrust_gf": 8540.0,
  "unclassified": []
