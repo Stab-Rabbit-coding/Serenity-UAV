@@ -136,6 +136,8 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
 - [Part XII-B — Connector Specifications](#part-xii-b--connector-specifications)
     - [REF-CONN-001: Samtec TSM series — 0.100in surface-mount terminal strip product data](#ref-conn-001-samtec-tsm-series--0100in-surface-mount-terminal-strip-product-data)
     - [REF-CONN-002: Pixhawk DS-009 — Pixhawk Connector Standard](#ref-conn-002-pixhawk-ds-009--pixhawk-connector-standard)
+    - [REF-CONN-003: JST GH series — 1.25 mm pitch wire-to-board connector (eGH)](#ref-conn-003-jst-gh-series--125-mm-pitch-wire-to-board-connector-egh)
+    - [REF-FAB-001: Sunstone Circuits (ASC Sunstone) — PCB fabrication capabilities and PCB Data Checklist](#ref-fab-001-sunstone-circuits-asc-sunstone--pcb-fabrication-capabilities-and-pcb-data-checklist)
     - [REF-SENSOR-041: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)](#ref-sensor-041-beagleboardorg-pocketbeagle-2--system-reference-manual-mechanical-board-and-header-dimensions)
     - [REF-SENSOR-042: Samtec SSM / SSW / TSW / TSM — .100 in socket and terminal strips (footprint, drawing, qualification)](#ref-sensor-042-samtec-ssm--ssw--tsw--tsm--100-in-socket-and-terminal-strips-footprint-drawing-qualification)
     - [REF-SENSOR-043: Murata BLM15EX331SN1 — 0402 chip ferrite bead specification JENF243A-0023M-01](#ref-sensor-043-murata-blm15ex331sn1--0402-chip-ferrite-bead-specification-jenf243a-0023m-01)
@@ -156,6 +158,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-058: ASIX AX88772E Demo Board schematic V1.01](#ref-sensor-058-asix-ax88772e-demo-board-schematic-v101)
     - [REF-SENSOR-059: ECS Inc. ECX-32 SMD crystal data sheet](#ref-sensor-059-ecs-inc-ecx-32-smd-crystal-data-sheet)
     - [REF-SENSOR-060: ASIX AX88772E / AX88772D demo board BOM (2025-11-28)](#ref-sensor-060-asix-ax88772e--ax88772d-demo-board-bom-2025-11-28)
+    - [REF-SENSOR-061: YAGEO (Pulse Electronics) TC1G00 PulseChip LAN transformer, TC002.C (10/25)](#ref-sensor-061-yageo-pulse-electronics-tc1g00-pulsechip-lan-transformer-tc002c-1025)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -2954,6 +2957,18 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Cited in** | `gen_pilot_sch.py` AX88772E support block comment; `avionics/kicad/Pilot/Pilot.md` update 2026-10-18 |
 | **Openness / sourcing** | No confidentiality marking. The BOM's own MPNs are not adopted where their maker or data sheet could not be verified (beads, crystal); the inductor MPN is open (avionics/WBS.md) |
 
+### REF-SENSOR-061: YAGEO (Pulse Electronics) TC1G00 PulseChip LAN transformer, TC002.C (10/25)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | YAGEO Group (Pulse Electronics), PulseChip LAN Transformer Overview, TC002.C (10/25) |
+| **Official access** | <https://yageogroup.com/content/datasheet/asset/file/DATASHEET_TC002> (HTTP 200, 2026-10-19) |
+| **Local copy** | `avionics/datasheets/Pulse_TC002_PulseChip.pdf` (MD5 d5be87a985f572a53d89cfc2cf935cd5) |
+| **Section applied** | p. 1 electrical table, row TC1G00 (240 uH min at 100 kHz / 0.1 V, 1CT:1CT, 1500 Vac isolation for 60 s at 1 mA max, -40 to +85 C); p. 2 Fig. A mechanical drawing, recommended footprint 1, schematic and pad numbering (winding 2-(8/7)-1 and 5-(3/4)-6, centre taps shorted on the PCB) |
+| **Cited in** | Pilot `T-RMII2-TX/-RX`, `T-USB1-TX/-RX` (`gen_pilot_sch.py`); land `Pulse_TC1G00_PulseChip_4.7x3.2mm` (`gen_pilot_footprints.py`) |
+| **Note** | The datasheet characterises the part for 1000BASE-T and faster. 10/100 suitability and the footprint transcription need engineer-of-record confirmation (avionics/WBS.md) |
+| **Openness / sourcing** | Public, no NDA. YAGEO is Taiwan-domiciled |
+
 ### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
 
 | Field | Value |
@@ -3230,6 +3245,29 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Local copy** | none: the licence ties redistribution and implementation to an adopter agreement, so the document is cited, not archived |
 | **Section applied** | "Connector Series" (JST GH); "Basic GPS port" 6-pin (VCC, TX, RX, I2C1 SCL, I2C1 SDA, GND); "SPI port" 7-pin (VCC, SPI_EXT_SCK, SPI_EXT_MISO, SPI_EXT_MOSI, !SPI_SS1, !SPI_SS2, GND); "I2C port" 1.5 k pull-ups on the autopilot side; VCC 2.5 A recommendation (NOT met: 0.35 A PTC per port, recorded deviation) |
 | **Cited in** | Pilot `J-GPS`, `J-SPI` (`gen_pilot_sch.py`). Pilot is pin-compatible only and does not use the Pixhawk trademark. |
+
+### REF-CONN-003: JST GH series — 1.25 mm pitch wire-to-board connector (eGH)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | J.S.T. Mfg. Co., Ltd., GH series catalogue sheet |
+| **Official access** | requires verification: <https://www.jst-mfg.com/product/pdf/eng/eGH.pdf> returned HTTP 403 to a scripted request on 2026-10-19, so the URL is not validated |
+| **Local copy** | `avionics/datasheets/eGH.pdf` (MD5 e6714f681357e4fed90fc40166d59701) |
+| **Section applied** | Ratings: 1.0 A AC/DC (AWG 26), 50 V AC/DC, -25 to +85 C including temperature rise, conductor AWG 30 to 26, 1.25 mm pitch |
+| **Cited in** | `avionics/kicad/Pilot/docs/Pilot-ICD-External.md` |
+| **Openness / sourcing** | Public catalogue sheet, no NDA. JST is Japan-domiciled |
+
+### REF-FAB-001: Sunstone Circuits (ASC Sunstone) — PCB fabrication capabilities and PCB Data Checklist
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | American Standard Circuits / Sunstone Circuits (Sunstone Circuits, an AS9100D / ISO 9001 / ITAR-registered US fabricator) |
+| **Official access** | <https://www.sunstone.com/capabilities> and <https://www.sunstone.com/resources/pcb-order-checklist> (HTTP 200, 2026-10-19). The checklist PDF is <https://qa-api.sunstone.com/uploads/PCB_Data_Checklist_2026_1f61edfc31.pdf> (HTTP 200, 2026-10-19; a "qa-api" host, so confirm it against the live page link before relying on it) |
+| **Local copy** | none: no redistribution licence is stated, so the checklist is cited, not archived (MD5 of the 2026-10-19 download: see `shasum` of `PCB_Data_Checklist_2026_1f61edfc31.pdf`, 179 628 bytes) |
+| **Section applied** | PCB Data Checklist (Gerber package, NC drill, board specifications, fabrication drawing, finish, special requirements, defaults: 150Tg FR-4, IPC-6012 Class 2, IPC-A-600 Class 2, satin green mask, white legend); capabilities page: layer counts 4 to 20 (6 is standard), copper 1 / 2 / 3 oz finished, board thickness 0.021 to 0.125 in |
+| **Not verified** | Outer-layer trace/space, minimum drill, annular ring, copper-to-edge and surface-finish limits: the detailed-capabilities tabs are loaded by script and were not retrievable. Inner-layer minimum trace/space by tier is verified (Limited Review 0.005 in; Online NRE 0.004 / 0.004 in at 1 oz; Custom 0.003 / 0.003 in at 1 oz) |
+| **Cited in** | `avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md` |
+| **Openness / sourcing** | US-domiciled fabricator, public pages, no NDA |
 
 ## Part XIII — Telecommunications Standards
 

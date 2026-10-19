@@ -11384,6 +11384,134 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/docs/Pilot-Design-Review.md": {
+      "description": "Pilot Design Review Package",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/Pilot-HDD.md": {
+      "description": "Pilot Hardware Design Description",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/Pilot-ICD-External.md": {
+      "description": "Pilot Interface Control Document: External Connectors",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md": {
+      "description": "Pilot Interface Control Document: PocketBeagle 2 Industrial Headers",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md": {
+      "description": "Pilot Manufacturing Transfer Package",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/README.md": {
+      "description": "Pilot documentation set",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/analysis/emc.json": {
+      "description": "JSON data (13 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/analysis/pcb.json": {
+      "description": "JSON data (36 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/analysis/schematic.json": {
+      "description": "JSON data (51 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/analysis/thermal.json": {
+      "description": "JSON data (8 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.json": {
+      "description": "JSON data (1 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.json": {
+      "description": "JSON data (1 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/figures/schematics/Pilot.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch": {
       "description": "KiCad schematic",
       "tags": [
@@ -11585,6 +11713,14 @@
       "tags": [
         "avionics-hardware",
         "emi-hardening",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/gen_pilot_icd.py": {
+      "description": "gen_pilot_icd.py \u2014 Generate the Pilot Interface Control Documents from the design data.",
+      "tags": [
+        "avionics-hardware",
         "pcb-design"
       ],
       "archived": false
@@ -17871,6 +18007,12 @@
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/docs/Pilot-Design-Review.md",
+      "avionics/kicad/Pilot/docs/Pilot-HDD.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-External.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
+      "avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md",
+      "avionics/kicad/Pilot/docs/README.md",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/README.md",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md",
       "avionics/kicad/README.md",
@@ -18440,6 +18582,8 @@
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/docs/Pilot-HDD.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
@@ -21102,6 +21246,21 @@
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/docs/Pilot-Design-Review.md",
+      "avionics/kicad/Pilot/docs/Pilot-HDD.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-External.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
+      "avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md",
+      "avionics/kicad/Pilot/docs/README.md",
+      "avionics/kicad/Pilot/docs/analysis/emc.json",
+      "avionics/kicad/Pilot/docs/analysis/pcb.json",
+      "avionics/kicad/Pilot/docs/analysis/schematic.json",
+      "avionics/kicad/Pilot/docs/analysis/thermal.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.svg",
+      "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.svg",
+      "avionics/kicad/Pilot/docs/figures/schematics/Pilot.svg",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/B_present_0pins.kicad_sch",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/C_absent_1pin.kicad_sch.crashes",
@@ -21127,6 +21286,7 @@
       "avionics/kicad/Pilot/scripts/fence_pgnd_pilot.py",
       "avionics/kicad/Pilot/scripts/finish_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_icd.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
       "avionics/kicad/Pilot/scripts/grid_route_pilot.py",
@@ -21836,6 +21996,21 @@
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/docs/Pilot-Design-Review.md",
+      "avionics/kicad/Pilot/docs/Pilot-HDD.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-External.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
+      "avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md",
+      "avionics/kicad/Pilot/docs/README.md",
+      "avionics/kicad/Pilot/docs/analysis/emc.json",
+      "avionics/kicad/Pilot/docs/analysis/pcb.json",
+      "avionics/kicad/Pilot/docs/analysis/schematic.json",
+      "avionics/kicad/Pilot/docs/analysis/thermal.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.svg",
+      "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.svg",
+      "avionics/kicad/Pilot/docs/figures/schematics/Pilot.svg",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/B_present_0pins.kicad_sch",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/C_absent_1pin.kicad_sch.crashes",
@@ -21861,6 +22036,7 @@
       "avionics/kicad/Pilot/scripts/fence_pgnd_pilot.py",
       "avionics/kicad/Pilot/scripts/finish_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_icd.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
       "avionics/kicad/Pilot/scripts/grid_route_pilot.py",
