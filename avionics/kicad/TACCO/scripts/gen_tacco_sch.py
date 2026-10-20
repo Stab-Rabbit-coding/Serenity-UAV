@@ -801,7 +801,7 @@ ICS += [
 # ---------------------------------------------------------------------------
 # ---------------------------------------------------------------------------
 # PocketBeagle 2 P1/P2 map — REBUILT 2026-09-29 from the BeagleBoard PocketBeagle 2
-# schematic sheet "016_BP P1 & P2" (avionics/datasheets/pocketbeagle2_sch.pdf), see
+# schematic sheet "016_BP P1 & P2" (avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf), see
 # avionics/kicad/PB2_HEADER_PINMAP.md for the ball-by-ball table and the TACCO
 # allocation.  The previous tables were not derived from the PB2 schematic (GND
 # on P1-1 = VIN, MCAN0 on the GND pins, SDIO on MDC/PRU balls) and would have

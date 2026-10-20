@@ -214,7 +214,7 @@ x 128.3–137.6 mm, so GPS pins 1–9 are no longer inside the band.
 **Update 2026-10-10 (TPM header pins, S. Griffing decision; implemented by Claude
 Opus 5.5):** `TPM_RSTN` moved from PB2 P2-11 to **P1-28** (GPIO0_43, ball K22) and
 `TPM_IRQN` from P2-12 to **P1-29** (GPIO0_62, ball Y20), per the PocketBeagle 2 SRM
-§4.2 mux tables (`../../datasheets/pocketbeagle2_srm.pdf`).
+§4.2 mux tables (`../../datasheets/beagleboard/pocketbeagle2_srm.pdf`).
 - **Superseded 2026-10-17:** the PB2-I header re-map (top of this file) puts `TPM_IRQN` on
   P1-20 (ball Y24) and `DSHOT2` on P1-29; `gen_pilot_sch.py` `PB2_P1` is authoritative.
 - **Why:** the TPM sits over the P1 rail, 6–7 mm from the new pins, whereas P2-11/12 were

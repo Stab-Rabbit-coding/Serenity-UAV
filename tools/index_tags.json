@@ -7986,6 +7986,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/ad/21-100699a.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/adin1300.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8029,6 +8036,50 @@
       "archived": false
     },
     "avionics/datasheets/aon6558.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/asix/AX88179X_178A_772D_UEFI_v3.3.1_ARM_AARCH64_20260331.zip": {
+      "description": "Archived snapshot bundle",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/asix/AX88179X_178A_772D_UEFI_v3.3.1_X64_IA32_signed_20260331.zip": {
+      "description": "Archived snapshot bundle",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/asix/AX88772E_AX88772D_DEMO_BORAD_BOM_20251128.zip": {
+      "description": "Archived snapshot bundle",
+      "tags": [
+        "avionics-hardware",
+        "bom"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/asix/AX88772E_DEMO_BOARD_SCHEMATIC_V101.zip": {
+      "description": "Archived snapshot bundle",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/asix/AX88772E_Datasheet_v103.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/asix/AX88772E_USB-to-FastEthernet_Application_DesignNote_v110-1.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8119,7 +8170,28 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/central-semiconductor/2N3866_SERIES.PDF": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/cmx994ds.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/coilcraft/0805cs.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/coilcraft/0805hq.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8239,6 +8311,62 @@
       "archived": false
     },
     "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/microchip/mcp1703.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/microchip/mcp4901-4911-4921.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/microchip/mcp4921.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex/987651-1223.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex/molex-104031.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex/molex-1040310811.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex/molex_105162-0001_drawing.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex/molex_105162-0001_spec.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8372,6 +8500,48 @@
       "archived": false
     },
     "avionics/datasheets/rfm95w-datasheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/samtec/samtec_ssm-dv_drawing.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/samtec/samtec_ssm_catalog.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/samtec/samtec_ssm_footprint.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/samtec/samtec_tsm-dv-footprint.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/samtec/samtec_tsm_catalog.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/samtec/samtec_tsw-sxx_drawing.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8808,6 +8978,13 @@
       "archived": false
     },
     "avionics/datasheets/ti/wl1837mod.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/transformer_lan_com_alt4532m_ecm.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -13111,6 +13288,14 @@
     },
     "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod": {
       "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/symbols/footprints/alt4532m-201.step": {
+      "description": "3D STEP model",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -19790,6 +19975,7 @@
       "archives/bom_revQ.json",
       "archives/bom_revR.csv",
       "archives/docs-superseded/bom_revQ.csv",
+      "avionics/datasheets/asix/AX88772E_AX88772D_DEMO_BORAD_BOM_20251128.zip",
       "avionics/kicad/Observer/Observer_som_pinmap.csv",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
       "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
@@ -20823,6 +21009,7 @@
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/TRIHAT-1/TRIHAT-1.kicad_sch",
       "avionics/datasheets/KiCADv6/2026-10-17_14-51-28.kicad_sym",
       "avionics/datasheets/KiCADv6/footprints.pretty/SIL0010D-MFG.kicad_mod",
+      "avionics/datasheets/asix/AX88772E_DEMO_BOARD_SCHEMATIC_V101.zip",
       "avionics/datasheets/ul_1040310811/KiCADv6/2026-10-05_14-13-00.kicad_sym",
       "avionics/datasheets/ul_1040310811/KiCADv6/footprints.pretty/104031-0811_MOL.kicad_mod",
       "avionics/kicad/.gitignore",
@@ -21244,6 +21431,7 @@
       "avionics/kicad/symbols/SLB9672_TPM.kicad_sym",
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
+      "avionics/kicad/symbols/footprints/alt4532m-201.step",
       "avionics/kicad/symbols/footprints/dim_MS_mlcc_all.jpg",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
       "avionics/kicad/tools/swap_1553_hi6138.py",
@@ -21337,6 +21525,7 @@
       "avionics/datasheets/X2YDatasheet.pdf",
       "avionics/datasheets/X2Y_15-2237598.pdf",
       "avionics/datasheets/a-ssm_sm.pdf",
+      "avionics/datasheets/ad/21-100699a.pdf",
       "avionics/datasheets/adin1300.pdf",
       "avionics/datasheets/adm2795e.pdf",
       "avionics/datasheets/ak7455-en-datasheet-myakm.pdf",
@@ -21344,6 +21533,12 @@
       "avionics/datasheets/aon6260.pdf",
       "avionics/datasheets/aon6554.pdf",
       "avionics/datasheets/aon6558.pdf",
+      "avionics/datasheets/asix/AX88179X_178A_772D_UEFI_v3.3.1_ARM_AARCH64_20260331.zip",
+      "avionics/datasheets/asix/AX88179X_178A_772D_UEFI_v3.3.1_X64_IA32_signed_20260331.zip",
+      "avionics/datasheets/asix/AX88772E_AX88772D_DEMO_BORAD_BOM_20251128.zip",
+      "avionics/datasheets/asix/AX88772E_DEMO_BOARD_SCHEMATIC_V101.zip",
+      "avionics/datasheets/asix/AX88772E_Datasheet_v103.pdf",
+      "avionics/datasheets/asix/AX88772E_USB-to-FastEthernet_Application_DesignNote_v110-1.pdf",
       "avionics/datasheets/atf16v8bql.pdf",
       "avionics/datasheets/ax5043-d.pdf",
       "avionics/datasheets/ax5043.pdf",
@@ -21356,7 +21551,10 @@
       "avionics/datasheets/bsh-bth.pdf",
       "avionics/datasheets/bst-bmp388-ds001.pdf",
       "avionics/datasheets/bth-xxx-xx-x-d-xx-footprint.pdf",
+      "avionics/datasheets/central-semiconductor/2N3866_SERIES.PDF",
       "avionics/datasheets/cmx994ds.pdf",
+      "avionics/datasheets/coilcraft/0805cs.pdf",
+      "avionics/datasheets/coilcraft/0805hq.pdf",
       "avionics/datasheets/ds-000347-icm-42688-p-v1.6.pdf",
       "avionics/datasheets/eGH.pdf",
       "avionics/datasheets/esd101-b1.pdf",
@@ -21374,6 +21572,14 @@
       "avionics/datasheets/johanson-2450bp15e0100.pdf",
       "avionics/datasheets/max42408-max42410.pdf",
       "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf",
+      "avionics/datasheets/microchip/mcp1703.pdf",
+      "avionics/datasheets/microchip/mcp4901-4911-4921.pdf",
+      "avionics/datasheets/microchip/mcp4921.pdf",
+      "avionics/datasheets/molex/987651-1223.pdf",
+      "avionics/datasheets/molex/molex-104031.pdf",
+      "avionics/datasheets/molex/molex-1040310811.pdf",
+      "avionics/datasheets/molex/molex_105162-0001_drawing.pdf",
+      "avionics/datasheets/molex/molex_105162-0001_spec.pdf",
       "avionics/datasheets/murata/Murata_BLM15EX_JENF243A-0023M-01.pdf",
       "avionics/datasheets/murata/TYPE2EL.pdf",
       "avionics/datasheets/murata/TYPE2LL.pdf",
@@ -21393,6 +21599,12 @@
       "avionics/datasheets/readme.txt",
       "avionics/datasheets/rfd900x-datasheet.pdf",
       "avionics/datasheets/rfm95w-datasheet.pdf",
+      "avionics/datasheets/samtec/samtec_ssm-dv_drawing.pdf",
+      "avionics/datasheets/samtec/samtec_ssm_catalog.pdf",
+      "avionics/datasheets/samtec/samtec_ssm_footprint.pdf",
+      "avionics/datasheets/samtec/samtec_tsm-dv-footprint.pdf",
+      "avionics/datasheets/samtec/samtec_tsm_catalog.pdf",
+      "avionics/datasheets/samtec/samtec_tsw-sxx_drawing.pdf",
       "avionics/datasheets/si5351.pdf",
       "avionics/datasheets/slb9672.pdf",
       "avionics/datasheets/smaj-series-tvs-datasheet.pdf",
@@ -21455,6 +21667,7 @@
       "avionics/datasheets/ti/tps7a20.pdf",
       "avionics/datasheets/ti/tpsm82822.pdf",
       "avionics/datasheets/ti/wl1837mod.pdf",
+      "avionics/datasheets/transformer_lan_com_alt4532m_ecm.pdf",
       "avionics/datasheets/tsw-sxx.pdf",
       "avionics/datasheets/ul_1040310811.zip",
       "avionics/datasheets/ul_1040310811/1040310811.stl",
@@ -21968,6 +22181,7 @@
       "avionics/kicad/symbols/SLB9672_TPM.kicad_sym",
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
+      "avionics/kicad/symbols/footprints/alt4532m-201.step",
       "avionics/kicad/symbols/footprints/dim_MS_mlcc_all.jpg",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
       "avionics/kicad/tools/swap_1553_hi6138.py",

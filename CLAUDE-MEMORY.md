@@ -901,7 +901,7 @@ silicon despite sharing the MSPM0 name, package and pinout. The '350x has *no* C
 Secure Code (CSC), and without CSC there is no key store, no flash firewalls and no
 monotonic counter. The '351x has CSC and therefore all of them. Authority is TI
 **SLAAE29A** Table 1-2 (`M0G3x0x` column vs `M0Gx5 1x` column), local copy at
-`Open-Secure-ESC/docs/datasheets/slaae29a.pdf`. Do not generalise "MSPM0 security" across
+`Open-Secure-ESC/docs/datasheets/ti/slaae29a.pdf`. Do not generalise "MSPM0 security" across
 subfamilies. Datasheet **SLASFA6B** (`.../mspm0g3519-q1.pdf`) covers *both* G3518 and G3519.
 
 **How to apply:** the '3507→'3518 swap moved no wires — the RHB-32 pad map is identical —

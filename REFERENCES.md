@@ -2009,7 +2009,7 @@ synthesis that a non-TI MCU (e.g. RP2350) would require.
 | **Official product page** | <https://www.ti.com/product/MSPM0G3519-Q1>, <https://www.ti.com/product/MSPM0G3518-Q1> |
 | **Datasheet** | SLASFA6B, *MSPM0G351x-Q1 Automotive Mixed-Signal Microcontrollers With CAN-FD Interface*, Nov 2024, rev. Oct 2025 |
 | **Datasheet URL** | <https://www.ti.com/lit/ds/symlink/mspm0g3519-q1.pdf> |
-| **Local copy** | `avionics/datasheets/mspm0g3518-q1.pdf` |
+| **Local copy** | `avionics/datasheets/ti/mspm0g3518-q1.pdf` |
 | **Lifecycle status** | ACTIVE / PRODUCTION DATA |
 
 **Specifications applied in this design:**
@@ -2048,7 +2048,7 @@ REF-SENSOR-004 (MSPM0G3507) at the 2026-08-03 retarget — `MSPM0G3519-Q1` in RG
 |---|---|
 | **Manufacturer** | Texas Instruments |
 | **Documents** | SLAAE76E, SLAAET8A, SLAAE29A, SLAU846E, SLAZ742G |
-| **Local copies** | `avionics/datasheets/slaae76e.pdf`, `slaaet8a.pdf`, `slaae29a.pdf`, `slau846e.pdf`, `slaz742g.pdf` |
+| **Local copies** | `avionics/datasheets/ti/slaae76e.pdf`, `slaaet8a.pdf`, `slaae29a.pdf`, `slau846e.pdf`, `slaz742g.pdf` |
 
 | Designation | Title | URL | Sections applied |
 |---|---|---|---|
@@ -2196,7 +2196,7 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 |---|---|
 | **Manufacturer** | Texas Instruments |
 | **Product** | ISOW1044BDFMR |
-| **Datasheet** | SLLSFF7A, archived at `avionics/datasheets/isow1044.pdf` |
+| **Datasheet** | SLLSFF7A, archived at `avionics/datasheets/ti/isow1044.pdf` |
 | **Package** | 20-pin DFM (SOIC-20W compatible), `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm` |
 | **Note** | Combines galvanic signal isolation + an integrated isolated DC-DC converter in one part (no external isolated supply needed for the bus side) — used for every isolated CAN-FD node this project builds. Clean-room symbol `Observer_MSPM0G3507_RGZ`/`Observer_ISOW1044BDFMR` built directly from datasheet Table 7-1, first on Observer, then reused verbatim on `CAN-PERIPH-GW-1` and FlightEngineer. |
 
@@ -2210,7 +2210,7 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 |---|---|
 | **Manufacturer** | Texas Instruments |
 | **Product** | ISOW1412 (500 kbps variant; ISOW1432 is the pin-compatible 12 Mbps variant, not used) |
-| **Datasheet** | SLLSF86C, archived at `avionics/datasheets/isow1412.pdf` |
+| **Datasheet** | SLLSF86C, archived at `avionics/datasheets/ti/isow1412.pdf` |
 | **Package** | 20-pin DFM (SOIC-20W compatible), `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm` |
 | **Note** | Full-duplex part (separate Y/Z driver-out and A/B receiver-in pins); run in half-duplex mode on this project's 2-wire RS485_A/RS485_B multi-drop bus by shorting Y-to-A and Z-to-B, matching the standard technique for using a full-duplex transceiver as half-duplex. Selected 2026-07-26 to replace ADI ADM2795E fleet-wide (see Removed/Superseded Citations) because it integrates its own isolated DC-DC for the bus-side supply — ADM2795E is signal-only and needs a separate external isolated supply. Clean-room symbol built directly from datasheet Table 7-1 ("Pin Functions"). |
 
@@ -2695,7 +2695,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Manufacturer** | Texas Instruments |
 | **Product** | DP83825IRHBR (WQFN-24, RMQ0024A) |
-| **Datasheet** | SNLS638C, December 2018 – revised April 2026, archived at `avionics/datasheets/dp83825i.pdf` |
+| **Datasheet** | SNLS638C, December 2018 – revised April 2026, archived at `avionics/datasheets/ti/dp83825i.pdf` |
 | **Package** | WQFN-24 3 × 3 mm, 0.4 mm pitch, exposed DAP = GND, `Package_DFN_QFN:Texas_RMQ0024A_WQFN-24-1EP_3x3mm_P0.4mm_EP1.9x1.9mm` |
 | **Portion applied** | Table 4-1 pin functions (1 TX_EN, 2 50MHzOut/LED2, 3 INTR/PWRDN, 4 LED0, 5 RST_N, 6 VDDA3V3, 7 RD_M, 8 RD_P, 9 GND, 10 TD_M, 11 TD_P, 12 XO, 13 XI/50MHzIn, 14 RBIAS, 15 MDIO, 16 MDC, 17 RX_D1, 18 RX_D0/PHYAD0, 19 VDDIO, 20 CRS_DV, 21 GND, 22 RX_ER, 23 TX_D0, 24 TX_D1); §6 RMII Leader mode (25 MHz on XI, 50 MHz reference out on pin 2); RBIAS 6.49 kΩ ±1 % |
 | **Note** | Added 2026-09-29 when the TACCO generator's `dp83825i()` pin table was found not to be this part's pinout (it cited a non-existent `REF-SENSOR-029`); Pilot's copy of the table carries the same defect (`avionics/WBS.md` §1.2a 2026-09-29 item 8). |
@@ -2710,7 +2710,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | BeagleBoard.org Foundation |
 | **Product** | PocketBeagle 2 (TI AM6254 Sitara), expansion headers P1/P2 |
-| **Source** | <https://github.com/beagleboard/pocketbeagle> (owner-supplied copies archived at `avionics/datasheets/pocketbeagle2_sch.pdf` — sheet "016_BP P1 & P2" v1.0 — and `avionics/datasheets/pocketbeagle-2.syscfg`, TI SysConfig for the AM62x ALW package) |
+| **Source** | <https://github.com/beagleboard/pocketbeagle> (owner-supplied copies archived at `avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf` — sheet "016_BP P1 & P2" v1.0 — and `avionics/datasheets/beagleboard/pocketbeagle-2.syscfg`, TI SysConfig for the AM62x ALW package) |
 | **Portion applied** | P1/P2 header ball assignment and pinmux options, transcribed into `avionics/kicad/PB2_HEADER_PINMAP.md`; MMC2 CLK/CMD/DAT not on the headers (MMC2_SDCD/SDWP are, see REF-SENSOR-049); USB1 on P1-3/5/9/11/13; sheet 15 MSPM0L1105 (U11) pin-to-AIN wiring and the VDDSHV_CANUART = VDD_3V3 decoupling group, used in `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` §3 and §6 |
 | **Note** | Licence line not present on the schematic sheet; confirm the repository licence before redistributing the archived PDF. Added 2026-09-29. |
 
@@ -2722,7 +2722,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | BeagleBoard.org Foundation |
 | **Product** | PocketBeagle 2, revisions A1 (AM6254, in production) and A0 (AM6232, out of production) |
-| **Source** | Owner-supplied copy archived at `avionics/datasheets/pocketbeagle2_srm.pdf` (55 pp.); published at <https://docs.beagleboard.org/pocketbeagle-2.pdf> |
+| **Source** | Owner-supplied copy archived at `avionics/datasheets/beagleboard/pocketbeagle2_srm.pdf` (55 pp.); published at <https://docs.beagleboard.org/pocketbeagle-2.pdf> |
 | **Portion applied** | §3.8 Mechanical specifications: Table 3.2 (PCB 55 x 35 mm, 1.6 mm, 10 layers, max height 13.6 mm, 12.7 g) and Fig. 3.45 "PocketBeagle 2 RevA Dimensions" — P1 and P2 pin-1 rows 3.53 mm and 6.07 mm from their board edges and 25.4 mm apart, so each rail centre-line is 4.80 mm inside its long edge. The figure also shows the board's own pre-soldered headers as surface-mount tails with round through-hole pins only at positions 1/2 and 35/36.. §4.2 Cape Header Connectors: header ball list and per-ball mux tables (P1.xx / P1.xxA columns), used in `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` (note: the P1.12 mode-1 entry "SPI2_DI" is a typo for SPI2_D1) |
 | **Note** | The manual names no "Industrial" variant; the owner confirmed on 2026-10-04 that this geometry applies to the board the capes stack on. Added 2026-10-05. |
 
@@ -2749,7 +2749,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Murata Manufacturing Co., Ltd. (Kyoto, Japan) |
 | **Product** | BLM15EX331SN1D (BLM15EX series, 0402 / 1005 metric, for power lines) |
-| **Source** | Reference specification JENF243A-0023M-01, archived at `avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf` (MD5 f77aaa952ec45d0ddc5e8539b21ad8ca); product page <https://www.murata.com/en-us/products/productdetail?partno=BLM15EX331SN1%23> (redirects to pim.murata.com, verified HTTP 200 2026-10-12); distributor mirror <https://datasheet.octopart.com/BLM15EX331SN1D-Murata-datasheet-180806479.pdf> |
+| **Source** | Reference specification JENF243A-0023M-01, archived at `avionics/datasheets/murata/Murata_BLM15EX_JENF243A-0023M-01.pdf` (MD5 f77aaa952ec45d0ddc5e8539b21ad8ca); product page <https://www.murata.com/en-us/products/productdetail?partno=BLM15EX331SN1%23> (redirects to pim.murata.com, verified HTTP 200 2026-10-12); distributor mirror <https://datasheet.octopart.com/BLM15EX331SN1D-Murata-datasheet-180806479.pdf> |
 | **Portion applied** | Rating table: impedance 330 Ω ±25 % at 100 MHz, 450 Ω ±40 % at 1 GHz; rated current 1.1 A at 85 °C, 700 mA at 125 °C; DC resistance 0.205 Ω max; operating temperature −55 to +125 °C; 0402 (1.0 x 0.5 mm, 0.039 x 0.020 in) body. |
 | **Note** | Part number is the one named by TI ISOW1044 SLLSFF7A §13.1 item 4 [REF-SENSOR-009] and ISOW1412 SLLSF86C §13.1 [REF-SENSOR-010] for the beads between VISOOUT and VISOIN and between GND2 and GISOIN. Added 2026-10-12 by Claude Opus 5.5 for the Pilot §13.1 re-floorplan. |
 
@@ -2765,7 +2765,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Texas Instruments, SLVSBO7O, December 2012, revised August 2024 |
 | **Official access** | <https://www.ti.com/lit/ds/symlink/tpd4e05u06.pdf> (HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/TPDxE05U06_SLVSBO7O.pdf` (MD5 4e1a6d84a2c48d615ef5f0eb53441170) |
+| **Local copy** | `avionics/datasheets/ti/TPDxE05U06_SLVSBO7O.pdf` (MD5 4e1a6d84a2c48d615ef5f0eb53441170) |
 | **Section applied** | Table 4-1 (TPD1E05U06 DYA pin 1 I/O, pin 2 GND), Table 4-2 (TPD4E05U06 DQA pinout); VRWM 5.5 V; IEC 61000-4-2 +/-12 kV contact; DQA0010A example board layout (4220328/A) for the custom land |
 | **Cited in** | Pilot `ESD-GPS`, `ESD-SPI`, `ESD-SS2` (`gen_pilot_sch.py`); land `TI_DQA0010A_USON-10_2.5x1.0mm_P0.5mm` (`gen_pilot_footprints.py`) |
 
@@ -2796,7 +2796,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | BeagleBoard.org Foundation; repository licence CC BY-SA 4.0 |
 | **Official access** | <https://openbeagle.org/pocketbeagle/pocketbeagle-2> (commit be5f0a4a84b8279968722a813887cf7cae3e22ff, 2025-06-26); <https://www.beagleboard.org/boards/pocketbeagle-2-industrial> (both HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/pocketbeagle2_sch.pdf` (MD5 84cbe69deda97f872ec07f6a974d613e, byte-identical to the repository's), `avionics/datasheets/pocketbeagle2_revA_dimension.pdf` (MD5 e2852b55443fd545015a38ad2011ec3b), `avionics/datasheets/pocketbeagle2-back.jpg` |
+| **Local copy** | `avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf` (MD5 84cbe69deda97f872ec07f6a974d613e, byte-identical to the repository's), `avionics/datasheets/beagleboard/pocketbeagle2_revA_dimension.pdf` (MD5 e2852b55443fd545015a38ad2011ec3b), `avionics/datasheets/beagleboard/pocketbeagle2-back.jpg` |
 | **Section applied** | Schematic V10 sheet 16 (P1 / P2 nets and power pins), sheet 15 (AIN0-7 direct to the MSPM0L1105), sheet 12 (EMMC_RSTn on F23, not a header ball); Rev A dimension drawing + back photo (P1 pin 1 outer row, P2 pin 1 inner row, rails 3.53 / 6.07 mm from the edge, 25.4 mm odd-row spacing); product page "Key differences" (PB2-I = PB2 + 1 GB DDR4 + 64 GB eMMC + -40..85 C, same design repository); PCN20250226-001 (AM6232 -> AM6254 only) |
 | **Cited in** | Pilot `PB2_P1` / `PB2_P2` (`gen_pilot_sch.py`); `PocketBeagle2_2x18_P1/P2_TSM-DV-LC` footprints; `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` |
 
@@ -2817,7 +2817,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Texas Instruments, *AM625, AM625-Q1, AM623, AM620-Q1 — AM62x Sitara Processors*, literature number SPRSP58C (June 2022, revised October 2025) |
 | **Official access** | <https://www.ti.com/lit/ds/symlink/am625.pdf> (HTTP 200, 2026-10-17); product page <https://www.ti.com/product/AM625> |
-| **Local copy** | `avionics/datasheets/am625.pdf` (owner-supplied, MD5 0bf05eb5e8fe8649fe010b244d7ef6e6) |
+| **Local copy** | `avionics/datasheets/ti/am625.pdf` (owner-supplied, MD5 0bf05eb5e8fe8649fe010b244d7ef6e6) |
 | **Section applied** | §1 Features (CPSW3G: 2 external ports, RMII or RGMII; 3x MCAN with CAN FD); Table 4-1 Device Comparison (MCAN 3, I2C 6); §5.2 Table 5-1 Pin Attributes, ALW column (mux modes of every PB2-I header ball); §5.3.1 Tables 5-2 to 5-5 (RGMII1/RGMII2/RMII1/RMII2 ball assignments; CPSW3G port 1 has no alternate balls) |
 | **Cited in** | `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md`; `avionics/kicad/PB2_HEADER_PINMAP.md` §1; `avionics/datasheets/extracted/AM625_PB2I_header_mux.json`; `avionics/kicad/Pilot/Pilot.md` (2026-10-17 block) |
 | **Openness / sourcing** | Public data sheet, no NDA. TI is US-domiciled (AGENTS.md §5 passes). |
@@ -2828,7 +2828,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Texas Instruments, *AM62x Processors Technical Reference Manual*, literature number SPRUIV7C (May 2022, revised November 2025), 16 613 pp. |
 | **Official access** | <https://www.ti.com/lit/pdf/spruiv7> (HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/spruiv7c.pdf` (owner-supplied, MD5 1a2d061c5719fdccc24a7182e57c4d0c) |
+| **Local copy** | `avionics/datasheets/ti/spruiv7c.pdf` (owner-supplied, MD5 1a2d061c5719fdccc24a7182e57c4d0c) |
 | **Section applied** | §1.4.12 3-port Gigabit Ethernet Switch (CPSW3G) — two external RGMII/RMII ports plus one internal CPPI port, wire-rate store-and-forward switching, IEEE 1588; §4.10.1.1 CPSW unsupported features (no GMII, SGMII, MACsec, jumbo 9600-byte frames, SyncE) |
 | **Cited in** | `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` |
 | **Openness / sourcing** | Public, no NDA. TI is US-domiciled. |
@@ -2839,7 +2839,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Texas Instruments, *MSPM0L1105, MSPM0L1106 Mixed-Signal Microcontrollers*, literature number SLASEX5C (October 2022, revised January 2024) |
 | **Official access** | <https://www.ti.com/lit/ds/symlink/mspm0l1105.pdf> (HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/mspm0l1105.pdf` (owner-supplied, MD5 b1e9cbd26c57ed4ad6f9934d131725cd) |
+| **Local copy** | `avionics/datasheets/ti/mspm0l1105.pdf` (owner-supplied, MD5 b1e9cbd26c57ed4ad6f9934d131725cd) |
 | **Section applied** | §1 Features; Table 6-1 Pin Attributes (24 VQFN column, PA15/16/20/21/22/24/25/26); §7.1 Absolute Maximum Ratings (common-tolerance pins -0.3 V to VDD + 0.3 V, 4.1 V max); digital I/O table (RPU/RPD 40 kΩ, CI 5 pF); §8.12 ADC |
 | **Cited in** | `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` §6 |
 | **Openness / sourcing** | Public, no NDA. TI is US-domiciled. |
@@ -2850,7 +2850,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Texas Instruments, *MSPM0 L-Series 32-MHz Microcontrollers Technical Reference Manual*, literature number SLAU847F (October 2022, revised March 2026) |
 | **Official access** | <https://www.ti.com/lit/pdf/slau847> (HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/slau847f.pdf` (owner-supplied, MD5 ae0c1a9e5238d4a0a97c87cc9e8940e2) |
+| **Local copy** | `avionics/datasheets/ti/slau847f.pdf` (owner-supplied, MD5 ae0c1a9e5238d4a0a97c87cc9e8940e2) |
 | **Section applied** | §2.4.1.2 Initial Conditions After Power-Up (SWCLK pulled low, SWDIO pulled high, other I/O Hi-Z); §8.2 IOMUX Operation, "Default IOMUX State" |
 | **Cited in** | `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` §6 |
 | **Openness / sourcing** | Public, no NDA. TI is US-domiciled. |
@@ -3049,7 +3049,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Publisher** | Texas Instruments, SLVSEP0F, August 2019, revised November 2021 |
 | **Official access** | <https://www.ti.com/lit/ds/symlink/tpsm82822.pdf> |
 | **URL status** | validated HTTP 200, 2026-10-17 |
-| **Local copy** | `avionics/datasheets/tpsm82822.pdf` (MD5 df684d387cf85ef14c3154b81424f4e2) |
+| **Local copy** | `avionics/datasheets/ti/tpsm82822.pdf` (MD5 df684d387cf85ef14c3154b81424f4e2) |
 | **Section applied** | Table 5 device options (TPSM828224SILR = fixed 3.3 V, 2 A); Table 6-1 / Fig 6-1 pin functions (FB to VOUT on fixed-output devices); sec 9.2.1.2.1 (R1/R2/C3 not needed for fixed output); sec 9.2.2 (effective CIN >= 3 uF, COUT >= 5 uF); Table 9-1/9-2 BOM; sec 11.1 layout guidelines (solder-mask-defined pads); pp. 47-49 SIL0010D package outline, land pattern and stencil (drawing 4223961/D) |
 | **Cited in** | Pilot cape +3V3 module `U-3V3` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py`); land `Serenity-Custom:TI_SIL0010D_uSiP-10_2.0x2.5mm_P0.5mm` (`avionics/kicad/Pilot/scripts/gen_pilot_footprints.py`) |
 | **Note** | KiCad symbol / footprint / STEP for the same package were obtained through Ultra Librarian (export `avionics/datasheets/ul_XPSM82822SILR.zip`, 2026-10-17); the land was cross-checked against this data sheet, not taken on trust. 3D model: TI SIL0010D_ASM STEP, copied to `avionics/kicad/Serenity-Custom.3dshapes/TI_SIL0010D_uSiP-10.step` (MD5 9dbd06ef98c84c6ecb20017de9d1a77b). |
@@ -3061,7 +3061,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Publisher** | Texas Instruments application note SLUA271C (S. Kummerl, B. Lange, D. Nguyen), June 2002, revised December 2023 |
 | **Official access** | <https://www.ti.com/lit/an/slua271c/slua271c.pdf> |
 | **URL status** | validated HTTP 200, 2026-10-17 |
-| **Local copy** | `avionics/datasheets/slua271c.pdf` (MD5 b1b1a948212f1a6f238bb5437d3d50f8) |
+| **Local copy** | `avionics/datasheets/ti/slua271c.pdf` (MD5 b1b1a948212f1a6f238bb5437d3d50f8) |
 | **Section applied** | Referenced by SLVSEP0F p. 48 note 4 for the SIL0010D land and solder-mask definition |
 | **Cited in** | `gen_pilot_footprints.py` `tpsm8282x_sil0010d()` (via REF-PWR-008) |
 
@@ -3072,7 +3072,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Publisher** | Texas Instruments technical white paper SLIB006A (C. Glaser), February 2011, revised June 2021 |
 | **Official access** | <https://www.ti.com/lit/ug/slib006a/slib006a.pdf> (reached via 302 from `/lit/pdf/slib006`) |
 | **URL status** | validated HTTP 200, 2026-10-17 |
-| **Local copy** | `avionics/datasheets/slib006a.pdf` (MD5 1827739e75b69f6dd78f11e4a1e278ed) |
+| **Local copy** | `avionics/datasheets/ti/slib006a.pdf` (MD5 1827739e75b69f6dd78f11e4a1e278ed) |
 | **Section applied** | Assembly and rework guidance for MicroSiP modules (reference for the assembly house; not used to size the land) |
 | **Cited in** | Pilot `U-3V3` (TPSM828224SILR) assembly notes |
 

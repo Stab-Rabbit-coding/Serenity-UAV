@@ -590,7 +590,7 @@ GND2_CANB to GND) break the 5 kV galvanic isolation requirement. They must be fi
       a separate discrete Semtech LoRa chip) and only 8KB RAM vs. the
       32-64KB SRAM mLRS's codebase assumes. STM32WLE5 has the LoRa radio
       **integrated in the die** (verified against ST's own datasheet,
-      `avionics/datasheets/stm32wle5jc.pdf`): UFQFPN48 (7x7mm) or UFBGA73
+      `avionics/datasheets/st/stm32wle5jc.pdf`): UFQFPN48 (7x7mm) or UFBGA73
       (5x5mm) package, up to 256KB flash / 64KB SRAM — single-chip courtyard
       ~36-64mm^2, smaller than the bare RFM95W module (289 mm^2) it's
       replacing, and a rounding error against the ~666 mm^2 SiK frees up.
@@ -1442,7 +1442,7 @@ REFERENCES.md Removed/Superseded Citations).
     reference for a different antenna.
     **Update, same day (owner-prompted footprint + regulator improvements):**
     (1) the owner supplied the vendor's own footprint DXF
-    (`avionics/datasheets/type2el-2dl-module-footprint-topview.dxf`) —
+    (`avionics/datasheets/murata/type2el-2dl-module-footprint-topview.dxf`) —
     `Murata_Type2EL_LGA107`'s 107 pads are now EXACT (parsed programmatically
     from the DXF's `NC_Work2`/`ProductsBoradOutline` layers), not a
     placeholder; only the pin-NUMBER-to-pad correspondence remains an
@@ -1711,7 +1711,7 @@ REFERENCES.md Removed/Superseded Citations).
     - [ ] mLRS HAL: BUTTON moves PB13 → PA0 (PB13 is not bonded on UFQFPN48), RF switch
         PA4 = RX_EN (PE4259 CTRL), PA5 = TX_EN (CTRL̄).
     7. **PB2 header map was wrong — rebuilt from the real schematic (2026-09-29, owner-supplied
-        `avionics/datasheets/pocketbeagle2_sch.pdf` + `pocketbeagle-2.syscfg`).** The Rev S2
+        `avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf` + `pocketbeagle-2.syscfg`).** The Rev S2
         `PB2_P1`/`PB2_P2` tables put GND on P1-1 (the PB2's 5 V **VIN**), +3V3/+5V on
         P1-33..36 (PRU/UART balls), MCAN0 on the GND pins P1-15/16, SPI0 on ADC/GPIO balls and
         SDIO on MDC/PRU balls; mating that cape would have shorted VIN to ground. The verified

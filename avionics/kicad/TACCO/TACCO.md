@@ -46,7 +46,7 @@ mLRS bare-chip radio, non-stack rails, and fab-ready layout" for the full decisi
 - **Smaller parts, same function:** boot/bind switch → C&K KMR2; SWD header → Tag-Connect
   TC2030-NL pads. PB2 rails are non-stack-through (Commo Rev T is standalone).
 - **PB2 header map rebuilt from the real PocketBeagle 2 schematic** (owner-supplied,
-  `avionics/datasheets/pocketbeagle2_sch.pdf`): the Rev S2 map had GND on the PB2's 5 V VIN pin
+  `avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf`): the Rev S2 map had GND on the PB2's 5 V VIN pin
   and peripherals on the wrong balls. Verified map and allocation:
   `avionics/kicad/PB2_HEADER_PINMAP.md`. Ethernet is now RMII2 + MDIO0 (`RMII2_*` nets),
   CAN-FD on MCAN0 (P2-5/7), RS-485 on UART2 with hardware DE, mLRS on UART0, BT on UART1.
