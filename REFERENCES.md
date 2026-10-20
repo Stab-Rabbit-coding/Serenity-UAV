@@ -159,6 +159,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-059: ECS Inc. ECX-32 SMD crystal data sheet](#ref-sensor-059-ecs-inc-ecx-32-smd-crystal-data-sheet)
     - [REF-SENSOR-060: ASIX AX88772E / AX88772D demo board BOM (2025-11-28)](#ref-sensor-060-asix-ax88772e--ax88772d-demo-board-bom-2025-11-28)
     - [REF-SENSOR-061: YAGEO (Pulse Electronics) TC1G00 PulseChip LAN transformer, TC002.C (10/25)](#ref-sensor-061-yageo-pulse-electronics-tc1g00-pulsechip-lan-transformer-tc002c-1025)
+    - [REF-SENSOR-062: Pilot passive components: YAGEO MLCC and chip resistors, Taiyo Yuden, Holy Stone, Murata data sheets](#ref-sensor-062-pilot-passive-components-yageo-mlcc-and-chip-resistors-taiyo-yuden-holy-stone-murata-data-sheets)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -2968,6 +2969,18 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Cited in** | Pilot `T-RMII2-TX/-RX`, `T-USB1-TX/-RX` (`gen_pilot_sch.py`); land `Pulse_TC1G00_PulseChip_4.7x3.2mm` (`gen_pilot_footprints.py`) |
 | **Note** | The datasheet characterises the part for 1000BASE-T and faster. 10/100 suitability and the footprint transcription need engineer-of-record confirmation (avionics/WBS.md) |
 | **Openness / sourcing** | Public, no NDA. YAGEO is Taiwan-domiciled |
+
+### REF-SENSOR-062: Pilot passive components: YAGEO MLCC and chip resistors, Taiyo Yuden, Holy Stone, Murata data sheets
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | YAGEO (UPY-GPHC X7R 6.3 V to 250 V; UPY-GPHC X5R 4 V to 50 V; PYU-RC Group 51 RoHS L and P; CC0402JRNPO9BN150 spec sheet), Taiyo Yuden (LMK325BJ476KMHP spec sheet), Holy Stone Enterprise (HVC series), Murata (DFE201610P) |
+| **Official access** | <https://yageogroup.com/content/datasheet/asset/file/UPY-GPHC_X7R_6_3V-TO-250V>, <https://yageogroup.com/content/datasheet/asset/file/UPY-GPHC_X5R_4V-TO-50V>, <https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L>, <https://yageogroup.com/content/datasheet/asset/file/PYU-RC_51_ROHS_P>, <https://yageogroup.com/download/specsheet/CC0402JRNPO9BN150>, <https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2092/LMK325BJ476KMHP_SS.pdf> (DigiKey-hosted Taiyo Yuden sheet), <http://www.holystonecaps.com/PDF/201612051329150.2017%20HVC%20Series.pdf>, <https://www.murata.com/~/media/webrenewal/products/inductor/chip/tokoproducts/wirewoundmetalalloychiptype/m_dfe201610p.ashx> (all HTTP 200, 2026-10-20; the links were returned by DigiKey's product API) |
+| **Local copy** | `avionics/datasheets/YAGEO_UPY-GPHC_X7R_6.3V-250V.pdf` (MD5 4ef16ad8ea5fa92e2c12af1f0c474c8f), `YAGEO_UPY-GPHC_X5R_4V-50V.pdf` (6f0fe5dfd6f124e0139376455e6b8904), `YAGEO_PYU-RC_GROUP_51_ROHS_L.pdf` (65fe4dad692770fee2ad5de035d3230b), `YAGEO_PYU-RC_51_ROHS_P.pdf` (726173b220bb313ae6cd9f43610caff9), `YAGEO_CC0402JRNPO9BN150.pdf` (c6e4e402ed86f021939dfb5d91b6c2d9), `TaiyoYuden_LMK325BJ476KMHP_SS.pdf` (8e227b928320dca591074cc2741c9b16), `HolyStone_HVC_Series.pdf` (5e203c4ebf9ef0b2876326b2075de10f), `Murata_DFE201610P.pdf` (0d1a4bffcfa3bd7c4c0530f9a6a7c9d7) |
+| **Section applied** | Part numbers and ratings used for the 25 formerly unnumbered BOM lines in `gen_pilot_sch.py` `PASSIVE_MPN`. Murata DFE201610P-2R2M=P2: 2.2 uH +/-20 %, 168 mOhm max DCR, 2.0 A at 30 % inductance drop, 1.4 A for a 40 C rise (the sheet's own definitions); recommended land 2.0 mm span, 0.9 mm gap, 1.6 mm pad height, which matches the KiCad `L_Murata_DFE201610P` pads (0.55 x 1.6 mm at +/-0.725 mm), checked 2026-10-20. Taiyo Yuden LMK325BJ476KMHP: 47 uF +/-10 %, 10 V, X5R, 1210. Holy Stone C1808X103K202T: 10 nF, 2 kV, X7R, 1808 |
+| **Cited in** | `avionics/kicad/Pilot/scripts/gen_pilot_sch.py`, `avionics/kicad/Pilot/docs/Pilot-BOM.csv` |
+| **Note** | Availability and status read from DigiKey's product API on 2026-10-20. Holy Stone is Taiwan-domiciled by the maker's published address (to be re-verified against the owner's sourcing rule at order time). DC-bias derating has been checked only for the 22 uF parts (REF-PWR-011); the 4.7, 10 and 47 uF X5R parts are not yet derated (Pilot-Design-Review.md) |
+| **Openness / sourcing** | Public data sheets, no NDA. YAGEO (Taiwan), Taiyo Yuden and Murata (Japan) |
 
 ### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
 

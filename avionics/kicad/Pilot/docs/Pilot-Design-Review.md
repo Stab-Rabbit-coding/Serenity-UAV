@@ -31,8 +31,8 @@ use the KiCad figure. **The board is not releasable.**
 | R-5 | 9 courtyard overlaps between the isolators and their section 13.1 parts, largest 0.0013 in2 (0.837 mm2) (`RS485`/`C-485-1`, `C-CAN1`/`CAN-TR`) | Analyzer PM-001 | The project rule `iso_section_13_1_courtyard` exempts `C-CAN1/3/4/6`, `CMC-CAN`, `C-485-1/4/6`, `CMC-RS485`, which is all nine pairs; confirm no pad contact |
 | R-6 | Thermal vias under `1553-XCVR`: 4 of 9 minimum | Analyzer TV-001 | Add vias or accept; not a DRC rule |
 | R-7 | Test-point coverage 7 / 104 nets | Analyzer TE-001 | Add test points or rely on the PB2 / JTAG access; owner decision |
-| R-8 | 26 BOM lines lack a manufacturer part number | Schematic BOM export | Owner approves makers (`Pilot-Manufacturing-Transfer.md` 7) |
-| R-9 | `L-USB1` datasheet not on file; land is a placeholder | WBS | Owner to download Darfon IP20162R2MP59 or equivalent datasheet |
+| R-8 | ~~26 BOM lines lack a manufacturer part number~~ **Closed 2026-10-20:** all 55 lines have an MPN and maker (`docs/Pilot-BOM.csv`). Remaining: DC-bias derating for the 4.7 / 10 / 47 uF X5R parts | DigiKey product API; REF-SENSOR-062 | Derate before release |
+| R-9 | ~~`L-USB1` datasheet not on file~~ **Closed 2026-10-20:** Murata DFE201610P-2R2M=P2 chosen, data sheet on file. The land was checked against Murata's recommended pattern and matches | `Murata_DFE201610P.pdf` | None |
 | R-10 | TC1G00 is characterised for 1000BASE-T; 100BASE-TX suitability and the footprint transcription are unreviewed | REF-SENSOR-061 | Engineer-of-record review |
 | R-11 | Power budget for the final 136-part design is not written down | `Pilot-HDD.md` 5 | Write it before release |
 | R-12 | Mass and CG not computed | `Pilot-HDD.md` 2 | BOM mass roll-up |
@@ -61,7 +61,7 @@ use the KiCad figure. **The board is not releasable.**
 
 1. How to finish routing (hand route in KiCad's interactive router; or a layer or function change).
 2. Fab choices: thickness 0.062 / 0.063 in, finish, IPC class, Tg, ITAR / FAI flags.
-3. Approve manufacturers for the 26 unnumbered BOM lines, or supply a DigiKey API key.
+3. Approve the new passive makers (`Pilot-Manufacturing-Transfer.md` 7); the DigiKey key is saved in `~/.config/secrets.env`.
 4. Fiducials and panel strategy for assembly at Cyber City Circuits.
 
 ## 5. Traceability

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-19",
+  "generated": "2026-10-20",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -7782,6 +7782,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/HolyStone_HVC_Series.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/ImportGuides.html": {
       "description": "HTML document",
       "tags": [
@@ -7897,6 +7904,13 @@
       "archived": false
     },
     "avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/Murata_DFE201610P.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8072,6 +8086,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/TaiyoYuden_LMK325BJ476KMHP_SS.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/Vishay_45273MDSK.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8094,6 +8115,41 @@
       "archived": false
     },
     "avionics/datasheets/X2Y_15-2237598.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/YAGEO_CC0402JRNPO9BN150.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/YAGEO_PYU-RC_51_ROHS_P.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/YAGEO_PYU-RC_GROUP_51_ROHS_L.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/YAGEO_UPY-GPHC_X5R_4V-50V.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/YAGEO_UPY-GPHC_X7R_6.3V-250V.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -11384,6 +11440,15 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/docs/Pilot-BOM.csv": {
+      "description": "Bill of materials, CSV (55 items)",
+      "tags": [
+        "avionics-hardware",
+        "bom",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/docs/Pilot-Design-Review.md": {
       "description": "Pilot Design Review Package",
       "tags": [
@@ -11704,6 +11769,15 @@
       "description": "finish_pilot_pcb.py \u2014 Import a freerouting session, fill outer-layer GND",
       "tags": [
         "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/gen_pilot_bom.py": {
+      "description": "gen_pilot_bom.py \u2014 Write the Pilot assembly BOM (CSV) from the schematic.",
+      "tags": [
+        "avionics-hardware",
+        "bom",
         "pcb-design"
       ],
       "archived": false
@@ -20010,6 +20084,8 @@
       "archives/docs-superseded/bom_revQ.csv",
       "avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx",
       "avionics/kicad/Observer/Observer_som_pinmap.csv",
+      "avionics/kicad/Pilot/docs/Pilot-BOM.csv",
+      "avionics/kicad/Pilot/scripts/gen_pilot_bom.py",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
       "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
       "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
@@ -21246,6 +21322,7 @@
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/docs/Pilot-BOM.csv",
       "avionics/kicad/Pilot/docs/Pilot-Design-Review.md",
       "avionics/kicad/Pilot/docs/Pilot-HDD.md",
       "avionics/kicad/Pilot/docs/Pilot-ICD-External.md",
@@ -21285,6 +21362,7 @@
       "avionics/kicad/Pilot/scripts/export_pilot_gerbers.sh",
       "avionics/kicad/Pilot/scripts/fence_pgnd_pilot.py",
       "avionics/kicad/Pilot/scripts/finish_pilot_pcb.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_bom.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_icd.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
@@ -21547,6 +21625,7 @@
       "avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf",
       "avionics/datasheets/GRM188Z71A106MA73#_EC-data.pdf",
       "avionics/datasheets/GRM188Z71A106MA73-01A-EN.pdf",
+      "avionics/datasheets/HolyStone_HVC_Series.pdf",
       "avionics/datasheets/ImportGuides.html",
       "avionics/datasheets/KSZ8863MLL-FLL-RLL_DS00002335B.pdf",
       "avionics/datasheets/KSZ8863_Daughter_Board_DS50002767B.pdf",
@@ -21564,6 +21643,7 @@
       "avionics/datasheets/MSASJ168BC6226MTNA01_SS.pdf",
       "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf",
       "avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf",
+      "avionics/datasheets/Murata_DFE201610P.pdf",
       "avionics/datasheets/PCA9555.pdf",
       "avionics/datasheets/PESD5V0F1BL.pdf",
       "avionics/datasheets/PESD5V0X1BL.pdf",
@@ -21588,10 +21668,16 @@
       "avionics/datasheets/TPDxE05U06_SLVSBO7O.pdf",
       "avionics/datasheets/TVS-Diode-SMBJ-Datasheet.pdf",
       "avionics/datasheets/TYPE2EL.pdf",
+      "avionics/datasheets/TaiyoYuden_LMK325BJ476KMHP_SS.pdf",
       "avionics/datasheets/Vishay_45273MDSK.pdf",
       "avionics/datasheets/WCH_CH397_datasheet_V1.2.pdf",
       "avionics/datasheets/X2YDatasheet.pdf",
       "avionics/datasheets/X2Y_15-2237598.pdf",
+      "avionics/datasheets/YAGEO_CC0402JRNPO9BN150.pdf",
+      "avionics/datasheets/YAGEO_PYU-RC_51_ROHS_P.pdf",
+      "avionics/datasheets/YAGEO_PYU-RC_GROUP_51_ROHS_L.pdf",
+      "avionics/datasheets/YAGEO_UPY-GPHC_X5R_4V-50V.pdf",
+      "avionics/datasheets/YAGEO_UPY-GPHC_X7R_6.3V-250V.pdf",
       "avionics/datasheets/a-ssm_sm.pdf",
       "avionics/datasheets/adin1300.pdf",
       "avionics/datasheets/adm2795e.pdf",
@@ -21996,6 +22082,7 @@
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/docs/Pilot-BOM.csv",
       "avionics/kicad/Pilot/docs/Pilot-Design-Review.md",
       "avionics/kicad/Pilot/docs/Pilot-HDD.md",
       "avionics/kicad/Pilot/docs/Pilot-ICD-External.md",
@@ -22035,6 +22122,7 @@
       "avionics/kicad/Pilot/scripts/export_pilot_gerbers.sh",
       "avionics/kicad/Pilot/scripts/fence_pgnd_pilot.py",
       "avionics/kicad/Pilot/scripts/finish_pilot_pcb.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_bom.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_icd.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",

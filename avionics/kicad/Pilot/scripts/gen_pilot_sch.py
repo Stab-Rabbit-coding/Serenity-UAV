@@ -1261,15 +1261,73 @@ SIMPLE += [
       ("5", "D2-", "EXT_SPI_SS1"), ("6", "NC", None), ("7", "NC", None), ("8", "GND", "GND"), ("9", "NC", None), ("10", "NC", None)]),
 ]
 
+# Part numbers for the generic passives (2026-10-20, Claude Sonnet 5.5, owner supplied the
+# DigiKey API credentials).  Keyed by (schematic value, footprint).  Each MPN was confirmed
+# on DigiKey's product API as Active with stock and a public data sheet on 2026-10-20; the
+# makers are YAGEO (Taiwan), Taiyo Yuden (Japan), Holy Stone (Taiwan), Murata (Japan)
+# [REF-SENSOR-062].  Only entries whose own MPN field is empty are filled.
+PASSIVE_MPN = {
+    ("100nF", FP_C0402): ("CC0402KRX7R7BB104", "YAGEO"),
+    ("10nF", FP_C0402): ("CC0402KRX7R7BB103", "YAGEO"),
+    ("1uF", FP_C0402): ("CC0402KRX5R6BB105", "YAGEO"),
+    ("1uF 10V", FP_C0402): ("CC0402KRX5R6BB105", "YAGEO"),
+    ("15pF C0G", FP_C0402): ("CC0402JRNPO9BN150", "YAGEO"),
+    ("10nF", FP_C0201): ("CC0201KRX7R7BB103", "YAGEO"),
+    ("100nF", FP_C0201): ("CC0201KRX5R6BB104", "YAGEO"),
+    ("10uF 6.3V X5R", FP_C0603): ("CC0603KRX5R5BB106", "YAGEO"),
+    ("4.7uF 10V X5R", FP_C0603): ("CC0603MRX5R6BB475", "YAGEO"),
+    ("10uF 10V X5R", FP_C0805): ("CC0805KKX5R6BB106", "YAGEO"),
+    # 10 V part for the 6.3 V schematic value: one part number, more bias margin on +3V3
+    ("10uF 6.3V X5R", FP_C0805): ("CC0805KKX5R6BB106", "YAGEO"),
+    ("47uF 10V X5R", FP_C1210): ("LMK325BJ476KMHP", "Taiyo Yuden"),
+    ("10nF 2kV", FP_C1808): ("C1808X103K202T", "Holy Stone"),
+    ("2.2uH", FP_L2016): ("DFE201610P-2R2M=P2", "Murata"),
+    ("75R", FP_R0402): ("RC0402FR-0775RL", "YAGEO"),
+    ("24k 1%", FP_R0402): ("RC0402FR-0724KL", "YAGEO"),
+    ("200R", FP_R0402): ("RC0402FR-07200RP", "YAGEO"),
+    ("10k", FP_R0402): ("RC0402FR-0710KL", "YAGEO"),
+    ("10k", FP_R0201): ("RC0201FR-0710KL", "YAGEO"),
+    ("4.7k", FP_R0201): ("RC0201FR-074K7L", "YAGEO"),
+    ("2.49k", FP_R0201): ("RC0201FR-072K49P", "YAGEO"),
+    ("6.49k 1%", FP_R0201): ("RC0201FR-076K49L", "YAGEO"),
+    ("120R", FP_R0603): ("RC0603FR-07120RL", "YAGEO"),
+    # 55 R 2 % is not a stock value: 54.9 R 1 % sits inside it
+    ("55R 2%", FP_R0603): ("RC0603FR-0754R9L", "YAGEO"),
+    ("0R", FP_R0805): ("RC0805JR-070RL", "YAGEO"),
+}
+
+
+# Manufacturer of record for the parts whose symbols were written before the Manufacturer
+# property existed (2026-10-20).  A kitted or turnkey order needs MPN and maker together.
+MFR_BY_MPN = {
+    "HI-6138PCIF": "Holt Integrated Circuits", "PM-DB2791S": "Premier Magnetics",
+    "BMP388": "Bosch Sensortec", "MSASJ168BC6226MTNA01": "Taiyo Yuden",
+    "SM04B-GHS-TB(LF)(SN)": "JST", "SM06B-GHS-TB(LF)(SN)": "JST",
+    "ISOW1044BDFMR": "Texas Instruments", "ISOW1412DFMR": "Texas Instruments",
+    "TPD4E05U06DQAR": "Texas Instruments", "DP83825IRMQR": "Texas Instruments",
+    "TPSM828224SILR": "Texas Instruments", "SRF2012-121YA": "Bourns",
+    "MF-PSMF035X-2": "Bourns", "BLM15EX331SN1D": "Murata", "742792512": "Wurth Elektronik",
+    "ICM-42688-P": "TDK InvenSense", "TSM-108-01-L-DV": "Samtec", "TSM-118-04-L-DV-LC": "Samtec",
+    "AX88772EQF": "ASIX", "105313-1204": "Molex", "SLB9672XU20FW1611XUMA1": "Infineon",
+    "ECS-2520MV-250-BN-TR": "ECS Inc.", "ECS-2520MV-500-BN-TR": "ECS Inc.",
+    "CX0805MRX7R0BB472": "YAGEO",
+}
+
+
 for _entry in SIMPLE:
     _ref, _val, _fp, _mpn, _ds, _pins = _entry[:6]
     _flags = _entry[6] if len(_entry) > 6 else {}
+    if not _mpn and (_val, _fp) in PASSIVE_MPN:
+        _mpn, _mk = PASSIVE_MPN[(_val, _fp)]
+        _flags = dict(_flags, mfr=_flags.get("mfr", _mk))
     _n = len(_pins)
     _half = (_n + 1) // 2
     ICS.append({
         "ref": _ref, "value": _val, "fp": _fp, "mpn": _mpn, "ds": _ds,
         "dnp": bool(_flags.get("dnp")),
         "mfr": _flags.get("mfr", ""),
+        # mounting holes are mechanical, not purchased parts
+        "in_bom": not _val.startswith("M2.5 PGND"),
         "pins": [(pn, fn, net, "L" if i < _half else "R") for i, (pn, fn, net) in enumerate(_pins)],
     })
 
@@ -1343,9 +1401,10 @@ def emit_instance(ic, X, Y, left, right, half_w, half_h, sheet_uuid) -> List[str
     ref, value = ic["ref"], ic["value"]
     libid = f"S_{sanitize(ref)}"
     dnp = "yes" if ic.get("dnp") else "no"
+    in_bom = "yes" if ic.get("in_bom", True) else "no"
     out = [
         f'  (symbol (lib_id "Pilot:{libid}") (at {X:.2f} {Y:.2f} 0) (unit 1)',
-        f'    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp {dnp}) (uuid "{uid()}")',
+        f'    (exclude_from_sim no) (in_bom {in_bom}) (on_board yes) (dnp {dnp}) (uuid "{uid()}")',
         f'    (property "Reference" "{esc(ref)}" (at {X:.2f} {Y - half_h - 1.27:.2f} 0) (effects (font (size {SIZE} {SIZE}))))',
         f'    (property "Value" "{esc(value)}" (at {X:.2f} {Y + half_h + 1.27:.2f} 0) (effects (font (size {SIZE} {SIZE}))))',
         f'    (property "Footprint" "{esc(ic["fp"])}" (at {X:.2f} {Y:.2f} 0) (effects (font (size {SIZE} {SIZE})) (hide yes)))',
@@ -1438,6 +1497,9 @@ TITLE_BLOCK = """  (title_block
 
 
 def main() -> None:
+    for _ic in ICS:
+        if not _ic.get("mfr") and _ic.get("mpn") in MFR_BY_MPN:
+            _ic["mfr"] = MFR_BY_MPN[_ic["mpn"]]
     sheet_uuid = uid()
     parts = [
         "(kicad_sch (version 20240101) (generator eeschema)",

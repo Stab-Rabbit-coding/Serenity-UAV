@@ -1777,10 +1777,8 @@ REFERENCES.md Removed/Superseded Citations).
                 block, Claude Opus 5.5): ERC 0, 134 parts. Own ECS 20 MHz crystal
                 [REF-SENSOR-059]; BLM15EX331 beads; VBUS = 4.7 k pull-up + P1-31 GPIO0_59 (owner
                 2026-10-18). Pilot.md update 2026-10-18.
-            - [ ] `L-USB1` 2.2 uH (2016) part number: the demo BOM's Darfon IP20162R2MP59 has no
-                data sheet on file (vendor sites block scripted download). Owner to download a
-                data sheet (Darfon, or an equivalent such as TDK MLP2016 / Coilcraft XFL2010),
-                then set the MPN and replace the placeholder `L_Murata_DFE201610P` land.
+            - [x] `L-USB1` 2.2 uH: Murata DFE201610P-2R2M=P2 chosen 2026-10-20 (data sheet on file, land matches the
+                Murata recommended pattern); all 55 BOM lines now carry an MPN and maker (REF-SENSOR-062).
             - [ ] Confirm ECS-200-20-33-AGM-TR option-code availability with a distributor.
             - [ ] DTS: hold P1-31 GPIO0_59 as an input (high-Z) by default; drive it low only to
                 force an AX88772E USB detach.
@@ -1810,7 +1808,7 @@ REFERENCES.md Removed/Superseded Citations).
             - [ ] Verify Sunstone outer-layer limits (min drill, annular ring, copper-to-edge): the
                 capabilities tabs are script-loaded; call 800.228.8198 or send the RFQ.
             - [ ] Fiducials, part number and revision on silkscreen, panel strategy.
-            - [ ] Part numbers for the 26 BOM lines without an MPN (needs DigiKey API keys or owner approval).
+            - [x] Part numbers for the 26 BOM lines: done 2026-10-20 via the DigiKey API (key in ~/.config/secrets.env); owner to approve the makers; derate the X5R parts.
             - [ ] Catalogue IPC-6012 and the surface-finish standard in `REFERENCES.md`.
             - [ ] Verify the JST GH URL (REF-CONN-003 returned HTTP 403).
         - [x] Pilot ICDs, HDD, design review and manufacturing package written (kidoc scaffold, generated
