@@ -1,0 +1,69 @@
+ok   payload floor DOOR_CROWN_Z 10.86 = measured door top 10.86
+shell airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl  faces=1,048,160
+clearance budget 3.0 mm
+
+envelope                        hit mm3   <gap mm3  note   (gap = 3.0 mm unless the envelope declares its own)
+worm wheel                            0          0  
+worm wheel (stbd)                     0          0  
+worm                                  0          0  
+worm (stbd)                           0          0  
+motor                                 0          0  
+motor (stbd)                          0          0  
+tilt controller board                 0          1  
+tilt controller board (stbd)          0          0  
+brake collar                          0          0  
+brake collar (stbd)                   0          0  
+brake solenoid                        0          0  
+brake solenoid (stbd)                 0          0  
+bracket foot 0                        0        400  seats on skin (hit expected: it is a boss)
+bracket foot 0 (stbd)                 0        389  seats on skin (hit expected: it is a boss)
+bracket foot 1                        0        494  seats on skin (hit expected: it is a boss)
+bracket foot 1 (stbd)                 0        545  seats on skin (hit expected: it is a boss)
+bracket foot 2                        0        842  seats on skin (hit expected: it is a boss)
+bracket foot 2 (stbd)                 0        794  seats on skin (hit expected: it is a boss)
+battery                               0          0  
+battery cradle                        0          0  
+cradle fwd hanger 0                   0        283  seats on skin (hit expected: it is a boss)
+cradle aft hanger 0                   0        445  seats on skin (hit expected: it is a boss)
+cradle fwd hanger 1                   0        282  seats on skin (hit expected: it is a boss)
+cradle aft hanger 1                   0        446  seats on skin (hit expected: it is a boss)
+node N1 CN2 (port chin)               0          0  
+node N3 CN3 (stbd chin)               0          0  
+chin cable channel                    0          0  
+chin shelf                            0          2   FAIL (gap 2.0)  box X-212..-128 Y-45..2 Z64..66
+chin shelf sill                       0        666  seats on skin (hit expected: it is a boss)
+shelf boss 0                          0        475  seats on skin (hit expected: it is a boss)
+shelf boss 1                          0        468  seats on skin (hit expected: it is a boss)
+shelf boss 2                          0       1250  seats on skin (hit expected: it is a boss)
+shelf boss 3                          0       1008  seats on skin (hit expected: it is a boss)
+observer tray                         0          0  
+observer boss 0                     160        320  seats on skin (hit expected: it is a boss)
+observer boss 1                     160        320  seats on skin (hit expected: it is a boss)
+observer boss 2                      96        340  seats on skin (hit expected: it is a boss)
+observer boss 3                      96        335  seats on skin (hit expected: it is a boss)
+node N2 FC2 (aft port)                0          0  
+node N2 FC2 (aft port) cable zone          0          0  
+node N4 FC3 (aft stbd)                0          0  
+node N4 FC3 (aft stbd) cable zone          0          0  
+door gateway tray base                0          0  
+door gateway tray rails               0          0  
+door gateway board+parts              0          0  
+door gateway boss 0                 288       1031  seats on skin (hit expected: it is a boss)
+door gateway boss 1                 288       1026  seats on skin (hit expected: it is a boss)
+door gateway boss 2                 288       1030  seats on skin (hit expected: it is a boss)
+door gateway boss 3                 288       1025  seats on skin (hit expected: it is a boss)
+payload                               0         15   FAIL (gap 2.0)  box X-208..-132 Y5..106 Z11..87
+hoist line 0                          0          0  
+winch drum 0 (Phase 7)                0          0  
+hoist line 1                          0          0  
+winch drum 1 (Phase 7)                0          0  
+winch axle (Phase 7)                  0          0  
+ramp fairing                      11967      16774  seats on skin (hit expected: it is a boss)
+
+pairwise interference (raw overlap, mm3; blank = 0):
+  node N2 FC2 (aft port)     x payload                            15  OVERLAP
+  node N4 FC3 (aft stbd)     x payload                            15  OVERLAP
+
+RESULT: FAIL (2 envelope(s) foul the shell/gap, 2 pair overlap(s))
+
+--- stderr ---

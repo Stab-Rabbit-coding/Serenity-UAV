@@ -70,6 +70,7 @@ to be made for each nacelle").
 | **U7 Merge pipelines** | `merge_cargo_interior.py`, `merge_head_interior.py`, `regen_rear_interior.py`, `add_structural_features.py`, collar/door/flange/bay/former generators | regenerate → matches U4 |
 | **U8 Gates and studies** | the ~30 tools under `tools/` with frame coordinates | regression harness |
 | **U9 SCAD parts** | gear CORNERS, bow pod, cargo/fuselage SCADs that place parts in the hull frame | render → matches U4 |
+| **U11 Installed instances** | Owner 2026-10-19: only a PCB inside KiCad keeps local coordinates; PCB STEP/STL for fitting and every printed or placeholder part is published at its installed position, ONE STL PER INSTANCE. `tools/frame_inventory.py` found 117 part-local and 35 unmarked-envelope STLs; each gets a placement source (layout tool, assembly, bake table) and a generator that writes its per-instance STLs | every instance in the census; none at its own origin |
 | **U10 Docs** | frame note in AGENTS.md "Hull-Frame Coordinate Standard"; dated docs keep R1 numbers with a pointer to this plan | doc wording |
 
 ## 5. Then rebuild, once, in R2

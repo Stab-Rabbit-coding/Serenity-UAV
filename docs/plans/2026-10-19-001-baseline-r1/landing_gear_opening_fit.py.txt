@@ -1,0 +1,30 @@
+cargo_sect_shell24_2mm_repaired.stl: 1,075,956 faces
+
+===== PORT: angled outboard/down flats =====
+  area    411 mm^2   n=( 0.894, 0.011,-0.447)   tilt  26.6 deg (down from horizontal-out)
+    centroid (  -84.5,   54.2,  38.6)   Y   24.8..  76.2   Z  32.1.. 43.2
+    in-plane  51.4 x  12.4 mm   lower/upper band width  51.4/ 45.6 -> TRAPEZOID
+  area    331 mm^2   n=( 0.905, 0.016,-0.424)   tilt  25.1 deg (down from horizontal-out)
+    centroid (  -89.5,   17.3,  36.8)   Y    8.0..  26.4   Z  22.4.. 50.9
+    in-plane  18.5 x  31.4 mm   lower/upper band width  15.1/ 18.5 -> TRAPEZOID
+  area    121 mm^2   n=( 0.891, 0.012,-0.454)   tilt  27.0 deg (down from horizontal-out)
+    centroid (  -90.5,   78.9,  37.0)   Y   72.5..  85.3   Z  31.6.. 42.7
+    in-plane  12.7 x  12.4 mm   lower/upper band width  11.5/ 11.4 -> parallel-sided
+
+===== STBD: angled outboard/down flats =====
+  area    531 mm^2   n=(-0.898,-0.017,-0.439)   tilt  26.0 deg (down from horizontal-out)
+    centroid ( -253.9,   51.3,  37.5)   Y   22.4..  76.1   Z  28.8.. 43.4
+    in-plane  53.7 x  16.5 mm   lower/upper band width  53.7/ 46.9 -> TRAPEZOID
+  area    400 mm^2   n=(-0.905,-0.016,-0.424)   tilt  25.1 deg (down from horizontal-out)
+    centroid ( -248.9,   13.4,  38.3)   Y    4.8..  23.5   Z  22.0.. 50.8
+    in-plane  18.8 x  31.8 mm   lower/upper band width  18.7/ 17.7 -> parallel-sided
+  area    120 mm^2   n=(-0.891,-0.019,-0.454)   tilt  27.0 deg (down from horizontal-out)
+    centroid ( -249.2,   78.8,  36.4)   Y   72.3..  85.4   Z  31.6.. 41.7
+    in-plane  13.2 x  11.3 mm   lower/upper band width  11.6/ 11.5 -> parallel-sided
+
+--- mirror check (port centroid reflected about X_CL) ---
+  port X   -84.5 ->  -255.3 vs stbd  -253.9   delta  1.4 mm   tilt 26.6 / 26.0 deg
+  port X   -89.5 ->  -250.3 vs stbd  -248.9   delta  1.4 mm   tilt 25.1 / 25.1 deg
+  port X   -90.5 ->  -249.3 vs stbd  -249.2   delta  0.1 mm   tilt 27.0 / 27.0 deg
+
+--- stderr ---

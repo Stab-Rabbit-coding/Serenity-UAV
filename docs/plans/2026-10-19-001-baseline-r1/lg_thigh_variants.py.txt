@@ -1,0 +1,56 @@
+LG thigh variants at the 13.0 lbm design mass (impact allowables, see header)
+
+== ordinary (LG-06, 1.5 ft): hip moment 39.0 N*m (345 lbf*in)
+  GROWN printed 17/22
+    root bending, CF-PETG (bored section, conservative)         10.7 vs    27.5 MPa  margin  2.57x OK
+  CF CORE 2x6 + 3 mm pins
+    rod gross section, CF                                       76.7 vs   300.0 MPa  margin  3.91x OK
+    rod NET section at the cross-pin hole, CF                  211.0 vs   300.0 MPa  margin  1.42x OK
+    cross-pin double shear, steel (N)                         2168.3 vs  4241.2 N    margin  1.96x OK
+    cross-pin bearing in the PETG lug (N)                     2168.3 vs  2940.0 N    margin  1.36x OK
+    bond, KNEE side of the root section (N)                   2168.3 vs  7775.4 N    margin  3.59x OK
+    bond alone, HUB side, 8 mm (why the pin is needed) (N)    2168.3 vs   754.0 N    margin  0.35x FAILS
+  CF CORE 2x6 + 4 mm pins
+    rod gross section, CF                                       76.7 vs   300.0 MPa  margin  3.91x OK
+    rod NET section at the cross-pin hole, CF                  507.3 vs   300.0 MPa  margin  0.59x FAILS
+    cross-pin double shear, steel (N)                         2168.3 vs  7539.8 N    margin  3.48x OK
+    cross-pin bearing in the PETG lug (N)                     2168.3 vs  3920.0 N    margin  1.81x OK
+    bond, KNEE side of the root section (N)                   2168.3 vs  7775.4 N    margin  3.59x OK
+    bond alone, HUB side, 8 mm (why the pin is needed) (N)    2168.3 vs   754.0 N    margin  0.35x FAILS
+
+== crash (LG-17, 4 ft): hip moment 91.9 N*m (813 lbf*in)
+  GROWN printed 17/22
+    root bending, CF-PETG (bored section, conservative)         25.1 vs    27.5 MPa  margin  1.09x OK
+  CF CORE 2x6 + 3 mm pins
+    rod gross section, CF                                      180.5 vs   300.0 MPa  margin  1.66x OK
+    rod NET section at the cross-pin hole, CF                  496.7 vs   300.0 MPa  margin  0.60x FAILS
+    cross-pin double shear, steel (N)                         5103.5 vs  4241.2 N    margin  0.83x FAILS
+    cross-pin bearing in the PETG lug (N)                     5103.5 vs  2940.0 N    margin  0.58x FAILS
+    bond, KNEE side of the root section (N)                   5103.5 vs  7775.4 N    margin  1.52x OK
+    bond alone, HUB side, 8 mm (why the pin is needed) (N)    5103.5 vs   754.0 N    margin  0.15x FAILS
+  CF CORE 2x6 + 4 mm pins
+    rod gross section, CF                                      180.5 vs   300.0 MPa  margin  1.66x OK
+    rod NET section at the cross-pin hole, CF                 1194.0 vs   300.0 MPa  margin  0.25x FAILS
+    cross-pin double shear, steel (N)                         5103.5 vs  7539.8 N    margin  1.48x OK
+    cross-pin bearing in the PETG lug (N)                     5103.5 vs  3920.0 N    margin  0.77x FAILS
+    bond, KNEE side of the root section (N)                   5103.5 vs  7775.4 N    margin  1.52x OK
+    bond alone, HUB side, 8 mm (why the pin is needed) (N)    5103.5 vs   754.0 N    margin  0.15x FAILS
+
+Mass change per leg vs baseline: {'grown': 11.1, 'cf_core': 8.3} g (x4 per aircraft)
+Worst margin over both cases: {'GROWN printed 17/22': 1.09, 'CF CORE 2x6 + 3 mm pins': 0.58, 'CF CORE 2x6 + 4 mm pins': 0.25}
+
+== FAILURE HIERARCHY (owner rule: leg breaks before bay / hull) ==
+   required: every mount capacity >= 1.25 x its demand at the leg's own breaking moment
+  grown: leg breaks at 197.3 N*m (root bending at CF-PETG flex strength)
+    bay M3 bolt tension (N)                         1451 vs    3521 N  ratio  2.43 OK
+    bolt-hole bearing, bay + hull stack (N)         1576 vs    2100 N  ratio  1.33 OK
+    hip pin M3 double shear (N)                     2466 vs    4241 N  ratio  1.72 OK
+  cf_core: leg breaks at 52.9 N*m (anchor (cross-pin bearing in the leg lug))
+    bay M3 bolt tension (N)                          389 vs    3521 N  ratio  9.05 OK
+    bolt-hole bearing, bay + hull stack (N)          423 vs    2100 N  ratio  4.97 OK
+    hip pin M3 double shear (N)                      662 vs    4241 N  ratio  6.41 OK
+  both: bay wire-boss bearing vs ductile plateau    7655 vs    6300 N  ratio  0.82 MOUNT FAILS FIRST -- AUTOMATIC FAIL (grow the boss)
+        -> boss bearing area needed 137 mm^2 (sizing area 90 mm^2)
+   NOTE: bay/hull bearing uses the 70 MPa CF-PETG bearing allowable against the leg's ULTIMATE moment -- conservative for the mount; the hull wall behind the seat collar is not modelled here (LG-14 drop test confirms).
+
+--- stderr ---

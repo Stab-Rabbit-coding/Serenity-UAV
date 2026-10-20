@@ -1,0 +1,182 @@
+Serenity UAV -- bottom-up AUW / CG / pitch inertia ledger
+Item                                                        g    Y mm   Z mm  source
+Nacelle port rotating assembly (64 mm)                  926.4    21.0   66.9  tools/nacelle_mass_cg_64.py roll-up at the hull pivot
+Nacelle stbd rotating assembly (64 mm)                  926.4    21.0   66.9  tools/nacelle_mass_cg_64.py roll-up at the hull pivot
+BATT-6S-4000                                            624.0    13.0  109.0  BOM; cargo_layout_fit BATT_*; solid box
+cargo_sect_shell24_2mm_repaired                         307.7    35.3   83.2  MEASURED mesh (hull frame)
+rear_shell24_2mm_repaired                               231.6   281.0   75.1  MEASURED mesh (hull frame)
+middle_shell24_2mm_repaired                             183.1   167.5   79.3  MEASURED mesh (hull frame)
+head_shell24_2mm_repaired                               177.6  -176.4  131.9  MEASURED mesh (hull frame)
+Flight Engineer                                         158.0   162.0   78.8  BOM Unit_Mass_g; middle_layout_fit FE_CAN_*
+wing_port_s1223_revo                                     95.6    35.3   66.0  MEASURED mesh (hull frame)
+wing_stbd_s1223_revo                                     95.6    35.3   66.0  MEASURED mesh (hull frame)
+lg_r6_3_0in_leg_frame                                    81.0   -31.0    0.0  MEASURED mass; station ESTIMATE: fore legs, midway hip Y -16 -> foot Y
+lg_r6_3_0in_leg_frame                                    81.0   117.0    0.0  MEASURED mass; station ESTIMATE: aft legs, midway hip Y 100 -> foot Y 
+WIRE-10AWG                                               80.0    90.0   80.0  BOM Unit_Mass_g; ESTIMATE: battery (Y 13) -> FE (Y 162) -> nacelles
+FAR-FERRITE-4MM                                          80.0    60.0   90.0  BOM Unit_Mass_g; ESTIMATE: cable exits, all nodes
+LG-DUCTILE-WIRE                                          70.2    50.0   30.0  BOM Unit_Mass_g; gear bays, 4 corners (sym)
+FE can (1.0 mm 6061) + entry plate + hardware            66.8   162.0   78.8  middle_layout_fit.py can_mass(), M_FE_PLATE, M_FE_HW; middle_layout_fi
+SPT5425LV-WINCH-LS2                                      60.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+WIRE-6AWG                                                60.0    90.0   80.0  BOM Unit_Mass_g; ESTIMATE: battery (Y 13) -> FE (Y 162) -> nacelles
+Cargo Observer node (vision/ToF/laser)                   60.0   118.5   50.0  ESTIMATE 60 g -- no BOM row; envelope 76.8 x 70.8 x 20 mm; cargo_layou
+SPAR-CF-20X16                                            58.2    21.0   66.9  BOM Unit_Mass_g; wing spar station, both sides (sym)
+GM-TILT-20D (port)                                       44.0    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+GM-TILT-20D (stbd)                                       44.0    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+TACCO (node A)                                           40.0  -260.0  120.0  BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_
+TACCO (node chin)                                        40.0   -29.0   77.0  BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)
+TACCO (node aft)                                         40.0   110.5  105.6  BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)
+TACCO (node simon)                                       40.0   189.0   80.5  BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)
+Commo                                                    40.0    50.0  100.0  BOM Unit_Mass_g; ESTIMATE: Commo sub-modules, cargo
+Structural epoxy (West System 105/206 + 406), bonded     40.0    40.0   80.0  ESTIMATE -- no installed-mass row (kit row is stock); ESTIMATE: spar s
+battery_cradle                                           39.2    10.4  119.7  MEASURED mesh (hull frame)
+LG-HARDWARE-MISC                                         34.0    50.0   30.0  BOM Unit_Mass_g; gear bays, 4 corners (sym)
+Pilot (node A)                                           31.0  -260.0  120.0  BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_
+Pilot (node chin)                                        31.0   -29.0   77.0  BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)
+Pilot (node aft)                                         31.0   110.5  105.6  BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)
+Pilot (node simon)                                       31.0   189.0   80.5  BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)
+CF-BAR-6X3                                               30.0    40.0    2.0  BOM Unit_Mass_g; ESTIMATE: keel bar mid-length
+lg_r6_3_0in_bay_aft-stbd_print                           27.8     0.4    9.5  MEASURED mesh (hull frame)
+lg_r6_3_0in_bay_aft-port_print                           27.6     0.5    9.5  MEASURED mesh (hull frame)
+SERVO-CARGO                                              27.0    55.0    8.0  BOM Unit_Mass_g; clamshell door aperture Y 2..108
+CONDUIT-PTFE                                             25.0    40.0   90.0  BOM Unit_Mass_g; ESTIMATE: full-hull-length conduit
+lg_r6_3_0in_bay_fore-stbd_print                          22.3     0.2   11.5  MEASURED mesh (hull frame)
+lg_r6_3_0in_bay_fore-port_print                          22.1     0.5   11.6  MEASURED mesh (hull frame)
+FOAM-PU-2LB                                              22.0     0.0  100.0  installed foam, MASS_AUDIT SS4.2 (MA-3); BOM carries the kit; ESTIMATE
+SHAFT-TILT-4MM                                           21.6    46.6   69.1  BOM Unit_Mass_g; cargo_layout_fit SHAFT_Y/Z
+LG-SPRING-WIRE                                           20.5    50.0   30.0  BOM Unit_Mass_g; gear bays, 4 corners (sym)
+PRINT-CARGO-WINCH-PEDESTAL-STBD                          20.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+WIRE-28AWG-STP                                           20.0    40.0   90.0  BOM Unit_Mass_g; ESTIMATE: full-length signal run
+wing_root_flange_stbd                                    18.8    26.3   69.0  MEASURED mesh (hull frame)
+wing_root_flange_port                                    18.4    26.0   69.2  MEASURED mesh (hull frame)
+PRINT-CARGO-WINCH-PEDESTAL-PORT                          18.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+tilt_actuator_bracket_port                               16.3    47.6  103.4  MEASURED mesh (hull frame)
+tilt_actuator_bracket_stbd                               16.3    47.6  103.4  MEASURED mesh (hull frame)
+PRINT-CARGO-WINCH-SPOOL-R2                               16.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+PRINT-NODE-SADDLE                                        16.0   110.5  105.6  BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)
+BATT-STRAP-CAM                                           16.0    13.0  109.0  BOM Unit_Mass_g; cargo_layout_fit BATT_*
+GEAR-TILT-FUS-38T                                        16.0    46.6   69.1  BOM Unit_Mass_g; cargo_layout_fit SHAFT_Y/Z
+cargo_middle_splice_collar                               15.8   130.0   76.0  MEASURED mesh (hull frame)
+lg_r6_common_foot                                        15.2   -46.5  -78.0  MEASURED mass; station foot station Y_FOOT_FORE (landing_gear_r6_sizin
+lg_r6_common_foot                                        15.2   135.0  -78.0  MEASURED mass; station foot station Y_FOOT_AFT (landing_gear_r6_sizing
+SOL-CATCH-5V                                             15.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+SOL-TILT-BRAKE (port)                                    15.0    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+SOL-TILT-BRAKE (stbd)                                    15.0    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+cargo_door_stbd                                          14.3    55.0    4.2  MEASURED mesh (hull frame)
+cargo_door_port                                          14.2    55.0    3.1  MEASURED mesh (hull frame)
+middle_rear_splice_collar                                14.0   203.3   80.6  MEASURED mesh (hull frame)
+CF thwart fore (CF-PLATE-2MM)                            13.6   -40.0   80.0  ESTIMATE; structural_analysis SS5.6, thwart Y -40
+CF thwart aft (CF-PLATE-2MM)                             13.6   118.0   80.0  ESTIMATE; structural_analysis SS5.6, thwart Y +118
+PB2-I-FC (node A)                                        13.0  -260.0  120.0  BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_
+PB2-I-FC (node chin)                                     13.0   -29.0   77.0  BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)
+PB2-I-FC (node aft)                                      13.0   110.5  105.6  BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)
+PB2-I-FC (node simon)                                    13.0   189.0   80.5  BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)
+PB2-I-CN (node A)                                        13.0  -260.0  120.0  BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_
+PB2-I-CN (node chin)                                     13.0   -29.0   77.0  BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)
+PB2-I-CN (node aft)                                      13.0   110.5  105.6  BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)
+PB2-I-CN (node simon)                                    13.0   189.0   80.5  BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)
+CF ring frame rear Y +290 (CF-PLATE-2MM)                 12.7   290.0   82.0  ESTIMATE; structural_analysis SS5.2, ~10 mm band ESTIMATE
+OSESC-TILT-TC (port)                                     12.0    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+OSESC-TILT-TC (stbd)                                     12.0    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+CAN-PERIPH-GW-1 gateways x2 (winch, tilt encoders)       12.0    55.5  143.4  ESTIMATE 6 g each, as CAN-PERIPH-GW-DOOR -- no BOM rows; cargo_layout_
+head_cargo_splice_collar                                 11.3   -70.3  106.5  MEASURED mesh (hull frame)
+SCREW-M3-BUTTON-8 (port)                                 10.8    21.0   66.9  BOM Unit_Mass_g; at the port nacelle pivot
+SCREW-M3-BUTTON-8 (stbd)                                 10.8    21.0   66.9  BOM Unit_Mass_g; at the stbd nacelle pivot
+SHUNT-1MOHM                                              10.0   162.0   78.8  BOM Unit_Mass_g; middle_layout_fit FE_CAN_*
+BATT-FOAM-SILICONE                                       10.0    13.0  109.0  BOM Unit_Mass_g; cargo_layout_fit BATT_*
+FAR-BOND-STRAP (node A)                                  10.0  -260.0  120.0  BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_
+FAR-BOND-STRAP (node chin)                               10.0   -29.0   77.0  BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)
+FAR-BOND-STRAP (node aft)                                10.0   110.5  105.6  BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)
+FAR-BOND-STRAP (node simon)                              10.0   189.0   80.5  BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)
+Node foil pouches x8 (node A)                            10.0  -260.0  120.0  middle_layout_fit.py M_CN4/M_FC4 convention
+Node foil pouches x8 (node chin)                         10.0   -29.0   77.0  middle_layout_fit.py M_CN4/M_FC4 convention
+Node foil pouches x8 (node aft)                          10.0   110.5  105.6  middle_layout_fit.py M_CN4/M_FC4 convention
+Node foil pouches x8 (node simon)                        10.0   189.0   80.5  middle_layout_fit.py M_CN4/M_FC4 convention
+chin_node_shelf                                           9.4   -23.7   65.2  MEASURED mesh (hull frame)
+FUSE-MAIN-150A                                            8.0   162.0   78.8  BOM Unit_Mass_g; middle_layout_fit FE_CAN_*
+FUSE-ESC-40A                                              8.0   162.0   78.8  BOM Unit_Mass_g; middle_layout_fit FE_CAN_*
+PIN-3X18 (port)                                           7.2    21.0   66.9  BOM Unit_Mass_g; at the port nacelle pivot
+PIN-3X18 (stbd)                                           7.2    21.0   66.9  BOM Unit_Mass_g; at the stbd nacelle pivot
+tilt_actuator_wheel                                       6.9    46.6   69.1  MEASURED mesh (hull frame)
+tilt_actuator_wheel                                       6.9    46.6   69.1  MEASURED mesh, starboard copy translated dX -89.2 (serenity_assembly.p
+CAN-PERIPH-GW-DOOR                                        6.0     0.0   10.0  BOM Unit_Mass_g; ESTIMATE: fwd belly slab (CARGO_DOOR_GATEWAY_SPEC)
+BUSH-TILT-4MM                                             6.0    46.6   69.1  BOM Unit_Mass_g; cargo_layout_fit SHAFT_Y/Z
+tilt_actuator_worm                                        6.0    46.9  102.1  MEASURED mesh (hull frame)
+tilt_actuator_worm                                        6.0    46.9  102.1  MEASURED mesh, starboard copy translated dX -89.2 (serenity_assembly.p
+SLEEVE-HUB-STEEL                                          5.6    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+cargo_door_servo_bracket                                  5.1    55.0    8.0  MEASURED mass; station ESTIMATE: clamshell door aperture Y 2..108
+cargo_release_servo_bracket                               5.1    55.5  120.0  MEASURED mass; station ESTIMATE: release at the hoist
+KEEPER-WINCH                                              5.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+FOAM-GASKET-CARGO                                         5.0    55.0    8.0  BOM Unit_Mass_g; clamshell door aperture Y 2..108
+gateway_door_tray                                         5.0     0.0   10.0  MEASURED mass; station ESTIMATE: fwd belly slab (CARGO_DOOR_GATEWAY_SP
+STUD-M3-BRASS (port)                                      4.8    21.0   66.9  BOM Unit_Mass_g; at the port nacelle pivot
+STUD-M3-BRASS (stbd)                                      4.8    21.0   66.9  BOM Unit_Mass_g; at the stbd nacelle pivot
+SHAFT-SS-4MM                                              4.6    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+POST-FWD-49                                               4.0  -150.0  205.0  BOM Unit_Mass_g; ESTIMATE: fwd 49 MHz post, head dorsal
+PLATE-PEDESTAL                                            4.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+ENC-AK7455-SPOOL                                          4.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+cargo_hinge_retention                                     3.0    55.0    4.0  MEASURED mesh (hull frame)
+WIRE-49MHZ                                                3.0    40.0  172.0  BOM Unit_Mass_g; ESTIMATE: dorsal spine mid-length
+BRG-MR84ZZ                                                3.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+HX711-LC                                                  3.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+DYNEEMA-SK75                                              3.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+PRINT-CARGO-WINCH-DOG-COUPLER                             3.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+PRINT-CARGO-WINCH-FAIRLEAD                                3.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+PRINT-HALL-HUB (port)                                     3.0    21.0   66.9  BOM Unit_Mass_g; at the port nacelle pivot
+PRINT-HALL-HUB (stbd)                                     3.0    21.0   66.9  BOM Unit_Mass_g; at the stbd nacelle pivot
+MESH-VENT-SS                                              3.0    13.0  109.0  BOM Unit_Mass_g; cargo_layout_fit BATT_*
+dorsal_antenna_fin                                        2.9     0.0  170.0  MEASURED mass; station ESTIMATE: dorsal, cargo
+door_latch_bracket_port                                   2.7    55.0    8.0  MEASURED mass; station clamshell door aperture Y 2..108
+door_latch_bracket_stbd                                   2.7    55.0    8.0  MEASURED mass; station clamshell door aperture Y 2..108
+cargo_gps_retention_ring                                  2.5   110.0  145.0  MEASURED mass; station ESTIMATE: GPS cups Z >= 139 over the aft strip
+INSERT-M3-WING                                            2.4    21.0   66.9  BOM Unit_Mass_g; wing spar station, both sides (sym)
+tilt_brake_guide                                          2.1    62.0  101.9  MEASURED mesh (hull frame)
+tilt_brake_guide_stbd                                     2.1    62.0  101.9  MEASURED mesh (hull frame)
+POST-AFT-49                                               2.0   380.0  160.0  BOM Unit_Mass_g; ESTIMATE: aft post, rear nozzle top
+PRINT-CARGO-WINCH-PAWL                                    2.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+LG-SAFETY-CORD                                            2.0    50.0    0.0  BOM Unit_Mass_g; gear, 4 corners (sym)
+SKIPPER-TILT-ENC-PCB (port)                               2.0    21.0   66.9  BOM Unit_Mass_g; at the port nacelle pivot
+SKIPPER-TILT-ENC-PCB (stbd)                               2.0    21.0   66.9  BOM Unit_Mass_g; at the stbd nacelle pivot
+FUSE-TILT-3A (port)                                       2.0    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+FUSE-TILT-3A (stbd)                                       2.0    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+door_horn                                                 1.8    55.0    8.0  MEASURED mass; station clamshell door aperture Y 2..108
+cargo_fpv_bezel                                           1.8   -60.0   60.0  MEASURED mass; station ESTIMATE: forward cargo
+PIN-3X10                                                  1.2    55.0    8.0  BOM Unit_Mass_g; clamshell door aperture Y 2..108
+HALL-SCR-M2-BRASS (port)                                  1.2    21.0   66.9  BOM Unit_Mass_g; at the port nacelle pivot
+HALL-SCR-M2-BRASS (stbd)                                  1.2    21.0   66.9  BOM Unit_Mass_g; at the stbd nacelle pivot
+MICROSD-LOG (node A)                                      1.0  -260.0  120.0  BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_
+MICROSD-LOG (node chin)                                   1.0   -29.0   77.0  BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)
+MICROSD-LOG (node aft)                                    1.0   110.5  105.6  BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)
+MICROSD-LOG (node simon)                                  1.0   189.0   80.5  BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)
+SPRING-PAWL                                               1.0    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+PIN-2X22 (port)                                           1.0    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+PIN-2X22 (stbd)                                           1.0    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+wing_tilt_pinion_port                                     0.9    46.6   69.1  MEASURED mesh (hull frame)
+wing_tilt_pinion_stbd                                     0.9    46.6   69.1  MEASURED mesh (hull frame)
+PIN-2X4 (port)                                            0.8    21.0   66.9  BOM Unit_Mass_g; at the port nacelle pivot
+PIN-2X4 (stbd)                                            0.8    21.0   66.9  BOM Unit_Mass_g; at the stbd nacelle pivot
+MAG-6X2.5-DIA (port)                                      0.5    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+MAG-6X2.5-DIA (stbd)                                      0.5    47.6  101.0  BOM Unit_Mass_g; tilt bracket centroid (placed STL)
+MESH-FOD-NOSEEUM (port)                                   0.4    21.0   66.9  BOM Unit_Mass_g; at the port nacelle pivot
+MESH-FOD-NOSEEUM (stbd)                                   0.4    21.0   66.9  BOM Unit_Mass_g; at the stbd nacelle pivot
+DOWEL-M2-10                                               0.3    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+CLIP-EXT-4MM                                              0.2    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+DIODE-SS34                                                0.2    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+FET-AO3400                                                0.1    55.5  143.4  BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0
+LED-WS2812C-NAC (port)                                    0.1    21.0   66.9  BOM Unit_Mass_g; at the port nacelle pivot
+LED-WS2812C-NAC (stbd)                                    0.1    21.0   66.9  BOM Unit_Mass_g; at the stbd nacelle pivot
+
+Subtotals (hover config):
+  BOM        2341.6 g  ( 5.16 lbm)
+  NACELLE    1852.8 g  ( 4.08 lbm)
+  PRINT      1635.9 g  ( 3.61 lbm)
+  GAP         218.8 g  ( 0.48 lbm)
+
+Thrust requirement: 4 x 2135 gf = 8540 gf (18.83 lbf) [REF-EDF-003]
+  hover_4000               AUW    6049 g (13.34 lbm)  CG X  -166.9 Y  +42.8 Z  77.6 mm  k_pitch 104.2 mm (4.10 in)  T/W 1.41
+  cargo_2800_payload       AUW    6177 g (13.62 lbm)  CG X  -167.0 Y  +43.7 Z  76.1 mm  k_pitch 103.0 mm (4.06 in)  T/W 1.38
+  heaviest_4000_payload    AUW    6276 g (13.84 lbm)  CG X  -167.0 Y  +43.2 Z  76.6 mm  k_pitch 102.5 mm (4.04 in)  T/W 1.36
+  hover thrust line (tilt pivot) Y +21.0 mm; CG offset +21.8 mm
+
+RESULT: PASS
+
+--- stderr ---

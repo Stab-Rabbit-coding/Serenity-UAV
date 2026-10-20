@@ -194,7 +194,9 @@ alter the exterior unless structurally required. When uncertain, request manual 
 placement from the user. `airframe/AGENTS.md` ("Canonical Geometry and Coordinate System",
 "Geometry Reference Points", "Geometry Integrity — Keep Skin True to Canon") and
 `airframe/HULL_FRAME_REFERENCE.md` ("Canonical Accuracy References" plus the validated extents
-table) own the hull-frame coordinate standard, the four-section layout, and the
+table) own the aircraft datum (ONE origin for the whole aircraft: centreline, nose tip,
+static ground plane — owner directive 2026-10-19; only a PCB inside KiCad keeps its own
+coordinates), the four-section layout, and the
 canonical-accuracy authority order over `docs/references/` (`REFERENCES.md`
 REF-CAD-002/003/004) — do not duplicate any of it here.
 
