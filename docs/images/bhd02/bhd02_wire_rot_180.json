@@ -1,0 +1,528 @@
+{
+  "scad": "airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad",
+  "scad_sha": "e0c7d6239ef3f097",
+  "defines": [
+    "CRANK_AZ=-202",
+    "CHORD_AZ=-112"
+  ],
+  "sweep_deg": 26.0,
+  "rows": [
+    {
+      "corner": "fore-port",
+      "feature": "cowl (flange+liner)",
+      "target": "shell",
+      "mm3": 968.1,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "cowl (flange+liner)",
+      "target": "root flange port",
+      "mm3": 246.5,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "cowl (flange+liner)",
+      "target": "CF spar port",
+      "mm3": 955.9,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "cowl (flange+liner)",
+      "target": "10AWG bundle exit port",
+      "mm3": 28.8,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "boss carrier",
+      "target": "shell",
+      "mm3": 1066.2,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "clevis gussets",
+      "target": "shell",
+      "mm3": 0.2,
+      "functional": false,
+      "verdict": "touch",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "clevis gussets",
+      "target": "root flange port",
+      "mm3": 17.1,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "clevis ears",
+      "target": "root flange port",
+      "mm3": 57.5,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "wire bosses",
+      "target": "shell",
+      "mm3": 561.3,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "wire seats",
+      "target": "shell",
+      "mm3": 95.9,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "M3 bolt keep-out",
+      "target": "shell",
+      "mm3": 399.3,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "M3 bolt keep-out",
+      "target": "root flange port",
+      "mm3": 83.2,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "M3 bolt keep-out",
+      "target": "CF spar port",
+      "mm3": 477.0,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "bay (printed part)",
+      "target": "shell",
+      "mm3": 2004.1,
+      "functional": false,
+      "verdict": "expected",
+      "why": "bay seats in the merged hull pocket"
+    },
+    {
+      "corner": "fore-port",
+      "feature": "bay (printed part)",
+      "target": "root flange port",
+      "mm3": 317.5,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "bay (printed part)",
+      "target": "CF spar port",
+      "mm3": 912.8,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "bay (printed part)",
+      "target": "10AWG bundle exit port",
+      "mm3": 28.8,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-port",
+      "feature": "leg (thigh+shin+foot)",
+      "target": "root flange port",
+      "mm3": 596.3,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "cowl (flange+liner)",
+      "target": "shell",
+      "mm3": 944.8,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "cowl (flange+liner)",
+      "target": "root flange stbd",
+      "mm3": 849.0,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "cowl (flange+liner)",
+      "target": "CF spar stbd",
+      "mm3": 949.9,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "cowl (flange+liner)",
+      "target": "10AWG bundle exit stbd",
+      "mm3": 32.0,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "boss carrier",
+      "target": "shell",
+      "mm3": 819.8,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "clevis gussets",
+      "target": "shell",
+      "mm3": 0.1,
+      "functional": false,
+      "verdict": "touch",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "clevis gussets",
+      "target": "root flange stbd",
+      "mm3": 78.7,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "clevis ears",
+      "target": "root flange stbd",
+      "mm3": 142.2,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "wire bosses",
+      "target": "shell",
+      "mm3": 415.1,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "wire seats",
+      "target": "shell",
+      "mm3": 105.7,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "M3 bolt keep-out",
+      "target": "shell",
+      "mm3": 380.4,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "M3 bolt keep-out",
+      "target": "wing stbd",
+      "mm3": 2.5,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "M3 bolt keep-out",
+      "target": "root flange stbd",
+      "mm3": 93.5,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "M3 bolt keep-out",
+      "target": "CF spar stbd",
+      "mm3": 477.0,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "bay (printed part)",
+      "target": "shell",
+      "mm3": 1702.9,
+      "functional": false,
+      "verdict": "expected",
+      "why": "bay seats in the merged hull pocket"
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "bay (printed part)",
+      "target": "root flange stbd",
+      "mm3": 1024.0,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "bay (printed part)",
+      "target": "CF spar stbd",
+      "mm3": 906.9,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "bay (printed part)",
+      "target": "10AWG bundle exit stbd",
+      "mm3": 32.0,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "fore-stbd",
+      "feature": "leg (thigh+shin+foot)",
+      "target": "root flange stbd",
+      "mm3": 497.5,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-port",
+      "feature": "cowl (flange+liner)",
+      "target": "shell",
+      "mm3": 60.1,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-port",
+      "feature": "cowl (flange+liner)",
+      "target": "wing port",
+      "mm3": 267.3,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-port",
+      "feature": "boss carrier",
+      "target": "shell",
+      "mm3": 188.9,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-port",
+      "feature": "wire bosses",
+      "target": "shell",
+      "mm3": 2.7,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-port",
+      "feature": "retention pads",
+      "target": "shell",
+      "mm3": 48.8,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-port",
+      "feature": "M3 bolt keep-out",
+      "target": "shell",
+      "mm3": 229.2,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-port",
+      "feature": "M3 bolt keep-out",
+      "target": "wing port",
+      "mm3": 60.4,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-port",
+      "feature": "bay (printed part)",
+      "target": "shell",
+      "mm3": 269.7,
+      "functional": false,
+      "verdict": "expected",
+      "why": "bay seats in the merged hull pocket"
+    },
+    {
+      "corner": "aft-port",
+      "feature": "bay (printed part)",
+      "target": "wing port",
+      "mm3": 267.3,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-stbd",
+      "feature": "cowl (flange+liner)",
+      "target": "shell",
+      "mm3": 60.6,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-stbd",
+      "feature": "cowl (flange+liner)",
+      "target": "wing stbd",
+      "mm3": 339.4,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-stbd",
+      "feature": "boss carrier",
+      "target": "shell",
+      "mm3": 210.7,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-stbd",
+      "feature": "wire bosses",
+      "target": "shell",
+      "mm3": 15.8,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-stbd",
+      "feature": "retention pads",
+      "target": "shell",
+      "mm3": 51.0,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-stbd",
+      "feature": "M3 bolt keep-out",
+      "target": "shell",
+      "mm3": 223.7,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-stbd",
+      "feature": "M3 bolt keep-out",
+      "target": "wing stbd",
+      "mm3": 61.4,
+      "functional": true,
+      "verdict": "CLASH",
+      "why": ""
+    },
+    {
+      "corner": "aft-stbd",
+      "feature": "bay (printed part)",
+      "target": "shell",
+      "mm3": 290.8,
+      "functional": false,
+      "verdict": "expected",
+      "why": "bay seats in the merged hull pocket"
+    },
+    {
+      "corner": "aft-stbd",
+      "feature": "bay (printed part)",
+      "target": "wing stbd",
+      "mm3": 339.4,
+      "functional": false,
+      "verdict": "CLASH",
+      "why": ""
+    }
+  ],
+  "function": [
+    {
+      "corner": "fore-port",
+      "bay_bodies": 1,
+      "leg_sweep_vs_own_bay_mm3": 0.0
+    },
+    {
+      "corner": "fore-stbd",
+      "bay_bodies": 1,
+      "leg_sweep_vs_own_bay_mm3": 0.0
+    },
+    {
+      "corner": "aft-port",
+      "bay_bodies": 1,
+      "leg_sweep_vs_own_bay_mm3": 0.0
+    },
+    {
+      "corner": "aft-stbd",
+      "bay_bodies": 1,
+      "leg_sweep_vs_own_bay_mm3": 0.0
+    }
+  ]
+}

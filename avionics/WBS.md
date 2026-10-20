@@ -1873,6 +1873,8 @@ REFERENCES.md Removed/Superseded Citations).
     (Observer job) re-applied the MCU/TPM footprint retarget on top. KiCad 9.0.2, default rules:
     0 copper/clearance errors, 305 unrouted connections. Open: route, re-verify sch<->PCB parity
     (§1.9.3), regenerate gerbers (the branch's pre-retarget `Jayne/gerbers` were dropped as stale).
+- [ ] **Observer PCB: route (305 unrouted), re-verify sch<->PCB parity, regenerate gerbers.**
+    Open remainder of the resync item above, split out 2026-10-19 so the generated TODO keeps it.
 - [ ] **Reconcile 2026-10-18 — branch work NOT carried into main (decision: main wins).**
     Recorded here so it is not rediscovered as "missing". All of it remains in git history on
     `don't-let-all-the-air-out`: (a) the Kaylee MAX42408/LM76005 buck architecture (4x MAX42408

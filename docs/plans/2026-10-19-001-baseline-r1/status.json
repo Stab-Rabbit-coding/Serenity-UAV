@@ -1,0 +1,21 @@
+{
+ "auw_ledger.py": 0,
+ "cargo_bay_envelope.py": 0,
+ "cargo_layout_fit.py": 1,
+ "landing_gear_bay_function.py": 2,
+ "landing_gear_bay_pad_fit.py": 0,
+ "landing_gear_bay_station_fit.py": 0,
+ "landing_gear_foot_stance.py": 0,
+ "landing_gear_ground_clearance.py": 0,
+ "landing_gear_opening_fit.py": 0,
+ "landing_gear_r6_sizing.py": 0,
+ "middle_layout_fit.py": 1,
+ "verify_bow_pod.py": 0,
+ "wing_root_deconflict.py": 0,
+ "wing_spar_carrythrough.py": 0,
+ "landing_gear_wing_clearance.py": 1,
+ "wing_internal_clearance.py": 0,
+ "lg_thigh_variants.py": 2,
+ "nacelle_esc_bay_fit.py": 0,
+ "nozzle_linkage_check.py": 0
+}

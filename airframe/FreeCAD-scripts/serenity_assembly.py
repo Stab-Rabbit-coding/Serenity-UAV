@@ -632,8 +632,9 @@ def assemble():
     # checklist's own visual-fit pass in FreeCAD.
     CARGO_X_CL = -170.0  # cargo/middle section lateral centreline, hull frame
 
-    cradle = add_mesh(doc, _stl("fuselage/cargo/cargo_cradle_autolatch.stl"), "Cargo_Cradle")
-    place_mesh(cradle, (CARGO_X_CL, 45.0, 1.0, 0.0, 0.0, 0.0, 1.0))
+    # cargo_cradle_autolatch retired 2026-10-19 (weight pass, BOM qty 0): the
+    # stowed payload is held by the winch ratchet over the latched doors
+    # (docs/CARGO_WINCH_SPECIFICATION.md state table).
 
     fpv = add_mesh(doc, _stl("fuselage/cargo/cargo_fpv_bezel.stl"), "Cargo_FPV_Bezel")
     place_mesh(fpv, (CARGO_X_CL, 60.0, 160.0, 0.0, 0.0, 0.0, 1.0))
@@ -641,16 +642,19 @@ def assemble():
     gps = add_mesh(doc, _stl("fuselage/cargo/cargo_gps_retention_ring.stl"), "Cargo_GPS_Ring")
     place_mesh(gps, (CARGO_X_CL, 20.0, 161.5, 0.0, 0.0, 0.0, 1.0))
 
-    winch_mount = add_mesh(
-        doc, _stl("fuselage/cargo/cargo_winch_motor_mount.stl"), "Cargo_Winch_Mount"
-    )
-    place_mesh(winch_mount, (-140.0, 55.0, 1.0, 0.0, 0.0, 0.0, 1.0))
+    # 2026-10-19 placement audit (tools/placement_audit.py): the N20 winch
+    # mount + spool (scrubbed 2026-07-27, airframe/fuselage-mid/WBS.md) and the
+    # DRV8833 tray (retired 2026-09-21, docs/CARGO_DOOR_GATEWAY_SPEC.md) are no
+    # longer placed -- a retired part in the assembly pollutes the joint census
+    # and the mass ledger.  The current winch (SPT5425LV + pedestals + spool R2)
+    # has no hull-frame STLs yet (WBS LEDGER-GAPS).
 
-    winch_spool = add_mesh(doc, _stl("fuselage/cargo/cargo_winch_spool.stl"), "Cargo_Winch_Spool")
-    place_mesh(winch_spool, (-140.0, 55.0, 27.0, 0.0, 0.0, 0.0, 1.0))  # coaxial, above mount
-
-    drv8833 = add_mesh(doc, _stl("fuselage/cargo/cargo_drv8833_tray.stl"), "Cargo_DRV8833_Tray")
-    place_mesh(drv8833, (-200.0, 55.0, 12.0, 0.0, 0.0, 0.0, 1.0))
+    # Door latch brackets and the cargo-door gateway tray: generated in hull
+    # frame from cargo_layout_t5_params.scad (door_latch_mechanism.scad,
+    # gateway_door_tray.scad) -- identity placement.  They were never added.
+    add_mesh(doc, _stl("fuselage/cargo/door_latch_bracket_port.stl"), "Door_Latch_Bracket_Port")
+    add_mesh(doc, _stl("fuselage/cargo/door_latch_bracket_stbd.stl"), "Door_Latch_Bracket_Stbd")
+    add_mesh(doc, _stl("fuselage/cargo/gateway_door_tray.stl"), "Gateway_Door_Tray")
 
     door_servo = add_mesh(
         doc, _stl("fuselage/cargo/cargo_door_servo_bracket.stl"), "Cargo_Door_Servo_Bracket"

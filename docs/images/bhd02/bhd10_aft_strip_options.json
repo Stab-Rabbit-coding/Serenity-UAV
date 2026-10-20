@@ -1,0 +1,156 @@
+{
+  "baseline": [
+    {
+      "part": "Pilot FC2 port",
+      "target": "collar cargo-middle",
+      "mm3": 22.0,
+      "gap_mm": 0.0,
+      "verdict": "CLASH"
+    },
+    {
+      "part": "Pilot FC2 port",
+      "target": "tilt controller board port",
+      "mm3": 0.0,
+      "gap_mm": 1.6,
+      "verdict": "near"
+    },
+    {
+      "part": "Pilot FC3 stbd",
+      "target": "collar cargo-middle",
+      "mm3": 24.2,
+      "gap_mm": 0.0,
+      "verdict": "CLASH"
+    },
+    {
+      "part": "Pilot FC3 stbd",
+      "target": "tilt controller board stbd",
+      "mm3": 0.0,
+      "gap_mm": 1.6,
+      "verdict": "near"
+    },
+    {
+      "part": "Pilot FC2 cable zone",
+      "target": "collar cargo-middle",
+      "mm3": 19.0,
+      "gap_mm": 0.0,
+      "verdict": "CLASH"
+    },
+    {
+      "part": "Pilot FC3 cable zone",
+      "target": "collar cargo-middle",
+      "mm3": 19.2,
+      "gap_mm": 0.0,
+      "verdict": "CLASH"
+    }
+  ],
+  "O1 shift fwd 2.5": [
+    {
+      "part": "Pilot FC2 port",
+      "target": "tilt bracket port",
+      "mm3": 42.9,
+      "gap_mm": 0.0,
+      "verdict": "CLASH"
+    },
+    {
+      "part": "Pilot FC2 port",
+      "target": "tilt controller board port",
+      "mm3": 200.7,
+      "gap_mm": 0.0,
+      "verdict": "CLASH"
+    },
+    {
+      "part": "Pilot FC3 stbd",
+      "target": "tilt bracket stbd",
+      "mm3": 43.4,
+      "gap_mm": 0.0,
+      "verdict": "CLASH"
+    },
+    {
+      "part": "Pilot FC3 stbd",
+      "target": "tilt controller board stbd",
+      "mm3": 215.6,
+      "gap_mm": 0.0,
+      "verdict": "CLASH"
+    },
+    {
+      "part": "Pilot FC2 cable zone",
+      "target": "tilt bracket port",
+      "mm3": 0.0,
+      "gap_mm": 0.1,
+      "verdict": "near"
+    },
+    {
+      "part": "Pilot FC3 cable zone",
+      "target": "tilt bracket stbd",
+      "mm3": 4.1,
+      "gap_mm": 0.0,
+      "verdict": "CLASH"
+    }
+  ],
+  "O2 collar relief": [
+    {
+      "part": "Pilot FC2 port",
+      "target": "collar cargo-middle",
+      "mm3": 0.0,
+      "gap_mm": 1.05,
+      "verdict": "near"
+    },
+    {
+      "part": "Pilot FC2 port",
+      "target": "tilt controller board port",
+      "mm3": 0.0,
+      "gap_mm": 1.6,
+      "verdict": "near"
+    },
+    {
+      "part": "Pilot FC3 stbd",
+      "target": "collar cargo-middle",
+      "mm3": 0.0,
+      "gap_mm": 1.05,
+      "verdict": "near"
+    },
+    {
+      "part": "Pilot FC3 stbd",
+      "target": "tilt controller board stbd",
+      "mm3": 0.0,
+      "gap_mm": 1.6,
+      "verdict": "near"
+    },
+    {
+      "part": "Pilot FC2 cable zone",
+      "target": "collar cargo-middle",
+      "mm3": 0.0,
+      "gap_mm": 1.42,
+      "verdict": "near"
+    },
+    {
+      "part": "Pilot FC3 cable zone",
+      "target": "collar cargo-middle",
+      "mm3": 0.0,
+      "gap_mm": 1.41,
+      "verdict": "near"
+    }
+  ],
+  "O2 collar relief cost": {
+    "removed_mm3": 595.6,
+    "band_mm3": 6702.0,
+    "band_loss_pct": 8.89,
+    "bodies_after": 1
+  },
+  "O3 stack -2.5": [
+    {
+      "part": "Pilot FC2 port",
+      "target": "tilt controller board port",
+      "mm3": 0.0,
+      "gap_mm": 1.6,
+      "verdict": "near"
+    },
+    {
+      "part": "Pilot FC3 stbd",
+      "target": "tilt controller board stbd",
+      "mm3": 0.0,
+      "gap_mm": 1.6,
+      "verdict": "near"
+    }
+  ]
+}

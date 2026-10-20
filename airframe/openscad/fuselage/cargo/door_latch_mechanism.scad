@@ -88,6 +88,12 @@ BRACKET_Y    = 39.33;    // 2nd hinge knuckle station -- clear of the aperture
 // by PIVOT_IN so the crank clears the door panel's swept arc.
 PIVOT_H  = 14.0;
 PIVOT_IN = 10.0;
+// BHD-06 (2026-10-12): the standoff ran down to the HINGE Z, so its base sat
+// inside the closed door panel (door x bracket 252 / 254 mm^3, Z 3..6.5 at
+// this station -- tools/cargo_bulkhead_context.py).  Its base now starts
+// BASE_LIFT above the hinge: 1 mm over the door's top here (Z 6.5 + 1.0).
+// The bracket still bonds to the hull wall along its outboard face.
+BASE_LIFT = 4.5;
 
 // Crank arms (mm), all about the same pivot pin
 ARM_DRIVE = 5.0;    // rA: to the door-horn pushrod (D-LATCH-1)
@@ -190,7 +196,8 @@ module bracket(side) {
     translate([hx - sgn * PIVOT_IN, BRACKET_Y, hz + PIVOT_H])
         mirror(side == "stbd" ? [1, 0, 0] : [0, 0, 0])
             union() {
-                translate([-5, -6, -PIVOT_H]) cube([15, 12, PIVOT_H]);  // standoff to the hull
+                translate([-5, -6, -PIVOT_H + BASE_LIFT])
+                    cube([15, 12, PIVOT_H - BASE_LIFT]);               // standoff to the hull
                 bell_crank();
                 mortise_boss();
             }

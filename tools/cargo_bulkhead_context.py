@@ -67,19 +67,20 @@ STL = os.path.join(REPO, "airframe", "stls")
 sys.path.insert(0, os.path.join(STL, "fuselage", "cargo"))
 import cargo_door_hinge_params as hinge  # noqa: E402  (CARGO-HINGE-SYNC source)
 
-X_CL = clf.X_CL                       # cargo centre plane, -169.85
+import hull_datums as hd  # noqa: E402  aircraft datum R2 (2026-10-19)
+X_CL = clf.X_CL                       # centreline = 0 (aircraft datum)
 STBD_DX = 2.0 * (X_CL - clf.WORM_X)   # -89.2: worm/wheel/guide translate, not mirror
 
 # Wing datums -- merge_cargo_interior.py (WING_SPAR_*, WING_*_Y/Z), restated
 # here only as the check's inputs; the meshes are measured against them.
-SPAR_Y, SPAR_Z, SPAR_D = 21.00, 66.851, 20.0
+SPAR_Y, SPAR_Z, SPAR_D = hd.SPAR_Y, hd.SPAR_Z, 20.0
 SHAFT_Y, SHAFT_Z, SHAFT_D = clf.SHAFT_Y, clf.SHAFT_Z, 4.0
 BUNDLE_D = 16.3            # spar ID = 4 x 10 AWG bundle (SPAR_WIRE_BORE_D)
-ENC_Y, ENC_Z, ENC_D = 37.50, 68.689, 6.5
-NAV_Y, NAV_Z, NAV_D = 1.00, 61.974, 3.2
-SPAR_INB = {"port": -100.0, "stbd": -240.0}      # socket floor (bay clear span)
-HARN_INB = {"port": -125.0, "stbd": -213.0}      # harness bore inboard exits
-WALL_OUT = {"port": -79.6, "stbd": -260.0}       # root-flange outer bbox = wall skin
+ENC_Y, ENC_Z, ENC_D = 343.20, 148.689, 6.5  # R1 37.5/68.689
+NAV_Y, NAV_Z, NAV_D = 306.70, 141.974, 3.2  # R1 1.0/61.974
+SPAR_INB = {"port": 69.85, "stbd": -70.15}      # socket floor; R1 -100 / -240
+HARN_INB = {"port": 44.85, "stbd": -43.15}      # harness exits; R1 -125 / -213
+WALL_OUT = {"port": 90.25, "stbd": -90.15}      # flange outer bbox; R1 -79.6 / -260
 EXIT_STUB = 10.0           # straight run inboard of a bore exit before a turn
 
 # Owner 2026-10-07 (BHD-07): 145 deg is adequate; the 3.0 in gear stops a
@@ -373,9 +374,9 @@ def corridor(P: dict, side: str, pitch: float = 1.0) -> dict:
     (into the middle section, towards Flight Engineer), and the
     centreline of the shortest route that carries the 16.3 mm bundle with
     1 mm clearance (for the render)."""
-    x_wall = -95.0 if side == "port" else -245.0
-    lo = np.array([min(X_CL, x_wall), -20.0, 10.0])
-    hi = np.array([max(X_CL, x_wall), 150.0, 165.0])
+    x_wall = 74.85 if side == "port" else -75.15  # R1 -95/-245
+    lo = np.array([min(X_CL, x_wall), 285.70, 90.0])  # R1 Y -20, Z 10
+    hi = np.array([max(X_CL, x_wall), 455.70, 245.0])  # R1 Y 150, Z 165
     xs = np.arange(lo[0] + pitch / 2, hi[0], pitch)
     ys = np.arange(lo[1] + pitch / 2, hi[1], pitch)
     zs = np.arange(lo[2] + pitch / 2, hi[2], pitch)
@@ -501,10 +502,11 @@ def main() -> int:
             r["side"] = sd
             tri(cm).export(os.path.join(a.export, f"CLASH_{sd}_{n_side[sd]:02d}.stl"))
             n_side[sd] += 1
-        slab = {"port": ([-135.0, -90.0, -100.0], [80.0, 260.0, 300.0]),
-                "stbd": ([-285.0, -90.0, -100.0], [80.0, 260.0, 300.0])}
-        half = {"port": ([X_CL, -200.0, -200.0], [400.0, 600.0, 600.0]),
-                "stbd": ([X_CL - 400.0, -200.0, -200.0], [400.0, 600.0, 600.0])}
+        # R2 origins; R1 (-135|-285, -90, -100)
+        slab = {"port": ([34.85, 215.70, -20.0], [80.0, 260.0, 300.0]),
+                "stbd": ([-115.15, 215.70, -20.0], [80.0, 260.0, 300.0])}
+        half = {"port": ([X_CL, 105.70, -120.0], [400.0, 600.0, 600.0]),
+                "stbd": ([X_CL - 400.0, 105.70, -120.0], [400.0, 600.0, 600.0])}
         for sd in ("port", "stbd"):
             o, d = slab[sd]
             tri(P["shell"]["m"] ^ Manifold.cube(d).translate(o)).export(

@@ -1,0 +1,82 @@
+Loading airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl ...
+  1,075,956 faces  watertight=True  bounds=[[-267.0, -69.5, -0.0], [-72.7, 129.0, 163.2]]
+  gathering skin points around each station ...
+    fore-port  144,436 vertices
+    fore-stbd  145,851 vertices
+    aft-port   110,089 vertices
+    aft-stbd   109,967 vertices
+
+=== AS-DESIGNED plane: BAY_BACK_X = -8.0, BAY_CANT = +22 ===
+  fore-port : standoff min  -29.56  max  +41.59  mean   -2.01 mm  (135 cells on skin)
+  fore-stbd : standoff min  -27.27  max  +43.79  mean   +0.19 mm  (137 cells on skin)
+  aft-port  : standoff min  -29.67  max  +41.71  mean   -0.76 mm  (99 cells on skin)
+  aft-stbd  : standoff min  -28.98  max  +42.28  mean   +0.85 mm  (106 cells on skin)
+  (negative standoff = the hull skin pokes THROUGH the plate's back
+   face -- the plate and the hull interfere there)
+
+=== solving common pad plane (minimise worst-case pad thickness) ===
+    cant  -45.0: worst pad  58.23 mm
+    cant  -42.5: worst pad  57.33 mm
+    cant  -40.0: worst pad  56.14 mm
+    cant  -37.5: worst pad  54.78 mm
+    cant  -35.0: worst pad  53.41 mm
+    cant  -32.5: worst pad  51.86 mm
+    cant  -30.0: worst pad  50.25 mm
+    cant  -27.5: worst pad  49.18 mm
+    cant  -25.0: worst pad  47.29 mm
+    cant  -22.5: worst pad  45.73 mm
+    cant  -20.0: worst pad  41.76 mm
+    cant  -17.5: worst pad  37.67 mm
+    cant  -15.0: worst pad  34.48 mm
+    cant  -12.5: worst pad  35.55 mm
+    cant  -10.0: worst pad  37.65 mm
+    cant   -7.5: worst pad  46.02 mm
+    cant   -5.0: worst pad  43.33 mm
+    cant   -2.5: worst pad  52.74 mm
+    cant   +0.0: worst pad  54.58 mm
+    cant   +2.5: worst pad  56.37 mm
+    cant   +5.0: worst pad  58.60 mm
+    cant   +7.5: worst pad  59.65 mm
+    cant  +10.0: worst pad  60.77 mm
+    cant  +12.5: worst pad  62.77 mm
+    cant  +15.0: worst pad  64.74 mm
+    cant  +17.5: worst pad  66.12 mm
+    cant  +20.0: worst pad  67.35 mm
+    cant  +22.5: worst pad  68.70 mm
+    cant  +25.0: worst pad  70.52 mm
+    cant  +27.5: no coverage
+    cant  +30.0: worst pad  76.13 mm
+  refining -18.0..-12.0 deg at 0.25 deg ...
+  BAY_CANT   = -15.2 deg   (as-designed +22 -> inverted sign)
+  BAY_BACK_X = +2.78 mm  (as-designed -8.00)
+  worst-case pad thickness = 34.37 mm
+
+  per-corner pad thickness (mm):
+    fore-port  min  1.50  max  34.08  mean 10.77   pad vol ~ 43.60 cm^3
+    fore-stbd  min  2.65  max  34.37  mean 13.44   pad vol ~ 54.42 cm^3
+    aft-port   min  8.91  max  32.81  mean 18.84   pad vol ~ 76.26 cm^3
+    aft-stbd   min  8.69  max  32.55  mean 19.42   pad vol ~ 78.61 cm^3
+
+  total added pad volume ~252.89 cm^3  -> ~265.5 g added to the cargo shell
+
+  ^ REJECTED on mass: a flat pad must fill the hull's curvature.
+    Retained above only as the evidence that the as-designed flat
+    surface mount cannot seat.  The build uses the conforming pad.
+
+=== CONFORMING pad — constant thickening that follows the skin ===
+  station      surface area    +3 mm      +4 mm      +5 mm
+  fore-port       4547 mm^2   13.64 cm^3   18.19 cm^3   22.74 cm^3
+  fore-stbd       4644 mm^2   13.93 cm^3   18.58 cm^3   23.22 cm^3
+  aft-port        3226 mm^2    9.68 cm^3   12.90 cm^3   16.13 cm^3
+  aft-stbd        3184 mm^2    9.55 cm^3   12.74 cm^3   15.92 cm^3
+
+  +3.0 mm pad total:  46.80 cm^3 ->  49.1 g   (flat slab: 252.9 cm^3 / 265.5 g)
+  +4.0 mm pad total:  62.41 cm^3 ->  65.5 g   (flat slab: 252.9 cm^3 / 265.5 g)
+  +5.0 mm pad total:  78.01 cm^3 ->  81.9 g   (flat slab: 252.9 cm^3 / 265.5 g)
+
+  Adopted: +3 mm (2 mm wall -> 5 mm local) = 49.1 g on the cargo shell.
+  BOM consequence: fore and aft flanks differ, so the conforming back
+  face makes the bay TWO unique geometries (fore, aft), each a
+  mirrored pair -- amend LANDING_GEAR_ANALYSIS.md SS11.4.
+
+--- stderr ---

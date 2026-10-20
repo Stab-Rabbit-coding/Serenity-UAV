@@ -82,11 +82,11 @@ STATIC_GAP = 2.0  # static part against the fixed hull (cargo_layout_fit convent
 # ---------------------------------------------------------------------------
 # Middle section datum (measured from the baked shell, 2026-09-17)
 # ---------------------------------------------------------------------------
-MID_Y0, MID_Y1 = 130.4, 203.6  # section faces (HULL_FRAME_REFERENCE.md)
-NECK_ZC = 77.8  # bore centre Z at Y 140 (drifts to ~80.5 by Y 198)
+MID_Y0, MID_Y1 = 436.1, 509.3  # R2; R1 130.4 / 203.6; section faces (HULL_FRAME_REFERENCE.md)
+NECK_ZC = 157.8  # R1 77.8; bore centre Z at Y 140 (drifts to ~80.5 by Y 198)
 NECK_R = 62.5  # nominal bore radius (129 x 129.5 at Y 140; 120 x 125 at Y 198)
-FWD_SLEEVE_Y1 = 139.0  # cargo/middle collar sleeve reaches Y 121..139
-AFT_SLEEVE_Y0 = 194.3  # middle/rear collar sleeve reaches Y 194.3..212.3
+FWD_SLEEVE_Y1 = 444.7  # R1 139.0; cargo/middle collar sleeve reaches Y 121..139
+AFT_SLEEVE_Y0 = 500.0  # R1 194.3; middle/rear collar sleeve reaches Y 194.3..212.3
 REAR_RESERVED_Y = MID_Y1  # nothing of this layout may pass the rear face (Phase 11)
 
 # ---------------------------------------------------------------------------
@@ -99,9 +99,14 @@ REAR_RESERVED_Y = MID_Y1  # nothing of this layout may pass the rear face (Phase
 # FlightEngineer.md, which does not fit (see module docstring).
 FE_BOARD_X, FE_BOARD_Z = 65.0, 90.0
 FE_HOLE_DX, FE_HOLE_DZ = 57.0 / 2, 82.0 / 2  # +-28.5 x +-41 from the board centre
-FE_CAN_X, FE_CAN_Z, FE_CAN_Y = 75.0, 94.0, 28.0  # external; 1.0 mm 6061-T6, R12 Y-parallel edges
+FE_CAN_X, FE_CAN_Z, FE_CAN_Y = 75.0, 94.0, 28.0  # external; 6061-T6, R12 Y-parallel edges
 FE_CAN_R = 12.0
-FE_WALL = 1.0
+# Wall 1.0 -> 0.5 mm (weight pass 2026-10-19, -31.8 g).  Shielding is still
+# absorption-dominated above ~10 MHz (Al skin depth ~26 um at 10 MHz -> >150 dB
+# absorption at 0.5 mm).  The trade is low-frequency magnetic absorption near
+# the PDB's buck switching frequency, which halves in dB with the wall -- WBS
+# FE-CAN-05 asks the EMC pass to confirm.  External envelope unchanged.
+FE_WALL = 0.5
 FE_STANDOFF = 4.0
 FE_PCB_T = 1.6
 FE_COMP_MAX = 16.0  # ICD: tallest component above the board top face
@@ -134,7 +139,7 @@ NODE_L, NODE_H, NODE_T, NODE_CABLE = cargo.NODE_L, cargo.NODE_H, cargo.NODE_T, c
 SIMON_Y0 = FE_CAN_Y1 + 2.0  # 178.0 (both static -> 2 mm, cargo convention)
 SIMON_Y1 = SIMON_Y0 + NODE_T  # 200.0 < 203.6 rear face
 SIMON_XC = X_CL
-SIMON_ZC = 80.5  # aft-neck bore centre
+SIMON_ZC = 160.5  # R1 80.5; aft-neck bore centre
 SIMON_STACK_GAP = 3.0
 SIMON_STACK_H = 2 * NODE_H + SIMON_STACK_GAP  # 77
 SIMON_Z0 = SIMON_ZC - SIMON_STACK_H / 2  # 42.0
@@ -144,8 +149,8 @@ SIMON_X0, SIMON_X1 = SIMON_XC - NODE_L / 2, SIMON_XC + NODE_L / 2  # -198.85..-1
 SIMON_CABLE_X1 = SIMON_X1 + NODE_CABLE  # -130.85 (port cable zone)
 # Saddle: floor-standing slotted block, 4 x M3 heat-set floor bosses
 SADDLE_T = 2.4
-SADDLE_BOSS = ((SIMON_XC - 22.0, 182.0), (SIMON_XC + 22.0, 182.0),
-               (SIMON_XC - 22.0, 196.0), (SIMON_XC + 22.0, 196.0))  # (X, Y)
+SADDLE_BOSS = ((SIMON_XC - 22.0, 487.7), (SIMON_XC + 22.0, 487.7),
+               (SIMON_XC - 22.0, 501.7), (SIMON_XC + 22.0, 501.7))  # (X, Y); R1 Y 182/196
 
 # ---------------------------------------------------------------------------
 # Ventral hatch -- the ONLY service opening (joints are bonded)
@@ -158,10 +163,11 @@ SADDLE_BOSS = ((SIMON_XC - 22.0, 182.0), (SIMON_XC + 22.0, 182.0),
 # hatch zone once Kaylee is lowered.
 HATCH_X0, HATCH_X1 = FE_CAN_X0 - 4.5, FE_CAN_X1 + 4.5  # 84 wide
 HATCH_Y0, HATCH_Y1 = FE_UNIT_Y0, FE_CAN_Y1 + 1.0  # 140..177
-HATCH_ZCUT = 47.0  # above the bore wall at the cut's X edges (Z 31.5 at |dX| 42)
+HATCH_ZCUT = 127.0  # R1 47.0; above the bore wall at the cut's X edges (Z 31.5 at |dX| 42)
 HATCH_LIP = 5.0  # cover shoulder lip riding on the OML
-HATCH_SCREWS = ((HATCH_X0 - 4.0, 143.0), (HATCH_X0 - 4.0, 158.5), (HATCH_X0 - 4.0, 174.0),
-                (HATCH_X1 + 4.0, 143.0), (HATCH_X1 + 4.0, 158.5), (HATCH_X1 + 4.0, 174.0))
+# R2 Y; R1 Y 143 / 158.5 / 174.
+HATCH_SCREWS = ((HATCH_X0 - 4.0, 448.7), (HATCH_X0 - 4.0, 464.2), (HATCH_X0 - 4.0, 479.7),
+                (HATCH_X1 + 4.0, 448.7), (HATCH_X1 + 4.0, 464.2), (HATCH_X1 + 4.0, 479.7))
 # Hatch cut removes roughly 97 deg of the O125 tube over 37 mm: the cover is a
 # structural doubler (SS LOAD open item, see the layout doc).
 
@@ -171,7 +177,7 @@ HATCH_SCREWS = ((HATCH_X0 - 4.0, 143.0), (HATCH_X0 - 4.0, 158.5), (HATCH_X0 - 4.
 # coax drops straight to the pouch).  60 mm apart: SiK/LoRa need >= 50
 # (AVIONICS_PB2_REDESIGN.md SS3.4 note).
 # ---------------------------------------------------------------------------
-SMA_Y = 168.0
+SMA_Y = 473.7  # R1 168.0
 SMA_XS = {"SMA-49 (Commo whip)": X_CL, "SMA-915-SIK": X_CL + 30.0, "SMA-WIFI": X_CL - 30.0}
 SMA_BORE_D = 6.5
 
@@ -189,36 +195,36 @@ ESC_PAIR_W, ESC_PAIR_T = 12.5, 7.0
 # 20 wide x 12.5 tall: the channel between the aft nodes' cable zones (X xc +-20,
 # cargo_layout_fit) -- batt O11 + 5 V O8 side by side, 6 V O6 and the STPs above
 CREST_X0, CREST_X1 = X_CL - 10.0, X_CL + 10.0
-CREST_Z0, CREST_Z1 = 124.5, 137.0
-CREST_Y0, CREST_Y1 = 86.5, 131.5
+CREST_Z0, CREST_Z1 = 204.5, 217.0  # R1 124.5 / 137
+CREST_Y0, CREST_Y1 = 392.2, 437.2  # R1 86.5 / 131.5
 # E -- ESC feeders (2 shielded pairs per side).  E1: the flange-face slab
 # where the pairs leave the spar wire bore (O16.3 at Y 21 / Z 66.85; flange
 # face X -118.9 port).  The worm wheel (X -127.75..-122.75, Y 25.6..67.6,
 # Z 48..90) shadows the bore's aft 3.5 mm, so the pairs turn DOWN and FORWARD
 # inside the flange thickness (a flared mouth -- CARGO change request T6-CR1)
 # and drop along the flange face forward of the wheel.
-FLANGE_FACE_X = -118.9
-E1 = (FLANGE_FACE_X - ESC_PAIR_T, FLANGE_FACE_X, 5.0, 25.6, 27.0, 75.0)
+FLANGE_FACE_X = 50.95  # R1 -118.9
+E1 = (FLANGE_FACE_X - ESC_PAIR_T, FLANGE_FACE_X, 310.7, 331.3, 107.0, 155.0)  # R2
 # E1a: the shadowed slab -- wires exiting aft of Y 25.6 have 3.85 mm before
 # the wheel rim.  Reported for the record; gap 0.
-E1A = (-122.75, FLANGE_FACE_X, 25.6, 29.15, 58.7, 75.0)
+E1A = (47.10, FLANGE_FACE_X, 331.3, 334.85, 138.7, 155.0)  # R2
 # E3: trough under the wheel along the lower flank (wall is at X -86..-100
 # here; the payload face is -131.75).  Two pairs side by side + tilt feed.
-E3 = (-129.5, -110.0, 25.6, 85.0, 32.5, 44.5)
+E3 = (40.35, 59.85, 331.3, 390.7, 112.5, 124.5)  # R2
 # E3->E4 transition: rise from the trough to the Observer-side slot
-E34 = (-130.0, -122.2, 85.0, 99.0, 30.0, 83.0)
+E34 = (39.85, 47.65, 390.7, 404.7, 110.0, 163.0)  # R2
 # E4: slot between the standing cargo Observer tray (X -131.45, Y 108.5..128.5,
 # Z 14.2..85) and the inward-sloping aft flank; pairs stacked in Z.
-E4 = (-129.2, -122.2, 99.0, 131.5, 58.0, 83.0)
+E4 = (40.65, 47.65, 404.7, 437.2, 138.0, 163.0)  # R2
 # E5: fan-out inside the fwd collar sleeve zone to the plate's port third
-E5 = (-137.5, -122.0, 131.5, FE_UNIT_Y0, 50.0, 106.0)
+E5 = (32.35, 47.85, 437.2, FE_UNIT_Y0, 130.0, 186.0)  # R2
 # T -- tilt-controller VBAT feeds (16 AWG pair, fused 3 A) share E3 and rise
 # in the shoulder pocket outboard of the bracket web plane to just under the
 # board's lower edge (board X -117.75..-110.75, Y 55..97.9, Z 83..119.5);
 # the last 2 mm to the board connector is the board's own cable-tie zone.
-T1 = (-117.0, -104.0, 85.0, 99.0, 46.0, 81.0)
+T1 = (52.85, 65.85, 390.7, 404.7, 126.0, 161.0)  # R2
 # S -- Simon trunk: 5 V + buses from the plate's port edge aft past the can
-S1 = (FE_CAN_X1 + 2.0, FE_CAN_X1 + 16.0, FE_PLATE_Y0, SIMON_Y0, 56.0, 100.0)
+S1 = (FE_CAN_X1 + 2.0, FE_CAN_X1 + 16.0, FE_PLATE_Y0, SIMON_Y0, 136.0, 180.0)  # R2 Z
 
 # Phase 11 scoop capture (55 mm EDF, 1.3x duct match), WBS SS1.1.1.3
 PHASE11_CAPTURE_MM2 = 3090.0
@@ -287,13 +293,13 @@ def layout_t6():
     )
     # saddle: from the floor skin up to the pouch bottoms (seats on skin)
     L["Simon saddle"] = dict(
-        solid=box(SIMON_X0 - 4.0, SIMON_X1 + 4.0, SIMON_Y0, SIMON_Y1 + 2.0, 5.0, CN4_Z0),
+        solid=box(SIMON_X0 - 4.0, SIMON_X1 + 4.0, SIMON_Y0, SIMON_Y1 + 2.0, 85.0, CN4_Z0),
         skin_seat=True,
         section="middle",
         mates=("CN4 (XO) pouch",),
     )
     L["hatch cut"] = dict(
-        solid=box(HATCH_X0, HATCH_X1, HATCH_Y0, HATCH_Y1, -5.0, HATCH_ZCUT),
+        solid=box(HATCH_X0, HATCH_X1, HATCH_Y0, HATCH_Y1, 75.0, HATCH_ZCUT),
         skin_seat=True,
         section="middle",
         mates=("Kaylee can", "Kaylee entry plate", "Kaylee cradle pillars"),
@@ -307,14 +313,14 @@ def layout_t6():
         )
     ):
         L[f"Kaylee cradle pillar {i}"] = dict(
-            solid=box(fx - 5.0, fx + 5.0, fy - 5.0, fy + 5.0, 5.0, FE_CAN_Z0),
+            solid=box(fx - 5.0, fx + 5.0, fy - 5.0, fy + 5.0, 85.0, FE_CAN_Z0),
             skin_seat=True,
             section="middle",
             mates=("Kaylee can", "hatch cut"),
         )
     for name, sx in SMA_XS.items():
         L[name] = dict(
-            solid=cyl("z", sx, SMA_Y, 150.0, 175.0, SMA_BORE_D / 2),
+            solid=cyl("z", sx, SMA_Y, 230.0, 255.0, SMA_BORE_D / 2),
             skin_seat=True,
             section="middle",
         )
@@ -323,7 +329,7 @@ def layout_t6():
                             mates=("Simon cable zone",))
     L["fan-out E5"] = dict(solid=box(*E5), gap=0.0, section="middle", mirror=True)
     L["crest B2 (middle)"] = dict(
-        solid=box(CREST_X0, CREST_X1, CREST_Y1, FE_UNIT_Y0, 112.0, CREST_Z1), gap=0.0,
+        solid=box(CREST_X0, CREST_X1, CREST_Y1, FE_UNIT_Y0, 192.0, CREST_Z1), gap=0.0,
         section="middle", mates=("Kaylee entry plate",),
     )
     # cargo-side corridors (checked against the cargo shell + Rev T5e layout)
@@ -453,7 +459,7 @@ def neck_void(shell_tm, y):
 def airflow_report(shell_tm, solids):
     print("\nPhase 11 free bore area (neck void minus equipment) vs scoop capture "
           f"{PHASE11_CAPTURE_MM2:.0f} mm^2:")
-    for y in (135, 145, 155, 165, 175, 185, 195, 201):
+    for y in (440.7, 450.7, 460.7, 470.7, 480.7, 490.7, 500.7, 506.7):  # R1 135..201
         v = neck_void(shell_tm, y)
         if v is None:
             continue
@@ -507,7 +513,8 @@ def write_scad(path):
     lines = [
         "// middle_layout_t6_params.scad -- GENERATED by tools/middle_layout_fit.py",
         "// --write-scad.  Do not edit: change the Python constants and regenerate.",
-        "// Hull frame: X = +port, Y = +aft, Z = +dorsal (mm).",
+        "// Aircraft datum R2: origin centreline / nose tip / ground plane on the",
+        "// 3.0 in gear; X = +port, Y = +aft, Z = +dorsal (mm).",
         f"X_CL = {X_CL};",
         f"NECK_ZC = {NECK_ZC};",
         f"NECK_R = {NECK_R};",
@@ -550,8 +557,8 @@ def _plot(mid_tm, cargo_tm, solids_mid, solids_cargo, cargo_solids):
     out = os.path.join(REPO, "docs", "img")
     os.makedirs(out, exist_ok=True)
     fig, axs = plt.subplots(2, 4, figsize=(28, 13))
-    cuts = [(mid_tm, solids_mid, {}, y) for y in (144, 162, 175, 190)] + [
-        (cargo_tm, solids_cargo, cargo_solids, y) for y in (18, 50, 92, 118)
+    cuts = [(mid_tm, solids_mid, {}, y) for y in (449.7, 467.7, 480.7, 495.7)] + [
+        (cargo_tm, solids_cargo, cargo_solids, y) for y in (323.7, 355.7, 397.7, 423.7)
     ]
     for ax, (shell, sol, ctx, y) in zip(axs.ravel(), cuts):
         n = [0, 1, 0]
@@ -577,8 +584,8 @@ def _plot(mid_tm, cargo_tm, solids_mid, solids_cargo, cargo_solids):
         ax.set_title(f"XZ at Y={y}  ({'middle' if shell is mid_tm else 'cargo, T5e grey'})")
         ax.set_aspect("equal")
         ax.grid(True, alpha=0.3)
-        ax.set_xlim(-280, -60)
-        ax.set_ylim(-5, 175)
+        ax.set_xlim(-110, 110)
+        ax.set_ylim(75, 255)
         ax.legend(fontsize=6, loc="lower left")
     fig.tight_layout()
     png = os.path.join(out, "middle_layout_t6_sections.png")

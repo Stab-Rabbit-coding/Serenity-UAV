@@ -121,7 +121,7 @@ GRUB_DEPTH = 4.0  # mm — tap depth below the block +Z face
 # Block envelope
 BLK_LEN_Y = 12.0  # mm — Y length of each block (rod bearing length)
 BLK_W_X = 9.0  # mm — X width (bore wall + bonding flange, extends inboard)
-BLK_BASE_Z = 0.5  # mm — block base Z (overlaps belly skin for boolean fusion)
+BLK_BASE_Z = 80.5  # mm — block base Z, aircraft datum R2 (R1 0.5; overlaps belly skin for fusion)
 BLK_WALL_TOP = 2.5  # mm — material above the bore for the grub-screw boss
 GAP_TO_BAY = 1.0  # mm — clearance between block inner Y face and bay edge
 

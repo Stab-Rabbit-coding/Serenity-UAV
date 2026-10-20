@@ -1043,23 +1043,25 @@ module leg_assembly(flex = 0, h_duct = H_NOM, h_spring = H_NOM) {
 
 // ---------------------------------------------------------------------------
 // Hull-frame corner placement (verification view only -- final placements
-// are LG-10).  Hull frame: X=+port, Y=+aft, Z=+dorsal; centreline
-// X=-169.9; cargo belly Z=0; ground plane Z=-80.
+// are LG-10).  AIRCRAFT DATUM R2 (2026-10-19): X=+port, Y=+aft, Z=+up;
+// centreline X=0, nose tip Y=0, static ground plane Z=0 (3.0 in gear);
+// cargo belly Z=80.  Datums from the GENERATED include below.
 // Corner format: [hip_x, hip_y, hip_z, swing_azimuth_deg]
 //   swing azimuth: direction of foot from hip in plan, deg from hull +X
 //   (port-outboard); fore legs swing fore-of-outboard, aft legs aft-of-
 //   outboard, feet landing within 5 mm of the canonical QMx stations.
 // ---------------------------------------------------------------------------
-X_CL = -169.9;
+include <../hull_datums.scad>   // X_CL etc. -- never re-typed
 CORNERS = [
     // Hip stations RECESSED 15 mm along each corner's own swing axis (LG-10.2).
     // Pre-recess: [-90, -7], [-249.8, -7], [-79, 107], [-260.8, 107].
     // Feet are UNCHANGED by the recess -- that is the point of translating
     // along the swing axis rather than the panel normal.
-    [-103.87,  -1.28, 38,  -22.4 ],   // fore-port
-    [-235.93,  -1.28, 38, -157.6 ],   // fore-stbd  (mirror)
-    [ -92.24,  99.96, 38,   28.0 ],   // aft-port
-    [-247.56,  99.96, 38,  152.0 ],   // aft-stbd   (mirror)
+    // R2 = R1 + (169.85, 305.70, 80.00); retired 1.5 in variant.
+    [  65.98, 304.42, 118,  -22.4 ],   // fore-port
+    [ -66.08, 304.42, 118, -157.6 ],   // fore-stbd  (mirror)
+    [  77.61, 405.66, 118,   28.0 ],   // aft-port
+    [ -77.71, 405.66, 118,  152.0 ],   // aft-stbd   (mirror)
 ];
 
 // All 4 corners, gear only (no ground/ghost slabs) -- consumed by
@@ -1074,9 +1076,9 @@ module hull_legs() {
 
 module hull_stance() {
     // ground plane
-    color("Tan", 0.25) translate([-360, -120, -39.1]) cube([380, 380, 1]);
+    color("Tan", 0.25) translate([-190.15, 185.7, 40.9]) cube([380, 380, 1]);   // R1 (-360,-120,-39.1)
     // cargo-belly footprint ghost
-    color("SaddleBrown", 0.12) translate([-267, -69.5, 0])
+    color("SaddleBrown", 0.12) translate([-97.15, 236.2, 80])   // R1 (-267,-69.5,0)
         cube([194.3, 198.5, 2]);
     hull_legs();
 }
