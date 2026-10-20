@@ -36,8 +36,10 @@ authoring the TACCO-unique radio/logging/payload blocks new:
   2026-09-21 SiK-swap note below), Murata Type 2EL WiFi+BT+802.15.4 tri-radio
   module (type2el.pdf — see the 2026-09-21 swap note below), TPS63031
   buck-boost for the RF 3V3 rail (tps63031.pdf), W25Q128JV SPI NOR flash
-  (w25q128jv.pdf), DRV8833 winch H-bridge driver (drv8833.pdf), HX711
-  load-cell ADC (hx711.pdf), PCA9685 PWM/I2C driver (pca9685.pdf), ATF16V8BQL
+  (w25q128jv.pdf), DRV8833 winch H-bridge driver (drv8833.pdf), a
+  load-cell ADC (not on this board: the ADS1231 LC-ADC board on CAN-PERIPH-GW,
+  docs/CARGO_WINCH_SPECIFICATION.md section 5.5), PCA9685 PWM/I2C driver
+  (pca9685.pdf), ATF16V8BQL
   PLD used as a logging write-block interlock (atf16v8bql.pdf — the JEDEC
   fuse map/logic equations are a firmware deliverable, out of scope here;
   every pin is wired to a real net so the schematic is ERC-complete), antenna
@@ -93,7 +95,7 @@ Datasheets (all in ``avionics/datasheets/``):
   Type 2EL type2el.pdf Rev.18 + Unified Design Guide Rev.2.0 |
   TPS63031 tps63031.pdf Table (Pin Functions) |
   W25Q128JV w25q128jv.pdf §3.3 | DRV8833 drv8833.pdf §5 (Pin Functions, WQFN) |
-  HX711 hx711.pdf Pin Description (SOP-16L) | PCA9685 pca9685.pdf Table 3 |
+  PCA9685 pca9685.pdf Table 3 |
   ATF16V8BQL atf16v8bql.pdf Pin Configurations | SRF2012A SRF2012A.pdf |
   PRTR5V0U2X prtr5v0u2x.pdf (Nexperia, SOT143B) | SMAJ33CA smaj-series-tvs-datasheet.pdf.
 
@@ -664,14 +666,15 @@ ICS: List[Dict[str, Any]] = [
             ("8", "VCC", "+3V3", "R"),
         ],
     },
-    # WINCH-DRV (DRV8833 H-bridge), LOAD-ADC (HX711), and PWM-I2C (PCA9685)
+    # WINCH-DRV (DRV8833 H-bridge), LOAD-ADC (load-cell ADC; now the ADS1231 LC-ADC
+    # board on CAN-PERIPH-GW), and PWM-I2C (PCA9685)
     # REMOVED 2026-09-20 per owner correction: the winch is a remote
     # multi-turn servo on CAN-FD/RS-485 (same bus-networked actuator pattern
     # as the nacelle tilt encoder's edge gateway) rather than a local
     # H-bridge, its tension sensing lives on that same remote node, and the
     # SG90 door servos are ALSO controlled over that bus rather than by a
     # local PWM driver — so XO carries no local actuator-drive silicon at
-    # all.  This recovers real board-area budget (DRV8833 + HX711 + PCA9685 +
+    # all.  This recovers real board-area budget (DRV8833 + load-cell ADC + PCA9685 +
     # their motor/load-cell/servo connectors + ~10 supporting passives) toward
     # the 55x35 mm area problem found while building this board's PCB.
     {

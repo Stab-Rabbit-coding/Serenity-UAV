@@ -160,9 +160,9 @@
 #define CAPE_B_GPIO_DRV_STBY        37  /* DRV8833 STBY (active-high)        [ESTIMATE] */
 #define CAPE_B_GPIO_DRV_FAULT_N     38  /* DRV8833 /FAULT (active-low)       [ESTIMATE] */
 
-/* HX711 24-bit ADC (cargo load cell). */
-#define CAPE_B_GPIO_HX711_DOUT      39  /* HX711 DOUT (serial data out)      [ESTIMATE] */
-#define CAPE_B_GPIO_HX711_SCK       40  /* HX711 PD_SCK (clock / power-down) [ESTIMATE] */
+/* Cargo load-cell ADC (formerly HX711 on GPIO 39/40): not on this board.  The
+ * line-tension ADC is the ADS1231 LC-ADC board on CAN-PERIPH-GW J_FLEX
+ * (docs/CARGO_WINCH_SPECIFICATION.md section 5.5).  GPIO 39/40 left unassigned. */
 
 /* ATF16V8BQL CPLD (write-protect logic + latch control). */
 #define CAPE_B_GPIO_CPLD_I1         41  /* CPLD input 1                      [ESTIMATE] */

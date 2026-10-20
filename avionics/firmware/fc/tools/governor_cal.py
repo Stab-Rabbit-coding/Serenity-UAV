@@ -25,7 +25,8 @@ Hardware requirements
       serenity-fc --cal <edf_id>
 
   This mode activates BDSHOT600 telemetry logging on the EDF's ESC and
-  reads the HX711 load-cell amplifier over SPI, exposing both data streams
+  reads the thrust-stand load-cell ADC (TI ADS1231, two-wire SCLK / DRDY-DOUT
+  serial), exposing both data streams
   over USB serial (115200 8N1, see Protocol section below).
 
 - USB serial cable from host machine to PocketBeagle 2 USB-OTG / UART port.
@@ -44,7 +45,7 @@ Commands (host → FC):
 Responses (FC → host):
     VER SERENITY-FC-CAL 1 <edf_id>\\n   Identity confirmation.
     ACK\\n                               Command accepted.
-    SAM <rpm> <hx711_raw> <esc_temp_c>\\n   One raw sample line.
+    SAM <rpm> <adc_raw> <esc_temp_c>\\n   One raw sample line.
                                          Emitted <n> times, then ACK\\n.
     ERR <code> <text>\\n                 Error; codes:
         1  NOT_ARMED
@@ -55,12 +56,12 @@ Responses (FC → host):
 Field types:
     <pct>          float, one decimal place  (e.g. "75.0")
     <rpm>          unsigned 32-bit int  (rev/min)
-    <hx711_raw>    signed 32-bit int    (raw 24-bit ADC counts from HX711)
+    <adc_raw>      signed 32-bit int    (raw 24-bit counts from the ADS1231, sign-extended)
     <esc_temp_c>   unsigned int         (degrees Celsius, BDSHOT600 telemetry)
     <edf_id>       0–4, matches EDF_ID_* constants in governor_config.h
 
-HX711 scale-factor determination
-----------------------------------
+Load-cell scale-factor determination
+------------------------------------
 Before the calibration sweep, determine the load-cell scale factor
 (counts per gram):
 
@@ -72,12 +73,12 @@ Before the calibration sweep, determine the load-cell scale factor
        and run:
            python3 governor_cal.py --weigh-only -p /dev/ttyUSB0 \\
                --tare-count <tare_count>
-       The script prints <hx711_raw_with_weight> - <tare_count>.
+       The script prints <adc_raw_with_weight> - <tare_count>.
 
     3. Compute scale:
            scale = (raw_with_weight - tare_count) / known_mass_g
 
-    Pass this value as --hx711-scale in subsequent calibration runs.
+    Pass this value as --adc-scale in subsequent calibration runs.
 
 Calibration sweep
 -----------------
@@ -100,7 +101,10 @@ References
 [3] More, J. J., "The Levenberg–Marquardt Algorithm: Implementation and
     Theory," in Numerical Analysis, Lecture Notes in Mathematics, vol. 630,
     Springer, 1978, pp. 105–116.
-[4] HX711 24-Bit Analog-to-Digital Converter datasheet, AVIA Semiconductor.
+[4] ADS1231 24-Bit Analog-to-Digital Converter for Bridge Sensors, Texas
+    Instruments, SBAS414D, Oct. 2013; REFERENCES.md REF-SENSOR-063.  (Replaces
+    the HX711, rejected 2026-10-20 under the component-sourcing rule, root
+    AGENTS.md section 5.)
 
 Dependencies (pip install):
     pyserial >= 3.5
@@ -113,7 +117,7 @@ Example
     python3 governor_cal.py \\
         --port /dev/ttyUSB0 \\
         --edf-id 0 \\
-        --hx711-scale 412.3 \\
+        --adc-scale 412.3 \\
         --steps 20 \\
         --dwell 3.0 \\
         --samples 60 \\
@@ -202,12 +206,12 @@ class RawSample:
     One raw telemetry sample returned by the FC node in calibration mode.
 
     :param rpm:        Motor speed reported by BDSHOT600 telemetry (rev/min).
-    :param hx711_raw:  Signed 24-bit ADC count from the HX711 load cell.
+    :param adc_raw:  Signed 24-bit ADC count from the load-cell ADC (ADS1231).
     :param esc_temp_c: ESC temperature in degrees Celsius (BDSHOT600 field).
     """
 
     rpm: int
-    hx711_raw: int
+    adc_raw: int
     esc_temp_c: int
 
 
@@ -425,8 +429,8 @@ def cmd_throttle(ser: serial.Serial, pct: float) -> None:
 def collect_samples(
     ser: serial.Serial,
     n_samples: int,
-    hx711_scale: float,
-    hx711_offset: int,
+    adc_scale: float,
+    adc_offset: int,
 ) -> List[RawSample]:
     """
     Request ``n_samples`` raw telemetry samples from the FC node.
@@ -434,16 +438,16 @@ def collect_samples(
     The FC node emits exactly ``n_samples`` ``SAM`` lines, then ``ACK``.
     Each line has the form::
 
-        SAM <rpm> <hx711_raw> <esc_temp_c>
+        SAM <rpm> <adc_raw> <esc_temp_c>
 
-    The HX711 raw counts are not converted here; conversion to Newtons is
+    The ADC raw counts are not converted here; conversion to Newtons is
     performed in :func:`_average_samples` after all samples are collected.
 
     :param ser:           Open serial port.
     :param n_samples:     How many samples to request (1–500).
-    :param hx711_scale:   HX711 counts-per-gram scale factor (unused here,
+    :param adc_scale:   ADC counts-per-gram scale factor (unused here,
                           passed through for documentation clarity).
-    :param hx711_offset:  HX711 zero-offset counts from the tare procedure.
+    :param adc_offset:  ADC zero-offset counts from the tare procedure.
     :returns: List of RawSample objects.
     :raises RuntimeError: On protocol or parse error.
     """
@@ -464,11 +468,11 @@ def collect_samples(
             raise RuntimeError(f"Malformed SAM line: {line!r}")
         try:
             rpm = int(parts[1])
-            hx711_raw = int(parts[2])
+            adc_raw = int(parts[2])
             esc_temp_c = int(parts[3])
         except ValueError as exc:
             raise RuntimeError(f"Non-integer field in SAM line: {line!r}") from exc
-        samples.append(RawSample(rpm=rpm, hx711_raw=hx711_raw, esc_temp_c=esc_temp_c))
+        samples.append(RawSample(rpm=rpm, adc_raw=adc_raw, esc_temp_c=esc_temp_c))
 
     # Consume trailing ACK.
     ack = read_line(ser)
@@ -480,8 +484,8 @@ def collect_samples(
 
 def _average_samples(
     samples: List[RawSample],
-    hx711_scale: float,
-    hx711_offset: int,
+    adc_scale: float,
+    adc_offset: int,
 ) -> Tuple[float, float, float, float, float]:
     """
     Average a block of raw samples into a single (rpm_mean, rpm_std,
@@ -489,12 +493,12 @@ def _average_samples(
 
     Thrust conversion:
 
-        thrust_g  =  (hx711_raw  −  hx711_offset)  /  hx711_scale
+        thrust_g  =  (adc_raw  −  adc_offset)  /  adc_scale
         thrust_N  =  thrust_g  ×  9.80665  /  1000.0
 
     :param samples:       List of RawSample from :func:`collect_samples`.
-    :param hx711_scale:   HX711 counts per gram (from scale calibration).
-    :param hx711_offset:  Tare offset (counts at zero thrust).
+    :param adc_scale:   ADC counts per gram (from scale calibration).
+    :param adc_offset:  Tare offset (counts at zero thrust).
     :returns: (rpm_mean, rpm_std, thrust_n, thrust_std, esc_temp_mean).
     :raises ValueError: If the sample list is empty.
     """
@@ -502,11 +506,11 @@ def _average_samples(
         raise ValueError("Cannot average an empty sample list.")
 
     rpms = np.array([s.rpm for s in samples], dtype=np.float64)
-    raws = np.array([s.hx711_raw for s in samples], dtype=np.float64)
+    raws = np.array([s.adc_raw for s in samples], dtype=np.float64)
     temps = np.array([s.esc_temp_c for s in samples], dtype=np.float64)
 
-    # Convert HX711 ADC counts to Newtons.
-    thrust_g = (raws - hx711_offset) / hx711_scale
+    # Convert ADC counts to Newtons.
+    thrust_g = (raws - adc_offset) / adc_scale
     thrust_n = thrust_g * G_MPS2 / 1000.0
 
     return (
@@ -543,8 +547,8 @@ def run_sweep(
     steps: int,
     dwell_s: float,
     n_samples: int,
-    hx711_scale: float,
-    hx711_offset: int,
+    adc_scale: float,
+    adc_offset: int,
 ) -> List[SweepPoint]:
     """
     Execute the full 0 % → 100 % → 0 % throttle sweep.
@@ -563,8 +567,8 @@ def run_sweep(
     :param steps:         Number of throttle steps from 0 % to 100 %.
     :param dwell_s:       Seconds to dwell at each step.
     :param n_samples:     Samples to average at each step.
-    :param hx711_scale:   HX711 counts per gram.
-    :param hx711_offset:  HX711 tare offset (counts).
+    :param adc_scale:   ADC counts per gram.
+    :param adc_offset:  ADC tare offset (counts).
     :returns: List of SweepPoint objects (ascending + descending).
     """
     throttle_steps = [i * (100.0 / steps) for i in range(steps + 1)]
@@ -589,9 +593,9 @@ def run_sweep(
             log.info("  Throttle %.1f %% — dwelling %.1f s…", thr_pct, dwell_s)
             time.sleep(dwell_s)
 
-            raw_samples = collect_samples(ser, n_samples, hx711_scale, hx711_offset)
+            raw_samples = collect_samples(ser, n_samples, adc_scale, adc_offset)
             rpm_mean, rpm_std, thrust_n, thrust_std, esc_temp = _average_samples(
-                raw_samples, hx711_scale, hx711_offset
+                raw_samples, adc_scale, adc_offset
             )
 
             point = SweepPoint(
@@ -632,7 +636,7 @@ def run_sweep(
 def tare_only(ser: serial.Serial, n_samples: int) -> int:
     """
     Collect ``n_samples`` readings at zero throttle and print the mean
-    HX711 raw count for use as --hx711-offset in a subsequent calibration.
+    ADC raw count for use as --adc-offset in a subsequent calibration.
 
     :param ser:       Open serial port.
     :param n_samples: Number of samples to average.
@@ -641,12 +645,12 @@ def tare_only(ser: serial.Serial, n_samples: int) -> int:
     log.info("Tare mode: collecting %d samples at zero throttle…", n_samples)
     cmd_throttle(ser, 0.0)
     time.sleep(1.0)
-    raw_samples = collect_samples(ser, n_samples, hx711_scale=1.0, hx711_offset=0)
-    counts = [s.hx711_raw for s in raw_samples]
+    raw_samples = collect_samples(ser, n_samples, adc_scale=1.0, adc_offset=0)
+    counts = [s.adc_raw for s in raw_samples]
     mean_count = int(round(float(np.mean(counts))))
     std_count = float(np.std(counts))
     print(f"Tare result:  mean={mean_count}  std={std_count:.1f}")
-    print(f"Use --hx711-offset {mean_count} for calibration runs.")
+    print(f"Use --adc-offset {mean_count} for calibration runs.")
     return mean_count
 
 
@@ -660,8 +664,8 @@ def weigh_only(ser: serial.Serial, n_samples: int, tare_count: int) -> None:
     :param tare_count:  Zero-offset count from a prior :func:`tare_only` run.
     """
     log.info("Weigh mode: collecting %d samples…", n_samples)
-    raw_samples = collect_samples(ser, n_samples, hx711_scale=1.0, hx711_offset=0)
-    counts = [s.hx711_raw for s in raw_samples]
+    raw_samples = collect_samples(ser, n_samples, adc_scale=1.0, adc_offset=0)
+    counts = [s.adc_raw for s in raw_samples]
     mean_count = float(np.mean(counts))
     net_count = mean_count - tare_count
     print(f"Raw mean count:  {mean_count:.1f}")
@@ -711,7 +715,7 @@ def fit_thrust_model(points: List[SweepPoint], edf_id: int) -> CalibrationResult
     if len(usable) < 3:
         raise ValueError(
             f"Only {len(usable)} usable sweep points after filtering "
-            f"(need ≥ 3).  Check HX711 scale factor and EDF connection."
+            f"(need ≥ 3).  Check load-cell scale factor and EDF connection."
         )
 
     rpms = np.array([p.rpm_mean for p in usable], dtype=np.float64)
@@ -910,7 +914,7 @@ def print_summary(result: CalibrationResult) -> None:
     if result.r_squared < 0.990:
         print()
         print("  WARNING: R² < 0.99.  Check load-cell mounting, EDF alignment,")
-        print("  and HX711 scale factor.  Re-run calibration before using k.")
+        print("  and load-cell scale factor.  Re-run calibration before using k.")
     elif result.r_squared >= 0.999:
         print()
         print("  Excellent fit (R² ≥ 0.999).  k is suitable for flight firmware.")
@@ -959,8 +963,8 @@ def build_parser() -> argparse.ArgumentParser:
             "EDF thrust-stand calibration tool for Serenity UAV.\n"
             "Sweeps 0%%→100%%→0%% throttle, fits T = k × RPM², and updates\n"
             "governor_config.h with the calibrated k coefficient.\n\n"
-            "Run with --tare-only first to determine --hx711-offset, then\n"
-            "--weigh-only with a known mass to find --hx711-scale."
+            "Run with --tare-only first to determine --adc-offset, then\n"
+            "--weigh-only with a known mass to find --adc-scale."
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -995,24 +999,24 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"EDF index to calibrate (0–{EDF_COUNT - 1}).  ({names_str})",
     )
 
-    # HX711 load cell.
-    lc = parser.add_argument_group("HX711 load cell")
+    # Load-cell ADC (ADS1231).
+    lc = parser.add_argument_group("Load-cell ADC (ADS1231)")
     lc.add_argument(
-        "--hx711-scale",
+        "--adc-scale",
         type=float,
         default=None,
         metavar="COUNTS_PER_GRAM",
         help=(
-            "HX711 counts per gram (required for calibration).  "
+            "ADC counts per gram (required for calibration).  "
             "Determine with --tare-only then --weigh-only."
         ),
     )
     lc.add_argument(
-        "--hx711-offset",
+        "--adc-offset",
         type=int,
         default=0,
         metavar="COUNTS",
-        help="HX711 tare offset in raw counts (default: 0).",
+        help="ADC tare offset in raw counts (default: 0).",
     )
 
     # Sweep parameters.
@@ -1068,8 +1072,8 @@ def build_parser() -> argparse.ArgumentParser:
         "--tare-only",
         action="store_true",
         help=(
-            "Collect samples at zero throttle and print the mean HX711 raw "
-            "count for use as --hx711-offset."
+            "Collect samples at zero throttle and print the mean ADC raw "
+            "count for use as --adc-offset."
         ),
     )
     util_mx.add_argument(
@@ -1163,13 +1167,13 @@ def main() -> int:
 
     if args.edf_id is None:
         parser.error("--edf-id is required for a calibration sweep.")
-    if args.hx711_scale is None:
+    if args.adc_scale is None:
         parser.error(
-            "--hx711-scale is required for a calibration sweep.  "
+            "--adc-scale is required for a calibration sweep.  "
             "Determine it with --tare-only then --weigh-only."
         )
-    if args.hx711_scale <= 0.0:
-        parser.error("--hx711-scale must be positive.")
+    if args.adc_scale <= 0.0:
+        parser.error("--adc-scale must be positive.")
     if args.steps < 5:
         parser.error("--steps must be at least 5 for a valid fit.")
     if args.dwell < 0.5:
@@ -1194,8 +1198,8 @@ def main() -> int:
             steps=args.steps,
             dwell_s=args.dwell,
             n_samples=args.samples,
-            hx711_scale=args.hx711_scale,
-            hx711_offset=args.hx711_offset,
+            adc_scale=args.adc_scale,
+            adc_offset=args.adc_offset,
         )
 
     finally:

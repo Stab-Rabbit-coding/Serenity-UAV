@@ -3,8 +3,9 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Drafted by:** Claude Haiku 4.5 (Anthropic), 2026-07-27
 **Rev C drafted by:** Claude Sonnet 5 (Anthropic), 2026-08-02
+**Rev C1 (§5.5 load-cell ADC change) drafted by:** Claude Sonnet 5.5 (Anthropic), 2026-10-20; owner decision by Steve Griffing
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Revision:** C (2026-08-02)
+**Revision:** C1 (2026-10-20)
 **Supersedes:** the Rev P/Q/R N20 winch train (see "Superseded Hardware" below); Rev C
 additionally supersedes Rev B's servo selection (STS3215 → SPT5425LV + LibreServo v2)
 
@@ -70,8 +71,9 @@ from the active BOM and must not be carried into the next letter revision.
 > open item in `airframe/fuselage-mid/WBS.md`.
 
 **Retained unchanged:** `DYNEEMA-SK75` (0.5 mm braid × 2 m, ~300 N break,
-60 N WLL) and `HX711-LC` (24-bit tension ADC). Both are re-hosted onto the
-gateway rather than TACCO — see §5.
+60 N WLL), re-hosted onto the gateway rather than TACCO — see §5.
+**Replaced 2026-10-20:** `HX711-LC` (24-bit tension ADC module) → `LC-ADC`
+(TI ADS1231 sense board), also hosted on the gateway — see §5.5.
 
 ### 2.1 Why the cantilever fails, numerically
 
@@ -311,7 +313,7 @@ cams the pawl out against its spring. The spool then ratchets backwards under
 load: it **pays out slowly**, one tooth click at a time, rather than releasing
 in free-fall.
 
-**(b) Sensed shed — secondary.** The retained HX711 load cell reports line
+**(b) Sensed shed — secondary.** The load cell, read by the `LC-ADC` board (ADS1231, §5.5), reports line
 tension to the gateway; above threshold the gateway energises the solenoid and
 commands a de-rated pay-out (§5.3). This is the graceful path and it produces
 telemetry; (a) is what protects the aircraft when power or firmware is gone.
@@ -728,9 +730,10 @@ see the open item below.
 |---|---|---|---|
 | `FLEX_UART_TX/RX` | bidirectional | SPT5425LV/LS2 servo, via an RS-485 transceiver — **§5.1.1, open item** | Servo command/telemetry bus |
 | `FLEX_PWM_IO` | output | AO3400 N-FET gate | Solenoid enable — high = catch retracted |
-| `FLEX_TTL_GPIO` | — | HX711 (moved here from the now-vacated `FLEX_UART_TX/RX` role) | Line-tension ADC (clock/data), bit-banged on a plain GPIO pair |
+| `FLEX_TTL_GPIO` | — | `LC-ADC` board, ADS1231 (§5.5; replaces the HX711, which had moved here from the now-vacated `FLEX_UART_TX/RX` role) | Line-tension ADC (SCLK / DRDY-DOUT), bit-banged on a plain GPIO pair |
 | `ENC_SPI_*` (`J_ENC`) | input | **AK7455 on the spool** | Spool angle (§3.7.3) — existing header, dedicated SPI bus, no board change |
-| `+5V`, `GND` | power | Servo, solenoid, HX711 | RAIL-2 `5V_OBS` |
+| `+5V`, `GND` | power | Servo, solenoid | RAIL-2 `5V_OBS` |
+| `+3V3` | power | `LC-ADC` AVDD and DVDD | Gateway 3V3 buck — **not** RAIL-2 (§5.5, 5.4 V exceeds the ADS1231 supply limit) |
 
 **Solenoid drive** — AO3400 SOT-23 N-FET (already a project-standard part; see
 `avionics/kicad/Observer/Observer.md` Q1), 100 Ω gate resistor, 10 kΩ gate pull-down
@@ -799,7 +802,7 @@ WINCH_STATUS   (10 Hz, gateway → bus)
                  4 OVERLOAD │ 5 LINE_SHED │ 6 FAULT
   servo_pos    : SPT5425LV/LS2 reported position
   servo_load   : SPT5425LV/LS2 reported load
-  line_tension : HX711, mN
+  line_tension : ADS1231 (LC-ADC), mN
   spool_angle  : AK7455, 0-4095 (single-turn absolute)
   spool_turns  : accumulated in firmware; INVALID if |dtheta| > half a rev
                  between samples (see §3.7.2 outrun case)
@@ -826,9 +829,9 @@ does not invent bus IDs.
 | SPT5425LV/LS2, moving | **⚠ stall current not yet published — §3.1** — 1.2 A carried forward from the STS3215-era budget as a placeholder | 6.5 W |
 | Solenoid, hold (pay-out only) | 0.20 A | 1.1 W |
 | Gateway (MSPM0 + TPM + 2 isolators) | 0.10 A | 0.5 W |
-| HX711 | 0.01 A | 0.1 W |
+| `LC-ADC` (ADS1231 + bridge), fed from the gateway 3V3 buck — §5.5; η = 0.9 assumed | 0.007 A | 0.04 W |
 | AK7455 spool encoder | 0.02 A | 0.1 W |
-| **Total, worst case** | **≈ 1.53 A** | **≈ 8.3 W** |
+| **Total, worst case** | **≈ 1.53 A** | **≈ 8.2 W** |
 
 RAIL-2 is planned at ~2.4 A typical / ~4.2 A peak
 (`docs/POWER_DISTRIBUTION.md` §3.2.1), so the winch fits with margin — **subject
@@ -838,6 +841,68 @@ sizing must be revisited. LibreServo v2's own motor driver is rated for up to
 16 A continuous (WSD3069DN56 MOSFETs, REF-SENSOR-014) — that is a board
 capability ceiling, not a prediction of what this particular servo motor will
 actually draw.
+
+### 5.5 Line-tension ADC — HX711 rejected, ADS1231 selected (2026-10-20)
+
+**Rejected: `HX711-LC` (Avia Semiconductor HX711, Rev S–T BOM).** Page 1 of the
+datasheet (`avionics/datasheets/avia-semiconductor/hx711.pdf`) prints Avia's
+contact as "(P. R. China)". Under the component-sourcing rule (root `AGENTS.md`
+§5, owner rule 2026-10-17) a semiconductor whose manufacturer is domiciled in the
+PRC shall not be designed in. The BOM entry was also a generic breakout module
+with no named manufacturer, which fails the same rule's generic-part clause.
+**Do not propose the HX711, or a breakout module built on it, again.**
+
+**Selected: TI ADS1231 (`ADS1231IDR`, SOIC-16)** — [REF-SENSOR-063]. TI is
+US-domiciled and the datasheet (SBAS414D) is public with no NDA. Digi-Key
+296-43578-1-ND: Active, USD 6.48 each, 3,332 in stock on 2026-10-20.
+
+| Parameter | HX711 (rejected) | ADS1231 (selected) |
+|---|---|---|
+| Resolution | 24-bit | 24-bit |
+| PGA gain used | 128 (A channel; 64 and the B channel unused) | 128, fixed |
+| Full-scale input | ±20 mV at AVDD = 5 V | ±19.5 mV at 5 V; ±11.7 mV at 3 V |
+| Data rates | 10 / 80 SPS | 10 / 80 SPS |
+| Noise, gain 128 | 50 nV rms (10 SPS) / 90 nV rms (80 SPS) | 35 nV rms (10 SPS) / 102 nV rms (80 SPS) |
+| Supply | 2.6 – 5.5 V | **3 – 5.3 V** (AVDD, DVDD; absolute max 6 V) |
+| Supply current | < 1.5 mA normal | 0.9 mA analog + 0.06 – 0.095 mA digital |
+| Bridge excitation switch | none on chip | on-chip low-side switch (`SW`): RON 3.5 Ω typ / 5 Ω max at 5 V, **4 Ω typ / 7 Ω max at 3 V**; 30 mA max |
+| Temperature | −40 to +85 °C | −40 to +85 °C |
+| Package | SOP-16 (bought as a module) | SOIC-16 bare IC — needs a board |
+
+Sources: HX711 datasheet p.1 and electrical-characteristics table; ADS1231
+datasheet "Electrical Characteristics", "Pin Configuration", "Low-Side Power
+Switch" [REF-SENSOR-063].
+
+**Design consequences of the swap**
+
+1. **It is a board, not a module.** The `LC-ADC` PCB (ADS1231IDR, support
+   passives per the datasheet "Application Example" Figure 24, 4-pin JST-GH to
+   `J_FLEX`) must be designed and fabricated: WBS CARGO-LC-01. The BOM carries a
+   3 g allowance and a 22 × 14 × 5 mm placeholder until the outline exists.
+2. **Supply is `+3V3`, not RAIL-2.** RAIL-2 is nominally 5.4 V (§5.4), which is
+   above the ADS1231's 3 – 5.3 V supply range; the HX711 tolerated 5.5 V, so this
+   is a new constraint. AVDD and DVDD both take the gateway `+3V3` from `J_FLEX`.
+3. **Ratiometric range is supply-independent.** Full scale is ±0.5·VREF/128 =
+   ±12.9 mV at 3.3 V, i.e. ±3.9 mV per volt of excitation. A 2 mV/V cell reads
+   51 % of full scale at any supply.
+4. **Common-mode window is narrow at 3.3 V.** The input common mode must stay
+   between GND + 1.5 V and AVDD − 1.5 V = 1.5 – 1.8 V. With `SW` at its 7 Ω
+   maximum, a 350 Ω bridge draws 9.2 mA and sits at ≈ 1.68 V (0.12 V margin to
+   the top edge). A 120 Ω bridge draws 26 mA (inside the 30 mA switch limit) and
+   sits at ≈ 1.74 V (0.06 V margin) — **a bridge below 350 Ω requires a 5.0 V
+   AVDD instead** (diode drop or LDO from RAIL-2), which opens the window to
+   1.5 – 3.5 V.
+5. **Power.** ADS1231 ≈ 1.0 mA plus bridge excitation (350 Ω: 9.2 mA at 3.3 V,
+   and the chip opens `SW` in standby and power-down) ≈ 10.2 mA = 34 mW at 3.3 V,
+   ≈ 7 mA on RAIL-2 through the gateway buck at an **assumed** 90 % efficiency
+   (§5.4).
+6. **Driver differs from the HX711's.** There are no gain-select clock pulses:
+   wait for `DRDY/DOUT` low, then clock 24 bits (a 25th SCLK returns `DRDY/DOUT`
+   high). Holding `SCLK` high for t_STANDBY after `DRDY/DOUT` goes low (≥ 12.5 ms at
+   80 SPS, ≥ 100 ms at 10 SPS) enters Standby (datasheet "Standby Mode"), so the
+   driver shall return `SCLK` low after every read. `PDWN` is tied high and
+   `SPEED` selects 10 or 80 SPS (default 10 SPS pending the §4.4 shed-latency
+   analysis).
 
 ---
 
@@ -900,6 +965,7 @@ See §3.3. All six are new STLs from
 | `SHAFT-SS-4MM` | Ø4 mm A2 stainless rod, 46 mm | 1 | **New stock item** (project stocks 3 mm CF; CF is unsuitable in a press-fit race) |
 | `SPRING-PAWL` | Compression spring, 1.0 N ± 0.2 N installed, stainless | 1 | Set-screw adjustable seat |
 | `DOWEL-M2-10` | M2 × 10 mm A2 dowel | 1 | Pawl pivot |
+| `LC-ADC` | Load-cell ADC sense board: TI `ADS1231IDR` (SOIC-16) + passives + 4-pin JST-GH, custom PCB | 1 | [REF-SENSOR-063]; replaces `HX711-LC` (§5.5). Mass 3 g is an allowance — WBS CARGO-LC-01 |
 | `ENC-AK7455-SPOOL` | AKM AK7455 off-axis angle sensor + diametric magnet | 1 | [REF-SENSOR-008], fleet-standard; mates the gateway's existing `J_ENC` pigtail — **no new part number, no board change** (§3.7.3) |
 | `SLEEVE-HUB-STEEL` | Steel sleeve, Ø10 OD × Ø8 ID × 25 mm | 1 | FM2 — bearings press into steel, not printed plastic; keeps fragments captive |
 | `CLIP-EXT-4MM` | External circlip, 4 mm shaft | 2 | FM1 — **positive** axle retention outboard of each pedestal |
@@ -910,7 +976,8 @@ See §3.3. All six are new STLs from
 | — | M3 heat-set inserts + M3 × 8 SHCS | 8 + 8 | Pedestals → cargo frame |
 | — | M3 × 10 SHCS | 2 | Axle split-collar pinch screws |
 
-**Retained:** `DYNEEMA-SK75`, `HX711-LC`.
+**Retained:** `DYNEEMA-SK75`.
+**Replaced:** `HX711-LC` → `LC-ADC` (§5.5).
 **Deleted:** `N20-WINCH`.
 
 ---
@@ -1005,12 +1072,23 @@ See §3.3. All six are new STLs from
     no encoder and no CAN frame. If post-event knowledge of a shed is required,
     that needs a separate mechanism (e.g. a latching mechanical indicator), not
     the encoder.
+18. **Select the load-cell element.** The Rev S–T BOM never carried the strain-gauge
+    element — the `HX711-LC` row was the ADC module only. Pick a cell whose
+    capacity brackets the 8.0 N shed threshold (§4.2) with overload margin, with
+    **bridge resistance ≥ 350 Ω** (§5.5 item 4) and sensitivity ≤ 3.9 mV/V, and add
+    it to the BOM. Until then `line_tension` has no sensor behind it.
+19. **Complete WBS CARGO-LC-01** — `LC-ADC` schematic, PCB, mass roll-up and
+    bench test with a known mass. The 3 g / 22 × 14 × 5 mm figures are allowances.
+20. **Confirm the second GPIO.** §5.1 describes the tension ADC as a GPIO *pair*
+    (SCLK, DRDY/DOUT) but lists only `FLEX_TTL_GPIO`. This ambiguity predates the
+    ADS1231 swap; assign the second pin on `J_FLEX` in the gateway document.
 
 ---
 
 ## 9. References
 
 - REF-SENSOR-013 (SPT5425LV), REF-SENSOR-014 (LibreServo v2) — §3.1, current servo spec
+- REF-SENSOR-063 (TI ADS1231, SBAS414D) — §5.5 line-tension ADC
 - `docs/references/108090023_STS3215-C001_Datasheet.pdf` — REF-SENSOR-012 (**superseded, historical**, §3.1)
 - `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` — gateway, `J_FLEX`, `N_STACKS`
 - `docs/POWER_DISTRIBUTION.md` §3.2.1, §11.1 — RAIL-2 `5V_OBS`
