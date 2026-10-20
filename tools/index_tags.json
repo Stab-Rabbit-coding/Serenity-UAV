@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-18",
+  "generated": "2026-10-20",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -7563,20 +7563,6 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/0805cs.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/0805hq.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
     "avionics/datasheets/100058045.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7605,21 +7591,7 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/21-100699a.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
     "avionics/datasheets/2893159.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/2N3866_SERIES.PDF": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7648,20 +7620,6 @@
       "archived": false
     },
     "avionics/datasheets/749010012A.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/987651-1223.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/AX88772E_Datasheet_v103.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -7845,13 +7803,6 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
     "avionics/datasheets/PCA9555.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7993,21 +7944,7 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/TPDxE05U06_SLVSBO7O.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
     "avionics/datasheets/TVS-Diode-SMBJ-Datasheet.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/TYPE2EL.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8070,13 +8007,6 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/am625.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
     "avionics/datasheets/ao3400.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8126,7 +8056,42 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/bq76930.pdf": {
+    "avionics/datasheets/beagleboard/pocketbeagle-2.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/beagleboard/pocketbeagle-2.syscfg": {
+      "description": "* These arguments were used when this file was generated. They will be automatically applied on subsequent lo\u2026",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/beagleboard/pocketbeagle2-back.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/beagleboard/pocketbeagle2_revA_dimension.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/beagleboard/pocketbeagle2_srm.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8161,35 +8126,7 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/dp83825i.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/drv8833.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
     "avionics/datasheets/ds-000347-icm-42688-p-v1.6.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/ds26lv31qml.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/ds26lv32at.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8204,34 +8141,6 @@
       "archived": false
     },
     "avionics/datasheets/esd101-b1.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/esd501.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/esd601.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/esd701.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/esd801.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8301,35 +8210,7 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/ina226.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
     "avionics/datasheets/infineon-optiga-trust-m-datasheet-en.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/iso6442.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/isow1044.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/isow1412.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8350,42 +8231,7 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/lm393.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/lmv331.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
     "avionics/datasheets/max42408-max42410.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/mcp1703.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/mcp4901-4911-4921.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/mcp4921.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8399,63 +8245,56 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/molex-104031.pdf": {
+    "avionics/datasheets/murata/Murata_BLM15EX_JENF243A-0023M-01.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/molex-1040310811.pdf": {
+    "avionics/datasheets/murata/TYPE2EL.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/molex_105162-0001_drawing.pdf": {
+    "avionics/datasheets/murata/TYPE2LL.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/molex_105162-0001_spec.pdf": {
+    "avionics/datasheets/murata/type2el-2dl-2ll-2kl-unified-design-guide.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/mspm0g3507-q1.pdf": {
-      "description": "PDF document",
+    "avionics/datasheets/murata/type2el-2dl-module-footprint-topview.dxf": {
+      "description": "2D DXF drawing",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/mspm0g3507.pdf": {
-      "description": "PDF document",
+    "avionics/datasheets/murata/type2el20261020210647.zip": {
+      "description": "Archived snapshot bundle",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/mspm0g3518-q1.pdf": {
-      "description": "PDF document",
+    "avionics/datasheets/murata/type2kl-2ll-module-footprint-topview.dxf": {
+      "description": "2D DXF drawing",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/mspm0g3519-q1.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/mspm0l1105.pdf": {
+    "avionics/datasheets/murata/type2ll-2kl-hw-application-note.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8476,6 +8315,27 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/nxp/AN14282.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/nxp/IW610.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/nxp/RM00297.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/pca9685.pdf": {
       "description": "PDF document",
       "tags": [
@@ -8484,48 +8344,6 @@
       "archived": false
     },
     "avionics/datasheets/pe4259.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/pocketbeagle-2.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/pocketbeagle-2.syscfg": {
-      "description": "* These arguments were used when this file was generated. They will be automatically applied on subsequent lo\u2026",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/pocketbeagle2-back.jpg": {
-      "description": "Rendered image / reference photo",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/pocketbeagle2_revA_dimension.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/pocketbeagle2_sch.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/pocketbeagle2_srm.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8560,91 +8378,7 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/samtec_ssm-dv_drawing.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/samtec_ssm_catalog.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/samtec_ssm_footprint.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/samtec_tsm-dv-footprint.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/samtec_tsm_catalog.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/samtec_tsw-sxx_drawing.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
     "avionics/datasheets/si5351.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/slaae29a.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/slaae76e.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/slaaet8a.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/slau846e.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/slau847f.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/slaz742g.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8658,35 +8392,7 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/slib006a.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/slua271c.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
     "avionics/datasheets/smaj-series-tvs-datasheet.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/sn74lvc1g04.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/sn74lvc1g3157.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8714,70 +8420,394 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/stm32wle5jc.pdf": {
+    "avionics/datasheets/st/DS_stm32wle5jc-1.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/tlv62569.pdf": {
+    "avionics/datasheets/st/an4759-introduction-to-using-the-hardware-realtime-clock-rtc-and-the-tamper-management-unit-tamp-for-stm32-mcus-stmicroelectronics.zip": {
+      "description": "Archived snapshot bundle",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/st/an4899-guidelines-for-gpio-hardware-settings-and-lowpower-consumption-on-stm32-mcus-stmicroelectronics.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/tlv757p.pdf": {
+    "avionics/datasheets/st/an4992-introduction-to-secure-firmware-install-sfi-for-stm32-mcus-stmicroelectronics.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware",
+        "firmware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/st/an5036-guidelines-for-thermal-management-on-stm32-mcus-and-mpus-stmicroelectronics.zip": {
+      "description": "Archived snapshot bundle",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/st/an5042-how-to-calibrate-the-hse-clock-for-rf-applications-on-stm32-wireless-mcus-stmicroelectronics.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/tlv9062.pdf": {
+    "avionics/datasheets/st/an5156-introduction-to-security-for-stm32-mcus-stmicroelectronics.zip": {
+      "description": "Archived snapshot bundle",
+      "tags": [
+        "avionics-hardware",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/st/an5407-how-to-optimize-the-rf-board-layout-for-stm32wl5xex-mcus-stmicroelectronics.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/tps54540.pdf": {
+    "avionics/datasheets/st/an5457-rf-matching-network-design-guide-for-stm32wl-series-stmicroelectronics.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/tps54620.pdf": {
+    "avionics/datasheets/st/an5612-esd-protection-of-stm32-mcus-and-mpus-stmicroelectronics.zip": {
+      "description": "Archived snapshot bundle",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/st/an5646-how-to-select-a-32-mhz-hse-oscillator-for-stm32wl5xex-mcus-stmicroelectronics.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/tps62933.pdf": {
+    "avionics/datasheets/st/rm0461-stm32wlex-advanced-armbased-32bit-mcus-with-subghz-radio-solution-stmicroelectronics.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/tps63031.pdf": {
+    "avionics/datasheets/st/stm32wle5jc.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/tps7a20.pdf": {
+    "avionics/datasheets/ti/TPDxE05U06_SLVSBO7O.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
       "archived": false
     },
-    "avionics/datasheets/tpsm82822.pdf": {
+    "avionics/datasheets/ti/am625.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/bq76930.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/dp83825i.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/drv8833.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/ds26lv31qml.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/ds26lv32at.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/esd501.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/esd601.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/esd701.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/esd801.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/ina226.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/iso6442.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/isow1044.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/isow1412.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/lm393.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/lmv331.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/mspm0g3507-q1.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/mspm0g3507.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/mspm0g3518-q1.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/mspm0g3519-q1.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/mspm0l1105.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/slaae29a.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/slaae76e.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/slaaet8a.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/slau846e.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/slau847f.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/slaz742g.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/slib006a.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/slua271c.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/sn74lv1t34.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/sn74lvc1g04.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/sn74lvc1g3157.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/tlv62569.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/tlv757p.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/tlv9062.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/tps54540.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/tps54620.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/tps62933.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/tps63031.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/tps7a20.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/tpsm82822.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/wl1837mod.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -8786,20 +8816,6 @@
     },
     "avionics/datasheets/tsw-sxx.pdf": {
       "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/type2el-2dl-2ll-2kl-unified-design-guide.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/type2el-2dl-module-footprint-topview.dxf": {
-      "description": "2D DXF drawing",
       "tags": [
         "avionics-hardware"
       ],
@@ -8886,13 +8902,6 @@
       "archived": false
     },
     "avionics/datasheets/wio-e5-datasheet.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/wl1837mod.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -9888,7 +9897,7 @@
       "archived": false
     },
     "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py": {
-      "description": "SUPERSEDED PART WARNING (2026-08-03)",
+      "description": "gen_can_periph_gw_sch.py -- author CAN-PERIPH-GW-1.kicad_sch.",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -18295,6 +18304,7 @@
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
+      "avionics/datasheets/st/an5156-introduction-to-security-for-stm32-mcus-stmicroelectronics.zip",
       "avionics/firmware/AK7455_CALIBRATION_SPECIFICATION.md",
       "avionics/firmware/README.md",
       "avionics/firmware/TODO.md",
@@ -21267,21 +21277,15 @@
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
-      "avionics/datasheets/0805cs.pdf",
-      "avionics/datasheets/0805hq.pdf",
       "avionics/datasheets/100058045.pdf",
       "avionics/datasheets/1040310811_sd.pdf",
       "avionics/datasheets/1051620001.pdf",
       "avionics/datasheets/1051620001_sd.pdf",
-      "avionics/datasheets/21-100699a.pdf",
       "avionics/datasheets/2893159.pdf",
-      "avionics/datasheets/2N3866_SERIES.PDF",
       "avionics/datasheets/317990687.pdf",
       "avionics/datasheets/6391731564544371956530548.pdf",
       "avionics/datasheets/74438335033.pdf",
       "avionics/datasheets/749010012A.pdf",
-      "avionics/datasheets/987651-1223.pdf",
-      "avionics/datasheets/AX88772E_Datasheet_v103.pdf",
       "avionics/datasheets/Bourns_MF-PSMF.pdf",
       "avionics/datasheets/DS3218 datasheet.pdf",
       "avionics/datasheets/DS3225 datasheet.pdf",
@@ -21307,7 +21311,6 @@
       "avionics/datasheets/MSASJ168BC6226MTNA01.pdf",
       "avionics/datasheets/MSASJ168BC6226MTNA01_SS.pdf",
       "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf",
-      "avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf",
       "avionics/datasheets/PCA9555.pdf",
       "avionics/datasheets/PESD5V0F1BL.pdf",
       "avionics/datasheets/PESD5V0X1BL.pdf",
@@ -21328,9 +21331,7 @@
       "avionics/datasheets/Si5351-B.pdf",
       "avionics/datasheets/TG2520SMN_en-2584158.pdf",
       "avionics/datasheets/TP6x12-DC-Push-Soleniod.pdf",
-      "avionics/datasheets/TPDxE05U06_SLVSBO7O.pdf",
       "avionics/datasheets/TVS-Diode-SMBJ-Datasheet.pdf",
-      "avionics/datasheets/TYPE2EL.pdf",
       "avionics/datasheets/Vishay_45273MDSK.pdf",
       "avionics/datasheets/WCH_CH397_datasheet_V1.2.pdf",
       "avionics/datasheets/X2YDatasheet.pdf",
@@ -21339,7 +21340,6 @@
       "avionics/datasheets/adin1300.pdf",
       "avionics/datasheets/adm2795e.pdf",
       "avionics/datasheets/ak7455-en-datasheet-myakm.pdf",
-      "avionics/datasheets/am625.pdf",
       "avionics/datasheets/ao3400.pdf",
       "avionics/datasheets/aon6260.pdf",
       "avionics/datasheets/aon6554.pdf",
@@ -21347,22 +21347,19 @@
       "avionics/datasheets/atf16v8bql.pdf",
       "avionics/datasheets/ax5043-d.pdf",
       "avionics/datasheets/ax5043.pdf",
-      "avionics/datasheets/bq76930.pdf",
+      "avionics/datasheets/beagleboard/pocketbeagle-2.pdf",
+      "avionics/datasheets/beagleboard/pocketbeagle-2.syscfg",
+      "avionics/datasheets/beagleboard/pocketbeagle2-back.jpg",
+      "avionics/datasheets/beagleboard/pocketbeagle2_revA_dimension.pdf",
+      "avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf",
+      "avionics/datasheets/beagleboard/pocketbeagle2_srm.pdf",
       "avionics/datasheets/bsh-bth.pdf",
       "avionics/datasheets/bst-bmp388-ds001.pdf",
       "avionics/datasheets/bth-xxx-xx-x-d-xx-footprint.pdf",
       "avionics/datasheets/cmx994ds.pdf",
-      "avionics/datasheets/dp83825i.pdf",
-      "avionics/datasheets/drv8833.pdf",
       "avionics/datasheets/ds-000347-icm-42688-p-v1.6.pdf",
-      "avionics/datasheets/ds26lv31qml.pdf",
-      "avionics/datasheets/ds26lv32at.pdf",
       "avionics/datasheets/eGH.pdf",
       "avionics/datasheets/esd101-b1.pdf",
-      "avionics/datasheets/esd501.pdf",
-      "avionics/datasheets/esd601.pdf",
-      "avionics/datasheets/esd701.pdf",
-      "avionics/datasheets/esd801.pdf",
       "avionics/datasheets/extracted/AM625_PB2I_header_mux.json",
       "avionics/datasheets/extracted/TPSM828224SILR_c2607d.json",
       "avionics/datasheets/extracted/manifest.json",
@@ -21372,78 +21369,93 @@
       "avionics/datasheets/hiro-s-a0003496442-1.pdf",
       "avionics/datasheets/hm-trp.pdf",
       "avionics/datasheets/hx711.pdf",
-      "avionics/datasheets/ina226.pdf",
       "avionics/datasheets/infineon-optiga-trust-m-datasheet-en.pdf",
-      "avionics/datasheets/iso6442.pdf",
-      "avionics/datasheets/isow1044.pdf",
-      "avionics/datasheets/isow1412.pdf",
       "avionics/datasheets/johanson-0915lp15b026e.pdf",
       "avionics/datasheets/johanson-2450bp15e0100.pdf",
-      "avionics/datasheets/lm393.pdf",
-      "avionics/datasheets/lmv331.pdf",
       "avionics/datasheets/max42408-max42410.pdf",
-      "avionics/datasheets/mcp1703.pdf",
-      "avionics/datasheets/mcp4901-4911-4921.pdf",
-      "avionics/datasheets/mcp4921.pdf",
       "avionics/datasheets/mechanics-of-advanced-composite-structures.pdf",
-      "avionics/datasheets/molex-104031.pdf",
-      "avionics/datasheets/molex-1040310811.pdf",
-      "avionics/datasheets/molex_105162-0001_drawing.pdf",
-      "avionics/datasheets/molex_105162-0001_spec.pdf",
-      "avionics/datasheets/mspm0g3507-q1.pdf",
-      "avionics/datasheets/mspm0g3507.pdf",
-      "avionics/datasheets/mspm0g3518-q1.pdf",
-      "avionics/datasheets/mspm0g3519-q1.pdf",
-      "avionics/datasheets/mspm0l1105.pdf",
+      "avionics/datasheets/murata/Murata_BLM15EX_JENF243A-0023M-01.pdf",
+      "avionics/datasheets/murata/TYPE2EL.pdf",
+      "avionics/datasheets/murata/TYPE2LL.pdf",
+      "avionics/datasheets/murata/type2el-2dl-2ll-2kl-unified-design-guide.pdf",
+      "avionics/datasheets/murata/type2el-2dl-module-footprint-topview.dxf",
+      "avionics/datasheets/murata/type2el20261020210647.zip",
+      "avionics/datasheets/murata/type2kl-2ll-module-footprint-topview.dxf",
+      "avionics/datasheets/murata/type2ll-2kl-hw-application-note.pdf",
       "avionics/datasheets/nexperia-MMBT2222A.pdf",
       "avionics/datasheets/nexperia-PMBT2222A.pdf",
+      "avionics/datasheets/nxp/AN14282.pdf",
+      "avionics/datasheets/nxp/IW610.pdf",
+      "avionics/datasheets/nxp/RM00297.pdf",
       "avionics/datasheets/pca9685.pdf",
       "avionics/datasheets/pe4259.pdf",
-      "avionics/datasheets/pocketbeagle-2.pdf",
-      "avionics/datasheets/pocketbeagle-2.syscfg",
-      "avionics/datasheets/pocketbeagle2-back.jpg",
-      "avionics/datasheets/pocketbeagle2_revA_dimension.pdf",
-      "avionics/datasheets/pocketbeagle2_sch.pdf",
-      "avionics/datasheets/pocketbeagle2_srm.pdf",
       "avionics/datasheets/prtr5v0u2x.pdf",
       "avionics/datasheets/readme.txt",
       "avionics/datasheets/rfd900x-datasheet.pdf",
       "avionics/datasheets/rfm95w-datasheet.pdf",
-      "avionics/datasheets/samtec_ssm-dv_drawing.pdf",
-      "avionics/datasheets/samtec_ssm_catalog.pdf",
-      "avionics/datasheets/samtec_ssm_footprint.pdf",
-      "avionics/datasheets/samtec_tsm-dv-footprint.pdf",
-      "avionics/datasheets/samtec_tsm_catalog.pdf",
-      "avionics/datasheets/samtec_tsw-sxx_drawing.pdf",
       "avionics/datasheets/si5351.pdf",
-      "avionics/datasheets/slaae29a.pdf",
-      "avionics/datasheets/slaae76e.pdf",
-      "avionics/datasheets/slaaet8a.pdf",
-      "avionics/datasheets/slau846e.pdf",
-      "avionics/datasheets/slau847f.pdf",
-      "avionics/datasheets/slaz742g.pdf",
       "avionics/datasheets/slb9672.pdf",
-      "avionics/datasheets/slib006a.pdf",
-      "avionics/datasheets/slua271c.pdf",
       "avionics/datasheets/smaj-series-tvs-datasheet.pdf",
-      "avionics/datasheets/sn74lvc1g04.pdf",
-      "avionics/datasheets/sn74lvc1g3157.pdf",
       "avionics/datasheets/ssm-1xx-xxx-dv-xx-xx-xxx-x-xx-mkt.pdf",
       "avionics/datasheets/ssm-1xx-xxx-xx-xx-xx-x-xx-footprint.pdf",
       "avionics/datasheets/ssm_sm.pdf",
-      "avionics/datasheets/stm32wle5jc.pdf",
-      "avionics/datasheets/tlv62569.pdf",
-      "avionics/datasheets/tlv757p.pdf",
-      "avionics/datasheets/tlv9062.pdf",
-      "avionics/datasheets/tps54540.pdf",
-      "avionics/datasheets/tps54620.pdf",
-      "avionics/datasheets/tps62933.pdf",
-      "avionics/datasheets/tps63031.pdf",
-      "avionics/datasheets/tps7a20.pdf",
-      "avionics/datasheets/tpsm82822.pdf",
+      "avionics/datasheets/st/DS_stm32wle5jc-1.pdf",
+      "avionics/datasheets/st/an4759-introduction-to-using-the-hardware-realtime-clock-rtc-and-the-tamper-management-unit-tamp-for-stm32-mcus-stmicroelectronics.zip",
+      "avionics/datasheets/st/an4899-guidelines-for-gpio-hardware-settings-and-lowpower-consumption-on-stm32-mcus-stmicroelectronics.pdf",
+      "avionics/datasheets/st/an4992-introduction-to-secure-firmware-install-sfi-for-stm32-mcus-stmicroelectronics.pdf",
+      "avionics/datasheets/st/an5036-guidelines-for-thermal-management-on-stm32-mcus-and-mpus-stmicroelectronics.zip",
+      "avionics/datasheets/st/an5042-how-to-calibrate-the-hse-clock-for-rf-applications-on-stm32-wireless-mcus-stmicroelectronics.pdf",
+      "avionics/datasheets/st/an5156-introduction-to-security-for-stm32-mcus-stmicroelectronics.zip",
+      "avionics/datasheets/st/an5407-how-to-optimize-the-rf-board-layout-for-stm32wl5xex-mcus-stmicroelectronics.pdf",
+      "avionics/datasheets/st/an5457-rf-matching-network-design-guide-for-stm32wl-series-stmicroelectronics.pdf",
+      "avionics/datasheets/st/an5612-esd-protection-of-stm32-mcus-and-mpus-stmicroelectronics.zip",
+      "avionics/datasheets/st/an5646-how-to-select-a-32-mhz-hse-oscillator-for-stm32wl5xex-mcus-stmicroelectronics.pdf",
+      "avionics/datasheets/st/rm0461-stm32wlex-advanced-armbased-32bit-mcus-with-subghz-radio-solution-stmicroelectronics.pdf",
+      "avionics/datasheets/st/stm32wle5jc.pdf",
+      "avionics/datasheets/ti/TPDxE05U06_SLVSBO7O.pdf",
+      "avionics/datasheets/ti/am625.pdf",
+      "avionics/datasheets/ti/bq76930.pdf",
+      "avionics/datasheets/ti/dp83825i.pdf",
+      "avionics/datasheets/ti/drv8833.pdf",
+      "avionics/datasheets/ti/ds26lv31qml.pdf",
+      "avionics/datasheets/ti/ds26lv32at.pdf",
+      "avionics/datasheets/ti/esd501.pdf",
+      "avionics/datasheets/ti/esd601.pdf",
+      "avionics/datasheets/ti/esd701.pdf",
+      "avionics/datasheets/ti/esd801.pdf",
+      "avionics/datasheets/ti/ina226.pdf",
+      "avionics/datasheets/ti/iso6442.pdf",
+      "avionics/datasheets/ti/isow1044.pdf",
+      "avionics/datasheets/ti/isow1412.pdf",
+      "avionics/datasheets/ti/lm393.pdf",
+      "avionics/datasheets/ti/lmv331.pdf",
+      "avionics/datasheets/ti/mspm0g3507-q1.pdf",
+      "avionics/datasheets/ti/mspm0g3507.pdf",
+      "avionics/datasheets/ti/mspm0g3518-q1.pdf",
+      "avionics/datasheets/ti/mspm0g3519-q1.pdf",
+      "avionics/datasheets/ti/mspm0l1105.pdf",
+      "avionics/datasheets/ti/slaae29a.pdf",
+      "avionics/datasheets/ti/slaae76e.pdf",
+      "avionics/datasheets/ti/slaaet8a.pdf",
+      "avionics/datasheets/ti/slau846e.pdf",
+      "avionics/datasheets/ti/slau847f.pdf",
+      "avionics/datasheets/ti/slaz742g.pdf",
+      "avionics/datasheets/ti/slib006a.pdf",
+      "avionics/datasheets/ti/slua271c.pdf",
+      "avionics/datasheets/ti/sn74lv1t34.pdf",
+      "avionics/datasheets/ti/sn74lvc1g04.pdf",
+      "avionics/datasheets/ti/sn74lvc1g3157.pdf",
+      "avionics/datasheets/ti/tlv62569.pdf",
+      "avionics/datasheets/ti/tlv757p.pdf",
+      "avionics/datasheets/ti/tlv9062.pdf",
+      "avionics/datasheets/ti/tps54540.pdf",
+      "avionics/datasheets/ti/tps54620.pdf",
+      "avionics/datasheets/ti/tps62933.pdf",
+      "avionics/datasheets/ti/tps63031.pdf",
+      "avionics/datasheets/ti/tps7a20.pdf",
+      "avionics/datasheets/ti/tpsm82822.pdf",
+      "avionics/datasheets/ti/wl1837mod.pdf",
       "avionics/datasheets/tsw-sxx.pdf",
-      "avionics/datasheets/type2el-2dl-2ll-2kl-unified-design-guide.pdf",
-      "avionics/datasheets/type2el-2dl-module-footprint-topview.dxf",
       "avionics/datasheets/ul_1040310811.zip",
       "avionics/datasheets/ul_1040310811/1040310811.stl",
       "avionics/datasheets/ul_1040310811/1040310811.stp",
@@ -21456,7 +21468,6 @@
       "avionics/datasheets/ul_XPSM82822SILR.zip",
       "avionics/datasheets/w25q128jv.pdf",
       "avionics/datasheets/wio-e5-datasheet.pdf",
-      "avionics/datasheets/wl1837mod.pdf",
       "avionics/datasheets/wurth-742792510.pdf",
       "avionics/emi-hardening/TODO.md",
       "avionics/emi-hardening/WBS.md",
@@ -21965,6 +21976,7 @@
       "avionics/rev-s1/WBS.md"
     ],
     "firmware": [
+      "avionics/datasheets/st/an4992-introduction-to-secure-firmware-install-sfi-for-stm32-mcus-stmicroelectronics.pdf",
       "avionics/firmware/AK7455_CALIBRATION_SPECIFICATION.md",
       "avionics/firmware/CMakeLists.txt",
       "avionics/firmware/README.md",
