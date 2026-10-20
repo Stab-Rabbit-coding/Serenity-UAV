@@ -109,10 +109,12 @@ SHELL_STL = os.path.join(
 # Swing azimuth: direction of the foot from the hip in plan, deg from hull +X.
 # ---------------------------------------------------------------------------
 CORNERS = [
-    ("fore-port", -90.0, -7.0, 38.0, -22.4),
-    ("fore-stbd", -249.8, -7.0, 38.0, -157.6),
-    ("aft-port", -79.0, 107.0, 38.0, 28.0),
-    ("aft-stbd", -260.8, 107.0, 38.0, 152.0),
+    # historical pre-recess stations, aircraft datum R2 (R1 [-90,-7],
+    # [-249.8,-7], [-79,107], [-260.8,107], hip Z 38)
+    ("fore-port", 79.85, 298.70, 118.0, -22.4),
+    ("fore-stbd", -79.95, 298.70, 118.0, -157.6),
+    ("aft-port", 90.85, 412.70, 118.0, 28.0),
+    ("aft-stbd", -90.95, 412.70, 118.0, 152.0),
 ]
 
 # Bay plate footprint, leg-local (canonical_leg_r6_*.scad bay()):

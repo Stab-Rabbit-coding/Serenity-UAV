@@ -110,8 +110,8 @@ DROPS_FT = [6.0, 4.0]     # candidate full-AUW drop-test heights
 # FORE feet moved 2026-10-10 (BHD-02 fore-station move, hip Y -1.28 -> -16):
 # foot Y = hip Y + R_H sin(az) = -16 + 80 sin(-22.4 deg) = -46.5 (was the
 # canonical -35; the as-built hip gave -31.8).  Aft feet stay on QMx.
-Y_FOOT_FORE = -46.5
-Y_FOOT_AFT = 135.0
+Y_FOOT_FORE = 259.2   # aircraft datum R2 (R1 -46.5)
+Y_FOOT_AFT = 440.7    # R1 135.0
 WHEELBASE = Y_FOOT_AFT - Y_FOOT_FORE
 
 # Hover nozzle-tip clearance above the ground plane, 3.0 in flight gear:
@@ -119,7 +119,9 @@ WHEELBASE = Y_FOOT_AFT - Y_FOOT_FORE
 # landing the nacelle nozzles hang lowest, so any gear settle beyond this puts
 # the nozzle tips on the ground.
 NOZZLE_TIP_CLEAR_3IN = 13.7
-GROUND_Z_3IN = -80.0      # foot contact plane, hull Z (belly Z 0 - 80 mm)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import hull_datums as hd  # noqa: E402  aircraft datum R2 (2026-10-19)
+GROUND_Z_3IN = hd.GROUND_Z_3IN   # foot contact plane = the datum ground (R1 -80)
 
 # Hip-pivot lever geometry (mm).  Bellcrank radius r and bay hip mounting
 # height are common to both leg-length variants -- only the leg frame

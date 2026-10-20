@@ -25,7 +25,11 @@ import tempfile
 import numpy as np
 import trimesh
 
-MARKER = b"SerenityUAV HULL-FRAME R1"
+import sys as _sys  # noqa: E402
+import os as _os  # noqa: E402
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+import hull_datums as hd  # noqa: E402
+MARKER = hd.FRAME_MARKER  # single source (aircraft datum R2, 2026-10-19)
 REC = np.dtype([("n", "<f4", 3), ("v", "<f4", (3, 3)), ("a", "<u2")])
 
 

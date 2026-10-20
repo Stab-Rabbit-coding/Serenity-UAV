@@ -1201,8 +1201,9 @@ module leg_assembly(flex = 0, h_duct = H_NOM, h_spring = H_NOM) {
 
 // ---------------------------------------------------------------------------
 // Hull-frame corner placement (verification view only -- final placements
-// are LG-10).  Hull frame: X=+port, Y=+aft, Z=+dorsal; centreline
-// X=-169.9; cargo belly Z=0; ground plane Z=-80.
+// are LG-10).  AIRCRAFT DATUM R2 (2026-10-19): X=+port, Y=+aft, Z=+up;
+// centreline X=0, nose tip Y=0, static ground plane Z=0 (3.0 in gear);
+// cargo belly Z=80.  Datums from the GENERATED include below.
 // Corner format: [hip_x, hip_y, hip_z, swing_azimuth_deg, hand]
 //   swing azimuth: direction of foot from hip in plan, deg from hull +X
 //   (port-outboard); fore legs swing fore-of-outboard, aft legs aft-of-
@@ -1210,7 +1211,7 @@ module leg_assembly(flex = 0, h_duct = H_NOM, h_spring = H_NOM) {
 //   the FORE feet no longer do -- the 2026-10-10 station move (BHD-02) put
 //   them at Y -46.5, 129 mm off the centreline (were -31.8 / 140).
 // ---------------------------------------------------------------------------
-X_CL = -169.9;
+include <../hull_datums.scad>   // X_CL etc. -- never re-typed
 CORNERS = [
     // [hip_x, hip_y, hip_z, swing_azimuth_deg, hand] -- hand +1 = port part,
     // -1 = starboard part, the MIRROR image of port (owner 2026-10-10,
@@ -1228,10 +1229,13 @@ CORNERS = [
     // was rejected: a third of the footprint is off the hull there.
     // AFT rows: hip stations RECESSED 15 mm along each corner's own swing
     // axis (LG-10.2); pre-recess [-79, 107], [-260.8, 107].
-    [-114.90, -16.00, 38,  -22.4,  1 ],   // fore-port
-    [-224.90, -16.00, 38, -157.6, -1 ],   // fore-stbd  (mirror of fore-port)
-    [ -92.24,  99.96, 38,   28.0,  1 ],   // aft-port
-    [-247.56,  99.96, 38,  152.0, -1 ],   // aft-stbd   (mirror of aft-port)
+    // R2 = R1 + (169.85, 305.70, 80.00).  R1 rows: (-114.90/-224.90, -16.00, 38),
+    // (-92.24/-247.56, 99.96, 38) -- mirrored about the old -169.9, so the R2
+    // starboard rows sit 0.1 mm off a true mirror; the rebuild derives them.
+    [  54.95, 289.70, 118,  -22.4,  1 ],   // fore-port
+    [ -55.05, 289.70, 118, -157.6, -1 ],   // fore-stbd  (mirror of fore-port)
+    [  77.61, 405.66, 118,   28.0,  1 ],   // aft-port
+    [ -77.71, 405.66, 118,  152.0, -1 ],   // aft-stbd   (mirror of aft-port)
 ];
 
 // All 4 corners, gear only (no ground/ghost slabs) -- consumed by
@@ -1247,9 +1251,9 @@ module hull_legs() {
 
 module hull_stance() {
     // ground plane
-    color("Tan", 0.25) translate([-360, -120, -81]) cube([380, 380, 1]);
+    color("Tan", 0.25) translate([-190.15, 185.7, -1]) cube([380, 380, 1]);   // R1 (-360,-120,-81)
     // cargo-belly footprint ghost
-    color("SaddleBrown", 0.12) translate([-267, -69.5, 0])
+    color("SaddleBrown", 0.12) translate([-97.15, 236.2, 80])   // R1 (-267,-69.5,0)
         cube([194.3, 198.5, 2]);
     hull_legs();
 }

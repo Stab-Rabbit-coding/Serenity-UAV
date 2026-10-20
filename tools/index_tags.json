@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-19",
+  "generated": "2026-10-20",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -2303,7 +2303,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/battery_cradle.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 battery_cradle",
       "tags": [
         "cad-mesh",
         "power",
@@ -2327,7 +2327,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/cargo_door_port.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 cargo_door_port",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2343,7 +2343,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/cargo_door_stbd.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 cargo_door_stbd",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2375,7 +2375,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/cargo_hinge_retention.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 cargo_hinge_retention",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2431,7 +2431,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/chin_node_shelf.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 chin_node_shelf",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2447,7 +2447,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/door_latch_bracket_port.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 door_latch_bracket_port",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2455,7 +2455,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/door_latch_bracket_stbd.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 door_latch_bracket_stbd",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2463,7 +2463,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/gateway_door_tray.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 gateway_door_tray",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2500,7 +2500,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/tilt_actuator_bracket_port.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 tilt_actuator_bracket_port",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2508,7 +2508,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/tilt_actuator_bracket_stbd.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 tilt_actuator_bracket_stbd",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2516,7 +2516,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/tilt_actuator_wheel.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 tilt_actuator_wheel",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2524,7 +2524,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/tilt_actuator_worm.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 tilt_actuator_worm",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2532,7 +2532,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/tilt_brake_guide.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 tilt_brake_guide",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2540,7 +2540,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/tilt_brake_guide_stbd.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 tilt_brake_guide_stbd",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2548,7 +2548,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/void_former_cargo_batt_chimney.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 void_former_cargo_batt_chimney",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2556,7 +2556,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/void_former_cargo_collar_rim.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 void_former_cargo_collar_rim",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2580,7 +2580,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/void_former_cargo_node_bay.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 void_former_cargo_node_bay",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2588,7 +2588,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo_middle_splice_collar.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 cargo_middle_splice_collar",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2618,7 +2618,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/head_cargo_splice_collar.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 head_cargo_splice_collar",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2634,7 +2634,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/head_shell24_2mm_repaired.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Head_Shell structural-features 2026-06-14",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 head_shell24_2mm_repaired",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2650,7 +2650,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_1_5in_hull_legs",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2659,7 +2659,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_stance.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_1_5in_hull_stance",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2731,7 +2731,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_fore-port",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2749,7 +2749,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_fore-stbd",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2767,7 +2767,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_hull_legs",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2776,7 +2776,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_stance.stl": {
-      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_hull_stance",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2883,7 +2883,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/middle_rear_splice_collar.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 middle_rear_splice_collar",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2891,7 +2891,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/middle_shell24_2mm_repaired.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Middle_Shell structural-features 2026-06-14",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 middle_shell24_2mm_repaired",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2899,7 +2899,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/rear_shell24_2mm_repaired.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Rear_Shell interior-regen 2026-07-06",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 rear_shell24_2mm_repaired",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2915,7 +2915,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/wing_root_flange_port.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_root_flange_port",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2923,7 +2923,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/wing_root_flange_stbd.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_root_flange_stbd",
       "tags": [
         "cad-mesh",
         "structural"
@@ -3016,7 +3016,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_port_64mm.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle64_Port 2026-06-11",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_port_64mm",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3025,7 +3025,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_port_revs.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle_Port 2026-06-11",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_port_revs",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3043,7 +3043,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_stbd_64mm.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle64_Stbd 2026-06-11",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_stbd_64mm",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3052,7 +3052,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_stbd_revs.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Nacelle_Stbd 2026-06-11",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_stbd_revs",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3070,7 +3070,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Trunnion64_Port 2026-06-11",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_trunnion_64mm_port",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3079,7 +3079,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Trunnion64_Stbd 2026-06-11",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_trunnion_64mm_stbd",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3142,7 +3142,7 @@
       "archived": false
     },
     "airframe/stls/wings/wing_port_s1223_revo.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Wing_Port 2026-06-11",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_port_s1223_revo",
       "tags": [
         "cad-mesh",
         "structural"
@@ -3150,7 +3150,7 @@
       "archived": false
     },
     "airframe/stls/wings/wing_stbd_s1223_revo.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Wing_Stbd 2026-06-11",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_stbd_s1223_revo",
       "tags": [
         "cad-mesh",
         "structural"
@@ -3158,7 +3158,7 @@
       "archived": false
     },
     "airframe/stls/wings/wing_tilt_pinion_port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 TiltPinion64_Port 2026-06-11",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_tilt_pinion_port",
       "tags": [
         "cad-mesh",
         "structural"
@@ -3166,7 +3166,7 @@
       "archived": false
     },
     "airframe/stls/wings/wing_tilt_pinion_stbd.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 TiltPinion64_Stbd 2026-06-11",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_tilt_pinion_stbd",
       "tags": [
         "cad-mesh",
         "structural"
@@ -17386,7 +17386,14 @@
       "archived": false
     },
     "tools/cargo_layout_fit.py": {
-      "description": "Python script",
+      "description": "cargo_layout_fit.py -- measure a proposed cargo-section equipment layout",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/check_datum_drift.py": {
+      "description": "Fail on aircraft-datum drift (plan 2026-10-19-001, rules R1-R4).",
       "tags": [
         "build-tooling"
       ],
@@ -17403,6 +17410,20 @@
       "description": "compact_bom_entries.py",
       "tags": [
         "bom",
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/datum_r2_stl_list.txt": {
+      "description": "Datum migration U4 (plan docs/plans/2026-10-19-001-aircraft-datum-migration-plan.md):",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/datum_regression.py": {
+      "description": "Datum-migration regression harness (plan 2026-10-19-001, rule R3).",
+      "tags": [
         "build-tooling"
       ],
       "archived": false
@@ -17469,6 +17490,13 @@
       "tags": [
         "build-tooling",
         "landing-gear"
+      ],
+      "archived": false
+    },
+    "tools/frame_inventory.py": {
+      "description": "Inventory every airframe file that carries hull-frame coordinates (datum migration U2).",
+      "tags": [
+        "build-tooling"
       ],
       "archived": false
     },
@@ -17610,7 +17638,7 @@
       "archived": false
     },
     "tools/landing_gear_r6_sizing.py": {
-      "description": "Python script",
+      "description": "Serenity UAV -- Landing Gear Rev R6 sizing study (hip-pivot canonical leg).",
       "tags": [
         "build-tooling",
         "landing-gear"
@@ -17632,6 +17660,13 @@
       ],
       "archived": false
     },
+    "tools/lg_corners.py": {
+      "description": "The landing-gear corner stations, read from their single source.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/lg_thigh_variants.py": {
       "description": "Serenity UAV -- landing-gear thigh: grown printed section vs anchored CF-rod core.",
       "tags": [
@@ -17648,6 +17683,13 @@
     },
     "tools/middle_layout_fit.py": {
       "description": "middle_layout_fit.py -- Rev T6 middle-section equipment layout and the",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/migrate_stl_r2.py": {
+      "description": "Translate hull-frame (R1) STLs into the aircraft datum (R2), in place.",
       "tags": [
         "build-tooling"
       ],
@@ -22666,8 +22708,11 @@
       "tools/cargo_bay_envelope.py",
       "tools/cargo_bulkhead_context.py",
       "tools/cargo_layout_fit.py",
+      "tools/check_datum_drift.py",
       "tools/check_tacco_envelope_sync.py",
       "tools/compact_bom_entries.py",
+      "tools/datum_r2_stl_list.txt",
+      "tools/datum_regression.py",
       "tools/dorsal_shroud_resize_64.py",
       "tools/esc70_design.json",
       "tools/esc80_cooptimize.py",
@@ -22677,6 +22722,7 @@
       "tools/export-specctra-dsn.py",
       "tools/export_assembly_meshes.py",
       "tools/export_landing_gear_stls.py",
+      "tools/frame_inventory.py",
       "tools/gen_cargo_void_formers.py",
       "tools/gen_todo_from_wbs.py",
       "tools/generate_lg_bays.py",
@@ -22697,9 +22743,11 @@
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",
       "tools/lg_collar_integrity.py",
+      "tools/lg_corners.py",
       "tools/lg_thigh_variants.py",
       "tools/lg_wire_layout_study.py",
       "tools/middle_layout_fit.py",
+      "tools/migrate_stl_r2.py",
       "tools/mirror_claude_memory.py",
       "tools/nacelle_64_proportion_trade.py",
       "tools/nacelle_64_scale.py",

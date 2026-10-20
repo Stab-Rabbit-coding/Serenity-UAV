@@ -200,13 +200,13 @@ def _wing_midline_mm(chord_fraction):
     mid = (wsf.surf_y(upper, chord_fraction) + wsf.surf_y(lower, chord_fraction)) / 2.0
     return mid * WING_ROOT_CHORD
 
-MARKER = b"SerenityUAV HULL-FRAME R1"
-
-# Cargo_Shell bake transform — MUST match tools/bake_hull_frame.py COMPONENTS.
-#   180 deg about +Z → (x,y,z)→(−x,−y,z);  T = (−274.4, −282.8, 0)
 
 import hull_datums as hd  # noqa: E402  (tools/ is on sys.path above)
-BAKE_T = np.array(hd.bake_translation("Cargo_Shell"))  # single source, 2026-10-19
+MARKER = hd.FRAME_MARKER  # single source (aircraft datum R2, 2026-10-19)
+
+# Cargo_Shell bake transform -- READ from tools/bake_hull_frame.py COMPONENTS
+# (single source, 2026-10-19): 180 deg about +Z, (x,y,z) -> (-x,-y,z) + T.
+BAKE_T = np.array(hd.bake_translation("Cargo_Shell"))
 
 WALL_MM = 2.0  # 2 mm foam-fill wall (Blender hollowing pitch / SCAD)
 
@@ -349,14 +349,14 @@ def extract_envelope(shell_tm):
 # above the belly skin; the door aperture below clears the rest.  Bottom held
 # at Z=8 so belly skin FWD of the bay is untouched (a <=2 mm foam-filled curb
 # is left where the duct met the floor).
-DUCT_CUT = (-201.0, -137.0, -20.0, 107.0, 8.0, 48.0)  # x0,x1,y0,y1,z0,z1
+DUCT_CUT = (-31.15, 32.85, 285.70, 412.70, 88.0, 128.0)  # x0..z1, R2; R1 (-201,-137,-20,107,8,48)
 
 # Clamshell belly aperture — between the two door hinge lines (stbd −222.5,
 # port −117.6), bay Y +2..+108, Z −3..+9 removes only the belly skin.
-APERTURE = (-222.5, -117.6, 2.0, 108.0, -3.0, 9.0)
+APERTURE = (-52.65, 52.25, 307.70, 413.70, 77.0, 89.0)  # R2; R1 (-222.5,-117.6,2,108,-3,9)
 
-# Wing subsystem — RE-DERIVED chordwise stations (hull frame).
-WING_LE_ROOT_Y = -7.0
+# Wing subsystem — RE-DERIVED chordwise stations (AIRCRAFT DATUM R2).
+WING_LE_ROOT_Y = 298.70  # R1 -7.0
 WING_ROOT_CHORD = 129.0
 
 # REV T1 (2026-08-29): spar station 45.15 -> 28.00 mm aft of LE, and the spar
@@ -394,7 +394,7 @@ WING_MORT_Y = WING_LE_ROOT_Y + 0.50 * WING_ROOT_CHORD  # = +57.5
 # Previously the spar bore and bosses were cut at WING_ROOT_Z (62.5), i.e. on
 # the mortise height rather than on the camber midline, which is why they never
 # lined up with the wing.
-WING_CHORD_LINE_Z = 58.01
+WING_CHORD_LINE_Z = 138.01  # R1 58.01
 
 # CARGO-03b (2026-08-24): the wing root joint now has ONE datum.
 # The tenon (`fuselage_root_tab()`) is centred on the wing CHORD LINE; this
@@ -458,8 +458,8 @@ ROOT_FLANGE_T = 5.0         # mm, protrusion inboard of the wall inner face
 # published shell (docs/WING_ATTACH_INTERFACE.md SS3.3).  Every Rev T1 wing-root
 # feature that has to reference "the wall" rather than a deep-embed bracket uses
 # these, so one measured fact drives all of them.
-WALL_SKIN_X_PORT = -81.33
-WALL_SKIN_X_STBD = -258.37      # = 2 * X_CL - WALL_SKIN_X_PORT, X_CL = -169.85
+WALL_SKIN_X_PORT = 88.52       # R1 -81.33
+WALL_SKIN_X_STBD = 2.0 * hd.X_CL - WALL_SKIN_X_PORT  # mirror of port (R1 -258.37)
 WALL_INNER_X_PORT = WALL_SKIN_X_PORT - ROOT_FLANGE_T    # = -86.33
 WALL_INNER_X_STBD = WALL_SKIN_X_STBD + ROOT_FLANGE_T    # = -253.37
 
@@ -551,8 +551,8 @@ WING_SHAFT_ENTRY_D = 4.4   # = wings_s1223_revo.scad SHAFT_BORE_D, running fit
 # into open cargo cavity.  The spar bore already crosses the same region (it spans
 # the full -270..-70 lateral run, because it is a continuous rod), so punching a
 # harness bore through it is not a new intrusion into that wall.
-WING_HARNESS_INB_PORT = -125.0   # past the -115.2 encoder-line wall
-WING_HARNESS_INB_STBD = -213.0   # past the -225.2 encoder-line wall (stbd inboard is +X)
+WING_HARNESS_INB_PORT = 44.85    # R1 -125.0, past the R1 -115.2 encoder-line wall
+WING_HARNESS_INB_STBD = -43.15   # R1 -213.0, past the R1 -225.2 wall (stbd inboard is +X)
 
 # Entry heights — same unscaled camber-midline rule as the spar.
 WING_NAV_Z = WING_CHORD_LINE_Z + WING_NAV_MIDLINE       # = +61.974
@@ -571,8 +571,8 @@ MORT_H = 20.8  # mortise Z span = 20.0 tenon + 0.4 mm/side
 
 # Lateral-wall X reference bands (deep-embed spans; the outboard end is clipped
 # to the real skin by the envelope, so only rough bracketing is needed).
-PORT_OUTB, PORT_INB = -60.0, -100.0  # port wall bracket (skin ≈ −83..−90)
-STBD_OUTB, STBD_INB = -278.0, -240.0  # stbd wall bracket (skin ≈ −250..−255)
+PORT_OUTB, PORT_INB = 109.85, 69.85  # port wall bracket; R1 (-60, -100)
+STBD_OUTB, STBD_INB = -108.15, -70.15  # stbd wall bracket; R1 (-278, -240)
 
 # Nacelle-tilt actuator mount pads.
 #
@@ -744,14 +744,14 @@ RING_Y30_ENABLED = False
 # Rev T5: GATED OFF -- Inara/River relocate out of the cargo section
 # (docs/CARGO_SECTION_LAYOUT.md D-T5-3); constants kept for the re-run.
 INARA_ENABLED = False
-INARA_X = -135.0
-INARA_Y = 90.0
+INARA_X = 34.85  # R1 -135.0
+INARA_Y = 395.70  # R1 90.0
 INARA_BOSS_DX = 25.0
 INARA_BOSS_DY = 15.0
 BOSS_OD = 8.0
 BOSS_BORE_D = 4.1
-DORSAL_Z_TOP = 172.0  # above the dorsal skin (Z_max ≈ 163); clipped by envelope
-DORSAL_Z_INB = 145.0  # boss reaches this far into the cavity
+DORSAL_Z_TOP = 252.0  # R1 172; above the dorsal skin; clipped by envelope
+DORSAL_Z_INB = 225.0  # R1 145; boss reaches this far into the cavity
 
 # ---------------------------------------------------------------------------
 # Rev R6 landing-gear bay integration (LG-02 / LG-10, 2026-08-09)
@@ -810,7 +810,7 @@ DORSAL_Z_INB = 145.0  # boss reaches this far into the cavity
 # Everything below is a CONTRACT with canonical_leg_r6_*.scad.  Change one,
 # change both; the aperture here must match the liner there exactly or the leg
 # will not pass through its own bay.
-X_CL_HULL = -169.9          # hull centreline
+X_CL_HULL = hd.X_CL         # centreline (R1 -169.9)
 BAY_APER_W_BOT = 25.0       # mm, aperture width at the mouth
 BAY_APER_W_TOP = 34.0       # mm, aperture width at the head
 BAY_APER_L = 58.0           # mm, aperture length up the canted plane
@@ -848,15 +848,16 @@ LG_PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
 # SS10-11) from Y -1.28 / X -103.87, -235.93 to Y -16.  MUST match canonical_leg_r6_3_0in.scad CORNERS (gated by
 # tools/landing_gear_bay_function.py corner_sync()).
 LG_CORNERS = [
-    ("fore-port", -114.90, -16.00, 38.0, -22.4, "fore"),
-    ("fore-stbd", -224.90, -16.00, 38.0, -157.6, "fore"),
-    ("aft-port", -92.24, 99.96, 38.0, 28.0, "aft"),
-    ("aft-stbd", -247.56, 99.96, 38.0, 152.0, "aft"),
+    # R2; R1 hips (-114.90/-224.90, -16.00, 38) and (-92.24/-247.56, 99.96, 38)
+    ("fore-port", 54.95, 289.70, 118.0, -22.4, "fore"),
+    ("fore-stbd", -55.05, 289.70, 118.0, -157.6, "fore"),
+    ("aft-port", 77.61, 405.66, 118.0, 28.0, "aft"),
+    ("aft-stbd", -77.71, 405.66, 118.0, 152.0, "aft"),
 ]
 
 # Retained as an informational clearance check.
 LEG_ZONES = [
-    (label, (hx - 25.0, hx + 25.0, hy - 30.0, hy + 30.0, 10.0, 60.0))
+    (label, (hx - 25.0, hx + 25.0, hy - 30.0, hy + 30.0, 90.0, 140.0))  # R1 Z 10..60
     for label, hx, hy, _hz, _az, _st in LG_CORNERS
 ]
 
@@ -977,7 +978,7 @@ T5_HANGER = 10.0          # cradle hanger boss section
 T5_PEDESTAL = 10.0        # winch pedestal boss section (Phase 7 reserve)
 T5_M3_D = 4.1             # heat-set pilot (RX-M3x5.7) -- same as BOSS_BORE_D
 T5_M25_D = 3.5            # heat-set pilot (RX-M2.5) for the Observer tray bosses
-T5_GPS_STATIONS = ((-135.0, 92.0), (-205.0, 92.0))   # (X, Y) dorsal, port / stbd
+T5_GPS_STATIONS = ((34.85, 397.70), (-35.15, 397.70))  # R1 ((-135, 92), (-205, 92))   # (X, Y) dorsal, port / stbd
 T5_GPS_CUP_OD, T5_GPS_RECESS_D, T5_GPS_RECESS_H = 40.0, 36.0, 6.0
 T5_GPS_SMA_D, T5_GPS_RING_PCD, T5_GPS_M2_D = 6.5, 44.0, 1.6
 T5_WINCH_PEDESTAL_X = (clf.HOIST_XS[0] - clf.DRUM_L / 2 - 5.0,
@@ -996,7 +997,7 @@ def t5_bracket_feet_raw():
     OUTBOARD to the skin (envelope-clipped by the caller).  (label, solid)."""
     out = []
     for i, (fy, fz) in enumerate(clf.BRACKET_FEET):
-        port = box(T5_FOOT_X_PORT, -60.0, fy - T5_FOOT / 2, fy + T5_FOOT / 2,
+        port = box(T5_FOOT_X_PORT, 109.85, fy - T5_FOOT / 2, fy + T5_FOOT / 2,
                    fz - T5_FOOT / 2, fz + T5_FOOT / 2)
         out.append((f"tilt bracket foot {i} port", port))
         out.append((f"tilt bracket foot {i} stbd", _mirror_x(port)))
@@ -1020,7 +1021,7 @@ def t5_cradle_hangers():
         for by in (clf.CRADLE_FWD_BOSS_Y, clf.CRADLE_AFT_BOSS_Y):
             x = clf.CRADLE_XC + dx
             pos.append(box(x - T5_HANGER / 2, x + T5_HANGER / 2, by - T5_HANGER / 2,
-                           by + T5_HANGER / 2, clf.CRADLE_TOP_Z, 175.0))
+                           by + T5_HANGER / 2, clf.CRADLE_TOP_Z, 255.0))
             neg.append(z_cylinder(x, by, clf.CRADLE_TOP_Z - 0.5, clf.CRADLE_TOP_Z + 8.0,
                                   T5_M3_D / 2))
     return pos, neg
@@ -1033,7 +1034,7 @@ def t5_winch_pedestals():
     zc = clf.SPOOL_Z0 + clf.DRUM_D / 2
     for x in T5_WINCH_PEDESTAL_X:
         pos.append(box(x - T5_PEDESTAL / 2, x + T5_PEDESTAL / 2, clf.HOIST_Y - T5_PEDESTAL / 2,
-                       clf.HOIST_Y + T5_PEDESTAL / 2, zc - 6.0, 175.0))
+                       clf.HOIST_Y + T5_PEDESTAL / 2, zc - 6.0, 255.0))
         neg.append(z_cylinder(x, clf.HOIST_Y, zc - 6.5, zc + 2.0, T5_M3_D / 2))
     return pos, neg
 
@@ -1046,7 +1047,7 @@ def t5_chin_shelf_bosses():
     real floor; M3 heat-set pilot 8 mm deep from the shelf face."""
     pos, neg = [], []
     for x, y in clf.SHELF_BOSS:
-        pos.append(box(x - 5.0, x + 5.0, y - 5.0, y + 5.0, -5.0, clf.SHELF_Z0))
+        pos.append(box(x - 5.0, x + 5.0, y - 5.0, y + 5.0, 75.0, clf.SHELF_Z0))
         neg.append(z_cylinder(x, y, clf.SHELF_Z0 - 8.0, clf.SHELF_Z0 + 0.5, T5_M3_D / 2))
     return pos, neg
 
@@ -1059,7 +1060,7 @@ def t5_observer_bosses():
     pos, neg = [], []
     for dx, dy, h in clf.OBSERVER_BOSS:
         x, y = clf.X_CL + dx, clf.OBSERVER_Y0 + dy
-        pos.append(box(x - h, x + h, y - h, y + h, -5.0, clf.OBSERVER_Z0))
+        pos.append(box(x - h, x + h, y - h, y + h, 75.0, clf.OBSERVER_Z0))
         neg.append(z_cylinder(x, y, clf.OBSERVER_Z0 - 6.0, clf.OBSERVER_Z0 + 0.5, T5_M25_D / 2))
     return pos, neg
 
@@ -1091,7 +1092,7 @@ def t5_gps_cups(shell_tm):
     pos, neg = [], []
     for x, y in T5_GPS_STATIONS:
         loc, _, _ = shell_tm.ray.intersects_location(
-            np.array([[x, y, 200.0]]), np.array([[0, 0, -1.0]]), multiple_hits=False)
+            np.array([[x, y, 280.0]]), np.array([[0, 0, -1.0]]), multiple_hits=False)
         loc = np.asarray(loc).reshape(-1, 3)
         if not len(loc):
             raise RuntimeError(f"no dorsal skin under GPS station ({x}, {y})")
@@ -1109,7 +1110,7 @@ def t5_gps_cups(shell_tm):
     return pos, neg
 
 
-def _flank_profile(shell_tm, z0=0.0, z1=54.0, step=0.5):
+def _flank_profile(shell_tm, z0=80.0, z1=134.0, step=0.5):  # R1 Z 0..54
     """Ray-probe the forward flank surface Y(z) on both sides of the ramp
     opening (X = RAMP_X1 + 4 port, RAMP_X0 - 4 stbd) on ONE fine Z grid.
     Every ramp slab (skin, lip, grooves) interpolates this same table, so
@@ -1124,7 +1125,7 @@ def _flank_profile(shell_tm, z0=0.0, z1=54.0, step=0.5):
         ys = []
         for z in zs:
             loc, _, _ = shell_tm.ray.intersects_location(
-                np.array([[xx, -70.0, z]]), np.array([[0, 1.0, 0]]), multiple_hits=False)
+                np.array([[xx, 235.70, z]]), np.array([[0, 1.0, 0]]), multiple_hits=False)
             loc = np.asarray(loc).reshape(-1, 3)
             ys.append(float(loc[0, 1]) if len(loc) else np.nan)
         ys = np.array(ys)

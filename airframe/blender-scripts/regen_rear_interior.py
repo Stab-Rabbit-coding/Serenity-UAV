@@ -67,7 +67,11 @@ import open_mating_faces as omf  # noqa: E402
 OUT = os.environ.get("REAR_REGEN_OUT") or os.path.join(
     REPO, "airframe", "stls", "fuselage", "rear_shell24_2mm_repaired.stl"
 )
-MARKER = b"SerenityUAV HULL-FRAME R1"
+import sys as _sys  # noqa: E402
+import os as _os  # noqa: E402
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', '..', 'tools'))
+import hull_datums as hd  # noqa: E402
+MARKER = hd.FRAME_MARKER  # single source (aircraft datum R2, 2026-10-19)
 RHO_PRINT = 1.05e-3  # g/mm^3 as-printed CF-PETG (≈40 % infill)
 RHO_SOLID = 1.28e-3  # g/mm^3 solid CF-PETG
 JUNK_FACES = 64  # connected components below this are dropped

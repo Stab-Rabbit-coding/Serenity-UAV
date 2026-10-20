@@ -68,8 +68,8 @@ TOL_MM = 0.05
 LEVEL_TOL_MM = 1e-3
 
 # FORE moved 2026-10-10 (BHD-02) from (-103.87 / -235.93, -1.28).
-CORNERS_XY = {"fore-port": (-114.90, -16.00), "fore-stbd": (-224.90, -16.00),
-              "aft-port": (-92.24, 99.96), "aft-stbd": (-247.56, 99.96)}
+import lg_corners  # noqa: E402  single-source corner stations (2026-10-19)
+CORNERS_XY = {n: (c[0], c[1]) for n, c in lg_corners.corners().items()}
 
 try:
     import numpy as np  # noqa: E402

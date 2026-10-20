@@ -64,14 +64,13 @@ HEAD_PATH = os.environ.get("HEAD_MERGE_OUT") or os.path.join(
     REPO_ROOT, "airframe", "stls", "fuselage", "head_shell24_2mm_repaired.stl"
 )
 
-MARKER = b"SerenityUAV HULL-FRAME R1"
-
 # Head_Shell bake transform -- READ from tools/bake_hull_frame.py COMPONENTS
 # through tools/hull_datums.py (single source, 2026-10-19; this file used to
 # restate it and drifted when the head was re-centred).
 import sys  # noqa: E402
 sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
 import hull_datums as hd  # noqa: E402
+MARKER = hd.FRAME_MARKER  # single source (aircraft datum R2, 2026-10-19)
 BAKE_T = np.array(hd.bake_translation("Head_Shell"))
 
 # CF-PETG mass reporting (same convention as merge_cargo_interior.py)

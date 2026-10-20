@@ -73,7 +73,7 @@ import hull_datums as hd  # noqa: E402  single-source hull datums (X_CL)
 
 # Marker stamped into the 80-byte binary STL header after baking.
 # Its presence means "vertices are already hull-frame" — do not re-bake.
-MARKER = b"SerenityUAV HULL-FRAME R1"
+MARKER = b"SerenityUAV AIRCRAFT-FRAME R2"
 
 # 1/sqrt(2), shared by all 90-degree-family quaternions below.
 _SQ2 = 0.7071067811865476
@@ -88,6 +88,10 @@ _SQ2 = 0.7071067811865476
 # Tuple format: (Px, Py, Pz, Qx, Qy, Qz, Qw)
 #   Position in mm; rotation as unit quaternion with Qw the scalar.
 # ---------------------------------------------------------------------------
+# AIRCRAFT DATUM R2 (2026-10-19): every placement below is in the aircraft
+# frame -- origin on the centreline, at the nose tip, on the static ground
+# plane (tools/hull_datums.py).  P_R2 = P_R1 + hull_datums.R1_TO_R2.  The
+# dated notes inside the table quote R1 numbers as they were recorded.
 COMPONENTS = {
     # Head: identity rotation — STL axes already matched the hull frame.
     # Paths standardised to the no-"s_"-prefix published basenames (Rev R1,
@@ -102,25 +106,27 @@ COMPONENTS = {
         # samples, IQR 0.17 mm) -- 1.6 mm port of the hull centreline hd.X_CL.
         # QMx Sheet 5 [REF-CAD-003] shows a symmetric hull; owner direction:
         # correct to symmetric unless canonically justified.
-        (-331.9993360 + (hd.X_CL - (-168.211)), -17.9999640, 60.9998780, 0.0, 0.0, 0.0, 1.0),
+        # R2: R1 (-333.6383360, -17.9999640, 60.9998780) + R1_TO_R2.
+        (-163.7883360, 287.7000360, 140.9998780, 0.0, 0.0, 0.0, 1.0),
     ),
     # Cargo: 180 deg about +Z flips the section hull-forward.
     "Cargo_Shell": (
         "fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl",
-        (-274.4000100, -282.8000440, 0.0, 0.0, 0.0, 1.0, 0.0),
+        (-104.5500100, 22.8999560, 80.0000000, 0.0, 0.0, 1.0, 0.0),  # R2
     ),
     # Middle / Rear: 90 deg about -X brings the SCAD section axis
     # (modelled along local Z) upright into hull +Z (dorsal).
     "Middle_Shell": (
         "fuselage/middle_shell24_2mm_repaired.stl",
-        (-350.9992980, 130.4001963, 10.0174324, -_SQ2, 0.0, 0.0, _SQ2),
+        (-181.1492980, 436.1001963, 90.0174324, -_SQ2, 0.0, 0.0, _SQ2),  # R2
     ),
     "Rear_Shell": (
         "fuselage/rear_shell24_2mm_repaired.stl",
         # 2026-10-19 RE-CENTRED: Px 0.0 -> +5.914.  The rear measured symmetric
         # about X -175.764 (194 samples, IQR 0.06 mm) -- 5.9 mm starboard of the
         # centreline, a 5.7 mm lateral step at the middle/rear joint.
-        (0.0 + (hd.X_CL - (-175.764)), 203.1999999, -31.9999360, -_SQ2, 0.0, 0.0, _SQ2),
+        # R2: R1 (5.9140000, 203.1999999, -31.9999360) + R1_TO_R2.
+        (175.7640000, 508.8999999, 48.0000640, -_SQ2, 0.0, 0.0, _SQ2),
     ),
     # Wings: identity rotation, translation only.
     # Filenames use the no-"s_"-prefix convention (Rev R1, 2026-06-11).
@@ -153,14 +159,14 @@ COMPONENTS = {
     #   Z: unchanged -- both wings already shared 57.9998840.
     "Wing_Port": (
         "wings/wing_port_s1223_revo.stl",
-        (-80.9998380, -6.9999860, 57.9998840, 0.0, 0.0, 0.0, 1.0),
+        (88.8501620, 298.7000140, 137.9998840, 0.0, 0.0, 0.0, 1.0),  # R2
     ),
     "Wing_Stbd": (
         "wings/wing_stbd_s1223_revo.stl",
         # 2026-10-19: DERIVED as the mirror of Wing_Port about hd.X_CL (was
         # -257.4822, mirrored about a measured -169.241 that disagreed with the
         # centreline every other generator used).
-        (hd.mirror_x(-80.9998380), -6.9999860, 57.9998840, 0.0, 0.0, 0.0, 1.0),
+        (hd.mirror_x(88.8501620), 298.7000140, 137.9998840, 0.0, 0.0, 0.0, 1.0),  # R2
     ),
     # Nacelles: 270 deg about +X = cruise / forward-flight attitude.
     # This is the canonical stored attitude; hover tilt is applied
@@ -178,11 +184,11 @@ COMPONENTS = {
     # Files were renamed so each filename matches its physical mounting side.
     "Nacelle_Port": (
         "nacelles/nacelle_port_revs.stl",
-        (46.9999060, -63.9998720, 62.9998740, _SQ2, 0.0, 0.0, -_SQ2),
+        (216.8499060, 241.7001280, 142.9998740, _SQ2, 0.0, 0.0, -_SQ2),  # R2 (50 mm, legacy)
     ),
     "Nacelle_Stbd": (
         "nacelles/nacelle_stbd_revs.stl",
-        (-385.0960040, -69.9998600, 64.9719300, _SQ2, 0.0, 0.0, -_SQ2),
+        (-215.2460040, 235.7001400, 144.9719300, _SQ2, 0.0, 0.0, -_SQ2),  # R2 (50 mm, legacy)
     ),
 }
 
@@ -228,7 +234,8 @@ _N64_SEAT = 53.84            # as baked (x1.00, axis shift 7.14)
 _N64_Y, _N64_Z = hd.SPAR_Y - nacelle_64_scale.pivot_z(), hd.SPAR_Z
 # 2026-10-19: starboard DERIVED as the mirror of port about hd.X_CL (was the
 # separately measured stbd pad face -345.182, mirrored about -169.241).
-_N64_X = {"Port": 6.700 + _N64_SEAT, "Stbd": hd.mirror_x(6.700 + _N64_SEAT)}
+# Port wing-pad face: R1 +6.700 -> R2 +176.550.
+_N64_X = {"Port": 176.550 + _N64_SEAT, "Stbd": hd.mirror_x(176.550 + _N64_SEAT)}
 for _side in ("Port", "Stbd"):
     _pl = (_N64_X[_side], _N64_Y, _N64_Z, _SQ2, 0.0, 0.0, -_SQ2)
     _s = _side.lower()
@@ -273,6 +280,11 @@ def is_baked(path):
     """Return True if the file's binary header carries the bake marker."""
     with open(path, "rb") as fh:
         header = fh.read(80)
+    if b"SerenityUAV HULL-FRAME R1" in header:
+        # Baked in the retired R1 frame: never bake again (that would apply the
+        # placement twice).  Translate it with tools/migrate_stl_r2.py instead.
+        sys.exit(f"[bake] {path}: carries the R1 frame marker -- run "
+                 "tools/migrate_stl_r2.py, do not re-bake")
     return MARKER in header
 
 

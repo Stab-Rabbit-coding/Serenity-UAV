@@ -39,22 +39,38 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 SCAD_OUT = os.path.join(REPO, "airframe", "openscad", "hull_datums.scad")
 
-# Aircraft centreline (port/starboard symmetry plane).  -169.85 is the value
-# the cargo merge and both layout tools were built on; the middle shell's own
-# symmetry plane measures -170.07 (within 0.22 mm).  Head and rear were
-# re-centred onto it 2026-10-19; the cargo base is rebuilt as a mirror of its
-# port half about it (merge_cargo_interior.py symmetrize_about_cl()).
-X_CL = -169.85
+# AIRCRAFT DATUM, frame R2 (owner directive 2026-10-19): the ONE origin for the
+# whole aircraft -- X = 0 on the centreline (port/starboard symmetry plane),
+# Y = 0 at the nose tip, Z = 0 on the static ground plane with the aircraft at
+# rest and level on the 3.0 in flight gear.  +X port, +Y aft, +Z up.
+#
+# The former R1 "hull frame" origin was the SerenityAssembly.FCStd world
+# origin; R2 = R1 + R1_TO_R2.  In R1 the centreline was X -169.85 (the value
+# the cargo merge and layout tools were built on; head and rear re-centred onto
+# it 2026-10-19), the nose tip Y -305.704 (foremost vertex of the re-centred
+# head shell -- the datum is set at -305.70, leaving the tip at Y -0.004 mm so
+# every converted Y stays on its original 0.01 mm grid), the 3.0 in foot-sole
+# plane Z -80.00.  R1_TO_R2 is used ONLY by migration tools; nothing else may
+# carry R1 numbers (tools/check_datum_drift.py).
+R1_TO_R2 = (169.85, 305.70, 80.00)
+
+# Header marker stamped into every published aircraft-frame STL (80-byte
+# binary header).  One definition; every generator that writes or checks the
+# marker imports it.
+FRAME_MARKER = b"SerenityUAV AIRCRAFT-FRAME R2"
+
+X_CL = 0.0            # centreline
+Y_NOSE = 0.0          # nose tip
+GROUND_Z_3IN = 0.0    # static ground plane, 3.0 in flight gear
+
+# Cargo belly (lowest skin of the cargo section, R1 Z 0).
+BELLY_Z = 80.0
 
 # Wing spar line = nacelle tilt axis = hover thrust line (Rev T6): the spar and
 # its fuselage socket are level here (merge_cargo_interior.py WING_SPAR_Z,
-# wings_s1223_revo.scad dihedral).
-SPAR_Y = 21.000
-SPAR_Z = 66.851
-
-# Cargo belly / ground plane for the 3.0 in flight gear.
-BELLY_Z = 0.0
-GROUND_Z_3IN = -80.0
+# wings_s1223_revo.scad dihedral).  R1 (Y 21.000, Z 66.851).
+SPAR_Y = 326.700
+SPAR_Z = 146.851
 
 
 def mirror_x(x: float) -> float:
@@ -71,8 +87,8 @@ def bake_translation(component: str) -> tuple[float, float, float]:
     return (px, py, pz)
 
 
-DATUMS = {"X_CL": X_CL, "SPAR_Y": SPAR_Y, "SPAR_Z": SPAR_Z, "BELLY_Z": BELLY_Z,
-          "GROUND_Z_3IN": GROUND_Z_3IN}
+DATUMS = {"X_CL": X_CL, "Y_NOSE": Y_NOSE, "GROUND_Z_3IN": GROUND_Z_3IN, "BELLY_Z": BELLY_Z,
+          "SPAR_Y": SPAR_Y, "SPAR_Z": SPAR_Z}
 
 
 def scad_text() -> str:

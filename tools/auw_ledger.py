@@ -77,7 +77,10 @@ X_CL = clf.X_CL
 # 64 mm pod (local (0, 0, PIVOT_Z 109.7) through R_BAKE/T_BAKE): port
 # (60.54, 21.0, 66.851), stbd (-399.02, 21.0, 66.851).  Y/Z equal the wing spar
 # (merge_cargo_interior.py WING_SPAR_Y 21.00, cargo_bulkhead_context SPAR_Z).
-PIVOT = {"port": (60.54, 21.0, 66.851), "stbd": (-399.022, 21.0, 66.851)}
+import bake_hull_frame as bhf  # noqa: E402  pivot X from the bake table
+import hull_datums as hd  # noqa: E402  aircraft datum R2 (2026-10-19)
+PIVOT = {s: (bhf.COMPONENTS[f"Nacelle64_{s.capitalize()}"][1][0], hd.SPAR_Y, hd.SPAR_Z)
+         for s in ("port", "stbd")}
 # Nacelle tilt-axis inertia about its own CG (= pivot), 64 mm, adopted:
 # docs/NACELLE_64MM_VERIFICATION.md SS5b (tools/nacelle_tilt_dynamics.py).
 I_NACELLE_KGM2 = 2.74e-3
@@ -94,7 +97,7 @@ NODE_POUCH_G = 5.0        # foil pouch per node, middle_layout_fit.py convention
 
 # Node stations (hull frame, centre of each node envelope).
 NODE_ST = {
-    "A": ((X_CL, -260.0, 120.0), "ESTIMATE: Bay A, head sta 0-91 mm "
+    "A": ((X_CL, 45.7, 200.0), "ESTIMATE: Bay A, head sta 0-91 mm "
           "(docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"),
     "chin": ((X_CL, 0.5 * (clf.N_CHIN_Y0 + clf.N_CHIN_Y1),
               0.5 * (clf.N_CHIN_Z0 + clf.N_CHIN_Z1)),
@@ -110,16 +113,16 @@ BATT_ST = ((clf.BATT_XC, clf.BATT_Y0 + clf.BATT_L / 2,
 WINCH_ST = ((X_CL, clf.HOIST_Y, SPOOL_Z), "cargo_layout_fit HOIST_Y / SPOOL_Z0")
 PAYLOAD_ST = ((X_CL, clf.HOIST_Y, clf.DOOR_CROWN_Z + 38.1),
               "cargo_layout_fit HOIST_Y, payload box on the closed-door crown")
-TILT_ST = {"port": ((-124.0, 47.6, 101.0), "tilt bracket centroid (placed STL)"),
-           "stbd": ((-215.0, 47.6, 101.0), "tilt bracket centroid (placed STL)")}
+TILT_ST = {"port": ((45.85, 353.3, 181.0), "tilt bracket centroid (placed STL)"),
+           "stbd": ((-45.15, 353.3, 181.0), "tilt bracket centroid (placed STL)")}  # R2
 SHAFT_ST = ((X_CL, clf.SHAFT_Y, clf.SHAFT_Z), "cargo_layout_fit SHAFT_Y/Z")
-SPAR_ST = ((X_CL, 21.0, 66.851), "wing spar station, both sides (sym)")
-DOOR_ST = ((X_CL, 55.0, 8.0), "clamshell door aperture Y 2..108")
-GW_DOOR_ST = ((X_CL, 0.0, 10.0), "ESTIMATE: fwd belly slab (CARGO_DOOR_GATEWAY_SPEC)")
-WIRE_ST = ((X_CL, 90.0, 80.0), "ESTIMATE: battery (Y 13) -> FE (Y 162) -> nacelles")
-KEEL_ST = ((X_CL, 40.0, 2.0), "ESTIMATE: keel bar mid-length")
-NAV_POST_F = ((X_CL, -150.0, 205.0), "ESTIMATE: fwd 49 MHz post, head dorsal")
-NAV_POST_A = ((X_CL, 380.0, 160.0), "ESTIMATE: aft post, rear nozzle top")
+SPAR_ST = ((X_CL, hd.SPAR_Y, hd.SPAR_Z), "wing spar station, both sides (sym)")
+DOOR_ST = ((X_CL, 360.7, 88.0), "clamshell door aperture Y 2..108")
+GW_DOOR_ST = ((X_CL, 305.7, 90.0), "ESTIMATE: fwd belly slab (CARGO_DOOR_GATEWAY_SPEC)")
+WIRE_ST = ((X_CL, 395.7, 160.0), "ESTIMATE: battery (Y 13) -> FE (Y 162) -> nacelles")
+KEEL_ST = ((X_CL, 345.7, 82.0), "ESTIMATE: keel bar mid-length")
+NAV_POST_F = ((X_CL, 155.7, 285.0), "ESTIMATE: fwd 49 MHz post, head dorsal")
+NAV_POST_A = ((X_CL, 685.7, 240.0), "ESTIMATE: aft post, rear nozzle top")
 
 # ---------------------------------------------------------------------------
 # Printed parts.  (BOM ref, STL, qty, placement)
@@ -160,17 +163,17 @@ PRINTED = [
     ("PRINT-LG-BAY-PLATE", "fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl", 1, "hull"),
     # Leg frames and feet: part-local; placed midway hip->foot / at the foot.
     ("PRINT-LG-LEG-FRAME-3.0IN", "fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl", 2,
-     ("st", (X_CL, -31.0, 0.0), "ESTIMATE: fore legs, midway hip Y -16 -> foot Y -46.5")),
+     ("st", (X_CL, 274.7, 80.0), "ESTIMATE: fore legs, midway hip Y -16 -> foot Y -46.5")),
     ("PRINT-LG-LEG-FRAME-3.0IN", "fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl", 2,
-     ("st", (X_CL, 117.0, 0.0), "ESTIMATE: aft legs, midway hip Y 100 -> foot Y 135")),
+     ("st", (X_CL, 422.7, 80.0), "ESTIMATE: aft legs, midway hip Y 100 -> foot Y 135")),
     ("PRINT-LG-FOOT", "fuselage/landing-gear/lg_r6_common_foot.stl", 2,
-     ("st", (X_CL, -46.5, -78.0), "foot station Y_FOOT_FORE (landing_gear_r6_sizing)")),
+     ("st", (X_CL, 259.2, 2.0), "foot station Y_FOOT_FORE (landing_gear_r6_sizing)")),
     ("PRINT-LG-FOOT", "fuselage/landing-gear/lg_r6_common_foot.stl", 2,
-     ("st", (X_CL, 135.0, -78.0), "foot station Y_FOOT_AFT (landing_gear_r6_sizing)")),
+     ("st", (X_CL, 440.7, 2.0), "foot station Y_FOOT_AFT (landing_gear_r6_sizing)")),
     ("PRINT-GPS-RETENTION", "fuselage/cargo/cargo_gps_retention_ring.stl", 1,
-     ("st", (X_CL, 110.0, 145.0), "ESTIMATE: GPS cups Z >= 139 over the aft strip")),
+     ("st", (X_CL, 415.7, 225.0), "ESTIMATE: GPS cups Z >= 139 over the aft strip")),
     ("PRINT-FPV-BEZEL", "fuselage/cargo/cargo_fpv_bezel.stl", 1,
-     ("st", (X_CL, -60.0, 60.0), "ESTIMATE: forward cargo")),
+     ("st", (X_CL, 245.7, 140.0), "ESTIMATE: forward cargo")),
     ("PRINT-CARGO-DOOR-SERVO-BKT", "fuselage/cargo/cargo_door_servo_bracket.stl", 1,
      ("st", DOOR_ST[0], "ESTIMATE: " + DOOR_ST[1])),
     ("PRINT-CARGO-RELEASE-BKT", "fuselage/cargo/cargo_release_servo_bracket.stl", 1,
@@ -184,7 +187,7 @@ PRINTED = [
     ("PRINT-DOOR-HORN", "fuselage/cargo/door_horn.stl", 2,
      ("st", DOOR_ST[0], DOOR_ST[1])),
     ("PRINT-DORSAL-ANTENNA-FIN", "fuselage/dorsal_antenna_fin.stl", 1,
-     ("st", (X_CL, 0.0, 170.0), "ESTIMATE: dorsal, cargo")),
+     ("st", (X_CL, 305.7, 250.0), "ESTIMATE: dorsal, cargo")),
 ]
 
 # Non-printed installed rows: ref -> (qty, station, source).  A station of
@@ -198,9 +201,9 @@ INSTALLED = {
     "PB2-I-CN": (4, "nodes"),
     "Pilot": (4, "nodes"),
     "TACCO": (4, "nodes"),
-    "Commo": (2, ((X_CL, 50.0, 100.0), "ESTIMATE: Commo sub-modules, cargo")),
+    "Commo": (2, ((X_CL, 355.7, 180.0), "ESTIMATE: Commo sub-modules, cargo")),
     "MICROSD-LOG": (4, "nodes"),
-    "WIRE-49MHZ": (1, ((X_CL, 40.0, 172.0), "ESTIMATE: dorsal spine mid-length")),
+    "WIRE-49MHZ": (1, ((X_CL, 345.7, 252.0), "ESTIMATE: dorsal spine mid-length")),
     "POST-FWD-49": (1, NAV_POST_F),
     "POST-AFT-49": (1, NAV_POST_A),
     "Flight Engineer": (1, FE_ST),
@@ -235,19 +238,19 @@ INSTALLED = {
     "CF-BAR-6X3": (1, KEEL_ST),
     "WIRE-6AWG": (1, WIRE_ST),
     "WIRE-10AWG": (1, WIRE_ST),
-    "WIRE-28AWG-STP": (1, ((X_CL, 40.0, 90.0), "ESTIMATE: full-length signal run")),
-    "CONDUIT-PTFE": (1, ((X_CL, 40.0, 90.0), "ESTIMATE: full-hull-length conduit")),
+    "WIRE-28AWG-STP": (1, ((X_CL, 345.7, 170.0), "ESTIMATE: full-length signal run")),
+    "CONDUIT-PTFE": (1, ((X_CL, 345.7, 170.0), "ESTIMATE: full-hull-length conduit")),
     "LED-WS2812C-NAC": (4, "pivot"),
     "INSERT-M3-WING": (8, SPAR_ST),
-    "LG-SPRING-WIRE": (8, ((X_CL, 50.0, 30.0), "gear bays, 4 corners (sym)")),
-    "LG-DUCTILE-WIRE": (8, ((X_CL, 50.0, 30.0), "gear bays, 4 corners (sym)")),
-    "LG-HARDWARE-MISC": (1, ((X_CL, 50.0, 30.0), "gear bays, 4 corners (sym)")),
-    "LG-SAFETY-CORD": (4, ((X_CL, 50.0, 0.0), "gear, 4 corners (sym)")),
+    "LG-SPRING-WIRE": (8, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
+    "LG-DUCTILE-WIRE": (8, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
+    "LG-HARDWARE-MISC": (1, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
+    "LG-SAFETY-CORD": (4, ((X_CL, 355.7, 80.0), "gear, 4 corners (sym)")),
     "BATT-STRAP-CAM": (2, BATT_ST),
     "BATT-FOAM-SILICONE": (1, BATT_ST),
     "MESH-VENT-SS": (1, BATT_ST),
     "FAR-BOND-STRAP": (4, "nodes"),                     # one per node-stack pouch
-    "FAR-FERRITE-4MM": (16, ((X_CL, 60.0, 90.0), "ESTIMATE: cable exits, all nodes")),
+    "FAR-FERRITE-4MM": (16, ((X_CL, 365.7, 170.0), "ESTIMATE: cable exits, all nodes")),
     "SKIPPER-TILT-ENC-PCB": (2, "pivot"),
     "HALL-SCR-M2-BRASS": (8, "pivot"),
     "GM-TILT-20D": (2, "tilt"),
@@ -269,7 +272,7 @@ INSTALLED = {
 MASS_OVERRIDE = {
     "FOAM-PU-2LB": (22.0, "installed foam, MASS_AUDIT SS4.2 (MA-3); BOM carries the kit"),
 }
-INSTALLED["FOAM-PU-2LB"] = (1, ((X_CL, 0.0, 100.0), "ESTIMATE: chin/head/flank pours"))
+INSTALLED["FOAM-PU-2LB"] = (1, ((X_CL, 305.7, 180.0), "ESTIMATE: chin/head/flank pours"))
 
 # Counted inside tools/nacelle_mass_cg_64.py's rotating assembly.
 NACELLE = {
@@ -327,12 +330,12 @@ EXCLUDED = {
 # g/mm^3 ESTIMATE.  The BOM row carries two whole 200 x 300 sheets (114 g).
 RHO_CF = 1.6e-3
 CF_PLATE_PARTS = [
-    ("CF thwart fore (CF-PLATE-2MM)", 2.0 * 25.0 * 170.0 * RHO_CF, ((X_CL, -40.0, 80.0),
+    ("CF thwart fore (CF-PLATE-2MM)", 2.0 * 25.0 * 170.0 * RHO_CF, ((X_CL, 265.7, 160.0),
      "structural_analysis SS5.6, thwart Y -40")),
-    ("CF thwart aft (CF-PLATE-2MM)", 2.0 * 25.0 * 170.0 * RHO_CF, ((X_CL, 118.0, 80.0),
+    ("CF thwart aft (CF-PLATE-2MM)", 2.0 * 25.0 * 170.0 * RHO_CF, ((X_CL, 423.7, 160.0),
      "structural_analysis SS5.6, thwart Y +118")),
     ("CF ring frame rear Y +290 (CF-PLATE-2MM)", 397.0 * 10.0 * 2.0 * RHO_CF,
-     ((X_CL, 290.0, 82.0), "structural_analysis SS5.2, ~10 mm band ESTIMATE")),
+     ((X_CL, 595.7, 162.0), "structural_analysis SS5.2, ~10 mm band ESTIMATE")),
 ]
 
 # Coverage gaps: installed items with no BOM row.  Stated estimates.
@@ -348,7 +351,7 @@ GAPS = [
     ("CAN-PERIPH-GW-1 gateways x2 (winch, tilt encoders)", 12.0, WINCH_ST,
      "ESTIMATE 6 g each, as CAN-PERIPH-GW-DOOR -- no BOM rows"),
     ("Structural epoxy (West System 105/206 + 406), bonded joints", 40.0,
-     ((X_CL, 40.0, 80.0), "ESTIMATE: spar sockets, flanges, collars, keel"),
+     ((X_CL, 345.7, 160.0), "ESTIMATE: spar sockets, flanges, collars, keel"),
      "ESTIMATE -- no installed-mass row (kit row is stock)"),
 ]
 

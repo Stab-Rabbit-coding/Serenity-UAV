@@ -55,7 +55,9 @@ DEFAULT_STL = os.path.join(
     "cargo_sect_shell24_2mm_repaired.stl",
 )
 
-X_CL = -169.9              # hull centreline (airframe/AGENTS.md)
+import hull_datums as hd  # noqa: E402  aircraft datum R2 (2026-10-19)
+import lg_corners  # noqa: E402  single-source corner stations
+X_CL = hd.X_CL             # centreline
 
 # Canonical corner stations, docs/LANDING_GEAR_ANALYSIS.md SS2.2.
 # (label, hip_x, hip_y, hip_z, swing_azimuth_deg)
@@ -64,17 +66,14 @@ X_CL = -169.9              # hull centreline (airframe/AGENTS.md)
 # with --pre-recess to measure those instead.
 # FORE moved 2026-10-10 (BHD-02) from [-103.87 / -235.93, -1.28]; must match
 # canonical_leg_r6_3_0in.scad CORNERS and merge_cargo_interior.LG_CORNERS.
-LG_CORNERS = [
-    ("fore-port", -114.90, -16.00, 38.0, -22.4),
-    ("fore-stbd", -224.90, -16.00, 38.0, -157.6),
-    ("aft-port", -92.24, 99.96, 38.0, 28.0),
-    ("aft-stbd", -247.56, 99.96, 38.0, 152.0),
-]
+LG_CORNERS = lg_corners.table()   # from canonical_leg_r6_3_0in.scad CORNERS
+# Historical pre-recess stations (LG-10.2), aircraft datum R2; R1 [-90,-7],
+# [-249.8,-7], [-79,107], [-260.8,107] at hip Z 38.
 LG_CORNERS_PRE = [
-    ("fore-port", -90.0, -7.0, 38.0, -22.4),
-    ("fore-stbd", -249.8, -7.0, 38.0, -157.6),
-    ("aft-port", -79.0, 107.0, 38.0, 28.0),
-    ("aft-stbd", -260.8, 107.0, 38.0, 152.0),
+    ("fore-port", 79.85, 298.70, 118.0, -22.4),
+    ("fore-stbd", -79.95, 298.70, 118.0, -157.6),
+    ("aft-port", 90.85, 412.70, 118.0, 28.0),
+    ("aft-stbd", -90.95, 412.70, 118.0, 152.0),
 ]
 
 # Measured sponson panel normal (SS2.4a, mirror-verified to 1.4 mm).
