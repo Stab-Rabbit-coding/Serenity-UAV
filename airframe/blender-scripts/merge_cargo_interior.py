@@ -1904,7 +1904,7 @@ def build_unclipped_positives(shell_tm):
 
 
 def stamp_export(mesh, out_path):
-    """Write binary STL with the HULL-FRAME R1 marker in the 80-byte header."""
+    """Write binary STL with the aircraft-frame R2 marker in the 80-byte header."""
     count = len(mesh.faces)
     tris = mesh.vertices[mesh.faces]
     e1 = tris[:, 1, :] - tris[:, 0, :]
@@ -2267,7 +2267,7 @@ def main():
 
     stamp_export(out, OUT_PATH)
     print(f"\n  written -> {OUT_PATH}")
-    print("  (already in hull frame + HULL-FRAME R1 marker; do NOT re-bake)")
+    print("  (already in the aircraft frame with the R2 marker; do NOT re-bake)")
 
     # Weld/clean the exported float32 file so the published STL passes CI.
     ok = repair_exported(OUT_PATH)

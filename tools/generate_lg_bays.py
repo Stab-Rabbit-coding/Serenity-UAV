@@ -36,7 +36,7 @@ Checks on every corner (exit 2 on failure): one body; the leg swept 0..26 deg
 clears its bay; every bolt still lands in flange material.
 
 Outputs (airframe/stls/fuselage/landing-gear/):
-    lg_r6_3_0in_bay_<corner>.stl        hull frame, for the assembly and gates
+    lg_r6_3_0in_bay_<corner>.stl        aircraft frame R2, for the assembly and gates
     lg_r6_3_0in_bay_<corner>_print.stl  leg-local (stbd = mirrored), for slicing
 
 Run:  /usr/bin/python3 tools/generate_lg_bays.py [--check]   (--check: no writes)
@@ -61,7 +61,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, ".."))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(REPO, "airframe", "blender-scripts"))
+import bake_hull_frame as bhf  # noqa: E402
 import cargo_bulkhead_context as cbc  # noqa: E402
+import hull_datums as hd  # noqa: E402
 import landing_gear_bay_function as lgbf  # noqa: E402
 import merge_cargo_interior as mci  # noqa: E402
 from bhd02_option_study import bolt_group, dilate  # noqa: E402
@@ -91,14 +93,15 @@ HW_DEPTH = mci.BAY_PLATE_T + mci.LG_SEAT_D + 4.0 + 2.4 + 2.0
 BOLT_KEEP_D = 3.4 + 2 * 2.5   # O8.4 washer / nut / driver, as the census
 BOLT_T = (-30.0, 20.0)    # bore extent along e_x, as the hull merge
 BOLT_SLIDE_MAX = 30.0     # mm a blocked bolt may slide down its side flange
-BOLT_MIN_FLANGE = 150.0   # mm^3 of flange around a bolt's O8.4 keep-out (a fully
-                          # seated nominal bolt measures 275 mm^3; 150 = more
-                          # than half of the washer footprint on material)
+# mm^3 of flange around a bolt's O8.4 keep-out (a fully seated nominal bolt
+# measures 275 mm^3; 150 = more than half of the washer footprint on material)
+BOLT_MIN_FLANGE = 150.0
 BOLT_MIN_COLLAR = 150.0   # mm^3 of hull seat collar under it (same reasoning)
 T = mci.BAY_PLATE_T
 COWL_H = mci.COWL_H
-BOLT_CAP_4MM = 2310.0     # N, bearing: wall + 5 mm boss + 4 mm backing plate (owner
-                          # 2026-10-10; 2,100 N at 3 mm, landing_gear_r6_sizing.py)
+# N, bearing: wall + 5 mm boss + 4 mm backing plate (owner 2026-10-10;
+# 2,100 N at 3 mm, landing_gear_r6_sizing.py)
+BOLT_CAP_4MM = 2310.0
 RHO, INFILL = 1.30e-3, 0.40   # CF-PETG g/mm^3 solid, 40 % gyroid (repo convention)
 
 
@@ -277,7 +280,10 @@ def main() -> int:
         rows.append(r)
         if not a.check:
             m = cbc.tri(r["bay"])
-            m.export(os.path.join(OUT, f"lg_r6_3_0in_bay_{label}.stl"))
+            # installed position, aircraft frame R2: stamp hd.FRAME_MARKER
+            hdr = (hd.FRAME_MARKER + f" lg_r6_3_0in_bay_{label}".encode())[:80].ljust(80, b"\0")
+            bhf.write_stl_binary(os.path.join(OUT, f"lg_r6_3_0in_bay_{label}.stl"),
+                                 np.asarray(m.triangles, dtype=np.float64), hdr)
             m.copy().apply_transform(np.linalg.inv(r["tf"])).export(
                 os.path.join(OUT, f"lg_r6_3_0in_bay_{label}_print.stl"))
     if not a.check:

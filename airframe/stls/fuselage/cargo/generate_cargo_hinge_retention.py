@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # ============================================================================
-# HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
+# AIRCRAFT DATUM R2 (2026-10-19, plan 2026-10-19-001); origin centreline / nose / ground.
 #   Hull frame (canonical for ALL design artifacts): X = +port (left),
 #   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
 #   world origin.
@@ -44,7 +44,7 @@
 #       docs/CARGO_DOOR_LATCH_SPEC.md S7a. This import is the fix for the
 #       class of bug, not just that one instance.
 #       CF rod:                3.0 mm OD; bore Ø3.3 mm (rod + 0.15 mm/side)
-#       Door knuckles (each):  6 mm OD, 12 mm long, at Y = 8.0/39.3/70.7/102.0
+#       Door knuckles (each):  6 mm OD, 12 mm long, at Y = 313.7/345.0/376.4/407.7 (R2)
 #
 #   Design
 #   ------
@@ -99,6 +99,10 @@ import trimesh
 # generate_cargo_doors.py (re)generates every run -- run that script first
 # whenever the cargo shell changes, then this one.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+_TOOLS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "tools")
+sys.path.insert(0, os.path.abspath(_TOOLS))
+import bake_hull_frame as bhf  # noqa: E402
+import hull_datums as hd  # noqa: E402
 try:
     from cargo_door_hinge_params import BAY_Y_AFT, BAY_Y_FWD, ROD_AXES
 except ImportError as exc:  # pragma: no cover - operator-facing guidance
@@ -109,7 +113,7 @@ except ImportError as exc:  # pragma: no cover - operator-facing guidance
         "docs/CARGO_DOOR_LATCH_SPEC.md S7a."
     ) from exc
 
-# Inboard direction (toward ship centreline X_CL ~ -169.85) for each door:
+# Inboard direction (toward the aircraft centreline X_CL = 0) for each door:
 #   port hinge X is OUTBOARD of CL (less negative) -> block extends -X
 #   stbd hinge X is OUTBOARD of CL (more negative) -> block extends +X
 INBOARD_SIGN = {"port": -1.0, "stbd": +1.0}
@@ -189,7 +193,7 @@ def main():
     out = os.path.join(here, "cargo_hinge_retention.stl")
 
     blocks = []
-    print("Cargo hinge-pin retention blocks (Rev R1c, hull frame):")
+    print("Cargo hinge-pin retention blocks (Rev R1c, aircraft frame R2):")
     for side in ("port", "stbd"):
         hx, hz = ROD_AXES[side]
         for station in ("fwd", "aft"):
@@ -203,7 +207,9 @@ def main():
             blocks.append(b)
 
     combined = trimesh.util.concatenate(blocks)
-    combined.export(out)
+    # installed position, aircraft frame R2: stamp hd.FRAME_MARKER
+    hdr = (hd.FRAME_MARKER + b" cargo_hinge_retention")[:80].ljust(80, b"\0")
+    bhf.write_stl_binary(out, np.asarray(combined.triangles, dtype=np.float64), hdr)
     px, pz = ROD_AXES["port"]
     sx, sz = ROD_AXES["stbd"]
     print(f"\n  rod axes: port (X={px:.2f}, Z={pz:.2f}), stbd (X={sx:.2f}, Z={sz:.2f})")

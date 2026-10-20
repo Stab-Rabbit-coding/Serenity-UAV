@@ -1,5 +1,5 @@
 // ===========================================================================
-// HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See AGENTS.md.
+// AIRCRAFT DATUM R2 (2026-10-19, plan 2026-10-19-001): origin centreline / nose / ground.
 //   Hull frame (canonical for ALL design artifacts): X = +port (left),
 //   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
 //   world origin.  MODELLED DIRECTLY IN HULL FRAME.
@@ -81,8 +81,13 @@ EPS = 0.01;
 // generate_cargo_hinge_retention.py and this file now import/include the
 // same single source instead.  Regenerate the door STLs (which writes this
 // include) before regenerating this file's parts whenever the shell changes.
-BRACKET_Y    = 39.33;    // 2nd hinge knuckle station -- clear of the aperture
-                         // rim (Y=2) and the GW-CARGO-DOOR tray (Y<=-2)
+// 2nd hinge knuckle station (generate_cargo_doors.py: 12 mm knuckles, 4 evenly
+// spaced over the bay) -- clear of the aperture rim (bay fwd edge) and the
+// GW-CARGO-DOOR tray.  DERIVED from the hinge include (aircraft datum R2;
+// R1 value 39.33), never retyped.
+KNUCKLE_LEN  = 12.0;
+BRACKET_Y    = HINGE_BAY_Y_FWD + KNUCKLE_LEN / 2
+               + (HINGE_BAY_Y_AFT - HINGE_BAY_Y_FWD - KNUCKLE_LEN) / 3;
 
 // Pivot bracket stands PIVOT_H above the hinge Z, inboard of the hinge line
 // by PIVOT_IN so the crank clears the door panel's swept arc.

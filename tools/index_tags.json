@@ -1161,7 +1161,7 @@
       "archived": false
     },
     "airframe/openscad/fuselage/cargo/door_latch_mechanism.scad": {
-      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See AGENTS.md.",
+      "description": "AIRCRAFT DATUM R2 (2026-10-19, plan 2026-10-19-001): origin centreline / nose / ground.",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2391,7 +2391,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Cargo_Shell interior-merge 2026-06-30",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Cargo_Shell interior-merge 2026-06-30",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2471,7 +2471,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/generate_cargo_doors.py": {
-      "description": "AIRCRAFT DATUM R2 (2026-10-19, plan 2026-10-19-001): origin centreline / nose / ground.",
+      "description": "generate_cargo_doors.py \u2014 Rev R1b (2026-06-22)",
       "tags": [
         "structural"
       ],
@@ -2564,7 +2564,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/void_former_cargo_harness_trunk_port.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 void_former_cargo_harness_trunk_port",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2572,7 +2572,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/void_former_cargo_harness_trunk_stbd.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 void_former_cargo_harness_trunk_stbd",
       "tags": [
         "cad-mesh",
         "structural"
@@ -2695,7 +2695,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_aft-port",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2713,7 +2713,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl": {
-      "description": "STL mesh (binary)",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_aft-stbd",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2899,7 +2899,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/rear_shell24_2mm_repaired.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 rear_shell24_2mm_repaired",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Rear_Shell interior-regen 2026-07-06",
       "tags": [
         "cad-mesh",
         "structural"

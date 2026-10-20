@@ -4,7 +4,7 @@ add_structural_features.py  —  add structural features to the four baked fusel
 
 Implements the structural engineering design from docs/structural_analysis.md (Rev R1,
 2026-06-14).  All geometry is in the hull frame (X = +port, Y = +aft, Z = +dorsal).
-All four input STLs must already be baked (header carries "SerenityUAV HULL-FRAME R1").
+All four input STLs must already be baked (header carries "SerenityUAV AIRCRAFT-FRAME R2").
 
 Features added per shell:
 
@@ -638,7 +638,7 @@ def _subtract_all(shell, cutters):
 
 def _stamp_header_export(mesh, out_path, shell_name):
     """
-    Write the mesh as binary STL with the HULL-FRAME R1 marker in the 80-byte header.
+    Write the mesh as binary STL with the aircraft-frame R2 marker in the 80-byte header.
 
     Stamping the marker on the output means bake_hull_frame.py --check will see the
     file as already baked (the geometry is already in hull frame; we are only adding
@@ -970,7 +970,7 @@ def main():
 
         passed = verify(modified, name)
 
-        # Write output with HULL-FRAME R1 header (geometry already in hull frame;
+        # Write output with R2 frame header (geometry already in the aircraft frame;
         # no placement transform applied — only boolean subtractions).
         _stamp_header_export(modified, path, name.capitalize() + "_Shell")
         print(f"  written → {path}")
@@ -989,7 +989,7 @@ def main():
     else:
         print("\nAll shells PASS manufacturing-watertight gate.")
         print(
-            "Run: python3 tools/bake_hull_frame.py --check  (to confirm HULL-FRAME R1 marker)"
+            "Run: python3 tools/bake_hull_frame.py --check  (to confirm R2 frame marker)"
         )
         print(
             "Slicer verification of feature positions is required before first print."

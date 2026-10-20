@@ -375,7 +375,7 @@ def main():
     stamp_export(result, HEAD_PATH)
     print(f"\nwrote {HEAD_PATH}")
     print(
-        "Marker preserved: SerenityUAV HULL-FRAME R1 (identity-rotation bake, "
+        "Marker preserved: SerenityUAV AIRCRAFT-FRAME R2 (identity-rotation bake, "
         "no re-bake needed -- only booleans were applied)."
     )
 
