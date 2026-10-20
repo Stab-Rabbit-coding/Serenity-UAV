@@ -1,6 +1,6 @@
 ---
 artifact_contract: "ce-handoff/v1"
-created_at: "2026-10-20T12:55:00Z"
+created_at: "2026-10-20T18:20:00Z"
 title: "Aircraft datum R2 migration, mid-flight"
 summary: "R1 hull frame to R2 aircraft datum (centreline / nose / 3.0 in ground) migration; U1-U6 mostly done, U7-U11 partial; rebuild queue waiting behind it"
 keywords: ["datum", "R2", "hull frame", "migration", "fuselage", "landing gear", "cargo", "symmetry"]
@@ -9,7 +9,7 @@ resume_focus: "Finish plan 2026-10-19-001 units U6-U11, run the regression compa
 repository: "github.com/Stab-Rabbit-coding/Serenity-UAV"
 repo_root_sha: "1411aee2adfe082e69ec11a5086cf60a281825c2"
 branch: "worktree-fuselage-reconcile"
-head: "5149b8ce8070bb768243e88972656d9dd4664669 (before the commit that carries this file)"
+head: "see git log; updated in place after each of the 5 continuation steps (session 2, 2026-10-20)"
 worktree_path: ".claude/worktrees/fuselage-reconcile"
 ---
 
@@ -44,13 +44,13 @@ the units U1 to U11 and section 5 the rebuild queue.
 
 | Unit | State |
 | --- | --- |
-| U1 datum module | Done. The header of `scad_text()` still says "Hull frame" and needs rewording. |
+| U1 datum module | Done, header reworded to "Aircraft datum R2" (session 2). |
 | U2 inventory | Done: `tools/frame_inventory.py` and `tools/datum_r2_stl_list.txt` (46 STLs). |
 | U3 drift gate | `tools/check_datum_drift.py` (gates D1-D5) is written. It is **not** wired into `.githooks/pre-commit` or CI yet. |
 | U4 STLs | 41 of 46 are translated and verified. Five fail verification (listed below). |
 | U5 bake table + assembly | `bake_hull_frame.py` COMPONENTS are in R2. `serenity_assembly.py` is **not** migrated: it still has local T_BAKE copies, `CARGO_X_CL −170`, `T5_STBD_DX` and legacy accessory placements. |
-| U6 layout tools | `cargo_layout_fit.py` and `middle_layout_fit.py` are migrated and lint-clean. The generated SCAD params (`cargo_layout_t5_params.scad`, `middle_layout_t6_params.scad`) have **not** been regenerated. |
-| U7 merge pipelines | Migrated: `merge_cargo_interior.py` constants, `add_structural_features.py`, `open_mating_faces.py`, `merge_head_interior.py` (BAKE_T from `hd`), and `cargo_door_hinge_params.{py,scad}`. Still to migrate: `generate_cargo_doors`, `generate_conforming_collars`, `generate_wing_root_flange`, `gen_cargo_void_formers`, `regen_rear_interior`. No merge has been re-run in R2 yet. |
+| U6 layout tools | `cargo_layout_fit.py` and `middle_layout_fit.py` are migrated and lint-clean. Generated SCAD params regenerated in R2 (session 2 step 1); every value moved by exactly R1_TO_R2. `middle_layout_fit.py` report `{y:3d}` crash on float Y fixed. |
+| U7 merge pipelines | Migrated: `merge_cargo_interior.py` constants, `add_structural_features.py`, `open_mating_faces.py`, `merge_head_interior.py` (BAKE_T from `hd`), and `cargo_door_hinge_params.{py,scad}`. Session 2 step 1 migrated the rest in code: `generate_cargo_doors` (shell bounds, bay Y, belly Z), `generate_conforming_collars` (face Y +305.70), `generate_wing_root_flange` (docstring only; geometry comes from `mci`), `gen_cargo_void_formers` (all chin-zone boxes and seeds), `regen_rear_interior` (strings). All five now write `hd.FRAME_MARKER` through `bake_hull_frame.write_stl_binary`. **None has been run in R2 yet**: doors, collars and formers read the R1 cargo shell, so they run in step 2. |
 | U8 gates and studies | Migrated: `cargo_bay_envelope`, `cargo_bulkhead_context`, `landing_gear_bay_station_fit`, `landing_gear_bay_pad_fit`, `landing_gear_foot_stance`, `landing_gear_opening_fit`, `landing_gear_ground_clearance`, `landing_gear_r6_sizing`, `nacelle_mass_cg`, `auw_ledger`, `verify_bow_pod`. Still to migrate: `wing_root_deconflict`, `wing_spar_carrythrough`, `wing_internal_clearance`, `landing_gear_wing_clearance`, `nacelle_esc_bay_fit`, `nozzle_linkage_check`, `airframe_interface_census` (CENTRE_X), and the rest of the inventory. |
 | U9 SCAD parts | Done for both canonical leg SCADs (CORNERS in R2, `include <../hull_datums.scad>`). Still to do: `port_tilt_spar_assembly.scad` and the other placed SCADs. |
 | U10 docs | The AGENTS.md datum rule is done (root, airframe and avionics). `docs/HULL_FRAME_REFERENCE` has not been updated. |
@@ -72,6 +72,14 @@ Root cause: float32 STL export collapses near-coincident vertices (gaps below
 about 3e-5 mm) at the larger R2 coordinates. `tools/migrate_stl_r2.py` welds
 at 1e-4 mm before translating, which saved the middle shell, the rear shell
 and the fore-port bay, but not these five. Do not retry a plain translation.
+
+## Session 2 progress (2026-10-20, owner: "do each of the 5 next steps, update the handoff and commit after each")
+
+Steps: (1) regenerate U6 params + migrate U7 generators; (2) re-run the merges so the five failed STLs come out in R2; (3) migrate remaining U8/U9 tools and `serenity_assembly.py`; (4) wire `check_datum_drift.py` into pre-commit and CI; (5) run the regression compare. U10 and U11 are out of scope for this pass.
+
+- **Step 1 done.** See the U1, U6 and U7 rows.
+- **Spurious PASS warning.** `middle_layout_fit.py` now PASSES and `cargo_layout_fit.py` lost its 2 shell fouls; both read the still-R1 `cargo_sect_shell24_2mm_repaired.stl`, so the clashes vanished only because the boxes moved and the shell did not. Re-judge after step 2.
+- **Drift-gate false positive.** `GROUND_Z = -118` in the canonical leg SCADs is leg-local, not a datum; D1 must allow it (step 4).
 
 ## Regression harness
 

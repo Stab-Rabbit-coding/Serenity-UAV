@@ -2471,7 +2471,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/generate_cargo_doors.py": {
-      "description": "generate_cargo_doors.py \u2014 Rev R1b (2026-06-22)",
+      "description": "AIRCRAFT DATUM R2 (2026-10-19, plan 2026-10-19-001): origin centreline / nose / ground.",
       "tags": [
         "structural"
       ],
@@ -17684,7 +17684,7 @@
       "archived": false
     },
     "tools/hull_datums.py": {
-      "description": "Serenity UAV -- the airframe's hull-frame datums, defined ONCE.",
+      "description": "Serenity UAV -- the aircraft datum (frame R2), defined ONCE.",
       "tags": [
         "build-tooling"
       ],

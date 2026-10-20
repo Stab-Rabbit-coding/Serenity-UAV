@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # ============================================================================
-# HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.
-#   Hull frame: X=+port, Y=+aft, Z=+dorsal; origin = SerenityAssembly world.
-#   These parts are generated DIRECTLY in hull frame (identity placement).
+# AIRCRAFT DATUM R2 (2026-10-19, plan 2026-10-19-001).
+#   Aircraft frame: X=+port, Y=+aft, Z=+dorsal; origin = centreline / nose
+#   tip / 3.0 in ground plane (tools/hull_datums.py).  These parts are
+#   generated DIRECTLY in the aircraft frame (identity placement).
 #
 #   generate_conforming_collars.py  (Rev R3, 2026-07-21)
 #   --------------------------------------------------------------------------
 #   Internal bonded splice collars for the three fuselage section joints:
-#     head/cargo (Y≈-71), cargo/middle (Y≈+130), middle/rear (Y≈+203).
+#     head/cargo (Y≈235), cargo/middle (Y≈436), middle/rear (Y≈509).
 #   These collars turn the four printed hull sections into ONE continuous,
 #   structurally sound fuselage: each is a 2 mm-wall sleeve slipped 8 mm into
 #   each section across the fabrication-split joint, bonded with West System
@@ -82,6 +83,7 @@
 """Generate the three CONFORMING splice collars (hull frame, Rev R3)."""
 
 import os
+import sys
 
 import numpy as np
 import trimesh
@@ -89,6 +91,9 @@ from manifold3d import Manifold, Mesh
 from shapely.geometry import Polygon
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..", "..", "..", "tools")))
+import bake_hull_frame as bhf  # noqa: E402
+import hull_datums as hd  # noqa: E402
 
 # --- design parameters -----------------------------------------------------
 BOND_GAP = 1.2        # mm — lap slip-fit inset from the section inner wall over
@@ -113,6 +118,7 @@ SIMPLIFY = 0.4        # mm — contour simplification tolerance
 FIT_TOL = 50.0        # mm^3 — max acceptable collar∩shell interference
 
 # joint: (name, fwd_stl, aft_stl, fwd_face_Y, aft_face_Y, out_stl)
+# Face Y in R2 (= R1 + 305.70: -71.2/-69.5, 129.0/131.0, 202.3/204.3).
 #   fwd section occupies Y <= fwd_face_Y ; aft section occupies Y >= aft_face_Y.
 #   Face Y values are the baked section extents (the flat open mating faces).
 JOINTS = [
@@ -120,24 +126,24 @@ JOINTS = [
         "head/cargo",
         "head_shell24_2mm_repaired.stl",
         "cargo/cargo_sect_shell24_2mm_repaired.stl",
-        -71.2,
-        -69.5,
+        234.5,
+        236.2,
         "head_cargo_splice_collar.stl",
     ),
     (
         "cargo/middle",
         "cargo/cargo_sect_shell24_2mm_repaired.stl",
         "middle_shell24_2mm_repaired.stl",
-        129.0,
-        131.0,
+        434.7,
+        436.7,
         "cargo_middle_splice_collar.stl",
     ),
     (
         "middle/rear",
         "middle_shell24_2mm_repaired.stl",
         "rear_shell24_2mm_repaired.stl",
-        202.3,
-        204.3,
+        508.0,
+        510.0,
         "middle_rear_splice_collar.stl",
     ),
 ]
@@ -323,7 +329,9 @@ def main():
 
         collar = conforming_collar(fwd, aft, fwd_face, aft_face)
         out = os.path.join(HERE, out_rel)
-        collar.export(out)
+        header = (hd.FRAME_MARKER + b" " + os.path.basename(out)[:-4].encode())[:80]
+        bhf.write_stl_binary(out, np.asarray(collar.triangles, dtype=np.float64),
+                             header.ljust(80, b"\0"))
 
         ec = np.bincount(
             collar.edges_unique_inverse, minlength=len(collar.edges_unique)

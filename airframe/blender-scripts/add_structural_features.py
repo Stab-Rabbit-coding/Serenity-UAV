@@ -107,7 +107,8 @@ SHELLS = {
 
 import sys as _sys  # noqa: E402
 import os as _os  # noqa: E402
-_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', '..', 'tools'))
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                                  '..', '..', 'tools'))
 import hull_datums as hd  # noqa: E402
 MARKER = hd.FRAME_MARKER  # single source (aircraft datum R2, 2026-10-19)
 

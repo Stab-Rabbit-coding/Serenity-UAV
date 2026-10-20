@@ -477,7 +477,7 @@ def airflow_report(shell_tm, solids):
         free = v.area - blocked
         flag = "ok" if free >= PHASE11_CAPTURE_MM2 else "SHORT"
         print(
-            f"  Y={y:3d}: void {v.area:8.0f}  blocked {blocked:7.0f}  "
+            f"  Y={y:6.1f}: void {v.area:8.0f}  blocked {blocked:7.0f}  "
             f"free {free:8.0f} mm^2  {flag}"
         )
 

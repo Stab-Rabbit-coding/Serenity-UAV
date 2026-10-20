@@ -30,7 +30,7 @@ Fix (this script), matching merge_cargo_interior.py:
      edges the float32 export otherwise leaves (0 boundary either way — the
      surface stays closed; slicers weld the coincident vertices).
   5. Drop any tiny disconnected junk fragments and stamp-export ONCE to the
-     published path with the HULL-FRAME R1 marker (do NOT re-bake).
+     published path with the aircraft-frame R2 marker (do NOT re-bake).
 
 The joint boss-pins are already removed from process_rear (splice collars
 supersede — 2026-07-06).  The bore-open fwd face uses the lofted per-station
@@ -69,7 +69,8 @@ OUT = os.environ.get("REAR_REGEN_OUT") or os.path.join(
 )
 import sys as _sys  # noqa: E402
 import os as _os  # noqa: E402
-_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', '..', 'tools'))
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                                  '..', '..', 'tools'))
 import hull_datums as hd  # noqa: E402
 MARKER = hd.FRAME_MARKER  # single source (aircraft datum R2, 2026-10-19)
 RHO_PRINT = 1.05e-3  # g/mm^3 as-printed CF-PETG (≈40 % infill)
@@ -152,7 +153,7 @@ def drop_junk(mesh):
 
 
 def stamp_export(mesh, out_path):
-    """Binary STL with the HULL-FRAME R1 marker in the 80-byte header."""
+    """Binary STL with the aircraft-frame R2 marker (hd.FRAME_MARKER) in the header."""
     count = len(mesh.faces)
     tris = mesh.vertices[mesh.faces]
     e1 = tris[:, 1, :] - tris[:, 0, :]
@@ -241,7 +242,7 @@ def main():
     ok = verify(out, "rear")
     stamp_export(out, OUT)
     print(f"\n  written -> {OUT}")
-    print("  (already in hull frame + HULL-FRAME R1 marker; do NOT re-bake)")
+    print("  (already in the aircraft frame with the R2 marker; do NOT re-bake)")
     if not ok:
         sys.exit(1)
 

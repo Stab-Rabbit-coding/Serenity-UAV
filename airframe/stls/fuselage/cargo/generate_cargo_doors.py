@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # ============================================================================
-# HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
-#   Hull frame (canonical for ALL design artifacts): X = +port (left),
-#   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
-#   world origin.  Primary-component STLs published to airframe/stls/
-#   are stored directly in hull frame, baked by tools/bake_hull_frame.py.
+# AIRCRAFT DATUM R2 (2026-10-19, plan 2026-10-19-001): origin centreline / nose / ground.
+#   Aircraft frame: X = +port (left), Y = +aft (back), Z = +dorsal (up);
+#   origin = centreline / nose tip / 3.0 in ground plane (tools/hull_datums.py).
+#   Primary-component STLs published to airframe/stls/ are stored directly
+#   in the aircraft frame, stamped hd.FRAME_MARKER.
 #
 #   This file (Rev R1b, 2026-06-22):
 #     Generates cargo bay clamshell doors from the baked hull-frame cargo
 #     shell (cargo_sect_shell24_2mm_repaired.stl).
 #
 #     Coordinate conventions used throughout:
-#       X = lateral (port = +X, stbd = -X); ship CL at X ≈ -170 mm
-#       Y = longitudinal fore-aft (+Y = aft); bay spans Y ≈ +2 to +108 mm
-#       Z = dorsal-ventral (+Z = up); belly at Z ≈ 0
+#       X = lateral (port = +X, stbd = -X); aircraft CL at X = 0 (hd.X_CL)
+#       Y = longitudinal fore-aft (+Y = aft); bay spans Y ≈ 307.7 to 413.7 mm
+#       Z = dorsal-ventral (+Z = up); belly at Z ≈ BELLY_Z (80)
 #
 #     Hinge lines run along Y at the OUTBOARD flank/belly edge of each door —
 #     X = X_MIN (stbd side) and X = X_MAX (port side), Z = belly exterior Z
@@ -49,7 +49,7 @@
 generate_cargo_doors.py — Rev R1b (2026-06-22)
 Generate clamshell cargo-bay door STL files in hull-frame coordinates.
 
-Two mirrored halves split at the ship lateral centreline (X = X_CL ≈ -170 mm),
+Two mirrored halves split at the ship lateral centreline (X = X_CL = 0),
 each hinged independently at its own OUTBOARD flank/belly edge:
   * cargo_door_port.stl   — port half  (X = X_CL .. X_MAX), hinge at X_MAX
   * cargo_door_stbd.stl   — stbd half  (X = X_MIN   .. X_CL), hinge at X_MIN
@@ -93,6 +93,12 @@ import trimesh
 import trimesh.transformations as tft
 from scipy.interpolate import griddata
 
+# Aircraft datum R2 (plan 2026-10-19-001): datums are imported, never typed.
+_REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+sys.path.insert(0, os.path.join(_REPO, "tools"))
+import bake_hull_frame as bhf  # noqa: E402
+import hull_datums as hd  # noqa: E402
+
 # ---------------------------------------------------------------------------
 # Paths — resolved relative to this script file
 # ---------------------------------------------------------------------------
@@ -101,22 +107,23 @@ SHELL_STL = os.path.join(SCRIPT_DIR, "cargo_sect_shell24_2mm_repaired.stl")
 OUT_DIR = SCRIPT_DIR
 
 # ---------------------------------------------------------------------------
-# Hull-frame cargo shell geometry (from CLAUDE.md validated baked extents)
-#   Cargo_Shell: X -267.0..-72.7,  Y -71.5..+132.0,  Z 0.0..163.2  (mm)
+# Aircraft-frame (R2) cargo shell geometry.  R1 baked extents were
+#   X -267.0..-72.7,  Y -71.5..+132.0,  Z 0.0..163.2  (mm);
+# R2 = R1 + hd.R1_TO_R2 (plan 2026-10-19-001).
 # ---------------------------------------------------------------------------
-X_SHELL_MIN = -267.0  # stbd extremity (hull -X)
-X_SHELL_MAX = -72.7  # port extremity (hull +X)
-X_CL = (X_SHELL_MIN + X_SHELL_MAX) / 2.0  # ship lateral CL ≈ -169.85 mm
+X_SHELL_MIN = -97.15  # stbd extremity (aircraft -X)
+X_SHELL_MAX = 97.15  # port extremity (aircraft +X)
+X_CL = hd.X_CL  # aircraft centreline (single source: tools/hull_datums.py)
 
 # Cargo bay opening: longitudinal span centred between leg attach points.
 # Landing-gear HULL_ATTACH_POS Y rows: 25 mm and 100 mm.  Bay spans Y=2..108.
 Y_BAY_LEN = 106.0  # mm — longitudinal door span
-Y_BAY_CEN = 55.0  # mm — Y centre of bay opening
-Y_BAY_FWD = Y_BAY_CEN - Y_BAY_LEN / 2.0  # =  2.0 mm
-Y_BAY_AFT = Y_BAY_CEN + Y_BAY_LEN / 2.0  # = 108.0 mm
+Y_BAY_CEN = 360.7  # mm — Y centre of bay opening (R1 55.0)
+Y_BAY_FWD = Y_BAY_CEN - Y_BAY_LEN / 2.0  # = 307.7 mm
+Y_BAY_AFT = Y_BAY_CEN + Y_BAY_LEN / 2.0  # = 413.7 mm
 
 # Fall-back exterior belly Z (used when interpolator misses a point)
-Z_BELLY_FALLBACK = 0.5  # mm
+Z_BELLY_FALLBACK = hd.BELLY_Z + 0.5  # mm
 
 # Wall thickness (door body, interior offset in +Z direction)
 WALL_T = 2.0  # mm
@@ -190,7 +197,7 @@ def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
 
     Belly faces are identified by:
       * Face normal Z component < -0.5  (pointing downward / ventral)
-      * Face centroid Z < 10 mm         (near the bottom of the shell)
+      * Face centroid Z < BELLY_Z + 10 mm (near the bottom of the shell)
 
     The returned (x_min, x_max) is the real edge of that ventral surface —
     where the flat belly transitions into the curved side wall — restricted
@@ -218,7 +225,7 @@ def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
     fn = shell.face_normals  # (F, 3) — face normals
 
     # Select ventral-facing faces (normal pointing -Z, near bottom of shell)
-    mask = (fn[:, 2] < -0.5) & (fc[:, 2] < 10.0)
+    mask = (fn[:, 2] < -0.5) & (fc[:, 2] < hd.BELLY_Z + 10.0)
     belly = fc[mask]
     if mask.sum() == 0:
         print("[belly] WARNING: no belly faces found — using flat fallback")
@@ -704,7 +711,9 @@ def write_hinge_params(hx_port, hz_port, hx_stbd, hz_stbd) -> None:
 def save(mesh: trimesh.Trimesh, name: str) -> None:
     """Export mesh to STL and print a summary."""
     path = os.path.join(OUT_DIR, name)
-    mesh.export(path)
+    tris = np.asarray(mesh.triangles, dtype=np.float64)
+    header = (hd.FRAME_MARKER + b" " + name[:-4].encode())[:80].ljust(80, b"\0")
+    bhf.write_stl_binary(path, tris, header)
     b = mesh.bounds
     dims = b[1] - b[0]
     print(

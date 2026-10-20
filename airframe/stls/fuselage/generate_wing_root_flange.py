@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Generate the two bonded wing-root flanges (WA-R1b, Rev T1c).
 
-HULL-FRAME STANDARD R1 — X = +port, Y = +aft, Z = +dorsal; origin =
-SerenityAssembly.FCStd world origin.  Output STLs are already in the hull frame;
-do NOT run tools/bake_hull_frame.py on them.
+AIRCRAFT DATUM R2 (plan 2026-10-19-001) — X = +port, Y = +aft, Z = +dorsal;
+origin = centreline / nose tip / 3.0 in ground plane (tools/hull_datums.py).
+Output STLs are already in the aircraft frame, stamped hd.FRAME_MARKER; do NOT
+run tools/bake_hull_frame.py on them.  Coordinates quoted below from dated
+measurements before 2026-10-19 are R1 (R2 = R1 + hd.R1_TO_R2).
 
 WHAT THIS PART IS
 -----------------
@@ -82,6 +84,10 @@ import trimesh
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 sys.path.insert(0, os.path.join(REPO_ROOT, "airframe", "blender-scripts"))
 import merge_cargo_interior as mci          # noqa: E402
+
+sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
+import bake_hull_frame as bhf               # noqa: E402
+import hull_datums as hd                    # noqa: E402
 
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -249,7 +255,8 @@ def main():
     for side in ("port", "stbd"):
         mesh = build(side)
         out = os.path.join(OUT_DIR, f"wing_root_flange_{side}.stl")
-        mesh.export(out)
+        header = (hd.FRAME_MARKER + f" wing_root_flange_{side}".encode())[:80]
+        bhf.write_stl_binary(out, mesh.triangles.astype("float64"), header.ljust(80, b"\0"))
         all_ok &= report(mesh, f"wing_root_flange_{side}")
         all_ok &= fos_report(mesh)
         print(f"      written -> {out}")
