@@ -5,7 +5,7 @@
 	(layer "F.Cu")
 	(descr "M2.5 mounting hole, 2.7 mm drill, 3.6 mm annular PGND ring for the cape chassis bond")
 	(tags "Serenity Pilot MountingHole_2.7mm_M2.5_PGND_Ring")
-	(attr through_hole)
+	(attr through_hole exclude_from_bom)
 	(property "Reference" "REF**" (at 0 -1 0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
 	(property "Value" "MountingHole_2.7mm_M2.5_PGND_Ring" (at 0 1 0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
 	(property "Datasheet" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1 1) (thickness 0.15))))

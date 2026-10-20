@@ -1796,9 +1796,10 @@ REFERENCES.md Removed/Superseded Citations).
         - [ ] Regenerate schematic (ERC 0), then PCB: sync, re-place, re-route, DRC 0 + parity 0.
             - [x] Placement (2026-10-19, Claude Sonnet 5.5 / Opus 5.5): parity 0, 0 copper DRC errors, 13
                 warnings (reference designators moved to Fab). Committed; 130 unconnected items remain.
-            - [ ] **Finish routing** (R-1 in `avionics/kicad/Pilot/docs/Pilot-Design-Review.md`): owner decision
-                between hand routing, an added signal layer, or removing a function. Two automatic
-                routers stalled (grid router 254 to 130; freerouting 2.2.4 about 190 unrouted).
+            - [ ] **Finish routing by hand** (owner decision 2026-10-20; R-1 in `avionics/kicad/Pilot/docs/Pilot-Design-Review.md`):
+                130 open connections on 68 nets, listed in `docs/Pilot-Routing-Worklist.md`. Two automatic
+                routers stalled (grid router 254 to 130; freerouting 2.2.4 about 190 unrouted). After
+                routing: DRC with parity (0 / 0 / 0), refill zones, regenerate gerbers.
             - [ ] **Resolve R-15:** five through vias on non-exempt nets have centers inside the TI 13.1
                 bubble outlines but DRC does not flag them. Relocate or find the cause.
         - [ ] Pilot manufacturing release (Sunstone fab, Cyber City Circuits assembly; owner 2026-10-19).

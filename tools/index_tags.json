@@ -11496,6 +11496,16 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/docs/Pilot-Routing-Worklist.md": {
+      "description": "Pilot hand-routing worklist",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/docs/README.md": {
       "description": "Pilot documentation set",
       "tags": [
@@ -11805,6 +11815,14 @@
         "avionics-hardware",
         "pcb-design",
         "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/gen_pilot_routing_worklist.py": {
+      "description": "gen_pilot_routing_worklist.py \u2014 List the Pilot board's open connections for hand routing.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
       ],
       "archived": false
     },
@@ -18086,6 +18104,7 @@
       "avionics/kicad/Pilot/docs/Pilot-ICD-External.md",
       "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
       "avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md",
+      "avionics/kicad/Pilot/docs/Pilot-Routing-Worklist.md",
       "avionics/kicad/Pilot/docs/README.md",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/README.md",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md",
@@ -18658,6 +18677,7 @@
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/docs/Pilot-HDD.md",
       "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
+      "avionics/kicad/Pilot/docs/Pilot-Routing-Worklist.md",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
@@ -21328,6 +21348,7 @@
       "avionics/kicad/Pilot/docs/Pilot-ICD-External.md",
       "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
       "avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md",
+      "avionics/kicad/Pilot/docs/Pilot-Routing-Worklist.md",
       "avionics/kicad/Pilot/docs/README.md",
       "avionics/kicad/Pilot/docs/analysis/emc.json",
       "avionics/kicad/Pilot/docs/analysis/pcb.json",
@@ -21366,6 +21387,7 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_icd.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_routing_worklist.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
       "avionics/kicad/Pilot/scripts/grid_route_pilot.py",
       "avionics/kicad/Pilot/scripts/inject_tpsm828224.py",
@@ -22088,6 +22110,7 @@
       "avionics/kicad/Pilot/docs/Pilot-ICD-External.md",
       "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
       "avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md",
+      "avionics/kicad/Pilot/docs/Pilot-Routing-Worklist.md",
       "avionics/kicad/Pilot/docs/README.md",
       "avionics/kicad/Pilot/docs/analysis/emc.json",
       "avionics/kicad/Pilot/docs/analysis/pcb.json",
@@ -22126,6 +22149,7 @@
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_icd.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_routing_worklist.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
       "avionics/kicad/Pilot/scripts/grid_route_pilot.py",
       "avionics/kicad/Pilot/scripts/inject_tpsm828224.py",

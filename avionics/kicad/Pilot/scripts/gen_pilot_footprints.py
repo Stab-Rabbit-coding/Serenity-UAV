@@ -59,8 +59,10 @@ HERE = Path(__file__).resolve().parent
 LIB = HERE.parent.parent / "Serenity-Custom.pretty"
 
 
-def hdr(name: str, descr: str, smd: bool = True) -> List[str]:
+def hdr(name: str, descr: str, smd: bool = True, no_bom: bool = False) -> List[str]:
     attr = "smd" if smd else "through_hole"
+    if no_bom:
+        attr += " exclude_from_bom"      # mechanical part: not purchased (matches the symbol)
     return [
         f'(footprint "{name}"',
         "\t(version 20241229)",
@@ -331,7 +333,8 @@ def pgnd_hole() -> None:
     _Pad variant) keeps 0.26 mm to the PB2 rail's corner pins with the hole on
     the R3 corner centre (u,v = 3.0 / 52.0)."""
     name = "MountingHole_2.7mm_M2.5_PGND_Ring"
-    b = hdr(name, "M2.5 mounting hole, 2.7 mm drill, 3.6 mm annular PGND ring for the cape chassis bond", smd=False)
+    b = hdr(name, "M2.5 mounting hole, 2.7 mm drill, 3.6 mm annular PGND ring for the cape chassis bond", smd=False,
+           no_bom=True)
     b.append(circ("F.CrtYd", 0, 0, 2.05, 0.05))
     b.append(tht_pad("1", 0, 0, 3.6, 2.7))
     write(name, b)
