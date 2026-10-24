@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-20",
+  "generated": "2026-10-24",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -11718,6 +11718,22 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/kicads/freerouting.dsn": {
+      "description": "Specctra design file (autorouter input)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicads/freerouting.ses": {
+      "description": "Specctra session file (autorouter output)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/kicads/freerouting1.ses": {
       "description": "Specctra session file (autorouter output)",
       "tags": [
@@ -21375,6 +21391,8 @@
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sym",
       "avionics/kicad/Pilot/kicads/Pilot.net",
       "avionics/kicad/Pilot/kicads/fp-lib-table",
+      "avionics/kicad/Pilot/kicads/freerouting.dsn",
+      "avionics/kicad/Pilot/kicads/freerouting.ses",
       "avionics/kicad/Pilot/kicads/freerouting1.ses",
       "avionics/kicad/Pilot/kicads/freerouting2.ses",
       "avionics/kicad/Pilot/kicads/sym-lib-table",
@@ -22137,6 +22155,8 @@
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sym",
       "avionics/kicad/Pilot/kicads/Pilot.net",
       "avionics/kicad/Pilot/kicads/fp-lib-table",
+      "avionics/kicad/Pilot/kicads/freerouting.dsn",
+      "avionics/kicad/Pilot/kicads/freerouting.ses",
       "avionics/kicad/Pilot/kicads/freerouting1.ses",
       "avionics/kicad/Pilot/kicads/freerouting2.ses",
       "avionics/kicad/Pilot/kicads/sym-lib-table",
