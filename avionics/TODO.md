@@ -117,6 +117,6 @@
 - [ ] XO PCB placement + DRC 0 + routing — placement and DRC 0 CLOSED…
 - [ ] TACCO area recovery, mLRS bare-chip radio, non-stack rails, and…
 - [ ] Flight Engineer PCB: close the last DRC items + route + gerbers
-- [ ] Observer PCB: route (resync done + retargeted 2026-10-18; 305 unrouted), re-verify sch<->PCB parity
+- [ ] Reconcile 2026-10-18 — branch work NOT carried into main (decision
 
 ---

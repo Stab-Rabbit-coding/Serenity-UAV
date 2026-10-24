@@ -1,0 +1,2468 @@
+{
+  "analyzer_type": "emc",
+  "schema_version": "1.3.0",
+  "summary": {
+    "total_findings": 45,
+    "categories_checked": 5,
+    "active": 45,
+    "suppressed": 0,
+    "by_severity": {
+      "error": 16,
+      "warning": 22,
+      "info": 7
+    },
+    "emc_risk_score": 0
+  },
+  "target_standard": "fcc-class-b",
+  "findings": [
+    {
+      "category": "ground_plane",
+      "severity": "info",
+      "rule_id": "GP-001",
+      "confidence": "deterministic",
+      "title": "Return path analysis data not available",
+      "description": "PCB analysis did not include return path continuity data. Run the PCB analyzer with --full flag to enable GP-001 reference plane coverage checking.",
+      "components": [],
+      "nets": [],
+      "recommendation": "Re-run PCB analysis with: python3 analyze_pcb.py <file> --full",
+      "detector": "emc_ground_plane",
+      "summary": "Return path analysis data not available",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Ground Plane",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "ground_plane",
+      "severity": "warning",
+      "rule_id": "GP-005",
+      "confidence": "deterministic",
+      "title": "6 ground domains detected",
+      "description": "Board has 6 separate ground domains: ?, ?, ?, ?, ?. Multiple ground domains require careful single-point connection to avoid ground loops and EMI.",
+      "components": [],
+      "nets": [
+        "?",
+        "?",
+        "?",
+        "?",
+        "?"
+      ],
+      "recommendation": "Verify ground domains connect at a single, intentional point (typically near the ADC for analog/digital split). Ensure no signal traces cross the domain boundary.",
+      "detector": "emc_ground_plane",
+      "summary": "6 ground domains detected",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Ground Plane",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on J-ETH-USB1",
+      "description": "J-ETH-USB1 (SM04B-GHS-TB) has 1 ground pin(s) for 4 signal pins. Recommended: at least 2 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "J-ETH-USB1"
+      ],
+      "nets": [],
+      "recommendation": "Ensure J-ETH-USB1 has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on J-ETH-USB1",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on J-ETH-RMII2",
+      "description": "J-ETH-RMII2 (SM04B-GHS-TB) has 1 ground pin(s) for 4 signal pins. Recommended: at least 2 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "J-ETH-RMII2"
+      ],
+      "nets": [],
+      "recommendation": "Ensure J-ETH-RMII2 has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on J-ETH-RMII2",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on PB2-P2",
+      "description": "PB2-P2 (PB2I-P2-2x18) has 2 ground pin(s) for 22 signal pins. Recommended: at least 6 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "PB2-P2"
+      ],
+      "nets": [],
+      "recommendation": "Ensure PB2-P2 has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on PB2-P2",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on PB2-P1",
+      "description": "PB2-P1 (PB2I-P1-2x18) has 3 ground pin(s) for 22 signal pins. Recommended: at least 6 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "PB2-P1"
+      ],
+      "nets": [],
+      "recommendation": "Ensure PB2-P1 has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on PB2-P1",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "io_filtering",
+      "severity": "info",
+      "rule_id": "IO-002",
+      "confidence": "heuristic",
+      "title": "Insufficient ground pins on PHY-RMII2",
+      "description": "PHY-RMII2 (DP83825IRMQR) has 3 ground pin(s) for 18 signal pins. Recommended: at least 5 ground pins for adequate return current path and cable shielding.",
+      "components": [
+        "PHY-RMII2"
+      ],
+      "nets": [],
+      "recommendation": "Ensure PHY-RMII2 has sufficient ground pins. For high-speed interfaces, ground pins should be distributed among signal pins, not grouped at one end.",
+      "detector": "emc_io_filtering",
+      "summary": "Insufficient ground pins on PHY-RMII2",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Io Filtering",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "pre_fab"
+      ]
+    },
+    {
+      "category": "clock_routing",
+      "severity": "warning",
+      "rule_id": "CK-001",
+      "confidence": "deterministic",
+      "title": "Clock SPI0_CLK on outer layer",
+      "description": "Clock net SPI0_CLK is 69% routed on outer layers (microstrip). Inner stripline layers provide better shielding from radiation.",
+      "components": [],
+      "nets": [
+        "SPI0_CLK"
+      ],
+      "recommendation": "Route clock signals on inner layers (stripline) when possible.",
+      "detector": "emc_clock_routing",
+      "summary": "Clock SPI0_CLK on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Clock Routing",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "clock_routing",
+      "severity": "warning",
+      "rule_id": "CK-001",
+      "confidence": "deterministic",
+      "title": "Clock RMII2_REF_CLK on outer layer",
+      "description": "Clock net RMII2_REF_CLK is 100% routed on outer layers (microstrip). Inner stripline layers provide better shielding from radiation.",
+      "components": [],
+      "nets": [
+        "RMII2_REF_CLK"
+      ],
+      "recommendation": "Route clock signals on inner layers (stripline) when possible.",
+      "detector": "emc_clock_routing",
+      "summary": "Clock RMII2_REF_CLK on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Clock Routing",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "clock_routing",
+      "severity": "warning",
+      "rule_id": "CK-001",
+      "confidence": "deterministic",
+      "title": "Clock M1553_MCLK on outer layer",
+      "description": "Clock net M1553_MCLK is 100% routed on outer layers (microstrip). Inner stripline layers provide better shielding from radiation.",
+      "components": [],
+      "nets": [
+        "M1553_MCLK"
+      ],
+      "recommendation": "Route clock signals on inner layers (stripline) when possible.",
+      "detector": "emc_clock_routing",
+      "summary": "Clock M1553_MCLK on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Clock Routing",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "emission_estimate",
+      "severity": "info",
+      "rule_id": "EE-001",
+      "confidence": "heuristic",
+      "title": "Board cavity resonance frequencies",
+      "description": "Board (55\u00d735mm, \u03b5r=4.4) cavity resonances: (1,0) at 1299 MHz; (0,1) at 2042 MHz; (1,1) at 2420 MHz; (2,0) at 2599 MHz. PDN impedance spikes at these frequencies. Ensure adequate decoupling at and around these frequencies.",
+      "components": [],
+      "nets": [],
+      "recommendation": "Add decoupling capacitors with SRF near these frequencies.",
+      "detector": "emc_emission_estimate",
+      "summary": "Board cavity resonance frequencies",
+      "pins": [],
+      "evidence_source": "heuristic_rule",
+      "report_context": {
+        "section": "Emission Estimate",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "schematic"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-001",
+      "confidence": "deterministic",
+      "title": "differential diff pair skew exceeds limit",
+      "description": "Differential pair M1553_P/M1553_N has 28.5mm length mismatch (156.2 ps skew). Exceeds differential limit of 50 ps by 212%.",
+      "components": [
+        "1553-XCVR",
+        "1553-XFM"
+      ],
+      "nets": [
+        "M1553_P",
+        "M1553_N"
+      ],
+      "recommendation": "Match trace lengths to within 25 ps (4.6mm). Use length-matched serpentine routing.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair skew exceeds limit",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-001",
+      "confidence": "deterministic",
+      "title": "differential diff pair skew approaching limit",
+      "description": "Differential pair M1553_SEC_P/M1553_SEC_N has 6.3mm length mismatch (34.4 ps skew). differential limit is 50 ps.",
+      "components": [
+        "1553-XFM"
+      ],
+      "nets": [
+        "M1553_SEC_P",
+        "M1553_SEC_N"
+      ],
+      "recommendation": "Match trace lengths to within 25 ps (4.6mm). Use length-matched serpentine routing.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair skew approaching limit",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-001",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair skew approaching limit",
+      "description": "Differential pair ETH_RMII2_TXP/ETH_RMII2_TXN has 4.7mm length mismatch (25.7 ps skew). Ethernet limit is 50 ps.",
+      "components": [
+        "PHY-RMII2",
+        "T-RMII2-TX"
+      ],
+      "nets": [
+        "ETH_RMII2_TXP",
+        "ETH_RMII2_TXN"
+      ],
+      "recommendation": "Match trace lengths to within 25 ps (4.6mm). Use length-matched serpentine routing.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair skew approaching limit",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-001",
+      "confidence": "deterministic",
+      "title": "USB diff pair skew exceeds limit",
+      "description": "Differential pair ETH_USB1_LINE_TXP/ETH_USB1_LINE_TXN has 4.7mm length mismatch (25.9 ps skew). Exceeds USB limit of 25 ps by 4%.",
+      "components": [
+        "J-ETH-USB1",
+        "T-USB1-TX"
+      ],
+      "nets": [
+        "ETH_USB1_LINE_TXP",
+        "ETH_USB1_LINE_TXN"
+      ],
+      "recommendation": "Match trace lengths to within 12 ps (2.3mm). Use length-matched serpentine routing.",
+      "detector": "emc_diff_pair",
+      "summary": "USB diff pair skew exceeds limit",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-001",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair skew exceeds limit",
+      "description": "Differential pair ETH_RMII2_RXP/ETH_RMII2_RXN has 13.7mm length mismatch (75.2 ps skew). Exceeds Ethernet limit of 50 ps by 50%.",
+      "components": [
+        "PHY-RMII2",
+        "T-RMII2-RX"
+      ],
+      "nets": [
+        "ETH_RMII2_RXP",
+        "ETH_RMII2_RXN"
+      ],
+      "recommendation": "Match trace lengths to within 25 ps (4.6mm). Use length-matched serpentine routing.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair skew exceeds limit",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-002",
+      "confidence": "datasheet-backed",
+      "title": "Ethernet skew-induced CM radiation risk",
+      "description": "ETH_RMII2_TXP/ETH_RMII2_TXN: 25.7ps skew generates 3.2mV CM voltage \u2192 estimated 61 dB\u00b5V/m at 125 MHz (limit: 44 dB\u00b5V/m, margin: -17 dB).",
+      "components": [
+        "PHY-RMII2",
+        "T-RMII2-TX"
+      ],
+      "nets": [
+        "ETH_RMII2_TXP",
+        "ETH_RMII2_TXN"
+      ],
+      "recommendation": "Reduce length mismatch or add common-mode filtering (CM choke) at the connector.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet skew-induced CM radiation risk",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-002",
+      "confidence": "datasheet-backed",
+      "title": "Ethernet skew-induced CM radiation risk",
+      "description": "ETH_RMII2_RXP/ETH_RMII2_RXN: 75.2ps skew generates 9.4mV CM voltage \u2192 estimated 70 dB\u00b5V/m at 125 MHz (limit: 44 dB\u00b5V/m, margin: -27 dB).",
+      "components": [
+        "PHY-RMII2",
+        "T-RMII2-RX"
+      ],
+      "nets": [
+        "ETH_RMII2_RXP",
+        "ETH_RMII2_RXN"
+      ],
+      "recommendation": "Reduce length mismatch or add common-mode filtering (CM choke) at the connector.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet skew-induced CM radiation risk",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-002",
+      "confidence": "datasheet-backed",
+      "title": "Ethernet skew-induced CM radiation risk",
+      "description": "ETH_RMII2_LINE_RXP/ETH_RMII2_LINE_RXN: 9.0ps skew generates 1.1mV CM voltage \u2192 estimated 52 dB\u00b5V/m at 125 MHz (limit: 44 dB\u00b5V/m, margin: -8 dB).",
+      "components": [
+        "J-ETH-RMII2",
+        "T-RMII2-RX"
+      ],
+      "nets": [
+        "ETH_RMII2_LINE_RXP",
+        "ETH_RMII2_LINE_RXN"
+      ],
+      "recommendation": "Reduce length mismatch or add common-mode filtering (CM choke) at the connector.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet skew-induced CM radiation risk",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-003",
+      "confidence": "deterministic",
+      "title": "differential diff pair changes layers",
+      "description": "Net M1553_N (part of differential diff pair) transitions across 2 layers (B.Cu, In3.Cu) with 1 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+      "components": [
+        "1553-XCVR",
+        "1553-XFM"
+      ],
+      "nets": [
+        "M1553_N"
+      ],
+      "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair changes layers",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-003",
+      "confidence": "deterministic",
+      "title": "differential diff pair changes layers",
+      "description": "Net M1553_SEC_P (part of differential diff pair) transitions across 2 layers (B.Cu, F.Cu) with 2 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+      "components": [
+        "1553-XFM"
+      ],
+      "nets": [
+        "M1553_SEC_P"
+      ],
+      "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair changes layers",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-003",
+      "confidence": "deterministic",
+      "title": "differential diff pair changes layers",
+      "description": "Net M1553_SEC_N (part of differential diff pair) transitions across 3 layers (B.Cu, F.Cu, In3.Cu) with 2 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+      "components": [
+        "1553-XFM"
+      ],
+      "nets": [
+        "M1553_SEC_N"
+      ],
+      "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair changes layers",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-003",
+      "confidence": "deterministic",
+      "title": "differential diff pair changes layers",
+      "description": "Net BUS_1553_P (part of differential diff pair) transitions across 3 layers (B.Cu, F.Cu, In2.Cu) with 3 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+      "components": [
+        "MIL-1553"
+      ],
+      "nets": [
+        "BUS_1553_P"
+      ],
+      "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair changes layers",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-003",
+      "confidence": "deterministic",
+      "title": "differential diff pair changes layers",
+      "description": "Net BUS_1553_N (part of differential diff pair) transitions across 2 layers (B.Cu, F.Cu) with 1 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+      "components": [
+        "MIL-1553"
+      ],
+      "nets": [
+        "BUS_1553_N"
+      ],
+      "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair changes layers",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-003",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair changes layers",
+      "description": "Net ETH_RMII2_TXP (part of Ethernet diff pair) transitions across 2 layers (B.Cu, In2.Cu) with 2 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+      "components": [
+        "PHY-RMII2",
+        "T-RMII2-TX"
+      ],
+      "nets": [
+        "ETH_RMII2_TXP"
+      ],
+      "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair changes layers",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-003",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair changes layers",
+      "description": "Net ETH_RMII2_LINE_TXP (part of Ethernet diff pair) transitions across 2 layers (F.Cu, In2.Cu) with 2 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+      "components": [
+        "J-ETH-RMII2",
+        "T-RMII2-TX"
+      ],
+      "nets": [
+        "ETH_RMII2_LINE_TXP"
+      ],
+      "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair changes layers",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-003",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair changes layers",
+      "description": "Net ETH_RMII2_RXP (part of Ethernet diff pair) transitions across 3 layers (B.Cu, F.Cu, In3.Cu) with 2 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+      "components": [
+        "PHY-RMII2",
+        "T-RMII2-RX"
+      ],
+      "nets": [
+        "ETH_RMII2_RXP"
+      ],
+      "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair changes layers",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-003",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair changes layers",
+      "description": "Net ETH_RMII2_RXN (part of Ethernet diff pair) transitions across 4 layers (B.Cu, F.Cu, In2.Cu, In3.Cu) with 4 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+      "components": [
+        "PHY-RMII2",
+        "T-RMII2-RX"
+      ],
+      "nets": [
+        "ETH_RMII2_RXN"
+      ],
+      "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair changes layers",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "error",
+      "rule_id": "DP-003",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair changes layers",
+      "description": "Net ETH_RMII2_LINE_RXP (part of Ethernet diff pair) transitions across 2 layers (F.Cu, In2.Cu) with 2 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+      "components": [
+        "J-ETH-RMII2",
+        "T-RMII2-RX"
+      ],
+      "nets": [
+        "ETH_RMII2_LINE_RXP"
+      ],
+      "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair changes layers",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "differential diff pair on outer layer",
+      "description": "Net M1553_P (differential diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "1553-XCVR",
+        "1553-XFM"
+      ],
+      "nets": [
+        "M1553_P"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "differential diff pair on outer layer",
+      "description": "Net M1553_SEC_P (differential diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "1553-XFM"
+      ],
+      "nets": [
+        "M1553_SEC_P"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "differential diff pair on outer layer",
+      "description": "Net M1553_SEC_N (differential diff pair) is 51% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "1553-XFM"
+      ],
+      "nets": [
+        "M1553_SEC_N"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "differential diff pair on outer layer",
+      "description": "Net BUS_1553_P (differential diff pair) is 73% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "MIL-1553"
+      ],
+      "nets": [
+        "BUS_1553_P"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "differential diff pair on outer layer",
+      "description": "Net BUS_1553_N (differential diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "MIL-1553"
+      ],
+      "nets": [
+        "BUS_1553_N"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "differential diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair on outer layer",
+      "description": "Net ETH_RMII2_TXP (Ethernet diff pair) is 89% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "PHY-RMII2",
+        "T-RMII2-TX"
+      ],
+      "nets": [
+        "ETH_RMII2_TXP"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair on outer layer",
+      "description": "Net ETH_RMII2_TXN (Ethernet diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "PHY-RMII2",
+        "T-RMII2-TX"
+      ],
+      "nets": [
+        "ETH_RMII2_TXN"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair on outer layer",
+      "description": "Net ETH_RMII2_LINE_TXP (Ethernet diff pair) is 67% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "J-ETH-RMII2",
+        "T-RMII2-TX"
+      ],
+      "nets": [
+        "ETH_RMII2_LINE_TXP"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair on outer layer",
+      "description": "Net ETH_RMII2_LINE_TXN (Ethernet diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "J-ETH-RMII2",
+        "T-RMII2-TX"
+      ],
+      "nets": [
+        "ETH_RMII2_LINE_TXN"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "USB diff pair on outer layer",
+      "description": "Net ETH_USB1_LINE_TXP (USB diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "J-ETH-USB1",
+        "T-USB1-TX"
+      ],
+      "nets": [
+        "ETH_USB1_LINE_TXP"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "USB diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "USB diff pair on outer layer",
+      "description": "Net ETH_USB1_LINE_TXN (USB diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "J-ETH-USB1",
+        "T-USB1-TX"
+      ],
+      "nets": [
+        "ETH_USB1_LINE_TXN"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "USB diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "USB diff pair on outer layer",
+      "description": "Net ETH_USB1_RXP (USB diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "NIC-USB1",
+        "T-USB1-RX"
+      ],
+      "nets": [
+        "ETH_USB1_RXP"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "USB diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "USB diff pair on outer layer",
+      "description": "Net ETH_USB1_RXN (USB diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "NIC-USB1",
+        "T-USB1-RX"
+      ],
+      "nets": [
+        "ETH_USB1_RXN"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "USB diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "Ethernet diff pair on outer layer",
+      "description": "Net ETH_RMII2_LINE_RXN (Ethernet diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "J-ETH-RMII2",
+        "T-RMII2-RX"
+      ],
+      "nets": [
+        "ETH_RMII2_LINE_RXN"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "Ethernet diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "USB diff pair on outer layer",
+      "description": "Net ETH_USB1_LINE_RXP (USB diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "J-ETH-USB1",
+        "T-USB1-RX"
+      ],
+      "nets": [
+        "ETH_USB1_LINE_RXP"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "USB diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    },
+    {
+      "category": "diff_pair",
+      "severity": "warning",
+      "rule_id": "DP-004",
+      "confidence": "deterministic",
+      "title": "USB diff pair on outer layer",
+      "description": "Net ETH_USB1_LINE_RXN (USB diff pair) is 100% routed on outer layers. Inner stripline layers provide better shielding and lower radiation for high-speed differential pairs.",
+      "components": [
+        "J-ETH-USB1",
+        "T-USB1-RX"
+      ],
+      "nets": [
+        "ETH_USB1_LINE_RXN"
+      ],
+      "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+      "detector": "emc_diff_pair",
+      "summary": "USB diff pair on outer layer",
+      "pins": [],
+      "evidence_source": "topology",
+      "report_context": {
+        "section": "Diff Pair",
+        "impact": "",
+        "standard_ref": ""
+      },
+      "suppressed": false,
+      "suppression_reason": "",
+      "stages": [
+        "layout"
+      ]
+    }
+  ],
+  "per_net_scores": [
+    {
+      "net": "ETH_RMII2_RXP",
+      "score": 64.0,
+      "finding_count": 3,
+      "rules": [
+        "DP-001",
+        "DP-002",
+        "DP-003"
+      ]
+    },
+    {
+      "net": "ETH_RMII2_RXN",
+      "score": 64.0,
+      "finding_count": 3,
+      "rules": [
+        "DP-001",
+        "DP-002",
+        "DP-003"
+      ]
+    },
+    {
+      "net": "ETH_RMII2_TXP",
+      "score": 70.0,
+      "finding_count": 4,
+      "rules": [
+        "DP-001",
+        "DP-002",
+        "DP-003",
+        "DP-004"
+      ]
+    },
+    {
+      "net": "M1553_N",
+      "score": 76.0,
+      "finding_count": 2,
+      "rules": [
+        "DP-001",
+        "DP-003"
+      ]
+    },
+    {
+      "net": "ETH_RMII2_LINE_RXP",
+      "score": 76.0,
+      "finding_count": 2,
+      "rules": [
+        "DP-002",
+        "DP-003"
+      ]
+    },
+    {
+      "net": "M1553_SEC_P",
+      "score": 82.0,
+      "finding_count": 3,
+      "rules": [
+        "DP-001",
+        "DP-003",
+        "DP-004"
+      ]
+    },
+    {
+      "net": "M1553_SEC_N",
+      "score": 82.0,
+      "finding_count": 3,
+      "rules": [
+        "DP-001",
+        "DP-003",
+        "DP-004"
+      ]
+    },
+    {
+      "net": "ETH_RMII2_TXN",
+      "score": 82.0,
+      "finding_count": 3,
+      "rules": [
+        "DP-001",
+        "DP-002",
+        "DP-004"
+      ]
+    },
+    {
+      "net": "?",
+      "score": 85.0,
+      "finding_count": 5,
+      "rules": [
+        "GP-005"
+      ]
+    },
+    {
+      "net": "M1553_P",
+      "score": 85.0,
+      "finding_count": 2,
+      "rules": [
+        "DP-001",
+        "DP-004"
+      ]
+    },
+    {
+      "net": "ETH_USB1_LINE_TXP",
+      "score": 85.0,
+      "finding_count": 2,
+      "rules": [
+        "DP-001",
+        "DP-004"
+      ]
+    },
+    {
+      "net": "ETH_USB1_LINE_TXN",
+      "score": 85.0,
+      "finding_count": 2,
+      "rules": [
+        "DP-001",
+        "DP-004"
+      ]
+    },
+    {
+      "net": "ETH_RMII2_LINE_RXN",
+      "score": 85.0,
+      "finding_count": 2,
+      "rules": [
+        "DP-002",
+        "DP-004"
+      ]
+    },
+    {
+      "net": "BUS_1553_P",
+      "score": 85.0,
+      "finding_count": 2,
+      "rules": [
+        "DP-003",
+        "DP-004"
+      ]
+    },
+    {
+      "net": "BUS_1553_N",
+      "score": 85.0,
+      "finding_count": 2,
+      "rules": [
+        "DP-003",
+        "DP-004"
+      ]
+    },
+    {
+      "net": "ETH_RMII2_LINE_TXP",
+      "score": 85.0,
+      "finding_count": 2,
+      "rules": [
+        "DP-003",
+        "DP-004"
+      ]
+    },
+    {
+      "net": "SPI0_CLK",
+      "score": 97.0,
+      "finding_count": 1,
+      "rules": [
+        "CK-001"
+      ]
+    },
+    {
+      "net": "RMII2_REF_CLK",
+      "score": 97.0,
+      "finding_count": 1,
+      "rules": [
+        "CK-001"
+      ]
+    },
+    {
+      "net": "M1553_MCLK",
+      "score": 97.0,
+      "finding_count": 1,
+      "rules": [
+        "CK-001"
+      ]
+    },
+    {
+      "net": "ETH_RMII2_LINE_TXN",
+      "score": 97.0,
+      "finding_count": 1,
+      "rules": [
+        "DP-004"
+      ]
+    },
+    {
+      "net": "ETH_USB1_RXP",
+      "score": 97.0,
+      "finding_count": 1,
+      "rules": [
+        "DP-004"
+      ]
+    },
+    {
+      "net": "ETH_USB1_RXN",
+      "score": 97.0,
+      "finding_count": 1,
+      "rules": [
+        "DP-004"
+      ]
+    },
+    {
+      "net": "ETH_USB1_LINE_RXP",
+      "score": 97.0,
+      "finding_count": 1,
+      "rules": [
+        "DP-004"
+      ]
+    },
+    {
+      "net": "ETH_USB1_LINE_RXN",
+      "score": 97.0,
+      "finding_count": 1,
+      "rules": [
+        "DP-004"
+      ]
+    }
+  ],
+  "test_plan": {
+    "frequency_bands": [
+      {
+        "band": "30-88 MHz",
+        "freq_min_hz": 30000000.0,
+        "freq_max_hz": 88000000.0,
+        "risk_level": "medium",
+        "source_count": 3,
+        "sources": [
+          "Y-USB1 20.0MHz harmonic 2 (40.0MHz)",
+          "Y-USB1 20.0MHz harmonic 3 (60.0MHz)",
+          "Y-USB1 20.0MHz harmonic 4 (80.0MHz)"
+        ]
+      },
+      {
+        "band": "88-216 MHz",
+        "freq_min_hz": 88000000.0,
+        "freq_max_hz": 216000000.0,
+        "risk_level": "low",
+        "source_count": 1,
+        "sources": [
+          "Y-USB1 20.0MHz harmonic 5 (100.0MHz)"
+        ]
+      },
+      {
+        "band": "216-960 MHz",
+        "freq_min_hz": 216000000.0,
+        "freq_max_hz": 960000000.0,
+        "risk_level": "none",
+        "source_count": 0,
+        "sources": []
+      },
+      {
+        "band": "960-40000 MHz",
+        "freq_min_hz": 960000000.0,
+        "freq_max_hz": 40000000000.0,
+        "risk_level": "none",
+        "source_count": 0,
+        "sources": []
+      }
+    ],
+    "interface_risks": [
+      {
+        "connector": "MIL-1553",
+        "value": "SM04B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "CAN-FD",
+        "value": "SM04B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-PWM",
+        "value": "TSM-108-01-L-DV",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-SPI",
+        "value": "SM06B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-ETH-USB1",
+        "value": "SM04B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "J-ETH-RMII2",
+        "value": "SM04B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "RS-485",
+        "value": "SM04B-GHS-TB",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PWR-IN",
+        "value": "Nano-Fit 4P",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PB2-P2",
+        "value": "PB2I-P2-2x18",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PB2-P1",
+        "value": "PB2I-P1-2x18",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      },
+      {
+        "connector": "PHY-RMII2",
+        "value": "DP83825IRMQR",
+        "protocol": "unknown",
+        "risk_score": 3,
+        "reasons": [
+          "General I/O"
+        ]
+      }
+    ],
+    "probe_points": [
+      {
+        "x": 157.6,
+        "y": 98.3,
+        "type": "inductor",
+        "ref": "L-USB1",
+        "reason": "Switching inductor \u2014 highest dI/dt source"
+      },
+      {
+        "x": 160.8,
+        "y": 104.1,
+        "type": "crystal",
+        "ref": "Y-USB1",
+        "reason": "Crystal/oscillator \u2014 clock harmonics source"
+      },
+      {
+        "x": 132.2,
+        "y": 110.5,
+        "type": "crystal",
+        "ref": "X-50M",
+        "reason": "Crystal/oscillator \u2014 clock harmonics source"
+      },
+      {
+        "x": 148.0,
+        "y": 108.6,
+        "type": "crystal",
+        "ref": "X2Y-RS485",
+        "reason": "Crystal/oscillator \u2014 clock harmonics source"
+      },
+      {
+        "x": 126.9,
+        "y": 111.3,
+        "type": "crystal",
+        "ref": "X2Y-CAN",
+        "reason": "Crystal/oscillator \u2014 clock harmonics source"
+      },
+      {
+        "x": 173.4,
+        "y": 111.2,
+        "type": "crystal",
+        "ref": "X-25M",
+        "reason": "Crystal/oscillator \u2014 clock harmonics source"
+      }
+    ]
+  },
+  "regulatory_coverage": {
+    "market": "us",
+    "applicable_standards": [
+      "FCC Part 15 Class B",
+      "FCC Part 15 Class B"
+    ],
+    "coverage_matrix": [
+      {
+        "standard": "FCC Part 15 Class B",
+        "test_type": "radiated",
+        "coverage": "minimal",
+        "checked_rules": [
+          "GP-001",
+          "GP-005",
+          "CK-001",
+          "DP-001",
+          "DP-002",
+          "DP-003",
+          "DP-004",
+          "EE-001"
+        ],
+        "total_applicable_rules": 23,
+        "note": "Design rule checks identify common radiation sources. Cannot predict absolute emission levels."
+      },
+      {
+        "standard": "FCC Part 15 Class B",
+        "test_type": "conducted",
+        "coverage": "indirect",
+        "checked_rules": [],
+        "total_applicable_rules": 4,
+        "note": "Switching harmonic analysis and decoupling checks. EMI filter verification not yet implemented."
+      }
+    ]
+  },
+  "category_summary": {
+    "ground_plane": {
+      "count": 2,
+      "max_severity": "warning",
+      "severities": {
+        "error": 0,
+        "warning": 1,
+        "info": 1
+      },
+      "suppressed_count": 0
+    },
+    "io_filtering": {
+      "count": 5,
+      "max_severity": "info",
+      "severities": {
+        "error": 0,
+        "warning": 0,
+        "info": 5
+      },
+      "suppressed_count": 0
+    },
+    "clock_routing": {
+      "count": 3,
+      "max_severity": "warning",
+      "severities": {
+        "error": 0,
+        "warning": 3,
+        "info": 0
+      },
+      "suppressed_count": 0
+    },
+    "emission_estimate": {
+      "count": 1,
+      "max_severity": "info",
+      "severities": {
+        "error": 0,
+        "warning": 0,
+        "info": 1
+      },
+      "suppressed_count": 0
+    },
+    "diff_pair": {
+      "count": 34,
+      "max_severity": "error",
+      "severities": {
+        "error": 16,
+        "warning": 18,
+        "info": 0
+      },
+      "suppressed_count": 0
+    }
+  },
+  "board_info": {
+    "board_width_mm": 55.0,
+    "board_height_mm": 35.0,
+    "layer_count": 6,
+    "footprint_count": 136,
+    "via_count": 308,
+    "has_stackup": false,
+    "total_components": 136,
+    "total_nets": 205,
+    "highest_frequency_hz": 20000000.0,
+    "crystal_frequencies_hz": [
+      20000000.0
+    ]
+  },
+  "elapsed_s": 0.037,
+  "audience_summary": {
+    "designer": {
+      "total_findings": 45,
+      "by_severity": {
+        "error": 16,
+        "warning": 22,
+        "info": 7
+      },
+      "by_category": {
+        "ground_plane": 2,
+        "io_filtering": 5,
+        "clock_routing": 3,
+        "emission_estimate": 1,
+        "diff_pair": 34
+      },
+      "top_issues": [
+        {
+          "category": "diff_pair",
+          "severity": "error",
+          "rule_id": "DP-001",
+          "confidence": "deterministic",
+          "title": "differential diff pair skew exceeds limit",
+          "description": "Differential pair M1553_P/M1553_N has 28.5mm length mismatch (156.2 ps skew). Exceeds differential limit of 50 ps by 212%.",
+          "components": [
+            "1553-XCVR",
+            "1553-XFM"
+          ],
+          "nets": [
+            "M1553_P",
+            "M1553_N"
+          ],
+          "recommendation": "Match trace lengths to within 25 ps (4.6mm). Use length-matched serpentine routing.",
+          "detector": "emc_diff_pair",
+          "summary": "differential diff pair skew exceeds limit",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Diff Pair",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "diff_pair",
+          "severity": "error",
+          "rule_id": "DP-001",
+          "confidence": "deterministic",
+          "title": "USB diff pair skew exceeds limit",
+          "description": "Differential pair ETH_USB1_LINE_TXP/ETH_USB1_LINE_TXN has 4.7mm length mismatch (25.9 ps skew). Exceeds USB limit of 25 ps by 4%.",
+          "components": [
+            "J-ETH-USB1",
+            "T-USB1-TX"
+          ],
+          "nets": [
+            "ETH_USB1_LINE_TXP",
+            "ETH_USB1_LINE_TXN"
+          ],
+          "recommendation": "Match trace lengths to within 12 ps (2.3mm). Use length-matched serpentine routing.",
+          "detector": "emc_diff_pair",
+          "summary": "USB diff pair skew exceeds limit",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Diff Pair",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "diff_pair",
+          "severity": "error",
+          "rule_id": "DP-001",
+          "confidence": "deterministic",
+          "title": "Ethernet diff pair skew exceeds limit",
+          "description": "Differential pair ETH_RMII2_RXP/ETH_RMII2_RXN has 13.7mm length mismatch (75.2 ps skew). Exceeds Ethernet limit of 50 ps by 50%.",
+          "components": [
+            "PHY-RMII2",
+            "T-RMII2-RX"
+          ],
+          "nets": [
+            "ETH_RMII2_RXP",
+            "ETH_RMII2_RXN"
+          ],
+          "recommendation": "Match trace lengths to within 25 ps (4.6mm). Use length-matched serpentine routing.",
+          "detector": "emc_diff_pair",
+          "summary": "Ethernet diff pair skew exceeds limit",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Diff Pair",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "diff_pair",
+          "severity": "error",
+          "rule_id": "DP-002",
+          "confidence": "datasheet-backed",
+          "title": "Ethernet skew-induced CM radiation risk",
+          "description": "ETH_RMII2_TXP/ETH_RMII2_TXN: 25.7ps skew generates 3.2mV CM voltage \u2192 estimated 61 dB\u00b5V/m at 125 MHz (limit: 44 dB\u00b5V/m, margin: -17 dB).",
+          "components": [
+            "PHY-RMII2",
+            "T-RMII2-TX"
+          ],
+          "nets": [
+            "ETH_RMII2_TXP",
+            "ETH_RMII2_TXN"
+          ],
+          "recommendation": "Reduce length mismatch or add common-mode filtering (CM choke) at the connector.",
+          "detector": "emc_diff_pair",
+          "summary": "Ethernet skew-induced CM radiation risk",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Diff Pair",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "diff_pair",
+          "severity": "error",
+          "rule_id": "DP-002",
+          "confidence": "datasheet-backed",
+          "title": "Ethernet skew-induced CM radiation risk",
+          "description": "ETH_RMII2_RXP/ETH_RMII2_RXN: 75.2ps skew generates 9.4mV CM voltage \u2192 estimated 70 dB\u00b5V/m at 125 MHz (limit: 44 dB\u00b5V/m, margin: -27 dB).",
+          "components": [
+            "PHY-RMII2",
+            "T-RMII2-RX"
+          ],
+          "nets": [
+            "ETH_RMII2_RXP",
+            "ETH_RMII2_RXN"
+          ],
+          "recommendation": "Reduce length mismatch or add common-mode filtering (CM choke) at the connector.",
+          "detector": "emc_diff_pair",
+          "summary": "Ethernet skew-induced CM radiation risk",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Diff Pair",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "diff_pair",
+          "severity": "error",
+          "rule_id": "DP-002",
+          "confidence": "datasheet-backed",
+          "title": "Ethernet skew-induced CM radiation risk",
+          "description": "ETH_RMII2_LINE_RXP/ETH_RMII2_LINE_RXN: 9.0ps skew generates 1.1mV CM voltage \u2192 estimated 52 dB\u00b5V/m at 125 MHz (limit: 44 dB\u00b5V/m, margin: -8 dB).",
+          "components": [
+            "J-ETH-RMII2",
+            "T-RMII2-RX"
+          ],
+          "nets": [
+            "ETH_RMII2_LINE_RXP",
+            "ETH_RMII2_LINE_RXN"
+          ],
+          "recommendation": "Reduce length mismatch or add common-mode filtering (CM choke) at the connector.",
+          "detector": "emc_diff_pair",
+          "summary": "Ethernet skew-induced CM radiation risk",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Diff Pair",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "diff_pair",
+          "severity": "error",
+          "rule_id": "DP-003",
+          "confidence": "deterministic",
+          "title": "differential diff pair changes layers",
+          "description": "Net M1553_N (part of differential diff pair) transitions across 2 layers (B.Cu, In3.Cu) with 1 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+          "components": [
+            "1553-XCVR",
+            "1553-XFM"
+          ],
+          "nets": [
+            "M1553_N"
+          ],
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "detector": "emc_diff_pair",
+          "summary": "differential diff pair changes layers",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Diff Pair",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "diff_pair",
+          "severity": "error",
+          "rule_id": "DP-003",
+          "confidence": "deterministic",
+          "title": "differential diff pair changes layers",
+          "description": "Net M1553_SEC_P (part of differential diff pair) transitions across 2 layers (B.Cu, F.Cu) with 2 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+          "components": [
+            "1553-XFM"
+          ],
+          "nets": [
+            "M1553_SEC_P"
+          ],
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "detector": "emc_diff_pair",
+          "summary": "differential diff pair changes layers",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Diff Pair",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "diff_pair",
+          "severity": "error",
+          "rule_id": "DP-003",
+          "confidence": "deterministic",
+          "title": "differential diff pair changes layers",
+          "description": "Net M1553_SEC_N (part of differential diff pair) transitions across 3 layers (B.Cu, F.Cu, In3.Cu) with 2 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+          "components": [
+            "1553-XFM"
+          ],
+          "nets": [
+            "M1553_SEC_N"
+          ],
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "detector": "emc_diff_pair",
+          "summary": "differential diff pair changes layers",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Diff Pair",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        },
+        {
+          "category": "diff_pair",
+          "severity": "error",
+          "rule_id": "DP-003",
+          "confidence": "deterministic",
+          "title": "differential diff pair changes layers",
+          "description": "Net BUS_1553_P (part of differential diff pair) transitions across 3 layers (B.Cu, F.Cu, In2.Cu) with 3 via(s). Each layer transition is a potential DM-to-CM conversion point. Ensure stitching vias or decoupling caps at each transition.",
+          "components": [
+            "MIL-1553"
+          ],
+          "nets": [
+            "BUS_1553_P"
+          ],
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "detector": "emc_diff_pair",
+          "summary": "differential diff pair changes layers",
+          "pins": [],
+          "evidence_source": "topology",
+          "report_context": {
+            "section": "Diff Pair",
+            "impact": "",
+            "standard_ref": ""
+          },
+          "suppressed": false,
+          "suppression_reason": "",
+          "stages": [
+            "layout"
+          ]
+        }
+      ]
+    },
+    "reviewer": {
+      "total_findings": 38,
+      "by_category": {
+        "ground_plane": 1,
+        "clock_routing": 3,
+        "diff_pair": 34
+      },
+      "top_issues": [
+        {
+          "rule_id": "DP-001",
+          "severity": "error",
+          "summary": "differential diff pair skew exceeds limit",
+          "recommendation": "Match trace lengths to within 25 ps (4.6mm). Use length-matched serpentine routing.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-001",
+          "severity": "error",
+          "summary": "USB diff pair skew exceeds limit",
+          "recommendation": "Match trace lengths to within 12 ps (2.3mm). Use length-matched serpentine routing.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-001",
+          "severity": "error",
+          "summary": "Ethernet diff pair skew exceeds limit",
+          "recommendation": "Match trace lengths to within 25 ps (4.6mm). Use length-matched serpentine routing.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-002",
+          "severity": "error",
+          "summary": "Ethernet skew-induced CM radiation risk",
+          "recommendation": "Reduce length mismatch or add common-mode filtering (CM choke) at the connector.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-002",
+          "severity": "error",
+          "summary": "Ethernet skew-induced CM radiation risk",
+          "recommendation": "Reduce length mismatch or add common-mode filtering (CM choke) at the connector.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-002",
+          "severity": "error",
+          "summary": "Ethernet skew-induced CM radiation risk",
+          "recommendation": "Reduce length mismatch or add common-mode filtering (CM choke) at the connector.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-003",
+          "severity": "error",
+          "summary": "differential diff pair changes layers",
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-003",
+          "severity": "error",
+          "summary": "differential diff pair changes layers",
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-003",
+          "severity": "error",
+          "summary": "differential diff pair changes layers",
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-003",
+          "severity": "error",
+          "summary": "differential diff pair changes layers",
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-003",
+          "severity": "error",
+          "summary": "differential diff pair changes layers",
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-003",
+          "severity": "error",
+          "summary": "Ethernet diff pair changes layers",
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-003",
+          "severity": "error",
+          "summary": "Ethernet diff pair changes layers",
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-003",
+          "severity": "error",
+          "summary": "Ethernet diff pair changes layers",
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-003",
+          "severity": "error",
+          "summary": "Ethernet diff pair changes layers",
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-003",
+          "severity": "error",
+          "summary": "Ethernet diff pair changes layers",
+          "recommendation": "Add ground stitching vias within 2\u00d7 dielectric height of each signal via. Preferably route diff pairs on a single layer to avoid layer transitions entirely.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "GP-005",
+          "severity": "warning",
+          "summary": "6 ground domains detected",
+          "recommendation": "Verify ground domains connect at a single, intentional point (typically near the ADC for analog/digital split). Ensure no signal traces cross the domain boundary.",
+          "category": "ground_plane"
+        },
+        {
+          "rule_id": "CK-001",
+          "severity": "warning",
+          "summary": "Clock SPI0_CLK on outer layer",
+          "recommendation": "Route clock signals on inner layers (stripline) when possible.",
+          "category": "clock_routing"
+        },
+        {
+          "rule_id": "CK-001",
+          "severity": "warning",
+          "summary": "Clock RMII2_REF_CLK on outer layer",
+          "recommendation": "Route clock signals on inner layers (stripline) when possible.",
+          "category": "clock_routing"
+        },
+        {
+          "rule_id": "CK-001",
+          "severity": "warning",
+          "summary": "Clock M1553_MCLK on outer layer",
+          "recommendation": "Route clock signals on inner layers (stripline) when possible.",
+          "category": "clock_routing"
+        },
+        {
+          "rule_id": "DP-001",
+          "severity": "warning",
+          "summary": "differential diff pair skew approaching limit",
+          "recommendation": "Match trace lengths to within 25 ps (4.6mm). Use length-matched serpentine routing.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-001",
+          "severity": "warning",
+          "summary": "Ethernet diff pair skew approaching limit",
+          "recommendation": "Match trace lengths to within 25 ps (4.6mm). Use length-matched serpentine routing.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "differential diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "differential diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "differential diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "differential diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "differential diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "Ethernet diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "Ethernet diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "Ethernet diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "Ethernet diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "USB diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "USB diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "USB diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "USB diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "Ethernet diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "USB diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        },
+        {
+          "rule_id": "DP-004",
+          "severity": "warning",
+          "summary": "USB diff pair on outer layer",
+          "recommendation": "Route differential pairs on inner stripline layers when possible for reduced EMI.",
+          "category": "diff_pair"
+        }
+      ]
+    },
+    "manager": {
+      "risk_level": "high",
+      "blocker_count": 16,
+      "warning_count": 22,
+      "stage_readiness": {
+        "schematic": "pass",
+        "layout": "needs_work",
+        "pre_fab": "pass",
+        "bring_up": "pass"
+      },
+      "one_liner": "16 errors, 22 warnings across 3 categories. Layout stage has blockers."
+    }
+  },
+  "trust_summary": {
+    "total_findings": 45,
+    "trust_level": "high",
+    "by_confidence": {
+      "deterministic": 36,
+      "heuristic": 6,
+      "datasheet-backed": 3
+    },
+    "by_evidence_source": {
+      "datasheet": 0,
+      "topology": 39,
+      "heuristic_rule": 6,
+      "symbol_footprint": 0,
+      "bom": 0,
+      "geometry": 0,
+      "api_lookup": 0
+    },
+    "provenance_coverage_pct": 0.0
+  }
+}

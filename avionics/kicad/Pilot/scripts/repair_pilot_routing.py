@@ -33,8 +33,10 @@ import sys
 import tempfile
 from pathlib import Path
 
-# Placement fixes: reference -> (new x mm or None, new y mm or None).
-MOVES = {"J-ETH-RMII2": (172.7, None), "C-P2-A3": (166.9, None)}
+# Placement fixes: reference -> (new x mm or None, new y mm or None).  The 2026-10-09
+# entries (J-ETH-RMII2 x 172.7, C-P2-A3 x 166.9) were retired 2026-10-19: refloorplan_pilot.py
+# now fixes J-ETH-RMII2's pose and C-P2-A3 left the netlist (item 1 above is historical).
+MOVES: "dict[str, tuple]" = {}
 # DRC types whose track/via items are ripped up.
 RIP_TYPES = {"hole_to_hole", "track_width", "connection_width", "clearance", "hole_clearance",
              "shorting_items", "tracks_crossing", "annular_width", "drill_out_of_range",
@@ -53,7 +55,10 @@ def move_footprints(text: str) -> str:
     """Rewrite the footprint-level (at x y [rot]) of each MOVES reference."""
     for ref, (nx, ny) in MOVES.items():
         tag = f'(property "Reference" "{ref}"'
-        i = text.index(tag)
+        i = text.find(tag)
+        if i < 0:
+            print(f"{ref}: not on the board, move skipped")
+            continue
         fp = text.rfind("\n\t(footprint ", 0, i)
         m = re.compile(r"\n\t\t\(at ([-\d.]+) ([-\d.]+)((?: [-\d.]+)?)\)").search(text, fp)
         assert m is not None, f"{ref}: footprint block has no (at x y) line"
@@ -115,6 +120,17 @@ def rip_set(report: dict) -> set:
     return doomed
 
 
+def refill(pcb: Path) -> None:
+    """Refill every zone in a child /usr/bin/python3 process (kicad-cli 9.0.2 has no
+    refill, and in-process pcbnew is unsafe here, PCBNEW_SWIG_BUG.md).  Without it a
+    plane via or stub that only reaches an unfilled zone reads as dangling and gets
+    ripped, segment by segment (2026-10-19: this undid most plane fan-out vias)."""
+    code = ("import pcbnew, sys; b = pcbnew.LoadBoard(sys.argv[1]); "
+            "pcbnew.ZONE_FILLER(b).Fill(b.Zones()); pcbnew.SaveBoard(sys.argv[1], b)")
+    subprocess.run(["/usr/bin/python3", "-c", code, str(pcb)], check=True,
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
 def main() -> None:
     if len(sys.argv) not in (2, 3):
         sys.exit(__doc__)
@@ -123,6 +139,8 @@ def main() -> None:
     text, n = drop(text, odd_vias(text))
     print("non-through / undersized vias removed:", n)
     pcb.write_text(text)
+    # ripping never moves a zone, so one fill before the loop keeps plane copper valid
+    refill(pcb)
     # dangling chains shrink one segment per DRC round, so long orphaned runs (the
     # 2026-10-17 keep-copper re-floorplan) need many rounds; a round costs ~2 s
     for rnd in range(1, int(sys.argv[2]) + 1 if len(sys.argv) > 2 else 30):

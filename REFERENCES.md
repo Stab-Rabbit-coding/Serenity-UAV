@@ -136,6 +136,8 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
 - [Part XII-B — Connector Specifications](#part-xii-b--connector-specifications)
     - [REF-CONN-001: Samtec TSM series — 0.100in surface-mount terminal strip product data](#ref-conn-001-samtec-tsm-series--0100in-surface-mount-terminal-strip-product-data)
     - [REF-CONN-002: Pixhawk DS-009 — Pixhawk Connector Standard](#ref-conn-002-pixhawk-ds-009--pixhawk-connector-standard)
+    - [REF-CONN-003: JST GH series — 1.25 mm pitch wire-to-board connector (eGH)](#ref-conn-003-jst-gh-series--125-mm-pitch-wire-to-board-connector-egh)
+    - [REF-FAB-001: Sunstone Circuits (ASC Sunstone) — PCB fabrication capabilities and PCB Data Checklist](#ref-fab-001-sunstone-circuits-asc-sunstone--pcb-fabrication-capabilities-and-pcb-data-checklist)
     - [REF-SENSOR-041: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)](#ref-sensor-041-beagleboardorg-pocketbeagle-2--system-reference-manual-mechanical-board-and-header-dimensions)
     - [REF-SENSOR-042: Samtec SSM / SSW / TSW / TSM — .100 in socket and terminal strips (footprint, drawing, qualification)](#ref-sensor-042-samtec-ssm--ssw--tsw--tsm--100-in-socket-and-terminal-strips-footprint-drawing-qualification)
     - [REF-SENSOR-043: Murata BLM15EX331SN1 — 0402 chip ferrite bead specification JENF243A-0023M-01](#ref-sensor-043-murata-blm15ex331sn1--0402-chip-ferrite-bead-specification-jenf243a-0023m-01)
@@ -148,6 +150,16 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-050: Texas Instruments SPRUIV7C — AM62x Processors Technical Reference Manual](#ref-sensor-050-texas-instruments-spruiv7c--am62x-processors-technical-reference-manual)
     - [REF-SENSOR-051: Texas Instruments SLASEX5C — MSPM0L1105, MSPM0L1106 data sheet](#ref-sensor-051-texas-instruments-slasex5c--mspm0l1105-mspm0l1106-data-sheet)
     - [REF-SENSOR-052: Texas Instruments SLAU847F — MSPM0 L-Series 32-MHz Microcontrollers Technical Reference Manual](#ref-sensor-052-texas-instruments-slau847f--mspm0-l-series-32-mhz-microcontrollers-technical-reference-manual)
+    - [REF-SENSOR-053: Texas Instruments SLVSFW5D — ESD2CAN24-Q1 / ESD2CANFD24-Q1 / ESD2CANXL24-Q1 24 V 2-channel ESD protection diode](#ref-sensor-053-texas-instruments-slvsfw5d--esd2can24-q1--esd2canfd24-q1--esd2canxl24-q1-24-v-2-channel-esd-protection-diode)
+    - [REF-SENSOR-054: Bourns CDSOT23-SM712 — surface mount TVS diode (asymmetric 7 V / 12 V, RS-485)](#ref-sensor-054-bourns-cdsot23-sm712--surface-mount-tvs-diode-asymmetric-7-v--12-v-rs-485)
+    - [REF-SENSOR-055: Bourns SMAJ series — 400 W surface mount transient voltage suppressor diodes](#ref-sensor-055-bourns-smaj-series--400-w-surface-mount-transient-voltage-suppressor-diodes)
+    - [REF-SENSOR-056: ASIX AX88772E — USB 2.0 to 10/100 Fast Ethernet controller data sheet v1.03](#ref-sensor-056-asix-ax88772e--usb-20-to-10100-fast-ethernet-controller-data-sheet-v103)
+    - [REF-SENSOR-057: ASIX AX88772E USB2.0 to Fast Ethernet Application Design Note, Revision 1.10](#ref-sensor-057-asix-ax88772e-usb20-to-fast-ethernet-application-design-note-revision-110)
+    - [REF-SENSOR-058: ASIX AX88772E Demo Board schematic V1.01](#ref-sensor-058-asix-ax88772e-demo-board-schematic-v101)
+    - [REF-SENSOR-059: ECS Inc. ECX-32 SMD crystal data sheet](#ref-sensor-059-ecs-inc-ecx-32-smd-crystal-data-sheet)
+    - [REF-SENSOR-060: ASIX AX88772E / AX88772D demo board BOM (2025-11-28)](#ref-sensor-060-asix-ax88772e--ax88772d-demo-board-bom-2025-11-28)
+    - [REF-SENSOR-061: YAGEO (Pulse Electronics) TC1G00 PulseChip LAN transformer, TC002.C (10/25)](#ref-sensor-061-yageo-pulse-electronics-tc1g00-pulsechip-lan-transformer-tc002c-1025)
+    - [REF-SENSOR-062: Pilot passive components: YAGEO MLCC and chip resistors, Taiyo Yuden, Holy Stone, Murata data sheets](#ref-sensor-062-pilot-passive-components-yageo-mlcc-and-chip-resistors-taiyo-yuden-holy-stone-murata-data-sheets)
     - [REF-SENSOR-063: Texas Instruments ADS1231 — 24-bit ADC for bridge sensors (SBAS414D)](#ref-sensor-063-texas-instruments-ads1231--24-bit-adc-for-bridge-sensors-sbas414d)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
@@ -978,7 +990,8 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 | §5 | Classification of ESD generators | Contact discharge ±8 kV (Level 4), air discharge ±15 kV (Level 4) at all field connectors |
 | §8 | Test levels | Level 4 is the highest defined test level; selected as design target for the 500 W/m² hostile EMI environment [REF-NIST-002 §6.2.5] |
 
-**Applied to:** TVS arrays (PRTR5V0U2X) at all JST-GH field connectors on Pilot and XO;
+**Applied to:** TVS arrays at all JST-GH field connectors on Pilot (ESD2CAN24-Q1 on CAN, CDSOT23-SM712
+on RS-485 since 2026-10-18) and XO (PRTR5V0U2X, pending the fleet sourcing audit);
 shielded Flight Engineer enclosure provides ESD isolation for PDB connectors.
 
 **Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`
@@ -1024,8 +1037,9 @@ shielded Flight Engineer enclosure provides ESD isolation for PDB connectors.
 | Annex A | Combination wave generator | Defines the 1.2/50 µs (voltage) / 8/20 µs (current) surge waveform |
 
 **Applied to:** ADM2795EBRWZ RS-485 transceiver (rated ±42 V bus fault — exceeds IEC 61000-4-5
-Level 3 ±2 kV CM surge on bus); SMBJ33CA TVS (D1) on Flight Engineer VBAT line; PRTR5V0U2X TVS
-arrays at field connectors on Pilot and XO.
+Level 3 ±2 kV CM surge on bus); SMBJ33CA TVS (D1) on Flight Engineer VBAT line; TVS arrays at
+field connectors on Pilot (ESD2CAN24-Q1 / CDSOT23-SM712, both rated to IEC 61000-4-5 surge per
+REF-SENSOR-053 / REF-SENSOR-054) and XO (PRTR5V0U2X).
 
 **Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`
 
@@ -2809,7 +2823,8 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Official access** | <https://www.wch.cn/downloads/CH397DS1_PDF.html> (WCH's page renders the download through JavaScript and could not be fetched by script, 2026-10-17); copy retrieved from WCH's distributor LCSC: <https://atta.szlcsc.com/upload/public/pdf/source/20240813/7579B736A93AD62F1FA2079FDA525BA1.pdf> (HTTP 200) — re-download from wch.cn and compare before fabrication |
 | **Local copy** | `avionics/datasheets/wch/WCH_CH397_datasheet_V1.2.pdf` (MD5 380b7f0ec12b25f124630525670b3209) |
 | **Section applied** | Fig. 1-1 / Table 1-3 CH397A QFN24 pinout (no RSTB; NC 12/16/19/20; EP = GND); sec 3.1 (25 MHz XI: crystal or external clock; internal POR); sec 3.2 (default CDC-ECM firmware); sec 3.3 (internal 50 ohm MDI termination); sec 3.7 + sec 6.1 (supply and decoupling; V5 and AVDD33 on 3.3 V for industrial use; transformer centre taps to GND through capacitors, no supply); sec 4.1 (TA -40..85 C at V5 = AVDD33 = 3.3 V); sec 5.1 QFN24 4 x 4 mm, 0.5 mm pitch, 2.8 mm EP |
-| **Cited in** | Pilot `ETH2-USB` and its support parts (`gen_pilot_sch.py`) |
+| **Cited in** | Formerly Pilot `NIC-USB1` (`ETH2-USB` before 2026-10-17) and its support parts. Removed from Pilot 2026-10-18, replaced by the ASIX AX88772E (REF-SENSOR-056) |
+| **Openness / sourcing** | FAILS AGENTS.md §5: WCH (Nanjing Qinheng Microelectronics) is PRC-domiciled. Kept here only as the record of the rejected candidate |
 | **Note** | Contains a RISC-V core running vendor firmware on the network path (supply-chain / security review item, avionics/WBS.md) |
 
 ### REF-SENSOR-049: Texas Instruments SPRSP58C — AM62x Sitara Processors data sheet
@@ -2856,6 +2871,117 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Cited in** | `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` §6 |
 | **Openness / sourcing** | Public, no NDA. TI is US-domiciled. |
 
+### REF-SENSOR-053: Texas Instruments SLVSFW5D — ESD2CAN24-Q1 / ESD2CANFD24-Q1 / ESD2CANXL24-Q1 24 V 2-channel ESD protection diode
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | Texas Instruments, SLVSFW5D (April 2022, revised March 2026) |
+| **Official access** | <https://www.ti.com/lit/ds/symlink/esd2can24-q1.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/ESD2CANxx24-Q1_SLVSFW5D.pdf` (MD5 0acd622da485487c1761daa7c86ba84a) |
+| **Section applied** | Fig. 4-1 / Table 4-1 pin functions (IO 1, 2; GND 3; DBZ and DCK identical); §5.7 Electrical Characteristics (VRWM ±24 V, VBR 25.5 V min, VCLAMP 37 V at 5.7 A 8/20 µs for ESD2CAN24-Q1); §6.3.4 IO capacitance 3 pF typical, data rate up to 10 Mbps; Packaging Information (ESD2CAN24DCKRQ1, SC70 DCK, −55 °C to 150 °C) |
+| **Cited in** | Pilot `TVS-CAN` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py`, `avionics/kicad/Pilot/Pilot.md` update 2026-10-18) |
+| **Openness / sourcing** | Public, no NDA. TI is US-domiciled. |
+
+### REF-SENSOR-054: Bourns CDSOT23-SM712 — surface mount TVS diode (asymmetric 7 V / 12 V, RS-485)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | Bourns, Inc., CDSOT23-SM712 data sheet (REV. 06/24) |
+| **Official access** | <https://www.bourns.com/docs/Product-Datasheets/CDSOT23-SM712.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/Bourns_CDSOT23-SM712.pdf` (MD5 129fc9f976111703cf731b109c6434b8) |
+| **Section applied** | p. 1 internal circuit (lines on pins 1, 2; common pin 3); Electrical Characteristics (VWM 7.0 V pins 3-1 / 3-2 and 12.0 V pins 1-3 / 2-3; VC 11 V / 19 V at 1 A; CD 75 pF typical; IEC 61000-4-2 ±8 kV contact min.); Absolute Maximum Ratings (PPK 400 W, IPP 17 A, 8/20 µs); How to Order |
+| **Cited in** | Pilot `TVS-RS485` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py`, `avionics/kicad/Pilot/Pilot.md` update 2026-10-18) |
+| **Openness / sourcing** | Public, no NDA. Bourns, Inc. is US-domiciled (Riverside, California). |
+
+### REF-SENSOR-055: Bourns SMAJ series — 400 W surface mount transient voltage suppressor diodes
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | Bourns, Inc., SMAJ Transient Voltage Suppressor Diode Series data sheet (REV. 09/20) |
+| **Official access** | <https://www.bourns.com/docs/Product-Datasheets/smaj.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/Bourns_SMAJ.pdf` (MD5 c596481475b507b3cc19c43438710252) |
+| **Section applied** | Electrical Characteristics row SMAJ33CA (VBR 36.7 V to 40.6 V, VRWM 33 V, VC 53.3 V at IPP 7.5 A 10/1000 µs); How to Order ("CA" = 5 % bidirectional, no suffix = 13 in reel); DO-214AC (SMA) package |
+| **Cited in** | Pilot `TVS-1553P`, `TVS-1553N` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py`) |
+| **Openness / sourcing** | Public, no NDA. Bourns, Inc. is US-domiciled. Names the compliant manufacturer for the generic SMAJ33CA (AGENTS.md §5). The older `avionics/datasheets/smaj-series-tvs-datasheet.pdf` names no manufacturer (PDF author field "可靠性实验室", "reliability laboratory") and does not satisfy the rule |
+
+### REF-SENSOR-056: ASIX AX88772E — USB 2.0 to 10/100 Fast Ethernet controller data sheet v1.03
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, AX88772E data sheet, Document No. AX88772E/V1.03/09/23/26 |
+| **Official access** | Product page <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); the PDF is behind the free MyASIX registration (owner-downloaded) |
+| **Local copy** | `avionics/datasheets/AX88772E_Datasheet_v103.pdf` (owner-supplied, MD5 3f5b6da32a9b2e9716e8298d467459aa) |
+| **Section applied** | §1.3 pinout (32-pin QFN, 4 x 4 mm, E-PAD); §1.4 signal description (RSET 24 kΩ 1 %, VBUS pin 6 is a 3.3 V input, PU pin 7 to 3.3 V, LX pin 12 drives the on-die 1.1 V buck's external inductor); §5.1.2 recommended operating conditions; §5.2 power (25 mA at 1.1 V, 35.3 mA at 3.3 V full load); §5.4 power-up sequence; §6 recommended footprint (0.40 mm pitch); §7 ordering (AX88772EQF only, 0 °C to +70 °C) |
+| **Cited in** | Pilot `NIC-USB1` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py` `ax88772e()`, 2026-10-18); land `QFN-32-1EP_4x4mm_P0.4mm_EP2.9x2.9mm` checked against §6; `avionics/kicad/Pilot/Pilot.md` |
+| **Openness / sourcing** | No confidentiality or NDA marking (copyright notice only), checked 2026-10-17. Free MyASIX registration wall, acceptable under AGENTS.md §5. ASIX is Taiwan-domiciled (Hsinchu) |
+
+### REF-SENSOR-057: ASIX AX88772E USB2.0 to Fast Ethernet Application Design Note, Revision 1.10
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, *AX88772E USB2.0 to Fast Ethernet Application Design Note*, Revision 1.10 (September 30, 2026) |
+| **Official access** | Listed on the product page <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); download behind the free MyASIX registration (owner-downloaded 2026-10-18) |
+| **Local copy** | `avionics/datasheets/AX88772E_Application_DesignNote_v110.pdf` (MD5 c967893114b9af31f6a998b6f4c1bb3b) |
+| **Section applied** | §4 VBUS pin (3.3 V input; on-board designs connect it to a host-controllable GPIO); §5 crystal (reference NXK20.000AC20F-BK4: 20 MHz, CL 20 pF, ±30 ppm, ESR 100 Ω max., 10 µW; note 2: no external oscillator source); §8 items 5 and 8 (a decoupling capacitor per power pin; regulator input trace > 40 mil, output > 20 mil); §9 USB layout (90 Ω differential); §10 MDI layout (100 Ω differential); §13 ESD |
+| **Cited in** | Pilot `NIC-USB1` support block, `Y-USB1` (`gen_pilot_sch.py`); `avionics/kicad/Pilot/Pilot.md` update 2026-10-18; `avionics/WBS.md` §1.2a Pilot |
+| **Openness / sourcing** | No confidentiality or NDA marking (copyright notice only), checked 2026-10-18. Free registration wall, acceptable under AGENTS.md §5 |
+
+### REF-SENSOR-058: ASIX AX88772E Demo Board schematic V1.01
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, *AX88772E Demo Board* schematic, Rev V1.01 (September 30, 2026), 3 sheets |
+| **Official access** | Listed on the product page as "Reference Schematic (Demo Board)" <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); download behind the free MyASIX registration (owner-downloaded 2026-10-18 as `AX88772E_DEMO_BOARD_SCHEMATIC_V101.zip`, MD5 1d6ca492f7a0f866333a3a2e86768911, which also holds the OrCAD `.DSN`) |
+| **Local copy** | `avionics/datasheets/AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf` (extracted from the zip, MD5 73fe544a2319557fa0abde9a15851413) |
+| **Section applied** | Sheet 2: power tree (pin 13 AVDD33_BUCK on DVDD_33 with C5 4.7 µF + C6 0.1 µF at the pin; pin 14 to GND; LX pin 12 -> L1 2.2 µH -> DVDD11 with C2 10 µF + C3 0.1 µF; DVDD11 pins 4/10/11/22 with 0.1 µF each; bead L4 -> AVDD11 pin 32 with 10 µF + 2 x 0.1 µF; bead L5 -> AVDD_33 pins 1/25/29 with 4.7 µF + 4 x 0.1 µF; DVDD_33 pins 5/18 with 2 x 0.1 µF); crystal (C11/C12 15 pF, R7 200 Ω in XTAL_OUT); RSET R20 24 kΩ 1 %; VBUS R4 4.7 kΩ to DVDD_33; PME/GPIO8 and PU 4.7 kΩ pull-ups; LED_0/LED_1 4.7 kΩ pull-ups; transformer centre taps 0.1 µF to GND; notes 2-1 to 2-14. Part numbers for L1, L4, L5 are not given here; see the demo BOM (REF-SENSOR-060) |
+| **Cited in** | Pilot `NIC-USB1` and every `C-USB1-*` / `R-USB1-*` / `L-USB1` / `FB-USB1-*` / `Y-USB1` support part (`gen_pilot_sch.py`, demo designators in each part's description); `avionics/kicad/Pilot/Pilot.md` update 2026-10-18 |
+| **Openness / sourcing** | No confidentiality or NDA marking, checked 2026-10-18. Free registration wall, acceptable under AGENTS.md §5 |
+
+### REF-SENSOR-059: ECS Inc. ECX-32 SMD crystal data sheet
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ECS Inc. International (Lenexa, Kansas), ECX-32 SMD Crystal data sheet (Rev. 2017) |
+| **Official access** | <https://ecsxtal.com/store/pdf/ECX-32.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/ECS_ECX-32.pdf` (MD5 401b18c1bfb0b440c1a6ef9d7723762d) |
+| **Section applied** | Electrical characteristics (fundamental mode, 10 to 54 MHz, load capacitance specified in P/N, drive level 100 µW max, aging ±5 ppm first year); ESR table (20.000 to 23.999 MHz: 60 Ω max); pad connections (1 In/Out, 2 GND, 3 Out/In, 4 GND); part numbering guide (ECS-200-20-33-AGM-TR = 20 MHz, CL 20 pF, A = ±25 ppm tolerance, G = ±30 ppm stability, M = -20 to +70 °C, tape and reel); 3.2 x 2.5 mm package |
+| **Cited in** | Pilot `Y-USB1` (`gen_pilot_sch.py`) |
+| **Openness / sourcing** | Public, no NDA. ECS Inc. is US-domiciled. Option-code availability (AGM) to be confirmed with a distributor before ordering |
+
+### REF-SENSOR-060: ASIX AX88772E / AX88772D demo board BOM (2025-11-28)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, `AX88772E_AX88772D_DEMO_BORAD_BOM_20251128` (reference schematic V2.01 BOM; ASIX's spelling of the file name) |
+| **Official access** | Listed on the product page as "Demo Board BOM" <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); owner-downloaded 2026-10-18 as a zip (MD5 f5b95480be78e00e926472b10df6baca) |
+| **Local copy** | `avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx` (extracted from the zip, MD5 4b23301c931db152df277b4a3554848d) |
+| **Section applied** | Items 2-11, 13, 15, 17 and 25: C11/C12 15 pF; 0.1 µF / 4.7 µF / 10 µF decoupling; L1 Darfon IP20162R2MP59 2.2 µH (2016); L4/L5 Chilisin PBY160808T-110Y-N bead; R7 200 Ω; 4.7 kΩ pull-ups; R20 24 kΩ 1 %; Y1 "NSK 20M CRYSTAL" (no part number) |
+| **Cited in** | `gen_pilot_sch.py` AX88772E support block comment; `avionics/kicad/Pilot/Pilot.md` update 2026-10-18 |
+| **Openness / sourcing** | No confidentiality marking. The BOM's own MPNs are not adopted where their maker or data sheet could not be verified (beads, crystal); the inductor MPN is open (avionics/WBS.md) |
+
+### REF-SENSOR-061: YAGEO (Pulse Electronics) TC1G00 PulseChip LAN transformer, TC002.C (10/25)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | YAGEO Group (Pulse Electronics), PulseChip LAN Transformer Overview, TC002.C (10/25) |
+| **Official access** | <https://yageogroup.com/content/datasheet/asset/file/DATASHEET_TC002> (HTTP 200, 2026-10-19) |
+| **Local copy** | `avionics/datasheets/Pulse_TC002_PulseChip.pdf` (MD5 d5be87a985f572a53d89cfc2cf935cd5) |
+| **Section applied** | p. 1 electrical table, row TC1G00 (240 uH min at 100 kHz / 0.1 V, 1CT:1CT, 1500 Vac isolation for 60 s at 1 mA max, -40 to +85 C); p. 2 Fig. A mechanical drawing, recommended footprint 1, schematic and pad numbering (winding 2-(8/7)-1 and 5-(3/4)-6, centre taps shorted on the PCB) |
+| **Cited in** | Pilot `T-RMII2-TX/-RX`, `T-USB1-TX/-RX` (`gen_pilot_sch.py`); land `Pulse_TC1G00_PulseChip_4.7x3.2mm` (`gen_pilot_footprints.py`) |
+| **Note** | The datasheet characterises the part for 1000BASE-T and faster. 10/100 suitability and the footprint transcription need engineer-of-record confirmation (avionics/WBS.md) |
+| **Openness / sourcing** | Public, no NDA. YAGEO is Taiwan-domiciled |
+
+### REF-SENSOR-062: Pilot passive components: YAGEO MLCC and chip resistors, Taiyo Yuden, Holy Stone, Murata data sheets
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | YAGEO (UPY-GPHC X7R 6.3 V to 250 V; UPY-GPHC X5R 4 V to 50 V; PYU-RC Group 51 RoHS L and P; CC0402JRNPO9BN150 spec sheet), Taiyo Yuden (LMK325BJ476KMHP spec sheet), Holy Stone Enterprise (HVC series), Murata (DFE201610P) |
+| **Official access** | <https://yageogroup.com/content/datasheet/asset/file/UPY-GPHC_X7R_6_3V-TO-250V>, <https://yageogroup.com/content/datasheet/asset/file/UPY-GPHC_X5R_4V-TO-50V>, <https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L>, <https://yageogroup.com/content/datasheet/asset/file/PYU-RC_51_ROHS_P>, <https://yageogroup.com/download/specsheet/CC0402JRNPO9BN150>, <https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2092/LMK325BJ476KMHP_SS.pdf> (DigiKey-hosted Taiyo Yuden sheet), <http://www.holystonecaps.com/PDF/201612051329150.2017%20HVC%20Series.pdf>, <https://www.murata.com/~/media/webrenewal/products/inductor/chip/tokoproducts/wirewoundmetalalloychiptype/m_dfe201610p.ashx> (all HTTP 200, 2026-10-20; the links were returned by DigiKey's product API) |
+| **Local copy** | `avionics/datasheets/YAGEO_UPY-GPHC_X7R_6.3V-250V.pdf` (MD5 4ef16ad8ea5fa92e2c12af1f0c474c8f), `YAGEO_UPY-GPHC_X5R_4V-50V.pdf` (6f0fe5dfd6f124e0139376455e6b8904), `YAGEO_PYU-RC_GROUP_51_ROHS_L.pdf` (65fe4dad692770fee2ad5de035d3230b), `YAGEO_PYU-RC_51_ROHS_P.pdf` (726173b220bb313ae6cd9f43610caff9), `YAGEO_CC0402JRNPO9BN150.pdf` (c6e4e402ed86f021939dfb5d91b6c2d9), `TaiyoYuden_LMK325BJ476KMHP_SS.pdf` (8e227b928320dca591074cc2741c9b16), `HolyStone_HVC_Series.pdf` (5e203c4ebf9ef0b2876326b2075de10f), `Murata_DFE201610P.pdf` (0d1a4bffcfa3bd7c4c0530f9a6a7c9d7) |
+| **Section applied** | Part numbers and ratings used for the 25 formerly unnumbered BOM lines in `gen_pilot_sch.py` `PASSIVE_MPN`. Murata DFE201610P-2R2M=P2: 2.2 uH +/-20 %, 168 mOhm max DCR, 2.0 A at 30 % inductance drop, 1.4 A for a 40 C rise (the sheet's own definitions); recommended land 2.0 mm span, 0.9 mm gap, 1.6 mm pad height, which matches the KiCad `L_Murata_DFE201610P` pads (0.55 x 1.6 mm at +/-0.725 mm), checked 2026-10-20. Taiyo Yuden LMK325BJ476KMHP: 47 uF +/-10 %, 10 V, X5R, 1210. Holy Stone C1808X103K202T: 10 nF, 2 kV, X7R, 1808 |
+| **Cited in** | `avionics/kicad/Pilot/scripts/gen_pilot_sch.py`, `avionics/kicad/Pilot/docs/Pilot-BOM.csv` |
+| **Note** | Availability and status read from DigiKey's product API on 2026-10-20. Holy Stone is Taiwan-domiciled by the maker's published address (to be re-verified against the owner's sourcing rule at order time). DC-bias derating has been checked only for the 22 uF parts (REF-PWR-011); the 4.7, 10 and 47 uF X5R parts are not yet derated (Pilot-Design-Review.md) |
+| **Openness / sourcing** | Public data sheets, no NDA. YAGEO (Taiwan), Taiyo Yuden and Murata (Japan) |
 ### REF-SENSOR-063: Texas Instruments ADS1231 — 24-bit ADC for bridge sensors (SBAS414D)
 
 | Field | Value |
@@ -2957,7 +3083,8 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Official access** | <https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf> |
 | **URL status** | validated 2026-09-26 |
 | **Section applied** | Table 2 pinning (SOT143B: 1 GND, 2 I/O1, 3 I/O2, 4 VCC); Sec. 11 outline |
-| **Cited in** | Pilot, TACCO, Flight Engineer, Commo, Observer; SecureControllers library |
+| **Cited in** | TACCO, Flight Engineer, Commo, Observer; SecureControllers library. Removed from Pilot 2026-10-18 (replaced by REF-SENSOR-053 / REF-SENSOR-054) |
+| **Openness / sourcing** | FAILS AGENTS.md §5: Nexperia is owned by PRC-domiciled Wingtech Technology. Replace on the remaining boards (avionics/WBS.md fleet sourcing audit) |
 
 ### REF-SENSOR-040: Texas Instruments BQ76930 — 6-10 cell battery monitor AFE data sheet
 
@@ -3143,6 +3270,29 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Local copy** | none: the licence ties redistribution and implementation to an adopter agreement, so the document is cited, not archived |
 | **Section applied** | "Connector Series" (JST GH); "Basic GPS port" 6-pin (VCC, TX, RX, I2C1 SCL, I2C1 SDA, GND); "SPI port" 7-pin (VCC, SPI_EXT_SCK, SPI_EXT_MISO, SPI_EXT_MOSI, !SPI_SS1, !SPI_SS2, GND); "I2C port" 1.5 k pull-ups on the autopilot side; VCC 2.5 A recommendation (NOT met: 0.35 A PTC per port, recorded deviation) |
 | **Cited in** | Pilot `J-GPS`, `J-SPI` (`gen_pilot_sch.py`). Pilot is pin-compatible only and does not use the Pixhawk trademark. |
+
+### REF-CONN-003: JST GH series — 1.25 mm pitch wire-to-board connector (eGH)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | J.S.T. Mfg. Co., Ltd., GH series catalogue sheet |
+| **Official access** | requires verification: <https://www.jst-mfg.com/product/pdf/eng/eGH.pdf> returned HTTP 403 to a scripted request on 2026-10-19, so the URL is not validated |
+| **Local copy** | `avionics/datasheets/eGH.pdf` (MD5 e6714f681357e4fed90fc40166d59701) |
+| **Section applied** | Ratings: 1.0 A AC/DC (AWG 26), 50 V AC/DC, -25 to +85 C including temperature rise, conductor AWG 30 to 26, 1.25 mm pitch |
+| **Cited in** | `avionics/kicad/Pilot/docs/Pilot-ICD-External.md` |
+| **Openness / sourcing** | Public catalogue sheet, no NDA. JST is Japan-domiciled |
+
+### REF-FAB-001: Sunstone Circuits (ASC Sunstone) — PCB fabrication capabilities and PCB Data Checklist
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | American Standard Circuits / Sunstone Circuits (Sunstone Circuits, an AS9100D / ISO 9001 / ITAR-registered US fabricator) |
+| **Official access** | <https://www.sunstone.com/capabilities> and <https://www.sunstone.com/resources/pcb-order-checklist> (HTTP 200, 2026-10-19). The checklist PDF is <https://qa-api.sunstone.com/uploads/PCB_Data_Checklist_2026_1f61edfc31.pdf> (HTTP 200, 2026-10-19; a "qa-api" host, so confirm it against the live page link before relying on it) |
+| **Local copy** | none: no redistribution licence is stated, so the checklist is cited, not archived (MD5 of the 2026-10-19 download: see `shasum` of `PCB_Data_Checklist_2026_1f61edfc31.pdf`, 179 628 bytes) |
+| **Section applied** | PCB Data Checklist (Gerber package, NC drill, board specifications, fabrication drawing, finish, special requirements, defaults: 150Tg FR-4, IPC-6012 Class 2, IPC-A-600 Class 2, satin green mask, white legend); capabilities page: layer counts 4 to 20 (6 is standard), copper 1 / 2 / 3 oz finished, board thickness 0.021 to 0.125 in |
+| **Not verified** | Outer-layer trace/space, minimum drill, annular ring, copper-to-edge and surface-finish limits: the detailed-capabilities tabs are loaded by script and were not retrievable. Inner-layer minimum trace/space by tier is verified (Limited Review 0.005 in; Online NRE 0.004 / 0.004 in at 1 oz; Custom 0.003 / 0.003 in at 1 oz) |
+| **Cited in** | `avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md` |
+| **Openness / sourcing** | US-domiciled fabricator, public pages, no NDA |
 
 ## Part XIII — Telecommunications Standards
 

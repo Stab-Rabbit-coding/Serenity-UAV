@@ -66,6 +66,34 @@ Lineage
   Reason: two ISOW §13.1 4 mm metal-free bubbles [REF-SENSOR-009/010] do not
   fit the 55 x 35 mm cape with the GPS aboard.  The same pass adds the §13.1
   ferrite beads and splits the DC-DC output nets (see FB-CAN-* / FB-485-*).
+* 2026-10-18 (Claude Opus 5.5; owner decisions S. Griffing 2026-10-17):
+    - One JST-GH expansion port only (no second board-edge site): J-SPI becomes
+      a 6-pin SM06B-GHS-TB (5V, SCK, MISO, MOSI, SS1, GND on the SPI2 pins; the
+      same pins also mux to UART1 / UART6).  J-GPS, its PTC / bypass / I2C
+      pull-ups / ESD array and the SS2 line are removed; P1-31/33/36 and
+      P2-2/4 become spare.
+    - Sourcing rule (AGENTS.md §5): the Nexperia PRTR5V0U2X (Nexperia is owned
+      by PRC-domiciled Wingtech) at the CAN and RS-485 field connectors is
+      replaced.  It was also the wrong clamp: a 5 V rail-referenced array holds
+      the bus inside 0..5 V, far narrower than the ISOW1044 receiver's +/-12 V and
+      the RS-485 -7..+12 V common-mode ranges.  Each TVS row now carries a
+      ``Manufacturer`` property (new optional ``mfr`` flag).  CAN: TI
+      ESD2CAN24-Q1, SC-70 (+/-24 V VRWM, 3 pF; the ISOW1044 bus pins are rated
+      +/-58 V) [REF-SENSOR-053].  RS-485: Bourns
+      CDSOT23-SM712 (-7 / +12 V VWM, the RS-485 common-mode range; the
+      ISOW1412 bus pins are rated -12..+15 V) [REF-SENSOR-054].  The 1553
+      SMAJ33CA now names a compliant manufacturer, Bourns [REF-SENSOR-055].
+    - USB1 ring-leg NIC: WCH CH397A (PRC, AGENTS.md §5) -> ASIX AX88772E
+      [REF-SENSOR-056], built to the ASIX demo board V1.01 [REF-SENSOR-058] and
+      app note v1.10 [REF-SENSOR-057]: own 20 MHz ECS crystal (no external clock
+      input), on-die 1.1 V buck with a 2.2 uH inductor, two BLM15EX331 beads, per-pin
+      decoupling, RSET 24 k 1 %.  VBUS pin: 4.7 k pull-up plus P1-31 GPIO0_59 (owner).
+      X-25M now clocks only the DP83825I.
+* 2026-10-19 (Claude Opus 5.5; owner choice "smaller LAN magnetics"): each
+  749010012A WE-LAN module (146 mm^2 courtyard) becomes two YAGEO/Pulse TC1G00
+  PulseChip transformers, one per pair (1CT:1CT, 1500 Vac 60 s) [REF-SENSOR-061]:
+  T-RMII2-TX/-RX and T-USB1-TX/-RX.  Same nets, so the centre-tap caps and the
+  Bob-Smith networks are unchanged.
 
 Datasheets (all in ``avionics/datasheets/``; OEM documents are authoritative
 per ``avionics/AGENTS.md``):
@@ -76,10 +104,16 @@ per ``avionics/AGENTS.md``):
   ICM-42688-P ds-000347 Table 10 | BMP388 bst-bmp388-ds001.pdf Table 50 |
   SRF2012A SRF2012A.pdf | TPSM828224SILR tpsm82822.pdf (SLVSEP0F) Table 6-1 |
   ECS-2520MV ECS-2520MV.pdf p.1 |
-  X2Y (Yageo CX0805) X2Y_15-2237598.pdf Table 3.
+  X2Y (Yageo CX0805) X2Y_15-2237598.pdf Table 3 |
+  ESD2CAN24-Q1 ESD2CANxx24-Q1_SLVSFW5D.pdf Table 4-1 | CDSOT23-SM712 Bourns_CDSOT23-SM712.pdf p.1 |
+  SMAJ33CA Bourns_SMAJ.pdf (REV. 09/20) | TPD4E05U06 TPDxE05U06_SLVSBO7O.pdf Table 4-2 |
+  AX88772E AX88772E_Datasheet_v103.pdf, AX88772E_Application_DesignNote_v110.pdf,
+  AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf sheet 2 | ECS ECX-32 ECS_ECX-32.pdf |
+  TC1G00 Pulse_TC002_PulseChip.pdf p.1-2.
 
 Author: Claude Opus 4.8 (2026-07-14); Claude Opus 5 (2026-07-28, 2026-09-19);
-Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap; 2026-10-12, §13.1 beads + GNSS off-board).
+Claude Opus 5.5 (2026-09-28, HI-6138 1553C swap; 2026-10-12, §13.1 beads + GNSS off-board;
+2026-10-18, single GH port + compliant TVS).
 Human owner: sgriffing (Griffing Technology LLC).  License: CC BY 4.0.
 """
 
@@ -122,19 +156,24 @@ FP_TSM2X8 = "Serenity-Custom:Samtec_TSM-108-01-x-DV"
 FP_LGA14 = "Package_LGA:Bosch_LGA-14_3x2.5mm_P0.5mm"
 FP_SOT583 = "Package_TO_SOT_SMD:SOT-583-8"
 FP_SIL0010D = "Serenity-Custom:TI_SIL0010D_uSiP-10_2.0x2.5mm_P0.5mm"
-FP_SOT363 = "Package_TO_SOT_SMD:SOT-363_SC-70-6"
+FP_SOT323 = "Package_TO_SOT_SMD:SOT-323_SC-70"   # TI DCK (SC-70, 3)
+FP_SOT23 = "Package_TO_SOT_SMD:SOT-23"           # JEDEC SOT23 (Bourns CDSOT23)
 FP_OSC2520 = "Oscillator:Oscillator_SMD_ECS_2520MV-xxx-xx-4Pin_2.5x2.0mm"
 FP_GH4 = "Connector_JST:JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal"
 FP_GH6 = "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
-FP_GH7 = "Connector_JST:JST_GH_SM07B-GHS-TB_1x07-1MP_P1.25mm_Horizontal"
-FP_QFN24_4X4 = "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm"
+# AX88772E: matches the data sheet sec 6 recommended land (pads 0.22 x 0.71 mm, 2.90 mm
+# E-pad, 3.30 mm inner span) to 0.02 mm [REF-SENSOR-056]
+FP_QFN32_4X4 = "Package_DFN_QFN:QFN-32-1EP_4x4mm_P0.4mm_EP2.9x2.9mm"
+FP_XTAL3225 = "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm"   # ECS ECX-32: pads 1/3 crystal, 2/4 GND
+# 2.0 x 1.6 mm (0806) power-inductor land, placeholder until the L-USB1 MPN is chosen
+FP_L2016 = "Inductor_SMD:L_Murata_DFE201610P"
 FP_DQA10 = "Serenity-Custom:TI_DQA0010A_USON-10_2.5x1.0mm_P0.5mm"
-FP_SOD523 = "Diode_SMD:D_SOD-523"
 FP_F0805 = "Fuse:Fuse_0805_2012Metric"
 FP_HOLE = "Serenity-Custom:MountingHole_2.7mm_M2.5_PGND_Ring"
 # project-custom lands (avionics/kicad/Serenity-Custom.pretty)
 FP_SAM = "Serenity-Custom:uBlox_SAM-M10Q-00B"
-FP_WELAN = "Serenity-Custom:Wurth_749010012A_WE-LAN"
+FP_WELAN = "Serenity-Custom:Wurth_749010012A_WE-LAN"   # retired 2026-10-19 (TC1G00 chips)
+FP_TC1G00 = "Serenity-Custom:Pulse_TC1G00_PulseChip_4.7x3.2mm"
 FP_BMP388 = "Serenity-Custom:Bosch_BMP388_LGA-10_2x2mm"
 FP_X2Y0805 = "Serenity-Custom:X2Y_0805_4T"
 FP_SRF2012 = "Serenity-Custom:Bourns_SRF2012_4T"
@@ -333,93 +372,119 @@ def dp83825i(ref: str, rmii: str, rstn: str, intn: str, eth: str, mdio: str, mdc
     }
 
 
-def ch397a(ref: str, eth: str) -> Dict[str, Any]:
-    """WCH CH397A USB 2.0 to 10/100 Ethernet controller with integrated MAC + PHY,
-    QFN24 4x4 mm, built-in SPI flash (MAC address / configuration).  Owner decision
-    2026-10-17 (S. Griffing, "Option 1"): the Ethernet ring's second port runs on the
-    PB2-I's USB1 (D+/D- on P1-11/P1-9, official schematic sheets 14/16), bridged in
-    Linux with ring port 1 (DP83825I on RMII2).  Implemented by Claude Opus 5.5.
+def ax88772e(ref: str, eth: str) -> Dict[str, Any]:
+    """ASIX AX88772E USB 2.0 to 10/100 Ethernet controller with integrated MAC + PHY,
+    32-pin QFN 4 x 4 mm, 0.4 mm pitch, 2.7 mm E-pad.  Ring leg on the PB2-I's USB1
+    (D+/D- on P1-11 / P1-9), bridged in Linux with the RMII2 leg (owner 2026-10-17).
+    Replaces the CH397A (WCH is PRC-domiciled, AGENTS.md §5) on 2026-10-18; Claude
+    Opus 5.5, owner decisions S. Griffing.
 
-    Pinout: CH397 datasheet V1.2 Fig. 1-1 / Table 1-3, CH397A column [REF-SENSOR-048];
-    no RSTB pin on the CH397A (internal POR, sec 3.1.2).  Supply per sec 3.7 / sec 6.1:
-    for industrial use V5 and AVDD33 both on the 3.3 V supply (TA -40..85 C, sec 4.1);
-    XI takes "a 25 MHz crystal or an external clock input" (Table 1-3) -> the shared
-    X-25M oscillator, XO open.  50 ohm MDI termination is internal (sec 3.3, sec 6.1),
-    transformer centre taps to GND through capacitors only (sec 6.1 note on T1).
-    Firmware default CDC-ECM (sec 3.2) -> Linux cdc_ether.
+    Pinout: AX88772E data sheet v1.03 Fig. 1-2 / Tables 1-1..1-5 [REF-SENSOR-056].
+    Supply tree per the ASIX demo board V1.01 sheet 2 [REF-SENSOR-058]: DVDD33 /
+    AVDD33_BUCK on +3V3; LX (pin 12) drives the on-die 1.1 V buck through an external
+    2.2 uH inductor to the DVDD11 pins; AVDD11_GBE behind a bead from DVDD11; the 3.3 V
+    analog pins (AVDD33_USB / _XTAL / _GBE) behind a bead from +3V3.
+    Clock: own 20 MHz crystal.  The part "does not support external oscillator clock
+    source" (app note §5 note 2 [REF-SENSOR-057]), so it cannot share X-25M.
+    MDI0 = transmit pair and MDI1 = receive pair, as wired to the RJ-45 TX/RX pins on the
+    demo board (auto-MDIX is supported either way).  Device-side centre taps go to GND
+    through 0.1 uF only (demo C4 / C7).
+    VBUS (pin 6) is a 3.3 V attach/detach sense input (app note §4).  Owner 2026-10-18:
+    4.7 k pull-up to +3V3 (demo R4) so the NIC attaches with no firmware, plus PB2-I
+    GPIO P1-31 (GPIO0_59) on the same net so Linux can pull it low to force a USB
+    detach / re-attach.  RST_N (internal pull-up + on-chip POR) and GPIO2/3/4 (no SPI
+    flash or I2C EEPROM fitted) are left open, as on the demo board's default fit.
+    LED_0 / LED_1 are left open (no LEDs on the cape).  The demo's LED pull-ups only
+    serve its RJ-45 LEDs.
     """
     return {
         "ref": ref,
-        "value": "CH397A",
-        "fp": FP_QFN24_4X4,
-        "mpn": "CH397A",
-        "ds": "CH397 datasheet V1.2 Table 1-3 / Fig. 1-1 (CH397A QFN24) [REF-SENSOR-048]",
+        "value": "AX88772EQF",
+        "fp": FP_QFN32_4X4,
+        "mpn": "AX88772EQF",
+        "ds": "AX88772E data sheet v1.03 Tables 1-1..1-5 (QFN-32 4x4) [REF-SENSOR-056]",
         "pins": [
-            ("8", "UDP", "USB1_DP", "L"),
-            ("7", "UDM", "USB1_DM", "L"),
-            ("21", "XI", "XI_25M", "L"),
-            ("22", "XO", None, "L"),
-            ("15", "LED0", None, "L"),
-            ("17", "LED1", None, "L"),
-            ("14", "GPIO6", None, "L"),
-            ("12", "NC", None, "L"),
-            ("16", "NC", None, "L"),
-            ("19", "NC", None, "L"),
-            ("20", "NC", None, "L"),
-            ("2", "MDITP", f"{eth}_TXP", "R"),
-            ("3", "MDITN", f"{eth}_TXN", "R"),
-            ("4", "MDIRP", f"{eth}_RXP", "R"),
-            ("5", "MDIRN", f"{eth}_RXN", "R"),
-            ("11", "V5", "+3V3", "R"),
-            ("10", "AVDD33", "+3V3", "R"),
-            ("1", "AVDD33", "+3V3", "R"),
-            ("13", "VDDIO", "+3V3", "R"),
-            ("18", "VDDIO", "+3V3", "R"),
-            ("23", "AVDDK", f"{ref}_AVDDK", "R"),
-            ("9", "DVDDK", f"{ref}_DVDDK", "R"),
-            ("6", "GND", "GND", "R"),
-            ("24", "GND", "GND", "R"),
-            ("25", "EP", "GND", "R"),
+            ("2", "USB_DP", "USB1_DP", "L"),
+            ("3", "USB_DM", "USB1_DM", "L"),
+            ("6", "VBUS", f"{ref}_VBUS", "L"),
+            ("7", "PU", f"{ref}_PU", "L"),
+            ("8", "GPIO_8/PME", f"{ref}_PME", "L"),
+            ("21", "RST_N", None, "L"),
+            ("23", "XTAL_IN", f"{ref}_XI", "L"),
+            ("24", "XTAL_OUT", f"{ref}_XO", "L"),
+            ("26", "RSET", f"{ref}_RSET", "L"),
+            ("15", "LED_0", None, "L"),
+            ("16", "LED_1", None, "L"),
+            ("17", "GPIO_2", None, "L"),
+            ("19", "GPIO_3", None, "L"),
+            ("20", "GPIO_4", None, "L"),
+            ("9", "NC", None, "L"),
+            ("27", "MDIP0", f"{eth}_TXP", "R"),
+            ("28", "MDIN0", f"{eth}_TXN", "R"),
+            ("30", "MDIP1", f"{eth}_RXP", "R"),
+            ("31", "MDIN1", f"{eth}_RXN", "R"),
+            ("12", "LX", f"{ref}_LX", "R"),
+            ("13", "AVDD33_BUCK", "+3V3", "R"),
+            ("14", "AVSS33_BUCK", "GND", "R"),
+            ("5", "DVDD33", "+3V3", "R"),
+            ("18", "DVDD33", "+3V3", "R"),
+            ("1", "AVDD33_USB", f"{ref}_AVDD33", "R"),
+            ("25", "AVDD33_XTAL", f"{ref}_AVDD33", "R"),
+            ("29", "AVDD33_GBE", f"{ref}_AVDD33", "R"),
+            ("4", "DVDD11", f"{ref}_DVDD11", "R"),
+            ("10", "DVDD11", f"{ref}_DVDD11", "R"),
+            ("11", "DVDD11", f"{ref}_DVDD11", "R"),
+            ("22", "DVDD11", f"{ref}_DVDD11", "R"),
+            ("32", "AVDD11_GBE", f"{ref}_AVDD11", "R"),
+            ("33", "EP", "GND", "R"),
         ],
     }
 
 
-def eth_xfmr(ref: str, eth: str) -> Dict[str, Any]:
-    """Wurth 749010012A WE-LAN 10/100 SMT transformer (749010012A.pdf p.1).
-    16 mechanical pads; 4/5/12/13 have no winding.  PHY side 1-3 / 6-8,
-    line side 9-11 / 14-16, 1:1 CT, 1500 V — this IS the Ethernet barrier."""
+def pulse_xfmr(ref: str, eth: str, pair: str) -> Dict[str, Any]:
+    """YAGEO/Pulse TC1G00 PulseChip LAN transformer, one per pair (TC002.C (10/25)
+    [REF-SENSOR-061]): 1CT:1CT, 240 uH min, 1500 Vac / 60 s isolation, -40..+85 C,
+    4.70 x 3.20 x 3.15 mm.  Replaces the 749010012A WE-LAN modules on 2026-10-19
+    (owner choice "smaller LAN magnetics"; Claude Opus 5.5): the two modules' 146 mm^2
+    courtyards each could not leave room for the AX88772E cluster.  Like the WE-LAN it
+    is transformer-only (no common-mode choke).
+
+    Windings per the TC002.C schematic: 2 - (8/7) - 1 and 5 - (3/4) - 6, dots at 8 and 3,
+    so 2 and 5 are like-phased, and therefore 1 and 6 are too; 8/7 and 3/4 are centre
+    taps shorted on the PCB (one land pad each, named "7" and "3").  The 2/1 winding faces
+    the PHY / NIC, 5/6 the line.  Pin 1 is the device-side "+" and pin 6 the line-side
+    "+" (2026-10-19): with the land's pad order this matches the NIC / PHY pin order and
+    the J-ETH pin order, so neither side of a pair has to cross over.  Both windings are
+    relabelled together, so end-to-end polarity is unchanged (1 and 6 are like-phased).
+    ``pair`` is "TX" or "RX"; the net names match the old eth_xfmr() so the device-side
+    centre-tap caps and the line-side Bob-Smith network are unchanged.
+    """
+    ct_dev, ct_line = ("CTD", "LINE_CTX") if pair == "TX" else ("CRD", "LINE_CRX")
     return {
         "ref": ref,
-        "value": "749010012A",
-        "fp": FP_WELAN,
-        "mpn": "749010012A",
-        "ds": "749010012A.pdf p.1 Schematic + Recommended Land Pattern [REF-SENSOR-028]",
+        "value": "TC1G00",
+        "fp": FP_TC1G00,
+        "mpn": "TC1G00",
+        "mfr": "YAGEO (Pulse Electronics)",
+        "ds": "TC002.C PulseChip LAN Transformer Overview p.1-2, Fig. A / Circuit A [REF-SENSOR-061]",
         "pins": [
-            ("1", "TD+", f"{eth}_TXP", "L"),
-            ("2", "CTD", f"{eth}_CTD", "L"),
-            ("3", "TD-", f"{eth}_TXN", "L"),
-            ("4", "NC", None, "L"),
-            ("5", "NC", None, "L"),
-            ("6", "RD+", f"{eth}_RXP", "L"),
-            ("7", "CRD", f"{eth}_CRD", "L"),
-            ("8", "RD-", f"{eth}_RXN", "L"),
-            ("16", "TX+", f"{eth}_LINE_TXP", "R"),
-            ("15", "CTX", f"{eth}_LINE_CTX", "R"),
-            ("14", "TX-", f"{eth}_LINE_TXN", "R"),
-            ("13", "NC", None, "R"),
-            ("12", "NC", None, "R"),
-            ("11", "RX+", f"{eth}_LINE_RXP", "R"),
-            ("10", "CRX", f"{eth}_LINE_CRX", "R"),
-            ("9", "RX-", f"{eth}_LINE_RXN", "R"),
+            ("1", f"{pair}D+", f"{eth}_{pair}P", "L"),
+            ("7", "CT_DEV", f"{eth}_{ct_dev}", "L"),
+            ("2", f"{pair}D-", f"{eth}_{pair}N", "L"),
+            ("6", f"{pair}L+", f"{eth}_LINE_{pair}P", "R"),
+            ("3", "CT_LINE", f"{eth}_{ct_line}", "R"),
+            ("5", f"{pair}L-", f"{eth}_LINE_{pair}N", "R"),
         ],
     }
 
 
 ICS += [
     dp83825i("PHY-RMII2", "RMII2", "RMII2_PHY_RSTN", "RMII2_PHY_INTRN", "ETH_RMII2", "MDIO0", "MDC0"),
-    ch397a("NIC-USB1", "ETH_USB1"),
-    eth_xfmr("T-RMII2", "ETH_RMII2"),
-    eth_xfmr("T-USB1", "ETH_USB1"),
+    ax88772e("NIC-USB1", "ETH_USB1"),
+    pulse_xfmr("T-RMII2-TX", "ETH_RMII2", "TX"),
+    pulse_xfmr("T-RMII2-RX", "ETH_RMII2", "RX"),
+    pulse_xfmr("T-USB1-TX", "ETH_USB1", "TX"),
+    pulse_xfmr("T-USB1-RX", "ETH_USB1", "RX"),
 ]
 
 ICS += [
@@ -579,7 +644,7 @@ ICS += [
 # ball must be left as an input by the device tree (noted).  Not driven by the cape: P1-14
 # / P2-23 (PB2 3V3 out), P1-24 / P2-13 (VSYS), P2-14 (VBAT), P2-16 (BAT_TS), P2-12
 # (PWR_BTN), P2-26 (RESET#), P1-7 (VIN.USB), P1-17/18 (AIN refs), P1-30/32 (UART0 = the
-# PB2 console).  USB1 (P1-5 VBUS, P1-9 D-, P1-11 D+) carries ring port 2 (CH397A); its
+# PB2 console).  USB1 (P1-5 VBUS, P1-9 D-, P1-11 D+) carries ring port 2 (AX88772E); its
 # DRVVBUS (P1-3) and ID (P1-13) balls are plain GPIO here, USB1 runs host-only.  P1-19/21/23/25/27 and P2-35/36 are also MSPM0 AIN inputs: the MSPM0
 # must keep them high-impedance (firmware requirement).
 # ---------------------------------------------------------------------------
@@ -588,13 +653,13 @@ PB2_P1 = [
     "RMII2_TX_EN",    # 2  AA19 RMII2_TX_EN (E18 GPIO1_10 left input)
     "SPI0_CS_IMU",    # 3  F18 GPIO1_51 (GPIO chip select, next to the IMU)
     "RMII2_TXD0",     # 4  Y18 RMII2_TXD0 (D20 left input)
-    "+5V",            # 5  USB1_VBUS: cape-supplied VBUS (PB2-I divides it 1k/20k to AB10) — USB1 host to the CH397A
+    "+5V",            # 5  USB1_VBUS: cape-supplied VBUS (PB2-I divides 1k/20k to AB10)
     "EXT_SPI_SS1",    # 6  E19 SPI2_CS0 (AD18 left input)
     None,             # 7  VIN.USB
     "EXT_SPI_SCK",    # 8  A20 SPI2_CLK
-    "USB1_DM",        # 9  AD10 USB1_DM -> CH397A UDM
+    "USB1_DM",        # 9  AD10 USB1_DM -> AX88772E USB_DM
     "EXT_SPI_MISO",   # 10 B19 SPI2_D0 (A18 left input)
-    "USB1_DP",        # 11 AE9 USB1_DP -> CH397A UDP
+    "USB1_DP",        # 11 AE9 USB1_DP -> AX88772E USB_DP
     "EXT_SPI_MOSI",   # 12 A19 SPI2_D1 (AE18 left input)
     "DSHOT1",         # 13 N20 PR0_PRU0_GPO13
     None,             # 14 VDD_3V3 out of the PB2 (cape has its own +3V3)
@@ -614,18 +679,18 @@ PB2_P1 = [
     "TPM_RSTN",       # 28 K22 GPIO0_43 (B3 left input)
     "DSHOT2",         # 29 Y20 PR0_PRU0_GPO7
     None,             # 30 E14 UART0_TXD — PB2 console, left free
-    "EXT_SPI_SS2",    # 31 Y22 GPIO0_59
+    "NIC-USB1_VBUS",  # 31 Y22 GPIO0_59 — AX88772E VBUS detach over 4.7 k pull-up (owner)
     None,             # 32 D14 UART0_RXD — PB2 console, left free
-    "EXT_I2C_SDA",    # 33 A17 I2C1_SDA (AA23 left input)
+    None,             # 33 A17 I2C1_SDA (AA23 left input) — spare (was J-GPS, removed 2026-10-18)
     "RMII2_REF_CLK",  # 34 AD23 RMII2_REF_CLK
     "RMII2_CRS_DV",   # 35 AE21 RMII2_CRS_DV
-    "EXT_I2C_SCL",    # 36 B17 I2C1_SCL (V20 left input)
+    None,             # 36 B17 I2C1_SCL (V20 left input) — spare (was J-GPS, removed 2026-10-18)
 ]
 PB2_P2 = [
     "MDC0",           # 1  AD24 MDIO0_MDC (B20 left input)
-    "EXT_UART_RX",    # 2  U22 UART2_RXD
+    None,             # 2  U22 UART2_RXD — spare (was J-GPS, removed 2026-10-18)
     "MDIO0",          # 3  AB22 MDIO0_MDIO (B18 left input)
-    "EXT_UART_TX",    # 4  V24 UART2_TXD
+    None,             # 4  V24 UART2_TXD — spare (was J-GPS, removed 2026-10-18)
     "MCAN0_TX",       # 5  C15 MCAN0_TX (B5 left input)
     "M1553_MRN",      # 6  W25 GPIO0_47
     "MCAN0_RX",       # 7  E15 MCAN0_RX (A5 left input)
@@ -724,9 +789,13 @@ SIMPLE: List[Any] = [
     ("C-CAN6", "100nF", FP_C0402, "", "ISOW1044 VISOIN bypass", [("1", "P", "VCC2_CAN"), ("2", "N", "GND2_CAN")]),
     ("CMC-CAN", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "CAN_H"), ("2", "W1_OUT", "CAN_H_F"), ("4", "W2_IN", "CAN_L"), ("3", "W2_OUT", "CAN_L_F")]),
-    ("TVS-CAN", "PRTR5V0U2X", FP_SOT363, "PRTR5V0U2X,115", "Pilot.md §5 dual TVS at CAN field connector",
-     [("1", "IO1", "CAN_H_F"), ("2", "GND", "GND2_CAN"), ("3", "IO2", "CAN_L_F"), ("4", "NC", None),
-      ("5", "VCC", "VCC2_CAN"), ("6", "NC", None)]),
+    # 2026-10-18: TI ESD2CAN24-Q1, SC-70 DCK (SLVSFW5D Table 4-1: IO 1, 2; GND 3).
+    # +/-24 V VRWM clears the CAN common-mode range; 37 V clamp (5.7 A 8/20 us) sits
+    # below the ISOW1044 +/-58 V bus rating (SLLSFF7A sec 8.1) [REF-SENSOR-053].
+    ("TVS-CAN", "ESD2CAN24-Q1", FP_SOT323, "ESD2CAN24DCKRQ1",
+     "Dual-line CAN TVS at the field connector, +/-24 V, 3 pF (TI SLVSFW5D) [REF-SENSOR-053]",
+     [("1", "IO1", "CAN_H_F"), ("2", "IO2", "CAN_L_F"), ("3", "GND", "GND2_CAN")],
+     {"mfr": "Texas Instruments"}),
     ("R-CANT", "120R", FP_R0603, "", "CAN bus termination — populate ONLY at a bus end node (DNP default)",
      [("1", "A", "CAN_H_F"), ("2", "B", "CAN_L_F")], {"dnp": True}),
     ("CAN-FD", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "Pilot.md §14 J_CAN",
@@ -751,9 +820,15 @@ SIMPLE: List[Any] = [
     ("C-485-6", "100nF", FP_C0402, "", "ISOW1412 VISOIN bypass", [("1", "P", "VCC2_RS485"), ("2", "N", "GND2_RS485")]),
     ("CMC-RS485", "SRF2012-100Y", FP_SRF2012, "SRF2012-121YA", "SRF2012A.pdf windings 1-2 / 4-3 [REF-SENSOR-026]",
      [("1", "W1_IN", "RS485_A"), ("2", "W1_OUT", "RS485_A_F"), ("4", "W2_IN", "RS485_B"), ("3", "W2_OUT", "RS485_B_F")]),
-    ("TVS-RS485", "PRTR5V0U2X", FP_SOT363, "PRTR5V0U2X,115", "Pilot.md §5 dual TVS at RS-485 field connector",
-     [("1", "IO1", "RS485_A_F"), ("2", "GND", "GND2_RS485"), ("3", "IO2", "RS485_B_F"), ("4", "NC", None),
-      ("5", "VCC", "VCC2_RS485"), ("6", "NC", None)]),
+    # 2026-10-18: Bourns CDSOT23-SM712 (lines on pins 1, 2; common pin 3 to GND2).
+    # VWM -7 V / +12 V = the RS-485 common-mode range; VC 19 V at 1 A.  The ISOW1412
+    # bus pins are rated -12..+15 V (SLLSF86C sec 8.1), so the part's own IEC
+    # 61000-4-2 +/-8 kV bus protection and the CMC take the residual above the
+    # clamp [REF-SENSOR-054] [REF-SENSOR-010].
+    ("TVS-RS485", "CDSOT23-SM712", FP_SOT23, "CDSOT23-SM712",
+     "Asymmetric -7/+12 V RS-485 TVS at the field connector (Bourns) [REF-SENSOR-054]",
+     [("1", "IO1", "RS485_A_F"), ("2", "IO2", "RS485_B_F"), ("3", "COM", "GND2_RS485")],
+     {"mfr": "Bourns"}),
     ("R-485T", "120R", FP_R0603, "", "RS-485 termination — populate ONLY at a bus end node (DNP default)",
      [("1", "A", "RS485_A_F"), ("2", "B", "RS485_B_F")], {"dnp": True}),
     ("RS-485", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "Pilot.md §14 J_485",
@@ -762,10 +837,10 @@ SIMPLE: List[Any] = [
     ("X2Y-RS485", "4.7nF X2Y", FP_X2Y0805, "CX0805MRX7R0BB472", "Pilot.md §3 GND1<->GND2 RF bridge (Yageo X2Y 0805)",
      [("1", "A", "GND"), ("2", "B", "GND"), ("3", "G1", "GND2_RS485"), ("4", "G2", "GND2_RS485")]),
     # --- Ethernet line-side connectors + Bob-Smith terminations ------------
-    ("J-ETH-RMII2", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-RMII2 line pair to T-RMII2 secondary",
+    ("J-ETH-RMII2", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-RMII2 line pairs to the T-RMII2-TX / -RX line windings",
      [("1", "TXP", "ETH_RMII2_LINE_TXP"), ("2", "TXN", "ETH_RMII2_LINE_TXN"), ("3", "RXP", "ETH_RMII2_LINE_RXP"), ("4", "RXN", "ETH_RMII2_LINE_RXN"),
       ("MP", "SHIELD", "PGND")]),
-    ("J-ETH-USB1", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-USB1 line pair to T-USB1 secondary",
+    ("J-ETH-USB1", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "J-ETH-USB1 line pairs to the T-USB1-TX / -RX line windings",
      [("1", "TXP", "ETH_USB1_LINE_TXP"), ("2", "TXN", "ETH_USB1_LINE_TXN"), ("3", "RXP", "ETH_USB1_LINE_RXP"), ("4", "RXN", "ETH_USB1_LINE_RXN"),
       ("MP", "SHIELD", "PGND")]),
     # TPI network per dp83825i.pdf Fig 8-3: 75 R from each line-side centre tap to a
@@ -776,8 +851,10 @@ SIMPLE: List[Any] = [
     ("R-USB1-BST", "75R", FP_R0402, "", "J-ETH-USB1 line TX centre tap Bob-Smith", [("1", "A", "ETH_USB1_LINE_CTX"), ("2", "B", "ETH_USB1_BS")]),
     ("R-USB1-BSR", "75R", FP_R0402, "", "J-ETH-USB1 line RX centre tap Bob-Smith", [("1", "A", "ETH_USB1_LINE_CRX"), ("2", "B", "ETH_USB1_BS")]),
     ("C-USB1-BS", "10nF 2kV", FP_C1808, "", "J-ETH-USB1 Bob-Smith HV cap to chassis", [("1", "P", "ETH_USB1_BS"), ("2", "N", "PGND")]),
-    # one 25 MHz oscillator drives both Ethernet controllers' XI pins (XO pins open)
-    ("X-25M", "25MHz 3.3V", FP_OSC2520, "ECS-2520MV-250-BN-TR", "25 MHz reference for the DP83825I XI (RMII Leader, +/-50 ppm, SNLS638C) and the CH397A XI (external clock input, CH397 Table 1-3); ECS-2520MV.pdf [REF-PWR-004]",
+    # 25 MHz oscillator for the DP83825I XI only (XO open); the AX88772E has its own crystal
+    ("X-25M", "25MHz 3.3V", FP_OSC2520, "ECS-2520MV-250-BN-TR",
+     "25 MHz reference for the DP83825I XI (RMII Leader, +/-50 ppm, SNLS638C); "
+     "ECS-2520MV.pdf [REF-PWR-004]",
      [("1", "TRI", None), ("2", "GND", "GND"), ("3", "OUT", "XI_25M"), ("4", "VDD", "+3V3")]),
     ("C-25M", "100nF", FP_C0402, "", "oscillator VDD bypass", [("1", "P", "+3V3"), ("2", "N", "GND")]),
     # --- MIL-STD-1553B field port ------------------------------------------
@@ -785,10 +862,13 @@ SIMPLE: List[Any] = [
      [("1", "A", "M1553_SEC_P"), ("2", "B", "BUS_1553_P")]),
     ("R-1553N", "55R 2%", FP_R0603, "", "MIL-STD-1553B §4.5.1.5.2 direct-coupled stub isolation resistor",
      [("1", "A", "M1553_SEC_N"), ("2", "B", "BUS_1553_N")]),
-    ("TVS-1553P", "SMAJ33CA", FP_SMA, "SMAJ33CA", "Pilot.md §5 bidirectional TVS, BUS_P to PGND",
-     [("1", "A", "BUS_1553_P"), ("2", "K", "PGND")]),
-    ("TVS-1553N", "SMAJ33CA", FP_SMA, "SMAJ33CA", "Pilot.md §5 bidirectional TVS, BUS_N to PGND",
-     [("1", "A", "BUS_1553_N"), ("2", "K", "PGND")]),
+    # Generic SMAJ33CA: manufacturer named per AGENTS.md §5 (2026-10-18) — Bourns, US.
+    ("TVS-1553P", "SMAJ33CA", FP_SMA, "SMAJ33CA",
+     "Pilot.md §5 bidirectional TVS, BUS_P to PGND [REF-SENSOR-055]",
+     [("1", "A", "BUS_1553_P"), ("2", "K", "PGND")], {"mfr": "Bourns"}),
+    ("TVS-1553N", "SMAJ33CA", FP_SMA, "SMAJ33CA",
+     "Pilot.md §5 bidirectional TVS, BUS_N to PGND [REF-SENSOR-055]",
+     [("1", "A", "BUS_1553_N"), ("2", "K", "PGND")], {"mfr": "Bourns"}),
     ("MIL-1553", "SM04B-GHS-TB", FP_GH4, "SM04B-GHS-TB(LF)(SN)", "Pilot.md §14 J_1553",
      [("1", "BUS_P", "BUS_1553_P"), ("2", "BUS_N", "BUS_1553_N"), ("3", "GND", "GND"), ("4", "SHIELD", "PGND"),
       ("MP", "SHIELD", "PGND")]),
@@ -878,59 +958,376 @@ def phy_support(tag: str, ref: str, rmii: str, eth: str) -> List[Any]:
 
 SIMPLE += phy_support("RMII2", "PHY-RMII2", "RMII2", "ETH_RMII2")
 
-# --- CH397A support (CH397 datasheet V1.2 sec 3.7 table, sec 6.1 circuit) [REF-SENSOR-048] --
+# --- AX88772E support (ASIX demo board V1.01 sheet 2 [REF-SENSOR-058]; app note v1.10
+# [REF-SENSOR-057]; owner 2026-10-18).  Demo designators in parentheses.  The app note
+# §8 item 5 wants a decoupling capacitor on every power pin, so the demo's per-pin
+# 0.1 uF set is kept; 0.1 uF goes in 0201 to save area.  Beads: the demo's Chilisin
+# PBY160808T-110Y-N (110 R) has no datasheet on file, so the cape reuses the vetted
+# Murata BLM15EX331SN1D (330 R at 100 MHz, 0.205 R max DCR, 1.1 A) [REF-SENSOR-043];
+# the drop at the ~25 mA rail load is about 5 mV.  Crystal: the demo's "NSK 20M
+# CRYSTAL" has no part number and no identifiable maker (AGENTS.md §5), so ECS
+# ECS-200-20-33-AGM-TR (Lenexa KS; 20 MHz, CL 20 pF, +/-25 ppm tol, +/-30 ppm
+# stability, -20..+70 C, ESR 60 R max; ECX-32 data sheet [REF-SENSOR-059]) meets the
+# app note §5 spec (CL 20 pF, +/-30 ppm, ESR <= 100 R).  Smaller ECS packages list a
+# CL of 8 pF typical, which the demo's 15 pF load caps cannot load to 20 pF.
 SIMPLE += [
-    ("C-USB1-V5A", "10uF 6.3V X6S", FP_C0603, "MSASJ168BC6226MTNA01", "V5 / AVDD33 (pins 11/10) bulk, 3.3 V supply (sec 6.1 C8)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-USB1-V5B", "100nF", FP_C0201, "", "V5 / AVDD33 (pins 11/10) HF (sec 6.1 C2)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-USB1-A1", "1uF", FP_C0402, "", "AVDD33 pin 1 decoupling (Table 1-3)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-USB1-IO", "100nF", FP_C0201, "", "VDDIO pins 13/18 decoupling (Table 1-3)", [("1", "P", "+3V3"), ("2", "N", "GND")]),
-    ("C-USB1-AK", "1uF", FP_C0402, "", "AVDDK core-analog decoupling, pin 23 (Table 1-3)", [("1", "P", "NIC-USB1_AVDDK"), ("2", "N", "GND")]),
-    ("C-USB1-DK", "100nF", FP_C0201, "", "DVDDK core-digital decoupling, pin 9 (Table 1-3)", [("1", "P", "NIC-USB1_DVDDK"), ("2", "N", "GND")]),
-    ("C-USB1-CTD", "1uF", FP_C0402, "", "T-USB1 device-side TX centre tap to GND (sec 6.1 C11; no supply on the CT)", [("1", "P", "ETH_USB1_CTD"), ("2", "N", "GND")]),
-    ("C-USB1-CRD", "1uF", FP_C0402, "", "T-USB1 device-side RX centre tap to GND (sec 6.1 C12)", [("1", "P", "ETH_USB1_CRD"), ("2", "N", "GND")]),
+    # 1.1 V buck: LX -> L1 2.2 uH -> DVDD11 (demo L1, C2, C3; note 2-5: at pin 12)
+    (
+        "L-USB1",
+        "2.2uH",
+        FP_L2016,
+        "",
+        "AX88772E 1.1 V buck inductor, LX pin 12 (demo L1 2.2 uH 2016, Darfon IP20162R2MP59); "
+        "MPN to be confirmed against a downloaded data sheet (avionics/WBS.md)",
+        [("1", "A", "NIC-USB1_LX"), ("2", "B", "NIC-USB1_DVDD11")],
+    ),
+    (
+        "C-USB1-LXB",
+        "10uF 6.3V X5R",
+        FP_C0603,
+        "",
+        "DVDD11 buck output bulk at pin 12 (demo C2)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-LXH",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD11 buck output HF at pin 12 (demo C3)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-D04",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD11 pin 4 (demo C20)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-D10",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD11 pin 10 (demo C18)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-D11",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD11 pin 11 (demo C24)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-D22",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD11 pin 22 (demo C19)",
+        [("1", "P", "NIC-USB1_DVDD11"), ("2", "N", "GND")],
+    ),
+    # AVDD11_GBE behind a bead (demo L4, C15, C14, C17)
+    (
+        "FB-USB1-A11",
+        "330R@100MHz",
+        FP_L0402,
+        "BLM15EX331SN1D",
+        "DVDD11 -> AVDD11_GBE bead (demo L4) [REF-SENSOR-043]",
+        [("1", "A", "NIC-USB1_DVDD11"), ("2", "B", "NIC-USB1_AVDD11")],
+    ),
+    (
+        "C-USB1-A11B",
+        "10uF 6.3V X5R",
+        FP_C0603,
+        "",
+        "AVDD11_GBE pin 32 bulk (demo C15)",
+        [("1", "P", "NIC-USB1_AVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A11H1",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD11_GBE pin 32 (demo C14)",
+        [("1", "P", "NIC-USB1_AVDD11"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A11H2",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD11_GBE pin 32 (demo C17)",
+        [("1", "P", "NIC-USB1_AVDD11"), ("2", "N", "GND")],
+    ),
+    # 3.3 V: buck input at pin 13 (note 2-4), DVDD33 pins 5 / 18
+    (
+        "C-USB1-BKB",
+        "4.7uF 10V X5R",
+        FP_C0603,
+        "",
+        "AVDD33_BUCK pin 13 bulk (demo C5, note 2-4)",
+        [("1", "P", "+3V3"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-BKH",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD33_BUCK pin 13 HF (demo C6, note 2-4)",
+        [("1", "P", "+3V3"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-IO5",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD33 pin 5 (demo C23)",
+        [("1", "P", "+3V3"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-IO18",
+        "100nF",
+        FP_C0201,
+        "",
+        "DVDD33 pin 18 (demo C16)",
+        [("1", "P", "+3V3"), ("2", "N", "GND")],
+    ),
+    # 3.3 V analog behind a bead (demo L5, C27, C21, C22, C25, C26)
+    (
+        "FB-USB1-A33",
+        "330R@100MHz",
+        FP_L0402,
+        "BLM15EX331SN1D",
+        "+3V3 -> AVDD33 analog bead (demo L5) [REF-SENSOR-043]",
+        [("1", "A", "+3V3"), ("2", "B", "NIC-USB1_AVDD33")],
+    ),
+    (
+        "C-USB1-A33B",
+        "4.7uF 10V X5R",
+        FP_C0603,
+        "",
+        "AVDD33 analog bulk (demo C27)",
+        [("1", "P", "NIC-USB1_AVDD33"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A33H1",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD33_USB pin 1 (demo C21)",
+        [("1", "P", "NIC-USB1_AVDD33"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A33H2",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD33_XTAL pin 25 (demo C22)",
+        [("1", "P", "NIC-USB1_AVDD33"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A33H3",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD33_GBE pin 29 (demo C25)",
+        [("1", "P", "NIC-USB1_AVDD33"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-A33H4",
+        "100nF",
+        FP_C0201,
+        "",
+        "AVDD33 bead output (demo C26)",
+        [("1", "P", "NIC-USB1_AVDD33"), ("2", "N", "GND")],
+    ),
+    # 20 MHz crystal: XTAL_IN on pad 1; XTAL_OUT through 200 R to pad 3 (demo Y1, C11, C12, R7)
+    (
+        "Y-USB1",
+        "20MHz CL20pF",
+        FP_XTAL3225,
+        "ECS-200-20-33-AGM-TR",
+        "AX88772E 20 MHz crystal, ECX-32: CL 20 pF, +/-25 ppm, +/-30 ppm, ESR 60 R max "
+        "(app note §5) [REF-SENSOR-059]",
+        [
+            ("1", "X1", "NIC-USB1_XI"),
+            ("2", "GND", "GND"),
+            ("3", "X2", "NIC-USB1_XO_R"),
+            ("4", "GND", "GND"),
+        ],
+        {"mfr": "ECS Inc."},
+    ),
+    (
+        "C-USB1-XI",
+        "15pF C0G",
+        FP_C0402,
+        "",
+        "XTAL_IN load cap (demo C11; trim per app note §5 note 1)",
+        [("1", "P", "NIC-USB1_XI"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-XO",
+        "15pF C0G",
+        FP_C0402,
+        "",
+        "XTAL_OUT load cap, crystal side of R-USB1-XO (demo C12)",
+        [("1", "P", "NIC-USB1_XO_R"), ("2", "N", "GND")],
+    ),
+    (
+        "R-USB1-XO",
+        "200R",
+        FP_R0402,
+        "",
+        "XTAL_OUT drive-level resistor (demo R7)",
+        [("1", "A", "NIC-USB1_XO"), ("2", "B", "NIC-USB1_XO_R")],
+    ),
+    # bias and straps
+    (
+        "R-USB1-RSET",
+        "24k 1%",
+        FP_R0402,
+        "",
+        "RSET pin 26 to analog GND, 24 kOhm 1 % (data sheet Table 1-4; demo note 2-8)",
+        [("1", "A", "NIC-USB1_RSET"), ("2", "B", "GND")],
+    ),
+    (
+        "R-USB1-VBUS",
+        "4.7k",
+        FP_R0201,
+        "",
+        "VBUS pin 6 pull-up to 3.3 V (demo R4); PB2-I P1-31 GPIO0_59 can pull it low "
+        "(owner 2026-10-18)",
+        [("1", "A", "+3V3"), ("2", "B", "NIC-USB1_VBUS")],
+    ),
+    (
+        "R-USB1-PU",
+        "4.7k",
+        FP_R0201,
+        "",
+        "PU pin 7 pull-up to 3.3 V (data sheet Table 1-4; demo R3)",
+        [("1", "A", "+3V3"), ("2", "B", "NIC-USB1_PU")],
+    ),
+    (
+        "R-USB1-PME",
+        "4.7k",
+        FP_R0201,
+        "",
+        "GPIO_8/PME pin 8 must be pulled high (demo note 2-7, R2)",
+        [("1", "A", "+3V3"), ("2", "B", "NIC-USB1_PME")],
+    ),
+    # device-side transformer centre taps: 0.1 uF to GND, no supply (demo C4, C7)
+    (
+        "C-USB1-CTD",
+        "100nF",
+        FP_C0402,
+        "",
+        "T-USB1-TX device-side centre tap to GND (demo C7)",
+        [("1", "P", "ETH_USB1_CTD"), ("2", "N", "GND")],
+    ),
+    (
+        "C-USB1-CRD",
+        "100nF",
+        FP_C0402,
+        "",
+        "T-USB1-RX device-side centre tap to GND (demo C4)",
+        [("1", "P", "ETH_USB1_CRD"), ("2", "N", "GND")],
+    ),
 ]
 
-# --- JST-GH expansion headers replacing the GNSS (owner 2026-10-17) -------------------
-# Pin order per Pixhawk DS-009 rev 0.1.0 [REF-CONN-002] "Basic GPS port" and "SPI port"
-# (pin-compatible only; this is not a Pixhawk-branded product).  Deviation: VCC is the
-# cape +5V through a 0.35 A PTC per port, not DS-009's 2.5 A, because +5V feeds the PB2-I
-# (VIN, 1 A) and the 3V3 module through FB1 (2 A).  ESD on every signal at the connector
-# (TI TPD4E05U06 / TPD1E05U06, SLVSBO7O [REF-SENSOR-044]); I2C 1.5 k pull-ups on the
-# cape side as DS-009 sec "I2C port" specifies.  Signals: UART2 + I2C1 (GPS port), SPI2
-# with SS1 = SPI2_CS0 and SS2 = GPIO (SPI port) — see PB2_P1 / PB2_P2.
+# --- JST-GH expansion port replacing the GNSS (owner 2026-10-17) ----------------------
+# ONE port: the placer found a single free board-edge site, so J-GPS was dropped and
+# J-SPI reduced to 6 pins (owner allowed 2026-10-17; avionics/WBS.md §1.2a Pilot).
+# Pin order follows Pixhawk DS-009 rev 0.1.0 [REF-CONN-002] "SPI port" minus !SS2
+# (pin-compatible only; this is not a Pixhawk-branded product).  All four signals sit on
+# SPI2 balls that also mux to UART1 / UART6 (SCK = UART1_TX, MISO = UART6_RX, MOSI =
+# UART6_TX, SS1 = UART1_RX; PB2I_AM625_HEADER_CAPABILITIES.md §4), so the port serves an
+# SPI or a UART peripheral (e.g. an external GNSS) by device-tree mux alone.  Deviation:
+# VCC is the cape +5V through a 0.35 A PTC, not DS-009's 2.5 A, because +5V feeds the
+# PB2-I (VIN, 1 A) and the 3V3 module through FB1 (2 A).  ESD on every signal at the
+# connector (TI TPD4E05U06, SLVSBO7O [REF-SENSOR-044]).
 SIMPLE += [
-    ("J-GPS", "SM06B-GHS-TB", FP_GH6, "SM06B-GHS-TB(LF)(SN)", "DS-009 Basic GPS port: 5V, TX, RX, SCL, SDA, GND (eGH.pdf)",
-     [("1", "VCC", "EXT_GPS_5V"), ("2", "TX", "EXT_UART_TX"), ("3", "RX", "EXT_UART_RX"), ("4", "SCL", "EXT_I2C_SCL"),
-      ("5", "SDA", "EXT_I2C_SDA"), ("6", "GND", "GND"), ("MP", "SHIELD", "PGND")]),
-    ("J-SPI", "SM07B-GHS-TB", FP_GH7, "SM07B-GHS-TB(LF)(SN)", "DS-009 SPI port: 5V, SCK, MISO, MOSI, !SS1, !SS2, GND (eGH.pdf)",
+    ("J-SPI", "SM06B-GHS-TB", FP_GH6, "SM06B-GHS-TB(LF)(SN)",
+     "Expansion port, DS-009 SPI order less SS2: 5V, SCK, MISO, MOSI, !SS1, GND (eGH.pdf)",
      [("1", "VCC", "EXT_SPI_5V"), ("2", "SCK", "EXT_SPI_SCK"), ("3", "MISO", "EXT_SPI_MISO"), ("4", "MOSI", "EXT_SPI_MOSI"),
-      ("5", "SS1", "EXT_SPI_SS1"), ("6", "SS2", "EXT_SPI_SS2"), ("7", "GND", "GND"), ("MP", "SHIELD", "PGND")]),
-    ("F-GPS", "MF-PSMF035X", FP_F0805, "MF-PSMF035X-2", "GPS port VCC PTC, 0.35 A hold / 0.75 A trip (Bourns MF-PSMF) [REF-PWR-013]",
-     [("1", "A", "+5V"), ("2", "B", "EXT_GPS_5V")]),
+      ("5", "SS1", "EXT_SPI_SS1"), ("6", "GND", "GND"), ("MP", "SHIELD", "PGND")]),
     ("F-SPI", "MF-PSMF035X", FP_F0805, "MF-PSMF035X-2", "SPI port VCC PTC, 0.35 A hold / 0.75 A trip (Bourns MF-PSMF) [REF-PWR-013]",
      [("1", "A", "+5V"), ("2", "B", "EXT_SPI_5V")]),
-    ("C-GPS5", "1uF 10V", FP_C0402, "", "GPS port VCC bypass at the connector", [("1", "P", "EXT_GPS_5V"), ("2", "N", "GND")]),
     ("C-SPI5", "1uF 10V", FP_C0402, "", "SPI port VCC bypass at the connector", [("1", "P", "EXT_SPI_5V"), ("2", "N", "GND")]),
-    ("R-I2C-SCL", "1.5k", FP_R0201, "", "DS-009 I2C port: 1.5 k pull-up on the autopilot side", [("1", "A", "+3V3"), ("2", "B", "EXT_I2C_SCL")]),
-    ("R-I2C-SDA", "1.5k", FP_R0201, "", "DS-009 I2C port: 1.5 k pull-up on the autopilot side", [("1", "A", "+3V3"), ("2", "B", "EXT_I2C_SDA")]),
-    ("ESD-GPS", "TPD4E05U06DQAR", FP_DQA10, "TPD4E05U06DQAR", "GPS port ESD, 4 ch (SLVSBO7O Table 4-2) [REF-SENSOR-044]",
-     [("1", "D1+", "EXT_UART_TX"), ("2", "D1-", "EXT_UART_RX"), ("3", "GND", "GND"), ("4", "D2+", "EXT_I2C_SCL"),
-      ("5", "D2-", "EXT_I2C_SDA"), ("6", "NC", None), ("7", "NC", None), ("8", "GND", "GND"), ("9", "NC", None), ("10", "NC", None)]),
     ("ESD-SPI", "TPD4E05U06DQAR", FP_DQA10, "TPD4E05U06DQAR", "SPI port ESD, 4 ch (SLVSBO7O Table 4-2) [REF-SENSOR-044]",
      [("1", "D1+", "EXT_SPI_SCK"), ("2", "D1-", "EXT_SPI_MISO"), ("3", "GND", "GND"), ("4", "D2+", "EXT_SPI_MOSI"),
       ("5", "D2-", "EXT_SPI_SS1"), ("6", "NC", None), ("7", "NC", None), ("8", "GND", "GND"), ("9", "NC", None), ("10", "NC", None)]),
-    ("ESD-SS2", "TPD1E05U06DYAR", FP_SOD523, "TPD1E05U06DYAR", "SPI port SS2 ESD, 1 ch (SLVSBO7O Table 4-1) [REF-SENSOR-044]",
-     [("1", "IO", "EXT_SPI_SS2"), ("2", "GND", "GND")]),
 ]
+
+# Part numbers for the generic passives (2026-10-20, Claude Sonnet 5.5, owner supplied the
+# DigiKey API credentials).  Keyed by (schematic value, footprint).  Each MPN was confirmed
+# on DigiKey's product API as Active with stock and a public data sheet on 2026-10-20; the
+# makers are YAGEO (Taiwan), Taiyo Yuden (Japan), Holy Stone (Taiwan), Murata (Japan)
+# [REF-SENSOR-062].  Only entries whose own MPN field is empty are filled.
+PASSIVE_MPN = {
+    ("100nF", FP_C0402): ("CC0402KRX7R7BB104", "YAGEO"),
+    ("10nF", FP_C0402): ("CC0402KRX7R7BB103", "YAGEO"),
+    ("1uF", FP_C0402): ("CC0402KRX5R6BB105", "YAGEO"),
+    ("1uF 10V", FP_C0402): ("CC0402KRX5R6BB105", "YAGEO"),
+    ("15pF C0G", FP_C0402): ("CC0402JRNPO9BN150", "YAGEO"),
+    ("10nF", FP_C0201): ("CC0201KRX7R7BB103", "YAGEO"),
+    ("100nF", FP_C0201): ("CC0201KRX5R6BB104", "YAGEO"),
+    ("10uF 6.3V X5R", FP_C0603): ("CC0603KRX5R5BB106", "YAGEO"),
+    ("4.7uF 10V X5R", FP_C0603): ("CC0603MRX5R6BB475", "YAGEO"),
+    ("10uF 10V X5R", FP_C0805): ("CC0805KKX5R6BB106", "YAGEO"),
+    # 10 V part for the 6.3 V schematic value: one part number, more bias margin on +3V3
+    ("10uF 6.3V X5R", FP_C0805): ("CC0805KKX5R6BB106", "YAGEO"),
+    ("47uF 10V X5R", FP_C1210): ("LMK325BJ476KMHP", "Taiyo Yuden"),
+    ("10nF 2kV", FP_C1808): ("C1808X103K202T", "Holy Stone"),
+    ("2.2uH", FP_L2016): ("DFE201610P-2R2M=P2", "Murata"),
+    ("75R", FP_R0402): ("RC0402FR-0775RL", "YAGEO"),
+    ("24k 1%", FP_R0402): ("RC0402FR-0724KL", "YAGEO"),
+    ("200R", FP_R0402): ("RC0402FR-07200RP", "YAGEO"),
+    ("10k", FP_R0402): ("RC0402FR-0710KL", "YAGEO"),
+    ("10k", FP_R0201): ("RC0201FR-0710KL", "YAGEO"),
+    ("4.7k", FP_R0201): ("RC0201FR-074K7L", "YAGEO"),
+    ("2.49k", FP_R0201): ("RC0201FR-072K49P", "YAGEO"),
+    ("6.49k 1%", FP_R0201): ("RC0201FR-076K49L", "YAGEO"),
+    ("120R", FP_R0603): ("RC0603FR-07120RL", "YAGEO"),
+    # 55 R 2 % is not a stock value: 54.9 R 1 % sits inside it
+    ("55R 2%", FP_R0603): ("RC0603FR-0754R9L", "YAGEO"),
+    ("0R", FP_R0805): ("RC0805JR-070RL", "YAGEO"),
+}
+
+
+# Manufacturer of record for the parts whose symbols were written before the Manufacturer
+# property existed (2026-10-20).  A kitted or turnkey order needs MPN and maker together.
+MFR_BY_MPN = {
+    "HI-6138PCIF": "Holt Integrated Circuits", "PM-DB2791S": "Premier Magnetics",
+    "BMP388": "Bosch Sensortec", "MSASJ168BC6226MTNA01": "Taiyo Yuden",
+    "SM04B-GHS-TB(LF)(SN)": "JST", "SM06B-GHS-TB(LF)(SN)": "JST",
+    "ISOW1044BDFMR": "Texas Instruments", "ISOW1412DFMR": "Texas Instruments",
+    "TPD4E05U06DQAR": "Texas Instruments", "DP83825IRMQR": "Texas Instruments",
+    "TPSM828224SILR": "Texas Instruments", "SRF2012-121YA": "Bourns",
+    "MF-PSMF035X-2": "Bourns", "BLM15EX331SN1D": "Murata", "742792512": "Wurth Elektronik",
+    "ICM-42688-P": "TDK InvenSense", "TSM-108-01-L-DV": "Samtec", "TSM-118-04-L-DV-LC": "Samtec",
+    "AX88772EQF": "ASIX", "105313-1204": "Molex", "SLB9672XU20FW1611XUMA1": "Infineon",
+    "ECS-2520MV-250-BN-TR": "ECS Inc.", "ECS-2520MV-500-BN-TR": "ECS Inc.",
+    "CX0805MRX7R0BB472": "YAGEO",
+}
+
 
 for _entry in SIMPLE:
     _ref, _val, _fp, _mpn, _ds, _pins = _entry[:6]
     _flags = _entry[6] if len(_entry) > 6 else {}
+    if not _mpn and (_val, _fp) in PASSIVE_MPN:
+        _mpn, _mk = PASSIVE_MPN[(_val, _fp)]
+        _flags = dict(_flags, mfr=_flags.get("mfr", _mk))
     _n = len(_pins)
     _half = (_n + 1) // 2
     ICS.append({
         "ref": _ref, "value": _val, "fp": _fp, "mpn": _mpn, "ds": _ds,
         "dnp": bool(_flags.get("dnp")),
+        "mfr": _flags.get("mfr", ""),
+        # mounting holes are mechanical, not purchased parts
+        "in_bom": not _val.startswith("M2.5 PGND"),
         "pins": [(pn, fn, net, "L" if i < _half else "R") for i, (pn, fn, net) in enumerate(_pins)],
     })
 
@@ -1004,15 +1401,23 @@ def emit_instance(ic, X, Y, left, right, half_w, half_h, sheet_uuid) -> List[str
     ref, value = ic["ref"], ic["value"]
     libid = f"S_{sanitize(ref)}"
     dnp = "yes" if ic.get("dnp") else "no"
+    in_bom = "yes" if ic.get("in_bom", True) else "no"
     out = [
         f'  (symbol (lib_id "Pilot:{libid}") (at {X:.2f} {Y:.2f} 0) (unit 1)',
-        f'    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp {dnp}) (uuid "{uid()}")',
+        f'    (exclude_from_sim no) (in_bom {in_bom}) (on_board yes) (dnp {dnp}) (uuid "{uid()}")',
         f'    (property "Reference" "{esc(ref)}" (at {X:.2f} {Y - half_h - 1.27:.2f} 0) (effects (font (size {SIZE} {SIZE}))))',
         f'    (property "Value" "{esc(value)}" (at {X:.2f} {Y + half_h + 1.27:.2f} 0) (effects (font (size {SIZE} {SIZE}))))',
         f'    (property "Footprint" "{esc(ic["fp"])}" (at {X:.2f} {Y:.2f} 0) (effects (font (size {SIZE} {SIZE})) (hide yes)))',
         f'    (property "Datasheet" "{esc(ic["ds"])}" (at {X:.2f} {Y:.2f} 0) (effects (font (size {SIZE} {SIZE})) (hide yes)))',
         f'    (property "MPN" "{esc(ic.get("mpn", ""))}" (at {X:.2f} {Y:.2f} 0) (effects (font (size {SIZE} {SIZE})) (hide yes)))',
     ]
+    # Manufacturer of record, emitted only where set: a generic part number (e.g.
+    # SMAJ33CA) meets the AGENTS.md §5 sourcing rule only once its maker is named.
+    if ic.get("mfr"):
+        out.append(
+            f'    (property "Manufacturer" "{esc(ic["mfr"])}" (at {X:.2f} {Y:.2f} 0) '
+            f'(effects (font (size {SIZE} {SIZE})) (hide yes)))'
+        )
     for pn, *_ in left + right:
         out.append(f'    (pin "{esc(pn)}" (uuid "{uid()}"))')
     out.append(f'    (instances (project "Pilot" (path "/{sheet_uuid}" (reference "{esc(ref)}") (unit 1))))')
@@ -1092,6 +1497,9 @@ TITLE_BLOCK = """  (title_block
 
 
 def main() -> None:
+    for _ic in ICS:
+        if not _ic.get("mfr") and _ic.get("mpn") in MFR_BY_MPN:
+            _ic["mfr"] = MFR_BY_MPN[_ic["mpn"]]
     sheet_uuid = uid()
     parts = [
         "(kicad_sch (version 20240101) (generator eeschema)",

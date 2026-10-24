@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-20",
+  "generated": "2026-10-24",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -7563,8 +7563,122 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx": {
+      "description": "u)(",
+      "tags": [
+        "avionics-hardware",
+        "bom"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/AX88772E_Application_DesignNote_v110.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/Bourns_CDSOT23-SM712.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/Bourns_SMAJ.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ECS_ECX-32.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ESD2CANxx24-Q1_SLVSFW5D.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/HolyStone_HVC_Series.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/ImportGuides.html": {
       "description": "HTML document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/Murata_DFE201610P.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/Pulse_TC002_PulseChip.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/TaiyoYuden_LMK325BJ476KMHP_SS.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/YAGEO_CC0402JRNPO9BN150.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/YAGEO_PYU-RC_51_ROHS_P.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/YAGEO_PYU-RC_GROUP_51_ROHS_L.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/YAGEO_UPY-GPHC_X5R_4V-50V.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/YAGEO_UPY-GPHC_X7R_6.3V-250V.pdf": {
+      "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
@@ -11520,6 +11634,153 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/docs/Pilot-BOM.csv": {
+      "description": "Bill of materials, CSV (55 items)",
+      "tags": [
+        "avionics-hardware",
+        "bom",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/Pilot-Design-Review.md": {
+      "description": "Pilot Design Review Package",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/Pilot-HDD.md": {
+      "description": "Pilot Hardware Design Description",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/Pilot-ICD-External.md": {
+      "description": "Pilot Interface Control Document: External Connectors",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md": {
+      "description": "Pilot Interface Control Document: PocketBeagle 2 Industrial Headers",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md": {
+      "description": "Pilot Manufacturing Transfer Package",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/Pilot-Routing-Worklist.md": {
+      "description": "Pilot hand-routing worklist",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/README.md": {
+      "description": "Pilot documentation set",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/analysis/emc.json": {
+      "description": "JSON data (13 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/analysis/pcb.json": {
+      "description": "JSON data (36 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/analysis/schematic.json": {
+      "description": "JSON data (51 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/analysis/thermal.json": {
+      "description": "JSON data (8 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.json": {
+      "description": "JSON data (1 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.json": {
+      "description": "JSON data (1 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/docs/figures/schematics/Pilot.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch": {
       "description": "KiCad schematic",
       "tags": [
@@ -11627,6 +11888,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/kicads/Pilot.kicad_sch-bak": {
+      "description": "(kicad_sch (version 20240101) (generator eeschema)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/kicads/Pilot.kicad_sym": {
       "description": "KiCad symbol library",
       "tags": [
@@ -11645,6 +11914,22 @@
     },
     "avionics/kicad/Pilot/kicads/fp-lib-table": {
       "description": "(fp_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicads/freerouting.dsn": {
+      "description": "Specctra design file (autorouter input)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/kicads/freerouting.ses": {
+      "description": "Specctra session file (autorouter output)",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -11716,11 +12001,28 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/scripts/gen_pilot_bom.py": {
+      "description": "gen_pilot_bom.py \u2014 Write the Pilot assembly BOM (CSV) from the schematic.",
+      "tags": [
+        "avionics-hardware",
+        "bom",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py": {
       "description": "gen_pilot_footprints.py \u2014 Author the project-custom land patterns Pilot needs.",
       "tags": [
         "avionics-hardware",
         "emi-hardening",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/gen_pilot_icd.py": {
+      "description": "gen_pilot_icd.py \u2014 Generate the Pilot Interface Control Documents from the design data.",
+      "tags": [
+        "avionics-hardware",
         "pcb-design"
       ],
       "archived": false
@@ -11731,6 +12033,14 @@
         "avionics-hardware",
         "pcb-design",
         "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/gen_pilot_routing_worklist.py": {
+      "description": "gen_pilot_routing_worklist.py \u2014 List the Pilot board's open connections for hand routing.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
       ],
       "archived": false
     },
@@ -11854,7 +12164,8 @@
       "description": "refloorplan_pilot.py \u2014 ISOW \u00a713.1 re-floorplan of the Pilot cape (2026-10-12).",
       "tags": [
         "avionics-hardware",
-        "pcb-design"
+        "pcb-design",
+        "security"
       ],
       "archived": false
     },
@@ -11874,8 +12185,24 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Pilot/scripts/route_loop_pilot.sh": {
+      "description": "!/usr/bin/env bash",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Pilot/scripts/route_pilot.sh": {
       "description": "!/usr/bin/env bash",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py": {
+      "description": "silk_refs_to_fab_pilot.py \u2014 Move footprint reference designators from silkscreen to Fab.",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -12085,6 +12412,14 @@
       "archived": false
     },
     "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_TSM-DV-LC.kicad_mod": {
+      "description": "KiCad footprint",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Serenity-Custom.pretty/Pulse_TC1G00_PulseChip_4.7x3.2mm.kicad_mod": {
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
@@ -17990,6 +18325,13 @@
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/docs/Pilot-Design-Review.md",
+      "avionics/kicad/Pilot/docs/Pilot-HDD.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-External.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
+      "avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md",
+      "avionics/kicad/Pilot/docs/Pilot-Routing-Worklist.md",
+      "avionics/kicad/Pilot/docs/README.md",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/README.md",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md",
       "avionics/kicad/README.md",
@@ -18561,12 +18903,16 @@
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/docs/Pilot-HDD.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
+      "avionics/kicad/Pilot/docs/Pilot-Routing-Worklist.md",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
       "avionics/kicad/Pilot/scripts/grid_route_pilot.py",
       "avionics/kicad/Pilot/scripts/optimize/eval_placement.py",
       "avionics/kicad/Pilot/scripts/optimize/test_optimize.py",
+      "avionics/kicad/Pilot/scripts/refloorplan_pilot.py",
       "avionics/kicad/README.md",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
@@ -19984,8 +20330,11 @@
       "archives/bom_revQ.json",
       "archives/bom_revR.csv",
       "archives/docs-superseded/bom_revQ.csv",
+      "avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx",
       "avionics/datasheets/asix/AX88772E_AX88772D_DEMO_BORAD_BOM_20251128.zip",
       "avionics/kicad/Observer/Observer_som_pinmap.csv",
+      "avionics/kicad/Pilot/docs/Pilot-BOM.csv",
+      "avionics/kicad/Pilot/scripts/gen_pilot_bom.py",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
       "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
       "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
@@ -21016,6 +21365,7 @@
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/COMMS-HAT-1/COMMS-HAT-1.kicad_sch",
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/TRIHAT-1/TRIHAT-1.kicad_pcb",
       "archives/stale-20260601/files-revF/serenity-drone-revF/pcb/TRIHAT-1/TRIHAT-1.kicad_sch",
+      "avionics/datasheets/AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf",
       "avionics/datasheets/asix/AX88772E_DEMO_BOARD_SCHEMATIC_V101.zip",
       "avionics/datasheets/molex/ul_1040310811/KiCADv6/2026-10-05_14-13-00.kicad_sym",
       "avionics/datasheets/molex/ul_1040310811/KiCADv6/footprints.pretty/104031-0811_MOL.kicad_mod",
@@ -21222,6 +21572,23 @@
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/docs/Pilot-BOM.csv",
+      "avionics/kicad/Pilot/docs/Pilot-Design-Review.md",
+      "avionics/kicad/Pilot/docs/Pilot-HDD.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-External.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
+      "avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md",
+      "avionics/kicad/Pilot/docs/Pilot-Routing-Worklist.md",
+      "avionics/kicad/Pilot/docs/README.md",
+      "avionics/kicad/Pilot/docs/analysis/emc.json",
+      "avionics/kicad/Pilot/docs/analysis/pcb.json",
+      "avionics/kicad/Pilot/docs/analysis/schematic.json",
+      "avionics/kicad/Pilot/docs/analysis/thermal.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.svg",
+      "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.svg",
+      "avionics/kicad/Pilot/docs/figures/schematics/Pilot.svg",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/B_present_0pins.kicad_sch",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/C_absent_1pin.kicad_sch.crashes",
@@ -21235,9 +21602,12 @@
       "avionics/kicad/Pilot/kicads/Pilot.kicad_prl",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_pro",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sch",
+      "avionics/kicad/Pilot/kicads/Pilot.kicad_sch-bak",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sym",
       "avionics/kicad/Pilot/kicads/Pilot.net",
       "avionics/kicad/Pilot/kicads/fp-lib-table",
+      "avionics/kicad/Pilot/kicads/freerouting.dsn",
+      "avionics/kicad/Pilot/kicads/freerouting.ses",
       "avionics/kicad/Pilot/kicads/freerouting1.ses",
       "avionics/kicad/Pilot/kicads/freerouting2.ses",
       "avionics/kicad/Pilot/kicads/sym-lib-table",
@@ -21246,8 +21616,11 @@
       "avionics/kicad/Pilot/scripts/export_pilot_gerbers.sh",
       "avionics/kicad/Pilot/scripts/fence_pgnd_pilot.py",
       "avionics/kicad/Pilot/scripts/finish_pilot_pcb.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_bom.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_icd.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_routing_worklist.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
       "avionics/kicad/Pilot/scripts/grid_route_pilot.py",
       "avionics/kicad/Pilot/scripts/inject_tpsm828224.py",
@@ -21265,7 +21638,9 @@
       "avionics/kicad/Pilot/scripts/refloorplan_pilot.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_logs/refloorplan-2026-10-17.png",
+      "avionics/kicad/Pilot/scripts/route_loop_pilot.sh",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
+      "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py",
       "avionics/kicad/README.md",
       "avionics/kicad/Serenity-Custom.3dshapes/ISOW1044BDFMR.step",
       "avionics/kicad/Serenity-Custom.3dshapes/KSZ9477STXI.step",
@@ -21292,6 +21667,7 @@
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_TSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_TSM-DV-LC.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Pulse_TC1G00_PulseChip_4.7x3.2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RCLAMP0502B_SOD882.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900x_2x8_THT.kicad_mod",
@@ -21474,7 +21850,23 @@
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
+      "avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx",
+      "avionics/datasheets/AX88772E_Application_DesignNote_v110.pdf",
+      "avionics/datasheets/AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf",
+      "avionics/datasheets/Bourns_CDSOT23-SM712.pdf",
+      "avionics/datasheets/Bourns_SMAJ.pdf",
+      "avionics/datasheets/ECS_ECX-32.pdf",
+      "avionics/datasheets/ESD2CANxx24-Q1_SLVSFW5D.pdf",
+      "avionics/datasheets/HolyStone_HVC_Series.pdf",
       "avionics/datasheets/ImportGuides.html",
+      "avionics/datasheets/Murata_DFE201610P.pdf",
+      "avionics/datasheets/Pulse_TC002_PulseChip.pdf",
+      "avionics/datasheets/TaiyoYuden_LMK325BJ476KMHP_SS.pdf",
+      "avionics/datasheets/YAGEO_CC0402JRNPO9BN150.pdf",
+      "avionics/datasheets/YAGEO_PYU-RC_51_ROHS_P.pdf",
+      "avionics/datasheets/YAGEO_PYU-RC_GROUP_51_ROHS_L.pdf",
+      "avionics/datasheets/YAGEO_UPY-GPHC_X5R_4V-50V.pdf",
+      "avionics/datasheets/YAGEO_UPY-GPHC_X7R_6.3V-250V.pdf",
       "avionics/datasheets/_unidentified/FOCSineESCCANCommunicationProtocolV30.pdf",
       "avionics/datasheets/_unidentified/MBRD1045CT.pdf",
       "avionics/datasheets/_unidentified/MED-16x2_000-Solenoid.pdf",
@@ -21973,6 +22365,23 @@
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
       "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
+      "avionics/kicad/Pilot/docs/Pilot-BOM.csv",
+      "avionics/kicad/Pilot/docs/Pilot-Design-Review.md",
+      "avionics/kicad/Pilot/docs/Pilot-HDD.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-External.md",
+      "avionics/kicad/Pilot/docs/Pilot-ICD-PB2I.md",
+      "avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md",
+      "avionics/kicad/Pilot/docs/Pilot-Routing-Worklist.md",
+      "avionics/kicad/Pilot/docs/README.md",
+      "avionics/kicad/Pilot/docs/analysis/emc.json",
+      "avionics/kicad/Pilot/docs/analysis/pcb.json",
+      "avionics/kicad/Pilot/docs/analysis/schematic.json",
+      "avionics/kicad/Pilot/docs/analysis/thermal.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/bus_topology.svg",
+      "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.json",
+      "avionics/kicad/Pilot/docs/figures/diagrams/emc_severity.svg",
+      "avionics/kicad/Pilot/docs/figures/schematics/Pilot.svg",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/B_present_0pins.kicad_sch",
       "avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/C_absent_1pin.kicad_sch.crashes",
@@ -21986,9 +22395,12 @@
       "avionics/kicad/Pilot/kicads/Pilot.kicad_prl",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_pro",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sch",
+      "avionics/kicad/Pilot/kicads/Pilot.kicad_sch-bak",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sym",
       "avionics/kicad/Pilot/kicads/Pilot.net",
       "avionics/kicad/Pilot/kicads/fp-lib-table",
+      "avionics/kicad/Pilot/kicads/freerouting.dsn",
+      "avionics/kicad/Pilot/kicads/freerouting.ses",
       "avionics/kicad/Pilot/kicads/freerouting1.ses",
       "avionics/kicad/Pilot/kicads/freerouting2.ses",
       "avionics/kicad/Pilot/kicads/sym-lib-table",
@@ -21997,8 +22409,11 @@
       "avionics/kicad/Pilot/scripts/export_pilot_gerbers.sh",
       "avionics/kicad/Pilot/scripts/fence_pgnd_pilot.py",
       "avionics/kicad/Pilot/scripts/finish_pilot_pcb.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_bom.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_footprints.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_icd.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_pcb.py",
+      "avionics/kicad/Pilot/scripts/gen_pilot_routing_worklist.py",
       "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
       "avionics/kicad/Pilot/scripts/grid_route_pilot.py",
       "avionics/kicad/Pilot/scripts/inject_tpsm828224.py",
@@ -22016,7 +22431,9 @@
       "avionics/kicad/Pilot/scripts/refloorplan_pilot.py",
       "avionics/kicad/Pilot/scripts/repair_pilot_routing.py",
       "avionics/kicad/Pilot/scripts/route_logs/refloorplan-2026-10-17.png",
+      "avionics/kicad/Pilot/scripts/route_loop_pilot.sh",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
+      "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py",
       "avionics/kicad/README.md",
       "avionics/kicad/Serenity-Custom.3dshapes/ISOW1044BDFMR.step",
       "avionics/kicad/Serenity-Custom.3dshapes/KSZ9477STXI.step",
@@ -22043,6 +22460,7 @@
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P1_TSM-DV-LC.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_Socket.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/PocketBeagle2_2x18_P2_TSM-DV-LC.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Pulse_TC1G00_PulseChip_4.7x3.2mm.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RCLAMP0502B_SOD882.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900ux_SMT.kicad_mod",
       "avionics/kicad/Serenity-Custom.pretty/RFDesign_RFD900x_2x8_THT.kicad_mod",
