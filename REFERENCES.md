@@ -3178,6 +3178,26 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Section applied** | MF-PSMF035X: Vmax 6 V, Ihold 0.35 A, Itrip 0.75 A at 23 C; thermal derating table (0.14 A hold at 85 C); operating -40..85 C |
 | **Cited in** | Pilot `F-GPS`, `F-SPI` (`gen_pilot_sch.py`) |
 
+### REF-PWR-014: Analog Devices (Linear Technology) LTC4370 — Two-Supply Diode-OR Current Balancing Controller, data sheet 4370f
+
+| Field | Value |
+|---|---|
+| **Publisher** | Analog Devices, Inc. (Linear Technology product line), data sheet 4370f (PDF creation date 2012-05-14) |
+| **Official access** | <https://www.analog.com/media/en/technical-documentation/data-sheets/4370f.pdf> — **URL requires verification** (no network from the authoring session, 2026-10-26) |
+| **Local copy** | `avionics/datasheets/linear/4370f.pdf` (SHA-256 efa666325494ec22800cdc34c6d287109b851c509211caeed6bb6631ffec5615), supplied by the owner |
+| **Section applied** | Absolute Maximum Ratings: VIN1, VIN2, OUT1, OUT2 −2 V to 24 V. Electrical Characteristics: VIN1, VIN2 operating range 2.9–18 V. **Result: fails the 6S gate (25.2 V full charge); rejected for the Flight Engineer combiner.** |
+| **Cited in** | `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` (KTD1, rejected candidates) |
+
+### REF-PWR-015: Analog Devices (Linear Technology) LTC4359 — Ideal Diode Controller with Reverse Input Protection, data sheet Rev. F
+
+| Field | Value |
+|---|---|
+| **Publisher** | Analog Devices, Inc. (Linear Technology product line), LTC4359 data sheet Rev. F |
+| **Official access** | <https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4359.pdf> — **URL requires verification** (no network from the authoring session, 2026-10-26) |
+| **Local copy** | `avionics/datasheets/linear/ltc4359.pdf` (SHA-256 8d05e6ba4259028463bbdb751d639715506ef28d1bd5eabac1b012786ea7d970), supplied by the owner |
+| **Section applied** | Features: 4–80 V operating, reverse input to −40 V, controls single or back-to-back N-channel MOSFETs. Absolute Maximum Ratings: IN, SOURCE, SHDN −40 V to 100 V. Operation: SHDN low turns the gate off; SHDN open is pulled high by an internal 2.6 µA source (enabled). Load Switching section: back-to-back MOSFETs for load-switch use. Temperature grades C 0–70 °C, I −40–85 °C, H −40–125 °C. |
+| **Cited in** | `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` (KTD1, R2, R3, R13) |
+
 ### REF-CONN-001: Samtec TSM series — 0.100in surface-mount terminal strip product data
 
 | Field | Value |

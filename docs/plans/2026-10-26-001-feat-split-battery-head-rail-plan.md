@@ -54,7 +54,7 @@ The verified Admiral Pro 6S 4000 (139 × 44 × 48 mm) fouls the cargo shell by 2
 **Optional third cell**
 
 - R9. An optional third cell (baseline Tattu R-Line v6.0 6S 1600 160C, 70 × 42 × 41 mm, 240 g) fits the payload keep-out (76.2 × 101.6 × 76.2 mm) and takes the place of the mission payload.
-- R10. The third cell is retained by the payload hooks and release and is never carried together with a mission payload. It is non-jettisonable until the companion plan delivers the breakaway connector and the isolate-before-release sequence (companion U4, U5).
+- R10. The third cell is retained by the payload hooks and release and is never carried together with a mission payload. It is drained first, ahead of the main pair, so that jettisoning it sheds spent mass and extends endurance (owner 2026-10-26; companion plan R13). It is non-jettisonable until the companion plan delivers the breakaway connector and the isolate-before-release sequence (companion U4, U5).
 
 **Head-section audit and update**
 
@@ -90,7 +90,7 @@ The verified Admiral Pro 6S 4000 (139 × 44 × 48 mm) fouls the cargo shell by 2
 
 ### Open Questions
 
-- Q1 (deferred). Third-cell jettison: keep it non-jettisonable, or enable jettison once the companion plan's breakaway connector and isolate-before-release sequence exist?
+- Q1 (resolved 2026-10-26, owner). The third cell is for jettison: drain it first, then jettison it once the companion plan's breakaway connector and isolate-before-release sequence exist (companion R12, R13).
 - Q2 (resolved 2026-10-26, owner). Use the gear design's crash deceleration: 79.4 g (4 ft, level, 3.0 in gear), applied in every direction; see R7.
 - Q3 (deferred). Minimum hover mission time that the split configuration must meet.
 

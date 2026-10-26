@@ -8469,6 +8469,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/linear/4370f.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/linear/ltc4359.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/lm393.pdf": {
       "description": "PDF document",
       "tags": [
@@ -22138,6 +22152,8 @@
       "avionics/datasheets/isow1412.pdf",
       "avionics/datasheets/johanson-0915lp15b026e.pdf",
       "avionics/datasheets/johanson-2450bp15e0100.pdf",
+      "avionics/datasheets/linear/4370f.pdf",
+      "avionics/datasheets/linear/ltc4359.pdf",
       "avionics/datasheets/lm393.pdf",
       "avionics/datasheets/lmv331.pdf",
       "avionics/datasheets/max42408-max42410.pdf",

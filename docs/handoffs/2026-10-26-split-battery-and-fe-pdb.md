@@ -98,3 +98,12 @@ The owner directed, on 2026-10-26:
 3. Plan 001: run U1 (head R2 migration and audit context), then the rail, sled and stop units, and pass the lead routes to plan 002 U4.
 
 Relevant skills: `ce-work` (execute the plans), `mechanical-engineering`, `statics-and-dynamics`, `openscad`, `3d-print-design` (head and rail), `kicad` and `datasheets` (FE board), `pcb-engineer`.
+
+## Addendum (2026-10-26, later the same session)
+
+Owner decisions since this handoff was written; these supersede §2–§4 where they conflict.
+
+- **Combiner:** the LTC4370 fails the 6S gate (24 V absolute maximum) [REF-PWR-014]. Plan 002 KTD1 is now one LTC4359 with back-to-back FETs per input [REF-PWR-015]. The pair shares current passively.
+- **Third cell first (plan 002 R13):** firmware holds the pair's SHDN low while the third cell runs, then hands over make-before-break and isolates the third cell. Undriven SHDN re-enables the pair (fail-safe). Q1 resolved: drain it first, then jettison it.
+- **Head-cell catch (plan 001 R7, Q2 resolved):** 79.4 g in every direction, from the gear design's 4 ft level peak; re-check after LG-LOADPATH.
+- **Still open:** LG-LOADPATH, Q3 (mission time), Tattu sourcing, the analog.com URL check and Analog Devices' domicile record.
