@@ -103,7 +103,7 @@
 - [ ] LG-11 coupon — demoted at wing root (flange FOS 29.2); gates tenon/thwarts
 - [ ] ★ Aero revalidation of the re-lofted wing (S1223/t17.7–t26.7; XFOIL/RANS)
 - [ ] LG-PIN-SHEAR: verify 0.6 x Su pin shear for A2 pins (REF-MAT-005)
-- [ ] HEAD-CELL-G: cite an emergency-landing load factor for the head-cell catch (5 g provisional, plan 2026-10-26-001 R7)
+- [x] HEAD-CELL-G: head-cell catch load factor = 79.4 g, the gear design's 4 ft level peak (owner 2026-10-26; plan 2026-10-26-001 R7)
 - [ ] LTC4370/LTC4359 input-range check vs 25.2 V 6S (plan 2026-10-26-002 U1 gate)
 
 #### 0.8.1 — Wing attach interface (Rev S1g), open requirements

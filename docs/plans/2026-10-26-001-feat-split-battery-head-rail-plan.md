@@ -48,7 +48,7 @@ The verified Admiral Pro 6S 4000 (139 × 44 × 48 mm) fouls the cargo shell by 2
 
 - R5. The cradle is extended forward as a rail through the head/cargo splice collar into the head. Both cells ride it.
 - R6. The head cell is inserted and removed through the open cargo doors only, using a sled with a pull lanyard. No new opening is made in the head shell.
-- R7. A forward stop and a positive catch hold the head cell under the crash case. The catch shall not depend on the cargo cell behind it. The design load factor is 5 g forward and vertical (about 3.5 lbf (15.7 N) at 321 g) until a cited emergency-landing factor replaces it; 5 g is uncited and marked requires verification.
+- R7. A forward stop and a positive catch hold the head cell under the crash case. The catch shall not depend on the cargo cell behind it. The design load factor is **79.4 g** in every direction. That is the landing gear's peak hull deceleration for the adopted 4 ft (1.219 m) drop, level attitude, on the 3.0 in flight-article gear (`docs/LANDING_GEAR_ANALYSIS.md` §Rev R6 table, "Peak decel, 4 ft tail-down / level" = 39.7 g / 79.4 g; LG-17 closed 2026-08-09). The cell's inertial load is therefore about 56.2 lbf (250 N) at 321 g (0.708 lbm), before the U-unit FOS 3.0. The gear figure is vertical; the forward direction takes the same value as a declared bounding assumption, because the gear analysis gives no forward figure. Re-check this figure after LG-LOADPATH is decided, because that changes the wire plateau force (owner decision 2026-10-26).
 - R8. Printed parts follow the owner's material order: printable composite first, then pre-cut composite, then metal only where a cited allowable requires it.
 
 **Optional third cell**
@@ -70,8 +70,8 @@ The verified Admiral Pro 6S 4000 (139 × 44 × 48 mm) fouls the cargo shell by 2
 > **WARNING**
 >
 > A loose LiPo in a crash can be punctured and burn. The head-cell catch is the only
-> thing holding the cell off the nose avionics. It shall be sized to a cited
-> emergency-landing load factor before flight, not to the provisional 5 g.
+> thing holding the cell off the nose avionics. It shall be sized to the
+> crash load factor in R7 (79.4 g, from the gear design), not to a lower figure.
 
 ### Acceptance Examples
 
@@ -91,7 +91,7 @@ The verified Admiral Pro 6S 4000 (139 × 44 × 48 mm) fouls the cargo shell by 2
 ### Open Questions
 
 - Q1 (deferred). Third-cell jettison: keep it non-jettisonable, or enable jettison once the companion plan's breakaway connector and isolate-before-release sequence exist?
-- Q2 (deferred). The cited emergency-landing load factor for the head-cell catch (replaces the provisional 5 g; root WBS §0.8 HEAD-CELL-G).
+- Q2 (resolved 2026-10-26, owner). Use the gear design's crash deceleration: 79.4 g (4 ft, level, 3.0 in gear), applied in every direction; see R7.
 - Q3 (deferred). Minimum hover mission time that the split configuration must meet.
 
 ---
