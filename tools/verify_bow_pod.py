@@ -69,7 +69,7 @@ LASER_BORE_L = 38.0
 
 # Flat extents (hull), for the aperture-row fit check.
 FLAT_W = 26.4  # mm — flat width spec (1.04 in)
-FLAT_CENTER_X = -167.15
+FLAT_CENTER_X = 2.70  # hull X, aircraft datum R2 (R1 -167.15)
 
 # Bore axis unit vectors in hull frame (exterior-facing, i.e. toward bow tip).
 # BOW_ROT cylinders fire toward -Y; LASER_ROT fires 30 deg below the -Y horizon.

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-20",
+  "generated": "2026-10-25",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -283,7 +283,7 @@
       "archived": false
     },
     "airframe/FreeCAD-scripts/serenity_assembly.py": {
-      "description": "serenity_assembly.py \u2014 Serenity UAV full-airframe FreeCAD assembly.",
+      "description": "Python script",
       "tags": [
         "cad-mesh",
         "security",
@@ -1185,7 +1185,7 @@
       "archived": false
     },
     "airframe/openscad/fuselage/cargo/tilt_actuator_options.scad": {
-      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See AGENTS.md.",
+      "description": "AIRCRAFT DATUM R2 (2026-10-20, plan 2026-10-19-001); hull X literals below are",
       "tags": [
         "cad-mesh",
         "structural"
@@ -1519,7 +1519,6 @@
       "description": "port_tilt_spar_assembly.scad \u2014 ILLUSTRATIVE integration view (2026-07-19)",
       "tags": [
         "cad-mesh",
-        "security",
         "structural"
       ],
       "archived": false
@@ -18855,7 +18854,6 @@
       "airframe/openscad/nacelles/_export_pivot_slab.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
-      "airframe/openscad/port_tilt_spar_assembly.scad",
       "airframe/placeholders/generate_placeholders.py",
       "airframe/stls/fuselage/cargo/generate_cargo_hinge_retention.py",
       "archives/airframe-archives/archive/FreeCAD-scripts/Serenity-Assemble.py",

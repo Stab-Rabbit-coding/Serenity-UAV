@@ -64,8 +64,8 @@ resulting pad volume/mass so the LG-18 mass ledger can be updated.
 
 Coordinate frames
 -----------------
-Hull frame  : X = +port, Y = +aft, Z = +dorsal; cargo belly Z = 0;
-              centreline X = -169.9 (airframe/AGENTS.md).
+Hull frame  : X = +port, Y = +aft, Z = +dorsal; cargo belly Z = 80 (R2);
+              centreline X = hd.X_CL = 0 (aircraft datum R2, tools/hull_datums.py).
 Leg-local   : hip pin at origin, +X outboard along the swing azimuth,
               pin axis = local Y, +Z dorsal
               (airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad header).

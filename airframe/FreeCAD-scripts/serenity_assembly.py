@@ -145,6 +145,26 @@ AIRFRAME = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 STL_DIR = os.path.join(AIRFRAME, "stls")
 OUTPUT = os.path.join(AIRFRAME, "freecad", "assembly", "SerenityAssembly.FCStd")
 
+# Aircraft datum R2 (plan 2026-10-19-001): the datums and every bake
+# translation are READ from tools/hull_datums.py and tools/bake_hull_frame.py
+# (numpy-only, importable in FreeCAD's interpreter), never restated here.
+import re  # noqa: E402
+import sys  # noqa: E402
+
+sys.path.insert(0, os.path.join(os.path.dirname(AIRFRAME), "tools"))
+import hull_datums as hd  # noqa: E402
+
+_T5_PARAMS = os.path.join(AIRFRAME, "openscad", "fuselage", "cargo", "cargo_layout_t5_params.scad")
+
+
+def _scad_param(path, name):
+    """Read one numeric assignment `NAME = value;` from a generated SCAD include."""
+    with open(path, encoding="utf-8") as fh:
+        m = re.search(rf"^{name}\s*=\s*([-+0-9.eE]+)\s*;", fh.read(), re.M)
+    if m is None:
+        raise SystemExit(f"{name} not found in {path}")
+    return float(m.group(1))
+
 
 # ---------------------------------------------------------------------------
 # R1: The eight primary components import with IDENTITY placements.
@@ -270,26 +290,27 @@ R_BAKE = (
     (0.0, -1.0, 0.0),
 )
 
-# Per-side bake translation, copied as plain numbers from
-# tools/bake_hull_frame.py COMPONENTS['Nacelle_Port'] / ['Nacelle_Stbd']
-# (that file remains the single source of truth for the primary nacelle
-# placement; these values are not re-derived here).
+# Per-side bake translation, READ from tools/bake_hull_frame.py
+# COMPONENTS['Nacelle_Port'] / ['Nacelle_Stbd'] (the single source of truth
+# for the primary nacelle placement).  Until 2026-10-20 these were copied here
+# as R1 numbers.
 T_BAKE_50 = {
-    "port": (46.9999060, -63.9998720, 62.9998740),
-    "stbd": (-385.0960040, -69.9998600, 64.9719300),
+    "port": hd.bake_translation("Nacelle_Port"),
+    "stbd": hd.bake_translation("Nacelle_Stbd"),
 }
 
 # NACELLE GENERATION (Rev T6, 2026-10-03).  64 = the QX 64 mm EDF nacelle
 # (nacelle_pod_64mm_tandem.scad), the build baseline; 50 keeps the legacy
 # 50 mm pod and its internals for reference.  The 64 mm bake translation is
 # DERIVED in tools/bake_hull_frame.py ('Nacelle64_*': tilt axis = level spar
-# line Y 21.000 / Z 66.851, pod pad seats on each wing's measured pad face,
-# mirrored about the hull centre plane X -169.241); the same numbers are
-# restated here because this file runs under freecadcmd without that module.
+# line, pod pad seats on each wing's measured pad face, starboard mirrored
+# about X_CL) and READ here.  The R1 copy that used to live here mirrored
+# starboard about the old measured plane X -169.241, 1.218 mm off the
+# re-centred starboard pod (5149b8ce).
 NACELLE_GEN = 64
 T_BAKE_64 = {
-    "port": (6.700 + 53.84, 21.000 - 109.7, 66.851),
-    "stbd": (-345.182 - 53.84, 21.000 - 109.7, 66.851),
+    "port": hd.bake_translation("Nacelle64_Port"),
+    "stbd": hd.bake_translation("Nacelle64_Stbd"),
 }
 T_BAKE = T_BAKE_64 if NACELLE_GEN == 64 else T_BAKE_50
 
@@ -630,17 +651,17 @@ def assemble():
     # centreline-correct; only the never-applied code was missing). Rough
     # placement only — orientation and fine position still need the
     # checklist's own visual-fit pass in FreeCAD.
-    CARGO_X_CL = -170.0  # cargo/middle section lateral centreline, hull frame
+    CARGO_X_CL = hd.X_CL  # aircraft centreline (R1 -170.0)
 
     # cargo_cradle_autolatch retired 2026-10-19 (weight pass, BOM qty 0): the
     # stowed payload is held by the winch ratchet over the latched doors
     # (docs/CARGO_WINCH_SPECIFICATION.md state table).
 
     fpv = add_mesh(doc, _stl("fuselage/cargo/cargo_fpv_bezel.stl"), "Cargo_FPV_Bezel")
-    place_mesh(fpv, (CARGO_X_CL, 60.0, 160.0, 0.0, 0.0, 0.0, 1.0))
+    place_mesh(fpv, (CARGO_X_CL, 365.7, 240.0, 0.0, 0.0, 0.0, 1.0))  # R2; R1 Y 60, Z 160
 
     gps = add_mesh(doc, _stl("fuselage/cargo/cargo_gps_retention_ring.stl"), "Cargo_GPS_Ring")
-    place_mesh(gps, (CARGO_X_CL, 20.0, 161.5, 0.0, 0.0, 0.0, 1.0))
+    place_mesh(gps, (CARGO_X_CL, 325.7, 241.5, 0.0, 0.0, 0.0, 1.0))  # R2; R1 Y 20, Z 161.5
 
     # 2026-10-19 placement audit (tools/placement_audit.py): the N20 winch
     # mount + spool (scrubbed 2026-07-27, airframe/fuselage-mid/WBS.md) and the
@@ -659,12 +680,12 @@ def assemble():
     door_servo = add_mesh(
         doc, _stl("fuselage/cargo/cargo_door_servo_bracket.stl"), "Cargo_Door_Servo_Bracket"
     )
-    place_mesh(door_servo, (-125.0, 85.0, 110.0, 0.0, 0.0, 0.0, 1.0))
+    place_mesh(door_servo, (44.85, 390.7, 190.0, 0.0, 0.0, 0.0, 1.0))  # R2; R1 (-125, 85, 110)
 
     release_servo = add_mesh(
         doc, _stl("fuselage/cargo/cargo_release_servo_bracket.stl"), "Cargo_Release_Servo_Bracket"
     )
-    place_mesh(release_servo, (-210.0, 85.0, 110.0, 0.0, 0.0, 0.0, 1.0))
+    place_mesh(release_servo, (-40.15, 390.7, 190.0, 0.0, 0.0, 0.0, 1.0))  # R2; R1 (-210, 85, 110)
 
     # -------------------------------------------------------------------
     # FUSELAGE ACCESSORIES (battery tray and belly panel) — VERIFY (2026-09-05
@@ -708,8 +729,8 @@ def assemble():
             battery_tray,
             (
                 (0.0, 0.0, 1.0, CARGO_X_CL - 31.0),  # hull_x = local_z + tx (tray Z half-width 31)
-                (-1.0, 0.0, 0.0, 106.75),  # hull_y = -local_x + ty
-                (0.0, 1.0, 0.0, 2.0),  # hull_z = local_y + tz (tray bottom ~2 mm off the floor)
+                (-1.0, 0.0, 0.0, 412.45),  # hull_y = -local_x + ty (R2; R1 106.75)
+                (0.0, 1.0, 0.0, 82.0),  # hull_z = local_y + tz, ~2 mm off the floor (R1 2.0)
             ),
         )
 
@@ -718,8 +739,8 @@ def assemble():
             belly_panel,
             (
                 (0.0, 0.0, 1.0, CARGO_X_CL - 32.5),  # panel is 65 mm wide, half-width 32.5
-                (-1.0, 0.0, 0.0, 106.75),  # same X/Y centre as Battery_Tray (covers its opening)
-                (0.0, 1.0, 0.0, 0.0),  # flush with the belly (Z ~ 0) below the tray
+                (-1.0, 0.0, 0.0, 412.45),  # same X/Y centre as Battery_Tray (R2; R1 106.75)
+                (0.0, 1.0, 0.0, hd.BELLY_Z),  # flush with the belly below the tray (R1 Z 0)
             ),
         )
 
@@ -952,7 +973,8 @@ def assemble():
     # cargo_vera_faraday.scad is re-authored in hull frame (OBS-CARGO).
     # -------------------------------------------------------------------
     print("[assembly] Rev T5e cargo equipment (tilt actuators, brake, battery cradle, chin shelf) ...", flush=True)
-    T5_STBD_DX = 2.0 * (-169.85 - (-125.25))   # -89.2 mm, port -> starboard translate
+    # -89.2 mm port -> starboard translate, from the generated layout include
+    T5_STBD_DX = 2.0 * (hd.X_CL - _scad_param(_T5_PARAMS, "WORM_X"))
     add_mesh(doc, _stl("fuselage/cargo/tilt_actuator_bracket_port.stl"), "Tilt_Bracket_Port")
     add_mesh(doc, _stl("fuselage/cargo/tilt_actuator_bracket_stbd.stl"), "Tilt_Bracket_Stbd")
     for side, dx in (("Port", 0.0), ("Stbd", T5_STBD_DX)):

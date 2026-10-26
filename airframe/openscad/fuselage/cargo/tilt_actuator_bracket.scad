@@ -131,12 +131,12 @@ EPS = 0.01;
 // Bracket parameters (hull frame, port side)
 // ---------------------------------------------------------------------------
 WALL_T        = 2.0;                     // CF-PETG structural wall
-WEB_X1        = GEAR_X_OUT + 5.0;        // foot / web plane, outboard face (-117.75)
-WEB_X0        = WEB_X1 - WALL_T;         // -119.75 -- 3.0 mm clear of the wheel face
-WEB_Y0        = 4.0;
-WEB_Y1        = 97.5;                    // Rev T5e: carries the board rails; 2 mm fwd of node N2 (Y 99.5)
-WEB_Z0        = 70.0;                    // foot 2 pad bottom (71) sits on it; harness bores are Z <= 69 in the WALL
-WEB_Z1        = 133.0;
+WEB_X1        = GEAR_X_OUT + 5.0;        // foot / web plane, outboard face (R2 52.1)
+WEB_X0        = WEB_X1 - WALL_T;         // R2 50.1 -- 3.0 mm clear of the wheel face
+WEB_Y0        = 309.7;                   // aircraft datum R2 (R1 4.0)
+WEB_Y1        = 403.2;                   // Rev T5e: board rails; 2 mm fwd of node N2 (R2 Y 405.2; R1 97.5)
+WEB_Z0        = 150.0;                   // foot 2 pad bottom (151) sits on it; harness bores Z <= 149 (R1 70)
+WEB_Z1        = 213.0;                   // R2 (R1 133.0)
 FOOT_PAD      = 12.0;                    // square foot pad, matches shell boss
 FOOT_T        = 3.0;                     // pad thickness (outboard of the web)
 M3_CLR        = 3.4;                     // ISO 273 medium
@@ -158,7 +158,7 @@ TIE_SLOT      = [1.6, 4.5];              // cable-tie slot (thickness x width)
 // rails on the web's OUTBOARD face (Rev T5e), board plane parallel to the
 // web, component side toward the web (RAIL_H standoff), bare back to the
 // skin.  BOARD_L / BOARD_W / BOARD_Y0 / BOARD_Z0 come from the params file
-// (hull Y extent 42.9, hull Z extent 36.5, Y 55, Z 85).
+// (hull Y extent 42.9, hull Z extent 36.5, R2 Y 360.7, Z 165).
 BOARD_PCB_T   = 1.6;
 RAIL_CLR      = 0.3;
 RAIL_H        = 4.0;                     // rail standoff (component clearance under the board)

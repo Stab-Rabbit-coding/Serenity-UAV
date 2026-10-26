@@ -4,7 +4,8 @@
 snapshot DIR   run every frame-aware tool under tools/ (no arguments, or the
                arguments in ARGS below) and store each stdout+stderr in DIR.
 compare A B    compare two snapshots line by line.  A number may change only by
-               a datum offset (+-169.850, +-305.704, +-80.000, within 0.01 mm);
+               a datum offset (+-169.850, +-305.704, +-80.000, within 0.011 mm plus
+               the rounding of the printed values);
                every other changed number is reported.  A tool that ran in A
                but fails in B is reported.
 
@@ -66,8 +67,15 @@ def snapshot(out: Path, tools: list[str]) -> None:
     (out / "status.json").write_text(json.dumps(status, indent=1))
 
 
-def is_offset(d: float) -> bool:
-    return abs(d) < TOL or any(abs(abs(d) - o) < TOL for o in OFFSETS)
+def _half_ulp(tok: str) -> float:
+    """Half a unit in the last printed place: the rounding a printed value carries."""
+    return 0.5 * 10.0 ** -len(tok.split(".")[1]) if "." in tok else 0.5
+
+
+def is_offset(d: float, slack: float = 0.0) -> bool:
+    """True if d is zero or a datum offset, within TOL plus the print rounding."""
+    tol = TOL + slack
+    return abs(d) < tol or any(abs(abs(d) - o) < tol for o in OFFSETS)
 
 
 def compare(a: Path, b: Path) -> int:
@@ -93,7 +101,7 @@ def compare(a: Path, b: Path) -> int:
                 bad += 1
                 continue
             for u, v in zip(nx, ny):
-                if not is_offset(float(v) - float(u)):
+                if not is_offset(float(v) - float(u), _half_ulp(u) + _half_ulp(v)):
                     print(f"CHANGED    {t}:{i + 1}: {u} -> {v}   [{y.strip()[:80]}]")
                     bad += 1
                     break

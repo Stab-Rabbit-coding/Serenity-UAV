@@ -56,9 +56,13 @@ except ImportError:  # pragma: no cover - reported, never silently skipped
     m3 = None
 
 SPAN_AXIS = 0          # hull X is span (port +X / stbd -X, serenity_assembly.py)
-# Hull centre plane, MEASURED on the baked cargo shell (tools/bake_hull_frame.py
-# Wing_Stbd note): the hull frame origin is NOT on the aircraft centreline.
-CENTRE_X = -169.241
+# Aircraft centreline, imported from the datum module (plan 2026-10-19-001).
+# Was a measured R1 value -169.241; 5149b8ce made every starboard twin an exact
+# mirror about X_CL, so the census mirrors about the same plane.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import hull_datums as hd  # noqa: E402
+
+CENTRE_X = hd.X_CL
 
 
 def load(census: Path) -> dict[str, trimesh.Trimesh]:
