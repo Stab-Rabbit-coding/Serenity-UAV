@@ -841,7 +841,10 @@ Derivation: `docs/LANDING_GEAR_ANALYSIS.md` §4.8. Gate:
         > spring steel > stainless; absorber wires stay metal), first with a
         cited allowable. Gate: `tools/lg_bellcrank_fbd.py` (exit 2 if A or B
         < 1.0). **BLOCKS LG-REMASS-c, LG-15, BHD-02g fore.**
-        - [ ] LG-FUSE-MAT — ductile fuse material (owner 2026-10-26): no cited
+        - [x] LG-FUSE-MAT — **DECIDED 2026-10-26 (owner): 6061-T6 ductile fuse in AXIAL
+            TENSION** (Ø4.60 mm, gauge 33.9 mm, 19.4 g for 8, Su/Sy 1.12, no DBTT;
+            `tools/lg_fuse_material.py`, study §6). Open: necking (uniform) strain from the
+            LG-15 bench firing. Original finding: ductile fuse material: no cited
             material meets all of flat plateau (Su/Sy), > hinge strain elongation and
             no DBTT on the present bow geometry (~25-37 % hinge strain; 6061-T6 cracks,
             annealed 304 work-hardens 2.5x). Source an annealed low-carbon steel /

@@ -240,6 +240,8 @@ plateau and stroke, with a 1.5× margin on total elongation:
 | C26000 brass H02 | 4.09 mm | 38.4 mm | 52.3 g | 1.57 | none |
 | C26000 brass annealed | 7.65 mm | 10.5 mm | 95.5 g | 4.00 | none |
 
+**DECIDED 2026-10-26 (Stab-Rabbit-coding): the ductile fuse is 6061-T6 in axial tension.**
+
 **6061-T6 in tension** meets all five properties on cited data, is the
 lightest, and is the owner's preferred metal. It also suits Option A: a
 balanced couple can be two **tension** fuses, one on each side of the pin.
