@@ -552,7 +552,9 @@ WING_SHAFT_ENTRY_D = 4.4   # = wings_s1223_revo.scad SHAFT_BORE_D, running fit
 # the full -270..-70 lateral run, because it is a continuous rod), so punching a
 # harness bore through it is not a new intrusion into that wall.
 WING_HARNESS_INB_PORT = 44.85    # R1 -125.0, past the R1 -115.2 encoder-line wall
-WING_HARNESS_INB_STBD = -43.15   # R1 -213.0, past the R1 -225.2 wall (stbd inboard is +X)
+# Cargo is the mirror of its port half (SYMMETRIC_FROM_PORT), so starboard
+# stations are the port ones mirrored about X_CL, never separately measured.
+WING_HARNESS_INB_STBD = 2.0 * hd.X_CL - WING_HARNESS_INB_PORT  # was -43.15 (R1 -213.0)
 
 # Entry heights — same unscaled camber-midline rule as the spar.
 WING_NAV_Z = WING_CHORD_LINE_Z + WING_NAV_MIDLINE       # = +61.974
@@ -572,7 +574,9 @@ MORT_H = 20.8  # mortise Z span = 20.0 tenon + 0.4 mm/side
 # Lateral-wall X reference bands (deep-embed spans; the outboard end is clipped
 # to the real skin by the envelope, so only rough bracketing is needed).
 PORT_OUTB, PORT_INB = 109.85, 69.85  # port wall bracket; R1 (-60, -100)
-STBD_OUTB, STBD_INB = -108.15, -70.15  # stbd wall bracket; R1 (-278, -240)
+# stbd wall bracket = mirror of port (was -108.15 / -70.15, R1 -278 / -240,
+# measured on the old asymmetric starboard skin: a 1.70 mm harness DESYNC)
+STBD_OUTB, STBD_INB = 2.0 * hd.X_CL - PORT_OUTB, 2.0 * hd.X_CL - PORT_INB
 
 # Nacelle-tilt actuator mount pads.
 #
@@ -1678,13 +1682,38 @@ def lg_bay_features(shell_tm, envelope_tm=None):
 # ---------------------------------------------------------------------------
 
 
+# CARGO SYMMETRY (owner decision 2026-10-19, rebuild queue of plan
+# 2026-10-19-001): the cargo section is rebuilt as the MIRROR OF ITS PORT HALF
+# about the aircraft centreline X = hd.X_CL, as head and rear already are
+# (5149b8ce).  The Blender source's starboard half sits ~1 mm off the mirrored
+# port half on average (XOR 142 cm^3 of 370 cm^3; up to ~3 mm at the wing-root
+# window), which put a 13.64 mm port/stbd DESYNC into the root flanges and a
+# 2.35 mm one into the fore gear stations.  Doing it HERE, in the one bake
+# every consumer calls (this merge, generate_lg_bays, generate_wing_root_flange
+# and the census/fit gates), keeps them all on one symmetric shell (rule R3).
+SYMMETRIC_FROM_PORT = True
+
+
+def symmetrize_port(tm):
+    """Return tm rebuilt as its port half (X >= X_CL) plus that half's mirror."""
+    s = to_man(tm)
+    half = Manifold.cube([1000.0, 2000.0, 2000.0]).translate([hd.X_CL, -1000.0, -1000.0])
+    port = s ^ half
+    stbd = port.mirror([1.0, 0.0, 0.0]).translate([2.0 * hd.X_CL, 0.0, 0.0])
+    return from_man(port + stbd)
+
+
 def bake(mesh):
-    """Apply the Cargo_Shell hull-frame bake transform (180° about Z + T)."""
+    """Apply the Cargo_Shell hull-frame bake transform (180 deg about Z + T).
+
+    With SYMMETRIC_FROM_PORT the baked shell is then rebuilt as the mirror of
+    its port half (see above)."""
     v = mesh.vertices.copy()
     v[:, 0] = -v[:, 0] + BAKE_T[0]
     v[:, 1] = -v[:, 1] + BAKE_T[1]
     v[:, 2] = v[:, 2] + BAKE_T[2]
-    return trimesh.Trimesh(vertices=v, faces=mesh.faces, process=False)
+    baked = trimesh.Trimesh(vertices=v, faces=mesh.faces, process=False)
+    return symmetrize_port(baked) if SYMMETRIC_FROM_PORT else baked
 
 
 def build_negatives(shell_tm, envelope_tm=None):

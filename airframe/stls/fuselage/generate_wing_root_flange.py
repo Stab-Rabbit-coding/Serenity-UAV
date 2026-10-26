@@ -112,11 +112,19 @@ def build(side):
     z0 = mci.WING_SPAR_Z - mci.ROOT_FLANGE_H / 2.0
     z1 = mci.WING_SPAR_Z + mci.ROOT_FLANGE_H / 2.0
 
+    # WALL BAND (2026-10-26): the window's inboard edge is a MIRRORED distance
+    # from the centreline, FLANGE_BAND_X.  It used to be PORT_INB - 20 /
+    # STBD_INB + 20, which reached the interior wall standing at |X| 53..57
+    # behind the skin (Y +350..357, Z 139..151): on starboard the plate climbed
+    # onto it as a 0.4 mm, 473 mm^3 sheet out to |X| 50.4 (unprintable), while
+    # on port the same piece came out disconnected and keep_plate() dropped it
+    # -- a 13.64 mm port/stbd DESYNC in tools/cargo_bulkhead_context.py.  The
+    # plate's real inner face is at |X| ~64, so 60 keeps 4 mm of margin.
     if side == "port":
-        x_lo, x_hi = mci.PORT_INB - 20.0, mci.PORT_OUTB
+        x_lo, x_hi = hd.X_CL + FLANGE_BAND_X, mci.PORT_OUTB
         dx = -mci.ROOT_FLANGE_T          # inboard is -X on the port side
     else:
-        x_lo, x_hi = mci.STBD_OUTB, mci.STBD_INB + 20.0
+        x_lo, x_hi = mci.STBD_OUTB, hd.X_CL - FLANGE_BAND_X
         dx = +mci.ROOT_FLANGE_T          # inboard is +X on the starboard side
 
     # Local envelope: the footprint plus CROP_PAD on every side.  Everything
@@ -153,6 +161,7 @@ def build(side):
 
 
 NOTCH_CLR = 1.5     # mm, printed-part clearance around the notch
+FLANGE_BAND_X = 60.0  # mm, |X| from the centreline: inboard limit of the plate window
 
 
 def fore_gear_notch(side, plate):
