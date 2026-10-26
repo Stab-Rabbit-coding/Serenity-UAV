@@ -14033,6 +14033,14 @@
       ],
       "archived": false
     },
+    "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md": {
+      "description": "Handoff: split battery, head rail, and FE multi-battery PDB",
+      "tags": [
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
     "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html": {
       "description": "HTML document",
       "tags": [
@@ -18498,6 +18506,7 @@
       "docs/failsafe_thresholds.md",
       "docs/flight_envelope.md",
       "docs/handoffs/2026-10-20-aircraft-datum-r2-migration.md",
+      "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
       "docs/ideation/2026-10-10-pilot-placement-routability-ideation.html",
       "docs/ideation/7-2.webp",
@@ -20624,6 +20633,7 @@
       "docs/BATTERY_MOUNT.md",
       "docs/BATTERY_SPLIT_OPTIONS.md",
       "docs/POWER_DISTRIBUTION.md",
+      "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",
       "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md",
       "docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md",
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
