@@ -157,10 +157,13 @@ PRINTED = [
     ("(wing tilt pinion)", "wings/wing_tilt_pinion_stbd.stl", 1, "hull"),
     ("PRINT-BATT-CRADLE", "fuselage/cargo/battery_cradle.stl", 1, "hull"),
     ("PRINT-CHIN-SHELF", "fuselage/cargo/chin_node_shelf.stl", 1, "hull"),
-    ("PRINT-LG-BAY-PLATE", "fuselage/landing-gear/lg_r6_3_0in_bay_fore-port_print.stl", 1, "hull"),
-    ("PRINT-LG-BAY-PLATE", "fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd_print.stl", 1, "hull"),
-    ("PRINT-LG-BAY-PLATE", "fuselage/landing-gear/lg_r6_3_0in_bay_aft-port_print.stl", 1, "hull"),
-    ("PRINT-LG-BAY-PLATE", "fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl", 1, "hull"),
+    # The INSTALLED (baked, aircraft-frame) bay meshes, not the *_print.stl bed
+    # copies: those are part-local, so measuring them "hull" put all four bays at
+    # the datum origin (CG Y -4.8 mm in R2; also wrong, by less, in R1).
+    ("PRINT-LG-BAY-PLATE", "fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl", 1, "hull"),
+    ("PRINT-LG-BAY-PLATE", "fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl", 1, "hull"),
+    ("PRINT-LG-BAY-PLATE", "fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl", 1, "hull"),
+    ("PRINT-LG-BAY-PLATE", "fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl", 1, "hull"),
     # Leg frames and feet: part-local; placed midway hip->foot / at the foot.
     ("PRINT-LG-LEG-FRAME-3.0IN", "fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl", 2,
      ("st", (X_CL, 274.7, 80.0), "ESTIMATE: fore legs, midway hip Y -16 -> foot Y -46.5")),
@@ -177,7 +180,7 @@ PRINTED = [
     ("PRINT-CARGO-DOOR-SERVO-BKT", "fuselage/cargo/cargo_door_servo_bracket.stl", 1,
      ("st", DOOR_ST[0], "ESTIMATE: " + DOOR_ST[1])),
     ("PRINT-CARGO-RELEASE-BKT", "fuselage/cargo/cargo_release_servo_bracket.stl", 1,
-     ("st", (X_CL, clf.HOIST_Y, 120.0), "ESTIMATE: release at the hoist")),
+     ("st", (X_CL, clf.HOIST_Y, hd.BELLY_Z + 120.0), "ESTIMATE: release at the hoist")),  # R1 Z 120
     ("PRINT-GW-DOOR-TRAY", "fuselage/cargo/gateway_door_tray.stl", 1,
      ("st", GW_DOOR_ST[0], GW_DOOR_ST[1])),
     ("PRINT-DOOR-LATCH-BRACKET", "fuselage/cargo/door_latch_bracket_port.stl", 1,
@@ -346,7 +349,8 @@ GAPS = [
      mlf.can_mass() + mlf.M_FE_PLATE + mlf.M_FE_HW, FE_ST,
      "middle_layout_fit.py can_mass(), M_FE_PLATE, M_FE_HW"),
     ("Cargo Observer node (vision/ToF/laser)", 60.0,
-     ((X_CL, clf.OBSERVER_Y0 + clf.OBSERVER_T / 2, 50.0), "cargo_layout_fit OBSERVER_*"),
+     ((X_CL, clf.OBSERVER_Y0 + clf.OBSERVER_T / 2, clf.OBSERVER_Z0 + clf.OBSERVER_W / 2),
+      "cargo_layout_fit OBSERVER_*"),  # was a typed R1 Z 50 (below the R2 belly)
      "ESTIMATE 60 g -- no BOM row; envelope 76.8 x 70.8 x 20 mm"),
     ("CAN-PERIPH-GW-1 gateways x2 (winch, tilt encoders)", 12.0, WINCH_ST,
      "ESTIMATE 6 g each, as CAN-PERIPH-GW-DOOR -- no BOM rows"),
