@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-24",
+  "generated": "2026-10-26",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -8107,6 +8107,20 @@
       "archived": false
     },
     "avionics/datasheets/linear/2893159.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/linear/4370f.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/linear/ltc4359.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -21928,6 +21942,8 @@
       "avionics/datasheets/jst/SM04B-SRSS-TB.pdf",
       "avionics/datasheets/jst/eGH.pdf",
       "avionics/datasheets/linear/2893159.pdf",
+      "avionics/datasheets/linear/4370f.pdf",
+      "avionics/datasheets/linear/ltc4359.pdf",
       "avionics/datasheets/littelfuse/TVS-Diode-SMBJ-Datasheet.pdf",
       "avionics/datasheets/magntek/MT6701_Datasheet_Rev.1.9.pdf",
       "avionics/datasheets/microchip/KSZ8863MLL-FLL-RLL_DS00002335B.pdf",
