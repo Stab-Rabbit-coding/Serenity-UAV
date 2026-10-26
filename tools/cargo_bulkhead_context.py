@@ -347,7 +347,7 @@ DELIBERATE = {
     "door (closed)": (6.0, "DOOR-REWORK half-lap: the port door's outer lip reaches "
                            "LAP_W 6 mm past the centreline (owner 2026-10-19)"),
     "door swept": (6.1, "same lap, swept 0..145 deg"),
-    "latch bracket": (12.0, "one latch (port): the starboard bracket has no mortise "
+    "latch bracket": (13.0, "one latch (port): the starboard bracket has no mortise "
                             "(DOOR-REWORK, CARGO_DOOR_LATCH_SPEC Rev B)"),
 }
 

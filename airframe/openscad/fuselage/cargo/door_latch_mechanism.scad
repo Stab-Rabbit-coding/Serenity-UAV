@@ -114,7 +114,13 @@ ARM_LATCH = 10.0;   // rB: to the hook (r_lip in the statics package)
 // fully closed.  DRIVE arm points toward the door horn at phi=0; LATCH arm
 // points into the mortise.
 ANG_DRIVE = 200.0;
-ANG_LATCH = 20.0;
+// Rev B (2026-10-26): 20 -> 60.  With the pivot 2 mm inboard of the hinge
+// (PIVOT_IN) a 20 deg latch arm put the hook tip and its mortise against the
+// flank (crank x shell 1.68 mm^3; mortise bridge 0.76 mm outside the skin,
+// tools/placement_audit.py).  Swung 40 deg forward the arm stays inboard;
+// r_lip = ARM_LATCH is unchanged, so the CARGO_DOOR_LATCH_SPEC statics hold,
+// and mortise_boss() reads this angle, so hook and mortise stay registered.
+ANG_LATCH = 60.0;
 
 PIN_D = 3.0;  PIN_CL = 0.075;  PIN_BORE_R = PIN_D/2 + PIN_CL;
 

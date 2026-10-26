@@ -131,6 +131,15 @@ def census(parts: dict, near: float, contact: float, clash: float,
     return rows
 
 
+# Deliberate port/starboard asymmetries (plan 2026-10-03-002 rule R4): part ->
+# (max bbox offset mm, why).  Same register as tools/cargo_bulkhead_context.py.
+DELIBERATE = {
+    "Cargo_Door": (6.0, "DOOR-REWORK half-lap: port lip reaches 6 mm past X_CL"),
+    "Door_Latch_Bracket": (13.0, "one latch (port); stbd bracket has no mortise"),
+    "Door_Latch_Crank": (12.0, "one latch (port); stbd crank is drive-only"),
+}
+
+
 def symmetry(parts: dict, tol: float) -> list[dict]:
     """Mirror each *_Port part and compare with its *_Stbd twin."""
     out = []
@@ -150,7 +159,9 @@ def symmetry(parts: dict, tol: float) -> list[dict]:
         db = float(np.abs(p - s).max())
         out.append({"part": name[:-5], "centroid_off_mm": round(dc, 2),
                     "bbox_off_mm": round(db, 2),
-                    "status": "SYNC" if max(dc, db) <= tol else "DESYNC"})
+                    "status": "SYNC" if max(dc, db) <= tol else
+                    ("DELIBERATE" if name[:-5] in DELIBERATE
+                     and db <= DELIBERATE[name[:-5]][0] + tol else "DESYNC")})
     return out
 
 

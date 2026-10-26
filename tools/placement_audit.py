@@ -77,6 +77,9 @@ HOSTS = {
     "Chin_Node_Shelf": ["Cargo_Shell"],
     "Door_Latch_Bracket_Port": ["Cargo_Shell"],
     "Door_Latch_Bracket_Stbd": ["Cargo_Shell"],
+    # DOOR-REWORK (2026-10-26): the bell-crank turns on its bracket's pivot pin
+    "Door_Latch_Crank_Port": ["Door_Latch_Bracket_Port"],
+    "Door_Latch_Crank_Stbd": ["Door_Latch_Bracket_Stbd"],
     "Gateway_Door_Tray": ["Cargo_Shell"],
     "Cargo_Cradle": ["Cargo_Shell", "Cargo_Door_Port", "Cargo_Door_Stbd"],
     "Cargo_FPV_Bezel": ["Cargo_Shell", "Head_Shell"],
@@ -93,7 +96,8 @@ INTERIOR = {
     "Tilt_Bracket_Stbd", "Tilt_Worm_Port", "Tilt_Worm_Stbd", "Tilt_Wheel_Port",
     "Tilt_Wheel_Stbd", "Tilt_Brake_Guide_Port", "Tilt_Brake_Guide_Stbd",
     "Battery_Cradle", "Chin_Node_Shelf", "Door_Latch_Bracket_Port",
-    "Door_Latch_Bracket_Stbd", "Gateway_Door_Tray", "Cargo_Cradle",
+    "Door_Latch_Bracket_Stbd", "Door_Latch_Crank_Port", "Door_Latch_Crank_Stbd",
+    "Gateway_Door_Tray", "Cargo_Cradle",
     "Cargo_GPS_Ring", "Cargo_Door_Servo_Bracket", "Cargo_Release_Servo_Bracket",
 }
 
