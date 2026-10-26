@@ -78,9 +78,22 @@ SHAFT_Y, SHAFT_Z, SHAFT_D = clf.SHAFT_Y, clf.SHAFT_Z, 4.0
 BUNDLE_D = 16.3            # spar ID = 4 x 10 AWG bundle (SPAR_WIRE_BORE_D)
 ENC_Y, ENC_Z, ENC_D = 343.20, 148.689, 6.5  # R1 37.5/68.689
 NAV_Y, NAV_Z, NAV_D = 306.70, 141.974, 3.2  # R1 1.0/61.974
-SPAR_INB = {"port": 69.85, "stbd": -70.15}      # socket floor; R1 -100 / -240
-HARN_INB = {"port": 44.85, "stbd": -43.15}      # harness exits; R1 -125 / -213
-WALL_OUT = {"port": 90.25, "stbd": -90.15}      # flange outer bbox; R1 -79.6 / -260
+# Port stations from the merge (single source, rule R3); starboard is their
+# MIRROR because the cargo is rebuilt as the mirror of its port half
+# (merge_cargo_interior.SYMMETRIC_FROM_PORT).  These were typed copies whose
+# starboard values (-70.15 / -43.15 / -90.15) were measured on the old,
+# asymmetric starboard skin: a 1.70 mm harness DESYNC.
+sys.path.insert(0, os.path.join(REPO, "airframe", "blender-scripts"))
+import merge_cargo_interior as mci  # noqa: E402
+
+
+def _mirrored(port_x):
+    return {"port": port_x, "stbd": 2.0 * X_CL - port_x}
+
+
+SPAR_INB = _mirrored(mci.PORT_INB)                # socket floor (R1 -100)
+HARN_INB = _mirrored(mci.WING_HARNESS_INB_PORT)   # harness exits (R1 -125)
+WALL_OUT = _mirrored(90.25)                       # flange outer bbox (R1 -79.6)
 EXIT_STUB = 10.0           # straight run inboard of a bore exit before a turn
 
 # Owner 2026-10-07 (BHD-07): 145 deg is adequate; the 3.0 in gear stops a
@@ -283,6 +296,11 @@ EXPECTED = {
     ("hoist line", "payload"): (1e9, "line attaches to the payload"),
     ("hoist line", "winch drum"): (1e9, "line on its drum"),
     ("Pilot", "cable zone"): (1e9, "node and its own cable zone"),
+    # DOOR-REWORK: the doors are SEQUENCED (port opens first, closes last), so
+    # their two swept envelopes are never occupied at the same time.  Each
+    # swept volume is still checked against the OTHER door closed, which is
+    # the state it actually moves past.
+    ("door port swept", "door stbd swept"): (1e9, "sequenced doors never move together"),
 }
 CLASH_MM3 = 0.5
 
@@ -322,6 +340,18 @@ def census(P: dict) -> list[dict]:
     return rows
 
 
+# Deliberate port/starboard asymmetries (plan 2026-10-03-002 rule R4: a desync
+# fails unless it is deliberate AND recorded).  part -> (max bbox offset mm,
+# why).  Anything above its allowance + tol is still a DESYNC.
+DELIBERATE = {
+    "door (closed)": (6.0, "DOOR-REWORK half-lap: the port door's outer lip reaches "
+                           "LAP_W 6 mm past the centreline (owner 2026-10-19)"),
+    "door swept": (6.1, "same lap, swept 0..145 deg"),
+    "latch bracket": (12.0, "one latch (port): the starboard bracket has no mortise "
+                            "(DOOR-REWORK, CARGO_DOOR_LATCH_SPEC Rev B)"),
+}
+
+
 def symmetry(P: dict, centre: float, tol: float = 0.5) -> list[dict]:
     """Mirror every port solid's bbox about `centre` and compare with stbd."""
     out = []
@@ -336,8 +366,11 @@ def symmetry(P: dict, centre: float, tol: float = 0.5) -> list[dict]:
         mp = bp.copy()
         mp[:, 0] = 2 * centre - bp[::-1, 0]
         d = float(np.abs(mp - bs).max())
-        out.append(dict(part=n.replace(" port", ""), bbox_off_mm=round(d, 2),
-                        status="SYNC" if d <= tol else "DESYNC"))
+        part = n.replace(" port", "")
+        status = "SYNC" if d <= tol else "DESYNC"
+        if status == "DESYNC" and part in DELIBERATE and d <= DELIBERATE[part][0] + tol:
+            status = "DELIBERATE"
+        out.append(dict(part=part, bbox_off_mm=round(d, 2), status=status))
     return out
 
 
@@ -520,7 +553,7 @@ def main() -> int:
         with open(a.json, "w", encoding="utf-8") as fh:
             json.dump(dict(pairs=rows, symmetry=sym, corridor=cor), fh, indent=2)
     bad = any(r["verdict"] == "CLASH" for r in rows) or any(
-        s["status"] != "SYNC" for s in sym) or any(c["verdict"] != "ROUTE EXISTS" for c in cor)
+        s["status"] == "DESYNC" for s in sym) or any(c["verdict"] != "ROUTE EXISTS" for c in cor)
     print(f"\nRESULT: {'FAIL' if bad else 'PASS'}")
     return 2 if bad else 0
 

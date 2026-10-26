@@ -2566,16 +2566,29 @@
     },
     {
       "Ref": "PRINT-DOOR-LATCH-BRACKET",
-      "Description": "door_latch_bracket_{port,stbd}.stl -- bell-crank + pivot bracket + mortise, cargo door positive latch, CF-PETG",
+      "Description": "door_latch_bracket_{port,stbd}.stl -- FIXED pivot bracket (pin seat); port carries the latch mortise, stbd is drive-only, CF-PETG",
       "Category": "Printed Part",
       "Qty": "2",
-      "Unit_Mass_g": "3.55",
-      "Total_Mass_g": "7.1",
+      "Unit_Mass_g": "1.81",
+      "Total_Mass_g": "3.61",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev A 2026-09-21 (docs/CARGO_DOOR_LATCH_SPEC.md): closes the DOOR-LATCH finding (docs/CARGO_DOOR_GATEWAY_SPEC.md) -- servo-driven bell-crank hook engages a mortise on this FIXED bracket; the hook/lip mechanical interference, not the SG90 gear train, carries the door-closed load (governing case: aero pressure at V_max=87kt, REF-FAA-002; SG90 stall torque 0.177 N.m < 0.202 N.m door-opening moment even at FOS=1). FOS_bearing=10.4, FOS_shear~3.0 (order-of-magnitude, FDM anisotropic -- bench pull-test required, DOOR-LATCH-1). One bracket per door, mounted at Y=39.33 (2nd hinge knuckle station). Print with a >=1.5mm hook-root fillet (not modelled in the CSG source -- DOOR-LATCH-4) and orient so the governing shear plane runs with the layer lines."
+      "Notes": "Rev B 2026-10-26 (docs/CARGO_DOOR_LATCH_SPEC.md section 0a): ONE latch (port) holds both lapped doors; port 2.33 g (mortise), stbd 1.28 g (no mortise), measured from the STLs. The bell-crank is now its own part (PRINT-DOOR-LATCH-CRANK). Bonded to the flank at the 2nd hinge-knuckle station, pivot 2 mm inboard of the hinge line (clear of the payload keep-out)."
+    },
+    {
+      "Ref": "PRINT-DOOR-LATCH-CRANK",
+      "Description": "door_latch_crank_{port,stbd}.stl -- door bell-crank on the PIN-3X10 pivot; port has the latch hook (7 x 3.5 mm root), stbd is drive-only, CF-PETG",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "0.79",
+      "Total_Mass_g": "1.58",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev B 2026-10-26 (docs/CARGO_DOOR_LATCH_SPEC.md section 0a): port 0.96 g, stbd 0.62 g. Port hook carries both doors: FOS_shear 2.97, FOS_bearing 8.8 at FOS 3.0 on the 87 kt door moment (order-of-magnitude, FDM anisotropic -- bench pull test, DOOR-LATCH-1). Print with the >=1.5 mm hook-root fillet."
     },
     {
       "Ref": "PRINT-DOOR-HORN",

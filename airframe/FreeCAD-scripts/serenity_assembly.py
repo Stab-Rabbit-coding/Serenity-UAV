@@ -675,6 +675,9 @@ def assemble():
     # gateway_door_tray.scad) -- identity placement.  They were never added.
     add_mesh(doc, _stl("fuselage/cargo/door_latch_bracket_port.stl"), "Door_Latch_Bracket_Port")
     add_mesh(doc, _stl("fuselage/cargo/door_latch_bracket_stbd.stl"), "Door_Latch_Bracket_Stbd")
+    # DOOR-REWORK (2026-10-26): the bell-crank is its own part (it turns on the pivot pin).
+    add_mesh(doc, _stl("fuselage/cargo/door_latch_crank_port.stl"), "Door_Latch_Crank_Port")
+    add_mesh(doc, _stl("fuselage/cargo/door_latch_crank_stbd.stl"), "Door_Latch_Crank_Stbd")
     add_mesh(doc, _stl("fuselage/cargo/gateway_door_tray.stl"), "Gateway_Door_Tray")
 
     door_servo = add_mesh(

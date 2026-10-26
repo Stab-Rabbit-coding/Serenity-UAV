@@ -2461,6 +2461,22 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/cargo/door_latch_crank_port.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 door_latch_crank_port",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/cargo/door_latch_crank_stbd.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 door_latch_crank_stbd",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/cargo/gateway_door_tray.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 gateway_door_tray",
       "tags": [
@@ -17523,6 +17539,14 @@
       ],
       "archived": false
     },
+    "tools/bom_edit_door_rework.py": {
+      "description": "DOOR-REWORK BOM edit: lapped cargo doors, ONE latch, crank split from bracket.",
+      "tags": [
+        "bom",
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/bom_edit_tilt_controller.py": {
       "description": "Swap the tilt-controller BOM row: retire LS-TILT-TC, add OSESC-TILT-TC.",
       "tags": [
@@ -19541,6 +19565,8 @@
       "airframe/stls/fuselage/cargo/door_horn.stl",
       "airframe/stls/fuselage/cargo/door_latch_bracket_port.stl",
       "airframe/stls/fuselage/cargo/door_latch_bracket_stbd.stl",
+      "airframe/stls/fuselage/cargo/door_latch_crank_port.stl",
+      "airframe/stls/fuselage/cargo/door_latch_crank_stbd.stl",
       "airframe/stls/fuselage/cargo/gateway_door_tray.stl",
       "airframe/stls/fuselage/cargo/generate_cargo_doors.py",
       "airframe/stls/fuselage/cargo/generate_cargo_hinge_retention.py",
@@ -19857,6 +19883,8 @@
       "airframe/stls/fuselage/cargo/door_horn.stl",
       "airframe/stls/fuselage/cargo/door_latch_bracket_port.stl",
       "airframe/stls/fuselage/cargo/door_latch_bracket_stbd.stl",
+      "airframe/stls/fuselage/cargo/door_latch_crank_port.stl",
+      "airframe/stls/fuselage/cargo/door_latch_crank_stbd.stl",
       "airframe/stls/fuselage/cargo/gateway_door_tray.stl",
       "airframe/stls/fuselage/cargo/tilt_actuator_bracket_port.stl",
       "airframe/stls/fuselage/cargo/tilt_actuator_bracket_stbd.stl",
@@ -20459,6 +20487,7 @@
       "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md",
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
+      "tools/bom_edit_door_rework.py",
       "tools/bom_edit_tilt_controller.py",
       "tools/bom_edit_weight_pass_13lbm.py",
       "tools/compact_bom_entries.py"
@@ -22932,6 +22961,7 @@
       "tools/bhd10_aft_strip_options.py",
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
+      "tools/bom_edit_door_rework.py",
       "tools/bom_edit_tilt_controller.py",
       "tools/bom_edit_weight_pass_13lbm.py",
       "tools/build_head_shell.py",

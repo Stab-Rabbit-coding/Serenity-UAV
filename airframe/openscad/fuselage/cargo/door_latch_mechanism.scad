@@ -92,13 +92,19 @@ BRACKET_Y    = HINGE_BAY_Y_FWD + KNUCKLE_LEN / 2
 // Pivot bracket stands PIVOT_H above the hinge Z, inboard of the hinge line
 // by PIVOT_IN so the crank clears the door panel's swept arc.
 PIVOT_H  = 14.0;
-PIVOT_IN = 10.0;
+// Rev B (2026-10-26): 10 -> 2.  At 10 mm the bracket reached X 32.5, inside
+// the payload keep-out (X +/-38.1 + 2 mm gap): 584 / 544 mm^3 in
+// tools/cargo_bulkhead_context.py (BHD-06, owned by DOOR-REWORK).  At 2 mm the
+// inboard face is at hinge - 7 = 40.5, clear of the 40.1 gap line.
+PIVOT_IN = 2.0;
 // BHD-06 (2026-10-12): the standoff ran down to the HINGE Z, so its base sat
 // inside the closed door panel (door x bracket 252 / 254 mm^3, Z 3..6.5 at
 // this station -- tools/cargo_bulkhead_context.py).  Its base now starts
 // BASE_LIFT above the hinge: 1 mm over the door's top here (Z 6.5 + 1.0).
 // The bracket still bonds to the hull wall along its outboard face.
-BASE_LIFT = 4.5;
+// Rev B: 4.5 -> 7.0 -- with the pivot moved outboard the base sits over the
+// door's hinge knuckles, whose sweep reaches hinge Z + ~5.
+BASE_LIFT = 7.0;
 
 // Crank arms (mm), all about the same pivot pin
 ARM_DRIVE = 5.0;    // rA: to the door-horn pushrod (D-LATCH-1)
@@ -112,9 +118,20 @@ ANG_LATCH = 20.0;
 
 PIN_D = 3.0;  PIN_CL = 0.075;  PIN_BORE_R = PIN_D/2 + PIN_CL;
 
-HOOK_L = 6.0;   HOOK_ROOT_W = 5.0;  HOOK_ROOT_T = 2.4;  // sized to FOS_shear ~3.0
+// Rev B (DOOR-REWORK, owner 2026-10-19): ONE latch, on the PORT door, now
+// holds BOTH doors -- the port door's lap traps the starboard door's edge
+// (generate_cargo_doors.py LAP_*), so the port latch reacts 2 x the Rev A
+// door moment.  Hook root 5 x 2.4 (12 mm^2) -> 7 x 3.5 (24.5 mm^2) restores
+// FOS_shear ~3.0; the lip pad widens with it (docs/CARGO_DOOR_LATCH_SPEC.md
+// Rev B).
+HOOK_L = 6.0;   HOOK_ROOT_W = 7.0;  HOOK_ROOT_T = 3.5;  // FOS_shear ~3.1 at 2 doors
 HOOK_FOOT = 3.0;                                         // engagement depth under the lip
-LIP_OVERHANG = 2.4;  LIP_PAD_W = 4.0;  LIP_PAD_T = 4.0;  // sized to FOS_bearing ~10
+LIP_OVERHANG = 2.4;  LIP_PAD_W = 7.0;  LIP_PAD_T = 4.0;  // FOS_bearing ~9 at 2 doors
+// Only these sides carry the hook + mortise.  The starboard bell-crank is a
+// DRIVE-ONLY crank (no latch arm, no mortise): starboard is held shut by the
+// port door's lap, never by its own latch.
+LATCHED_SIDES = ["port"];
+function is_latched(side) = len([for (s = LATCHED_SIDES) if (s == side) s]) > 0;
 FILLET_R = 1.5;       // hook-root fillet -- reduces Kt; VERIFY by section/render
 
 HORN_L = 8.0;  HORN_T = 3.0;  HORN_W = 6.0;
@@ -134,10 +151,11 @@ module crank_arm(ang, len, w = 4.0, t = 3.0) {
             cube([len, w, t]);
 }
 
-module bell_crank() {
+module bell_crank(latch = true) {
     union() {
         pivot_boss();
         crank_arm(ANG_DRIVE, ARM_DRIVE, 4.0, 5.0);
+        if (latch)
         // latch arm ends in the hook: an L-foot turned toward the lip's
         // engaged side (ANG_LATCH - 90, i.e. trailing the arm as phi
         // increases -- so INCREASING phi from 0 is the direction that lifts
@@ -194,29 +212,64 @@ module mortise_boss() {
 // Pivot bracket: bonds to the airframe interior at BRACKET_Y, carries the
 // crank pin boss and (unioned) the mortise so hook/lip registration is
 // baked into one printed part per side -- no separate-part tolerance stack.
-module bracket(side) {
+// Rev B part split (2026-10-26): the bell-crank ROTATES on the pivot pin, so
+// it is its own printed part.  Rev A unioned it into the fixed bracket (one
+// STL that could never move; the hook-in-pocket coincidence also left a
+// zero-volume sliver body).  The bracket now carries the pin in a blind bore
+// in the standoff top; the crank sits on that face and turns on the pin.
+module at_pivot(side) {
     sgn = (side == "port") ? 1 : -1;
     hx = (side == "port") ? HINGE_X_PORT : HINGE_X_STBD;
     hz = (side == "port") ? HINGE_Z_PORT : HINGE_Z_STBD;
     translate([hx - sgn * PIVOT_IN, BRACKET_Y, hz + PIVOT_H])
         mirror(side == "stbd" ? [1, 0, 0] : [0, 0, 0])
-            union() {
-                translate([-5, -6, -PIVOT_H + BASE_LIFT])
-                    cube([15, 12, PIVOT_H - BASE_LIFT]);               // standoff to the hull
-                bell_crank();
+            children();
+}
+
+PIN_SEAT_D = PIN_D - 0.1;   // press seat for the steel pin in the standoff
+PIN_SEAT_H = 6.0;           // blind seat depth below the crank face
+
+module bracket(side) {
+    at_pivot(side) difference() {
+        union() {
+            translate([-5, -6, -PIVOT_H + BASE_LIFT])
+                cube([15, 12, PIVOT_H - BASE_LIFT]);               // standoff to the hull
+            if (is_latched(side)) {
                 mortise_boss();
+                // the mortise is FIXED structure: tie it to the standoff
+                // BELOW the crank plane (z < 0), where the crank never sweeps
+                hull() {
+                    translate([-5, -6, -PIVOT_H + BASE_LIFT]) cube([15, 12, PIVOT_H - BASE_LIFT - EPS]);
+                    intersection() {
+                        mortise_boss();
+                        translate([-50, -50, -1]) cube([100, 100, 1 + EPS]);
+                    }
+                    translate([0, 0, -PIVOT_H + BASE_LIFT]) linear_extrude(EPS)
+                        projection() mortise_boss();
+                }
             }
+        }
+        translate([0, 0, -PIN_SEAT_H]) cylinder(h = PIN_SEAT_H + EPS, d = PIN_SEAT_D);
+    }
+}
+
+module crank(side) {
+    at_pivot(side) bell_crank(latch = is_latched(side));
 }
 
 // PART selector (matches the repo's -D 'PART="..."' export convention)
-PART = "bracket_port";  // [bracket_port, bracket_stbd, horn, preview]
+PART = "bracket_port";  // [bracket_port, bracket_stbd, crank_port, crank_stbd, horn, preview]
 
 if (PART == "bracket_port") bracket("port");
 else if (PART == "bracket_stbd") bracket("stbd");
+else if (PART == "crank_port") crank("port");
+else if (PART == "crank_stbd") crank("stbd");
 else if (PART == "horn") door_horn();
 else if (PART == "preview") {
     color("SteelBlue") bracket("port");
     color("SteelBlue") bracket("stbd");
+    color("Orange") crank("port");
+    color("Orange") crank("stbd");
     color("Gray") translate([HINGE_X_PORT - PIVOT_IN + ARM_DRIVE * cos(ANG_DRIVE),
                               BRACKET_Y + ARM_DRIVE * sin(ANG_DRIVE), HINGE_Z_PORT + PIVOT_H])
         translate([-HORN_L, 0, -PIVOT_H]) door_horn();

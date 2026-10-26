@@ -4,10 +4,10 @@ Aircraft datum R2, mm.  CARGO-HINGE-SYNC single source -- every other hinge-depe
 generator or SCAD file reads this, not a hand-copied constant.
 """
 
-HINGE_X_PORT = 48.3170
-HINGE_Z_PORT = 84.6323
-HINGE_X_STBD = -49.5513
-HINGE_Z_STBD = 84.8897
+HINGE_X_PORT = 47.4596
+HINGE_Z_PORT = 85.5061
+HINGE_X_STBD = -47.4596
+HINGE_Z_STBD = 85.4947
 BAY_Y_FWD = 307.7000
 BAY_Y_AFT = 413.7000
 ROD_AXES = {

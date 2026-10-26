@@ -183,10 +183,12 @@ PRINTED = [
      ("st", (X_CL, clf.HOIST_Y, hd.BELLY_Z + 120.0), "ESTIMATE: release at the hoist")),  # R1 Z 120
     ("PRINT-GW-DOOR-TRAY", "fuselage/cargo/gateway_door_tray.stl", 1,
      ("st", GW_DOOR_ST[0], GW_DOOR_ST[1])),
-    ("PRINT-DOOR-LATCH-BRACKET", "fuselage/cargo/door_latch_bracket_port.stl", 1,
-     ("st", DOOR_ST[0], DOOR_ST[1])),
-    ("PRINT-DOOR-LATCH-BRACKET", "fuselage/cargo/door_latch_bracket_stbd.stl", 1,
-     ("st", DOOR_ST[0], DOOR_ST[1])),
+    # DOOR-REWORK (2026-10-26): brackets and cranks are rendered at their installed
+    # position (aircraft frame, FRAME_MARKER), so they are measured, not estimated.
+    ("PRINT-DOOR-LATCH-BRACKET", "fuselage/cargo/door_latch_bracket_port.stl", 1, "hull"),
+    ("PRINT-DOOR-LATCH-BRACKET", "fuselage/cargo/door_latch_bracket_stbd.stl", 1, "hull"),
+    ("PRINT-DOOR-LATCH-CRANK", "fuselage/cargo/door_latch_crank_port.stl", 1, "hull"),
+    ("PRINT-DOOR-LATCH-CRANK", "fuselage/cargo/door_latch_crank_stbd.stl", 1, "hull"),
     ("PRINT-DOOR-HORN", "fuselage/cargo/door_horn.stl", 2,
      ("st", DOOR_ST[0], DOOR_ST[1])),
     ("PRINT-DORSAL-ANTENNA-FIN", "fuselage/dorsal_antenna_fin.stl", 1,
