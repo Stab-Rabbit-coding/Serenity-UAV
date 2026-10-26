@@ -41,20 +41,20 @@ The verified Admiral Pro 6S 4000 (139 × 44 × 48 mm) fouls the cargo shell by 2
 
 - R1. The main supply is two matched 6S 2200 mAh cells of the same model, one in the cargo cradle and one in the head.
 - R2. Each cell has a cited, live listing. The baseline is the Tattu R-Line 6S 2200 95C (116 × 34 × 38.5 mm, 321 g). A non-PRC equivalent is evaluated before purchase.
-- R3. The cargo cell fits the existing cradle envelope (142 × 50 × 38 mm) with no change to the cargo layout stations.
-- R4. The head cell sits at Y 110–226 on the rail, clear of the head contents and of the harness channel.
+- R3. The cargo cell fits the existing cradle envelope (142 × 50 × 38 mm) on its side (34 mm vertical, 38.5 mm lateral) with no change to the cargo layout stations.
+- R4. The head-cell station is the cell plus its sled and the stop/catch stack, forward of the collar (provisional Y about 105–235, fixed by U5), clear of the head contents and of the harness channel.
 
 **Rail, stop, catch and sled**
 
 - R5. The cradle is extended forward as a rail through the head/cargo splice collar into the head. Both cells ride it.
 - R6. The head cell is inserted and removed through the open cargo doors only, using a sled with a pull lanyard. No new opening is made in the head shell.
-- R7. A forward stop and a positive catch hold the head cell under the crash case: 5 g forward and vertical, about 3.5 lbf (15.7 N) at 321 g. The catch shall not depend on the cargo cell behind it.
+- R7. A forward stop and a positive catch hold the head cell under the crash case. The catch shall not depend on the cargo cell behind it. The design load factor is 5 g forward and vertical (about 3.5 lbf (15.7 N) at 321 g) until a cited emergency-landing factor replaces it; 5 g is uncited and marked requires verification.
 - R8. Printed parts follow the owner's material order: printable composite first, then pre-cut composite, then metal only where a cited allowable requires it.
 
 **Optional third cell**
 
 - R9. An optional third cell (baseline Tattu R-Line v6.0 6S 1600 160C, 70 × 42 × 41 mm, 240 g) fits the payload keep-out (76.2 × 101.6 × 76.2 mm) and takes the place of the mission payload.
-- R10. The third cell is retained by the payload hooks and release. It is jettisonable, and it is never carried together with a mission payload.
+- R10. The third cell is retained by the payload hooks and release and is never carried together with a mission payload. It is non-jettisonable until the companion plan delivers the breakaway connector and the isolate-before-release sequence (companion U4, U5).
 
 **Head-section audit and update**
 
@@ -67,10 +67,16 @@ The verified Admiral Pro 6S 4000 (139 × 44 × 48 mm) fouls the cargo shell by 2
 
 - R15. The pitot line and static port are air-path keep-out solids. The camera, ToF and laser have line-of-sight keep-outs through their apertures. Neither may be crossed by the rail, cell or harness.
 
+> **WARNING**
+>
+> A loose LiPo in a crash can be punctured and burn. The head-cell catch is the only
+> thing holding the cell off the nose avionics. It shall be sized to a cited
+> emergency-landing load factor before flight, not to the provisional 5 g.
+
 ### Acceptance Examples
 
 - AE1. Covers R6, R7. With the doors open and the payload and cargo cell removed, the head cell slides from the door opening to the stop and latches. A pull on the lanyard releases the catch and returns it.
-- AE2. Covers R9, R10. With the third cell fitted, a mission payload cannot be loaded, and the census reports the third cell inside the payload keep-out.
+- AE2. Covers R9, R10. The third cell occupies the payload hooks, so a mission payload has no hook to load on; the census flags the two together and reports the third cell inside the payload keep-out.
 - AE3. Covers R4, R15. The head cell, rail and harness channel show zero clash against the Observer pocket, the pitot keep-out and the optical keep-outs.
 
 ### Scope Boundaries
@@ -82,6 +88,12 @@ The verified Admiral Pro 6S 4000 (139 × 44 × 48 mm) fouls the cargo shell by 2
 
 - Physical weighing of a cell (BATT-01) and the bench C-rating test happen at procurement.
 
+### Open Questions
+
+- Q1 (deferred). Third-cell jettison: keep it non-jettisonable, or enable jettison once the companion plan's breakaway connector and isolate-before-release sequence exist?
+- Q2 (deferred). The cited emergency-landing load factor for the head-cell catch (replaces the provisional 5 g; root WBS §0.8 HEAD-CELL-G).
+- Q3 (deferred). Minimum hover mission time that the split configuration must meet.
+
 ---
 
 ## Planning Contract
@@ -92,7 +104,7 @@ The verified Admiral Pro 6S 4000 (139 × 44 × 48 mm) fouls the cargo shell by 2
 - KTD2. Swap the head cell through the cargo doors on a rail extending the cradle. (session-settled: user-directed — chosen over a new head belly panel: no new hull opening.)
 - KTD3. Migrate the head shell SCAD to the R2 datum as part of the audit. (session-settled: user-approved — chosen over modelling head contents as separate solids beside the legacy shell: only a migrated shell can be gated.)
 - KTD4. Keep the Tattu baseline, but evaluate a non-PRC equivalent before purchase. (session-settled: user-approved — chosen over excluding Tattu outright: `AGENTS.md` §5 governs semiconductors, not cells.)
-- KTD5. Sliding envelope for the head cell is 40 × 36.5 mm (the cell on its side plus 1 mm handling each way), centred X 0 and Z 169–187. This band clears the head shell, collar, cargo shell, cradle, chin shelf and tilt brackets at every station from Y 200 to 328 (measured 2026-10-26).
+- KTD5. The head cell slides on its side (38.5 mm wide, 34 mm tall) inside a 40 × 36.5 mm box (0.75 mm lateral and 1.25 mm vertical clearance per side), centred on X 0. The box centre may sit anywhere from Z 169 to Z 187. Measured 2026-10-26 against the head shell, collar, cargo shell, cradle, chin shelf and tilt brackets for **Y 200–328 only**. Y 110–200 is provisional until U2 re-measures it against the R2 head solids.
 - KTD6. The rail is the cradle's inverted U carried forward. Rail stations come from `tools/cargo_layout_fit.py` (single source). The cradle SCAD reads them; nothing is typed twice.
 - KTD7. The catch is a sprung printed detent at the stop, released by the lanyard. A metal spring is used only if no printed spring meets R7 with a cited allowable.
 
@@ -142,19 +154,21 @@ Head geometry first (U1–U3), then the rail and catch (U4–U5), then the cells
 
 ### U2. Model the head contents as R2 solids
 
-**Goal:** Every head item in R11 is a placed solid with its keep-outs.
+**Goal:** Every head item in R11 is a placed solid with its keep-outs, so the AE3 clash checks are meaningful.
 **Requirements:** R11, R15.
 **Dependencies:** U1.
-**Files:** a new `tools/head_layout_fit.py` (single source of head stations, mirroring `tools/cargo_layout_fit.py`), `airframe/FreeCAD-scripts/serenity_assembly.py`, `avionics/kicad/Observer/Observer.md`.
+**Files:** a new `tools/head_layout_fit.py` (single source of head stations, mirroring `tools/cargo_layout_fit.py`), a new `tools/head_bulkhead_context.py` (the head context check, modelled on `tools/cargo_bulkhead_context.py`), `airframe/FreeCAD-scripts/serenity_assembly.py`, `avionics/kicad/Observer/Observer.md`.
 **Approach:**
 1. Place the nose Observer board (25.4 × 69.85 mm) on standoffs aft of the bow faceplate, per `Observer.md` "Nose install".
 2. Add camera, ToF and laser bodies and their line-of-sight cones through the apertures.
 3. Add the pitot tube and line as an air-path keep-out to its sensor.
 4. Place node A (Bay A) from its current ledger station.
+5. Build the head context check and re-measure the KTD5 sliding band for Y 110–200 against the R2 head solids. If it does not clear, stop (Goal Capsule stop condition) before U3.
 **Test scenarios:**
 - Each solid is watertight and placed inside the head shell (placement audit CONTAIN).
 - The optical keep-outs pass through their apertures with zero shell clash.
 - The pitot keep-out is continuous from the tube to the sensor.
+- The KTD5 band is clear for Y 110–200, or the stop condition fires.
 **Verification:** placement audit PASS for every head part.
 
 ### U3. Size the head harness trunk channel
@@ -204,13 +218,14 @@ Head geometry first (U1–U3), then the rail and catch (U4–U5), then the cells
 
 **Goal:** Cells are placed solids at their installed stations; the third cell is a payload-bay alternate.
 **Requirements:** R1, R2, R3, R9, R10.
-**Dependencies:** U5.
+**Dependencies:** U5 for the head cell only; the cargo cell, third cell and listings need none.
 **Files:** `tools/cargo_layout_fit.py`, `tools/cargo_bulkhead_context.py`, `airframe/FreeCAD-scripts/serenity_assembly.py`, `REFERENCES.md`.
 **Approach:**
 1. Cargo cell inside the existing cradle envelope with a shim (no station change).
 2. Head cell at the stop.
 3. Third cell as an alternate payload solid with a census rule that the payload and third cell are never both present.
 4. Catalogue each cell listing in `REFERENCES.md` and record the non-PRC equivalent evaluation.
+5. Reserve lead route volumes from the cargo cradle and from the payload bay to the Flight Engineer; these, with U3's head-lead route, are the companion plan's U4 inputs.
 **Test scenarios:**
 - Covers AE2. Payload and third cell present together is flagged.
 - Third cell inside the payload keep-out.
@@ -227,6 +242,7 @@ Head geometry first (U1–U3), then the rail and catch (U4–U5), then the cells
 **Test scenarios:**
 - Ledger CG and T/W match the options study within the rail and catch mass.
 - BOM CSV and JSON parity holds.
+- Hover endurance for the split and third-cell configurations, at the companion plan's reconciled hover current, meets a stated minimum mission time (owner to set).
 **Verification:** all gates PASS or carry only registered pre-existing items; WBS BATT-02 closed.
 
 ---

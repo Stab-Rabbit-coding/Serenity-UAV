@@ -29,7 +29,7 @@ execution: code
 
 ### Summary
 
-The Flight Engineer gets `J_BATT`, `J_BATT2` and `J_BATT3`. The matched pair is current-shared, the third input is ideal-diode OR'd, every input is fused and reverse-blocking, and `pwr_fault` tracks all three. The battery harnesses become three runs sized to their share of about 150 A hover.
+The Flight Engineer gets `J_BATT`, `J_BATT2` and `J_BATT3`. The matched pair is current-shared, the third input is ideal-diode OR'd, every input is fused and reverse-blocking, and `pwr_fault` tracks all three. The battery harnesses become three runs sized from the reconciled hover current (R9), each for its worst case (R4).
 
 ### Problem Frame
 
@@ -42,11 +42,11 @@ The board as documented has one XT60 battery input, one BQ76930 6S monitor and o
 - R1. Three battery inputs: `J_BATT` (cargo cell), `J_BATT2` (head cell) and `J_BATT3` (optional third cell).
 - R2. The matched pair shares current through a two-input current-share combiner (LTC4370 class). The third input uses an ideal-diode controller (LTC4359 class).
 - R3. No input can back-feed another; an absent or faulted pack draws no current from the others.
-- R4. Each input has its own fuse sized to its share with margin, and the combined rail has a main fuse.
+- R4. Each input has its own fuse, connector and conductor sized for its worst case, and the combined rail has a main fuse. For each input of the pair the worst case is the full hover-plus-RTH current, carried alone after the other pack is isolated. For the third input it is the full bus current, because an ideal-diode OR'd source carries the whole load while its voltage is highest.
 
 **Monitoring and firmware**
 
-- R5. Each pack's voltage, current and temperature reach `pwr_fault`; a pack fault isolates that pack and continues on the others (RTH).
+- R5. Each pack's voltage, current and temperature reach `pwr_fault`. A single-pack fault isolates that pack and starts RTH on the remaining packs, or an immediate landing if U1 shows one cell cannot sustain RTH. All packs low starts an immediate landing.
 - R6. Cell-level monitoring covers every connected pack (BQ76930 class per pack, or a per-pack balance input), decided in U2.
 
 **Connectors and harnesses**
@@ -55,9 +55,20 @@ The board as documented has one XT60 battery input, one BQ76930 6S monitor and o
 - R8. Harness runs (head cell to FE, cargo cell to FE, third cell to FE) are sized for voltage drop and temperature rise at their share, with routing volumes taken from the companion plan.
 - R9. Hover current is reconciled to one cited figure that every downstream sizing uses.
 
+**Third-cell jettison**
+
+- R12. The J_BATT3 run has a rated breakaway connector, and firmware isolates J_BATT3 before the payload release fires. Until both exist the third cell is non-jettisonable (companion plan R10).
+
 **Sourcing**
 
+- R11. The deferred Phase 12 entry is retired and the WBS shows the work active.
 - R10. Every new IC passes `AGENTS.md` §5 (no restricted-country silicon, NDA-free documentation), with the data sheets read and catalogued in `REFERENCES.md`.
+
+> **WARNING**
+>
+> Pulling a live 6S connector apart under load can arc, and a released LiPo is a
+> ground fire hazard. Do not jettison the third cell until the breakaway connector and
+> the isolate-before-release interlock (R12) are built and bench-tested.
 
 ### Scope Boundaries
 
@@ -106,12 +117,16 @@ flowchart LR
 **Dependencies:** none.
 **Files:** `docs/POWER_DISTRIBUTION.md`, `avionics/kicad/FlightEngineer/FlightEngineer.md`, `REFERENCES.md`.
 **Approach:**
-1. Reconcile 76 A (FE document) against about 150 A (WBS PWR-CONN-01) from the thrust and ESC data.
-2. Read and catalogue the LTC4370 and LTC4359 data sheets and the external FETs; confirm Analog Devices' domicile.
-3. Record rejected candidates with the reason.
+1. **Gate first:** check the LTC4370 and LTC4359 absolute-maximum and operating input ranges against 25.2 V (6S full charge) plus transient margin. If a part fails, stop and return KTD1 to the owner with an alternative current-share approach.
+2. Reconcile 76 A (FE document) against about 150 A (WBS PWR-CONN-01) from the thrust and ESC data.
+3. Check one 2200 mAh cell alone at the reconciled hover current: C rate, voltage sag and RTH time. This sets R5's RTH-or-land behaviour.
+4. Read and catalogue the LTC4370 and LTC4359 data sheets and the external FETs; confirm Analog Devices' domicile.
+5. Record rejected candidates with the reason.
 **Test scenarios:**
 - Each selected part has a cited data sheet and passes the sourcing and NDA rule.
+- Both controllers are rated for 25.2 V plus margin, or the stop fires.
 - Combiner FET dissipation at the reconciled current is within its rating.
+- One cell's sag and RTH time at the reconciled current are recorded.
 **Verification:** `REFERENCES.md` entries present; decision recorded in the FE document.
 
 ### U2. Decide per-pack monitoring
@@ -141,24 +156,27 @@ flowchart LR
 ### U4. Specify connectors and harnesses
 
 **Goal:** Connectors and conductors for each run.
-**Requirements:** R7, R8.
+**Requirements:** R4, R7, R8, R12.
 **Dependencies:** U1; routing volumes from the companion plan's U3 and U6.
 **Files:** `docs/POWER_DISTRIBUTION.md`, `current-specification/bom_revT.csv`, `current-specification/bom_revT.json`.
-**Approach:** Choose the connector class (XT90 / AS150 or equivalent) from cited ratings; size gauges for drop and rise per run; route lengths from the companion plan.
+**Approach:** Choose the connector class (XT90 / AS150 or equivalent) from cited ratings, sized per R4 worst cases. Size gauges for drop and rise per run; route lengths come from the companion plan (U3 head lead, U6 cargo and third-cell leads). Specify the J_BATT3 breakaway connector with a cited separation force (R12).
 **Test scenarios:**
 - Each connector's cited rating ≥ its worst-case current × margin.
 - Voltage drop per run within budget at the reconciled current.
+- One pair input carries the full hover-plus-RTH current with its fuse intact.
+- The J_BATT3 breakaway separates at its cited force with the lead retained on the aircraft side.
 **Verification:** PWR-CONN-01 closed; BOM parity holds.
 
 ### U5. Firmware: three-pack context in pwr_fault
 
 **Goal:** `pwr_fault` monitors and isolates each pack.
-**Requirements:** R5.
+**Requirements:** R5, R12.
 **Dependencies:** U2.
 **Files:** `avionics/firmware/` (the `pwr_fault` node sources).
-**Approach:** Add per-pack telemetry, combiner fault and PGOOD logging, and isolate-and-continue behaviour.
+**Approach:** Add per-pack telemetry, combiner fault and PGOOD logging, the R5 isolate-then-RTH-or-land behaviour, and the R12 isolate-J_BATT3-before-release interlock on the payload release command. Host tests run on `avionics/firmware/mspm0/hal/sim/`.
 **Test scenarios:**
-- A pack fault on any input isolates it and continues.
+- A single-pack fault isolates that pack and starts RTH (or landing, per U1).
+- A payload-release command with J_BATT3 live isolates J_BATT3 first.
 - The third pack absent at boot is a normal state.
 - All packs low triggers RTH.
 **Verification:** host-simulation tests pass (the existing HAL simulator).
@@ -166,7 +184,7 @@ flowchart LR
 ### U6. Retire the deferred Phase 12 entry
 
 **Goal:** WBS and docs show the work as active.
-**Requirements:** KTD2.
+**Requirements:** R11, KTD2.
 **Dependencies:** U1.
 **Files:** `deferred/WBS.md`, `deferred/README.md`, `WBS.md`.
 **Approach:** Replace §Phase12 with a pointer to this plan; regenerate TODOs.
