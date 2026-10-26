@@ -110,6 +110,34 @@ First cargo merge was +2,385 mm^3 because `merge_cargo_interior.py` reads `lg_r6
 - `cargo_bulkhead_context.py`: all other clashes identical R1 vs R2 (38 vs 42 total; differences are the door/bracket rows above).
 - `cargo_layout_fit` / `middle_layout_fit` now reproduce their R1 baseline FAIL counts (the step 1 spurious PASS is gone).
 
+## Session 3 (2026-10-25/26, Claude Opus 5.5): steps 3-5 closed
+
+- **Step 3 done.** The uncommitted step-3 conversion was committed as found
+  (3df5f82d). `wing_internal_clearance`, `landing_gear_wing_clearance`,
+  `nacelle_esc_bay_fit` and `nozzle_linkage_check` need no literal changes:
+  they take their frame from `mci`, `bake_hull_frame` or the nacelle-local
+  frame, and all four run.
+- **Step 4 done** (fe0699be). `check_datum_drift.py` runs in pre-commit and CI.
+  A line that declares itself `leg-local` / `part-local` is exempt from D1.
+- **Ledger** (4ba47dba). `auw_ledger.json` is regenerated in R2. The bays were
+  measured from their part-local `*_print.stl` copies and two stations carried
+  R1 Z literals; with those fixed, heaviest CG is Y +349.7 / Z 157.2 (R1 44.0 /
+  77.2) and the sizing tool's static share is 25.1 % fore / 24.9 % aft.
+- **Step 5 done.** `datum_regression.py compare` against the R1 baseline:
+  every changed number is a datum offset, shell noise, or the ledger fix,
+  except three migration defects, now fixed: `landing_gear_foot_stance`
+  (sole plane in R1), `landing_gear_bay_station_fit` (R1 Z band, "NO SKIN"),
+  `cargo_layout_fit` (`DOOR_CROWN_Z` 90.86 vs the R2-regenerated doors 91.00).
+  `cargo_layout_fit` then reproduces its R1 baseline (2 envelope fouls).
+  `landing_gear_bay_function` re-renders the fore bays as 3 bodies (the
+  pre-existing fore-station defect above).
+- **New blocker (gear load path).** The R6 bellcrank's two wires in a row push
+  the crank the SAME way, so the hip pin and bay carry about 14.3 kN in the
+  4 ft crash, not the 1,148 N foot load the sizing checks (M3 pin margin 0.30;
+  blind-socket floor bearing about 278 MPa vs CF-PETG bulk compression
+  47-60 MPa [REF-MAT-001]). Owner asked for FBDs of the current design and
+  both options before deciding; see `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md`.
+
 ## Regression harness
 
 `tools/datum_regression.py snapshot DIR` and `compare A B`. The R1 baseline of

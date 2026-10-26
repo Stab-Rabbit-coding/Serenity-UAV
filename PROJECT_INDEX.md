@@ -6,7 +6,7 @@
      look, change the generator (tools/precommit_index.py), not this
      file. Machine-readable form: tools/index_tags.json -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last generated: 2026-10-25 -->
+<!-- Last generated: 2026-10-26 -->
 
 ## Tag Index
 
@@ -2510,7 +2510,7 @@ build_head_shell.py — build_head_shell.py — apply head-shell features (bosse
 build_landing_gear_views.py — RETIRED 2026-07-21 -- Rev R5 tool, superseded by Rev R6. [build-tooling, landing-gear, security]
 cargo_bay_envelope.py — Measure the cargo bay's usable interior envelope, and gate the mission payload. [build-tooling]
 cargo_bulkhead_context.py — In-context fit of the port and starboard cargo-bay bulkheads (side walls). [build-tooling, security]
-cargo_layout_fit.py — cargo_layout_fit.py -- measure a proposed cargo-section equipment layout [build-tooling]
+cargo_layout_fit.py — Python script [build-tooling]
 check_datum_drift.py — Fail on aircraft-datum drift (plan 2026-10-19-001, rules R1-R4). [build-tooling]
 check_tacco_envelope_sync.py — check_tacco_envelope_sync.py — keep every airframe TACCO mount in step with the board size. [build-tooling]
 compact_bom_entries.py — compact_bom_entries.py [bom, build-tooling]

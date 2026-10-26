@@ -344,7 +344,7 @@ HOIST_XS = (BATT_XC - HOIST_DX, BATT_XC + HOIST_DX)
 # cargo_door_port/stbd.stl).  8.72 put the box 2.14 mm low -- inside the doors
 # (571 / 986 mm^3) and 2 mm short of its real conflict with the aft Pilot
 # nodes.  main() re-measures the doors and fails if this drifts.
-DOOR_CROWN_Z = 90.86  # R1 10.86
+DOOR_CROWN_Z = 91.00  # doors regenerated on the R2 shell 2026-10-20 (was 90.86; R1 10.86)
 DRUM_D, DRUM_L = 16.0, 12.0
 SPOOL_Z0 = BATT_Z1 + CRADLE_T + GAP_MM  # 133.4, above the cradle ceiling
 # Canonical forward cargo-ramp fairing: opening measured by ray map

@@ -81,7 +81,7 @@ PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
            "stbd": np.array([-0.901, -0.015, -0.433])}
 
 FOOTPRINT_R = 34.0         # mm, radius about the hip axis to sample
-Z_BAND = (12.0, 66.0)      # mm, height band that isolates the bay station
+Z_BAND = (hd.BELLY_Z + 12.0, hd.BELLY_Z + 66.0)  # bay band above belly (R1 12..66)
 X_MIN_OFF = 30.0           # mm, minimum |X - centreline| (trap #3 guard)
 
 
