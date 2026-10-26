@@ -1544,6 +1544,31 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 
 **Used in:** `airframe/README.md` §5.1
 
+### REF-MAT-005: Fastenal Engineering & Design Support (F.E.D.S.) — "Mechanical Properties of Metric Stainless Steel Per ISO 3506-1"
+
+| Field | Value |
+|---|---|
+| **Publisher** | Fastenal Company, Engineering & Design Support, "Mechanical Properties of Metric Fasteners", 2 pp., Rev 3-6-09 |
+| **Official access** | <https://crafter.fastenal.com/static-assets/pdfs/Mechanical_Properties_of_Metric_Fasteners.pdf> (fetched and read 2026-10-26) |
+| **Underlying standard** | ISO 3506-1:2020, *Fasteners — Mechanical properties of corrosion-resistant stainless steel fasteners — Part 1: Bolts, screws and studs with specified grades and property classes* (ISO catalogue page not reachable from this session, HTTP 403, so no ISO URL is asserted here; ISO preview at <https://webstore.ansi.org/preview-pages/ISO/preview_ISO+3506-1-2020.pdf> shows only the contents). The Fastenal page reproduces the ISO 3506-1 table; the ISO text itself has not been checked, so the values below carry the distributor reproduction as their source. |
+| **Section applied** | p. 2, table "Mechanical Properties of Metric Stainless Steel Per ISO 3506-1": austenitic A1/A2/A4, property class 70 (cold-worked), diameter range up to M20 — tensile strength 700 MPa, stress at 0.2 % permanent 450 MPa. Same page, "Metric Thread Stress Areas": M3 coarse 5.03 mm^2. |
+| **Not provided** | No shear strength. The 0.6 x tensile shear figure used for pins in this repository is a design-judgment ratio, not from this source: **requires verification** (TODO §0.x LG-PIN-SHEAR). |
+| **Cited in** | `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md`; `tools/lg_bellcrank_fbd.py`; the A2-70 700 MPa figure in `tools/landing_gear_r6_sizing.py` (LG-02) |
+| **Openness / sourcing** | Public PDF, no registration. |
+
+### REF-MAT-006: ATI — "ATI 304 Austenitic Stainless Steel" product page (ASTM A240 minimum properties)
+
+| Field | Value |
+|---|---|
+| **Publisher** | ATI Inc., product page "ATI 304" |
+| **Official access** | <https://www.atimaterials.com/Products/ati-304> (fetched 2026-10-26); data sheet PDF linked from that page at `/Products/Documents/datasheets/stainless-specialty-steel/austenitic/ati_302_304_304l_305_tds_en2_v1.pdf` |
+| **Section applied** | "Minimum mechanical properties" for plate, sheet and strip, listed against ASTM A240 / ASME SA-240 / ASTM A666: tensile strength 515 MPa (75 ksi), yield strength 205 MPa (30 ksi), elongation 40 %. Corroborated for A240 type 304 plate tensile (75,000 psi) by 49 CFR 179.300-7 (<https://www.law.cornell.edu/cfr/text/49/179.300-7>). |
+| **Physical property applied** | Data sheet "ATI 302/304/304L/305" (linked above), "Physical Properties": density 0.285 lb/in^3 (7.90 g/cm^3), read 2026-10-26. |
+| **Not provided** | No bearing allowable for a pin in a plate. Where this repository checks steel bearing it uses the 205 MPa yield as the bearing limit (conservative design judgment, not a published bearing allowable). |
+| **Cited in** | `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md`; `tools/lg_bellcrank_fbd.py` (stainless thrust plates, clevis plates) |
+| **Openness / sourcing** | Public web page; ATI is US-domiciled (structural material, not silicon; AGENTS.md §5 not engaged). |
+
+
 ### REF-EDF-001: XFly-Model — Galaxy X5 50 mm 12-blade EDF, 6S, motor 2627-KV3200
 
 | Field | Value |

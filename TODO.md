@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-10-19
+**Last updated:** 2026-10-26
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -26,6 +26,7 @@
 - [ ] Measure procured 10 AWG silicone wire OD (5.5 mm bore chain is…
 - [ ] LG-11 coupon — demoted at wing root (flange FOS 29.2)
 - [ ] ★ Aero revalidation of the re-lofted wing (S1223/t17.7–t26.7
+- [ ] LG-PIN-SHEAR: verify 0.6 x Su pin shear for A2 pins (REF-MAT-005)
 
 #### 0.8.1 — Wing attach interface (Rev S1g), open requirements
 → detail: `docs/WING_ATTACH_INTERFACE.md` §5; `airframe/fuselage-mid/WBS.md` §1.1.1.5

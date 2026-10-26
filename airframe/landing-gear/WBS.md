@@ -826,6 +826,19 @@ Derivation: `docs/LANDING_GEAR_ANALYSIS.md` §4.8. Gate:
         `tools/lg_thigh_variants.py` (exit 2 on a mount-first failure).
     - [ ] LG-REMASS-c — re-solve the two-row layout at Ø5.27/Ø4.06 (ROW_PITCH ≈ 7.1),
         regenerate bays (`generate_lg_bays.py`), re-merge, census both stations.
+    - [ ] ★ **LG-LOADPATH — BUILD-BLOCKING, owner decision (found 2026-10-26).** The
+        R6 bellcrank's two wires of a row push the crank the SAME way, so the hip
+        pin, clevis ears and bay carry ≈2P, not the foot force: 4 ft crash pin
+        reaction 3,221 lbf (14.3 kN) vs M3 capacity 953 lbf (0.30×); at the
+        hierarchy demand pin 0.11×, printed ears 0.02×, blind socket floors 0.14×.
+        Supersedes LG-HIERARCHY's "pin passes" and its 137 mm² boss figure (that
+        used an uncited 70 MPa bearing allowable). Options with FBDs, mass and
+        dynamics: `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` — A balanced couple
+        (r 10, stainless cups/liners, +44.6 g; boss packaging unproven) or B steel
+        load path (+460.5 g). Gate: `tools/lg_bellcrank_fbd.py` (exit 2 if A or B
+        < 1.0). **BLOCKS LG-REMASS-c, LG-15, BHD-02g fore.**
+        - [ ] LG-PIN-SHEAR — verify the 0.6 × tensile pin-shear ratio used with
+            ISO 3506-1 [REF-MAT-005] (requires verification; root WBS §0.8).
   *LG-32 original text:* **Reconcile the AUW ledger before LG-15 procures wire.**
     `docs/LANDING_GEAR_ANALYSIS.md` §2.1 sizes the gear at a **3,130 g** design
     AUW; the ~1.19 hover T/W in `docs/plans/2026-08-30-001` against 4,464 gf of

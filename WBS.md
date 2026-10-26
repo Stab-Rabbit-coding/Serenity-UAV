@@ -102,6 +102,7 @@
 - [x] ★ Actuator re-select — DONE 2026-09-15 (D5), RE-CUT 2026-09-16 (Rev T5e): Pololu 20D 25:1 + six-start worm 6.67:1 + pin brake; the 25D pick could not clear the wheel (T5d-1) (`docs/TILT_ACTUATOR_SELECTION.md` §1a)
 - [ ] LG-11 coupon — demoted at wing root (flange FOS 29.2); gates tenon/thwarts
 - [ ] ★ Aero revalidation of the re-lofted wing (S1223/t17.7–t26.7; XFOIL/RANS)
+- [ ] LG-PIN-SHEAR: verify 0.6 x Su pin shear for A2 pins (REF-MAT-005)
 
 #### 0.8.1 — Wing attach interface (Rev S1g), open requirements
 → detail: `docs/WING_ATTACH_INTERFACE.md` §5; `airframe/fuselage-mid/WBS.md` §1.1.1.5

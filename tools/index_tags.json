@@ -13733,6 +13733,13 @@
       ],
       "archived": false
     },
+    "docs/LG_BELLCRANK_LOAD_PATH_STUDY.md": {
+      "description": "Landing-gear bellcrank load path: free-body study",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/LICENSE": {
       "description": "Serenity UAV \u2014 docs \u2014 License",
       "tags": [
@@ -14151,6 +14158,27 @@
     },
     "docs/images/cargo_bulkhead_context_stbd_inboard.png": {
       "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/lg_bellcrank/lg_bellcrank_fbd_A.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/lg_bellcrank/lg_bellcrank_fbd_B.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/lg_bellcrank/lg_bellcrank_fbd_C0.svg": {
+      "description": "Vector diagram",
       "tags": [
         "documentation"
       ],
@@ -17811,6 +17839,14 @@
       ],
       "archived": false
     },
+    "tools/lg_bellcrank_fbd.py": {
+      "description": "Landing-gear bellcrank load path: free-body diagrams of three configurations.",
+      "tags": [
+        "build-tooling",
+        "security"
+      ],
+      "archived": false
+    },
     "tools/lg_collar_integrity.py": {
       "description": "Gate: the hull merge's landing-gear cuts keep every collar joint intact.",
       "tags": [
@@ -18372,6 +18408,7 @@
       "docs/FIRST_FLIGHT_READINESS.md",
       "docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md",
       "docs/LANDING_GEAR_ANALYSIS.md",
+      "docs/LG_BELLCRANK_LOAD_PATH_STUDY.md",
       "docs/LICENSE",
       "docs/MANIFEST.json",
       "docs/MASS_AUDIT_CARGO_WING_ROOT.md",
@@ -18427,6 +18464,9 @@
       "docs/images/cargo_bulkhead_context_iso_aft.png",
       "docs/images/cargo_bulkhead_context_port_inboard.png",
       "docs/images/cargo_bulkhead_context_stbd_inboard.png",
+      "docs/images/lg_bellcrank/lg_bellcrank_fbd_A.svg",
+      "docs/images/lg_bellcrank/lg_bellcrank_fbd_B.svg",
+      "docs/images/lg_bellcrank/lg_bellcrank_fbd_C0.svg",
       "docs/images/nacelle_64mm_nozzle_servo_option1.png",
       "docs/images/nacelle_64mm_nozzle_servo_option2.png",
       "docs/images/nacelle_64mm_nozzle_servo_option3.png",
@@ -19020,6 +19060,7 @@
       "tools/kicad_relink.py",
       "tools/landing_gear_bay_function.py",
       "tools/landing_gear_bay_pad_fit.py",
+      "tools/lg_bellcrank_fbd.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
       "tools/open_mating_faces.py",
@@ -22932,6 +22973,7 @@
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",
+      "tools/lg_bellcrank_fbd.py",
       "tools/lg_collar_integrity.py",
       "tools/lg_corners.py",
       "tools/lg_thigh_variants.py",
