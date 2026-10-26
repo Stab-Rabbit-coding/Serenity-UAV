@@ -132,7 +132,7 @@
 - [ ] ★ NAC-64-REBAKE — published 64 mm pods are x1.00 (axis X ±229.39 from centreline) but nacelle_64_scale.scad says x1.06; re-render + re-bake when the owner releases the HOLD; both pods are also NOT watertight
 - [ ] ★ WEIGHT-13LB — owner target 13.0 lbm heaviest config (2026-10-19). Applied: bookkeeping −126 g, BOM cuts (pistons, Faraday cages→pouches, cradle, belly panel, tube shafts) + FE can 0.5 mm, battery → 624 g pack. Heaviest now ≈ 13.8 lbm with the pack; still open: nacelle pod foam core (−115 g, plan 2026-10-03-001), FE PDB forward re-route (−60 g), and ≈ 0.4 lbm more to find
 - [ ] ★ BATT-01 — listing VERIFIED 2026-10-26 (motionrc.com/eu: 624 g, 139×44×48, 60C, 10 AWG, EC5); weigh a pack
-- [ ] ★ BATT-02 — grow the battery cradle from 142×50×38 to fit a real 6S 4000 pack (≈ 139×44×48); re-prove cargo layout (chin nodes, spool, Observer)
+- [ ] ★ BATT-02 — BLOCKED 2026-10-26 (owner): the verified Admiral Pro 139×44×48 does NOT fit the cargo roof band (`tools/cargo_layout_fit.py`): 48 up → 5,828 mm³ into the shell, 44 up → 2,712 mm³, winch drums foul above it; the payload (Z ≤ 167) blocks growing down. Choose a ≤ 38 mm-tall 6S pack, split packs, or relocate the battery
 - [ ] ★ PWR-CONN-01 — WARNING: battery/FE PDB path is specified XT60 at ~150 A hover; move to XT90 / AS150 class (fire risk)
 - [ ] FE-CAN-05 — EMC pass to confirm the 0.5 mm FE can (low-frequency H-field absorption halves vs 1.0 mm)
 - [ ] REF-NCEES-009 version — confirm FE Reference Handbook version and the Dynamics section numbers cited in `REFERENCES.md`
