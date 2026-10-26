@@ -39,7 +39,13 @@ SKIP = ("/archive", "archives/", "node_modules", "/.git/", "gcs/", "docs/referen
 OWNER = {"tools/hull_datums.py", "tools/check_datum_drift.py", "tools/datum_regression.py",
          "tools/frame_inventory.py"}
 NAMES = r"(X_CL|CENTRE_X|CENTER_X|CARGO_X_CL|X_CL_HULL|Y_NOSE|GROUND_Z|SPAR_Y|SPAR_Z)"
-D1 = re.compile(rf"^\s*{NAMES}\s*=\s*[-+]?\d", re.M)
+# [ \t]* not \s*: \s would span blank lines and mis-report the line number.
+D1 = re.compile(rf"^[ \t]*{NAMES}[ \t]*=[ \t]*[-+]?\d", re.M)
+# A leg- or part-local coordinate that merely shares a datum name (for example
+# GROUND_Z in the canonical leg SCADs, the foot-sole plane in the LEG frame) is
+# exempt when its own source line says so with the token "leg-local" or
+# "part-local".  Owner-flagged false positive, handoff 2026-10-20 step 4.
+LOCAL_OK = ("leg-local", "part-local")
 D2 = re.compile(r"(?<![\w.])-(169\.(?:85|9|241)\d*|305\.70\d*)(?![\w.])")
 D3 = re.compile(r"BAKE_T\s*=\s*np\.array\(\s*\[\s*[-+]?\d")
 R1_MARKER = b"SerenityUAV HULL-FRAME R1"
@@ -70,8 +76,12 @@ def main(argv: list[str]) -> int:
         if generated(text):
             continue
         code = strip_comments(text, p.suffix == ".scad")
+        raw = text.splitlines()
         for m in D1.finditer(code):
-            finds.append(("D1", rel, code[:m.start()].count("\n") + 1, m.group(0).strip()))
+            ln = code[:m.start()].count("\n") + 1
+            if any(tok in raw[ln - 1] for tok in LOCAL_OK):
+                continue
+            finds.append(("D1", rel, ln, m.group(0).strip()))
         for m in D2.finditer(code):
             finds.append(("D2", rel, code[:m.start()].count("\n") + 1, m.group(0)))
         for m in D3.finditer(code):
