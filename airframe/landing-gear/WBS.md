@@ -841,6 +841,13 @@ Derivation: `docs/LANDING_GEAR_ANALYSIS.md` §4.8. Gate:
         > spring steel > stainless; absorber wires stay metal), first with a
         cited allowable. Gate: `tools/lg_bellcrank_fbd.py` (exit 2 if A or B
         < 1.0). **BLOCKS LG-REMASS-c, LG-15, BHD-02g fore.**
+        - [ ] LG-FUSE-MAT — ductile fuse material (owner 2026-10-26): no cited
+            material meets all of flat plateau (Su/Sy), > hinge strain elongation and
+            no DBTT on the present bow geometry (~25-37 % hinge strain; 6061-T6 cracks,
+            annealed 304 work-hardens 2.5x). Source an annealed low-carbon steel /
+            5052 / 3003 wire, or evaluate a crushable composite tube; bench firing
+            (LG-15) to measure the plateau and hinge strain. `tools/lg_fuse_material.py`,
+            study §6.
         - [ ] LG-PIN-SHEAR — verify the 0.6 × tensile pin-shear ratio used with
             ISO 3506-1 [REF-MAT-005] (requires verification; root WBS §0.8).
   *LG-32 original text:* **Reconcile the AUW ledger before LG-15 procures wire.**

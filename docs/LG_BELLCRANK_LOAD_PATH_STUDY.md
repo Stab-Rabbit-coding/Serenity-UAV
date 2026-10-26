@@ -175,7 +175,61 @@ bay. If the LG-11 coupons give CF-PETG or CF-plate bearing allowables, the
 6061 liners and spreaders become candidates for composite replacement, per
 the owner's preference.
 
-## 6. Assumptions and verification needed
+## 6. Ductile fuse material (owner 2026-10-26)
+
+The ductile wire is a **fuse**: it must absorb the crash energy by yielding,
+not spring back. `tools/landing_gear_r6_sizing.py` specifies it only as
+"ductile-temper steel wire, flow stress ≈550 MPa", with no source.
+`tools/lg_fuse_material.py` compares the candidates that have cited
+properties. It uses the sizing tool's two-hinge bowed-wire model and judges
+each one on the properties a fuse needs:
+
+| Property | Why the fuse needs it | Check |
+| --- | --- | --- |
+| Yield (lower bound) | sets the plateau and the wire diameter | `d = (3 P h0 / Sy)^(1/3)` |
+| Su / Sy | strain hardening raises the late-stroke plateau, and every mount demand with it (failure hierarchy) | ratio |
+| Elongation | the wire must finish its stroke without cracking | middle-hinge strain ≈ Δφ (plastic-hinge length = one diameter, an assumption) |
+| No ductile-brittle transition | a cold-day crash must still yield | FCC metals (Al, austenitic stainless, Cu) have none |
+| Mass | eight ductile wires per aircraft | stock length × area × density |
+
+Option A plateau (4,593 N per wire, 21 mm span, 3.84 mm stroke): estimated
+hinge strain about **37 %**.
+
+| Material | d (mm) | Mass, 8 wires | Su/Sy | Elongation | Strain margin | DBTT |
+| --- | --- | --- | --- | --- | --- | --- |
+| 6061-T6 [REF-MAT-007] | 5.59 | 21.7 g | 1.12 | 17 % | **0.5** | none |
+| 304 annealed, ASTM A240 min [REF-MAT-006] | 6.17 | 77.6 g | **2.51** | 40 % | 1.1 | none |
+| A228 music wire [REF-MAT-008] | — | — | — | — | — | yes |
+| current "ductile steel 550" (uncited) | 4.44 | 39.9 g | unknown | unknown | unknown | yes |
+
+**Findings:**
+
+- **Music wire is right for the spring wires and the seat slugs, not the fuse.**
+  It is a spring temper, and its source publishes no yield to size a plateau on.
+- **6061-T6 has the flat plateau a fuse wants** (Su/Sy 1.12), but its 17 %
+  elongation is half the estimated hinge strain. It would crack mid-stroke.
+- **Annealed 304 is ductile enough** but work-hardens: Su/Sy 2.51. The
+  late-stroke plateau can reach 2.5 times the design force, which multiplies
+  every pin, ear and bay demand above by the same factor and breaks the
+  failure hierarchy.
+- **The bow geometry, not only the material, is the problem.** With the 3.5 mm
+  pre-rise fixed, hinge strain falls only as about span^-1/2. Even an 80 mm
+  span leaves 6061-T6 at margin 0.72. Option A's longer crank also needs
+  more stroke (3.84 mm against 2.30 mm at r 6), which raises the strain.
+
+**What would satisfy all five properties, not yet cited:**
+
+- an annealed low-carbon steel or a work-hardening-limited aluminium (for
+  example 5052 or 3003) with both a flat plateau and over 30 % elongation;
+- or a different fuse architecture, such as a **crushable composite tube**
+  (progressive crushing gives a flat plateau and is the owner's preferred
+  material class).
+
+Both need sources before they can be sized. The plastic-hinge-length
+assumption needs a bench firing (LG-15), which is the real gate on any fuse
+material.
+
+## 7. Assumptions and verification needed
 
 - **CF-PETG allowable.** 47 MPa, the low end of ASTM D695 bulk compression
   [REF-MAT-001], is used as the flat-contact limit under the 6061 spreaders. It

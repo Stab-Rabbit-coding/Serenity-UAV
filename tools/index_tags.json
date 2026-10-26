@@ -17885,6 +17885,13 @@
       ],
       "archived": false
     },
+    "tools/lg_fuse_material.py": {
+      "description": "Landing-gear DUCTILE FUSE wire: material trade on cited properties only.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/lg_thigh_variants.py": {
       "description": "Serenity UAV -- landing-gear thigh: grown printed section vs anchored CF-rod core.",
       "tags": [
@@ -23006,6 +23013,7 @@
       "tools/lg_bellcrank_fbd.py",
       "tools/lg_collar_integrity.py",
       "tools/lg_corners.py",
+      "tools/lg_fuse_material.py",
       "tools/lg_thigh_variants.py",
       "tools/lg_wire_layout_study.py",
       "tools/middle_layout_fit.py",
