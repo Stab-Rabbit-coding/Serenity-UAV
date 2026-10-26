@@ -133,6 +133,8 @@
 - [ ] ★ WEIGHT-13LB — owner target 13.0 lbm heaviest config (2026-10-19). Applied: bookkeeping −126 g, BOM cuts (pistons, Faraday cages→pouches, cradle, belly panel, tube shafts) + FE can 0.5 mm, battery → 624 g pack. Heaviest now ≈ 13.8 lbm with the pack; still open: nacelle pod foam core (−115 g, plan 2026-10-03-001), FE PDB forward re-route (−60 g), and ≈ 0.4 lbm more to find
 - [ ] ★ BATT-01 — listing VERIFIED 2026-10-26 (motionrc.com/eu: 624 g, 139×44×48, 60C, 10 AWG, EC5); weigh a pack
 - [ ] ★ BATT-02 — BLOCKED 2026-10-26 (owner): the verified Admiral Pro 139×44×48 does NOT fit the cargo roof band (`tools/cargo_layout_fit.py`): 48 up → 5,828 mm³ into the shell, 44 up → 2,712 mm³, winch drums foul above it; the payload (Z ≤ 167) blocks growing down. Choose a ≤ 38 mm-tall 6S pack, split packs, or relocate the battery; options 2026-10-26 in `docs/BATTERY_SPLIT_OPTIONS.md` (split 2 × 6S 2200 cargo + head on the FE Phase-12 combiner, CG +22.6 → +14.3 mm, and an ad hoc third pack in the payload box)
+- [ ] ★ SPLIT-BATT — execute `docs/plans/2026-10-26-001-feat-split-battery-head-rail-plan.md` U1–U7 (head R2 migration + audit, rail, catch/sled, cells, optional third cell, gates)
+- [ ] ★ FE-MULTIBATT — execute `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` U1–U6 (combiner, fuses, connectors, harnesses, pwr_fault); closes PWR-CONN-01
 - [ ] ★ PWR-CONN-01 — WARNING: battery/FE PDB path is specified XT60 at ~150 A hover; move to XT90 / AS150 class (fire risk)
 - [ ] FE-CAN-05 — EMC pass to confirm the 0.5 mm FE can (low-frequency H-field absorption halves vs 1.0 mm)
 - [ ] REF-NCEES-009 version — confirm FE Reference Handbook version and the Dynamics section numbers cited in `REFERENCES.md`
@@ -1029,15 +1031,10 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Forward-thrust test passed; rear EDF NOT used for hover lift; E…
 - [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruis…
 
-### Phase12 — Cargo-bay Range-Extender Battery Module (Deferred)
-→ detail: `deferred/WBS.md` §Phase12
+### Phase12 — Cargo-bay Range-Extender Battery Module (PROMOTED 2026-10-26)
+→ detail: `deferred/WBS.md` §Phase12 (superseded)
 
-- [ ] RBM module:
-- [ ] Flight Engineer input:
-- [ ] Current sharing:
-- [ ] Firmware (pwr_fault):
-- [ ] W&B:
-- [ ] CAD:
+- [x] Promoted to the active build (owner 2026-10-26): the split main pack needs the multi-input combiner. Now `docs/plans/2026-10-26-001-feat-split-battery-head-rail-plan.md` (cells, rail, optional third cell, head audit) and `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` (FE PDB, harnesses)
 
 ---
 
