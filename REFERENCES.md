@@ -3183,7 +3183,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | Field | Value |
 |---|---|
 | **Publisher** | Analog Devices, Inc. (Linear Technology product line), data sheet 4370f (PDF creation date 2012-05-14) |
-| **Official access** | <https://www.analog.com/media/en/technical-documentation/data-sheets/4370f.pdf> — **URL requires verification** (no network from the authoring session, 2026-10-26) |
+| **Official access** | <https://www.analog.com/media/en/technical-documentation/data-sheets/4370f.pdf> — URL supplied by the owner (Stab-Rabbit-coding) 2026-10-26 as the official source of the local copy; not re-fetched by the AI (no network from the authoring session) |
 | **Local copy** | `avionics/datasheets/linear/4370f.pdf` (SHA-256 efa666325494ec22800cdc34c6d287109b851c509211caeed6bb6631ffec5615), supplied by the owner |
 | **Section applied** | Absolute Maximum Ratings: VIN1, VIN2, OUT1, OUT2 −2 V to 24 V. Electrical Characteristics: VIN1, VIN2 operating range 2.9–18 V. **Result: fails the 6S gate (25.2 V full charge); rejected for the Flight Engineer combiner.** |
 | **Cited in** | `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` (KTD1, rejected candidates) |
@@ -3193,7 +3193,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | Field | Value |
 |---|---|
 | **Publisher** | Analog Devices, Inc. (Linear Technology product line), LTC4359 data sheet Rev. F |
-| **Official access** | <https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4359.pdf> — **URL requires verification** (no network from the authoring session, 2026-10-26) |
+| **Official access** | <https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4359.pdf> — URL supplied by the owner (Stab-Rabbit-coding) 2026-10-26 as the official source of the local copy; not re-fetched by the AI (no network from the authoring session) |
 | **Local copy** | `avionics/datasheets/linear/ltc4359.pdf` (SHA-256 8d05e6ba4259028463bbdb751d639715506ef28d1bd5eabac1b012786ea7d970), supplied by the owner |
 | **Section applied** | Features: 4–80 V operating, reverse input to −40 V, controls single or back-to-back N-channel MOSFETs. Absolute Maximum Ratings: IN, SOURCE, SHDN −40 V to 100 V. Operation: SHDN low turns the gate off; SHDN open is pulled high by an internal 2.6 µA source (enabled). Load Switching section: back-to-back MOSFETs for load-switch use. Temperature grades C 0–70 °C, I −40–85 °C, H −40–125 °C. |
 | **Cited in** | `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` (KTD1, R2, R3, R13) |

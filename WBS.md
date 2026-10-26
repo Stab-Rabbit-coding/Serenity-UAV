@@ -105,7 +105,8 @@
 - [ ] LG-PIN-SHEAR: verify 0.6 x Su pin shear for A2 pins (REF-MAT-005)
 - [x] HEAD-CELL-G: head-cell catch load factor = 79.4 g, the gear design's 4 ft level peak (owner 2026-10-26; plan 2026-10-26-001 R7)
 - [x] LTC4370/LTC4359 input-range check vs 25.2 V 6S: LTC4370 FAILS (24 V abs max, REF-PWR-014), LTC4359 PASSES (REF-PWR-015); plan 2026-10-26-002 KTD1 now 3 × LTC4359
-- [ ] Verify analog.com URLs for REF-PWR-014/015 and record Analog Devices domicile (AGENTS.md §5)
+- [x] analog.com URLs for REF-PWR-014/015 supplied by owner 2026-10-26
+- [ ] Record Analog Devices domicile/control for LTC4359 (AGENTS.md §5)
 
 #### 0.8.1 — Wing attach interface (Rev S1g), open requirements
 → detail: `docs/WING_ATTACH_INTERFACE.md` §5; `airframe/fuselage-mid/WBS.md` §1.1.1.5
