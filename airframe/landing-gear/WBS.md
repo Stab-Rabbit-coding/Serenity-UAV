@@ -834,8 +834,12 @@ Derivation: `docs/LANDING_GEAR_ANALYSIS.md` §4.8. Gate:
         Supersedes LG-HIERARCHY's "pin passes" and its 137 mm² boss figure (that
         used an uncited 70 MPa bearing allowable). Options with FBDs, mass and
         dynamics: `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` — A balanced couple
-        (r 10, stainless cups/liners, +44.6 g; boss packaging unproven) or B steel
-        load path (+460.5 g). Gate: `tools/lg_bellcrank_fbd.py` (exit 2 if A or B
+        (r 10, 6061 pin/liners/spreaders + A228 music-wire seat slugs, +32.2 g;
+        boss packaging unproven) or B metal load path (6061 Ø11 pin, 2 × 6.5 mm
+        plates, +128.8 g). Materials per the owner's preference order (2026-10-26:
+        printable composite > pre-cut/laid-up CF/Kevlar/glass > aluminium > brass
+        > spring steel > stainless; absorber wires stay metal), first with a
+        cited allowable. Gate: `tools/lg_bellcrank_fbd.py` (exit 2 if A or B
         < 1.0). **BLOCKS LG-REMASS-c, LG-15, BHD-02g fore.**
         - [ ] LG-PIN-SHEAR — verify the 0.6 × tensile pin-shear ratio used with
             ISO 3506-1 [REF-MAT-005] (requires verification; root WBS §0.8).

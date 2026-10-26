@@ -1569,6 +1569,28 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 | **Openness / sourcing** | Public web page; ATI is US-domiciled (structural material, not silicon; AGENTS.md §5 not engaged). |
 
 
+### REF-MAT-007: Protolabs — "Aluminum 6061-T651/T6" CNC material data sheet
+
+| Field | Value |
+|---|---|
+| **Publisher** | Proto Labs, Inc., CNC machining material data sheet "Aluminum 6061-T651/T6" (document 2026-026) |
+| **Official access** | <https://www.protolabs.com/media/h54d0gnp/2026-026-cnc-material-data-sheet_aluminum-6061-t651_t6.pdf> (fetched and read 2026-10-26) |
+| **Section applied** | Properties table: ultimate tensile strength 45 ksi (310 MPa), yield stress 40 ksi (276 MPa), elongation 17 %, ultimate shearing strength 30 ksi (207 MPa), nominal density 0.098 lb/in^3 (2.70 Mg/m^3). |
+| **Not provided** | No bearing allowable. The 276 MPa yield is used as the pin-bearing limit (conservative design judgment, not a published bearing value). |
+| **Cited in** | `tools/lg_bellcrank_fbd.py`; `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` |
+| **Openness / sourcing** | Public PDF. Structural material (AGENTS.md §5 silicon rule not engaged). |
+
+### REF-MAT-008: Gibbs Wire & Steel — "Phosphate Coated Music Wire" technical data sheet (ASTM A228)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Gibbs Wire & Steel Company, Inc., Southington, CT — Technical Data Sheet No. 1004 (01/14) |
+| **Official access** | <https://www.gibbswire.com/assets/PMW%20-phos%20coated%20music%20wire.pdf> (fetched and read 2026-10-26) |
+| **Section applied** | "Tensile Strength Table (ASTM-A228 spec)": minimum / maximum tensile by diameter, e.g. 0.207 in 238,000 / 264,000 psi; 0.250 in 230,000 / 255,000 psi (1,586 / 1,758 MPa). Stock available 0.005–0.283 in. Service range 0–250 °F. |
+| **Not provided** | No yield strength and no density. The source notes the charts are general background and the material specification shall be reviewed. |
+| **Cited in** | `tools/lg_bellcrank_fbd.py` (A228 seat slugs); the absorber wires (`tools/landing_gear_r6_sizing.py`) are the same material class |
+| **Openness / sourcing** | Public PDF; Gibbs is US-domiciled. |
+
 ### REF-EDF-001: XFly-Model — Galaxy X5 50 mm 12-blade EDF, 6S, motor 2627-KV3200
 
 | Field | Value |

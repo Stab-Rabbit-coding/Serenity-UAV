@@ -64,7 +64,7 @@ differs.
 Hip pin at the origin. The foot force is blue, the wire forces green, the pin
 reaction red. A red X and the red text mark each failure location.
 
-| Current R6 + LG-REMASS (C0) | Option A: balanced couple | Option B: steel load path |
+| Current R6 + LG-REMASS (C0) | Option A: balanced couple | Option B: metal load path |
 | --- | --- | --- |
 | ![C0 FBD](images/lg_bellcrank/lg_bellcrank_fbd_C0.svg) | ![Option A FBD](images/lg_bellcrank/lg_bellcrank_fbd_A.svg) | ![Option B FBD](images/lg_bellcrank/lg_bellcrank_fbd_B.svg) |
 
@@ -92,71 +92,104 @@ Even the **normal** 1.5 ft landing puts 2,718 lbf (12.1 kN) through the M3 pin,
 2.9 times its capacity. The parts fail in this order: socket floors and ears
 first, then the pin. The wire fuse never reaches its plateau.
 
-### 4.2 Option A: balanced couple, crank r 10 mm
+### 4.2 Material preference (owner 2026-10-26)
+
+Each load-path part takes the first material in this order that has a
+**cited** allowable for its failure mode:
+
+1. Printable composite (CF-PETG).
+2. Pre-cut or laid-up CF, Kevlar or glass.
+3. Aluminium, then brass.
+4. Spring steel.
+5. Stainless.
+
+The energy-absorber **wires stay metal**, because the design relies on their
+ductile and elastic behaviour.
+
+- **Composites, skipped:** the repository has no cited pin-bearing, shear or
+  through-thickness allowable for CF-PETG or for CF, Kevlar or glass plate.
+  CF-PETG is used only in flat contact (47 MPa [REF-MAT-001]). The LG-11
+  coupons would make the composites eligible.
+- **Brass, skipped:** no verified allowable has been obtained yet.
+- **Aluminium:** 6061-T6 [REF-MAT-007] is the first eligible metal for the
+  pin, ear liners, side plates and spreaders.
+- **Spring steel:** the wire end presses on its seat at 370–439 MPa, above
+  6061's 276 MPa yield. The seat is therefore a short slug of ASTM A228 music
+  wire (spring steel, Ø7 × 4 mm) [REF-MAT-008], sitting on a 6061 spreader
+  disc.
+
+### 4.3 Option A: balanced couple, crank r 10 mm
 
 Each row (ductile, spring) puts one wire on each side of the pin with
-antiparallel chords. Stainless 304 thrust cups sit under the socket floors and
-stainless liners in the clevis ears.
+antiparallel chords.
 
-| Location | Failure mode | Sized part | Demand | Capacity | Margin |
+| Location | Failure mode | Part | Demand | Capacity | Margin |
 | --- | --- | --- | --- | --- | --- |
-| Hip pin | double shear | M3 A2 (unchanged) | 693 lbf (3,083 N) | 953 lbf (4,241 N) | 1.38 OK |
-| Clevis ears | pin bearing | 304 liner, 2 × 3.0 mm | 693 lbf (3,083 N) | 830 lbf (3,690 N) | 1.20 OK |
-| Wire thrust cups | flat bearing on CF-PETG | 304 cup, flange Ø13 × 1.5 mm | 1,291 lbf (5,741 N) | 1,402 lbf (6,238 N) | 1.09 OK |
+| Hip pin | double shear | 6061-T6, Ø4 mm | 693 lbf (3,083 N) | 1,170 lbf (5,202 N) | 1.69 OK |
+| Clevis ears | pin bearing | 6061-T6 liners, 2 × 1.5 mm | 693 lbf (3,083 N) | 745 lbf (3,312 N) | 1.07 OK |
+| Wire end on seat | contact | A228 slug Ø7 × 4 | 53.7 ksi (370 MPa) | 230 ksi (1,586 MPa) min tensile | 4.29 OK |
+| Slug on spreader | bearing | 6061-T6 disc | 21.6 ksi (149 MPa) | 40.0 ksi (276 MPa) | 1.85 OK |
+| Spreader on bay | flat bearing on CF-PETG | 6061-T6 disc Ø13 × 1.5 | 1,291 lbf (5,741 N) | 1,402 lbf (6,238 N) | 1.09 OK |
 
 - The pin reaction is the foot force alone: 218 / 258 / 554 lbf (normal / crash / leg-break).
 - The wire force drops to 4,593 N per wire, so the ductile wire becomes about Ø4.44 instead of Ø5.27.
 - The longer crank needs 3.84 mm of wire stroke for the 22° hip rotation. The 20 mm bow span gives 3.67 mm, so the span grows to about 21 mm.
-- **Mass penalty: +15.1 g per leg, +44.6 g (+0.098 lbm) per aircraft**, net of the lighter wires. The thigh root ring grows from r 6 to r 10.
+- **Mass penalty: +12.0 g per leg, +32.2 g (+0.071 lbm) per aircraft**, net of the lighter wires.
 - **Open packaging risk.** With the crank at 30°/210°, the lower wire's boss lies about 35 mm below the hip, and the hip is only 38 mm above the belly. The crank azimuth pair has to be re-screened in `tools/lg_wire_layout_study.py` and the 3-D census so that both bosses stay inside the canonical bay outline. This study has not proved that they can.
 
-### 4.3 Option B: steel load path, R6 layout kept (r 6 mm)
+### 4.4 Option B: metal load path, R6 layout kept (r 6 mm)
 
 The bay keeps its outline and the same-side wire pair. The 2P reaction is
-carried in metal from the pin to the thrust plates.
+carried in aluminium from the pin to the seats.
 
-| Location | Failure mode | Sized part | Demand | Capacity | Margin |
+| Location | Failure mode | Part | Demand | Capacity | Margin |
 | --- | --- | --- | --- | --- | --- |
-| Hip pin | double shear | A2-70, Ø8 mm | 8,647 lbf (38.5 kN) | 9,492 lbf (42.2 kN) | 1.10 OK |
-| Clevis side plates | pin bearing | 304, 2 × 12.0 mm | 8,647 lbf (38.5 kN) | 8,849 lbf (39.4 kN) | 1.02 OK |
-| Wire thrust plates | flat bearing on CF-PETG | 304, flange Ø17 × 1.5 mm | 2,151 lbf (9,569 N) | 2,398 lbf (10,668 N) | 1.11 OK |
+| Hip pin | double shear | 6061-T6, Ø11 mm | 8,647 lbf (38.5 kN) | 8,845 lbf (39.3 kN) | 1.02 OK |
+| Clevis side plates | pin bearing | 6061-T6, 2 × 6.5 mm | 8,647 lbf (38.5 kN) | 8,873 lbf (39.5 kN) | 1.03 OK |
+| Wire end on seat | contact | A228 slug Ø7 × 4 | 63.7 ksi (439 MPa) | 230 ksi (1,586 MPa) min tensile | 3.62 OK |
+| Slug on spreader | bearing | 6061-T6 disc | 36.1 ksi (249 MPa) | 40.0 ksi (276 MPa) | 1.11 OK |
+| Spreader on bay | flat bearing on CF-PETG | 6061-T6 disc Ø17 × 1.5 | 2,151 lbf (9,569 N) | 2,398 lbf (10,668 N) | 1.11 OK |
 
-- **Mass penalty: +115.1 g per leg, +460.5 g (+1.015 lbm) per aircraft.**
+- **Mass penalty: +32.2 g per leg, +128.8 g (+0.284 lbm) per aircraft.** In stainless it was +460.5 g.
 - The 13.0 lbm target already lacks 0.34 lbm (handoff 2026-10-20), so Option B
-  would leave the aircraft about 1.35 lbm over target. Two 12 mm stainless side
-  plates also do not fit the 14–16 mm lug and the bay aperture without
-  re-drawing the bay.
+  would nearly double the shortfall. Two 6.5 mm side plates and an Ø11 pin also
+  do not fit the 14–16 mm lug and the bay aperture without re-drawing the bay.
 
 ## 5. Comparison
 
-| | C0 current | A balanced couple | B steel load path |
+| | C0 current | A balanced couple | B metal load path |
 | --- | --- | --- | --- |
-| Worst margin | **0.02 (fails)** | 1.09 | 1.02 |
+| Worst margin | **0.02 (fails)** | 1.07 | 1.02 |
 | Pin reaction, crash | 3,221 lbf (14.3 kN) | 258 lbf (1,148 N) | 3,221 lbf (14.3 kN) |
 | Wire P, crash | 7,655 N | 4,593 N | 7,655 N |
 | Ductile wire | Ø5.27 | about Ø4.44 | Ø5.27 |
-| Mass vs C0, per aircraft | 0 | **+44.6 g (+0.098 lbm)** | +460.5 g (+1.015 lbm) |
-| Canonical outline | as drawn | thigh root ring grows; boss packaging **unproven** | side plates do not fit the present bay |
+| Load-path materials | printed only | 6061 pin / liners / spreaders, A228 seats | 6061 pin / plates / spreaders, A228 seats |
+| Mass vs C0, per aircraft | 0 | **+32.2 g (+0.071 lbm)** | +128.8 g (+0.284 lbm) |
+| Canonical outline | as drawn | thigh root ring grows; boss packaging **unproven** | side plates and pin do not fit the present bay |
 | Failure hierarchy (fuse < leg < bay) | violated | met (as sized) | met (as sized) |
 
-**Recommendation: Option A.** It is the only option that meets the hierarchy at
-a mass the 13.0 lbm target can absorb. Its open item is geometric, not
-structural: re-screen the crank azimuths so both bosses stay inside the bay.
-Option B is structurally sound but costs about 1 lbm.
+**Recommendation: Option A.** It meets the hierarchy at the lowest mass and
+keeps the pin small enough for the present clevis. Its open item is geometric,
+not structural: re-screen the crank azimuths so both bosses stay inside the
+bay. If the LG-11 coupons give CF-PETG or CF-plate bearing allowables, the
+6061 liners and spreaders become candidates for composite replacement, per
+the owner's preference.
 
 ## 6. Assumptions and verification needed
 
 - **CF-PETG allowable.** 47 MPa, the low end of ASTM D695 bulk compression
-  [REF-MAT-001], is used as the flat-contact limit under the stainless cups. It
+  [REF-MAT-001], is used as the flat-contact limit under the 6061 spreaders. It
   is not a pin-bearing allowable. A real bearing coupon (LG-11, ASTM D953 or
   equivalent, printed in the part's own orientation) is still required. The
-  thrust-cup margins (1.09 and 1.11) are thin; the cup flanges should grow
-  one size when the layout is drawn.
+  spreader margins (1.09 and 1.11) are thin; the spreaders should grow one size
+  when the layout is drawn.
 - **Pin shear.** Pin shear uses 0.6 × the ISO 3506-1 tensile strength
   [REF-MAT-005]. That ratio is a design judgment and is marked "requires
   verification" in REFERENCES.md.
-- **Steel.** 304 bearing and tension use the 205 MPa ASTM A240 minimum yield,
-  and the density is 7.90 g/cm³ [REF-MAT-006].
+- **Metals.** 6061-T6 bearing uses its 276 MPa yield and shear its 207 MPa
+  ultimate [REF-MAT-007]. The A228 seat contact is checked against the 230 ksi
+  minimum tensile [REF-MAT-008], which publishes no yield. The slug mass uses
+  the 7.90 g/cm³ steel density of [REF-MAT-006] as a proxy.
 - **Load-case conventions.** Normal case is a linear spring with peak `2E/x`.
   Crash case is a constant ductile plateau `E/s`. Both are solved at the
   sizing tool's 25.1 % worst static share and the 50 % tail-down share.

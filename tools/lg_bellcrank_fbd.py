@@ -17,11 +17,11 @@ Configurations (all at the decided LG-REMASS schedule, 13.0 lbm design mass):
   C0  current R6 + LG-REMASS: r 6, same-side wire pair, M3 pin, printed ears,
       blind printed wire sockets.
   A   balanced couple: one wire of each row on EACH side of the pin with
-      antiparallel chords, r 10; stainless thrust cups under the socket floors
-      and stainless ear liners.  The pin carries only the foot force.
-  B   steel load path: R6 layout kept (r 6, same-side pair); the 2P reaction is
-      carried by a stainless clevis (side plates), a larger A2-70 pin and
-      stainless thrust plates; the printed bay only locates.
+      antiparallel chords, r 10; A228 seat slugs on 6061 spreaders under the
+      socket floors, 6061 ear liners and pin.  The pin carries only the foot force.
+  B   metal load path: R6 layout kept (r 6, same-side pair); the 2P reaction is
+      carried by 6061 clevis side plates, a 6061 pin and A228 seat slugs on
+      6061 spreaders; the printed bay only locates.
 
 Load cases per leg (foot force, vertical, at R_H), from the sizing tool's
 schedule at the 13.0 lbm design mass and the R2 ledger (static share 25.1 %):
@@ -45,7 +45,18 @@ Allowables (every one cited; see REFERENCES.md):
     [REF-MAT-005 p.2].  Shear = 0.6 x tensile is a design-judgment ratio,
     "requires verification" in REFERENCES.md.
   304 plate yield 205 MPa, used as the steel bearing and tension limit;
-    density 7.90 g/cm^3 [REF-MAT-006].
+    density 7.90 g/cm^3 [REF-MAT-006] (also the density proxy for the A228
+    seat slugs; no music-wire density was cited).
+  6061-T6: yield 276 MPa (used as the pin-bearing limit), ultimate shear
+    207 MPa, density 2.70 g/cm^3 [REF-MAT-007].
+  ASTM A228 music wire: minimum tensile 230 ksi (1,586 MPa) at 0.250 in
+    [REF-MAT-008]; no yield is published there, so the seat-slug contact is
+    checked against the minimum tensile and says so.
+
+Material preference (owner 2026-10-26): printable composite, then pre-cut or
+laid-up CF/Kevlar/glass, then aluminium, brass, spring steel, stainless; the
+absorber wires stay metal.  A material is used only where a cited allowable
+for that failure mode exists; the skips are printed.
   Printed density 1.05 g/cm^3: the project's effective print density
     (tools/auw_ledger.py RHO_PRINT).
 
@@ -137,7 +148,7 @@ def thigh_fbd(f_foot, r, wires):
 CONFIGS = {
     "C0": dict(name="Current R6 + LG-REMASS", r=6.0, wires=[(30, 1), (30, 1)]),
     "A": dict(name="Option A: balanced couple", r=10.0, wires=[(30, 1), (210, 1)]),
-    "B": dict(name="Option B: steel load path", r=6.0, wires=[(30, 1), (30, 1)]),
+    "B": dict(name="Option B: metal load path", r=6.0, wires=[(30, 1), (30, 1)]),
 }
 
 
@@ -145,8 +156,39 @@ def disk_area(d):
     return math.pi / 4 * d * d
 
 
+# Owner material preference (2026-10-26), first match wins for each part:
+#   1 printable composite (CF-PETG)  2 pre-cut / laid-up CF, Kevlar, glass
+#   3 aluminium  4 brass  5 spring steel  6 stainless.
+# The absorber WIRES stay metal (ductile and elastic behaviour are the point).
+# A material is eligible for a part only with a CITED allowable for that
+# failure mode; otherwise it is skipped and the reason is printed.
+SY_6061, SS_6061 = 276.0, 207.0     # MPa yield, ult. shear  [REF-MAT-007]
+RHO_6061 = 2.70e-3                  # g/mm^3                 [REF-MAT-007]
+SU_A228 = 1586.0                    # MPa, A228 min tensile 230 ksi, 0.250 in row [REF-MAT-008]
+SKIPPED = {
+    "CF-PETG (printed)": "no cited shear or pin-bearing allowable; flat contact only (47 MPa)",
+    "CF / Kevlar / glass plate": "no cited bearing, shear or through-thickness allowable "
+                                 "(LG-11 coupons would make it eligible)",
+    "brass": "no verified allowable obtained (requires a cited source)",
+}
+SLUG_D, SLUG_L = 7.0, 4.0           # mm, A228 seat slug (largest stock dia 0.283 in)
+SPREAD_T = 1.5                      # mm, 6061 spreader disc under the slug
+
+
+def size_pin(dem):
+    """6061 pin, double shear: smallest whole-mm dia that carries dem."""
+    d = math.ceil(math.sqrt(dem / (2 * SS_6061) * 4 / math.pi))
+    return d, 2 * SS_6061 * disk_area(d)
+
+
+def size_plates(dem, d_pin):
+    """6061 ear liners / side plates, pin bearing at yield, 0.5 mm steps."""
+    t = math.ceil(dem / (2 * d_pin * SY_6061) * 2) / 2
+    return t, 2 * t * d_pin * SY_6061
+
+
 def analyse(key, cs):
-    """Component demand vs capacity for one configuration, plus steel sizing/mass."""
+    """Component demand vs capacity for one configuration, plus sizing and mass."""
     c = CONFIGS[key]
     r = c["r"]
     rows, mass_add = [], 0.0
@@ -156,49 +198,41 @@ def analyse(key, cs):
         pin[case] = (p, math.hypot(*rp))
     p_c = pin["crash"][0]                         # ductile plateau per wire
     d_duct = D_DUCT0 * (p_c / P_DUCT0) ** (1 / 3)  # wire scales as d^3 ~ P
-    # ---- hip pin (double shear) vs 1.25 x leg-break reaction ----
-    dem_pin = HIER * pin["hier"][1]
-    if key == "B":
-        d_pin = math.sqrt(dem_pin / (2 * SHEAR_RATIO * SU_A2_70) * 4 / math.pi)
-        d_pin = math.ceil(d_pin)
-        cap_pin = 2 * SHEAR_RATIO * SU_A2_70 * disk_area(d_pin)
-        mass_add += disk_area(d_pin) * 22.0 * RHO_STEEL - disk_area(3.0) * 22.0 * RHO_STEEL
-        rows.append(("hip pin, double shear", f"A2-70 dia {d_pin} mm", dem_pin, cap_pin))
-    else:
-        cap_pin = 2 * SHEAR_RATIO * SU_A2_50 * disk_area(3.0)
-        rows.append(("hip pin, double shear", "M3 A2, class-50 basis", dem_pin, cap_pin))
-    # ---- clevis ears: pin bearing ----
+    dem_pin = HIER * pin["hier"][1]               # vs 1.25 x leg-break reaction
+    dem_s = HIER * p_c                            # wire path vs 1.25 x plateau
     if key == "C0":
-        cap_ear = 2 * EAR_T * PIN_BORE * SIG_PETG
-        rows.append(("clevis ears, pin bearing (printed)", "2 x 3 mm CF-PETG", dem_pin, cap_ear))
+        rows.append(("hip pin, double shear", "M3 A2, class-50 basis", dem_pin,
+                     2 * SHEAR_RATIO * SU_A2_50 * disk_area(3.0)))
+        rows.append(("clevis ears, pin bearing (printed)", "2 x 3 mm CF-PETG", dem_pin,
+                     2 * EAR_T * PIN_BORE * SIG_PETG))
+        rows.append(("wire socket floor, end thrust (printed)",
+                     f"blind bore dia {d_duct + SOCK_CLR:.2f}", dem_s,
+                     disk_area(d_duct + SOCK_CLR) * SIG_PETG))
     else:
-        d_p = d_pin if key == "B" else 3.0
-        t = dem_pin / (2 * d_p * SY_304)           # stainless liner / side plate, each side
-        t = math.ceil(t * 2) / 2
-        cap_ear = 2 * t * d_p * SY_304
-        od = d_p + 2 * 4.0                         # 4 mm edge distance
-        vol = 2 * (disk_area(od) - disk_area(d_p)) * t
+        d_pin, cap = size_pin(dem_pin)
+        rows.append(("hip pin, double shear", f"6061-T6 dia {d_pin} mm", dem_pin, cap))
+        mass_add += (disk_area(d_pin) * RHO_6061 - disk_area(3.0) * RHO_STEEL) * 22.0
+        t, cap = size_plates(dem_pin, d_pin)
+        vol = 2 * (disk_area(d_pin + 8.0) - disk_area(d_pin)) * t
         if key == "B":                             # side plates run hip -> thrust plate
             vol += 2 * t * 12.0 * 30.0
-        mass_add += vol * RHO_STEEL
-        rows.append(("clevis ears / side plates, pin bearing", f"304, 2 x {t} mm",
-                     dem_pin, cap_ear))
-    # ---- wire socket floor: axial end thrust (wire path, vs 1.25 x plateau) ----
-    dem_s = HIER * p_c
-    if key == "C0":
-        cap_s = disk_area(d_duct + SOCK_CLR) * SIG_PETG
-        rows.append(("wire socket floor, end thrust (printed)",
-                     f"blind bore dia {d_duct + SOCK_CLR:.2f}",
-                     dem_s, cap_s))
-    else:
-        d_c = math.sqrt(dem_s / SIG_PETG * 4 / math.pi)
-        d_c = math.ceil(d_c)
-        cap_s = disk_area(d_c) * SIG_PETG
-        n_cups = 4                                 # 2 ductile + 2 spring per leg
-        mass_add += n_cups * disk_area(d_c) * 1.5 * RHO_STEEL
-        rows.append(("wire thrust cup on CF-PETG", f"304 cup flange dia {d_c} x 1.5", dem_s, cap_s))
-    # ---- printed thigh root growth for r 10 (option A) ----
-    if key == "A":
+        mass_add += vol * RHO_6061
+        what = "ear liners" if key == "A" else "side plates"
+        rows.append((f"clevis {what}, pin bearing", f"6061-T6, 2 x {t} mm", dem_pin, cap))
+        # wire end -> A228 slug (contact) -> 6061 spreader -> CF-PETG (flat)
+        a_wire = disk_area(d_duct)
+        rows.append(("wire end on A228 seat slug, MPa (vs min tensile)",
+                     f"music wire dia {SLUG_D:.0f} x {SLUG_L:.0f}", dem_s / a_wire,
+                     SU_A228))
+        rows.append(("slug on 6061 spreader, bearing, MPa", f"dia {SLUG_D:.0f} on 6061",
+                     dem_s / disk_area(SLUG_D), SY_6061))
+        d_c = math.ceil(math.sqrt(dem_s / SIG_PETG * 4 / math.pi))
+        rows.append(("spreader on CF-PETG, flat bearing", f"6061 disc dia {d_c} x {SPREAD_T}",
+                     dem_s, disk_area(d_c) * SIG_PETG))
+        n_seats = 4                                # 2 ductile + 2 spring per leg
+        mass_add += n_seats * (disk_area(d_c) * SPREAD_T * RHO_6061
+                               + disk_area(SLUG_D) * SLUG_L * RHO_STEEL)
+    if key == "A":                                 # printed thigh root ring grows r 6 -> 10
         lug = 16.0
         ring_old = disk_area(2 * (6 + (D_DUCT0 + SOCK_CLR) / 2 + 1.5))
         ring_new = disk_area(2 * (r + (d_duct + SOCK_CLR) / 2 + 1.5))
@@ -275,6 +309,9 @@ def main(argv):
         if "g2" in v:
             extra += f" / 2-pt {v['g2']:.0f} g"
         print(f"  {k:7s} F {v['F']:7.0f} N ({v['F'] / LBF:6.1f} lbf)  {v['note']}{extra}")
+    print("\nMaterial preference skips (owner order 2026-10-26):")
+    for m, why in SKIPPED.items():
+        print(f"  {m:28s} {why}")
     worst = {}
     for key in CONFIGS:
         res = analyse(key, cs)
@@ -286,7 +323,8 @@ def main(argv):
                   f"({rp / LBF:6.0f} lbf)")
         for name, what, dem, cap in res["rows"]:
             m = cap / dem
-            print(f"   {name:42s} {what:28s} demand {dem:7.0f} N  cap {cap:7.0f} N  "
+            u = "MPa" if "MPa" in name else "N  "
+            print(f"   {name:50s} {what:28s} demand {dem:7.0f} {u} cap {cap:7.0f} {u} "
                   f"margin {m:5.2f} {'OK' if m >= 1.0 else 'FAILS'}")
         worst[key] = min(cap / dem for _, _, dem, cap in res["rows"])
         print(f"   mass penalty vs C0: {res['mass_leg']:+.1f} g/leg, "
