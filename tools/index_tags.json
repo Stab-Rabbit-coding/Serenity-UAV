@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-24",
+  "generated": "2026-10-26",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -1357,6 +1357,15 @@
     },
     "airframe/openscad/nacelles/nacelle_housing_profile.scad": {
       "description": "nacelle_housing_profile.scad \u2014 GENERATED FILE, DO NOT EDIT BY HAND",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/nacelles/nacelle_nozzle_fixed.scad": {
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -2976,6 +2985,15 @@
     },
     "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV HULL-FRAME R1 Trunnion64_Stbd 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/nozzles/nacelle_nozzle_fixed.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -14138,6 +14156,14 @@
       ],
       "archived": false
     },
+    "docs/FIXED_NOZZLE_FALLBACK.md": {
+      "description": "Fixed Open Nozzle \u2014 Weight-Cutting Fallback",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md": {
       "description": "Serenity UAV \u2014 36in Hull / 64mm EDF Scale-Up Evaluation",
       "tags": [
@@ -14859,6 +14885,14 @@
         "emi-hardening",
         "redundancy-failover",
         "security"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-09-29-001-tw-recovery-stem-to-stern-plan.md": {
+      "description": "Serenity UAV \u2014 T/W Recovery, Stem to Stern",
+      "tags": [
+        "documentation",
+        "emi-hardening"
       ],
       "archived": false
     },
@@ -18364,6 +18398,7 @@
       "docs/DOC_TEMPLATES.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
+      "docs/FIXED_NOZZLE_FALLBACK.md",
       "docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md",
       "docs/LANDING_GEAR_ANALYSIS.md",
       "docs/LICENSE",
@@ -18456,6 +18491,7 @@
       "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md",
       "docs/plans/2026-09-28-002-feat-fleet-1553c-hi6138-swap-plan.md",
       "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
+      "docs/plans/2026-09-29-001-tw-recovery-stem-to-stern-plan.md",
       "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
       "docs/plans/2026-10-03-001-feat-nacelle-pour-foam-core-plan.md",
       "docs/plans/2026-10-03-002-feat-exhaustive-joint-analysis-plan.md",
@@ -18721,6 +18757,7 @@
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
       "docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md",
       "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
+      "docs/plans/2026-09-29-001-tw-recovery-stem-to-stern-plan.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
@@ -19323,6 +19360,7 @@
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_fixed.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad",
@@ -19514,6 +19552,7 @@
       "airframe/stls/nacelles/nacelle_trunnion.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl",
+      "airframe/stls/nacelles/nozzles/nacelle_nozzle_fixed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
@@ -19629,6 +19668,7 @@
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_fixed.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad",
@@ -19812,6 +19852,7 @@
       "airframe/stls/nacelles/nacelle_trunnion.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl",
+      "airframe/stls/nacelles/nozzles/nacelle_nozzle_fixed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
@@ -20083,6 +20124,7 @@
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_housing_profile.scad",
+      "airframe/openscad/nacelles/nacelle_nozzle_fixed.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad",
@@ -20119,6 +20161,7 @@
       "airframe/stls/nacelles/nacelle_trunnion.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl",
+      "airframe/stls/nacelles/nozzles/nacelle_nozzle_fixed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
@@ -20217,6 +20260,7 @@
       "deferred/aft-edf/stls/rear_nozzle_petal_hull_6.stl",
       "deferred/aft-edf/stls/rear_nozzle_petal_hull_7.stl",
       "deferred/aft-edf/stls/rear_shell24_2mm_edf_bored.stl",
+      "docs/FIXED_NOZZLE_FALLBACK.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/images/nacelle_64mm_nozzle_servo_option1.png",
