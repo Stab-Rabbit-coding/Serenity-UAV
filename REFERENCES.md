@@ -1591,6 +1591,27 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 | **Cited in** | `tools/lg_bellcrank_fbd.py` (A228 seat slugs); the absorber wires (`tools/landing_gear_r6_sizing.py`) are the same material class |
 | **Openness / sourcing** | Public PDF; Gibbs is US-domiciled. |
 
+### REF-MAT-009: Ningbo Jintian Copper — "C26000 Brass" product page (cartridge brass tempers)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Ningbo Jintian Copper (Group) Co., Ltd., product page "C26000 Brass" |
+| **Official access** | <https://en.jtcopper.com/c26000-brass.html> (fetched 2026-10-26) |
+| **Section applied** | Mechanical properties table: Annealed 300–400 MPa tensile, 100–150 MPa yield, 55–70 % elongation; Cold Worked H02 450–550 / 350–420 / 15–25 %; H04 550–650 / 480–550 / 5–12 %; density 8.53–8.60 g/cm^3. The page notes the data apply to standard thicknesses and processing states. |
+| **Use limits** | Vendor ranges, not ASTM B134 minimums; used only for the fuse-material TRADE (worst case of each range). A PRC-domiciled vendor: cited as a property source only, never as a supply source (AGENTS.md §5 governs silicon, but supply of any part should follow the owner's sourcing intent). Replace with ASTM B134 / a US mill sheet before any sizing for build. |
+| **Cited in** | `tools/lg_fuse_material.py`; `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` §6 |
+
+### REF-MAT-010: Elgin Fastener Group (M&W) — "Carbon Steel Grade 1008 Fact Sheet" (1008 annealed)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Elgin Fastener Group via mwcomponents.com, "Carbon Steel Grade 1008 Fact Sheet" (Eagle Brass 1008 Low Carbon Steel, Annealed; ASTM A109, UNS G10080) |
+| **Official access** | <https://www.mwcomponents.com/uploads/Resource-Center/Elgin-Material-Sheets/Carbon-Steel-Grade-1008-Fact-Sheet_Elgin-Website.pdf> (fetched and read 2026-10-26) |
+| **Section applied** | Annealed: tensile strength 241–345 MPa (35,000–50,000 psi), elongation at break >= 35 % in 2 in, tensile modulus 200 GPa, density 7.86 g/cc. |
+| **Not provided** | No yield strength. |
+| **Cited in** | `tools/lg_fuse_material.py`; `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` §6 |
+| **Openness / sourcing** | Public PDF; US manufacturer. |
+
 ### REF-EDF-001: XFly-Model — Galaxy X5 50 mm 12-blade EDF, 6S, motor 2627-KV3200
 
 | Field | Value |

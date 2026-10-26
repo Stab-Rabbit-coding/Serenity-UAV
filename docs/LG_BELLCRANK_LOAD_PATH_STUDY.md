@@ -217,7 +217,37 @@ hinge strain about **37 %**.
   span leaves 6061-T6 at margin 0.72. Option A's longer crank also needs
   more stroke (3.84 mm against 2.30 mm at r 6), which raises the strain.
 
-**What would satisfy all five properties, not yet cited:**
+**Brass and other metals (owner question, 2026-10-26).** No common metal gives
+both a flat plateau and high elongation, because ductility comes with work
+hardening.
+
+- Annealed C26000 brass [REF-MAT-009] has 55 % elongation (margin 1.5 in
+  bending) but Su/Sy up to 4.0, so the plateau can climb fourfold.
+- Half-hard (H02) brass flattens the plateau (1.57) but drops to 15 %
+  elongation (margin 0.4).
+- Annealed 1008 steel [REF-MAT-010] has at least 35 % elongation but no
+  published yield, and it has a ductile-brittle transition.
+
+**Change the fuse's mode, not only its metal.** A straight wire yielding in
+**axial tension** spreads its strain over the whole gauge length
+(ε = stroke / L), instead of concentrating it in plastic hinges. At Option A's
+plateau and stroke, with a 1.5× margin on total elongation:
+
+| Tension fuse | d | Gauge length | Mass, 8 wires | Plateau rise Su/Sy | DBTT |
+| --- | --- | --- | --- | --- | --- |
+| **6061-T6** | 4.60 mm | 33.9 mm | **19.4 g** | **1.12** | none |
+| 304 annealed | 5.34 mm | 14.4 mm | 48.7 g | 2.51 | none |
+| C26000 brass H02 | 4.09 mm | 38.4 mm | 52.3 g | 1.57 | none |
+| C26000 brass annealed | 7.65 mm | 10.5 mm | 95.5 g | 4.00 | none |
+
+**6061-T6 in tension** meets all five properties on cited data, is the
+lightest, and is the owner's preferred metal. It also suits Option A: a
+balanced couple can be two **tension** fuses, one on each side of the pin.
+Its open limit is that the flat plateau lasts only until the wire necks (the
+uniform elongation). No cited source gives that figure for 6061-T6, so the
+LG-15 bench firing has to measure it.
+
+**What else would satisfy all five properties, not yet cited:**
 
 - an annealed low-carbon steel or a work-hardening-limited aluminium (for
   example 5052 or 3003) with both a flat plateau and over 30 % elongation;

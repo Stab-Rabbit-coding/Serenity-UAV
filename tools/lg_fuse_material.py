@@ -28,7 +28,8 @@ fuse needs, and how each property is checked here:
   6. Owner material order (2026-10-26): aluminium and brass before any steel.
 
 Candidates are limited to cited properties: 6061-T6 [REF-MAT-007], annealed
-304 per ASTM A240 minimums [REF-MAT-006], and ASTM A228 music wire
+304 per ASTM A240 minimums [REF-MAT-006], C26000 cartridge brass annealed and
+H02 [REF-MAT-009], annealed 1008 steel [REF-MAT-010], and ASTM A228 music wire
 [REF-MAT-008] (spring temper -- included to show why it is wrong for a fuse;
 its source publishes no yield, so its Sy is not available).  The current
 uncited "550 MPa ductile steel" is shown for reference only.
@@ -56,6 +57,9 @@ N_WIRES = 8         # ductile wires per aircraft
 MATERIALS = {
     "6061-T6 aluminium": (276.0, 310.0, 0.17, 2.70e-3, "FCC", "REF-MAT-007"),
     "304 annealed (A240 min)": (205.0, 515.0, 0.40, 7.90e-3, "FCC", "REF-MAT-006"),
+    "C26000 brass, annealed": (100.0, 400.0, 0.55, 8.53e-3, "FCC", "REF-MAT-009"),
+    "C26000 brass, H02": (350.0, 550.0, 0.15, 8.53e-3, "FCC", "REF-MAT-009"),
+    "1008 steel, annealed": (None, 345.0, 0.35, 7.86e-3, "BCC", "REF-MAT-010"),
     "A228 music wire": (None, 1586.0, None, 7.90e-3, "BCC", "REF-MAT-008"),
     "uncited 'ductile steel 550'": (550.0, None, None, 7.85e-3, "BCC", "none"),
 }
@@ -85,8 +89,8 @@ def main(argv):
     for name, (sy, su, el, rho, lat, ref) in MATERIALS.items():
         if sy is None:
             print(f"{name:30s} {'--':>6s} {'--':>10s} {'--':>6s} {'--':>7s} {'--':>10s} "
-                  f"{'yes' if lat == 'BCC' else 'none':>5s}  {ref}: no cited yield -- a "
-                  f"spring temper, cannot be sized as a fuse")
+                  f"{'yes' if lat == 'BCC' else 'none':>5s}  {ref}: no cited yield, "
+                  f"cannot be sized" + (" (spring temper)" if su and su > 1000 else ""))
             continue
         d = (3.0 * a.p_wire * H0 / sy) ** (1.0 / 3.0)
         mass = N_WIRES * math.pi / 4.0 * d * d * length * rho
@@ -95,6 +99,22 @@ def main(argv):
         em = f"{el / eps:.1f}" if el else "--"
         print(f"{name:30s} {d:6.2f} {mass:10.1f} {ratio:>6s} {elo:>7s} {em:>10s} "
               f"{'yes' if lat == 'BCC' else 'none':>5s}  {ref}")
+    # ---- AXIAL-TENSION fuse (owner question 2026-10-26: "would brass or
+    # another metal work?").  A straight wire yielding in tension spreads its
+    # strain over the whole gauge length: eps = stroke / L_g, so the length is
+    # chosen for a 1.5x elongation margin and the plateau is flat up to the
+    # material's Su/Sy.  Brass ranges use the worst case (lowest Sy, highest Su).
+    print("\nAXIAL-TENSION fuse at the same P and stroke (gauge length for a 1.5x "
+          "TOTAL-elongation margin; the flat plateau ends at NECKING, i.e. the uniform "
+          "elongation, which no cited source gives -- bench firing LG-15):")
+    for name, (sy, su, el, rho, lat, ref) in MATERIALS.items():
+        if sy is None or el is None:
+            continue
+        d = math.sqrt(4.0 * a.p_wire / (math.pi * sy))
+        lg = 1.5 * a.stroke / el
+        mass = N_WIRES * math.pi / 4.0 * d * d * (lg + SEATS) * rho
+        print(f"  {name:30s} d {d:5.2f} mm  gauge {lg:5.1f} mm  {mass:6.1f} g/aircraft  "
+              f"plateau rise Su/Sy {su / sy:4.2f}  DBTT {'yes' if lat == 'BCC' else 'none'}")
     return 0
 
 
