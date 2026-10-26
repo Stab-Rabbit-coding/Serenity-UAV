@@ -107,6 +107,6 @@ in `pwr_fault`. The split main pack uses that same combiner for its two halves.
    XT90 / AS150 class connector.
 4. Bench check of each pack's temperature rise and voltage sag at its share of
    150 A, because published C ratings are manufacturer claims.
-5. Tattu is a brand of a PRC-domiciled maker. `AGENTS.md` §5 governs
+5. **ORIGIN FLAG (owner decision 2026-10-26: keep Tattu for now, flag the origin).** Tattu is a brand of a PRC-domiciled maker. `AGENTS.md` §5 governs
    semiconductors, not cells, but the owner's sourcing intent should decide
    between Tattu and an equivalent from another maker.

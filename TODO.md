@@ -27,6 +27,7 @@
 - [ ] LG-11 coupon — demoted at wing root (flange FOS 29.2)
 - [ ] ★ Aero revalidation of the re-lofted wing (S1223/t17.7–t26.7
 - [ ] LG-PIN-SHEAR: verify 0.6 x Su pin shear for A2 pins (REF-MAT-005)
+- [ ] CELL-ORIGIN: Tattu cells retained (owner 2026-10-26) with PRC-origin…
 - [ ] Record Analog Devices domicile/control for LTC4359 (AGENTS.md §5)
 
 #### 0.8.1 — Wing attach interface (Rev S1g), open requirements
