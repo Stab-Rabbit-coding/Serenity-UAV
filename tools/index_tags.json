@@ -13664,6 +13664,14 @@
       ],
       "archived": false
     },
+    "docs/BATTERY_SPLIT_OPTIONS.md": {
+      "description": "Battery options: split pack, low profile, and an ad hoc third pack (BATT-02)",
+      "tags": [
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
     "docs/BHD02_OPTION_STUDY.md": {
       "description": "BHD-02 Option Study \u2014 Landing-Gear Bays vs Wing Root",
       "tags": [
@@ -18428,6 +18436,7 @@
       "docs/AGENTS.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/BATTERY_MOUNT.md",
+      "docs/BATTERY_SPLIT_OPTIONS.md",
       "docs/BHD02_OPTION_STUDY.md",
       "docs/CARGO_BULKHEAD_FIT_CHECK.md",
       "docs/CARGO_DOOR_GATEWAY_SPEC.md",
@@ -20595,6 +20604,7 @@
       "archives/serenity-esc-telem-revH1.jsx",
       "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "docs/BATTERY_MOUNT.md",
+      "docs/BATTERY_SPLIT_OPTIONS.md",
       "docs/POWER_DISTRIBUTION.md",
       "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md",
       "docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md",
