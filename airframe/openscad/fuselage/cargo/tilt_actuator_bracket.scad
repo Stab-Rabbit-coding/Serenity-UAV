@@ -214,15 +214,19 @@ module web_plate() {
         // motor clearance slot: the body runs forward of the face plate
         translate([WEB_X0 - 1, WEB_Y0 - 1, WORM_Z - MOTOR_R - GAP_MM])
             cube([WALL_T + 2, MOTOR_FACE_Y - WEB_Y0 + 1, MOTOR_D + 2 * GAP_MM]);
-        // worm + brake-collar slot (Rev T5e, T5d-3): rounded ends
-        translate([WEB_X0 - 1, 0, WORM_Z]) hull() {
-            translate([0, SLOT_Y0 + SLOT_R_WORM, 0]) cyl_x(SLOT_R_WORM, 0, WALL_T + 2);
-            translate([0, WORM_YC + WORM_LEN / 2, 0]) cyl_x(SLOT_R_WORM, 0, WALL_T + 2);
-        }
-        translate([WEB_X0 - 1, 0, WORM_Z]) hull() {
-            translate([0, WORM_YC + WORM_LEN / 2, 0]) cyl_x(SLOT_R_COLLAR, 0, WALL_T + 2);
-            translate([0, SLOT_Y1, 0]) cyl_x(SLOT_R_COLLAR, 0, WALL_T + 2);
-        }
+        // worm + brake-collar slot.  BRAKE-GUIDE-MOUNT (2026-10-26): these were
+        // hulls of r 17 / r 9 cylinders with their FORWARD centre at SLOT_Y0 +
+        // SLOT_R_WORM = Y 362.8 -- behind the 10 mm worm -- so the "slot" was a
+        // 34 mm disc spanning Y 345.8..379.8 that took the web out from under
+        // the brake guide (Y 362.8..367.8, 2 x M2.5 at Z +/-11): the guide had
+        // nothing to bolt to (tools/placement_audit.py, 2026-10-19).  Now two
+        // rectangles sized to what actually passes through the web: the worm
+        // (axial clearance 1.5 mm, radial SLOT_R_WORM) and the collar (to
+        // SLOT_Y1 = collar aft face + 1, radial SLOT_R_COLLAR = collar + 2 mm).
+        translate([WEB_X0 - 1, SLOT_Y0, WORM_Z - SLOT_R_WORM])
+            cube([WALL_T + 2, WORM_YC + WORM_LEN / 2 + 1.5 - SLOT_Y0, 2 * SLOT_R_WORM]);
+        translate([WEB_X0 - 1, WORM_YC + WORM_LEN / 2, WORM_Z - SLOT_R_COLLAR])
+            cube([WALL_T + 2, SLOT_Y1 - (WORM_YC + WORM_LEN / 2), 2 * SLOT_R_COLLAR]);
         // 2 x M2.5 through-holes for the brake guide block (tilt_brake.scad:
         // block Y = collar aft face + 1 .. + 5, screws at Z +/-11)
         for (dz = [-11, 11])
