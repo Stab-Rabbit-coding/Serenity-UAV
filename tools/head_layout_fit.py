@@ -72,7 +72,9 @@ SENSOR_REAR_ZONE = 6.0  # connector / lead clearance behind each body (local har
 # ToF: TFmini-S FoV 2.3 deg [REF-SENSOR-002] -> 4 deg reserved.  Laser: the
 # nose dot grid is ~1.0 deg total fan (docs/OBSERVER_LASER_ANALYSIS.md §4.4.3)
 # -> 3 deg reserved.
-CAM_FOV_DEG, TOF_FOV_DEG, LASER_FOV_DEG = 90.0, 4.0, 3.0
+# Camera: 54 deg full cone is the widest the Rev H2 bay passes unobstructed
+# (brow/cheeks, probed 2026-10-27) -- a SELECTION REQUIREMENT for the camera.
+CAM_FOV_DEG, TOF_FOV_DEG, LASER_FOV_DEG = 54.0, 4.0, 3.0
 LOS_LEN = 400.0  # mm outboard of the aperture checked for obstruction
 
 # ---------------------------------------------------------------------------
@@ -100,6 +102,42 @@ OBS_STANDOFF_D = 6.0  # M2.5 printed standoff OD, down to the carrier saddle
 OBS_HOLES = ((4.0, 4.0), (65.85, 4.0), (4.0, 21.4), (65.85, 21.4))  # board-local (Observer.md)
 
 # ---------------------------------------------------------------------------
+# Nose sensor bay, Rev H2 (owner-approved 2026-10-27).  Canon reference: the
+# recessed twin-pod bay under the nose brow in REF-CAD-002 (Nick Henning,
+# close-bridge render) and the two bow fixtures in REF-CAD-003 (QMx Sheet 3,
+# Bow Elevation): two identical pods side by side, symmetric about the
+# centreline.  Camera pod PORT, ToF pod STARBOARD, laser exit on the CL in
+# the web between them.  The sensors are SOLDERED TO THE LEADING EDGE of the
+# Observer board (owner, 2026-10-27), so the board is pitched along the bay
+# axis (the 40 deg bow-flat normal) and its leading edge sits POD_D + JOINT
+# behind the window face.
+# Frame: axis BAY_N = FLAT_N (outward), lateral X, board normal BAY_BN.
+# The window face sits BAY_FACE_DEPTH behind the old flat (the nose widens
+# with depth: half-width ~11.6 mm at 4 mm, ~16 at 10, ~19.8 at 16 -- probed
+# 2026-10-27).  Pod width is the binding dimension for the ToF selection.
+# ---------------------------------------------------------------------------
+BAY_ORIGIN = np.array([X_CL, 5.76, 197.14])  # old laser aperture (CL) on the flat
+BAY_FACE_DEPTH = 10.0
+POD_W, POD_T, POD_D = 10.0, 14.0, 18.0  # lateral, board-normal, axial (body + joint)
+POD_XC = 8.5  # camera +X (port), ToF -X (stbd)
+LASER_D, LASER_L = 6.0, 18.0
+BAY_WALL = 1.5  # printed bay insert wall
+BAY_INSERT_L = 11.0  # wall length forward of the window face (trimmed to the OML)
+JOINT = 1.0  # solder joint to the board edge
+BOARD_SIDE_SOM = 1.0  # SoM on the aft-down face (the roof leaves the other face ~2 mm)
+# Traced outline (raster of the bay-cut shell on the pitched plane, 2 mm grid,
+# 2 mm wall clearance, 2026-10-27): board-local (x lateral, u aft from the
+# leading edge), half-outline, mirrored about the CL.  Leading edge = pod band.
+# Zones: u 0-20 both faces <= 2 mm (sensor carriers, passives); u 20-64 the
+# aft-down face carries the PCM-071 SoM (32 x 43) and tall parts to 11 mm;
+# the roof-side face is <= 2 mm over the whole board.
+OBS_OUTLINE_HALF = ((13.5, 0.0), (16.5, 6.0), (20.0, 12.0), (23.0, 18.0), (23.0, 20.0),
+                    (23.0, 58.0), (21.0, 60.0), (19.0, 62.0), (12.0, 64.0))
+OBS_UPPER = 2.0  # roof-side face, whole board
+OBS_LOWER_FWD = 2.0  # aft-down face, u < OBS_SOM_U0
+OBS_SOM_U0 = 20.0
+
+# ---------------------------------------------------------------------------
 # Pitot-static (WBS §1.10 U5, sensor not selected): tube through the nose skin
 # just above the bow flat, port of the laser, line aft to a differential-
 # pressure sensor on the Observer carrier F side.  Reservation only.
@@ -117,7 +155,7 @@ PITOT_Y_SENSOR = 60.0
 # plane vertical, connector edge AFT with the 10 mm cable zone behind it.
 # Grid-searched 2026-10-27 (zero 2 mm-near volume over Y 56-76, Z 209-212).
 # ---------------------------------------------------------------------------
-BAYA_Y0 = 121.0  # owner 2026-10-27: Bay A stays in Shepherd's bay; head cell moves aft
+BAYA_Y0 = 118.0  # Rev H2: first clear station aft of the pitched board (searched 86-124)
 BAYA_Z0 = 189.0
 BAYA_X_IN = 1.0  # inner face off the centreline (2 mm between the pouches)
 # Sensor harness (J_CAM / J_TOF / J_LASER) past Bay A to the carrier.
@@ -142,7 +180,8 @@ BAND_ZC = 187.0
 BAND_Z0, BAND_Z1 = BAND_ZC - BAND_H / 2, BAND_ZC + BAND_H / 2  # 168.75 .. 205.25
 # Owner 2026-10-27: head cell moved aft so CN1 + FC1 fit ahead of it; stop is
 # aft of Bay A's cable zone (Y 189) + 4 mm stop plate.  Band clear from Y 150.
-STOP_Y = 199.0  # +6 mm (2026-10-27): catch leaf + sled tongue clear the Bay A cable zone
+# pouch + cable zone + stop plate + catch leaf / tongue (196.0)
+STOP_Y = BAYA_Y0 + 58.0 + 10.0 + 4.0 + 6.0
 SLED_FLOOR_T = 1.0  # sled pan under the cell, inside the band
 SLED_LIP = 2.0  # nose / tail lips
 CELL_Y0 = STOP_Y + SLED_LIP  # 150.0
@@ -177,10 +216,9 @@ TRUNK_W, TRUNK_H = 10.0, 8.0
 # installed; and the TFmini-S fails AGENTS.md §5 (Benewake (Beijing) Co.,
 # Ltd., PRC-domiciled, REFERENCES.md REF-SENSOR-002).  The cluster is
 # re-selected and re-laid-out under BOW-02; the pitot keep-out moves with it.
-REGISTERED = {
-    "camera body": "BOW-02", "ToF body": "BOW-02", "laser module": "BOW-02",
-    "pitot line": "BOW-02",
-}
+# BOW-02 is CLOSED by the Rev H2 twin-pod bay (the old pockets are inside the
+# bay cut).  PITOT-01: the canon nose has no pitot; its location is open.
+REGISTERED = {"pitot line": "PITOT-01"}
 
 
 def trapezoid_prism(y0, length, w0, w1, z0, z1):
@@ -222,26 +260,117 @@ def sensor_body(children, idx, rear_zone):
     return trimesh.util.concatenate([body, tail]).convex_hull
 
 
+BAY_BN = np.cross(np.array([1.0, 0.0, 0.0]), FLAT_N)  # board normal (aft-down)
+
+
+def _bay_frame(center):
+    """4x4 placing local (x lateral, y board-normal, z axis outward) at center."""
+    T = np.eye(4)
+    T[:3, 0], T[:3, 1], T[:3, 2] = [1.0, 0.0, 0.0], BAY_BN, FLAT_N
+    T[:3, 3] = center
+    return T
+
+
+def bay_box(center, w, t, d):
+    b = trimesh.creation.box(extents=[w, t, d])
+    b.apply_transform(_bay_frame(center))
+    return b
+
+
+def bay_cyl(center, dia, length):
+    c = trimesh.creation.cylinder(radius=dia / 2, height=length, sections=48)
+    c.apply_transform(_bay_frame(center))
+    return c
+
+
+def bay_face():
+    return BAY_ORIGIN - FLAT_N * BAY_FACE_DEPTH
+
+
+def edge_w():
+    return 2.0 * (POD_XC + POD_W / 2)
+
+
+def bay_cutter():
+    """Material removed from the head: the bay opening, from the window face
+    forward and out through the nose, pod band wide plus the insert walls."""
+    w = edge_w() + 2 * BAY_WALL
+    t = POD_T + 2 * BAY_WALL
+    return bay_box(bay_face() + FLAT_N * 15.0, w, t, 30.0)
+
+
+def bay_insert(trim=True):
+    """Printed liner bonded into the cut: walls around the opening plus the
+    window face (back wall) with the three apertures.  Trimmed to the head's
+    outer envelope (convex hull of the published shell) so no lip stands
+    proud of the outer mould line (untrimmed it reached 3.3 mm ahead of the
+    nose tip, 2026-10-27)."""
+    w, t = edge_w(), POD_T
+    L = BAY_INSERT_L
+    outer = bay_box(bay_face() + FLAT_N * (L / 2 - BAY_WALL / 2), w + 2 * BAY_WALL,
+                    t + 2 * BAY_WALL, L + BAY_WALL)
+    inner = bay_box(bay_face() + FLAT_N * (L / 2 + 0.01), w, t, L)
+    m = to_man(outer) - to_man(inner)
+    for xc, d in ((POD_XC, POD_W - 2.0), (-POD_XC, POD_W - 2.0), (0.0, LASER_D)):
+        m = m - to_man(bay_cyl(bay_face() + np.array([xc, 0, 0]), d, 6.0))
+    if trim:
+        m = m ^ to_man(trimesh.load(HEAD).convex_hull)
+    mm = m.to_mesh()
+    return trimesh.Trimesh(np.asarray(mm.vert_properties)[:, :3], np.asarray(mm.tri_verts))
+
+
+def _outline_poly():
+    half = list(OBS_OUTLINE_HALF)
+    pts = [(x, u) for x, u in half] + [(-x, u) for x, u in reversed(half)]
+    return trimesh.path.polygons.Polygon(pts)
+
+
+def _board_prism(poly, lo, hi):
+    m = trimesh.creation.extrude_polygon(poly, hi - lo)
+    m.apply_translation([0.0, 0.0, lo])  # local: x lateral, y = u (aft), z = up-face normal
+    T = np.eye(4)
+    T[:3, 0], T[:3, 1], T[:3, 2] = [1.0, 0.0, 0.0], -FLAT_N, -BAY_BN
+    T[:3, 3] = bay_face() - FLAT_N * (POD_D + JOINT)
+    m.apply_transform(T)
+    return m
+
+
+def observer_board():
+    """Pitched Observer envelope on the traced outline, zoned component heights
+    (OBS_UPPER on the roof side, OBS_LOWER_FWD / OBS_BELOW on the aft-down side)."""
+    from shapely.geometry import box as sbox
+    poly = _outline_poly()
+    fwd = poly.intersection(sbox(-60, -1, 60, OBS_SOM_U0))
+    aft = poly.intersection(sbox(-60, OBS_SOM_U0, 60, 200))
+    a = _board_prism(fwd, -OBS_LOWER_FWD, OBS_BOARD_T + OBS_UPPER)
+    b = _board_prism(aft, -OBS_BELOW, OBS_BOARD_T + OBS_UPPER)
+    m = to_man(a) + to_man(b)
+    mm = m.to_mesh()
+    return trimesh.Trimesh(np.asarray(mm.vert_properties)[:, :3], np.asarray(mm.tri_verts))
+
+
+def observer_aft_end():
+    return bay_face() - FLAT_N * (POD_D + JOINT + OBS_OUTLINE_HALF[-1][1])
+
+
 def layout():
     L = {}
-    # --- bow sensors (pockets are in the shell; bodies fill them) ----------
-    cam = mhi.build_camera_cut()
-    tof = mhi.build_tof_cut()
-    las = mhi.build_laser_cut()
-    L["camera body"] = dict(solid=sensor_body(cam, 1, SENSOR_REAR_ZONE), pocket=True, gap=0.0)
-    L["ToF body"] = dict(solid=sensor_body(tof, 1, SENSOR_REAR_ZONE), pocket=True, gap=0.0)
-    L["laser module"] = dict(solid=sensor_body(las, 1, SENSOR_REAR_ZONE), pocket=True, gap=0.0)
-    # --- Observer nose carrier --------------------------------------------
-    z0 = OBS_BOARD_Z0 - OBS_BELOW
-    z1 = OBS_BOARD_Z0 + OBS_BOARD_T + OBS_ABOVE
-    L["Observer carrier"] = dict(
-        solid=trapezoid_prism(OBS_Y0, OBS_L, OBS_W_FWD, OBS_W_AFT, z0, z1), gap=2.0
-    )
+    # --- nose sensor bay: pods + laser on the Observer leading edge --------
+    face = BAY_ORIGIN - FLAT_N * BAY_FACE_DEPTH
+    for name, xc in (("camera pod (port)", POD_XC), ("ToF pod (stbd)", -POD_XC)):
+        c = face + np.array([xc, 0, 0]) - FLAT_N * (POD_D / 2)
+        L[name] = dict(solid=bay_box(c, POD_W, POD_T, POD_D), gap=0.5,
+                       mates=("Observer board",))
+    L["laser module"] = dict(solid=bay_cyl(face - FLAT_N * (LASER_L / 2), LASER_D, LASER_L),
+                             gap=0.5, mates=("Observer board",))
+    L["Observer board"] = dict(solid=observer_board(), gap=1.0)  # traced at 2 mm clearance
+    L["bay insert"] = dict(solid=bay_insert(), skin_seat=True,
+                           mates=("camera pod (port)", "ToF pod (stbd)", "laser module"))
     # --- pitot-static ------------------------------------------------------
     L["pitot line"] = dict(
         solid=cyl("y", PITOT_X, PITOT_Z, 10.0, PITOT_Y_SENSOR, PITOT_LINE_D / 2),
         gap=1.0,
-        mates=("Observer carrier",),
+        mates=("Observer board",),
     )
     # --- Bay A nodes (on edge, port, mirrored stbd) ------------------------
     L["Bay A node CN1 (port)"] = dict(
@@ -253,14 +382,7 @@ def layout():
     L["Bay A cable zone"] = dict(
         solid=box(-BAYA_X_IN - clf.NODE_T, BAYA_X_IN + clf.NODE_T, BAYA_Y0 + clf.NODE_L,
                   BAYA_Y0 + clf.NODE_L + clf.NODE_CABLE, BAYA_Z0, BAYA_Z0 + clf.NODE_H),
-        mates=("Bay A node CN1 (port)", "Bay A node FC1 (stbd)", "sensor harness (port)",
-               "sensor harness (stbd)"),
-        gap=1.0,
-    )
-    L["sensor harness (port)"] = dict(
-        solid=box(SH_X0, SH_X1, SH_Y0, OBS_Y0 + 6.0, SH_Z0, SH_Z1),
-        mirror="sensor harness (stbd)",
-        mates=("Observer carrier",),
+        mates=("Bay A node CN1 (port)", "Bay A node FC1 (stbd)"),
         gap=1.0,
     )
     # --- head cell + sled ---------------------------------------------------
@@ -298,13 +420,15 @@ def layout():
         mates=("trunk: over catch",),
         gap=1.0,
     )
+    ae = observer_aft_end()
     L["trunk: Observer to Bay A"] = dict(
-        solid=box(-hw, hw, OBS_Y0 + OBS_L - 4.0, BAYA_Y0 + 2.0, BAYA_Z0 + 10.0,
-                  BAYA_Z0 + 10.0 + TRUNK_H),
-        mates=("Observer carrier", "Bay A node CN1 (port)", "Bay A node FC1 (stbd)"),
+        solid=box(-hw, hw, ae[1] - 6.0, BAYA_Y0 + 2.0, BAYA_Z0 + clf.NODE_H - TRUNK_H,
+                  ae[2] - 4.0),
+        mates=("Observer board", "Bay A node CN1 (port)", "Bay A node FC1 (stbd)",
+               "Bay A cable zone"),
         gap=1.0,
     )
-    return L, dict(cam=cam, tof=tof, las=las)
+    return L, {}
 
 
 def _part(name):
@@ -353,14 +477,12 @@ def _mesh(m):
 
 
 def los_cones(parts):
+    face = bay_face() + FLAT_N * 0.2
     out = {}
-    for name, children, idx, fov in (("camera", parts["cam"], 0, CAM_FOV_DEG),
-                                     ("ToF", parts["tof"], 0, TOF_FOV_DEG),
-                                     ("laser", parts["las"], 0, LASER_FOV_DEG)):
-        ap = children[idx]
-        centre = ap.bounds.mean(axis=0) + FLAT_N * 2.0  # just outboard of the skin
-        r0 = (ap.extents.max()) / 2
-        out[name] = cone(centre, FLAT_N, fov, LOS_LEN, r0=r0)
+    for name, xc, fov, r0 in (("camera", POD_XC, CAM_FOV_DEG, POD_W / 2 - 1.0),
+                              ("ToF", -POD_XC, TOF_FOV_DEG, POD_W / 2 - 1.0),
+                              ("laser", 0.0, LASER_FOV_DEG, LASER_D / 2)):
+        out[name] = cone(face + np.array([xc, 0, 0]), FLAT_N, fov, LOS_LEN, r0=r0)
     return out
 
 
@@ -390,7 +512,7 @@ def band_check(head_m):
 
 def report(write_scad=False):
     head_tm = trimesh.load(HEAD)
-    head_m = to_man(head_tm) + to_man(trimesh.load(COLLAR))
+    head_m = to_man(head_tm) + to_man(trimesh.load(COLLAR)) - to_man(bay_cutter())
     L, parts = layout()
     solids = {}
     for name, e in list(L.items()):
@@ -443,13 +565,15 @@ def report(write_scad=False):
                 print(f"  {a:26s} x {b_:26s} {v:9.0f}  {tag}")
     if not over:
         print("  none")
-    print("\nline of sight (outboard cones vs pitot tube):")
+    print("\nline of sight (outboard cones vs bay-cut shell incl. brow, and pitot):")
     tube = to_man(pitot_tube())
     los_bad = 0
     for k, c in los_cones(parts).items():
-        v = (to_man(c) ^ tube).volume()
-        los_bad += v > 0.5
-        print(f"  {k:8s} cone x pitot tube {v:8.1f} mm3 {'BLOCKED' if v > 0.5 else 'clear'}")
+        cm = to_man(c)
+        vs, vt = (cm ^ head_m).volume(), (cm ^ tube).volume()
+        los_bad += (vs > 0.5) + (vt > 0.5 and "pitot line" not in REGISTERED)
+        print(f"  {k:8s} cone x shell {vs:8.1f} mm3  x pitot {vt:6.1f} mm3"
+              f"  {'BLOCKED' if vs > 0.5 else 'clear'}")
     print(f"\nsliding band X+-{BAND_W / 2:.2f} Z{BAND_Z0:.2f}..{BAND_Z1:.2f}"
           f" Y{STOP_Y:.1f}..{BAND_Y1:.1f}:")
     band_bad = 0
@@ -485,6 +609,20 @@ def write_params():
     lines += [f"{k} = {float(g[k]):.4f};" for k in SCAD_KEYS]
     lines.append("SADDLE_Y = [" + ", ".join(f"{y:.4f}" for y in SADDLE_Y) + "];")
     lines.append("OBS_HOLES = [" + ", ".join(f"[{a:.2f}, {b:.2f}]" for a, b in OBS_HOLES) + "];")
+    # nose sensor bay (Rev H2)
+    vec = lambda v: "[" + ", ".join(f"{c:.6f}" for c in v) + "]"  # noqa: E731
+    lines.append(f"BAY_N = {vec(FLAT_N)};  // outward bay axis (40 deg bow-flat normal)")
+    lines.append(f"BAY_BN = {vec(BAY_BN)};  // board normal")
+    lines.append(f"BAY_FACE = {vec(bay_face())};  // window-face centre (CL)")
+    lines.append(f"OBS_LEAD = {vec(bay_face() - FLAT_N * (POD_D + JOINT))};  // board leading edge")
+    for k in ("BAY_FACE_DEPTH", "POD_W", "POD_T", "POD_D", "POD_XC", "LASER_D", "LASER_L",
+              "BAY_WALL", "BAY_INSERT_L", "JOINT", "OBS_UPPER", "OBS_LOWER_FWD", "OBS_SOM_U0",
+              "OBS_BELOW",
+              "CAM_FOV_DEG"):
+        lines.append(f"{k} = {float(g[k]):.4f};")
+    half = OBS_OUTLINE_HALF
+    pts = [(x, u) for x, u in half] + [(-x, u) for x, u in reversed(half)]
+    lines.append("OBS_OUTLINE = [" + ", ".join(f"[{x:.2f}, {u:.2f}]" for x, u in pts) + "];")
     with open(SCAD_OUT, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
     print(f"wrote {os.path.relpath(SCAD_OUT, REPO)}")

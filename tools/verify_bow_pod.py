@@ -181,6 +181,14 @@ def report_bore(name, mesh, centre_hull, axis, pocket_depth):
 
 
 def main():
+    # SUPERSEDED 2026-10-27 (Rev H2): the three Rev R1c bow-flat bores this tool
+    # checks were replaced by the twin-pod nose sensor bay (bow_sensor_pod.scad
+    # Rev H2, merge_head_sensor_bay.py).  The bay, pods, laser, board and their
+    # lines of sight are gated by tools/head_layout_fit.py.  Run it with
+    # --legacy to re-run the old bore checks for history.
+    if "--legacy" not in sys.argv:
+        print("verify_bow_pod.py: SUPERSEDED by tools/head_layout_fit.py (Rev H2 sensor bay)")
+        return 0
     print("Loading baked head shell:", HEAD_STL)
     mesh = trimesh.load(HEAD_STL, process=False)
     # Binary STL stores each triangle with its own unwelded vertex copies;

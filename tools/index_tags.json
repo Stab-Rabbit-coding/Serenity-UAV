@@ -736,6 +736,15 @@
       ],
       "archived": false
     },
+    "airframe/blender-scripts/merge_head_sensor_bay.py": {
+      "description": "merge_head_sensor_bay.py -- Rev H2 (2026-10-27), aircraft datum R2",
+      "tags": [
+        "cad-mesh",
+        "sensors-vision",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/blender-scripts/morph_open_voxel.py": {
       "description": "morph_open_voxel.py \u2014 voxel-SDF morphological opening of a shell inner operand.",
       "tags": [
@@ -1035,7 +1044,7 @@
       "archived": false
     },
     "airframe/openscad/fuselage/bow_sensor_pod.scad": {
-      "description": "bow_sensor_pod.scad \u2014 Rev R1c (2026-06-30)",
+      "description": "bow_sensor_pod.scad -- Rev H2 (2026-10-27), AIRCRAFT DATUM R2",
       "tags": [
         "cad-mesh",
         "sensors-vision",
@@ -1217,11 +1226,9 @@
       "archived": false
     },
     "airframe/openscad/fuselage/head_shell24.scad": {
-      "description": "head_shell24.scad",
+      "description": "head_shell24.scad -- Rev H2 (2026-10-27), AIRCRAFT DATUM R2",
       "tags": [
         "cad-mesh",
-        "emi-hardening",
-        "redundancy-failover",
         "structural"
       ],
       "archived": false
@@ -2649,6 +2656,15 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/head/bow_sensor_bay_insert.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Bow_Sensor_Bay_Insert",
+      "tags": [
+        "cad-mesh",
+        "sensors-vision",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/head/head_cell_catch.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2",
       "tags": [
@@ -2690,7 +2706,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/head_shell24_2mm_repaired.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 head_shell24_2mm_repaired",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Head_Shell bow-pod-merge 2026-07-03",
       "tags": [
         "cad-mesh",
         "structural"
@@ -19451,7 +19467,6 @@
       "airframe/fuselage-joints/WBS.md",
       "airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad",
       "airframe/openscad/fuselage/cargo/cargo_vera_faraday.scad",
-      "airframe/openscad/fuselage/head_shell24.scad",
       "airframe/openscad/fuselage/rcrs49_wire_post.scad",
       "airframe/openscad/nacelles/nacelle_trunnion.scad",
       "airframe/placeholders/faraday/Far_EMI_vent_40x40x6mm.stl",
@@ -19549,7 +19564,6 @@
       "README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad",
-      "airframe/openscad/fuselage/head_shell24.scad",
       "airframe/openscad/fuselage/middle_canonical_shell24.scad",
       "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
@@ -20068,6 +20082,7 @@
       "airframe/blender-scripts/make_shuttle_text.py",
       "airframe/blender-scripts/merge_cargo_interior.py",
       "airframe/blender-scripts/merge_head_interior.py",
+      "airframe/blender-scripts/merge_head_sensor_bay.py",
       "airframe/blender-scripts/morph_open_voxel.py",
       "airframe/blender-scripts/regen_rear_interior.py",
       "airframe/blender-scripts/repair_shells_for_scad.py",
@@ -20297,6 +20312,7 @@
       "airframe/stls/fuselage/dorsal_antenna_fin.stl",
       "airframe/stls/fuselage/generate_conforming_collars.py",
       "airframe/stls/fuselage/generate_wing_root_flange.py",
+      "airframe/stls/fuselage/head/bow_sensor_bay_insert.stl",
       "airframe/stls/fuselage/head/head_cell_catch.stl",
       "airframe/stls/fuselage/head/head_cell_rail.stl",
       "airframe/stls/fuselage/head/head_cell_sled.stl",
@@ -20420,6 +20436,7 @@
       "airframe/blender-scripts/make_shuttle_text.py",
       "airframe/blender-scripts/merge_cargo_interior.py",
       "airframe/blender-scripts/merge_head_interior.py",
+      "airframe/blender-scripts/merge_head_sensor_bay.py",
       "airframe/blender-scripts/morph_open_voxel.py",
       "airframe/blender-scripts/regen_rear_interior.py",
       "airframe/blender-scripts/repair_shells_for_scad.py",
@@ -20615,6 +20632,7 @@
       "airframe/stls/fuselage/cargo/void_former_cargo_node_bay.stl",
       "airframe/stls/fuselage/cargo_middle_splice_collar.stl",
       "airframe/stls/fuselage/dorsal_antenna_fin.stl",
+      "airframe/stls/fuselage/head/bow_sensor_bay_insert.stl",
       "airframe/stls/fuselage/head/head_cell_catch.stl",
       "airframe/stls/fuselage/head/head_cell_rail.stl",
       "airframe/stls/fuselage/head/head_cell_sled.stl",
@@ -21185,6 +21203,23 @@
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nozzle_servo_linkage.py"
     ],
+    "sensors-vision": [
+      "airframe/blender-scripts/merge_head_sensor_bay.py",
+      "airframe/openscad/fuselage/bow_sensor_faceplate.scad",
+      "airframe/openscad/fuselage/bow_sensor_pod.scad",
+      "airframe/stls/fuselage/bow_sensor_faceplate.stl",
+      "airframe/stls/fuselage/head/bow_sensor_bay_insert.stl",
+      "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/DS_Laser_2P.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/DS_ToF_4P.kicad_mod",
+      "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
+      "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
+      "avionics/kicad/Observer/Vera.pretty/DS_ToF_4P.kicad_mod",
+      "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x",
+      "avionics/kicad/add_sensors_sbus.py",
+      "docs/OBSERVER_LASER_ANALYSIS.md",
+      "graphical-build-guide/build_guide_25_obstacle_sensors.svg"
+    ],
     "bom": [
       "airframe/diagrams/ring_frames/ring_cargo_Y30_inner.csv",
       "airframe/diagrams/ring_frames/ring_rear_Y290_inner.csv",
@@ -21334,21 +21369,6 @@
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",
       "tools/tests/test_nacelle_esc_service.py"
-    ],
-    "sensors-vision": [
-      "airframe/openscad/fuselage/bow_sensor_faceplate.scad",
-      "airframe/openscad/fuselage/bow_sensor_pod.scad",
-      "airframe/stls/fuselage/bow_sensor_faceplate.stl",
-      "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/DS_Laser_2P.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/DS_ToF_4P.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/DS_ToF_4P.kicad_mod",
-      "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x",
-      "avionics/kicad/add_sensors_sbus.py",
-      "docs/OBSERVER_LASER_ANALYSIS.md",
-      "graphical-build-guide/build_guide_25_obstacle_sensors.svg"
     ],
     "comms-protocol": [
       "airframe/placeholders/avionics/XCVR_49MHZ2_PCB_55x35mm.stl",
