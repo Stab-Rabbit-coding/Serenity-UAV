@@ -13,6 +13,16 @@ continues: docs/plans/2026-10-03-002-feat-exhaustive-joint-analysis-plan.md
 
 # Middle and Rear Section Layout
 
+> **Superseded in part, owner 2026-10-27 (later the same day).** The CG study
+> (`docs/CG_RELOCATION_STUDY.md`) moved Bay A onto the head-cell rail ceiling,
+> so the head cell runs forward to Y 158–274 and the **second cell returns to
+> the cargo band, Y 286.2–402.2**. KTD1 (second cell in the middle/aft) and the
+> second-cell units (U3 access trade, U4 drawer) are therefore **void**. Still
+> live: Simon stays in the middle neck (KTD2 is moot), the routed harness (U5),
+> the aft-CG limit (U6), and the ledger close-out (U7). New owner direction:
+> **cut weight aft of the pivot first** (residual +16.3 mm, 101,694 g·mm), then
+> choose between ballast and a pivot move.
+
 **Author:** Claude (Claude Opus 5.5, Anthropic), under the direction of Stab-Rabbit-coding, per `AGENTS.md` §3.
 **License:** CC BY-SA 4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Continues:** `docs/plans/2026-10-03-002-feat-exhaustive-joint-analysis-plan.md` (rules R1–R6 apply unchanged).

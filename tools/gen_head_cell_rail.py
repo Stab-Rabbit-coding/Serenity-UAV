@@ -49,10 +49,19 @@ FLANGE_T = 3.0
 FLANGE_STEP = 4.0  # Y pitch of the skin-following flange segments
 # Catch: vertical CF-PETG leaf on the stop's forward face, tooth through the
 # stop into a hole in a tongue on the sled nose (KTD7).
-LEAF_L, LEAF_W, LEAF_T = 34.0, 20.0, 1.2
-LEAF_DEFLECT = 2.5  # tooth disengagement travel
-TOOTH_W, TOOTH_H = 10.0, 5.0  # tooth section (X, Z) in shear
-TONGUE_W, TONGUE_T, TONGUE_L = 20.0, 6.0, 8.0  # sled-nose tongue (X, Z, Y into the stop slot)
+# Rev H3 catch (2026-10-27): a HORIZONTAL leaf lying on top of the sled-nose
+# tongue, forward of the stop (the vertical leaf rose above the rail ceiling
+# into the Bay A pouches).  A full-width blade under the leaf tip drops into a
+# groove across the tongue's top at the stop face; an aft crash load drives the
+# groove face into the blade and the blade into the STOP face, so the leaf
+# carries no crash load -- it only holds the blade down.  Lift 3 mm to release.
+LEAF_L, LEAF_W, LEAF_T = 30.0, 20.0, 1.0  # span (X), width (Y), thickness (Z)
+GROOVE_D = 2.5  # blade engagement depth into the tongue
+LEAF_DEFLECT = GROOVE_D + 0.5  # lift to release
+TONGUE_X = -10.0  # tongue / blade lateral centre (leaf root at +X, port side)
+TONGUE_W, TONGUE_T = 14.0, 6.0  # tongue width (X) and thickness (Z)
+TONGUE_FWD = 9.4  # projection forward of the stop face (blade 5 + gap + 4 mm ridge)
+BLADE_Y = 5.0  # blade length (Y) in shear
 STOP_T = 4.0
 
 # Cited allowables (20 % CF-PETG)
@@ -93,11 +102,14 @@ def statics():
     # down: lips as cantilevers, load at 2 mm arm, both lips over the cell length
     w = ult / (2 * h.CELL_L)
     row("lip bending (down)", 6 * (w * 2.0) / h.RAIL_T ** 2, FLEX_STRENGTH, "REF-MAT-002")
-    # aft: tooth shear, tongue net tension and hole bearing
-    row("tooth shear (aft)", ult / (TOOTH_W * TOOTH_H), SHEAR_EST, "REF-MAT-001 est")
-    row("tongue net tension (aft)", ult / ((TONGUE_W - TOOTH_W) * TONGUE_T), TENSILE,
+    # aft: groove face bears on the blade, blade bears on the stop face; the
+    # ridge forward of the groove shears off along the groove floor
+    row("blade shear (aft)", ult / (TONGUE_W * BLADE_Y), SHEAR_EST, "REF-MAT-001 est")
+    row("groove-face bearing (aft)", ult / (TONGUE_W * GROOVE_D), COMPRESSIVE, "REF-MAT-001")
+    row("ridge shear-out (aft)", ult / (TONGUE_W * (TONGUE_FWD - BLADE_Y - 0.4)), SHEAR_EST,
+        "REF-MAT-001 est")
+    row("tongue section tension (aft)", ult / (TONGUE_W * (TONGUE_T - GROOVE_D)), TENSILE,
         "REF-MAT-001")
-    row("tongue hole bearing (aft)", ult / (TOOTH_W * TONGUE_T), COMPRESSIVE, "REF-MAT-001")
     # catch leaf at release (not a crash case): strain/stress and pull force
     sig = 3 * FLEX_MODULUS * LEAF_T * LEAF_DEFLECT / (2 * LEAF_L ** 2)
     i_leaf = LEAF_W * LEAF_T ** 3 / 12
@@ -153,9 +165,14 @@ def rail_head(head_tm):
     # keep the body that holds the ceiling (the rail), drop skin-outside slivers
     keep = max(parts, key=lambda p: p.volume)
     # slot in the stop for the tongue + tooth
-    slot = box(-TONGUE_W / 2 - 0.3, TONGUE_W / 2 + 0.3, h.RAIL_Y0 - 1, h.STOP_Y + 1,
-               h.BAND_ZC - TONGUE_T / 2 - 0.3, h.BAND_ZC + TONGUE_T / 2 + 0.3)
+    slot = box(TONGUE_X - TONGUE_W / 2 - 0.3, TONGUE_X + TONGUE_W / 2 + 0.3, h.RAIL_Y0 - 1,
+               h.STOP_Y + 1, h.BAND_ZC - TONGUE_T / 2 - 0.3, h.BAND_ZC + TONGUE_T / 2 + 0.3)
     return _tm(to_man(keep) - to_man(slot))
+
+
+def _tongue_y():
+    """(y0, y1) of the tongue: from its forward tip to the cell nose."""
+    return h.RAIL_Y0 - TONGUE_FWD, h.CELL_Y0
 
 
 def sled():
@@ -163,24 +180,26 @@ def sled():
     floor = box(-hw, hw, h.STOP_Y, h.CELL_Y1 + h.SLED_LIP, h.BAND_Z0, h.BAND_Z0 + h.SLED_FLOOR_T)
     nose = box(-hw, hw, h.STOP_Y, h.CELL_Y0, h.BAND_Z0, h.BAND_Z1 - 0.5)
     tail = box(-hw, hw, h.CELL_Y1, h.CELL_Y1 + h.SLED_LIP, h.BAND_Z0, h.BAND_Z0 + 12.0)
-    tongue = box(-TONGUE_W / 2, TONGUE_W / 2, h.STOP_Y - TONGUE_L, h.STOP_Y,
-                 h.BAND_ZC - TONGUE_T / 2, h.BAND_ZC + TONGUE_T / 2)
-    hole = box(-TOOTH_W / 2 - 0.2, TOOTH_W / 2 + 0.2, h.STOP_Y - TONGUE_L + 1.5,
-               h.STOP_Y - TONGUE_L + 1.5 + TOOTH_H + 0.4, h.BAND_ZC - 5, h.BAND_ZC + 5)
-    m = to_man(floor) + to_man(nose) + to_man(tail) + to_man(tongue) - to_man(hole)
+    ty0, ty1 = _tongue_y()
+    z0, z1 = h.BAND_ZC - TONGUE_T / 2, h.BAND_ZC + TONGUE_T / 2
+    tongue = box(TONGUE_X - TONGUE_W / 2, TONGUE_X + TONGUE_W / 2, ty0, ty1, z0, z1)
+    groove = box(TONGUE_X - TONGUE_W / 2 - 1, TONGUE_X + TONGUE_W / 2 + 1,
+                 h.RAIL_Y0 - BLADE_Y - 0.4, h.RAIL_Y0, z1 - GROOVE_D, z1 + 1)
+    m = to_man(floor) + to_man(nose) + to_man(tail) + to_man(tongue) - to_man(groove)
     return _tm(m)
 
 
 def catch():
-    """Vertical leaf on the stop's forward face, root at the top, tooth at
-    the bottom pointing aft through the stop slot into the tongue hole."""
-    y0 = h.RAIL_Y0 - LEAF_T
-    leaf = box(-LEAF_W / 2, LEAF_W / 2, y0, h.RAIL_Y0, h.BAND_ZC - 4, h.BAND_ZC - 4 + LEAF_L)
-    root = box(-LEAF_W / 2, LEAF_W / 2, y0 - 2.0, h.RAIL_Y0, h.BAND_ZC - 4 + LEAF_L - 4,
-               h.BAND_ZC - 4 + LEAF_L)
-    ty0 = h.STOP_Y - TONGUE_L + 1.5
-    tooth = box(-TOOTH_W / 2, TOOTH_W / 2, y0, ty0 + TOOTH_H, h.BAND_ZC - 2.5, h.BAND_ZC + 2.5)
-    return _tm(to_man(leaf) + to_man(root) + to_man(tooth))
+    """Horizontal leaf on the tongue top, root block bonded to the stop's
+    forward face at +X (port), blade under the tip in the tongue groove."""
+    z1 = h.BAND_ZC + TONGUE_T / 2
+    x_tip = TONGUE_X - TONGUE_W / 2
+    x_root = x_tip + LEAF_L
+    leaf = box(x_tip, x_root, h.RAIL_Y0 - LEAF_W, h.RAIL_Y0, z1, z1 + LEAF_T)
+    root = box(x_root - 4.0, x_root, h.RAIL_Y0 - LEAF_W, h.RAIL_Y0, z1 - TONGUE_T, z1 + LEAF_T)
+    blade = box(x_tip, TONGUE_X + TONGUE_W / 2, h.RAIL_Y0 - BLADE_Y - 0.2, h.RAIL_Y0 - 0.2,
+                z1 - GROOVE_D + 0.2, z1)
+    return _tm(to_man(leaf) + to_man(root) + to_man(blade))
 
 
 def write(tm, name):

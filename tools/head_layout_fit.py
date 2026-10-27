@@ -161,8 +161,9 @@ PITOT_BARB_TIP = 3.5  # nipple ring centroid -> barb tip along the tube axis (se
 # plane vertical, connector edge AFT with the 10 mm cable zone behind it.
 # Grid-searched 2026-10-27 (zero 2 mm-near volume over Y 56-76, Z 209-212).
 # ---------------------------------------------------------------------------
-BAYA_Y0 = 118.0  # Rev H2: first clear station aft of the pitched board (searched 86-124)
-BAYA_Z0 = 189.0
+# Owner 2026-10-27 (CG "rail lever", docs/CG_RELOCATION_STUDY.md): the pouches
+# stand on edge ON the rail ceiling, so the head cell can run forward under them.
+BAYA_Y0 = 100.0
 BAYA_X_IN = 1.0  # inner face off the centreline (2 mm between the pouches)
 # Sensor harness (J_CAM / J_TOF / J_LASER) past Bay A to the carrier.
 # 6 x 8 mm per side (camera FPC + JST-SH ToF/laser leads); grid-searched
@@ -186,8 +187,9 @@ BAND_ZC = 187.0
 BAND_Z0, BAND_Z1 = BAND_ZC - BAND_H / 2, BAND_ZC + BAND_H / 2  # 168.75 .. 205.25
 # Owner 2026-10-27: head cell moved aft so CN1 + FC1 fit ahead of it; stop is
 # aft of Bay A's cable zone (Y 189) + 4 mm stop plate.  Band clear from Y 150.
-# pouch + cable zone + stop plate + catch leaf / tongue (196.0)
-STOP_Y = BAYA_Y0 + 58.0 + 10.0 + 4.0 + 6.0
+# Band clear from Y 150 at Zc 187; stop plate + catch leaf / tongue forward of
+# STOP_Y (6 mm) -> stop at Y 156 (CG study rail lever).
+STOP_Y = 156.0
 SLED_FLOOR_T = 1.0  # sled pan under the cell, inside the band
 SLED_LIP = 2.0  # nose / tail lips
 CELL_Y0 = STOP_Y + SLED_LIP  # 150.0
@@ -198,6 +200,7 @@ BAND_Y1 = clf.N_AFT_Y0 - GAP_MM  # 402.2
 # Rail = the cradle's inverted U carried forward (KTD6) with inward lower lips
 # the sled rides on: ceiling over the band, side walls, 4 mm lips under it.
 RAIL_T = 2.4
+BAYA_Z0 = BAND_Z1 + RAIL_T + 1.0  # Bay A pouches on the rail ceiling, 1 mm gap (208.65)
 RAIL_LIP = 4.0
 RAIL_Y0 = STOP_Y - 4.0  # stop plate thickness 4 mm, forward of STOP_Y
 RAIL_HEAD_Y1 = 243.0  # head piece ends aft of the collar ring; keyed to the cargo piece
@@ -387,9 +390,12 @@ def layout():
         gap=2.0,
     )
     L["Bay A cable zone"] = dict(
+        # 4 mm shorter than the pouches: the dome closes in over Y 158-168
         solid=box(-BAYA_X_IN - clf.NODE_T, BAYA_X_IN + clf.NODE_T, BAYA_Y0 + clf.NODE_L,
-                  BAYA_Y0 + clf.NODE_L + clf.NODE_CABLE, BAYA_Z0, BAYA_Z0 + clf.NODE_H),
-        mates=("Bay A node CN1 (port)", "Bay A node FC1 (stbd)"),
+                  BAYA_Y0 + clf.NODE_L + clf.NODE_CABLE, BAYA_Z0, BAYA_Z0 + clf.NODE_H - 4.0),
+        # the cables leave the pouches straight into the trunk
+        mates=("Bay A node CN1 (port)", "Bay A node FC1 (stbd)", "trunk: aft run",
+               "trunk: over catch"),
         gap=1.0,
     )
     # --- head cell + sled ---------------------------------------------------
@@ -592,8 +598,8 @@ def report(write_scad=False):
             print(f"  {k:40s} {v:9.0f}  FOUL")
     if not band_bad:
         print("  clear of the head shell, collar, cargo shell and every cargo envelope")
-    print(f"\nhead cell Y{CELL_Y0:.1f}..{CELL_Y1:.1f} (stop Y{STOP_Y:.1f}); second cell is in"
-          " the middle/rear sections (docs/plans/2026-10-27-001-feat-middle-rear-layout-plan.md)")
+    print(f"\nhead cell Y{CELL_Y0:.1f}..{CELL_Y1:.1f} (stop Y{STOP_Y:.1f}); second cell in the"
+          f" cargo band Y{BAND_Y1 - CELL_L:.1f}..{BAND_Y1:.1f} (owner 2026-10-27, rail lever)")
     ok = not (fails or over or los_bad or band_bad)
     print(f"\nRESULT: {'PASS' if ok else 'FAIL'} ({fails} shell, {over} pair, "
           f"{los_bad} line-of-sight, {band_bad} band)")
