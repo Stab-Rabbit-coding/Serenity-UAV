@@ -8,20 +8,53 @@ This folder contains all hardware design for the airframe structure: printed she
 
 ## Canonical Geometry and Coordinate System
 
-**Hull-frame coordinate standard (Rev R1 — baked, canonical):**
+**Aircraft datum (Rev R2 — owner directive 2026-10-19): ONE origin for the whole aircraft.**
 
-All design artifacts in this folder — SCAD sources, STLs, Blender/FreeCAD scripts, and documentation — use the **single validated hull frame**:
+> "There needs to be a single datum for the entire aircraft. Specific translations need to
+> be made for each nacelle, but otherwise, there's no reason for ever having more than one
+> 0,0,0 point, which should be centerline, nose, groundplane." — owner, 2026-10-19
 
-- **X** — positive port (left) — the lateral axis
-- **Y** — positive aft (back) — the longitudinal axis (nose-tip position: `airframe/HULL_FRAME_REFERENCE.md`)
-- **Z** — positive dorsal (up)
-- **Origin** — the `airframe/freecad/assembly/SerenityAssembly.FCStd` world origin
+- **Origin (0, 0, 0)** — on the aircraft centreline (the port/starboard symmetry plane), at
+  the **nose tip** (the foremost point of the head shell), on the **static ground plane**
+  (the aircraft at rest and level on the 3.0 in flight landing gear).
+- **X** — positive port (left), the lateral axis; **X = 0 is the symmetry plane**, so a
+  starboard twin is the port part mirrored X → −X.
+- **Y** — positive aft, the longitudinal axis; Y = 0 at the nose tip.
+- **Z** — positive up (dorsal); Z = 0 on the ground plane.
 
-Primary STLs in `airframe/stls/` are stored directly in hull-frame coordinates and import into
-FreeCAD with **identity placement** — do not apply per-part transforms. **`airframe/HULL_FRAME_REFERENCE.md`**
-holds the bake workflow and `tools/bake_hull_frame.py` usage, the canonical-accuracy authority
-order (REF-CAD-002/003/004, `docs/references/`), and the validated baked-extents table for all
-eight primary components. Read it before regenerating or placing any primary STL.
+Rules:
+
+- **Every** design artifact uses this datum: SCAD sources, STLs, STEP files,
+  Blender/FreeCAD/Python generators and gates, and documentation. Each STL and STEP is
+  published **at its installed position** in the aircraft datum, so it imports into FreeCAD
+  with identity placement. Print orientation is a slicer operation; a `*_print.stl` copy
+  in print orientation is a derived export for the slicer only and is never used for fit
+  or clash checking.
+- **One STL per installed instance** (owner 2026-10-19): a part used at several positions
+  (four leg frames, eight nozzle flaps per nacelle, repeated fasteners and placeholders)
+  is published as one STL per instance, each at its own installed position (e.g.
+  `lg_r6_3_0in_leg_frame_fore-port.stl`), all generated from the same source — never a
+  hand copy, and never a design STL plus a separate placement table.
+- **The only exception is a PCB while it is being designed in KiCad**, which keeps
+  KiCad's own board coordinates. Any PCB **STEP or STL used for fitting** (enclosures,
+  bays, census, mass ledger) is exported or placed **in the aircraft datum** at its
+  installed position.
+- **Nacelles:** each nacelle's geometry is stored in the aircraft datum at the cruise
+  (forward-flight) attitude. Tilt is applied as that nacelle's own rotation about its
+  pivot axis; this is the one per-part transform allowed.
+- **Datums are never re-typed.** Python imports `tools/hull_datums.py`; OpenSCAD includes
+  the GENERATED `airframe/openscad/hull_datums.scad`. `tools/check_datum_drift.py` (in
+  `.githooks/pre-commit` and CI) fails a re-typed datum or a stale frame marker.
+
+**Migration in progress:** the former "hull frame R1" put the origin at the
+`SerenityAssembly.FCStd` world origin, an arbitrary point. R2 = R1 + (169.850, 305.704,
+80.000) mm (`hull_datums.R1_TO_R2`). Until every file is migrated (plan
+`docs/plans/2026-10-19-001-aircraft-datum-migration-plan.md`, WBS DATUM-R2), a file is in
+R2 only if its STL header carries `SerenityUAV AIRCRAFT-FRAME R2` or its code imports the R2
+datums. Numbers quoted in dated documents written before 2026-10-19 are R1.
+**`airframe/HULL_FRAME_REFERENCE.md`** holds the bake workflow, the canonical-accuracy
+authority order (REF-CAD-002/003/004, `docs/references/`) and the baked-extents table; it
+is re-issued in R2 by the migration.
 
 ## Geometry Reference Points
 

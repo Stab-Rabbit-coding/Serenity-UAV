@@ -1,0 +1,27 @@
+LG-10.8 foot stance -- the gear must stand on its treads
+
+=== canonical_leg_r6_1_5in.scad ===
+  ankle Z   -58.10   disc rim   -66.10
+  hub top   -66.10   socket floor   -72.00
+  spigot tip   -71.60   sole   -76.10
+  1. disc rim on hub top face      :  +0.00 mm  -- ok
+  2. spigot clears floor / sole    :  +0.40 /  +4.50 mm  -- ok
+  3. belly clearance               :  38.10 mm (want 38.1) -- ok
+  4. exported feet: fp -38.100  fs -38.100  ap -38.100  as -38.100
+     spread 0.0000 mm -- ok
+     lowest point -38.100 vs sole plane -38.100 -- ok
+
+=== canonical_leg_r6_3_0in.scad ===
+  ankle Z  -100.00   disc rim  -108.00
+  hub top  -108.00   socket floor  -113.90
+  spigot tip  -113.50   sole  -118.00
+  1. disc rim on hub top face      :  +0.00 mm  -- ok
+  2. spigot clears floor / sole    :  +0.40 /  +4.50 mm  -- ok
+  3. belly clearance               :  80.00 mm (want 80.0) -- ok
+  4. exported feet: fp -80.000  fs -80.000  ap -80.000  as -80.000
+     spread 0.0000 mm -- ok
+     lowest point -80.000 vs sole plane -80.000 -- ok
+
+  CLEAR -- LG-10.8 satisfied on both variants
+
+--- stderr ---

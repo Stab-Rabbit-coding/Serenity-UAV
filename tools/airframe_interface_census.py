@@ -56,9 +56,13 @@ except ImportError:  # pragma: no cover - reported, never silently skipped
     m3 = None
 
 SPAN_AXIS = 0          # hull X is span (port +X / stbd -X, serenity_assembly.py)
-# Hull centre plane, MEASURED on the baked cargo shell (tools/bake_hull_frame.py
-# Wing_Stbd note): the hull frame origin is NOT on the aircraft centreline.
-CENTRE_X = -169.241
+# Aircraft centreline, imported from the datum module (plan 2026-10-19-001).
+# Was a measured R1 value -169.241; 5149b8ce made every starboard twin an exact
+# mirror about X_CL, so the census mirrors about the same plane.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import hull_datums as hd  # noqa: E402
+
+CENTRE_X = hd.X_CL
 
 
 def load(census: Path) -> dict[str, trimesh.Trimesh]:
@@ -127,6 +131,15 @@ def census(parts: dict, near: float, contact: float, clash: float,
     return rows
 
 
+# Deliberate port/starboard asymmetries (plan 2026-10-03-002 rule R4): part ->
+# (max bbox offset mm, why).  Same register as tools/cargo_bulkhead_context.py.
+DELIBERATE = {
+    "Cargo_Door": (6.0, "DOOR-REWORK half-lap: port lip reaches 6 mm past X_CL"),
+    "Door_Latch_Bracket": (13.0, "one latch (port); stbd bracket has no mortise"),
+    "Door_Latch_Crank": (12.0, "one latch (port); stbd crank is drive-only"),
+}
+
+
 def symmetry(parts: dict, tol: float) -> list[dict]:
     """Mirror each *_Port part and compare with its *_Stbd twin."""
     out = []
@@ -146,7 +159,9 @@ def symmetry(parts: dict, tol: float) -> list[dict]:
         db = float(np.abs(p - s).max())
         out.append({"part": name[:-5], "centroid_off_mm": round(dc, 2),
                     "bbox_off_mm": round(db, 2),
-                    "status": "SYNC" if max(dc, db) <= tol else "DESYNC"})
+                    "status": "SYNC" if max(dc, db) <= tol else
+                    ("DELIBERATE" if name[:-5] in DELIBERATE
+                     and db <= DELIBERATE[name[:-5]][0] + tol else "DESYNC")})
     return out
 
 

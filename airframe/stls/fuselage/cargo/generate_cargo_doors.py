@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # ============================================================================
-# HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
-#   Hull frame (canonical for ALL design artifacts): X = +port (left),
-#   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
-#   world origin.  Primary-component STLs published to airframe/stls/
-#   are stored directly in hull frame, baked by tools/bake_hull_frame.py.
+# AIRCRAFT DATUM R2 (2026-10-19, plan 2026-10-19-001): origin centreline / nose / ground.
+#   Aircraft frame: X = +port (left), Y = +aft (back), Z = +dorsal (up);
+#   origin = centreline / nose tip / 3.0 in ground plane (tools/hull_datums.py).
+#   Primary-component STLs published to airframe/stls/ are stored directly
+#   in the aircraft frame, stamped hd.FRAME_MARKER.
 #
 #   This file (Rev R1b, 2026-06-22):
 #     Generates cargo bay clamshell doors from the baked hull-frame cargo
 #     shell (cargo_sect_shell24_2mm_repaired.stl).
 #
 #     Coordinate conventions used throughout:
-#       X = lateral (port = +X, stbd = -X); ship CL at X ≈ -170 mm
-#       Y = longitudinal fore-aft (+Y = aft); bay spans Y ≈ +2 to +108 mm
-#       Z = dorsal-ventral (+Z = up); belly at Z ≈ 0
+#       X = lateral (port = +X, stbd = -X); aircraft CL at X = 0 (hd.X_CL)
+#       Y = longitudinal fore-aft (+Y = aft); bay spans Y ≈ 307.7 to 413.7 mm
+#       Z = dorsal-ventral (+Z = up); belly at Z ≈ BELLY_Z (80)
 #
 #     Hinge lines run along Y at the OUTBOARD flank/belly edge of each door —
 #     X = X_MIN (stbd side) and X = X_MAX (port side), Z = belly exterior Z
@@ -49,7 +49,7 @@
 generate_cargo_doors.py — Rev R1b (2026-06-22)
 Generate clamshell cargo-bay door STL files in hull-frame coordinates.
 
-Two mirrored halves split at the ship lateral centreline (X = X_CL ≈ -170 mm),
+Two mirrored halves split at the ship lateral centreline (X = X_CL = 0),
 each hinged independently at its own OUTBOARD flank/belly edge:
   * cargo_door_port.stl   — port half  (X = X_CL .. X_MAX), hinge at X_MAX
   * cargo_door_stbd.stl   — stbd half  (X = X_MIN   .. X_CL), hinge at X_MIN
@@ -59,7 +59,7 @@ two doors meet there when closed.  Opening, each door swings on its own
 outboard pin DOWN AND OUT from the aircraft through a 180 deg range of
 motion, clearing the full belly opening between the two hinge lines.
 
-Door geometry (hull frame):
+Door geometry (aircraft frame R2):
   * Exterior surface  — interpolated from cargo belly faces (Z ≈ 0, normal = -Z)
   * Interior surface  — exterior + WALL_T mm offset in +Z
   * Four hinge knuckles per door (CF-PETG, 6 mm OD, 12 mm long, 3.15 mm bore
@@ -93,6 +93,12 @@ import trimesh
 import trimesh.transformations as tft
 from scipy.interpolate import griddata
 
+# Aircraft datum R2 (plan 2026-10-19-001): datums are imported, never typed.
+_REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+sys.path.insert(0, os.path.join(_REPO, "tools"))
+import bake_hull_frame as bhf  # noqa: E402
+import hull_datums as hd  # noqa: E402
+
 # ---------------------------------------------------------------------------
 # Paths — resolved relative to this script file
 # ---------------------------------------------------------------------------
@@ -101,25 +107,43 @@ SHELL_STL = os.path.join(SCRIPT_DIR, "cargo_sect_shell24_2mm_repaired.stl")
 OUT_DIR = SCRIPT_DIR
 
 # ---------------------------------------------------------------------------
-# Hull-frame cargo shell geometry (from CLAUDE.md validated baked extents)
-#   Cargo_Shell: X -267.0..-72.7,  Y -71.5..+132.0,  Z 0.0..163.2  (mm)
+# Aircraft-frame (R2) cargo shell geometry.  R1 baked extents were
+#   X -267.0..-72.7,  Y -71.5..+132.0,  Z 0.0..163.2  (mm);
+# R2 = R1 + hd.R1_TO_R2 (plan 2026-10-19-001).
 # ---------------------------------------------------------------------------
-X_SHELL_MIN = -267.0  # stbd extremity (hull -X)
-X_SHELL_MAX = -72.7  # port extremity (hull +X)
-X_CL = (X_SHELL_MIN + X_SHELL_MAX) / 2.0  # ship lateral CL ≈ -169.85 mm
+X_SHELL_MIN = -97.15  # stbd extremity (aircraft -X)
+X_SHELL_MAX = 97.15  # port extremity (aircraft +X)
+X_CL = hd.X_CL  # aircraft centreline (single source: tools/hull_datums.py)
 
 # Cargo bay opening: longitudinal span centred between leg attach points.
 # Landing-gear HULL_ATTACH_POS Y rows: 25 mm and 100 mm.  Bay spans Y=2..108.
 Y_BAY_LEN = 106.0  # mm — longitudinal door span
-Y_BAY_CEN = 55.0  # mm — Y centre of bay opening
-Y_BAY_FWD = Y_BAY_CEN - Y_BAY_LEN / 2.0  # =  2.0 mm
-Y_BAY_AFT = Y_BAY_CEN + Y_BAY_LEN / 2.0  # = 108.0 mm
+Y_BAY_CEN = 360.7  # mm — Y centre of bay opening (R1 55.0)
+Y_BAY_FWD = Y_BAY_CEN - Y_BAY_LEN / 2.0  # = 307.7 mm
+Y_BAY_AFT = Y_BAY_CEN + Y_BAY_LEN / 2.0  # = 413.7 mm
 
 # Fall-back exterior belly Z (used when interpolator misses a point)
-Z_BELLY_FALLBACK = 0.5  # mm
+Z_BELLY_FALLBACK = hd.BELLY_Z + 0.5  # mm
 
 # Wall thickness (door body, interior offset in +Z direction)
 WALL_T = 2.0  # mm
+
+# DOOR-REWORK (owner 2026-10-19): the port door opens first and closes OVER
+# the starboard door, and ONE latch (on the port door) holds both.  The free
+# edges form a HALF-LAP with a flush INTERIOR (the bay floor): the port door's
+# free edge is an OUTER lip LAP_LIP_T thick that runs LAP_W past the centreline
+# and stands LAP_PROUD below the belly; the starboard door's free edge thins to
+# an INNER lip that sits LAP_GAP above it.  The
+# port lip therefore traps the starboard lip from outside: starboard cannot
+# open until port has, and the latched port door carries starboard's
+# closed-door load through the lap (docs/CARGO_DOOR_LATCH_SPEC.md Rev B).
+# The doors no longer butt at X_CL, which also removes the BHD-13 seam jam
+# (zero seam gap, crown corner swinging inboard on a synchronised open).
+LAP_W = 6.0        # mm, lap width (port lip reach past X_CL)
+LAP_LIP_T = 1.2    # mm, each lip: 3 perimeters at a 0.4 mm nozzle (FDM floor)
+LAP_GAP = 0.3      # mm, running clearance, both across and through the lap
+LAP_STEP = 0.2     # mm, grid ramp that makes the lap step (near-vertical)
+LAP_PROUD = 2 * LAP_LIP_T + LAP_GAP - WALL_T   # 0.7 mm, carried on the exterior
 
 # Grid resolution for belly-surface sampling
 GRID_DX = 3.0  # mm step in X
@@ -190,7 +214,7 @@ def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
 
     Belly faces are identified by:
       * Face normal Z component < -0.5  (pointing downward / ventral)
-      * Face centroid Z < 10 mm         (near the bottom of the shell)
+      * Face centroid Z < BELLY_Z + 10 mm (near the bottom of the shell)
 
     The returned (x_min, x_max) is the real edge of that ventral surface —
     where the flat belly transitions into the curved side wall — restricted
@@ -218,7 +242,7 @@ def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
     fn = shell.face_normals  # (F, 3) — face normals
 
     # Select ventral-facing faces (normal pointing -Z, near bottom of shell)
-    mask = (fn[:, 2] < -0.5) & (fc[:, 2] < 10.0)
+    mask = (fn[:, 2] < -0.5) & (fc[:, 2] < hd.BELLY_Z + 10.0)
     belly = fc[mask]
     if mask.sum() == 0:
         print("[belly] WARNING: no belly faces found — using flat fallback")
@@ -324,7 +348,8 @@ def despike_grid(
 
 
 def build_panel_mesh(
-    x_grid: np.ndarray, y_grid: np.ndarray, z_ext: np.ndarray, wall_t: float = WALL_T
+    x_grid: np.ndarray, y_grid: np.ndarray, z_ext: np.ndarray, wall_t: float = WALL_T,
+    z_int: "np.ndarray | None" = None,
 ) -> trimesh.Trimesh:
     """
     Construct a closed triangular mesh for one door panel half.
@@ -343,7 +368,8 @@ def build_panel_mesh(
     trimesh.Trimesh
     """
     M, N = len(x_grid), len(y_grid)
-    z_int = z_ext + wall_t  # interior Z (+Z / inward toward hull)
+    if z_int is None:
+        z_int = z_ext + wall_t  # interior Z (+Z / inward toward hull)
 
     # Exterior vertices index = i*N + j  (range 0 .. M*N-1)
     # Interior vertices index = M*N + i*N + j
@@ -512,6 +538,38 @@ def make_knuckle_gusset(
 # ---------------------------------------------------------------------------
 
 
+def lap_breaks(side: str, x_cl: float) -> list:
+    """X stations of the half-lap steps on this door (see LAP_* above)."""
+    if side == "port":
+        return [x_cl - LAP_W, x_cl + LAP_GAP, x_cl + LAP_GAP + LAP_STEP]
+    return [x_cl - LAP_W - LAP_GAP - LAP_STEP, x_cl - LAP_W - LAP_GAP, x_cl]
+
+
+def lap_profile(side: str, x_cl: float, xg: np.ndarray, z_ext: np.ndarray):
+    """(exterior Z, interior Z) for the panel grid, with the half-lap applied.
+
+    The two lips plus the gap are LAP_PROUD thicker than the panel.  That
+    excess goes OUTSIDE: the bay floor (the closed doors' top, which the
+    payload rests on -- BHD-08, tools/cargo_bay_envelope.door_top()) stays
+    exactly where it was, and the port lip stands LAP_PROUD below the belly
+    in a strip LAP_W + LAP_GAP wide along the seam.
+    Port: OUTER lip, X in [x_cl - LAP_W, x_cl + LAP_GAP],
+          Z ext - LAP_PROUD .. ext - LAP_PROUD + LIP_T.
+    Stbd: INNER lip, X in [x_cl - LAP_W - LAP_GAP, x_cl],
+          Z ext + WALL_T - LIP_T .. ext + WALL_T.
+    Elsewhere the full WALL_T panel."""
+    z_out, z_in = z_ext.copy(), z_ext + WALL_T
+    eps = 1e-6
+    if side == "port":
+        lip = xg <= x_cl + LAP_GAP + eps
+        z_out[lip] = z_ext[lip] - LAP_PROUD
+        z_in[lip] = z_out[lip] + LAP_LIP_T
+    else:
+        lip = xg >= x_cl - LAP_W - LAP_GAP - eps
+        z_out[lip] = z_ext[lip] + WALL_T - LAP_LIP_T
+    return z_out, z_in
+
+
 def make_door(
     side: str, belly_z_fn, free_edge_x: float, hinge_x: float, knuckle_y_list
 ) -> "tuple[trimesh.Trimesh, float]":
@@ -548,10 +606,18 @@ def make_door(
     # rounding — that overshoot point falls just outside the real belly-mesh
     # data and griddata silently returns the flat fallback there, producing
     # a small but real step right at the hinge line.
-    x_min, x_max = sorted([free_edge_x, hinge_x])
+    # DOOR-REWORK half-lap: the port panel reaches LAP_W past the centreline;
+    # both panels carry exact breakpoints at the lap step so the two lips'
+    # mating faces are coincident planes offset by LAP_GAP.
+    lap = lap_breaks(side, free_edge_x)
+    reach = free_edge_x - LAP_W if side == "port" else free_edge_x
+    x_min, x_max = sorted([reach, hinge_x])
     n_x = max(2, round((x_max - x_min) / GRID_DX) + 1)
     n_y = max(2, round((Y_BAY_AFT - Y_BAY_FWD) / GRID_DY) + 1)
     x_grid = np.linspace(x_min, x_max, n_x)
+    x_grid = np.unique(np.concatenate([x_grid[np.min(np.abs(
+        x_grid[:, None] - np.array(lap)[None, :]), axis=1) > 0.05], lap]))
+    x_grid = x_grid[(x_grid >= x_min - 1e-9) & (x_grid <= x_max + 1e-9)]
     y_grid = np.linspace(Y_BAY_FWD, Y_BAY_AFT, n_y)
 
     xg, yg = np.meshgrid(x_grid, y_grid, indexing="ij")  # shape (M, N)
@@ -575,8 +641,12 @@ def make_door(
         f"Z_ext={z_ext.min():.2f}..{z_ext.max():.2f}"
     )
 
+    # Half-lap thickness map (exterior stays the belly contour except under
+    # the starboard inner lip, which is lifted clear of the port lip).
+    z_out, z_in = lap_profile(side, free_edge_x, xg, z_ext)
+
     # Build door panel mesh
-    panel = build_panel_mesh(x_grid, y_grid, z_ext, wall_t=WALL_T)
+    panel = build_panel_mesh(x_grid, y_grid, z_out, z_int=z_in)
     print(
         f"[{side}] panel verts={len(panel.vertices)} "
         f"faces={len(panel.faces)} watertight={panel.is_watertight}"
@@ -657,7 +727,7 @@ def write_hinge_params(hx_port, hz_port, hx_stbd, hz_stbd) -> None:
         '"""cargo_door_hinge_params.py -- GENERATED by generate_cargo_doors.py.\n'
         "Do not edit: change the shell/generator and re-run "
         'generate_cargo_doors.py to regenerate.\n'
-        "Hull frame, mm.  CARGO-HINGE-SYNC single source -- every other "
+        "Aircraft datum R2, mm.  CARGO-HINGE-SYNC single source -- every other "
         "hinge-dependent\n"
         "generator or SCAD file reads this, not a hand-copied constant.\n"
         '"""\n\n'
@@ -679,7 +749,7 @@ def write_hinge_params(hx_port, hz_port, hx_stbd, hz_stbd) -> None:
         "// cargo_door_hinge_params.scad -- GENERATED by generate_cargo_doors.py.\n"
         "// Do not edit: change the shell/generator and re-run "
         "generate_cargo_doors.py\n"
-        "// to regenerate.  Hull frame, mm.  CARGO-HINGE-SYNC single source.\n"
+        "// to regenerate.  Aircraft datum R2, mm.  CARGO-HINGE-SYNC single source.\n"
         f"HINGE_X_PORT = {hx_port:.4f};\n"
         f"HINGE_Z_PORT = {hz_port:.4f};\n"
         f"HINGE_X_STBD = {hx_stbd:.4f};\n"
@@ -704,7 +774,9 @@ def write_hinge_params(hx_port, hz_port, hx_stbd, hz_stbd) -> None:
 def save(mesh: trimesh.Trimesh, name: str) -> None:
     """Export mesh to STL and print a summary."""
     path = os.path.join(OUT_DIR, name)
-    mesh.export(path)
+    tris = np.asarray(mesh.triangles, dtype=np.float64)
+    header = (hd.FRAME_MARKER + b" " + name[:-4].encode())[:80].ljust(80, b"\0")
+    bhf.write_stl_binary(path, tris, header)
     b = mesh.bounds
     dims = b[1] - b[0]
     print(
@@ -730,7 +802,7 @@ def main() -> int:
         )
         return 1
 
-    print("=== Cargo clamshell door generation — Rev R1b (hull frame) ===")
+    print("=== Cargo clamshell door generation — Rev R1b (aircraft frame R2) ===")
     print("Hull-frame convention: X=+port, Y=+aft, Z=+dorsal")
     print(
         f"Cargo shell bounding box: X={X_SHELL_MIN:.1f}..{X_SHELL_MAX:.1f}  "
@@ -746,16 +818,29 @@ def main() -> int:
     )
     print()
 
-    belly_z, belly_x_min, belly_x_max = build_belly_interpolator(
+    belly_raw, belly_x_min, belly_x_max = build_belly_interpolator(
         SHELL_STL, Y_BAY_FWD, Y_BAY_AFT
     )
+
+    # The cargo shell is the mirror of its port half (merge_cargo_interior
+    # SYMMETRIC_FROM_PORT), so the port belly IS the belly: sample every X
+    # from the port side.  The scattered-centroid interpolation plus the
+    # despike walk otherwise put the two hinge edges 2.5 mm apart in Z.
+    def belly_z(x2d, y2d):
+        return belly_raw(X_CL + np.abs(np.asarray(x2d) - X_CL), y2d)
     print()
 
     # Hinge lines are the REAL detected edges of the belly mesh — port door
     # hinges at the port-side edge, stbd door at the stbd-side edge.  Free
     # edges (both doors) meet at X_CL when closed.
-    hinge_x_port = belly_x_max
-    hinge_x_stbd = belly_x_min
+    # Symmetry (rule R4, cargo rebuilt as the mirror of its port half): one
+    # half-span for both doors, the SMALLER of the two detected edges so both
+    # hinges stay on real belly data.  The detected edges differ by ~0.9 mm
+    # (interior features sampled into the belly mask), which had put the
+    # hinge Z 1.4 mm apart port/stbd.
+    half = min(belly_x_max - X_CL, X_CL - belly_x_min)
+    hinge_x_port = X_CL + half
+    hinge_x_stbd = X_CL - half
     print(
         f"Port hinge line: X={hinge_x_port:.2f} mm (outboard belly edge, NOT centreline)"
     )

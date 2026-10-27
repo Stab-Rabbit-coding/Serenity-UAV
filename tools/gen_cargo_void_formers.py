@@ -27,10 +27,10 @@ optional pour is the few slivers around it.
 The formers
 -----------
 1. collar_rim   -- keeps the head/cargo splice-collar seat clear (the open
-                   fwd mating face is at Y -69.5 and the rim wall is not a closed
-                   ring until Y ~-67, so the plug starts at -66): the collar
-                   reaches to Y -61.5 (head_cargo_splice_collar.stl) and is
-                   bonded AFTER the pour, so the rim band Y -71.5..-58 must
+                   fwd mating face is at Y 236.2 and the rim wall is not a closed
+                   ring until Y ~238.7, so the plug starts at 239.7): the collar
+                   reaches to Y 244.2 (head_cargo_splice_collar.stl) and is
+                   bonded AFTER the pour, so the rim band Y 234.2..247.7 must
                    stay foam-free right round the section.
 2. batt_chimney -- the battery cradle's forward 36 mm sits in the chin; the
                    pack is exchanged DOWNWARD (docs/BATTERY_MOUNT.md Rev T5),
@@ -53,7 +53,7 @@ Run:
     /usr/bin/python3 tools/gen_cargo_void_formers.py
 Outputs:
     airframe/stls/fuselage/cargo/void_former_cargo_{collar_rim,batt_chimney,
-        harness_trunk_port,harness_trunk_stbd}.stl   (hull frame; PLA, waxed)
+        harness_trunk_port,harness_trunk_stbd}.stl   (aircraft frame R2; PLA, waxed)
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (model: Claude Opus 5, Anthropic) under the
@@ -71,14 +71,22 @@ from manifold3d import Manifold, Mesh
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, ".."))
 sys.path.insert(0, HERE)
+import bake_hull_frame as bhf  # noqa: E402
 import cargo_layout_fit as clf  # noqa: E402
+import hull_datums as hd  # noqa: E402
 
 OUT_DIR = os.path.join(REPO, "airframe", "stls", "fuselage", "cargo")
 SHRINK_MM = 0.4  # wax film + PLA shrink: former is this much smaller than the cavity
 FOAM_RHO = 32.04e-6  # g/mm^3, 2 lb/ft^3 PU (docs/MASS_AUDIT_CARGO_WING_ROOT.md SS4)
-COLLAR_Y1 = -58.0  # head/cargo collar reaches Y -61.5; +3.5 mm bonding access
-CHIN_Y1 = -22.0  # aft end of the chin floor (ramp face top)
+# Aircraft datum R2 (plan 2026-10-19-001); R1 values in brackets.
+COLLAR_Y1 = 247.7  # head/cargo collar reaches Y 244.2; +3.5 mm bonding access [R1 -58]
+CHIN_Y1 = 283.7  # aft end of the chin floor (ramp face top) [R1 -22]
 TRUNK = 20.0  # harness trunk section
+# Chin-zone design-box bounds [R1 X -260..-80, Y -66, Z 44..170, trunk top 62].
+CHIN_X0, CHIN_X1 = -90.15, 89.85
+CHIN_Y0 = 239.7
+CHIN_Z0, CHIN_Z1 = 124.0, 250.0
+TRUNK_Z1 = 142.0
 
 
 def to_man(tm):
@@ -120,9 +128,9 @@ def former_in_box(shell_man, design_box, seed):
 
 # Rev T5e node bay: the shelf + two pouched nodes + 2 mm, floor to the
 # battery underside
-NODE_BAY_X1 = clf.N_CHIN_X_IN + clf.NODE_H + 2.0  # -125.85
-NODE_BAY_X0 = 2 * clf.X_CL - NODE_BAY_X1  # -213.85
-NODE_BAY_Z1 = clf.BATT_Z0  # 90
+NODE_BAY_X1 = clf.N_CHIN_X_IN + clf.NODE_H + 2.0  # 44.0
+NODE_BAY_X0 = 2 * clf.X_CL - NODE_BAY_X1  # -44.0
+NODE_BAY_Z1 = clf.BATT_Z0  # 170
 
 
 def main():
@@ -134,7 +142,10 @@ def main():
     xc = clf.X_CL
     formers = {
         # name: (design box, seed point inside the cavity)
-        "collar_rim": (box(-260, -80, -66.0, COLLAR_Y1, 44.0, 170.0), (xc, -64.0, 100.0)),
+        "collar_rim": (
+            box(CHIN_X0, CHIN_X1, CHIN_Y0, COLLAR_Y1, CHIN_Z0, CHIN_Z1),
+            (xc, 241.7, 180.0),
+        ),
         "batt_chimney": (
             box(
                 clf.BATT_X0 - clf.CRADLE_T - 1.0,
@@ -144,19 +155,21 @@ def main():
                 NODE_BAY_Z1,
                 clf.CRADLE_TOP_Z + 1.0,
             ),
-            (xc, -40.0, 110.0),
+            (xc, 265.7, 190.0),
         ),
         "harness_trunk_port": (
-            box(NODE_BAY_X1 + 1.0, NODE_BAY_X1 + 1.0 + TRUNK, -66.0, CHIN_Y1, 44.0, 62.0 + TRUNK),
-            (NODE_BAY_X1 + 4.0, -45.0, 72.0),
+            box(NODE_BAY_X1 + 1.0, NODE_BAY_X1 + 1.0 + TRUNK,
+                CHIN_Y0, CHIN_Y1, CHIN_Z0, TRUNK_Z1 + TRUNK),
+            (NODE_BAY_X1 + 4.0, 260.7, 152.0),
         ),
         "harness_trunk_stbd": (
-            box(NODE_BAY_X0 - 1.0 - TRUNK, NODE_BAY_X0 - 1.0, -66.0, CHIN_Y1, 44.0, 62.0 + TRUNK),
-            (NODE_BAY_X0 - 4.0, -45.0, 72.0),
+            box(NODE_BAY_X0 - 1.0 - TRUNK, NODE_BAY_X0 - 1.0,
+                CHIN_Y0, CHIN_Y1, CHIN_Z0, TRUNK_Z1 + TRUNK),
+            (NODE_BAY_X0 - 4.0, 260.7, 152.0),
         ),
         "node_bay": (
-            box(NODE_BAY_X0, NODE_BAY_X1, COLLAR_Y1, CHIN_Y1, 44.0, NODE_BAY_Z1),
-            (xc, -40.0, 75.0),
+            box(NODE_BAY_X0, NODE_BAY_X1, COLLAR_Y1, CHIN_Y1, CHIN_Z0, NODE_BAY_Z1),
+            (xc, 265.7, 155.0),
         ),
     }
     total_void = 0.0
@@ -172,7 +185,8 @@ def main():
         f.apply_translation(c)
         assert f.is_watertight and f.volume > 0, name
         path = os.path.join(OUT_DIR, f"void_former_cargo_{name}.stl")
-        f.export(path)
+        header = (hd.FRAME_MARKER + f" void_former_cargo_{name}".encode())[:80]
+        bhf.write_stl_binary(path, f.triangles.astype(np.float64), header.ljust(80, b"\0"))
         chk = trimesh.load(path, process=True)
         assert chk.is_watertight or all(bb.is_watertight for bb in chk.split()), f"{name} on-disk"
         bb = f.bounds
@@ -183,7 +197,8 @@ def main():
             f"Z{bb[0][2]:.0f}..{bb[1][2]:.0f}"
         )
         total_void += f.volume
-    chin = former_in_box(shell_man, box(-260, -80, -66.0, CHIN_Y1, 44.0, 170.0), (xc, -40.0, 100.0))
+    chin_box = box(CHIN_X0, CHIN_X1, CHIN_Y0, CHIN_Y1, CHIN_Z0, CHIN_Z1)
+    chin = former_in_box(shell_man, chin_box, (xc, 265.7, 180.0))
     foam = chin.volume - total_void
     print(
         f"\nchin zone cavity {chin.volume:,.0f} mm^3; formers {total_void:,.0f}; "
