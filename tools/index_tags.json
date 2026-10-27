@@ -12710,30 +12710,6 @@
       ],
       "archived": false
     },
-    "avionics/kicad/TACCO/kicads/TACCO-2.kicad_dru": {
-      "description": "KiCad custom design-rules file",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb": {
-      "description": "KiCad PCB layout",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pro": {
-      "description": "KiCad project file",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design"
-      ],
-      "archived": false
-    },
     "avionics/kicad/TACCO/kicads/TACCO.kicad_dru": {
       "description": "KiCad custom design-rules file",
       "tags": [
@@ -21757,9 +21733,6 @@
       "avionics/kicad/TACCO/gerbers/TACCO-In2_Cu.gbr",
       "avionics/kicad/TACCO/gerbers/TACCO-job.gbrjob",
       "avionics/kicad/TACCO/gerbers/TACCO.drl",
-      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_dru",
-      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb",
-      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pro",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_dru",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_prl",
@@ -22552,9 +22525,6 @@
       "avionics/kicad/TACCO/gerbers/TACCO-In2_Cu.gbr",
       "avionics/kicad/TACCO/gerbers/TACCO-job.gbrjob",
       "avionics/kicad/TACCO/gerbers/TACCO.drl",
-      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_dru",
-      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb",
-      "avionics/kicad/TACCO/kicads/TACCO-2.kicad_pro",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_dru",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
       "avionics/kicad/TACCO/kicads/TACCO.kicad_prl",

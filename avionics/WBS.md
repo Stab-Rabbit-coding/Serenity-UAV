@@ -327,12 +327,64 @@ GND2_CANB to GND) break the 5 kV galvanic isolation requirement. They must be fi
 - [x] **Owner:** footprint repositioning for the courtyard overlaps and placement-driven shorts
       (`avionics/AGENTS.md`: repositioning is referred to the owner). *(Superseded 2026-10-05:
       generator placement is DRC-clean; owner approved the placement rules.)*
-- [ ] Clear the isolation-domain shorts (PGND, GND2_*, VCC2_* and RADIO_ANT_F crossings) and
-      the keepout intrusion.
-- [ ] Clear the remaining shorts, clearance and solder-mask-bridge findings (routing, via and
-      mask edits).
-- [ ] Re-run `tools/validate_kicad.py` until it reports 0 hard violations on TACCO, and document
-      any accepted residuals with rule and reason.
+- [x] Clear the isolation-domain shorts (PGND, GND2_*, VCC2_* and RADIO_ANT_F crossings) and
+      the keepout intrusion. *(Closed 2026-10-26: `tools/validate_kicad.py` on
+      `avionics/kicad/TACCO/kicads/TACCO.kicad_pcb` at branch `pilot-refloorplan` @ 13a5a119
+      reports 0 hard, 5 soft. No `shorting_items` or `items_not_allowed` finding remains on the
+      canonical board. The hand-edited `TACCO-2.kicad_pcb` is not this item; see §1.2a.6.)*
+- [x] Clear the remaining shorts, clearance and solder-mask-bridge findings. *(Closed 2026-10-26
+      with the same measurement: 0 hard on the canonical TACCO board.)*
+- [x] Re-run `tools/validate_kicad.py` until it reports 0 hard violations on TACCO, and document
+      any accepted residuals with rule and reason. *(Met 2026-10-26 on `TACCO.kicad_pcb`; the
+      5 soft findings remain accepted-class under the validator's severity policy.)*
+
+##### 1.2a.5 *Pilot DRC backlog — 250 hard violations (measured 2026-10-26)*
+
+**Measurement.** `tools/validate_kicad.py --changed-since origin/main --verbose` (KiCad 9.0.9
+`kicad-cli pcb drc --severity-error`) on `avionics/kicad/Pilot/kicads/Pilot.kicad_pcb` at branch
+`pilot-refloorplan` @ 13a5a119 (PR #258) reports **250 hard / 55 soft**. The same board
+measured 79 hard on 2026-10-18, so the count grew during the Pilot re-route. The ERC on
+`Pilot.kicad_sch` is 0 hard. The gate in CI "KiCad Validation" fails on this board.
+
+| DRC rule | Count | Notes |
+| --- | --- | --- |
+| `clearance` | 109 | Requires track, pad, or via relocation; not a netclass edit |
+| `hole_clearance` | 96 | Via-to-pad and via-to-hole spacing |
+| `track_width` | 44 | Track width below the active netclass minimum |
+| `items_not_allowed` | 1 | Keepout intrusion |
+
+`kicad-cli` also reports 212 unconnected items. The validator gate does not count them, but the
+Pilot routing is open (§1.2a "Finish Pilot PCB"), so the unconnected nets remain part of this
+backlog.
+
+- [ ] Clear the 109 `clearance` findings. Re-route or move the offending tracks, pads, or vias.
+      Do not widen the netclass to pass the check.
+- [ ] Clear the 96 `hole_clearance` findings. Move the vias or pads, or resize the drill where the
+      design permits.
+- [ ] Clear the 44 `track_width` findings by widening the affected tracks to the netclass minimum.
+- [ ] Clear the `items_not_allowed` keepout intrusion.
+- [ ] Route the 212 unconnected items and record any that stay open as accepted, with reason.
+- [ ] Re-run `tools/validate_kicad.py` until `Pilot.kicad_pcb` reports 0 hard. Document any
+      accepted residuals with rule and reason.
+
+##### 1.2a.6 *TACCO-2 hand-edited board — 93 hard violations (measured 2026-10-26); owner decision required*
+
+**Finding.** `avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb` has no matching schematic. It is a
+hand-edited layout copy, not a generator output. The validator scans it because it is a
+`.kicad_pcb` in the repository. Measured at the same ref as §1.2a.5: **93 hard / 36 soft**, of
+which 48 are `solder_mask_bridge`, 34 are `shorting_items`, 7 are `clearance`, 3 are
+`hole_clearance`, and 1 is `courtyards_overlap`. The shorting items match the PB2 socket-rail
+pattern in `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`,
+which records these findings as caused by hand-edited what-if copies.
+
+The canonical TACCO board (§1.2a.4) is `TACCO.kicad_pcb` and reports 0 hard. This item does not
+reopen §1.2a.4.
+
+- [x] **Owner decision:** delete `TACCO-2.kicad_pcb`, `.kicad_pro`, and `.kicad_dru`, not
+      regenerate them. *(Decided 2026-10-26 by the owner. The files are removed from the tree and
+      remain in git history before the deletion commit.)*
+- [x] Delete the three TACCO-2 files and confirm `tools/validate_kicad.py` no longer scans
+      `TACCO-2`. *(Closed 2026-10-26 with the deletion commit on `track/drc-backlog`.)*
 
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 
