@@ -13930,7 +13930,7 @@
       "archived": false
     },
     "current-specification/bom_revT.csv": {
-      "description": "Bill of materials, CSV (212 items)",
+      "description": "Bill of materials, CSV (217 items)",
       "tags": [
         "bom",
         "specification"
@@ -13938,7 +13938,7 @@
       "archived": false
     },
     "current-specification/bom_revT.json": {
-      "description": "Bill of materials, JSON (212 items)",
+      "description": "Bill of materials, JSON (217 items)",
       "tags": [
         "bom",
         "specification"
@@ -18177,6 +18177,14 @@
       ],
       "archived": false
     },
+    "tools/bom_edit_lg_a1b.py": {
+      "description": "LG-LOADPATH-A1B BOM edit: balanced-couple gear (owner 2026-10-27).",
+      "tags": [
+        "bom",
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/bom_edit_tilt_controller.py": {
       "description": "Swap the tilt-controller BOM row: retire LS-TILT-TC, add OSESC-TILT-TC.",
       "tags": [
@@ -21191,6 +21199,7 @@
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
       "tools/bom_edit_door_rework.py",
+      "tools/bom_edit_lg_a1b.py",
       "tools/bom_edit_tilt_controller.py",
       "tools/bom_edit_weight_pass_13lbm.py",
       "tools/compact_bom_entries.py"
@@ -23765,6 +23774,7 @@
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
       "tools/bom_edit_door_rework.py",
+      "tools/bom_edit_lg_a1b.py",
       "tools/bom_edit_tilt_controller.py",
       "tools/bom_edit_weight_pass_13lbm.py",
       "tools/build_head_shell.py",
