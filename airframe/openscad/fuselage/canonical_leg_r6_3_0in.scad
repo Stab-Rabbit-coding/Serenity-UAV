@@ -704,6 +704,20 @@ module a1b_members(flex = 0) {
     }
 }
 
+// Canonical flank HOUSING envelope (fore corners, owner 2026-10-27): the
+// space the A1B backbone and members occupy over the full flex range, as one
+// convex solid.  QMx Sheet 5 [REF-CAD-003] and the Henning renders
+// [REF-CAD-002] show the jack entering a rectangular housing on the hull
+// flank; tools/generate_lg_a1b_housing.py places this per corner and the
+// cargo merge tool cuts it (+ fit clearance) and walls it.
+module a1b_housing_envelope() {
+    hull() {
+        a1b_backbone();
+        a1b_members(0);
+        a1b_members(FLEX_DEG);
+    }
+}
+
 // CF backbone: two cheeks (1/8 in quasi-iso plate) in the clevis-ear
 // planes, each a hull of the hip boss and both anchor bosses.  Carries the
 // hip pin and both anchor pins, so the couple closes in the plate.

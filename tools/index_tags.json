@@ -2694,6 +2694,24 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_1_5in_hull_legs",
       "tags": [
@@ -18371,6 +18389,13 @@
       ],
       "archived": false
     },
+    "tools/generate_lg_a1b_housing.py": {
+      "description": "Place the LG Option A1b flank-housing envelope at the fore corners.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/generate_lg_bays.py": {
       "description": "Generate the four CONFORMING 3.0 in landing-gear bays (BHD-02, 2026-10-10).",
       "tags": [
@@ -20292,6 +20317,8 @@
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/inara_access_cover.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
@@ -20606,6 +20633,8 @@
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/inara_access_cover.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
@@ -21208,6 +21237,8 @@
       "airframe/landing-gear/HANDOFF.md",
       "airframe/landing-gear/TODO.md",
       "airframe/landing-gear/WBS.md",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
@@ -23800,6 +23831,7 @@
       "tools/frame_inventory.py",
       "tools/gen_cargo_void_formers.py",
       "tools/gen_todo_from_wbs.py",
+      "tools/generate_lg_a1b_housing.py",
       "tools/generate_lg_bays.py",
       "tools/hull_datums.py",
       "tools/import-specctra-ses.py",
