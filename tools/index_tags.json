@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-26",
+  "generated": "2026-10-27",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -15384,6 +15384,13 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md": {
+      "description": "Landing Gear Option A (Balanced Couple) - Plan",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -18494,6 +18501,13 @@
       ],
       "archived": false
     },
+    "tools/lg_couple_options.py": {
+      "description": "Option A sub-forms: free-body, materials and packaging trade (LG-LOADPATH).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/lg_fuse_material.py": {
       "description": "Landing-gear DUCTILE FUSE wire: material trade on cited properties only.",
       "tags": [
@@ -19196,6 +19210,7 @@
       "docs/plans/2026-10-26-001-feat-split-battery-head-rail-plan.md",
       "docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md",
       "docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md",
+      "docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -23757,6 +23772,7 @@
       "tools/lg_bellcrank_fbd.py",
       "tools/lg_collar_integrity.py",
       "tools/lg_corners.py",
+      "tools/lg_couple_options.py",
       "tools/lg_fuse_material.py",
       "tools/lg_thigh_variants.py",
       "tools/lg_wire_layout_study.py",
