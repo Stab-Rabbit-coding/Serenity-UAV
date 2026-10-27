@@ -138,15 +138,19 @@ OBS_LOWER_FWD = 2.0  # aft-down face, u < OBS_SOM_U0
 OBS_SOM_U0 = 20.0
 
 # ---------------------------------------------------------------------------
-# Pitot-static (WBS §1.10 U5, sensor not selected): tube through the nose skin
-# just above the bow flat, port of the laser, line aft to a differential-
-# pressure sensor on the Observer carrier F side.  Reservation only.
+# Pitot (owner, 2026-10-27): the probe runs through the centre post of the
+# parabolic dish on the nose's STARBOARD side; the interior tube and hose
+# nipple are already modelled in the published head.  Located by section
+# search of the mesh 2026-10-27: bore along Y from ~(-35.7, 14, 213); interior
+# tube (-43, 24.5, 209.9) -> (-16, 42.3, 219.5); nipple at the inboard end.
+# The airspeed sensor is not selected (WBS §1.10 U5): the hose keep-out runs
+# from the nipple along the tube axis toward the Observer board's SoM face.
 # ---------------------------------------------------------------------------
-PITOT_X, PITOT_Z = 9.0, 212.0
-PITOT_TUBE_D = 6.0  # keep-out (tube OD + clearance)
-PITOT_FWD = 60.0  # tube projection ahead of the nose tip (reservation)
-PITOT_LINE_D = 7.0  # keep-out for the 4 mm silicone line
-PITOT_Y_SENSOR = 60.0
+PITOT_TUBE_A = np.array([-43.0, 24.5, 209.9])
+PITOT_NIPPLE = np.array([-16.0, 42.3, 219.5])
+PITOT_HOSE_D = 7.0  # keep-out for the hose on the barb
+PITOT_HOSE_L = 12.0  # hose run past the barb tip before it turns to the sensor
+PITOT_BARB_TIP = 3.5  # nipple ring centroid -> barb tip along the tube axis (sections Y 41-44.6)
 
 # ---------------------------------------------------------------------------
 # Bay A, Shepherd's room: CN1 + FC1 (docs/AVIONICS_PB2_REDESIGN.md, bus start,
@@ -217,8 +221,8 @@ TRUNK_W, TRUNK_H = 10.0, 8.0
 # Ltd., PRC-domiciled, REFERENCES.md REF-SENSOR-002).  The cluster is
 # re-selected and re-laid-out under BOW-02; the pitot keep-out moves with it.
 # BOW-02 is CLOSED by the Rev H2 twin-pod bay (the old pockets are inside the
-# bay cut).  PITOT-01: the canon nose has no pitot; its location is open.
-REGISTERED = {"pitot line": "PITOT-01"}
+# bay cut).
+REGISTERED = {}  # PITOT-01 closed: owner-built pitot in the starboard dish post
 
 
 def trapezoid_prism(y0, length, w0, w1, z0, z1):
@@ -367,11 +371,11 @@ def layout():
     L["bay insert"] = dict(solid=bay_insert(), skin_seat=True,
                            mates=("camera pod (port)", "ToF pod (stbd)", "laser module"))
     # --- pitot-static ------------------------------------------------------
-    L["pitot line"] = dict(
-        solid=cyl("y", PITOT_X, PITOT_Z, 10.0, PITOT_Y_SENSOR, PITOT_LINE_D / 2),
-        gap=1.0,
-        mates=("Observer board",),
-    )
+    ax = (PITOT_NIPPLE - PITOT_TUBE_A) / np.linalg.norm(PITOT_NIPPLE - PITOT_TUBE_A)
+    hose = trimesh.creation.cylinder(radius=PITOT_HOSE_D / 2, height=PITOT_HOSE_L, sections=32)
+    hose.apply_transform(trimesh.geometry.align_vectors([0, 0, 1.0], ax))
+    hose.apply_translation(PITOT_NIPPLE + ax * (PITOT_HOSE_L / 2 + PITOT_BARB_TIP))
+    L["pitot hose"] = dict(solid=hose, gap=1.0, mates=("Observer board",))
     # --- Bay A nodes (on edge, port, mirrored stbd) ------------------------
     L["Bay A node CN1 (port)"] = dict(
         solid=box(X_CL + BAYA_X_IN, X_CL + BAYA_X_IN + clf.NODE_T, BAYA_Y0,
@@ -487,7 +491,9 @@ def los_cones(parts):
 
 
 def pitot_tube():
-    return cyl("y", PITOT_X, PITOT_Z, -PITOT_FWD, 12.0, PITOT_TUBE_D / 2)
+    """Probe bore through the starboard dish post (shell geometry); the
+    line-of-sight cones are checked against the shell, which includes it."""
+    return cyl("y", PITOT_TUBE_A[0] + 7.3, 213.0, 0.0, 23.0, 2.0)
 
 
 def band_check(head_m):

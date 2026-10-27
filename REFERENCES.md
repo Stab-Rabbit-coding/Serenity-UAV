@@ -3062,6 +3062,28 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Cited in** | `docs/CARGO_WINCH_SPECIFICATION.md` §5.5; `current-specification/bom_revT.csv` / `.json` row `LC-ADC`; `airframe/placeholders/generate_placeholders.py` (`gen_lc_adc`); `avionics/firmware/fc/tools/governor_cal.py`; WBS CARGO-LC-01 (`airframe/fuselage-mid/WBS.md`) |
 | **Openness / sourcing** | Public, no NDA. TI is US-domiciled; passes the component-sourcing rule in `AGENTS.md` §5. Replaces the HX711 (see "Removed / Superseded Citations"). |
 
+### REF-SENSOR-064: Broadcom AFBR-S50LX85D — Time-of-Flight sensor module, 50 m (datasheet)
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Broadcom Inc. (US-domiciled; passes AGENTS.md §5) |
+| **Document** | *AFBR-S50LX85D* data sheet (official) |
+| **Official URL** | <https://docs.broadcom.com/doc/AFBR-S50LX85D-DS> |
+| **Retrieved** | 2026-10-27 by a Claude (Opus 5.5) research subagent: PDF downloaded and read via `pdftotext`; the figures below are from that read and were not re-read in the main session |
+| **Scope applied** | Range, optics, package dimensions, interface, supply, laser class |
+
+| Parameter | Value |
+|---|---|
+| Range | up to 50 m indoor on a target of at least 30 % reflectance; in 100 klx sunlight the range is "reduced to less than 50m" (an upper bound, not a guarantee) |
+| Optics | 32 pixels at 1.55° × 1.55°; receiver 12.4° × 5.4°; transmit beam 2° × 2° |
+| Package | 12.4 × 7.6 × 7.9 mm without pins; optics on the top face; 4.3 mm through-hole pins |
+| Interface / supply | SPI up to 25 MHz, 3.3 V CMOS; single 5 V supply |
+| Laser | "Class 1 eye safe ready" |
+
+**Open:** outdoor 15 m range on a 30 % target needs a bench test. Mass is not stated (weigh a sample). The driver software is distributed as licensed binaries, so check the licence against the openness rule. A right-angle carrier is needed for leading-edge mounting.
+
+**Used in:** `tools/head_layout_fit.py` and `airframe/openscad/fuselage/bow_sensor_pod.scad` (ToF pod, Rev H2), where it is the recommended part pending procurement.
+
 ### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
 
 | Field | Value |
@@ -3647,6 +3669,18 @@ equivalent section promulgated to every sibling repo's `AGENTS.md`/`CLAUDE.md` i
 workspace — see each repo's own `REFERENCES.md` for its local entry. Renumbered from REF-MIL-001 on
 2026-10-05 (merge of `main` into `avionics-docs-audit`): REF-MIL-001 is MIL-STD-1553C in this
 catalogue, and the CNAF entry had been filed under the same ID — see Removed / Superseded Citations.
+
+### REF-MIL-004: MIL-F-83300 — Flying Qualities of Piloted V/STOL Aircraft
+
+| Field | Value |
+|---|---|
+| **Publisher** | U.S. Department of Defense (USAF) |
+| **Designation** | MIL-F-83300, 31 December 1970; Notice 1 (09-1991), Notice 2 (07-2019) |
+| **Official URL** | REQUIRES VERIFICATION (DLA ASSIST); public copy read from <https://everyspec.com/MIL-SPECS/MIL-SPECS-MIL-F/MIL-F-83300_17560/> on 2026-10-27 (base document PDF) |
+| **Sections applied** | §3.4.4 *Control margin*: "the margin of control power remaining at any stage in the transition shall not be less than 50 percent of the nominal pitch, roll and yaw control moments available". §3.2.3.3 *Maneuvering control margins*: at least 50 percent of the nominal control moment remains commandable when stabilization equipment is used (hover / low speed) |
+| **Scope limitation** | Piloted military V/STOL. Serenity is an uncrewed sUAS with no certification basis (14 CFR Part 107 governs operations only), so this is adopted as a SELF-ADOPTED criterion. The FAA powered-lift special-class criteria (AW609, docket FAA-2022-1726) and 14 CFR §27.143 give only qualitative "satisfactory control" margins |
+
+**Used in:** `docs/plans/2026-10-27-001-feat-middle-rear-layout-plan.md` (KTD5, the aft-CG / control-reserve limit) and the background CG relocation study.
 
 ### REF-NCEES-009: NCEES — FE Reference Handbook (rigid-body dynamics)
 
