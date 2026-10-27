@@ -519,8 +519,9 @@ FLEX_DEG     = 22.0;
 // ---------------------------------------------------------------------------
 LOADPATH      = "A1B";
 A1B_CRANK_R   = 10.0;       // mm, crank radius (study SS4.3)
-// Strut azimuth per station, from the packaging gate tools/lg_a1b_packaging.py
-// against the published merged hull (2026-10-27): aft inboard 154 deg (clear
+// Strut azimuth per station, chosen by the sweep tools/lg_a1b_packaging.py and
+// gated by tools/lg_a1b_census.py (rendered geometry + parity) against the
+// published merged hull (2026-10-27): aft inboard 154 deg (clear
 // of the wing root and tilt bracket); fore outboard 65 deg into the canonical
 // flank housing (owner 2026-10-27).
 A1B_STRUT_AZ  = (BAY_STATION == "aft") ? 154 : 65;

@@ -18550,7 +18550,7 @@
       "archived": false
     },
     "tools/lg_a1b_packaging.py": {
-      "description": "LG Option A1b packaging gate (plan 2026-10-27-001 U1).",
+      "description": "LG Option A1b packaging SWEEP (plan 2026-10-27-001 U1) -- exploratory.",
       "tags": [
         "build-tooling"
       ],

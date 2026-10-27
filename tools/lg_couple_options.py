@@ -33,7 +33,7 @@ Bowed-wire plateau P = 2 Mp / h, Mp = Sy d^3 / 6 (two-hinge mechanism; the
 plastic-hinge length L_p = d is a design assumption, REQUIRES VERIFICATION by
 the LG-15 bench firing).  Tension fuse: P = Sy A, gauge = 1.5 x stroke / elong.
 
-Run:  /usr/bin/python3 tools/lg_couple_options.py [--svg PATH]
+Run:  /usr/bin/python3 tools/lg_couple_options.py [--r CRANK_MM]
 
 Author: Claude (Claude Opus 5.5, Anthropic) under the direction of
 Stab-Rabbit-coding, 2026-10-27, per AGENTS.md section 3 AI attribution.

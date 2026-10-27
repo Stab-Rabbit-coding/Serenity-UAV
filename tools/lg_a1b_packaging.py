@@ -1,5 +1,10 @@
 #!/usr/bin/python3
-"""LG Option A1b packaging gate (plan 2026-10-27-001 U1).
+"""LG Option A1b packaging SWEEP (plan 2026-10-27-001 U1) -- exploratory.
+
+Used to choose the per-station strut azimuth and reach before the SCAD
+geometry existed.  The AUTHORITATIVE gate is tools/lg_a1b_census.py, which
+renders the real a1b_members()/a1b_backbone() and checks parity of these
+constants against the SCAD.
 
 A1b (tools/lg_couple_options.py): per row, two identical 6061-T6 tension
 fuses either side of the hip pin at the crank radius; the push-side fuse sits
@@ -43,10 +48,10 @@ import generate_lg_bays as g
 cbc, mci, lgbf = g.cbc, g.mci, g.lgbf
 
 CRANK_R = 10.0        # mm, Option A crank radius (study SS4.3)
-ROW_Y = 7.0           # mm, ductile / spring rows either side of the leg plane
+ROW_Y = 3.5           # mm, ductile row at -y, spring row at +y (SCAD A1B_ROW_Y)
 MEMBER_D = 10.0       # mm, OD 8 sleeve + 1 mm clearance each side
 ANCHOR_D, ANCHOR_L = 16.0, 10.0   # mm, anchor boss (spreader O15 + wall)
-STRUT_AZ = 154.0      # deg, up-inboard; aft sweep optimum 2026-10-27 (thigh at rest -48 reversed = 132)
+STRUT_AZ = {"aft": 154.0, "fore": 65.0}   # deg per station (SCAD A1B_STRUT_AZ)
 REACH = 55.0          # mm, crank point -> anchor; aft sweep optimum 2026-10-27
 CLASH_MM3 = 1.0
 
@@ -79,7 +84,8 @@ def members(reach, strut_az):
 def main(argv):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--reach", type=float, default=REACH)
-    ap.add_argument("--az", type=float, default=STRUT_AZ)
+    ap.add_argument("--az", type=float, default=None,
+                    help="override the per-station strut azimuth (deg)")
     a = ap.parse_args(argv)
     src = cbc.as_trimesh(trimesh.load(mci.BLENDER_SRC, process=False), mci.BLENDER_SRC)
     src.merge_vertices()
@@ -88,12 +94,13 @@ def main(argv):
     P = cbc.build()
     keep = Manifold.batch_boolean([P[k]["m"] for k in g.KEEPOUTS], OpType.Add)
     corners = lgbf.parse_corners(lgbf.SCAD)
-    local = members(a.reach, a.az)
     ok_all = True
-    print(f"A1b packaging: crank r {CRANK_R}, reach {a.reach} mm along az {a.az} deg, "
-          f"member O{MEMBER_D}, anchor O{ANCHOR_D}")
+    print(f"A1B packaging (EXPLORATORY sweep; the gate is tools/lg_a1b_census.py): "
+          f"crank r {CRANK_R}, reach {a.reach} mm, member O{MEMBER_D}, anchor O{ANCHOR_D}")
     for label, c in corners.items():
         tf = lgbf.corner_tf(c)
+        st = "fore" if label.startswith("fore") else "aft"
+        local = members(a.reach, a.az if a.az is not None else STRUT_AZ[st])
         for row, m in local.items():
             w = m.transform(np.asarray(tf)[:3, :4])
             k_v = (w ^ keep).volume()

@@ -16,20 +16,20 @@ execution: code
 
 ## Goal Capsule
 
-- **Objective.** Build the landing-gear thigh as a balanced couple, so the hip pin carries only the foot force (crash 258 lbf / 1,148 N instead of 3,221 lbf / 14.3 kN).
+- **Objective.** Build the landing-gear thigh as a balanced couple, so the hip pin carries only the foot force (crash 258 lbf (1,148 N) instead of 3,221 lbf (14.3 kN)).
 - **Owner decisions.** Option A selected 2026-10-27 (LG-LOADPATH closed). Ductile fuse is 6061-T6 in axial tension (2026-10-26). Material preference order applies (`feedback_material_preference_order`).
 - **Stop condition.** If no crank azimuth pair keeps both bosses inside the bay outline (U1), stop and return to the owner with the best near-miss before changing any geometry.
 
 ## Requirements
 
 - R1. Each row has one member on each side of the hip pin, with antiparallel lines of action, so the row forms a pure couple.
-- R2. The ductile row is a pair of straight 6061-T6 tension fuses: Ø4.60 mm, gauge length 33.9 mm, 4,593 N plateau per link [REF-MAT-007].
+- R2. The ductile row is a pair of straight 6061-T6 tension fuses: Ø0.181 in (4.60 mm), gauge length 1.33 in (33.9 mm), 1,033 lbf (4,593 N) plateau per link [REF-MAT-007].
 - R3. The spring row is a pair of opposed bowed spring wires, re-sized to the 10 mm crank.
-- R4. Crank radius 10 mm. Hip pin is 6061-T6 Ø4 mm in double shear, with 6061-T6 clevis ear liners 2 × 1.5 mm.
-- R5. Every printed bearing face that carries a wire or link end has a 6061 spreader. Per study §7, spreaders go one size up from Ø13 × 1.5 mm.
+- R4. Crank radius 0.39 in (10 mm). Hip pin is 6061-T6 Ø0.157 in (4 mm) in double shear, with 6061-T6 clevis ear liners 2 × 0.059 in (2 × 1.5 mm).
+- R5. Every printed bearing face that carries a wire or link end has a 6061 spreader. Per study §7, spreaders go one size up from Ø0.51 × 0.059 in (Ø13 × 1.5 mm).
 - R6. Both boss clusters stay inside the canonical bay outline at every corner, at rest and at full flex. This is the gate.
 - R7. Failure hierarchy holds: fuse < leg < bay, checked by `tools/lg_bellcrank_fbd.py` at the as-built geometry.
-- R8. The mass ledger and BOM reflect the change (about +32 g per aircraft before the tension-fuse change, recomputed).
+- R8. The mass ledger and BOM reflect the change (about +0.07 lbm (+32 g) per aircraft before the tension-fuse change, recomputed).
 
 ## Implementation Units
 
@@ -64,7 +64,7 @@ execution: code
 | --- | --- | --- | --- | --- |
 | CF-PETG printed [REF-MAT-001] | 47 MPa (bulk compression; no cited bearing) | 30.5 mm | 125 g | **not viable** for the anchors |
 | 6061-T6 [REF-MAT-007] | 276 MPa | 5.2 mm (stock 2 x 1/8 in cheeks) | 44 g (54 g stock) | viable, fully cited |
-| CF plate, quasi-iso [REF-MAT-011] | 384 MPa proxy (compressive; units inferred) | 3.7 mm (stock 2 x 1/8 in cheeks) | 18 g (30 g stock) | lightest; allowable requires verification |
+| CF plate, quasi-iso [REF-MAT-011] | 384 MPa proxy (compressive; units confirmed 2026-10-27) | 3.7 mm (stock 2 x 1/8 in cheeks) | 18 g (30 g stock) | lightest; allowable requires verification |
 
 Printed CF-PETG stays as the non-structural liner/fairing only. Recommended: CF plate backbone (owner material order), with 6061-T6 as the fully cited fallback until the CF bearing coupon (LG-11) is run. NCAMP analog check [REF-MAT-012]: 3k plain-weave epoxy, quasi-isotropic single-shear bearing B-basis 448 MPa (180 °F wet) to 577 MPa (RTD), above the 384 MPa proxy; at 448 MPa the plate drops to 3.2 mm (1/8 in stock).
 
@@ -78,7 +78,7 @@ Printed CF-PETG stays as the non-structural liner/fairing only. Recommended: CF 
 
 - Bearing, quasi-isotropic single shear, 2 % offset [REF-MAT-013 Table 4-57]: 113.6 ksi (783 MPa) RTA B-basis; 80.3 ksi (554 MPa) 275 °F wet B-estimate (worst).
 - Anchor pin O4, 4,593 N x 1.25: required t = 2.6 mm at the worst value; 3.29 mm gives margin 1.27 (275 °F wet), 1.79 (room temperature).
-- This is the only option with published, units-printed, basis-value bearing data for a purchasable plate. Rock West [REF-MAT-011] has no units or bearing; the 3k-fabric NCAMP data [REF-MAT-012] is an analog only; McMaster's CF/PAEK sheet names no maker and is 2.2 mm maximum.
+- This is the only option with published, units-printed, basis-value bearing data for a purchasable plate. Rock West [REF-MAT-011] has no published bearing value; the 3k-fabric NCAMP data [REF-MAT-012] is an analog only; McMaster's CF/PAEK sheet names no maker and is 2.2 mm maximum.
 - Procurement conditions: (1) supplier certification that the RTL is made from the NCAMP-qualified TC1225/T700GC to the qualified consolidation process; (2) laminate density from the Toray datasheet for the mass ledger (not in REF-MAT-013); (3) quote and lead time (custom RTL; not stocked). Fallback if (1) cannot be had: 6061-T6 [REF-MAT-007], 2 x 1/8 in cheeks.
 
 ### Packaging gate against the published merged hull (2026-10-27)

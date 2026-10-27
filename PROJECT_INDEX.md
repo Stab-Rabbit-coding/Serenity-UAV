@@ -2936,7 +2936,7 @@ landing_gear_opening_fit.py — LG-10.1 -- locate and measure the landing-gear o
 landing_gear_r6_sizing.py — Serenity UAV -- Landing Gear Rev R6 sizing study (hip-pivot canonical leg). [build-tooling, landing-gear]
 landing_gear_wing_clearance.py — Verify the Rev R6 gear bay clears the wing structure it shares a station with. [build-tooling, landing-gear]
 lg_a1b_census.py — LG Option A1b 3-D census: rendered members + CF backbone vs hull, keep-outs, leg. [build-tooling]
-lg_a1b_packaging.py — LG Option A1b packaging gate (plan 2026-10-27-001 U1). [build-tooling]
+lg_a1b_packaging.py — LG Option A1b packaging SWEEP (plan 2026-10-27-001 U1) -- exploratory. [build-tooling]
 lg_bellcrank_fbd.py — Landing-gear bellcrank load path: free-body diagrams of three configurations. [build-tooling, security]
 lg_collar_integrity.py — Gate: the hull merge's landing-gear cuts keep every collar joint intact. [build-tooling]
 lg_corners.py — The landing-gear corner stations, read from their single source. [build-tooling]
