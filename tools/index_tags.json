@@ -11664,6 +11664,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Observer/observer_nose_envelope.json": {
+      "description": "JSON data (6 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Observer/scripts/gen_observer.py": {
       "description": "Deterministic UUID helpers",
       "tags": [
@@ -18776,6 +18784,13 @@
       ],
       "archived": false
     },
+    "tools/observer_board_envelope.py": {
+      "description": "observer_board_envelope.py -- the nose Observer board's real envelope on its",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/observer_nose_fit.py": {
       "description": "observer_nose_fit.py -- exact fit of the nose Observer board with its",
       "tags": [
@@ -22477,6 +22492,7 @@
       "avionics/kicad/Observer/mod_vera_trapezoid.py",
       "avionics/kicad/Observer/observer/TODO.md",
       "avionics/kicad/Observer/observer/WBS.md",
+      "avionics/kicad/Observer/observer_nose_envelope.json",
       "avionics/kicad/Observer/scripts/gen_observer.py",
       "avionics/kicad/Observer/scripts/gen_observer_bth060_footprint.py",
       "avionics/kicad/Observer/scripts/gen_observer_carrier_pcb.py",
@@ -23269,6 +23285,7 @@
       "avionics/kicad/Observer/mod_vera_trapezoid.py",
       "avionics/kicad/Observer/observer/TODO.md",
       "avionics/kicad/Observer/observer/WBS.md",
+      "avionics/kicad/Observer/observer_nose_envelope.json",
       "avionics/kicad/Observer/scripts/gen_observer.py",
       "avionics/kicad/Observer/scripts/gen_observer_bth060_footprint.py",
       "avionics/kicad/Observer/scripts/gen_observer_carrier_pcb.py",
@@ -23896,6 +23913,7 @@
       "tools/nozzle_linkage_check.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
+      "tools/observer_board_envelope.py",
       "tools/observer_nose_fit.py",
       "tools/open_mating_faces.py",
       "tools/placement_audit.py",
