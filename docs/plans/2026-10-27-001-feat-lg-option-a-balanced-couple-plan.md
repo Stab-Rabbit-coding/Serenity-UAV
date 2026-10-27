@@ -80,3 +80,11 @@ Printed CF-PETG stays as the non-structural liner/fairing only. Recommended: CF 
 - Anchor pin O4, 4,593 N x 1.25: required t = 2.6 mm at the worst value; 3.29 mm gives margin 1.27 (275 °F wet), 1.79 (room temperature).
 - This is the only option with published, units-printed, basis-value bearing data for a purchasable plate. Rock West [REF-MAT-011] has no units or bearing; the 3k-fabric NCAMP data [REF-MAT-012] is an analog only; McMaster's CF/PAEK sheet names no maker and is 2.2 mm maximum.
 - Procurement conditions: (1) supplier certification that the RTL is made from the NCAMP-qualified TC1225/T700GC to the qualified consolidation process; (2) laminate density from the Toray datasheet for the mass ledger (not in REF-MAT-013); (3) quote and lead time (custom RTL; not stocked). Fallback if (1) cannot be had: 6061-T6 [REF-MAT-007], 2 x 1/8 in cheeks.
+
+### Packaging gate against the published merged hull (2026-10-27)
+
+Re-run against `airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl` (wells cut, hull frame), hip region masked, keep-outs and swept leg included:
+
+- **Aft corners: PASS.** Strut az 154 deg, reach 55 mm: hull wall 0, swept leg 0, keep-outs 12 mm^3 (tilt bracket, to be cleared by anchor-boss shaping).
+- **Fore corners: blocked by real skin.** Inboard is blocked by TACCO CN2 and the chin shelf. Outboard-up clears every keep-out. At the reach the parts need (55-65 mm: fuse 54 mm, sleeve 64 mm) the members cross 240-400 mm^3 of the 2 mm flank skin, at leg-local X 16-21, Z 41-68 (the flank bulges outboard above the bay). Best found: az 65, reach 40, 99 mm^3, which is too short for the parts.
+- **Canonical resolution for owner decision:** QMx Sheet 5 and the Henning renders show the jack entering a rectangular **housing** on the hull flank. A local recessed housing in the skin above each fore bay (about 25 x 30 mm, carrying the backbone) clears the members and matches canon. It changes the cargo shell at two places and needs the merge tool to cut and reinforce it.
