@@ -250,7 +250,8 @@ INSTALLED: dict[str, tuple[int, Any]] = {
     "LED-WS2812C-NAC": (4, "pivot"),
     "INSERT-M3-WING": (8, SPAR_ST),
     "LG-SPRING-WIRE": (8, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
-    "LG-DUCTILE-WIRE": (0, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),   # retired 2026-10-27 (LG-LOADPATH-A1B)
+    # LG-DUCTILE-WIRE retired 2026-10-27 (LG-LOADPATH-A1B): Qty 0
+    "LG-DUCTILE-WIRE": (0, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
     # Option A1b balanced couple (plan 2026-10-27-001; tools/bom_edit_lg_a1b.py)
     "LG-A1B-FUSE": (8, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
     "LG-A1B-SLEEVE": (4, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
