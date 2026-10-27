@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import math
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -162,9 +163,10 @@ def hierarchy() -> bool:
     boss_cap = BEAR_PETG * (12 * 10 - 6 * 5)          # sizing tool's boss bearing area
     r = boss_cap / p_plateau
     ok_all &= r >= HIERARCHY_MIN
+    verdict = ("OK" if r >= HIERARCHY_MIN
+               else "MOUNT FAILS FIRST -- AUTOMATIC FAIL (grow the boss)")
     print(f"  both: bay wire-boss bearing vs ductile plateau {p_plateau:7.0f} vs "
-          f"{boss_cap:7.0f} N  ratio {r:5.2f} "
-          f"{'OK' if r >= HIERARCHY_MIN else 'MOUNT FAILS FIRST -- AUTOMATIC FAIL (grow the boss)'}")
+          f"{boss_cap:7.0f} N  ratio {r:5.2f} {verdict}")
     need = HIERARCHY_MIN * p_plateau / BEAR_PETG
     print(f"        -> boss bearing area needed {need:.0f} mm^2 (sizing area 90 mm^2)")
     print("   NOTE: bay/hull bearing uses the 70 MPa CF-PETG bearing allowable against "
@@ -175,11 +177,13 @@ def hierarchy() -> bool:
 
 def main() -> int:
     print("LG thigh variants at the 13.0 lbm design mass (impact allowables, see header)")
-    worst = {}
+    worst: dict[str, float] = {}
+    variants: list[tuple[str, Callable[..., list]]] = [
+        ("GROWN printed 17/22", grown), ("CF CORE 2x6 + 3 mm pins", cf_core),
+        ("CF CORE 2x6 + 4 mm pins", lambda x: cf_core(x, 4.0))]
     for name, m in cases().items():
         print(f"\n== {name}: hip moment {m / 1000:.1f} N*m ({m / 1000 * 8.851:.0f} lbf*in)")
-        for label, fn in (("GROWN printed 17/22", grown), ("CF CORE 2x6 + 3 mm pins", cf_core),
-                          ("CF CORE 2x6 + 4 mm pins", lambda x: cf_core(x, 4.0))):
+        for label, fn in variants:
             print(f"  {label}")
             for mode, dem, cap in fn(m):
                 mar = cap / dem

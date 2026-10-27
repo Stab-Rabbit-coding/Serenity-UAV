@@ -44,8 +44,7 @@ import merge_cargo_interior as mci  # noqa: E402
 
 BEARING_MIN_MM3 = 150.0     # hull under each bolt (same bar as generate_lg_bays.py)
 KEEP_D = 3.4 + 2 * 2.5      # O8.4 washer / nut keep-out
-# collar Y bands, aircraft datum R2 (R1 (-61.5, -53.5) / (121.0, 129.0))
-SPLICE = {"head/cargo": (244.2, 252.2), "cargo/middle": (426.7, 434.7)}
+SPLICE = {"head/cargo": (-61.5, -53.5), "cargo/middle": (121.0, 129.0)}  # collar Y bands
 SPLICE_TOL_MM3 = 1.0
 
 
@@ -55,9 +54,9 @@ def main() -> int:
     ap.add_argument("--against", default=os.path.join(
         REPO, "airframe", "stls", "fuselage", "cargo", "cargo_sect_shell24_2mm_repaired.stl"))
     a = ap.parse_args()
-    new = cbc.man(trimesh.load(a.merged, force="mesh"))
-    old = cbc.man(trimesh.load(a.against, force="mesh"))
-    src = trimesh.load(mci.BLENDER_SRC, process=False)
+    new = cbc.man(cbc.as_trimesh(trimesh.load(a.merged, force="mesh"), a.merged))
+    old = cbc.man(cbc.as_trimesh(trimesh.load(a.against, force="mesh"), a.against))
+    src = cbc.as_trimesh(trimesh.load(mci.BLENDER_SRC, process=False), mci.BLENDER_SRC)
     src.merge_vertices()
     env = cbc.man(mci.extract_envelope(mci.bake(src)))
     bad = False
@@ -80,9 +79,8 @@ def main() -> int:
         for u, v in mci.LG_CORNER_BOLTS.get(label, mci.lg_nominal_bolts()):
             k = mci.to_man(mci.axis_cylinder(org + ey * u + ez * v, ex, -30.0, 20.0, KEEP_D / 2))
             # bearing = hull below the flange, inside the washer / nut footprint
-            seat = mci.lg_skin_layer(env, org, ex, ey, ez, 80, 80, -80, 80,
-                                     -1.0, mci.BAY_PLATE_T)
-            under = (k ^ new) - seat
+            under = (k ^ new) - mci.lg_skin_layer(
+                env, org, ex, ey, ez, 80, 80, -80, 80, -1.0, mci.BAY_PLATE_T)
             ok = under.volume() >= BEARING_MIN_MM3
             bad |= not ok
             print(f"     {'OK  ' if ok else 'FAIL'} M3 ({u:+6.2f},{v:+6.2f}) bearing "
@@ -91,14 +89,13 @@ def main() -> int:
     collars = {"head/cargo": "head_cargo_splice_collar.stl",
                "cargo/middle": "cargo_middle_splice_collar.stl"}
     for name, (y0, y1) in SPLICE.items():
-        # R2: X -200..200 spans the whole hull (R1 band was X -370..30)
-        band = Manifold.cube([400.0, y1 - y0, 400.0]).translate([-200.0, y0, -100.0])
+        band = Manifold.cube([400.0, y1 - y0, 400.0]).translate([-370.0, y0, -100.0])
         diff = ((new ^ band) - (old ^ band)) + ((old ^ band) - (new ^ band))
         # the band also holds the gear-bay pockets on the flank, which are not
         # splice-collar material: fail only where the change reaches the collar
         # itself or its bond face (collar mesh grown 2 mm)
-        col = cbc.man(trimesh.load(os.path.join(REPO, "airframe", "stls", "fuselage",
-                                                collars[name]), force="mesh"))
+        col_path = os.path.join(REPO, "airframe", "stls", "fuselage", collars[name])
+        col = cbc.man(cbc.as_trimesh(trimesh.load(col_path, force="mesh"), col_path))
         grown = col.minkowski_sum(Manifold.sphere(2.0, 8))
         hit = (diff ^ grown).volume()
         ok = hit <= SPLICE_TOL_MM3

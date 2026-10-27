@@ -65,6 +65,7 @@ import argparse
 import json
 import os
 import sys
+from typing import Any
 
 import numpy as np
 import trimesh
@@ -224,7 +225,7 @@ CLUSTER = ("boss carrier", "wire bosses", "wire seats", "retention pads",
 
 
 def option_b2(P: dict, corners: dict, out: str | None) -> dict:
-    res = {}
+    res: dict[str, Any] = {}
     for cn in lgbf.CORNER_NAMES:
         side = lgbf.SIDE[cn]
         wing = P[f"wing {side}"]["m"]
@@ -347,7 +348,7 @@ def option_c(P: dict, corners: dict, out: str | None) -> dict:
             b = bolts[i]
             for dz in np.arange(1.0, 50.0, 0.5):
                 if ((b.translate([0, 0, -dz])) ^ rel).volume() <= 0.05:
-                    zb_new = BOLT_ZB[1] - dz
+                    zb_new = float(BOLT_ZB[1] - dz)
                     reloc.append(dict(bolt=i, drop_mm=float(dz), zb_new=float(zb_new),
                                       flange_centre_y=round(aper_half(zb_new) + FLANGE / 2, 1)))
                     kept_levers.append(zb_new - BOLT_ZB[0])
@@ -358,7 +359,7 @@ def option_c(P: dict, corners: dict, out: str | None) -> dict:
         grp = bolt_group(levers) if levers else {}
         keep_after = Manifold.batch_boolean(
             [b for i, b in enumerate(bolts) if i not in killed] +
-            [bolts[r["bolt"]].translate([0, 0, -r["drop_mm"]]) for r in reloc], OpType.Add)
+            [bolts[int(r["bolt"])].translate([0, 0, -r["drop_mm"]]) for r in reloc], OpType.Add)
         LOCAL[name] = dict(bay=bay_after, keep=keep_after)
         res[name] = dict(bolts_killed=killed, relocated=reloc,
                          bay_removed_mm3=round(removed, 0),
@@ -427,7 +428,7 @@ def main() -> int:
     P = cbc.build()
     corners = lgbf.parse_corners(lgbf.SCAD)
     only = set(a.only or ("A", "B", "C"))
-    S = {}
+    S: dict[str, Any] = {}
     if only & {"A", "B", "C"}:
         S["C"] = option_c(P, corners, a.export)
     if "A" in only:

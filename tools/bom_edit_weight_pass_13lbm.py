@@ -126,6 +126,8 @@ def main() -> int:
     if not n_c:
         print("[bom_edit] already applied -- no change")
         return 0
+    if fields is None:
+        sys.exit("[bom_edit] CSV has no header row -- nothing written")
     buf = io.StringIO()
     w = csv.DictWriter(buf, fieldnames=fields, lineterminator="\r\n")  # file is CRLF
     w.writeheader()

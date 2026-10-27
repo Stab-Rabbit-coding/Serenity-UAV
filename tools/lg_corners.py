@@ -40,7 +40,7 @@ def corners(path: Path = SCAD) -> dict[str, list[float]]:
 
 def table() -> list[tuple[str, float, float, float, float]]:
     """[(name, hip_x, hip_y, hip_z, azimuth)] -- the legacy tuple layout."""
-    return [(n, *c[:4]) for n, c in corners().items()]
+    return [(n, c[0], c[1], c[2], c[3]) for n, c in corners().items()]
 
 
 if __name__ == "__main__":

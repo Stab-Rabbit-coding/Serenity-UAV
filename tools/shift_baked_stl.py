@@ -33,6 +33,14 @@ MARKER = hd.FRAME_MARKER  # single source (aircraft datum R2, 2026-10-19)
 REC = np.dtype([("n", "<f4", 3), ("v", "<f4", (3, 3)), ("a", "<u2")])
 
 
+def _mesh(path: str) -> trimesh.Trimesh:
+    """Load a file that must be one Trimesh; raise on a Scene or Path."""
+    geom = trimesh.load(path, force="mesh")
+    if not isinstance(geom, trimesh.Trimesh):
+        raise TypeError(f"{path}: not a single mesh")
+    return geom
+
+
 def shift(path: str, dx: float) -> None:
     raw = open(path, "rb").read()
     header = raw[:80]
@@ -48,8 +56,8 @@ def shift(path: str, dx: float) -> None:
         fh.write(header)
         fh.write(np.uint32(n).tobytes())
         fh.write(recs.tobytes())
-    was = trimesh.load(path, force="mesh").is_watertight
-    m = trimesh.load(tmp, force="mesh")
+    was = _mesh(path).is_watertight
+    m = _mesh(tmp)
     if was and not m.is_watertight:            # refuse only if the shift made it worse
         os.unlink(tmp)
         sys.exit(f"[shift] {path}: result not watertight -- original kept")

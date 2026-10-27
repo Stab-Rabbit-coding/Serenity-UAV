@@ -58,8 +58,9 @@ def assembly_identity_stls() -> set[str]:
 
 def main(argv: list[str]) -> int:
     asm = assembly_identity_stls()
-    stls = {"r1_marker": [], "r2_marker": [], "assembly_placed": [], "envelope_candidate": [],
-            "part_local": []}
+    stls: dict[str, list[str]] = {
+        "r1_marker": [], "r2_marker": [], "assembly_placed": [], "envelope_candidate": [],
+        "part_local": []}
     for p in sorted((REPO / "airframe").rglob("*.stl")):
         rel = p.relative_to(REPO).as_posix()
         if any(s in rel for s in SKIP_DIRS):

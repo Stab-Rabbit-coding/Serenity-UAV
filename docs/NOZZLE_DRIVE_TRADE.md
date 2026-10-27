@@ -2,6 +2,9 @@
 
 > **Current decision:** servo drive scheduled on measured tilt — see
 > [DECISION AMENDMENT — servo drive (2026-09-28)](#decision-amendment--servo-drive-2026-09-28).
+>
+> **Fallback:** a one-piece fixed open nozzle (50 mm baseline) is kept for weight cutting — see
+> [`FIXED_NOZZLE_FALLBACK.md`](FIXED_NOZZLE_FALLBACK.md).
 
 > *"It's the tilt-nozzle. Passive. Elegant. Right up until a gear's hanging off
 > the side of the ship." — design review, this session.*

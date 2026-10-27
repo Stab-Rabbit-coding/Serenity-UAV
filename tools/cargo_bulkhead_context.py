@@ -117,6 +117,13 @@ def tri(m: Manifold) -> trimesh.Trimesh:
                            np.asarray(g.tri_verts), process=False)
 
 
+def as_trimesh(geom: object, source: str) -> trimesh.Trimesh:
+    """Narrow a trimesh.load() result to one Trimesh; raise on a Scene or Path."""
+    if not isinstance(geom, trimesh.Trimesh):
+        raise TypeError(f"{source}: not a single mesh")
+    return geom
+
+
 def load(rel: str) -> trimesh.Trimesh:
     """Load a hull-frame STL under airframe/stls."""
     m = trimesh.load(os.path.join(STL, rel), force="mesh")
