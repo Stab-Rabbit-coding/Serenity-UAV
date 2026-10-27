@@ -2649,6 +2649,30 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/head/head_cell_catch.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head/head_cell_rail.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head/head_cell_sled.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/head_cargo_splice_collar.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 head_cargo_splice_collar",
       "tags": [
@@ -18348,6 +18372,13 @@
       ],
       "archived": false
     },
+    "tools/gen_head_cell_rail.py": {
+      "description": "gen_head_cell_rail.py -- generate the head-cell rail (head piece), stop,",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/gen_todo_from_wbs.py": {
       "description": "Regenerate a ``TODO.md`` (open work only) from its owning ``WBS.md``.",
       "tags": [
@@ -20259,6 +20290,9 @@
       "airframe/stls/fuselage/dorsal_antenna_fin.stl",
       "airframe/stls/fuselage/generate_conforming_collars.py",
       "airframe/stls/fuselage/generate_wing_root_flange.py",
+      "airframe/stls/fuselage/head/head_cell_catch.stl",
+      "airframe/stls/fuselage/head/head_cell_rail.stl",
+      "airframe/stls/fuselage/head/head_cell_sled.stl",
       "airframe/stls/fuselage/head_cargo_splice_collar.stl",
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
@@ -20574,6 +20608,9 @@
       "airframe/stls/fuselage/cargo/void_former_cargo_node_bay.stl",
       "airframe/stls/fuselage/cargo_middle_splice_collar.stl",
       "airframe/stls/fuselage/dorsal_antenna_fin.stl",
+      "airframe/stls/fuselage/head/head_cell_catch.stl",
+      "airframe/stls/fuselage/head/head_cell_rail.stl",
+      "airframe/stls/fuselage/head/head_cell_sled.stl",
       "airframe/stls/fuselage/head_cargo_splice_collar.stl",
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
@@ -23769,6 +23806,7 @@
       "tools/flight_envelope_endurance.py",
       "tools/frame_inventory.py",
       "tools/gen_cargo_void_formers.py",
+      "tools/gen_head_cell_rail.py",
       "tools/gen_todo_from_wbs.py",
       "tools/generate_lg_bays.py",
       "tools/head_layout_fit.py",

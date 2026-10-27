@@ -142,7 +142,7 @@ BAND_ZC = 187.0
 BAND_Z0, BAND_Z1 = BAND_ZC - BAND_H / 2, BAND_ZC + BAND_H / 2  # 168.75 .. 205.25
 # Owner 2026-10-27: head cell moved aft so CN1 + FC1 fit ahead of it; stop is
 # aft of Bay A's cable zone (Y 189) + 4 mm stop plate.  Band clear from Y 150.
-STOP_Y = 193.0
+STOP_Y = 199.0  # +6 mm (2026-10-27): catch leaf + sled tongue clear the Bay A cable zone
 SLED_FLOOR_T = 1.0  # sled pan under the cell, inside the band
 SLED_LIP = 2.0  # nose / tail lips
 CELL_Y0 = STOP_Y + SLED_LIP  # 150.0
@@ -150,10 +150,6 @@ CELL_Y1 = CELL_Y0 + CELL_L  # 266.0
 # Aft limit of the band: the cell is lifted into the band through the open
 # clamshell doors and must clear the aft nodes N2/N4 (Y >= 405.2).
 BAND_Y1 = clf.N_AFT_Y0 - GAP_MM  # 402.2
-# Cargo cell rides the same band, aft-justified: leaves a lead gap between
-# the cells for the head cell's aft-exiting leads.
-CARGO_CELL_Y1 = BAND_Y1
-CARGO_CELL_Y0 = CARGO_CELL_Y1 - CELL_L  # 286.2
 # Rail = the cradle's inverted U carried forward (KTD6) with inward lower lips
 # the sled rides on: ceiling over the band, side walls, 4 mm lips under it.
 RAIL_T = 2.4
@@ -271,42 +267,35 @@ def layout():
     L["head cell"] = dict(
         solid=box(-CELL_W / 2, CELL_W / 2, CELL_Y0, CELL_Y1, BAND_ZC - CELL_H / 2,
                   BAND_ZC + CELL_H / 2),
-        mates=("sled", "rail (head)"),
+        mates=("sled",),
         gap=1.0,  # static, enclosed by the rail; the rail carries the skin clearance
     )
-    L["sled"] = dict(
-        solid=box(-BAND_W / 2 + 1.0, BAND_W / 2 - 1.0, STOP_Y, CELL_Y1 + SLED_LIP,
-                  BAND_Z0, BAND_Z0 + SLED_FLOOR_T),
-        mates=("head cell", "rail (head)", "catch"),
-        gap=0.0,
-    )
-    # --- rail (head piece), stop, catch, saddles ----------------------------
-    L["rail (head)"] = dict(solid=rail_solid(RAIL_Y0, RAIL_HEAD_Y1), mates=("stop", "catch"),
+    # Rail, stop, sled and catch are the GENERATED parts (tools/gen_head_cell_rail.py,
+    # installed-position R2 STLs).  The catch is NOT a mate of the cell: the
+    # gate proves the leaf and tooth stay out of the cell.
+    L["sled"] = dict(solid=_part("head_cell_sled.stl"),
+                     mates=("head cell", "rail (head)", "catch"), gap=0.0)
+    L["rail (head)"] = dict(solid=_part("head_cell_rail.stl"), mates=("catch", "sled"),
                             skin_seat=True)
-    L["stop"] = dict(
-        solid=box(-BAND_W / 2, BAND_W / 2, RAIL_Y0, STOP_Y, BAND_Z0 - RAIL_T, BAND_Z1),
-        mates=("rail (head)", "catch", "sled"),
-        skin_seat=True,  # bonded to the head floor and the rail lips
-    )
-    L["catch"] = dict(
-        solid=box(-CATCH_W / 2, CATCH_W / 2, STOP_Y, STOP_Y + CATCH_L,
-                  BAND_Z1 - CATCH_T - CATCH_TOOTH_H, BAND_Z1),
-        mates=("stop", "rail (head)", "head cell", "sled"),
-        gap=0.0,
-        note="flexure inside the band ceiling gap; tooth into the sled nose",
-    )
-    for y in SADDLE_Y:
-        L[f"saddle Y{y:.0f}"] = dict(solid=saddle_solid(y), skin_seat=True,
-                                     mates=("rail (head)",))
-    # --- trunk channel: Bay A cable zone -> over the carrier's ceiling
-    # gap is not available, so the trunk runs aft from the carrier's aft end
-    # on the centreline above the rail ceiling and through the collar.
+    L["catch"] = dict(solid=_part("head_cell_catch.stl"), mates=("rail (head)", "sled"),
+                      gap=0.0, note="leaf on the stop's forward face; tooth into the sled tongue")
+    # --- trunk channel: Bay A cable zone -> aft on the centreline through the
+    # collar.  It rides HIGH over the catch leaf root (top Z 217, Y < STOP_Y + 6)
+    # and drops to the rail-ceiling level aft of it, where the roof falls toward
+    # the collar.
     hw = TRUNK_W / 2
-    tz0 = BAND_Z1 + RAIL_T + GAP_MM
+    tz_low = BAND_Z1 + RAIL_T + GAP_MM
+    tz_high = BAND_ZC - 4.0 + 34.0 + 1.0  # gen_head_cell_rail LEAF top + 1 mm
+    y_step = STOP_Y + 6.0
+    L["trunk: over catch"] = dict(
+        solid=box(-hw, hw, BAYA_Y0 + clf.NODE_L + clf.NODE_CABLE - 2.0, y_step + 2.0,
+                  tz_high, tz_high + TRUNK_H),
+        mates=("Bay A cable zone", "trunk: aft run"),
+        gap=1.0,
+    )
     L["trunk: aft run"] = dict(
-        solid=box(-hw, hw, BAYA_Y0 + clf.NODE_L + clf.NODE_CABLE - 2.0, RAIL_HEAD_Y1 + 2.0,
-                  tz0, tz0 + TRUNK_H),
-        mates=("Bay A cable zone",),
+        solid=box(-hw, hw, y_step - 2.0, RAIL_HEAD_Y1 + 2.0, tz_low, tz_low + TRUNK_H),
+        mates=("trunk: over catch",),
         gap=1.0,
     )
     L["trunk: Observer to Bay A"] = dict(
@@ -316,6 +305,10 @@ def layout():
         gap=1.0,
     )
     return L, dict(cam=cam, tof=tof, las=las)
+
+
+def _part(name):
+    return trimesh.load(os.path.join(REPO, "airframe", "stls", "fuselage", "head", name))
 
 
 def rail_solid(y0, y1):
@@ -466,8 +459,8 @@ def report(write_scad=False):
             print(f"  {k:40s} {v:9.0f}  FOUL")
     if not band_bad:
         print("  clear of the head shell, collar, cargo shell and every cargo envelope")
-    print(f"\nhead cell Y{CELL_Y0:.1f}..{CELL_Y1:.1f}; cargo cell Y{CARGO_CELL_Y0:.1f}.."
-          f"{CARGO_CELL_Y1:.1f}; lead gap {CARGO_CELL_Y0 - CELL_Y1 - SLED_LIP:.1f} mm")
+    print(f"\nhead cell Y{CELL_Y0:.1f}..{CELL_Y1:.1f} (stop Y{STOP_Y:.1f}); second cell is in"
+          " the middle/rear sections (docs/plans/2026-10-27-001-feat-middle-rear-layout-plan.md)")
     ok = not (fails or over or los_bad or band_bad)
     print(f"\nRESULT: {'PASS' if ok else 'FAIL'} ({fails} shell, {over} pair, "
           f"{los_bad} line-of-sight, {band_bad} band)")
@@ -479,7 +472,7 @@ def report(write_scad=False):
 SCAD_KEYS = ("BAND_W", "BAND_H", "BAND_ZC", "BAND_Z0", "BAND_Z1", "STOP_Y", "SLED_FLOOR_T",
              "SLED_LIP", "CELL_L", "CELL_W", "CELL_H", "CELL_Y0", "CELL_Y1", "RAIL_T",
              "RAIL_LIP", "RAIL_Y0", "RAIL_HEAD_Y1", "CATCH_L", "CATCH_W", "CATCH_T",
-             "CATCH_TOOTH_H", "SADDLE_T", "CARGO_CELL_Y0", "CARGO_CELL_Y1", "BAND_Y1",
+             "CATCH_TOOTH_H", "SADDLE_T", "BAND_Y1",
              "OBS_Y0", "OBS_L", "BAYA_Y0", "BAYA_Z0", "BAYA_X_IN", "OBS_W_FWD", "OBS_W_AFT",
              "OBS_BOARD_Z0", "OBS_STANDOFF_D")
 
