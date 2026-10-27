@@ -16,7 +16,7 @@ Output tree (relative to this script):
     structural/     CF rods / tubes / bar / plate, PTFE sleeve
     avionics/       PocketBeagle2, Pilot/B-2, XCVR-49MHZ-2, Flight Engineer PDB, microSD
     power/          LiPo packs, automotive fuses, Bourns shunt
-    cargo/          N20 winch motor, HX711, DRV8833
+    cargo/          N20 winch motor, ADS1231 load-cell ADC board, DRV8833
     gears/          M=1.0 sector, pinion, bevel pair, crown (resin-print or SDP-SI)
     hardware/       hinge pins, heat-set inserts, screws, PTFE sleeve, cam straps
     lighting/       WS2812C-2020 SMD nav LED
@@ -551,13 +551,17 @@ def gen_n20_motor():
     return _cat(gearbox, shaft)
 
 
-def gen_hx711():
+def gen_lc_adc():
     """
-    HX711 24-bit load-cell ADC breakout module.
-    PCB: 24 × 18 × 4 mm (populated).
-    BOM: HX711-LC (×1 cargo tension monitoring).
+    Load-cell ADC sense board: TI ADS1231IDR (SOIC-16) plus support passives
+    and a 4-pin JST-GH header, on a small custom PCB.
+    Envelope: 22 × 14 × 5 mm.  This is an allowance, not a layout: no board
+    outline exists yet (WBS CARGO-LC-01).  Replace with the real outline when
+    the PCB is drawn.
+    BOM: LC-ADC (×1 cargo line-tension monitoring).
+    Ref [3]: REFERENCES.md REF-SENSOR-063 (ADS1231, TI SBAS414D).
     """
-    return _box(24.0, 18.0, 4.0)
+    return _box(22.0, 14.0, 5.0)
 
 
 def gen_drv8833():
@@ -1260,8 +1264,8 @@ def gen_void_cargo_bay():
 
     The Observer cargo handling system occupies the belly of the cargo
     section.  Approximate clear volume: 120 × 150 × 80 mm.  The cargo
-    door opens in the −Z (ventral) direction; the N20 winch motor, HX711
-    load-cell ADC, and hook assembly must clear this pocket.
+    door opens in the −Z (ventral) direction; the N20 winch motor, ADS1231
+    load-cell ADC board, and hook assembly must clear this pocket.
 
     BOM:  VOID-CARGO-BAY (×1)
     Ref [2]: CLAUDE.md cargo section description; Observer cargo system.
@@ -1585,11 +1589,11 @@ _COMPONENTS = [
         "N20 300 RPM gear motor — cargo winch (×1)",
     ),
     (
-        gen_hx711,
+        gen_lc_adc,
         "cargo",
-        "HX711_loadcell_ADC_breakout.stl",
-        "HX711-LC",
-        "HX711 24-bit load-cell ADC module (×1)",
+        "LC_ADC_ADS1231_board.stl",
+        "LC-ADC",
+        "ADS1231 24-bit load-cell ADC sense board 22×14×5 mm allowance (×1)",
     ),
     (
         gen_drv8833,

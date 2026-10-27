@@ -49,7 +49,7 @@ comes from the PCB roll-up.
 ### Phase 1 findings (2026-09-28, from on-file datasheets)
 
 **MCU: TI MSPM0G351x-Q1, VQFN-48 RGZ.**
-- Source: `avionics/datasheets/mspm0g3518-q1.pdf`, TI SLASFA6B, Table 5-1.
+- Source: `avionics/datasheets/ti/mspm0g3518-q1.pdf`, TI SLASFA6B, Table 5-1.
 - The RGZ-48 package gives 1 CAN-FD, 6 UART, 3 I²C, 2 SPI, and 44 GPIO. The G351x also has an
   AES-256 accelerator, secure key storage, and a TRNG (§1).
 - Estimated signal count: about 30 lines. That covers SWD, CAN-FD, RS-485 (TX/RX/DE), the SiK

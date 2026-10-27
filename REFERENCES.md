@@ -136,6 +136,8 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
 - [Part XII-B — Connector Specifications](#part-xii-b--connector-specifications)
     - [REF-CONN-001: Samtec TSM series — 0.100in surface-mount terminal strip product data](#ref-conn-001-samtec-tsm-series--0100in-surface-mount-terminal-strip-product-data)
     - [REF-CONN-002: Pixhawk DS-009 — Pixhawk Connector Standard](#ref-conn-002-pixhawk-ds-009--pixhawk-connector-standard)
+    - [REF-CONN-003: JST GH series — 1.25 mm pitch wire-to-board connector (eGH)](#ref-conn-003-jst-gh-series--125-mm-pitch-wire-to-board-connector-egh)
+    - [REF-FAB-001: Sunstone Circuits (ASC Sunstone) — PCB fabrication capabilities and PCB Data Checklist](#ref-fab-001-sunstone-circuits-asc-sunstone--pcb-fabrication-capabilities-and-pcb-data-checklist)
     - [REF-SENSOR-041: BeagleBoard.org PocketBeagle 2 — System Reference Manual (mechanical: board and header dimensions)](#ref-sensor-041-beagleboardorg-pocketbeagle-2--system-reference-manual-mechanical-board-and-header-dimensions)
     - [REF-SENSOR-042: Samtec SSM / SSW / TSW / TSM — .100 in socket and terminal strips (footprint, drawing, qualification)](#ref-sensor-042-samtec-ssm--ssw--tsw--tsm--100-in-socket-and-terminal-strips-footprint-drawing-qualification)
     - [REF-SENSOR-043: Murata BLM15EX331SN1 — 0402 chip ferrite bead specification JENF243A-0023M-01](#ref-sensor-043-murata-blm15ex331sn1--0402-chip-ferrite-bead-specification-jenf243a-0023m-01)
@@ -148,6 +150,17 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-050: Texas Instruments SPRUIV7C — AM62x Processors Technical Reference Manual](#ref-sensor-050-texas-instruments-spruiv7c--am62x-processors-technical-reference-manual)
     - [REF-SENSOR-051: Texas Instruments SLASEX5C — MSPM0L1105, MSPM0L1106 data sheet](#ref-sensor-051-texas-instruments-slasex5c--mspm0l1105-mspm0l1106-data-sheet)
     - [REF-SENSOR-052: Texas Instruments SLAU847F — MSPM0 L-Series 32-MHz Microcontrollers Technical Reference Manual](#ref-sensor-052-texas-instruments-slau847f--mspm0-l-series-32-mhz-microcontrollers-technical-reference-manual)
+    - [REF-SENSOR-053: Texas Instruments SLVSFW5D — ESD2CAN24-Q1 / ESD2CANFD24-Q1 / ESD2CANXL24-Q1 24 V 2-channel ESD protection diode](#ref-sensor-053-texas-instruments-slvsfw5d--esd2can24-q1--esd2canfd24-q1--esd2canxl24-q1-24-v-2-channel-esd-protection-diode)
+    - [REF-SENSOR-054: Bourns CDSOT23-SM712 — surface mount TVS diode (asymmetric 7 V / 12 V, RS-485)](#ref-sensor-054-bourns-cdsot23-sm712--surface-mount-tvs-diode-asymmetric-7-v--12-v-rs-485)
+    - [REF-SENSOR-055: Bourns SMAJ series — 400 W surface mount transient voltage suppressor diodes](#ref-sensor-055-bourns-smaj-series--400-w-surface-mount-transient-voltage-suppressor-diodes)
+    - [REF-SENSOR-056: ASIX AX88772E — USB 2.0 to 10/100 Fast Ethernet controller data sheet v1.03](#ref-sensor-056-asix-ax88772e--usb-20-to-10100-fast-ethernet-controller-data-sheet-v103)
+    - [REF-SENSOR-057: ASIX AX88772E USB2.0 to Fast Ethernet Application Design Note, Revision 1.10](#ref-sensor-057-asix-ax88772e-usb20-to-fast-ethernet-application-design-note-revision-110)
+    - [REF-SENSOR-058: ASIX AX88772E Demo Board schematic V1.01](#ref-sensor-058-asix-ax88772e-demo-board-schematic-v101)
+    - [REF-SENSOR-059: ECS Inc. ECX-32 SMD crystal data sheet](#ref-sensor-059-ecs-inc-ecx-32-smd-crystal-data-sheet)
+    - [REF-SENSOR-060: ASIX AX88772E / AX88772D demo board BOM (2025-11-28)](#ref-sensor-060-asix-ax88772e--ax88772d-demo-board-bom-2025-11-28)
+    - [REF-SENSOR-061: YAGEO (Pulse Electronics) TC1G00 PulseChip LAN transformer, TC002.C (10/25)](#ref-sensor-061-yageo-pulse-electronics-tc1g00-pulsechip-lan-transformer-tc002c-1025)
+    - [REF-SENSOR-062: Pilot passive components: YAGEO MLCC and chip resistors, Taiyo Yuden, Holy Stone, Murata data sheets](#ref-sensor-062-pilot-passive-components-yageo-mlcc-and-chip-resistors-taiyo-yuden-holy-stone-murata-data-sheets)
+    - [REF-SENSOR-063: Texas Instruments ADS1231 — 24-bit ADC for bridge sensors (SBAS414D)](#ref-sensor-063-texas-instruments-ads1231--24-bit-adc-for-bridge-sensors-sbas414d)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -977,7 +990,8 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 | §5 | Classification of ESD generators | Contact discharge ±8 kV (Level 4), air discharge ±15 kV (Level 4) at all field connectors |
 | §8 | Test levels | Level 4 is the highest defined test level; selected as design target for the 500 W/m² hostile EMI environment [REF-NIST-002 §6.2.5] |
 
-**Applied to:** TVS arrays (PRTR5V0U2X) at all JST-GH field connectors on Pilot and XO;
+**Applied to:** TVS arrays at all JST-GH field connectors on Pilot (ESD2CAN24-Q1 on CAN, CDSOT23-SM712
+on RS-485 since 2026-10-18) and XO (PRTR5V0U2X, pending the fleet sourcing audit);
 shielded Flight Engineer enclosure provides ESD isolation for PDB connectors.
 
 **Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`
@@ -1023,8 +1037,9 @@ shielded Flight Engineer enclosure provides ESD isolation for PDB connectors.
 | Annex A | Combination wave generator | Defines the 1.2/50 µs (voltage) / 8/20 µs (current) surge waveform |
 
 **Applied to:** ADM2795EBRWZ RS-485 transceiver (rated ±42 V bus fault — exceeds IEC 61000-4-5
-Level 3 ±2 kV CM surge on bus); SMBJ33CA TVS (D1) on Flight Engineer VBAT line; PRTR5V0U2X TVS
-arrays at field connectors on Pilot and XO.
+Level 3 ±2 kV CM surge on bus); SMBJ33CA TVS (D1) on Flight Engineer VBAT line; TVS arrays at
+field connectors on Pilot (ESD2CAN24-Q1 / CDSOT23-SM712, both rated to IEC 61000-4-5 surge per
+REF-SENSOR-053 / REF-SENSOR-054) and XO (PRTR5V0U2X).
 
 **Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`
 
@@ -2009,7 +2024,7 @@ synthesis that a non-TI MCU (e.g. RP2350) would require.
 | **Official product page** | <https://www.ti.com/product/MSPM0G3519-Q1>, <https://www.ti.com/product/MSPM0G3518-Q1> |
 | **Datasheet** | SLASFA6B, *MSPM0G351x-Q1 Automotive Mixed-Signal Microcontrollers With CAN-FD Interface*, Nov 2024, rev. Oct 2025 |
 | **Datasheet URL** | <https://www.ti.com/lit/ds/symlink/mspm0g3519-q1.pdf> |
-| **Local copy** | `avionics/datasheets/mspm0g3518-q1.pdf` |
+| **Local copy** | `avionics/datasheets/ti/mspm0g3518-q1.pdf` |
 | **Lifecycle status** | ACTIVE / PRODUCTION DATA |
 
 **Specifications applied in this design:**
@@ -2048,7 +2063,7 @@ REF-SENSOR-004 (MSPM0G3507) at the 2026-08-03 retarget — `MSPM0G3519-Q1` in RG
 |---|---|
 | **Manufacturer** | Texas Instruments |
 | **Documents** | SLAAE76E, SLAAET8A, SLAAE29A, SLAU846E, SLAZ742G |
-| **Local copies** | `avionics/datasheets/slaae76e.pdf`, `slaaet8a.pdf`, `slaae29a.pdf`, `slau846e.pdf`, `slaz742g.pdf` |
+| **Local copies** | `avionics/datasheets/ti/slaae76e.pdf`, `slaaet8a.pdf`, `slaae29a.pdf`, `slau846e.pdf`, `slaz742g.pdf` |
 
 | Designation | Title | URL | Sections applied |
 |---|---|---|---|
@@ -2078,7 +2093,7 @@ and TRM applicability must be confirmed against TI before firmware sign-off — 
 | **Product** | SLB 9672AU2.0 FW16.xx (OPTIGA TPM 2.0) |
 | **Datasheet** | *OPTIGA TPM SLB9672 TPM 2.0 FW16.xx Datasheet*, rev. 1.3, 2024-11-18 |
 | **Datasheet URL** | <https://www.infineon.com/assets/row/public/documents/30/49/infineon-slb9672-tpm20-spi-fw16.xx-ds-rev1-3-2024-11-18-datasheet-en.pdf> |
-| **Local copy** | `avionics/datasheets/slb9672.pdf` |
+| **Local copy** | `avionics/datasheets/infineon/slb9672.pdf` |
 
 **Specifications applied in this design:**
 
@@ -2162,7 +2177,7 @@ to shielded JST-GH CAN-FD connector.
 | **Product** | AK7455 Zero-Latency Angle Sensor IC |
 | **Official product page** | <https://www.akm.com/global/en/products/rotation-angle-sensor/ak7455/> |
 | **Announcement** | <https://www.akm.com/us/en/about-us/news/2022/20220509-ak7455/> ("14-bit magnetic rotation angle sensor … that supports off-axis configuration") |
-| **Datasheet** | Doc **200800064-E-00** (2020/09), 68 pp — archived in repo at `avionics/datasheets/ak7455-en-datasheet-myakm.pdf` (AKM gates the web download behind a form) |
+| **Datasheet** | Doc **200800064-E-00** (2020/09), 68 pp — archived in repo at `avionics/datasheets/akm/ak7455-en-datasheet-myakm.pdf` (AKM gates the web download behind a form) |
 | **Note** | Selected for the wing/nacelle tilt-angle encoder (`SKIPPER-TILT-ENC-PCB`) because it explicitly supports the **Off-Axis (side-of-shaft)** configuration required by the through-shaft tilt-spar, and adds anomaly-magnetic-field detection + dynamic error reduction + EEPROM INL calibration — suited to the ferromagnetic (4130/17-4 PH) spar. Supersedes the on-axis MT6701 (rejected) and AS5600 (Rev Q). |
 
 **Specifications applied in this design:**
@@ -2196,7 +2211,7 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 |---|---|
 | **Manufacturer** | Texas Instruments |
 | **Product** | ISOW1044BDFMR |
-| **Datasheet** | SLLSFF7A, archived at `avionics/datasheets/isow1044.pdf` |
+| **Datasheet** | SLLSFF7A, archived at `avionics/datasheets/ti/isow1044.pdf` |
 | **Package** | 20-pin DFM (SOIC-20W compatible), `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm` |
 | **Note** | Combines galvanic signal isolation + an integrated isolated DC-DC converter in one part (no external isolated supply needed for the bus side) — used for every isolated CAN-FD node this project builds. Clean-room symbol `Observer_MSPM0G3507_RGZ`/`Observer_ISOW1044BDFMR` built directly from datasheet Table 7-1, first on Observer, then reused verbatim on `CAN-PERIPH-GW-1` and FlightEngineer. |
 
@@ -2210,7 +2225,7 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 |---|---|
 | **Manufacturer** | Texas Instruments |
 | **Product** | ISOW1412 (500 kbps variant; ISOW1432 is the pin-compatible 12 Mbps variant, not used) |
-| **Datasheet** | SLLSF86C, archived at `avionics/datasheets/isow1412.pdf` |
+| **Datasheet** | SLLSF86C, archived at `avionics/datasheets/ti/isow1412.pdf` |
 | **Package** | 20-pin DFM (SOIC-20W compatible), `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm` |
 | **Note** | Full-duplex part (separate Y/Z driver-out and A/B receiver-in pins); run in half-duplex mode on this project's 2-wire RS485_A/RS485_B multi-drop bus by shorting Y-to-A and Z-to-B, matching the standard technique for using a full-duplex transceiver as half-duplex. Selected 2026-07-26 to replace ADI ADM2795E fleet-wide (see Removed/Superseded Citations) because it integrates its own isolated DC-DC for the bus-side supply — ADM2795E is signal-only and needs a separate external isolated supply. Clean-room symbol built directly from datasheet Table 7-1 ("Pin Functions"). |
 
@@ -2224,7 +2239,7 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 |---|---|
 | **Manufacturer** | Infineon Technologies |
 | **Product** | OPTIGA™ TPM SLB 9672 TPM 2.0 FW16.xx (SLB9672XU2.0 / SLB9672AU2.0) |
-| **Datasheet** | Revision 1.3, 2024-11-18, archived at `avionics/datasheets/SLB_9672XU20_Infineon.pdf`, <https://www.infineon.com/assets/row/public/documents/30/49/infineon-slb9672-tpm20-spi-fw16.xx-ds-rev1-3-2024-11-18-datasheet-en.pdf> |
+| **Datasheet** | Revision 1.3, 2024-11-18, archived at `avionics/datasheets/infineon/SLB_9672XU20_Infineon.pdf`, <https://www.infineon.com/assets/row/public/documents/30/49/infineon-slb9672-tpm20-spi-fw16.xx-ds-rev1-3-2024-11-18-datasheet-en.pdf> |
 | **Product page** | <https://www.infineon.com/OPTIGA-TPM-SLB9672> |
 | **Package** | PG-UQFN-32-1,-2, `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm` |
 | **Note** | Fleet-standard TPM (root `AGENTS.md` §Security: "every Cape carries a TPM"). **Migrated from SLB9670 to SLB9672 (2026-08-01)** — same 5x5mm/0.5mm-pitch/32-pin QFN land pattern (both datasheets: 5x5mm body, 3.6x3.6mm exposed pad), so the existing `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm` footprint was reused as-is; the GPIO/PP pin functions and which VDD/GND pins are mandatory vs optional differ (SLB9672 pins 1/14/22 are the three mandatory VDD pins, vs 8/22 on SLB9670; pin 6 is a true no-connect instead of a GPIO; pins 3/4/7 are GPIO_00/01/02 instead of NCI/NCI/PP) — see Removed/Superseded Citations for the old SLB9670VQ2.0/XQ2.0 entry. Clean-room symbol `SLB9672_TPM` built directly from datasheet Tables 11/12/13, first on Observer, reused verbatim on `CAN-PERIPH-GW-1`, Flight Engineer, and Commo. **Not** the same as the inline "SLB9672" symbol already embedded in Pilot.kicad_sch/XO.kicad_sch (renamed from "SLB9670" in the same migration, pin numbers unchanged), which was found (2026-07-26, not yet corrected) to have incorrect pin numbers relative to the datasheet — see Removed/Superseded Citations. |
@@ -2449,7 +2464,7 @@ same SG90 class and inherit this note when that phase is implemented (hosted by 
 ### REF-SENSOR-016: Infineon OPTIGA™ Trust M — I2C Secure Element (planned, CAN-PERIPH-GW-1 + Flight Engineer only)
 
 > **⚠ REQUIRES VERIFICATION (root `AGENTS.md` §4).** The primary datasheet
-> (`infineon-optiga-trust-m-datasheet-en.pdf`, Infineon document reference
+> (`infineon/infineon-optiga-trust-m-datasheet-en.pdf`, Infineon document reference
 > `Z8F80311641-D`) could **not** be fetched in this session — `infineon.com`,
 > `mouser.com`, `digikey.com`, and `device.report` are all blocked by this
 > environment's network egress policy. Everything below is sourced from
@@ -2695,7 +2710,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Manufacturer** | Texas Instruments |
 | **Product** | DP83825IRHBR (WQFN-24, RMQ0024A) |
-| **Datasheet** | SNLS638C, December 2018 – revised April 2026, archived at `avionics/datasheets/dp83825i.pdf` |
+| **Datasheet** | SNLS638C, December 2018 – revised April 2026, archived at `avionics/datasheets/ti/dp83825i.pdf` |
 | **Package** | WQFN-24 3 × 3 mm, 0.4 mm pitch, exposed DAP = GND, `Package_DFN_QFN:Texas_RMQ0024A_WQFN-24-1EP_3x3mm_P0.4mm_EP1.9x1.9mm` |
 | **Portion applied** | Table 4-1 pin functions (1 TX_EN, 2 50MHzOut/LED2, 3 INTR/PWRDN, 4 LED0, 5 RST_N, 6 VDDA3V3, 7 RD_M, 8 RD_P, 9 GND, 10 TD_M, 11 TD_P, 12 XO, 13 XI/50MHzIn, 14 RBIAS, 15 MDIO, 16 MDC, 17 RX_D1, 18 RX_D0/PHYAD0, 19 VDDIO, 20 CRS_DV, 21 GND, 22 RX_ER, 23 TX_D0, 24 TX_D1); §6 RMII Leader mode (25 MHz on XI, 50 MHz reference out on pin 2); RBIAS 6.49 kΩ ±1 % |
 | **Note** | Added 2026-09-29 when the TACCO generator's `dp83825i()` pin table was found not to be this part's pinout (it cited a non-existent `REF-SENSOR-029`); Pilot's copy of the table carries the same defect (`avionics/WBS.md` §1.2a 2026-09-29 item 8). |
@@ -2710,7 +2725,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | BeagleBoard.org Foundation |
 | **Product** | PocketBeagle 2 (TI AM6254 Sitara), expansion headers P1/P2 |
-| **Source** | <https://github.com/beagleboard/pocketbeagle> (owner-supplied copies archived at `avionics/datasheets/pocketbeagle2_sch.pdf` — sheet "016_BP P1 & P2" v1.0 — and `avionics/datasheets/pocketbeagle-2.syscfg`, TI SysConfig for the AM62x ALW package) |
+| **Source** | <https://github.com/beagleboard/pocketbeagle> (owner-supplied copies archived at `avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf` — sheet "016_BP P1 & P2" v1.0 — and `avionics/datasheets/beagleboard/pocketbeagle-2.syscfg`, TI SysConfig for the AM62x ALW package) |
 | **Portion applied** | P1/P2 header ball assignment and pinmux options, transcribed into `avionics/kicad/PB2_HEADER_PINMAP.md`; MMC2 CLK/CMD/DAT not on the headers (MMC2_SDCD/SDWP are, see REF-SENSOR-049); USB1 on P1-3/5/9/11/13; sheet 15 MSPM0L1105 (U11) pin-to-AIN wiring and the VDDSHV_CANUART = VDD_3V3 decoupling group, used in `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` §3 and §6 |
 | **Note** | Licence line not present on the schematic sheet; confirm the repository licence before redistributing the archived PDF. Added 2026-09-29. |
 
@@ -2722,7 +2737,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | BeagleBoard.org Foundation |
 | **Product** | PocketBeagle 2, revisions A1 (AM6254, in production) and A0 (AM6232, out of production) |
-| **Source** | Owner-supplied copy archived at `avionics/datasheets/pocketbeagle2_srm.pdf` (55 pp.); published at <https://docs.beagleboard.org/pocketbeagle-2.pdf> |
+| **Source** | Owner-supplied copy archived at `avionics/datasheets/beagleboard/pocketbeagle2_srm.pdf` (55 pp.); published at <https://docs.beagleboard.org/pocketbeagle-2.pdf> |
 | **Portion applied** | §3.8 Mechanical specifications: Table 3.2 (PCB 55 x 35 mm, 1.6 mm, 10 layers, max height 13.6 mm, 12.7 g) and Fig. 3.45 "PocketBeagle 2 RevA Dimensions" — P1 and P2 pin-1 rows 3.53 mm and 6.07 mm from their board edges and 25.4 mm apart, so each rail centre-line is 4.80 mm inside its long edge. The figure also shows the board's own pre-soldered headers as surface-mount tails with round through-hole pins only at positions 1/2 and 35/36.. §4.2 Cape Header Connectors: header ball list and per-ball mux tables (P1.xx / P1.xxA columns), used in `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` (note: the P1.12 mode-1 entry "SPI2_DI" is a typo for SPI2_D1) |
 | **Note** | The manual names no "Industrial" variant; the owner confirmed on 2026-10-04 that this geometry applies to the board the capes stack on. Added 2026-10-05. |
 
@@ -2734,9 +2749,9 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Samtec, Inc. (New Albany, Indiana, USA) |
 | **Product** | SSM "Tiger Claw" surface-mount socket strip (-DV double row); SSW through-hole socket strip; TSW terminal (post) strip, .025 in square post |
-| **Source** | Owner-supplied copies archived at `avionics/datasheets/samtec_ssm_footprint.pdf` (recommended PCB layout, Rev D), `samtec_ssm-dv_drawing.pdf` (SSM-1XX-XXX-DV marketing drawing), `samtec_ssm_catalog.pdf` (SSM series catalog page) and `samtec_tsw-sxx_drawing.pdf` (SSW/TSW product specification, Rev C, 2023-02-08); <https://www.samtec.com/products/ssm> |
+| **Source** | Owner-supplied copies archived at `avionics/datasheets/samtec/samtec_ssm_footprint.pdf` (recommended PCB layout, Rev D), `samtec_ssm-dv_drawing.pdf` (SSM-1XX-XXX-DV marketing drawing), `samtec_ssm_catalog.pdf` (SSM series catalog page) and `samtec_tsw-sxx_drawing.pdf` (SSW/TSW product specification, Rev C, 2023-02-08); <https://www.samtec.com/products/ssm> |
 | **Portion applied** | SSM-DV: 02-40 positions per row; mates TSW/TSM; pads .040 in (1.02 mm) wide, inner span .135 in (3.43 mm), outer span .310 in (7.87 mm) (Fig. 4); options -A alignment pin (1.09 mm NPTH), -LC locking clip (1.19 mm NPTH); 5.2 A per pin; -55 to +125 °C with gold; catalog states Severe Environment Testing qualification aligned with MIL-DTL-55302. SSW/TSW spec: random vibration 7.56 G RMS, 50-2000 Hz, 2 h/axis, 3 axes (EIA-364-28 Cond. V-B); mechanical shock 100 G, 6 ms, 18 shocks (EIA-364-27); durability 1000 cycles; LLCR change 15 mOhm max. |
-| **TSM (adopted)** | `avionics/datasheets/samtec_tsm-dv-footprint.pdf` (TSM double-vertical recommended PCB layout, Rev F, 2015-07-16: pads .050 x .145 in (1.27 x 3.68 mm) at .100 in pitch, rows .050 in (1.27 mm) apart at their inner edges; -LC .047 in (1.19 mm) / -A .068 in (1.73 mm) holes on the centre-line at (N-2) x .100 in) and `samtec_tsm_catalog.pdf` (lead style -04 post .120 in (3.05 mm) for SLW/CES/HLE low-profile sockets; insulator .100 in (2.54 mm); -LC not with -TM; -LC manual placement). |
+| **TSM (adopted)** | `avionics/datasheets/samtec/samtec_tsm-dv-footprint.pdf` (TSM double-vertical recommended PCB layout, Rev F, 2015-07-16: pads .050 x .145 in (1.27 x 3.68 mm) at .100 in pitch, rows .050 in (1.27 mm) apart at their inner edges; -LC .047 in (1.19 mm) / -A .068 in (1.73 mm) holes on the centre-line at (N-2) x .100 in) and `samtec_tsm_catalog.pdf` (lead style -04 post .120 in (3.05 mm) for SLW/CES/HLE low-profile sockets; insulator .100 in (2.54 mm); -LC not with -TM; -LC manual placement). |
 | **Note** | Used for the rail-socket trade study (THT socket vs surface-mount SSM-DV), then for the male TSM-118-04-L-DV-LC rails adopted 2026-10-05 once the PB2-I was found to carry female receptacles. Added 2026-10-05; renumbered from REF-SENSOR-023 on the main merge (that ID is the BMP388 on main). |
 
 **Used in:** `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`, `avionics/WBS.md` §1.2a.
@@ -2749,7 +2764,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Murata Manufacturing Co., Ltd. (Kyoto, Japan) |
 | **Product** | BLM15EX331SN1D (BLM15EX series, 0402 / 1005 metric, for power lines) |
-| **Source** | Reference specification JENF243A-0023M-01, archived at `avionics/datasheets/Murata_BLM15EX_JENF243A-0023M-01.pdf` (MD5 f77aaa952ec45d0ddc5e8539b21ad8ca); product page <https://www.murata.com/en-us/products/productdetail?partno=BLM15EX331SN1%23> (redirects to pim.murata.com, verified HTTP 200 2026-10-12); distributor mirror <https://datasheet.octopart.com/BLM15EX331SN1D-Murata-datasheet-180806479.pdf> |
+| **Source** | Reference specification JENF243A-0023M-01, archived at `avionics/datasheets/murata/Murata_BLM15EX_JENF243A-0023M-01.pdf` (MD5 f77aaa952ec45d0ddc5e8539b21ad8ca); product page <https://www.murata.com/en-us/products/productdetail?partno=BLM15EX331SN1%23> (redirects to pim.murata.com, verified HTTP 200 2026-10-12); distributor mirror <https://datasheet.octopart.com/BLM15EX331SN1D-Murata-datasheet-180806479.pdf> |
 | **Portion applied** | Rating table: impedance 330 Ω ±25 % at 100 MHz, 450 Ω ±40 % at 1 GHz; rated current 1.1 A at 85 °C, 700 mA at 125 °C; DC resistance 0.205 Ω max; operating temperature −55 to +125 °C; 0402 (1.0 x 0.5 mm, 0.039 x 0.020 in) body. |
 | **Note** | Part number is the one named by TI ISOW1044 SLLSFF7A §13.1 item 4 [REF-SENSOR-009] and ISOW1412 SLLSF86C §13.1 [REF-SENSOR-010] for the beads between VISOOUT and VISOIN and between GND2 and GISOIN. Added 2026-10-12 by Claude Opus 5.5 for the Pilot §13.1 re-floorplan. |
 
@@ -2765,7 +2780,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Texas Instruments, SLVSBO7O, December 2012, revised August 2024 |
 | **Official access** | <https://www.ti.com/lit/ds/symlink/tpd4e05u06.pdf> (HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/TPDxE05U06_SLVSBO7O.pdf` (MD5 4e1a6d84a2c48d615ef5f0eb53441170) |
+| **Local copy** | `avionics/datasheets/ti/TPDxE05U06_SLVSBO7O.pdf` (MD5 4e1a6d84a2c48d615ef5f0eb53441170) |
 | **Section applied** | Table 4-1 (TPD1E05U06 DYA pin 1 I/O, pin 2 GND), Table 4-2 (TPD4E05U06 DQA pinout); VRWM 5.5 V; IEC 61000-4-2 +/-12 kV contact; DQA0010A example board layout (4220328/A) for the custom land |
 | **Cited in** | Pilot `ESD-GPS`, `ESD-SPI`, `ESD-SS2` (`gen_pilot_sch.py`); land `TI_DQA0010A_USON-10_2.5x1.0mm_P0.5mm` (`gen_pilot_footprints.py`) |
 
@@ -2775,7 +2790,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Microchip Technology, DS00002335B (10-19-17) |
 | **Official access** | <https://ww1.microchip.com/downloads/en/DeviceDoc/00002335B.pdf> (HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/KSZ8863MLL-FLL-RLL_DS00002335B.pdf` (MD5 342959b711f1037d63fb764cff41d220) |
+| **Local copy** | `avionics/datasheets/microchip/KSZ8863MLL-FLL-RLL_DS00002335B.pdf` (MD5 342959b711f1037d63fb764cff41d220) |
 | **Section applied** | Fig. 2-1 / Table 2-1 pin functions and straps; sec 3.3.9 + Table 3-5 RMII clock setting (25 MHz on X1, REFCLKO_3 looped to REFCLKI_3); sec 6 note (transformer current at 3.3 V); sec 9 Table 9-1 transformer criteria; Fig. 10-1 recommended land (0.25 x 1.30 mm pads, 8.70 mm span); industrial -40..85 C |
 | **Cited in** | Evaluated 2026-10-17 for the Pilot ring switch and NOT used (no 10.5 mm site on the cape; the second ring leg moved to USB1, see REF-SENSOR-048); the verified land is kept as `ksz8863_lqfp48()` in `gen_pilot_footprints.py` (not generated) |
 | **Open item** | The 749010012A magnetics' DCR (1.0 ohm max) exceeds Table 9-1's 0.9 ohm and their leakage inductance / interwinding capacitance are unspecified (avionics/WBS.md) |
@@ -2786,7 +2801,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Microchip Technology, DS50002767B (2019), board AC320004-7 |
 | **Official access** | <https://ww1.microchip.com/downloads/en/DeviceDoc/KSZ8863-Daughter-Board-Information-Sheet-DS50002767B.pdf> (HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/KSZ8863_Daughter_Board_DS50002767B.pdf` (MD5 6be52a832a73ad23eeddd890e49aa6f3) |
+| **Local copy** | `avionics/datasheets/microchip/KSZ8863_Daughter_Board_DS50002767B.pdf` (MD5 6be52a832a73ad23eeddd890e49aa6f3) |
 | **Section applied** | p. 3 magnetics: chip-side centre taps to VCC_3P3 with 10 uF, 49.9 R line terminations to 0.1 uF nodes; p. 4 decoupling (FB1/FB2 220 R, VDDA_3P3, VDDIO, VDDA_1P8), ISET, FXSD1 1 k, power-on reset 10 k / 10 uF; p. 5 strap and management resistor options |
 | **Cited in** | Evaluated 2026-10-17 with REF-SENSOR-045 and NOT used (decision record in `avionics/kicad/Pilot/Pilot.md`) |
 
@@ -2796,7 +2811,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | BeagleBoard.org Foundation; repository licence CC BY-SA 4.0 |
 | **Official access** | <https://openbeagle.org/pocketbeagle/pocketbeagle-2> (commit be5f0a4a84b8279968722a813887cf7cae3e22ff, 2025-06-26); <https://www.beagleboard.org/boards/pocketbeagle-2-industrial> (both HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/pocketbeagle2_sch.pdf` (MD5 84cbe69deda97f872ec07f6a974d613e, byte-identical to the repository's), `avionics/datasheets/pocketbeagle2_revA_dimension.pdf` (MD5 e2852b55443fd545015a38ad2011ec3b), `avionics/datasheets/pocketbeagle2-back.jpg` |
+| **Local copy** | `avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf` (MD5 84cbe69deda97f872ec07f6a974d613e, byte-identical to the repository's), `avionics/datasheets/beagleboard/pocketbeagle2_revA_dimension.pdf` (MD5 e2852b55443fd545015a38ad2011ec3b), `avionics/datasheets/beagleboard/pocketbeagle2-back.jpg` |
 | **Section applied** | Schematic V10 sheet 16 (P1 / P2 nets and power pins), sheet 15 (AIN0-7 direct to the MSPM0L1105), sheet 12 (EMMC_RSTn on F23, not a header ball); Rev A dimension drawing + back photo (P1 pin 1 outer row, P2 pin 1 inner row, rails 3.53 / 6.07 mm from the edge, 25.4 mm odd-row spacing); product page "Key differences" (PB2-I = PB2 + 1 GB DDR4 + 64 GB eMMC + -40..85 C, same design repository); PCN20250226-001 (AM6232 -> AM6254 only) |
 | **Cited in** | Pilot `PB2_P1` / `PB2_P2` (`gen_pilot_sch.py`); `PocketBeagle2_2x18_P1/P2_TSM-DV-LC` footprints; `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` |
 
@@ -2806,9 +2821,10 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Nanjing Qinheng Microelectronics (WCH), CH397 data sheet V1.2 (Chinese) |
 | **Official access** | <https://www.wch.cn/downloads/CH397DS1_PDF.html> (WCH's page renders the download through JavaScript and could not be fetched by script, 2026-10-17); copy retrieved from WCH's distributor LCSC: <https://atta.szlcsc.com/upload/public/pdf/source/20240813/7579B736A93AD62F1FA2079FDA525BA1.pdf> (HTTP 200) — re-download from wch.cn and compare before fabrication |
-| **Local copy** | `avionics/datasheets/WCH_CH397_datasheet_V1.2.pdf` (MD5 380b7f0ec12b25f124630525670b3209) |
+| **Local copy** | `avionics/datasheets/wch/WCH_CH397_datasheet_V1.2.pdf` (MD5 380b7f0ec12b25f124630525670b3209) |
 | **Section applied** | Fig. 1-1 / Table 1-3 CH397A QFN24 pinout (no RSTB; NC 12/16/19/20; EP = GND); sec 3.1 (25 MHz XI: crystal or external clock; internal POR); sec 3.2 (default CDC-ECM firmware); sec 3.3 (internal 50 ohm MDI termination); sec 3.7 + sec 6.1 (supply and decoupling; V5 and AVDD33 on 3.3 V for industrial use; transformer centre taps to GND through capacitors, no supply); sec 4.1 (TA -40..85 C at V5 = AVDD33 = 3.3 V); sec 5.1 QFN24 4 x 4 mm, 0.5 mm pitch, 2.8 mm EP |
-| **Cited in** | Pilot `ETH2-USB` and its support parts (`gen_pilot_sch.py`) |
+| **Cited in** | Formerly Pilot `NIC-USB1` (`ETH2-USB` before 2026-10-17) and its support parts. Removed from Pilot 2026-10-18, replaced by the ASIX AX88772E (REF-SENSOR-056) |
+| **Openness / sourcing** | FAILS AGENTS.md §5: WCH (Nanjing Qinheng Microelectronics) is PRC-domiciled. Kept here only as the record of the rejected candidate |
 | **Note** | Contains a RISC-V core running vendor firmware on the network path (supply-chain / security review item, avionics/WBS.md) |
 
 ### REF-SENSOR-049: Texas Instruments SPRSP58C — AM62x Sitara Processors data sheet
@@ -2817,7 +2833,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Texas Instruments, *AM625, AM625-Q1, AM623, AM620-Q1 — AM62x Sitara Processors*, literature number SPRSP58C (June 2022, revised October 2025) |
 | **Official access** | <https://www.ti.com/lit/ds/symlink/am625.pdf> (HTTP 200, 2026-10-17); product page <https://www.ti.com/product/AM625> |
-| **Local copy** | `avionics/datasheets/am625.pdf` (owner-supplied, MD5 0bf05eb5e8fe8649fe010b244d7ef6e6) |
+| **Local copy** | `avionics/datasheets/ti/am625.pdf` (owner-supplied, MD5 0bf05eb5e8fe8649fe010b244d7ef6e6) |
 | **Section applied** | §1 Features (CPSW3G: 2 external ports, RMII or RGMII; 3x MCAN with CAN FD); Table 4-1 Device Comparison (MCAN 3, I2C 6); §5.2 Table 5-1 Pin Attributes, ALW column (mux modes of every PB2-I header ball); §5.3.1 Tables 5-2 to 5-5 (RGMII1/RGMII2/RMII1/RMII2 ball assignments; CPSW3G port 1 has no alternate balls) |
 | **Cited in** | `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md`; `avionics/kicad/PB2_HEADER_PINMAP.md` §1; `avionics/datasheets/extracted/AM625_PB2I_header_mux.json`; `avionics/kicad/Pilot/Pilot.md` (2026-10-17 block) |
 | **Openness / sourcing** | Public data sheet, no NDA. TI is US-domiciled (AGENTS.md §5 passes). |
@@ -2828,7 +2844,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Texas Instruments, *AM62x Processors Technical Reference Manual*, literature number SPRUIV7C (May 2022, revised November 2025), 16 613 pp. |
 | **Official access** | <https://www.ti.com/lit/pdf/spruiv7> (HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/spruiv7c.pdf` (owner-supplied, MD5 1a2d061c5719fdccc24a7182e57c4d0c) |
+| **Local copy** | `avionics/datasheets/ti/spruiv7c.pdf` (owner-supplied, MD5 1a2d061c5719fdccc24a7182e57c4d0c) |
 | **Section applied** | §1.4.12 3-port Gigabit Ethernet Switch (CPSW3G) — two external RGMII/RMII ports plus one internal CPPI port, wire-rate store-and-forward switching, IEEE 1588; §4.10.1.1 CPSW unsupported features (no GMII, SGMII, MACsec, jumbo 9600-byte frames, SyncE) |
 | **Cited in** | `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` |
 | **Openness / sourcing** | Public, no NDA. TI is US-domiciled. |
@@ -2839,7 +2855,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Texas Instruments, *MSPM0L1105, MSPM0L1106 Mixed-Signal Microcontrollers*, literature number SLASEX5C (October 2022, revised January 2024) |
 | **Official access** | <https://www.ti.com/lit/ds/symlink/mspm0l1105.pdf> (HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/mspm0l1105.pdf` (owner-supplied, MD5 b1e9cbd26c57ed4ad6f9934d131725cd) |
+| **Local copy** | `avionics/datasheets/ti/mspm0l1105.pdf` (owner-supplied, MD5 b1e9cbd26c57ed4ad6f9934d131725cd) |
 | **Section applied** | §1 Features; Table 6-1 Pin Attributes (24 VQFN column, PA15/16/20/21/22/24/25/26); §7.1 Absolute Maximum Ratings (common-tolerance pins -0.3 V to VDD + 0.3 V, 4.1 V max); digital I/O table (RPU/RPD 40 kΩ, CI 5 pF); §8.12 ADC |
 | **Cited in** | `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` §6 |
 | **Openness / sourcing** | Public, no NDA. TI is US-domiciled. |
@@ -2850,16 +2866,139 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Texas Instruments, *MSPM0 L-Series 32-MHz Microcontrollers Technical Reference Manual*, literature number SLAU847F (October 2022, revised March 2026) |
 | **Official access** | <https://www.ti.com/lit/pdf/slau847> (HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/slau847f.pdf` (owner-supplied, MD5 ae0c1a9e5238d4a0a97c87cc9e8940e2) |
+| **Local copy** | `avionics/datasheets/ti/slau847f.pdf` (owner-supplied, MD5 ae0c1a9e5238d4a0a97c87cc9e8940e2) |
 | **Section applied** | §2.4.1.2 Initial Conditions After Power-Up (SWCLK pulled low, SWDIO pulled high, other I/O Hi-Z); §8.2 IOMUX Operation, "Default IOMUX State" |
 | **Cited in** | `avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md` §6 |
 | **Openness / sourcing** | Public, no NDA. TI is US-domiciled. |
+
+### REF-SENSOR-053: Texas Instruments SLVSFW5D — ESD2CAN24-Q1 / ESD2CANFD24-Q1 / ESD2CANXL24-Q1 24 V 2-channel ESD protection diode
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | Texas Instruments, SLVSFW5D (April 2022, revised March 2026) |
+| **Official access** | <https://www.ti.com/lit/ds/symlink/esd2can24-q1.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/ESD2CANxx24-Q1_SLVSFW5D.pdf` (MD5 0acd622da485487c1761daa7c86ba84a) |
+| **Section applied** | Fig. 4-1 / Table 4-1 pin functions (IO 1, 2; GND 3; DBZ and DCK identical); §5.7 Electrical Characteristics (VRWM ±24 V, VBR 25.5 V min, VCLAMP 37 V at 5.7 A 8/20 µs for ESD2CAN24-Q1); §6.3.4 IO capacitance 3 pF typical, data rate up to 10 Mbps; Packaging Information (ESD2CAN24DCKRQ1, SC70 DCK, −55 °C to 150 °C) |
+| **Cited in** | Pilot `TVS-CAN` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py`, `avionics/kicad/Pilot/Pilot.md` update 2026-10-18) |
+| **Openness / sourcing** | Public, no NDA. TI is US-domiciled. |
+
+### REF-SENSOR-054: Bourns CDSOT23-SM712 — surface mount TVS diode (asymmetric 7 V / 12 V, RS-485)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | Bourns, Inc., CDSOT23-SM712 data sheet (REV. 06/24) |
+| **Official access** | <https://www.bourns.com/docs/Product-Datasheets/CDSOT23-SM712.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/Bourns_CDSOT23-SM712.pdf` (MD5 129fc9f976111703cf731b109c6434b8) |
+| **Section applied** | p. 1 internal circuit (lines on pins 1, 2; common pin 3); Electrical Characteristics (VWM 7.0 V pins 3-1 / 3-2 and 12.0 V pins 1-3 / 2-3; VC 11 V / 19 V at 1 A; CD 75 pF typical; IEC 61000-4-2 ±8 kV contact min.); Absolute Maximum Ratings (PPK 400 W, IPP 17 A, 8/20 µs); How to Order |
+| **Cited in** | Pilot `TVS-RS485` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py`, `avionics/kicad/Pilot/Pilot.md` update 2026-10-18) |
+| **Openness / sourcing** | Public, no NDA. Bourns, Inc. is US-domiciled (Riverside, California). |
+
+### REF-SENSOR-055: Bourns SMAJ series — 400 W surface mount transient voltage suppressor diodes
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | Bourns, Inc., SMAJ Transient Voltage Suppressor Diode Series data sheet (REV. 09/20) |
+| **Official access** | <https://www.bourns.com/docs/Product-Datasheets/smaj.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/Bourns_SMAJ.pdf` (MD5 c596481475b507b3cc19c43438710252) |
+| **Section applied** | Electrical Characteristics row SMAJ33CA (VBR 36.7 V to 40.6 V, VRWM 33 V, VC 53.3 V at IPP 7.5 A 10/1000 µs); How to Order ("CA" = 5 % bidirectional, no suffix = 13 in reel); DO-214AC (SMA) package |
+| **Cited in** | Pilot `TVS-1553P`, `TVS-1553N` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py`) |
+| **Openness / sourcing** | Public, no NDA. Bourns, Inc. is US-domiciled. Names the compliant manufacturer for the generic SMAJ33CA (AGENTS.md §5). The older `avionics/datasheets/smaj-series-tvs-datasheet.pdf` names no manufacturer (PDF author field "可靠性实验室", "reliability laboratory") and does not satisfy the rule |
+
+### REF-SENSOR-056: ASIX AX88772E — USB 2.0 to 10/100 Fast Ethernet controller data sheet v1.03
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, AX88772E data sheet, Document No. AX88772E/V1.03/09/23/26 |
+| **Official access** | Product page <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); the PDF is behind the free MyASIX registration (owner-downloaded) |
+| **Local copy** | `avionics/datasheets/AX88772E_Datasheet_v103.pdf` (owner-supplied, MD5 3f5b6da32a9b2e9716e8298d467459aa) |
+| **Section applied** | §1.3 pinout (32-pin QFN, 4 x 4 mm, E-PAD); §1.4 signal description (RSET 24 kΩ 1 %, VBUS pin 6 is a 3.3 V input, PU pin 7 to 3.3 V, LX pin 12 drives the on-die 1.1 V buck's external inductor); §5.1.2 recommended operating conditions; §5.2 power (25 mA at 1.1 V, 35.3 mA at 3.3 V full load); §5.4 power-up sequence; §6 recommended footprint (0.40 mm pitch); §7 ordering (AX88772EQF only, 0 °C to +70 °C) |
+| **Cited in** | Pilot `NIC-USB1` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py` `ax88772e()`, 2026-10-18); land `QFN-32-1EP_4x4mm_P0.4mm_EP2.9x2.9mm` checked against §6; `avionics/kicad/Pilot/Pilot.md` |
+| **Openness / sourcing** | No confidentiality or NDA marking (copyright notice only), checked 2026-10-17. Free MyASIX registration wall, acceptable under AGENTS.md §5. ASIX is Taiwan-domiciled (Hsinchu) |
+
+### REF-SENSOR-057: ASIX AX88772E USB2.0 to Fast Ethernet Application Design Note, Revision 1.10
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, *AX88772E USB2.0 to Fast Ethernet Application Design Note*, Revision 1.10 (September 30, 2026) |
+| **Official access** | Listed on the product page <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); download behind the free MyASIX registration (owner-downloaded 2026-10-18) |
+| **Local copy** | `avionics/datasheets/AX88772E_Application_DesignNote_v110.pdf` (MD5 c967893114b9af31f6a998b6f4c1bb3b) |
+| **Section applied** | §4 VBUS pin (3.3 V input; on-board designs connect it to a host-controllable GPIO); §5 crystal (reference NXK20.000AC20F-BK4: 20 MHz, CL 20 pF, ±30 ppm, ESR 100 Ω max., 10 µW; note 2: no external oscillator source); §8 items 5 and 8 (a decoupling capacitor per power pin; regulator input trace > 40 mil, output > 20 mil); §9 USB layout (90 Ω differential); §10 MDI layout (100 Ω differential); §13 ESD |
+| **Cited in** | Pilot `NIC-USB1` support block, `Y-USB1` (`gen_pilot_sch.py`); `avionics/kicad/Pilot/Pilot.md` update 2026-10-18; `avionics/WBS.md` §1.2a Pilot |
+| **Openness / sourcing** | No confidentiality or NDA marking (copyright notice only), checked 2026-10-18. Free registration wall, acceptable under AGENTS.md §5 |
+
+### REF-SENSOR-058: ASIX AX88772E Demo Board schematic V1.01
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, *AX88772E Demo Board* schematic, Rev V1.01 (September 30, 2026), 3 sheets |
+| **Official access** | Listed on the product page as "Reference Schematic (Demo Board)" <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); download behind the free MyASIX registration (owner-downloaded 2026-10-18 as `AX88772E_DEMO_BOARD_SCHEMATIC_V101.zip`, MD5 1d6ca492f7a0f866333a3a2e86768911, which also holds the OrCAD `.DSN`) |
+| **Local copy** | `avionics/datasheets/AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf` (extracted from the zip, MD5 73fe544a2319557fa0abde9a15851413) |
+| **Section applied** | Sheet 2: power tree (pin 13 AVDD33_BUCK on DVDD_33 with C5 4.7 µF + C6 0.1 µF at the pin; pin 14 to GND; LX pin 12 -> L1 2.2 µH -> DVDD11 with C2 10 µF + C3 0.1 µF; DVDD11 pins 4/10/11/22 with 0.1 µF each; bead L4 -> AVDD11 pin 32 with 10 µF + 2 x 0.1 µF; bead L5 -> AVDD_33 pins 1/25/29 with 4.7 µF + 4 x 0.1 µF; DVDD_33 pins 5/18 with 2 x 0.1 µF); crystal (C11/C12 15 pF, R7 200 Ω in XTAL_OUT); RSET R20 24 kΩ 1 %; VBUS R4 4.7 kΩ to DVDD_33; PME/GPIO8 and PU 4.7 kΩ pull-ups; LED_0/LED_1 4.7 kΩ pull-ups; transformer centre taps 0.1 µF to GND; notes 2-1 to 2-14. Part numbers for L1, L4, L5 are not given here; see the demo BOM (REF-SENSOR-060) |
+| **Cited in** | Pilot `NIC-USB1` and every `C-USB1-*` / `R-USB1-*` / `L-USB1` / `FB-USB1-*` / `Y-USB1` support part (`gen_pilot_sch.py`, demo designators in each part's description); `avionics/kicad/Pilot/Pilot.md` update 2026-10-18 |
+| **Openness / sourcing** | No confidentiality or NDA marking, checked 2026-10-18. Free registration wall, acceptable under AGENTS.md §5 |
+
+### REF-SENSOR-059: ECS Inc. ECX-32 SMD crystal data sheet
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ECS Inc. International (Lenexa, Kansas), ECX-32 SMD Crystal data sheet (Rev. 2017) |
+| **Official access** | <https://ecsxtal.com/store/pdf/ECX-32.pdf> (HTTP 200, 2026-10-18) |
+| **Local copy** | `avionics/datasheets/ECS_ECX-32.pdf` (MD5 401b18c1bfb0b440c1a6ef9d7723762d) |
+| **Section applied** | Electrical characteristics (fundamental mode, 10 to 54 MHz, load capacitance specified in P/N, drive level 100 µW max, aging ±5 ppm first year); ESR table (20.000 to 23.999 MHz: 60 Ω max); pad connections (1 In/Out, 2 GND, 3 Out/In, 4 GND); part numbering guide (ECS-200-20-33-AGM-TR = 20 MHz, CL 20 pF, A = ±25 ppm tolerance, G = ±30 ppm stability, M = -20 to +70 °C, tape and reel); 3.2 x 2.5 mm package |
+| **Cited in** | Pilot `Y-USB1` (`gen_pilot_sch.py`) |
+| **Openness / sourcing** | Public, no NDA. ECS Inc. is US-domiciled. Option-code availability (AGM) to be confirmed with a distributor before ordering |
+
+### REF-SENSOR-060: ASIX AX88772E / AX88772D demo board BOM (2025-11-28)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | ASIX Electronics Corporation, `AX88772E_AX88772D_DEMO_BORAD_BOM_20251128` (reference schematic V2.01 BOM; ASIX's spelling of the file name) |
+| **Official access** | Listed on the product page as "Demo Board BOM" <https://asix.com.tw/en/product/USBEthernet/High-Speed_USB_Ethernet/AX88772E> (fetched 2026-10-18); owner-downloaded 2026-10-18 as a zip (MD5 f5b95480be78e00e926472b10df6baca) |
+| **Local copy** | `avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx` (extracted from the zip, MD5 4b23301c931db152df277b4a3554848d) |
+| **Section applied** | Items 2-11, 13, 15, 17 and 25: C11/C12 15 pF; 0.1 µF / 4.7 µF / 10 µF decoupling; L1 Darfon IP20162R2MP59 2.2 µH (2016); L4/L5 Chilisin PBY160808T-110Y-N bead; R7 200 Ω; 4.7 kΩ pull-ups; R20 24 kΩ 1 %; Y1 "NSK 20M CRYSTAL" (no part number) |
+| **Cited in** | `gen_pilot_sch.py` AX88772E support block comment; `avionics/kicad/Pilot/Pilot.md` update 2026-10-18 |
+| **Openness / sourcing** | No confidentiality marking. The BOM's own MPNs are not adopted where their maker or data sheet could not be verified (beads, crystal); the inductor MPN is open (avionics/WBS.md) |
+
+### REF-SENSOR-061: YAGEO (Pulse Electronics) TC1G00 PulseChip LAN transformer, TC002.C (10/25)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | YAGEO Group (Pulse Electronics), PulseChip LAN Transformer Overview, TC002.C (10/25) |
+| **Official access** | <https://yageogroup.com/content/datasheet/asset/file/DATASHEET_TC002> (HTTP 200, 2026-10-19) |
+| **Local copy** | `avionics/datasheets/Pulse_TC002_PulseChip.pdf` (MD5 d5be87a985f572a53d89cfc2cf935cd5) |
+| **Section applied** | p. 1 electrical table, row TC1G00 (240 uH min at 100 kHz / 0.1 V, 1CT:1CT, 1500 Vac isolation for 60 s at 1 mA max, -40 to +85 C); p. 2 Fig. A mechanical drawing, recommended footprint 1, schematic and pad numbering (winding 2-(8/7)-1 and 5-(3/4)-6, centre taps shorted on the PCB) |
+| **Cited in** | Pilot `T-RMII2-TX/-RX`, `T-USB1-TX/-RX` (`gen_pilot_sch.py`); land `Pulse_TC1G00_PulseChip_4.7x3.2mm` (`gen_pilot_footprints.py`) |
+| **Note** | The datasheet characterises the part for 1000BASE-T and faster. 10/100 suitability and the footprint transcription need engineer-of-record confirmation (avionics/WBS.md) |
+| **Openness / sourcing** | Public, no NDA. YAGEO is Taiwan-domiciled |
+
+### REF-SENSOR-062: Pilot passive components: YAGEO MLCC and chip resistors, Taiyo Yuden, Holy Stone, Murata data sheets
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | YAGEO (UPY-GPHC X7R 6.3 V to 250 V; UPY-GPHC X5R 4 V to 50 V; PYU-RC Group 51 RoHS L and P; CC0402JRNPO9BN150 spec sheet), Taiyo Yuden (LMK325BJ476KMHP spec sheet), Holy Stone Enterprise (HVC series), Murata (DFE201610P) |
+| **Official access** | <https://yageogroup.com/content/datasheet/asset/file/UPY-GPHC_X7R_6_3V-TO-250V>, <https://yageogroup.com/content/datasheet/asset/file/UPY-GPHC_X5R_4V-TO-50V>, <https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L>, <https://yageogroup.com/content/datasheet/asset/file/PYU-RC_51_ROHS_P>, <https://yageogroup.com/download/specsheet/CC0402JRNPO9BN150>, <https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2092/LMK325BJ476KMHP_SS.pdf> (DigiKey-hosted Taiyo Yuden sheet), <http://www.holystonecaps.com/PDF/201612051329150.2017%20HVC%20Series.pdf>, <https://www.murata.com/~/media/webrenewal/products/inductor/chip/tokoproducts/wirewoundmetalalloychiptype/m_dfe201610p.ashx> (all HTTP 200, 2026-10-20; the links were returned by DigiKey's product API) |
+| **Local copy** | `avionics/datasheets/YAGEO_UPY-GPHC_X7R_6.3V-250V.pdf` (MD5 4ef16ad8ea5fa92e2c12af1f0c474c8f), `YAGEO_UPY-GPHC_X5R_4V-50V.pdf` (6f0fe5dfd6f124e0139376455e6b8904), `YAGEO_PYU-RC_GROUP_51_ROHS_L.pdf` (65fe4dad692770fee2ad5de035d3230b), `YAGEO_PYU-RC_51_ROHS_P.pdf` (726173b220bb313ae6cd9f43610caff9), `YAGEO_CC0402JRNPO9BN150.pdf` (c6e4e402ed86f021939dfb5d91b6c2d9), `TaiyoYuden_LMK325BJ476KMHP_SS.pdf` (8e227b928320dca591074cc2741c9b16), `HolyStone_HVC_Series.pdf` (5e203c4ebf9ef0b2876326b2075de10f), `Murata_DFE201610P.pdf` (0d1a4bffcfa3bd7c4c0530f9a6a7c9d7) |
+| **Section applied** | Part numbers and ratings used for the 25 formerly unnumbered BOM lines in `gen_pilot_sch.py` `PASSIVE_MPN`. Murata DFE201610P-2R2M=P2: 2.2 uH +/-20 %, 168 mOhm max DCR, 2.0 A at 30 % inductance drop, 1.4 A for a 40 C rise (the sheet's own definitions); recommended land 2.0 mm span, 0.9 mm gap, 1.6 mm pad height, which matches the KiCad `L_Murata_DFE201610P` pads (0.55 x 1.6 mm at +/-0.725 mm), checked 2026-10-20. Taiyo Yuden LMK325BJ476KMHP: 47 uF +/-10 %, 10 V, X5R, 1210. Holy Stone C1808X103K202T: 10 nF, 2 kV, X7R, 1808 |
+| **Cited in** | `avionics/kicad/Pilot/scripts/gen_pilot_sch.py`, `avionics/kicad/Pilot/docs/Pilot-BOM.csv` |
+| **Note** | Availability and status read from DigiKey's product API on 2026-10-20. Holy Stone is Taiwan-domiciled by the maker's published address (to be re-verified against the owner's sourcing rule at order time). DC-bias derating has been checked only for the 22 uF parts (REF-PWR-011); the 4.7, 10 and 47 uF X5R parts are not yet derated (Pilot-Design-Review.md) |
+| **Openness / sourcing** | Public data sheets, no NDA. YAGEO (Taiwan), Taiyo Yuden and Murata (Japan) |
+### REF-SENSOR-063: Texas Instruments ADS1231 — 24-bit ADC for bridge sensors (SBAS414D)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Texas Instruments, *ADS1231 24-Bit Analog-to-Digital Converter for Bridge Sensors*, literature number SBAS414D (July 2009, revised October 2013) |
+| **Official access** | <https://www.ti.com/lit/ds/symlink/ads1231.pdf> (HTTP 200, application/pdf, 2026-10-20) |
+| **Local copy** | `avionics/datasheets/ti/ads1231.pdf` (MD5 158471a5ea317c31491054d2711064e3) |
+| **Orderable part** | `ADS1231IDR`, SOIC-16, tape and reel — listed Active in the datasheet "Packaging Information"; Digi-Key 296-43578-1-ND, USD 6.48 each, 3,332 in stock (Digi-Key Product Information API, 2026-10-20) |
+| **Section applied** | The datasheet uses unnumbered headings. "Electrical Characteristics": power-supply voltage 3 – 5.3 V (AVDD, DVDD), full-scale input ±0.5·VREF/128, common-mode input range GND + 1.5 V to AVDD − 1.5 V, low-side switch RON (3.5 Ω typ / 5 Ω max at 5 V; 4 Ω typ / 7 Ω max at 3 V; 30 mA max), supply currents. "Absolute Maximum Ratings": AVDD/DVDD −0.3 to +6 V. "Pin Configuration" and "Pin Descriptions" (SO-16). "Data Format": 7FFFFFh / 800000h at ±full scale. "Data Retrieval" (Figures 19, 20). "Standby Mode" (Figure 21, t_STANDBY). "Application Example", Figure 24 (weigh-scale system). |
+| **Cited in** | `docs/CARGO_WINCH_SPECIFICATION.md` §5.5; `current-specification/bom_revT.csv` / `.json` row `LC-ADC`; `airframe/placeholders/generate_placeholders.py` (`gen_lc_adc`); `avionics/firmware/fc/tools/governor_cal.py`; WBS CARGO-LC-01 (`airframe/fuselage-mid/WBS.md`) |
+| **Openness / sourcing** | Public, no NDA. TI is US-domiciled; passes the component-sourcing rule in `AGENTS.md` §5. Replaces the HX711 (see "Removed / Superseded Citations"). |
 
 ### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
 
 | Field | Value |
 |---|---|
-| **Official access** | `avionics/datasheets/ds-000347-icm-42688-p-v1.6.pdf` (local copy) |
+| **Official access** | `avionics/datasheets/tdk/ds-000347-icm-42688-p-v1.6.pdf` (local copy) |
 | **URL status** | requires verification (TDK URL returned 404, 2026-09-26) |
 | **Section applied** | Pilot IMU pin map |
 | **Cited in** | Pilot.kicad_sch/.kicad_sym, gen_pilot_sch.py |
@@ -2877,7 +3016,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 
 | Field | Value |
 |---|---|
-| **Official access** | `avionics/datasheets/PremierMagnetics_DB2791S.pdf` (local copy) |
+| **Official access** | `avionics/datasheets/premier-magnetics/PremierMagnetics_DB2791S.pdf` (local copy) |
 | **URL status** | requires verification (no working manufacturer URL found 2026-09-26) |
 | **Section applied** | Fig. 1 schematic (winding pins) |
 | **Cited in** | Pilot, TACCO schematics |
@@ -2922,7 +3061,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 
 | Field | Value |
 |---|---|
-| **Official access** | `avionics/datasheets/hi-1573.pdf` (local copy) |
+| **Official access** | `avionics/datasheets/holt/hi-1573.pdf` (local copy) |
 | **URL status** | requires verification (holtic.com link serves an HTML page, 2026-09-26) |
 | **Section applied** | p. 1 Pin Configurations (44-pin QFN); heat-sink note |
 | **Cited in** | Pilot, TACCO schematics; SecureControllers library |
@@ -2944,7 +3083,8 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Official access** | <https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf> |
 | **URL status** | validated 2026-09-26 |
 | **Section applied** | Table 2 pinning (SOT143B: 1 GND, 2 I/O1, 3 I/O2, 4 VCC); Sec. 11 outline |
-| **Cited in** | Pilot, TACCO, Flight Engineer, Commo, Observer; SecureControllers library |
+| **Cited in** | TACCO, Flight Engineer, Commo, Observer; SecureControllers library. Removed from Pilot 2026-10-18 (replaced by REF-SENSOR-053 / REF-SENSOR-054) |
+| **Openness / sourcing** | FAILS AGENTS.md §5: Nexperia is owned by PRC-domiciled Wingtech Technology. Replace on the remaining boards (avionics/WBS.md fleet sourcing audit) |
 
 ### REF-SENSOR-040: Texas Instruments BQ76930 — 6-10 cell battery monitor AFE data sheet
 
@@ -3049,10 +3189,10 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Publisher** | Texas Instruments, SLVSEP0F, August 2019, revised November 2021 |
 | **Official access** | <https://www.ti.com/lit/ds/symlink/tpsm82822.pdf> |
 | **URL status** | validated HTTP 200, 2026-10-17 |
-| **Local copy** | `avionics/datasheets/tpsm82822.pdf` (MD5 df684d387cf85ef14c3154b81424f4e2) |
+| **Local copy** | `avionics/datasheets/ti/tpsm82822.pdf` (MD5 df684d387cf85ef14c3154b81424f4e2) |
 | **Section applied** | Table 5 device options (TPSM828224SILR = fixed 3.3 V, 2 A); Table 6-1 / Fig 6-1 pin functions (FB to VOUT on fixed-output devices); sec 9.2.1.2.1 (R1/R2/C3 not needed for fixed output); sec 9.2.2 (effective CIN >= 3 uF, COUT >= 5 uF); Table 9-1/9-2 BOM; sec 11.1 layout guidelines (solder-mask-defined pads); pp. 47-49 SIL0010D package outline, land pattern and stencil (drawing 4223961/D) |
 | **Cited in** | Pilot cape +3V3 module `U-3V3` (`avionics/kicad/Pilot/scripts/gen_pilot_sch.py`); land `Serenity-Custom:TI_SIL0010D_uSiP-10_2.0x2.5mm_P0.5mm` (`avionics/kicad/Pilot/scripts/gen_pilot_footprints.py`) |
-| **Note** | KiCad symbol / footprint / STEP for the same package were obtained through Ultra Librarian (export `avionics/datasheets/ul_XPSM82822SILR.zip`, 2026-10-17); the land was cross-checked against this data sheet, not taken on trust. 3D model: TI SIL0010D_ASM STEP, copied to `avionics/kicad/Serenity-Custom.3dshapes/TI_SIL0010D_uSiP-10.step` (MD5 9dbd06ef98c84c6ecb20017de9d1a77b). |
+| **Note** | KiCad symbol / footprint / STEP for the same package were obtained through Ultra Librarian (export `avionics/datasheets/ti/ul_XPSM82822SILR.zip`, 2026-10-17); the land was cross-checked against this data sheet, not taken on trust. 3D model: TI SIL0010D_ASM STEP, copied to `avionics/kicad/Serenity-Custom.3dshapes/TI_SIL0010D_uSiP-10.step` (MD5 9dbd06ef98c84c6ecb20017de9d1a77b). |
 
 ### REF-PWR-009: Texas Instruments SLUA271C — QFN and SON PCB Attachment
 
@@ -3061,7 +3201,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Publisher** | Texas Instruments application note SLUA271C (S. Kummerl, B. Lange, D. Nguyen), June 2002, revised December 2023 |
 | **Official access** | <https://www.ti.com/lit/an/slua271c/slua271c.pdf> |
 | **URL status** | validated HTTP 200, 2026-10-17 |
-| **Local copy** | `avionics/datasheets/slua271c.pdf` (MD5 b1b1a948212f1a6f238bb5437d3d50f8) |
+| **Local copy** | `avionics/datasheets/ti/slua271c.pdf` (MD5 b1b1a948212f1a6f238bb5437d3d50f8) |
 | **Section applied** | Referenced by SLVSEP0F p. 48 note 4 for the SIL0010D land and solder-mask definition |
 | **Cited in** | `gen_pilot_footprints.py` `tpsm8282x_sil0010d()` (via REF-PWR-008) |
 
@@ -3072,7 +3212,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Publisher** | Texas Instruments technical white paper SLIB006A (C. Glaser), February 2011, revised June 2021 |
 | **Official access** | <https://www.ti.com/lit/ug/slib006a/slib006a.pdf> (reached via 302 from `/lit/pdf/slib006`) |
 | **URL status** | validated HTTP 200, 2026-10-17 |
-| **Local copy** | `avionics/datasheets/slib006a.pdf` (MD5 1827739e75b69f6dd78f11e4a1e278ed) |
+| **Local copy** | `avionics/datasheets/ti/slib006a.pdf` (MD5 1827739e75b69f6dd78f11e4a1e278ed) |
 | **Section applied** | Assembly and rework guidance for MicroSiP modules (reference for the assembly house; not used to size the land) |
 | **Cited in** | Pilot `U-3V3` (TPSM828224SILR) assembly notes |
 
@@ -3082,7 +3222,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Taiyo Yuden Co., Ltd. — TY-COMPAS spec sheet (generated 2026-10-18 JST) and "Electrical Characteristics Data" sheet 23H2B09 |
 | **Official access** | <https://ds.yuden.co.jp/TYCOMPAS/ut/detail?pn=JMK107BC6226MA-T&u=M> (product page, HTTP 200 2026-10-17; the PDFs are generated by its JavaScript and were downloaded by S. Griffing) |
-| **Local copy** | `avionics/datasheets/MSASJ168BC6226MTNA01_SS.pdf` (MD5 bdd09678241888ebf6beb2c2068c4d4b), `avionics/datasheets/MSASJ168BC6226MTNA01.pdf` (MD5 0141e44d0306f5afc8b2c1b276dc526a); dimension table `avionics/kicad/symbols/footprints/dim_MS_mlcc_all.jpg` |
+| **Local copy** | `avionics/datasheets/taiyo-yuden/MSASJ168BC6226MTNA01_SS.pdf` (MD5 bdd09678241888ebf6beb2c2068c4d4b), `avionics/datasheets/taiyo-yuden/MSASJ168BC6226MTNA01.pdf` (MD5 0141e44d0306f5afc8b2c1b276dc526a); dimension table `avionics/kicad/symbols/footprints/dim_MS_mlcc_all.jpg` |
 | **Section applied** | Spec sheet: 22 uF +/-20 %, 6.3 V, X6S, -55 to +105 C, L 1.6 +0.2/-0, W/T 0.8 +0.2/-0 mm. Characteristics data: "DC Bias Char." curve, digitized from a 150 dpi render by Claude Opus 5.5 (2026-10-17): -46 % at 3.0 V, -51 % at 3.3 V, -55 % at 3.6 V, -68 % at 5.0 V, -71 % at 5.5 V; "Capacitance Temp." about -17 % at 105 C. Reference data only, per the sheet's own note. |
 | **Cited in** | Pilot `C-3V3-IN` and `C-3V3-O1/O2` (`gen_pilot_sch.py`, `inject_tpsm828224.py`); CIN / COUT DC-bias checks for REF-PWR-008 sec 9.2.2: CIN 22 x 0.80 x 0.29 x 0.83 = 4.2 uF worst at 5.5 V (>= 3 uF), COUT 7.2 uF per cap worst at 3.333 V (>= 5 uF) |
 
@@ -3092,7 +3232,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Murata Manufacturing Co., Ltd., reference sheet GRM188Z71A106MA73-01A (specifications as of 2026-06-19) |
 | **Official access** | <https://pim.murata.com/en-us/pim/details/?partNum=GRM188Z71A106MA73%23> (HTTP 200 2026-10-17; downloaded by S. Griffing) |
-| **Local copy** | `avionics/datasheets/GRM188Z71A106MA73-01A-EN.pdf` (MD5 c2d12c5879c506bb38a3220f014d57c5); Electrical Characteristics Data sheet `avionics/datasheets/GRM188Z71A106MA73#_EC-data.pdf` (MD5 1eb56b61a1f2c66efd381dc783f4bd8e, "as of Oct. 2026", typical data; downloaded by S. Griffing) |
+| **Local copy** | `avionics/datasheets/murata/GRM188Z71A106MA73-01A-EN.pdf` (MD5 c2d12c5879c506bb38a3220f014d57c5); Electrical Characteristics Data sheet `avionics/datasheets/murata/GRM188Z71A106MA73#_EC-data.pdf` (MD5 1eb56b61a1f2c66efd381dc783f4bd8e, "as of Oct. 2026", typical data; downloaded by S. Griffing) |
 | **Section applied** | Rated value table: 10 uF +/-20 %, 10 V, Z7 = X7R(MURATA), cap change -15 to +15 % over -55 to 125 C *with 50 % rated voltage applied* (relative to the biased reference, so it gives NO absolute capacitance at 5 V). The reference sheet carries no part-specific DC-bias curve (pp. 11-12 are generic samples). EC-data sheet sec. 4 "Capacitance-DC Bias Characteristics" (1 kHz / 1 Vrms), digitized from a 150 dpi render by Claude Opus 5.5 (2026-10-17): -17 % at 2 V, -46 % at 4 V, -56 % at 5.0 V, -61 % at 5.5 V, -64 % at 6 V. Its sec. 6 temperature chart is blank; the -15 % rated-value bound above is used instead. |
 | **Cited in** | Pilot `C-3V3-IN` CIN check against REF-PWR-008 sec 9.2.2: worst case 10 uF x 0.80 x 0.44 x 0.85 = 2.96 uF at 5.0 V and 2.65 uF at 5.5 V, **below the 3 uF floor** (typical 4.4 / 3.9 uF). Part **rejected** for `C-3V3-IN` 2026-10-17 (owner decision S. Griffing); replaced by REF-PWR-011's part. Kept as the record of why. |
 
@@ -3106,7 +3246,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 |---|---|
 | **Publisher** | Bourns, Inc., MF-PSMF series data sheet |
 | **Official access** | <https://www.bourns.com/docs/Product-Datasheets/mfpsmf.pdf> (HTTP 200, 2026-10-17) |
-| **Local copy** | `avionics/datasheets/Bourns_MF-PSMF.pdf` (MD5 36ae6a91eac8cdbd53994f5b559ce50c) |
+| **Local copy** | `avionics/datasheets/bourns/Bourns_MF-PSMF.pdf` (MD5 36ae6a91eac8cdbd53994f5b559ce50c) |
 | **Section applied** | MF-PSMF035X: Vmax 6 V, Ihold 0.35 A, Itrip 0.75 A at 23 C; thermal derating table (0.14 A hold at 85 C); operating -40..85 C |
 | **Cited in** | Pilot `F-GPS`, `F-SPI` (`gen_pilot_sch.py`) |
 
@@ -3117,7 +3257,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Official access** | <https://www.samtec.com/products/tsm-108-01-l-dv> (product family: <https://www.samtec.com/products/tsm>) |
 | **URL status** | validated 2026-09-27 |
 | **Section applied** | Mechanical dimensions (1.27 mm gap, 2.54 mm pitch, TSM-108-01-x-DV body) |
-| **Cited in** | Pilot PocketBeagle 2 socket connector (TSM-108-01-x-DV), `gen_pilot_sch.py`, `gen_pilot_footprints.py`; local copy `avionics/datasheets/samtec_tsm_catalog.pdf` |
+| **Cited in** | Pilot PocketBeagle 2 socket connector (TSM-108-01-x-DV), `gen_pilot_sch.py`, `gen_pilot_footprints.py`; local copy `avionics/datasheets/samtec/samtec_tsm_catalog.pdf` |
 
 ---
 
@@ -3130,6 +3270,29 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Local copy** | none: the licence ties redistribution and implementation to an adopter agreement, so the document is cited, not archived |
 | **Section applied** | "Connector Series" (JST GH); "Basic GPS port" 6-pin (VCC, TX, RX, I2C1 SCL, I2C1 SDA, GND); "SPI port" 7-pin (VCC, SPI_EXT_SCK, SPI_EXT_MISO, SPI_EXT_MOSI, !SPI_SS1, !SPI_SS2, GND); "I2C port" 1.5 k pull-ups on the autopilot side; VCC 2.5 A recommendation (NOT met: 0.35 A PTC per port, recorded deviation) |
 | **Cited in** | Pilot `J-GPS`, `J-SPI` (`gen_pilot_sch.py`). Pilot is pin-compatible only and does not use the Pixhawk trademark. |
+
+### REF-CONN-003: JST GH series — 1.25 mm pitch wire-to-board connector (eGH)
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | J.S.T. Mfg. Co., Ltd., GH series catalogue sheet |
+| **Official access** | requires verification: <https://www.jst-mfg.com/product/pdf/eng/eGH.pdf> returned HTTP 403 to a scripted request on 2026-10-19, so the URL is not validated |
+| **Local copy** | `avionics/datasheets/eGH.pdf` (MD5 e6714f681357e4fed90fc40166d59701) |
+| **Section applied** | Ratings: 1.0 A AC/DC (AWG 26), 50 V AC/DC, -25 to +85 C including temperature rise, conductor AWG 30 to 26, 1.25 mm pitch |
+| **Cited in** | `avionics/kicad/Pilot/docs/Pilot-ICD-External.md` |
+| **Openness / sourcing** | Public catalogue sheet, no NDA. JST is Japan-domiciled |
+
+### REF-FAB-001: Sunstone Circuits (ASC Sunstone) — PCB fabrication capabilities and PCB Data Checklist
+
+| Field | Value |
+| --- | --- |
+| **Publisher** | American Standard Circuits / Sunstone Circuits (Sunstone Circuits, an AS9100D / ISO 9001 / ITAR-registered US fabricator) |
+| **Official access** | <https://www.sunstone.com/capabilities> and <https://www.sunstone.com/resources/pcb-order-checklist> (HTTP 200, 2026-10-19). The checklist PDF is <https://qa-api.sunstone.com/uploads/PCB_Data_Checklist_2026_1f61edfc31.pdf> (HTTP 200, 2026-10-19; a "qa-api" host, so confirm it against the live page link before relying on it) |
+| **Local copy** | none: no redistribution licence is stated, so the checklist is cited, not archived (MD5 of the 2026-10-19 download: see `shasum` of `PCB_Data_Checklist_2026_1f61edfc31.pdf`, 179 628 bytes) |
+| **Section applied** | PCB Data Checklist (Gerber package, NC drill, board specifications, fabrication drawing, finish, special requirements, defaults: 150Tg FR-4, IPC-6012 Class 2, IPC-A-600 Class 2, satin green mask, white legend); capabilities page: layer counts 4 to 20 (6 is standard), copper 1 / 2 / 3 oz finished, board thickness 0.021 to 0.125 in |
+| **Not verified** | Outer-layer trace/space, minimum drill, annular ring, copper-to-edge and surface-finish limits: the detailed-capabilities tabs are loaded by script and were not retrievable. Inner-layer minimum trace/space by tier is verified (Limited Review 0.005 in; Online NRE 0.004 / 0.004 in at 1 oz; Custom 0.003 / 0.003 in at 1 oz) |
+| **Cited in** | `avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md` |
+| **Openness / sourcing** | US-domiciled fabricator, public pages, no NDA |
 
 ## Part XIII — Telecommunications Standards
 
@@ -3415,6 +3578,7 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 | ADI ADM2795EBRWZ (isolated RS-485, signal-only) — `Observer`, `CAN-PERIPH-GW-1`, `Flight Engineer`, `Pilot`, `XO` RS-485 transceivers | `avionics/kicad/Observer/kicads/Observer.kicad_sch`, `avionics/kicad/CAN-PERIPH-GW-1/`, `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch`, `avionics/kicad/Pilot/kicads/Pilot.kicad_sch`, `avionics/kicad/XO/kicads/XO.kicad_sch` | **Superseded by design decision, 2026-07-26.** ADM2795E provides signal isolation only and requires a separate external isolated DC-DC supply for its bus-side VDD2. TI ISOW1412 integrates its own isolated DC-DC, eliminating the extra supply and simplifying every "trust module" node fleet-wide. Fleet-wide swap performed 2026-07-26. Separately, while performing this swap on Pilot and XO, found their pre-existing ADM2795EBRWZ symbols had incorrectly numbered pins (and their ISOW1044BDFMR symbols had the wrong footprint, `SOIC-16W` instead of the correct `SOIC-20W` for a 20-pin part) — both defects predate this session and were corrected as part of the same fix (`kicad-cli sch erc` violation counts unchanged before/after: Pilot 48, XO 234 — confirming the fix corrected the target defects with zero regression against these boards' large, pre-existing, out-of-scope ERC backlog). | REF-SENSOR-010 (TI ISOW1412) |
 | "LibreServo_v4.1-TC" tilt-controller variant (`LS-TILT-TC`, `TILT-CTL-08`, `TC-BOARD`, `LS-CR-1`) | `docs/TILT_ACTUATOR_SELECTION.md` §4, `docs/TILT_DRIVE_CONTROL_SPEC.md`, `docs/POWER_DISTRIBUTION.md` §3.3a, `docs/CARGO_SECTION_LAYOUT.md`, `current-specification/bom_revS.*`, `WBS.md` | **Superseded by design decision (2026-09-17), not an error.** A LibreServo variant would fork that board away from its upstream and break the attribution chain, for a device that is no longer a servo controller. | REF-ESC-001 — Open-Secure-ESC build `6s/10A/BRUSHED_CAN_485_isolation`; BOM row `OSESC-TILT-TC` |
 | REF-MIL-001 used for CNAF M-3710.7 (ID collision) | `AGENTS.md` §6a, `tools/precommit_doc_wording.py`, `.githooks/pre-commit` (branch `avionics-docs-audit`) | **Duplicate ID.** REF-MIL-001 is MIL-STD-1553C; the CNAF M-3710.7 entry was filed under the same ID. Found while merging `main` 2026-10-05. | REF-MIL-003 (same CNAF entry, renumbered) |
+| Avia Semiconductor HX711 24-bit ADC and the `HX711-LC` breakout module — cargo line-tension ADC | `current-specification/bom_revS.*` (retained as the Rev S snapshot) and `bom_revT.*` (row replaced), `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/POWER_DISTRIBUTION.md` §3.2, `avionics/firmware/fc/tools/governor_cal.py`, `airframe/placeholders/generate_placeholders.py` | **Superseded by owner decision (2026-10-20), not a citation error.** Page 1 of the HX711 datasheet prints Avia's contact as "(P. R. China)", which fails the component-sourcing rule in `AGENTS.md` §5; the BOM entry also named no manufacturer for the module. The datasheet stays at `avionics/datasheets/avia-semiconductor/hx711.pdf` pending the owner's decision to delete it. | REF-SENSOR-063 (TI ADS1231) |
 
 ---
 
@@ -3429,7 +3593,7 @@ Add verified section numbers to the relevant files and update this table.
 | TACCO signal-line ferrite bead MPN (600 Ω @ 100 MHz, 0402) | `gen_tacco_sch.py` (`FB-MLRS-1/2`) | **Open (2026-09-29).** The 1812 power bead 742792510 had been used on signal lines by mistake; the correct 0402 part is not yet selected (no catalog access). | Owner selects the MPN (Würth WE-CBF 0402 600 Ω family or equivalent), archive its datasheet, cite it. |
 | C&K KMR2 tact-switch variant, Epson TG2520SMN 32 MHz ordering code, pSemi PE4259 datasheet REF-ID | `gen_tacco_sch.py` (`SW-MLRS`, `X-MLRS`, `RFSW-MLRS`) | **Open (2026-09-29).** Footprints are from the KiCad library / `avionics/datasheets/`; exact orderable part numbers are not confirmed. | Owner confirms MPNs; add REF-IDs for TG2520SMN and PE4259 (datasheets already archived). |
 | USB Wi-Fi/BT module for TACCO (owner decision 2026-09-29) | `avionics/WBS.md` §1.2a, `PB2_HEADER_PINMAP.md` §3 | **Open — fab blocker.** SDIO is not on the PB2 headers; Wi-Fi moves to USB1. No non-restricted-vendor module has been selected and no datasheet is archived. | Owner selects the module; archive datasheet; author symbol/land; re-run the area budget. |
-| `[REF-PWR-003]`, `[REF-PWR-004]` cited in `gen_tacco_sch.py` (WE-MAPI inductor, ECS-2520MV oscillator) | `gen_tacco_sch.py` | **Open (2026-09-29).** These REF-IDs do not exist in this catalog; the datasheets are archived (`74438335033.pdf`, `ECS-2520MV.pdf`). | Add catalog entries (or renumber) and fix the citations. |
+| `[REF-PWR-003]`, `[REF-PWR-004]` cited in `gen_tacco_sch.py` (WE-MAPI inductor, ECS-2520MV oscillator) | `gen_tacco_sch.py` | **Open (2026-09-29).** These REF-IDs do not exist in this catalog; the datasheets are archived (`wurth-elektronik/74438335033.pdf`, `ecs-inc/ECS-2520MV.pdf`). | Add catalog entries (or renumber) and fix the citations. |
 | §15.203 antenna restriction (Commo RF connector) | Commo board files, `skipper_wiring.md` | **Confirmed, resolved 2026-06-20.** §15.203 binds the manufacturer directly. J2 used a generic SMA edge connector (Amphenol 132289), a standard jack; no exception applies. | **Resolved:** J2 changed to 132289RP (RP-SMA, same footprint), satisfying §15.203. Board re-spin tracked in TODO.md §0.1 |
 | 14 CFR Part 47 (aircraft registration marks) | `ax25_types.h` | **Resolved 2026-06-21.** README/build guide had no erroneous citation; the miscitation was in `ax25_types.h`, which stated Part 47 governs registration and AX.25 needs an amateur license (Part 97) | Corrected to cite Part 48 §48.205 [REF-FAA-001]; link is license-exempt under Part 15 §15.235 [REF-FCC-003], per REF-PROTO-001 |
 | AUVSI "standards" (unnamed) | `AGENTS.md`, `README.md` | **Resolved 2026-06-22.** No specific numbered AUVSI standard exists (AUVSI publishes frameworks, not numbered design standards). Identified and verified three applicable ASTM F38 standards. | Added REF-ASTM-001 (F2910-22, design/construction/test), REF-ASTM-002 (F3005-22, batteries), REF-ASTM-003 (F3269-21, runtime assurance/failover). `AGENTS.md`/`README.md` AUVSI text is accurate as-is (AUVSI frameworks, not numbered standards) — no doc text change needed there. |
@@ -3446,7 +3610,7 @@ Add verified section numbers to the relevant files and update this table.
 | Tilt-spar material allowables (4130 + trade-study alternates) | `docs/TILT_SPAR_ANALYSIS.md` §3.1–3.2/§3.5, `current-specification/bom_revS.csv` SPAR-TILT-4130 | The §3.5 material trade study uses **typical handbook allowables** for AISI 4130 (~460 MPa yield), 17-4 PH H1075 (~860 MPa), 7075-T6 (~503 MPa), 6061-T6 (~276 MPa), 316 SS, and Ti-6Al-4V (~880 MPa); none are yet tied to a validated MMPDS/AMS product page. Moduli/densities are nominal. | Confirm the **selected** material's design allowable and the two carried alternates (17-4 PH, 7075-T6) vs MMPDS-2023 / AMS (or mill cert) and add `REF-MAT-*` catalog entries with validated URLs before spar procurement (TODO §0.8). |
 | CF plate bending allowable for the SPAR-01 thwarts | `airframe/wings-nacelles/WBS.md` §1.1.2 SPAR-01, `tools/wing_spar_carrythrough.py`, `docs/structural_analysis.md` §1 | The two CF thwarts that replace the wing-spar carry-through (2026-08-23) are sized against a **300 MPa** cross-ply bending stand-in, chosen a factor of 5 below the only CF figure the repository carries — `docs/structural_analysis.md` §1's ~1 500 MPa for **unidirectional pultruded** stock, which is itself marked as requiring supplier certificates. A thwart is loaded in bending across the ship, which is not that layup, so neither number is a verified allowable for this part. The tool prints FOS against both (8.5 and 42.5 at the governing station). | Obtain ASTM D3039 (tensile) and ASTM D695 (compressive) certificates for the actual CF plate stock, add a `REF-MAT-*` catalog entry with a validated URL and the certified flexural allowable, and re-run `tools/wing_spar_carrythrough.py` before cutting the thwarts. Do not fabricate the figure. (root `TODO.md` §0.8) |
 | S1223 airfoil coordinates — the tabulated section is not a valid airfoil | `airframe/openscad/wings/wings_s1223_revo.scad` `S1223_UPPER`/`S1223_LOWER`, `airframe/wings-nacelles/WBS.md` §1.1.2 WING-01, `tools/wing_airfoil_integrity.py` | The tabulated upper surface falls below the lower surface over the aft quarter: section thickness goes **negative from x/c ≈ 0.742**, reaching t/c −0.0152 at x/c 0.90, and the outline self-intersects at (0.7417, 0.0235). The aft upper points sit ~0.03 t/c below published Selig S1223. **No source is recorded for the tables** — they carry no citation, retrieval date, or URL anywhere in the repository, which is how a corrupted aft section went unnoticed. `wing_solid()` lofts with `hull()`, whose convex hull is 1.647× the outline's area, so the defect never reaches the STL and `validate_stls.py` passes. | Retrieve S1223 coordinates from the **UIUC Airfoil Coordinates Database** (<https://m-selig.ae.illinois.edu/ads/coord_database.html>) — URL not yet validated against the issuing site by this repository, so verify before citing — record the retrieval date, add a `REF-CAD-*` entry, and only then replace both tables. `tools/wing_airfoil_integrity.py` must reach PASS. Do **not** transcribe coordinates from memory or from the comparison column in WING-01. (root `TODO.md` §1.1.2) |
-| DS3225 nacelle-tilt servo — residual torque margin vs the tilt requirement | `avionics/datasheets/DS3225 datasheet.pdf`, `docs/TILT_SPAR_ANALYSIS.md` §2/§2.1, `current-specification/bom_revS.csv` SERVO-TILT | **Dimensions RESOLVED and stable across the swap.** DS3225 (added 2026-08-23) is **dimensionally identical** to the DS3218 it replaces — 40 × 20 × 40.5 mm, 60 g, 54.5 mm flange span, 49.5 × 10 mm bolt pattern, flange 27.7 mm above base — so the Rev S1d cargo-shell pads are unaffected. Datasheet stall is **21 kgf·cm @ 5 V / 24.5 kgf·cm @ 6.8 V**; the "25kg" in the product name is the marketing figure and the spec table maxes at 24.5. Against the uncorrected **≥ 25 kgf·cm (2.45 N·m)** spec-pick that was **98 % at 6.8 V**. **RESOLVED 2026-08-25** (`docs/TILT_SPAR_ANALYSIS.md` §2.1): the ≥25 kgf·cm figure was itself the stale artifact — it is a spec pick (`archives/serenity-rev-r.jsx` L383), not a load derivation. Re-derived from aero+inertia only (pivot at CG nulls gravity to within a 0.019 kgf·cm bound on two off-axis parts): grounded requirement ≈ 1.80 kgf·cm, **7.3 % of DS3225's 24.5 kgf·cm** — wide margin. Aero moment could not be grounded (no nacelle Cd/frontal-area data exists in the repo) and remains an open item, not assumed zero. **DS3225 stands; no part change.** Stall current is cited at **1.9 A / 2.3 A** — this is the **6 V servo bus** current (`docs/POWER_DISTRIBUTION.md` §3.3), now resized there to 2.3 A/servo; it is **not** RAIL-2 (RAIL-2/`5V_OBS` is the separate Observer/winch-servo rail, `docs/POWER_DISTRIBUTION.md` §3.2.1/§11.1 — the earlier "1.2 A placeholder RAIL-2 was sized on" language in this row and elsewhere was a citation error, corrected 2026-08-25). | Bench-measure stall torque of a DS3225 + LibreServo_v4 unit at the rail voltage actually chosen, to confirm the datasheet figures translate to the built hardware — the load-side conclusion (DS3225 stands) does not depend on this, but it remains an open verification item per Scope Boundaries. (root `TODO.md` §0.8) |
+| DS3225 nacelle-tilt servo — residual torque margin vs the tilt requirement | `avionics/datasheets/dsservo/DS3225 datasheet.pdf`, `docs/TILT_SPAR_ANALYSIS.md` §2/§2.1, `current-specification/bom_revS.csv` SERVO-TILT | **Dimensions RESOLVED and stable across the swap.** DS3225 (added 2026-08-23) is **dimensionally identical** to the DS3218 it replaces — 40 × 20 × 40.5 mm, 60 g, 54.5 mm flange span, 49.5 × 10 mm bolt pattern, flange 27.7 mm above base — so the Rev S1d cargo-shell pads are unaffected. Datasheet stall is **21 kgf·cm @ 5 V / 24.5 kgf·cm @ 6.8 V**; the "25kg" in the product name is the marketing figure and the spec table maxes at 24.5. Against the uncorrected **≥ 25 kgf·cm (2.45 N·m)** spec-pick that was **98 % at 6.8 V**. **RESOLVED 2026-08-25** (`docs/TILT_SPAR_ANALYSIS.md` §2.1): the ≥25 kgf·cm figure was itself the stale artifact — it is a spec pick (`archives/serenity-rev-r.jsx` L383), not a load derivation. Re-derived from aero+inertia only (pivot at CG nulls gravity to within a 0.019 kgf·cm bound on two off-axis parts): grounded requirement ≈ 1.80 kgf·cm, **7.3 % of DS3225's 24.5 kgf·cm** — wide margin. Aero moment could not be grounded (no nacelle Cd/frontal-area data exists in the repo) and remains an open item, not assumed zero. **DS3225 stands; no part change.** Stall current is cited at **1.9 A / 2.3 A** — this is the **6 V servo bus** current (`docs/POWER_DISTRIBUTION.md` §3.3), now resized there to 2.3 A/servo; it is **not** RAIL-2 (RAIL-2/`5V_OBS` is the separate Observer/winch-servo rail, `docs/POWER_DISTRIBUTION.md` §3.2.1/§11.1 — the earlier "1.2 A placeholder RAIL-2 was sized on" language in this row and elsewhere was a citation error, corrected 2026-08-25). | Bench-measure stall torque of a DS3225 + LibreServo_v4 unit at the rail voltage actually chosen, to confirm the datasheet figures translate to the built hardware — the load-side conclusion (DS3225 stands) does not depend on this, but it remains an open verification item per Scope Boundaries. (root `TODO.md` §0.8) |
 | SPT5425LV mounting-ear span and bolt-hole spacing (REF-SENSOR-013) | `REFERENCES.md` REF-SENSOR-013, `airframe/blender-scripts/merge_cargo_interior.py` `NSVMT_HOLE_S_Y`/`NSVMT_HOLE_S_Z`, `airframe/wings-nacelles/WBS.md` §1.1.2 SPAR-02 | REF-SENSOR-013 publishes the SPT5425LV body as 40.5 × 20 × 40.5 mm but **neither source lists the mounting-ear span or the bolt-hole spacing**. The cargo shell drills a 35 × 16 mm pattern into both nacelle-servo pads; that pattern predates this servo (drawn for the uncited DS3218MG the BOM replaced 2026-08-02) and is therefore unlikely to match. `tools/nacelle_servo_deconflict.py` carries a 6 mm/end ear allowance as an explicitly conservative stand-in, not a datasheet figure, and the 0.5 mm Y pad shortfall it reports rests entirely on that allowance. | Measure the ear span and hole spacing on a real SPT5425LV (or obtain a dimensioned manufacturer drawing), add them to REF-SENSOR-013, then correct `NSVMT_HOLE_S_Y`/`NSVMT_HOLE_S_Z` and re-run `tools/nacelle_servo_deconflict.py` before the cargo shell is cut. Do not fabricate the spacing. (root `TODO.md` §0.8) |
 | CF-PETG **bearing** allowable for the wing-root tenon | `airframe/fuselage-mid/WBS.md` §1.1.1.2 CARGO-03c, `tools/wing_spar_carrythrough.py`, `docs/structural_analysis.md` §7.3, **REF-MAT-001** | **RESOLVED (built) 2026-08-25 under the default `two_rod` path — this row now describes the coupon-gated alternative, not a blocker.** The wing-root couple is now reacted by two bonded CF tie rods (`wings_s1223_revo.scad` `TENON_LOAD_PATH = "two_rod"`), sized against the repo's existing ≈5 MPa bond-limited CF-PETG figure at FOS 5.26 (fwd)/4.14 (aft) — no new allowable needed to close this. The tenon itself is traded out of the load path and reverted to a locating-only feature. The **`enlarged_tenon`** path (tenon alone reacting the full 14.60 N·m ultimate moment, needing ≥40.6 MPa bearing at 12 mm insertion or ≥11.1 MPa at the airframe's 39.2×20.1 mm maximum envelope) stays documented/buildable but is not default and remains gated on a real bearing coupon. **REF-MAT-001** (2026-08-25) adds the first peer-reviewed data point — ASTM D695 *bulk* compressive strength for 20%-CF-PETG, ≈47–60 MPa — an order of magnitude above the 5 MPa placeholder, but it is bulk unnotched compression, not a bearing-in-a-hole test, so it does not by itself clear the ≥11.1–40.6 MPa bar this row's `enlarged_tenon` alternative needs; it does make that alternative look plausibly viable pending an actual bearing coupon, where before this row had no positive evidence at all. | For the built `two_rod` path: no action required, already closed. To *reopen* `enlarged_tenon` as a real option: run a genuine bearing coupon (ASTM D953 or equivalent pin-in-hole test, printed in the tenon's own orientation/layer direction) rather than inferring a bearing allowable from REF-MAT-001's bulk-compression figure via an unstated knockdown factor — add the LG-11 coupon-test schedule item (root `TODO.md` §1.1.4) if pursued. Do not fabricate a bearing/bulk-compression knockdown factor. |
 | 14 CFR Part 107 dropped-object provision — section number **not yet verified** | `REFERENCES.md` REF-FAA-002 applied-sections table, `docs/CARGO_WINCH_SPECIFICATION.md` §3.10.2 | Part 107 contains a provision prohibiting dropping an object from a small UA in a manner that creates an undue hazard to persons or property. REF-FAA-002's applied-sections table currently lists only §107.3, §107.29, §107.31 and §107.51(a)–(d) — the dropped-object section is **absent**, so no section number is asserted in the winch spec (root `AGENTS.md` §4: never guess a section number). This matters because the cargo winch **intentionally** releases a payload (requirement R5, overload line-shed) while an uncommanded structural release of the spool itself (19.1 J, or 31.8 J for the full assembly, from the §107.51(b) 400 ft ceiling) is precisely the hazard the provision addresses. | Look up the section in the eCFR Part 107 text, add it to REF-FAA-002's applied-sections table with the exact title and a validated URL, then cite it in `docs/CARGO_WINCH_SPECIFICATION.md` §3.10.2 and state explicitly how a commanded shed differs from an uncommanded release under that text. Do not fabricate the number. (`docs/TODO.md` §0.x) |

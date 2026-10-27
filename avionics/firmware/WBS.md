@@ -120,12 +120,12 @@
     - [ ] Receiver-side verification gate (discard unsigned/invalid before acting, mirrors §4.4 "Security message signing").
     - [ ] Bench test: signed/unsigned/corrupted-signature frame acceptance matrix.
 
-- [ ] **Cargo control** — DRV8833 winch H-bridge, HX711 load cell (payload weight sensing), SG90 door and release servos; state machine: IDLE → DEPLOY → DELIVERED → RETRACT → LATCHED.
+- [ ] **Cargo control** — DRV8833 winch H-bridge, ADS1231 load cell (payload weight sensing), SG90 door and release servos; state machine: IDLE → DEPLOY → DELIVERED → RETRACT → LATCHED.
     - [ ] DRV8833 H-bridge winch driver.
-    - [ ] HX711 load-cell driver (payload weight sensing, overload cutoff).
+    - [ ] ADS1231 load-cell driver (line-tension sensing, overload cutoff): wait for DRDY/DOUT low, clock 24 bits, return SCLK low after every read (Standby entry otherwise); hardware is `LC-ADC`, WBS CARGO-LC-01.
     - [ ] SG90 door + release servo driver.
     - [ ] State machine implementation: IDLE → DEPLOY → DELIVERED → RETRACT → LATCHED, with fault states.
-    - [ ] Bench test: full cycle with simulated payload load, verify HX711 cutoff and state transitions.
+    - [ ] Bench test: full cycle with simulated payload load, verify ADS1231 cutoff and state transitions.
 
 - [ ] **MAVLink routing configuration** — mavlink-router config: elected CN master routes FC master telemetry to all 4 radio links (SiK, LoRa, Wi-Fi, 49 MHz (Part 15 §15.235) backup).
     - [ ] mavlink-router config file per CN role (master vs. standby).

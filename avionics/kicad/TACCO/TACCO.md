@@ -46,7 +46,7 @@ mLRS bare-chip radio, non-stack rails, and fab-ready layout" for the full decisi
 - **Smaller parts, same function:** boot/bind switch → C&K KMR2; SWD header → Tag-Connect
   TC2030-NL pads. PB2 rails are non-stack-through (Commo Rev T is standalone).
 - **PB2 header map rebuilt from the real PocketBeagle 2 schematic** (owner-supplied,
-  `avionics/datasheets/pocketbeagle2_sch.pdf`): the Rev S2 map had GND on the PB2's 5 V VIN pin
+  `avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf`): the Rev S2 map had GND on the PB2's 5 V VIN pin
   and peripherals on the wrong balls. Verified map and allocation:
   `avionics/kicad/PB2_HEADER_PINMAP.md`. Ethernet is now RMII2 + MDIO0 (`RMII2_*` nets),
   CAN-FD on MCAN0 (P2-5/7), RS-485 on UART2 with hardware DE, mLRS on UART0, BT on UART1.
@@ -463,7 +463,7 @@ copper pour, consistent with §11.
 | --- | --- | --- |
 | +5V (filtered) | PB2 VIN, DRV8833 motor, radio modules | 3.0 A |
 | +3V3_RF (SMPS) | RFD900x (1.2 A TX peak), RFM95W (120 mA TX), WL1837MOD (550 mA TX) | 1.5 A continuous, 2.0 A peak |
-| +3V3 logic (LDO) | MAX3485E→ADM2795, ATA6561→ISOW1044B, DS26LV31/32, HX711, SLB9672, ATF16V8BQL | 350 mA |
+| +3V3 logic (LDO) | MAX3485E→ADM2795, ATA6561→ISOW1044B, DS26LV31/32, SLB9672, ATF16V8BQL | 350 mA |
 
 DP83825I removal saves approximately 100 mA from the 3.3V logic rail, leaving additional
 headroom absorbed by the new isolated transceivers (~80 mA combined increase).
