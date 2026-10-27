@@ -51,3 +51,23 @@ execution: code
 > The tension-fuse plateau ends at necking, and no cited source gives uniform
 > elongation for 6061-T6. A bench firing (LG-15) shall confirm the stroke before
 > the gear is flown.
+
+## Findings 2026-10-27 (owner questions)
+
+**Couple form (A1b selected for analysis).** `tools/lg_couple_options.py`: push-pull pair of two identical 6061-T6 tension fuses, the push side inside a 6061 reversing sleeve (the canonical jack barrel, QMx Sheet 5 [REF-CAD-003], Henning [REF-CAD-002]). Pin 258 lbf (1,148 N), worst margin 1.36. A1 (bowed compression side) fails at its hinges; A2 does not fit the bay window; A3 needs a 224 mm fuse.
+
+**Reaction path (owner question).** The hip pin's clevis ears and the absorber bosses are both on the separate printed bay part (`tools/generate_lg_bays.py:138-140`), which is bolted to the hull by 4 x M3. The couple therefore closes inside the bay part or a backbone bolted to it; the hull sees only the net foot force through the four bolts.
+
+**Backbone plate material** (anchor pin 4,593 N, hip pin at hierarchy 2,466 N, O4 pins, 1.25 factor, single-shear plate bearing):
+
+| Material | Bearing limit | Plate thickness | Mass per leg (70 x 45 mm) | Verdict |
+| --- | --- | --- | --- | --- |
+| CF-PETG printed [REF-MAT-001] | 47 MPa (bulk compression; no cited bearing) | 30.5 mm | 125 g | **not viable** for the anchors |
+| 6061-T6 [REF-MAT-007] | 276 MPa | 5.2 mm (stock 2 x 1/8 in cheeks) | 44 g (54 g stock) | viable, fully cited |
+| CF plate, quasi-iso [REF-MAT-011] | 384 MPa proxy (compressive; units inferred) | 3.7 mm (stock 2 x 1/8 in cheeks) | 18 g (30 g stock) | lightest; allowable requires verification |
+
+Printed CF-PETG stays as the non-structural liner/fairing only. Recommended: CF plate backbone (owner material order), with 6061-T6 as the fully cited fallback until the CF bearing coupon (LG-11) is run.
+
+**Packaging gate, anchors on a backbone** (hip region masked; members may be outside the hull, as the canonical exposed jack):
+- Aft corners: strut az 154 deg, reach 55 mm, inboard: 12 mm^3 (tilt bracket). Passes after anchor-boss shaping.
+- Fore corners: inboard blocked by TACCO CN2 + chin shelf (about 2,000 mm^3). Outboard-up az 60 deg, reach 65 mm: no keep-out clash; 400-450 mm^3 hull wall + 19 mm^3 swept leg. Open: confirm whether that wall overlap is the open well region of the source mesh or real skin around the window.

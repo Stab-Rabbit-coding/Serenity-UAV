@@ -1627,6 +1627,17 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 | **Cited in** | `tools/lg_fuse_material.py`; `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` §6 |
 | **Openness / sourcing** | Public PDF; US manufacturer. |
 
+### REF-MAT-011: Rock West Composites — Carbon Fiber Plate, Quasi-Iso, Standard Modulus (204-xx 1/8 in; 208-xx 1/4 in)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Rock West Composites, product pages 204-44 (1/8 in, 5 plies) and 208-22 (1/4 in, 9 plies); T700-class fibre, Rhino 1411/4111 epoxy; 0/90 and +/-45 3k 2x2 twill plies |
+| **Official access** | <https://www.rockwestcomposites.com/204-44.html>, <https://www.rockwestcomposites.com/208-22.html> (fetched and read 2026-10-27) |
+| **Section applied** | "Engineering Properties": X/Y tensile yield 62,320; X/Y compressive yield 55,760; XY shear strength 30,446 (204) / 30,454 (208); E_X = E_Y 6,664,000; G_XY 2,546,000; Poisson 0.309. Density 0.055 lb/in^3 (1.52 g/cm^3), printed with units. |
+| **Units — requires verification** | The properties table prints **no units**; the only nearby control is the site's Imperial/Metric selector. psi / Msi is **inferred** from the magnitudes and the Imperial default (430 / 384 / 210 MPa, 45.9 GPa). Confirm with the supplier before relying on any value. |
+| **Not provided** | No bearing strength. Bolted/pinned-joint bearing needs a coupon test (bearing response of polymer-matrix laminates; LG-11) — **requires verification**. `tools/lg_couple_options.py` uses the compressive yield as a design-judgment bearing proxy until then. |
+| **Cited in** | Plan `docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md`; backbone-plate trade in that plan |
+
 ### REF-EDF-001: XFly-Model — Galaxy X5 50 mm 12-blade EDF, 6S, motor 2627-KV3200
 
 | Field | Value |
