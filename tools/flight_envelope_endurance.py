@@ -64,6 +64,26 @@ S_WING = 0.019025         # m^2
 CL_MAX = 2.0              # UNVERIFIED for the built section (flight_envelope banner)
 
 
+# ---- Planning sensitivities (doc-review 2026-10-26, feasibility reviewer).
+# NOMINAL: the optimistic first pass.  PLANNING: the governing case until
+# bench and thrust-stand data exist.  Every value ASSUMED.
+CASES = {
+    "NOMINAL": dict(usable=0.80, v_load=22.2, stack=1.00),
+    # 0.70: a 3.30 V/cell LOADED trigger at ~34C reads ~0.2-0.3 V below rest;
+    # 3.55 V/cell mean loaded voltage; 90 % tandem stacking (Rev S figure).
+    "PLANNING": dict(usable=0.70, v_load=21.3, stack=0.90),
+}
+CELL_G_PER_AH = 321.0 / 2.2   # Tattu 6S 2200 95C, 321 g (BATTERY_SPLIT_OPTIONS S3)
+TW_CONTROL_FLOOR = 1.2        # WA-R18 hover floor
+
+# ---- Wing spar (README "Rev S1g": bonded 20 x 16.3 mm CF spar; read as a tube
+# OD 20.0 mm, ID 16.3 mm -- ASSUMED tube reading).  sigma_u and FOS from
+# docs/structural_analysis.md S3.
+SPAR_OD, SPAR_ID = 20.0, 16.3
+SIGMA_U, SPAR_FOS = 1500.0, 4.0
+SEMI_SPAN_MM = 85.7
+
+
 def hover_fan_power(thrust_per_fan_gf):
     """Electrical power per fan at a hover thrust, W.
 
@@ -77,10 +97,40 @@ def hover_fan_power(thrust_per_fan_gf):
     return FAN_P_W * (thrust_per_fan_gf / FAN_T_GF) ** 1.5
 
 
-def hover_current(auw_g):
-    """Total VBAT current in hover, A (propulsion + avionics)."""
-    p = N_FANS * hover_fan_power(auw_g / N_FANS)
-    return p / V_NOM + I_AVIONICS_A
+def hover_current(auw_g, v_load=V_NOM, stack=1.0):
+    """Total VBAT current in hover, A (propulsion + avionics).
+
+    stack < 1 is a tandem stacking efficiency: each fan must make 1/stack
+    of its share of the weight.
+    """
+    p = N_FANS * hover_fan_power(auw_g / N_FANS / stack)
+    return p / v_load + I_AVIONICS_A
+
+
+def endurance_s(auw_g, cap_ah, k):
+    """Hover time to the RTL trigger, s, for planning case k."""
+    return cap_ah * k["usable"] / hover_current(auw_g, k["v_load"], k["stack"]) * 3600.0
+
+
+def capacity_for(target_s, k):
+    """Mass-coupled pair capacity that meets target_s, or None.
+
+    Each added Ah adds CELL_G_PER_AH; stop when T/W falls below the control
+    floor.  Returns (capacity Ah, AUW g, T/W) at the first capacity that
+    meets the target, or None plus the best endurance found.
+    """
+    best = (0.0, 0.0)
+    cap = CAP_PAIR_AH
+    while True:
+        m = AUW_S1_G + PAYLOAD_G + (cap - CAP_PAIR_AH) * CELL_G_PER_AH
+        tw = N_FANS * FAN_T_GF * k["stack"] / m
+        if tw < TW_CONTROL_FLOOR:
+            return None, best
+        t = endurance_s(m, cap, k)
+        best = max(best, (t, cap))
+        if t >= target_s:
+            return (cap, m, tw), best
+        cap += 0.1
 
 
 def isa_sigma_alt_ft(sigma):
@@ -173,6 +223,33 @@ def main():
     print(f"  capacity needed at {res['Two cells, payload aboard'][3]:.0f} A: "
           f"{res['Two cells, payload aboard'][3] * target / 3600 / USABLE:.1f} Ah "
           f"(have {CAP_PAIR_AH} Ah); or hover current <= {i_need:.0f} A on 4.4 Ah")
+    print("\nPlanning sensitivities (two cells + payload unless stated):")
+    for name, k in CASES.items():
+        m = AUW_S1_G + PAYLOAD_G
+        print(f"  {name:8s} usable {k['usable']:.2f}, V {k['v_load']} V, stacking "
+              f"{k['stack']:.2f}: I {hover_current(m, k['v_load'], k['stack']):.0f} A, "
+              f"hover {endurance_s(m, CAP_PAIR_AH, k):.0f} s; three cells retained "
+              f"{endurance_s(AUW_S1_CELL3_G, CAP_PAIR_AH + CAP_CELL3_AH, k):.0f} s")
+        i3 = hover_current(AUW_S1_CELL3_G, k["v_load"], k["stack"])
+        print(f"           third-cell-first leg {i3:.0f} A = {i3 / CAP_CELL3_AH:.0f}C on "
+              f"the 1.6 Ah cell (usable fraction at that C unverified)")
+        hit, best = capacity_for(target, k)
+        if hit:
+            print(f"           capacity to meet {target:.0f} s (mass-coupled): "
+                  f"{hit[0]:.1f} Ah, AUW {hit[1]:.0f} g, T/W {hit[2]:.2f}")
+        else:
+            print(f"           NO capacity meets {target:.0f} s before T/W < "
+                  f"{TW_CONTROL_FLOOR}; best {best[0]:.0f} s at {best[1]:.1f} Ah")
+
+    z = math.pi * (SPAR_OD ** 4 - SPAR_ID ** 4) / (32.0 * SPAR_OD)
+    m_allow = z * SIGMA_U / SPAR_FOS / 1000.0
+    l_tot = m_allow / (0.5 * 0.5 * SEMI_SPAN_MM / 1000.0)
+    v_s = math.sqrt(2 * l_tot / (RHO0 * S_WING * 1.0))
+    print(f"\nSpar check (OD {SPAR_OD} / ID {SPAR_ID} mm): Z {z:.1f} mm^3, M_allow "
+          f"{m_allow:.1f} N.m, L_total {l_tot:,.0f} N, V_struct {v_s * KT_PER_MS:,.0f} kt "
+          f"({v_s:.0f} m/s) at CL 1.0")
+    print(f"Density altitude at T/W {TW_CONTROL_FLOOR}: "
+          f"{isa_sigma_alt_ft(TW_CONTROL_FLOOR / res['Two cells, payload aboard'][1]):,.0f} ft")
     return 0
 
 
