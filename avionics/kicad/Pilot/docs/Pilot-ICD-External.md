@@ -175,7 +175,7 @@ Each Ethernet pair is one `TC1G00` chip transformer (`T-<leg>-TX`, `-RX`); the p
 ## 4. Open items
 
 1. **OPEN:** Molex 105313-1204 (PWR-IN) is not datasheet-verified (WBS 1.2a).
-2. **OPEN:** JST GH and Samtec TSM ratings are quoted from `eGH.pdf`; neither is yet catalogued in `REFERENCES.md` with a verified URL (TODO).
+2. **OPEN:** JST GH and Samtec TSM ratings are quoted from `eGH.pdf`; neither is yet catalogued in `REFERENCES.md` with a verified URL (open: not yet catalogued).
 3. **OPEN:** CAN-FD and RS-485 connector pin 4 (isolated VCC) current limit is not analysed; the ISOW DC-DC output budget has not been written down.
 4. **OPEN:** mating-harness drawing and pin-1 marking convention for the cable ends.
 5. **OPEN (owner):** J-PWM signal levels are 3.3 V from the AM625 PRU; confirm ESC inputs accept 3.3 V logic.
