@@ -776,6 +776,27 @@
       ],
       "archived": false
     },
+    "airframe/datasheets/RW-PS-070-Stock-Plate-Panel-Angle-Tolerance-Sheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/datasheets/Rhino-1411-4111-Infusion-Resin-TDS.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/datasheets/T700GDataSheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/diagrams/cargo-rear.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -20026,6 +20047,9 @@
       "airframe/blender-scripts/repair_shells_for_scad.py",
       "airframe/blender-scripts/serenity_render_views.py",
       "airframe/blender-scripts/verify_shells.py",
+      "airframe/datasheets/RW-PS-070-Stock-Plate-Panel-Angle-Tolerance-Sheet.pdf",
+      "airframe/datasheets/Rhino-1411-4111-Infusion-Resin-TDS.pdf",
+      "airframe/datasheets/T700GDataSheet.pdf",
       "airframe/diagrams/cargo-rear.png",
       "airframe/diagrams/cargo-ringframe-fit1.png",
       "airframe/diagrams/cargo-ringframe-fit2.png",
