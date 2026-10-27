@@ -65,7 +65,7 @@ head stations in R2 and the head context gate. It writes
   as the head cell). This must be checked against the rear belly shape. Phase 11
   aft-EDF reshuffling is accepted by the owner.
 - **CG, rough estimate (needs `auw_ledger.py`):** head cell centre Y 253, second
-  cell centre Y 541.7, against the hover thrust line Y 352.3. That puts the CG about
+  cell centre Y 541.7. CORRECTED 2026-10-27: the thrust line is the nacelle pivot, Y 326.7 (SPAR_Y), not Y 352.3 (the worm shaft); the ledger gives +32.8 mm. The original estimate read: CG about
   +31 mm behind the thrust line, against the single-pack +22.6 mm and the
   original split's +14.3 mm. **An acceptable aft CG limit is not documented;** the
   hover trim authority must be confirmed before this layout is accepted.

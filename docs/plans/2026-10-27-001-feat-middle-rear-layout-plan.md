@@ -40,7 +40,7 @@ Owner decisions on 2026-10-27 moved the head cell aft (Y 195–311) so Bay A sta
 - The cell fits directly aft of the FE can at **Y 483.7–599.7, Zc 136**, across the bonded middle/rear joint.
 - Simon's 77 mm stack does not fit aft of it within 60 mm as currently packed.
 - The middle ventral hatch (~32 mm in Y) cannot pass the cell.
-- A rough CG estimate puts the aircraft about +31 mm behind the hover thrust line (Y 352.3). No aft limit is documented.
+- **Corrected 2026-10-27:** the hover thrust line is the nacelle tilt pivot, Y 326.7 (`hull_datums.SPAR_Y`); Y 352.3 is the tilt worm-wheel shaft. The ledger puts that configuration at +32.8 mm aft of the pivot. **Owner target: the CG on the thrust line.** The best internal rearrangement studied reaches +13.2 mm, and the owner directed more relocations before a pivot move or ballast is considered.
 
 ### Requirements
 
