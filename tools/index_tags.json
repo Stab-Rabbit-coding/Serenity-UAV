@@ -14311,6 +14311,13 @@
       ],
       "archived": false
     },
+    "docs/CG_RELOCATION_STUDY.md": {
+      "description": "CG Relocation Study \u2014 Hover CG onto the Thrust Line",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/DOC_TEMPLATES.md": {
       "description": "Documentation Structure Templates",
       "tags": [
@@ -18266,6 +18273,13 @@
       ],
       "archived": false
     },
+    "tools/cg_relocation_study.py": {
+      "description": "cg_relocation_study.py -- move equipment forward until the hover CG sits on",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/check_datum_drift.py": {
       "description": "Fail on aircraft-datum drift (plan 2026-10-19-001, rules R1-R4).",
       "tags": [
@@ -19134,6 +19148,7 @@
       "docs/CARGO_DOOR_LATCH_SPEC.md",
       "docs/CARGO_SECTION_LAYOUT.md",
       "docs/CARGO_WINCH_SPECIFICATION.md",
+      "docs/CG_RELOCATION_STUDY.md",
       "docs/DOC_TEMPLATES.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
@@ -23816,6 +23831,7 @@
       "tools/cargo_bay_envelope.py",
       "tools/cargo_bulkhead_context.py",
       "tools/cargo_layout_fit.py",
+      "tools/cg_relocation_study.py",
       "tools/check_datum_drift.py",
       "tools/check_tacco_envelope_sync.py",
       "tools/compact_bom_entries.py",
