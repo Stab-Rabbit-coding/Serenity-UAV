@@ -468,7 +468,8 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
   - [x] FBD + materials trade of A1/A1b/A2/A3 (tools/lg_couple_options.py)
   - [x] Packaging gate (tools/lg_a1b_packaging.py): aft PASS az 154 / reach 55
   - [x] Fore corners: canonical flank housing above each fore bay chosen (owner 2026-10-27)
-  - [ ] Merge tool: cut + reinforce fore flank housings (~25 x 30 mm)
+  - [x] Merge tool: fore flank housing pocket + 2 mm wall (tooling, a975f6de)
+  - [ ] ★ MERGE-FINALIZE-NM — cargo shell rebuild fails in repair_exported -> ensure_open: after the float32 STL round trip finalize_watertight leaves 53 boundary + 12 non-manifold edges, manifold3d rejects the shell (NotManifold) and open_plug returns an empty mesh. Baseline (no housing) fails identically -> pre-existing. Blocks regenerating the shell with the housings
   - [ ] Leg SCAD: crank r 10, A1b members, backbone, anchor bosses (aft inboard az 154; fore outboard az ~65 into housing)
   - [ ] Sizing tool: couple sizing, retire the superseded pin/boss checks
   - [ ] Bays/STLs regenerated; fore-corner loose bodies fixed; BOM (6061 fuses, sleeves, pins, liners, CF backbone)
