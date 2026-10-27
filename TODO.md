@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-10-26
+**Last updated:** 2026-10-27
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -204,6 +204,7 @@
 - [ ] LG-16 Confirm ductile wire temper survives jig-forming
 - [ ] LG-13 Define wire-end retention detail at bay bosses
 - [ ] LG-02 Bay mounting integration: backing plates, flank conform…
+- [ ] ★ LG-LOADPATH-A1B — Option A balanced couple, form A1b (owner…
 - [ ] Add top-face socket to canonical foot
 - [ ] Assess foot grip on concrete/asphalt
 - [ ] LG-06 Elastic bench check: quarter-AUW fixture, 1.5 ft drop

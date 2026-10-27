@@ -1627,6 +1627,48 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 | **Cited in** | `tools/lg_fuse_material.py`; `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` §6 |
 | **Openness / sourcing** | Public PDF; US manufacturer. |
 
+### REF-MAT-011: Rock West Composites — Carbon Fiber Plate, Quasi-Iso, Standard Modulus (204-xx 1/8 in; 208-xx 1/4 in)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Rock West Composites, product pages 204-44 (1/8 in, 5 plies) and 208-22 (1/4 in, 9 plies); T700-class fibre, Rhino 1411/4111 epoxy; 0/90 and +/-45 3k 2x2 twill plies |
+| **Official access** | <https://www.rockwestcomposites.com/204-44.html>, <https://www.rockwestcomposites.com/208-22.html> (fetched and read 2026-10-27) |
+| **Section applied** | "Engineering Properties": X/Y tensile yield 62,320; X/Y compressive yield 55,760; XY shear strength 30,446 (204) / 30,454 (208); E_X = E_Y 6,664,000; G_XY 2,546,000; Poisson 0.309. Density 0.055 lb/in^3 (1.52 g/cm^3), printed with units. |
+| **Units — confirmed 2026-10-27** | With the page's unit selector set to Imperial (owner-read, pasted 2026-10-27): E_X = E_Y 6.66e6 psi (45.9 GPa); G_XY 2.55e6 psi (17.6 GPa); X/Y tensile yield 6.23e4 psi (430 MPa); X/Y compressive yield 5.58e4 psi (384 MPa); XY shear 3.04e4 psi (210 MPa); CTE 2.00e-6 in/in-°F; Poisson 0.309. X = along the plate length, Y = along the width. |
+| **Technical Data tab (re-read 2026-10-27, owner pointer `#tab-technical_data`)** | Density "0.055 lbs / in^3 OR 1.52 grams / cm^3" (units printed); Tg 194 °F; "Max Operating Temp (Tg) 175F to 199F"; resin Rhino 1411/4111 epoxy. Fibre: Rock West specifies a **T700G-equivalent** fibre ("13000-D FIBER or EQUIVALENT ... a T700G equivalent", Technical Data; confirmed by the owner 2026-10-27), so the Toray CFA-006 T700G datasheet is the applicable fibre reference. The "Toray T700S" entry under Additional Information is a page inconsistency, not the specification. The Engineering Properties values still print no units. |
+| **Not provided** | No bearing strength. Bolted/pinned-joint bearing needs a coupon test (bearing response of polymer-matrix laminates; LG-11) — **requires verification**. `tools/lg_couple_options.py` uses the compressive yield (384 MPa) as a design-judgment bearing proxy until then. NCAMP 3k-fabric quasi-isotropic bearing basis values [REF-MAT-012, analog] are all higher (448-696 MPa), which supports the proxy being conservative but does not make it an allowable. |
+| **Constituent datasheets (owner-supplied 2026-10-27)** | Local copies in `airframe/datasheets/`: **Toray CFA-006 T700G** (fibre 711 ksi / 4,900 MPa, 34.8 Msi / 240 GPa, 1.80 g/cm^3; UD composite in Toray epoxies at 60 % Vf: 340-355 ksi tension, 230 ksi / 1,570 MPa compression, ASTM D3039 / D695 — not this plate's resin, layup or process); **Rhino 1411/4111 infusion resin TDS Rev 0** (neat resin Tg 194 °F / 90 °C by DSC, IPC-TM-650 2.4.25; tensile 10.30 ksi, elongation 7.4-7.5 %; composite data are E-glass only); **RW-PS-070 Rev E** (2025-08-06: solid plates 0.010-0.130 in thick +/-0.010 in, 0.131-0.260 in +/-0.020 in; flatness 0.125 in gap up to 12 in). None of the three prints the plate's own property units or a bearing value, so the units and bearing caveats above stand. The 90 °C Tg limits hot-environment use. |
+| **Cited in** | `docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md` (backbone trade); `airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad` (A1B_PLATE_T); `tools/bom_edit_lg_a1b.py` / `current-specification/bom_revT.{csv,json}` (LG-A1B-CF-CHEEK); `tools/lg_couple_options.py` |
+
+### REF-MAT-012: NCAMP NCP-RP-2010-056 N/C — Cytec Cycom 5215 T650 3K70PW Fabric, 38 % RC, Qualification Statistical Analysis Report (2012)
+
+| Field | Value |
+|---|---|
+| **Publisher** | National Center for Advanced Materials Performance (NCAMP), National Institute for Aviation Research, Wichita State University; E. Clarkson; FAA Special Project SP4612WI-Q; released 2012-07-31 |
+| **Official access** | <https://www.wichita.edu/industry_and_defense/NIAR/Research/cytec-5215/T650-3k-PW-3.pdf> (fetched and read 2026-10-27) |
+| **Section applied** | §4.26 Quasi-isotropic (25/50/25) single-shear bearing SSB1, Table 4-36 (p. 91), normalized: 2 % offset strength RTD (70 °F) mean 93.377 ksi (644 MPa), B-estimate (ANOVA) 70.232 ksi (484 MPa), modified-CV B-basis 83.738 ksi (577 MPa); ETW (180 °F wet) B-basis 66.962 ksi (462 MPa, Weibull) / 65.032 ksi (448 MPa, mod CV); ultimate RTD B-basis 100.937 ksi (696 MPa). |
+| **Applicability — analog only** | Different fibre (T650, not T700), resin (Cycom 5215 prepreg, autoclave) and weave (3k plain weave) from the Rock West infused T700 3k twill plate [REF-MAT-011]. NCAMP allowables apply only to the qualified material and process. Used here to show the 384 MPa bearing proxy for REF-MAT-011 sits below every 3k-fabric quasi-isotropic bearing basis value in this report (lowest: 448 MPa ETW B-basis). It is **not** an allowable for the Rock West plate. |
+| **Cited in** | `docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md` (backbone material trade); `tools/bom_edit_lg_a1b.py` / `current-specification/bom_revT.{csv,json}` (LG-A1B-CF-CHEEK notes) |
+
+### REF-MAT-013: NCAMP NCP-RP-2025-008 Rev A — Toray Cetex TC1225 (LM PAEK) T700GC 145 gsm 34 % RC Unidirectional Tape, Qualification Statistical Analysis Report (2026)
+
+| Field | Value |
+|---|---|
+| **Publisher** | NCAMP / NIAR, Wichita State University; report dated 2026-02-24; test methods in companion NCAMP report CAM-RP-2025-016 Rev A |
+| **Official access** | <https://www.wichita.edu/industry_and_defense/NIAR/Documents/Toray-TC1225-LM-PAEK-T700GC-UNI-Qualification-NCP-RP-2025-008-RevA-2-24-2026-SAR-Final.pdf> (downloaded and read 2026-10-27) |
+| **Section applied** | §4.31 "25/50/25" (quasi-isotropic) single-shear bearing, Proc. C, SSB1; Table 4-57 (p. 113), normalized, 2 % offset strength: RTA (70 °F) mean 126.7 ksi, modified-CV B-basis 113.6 ksi (783 MPa); ETA1 (275 °F) mod-CV B-basis 91.82 ksi (633 MPa); ETW (275 °F wet) B-estimate 90.43 ksi (ANOVA) / 80.33 ksi (mod CV, 554 MPa, 1 batch). Normalizing cured ply thickness 0.0054 in (§ data tables). Environment codes Table 1-3 (p. 11). |
+| **Applicability** | Allowables apply to this material made to the NCAMP material and process specification. A purchased laminate shall be certified by the supplier as made from this qualified material by an equivalent consolidation process before these values are used without a confirmation coupon. Density is not given in this report. |
+| **Cited in** | `docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md` (backbone material); `airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad` (A1B_PLATE_T alternative); `tools/bom_edit_lg_a1b.py` / `current-specification/bom_revT.{csv,json}` |
+
+### REF-MAT-014: Toray Advanced Composites — press release, NCAMP qualification of Cetex LMPAEK TC1225 (2025-12-02)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Toray Advanced Composites, Nijverdal, The Netherlands |
+| **Official access** | <https://www.toraytac.com/newsroom/news-item/2025/12/2/Toray-Advanced-Composites-completes-NCAMP-Qualification-for-Cetex®-High-Performance-Thermoplastic-Composite-Materials> (fetched and read 2026-10-27) |
+| **Section applied** | TC1225/T300 fabric NCAMP-qualified; "available in both semi-preg and large pre-consolidated" reinforced thermoplastic laminate (RTL) formats; RTLs "can be supplied tailored to customer-specific thicknesses and orientation requirements". At release, TC1225/T700 UD tape was "still in qualification" (REF-MAT-013 is that qualification report, 2026-02-24). |
+| **Cited in** | `docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md` (backbone procurement route); `tools/bom_edit_lg_a1b.py` / `current-specification/bom_revT.{csv,json}` (fallback note) |
+
 ### REF-EDF-001: XFly-Model — Galaxy X5 50 mm 12-blade EDF, 6S, motor 2627-KV3200
 
 | Field | Value |

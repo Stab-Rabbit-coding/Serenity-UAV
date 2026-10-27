@@ -502,6 +502,47 @@ RET_DEPTH_S  = 2.5;         // screw axis, mm from the boss mouth (spring)
 FLEX_DEG     = 22.0;
 
 // ---------------------------------------------------------------------------
+// LOAD PATH (LG-LOADPATH, owner 2026-10-27): "A1B" balanced couple, or "R6"
+// (legacy same-side rows, kept selectable for comparison only).
+// docs/LG_BELLCRANK_LOAD_PATH_STUDY.md SS1: the R6 same-side pair puts ~2P
+// (14.3 kN at the 4 ft crash) through the M3 hip pin.  A1B
+// (docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md;
+// tools/lg_couple_options.py; sized by tools/landing_gear_r6_sizing.py
+// a1b_sizing()): each row is TWO IDENTICAL members either side of the pin at
+// crank radius A1B_CRANK_R, both running parallel to the canonical strut
+// line (QMx Sheet 5 [REF-CAD-003], Henning renders [REF-CAD-002]) to anchors
+// on a CF backbone.  Flexion shortens the +n member and lengthens the -n
+// member; the member on the "wrong" side reaches its anchor through a
+// reversing sleeve (ductile, push side) or cage (spring, pull side), so both
+// members of a row carry the same load sense and the pair is a pure couple:
+// the hip pin carries only the foot force.
+// ---------------------------------------------------------------------------
+LOADPATH      = "A1B";
+A1B_CRANK_R   = 10.0;       // mm, crank radius (study SS4.3)
+// Strut azimuth per station, chosen by the sweep tools/lg_a1b_packaging.py and
+// gated by tools/lg_a1b_census.py (rendered geometry + parity) against the
+// published merged hull (2026-10-27): aft inboard 154 deg (clear
+// of the wing root and tilt bracket); fore outboard 65 deg into the canonical
+// flank housing (owner 2026-10-27).
+A1B_STRUT_AZ  = (BAY_STATION == "aft") ? 154 : 65;
+A1B_REACH     = 55.0;       // mm, crank pin -> anchor pin (fuse 33.9 gauge + ends)
+A1B_ROW_Y     = 3.5;        // mm, ductile row at -y, spring row at +y (inside LUG_W)
+A1B_PIN_D     = 4.0;        // mm, 6061-T6 crank / anchor / hip pins [REF-MAT-007]
+A1B_EYE_OD    = 9.0;        // mm, member end eye OD
+A1B_EYE_T     = 3.0;        // mm, member end eye thickness (along y)
+A1B_FUSE_D    = 4.60;       // mm, 6061-T6 tension fuse (sizing tool a1b_sizing)
+A1B_SLEEVE_OD = 8.0;        // mm, 6061 reversing sleeve on the ductile push member
+A1B_SPRING_D  = 3.37;       // mm, A228 spring wire (sizing tool a1b_sizing)
+A1B_SPRING_L  = 34.0;       // mm, spring stock (span 20 + 2 x (seat 5 + run-in 2))
+A1B_CAGE_T    = 6.0;        // mm, reversing cage thickness along y (flat: the bow
+                            // sweeps only in the swing plane)
+A1B_CAGE_W    = 2 * (H_DEF_SPRING + A1B_SPRING_D) + 2;   // in-plane cage width
+A1B_PLATE_T   = 3.18;       // mm, CF backbone cheek, 1/8 in quasi-iso plate
+                            // [REF-MAT-011]; NCAMP alternative [REF-MAT-013]
+A1B_CHEEK_Y   = LUG_W / 2 + EAR_CLR + A1B_PLATE_T / 2;   // cheeks take the ears' place
+A1B_HORN_W    = LUG_W;      // crank horns span the full lug; members ride in slots
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
@@ -596,6 +637,107 @@ module posed_wire(i, h) {
             bowed_wire(w_d(i), w_l(i), h, w_seat(i) + END_RUN_IN);
 }
 
+// ---------------------------------------------------------------------------
+// A1B balanced couple geometry (LOADPATH == "A1B")
+// ---------------------------------------------------------------------------
+function a1b_u() = azv(A1B_STRUT_AZ);              // strut line, hip -> anchors
+function a1b_n() = azv(A1B_STRUT_AZ - 90);         // crank offset direction
+// Crank pin of side s (+1 / -1) at rest; s = +1 is the member that SHORTENS
+// in flexion (the thigh turns +az, carrying the +n crank point along +u).
+function a1b_crank(s) = s * A1B_CRANK_R * a1b_n();
+function a1b_anchor(s) = a1b_crank(s) + A1B_REACH * a1b_u();
+function a1b_rot(p, flex) = [p[0] * cos(flex) - p[2] * sin(flex), p[1],
+                             p[0] * sin(flex) + p[2] * cos(flex)];
+
+// Crank horns on the thigh: a boss around each crank pin, hulled to the hub.
+module a1b_crank_horns() {
+    for (s = [-1, 1])
+        hull() {
+            ycyl([0, 0, 0], A1B_HORN_W, HUB_D);
+            ycyl(a1b_crank(s), A1B_HORN_W, A1B_EYE_OD + 3);
+        }
+}
+
+// Slots in the horns for the member eyes, and the crank pin bores.
+module a1b_crank_cuts() {
+    for (s = [-1, 1]) {
+        ycyl(a1b_crank(s), A1B_HORN_W + 0.2, A1B_PIN_D + 0.1);
+        for (y = [-A1B_ROW_Y, A1B_ROW_Y])
+            translate([0, y, 0])
+                ycyl(a1b_crank(s), A1B_EYE_T + 0.6, A1B_EYE_OD + 6);
+    }
+}
+
+// Procured members at flexion `flex` (deg): 6061 tension fuses (ductile row,
+// y = -A1B_ROW_Y) and A228 bowed spring wires (spring row, y = +A1B_ROW_Y),
+// eye-ended, with the ductile reversing sleeve (s = +1) and the spring
+// reversing cage (s = -1).
+module a1b_members(flex = 0) {
+    for (s = [-1, 1]) {
+        a = a1b_anchor(s);
+        // ductile row
+        cd = a1b_rot(a1b_crank(s), flex) + [0, -A1B_ROW_Y, 0];
+        ad = a + [0, -A1B_ROW_Y, 0];
+        color("Silver") {
+            rod_between(cd, ad, A1B_FUSE_D);
+            for (p = [cd, ad]) ycyl(p, A1B_EYE_T, A1B_EYE_OD);
+        }
+        if (s > 0)
+            color("SlateGray", 0.6)
+                rod_between(cd + 6 * a1b_u(), ad - 6 * a1b_u(), A1B_SLEEVE_OD);
+        // spring row
+        cs = a1b_rot(a1b_crank(s), flex) + [0, A1B_ROW_Y, 0];
+        as = a + [0, A1B_ROW_Y, 0];
+        color("Goldenrod") {
+            for (p = [cs, as]) ycyl(p, A1B_EYE_T, A1B_EYE_OD);
+            v = as - cs;
+            translate((cs + as) / 2)
+                rotate([0, 90 - atan2(v[2], v[0]), 0])
+                    rotate([0, 0, s > 0 ? 0 : 180])
+                        bowed_wire(A1B_SPRING_D, min(A1B_SPRING_L, norm(v) - 2),
+                                   H_NOM, 5 + END_RUN_IN);
+        }
+        if (s < 0)
+            color("SlateGray", 0.6)
+                translate((cs + as) / 2)
+                    rotate([0, 90 - atan2((as - cs)[2], (as - cs)[0]), 0])
+                        cube([A1B_CAGE_W, A1B_CAGE_T, norm(as - cs) - 12], center = true);
+    }
+}
+
+// Canonical flank HOUSING envelope (fore corners, owner 2026-10-27): the
+// space the A1B backbone and members occupy over the full flex range, as one
+// convex solid.  QMx Sheet 5 [REF-CAD-003] and the Henning renders
+// [REF-CAD-002] show the jack entering a rectangular housing on the hull
+// flank; tools/generate_lg_a1b_housing.py places this per corner and the
+// cargo merge tool cuts it (+ fit clearance) and walls it.
+module a1b_housing_envelope() {
+    hull() {
+        a1b_backbone();
+        a1b_members(0);
+        a1b_members(FLEX_DEG);
+    }
+}
+
+// CF backbone: two cheeks (1/8 in quasi-iso plate) in the clevis-ear
+// planes, each a hull of the hip boss and both anchor bosses.  Carries the
+// hip pin and both anchor pins, so the couple closes in the plate.
+module a1b_backbone() {
+    color([0.1, 0.1, 0.1])
+        for (sy = [-1, 1])
+            translate([0, sy * A1B_CHEEK_Y, 0])
+                difference() {
+                    hull() {
+                        ycyl([0, 0, 0], A1B_PLATE_T, A1B_PIN_D + 10);
+                        for (s = [-1, 1])
+                            ycyl(a1b_anchor(s), A1B_PLATE_T, A1B_PIN_D + 10);
+                    }
+                    ycyl([0, 0, 0], A1B_PLATE_T + 0.2, A1B_PIN_D + 0.1);
+                    for (s = [-1, 1])
+                        ycyl(a1b_anchor(s), A1B_PLATE_T + 0.2, A1B_PIN_D + 0.1);
+                }
+}
+
 // Wedge sector in the XZ plane: azimuth az1..az2, radius r1..r2, width w
 // along Y, centred on the hip axis.  Used for the extension-stop tab.
 module xz_sector(az1, az2, r1, r2, w) {
@@ -652,6 +794,8 @@ module leg_frame() {
             xz_sector(STOP_TAB_AZ1, STOP_TAB_AZ2, 3.0, 10.0, LUG_W);
             // Crank horns (BHD-02g): a local boss around each ROW's sockets,
             // hulled to the hub, so a row may sit outside the root lug.
+            if (LOADPATH == "A1B") a1b_crank_horns();
+            else
             for (az = [CRANK_AZ_D, CRANK_AZ_S])
                 hull() {
                     ycyl([0, 0, 0], LUG_W, HUB_D);
@@ -753,10 +897,11 @@ module leg_frame() {
                 rod_between(20 * axis + s * THIGH_CYL_C / 2 * perp,
                             KNEE + 4 * axis + s * THIGH_CYL_C / 2 * perp,
                             THIGH_BORE_D);
-        // Hip pin bore
-        ycyl([0, 0, 0], LUG_W + 0.2, PIN_D);
+        // Hip pin bore (A1B: 6061-T6 O4 pin, sizing tool a1b_sizing)
+        ycyl([0, 0, 0], LUG_W + 0.2, LOADPATH == "A1B" ? A1B_PIN_D + 0.1 : PIN_D);
+        if (LOADPATH == "A1B") a1b_crank_cuts();
         // 4 bellcrank wire sockets: bore along each row's chord, into the root
-        for (i = [0 : 3]) {
+        if (LOADPATH == "R6") for (i = [0 : 3]) {
             translate(crank_socket(i) + 0.1 * azv(w_chord(i)))
                 rotate([0, 90 - w_chord(i), 0])
                     translate([0, 0, -w_seat(i) - 0.1])
@@ -764,7 +909,7 @@ module leg_frame() {
         }
         // Wire-chord relief scallop across the root shoulder (the chords'
         // first 14 mm clear the lug blend and the crank horn)
-        for (i = [0 : 3])
+        if (LOADPATH == "R6") for (i = [0 : 3])
             translate(crank_socket(i)) rotate([0, 90 - w_chord(i), 0])
                 cylinder(h = 14, d = w_d(i) + 2.5);
         // Canonical vent-slot pockets, both shin faces
@@ -919,7 +1064,12 @@ module bay_cowl(flange = true) {
 // thread is carried on a raised pad.  Axis is radial to the wire (normal to
 // the chord) and set back RET_DEPTH_* from the boss mouth so the screw always
 // bears on the STRAIGHT seat, including after the 1.62 mm inward slide.
+// LOADPATH "A1B": R6-only feature (no wire bosses to retain)
 module retention_pad(i, cut) {
+    if (LOADPATH == "R6") retention_pad_r6(i, cut);
+}
+
+module retention_pad_r6(i, cut) {
     dep  = w_spring(i) ? RET_DEPTH_S : RET_DEPTH_D;
     m    = boss_mouth(i);
     // step `dep` INTO the boss along the chord, then go radial (in the swing
@@ -943,6 +1093,8 @@ module retention_pad(i, cut) {
 // enough along the pin axis to bite into both liner walls.  Placed at the boss
 // MID-LENGTH so it bonds the full 4-boss cluster rather than clipping its root.
 module boss_carrier() {
+    // LOADPATH "A1B": R6-only feature (the CF backbone replaces it)
+    if (LOADPATH == "R6")
     // one carrier per ROW (BHD-02g), centred between the row's two bosses
     for (i = [0, 2]) {
         m = (boss_mouth(i) + boss_mouth(i + 1)) / 2;
@@ -973,6 +1125,8 @@ module clevis_gussets() {
 
 // Clevis ears astride the thigh lug (carry both pins)
 module bay_clevis_ears() {
+    // LOADPATH "A1B": R6-only feature (the CF backbone replaces it)
+    if (LOADPATH == "R6")
     for (s = [-1, 1])
         translate([0, s * (LUG_W / 2 + EAR_CLR + EAR_T / 2), 0])
             hull() {
@@ -986,6 +1140,8 @@ module bay_clevis_ears() {
 
 // Wire bosses on riser wedges at each chord's far end
 module bay_wire_bosses() {
+    // LOADPATH "A1B": R6-only feature (the CF backbone replaces it)
+    if (LOADPATH == "R6")
     for (i = [0 : 3]) {
         st = w_seat(i);
         m = boss_mouth(i);
@@ -1065,14 +1221,19 @@ module bay_bolts(d) {
 // gussets, boss carrier, wire bosses, retention pads.  Split out 2026-10-10
 // so the conforming-bay generator can union them with its own flange.
 module bay_body() {
-    boss_carrier();
     clevis_gussets();
-    for (i = [0 : 3])
-        retention_pad(i, false);
-    // Clevis ears astride the thigh lug (carry both pins)
-    bay_clevis_ears();
-    // Wire bosses along each chord (see bay_wire_bosses)
-    bay_wire_bosses();
+    if (LOADPATH == "R6") {
+        boss_carrier();
+        for (i = [0 : 3])
+            retention_pad(i, false);
+        // Clevis ears astride the thigh lug (carry both pins)
+        bay_clevis_ears();
+        // Wire bosses along each chord (see bay_wire_bosses)
+        bay_wire_bosses();
+    }
+    // A1B: the CF backbone cheeks (a1b_backbone, procured) take the ears'
+    // place and carry the hip pin and anchors; the printed bay keeps the
+    // cowl, flange and gussets, which the cheeks bolt to.
 }
 
 // Every cut of the bay except the 4 M3 bolts (which the generator places per
@@ -1083,13 +1244,15 @@ module bay_cuts() {
     // Extension-stop cross-pin bore through both ears
     ycyl(STOP_PIN_R * azv(STOP_PIN_AZ),
          LUG_W + 2 * (EAR_CLR + EAR_T) + 0.2, PIN_D);
-    // Wire seats: blind bores into each boss along the chord
-    bay_wire_seats();
-    // Bow sweep relief through the carrier / boss roots (free span only)
-    bay_bow_relief();
-    // LG-13 retention tap pilots + counterbores
-    for (i = [0 : 3])
-        retention_pad(i, true);
+    if (LOADPATH == "R6") {
+        // Wire seats: blind bores into each boss along the chord
+        bay_wire_seats();
+        // Bow sweep relief through the carrier / boss roots (free span only)
+        bay_bow_relief();
+        // LG-13 retention tap pilots + counterbores
+        for (i = [0 : 3])
+            retention_pad(i, true);
+    }
 }
 
 // Flange OUTLINE as a prism x0..x1 (plate frame, measured out from the back
@@ -1194,6 +1357,10 @@ module leg_moving(flex) {
 module leg_assembly(flex = 0, h_duct = H_NOM, h_spring = H_NOM) {
     color("OliveDrab", 0.8) bay();
     leg_moving(flex);
+    if (LOADPATH == "A1B") {
+        a1b_members(flex);
+        a1b_backbone();
+    } else
     for (i = [0 : 3])
         color(w_spring(i) ? "Goldenrod" : "FireBrick")
             posed_wire(i, w_spring(i) ? h_spring : h_duct);
