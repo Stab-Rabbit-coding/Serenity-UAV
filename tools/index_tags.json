@@ -18746,6 +18746,13 @@
       ],
       "archived": false
     },
+    "tools/observer_nose_fit.py": {
+      "description": "observer_nose_fit.py -- exact fit of the nose Observer board with its",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/open_mating_faces.py": {
       "description": "Open (and keep open) the six fuselage-section mating-face apertures.",
       "tags": [
@@ -23853,6 +23860,7 @@
       "tools/nozzle_linkage_check.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
+      "tools/observer_nose_fit.py",
       "tools/open_mating_faces.py",
       "tools/placement_audit.py",
       "tools/precommit_doc_wording.py",
