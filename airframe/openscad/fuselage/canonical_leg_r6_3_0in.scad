@@ -1063,7 +1063,12 @@ module bay_cowl(flange = true) {
 // thread is carried on a raised pad.  Axis is radial to the wire (normal to
 // the chord) and set back RET_DEPTH_* from the boss mouth so the screw always
 // bears on the STRAIGHT seat, including after the 1.62 mm inward slide.
+// LOADPATH "A1B": R6-only feature (no wire bosses to retain)
 module retention_pad(i, cut) {
+    if (LOADPATH == "R6") retention_pad_r6(i, cut);
+}
+
+module retention_pad_r6(i, cut) {
     dep  = w_spring(i) ? RET_DEPTH_S : RET_DEPTH_D;
     m    = boss_mouth(i);
     // step `dep` INTO the boss along the chord, then go radial (in the swing
@@ -1087,6 +1092,8 @@ module retention_pad(i, cut) {
 // enough along the pin axis to bite into both liner walls.  Placed at the boss
 // MID-LENGTH so it bonds the full 4-boss cluster rather than clipping its root.
 module boss_carrier() {
+    // LOADPATH "A1B": R6-only feature (the CF backbone replaces it)
+    if (LOADPATH == "R6")
     // one carrier per ROW (BHD-02g), centred between the row's two bosses
     for (i = [0, 2]) {
         m = (boss_mouth(i) + boss_mouth(i + 1)) / 2;
@@ -1117,6 +1124,8 @@ module clevis_gussets() {
 
 // Clevis ears astride the thigh lug (carry both pins)
 module bay_clevis_ears() {
+    // LOADPATH "A1B": R6-only feature (the CF backbone replaces it)
+    if (LOADPATH == "R6")
     for (s = [-1, 1])
         translate([0, s * (LUG_W / 2 + EAR_CLR + EAR_T / 2), 0])
             hull() {
@@ -1130,6 +1139,8 @@ module bay_clevis_ears() {
 
 // Wire bosses on riser wedges at each chord's far end
 module bay_wire_bosses() {
+    // LOADPATH "A1B": R6-only feature (the CF backbone replaces it)
+    if (LOADPATH == "R6")
     for (i = [0 : 3]) {
         st = w_seat(i);
         m = boss_mouth(i);

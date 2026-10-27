@@ -2758,7 +2758,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_aft-port",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2794,7 +2794,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_fore-port",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2812,7 +2812,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_fore-stbd",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",

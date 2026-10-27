@@ -51,6 +51,7 @@ from __future__ import annotations
 import argparse
 import os
 import pprint
+import subprocess
 import sys
 
 import numpy as np
@@ -104,7 +105,19 @@ RHO, INFILL = 1.30e-3, 0.40   # CF-PETG g/mm^3 solid, 40 % gyroid (repo conventi
 
 
 def feat(station: str, name: str, tf: np.ndarray) -> Manifold:
-    p = lgbf.render(lgbf.SCAD, station, name, lgbf.FEATURES[name][0])
+    """Render one named bay feature and place it in the hull frame.
+
+    A feature the active LOADPATH does not build (e.g. the R6 boss carrier
+    under "A1B", plan 2026-10-27-001) renders an EMPTY top-level object, which
+    OpenSCAD reports as an error; that one case is an empty Manifold here.  Any
+    other OpenSCAD failure still propagates.
+    """
+    try:
+        p = lgbf.render(lgbf.SCAD, station, name, lgbf.FEATURES[name][0])
+    except subprocess.CalledProcessError as exc:
+        if b"Current top level object is empty" in (exc.stderr or b""):
+            return Manifold()
+        raise
     return lgbf.posed(p, tf)
 
 
@@ -243,6 +256,29 @@ License: MIT (SPDX-License-Identifier: MIT)
 BOLTS = ''' + pprint.pformat(body, width=88) + "\n")
 
 
+def mirror_stbd_from_port() -> None:
+    """Write each starboard bay as the exact X-mirror of its port bay.
+
+    The cargo is built as the mirror of its port half (merge_cargo_interior.py
+    SYMMETRIC_FROM_PORT), and the starboard bays' own boolean path has twice
+    exported non-watertight meshes (aft-stbd, 2026-10-26 and 2026-10-27) while
+    the port bays validate.  Hull frame: mirror X about the centreline X 0
+    (aircraft datum R2) and invert the winding.  The leg-local print file is
+    the port print unchanged: the starboard part is the mirror image in
+    leg-local y, which the print frame already folds back.
+    """
+    mx = np.diag([-1.0, 1.0, 1.0, 1.0])
+    for st in ("fore", "aft"):
+        for suffix in (".stl", "_print.stl"):
+            src = os.path.join(OUT, f"lg_r6_3_0in_bay_{st}-port{suffix}")
+            dst = os.path.join(OUT, f"lg_r6_3_0in_bay_{st}-stbd{suffix}")
+            m = trimesh.load(src, process=False)
+            if suffix == ".stl":
+                m.apply_transform(mx)
+                m.invert()
+            m.export(dst)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--check", action="store_true", help="build and check only; write nothing")
@@ -282,6 +318,7 @@ def main() -> int:
             m.copy().apply_transform(np.linalg.inv(r["tf"])).export(
                 os.path.join(OUT, f"lg_r6_3_0in_bay_{label}_print.stl"))
     if not a.check:
+        mirror_stbd_from_port()
         write_params(rows)
     print(f"\nRESULT: {'FAIL' if bad else 'PASS'}")
     return 2 if bad else 0
