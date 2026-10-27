@@ -334,7 +334,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Structural CF (rods, tube, bar, plate, PTFE) | 6 | `airframe/placeholders/structural/` |
 | Avionics PCBs (PB2-I, Pilot/B-2, Commo, Flight Engineer, microSD) | 6 | `airframe/placeholders/avionics/` |
 | Power (LiPos, fuses, shunt) | 7 | `airframe/placeholders/power/` |
-| Cargo (STS3215, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` — N20 placeholder retired, STS3215 placeholder pending envelope |
+| Cargo (STS3215, LC-ADC, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` — N20 placeholder retired, STS3215 placeholder pending envelope |
 | Gears M=1.0 (sector, pinion, bevel, housing) | 4 | `airframe/placeholders/gears/` |
 | Hardware (pins, inserts, screws, straps, wire ring) | 6 | `airframe/placeholders/hardware/` |
 | Lighting (WS2812C SMD nav LED) | 1 | `airframe/placeholders/lighting/` |

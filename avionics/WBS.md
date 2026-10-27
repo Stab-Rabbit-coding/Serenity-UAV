@@ -327,12 +327,64 @@ GND2_CANB to GND) break the 5 kV galvanic isolation requirement. They must be fi
 - [x] **Owner:** footprint repositioning for the courtyard overlaps and placement-driven shorts
       (`avionics/AGENTS.md`: repositioning is referred to the owner). *(Superseded 2026-10-05:
       generator placement is DRC-clean; owner approved the placement rules.)*
-- [ ] Clear the isolation-domain shorts (PGND, GND2_*, VCC2_* and RADIO_ANT_F crossings) and
-      the keepout intrusion.
-- [ ] Clear the remaining shorts, clearance and solder-mask-bridge findings (routing, via and
-      mask edits).
-- [ ] Re-run `tools/validate_kicad.py` until it reports 0 hard violations on TACCO, and document
-      any accepted residuals with rule and reason.
+- [x] Clear the isolation-domain shorts (PGND, GND2_*, VCC2_* and RADIO_ANT_F crossings) and
+      the keepout intrusion. *(Closed 2026-10-26: `tools/validate_kicad.py` on
+      `avionics/kicad/TACCO/kicads/TACCO.kicad_pcb` at branch `pilot-refloorplan` @ 13a5a119
+      reports 0 hard, 5 soft. No `shorting_items` or `items_not_allowed` finding remains on the
+      canonical board. The hand-edited `TACCO-2.kicad_pcb` is not this item; see §1.2a.6.)*
+- [x] Clear the remaining shorts, clearance and solder-mask-bridge findings. *(Closed 2026-10-26
+      with the same measurement: 0 hard on the canonical TACCO board.)*
+- [x] Re-run `tools/validate_kicad.py` until it reports 0 hard violations on TACCO, and document
+      any accepted residuals with rule and reason. *(Met 2026-10-26 on `TACCO.kicad_pcb`; the
+      5 soft findings remain accepted-class under the validator's severity policy.)*
+
+##### 1.2a.5 *Pilot DRC backlog — 250 hard violations (measured 2026-10-26)*
+
+**Measurement.** `tools/validate_kicad.py --changed-since origin/main --verbose` (KiCad 9.0.9
+`kicad-cli pcb drc --severity-error`) on `avionics/kicad/Pilot/kicads/Pilot.kicad_pcb` at branch
+`pilot-refloorplan` @ 13a5a119 (PR #258) reports **250 hard / 55 soft**. The same board
+measured 79 hard on 2026-10-18, so the count grew during the Pilot re-route. The ERC on
+`Pilot.kicad_sch` is 0 hard. The gate in CI "KiCad Validation" fails on this board.
+
+| DRC rule | Count | Notes |
+| --- | --- | --- |
+| `clearance` | 109 | Requires track, pad, or via relocation; not a netclass edit |
+| `hole_clearance` | 96 | Via-to-pad and via-to-hole spacing |
+| `track_width` | 44 | Track width below the active netclass minimum |
+| `items_not_allowed` | 1 | Keepout intrusion |
+
+`kicad-cli` also reports 212 unconnected items. The validator gate does not count them, but the
+Pilot routing is open (§1.2a "Finish Pilot PCB"), so the unconnected nets remain part of this
+backlog.
+
+- [ ] Clear the 109 `clearance` findings. Re-route or move the offending tracks, pads, or vias.
+      Do not widen the netclass to pass the check.
+- [ ] Clear the 96 `hole_clearance` findings. Move the vias or pads, or resize the drill where the
+      design permits.
+- [ ] Clear the 44 `track_width` findings by widening the affected tracks to the netclass minimum.
+- [ ] Clear the `items_not_allowed` keepout intrusion.
+- [ ] Route the 212 unconnected items and record any that stay open as accepted, with reason.
+- [ ] Re-run `tools/validate_kicad.py` until `Pilot.kicad_pcb` reports 0 hard. Document any
+      accepted residuals with rule and reason.
+
+##### 1.2a.6 *TACCO-2 hand-edited board — 93 hard violations (measured 2026-10-26); owner decision required*
+
+**Finding.** `avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb` has no matching schematic. It is a
+hand-edited layout copy, not a generator output. The validator scans it because it is a
+`.kicad_pcb` in the repository. Measured at the same ref as §1.2a.5: **93 hard / 36 soft**, of
+which 48 are `solder_mask_bridge`, 34 are `shorting_items`, 7 are `clearance`, 3 are
+`hole_clearance`, and 1 is `courtyards_overlap`. The shorting items match the PB2 socket-rail
+pattern in `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`,
+which records these findings as caused by hand-edited what-if copies.
+
+The canonical TACCO board (§1.2a.4) is `TACCO.kicad_pcb` and reports 0 hard. This item does not
+reopen §1.2a.4.
+
+- [x] **Owner decision:** delete `TACCO-2.kicad_pcb`, `.kicad_pro`, and `.kicad_dru`, not
+      regenerate them. *(Decided 2026-10-26 by the owner. The files are removed from the tree and
+      remain in git history before the deletion commit.)*
+- [x] Delete the three TACCO-2 files and confirm `tools/validate_kicad.py` no longer scans
+      `TACCO-2`. *(Closed 2026-10-26 with the deletion commit on `track/drc-backlog`.)*
 
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 
@@ -590,7 +642,7 @@ GND2_CANB to GND) break the 5 kV galvanic isolation requirement. They must be fi
       a separate discrete Semtech LoRa chip) and only 8KB RAM vs. the
       32-64KB SRAM mLRS's codebase assumes. STM32WLE5 has the LoRa radio
       **integrated in the die** (verified against ST's own datasheet,
-      `avionics/datasheets/stm32wle5jc.pdf`): UFQFPN48 (7x7mm) or UFBGA73
+      `avionics/datasheets/st/stm32wle5jc.pdf`): UFQFPN48 (7x7mm) or UFBGA73
       (5x5mm) package, up to 256KB flash / 64KB SRAM — single-chip courtyard
       ~36-64mm^2, smaller than the bare RFM95W module (289 mm^2) it's
       replacing, and a rounding error against the ~666 mm^2 SiK frees up.
@@ -1442,7 +1494,7 @@ REFERENCES.md Removed/Superseded Citations).
     reference for a different antenna.
     **Update, same day (owner-prompted footprint + regulator improvements):**
     (1) the owner supplied the vendor's own footprint DXF
-    (`avionics/datasheets/type2el-2dl-module-footprint-topview.dxf`) —
+    (`avionics/datasheets/murata/type2el-2dl-module-footprint-topview.dxf`) —
     `Murata_Type2EL_LGA107`'s 107 pads are now EXACT (parsed programmatically
     from the DXF's `NC_Work2`/`ProductsBoradOutline` layers), not a
     placeholder; only the pin-NUMBER-to-pad correspondence remains an
@@ -1711,7 +1763,7 @@ REFERENCES.md Removed/Superseded Citations).
     - [ ] mLRS HAL: BUTTON moves PB13 → PA0 (PB13 is not bonded on UFQFPN48), RF switch
         PA4 = RX_EN (PE4259 CTRL), PA5 = TX_EN (CTRL̄).
     7. **PB2 header map was wrong — rebuilt from the real schematic (2026-09-29, owner-supplied
-        `avionics/datasheets/pocketbeagle2_sch.pdf` + `pocketbeagle-2.syscfg`).** The Rev S2
+        `avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf` + `pocketbeagle-2.syscfg`).** The Rev S2
         `PB2_P1`/`PB2_P2` tables put GND on P1-1 (the PB2's 5 V **VIN**), +3V3/+5V on
         P1-33..36 (PRU/UART balls), MCAN0 on the GND pins P1-15/16, SPI0 on ADC/GPIO balls and
         SDIO on MDC/PRU balls; mating that cape would have shorted VIN to ground. The verified
@@ -1767,17 +1819,62 @@ REFERENCES.md Removed/Superseded Citations).
             (free MyASIX login) into avionics/datasheets/, then replace the CH397A block (WCH =
             PRC, fails the AGENTS.md sourcing rule) and verify the 20 MHz crystal, buck inductor
             and decoupling against them.
-        - [ ] Two JST-GH expansion headers replacing the GNSS (owner 2026-10-17): DS-009 Basic
-            GPS 6-pin (5V, TX, RX, SCL, SDA, GND) + DS-009 SPI 7-pin (5V, SCK, MISO, MOSI, SS1,
-            SS2, GND) on PB2 SPI2 / UART / I2C, VCC current-limited, ESD on all lines.
-        - [ ] Sourcing rule (AGENTS.md §5, 2026-10-17): replace TVS-CAN / TVS-RS485
-            PRTR5V0U2X,115 (Nexperia, owned by PRC-domiciled Wingtech Technology) with a
-            compliant-manufacturer equivalent; name a compliant manufacturer for TVS-1553P/N
-            SMAJ33CA (generic part number).
-        - [ ] Only one GH header fits at a board edge: keep J-SPI as a 6-pin generic port (5V,
-            SCK/UART1_TX, MISO/UART6_RX, MOSI/UART6_TX, SS1/UART1_RX, GND on the SPI2 pins);
-            drop J-GPS (owner allowed 2026-10-17).
+            - [x] Datasheet v1.03 received 2026-10-17 (owner) and catalogued as REF-SENSOR-056: no
+                confidentiality marking. The 0-70 C rating is accepted: the -40..85 C figure in
+                docs/AVIONICS_PB2_REDESIGN.md is the PB2-I module's rating, not a board
+                requirement (owner 2026-10-17).
+            - [x] Reference schematic, application design note and demo BOM received 2026-10-18
+                (owner) and catalogued as REF-SENSOR-057 / 058 / 060 (no confidentiality
+                marking). CH397A block replaced in `gen_pilot_sch.py` (`ax88772e()` + support
+                block, Claude Opus 5.5): ERC 0, 134 parts. Own ECS 20 MHz crystal
+                [REF-SENSOR-059]; BLM15EX331 beads; VBUS = 4.7 k pull-up + P1-31 GPIO0_59 (owner
+                2026-10-18). Pilot.md update 2026-10-18.
+            - [x] `L-USB1` 2.2 uH: Murata DFE201610P-2R2M=P2 chosen 2026-10-20 (data sheet on file, land matches the
+                Murata recommended pattern); all 55 BOM lines now carry an MPN and maker (REF-SENSOR-062).
+            - [ ] Confirm ECS-200-20-33-AGM-TR option-code availability with a distributor.
+            - [ ] DTS: hold P1-31 GPIO0_59 as an input (high-Z) by default; drive it low only to
+                force an AX88772E USB detach.
+        - [x] ~~Two JST-GH expansion headers replacing the GNSS~~ — superseded 2026-10-17 by the
+            single-port item below (only one board-edge site).
+        - [x] Sourcing rule (AGENTS.md §5, 2026-10-17), Pilot — done 2026-10-18 (Claude Opus 5.5):
+            TVS-CAN -> TI ESD2CAN24DCKRQ1 [REF-SENSOR-053]; TVS-RS485 -> Bourns CDSOT23-SM712
+            [REF-SENSOR-054] (the PRTR5V0U2X also clamped both buses to 0..5 V, far narrower than
+            their common-mode ranges); TVS-1553P/N -> Bourns SMAJ33CA [REF-SENSOR-055], with a new
+            `Manufacturer` schematic property. Pilot.md update 2026-10-18.
+        - [x] Only one GH header fits at a board edge — done 2026-10-18 (Claude Opus 5.5): J-SPI is
+            a 6-pin SM06B-GHS-TB (5V, SCK/UART1_TX, MISO/UART6_RX, MOSI/UART6_TX, SS1/UART1_RX,
+            GND on the SPI2 pins); J-GPS, F-GPS, C-GPS5, R-I2C-SCL/SDA, ESD-GPS, ESD-SS2 removed;
+            P1-31/33/36 and P2-2/4 spare.
         - [ ] Regenerate schematic (ERC 0), then PCB: sync, re-place, re-route, DRC 0 + parity 0.
+            - [x] Placement (2026-10-19, Claude Sonnet 5.5 / Opus 5.5): parity 0, 0 copper DRC errors, 13
+                warnings (reference designators moved to Fab). Committed; 130 unconnected items remain.
+            - [ ] **Finish routing by hand** (owner decision 2026-10-20; R-1 in `avionics/kicad/Pilot/docs/Pilot-Design-Review.md`):
+                130 open connections on 68 nets, listed in `docs/Pilot-Routing-Worklist.md`. Two automatic
+                routers stalled (grid router 254 to 130; freerouting 2.2.4 about 190 unrouted). After
+                routing: DRC with parity (0 / 0 / 0), refill zones, regenerate gerbers.
+            - [ ] **Resolve R-15:** five through vias on non-exempt nets have centers inside the TI 13.1
+                bubble outlines but DRC does not flag them. Relocate or find the cause.
+        - [ ] Pilot manufacturing release (Sunstone fab, Cyber City Circuits assembly; owner 2026-10-19).
+            Package: `avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md`. Open items:
+            - [ ] Stackup and controlled impedance (90 ohm USB1, 100 ohm Ethernet) from Sunstone's proposal.
+            - [ ] Owner fab choices: thickness 0.062 / 0.063 in, finish, IPC class, Tg, ITAR / FAI.
+            - [ ] Verify Sunstone outer-layer limits (min drill, annular ring, copper-to-edge): the
+                capabilities tabs are script-loaded; call 800.228.8198 or send the RFQ.
+            - [ ] Fiducials, part number and revision on silkscreen, panel strategy.
+            - [x] Part numbers for the 26 BOM lines: done 2026-10-20 via the DigiKey API (key in ~/.config/secrets.env); owner to approve the makers; derate the X5R parts.
+            - [ ] Catalogue IPC-6012 and the surface-finish standard in `REFERENCES.md`.
+            - [ ] Verify the JST GH URL (REF-CONN-003 returned HTTP 403).
+        - [x] Pilot ICDs, HDD, design review and manufacturing package written (kidoc scaffold, generated
+            tables): `avionics/kicad/Pilot/docs/`. Open inside them: power budget, mass and CG, test-point
+            plan, ICD OPEN items.
+            - [x] Schematic regenerated 2026-10-18: ERC 0, 111 parts after the GH and TVS items,
+                134 after the AX88772E swap.
+            - [ ] PCB sync, re-place, re-route (DRC 0 + parity 0). The board gains 23 parts for
+                the AX88772E (own crystal, buck inductor, two beads, per-pin decoupling) on a
+                cape whose largest free square was ~6 mm. TVS footprints change (SOT-363 ->
+                SC-70-3 / SOT-23); seven expansion parts leave. `refloorplan_pilot.py`
+                PARENT anchors updated for the new `*-USB1` parts. Best done after the
+                `L-USB1` MPN fixes its land.
         - [x] Pin and net name alignment, Pilot + TACCO (owner 2026-10-17): PB2 header pins
             P1.01..P2.36 (BeagleBoard SRM), Ethernet ring parts/nets to TI interface names
             (`PHY-RMII2`, `NIC-USB1`, `T-RMII2`, `T-USB1`, `RMII2_PHY_*`, `ETH_RMII2_*`,

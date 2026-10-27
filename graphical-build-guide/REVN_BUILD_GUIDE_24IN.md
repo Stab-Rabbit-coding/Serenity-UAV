@@ -623,7 +623,7 @@ Verify full obstacle avoidance in firmware (dual-redundant arrays — A and B co
 
 ## Phase 7 — Cargo System
 
-Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_sect_shell24.stl interior). Install the STS3215 winch train in the aft bay: both pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. **The spool shall be supported at both pedestals — never hung off the servo output.** Fit the auto-latch cradle. Wire the HX711 load cell and the STS3215 TTL bus to the cargo-bay CAN-PERIPH-GW (not TACCO). Bench-calibrate the pawl spring to an 8.0 N ± 1.0 N slip threshold, then test release and retrieval with a 250 g dummy load. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
+Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_sect_shell24.stl interior). Install the STS3215 winch train in the aft bay: both pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. **The spool shall be supported at both pedestals — never hung off the servo output.** Fit the auto-latch cradle. Wire the load cell (read by the LC-ADC ADS1231 board, WBS CARGO-LC-01) and the STS3215 TTL bus to the cargo-bay CAN-PERIPH-GW (not TACCO). Bench-calibrate the pawl spring to an 8.0 N ± 1.0 N slip threshold, then test release and retrieval with a 250 g dummy load. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
 
 ---
 

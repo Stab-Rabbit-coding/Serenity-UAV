@@ -899,7 +899,7 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 - Step 7: Seal gondola-to-hull perimeter joint with 3M foam gasket tape (dust and moisture seal).
 
-- Step 8: Configure CN master node GPIO: door open/close command, winch deploy/retract, payload latch status (microswitched auto-latch). The TACCO DRV8833 and HX711 load-cell interfaces are used directly for winch motor and payload weight sensing.
+- Step 8: Configure CN master node GPIO: door open/close command, winch deploy/retract, payload latch status (microswitched auto-latch). The TACCO DRV8833 and the ADS1231 load-cell (LC-ADC) interfaces are used directly for winch motor and payload weight sensing.
 
 ### Phase 6 Pass Criteria
 
@@ -1188,7 +1188,7 @@ Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** (inte
 
 **All FC nodes (Cape-A):** ICM-42688-P IMU · BMP388 baro · u-blox M10Q GPS · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9672 TPM 2.0 · 8× servo PWM rail
 
-**All CN nodes (Cape-B):** SiK 915MHz · LoRa RFM95W 915MHz · TI WL1837MOD WiFi/BT · XCVR-49MHZ sub-module · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9672 TPM 2.0 · ATF16V8BQL CPLD write-blocker · W25Q128JV NOR flash log · DRV8833 winch · HX711 load cell · 2× cargo servo PWM
+**All CN nodes (Cape-B):** SiK 915MHz · LoRa RFM95W 915MHz · TI WL1837MOD WiFi/BT · XCVR-49MHZ sub-module · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9672 TPM 2.0 · ATF16V8BQL CPLD write-blocker · W25Q128JV NOR flash log · DRV8833 winch · ADS1231 load-cell ADC · 2× cargo servo PWM
 
 ---
 

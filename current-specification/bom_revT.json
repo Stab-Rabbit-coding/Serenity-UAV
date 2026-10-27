@@ -469,7 +469,7 @@
       "Supplier_PN_or_Search": "SPT5425LV 25kg digital servo metal gear",
       "Est_Unit_Price_USD": "13.00",
       "Est_Total_Price_USD": "13.00",
-      "Notes": "2026-08-02 (docs/CARGO_WINCH_SPECIFICATION.md Rev C): supersedes both the retired N20-WINCH gearmotor (Rev P/Q/R) and the never-procured STS3215 (Rev B) in this reconciled BOM — see REFERENCES.md REF-SENSOR-012 (superseded) and REF-SENSOR-013/014. Drives the both-ends-supported spool through a lost-motion dog coupler (torque only, no radial load); paired with HX711 load cell for line tension and AK7455 for true spool position. ⚠ Stall current not yet published — see REFERENCES.md Open Standards Verification Items."
+      "Notes": "2026-08-02 (docs/CARGO_WINCH_SPECIFICATION.md Rev C): supersedes both the retired N20-WINCH gearmotor (Rev P/Q/R) and the never-procured STS3215 (Rev B) in this reconciled BOM — see REFERENCES.md REF-SENSOR-012 (superseded) and REF-SENSOR-013/014. Drives the both-ends-supported spool through a lost-motion dog coupler (torque only, no radial load); paired with the LC-ADC (ADS1231) load cell for line tension and AK7455 for true spool position. ⚠ Stall current not yet published — see REFERENCES.md Open Standards Verification Items."
     },
     {
       "Ref": "SOL-CATCH-5V",
@@ -628,17 +628,17 @@
       "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §5.1"
     },
     {
-      "Ref": "HX711-LC",
-      "Description": "HX711 24-bit load cell ADC module",
+      "Ref": "LC-ADC",
+      "Description": "Load-cell ADC sense board - TI ADS1231IDR 24-bit bridge ADC + support passives + 4-pin JST-GH on a custom PCB (replaces the HX711 module)",
       "Category": "Cargo",
       "Qty": "1",
       "Unit_Mass_g": "3",
       "Total_Mass_g": "3",
-      "Supplier": "Amazon / AliExpress",
-      "Supplier_PN_or_Search": "HX711 load cell amplifier breakout module",
-      "Est_Unit_Price_USD": "4.00",
-      "Est_Total_Price_USD": "4.00",
-      "Notes": "Cargo weight monitoring; interfaces to TACCO SPI/GPIO"
+      "Supplier": "Digi-Key (ADS1231IDR, 296-43578-1-ND) + custom PCB (in-house design, WBS CARGO-LC-01)",
+      "Supplier_PN_or_Search": "ADS1231IDR (Texas Instruments) SOIC-16",
+      "Est_Unit_Price_USD": "8.50",
+      "Est_Total_Price_USD": "8.50",
+      "Notes": "2026-10-20 (owner decision): replaces HX711-LC (Avia Semiconductor, P. R. China per its datasheet p.1; fails the component-sourcing rule, AGENTS.md section 5 -- rejection recorded in docs/CARGO_WINCH_SPECIFICATION.md section 5.5). ADS1231IDR is Texas Instruments (US), Active, public datasheet SBAS414D (REFERENCES.md REF-SENSOR-063); Digi-Key 296-43578-1-ND, USD 6.48 each with 3332 in stock on 2026-10-20. Est. USD 8.50 = IC 6.48 + 2.00 allowance for PCB, passives and JST-GH (estimate, not quoted). Mass 3 g is the retired module's allowance carried forward (no layout yet) -- replace with the PCB roll-up when WBS CARGO-LC-01 completes. Interface unchanged from the HX711: two-wire clock/data on CAN-PERIPH-GW J_FLEX; AVDD = DVDD = +3V3 from J_FLEX (RAIL-2 at 5.4 V exceeds the ADS1231 5.3 V supply limit; docs/CARGO_WINCH_SPECIFICATION.md section 5.5). Load-cell element is NOT yet in the BOM (spec open item 18); bridge must be >= 350 ohm."
     },
     {
       "Ref": "DRV8833-CARGO",

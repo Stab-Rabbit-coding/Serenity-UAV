@@ -1008,9 +1008,20 @@ do not restate its dimensions here.
 - [ ] **Line-shed test.** Confirm the line actually runs clear of drum and fairlead under load.
     The ~0.7 N capstan retention on the last two turns is analytic, not measured. Verify the
     inboard end is **not** anchored.
+- [ ] **CARGO-LC-01 — LC-ADC line-tension sense board (TI ADS1231IDR) replaces the HX711 module.**
+    *(owner decision 2026-10-20: the HX711 maker is PRC-domiciled, which the component-sourcing
+    rule in `AGENTS.md` §5 forbids; rejection recorded in `docs/CARGO_WINCH_SPECIFICATION.md` §5.5.)*
+    Design, fabricate and bench-test the board: ADS1231IDR + support passives per the datasheet
+    Figure 24 application example (REFERENCES.md REF-SENSOR-063), 4-pin JST-GH to `J_FLEX`
+    (`+3V3`, `GND`, SCLK, DRDY/DOUT), AVDD = DVDD = gateway `+3V3`, `SPEED` and `PDWN` straps.
+    Gates: (a) the load-cell element is selected first — bridge ≥ 350 Ω (spec open item 18);
+    (b) KiCad ERC/DRC clean and a parts-sourcing check against `AGENTS.md` §5 for every passive;
+    (c) real mass replaces the 3 g allowance in `bom_revT` row `LC-ADC` and the
+    22 × 14 × 5 mm placeholder (`generate_placeholders.py`) is replaced by the board outline;
+    (d) bench test with a known mass confirms scale, tare and the `loadcell_fail` flag.
 - [ ] **Firmware — winch state machine** (Simon payload-primary, gateway-side control).
     `WINCH_STATUS` / `WINCH_COMMAND` frames, TPM-signed per [REF-NIST-001 §2.1]; STS3215 bus
-    driver; HX711 re-hosted from TACCO to the gateway; Shepherd watchdog cuts RAIL-2 on
+    driver; ADS1231 load-cell driver (replaces the HX711, see CARGO-LC-01); Shepherd watchdog cuts RAIL-2 on
     heartbeat timeout (which *engages* the catch). Bus IDs assigned in firmware, not in the
     spec. Cross-ref `avionics/firmware/WBS.md`.
 - [ ] **Re-run the §6 mass/CG table** once the SPT5425LV+LibreServo v2 unit is bench-weighed;
