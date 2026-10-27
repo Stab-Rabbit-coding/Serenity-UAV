@@ -11672,6 +11672,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Observer/scripts/apply_nose_outline_r2.py": {
+      "description": "apply_nose_outline_r2.py -- reshape the Observer board outline and slot",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Observer/scripts/gen_observer.py": {
       "description": "Deterministic UUID helpers",
       "tags": [
@@ -22493,6 +22501,7 @@
       "avionics/kicad/Observer/observer/TODO.md",
       "avionics/kicad/Observer/observer/WBS.md",
       "avionics/kicad/Observer/observer_nose_envelope.json",
+      "avionics/kicad/Observer/scripts/apply_nose_outline_r2.py",
       "avionics/kicad/Observer/scripts/gen_observer.py",
       "avionics/kicad/Observer/scripts/gen_observer_bth060_footprint.py",
       "avionics/kicad/Observer/scripts/gen_observer_carrier_pcb.py",
@@ -23286,6 +23295,7 @@
       "avionics/kicad/Observer/observer/TODO.md",
       "avionics/kicad/Observer/observer/WBS.md",
       "avionics/kicad/Observer/observer_nose_envelope.json",
+      "avionics/kicad/Observer/scripts/apply_nose_outline_r2.py",
       "avionics/kicad/Observer/scripts/gen_observer.py",
       "avionics/kicad/Observer/scripts/gen_observer_bth060_footprint.py",
       "avionics/kicad/Observer/scripts/gen_observer_carrier_pcb.py",

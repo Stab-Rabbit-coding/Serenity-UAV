@@ -131,11 +131,13 @@ BOARD_SIDE_SOM = 1.0  # SoM on the aft-down face (the roof leaves the other face
 # Zones: u 0-20 both faces <= 2 mm (sensor carriers, passives); u 20-64 the
 # aft-down face carries the PCM-071 SoM (32 x 43) and tall parts to 11 mm;
 # the roof-side face is <= 2 mm over the whole board.
-OBS_OUTLINE_HALF = ((13.5, 0.0), (16.5, 6.0), (20.0, 12.0), (23.0, 18.0), (23.0, 20.0),
-                    (23.0, 58.0), (21.0, 60.0), (19.0, 62.0), (12.0, 64.0))
-OBS_UPPER = 2.0  # roof-side face, whole board
+OBS_OUTLINE_HALF = ((13.25, 0.0), (27.7, 56.0), (23.0, 66.0))
+# ^ (half-width, u): the KiCad board outline as applied 2026-10-27 by
+#   avionics/kicad/Observer/scripts/apply_nose_outline_r2.py (owner: steeper
+#   slot edges + aft chamfer); slot edges u 0-56 ride in wall slots.
+OBS_UPPER = 0.0  # roof side: per-part heights vs the measured map, tools/observer_board_envelope.py
 OBS_LOWER_FWD = 2.0  # aft-down face, u < OBS_SOM_U0
-OBS_SOM_U0 = 20.0
+OBS_SOM_U0 = 21.7  # U_SOM courtyard starts here on the KiCad board
 
 # ---------------------------------------------------------------------------
 # Pitot (owner, 2026-10-27): the probe runs through the centre post of the
@@ -326,7 +328,7 @@ def bay_insert(trim=True):
 def _outline_poly():
     half = list(OBS_OUTLINE_HALF)
     pts = [(x, u) for x, u in half] + [(-x, u) for x, u in reversed(half)]
-    return trimesh.path.polygons.Polygon(pts)
+    return trimesh.path.polygons.Polygon(pts)  # (lateral, u)
 
 
 def _board_prism(poly, lo, hi):
@@ -367,7 +369,8 @@ def layout():
                        mates=("Observer board",))
     L["laser module"] = dict(solid=bay_cyl(face - FLAT_N * (LASER_L / 2), LASER_D, LASER_L),
                              gap=0.5, mates=("Observer board",))
-    L["Observer board"] = dict(solid=observer_board(), gap=1.0)  # traced at 2 mm clearance
+    # slot edges ride 0.5 mm inside the wall by design (wall slots hold them)
+    L["Observer board"] = dict(solid=observer_board(), gap=0.5)
     L["bay insert"] = dict(solid=bay_insert(), skin_seat=True,
                            mates=("camera pod (port)", "ToF pod (stbd)", "laser module"))
     # --- pitot-static ------------------------------------------------------
