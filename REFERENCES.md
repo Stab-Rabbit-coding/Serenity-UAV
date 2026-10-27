@@ -1635,8 +1635,18 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 | **Official access** | <https://www.rockwestcomposites.com/204-44.html>, <https://www.rockwestcomposites.com/208-22.html> (fetched and read 2026-10-27) |
 | **Section applied** | "Engineering Properties": X/Y tensile yield 62,320; X/Y compressive yield 55,760; XY shear strength 30,446 (204) / 30,454 (208); E_X = E_Y 6,664,000; G_XY 2,546,000; Poisson 0.309. Density 0.055 lb/in^3 (1.52 g/cm^3), printed with units. |
 | **Units — requires verification** | The properties table prints **no units**; the only nearby control is the site's Imperial/Metric selector. psi / Msi is **inferred** from the magnitudes and the Imperial default (430 / 384 / 210 MPa, 45.9 GPa). Confirm with the supplier before relying on any value. |
-| **Not provided** | No bearing strength. Bolted/pinned-joint bearing needs a coupon test (bearing response of polymer-matrix laminates; LG-11) — **requires verification**. `tools/lg_couple_options.py` uses the compressive yield as a design-judgment bearing proxy until then. |
+| **Not provided** | No bearing strength. Bolted/pinned-joint bearing needs a coupon test (bearing response of polymer-matrix laminates; LG-11) — **requires verification**. `tools/lg_couple_options.py` uses the compressive yield (384 MPa) as a design-judgment bearing proxy until then. NCAMP 3k-fabric quasi-isotropic bearing basis values [REF-MAT-012, analog] are all higher (448-696 MPa), which supports the proxy being conservative but does not make it an allowable. |
 | **Cited in** | Plan `docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md`; backbone-plate trade in that plan |
+
+### REF-MAT-012: NCAMP NCP-RP-2010-056 N/C — Cytec Cycom 5215 T650 3K70PW Fabric, 38 % RC, Qualification Statistical Analysis Report (2012)
+
+| Field | Value |
+|---|---|
+| **Publisher** | National Center for Advanced Materials Performance (NCAMP), National Institute for Aviation Research, Wichita State University; E. Clarkson; FAA Special Project SP4612WI-Q; released 2012-07-31 |
+| **Official access** | <https://www.wichita.edu/industry_and_defense/NIAR/Research/cytec-5215/T650-3k-PW-3.pdf> (fetched and read 2026-10-27) |
+| **Section applied** | §4.26 Quasi-isotropic (25/50/25) single-shear bearing SSB1, Table 4-36 (p. 91), normalized: 2 % offset strength RTD (70 °F) mean 93.377 ksi (644 MPa), B-estimate (ANOVA) 70.232 ksi (484 MPa), modified-CV B-basis 83.738 ksi (577 MPa); ETW (180 °F wet) B-basis 66.962 ksi (462 MPa, Weibull) / 65.032 ksi (448 MPa, mod CV); ultimate RTD B-basis 100.937 ksi (696 MPa). |
+| **Applicability — analog only** | Different fibre (T650, not T700), resin (Cycom 5215 prepreg, autoclave) and weave (3k plain weave) from the Rock West infused T700 3k twill plate [REF-MAT-011]. NCAMP allowables apply only to the qualified material and process. Used here to show the 384 MPa bearing proxy for REF-MAT-011 sits below every 3k-fabric quasi-isotropic bearing basis value in this report (lowest: 448 MPa ETW B-basis). It is **not** an allowable for the Rock West plate. |
+| **Cited in** | `docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md` (backbone material trade) |
 
 ### REF-EDF-001: XFly-Model — Galaxy X5 50 mm 12-blade EDF, 6S, motor 2627-KV3200
 

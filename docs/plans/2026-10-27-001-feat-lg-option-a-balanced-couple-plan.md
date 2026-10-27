@@ -66,7 +66,7 @@ execution: code
 | 6061-T6 [REF-MAT-007] | 276 MPa | 5.2 mm (stock 2 x 1/8 in cheeks) | 44 g (54 g stock) | viable, fully cited |
 | CF plate, quasi-iso [REF-MAT-011] | 384 MPa proxy (compressive; units inferred) | 3.7 mm (stock 2 x 1/8 in cheeks) | 18 g (30 g stock) | lightest; allowable requires verification |
 
-Printed CF-PETG stays as the non-structural liner/fairing only. Recommended: CF plate backbone (owner material order), with 6061-T6 as the fully cited fallback until the CF bearing coupon (LG-11) is run.
+Printed CF-PETG stays as the non-structural liner/fairing only. Recommended: CF plate backbone (owner material order), with 6061-T6 as the fully cited fallback until the CF bearing coupon (LG-11) is run. NCAMP analog check [REF-MAT-012]: 3k plain-weave epoxy, quasi-isotropic single-shear bearing B-basis 448 MPa (180 °F wet) to 577 MPa (RTD), above the 384 MPa proxy; at 448 MPa the plate drops to 3.2 mm (1/8 in stock).
 
 **Packaging gate, anchors on a backbone** (hip region masked; members may be outside the hull, as the canonical exposed jack):
 - Aft corners: strut az 154 deg, reach 55 mm, inboard: 12 mm^3 (tilt bracket). Passes after anchor-boss shaping.
