@@ -106,7 +106,7 @@ OPTIONS = {
         module=1.0,
         mech_mass_g=17.7 + 2.3 + 6.9 + 3.0,  # bracket + worm + wheel + M3/inserts
         shell_delta_g=-53.5 + 6 * 3.9,  # pads removed, 6 foot bosses added
-        reach_x=-138.75,  # motor inboard face, port
+        reach_x=31.1,  # motor inboard face, port (R2; R1 -138.75)
         battery_ok=True,
         hold_unpowered=True,
         brake_needed=False,
@@ -127,7 +127,7 @@ OPTIONS = {
         module=1.0,
         mech_mass_g=20.0 + 4.0 + 6.9 + 3.0 + 12.0,  # bigger cradle, worm, wheel, hw, brake (EST)
         shell_delta_g=-53.5 + 6 * 3.9,
-        reach_x=-142.75,  # O25 body, worm PD 24 -> mid-plane -126.25
+        reach_x=27.1,  # O25 body, worm PD 24 -> mid-plane 43.6 (R2; R1 -142.75)
         battery_ok=True,
         hold_unpowered=False,
         brake_needed=True,
@@ -148,7 +148,7 @@ OPTIONS = {
         module=0.8,
         mech_mass_g=10.6 + 2 * 4.2 + 3.0 + 12.0,  # bracket, 2 gears, hw, brake (EST)
         shell_delta_g=0.0,  # pads stay (32.9 g standoffs, MA-5)
-        reach_x=-158.5,
+        reach_x=11.35,  # R2; R1 -158.5
         battery_ok=False,
         hold_unpowered=False,
         brake_needed=True,
@@ -178,7 +178,7 @@ OPTIONS = {
         + 2.1
         + 10.0,  # bracket, worm, wheel, hw, guide, solenoid+pin (EST)
         shell_delta_g=-53.5 + 6 * 3.9,
-        reach_x=-139.25,  # O26 worm tip, mid-plane -125.25
+        reach_x=30.6,  # O26 worm tip, mid-plane 44.6 (R2; R1 -139.25)
         battery_ok=True,
         hold_unpowered=False,
         brake_needed=True,
@@ -502,7 +502,7 @@ it by 2.0 mm.  A six-start worm on the slower 20D keeps TILT-CTL-07.
 {img_row("front")}
 {img_row("iso")}
 
-Looking aft from ahead: grey = hull ring sections at Y −10/20/46.6/80, brown =
+Looking aft from ahead: grey = hull ring sections at Y 295.7/325.7/352.3/385.7 (R2), brown =
 root-flange keep-out, gold = battery in its cradle, green = mission payload at
 the door crown, black lines = bridle hoist lines, blue = wheel on the drive
 shaft, dark grey = motor, red = brake envelope (Opt 2/3) or overlap (Opt 3).

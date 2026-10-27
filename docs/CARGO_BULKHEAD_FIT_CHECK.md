@@ -182,7 +182,33 @@ open.
 - **BHD-13 NEW:** the door seam interferes during synchronised opening (see
   above). Fix with a seam gap or chamfer, or open the doors in sequence
   (DOOR-SEAM-1 will need sequencing anyway).
+- **BHD-11 CLOSED.** TACCO reverted to 55 × 35 mm on main (chin pouch
+  Y −58..0); TACCO vs cradle is 0 mm³. Gate now reports 40 clashes.
 - **BHD-02 IN WORK:** the gear blocks are being reshaped per owner direction.
+
+### 2b. Status update (2026-10-10)
+
+- **BHD-02 analysed, three owner decisions open:**
+  [BHD02_OPTION_STUDY.md](BHD02_OPTION_STUDY.md). A per-feature census
+  (`tools/landing_gear_bay_function.py`) shows the fore bays sit wholly
+  inside the bonded root-flange footprint and the wire-seat clusters hit the
+  wing at all four corners. `landing_gear_wing_clearance.py` no longer
+  reports a false CLEAR (check 5, real meshes).
+- **BHD-14 NEW:** the aft-station bay, which is the published
+  `lg_r6_common_bay.stl`, prints as two bodies. Its wire-boss block is
+  loose. BUILD-BLOCKING.
+- **BHD-10 options pictured** (study §9): moving forward is rejected. A
+  thinner measured stack, or a collar ring relief after a bond check.
+
+### 2c. Status update (2026-10-12)
+
+- **BHD-02 aft corners resolved** (two-row wire layout, conforming bays,
+  hull re-merged; study §12). The **fore corners wait on the owner's
+  fore-absorber choice** (F1–F3).
+- **BHD-14 and BHD-02i closed.** The aft bays are one body, and every M3 is
+  seated on flange and hull collar.
+- New gate `tools/lg_collar_integrity.py`: seat collars one piece with
+  bearing under every M3, and the splice-collar joints untouched.
 
 ## 3. 10 AWG route — the corridor answer
 

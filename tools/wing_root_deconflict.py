@@ -82,6 +82,7 @@ sys.path.insert(0, os.path.join(REPO_ROOT, "airframe", "blender-scripts"))
 sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
 import merge_cargo_interior as mci          # noqa: E402
 import wing_spar_station_fit as wsf         # noqa: E402
+import hull_datums as hd                    # noqa: E402
 
 # --- servo envelope, DS3225 datasheet (authoritative, owner 2026-08-23) ------
 # avionics/datasheets/DS3225 datasheet.pdf, Dongguan City Dsservo Technology.
@@ -103,8 +104,9 @@ SERVO_MASS_G = 60.0                 # datasheet SS2-2
 # with the linkage it described.
 GEAR_ENVELOPE_R = mci.TILT_STAGE_OD / 2.0      # 16.0 mm, gear tip radius
 
-WING_CHORD_LINE_Z = 58.01       # hull Z of the wing chord line at the root
+WING_CHORD_LINE_Z = mci.WING_CHORD_LINE_Z  # wing chord line Z at the root (R2 138.01)
 GAP_BUDGET = 3.0                # mm, minimum acceptable edge-to-edge clearance
+GAP_EPS = 1e-3                  # mm, mesh-vertex float noise on a gap sitting on the budget
 
 # U6 (2026-08-25): boolean/mesh noise tolerance for intersection-volume tests.
 # The published shell round-trips through a float32 binary STL (repair_exported
@@ -121,7 +123,7 @@ BOOL_NOISE_TOL = 1.0            # mm^3, see note above
 # protected volume stops at the wall bracket; see routes() for why.
 WIRE_ROUTES = ("nav-light 3-core conduit", "Hall/encoder conduit")
 
-X_CL = -169.9                   # cargo centreline
+X_CL = hd.X_CL                  # aircraft centreline (R1 -169.9)
 PAYLOAD_W = 101.6               # mission payload width, CARGO-01
 
 
@@ -409,7 +411,7 @@ def max_tenon_envelope(side="port"):
         tm = to_man(t)
         return any(volume_of(tm ^ to_man(sol)) > 1.0 for _l, sol in real)
 
-    lo, hi = y_c + w0 / 2.0, 120.0               # aft face sweep
+    lo, hi = y_c + w0 / 2.0, 425.7               # aft face sweep (R2; R1 Y 120)
     while hi - lo > 0.05:
         mid = (lo + hi) / 2.0
         lo, hi = (mid, hi) if not clashes(y_fwd, mid, l0) else (lo, mid)
@@ -580,9 +582,9 @@ def penetration_check(shell_man, findings):
     z1 = mci.WING_ROOT_Z + mci.MORT_H / 2
     cases = [
         ("wing root mortise, port", (mci.PORT_INB + 1.0, mci.PORT_OUTB - 10.0),
-         box(-130.0, -60.0, y0, y1, z0, z1)),
+         box(39.85, 109.85, y0, y1, z0, z1)),       # R2; R1 X -130..-60
         ("wing root mortise, stbd", (mci.STBD_OUTB + 8.0, mci.STBD_INB - 1.0),
-         box(-280.0, -210.0, y0, y1, z0, z1)),
+         box(-110.15, -40.15, y0, y1, z0, z1)),     # R2; R1 X -280..-210
         # Print labels below MUST match the swept-corridor bounds actually
         # passed to xcyl() just beneath them.  They used to both read the
         # copy-pasted placeholder (-270.0, -70.0) -- identical for port AND
@@ -599,17 +601,18 @@ def penetration_check(shell_man, findings):
         # O20.4 the whole way would read the 2.05 mm annulus of intended
         # material between the two diameters as "BLIND -- wall not cut", which
         # is the opposite of the truth.
-        ("spar socket, port", (mci.PORT_INB, -55.0),
-         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, mci.PORT_INB, -55.0,
+        # corridor X bounds in R2 (R1 -55 / -130 / -285 / -210)
+        ("spar socket, port", (mci.PORT_INB, 114.85),
+         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, mci.PORT_INB, 114.85,
               mci.WING_SPAR_BORE_D / 2.0)),
-        ("10 AWG bundle exit, port", (-130.0, mci.PORT_INB),
-         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, -130.0, mci.PORT_INB,
+        ("10 AWG bundle exit, port", (39.85, mci.PORT_INB),
+         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, 39.85, mci.PORT_INB,
               mci.SPAR_WIRE_BORE_D / 2.0)),
-        ("spar socket, stbd", (-285.0, mci.STBD_INB),
-         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, -285.0, mci.STBD_INB,
+        ("spar socket, stbd", (-115.15, mci.STBD_INB),
+         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, -115.15, mci.STBD_INB,
               mci.WING_SPAR_BORE_D / 2.0)),
-        ("10 AWG bundle exit, stbd", (mci.STBD_INB, -210.0),
-         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, mci.STBD_INB, -210.0,
+        ("10 AWG bundle exit, stbd", (mci.STBD_INB, -40.15),
+         xcyl(mci.WING_SPAR_Y, mci.WING_SPAR_Z, mci.STBD_INB, -40.15,
               mci.SPAR_WIRE_BORE_D / 2.0)),
     ]
     # Boolean noise on a ~900 k-face shell leaves sub-mm^3 slivers in a corridor
@@ -724,7 +727,7 @@ def check_solids(side, findings):
                 findings.append((side, f"{plabel} interferes with {olabel}", inter))
             elif gap <= 1e-3:
                 verdict = "flush at the mounting plane (by construction)"
-            elif gap < GAP_BUDGET:
+            elif gap < GAP_BUDGET - GAP_EPS:
                 verdict = f"TIGHT (< {GAP_BUDGET:.0f} mm)"
                 findings.append((side, f"{plabel} clears {olabel} by {gap:.2f} mm", 0.0))
             else:

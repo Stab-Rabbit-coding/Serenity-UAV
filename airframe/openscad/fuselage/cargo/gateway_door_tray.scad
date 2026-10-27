@@ -77,9 +77,9 @@ LIP_IN     = 2.0;                  // rail lip reach over the board's short edge
 LIP_H      = 1.2;                  // block-top lip height fore/aft of the bottom edge
 TIE_SLOT   = [3.2, 1.6];           // cable-tie through-slot (long x short)
 TIE_Z      = GW_PCB_Z1 + 0.6;      // keeper tie passes just over the board's top edge
-APRON_TIE_Y = -3.5;                // strain-relief tie slots in the forward apron
+APRON_TIE_Y = 302.2;               // strain-relief tie slots in the forward apron (R2; R1 -3.5)
 APRON_TIE_X = [GW_XC - 10, GW_XC + 10];
-BLOCK_Z1   = GW_Z0 + GW_BASE_T;    // 15.6: base slab top = board bottom edge
+BLOCK_Z1   = GW_Z0 + GW_BASE_T;    // R2 95.6: base slab top = board bottom edge
 SLOT_Y     = [GW_PCB_Y0 - GW_RAIL_CLR, GW_PCB_Y1 + GW_RAIL_CLR];   // board slot in Y
 
 // ---------------------------------------------------------------------------

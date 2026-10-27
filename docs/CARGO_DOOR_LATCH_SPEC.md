@@ -34,6 +34,65 @@ Two mechanisms, both required, neither a substitute for the other:
    other when closed (structural) — deliberately **not** a rigid link between the two
    independent bell-cranks (§4.1 explains why that was rejected).
 
+## 0a. Rev B (2026-10-26): lapped doors, one latch (DOOR-REWORK)
+
+**Owner direction 2026-10-19:** the port door opens first and closes **over**
+the starboard door, and **one** latch holds both. Rev B supersedes Rev A's
+two-latch arrangement and its §4 "structural cross-link" (the tongue-and-groove
+`door_seam_interlock.scad` named there was never built).
+
+**Geometry** (`generate_cargo_doors.py` `LAP_*`; drawn by Claude Opus 5.5 for
+Stab-Rabbit-coding):
+
+- The free edges form a **half-lap with a flush exterior**. The port door's
+  free edge is an outer lip 1.2 mm thick (`LAP_LIP_T`) that reaches 6 mm
+  (`LAP_W`) past the centreline. The starboard door's free edge steps up into an
+  inner lip of the same thickness, 0.3 mm (`LAP_GAP`) above the port lip.
+- Closing order: starboard, then port. The port lip comes up from outside and
+  traps the starboard lip. Opening order: port, then starboard. Starboard
+  physically cannot open first.
+- The doors no longer butt at the centreline, which removes the BHD-13
+  synchronised-opening seam jam.
+- The bay floor rises 0.7 mm only over the 6 mm lap strip (inner lip plus gap).
+
+**Latch** (`door_latch_mechanism.scad`, `LATCHED_SIDES = ["port"]`): the port
+bell-crank keeps the hook and mortise. The starboard bell-crank is
+**drive-only**, with no latch arm and no mortise.
+
+**Statics, same method and FOS 3.0 as §1–3.** Isolate the starboard door. Its
+aero moment about its own hinge (0.202 N·m, §1) is reacted at the lap, at its
+free edge, 55.7 mm from that hinge. The lap reaction acts on the port door at
+the lap centre, 55.7 + 3.0 mm from the port hinge:
+
+```text
+R_lap            = 0.202 / 0.0557            = 3.63 N
+M_port (total)   = 0.202 + 3.63 x 0.0587     = 0.415 N.m   (2.05 x Rev A)
+M_design         = 3.0 x 0.415               = 1.245 N.m
+
+pushrod          F_rod = 1.245 / 0.005 = 249 N;   sigma = 249 / 3.14 = 79.3 MPa
+                 mild-steel wire 250-350 MPa (REF-ID pending, §6) -> FOS 3.2-4.4
+lip bearing      F_lip = 1.245 / 0.010 = 124.5 N on 7 x 4 = 28 mm^2 -> 4.45 MPa
+                 REF-MAT-001 39.23 MPa proxy (VERIFY, §3)          -> FOS 8.8
+hook root shear  7 x 3.5 = 24.5 mm^2: tau = 1.5 x 124.5 / 24.5 = 7.62 MPa
+                 0.577 x 39.23 = 22.6 MPa                          -> FOS 2.97
+port lap lip     line load 3.0 x 3.63 / 106 = 0.103 N/mm at 3 mm lever:
+                 M = 0.308 N.mm/mm, Z = 1.2^2/6 = 0.24 mm^3/mm -> 1.28 MPa
+                 20 % CF-PETG flexural 77 MPa (REF-MAT-002)        -> FOS 60
+```
+
+The hook root and lip pad were resized for the doubled load: the hook root
+went from 5 × 2.4 to 7 × 3.5 mm and the lip pad from 4 to 7 mm wide. All
+Rev A caveats (anisotropy, the proxy allowable, the unmodelled 1.5 mm root
+fillet) still apply.
+
+> **CAUTION**
+>
+> With the port door open, the starboard door has no positive latch: its SG90
+> gear train (stall 0.177 N·m) is below the 87 kt door moment (0.202 N·m, §1).
+> Operate the doors only in hover or low-speed flight. The gateway shall
+> sequence port-open before starboard-open and starboard-close before
+> port-close (WBS DOOR-REWORK-SEQ).
+
 ## 1. Governing load (statics)
 
 **Free-body diagram (each door, closed, level flight):** isolate one door panel. Forces:

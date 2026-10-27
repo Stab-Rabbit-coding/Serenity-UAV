@@ -21,6 +21,9 @@ python3 "$TOPDIR/tools/precommit_doc_wording.py" || exit 1
 # TACCO board size <-> airframe mount envelopes (nose tray, chin shelf, Simon saddle)
 python3 "$TOPDIR/tools/check_tacco_envelope_sync.py" || exit 1
 
+# Aircraft datum R2 drift gate (plan 2026-10-19-001 U3: datums imported, never re-typed)
+python3 "$TOPDIR/tools/check_datum_drift.py" || exit 1
+
 # Update indexes
 python3 "$TOPDIR/tools/precommit_index.py" || exit 1
 

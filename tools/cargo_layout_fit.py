@@ -59,7 +59,9 @@ SHELL = os.path.join(
     "cargo_sect_shell24_2mm_repaired.stl",
 )
 GAP_MM = 3.0  # repo clearance budget to a moving / adjacent part
-X_CL = -169.85  # hull centreline (merge_cargo_interior.py X_CL)
+sys.path.insert(0, HERE)
+import hull_datums as hd  # noqa: E402  aircraft datum R2 (2026-10-19)
+X_CL = hd.X_CL  # centreline = 0 in the aircraft datum
 
 
 # ---------------------------------------------------------------------------
@@ -112,14 +114,16 @@ def dilate(tm, d):
 
 
 # ---------------------------------------------------------------------------
-# Rev T5 layout (hull frame, mm).  Port side given; 'mirror': True makes a
+# Rev T5 layout (AIRCRAFT DATUM R2, mm: origin centreline / nose tip /
+# static ground; R2 = R1 + (169.85, 305.70, 80.00) -- comments dated before
+# 2026-10-19 quote R1 numbers).  Port side given; 'mirror': True makes a
 # starboard twin about X_CL.  THESE ARE THE SINGLE-SOURCE NUMBERS -- the
 # bracket / cradle / void-former SCAD files read them from the generated
 # include `cargo_layout_t5_params.scad` (--write-scad), and
 # merge_cargo_interior.py imports this module.
 # ---------------------------------------------------------------------------
 # Drive shaft (WING_SHAFT_Y / WING_SHAFT_Z in merge_cargo_interior.py)
-SHAFT_Y, SHAFT_Z = 46.60, 69.09
+SHAFT_Y, SHAFT_Z = 352.30, 149.09  # R1 (46.60, 69.09)
 # Worm stage -- Rev T5e (2026-09-16), supersedes the Rev T5b/T5c/T5d numbers.
 # m1 40T wheel on the drive shaft driven by a SIX-start O26 worm on a Pololu
 # 20D 25:1 CB 6 V gearmotor (#3712, REF-ACT-001): 6.667:1 here, 23.8:1 overall
@@ -151,7 +155,7 @@ WORM_Z = SHAFT_Z + STAGE_C  # 102.09 -- worm axis ABOVE shaft
 # face is at -120 there.  Rev T5e moves the plane 1 mm outboard (-122.75 vs
 # -123.75: 2.75 mm to the flange face, a static bonded part) so the O26 worm's
 # inboard tip stays at X -139.25 -- 3.2 mm off the battery cradle's port face.
-GEAR_X_OUT = -122.75
+GEAR_X_OUT = 47.10  # R1 -122.75
 WHEEL_FACE = 5.0
 WORM_X = GEAR_X_OUT - WHEEL_FACE / 2  # -125.25 wheel/worm mid-plane
 WORM_LEN = 10.0  # >= 2*m*sqrt(z2/2+1) = 8.2 mm
@@ -206,34 +210,35 @@ BOARD_L, BOARD_W, BOARD_T = 42.9, 36.5, 7.4  # Y, Z, X
 # outboard face moved to X -113.85 (N_AFT_XC).  Grid-searched 2026-09-16: no
 # position forward of the worm clears the wall at Y < 12 / Z > 108 by 2 mm.
 BOARD_X0 = GEAR_X_OUT + 5.0  # -117.75, the web's outboard face
-BOARD_Y0, BOARD_Z0 = 55.0, 83.0
+BOARD_Y0, BOARD_Z0 = 360.70, 163.0  # R1 (55.0, 83.0)
 # Old NSVMT DS3225 pads, still IN the published shell -- subtracted here so
 # the check reflects the shell AFTER this rev's merge (they are gated off).
-NSVMT_PAD_PORT = (-160.0, -94.0, 15.0, 78.0, 84.0, 114.0)
+NSVMT_PAD_PORT = (9.85, 75.85, 320.70, 383.70, 164.0, 194.0)  # R1 (-160,-94,15,78,84,114)
 # Battery (BATTERY_MOUNT.md SS1, Tattu 6S 4000 class) -- LONGITUDINAL in the
 # roof band, on the centreline.
 BATT_L, BATT_W, BATT_H = 142.0, 50.0, 38.0
 # centred (a 1.5 mm port shift was tried for the chin nodes on 2026-09-16 and reverted)
 BATT_XC = X_CL
 BATT_X0, BATT_X1 = BATT_XC - BATT_W / 2, BATT_XC + BATT_W / 2
-BATT_Y0 = -58.0  # head/cargo collar ends at -61.5
+BATT_Y0 = 247.70  # R1 -58.0; head/cargo collar ends at R1 -61.5
 BATT_Y1 = BATT_Y0 + BATT_L  # +84.0
-BATT_Z0 = 90.0  # payload crown 84.92 + cradle + gap
+# payload crown (DOOR_CROWN_Z + PAYLOAD Z, BHD-08) + cradle + gap
+BATT_Z0 = 170.0  # R1 90.0
 BATT_Z1 = BATT_Z0 + BATT_H  # 128.0
 CRADLE_T = 2.4
 # The cradle is an INVERTED U hung from the roof: the battery is pushed up
 # into it from the open belly (doors open, winch not yet fitted) and held by
 # two cam straps under it -- field exchange needs neither roof access nor
 # winch removal (docs/BATTERY_MOUNT.md Rev T5 SS3).
-CRADLE_FWD_BOSS_Y = -50.0  # roof hangers, chin roof (Z ~143)
-CRADLE_AFT_BOSS_Y = 80.0  # roof hangers (roof Z ~161)
+CRADLE_FWD_BOSS_Y = 255.70  # R1 -50.0; roof hangers, chin roof (R1 Z ~143)
+CRADLE_AFT_BOSS_Y = 385.70  # R1 80.0; roof hangers (R1 roof Z ~161)
 CRADLE_BOSS_DX = 18.0  # +/- from cradle centreline
 CRADLE_TOP_Z = BATT_Z1 + CRADLE_T  # ceiling plate top, 130.4
 # Dorsal-notch relief: the roof dips to Z ~131 over Y -20..+2, so the
 # ceiling plate is cut away there across the full width and the side rails
 # step down to CRADLE_RELIEF_Z -- the battery's own top (128) is then the
 # highest thing under the notch, 3 mm below the skin.
-CRADLE_RELIEF_Y = (-20.0, 2.0)
+CRADLE_RELIEF_Y = (285.70, 307.70)  # R1 (-20, 2)
 CRADLE_RELIEF_Z = BATT_Z1 - 1.0  # 127.0, rail top through the relief
 CRADLE_XC = BATT_XC
 # Avionics nodes -- Rev T5c (owner, 2026-09-15): all FOUR control nodes stay
@@ -264,7 +269,7 @@ CRADLE_XC = BATT_XC
 NODE_L, NODE_H, NODE_T = 58.0, 37.0, 22.0  # pouch-inclusive: board length, board height, stack
 NODE_CABLE = 10.0  # connector-edge clearance
 # chin floor nodes: X = board height (37), Y = board length (58), Z = stack (22)
-N_CHIN_Y0, N_CHIN_Y1 = -58.0, 0.0
+N_CHIN_Y0, N_CHIN_Y1 = 247.70, 305.70  # R1 (-58, 0)
 N_CHIN_Z1 = BATT_Z0 - 2.0  # 88.0: 2 mm static gap under the battery
 N_CHIN_Z0 = N_CHIN_Z1 - NODE_T  # 66.0
 N_CHIN_X_IN = X_CL + NODE_CABLE / 2  # port node inner face (-164.85); stbd mirrored
@@ -274,8 +279,9 @@ N_CHIN_X_IN = X_CL + NODE_CABLE / 2  # port node inner face (-164.85); stbd mirr
 # in Y -- board and node are both static, and they are also 3.9 mm apart in
 # X; the nodes' aft faces at Y 121.5 reach 0.5 mm into the middle-section
 # splice collar's ring zone (Y 121..129), checked at 4.5 mm below.
-N_AFT_Y0 = 99.5
-N_AFT_Z0 = 87.0  # payload crown 84.92 + 2 (static gap); keeps the top under the wall's curve-in
+N_AFT_Y0 = 405.20  # R1 99.5
+N_AFT_Z0 = 167.0  # R1 87.0; was payload crown 84.92 + 2; since BHD-08 the crown is 87.06, so this
+#   overlaps the payload (owner decision with BHD-10 -- raising it costs shoulder gap)
 # port / stbd centres (3 mm apart; the pair sits 0.5 mm stbd of centre -- the
 # port shoulder curves in earlier); GPS cups (Z >= 139) are above
 N_AFT_XC = (X_CL + 30.0, X_CL - 31.0)
@@ -287,14 +293,14 @@ SHELF_T = 2.4
 SHELF_Z0 = N_CHIN_Z0 - SHELF_T  # 63.6
 # plate: clear of the head/cargo splice collar ring (Y -61.5..-53.5) and the
 # payload (4.7); the pouches overhang it 6 mm forward
-SHELF_Y0, SHELF_Y1 = -52.0, 1.6
-SHELF_SILL_Y1 = -45.0  # forward of this the plate lies on the floor
+SHELF_Y0, SHELF_Y1 = 253.70, 307.30  # R1 (-52, 1.6)
+SHELF_SILL_Y1 = 260.70  # R1 -45.0; forward of this the plate lies on the floor
 SHELF_BOSS = (
-    (X_CL - 30.0, -49.0),
-    (X_CL + 30.0, -49.0),
-    (X_CL - 20.0, -33.0),
-    (X_CL + 20.0, -33.0),
-)  # (X, Y)
+    (X_CL - 30.0, 256.70),
+    (X_CL + 30.0, 256.70),
+    (X_CL - 20.0, 272.70),
+    (X_CL + 20.0, 272.70),
+)  # (X, Y); R1 Y -49 / -33
 # Cargo-bay OBSERVER board (cargo_vera_faraday.scad Rev S1: 69.85 x 58 board,
 # tray 76.8 x 70.8 x ~20 + lid/vents) and its 28 mm nadir camera -- NOT
 # PLACED in Rev T5 (found 2026-09-16 on owner question).  Rev T5e: STANDING
@@ -306,8 +312,8 @@ SHELF_BOSS = (
 # aperture (Y 2..108) from the tray's top edge: a hoist monitor, no belly
 # window.  Four M2.5 belly bosses (floor Z ~1-2 there).
 OBSERVER_L, OBSERVER_W, OBSERVER_T = 76.8, 70.8, 20.0
-OBSERVER_Y0 = 108.5
-OBSERVER_Z0 = 14.2
+OBSERVER_Y0 = 414.20  # R1 108.5
+OBSERVER_Z0 = 94.20  # R1 14.2
 OBSERVER_PLACED = True
 OBSERVER_BOSS = (
     (-30.0, 4.0, 4.0),
@@ -316,11 +322,11 @@ OBSERVER_BOSS = (
     (30.0, 8.5, 3.5),
 )  # (dX, dY, half-size)
 WALL_SLICES = False  # the rejected shoulder-pocket option, kept for the record
-SLICE_T, SLICE_L, SLICE_H, SLICE_Z0, SLICE_Y0 = 20.0, 55.0, 31.0, 81.0, 52.0
+SLICE_T, SLICE_L, SLICE_H, SLICE_Z0, SLICE_Y0 = 20.0, 55.0, 31.0, 161.0, 357.70  # R1 Z0 81, Y0 52
 SLICE_X_IN = GEAR_X_OUT + 5.0 + GAP_MM
 # Legacy dorsal-tray constants (retired at Rev T5; kept for the record)
 TRAY_X, TRAY_Y, TRAY_D = 40.0, 60.0, 55.0
-INARA_XC, INARA_YC = -132.0, 86.0
+INARA_XC, INARA_YC = 37.85, 391.70  # R1 (-132, 86)
 INARA_BOSS_DX, INARA_BOSS_DY = 15.0, 25.0
 TRAYS_IN_CARGO = False
 # Mission payload (cargo_bay_envelope.py gate) + TWIN-LINE bridle hoist.
@@ -329,16 +335,21 @@ TRAYS_IN_CARGO = False
 PAYLOAD = (76.2, 101.6, 76.2)  # X, Y, Z
 # The box is a hoisted soft load, not a moving machine part: its lateral
 # margin to the wheels is 3.0 mm and its Y margin in the aperture 2.2 mm.
-HOIST_Y = 55.5  # box Y 4.7..106.3 in the 2..108 aperture
+HOIST_Y = 361.20  # R1 55.5; box R1 Y 4.7..106.3 in the 2..108 aperture
 LINE_R = 0.5  # 1 mm Dyneema
 HOIST_DX = BATT_W / 2 + CRADLE_T + GAP_MM + LINE_R  # 30.9 from the battery centre
 HOIST_XS = (BATT_XC - HOIST_DX, BATT_XC + HOIST_DX)
-DOOR_CROWN_Z = 8.72
+# BHD-08 (corrected 2026-10-12): the payload rests on the CLOSED DOORS, whose
+# highest point is Z 10.86 (tools/cargo_bay_envelope.door_top(), measured from
+# cargo_door_port/stbd.stl).  8.72 put the box 2.14 mm low -- inside the doors
+# (571 / 986 mm^3) and 2 mm short of its real conflict with the aft Pilot
+# nodes.  main() re-measures the doors and fails if this drifts.
+DOOR_CROWN_Z = 91.00  # doors regenerated on the R2 shell 2026-10-20 (was 90.86; R1 10.86)
 DRUM_D, DRUM_L = 16.0, 12.0
 SPOOL_Z0 = BATT_Z1 + CRADLE_T + GAP_MM  # 133.4, above the cradle ceiling
 # Canonical forward cargo-ramp fairing: opening measured by ray map
-RAMP_X0, RAMP_X1 = -194.0, -142.0
-RAMP_Z0, RAMP_Z1 = 8.0, 44.0
+RAMP_X0, RAMP_X1 = -24.15, 27.85  # R1 (-194, -142)
+RAMP_Z0, RAMP_Z1 = 88.0, 124.0  # R1 (8, 44)
 RAMP_OVERLAP = 6.0  # fuse margin onto the flanks
 # Cargo-door servo GATEWAY (GW-CARGO-DOOR: one SKIPPER-CAN-PERIPH-GW-PCB at
 # N_STACKS=1, docs/CARGO_DOOR_GATEWAY_SPEC.md, 2026-09-21).  The board has no
@@ -365,12 +376,12 @@ GW_RAIL_T, GW_RAIL_CLR, GW_RAIL_LIP = 1.6, 0.3, 1.2  # side-rail wall, slot clea
 GW_BASE_T = 5.4
 GW_CBORE_D, GW_CBORE_H = 6.0, 3.2
 GW_BOSS_H = 4.0  # boss height above the 6.2 mm slab
-GW_SLAB_Z = 6.2  # slab top (interior floor) at the tray station
+GW_SLAB_Z = 86.2  # R1 6.2; slab top (interior floor) at the tray station
 GW_XC = X_CL
 GW_X0, GW_X1 = GW_XC - GW_PCB_L / 2, GW_XC + GW_PCB_L / 2  # board -194.35..-145.35
 GW_TRAY_X0, GW_TRAY_X1 = GW_X0 - GW_RAIL_T, GW_X1 + GW_RAIL_T  # -195.95..-143.75
-GW_BASE_Y0 = -17.25  # base slab back face (2.75 mm off the floor-level wall at Y -20)
-GW_TRAY_Y0 = -16.0  # rail back face
+GW_BASE_Y0 = 288.45  # R1 -17.25; base slab back face (2.75 mm off the floor-level wall at Y -20)
+GW_TRAY_Y0 = 289.70  # R1 -16.0; rail back face
 GW_PCB_Y0 = GW_TRAY_Y0 + GW_RAIL_LIP + GW_RAIL_CLR  # -14.5 board back face
 GW_PCB_Y1 = GW_PCB_Y0 + GW_PCB_T  # -12.9 board front face
 GW_TRAY_Y1 = GW_PCB_Y1 + GW_RAIL_CLR + GW_RAIL_LIP  # -11.4 tray front (rail) face
@@ -380,11 +391,12 @@ GW_Z0 = GW_SLAB_Z + GW_BOSS_H  # 10.2 tray underside on the boss tops
 GW_PCB_Z0 = GW_Z0 + GW_BASE_T  # 15.6 board bottom edge on the base slab
 GW_PCB_Z1 = GW_PCB_Z0 + GW_PCB_W  # 41.1
 GW_TRAY_Z1 = GW_PCB_Z1 + 3.0  # 44.1 side-rail tops (cable-tie keeper over the board edge)
-GW_BASE_Y1 = -2.0  # base plate runs forward under the component zone (4 mm off the aperture edge)
+# base plate runs forward under the component zone (4 mm off the aperture edge)
+GW_BASE_Y1 = 303.70  # R1 -2.0
 GW_BOSS_DX, GW_BOSS_H2 = 19.0, 3.5  # boss (X offset from X_CL, half-size; 7 x 7 mm)
 # rear row under the board (counterbored), front row exposed; the 7 x 7 bosses
 # meet edge-to-edge at Y -9.5
-GW_BOSS_Y = (-13.0, -6.0)
+GW_BOSS_Y = (292.70, 299.70)  # R1 (-13, -6)
 GW_BOSS = tuple((sx * GW_BOSS_DX, by) for by in GW_BOSS_Y for sx in (-1, 1))  # (dX, Y)
 GW_DOOR_PLACED = True
 
@@ -447,7 +459,7 @@ def layout_t5():
     for i, (fy, fz) in enumerate(BRACKET_FEET):
         L[f"bracket foot {i}"] = dict(
             mirror=True,
-            solid=box(GEAR_X_OUT + 4.0, -60.0, fy - 6.0, fy + 6.0, fz - 6.0, fz + 6.0),
+            solid=box(GEAR_X_OUT + 4.0, 109.85, fy - 6.0, fy + 6.0, fz - 6.0, fz + 6.0),  # R1 X -60
             skin_seat=True,
         )
     # --- battery: LONGITUDINAL, roof band, printed cradle --------------------
@@ -487,7 +499,7 @@ def layout_t5():
                     by - 5.0,
                     by + 5.0,
                     CRADLE_TOP_Z,
-                    175.0,
+                    255.0,  # R1 175
                 ),
                 skin_seat=True,
                 mates=("battery cradle",),
@@ -499,8 +511,8 @@ def layout_t5():
                 INARA_XC + TRAY_X / 2,
                 INARA_YC - TRAY_Y / 2,
                 INARA_YC + TRAY_Y / 2,
-                163.0 - TRAY_D,
-                163.0,
+                243.0 - TRAY_D,  # R1 163
+                243.0,
             ),
             skin_seat=True,
         )
@@ -560,7 +572,7 @@ def layout_t5():
         )
         for i, (bx, by) in enumerate(SHELF_BOSS):
             L[f"shelf boss {i}"] = dict(
-                solid=box(bx - 5.0, bx + 5.0, by - 5.0, by + 5.0, 0.0, SHELF_Z0 + 0.5),
+                solid=box(bx - 5.0, bx + 5.0, by - 5.0, by + 5.0, 80.0, SHELF_Z0 + 0.5),  # R1 Z 0
                 skin_seat=True,
                 mates=("chin shelf", "chin shelf sill", "ramp fairing"),
             )
@@ -585,7 +597,7 @@ def layout_t5():
                     X_CL + dx + h,
                     OBSERVER_Y0 + dy - h,
                     OBSERVER_Y0 + dy + h,
-                    -5.0,
+                    75.0,  # R1 -5
                     OBSERVER_Z0 + 0.5,
                 ),
                 skin_seat=True,
@@ -676,7 +688,7 @@ def layout_t5():
                     GW_XC + dx + GW_BOSS_H2,
                     by - GW_BOSS_H2,
                     by + GW_BOSS_H2,
-                    -5.0,
+                    75.0,  # R1 -5
                     GW_Z0 + 0.5,
                 ),
                 skin_seat=True,
@@ -719,8 +731,8 @@ def layout_t5():
         solid=box(
             RAMP_X0 - RAMP_OVERLAP,
             RAMP_X1 + RAMP_OVERLAP,
-            -40.0,
-            -14.0,
+            265.70,  # R1 -40
+            291.70,  # R1 -14
             RAMP_Z0 - RAMP_OVERLAP,
             RAMP_Z1 + RAMP_OVERLAP,
         ),
@@ -768,7 +780,7 @@ def shell_after_merge(shell_tm):
     pad = box(*NSVMT_PAD_PORT)
     m = m - to_man(pad) - to_man(mirror_x(pad))
     for fy, fz in PUBLISHED_FEET:
-        fb = box(PUBLISHED_FOOT_X, -60.0, fy - 6.5, fy + 6.5, fz - 6.5, fz + 6.5)
+        fb = box(PUBLISHED_FOOT_X, 109.85, fy - 6.5, fy + 6.5, fz - 6.5, fz + 6.5)  # R1 X -60
         m = m - to_man(fb) - to_man(mirror_x(fb))
     for dx in (-CRADLE_BOSS_DX, CRADLE_BOSS_DX):
         for by in (CRADLE_FWD_BOSS_Y, CRADLE_AFT_BOSS_Y):
@@ -779,12 +791,13 @@ def shell_after_merge(shell_tm):
                     by - 5.5,
                     by + 5.5,
                     CRADLE_TOP_Z - 0.5,
-                    170.0,
+                    250.0,  # R1 170
                 )
             )
     if CHIN_NODES:
         for bx, by in SHELF_BOSS:
-            m = m - to_man(box(bx - 5.5, bx + 5.5, by - 5.5, by + 5.5, 2.0, SHELF_Z0 + 0.5))
+            # R1 Z 2
+            m = m - to_man(box(bx - 5.5, bx + 5.5, by - 5.5, by + 5.5, 82.0, SHELF_Z0 + 0.5))
     if OBSERVER_PLACED:
         for dx, dy, h in OBSERVER_BOSS:
             m = m - to_man(
@@ -793,7 +806,7 @@ def shell_after_merge(shell_tm):
                     X_CL + dx + h + 0.5,
                     OBSERVER_Y0 + dy - h - 0.5,
                     OBSERVER_Y0 + dy + h + 0.5,
-                    2.5,
+                    82.5,  # R1 2.5
                     OBSERVER_Z0 + 0.5,
                 )
             )
@@ -813,7 +826,7 @@ def shell_after_merge(shell_tm):
         px = hx - DRUM_L / 2 - 5.0 if hx < X_CL else hx + DRUM_L / 2 + 5.0
         m = m - to_man(
             box(
-                px - 5.5, px + 5.5, HOIST_Y - 5.5, HOIST_Y + 5.5, SPOOL_Z0 + DRUM_D / 2 - 6.5, 170.0
+                px - 5.5, px + 5.5, HOIST_Y - 5.5, HOIST_Y + 5.5, SPOOL_Z0 + DRUM_D / 2 - 6.5, 250.0
             )
         )
     msh = m.to_mesh()
@@ -957,7 +970,8 @@ def write_scad(path):
         fh.write(
             "// cargo_layout_t5_params.scad -- GENERATED by tools/cargo_layout_fit.py\n"
             "// --write-scad.  Do not edit: change the Python constants and regenerate.\n"
-            "// Hull frame, mm (X=+port, Y=+aft, Z=+dorsal).  Rev T5f, 2026-09-21.\n"
+            "// AIRCRAFT DATUM R2, mm (origin centreline / nose tip / ground plane;\n"
+            "// X=+port, Y=+aft, Z=+up).  2026-10-19.\n"
             "// License: CERN-OHL-W-2.0 —\n"
             "// see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)\n"
         )
@@ -1047,7 +1061,7 @@ def _plot(shell_tm, solids):
 
     out = os.path.join(REPO, "docs", "img")
     os.makedirs(out, exist_ok=True)
-    cuts = [("y", v) for v in (-50, -10, 20, 46.6, 55, 80)]
+    cuts = [("y", v) for v in (255.7, 295.7, 325.7, 352.3, 360.7, 385.7)]  # R1 -50..80
     fig, axs = plt.subplots(2, 3, figsize=(21, 12))
     for ax, (axis, v) in zip(axs.ravel(), cuts):
         n = {"y": [0, 1, 0]}[axis]
@@ -1066,8 +1080,8 @@ def _plot(shell_tm, solids):
         ax.set_title(f"XZ at Y={v}")
         ax.set_aspect("equal")
         ax.grid(True, alpha=0.3)
-        ax.set_xlim(-280, -60)
-        ax.set_ylim(-5, 170)
+        ax.set_xlim(-110, 110)
+        ax.set_ylim(75, 250)
     h, lbl = axs[0][0].get_legend_handles_labels()
     fig.legend(h, lbl, loc="lower center", ncol=6, fontsize=8)
     fig.tight_layout(rect=(0, 0.06, 1, 1))
@@ -1103,6 +1117,16 @@ def main():
         MOTOR_BODY_L, MOTOR_ENC_L = 43.2, 6.0
         MOTOR_L = MOTOR_BODY_L + MOTOR_ENC_L
         print("checking OPTION 1 envelope (20D, worm PD 18, C 29, single-start)")
+    # BHD-08 payload floor datum vs the real closed doors -- checked FIRST, so
+    # neither --write-scad nor the report can run on a stale datum (security
+    # review 2026-10-12: the check used to run after both).
+    import cargo_bay_envelope as cbe  # noqa: PLC0415
+    floor = cbe.door_top([trimesh.load(q, force="mesh") for q in cbe.DOOR_PATHS])
+    if abs(floor - DOOR_CROWN_Z) > 0.05:
+        print(f"FAIL payload floor DOOR_CROWN_Z {DOOR_CROWN_Z:.2f} != measured door top "
+              f"{floor:.2f} (BHD-08) -- fix the datum before anything else")
+        sys.exit(1)
+    print(f"ok   payload floor DOOR_CROWN_Z {DOOR_CROWN_Z:.2f} = measured door top {floor:.2f}")
     if a.write_scad:
         p = os.path.join(
             REPO, "airframe", "openscad", "fuselage", "cargo", "cargo_layout_t5_params.scad"

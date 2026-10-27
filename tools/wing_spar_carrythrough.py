@@ -155,8 +155,8 @@ def measure_geometry():
     # Port wall skin: the outboard-most shell material at the spar station.
     v = shell.vertices
     band = (np.abs(v[:, 1] - mci.WING_SPAR_Y) < 4.0) & \
-           (np.abs(v[:, 2] - mci.WING_SPAR_Z) < 12.0) & (v[:, 0] > -170.0)
-    wall_x = float(v[band, 0].max()) if band.any() else -85.0
+           (np.abs(v[:, 2] - mci.WING_SPAR_Z) < 12.0) & (v[:, 0] > mci.X_CL_HULL)
+    wall_x = float(v[band, 0].max()) if band.any() else 84.85  # R2; R1 -85
     # Fuselage bearing seat: mid-way along the existing spar boss embed span.
     bearing_x = (mci.PORT_INB + mci.PORT_OUTB) / 2.0
     return {
@@ -608,7 +608,8 @@ def report_thwart(m_ultimate):
     # proportion to their distance from it.  Both stations below are measured
     # clear of every opening -- see clear_stations().
     y_spar = mci.WING_SPAR_Y
-    for y_fore, y_aft in ((-40.0, 118.0), (-36.0, 114.0)):
+    # R2 stations; R1 (-40, 118) / (-36, 114)
+    for y_fore, y_aft in ((265.7, 423.7), (269.7, 419.7)):
         base = y_aft - y_fore
         for tag, y_f, share in (("fore", y_fore, (y_aft - y_spar) / base),
                                 ("aft", y_aft, (y_spar - y_fore) / base)):
@@ -661,11 +662,11 @@ def clear_stations():
 
     print("\n  measured clear bands (belly + both flanks intact):")
     bands, run = [], None
-    for y in np.arange(-66.0, 127.0, 2.0):
+    for y in np.arange(239.7, 432.7, 2.0):   # R2; R1 Y -66..127
         y = float(y)
-        belly = count(y, ap[0], ap[1], -2.0, 12.0) > 30
-        flanks = (count(y, -110.0, -78.0, 30.0, 60.0) > 20
-                  and count(y, -262.0, -230.0, 30.0, 60.0) > 20)
+        belly = count(y, ap[0], ap[1], 78.0, 92.0) > 30          # R1 Z -2..12
+        flanks = (count(y, 59.85, 91.85, 110.0, 140.0) > 20     # R1 X -110..-78
+                  and count(y, -92.15, -60.15, 110.0, 140.0) > 20)  # R1 X -262..-230
         good = ring_closed(y) or (belly and flanks)
         if good and run is None:
             run = y
@@ -673,7 +674,7 @@ def clear_stations():
             bands.append((run, y - 2.0))
             run = None
     if run is not None:
-        bands.append((run, 125.0))
+        bands.append((run, 430.7))   # R2; R1 125
     for lo, hi in bands:
         if hi - lo >= 4.0:
             print(f"    Y {lo:+7.1f} .. {hi:+7.1f}   ({hi - lo:5.1f} mm of station)")
@@ -712,7 +713,7 @@ def main():
         ring_bottom_chord_check()
 
     print("\nBay impact if the spar stops at the wall")
-    bay_lo, bay_hi = -240.0, mci.PORT_INB
+    bay_lo, bay_hi = -70.15, mci.PORT_INB   # R2; R1 -240
     print(f"  spar inboard end X {mci.PORT_INB:.1f}; bay clear span "
           f"X {bay_lo:.1f}..{bay_hi:.1f} = {bay_hi - bay_lo:.0f} mm")
     print("  the spar no longer crosses the bay -> CARGO-01's obstruction is removed")

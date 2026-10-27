@@ -1,0 +1,2039 @@
+{
+ "configs": {
+  "cargo_2800_payload": {
+   "I_pitch_gmm2": 65312755.71531494,
+   "T_W": 1.3817788420522563,
+   "cg": [
+    -0.06817725194196675,
+    350.2299765795821,
+    156.80247141576018
+   ],
+   "k_pitch_mm": 102.79910603609748,
+   "mass_g": 6180.439112322892
+  },
+  "heaviest_4000_payload": {
+   "I_pitch_gmm2": 65688903.20113763,
+   "T_W": 1.3599940770571277,
+   "cg": [
+    -0.06710238716160616,
+    349.7328831886688,
+    157.3100892575487
+   ],
+   "k_pitch_mm": 102.27878927514026,
+   "mass_g": 6279.439112322892
+  },
+  "hover_4000": {
+   "I_pitch_gmm2": 65470710.000898,
+   "T_W": 1.4109547656018278,
+   "cg": [
+    -0.06961679800385635,
+    349.3031958994473,
+    158.3671567821242
+   ],
+   "k_pitch_mm": 104.00426169158635,
+   "mass_g": 6052.639112322891
+  }
+ },
+ "rows_hover": [
+  {
+   "cg": [
+    -3.3,
+    129.3,
+    211.9
+   ],
+   "kind": "PRINT",
+   "mass_g": 177.58,
+   "name": "head_shell24_2mm_repaired",
+   "ref": "PRINT-HEAD-SHELL",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    0.3,
+    343.0,
+    164.9
+   ],
+   "kind": "PRINT",
+   "mass_g": 309.95,
+   "name": "cargo_sect_shell24_2mm_repaired",
+   "ref": "PRINT-CARGO-SECT",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -0.2,
+    473.2,
+    159.3
+   ],
+   "kind": "PRINT",
+   "mass_g": 183.11,
+   "name": "middle_shell24_2mm_repaired",
+   "ref": "PRINT-MIDDLE-CANONICAL",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -0.0,
+    586.7,
+    155.1
+   ],
+   "kind": "PRINT",
+   "mass_g": 231.48,
+   "name": "rear_shell24_2mm_repaired",
+   "ref": "PRINT-REAR-NECK-INTAKE",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    0.1,
+    235.3,
+    186.7
+   ],
+   "kind": "PRINT",
+   "mass_g": 11.52,
+   "name": "head_cargo_splice_collar",
+   "ref": "PRINT-HEAD-CARGO-COLLAR",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -0.3,
+    435.7,
+    156.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 15.8,
+   "name": "cargo_middle_splice_collar",
+   "ref": "PRINT-CARGO-MIDDLE-COLLAR",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -0.2,
+    509.0,
+    160.3
+   ],
+   "kind": "PRINT",
+   "mass_g": 14.43,
+   "name": "middle_rear_splice_collar",
+   "ref": "PRINT-MIDDLE-REAR-COLLAR",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    128.8,
+    341.0,
+    146.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 95.57,
+   "name": "wing_port_s1223_revo",
+   "ref": "PRINT-WINGS-S1223",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -128.8,
+    341.0,
+    146.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 95.57,
+   "name": "wing_stbd_s1223_revo",
+   "ref": "PRINT-WINGS-S1223",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    80.5,
+    331.5,
+    149.4
+   ],
+   "kind": "PRINT",
+   "mass_g": 18.64,
+   "name": "wing_root_flange_port",
+   "ref": "PRINT-WING-ROOT-FLANGE",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -80.4,
+    331.5,
+    149.3
+   ],
+   "kind": "PRINT",
+   "mass_g": 18.7,
+   "name": "wing_root_flange_stbd",
+   "ref": "PRINT-WING-ROOT-FLANGE",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    26.6,
+    360.4,
+    84.7
+   ],
+   "kind": "PRINT",
+   "mass_g": 14.0,
+   "name": "cargo_door_port",
+   "ref": "PRINT-CARGO-DOOR-PORT",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -29.4,
+    360.3,
+    84.6
+   ],
+   "kind": "PRINT",
+   "mass_g": 12.66,
+   "name": "cargo_door_stbd",
+   "ref": "PRINT-CARGO-DOOR-STBD",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    0.0,
+    360.7,
+    85.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 4.19,
+   "name": "cargo_hinge_retention",
+   "ref": "(hinge retention, merged-in part)",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    51.6,
+    354.3,
+    183.3
+   ],
+   "kind": "PRINT",
+   "mass_g": 17.32,
+   "name": "tilt_actuator_bracket_port",
+   "ref": "PRINT-TILT-BRACKET",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -51.6,
+    354.3,
+    183.3
+   ],
+   "kind": "PRINT",
+   "mass_g": 17.32,
+   "name": "tilt_actuator_bracket_stbd",
+   "ref": "PRINT-TILT-BRACKET",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    44.6,
+    352.6,
+    182.1
+   ],
+   "kind": "PRINT",
+   "mass_g": 5.95,
+   "name": "tilt_actuator_worm",
+   "ref": "PRINT-TILT-WORM",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -44.6,
+    352.6,
+    182.1
+   ],
+   "kind": "PRINT",
+   "mass_g": 5.95,
+   "name": "tilt_actuator_worm",
+   "ref": "PRINT-TILT-WORM",
+   "source": "MEASURED mesh, starboard copy translated dX -89.2 (serenity_assembly.py T5_STBD_DX)"
+  },
+  {
+   "cg": [
+    44.1,
+    352.3,
+    149.1
+   ],
+   "kind": "PRINT",
+   "mass_g": 6.91,
+   "name": "tilt_actuator_wheel",
+   "ref": "PRINT-TILT-WHEEL",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -45.1,
+    352.3,
+    149.1
+   ],
+   "kind": "PRINT",
+   "mass_g": 6.91,
+   "name": "tilt_actuator_wheel",
+   "ref": "PRINT-TILT-WHEEL",
+   "source": "MEASURED mesh, starboard copy translated dX -89.2 (serenity_assembly.py T5_STBD_DX)"
+  },
+  {
+   "cg": [
+    41.4,
+    367.7,
+    181.9
+   ],
+   "kind": "PRINT",
+   "mass_g": 2.12,
+   "name": "tilt_brake_guide",
+   "ref": "PRINT-TILT-BRAKE-GUIDE",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -41.4,
+    367.7,
+    181.9
+   ],
+   "kind": "PRINT",
+   "mass_g": 2.12,
+   "name": "tilt_brake_guide_stbd",
+   "ref": "PRINT-TILT-BRAKE-GUIDE",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    187.8,
+    352.3,
+    149.1
+   ],
+   "kind": "PRINT",
+   "mass_g": 0.89,
+   "name": "wing_tilt_pinion_port",
+   "ref": "(wing tilt pinion)",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -187.8,
+    352.3,
+    149.1
+   ],
+   "kind": "PRINT",
+   "mass_g": 0.89,
+   "name": "wing_tilt_pinion_stbd",
+   "ref": "(wing tilt pinion)",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -0.0,
+    316.1,
+    199.7
+   ],
+   "kind": "PRINT",
+   "mass_g": 39.24,
+   "name": "battery_cradle",
+   "ref": "PRINT-BATT-CRADLE",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    0.0,
+    282.0,
+    145.2
+   ],
+   "kind": "PRINT",
+   "mass_g": 9.36,
+   "name": "chin_node_shelf",
+   "ref": "PRINT-CHIN-SHELF",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    60.6,
+    287.9,
+    129.6
+   ],
+   "kind": "PRINT",
+   "mass_g": 22.15,
+   "name": "lg_r6_3_0in_bay_fore-port",
+   "ref": "PRINT-LG-BAY-PLATE",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -59.9,
+    287.9,
+    129.5
+   ],
+   "kind": "PRINT",
+   "mass_g": 22.34,
+   "name": "lg_r6_3_0in_bay_fore-stbd",
+   "ref": "PRINT-LG-BAY-PLATE",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    69.2,
+    401.7,
+    127.6
+   ],
+   "kind": "PRINT",
+   "mass_g": 27.54,
+   "name": "lg_r6_3_0in_bay_aft-port",
+   "ref": "PRINT-LG-BAY-PLATE",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -69.3,
+    401.7,
+    127.7
+   ],
+   "kind": "PRINT",
+   "mass_g": 27.47,
+   "name": "lg_r6_3_0in_bay_aft-stbd",
+   "ref": "PRINT-LG-BAY-PLATE",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    0.0,
+    274.7,
+    80.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 80.98,
+   "name": "lg_r6_3_0in_leg_frame",
+   "ref": "PRINT-LG-LEG-FRAME-3.0IN",
+   "source": "MEASURED mass; station ESTIMATE: fore legs, midway hip Y -16 -> foot Y -46.5"
+  },
+  {
+   "cg": [
+    0.0,
+    422.7,
+    80.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 80.98,
+   "name": "lg_r6_3_0in_leg_frame",
+   "ref": "PRINT-LG-LEG-FRAME-3.0IN",
+   "source": "MEASURED mass; station ESTIMATE: aft legs, midway hip Y 100 -> foot Y 135"
+  },
+  {
+   "cg": [
+    0.0,
+    259.2,
+    2.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 15.22,
+   "name": "lg_r6_common_foot",
+   "ref": "PRINT-LG-FOOT",
+   "source": "MEASURED mass; station foot station Y_FOOT_FORE (landing_gear_r6_sizing)"
+  },
+  {
+   "cg": [
+    0.0,
+    440.7,
+    2.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 15.22,
+   "name": "lg_r6_common_foot",
+   "ref": "PRINT-LG-FOOT",
+   "source": "MEASURED mass; station foot station Y_FOOT_AFT (landing_gear_r6_sizing)"
+  },
+  {
+   "cg": [
+    0.0,
+    415.7,
+    225.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 2.52,
+   "name": "cargo_gps_retention_ring",
+   "ref": "PRINT-GPS-RETENTION",
+   "source": "MEASURED mass; station ESTIMATE: GPS cups Z >= 139 over the aft strip"
+  },
+  {
+   "cg": [
+    0.0,
+    245.7,
+    140.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 1.82,
+   "name": "cargo_fpv_bezel",
+   "ref": "PRINT-FPV-BEZEL",
+   "source": "MEASURED mass; station ESTIMATE: forward cargo"
+  },
+  {
+   "cg": [
+    0.0,
+    360.7,
+    88.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 5.06,
+   "name": "cargo_door_servo_bracket",
+   "ref": "PRINT-CARGO-DOOR-SERVO-BKT",
+   "source": "MEASURED mass; station ESTIMATE: clamshell door aperture Y 2..108"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    200.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 5.06,
+   "name": "cargo_release_servo_bracket",
+   "ref": "PRINT-CARGO-RELEASE-BKT",
+   "source": "MEASURED mass; station ESTIMATE: release at the hoist"
+  },
+  {
+   "cg": [
+    0.0,
+    305.7,
+    90.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 4.97,
+   "name": "gateway_door_tray",
+   "ref": "PRINT-GW-DOOR-TRAY",
+   "source": "MEASURED mass; station ESTIMATE: fwd belly slab (CARGO_DOOR_GATEWAY_SPEC)"
+  },
+  {
+   "cg": [
+    52.0,
+    347.2,
+    96.4
+   ],
+   "kind": "PRINT",
+   "mass_g": 2.33,
+   "name": "door_latch_bracket_port",
+   "ref": "PRINT-DOOR-LATCH-BRACKET",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -48.0,
+    345.0,
+    96.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 1.28,
+   "name": "door_latch_bracket_stbd",
+   "ref": "PRINT-DOOR-LATCH-BRACKET",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    48.8,
+    346.0,
+    102.7
+   ],
+   "kind": "PRINT",
+   "mass_g": 0.96,
+   "name": "door_latch_crank_port",
+   "ref": "PRINT-DOOR-LATCH-CRANK",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    -45.4,
+    345.0,
+    103.4
+   ],
+   "kind": "PRINT",
+   "mass_g": 0.62,
+   "name": "door_latch_crank_stbd",
+   "ref": "PRINT-DOOR-LATCH-CRANK",
+   "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    0.0,
+    360.7,
+    88.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 1.84,
+   "name": "door_horn",
+   "ref": "PRINT-DOOR-HORN",
+   "source": "MEASURED mass; station clamshell door aperture Y 2..108"
+  },
+  {
+   "cg": [
+    0.0,
+    305.7,
+    250.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 2.94,
+   "name": "dorsal_antenna_fin",
+   "ref": "PRINT-DORSAL-ANTENNA-FIN",
+   "source": "MEASURED mass; station ESTIMATE: dorsal, cargo"
+  },
+  {
+   "cg": [
+    230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "NACELLE",
+   "mass_g": 926.38,
+   "name": "Nacelle port rotating assembly (64 mm)",
+   "ref": "NACELLE",
+   "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
+  },
+  {
+   "cg": [
+    -230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "NACELLE",
+   "mass_g": 926.38,
+   "name": "Nacelle stbd rotating assembly (64 mm)",
+   "ref": "NACELLE",
+   "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
+  },
+  {
+   "cg": [
+    0.0,
+    360.7,
+    88.0
+   ],
+   "kind": "BOM",
+   "mass_g": 27.0,
+   "name": "SERVO-CARGO",
+   "ref": "SERVO-CARGO",
+   "source": "BOM Unit_Mass_g; clamshell door aperture Y 2..108"
+  },
+  {
+   "cg": [
+    0.0,
+    305.7,
+    90.0
+   ],
+   "kind": "BOM",
+   "mass_g": 6.0,
+   "name": "CAN-PERIPH-GW-DOOR",
+   "ref": "CAN-PERIPH-GW-DOOR",
+   "source": "BOM Unit_Mass_g; ESTIMATE: fwd belly slab (CARGO_DOOR_GATEWAY_SPEC)"
+  },
+  {
+   "cg": [
+    230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 7.2,
+   "name": "PIN-3X18 (port)",
+   "ref": "PIN-3X18",
+   "source": "BOM Unit_Mass_g; at the port nacelle pivot"
+  },
+  {
+   "cg": [
+    -230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 7.2,
+   "name": "PIN-3X18 (stbd)",
+   "ref": "PIN-3X18",
+   "source": "BOM Unit_Mass_g; at the stbd nacelle pivot"
+  },
+  {
+   "cg": [
+    230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 0.8,
+   "name": "PIN-2X4 (port)",
+   "ref": "PIN-2X4",
+   "source": "BOM Unit_Mass_g; at the port nacelle pivot"
+  },
+  {
+   "cg": [
+    -230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 0.8,
+   "name": "PIN-2X4 (stbd)",
+   "ref": "PIN-2X4",
+   "source": "BOM Unit_Mass_g; at the stbd nacelle pivot"
+  },
+  {
+   "cg": [
+    0.0,
+    45.7,
+    200.0
+   ],
+   "kind": "BOM",
+   "mass_g": 13.0,
+   "name": "PB2-I-FC (node A)",
+   "ref": "PB2-I-FC",
+   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+  },
+  {
+   "cg": [
+    0.0,
+    276.7,
+    157.0
+   ],
+   "kind": "BOM",
+   "mass_g": 13.0,
+   "name": "PB2-I-FC (node chin)",
+   "ref": "PB2-I-FC",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)"
+  },
+  {
+   "cg": [
+    0.0,
+    416.2,
+    185.6
+   ],
+   "kind": "BOM",
+   "mass_g": 13.0,
+   "name": "PB2-I-FC (node aft)",
+   "ref": "PB2-I-FC",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)"
+  },
+  {
+   "cg": [
+    0.0,
+    494.7,
+    160.5
+   ],
+   "kind": "BOM",
+   "mass_g": 13.0,
+   "name": "PB2-I-FC (node simon)",
+   "ref": "PB2-I-FC",
+   "source": "BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)"
+  },
+  {
+   "cg": [
+    0.0,
+    45.7,
+    200.0
+   ],
+   "kind": "BOM",
+   "mass_g": 13.0,
+   "name": "PB2-I-CN (node A)",
+   "ref": "PB2-I-CN",
+   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+  },
+  {
+   "cg": [
+    0.0,
+    276.7,
+    157.0
+   ],
+   "kind": "BOM",
+   "mass_g": 13.0,
+   "name": "PB2-I-CN (node chin)",
+   "ref": "PB2-I-CN",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)"
+  },
+  {
+   "cg": [
+    0.0,
+    416.2,
+    185.6
+   ],
+   "kind": "BOM",
+   "mass_g": 13.0,
+   "name": "PB2-I-CN (node aft)",
+   "ref": "PB2-I-CN",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)"
+  },
+  {
+   "cg": [
+    0.0,
+    494.7,
+    160.5
+   ],
+   "kind": "BOM",
+   "mass_g": 13.0,
+   "name": "PB2-I-CN (node simon)",
+   "ref": "PB2-I-CN",
+   "source": "BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)"
+  },
+  {
+   "cg": [
+    0.0,
+    45.7,
+    200.0
+   ],
+   "kind": "BOM",
+   "mass_g": 31.0,
+   "name": "Pilot (node A)",
+   "ref": "Pilot",
+   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+  },
+  {
+   "cg": [
+    0.0,
+    276.7,
+    157.0
+   ],
+   "kind": "BOM",
+   "mass_g": 31.0,
+   "name": "Pilot (node chin)",
+   "ref": "Pilot",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)"
+  },
+  {
+   "cg": [
+    0.0,
+    416.2,
+    185.6
+   ],
+   "kind": "BOM",
+   "mass_g": 31.0,
+   "name": "Pilot (node aft)",
+   "ref": "Pilot",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)"
+  },
+  {
+   "cg": [
+    0.0,
+    494.7,
+    160.5
+   ],
+   "kind": "BOM",
+   "mass_g": 31.0,
+   "name": "Pilot (node simon)",
+   "ref": "Pilot",
+   "source": "BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)"
+  },
+  {
+   "cg": [
+    0.0,
+    45.7,
+    200.0
+   ],
+   "kind": "BOM",
+   "mass_g": 40.0,
+   "name": "TACCO (node A)",
+   "ref": "TACCO",
+   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+  },
+  {
+   "cg": [
+    0.0,
+    276.7,
+    157.0
+   ],
+   "kind": "BOM",
+   "mass_g": 40.0,
+   "name": "TACCO (node chin)",
+   "ref": "TACCO",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)"
+  },
+  {
+   "cg": [
+    0.0,
+    416.2,
+    185.6
+   ],
+   "kind": "BOM",
+   "mass_g": 40.0,
+   "name": "TACCO (node aft)",
+   "ref": "TACCO",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)"
+  },
+  {
+   "cg": [
+    0.0,
+    494.7,
+    160.5
+   ],
+   "kind": "BOM",
+   "mass_g": 40.0,
+   "name": "TACCO (node simon)",
+   "ref": "TACCO",
+   "source": "BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)"
+  },
+  {
+   "cg": [
+    0.0,
+    355.7,
+    180.0
+   ],
+   "kind": "BOM",
+   "mass_g": 40.0,
+   "name": "Commo",
+   "ref": "Commo",
+   "source": "BOM Unit_Mass_g; ESTIMATE: Commo sub-modules, cargo"
+  },
+  {
+   "cg": [
+    0.0,
+    45.7,
+    200.0
+   ],
+   "kind": "BOM",
+   "mass_g": 1.0,
+   "name": "MICROSD-LOG (node A)",
+   "ref": "MICROSD-LOG",
+   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+  },
+  {
+   "cg": [
+    0.0,
+    276.7,
+    157.0
+   ],
+   "kind": "BOM",
+   "mass_g": 1.0,
+   "name": "MICROSD-LOG (node chin)",
+   "ref": "MICROSD-LOG",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)"
+  },
+  {
+   "cg": [
+    0.0,
+    416.2,
+    185.6
+   ],
+   "kind": "BOM",
+   "mass_g": 1.0,
+   "name": "MICROSD-LOG (node aft)",
+   "ref": "MICROSD-LOG",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)"
+  },
+  {
+   "cg": [
+    0.0,
+    494.7,
+    160.5
+   ],
+   "kind": "BOM",
+   "mass_g": 1.0,
+   "name": "MICROSD-LOG (node simon)",
+   "ref": "MICROSD-LOG",
+   "source": "BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)"
+  },
+  {
+   "cg": [
+    0.0,
+    345.7,
+    252.0
+   ],
+   "kind": "BOM",
+   "mass_g": 3.0,
+   "name": "WIRE-49MHZ",
+   "ref": "WIRE-49MHZ",
+   "source": "BOM Unit_Mass_g; ESTIMATE: dorsal spine mid-length"
+  },
+  {
+   "cg": [
+    0.0,
+    155.7,
+    285.0
+   ],
+   "kind": "BOM",
+   "mass_g": 4.0,
+   "name": "POST-FWD-49",
+   "ref": "POST-FWD-49",
+   "source": "BOM Unit_Mass_g; ESTIMATE: fwd 49 MHz post, head dorsal"
+  },
+  {
+   "cg": [
+    0.0,
+    685.7,
+    240.0
+   ],
+   "kind": "BOM",
+   "mass_g": 2.0,
+   "name": "POST-AFT-49",
+   "ref": "POST-AFT-49",
+   "source": "BOM Unit_Mass_g; ESTIMATE: aft post, rear nozzle top"
+  },
+  {
+   "cg": [
+    0.0,
+    467.7,
+    158.8
+   ],
+   "kind": "BOM",
+   "mass_g": 158.0,
+   "name": "Flight Engineer",
+   "ref": "Flight Engineer",
+   "source": "BOM Unit_Mass_g; middle_layout_fit FE_CAN_*"
+  },
+  {
+   "cg": [
+    0.0,
+    467.7,
+    158.8
+   ],
+   "kind": "BOM",
+   "mass_g": 8.0,
+   "name": "FUSE-MAIN-150A",
+   "ref": "FUSE-MAIN-150A",
+   "source": "BOM Unit_Mass_g; middle_layout_fit FE_CAN_*"
+  },
+  {
+   "cg": [
+    0.0,
+    467.7,
+    158.8
+   ],
+   "kind": "BOM",
+   "mass_g": 8.0,
+   "name": "FUSE-ESC-40A",
+   "ref": "FUSE-ESC-40A",
+   "source": "BOM Unit_Mass_g; middle_layout_fit FE_CAN_*"
+  },
+  {
+   "cg": [
+    0.0,
+    467.7,
+    158.8
+   ],
+   "kind": "BOM",
+   "mass_g": 10.0,
+   "name": "SHUNT-1MOHM",
+   "ref": "SHUNT-1MOHM",
+   "source": "BOM Unit_Mass_g; middle_layout_fit FE_CAN_*"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 60.0,
+   "name": "SPT5425LV-WINCH-LS2",
+   "ref": "SPT5425LV-WINCH-LS2",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 15.0,
+   "name": "SOL-CATCH-5V",
+   "ref": "SOL-CATCH-5V",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 3.0,
+   "name": "BRG-MR84ZZ",
+   "ref": "BRG-MR84ZZ",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 4.6,
+   "name": "SHAFT-SS-4MM",
+   "ref": "SHAFT-SS-4MM",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 1.0,
+   "name": "SPRING-PAWL",
+   "ref": "SPRING-PAWL",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 0.3,
+   "name": "DOWEL-M2-10",
+   "ref": "DOWEL-M2-10",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 5.6,
+   "name": "SLEEVE-HUB-STEEL",
+   "ref": "SLEEVE-HUB-STEEL",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 0.2,
+   "name": "CLIP-EXT-4MM",
+   "ref": "CLIP-EXT-4MM",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 5.0,
+   "name": "KEEPER-WINCH",
+   "ref": "KEEPER-WINCH",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 4.0,
+   "name": "PLATE-PEDESTAL",
+   "ref": "PLATE-PEDESTAL",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 4.0,
+   "name": "ENC-AK7455-SPOOL",
+   "ref": "ENC-AK7455-SPOOL",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 0.1,
+   "name": "FET-AO3400",
+   "ref": "FET-AO3400",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 0.2,
+   "name": "DIODE-SS34",
+   "ref": "DIODE-SS34",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 3.0,
+   "name": "HX711-LC",
+   "ref": "HX711-LC",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 3.0,
+   "name": "DYNEEMA-SK75",
+   "ref": "DYNEEMA-SK75",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 18.0,
+   "name": "PRINT-CARGO-WINCH-PEDESTAL-PORT",
+   "ref": "PRINT-CARGO-WINCH-PEDESTAL-PORT",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 20.0,
+   "name": "PRINT-CARGO-WINCH-PEDESTAL-STBD",
+   "ref": "PRINT-CARGO-WINCH-PEDESTAL-STBD",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 16.0,
+   "name": "PRINT-CARGO-WINCH-SPOOL-R2",
+   "ref": "PRINT-CARGO-WINCH-SPOOL-R2",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 2.0,
+   "name": "PRINT-CARGO-WINCH-PAWL",
+   "ref": "PRINT-CARGO-WINCH-PAWL",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 3.0,
+   "name": "PRINT-CARGO-WINCH-DOG-COUPLER",
+   "ref": "PRINT-CARGO-WINCH-DOG-COUPLER",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "BOM",
+   "mass_g": 3.0,
+   "name": "PRINT-CARGO-WINCH-FAIRLEAD",
+   "ref": "PRINT-CARGO-WINCH-FAIRLEAD",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    416.2,
+    185.6
+   ],
+   "kind": "BOM",
+   "mass_g": 16.0,
+   "name": "PRINT-NODE-SADDLE",
+   "ref": "PRINT-NODE-SADDLE",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)"
+  },
+  {
+   "cg": [
+    230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 3.0,
+   "name": "PRINT-HALL-HUB (port)",
+   "ref": "PRINT-HALL-HUB",
+   "source": "BOM Unit_Mass_g; at the port nacelle pivot"
+  },
+  {
+   "cg": [
+    -230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 3.0,
+   "name": "PRINT-HALL-HUB (stbd)",
+   "ref": "PRINT-HALL-HUB",
+   "source": "BOM Unit_Mass_g; at the stbd nacelle pivot"
+  },
+  {
+   "cg": [
+    0.0,
+    360.7,
+    88.0
+   ],
+   "kind": "BOM",
+   "mass_g": 5.0,
+   "name": "FOAM-GASKET-CARGO",
+   "ref": "FOAM-GASKET-CARGO",
+   "source": "BOM Unit_Mass_g; clamshell door aperture Y 2..108"
+  },
+  {
+   "cg": [
+    0.0,
+    360.7,
+    88.0
+   ],
+   "kind": "BOM",
+   "mass_g": 1.2,
+   "name": "PIN-3X10",
+   "ref": "PIN-3X10",
+   "source": "BOM Unit_Mass_g; clamshell door aperture Y 2..108"
+  },
+  {
+   "cg": [
+    0.0,
+    345.7,
+    82.0
+   ],
+   "kind": "BOM",
+   "mass_g": 30.0,
+   "name": "CF-BAR-6X3",
+   "ref": "CF-BAR-6X3",
+   "source": "BOM Unit_Mass_g; ESTIMATE: keel bar mid-length"
+  },
+  {
+   "cg": [
+    0.0,
+    395.7,
+    160.0
+   ],
+   "kind": "BOM",
+   "mass_g": 60.0,
+   "name": "WIRE-6AWG",
+   "ref": "WIRE-6AWG",
+   "source": "BOM Unit_Mass_g; ESTIMATE: battery (Y 13) -> FE (Y 162) -> nacelles"
+  },
+  {
+   "cg": [
+    0.0,
+    395.7,
+    160.0
+   ],
+   "kind": "BOM",
+   "mass_g": 80.0,
+   "name": "WIRE-10AWG",
+   "ref": "WIRE-10AWG",
+   "source": "BOM Unit_Mass_g; ESTIMATE: battery (Y 13) -> FE (Y 162) -> nacelles"
+  },
+  {
+   "cg": [
+    0.0,
+    345.7,
+    170.0
+   ],
+   "kind": "BOM",
+   "mass_g": 20.0,
+   "name": "WIRE-28AWG-STP",
+   "ref": "WIRE-28AWG-STP",
+   "source": "BOM Unit_Mass_g; ESTIMATE: full-length signal run"
+  },
+  {
+   "cg": [
+    0.0,
+    345.7,
+    170.0
+   ],
+   "kind": "BOM",
+   "mass_g": 25.0,
+   "name": "CONDUIT-PTFE",
+   "ref": "CONDUIT-PTFE",
+   "source": "BOM Unit_Mass_g; ESTIMATE: full-hull-length conduit"
+  },
+  {
+   "cg": [
+    230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 0.1,
+   "name": "LED-WS2812C-NAC (port)",
+   "ref": "LED-WS2812C-NAC",
+   "source": "BOM Unit_Mass_g; at the port nacelle pivot"
+  },
+  {
+   "cg": [
+    -230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 0.1,
+   "name": "LED-WS2812C-NAC (stbd)",
+   "ref": "LED-WS2812C-NAC",
+   "source": "BOM Unit_Mass_g; at the stbd nacelle pivot"
+  },
+  {
+   "cg": [
+    0.0,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 2.4,
+   "name": "INSERT-M3-WING",
+   "ref": "INSERT-M3-WING",
+   "source": "BOM Unit_Mass_g; wing spar station, both sides (sym)"
+  },
+  {
+   "cg": [
+    0.0,
+    355.7,
+    110.0
+   ],
+   "kind": "BOM",
+   "mass_g": 20.48,
+   "name": "LG-SPRING-WIRE",
+   "ref": "LG-SPRING-WIRE",
+   "source": "BOM Unit_Mass_g; gear bays, 4 corners (sym)"
+  },
+  {
+   "cg": [
+    0.0,
+    355.7,
+    110.0
+   ],
+   "kind": "BOM",
+   "mass_g": 70.2,
+   "name": "LG-DUCTILE-WIRE",
+   "ref": "LG-DUCTILE-WIRE",
+   "source": "BOM Unit_Mass_g; gear bays, 4 corners (sym)"
+  },
+  {
+   "cg": [
+    0.0,
+    355.7,
+    110.0
+   ],
+   "kind": "BOM",
+   "mass_g": 34.0,
+   "name": "LG-HARDWARE-MISC",
+   "ref": "LG-HARDWARE-MISC",
+   "source": "BOM Unit_Mass_g; gear bays, 4 corners (sym)"
+  },
+  {
+   "cg": [
+    0.0,
+    355.7,
+    80.0
+   ],
+   "kind": "BOM",
+   "mass_g": 2.0,
+   "name": "LG-SAFETY-CORD",
+   "ref": "LG-SAFETY-CORD",
+   "source": "BOM Unit_Mass_g; gear, 4 corners (sym)"
+  },
+  {
+   "cg": [
+    0.0,
+    318.7,
+    189.0
+   ],
+   "kind": "BOM",
+   "mass_g": 16.0,
+   "name": "BATT-STRAP-CAM",
+   "ref": "BATT-STRAP-CAM",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit BATT_*"
+  },
+  {
+   "cg": [
+    0.0,
+    318.7,
+    189.0
+   ],
+   "kind": "BOM",
+   "mass_g": 10.0,
+   "name": "BATT-FOAM-SILICONE",
+   "ref": "BATT-FOAM-SILICONE",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit BATT_*"
+  },
+  {
+   "cg": [
+    0.0,
+    318.7,
+    189.0
+   ],
+   "kind": "BOM",
+   "mass_g": 3.0,
+   "name": "MESH-VENT-SS",
+   "ref": "MESH-VENT-SS",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit BATT_*"
+  },
+  {
+   "cg": [
+    0.0,
+    45.7,
+    200.0
+   ],
+   "kind": "BOM",
+   "mass_g": 10.0,
+   "name": "FAR-BOND-STRAP (node A)",
+   "ref": "FAR-BOND-STRAP",
+   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+  },
+  {
+   "cg": [
+    0.0,
+    276.7,
+    157.0
+   ],
+   "kind": "BOM",
+   "mass_g": 10.0,
+   "name": "FAR-BOND-STRAP (node chin)",
+   "ref": "FAR-BOND-STRAP",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_CHIN_* (CN2/CN3)"
+  },
+  {
+   "cg": [
+    0.0,
+    416.2,
+    185.6
+   ],
+   "kind": "BOM",
+   "mass_g": 10.0,
+   "name": "FAR-BOND-STRAP (node aft)",
+   "ref": "FAR-BOND-STRAP",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit N_AFT_* (FC2/FC3)"
+  },
+  {
+   "cg": [
+    0.0,
+    494.7,
+    160.5
+   ],
+   "kind": "BOM",
+   "mass_g": 10.0,
+   "name": "FAR-BOND-STRAP (node simon)",
+   "ref": "FAR-BOND-STRAP",
+   "source": "BOM Unit_Mass_g; middle_layout_fit SIMON_* (CN4/FC4)"
+  },
+  {
+   "cg": [
+    0.0,
+    365.7,
+    170.0
+   ],
+   "kind": "BOM",
+   "mass_g": 80.0,
+   "name": "FAR-FERRITE-4MM",
+   "ref": "FAR-FERRITE-4MM",
+   "source": "BOM Unit_Mass_g; ESTIMATE: cable exits, all nodes"
+  },
+  {
+   "cg": [
+    230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 2.0,
+   "name": "SKIPPER-TILT-ENC-PCB (port)",
+   "ref": "SKIPPER-TILT-ENC-PCB",
+   "source": "BOM Unit_Mass_g; at the port nacelle pivot"
+  },
+  {
+   "cg": [
+    -230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 2.0,
+   "name": "SKIPPER-TILT-ENC-PCB (stbd)",
+   "ref": "SKIPPER-TILT-ENC-PCB",
+   "source": "BOM Unit_Mass_g; at the stbd nacelle pivot"
+  },
+  {
+   "cg": [
+    230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 1.2,
+   "name": "HALL-SCR-M2-BRASS (port)",
+   "ref": "HALL-SCR-M2-BRASS",
+   "source": "BOM Unit_Mass_g; at the port nacelle pivot"
+  },
+  {
+   "cg": [
+    -230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 1.2,
+   "name": "HALL-SCR-M2-BRASS (stbd)",
+   "ref": "HALL-SCR-M2-BRASS",
+   "source": "BOM Unit_Mass_g; at the stbd nacelle pivot"
+  },
+  {
+   "cg": [
+    45.8,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 44.0,
+   "name": "GM-TILT-20D (port)",
+   "ref": "GM-TILT-20D",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    -45.2,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 44.0,
+   "name": "GM-TILT-20D (stbd)",
+   "ref": "GM-TILT-20D",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    45.8,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 12.0,
+   "name": "OSESC-TILT-TC (port)",
+   "ref": "OSESC-TILT-TC",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    -45.2,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 12.0,
+   "name": "OSESC-TILT-TC (stbd)",
+   "ref": "OSESC-TILT-TC",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    45.8,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 15.0,
+   "name": "SOL-TILT-BRAKE (port)",
+   "ref": "SOL-TILT-BRAKE",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    -45.2,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 15.0,
+   "name": "SOL-TILT-BRAKE (stbd)",
+   "ref": "SOL-TILT-BRAKE",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    45.8,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 1.0,
+   "name": "PIN-2X22 (port)",
+   "ref": "PIN-2X22",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    -45.2,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 1.0,
+   "name": "PIN-2X22 (stbd)",
+   "ref": "PIN-2X22",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    45.8,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 2.0,
+   "name": "FUSE-TILT-3A (port)",
+   "ref": "FUSE-TILT-3A",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    -45.2,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 2.0,
+   "name": "FUSE-TILT-3A (stbd)",
+   "ref": "FUSE-TILT-3A",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    45.8,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 0.5,
+   "name": "MAG-6X2.5-DIA (port)",
+   "ref": "MAG-6X2.5-DIA",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    -45.2,
+    353.3,
+    181.0
+   ],
+   "kind": "BOM",
+   "mass_g": 0.5,
+   "name": "MAG-6X2.5-DIA (stbd)",
+   "ref": "MAG-6X2.5-DIA",
+   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+  },
+  {
+   "cg": [
+    0.0,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 58.2,
+   "name": "SPAR-CF-20X16",
+   "ref": "SPAR-CF-20X16",
+   "source": "BOM Unit_Mass_g; wing spar station, both sides (sym)"
+  },
+  {
+   "cg": [
+    0.0,
+    352.3,
+    149.1
+   ],
+   "kind": "BOM",
+   "mass_g": 21.6,
+   "name": "SHAFT-TILT-4MM",
+   "ref": "SHAFT-TILT-4MM",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit SHAFT_Y/Z"
+  },
+  {
+   "cg": [
+    0.0,
+    352.3,
+    149.1
+   ],
+   "kind": "BOM",
+   "mass_g": 6.0,
+   "name": "BUSH-TILT-4MM",
+   "ref": "BUSH-TILT-4MM",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit SHAFT_Y/Z"
+  },
+  {
+   "cg": [
+    0.0,
+    352.3,
+    149.1
+   ],
+   "kind": "BOM",
+   "mass_g": 16.0,
+   "name": "GEAR-TILT-FUS-38T",
+   "ref": "GEAR-TILT-FUS-38T",
+   "source": "BOM Unit_Mass_g; cargo_layout_fit SHAFT_Y/Z"
+  },
+  {
+   "cg": [
+    230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 4.8,
+   "name": "STUD-M3-BRASS (port)",
+   "ref": "STUD-M3-BRASS",
+   "source": "BOM Unit_Mass_g; at the port nacelle pivot"
+  },
+  {
+   "cg": [
+    -230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 4.8,
+   "name": "STUD-M3-BRASS (stbd)",
+   "ref": "STUD-M3-BRASS",
+   "source": "BOM Unit_Mass_g; at the stbd nacelle pivot"
+  },
+  {
+   "cg": [
+    230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 10.8,
+   "name": "SCREW-M3-BUTTON-8 (port)",
+   "ref": "SCREW-M3-BUTTON-8",
+   "source": "BOM Unit_Mass_g; at the port nacelle pivot"
+  },
+  {
+   "cg": [
+    -230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 10.8,
+   "name": "SCREW-M3-BUTTON-8 (stbd)",
+   "ref": "SCREW-M3-BUTTON-8",
+   "source": "BOM Unit_Mass_g; at the stbd nacelle pivot"
+  },
+  {
+   "cg": [
+    230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 0.4,
+   "name": "MESH-FOD-NOSEEUM (port)",
+   "ref": "MESH-FOD-NOSEEUM",
+   "source": "BOM Unit_Mass_g; at the port nacelle pivot"
+  },
+  {
+   "cg": [
+    -230.4,
+    326.7,
+    146.9
+   ],
+   "kind": "BOM",
+   "mass_g": 0.4,
+   "name": "MESH-FOD-NOSEEUM (stbd)",
+   "ref": "MESH-FOD-NOSEEUM",
+   "source": "BOM Unit_Mass_g; at the stbd nacelle pivot"
+  },
+  {
+   "cg": [
+    0.0,
+    305.7,
+    180.0
+   ],
+   "kind": "BOM",
+   "mass_g": 22.0,
+   "name": "FOAM-PU-2LB",
+   "ref": "FOAM-PU-2LB",
+   "source": "installed foam, MASS_AUDIT SS4.2 (MA-3); BOM carries the kit; ESTIMATE: chin/head/flank pours"
+  },
+  {
+   "cg": [
+    0.0,
+    265.7,
+    160.0
+   ],
+   "kind": "BOM",
+   "mass_g": 13.6,
+   "name": "CF thwart fore (CF-PLATE-2MM)",
+   "ref": "CF-PLATE-2MM",
+   "source": "ESTIMATE; structural_analysis SS5.6, thwart Y -40"
+  },
+  {
+   "cg": [
+    0.0,
+    423.7,
+    160.0
+   ],
+   "kind": "BOM",
+   "mass_g": 13.6,
+   "name": "CF thwart aft (CF-PLATE-2MM)",
+   "ref": "CF-PLATE-2MM",
+   "source": "ESTIMATE; structural_analysis SS5.6, thwart Y +118"
+  },
+  {
+   "cg": [
+    0.0,
+    595.7,
+    162.0
+   ],
+   "kind": "BOM",
+   "mass_g": 12.7,
+   "name": "CF ring frame rear Y +290 (CF-PLATE-2MM)",
+   "ref": "CF-PLATE-2MM",
+   "source": "ESTIMATE; structural_analysis SS5.2, ~10 mm band ESTIMATE"
+  },
+  {
+   "cg": [
+    0.0,
+    45.7,
+    200.0
+   ],
+   "kind": "GAP",
+   "mass_g": 10.0,
+   "name": "Node foil pouches x8 (node A)",
+   "ref": "GAP",
+   "source": "middle_layout_fit.py M_CN4/M_FC4 convention"
+  },
+  {
+   "cg": [
+    0.0,
+    276.7,
+    157.0
+   ],
+   "kind": "GAP",
+   "mass_g": 10.0,
+   "name": "Node foil pouches x8 (node chin)",
+   "ref": "GAP",
+   "source": "middle_layout_fit.py M_CN4/M_FC4 convention"
+  },
+  {
+   "cg": [
+    0.0,
+    416.2,
+    185.6
+   ],
+   "kind": "GAP",
+   "mass_g": 10.0,
+   "name": "Node foil pouches x8 (node aft)",
+   "ref": "GAP",
+   "source": "middle_layout_fit.py M_CN4/M_FC4 convention"
+  },
+  {
+   "cg": [
+    0.0,
+    494.7,
+    160.5
+   ],
+   "kind": "GAP",
+   "mass_g": 10.0,
+   "name": "Node foil pouches x8 (node simon)",
+   "ref": "GAP",
+   "source": "middle_layout_fit.py M_CN4/M_FC4 convention"
+  },
+  {
+   "cg": [
+    0.0,
+    467.7,
+    158.8
+   ],
+   "kind": "GAP",
+   "mass_g": 66.81,
+   "name": "FE can (1.0 mm 6061) + entry plate + hardware",
+   "ref": "GAP",
+   "source": "middle_layout_fit.py can_mass(), M_FE_PLATE, M_FE_HW; middle_layout_fit FE_CAN_*"
+  },
+  {
+   "cg": [
+    0.0,
+    424.2,
+    129.6
+   ],
+   "kind": "GAP",
+   "mass_g": 60.0,
+   "name": "Cargo Observer node (vision/ToF/laser)",
+   "ref": "GAP",
+   "source": "ESTIMATE 60 g -- no BOM row; envelope 76.8 x 70.8 x 20 mm; cargo_layout_fit OBSERVER_*"
+  },
+  {
+   "cg": [
+    0.0,
+    361.2,
+    223.4
+   ],
+   "kind": "GAP",
+   "mass_g": 12.0,
+   "name": "CAN-PERIPH-GW-1 gateways x2 (winch, tilt encoders)",
+   "ref": "GAP",
+   "source": "ESTIMATE 6 g each, as CAN-PERIPH-GW-DOOR -- no BOM rows; cargo_layout_fit HOIST_Y / SPOOL_Z0"
+  },
+  {
+   "cg": [
+    0.0,
+    345.7,
+    160.0
+   ],
+   "kind": "GAP",
+   "mass_g": 40.0,
+   "name": "Structural epoxy (West System 105/206 + 406), bonded joints",
+   "ref": "GAP",
+   "source": "ESTIMATE -- no installed-mass row (kit row is stock); ESTIMATE: spar sockets, flanges, collars, keel"
+  },
+  {
+   "cg": [
+    0.0,
+    318.7,
+    189.0
+   ],
+   "kind": "BOM",
+   "mass_g": 624.0,
+   "name": "BATT-6S-4000",
+   "ref": "BATT-6S-4000",
+   "source": "BOM; cargo_layout_fit BATT_*; solid box"
+  }
+ ],
+ "subtotals_hover_g": {
+  "BOM": 2341.584,
+  "GAP": 218.8114,
+  "NACELLE": 1852.7585168971268,
+  "PRINT": 1639.4851954257651
+ },
+ "thrust_gf": 8540.0,
+ "unclassified": []
+}

@@ -2146,6 +2146,19 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         `nacelle_nozzle_iris_64mm.scad` (include + radial-literal override; exit
         24.0 / 33.6 mm; closed flap angle held at 16.96 deg; all 4 print parts
         watertight single bodies). OPEN:
+    - [ ] **★ NAC-64-PETAL-FUSE — owner rule 2026-10-19: "if the petals of the
+        nacelles hit and break, they don't break the entire nacelle or wing with
+        them."** The nozzle flaps are already the sacrificial level 2a in a crash
+        (`docs/LANDING_GEAR_ANALYSIS.md` §6; the hover nozzle tips sit only 13.7 mm
+        above the ground on the 3.0 in gear). Each flap root shall carry a
+        frangible link — a printed or nylon shear pin in place of the PIN-3X18
+        stainless hinge dowel, or a notched root section — whose breaking force
+        F_b satisfies N_flaps × F_b × (tip-to-trunnion arm, ≈ 143.7 mm in hover)
+        ≤ (capacity of the unison ring / nozzle housing / pod shell / trunnion +
+        6804 bearings / wing spar stub) ÷ 1.25, with N_flaps = the number that can
+        touch at once. Size it with the 64 mm iris (plan 2026-09-28-001 U11) and
+        gate it the way `tools/lg_thigh_variants.py` gates the gear hierarchy.
+        Replace `PIN-3X18` in the BOM when the fuse is chosen.
     - [ ] **NAC-64-SERVO-01 — nozzle servo drive — DESIGNED + FIT-CLOSED 2026-10-04
         (Claude Opus 5.5; owner decisions: servo in the canonical dorsal spine,
         bellcrank, fixed shroud on the pod, slide-off nozzle module, KST X06,

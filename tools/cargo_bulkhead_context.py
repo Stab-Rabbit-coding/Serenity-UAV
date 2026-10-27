@@ -67,19 +67,33 @@ STL = os.path.join(REPO, "airframe", "stls")
 sys.path.insert(0, os.path.join(STL, "fuselage", "cargo"))
 import cargo_door_hinge_params as hinge  # noqa: E402  (CARGO-HINGE-SYNC source)
 
-X_CL = clf.X_CL                       # cargo centre plane, -169.85
+import hull_datums as hd  # noqa: E402  aircraft datum R2 (2026-10-19)
+X_CL = clf.X_CL                       # centreline = 0 (aircraft datum)
 STBD_DX = 2.0 * (X_CL - clf.WORM_X)   # -89.2: worm/wheel/guide translate, not mirror
 
 # Wing datums -- merge_cargo_interior.py (WING_SPAR_*, WING_*_Y/Z), restated
 # here only as the check's inputs; the meshes are measured against them.
-SPAR_Y, SPAR_Z, SPAR_D = 21.00, 66.851, 20.0
+SPAR_Y, SPAR_Z, SPAR_D = hd.SPAR_Y, hd.SPAR_Z, 20.0
 SHAFT_Y, SHAFT_Z, SHAFT_D = clf.SHAFT_Y, clf.SHAFT_Z, 4.0
 BUNDLE_D = 16.3            # spar ID = 4 x 10 AWG bundle (SPAR_WIRE_BORE_D)
-ENC_Y, ENC_Z, ENC_D = 37.50, 68.689, 6.5
-NAV_Y, NAV_Z, NAV_D = 1.00, 61.974, 3.2
-SPAR_INB = {"port": -100.0, "stbd": -240.0}      # socket floor (bay clear span)
-HARN_INB = {"port": -125.0, "stbd": -213.0}      # harness bore inboard exits
-WALL_OUT = {"port": -79.6, "stbd": -260.0}       # root-flange outer bbox = wall skin
+ENC_Y, ENC_Z, ENC_D = 343.20, 148.689, 6.5  # R1 37.5/68.689
+NAV_Y, NAV_Z, NAV_D = 306.70, 141.974, 3.2  # R1 1.0/61.974
+# Port stations from the merge (single source, rule R3); starboard is their
+# MIRROR because the cargo is rebuilt as the mirror of its port half
+# (merge_cargo_interior.SYMMETRIC_FROM_PORT).  These were typed copies whose
+# starboard values (-70.15 / -43.15 / -90.15) were measured on the old,
+# asymmetric starboard skin: a 1.70 mm harness DESYNC.
+sys.path.insert(0, os.path.join(REPO, "airframe", "blender-scripts"))
+import merge_cargo_interior as mci  # noqa: E402
+
+
+def _mirrored(port_x):
+    return {"port": port_x, "stbd": 2.0 * X_CL - port_x}
+
+
+SPAR_INB = _mirrored(mci.PORT_INB)                # socket floor (R1 -100)
+HARN_INB = _mirrored(mci.WING_HARNESS_INB_PORT)   # harness exits (R1 -125)
+WALL_OUT = _mirrored(90.25)                       # flange outer bbox (R1 -79.6)
 EXIT_STUB = 10.0           # straight run inboard of a bore exit before a turn
 
 # Owner 2026-10-07 (BHD-07): 145 deg is adequate; the 3.0 in gear stops a
@@ -101,6 +115,13 @@ def tri(m: Manifold) -> trimesh.Trimesh:
     g = m.to_mesh()
     return trimesh.Trimesh(np.asarray(g.vert_properties)[:, :3],
                            np.asarray(g.tri_verts), process=False)
+
+
+def as_trimesh(geom: object, source: str) -> trimesh.Trimesh:
+    """Narrow a trimesh.load() result to one Trimesh; raise on a Scene or Path."""
+    if not isinstance(geom, trimesh.Trimesh):
+        raise TypeError(f"{source}: not a single mesh")
+    return geom
 
 
 def load(rel: str) -> trimesh.Trimesh:
@@ -282,6 +303,11 @@ EXPECTED = {
     ("hoist line", "payload"): (1e9, "line attaches to the payload"),
     ("hoist line", "winch drum"): (1e9, "line on its drum"),
     ("Pilot", "cable zone"): (1e9, "node and its own cable zone"),
+    # DOOR-REWORK: the doors are SEQUENCED (port opens first, closes last), so
+    # their two swept envelopes are never occupied at the same time.  Each
+    # swept volume is still checked against the OTHER door closed, which is
+    # the state it actually moves past.
+    ("door port swept", "door stbd swept"): (1e9, "sequenced doors never move together"),
 }
 CLASH_MM3 = 0.5
 
@@ -321,6 +347,18 @@ def census(P: dict) -> list[dict]:
     return rows
 
 
+# Deliberate port/starboard asymmetries (plan 2026-10-03-002 rule R4: a desync
+# fails unless it is deliberate AND recorded).  part -> (max bbox offset mm,
+# why).  Anything above its allowance + tol is still a DESYNC.
+DELIBERATE = {
+    "door (closed)": (6.0, "DOOR-REWORK half-lap: the port door's outer lip reaches "
+                           "LAP_W 6 mm past the centreline (owner 2026-10-19)"),
+    "door swept": (6.1, "same lap, swept 0..145 deg"),
+    "latch bracket": (13.0, "one latch (port): the starboard bracket has no mortise "
+                            "(DOOR-REWORK, CARGO_DOOR_LATCH_SPEC Rev B)"),
+}
+
+
 def symmetry(P: dict, centre: float, tol: float = 0.5) -> list[dict]:
     """Mirror every port solid's bbox about `centre` and compare with stbd."""
     out = []
@@ -335,8 +373,11 @@ def symmetry(P: dict, centre: float, tol: float = 0.5) -> list[dict]:
         mp = bp.copy()
         mp[:, 0] = 2 * centre - bp[::-1, 0]
         d = float(np.abs(mp - bs).max())
-        out.append(dict(part=n.replace(" port", ""), bbox_off_mm=round(d, 2),
-                        status="SYNC" if d <= tol else "DESYNC"))
+        part = n.replace(" port", "")
+        status = "SYNC" if d <= tol else "DESYNC"
+        if status == "DESYNC" and part in DELIBERATE and d <= DELIBERATE[part][0] + tol:
+            status = "DELIBERATE"
+        out.append(dict(part=part, bbox_off_mm=round(d, 2), status=status))
     return out
 
 
@@ -373,9 +414,9 @@ def corridor(P: dict, side: str, pitch: float = 1.0) -> dict:
     (into the middle section, towards Flight Engineer), and the
     centreline of the shortest route that carries the 16.3 mm bundle with
     1 mm clearance (for the render)."""
-    x_wall = -95.0 if side == "port" else -245.0
-    lo = np.array([min(X_CL, x_wall), -20.0, 10.0])
-    hi = np.array([max(X_CL, x_wall), 150.0, 165.0])
+    x_wall = 74.85 if side == "port" else -75.15  # R1 -95/-245
+    lo = np.array([min(X_CL, x_wall), 285.70, 90.0])  # R1 Y -20, Z 10
+    hi = np.array([max(X_CL, x_wall), 455.70, 245.0])  # R1 Y 150, Z 165
     xs = np.arange(lo[0] + pitch / 2, hi[0], pitch)
     ys = np.arange(lo[1] + pitch / 2, hi[1], pitch)
     zs = np.arange(lo[2] + pitch / 2, hi[2], pitch)
@@ -501,10 +542,11 @@ def main() -> int:
             r["side"] = sd
             tri(cm).export(os.path.join(a.export, f"CLASH_{sd}_{n_side[sd]:02d}.stl"))
             n_side[sd] += 1
-        slab = {"port": ([-135.0, -90.0, -100.0], [80.0, 260.0, 300.0]),
-                "stbd": ([-285.0, -90.0, -100.0], [80.0, 260.0, 300.0])}
-        half = {"port": ([X_CL, -200.0, -200.0], [400.0, 600.0, 600.0]),
-                "stbd": ([X_CL - 400.0, -200.0, -200.0], [400.0, 600.0, 600.0])}
+        # R2 origins; R1 (-135|-285, -90, -100)
+        slab = {"port": ([34.85, 215.70, -20.0], [80.0, 260.0, 300.0]),
+                "stbd": ([-115.15, 215.70, -20.0], [80.0, 260.0, 300.0])}
+        half = {"port": ([X_CL, 105.70, -120.0], [400.0, 600.0, 600.0]),
+                "stbd": ([X_CL - 400.0, 105.70, -120.0], [400.0, 600.0, 600.0])}
         for sd in ("port", "stbd"):
             o, d = slab[sd]
             tri(P["shell"]["m"] ^ Manifold.cube(d).translate(o)).export(
@@ -518,7 +560,7 @@ def main() -> int:
         with open(a.json, "w", encoding="utf-8") as fh:
             json.dump(dict(pairs=rows, symmetry=sym, corridor=cor), fh, indent=2)
     bad = any(r["verdict"] == "CLASH" for r in rows) or any(
-        s["status"] != "SYNC" for s in sym) or any(c["verdict"] != "ROUTE EXISTS" for c in cor)
+        s["status"] == "DESYNC" for s in sym) or any(c["verdict"] != "ROUTE EXISTS" for c in cor)
     print(f"\nRESULT: {'FAIL' if bad else 'PASS'}")
     return 2 if bad else 0
 

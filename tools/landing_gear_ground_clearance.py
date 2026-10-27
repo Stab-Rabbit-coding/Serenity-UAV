@@ -113,13 +113,16 @@ assert set(lg.LEG_VARIANTS) == {"1.5in", "3.0in"}, (
 # leg of belly clearance C.
 # ---------------------------------------------------------------------------
 
+import hull_datums as hd  # noqa: E402  aircraft datum R2 (2026-10-19)
+BELLY_Z = hd.BELLY_Z  # cargo belly; a leg of belly clearance C puts the feet at Z = BELLY_Z - C
+
 #: Canonical foot stations, docs/LANDING_GEAR_ANALYSIS.md section 2.2
 #: (from [REF-CAD-003] Sheet 5, unified to one leg part per corner).
-FEET_XY = {
-    "fore-port": (-30.4, -31.8),
-    "aft-port": (-21.6, 137.5),
-    "fore-stbd": (-309.4, -31.8),
-    "aft-stbd": (-318.2, 137.5),
+FEET_XY = {   # aircraft datum R2; R1 (-30.4/-309.4, -31.8), (-21.6/-318.2, 137.5)
+    "fore-port": (139.45, 273.90),
+    "aft-port": (148.25, 443.20),
+    "fore-stbd": (-139.55, 273.90),
+    "aft-stbd": (-148.35, 443.20),
 }
 
 #: Nacelle bake translation, copied from
@@ -127,10 +130,9 @@ FEET_XY = {
 #: tools/bake_hull_frame.py, the single source of truth).  The bake rotation is
 #: hull_x = x_local, hull_y = z_local, hull_z = -y_local, so a point on the duct
 #: axis at nacelle-local Z maps to hull (T[0], Z + T[1], T[2]).
-T_BAKE = {
-    "port": (46.9999060, -63.9998720, 62.9998740),
-    "stbd": (-385.0960040, -69.9998600, 64.9719300),
-}
+import bake_hull_frame as _bhf  # noqa: E402  single source (2026-10-19)
+T_BAKE = {"port": tuple(_bhf.COMPONENTS["Nacelle_Port"][1][:3]),
+          "stbd": tuple(_bhf.COMPONENTS["Nacelle_Stbd"][1][:3])}
 
 #: Stance, docs/LANDING_GEAR_ANALYSIS.md section 2.2 -- reported for the
 #: tip-over check, not used in the clearance solve.
@@ -243,7 +245,7 @@ def worst_case(clearance_mm: float, tips: dict, theta_deg: float,
         psi = 2.0 * math.pi * i / steps
         n = (-sin_t * math.cos(psi), -sin_t * math.sin(psi), cos_t)
         contact = min(
-            ((x * n[0] + y * n[1] + (-clearance_mm) * n[2], name)
+            ((x * n[0] + y * n[1] + (BELLY_Z - clearance_mm) * n[2], name)
              for name, (x, y) in FEET_XY.items()),
             key=lambda pair: pair[0])
         for side, (x, y, z) in tips.items():
