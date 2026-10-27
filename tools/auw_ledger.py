@@ -230,6 +230,7 @@ INSTALLED: dict[str, tuple[int, Any]] = {
     "FET-AO3400": (1, WINCH_ST),
     "DIODE-SS34": (1, WINCH_ST),
     "HX711-LC": (1, WINCH_ST),
+    "LC-ADC": (1, WINCH_ST),   # ADS1231 load-cell ADC board, replaces HX711-LC (main, 2026-10-20)
     "DYNEEMA-SK75": (1, WINCH_ST),
     "PRINT-CARGO-WINCH-PEDESTAL-PORT": (1, WINCH_ST),   # no STL in tree: BOM mass
     "PRINT-CARGO-WINCH-PEDESTAL-STBD": (1, WINCH_ST),
@@ -249,7 +250,13 @@ INSTALLED: dict[str, tuple[int, Any]] = {
     "LED-WS2812C-NAC": (4, "pivot"),
     "INSERT-M3-WING": (8, SPAR_ST),
     "LG-SPRING-WIRE": (8, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
-    "LG-DUCTILE-WIRE": (8, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
+    "LG-DUCTILE-WIRE": (0, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),   # retired 2026-10-27 (LG-LOADPATH-A1B)
+    # Option A1b balanced couple (plan 2026-10-27-001; tools/bom_edit_lg_a1b.py)
+    "LG-A1B-FUSE": (8, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
+    "LG-A1B-SLEEVE": (4, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
+    "LG-A1B-CAGE": (4, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
+    "LG-A1B-PIN": (20, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
+    "LG-A1B-CF-CHEEK": (8, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
     "LG-HARDWARE-MISC": (1, ((X_CL, 355.7, 110.0), "gear bays, 4 corners (sym)")),
     "LG-SAFETY-CORD": (4, ((X_CL, 355.7, 80.0), "gear, 4 corners (sym)")),
     "BATT-STRAP-CAM": (2, BATT_ST),

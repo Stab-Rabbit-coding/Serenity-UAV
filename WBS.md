@@ -470,9 +470,10 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
   - [x] Fore corners: canonical flank housing above each fore bay chosen (owner 2026-10-27)
   - [x] Merge tool: fore flank housing pocket + 2 mm wall (tooling, a975f6de)
   - [ ] ★ MERGE-FINALIZE-NM — cargo shell rebuild fails in repair_exported -> ensure_open: after the float32 STL round trip finalize_watertight leaves 53 boundary + 12 non-manifold edges, manifold3d rejects the shell (NotManifold) and open_plug returns an empty mesh. Baseline (no housing) fails identically -> pre-existing. Blocks regenerating the shell with the housings
-  - [ ] Leg SCAD: crank r 10, A1b members, backbone, anchor bosses (aft inboard az 154; fore outboard az ~65 into housing)
-  - [ ] Sizing tool: couple sizing, retire the superseded pin/boss checks
-  - [ ] Bays/STLs regenerated; fore-corner loose bodies fixed; BOM (6061 fuses, sleeves, pins, liners, CF backbone)
+  - [x] Leg SCAD: crank r 10, A1b members, backbone (LOADPATH switch; 4af1848d)
+  - [x] Sizing tool: couple sizing; R6 pin/boss checks labelled superseded (b442addc)
+  - [x] Bays/STLs regenerated (all PASS, 7.6 g each); fore loose bodies gone; BOM rows (9c2dc7ee, 3e1c14e6, 0b0686d3)
+  - [ ] A1B backbone detail: trim the aft tilt-bracket corner (17 mm^3); anchor-pin edge distance against a cited minimum
   - [ ] LG-11 bearing coupons on the Rock West plate before flight
 - [x] Feet separated into individual STLs (foot_1 through foot_4 in l…
 - [ ] Add top-face socket to canonical foot

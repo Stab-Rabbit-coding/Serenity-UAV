@@ -1,10 +1,26 @@
 # Landing-gear bellcrank load path: free-body study
 
-**Status:** analysis complete; owner decision required (BUILD-BLOCKING, WBS LG-LOADPATH).
+**Status:** DECIDED 2026-10-27 (Stab-Rabbit-coding): **Option A, built as form A1b** — see the note below and plan `docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md`.
 **Date:** 2026-10-26
 **Author:** Claude (Claude Opus 5.5, Anthropic), under the direction of Stab-Rabbit-coding, per `AGENTS.md` §3.
 **License:** CC BY-SA 4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Numbers:** regenerate with `/usr/bin/python3 tools/lg_bellcrank_fbd.py --svg docs/images/lg_bellcrank`.
+
+> **NOTE — decision and implementation (2026-10-27)**
+>
+> Option A is implemented as **A1b**: per row, two identical members either
+> side of the hip pin at crank radius 10 mm, both running along the canonical
+> strut line to a CF backbone. The ductile row is two 6061-T6 axial tension
+> fuses, the push-side one inside a reversing sleeve. The spring row is two A228
+> bowed wires, the pull-side one inside a reversing cage. Both rows are pure
+> couples, so the hip pin carries only the foot force, 258 lbf (1,148 N) at the
+> 4 ft crash. The form trade (A1 / A1b / A2 / A3), the free-body and materials
+> analysis, the packaging gate and the backbone material are in the plan and in
+> `tools/lg_couple_options.py`, `tools/lg_a1b_packaging.py`,
+> `tools/lg_a1b_census.py` and `tools/landing_gear_r6_sizing.py`
+> (`a1b_sizing()`). Geometry: `canonical_leg_r6_3_0in.scad`,
+> `LOADPATH = "A1B"`.
+<!-- markdownlint-disable-next-line MD028 -->
 
 > **WARNING**
 >
