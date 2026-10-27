@@ -17749,6 +17749,13 @@
       ],
       "archived": false
     },
+    "tools/flight_envelope_endurance.py": {
+      "description": "Flight-envelope and hover-endurance recompute for the split-battery aircraft.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/frame_inventory.py": {
       "description": "Inventory every airframe file that carries hull-frame coordinates (datum migration U2).",
       "tags": [
@@ -23046,6 +23053,7 @@
       "tools/export-specctra-dsn.py",
       "tools/export_assembly_meshes.py",
       "tools/export_landing_gear_stls.py",
+      "tools/flight_envelope_endurance.py",
       "tools/frame_inventory.py",
       "tools/gen_cargo_void_formers.py",
       "tools/gen_todo_from_wbs.py",

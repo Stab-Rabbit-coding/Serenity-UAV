@@ -103,6 +103,7 @@
 - [ ] LG-11 coupon — demoted at wing root (flange FOS 29.2); gates tenon/thwarts
 - [ ] ★ Aero revalidation of the re-lofted wing (S1223/t17.7–t26.7; XFOIL/RANS)
 - [ ] LG-PIN-SHEAR: verify 0.6 x Su pin shear for A2 pins (REF-MAT-005)
+- [ ] ★ ENDURANCE-TGT — WARNING: derived mission endurance target 318 s (5.3 min) airborne, two cells + payload, is NOT met (85 s hover). Owner to confirm the ASSUMED leg durations/reserve and choose a gap-closure path (docs/flight_envelope.md §6); thrust-stand hover-power measurement first
 - [ ] CELL-ORIGIN: Tattu cells retained (owner 2026-10-26) with PRC-origin flag on every BOM/procurement entry; evaluate a non-PRC equivalent before purchase (plan 2026-10-26-001 KTD4)
 - [x] HEAD-CELL-G: head-cell catch load factor = 79.4 g, the gear design's 4 ft level peak (owner 2026-10-26; plan 2026-10-26-001 R7)
 - [x] LTC4370/LTC4359 input-range check vs 25.2 V 6S: LTC4370 FAILS (24 V abs max, REF-PWR-014), LTC4359 PASSES (REF-PWR-015); plan 2026-10-26-002 KTD1 now 3 × LTC4359
