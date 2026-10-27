@@ -14602,6 +14602,13 @@
       ],
       "archived": false
     },
+    "docs/handoffs/2026-10-27-head-section-layout.md": {
+      "description": "Handoff: head-section layout (2026-10-27)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html": {
       "description": "HTML document",
       "tags": [
@@ -19107,6 +19114,7 @@
       "docs/flight_envelope.md",
       "docs/handoffs/2026-10-20-aircraft-datum-r2-migration.md",
       "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",
+      "docs/handoffs/2026-10-27-head-section-layout.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
       "docs/ideation/2026-10-10-pilot-placement-routability-ideation.html",
       "docs/ideation/7-2.webp",
