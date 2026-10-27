@@ -2737,7 +2737,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_aft-stbd",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",

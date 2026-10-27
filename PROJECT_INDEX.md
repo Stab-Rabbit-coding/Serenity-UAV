@@ -559,7 +559,7 @@ lg_r6_1_5in_leg_deformed.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, lan
 lg_r6_1_5in_leg_frame.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, landing-gear, structural]
 lg_r6_3_0in_bay_aft-port.stl — STL mesh — header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_aft-port [cad-mesh, landing-gear, structural]
 lg_r6_3_0in_bay_aft-port_print.stl — STL mesh (binary) [cad-mesh, landing-gear, structural]
-lg_r6_3_0in_bay_aft-stbd.stl — STL mesh — header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_aft-stbd [cad-mesh, landing-gear, structural]
+lg_r6_3_0in_bay_aft-stbd.stl — STL mesh (binary) [cad-mesh, landing-gear, structural]
 lg_r6_3_0in_bay_aft-stbd_print.stl — STL mesh (binary) [cad-mesh, landing-gear, structural]
 lg_r6_3_0in_bay_fore-port.stl — STL mesh — header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_fore-port [cad-mesh, landing-gear, structural]
 lg_r6_3_0in_bay_fore-port_print.stl — STL mesh (binary) [cad-mesh, landing-gear, structural]
