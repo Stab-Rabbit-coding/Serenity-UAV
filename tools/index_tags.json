@@ -2830,7 +2830,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_hull_legs",
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2839,7 +2839,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_stance.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_hull_stance",
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2866,6 +2866,15 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
@@ -20337,6 +20346,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_bay.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_nominal.stl",
@@ -20653,6 +20663,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_bay.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_nominal.stl",
@@ -21257,6 +21268,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_bay.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_nominal.stl",
