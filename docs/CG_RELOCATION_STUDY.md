@@ -49,26 +49,39 @@ This lets the rail stop move forward from Y 196 to about Y 156. The band itself 
 
 **Open item (owner and coordinator):** the head cell's leads exit aft into a gap of about 10 mm before the second cell. Route them before this arrangement is adopted.
 
-### 3.2 Equipment relocations (none found)
+### 3.2 Equipment relocations — fine search (owner: "finer relocation search", 2026-10-27)
 
-| Item | Mass | Station now | Result |
+**Method: free-space map.**
+- Fixed obstacles: every shell and collar, plus every `cargo_layout_fit`, `middle_layout_fit` and `head_layout_fit` envelope. That includes the nose sensor bay, the pitched Observer board, the pitot hose, Bay A on the rail ceiling, and the rail and band from Y 146 to Y 404.
+- Moved candidates are taken out of the obstacle set.
+- The obstacles are sliced by manifold3d every 4 mm in Z and rasterised at 1.5 × 1.5 mm in X and Y. Box placements are tested through a 3-D summed-area table with a 2 mm static gap.
+- Search space: all six axis orders (90° rotations about each axis), any X across the section (lateral and off-centre), Y step 1.5 mm, Z step 4 mm. Node pairs were split into single pouches, which covers mirrored and split placements.
+- The map's free volume is 4,892 cm³ (299 in³).
+
+| Item | Mass | Station | Result |
 | --- | --- | --- | --- |
-| Flight Engineer (board + can + plate) | 225 g (0.50 lbm) | Y 467.7 | no clear placement forward |
-| Simon CN4 + FC4 (stack) | 118 g (0.26 lbm) | Y 494.7 | no clear placement forward |
-| Aft nodes FC2/FC3 | 118 g (0.26 lbm) | Y 416.2 | no clear placement forward |
-| Cargo Observer | 60 g (0.13 lbm) | Y 424.2 | no clear placement forward |
+| Flight Engineer (board + can + plate) | 225 g (0.50 lbm) | Y 467.7 | no clear placement forward. Its most-forward clear slot anywhere is Y 516.8 (rear section). |
+| Simon CN4 + FC4, split | 2 × 59 g | Y 494.7 | no clear placement forward once the FE keeps its slot. Swapping the FE aft of Simon would move the CG **aft**. |
+| Aft nodes FC2/FC3, split | 2 × 59 g | Y 416.2 | no clear placement forward. The most-forward clear slot for a single pouch anywhere is Y 447 (middle neck, the FE's space). |
+| Cargo Observer | 60 g (0.13 lbm) | Y 424.2 | no clear placement forward. Its function also needs line of sight to the clamshell aperture. |
 
-**Search limits** (so a later, finer pass can overturn these results):
+**Other items over 20 g aft of the pivot**, not relocatable by structure or function:
 
-- axis-aligned envelopes only, on the centreline (X 0);
-- Y step 6 mm, Z step 8 mm;
-- a 2 mm static gap against the post-merge cargo shell, both splice collars, the middle shell, every `cargo_layout_fit` and `middle_layout_fit` envelope, and the cell sliding band.
+- rear, middle and cargo shells;
+- gear frame and bays;
+- wing panels and tilt motors, which sit on the pivot geometry;
+- the winch (tied to the payload);
+- Commo, ferrites and harness.
 
-Lateral offsets, rotated placements, and splitting a node pair across sides were not searched.
+The harness (WIRE-6AWG/10AWG, 140 g at Y 395.7) is an estimate from the single-pack layout. It moves when the split-cell routes are drawn, but that is a ledger correction, not a relocation.
+
+**Second cell pulled forward** to the head cell's tail (4 mm lead gap, centre Y 338.0): hover +16.5 mm, a gain of only 0.3 mm. A 4 mm gap is below any practical bend allowance for the cell leads, so this is not recommended.
+
+**Verdict:** after the rail lever, no further equipment relocation is available at a 2 mm static gap. The rest has to come from a pivot move, ballast, or mass reduction aft of the pivot.
 
 ## 4. Residual
 
-- Hover residual moment: **101,785 g·mm**.
+- Hover residual moment: **101,950 g·mm** (fine-search run).
 - **Nose ballast** at Y 15 to close it: **327 g (0.72 lbm)**. This is not recommended: T/W falls from 1.41 to about 1.33.
 - **Pivot move.** The nacelles (1,853 g, 4.08 lbm, ledger) move with the pivot, so the CG offset closes by Δ(1 − f), where f ≈ 0.31 is the nacelle mass fraction. Closing 16.8 mm therefore takes **Δ ≈ 24 mm (0.95 in) aft**. This is an upper bound: including the wing panels in f lowers it. It reworks the spar carry-through, the cargo tilt actuators and the wing-root flanges.
 
