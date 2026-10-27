@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import math
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -177,10 +178,12 @@ def hierarchy() -> bool:
 def main() -> int:
     print("LG thigh variants at the 13.0 lbm design mass (impact allowables, see header)")
     worst: dict[str, float] = {}
+    variants: list[tuple[str, Callable[..., list]]] = [
+        ("GROWN printed 17/22", grown), ("CF CORE 2x6 + 3 mm pins", cf_core),
+        ("CF CORE 2x6 + 4 mm pins", lambda x: cf_core(x, 4.0))]
     for name, m in cases().items():
         print(f"\n== {name}: hip moment {m / 1000:.1f} N*m ({m / 1000 * 8.851:.0f} lbf*in)")
-        for label, fn in (("GROWN printed 17/22", grown), ("CF CORE 2x6 + 3 mm pins", cf_core),
-                          ("CF CORE 2x6 + 4 mm pins", lambda x: cf_core(x, 4.0))):
+        for label, fn in variants:
             print(f"  {label}")
             for mode, dem, cap in fn(m):
                 mar = cap / dem

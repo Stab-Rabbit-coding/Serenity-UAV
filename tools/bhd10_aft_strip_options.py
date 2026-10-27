@@ -35,6 +35,7 @@ import argparse
 import json
 import os
 import sys
+from typing import Any
 
 import numpy as np
 from manifold3d import Manifold
@@ -82,7 +83,7 @@ def census(P: dict, moved: dict[str, Manifold], skip=()) -> list[dict]:
 
 
 def option_rows(P: dict, export: str | None) -> dict:
-    out = {}
+    out: dict[str, Any] = {}
     base = {n: P[n]["m"] for n in NODES}
     out["baseline"] = census(P, base)
     o1 = {n: m.translate([0, -SHIFT, 0]) for n, m in base.items()}

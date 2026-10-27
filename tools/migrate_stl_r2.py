@@ -32,6 +32,14 @@ import hull_datums as hd  # noqa: E402
 R2_MARKER = b"SerenityUAV AIRCRAFT-FRAME R2"
 
 
+def _mesh(path: str) -> trimesh.Trimesh:
+    """Load a file that must be one Trimesh; raise on a Scene or Path."""
+    geom = trimesh.load(path, force="mesh", process=True)
+    if not isinstance(geom, trimesh.Trimesh):
+        raise TypeError(f"{path}: not a single mesh")
+    return geom
+
+
 def migrate(path: str) -> bool:
     with open(path, "rb") as fh:
         head = fh.read(80)
@@ -46,7 +54,7 @@ def migrate(path: str) -> bool:
     # coordinates (~3e-5 mm at Y 500) collapse on export; the shells carry 33+
     # such pairs (closest 3.8e-6 mm, MESH-01 boolean slivers).  Weld them at
     # 1e-4 mm (0.1 um -- far below print resolution) BEFORE translating.
-    before = trimesh.load(path, force="mesh", process=True)
+    before = _mesh(path)
     before.merge_vertices(digits_vertex=4)
     before.update_faces(before.nondegenerate_faces())
     before.remove_unreferenced_vertices()
@@ -58,8 +66,8 @@ def migrate(path: str) -> bool:
     fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path), suffix=".stl")
     with os.fdopen(fd, "wb") as fh:
         fh.write(header + data[80:])
-    after = trimesh.load(tmp, force="mesh")
-    pb = trimesh.load(path, force="mesh")
+    after = _mesh(tmp)
+    pb = _mesh(path)
     ok = (len(after.faces) == len(before.faces)
           and abs(after.volume - pb.volume) <= 1e-3 * max(abs(pb.volume), 1.0)
           and after.is_watertight == pb.is_watertight

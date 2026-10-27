@@ -54,6 +54,7 @@ import math
 import os
 import sys
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import trimesh
@@ -192,7 +193,7 @@ PRINTED = [
 
 # Non-printed installed rows: ref -> (qty, station, source).  A station of
 # "pivot" splits the quantity evenly across both nacelle pivots.
-INSTALLED = {
+INSTALLED: dict[str, tuple[int, Any]] = {
     "SERVO-CARGO": (3, DOOR_ST),
     "CAN-PERIPH-GW-DOOR": (1, GW_DOOR_ST),
     "PIN-3X18": (16, "pivot"),     # nozzle flap pins; not in the 64 mm roll-up
@@ -368,7 +369,7 @@ def load(rel: str) -> trimesh.Trimesh:
 def bom_rows() -> dict[str, dict]:
     with open(BOM, newline="", encoding="utf-8") as fh:
         rows = list(csv.DictReader(fh))
-    out = {}
+    out: dict[str, dict] = {}
     for r in rows:
         if r["Category"] in AIRBORNE_SKIP_CATEGORIES:
             continue
@@ -506,12 +507,12 @@ def build() -> dict:
         "heaviest_4000_payload": base + [battery_item("BATT-6S-4000", bom), payload],
     }
     thrust = THRUST_PER_FAN_GF * N_FANS
-    result = {"unclassified": missing, "thrust_gf": thrust, "configs": {}}
+    result: dict[str, Any] = {"unclassified": missing, "thrust_gf": thrust, "configs": {}}
     for name, items in configs.items():
         p = properties(items)
         p["T_W"] = thrust / p["mass_g"]
         result["configs"][name] = p
-    by_kind = {}
+    by_kind: dict[str, float] = {}
     for it in configs["hover_4000"]:
         by_kind[it.kind] = by_kind.get(it.kind, 0.0) + it.m
     result["subtotals_hover_g"] = by_kind
