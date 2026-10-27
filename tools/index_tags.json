@@ -2480,7 +2480,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/cargo/generate_cargo_doors.py": {
-      "description": "generate_cargo_doors.py \u2014 Rev R1b (2026-06-22)",
+      "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
       "tags": [
         "structural"
       ],

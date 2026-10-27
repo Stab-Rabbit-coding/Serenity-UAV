@@ -91,14 +91,15 @@ HW_DEPTH = mci.BAY_PLATE_T + mci.LG_SEAT_D + 4.0 + 2.4 + 2.0
 BOLT_KEEP_D = 3.4 + 2 * 2.5   # O8.4 washer / nut / driver, as the census
 BOLT_T = (-30.0, 20.0)    # bore extent along e_x, as the hull merge
 BOLT_SLIDE_MAX = 30.0     # mm a blocked bolt may slide down its side flange
-BOLT_MIN_FLANGE = 150.0   # mm^3 of flange around a bolt's O8.4 keep-out (a fully
-                          # seated nominal bolt measures 275 mm^3; 150 = more
-                          # than half of the washer footprint on material)
+# mm^3 of flange around a bolt's O8.4 keep-out. A fully seated nominal bolt
+# measures 275 mm^3; 150 = more than half of the washer footprint on material.
+BOLT_MIN_FLANGE = 150.0
 BOLT_MIN_COLLAR = 150.0   # mm^3 of hull seat collar under it (same reasoning)
 T = mci.BAY_PLATE_T
 COWL_H = mci.COWL_H
-BOLT_CAP_4MM = 2310.0     # N, bearing: wall + 5 mm boss + 4 mm backing plate (owner
-                          # 2026-10-10; 2,100 N at 3 mm, landing_gear_r6_sizing.py)
+# N, bearing: wall + 5 mm boss + 4 mm backing plate (owner 2026-10-10;
+# 2,100 N at 3 mm, landing_gear_r6_sizing.py).
+BOLT_CAP_4MM = 2310.0
 RHO, INFILL = 1.30e-3, 0.40   # CF-PETG g/mm^3 solid, 40 % gyroid (repo convention)
 
 
@@ -247,7 +248,7 @@ def main() -> int:
     ap.add_argument("--check", action="store_true", help="build and check only; write nothing")
     ap.add_argument("--only", action="append", help="build only this corner (repeatable)")
     a = ap.parse_args()
-    src = trimesh.load(mci.BLENDER_SRC, process=False)
+    src = cbc.as_trimesh(trimesh.load(mci.BLENDER_SRC, process=False), mci.BLENDER_SRC)
     src.merge_vertices()
     env = mci.to_man(mci.extract_envelope(mci.bake(src)))
     P = cbc.build()

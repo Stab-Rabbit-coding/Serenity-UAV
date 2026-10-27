@@ -44,6 +44,7 @@ from __future__ import annotations
 
 import argparse
 import math
+from typing import Any
 
 import numpy as np
 
@@ -170,9 +171,9 @@ def evaluate(tD, tS, stop_az, poly):
             c = [band_clear(CRANK_R * az(to + fl), rb[other], t, row, fl),
                  band_clear(pin, STOP_PIN_RAD, t, row, fl)]
             # the tab rides on the thigh: rotate it with the flex
-            c += [band_clear(q @ np.array([[math.cos(math.radians(fl)), math.sin(math.radians(fl))],
-                                           [-math.sin(math.radians(fl)), math.cos(math.radians(fl))]]),
-                             0.0, t, row, fl) for q in tab]
+            cf, sf = math.cos(math.radians(fl)), math.sin(math.radians(fl))
+            rot = np.array([[cf, sf], [-sf, cf]])
+            c += [band_clear(q @ rot, 0.0, t, row, fl) for q in tab]
             worst = min(worst, min(c))
     if worst < 0:
         ok = False
@@ -205,7 +206,7 @@ def evaluate(tD, tS, stop_az, poly):
 CARRIER_H, CARRIER_T = 16.0, 12.0          # BAY_CARRIER_H (perp to chord), _T (along)
 MARGIN = 1.0                               # mm, clearance demanded of every pair
 HW_THIGH_SLACK = 2.5                       # mm^2 of projected overlap left to the 3-D census
-_SWEPT_THIGH = []
+_SWEPT_THIGH: list[Any] = []
 
 
 def _unary(parts):
@@ -225,7 +226,7 @@ def _shapely():
     return affinity, LineString, Point, Polygon, unary_union
 
 
-_THIGH = []
+_THIGH: list[Any] = []
 
 
 def thigh_shape():
@@ -312,7 +313,7 @@ def swept(shape, a0=0.0, a1=FLEX + FLEX_MARGIN, step=2.0):
                         for a in np.arange(a0, a1 + 1e-9, step)])
 
 
-_PARTS = {}
+_PARTS: dict[tuple[float, str], tuple[Any, Any]] = {}
 
 
 def row_hardware(t, row):
@@ -357,7 +358,7 @@ def ear_shape(stop_az, back_x=0.0):
                         blk]).convex_hull
 
 
-_OBST = {}
+_OBST: dict[Any, Any] = {}
 
 
 def station_obstacles(station: str, half_y: float = 15.0):
@@ -398,7 +399,7 @@ def station_obstacles(station: str, half_y: float = 15.0):
                 continue
             # project() returns outer AND hole rings: combine them even-odd, or
             # a hollow door outline fills in solid (found 2026-10-11)
-            g = Polygon()
+            g: Any = Polygon()
             for ring in loc.transform(swap).project().to_polygons():
                 if len(ring) >= 3:
                     g = g.symmetric_difference(Polygon(np.asarray(ring)).buffer(0))
@@ -472,7 +473,8 @@ def evaluate2(tD, tS, stop_az, station=None):
             for name, shp, hy in (("carrier", car, 15.0), ("bosses", boss, 8.5),
                                   ("wire band", hw[row][1], 5.2)):
                 obst = station_obstacles(station, hy)
-                gap = shp.distance(obst) if not shp.intersects(obst) else -shp.intersection(obst).area
+                gap = (shp.distance(obst) if not shp.intersects(obst)
+                       else -shp.intersection(obst).area)
                 if gap < MARGIN:
                     # SOFT: the projection ignores how a round boss narrows away
                     # from its axis in Y, so it over-reports; ranked, and the 3-D
@@ -486,7 +488,8 @@ def evaluate2(tD, tS, stop_az, station=None):
     cl = {}
     for row in ("D", "S"):
         c = np.array(hw[row][0].centroid.coords[0])
-        cl[row] = (round(math.degrees(math.atan2(c[1], c[0])), 1), round(float(np.linalg.norm(c)), 1))
+        cl[row] = (round(math.degrees(math.atan2(c[1], c[0])), 1),
+                   round(float(np.linalg.norm(c)), 1))
     cl["soft_mm2"] = round(-sum(g for _n, g in soft), 1)
     cl["soft_parts"] = sorted({n for n, g in soft if g < 0})
     return (not notes), notes, round(min(gaps), 2), cl

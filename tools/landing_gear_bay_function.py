@@ -131,6 +131,7 @@ def function_ok(f: dict) -> bool:
     """True when the bay is one body and every interference check is clear."""
     return f["bay_bodies"] == 1 and all(f[k] < CLASH_MM3 for k in FUNCTION_LIMITS)
 
+
 # Context solids the gear is EXPECTED to touch, with why (unordered substrings).
 EXPECTED = (
     ("bay (printed part)", "shell", "bay seats in the merged hull pocket"),
@@ -218,7 +219,7 @@ def corner_keepout(cn: str, hardware_only: bool = True) -> Manifold:
     return out
 
 
-_ENV = []
+_ENV: list[Manifold] = []
 
 
 def _env() -> Manifold:
@@ -226,7 +227,7 @@ def _env() -> Manifold:
     if not _ENV:
         sys.path.insert(0, os.path.join(REPO, "airframe", "blender-scripts"))
         import merge_cargo_interior as mci  # noqa: PLC0415
-        src = trimesh.load(mci.BLENDER_SRC, process=False)
+        src = cbc.as_trimesh(trimesh.load(mci.BLENDER_SRC, process=False), mci.BLENDER_SRC)
         src.merge_vertices()
         _ENV.append(cbc.man(mci.extract_envelope(mci.bake(src))))
     return _ENV[0]
@@ -318,7 +319,7 @@ def census(scad: str, P: dict, export: str | None = None,
         gen = GENERATED.format(cn)
         conforming = os.path.exists(gen) and scad == SCAD and not defines
         if conforming:
-            bay = cbc.man(trimesh.load(gen, force="mesh"))
+            bay = cbc.man(cbc.as_trimesh(trimesh.load(gen, force="mesh"), gen))
             keep = corner_keepout(cn)
             driver = corner_keepout(cn, hardware_only=False)
         else:
@@ -326,7 +327,8 @@ def census(scad: str, P: dict, export: str | None = None,
             keep = driver = None
         leg = swept_leg(paths[(st, "leg (thigh+shin+foot)")], tf)
         bodies = len(bay.decompose()) if conforming else len(
-            trimesh.load(paths[(st, "bay (printed part)")], force="mesh")
+            cbc.as_trimesh(trimesh.load(paths[(st, "bay (printed part)")], force="mesh"),
+                           "bay (printed part)")
             .split(only_watertight=False))
         # Thigh corridor: the swept leg against its OWN bay, minus the hip pin
         # contact (the lug sits between the ears on the pin -- designed).
