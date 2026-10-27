@@ -464,6 +464,15 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] LG-16 Confirm ductile wire temper survives jig-forming
 - [ ] LG-13 Define wire-end retention detail at bay bosses
 - [ ] LG-02 Bay mounting integration: backing plates, flank conform…
+- [ ] ★ LG-LOADPATH-A1B — Option A balanced couple, form A1b (owner 2026-10-27; plan docs/plans/2026-10-27-001): two identical 6061-T6 tension fuses per row, push side in a reversing sleeve; CF backbone plate (Rock West QI 2 x 1/8 in, bearing coupon LG-11; Toray TC1225 RTL fallback)
+  - [x] FBD + materials trade of A1/A1b/A2/A3 (tools/lg_couple_options.py)
+  - [x] Packaging gate (tools/lg_a1b_packaging.py): aft PASS az 154 / reach 55
+  - [x] Fore corners: canonical flank housing above each fore bay chosen (owner 2026-10-27)
+  - [ ] Merge tool: cut + reinforce fore flank housings (~25 x 30 mm)
+  - [ ] Leg SCAD: crank r 10, A1b members, backbone, anchor bosses (aft inboard az 154; fore outboard az ~65 into housing)
+  - [ ] Sizing tool: couple sizing, retire the superseded pin/boss checks
+  - [ ] Bays/STLs regenerated; fore-corner loose bodies fixed; BOM (6061 fuses, sleeves, pins, liners, CF backbone)
+  - [ ] LG-11 bearing coupons on the Rock West plate before flight
 - [x] Feet separated into individual STLs (foot_1 through foot_4 in l…
 - [ ] Add top-face socket to canonical foot
 - [ ] Assess foot grip on concrete/asphalt
