@@ -82,7 +82,7 @@ import sys
 # ---------------------------------------------------------------- inputs ---
 G = 9.807                     # m/s^2
 LBF = 4.44822                 # N per lbf
-M_DES = 13.0 * 0.45359237     # kg, owner design mass 13.0 lbm
+M_GEAR_MASS = 13.0 * 0.45359237     # kg, owner design mass 13.0 lbm
 SHARE = 0.251                 # worst per-leg static share (sizing tool, R2 ledger)
 R_H = 80.0                    # mm, hip -> foot horizontal arm
 FOOT_Z = -118.0               # mm, foot sole below the hip (leg-local GROUND_Z)
@@ -108,15 +108,15 @@ P_DUCT0 = 7655.0              # N, ductile plateau per wire at r = 6 (sizing too
 def drop(h_ft):
     """(energy per leg J, touchdown speed m/s) for a free drop of h_ft."""
     h = h_ft * 0.3048
-    return M_DES * G * h * SHARE, math.sqrt(2 * G * h)
+    return M_GEAR_MASS * G * h * SHARE, math.sqrt(2 * G * h)
 
 
 def cases():
     """Foot force per leg (N) for each load case, with its dynamics."""
-    w = M_DES * G
+    w = M_GEAR_MASS * G
     e_n, v_n = drop(1.5)
     e_c, v_c = drop(4.0)
-    e_c = M_DES * G * 4.0 * 0.3048 * 0.5          # tail-down 2-pt, 50 % per leg
+    e_c = M_GEAR_MASS * G * 4.0 * 0.3048 * 0.5          # tail-down 2-pt, 50 % per leg
     f_n = 2 * e_n / (NOZZLE_X / 1000)             # linear spring peak
     f_c = e_c / (SETTLE_CRASH / 1000)             # ductile plateau
     return {
