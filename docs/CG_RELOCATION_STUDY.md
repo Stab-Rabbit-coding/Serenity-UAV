@@ -32,7 +32,8 @@
 | Arrangement | Hover | Heaviest payload | Third cell |
 | --- | --- | --- | --- |
 | Rev H2 as handed over: Bay A Y 147, head cell Y 256, cell 2 middle/aft Y 541.7 | +29.7 mm (+1.17 in) | — | — |
-| **Rail lever:** Bay A on the rail ceiling, stop Y 156, head cell Y 216, cell 2 cargo band Y 286–402 | **+16.8 mm (+0.66 in)**, AUW 13.38 lbm (6,071 g) | +17.4 mm, 13.88 lbm (6,298 g) | +17.4 mm, 13.91 lbm (6,311 g) |
+| **Rail lever:** Bay A on the rail ceiling, stop Y 156, head cell Y 216, cell 2 cargo band Y 286–402 (ledger wire lump) | +16.8 mm (+0.66 in), AUW 13.38 lbm (6,071 g) | +17.4 mm, 13.88 lbm (6,298 g) | +17.4 mm, 13.91 lbm (6,311 g) |
+| **Rail lever with the routed harness (current)** | **+16.3 mm (+0.64 in)**, AUW 13.74 lbm (6,232 g) | +17.0 mm, 14.24 lbm (6,459 g) | +17.0 mm, 14.27 lbm (6,472 g) |
 
 The CG spread across the three configurations is **0.7 mm (0.03 in)**. Payload and third-cell changes therefore barely move the trim. The offset itself is what the control reserve has to absorb.
 
@@ -79,11 +80,35 @@ The harness (WIRE-6AWG/10AWG, 140 g at Y 395.7) is an estimate from the single-p
 
 **Verdict:** after the rail lever, no further equipment relocation is available at a 2 mm static gap. The rest has to come from a pivot move, ballast, or mass reduction aft of the pivot.
 
+### 3.3 Owner inputs, 2026-10-27
+
+**(1) Swap the FE forward into the cargo Observer slot, and the Observer aft into the FE's neck slot.**
+
+- **Fit: does not fit.** The FE unit (can + plate, 75 × 36 × 94 mm) has no clear placement within ±25 mm of the Observer station (Y 424.2) in any of the six axis orders, even with both items removed from the free-space map. The Observer slot is 76.8 × 20 × 70.8 mm and sits under the aft nodes (Z 167–204). Its most-forward clear slot anywhere is Y 516.8.
+- **Value if it did fit:** hover +16.3 → +14.3 mm, a gain of 2.0 mm (owner estimate 1.2 mm). The shorter feeder runs also save 54 g of wire.
+- **Observer view from the neck slot (geometry check):**
+  - A camera at the tray's top edge (Z ≈ 194) sees the ground under the hoist point (Y 361.2) through the clamshell aperture: the ray crosses the belly plane at Y ≈ 396, inside the aperture's aft edge at Y 413.7.
+  - With the payload stowed, that ray passes through the payload box's aft face, but so does the ray from today's station. The view is therefore no worse than today.
+  - Below a camera height of about Z 131 the belly skin aft of the aperture blocks the view.
+
+**(2) Large-gauge harness as routed segments**, replacing the ledger's single lump of 140 g at Y 395.7.
+
+- **Mass per length:**
+  - AWG diameter from ASTM B258, d = 0.005 in × 92^((36 − n)/39). **REQUIRES VERIFICATION:** ASTM B258 is not yet catalogued in REFERENCES.md.
+  - Copper at 8.89 g/cm³. **REQUIRES VERIFICATION:** source to be catalogued.
+  - Silicone insulation adds 35 % (**ASSUMED**); routing slack is 10 % (**ASSUMED**).
+  - Result: 6 AWG **160 g/m** (1.08 oz/ft); 10 AWG **63 g/m** (0.42 oz/ft).
+- **Routes:**
+  - a 6 AWG pair from each cell's aft face (head cell Y 274, cell 2 Y 402.2) to the FE entry plate;
+  - a 10 AWG pair per ESC (four ESCs) from the FE to each nacelle pivot (Y 326.7), run along the centreline and then laterally along the spar.
+- **Routed total: 301 g (0.66 lbm) at Y 357.8.** The centroid is 38 mm further forward than the lump, but the mass is 161 g more. The BOM's 140 g appears to undercount the ESC feeders (one 1 m red/black pair), so the BOM row needs reconciling.
+- **Net effect:** the hover offset moves from +16.8 to **+16.3 mm**, and AUW rises to 13.74 lbm (6,232 g). The harness model shortens and moves with the FE whenever the FE moves; since the FE has no feasible forward slot, this only changes the baseline.
+
 ## 4. Residual
 
-- Hover residual moment: **101,950 g·mm** (fine-search run).
-- **Nose ballast** at Y 15 to close it: **327 g (0.72 lbm)**. This is not recommended: T/W falls from 1.41 to about 1.33.
-- **Pivot move.** The nacelles (1,853 g, 4.08 lbm, ledger) move with the pivot, so the CG offset closes by Δ(1 − f), where f ≈ 0.31 is the nacelle mass fraction. Closing 16.8 mm therefore takes **Δ ≈ 24 mm (0.95 in) aft**. This is an upper bound: including the wing panels in f lowers it. It reworks the spar carry-through, the cargo tilt actuators and the wing-root flanges.
+- Hover residual moment: **101,694 g·mm** (routed harness).
+- **Nose ballast** at Y 15 to close it: **326 g (0.72 lbm)**. This is not recommended: T/W falls from 1.37 to about 1.30 with the routed harness.
+- **Pivot move.** The nacelles (1,853 g, 4.08 lbm, ledger) move with the pivot, so the CG offset closes by Δ(1 − f), where f ≈ 0.31 is the nacelle mass fraction. Closing 16.3 mm therefore takes **Δ ≈ 23 mm (0.91 in) aft** (f 0.30 with the routed harness). This is an upper bound: including the wing panels in f lowers it. It reworks the spar carry-through, the cargo tilt actuators and the wing-root flanges.
 
 ## 5. Next relocation passes
 

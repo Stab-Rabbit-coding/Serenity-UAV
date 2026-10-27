@@ -107,6 +107,44 @@ NOTES = {
 }
 
 
+# ---------------------------------------------------------------------------
+# routed large-gauge harness (owner 2026-10-27: "all the large-gauge wires
+# also contribute to the CG") -- replaces the ledger's single WIRE lump
+# ---------------------------------------------------------------------------
+# AWG diameter per ASTM B258, d = 0.005 in x 92^((36 - n) / 39) -- REQUIRES
+# VERIFICATION: ASTM B258 is not yet catalogued in REFERENCES.md.
+# Copper density 8.89 g/cm^3 -- REQUIRES VERIFICATION (catalogue a source).
+# Silicone insulation mass factor -- ASSUMED.
+CU_RHO = 8.89e-3  # g/mm^3
+INSUL_FACTOR = 1.35  # ASSUMED: silicone jacket adds 35 % to the conductor mass
+ROUTE_SLACK = 1.10  # ASSUMED: 10 % routing slack and service loops
+N_ESC = 4  # two ESCs per nacelle (ledger NACELLE items)
+LUMP = ("WIRE-6AWG", "WIRE-10AWG")
+
+
+def awg_g_per_mm(n):
+    d = 0.005 * 25.4 * 92 ** ((36 - n) / 39.0)
+    return np.pi * d * d / 4 * CU_RHO * INSUL_FACTOR
+
+
+def harness(fe_y, fe_z, cell_spans):
+    """(mass g, Y centroid) segments for the routed runs.  Battery leads
+    (6 AWG pair per cell) leave each cell's aft face on the centreline and run
+    to the FE entry plate; ESC feeders (10 AWG pair per ESC) run from the FE to
+    each nacelle pivot (Y along the centreline, then lateral along the spar)."""
+    segs = []
+    g6, g10 = awg_g_per_mm(6), awg_g_per_mm(10)
+    for y1, zc in cell_spans:  # cell aft face Y, cell centre Z
+        ly, lz = abs(fe_y - y1), abs(fe_z - zc)
+        segs.append((2 * g6 * (ly + lz) * ROUTE_SLACK, 0.5 * (fe_y + y1)))
+    for side, (px, py, pz) in al.PIVOT.items():
+        ly, lx, lz = abs(fe_y - py), abs(px), abs(fe_z - pz)
+        m = (N_ESC // 2) * 2 * g10 * ROUTE_SLACK
+        segs.append((m * ly, 0.5 * (fe_y + py)))  # along the centreline
+        segs.append((m * (lx + lz), py))  # lateral along the spar to the pivot
+    return segs
+
+
 def items():
     bom = al.bom_rows()
     base = al.printed_items() + al.nacelle_items() + al.station_items(bom) + al.gap_items()
@@ -303,12 +341,26 @@ def main():
         groups[name] = dict(m=m, y=sum(i.m * i.cg[1] for i in g) / m, dims=dims,
                             split=split, skip=skip)
         moved |= {i.name for i in g}
+    lump = [i for i in base if i.ref in LUMP]
+    moved |= {i.name for i in lump}
     rest = [(i.m, i.cg[1]) for i in base if i.name not in moved]
+    fe = groups["Flight Engineer (board + can + plate)"]
+    fe_z = mlf.FE_ZC
+    spans = [(HEAD_CELL_Y0 + hlf.CELL_L, hlf.BAND_ZC), (CELL2_Y1, hlf.BAND_ZC)]
+
+    def wires(fe_y):
+        return harness(fe_y - (mlf.FE_CAN_Y + mlf.FE_PLATE_Y) / 2, fe_z, spans)
+    w0 = wires(fe["y"])
+    print(f"harness: ledger lump {sum(i.m for i in lump):.0f} g at Y "
+          f"{sum(i.m * i.cg[1] for i in lump) / sum(i.m for i in lump):.1f}; routed "
+          f"{sum(m for m, _ in w0):.0f} g at Y {cg_y(w0)[1]:.1f} "
+          f"(6 AWG {awg_g_per_mm(6) * 1000:.0f} g/m, 10 AWG {awg_g_per_mm(10) * 1000:.0f} g/m)")
     mA = sum(i.m for i in nodeA)
     fixed = list(rest) + [(mA, BAYA_Y), (CELL_G, HEAD_CELL_Y), (NOSE_OBS_G, NOSE_OBS_Y)]
 
-    def cgs(pieces, cell2_y=CELL2_Y):
-        e = fixed + [(CELL_G, cell2_y)] + pieces
+    def cgs(pieces, cell2_y=CELL2_Y, fe_y=None):
+        fy = fe["y"] if fe_y is None else fe_y
+        e = fixed + [(CELL_G, cell2_y)] + pieces + wires(fy)
         out = []
         for cfg, extra in (("hover", ()), ("heaviest payload", ((payload.m, payload.cg[1]),)),
                            ("third cell", ((THIRD_CELL_G, payload.cg[1]),))):
@@ -323,7 +375,7 @@ def main():
                   f"offset {d:+6.1f} mm ({d / 25.4:+.2f} in)")
 
     h2 = fixed[:-3] + [(mA, H2_BAYA_Y), (CELL_G, H2_HEAD_CELL_Y), (NOSE_OBS_G, NOSE_OBS_Y),
-                       (CELL_G, 541.7)] + [(g["m"], g["y"]) for g in groups.values()]
+                       (CELL_G, 541.7)] + [(g["m"], g["y"]) for g in groups.values()] + w0
     print(f"Rev H2 as handed over: hover offset {cg_y(h2)[1] - PIVOT_Y:+.1f} mm")
     start = [(g["m"], g["y"]) for g in groups.values()]
     show("RAIL LEVER, candidates at their ledger stations", cgs(start))
@@ -376,6 +428,34 @@ def main():
     alt_y = HEAD_CELL_Y0 + hlf.CELL_L + hlf.SLED_LIP + 4.0 + hlf.CELL_L / 2
     show(f"... and cell 2 pulled forward to the head cell's tail (4 mm lead gap, centre Y "
          f"{alt_y:.1f})", cgs(pieces, alt_y))
+    # owner input (1): FE forward into the cargo Observer slot, Observer aft
+    # into the FE's neck slot.  Fit: FE envelope at the Observer slot, every
+    # orientation, against the map with BOTH removed.
+    obs = groups["cargo Observer node"]
+    swap_map = Map(xs, ys, zs, free)
+    best = None
+    for dims in {(75.0, 36.0, 94.0), (94.0, 36.0, 75.0), (75.0, 94.0, 36.0),
+                 (36.0, 75.0, 94.0), (94.0, 75.0, 36.0), (36.0, 94.0, 75.0)}:
+        ok, (nx, ny, nz) = swap_map.window_ok(*dims)
+        if ok is None or not ok.any():
+            continue
+        iz, iy, ix = np.nonzero(ok)
+        yc = swap_map.ys[0] - GRID_XY / 2 + iy * GRID_XY + ny * GRID_XY / 2
+        sel = (yc > obs["y"] - 25) & (yc < obs["y"] + 25)
+        if sel.any():
+            best = dims
+    swap_fits = best is not None
+    print(f"\nFE <-> cargo Observer swap: FE fits within +-25 mm of the Observer station: "
+          f"{swap_fits}")
+    sw = [p for p in pieces]
+    # replace the FE and Observer entries (first and last groups in `pieces` order)
+    fe_idx = [i for i, r in enumerate(log) if r[0].startswith("Flight Engineer")][0]
+    ob_idx = [i for i, r in enumerate(log) if r[0].startswith("cargo Observer")][0]
+    sw[fe_idx] = (fe["m"], obs["y"])
+    sw[ob_idx] = (obs["m"], fe["y"])
+    rs = cgs(sw, fe_y=obs["y"])
+    show("IF the swap fitted (FE at Y {:.1f}, Observer at Y {:.1f}, harness re-routed)".format(
+        obs["y"], fe["y"]), rs)
     hover = res[0]
     spread = max(r[3] for r in res) - min(r[3] for r in res)
     resid = hover[3] * hover[1]
