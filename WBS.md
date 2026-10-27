@@ -104,6 +104,7 @@
 - [ ] ★ Aero revalidation of the re-lofted wing (S1223/t17.7–t26.7; XFOIL/RANS)
 - [ ] LG-PIN-SHEAR: verify 0.6 x Su pin shear for A2 pins (REF-MAT-005)
 - [ ] ★ ENDURANCE-TGT — WARNING: derived mission endurance target 318 s (5.3 min) airborne, two cells + payload, is NOT met (61 s PLANNING / 85 s NOMINAL hover) and is not reachable by battery capacity alone (mass-coupled). Leg durations and 30 % reserve ACCEPTED by owner 2026-10-26 (no better data); owner to choose a gap-closure path (docs/flight_envelope.md §6); tandem-pair thrust-stand hover-power measurement first
+- [ ] MASS-DIET-2SORTIE — requirements in docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md (−555 g: EMI hardening, gear, NoNFO stacks; two sorties); retrieval sortie R9 OPEN, propulsion gate R10 after tandem-pair thrust-stand test
 - [ ] EDF-64-REDLINE: define a 64 mm QF2822 RPM redline in governor_config.h (flight_envelope §2.2)
 - [ ] CELL-ORIGIN: Tattu cells retained (owner 2026-10-26) with PRC-origin flag on every BOM/procurement entry; evaluate a non-PRC equivalent before purchase (plan 2026-10-26-001 KTD4)
 - [x] HEAD-CELL-G: head-cell catch load factor = 79.4 g, the gear design's 4 ft level peak (owner 2026-10-26; plan 2026-10-26-001 R7)
