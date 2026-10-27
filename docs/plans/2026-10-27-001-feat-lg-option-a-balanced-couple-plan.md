@@ -71,3 +71,12 @@ Printed CF-PETG stays as the non-structural liner/fairing only. Recommended: CF 
 **Packaging gate, anchors on a backbone** (hip region masked; members may be outside the hull, as the canonical exposed jack):
 - Aft corners: strut az 154 deg, reach 55 mm, inboard: 12 mm^3 (tilt bracket). Passes after anchor-boss shaping.
 - Fore corners: inboard blocked by TACCO CN2 + chin shelf (about 2,000 mm^3). Outboard-up az 60 deg, reach 65 mm: no keep-out clash; 400-450 mm^3 hull wall + 19 mm^3 swept leg. Open: confirm whether that wall overlap is the open well region of the source mesh or real skin around the window.
+
+### Backbone material to build against (owner 2026-10-27: "find one that you can actually build against")
+
+**Toray Cetex TC1225 (LM PAEK) / T700GC, quasi-isotropic RTL sheet**, 24 plies (0.130 in, 3.29 mm at 0.0054 in cured ply thickness [REF-MAT-013]), ordered pre-consolidated from Toray Advanced Composites to the customer layup [REF-MAT-014], waterjet-cut to the backbone outline.
+
+- Bearing, quasi-isotropic single shear, 2 % offset [REF-MAT-013 Table 4-57]: 113.6 ksi (783 MPa) RTA B-basis; 80.3 ksi (554 MPa) 275 °F wet B-estimate (worst).
+- Anchor pin O4, 4,593 N x 1.25: required t = 2.6 mm at the worst value; 3.29 mm gives margin 1.27 (275 °F wet), 1.79 (room temperature).
+- This is the only option with published, units-printed, basis-value bearing data for a purchasable plate. Rock West [REF-MAT-011] has no units or bearing; the 3k-fabric NCAMP data [REF-MAT-012] is an analog only; McMaster's CF/PAEK sheet names no maker and is 2.2 mm maximum.
+- Procurement conditions: (1) supplier certification that the RTL is made from the NCAMP-qualified TC1225/T700GC to the qualified consolidation process; (2) laminate density from the Toray datasheet for the mass ledger (not in REF-MAT-013); (3) quote and lead time (custom RTL; not stocked). Fallback if (1) cannot be had: 6061-T6 [REF-MAT-007], 2 x 1/8 in cheeks.

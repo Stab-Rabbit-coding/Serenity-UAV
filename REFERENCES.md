@@ -1648,6 +1648,25 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 | **Applicability — analog only** | Different fibre (T650, not T700), resin (Cycom 5215 prepreg, autoclave) and weave (3k plain weave) from the Rock West infused T700 3k twill plate [REF-MAT-011]. NCAMP allowables apply only to the qualified material and process. Used here to show the 384 MPa bearing proxy for REF-MAT-011 sits below every 3k-fabric quasi-isotropic bearing basis value in this report (lowest: 448 MPa ETW B-basis). It is **not** an allowable for the Rock West plate. |
 | **Cited in** | `docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md` (backbone material trade) |
 
+### REF-MAT-013: NCAMP NCP-RP-2025-008 Rev A — Toray Cetex TC1225 (LM PAEK) T700GC 145 gsm 34 % RC Unidirectional Tape, Qualification Statistical Analysis Report (2026)
+
+| Field | Value |
+|---|---|
+| **Publisher** | NCAMP / NIAR, Wichita State University; report dated 2026-02-24; test methods in companion NCAMP report CAM-RP-2025-016 Rev A |
+| **Official access** | <https://www.wichita.edu/industry_and_defense/NIAR/Documents/Toray-TC1225-LM-PAEK-T700GC-UNI-Qualification-NCP-RP-2025-008-RevA-2-24-2026-SAR-Final.pdf> (downloaded and read 2026-10-27) |
+| **Section applied** | §4.31 "25/50/25" (quasi-isotropic) single-shear bearing, Proc. C, SSB1; Table 4-57 (p. 113), normalized, 2 % offset strength: RTA (70 °F) mean 126.7 ksi, modified-CV B-basis 113.6 ksi (783 MPa); ETA1 (275 °F) mod-CV B-basis 91.82 ksi (633 MPa); ETW (275 °F wet) B-estimate 90.43 ksi (ANOVA) / 80.33 ksi (mod CV, 554 MPa, 1 batch). Normalizing cured ply thickness 0.0054 in (§ data tables). Environment codes Table 1-3 (p. 11). |
+| **Applicability** | Allowables apply to this material made to the NCAMP material and process specification. A purchased laminate shall be certified by the supplier as made from this qualified material by an equivalent consolidation process before these values are used without a confirmation coupon. Density is not given in this report. |
+| **Cited in** | `docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md` (backbone material) |
+
+### REF-MAT-014: Toray Advanced Composites — press release, NCAMP qualification of Cetex LMPAEK TC1225 (2025-12-02)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Toray Advanced Composites, Nijverdal, The Netherlands |
+| **Official access** | <https://www.toraytac.com/newsroom/news-item/2025/12/2/Toray-Advanced-Composites-completes-NCAMP-Qualification-for-Cetex®-High-Performance-Thermoplastic-Composite-Materials> (fetched and read 2026-10-27) |
+| **Section applied** | TC1225/T300 fabric NCAMP-qualified; "available in both semi-preg and large pre-consolidated" reinforced thermoplastic laminate (RTL) formats; RTLs "can be supplied tailored to customer-specific thicknesses and orientation requirements". At release, TC1225/T700 UD tape was "still in qualification" (REF-MAT-013 is that qualification report, 2026-02-24). |
+| **Cited in** | Plan 2026-10-27-001 (backbone procurement route) |
+
 ### REF-EDF-001: XFly-Model — Galaxy X5 50 mm 12-blade EDF, 6S, motor 2627-KV3200
 
 | Field | Value |
