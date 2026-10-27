@@ -18479,6 +18479,13 @@
       ],
       "archived": false
     },
+    "tools/lg_a1b_packaging.py": {
+      "description": "LG Option A1b packaging gate (plan 2026-10-27-001 U1).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/lg_bellcrank_fbd.py": {
       "description": "Landing-gear bellcrank load path: free-body diagrams of three configurations.",
       "tags": [
@@ -23769,6 +23776,7 @@
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",
+      "tools/lg_a1b_packaging.py",
       "tools/lg_bellcrank_fbd.py",
       "tools/lg_collar_integrity.py",
       "tools/lg_corners.py",
