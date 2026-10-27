@@ -16,6 +16,8 @@ related_components:
   - airframe/blender-scripts/merge_cargo_interior.py
   - airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad
   - airframe/openscad/fuselage/cargo/battery_cradle.scad
+  - tools/generate_lg_bays.py
+  - airframe/blender-scripts/lg_bay_corner_params.py
 tags: [single-source, layout, openscad, generated-include, merge-pipeline, cargo-section, stations]
 ---
 
@@ -51,9 +53,19 @@ through it without a single restated number.
 * **The SCAD parts include a generated file.** `--write-scad` emits
   `cargo_layout_t5_params.scad` (header: *GENERATED … do not edit*); every
   part (`tilt_actuator_bracket.scad`, `tilt_brake.scad`, `battery_cradle.scad`,
-  `chin_node_shelf.scad`) `include`s it and derives its own geometry from the
+  `chin_node_shelf.scad`, `tilt_actuator_options.scad`, `gateway_door_tray.scad`,
+  `door_latch_mechanism.scad`) `include`s it and derives its own geometry from the
   names. A part file may define *its own* wall thicknesses and fillets; it may
   not type a hull station.
+* **One owner per station family, each emitting a generated file.** The
+  module owns the cargo-interior equipment stations. The landing-gear bay
+  corners are a second family with their own owner: the `CORNERS` table in
+  `canonical_leg_r6_3_0in.scad`, read by `tools/generate_lg_bays.py`, which
+  writes `airframe/blender-scripts/lg_bay_corner_params.py` (*GENERATED*) for
+  the merge (BHD-02, 2026-10). Never retype those values in
+  `cargo_layout_fit.py`. The merge falls back to an empty `LG_CORNER_BOLTS`
+  on `ImportError`, so a missing file fails silently — regenerate the bays
+  before re-merging the shell.
 * **Change order:** edit the constant → run the proof (`--write-scad`) → re-merge
   the shell if a boss moved → re-render the parts → boolean the parts against
   the proof → run the other gates. The layout doc is written last, from the
@@ -89,3 +101,8 @@ and in the merge script:
 for x, y in clf.SHELF_BOSS:
     pos.append(box(x - 5.0, x + 5.0, y - 5.0, y + 5.0, -5.0, clf.SHELF_Z0))
 ```
+
+## Related
+
+* [decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md](decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md)
+* [probe-the-published-hull-and-change-the-placement-class-not-the-margins.md](probe-the-published-hull-and-change-the-placement-class-not-the-margins.md)

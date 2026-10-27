@@ -1,5 +1,6 @@
 // ===========================================================================
-// HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See AGENTS.md.
+// AIRCRAFT DATUM R2 (2026-10-20, plan 2026-10-19-001); hull X literals below are
+// R1 + 169.85.  See AGENTS.md datum rule.
 //   X = +port (left), Y = +aft (back), Z = +dorsal (up).  Modelled directly
 //   in hull frame; a VIEW model, not a printed part.
 // ===========================================================================
@@ -56,13 +57,13 @@ module ring_section(entry) {
 
 module context() {
     color("gray", 0.25) for (e = CARGO_SECTIONS) ring_section(e);
-    // drive shaft + root flange keep-out (WA-R1b: Y -9..51, Z 27..107, 5 mm)
+    // drive shaft + root flange keep-out (WA-R1b: Y 296.7..356.7, Z 107..187, 5 mm; R2)
     color("black") for (s = [1, -1])
-        translate([X_CL + s * (X_CL - (-86.33)) * -1 + 0, 0, 0]) {}
-    color("dimgray") translate([-86.33, SHAFT_Y, SHAFT_Z]) rotate([0, -90, 0]) cylinder(d = 4, h = 40);
-    color("dimgray") translate([2 * X_CL + 86.33, SHAFT_Y, SHAFT_Z]) rotate([0, 90, 0]) cylinder(d = 4, h = 40);
-    color("sienna", 0.35) translate([-120.0, SHAFT_Y - 30, SHAFT_Z - 40]) cube([34, 60, 80]);
-    color("sienna", 0.35) translate([2 * X_CL + 86.0, SHAFT_Y - 30, SHAFT_Z - 40]) cube([34, 60, 80]);
+        translate([X_CL + s * (X_CL - 83.52) * -1 + 0, 0, 0]) {}
+    color("dimgray") translate([83.52, SHAFT_Y, SHAFT_Z]) rotate([0, -90, 0]) cylinder(d = 4, h = 40);
+    color("dimgray") translate([2 * X_CL - 83.52, SHAFT_Y, SHAFT_Z]) rotate([0, 90, 0]) cylinder(d = 4, h = 40);
+    color("sienna", 0.35) translate([49.85, SHAFT_Y - 30, SHAFT_Z - 40]) cube([34, 60, 80]);
+    color("sienna", 0.35) translate([2 * X_CL - 83.85, SHAFT_Y - 30, SHAFT_Z - 40]) cube([34, 60, 80]);
 }
 
 module battery_and_payload() {
@@ -114,18 +115,18 @@ module worm_option(opt) {
 module spur_option() {
     // Rev T4: 38T/38T m0.8 spur, DS3225 body on the 18 mm standoff pad
     // (merge_cargo_interior.py NSVMT_*, Rev T1 numbers)
-    gx0 = -111.0; gface = 6.0;           // gear plane, tenon +3
+    gx0 = 58.85; gface = 6.0;            // gear plane, tenon +3 (R2; R1 -111)
     cz = SHAFT_Z + 30.4;                 // actuator axis, C 30.40
     color("steelblue") translate([gx0 - gface, SHAFT_Y, SHAFT_Z]) rotate([0, 90, 0]) cylinder(d = 32, h = gface);
     color("goldenrod") translate([gx0 - gface, SHAFT_Y, cz]) rotate([0, 90, 0]) cylinder(d = 32, h = gface);
     // DS3225 body 40 (Y) x 20 (Z) x 40.5 (X inboard), shaft 24 mm from one end
-    color("dimgray") translate([-158.5, SHAFT_Y - 24 + 4, cz - 10]) cube([40.5, 40, 20]);
-    color("gray", 0.5) translate([-118.0, SHAFT_Y - 30.75, cz - 13.5]) cube([40, 61.5, 27]);   // pad to the skin
+    color("dimgray") translate([11.35, SHAFT_Y - 24 + 4, cz - 10]) cube([40.5, 40, 20]);  // R1 X -158.5
+    color("gray", 0.5) translate([51.85, SHAFT_Y - 30.75, cz - 13.5]) cube([40, 61.5, 27]);   // pad to the skin
     // brake (needed, part TBD)
     color("firebrick", 0.6) translate([gx0 - gface - 11, SHAFT_Y, SHAFT_Z]) rotate([0, 90, 0]) cylinder(d = 22, h = 10);
     // overlap with the battery cradle, shown in red (explicit box: OpenCSG
     // preview mis-colours intersection() children)
-    ox0 = max(-158.5, BATT_X0 - CRADLE_T);  ox1 = min(-118.0, BATT_X1 + CRADLE_T);
+    ox0 = max(11.35, BATT_X0 - CRADLE_T);   ox1 = min(51.85, BATT_X1 + CRADLE_T);
     oz0 = max(cz - 10, BATT_Z0);            oz1 = min(cz + 10, BATT_Z1 + CRADLE_T);
     if (ox1 > ox0 && oz1 > oz0)
         color("red") translate([ox0, SHAFT_Y - 20, oz0]) cube([ox1 - ox0, 40, oz1 - oz0]);

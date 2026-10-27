@@ -1,0 +1,11 @@
+wing internal clearance -- parsed from airframe/openscad/wings/wings_s1223_revo.scad
+  root chord 129.0  tip chord 93.0  t_scale 1.46 -> 2.2
+  min web 2.5 mm   min skin 1.16 mm   min pad gap 1.0 mm
+  spar        : SPAR_BORE_STATION = 28.0 mm (constant station)
+  EDF double-D: RETIRED at Rev T1 (power moved into the spar bore)
+  AK7455      : HALL_CABLE_STATION = 44.5 mm (constant station)
+
+
+PASS -- all bores clear each other, the skin, and the wingtip pad
+
+--- stderr ---

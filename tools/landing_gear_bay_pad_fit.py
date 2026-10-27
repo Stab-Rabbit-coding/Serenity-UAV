@@ -64,8 +64,8 @@ resulting pad volume/mass so the LG-18 mass ledger can be updated.
 
 Coordinate frames
 -----------------
-Hull frame  : X = +port, Y = +aft, Z = +dorsal; cargo belly Z = 0;
-              centreline X = -169.9 (airframe/AGENTS.md).
+Hull frame  : X = +port, Y = +aft, Z = +dorsal; cargo belly Z = 80 (R2);
+              centreline X = hd.X_CL = 0 (aircraft datum R2, tools/hull_datums.py).
 Leg-local   : hip pin at origin, +X outboard along the swing azimuth,
               pin axis = local Y, +Z dorsal
               (airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad header).
@@ -109,10 +109,12 @@ SHELL_STL = os.path.join(
 # Swing azimuth: direction of the foot from the hip in plan, deg from hull +X.
 # ---------------------------------------------------------------------------
 CORNERS = [
-    ("fore-port", -90.0, -7.0, 38.0, -22.4),
-    ("fore-stbd", -249.8, -7.0, 38.0, -157.6),
-    ("aft-port", -79.0, 107.0, 38.0, 28.0),
-    ("aft-stbd", -260.8, 107.0, 38.0, 152.0),
+    # historical pre-recess stations, aircraft datum R2 (R1 [-90,-7],
+    # [-249.8,-7], [-79,107], [-260.8,107], hip Z 38)
+    ("fore-port", 79.85, 298.70, 118.0, -22.4),
+    ("fore-stbd", -79.95, 298.70, 118.0, -157.6),
+    ("aft-port", 90.85, 412.70, 118.0, 28.0),
+    ("aft-stbd", -90.95, 412.70, 118.0, 152.0),
 ]
 
 # Bay plate footprint, leg-local (canonical_leg_r6_*.scad bay()):

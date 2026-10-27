@@ -46,13 +46,13 @@ print(f"[render] stls  = {STLS}")
 print(f"[render] out   = {OUT}")
 
 # ---------------------------------------------------------------------------
-# Baked hull-frame assembly centre (from CLAUDE.md validated extents)
-#   X: −428.1 (stbd nacelle tip) to +86.0 (port nacelle tip)  → Cx ≈ −171
-#   Y: −305.7 (nose tip)          to +384.3 (stern tip)         → Cy ≈  +39
-#   Z:    0.0 (cargo belly)       to +201.5 (head dorsal crown)  → Cz ≈ +101
+# Assembly centre, aircraft datum R2 (R1 extents + R1_TO_R2, plan 2026-10-19-001)
+#   X: −258.3 (stbd nacelle tip) to +255.9 (port nacelle tip)  → Cx ≈ −1
+#   Y:    0.0 (nose tip)          to +690.0 (stern tip)         → Cy ≈ +345
+#   Z:   80.0 (cargo belly)       to +281.5 (head dorsal crown)  → Cz ≈ +181
 # All values in mm (= Blender scene units here).
 # ---------------------------------------------------------------------------
-CX, CY, CZ = -171.0, 39.0, 80.0  # ship geometric centre (hull frame, mm)
+CX, CY, CZ = -1.15, 344.7, 160.0  # ship geometric centre, aircraft datum R2 (R1 -171, 39, 80)
 
 SHIP_HALF_W = 257.0  # half-width  (mm) — nacelle tip to nacelle tip
 SHIP_HALF_L = 345.0  # half-length (mm) — nose to stern from Cy

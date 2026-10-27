@@ -58,7 +58,9 @@ STL_DIR = os.path.join(REPO_ROOT, "airframe", "stls", "fuselage", "landing-gear"
 # docs/LANDING_GEAR_ANALYSIS.md SS4.7 -- the extended leg is sized on the
 # 80 mm figure, not on the round inch).
 BELLY_MM = {"1_5in": 38.1, "3_0in": 80.0}
-HIP_Z = 38.0                # hull-frame Z of every hip station (LG-10.2)
+import hull_datums as hd  # noqa: E402  aircraft datum R2
+
+HIP_Z = hd.BELLY_Z + 38.0   # every hip station, 38 mm above the belly (LG-10.2; R1 38)
 
 # Geometry tolerance.  The SCAD constants are written to 0.1 mm, so 0.05 mm is
 # half the last declared digit -- tight enough that a real re-datum trips it.
@@ -67,8 +69,9 @@ TOL_MM = 0.05
 # times, so anything above export round-off is a placement bug.
 LEVEL_TOL_MM = 1e-3
 
-CORNERS_XY = {"fore-port": (-103.87, -1.28), "fore-stbd": (-235.93, -1.28),
-              "aft-port": (-92.24, 99.96), "aft-stbd": (-247.56, 99.96)}
+# FORE moved 2026-10-10 (BHD-02) from (-103.87 / -235.93, -1.28).
+import lg_corners  # noqa: E402  single-source corner stations (2026-10-19)
+CORNERS_XY = {n: (c[0], c[1]) for n, c in lg_corners.corners().items()}
 
 try:
     import numpy as np  # noqa: E402
@@ -139,9 +142,9 @@ def check_variant(variant):
 
     # 3. belly clearance is what the variant is named for.  The hip sits at
     # hull Z +38 and GROUND_Z is leg-local, so the sole lands at HIP_Z +
-    # GROUND_Z and the clearance below the cargo belly (hull Z 0) is its
-    # negation.
-    belly = -(HIP_Z + ground)
+    # GROUND_Z and the clearance is the belly (hd.BELLY_Z, R2 80; R1 0) minus
+    # that sole height.
+    belly = hd.BELLY_Z - (HIP_Z + ground)
     want = BELLY_MM[variant]
     ok = abs(belly - want) <= TOL_MM
     print(f"  3. belly clearance               : {belly:6.2f} mm "

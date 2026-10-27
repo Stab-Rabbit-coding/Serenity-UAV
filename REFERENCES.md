@@ -1559,6 +1559,74 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 
 **Used in:** `airframe/README.md` §5.1
 
+### REF-MAT-005: Fastenal Engineering & Design Support (F.E.D.S.) — "Mechanical Properties of Metric Stainless Steel Per ISO 3506-1"
+
+| Field | Value |
+|---|---|
+| **Publisher** | Fastenal Company, Engineering & Design Support, "Mechanical Properties of Metric Fasteners", 2 pp., Rev 3-6-09 |
+| **Official access** | <https://crafter.fastenal.com/static-assets/pdfs/Mechanical_Properties_of_Metric_Fasteners.pdf> (fetched and read 2026-10-26) |
+| **Underlying standard** | ISO 3506-1:2020, *Fasteners — Mechanical properties of corrosion-resistant stainless steel fasteners — Part 1: Bolts, screws and studs with specified grades and property classes* (ISO catalogue page not reachable from this session, HTTP 403, so no ISO URL is asserted here; ISO preview at <https://webstore.ansi.org/preview-pages/ISO/preview_ISO+3506-1-2020.pdf> shows only the contents). The Fastenal page reproduces the ISO 3506-1 table; the ISO text itself has not been checked, so the values below carry the distributor reproduction as their source. |
+| **Section applied** | p. 2, table "Mechanical Properties of Metric Stainless Steel Per ISO 3506-1": austenitic A1/A2/A4, property class 70 (cold-worked), diameter range up to M20 — tensile strength 700 MPa, stress at 0.2 % permanent 450 MPa. Same page, "Metric Thread Stress Areas": M3 coarse 5.03 mm^2. |
+| **Not provided** | No shear strength. The 0.6 x tensile shear figure used for pins in this repository is a design-judgment ratio, not from this source: **requires verification** (TODO §0.x LG-PIN-SHEAR). |
+| **Cited in** | `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md`; `tools/lg_bellcrank_fbd.py`; the A2-70 700 MPa figure in `tools/landing_gear_r6_sizing.py` (LG-02) |
+| **Openness / sourcing** | Public PDF, no registration. |
+
+### REF-MAT-006: ATI — "ATI 304 Austenitic Stainless Steel" product page (ASTM A240 minimum properties)
+
+| Field | Value |
+|---|---|
+| **Publisher** | ATI Inc., product page "ATI 304" |
+| **Official access** | <https://www.atimaterials.com/Products/ati-304> (fetched 2026-10-26); data sheet PDF linked from that page at `/Products/Documents/datasheets/stainless-specialty-steel/austenitic/ati_302_304_304l_305_tds_en2_v1.pdf` |
+| **Section applied** | "Minimum mechanical properties" for plate, sheet and strip, listed against ASTM A240 / ASME SA-240 / ASTM A666: tensile strength 515 MPa (75 ksi), yield strength 205 MPa (30 ksi), elongation 40 %. Corroborated for A240 type 304 plate tensile (75,000 psi) by 49 CFR 179.300-7 (<https://www.law.cornell.edu/cfr/text/49/179.300-7>). |
+| **Physical property applied** | Data sheet "ATI 302/304/304L/305" (linked above), "Physical Properties": density 0.285 lb/in^3 (7.90 g/cm^3), read 2026-10-26. |
+| **Not provided** | No bearing allowable for a pin in a plate. Where this repository checks steel bearing it uses the 205 MPa yield as the bearing limit (conservative design judgment, not a published bearing allowable). |
+| **Cited in** | `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md`; `tools/lg_bellcrank_fbd.py` (stainless thrust plates, clevis plates) |
+| **Openness / sourcing** | Public web page; ATI is US-domiciled (structural material, not silicon; AGENTS.md §5 not engaged). |
+
+
+### REF-MAT-007: Protolabs — "Aluminum 6061-T651/T6" CNC material data sheet
+
+| Field | Value |
+|---|---|
+| **Publisher** | Proto Labs, Inc., CNC machining material data sheet "Aluminum 6061-T651/T6" (document 2026-026) |
+| **Official access** | <https://www.protolabs.com/media/h54d0gnp/2026-026-cnc-material-data-sheet_aluminum-6061-t651_t6.pdf> (fetched and read 2026-10-26) |
+| **Section applied** | Properties table: ultimate tensile strength 45 ksi (310 MPa), yield stress 40 ksi (276 MPa), elongation 17 %, ultimate shearing strength 30 ksi (207 MPa), nominal density 0.098 lb/in^3 (2.70 Mg/m^3). |
+| **Not provided** | No bearing allowable. The 276 MPa yield is used as the pin-bearing limit (conservative design judgment, not a published bearing value). |
+| **Cited in** | `tools/lg_bellcrank_fbd.py`; `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` |
+| **Openness / sourcing** | Public PDF. Structural material (AGENTS.md §5 silicon rule not engaged). |
+
+### REF-MAT-008: Gibbs Wire & Steel — "Phosphate Coated Music Wire" technical data sheet (ASTM A228)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Gibbs Wire & Steel Company, Inc., Southington, CT — Technical Data Sheet No. 1004 (01/14) |
+| **Official access** | <https://www.gibbswire.com/assets/PMW%20-phos%20coated%20music%20wire.pdf> (fetched and read 2026-10-26) |
+| **Section applied** | "Tensile Strength Table (ASTM-A228 spec)": minimum / maximum tensile by diameter, e.g. 0.207 in 238,000 / 264,000 psi; 0.250 in 230,000 / 255,000 psi (1,586 / 1,758 MPa). Stock available 0.005–0.283 in. Service range 0–250 °F. |
+| **Not provided** | No yield strength and no density. The source notes the charts are general background and the material specification shall be reviewed. |
+| **Cited in** | `tools/lg_bellcrank_fbd.py` (A228 seat slugs); the absorber wires (`tools/landing_gear_r6_sizing.py`) are the same material class |
+| **Openness / sourcing** | Public PDF; Gibbs is US-domiciled. |
+
+### REF-MAT-009: Ningbo Jintian Copper — "C26000 Brass" product page (cartridge brass tempers)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Ningbo Jintian Copper (Group) Co., Ltd., product page "C26000 Brass" |
+| **Official access** | <https://en.jtcopper.com/c26000-brass.html> (fetched 2026-10-26) |
+| **Section applied** | Mechanical properties table: Annealed 300–400 MPa tensile, 100–150 MPa yield, 55–70 % elongation; Cold Worked H02 450–550 / 350–420 / 15–25 %; H04 550–650 / 480–550 / 5–12 %; density 8.53–8.60 g/cm^3. The page notes the data apply to standard thicknesses and processing states. |
+| **Use limits** | Vendor ranges, not ASTM B134 minimums; used only for the fuse-material TRADE (worst case of each range). A PRC-domiciled vendor: cited as a property source only, never as a supply source (AGENTS.md §5 governs silicon, but supply of any part should follow the owner's sourcing intent). Replace with ASTM B134 / a US mill sheet before any sizing for build. |
+| **Cited in** | `tools/lg_fuse_material.py`; `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` §6 |
+
+### REF-MAT-010: Elgin Fastener Group (M&W) — "Carbon Steel Grade 1008 Fact Sheet" (1008 annealed)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Elgin Fastener Group via mwcomponents.com, "Carbon Steel Grade 1008 Fact Sheet" (Eagle Brass 1008 Low Carbon Steel, Annealed; ASTM A109, UNS G10080) |
+| **Official access** | <https://www.mwcomponents.com/uploads/Resource-Center/Elgin-Material-Sheets/Carbon-Steel-Grade-1008-Fact-Sheet_Elgin-Website.pdf> (fetched and read 2026-10-26) |
+| **Section applied** | Annealed: tensile strength 241–345 MPa (35,000–50,000 psi), elongation at break >= 35 % in 2 in, tensile modulus 200 GPa, density 7.86 g/cc. |
+| **Not provided** | No yield strength. |
+| **Cited in** | `tools/lg_fuse_material.py`; `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` §6 |
+| **Openness / sourcing** | Public PDF; US manufacturer. |
+
 ### REF-EDF-001: XFly-Model — Galaxy X5 50 mm 12-blade EDF, 6S, motor 2627-KV3200
 
 | Field | Value |
@@ -3250,6 +3318,26 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Section applied** | MF-PSMF035X: Vmax 6 V, Ihold 0.35 A, Itrip 0.75 A at 23 C; thermal derating table (0.14 A hold at 85 C); operating -40..85 C |
 | **Cited in** | Pilot `F-GPS`, `F-SPI` (`gen_pilot_sch.py`) |
 
+### REF-PWR-014: Analog Devices (Linear Technology) LTC4370 — Two-Supply Diode-OR Current Balancing Controller, data sheet 4370f
+
+| Field | Value |
+|---|---|
+| **Publisher** | Analog Devices, Inc. (Linear Technology product line), data sheet 4370f (PDF creation date 2012-05-14) |
+| **Official access** | <https://www.analog.com/media/en/technical-documentation/data-sheets/4370f.pdf> — URL supplied by the owner (Stab-Rabbit-coding) 2026-10-26 as the official source of the local copy; not re-fetched by the AI (no network from the authoring session) |
+| **Local copy** | `avionics/datasheets/linear/4370f.pdf` (SHA-256 efa666325494ec22800cdc34c6d287109b851c509211caeed6bb6631ffec5615), supplied by the owner |
+| **Section applied** | Absolute Maximum Ratings: VIN1, VIN2, OUT1, OUT2 −2 V to 24 V. Electrical Characteristics: VIN1, VIN2 operating range 2.9–18 V. **Result: fails the 6S gate (25.2 V full charge); rejected for the Flight Engineer combiner.** |
+| **Cited in** | `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` (KTD1, rejected candidates) |
+
+### REF-PWR-015: Analog Devices (Linear Technology) LTC4359 — Ideal Diode Controller with Reverse Input Protection, data sheet Rev. F
+
+| Field | Value |
+|---|---|
+| **Publisher** | Analog Devices, Inc. (Linear Technology product line), LTC4359 data sheet Rev. F |
+| **Official access** | <https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4359.pdf> — URL supplied by the owner (Stab-Rabbit-coding) 2026-10-26 as the official source of the local copy; not re-fetched by the AI (no network from the authoring session) |
+| **Local copy** | `avionics/datasheets/linear/ltc4359.pdf` (SHA-256 8d05e6ba4259028463bbdb751d639715506ef28d1bd5eabac1b012786ea7d970), supplied by the owner |
+| **Section applied** | Features: 4–80 V operating, reverse input to −40 V, controls single or back-to-back N-channel MOSFETs. Absolute Maximum Ratings: IN, SOURCE, SHDN −40 V to 100 V. Operation: SHDN low turns the gate off; SHDN open is pulled high by an internal 2.6 µA source (enabled). Load Switching section: back-to-back MOSFETs for load-switch use. Temperature grades C 0–70 °C, I −40–85 °C, H −40–125 °C. |
+| **Cited in** | `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` (KTD1, R2, R3, R13) |
+
 ### REF-CONN-001: Samtec TSM series — 0.100in surface-mount terminal strip product data
 
 | Field | Value |
@@ -3559,6 +3647,17 @@ equivalent section promulgated to every sibling repo's `AGENTS.md`/`CLAUDE.md` i
 workspace — see each repo's own `REFERENCES.md` for its local entry. Renumbered from REF-MIL-001 on
 2026-10-05 (merge of `main` into `avionics-docs-audit`): REF-MIL-001 is MIL-STD-1553C in this
 catalogue, and the CNAF entry had been filed under the same ID — see Removed / Superseded Citations.
+
+### REF-NCEES-009: NCEES — FE Reference Handbook (rigid-body dynamics)
+
+| Field | Value |
+|---|---|
+| **Publisher** | National Council of Examiners for Engineering and Surveying (NCEES) |
+| **Official URL** | <https://ncees.org/engineering/fe/> (landing page VERIFIED; the handbook is distributed through the NCEES account portal) |
+| **Applied sections** | "Dynamics" — rigid-body plane motion (Newton–Euler: ΣF = m·a_G, ΣM_G = I_G·α) and mass moment of inertia with the parallel-axis theorem. **Section and page numbers, and the current handbook version, REQUIRE VERIFICATION** (TODO §0.x item `REF-NCEES-009 version`). |
+| **Catalog source** | Entry carried over from the `engineering-pe-skills` repository `REFERENCES.md` REF-NCEES-009 (statics-and-dynamics skill). |
+
+**Used in:** `tools/auw_ledger.py` (pitch moment of inertia about the CG, parallel-axis), `tools/landing_gear_r6_sizing.py` `effective_mass_ratio()` (two-point drop effective mass, m_eff = m·k²/(k²+d²), derived from plane-motion Newton–Euler).
 
 ---
 

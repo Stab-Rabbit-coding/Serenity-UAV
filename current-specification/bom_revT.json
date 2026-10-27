@@ -382,16 +382,16 @@
     },
     {
       "Ref": "BATT-6S-4000",
-      "Description": "6S 4000mAh LiPo — hover / high-endurance",
+      "Description": "6S 4000mAh 60C LiPo -- Motion RC Admiral Pro EPR40006PRO (hover / high-endurance)",
       "Category": "Power",
       "Qty": "1",
-      "Unit_Mass_g": "750",
-      "Total_Mass_g": "750",
+      "Unit_Mass_g": "624",
+      "Total_Mass_g": "624.0",
       "Supplier": "HobbyKing / GetFPV",
       "Supplier_PN_or_Search": "Tattu or Gens Ace 4000mAh 6S 60C LiPo XT60",
       "Est_Unit_Price_USD": "55.00",
       "Est_Total_Price_USD": "55.00",
-      "Notes": "Primary flight battery; >=15C cont (~60A draw); AUW ~3608g with Rev P cargo hardware"
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): 750 g pack -> Admiral Pro 4000 6S 60C, 624 g, 139 x 44 x 48 mm, EC5 (US brand of record, no on-pack electronics); figures from a search listing, VERIFY on a live page and WEIGH (WBS BATT-01). Needs the cradle grown from 142x50x38 (no real 6S 4000 pack is 38 mm thick; WBS BATT-02) and an XT90/AS150-class battery path, not XT60 (WBS PWR-CONN-01) *** Primary flight battery; >=15C cont (~60A draw); AUW ~3608g with Rev P cargo hardware"
     },
     {
       "Ref": "BATT-6S-2800",
@@ -1073,14 +1073,14 @@
       "Ref": "PRINT-PISTONS",
       "Description": "s_eng_pistons_scaled24.stl — Tilt piston linkage fairing",
       "Category": "Printed Part",
-      "Qty": "2",
+      "Qty": "0",
       "Unit_Mass_g": "25",
-      "Total_Mass_g": "50",
+      "Total_Mass_g": "0",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "0.20mm / 20% gyroid; decorative fairing only"
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): qty -> 0, decorative fairing with no source; dropped (no capability) *** 0.20mm / 20% gyroid; decorative fairing only"
     },
     {
       "Ref": "PRINT-PIVOT-ARM",
@@ -1671,14 +1671,14 @@
       "Ref": "PRINT-CARGO-CRADLE",
       "Description": "cargo_cradle_autolatch.stl — Cargo auto-latch cradle, PETG",
       "Category": "Printed Part",
-      "Qty": "1",
+      "Qty": "0",
       "Unit_Mass_g": "80.6",
-      "Total_Mass_g": "80.6",
+      "Total_Mass_g": "0",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev P new (PR #21 2026-05-30); press-to-lock latch 5N hold; 0.5mm SS spring wire; pull-wire release from SERVO-CARGO Ch-B; 50x50x30mm+ payload footprint; 0.20mm / 40% gyroid [Rev T MASS_AUDIT correction (docs/MASS_AUDIT_CARGO_WING_ROOT.md section 5, measured 2026-08-30): BOM mass 18 g/ea -> measured 80.6 g/ea from the published STL.]"
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): qty -> 0, stowed payload held by the winch ratchet over latched doors *** Rev P new (PR #21 2026-05-30); press-to-lock latch 5N hold; 0.5mm SS spring wire; pull-wire release from SERVO-CARGO Ch-B; 50x50x30mm+ payload footprint; 0.20mm / 40% gyroid [Rev T MASS_AUDIT correction (docs/MASS_AUDIT_CARGO_WING_ROOT.md section 5, measured 2026-08-30): BOM mass 18 g/ea -> measured 80.6 g/ea from the published STL.]"
     },
     {
       "Ref": "PRINT-GPS-RETENTION",
@@ -1723,14 +1723,14 @@
       "Ref": "PRINT-BELLY-PANEL",
       "Description": "belly_panel.stl — Battery bay belly access panel, PETG; 160×65mm; flush rebate fit",
       "Category": "Printed Part",
-      "Qty": "2",
+      "Qty": "0",
       "Unit_Mass_g": "24.5",
-      "Total_Mass_g": "49",
+      "Total_Mass_g": "0",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev Q new; 2mm PETG; 1.5mm rebate locates flush with hull skin; 2x M3 coin-slot screws; EPDM foam tape seal; 1 per face (port+stbd); SCAD: belly_panel.scad; 0.20mm / 15% gyroid / 3 walls [Rev T MASS_AUDIT correction (docs/MASS_AUDIT_CARGO_WING_ROOT.md section 5, measured 2026-08-30): BOM mass 6 g/ea -> measured 24.5 g/ea from the published STL.]"
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): qty -> 0, superseded with the keel battery tray (Rev T5) *** Rev Q new; 2mm PETG; 1.5mm rebate locates flush with hull skin; 2x M3 coin-slot screws; EPDM foam tape seal; 1 per face (port+stbd); SCAD: belly_panel.scad; 0.20mm / 15% gyroid / 3 walls [Rev T MASS_AUDIT correction (docs/MASS_AUDIT_CARGO_WING_ROOT.md section 5, measured 2026-08-30): BOM mass 6 g/ea -> measured 24.5 g/ea from the published STL.]"
     },
     {
       "Ref": "PRINT-DORSAL-ANTENNA-FIN",
@@ -1788,27 +1788,27 @@
       "Ref": "SCREW-M3-8-BTN",
       "Description": "M3×8mm stainless button-head cap screw — belly panel fasteners",
       "Category": "Hardware",
-      "Qty": "4",
+      "Qty": "0",
       "Unit_Mass_g": "0.3",
-      "Total_Mass_g": "1.2",
+      "Total_Mass_g": "0",
       "Supplier": "Amazon / McMaster-Carr",
       "Supplier_PN_or_Search": "M3×8mm stainless button-head SHCS ISO 7380",
       "Est_Unit_Price_USD": "0.20",
-      "Est_Total_Price_USD": "0.80",
-      "Notes": "Rev Q new; 2x per belly panel × 2 panels = 4 total; coin-slot drive in head; finger-tight + 1/4 turn max (PETG boss strips at >0.5 N·m)"
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): qty -> 0, belly-panel fasteners, superseded (Rev T5) *** Rev Q new; 2x per belly panel × 2 panels = 4 total; coin-slot drive in head; finger-tight + 1/4 turn max (PETG boss strips at >0.5 N·m)"
     },
     {
       "Ref": "SEAL-EPDM-2MM",
       "Description": "2mm closed-cell EPDM foam tape — belly panel rebate dust seal",
       "Category": "Hardware",
-      "Qty": "1",
+      "Qty": "0",
       "Unit_Mass_g": "2",
-      "Total_Mass_g": "2",
+      "Total_Mass_g": "0",
       "Supplier": "Amazon / AliExpress",
       "Supplier_PN_or_Search": "2mm closed-cell EPDM foam tape 10mm wide self-adhesive",
       "Est_Unit_Price_USD": "3.00",
-      "Est_Total_Price_USD": "3.00",
-      "Notes": "Rev Q new; applied in 1.5mm rebate of belly panel; dust seal (not waterproof); replace if adhesion fails after repeated panel cycles"
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): qty -> 0, belly-panel seal, superseded (Rev T5) *** Rev Q new; applied in 1.5mm rebate of belly panel; dust seal (not waterproof); replace if adhesion fails after repeated panel cycles"
     },
     {
       "Ref": "SKIPPER-PB2-I",
@@ -2100,53 +2100,53 @@
       "Ref": "FAR-CAGE-AV",
       "Description": "Faraday cage assembly — avionics bay 0.1 mm Al foil (foam-bonded) + 0.8 mm lid channel + 0.5 mm lid 70×50×82 mm",
       "Category": "EMC/Shielding",
-      "Qty": "4",
+      "Qty": "0",
       "Unit_Mass_g": "17",
-      "Total_Mass_g": "68",
+      "Total_Mass_g": "0",
       "Supplier": "Local sheet metal shop / 3M distributor",
       "Supplier_PN_or_Search": "0.1 mm 5052-H34 Al foil (5-wall liner bonded to VOID-FAR-CAGE foam cavity with 3M DP190 flexible epoxy); 0.8 mm 5052-H32 Al channel strip (lid perimeter / EMI gasket seat); 0.5 mm 5052-H32 Al removable lid; 0.8 mm brass insert strips at M3 fastener holes",
       "Est_Unit_Price_USD": "25.00",
-      "Est_Total_Price_USD": "100.00",
-      "Notes": "Rev R new; one per bay (Shepherd/Inara/River/Simon); inner clear 66×46×79 mm; 4× M3 captive lid screws; 40 mm fan aperture on aft face; bottom 4× M3 standoff mounts. Construction: 5-wall 0.1 mm Al foil liner bonded into foam void — foam elastic foundation raises panel f₁ ≈ 810 Hz (above EDF shaft ~470 Hz at rated RPM); seam laps ≥25 mm with conductive adhesive; liner is non-removable (integral with airframe foam). Lid perimeter channel (0.8 mm) provides rigid EMI gasket seating surface. Lid (0.5 mm) is field-removable. Flexible adhesive accommodates Al/foam CTE mismatch. *** MASS NOTICE: Faraday aircraft system now 364 g (0.80 lbm) after ferrite/strap reduction; all changes in this commit bring cumulative T/W to ~1.19 without battery swap; battery swap to 2800mAh (BATT-6S-2800) brings T/W to ~1.25 ***"
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): qty -> 0, all nodes foil-pouched; cages retired *** Rev R new; one per bay (Shepherd/Inara/River/Simon); inner clear 66×46×79 mm; 4× M3 captive lid screws; 40 mm fan aperture on aft face; bottom 4× M3 standoff mounts. Construction: 5-wall 0.1 mm Al foil liner bonded into foam void — foam elastic foundation raises panel f₁ ≈ 810 Hz (above EDF shaft ~470 Hz at rated RPM); seam laps ≥25 mm with conductive adhesive; liner is non-removable (integral with airframe foam). Lid perimeter channel (0.8 mm) provides rigid EMI gasket seating surface. Lid (0.5 mm) is field-removable. Flexible adhesive accommodates Al/foam CTE mismatch. *** MASS NOTICE: Faraday aircraft system now 364 g (0.80 lbm) after ferrite/strap reduction; all changes in this commit bring cumulative T/W to ~1.19 without battery swap; battery swap to 2800mAh (BATT-6S-2800) brings T/W to ~1.25 ***"
     },
     {
       "Ref": "FAR-GASKET-AV",
       "Description": "EMI spring-contact lid gasket — avionics cage 250 mm × 6 mm beryllium-Cu strip",
       "Category": "EMC/Shielding",
-      "Qty": "4",
+      "Qty": "0",
       "Unit_Mass_g": "3",
-      "Total_Mass_g": "12",
+      "Total_Mass_g": "0",
       "Supplier": "DigiKey / Mouser",
       "Supplier_PN_or_Search": "Leader Tech F-100-B series or Laird Soft Shield 325",
       "Est_Unit_Price_USD": "8.00",
-      "Est_Total_Price_USD": "32.00",
-      "Notes": "Rev R new; one per cage; seals all 4 lid sides ≥60 dB at 500 MHz; compress to 1 mm in lid rebate groove"
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): qty -> 0, all nodes foil-pouched; cages retired *** Rev R new; one per cage; seals all 4 lid sides ≥60 dB at 500 MHz; compress to 1 mm in lid rebate groove"
     },
     {
       "Ref": "FAR-FAN-40",
       "Description": "40×40×10 mm axial fan 5 V DC 4.8 CFM — Faraday cage internal cooling",
       "Category": "EMC/Shielding",
-      "Qty": "4",
+      "Qty": "0",
       "Unit_Mass_g": "17",
-      "Total_Mass_g": "68",
+      "Total_Mass_g": "0",
       "Supplier": "DigiKey / Mouser",
       "Supplier_PN_or_Search": "Sunon ME40101V1-000U-A99 or equiv 40mm 5V fan",
       "Est_Unit_Price_USD": "6.00",
-      "Est_Total_Price_USD": "24.00",
-      "Notes": "Rev R new; one per cage; mounts on aft fan-face panel; inlet + outlet each covered by FAR-EMI-VENT-40; powered from Flight Engineer 5 V rail via FAR-FT-PANEL"
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): qty -> 0, all nodes foil-pouched; cages retired *** Rev R new; one per cage; mounts on aft fan-face panel; inlet + outlet each covered by FAR-EMI-VENT-40; powered from Flight Engineer 5 V rail via FAR-FT-PANEL"
     },
     {
       "Ref": "FAR-EMI-VENT-40",
       "Description": "40×40×6 mm aluminum honeycomb EMI vent panel — cage ventilation",
       "Category": "EMC/Shielding",
-      "Qty": "8",
+      "Qty": "0",
       "Unit_Mass_g": "8",
-      "Total_Mass_g": "64",
+      "Total_Mass_g": "0",
       "Supplier": "Laird Technologies / custom machined",
       "Supplier_PN_or_Search": "Laird 1-600600 series or custom-cut Al honeycomb stock",
       "Est_Unit_Price_USD": "12.00",
-      "Est_Total_Price_USD": "96.00",
-      "Notes": "Rev R new; two per cage (fan inlet + fan outlet); ~3 mm hexagonal cell 6 mm depth; L/d≈2.0 → ≥35 dB attenuation at 1 GHz (MIL-HDBK-419A §1.6)"
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): qty -> 0, all nodes foil-pouched; cages retired *** Rev R new; two per cage (fan inlet + fan outlet); ~3 mm hexagonal cell 6 mm depth; L/d≈2.0 → ≥35 dB attenuation at 1 GHz (MIL-HDBK-419A §1.6)"
     },
     {
       "Ref": "FAR-BOND-STRAP",
@@ -2165,14 +2165,14 @@
       "Ref": "FAR-FT-PANEL",
       "Description": "EMI-filtered signal feed-through panel PCB 55×35 mm — all cage cable penetrations",
       "Category": "EMC/Shielding",
-      "Qty": "4",
+      "Qty": "0",
       "Unit_Mass_g": "8",
-      "Total_Mass_g": "32",
+      "Total_Mass_g": "0",
       "Supplier": "JLCPCB (fab from project gerbers)",
       "Supplier_PN_or_Search": "FAR-FT-PANEL gerbers (design pending — see TODO §1.2)",
       "Est_Unit_Price_USD": "15.00",
-      "Est_Total_Price_USD": "60.00",
-      "Notes": "Rev R new; one per cage; 5 kV LC π-filter + TVS on all penetrations: CAN FD ×2 (JST-GH 4P) + RS-485 ×1 (JST-GH 3P) + Ethernet ×1 (RJ45 mag) + power ×1 (JST-GH 2P); continuous with Pilot/B-2 5 kV isolation chain"
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): qty -> 0, all nodes foil-pouched; cage feed-through retired *** Rev R new; one per cage; 5 kV LC π-filter + TVS on all penetrations: CAN FD ×2 (JST-GH 4P) + RS-485 ×1 (JST-GH 3P) + Ethernet ×1 (RJ45 mag) + power ×1 (JST-GH 2P); continuous with Pilot/B-2 5 kV isolation chain"
     },
     {
       "Ref": "FAR-FERRITE-4MM",
@@ -2566,16 +2566,29 @@
     },
     {
       "Ref": "PRINT-DOOR-LATCH-BRACKET",
-      "Description": "door_latch_bracket_{port,stbd}.stl -- bell-crank + pivot bracket + mortise, cargo door positive latch, CF-PETG",
+      "Description": "door_latch_bracket_{port,stbd}.stl -- FIXED pivot bracket (pin seat); port carries the latch mortise, stbd is drive-only, CF-PETG",
       "Category": "Printed Part",
       "Qty": "2",
-      "Unit_Mass_g": "3.55",
-      "Total_Mass_g": "7.1",
+      "Unit_Mass_g": "1.81",
+      "Total_Mass_g": "3.61",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev A 2026-09-21 (docs/CARGO_DOOR_LATCH_SPEC.md): closes the DOOR-LATCH finding (docs/CARGO_DOOR_GATEWAY_SPEC.md) -- servo-driven bell-crank hook engages a mortise on this FIXED bracket; the hook/lip mechanical interference, not the SG90 gear train, carries the door-closed load (governing case: aero pressure at V_max=87kt, REF-FAA-002; SG90 stall torque 0.177 N.m < 0.202 N.m door-opening moment even at FOS=1). FOS_bearing=10.4, FOS_shear~3.0 (order-of-magnitude, FDM anisotropic -- bench pull-test required, DOOR-LATCH-1). One bracket per door, mounted at Y=39.33 (2nd hinge knuckle station). Print with a >=1.5mm hook-root fillet (not modelled in the CSG source -- DOOR-LATCH-4) and orient so the governing shear plane runs with the layer lines."
+      "Notes": "Rev B 2026-10-26 (docs/CARGO_DOOR_LATCH_SPEC.md section 0a): ONE latch (port) holds both lapped doors; port 2.33 g (mortise), stbd 1.28 g (no mortise), measured from the STLs. The bell-crank is now its own part (PRINT-DOOR-LATCH-CRANK). Bonded to the flank at the 2nd hinge-knuckle station, pivot 2 mm inboard of the hinge line (clear of the payload keep-out)."
+    },
+    {
+      "Ref": "PRINT-DOOR-LATCH-CRANK",
+      "Description": "door_latch_crank_{port,stbd}.stl -- door bell-crank on the PIN-3X10 pivot; port has the latch hook (7 x 3.5 mm root), stbd is drive-only, CF-PETG",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "0.79",
+      "Total_Mass_g": "1.58",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev B 2026-10-26 (docs/CARGO_DOOR_LATCH_SPEC.md section 0a): port 0.96 g, stbd 0.62 g. Port hook carries both doors: FOS_shear 2.97, FOS_bearing 8.8 at FOS 3.0 on the 87 kt door moment (order-of-magnitude, FDM anisotropic -- bench pull test, DOOR-LATCH-1). Print with the >=1.5 mm hook-root fillet."
     },
     {
       "Ref": "PRINT-DOOR-HORN",
@@ -2618,16 +2631,16 @@
     },
     {
       "Ref": "SHAFT-TILT-4MM",
-      "Description": "4mm OD x ~250mm ground steel shaft — nacelle tilt drive, fuselage to wingtip",
+      "Description": "4mm OD x 0.5mm wall x ~250mm steel tube -- nacelle tilt drive, fuselage to wingtip",
       "Category": "Structural Hardware",
       "Qty": "2",
-      "Unit_Mass_g": "24.7",
-      "Total_Mass_g": "49.4",
+      "Unit_Mass_g": "10.8",
+      "Total_Mass_g": "21.6",
       "Supplier": "McMaster-Carr / Misumi",
       "Supplier_PN_or_Search": "ground shaft 4mm OD 250mm precision steel",
       "Est_Unit_Price_USD": "6.00",
       "Est_Total_Price_USD": "12.00",
-      "Notes": "Rev T1 (2026-08-30). Carries tilt torque along chord station 53.6, parallel to the spar, from the fuselage gear pair (GEAR-TILT-FUS-38T) to the tip pinion (WA-R8). Spur pairs at both ends, no right-angle stage -- the shaft is already parallel to the tilt axis, which is the kinematic argument that selected it over a spanwise belt (plan 004 KTD1). LOADS: 0.050 N.m (0.44 lbf.in), from the 0.177 N.m grounded nacelle requirement divided by the 3.571 tip reduction. Wind-up 0.27 deg over the installed length (J=25.13 mm^4, G=79 GPa) = 0.076 deg referred to the nacelle. Runs in BUSH-TILT-4MM at the fuselage wall and at the wing tip rib. FERROMAGNETIC and it moves -- it sits inside the AK7455 non-ferrous keep-out envelope, so the in-situ INL calibration must be run with the shaft and pinion INSTALLED (docs/TILT_DRIVE_CONTROL_SPEC.md SS7.5). Mass: 4mm steel, 250mm, 7.85 g/cm^3 = 24.7 g/side."
+      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): solid 24.7 g -> tube 10.8 g; torsional stiffness 0.68 of solid; gears/bushings on the unchanged 4 mm OD *** Rev T1 (2026-08-30). Carries tilt torque along chord station 53.6, parallel to the spar, from the fuselage gear pair (GEAR-TILT-FUS-38T) to the tip pinion (WA-R8). Spur pairs at both ends, no right-angle stage -- the shaft is already parallel to the tilt axis, which is the kinematic argument that selected it over a spanwise belt (plan 004 KTD1). LOADS: 0.050 N.m (0.44 lbf.in), from the 0.177 N.m grounded nacelle requirement divided by the 3.571 tip reduction. Wind-up 0.27 deg over the installed length (J=25.13 mm^4, G=79 GPa) = 0.076 deg referred to the nacelle. Runs in BUSH-TILT-4MM at the fuselage wall and at the wing tip rib. FERROMAGNETIC and it moves -- it sits inside the AK7455 non-ferrous keep-out envelope, so the in-situ INL calibration must be run with the shaft and pinion INSTALLED (docs/TILT_DRIVE_CONTROL_SPEC.md SS7.5). Mass: 4mm steel, 250mm, 7.85 g/cm^3 = 24.7 g/side."
     },
     {
       "Ref": "BUSH-TILT-4MM",

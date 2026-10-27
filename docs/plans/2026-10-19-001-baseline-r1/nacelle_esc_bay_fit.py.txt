@@ -1,0 +1,35 @@
+Hinged ESC bay fit — Open-Secure-ESC in the Rev T4b hollowed pod
+
+  board: 23.0 mm power + 10.0 mm signal = 33.0 mm folded, 1.6 mm PCB
+    sagitta at R 33, one flat board   33.0 mm wide:  4.42 mm
+    sagitta at R 33, power panel      23.0 mm wide:  2.07 mm
+    sagitta at R 33, signal panel     10.0 mm wide:  0.38 mm
+
+  stack height 4.0 mm (PCB 1.6 + 2.4 of parts and mounting)
+  + cooling flow lane 1.0 mm, + cover and clearance 2.9 mm
+  => the pocket must hold 5.0 mm from the seat, and the skin must clear 7.9 mm in total
+
+   hinge az   Z from    Z to   length    d_in  centroid
+         68     74.0   116.0     44.0   30.25      95.0
+        248     74.0   116.0     44.0   30.25      95.0
+         67     74.0   114.0     42.0   30.25      94.0
+        247     74.0   114.0     42.0   30.25      94.0
+         66     74.0   112.0     40.0   30.25      93.0
+        246     74.0   112.0     40.0   30.25      93.0
+         69     90.0   116.0     28.0   30.25     103.0
+         70     92.0   118.0     28.0   30.25     105.0
+        249     90.0   116.0     28.0   30.25     103.0
+        250     92.0   118.0     28.0   30.25     105.0
+         71     94.0   114.0     22.0   30.25     104.0
+        251     94.0   114.0     22.0   30.25     104.0
+
+  BEST: hinge at azimuth 68 deg, Z 74-116 (44 mm), inner face at R 30.25
+    power panel centre  az   88.82 deg  (half-angle 20.82)
+    signal panel centre az   58.61 deg  (half-angle 9.39)
+    fold angle 30.20 deg — panels at 149.8 deg to each other
+    angular footprint 60.4 deg, az 49.2 .. 109.6
+    board area 1452 mm2 vs as-built 32.0 x 66.1 = 2115 mm2 (69 %)
+
+  SECOND BAY: hinge azimuth 248 deg (180 deg away), Z 74-116 (44 mm), R 30.25
+
+--- stderr ---

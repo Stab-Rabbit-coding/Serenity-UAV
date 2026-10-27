@@ -209,10 +209,14 @@ def tip_reach(flap_len: float) -> float:
     return ROT_ASSY_TIP_Z - (BUILT_FLAP_LEN - flap_len)
 
 
-WING_SPAR_HULL_Z = 66.851  # [mm] built spar height (merge_cargo_interior.py
-# WING_SPAR_Z, Rev T1c station 28)
-GROUND_PLANES = {"1.5 in gear (ACTIVE default)": -38.1,
-                 "3.0 in gear (kept, not wired in)": -80.0}
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import hull_datums as hd  # noqa: E402  aircraft datum R2 (2026-10-19)
+WING_SPAR_HULL_Z = hd.SPAR_Z  # [mm] built spar height (R1 66.851)
+# Ground plane per gear variant, aircraft datum: the 3.0 in flight gear IS the
+# datum ground (Z 0); the retired 1.5 in gear stands the belly 41.9 mm lower.
+# (Keys kept for the scripts that index them.)
+GROUND_PLANES = {"1.5 in gear (ACTIVE default)": hd.BELLY_Z - 38.1,
+                 "3.0 in gear (kept, not wired in)": hd.GROUND_Z_3IN}
 
 #: Deleted at Rev T4, kept so the delta is legible rather than implied.
 DELETED = [

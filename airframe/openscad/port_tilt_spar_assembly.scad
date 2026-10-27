@@ -59,6 +59,7 @@
 $fn = 48;
 
 use <fuselage/cargo/cargo_spar_drive.scad>   // root_bearing_seat/servo_mount/…
+include <hull_datums.scad>                   // aircraft datum R2: SPAR_Y, SPAR_Z, X_CL
 
 // ── Spar axis (hull frame) ───────────────────────────────────────────────────
 // REV S1c (2026-08-18): these were still the pre-Rev-S1b values (the 22.0 mm
@@ -69,24 +70,29 @@ use <fuselage/cargo/cargo_spar_drive.scad>   // root_bearing_seat/servo_mount/�
 // Both values now match airframe/blender-scripts/merge_cargo_interior.py
 // (WING_SPAR_Y / WING_SPAR_Z), which is the fuselage-side authority for the
 // same physical rod.
-SPAR_Y   = 38.15; // hull Y (chord-station 45.15 = 35 % root chord → camber midline)
-SPAR_Z   = 68.42; // hull Z (camber midline 10.41 + chord line 58.01)
-SPAR_X0  = -96;   // cargo (root-bearing) end
-SPAR_X1  =  88;   // nacelle outboard end (through the outboard pivot boss)
+// AIRCRAFT DATUM R2 (2026-10-20, plan 2026-10-19-001): SPAR_Y / SPAR_Z now come
+// from the generated hull_datums.scad include (the spar line = tilt axis, Rev T6;
+// R2 326.700 / 146.851 = R1 21.000 / 66.851).  This overlay had still typed the
+// Rev S1b values (R1 38.15 / 68.42), which no longer match the fuselage authority
+// (merge_cargo_interior.py WING_SPAR_Y/Z); importing the datum corrects both.
+// Hull X stations below are R2 (R1 value in brackets).
+SPAR_X0  = 73.85;  // cargo (root-bearing) end                         [R1 -96]
+SPAR_X1  = 257.85; // nacelle outboard end (through the outboard boss)  [R1 88]
 SPAR_OD  = 8.0;
 
 // Feature X-stations along the spar (hull X):
-X_ROOT_BRG = -90;   // F688ZZ root bearing (cargo)          [x_root −81 + inb·9]
-X_TIP_BRG  =   4;   // MF128ZZ wingtip bearing (wing tip pad)
-X_RING     =   9;   // Ø22 ring magnet at nacelle inboard face
-X_SENSOR   =   3;   // AK7455 PCB on the wing pad, chord-aft of the spar
+X_ROOT_BRG = 79.85;  // F688ZZ root bearing (cargo)  [x_root 88.85 + inb·9; R1 -90]
+X_TIP_BRG  = 173.85; // MF128ZZ wingtip bearing (wing tip pad)          [R1 4]
+X_RING     = 178.85; // Ø22 ring magnet at nacelle inboard face         [R1 9]
+X_SENSOR   = 172.85; // AK7455 PCB on the wing pad, chord-aft of spar   [R1 3]
 
 // ── Nacelle pose (bake) + spar-alignment shift ───────────────────────────────
 // Baked pose (tools/bake_hull_frame.py Nacelle_Port): 270° about +X then
 // translate, so nacelle-LOCAL (x,y,z) → hull (x+47, z−64, −y+63).  The pod is
 // modelled with the duct axis on local +Z, intake at local Z=0; the CG pivot /
 // spar axis is at local Z = PIVOT_ZLOC.
-NAC_BAKE   = [47, -64, 63];   // baked translation (rotation = 270° about +X)
+NAC_BAKE   = [216.85, 241.70, 143.0]; // baked translation, R2 (bake_hull_frame.py
+                                      //   Nacelle_Port; R1 [47, -64, 63])
 PIVOT_ZLOC = 107.5;           // nacelle-local duct Z of the CG pivot / spar axis.
                               //   CORRECTED 2026-09-09: this file carried a
                               //   STALE 111.5 (Rev T CG re-derive 2026-07-19,
@@ -120,7 +126,7 @@ PIVOT_ZLOC = 107.5;           // nacelle-local duct Z of the CG pivot / spar axi
 JOINT_GAP_X   = 1;                                    // [mm] → ~4 mm joint gap (min)
 PIVOT_Y_BAKED = PIVOT_ZLOC + NAC_BAKE[1];             // pre-shift pivot hull Y (= 43.5
                                                       //   at PIVOT_ZLOC 107.5; was 47.5)
-NAC_D = [JOINT_GAP_X, SPAR_Y - PIVOT_Y_BAKED, SPAR_Z - 63.2];  // = [+1, -5.35, +5.22]
+NAC_D = [JOINT_GAP_X, SPAR_Y - PIVOT_Y_BAKED, SPAR_Z - 143.2];  // bore-centre baked Z, R2 (R1 63.2)
 // Rev S1c: the trailing comment used to read [+5, -32.5, +2.8].  Two of the
 // three were stale: the Y shift followed the spar from 15 to 38.15 (so the pod
 // slides 23.15 mm LESS far forward — the point of moving the spar aft), and the
@@ -168,16 +174,17 @@ module torus(loop_r, tube_r, ang = 360) {
 color([0.82, 0.72, 0.55, 0.30])                          // translucent tan
 intersection() {
     import("../stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl", convexity = 6);
-    translate([-115, -15, 18]) cube([80, 120, 90]);      // port root region only
+    translate([54.85, 290.7, 98]) cube([80, 120, 90]);   // port root region only (R1 [-115, -15, 18])
 }
 
 // ── Cargo spar-drive ACCESSORIES (port), each a distinct colour ──────────────
 //   PORT args: spar_y=15, spar_z=66, x_root=-81, inb=-1, tenon_y=57.5,
 //   tenon_z=58, cable_y=55, wall_x=-86  (matches cargo_spar_drive.scad PORT[]).
-color([0.90, 0.55, 0.25, 0.85]) wing_root_receiver(15, 66, -81, -1, 57.5, 58); // orange
-color([0.95, 0.80, 0.20])       root_bearing_seat(15, 66, -81, -1);            // gold boss
-color([0.65, 0.35, 0.80, 0.9])  servo_mount(15, 66, -81, -1, -86);             // purple
-color([0.20, 0.70, 0.75])       cableway_ends(5, 66, -1, -86);                 // teal tubes (fwd)
+// R2 arguments; R1 were (15, 66, -81, -1, 57.5, 58), wall_x -86, cable_y 5.
+color([0.90, 0.55, 0.25, 0.85]) wing_root_receiver(320.7, 146, 88.85, -1, 363.2, 138); // orange
+color([0.95, 0.80, 0.20])       root_bearing_seat(320.7, 146, 88.85, -1);             // gold boss
+color([0.65, 0.35, 0.80, 0.9])  servo_mount(320.7, 146, 88.85, -1, 83.85);            // purple
+color([0.20, 0.70, 0.75])       cableway_ends(310.7, 146, -1, 83.85);                 // teal tubes
 
 // =============================================================================
 // 2) PORT WING (baked hull-frame STL)
@@ -324,12 +331,12 @@ color([0.90, 0.20, 0.20])
 // nav-light 3-core).  SOURCE follow-up: move wing CABLE_BORE_XFR 0.48c → ~0.10c
 // with a forward channel through the Ø29.5 wingtip pad, keeping the off-axis
 // AK7455 Hall pocket (chord-aft of the spar) clear.
-CW_GROMMET = [10, 8, 66];   // nacelle harness grommet (hull), fwd of the pivot boss
+CW_GROMMET = [179.85, 313.7, 146];  // nacelle harness grommet, fwd of the pivot boss (R1 [10, 8, 66])
 
 // service-loop slack coil (Ø14 loop of Ø4 harness), axis ≈ spar so nacelle tilt
 // winds/unwinds it — teal
 color([0.20, 0.62, 0.68])
-    translate([6, 2, 66]) rotate([0, 90, 0]) torus(7, 2, 300);
+    translate([175.85, 307.7, 146]) rotate([0, 90, 0]) torus(7, 2, 300);  // R1 [6, 2, 66]
 // nacelle harness grommet — cable pass-through boss on the inboard face — teal
 color([0.15, 0.52, 0.58])
     translate(CW_GROMMET) rotate([0, 90, 0])
