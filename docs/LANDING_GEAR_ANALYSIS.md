@@ -18,6 +18,16 @@ absorption retained
 
 *"She's tore up plenty, but she'll fly true." — Skipper, on a ship that's seen worse landings than this one's rated for.*
 
+> **LOAD PATH superseded 2026-10-27 (LG-LOADPATH-A1B).** The R6 same-side
+> wire rows described below put about 2P through the hip pin
+> (`docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` §1). The gear is now the Option A1b
+> balanced couple (6061-T6 tension fuses + A228 spring wires, CF backbone).
+> Sections describing the R6 bowed ductile wire, the boss carrier and the
+> printed clevis ears are retained as history. Current sizing:
+> `tools/landing_gear_r6_sizing.py` `a1b_sizing()`. Plan:
+> `docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md`.
+<!-- markdownlint-disable-next-line MD028 -->
+
 > **Rev R5** (vertical post + 4-wire brace) **superseded 2026-07-21.** The
 > R5 post geometry — like every revision before it — descended from the
 > misubisu Thingiverse leg, which does not resemble the canonical Serenity

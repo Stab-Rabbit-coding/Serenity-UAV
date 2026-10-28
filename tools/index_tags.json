@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-26",
+  "generated": "2026-10-27",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -772,6 +772,27 @@
       "description": "verify_shells.py \u2014 watertight / no-breach gate for the 2 mm fuselage shells.",
       "tags": [
         "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/datasheets/RW-PS-070-Stock-Plate-Panel-Angle-Tolerance-Sheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/datasheets/Rhino-1411-4111-Infusion-Resin-TDS.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/datasheets/T700GDataSheet.pdf": {
+      "description": "PDF document",
+      "tags": [
         "structural"
       ],
       "archived": false
@@ -2673,6 +2694,24 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_1_5in_hull_legs",
       "tags": [
@@ -2719,7 +2758,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_aft-port",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2755,7 +2794,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_fore-port",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2773,7 +2812,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_fore-stbd",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2791,7 +2830,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_hull_legs",
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2800,7 +2839,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_stance.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_hull_stance",
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2827,6 +2866,15 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
@@ -13909,7 +13957,7 @@
       "archived": false
     },
     "current-specification/bom_revT.csv": {
-      "description": "Bill of materials, CSV (212 items)",
+      "description": "Bill of materials, CSV (217 items)",
       "tags": [
         "bom",
         "specification"
@@ -13917,7 +13965,7 @@
       "archived": false
     },
     "current-specification/bom_revT.json": {
-      "description": "Bill of materials, JSON (212 items)",
+      "description": "Bill of materials, JSON (217 items)",
       "tags": [
         "bom",
         "specification"
@@ -15381,6 +15429,13 @@
         "documentation",
         "emi-hardening",
         "redundancy-failover"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md": {
+      "description": "Landing Gear Option A (Balanced Couple) - Plan",
+      "tags": [
+        "documentation"
       ],
       "archived": false
     },
@@ -18149,6 +18204,14 @@
       ],
       "archived": false
     },
+    "tools/bom_edit_lg_a1b.py": {
+      "description": "LG-LOADPATH-A1B BOM edit: balanced-couple gear (owner 2026-10-27).",
+      "tags": [
+        "bom",
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/bom_edit_tilt_controller.py": {
       "description": "Swap the tilt-controller BOM row: retire LS-TILT-TC, add OSESC-TILT-TC.",
       "tags": [
@@ -18335,6 +18398,13 @@
       ],
       "archived": false
     },
+    "tools/generate_lg_a1b_housing.py": {
+      "description": "Place the LG Option A1b flank-housing envelope at the fore corners.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/generate_lg_bays.py": {
       "description": "Generate the four CONFORMING 3.0 in landing-gear bays (BHD-02, 2026-10-10).",
       "tags": [
@@ -18472,6 +18542,20 @@
       ],
       "archived": false
     },
+    "tools/lg_a1b_census.py": {
+      "description": "LG Option A1b 3-D census: rendered members + CF backbone vs hull, keep-outs, leg.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/lg_a1b_packaging.py": {
+      "description": "LG Option A1b packaging SWEEP (plan 2026-10-27-001 U1) -- exploratory.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/lg_bellcrank_fbd.py": {
       "description": "Landing-gear bellcrank load path: free-body diagrams of three configurations.",
       "tags": [
@@ -18489,6 +18573,13 @@
     },
     "tools/lg_corners.py": {
       "description": "The landing-gear corner stations, read from their single source.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/lg_couple_options.py": {
+      "description": "Option A sub-forms: free-body, materials and packaging trade (LG-LOADPATH).",
       "tags": [
         "build-tooling"
       ],
@@ -19196,6 +19287,7 @@
       "docs/plans/2026-10-26-001-feat-split-battery-head-rail-plan.md",
       "docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md",
       "docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md",
+      "docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -20004,6 +20096,9 @@
       "airframe/blender-scripts/repair_shells_for_scad.py",
       "airframe/blender-scripts/serenity_render_views.py",
       "airframe/blender-scripts/verify_shells.py",
+      "airframe/datasheets/RW-PS-070-Stock-Plate-Panel-Angle-Tolerance-Sheet.pdf",
+      "airframe/datasheets/Rhino-1411-4111-Infusion-Resin-TDS.pdf",
+      "airframe/datasheets/T700GDataSheet.pdf",
       "airframe/diagrams/cargo-rear.png",
       "airframe/diagrams/cargo-ringframe-fit1.png",
       "airframe/diagrams/cargo-ringframe-fit2.png",
@@ -20231,6 +20326,8 @@
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/inara_access_cover.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
@@ -20249,6 +20346,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_bay.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_nominal.stl",
@@ -20545,6 +20643,8 @@
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/inara_access_cover.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
@@ -20563,6 +20663,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_bay.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_nominal.stl",
@@ -21138,6 +21239,7 @@
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
       "tools/bom_edit_door_rework.py",
+      "tools/bom_edit_lg_a1b.py",
       "tools/bom_edit_tilt_controller.py",
       "tools/bom_edit_weight_pass_13lbm.py",
       "tools/compact_bom_entries.py"
@@ -21146,6 +21248,8 @@
       "airframe/landing-gear/HANDOFF.md",
       "airframe/landing-gear/TODO.md",
       "airframe/landing-gear/WBS.md",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
@@ -21164,6 +21268,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_bay.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_nominal.stl",
@@ -23712,6 +23817,7 @@
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
       "tools/bom_edit_door_rework.py",
+      "tools/bom_edit_lg_a1b.py",
       "tools/bom_edit_tilt_controller.py",
       "tools/bom_edit_weight_pass_13lbm.py",
       "tools/build_head_shell.py",
@@ -23737,6 +23843,7 @@
       "tools/frame_inventory.py",
       "tools/gen_cargo_void_formers.py",
       "tools/gen_todo_from_wbs.py",
+      "tools/generate_lg_a1b_housing.py",
       "tools/generate_lg_bays.py",
       "tools/hull_datums.py",
       "tools/import-specctra-ses.py",
@@ -23754,9 +23861,12 @@
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",
+      "tools/lg_a1b_census.py",
+      "tools/lg_a1b_packaging.py",
       "tools/lg_bellcrank_fbd.py",
       "tools/lg_collar_integrity.py",
       "tools/lg_corners.py",
+      "tools/lg_couple_options.py",
       "tools/lg_fuse_material.py",
       "tools/lg_thigh_variants.py",
       "tools/lg_wire_layout_study.py",
