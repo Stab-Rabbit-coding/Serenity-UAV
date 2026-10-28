@@ -18289,6 +18289,13 @@
       ],
       "archived": false
     },
+    "tools/cg_mass_reduction_study.py": {
+      "description": "cg_mass_reduction_study.py -- rank mass reductions aft of the hover thrust",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/cg_relocation_study.py": {
       "description": "cg_relocation_study.py -- move equipment forward until the hover CG sits on",
       "tags": [
@@ -23858,6 +23865,7 @@
       "tools/cargo_bay_envelope.py",
       "tools/cargo_bulkhead_context.py",
       "tools/cargo_layout_fit.py",
+      "tools/cg_mass_reduction_study.py",
       "tools/cg_relocation_study.py",
       "tools/check_datum_drift.py",
       "tools/check_tacco_envelope_sync.py",
