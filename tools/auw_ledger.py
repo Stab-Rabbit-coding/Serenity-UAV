@@ -30,7 +30,7 @@ listed as GAP rows with a stated estimate, and reported as their own subtotal.
 
 Outputs: a table, three configurations (hover / cargo mission / heaviest),
 CG, pitch radius of gyration about the CG, and hover T/W against the owner
-thrust requirement of 2135 gf per fan [REF-EDF-003].  --write stores the
+thrust of 2370 gf per fan (QF2822-2300KV) [REF-EDF-003].  --write stores the
 result in current-specification/auw_ledger.json, which
 tools/landing_gear_r6_sizing.py reads; --check fails if that file is stale.
 
@@ -86,9 +86,10 @@ PIVOT = {s: (bhf.COMPONENTS[f"Nacelle64_{s.capitalize()}"][1][0], hd.SPAR_Y, hd.
 # docs/NACELLE_64MM_VERIFICATION.md SS5b (tools/nacelle_tilt_dynamics.py).
 I_NACELLE_KGM2 = 2.74e-3
 
-# Thrust requirement per fan, owner (WBS NAC-64-ESC-80A.m): 2135 gf, which is
-# the QF2822-2400KV row at 22.2 V of the QX manual sheet [REF-EDF-003].
-THRUST_PER_FAN_GF = 2135.0
+# Thrust per fan, owner 2026-10-28: the flight article is the QF2822-2300KV,
+# 2370 gf at 24 V, 100 % throttle, 57.0 A (QX 2300KV manual sheet, recommended
+# ESC 80 A) [REF-EDF-003, second sheet].  Was 2135 gf (2400KV at 22.2 V).
+THRUST_PER_FAN_GF = 2370.0
 N_FANS = 4
 PAYLOAD_G = 226.8         # 8.0 oz mission payload, README.md "Payload capacity"
 T_W_FLOOR = 1.2           # WA-R18 hover floor; owner D4 still to confirm one number
@@ -117,6 +118,20 @@ PAYLOAD_ST = ((X_CL, clf.HOIST_Y, clf.DOOR_CROWN_Z + 38.1),
 TILT_ST = {"port": ((45.85, 353.3, 181.0), "tilt bracket centroid (placed STL)"),
            "stbd": ((-45.15, 353.3, 181.0), "tilt bracket centroid (placed STL)")}  # R2
 SHAFT_ST = ((X_CL, clf.SHAFT_Y, clf.SHAFT_Z), "cargo_layout_fit SHAFT_Y/Z")
+# Per-part tilt-drive stations from the cargo_layout_fit solids (2026-10-28):
+# the 20D motor body points FORWARD from its face plate (centre ~2 mm ahead of
+# the spar), not at the worm where TILT_ST lumped it (29 mm aft).  Port X
+# shown; stbd mirrors.  Parts not listed here keep TILT_ST.
+_MOT_Y = clf.MOTOR_FACE_Y - clf.MOTOR_L / 2
+_SOL_Y = clf.BRAKE_SOL_Y0 + clf.BRAKE_SOL_L / 2
+_TCB = (clf.BOARD_X0 + clf.BOARD_T / 2, clf.BOARD_Y0 + clf.BOARD_L / 2,
+        clf.BOARD_Z0 + clf.BOARD_W / 2)
+TILT_PART_ST = {
+    "GM-TILT-20D": ((clf.WORM_X, _MOT_Y, clf.WORM_Z), "cargo_layout_fit motor solid centre"),
+    "SOL-TILT-BRAKE": ((clf.BRAKE_SOL_X, _SOL_Y, clf.WORM_Z),
+                       "cargo_layout_fit brake solenoid solid centre"),
+    "OSESC-TILT-TC": (_TCB, "cargo_layout_fit tilt controller board centre"),
+}
 SPAR_ST = ((X_CL, hd.SPAR_Y, hd.SPAR_Z), "wing spar station, both sides (sym)")
 DOOR_ST = ((X_CL, 360.7, 88.0), "clamshell door aperture Y 2..108")
 GW_DOOR_ST = ((X_CL, 305.7, 90.0), "ESTIMATE: fwd belly slab (CARGO_DOOR_GATEWAY_SPEC)")
@@ -229,7 +244,7 @@ INSTALLED: dict[str, tuple[int, Any]] = {
     "ENC-AK7455-SPOOL": (1, WINCH_ST),
     "FET-AO3400": (1, WINCH_ST),
     "DIODE-SS34": (1, WINCH_ST),
-    "HX711-LC": (1, WINCH_ST),
+    "LC-ADC": (1, WINCH_ST),  # ADS1231 board, replaced HX711-LC 2026-10-20
     "DYNEEMA-SK75": (1, WINCH_ST),
     "PRINT-CARGO-WINCH-PEDESTAL-PORT": (1, WINCH_ST),   # no STL in tree: BOM mass
     "PRINT-CARGO-WINCH-PEDESTAL-STBD": (1, WINCH_ST),
@@ -448,6 +463,9 @@ def station_items(bom: dict[str, dict]) -> list[Item]:
                                   f"{msrc}; at the {side} nacelle pivot", "BOM"))
         elif st == "tilt":
             for side, (p, s) in TILT_ST.items():
+                if ref in TILT_PART_ST:
+                    (px, py, pz), s = TILT_PART_ST[ref]
+                    p = (abs(px) if side == "port" else -abs(px), py, pz)
                 items.append(Item(f"{ref} ({side})", ref, unit * qty / 2, p, None,
                                   f"{msrc}; {s}", "BOM"))
         elif st == "nodes":

@@ -30,9 +30,12 @@ import middle_layout_fit as mlf  # noqa: E402
 
 PIVOT_Y = crs.PIVOT_Y
 # Baseline: rail lever + routed harness (cg_relocation_study, commit 2c4ebb9f)
-BASE_AUW_G = 6232.0
-BASE_OFFSET_MM = 16.3
-BASE_MOMENT = 101694.0  # g.mm, hover
+# Baseline = cg_relocation_study.py "cell 2 pulled forward" hover line, rerun
+# 2026-10-28 with the QF2822-2300KV flight article (140 g motors) and the
+# corrected aft-stbd gear bay winding.  Update when that study is rerun.
+BASE_AUW_G = 6310.0
+BASE_OFFSET_MM = 16.5
+BASE_MOMENT = BASE_AUW_G * BASE_OFFSET_MM  # g.mm, hover
 
 # Skin plate deflection scales with t^-3 (plate bending); the 2.0 mm skin's
 # figure, 0.054 mm at 28 m/s against a 0.5 mm limit, is recorded in

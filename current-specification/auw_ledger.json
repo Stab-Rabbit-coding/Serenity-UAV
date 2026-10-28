@@ -1,48 +1,48 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 65312755.71531494,
-   "T_W": 1.3817788420522563,
+   "I_pitch_gmm2": 65265678.90856712,
+   "T_W": 1.529255470115393,
    "cg": [
-    -0.06817725194196675,
-    350.2299765795821,
-    156.80247141576018
+    -0.0758816044957647,
+    350.030474390997,
+    156.77849515163703
    ],
-   "k_pitch_mm": 102.79910603609748,
-   "mass_g": 6180.439112322892
+   "k_pitch_mm": 102.60730540533856,
+   "mass_g": 6199.095040205851
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 65688903.20113763,
-   "T_W": 1.3599940770571277,
+   "I_pitch_gmm2": 65640764.26511116,
+   "T_W": 1.5052170441191295,
    "cg": [
-    -0.06710238716160616,
-    349.7328831886688,
-    157.3100892575487
+    -0.07468881861414117,
+    349.5379894499302,
+    157.28498623499226
    ],
-   "k_pitch_mm": 102.27878927514026,
-   "mass_g": 6279.439112322892
+   "k_pitch_mm": 102.08976626291792,
+   "mass_g": 6298.095040205851
   },
   "hover_4000": {
-   "I_pitch_gmm2": 65470710.000898,
-   "T_W": 1.4109547656018278,
+   "I_pitch_gmm2": 65421867.81022438,
+   "T_W": 1.5614461061801035,
    "cg": [
-    -0.06961679800385635,
-    349.3031958994473,
-    158.3671567821242
+    -0.07747890276414698,
+    349.102342034471,
+    158.33786784192523
    ],
-   "k_pitch_mm": 104.00426169158635,
-   "mass_g": 6052.639112322891
+   "k_pitch_mm": 103.8056041588263,
+   "mass_g": 6071.2950402058505
   }
  },
  "rows_hover": [
   {
    "cg": [
-    -3.3,
-    129.3,
-    211.9
+    -3.4,
+    130.4,
+    212.0
    ],
    "kind": "PRINT",
-   "mass_g": 177.58,
+   "mass_g": 175.97,
    "name": "head_shell24_2mm_repaired",
    "ref": "PRINT-HEAD-SHELL",
    "source": "MEASURED mesh (hull frame)"
@@ -385,12 +385,12 @@
   },
   {
    "cg": [
-    -69.3,
+    -69.2,
     401.7,
-    127.7
+    127.6
    ],
    "kind": "PRINT",
-   "mass_g": 27.47,
+   "mass_g": 27.54,
    "name": "lg_r6_3_0in_bay_aft-stbd",
    "ref": "PRINT-LG-BAY-PLATE",
    "source": "MEASURED mesh (hull frame)"
@@ -505,12 +505,12 @@
   },
   {
    "cg": [
-    52.0,
-    347.2,
+    49.5,
+    350.2,
     96.4
    ],
    "kind": "PRINT",
-   "mass_g": 2.33,
+   "mass_g": 2.53,
    "name": "door_latch_bracket_port",
    "ref": "PRINT-DOOR-LATCH-BRACKET",
    "source": "MEASURED mesh (hull frame)"
@@ -529,8 +529,8 @@
   },
   {
    "cg": [
-    48.8,
-    346.0,
+    47.4,
+    347.9,
     102.7
    ],
    "kind": "PRINT",
@@ -582,7 +582,7 @@
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 926.38,
+   "mass_g": 936.38,
    "name": "Nacelle port rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
@@ -594,7 +594,7 @@
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 926.38,
+   "mass_g": 936.38,
    "name": "Nacelle stbd rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
@@ -1171,8 +1171,8 @@
    ],
    "kind": "BOM",
    "mass_g": 3.0,
-   "name": "HX711-LC",
-   "ref": "HX711-LC",
+   "name": "LC-ADC",
+   "ref": "LC-ADC",
    "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
   },
   {
@@ -1609,75 +1609,75 @@
   },
   {
    "cg": [
-    45.8,
-    353.3,
-    181.0
+    44.6,
+    321.3,
+    182.1
    ],
    "kind": "BOM",
    "mass_g": 44.0,
    "name": "GM-TILT-20D (port)",
    "ref": "GM-TILT-20D",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit motor solid centre"
   },
   {
    "cg": [
-    -45.2,
-    353.3,
-    181.0
+    -44.6,
+    321.3,
+    182.1
    ],
    "kind": "BOM",
    "mass_g": 44.0,
    "name": "GM-TILT-20D (stbd)",
    "ref": "GM-TILT-20D",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit motor solid centre"
   },
   {
    "cg": [
-    45.8,
-    353.3,
-    181.0
+    55.8,
+    382.2,
+    181.2
    ],
    "kind": "BOM",
    "mass_g": 12.0,
    "name": "OSESC-TILT-TC (port)",
    "ref": "OSESC-TILT-TC",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit tilt controller board centre"
   },
   {
    "cg": [
-    -45.2,
-    353.3,
-    181.0
+    -55.8,
+    382.2,
+    181.2
    ],
    "kind": "BOM",
    "mass_g": 12.0,
    "name": "OSESC-TILT-TC (stbd)",
    "ref": "OSESC-TILT-TC",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit tilt controller board centre"
   },
   {
    "cg": [
-    45.8,
-    353.3,
-    181.0
+    43.1,
+    379.8,
+    182.1
    ],
    "kind": "BOM",
    "mass_g": 15.0,
    "name": "SOL-TILT-BRAKE (port)",
    "ref": "SOL-TILT-BRAKE",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit brake solenoid solid centre"
   },
   {
    "cg": [
-    -45.2,
-    353.3,
-    181.0
+    -43.1,
+    379.8,
+    182.1
    ],
    "kind": "BOM",
    "mass_g": 15.0,
    "name": "SOL-TILT-BRAKE (stbd)",
    "ref": "SOL-TILT-BRAKE",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit brake solenoid solid centre"
   },
   {
    "cg": [
@@ -2031,9 +2031,9 @@
  "subtotals_hover_g": {
   "BOM": 2341.584,
   "GAP": 218.8114,
-  "NACELLE": 1852.7585168971268,
-  "PRINT": 1639.4851954257651
+  "NACELLE": 1872.7585168971268,
+  "PRINT": 1638.141123308724
  },
- "thrust_gf": 8540.0,
+ "thrust_gf": 9480.0,
  "unclassified": []
 }
