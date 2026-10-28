@@ -3,7 +3,7 @@ title: Flight Engineer Chin + Shuttle Split - Plan
 type: feat
 date: 2026-10-28
 artifact_contract: ce-unified-plan/v1
-artifact_readiness: requirements-only
+artifact_readiness: implementation-ready
 product_contract_source: ce-brainstorm
 execution: code
 ---
@@ -112,3 +112,226 @@ The FE (225 g with its can) sits in the middle neck at Y 467.7, 141 mm aft of th
 - Which measured envelope and orientation the daughter board uses (the clear volumes also admit a 30 × 40 × 14 mm flat board at X ±54 Z 136–150 and a 12 × 45 × 35 mm on-edge board at X ±45 Z 130–165), decided by the R4 termination study once plan 002 U1 fixes fuse and conductor sizes.
 - How branch telemetry crosses to the chin board: the shared INA226 I²C bus run between boards, or a local bridge onto CAN.
 - Service access to the chin board (doors open, cargo cell and payload out) and whether that is acceptable for routine maintenance.
+
+---
+
+## Planning Contract
+
+**Product Contract preservation:** Product Contract unchanged (R1–R20, AE1–AE4 as resolved in doc review round 1).
+
+### Key Technical Decisions
+
+- KTD1. Run plan 002 U1 (hover-current reconciliation) here as U1, ahead of every sizing unit. (session-settled: user-directed — chosen over blocking on plan 002: the split's fuse, thermal and termination units depend on that one number.) Plan 002 cites this result.
+- KTD2. The R13 CG pre-check (U2) gates all layout work: a FAIL stops the plan before U4 onward. It reuses the routed-harness model in `tools/cg_relocation_study.py`.
+- KTD3. KiCad work partitions the existing FE schematic into three board projects (chin, port daughter, starboard daughter) with inter-board connectors, by targeted injection, not regeneration (`avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md`). The plan ends at net-correct, outlined boards: final placement and routing stay with the owner (avionics/AGENTS.md).
+- KTD4. Fuse and disconnect mounts (R9, R15) are features on the cargo battery cradle and the head-cell rail, generated from the existing single-source tools (`tools/cargo_layout_fit.py`, `tools/gen_head_cell_rail.py`).
+- KTD5. Every new part (low-profile fuses and holders, shunts, inter-board connectors) is checked against AGENTS.md §5 (maker domicile, NDA-free datasheet) and catalogued in `REFERENCES.md` by the unit that selects it.
+- KTD6. Heights and dissipations come from cited datasheets; any value not yet sourced is marked ASSUMED in the budget tool's output, never silently defaulted.
+
+### High-Level Technical Design
+
+```mermaid
+flowchart TD
+    U1[U1 hover current<br/>plan 002 U1] --> U2{U2 CG pre-check<br/>>= 3.0 mm fwd?}
+    U2 -- no --> STOP[stop: reconsider split]
+    U2 -- yes --> U3[U3 relocate node pair<br/>+ bus check]
+    U2 -- yes --> U4[U4 part selection<br/>low-profile fuses, shunts]
+    U4 --> U5[U5 daughter termination study<br/>R4 / R18 fallback]
+    U4 --> U6[U6 height + thermal budget]
+    U4 --> U7[U7 fuse + disconnect mounts<br/>cradle, head rail]
+    U3 --> U8[U8 placed solids + gates]
+    U5 --> U8
+    U6 --> U8
+    U7 --> U8
+    U8 --> U9[U9 KiCad three-board partition]
+    U9 --> U10[U10 ledger close-out]
+```
+
+```mermaid
+flowchart LR
+    HC[head cell] -- lead --> FH1[fuse + disconnect<br/>on head rail]
+    CC[cargo cell] -- lead --> FH2[fuse + disconnect<br/>on cargo cradle]
+    T3[third cell] -- lead --> FH3[fuse + disconnect<br/>inline]
+    FH1 --> CHIN[chin board<br/>combiner, shunt, DSG,<br/>BECs, monitor, trust]
+    FH2 --> CHIN
+    FH3 --> CHIN
+    CHIN -- port bus --> DP[port daughter<br/>2 branches]
+    CHIN -- stbd bus --> DS[stbd daughter<br/>2 branches]
+    DP -- soldered feeders --> EP[port ESCs]
+    DS -- soldered feeders --> ES[stbd ESCs]
+    DP -. telemetry .-> CHIN
+    DS -. telemetry .-> CHIN
+```
+
+---
+
+## Implementation Units
+
+### U1. Reconcile hover current (plan 002 U1)
+
+**Goal:** One cited hover and RTH current that every sizing unit uses.
+**Requirements:** R10; KTD1.
+**Dependencies:** none.
+**Files:** `tools/hover_current.py` (new), `tests/tools/test_hover_current.py` (new), `docs/POWER_DISTRIBUTION.md`, `avionics/kicad/FlightEngineer/FlightEngineer.md`.
+**Approach:**
+1. Derive per-fan current at hover thrust (ledger AUW / 4) from the cited QF2822 thrust-current data [REF-EDF-003], interpolated, with RTH margin.
+2. Reconcile the FE document's 76 A against WBS PWR-CONN-01's ~150 A, and record which one was wrong and why.
+3. Report per-branch continuous, per-side bus and main-bus currents.
+**Patterns to follow:** `tools/flight_envelope_endurance.py` (same thrust-point data).
+**Test scenarios:**
+- At the rated point (2,135 gf), per-fan current reproduces 57.0 A.
+- At the ledger hover thrust, the interpolated current lies between the bracketing table rows.
+- An AUW above the 4-fan rated thrust raises an error, not an extrapolated current.
+**Verification:** one hover and RTH current per branch, side and main bus, cited, in POWER_DISTRIBUTION.md.
+
+### U2. CG pre-check for the split (R13 gate)
+
+**Goal:** Prove or disprove at least 3.0 mm forward of +13.6 mm before any layout.
+**Requirements:** R13, KTD2.
+**Dependencies:** U1 (harness gauges).
+**Files:** `tools/cg_relocation_study.py`, `tests/tools/test_cg_split_estimate.py` (new), `docs/CG_RELOCATION_STUDY.md`.
+**Approach:**
+1. Add the split arrangement: chin board at the chin-node station, daughter boards at Y ~396 X ±36/±51, the node pair in the neck, pouch masses in place of the can.
+2. Re-route the harness for the new endpoints (cell leads to the cradle and rail fuse mounts and on to the chin; side buses; feeders from the daughters).
+3. Print PASS/FAIL against the 3.0 mm margin.
+**Patterns to follow:** the existing routed-harness and arrangement code in `tools/cg_relocation_study.py`.
+**Test scenarios:**
+- The baseline arrangement reproduces +13.63 mm.
+- The split arrangement's moment change equals the sum of its per-item moments.
+- A daughter-board mass 3× higher still reports a deterministic PASS/FAIL, never an exception.
+**Verification:** PASS recorded, or the plan stops with a FAIL report.
+
+### U3. Relocate the chin node pair and check the buses
+
+**Goal:** CN2/CN3 in the middle neck, with bus limits and distribution checked.
+**Requirements:** R2, R3, R19.
+**Dependencies:** U2.
+**Files:** `tools/middle_layout_fit.py`, `tools/cargo_layout_fit.py`, `tools/node_bus_check.py` (new), `tests/tools/test_node_bus_check.py` (new).
+**Approach:**
+1. Place the pair stacked in Z in the neck slot (58 × 22 × 74 mm); remove the chin nodes from the cargo layout.
+2. Compute stub lengths per bus (CAN-FD, RS-485, Ethernet ring) from node stations and compare them against each bus's documented limits in `docs/AVIONICS_PB2_REDESIGN.md`.
+3. Report node distribution (count per section, nearest-neighbour spacing) for R19.
+**Patterns to follow:** `SIMON_*` placement in `tools/middle_layout_fit.py`.
+**Test scenarios:**
+- The pair clears every middle-gate solid.
+- A stub length over its limit is reported as FAIL with the bus named.
+- Termination positions before and after are listed; a change is flagged.
+**Verification:** middle gate PASS; bus check PASS or each exception stated.
+
+### U4. Select low-profile fuses, holders, shunts and inter-board connectors
+
+**Goal:** Real parts that meet U1's currents, R14 heights and §5 sourcing.
+**Requirements:** R10, R14, R15; KTD5, KTD6.
+**Dependencies:** U1.
+**Files:** `REFERENCES.md`, `docs/FE_SPLIT_PARTS.md` (new), `current-specification/bom_revT.csv`, `current-specification/bom_revT.json`.
+**Approach:** For each role (input fuse ×3, branch fuse ×4, main shunt, branch shunts ×4, per-side bus connector or lug, telemetry connector), shortlist at least two candidates with datasheets read, rate them against U1 currents with margin, and record rejects with reasons.
+**Test scenarios:** Test expectation: none -- part selection; verified by the BOM CSV/JSON parity check and the REFERENCES.md entries.
+**Verification:** every role has a selected part with a cited datasheet; BOM parity holds.
+
+### U5. Daughter termination study
+
+**Goal:** Confirm the daughter content fits a measured envelope, or apply the R18 fallback.
+**Requirements:** R4, R18.
+**Dependencies:** U4.
+**Files:** `tools/fe_daughter_fit.py` (new), `tests/tools/test_fe_daughter_fit.py` (new).
+**Approach:**
+1. Build the daughter content (bus landing, two feeder solder pads, two fuses, two shunts and monitors) from U4 footprints and heights.
+2. Pack it into each measured envelope and orientation.
+3. On no fit, re-run with the branch fuses removed (R18) and report.
+**Patterns to follow:** the envelope search in `tools/head_layout_fit.py`.
+**Test scenarios:**
+- The content fits the 20 × 35 × 25 mm envelope, or the tool reports which part over-runs and by how much.
+- With R18 applied, the reduced content is re-checked.
+- Port and starboard results are mirror-identical.
+**Verification:** chosen envelope and orientation recorded, or R18 adopted.
+
+### U6. Height-stack and thermal budget per board
+
+**Goal:** R14 and R16 met for all three boards, with a stated heat path.
+**Requirements:** R14, R16, R20.
+**Dependencies:** U4, U5.
+**Files:** `tools/fe_board_budget.py` (new), `tests/tools/test_fe_board_budget.py` (new), `docs/FE_SPLIT_PARTS.md`.
+**Approach:**
+1. Height stack per board: pouch + tallest back-side part + PCB + tallest top-side part, against the measured Z span (chin capped by the rail at Z 166.35).
+2. Dissipation per part (I²R for shunts and FET RDS(on), fuse drop, BEC efficiency) at U1 currents.
+3. Temperature rise from a stated heat path to the chin floor, cradle or air, against each part's rating with fuse derating.
+4. Projected courtyard fill on the chin board against R20's 70 %.
+**Execution note:** Report every unsourced value as ASSUMED; a PASS that rests on an assumption is reported as provisional.
+**Test scenarios:**
+- A part taller than the remaining Z span fails R14 with its name.
+- The 1 mΩ shunt at 76 A reproduces ≈ 5.8 W.
+- A fill above 70 % on either side fails R20.
+**Verification:** all three boards PASS R14/R16/R20 or each failure is reported.
+
+### U7. Fuse and disconnect mounts on the cradle and head rail
+
+**Goal:** Printed mounts for the input fuses and disconnects at the cells.
+**Requirements:** R9, R15; KTD4.
+**Dependencies:** U4.
+**Files:** `airframe/openscad/fuselage/cargo/battery_cradle.scad`, `tools/cargo_layout_fit.py`, `tools/gen_head_cell_rail.py`, `airframe/stls/fuselage/head/head_cell_rail.stl`.
+**Approach:** Add holder pads and lead-retention features sized from U4 parts, at stations that keep the leads short and clear of the sliding band; regenerate STLs and re-run the statics in `tools/gen_head_cell_rail.py --statics`.
+**Test scenarios:**
+- Head and cargo gates still pass with the mounts in place.
+- The head-cell sliding band stays clear end to end.
+- The rail statics still PASS at 79.4 g, FOS 3.0.
+**Verification:** gates PASS, statics PASS, STLs watertight.
+
+### U8. Placed board solids and gates
+
+**Goal:** All three boards and the moved node pair as R2 solids, gated.
+**Requirements:** R1, R5; AE1.
+**Dependencies:** U3, U5, U6, U7.
+**Files:** `tools/cargo_layout_fit.py`, `tools/middle_layout_fit.py`, `tools/fe_split_layout.py` (new), `airframe/stls/avionics/fe/` (new, installed-position STLs).
+**Approach:** Single-source the three board envelopes in `tools/fe_split_layout.py`; import them into the cargo and middle gates; write installed-position STLs; run the symmetry check on the daughters.
+**Test scenarios:**
+- Covers AE1. The head, cargo and middle gates pass with all three boards and the moved nodes.
+- The daughters mirror within 0.5 mm.
+**Verification:** all gates PASS; STLs carry the R2 marker.
+
+### U9. KiCad three-board partition
+
+**Goal:** Net-correct chin and daughter projects with inter-board connectors.
+**Requirements:** R6, R7, R11, R12, R20; AE2, AE4; KTD3.
+**Dependencies:** U4, U8.
+**Files:** `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch`, `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb`, `avionics/kicad/FlightEngineer/daughter/` (new project), `avionics/kicad/FlightEngineer/scripts/partition_fe.py` (new).
+**Approach:**
+1. Assign each FE block to a board per R7.
+2. Add the per-side bus and telemetry connectors (U4 parts).
+3. Create the daughter project as one design instanced port and starboard.
+4. Set board outlines from U8 envelopes.
+5. Inject into the existing schematic, never regenerate.
+6. Run ERC and schematic/PCB parity.
+**Execution note:** Start from an ERC/parity baseline of the current FE files and prove no regression at each injection step.
+**Test scenarios:**
+- ERC 0 errors and parity 0 on all three projects.
+- Every plan 002 function (inputs, combiner, BECs, monitor, trust) maps to exactly one board.
+- Covers AE2. Branch-overcurrent telemetry has a net path from each daughter to `pwr_fault`.
+**Verification:** ERC/parity clean; boards outlined; placement left to the owner.
+
+### U10. Ledger and harness close-out
+
+**Goal:** Final CG, harness and BOM state for the split.
+**Requirements:** R17; AE3.
+**Dependencies:** U8, U9.
+**Files:** `tools/auw_ledger.py`, `current-specification/auw_ledger.json`, `current-specification/bom_revT.csv`, `current-specification/bom_revT.json`, `WBS.md`.
+**Approach:** Move the FE, daughters and node pair to their stations; replace the harness rows with the routed values; add WBS rows for the owner's placement and routing.
+**Test scenarios:**
+- Covers AE3. Hover CG at least 3.0 mm forward of +13.6 mm.
+- BOM CSV/JSON parity holds.
+**Verification:** ledger PASS; WBS updated.
+
+---
+
+## Verification Contract
+
+- `/usr/bin/python3 tools/head_layout_fit.py`, `tools/cargo_layout_fit.py`, `tools/middle_layout_fit.py` → PASS.
+- `tools/cg_relocation_study.py` split arrangement → R13 PASS; `tools/fe_board_budget.py` → R14/R16/R20 PASS or stated.
+- KiCad: ERC 0 and parity 0 on all three projects with a `kicad-cli` at or above the files' generator version.
+- `tools/check_datum_drift.py` PASS; BOM CSV/JSON parity.
+
+## Definition of Done
+
+- Hover current reconciled and cited; the CG pre-check passed.
+- Node pair relocated with buses checked; all three boards placed, gated and outlined in KiCad with ERC/parity clean.
+- Fuse and disconnect mounts on the cradle and rail; height, thermal and fill budgets met or explicitly reported.
+- Ledger shows at least 3.0 mm forward of +13.6 mm; WBS carries the owner's placement and routing items.
