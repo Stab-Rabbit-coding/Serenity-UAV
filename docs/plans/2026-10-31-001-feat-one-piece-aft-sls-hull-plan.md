@@ -89,6 +89,7 @@ middle shell skins cause about 85% of the net aft moment
 ### Outstanding Questions
 
 - **Option B (owner, 2026-10-31):** print the ring and skids as a separate crash member in PA11 Black (preferred over PA12: about 4× the toughness for +1.6 g). The skin stays PA CF. This would supersede R3 and R3a. It needs a skid stiffness or stroke requirement and a skin-to-ring interface (`docs/AFT_SKIN_THINNING_STUDY.md` §5).
+  The stroke and force requirement now exists: CS-1–CS-5 in `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md` §5 (co-strike design case, plan 2026-10-31-002).
 
 - Does the part fit a vendor's SLS build envelope? The part is about 11 in long
   (Y 436 → about 700) and has not been checked against any vendor's machine.
