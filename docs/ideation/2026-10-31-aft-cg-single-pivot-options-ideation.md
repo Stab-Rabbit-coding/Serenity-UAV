@@ -26,7 +26,7 @@ Baseline: the rail-lever arrangement from `tools/sls_scale_trim_study.py`. AUW i
 moment is 101,694 g·mm [REPO].
 
 | Item | Mass | Station Y | Moment about pivot |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Rear hull shell | 231.5 g (0.51 lbm) | 586.7 | **60,176 g·mm (59%)** |
 | Flight Engineer (board, can and plate) | 224.8 g | 467.7 | 31,698 g·mm |
 | Middle hull shell | 183.1 g | 473.2 | **26,824 g·mm (26%)** |
@@ -47,7 +47,7 @@ Every offset below is from a moment balance on the baseline item list, with the 
 riding the pivot [CALC].
 
 | # | Idea | Offset | Notes |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 1 | **Graded aft skin.** Make the rear shell 50% of its current mass (SLS PA CF, thinner wall, integral ribs). Make the middle shell 70%. | **+10.5 mm** | No proportion change. SLS makes thin ribbed walls practical where FDM would not. Needs a stiffness and drop check on the thinned wall. |
 | 2 | Idea 1 **plus the single pivot moved 0.5 in (12.7 mm) aft**. This is the owner's existing plan, still one pivot. | **+1.7 mm** | Closes most of the gap. A 2-section hull removes the cargo/middle splice at Y 436 that the wing root trailing edge was crossing. |
 | 3 | **Rear section as an SLS rib frame with a film skin** (25% of mass), middle shell 70%, pivot 0.5 in aft. | **−0.7 mm** | Lightest option. The rear section carries almost no load: it sits aft of every mass item. Durability of a film skin in ground handling is [ASSUMED]. |
@@ -71,7 +71,7 @@ riding the pivot [CALC].
 ## 5. Review of the earlier conclusions (refresh)
 
 | Document | Verdict |
-|---|---|
+| --- | --- |
 | `SLS_MATERIAL_SELECTION_3DSYSTEMS.md` | **Holds.** PA CF matches CF-PETG stiffness. **Extend it:** grade the wall by station rather than using one 2 mm wall everywhere. |
 | `SLS_27IN_UNIFORM_SCALE_ADDENDUM.md` | **Partly superseded.** The scaling conclusion holds. The "indexed pivot" recommendation is rejected by the owner (2026-10-31). |
 | `SLS_27IN_TWO_SECTION_TRIM_STUDY.md` | **Holds** for the joint loads. Its trim levers need to be re-ranked against §3 above. |
@@ -83,7 +83,7 @@ offsets stay within 0.1 mm of the values above. With the middle and rear printed
 piece (the 14.4 g collar at Y 509 deleted), the cases are:
 
 | Case | AUW | Offset |
-|---|---|---|
+| --- | --- | --- |
 | One piece, collar deleted | 6,296 g | +16.2 mm |
 | Plus rear ×0.5, middle ×0.7 | 6,125 g | +10.4 mm |
 | Plus rear ×0.25 (ribs and film), middle ×0.7 | 6,068 g | +8.0 mm |
