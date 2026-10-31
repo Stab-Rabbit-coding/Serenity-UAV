@@ -321,3 +321,120 @@ Rules that keep the strut and skids canonical:
     - interior clearance for the rib at X ±1.6 in, Y 596–620, against the rear-section
       equipment;
     - tolerance stack for co-planarity of the feet and skid tips.
+
+## 10. The five open items, on the current specification (2026-10-31)
+
+Owner direction: keep the current specs, work the open items, and flag anything that
+breaks a spec. Reproduce with `/usr/bin/python3 tools/skid_open_items.py`. Item 4 was done
+by mesh inspection in the session and is recorded here.
+
+### 10.1 Item 1: stroke margin against as-built stiffness — **FLAG**
+
+| Skid stiffness (per skid) | 4 ft stroke | Status |
+| --- | ---: | --- |
+| 1,369 lbf/in (×1.10) | 0.205 in (5.20 mm) | ok |
+| **1,245 lbf/in (nominal)** | **0.213 in (5.42 mm)** | ok |
+| 1,207 lbf/in (×0.97) | 0.216 in (5.49 mm) | ok, the lowest that passes |
+| 1,183 lbf/in (×0.95) | 0.218 in (5.54 mm) | **over 0.217 in** |
+| 1,058 lbf/in (×0.85, worst case) | 0.229 in (5.81 mm) | **over** |
+
+The worst-case stiffness combines the SLS wall tolerance (±0.3 mm on a 5.5 mm wall, so I
+±5%) with modulus scatter (±10% [ASSUMED]; 3DS-30108A gives none). It is ×0.85.
+
+> **FLAG — breaks R2 / CS-7 at worst-case tolerance.** The design has a 3% stiffness
+> margin.
+>
+> - **Required:** an as-built acceptance test. Bench-load each skid at the tip and require
+>   **k ≥ 1,207 lbf/in (211 N/mm)**. Reject or shim any softer skid.
+> - **Alternative**, a design change not made per the owner: add about 15% stiffness, which
+>   is about 0.1 oz more wall per skid.
+
+### 10.2 Item 2: single-skid (rolled) strike — **FLAG**
+
+The bound is conservative: one skid plus the aft gear pair, in pitch only, with no roll
+relief. The ledger carries I_pitch only, not I_roll.
+
+| Quantity | Value |
+| --- | --- |
+| Skid stroke | **0.285 in (7.24 mm)**, against a 0.217 in limit: **the hull touches** |
+| Skid peak | **355 lbf (1,579 N)**, about **1.27 × ultimate**, so the skid fractures |
+| Strut, loaded side | 654 lbf (2,909 N) |
+| U-frame torsion | about 629 lbf·in [45 mm lever ASSUMED] |
+| Gear stroke | 0.84 in, within the 1.21 in limit |
+
+> **FLAG — breaks R2 / CS-7 and the TS-5 intent for a one-skid-first touchdown.**
+>
+> - Roll relief would lower it; the true effective mass depends on I_roll and the roll
+>   arm, which are not in the ledger.
+> - **Required:** add I_roll to `tools/auw_ledger.py` and re-run.
+> - If it still fails, the owner chooses between limiting the design roll attitude at
+>   touchdown, which is an operating limit, and accepting skid fracture on a rolled 4 ft
+>   crash, which TS-5 allows if the hull does not crack. A fracture lets the hull touch, so
+>   that also has to be confirmed.
+
+### 10.3 Item 3: rib to CF ring frame joint — **FLAG, resolved by a rib change**
+
+- **As specified, it breaks.** The rib is cantilevered aft from the frame, so it loads the
+  2 mm CF plate frame **out of plane**: 468 lbf·in on a 0.08 × 0.39 in band, about
+  1,150,000 psi (7,935 MPa). A plate frame cannot carry that.
+- **Resolution: the rib passes over the frame as a lever**, bonded or bolted along the
+  2 mm skin zone, from Y ≈ 572 to 620:
+    - **Forward tie:** 502 lbf. Two M3 bolts in tension carry 251 lbf each (FOS 3.2). Skin
+      pull-through is 392 lbf per bolt (FOS 1.56).
+    - **Frame reaction:** 991 lbf (4,409 N) per side, **in plane** (vertical), which is the
+      direction a ring frame carries.
+    - **Rib:** grows 0.93 in forward, **+0.14 oz (4.1 g) per side, +0.28 oz pair**. The CG
+      effect is negligible (about +0.01 in; most of the added mass is near the pivot).
+
+> **FLAG — the specified joint concept breaks; the lever rib above replaces it.**
+>
+> - The CF plate bearing allowable under the rib saddle is **unsourced**. Gate it on a
+>   coupon (WBS §0.12).
+> - The forward tie lands in the 2 mm keep zone (plan 001 R4). If that skin is thinned,
+>   add a backing plate.
+
+### 10.4 Item 4: interior clearance for the rib — **no conflict**
+
+- The ledger has nothing at Y 560–660 except the rear shell and the CF ring frame.
+- Sectioning the rear shell at Y 597–619 shows only the outer and inner skin loops
+  crossing the rib volume (X ±1.46–1.69 in, 26 mm deep). There is no inner-neck, pod or
+  equipment geometry there.
+- The rib sits in the lower interior corner, about 0.3 in (8 mm) from the side wall.
+- **Recheck** when the rear section is rebuilt from source, or when equipment is placed
+  aft of Y 560.
+
+### 10.5 Item 5: co-planarity tolerance (R1 ±1 mm) — **R1 met (RSS); margin FLAG**
+
+SLS ±0.3% or ±0.3 mm per dimension (`3d-print-design` skill, SLS rules):
+
+| Contributor | ± |
+| --- | ---: |
+| U-frame, ring mount to skid tip (~200 mm) | 0.024 in (0.60 mm) |
+| Middle shell, ring seat to aft gear bay | 0.012 in (0.30 mm) |
+| Gear leg frame, 3.0 in | 0.014 in (0.36 mm) |
+| Bay plate + foot | 0.017 in (0.42 mm) |
+| Wire bow set | 0.008 in (0.20 mm) |
+| Ring-to-hull joint | 0.008 in (0.20 mm) |
+| **RSS** | **0.036 in (0.92 mm)**: **R1 met** (worst-case sum 0.082 in, not met) |
+
+- **The skid-to-hull part of the stack** (±0.63 mm) eats the stroke margin. 6.5 mm
+  clearance − 0.63 − 5.42 mm stroke leaves **0.45 mm** against the required 1 mm. The hull
+  still clears, but the margin spec does not hold.
+
+> **FLAG — breaks the CS-2 / CS-7 1 mm hull margin at tolerance.** Resolutions, owner to
+> choose:
+>
+> - **A measure-and-shim step:** set the skid tip height to the hull at assembly, using
+>   the Option B bolted ring joint.
+> - **Combine with the item-1 bench test**, so the as-built stroke is verified.
+> - **Accept a 0.45 mm worst-case margin.**
+
+### 10.6 Summary of flags
+
+| # | Spec | Status | Path |
+| --- | --- | --- | --- |
+| 1 | R2 / CS-7 stroke | Breaks at worst-case stiffness | Bench acceptance k ≥ 1,207 lbf/in, or +15% stiffness |
+| 2 | R2 / CS-7, TS-5 | Breaks under the conservative single-skid bound | Add I_roll and re-run; then a roll-attitude limit or accepted fracture |
+| 3 | Joint concept | Breaks (out-of-plane frame load) | Lever rib over the frame, +0.28 oz pair; CF bearing coupon |
+| 4 | Interior clearance | OK | Recheck after the source rebuild |
+| 5 | R1 (RSS) OK; CS-2 margin | Margin breaks at tolerance (0.45 mm) | Measure and shim at assembly |

@@ -244,7 +244,11 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Obtain PA CF build-axis (Z) tensile and flexural data (coupon or vendor), replacing the 0.5 knockdown
 - [ ] Owner sets the handling design load (now 20 lbf on a 5 mm radius patch, ASSUMED)
 - [ ] Verify Brazier 1927 [REF-STR-002] DOI/pages and the Roark ring-crush case [REF-STR-001] used in `docs/SKID_FAILURE_MODE_STUDY.md`
-- [ ] Size the PA11 skid root as a plastic hinge for ~700 N per skid (Zp ~2,460 mm³; root wall/fillet or strut), and check the ring joint behind it is stronger than the hinge
+- [x] ~~Size the PA11 skid root as a plastic hinge~~ — superseded 2026-10-31 by the PA12-CF elastic U-frame (owner); see `docs/SKID_FAILURE_MODE_STUDY.md` §8–10
+- [ ] Skid bench acceptance: tip stiffness ≥ 1,207 lbf/in per skid (SKID study §10.1)
+- [ ] Add I_roll to `tools/auw_ledger.py`; re-run the single-skid strike (§10.2); owner: roll-attitude limit or accepted fracture
+- [ ] Lever rib over the CF frame (Y 572–620) + forward 2×M3 tie; CF plate bearing coupon (§10.3)
+- [ ] Skid-tip-to-hull measure-and-shim step at assembly, or owner accepts a 0.45 mm worst-case hull margin (§10.5)
 
 ---
 
