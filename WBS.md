@@ -243,6 +243,8 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Validate an official 3D Systems URL for DuraForm PA CF 3DS-30108A [REF-MAT-011]
 - [ ] Obtain PA CF build-axis (Z) tensile and flexural data (coupon or vendor), replacing the 0.5 knockdown
 - [ ] Owner sets the handling design load (now 20 lbf on a 5 mm radius patch, ASSUMED)
+- [ ] Verify Brazier 1927 [REF-STR-002] DOI/pages and the Roark ring-crush case [REF-STR-001] used in `docs/SKID_FAILURE_MODE_STUDY.md`
+- [ ] Size the PA11 skid root as a plastic hinge for ~700 N per skid (Zp ~2,460 mm³; root wall/fillet or strut), and check the ring joint behind it is stronger than the hinge
 
 ---
 

@@ -14535,6 +14535,13 @@
       ],
       "archived": false
     },
+    "docs/SKID_FAILURE_MODE_STUDY.md": {
+      "description": "Rear Skid Failure Mode by Material \u2014 Root Bending vs Wall Collapse",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/SLS_27IN_TWO_SECTION_TRIM_STUDY.md": {
       "description": "Serenity UAV \u2014 27 in Hull, Two Fuselage Sections, SLS PA12 / PA12-CF, and Trim Authority",
       "tags": [
@@ -19037,6 +19044,13 @@
       ],
       "archived": false
     },
+    "tools/skid_failure_mode_study.py": {
+      "description": "skid_failure_mode_study.py -- how does a rear skid fail, and in which material?",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/sls_auw_reconcile.py": {
       "description": "sls_auw_reconcile.py -- part-by-part reconciliation of the aircraft AUW from FDM",
       "tags": [
@@ -19391,6 +19405,7 @@
       "docs/PROTO_PRINT_DAVINCI_JR.md",
       "docs/README.md",
       "docs/REVN_BUILD_GUIDE_24IN.md",
+      "docs/SKID_FAILURE_MODE_STUDY.md",
       "docs/SLS_27IN_TWO_SECTION_TRIM_STUDY.md",
       "docs/SLS_27IN_UNIFORM_SCALE_ADDENDUM.md",
       "docs/SLS_EMI_AND_WINGS_NOTE.md",
@@ -24161,6 +24176,7 @@
       "tools/prep_nacelle_64_bake.py",
       "tools/purge_stale_fcstd_objects.py",
       "tools/shift_baked_stl.py",
+      "tools/skid_failure_mode_study.py",
       "tools/sls_auw_reconcile.py",
       "tools/sls_material_screen.py",
       "tools/sls_scale_trim_study.py",

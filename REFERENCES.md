@@ -870,6 +870,18 @@ MIL-STD-461G qualification testing is deferred pending airframe integration.
 
 ---
 
+### REF-STR-002: Brazier, L. G. — "On the Flexure of Thin Cylindrical Shells and Other 'Thin' Sections"
+
+| Field | Value |
+| --- | --- |
+| **Publication** | *Proceedings of the Royal Society of London, Series A*, vol. 116 (1927), pp. 104–114 |
+| **Official URL** | DOI 10.1098/rspa.1927.0125 (royalsocietypublishing.org). **Requires verification**: DOI and pages were not fetched in this session. |
+| **Section applied** | Limit (ovalisation) moment of a thin tube in bending, M_B = (2√2/9)·π·E·r·t²/√(1−ν²). Used as a screening mode only. |
+
+**Used in:** `tools/skid_failure_mode_study.py`, `docs/SKID_FAILURE_MODE_STUDY.md` §2
+
+---
+
 ## Part V — International Standards (ISO, IEC)
 
 ### REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling
@@ -3804,6 +3816,7 @@ Add verified section numbers to the relevant files and update this table.
 
 | Citation | File | Issue | Action Required |
 |---|---|---|---|
+| [REF-STR-002] Brazier 1927 DOI/pages; ring-crush formula case in [REF-STR-001] | `tools/skid_failure_mode_study.py`, `docs/SKID_FAILURE_MODE_STUDY.md` | **Open (2026-10-31).** Applied from established practice; not fetched. | Fetch the paper and the Roark case; record them (WBS §0.12). |
 | [REF-NASA-002] §, [REF-NASA-003] §, [REF-STR-001] case; 3DS-30108A official URL | `tools/aft_skin_thinning_study.py`, `docs/AFT_SKIN_THINNING_STUDY.md` | **Open (2026-10-31).** Formulas applied from established practice; section and case numbers not confirmed against the documents. The datasheet is an owner-supplied PDF. | Read the NTRS PDFs and a Roark copy, record the sections, validate the 3D Systems URL (WBS §0.12). |
 | STM32WLE5JC RF matching / harmonic-filter values (ST AN5457) | `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`L-MLRS-PA`, `C-MLRS-TX0..2`, `L-MLRS-TX1/2`, `C-MLRS-RXP/RXN`, `L-MLRS-RX1/2`, `C-MLRS-RX1`, `C-MLRS-VRPA`) | **Open (2026-09-29).** Topology follows DS13105 Figures 2–4; the 915 MHz element values come from ST AN5457, which could not be fetched from the build environment. Values are tagged `VERIFY AN5457`. | Obtain AN5457, populate the values, add it as a REF-ID, bench-tune (VSWR/harmonics) before flight. |
 | TACCO signal-line ferrite bead MPN (600 Ω @ 100 MHz, 0402) | `gen_tacco_sch.py` (`FB-MLRS-1/2`) | **Open (2026-09-29).** The 1812 power bead 742792510 had been used on signal lines by mistake; the correct 0402 part is not yet selected (no catalog access). | Owner selects the MPN (Würth WE-CBF 0402 600 Ω family or equivalent), archive its datasheet, cite it. |
