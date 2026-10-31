@@ -112,6 +112,43 @@ def main():
           f"bending M = {mom:.1f} N.m ({mom * 8.851:.0f} lbf.in)")
     print("  (assumes the aft mass is rigid and the whole load reacts at the joint; allowables not sourced)")
 
+    print("\n(F) UNIFORM fuselage scale k about the nose (owner direction 2026-10-31)")
+    print("    hull shells/collars mass x k^2 (2 mm wall kept); every fuselage item's station x k;")
+    print("    nacelles/wings stay full size and ride the pivot P (free parameter)")
+    hull = [e for e in es if "shell24" in e[0] or "splice_collar" in e[0]]
+    m_hull = sum(e[2] for e in hull)
+    for k in (25 / 24, 26 / 24, 27 / 24):
+        sc = []
+        for n, kind, m, y in es:
+            if kind == "NACELLE":
+                continue
+            mm = m * k * k if (n, kind, m, y) in hull else m
+            sc.append((mm, y * k))
+        m_h = sum(a for a, _ in sc)
+        y_h = sum(a * b for a, b in sc) / m_h
+        m_n = nac
+        p_zero = y_h  # nacelle (and wing) mass at the pivot; offset zero when P = CG_h
+        p0 = PIVOT * k
+        w2 = m_h + m_n
+        off_k = (m_h * y_h + m_n * p0) / w2 - p0
+        d_zero = p_zero - p0
+        off_half = off_k - 0.5 * IN * (1 - m_n / w2)
+        dm = (k * k - 1) * m_hull
+        print(f"  k {k:.4f} ({24 * k:.0f} in): hull +{dm:.0f} g CF-PETG-ledger; AUW {w2:.0f} g; "
+              f"offset at scaled pivot {off_k:+.1f} mm; pivot move to zero {d_zero:.1f} mm "
+              f"({d_zero / IN:.2f} in); offset after a 0.5 in move {off_half:+.1f} mm; "
+              f"cell-rail slack gained ~{(k - 1) * 246:.0f} mm [ASSUMED]")
+        for lab, ratio in (("PA CF @1.28", 1.11 / 1.28), ("PA CF @1.05", 1.11 / 1.05)):
+            dpa = m_hull * (k * k * ratio - 1)
+            endu = ((6232 + dpa) / 6232) ** -1.5 - 1
+            print(f"     {lab}: hull {dpa:+.0f} g vs today's CF-PETG hull; endurance {100 * endu:+.1f}%")
+        am = [e for e in es if e[3] > 436.0]
+        ma = sum(e[2] * (k * k if e in hull else 1) for e in am)
+        ya = sum(e[2] * (k * k if e in hull else 1) * e[3] * k for e in am) / ma
+        v = ma / 1000 * 79.4 * 9.80665
+        print(f"     J2 at Y {436 * k:.0f}: aft mass {ma:.0f} g, arm {ya - 436 * k:.0f} mm, "
+              f"V {v:.0f} N, M {v * (ya - 436 * k) / 1000:.1f} N.m (ultimate x3: {3 * v * (ya - 436 * k) / 1000:.0f} N.m)")
+
     print("\n(D) trim authority = m * travel / AUW  (mm of CG per item)")
     for name, m in (("one 321 g cell", c.CELL_G), ("both cells", 2 * c.CELL_G),
                     ("300 g ballast at nose arm", 300.0)):

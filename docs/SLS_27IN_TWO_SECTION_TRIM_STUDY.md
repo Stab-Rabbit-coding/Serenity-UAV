@@ -8,6 +8,8 @@
 **Supersedes:** the 30 in and single-piece conclusions in `docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md`
 and `docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md`.
 
+> **OWNER DIRECTION 2026-10-31.** The extra length is a **uniform fuselage scale**, not a plug, and nose electronics are serviced through the cargo bay. `docs/SLS_27IN_UNIFORM_SCALE_ADDENDUM.md` replaces the plug results in §3 and §8 item 1 and the Bay A access risk in §4. The 27 in uniform scale worsens the offset (+11.4 mm after a 0.5 in pivot move) and adds 92–318 g of hull.
+
 > **CORRECTION (2026-10-31, after the PA12, PA11 and AF+ datasheets).** `docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` §1 replaces the material advice in §5, §6 and §8 below: (1) PA12 is **not** a suitable hull skin at 2 mm. Its flexural modulus (1,500 MPa) is 4.4× below the repo's CF-PETG (6,670 MPa); **PA CF** matches it. (2) The hull mass savings in §6 assume real FDM shells weigh 1.28 g/cc; on the ledger's 1.05 g/cc they do not hold. Weigh one printed shell. (3) For shock-absorbing parts use **PA11 Black**, not PA12. The trim, plug, joint and two-section conclusions (§2–§4) are unaffected.
 
 > [!WARNING]
