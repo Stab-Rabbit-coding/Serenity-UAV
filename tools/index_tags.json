@@ -11601,8 +11601,32 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Observer/kicads/freerouting.dsn": {
+      "description": "Specctra design file (autorouter input)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Observer/kicads/freerouting.ses": {
+      "description": "Specctra session file (autorouter output)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Observer/kicads/sym-lib-table": {
       "description": "(sym_lib_table",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Observer/kicads/temp-freerouting.dsn": {
+      "description": "Specctra design file (autorouter input)",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -15521,6 +15545,13 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-10-28-001-feat-fe-chin-and-shuttle-split-plan.md": {
+      "description": "Flight Engineer Chin + Shuttle Split - Plan",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -18225,6 +18256,13 @@
       ],
       "archived": false
     },
+    "tools/_clf_shift.py": {
+      "description": "Python script",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/add_board_notices.py": {
       "description": "Stamp the Wurth usage notice and the uncrewed-only notice onto boards.",
       "tags": [
@@ -18351,6 +18389,13 @@
     },
     "tools/cargo_layout_fit.py": {
       "description": "Python script",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/cg_mass_reduction_study.py": {
+      "description": "cg_mass_reduction_study.py -- rank mass reductions aft of the hover thrust",
       "tags": [
         "build-tooling"
       ],
@@ -19407,6 +19452,7 @@
       "docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md",
       "docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md",
       "docs/plans/2026-10-27-001-feat-middle-rear-layout-plan.md",
+      "docs/plans/2026-10-28-001-feat-fe-chin-and-shuttle-split-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -22587,7 +22633,10 @@
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
       "avionics/kicad/Observer/kicads/Observer.net",
       "avionics/kicad/Observer/kicads/fp-lib-table",
+      "avionics/kicad/Observer/kicads/freerouting.dsn",
+      "avionics/kicad/Observer/kicads/freerouting.ses",
       "avionics/kicad/Observer/kicads/sym-lib-table",
+      "avionics/kicad/Observer/kicads/temp-freerouting.dsn",
       "avionics/kicad/Observer/mod_vera_corners.py",
       "avionics/kicad/Observer/mod_vera_ds_pcb.py",
       "avionics/kicad/Observer/mod_vera_som_place.py",
@@ -23381,7 +23430,10 @@
       "avionics/kicad/Observer/kicads/Observer.kicad_sch",
       "avionics/kicad/Observer/kicads/Observer.net",
       "avionics/kicad/Observer/kicads/fp-lib-table",
+      "avionics/kicad/Observer/kicads/freerouting.dsn",
+      "avionics/kicad/Observer/kicads/freerouting.ses",
       "avionics/kicad/Observer/kicads/sym-lib-table",
+      "avionics/kicad/Observer/kicads/temp-freerouting.dsn",
       "avionics/kicad/Observer/mod_vera_corners.py",
       "avionics/kicad/Observer/mod_vera_ds_pcb.py",
       "avionics/kicad/Observer/mod_vera_som_place.py",
@@ -23935,6 +23987,7 @@
       "tools/README.md",
       "tools/TODO.md",
       "tools/TOOL_REFERENCE.md",
+      "tools/_clf_shift.py",
       "tools/add_board_notices.py",
       "tools/add_landing_gear_bosses.py",
       "tools/airframe_interface_census.py",
@@ -23952,6 +24005,7 @@
       "tools/cargo_bay_envelope.py",
       "tools/cargo_bulkhead_context.py",
       "tools/cargo_layout_fit.py",
+      "tools/cg_mass_reduction_study.py",
       "tools/cg_relocation_study.py",
       "tools/check_datum_drift.py",
       "tools/check_tacco_envelope_sync.py",
