@@ -109,3 +109,45 @@ bending mode of the part as a cantilever from Y 436, carrying its items [REF-STR
 5. **The remaining offset** of about +4 mm has to come from outside the skin. The
    FE chin and shuttle split (plan 2026-10-28-001, about −2.6 mm) brings it to about
    +1.8 mm, inside the ±6.4 mm working trim band.
+
+## 5. Option B — ring and skids as a separate crash member (owner, 2026-10-31)
+
+The one-piece part (Option A) prints skin, ring and skids together in PA CF. Option B
+prints the **ring and skid member separately** in a tougher nylon. The skin stays PA CF.
+
+| Skid tubes (54,190 mm³ measured) | Mass | Flexural modulus | Equal-EI tube OD | Toughness, about σ_u·ε_b | Notched Izod |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| PA CF [REF-MAT-011] | 60.2 g | 7,000 MPa | ×1.00 | 1.6 MJ/m³ (brittle, 3.8 %) | 52 J/m |
+| PA12 Black [3DS-30112A] | 54.2 g | 1,500 MPa | ×1.67 | 5.5 MJ/m³ (13.7 %) | 35 J/m |
+| **PA11 Black** [3DS PA11 datasheet] | 55.8 g | 1,500 MPa | ×1.67 | **24.1 MJ/m³** (52.6 %) | 42 J/m |
+
+The toughness figures are a rough area-under-curve estimate from datasheet ultimate and
+elongation [CALC]. They are not a crash-energy test.
+
+**Findings**
+
+1. **Use PA11 rather than PA12 for a crash member.** For about +1.6 g, PA11 has about 4×
+   the PA12 energy estimate, a higher notched Izod (42 vs 35 J/m), and the most consistent
+   properties across build orientations of the three, per its datasheet.
+   PA12 already gains about 3.4× over PA CF.
+2. **Stiffness drops 4.7×** in either nylon. Whether that is acceptable depends on a skid
+   deflection or stiffness requirement, and the repo has none. Holding PA CF stiffness
+   would need about 1.67× the tube OD (about 33 mm), which changes the outer shape. The
+   owner has fixed the shape (plan R6). With the OD unchanged, the softer skid is the
+   point of the option: it strokes and absorbs energy.
+3. **Mass and CG are a wash.** The skids lose 4–6 g, which is about the mass of the joint
+   hardware the split brings back [ASSUMED, joint not designed]. The CG moves by less than
+   0.3 mm [CALC].
+4. **It brings back a joint.** The reason for one piece was to remove the ring-to-skid
+   and skin attachments. Option B needs a skin-to-ring interface that carries the skin's
+   crash moment, 68.3 N·m ultimate at Y 436. In exchange it gives:
+    - **A replaceable crash element.** After a hard landing you swap the ring and skids,
+      not the whole hull.
+    - **No ring keep zones in the skin.** The skin bands at Y 450–460 and 480–490 can
+      thin too, which favours CG [CALC not run: the ring's own volume is not yet
+      separated from the skin in the mesh].
+    - **Each material doing its own job.** The stiff skin and the tough energy absorber
+      come from separate materials.
+5. **Open before choosing:** a skid stiffness or stroke requirement; the 4 ft drop energy
+   that the skids must absorb (the plan R7 case); the interface design; a separate mesh
+   measurement of the ring.
