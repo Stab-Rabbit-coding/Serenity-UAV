@@ -19114,7 +19114,8 @@
     "tools/tests/test_tail_strike_requirement.py": {
       "description": "Tests for the co-strike and slap-down models in tools/tail_strike_requirement.py,",
       "tags": [
-        "build-tooling"
+        "build-tooling",
+        "security"
       ],
       "archived": false
     },
@@ -20063,6 +20064,7 @@
       "tools/nozzle_servo_linkage_64.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
+      "tools/tests/test_tail_strike_requirement.py",
       "tools/wing_internal_clearance.py"
     ],
     "licensing": [

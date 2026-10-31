@@ -17,6 +17,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import landing_gear_r6_sizing as lg
+import sls_auw_reconcile as rec
 import tail_strike_requirement as ts
 
 # Problem-frame case (plan 002): 14.68 lbm, k 102.1 mm, arms 14.4 / 290.5 mm.
@@ -87,35 +88,73 @@ def test_slap_down_hand_case_below_fore_capacity():
     assert 0 < per_leg < 35.3
 
 
+def _with_auw(lbm):
+    """wire_schedule at lbm, restoring the gear tool's design mass afterward."""
+    prev = lg.DESIGN_AUW_LBM
+    try:
+        lg.set_design_auw(lbm)
+        return lg.wire_schedule()
+    finally:
+        lg.set_design_auw(prev)
+
+
 def test_gear_tool_regression_at_13_lbm():
     """13.0 lbm reproduces today's ductile 5.27 mm / spring 4.00 mm wires."""
-    lg.set_design_auw(13.0)
-    s = lg.wire_schedule()
+    s = _with_auw(13.0)
     assert _close(s["ductile_d_mm"], 5.27, 0.005), s
     assert _close(s["spring_d_mm"], 4.00, 0.005), s
 
 
 def test_gear_tool_wires_grow_with_auw():
-    """14.09 lbm needs larger wires than 13.0 lbm."""
-    lg.set_design_auw(13.0)
-    a = lg.wire_schedule()
-    lg.set_design_auw(14.09)
-    b = lg.wire_schedule()
-    lg.set_design_auw(13.0)
+    """A heavier design mass needs larger wires (roughly AUW^(1/3))."""
+    a, b = _with_auw(13.0), _with_auw(14.19)
     assert b["ductile_d_mm"] > a["ductile_d_mm"]
-    assert b["spring_d_mm"] >= a["spring_d_mm"]
+    assert _close(b["ductile_d_mm"] / a["ductile_d_mm"], (14.19 / 13.0) ** (1 / 3), 0.01)
+
+
+def test_gear_schedule_at_restores_state_even_on_error():
+    """ts.gear_schedule_at must not leak its mass into the gear tool."""
+    prev = lg.DESIGN_AUW_LBM
+    ts.gear_schedule_at(6.4)
+    assert lg.DESIGN_AUW_LBM == prev
+    try:
+        ts.gear_schedule_at(-1.0)
+    except ValueError:
+        pass
+    assert lg.DESIGN_AUW_LBM == prev
+
+
+def test_gear_arm_further_aft_takes_less_energy():
+    """Direction check: moving the gear contact further from the CG lowers its
+    effective mass, so it absorbs less (catches a sign flip in the arm)."""
+    near = ts.co_strike(M, K, 0.0144, D2, FG, 1250.0)
+    far = ts.co_strike(M, K, 0.0600, D2, FG, 1250.0)
+    assert far["e_gear"] < near["e_gear"]
+
+
+def test_reconcile_includes_nacelle_printed_parts():
+    """Guards the 14.09 -> 14.19 lbm fix: nacelle printed parts are re-priced too."""
+    nac = 2 * sum(m for _n, m in rec.nacelle_printed_g())
+    assert nac > 800.0, nac                       # ~852 g at 1.05 g/cc today
+    names = " ".join(n.lower() for n, _m in rec.nacelle_printed_g())
+    assert "bearing" not in names and "motor" not in names
+    _solid, d_sls = rec.deltas()
+    d_hull_only = sum(r["mass_g"] / rec.RHO_LEDGER * rec.RHO[rec.SLS_MATERIAL.get(r["name"], "PA CF")]
+                      - r["mass_g"] for r in rec.ledger()["rows_hover"] if r["kind"] == "PRINT")
+    assert _close(d_sls - d_hull_only, nac * (1.11 / 1.05 - 1), 1e-6)
 
 
 def test_mesh_check_on_todays_rear_shell():
-    """U4: today the skid tips lead (25.6 deg) and the ventral cross member clears
-    by ~6.5 mm -- enough for the 1,000 N pair's 6.1 mm stroke, not for 750 N's 7.5 mm.
-    (Corrects an earlier reading that the tail cone led; that vertex was a skid tip.)"""
-    ok = ts.co_strike_mesh_check(stroke_mm=6.1)
-    short = ts.co_strike_mesh_check(stroke_mm=7.5)
+    """U4: today the skid tips lead and the ventral cross member clears by ~6.5 mm.
+    With the 1 mm CS-2 margin, the 1,250 N stroke (5.2 mm) passes and the
+    1,000 N stroke (6.1 mm) fails.  (Earlier versions passed 6.1 mm because the
+    margin was not enforced -- review finding P0, 2026-10-31.)"""
+    ok = ts.co_strike_mesh_check(stroke_mm=5.2)
+    short = ts.co_strike_mesh_check(stroke_mm=6.1)
     assert ok["skid_deg"] < ok["tail_deg"]
+    assert 6.2 <= ok["tail_clear_mm"] <= 6.8, ok["tail_clear_mm"]
     assert ok["pass"] is True
-    assert short["pass"] is False
-    assert "hull only" in short["reason"]
+    assert short["pass"] is False and "needs 7.1" in short["reason"]
 
 if __name__ == "__main__":
     fails = 0

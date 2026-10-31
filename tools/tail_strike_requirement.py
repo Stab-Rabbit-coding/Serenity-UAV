@@ -57,19 +57,18 @@ MATS = [
 # Gear-tool demands at the 4 ft schedule (13.0 lbm design mass) -- printed output
 # of tools/landing_gear_r6_sizing.py, 2026-10-31.
 DESIGN_KG = 13.0 * 0.45359237
-THIGH_M = 91.9e3        # N.mm
 THIGH_Z = 1925.0        # mm^3 (2 x 14 mm cylinders, 6 mm bore, + web)
 THIGH_Z_SOLID = 2219.0
-BOSS_P = 7655.0         # N wire load on the bay boss
 BOSS_CAP_PETG = 6300.0  # N bay boss bearing capacity in CF-PETG
-BOLT_R = 734.0          # N per bay bolt, resultant
+BOLT_R_13LBM = 734.0    # N per bay bolt, resultant, at 13.0 lbm (gear tool lg02_bay_attachment)
 BOLT_CAP_PETG = 2100.0  # N, wall + boss + 3 mm plate, CF-PETG
 LEG_FRAME_CM3 = 40.64   # 3.0 in leg frame volume, LANDING_GEAR_ANALYSIS.md 11.1
 FOS_IMPACT = 4.0
 # Printed-part re-pricing over the WHOLE aircraft (hull + both nacelles).  An earlier
 # version re-priced the hull PRINT subtotal only and under-stated both cases.
 D_SOLID, D_SLS = sls_auw_reconcile.deltas()
-S_SKID_AVAIL = 7.0   # mm, skid protrusion below the hull today [MESH, docs/TAIL_STRIKE §1]
+HULL_MARGIN_MM = 1.0  # mm, hull clearance kept below the skid stroke (CS-2) [ASSUMED, owner to confirm]
+SHELLS = ("middle_shell24_2mm_repaired.stl", "rear_shell24_2mm_repaired.stl")
 
 
 def ledger():
@@ -121,9 +120,9 @@ def part1():
         print(f"  {lab:34s} AUW {m:6.0f} g ({m / 453.592:5.2f} lbm), "
               f"{m / 1000 / DESIGN_KG:.3f}x the gear's 13.0 lbm design mass")
     print("\nSkid-first strike (attitude just above tip-back and steeper):")
-    print(f"  {'attitude':>8s} {'arm d':>7s} {'m_eff/m':>7s} {'E (FDM 1.28)':>12s} "
+    print(f"  {'attitude':>8s} {'arm d':>7s} {'m_eff/m':>7s} {'E (SLS)':>12s} "
           f"{'F @10mm':>9s} {'F @20mm':>9s} {'F @30mm':>9s}")
-    m = masses[1][1] / 1000
+    m = masses[2][1] / 1000   # SLS design mass (heaviest = max hover AUW)
     rows = []
     for th in (th0, th0 + 5, th0 + 10, th0 + 15, th0 + 25, th0 + 35):
         t = math.radians(th)
@@ -216,91 +215,162 @@ def slap_down_per_leg(ke_res, w_gravity_drop):
     return 0.5 * (ke_res + w_gravity_drop)
 
 
+def gear_schedule_at(auw_kg):
+    """Gear wire schedule at auw_kg without leaking the gear tool's module state.
+
+    landing_gear_r6_sizing keeps its design mass in module globals; save and
+    restore whatever value was set, even if the sizing raises.
+    """
+    import landing_gear_r6_sizing as lg
+    prev = lg.DESIGN_AUW_LBM
+    try:
+        lg.set_design_auw(auw_kg / 0.45359237)
+        return lg.wire_schedule(), lg.CLEARANCE_COMPACT - lg.RESIDUAL_MIN
+    finally:
+        lg.set_design_auw(prev)
+
+
+def design_case():
+    """Heaviest ledger configuration with SLS printed parts.
+
+    VTOL: every sortie takes off and lands in hover, so the heaviest
+    configuration (4000 mAh + 8 oz payload) IS the maximum hover AUW.
+    """
+    nm, auw, cy, cz, k = max(ledger(), key=lambda c: c[1])
+    return nm, (auw + D_SLS) / 1000, cy, cz, k
+
+
 def part3():
     """Co-strike report at the interim SLS design mass (plan 002 U1-U2)."""
-    import landing_gear_r6_sizing as lg
     th0, pt, _f = tip_back()
-    _nm, auw, cy, cz, k = max(ledger(), key=lambda c: c[1])
-    m = (auw + D_SLS) / 1000   # SLS printed parts, hull + nacelles (sls_auw_reconcile)
-    lg.set_design_auw(m / 0.45359237)
-    sched = lg.wire_schedule()
-    lg.set_design_auw(13.0)
+    _nm, m, cy, cz, k = design_case()
+    sched, settle_max = gear_schedule_at(m)
     t = math.radians(th0)
     cgr, spr = rot((cy, cz), t), rot(pt, t)
     d1, d2 = (Y_FOOT_AFT - cgr[0]) / 1000, (spr[0] - cgr[0]) / 1000   # aft of the CG
     f_gear = 2 * sched["f_leg_n"]
-    settle_max = lg.CLEARANCE_COMPACT - lg.RESIDUAL_MIN
+    chk0 = co_strike_mesh_check(stroke_mm=0.0, margin_mm=0.0)
+    s_allow = chk0["tail_clear_mm"] - HULL_MARGIN_MM
     print(f"\nCO-STRIKE (owner 2026-10-31): aft feet + skid tips together at {th0:.1f} deg")
-    print(f"  design mass {m:.3f} kg ({m / 0.45359237:.2f} lbm, SLS interim, LG-15 final); "
+    print(f"  design mass {m:.3f} kg ({m / 0.45359237:.2f} lbm, SLS, heaviest = max hover AUW; LG-15 final); "
           f"arms: feet {d1 * 1000:.1f} mm, skid {d2 * 1000:.1f} mm aft of CG; k {k:.1f} mm")
     print(f"  re-sized gear at this mass: F_leg {sched['f_leg_n']:.0f} N, ductile d "
           f"{sched['ductile_d_mm']:.2f} mm, spring d {sched['spring_d_mm']:.2f} mm, "
           f"thigh M {sched['thigh_m_nmm'] / 1000:.1f} N.m")
+    print(f"  measured hull clearance at skid contact {chk0['tail_clear_mm']:.1f} mm; "
+          f"allowed skid stroke = clearance - {HULL_MARGIN_MM:.1f} mm margin = {s_allow:.1f} mm")
     print(f"  {'F_skid pair':>11s} {'gear J':>7s} {'gear mm':>8s} {'skid J':>7s} "
           f"{'skid mm':>8s} {'slap J/leg':>10s}")
     drop = G * m * max(0.0, (cgr[1] - cz) / 1000)
     band = []
-    for fs in (0, 250, 500, 750, 1000, 1250, 1500):
+    for fs in (0, 250, 500, 750, 1000, 1250, 1500, 2000):
         r = co_strike(m, k / 1000, d1, d2, f_gear, float(fs))
         sl = slap_down_per_leg(r["ke_res"], drop)
-        ok = r["s_gear_mm"] <= settle_max and 0 < r["s_skid_mm"] <= S_SKID_AVAIL
+        ok = r["s_gear_mm"] <= settle_max and 0 < r["s_skid_mm"] <= s_allow
         if ok:
             band.append(fs)
+        note = "  <- meets R2/R3" if ok else ("  (no absorber: hull penetration)" if fs == 0 else "")
         print(f"  {fs:9.0f} N {r['e_gear']:7.1f} {r['s_gear_mm']:8.1f} {r['e_skid']:7.1f} "
-              f"{r['s_skid_mm']:8.1f} {sl:10.1f}{'  <- meets R2/R3' if ok else ''}")
-    print(f"  R2/R3 band (gear <= {settle_max:.1f} mm, skid <= {S_SKID_AVAIL:.0f} mm available): "
-          + (f"{min(band)}-{max(band)} N pair" if band else "NONE -- more skid stroke needed (U4)"))
-    cap = m * G * H_DROP * 0.5
-    print(f"  fore-leg capacity (shared wire schedule, re-sized at this mass): {cap:.1f} J/leg tail-down")
-    for st in (6.1, 7.5):
+              f"{r['s_skid_mm']:8.1f} {sl:10.1f}{note}")
+    print(f"  R2/R3 band (gear <= {settle_max:.1f} mm, skid <= {s_allow:.1f} mm): "
+          + (f"{min(band)}-{max(band)} N pair (of the forces tried)" if band else "NONE -- more skid stroke needed (U4)"))
+    dem = m * G * H_DROP * 0.5
+    print(f"  slap-down is compared with the tail-down per-leg DEMAND the shared wire is sized for "
+          f"({dem:.1f} J/leg = m g h / 2), not an independent fore-leg capacity")
+    for st in (5.2, 6.1):
         chk = co_strike_mesh_check(stroke_mm=st)
-        print(f"  U4 mesh check (rear shell, {st} mm skid stroke): "
+        print(f"  U4 mesh check ({st} mm skid stroke + {HULL_MARGIN_MM:.1f} mm margin): "
               f"{'PASS' if chk['pass'] else 'FAIL'} -- {chk['reason']}")
 
 
-def co_strike_mesh_check(stroke_mm, rear="rear_shell24_2mm_repaired.stl"):
-    """U4 acceptance check on the (rebuilt) rear part: in the co-strike the skid
-    tips must be the first aft contact about the aft feet, and at that attitude
-    the tail cone must stay at least the skid stroke above the ground.
+def skid_vertex_mask(v, y0=Y_FOOT_AFT, step=0.5, tol=0.6):
+    """True where a vertex belongs to a skid tube, identified from geometry.
 
-    Skid vertices are the hollow skid tubes: outboard (|X| > 20 mm) and low
-    (Z < 130 mm); the tubes converge to |X| ~25-37 mm at their tips (Y ~690).
-    Everything else aft of the feet counts as hull -- today the lowest centre
-    point is the ventral cross member between the skids (Y 627.6, Z 96.6).
+    At each station (every `step` mm) the skid tubes are their own small
+    cross-section loops: outboard (|X| mean > 20 mm), narrow (< 40 mm), with
+    their lower edge below Z 125 and top below Z 140 (the tubes rise toward the
+    tip).  A vertex is skid when it lies inside such a loop's polygon, grown by
+    `tol` mm, at its own station.  Point-in-polygon, not a bounding box: a box
+    also caught the hull belly where it passes beside the tubes.
     """
-    v = trimesh.load(os.path.join(STL, rear)).vertices
+    import shapely
+    from shapely.geometry import Polygon
+    mask = np.zeros(len(v), bool)
+    for f in SHELLS:
+        mesh = trimesh.load(os.path.join(STL, f))
+        ys = np.arange(max(y0, mesh.bounds[0][1]) + step / 2, mesh.bounds[1][1] + step, step)
+        for y in ys:
+            yc = min(y, mesh.bounds[1][1] - 0.05)
+            sec = mesh.section(plane_origin=[0, yc, 0], plane_normal=[0, 1, 0])
+            if sec is None:
+                continue
+            near = np.where(np.abs(v[:, 1] - y) <= step / 2 + 1e-9)[0]
+            if not len(near):
+                continue
+            for d in sec.discrete:
+                if len(d) < 4:
+                    continue
+                xw, zt = np.ptp(d[:, 0]), d[:, 2].max()
+                if abs(d[:, 0].mean()) > 20.0 and xw < 40.0 and d[:, 2].min() < 125.0 and zt < 140.0:
+                    poly = Polygon(d[:, [0, 2]]).buffer(tol)
+                    hit = shapely.contains_xy(poly, v[near, 0], v[near, 2])
+                    mask[near[hit]] = True
+        # Tube end caps: the tips curve inboard faster than the section loops
+        # track over the last few mm.  The cross-sections show no hull below
+        # Z 220 there (docs/TAIL_STRIKE §1), so outboard vertices below Z 140
+        # in the last 6 mm of the part are skid end cap.
+        if f.startswith("rear"):
+            tip = (v[:, 1] > mesh.bounds[1][1] - 6.0) & (np.abs(v[:, 0]) > 20.0) & (v[:, 2] < 140.0)
+            mask |= tip
+    return mask
+
+
+def co_strike_mesh_check(stroke_mm, margin_mm=None):
+    """U4 acceptance check: at the co-strike the skid tips must be the first aft
+    contact about the aft feet, and the hull (every middle+rear vertex that is
+    not skid tube) must stay at least stroke + margin above the ground.
+    """
+    margin_mm = HULL_MARGIN_MM if margin_mm is None else margin_mm
+    v = np.vstack([trimesh.load(os.path.join(STL, f)).vertices for f in SHELLS])
     v = v[v[:, 1] > Y_FOOT_AFT + 1.0]
-    skid = (np.abs(v[:, 0]) > 20.0) & (v[:, 2] < 130.0)
+    skid = skid_vertex_mask(v)
     ang = np.degrees(np.arctan2(v[:, 2] - GROUND_Z, v[:, 1] - Y_FOOT_AFT))
     skid_deg, tail_deg = float(ang[skid].min()), float(ang[~skid].min())
     t = math.radians(skid_deg)
-    tail_h = float(min(rot((y, z), t)[1] for y, z in v[~skid][:, 1:3]))
-    ok = bool(skid_deg < tail_deg and tail_h >= stroke_mm)
+    tail_h = float(min(rot((y, z), t)[1] for y, z in v[~skid][:, 1:3])) - GROUND_Z
+    need = stroke_mm + margin_mm
+    ok = bool(skid_deg < tail_deg and tail_h >= need)
     if skid_deg >= tail_deg:
-        reason = f"hull/tail cone touches first ({tail_deg:.2f} deg vs skids {skid_deg:.2f} deg)"
-    elif tail_h < stroke_mm:
-        reason = f"hull only {tail_h:.1f} mm up at skid contact, stroke {stroke_mm:.1f} mm"
+        reason = f"hull touches first ({tail_deg:.2f} deg vs skids {skid_deg:.2f} deg)"
+    elif tail_h < need:
+        reason = f"hull only {tail_h:.1f} mm up at skid contact, needs {need:.1f} mm"
     else:
-        reason = f"skids lead; hull {tail_h:.1f} mm clear (stroke {stroke_mm:.1f} mm)"
+        reason = f"skids lead; hull {tail_h:.1f} mm clear (needs {need:.1f} mm)"
     return {"pass": ok, "skid_deg": skid_deg, "tail_deg": tail_deg,
             "tail_clear_mm": tail_h, "reason": reason}
 
 
 def part2():
-    print("\nLanding-gear material re-check (gear tool 4 ft demands, allowable = ult/2)")
+    _nm, m, *_ = design_case()
+    sched, _ = gear_schedule_at(m)
+    thigh_m = sched["thigh_m_nmm"]
+    boss_p = sched["p_wire_n"]
+    bolt_r = BOLT_R_13LBM * m / DESIGN_KG     # bolt resultant scales with the leg force
+    print(f"\nLanding-gear material re-check at {m / 0.45359237:.2f} lbm (SLS design mass; "
+          "gear tool demands; allowable = ult/2)")
     print(f"  {'material':28s} {'leg g':>6s} {'thigh M':>8s} {'thigh solid':>11s} "
           f"{'boss':>6s} {'bolt FOS':>8s} {'stiff':>6s} {'elong':>6s}")
     for name, rho, su, ef, el in MATS:
         allow = su / 2
-        thigh = allow / (THIGH_M / THIGH_Z)
-        thigh_s = allow / (THIGH_M / THIGH_Z_SOLID)
-        boss = BOSS_CAP_PETG * (su / 55.0) / BOSS_P
-        bolt = BOLT_CAP_PETG * (su / 55.0) / BOLT_R
+        thigh = allow / (thigh_m / THIGH_Z)
+        thigh_s = allow / (thigh_m / THIGH_Z_SOLID)
+        boss = BOSS_CAP_PETG * (su / 55.0) / boss_p
+        bolt = BOLT_CAP_PETG * (su / 55.0) / bolt_r
         print(f"  {name:28s} {LEG_FRAME_CM3 * rho:6.1f} {thigh:7.2f}x {thigh_s:10.2f}x "
               f"{boss:5.2f}x {bolt:7.2f} {ef / 6670:5.2f}x {el:5.1f}%")
     print(f"  (pass = 1.00x on thigh and boss; bolt bearing target FOS {FOS_IMPACT})")
     print("  thigh Z needed: " + ", ".join(
-        f"{n.split()[0]} {THIGH_M / (s / 2):.0f} mm^3 (d x{(THIGH_M / (s / 2) / THIGH_Z_SOLID) ** (1 / 3):.2f})"
+        f"{n.split()[0]} {thigh_m / (s / 2):.0f} mm^3 (d x{(thigh_m / (s / 2) / THIGH_Z_SOLID) ** (1 / 3):.2f})"
         for n, _r, s, _e, _l in MATS))
 
 
