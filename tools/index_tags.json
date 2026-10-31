@@ -14434,6 +14434,13 @@
       ],
       "archived": false
     },
+    "docs/MASS_AUDIT_MIDDLE_REAR_SECTIONS.md": {
+      "description": "Mass Audit \u2014 Middle and Rear Sections, and the Joined One-Piece Baseline",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/NACELLE_64MM_VERIFICATION.md": {
       "description": "64 mm Nacelle \u2014 Verification Record (2026-10-03)",
       "tags": [
@@ -18286,6 +18293,13 @@
       ],
       "archived": false
     },
+    "tools/aft_section_mass_audit.py": {
+      "description": "aft_section_mass_audit.py -- measured geometry and mass baseline of the middle",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/airframe_interface_census.py": {
       "description": "Exhaustive interface census of the airframe master assembly.",
       "tags": [
@@ -19315,6 +19329,7 @@
       "docs/LICENSE",
       "docs/MANIFEST.json",
       "docs/MASS_AUDIT_CARGO_WING_ROOT.md",
+      "docs/MASS_AUDIT_MIDDLE_REAR_SECTIONS.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/OBSERVER_LASER_ANALYSIS.md",
@@ -23998,6 +24013,7 @@
       "tools/_clf_shift.py",
       "tools/add_board_notices.py",
       "tools/add_landing_gear_bosses.py",
+      "tools/aft_section_mass_audit.py",
       "tools/airframe_interface_census.py",
       "tools/auw_ledger.py",
       "tools/bake_hull_frame.py",
