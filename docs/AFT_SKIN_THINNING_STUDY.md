@@ -66,6 +66,7 @@ below are slightly **conservative** (heavy) [ASSUMED].
 | 0.8 mm bare | 0.80 | 270.1 g | +8.6 | −0.83 | 392 Hz |
 | 0.8 + isogrid 1.0×4 mm @ 30 | 1.20 | 320.3 g | +7.1 | −0.67 | 464 Hz |
 | 1.0 + isogrid 1.0×4 mm @ 40 | 1.30 | 332.9 g | +6.4 | −0.57 | 478 Hz |
+| 1.0 + isogrid 1.2×5 mm @ 45 | 1.40 | 345.5 g | **+5.1** | −0.60 | 492 Hz |
 | 1.0 + isogrid 1.0×4 mm @ 30 | 1.40 | 345.5 g | +12.8 | −0.49 | 492 Hz |
 | 1.2 + isogrid 1.0×4 mm @ 45 | 1.47 | 353.8 g | +8.1 | −0.43 | 501 Hz |
 
@@ -90,6 +91,27 @@ bending mode of the part as a cantilever from Y 436, carrying its items [REF-STR
 5. **Handling.** A simply supported circular plate with a central patch load, plate
    radius equal to the pocket inradius h/3 [REF-STR-001].
 6. **Allowable.** The lower of 0.5 × 84 MPa [REF-MAT-011] and the buckling stress.
+
+## 3a. SLS printability check (3D-print DFM review, 2026-10-31)
+
+> **CAUTION** — The thin candidates above may not print reliably in PA CF. Typical SLS
+> design rules give a 0.7 mm minimum and a 1.0 mm recommended wall for **unfilled** PA12,
+> but **1.5 mm minimum and 2.0–2.5 mm recommended** for fibre-filled grades
+> (`3d-print-design` skill, SLS rules; vendor-specific). DuraForm PA CF is fibre-filled,
+> so the 0.8–1.0 mm skins and 1.0 mm ribs fall below that minimum. Confirm the minimum
+> wall with the service bureau before designing to them.
+
+What this does to the result, at a 1.5 mm PA CF minimum skin [CALC, same tool]:
+
+| Candidate | Part | MS handling | Offset, single pivot 0.5 in aft |
+| --- | ---: | ---: | ---: |
+| 1.5 mm bare | 358.0 g | −0.42 | +5.2 mm |
+| 1.5 + isogrid 1.5×4 mm @ 40 | 412.6 g | −0.04 | +7.0 mm |
+
+A 1.5 mm skin still fails the assumed handling load. The ribs that nearly fix it add
+back almost all the mass. So the printable PA CF skin leaves the CG at **+5.2 to +7.0 mm**,
+not +4.4 mm. Unfilled PA11 or PA12 could reach 1.0 mm, but at 0.22× the stiffness
+(`docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md` §3).
 
 ## 4. What decides the answer, and what to do about it
 

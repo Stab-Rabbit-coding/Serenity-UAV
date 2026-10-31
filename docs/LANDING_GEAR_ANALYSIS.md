@@ -978,7 +978,7 @@ bearing is scaled by the CF-PETG ratio [ASSUMED].
 | Thigh, 6 mm bore | 0.53× | 0.81× |
 | Thigh, solid | 0.61× | **0.93×**: cylinders Ø14 → **Ø14.35 mm** for 1.00× |
 | Bay boss bearing | 0.75× | **1.15×** |
-| Bay bolt bearing FOS (target 4.0) | 2.62 | **4.00**, with no margin |
+| Bay bolt bearing FOS (target 4.0) | 2.62 | **4.00**, with no margin. **Action:** restore margin with a thicker boss or backing land, or a wider bolt pattern, so that FOS ≥ 4.0 holds with 10% AUW growth. The PA12-CF bearing allowable is ASSUMED, gated on the WBS §0.12 coupons. |
 
 **Co-strike** (owner design case, `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md` §5): the aft
 feet and the PA11 skids land together at the 25.6° tip-back attitude. With a skid-pair

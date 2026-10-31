@@ -33,9 +33,11 @@ Labels: **[MESH]** measured. **[SRC]** datasheet or cited source. **[REPO]** rep
 
    | Attitude | Energy in first contact | Fraction of aircraft mass acting |
    | --- | --- | --- |
-   | Tip-back, 25.6° | 8.8 J (6.5 ft·lbf) | 0.110 |
-   | 40.6° (tip-back + 15°) | 12.8 J (9.4 ft·lbf) | 0.160 |
-   | Near-vertical, tail-first | approaches 79.6 J | approaches 1.0 |
+   | Tip-back, 25.6° | 8.5 J (6.3 ft·lbf) | 0.110 |
+   | 40.6° (tip-back + 15°) | 12.3 J (9.1 ft·lbf) | 0.160 |
+   | Near-vertical, tail-first | approaches 77.0 J | approaches 1.0 |
+
+   At the SLS design mass, 14.19 lbm.
 
    [CALC, the same method as the gear tool].
 3. **A strike at exactly tip-back loads the aft gear, not the skids.**
@@ -48,8 +50,8 @@ Labels: **[MESH]** measured. **[SRC]** datasheet or cited source. **[REPO]** rep
      (300 lbf)**.
 4. **SLS lowers the AUW against solid FDM.** With SLS printed parts (PA CF, PA11 feet) on
    the hull and both nacelles, the heaviest configuration is **14.19 lbm**, against
-   15.09 lbm FDM-solid: ×1.092 the gear design mass. The 13.38 lbm figure is the *hover*
-   configuration, FDM at the ledger's 1.05 g/cc. The SLS equivalent for hover is
+   15.09 lbm FDM-solid: ×1.092 the gear design mass. The 13.38 lbm figure is the *empty* (no-payload)
+   configuration, FDM at the ledger's 1.05 g/cc. The SLS equivalent, still empty, is
    **13.69 lbm** (§6). *(Corrected 2026-10-31: earlier figures of 14.09 and 14.68 lbm re-priced only the hull's printed parts and left out the 852 g of nacelle printed parts. See `tools/sls_auw_reconcile.py` and §6.)*
 5. **Gear materials:** PA12-CF (DuraForm PA CF) is the only one of the three that carries
    the leg frame and bay loads. PA11 belongs where energy is absorbed: the skids and the
@@ -74,12 +76,12 @@ superseded for the 3.0 in flight gear: the angle is 25.6°.
 | ID | Requirement | Basis |
 | --- | --- | --- |
 | **TS-1** | The skids shall make the first aft ground contact at every nose-up attitude above aft-gear tip-back. **Met today** (25.6° vs 27.3° for the hull). The hull clearance at skid contact (6.5 mm) shall be at least the skid stroke; see §5. | §1, §5 |
-| **TS-2** | Design attitude envelope: tip-back to tip-back + 15° (25.6–40.6°) **[ASSUMED, owner to set]**. Skid-pair energy **≥ 12.8 J (9.4 ft·lbf)**, absorbed without the hull or tail cone reaching the ground. | §0 item 2 |
-| **TS-3** | Stroke. The skids shall provide their absorbing stroke before the skin touches. That stroke is **3–7 mm** today. Pair force at the stated stroke and 12.8 J: 10 mm, 1,276 N (287 lbf); 20 mm, 638 N; 30 mm, 425 N. At 10 mm the CG sees about 19.5 g and the skid point about 122 g. | [CALC] |
-| **TS-4** | Simultaneous aft gear and tail at tip-back: the aft gear pair shall take 40.1 J per leg (F_leg about 1,333 N) at FDM-solid mass, or 38.4 J and 1,254 N at the SLS 14.19 lbm. **Re-size the gear schedule from 13.0 lbm to the as-weighed AUW** (LG-15). | §0 item 3 |
+| **TS-2** | Design attitude envelope: tip-back to tip-back + 15° (25.6–40.6°) **[ASSUMED, owner to set]**. Skid-pair energy **≥ 12.3 J (9.1 ft·lbf)** at 14.19 lbm, absorbed without the hull or tail cone reaching the ground. | §0 item 2 |
+| **TS-3** | Stroke. The skids shall provide their absorbing stroke before the skin touches. The hull clearance at skid contact is **6.5 mm** today (the ventral cross member; §1). Pair force at the stated stroke and 12.3 J: 10 mm, 1,234 N (277 lbf); 20 mm, 617 N; 30 mm, 411 N. At 10 mm the CG sees about 19.5 g and the skid point about 122 g. | [CALC] |
+| **TS-4** | Simultaneous aft gear and tail at tip-back: the aft gear pair shall take 40.1 J per leg (F_leg about 1,333 N) at FDM-solid mass, or 37.7 J and 1,254 N at the SLS 14.19 lbm. **Re-size the gear schedule from 13.0 lbm to the as-weighed AUW** (LG-15). | §0 item 3 |
 | **TS-5** | Skids may be sacrificial after a 4 ft drop, as for the gear (`LANDING_GEAR_ANALYSIS.md` §1). The hull shall not crack. | LG-17 practice |
 
-**Why stroke drives the material.** At 12.8 J the energy needs a skid that yields and
+**Why stroke drives the material.** At 12.3 J the energy needs a skid that yields and
 strokes rather than one that breaks. PA CF fails at 3.8% elongation, so it fractures with
 little absorbed energy. PA11 Black stretches to 52.6%, so it yields and keeps absorbing.
 This supports Option B (`docs/AFT_SKIN_THINNING_STUDY.md` §5): the ring and skids
@@ -144,15 +146,16 @@ skid member:**
 
 | ID | Requirement |
 | --- | --- |
-| **CS-1** | Skid-pair plateau force **1,000–1,500 N (225–337 lbf)**, so **500–750 N per skid**, held over the stroke. |
-| **CS-2** | Skid stroke **≤ 6.1 mm** at 1,000 N. It shall stay at least **1 mm** below the hull clearance at skid contact (6.5 mm today) [margin ASSUMED]. At 750 N the 7.5 mm stroke fails the mesh check. |
+| **CS-1** | Skid-pair plateau force **1,250–1,500 N (281–337 lbf)**, so **625–750 N (141–169 lbf) per skid**, held over the stroke. *(Corrected by review 2026-10-31: 1,000 N fails CS-2.)* |
+| **CS-2** | Skid stroke **≤ 5.5 mm**: the 6.5 mm hull clearance at skid contact, less a **1 mm** margin [margin ASSUMED, owner to confirm]. 1,250 N gives 5.2 mm; 1,000 N gives 6.1 mm and fails. |
 | **CS-3** | The skid tips stay the first aft contact (TS-1), with the tip at Y about 690 and X about ±37. |
-| **CS-4** | Each skid absorbs **3.1–3.4 J (2.3–2.5 ft·lbf)**. In PA11 this has to come from yielding [REF-MAT-012]. The plateau model is an assumption until a coupon or skid drop test confirms it. |
-| **CS-5** | Acceptance: `co_strike_mesh_check()` passes on the rebuilt STL at the chosen stroke. Today it passes at 6.1 mm and fails at 7.5 mm. |
+| **CS-4** | Each skid absorbs **3.3–3.4 J (2.4–2.5 ft·lbf)**. In PA11 this has to come from yielding [REF-MAT-012]. The plateau model is an assumption until a coupon or skid drop test confirms it. |
+| **CS-5** | Acceptance: `co_strike_mesh_check()` passes on the rebuilt STL at the chosen stroke plus the 1 mm margin. It identifies the skid tubes from their own cross-section loops and checks the middle and rear shells. Today it passes at 5.2 mm and fails at 6.1 mm. |
+| **CS-6** | **The skid section shall carry CS-1.** Estimate: a Ø20 × 2 mm tube cantilevered about 205 mm from the ring collapses at about **165 N** in PA11 (51 MPa plastic moment) and breaks at about **190 N** in PA12-CF. That is roughly a quarter of the 625–750 N needed [CALC; the cantilever length is ASSUMED from the mesh stations]. The rebuild needs a larger or thicker tube, a strut to the hull, or a shorter cantilever, within the fixed outer shape. |
 
 **Gear in the co-strike:** about 25 mm of stroke against the 30.7 mm settle limit. That is
 5.7 mm more margin than in a gear-only strike. The nose slap-down puts **≤ 6.2 J per fore
-leg** against 38.5 J of capacity. R3 and R4 are met.
+leg**. The comparison value is 38.5 J: the tail-down per-leg *demand* the shared wire is sized for, not an independent fore-leg capacity. R3 and R4 are **met under the plateau assumption**. That depends on the CS-4 coupon or drop test and on CS-6. Not yet analysed: roll or one-skid attitudes, a ±1 mm skid-height offset, local skin or ring joint capacity at the skid roots, and a rising (non-plateau) PA11 force curve.
 
 ## 6. How the AUW goes from 13.38 lbm (FDM) to SLS
 
@@ -160,7 +163,7 @@ Reproduce with `/usr/bin/python3 tools/sls_auw_reconcile.py`. Every printed part
 STL volume. Only the density changes. Non-printed mass (BOM, nacelle hardware, GAP) is
 unchanged.
 
-| Step | Hover (`hover_4000`) | Heaviest (`heaviest_4000_payload`, the gear design case) |
+| Step | Empty, no payload (`hover_4000`) | Heaviest = max hover AUW (`heaviest_4000_payload`, +8 oz payload; the design case) |
 | --- | ---: | ---: |
 | Ledger: FDM CF-PETG at 1.05 g/cc | **6,071 g, 13.38 lbm** | 6,298 g, 13.88 lbm |
 | + hull printed parts to SLS (1,638 → 1,729 g) | +91 g | +91 g |
@@ -168,11 +171,14 @@ unchanged.
 | **SLS** | **6,211 g, 13.69 lbm** | **6,438 g, 14.19 lbm** |
 | For comparison: FDM at solid 1.28 g/cc | 6,617 g, 14.59 lbm | 6,844 g, 15.09 lbm |
 
-**Reading it.**
+**Reading it.** VTOL: every sortie takes off and lands in hover, so the heaviest
+configuration *is* the maximum hover AUW. The ledger name `hover_4000` means
+"4000 mAh, no payload", not a separate flight regime. Hover T/W at the SLS design mass
+is 9,480 gf / 6,438 g = **1.47**.
 
 - **There are two steps, not one.** 13.38 → 14.09 lbm (my earlier figure) mixed two
   separate changes:
-    - A configuration change: hover to heaviest-payload, +227 g.
+    - A configuration change: empty to loaded (+8 oz payload), +227 g.
     - A process change: FDM to SLS, which I applied to the hull only.
 - **The process change, done properly over the whole aircraft, is +140 g (0.31 lbm).**
 - **SLS is heavier than the ledger and lighter than real FDM.**
@@ -187,7 +193,7 @@ unchanged.
     - The Option B skids in PA11 (−4.3 g).
     - The PA12-CF thigh growth (Ø14 → Ø14.35 mm, a few grams).
 
-**CG effect.** Re-pricing the printed parts barely moves the hover CG. It shifts
+**CG effect.** Re-pricing the printed parts barely moves the CG (empty configuration). It shifts
 **+0.16 mm** aft with SLS and +0.57 mm with FDM-solid, against Y 349.1 on the ledger.
 The nacelle printed mass rides the pivot station. None of the CG studies
 (`docs/AFT_SKIN_THINNING_STUDY.md`, plan 001) change materially [CALC].

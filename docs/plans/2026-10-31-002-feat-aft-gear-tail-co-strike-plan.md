@@ -41,7 +41,7 @@ review agents were dispatched.
 - **The gear is undersized.** It was designed for 13.0 lbm, below the as-built mass.
 - **The skids have little stroke.** They hang only 3–7 mm below the hull.
 
-A first two-contact plateau simulation, at the hull-only FDM-solid mass (14.68 lbm, later corrected to 15.09 lbm; see `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md` §6) with F_gear = 2 × 1,296 N, showed:
+A first two-contact plateau simulation, at the hull-only FDM-solid mass (14.68 lbm, later corrected to 15.09 lbm; see `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md` §6) with F_gear = 2 × 1,296 N, showed the table below. **Historical:** the current values at 14.19 lbm are in `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md` §5. The slap-down column here is the *total* onto the fore pair, not per leg.
 
 | Skid pair force | Gear pair energy | Gear stroke | Skid pair energy | Skid stroke | Nose slap-down |
 | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -51,8 +51,7 @@ A first two-contact plateau simulation, at the hull-only FDM-solid mass (14.68 l
 
 - **With no skid force, the tail descends 22 mm** while the gear strokes, so it strikes.
 - **The gear is already at its 30.7 mm settle limit.**
-- **A skid pair of about 750–1,000 N** relieves the gear by about 5 mm and fits the
-  available stroke.
+- **A skid pair of about 750–1,000 N** relieves the gear by about 5 mm. *(Superseded by review 2026-10-31: with the 6.5 mm measured clearance and a 1 mm margin, only **1,250 N and above** fits. See CS-1 and CS-2.)*
 
 ---
 
@@ -61,12 +60,14 @@ A first two-contact plateau simulation, at the hull-only FDM-solid mass (14.68 l
 - **R1.** At tip-back, the aft feet and both skid tips shall be co-planar ground contacts,
   within ±1 mm. The tail cone shall clear the ground through the full skid stroke.
 - **R2.** The skid pair shall absorb its share of the co-strike energy within the
-  available stroke, and the hull skin shall not touch. Starting target: 700–1,000 N
-  plateau, ≤7 mm stroke, about 6 J.
+  available stroke, and the hull skin shall not touch. Target (corrected by review 2026-10-31; owned by CS-1/CS-2): **1,250–1,500 N** pair plateau,
+  stroke **≤ 5.5 mm** (6.5 mm measured clearance less a 1 mm margin), about 6.5 J.
 - **R3.** The aft gear stroke in the co-strike shall stay within the 30.7 mm settle limit,
-  with the existing residual-clearance rule (`RESIDUAL_MIN`).
-- **R4.** The nose slap-down energy (about 10 J) onto the fore gear shall be checked
-  against the fore-leg schedule.
+  with the existing residual-clearance rule (`RESIDUAL_MIN`). The 30.7 mm limit comes from the
+  retired 1.5 in variant's clearance (38.1 − 7.4 mm). It binds the shared wire, which is
+  conservative for the 3.0 in flight gear (80 mm clearance).
+- **R4.** The nose slap-down energy onto the fore gear (≤ 6.2 J per fore leg at 14.19 lbm)
+  shall be checked against the fore-leg schedule.
 - **R5.** The gear wires (ductile and spring) shall be re-sized as a function of AUW. The
   interim value is **14.19 lbm** (SLS on the hull and both nacelles; first written as 14.09,
   which omitted the nacelles); the final value is the as-weighed AUW (LG-15).
@@ -122,7 +123,7 @@ flowchart LR
 - **Files:**
     - `tools/tail_strike_requirement.py`: add a co-strike section, reading the geometry
       from the meshes and the ledger.
-    - `tools/test_tail_strike_requirement.py`: new.
+    - `tools/tests/test_tail_strike_requirement.py`: new.
 - **Approach:**
     1. Time-step the planar rigid body: two plateau forces, gravity included, each
        contact releasing when its downward speed reaches zero.
@@ -150,10 +151,11 @@ flowchart LR
   Check it against the fore-leg schedule.
 - **Requirements:** R4.
 - **Dependencies:** U1.
-- **Files:** `tools/tail_strike_requirement.py`, `tools/test_tail_strike_requirement.py`.
-- **Approach:** The rotational kinetic energy becomes impact energy at the fore feet
-  (Y 259.2), through the effective mass about the aft-foot line. Compare it with the
-  fore-leg energy capacity of the current wire schedule.
+- **Files:** `tools/tail_strike_requirement.py`, `tools/tests/test_tail_strike_requirement.py`.
+- **Approach:** All the residual kinetic energy, plus the gravity work as the CG settles to
+  level, goes to the fore pair, split equally (conservative). It is compared with the
+  tail-down per-leg demand the shared wire is sized for (m·g·h/2). That is not an independent
+  fore-leg capacity; the fore peak force is deferred.
 - **Test scenarios:**
     - **Zero rotation:** zero residual rotation gives zero slap-down energy.
     - **Hand case:** the about-10 J residual gives per-fore-leg energy below the
@@ -170,7 +172,7 @@ flowchart LR
     - `tools/landing_gear_r6_sizing.py`: `DESIGN_AUW_LBM`, read from an argument or
       constant, with 13.0 kept as the historical comparison.
     - `docs/LANDING_GEAR_ANALYSIS.md`: a 14.19 lbm addendum section.
-    - `tools/test_landing_gear_r6_sizing.py`: new or extended.
+    - `tools/tests/test_tail_strike_requirement.py`: the gear regression and AUW-scaling tests live here.
 - **Approach:** The demand per leg is the larger of the tail-down 2-point demand and the
   U1 co-strike gear-pair demand. Re-solve the ductile and spring wires. Re-run the
   thigh, bay-boss and bolt checks with the PA12-CF allowables
@@ -204,8 +206,11 @@ flowchart LR
 - **Test scenarios:**
     - **Rebuilt mesh:** feet and skid tips co-planar within ±1 mm.
     - **Tail cone:** above the ground through the full stroke.
-    - **Current mesh:** the check reports the 0.6° tail-cone lead as a failure.
-- **Verification:** the mesh check fails on today's STL and passes on the rebuild.
+    - **Current mesh:** the skids lead (25.6° against 27.3° for the hull). With the 1 mm
+      margin, the check passes at a 5.2 mm stroke (1,250 N) and fails at 6.1 mm (1,000 N).
+      *(Corrected: the earlier '0.6° tail-cone lead' was a skid-tip vertex.)*
+- **Verification:** the mesh check enforces stroke + margin on both shells, identifies
+  skids from their own section loops, and passes on the rebuild at the chosen F_skid.
 
 ---
 
@@ -226,8 +231,16 @@ flowchart LR
 
 ## Risks
 
-- **Too little skid stroke** (3–7 mm today) may force F_skid above the hull's local
-  capacity. U4 resolves this in the rebuild.
+- **Too little skid stroke** (6.5 mm hull clearance today) forces F_skid up to 1,250 N or
+  more, which loads the hull locally. The skin and ring-joint capacity at the skid roots,
+  at 1.5 × the per-skid peak, has not been computed.
+- **The skid section is too weak for CS-1.** A Ø20 × 2 mm tube collapses at about 165 N
+  (PA11) against 625–750 N needed (CS-6).
+- **Only the symmetric tip-back attitude is analysed.** Not covered: roll (one foot plus one
+  skid), the TS-2 pitch envelope, and a ±1 mm skid-height offset. SLS tolerance is ±0.3% or
+  ±0.3 mm, so ±1 mm co-planarity across separate parts needs a shim or measurement step.
+- **One-way U3 → U1.** The co-strike uses a constant F_gear. Re-sized or rising-force wires
+  need a re-run of U1.
 - **PA11 plateau behaviour is assumed.** Nylon yields gradually rather than at a flat
   plateau. The coupons are deferred.
 - **AUW drift.** Every number in U1–U3 scales with mass. KTD2 keeps it a parameter.
@@ -243,4 +256,4 @@ flowchart LR
 ## Definition of Done
 
 U1–U4 are complete. The addendum and the skid specification are written. The mesh check
-fails on today's STL with the reason stated. Every citation is in `REFERENCES.md`.
+reports today's STL correctly: it passes at 1,250 N and fails at 1,000 N. Every citation is in `REFERENCES.md`.
