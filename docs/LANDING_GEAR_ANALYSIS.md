@@ -950,3 +950,37 @@ byte-identical in content to the 3.0in variant) is retired and archived to
   (cylinder cluster, disc joints, slotted shin), bay recess appearance.
 - Canonical universe: *Firefly* / *Serenity*, created by Joss Whedon; ship
   design Tim Earls / Geoffrey Mandel.
+
+---
+
+## 12. Addendum (2026-10-31): Re-size at 14.09 lbm, SLS PA12-CF, and the Aft-Gear + Skid Co-Strike
+
+**Interim.** The owner decided on 2026-10-31 that SLS is the fabrication process and that
+AUW stays a parameter until the aircraft is weighed (LG-15). 14.09 lbm is the heaviest
+configuration with SLS PA CF printed parts. Reproduce with
+`/usr/bin/python3 tools/landing_gear_r6_sizing.py --auw-lbm 14.09`. Without the flag, the
+13.0 lbm schedule is unchanged. *Analysis by Claude Opus 5.5 (Anthropic); plan
+2026-10-31-002 U3.*
+
+| | 13.0 lbm (current schedule) | **14.09 lbm (SLS interim)** |
+| --- | ---: | ---: |
+| F_leg, 4 ft tail-down | 1,148 N (258 lbf) | **1,245 N (280 lbf)** |
+| Ductile wire Ø | 5.27 mm | **5.41 mm** |
+| Spring wire Ø | 4.00 mm | **4.11 mm** |
+| Thigh moment at the hip | 91.9 N·m | 99.6 N·m |
+
+**Structure margins at 14.09 lbm.** Allowable = ultimate / 2 (§4.6 convention). PA12-CF
+bearing is scaled by the CF-PETG ratio [ASSUMED].
+
+| Check | CF-PETG FDM | **PA12-CF (DuraForm PA CF) [REF-MAT-011]** |
+| --- | ---: | ---: |
+| Thigh, 6 mm bore | 0.53× | 0.81× |
+| Thigh, solid | 0.61× | **0.94×**: cylinders Ø14 → **Ø14.3 mm** for 1.00× |
+| Bay boss bearing | 0.76× | **1.16×** |
+| Bay bolt bearing FOS (target 4.0) | 2.64 | **4.03** |
+
+**Co-strike** (owner design case, `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md` §5): the aft
+feet and the PA11 skids land together at the 25.6° tip-back attitude. With a skid-pair
+plateau of 1,000–1,500 N, the aft gear strokes about 25 mm (limit 30.7 mm) and absorbs
+about 62 J. The nose slap-down puts ≤ 6.2 J on each fore leg. The tail-down gear schedule
+above remains the sizing case for the wires. The co-strike adds no new wire demand.

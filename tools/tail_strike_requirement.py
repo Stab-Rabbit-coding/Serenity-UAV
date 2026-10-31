@@ -254,6 +254,38 @@ def part3():
           + (f"{min(band)}-{max(band)} N pair" if band else "NONE -- more skid stroke needed (U4)"))
     cap = m * G * H_DROP * 0.5
     print(f"  fore-leg capacity (shared wire schedule, re-sized at this mass): {cap:.1f} J/leg tail-down")
+    for st in (6.1, 7.5):
+        chk = co_strike_mesh_check(stroke_mm=st)
+        print(f"  U4 mesh check (rear shell, {st} mm skid stroke): "
+              f"{'PASS' if chk['pass'] else 'FAIL'} -- {chk['reason']}")
+
+
+def co_strike_mesh_check(stroke_mm, rear="rear_shell24_2mm_repaired.stl"):
+    """U4 acceptance check on the (rebuilt) rear part: in the co-strike the skid
+    tips must be the first aft contact about the aft feet, and at that attitude
+    the tail cone must stay at least the skid stroke above the ground.
+
+    Skid vertices are the hollow skid tubes: outboard (|X| > 20 mm) and low
+    (Z < 130 mm); the tubes converge to |X| ~25-37 mm at their tips (Y ~690).
+    Everything else aft of the feet counts as hull -- today the lowest centre
+    point is the ventral cross member between the skids (Y 627.6, Z 96.6).
+    """
+    v = trimesh.load(os.path.join(STL, rear)).vertices
+    v = v[v[:, 1] > Y_FOOT_AFT + 1.0]
+    skid = (np.abs(v[:, 0]) > 20.0) & (v[:, 2] < 130.0)
+    ang = np.degrees(np.arctan2(v[:, 2] - GROUND_Z, v[:, 1] - Y_FOOT_AFT))
+    skid_deg, tail_deg = float(ang[skid].min()), float(ang[~skid].min())
+    t = math.radians(skid_deg)
+    tail_h = float(min(rot((y, z), t)[1] for y, z in v[~skid][:, 1:3]))
+    ok = bool(skid_deg < tail_deg and tail_h >= stroke_mm)
+    if skid_deg >= tail_deg:
+        reason = f"hull/tail cone touches first ({tail_deg:.2f} deg vs skids {skid_deg:.2f} deg)"
+    elif tail_h < stroke_mm:
+        reason = f"hull only {tail_h:.1f} mm up at skid contact, stroke {stroke_mm:.1f} mm"
+    else:
+        reason = f"skids lead; hull {tail_h:.1f} mm clear (stroke {stroke_mm:.1f} mm)"
+    return {"pass": ok, "skid_deg": skid_deg, "tail_deg": tail_deg,
+            "tail_clear_mm": tail_h, "reason": reason}
 
 
 def part2():

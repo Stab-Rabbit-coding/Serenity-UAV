@@ -106,6 +106,17 @@ def test_gear_tool_wires_grow_with_auw():
     assert b["spring_d_mm"] >= a["spring_d_mm"]
 
 
+def test_mesh_check_on_todays_rear_shell():
+    """U4: today the skid tips lead (25.6 deg) and the ventral cross member clears
+    by ~6.5 mm -- enough for the 1,000 N pair's 6.1 mm stroke, not for 750 N's 7.5 mm.
+    (Corrects an earlier reading that the tail cone led; that vertex was a skid tip.)"""
+    ok = ts.co_strike_mesh_check(stroke_mm=6.1)
+    short = ts.co_strike_mesh_check(stroke_mm=7.5)
+    assert ok["skid_deg"] < ok["tail_deg"]
+    assert ok["pass"] is True
+    assert short["pass"] is False
+    assert "hull only" in short["reason"]
+
 if __name__ == "__main__":
     fails = 0
     for name, fn in sorted(globals().items()):

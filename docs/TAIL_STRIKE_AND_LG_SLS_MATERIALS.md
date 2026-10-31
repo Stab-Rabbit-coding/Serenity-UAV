@@ -19,11 +19,15 @@ Labels: **[MESH]** measured. **[SRC]** datasheet or cited source. **[REPO]** rep
 
 ## 0. Headline
 
-1. **The tail cone strikes before the skids.**
+1. **The skid tips are the first aft contact, but only just.** *(Corrected 2026-10-31:
+   an earlier version said the tail cone strikes first. That vertex, at X ±37 mm, is a
+   skid tip, not the tail cone.)*
    - The tip-back angle is **25.6°** nose-up about the aft feet. The first contact is the
-     tail-cone tip at Y 689.8, Z 119.2 [MESH].
-   - The skid tips reach the ground about 0.6° later.
-   - The skids are not yet protecting the tail.
+     skid tips at X ±37, Y 689.8, Z 119.2 [MESH].
+   - The lowest centerline point is the ventral cross member between the skids
+     (Y 627.6, Z 96.6, 27.3°).
+   - At skid contact, the cross member is **6.5 mm** off the ground. That is the skid
+     stroke available before the hull touches.
 2. **Skid-first strike energy is small, because the long lever arm makes the effective
    mass small.** The skid pair has to absorb:
 
@@ -55,8 +59,8 @@ Labels: **[MESH]** measured. **[SRC]** datasheet or cited source. **[REPO]** rep
 | --- | --- | --- |
 | Aft feet | Y 440.7, ground Z 0 | `tools/landing_gear_r6_sizing.py` [REPO] |
 | CG, heaviest configuration | Y 349.5, Z 157.3; k_pitch 102.1 mm | `auw_ledger.json` [REPO] |
-| First aft contact | tail-cone tip at Y 689.8, Z 119.2: **25.6°** | [MESH] |
-| Skid tip | about Y 680, Z 117.7: **26.2°** | [MESH] |
+| First aft contact | skid tips at X ±37, Y 689.8, Z 119.2: **25.6°** | [MESH] |
+| Lowest centerline hull point | ventral cross member at Y 627.6, Z 96.6: **27.3°**; 6.5 mm clear at skid contact | [MESH] |
 | Skid below the adjacent hull | 2.7 mm at Y 575, 7.0 mm at Y 605. At Y 625 the cross member between the skids (Z 96) is lower than the skid tubes (Z 99.9). | [MESH] |
 
 The 1.5 in-era note in `LANDING_GEAR_ANALYSIS.md` §2.3 ("≈12° to skid contact") is
@@ -66,7 +70,7 @@ superseded for the 3.0 in flight gear: the angle is 25.6°.
 
 | ID | Requirement | Basis |
 | --- | --- | --- |
-| **TS-1** | The skids shall make the first aft ground contact at every nose-up attitude above aft-gear tip-back. Today the tail cone leads by 0.6°. Proportions are fixed (plan R6), so the fix is in the skid tip itself. Its underside shall reach at least about 2 mm below the line from the aft feet to the tail tip (margin [ASSUMED]). | §1 |
+| **TS-1** | The skids shall make the first aft ground contact at every nose-up attitude above aft-gear tip-back. **Met today** (25.6° vs 27.3° for the hull). The hull clearance at skid contact (6.5 mm) shall be at least the skid stroke; see §5. | §1, §5 |
 | **TS-2** | Design attitude envelope: tip-back to tip-back + 15° (25.6–40.6°) **[ASSUMED, owner to set]**. Skid-pair energy **≥ 12.8 J (9.4 ft·lbf)**, absorbed without the hull or tail cone reaching the ground. | §0 item 2 |
 | **TS-3** | Stroke. The skids shall provide their absorbing stroke before the skin touches. That stroke is **3–7 mm** today. Pair force at the stated stroke and 12.8 J: 10 mm, 1,276 N (287 lbf); 20 mm, 638 N; 30 mm, 425 N. At 10 mm the CG sees about 19.5 g and the skid point about 122 g. | [CALC] |
 | **TS-4** | Simultaneous aft gear and tail at tip-back: the aft gear pair shall take 39.0 J per leg (F_leg about 1,296 N) at the as-built design mass. **Re-size the gear schedule from 13.0 lbm to the as-weighed AUW** (LG-15). | §0 item 3 |
@@ -107,10 +111,41 @@ wires, the pins and the CF backbone are unchanged.
 
 ## 4. Open items
 
-- The owner sets the TS-2 attitude envelope, and the skid fix for TS-1 within the fixed
+- The owner sets the TS-2 attitude envelope, and the skid-stroke margin (§5) within the fixed
   outer shape.
 - **Re-size the gear wires** (ductile Ø, spring Ø) at the as-weighed AUW (LG-15). This
   depends on the SLS or FDM decision: 14.09 vs 14.68 lbm.
 - PA CF and PA11 bearing allowables and build-axis data: coupons or the vendor
   (WBS §0.12).
 - PA11 and PA12 Black datasheets are cataloged as REF-MAT-012 and REF-MAT-013; their official URLs still need validating.
+
+## 5. Co-strike design case (owner, 2026-10-31; plan 2026-10-31-002)
+
+The design case is **the aft gear and the tail skids striking together** at tip-back. The
+model is `co_strike()` in `tools/tail_strike_requirement.py`: a planar rigid body with two
+constant-force (plateau) absorbers and gravity, extending the gear tool's effective-mass
+method [REF-NCEES-009]. Design mass is **14.09 lbm** (SLS, interim; the final value comes
+from the LG-15 weigh-in). The gear is re-sized at that mass: F_leg 1,245 N per leg.
+
+| Skid pair force | Gear pair | Gear stroke | Skid pair | Skid stroke | Slap-down, per fore leg |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 N | 76.8 J | 30.9 mm | 0 J | 22.3 mm (the hull strikes) | 1.5 J |
+| 750 N | 63.8 J | 25.6 mm | 5.6 J | 7.5 mm | 5.1 J |
+| **1,000 N** | 62.3 J | 25.0 mm | 6.1 J | **6.1 mm** | 5.6 J |
+| 1,250 N | 61.2 J | 24.6 mm | 6.5 J | 5.2 mm | 5.9 J |
+| 1,500 N | 60.4 J | 24.3 mm | 6.7 J | 4.5 mm | 6.2 J |
+
+**Skid specification (U4), for the owner's source rebuild of the separate PA11 ring and
+skid member:**
+
+| ID | Requirement |
+| --- | --- |
+| **CS-1** | Skid-pair plateau force **1,000–1,500 N (225–337 lbf)**, so **500–750 N per skid**, held over the stroke. |
+| **CS-2** | Skid stroke **≤ 6.1 mm** at 1,000 N. It shall stay at least **1 mm** below the hull clearance at skid contact (6.5 mm today) [margin ASSUMED]. At 750 N the 7.5 mm stroke fails the mesh check. |
+| **CS-3** | The skid tips stay the first aft contact (TS-1), with the tip at Y about 690 and X about ±37. |
+| **CS-4** | Each skid absorbs **3.1–3.4 J (2.3–2.5 ft·lbf)**. In PA11 this has to come from yielding [REF-MAT-012]. The plateau model is an assumption until a coupon or skid drop test confirms it. |
+| **CS-5** | Acceptance: `co_strike_mesh_check()` passes on the rebuilt STL at the chosen stroke. Today it passes at 6.1 mm and fails at 7.5 mm. |
+
+**Gear in the co-strike:** about 25 mm of stroke against the 30.7 mm settle limit. That is
+5.7 mm more margin than in a gear-only strike. The nose slap-down puts **≤ 6.2 J per fore
+leg** against 38.2 J of capacity. R3 and R4 are met.
