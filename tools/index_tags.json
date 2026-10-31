@@ -18724,7 +18724,7 @@
       "archived": false
     },
     "tools/landing_gear_r6_sizing.py": {
-      "description": "Serenity UAV -- Landing Gear Rev R6 sizing study (hip-pivot canonical leg).",
+      "description": "Python script",
       "tags": [
         "build-tooling",
         "landing-gear"
@@ -19101,6 +19101,13 @@
       "tags": [
         "build-tooling",
         "propulsion"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_tail_strike_requirement.py": {
+      "description": "Tests for the co-strike and slap-down models in tools/tail_strike_requirement.py,",
+      "tags": [
+        "build-tooling"
       ],
       "archived": false
     },
@@ -24154,6 +24161,7 @@
       "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nozzle_servo_linkage.py",
+      "tools/tests/test_tail_strike_requirement.py",
       "tools/tilt_actuator_options.py",
       "tools/try-via-again.py",
       "tools/validate_kicad.py",

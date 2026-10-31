@@ -455,6 +455,44 @@ def solve_ductile_wire(u_per_wire_j: float, f_leg_target_n: float, r_h: float):
     return d, bow, length, p_wire, stroke
 
 
+def set_design_auw(lbm: float) -> None:
+    """Set the design mass for this run (plan 2026-10-31-002 U3, KTD2).
+
+    Owner 2026-10-31: SLS is the fabrication process and AUW stays a parameter
+    until the aircraft is weighed (LG-15); 14.09 lbm is the interim SLS figure,
+    13.0 lbm the historical schedule.  Every function here reads M_AUW_KG at
+    call time, so changing the module globals re-sizes the whole run.
+    """
+    global DESIGN_AUW_LBM, M_AUW_KG
+    if lbm <= 0:
+        raise ValueError(f"design AUW must be positive, got {lbm}")
+    DESIGN_AUW_LBM = lbm
+    M_AUW_KG = lbm * 0.45359237
+
+
+def wire_schedule(h_ft: float = 4.0) -> dict:
+    """Ductile and spring wire schedule at the current design mass, as data.
+
+    The same equations main() prints (tail-down worst leg for the ductile
+    pair; LG-06 1.5 ft ordinary landing at the worst static share for the
+    spring pair), returned for tests and for the co-strike re-size.
+    """
+    settle_max = CLEARANCE_COMPACT - RESIDUAL_MIN
+    u_leg = M_AUW_KG * G * h_ft * FT * 0.5
+    f_leg = u_leg * 1000.0 / settle_max
+    d, bow, length, p_wire, stroke = solve_ductile_wire(u_leg / 2.0, f_leg, R_H_BUILT)
+    share_worst = max((Y_CG - Y_FOOT_FORE) / WHEELBASE / 2.0,
+                      (Y_FOOT_AFT - Y_CG) / WHEELBASE / 2.0)
+    u_spring_leg = share_worst * M_AUW_KG * G * 1.5 * FT
+    f_leg_el = u_spring_leg * 1000.0 / NOZZLE_TIP_CLEAR_3IN
+    p_spring = f_leg_el * R_H_BUILT / (2.0 * R_WIRE)
+    d_s = (16.0 * p_spring * H0 / (SIGMA_WORK_SPRING * math.pi)) ** (1 / 3.0)
+    return {"auw_lbm": DESIGN_AUW_LBM, "f_leg_n": f_leg, "p_wire_n": p_wire,
+            "ductile_d_mm": d, "ductile_bow_mm": bow, "ductile_l_mm": length,
+            "ductile_stroke_mm": stroke, "spring_d_mm": d_s, "p_spring_n": p_spring,
+            "thigh_m_nmm": 2.0 * p_wire * R_WIRE}
+
+
 def wire_mass_g(d_mm: float, l_mm: float) -> float:
     return math.pi / 4.0 * d_mm**2 * l_mm * RHO_STEEL
 
@@ -701,6 +739,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    if "--auw-lbm" in sys.argv:
+        set_design_auw(float(sys.argv[sys.argv.index("--auw-lbm") + 1]))
     if "--derive-stroke" in sys.argv:
         derive_stroke_relation()
     else:

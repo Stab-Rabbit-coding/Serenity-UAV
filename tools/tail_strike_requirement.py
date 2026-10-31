@@ -65,6 +65,7 @@ BOLT_R = 734.0          # N per bay bolt, resultant
 BOLT_CAP_PETG = 2100.0  # N, wall + boss + 3 mm plate, CF-PETG
 LEG_FRAME_CM3 = 40.64   # 3.0 in leg frame volume, LANDING_GEAR_ANALYSIS.md 11.1
 FOS_IMPACT = 4.0
+S_SKID_AVAIL = 7.0   # mm, skid protrusion below the hull today [MESH, docs/TAIL_STRIKE §1]
 
 
 def print_subtotal():
@@ -155,6 +156,106 @@ def part1():
     return emax, m
 
 
+def co_strike(m, k, d1, d2, f_gear, f_skid, h=H_DROP, dt=1e-6):
+    """Aft gear pair + skid pair striking together (plan 2026-10-31-002 U1, KTD4).
+
+    Planar rigid body, mass m (kg), pitch radius of gyration k (m), falling at
+    v0 = sqrt(2 g h) with no initial rotation.  Two upward constant-force
+    (plateau) absorbers act at horizontal arms d1 (aft feet) and d2 (skid tips)
+    aft of the CG (m).  Both forces pitch the nose down, which lifts the aft
+    points, so each contact releases when its own downward speed reaches zero.
+    Gravity is kept.  This extends the single-contact effective-mass method of
+    tools/landing_gear_r6_sizing.py [REF-NCEES-009, rigid-body plane motion].
+
+    Returns energies (J), strokes (mm) and the residual state for the
+    slap-down onto the fore gear.
+    """
+    if d1 < 0 or d2 < 0:
+        raise ValueError("co-strike contacts must lie aft of the CG (arms >= 0)")
+    i_g = m * k * k
+    v0 = math.sqrt(2 * G * h)
+    v, w = v0, 0.0                      # CG down-speed, nose-down rate
+    s1 = s2 = s_cg = e1 = e2 = 0.0
+    on1 = on2 = True
+    t = 0.0
+    while (on1 or on2) and t < 1.0:
+        f1 = f_gear if on1 else 0.0
+        f2 = f_skid if on2 else 0.0
+        v += (G - (f1 + f2) / m) * dt
+        w += (f1 * d1 + f2 * d2) / i_g * dt
+        s_cg += v * dt
+        u1, u2 = v - w * d1, v - w * d2
+        if on1:
+            if u1 <= 0:
+                on1 = False
+            else:
+                s1 += u1 * dt
+                e1 += f1 * u1 * dt
+        if on2:
+            if u2 <= 0:
+                on2 = False
+            else:
+                s2 += u2 * dt
+                e2 += f2 * u2 * dt
+        t += dt
+    ke_rot = 0.5 * i_g * w * w
+    ke_tr = 0.5 * m * v * v
+    return {"ke0": 0.5 * m * v0 * v0, "w_gravity": m * G * s_cg,
+            "e_gear": e1, "s_gear_mm": s1 * 1000, "e_skid": e2, "s_skid_mm": s2 * 1000,
+            "ke_rot": ke_rot, "ke_tr": ke_tr, "ke_res": ke_rot + ke_tr}
+
+
+def slap_down_per_leg(ke_res, w_gravity_drop):
+    """Energy per fore leg when the nose rotates down onto the fore pair (U2).
+
+    The residual kinetic energy left after the co-strike, plus the work of
+    gravity as the CG settles from the tip-back attitude to level, is taken
+    entirely by the two fore legs -- conservative: no share returns to the aft
+    pair.
+    """
+    if ke_res < 0 or w_gravity_drop < 0:
+        raise ValueError("energies must be non-negative")
+    return 0.5 * (ke_res + w_gravity_drop)
+
+
+def part3():
+    """Co-strike report at the interim SLS design mass (plan 002 U1-U2)."""
+    import landing_gear_r6_sizing as lg
+    th0, pt, _f = tip_back()
+    _nm, auw, cy, cz, k = max(ledger(), key=lambda c: c[1])
+    m = (auw + print_subtotal() * (1.11 / 1.05 - 1)) / 1000   # SLS PA CF parts
+    lg.set_design_auw(m / 0.45359237)
+    sched = lg.wire_schedule()
+    lg.set_design_auw(13.0)
+    t = math.radians(th0)
+    cgr, spr = rot((cy, cz), t), rot(pt, t)
+    d1, d2 = (Y_FOOT_AFT - cgr[0]) / 1000, (spr[0] - cgr[0]) / 1000   # aft of the CG
+    f_gear = 2 * sched["f_leg_n"]
+    settle_max = lg.CLEARANCE_COMPACT - lg.RESIDUAL_MIN
+    print(f"\nCO-STRIKE (owner 2026-10-31): aft feet + skid tips together at {th0:.1f} deg")
+    print(f"  design mass {m:.3f} kg ({m / 0.45359237:.2f} lbm, SLS interim, LG-15 final); "
+          f"arms: feet {d1 * 1000:.1f} mm, skid {d2 * 1000:.1f} mm aft of CG; k {k:.1f} mm")
+    print(f"  re-sized gear at this mass: F_leg {sched['f_leg_n']:.0f} N, ductile d "
+          f"{sched['ductile_d_mm']:.2f} mm, spring d {sched['spring_d_mm']:.2f} mm, "
+          f"thigh M {sched['thigh_m_nmm'] / 1000:.1f} N.m")
+    print(f"  {'F_skid pair':>11s} {'gear J':>7s} {'gear mm':>8s} {'skid J':>7s} "
+          f"{'skid mm':>8s} {'slap J/leg':>10s}")
+    drop = G * m * max(0.0, (cgr[1] - cz) / 1000)
+    band = []
+    for fs in (0, 250, 500, 750, 1000, 1250, 1500):
+        r = co_strike(m, k / 1000, d1, d2, f_gear, float(fs))
+        sl = slap_down_per_leg(r["ke_res"], drop)
+        ok = r["s_gear_mm"] <= settle_max and 0 < r["s_skid_mm"] <= S_SKID_AVAIL
+        if ok:
+            band.append(fs)
+        print(f"  {fs:9.0f} N {r['e_gear']:7.1f} {r['s_gear_mm']:8.1f} {r['e_skid']:7.1f} "
+              f"{r['s_skid_mm']:8.1f} {sl:10.1f}{'  <- meets R2/R3' if ok else ''}")
+    print(f"  R2/R3 band (gear <= {settle_max:.1f} mm, skid <= {S_SKID_AVAIL:.0f} mm available): "
+          + (f"{min(band)}-{max(band)} N pair" if band else "NONE -- more skid stroke needed (U4)"))
+    cap = m * G * H_DROP * 0.5
+    print(f"  fore-leg capacity (shared wire schedule, re-sized at this mass): {cap:.1f} J/leg tail-down")
+
+
 def part2():
     print("\nLanding-gear material re-check (gear tool 4 ft demands, allowable = ult/2)")
     print(f"  {'material':28s} {'leg g':>6s} {'thigh M':>8s} {'thigh solid':>11s} "
@@ -176,3 +277,4 @@ def part2():
 if __name__ == "__main__":
     part1()
     part2()
+    part3()
