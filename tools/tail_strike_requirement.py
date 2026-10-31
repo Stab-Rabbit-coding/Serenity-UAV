@@ -64,6 +64,7 @@ BOLT_R_13LBM = 734.0    # N per bay bolt, resultant, at 13.0 lbm (gear tool lg02
 BOLT_CAP_PETG = 2100.0  # N, wall + boss + 3 mm plate, CF-PETG
 LEG_FRAME_CM3 = 40.64   # 3.0 in leg frame volume, LANDING_GEAR_ANALYSIS.md 11.1
 FOS_IMPACT = 4.0
+LBF = 4.44822           # N per lbf
 # Printed-part re-pricing over the WHOLE aircraft (hull + both nacelles).  An earlier
 # version re-priced the hull PRINT subtotal only and under-stated both cases.
 D_SOLID, D_SLS = sls_auw_reconcile.deltas()
@@ -153,19 +154,25 @@ def part1():
     return emax, m
 
 
-def co_strike(m, k, d1, d2, f_gear, f_skid, h=H_DROP, dt=1e-6):
+def co_strike(m, k, d1, d2, f_gear, f_skid, h=H_DROP, dt=1e-6, skid_k=None):
     """Aft gear pair + skid pair striking together (plan 2026-10-31-002 U1, KTD4).
 
     Planar rigid body, mass m (kg), pitch radius of gyration k (m), falling at
-    v0 = sqrt(2 g h) with no initial rotation.  Two upward constant-force
-    (plateau) absorbers act at horizontal arms d1 (aft feet) and d2 (skid tips)
-    aft of the CG (m).  Both forces pitch the nose down, which lifts the aft
-    points, so each contact releases when its own downward speed reaches zero.
-    Gravity is kept.  This extends the single-contact effective-mass method of
+    v0 = sqrt(2 g h) with no initial rotation.  The aft gear pair is a constant-
+    force (plateau) absorber at arm d1; it releases when its downward speed
+    reaches zero (ductile wire: no rebound).  The skid pair at arm d2 is either
+      * a plateau of f_skid (N), releasing like the gear, or
+      * ELASTIC with pair stiffness skid_k (N/mm) when skid_k is given (owner
+        decision 2026-10-31: PA12-CF leaf-spring U-frame).  Force = k * stroke; the
+        contact persists through rebound and releases when the stroke returns to
+        zero, so the stored energy is handed back to the airframe.
+    Both forces pitch the nose down (they act aft of the CG).  Gravity is kept.
+    Extends the single-contact effective-mass method of
     tools/landing_gear_r6_sizing.py [REF-NCEES-009, rigid-body plane motion].
 
-    Returns energies (J), strokes (mm) and the residual state for the
-    slap-down onto the fore gear.
+    Returns energies (J), strokes (mm), peak skid force (N) and the residual state
+    for the slap-down onto the fore gear.  'capped' is True if the 1 s limit was hit
+    with a contact still active (the result is then not a completed event).
     """
     if d1 < 0 or d2 < 0:
         raise ValueError("co-strike contacts must lie aft of the CG (arms >= 0)")
@@ -173,11 +180,17 @@ def co_strike(m, k, d1, d2, f_gear, f_skid, h=H_DROP, dt=1e-6):
     v0 = math.sqrt(2 * G * h)
     v, w = v0, 0.0                      # CG down-speed, nose-down rate
     s1 = s2 = s_cg = e1 = e2 = 0.0
+    s2_max = f2_max = e2_peak = 0.0
     on1 = on2 = True
     t = 0.0
     while (on1 or on2) and t < 1.0:
         f1 = f_gear if on1 else 0.0
-        f2 = f_skid if on2 else 0.0
+        if not on2:
+            f2 = 0.0
+        elif skid_k is not None:
+            f2 = skid_k * 1e3 * max(s2, 0.0)        # N/mm * mm -> N (s2 in m)
+        else:
+            f2 = f_skid
         v += (G - (f1 + f2) / m) * dt
         w += (f1 * d1 + f2 * d2) / i_g * dt
         s_cg += v * dt
@@ -189,17 +202,26 @@ def co_strike(m, k, d1, d2, f_gear, f_skid, h=H_DROP, dt=1e-6):
                 s1 += u1 * dt
                 e1 += f1 * u1 * dt
         if on2:
-            if u2 <= 0:
+            if skid_k is not None:
+                s2 += u2 * dt                       # rebound allowed
+                e2 += f2 * u2 * dt
+                if s2 > s2_max:
+                    s2_max, f2_max, e2_peak = s2, f2, e2
+                if s2 <= 0 and s2_max > 0:
+                    on2 = False
+            elif u2 <= 0:
                 on2 = False
             else:
                 s2 += u2 * dt
                 e2 += f2 * u2 * dt
+                s2_max, f2_max, e2_peak = s2, f2, e2
         t += dt
     ke_rot = 0.5 * i_g * w * w
     ke_tr = 0.5 * m * v * v
     return {"ke0": 0.5 * m * v0 * v0, "w_gravity": m * G * s_cg,
-            "e_gear": e1, "s_gear_mm": s1 * 1000, "e_skid": e2, "s_skid_mm": s2 * 1000,
-            "ke_rot": ke_rot, "ke_tr": ke_tr, "ke_res": ke_rot + ke_tr}
+            "e_gear": e1, "s_gear_mm": s1 * 1000, "e_skid": e2, "s_skid_mm": s2_max * 1000,
+            "s_skid_max_mm": s2_max * 1000, "f_skid_peak": f2_max, "e_skid_peak": e2_peak,
+            "ke_rot": ke_rot, "ke_tr": ke_tr, "ke_res": ke_rot + ke_tr, "capped": t >= 1.0}
 
 
 def slap_down_per_leg(ke_res, w_gravity_drop):
@@ -272,6 +294,16 @@ def part3():
         note = "  <- meets R2/R3" if ok else ("  (no absorber: hull penetration)" if fs == 0 else "")
         print(f"  {fs:9.0f} N {r['e_gear']:7.1f} {r['s_gear_mm']:8.1f} {r['e_skid']:7.1f} "
               f"{r['s_skid_mm']:8.1f} {sl:10.1f}{note}")
+    import skid_mount_loads as sml
+    k_skid = 1.0 / sml.solve(sml.E_RIB, *sml.i_of_y()[:2], sml.i_of_y()[3], sml.Y_PAD)[1][-1]
+    r = co_strike(m, k / 1000, d1, d2, f_gear, 0.0, skid_k=2 * k_skid)
+    sl = slap_down_per_leg(r["ke_res"], drop)
+    ok = r["s_gear_mm"] <= settle_max and r["s_skid_max_mm"] <= s_allow
+    print(f"  ELASTIC PA12-CF skid, k {k_skid:.1f} N/mm per skid (strut at Y {sml.Y_PAD:.0f}): gear "
+          f"{r['e_gear']:.1f} J / {r['s_gear_mm']:.1f} mm; skid peak {r['f_skid_peak'] / 2:.0f} N per skid "
+          f"({r['f_skid_peak'] / 2 / LBF:.0f} lbf) at {r['s_skid_max_mm']:.1f} mm, stores {r['e_skid_peak']:.1f} J, "
+          f"returns it (net {r['e_skid']:+.2f} J); slap {sl:.1f} J/leg"
+          f"{'  <- meets R2/R3' if ok else '  FAILS R2/R3'}{'  [CAPPED]' if r['capped'] else ''}")
     print(f"  R2/R3 band (gear <= {settle_max:.1f} mm, skid <= {s_allow:.1f} mm): "
           + (f"{min(band)}-{max(band)} N pair (of the forces tried)" if band else "NONE -- more skid stroke needed (U4)"))
     dem = m * G * H_DROP * 0.5

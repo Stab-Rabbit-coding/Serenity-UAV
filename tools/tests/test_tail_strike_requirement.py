@@ -156,6 +156,18 @@ def test_mesh_check_on_todays_rear_shell():
     assert ok["pass"] is True
     assert short["pass"] is False and "needs 7.1" in short["reason"]
 
+def test_elastic_skid_returns_its_energy():
+    """Elastic skid (spring, owner decision PA12-CF): it stores energy and gives it back,
+    so its net absorbed energy at release is ~0 and more energy is left for the slap-down
+    than with a plateau skid of similar peak force."""
+    el = ts.co_strike(M, K, D1, D2, FG, 0.0, skid_k=2 * 135.6)
+    pl = ts.co_strike(M, K, D1, D2, FG, 900.0)
+    assert el["s_skid_max_mm"] > 0
+    assert abs(el["e_skid"]) < 0.05 * el["e_skid_peak"]
+    assert el["ke_res"] > pl["ke_res"]
+    assert _close(el["f_skid_peak"], 2 * 135.6 * el["s_skid_max_mm"], 0.01)
+
+
 if __name__ == "__main__":
     fails = 0
     for name, fn in sorted(globals().items()):

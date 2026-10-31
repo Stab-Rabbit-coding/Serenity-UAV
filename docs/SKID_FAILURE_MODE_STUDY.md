@@ -253,3 +253,71 @@ Next steps:
 5. Re-run the co-strike (`tail_strike_requirement.py`) with an *elastic* skid (k ≈ 127 N/mm),
    not a plateau. CS-1 and CS-2 change shape: the peak force is about 930 N at full
    stroke.
+
+## 9. Strut and elastic co-strike design (items 2 and 5, 2026-10-31)
+
+Reproduce with `/usr/bin/python3 tools/skid_mount_loads.py`. The figures below come from
+`size_elastic_design()`, `strut_design()` and `tail_strike_requirement.py` (elastic mode).
+US customary first, metric in parentheses.
+
+### 9.1 Canon guidance [REF-CAD-003, REF-CAD-002]
+
+QMx Sheet Two (the pack's tablet extract is at thumbnail resolution) names the aft
+structure **"the big yoke around the back of the engine."** Nick Henning's renders
+(`nick-henning-close-back-combine.jpg`, `nick-henning-final-backside-combine.jpg`) show
+it clearly:
+
+- a **broad, flat ring** over the top of the engine bell;
+- at the bottom, each side turns aft into a **flat rectangular skid rail**, wider than it
+  is tall, running close under the bell and ending in a squared tip behind it;
+- **no visible strut** between the rails and the bell in profile. The rails hide
+  everything beneath the bell.
+
+Henning ranks below QMx and is used here for detail only.
+
+Rules that keep the strut and skids canonical:
+
+1. **The outer shape is unchanged.** All skid strengthening goes *inside* the tube, as
+   wall growth.
+2. **The strut is a low pad**, about 0.04 in (1 mm), between the cross member and the bell
+   underside, at **X ±1.6 in (±40 mm), inboard of the rails**. The near rail hides it in
+   side view. There is no diagonal post.
+3. **The rib is internal**, inside the hull, running from the pad forward to the rear CF
+   ring frame.
+4. **The bolt enters from below** (a socket head on the underside, as with existing
+   underside detail). There is no new exterior silhouette.
+
+### 9.2 Results
+
+| Item | Value |
+| --- | --- |
+| Design case | 4 ft co-strike at 14.19 lbm. Skids sacrificial above 0.95 × ultimate (TS-5 practice, as for the gear). |
+| Skid stiffness | **1,244 lbf/in (218 N/mm) per skid** |
+| Skid stroke | **0.213 in (5.42 mm)** against a 0.217 in (5.5 mm) limit: 6.5 mm clearance less the 1 mm margin |
+| Skid peak force | **266 lbf (1,181 N) per skid**, elastic. The energy is returned on rebound. |
+| Pad (strut) reaction | **489 lbf (2,177 N) per side**, 978 lbf (4,354 N) per pair, at Y 620 |
+| Ring-root moment | 315 lbf·in (35.6 N·m) per skid |
+| Aft gear stroke | 0.78 in (19.8 mm) of the 1.21 in (30.7 mm) settle limit |
+| Skid wall | grows up to **×2.4** over Y 589–661, inside the tube: **+0.25 oz (7.2 g) per skid** |
+| Internal rib (PA12-CF) | 0.24 × 1.01 in (6 × 26 mm), 0.96 in (24.3 mm) long: **0.15 oz (4.2 g) per side** |
+| Pads, M3 bolts, heat-set inserts | about 0.14 oz (4 g) per pair [ASSUMED] |
+| **1.5 ft ordinary landing** | peak 149 lbf. Maximum skid stress **6,500 psi against 8,120 psi** (ultimate ÷ 1.5): **elastic, no damage** |
+| **Mass added, pair** | **+0.94 oz (27 g) at Y ≈ 620 → hover CG +0.048 in (1.2 mm) aft** |
+
+### 9.3 Notes
+
+- **Why not sized elastically at 1.5 × for the crash?** Holding the 4 ft peak to
+  ultimate ÷ 1.5 needs about ×4.8 wall growth: +2.45 oz (69 g) and +0.12 in CG. Each
+  stiffening step raises the peak force. Elastic energy storage in a brittle composite at
+  a high factor of safety is mass-hungry, so the crash case is allowed to be sacrificial,
+  as for the gear (TS-5).
+- **The stroke margin is thin:** 0.004 in to the limit. The as-built skid stiffness must
+  be checked by a bench deflection test. If it comes out softer, add wall.
+- **The minimum SLS wall** (1.5 mm for fibre-filled grades) is met: the wall grows from
+  2.3 mm.
+- **Still open:**
+    - the single-skid (rolled) strike;
+    - the rib and CF frame joint detail: 489 lbf plus 41 lbf·in per side into the frame;
+    - interior clearance for the rib at X ±1.6 in, Y 596–620, against the rear-section
+      equipment;
+    - tolerance stack for co-planarity of the feet and skid tips.
