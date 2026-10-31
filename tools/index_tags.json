@@ -15552,6 +15552,13 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-10-31-001-feat-one-piece-aft-sls-hull-plan.md": {
+      "description": "One-Piece Middle+Rear SLS Hull for Aft-CG Recovery - Plan",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -19453,6 +19460,7 @@
       "docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md",
       "docs/plans/2026-10-27-001-feat-middle-rear-layout-plan.md",
       "docs/plans/2026-10-28-001-feat-fe-chin-and-shuttle-split-plan.md",
+      "docs/plans/2026-10-31-001-feat-one-piece-aft-sls-hull-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
