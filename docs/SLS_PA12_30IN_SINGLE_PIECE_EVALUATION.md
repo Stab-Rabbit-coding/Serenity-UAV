@@ -1,5 +1,8 @@
 # Serenity UAV — SLS PA12 / PA12-CF, 30 in Hull, Single-Piece Print Evaluation
 
+> **SUPERSEDED IN PART (2026-10-31).** See `docs/SLS_27IN_TWO_SECTION_TRIM_STUDY.md`. The 36 in study cited here dates from 2026-09-28 and is stale (AUW, stacking and T/W inputs predate the 10-19 to 10-27 ledger, envelope and CG work). The T/W 'open conflict' below is resolved: 0.98–1.01 is the stale figure; current is 1.35–1.37. The 30 in and single-piece conclusions are replaced by a 27 in, two-section recommendation.
+
+
 **License:** CC BY-SA 4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Status:** Screening study. Not a design release. No vendor quotes obtained, no FEA run.
 **Base:** branch `worktree-fuselage-reconcile` @ `3252b5a2`

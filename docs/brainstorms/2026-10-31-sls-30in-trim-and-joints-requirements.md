@@ -8,6 +8,9 @@ companion: docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md
 
 # SLS Material, 30 in Scale and Single-Piece Hull — Brainstorm
 
+> **SUPERSEDED IN PART (2026-10-31).** See `docs/SLS_27IN_TWO_SECTION_TRIM_STUDY.md`. The 36 in study cited here dates from 2026-09-28 and is stale (AUW, stacking and T/W inputs predate the 10-19 to 10-27 ledger, envelope and CG work). The T/W 'open conflict' below is resolved: 0.98–1.01 is the stale figure; current is 1.35–1.37. The 30 in and single-piece conclusions are replaced by a 27 in, two-section recommendation.
+
+
 **License:** CC BY-SA 4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 > ⚠️ **ENGINEERING REVIEW REQUIRED.** Screening ideas only. A qualified engineer shall review
