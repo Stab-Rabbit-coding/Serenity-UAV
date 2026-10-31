@@ -857,6 +857,13 @@
       ],
       "archived": false
     },
+    "airframe/diagrams/skid_strut_lever_rib.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/freecad/assembly/SerenityAssembly.FCStd.bak2": {
       "description": "O@'\u0001qM\u0004M\"\u0003\u0016\u0005G;\bb\u0014\u0007F=PP\u0004",
       "tags": [
@@ -20408,6 +20415,7 @@
       "airframe/diagrams/ring_frames/ring_cargo_Y30_plate_PROVISIONAL.dxf",
       "airframe/diagrams/ring_frames/ring_rear_Y290_inner.csv",
       "airframe/diagrams/ring_frames/ring_rear_Y290_plate.dxf",
+      "airframe/diagrams/skid_strut_lever_rib.svg",
       "airframe/freecad/assembly/SerenityAssembly.FCStd.bak2",
       "airframe/freecad/assembly/leg_2_scaled-oriented.stl",
       "airframe/fuselage-covers/TODO.md",

@@ -389,6 +389,8 @@ equipment damage only, so a CAUTION, not a WARNING (CNAF M-3710.7 [REF-MIL-003])
 - **As specified, it breaks.** The rib is cantilevered aft from the frame, so it loads the
   2 mm CF plate frame **out of plane**: 468 lbf·in on a 0.08 × 0.39 in band, about
   1,150,000 psi (7,935 MPa). A plate frame cannot carry that.
+![Lever rib over the rear CF ring frame](../airframe/diagrams/skid_strut_lever_rib.svg)
+
 - **Resolution: the rib passes over the frame as a lever**, bonded or bolted along the
   2 mm skin zone, from Y ≈ 572 to 620:
     - **Forward tie:** 502 lbf. Two M3 bolts in tension carry 251 lbf each (FOS 3.2). Skin
