@@ -39,6 +39,7 @@ AI note: Written by Claude Opus 5.5 (Anthropic) under the author's direction, 20
 License: MIT -- see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
+import itertools
 import math
 import os
 
@@ -170,5 +171,36 @@ def main():
               f"OD ~{(z_need / (sec0 or root)['t']) ** 0.5:.0f} mm (Zp ~ D^2 t)")
 
 
+STROKE_MM = 7.3        # mm: >= 8.3 mm hull clearance (cross member counted as skid frame) - 1 mm margin
+U_SKID_J = 3.3         # J per skid, co-strike (CS-4)
+Y_TIE = 596.0          # rear CF ring frame station (add_structural_features.py rear_Y290 pocket)
+
+
+def stiffness_check():
+    """Can the skid develop the co-strike force inside the stroke? (tip stiffness)
+
+    Tip compliance of a cantilever with measured I(y): c = integral (L - y)^2 / (E I) dy.
+    Needed: U = 3.3 J inside STROKE_MM -> plateau F >= U/S, or elastic-only k >= 2U/S^2.
+    """
+    pairs = port_skid_pairs()
+    props = {y: section_props(*pairs[y]) for y in sorted(pairs) if y >= Y_MERGE}
+    ys = sorted(props)
+    y_tip = ys[-1] + 1.0
+    print(f"\nSTIFFNESS: need {U_SKID_J} J per skid within {STROKE_MM} mm -> plateau >= "
+          f"{U_SKID_J * 1e3 / STROKE_MM:.0f} N, or elastic k >= {2 * U_SKID_J * 1e3 / STROKE_MM ** 2:.0f} N/mm")
+    for name, s_, e, _el, _d in MATS:
+        for lab, y0 in (("root at ring", Y_MERGE), ("tied at CF frame Y596", Y_TIE)):
+            c = sum((y_tip - (a + b) / 2) ** 2 / (e * props[a]["I"]) * (b - a)
+                    for a, b in itertools.pairwise(ys) if a >= y0)
+            k = 1 / c
+            f_s = k * STROKE_MM
+            m_t = f_s * (y_tip - y0)
+            z0 = props[min(y for y in ys if y >= y0)]["Z"]
+            print(f"  {name:40s} {lab:22s} k {k:6.1f} N/mm ({k * 25.4 / LBF:4.0f} lbf/in)  "
+                  f"F@stroke {f_s:5.0f} N  U {0.5 * k * STROKE_MM ** 2 / 1e3:4.2f} J  "
+                  f"stress at support {m_t / z0:5.0f} MPa (strength {s_:.0f})")
+
+
 if __name__ == "__main__":
     main()
+    stiffness_check()

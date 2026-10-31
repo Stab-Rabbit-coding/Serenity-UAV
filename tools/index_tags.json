@@ -19051,6 +19051,13 @@
       ],
       "archived": false
     },
+    "tools/skid_mount_loads.py": {
+      "description": "skid_mount_loads.py -- forces and moments at the ring / skid / hull mount points,",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/sls_auw_reconcile.py": {
       "description": "sls_auw_reconcile.py -- part-by-part reconciliation of the aircraft AUW from FDM",
       "tags": [
@@ -24177,6 +24184,7 @@
       "tools/purge_stale_fcstd_objects.py",
       "tools/shift_baked_stl.py",
       "tools/skid_failure_mode_study.py",
+      "tools/skid_mount_loads.py",
       "tools/sls_auw_reconcile.py",
       "tools/sls_material_screen.py",
       "tools/sls_scale_trim_study.py",
