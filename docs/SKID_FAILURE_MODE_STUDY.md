@@ -372,6 +372,18 @@ relief. The ledger carries I_pitch only, not I_roll.
 >   crash, which TS-5 allows if the hull does not crack. A fracture lets the hull touch, so
 >   that also has to be confirmed.
 
+**Owner direction (2026-10-31): record the rollover failure mode as a CAUTION.** It is
+equipment damage only, so a CAUTION, not a WARNING (CNAF M-3710.7 [REF-MIL-003]).
+
+> **CAUTION:** Rolled (one-skid-first) hard landing. Each aft skid is sized to share a
+> nose-high 4 ft drop *with the other skid and the aft gear*. If the aircraft touches down
+> rolled, so that one skid takes the strike alone, that skid can be driven past its ultimate
+> strength (about 355 lbf, 1.27 × ultimate, conservative pitch-only estimate) and **fracture
+> at the ring root**. The tail cross member and hull can then touch the ground. Inspect both
+> skids, the ring root and the ventral strut pads after any rolled or hard landing, and
+> replace a cracked skid frame before the next flight. Avoid rolled touchdowns until the
+> I_roll re-analysis (WBS §0.12) sets a roll-attitude limit.
+
 ### 10.3 Item 3: rib to CF ring frame joint — **FLAG, resolved by a rib change**
 
 - **As specified, it breaks.** The rib is cantilevered aft from the frame, so it loads the
@@ -420,6 +432,12 @@ SLS ±0.3% or ±0.3 mm per dimension (`3d-print-design` skill, SLS rules):
 - **The skid-to-hull part of the stack** (±0.63 mm) eats the stroke margin. 6.5 mm
   clearance − 0.63 − 5.42 mm stroke leaves **0.45 mm** against the required 1 mm. The hull
   still clears, but the margin spec does not hold.
+
+**Owner direction (2026-10-31):** if the margin cannot be brought back to 1 mm, put a note
+in the assembly instructions. It **cannot** be brought back by analysis or process choice:
+the SLS tolerance (±0.3% or ±0.3 mm) is a process limit, and a tighter vendor class is
+unverified. So the NOTE is in `graphical-build-guide/REVN_BUILD_GUIDE_24IN.md` Phase 1
+Checks.
 
 > **FLAG — breaks the CS-2 / CS-7 1 mm hull margin at tolerance.** Resolutions, owner to
 > choose:
