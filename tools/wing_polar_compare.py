@@ -84,7 +84,7 @@ def xfoil_polar(dat, re, ncrit=9.0, trip=None, a0=-4.0, a1=22.0, da=0.25):
                  "PACC", "", "QUIT"]
         try:
             subprocess.run(["xvfb-run", "-a", "xfoil"], input="\n".join(cmds) + "\n", text=True,
-                           capture_output=True, timeout=240)
+                           capture_output=True, timeout=240, cwd=td)  # XFOIL drops *.bl dumps in cwd
         except subprocess.TimeoutExpired:
             pass
         rows = []
