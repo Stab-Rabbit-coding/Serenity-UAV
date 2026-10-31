@@ -14571,6 +14571,13 @@
       ],
       "archived": false
     },
+    "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md": {
+      "description": "Tail Strike on the Aft Skids (4 ft Drop) and Landing-Gear Materials in SLS",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/TILT_ACTUATOR_OPTIONS.md": {
       "description": "Nacelle-Tilt Actuator Options \u2014 Rev T5 trade (GENERATED)",
       "tags": [
@@ -19051,6 +19058,13 @@
       ],
       "archived": false
     },
+    "tools/tail_strike_requirement.py": {
+      "description": "tail_strike_requirement.py -- 4 ft drop tail strike on the aft skids, and the",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_esc80_cooptimize.py": {
       "description": "Tests for tools/esc80_cooptimize.py (WBS NAC-64-ESC-80A).",
       "tags": [
@@ -19360,6 +19374,7 @@
       "docs/SLS_EMI_AND_WINGS_NOTE.md",
       "docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md",
       "docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md",
+      "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
       "docs/TILT_ACTUATOR_SELECTION.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
@@ -24126,6 +24141,7 @@
       "tools/sls_scale_trim_study.py",
       "tools/spar_bundle_fit.py",
       "tools/stitch_vias.py",
+      "tools/tail_strike_requirement.py",
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",

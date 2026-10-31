@@ -1927,6 +1927,34 @@ which prints that caveat on every run.
 
 ---
 
+### REF-MAT-012: 3D Systems — DuraForm PA11 Black datasheet (SLS)
+
+| Field | Value |
+| --- | --- |
+| **Issuing body** | 3D Systems, Inc. |
+| **Date** | 2025-03-04 |
+| **Source** | Owner-supplied PDF (`3d-systems-duraform-pa11-black-datasheet-us-a4-2025-03-04-web.pdf`), read 2026-10-31. Official URL not yet validated. |
+| **Values applied** | Density 1.03 g/cm³ (ASTM D792); tensile 51 MPa ultimate and yield, modulus 1,900 MPa, elongation at break 52.6 % (ASTM D638 Type IV); flexural modulus 1,500 MPa (ASTM D790); notched Izod 42 J/m (ASTM D256). The datasheet states near-isotropic XYZ performance. |
+
+**Used in:** `tools/tail_strike_requirement.py`, `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md`,
+`docs/AFT_SKIN_THINNING_STUDY.md` §5
+
+---
+
+### REF-MAT-013: 3D Systems — DuraForm PA12 Black datasheet (SLS)
+
+| Field | Value |
+| --- | --- |
+| **Issuing body** | 3D Systems, Inc. |
+| **Date** | 2025-04-03 |
+| **Source** | Owner-supplied PDF (`3d-systems-duraform-pa12-black-datasheet-us-en-2025-04-03-web.pdf`), read 2026-10-31. Official URL not yet validated. |
+| **Values applied** | Density 1.00 g/cm³; tensile 45 MPa, modulus 1,800 MPa, elongation 13.7 % (ASTM D638 Type IV, headline column); flexural modulus 1,500 MPa; notched Izod 35 J/m. **Note:** the headline values match the sheet's ZY column. The XY column reads 1,600 MPa and 6.2 % (`docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` §2.1). |
+
+**Used in:** `tools/tail_strike_requirement.py`, `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md`,
+`docs/AFT_SKIN_THINNING_STUDY.md` §5
+
+---
+
 ## Part XI — FDA / CDRH Laser Product Regulations
 
 ### REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products
