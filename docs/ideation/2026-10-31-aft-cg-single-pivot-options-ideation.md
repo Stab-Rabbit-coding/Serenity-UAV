@@ -77,7 +77,18 @@ riding the pivot [CALC].
 | `SLS_27IN_TWO_SECTION_TRIM_STUDY.md` | **Holds** for the joint loads. Its trim levers need to be re-ranked against §3 above. |
 | `SLS_EMI_AND_WINGS_NOTE.md` | Not affected. |
 
-**Stale base.** This branch does not contain commit `1f76e5cf`, which carries the
-QF2822-2300KV ledger fixes. Here `tools/auw_ledger.py` still reports 2,135 gf per fan and
-fails on the unclassified LC-ADC row. Every figure above uses the pre-fix ledger. Re-run
-after a rebase.
+**Re-run after merging `1f76e5cf`** (QF2822-2300KV, 2,370 gf per fan, ledger PASS, merge
+commit `ea00da21`). The relocated baseline is now AUW 6,310 g and **+16.6 mm**. The §3
+offsets stay within 0.1 mm of the values above. With the middle and rear printed as one
+piece (the 14.4 g collar at Y 509 deleted), the cases are:
+
+| Case | AUW | Offset |
+|---|---|---|
+| One piece, collar deleted | 6,296 g | +16.2 mm |
+| Plus rear ×0.5, middle ×0.7 | 6,125 g | +10.4 mm |
+| Plus rear ×0.25 (ribs and film), middle ×0.7 | 6,068 g | +8.0 mm |
+| Plus rear ×0.5, middle ×0.7, pivot 0.5 in aft | 6,125 g | **+1.6 mm** |
+| Plus rear ×0.25, middle ×0.7, pivot 0.5 in aft | 6,068 g | **−0.7 mm** |
+
+The raw ledger figure (+22.4 mm) is before the head and cargo relocations. The study
+figures include them.
