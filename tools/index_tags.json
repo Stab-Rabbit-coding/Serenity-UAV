@@ -14270,6 +14270,13 @@
       ],
       "archived": false
     },
+    "docs/AFT_SKIN_THINNING_STUDY.md": {
+      "description": "Aft Skin Thinning Study \u2014 Joined Middle+Rear SLS Part",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/AGENTS.md": {
       "description": "Documentation \u2014 Agent Instructions",
       "tags": [
@@ -18300,6 +18307,13 @@
       ],
       "archived": false
     },
+    "tools/aft_skin_thinning_study.py": {
+      "description": "aft_skin_thinning_study.py -- can the joined middle+rear SLS part use a thinner skin,",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/airframe_interface_census.py": {
       "description": "Exhaustive interface census of the airframe master assembly.",
       "tags": [
@@ -19308,6 +19322,7 @@
       "deferred/TODO.md",
       "deferred/WBS.md",
       "deferred/aft-edf/README.md",
+      "docs/AFT_SKIN_THINNING_STUDY.md",
       "docs/AGENTS.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/BATTERY_MOUNT.md",
@@ -24014,6 +24029,7 @@
       "tools/add_board_notices.py",
       "tools/add_landing_gear_bosses.py",
       "tools/aft_section_mass_audit.py",
+      "tools/aft_skin_thinning_study.py",
       "tools/airframe_interface_census.py",
       "tools/auw_ledger.py",
       "tools/bake_hull_frame.py",

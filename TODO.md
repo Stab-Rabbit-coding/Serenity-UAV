@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-10-26
+**Last updated:** 2026-10-31
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -93,6 +93,16 @@
 - [ ] Re-test on newest reachable KiCad — if already fixed, do NOT file
 - [ ] Search KiCad GitLab for a duplicate before filing
 - [ ] File at gitlab.com/kicad/code/kicad/-/issues, attach repro zip
+
+### 0.12 — Aft-Section SLS Sizing References (2026-10-31)
+→ detail: `docs/AFT_SKIN_THINNING_STUDY.md`, `REFERENCES.md` Open Standards Verification Items
+
+- [ ] Confirm the NASA SP-8007 [REF-NASA-002] bending-knockdown section…
+- [ ] Confirm the Isogrid Design Handbook [REF-NASA-003] smear against…
+- [ ] Confirm the Roark [REF-STR-001] edition, table and case for the…
+- [ ] Validate an official 3D Systems URL for DuraForm PA CF 3DS-30108A…
+- [ ] Obtain PA CF build-axis (Z) tensile and flexural data (coupon or…
+- [ ] Owner sets the handling design load (now 20 lbf on a 5 mm radius…
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 → detail: `airframe/WBS.md` §1.1.0

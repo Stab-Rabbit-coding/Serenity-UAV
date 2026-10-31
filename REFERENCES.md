@@ -831,6 +831,45 @@ MIL-STD-461G qualification testing is deferred pending airframe integration.
 
 ---
 
+### REF-NASA-002: NASA SP-8007 — Buckling of Thin-Walled Circular Cylinders
+
+| Field | Value |
+| --- | --- |
+| **Authors** | V. I. Weingarten, P. Seide, J. P. Peterson |
+| **Issuing body** | NASA (Space Vehicle Design Criteria — Structures monograph) |
+| **Date** | August 1968 (revised edition; NTRS record date) |
+| **Official URL** | <https://ntrs.nasa.gov/citations/19690013955> (record located 2026-10-31). Revision: NASA/SP-8007-2020/REV 2, <https://ntrs.nasa.gov/citations/20205011530> |
+| **Section applied** | Bending of unstiffened cylinders: classical stress 0.605·E·t/R with the knockdown γ = 1 − 0.731(1 − e^−φ), φ = (1/16)√(R/t). **Requires verification**: the formula was applied from the established 1968 practice, and the PDF section number has not been confirmed (see Open Standards Verification Items). |
+
+**Used in:** `tools/aft_skin_thinning_study.py`, `docs/AFT_SKIN_THINNING_STUDY.md` §3
+
+---
+
+### REF-NASA-003: NASA CR-124075 — Isogrid Design Handbook
+
+| Field | Value |
+| --- | --- |
+| **Authors** | R. R. Meyer, O. P. Harwood, J. I. Orlando (McDonnell Douglas Astronautics Co., NASA Contract NAS 8-28619, MSFC) |
+| **Date** | February 1973 |
+| **Official URL** | <https://ntrs.nasa.gov/citations/19730011184> (record located 2026-10-31) |
+| **Section applied** | Isogrid (equilateral-triangle) rib geometry, smeared as 3·b·d/h of added thickness per unit skin area. That is a first-order smear, not the handbook's §4.2 closed-form cylinder method. **Requires verification**: the smear and section number have not been checked against the PDF. |
+
+**Used in:** `tools/aft_skin_thinning_study.py`, `docs/AFT_SKIN_THINNING_STUDY.md` §3
+
+---
+
+### REF-STR-001: Roark's Formulas for Stress and Strain — circular plate, central patch load
+
+| Field | Value |
+| --- | --- |
+| **Work** | W. C. Young, R. G. Budynas, A. M. Sadegh, *Roark's Formulas for Stress and Strain*, McGraw-Hill (edition not confirmed) |
+| **Section applied** | Simply supported solid circular plate, uniform load over a central circle of radius r0: σ_max = 3W/(2πt²)·[(1+ν)·ln(a/r0) + 1]. Also the uniform-cantilever first bending frequency. **Requires verification**: edition, table and case number not confirmed. No copy was available in this session. |
+| **URL** | None validated. Commercial handbook. |
+
+**Used in:** `tools/aft_skin_thinning_study.py`, `docs/AFT_SKIN_THINNING_STUDY.md` §3
+
+---
+
 ## Part V — International Standards (ISO, IEC)
 
 ### REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling
@@ -1870,6 +1909,21 @@ which prints that caveat on every run.
 **Resolved 2026-10-07 (option b — citation removed). Original action:** Correct `airframe/README.md` §Printing Specifications to either (a) cite the correct AMS2400-series electroplating spec once identified and verified, or (b) remove the citation if no specific AMS spec was actually being invoked. Do not leave AMS2301 attached to an electroplating claim it does not support. (`TODO.md` §0.x)
 
 **Used in:** no active document (the `airframe/README.md` citation was removed 2026-10-07)
+
+---
+
+### REF-MAT-011: 3D Systems — DuraForm PA CF datasheet (SLS), document 3DS-30108A
+
+| Field | Value |
+| --- | --- |
+| **Issuing body** | 3D Systems, Inc. |
+| **Date** | 2023-10-31 |
+| **Source** | Owner-supplied PDF (`3d-systems-duraform-pa-cf-datasheet-us-en-2023-10-31-a_web65.pdf`), read 2026-10-31. Official URL not yet validated. |
+| **Values applied** | Density 1.11 g/cm³ (ASTM D792); tensile ultimate 84 MPa, tensile modulus 8,500 MPa, elongation 3.8 % (ASTM D638 Type I); flexural modulus 7,000 MPa (ASTM D790); HDT 177 °C at 1.82 MPa (ASTM D648). No orientation (Z) data and no electrical rows. |
+
+**Used in:** `tools/aft_section_mass_audit.py`, `tools/aft_skin_thinning_study.py`,
+`docs/MASS_AUDIT_MIDDLE_REAR_SECTIONS.md`, `docs/AFT_SKIN_THINNING_STUDY.md`,
+`docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` (as 3DS-30108A)
 
 ---
 
@@ -3722,6 +3776,7 @@ Add verified section numbers to the relevant files and update this table.
 
 | Citation | File | Issue | Action Required |
 |---|---|---|---|
+| [REF-NASA-002] §, [REF-NASA-003] §, [REF-STR-001] case; 3DS-30108A official URL | `tools/aft_skin_thinning_study.py`, `docs/AFT_SKIN_THINNING_STUDY.md` | **Open (2026-10-31).** Formulas applied from established practice; section and case numbers not confirmed against the documents. The datasheet is an owner-supplied PDF. | Read the NTRS PDFs and a Roark copy, record the sections, validate the 3D Systems URL (WBS §0.12). |
 | STM32WLE5JC RF matching / harmonic-filter values (ST AN5457) | `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`L-MLRS-PA`, `C-MLRS-TX0..2`, `L-MLRS-TX1/2`, `C-MLRS-RXP/RXN`, `L-MLRS-RX1/2`, `C-MLRS-RX1`, `C-MLRS-VRPA`) | **Open (2026-09-29).** Topology follows DS13105 Figures 2–4; the 915 MHz element values come from ST AN5457, which could not be fetched from the build environment. Values are tagged `VERIFY AN5457`. | Obtain AN5457, populate the values, add it as a REF-ID, bench-tune (VSWR/harmonics) before flight. |
 | TACCO signal-line ferrite bead MPN (600 Ω @ 100 MHz, 0402) | `gen_tacco_sch.py` (`FB-MLRS-1/2`) | **Open (2026-09-29).** The 1812 power bead 742792510 had been used on signal lines by mistake; the correct 0402 part is not yet selected (no catalog access). | Owner selects the MPN (Würth WE-CBF 0402 600 Ω family or equivalent), archive its datasheet, cite it. |
 | C&K KMR2 tact-switch variant, Epson TG2520SMN 32 MHz ordering code, pSemi PE4259 datasheet REF-ID | `gen_tacco_sch.py` (`SW-MLRS`, `X-MLRS`, `RFSW-MLRS`) | **Open (2026-09-29).** Footprints are from the KiCad library / `avionics/datasheets/`; exact orderable part numbers are not confirmed. | Owner confirms MPNs; add REF-IDs for TG2520SMN and PE4259 (datasheets already archived). |

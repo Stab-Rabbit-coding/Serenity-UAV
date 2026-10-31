@@ -44,12 +44,16 @@ middle shell skins cause about 85% of the net aft moment
 - **R3.** The horseshoe ring shall remain a **printed frame, integral with the shell**.
   The skids shall continue to attach to it and react through it. *(session-settled:
   owner, 2026-10-31)*
-- **R4.** The wall shall be graded by station. The 2.0 mm wall shall be kept at the skid
-  channels, the ring, the collar land at Y 436, the horseshoe legs and the hatch frame.
-  Away from those features the wall shall be thinner and rib-stiffened.
-  - Mass target: rear at ≤50% and middle at ≤70% of the current shells, which are
-    231.5 g and 183.1 g.
-  - A rib frame with a film skin may be used aft of the ring if it passes G2.
+- **R3a.** The ring and the skids shall be **one continuous printed member**. There is no
+  ring-to-skid attachment. The skid tubes (56.9 g) shall stay at full section.
+  *(session-settled: owner, 2026-10-31)*
+- **R4.** The skin shall be zoned.
+    - Zones that hands, ground contact and hatch edges load keep 1.4–2.0 mm.
+    - Protected acreage may go to 0.8–1.0 mm with an internal isogrid.
+    - Mass target, corrected by `docs/AFT_SKIN_THINNING_STUDY.md`: joined part ≤333 g
+    (0.80 of 417.9 g). The earlier rear ×0.5 / middle ×0.7 targets are not reachable,
+    because handling (not strength) governs.
+    - Foam fill shall not be used. It adds more aft moment than it saves.
 - **R5.** There shall be one tilt pivot. It shall be moved 0.5 in (12.7 mm) aft, per the
   existing plan. *(session-settled: owner rejected indexed or multiple pivots,
   2026-10-31)*
@@ -62,8 +66,9 @@ middle shell skins cause about 85% of the net aft moment
 
 ### Success Criteria
 
-- **S1.** Hover CG offset within the trim band. Expected: +1.6 mm with the graded skin,
-  −0.7 mm with ribs and film.
+- **S1.** Hover CG offset within the trim band. Expected with the single pivot 0.5 in aft:
+  **+4.4 to +7.2 mm** from the skin alone, depending on zoning. About +1.8 mm with the FE
+  chin and shuttle split added.
 - **S2.** The ring, skids and joint at Y 436 survive the plan 001 R7 crash case (79.4 g)
   with the factor of safety the repo requires. The joint loads at 24 in are 645 N
   (145 lbf) shear and 46.9 N·m (415 lbf·in) bending
