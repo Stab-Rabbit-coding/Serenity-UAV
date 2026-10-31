@@ -89,7 +89,7 @@ SHELLS = ("middle_shell24_2mm_repaired", "rear_shell24_2mm_repaired",
 
 def radius(y):
     """Linear interpolation of the equivalent tube radius (mm)."""
-    for (ya, ra), (yb, rb) in zip(RADIUS, RADIUS[1:]):
+    for (ya, ra), (yb, rb) in itertools.pairwise(RADIUS):
         if ya <= y <= yb:
             return ra + (rb - ra) * (y - ya) / (yb - ya)
     return RADIUS[0][1] if y < RADIUS[0][0] else RADIUS[-1][1]
