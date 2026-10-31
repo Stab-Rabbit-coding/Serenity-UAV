@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-27",
+  "generated": "2026-10-31",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -14497,6 +14497,42 @@
       ],
       "archived": false
     },
+    "docs/SLS_27IN_TWO_SECTION_TRIM_STUDY.md": {
+      "description": "Serenity UAV \u2014 27 in Hull, Two Fuselage Sections, SLS PA12 / PA12-CF, and Trim Authority",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/SLS_27IN_UNIFORM_SCALE_ADDENDUM.md": {
+      "description": "Serenity UAV \u2014 27 in Uniform Fuselage Scale: Addendum to the Trim Study",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/SLS_EMI_AND_WINGS_NOTE.md": {
+      "description": "Serenity UAV \u2014 SLS Note: Does PA-AF Help EMI, and Should the Wings Stay FDM?",
+      "tags": [
+        "documentation",
+        "emi-hardening"
+      ],
+      "archived": false
+    },
+    "docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md": {
+      "description": "Serenity UAV \u2014 SLS Material Selection from the 3D Systems Datasheets",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md": {
+      "description": "Serenity UAV \u2014 SLS PA12 / PA12-CF, 30 in Hull, Single-Piece Print Evaluation",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/TILT_ACTUATOR_OPTIONS.md": {
       "description": "Nacelle-Tilt Actuator Options \u2014 Rev T5 trade (GENERATED)",
       "tags": [
@@ -14619,6 +14655,14 @@
       ],
       "archived": false
     },
+    "docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md": {
+      "description": "SLS Material, 30 in Scale and Single-Piece Hull \u2014 Brainstorm",
+      "tags": [
+        "documentation",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/conversation histories/2026-10-17-103355-this-session-is-being-continued-from-a-previous-c.txt": {
       "description": "Text file",
       "tags": [
@@ -14683,6 +14727,14 @@
       "description": "HTML document",
       "tags": [
         "documentation"
+      ],
+      "archived": false
+    },
+    "docs/ideation/2026-10-31-aft-cg-single-pivot-options-ideation.md": {
+      "description": "Serenity UAV \u2014 Aft-CG Options Under a Single Fixed Pivot and Fixed Proportions",
+      "tags": [
+        "documentation",
+        "emi-hardening"
       ],
       "archived": false
     },
@@ -16536,6 +16588,21 @@
         "documentation",
         "power",
         "specification"
+      ],
+      "archived": false
+    },
+    "docs/sls-study/hull_build_volume_fit.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/sls-study/hull_build_volume_fit.scad": {
+      "description": "SPDX-License-Identifier: CERN-OHL-W-2.0",
+      "tags": [
+        "cad-mesh",
+        "documentation"
       ],
       "archived": false
     },
@@ -18876,6 +18943,20 @@
       ],
       "archived": false
     },
+    "tools/sls_material_screen.py": {
+      "description": "sls_material_screen.py -- screen the 3D Systems SLS nylons against the repo's",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/sls_scale_trim_study.py": {
+      "description": "sls_scale_trim_study.py -- hover-CG effect of a pivot shift, a forward hull",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/spar_bundle_fit.py": {
       "description": "Size a hollow spar bore against the conductor bundle it has to swallow.",
       "tags": [
@@ -19192,6 +19273,11 @@
       "docs/PROTO_PRINT_DAVINCI_JR.md",
       "docs/README.md",
       "docs/REVN_BUILD_GUIDE_24IN.md",
+      "docs/SLS_27IN_TWO_SECTION_TRIM_STUDY.md",
+      "docs/SLS_27IN_UNIFORM_SCALE_ADDENDUM.md",
+      "docs/SLS_EMI_AND_WINGS_NOTE.md",
+      "docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md",
+      "docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
       "docs/TILT_ACTUATOR_SELECTION.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
@@ -19207,6 +19293,7 @@
       "docs/bom_revR.json",
       "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
+      "docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md",
       "docs/conversation histories/2026-10-17-103355-this-session-is-being-continued-from-a-previous-c.txt",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
@@ -19216,6 +19303,7 @@
       "docs/handoffs/2026-10-27-head-section-layout.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
       "docs/ideation/2026-10-10-pilot-placement-routability-ideation.html",
+      "docs/ideation/2026-10-31-aft-cg-single-pivot-options-ideation.md",
       "docs/ideation/7-2.webp",
       "docs/images/bhd02/A_flange_cut_port.png",
       "docs/images/bhd02/B1_rejected_thigh_strike.png",
@@ -19444,6 +19532,8 @@
       "docs/references/vimdrones_esc_s50_v1.0.step",
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
+      "docs/sls-study/hull_build_volume_fit.png",
+      "docs/sls-study/hull_build_volume_fit.scad",
       "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/conventions/pb2-header-capability-from-soc-datasheet-not-srm-summary.md",
@@ -19568,6 +19658,7 @@
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
       "docs/REVN_BUILD_GUIDE_24IN.md",
+      "docs/SLS_EMI_AND_WINGS_NOTE.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
       "docs/TILT_ENCODER_WIRING_EMI_SPEC.md",
       "docs/TILT_SPAR_ANALYSIS.md",
@@ -19575,6 +19666,7 @@
       "docs/WBS_FEDERATION.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
       "docs/electrical_fault_margins.md",
+      "docs/ideation/2026-10-31-aft-cg-single-pivot-options-ideation.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/plans/2026-08-27-nacelle-wiring-plan.md",
@@ -19804,6 +19896,7 @@
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
+      "docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
@@ -20976,6 +21069,7 @@
       "docs/references/thingverse-serenity/files/s_wings_both.stl",
       "docs/references/vimdrones_can_periph_pico_v1.0.stl",
       "docs/references/vimdrones_esc_s50_v1.0.stl",
+      "docs/sls-study/hull_build_volume_fit.scad",
       "gcs/skipper/hardware/enclosure/openscad/skipper_field_enclosure.scad",
       "gcs/skipper/hardware/gimbal/openscad/skipper_gimbal_mount.scad",
       "gcs/skipper/hardware/gimbal/openscad/skipper_gimbal_pan.scad",
@@ -23934,6 +24028,8 @@
       "tools/prep_nacelle_64_bake.py",
       "tools/purge_stale_fcstd_objects.py",
       "tools/shift_baked_stl.py",
+      "tools/sls_material_screen.py",
+      "tools/sls_scale_trim_study.py",
       "tools/spar_bundle_fit.py",
       "tools/stitch_vias.py",
       "tools/tests/test_esc80_cooptimize.py",
