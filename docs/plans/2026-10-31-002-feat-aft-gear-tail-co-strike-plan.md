@@ -71,8 +71,9 @@ A first two-contact plateau simulation, at the hull-only FDM-solid mass (14.68 l
 - **R5.** The gear wires (ductile and spring) shall be re-sized as a function of AUW. The
   interim value is **14.19 lbm** (SLS on the hull and both nacelles; first written as 14.09,
   which omitted the nacelles); the final value is the as-weighed AUW (LG-15).
-- **R6.** The skids shall be PA11 Black [REF-MAT-012], printed as part of the separate
-  ring and skid member (Option B).
+- **R6.** The skids and cross member shall be **PA12-CF** [REF-MAT-011], an elastic
+  leaf-spring U-frame printed as a separate ring and skid member (Option B). A ventral
+  strut pad at Y 620 shall tie the cross member to a hull hard point. *(Superseded 2026-10-31, owner decision: the skid and cross member U-frame is **PA12-CF** (DuraForm PA CF), designed elastic, with a ventral strut at Y 620. PA11 was too flexible to absorb the co-strike inside the stroke. See `docs/SKID_FAILURE_MODE_STUDY.md` §5–8.)*
 - **R7.** No change to the pivot station, and no proportion change. Geometry is rebuilt
   from the owner's sources only.
 
@@ -86,8 +87,10 @@ A first two-contact plateau simulation, at the hull-only FDM-solid mass (14.68 l
 - **KTD2. SLS is the fabrication process; AUW stays a parameter until weighed.**
   *(session-settled: user-directed, chosen over enveloping at the FDM-solid mass: owner
   2026-10-31)* Governs R5.
-- **KTD3. Ring and skids are PA11, printed separately (Option B); the skin is PA CF.**
-  *(session-settled: user-approved, chosen over the one-piece PA CF part and over PA12)*
+- **KTD3. Ring and skids are PA12-CF, printed separately (Option B), elastic design with a
+  ventral strut at Y 620; the skin is PA CF.** *(session-settled: user-directed 2026-10-31,
+  chosen over PA11, which is too flexible: 0.78 J against 3.3 J inside the stroke, and over
+  PA11 with tail contact accepted.)*
   Governs R6.
 - **KTD4. The two-contact model is a planar rigid body with two constant-force (plateau)
   absorbers.** This extends the single-contact effective-mass method in

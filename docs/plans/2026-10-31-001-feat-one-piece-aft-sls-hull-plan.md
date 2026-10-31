@@ -88,6 +88,7 @@ middle shell skins cause about 85% of the net aft moment
 
 ### Outstanding Questions
 
+- *(Superseded 2026-10-31, owner decision: the skid and cross member U-frame is **PA12-CF** (DuraForm PA CF), designed elastic, with a ventral strut at Y 620. PA11 was too flexible to absorb the co-strike inside the stroke. See `docs/SKID_FAILURE_MODE_STUDY.md` §5–8.)*
 - **Option B (owner, 2026-10-31):** print the ring and skids as a separate crash member in PA11 Black (preferred over PA12: about 4× the toughness for +1.6 g). The skin stays PA CF. This would supersede R3 and R3a. It needs a skid stiffness or stroke requirement and a skin-to-ring interface (`docs/AFT_SKIN_THINNING_STUDY.md` §5).
   The stroke and force requirement now exists: CS-1–CS-5 in `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md` §5 (co-strike design case, plan 2026-10-31-002).
 

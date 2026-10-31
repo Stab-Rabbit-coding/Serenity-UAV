@@ -108,7 +108,7 @@ margin by 1.16; at the SLS 14.19 lbm, by 1.09.**
 | Leg frame: thigh bellcrank and shin | **PA12-CF, solid thigh (no bore)** | The only material that passes, at 1.01× and 13.0 lbm. At 14.19 lbm it is 0.93×, so the thigh cylinders need +2.5%, Ø14 → Ø14.35 mm (Z ×1.08). Or carry the moment in the Option A1b CF backbone (PR #262). Saves 6.9 g per leg against CF-PETG. |
 | Bay plate, boss and bolt lands | **PA12-CF** | Boss 1.26× and bolt FOS 4.37 at 13.0 lbm. At 14.19 lbm these become 1.15× and **4.00**, exactly at the 4.0 target, with no margin. The nylons fail both. |
 | Foot (ground contact) | **PA11** | Small and in direct impact and abrasion, so toughness counts more than stiffness. |
-| Skids and ring (Option B) | **PA11** | The energy absorber for TS-2 and TS-3 (§2). Equal-OD stiffness is 0.22×, which is acceptable because the skids are meant to stroke. |
+| Skids and ring (Option B) | **~~PA11~~ → PA12-CF** (owner, 2026-10-31; stiffness governs, `SKID_FAILURE_MODE_STUDY.md` §5) | The energy absorber for TS-2 and TS-3 (§2). Equal-OD stiffness is 0.22×, which is acceptable because the skids are meant to stroke. |
 | PA12 Black | **No section** | PA11 is stronger, tougher and more uniform across build orientations, for 1.6 g more per leg-sized part. |
 
 **Mass:** four PA12-CF leg frames save **27.6 g** against CF-PETG. The ductile and spring
@@ -141,8 +141,8 @@ F_leg 1,254 N per leg.
 | 1,250 N | 61.7 J | 24.6 mm | 6.5 J | 5.2 mm | 6.0 J |
 | 1,500 N | 60.9 J | 24.3 mm | 6.8 J | 4.5 mm | 6.2 J |
 
-**Skid specification (U4), for the owner's source rebuild of the separate PA11 ring and
-skid member:**
+**Skid specification (U4), for the owner's source rebuild of the separate ring and skid
+member** *(Superseded 2026-10-31, owner decision: the skid and cross member U-frame is **PA12-CF** (DuraForm PA CF), designed elastic, with a ventral strut at Y 620. PA11 was too flexible to absorb the co-strike inside the stroke. See `docs/SKID_FAILURE_MODE_STUDY.md` §5–8.)*:
 
 | ID | Requirement |
 | --- | --- |

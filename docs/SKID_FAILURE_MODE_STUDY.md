@@ -241,6 +241,15 @@ Against the alternatives:
   *still* fails the stroke, on stiffness.
 - A steel spring-wire root: about +92 g.
 
-**Decision needed (owner):** accept PA12-CF for the skid and cross member U-frame, with an
-elastic design and a ventral strut at Y 620. Or keep PA11 and accept that the skids cannot
-protect the tail in the 4 ft co-strike.
+**Owner decision (2026-10-31): PA12-CF U-frame plus a ventral strut at Y 620, elastic
+design.** This supersedes the §0 and §3 PA11 plastic-hinge recommendation.
+
+Next steps:
+
+1. Size the local wall at Y 630–650 with a factor of safety of 1.5 on the 84 MPa strength.
+2. Design the strut pad, the M3 bolt, and the doubler to the CF frame for 2.8 kN per pair.
+3. Check the single-skid strike: cross member bending and torsion.
+4. Check the ring root at V 630 N and M 22 N·m per skid.
+5. Re-run the co-strike (`tail_strike_requirement.py`) with an *elastic* skid (k ≈ 127 N/mm),
+   not a plateau. CS-1 and CS-2 change shape: the peak force is about 930 N at full
+   stroke.
