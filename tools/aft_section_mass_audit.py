@@ -29,6 +29,7 @@ AI note: Written by Claude Opus 5.5 (Anthropic) under the author's direction,
 License: MIT -- see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
+import itertools
 import os
 import sys
 
@@ -89,7 +90,7 @@ def bands(m, label):
     print(f"  {'Y band':>15s} {'V mm3':>9s} {'mass g':>7s} {'t mm':>5s} {'env cm2':>8s} "
           f"{'wall mm2':>8s} {'W x H mm, loops':>15s}")
     rows = []
-    for a, b in zip(edges[:-1], edges[1:]):
+    for a, b in itertools.pairwise(edges):
         try:
             sl = m.slice_plane([0, a, 0], [0, 1, 0], cap=True)
             sl = sl.slice_plane([0, b, 0], [0, -1, 0], cap=True)
