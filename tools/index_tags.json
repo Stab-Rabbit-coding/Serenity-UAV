@@ -18724,7 +18724,7 @@
       "archived": false
     },
     "tools/landing_gear_r6_sizing.py": {
-      "description": "Python script",
+      "description": "Serenity UAV -- Landing Gear Rev R6 sizing study (hip-pivot canonical leg).",
       "tags": [
         "build-tooling",
         "landing-gear"
@@ -19032,6 +19032,13 @@
     },
     "tools/shift_baked_stl.py": {
       "description": "Translate an already hull-frame-baked binary STL along hull X, in place.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/sls_auw_reconcile.py": {
+      "description": "sls_auw_reconcile.py -- part-by-part reconciliation of the aircraft AUW from FDM",
       "tags": [
         "build-tooling"
       ],
@@ -24152,6 +24159,7 @@
       "tools/prep_nacelle_64_bake.py",
       "tools/purge_stale_fcstd_objects.py",
       "tools/shift_baked_stl.py",
+      "tools/sls_auw_reconcile.py",
       "tools/sls_material_screen.py",
       "tools/sls_scale_trim_study.py",
       "tools/spar_bundle_fit.py",

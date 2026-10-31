@@ -459,7 +459,8 @@ def set_design_auw(lbm: float) -> None:
     """Set the design mass for this run (plan 2026-10-31-002 U3, KTD2).
 
     Owner 2026-10-31: SLS is the fabrication process and AUW stays a parameter
-    until the aircraft is weighed (LG-15); 14.09 lbm is the interim SLS figure,
+    until the aircraft is weighed (LG-15); 14.19 lbm is the interim SLS figure (hull + nacelles,
+    tools/sls_auw_reconcile.py),
     13.0 lbm the historical schedule.  Every function here reads M_AUW_KG at
     call time, so changing the module globals re-sizes the whole run.
     """

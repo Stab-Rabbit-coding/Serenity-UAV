@@ -36,6 +36,7 @@ import math
 import os
 
 import numpy as np
+import sls_auw_reconcile
 import trimesh
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -65,13 +66,10 @@ BOLT_R = 734.0          # N per bay bolt, resultant
 BOLT_CAP_PETG = 2100.0  # N, wall + boss + 3 mm plate, CF-PETG
 LEG_FRAME_CM3 = 40.64   # 3.0 in leg frame volume, LANDING_GEAR_ANALYSIS.md 11.1
 FOS_IMPACT = 4.0
+# Printed-part re-pricing over the WHOLE aircraft (hull + both nacelles).  An earlier
+# version re-priced the hull PRINT subtotal only and under-stated both cases.
+D_SOLID, D_SLS = sls_auw_reconcile.deltas()
 S_SKID_AVAIL = 7.0   # mm, skid protrusion below the hull today [MESH, docs/TAIL_STRIKE §1]
-
-
-def print_subtotal():
-    """Ledger PRINT subtotal (g) at the ledger's 1.05 g/cc."""
-    with open(os.path.join(ROOT, "current-specification", "auw_ledger.json")) as f:
-        return json.load(f)["subtotals_hover_g"]["PRINT"]
 
 
 def ledger():
@@ -115,8 +113,8 @@ def part1():
     nm, auw, cy, cz, k = max(cfgs, key=lambda c: c[1])
     masses = [
         ("ledger, FDM at 1.05 g/cc", auw),
-        ("FDM re-priced at solid 1.28 g/cc", auw + print_subtotal() * (1.28 / 1.05 - 1)),
-        ("SLS PA CF printed parts (1.11)", auw + print_subtotal() * (1.11 / 1.05 - 1)),
+        ("FDM re-priced at solid 1.28 g/cc", auw + D_SOLID),
+        ("SLS (PA CF, PA11 feet), hull + nacelles", auw + D_SLS),
     ]
     print(f"Design configuration: {nm}, CG Y {cy:.1f} Z {cz:.1f}, k_pitch {k:.1f} mm")
     for lab, m in masses:
@@ -223,7 +221,7 @@ def part3():
     import landing_gear_r6_sizing as lg
     th0, pt, _f = tip_back()
     _nm, auw, cy, cz, k = max(ledger(), key=lambda c: c[1])
-    m = (auw + print_subtotal() * (1.11 / 1.05 - 1)) / 1000   # SLS PA CF parts
+    m = (auw + D_SLS) / 1000   # SLS printed parts, hull + nacelles (sls_auw_reconcile)
     lg.set_design_auw(m / 0.45359237)
     sched = lg.wire_schedule()
     lg.set_design_auw(13.0)

@@ -34,12 +34,14 @@ review agents were dispatched.
 
 `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md` found three problems:
 
-- **The tail cone touches first.** The tip-back angle is 25.6°, and the tail cone at
-  Y 689.8 touches 0.6° before the skids.
+- **The skids lead by very little.** The tip-back angle is 25.6°, set by the skid tips
+  (X ±37, Y 689.8). The hull (the ventral cross member) is only 6.5 mm off the ground at
+  that point. *(Corrected during execution: this line first said the tail cone touched
+  first. That vertex is a skid tip.)*
 - **The gear is undersized.** It was designed for 13.0 lbm, below the as-built mass.
 - **The skids have little stroke.** They hang only 3–7 mm below the hull.
 
-A first two-contact plateau simulation, at 14.68 lbm with F_gear = 2 × 1,296 N, shows:
+A first two-contact plateau simulation, at the hull-only FDM-solid mass (14.68 lbm, later corrected to 15.09 lbm; see `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md` §6) with F_gear = 2 × 1,296 N, showed:
 
 | Skid pair force | Gear pair energy | Gear stroke | Skid pair energy | Skid stroke | Nose slap-down |
 | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -66,7 +68,8 @@ A first two-contact plateau simulation, at 14.68 lbm with F_gear = 2 × 1,296 N,
 - **R4.** The nose slap-down energy (about 10 J) onto the fore gear shall be checked
   against the fore-leg schedule.
 - **R5.** The gear wires (ductile and spring) shall be re-sized as a function of AUW. The
-  interim value is **14.09 lbm** (SLS); the final value is the as-weighed AUW (LG-15).
+  interim value is **14.19 lbm** (SLS on the hull and both nacelles; first written as 14.09,
+  which omitted the nacelles); the final value is the as-weighed AUW (LG-15).
 - **R6.** The skids shall be PA11 Black [REF-MAT-012], printed as part of the separate
   ring and skid member (Option B).
 - **R7.** No change to the pivot station, and no proportion change. Geometry is rebuilt
@@ -80,7 +83,7 @@ A first two-contact plateau simulation, at 14.68 lbm with F_gear = 2 × 1,296 N,
   *(session-settled: user-directed, chosen over skid-first strike sizing and TS-1
   skid-leads: owner 2026-10-31)* Governs R1–R4.
 - **KTD2. SLS is the fabrication process; AUW stays a parameter until weighed.**
-  *(session-settled: user-directed, chosen over enveloping at the FDM 14.68 lbm: owner
+  *(session-settled: user-directed, chosen over enveloping at the FDM-solid mass: owner
   2026-10-31)* Governs R5.
 - **KTD3. Ring and skids are PA11, printed separately (Option B); the skin is PA CF.**
   *(session-settled: user-approved, chosen over the one-piece PA CF part and over PA12)*
@@ -96,7 +99,7 @@ A first two-contact plateau simulation, at 14.68 lbm with F_gear = 2 × 1,296 N,
 
 ```mermaid
 flowchart LR
-    A["AUW parameter<br/>(14.09 interim / weighed)"] --> B["U1 two-contact model<br/>gear pair + skid pair plateaus"]
+    A["AUW parameter<br/>(14.19 interim / weighed)"] --> B["U1 two-contact model<br/>gear pair + skid pair plateaus"]
     G["Mesh geometry:<br/>feet, skid tips, tail cone"] --> B
     B --> C{"gear stroke <= 30.7 mm<br/>skid stroke <= available?"}
     C -- no --> D["iterate F_skid / F_gear"]
@@ -159,14 +162,14 @@ flowchart LR
 
 ### U3. Gear-wire re-size at an AUW parameter
 
-- **Goal:** Make the wire schedule a function of AUW, run at 14.09 lbm, and record the
+- **Goal:** Make the wire schedule a function of AUW, run at 14.19 lbm, and record the
   diameters and margins.
 - **Requirements:** R3, R5 (KTD2).
 - **Dependencies:** U1, for the co-strike gear demand.
 - **Files:**
     - `tools/landing_gear_r6_sizing.py`: `DESIGN_AUW_LBM`, read from an argument or
       constant, with 13.0 kept as the historical comparison.
-    - `docs/LANDING_GEAR_ANALYSIS.md`: a 14.09 lbm addendum section.
+    - `docs/LANDING_GEAR_ANALYSIS.md`: a 14.19 lbm addendum section.
     - `tools/test_landing_gear_r6_sizing.py`: new or extended.
 - **Approach:** The demand per leg is the larger of the tail-down 2-point demand and the
   U1 co-strike gear-pair demand. Re-solve the ductile and spring wires. Re-run the
@@ -175,10 +178,10 @@ flowchart LR
 - **Test scenarios:**
     - **Regression:** at 13.0 lbm the tool reproduces today's Ø5.27 ductile and Ø4.00
       spring wires.
-    - **Scaling:** at 14.09 lbm the wire diameters grow, roughly with AUW^(1/3).
+    - **Scaling:** at a mass above 13.0 lbm the wire diameters grow, roughly with AUW^(1/3).
     - **Material check:** a thigh margin below 1.0 is flagged.
 - **Verification:** the addendum lists the wire diameters, F_leg and every structural
-  margin at 14.09 lbm, marked interim pending LG-15.
+  margin at 14.19 lbm, marked interim pending LG-15.
 
 ### U4. Skid geometry specification for the source rebuild
 
@@ -235,7 +238,7 @@ flowchart LR
 
 - U1–U3 tests pass. `ruff` is clean. The repo pre-commit gate passes.
 - `tools/tail_strike_requirement.py` prints the co-strike, slap-down and wire tables at
-  14.09 lbm.
+  14.19 lbm.
 
 ## Definition of Done
 
