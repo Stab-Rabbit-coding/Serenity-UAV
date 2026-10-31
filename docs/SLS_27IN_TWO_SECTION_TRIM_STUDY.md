@@ -8,6 +8,8 @@
 **Supersedes:** the 30 in and single-piece conclusions in `docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md`
 and `docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md`.
 
+> **CORRECTION (2026-10-31, after the PA12, PA11 and AF+ datasheets).** `docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` §1 replaces the material advice in §5, §6 and §8 below: (1) PA12 is **not** a suitable hull skin at 2 mm. Its flexural modulus (1,500 MPa) is 4.4× below the repo's CF-PETG (6,670 MPa); **PA CF** matches it. (2) The hull mass savings in §6 assume real FDM shells weigh 1.28 g/cc; on the ledger's 1.05 g/cc they do not hold. Weigh one printed shell. (3) For shock-absorbing parts use **PA11 Black**, not PA12. The trim, plug, joint and two-section conclusions (§2–§4) are unaffected.
+
 > [!WARNING]
 > **ENGINEERING REVIEW REQUIRED — this output is not a substitute for a
 > qualified engineer.** Every result, calculation, and recommendation produced
