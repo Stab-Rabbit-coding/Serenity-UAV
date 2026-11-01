@@ -41,7 +41,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import sls_scale_trim_study as s
+import sls_scale_trim_study as s  # noqa: E402
 import hull_datums as hd  # noqa: E402  (PENDING_PIVOT_SHIFT)
 
 G = 9.80665
@@ -171,7 +171,8 @@ def cg_effect(sb, label):
     yc = sum(e[2] * e[3] for e in es) / w
     f = _nac_frac(es)
     print(f"     {label}: AUW {w:.0f} g, offset {yc - s.PIVOT:+.1f} mm; "
-          f"with the single pivot 0.5 in aft {yc - s.PIVOT - hd.PENDING_PIVOT_SHIFT * (1 - f):+.1f} mm")
+          "with the single pivot 0.5 in aft "
+          f"{yc - s.PIVOT - hd.PENDING_PIVOT_SHIFT * (1 - f):+.1f} mm")
 
 
 def _nac_frac(es):
@@ -203,7 +204,8 @@ def main():
         cg_effect(res[lab][1], lab)
 
     print("\nFoam fill (2 lb/ft3 PU) -- mass and moment cost:")
-    for lab, vol, yc in (("rear cavity, full", 2.110e6, 586.7), ("middle cavity, full", 1.273e6, 473.2),
+    for lab, vol, yc in (("rear cavity, full", 2.110e6, 586.7), ("middle cavity, "
+                                                                 "full", 1.273e6, 473.2),
                          ("5 mm liner on rear acreage", 0.5 * 205195 * 0.7 * 5, 586.7)):
         m = vol * RHO_FOAM
         print(f"  {lab:28s} {m:5.1f} g at Y {yc:.0f}: +{m * (yc - s.PIVOT):6.0f} g.mm aft")

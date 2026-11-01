@@ -16,9 +16,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-import landing_gear_r6_sizing as lg
-import sls_auw_reconcile as rec
-import tail_strike_requirement as ts
+import landing_gear_r6_sizing as lg  # noqa: E402
+import sls_auw_reconcile as rec  # noqa: E402
+import tail_strike_requirement as ts  # noqa: E402
 
 # Problem-frame case (plan 002): 14.68 lbm, k 102.1 mm, arms 14.4 / 290.5 mm.
 M, K, D1, D2 = 6.657, 0.1021, 0.0144, 0.2905
@@ -139,7 +139,8 @@ def test_reconcile_includes_nacelle_printed_parts():
     names = " ".join(n.lower() for n, _m in rec.nacelle_printed_g())
     assert "bearing" not in names and "motor" not in names
     _solid, d_sls = rec.deltas()
-    d_hull_only = sum(r["mass_g"] / rec.RHO_LEDGER * rec.RHO[rec.SLS_MATERIAL.get(r["name"], "PA CF")]
+    d_hull_only = sum(r["mass_g"] / rec.RHO_LEDGER * rec.RHO[rec.SLS_MATERIAL.get(r["name"], "PA "
+                                                                                             "CF")]
                       - r["mass_g"] for r in rec.ledger()["rows_hover"] if r["kind"] == "PRINT")
     assert _close(d_sls - d_hull_only, nac * (1.11 / 1.05 - 1), 1e-6)
 
@@ -155,6 +156,7 @@ def test_mesh_check_on_todays_rear_shell():
     assert 6.2 <= ok["tail_clear_mm"] <= 6.8, ok["tail_clear_mm"]
     assert ok["pass"] is True
     assert short["pass"] is False and "needs 7.1" in short["reason"]
+
 
 def test_elastic_skid_returns_its_energy():
     """Elastic skid (spring, owner decision PA12-CF): it stores energy and gives it back,

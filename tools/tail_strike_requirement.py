@@ -68,7 +68,8 @@ LBF = 4.44822           # N per lbf
 # Printed-part re-pricing over the WHOLE aircraft (hull + both nacelles).  An earlier
 # version re-priced the hull PRINT subtotal only and under-stated both cases.
 D_SOLID, D_SLS = sls_auw_reconcile.deltas()
-HULL_MARGIN_MM = 1.0  # mm, hull clearance kept below the skid stroke (CS-2) [ASSUMED, owner to confirm]
+# mm, hull clearance kept below the skid stroke (CS-2) [ASSUMED, owner to confirm]
+HULL_MARGIN_MM = 1.0
 SHELLS = ("middle_shell24_2mm_repaired.stl", "rear_shell24_2mm_repaired.stl")
 
 
@@ -134,7 +135,8 @@ def part1():
         e = 0.5 * r * m * V * V
         rows.append((th, d, r, e))
         f10, f20, f30 = (e / s * 1000 for s in (10, 20, 30))
-        print(f"  {th:7.1f}d {d:6.1f}mm {r:7.3f} {e:9.1f} J  {f10:7.0f} N {f20:7.0f} N {f30:7.0f} N")
+        print(f"  {th:7.1f}d {d:6.1f}mm {r:7.3f} {e:9.1f} J  {f10:7.0f} N {f20:7.0f} N {f30:7.0f} "
+              "N")
     emax = max(r[3] for r in rows[:4])
     print(f"  full-KE limit (CG over the skid point): {0.5 * m * V * V:.1f} J")
     # Simultaneous aft gear + tail at tip-back: the aft-gear pair is the contact
@@ -274,7 +276,8 @@ def part3():
     chk0 = co_strike_mesh_check(stroke_mm=0.0, margin_mm=0.0)
     s_allow = chk0["tail_clear_mm"] - HULL_MARGIN_MM
     print(f"\nCO-STRIKE (owner 2026-10-31): aft feet + skid tips together at {th0:.1f} deg")
-    print(f"  design mass {m:.3f} kg ({m / 0.45359237:.2f} lbm, SLS, heaviest = max hover AUW; LG-15 final); "
+    print(f"  design mass {m:.3f} kg ({m / 0.45359237:.2f} lbm, SLS, heaviest = max hover AUW; "
+          "LG-15 final); "
           f"arms: feet {d1 * 1000:.1f} mm, skid {d2 * 1000:.1f} mm aft of CG; k {k:.1f} mm")
     print(f"  re-sized gear at this mass: F_leg {sched['f_leg_n']:.0f} N, ductile d "
           f"{sched['ductile_d_mm']:.2f} mm, spring d {sched['spring_d_mm']:.2f} mm, "
@@ -291,7 +294,8 @@ def part3():
         ok = r["s_gear_mm"] <= settle_max and 0 < r["s_skid_mm"] <= s_allow
         if ok:
             band.append(fs)
-        note = "  <- meets R2/R3" if ok else ("  (no absorber: hull penetration)" if fs == 0 else "")
+        note = "  <- meets R2/R3" if ok else (
+            "  (no absorber: hull penetration)" if fs == 0 else "")
         print(f"  {fs:9.0f} N {r['e_gear']:7.1f} {r['s_gear_mm']:8.1f} {r['e_skid']:7.1f} "
               f"{r['s_skid_mm']:8.1f} {sl:10.1f}{note}")
     import skid_mount_loads as sml
@@ -299,13 +303,18 @@ def part3():
     r = co_strike(m, k / 1000, d1, d2, f_gear, 0.0, skid_k=2 * k_skid)
     sl = slap_down_per_leg(r["ke_res"], drop)
     ok = r["s_gear_mm"] <= settle_max and r["s_skid_max_mm"] <= s_allow
-    print(f"  ELASTIC PA12-CF skid, k {k_skid:.1f} N/mm per skid (strut at Y {sml.Y_PAD:.0f}): gear "
-          f"{r['e_gear']:.1f} J / {r['s_gear_mm']:.1f} mm; skid peak {r['f_skid_peak'] / 2:.0f} N per skid "
-          f"({r['f_skid_peak'] / 2 / LBF:.0f} lbf) at {r['s_skid_max_mm']:.1f} mm, stores {r['e_skid_peak']:.1f} J, "
+    print(f"  ELASTIC PA12-CF skid, k {k_skid:.1f} N/mm per skid (strut at Y {sml.Y_PAD:.0f}): "
+          "gear "
+          f"{r['e_gear']:.1f} J / {r['s_gear_mm']:.1f} mm; skid peak {r['f_skid_peak'] / 2:.0f} N "
+          "per skid "
+          f"({r['f_skid_peak'] / 2 / LBF:.0f} lbf) at {r['s_skid_max_mm']:.1f} mm, stores "
+          f"{r['e_skid_peak']:.1f} J, "
           f"returns it (net {r['e_skid']:+.2f} J); slap {sl:.1f} J/leg"
           f"{'  <- meets R2/R3' if ok else '  FAILS R2/R3'}{'  [CAPPED]' if r['capped'] else ''}")
     print(f"  R2/R3 band (gear <= {settle_max:.1f} mm, skid <= {s_allow:.1f} mm): "
-          + (f"{min(band)}-{max(band)} N pair (of the forces tried)" if band else "NONE -- more skid stroke needed (U4)"))
+          + (f"{min(band)}-{max(band)} N pair (of the forces tried)" if band else "NONE -- more "
+                                                                                  "skid stroke "
+                                                                                  "needed (U4)"))
     dem = m * G * H_DROP * 0.5
     print(f"  slap-down is compared with the tail-down per-leg DEMAND the shared wire is sized for "
           f"({dem:.1f} J/leg = m g h / 2), not an independent fore-leg capacity")
@@ -343,7 +352,8 @@ def skid_vertex_mask(v, y0=Y_FOOT_AFT, step=0.5, tol=0.6):
                 if len(d) < 4:
                     continue
                 xw, zt = np.ptp(d[:, 0]), d[:, 2].max()
-                if abs(d[:, 0].mean()) > 20.0 and xw < 40.0 and d[:, 2].min() < 125.0 and zt < 140.0:
+                if (abs(d[:, 0].mean()) > 20.0 and xw < 40.0
+                        and d[:, 2].min() < 125.0 and zt < 140.0):
                     poly = Polygon(d[:, [0, 2]]).buffer(tol)
                     hit = shapely.contains_xy(poly, v[near, 0], v[near, 2])
                     mask[near[hit]] = True
@@ -402,7 +412,8 @@ def part2():
               f"{boss:5.2f}x {bolt:7.2f} {ef / 6670:5.2f}x {el:5.1f}%")
     print(f"  (pass = 1.00x on thigh and boss; bolt bearing target FOS {FOS_IMPACT})")
     print("  thigh Z needed: " + ", ".join(
-        f"{n.split()[0]} {thigh_m / (s / 2):.0f} mm^3 (d x{(thigh_m / (s / 2) / THIGH_Z_SOLID) ** (1 / 3):.2f})"
+        f"{n.split()[0]} {thigh_m / (s / 2):.0f} mm^3 (d "
+        f"x{(thigh_m / (s / 2) / THIGH_Z_SOLID) ** (1 / 3):.2f})"
         for n, _r, s, _e, _l in MATS))
 
 

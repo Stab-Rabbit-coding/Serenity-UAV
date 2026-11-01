@@ -54,7 +54,8 @@ F_CASES = (625.0, 750.0)        # N per skid, CS-1
 LC = 10.0                       # mm contact length along the tube [ASSUMED]
 NU = 0.35                       # nylon / PETG Poisson ratio [ASSUMED]
 Y_RING = 485.0                  # Option B root at the horseshoe ring [ASSUMED station]
-Y_MERGE = 515.0                 # first continuous separate-tube station aft of the ring merge [MESH]
+# first continuous separate-tube station aft of the ring merge [MESH]
+Y_MERGE = 515.0
 
 # name, strength MPa, flexural E MPa, elongation %, ductile (plastic hinge)?
 MATS = [
@@ -121,16 +122,20 @@ def main():
     run = sorted((y for y in ys if y >= Y_MERGE), reverse=True)
     y_root = min(run)
     print(f"Port skid tube measured as a separate section from Y {y_root:.0f} to {ys[-1]:.0f} "
-          f"(tip ~{y_tip:.0f}); free cantilever {y_tip - y_root:.0f} mm ({(y_tip - y_root) / 25.4:.1f} in)")
+          f"(tip ~{y_tip:.0f}); free cantilever {y_tip - y_root:.0f} mm "
+          f"({(y_tip - y_root) / 25.4:.1f} in)")
     print("  Y      w x h mm    wall t  r_mean   A mm2    I mm4    Z mm3   Zp mm3")
     for y in run[::-1][::8] + [run[0]]:
         p = props[y]
-        print(f"  {y:5.0f}  {p['w']:4.1f} x {p['h']:4.1f}  {p['t']:5.2f}  {p['r']:6.2f}  {p['A']:6.1f} "
+        print(f"  {y:5.0f}  {p['w']:4.1f} x {p['h']:4.1f}  {p['t']:5.2f}  {p['r']:6.2f}  "
+              f"{p['A']:6.1f} "
               f"{p['I']:8.0f} {p['Z']:7.0f} {p['Zp']:7.0f}")
 
     root = props[y_root]
-    for case, y0, sec0 in (("AS-BUILT (tube merges into the middle shell at the ring)", y_root, None),
-                           ("OPTION B (separate ring + skids; root at the ring, Y 485)", Y_RING, root)):
+    for case, y0, sec0 in (("AS-BUILT (tube merges into the middle shell at the "
+                            "ring)", y_root, None),
+                           ("OPTION B (separate ring + skids; root at the ring, Y "
+                            "485)", Y_RING, root)):
         L_root = y_tip - y0
         print(f"\n{case}: free length {L_root:.0f} mm ({L_root / 25.4:.1f} in)")
         print(f"  {'material':40s} {'root bend':>10s} {'weakest station':>17s} {'wall crush':>11s} "
@@ -150,7 +155,8 @@ def main():
             tip = props.get(run[0], root)
             f_crush = (s * tip["t"] ** 2 * LC / tip["r"] if duct
                        else math.pi * s * tip["t"] ** 2 * LC / (6 * tip["r"]))
-            m_b = 2 * math.sqrt(2) / 9 * math.pi * e * p0["r"] * p0["t"] ** 2 / math.sqrt(1 - NU ** 2)
+            m_b = (2 * math.sqrt(2) / 9 * math.pi * e
+                   * p0["r"] * p0["t"] ** 2 / math.sqrt(1 - NU ** 2))
             f_brz = m_b / L_root
             phi = math.sqrt(p0["r"] / p0["t"]) / 16
             gam = 1 - 0.731 * (1 - math.exp(-phi))
@@ -159,8 +165,10 @@ def main():
             modes = {f"bending at Y {best[1]:.0f}": best[0], "wall crush at contact": f_crush,
                      "Brazier ovalisation": f_brz, "local buckling": f_buck}
             gov = min(modes, key=modes.get)
-            print(f"  {name:40s} {f_root:8.0f} N {best[0]:8.0f} N @Y{best[1]:3.0f} {f_crush:9.0f} N "
-                  f"{f_brz:7.0f} N {f_buck:6.0f} N  {gov} ({modes[gov]:.0f} N, {modes[gov] / LBF:.0f} lbf)"
+            print(f"  {name:40s} {f_root:8.0f} N {best[0]:8.0f} N @Y{best[1]:3.0f} {f_crush:9.0f} "
+                  "N "
+                  f"{f_brz:7.0f} N {f_buck:6.0f} N  {gov} ({modes[gov]:.0f} N, "
+                  f"{modes[gov] / LBF:.0f} lbf)"
                   f"{'  ductile' if duct else '  BRITTLE: fracture, no stroke'}")
         need = F_CASES
         print(f"  CS-1 needs {need[0]:.0f}-{need[1]:.0f} N per skid "
@@ -171,7 +179,8 @@ def main():
               f"OD ~{(z_need / (sec0 or root)['t']) ** 0.5:.0f} mm (Zp ~ D^2 t)")
 
 
-STROKE_MM = 7.3        # mm: >= 8.3 mm hull clearance (cross member counted as skid frame) - 1 mm margin
+# mm: >= 8.3 mm hull clearance (cross member counted as skid frame) - 1 mm margin
+STROKE_MM = 7.3
 U_SKID_J = 3.3         # J per skid, co-strike (CS-4)
 Y_TIE = 596.0          # rear CF ring frame station (add_structural_features.py rear_Y290 pocket)
 
@@ -187,7 +196,8 @@ def stiffness_check():
     ys = sorted(props)
     y_tip = ys[-1] + 1.0
     print(f"\nSTIFFNESS: need {U_SKID_J} J per skid within {STROKE_MM} mm -> plateau >= "
-          f"{U_SKID_J * 1e3 / STROKE_MM:.0f} N, or elastic k >= {2 * U_SKID_J * 1e3 / STROKE_MM ** 2:.0f} N/mm")
+          f"{U_SKID_J * 1e3 / STROKE_MM:.0f} N, or elastic k >= "
+          f"{2 * U_SKID_J * 1e3 / STROKE_MM ** 2:.0f} N/mm")
     for name, s_, e, _el, _d in MATS:
         for lab, y0 in (("root at ring", Y_MERGE), ("tied at CF frame Y596", Y_TIE)):
             c = sum((y_tip - (a + b) / 2) ** 2 / (e * props[a]["I"]) * (b - a)

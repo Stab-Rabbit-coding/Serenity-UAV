@@ -109,8 +109,8 @@ def checks():
     statics = {  # must clear shell AND every envelope by GAP
         "pack band (both lanes)": (-hw, hw, TRAY_Y0, TRAY_Y1, z0, z1),
         "loading corridor (one pack, centreline)": (-LANE_W / 2, LANE_W / 2, TRAY_Y1,
-                                                   CORRIDOR_Y1, CORRIDOR_ZC - TRAY_H / 2,
-                                                   CORRIDOR_ZC + TRAY_H / 2),
+                                                    CORRIDOR_Y1, CORRIDOR_ZC - TRAY_H / 2,
+                                                    CORRIDOR_ZC + TRAY_H / 2),
         "trunk (port side channel)": (TRUNK_X0, TRUNK_X1, 160.0, 300.0, TRUNK_Z0,
                                       TRUNK_Z1),
     }

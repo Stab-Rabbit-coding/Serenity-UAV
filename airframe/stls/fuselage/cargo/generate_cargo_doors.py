@@ -12,7 +12,8 @@
 #
 #     Coordinate conventions used throughout:
 #       X = lateral (port = +X, stbd = -X); aircraft CL at X = 0 (hd.X_CL)
-#       Y = longitudinal fore-aft (+Y = aft); bay spans Y ≈ 304.7 to 410.7 mm (hull_datums.CARGO_BAY_*)
+#       Y = longitudinal fore-aft (+Y = aft); bay spans Y ≈ 304.7 to 410.7 mm
+#           (hull_datums.CARGO_BAY_*)
 #       Z = dorsal-ventral (+Z = up); belly at Z ≈ BELLY_Z (80)
 #
 #     Hinge lines run along Y at the OUTBOARD flank/belly edge of each door —

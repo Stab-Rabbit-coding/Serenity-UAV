@@ -34,7 +34,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import nacelle_mass_cg_64 as nac64
+import nacelle_mass_cg_64 as nac64  # noqa: E402
 
 ROOT = os.path.join(HERE, "..")
 LB = 453.59237
@@ -80,7 +80,8 @@ def main():
     hull = [r for r in d["rows_hover"] if r["kind"] == "PRINT"]
     nac = nacelle_printed_g()
     print("HULL-SIDE PRINTED PARTS (ledger PRINT rows; volume = mass / 1.05)")
-    print(f"  {'part':38s} {'FDM 1.05':>9s} {'FDM 1.28':>9s} {'SLS mat':>8s} {'SLS g':>7s} {'d SLS-1.05':>10s}")
+    print(f"  {'part':38s} {'FDM 1.05':>9s} {'FDM 1.28':>9s} {'SLS mat':>8s} {'SLS g':>7s} "
+          f"{'d SLS-1.05':>10s}")
     tot = {"l": 0.0, "s": 0.0, "q": 0.0}
     for r in sorted(hull, key=lambda r: -r["mass_g"]):
         mat = SLS_MATERIAL.get(r["name"], "PA CF")
@@ -100,7 +101,8 @@ def main():
         print(f"  {n[:38]:38s} {m:9.1f} {m / RHO_LEDGER * RHO_FDM_SOLID:9.1f} {'PA CF':>8s} "
               f"{m / RHO_LEDGER * 1.11:7.1f} {m / RHO_LEDGER * 1.11 - m:+10.1f}")
     nac_l, nac_s, nac_q = 2 * nl, 2 * nl / RHO_LEDGER * RHO_FDM_SOLID, 2 * nl / RHO_LEDGER * 1.11
-    print(f"  {'both nacelles':38s} {nac_l:9.1f} {nac_s:9.1f} {'':>8s} {nac_q:7.1f} {nac_q - nac_l:+10.1f}")
+    print(f"  {'both nacelles':38s} {nac_l:9.1f} {nac_s:9.1f} {'':>8s} {nac_q:7.1f} "
+          f"{nac_q - nac_l:+10.1f}")
     skid_d = SKID_G_LEDGER / RHO_LEDGER * (RHO["PA11"] - RHO["PA CF"])
     d_fdm_solid = (tot["s"] - tot["l"]) + (nac_s - nac_l)
     d_sls = (tot["q"] - tot["l"]) + (nac_q - nac_l)
@@ -114,7 +116,8 @@ def main():
         print(f"  {k:24s} " + " ".join(f"{g:7.0f} g {g / LB:5.2f}" for g in rows))
     print("  * 'SLS hull only' reproduces the 14.09 lbm figure used in plan 002: it omitted the"
           " nacelle printed parts.")
-    print(f"\n  printed mass on the aircraft at 1.05: hull {tot['l']:.0f} g + nacelles {nac_l:.0f} g"
+    print(f"\n  printed mass on the aircraft at 1.05: hull {tot['l']:.0f} g + nacelles {nac_l:.0f} "
+          "g"
           f" = {tot['l'] + nac_l:.0f} g ({(tot['l'] + nac_l) / LB:.2f} lbm)")
     return 0
 

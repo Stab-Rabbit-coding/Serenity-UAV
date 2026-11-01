@@ -28,7 +28,8 @@ import os
 HERE = os.path.dirname(os.path.abspath(__file__))
 LEDGER = os.path.join(HERE, "..", "current-specification", "auw_ledger.json")
 
-# name: (density g/cc, flex modulus MPa, tensile modulus MPa, elongation % (break), notched Izod J/m)
+# name: (density g/cc, flex modulus MPa, tensile modulus MPa, elongation % (break),
+#        notched Izod J/m)
 MATS = {
     "CF-PETG (repo)": (1.28, 6670, None, None, None),
     "PA CF": (1.11, 7000, 8500, 3.8, 52),
@@ -63,14 +64,16 @@ DEFAULT = "PA CF"  # small brackets and shelves
 
 def merit():
     print("figures of merit (higher is better)")
-    print(f"{'material':16s} {'rho':>5s} {'E/rho':>7s} {'Eflex^1/3/rho':>14s} {'Etens^1/2/rho':>14s}"
+    print(f"{'material':16s} {'rho':>5s} {'E/rho':>7s} {'Eflex^1/3/rho':>14s} "
+          f"{'Etens^1/2/rho':>14s}"
           f" {'elong%':>7s} {'notchedJ/m':>11s}")
     for n, (rho, ef, et, el, iz) in MATS.items():
         panel = ef ** (1 / 3) / rho
         strut = (et ** 0.5 / rho) if et else float("nan")
         eor = (et / rho) if et else float("nan")
         print(f"{n:16s} {rho:5.2f} {eor:7.0f} {panel:14.1f} {strut:14.1f} "
-              f"{(el if el is not None else float('nan')):7.1f} {(iz if iz else float('nan')):11.0f}")
+              f"{(el if el is not None else float('nan')):7.1f} "
+              f"{(iz if iz else float('nan')):11.0f}")
     print("panel index = flex modulus^(1/3)/rho: equal-stiffness plate mass ~ 1/index")
     print("strut index = tensile modulus^(1/2)/rho")
 

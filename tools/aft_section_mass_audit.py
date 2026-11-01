@@ -37,7 +37,7 @@ import numpy as np
 import trimesh
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import hull_datums as hd  # noqa: E402  (tilt pivot = SPAR_Y)
-from shapely.geometry import MultiPolygon
+from shapely.geometry import MultiPolygon  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 STL = os.path.join(HERE, "..", "airframe", "stls", "fuselage")
@@ -126,9 +126,11 @@ def ventral_dorsal(m, label):
 def summary(label, m):
     """Mass at each density, centroid, first moment and pitch inertia about the pivot."""
     c = m.center_mass
-    print(f"\n{label}: V {m.volume:,.0f} mm3, A {m.area:,.0f} mm2, mean t {2 * m.volume / m.area:.2f} mm")
+    print(f"\n{label}: V {m.volume:,.0f} mm3, A {m.area:,.0f} mm2, mean t "
+          f"{2 * m.volume / m.area:.2f} mm")
     print(f"  bounds Y {m.bounds[0][1]:.1f}..{m.bounds[1][1]:.1f}, "
-          f"X {m.bounds[0][0]:.1f}..{m.bounds[1][0]:.1f}, Z {m.bounds[0][2]:.1f}..{m.bounds[1][2]:.1f}")
+          f"X {m.bounds[0][0]:.1f}..{m.bounds[1][0]:.1f}, Z "
+          f"{m.bounds[0][2]:.1f}..{m.bounds[1][2]:.1f}")
     print(f"  centroid X {c[0]:.1f} Y {c[1]:.1f} Z {c[2]:.1f}")
     for k, r in RHO.items():
         g = m.volume * r
@@ -161,17 +163,20 @@ def main():
     bridge = 0.5 * (sa[1] + sb[1]) * 2.0
     joined = trimesh.util.concatenate([m["middle"], m["rear"]])
     v = m["middle"].volume + m["rear"].volume + bridge
-    cy = (m["middle"].volume * m["middle"].center_mass[1] + m["rear"].volume * m["rear"].center_mass[1]
+    cy = (m["middle"].volume * m["middle"].center_mass[1]
+          + m["rear"].volume * m["rear"].center_mass[1]
           + bridge * 509.0) / v
     print("\nJOINED middle+rear (as-is walls, collar Y509 deleted, gap bridged)")
-    print(f"  wall cut at Y 507.5 {sa[1]:.0f} mm2 (perimeter {sa[2]:.0f} mm), at Y 510.5 {sb[1]:.0f} mm2 "
+    print(f"  wall cut at Y 507.5 {sa[1]:.0f} mm2 (perimeter {sa[2]:.0f} mm), at Y 510.5 "
+          f"{sb[1]:.0f} mm2 "
           f"(perimeter {sb[2]:.0f} mm); bridge {bridge:.0f} mm3")
     print(f"  envelope mismatch at the joint: middle {sa[3]:.0f} x {sa[4]:.0f} mm, "
           f"rear {sb[3]:.0f} x {sb[4]:.0f} mm")
     old = m["middle"].volume + m["rear"].volume + m["collar Y509"].volume
     for k, r in RHO.items():
         print(f"  {k:18s}: joined {v * r:6.1f} g vs 4-section parts {old * r:6.1f} g "
-              f"(delta {(v - old) * r:+.1f} g); centroid Y {cy:.1f}; moment {v * r * (cy - PIVOT_Y):.0f} g.mm")
+              f"(delta {(v - old) * r:+.1f} g); centroid Y {cy:.1f}; moment "
+              f"{v * r * (cy - PIVOT_Y):.0f} g.mm")
     print(f"  overall length {joined.bounds[1][1] - joined.bounds[0][1]:.1f} mm "
           f"({(joined.bounds[1][1] - joined.bounds[0][1]) / 25.4:.2f} in); bbox "
           f"{np.ptp(joined.bounds, axis=0).round(1).tolist()} mm")

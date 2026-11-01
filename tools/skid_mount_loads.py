@@ -37,7 +37,7 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import skid_failure_mode_study as sf
+import skid_failure_mode_study as sf  # noqa: E402
 import hull_datums as hd  # noqa: E402  (tilt pivot = SPAR_Y)
 
 LBF = 4.44822
@@ -74,8 +74,11 @@ def solve(e, ys, iz, y_tip, y_strut=None, f_tip=1.0):
     for i in range(n - 1):
         le = yn[i + 1] - yn[i]
         ii = np.interp(0.5 * (yn[i] + yn[i + 1]), ys, iz, left=iz[0], right=iz[-1])
-        ke = e * ii / le ** 3 * np.array([[12, 6 * le, -12, 6 * le], [6 * le, 4 * le ** 2, -6 * le, 2 * le ** 2],
-                                          [-12, -6 * le, 12, -6 * le], [6 * le, 2 * le ** 2, -6 * le, 4 * le ** 2]])
+        ke = e * ii / le ** 3 * np.array([
+            [12, 6 * le, -12, 6 * le],
+            [6 * le, 4 * le ** 2, -6 * le, 2 * le ** 2],
+            [-12, -6 * le, 12, -6 * le],
+            [6 * le, 2 * le ** 2, -6 * le, 4 * le ** 2]])
         idx = [2 * i, 2 * i + 1, 2 * i + 2, 2 * i + 3]
         k[np.ix_(idx, idx)] += ke
     js = None
@@ -91,7 +94,8 @@ def solve(e, ys, iz, y_tip, y_strut=None, f_tip=1.0):
     v_root, m_root = react[0], react[1]
     r_strut = K_STRUT * u[2 * js] if js is not None else 0.0
     # bending moment along the beam from statics (tip load and strut reaction)
-    m = np.array([f_tip * (y_tip - y) - (r_strut * (y_strut - y) if (js is not None and y < y_strut) else 0.0)
+    m = np.array([f_tip * (y_tip - y)
+                  - (r_strut * (y_strut - y) if (js is not None and y < y_strut) else 0.0)
                   for y in yn])
     return yn, u[0::2], m, v_root, m_root, r_strut
 
@@ -115,14 +119,19 @@ def main():
             # loads at the co-strike design force (or what the stroke can develop, if lower)
             f_use = min(F_DESIGN, fs)
             z_at = np.interp(yn[imax], ys, zz, left=zz[0], right=zz[-1])
-            print(f"  {'':34s}   at F = {f_use:4.0f} N ({f_use / LBF:3.0f} lbf) per skid: ring root V "
-                  f"{abs(vr) * f_use:5.0f} N, M {abs(mr) * f_use / 1e3:5.1f} N.m ({abs(mr) * f_use / 1e3 * 8.851:4.0f} lbf.in); "
-                  f"strut {abs(rs) * f_use:5.0f} N/skid -> hull {2 * abs(rs) * f_use:5.0f} N (pair); "
+            print(f"  {'':34s}   at F = {f_use:4.0f} N ({f_use / LBF:3.0f} lbf) per skid: ring "
+                  "root V "
+                  f"{abs(vr) * f_use:5.0f} N, M {abs(mr) * f_use / 1e3:5.1f} N.m "
+                  f"({abs(mr) * f_use / 1e3 * 8.851:4.0f} lbf.in); "
+                  f"strut {abs(rs) * f_use:5.0f} N/skid -> hull {2 * abs(rs) * f_use:5.0f} N "
+                  "(pair); "
                   f"skid sigma_max {abs(m[imax]) * f_use / z_at:4.0f} MPa vs {s:.0f}")
             if ysr is not None:
                 m_cm = abs(rs) * f_use * X_HALF / 1e3
-                print(f"  {'':34s}   cross member (central strut): bending {m_cm:4.1f} N.m each side "
-                      f"(symmetric); single-skid strike: {m_cm:4.1f} N.m one side + torsion into the U")
+                print(f"  {'':34s}   cross member (central strut): bending {m_cm:4.1f} N.m each "
+                      "side "
+                      f"(symmetric); single-skid strike: {m_cm:4.1f} N.m one side + torsion into "
+                      "the U")
 
 
 def strut_design(f_tip=F_DESIGN):
@@ -134,19 +143,25 @@ def strut_design(f_tip=F_DESIGN):
     m_rib = r * lr                           # N.mm at the frame end of the rib
     z_rib = RIB_B * RIB_H ** 2 / 6
     pad_a = 10.0 * 16.0
-    print(f"\nSTRUT (item 2): pads at Y {Y_PAD:.0f}, X +/-40 (inboard of the rails, hidden in profile), "
+    print(f"\nSTRUT (item 2): pads at Y {Y_PAD:.0f}, X +/-40 (inboard of the rails, hidden in "
+          "profile), "
           f"rib to the CF frame at Y {Y_FRAME}")
-    print(f"  skid tip k {1 / w[-1]:.1f} N/mm with k_strut {K_STRUT:.0f} N/mm; per skid at F = {f_tip:.0f} N "
+    print(f"  skid tip k {1 / w[-1]:.1f} N/mm with k_strut {K_STRUT:.0f} N/mm; per skid at F = "
+          f"{f_tip:.0f} N "
           f"({f_tip / LBF:.0f} lbf):")
-    print(f"  pad reaction {r:.0f} N ({r / LBF:.0f} lbf) per side, {2 * r:.0f} N ({2 * r / LBF:.0f} lbf) pair; "
+    print(f"  pad reaction {r:.0f} N ({r / LBF:.0f} lbf) per side, {2 * r:.0f} N "
+          f"({2 * r / LBF:.0f} lbf) pair; "
           f"pad bearing {r / pad_a:.1f} MPa on 10 x 16 mm")
     print(f"  rib {RIB_B:.0f} x {RIB_H:.0f} mm PA12-CF, {lr:.1f} mm: M {m_rib / 1e3:.1f} N.m "
           f"({m_rib / 1e3 * 8.851:.0f} lbf.in), sigma {m_rib / z_rib:.0f} MPa -> FOS "
           f"{S_RIB / (m_rib / z_rib):.2f}; mass {RIB_B * RIB_H * lr * 1.11e-3:.1f} g per side")
-    print(f"  CF frame: {r:.0f} N + {m_rib / 1e3:.1f} N.m per side, in-plane; ring-root V {abs(vr) * f_tip:.0f} N, "
+    print(f"  CF frame: {r:.0f} N + {m_rib / 1e3:.1f} N.m per side, in-plane; ring-root V "
+          f"{abs(vr) * f_tip:.0f} N, "
           f"M {abs(mr) * f_tip / 1e3:.1f} N.m per skid")
-    print("  M3 A2-70 (tension cap 3,521 N, gear tool) from BELOW through the cross-member pad into a heat-set "
-          "insert in the rib: compression goes through the pad in bearing; the bolt carries only rebound and "
+    print("  M3 A2-70 (tension cap 3,521 N, gear tool) from BELOW through the cross-member pad "
+          "into a heat-set "
+          "insert in the rib: compression goes through the pad in bearing; the bolt carries only "
+          "rebound and "
           "locates the frame")
 
 
@@ -197,16 +212,24 @@ def size_elastic_design(y_pad=Y_PAD, crash_frac=0.95, b=6.0):
     rib = b * h * lr * 1.11e-3
     tot = 2 * (dm + rib) + 4.0
     mpa2psi, g2oz, mm2in = 145.038, 1 / 28.3495, 1 / 25.4
-    print(f"\nELASTIC DESIGN (pad Y {y_pad:.0f}, 4 ft at {crash_frac:.2f} x ultimate, 1.5 ft at ultimate/1.5):")
+    print(
+        f"\nELASTIC DESIGN (pad Y {y_pad:.0f}, 4 ft at {crash_frac:.2f} x ultimate, 1.5 ft at "
+        "ultimate/1.5):")
     print(f"  skid k {kk * 25.4 / LBF:.0f} lbf/in; 4 ft stroke {r['s_skid_max_mm'] * mm2in:.3f} in "
-          f"({r['s_skid_max_mm']:.2f} mm; limit 0.217 in); peak {fpk / LBF:.0f} lbf ({fpk:.0f} N) per skid")
-    print(f"  strut {fs / LBF:.0f} lbf ({fs:.0f} N) per side; ring root {abs(mr) * fpk / 1e3 * 8.851:.0f} lbf.in; "
+          f"({r['s_skid_max_mm']:.2f} mm; limit 0.217 in); peak {fpk / LBF:.0f} lbf ({fpk:.0f} N) "
+          "per skid")
+    print(f"  strut {fs / LBF:.0f} lbf ({fs:.0f} N) per side; ring root "
+          f"{abs(mr) * fpk / 1e3 * 8.851:.0f} lbf.in; "
           f"gear stroke {r['s_gear_mm'] * mm2in:.2f} in")
-    print(f"  skid wall growth up to x{f.max():.1f} over Y {ys[f > 1.01].min():.0f}-{ys[f > 1.01].max():.0f} "
+    print(f"  skid wall growth up to x{f.max():.1f} over Y "
+          f"{ys[f > 1.01].min():.0f}-{ys[f > 1.01].max():.0f} "
           f"(inside the tube): +{dm * g2oz:.2f} oz ({dm:.1f} g) per skid")
-    print(f"  rib {b * mm2in:.2f} x {h * mm2in:.2f} in, {lr * mm2in:.2f} in long: {rib * g2oz:.2f} oz ({rib:.1f} g) per side")
-    print(f"  1.5 ft landing: peak {r15['f_skid_peak'] / 2 / LBF:.0f} lbf, max stress {s15 * mpa2psi:.0f} psi vs "
-          f"{S_RIB / 1.5 * mpa2psi:.0f} psi allowable -> {'elastic, no damage' if s15 <= S_RIB / 1.5 else 'OVER'}")
+    print(f"  rib {b * mm2in:.2f} x {h * mm2in:.2f} in, {lr * mm2in:.2f} in long: {rib * g2oz:.2f} "
+          f"oz ({rib:.1f} g) per side")
+    print(f"  1.5 ft landing: peak {r15['f_skid_peak'] / 2 / LBF:.0f} lbf, max stress "
+          f"{s15 * mpa2psi:.0f} psi vs "
+          f"{S_RIB / 1.5 * mpa2psi:.0f} psi allowable -> "
+          f"{'elastic, no damage' if s15 <= S_RIB / 1.5 else 'OVER'}")
     print(f"  pair total +{tot * g2oz:.2f} oz ({tot:.0f} g) at Y ~{y_pad:.0f} -> hover CG "
           f"+{tot * (y_pad - hd.SPAR_Y) / (m * 1000) * mm2in:.3f} in aft")
 

@@ -170,7 +170,9 @@ COMPONENTS = {
         # 2026-10-19: DERIVED as the mirror of Wing_Port about hd.X_CL (was
         # -257.4822, mirrored about a measured -169.241 that disagreed with the
         # centreline every other generator used).
-        (hd.mirror_x(88.8501620), hd.WING_LE_ROOT_Y + 0.0000140, 137.9998840, 0.0, 0.0, 0.0, 1.0),  # R2
+        # R2
+        (hd.mirror_x(88.8501620), hd.WING_LE_ROOT_Y + 0.0000140, 137.9998840,
+         0.0, 0.0, 0.0, 1.0),
     ),
     # Nacelles: 270 deg about +X = cruise / forward-flight attitude.
     # This is the canonical stored attitude; hover tilt is applied
