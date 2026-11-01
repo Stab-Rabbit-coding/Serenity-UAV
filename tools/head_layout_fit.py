@@ -227,7 +227,7 @@ TRUNK_W, TRUNK_H = 10.0, 8.0
 # re-selected and re-laid-out under BOW-02; the pitot keep-out moves with it.
 # BOW-02 is CLOSED by the Rev H2 twin-pod bay (the old pockets are inside the
 # bay cut).
-REGISTERED = {}  # PITOT-01 closed: owner-built pitot in the starboard dish post
+REGISTERED: dict[str, str] = {}  # PITOT-01 closed: owner-built pitot in the starboard dish post
 
 
 def trapezoid_prism(y0, length, w0, w1, z0, z1):
