@@ -14699,6 +14699,13 @@
       ],
       "archived": false
     },
+    "docs/BAY_A_FWD_THERMAL.md": {
+      "description": "Bay A Forward \u2014 Thermal Budget and Controls",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/BHD02_OPTION_STUDY.md": {
       "description": "BHD-02 Option Study \u2014 Landing-Gear Bays vs Wing Root",
       "tags": [
@@ -19260,6 +19267,13 @@
       ],
       "archived": false
     },
+    "tools/bay_a_thermal_budget.py": {
+      "description": "bay_a_thermal_budget.py -- lumped thermal budget for the enclosed Bay A",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/bhd02_option_study.py": {
       "description": "BHD-02 option study: geometry and loads for the three owner decisions.",
       "tags": [
@@ -20098,6 +20112,13 @@
       ],
       "archived": false
     },
+    "tools/tests/test_bay_a_thermal_budget.py": {
+      "description": "test_bay_a_thermal_budget.py -- lumped thermal network for the Bay A",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_esc80_cooptimize.py": {
       "description": "Tests for tools/esc80_cooptimize.py (WBS NAC-64-ESC-80A).",
       "tags": [
@@ -20398,6 +20419,7 @@
       "docs/BATTERY_MOUNT.md",
       "docs/BATTERY_SPLIT_OPTIONS.md",
       "docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md",
+      "docs/BAY_A_FWD_THERMAL.md",
       "docs/BHD02_OPTION_STUDY.md",
       "docs/CARGO_BULKHEAD_FIT_CHECK.md",
       "docs/CARGO_DOOR_GATEWAY_SPEC.md",
@@ -25293,6 +25315,7 @@
       "tools/airframe_interface_census.py",
       "tools/auw_ledger.py",
       "tools/bake_hull_frame.py",
+      "tools/bay_a_thermal_budget.py",
       "tools/bhd02_option_study.py",
       "tools/bhd10_aft_strip_options.py",
       "tools/bom_edit_door_gateway.py",
@@ -25403,6 +25426,7 @@
       "tools/tail_strike_requirement.py",
       "tools/tests/test_bay_a_fwd_mounts.py",
       "tools/tests/test_bay_a_fwd_routes.py",
+      "tools/tests/test_bay_a_thermal_budget.py",
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
