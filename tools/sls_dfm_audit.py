@@ -10,27 +10,28 @@ SLS rules do.  This tool measures each part against the SLS rules below so the
 geometry changes go where a rule is actually broken.
 
 Rules checked (all from the 3D Systems SLS Design Guide, June 2019 [REF-MFG-001]):
-  R1 Build envelope -- 3D Systems SLS 380, 15 x 13 x 18 in (381.0 x 330.2 x
-     457.2 mm), the machine the owner (Stab-Rabbit-coding) confirmed 3D Systems
-     will build on, 2026-11-01.  The guide lists the same 15 x 13 x 18 in class
-     for ProX 6100 / sPro 60 (p. 17, rounded there to 460 mm); the exact inch
-     figure is used.  Checked axis-aligned in the best of the 6 axis
-     permutations (conservative: a tilted nest may still fit).
+  R1 Build envelope -- the 3D Systems machines the owner (Stab-Rabbit-coding)
+     confirmed are available, 2026-11-01: SLS 380 15 x 13 x 18 in, sPro 140
+     22 x 22 x 18 in, sPro 230 22 x 22 x 30 in (the guide lists the same inch
+     figures, p. 17).  The smallest machine that holds the part is recorded.
+     Checked axis-aligned in the best of the 6 axis permutations
+     (conservative: a tilted nest may still fit).
   R2 Minimum wall -- 1.0 mm.  The guide gives >1 mm for sealed tank walls
-     (p. 15) and >1 mm for tag sticks (p. 14); used here as the general floor.
+     (p. 15) and "keep all features above 1mm thickness" (p. 15); used here
+     as the general floor.
      Measured by inward ray-casting from sampled surface points
      (Moller-Trumbore: T. Moller & B. Trumbore, "Fast, Minimum Storage
      Ray/Triangle Intersection", J. Graphics Tools 2(1), 1997; numpy, since
      rtree/embree are not installed on this system).
   R3 Trapped powder -- every enclosed void (a closed inner shell) needs an
      escape path.  The guide's blind-boss fix is a >2 mm hole at the base
-     (p. 6); duct/axle cavities need 2 mm+ clearance and air ports (p. 3).
+     (p. 6); duct/axle cavities need 2 mm+ clearance and air ports (p. 4).
      A void is reported as a closed component whose signed volume is negative.
   R4 Mesh validity -- watertight, consistent winding, positive volume
      (needed by every SLS build-prep tool; not a guide rule, a file rule).
 
 Not checked here (needs part-by-part design intent, see docs/SLS_MIGRATION.md):
-  moving-part clearance 0.3 mm / 0.2 mm min (guide pp. 3, 7, 12), blind-boss
+  moving-part clearance 0.3 mm / 0.2 mm min (guide pp. 4, 7, 12), blind-boss
   escape holes, thick-section shrink.
 
 Run:  /usr/bin/python3 tools/sls_dfm_audit.py [--rays N] [--json out.json]
@@ -54,8 +55,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 STL_ROOT = os.path.join(ROOT, "airframe", "stls")
 
-ENVELOPE_SLS380 = (15 * 25.4, 13 * 25.4, 18 * 25.4)  # owner 2026-11-01; [REF-MFG-001 p. 17]
-MIN_WALL_MM = 1.0                       # [REF-MFG-001 pp. 14-15]
+# 3D Systems machines available (owner 2026-11-01), smallest first; W x D x H,
+# same inch figures as [REF-MFG-001 p. 17].
+MACHINES = (("SLS 380", (15 * 25.4, 13 * 25.4, 18 * 25.4)),
+            ("sPro 140", (22 * 25.4, 22 * 25.4, 18 * 25.4)),
+            ("sPro 230", (22 * 25.4, 22 * 25.4, 30 * 25.4)))
+MIN_WALL_MM = 1.0                       # [REF-MFG-001 p. 15]
 # A designed 1.00 mm wall measures 0.99x by ray; edge/corner grazing rays read
 # short on every part.  Flag only if >5 % of the surface reads below 0.95 mm.
 WALL_TOL_MM = 0.05
@@ -109,7 +114,7 @@ def audit(path, rays, rng):
          "watertight": bool(m.is_watertight),
          "winding_ok": bool(m.is_winding_consistent),
          "volume_cc": round(abs(m.volume) / 1000.0, 2) if m.is_watertight else None,
-         "fits_sls380": fits(ext, ENVELOPE_SLS380)}
+         "fits_machine": next((n for n, env in MACHINES if fits(ext, env)), None)}
     # R3: closed components with negative signed volume are inner void shells.
     voids = []
     for c in m.split(only_watertight=False):
@@ -128,7 +133,7 @@ def audit(path, rays, rng):
     else:
         r["wall_p01_mm"] = r["wall_p50_mm"] = r["frac_below_min"] = None
     fails = []
-    if not r["fits_sls380"]:
+    if r["fits_machine"] is None:
         fails.append("R1-envelope")
     if r["frac_below_min"] and r["frac_below_min"] > THIN_FRAC_LIMIT:
         fails.append("R2-thin-wall")

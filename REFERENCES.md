@@ -2015,11 +2015,15 @@ which prints that caveat on every run.
 | --- | --- |
 | **Issuing body** | 3D Systems, Inc. |
 | **Date** | June 2019 (PDF created 2019-06-01, modified 2019-08-21) |
-| **Source** | Owner-supplied PDF, committed as `airframe/datasheets/3D-Systems_SLS_Design_Guide_en_final.pdf` (19 pp.), read 2026-11-01. Official 3dsystems.com URL not yet located — **requires verification**. |
-| **Section applied** | p. 3 Axles: 0.3 mm running clearance, 2 mm+ away from rails for powder removal; p. 6 Blind Bosses: >2 mm escape hole at the base; pp. 7, 12: 0.3 mm general / 0.2 mm minimum clearance; pp. 14–15: walls >1 mm (tag sticks, sealed tanks), escape/pull-rod >2 mm; p. 17: ProX SLS 6100 / sPro 60 HD-HS build envelope 15 × 13 × 18 in (381 × 330 × 460 mm). The owner states (2026-11-01) that 3D Systems will build Serenity on an **SLS 380**, 15 × 13 × 18 in; the audit uses 381.0 × 330.2 × 457.2 mm. |
+| **Source** | Owner-supplied PDF, committed as `airframe/datasheets/3D-Systems_SLS_Design_Guide_en_final.pdf` (19 pp.), read page by page 2026-11-01. Official 3dsystems.com URL not yet located — **requires verification**. |
+| **Section applied** | Printed page numbers, checked against the PDF. p. 4 Axles: 0.3 mm running clearance, 2 mm+ and air ports for powder removal; p. 4 Baffles: generous fillets on duct baffles; p. 6 Blind Bosses: >2 mm hole at the base; p. 7 and p. 12: at least 0.3 mm clearance, 0.2 mm minimum; p. 13 Living Hinges: avoid, and for build orientation "avoid stair steps coinciding with the tensile surface"; p. 13 Design for Mounting: elongate one hole at least 5 mm per 100 mm on long sections; p. 15: "keep all features above 1mm thickness", tank walls >1 mm; p. 16 Threads; p. 17 build envelopes: ProX SLS 6100 / sPro 60 HD-HS 15 × 13 × 18 in, sPro 140 22 × 22 × 18 in, sPro 230 22 × 22 × 30 in. The owner states (2026-11-01) that 3D Systems has an SLS 380 (15 × 13 × 18 in), sPro 140 and sPro 230 available; final orientation and machine are agreed with 3D Systems. |
+| **Limitation** | General SLS-nylon guidance from 2019. It predates DuraForm PA CF (2023) and gives no material allowables. |
 
-**Used in:** `tools/sls_dfm_audit.py`, `airframe/openscad/nacelles/nacelle_nozzle_fixed.scad`,
-`docs/SLS_MIGRATION.md`
+**Used in:** `tools/sls_dfm_audit.py`, `tools/sls_print_orientation.py`,
+`airframe/openscad/nacelles/nacelle_nozzle_fixed.scad`,
+`airframe/openscad/fuselage/cargo/tilt_brake.scad`,
+`airframe/openscad/fuselage/belly_panel.scad`, `docs/SLS_MIGRATION.md`,
+`docs/SLS_PRINT_ORIENTATION.md`
 
 ---
 

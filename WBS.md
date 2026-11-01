@@ -265,9 +265,19 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Feather-edge review, part by part (thicken, truncate or accept) — list in `docs/SLS_MIGRATION.md` §4
 - [ ] Re-point the remaining CF-PETG margin tools (list in `docs/SLS_MIGRATION.md` §5)
 - [x] Build orientation for every printed part (90), critical stress in the build plane, SLS 380 fit — `docs/SLS_PRINT_ORIENTATION.md`, `tools/sls_print_orientation.py` (2026-11-01)
-- [ ] Owner: decide merged head-cargo shell (fits SLS 380 only on end, Y across layers) vs separate head + cargo shells (recommended)
+- [x] Decision (owner 2026-11-01): final build orientation and machine are set with 3D Systems; repo orientations are the design-intent request (`docs/SLS_PRINT_ORIENTATION.md` §0)
+- [ ] Owner + 3D Systems: agree orientation and machine per part (SLS 380 / sPro 140 / sPro 230); record in `tools/sls_print_orientation.py`
+- [ ] Owner + 3D Systems: merged head-cargo shell on the sPro 140 (lying down) vs separate head + cargo shells on the SLS 380
+- [x] Design review against the 3D Systems SLS Design Guide [REF-MFG-001] — `docs/SLS_MIGRATION.md` §7; citations corrected to pp. 4/15
+- [x] Tilt-brake pin bore clearance 0.15 → 0.3 mm per side [REF-MFG-001 pp. 7, 12]; guides re-rendered
+- [x] Belly panel aft hole slotted +6.0 mm [REF-MFG-001 p. 13]; panel re-rendered
+- [ ] Add 1 × ISO 7089 M3 washer (belly-panel aft screw) to `bom_revT.csv` + `.json`
+- [ ] Stator-vane and spider-arm root fillets [REF-MFG-001 p. 4], sized with a flow/thrust check
+- [ ] Ask 3D Systems: bead-blast reach into blind heat-set boss holes, or add >2 mm vents [REF-MFG-001 p. 6]
+- [ ] ESC cover rebate fit 0.25 → 0.3 mm per side at the next 64 mm nacelle re-export
+- [ ] Owner: battery-cradle hanger slotting (p. 13) vs fixed holes carrying the fore/aft crash load
 - [ ] Verify the 15 confidence-V orientations (frame / load path) before the build is released
-- [ ] Ask 3D Systems for DuraForm PA CF X-vs-Y (recoater-direction) properties — requires verification
+- [ ] Ask 3D Systems for DuraForm PA CF X/Y/Z (recoater-direction) properties — requires verification
 - [ ] Owner: confirm FDM-only features to strip (4×0.6 mm perimeter wall sizing, brims, support-avoid chamfers) per part family
 - [ ] Re-export the 64 mm nacelles and wing-root flanges watertight (audit R4)
 - [ ] Re-run `tools/sls_auw_reconcile.py` after the above and update the AUW ledger

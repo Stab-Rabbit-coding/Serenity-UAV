@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""sls_print_orientation.py -- build orientation for every printed Serenity
-part on the 3D Systems SLS 380 (15 x 13 x 18 in), chosen so each part's most
+"""sls_print_orientation.py -- design-intent build orientation for every
+printed Serenity part on the 3D Systems SLS machines, chosen so each part's most
 critical tensile / bending stress lies IN the build plane (machine X-Y).
 
 Why: DuraForm PA CF [REF-MAT-015] publishes XY properties only.  Fibre-filled
@@ -25,14 +25,17 @@ Method, per part (table ORIENT below, one row per printed STL):
                cross axis -> build Z.
   * The two in-plane axes are then laid on machine X/Y in whichever way
     fits; rotation about build Z does not change strength.
-  * Envelope check against 381.0 x 330.2 x 457.2 mm (owner 2026-11-01,
-    [REF-MFG-001 p. 17]), axis-aligned, no nesting margin.  A part that
-    fits only in a weaker orientation is reported as CONFLICT, never
-    silently re-oriented.
+  * Envelope check, axis-aligned, no nesting margin, against the three
+    3D Systems machines available (owner 2026-11-01, [REF-MFG-001 p. 17]):
+    SLS 380 15 x 13 x 18 in, sPro 140 22 x 22 x 18 in, sPro 230
+    22 x 22 x 30 in.  The smallest machine that holds the part in its
+    strength orientation is reported; a part is never silently re-oriented.
+  * These are DESIGN-INTENT orientations.  Final orientation and machine
+    are agreed with 3D Systems (owner decision 2026-11-01).
 
 Run:  /usr/bin/python3 tools/sls_print_orientation.py
-Writes docs/sls-study/sls_print_orientation.json and prints the table that
-docs/SLS_PRINT_ORIENTATION.md is built from.
+Writes docs/sls-study/sls_print_orientation.json and regenerates section 4 of
+docs/SLS_PRINT_ORIENTATION.md (the per-part list) from it.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (Stab-Rabbit-coding)
 AI note: Written by Claude Opus 5.5 (Anthropic) under the author's direction,
@@ -43,14 +46,23 @@ License: MIT -- see LICENSES/MIT (SPDX-License-Identifier: MIT)
 import json
 import os
 import sys
+import textwrap
 
 import trimesh
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 STL = os.path.join(ROOT, "airframe", "stls")
-ENV_XY = (15 * 25.4, 13 * 25.4)   # 381.0 x 330.2 mm build plane
-ENV_Z = 18 * 25.4                 # 457.2 mm build height
+IN = 25.4
+# 3D Systems machines available for this build (owner, 2026-11-01), smallest
+# first.  Envelopes W x D x H; the guide lists the same inch figures, p. 17
+# [REF-MFG-001].  A part is placed on the smallest machine it fits on in its
+# strength orientation.  FINAL ORIENTATION AND MACHINE ARE SET WITH 3D SYSTEMS
+# (owner decision 2026-11-01, docs/SLS_PRINT_ORIENTATION.md section 0); this
+# tool's output is the design-intent request taken to that conversation.
+MACHINES = (("SLS 380", (15 * IN, 13 * IN), 18 * IN),
+            ("sPro 140", (22 * IN, 22 * IN), 18 * IN),
+            ("sPro 230", (22 * IN, 22 * IN), 30 * IN))
 AX = "XYZ"
 
 # part (path under airframe/stls) : (STL axis -> build Z, material,
@@ -499,14 +511,69 @@ NOT_PRINT = {
 }
 
 
-def place(ext, zax):
-    """Return (machine X, Y, Z extents, mapping, fits) for build-Z = STL axis zax."""
+def place(ext, zax, machines=MACHINES):
+    """(machine X, Y, Z extents, mapping, machine name or None) for build-Z = STL axis
+    zax, on the smallest machine in `machines` that holds the part."""
     zi = AX.index(zax)
     a, b = [i for i in range(3) if i != zi]
-    for p, q in ((a, b), (b, a)):           # rotate 90 deg about build Z if needed
-        if ext[p] <= ENV_XY[0] and ext[q] <= ENV_XY[1] and ext[zi] <= ENV_Z:
-            return (ext[p], ext[q], ext[zi]), f"{AX[p]}->X {AX[q]}->Y {AX[zi]}->Z", True
-    return (ext[a], ext[b], ext[zi]), f"{AX[a]}->X {AX[b]}->Y {AX[zi]}->Z", False
+    for name, (ex, ey), ez in machines:
+        for p, q in ((a, b), (b, a)):       # rotate 90 deg about build Z if needed
+            if ext[p] <= ex and ext[q] <= ey and ext[zi] <= ez:
+                return (ext[p], ext[q], ext[zi]), f"{AX[p]}->X {AX[q]}->Y {AX[zi]}->Z", name
+    return (ext[a], ext[b], ext[zi]), f"{AX[a]}->X {AX[b]}->Y {AX[zi]}->Z", None
+
+
+DOC_SECTIONS = (
+    ("Bow and head", lambda p: "head" in p or "bow_" in p),
+    ("Cargo section", lambda p: "cargo" in p or p.startswith("fuselage/battery")
+     or "access_cover" in p or "belly" in p or "wing_root_flange" in p),
+    ("Middle and rear", lambda p: "middle" in p or "rear" in p or "dorsal" in p),
+    ("Landing gear", lambda p: "landing-gear" in p),
+    ("Wings", lambda p: p.startswith("wings/")),
+    ("Nacelles, port and starboard", lambda p: p.startswith("nacelles/")),
+)
+
+
+def part_list_md(rows):
+    """Per-part Markdown list for docs/SLS_PRINT_ORIENTATION.md section 4."""
+    def wrap(text):
+        return textwrap.wrap(text, 80, subsequent_indent="  ", break_on_hyphens=False,
+                             break_long_words=False)
+    out, done = [], set()
+    for name, match in DOC_SECTIONS:
+        out += ["", f"### {name}", ""]
+        for r in rows:
+            p = r["part"]
+            if p in done or not match(p):
+                continue
+            done.add(p)
+            x, y, z = r["machine_xyz_mm"]
+            s = (f"- **`{p.split('/')[-1]}`** ({r['material']}, confidence "
+                 f"{r['confidence']}): build Z = STL {r['build_z_stl_axis']} "
+                 f"({r['mapping']}); {x:.0f} × {y:.0f} × {z:.0f} mm on the "
+                 f"{r['machine']}. Critical: {r['critical_load']}. {r['rule']}.")
+            if r.get("note"):
+                s += f" **Note:** {r['note']}."
+            if not r["fits"]:
+                s += f" **CONFLICT:** {r['conflict']}."
+            out += [ln if not ln.startswith("  + ") else "  and " + ln[4:]
+                    for ln in wrap(s)]
+    missing = {r["part"] for r in rows} - done
+    if missing:
+        raise RuntimeError(f"parts not placed in a doc section: {sorted(missing)}")
+    return "\n".join(out)
+
+
+def write_doc(rows):
+    """Replace section 4 of docs/SLS_PRINT_ORIENTATION.md with the generated list."""
+    path = os.path.join(ROOT, "docs", "SLS_PRINT_ORIENTATION.md")
+    with open(path) as fh:
+        doc = fh.read()
+    a = doc.index("## 4. Per-part orientation")
+    b = doc.index("## 5. Notes")
+    doc = doc[:a] + "## 4. Per-part orientation\n" + part_list_md(rows) + "\n\n" + doc[b:]
+    with open(path, "w") as fh:
+        fh.write(doc)
 
 
 def main():
@@ -525,24 +592,30 @@ def main():
             print(f"listed but not on disk: {part}")
             return 1
         ext = trimesh.load(os.path.join(STL, part), force="mesh").extents.tolist()
-        mach, mapping, ok = place(ext, zax)
+        mach, mapping, machine = place(ext, zax)
+        ok = machine is not None
         row = {"part": part, "material": mat, "build_z_stl_axis": zax, "mapping": mapping,
-               "machine_xyz_mm": [round(v, 1) for v in mach], "fits": ok,
+               "machine": machine, "machine_xyz_mm": [round(v, 1) for v in mach], "fits": ok,
                "critical_load": load, "rule": rule, "confidence": conf}
+        if machine and machine != MACHINES[0][0]:
+            # strength orientation needs a bigger machine; say what the SLS 380 allows
+            alt = [z for z in AX if place(ext, z, MACHINES[:1])[2]]
+            row["note"] = (f"needs the {machine} in its strength orientation; on the "
+                           "SLS 380 it fits only with "
+                           + (", ".join(f"build Z = STL {z}" for z in alt) or "no orientation"))
         if not ok:
-            # report the strongest orientation that DOES fit, as a conflict
-            alt = [(z, place(ext, z)) for z in AX if z != zax and place(ext, z)[2]]
-            fits_with = ", ".join(f"build Z = STL {z}" for z, _ in alt) or "no orientation"
-            row["conflict"] = ("does not fit the SLS 380 in the strength orientation; "
-                               "fits only with " + fits_with)
+            row["conflict"] = "fits no available machine in its strength orientation"
         rows.append(row)
         print(f"{'ok  ' if ok else 'CONF'} {part:58s} Z<-{zax} {mapping:20s} "
-              f"{row['machine_xyz_mm']} {mat:6s} {conf}")
+              f"{row['machine_xyz_mm']} {machine} {mat:6s} {conf}")
     out = os.path.join(ROOT, "docs", "sls-study", "sls_print_orientation.json")
     with open(out, "w") as fh:
         json.dump(rows, fh, indent=1)
+    write_doc(rows)
     nc = sum(not r["fits"] for r in rows)
-    print(f"\n{len(rows)} parts oriented, {nc} conflict(s) -> {os.path.relpath(out, ROOT)}")
+    per = {m[0]: sum(r["machine"] == m[0] for r in rows) for m in MACHINES}
+    print(f"\n{len(rows)} parts oriented, {per}, {nc} conflict(s) -> "
+          f"{os.path.relpath(out, ROOT)}")
     return 0
 
 

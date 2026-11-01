@@ -35,7 +35,8 @@
 // License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 //
 // Print spec:
-//   Material: PETG (non-structural panel; no CF required)
+//   Material: SLS DuraForm PA CF [REF-MAT-015] (2026-11-01 FDM -> SLS migration;
+//   was PETG FDM).  Non-structural panel.
 //   Layer:    0.20 mm
 //   Walls:    3 perimeters
 //   Infill:   15% gyroid
@@ -69,6 +70,12 @@ REBATE_W  = 4.0;    // mm — rebate lip width on panel edge  = 0.157 in
 // ------------------------------------------------------------
 SCREW_DIA  = 3.4;    // mm — M3 clearance bore
 SCREW_CTR  = 20.0;   // mm — distance from each end to screw centre
+// Aft bore is a fore-aft slot.  SLS parts vary along long sections; a part
+// with two fixed holes on a long span shall have one hole elongated by at
+// least 5 mm per 100 mm of span [REF-MFG-001 p. 13].  Span = PANEL_L -
+// 2*SCREW_CTR = 120 mm -> 6.0 mm.  Fit an ISO 7089 M3 washer (7 mm OD)
+// under the aft screw head so the head bears across the slot.
+SLOT_EXTRA = 5.0 / 100.0 * (PANEL_L - 2.0 * SCREW_CTR);   // mm = 6.0
 
 // ============================================================
 // Belly panel
@@ -99,10 +106,12 @@ module belly_panel() {
             rotate([-90, 0, 0])
                 cylinder(h = PANEL_T + REBATE_D + 0.2, d = SCREW_DIA);
 
-        // --- Aft screw bore ---
-        translate([PANEL_L - SCREW_CTR, -0.1, PANEL_W / 2.0])
-            rotate([-90, 0, 0])
-                cylinder(h = PANEL_T + REBATE_D + 0.2, d = SCREW_DIA);
+        // --- Aft screw slot (centred on the nominal hole, ±SLOT_EXTRA/2) ---
+        hull()
+            for (dx = [-SLOT_EXTRA / 2.0, SLOT_EXTRA / 2.0])
+                translate([PANEL_L - SCREW_CTR + dx, -0.1, PANEL_W / 2.0])
+                    rotate([-90, 0, 0])
+                        cylinder(h = PANEL_T + REBATE_D + 0.2, d = SCREW_DIA);
     }
 }
 
