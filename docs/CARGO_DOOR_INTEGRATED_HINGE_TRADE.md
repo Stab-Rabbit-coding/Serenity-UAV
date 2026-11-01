@@ -14,9 +14,9 @@ integrated hinges, in the same print as the cargo section?
 3 mm CF-rod piano hinge. Take the main benefit of integration, hinge-line
 alignment, in two other ways:
 
-1. **Same build:** order the doors in the same 3D Systems build as the cargo
-   shell, nested in their installed position or near it. They then share a
-   powder lot and a shrink history.
+1. **Same build:** order the doors in the same 3D Systems build as the
+   one-piece hull, nested in their installed position or near it. They then
+   share a powder lot and a shrink history.
 2. **Line-ream the hinge at assembly:** print the knuckle bores undersize.
    With the door clamped closed, ream the shell-side and door-side knuckles
    in one pass to the final pin fit. This gives co-linear bores without
@@ -53,17 +53,18 @@ Numbers are from the committed STLs, at PA CF 1.11 g/cm³ [REF-MAT-015].
 - **Repair: strongly against integration.** The doors sit on the belly and
   swing down toward the ground during hover payload operations; they are the
   most exposed printed parts. Separate, a door costs 13.4–14.8 g and a pin
-  pull to replace. Integrated, a cracked door or knuckle scraps the 327.7 g
-  cargo shell. That shell carries the merged interior: bosses, hangers,
-  gear-bay datums and splice collars.
+  pull to replace. Integrated, a cracked door or knuckle scraps the whole
+  one-piece head+cargo hull: 457 cc, 507 g in PA CF (commit `d92c4f14`). That
+  hull is the largest part on the aircraft, needs the sPro 140, and carries
+  the merged interior and the twin battery tray seat.
 - **Print risk: against integration.** A fused hinge is found only at
   breakout and scraps the whole shell. The guide warns that SLS "is very
   sensitive to process variation" (p. 16). The port door also laps 6 mm over
   the starboard door at the centerline (port X −6.0 to 50.5 mm). Printed
   closed, that lap would trap powder in a sub-millimeter gap, so the doors
   would have to be printed open. Opened 90°, each door hangs about 56 mm
-  below the belly. The build still fits: 194 × 198 × about 220 mm, on the
-  SLS 380.
+  below the belly, adding that height to a hull that already needs the
+  sPro 140.
 - **Powder removal: against integration.** A captive pin at the guide's
   0.3 mm clearance, over 4 × 12 mm knuckles, needs the axle treatment on
   p. 4: rails, 2 mm+ relief and air ports. That's more geometry in a part

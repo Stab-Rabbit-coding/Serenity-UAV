@@ -17075,14 +17075,14 @@
       "archived": false
     },
     "docs/sls-study/sls_dfm_audit.json": {
-      "description": "JSON data (94 entries)",
+      "description": "JSON data (83 entries)",
       "tags": [
         "documentation"
       ],
       "archived": false
     },
     "docs/sls-study/sls_print_orientation.json": {
-      "description": "JSON data (90 entries)",
+      "description": "JSON data (79 entries)",
       "tags": [
         "documentation"
       ],
@@ -20051,6 +20051,13 @@
     },
     "tools/sls_print_orientation.py": {
       "description": "sls_print_orientation.py -- design-intent build orientation for every",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/sls_retired_parts.py": {
+      "description": "sls_retired_parts.py -- printed STLs that are still on disk but are NOT",
       "tags": [
         "build-tooling"
       ],
@@ -25377,6 +25384,7 @@
       "tools/sls_material_screen.py",
       "tools/sls_materials.py",
       "tools/sls_print_orientation.py",
+      "tools/sls_retired_parts.py",
       "tools/sls_scale_trim_study.py",
       "tools/spar_bundle_fit.py",
       "tools/stitch_vias.py",

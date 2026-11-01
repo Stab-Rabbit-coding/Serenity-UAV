@@ -50,6 +50,9 @@ import textwrap
 
 import trimesh
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sls_retired_parts import RETIRED  # noqa: E402
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 STL = os.path.join(ROOT, "airframe", "stls")
@@ -582,12 +585,14 @@ def main():
     audit_json = os.path.join(ROOT, "docs", "sls-study", "sls_dfm_audit.json")
     with open(audit_json) as fh:
         audited = {r["part"].replace("airframe/stls/", "") for r in json.load(fh)}
-    missing = sorted(audited - set(ORIENT) - NOT_PRINT)
+    missing = sorted(audited - set(ORIENT) - NOT_PRINT - set(RETIRED))
     if missing:  # every printed part shall have an orientation
         print("NO ORIENTATION ASSIGNED:", *missing, sep="\n  ")
         return 1
     rows = []
     for part, (zax, mat, load, rule, conf) in ORIENT.items():
+        if part in RETIRED:  # kept in ORIENT for history; not a current part
+            continue
         if part not in on_disk:
             print(f"listed but not on disk: {part}")
             return 1

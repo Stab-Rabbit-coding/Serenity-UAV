@@ -51,10 +51,12 @@ load.
 
 ## 2. Envelope (R1)
 
-Every printed part fits the SLS 380 in at least one axis-aligned orientation.
-The longest part, `head_cargo_shell24_2mm_merged.stl` (194 × 435 × 202 mm),
-fits the SLS 380 only standing on end. It fits the sPro 140 lying down, which
-is its strength orientation (`docs/SLS_PRINT_ORIENTATION.md`).
+Every current printed part fits the SLS 380 in at least one axis-aligned
+orientation. The longest part is the one-piece hull,
+`head_cargo_shell24_2mm_merged.stl` (194 × 435 × 202 mm, commit `d92c4f14`).
+It fits the SLS 380 only standing on end, and the sPro 140 lying down, which
+is its strength orientation (`docs/SLS_PRINT_ORIENTATION.md`). Retired parts
+are excluded from both tools (`tools/sls_retired_parts.py`).
 
 ## 3. Defects found and fixed
 
@@ -73,9 +75,11 @@ is its strength orientation (`docs/SLS_PRINT_ORIENTATION.md`).
 
 Margin tools re-pointed to `tools/sls_materials.py`:
 
-- **`gen_head_cell_rail.py --statics`:** PASS. The minimum margin is 1.70
-  (ridge shear-out). The catch leaf release force falls from 0.83 lbf to
-  0.44 lbf (3.7 N to 1.9 N); bench-check it.
+- **`gen_head_cell_rail.py --statics`:** PASS, minimum margin 1.70. The
+  head-cell rail is **retired** (twin pack tray, `d92c4f14`), so this result
+  is historical only. The twin pack tray's gate and catch statics are still
+  open (`docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md` open items) and shall be run
+  on PA CF.
 - **`lg_bellcrank_fbd.py`:** the flat-bearing spreader discs re-size from
   Ø13 to Ø14 mm (Option A) and from Ø17 to Ø18 mm (Option B). Option C0 (the
   printed clevis) was already failing and still fails.
@@ -153,12 +157,11 @@ guidance, not PA CF-specific.
   tensile surface". **Complies in intent.** This is the basis of
   `docs/SLS_PRINT_ORIENTATION.md`; final orientation is set with 3D Systems.
 - **p. 13, mounting on long sections:** elongate one hole by at least 5 mm
-  per 100 mm. **Fixed:** `belly_panel` aft hole slotted by 6.0 mm (120 mm
-  span), with an M3 washer under the head. **Owner decision:**
-  `battery_cradle`, 4 × M3 hangers over a 130 mm span. Its screws carry the
-  battery's fore-and-aft crash load, and slotting along that axis would leave
-  only clamp friction. Hull shells and collars are bonded, so the rule
-  doesn't apply to them.
+  per 100 mm. **No current part needs it.** The two candidates found, the
+  belly panel (120 mm screw span) and the battery cradle (130 mm hanger
+  span), are both retired (`tools/sls_retired_parts.py`). The belly-panel
+  slot made earlier on 2026-11-01 was reverted. Hull, collars and the twin
+  pack tray are bonded.
 - **p. 15, features above 1 mm:** **Open.** Audit R2: the feather-edge list
   in §4.
 - **p. 15, tanks:** walls over 1 mm at density above 0.98 g/cc hold fluid. Not

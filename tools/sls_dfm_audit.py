@@ -51,6 +51,9 @@ from itertools import permutations
 import numpy as np
 import trimesh
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sls_retired_parts import RETIRED  # noqa: E402
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 STL_ROOT = os.path.join(ROOT, "airframe", "stls")
@@ -155,7 +158,8 @@ def main():
     files = sorted(
         os.path.join(dp, f) for dp, _, fs in os.walk(STL_ROOT) for f in fs
         if f.lower().endswith(".stl") and "rchive" not in dp
-        and not any(t in f.lower() for t in SKIP_TOKENS))
+        and not any(t in f.lower() for t in SKIP_TOKENS)
+        and os.path.relpath(os.path.join(dp, f), STL_ROOT) not in RETIRED)
     rows = []
     for f in files:
         try:

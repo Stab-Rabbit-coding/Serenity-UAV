@@ -32,86 +32,6 @@
   "confidence": "M"
  },
  {
-  "part": "fuselage/head_shell24.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   129.5,
-   235.0,
-   140.5
-  ],
-  "fits": true,
-  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
-  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
-  "confidence": "H"
- },
- {
-  "part": "fuselage/head_shell24_2mm_repaired.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   129.4,
-   232.8,
-   140.5
-  ],
-  "fits": true,
-  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
-  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
-  "confidence": "H"
- },
- {
-  "part": "fuselage/head/head_cell_rail.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   52.4,
-   91.0,
-   63.9
-  ],
-  "fits": true,
-  "critical_load": "fwd/aft crash load into longitudinal webs (Y)",
-  "rule": "R-BEAM: webs run along Y, stand vertical; ceiling bending in X-Y (tools/gen_head_cell_rail.py)",
-  "confidence": "H"
- },
- {
-  "part": "fuselage/head/head_cell_sled.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   39.0,
-   133.4,
-   36.0
-  ],
-  "fits": true,
-  "critical_load": "floor bending under cell, fwd/aft crash (Y)",
-  "rule": "R-PLATE",
-  "confidence": "H"
- },
- {
-  "part": "fuselage/head/head_cell_catch.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   30.0,
-   20.0,
-   7.0
-  ],
-  "fits": true,
-  "critical_load": "leaf-spring bending along X (LEAF_T is Z)",
-  "rule": "R-PLATE: leaf strain in plane, 0.5 % << 3.8 %",
-  "confidence": "H"
- },
- {
   "part": "fuselage/head/twin_pack_tray.stl",
   "material": "PA CF",
   "build_z_stl_axis": "Z",
@@ -160,22 +80,6 @@
   "confidence": "M"
  },
  {
-  "part": "fuselage/head_cargo_splice_collar.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   113.5,
-   17.7,
-   77.8
-  ],
-  "fits": true,
-  "critical_load": "splice moment -> Y tension at crown/keel",
-  "rule": "R-BEAM: same frame as hull so crown/keel Y stress is in plane",
-  "confidence": "H"
- },
- {
   "part": "fuselage/head_cargo_shell24_2mm_merged.stl",
   "material": "PA CF",
   "build_z_stl_axis": "Z",
@@ -191,70 +95,6 @@
   "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
   "confidence": "H",
   "note": "needs the sPro 140 in its strength orientation; on the SLS 380 it fits only with build Z = STL Y"
- },
- {
-  "part": "fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   194.3,
-   198.5,
-   163.2
-  ],
-  "fits": true,
-  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
-  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
-  "confidence": "H"
- },
- {
-  "part": "fuselage/cargo/cargo_sect_shell24_repaired.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   194.1,
-   203.5,
-   163.2
-  ],
-  "fits": true,
-  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
-  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
-  "confidence": "H"
- },
- {
-  "part": "fuselage/battery_tray.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   154.0,
-   51.5,
-   62.0
-  ],
-  "fits": true,
-  "critical_load": "battery inertia fwd/aft (Y) + vertical g",
-  "rule": "R-BEAM",
-  "confidence": "M"
- },
- {
-  "part": "fuselage/cargo/battery_cradle.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   54.8,
-   146.8,
-   42.8
-  ],
-  "fits": true,
-  "critical_load": "inverted-U cradle bending under battery g",
-  "rule": "R-BEAM: U legs vertical, span X in plane",
-  "confidence": "M"
  },
  {
   "part": "fuselage/cargo/cargo_cradle_autolatch.stl",
@@ -687,22 +527,6 @@
   "critical_load": "cover panel bending",
   "rule": "R-PLATE",
   "confidence": "H"
- },
- {
-  "part": "fuselage/belly_panel.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Y",
-  "mapping": "X->X Z->Y Y->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   160.0,
-   65.0,
-   3.5
-  ],
-  "fits": true,
-  "critical_load": "panel bending",
-  "rule": "R-PLATE: normal is Y (3.5 mm)",
-  "confidence": "V"
  },
  {
   "part": "fuselage/cargo_middle_splice_collar.stl",

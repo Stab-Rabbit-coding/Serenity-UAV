@@ -1,39 +1,5 @@
 [
  {
-  "part": "airframe/stls/fuselage/battery_tray.stl",
-  "extents_mm": [
-   154.0,
-   51.5,
-   62.0
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 133.52,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 2.0,
-  "wall_p50_mm": 6.25,
-  "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/belly_panel.stl",
-  "extents_mm": [
-   160.0,
-   3.5,
-   65.0
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 23.37,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 2.0,
-  "wall_p50_mm": 2.0,
-  "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
   "part": "airframe/stls/fuselage/bow_sensor_faceplate.stl",
   "extents_mm": [
    28.0,
@@ -50,23 +16,6 @@
   "fails": [
    "R2-thin-wall"
   ],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/cargo/battery_cradle.stl",
-  "extents_mm": [
-   54.8,
-   146.8,
-   42.8
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 37.37,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 2.4,
-  "wall_p50_mm": 2.4,
-  "frac_below_min": 0.0,
-  "fails": [],
   "fits_machine": "SLS 380"
  },
  {
@@ -221,42 +170,6 @@
   "wall_p01_mm": 1.0,
   "wall_p50_mm": 5.0,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl",
-  "extents_mm": [
-   194.3,
-   198.5,
-   163.2
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 295.19,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.07,
-  "wall_p50_mm": 2.01,
-  "frac_below_min": 0.09,
-  "fails": [
-   "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/cargo/cargo_sect_shell24_repaired.stl",
-  "extents_mm": [
-   194.1,
-   203.5,
-   163.2
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 3574.72,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 4.05,
-  "wall_p50_mm": 117.14,
-  "frac_below_min": 0.005,
   "fails": [],
   "fits_machine": "SLS 380"
  },
@@ -588,57 +501,6 @@
   "fits_machine": "SLS 380"
  },
  {
-  "part": "airframe/stls/fuselage/head/head_cell_catch.stl",
-  "extents_mm": [
-   30.0,
-   20.0,
-   7.0
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 1.24,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.0,
-  "wall_p50_mm": 1.0,
-  "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/head/head_cell_rail.stl",
-  "extents_mm": [
-   52.4,
-   91.0,
-   63.9
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 44.07,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 2.4,
-  "wall_p50_mm": 2.4,
-  "frac_below_min": 0.003,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/head/head_cell_sled.stl",
-  "extents_mm": [
-   39.0,
-   133.4,
-   36.0
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 9.2,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.0,
-  "wall_p50_mm": 1.0,
-  "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
   "part": "airframe/stls/fuselage/head/twin_pack_gate.stl",
   "extents_mm": [
    69.5,
@@ -703,57 +565,6 @@
   "wall_p01_mm": 0.26,
   "wall_p50_mm": 2.0,
   "frac_below_min": 0.025,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/head_cargo_splice_collar.stl",
-  "extents_mm": [
-   113.5,
-   17.7,
-   77.8
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 10.97,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.21,
-  "wall_p50_mm": 2.0,
-  "frac_below_min": 0.015,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/head_shell24.stl",
-  "extents_mm": [
-   129.5,
-   235.0,
-   140.5
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 182.76,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.82,
-  "wall_p50_mm": 2.0,
-  "frac_below_min": 0.003,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
-  "extents_mm": [
-   129.4,
-   232.8,
-   140.5
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 167.59,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.73,
-  "wall_p50_mm": 2.0,
-  "frac_below_min": 0.015,
   "fails": [],
   "fits_machine": "SLS 380"
  },

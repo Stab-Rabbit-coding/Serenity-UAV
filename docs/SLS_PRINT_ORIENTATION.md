@@ -76,19 +76,26 @@ Confidence levels:
 
 ## 3. Result
 
-90 printed parts, port and starboard, from bow to stern: 89 fit the SLS 380
-in their strength orientation. One, the merged head-cargo shell, needs the
-sPro 140, and none conflicts.
+79 current printed parts, port and starboard, from bow to stern: 78 fit the
+SLS 380 in their strength orientation. One, the hull, needs the sPro 140, and
+none conflicts.
 
-**`head_cargo_shell24_2mm_merged.stl`:** 17.1 in (434.7 mm) long. On the
-SLS 380 it fits only standing on end, which would put fuselage bending
-straight across the layers. On the sPro 140 it lies down with Y in the build
-plane. The other option is to build the separate head and cargo shells,
-joined by `head_cargo_splice_collar`; each fits the SLS 380 lying down.
-Choose between them with 3D Systems (§0).
+**The hull is the one-piece head+cargo section,
+`head_cargo_shell24_2mm_merged.stl`** (commit `d92c4f14`, 2026-10-31). The
+splice collar and cradle were removed so the twin battery packs fit flat in
+the head. It's 17.1 in (434.7 mm) long. On the SLS 380 it fits only standing
+on end, which would put fuselage bending straight across the layers. On the
+sPro 140 it lies down with Y in the build plane, so **request the sPro 140
+for the hull** (§0). Going back to separate head and cargo shells isn't an
+option, because that undoes the battery relocation.
 
-Hull-frame copies of the gear bays (`lg_r6_3_0in_bay_*.stl` without
-`_print`) aren't print files and are excluded. Build the `_print` files.
+Parts still on disk but retired are excluded and listed in
+`tools/sls_retired_parts.py`, with the decision that retired each one: the
+separate head and cargo shells (now inputs to the merge), the head-cargo
+collar, the battery cradle, the head-cell rail, sled and catch, the belly
+panel and the keel battery tray. Hull-frame copies of the gear bays
+(`lg_r6_3_0in_bay_*.stl` without `_print`) aren't print files either. Build
+the `_print` files.
 
 ## 4. Per-part orientation
 
@@ -100,25 +107,6 @@ Hull-frame copies of the gear bays (`lg_r6_3_0in_bay_*.stl` without
 - **`bow_sensor_bay_insert.stl`** (PA CF, confidence M): build Z = STL Z (X->X
   Y->Y Z->Z); 30 × 20 × 18 mm on the SLS 380. Critical: sensor mount bending.
   R-PLATE: base flange flat.
-- **`head_shell24.stl`** (PA CF, confidence H): build Z = STL Z (X->X Y->Y
-  Z->Z); 130 × 235 × 140 mm on the SLS 380. Critical: fuselage vertical bending
-  -> longitudinal (Y) skin stress. R-BEAM: Y and X in plane, hull vertical -> Z;
-  ring frames and webs stand vertical so their in-plane bending is in X-Y too.
-- **`head_shell24_2mm_repaired.stl`** (PA CF, confidence H): build Z = STL Z
-  (X->X Y->Y Z->Z); 129 × 233 × 140 mm on the SLS 380. Critical: fuselage
-  vertical bending -> longitudinal (Y) skin stress. R-BEAM: Y and X in plane,
-  hull vertical -> Z; ring frames and webs stand vertical so their in-plane
-  bending is in X-Y too.
-- **`head_cell_rail.stl`** (PA CF, confidence H): build Z = STL Z (X->X Y->Y
-  Z->Z); 52 × 91 × 64 mm on the SLS 380. Critical: fwd/aft crash load into
-  longitudinal webs (Y). R-BEAM: webs run along Y, stand vertical; ceiling
-  bending in X-Y (tools/gen_head_cell_rail.py).
-- **`head_cell_sled.stl`** (PA CF, confidence H): build Z = STL Z (X->X Y->Y
-  Z->Z); 39 × 133 × 36 mm on the SLS 380. Critical: floor bending under cell,
-  fwd/aft crash (Y). R-PLATE.
-- **`head_cell_catch.stl`** (PA CF, confidence H): build Z = STL Z (X->X Y->Y
-  Z->Z); 30 × 20 × 7 mm on the SLS 380. Critical: leaf-spring bending along X
-  (LEAF_T is Z). R-PLATE: leaf strain in plane, 0.5 % << 3.8 %.
 - **`twin_pack_tray.stl`** (PA CF, confidence M): build Z = STL Z (X->X Y->Y
   Z->Z); 74 × 124 × 46 mm on the SLS 380. Critical: ceiling + side-wall bending
   under packs. R-BEAM.
@@ -127,10 +115,6 @@ Hull-frame copies of the gear bays (`lg_r6_3_0in_bay_*.stl` without
 - **`twin_pack_gate.stl`** (PA CF, confidence M): build Z = STL Y (X->X Z->Y
   Y->Z); 70 × 12 × 4 mm on the SLS 380. Critical: gate plate bending under pack
   fwd load. R-PLATE: normal is Y (4 mm).
-- **`head_cargo_splice_collar.stl`** (PA CF, confidence H): build Z = STL Z
-  (X->X Y->Y Z->Z); 114 × 18 × 78 mm on the SLS 380. Critical: splice moment ->
-  Y tension at crown/keel. R-BEAM: same frame as hull so crown/keel Y stress is
-  in plane.
 - **`head_cargo_shell24_2mm_merged.stl`** (PA CF, confidence H): build Z = STL Z
   (X->X Y->Y Z->Z); 194 × 435 × 202 mm on the sPro 140. Critical: fuselage
   vertical bending -> longitudinal (Y) skin stress. R-BEAM: Y and X in plane,
@@ -140,22 +124,6 @@ Hull-frame copies of the gear bays (`lg_r6_3_0in_bay_*.stl` without
 
 ### Cargo section
 
-- **`cargo_sect_shell24_2mm_repaired.stl`** (PA CF, confidence H): build Z = STL
-  Z (X->X Y->Y Z->Z); 194 × 198 × 163 mm on the SLS 380. Critical: fuselage
-  vertical bending -> longitudinal (Y) skin stress. R-BEAM: Y and X in plane,
-  hull vertical -> Z; ring frames and webs stand vertical so their in-plane
-  bending is in X-Y too.
-- **`cargo_sect_shell24_repaired.stl`** (PA CF, confidence H): build Z = STL Z
-  (X->X Y->Y Z->Z); 194 × 204 × 163 mm on the SLS 380. Critical: fuselage
-  vertical bending -> longitudinal (Y) skin stress. R-BEAM: Y and X in plane,
-  hull vertical -> Z; ring frames and webs stand vertical so their in-plane
-  bending is in X-Y too.
-- **`battery_tray.stl`** (PA CF, confidence M): build Z = STL Z (X->X Y->Y
-  Z->Z); 154 × 52 × 62 mm on the SLS 380. Critical: battery inertia fwd/aft (Y)
-  and vertical g. R-BEAM.
-- **`battery_cradle.stl`** (PA CF, confidence M): build Z = STL Z (X->X Y->Y
-  Z->Z); 55 × 147 × 43 mm on the SLS 380. Critical: inverted-U cradle bending
-  under battery g. R-BEAM: U legs vertical, span X in plane.
 - **`cargo_cradle_autolatch.stl`** (PA CF, confidence V): build Z = STL Z (X->X
   Y->Y Z->Z); 110 × 80 × 72 mm on the SLS 380. Critical: payload hook load,
   vertical. R-BEAM.
@@ -232,9 +200,6 @@ Hull-frame copies of the gear bays (`lg_r6_3_0in_bay_*.stl` without
   Z->Z); 46 × 66 × 5 mm on the SLS 380. Critical: cover panel bending. R-PLATE.
 - **`river_access_cover.stl`** (PA CF, confidence H): build Z = STL Z (X->X Y->Y
   Z->Z); 46 × 64 × 5 mm on the SLS 380. Critical: cover panel bending. R-PLATE.
-- **`belly_panel.stl`** (PA CF, confidence V): build Z = STL Y (X->X Z->Y Y->Z);
-  160 × 65 × 4 mm on the SLS 380. Critical: panel bending. R-PLATE: normal is Y
-  (3.5 mm).
 - **`cargo_middle_splice_collar.stl`** (PA CF, confidence H): build Z = STL Z
   (X->X Y->Y Z->Z); 126 × 18 × 128 mm on the SLS 380. Critical: splice moment ->
   Y tension at crown/keel. R-BEAM: same frame as hull.
