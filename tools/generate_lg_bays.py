@@ -37,7 +37,7 @@ clears its bay; every bolt still lands in flange material.
 
 Outputs (airframe/stls/fuselage/landing-gear/):
     lg_r6_3_0in_bay_<corner>.stl        hull frame, for the assembly and gates
-    lg_r6_3_0in_bay_<corner>_print.stl  leg-local (stbd = mirrored), for slicing
+    lg_r6_3_0in_bay_<corner>_print.stl  leg-local, for slicing (stbd = port mirrored in y)
 
 Run:  /usr/bin/python3 tools/generate_lg_bays.py [--check]   (--check: no writes)
 
@@ -51,6 +51,7 @@ from __future__ import annotations
 import argparse
 import os
 import pprint
+import subprocess
 import sys
 
 import numpy as np
@@ -101,10 +102,32 @@ COWL_H = mci.COWL_H
 # 2,100 N at 3 mm, landing_gear_r6_sizing.py).
 BOLT_CAP_4MM = 2310.0
 RHO, INFILL = 1.30e-3, 0.40   # CF-PETG g/mm^3 solid, 40 % gyroid (repo convention)
+MIRROR_TOL = 0.2              # mm / deg, stbd-vs-port corner mirror tolerance (R2 rows: 0.1 mm)
+
+
+# Bay features that LOADPATH "A1B" retires (the CF backbone replaces them;
+# canonical_leg_r6_3_0in.scad gates them on LOADPATH == "R6").  ONLY these may
+# render empty; an empty render of any other feature is an error.
+EMPTY_OK_A1B = frozenset({"boss carrier", "wire bosses", "retention pads",
+                          "clevis ears", "wire seats"})
 
 
 def feat(station: str, name: str, tf: np.ndarray) -> Manifold:
-    p = lgbf.render(lgbf.SCAD, station, name, lgbf.FEATURES[name][0])
+    """Render one named bay feature and place it in the hull frame.
+
+    A feature the active LOADPATH does not build (e.g. the R6 boss carrier
+    under "A1B", plan 2026-10-27-001) renders an EMPTY top-level object, which
+    OpenSCAD reports as an error; that one case is an empty Manifold here.  Any
+    other OpenSCAD failure still propagates.
+    """
+    try:
+        p = lgbf.render(lgbf.SCAD, station, name, lgbf.FEATURES[name][0])
+    except subprocess.CalledProcessError as exc:
+        if (name in EMPTY_OK_A1B
+                and b"Current top level object is empty" in (exc.stderr or b"")):
+            print(f"     {station}: '{name}' is retired under LOADPATH A1B (empty)")
+            return Manifold()
+        raise
     return lgbf.posed(p, tf)
 
 
@@ -243,6 +266,55 @@ License: MIT (SPDX-License-Identifier: MIT)
 BOLTS = ''' + pprint.pformat(body, width=88) + "\n")
 
 
+def mesh_passes_stl_gate(m: trimesh.Trimesh) -> bool:
+    """tools/validate_stls.py's rule: watertight overall, or every split body is.
+
+    Restated here because importing validate_stls runs its whole check at
+    import time.
+    """
+    m = m.copy()
+    m.merge_vertices()      # as trimesh.load() does for validate_stls
+    if m.is_watertight:
+        return True
+    bodies = m.split(only_watertight=False)
+    return len(bodies) > 0 and all(b.is_watertight for b in bodies)
+
+
+def mirror_stbd_from_port(corners: dict[str, list[float]]) -> None:
+    """Write each starboard bay as the exact mirror of its validated port bay.
+
+    The cargo is built as the mirror of its port half (merge_cargo_interior.py
+    SYMMETRIC_FROM_PORT), and the starboard bays' own boolean path has twice
+    exported non-watertight meshes (aft-stbd, 2026-10-26 and 2026-10-27) while
+    the port bays validate.  Preconditions (raise, nothing written): each stbd
+    corner row is the X-mirror of its port row within MIRROR_TOL (hip x
+    negated, azimuth 180 - az, hand -1).  Hull frame: mirror X about the
+    centreline X 0 (aircraft datum R2) and invert the winding.  Print frame:
+    the starboard part is the port part mirrored in leg-local y
+    (landing_gear_bay_function.corner_tf), so the stbd print is the port print
+    mirrored in y, winding inverted.  Each written mesh is re-checked
+    with the tools/validate_stls.py rule.
+    """
+    for st in ("fore", "aft"):
+        p, s = corners[f"{st}-port"], corners[f"{st}-stbd"]
+        dev = (abs(p[0] + s[0]), abs(p[1] - s[1]), abs(p[2] - s[2]),
+               abs(((180.0 - p[3]) - s[3] + 180.0) % 360.0 - 180.0))
+        if max(dev) > MIRROR_TOL or s[4] != -1:
+            raise RuntimeError(f"{st}: stbd corner is not the mirror of port {dev}")
+    for st in ("fore", "aft"):
+        for suffix, mx in ((".stl", np.diag([-1.0, 1.0, 1.0, 1.0])),
+                           ("_print.stl", np.diag([1.0, -1.0, 1.0, 1.0]))):
+            src = os.path.join(OUT, f"lg_r6_3_0in_bay_{st}-port{suffix}")
+            dst = os.path.join(OUT, f"lg_r6_3_0in_bay_{st}-stbd{suffix}")
+            m = trimesh.load(src, process=False)
+            m.apply_transform(mx)
+            m.invert()
+            if not mesh_passes_stl_gate(m):
+                raise RuntimeError(f"{dst}: mirrored mesh fails tools/validate_stls.py")
+            m.export(dst)
+            print(f"     {os.path.basename(dst)}: mirrored from port, watertight")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--check", action="store_true", help="build and check only; write nothing")
@@ -281,6 +353,8 @@ def main() -> int:
             m.export(os.path.join(OUT, f"lg_r6_3_0in_bay_{label}.stl"))
             m.copy().apply_transform(np.linalg.inv(r["tf"])).export(
                 os.path.join(OUT, f"lg_r6_3_0in_bay_{label}_print.stl"))
+    if not a.check and not bad:
+        mirror_stbd_from_port(corners)
     if not a.check:
         write_params(rows)
     print(f"\nRESULT: {'FAIL' if bad else 'PASS'}")

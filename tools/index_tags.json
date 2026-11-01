@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-26",
+  "generated": "2026-10-31",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -283,7 +283,7 @@
       "archived": false
     },
     "airframe/FreeCAD-scripts/serenity_assembly.py": {
-      "description": "Python script",
+      "description": "serenity_assembly.py \u2014 Serenity UAV full-airframe FreeCAD assembly.",
       "tags": [
         "cad-mesh",
         "security",
@@ -449,6 +449,14 @@
     },
     "airframe/blender-scripts/blender_stator_gen.py": {
       "description": "blender_stator_gen.py \u2014 run with:",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/blender-scripts/build_guide_card_renders.py": {
+      "description": "build_guide_card_renders.py \u2014 per-card highlight renders for the graphical build guide.",
       "tags": [
         "cad-mesh",
         "structural"
@@ -761,7 +769,7 @@
       "archived": false
     },
     "airframe/blender-scripts/serenity_render_views.py": {
-      "description": "serenity_render_views.py \u2014 Rev R1 (2026-06-15)",
+      "description": "serenity_render_views.py \u2014 Rev T+ (2026-10-31; was Rev R1 2026-06-15)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -772,6 +780,27 @@
       "description": "verify_shells.py \u2014 watertight / no-breach gate for the 2 mm fuselage shells.",
       "tags": [
         "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/datasheets/RW-PS-070-Stock-Plate-Panel-Angle-Tolerance-Sheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/datasheets/Rhino-1411-4111-Infusion-Resin-TDS.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/datasheets/T700GDataSheet.pdf": {
+      "description": "PDF document",
+      "tags": [
         "structural"
       ],
       "archived": false
@@ -2673,6 +2702,24 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_1_5in_hull_legs",
       "tags": [
@@ -2719,7 +2766,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_aft-port",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2755,7 +2802,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_fore-port",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2773,7 +2820,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_bay_fore-stbd",
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2791,7 +2838,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_hull_legs",
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2800,7 +2847,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_stance.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 lg_r6_3_0in_hull_stance",
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -2827,6 +2874,15 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
+      "tags": [
+        "cad-mesh",
+        "landing-gear",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl": {
       "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
@@ -6333,6 +6389,16 @@
       ],
       "archived": true
     },
+    "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md": {
+      "description": "Serenity UAV \u2014 24-Inch Build Guide (Rev S Baseline)",
+      "tags": [
+        "archive",
+        "documentation",
+        "emi-hardening",
+        "redundancy-failover"
+      ],
+      "archived": true
+    },
     "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md": {
       "description": "TODO.md \u00a71.1.0 \u2014 Hull-Frame Coordinate Standardisation (Rev R1) \u2014 Completion Summary",
       "tags": [
@@ -6377,6 +6443,216 @@
     },
     "archives/generate_foam_svgs.py": {
       "description": "Generate foam-fill build guide SVGs and update overview diagrams.",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_00_cover.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_01_print_prep.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_02_print_hull.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_03_print_nacelle.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive",
+        "propulsion"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_04_cut_cf.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_05_cf_skeleton.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_06_nacelle_pivot.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive",
+        "propulsion"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_07_edf_install.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive",
+        "propulsion"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_08_nozzle_gear.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive",
+        "propulsion"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_09_avionics.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_10_power_wiring.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive",
+        "power"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_11_inter_board.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_12_security_hw.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_13_nav_lights.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_14_antennas.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_15_software.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_16_calibration.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_17_ground_test.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_18_first_flight.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_19_decal_placement.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_20_node_placement.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_21_node_install.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_22_void_formers.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_23_foam_fill.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_24_access_panels.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_25_obstacle_sensors.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive",
+        "sensors-vision"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_guide_26_cargo_bay_winch.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/build_plan.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "archive"
+      ],
+      "archived": true
+    },
+    "archives/graphical-build-guide-pre-revt/components_overview.svg": {
+      "description": "Vector diagram",
       "tags": [
         "archive"
       ],
@@ -13909,7 +14185,7 @@
       "archived": false
     },
     "current-specification/bom_revT.csv": {
-      "description": "Bill of materials, CSV (212 items)",
+      "description": "Bill of materials, CSV (217 items)",
       "tags": [
         "bom",
         "specification"
@@ -13917,7 +14193,7 @@
       "archived": false
     },
     "current-specification/bom_revT.json": {
-      "description": "Bill of materials, JSON (212 items)",
+      "description": "Bill of materials, JSON (217 items)",
       "tags": [
         "bom",
         "specification"
@@ -14414,15 +14690,6 @@
         "emi-hardening",
         "redundancy-failover",
         "security"
-      ],
-      "archived": false
-    },
-    "docs/REVN_BUILD_GUIDE_24IN.md": {
-      "description": "Serenity UAV \u2014 24-Inch Build Guide (Rev S Baseline)",
-      "tags": [
-        "documentation",
-        "emi-hardening",
-        "redundancy-failover"
       ],
       "archived": false
     },
@@ -15381,6 +15648,13 @@
         "documentation",
         "emi-hardening",
         "redundancy-failover"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md": {
+      "description": "Landing Gear Option A (Balanced Couple) - Plan",
+      "tags": [
+        "documentation"
       ],
       "archived": false
     },
@@ -16945,10 +17219,11 @@
       "archived": false
     },
     "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md": {
-      "description": "Serenity-Class Tiltrotor UAV \u2014 Build Guide Rev P baseline (24-inch)",
+      "description": "Serenity-Class Tiltrotor UAV \u2014 Build Guide Rev T+ (24-inch)",
       "tags": [
         "build-guide",
         "documentation",
+        "emi-hardening",
         "security"
       ],
       "archived": false
@@ -17013,21 +17288,64 @@
       ],
       "archived": false
     },
-    "graphical-build-guide/build_guide_04_cut_cf.svg": {
+    "graphical-build-guide/build_guide_04_print_cargo_gear.svg": {
       "description": "Vector diagram",
       "tags": [
         "build-guide"
       ],
       "archived": false
     },
-    "graphical-build-guide/build_guide_05_cf_skeleton.svg": {
+    "graphical-build-guide/build_guide_05_cut_cf_machined.svg": {
       "description": "Vector diagram",
       "tags": [
         "build-guide"
       ],
       "archived": false
     },
-    "graphical-build-guide/build_guide_06_nacelle_pivot.svg": {
+    "graphical-build-guide/build_guide_06_hull_join.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_07_wing_root.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_08_landing_gear.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide",
+        "landing-gear"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_09_cargo_doors.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_10_tilt_drive.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_11_trunnion.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_12_edf_install.svg": {
       "description": "Vector diagram",
       "tags": [
         "build-guide",
@@ -17035,7 +17353,7 @@
       ],
       "archived": false
     },
-    "graphical-build-guide/build_guide_07_edf_install.svg": {
+    "graphical-build-guide/build_guide_13_nozzle_servo.svg": {
       "description": "Vector diagram",
       "tags": [
         "build-guide",
@@ -17043,22 +17361,7 @@
       ],
       "archived": false
     },
-    "graphical-build-guide/build_guide_08_nozzle_gear.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide",
-        "propulsion"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_09_avionics.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_10_power_wiring.svg": {
+    "graphical-build-guide/build_guide_14_power_routing.svg": {
       "description": "Vector diagram",
       "tags": [
         "build-guide",
@@ -17066,14 +17369,35 @@
       ],
       "archived": false
     },
-    "graphical-build-guide/build_guide_11_inter_board.svg": {
+    "graphical-build-guide/build_guide_15_void_formers.svg": {
       "description": "Vector diagram",
       "tags": [
         "build-guide"
       ],
       "archived": false
     },
-    "graphical-build-guide/build_guide_12_security_hw.svg": {
+    "graphical-build-guide/build_guide_16_foam_pour.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_17_avionics_nodes.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_18_bus_wiring.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_19_security_hw.svg": {
       "description": "Vector diagram",
       "tags": [
         "build-guide",
@@ -17081,91 +17405,21 @@
       ],
       "archived": false
     },
-    "graphical-build-guide/build_guide_13_nav_lights.svg": {
+    "graphical-build-guide/build_guide_20_nav_lights.svg": {
       "description": "Vector diagram",
       "tags": [
         "build-guide"
       ],
       "archived": false
     },
-    "graphical-build-guide/build_guide_14_antennas.svg": {
+    "graphical-build-guide/build_guide_21_antennas_c2.svg": {
       "description": "Vector diagram",
       "tags": [
         "build-guide"
       ],
       "archived": false
     },
-    "graphical-build-guide/build_guide_15_software.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_16_calibration.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_17_ground_test.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_18_first_flight.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_19_decal_placement.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_20_node_placement.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_21_node_install.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_22_void_formers.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_23_foam_fill.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_24_access_panels.svg": {
-      "description": "Vector diagram",
-      "tags": [
-        "build-guide"
-      ],
-      "archived": false
-    },
-    "graphical-build-guide/build_guide_25_obstacle_sensors.svg": {
+    "graphical-build-guide/build_guide_22_obstacle_sensors.svg": {
       "description": "Vector diagram",
       "tags": [
         "build-guide",
@@ -17173,7 +17427,28 @@
       ],
       "archived": false
     },
-    "graphical-build-guide/build_guide_26_cargo_bay_winch.svg": {
+    "graphical-build-guide/build_guide_23_software.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_24_calibration.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_25_test_flight.svg": {
+      "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/build_guide_26_markings.svg": {
       "description": "Vector diagram",
       "tags": [
         "build-guide"
@@ -17182,6 +17457,202 @@
     },
     "graphical-build-guide/build_plan.svg": {
       "description": "Vector diagram",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card00.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card01.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card02.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card03.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card04.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card05.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card06.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card07.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card08.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card09.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card10.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card11.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card12.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card13.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card14.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card15.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card16.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card17.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card18.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card19.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card20.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card21.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card22.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card23.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card24.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card25.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/card26.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "build-guide"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/card-renders/components.png": {
+      "description": "Rendered image / reference photo",
       "tags": [
         "build-guide"
       ],
@@ -18149,6 +18620,14 @@
       ],
       "archived": false
     },
+    "tools/bom_edit_lg_a1b.py": {
+      "description": "LG-LOADPATH-A1B BOM edit: balanced-couple gear (owner 2026-10-27).",
+      "tags": [
+        "bom",
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/bom_edit_tilt_controller.py": {
       "description": "Swap the tilt-controller BOM row: retire LS-TILT-TC, add OSESC-TILT-TC.",
       "tags": [
@@ -18319,6 +18798,14 @@
       ],
       "archived": false
     },
+    "tools/gen_build_guide_cards.py": {
+      "description": "ruff: noqa: C408, ISC004 -- dict() keeps the CARDS table readable as keyword",
+      "tags": [
+        "build-tooling",
+        "security"
+      ],
+      "archived": false
+    },
     "tools/gen_cargo_void_formers.py": {
       "description": "gen_cargo_void_formers.py -- Rev T5e (2026-09-16; Rev T5 2026-09-15 base)",
       "tags": [
@@ -18332,6 +18819,13 @@
         "build-tooling",
         "emi-hardening",
         "project-tracking"
+      ],
+      "archived": false
+    },
+    "tools/generate_lg_a1b_housing.py": {
+      "description": "Place the LG Option A1b flank-housing envelope at the fore corners.",
+      "tags": [
+        "build-tooling"
       ],
       "archived": false
     },
@@ -18472,6 +18966,20 @@
       ],
       "archived": false
     },
+    "tools/lg_a1b_census.py": {
+      "description": "LG Option A1b 3-D census: rendered members + CF backbone vs hull, keep-outs, leg.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/lg_a1b_packaging.py": {
+      "description": "LG Option A1b packaging SWEEP (plan 2026-10-27-001 U1) -- exploratory.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/lg_bellcrank_fbd.py": {
       "description": "Landing-gear bellcrank load path: free-body diagrams of three configurations.",
       "tags": [
@@ -18489,6 +18997,13 @@
     },
     "tools/lg_corners.py": {
       "description": "The landing-gear corner stations, read from their single source.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/lg_couple_options.py": {
+      "description": "Option A sub-forms: free-body, materials and packaging trade (LG-LOADPATH).",
       "tags": [
         "build-tooling"
       ],
@@ -18968,6 +19483,7 @@
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
       "archives/docs-superseded/PYLON_INTEGRATION_2026-07-18.md",
       "archives/docs-superseded/README.md",
+      "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md",
       "archives/root-readme-deep-dive-2026-08-03/README.md",
@@ -19070,7 +19586,6 @@
       "docs/POWER_DISTRIBUTION.md",
       "docs/PROTO_PRINT_DAVINCI_JR.md",
       "docs/README.md",
-      "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
       "docs/TILT_ACTUATOR_SELECTION.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
@@ -19196,6 +19711,7 @@
       "docs/plans/2026-10-26-001-feat-split-battery-head-rail-plan.md",
       "docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md",
       "docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md",
+      "docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
@@ -19402,6 +19918,7 @@
       "archives/avionics-archives/kicad-archives/archive/gen_cape_b2.py",
       "archives/avionics-archives/kicad-archives/archive/gen_cape_b2_pcb.py",
       "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
+      "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
       "archives/docs-superseded/serenity-rev-q.jsx",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity-rev-q.jsx",
@@ -19445,7 +19962,6 @@
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
-      "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
       "docs/TILT_ENCODER_WIRING_EMI_SPEC.md",
       "docs/TILT_SPAR_ANALYSIS.md",
@@ -19466,6 +19982,7 @@
       "docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
+      "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
       "tools/bom_edit_weight_pass_13lbm.py",
@@ -19483,6 +20000,7 @@
       "airframe/openscad/fuselage/head_shell24.scad",
       "airframe/openscad/fuselage/middle_canonical_shell24.scad",
       "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
+      "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "avionics/AGENTS.md",
       "avionics/README.md",
@@ -19516,7 +20034,6 @@
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
-      "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
@@ -19568,6 +20085,7 @@
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/serenity-rev-q.jsx",
+      "archives/graphical-build-guide-pre-revt/build_guide_12_security_hw.svg",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity-esc-telem-revH1.jsx",
       "archives/serenity-rev-f-.jsx",
@@ -19711,7 +20229,7 @@
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
       "graphical-build-guide/TODO-old.md",
       "graphical-build-guide/TODO.md",
-      "graphical-build-guide/build_guide_12_security_hw.svg",
+      "graphical-build-guide/build_guide_19_security_hw.svg",
       "graphical-build-guide/flight-phases/TODO.md",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
@@ -19719,6 +20237,7 @@
       "tools/bom_edit_door_gateway.py",
       "tools/build_landing_gear_views.py",
       "tools/cargo_bulkhead_context.py",
+      "tools/gen_build_guide_cards.py",
       "tools/generate_lg_bays.py",
       "tools/kicad_relink.py",
       "tools/landing_gear_bay_function.py",
@@ -19964,6 +20483,7 @@
       "airframe/blender-scripts/blender_shells_2mm_solidify.py",
       "airframe/blender-scripts/blender_shells_v3.py",
       "airframe/blender-scripts/blender_stator_gen.py",
+      "airframe/blender-scripts/build_guide_card_renders.py",
       "airframe/blender-scripts/check_nacelle_alignment.py",
       "airframe/blender-scripts/engrave_plaques.py",
       "airframe/blender-scripts/engrave_shuttles.py",
@@ -20004,6 +20524,9 @@
       "airframe/blender-scripts/repair_shells_for_scad.py",
       "airframe/blender-scripts/serenity_render_views.py",
       "airframe/blender-scripts/verify_shells.py",
+      "airframe/datasheets/RW-PS-070-Stock-Plate-Panel-Angle-Tolerance-Sheet.pdf",
+      "airframe/datasheets/Rhino-1411-4111-Infusion-Resin-TDS.pdf",
+      "airframe/datasheets/T700GDataSheet.pdf",
       "airframe/diagrams/cargo-rear.png",
       "airframe/diagrams/cargo-ringframe-fit1.png",
       "airframe/diagrams/cargo-ringframe-fit2.png",
@@ -20231,6 +20754,8 @@
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/inara_access_cover.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
@@ -20249,6 +20774,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_bay.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_nominal.stl",
@@ -20312,6 +20838,7 @@
       "airframe/blender-scripts/blender_shells_2mm_solidify.py",
       "airframe/blender-scripts/blender_shells_v3.py",
       "airframe/blender-scripts/blender_stator_gen.py",
+      "airframe/blender-scripts/build_guide_card_renders.py",
       "airframe/blender-scripts/check_nacelle_alignment.py",
       "airframe/blender-scripts/engrave_plaques.py",
       "airframe/blender-scripts/engrave_shuttles.py",
@@ -20545,6 +21072,8 @@
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/inara_access_cover.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
@@ -20563,6 +21092,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_bay.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_nominal.stl",
@@ -20952,6 +21482,10 @@
       "archives/airframe-archives/archive/stls/wings/wing_nacelle_pylon_revo.stl",
       "archives/airframe-archives/nacelle_nozzle_straight.scad",
       "archives/airframe-archives/nacelle_pod_50mm_tandem_simple.scad",
+      "archives/graphical-build-guide-pre-revt/build_guide_03_print_nacelle.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_06_nacelle_pivot.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_07_edf_install.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_08_nozzle_gear.svg",
       "archives/nacelle-nozzle-gear.jsx",
       "archives/nacelles.jst",
       "archives/stale-20260601/files-revF/nacelle_pod_70mm.stl",
@@ -21080,9 +21614,8 @@
       "docs/references/qx-motor 64mm edf/8-4.webp",
       "docs/references/qx-motor 64mm edf/e-600x600.jpg",
       "graphical-build-guide/build_guide_03_print_nacelle.svg",
-      "graphical-build-guide/build_guide_06_nacelle_pivot.svg",
-      "graphical-build-guide/build_guide_07_edf_install.svg",
-      "graphical-build-guide/build_guide_08_nozzle_gear.svg",
+      "graphical-build-guide/build_guide_12_edf_install.svg",
+      "graphical-build-guide/build_guide_13_nozzle_servo.svg",
       "graphical-build-guide/pngs/17_closeup_nacelle.png",
       "tools/eval_nozzle_drive_64.py",
       "tools/nacelle_64_proportion_trade.py",
@@ -21138,6 +21671,7 @@
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
       "tools/bom_edit_door_rework.py",
+      "tools/bom_edit_lg_a1b.py",
       "tools/bom_edit_tilt_controller.py",
       "tools/bom_edit_weight_pass_13lbm.py",
       "tools/compact_bom_entries.py"
@@ -21146,6 +21680,8 @@
       "airframe/landing-gear/HANDOFF.md",
       "airframe/landing-gear/TODO.md",
       "airframe/landing-gear/WBS.md",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl",
+      "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_stance.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl",
@@ -21164,6 +21700,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl",
+      "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_bay.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_deformed.stl",
       "airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_nominal.stl",
@@ -21200,6 +21737,7 @@
       "docs/plans/2026-10-19-001-baseline-r1/landing_gear_opening_fit.py.txt",
       "docs/plans/2026-10-19-001-baseline-r1/landing_gear_r6_sizing.py.txt",
       "docs/plans/2026-10-19-001-baseline-r1/landing_gear_wing_clearance.py.txt",
+      "graphical-build-guide/build_guide_08_landing_gear.svg",
       "tools/add_landing_gear_bosses.py",
       "tools/build_landing_gear_views.py",
       "tools/export_landing_gear_stls.py",
@@ -21235,6 +21773,7 @@
       "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_a.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_b.stl",
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
+      "archives/graphical-build-guide-pre-revt/build_guide_10_power_wiring.svg",
       "archives/serenity-esc-telem-revH1.jsx",
       "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "docs/BATTERY_MOUNT.md",
@@ -21252,7 +21791,7 @@
       "docs/references/vimdrones_esc_s50_wiring.png",
       "docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md",
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
-      "graphical-build-guide/build_guide_10_power_wiring.svg",
+      "graphical-build-guide/build_guide_14_power_routing.svg",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",
@@ -21262,6 +21801,7 @@
       "airframe/openscad/fuselage/bow_sensor_faceplate.scad",
       "airframe/openscad/fuselage/bow_sensor_pod.scad",
       "airframe/stls/fuselage/bow_sensor_faceplate.stl",
+      "archives/graphical-build-guide-pre-revt/build_guide_25_obstacle_sensors.svg",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/DS_Laser_2P.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/DS_ToF_4P.kicad_mod",
@@ -21271,7 +21811,7 @@
       "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x",
       "avionics/kicad/add_sensors_sbus.py",
       "docs/OBSERVER_LASER_ANALYSIS.md",
-      "graphical-build-guide/build_guide_25_obstacle_sensors.svg"
+      "graphical-build-guide/build_guide_22_obstacle_sensors.svg"
     ],
     "comms-protocol": [
       "airframe/placeholders/avionics/XCVR_49MHZ2_PCB_55x35mm.stl",
@@ -21779,12 +22319,42 @@
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
       "archives/docs-superseded/PYLON_INTEGRATION_2026-07-18.md",
       "archives/docs-superseded/README.md",
+      "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/bom_revQ.csv",
       "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md",
       "archives/docs-superseded/serenity-rev-q.jsx",
       "archives/files.zip",
       "archives/generate_foam_svgs.py",
+      "archives/graphical-build-guide-pre-revt/build_guide_00_cover.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_01_print_prep.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_02_print_hull.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_03_print_nacelle.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_04_cut_cf.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_05_cf_skeleton.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_06_nacelle_pivot.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_07_edf_install.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_08_nozzle_gear.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_09_avionics.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_10_power_wiring.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_11_inter_board.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_12_security_hw.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_13_nav_lights.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_14_antennas.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_15_software.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_16_calibration.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_17_ground_test.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_18_first_flight.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_19_decal_placement.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_20_node_placement.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_21_node_install.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_22_void_formers.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_23_foam_fill.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_24_access_panels.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_25_obstacle_sensors.svg",
+      "archives/graphical-build-guide-pre-revt/build_guide_26_cargo_bay_winch.svg",
+      "archives/graphical-build-guide-pre-revt/build_plan.svg",
+      "archives/graphical-build-guide-pre-revt/components_overview.svg",
       "archives/more-files.zip",
       "archives/nacelle-nozzle-gear.jsx",
       "archives/nacelles.jst",
@@ -23556,30 +24126,58 @@
       "graphical-build-guide/build_guide_01_print_prep.svg",
       "graphical-build-guide/build_guide_02_print_hull.svg",
       "graphical-build-guide/build_guide_03_print_nacelle.svg",
-      "graphical-build-guide/build_guide_04_cut_cf.svg",
-      "graphical-build-guide/build_guide_05_cf_skeleton.svg",
-      "graphical-build-guide/build_guide_06_nacelle_pivot.svg",
-      "graphical-build-guide/build_guide_07_edf_install.svg",
-      "graphical-build-guide/build_guide_08_nozzle_gear.svg",
-      "graphical-build-guide/build_guide_09_avionics.svg",
-      "graphical-build-guide/build_guide_10_power_wiring.svg",
-      "graphical-build-guide/build_guide_11_inter_board.svg",
-      "graphical-build-guide/build_guide_12_security_hw.svg",
-      "graphical-build-guide/build_guide_13_nav_lights.svg",
-      "graphical-build-guide/build_guide_14_antennas.svg",
-      "graphical-build-guide/build_guide_15_software.svg",
-      "graphical-build-guide/build_guide_16_calibration.svg",
-      "graphical-build-guide/build_guide_17_ground_test.svg",
-      "graphical-build-guide/build_guide_18_first_flight.svg",
-      "graphical-build-guide/build_guide_19_decal_placement.svg",
-      "graphical-build-guide/build_guide_20_node_placement.svg",
-      "graphical-build-guide/build_guide_21_node_install.svg",
-      "graphical-build-guide/build_guide_22_void_formers.svg",
-      "graphical-build-guide/build_guide_23_foam_fill.svg",
-      "graphical-build-guide/build_guide_24_access_panels.svg",
-      "graphical-build-guide/build_guide_25_obstacle_sensors.svg",
-      "graphical-build-guide/build_guide_26_cargo_bay_winch.svg",
+      "graphical-build-guide/build_guide_04_print_cargo_gear.svg",
+      "graphical-build-guide/build_guide_05_cut_cf_machined.svg",
+      "graphical-build-guide/build_guide_06_hull_join.svg",
+      "graphical-build-guide/build_guide_07_wing_root.svg",
+      "graphical-build-guide/build_guide_08_landing_gear.svg",
+      "graphical-build-guide/build_guide_09_cargo_doors.svg",
+      "graphical-build-guide/build_guide_10_tilt_drive.svg",
+      "graphical-build-guide/build_guide_11_trunnion.svg",
+      "graphical-build-guide/build_guide_12_edf_install.svg",
+      "graphical-build-guide/build_guide_13_nozzle_servo.svg",
+      "graphical-build-guide/build_guide_14_power_routing.svg",
+      "graphical-build-guide/build_guide_15_void_formers.svg",
+      "graphical-build-guide/build_guide_16_foam_pour.svg",
+      "graphical-build-guide/build_guide_17_avionics_nodes.svg",
+      "graphical-build-guide/build_guide_18_bus_wiring.svg",
+      "graphical-build-guide/build_guide_19_security_hw.svg",
+      "graphical-build-guide/build_guide_20_nav_lights.svg",
+      "graphical-build-guide/build_guide_21_antennas_c2.svg",
+      "graphical-build-guide/build_guide_22_obstacle_sensors.svg",
+      "graphical-build-guide/build_guide_23_software.svg",
+      "graphical-build-guide/build_guide_24_calibration.svg",
+      "graphical-build-guide/build_guide_25_test_flight.svg",
+      "graphical-build-guide/build_guide_26_markings.svg",
       "graphical-build-guide/build_plan.svg",
+      "graphical-build-guide/card-renders/card00.png",
+      "graphical-build-guide/card-renders/card01.png",
+      "graphical-build-guide/card-renders/card02.png",
+      "graphical-build-guide/card-renders/card03.png",
+      "graphical-build-guide/card-renders/card04.png",
+      "graphical-build-guide/card-renders/card05.png",
+      "graphical-build-guide/card-renders/card06.png",
+      "graphical-build-guide/card-renders/card07.png",
+      "graphical-build-guide/card-renders/card08.png",
+      "graphical-build-guide/card-renders/card09.png",
+      "graphical-build-guide/card-renders/card10.png",
+      "graphical-build-guide/card-renders/card11.png",
+      "graphical-build-guide/card-renders/card12.png",
+      "graphical-build-guide/card-renders/card13.png",
+      "graphical-build-guide/card-renders/card14.png",
+      "graphical-build-guide/card-renders/card15.png",
+      "graphical-build-guide/card-renders/card16.png",
+      "graphical-build-guide/card-renders/card17.png",
+      "graphical-build-guide/card-renders/card18.png",
+      "graphical-build-guide/card-renders/card19.png",
+      "graphical-build-guide/card-renders/card20.png",
+      "graphical-build-guide/card-renders/card21.png",
+      "graphical-build-guide/card-renders/card22.png",
+      "graphical-build-guide/card-renders/card23.png",
+      "graphical-build-guide/card-renders/card24.png",
+      "graphical-build-guide/card-renders/card25.png",
+      "graphical-build-guide/card-renders/card26.png",
+      "graphical-build-guide/card-renders/components.png",
       "graphical-build-guide/components_overview.svg",
       "graphical-build-guide/decal_sheet.svg",
       "graphical-build-guide/flight-phases/TODO.md",
@@ -23712,6 +24310,7 @@
       "tools/bom_edit_door_gateway.py",
       "tools/bom_edit_door_latch.py",
       "tools/bom_edit_door_rework.py",
+      "tools/bom_edit_lg_a1b.py",
       "tools/bom_edit_tilt_controller.py",
       "tools/bom_edit_weight_pass_13lbm.py",
       "tools/build_head_shell.py",
@@ -23735,8 +24334,10 @@
       "tools/export_landing_gear_stls.py",
       "tools/flight_envelope_endurance.py",
       "tools/frame_inventory.py",
+      "tools/gen_build_guide_cards.py",
       "tools/gen_cargo_void_formers.py",
       "tools/gen_todo_from_wbs.py",
+      "tools/generate_lg_a1b_housing.py",
       "tools/generate_lg_bays.py",
       "tools/hull_datums.py",
       "tools/import-specctra-ses.py",
@@ -23754,9 +24355,12 @@
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",
+      "tools/lg_a1b_census.py",
+      "tools/lg_a1b_packaging.py",
       "tools/lg_bellcrank_fbd.py",
       "tools/lg_collar_integrity.py",
       "tools/lg_corners.py",
+      "tools/lg_couple_options.py",
       "tools/lg_fuse_material.py",
       "tools/lg_thigh_variants.py",
       "tools/lg_wire_layout_study.py",

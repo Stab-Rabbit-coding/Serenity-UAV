@@ -134,8 +134,12 @@
 - [ ] Phase A (08/10): Rebuild `overview_close_up_head.svg`
 - [ ] Phase A (09/10): Rebuild `overview_close_up_cargo.svg`
 - [ ] Phase A (10/10): Rebuild `overview_close_up_rear.svg`
-- [ ] Phase B (1/2): Rebuild `build_plan.svg` — Update master construction…
-- [ ] Phase B (2/2): Rebuild `components_overview.svg`
+- [ ] Re-audit `REVN_BUILD_GUIDE_24IN.md` Phases 4–11 for Rev T+
+- [ ] Sync the tilt range to the owner's 2026-10-31 ruling
+- [ ] Owner decision: 6704ZZ trunnion pair at 89 % C0 under ultimate load…
+- [ ] Add a BOM row for the machined 14T tilt pinion (brass/steel…
+- [ ] Place the remaining unplaced parts in the master assembly
+- [ ] Draw the 10 AWG ESC route, disconnect bay → ESC (WA-R10), then…
 - [ ] Phase C (01/10): Rebuild `build_guide_01_parts.svg`
 - [ ] Phase C (02/10): Rebuild `build_guide_02_keel.svg`
 - [ ] Phase C (03/10): Rebuild `build_guide_03_hull_prep.svg`

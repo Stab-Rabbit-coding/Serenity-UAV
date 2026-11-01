@@ -67,8 +67,8 @@ See `HULL_FRAME_REFERENCE.md` for the validated component placement extents tabl
 | **Cargo Bay** | Payload + winch + door actuation | ~150 mm | Clamshell doors; SPT5425LV/LibreServo v2 winch mount; DRV8833 H-bridge tray (the gondola shell was superseded 2026-09-15) |
 | **Middle / Neck** | Avionics + power + fuel (battery) | ~230 mm | Horseshoe ring frame; Flight Engineer PDB mount; battery bay; 4× avionics bays (A–D); foam fill; keel rod |
 | **Rear** | Tail cone + tail boom | ~140 mm | Optional Phase 11 aft-EDF intake; twin rear-nozzle pods; landing-gear hard points |
-| **Wings** | Port + stbd lift surfaces | 486 mm span (19.1 in) | Carbon-composite skin + foam core; tilt-servo mounts at roots; spar pocket inserts |
-| **Nacelles** | Two tilting propulsion pods | ~200 mm each | 50 mm tandem EDF pair (X-Fly Galaxy X5, 12-blade, 3200 kV; 64 mm redesign in progress); servo-driven variable nozzle; tilt pivot (MF104ZZ bearing + 4 mm CF rod) |
+| **Wings** | Port + stbd lift surfaces | 486 mm span (19.1 in) | Fixed, bonded 20 mm CF spar (Rev T1); bonded root moment flanges; wing + spar clamps into the fuselage (releasable) |
+| **Nacelles** | Two tilting propulsion pods | ~200 mm each | 50 mm tandem EDF pair (X-Fly Galaxy X5, 12-blade, 3200 kV; 64 mm redesign in progress); servo-driven variable nozzle; trunnion on 2 × 6704ZZ, concentric with the fixed spar, driven by the cargo-bay worm drive (Rev T4/T5e) |
 
 ## Mass Budget (Phase 5–10, Nacelles Only)
 

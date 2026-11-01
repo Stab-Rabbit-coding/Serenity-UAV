@@ -1476,6 +1476,7 @@ def _plate_trap(org, ex, ey, ez, w_bot, w_top, zb0, zb1, x0, x1):
 # not the local skin normal: the bolts run along e_x too, and on the 21-24 deg
 # yawed flank the normal thickness is T cos(yaw) ~ 4.6 mm for T = 5.
 LG_CONFORM = True
+LG_A1B_HOUSING_WALL = 2.0  # mm, reinforcing wall around the A1B flank housing pocket
 LG_LAYER_PAD = 12.0        # mm, crop margin beyond the footprint (keeps the
                            # crop box's own faces out of the final layer)
 LG_LAYER_CROP = 26.0       # mm, +/- plate-frame x kept around the plate origin.
@@ -1637,6 +1638,30 @@ def lg_bay_features(shell_tm, envelope_tm=None):
                         -(COWL_H + 6.0), 12.0),
             keep_pos)
         neg.append(aper)
+
+        # LG-LOADPATH-A1B (owner 2026-10-27): canonical FLANK HOUSING at the
+        # fore corners.  The A1B backbone + members run up and outboard and
+        # cross the flank skin (tools/lg_a1b_census.py); QMx Sheet 5
+        # [REF-CAD-003] and the Henning renders [REF-CAD-002] show the jack
+        # entering a recessed housing in the hull side.  The envelope is the
+        # leg SCAD's a1b_housing_envelope(), placed per corner by
+        # tools/generate_lg_a1b_housing.py.  Pocket = envelope + LG_FIT_CLR;
+        # wall = LG_A1B_HOUSING_WALL around it (main() clips positives to the
+        # hull interior); both give way to wing material / voids like the bay.
+        hpath = os.path.join(REPO_ROOT, "airframe", "stls", "fuselage", "landing-gear",
+                             f"lg_a1b_housing_{label}.stl")
+        if os.path.exists(hpath):
+            henv = to_man(trimesh.load(hpath, force="mesh"))
+            pocket_m = henv.minkowski_sum(Manifold.sphere(LG_FIT_CLR, 12))
+            wall_m = henv.minkowski_sum(
+                Manifold.sphere(LG_FIT_CLR + LG_A1B_HOUSING_WALL, 12)) - pocket_m
+            pocket, p_v = _subtract_all(from_man(pocket_m), keep_pos)
+            wall, w_v = _subtract_all(from_man(wall_m), keep_neg)
+            neg.append(pocket)
+            pos.append(wall)
+            report.append(f"{label}: A1B flank housing pocket {abs(pocket.volume):.0f} mm^3 "
+                          f"(wing-held {p_v:.0f}), wall {abs(wall.volume):.0f} mm^3 "
+                          f"(wing-relieved {w_v:.0f})")
 
         # Flange rebate: BAY_PLATE_T deep, so the frame finishes flush.
         # LG-10.4: likewise stops at wing material.  Where it does, the skin
