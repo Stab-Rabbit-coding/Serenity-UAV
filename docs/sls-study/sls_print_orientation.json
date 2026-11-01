@@ -1,0 +1,1353 @@
+[
+ {
+  "part": "fuselage/bow_sensor_faceplate.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   28.0,
+   16.0,
+   2.5
+  ],
+  "fits": true,
+  "critical_load": "panel bending (handling)",
+  "rule": "R-PLATE",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/head/bow_sensor_bay_insert.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   30.0,
+   19.7,
+   17.9
+  ],
+  "fits": true,
+  "critical_load": "sensor mount bending",
+  "rule": "R-PLATE: base flange flat",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/head_shell24.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   129.5,
+   235.0,
+   140.5
+  ],
+  "fits": true,
+  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
+  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/head_shell24_2mm_repaired.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   129.4,
+   232.8,
+   140.5
+  ],
+  "fits": true,
+  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
+  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/head/head_cell_rail.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   52.4,
+   91.0,
+   63.9
+  ],
+  "fits": true,
+  "critical_load": "fwd/aft crash load into longitudinal webs (Y)",
+  "rule": "R-BEAM: webs run along Y, stand vertical; ceiling bending in X-Y (tools/gen_head_cell_rail.py)",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/head/head_cell_sled.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   39.0,
+   133.4,
+   36.0
+  ],
+  "fits": true,
+  "critical_load": "floor bending under cell, fwd/aft crash (Y)",
+  "rule": "R-PLATE",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/head/head_cell_catch.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   30.0,
+   20.0,
+   7.0
+  ],
+  "fits": true,
+  "critical_load": "leaf-spring bending along X (LEAF_T is Z)",
+  "rule": "R-PLATE: leaf strain in plane, 0.5 % << 3.8 %",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/head/twin_pack_tray.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   74.3,
+   124.0,
+   45.8
+  ],
+  "fits": true,
+  "critical_load": "ceiling + side-wall bending under packs",
+  "rule": "R-BEAM",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/head/twin_pack_sled.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   34.5,
+   123.0,
+   8.0
+  ],
+  "fits": true,
+  "critical_load": "sled floor bending",
+  "rule": "R-PLATE",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/head/twin_pack_gate.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Y",
+  "mapping": "X->X Z->Y Y->Z",
+  "machine_xyz_mm": [
+   69.5,
+   12.0,
+   4.0
+  ],
+  "fits": true,
+  "critical_load": "gate plate bending under pack fwd load",
+  "rule": "R-PLATE: normal is Y (4 mm)",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/head_cargo_splice_collar.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   113.5,
+   17.7,
+   77.8
+  ],
+  "fits": true,
+  "critical_load": "splice moment -> Y tension at crown/keel",
+  "rule": "R-BEAM: same frame as hull so crown/keel Y stress is in plane",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/head_cargo_shell24_2mm_merged.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   194.3,
+   434.7,
+   201.5
+  ],
+  "fits": false,
+  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
+  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
+  "confidence": "H",
+  "conflict": "does not fit the SLS 380 in the strength orientation; fits only with build Z = STL Y"
+ },
+ {
+  "part": "fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   194.3,
+   198.5,
+   163.2
+  ],
+  "fits": true,
+  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
+  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/cargo/cargo_sect_shell24_repaired.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   194.1,
+   203.5,
+   163.2
+  ],
+  "fits": true,
+  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
+  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/battery_tray.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   154.0,
+   51.5,
+   62.0
+  ],
+  "fits": true,
+  "critical_load": "battery inertia fwd/aft (Y) + vertical g",
+  "rule": "R-BEAM",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/battery_cradle.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   54.8,
+   146.8,
+   42.8
+  ],
+  "fits": true,
+  "critical_load": "inverted-U cradle bending under battery g",
+  "rule": "R-BEAM: U legs vertical, span X in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/cargo_cradle_autolatch.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   110.0,
+   80.0,
+   72.0
+  ],
+  "fits": true,
+  "critical_load": "payload hook load, vertical",
+  "rule": "R-BEAM",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/cargo/cargo_door_port.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   56.5,
+   106.0,
+   11.7
+  ],
+  "fits": true,
+  "critical_load": "door panel bending (air load)",
+  "rule": "R-PLATE",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/cargo/cargo_door_stbd.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   50.5,
+   106.0,
+   11.0
+  ],
+  "fits": true,
+  "critical_load": "door panel bending (air load)",
+  "rule": "R-PLATE",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/cargo/cargo_hinge_retention.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   96.9,
+   132.0,
+   9.2
+  ],
+  "fits": true,
+  "critical_load": "hinge-pin retention plate bending",
+  "rule": "R-PLATE",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/door_latch_crank_port.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   16.4,
+   20.6,
+   8.0
+  ],
+  "fits": true,
+  "critical_load": "crank arm bending about pivot",
+  "rule": "R-PLATE: arm in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/door_latch_crank_stbd.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   10.4,
+   10.0,
+   8.0
+  ],
+  "fits": true,
+  "critical_load": "crank arm bending about pivot",
+  "rule": "R-PLATE: arm in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/door_latch_bracket_port.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   19.6,
+   24.5,
+   12.9
+  ],
+  "fits": true,
+  "critical_load": "pivot-boss bearing + base bending",
+  "rule": "R-PLATE",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/door_latch_bracket_stbd.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   15.0,
+   12.0,
+   7.0
+  ],
+  "fits": true,
+  "critical_load": "pivot-boss bearing + base bending",
+  "rule": "R-PLATE",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/door_horn.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Y",
+  "mapping": "X->X Z->Y Y->Z",
+  "machine_xyz_mm": [
+   11.0,
+   14.0,
+   6.0
+  ],
+  "fits": true,
+  "critical_load": "horn arm bending (servo torque)",
+  "rule": "R-PLATE: thinnest axis Y",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/cargo_door_servo_bracket.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   44.0,
+   28.0,
+   5.0
+  ],
+  "fits": true,
+  "critical_load": "servo-ear bending",
+  "rule": "R-PLATE",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/cargo_release_servo_bracket.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   44.0,
+   28.0,
+   5.0
+  ],
+  "fits": true,
+  "critical_load": "servo-ear bending",
+  "rule": "R-PLATE",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/cargo_drv8833_tray.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   36.0,
+   33.0,
+   6.0
+  ],
+  "fits": true,
+  "critical_load": "board tray, light",
+  "rule": "R-PLATE",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/gateway_door_tray.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Y",
+  "mapping": "X->X Z->Y Y->Z",
+  "machine_xyz_mm": [
+   52.2,
+   33.9,
+   15.2
+  ],
+  "fits": true,
+  "critical_load": "board tray, light",
+  "rule": "R-PLATE: normal is Y (15 mm)",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/cargo/chin_node_shelf.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   84.0,
+   53.6,
+   6.4
+  ],
+  "fits": true,
+  "critical_load": "shelf bending under node",
+  "rule": "R-PLATE",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/cargo/cargo_fpv_bezel.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   29.0,
+   29.0,
+   2.5
+  ],
+  "fits": true,
+  "critical_load": "cosmetic / light",
+  "rule": "R-PLATE",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/cargo_gps_retention_ring.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   50.0,
+   50.0,
+   2.5
+  ],
+  "fits": true,
+  "critical_load": "ring hoop",
+  "rule": "R-RING",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/cargo_vera_faraday.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   76.8,
+   70.8,
+   32.6
+  ],
+  "fits": true,
+  "critical_load": "enclosure, light",
+  "rule": "R-PLATE: base flat",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/cargo_winch_motor_mount.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   36.0,
+   28.0,
+   15.0
+  ],
+  "fits": true,
+  "critical_load": "motor torque reaction in base",
+  "rule": "R-PLATE",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/cargo_winch_spool.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   26.0,
+   26.0,
+   22.0
+  ],
+  "fits": true,
+  "critical_load": "line tension -> drum hoop + flange bending",
+  "rule": "R-RING: drum axis Z",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/tilt_actuator_bracket_port.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   95.4,
+   63.0,
+   28.4
+  ],
+  "fits": true,
+  "critical_load": "worm thrust + wheel reaction in bracket plate (Y-Z)",
+  "rule": "R-PLATE: plate normal X (28 mm)",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/tilt_actuator_bracket_stbd.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   95.4,
+   63.0,
+   28.4
+  ],
+  "fits": true,
+  "critical_load": "worm thrust + wheel reaction in bracket plate (Y-Z)",
+  "rule": "R-PLATE: plate normal X (28 mm)",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/tilt_actuator_wheel.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   42.0,
+   42.0,
+   13.0
+  ],
+  "fits": true,
+  "critical_load": "worm-wheel tooth-root bending",
+  "rule": "R-RING: wheel axis X (13 mm face)",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/cargo/tilt_actuator_worm.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   17.0,
+   28.0,
+   28.0
+  ],
+  "fits": true,
+  "critical_load": "thread-root shear along the worm axis (Y) + shaft torsion",
+  "rule": "R-BEAM: worm axis Y stays in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/cargo/tilt_brake_guide.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   15.3,
+   17.0,
+   26.0
+  ],
+  "fits": true,
+  "critical_load": "brake-pin bore hoop + side load",
+  "rule": "R-RING: bore axis Z",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/cargo/tilt_brake_guide_stbd.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   15.3,
+   17.0,
+   26.0
+  ],
+  "fits": true,
+  "critical_load": "brake-pin bore hoop + side load",
+  "rule": "R-RING: bore axis Z",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/inara_access_cover.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   46.5,
+   66.5,
+   4.8
+  ],
+  "fits": true,
+  "critical_load": "cover panel bending",
+  "rule": "R-PLATE",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/river_access_cover.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   46.5,
+   64.0,
+   4.6
+  ],
+  "fits": true,
+  "critical_load": "cover panel bending",
+  "rule": "R-PLATE",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/belly_panel.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Y",
+  "mapping": "X->X Z->Y Y->Z",
+  "machine_xyz_mm": [
+   160.0,
+   65.0,
+   3.5
+  ],
+  "fits": true,
+  "critical_load": "panel bending",
+  "rule": "R-PLATE: normal is Y (3.5 mm)",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/cargo_middle_splice_collar.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   125.8,
+   18.0,
+   128.1
+  ],
+  "fits": true,
+  "critical_load": "splice moment -> Y tension at crown/keel",
+  "rule": "R-BEAM: same frame as hull",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/wing_root_flange_port.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   60.0,
+   80.0,
+   26.2
+  ],
+  "fits": true,
+  "critical_load": "wing root moment -> flange plate bending (Y-Z plane)",
+  "rule": "R-PLATE: flange normal X (26 mm)",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/wing_root_flange_stbd.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   60.0,
+   80.0,
+   26.2
+  ],
+  "fits": true,
+  "critical_load": "wing root moment -> flange plate bending (Y-Z plane)",
+  "rule": "R-PLATE: flange normal X (26 mm)",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/middle_shell24_2mm_repaired.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   176.9,
+   71.3,
+   164.8
+  ],
+  "fits": true,
+  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
+  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/middle_canonical_shell24.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   225.5,
+   164.8,
+   73.2
+  ],
+  "fits": true,
+  "critical_load": "fuselage bending (frame not confirmed)",
+  "rule": "R-BEAM",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/middle_canonical_edf_intake.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   225.5,
+   164.8,
+   73.2
+  ],
+  "fits": true,
+  "critical_load": "intake duct, light",
+  "rule": "R-BEAM",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/middle_rear_splice_collar.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   113.8,
+   18.0,
+   118.8
+  ],
+  "fits": true,
+  "critical_load": "splice moment -> Y tension at crown/keel",
+  "rule": "R-BEAM: same frame as hull",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/rear_shell24_2mm_repaired.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   140.6,
+   180.0,
+   157.8
+  ],
+  "fits": true,
+  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
+  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/dorsal_antenna_fin.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Y",
+  "mapping": "X->X Z->Y Y->Z",
+  "machine_xyz_mm": [
+   20.0,
+   35.0,
+   4.0
+  ],
+  "fits": true,
+  "critical_load": "fin root bending (side gust)",
+  "rule": "R-PLATE: normal is Y (4 mm)",
+  "confidence": "M"
+ },
+ {
+  "part": "fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   98.4,
+   128.5,
+   16.0
+  ],
+  "fits": true,
+  "critical_load": "leg frame in-plane bending (strike)",
+  "rule": "R-PLATE: frame plane X-Y, 16 mm thick",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   103.1,
+   123.7,
+   16.0
+  ],
+  "fits": true,
+  "critical_load": "leg frame in-plane bending (strike)",
+  "rule": "R-PLATE",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   96.3,
+   79.1,
+   16.0
+  ],
+  "fits": true,
+  "critical_load": "bench/handling article",
+  "rule": "R-PLATE",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/landing-gear/lg_r6_common_foot.stl",
+  "material": "PA11",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   68.5,
+   55.6,
+   10.0
+  ],
+  "fits": true,
+  "critical_load": "ground strike; PA11 isotropic",
+  "rule": "sole flat for finish",
+  "confidence": "H"
+ },
+ {
+  "part": "fuselage/landing-gear/lg_r6_3_0in_bay_aft-port_print.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   53.9,
+   76.5,
+   50.7
+  ],
+  "fits": true,
+  "critical_load": "leg side-load bending along the socket axis (print Z)",
+  "rule": "R-BEAM: socket axis in plane",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   53.9,
+   76.5,
+   50.7
+  ],
+  "fits": true,
+  "critical_load": "leg side-load bending along the socket axis (print Z)",
+  "rule": "R-BEAM: socket axis in plane",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/landing-gear/lg_r6_3_0in_bay_fore-port_print.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   53.8,
+   75.0,
+   48.6
+  ],
+  "fits": true,
+  "critical_load": "leg side-load bending along the socket axis (print Z)",
+  "rule": "R-BEAM: socket axis in plane",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd_print.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   53.8,
+   75.0,
+   48.6
+  ],
+  "fits": true,
+  "critical_load": "leg side-load bending along the socket axis (print Z)",
+  "rule": "R-BEAM: socket axis in plane",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/landing-gear/lg_r6_common_bay.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   54.0,
+   78.0,
+   32.9
+  ],
+  "fits": true,
+  "critical_load": "leg side-load bending along the socket axis (Z)",
+  "rule": "R-BEAM: socket axis in plane",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/landing-gear/lg_a1b_housing_fore-port.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Y",
+  "mapping": "X->X Z->Y Y->Z",
+  "machine_xyz_mm": [
+   55.7,
+   69.8,
+   37.4
+  ],
+  "fits": true,
+  "critical_load": "balanced-couple housing; metal carries the couple",
+  "rule": "R-BEAM: long axis Z in plane",
+  "confidence": "V"
+ },
+ {
+  "part": "fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Y",
+  "mapping": "X->X Z->Y Y->Z",
+  "machine_xyz_mm": [
+   55.7,
+   69.8,
+   37.4
+  ],
+  "fits": true,
+  "critical_load": "balanced-couple housing; metal carries the couple",
+  "rule": "R-BEAM: long axis Z in plane",
+  "confidence": "V"
+ },
+ {
+  "part": "wings/wing_port_s1223_revo.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   95.7,
+   129.0,
+   32.8
+  ],
+  "fits": true,
+  "critical_load": "spanwise bending (CF spar is primary)",
+  "rule": "R-PLATE: airfoil thickness Z; span + chord in plane",
+  "confidence": "H"
+ },
+ {
+  "part": "wings/wing_stbd_s1223_revo.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   95.7,
+   129.0,
+   32.8
+  ],
+  "fits": true,
+  "critical_load": "spanwise bending (CF spar is primary)",
+  "rule": "R-PLATE: airfoil thickness Z; span + chord in plane",
+  "confidence": "H"
+ },
+ {
+  "part": "wings/wing_tilt_pinion_port.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   12.7,
+   12.8,
+   10.5
+  ],
+  "fits": true,
+  "critical_load": "14T pinion tooth-root bending",
+  "rule": "R-RING: gear axis X",
+  "confidence": "H"
+ },
+ {
+  "part": "wings/wing_tilt_pinion_stbd.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   12.7,
+   12.8,
+   10.5
+  ],
+  "fits": true,
+  "critical_load": "14T pinion tooth-root bending",
+  "rule": "R-RING: gear axis X",
+  "confidence": "H"
+ },
+ {
+  "part": "nacelles/nacelle_port_64mm.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   95.0,
+   193.9,
+   98.8
+  ],
+  "fits": true,
+  "critical_load": "pod bending about trunnion -> axial (Y) duct stress",
+  "rule": "R-BEAM: duct axis Y in plane",
+  "confidence": "H"
+ },
+ {
+  "part": "nacelles/nacelle_stbd_64mm.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   95.0,
+   193.9,
+   99.3
+  ],
+  "fits": true,
+  "critical_load": "pod bending about trunnion -> axial (Y) duct stress",
+  "rule": "R-BEAM: duct axis Y in plane",
+  "confidence": "H"
+ },
+ {
+  "part": "nacelles/nacelle_port_revs.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   76.4,
+   167.3,
+   79.1
+  ],
+  "fits": true,
+  "critical_load": "legacy 50 mm pod",
+  "rule": "R-BEAM: duct axis Y in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/nacelle_stbd_revs.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   76.4,
+   167.3,
+   77.7
+  ],
+  "fits": true,
+  "critical_load": "legacy 50 mm pod",
+  "rule": "R-BEAM: duct axis Y in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/eng_left_shell24_50mm_repaired.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   83.3,
+   185.2,
+   75.4
+  ],
+  "fits": true,
+  "critical_load": "legacy 50 mm pod, duct axis Z in this file",
+  "rule": "R-BEAM: duct axis in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/eng_right_shell24_50mm_repaired.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   83.3,
+   185.2,
+   75.4
+  ],
+  "fits": true,
+  "critical_load": "legacy 50 mm pod, duct axis Z in this file",
+  "rule": "R-BEAM: duct axis in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/nacelle_trunnion_64mm_port.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   53.5,
+   49.9,
+   18.2
+  ],
+  "fits": true,
+  "critical_load": "2 x 6804 bearing seat (\u00d832 H7) hoop + barrel-to-flange bending",
+  "rule": "R-RING: bearing axis X -> Z keeps the H7 bore round; flange plate in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/nacelle_trunnion_64mm_stbd.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   53.5,
+   49.9,
+   18.2
+  ],
+  "fits": true,
+  "critical_load": "2 x 6804 bearing seat (\u00d832 H7) hoop + barrel-to-flange bending",
+  "rule": "R-RING: bearing axis X -> Z keeps the H7 bore round; flange plate in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/nacelle_trunnion.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   50.0,
+   50.0,
+   11.5
+  ],
+  "fits": true,
+  "critical_load": "legacy 50 mm disc trunnion",
+  "rule": "R-RING",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/nacelle_servo_bracket.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   44.4,
+   22.4,
+   18.0
+  ],
+  "fits": true,
+  "critical_load": "servo-ear bending",
+  "rule": "R-PLATE",
+  "confidence": "V"
+ },
+ {
+  "part": "nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   69.0,
+   72.0,
+   84.2
+  ],
+  "fits": true,
+  "critical_load": "motor torque + thrust through stator vanes",
+  "rule": "R-RING: duct axis Z; vanes radial in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/edf_stator_sleeve.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   55.0,
+   58.0,
+   32.5
+  ],
+  "fits": true,
+  "critical_load": "stator vane bending (swirl torque), sleeve hoop",
+  "rule": "R-RING",
+  "confidence": "H"
+ },
+ {
+  "part": "nacelles/edf_aft_spider_sleeve.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   55.0,
+   58.0,
+   43.8
+  ],
+  "fits": true,
+  "critical_load": "spider arm bending, sleeve hoop",
+  "rule": "R-RING",
+  "confidence": "H"
+ },
+ {
+  "part": "nacelles/esc/nacelle_esc_cover_port_a.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Y",
+  "mapping": "X->X Z->Y Y->Z",
+  "machine_xyz_mm": [
+   50.5,
+   57.5,
+   24.2
+  ],
+  "fits": true,
+  "critical_load": "flush cover panel bending",
+  "rule": "R-PLATE: normal Y",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/esc/nacelle_esc_cover_port_b.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Y",
+  "mapping": "X->X Z->Y Y->Z",
+  "machine_xyz_mm": [
+   50.5,
+   57.5,
+   24.2
+  ],
+  "fits": true,
+  "critical_load": "flush cover panel bending",
+  "rule": "R-PLATE: normal Y",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/esc/nacelle_esc_cover_stbd_a.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Y",
+  "mapping": "X->X Z->Y Y->Z",
+  "machine_xyz_mm": [
+   50.3,
+   57.5,
+   25.3
+  ],
+  "fits": true,
+  "critical_load": "flush cover panel bending",
+  "rule": "R-PLATE: normal Y",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/esc/nacelle_esc_cover_stbd_b.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Y",
+  "mapping": "X->X Z->Y Y->Z",
+  "machine_xyz_mm": [
+   50.3,
+   57.5,
+   25.3
+  ],
+  "fits": true,
+  "critical_load": "flush cover panel bending",
+  "rule": "R-PLATE: normal Y",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/nozzles/nacelle_nozzle_fixed.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   71.2,
+   71.2,
+   48.0
+  ],
+  "fits": true,
+  "critical_load": "duct hoop + bond-lip shear",
+  "rule": "R-RING",
+  "confidence": "H"
+ },
+ {
+  "part": "nacelles/nozzles/nacelle_nozzle_throat.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   71.2,
+   71.2,
+   21.1
+  ],
+  "fits": true,
+  "critical_load": "duct hoop",
+  "rule": "R-RING",
+  "confidence": "H"
+ },
+ {
+  "part": "nacelles/nozzles/nacelle_nozzle_ring.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "Z",
+  "mapping": "X->X Y->Y Z->Z",
+  "machine_xyz_mm": [
+   66.4,
+   66.2,
+   8.0
+  ],
+  "fits": true,
+  "critical_load": "unison-ring hoop + tooth bending",
+  "rule": "R-RING",
+  "confidence": "H"
+ },
+ {
+  "part": "nacelles/nozzles/nacelle_nozzle_flap.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   23.2,
+   50.2,
+   10.5
+  ],
+  "fits": true,
+  "critical_load": "flap cantilever bending along its 50 mm length (Z)",
+  "rule": "R-BEAM: flap length in plane",
+  "confidence": "M"
+ },
+ {
+  "part": "nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
+  "material": "PA CF",
+  "build_z_stl_axis": "X",
+  "mapping": "Y->X Z->Y X->Z",
+  "machine_xyz_mm": [
+   25.5,
+   50.2,
+   9.2
+  ],
+  "fits": true,
+  "critical_load": "flap cantilever bending along its 50 mm length (Z)",
+  "rule": "R-BEAM: flap length in plane",
+  "confidence": "M"
+ }
+]

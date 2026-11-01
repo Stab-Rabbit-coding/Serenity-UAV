@@ -227,7 +227,6 @@
       "description": "Serenity UAV \u2014 TODO (Open Work Only)",
       "tags": [
         "documentation",
-        "emi-hardening",
         "project-tracking",
         "security"
       ],
@@ -14922,6 +14921,13 @@
       ],
       "archived": false
     },
+    "docs/SLS_PRINT_ORIENTATION.md": {
+      "description": "Serenity UAV \u2014 SLS Print Orientation, Every Part (SLS 380)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md": {
       "description": "Tail Strike on the Aft Skids (4 ft Drop) and Landing-Gear Materials in SLS",
       "tags": [
@@ -17063,6 +17069,13 @@
     },
     "docs/sls-study/sls_dfm_audit.json": {
       "description": "JSON data (94 entries)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/sls-study/sls_print_orientation.json": {
+      "description": "JSON data (90 entries)",
       "tags": [
         "documentation"
       ],
@@ -20029,6 +20042,13 @@
       ],
       "archived": false
     },
+    "tools/sls_print_orientation.py": {
+      "description": "sls_print_orientation.py -- build orientation for every printed Serenity",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/sls_scale_trim_study.py": {
       "description": "sls_scale_trim_study.py -- hover-CG effect of a pivot shift, a forward hull",
       "tags": [
@@ -20391,6 +20411,7 @@
       "docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md",
       "docs/SLS_MIGRATION.md",
       "docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md",
+      "docs/SLS_PRINT_ORIENTATION.md",
       "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
       "docs/TILT_ACTUATOR_SELECTION.md",
@@ -20657,6 +20678,7 @@
       "docs/sls-study/hull_build_volume_fit.png",
       "docs/sls-study/hull_build_volume_fit.scad",
       "docs/sls-study/sls_dfm_audit.json",
+      "docs/sls-study/sls_print_orientation.json",
       "docs/sls-study/wing-polars/S1223.dat",
       "docs/sls-study/wing-polars/S1223_Re100000_N5_nf.csv",
       "docs/sls-study/wing-polars/S1223_Re100000_N5_xfoil.csv",
@@ -20746,7 +20768,6 @@
     "emi-hardening": [
       "AGENTS.md",
       "README.md",
-      "TODO.md",
       "WBS.md",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
       "airframe/README.md",
@@ -25347,6 +25368,7 @@
       "tools/sls_dfm_audit.py",
       "tools/sls_material_screen.py",
       "tools/sls_materials.py",
+      "tools/sls_print_orientation.py",
       "tools/sls_scale_trim_study.py",
       "tools/spar_bundle_fit.py",
       "tools/stitch_vias.py",

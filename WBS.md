@@ -264,7 +264,10 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Locate an official 3dsystems.com URL for the SLS Design Guide [REF-MFG-001]
 - [ ] Feather-edge review, part by part (thicken, truncate or accept) — list in `docs/SLS_MIGRATION.md` §4
 - [ ] Re-point the remaining CF-PETG margin tools (list in `docs/SLS_MIGRATION.md` §5)
-- [ ] Owner: assign build orientation per structural part (removes the 0.5 Z knockdown where load is in-plane)
+- [x] Build orientation for every printed part (90), critical stress in the build plane, SLS 380 fit — `docs/SLS_PRINT_ORIENTATION.md`, `tools/sls_print_orientation.py` (2026-11-01)
+- [ ] Owner: decide merged head-cargo shell (fits SLS 380 only on end, Y across layers) vs separate head + cargo shells (recommended)
+- [ ] Verify the 15 confidence-V orientations (frame / load path) before the build is released
+- [ ] Ask 3D Systems for DuraForm PA CF X-vs-Y (recoater-direction) properties — requires verification
 - [ ] Owner: confirm FDM-only features to strip (4×0.6 mm perimeter wall sizing, brims, support-avoid chamfers) per part family
 - [ ] Re-export the 64 mm nacelles and wing-root flanges watertight (audit R4)
 - [ ] Re-run `tools/sls_auw_reconcile.py` after the above and update the AUW ledger
