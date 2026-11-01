@@ -271,6 +271,10 @@ see docs/WBS.md §0.10.2.)*
 - [x] One-piece AFT hull section `middle_rear_shell24_2mm_merged.stl` (`tools/merge_middle_rear_shell.py`, blended loft Y 501–530.5); middle/rear collar retired (2026-11-01)
 - [x] Hull seams vs QMx/Henning canon: forward seam waist step removed (loft), aft dorsal collar residue removed, cargo/middle ring step confirmed canonical — `docs/SLS_PRINT_ORIENTATION.md` §6
 - [ ] Re-run the aft-dependent tools on the merged aft section (`aft_section_mass_audit.py`, `tail_strike_requirement.py`, AUW ledger) — they still read the separate middle/rear shells
+- [x] Assembly + build guide refreshed for the 2-section SLS hull and twin pack tray (serenity_assembly.py, gen_build_guide_cards.py, REVN_BUILD_GUIDE_24IN.md Phase 0/1); card renders now EMBEDDED in the SVGs (linked PNGs showed blank in viewers) (2026-11-01)
+- [ ] Re-home the two cargo node saddles (`PRINT-NODE-SADDLE`): they bolted to the retired battery cradle's aft wall; mount is OPEN
+- [ ] Retire / regenerate void formers `void_former_cargo_{collar_rim,batt_chimney}` (their collar and cradle are retired); fix BOM `PRINT-VOID-FORMER-CARGO` qty 5 → 3
+- [ ] Add BOM rows for the merged forward/aft hull sections and the twin pack tray/sleds/gate (guide Print Schedule shows "BOM rows pending")
 - [x] Design review against the 3D Systems SLS Design Guide [REF-MFG-001] — `docs/SLS_MIGRATION.md` §7; citations corrected to pp. 4/15
 - [x] Tilt-brake pin bore clearance 0.15 → 0.3 mm per side [REF-MFG-001 pp. 7, 12]; guides re-rendered
 - [x] ~~Belly panel aft hole slot~~ — reverted 2026-11-01: belly panel is retired (BOM qty 0)

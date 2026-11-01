@@ -227,8 +227,7 @@
       "description": "Serenity UAV \u2014 TODO (Open Work Only)",
       "tags": [
         "documentation",
-        "project-tracking",
-        "security"
+        "project-tracking"
       ],
       "archived": false
     },
@@ -20966,7 +20965,6 @@
       "README.md",
       "REFERENCES.md",
       "SECURITY.md",
-      "TODO.md",
       "airframe/FreeCAD-scripts/serenity_assembly.py",
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",

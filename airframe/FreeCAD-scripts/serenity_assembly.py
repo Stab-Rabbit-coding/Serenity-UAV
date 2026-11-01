@@ -513,45 +513,31 @@ def assemble():
     doc = App.newDocument("SerenityAssembly")
 
     # -------------------------------------------------------------------
-    # FUSELAGE SECTIONS
-    # R1: STL vertex data is already hull-frame (baked 2026-06-11 by
-    # tools/bake_hull_frame.py); all four sections import at identity
-    # and tile into the complete hull without additional offsets.
+    # FUSELAGE SECTIONS -- two-section SLS hull (2026-11-01)
+    # Forward = head+cargo in one piece (tools/merge_head_cargo_shell.py,
+    # commit d92c4f14); aft = middle+rear in one piece
+    # (tools/merge_middle_rear_shell.py).  Both seams are blended lofts
+    # checked against the QMx blueprints / Henning renders
+    # (docs/SLS_PRINT_ORIENTATION.md section 6).  The only hull joint left is
+    # the cargo/middle splice collar.  The separate head/cargo/middle/rear
+    # shells and the head/cargo + middle/rear collars are RETIRED print
+    # articles (tools/sls_retired_parts.py).  All parts are aircraft frame
+    # R2 and import at identity.
     # -------------------------------------------------------------------
-    print("[assembly] Fuselage sections ...", flush=True)
+    print("[assembly] Fuselage sections (2-section hull) ...", flush=True)
 
-    head = add_mesh(doc, _stl("fuselage/head_shell24_2mm_repaired.stl"), "Head_Shell")
-    place_mesh(head, PL_IDENTITY)
+    fwd = add_mesh(doc, _stl("fuselage/head_cargo_shell24_2mm_merged.stl"),
+                   "Hull_Forward_HeadCargo")
+    place_mesh(fwd, PL_IDENTITY)
 
-    cargo = add_mesh(
-        doc, _stl("fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl"), "Cargo_Shell"
-    )
-    place_mesh(cargo, PL_IDENTITY)
+    aft = add_mesh(doc, _stl("fuselage/middle_rear_shell24_2mm_merged.stl"),
+                   "Hull_Aft_MiddleRear")
+    place_mesh(aft, PL_IDENTITY)
 
-    middle = add_mesh(
-        doc, _stl("fuselage/middle_shell24_2mm_repaired.stl"), "Middle_Shell"
-    )
-    place_mesh(middle, PL_IDENTITY)
-
-    # R1: the baked repaired mesh is the canonical rear shell.  (The
-    # former preference for a compiled s_rear_shell24.stl is removed —
-    # a freshly compiled, un-baked file must not bypass the bake step.)
-    rear = add_mesh(doc, _stl("fuselage/rear_shell24_2mm_repaired.stl"), "Rear_Shell")
-    place_mesh(rear, PL_IDENTITY)
-
-    # Internal head/cargo splice collar (Rev R1, hull frame — spans the joint at
-    # hull Y ≈ -71 mm; identity placement).  Secures the head section to the
-    # cargo section: 2-wall bonded double-lap + anti-ovalisation ring.  See
-    # docs/structural_analysis.md §4a and TODO.md §1.1.0.
-    splice = add_mesh(
-        doc, _stl("fuselage/head_cargo_splice_collar.stl"), "Head_Cargo_Splice_Collar"
-    )
-    place_mesh(splice, PL_IDENTITY)
-
-    # Internal cargo/middle splice collar (Rev R1, hull frame — spans the joint at
-    # hull Y ≈ +131 mm; identity placement).  Secures the cargo section to the
-    # middle section: 2-wall bonded double-lap + anti-ovalisation ring.  See
-    # docs/structural_analysis.md §7.4 and TODO.md §1.1.1.0b.
+    # Internal cargo/middle splice collar -- the one remaining hull joint
+    # (2-wall bonded double-lap + anti-ovalisation ring; docs/structural_analysis.md
+    # section 7.4).  The step at this joint is canonical (raised ring aft of
+    # the cargo hold), so the joint stays.
     splice2 = add_mesh(
         doc,
         _stl("fuselage/cargo_middle_splice_collar.stl"),
@@ -559,17 +545,29 @@ def assemble():
     )
     place_mesh(splice2, PL_IDENTITY)
 
-    # Internal middle/rear splice collar (Rev R1, hull frame — spans the joint at
-    # hull Y ≈ +203 mm; identity placement).  Secures the middle section to the
-    # rear section: 2-wall bonded double-lap + anti-ovalisation ring; complements
-    # (does not replace) the CF skid rods as the skid-impact load path.  See
-    # docs/structural_analysis.md §7.5 and TODO.md §1.1.1.0b.
-    splice3 = add_mesh(
-        doc,
-        _stl("fuselage/middle_rear_splice_collar.stl"),
-        "Middle_Rear_Splice_Collar",
-    )
-    place_mesh(splice3, PL_IDENTITY)
+    # -------------------------------------------------------------------
+    # MAIN BATTERY -- twin flat Tattu 6S 2200 packs in the head
+    # (tools/twin_head_pack_fit.py, docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md).
+    # Replaces the retired cargo Battery_Cradle.  The tray STL is aircraft
+    # frame; the sled and gate STLs are part-local, placed exactly as
+    # twin_pack_tray.scad placed_sleds() / placed_gate() do, from the
+    # generated twin_pack_tray_params.scad (single source).
+    # -------------------------------------------------------------------
+    print("[assembly] Twin battery tray, sleds, gate ...", flush=True)
+    tp = os.path.join(AIRFRAME, "openscad", "fuselage", "twin_pack_tray_params.scad")
+    tz0 = _scad_param(tp, "TRAY_ZC") - _scad_param(tp, "TRAY_H") / 2.0   # band floor
+    ty0 = _scad_param(tp, "TRAY_Y0")
+    lane_x = _scad_param(tp, "LANE_X")
+    sled_len = _scad_param(tp, "CELL_L") + 2.0 * _scad_param(tp, "SLED_LIP")
+    add_mesh(doc, _stl("fuselage/head/twin_pack_tray.stl"), "Twin_Pack_Tray")
+    for side, sx in (("Port", 1.0), ("Stbd", -1.0)):   # +X = port (datum R2)
+        sled = add_mesh(doc, _stl("fuselage/head/twin_pack_sled.stl"), f"Twin_Pack_Sled_{side}")
+        if sled is not None:
+            place_mesh(sled, (sx * lane_x, ty0, tz0, 0.0, 0.0, 0.0, 1.0))
+    gate = add_mesh(doc, _stl("fuselage/head/twin_pack_gate.stl"), "Twin_Pack_Gate")
+    if gate is not None:
+        # TAB_L - (TAB_L - 0.5) = 0.5 mm, as in twin_pack_tray.scad placed_gate()
+        place_mesh(gate, (0.0, ty0 + sled_len + 0.5, tz0, 0.0, 0.0, 0.0, 1.0))
 
     # Landing gear — Rev R6 canonical articulated legs (2026-07-21; split
     # into 1.5in/3.0in belly-clearance variants 2026-07-23).
@@ -992,7 +990,7 @@ def assemble():
     # (chin_node_shelf.scad); the cargo Observer tray is an ENVELOPE only until
     # cargo_vera_faraday.scad is re-authored in hull frame (OBS-CARGO).
     # -------------------------------------------------------------------
-    print("[assembly] Rev T5e cargo equipment (tilt actuators, brake, battery cradle, chin shelf) ...", flush=True)
+    print("[assembly] Rev T5e cargo equipment (tilt actuators, brake, chin shelf) ...", flush=True)
     # -89.2 mm port -> starboard translate, from the generated layout include
     T5_STBD_DX = 2.0 * (hd.X_CL - _scad_param(_T5_PARAMS, "WORM_X"))
     add_mesh(doc, _stl("fuselage/cargo/tilt_actuator_bracket_port.stl"), "Tilt_Bracket_Port")
@@ -1010,7 +1008,7 @@ def assemble():
         add_mesh(doc, _stl("fuselage/cargo/tilt_brake_guide"
                            + ("_stbd" if dx else "") + ".stl"),
                  f"Tilt_Brake_Guide_{side}")
-    add_mesh(doc, _stl("fuselage/cargo/battery_cradle.stl"), "Battery_Cradle")
+    # Battery_Cradle RETIRED 2026-10-31 (twin head pack tray, block above).
     add_mesh(doc, _stl("fuselage/cargo/chin_node_shelf.stl"), "Chin_Node_Shelf")
 
     # -------------------------------------------------------------------
