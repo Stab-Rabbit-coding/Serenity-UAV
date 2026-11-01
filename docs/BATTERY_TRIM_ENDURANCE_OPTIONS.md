@@ -151,4 +151,4 @@ head-cell rail and sled. The ledger has not been updated yet.
 - Update the ledger.
 - Switch the layout tools over to the merged hull and archive the collar.
 - Add the merged part to `bake_hull_frame` / PROJECT_INDEX.
-- The 86 MB merged STL is git-ignored. Regenerate it with the tool.
+- The 86 MB merged STL is left untracked (regenerable with the tool). Decide whether to commit it; the other shells are 35–49 MB.
