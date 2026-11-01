@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-10-31
+**Last updated:** 2026-11-01
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -166,6 +166,13 @@
 - [ ] aft_edf_plenum.stl
 - [ ] Mount ant-collision strobe on belly of middle section in accord…
 - [ ] Mount ant-collision steady white tail light on upper pod of rea…
+- [ ] BAYA-FWD-05 Verify hatch seams vs full-res QMx Sheet Six
+- [ ] BAYA-FWD-06 Bay A retention statics (cite allowables)
+- [ ] BAYA-FWD-07 Select M2.5 heat-set insert (datasheet bore)
+- [ ] BAYA-FWD-08 Mass ledger + CG for Bay A mounts/hatch
+- [ ] BAYA-FWD-09 Assembly/build guide: hatch hull + new parts
+- [ ] BAYA-FWD-10 Hatch seal + cover PGND bond decision
+- [ ] BAYA-FWD-11 Place TACCO antennas; cut MMCX coax to length
 
 #### 1.1.2 — Wings
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
@@ -307,6 +314,7 @@
 - [ ] Pilot routing + Gerbers (120/120 placed, DRC 0)
 - [ ] Flight Engineer PCB: last DRC items, route, Gerbers
 - [ ] Observer PCB resync to the ISOW1412/Section H schematic
+- [ ] ★ OBSERVER-EDGE-DRC — 9 hard copper-to-edge clearance violations…
 - [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
 - [ ] Generate Commo gerbers
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
@@ -354,6 +362,13 @@
 - [ ] ★ U7 — Per-board ERC/DRC/gerber closeout (6 boards)
 - [ ] ★ U8 — Pilot tamper-mesh creepage fix (fab blocker) +…
 - [ ] U9 — REFERENCES.md + WBS/TODO + AGENTS.md closeout for U1–U8
+- [ ] ★ BAYA-FWD-T1 BLOCKER: CN1 sustained TX peak vs thermal cap
+- [ ] BAYA-FWD-T2 Confirm design ambient (104 °F assumed)
+- [ ] BAYA-FWD-T3 Cite/bench-measure Bay A thermal inputs
+- [ ] BAYA-FWD-T4 Bay A vent + fan geometry (after T1)
+- [ ] BAYA-FWD-B1 Cite CAN-FD/RS-485 stub limits
+- [ ] BAYA-FWD-B2 Airspeed sensor footprint at pitot hose turn
+- [ ] BAYA-FWD-B3 Re-check bus lengths with routed Bay A runs
 
 ### Phase0 — Print All Parts + CF Cuts
 → detail: `graphical-build-guide/WBS.md` §Phase0
@@ -810,9 +825,6 @@
 → detail: `docs/WBS.md` §6.1
 
 - [ ] Delete stale feature branches
-
-### 6.2 — Observer PCB
-- [ ] ★ OBSERVER-EDGE-DRC: fix 9 copper-edge violations (KiCad CI)
 
 ---
 

@@ -1197,6 +1197,34 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 ##### 1.1.1.4 *Rear Engine Cone*
 
+### Bay A forward — head nodes, twin tray, access hatch (2026-11-01)
+
+Plan `docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md`; spec
+`docs/BAY_A_FWD_LAYOUT.md`; thermal `docs/BAY_A_FWD_THERMAL.md`.
+
+- [x] **BAYA-FWD-01** — Bay A forward published: CN1 flat under the Observer (Y 62–120),
+    FC1 flat above it (Y 88–146, Z 230.5); `head_layout_fit.py` default, side mode read-only.
+- [x] **BAYA-FWD-02** — Twin pack tray published at Y 163–283 (stop Y 159–163);
+    `twin_pack_tray_params.scad` + tray/sled/gate STLs regenerated.
+- [x] **BAYA-FWD-03** — Harness routes gated (ROUTES table): CN1 run → riser → crossover
+    (Y 148–158, forward of the tray stop) → port link → port channel.
+- [x] **BAYA-FWD-04** — Mounts + canonical bridge-roof hatch generated and gated
+    (`tools/gen_bay_a_fwd_mounts.py`): CN1 drawer, CN1 gate, FC1 shelf, hatch cover/flange,
+    merged hull with the opening cut.
+- [ ] **BAYA-FWD-05** — Verify the hatch seam stations (Y 60 / Y 137, X ±27) against a
+    full-resolution QMx Sheet Six [REF-CAD-003] (repo copy is a low-res extract).
+- [ ] **BAYA-FWD-06** — Retention statics: cite cam-strap, snap-gate, M2.5 insert pull-out
+    and bond-shear allowables against 30.5 lbf (135.5 N) per node; statics now PROVISIONAL.
+- [ ] **BAYA-FWD-07** — Select the M2.5 heat-set insert (bore assumed 3.6 mm) from its
+    datasheet, per the sourcing rules; update `M25_INSERT`.
+- [ ] **BAYA-FWD-08** — Mass ledger: add drawer, shelf, gate, hatch flange/cover and any fan
+    to `tools/auw_ledger.py`; re-run the CG roll-up.
+- [ ] **BAYA-FWD-09** — Assembly/build guide: use `head_cargo_shell24_2mm_merged_hatch.stl`
+    and the new parts; retire the single-cell rail/sled/catch from the assembly.
+- [ ] **BAYA-FWD-10** — Hatch seal (rain/dust) and cover-to-PGND bond decision.
+- [ ] **BAYA-FWD-11** — Place the TACCO antennas and cut the 3 MMCX coax leads to length
+    (plan 003 deferred antenna placement).
+
 ###### 1.1.1.4.1 *Anti-Collision Tail Light*
 
 - [ ] Mount ant-collision steady white tail light on upper pod of rear section in accordance with [REF-FAA-003]

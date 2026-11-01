@@ -386,6 +386,14 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Mount ant-collision strobe on belly of middle section in accord…
 - [ ] Mount ant-collision steady white tail light on upper pod of rea…
 
+- [x] BAYA-FWD-01..04 Bay A fwd, tray Y163, routes, mounts+hatch
+- [ ] BAYA-FWD-05 Verify hatch seams vs full-res QMx Sheet Six
+- [ ] BAYA-FWD-06 Bay A retention statics (cite allowables)
+- [ ] BAYA-FWD-07 Select M2.5 heat-set insert (datasheet bore)
+- [ ] BAYA-FWD-08 Mass ledger + CG for Bay A mounts/hatch
+- [ ] BAYA-FWD-09 Assembly/build guide: hatch hull + new parts
+- [ ] BAYA-FWD-10 Hatch seal + cover PGND bond decision
+- [ ] BAYA-FWD-11 Place TACCO antennas; cut MMCX coax to length
 #### 1.1.2 — Wings
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
 
@@ -741,6 +749,13 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] ★ U7 — Per-board ERC/DRC/gerber closeout (6 boards)
 - [ ] ★ U8 — Pilot tamper-mesh creepage fix (fab blocker) + Faraday/shielding
 - [ ] U9 — REFERENCES.md + WBS/TODO + AGENTS.md closeout for U1–U8
+- [ ] ★ BAYA-FWD-T1 BLOCKER: CN1 sustained TX peak vs thermal cap
+- [ ] BAYA-FWD-T2 Confirm design ambient (104 °F assumed)
+- [ ] BAYA-FWD-T3 Cite/bench-measure Bay A thermal inputs
+- [ ] BAYA-FWD-T4 Bay A vent + fan geometry (after T1)
+- [ ] BAYA-FWD-B1 Cite CAN-FD/RS-485 stub limits
+- [ ] BAYA-FWD-B2 Airspeed sensor footprint at pitot hose turn
+- [ ] BAYA-FWD-B3 Re-check bus lengths with routed Bay A runs
 
 ---
 
