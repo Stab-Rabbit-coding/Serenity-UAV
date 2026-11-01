@@ -91,3 +91,64 @@ listings (§4). Arithmetic is screening only.
    the real mesh.
 2. Decide whether the sourcing rule covers cells.
 3. Re-run the T/W and current checks at the heaviest-payload AUW with option A.
+
+## 6. Detailed placement (2026-10-31): twin flat tray in a one-piece head+cargo hull
+
+Two tools reproduce this result:
+
+- `tools/merge_head_cargo_shell.py` builds the one-piece head+cargo hull.
+- `tools/twin_head_pack_fit.py` checks the tray against every other component.
+
+The tray geometry is in `airframe/openscad/fuselage/twin_pack_tray.scad`. The rendered
+parts are in `airframe/stls/fuselage/head/twin_pack_{tray,sled,gate}.stl`.
+
+**Why the head and cargo had to merge.** No 2 × 2200 arrangement fits in the head as
+built; the sides, flat and stacked layouts all fail. Only today's single band fits, at
+1 mm clearance. Removing the splice collar ring and the cargo cradle opens a twin flat
+band.
+
+**The merge**
+
+- The published head is kept for Y < 227 and the published cargo for Y > 241.5.
+- The seam zone, Y 227–241.5, is rebuilt as plain 2 mm skin. It is extruded from clean
+  rings measured at Y 226 and Y 242. The old collar mating lands are dropped.
+- The four cargo cradle hanger bosses are removed.
+- The result is one watertight body, about 457 cm³. Every 0.5 mm slice across the seam
+  is one closed ring, and the cavity is open through the seam.
+- This file, `head_cargo_splice_collar.stl` and the cradle are now retired.
+
+**Placement**
+
+| Item | Where |
+| --- | --- |
+| Pack band | 69.5 W × 41.0 H, Zc 191, Y 172–292. Both packs lie flat; the lanes are at X ±17.4. |
+| Tray | Ceiling, walls bonded to the skin (seat ≤ 52 mm³), full floor, and a forward stop at Y 168–172. |
+| Loading | Each pack is lifted in on its own sled through the open clamshell doors, with the payload out. It slides forward on the centreline corridor (\|X\| ≤ 17.75, Y 292–400, Zc 189.5), climbs a 1.5 mm ramp, then steps sideways into its lane. |
+| Retention | A hinged aft gate. It has a pocket for each sled tail tab, which holds each pack fore/aft and laterally. |
+| Nose avionics trunk | Rerouted to a port side channel at X 38.5–48.5, Z 193–201. |
+| Optional third pack | The Tattu 6S 1600 fits in the corridor. A third 2200 does not: there is 108 mm of room and it needs 120 mm. |
+
+All checks pass with a 1 mm gap against both shells and every cargo and head envelope.
+
+**CG and endurance** (same basis as §2; the twin-pack centroid is Y 232)
+
+| Configuration | CG | +pivot | Endurance |
+| --- | ---: | ---: | ---: |
+| F: two packs in the tray | +11.3 mm | +2.4 mm | 0 % |
+| A: tray + Tattu 1600 in the corridor | +10.6 mm | +1.5 mm | +29 % |
+
+These are about 1.5 mm worse than the §2 screen, which assumed the packs sat at the
+head-cell station (Y 216).
+
+**Printed parts (PA CF).** The tray is 88.5 g, the two sleds 11.8 g and the gate 3.3 g.
+The retired parts are the collar (11.5 g), the cradle (39.2 g), the strap and the
+head-cell rail and sled. The ledger has not been updated yet.
+
+**Open items**
+
+- Re-run the gate latch and catch statics for 2 × 321 g at 79.4 g, per
+  `docs/BATTERY_MOUNT.md` §8.
+- Update the ledger.
+- Switch the layout tools over to the merged hull and archive the collar.
+- Add the merged part to `bake_hull_frame` / PROJECT_INDEX.
+- The 86 MB merged STL is git-ignored. Regenerate it with the tool.
