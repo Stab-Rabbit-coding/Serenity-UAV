@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-10-31
+**Last updated:** 2026-11-01
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -100,7 +100,7 @@
 - [ ] Confirm the NASA SP-8007 [REF-NASA-002] bending-knockdown section…
 - [ ] Confirm the Isogrid Design Handbook [REF-NASA-003] smear against…
 - [ ] Confirm the Roark [REF-STR-001] edition, table and case for the…
-- [ ] Validate an official 3D Systems URL for DuraForm PA CF 3DS-30108A…
+- [ ] Validate an official 3D Systems URL for DuraForm PA12 Black…
 - [ ] Obtain PA CF build-axis (Z) tensile and flexural data (coupon or…
 - [ ] Owner sets the handling design load (now 20 lbf on a 5 mm radius…
 - [ ] Verify Brazier 1927 [REF-STR-002] DOI/pages and the Roark ring-crush…
@@ -307,6 +307,7 @@
 - [ ] Pilot routing + Gerbers (120/120 placed, DRC 0)
 - [ ] Flight Engineer PCB: last DRC items, route, Gerbers
 - [ ] Observer PCB resync to the ISOW1412/Section H schematic
+- [ ] ★ OBSERVER-EDGE-DRC — 9 hard copper-to-edge clearance violations…
 - [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
 - [ ] Generate Commo gerbers
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
@@ -810,9 +811,6 @@
 → detail: `docs/WBS.md` §6.1
 
 - [ ] Delete stale feature branches
-
-### 6.2 — Observer PCB
-- [ ] ★ OBSERVER-EDGE-DRC: fix 9 copper-edge violations (KiCad CI)
 
 ---
 

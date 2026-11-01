@@ -21,7 +21,7 @@ yield for PA CF, so ultimate / 2 is used for all three.  Bearing is taken as 1.2
 tensile ultimate, the ratio the gear tool uses for CF-PETG (70 / 55 MPa) [ASSUMED for
 the SLS nylons: no bearing data in the datasheets].
 
-Sources: 3DS-30108A DuraForm PA CF [REF-MAT-011]; 3D Systems DuraForm PA12 Black and
+Sources: 3DS-30108A DuraForm PA CF [REF-MAT-015]; 3D Systems DuraForm PA12 Black and
 PA11 Black datasheets (owner-supplied PDFs, 2025); REF-MAT-002 CF-PETG; gear tool.
 
 Run:  /usr/bin/python3 tools/tail_strike_requirement.py

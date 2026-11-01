@@ -240,7 +240,8 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Confirm the NASA SP-8007 [REF-NASA-002] bending-knockdown section against the NTRS PDF
 - [ ] Confirm the Isogrid Design Handbook [REF-NASA-003] smear against §4.2 of the NTRS PDF
 - [ ] Confirm the Roark [REF-STR-001] edition, table and case for the circular-plate patch load and the cantilever frequency
-- [ ] Validate an official 3D Systems URL for DuraForm PA CF 3DS-30108A [REF-MAT-011]
+- [x] Validate an official 3D Systems URL for DuraForm PA CF 3DS-30108A [REF-MAT-015] — validated 2026-11-01 (PA11 Black [REF-MAT-016] also validated)
+- [ ] Validate an official 3D Systems URL for DuraForm PA12 Black [REF-MAT-017]
 - [ ] Obtain PA CF build-axis (Z) tensile and flexural data (coupon or vendor), replacing the 0.5 knockdown
 - [ ] Owner sets the handling design load (now 20 lbf on a 5 mm radius patch, ASSUMED)
 - [ ] Verify Brazier 1927 [REF-STR-002] DOI/pages and the Roark ring-crush case [REF-STR-001] used in `docs/SKID_FAILURE_MODE_STUDY.md`

@@ -90,7 +90,7 @@ bending mode of the part as a cantilever from Y 436, carrying its items [REF-STR
 4. **Skin-pocket buckling.** A flat plate with k = 4, b equal to the rib spacing.
 5. **Handling.** A simply supported circular plate with a central patch load, plate
    radius equal to the pocket inradius h/3 [REF-STR-001].
-6. **Allowable.** The lower of 0.5 × 84 MPa [REF-MAT-011] and the buckling stress.
+6. **Allowable.** The lower of 0.5 × 84 MPa [REF-MAT-015] and the buckling stress.
 
 ## 3a. SLS printability check (3D-print DFM review, 2026-10-31)
 
@@ -139,7 +139,7 @@ prints the **ring and skid member separately** in a tougher nylon. The skin stay
 
 | Skid tubes (54,190 mm³ measured) | Mass | Flexural modulus | Equal-EI tube OD | Toughness, about σ_u·ε_b | Notched Izod |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| PA CF [REF-MAT-011] | 60.2 g | 7,000 MPa | ×1.00 | 1.6 MJ/m³ (brittle, 3.8 %) | 52 J/m |
+| PA CF [REF-MAT-015] | 60.2 g | 7,000 MPa | ×1.00 | 1.6 MJ/m³ (brittle, 3.8 %) | 52 J/m |
 | PA12 Black [3DS-30112A] | 54.2 g | 1,500 MPa | ×1.67 | 5.5 MJ/m³ (13.7 %) | 35 J/m |
 | **PA11 Black** [3DS PA11 datasheet] | 55.8 g | 1,500 MPa | ×1.67 | **24.1 MJ/m³** (52.6 %) | 42 J/m |
 

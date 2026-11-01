@@ -22,7 +22,7 @@ Outputs per case and material, per skid at the co-strike force F:
   case adds the same moment as torsion/bending into the cross member.
 
 Run:  /usr/bin/python3 tools/skid_mount_loads.py
-Sources: beam stiffness method (standard); materials REF-MAT-011/012; ring frame station
+Sources: beam stiffness method (standard); materials REF-MAT-015/016; ring frame station
 add_structural_features.py (rear_Y290 pocket, R2 Y 595.7).
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
