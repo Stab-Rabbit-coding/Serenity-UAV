@@ -639,6 +639,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Pilot routing + Gerbers (120/120 placed, DRC 0)
 - [ ] Flight Engineer PCB: last DRC items, route, Gerbers
 - [ ] Observer PCB resync to the ISOW1412/Section H schematic
+- [ ] ★ OBSERVER-EDGE-DRC — 9 hard copper-to-edge clearance violations (0.5 mm req.) in Observer.kicad_pcb after the 1a6fb8d5 outline reshape; move copper or change outline; KiCad Validation CI fails until fixed
 - [x] remove Wi-Fi, sik, and loRa antennas from XO. Use filtered cho…
 - [x] Re-evaluate space / restore Ethernet to XO
 - [ ] Zigbee RF chain was never actually added to XO — PCB scope g…

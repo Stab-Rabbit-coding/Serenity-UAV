@@ -811,6 +811,9 @@
 
 - [ ] Delete stale feature branches
 
+### 6.2 — Observer PCB
+- [ ] ★ OBSERVER-EDGE-DRC: fix 9 copper-edge violations (KiCad CI)
+
 ---
 
 *"Get on with it, Pilot." — Capt. Skipper Reynolds*
