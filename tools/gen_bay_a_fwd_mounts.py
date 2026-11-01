@@ -70,13 +70,23 @@ import trimesh
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import head_layout_fit as h  # noqa: E402  single source of stations
+import cargo_layout_fit as clf  # noqa: E402  pouch size
 from cargo_layout_fit import box, cyl, to_man  # noqa: E402
 
 REPO = h.REPO
 OUT_DIR = os.path.join(REPO, "airframe", "stls", "fuselage", "head")
 HULL_OUT = os.path.join(REPO, "airframe", "stls", "fuselage",
                         "head_cargo_shell24_2mm_merged_hatch.stl")
-SERVICE_PATH = __doc__[__doc__.index("SERVICE PATH (R2):"):__doc__.index("Retention load")].strip()
+SERVICE_PATH = """SERVICE PATH (R2):
+  1. Remove the 8 hatch screws, lift the cover's aft edge and draw it aft
+     to free the forward tongue (opening Y 60..137, X +-27).
+  2. FC1: release both cam straps, unplug, lift the FC1 pouch nose-up and out
+     (its aft 9 mm sits under the Y 137 frame; tilt about the aft edge).
+  3. FC1 shelf: remove 4 screws, lift out.
+  4. CN1: unsnap the aft gate, unplug, slide CN1 aft 26 mm (clear of the
+     Observer, which ends at Y 86) and tilt it out through the opening.
+  Reverse to install.  The Observer stays in place throughout."""
+# (also quoted in the module docstring; this constant is the source)
 
 G0 = 9.80665
 LIMIT_G, FOS = 79.4, 3.0
@@ -86,9 +96,9 @@ NODE_KG = 0.058  # PB2-I 13 g + cape (TACCO 40 / Pilot 31) + pouch 5 g, heavier 
 FLOOR_T, SHELF_T = 3.0, 2.0
 FLANGE_SHIFT = 3.0  # hatch flange depth under the skin (not 2.0: see hatch_parts)
 WALL_X0, WALL_X1 = 19.5, 21.9  # 1 mm off the pouch side (X 18.5), 2.4 mm wall
-CN1_TOP = h.CN1F_Z0 + 22.0  # 228
+CN1_TOP = h.CN1F_Z0 + clf.NODE_T  # 228
 SHELF_Z0 = CN1_TOP + 0.5  # 228.5
-DRAWER_Y1 = h.FC1F_Y0 + 58.0  # walls run aft to the FC1 shelf's aft end
+DRAWER_Y1 = h.FC1F_Y0 + clf.NODE_L  # walls run aft to the FC1 shelf's aft end
 STOP_T = 2.0
 GATE_H, GATE_T = 3.0, 2.0
 STRAP_W, SLOT_W = 16.0, 2.0  # 16 mm cam strap; 2 mm slots, 2 mm bridge between
@@ -132,7 +142,7 @@ def skin_clipped_plate(hull, y0, y1, z0, z1, step=2.0, bite=0.0):
 
 
 def cn1_drawer(hull):
-    ny0, ny1 = h.CN1F_Y0, h.CN1F_Y0 + 58.0
+    ny0, ny1 = h.CN1F_Y0, h.CN1F_Y0 + clf.NODE_L
     floor = to_man(skin_clipped_plate(hull, ny0 - STOP_T, ny1, h.CN1F_Z0 - FLOOR_T, h.CN1F_Z0))
     m = floor
     for s in (1, -1):
@@ -151,13 +161,11 @@ def cn1_drawer(hull):
         for y in (h.FC1F_Y0 + 4.0, DRAWER_Y1 - 4.0):
             x = s * 0.5 * (WALL_X0 + WALL_X1)
             m = m - to_man(cyl("z", x, y, SHELF_Z0 - 6.0, SHELF_Z0 + 0.1, M25_INSERT / 2))
-    # conform to the skin: forward of Y ~76 the chin skin rises to Z 205.5
-    # inside the floor footprint, so the floor seats ON the chin there
-    return _mesh(m - to_man(hull))
+    return _mesh(m - to_man(hull))  # conform: forward of Y ~76 the floor seats ON the chin skin
 
 
 def cn1_gate():
-    ny1 = h.CN1F_Y0 + 58.0
+    ny1 = h.CN1F_Y0 + clf.NODE_L
     return box(-WALL_X1, WALL_X1, ny1 + 0.5, ny1 + 0.5 + GATE_T, h.CN1F_Z0, h.CN1F_Z0 + GATE_H)
 
 
@@ -250,14 +258,20 @@ def main():
         return 0
     hull = trimesh.load(h.MERGED)
     cover, flange, hull_cut = hatch_parts(hull)
-    ok = all([
-        write(cn1_drawer(hull), os.path.join(OUT_DIR, "bay_a_cn1_drawer.stl")),
-        write(cn1_gate(), os.path.join(OUT_DIR, "bay_a_cn1_gate.stl")),
-        write(fc1_shelf(hull), os.path.join(OUT_DIR, "bay_a_fc1_shelf.stl")),
-        write(cover, os.path.join(OUT_DIR, "bay_a_hatch_cover.stl")),
-        write(flange, os.path.join(OUT_DIR, "bay_a_hatch_flange.stl")),
-        write(hull_cut, HULL_OUT),
-    ])
+    parts = [
+        (cn1_drawer(hull), os.path.join(OUT_DIR, "bay_a_cn1_drawer.stl")),
+        (cn1_gate(), os.path.join(OUT_DIR, "bay_a_cn1_gate.stl")),
+        (fc1_shelf(hull), os.path.join(OUT_DIR, "bay_a_fc1_shelf.stl")),
+        (cover, os.path.join(OUT_DIR, "bay_a_hatch_cover.stl")),
+        (flange, os.path.join(OUT_DIR, "bay_a_hatch_flange.stl")),
+        (hull_cut, HULL_OUT),
+    ]
+    # check every part BEFORE writing any: a failed run never leaves a mixed set
+    bad = [os.path.basename(p) for tm, p in parts if not tm.is_watertight]
+    if bad:
+        print(f"NOT WRITING: non-watertight part(s): {bad}")
+        return 1
+    ok = all(write(tm, p) for tm, p in parts)
     print("SERVICE PATH:\n" + SERVICE_PATH)
     return 0 if ok else 1
 

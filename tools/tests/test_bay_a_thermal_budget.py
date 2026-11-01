@@ -82,6 +82,21 @@ def test_max_sustained_power_puts_cn1_at_the_limit():
     assert math.isclose(inp.ambient_c + hot, inp.limit_c, abs_tol=1e-6)
 
 
+def test_unknown_cited_key_is_rejected():
+    try:
+        tb.provisional(replace(tb.Inputs(), cited={"not_a_field": "REF-X"}))
+    except ValueError:
+        return
+    raise AssertionError("bogus cited key accepted")
+
+
+def test_fully_cited_is_not_provisional():
+    fields = set(tb.Inputs.__dataclass_fields__) - {"cited"}
+    assert not tb.provisional(replace(tb.Inputs(), cited={f: "REF-X" for f in fields}))
+    one_short = {f: "REF-X" for f in sorted(fields)[1:]}
+    assert tb.provisional(replace(tb.Inputs(), cited=one_short))
+
+
 if __name__ == "__main__":
     fails = 0
     for name, fn in sorted(globals().items()):

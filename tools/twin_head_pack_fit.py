@@ -75,6 +75,7 @@ GAP = 1.0
 SIDE_TRAY_Y0 = 172.0
 # Bay A forward harness envelopes that must clear the tray (KTD3: defined in
 # head_layout_fit.ROUTES, never retyped here).
+PORT_LINK_MATE_MAX = 300.0  # mm^3, designed link/channel overlap incl. the 1 mm gap growth
 FWD_TRUNKS = ("trunk: CN1 run", "trunk: Observer to CN1", "trunk: riser", "trunk: crossover",
               "trunk: port link")
 SEAT_MAX = 100.0  # mm^3 skin overlap accepted as a bonded seat per rail part
@@ -172,8 +173,12 @@ def main():
     for name, b in statics.items():
         m = grown(*b)
         hits = {k: (m ^ o).volume() for k, o in obs.items()
-                if not (name.startswith("loading") and k == "cargo: payload")
-                and not (name.startswith("trunk") and k == "head: trunk: port link")}  # mate
+                if not (name.startswith("loading") and k == "cargo: payload")}
+        # the port link joins the channel by design: allow its designed overlap
+        # (10 x 2 x 8 mm grown by GAP -> ~270 mm^3), never more, and print it
+        link = hits.pop("head: trunk: port link", None) if name.startswith("trunk") else None
+        if link is not None and link > PORT_LINK_MATE_MAX:
+            hits["head: trunk: port link (over mate allowance)"] = link
         hits = {k: v for k, v in hits.items() if v > 0.5}
         sv = (m ^ shell).volume()
         # the corridor sweeps the cargo skin where the hull narrows at the

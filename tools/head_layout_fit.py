@@ -237,6 +237,7 @@ ROUTES = {
 # Stub limits for the CN1 bus-start node (R4).  None = not yet cited from the
 # fitted transceiver datasheets; the check then reports PROVISIONAL, never PASS.
 STUB_LIMIT_MM = {"CAN-FD": None, "RS-485": None}
+CN1_HARNESS_STUB_MM = 0.0  # daisy chain through the pouch connectors (bus start)
 
 # ---------------------------------------------------------------------------
 # Head cell, sled, rail, stop, catch (plan 001 R4-R8, KTD5-KTD7).
@@ -520,6 +521,9 @@ def layout():
     return L, {}
 
 
+MISSING_MOUNTS: list = []
+
+
 def _bay_a_fwd(L):
     """Bay A forward (the published layout since 2026-11-01, plan
     2026-11-01-001): both pouches flat (37 beam x 58 long x 22 tall),
@@ -587,6 +591,8 @@ def _bay_a_fwd(L):
         path = os.path.join(REPO, "airframe", "stls", "fuselage", "head", stl)
         if os.path.exists(path):
             L[name] = dict(solid=trimesh.load(path), skin_seat=bonded, mates=mates, gap=1.0)
+        else:
+            MISSING_MOUNTS.append(stl)  # report() FAILS on these (never silently ungated)
     # Observer aft edge -> down in front of FC1 to the top of CN1 (CN1's
     # forward cables reach it there; the ring continues through CN1's zone).
     ae = observer_aft_end()
@@ -620,15 +626,21 @@ def stub_status(length_mm, limit_mm):
 
 
 def route_report(solids):
+    """Print the route table; return (n_fail, n_provisional) for RESULT."""
     print("\nharness routes (centreline lengths, KTD3):")
     for name, (mm, what) in route_lengths(solids).items():
         print(f"  {name:46s} {mm:6.0f} mm ({mm / 25.4:4.1f} in)  {what}")
     # CN1 is the bus START (120 ohm on board); the bus daisy-chains through the
-    # pouch connectors, so the harness adds no stub at CN1.  The on-board stub
-    # (connector -> transceiver) is a board-layout quantity, reported 0 here.
+    # pouch connectors, so the HARNESS adds no stub at CN1.  The on-board stub
+    # (connector -> transceiver) is a board-layout quantity not measured here.
+    n_fail = n_prov = 0
     for bus, lim in STUB_LIMIT_MM.items():
-        print(f"  CN1 {bus} harness stub 0 mm (daisy chain, bus start): "
-              f"{stub_status(0.0, lim)}")
+        st = stub_status(CN1_HARNESS_STUB_MM, lim)
+        n_fail += st == "FAIL"
+        n_prov += st.startswith("PROVISIONAL")
+        print(f"  CN1 {bus} harness stub {CN1_HARNESS_STUB_MM:.0f} mm (daisy chain, bus start; "
+              f"on-board stub not measured): {st}")
+    return n_fail, n_prov
 
 
 def _part(name):
@@ -793,12 +805,18 @@ def report(write_scad=False):
     if BAYA_MODE == "fwd":
         print("\nbattery: twin pack tray -- gated by tools/twin_head_pack_fit.py "
               "(merged hull); no single-cell band here")
-        route_report(solids)
+        route_fail, route_prov = route_report(solids)
+        for stl in MISSING_MOUNTS:
+            print(f"  FAIL mount STL missing (run tools/gen_bay_a_fwd_mounts.py): {stl}")
+        band_bad = route_fail + len(MISSING_MOUNTS)
     else:
+        route_prov = 0
         band_bad = _single_cell_band(head_m)
     ok = not (fails or over or los_bad or band_bad)
-    print(f"\nRESULT: {'PASS' if ok else 'FAIL'} ({fails} shell, {over} pair, "
-          f"{los_bad} line-of-sight, {band_bad} band)")
+    tag = "PASS (PROVISIONAL: stub limits not cited)" if ok and route_prov else (
+        "PASS" if ok else "FAIL")
+    print(f"\nRESULT: {tag} ({fails} shell, {over} pair, "
+          f"{los_bad} line-of-sight, {band_bad} band/route/mount)")
     if write_scad:
         if ok:
             write_params()

@@ -48,6 +48,11 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
+sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
+import cargo_layout_fit as _clf  # noqa: E402  pouch size (single source)
+import gen_bay_a_fwd_mounts as _g  # noqa: E402  drawer geometry (single source)
+import head_layout_fit as _h  # noqa: E402  stations (single source)
+
 TIERS = ("none", "pad", "mount", "vents", "fan")
 
 
@@ -73,8 +78,9 @@ class Inputs:
     pouch_t_m: float = 0.0005
     k_floor: float = 0.4
     floor_t_m: float = 0.003
-    wall_h_m: float = 0.0225  # drawer wall, floor top to shelf (tools/gen_bay_a_fwd_mounts.py)
-    wall_a_m2: float = 2 * 0.0024 * 0.058  # two 2.4 mm walls under the shelf
+    # drawer wall under the FC1 shelf: geometry from tools/gen_bay_a_fwd_mounts.py
+    wall_h_m: float = (_g.SHELF_Z0 - _h.CN1F_Z0) / 1000.0
+    wall_a_m2: float = 2 * (_g.WALL_X1 - _g.WALL_X0) / 1000.0 * _clf.NODE_L / 1000.0
     # film coefficients, W/m^2-K -- ASSUMED
     h_still: float = 4.0  # enclosed natural convection
     h_vent: float = 10.0  # through-flow from the bow bay
@@ -155,8 +161,13 @@ def max_sustained_cn1_w(inp, tier):
 
 
 def provisional(inp):
-    """True while any input is uncited (KTD4)."""
-    return len(inp.cited) < len(Inputs.__dataclass_fields__) - 1
+    """True while any input field is uncited (KTD4).  `cited` must name real
+    input fields; an unknown key is an error, not a citation."""
+    fields = set(Inputs.__dataclass_fields__) - {"cited"}
+    unknown = set(inp.cited) - fields
+    if unknown:
+        raise ValueError(f"cited names unknown input field(s): {sorted(unknown)}")
+    return bool(fields - set(inp.cited))
 
 
 def main():

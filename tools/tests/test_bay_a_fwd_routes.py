@@ -94,6 +94,37 @@ def test_side_mode_refuses_write():
         h.BAYA_MODE = "fwd"
 
 
+def test_published_params_agree():
+    """U1/KTD6: published tray at Y 163; twin tool reads the head's port channel."""
+    import re
+    import twin_head_pack_fit as t
+    root = Path(__file__).resolve().parents[2] / "airframe" / "openscad" / "fuselage"
+    tp = (root / "twin_pack_tray_params.scad").read_text()
+    assert re.search(r"^TRAY_Y0 = 163\.0000;", tp, re.M), "published tray is not at Y 163"
+    hp = (root / "head_layout_params.scad").read_text()
+    for k in ("PORT_CH_X0", "PORT_CH_X1", "PORT_CH_Z0", "PORT_CH_Z1"):
+        assert re.search(rf"^{k} = {getattr(h, k):.4f};", hp, re.M), k
+    assert (t.TRUNK_X0, t.TRUNK_X1, t.TRUNK_Z0, t.TRUNK_Z1) == (
+        h.PORT_CH_X0, h.PORT_CH_X1, h.PORT_CH_Z0, h.PORT_CH_Z1)
+
+
+def test_missing_mount_stl_is_recorded_for_fail():
+    """A missing mount STL must FAIL the gate, never drop out silently."""
+    repo, h.REPO = h.REPO, "/nonexistent-repo"
+    h.MISSING_MOUNTS.clear()
+    try:
+        h._bay_a_fwd({})
+        assert len(h.MISSING_MOUNTS) == 4, h.MISSING_MOUNTS
+    finally:
+        h.REPO = repo
+        h.MISSING_MOUNTS.clear()
+
+
+def test_uncited_stub_limits_make_result_provisional():
+    n_fail, n_prov = h.route_report(_solids())
+    assert n_fail == 0 and n_prov == sum(v is None for v in h.STUB_LIMIT_MM.values())
+
+
 if __name__ == "__main__":
     fails = 0
     for name, fn in sorted(globals().items()):
