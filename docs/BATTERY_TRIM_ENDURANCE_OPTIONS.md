@@ -126,7 +126,7 @@ band.
 | Loading | Each pack is lifted in on its own sled through the open clamshell doors, with the payload out. It slides forward on the centreline corridor (\|X\| ≤ 17.75, Y 292–400, Zc 189.5), climbs a 1.5 mm ramp, then steps sideways into its lane. |
 | Retention | A hinged aft gate. It has a pocket for each sled tail tab, which holds each pack fore/aft and laterally. |
 | Nose avionics trunk | Rerouted to a port side channel at X 38.5–48.5, Z 193–201. |
-| Optional third pack | The Tattu 6S 1600 fits in the corridor. A third 2200 does not: there is 108 mm of room and it needs 120 mm. |
+| Optional third pack | The bare Tattu 6S 1600 (70 × 42 × 41 mm) fits only at Y ≈ 302–372, Zc 190, with 1 mm to the cargo roof above and the payload envelope below. There is no room for a sled or strap: with 1.5 mm of retention allowance it hits the roof or the payload. It does not block the payload, the hoist lines, the winch or the Observer tray, but it sits in the loading corridor, so it comes out first and goes in last. Observer line of sight not yet checked. A third 2200 does not fit (108 mm of room, needs 120). |
 
 All checks pass with a 1 mm gap against both shells and every cargo and head envelope.
 
