@@ -334,6 +334,19 @@ rebates (port and starboard are distinct mirror prints). **DRAFT — not bench-v
 - [ ] All standoffs in place; screws start freely
 - [ ] Foam not in nacelle mounting bay, pivot housing, or access panel bays
 
+> **NOTE (skid-tip height, SLS ring and skid frame, Rev S+):** The skid tips must sit
+> **0.256 in (6.5 mm) below the lowest hull point** (the ventral cross member) when the
+> aircraft rests nose-up on the aft feet at the 25.6° tip-back attitude. The printed parts
+> can be off by about ±0.025 in (±0.63 mm), which eats most of the 0.039 in (1 mm) hull
+> margin (worst case 0.018 in left). At assembly, before torquing the ring-to-hull bolts:
+>
+> 1. Measure the skid-tip-to-cross-member height on both sides, using a height gauge or
+>    feeler stack on a flat plate.
+> 2. Shim the ring-to-hull joint so that both tips read 0.256 in ±0.008 in
+>    (6.5 mm ±0.2 mm) and match each other within 0.008 in.
+> 3. Record the shim stack in the build log.
+> 4. Bench-check each skid's tip stiffness: at least **1,207 lbf/in** (`docs/SKID_FAILURE_MODE_STUDY.md` §10.1).
+
 ---
 
 ## Phase 2 — Nacelle Assembly
@@ -613,6 +626,15 @@ hover rather than losing one nacelle entirely.
 4. Verify each nacelle nozzle reaches 105 % at 90° tilt on its servo schedule.
 5. **Only after 3 successful tethered hover passes:** proceed to free hover at 1 m AGL.
 6. Free hover: altitude hold ±0.3 m for 30 s; yaw response; then nacelle transition forward flight circuit.
+
+> **CAUTION:** Rolled (one-skid-first) hard landing. Each aft skid is sized to share a
+> nose-high 4 ft drop *with the other skid and the aft gear*. If the aircraft touches down
+> rolled, so that one skid takes the strike alone, that skid can be driven past its ultimate
+> strength (about 355 lbf, 1.27 × ultimate, conservative pitch-only estimate) and **fracture
+> at the ring root**. The tail cross member and hull can then touch the ground. Inspect both
+> skids, the ring root and the ventral strut pads after any rolled or hard landing, and
+> replace a cracked skid frame before the next flight. Avoid rolled touchdowns until the
+> I_roll re-analysis (WBS §0.12) sets a roll-attitude limit.
 
 ---
 

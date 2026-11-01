@@ -9,7 +9,7 @@
 > [`WBS.md`](WBS.md), the full historical record for project-progression
 > tracking. Close an item in `WBS.md` first, then delete its line here.
 
-*"I was aiming for his head. — Observer"*
+
 
 ---
 

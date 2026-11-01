@@ -831,6 +831,57 @@ MIL-STD-461G qualification testing is deferred pending airframe integration.
 
 ---
 
+### REF-NASA-002: NASA SP-8007 — Buckling of Thin-Walled Circular Cylinders
+
+| Field | Value |
+| --- | --- |
+| **Authors** | V. I. Weingarten, P. Seide, J. P. Peterson |
+| **Issuing body** | NASA (Space Vehicle Design Criteria — Structures monograph) |
+| **Date** | August 1968 (revised edition; NTRS record date) |
+| **Official URL** | <https://ntrs.nasa.gov/citations/19690013955> (record located 2026-10-31). Revision: NASA/SP-8007-2020/REV 2, <https://ntrs.nasa.gov/citations/20205011530> |
+| **Section applied** | Bending of unstiffened cylinders: classical stress 0.605·E·t/R with the knockdown γ = 1 − 0.731(1 − e^−φ), φ = (1/16)√(R/t). **Requires verification**: the formula was applied from the established 1968 practice, and the PDF section number has not been confirmed (see Open Standards Verification Items). |
+
+**Used in:** `tools/aft_skin_thinning_study.py`, `docs/AFT_SKIN_THINNING_STUDY.md` §3
+
+---
+
+### REF-NASA-003: NASA CR-124075 — Isogrid Design Handbook
+
+| Field | Value |
+| --- | --- |
+| **Authors** | R. R. Meyer, O. P. Harwood, J. I. Orlando (McDonnell Douglas Astronautics Co., NASA Contract NAS 8-28619, MSFC) |
+| **Date** | February 1973 |
+| **Official URL** | <https://ntrs.nasa.gov/citations/19730011184> (record located 2026-10-31) |
+| **Section applied** | Isogrid (equilateral-triangle) rib geometry, smeared as 3·b·d/h of added thickness per unit skin area. That is a first-order smear, not the handbook's §4.2 closed-form cylinder method. **Requires verification**: the smear and section number have not been checked against the PDF. |
+
+**Used in:** `tools/aft_skin_thinning_study.py`, `docs/AFT_SKIN_THINNING_STUDY.md` §3
+
+---
+
+### REF-STR-001: Roark's Formulas for Stress and Strain — circular plate, central patch load
+
+| Field | Value |
+| --- | --- |
+| **Work** | W. C. Young, R. G. Budynas, A. M. Sadegh, *Roark's Formulas for Stress and Strain*, McGraw-Hill (edition not confirmed) |
+| **Section applied** | Simply supported solid circular plate, uniform load over a central circle of radius r0: σ_max = 3W/(2πt²)·[(1+ν)·ln(a/r0) + 1]. Also the uniform-cantilever first bending frequency. **Requires verification**: edition, table and case number not confirmed. No copy was available in this session. |
+| **URL** | None validated. Commercial handbook. |
+
+**Used in:** `tools/aft_skin_thinning_study.py`, `docs/AFT_SKIN_THINNING_STUDY.md` §3
+
+---
+
+### REF-STR-002: Brazier, L. G. — "On the Flexure of Thin Cylindrical Shells and Other 'Thin' Sections"
+
+| Field | Value |
+| --- | --- |
+| **Publication** | *Proceedings of the Royal Society of London, Series A*, vol. 116 (1927), pp. 104–114 |
+| **Official URL** | DOI 10.1098/rspa.1927.0125 (royalsocietypublishing.org). **Requires verification**: DOI and pages were not fetched in this session. |
+| **Section applied** | Limit (ovalisation) moment of a thin tube in bending, M_B = (2√2/9)·π·E·r·t²/√(1−ν²). Used as a screening mode only. |
+
+**Used in:** `tools/skid_failure_mode_study.py`, `docs/SKID_FAILURE_MODE_STUDY.md` §2
+
+---
+
 ## Part V — International Standards (ISO, IEC)
 
 ### REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling
@@ -1912,6 +1963,49 @@ which prints that caveat on every run.
 **Resolved 2026-10-07 (option b — citation removed). Original action:** Correct `airframe/README.md` §Printing Specifications to either (a) cite the correct AMS2400-series electroplating spec once identified and verified, or (b) remove the citation if no specific AMS spec was actually being invoked. Do not leave AMS2301 attached to an electroplating claim it does not support. (`TODO.md` §0.x)
 
 **Used in:** no active document (the `airframe/README.md` citation was removed 2026-10-07)
+
+---
+
+### REF-MAT-011: 3D Systems — DuraForm PA CF datasheet (SLS), document 3DS-30108A
+
+| Field | Value |
+| --- | --- |
+| **Issuing body** | 3D Systems, Inc. |
+| **Date** | 2023-10-31 |
+| **Source** | Owner-supplied PDF (`3d-systems-duraform-pa-cf-datasheet-us-en-2023-10-31-a_web65.pdf`), read 2026-10-31. Official URL not yet validated. |
+| **Values applied** | Density 1.11 g/cm³ (ASTM D792); tensile ultimate 84 MPa, tensile modulus 8,500 MPa, elongation 3.8 % (ASTM D638 Type I); flexural modulus 7,000 MPa (ASTM D790); HDT 177 °C at 1.82 MPa (ASTM D648). No orientation (Z) data and no electrical rows. |
+
+**Used in:** `tools/aft_section_mass_audit.py`, `tools/aft_skin_thinning_study.py`,
+`docs/MASS_AUDIT_MIDDLE_REAR_SECTIONS.md`, `docs/AFT_SKIN_THINNING_STUDY.md`,
+`docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` (as 3DS-30108A)
+
+---
+
+### REF-MAT-012: 3D Systems — DuraForm PA11 Black datasheet (SLS)
+
+| Field | Value |
+| --- | --- |
+| **Issuing body** | 3D Systems, Inc. |
+| **Date** | 2025-03-04 |
+| **Source** | Owner-supplied PDF (`3d-systems-duraform-pa11-black-datasheet-us-a4-2025-03-04-web.pdf`), read 2026-10-31. Official URL not yet validated. |
+| **Values applied** | Density 1.03 g/cm³ (ASTM D792); tensile 51 MPa ultimate and yield, modulus 1,900 MPa, elongation at break 52.6 % (ASTM D638 Type IV); flexural modulus 1,500 MPa (ASTM D790); notched Izod 42 J/m (ASTM D256). The datasheet states near-isotropic XYZ performance. |
+
+**Used in:** `tools/tail_strike_requirement.py`, `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md`,
+`docs/AFT_SKIN_THINNING_STUDY.md` §5
+
+---
+
+### REF-MAT-013: 3D Systems — DuraForm PA12 Black datasheet (SLS)
+
+| Field | Value |
+| --- | --- |
+| **Issuing body** | 3D Systems, Inc. |
+| **Date** | 2025-04-03 |
+| **Source** | Owner-supplied PDF (`3d-systems-duraform-pa12-black-datasheet-us-en-2025-04-03-web.pdf`), read 2026-10-31. Official URL not yet validated. |
+| **Values applied** | Density 1.00 g/cm³; tensile 45 MPa, modulus 1,800 MPa, elongation 13.7 % (ASTM D638 Type IV, headline column); flexural modulus 1,500 MPa; notched Izod 35 J/m. **Note:** the headline values match the sheet's ZY column. The XY column reads 1,600 MPa and 6.2 % (`docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` §2.1). |
+
+**Used in:** `tools/tail_strike_requirement.py`, `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md`,
+`docs/AFT_SKIN_THINNING_STUDY.md` §5
 
 ---
 
@@ -3104,6 +3198,28 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Cited in** | `docs/CARGO_WINCH_SPECIFICATION.md` §5.5; `current-specification/bom_revT.csv` / `.json` row `LC-ADC`; `airframe/placeholders/generate_placeholders.py` (`gen_lc_adc`); `avionics/firmware/fc/tools/governor_cal.py`; WBS CARGO-LC-01 (`airframe/fuselage-mid/WBS.md`) |
 | **Openness / sourcing** | Public, no NDA. TI is US-domiciled; passes the component-sourcing rule in `AGENTS.md` §5. Replaces the HX711 (see "Removed / Superseded Citations"). |
 
+### REF-SENSOR-064: Broadcom AFBR-S50LX85D — Time-of-Flight sensor module, 50 m (datasheet)
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Broadcom Inc. (US-domiciled; passes AGENTS.md §5) |
+| **Document** | *AFBR-S50LX85D* data sheet (official) |
+| **Official URL** | <https://docs.broadcom.com/doc/AFBR-S50LX85D-DS> |
+| **Retrieved** | 2026-10-27 by a Claude (Opus 5.5) research subagent: PDF downloaded and read via `pdftotext`; the figures below are from that read and were not re-read in the main session |
+| **Scope applied** | Range, optics, package dimensions, interface, supply, laser class |
+
+| Parameter | Value |
+|---|---|
+| Range | up to 50 m indoor on a target of at least 30 % reflectance; in 100 klx sunlight the range is "reduced to less than 50m" (an upper bound, not a guarantee) |
+| Optics | 32 pixels at 1.55° × 1.55°; receiver 12.4° × 5.4°; transmit beam 2° × 2° |
+| Package | 12.4 × 7.6 × 7.9 mm without pins; optics on the top face; 4.3 mm through-hole pins |
+| Interface / supply | SPI up to 25 MHz, 3.3 V CMOS; single 5 V supply |
+| Laser | "Class 1 eye safe ready" |
+
+**Open:** outdoor 15 m range on a 30 % target needs a bench test. Mass is not stated (weigh a sample). The driver software is distributed as licensed binaries, so check the licence against the openness rule. A right-angle carrier is needed for leading-edge mounting.
+
+**Used in:** `tools/head_layout_fit.py` and `airframe/openscad/fuselage/bow_sensor_pod.scad` (ToF pod, Rev H2), where it is the recommended part pending procurement.
+
 ### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
 
 | Field | Value |
@@ -3690,6 +3806,18 @@ workspace — see each repo's own `REFERENCES.md` for its local entry. Renumbere
 2026-10-05 (merge of `main` into `avionics-docs-audit`): REF-MIL-001 is MIL-STD-1553C in this
 catalogue, and the CNAF entry had been filed under the same ID — see Removed / Superseded Citations.
 
+### REF-MIL-004: MIL-F-83300 — Flying Qualities of Piloted V/STOL Aircraft
+
+| Field | Value |
+|---|---|
+| **Publisher** | U.S. Department of Defense (USAF) |
+| **Designation** | MIL-F-83300, 31 December 1970; Notice 1 (09-1991), Notice 2 (07-2019) |
+| **Official URL** | REQUIRES VERIFICATION (DLA ASSIST); public copy read from <https://everyspec.com/MIL-SPECS/MIL-SPECS-MIL-F/MIL-F-83300_17560/> on 2026-10-27 (base document PDF) |
+| **Sections applied** | §3.4.4 *Control margin*: "the margin of control power remaining at any stage in the transition shall not be less than 50 percent of the nominal pitch, roll and yaw control moments available". §3.2.3.3 *Maneuvering control margins*: at least 50 percent of the nominal control moment remains commandable when stabilization equipment is used (hover / low speed) |
+| **Scope limitation** | Piloted military V/STOL. Serenity is an uncrewed sUAS with no certification basis (14 CFR Part 107 governs operations only), so this is adopted as a SELF-ADOPTED criterion. The FAA powered-lift special-class criteria (AW609, docket FAA-2022-1726) and 14 CFR §27.143 give only qualitative "satisfactory control" margins |
+
+**Used in:** `docs/plans/2026-10-27-001-feat-middle-rear-layout-plan.md` (KTD5, the aft-CG / control-reserve limit) and the background CG relocation study.
+
 ### REF-NCEES-009: NCEES — FE Reference Handbook (rigid-body dynamics)
 
 | Field | Value |
@@ -3730,6 +3858,8 @@ Add verified section numbers to the relevant files and update this table.
 
 | Citation | File | Issue | Action Required |
 |---|---|---|---|
+| [REF-STR-002] Brazier 1927 DOI/pages; ring-crush formula case in [REF-STR-001] | `tools/skid_failure_mode_study.py`, `docs/SKID_FAILURE_MODE_STUDY.md` | **Open (2026-10-31).** Applied from established practice; not fetched. | Fetch the paper and the Roark case; record them (WBS §0.12). |
+| [REF-NASA-002] §, [REF-NASA-003] §, [REF-STR-001] case; 3DS-30108A official URL | `tools/aft_skin_thinning_study.py`, `docs/AFT_SKIN_THINNING_STUDY.md` | **Open (2026-10-31).** Formulas applied from established practice; section and case numbers not confirmed against the documents. The datasheet is an owner-supplied PDF. | Read the NTRS PDFs and a Roark copy, record the sections, validate the 3D Systems URL (WBS §0.12). |
 | STM32WLE5JC RF matching / harmonic-filter values (ST AN5457) | `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`L-MLRS-PA`, `C-MLRS-TX0..2`, `L-MLRS-TX1/2`, `C-MLRS-RXP/RXN`, `L-MLRS-RX1/2`, `C-MLRS-RX1`, `C-MLRS-VRPA`) | **Open (2026-09-29).** Topology follows DS13105 Figures 2–4; the 915 MHz element values come from ST AN5457, which could not be fetched from the build environment. Values are tagged `VERIFY AN5457`. | Obtain AN5457, populate the values, add it as a REF-ID, bench-tune (VSWR/harmonics) before flight. |
 | TACCO signal-line ferrite bead MPN (600 Ω @ 100 MHz, 0402) | `gen_tacco_sch.py` (`FB-MLRS-1/2`) | **Open (2026-09-29).** The 1812 power bead 742792510 had been used on signal lines by mistake; the correct 0402 part is not yet selected (no catalog access). | Owner selects the MPN (Würth WE-CBF 0402 600 Ω family or equivalent), archive its datasheet, cite it. |
 | C&K KMR2 tact-switch variant, Epson TG2520SMN 32 MHz ordering code, pSemi PE4259 datasheet REF-ID | `gen_tacco_sch.py` (`SW-MLRS`, `X-MLRS`, `RFSW-MLRS`) | **Open (2026-09-29).** Footprints are from the KiCad library / `avionics/datasheets/`; exact orderable part numbers are not confirmed. | Owner confirms MPNs; add REF-IDs for TG2520SMN and PE4259 (datasheets already archived). |

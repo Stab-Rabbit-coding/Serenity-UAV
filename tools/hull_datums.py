@@ -66,11 +66,53 @@ GROUND_Z_3IN = 0.0    # static ground plane, 3.0 in flight gear
 # Cargo belly (lowest skin of the cargo section, R1 Z 0).
 BELLY_Z = 80.0
 
+# Wing root station -- THE ONE fore/aft number for the wing root and every
+# part that has to fit around it (spar socket, root flange, mortise, harness
+# ports, drive-shaft bushing, tilt worm stage, wing and nacelle bakes).
+#
+# 2026-10-31 (plan docs/plans/2026-10-31-001-feat-one-piece-aft-sls-hull-plan.md
+# R5, owner-settled): the single tilt pivot moves 0.5 in (12.7 mm) AFT, so the
+# root leading edge goes 298.70 -> 311.40.  Before this date the leading edge
+# was typed as a literal in merge_cargo_interior.py, the spar line here, the
+# shaft station in cargo_layout_fit.py and the wing bake in bake_hull_frame.py
+# -- four copies of one fact.  They now all read these names.
+#
+# The chordwise stations are fixed by the WING (wings_s1223_revo.scad
+# SPAR_BORE_STATION / SHAFT_BORE_STATION) and are NOT free here: the shaft is
+# 25.6 mm aft of the spar because that is the 14T/50T m0.8 tip-stage centre
+# distance at the nacelle ((14 + 50) x 0.8 / 2), so the two move together.
+WING_LE_ROOT_Y = 311.400      # R1 -7.0 + 12.7 (was 298.700 until 2026-10-31)
+WING_ROOT_CHORD = 129.0
+WING_SPAR_STATION = 28.00     # mm aft of the root LE (wing SPAR_BORE_STATION)
+WING_SHAFT_STATION = 53.60    # mm aft of the root LE (wing SHAFT_BORE_STATION)
+WING_AFT_SHIFT_2026_10_31 = 12.7  # record of the move; used only by audit tools
+# Shift still to be ADDED by CG studies that model "the 0.5 in pivot shift"
+# on top of the live ledger (cg_relocation_study family, aft_skin_thinning,
+# min_stretch_relocation, twin_head_pack_fit).  It was 12.7 while the shift
+# was planned; it is 0.0 now that the geometry, the pivot and the ledger all
+# carry it -- adding it again would count the shift twice.
+PENDING_PIVOT_SHIFT = 0.0
+
 # Wing spar line = nacelle tilt axis = hover thrust line (Rev T6): the spar and
 # its fuselage socket are level here (merge_cargo_interior.py WING_SPAR_Z,
-# wings_s1223_revo.scad dihedral).  R1 (Y 21.000, Z 66.851).
-SPAR_Y = 326.700
+# wings_s1223_revo.scad dihedral).  R1 (Y 21.000, Z 66.851) before the
+# 2026-10-31 shift; now Y 339.400.
+SPAR_Y = WING_LE_ROOT_Y + WING_SPAR_STATION      # 339.400 (was 326.700)
 SPAR_Z = 146.851
+# Clamshell cargo-bay door aperture, fore/aft (the belly opening the payload
+# box is hoisted through; doors, hinge knuckles, merge_cargo_interior.APERTURE,
+# the hoist line and the AUW ledger all read it).
+# 2026-10-31 (owner): moved 3.0 mm FORWARD, 307.70 -> 304.70, so that with the
+# wing root 12.7 mm aft the hoist line (box hung 1.0 mm off this edge) lands at
+# Y 356.5 -- 3.0 mm clear of the unswung tilt worm and 17.1 mm aft of the
+# thrust line (the closest the fixed-size bay allows; it was 21.8 mm).
+CARGO_BAY_Y_FWD = 304.700     # R1 2.0 - 3.0
+CARGO_BAY_LEN = 106.0
+CARGO_BAY_Y_AFT = CARGO_BAY_Y_FWD + CARGO_BAY_LEN  # 410.700 (was 413.700)
+
+# Tilt drive-shaft axis (wing chord station 53.6, hull Z from the camber
+# midline -- merge_cargo_interior.py WING_SHAFT_Z).
+SHAFT_Y = WING_LE_ROOT_Y + WING_SHAFT_STATION    # 365.000 (was 352.300)
 
 
 def mirror_x(x: float) -> float:
@@ -88,7 +130,9 @@ def bake_translation(component: str) -> tuple[float, float, float]:
 
 
 DATUMS = {"X_CL": X_CL, "Y_NOSE": Y_NOSE, "GROUND_Z_3IN": GROUND_Z_3IN, "BELLY_Z": BELLY_Z,
-          "SPAR_Y": SPAR_Y, "SPAR_Z": SPAR_Z}
+          "WING_LE_ROOT_Y": WING_LE_ROOT_Y, "SPAR_Y": SPAR_Y, "SPAR_Z": SPAR_Z,
+          "SHAFT_Y": SHAFT_Y, "CARGO_BAY_Y_FWD": CARGO_BAY_Y_FWD,
+          "CARGO_BAY_Y_AFT": CARGO_BAY_Y_AFT}
 
 
 def scad_text() -> str:

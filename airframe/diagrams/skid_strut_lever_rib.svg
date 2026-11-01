@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <!--
+    Serenity UAV — ventral strut pad + lever rib over the rear CF ring frame (side section).
+    Schematic, not to scale; stations are aircraft datum R2 (Y aft-positive), per
+    docs/SKID_FAILURE_MODE_STUDY.md section 10.3.  Drawn by Claude Opus 5.5 (Anthropic)
+    under the direction of Steve Griffing, 2026-10-31.  License: CC BY-SA 4.0.
+  -->
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/>
+    </marker>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#555" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="30" text-anchor="middle" font-size="19" font-weight="bold">Lever rib over the rear CF ring frame (per side, X ±1.6 in) — side section</text>
+  <text x="500" y="52" text-anchor="middle" fill="#555">Forward ← → Aft   (schematic, not to scale; 4 ft co-strike design loads)</text>
+
+  <!-- hull interior label -->
+  <text x="150" y="120" fill="#555">HULL INTERIOR (rear section)</text>
+
+  <!-- hull skin (2 mm keep zone) -->
+  <rect x="80" y="300" width="840" height="12" fill="#bdc3c7" stroke="#333"/>
+  <text x="84" y="296" fill="#333">hull skin</text>
+  <text x="500" y="74" text-anchor="middle" fill="#555">Hull skin in this zone stays 0.08 in (2 mm), plan 001 R4 keep zone</text>
+
+  <!-- CF ring frame at Y 595.7 -->
+  <rect x="452" y="140" width="10" height="172" fill="url(#hatch)" stroke="#111" stroke-width="1.5"/>
+  <text x="457" y="132" text-anchor="middle" font-weight="bold">CF ring frame</text>
+  <text x="457" y="114" text-anchor="middle" fill="#555">Y 595.7 · 2 mm CF plate</text>
+
+  <!-- lever rib: Y 572 -> 620, passes over (notched around) the frame -->
+  <path d="M240,300 L240,250 L447,250 L447,236 L467,236 L467,250 L720,250 L720,300 Z"
+        fill="#2e86c1" fill-opacity="0.35" stroke="#1b4f72" stroke-width="2"/>
+  <text x="585" y="272" text-anchor="middle" font-weight="bold" fill="#1b4f72" font-size="13">PA12-CF lever rib</text>
+  <text x="585" y="290" text-anchor="middle" fill="#1b4f72" font-size="13">0.24 × 1.0 in, bonded to skin</text>
+  <text x="457" y="230" text-anchor="middle" fill="#1b4f72">saddle bears on the frame</text>
+
+  <!-- forward tie bolts at Y ~572 -->
+  <g stroke="#111" stroke-width="2">
+    <line x1="255" y1="244" x2="255" y2="322"/><line x1="285" y1="244" x2="285" y2="322"/>
+  </g>
+  <rect x="247" y="238" width="16" height="7" fill="#111"/><rect x="277" y="238" width="16" height="7" fill="#111"/>
+  <rect x="245" y="318" width="20" height="5" fill="#7f8c8d"/><rect x="275" y="318" width="20" height="5" fill="#7f8c8d"/>
+  <text x="270" y="350" text-anchor="middle">forward tie: 2 × M3 + washers</text>
+  <text x="270" y="367" text-anchor="middle" fill="#555">Y ≈ 572</text>
+
+  <!-- pad at Y 620 -->
+  <rect x="700" y="312" width="40" height="10" fill="#f39c12" stroke="#7e5109"/>
+  <text x="790" y="296" fill="#7e5109" font-weight="bold">pad 0.04 in</text>
+  <!-- bolt from below into heat-set insert -->
+  <line x1="720" y1="262" x2="720" y2="380" stroke="#111" stroke-width="2"/>
+  <rect x="712" y="380" width="16" height="7" fill="#111"/>
+  <rect x="714" y="262" width="12" height="12" fill="#a6acaf" stroke="#111"/>
+  <text x="735" y="258" fill="#555">heat-set insert</text>
+
+  <!-- ventral cross member + skid rail (U-frame), below -->
+  <rect x="560" y="322" width="360" height="40" rx="4" fill="#d5dbdb" stroke="#333"/>
+  <text x="740" y="347" text-anchor="middle">ventral cross member / skid U-frame (PA12-CF)</text>
+  <rect x="560" y="440" width="380" height="30" rx="6" fill="#ecf0f1" stroke="#333" stroke-dasharray="6 4"/>
+  <text x="750" y="460" text-anchor="middle" fill="#555">skid rail (outboard; hides the pad in profile) → tip Y 686</text>
+  <text x="705" y="403" text-anchor="end" fill="#555">M3 from below</text>
+
+  <!-- ground contact arrow at skid tip -->
+  <line x1="930" y1="530" x2="930" y2="474" stroke="#c0392b" stroke-width="3" marker-end="url(#arr)"/>
+  <text x="920" y="548" text-anchor="end" fill="#c0392b">ground 266 lbf per skid (tip)</text>
+
+  <!-- load arrows -->
+  <line x1="720" y1="520" x2="720" y2="392" stroke="#c0392b" stroke-width="3" marker-end="url(#arr)"/>
+  <text x="712" y="515" text-anchor="end" fill="#c0392b" font-weight="bold">pad pushes UP 489 lbf</text>
+  <line x1="270" y1="180" x2="270" y2="236" stroke="#c0392b" stroke-width="3" marker-end="url(#arr)"/>
+  <text x="270" y="172" text-anchor="middle" fill="#c0392b" font-weight="bold">tie holds DOWN 502 lbf</text>
+  <line x1="457" y1="395" x2="457" y2="318" stroke="#c0392b" stroke-width="3" marker-end="url(#arr)"/>
+  <text x="467" y="375" fill="#c0392b" font-weight="bold">frame reacts 991 lbf</text>
+  <text x="467" y="392" fill="#c0392b">in plane (vertical)</text>
+
+  <!-- lever arms -->
+  <g stroke="#555" stroke-width="1">
+    <line x1="270" y1="205" x2="457" y2="205"/><line x1="457" y1="205" x2="720" y2="205"/>
+    <line x1="270" y1="198" x2="270" y2="212"/><line x1="457" y1="198" x2="457" y2="212"/><line x1="720" y1="198" x2="720" y2="212"/>
+  </g>
+  <text x="363" y="199" text-anchor="middle" fill="#555">0.93 in</text>
+  <text x="588" y="199" text-anchor="middle" fill="#555">0.96 in</text>
+
+  <!-- rejected concept inset -->
+  <rect x="40" y="420" width="380" height="104" fill="#fdedec" stroke="#c0392b"/>
+  <text x="52" y="442" font-weight="bold" fill="#922b21">✗ Rejected: rib cantilevered off the frame</text>
+  <text x="52" y="464" fill="#922b21">468 lbf·in bends the 2 mm CF plate OUT of plane</text>
+  <text x="52" y="484" fill="#922b21">(~1,150,000 psi) — a plate frame cannot carry it.</text>
+  <text x="52" y="508" fill="#922b21">Lever version: +0.14 oz per side; bolt FOS 3.2, pull-through 1.56</text>
+</svg>

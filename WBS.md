@@ -233,6 +233,25 @@ see docs/WBS.md §0.10.2.)*
 
 ---
 
+### 0.12 — Aft-Section SLS Sizing References (2026-10-31)
+
+→ detail: `docs/AFT_SKIN_THINNING_STUDY.md`, `REFERENCES.md` Open Standards Verification Items
+
+- [ ] Confirm the NASA SP-8007 [REF-NASA-002] bending-knockdown section against the NTRS PDF
+- [ ] Confirm the Isogrid Design Handbook [REF-NASA-003] smear against §4.2 of the NTRS PDF
+- [ ] Confirm the Roark [REF-STR-001] edition, table and case for the circular-plate patch load and the cantilever frequency
+- [ ] Validate an official 3D Systems URL for DuraForm PA CF 3DS-30108A [REF-MAT-011]
+- [ ] Obtain PA CF build-axis (Z) tensile and flexural data (coupon or vendor), replacing the 0.5 knockdown
+- [ ] Owner sets the handling design load (now 20 lbf on a 5 mm radius patch, ASSUMED)
+- [ ] Verify Brazier 1927 [REF-STR-002] DOI/pages and the Roark ring-crush case [REF-STR-001] used in `docs/SKID_FAILURE_MODE_STUDY.md`
+- [x] ~~Size the PA11 skid root as a plastic hinge~~ — superseded 2026-10-31 by the PA12-CF elastic U-frame (owner); see `docs/SKID_FAILURE_MODE_STUDY.md` §8–10
+- [ ] Skid bench acceptance: tip stiffness ≥ 1,207 lbf/in per skid (SKID study §10.1)
+- [ ] Add I_roll to `tools/auw_ledger.py`; re-run the single-skid strike (§10.2); owner: roll-attitude limit or accepted fracture
+- [ ] Lever rib over the CF frame (Y 572–620) + forward 2×M3 tie; CF plate bearing coupon (§10.3)
+- [ ] Skid-tip-to-hull measure-and-shim step at assembly, or owner accepts a 0.45 mm worst-case hull margin (§10.5)
+
+---
+
 ## 1.0 — Design Artifacts (Pre-Fabrication)
 
 ### 1.1 — 3D Models: SCAD → STL Exports (Rev T baseline; hull carries forward from Rev S,
@@ -620,6 +639,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Pilot routing + Gerbers (120/120 placed, DRC 0)
 - [ ] Flight Engineer PCB: last DRC items, route, Gerbers
 - [ ] Observer PCB resync to the ISOW1412/Section H schematic
+- [ ] ★ OBSERVER-EDGE-DRC — 9 hard copper-to-edge clearance violations (0.5 mm req.) in Observer.kicad_pcb after the 1a6fb8d5 outline reshape; move copper or change outline; KiCad Validation CI fails until fixed
 - [x] remove Wi-Fi, sik, and loRa antennas from XO. Use filtered cho…
 - [x] Re-evaluate space / restore Ethernet to XO
 - [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
