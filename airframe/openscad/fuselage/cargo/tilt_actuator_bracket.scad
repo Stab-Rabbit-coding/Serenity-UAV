@@ -133,7 +133,9 @@ EPS = 0.01;
 WALL_T        = 2.0;                     // CF-PETG structural wall
 WEB_X1        = GEAR_X_OUT + 5.0;        // foot / web plane, outboard face (R2 52.1)
 WEB_X0        = WEB_X1 - WALL_T;         // R2 50.1 -- 3.0 mm clear of the wheel face
-WEB_Y0        = 309.7;                   // aircraft datum R2 (R1 4.0)
+// 2026-10-31: the web follows the drive shaft (0.5 in aft wing-root shift,
+// SHAFT_Y 352.3 -> 365.0); it was typed 309.7 = SHAFT_Y - 42.6 at the old shaft.
+WEB_Y0        = SHAFT_Y - 42.6;          // R2 322.4 (was 309.7, R1 4.0)
 WEB_Y1        = 403.2;                   // Rev T5e: board rails; 2 mm fwd of node N2 (R2 Y 405.2; R1 97.5)
 WEB_Z0        = 150.0;                   // foot 2 pad bottom (151) sits on it; harness bores Z <= 149 (R1 70)
 WEB_Z1        = 213.0;                   // R2 (R1 133.0)
@@ -272,6 +274,13 @@ module face_plate() {
         }
         translate([WORM_X - FACE_R - 1, MOTOR_FACE_Y - 1, WORM_Z - FACE_R - 1])
             cube([2 * FACE_R + 2, FACE_T + 2, FACE_R - MOTOR_R + 1]);
+        // 2026-10-31 HOIST-LINE TRIM: the plate (Y 357.5..360.0) now sits 0.5 mm
+        // aft of the port hoist line (HOIST_Y 356.5, X HOIST_DX +/- LINE_R), so
+        // its inboard edge is cut back to the line + GAP_MM (X 34.4).  The M2.5
+        // holes on the +/-45 deg diagonal keep 3.5 mm of plate inboard of them.
+        translate([WORM_X - FACE_R - 1, MOTOR_FACE_Y - 1, WORM_Z - FACE_R - 1])
+            cube([(X_CL + HOIST_DX + LINE_R + GAP_MM) - (WORM_X - FACE_R - 1),
+                  FACE_T + 2, 2 * FACE_R + 2]);
         translate([WORM_X, MOTOR_FACE_Y - 1, WORM_Z]) cyl_y(HUB_BORE_D / 2, 0, FACE_T + 2);
         for (sgn = [-1, 1])
             translate([WORM_X + sgn * MOTOR_HOLE_S / 2 * cos(45), MOTOR_FACE_Y - 1,

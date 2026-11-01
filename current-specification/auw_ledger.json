@@ -1,48 +1,48 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 65030787.60115504,
-   "T_W": 1.3917805556617056,
+   "I_pitch_gmm2": 63963076.138266385,
+   "T_W": 1.5403573247300024,
    "cg": [
-    0.5880524920809412,
-    350.2657657098211,
-    156.81758292118516
+    0.5782154269979078,
+    354.4576867295071,
+    156.79601168675248
    ],
-   "k_pitch_mm": 102.94753541075751,
-   "mass_g": 6136.02479590596
+   "k_pitch_mm": 101.94624671660812,
+   "mass_g": 6154.416152538943
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 65407037.7286996,
-   "T_W": 1.3696818023253945,
+   "I_pitch_gmm2": 64366967.913116574,
+   "T_W": 1.5159713936759247,
    "cg": [
-    0.5787153685535033,
-    349.7645630831172,
-    157.32857676565146
+    0.5690614980290911,
+    353.89159438895746,
+    157.30584419513545
    ],
-   "k_pitch_mm": 102.42197539890937,
-   "mass_g": 6235.02479590596
+   "k_pitch_mm": 101.45486101836306,
+   "mass_g": 6253.416152538943
   },
   "hover_4000": {
-   "I_pitch_gmm2": 65188711.46061994,
-   "T_W": 1.4213848998824423,
+   "I_pitch_gmm2": 64178141.22016011,
+   "T_W": 1.573022034264815,
    "cg": [
-    0.6005608636949917,
-    349.3328952975649,
-    158.39415627173324
+    0.5904770228420702,
+    353.7934321072373,
+    158.3673163880777
    ],
-   "k_pitch_mm": 104.16291178345716,
-   "mass_g": 6008.22479590596
+   "k_pitch_mm": 103.19455952600876,
+   "mass_g": 6026.6161525389425
   }
  },
  "rows_hover": [
   {
    "cg": [
-    -3.3,
-    129.3,
-    211.9
+    -3.4,
+    130.4,
+    212.0
    ],
    "kind": "PRINT",
-   "mass_g": 177.58,
+   "mass_g": 175.97,
    "name": "head_shell24_2mm_repaired",
    "ref": "PRINT-HEAD-SHELL",
    "source": "MEASURED mesh (hull frame)"
@@ -122,7 +122,7 @@
   {
    "cg": [
     128.8,
-    341.0,
+    353.7,
     146.0
    ],
    "kind": "PRINT",
@@ -134,7 +134,7 @@
   {
    "cg": [
     -128.8,
-    341.0,
+    353.7,
     146.0
    ],
    "kind": "PRINT",
@@ -302,7 +302,7 @@
   {
    "cg": [
     187.8,
-    352.3,
+    365.0,
     149.1
    ],
    "kind": "PRINT",
@@ -314,7 +314,7 @@
   {
    "cg": [
     -187.8,
-    352.3,
+    365.0,
     149.1
    ],
    "kind": "PRINT",
@@ -470,19 +470,19 @@
   {
    "cg": [
     0.0,
-    360.7,
+    357.7,
     88.0
    ],
    "kind": "PRINT",
    "mass_g": 5.06,
    "name": "cargo_door_servo_bracket",
    "ref": "PRINT-CARGO-DOOR-SERVO-BKT",
-   "source": "MEASURED mass; station ESTIMATE: clamshell door aperture Y 2..108"
+   "source": "MEASURED mass; station ESTIMATE: clamshell door aperture (hull_datums.CARGO_BAY_*)"
   },
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     200.0
    ],
    "kind": "PRINT",
@@ -554,14 +554,14 @@
   {
    "cg": [
     0.0,
-    360.7,
+    357.7,
     88.0
    ],
    "kind": "PRINT",
    "mass_g": 1.84,
    "name": "door_horn",
    "ref": "PRINT-DOOR-HORN",
-   "source": "MEASURED mass; station clamshell door aperture Y 2..108"
+   "source": "MEASURED mass; station clamshell door aperture (hull_datums.CARGO_BAY_*)"
   },
   {
    "cg": [
@@ -578,11 +578,11 @@
   {
    "cg": [
     230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 926.38,
+   "mass_g": 936.38,
    "name": "Nacelle port rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
@@ -590,11 +590,11 @@
   {
    "cg": [
     -230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 926.38,
+   "mass_g": 936.38,
    "name": "Nacelle stbd rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
@@ -602,14 +602,14 @@
   {
    "cg": [
     0.0,
-    360.7,
+    357.7,
     88.0
    ],
    "kind": "BOM",
    "mass_g": 27.0,
    "name": "SERVO-CARGO",
    "ref": "SERVO-CARGO",
-   "source": "BOM Unit_Mass_g; clamshell door aperture Y 2..108"
+   "source": "BOM Unit_Mass_g; clamshell door aperture (hull_datums.CARGO_BAY_*)"
   },
   {
    "cg": [
@@ -626,7 +626,7 @@
   {
    "cg": [
     230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -638,7 +638,7 @@
   {
    "cg": [
     -230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -650,7 +650,7 @@
   {
    "cg": [
     230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -662,7 +662,7 @@
   {
    "cg": [
     -230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -686,7 +686,7 @@
   {
    "cg": [
     0.0,
-    276.7,
+    273.1,
     157.0
    ],
    "kind": "BOM",
@@ -734,7 +734,7 @@
   {
    "cg": [
     0.0,
-    276.7,
+    273.1,
     157.0
    ],
    "kind": "BOM",
@@ -782,7 +782,7 @@
   {
    "cg": [
     0.0,
-    276.7,
+    273.1,
     157.0
    ],
    "kind": "BOM",
@@ -830,7 +830,7 @@
   {
    "cg": [
     0.0,
-    276.7,
+    273.1,
     157.0
    ],
    "kind": "BOM",
@@ -890,7 +890,7 @@
   {
    "cg": [
     0.0,
-    276.7,
+    273.1,
     157.0
    ],
    "kind": "BOM",
@@ -1010,7 +1010,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1022,7 +1022,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1034,7 +1034,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1046,7 +1046,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1058,7 +1058,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1070,7 +1070,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1082,7 +1082,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1094,7 +1094,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1106,7 +1106,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1118,7 +1118,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1130,7 +1130,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1142,7 +1142,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1154,7 +1154,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1166,7 +1166,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1178,7 +1178,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1190,7 +1190,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1202,7 +1202,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1214,7 +1214,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1226,7 +1226,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1238,7 +1238,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1250,7 +1250,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "BOM",
@@ -1274,7 +1274,7 @@
   {
    "cg": [
     230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1286,7 +1286,7 @@
   {
    "cg": [
     -230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1298,26 +1298,26 @@
   {
    "cg": [
     0.0,
-    360.7,
+    357.7,
     88.0
    ],
    "kind": "BOM",
    "mass_g": 5.0,
    "name": "FOAM-GASKET-CARGO",
    "ref": "FOAM-GASKET-CARGO",
-   "source": "BOM Unit_Mass_g; clamshell door aperture Y 2..108"
+   "source": "BOM Unit_Mass_g; clamshell door aperture (hull_datums.CARGO_BAY_*)"
   },
   {
    "cg": [
     0.0,
-    360.7,
+    357.7,
     88.0
    ],
    "kind": "BOM",
    "mass_g": 1.2,
    "name": "PIN-3X10",
    "ref": "PIN-3X10",
-   "source": "BOM Unit_Mass_g; clamshell door aperture Y 2..108"
+   "source": "BOM Unit_Mass_g; clamshell door aperture (hull_datums.CARGO_BAY_*)"
   },
   {
    "cg": [
@@ -1382,7 +1382,7 @@
   {
    "cg": [
     230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1394,7 +1394,7 @@
   {
    "cg": [
     -230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1406,7 +1406,7 @@
   {
    "cg": [
     0.0,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1562,7 +1562,7 @@
   {
    "cg": [
     0.0,
-    276.7,
+    273.1,
     157.0
    ],
    "kind": "BOM",
@@ -1610,7 +1610,7 @@
   {
    "cg": [
     230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1622,7 +1622,7 @@
   {
    "cg": [
     -230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1634,7 +1634,7 @@
   {
    "cg": [
     230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1646,7 +1646,7 @@
   {
    "cg": [
     -230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1657,75 +1657,75 @@
   },
   {
    "cg": [
-    45.8,
-    353.3,
-    181.0
+    44.6,
+    334.0,
+    182.1
    ],
    "kind": "BOM",
    "mass_g": 44.0,
    "name": "GM-TILT-20D (port)",
    "ref": "GM-TILT-20D",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit motor solid centre"
   },
   {
    "cg": [
-    -45.2,
-    353.3,
-    181.0
+    -44.6,
+    334.0,
+    182.1
    ],
    "kind": "BOM",
    "mass_g": 44.0,
    "name": "GM-TILT-20D (stbd)",
    "ref": "GM-TILT-20D",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit motor solid centre"
   },
   {
    "cg": [
-    45.8,
-    353.3,
-    181.0
+    55.8,
+    382.2,
+    181.2
    ],
    "kind": "BOM",
    "mass_g": 12.0,
    "name": "OSESC-TILT-TC (port)",
    "ref": "OSESC-TILT-TC",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit tilt controller board centre"
   },
   {
    "cg": [
-    -45.2,
-    353.3,
-    181.0
+    -55.8,
+    382.2,
+    181.2
    ],
    "kind": "BOM",
    "mass_g": 12.0,
    "name": "OSESC-TILT-TC (stbd)",
    "ref": "OSESC-TILT-TC",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit tilt controller board centre"
   },
   {
    "cg": [
-    45.8,
-    353.3,
-    181.0
+    43.1,
+    392.5,
+    182.1
    ],
    "kind": "BOM",
    "mass_g": 15.0,
    "name": "SOL-TILT-BRAKE (port)",
    "ref": "SOL-TILT-BRAKE",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit brake solenoid solid centre"
   },
   {
    "cg": [
-    -45.2,
-    353.3,
-    181.0
+    -43.1,
+    392.5,
+    182.1
    ],
    "kind": "BOM",
    "mass_g": 15.0,
    "name": "SOL-TILT-BRAKE (stbd)",
    "ref": "SOL-TILT-BRAKE",
-   "source": "BOM Unit_Mass_g; tilt bracket centroid (placed STL)"
+   "source": "BOM Unit_Mass_g; cargo_layout_fit brake solenoid solid centre"
   },
   {
    "cg": [
@@ -1802,7 +1802,7 @@
   {
    "cg": [
     0.0,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1814,7 +1814,7 @@
   {
    "cg": [
     0.0,
-    352.3,
+    365.0,
     149.1
    ],
    "kind": "BOM",
@@ -1826,7 +1826,7 @@
   {
    "cg": [
     0.0,
-    352.3,
+    365.0,
     149.1
    ],
    "kind": "BOM",
@@ -1838,7 +1838,7 @@
   {
    "cg": [
     0.0,
-    352.3,
+    365.0,
     149.1
    ],
    "kind": "BOM",
@@ -1850,7 +1850,7 @@
   {
    "cg": [
     230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1862,7 +1862,7 @@
   {
    "cg": [
     -230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1874,7 +1874,7 @@
   {
    "cg": [
     230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1886,7 +1886,7 @@
   {
    "cg": [
     -230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1898,7 +1898,7 @@
   {
    "cg": [
     230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1910,7 +1910,7 @@
   {
    "cg": [
     -230.4,
-    326.7,
+    339.4,
     146.9
    ],
    "kind": "BOM",
@@ -1982,7 +1982,7 @@
   {
    "cg": [
     0.0,
-    276.7,
+    273.1,
     157.0
    ],
    "kind": "GAP",
@@ -2030,7 +2030,7 @@
   {
    "cg": [
     0.0,
-    424.2,
+    419.5,
     129.6
    ],
    "kind": "GAP",
@@ -2042,7 +2042,7 @@
   {
    "cg": [
     0.0,
-    361.2,
+    356.5,
     223.4
    ],
    "kind": "GAP",
@@ -2079,9 +2079,9 @@
  "subtotals_hover_g": {
   "BOM": 2391.704,
   "GAP": 218.8114,
-  "NACELLE": 1852.7585168971268,
-  "PRINT": 1544.9508790088332
+  "NACELLE": 1872.7585548798727,
+  "PRINT": 1543.3421976590705
  },
- "thrust_gf": 8540.0,
+ "thrust_gf": 9480.0,
  "unclassified": []
 }

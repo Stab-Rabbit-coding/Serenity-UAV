@@ -4,7 +4,9 @@
 TACCO (the comms-node cape) flies at four stations, each with its own envelope
 written in a different file:
 
-* nose (CN1)        — Faraday tray, ``head_shell24.scad`` / ``build_head_shell.py``
+* nose (CN1)        — Bay A pouch in ``head_layout_fit.py``, sized by importing
+                       ``cargo_layout_fit`` NODE_L / NODE_H (2026-10-27; the Faraday
+                       tray in ``head_shell24.scad`` was retired by Rev H2)
 * cargo chin (CN2/3) — pouches on the chin shelf, ``cargo_layout_fit.py`` (NODE_L)
                        -> ``cargo_layout_t5_params.scad`` -> ``chin_node_shelf.scad``
 * middle ring (CN4) — Simon saddle slot, ``middle_layout_fit.py``
@@ -44,16 +46,13 @@ REPO = Path(__file__).resolve().parents[1]
 # Allowances, mm (CARGO_SECTION_LAYOUT.md §3a; head_shell24.scad Faraday comments).
 POUCH_L = 3.0      # foil pouch on the board's length (55 -> 58, 60 -> 63)
 POUCH_H = 2.0      # foil pouch on the board's width (35 -> 37)
-TRAY_X = 5.0       # nose tray: 2 x 1.5 mm wall + 2 mm clearance (60 -> 65)
-PANEL_CLR = 2.0    # nose access panel: tray + 1 mm each side
 
 GEN = "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py"
 CARGO_FIT = "tools/cargo_layout_fit.py"
 CARGO_PARAMS = "airframe/openscad/fuselage/cargo/cargo_layout_t5_params.scad"
 MIDDLE_FIT = "tools/middle_layout_fit.py"
 MIDDLE_PARAMS = "airframe/openscad/fuselage/middle_layout_t6_params.scad"
-HEAD_SCAD = "airframe/openscad/fuselage/head_shell24.scad"
-HEAD_PY = "tools/build_head_shell.py"
+HEAD_FIT = "tools/head_layout_fit.py"
 
 # printable STL -> the sources it is built from
 STLS = {
@@ -63,7 +62,6 @@ STLS = {
         "tools/gen_cargo_void_formers.py", CARGO_FIT],
     "airframe/stls/fuselage/simon_node_saddle.stl": [
         "airframe/openscad/fuselage/simon_node_saddle.scad", MIDDLE_PARAMS],
-    "airframe/stls/fuselage/head_shell24.stl": [HEAD_SCAD, HEAD_PY],
 }
 
 
@@ -96,7 +94,6 @@ def main() -> int:
     bw = num(GEN, r"^BW, BH = ([\d.]+), [\d.]+")
     bh = num(GEN, r"^BW, BH = [\d.]+, ([\d.]+)")
     flt = r"\s*=\s*(-?[\d.]+)"
-    panel = bw + TRAY_X + PANEL_CLR
     simon_w = num(MIDDLE_PARAMS, r"SIMON_X1" + flt) - num(MIDDLE_PARAMS, r"SIMON_X0" + flt)
     checks = [
         ("cargo NODE_L (fit tool)", num(CARGO_FIT, r"^NODE_L, NODE_H, NODE_T = ([\d.]+)"),
@@ -106,12 +103,9 @@ def main() -> int:
          - num(CARGO_PARAMS, r"^N_CHIN_Y0" + flt), bw + POUCH_L),
         ("cargo NODE_H (pouch width)", num(CARGO_PARAMS, r"^NODE_H" + flt), bh + POUCH_H),
         ("Simon CN4 slot width", simon_w, bw + POUCH_L),
-        ("nose CAPE_PCB_X (SCAD)", num(HEAD_SCAD, r"^CAPE_PCB_X" + flt), bw),
-        ("nose CAPE_PCB_X (builder)", num(HEAD_PY, r"^CAPE_PCB_X" + flt), bw),
-        ("nose FARADAY_ENC_X (SCAD)", num(HEAD_SCAD, r"^FARADAY_ENC_X" + flt), bw + TRAY_X),
-        ("nose FARADAY_ENC_X (builder)", num(HEAD_PY, r"^FARADAY_ENC_X" + flt), bw + TRAY_X),
-        ("nose BOOK_PANEL_X (SCAD)", num(HEAD_SCAD, r"^BOOK_PANEL_X" + flt), panel),
-        ("nose BOOK_PANEL_X (builder)", num(HEAD_PY, r"^BOOK_PANEL_X" + flt), panel),
+        # nose Bay A pouch must stay sized FROM the cargo pouch (no restated number)
+        ("nose Bay A pouch imports NODE_L",
+         float("BAYA_Y0 + clf.NODE_L" in (REPO / HEAD_FIT).read_text(encoding="utf-8")), 1.0),
     ]
     print(f"TACCO board {bw:g} x {bh:g} mm ({GEN})")
     bad = 0
