@@ -19490,7 +19490,7 @@
       "archived": false
     },
     "tools/head_layout_fit.py": {
-      "description": "head_layout_fit.py -- single source of head-section equipment stations, and",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
@@ -20024,6 +20024,13 @@
     },
     "tools/tail_strike_requirement.py": {
       "description": "tail_strike_requirement.py -- 4 ft drop tail strike on the aft skids, and the",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_bay_a_fwd_routes.py": {
+      "description": "test_bay_a_fwd_routes.py -- Bay A forward harness route table (plan",
       "tags": [
         "build-tooling"
       ],
@@ -25319,6 +25326,7 @@
       "tools/spar_bundle_fit.py",
       "tools/stitch_vias.py",
       "tools/tail_strike_requirement.py",
+      "tools/tests/test_bay_a_fwd_routes.py",
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",

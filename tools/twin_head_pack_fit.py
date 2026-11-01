@@ -7,8 +7,9 @@ A and F; plan 003 R10 "battery cells, not dead ballast").
 Result of the 2026-10-31 search (this file records and re-proves it):
 
     TWIN TRAY  band 69.5 W x 41.0 H (2 x 34 lateral + 0.75 per side per pack,
-               38.5 tall + 1.25 per side), centre Z 191, Y 172..292,
-               stop plate Y 168..172.  Rail = RAIL_T ceiling, side walls and
+               38.5 tall + 1.25 per side), centre Z 191, Y 163..283,
+               stop plate Y 159..163 (Bay A forward, 2026-11-01; was Y 172 with
+               the side-by-side Bay A).  Rail = RAIL_T ceiling, side walls and
                RAIL_LIP lips (bonded to the skin like today's rail).
     LOADING    each pack on its own sled, lifted in through the open clamshell
                doors (payload removed, as today), slid FORWARD on the
@@ -58,23 +59,24 @@ LANE_W = CELL_H + 2 * LAT  # 35.5: pack lies FLAT (34 lateral, 38.5 tall)
 TRAY_W = 2 * LANE_W - 1.5  # 69.5: lanes share the centre 1.5 mm
 TRAY_H = 41.0  # 38.5 + 2 x 1.25 (KTD5)
 TRAY_ZC = 191.0
-TRAY_Y0, TRAY_Y1 = 172.0, 292.0
+TRAY_Y0, TRAY_Y1 = 163.0, 283.0  # Bay A forward, published 2026-11-01 (side: 172..292)
 STOP_T = 4.0
 LANE_X = TRAY_W / 4  # 17.375: lane centre off the centreline
 RAIL_T, RAIL_LIP = h.RAIL_T, h.RAIL_LIP
 CORRIDOR_Y1 = 400.0
-TRUNK_X0, TRUNK_X1, TRUNK_Z0, TRUNK_Z1 = 38.5, 48.5, 193.0, 201.0
+TRUNK_X0, TRUNK_X1, TRUNK_Z0, TRUNK_Z1 = h.PORT_CH_X0, h.PORT_CH_X1, h.PORT_CH_Z0, h.PORT_CH_Z1
 # Loading corridor runs 1.5 mm LOWER than the tray (Zc 189.5): at Zc 191 it
 # grazes the cargo roof aft of Y 292.  The sled steps up a 1.5 mm chamfered
 # ramp at the tray's aft edge.  Payload is out during loading (as today).
 CORRIDOR_ZC = 189.5
 GAP = 1.0
-# Bay A option "fwd" (head_layout_fit --bay-a fwd, owner 2026-11-01): with the
-# side-by-side Bay A gone the tray runs forward to Y 163, where the skin binds
-# at Zc 191 (real-mesh probe 2026-11-01).  Option only: the published tray
-# (and twin_pack_tray_params.scad) stay at TRAY_Y0 until the owner adopts it.
-FWD_TRAY_Y0 = 163.0
-FWD_TRUNKS = ("trunk: CN1 run", "trunk: Observer to CN1")
+# Bay A reference layout (head_layout_fit --bay-a side): the side-by-side
+# pouches held the tray at Y 172.  Read-only: a side run never writes SCAD.
+SIDE_TRAY_Y0 = 172.0
+# Bay A forward harness envelopes that must clear the tray (KTD3: defined in
+# head_layout_fit.ROUTES, never retyped here).
+FWD_TRUNKS = ("trunk: CN1 run", "trunk: Observer to CN1", "trunk: riser", "trunk: crossover",
+              "trunk: port link")
 SEAT_MAX = 100.0  # mm^3 skin overlap accepted as a bonded seat per rail part
 CELL_G = h.CELL_G
 MERGED = os.path.join(c.REPO, "airframe", "stls", "fuselage",
@@ -121,8 +123,8 @@ def checks():
         "loading corridor (one pack, centreline)": (-LANE_W / 2, LANE_W / 2, TRAY_Y1,
                                                     CORRIDOR_Y1, CORRIDOR_ZC - TRAY_H / 2,
                                                     CORRIDOR_ZC + TRAY_H / 2),
-        "trunk (port side channel)": (TRUNK_X0, TRUNK_X1, 160.0, 300.0, TRUNK_Z0,
-                                      TRUNK_Z1),
+        "trunk (port side channel)": (TRUNK_X0, TRUNK_X1, h.PORT_CH_Y0, h.PORT_CH_Y1,
+                                      TRUNK_Z0, TRUNK_Z1),
     }
     rail = {  # may seat on the skin; must clear every envelope
         "rail ceiling": (-hw - RAIL_T, hw + RAIL_T, TRAY_Y0, TRAY_Y1, z1, z1 + RAIL_T),
@@ -157,13 +159,11 @@ def main():
     global TRAY_Y0, TRAY_Y1
     import argparse
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--bay-a", choices=("side", "fwd"), default="side",
-                    help="fwd: Bay A CN1-forward option, tray at FWD_TRAY_Y0 (no SCAD write)")
+    ap.add_argument("--bay-a", choices=("fwd", "side"), default="fwd",
+                    help="fwd (published, writes SCAD on PASS) or side (read-only reference)")
     h.BAYA_MODE = ap.parse_args().bay_a
-    if h.BAYA_MODE == "fwd":
-        TRAY_Y0, TRAY_Y1 = FWD_TRAY_Y0, FWD_TRAY_Y0 + (TRAY_Y1 - TRAY_Y0)
-    else:
-        write_params()
+    if h.BAYA_MODE == "side":
+        TRAY_Y0, TRAY_Y1 = SIDE_TRAY_Y0, SIDE_TRAY_Y0 + (TRAY_Y1 - TRAY_Y0)
     shell, obs = obstacles()
     statics, rail = checks()
     fails = 0
@@ -172,7 +172,8 @@ def main():
     for name, b in statics.items():
         m = grown(*b)
         hits = {k: (m ^ o).volume() for k, o in obs.items()
-                if not (name.startswith("loading") and k == "cargo: payload")}
+                if not (name.startswith("loading") and k == "cargo: payload")
+                and not (name.startswith("trunk") and k == "head: trunk: port link")}  # mate
         hits = {k: v for k, v in hits.items() if v > 0.5}
         sv = (m ^ shell).volume()
         # the corridor sweeps the cargo skin where the hull narrows at the
@@ -215,6 +216,10 @@ def main():
         print(f"  {label:48s} AUW {M:5.0f} g ({M / 453.592:5.2f} lbm)  CG {off:+5.1f} mm; "
               f"with 0.5 in pivot {off - hd.PENDING_PIVOT_SHIFT * (1 - f * M0 / M):+5.1f} mm; "
               f"T/W {8540 / M:.2f}; endurance {end * 100:+.0f} %")
+    if h.BAYA_MODE == "fwd" and not fails:
+        write_params()
+    elif h.BAYA_MODE == "fwd":
+        print("not writing twin_pack_tray_params.scad: gate FAILED")
     print(f"\nRESULT: {'PASS' if not fails else f'FAIL ({fails})'}")
     return 1 if fails else 0
 
