@@ -96,7 +96,7 @@ def radius(y):
     return RADIUS[0][1] if y < RADIUS[0][0] else RADIUS[-1][1]
 
 
-_ENTRIES = []
+_ENTRIES: list = []
 
 
 def entries():
