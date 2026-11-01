@@ -61,6 +61,7 @@ REPO = os.path.abspath(os.path.join(HERE, ".."))
 sys.path.insert(0, HERE)
 import bake_hull_frame as bk  # noqa: E402
 import cargo_layout_fit as clf  # noqa: E402
+import merge_middle_rear_shell as seam  # noqa: E402  shared blended-loft seam
 
 OPS = os.path.join(REPO, "airframe", "blender-scripts", "files-hollowed-24in", "operands")
 FSTL = os.path.join(REPO, "airframe", "stls", "fuselage")
@@ -126,10 +127,16 @@ def main():
     mid = 0.5 * (hy1 + cy0)
     print(f"published head ends Y {hy1:.2f}, cargo starts Y {cy0:.2f}: seam gap "
           f"{cy0 - hy1:.2f} mm, meet plane Y {mid:.2f}")
-    rh, nh = ring(head, HEAD_RING_Y, HEAD_CUT_Y - 0.5, mid + OVERLAP)
-    rc, nc = ring(cargo, CARGO_RING_Y, mid - OVERLAP, CARGO_CUT_Y + 0.5)
-    print(f"head ring (Y {HEAD_RING_Y}): {nh} polygon(s); cargo ring (Y {CARGO_RING_Y}): "
-          f"{nc} polygon(s); seam zone Y {HEAD_CUT_Y}..{CARGO_CUT_Y} rebuilt as plain skin")
+    # Blended seam (2026-11-01): the published head ring at Y 226 is X +/-64.7
+    # and the cargo ring at Y 242 is X +/-61.6.  Extruding each straight to
+    # the meet plane left a 3.1 mm/side waist step and a 5.2 mm dorsal step
+    # at Y ~234.  Canon: the QMx blueprints (REF-CAD-003, Sheet 1 port profile,
+    # Sheet 5 ventral plan) and the Henning top view (REF-CAD-002) show the
+    # bridge neck flowing into the cargo-hold section with no waist, so the
+    # zone is now a ruled loft from the head ring to the cargo ring
+    # (merge_middle_rear_shell.seam_loft, one tube).
+    lofts = seam.seam_loft(head, HEAD_RING_Y, cargo, CARGO_RING_Y, 1)
+    print(f"seam zone Y {HEAD_RING_Y}..{CARGO_RING_Y} rebuilt as a blended loft")
     # the cargo battery cradle is RETIRED by the twin tray (plan 003 R10):
     # its four roof hanger bosses are removed -- the same boxes
     # cargo_layout_fit.shell_after_merge() takes them out with
@@ -141,10 +148,9 @@ def main():
                                   clf.CRADLE_TOP_Z - 0.5, 250.0))
     print(f"cargo: 4 cradle hanger bosses removed, "
           f"{(man(cargo).volume() - cm.volume()) / 1e3:.2f} cm3")
-    part = ((man(head) ^ slab(-BIG, HEAD_CUT_Y)) + rh + rc
-            + (cm ^ slab(CARGO_CUT_Y, BIG)))
-    tm = tm_of(part)
-    tm.merge_vertices()
+    part = ((man(head) ^ slab(-BIG, HEAD_RING_Y + seam.OVERLAP)) + lofts
+            + (cm ^ slab(CARGO_RING_Y - seam.OVERLAP, BIG)))
+    tm = seam.tm_of(part)
     bodies = tm.split(only_watertight=False)
     big = [b for b in bodies if len(b.faces) > 200]
     # drop the zero-area 2-face slivers manifold3d leaves at coplanar seams
@@ -173,10 +179,15 @@ def main():
             print(f"  seam slice Y {y:.1f}: {len(g)} piece(s) -- skin gap")
     print(f"seam skin continuity Y {HEAD_CUT_Y - 1:.1f}..{CARGO_CUT_Y + 1:.1f}: "
           f"{'one closed ring at every 0.5 mm slice' if not bad else f'{bad} slice(s) open'}")
+    tm = seam.weld_clean(seam.separate_f32_collisions(tm))
     hdr = (bk.MARKER + b" head+cargo merged (merge_head_cargo_shell.py)").ljust(80, b" ")[:80]
     bk.write_stl_binary(OUT, np.asarray(tm.triangles), hdr)
-    print(f"wrote {os.path.relpath(OUT, REPO)}")
-    return 0 if tm.is_watertight and len(big) == 1 and not bad else 2
+    back = trimesh.load(OUT)
+    _, cnt = np.unique(np.sort(back.edges, axis=1), axis=0, return_counts=True)
+    ok = back.is_watertight and (cnt != 2).sum() == 0
+    print(f"wrote {os.path.relpath(OUT, REPO)}; re-read: watertight {back.is_watertight}, "
+          f"edges not shared by exactly 2 faces {(cnt != 2).sum()}")
+    return 0 if ok and len(big) == 1 and not bad else 2
 
 
 if __name__ == "__main__":

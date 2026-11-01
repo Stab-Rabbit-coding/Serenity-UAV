@@ -3638,7 +3638,7 @@ tilt range.
 | **License / Permission** | Public-space reference imagery; direct permission granted by email from Nick Henning (`nickhenning3d@gmail.com`) on 2026-07-06 (email export archived at `docs/references/nick-henning/`). Used only as design reference imagery and attribution is recorded here to satisfy CC BY-style attribution requirements. |
 | **Note** | Used as high-fidelity visual reference for wing surface detail, landing gear arrangement, and UV-display styling. Per Nick Henning's email, this model was a school project **derived from the show/movie renders** — so it sits **below** the QMx blueprints (REF-CAD-003) in the canonical-accuracy ranking but carries **more mechanical/surface detail**; use it where the blueprints are ambiguous. The repository stores only derivative reference imagery; no original CAD model or proprietary 3D geometry from the author is redistributed. |
 
-**Applied to:** wing and landing gear detail reference in the Serenity UAV hull design, including landing gear canopy/brace styling and wing surface treatment; canonical-accuracy cross-check for exterior detail.
+**Applied to:** wing and landing gear detail reference in the Serenity UAV hull design, including landing gear canopy/brace styling and wing surface treatment; canonical-accuracy cross-check for exterior detail. 2026-11-01: top view (`top-view-with-wireframe-henning.jpg`) used to confirm the raised ring aft of the cargo hold (cargo/middle step kept) and the waist-free head/cargo transition (`tools/merge_head_cargo_shell.py`, `tools/merge_middle_rear_shell.py`, `docs/SLS_PRINT_ORIENTATION.md` §6).
 
 **Consolidated 2026-07-20:** all Nick Henning material was moved from `airframe/diagrams/` into a
 single `docs/references/nick-henning/` folder alongside the other canonical references.
@@ -3666,7 +3666,7 @@ single `docs/references/nick-henning/` folder alongside the other canonical refe
 layout (head/cargo/middle/rear), and canonical feature placement. No QMx geometry is copied; it is a
 visual/dimensional accuracy check only.
 
-**Used in:** canonical-accuracy reference for `airframe/` hull/exterior work (see
+**Used in:** `tools/merge_head_cargo_shell.py` and `tools/merge_middle_rear_shell.py` (Sheet 1 port profile, Sheet 5 ventral plan: seam blends, 2026-11-01), `docs/SLS_PRINT_ORIENTATION.md` §6; canonical-accuracy reference for `airframe/` hull/exterior work (see
 `airframe/AGENTS.md` "Canonical Accuracy References"); cross-referenced by REF-CAD-002 and
 REF-CAD-004 and by `current-specification/LICENSE_AND_ATTRIBUTION.md`.
 

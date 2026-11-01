@@ -16,6 +16,8 @@ License: MIT -- see LICENSES/MIT (SPDX-License-Identifier: MIT)
 _MERGE = ("one-piece head+cargo FORWARD hull section (hull = 2 sections joined at "
           "the cargo/middle collar), commit d92c4f14 (2026-10-31), "
           "docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md 'The merge'")
+_AFT = ("one-piece middle+rear AFT hull section, tools/merge_middle_rear_shell.py "
+        "(owner 2026-11-01: 'merge the middle and aft')")
 _HEAD_CELL = ("single head cell replaced by the twin flat pack tray, commit d92c4f14, "
               "docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md 'Printed parts'")
 
@@ -31,6 +33,9 @@ RETIRED = {
     "fuselage/head/head_cell_rail.stl": "retired -- " + _HEAD_CELL,
     "fuselage/head/head_cell_sled.stl": "retired -- " + _HEAD_CELL,
     "fuselage/head/head_cell_catch.stl": "retired -- " + _HEAD_CELL,
+    "fuselage/middle_shell24_2mm_repaired.stl": "merge INPUT, not a print article -- " + _AFT,
+    "fuselage/rear_shell24_2mm_repaired.stl": "merge INPUT, not a print article -- " + _AFT,
+    "fuselage/middle_rear_splice_collar.stl": "retired -- " + _AFT,
     "fuselage/belly_panel.stl": "BOM qty 0 since the 2026-10-19 weight pass (keel tray, "
     "head battery bay gone)",
     "fuselage/battery_tray.stl": "BOM qty 0 (keel tray superseded by the twin pack tray)",

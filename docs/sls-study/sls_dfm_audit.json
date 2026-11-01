@@ -552,23 +552,6 @@
   "fits_machine": "SLS 380"
  },
  {
-  "part": "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl",
-  "extents_mm": [
-   194.3,
-   434.7,
-   201.5
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 456.95,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.26,
-  "wall_p50_mm": 2.0,
-  "frac_below_min": 0.025,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
   "part": "airframe/stls/fuselage/inara_access_cover.stl",
   "extents_mm": [
    46.5,
@@ -899,57 +882,6 @@
   "fails": [
    "R2-thin-wall"
   ],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/middle_rear_splice_collar.stl",
-  "extents_mm": [
-   113.8,
-   18.0,
-   118.8
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 13.74,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 2.0,
-  "wall_p50_mm": 2.0,
-  "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/middle_shell24_2mm_repaired.stl",
-  "extents_mm": [
-   176.9,
-   71.3,
-   164.8
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 174.39,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.4,
-  "wall_p50_mm": 2.0,
-  "frac_below_min": 0.005,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/rear_shell24_2mm_repaired.stl",
-  "extents_mm": [
-   140.6,
-   180.0,
-   157.8
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 220.46,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.95,
-  "wall_p50_mm": 2.0,
-  "frac_below_min": 0.01,
-  "fails": [],
   "fits_machine": "SLS 380"
  },
  {
@@ -1468,5 +1400,39 @@
   "frac_below_min": 0.03,
   "fails": [],
   "fits_machine": "SLS 380"
+ },
+ {
+  "part": "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl",
+  "extents_mm": [
+   194.3,
+   434.7,
+   201.5
+  ],
+  "watertight": true,
+  "winding_ok": true,
+  "volume_cc": 457.32,
+  "fits_machine": "SLS 380",
+  "enclosed_voids_cc": [],
+  "wall_p01_mm": 0.04,
+  "wall_p50_mm": 2.0,
+  "frac_below_min": 0.048,
+  "fails": []
+ },
+ {
+  "part": "airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl",
+  "extents_mm": [
+   176.9,
+   253.3,
+   162.5
+  ],
+  "watertight": true,
+  "winding_ok": true,
+  "volume_cc": 388.71,
+  "fits_machine": "SLS 380",
+  "enclosed_voids_cc": [],
+  "wall_p01_mm": 1.11,
+  "wall_p50_mm": 2.01,
+  "frac_below_min": 0.01,
+  "fails": []
  }
 ]

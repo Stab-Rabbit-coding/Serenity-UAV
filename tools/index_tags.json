@@ -3071,6 +3071,14 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 middle+rear merged (merge_middle_rear_shell.py)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/middle_rear_splice_collar.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 middle_rear_splice_collar",
       "tags": [
@@ -17075,14 +17083,14 @@
       "archived": false
     },
     "docs/sls-study/sls_dfm_audit.json": {
-      "description": "JSON data (83 entries)",
+      "description": "JSON data (81 entries)",
       "tags": [
         "documentation"
       ],
       "archived": false
     },
     "docs/sls-study/sls_print_orientation.json": {
-      "description": "JSON data (79 entries)",
+      "description": "JSON data (77 entries)",
       "tags": [
         "documentation"
       ],
@@ -19730,6 +19738,13 @@
       ],
       "archived": false
     },
+    "tools/merge_middle_rear_shell.py": {
+      "description": "merge_middle_rear_shell.py -- one-piece MIDDLE + REAR (aft) hull section;",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/middle_layout_fit.py": {
       "description": "middle_layout_fit.py -- Rev T6 middle-section equipment layout and the",
       "tags": [
@@ -21693,6 +21708,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_common_spring_wire_nominal.stl",
       "airframe/stls/fuselage/middle_canonical_edf_intake.stl",
       "airframe/stls/fuselage/middle_canonical_shell24.stl",
+      "airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl",
       "airframe/stls/fuselage/middle_rear_splice_collar.stl",
       "airframe/stls/fuselage/middle_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/rear_shell24_2mm_repaired.stl",
@@ -22023,6 +22039,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_common_spring_wire_nominal.stl",
       "airframe/stls/fuselage/middle_canonical_edf_intake.stl",
       "airframe/stls/fuselage/middle_canonical_shell24.stl",
+      "airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl",
       "airframe/stls/fuselage/middle_rear_splice_collar.stl",
       "airframe/stls/fuselage/middle_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/rear_shell24_2mm_repaired.stl",
@@ -25342,6 +25359,7 @@
       "tools/lg_thigh_variants.py",
       "tools/lg_wire_layout_study.py",
       "tools/merge_head_cargo_shell.py",
+      "tools/merge_middle_rear_shell.py",
       "tools/middle_layout_fit.py",
       "tools/migrate_stl_r2.py",
       "tools/min_stretch_relocation.py",

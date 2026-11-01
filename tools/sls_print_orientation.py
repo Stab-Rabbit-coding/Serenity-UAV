@@ -297,6 +297,7 @@ ORIENT = {
         'H'),
     # ---- middle / rear ---------------------------------------------------------
     'fuselage/middle_shell24_2mm_repaired.stl': HULL,
+    'fuselage/middle_rear_shell24_2mm_merged.stl': HULL,
     'fuselage/middle_canonical_shell24.stl': (
         'Z', 'PA CF',
         'fuselage bending (frame not confirmed)',
@@ -585,7 +586,14 @@ def main():
     audit_json = os.path.join(ROOT, "docs", "sls-study", "sls_dfm_audit.json")
     with open(audit_json) as fh:
         audited = {r["part"].replace("airframe/stls/", "") for r in json.load(fh)}
-    missing = sorted(audited - set(ORIENT) - NOT_PRINT - set(RETIRED))
+    # every STL under airframe/stls that the audit would read must be either
+    # oriented, a non-print view, or retired -- checked against the DISK too,
+    # so a new part cannot slip through a stale audit JSON
+    import sls_dfm_audit
+    on_disk_print = {p for p in on_disk if "rchive" not in p
+                     and not any(t in os.path.basename(p).lower()
+                                 for t in sls_dfm_audit.SKIP_TOKENS)}
+    missing = sorted((audited | on_disk_print) - set(ORIENT) - NOT_PRINT - set(RETIRED))
     if missing:  # every printed part shall have an orientation
         print("NO ORIENTATION ASSIGNED:", *missing, sep="\n  ")
         return 1

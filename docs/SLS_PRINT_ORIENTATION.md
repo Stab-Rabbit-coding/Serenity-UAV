@@ -76,7 +76,7 @@ Confidence levels:
 
 ## 3. Result
 
-79 current printed parts, port and starboard, from bow to stern: 78 fit the
+77 current printed parts, port and starboard, from bow to stern: 76 fit the
 SLS 380 in their strength orientation. One, the hull, needs the sPro 140, and
 none conflicts.
 
@@ -91,13 +91,12 @@ none conflicts.
   forward section** (§0). Separate head and cargo shells aren't an option,
   because the twin battery tray needs the merged section.
 - **Joint:** `cargo_middle_splice_collar.stl`, which stays a separate part.
-- **Aft section:** middle+rear in one piece is the planned baseline (plan
-  2026-10-31-003, `docs/MASS_AUDIT_MIDDLE_REAR_SECTIONS.md` §4), but **the
-  merged STL hasn't been generated yet**. Until it is, the middle shell, the
-  rear shell and `middle_rear_splice_collar` are oriented here as they
-  stand. Joined, the aft section is about 250 × 177 × 165 mm, so it fits the
-  SLS 380 lying down with Y in-plane (a footprint estimate, not yet
-  measured).
+- **Aft section:** middle+rear in one piece,
+  `middle_rear_shell24_2mm_merged.stl` (`tools/merge_middle_rear_shell.py`,
+  owner 2026-11-01). It's 176.9 × 253.3 × 162.5 mm and lies down on the
+  SLS 380 with Y in-plane. The middle/rear collar is retired.
+
+Both merge seams are blended lofts checked against canon (§6).
 
 Parts still on disk but retired are excluded and listed in
 `tools/sls_retired_parts.py`, with the decision that retired each one: the
@@ -222,8 +221,8 @@ the `_print` files.
 
 ### Middle and rear
 
-- **`middle_shell24_2mm_repaired.stl`** (PA CF, confidence H): build Z = STL Z
-  (X->X Y->Y Z->Z); 177 × 71 × 165 mm on the SLS 380. Critical: fuselage
+- **`middle_rear_shell24_2mm_merged.stl`** (PA CF, confidence H): build Z = STL
+  Z (X->X Y->Y Z->Z); 177 × 253 × 162 mm on the SLS 380. Critical: fuselage
   vertical bending -> longitudinal (Y) skin stress. R-BEAM: Y and X in plane,
   hull vertical -> Z; ring frames and webs stand vertical so their in-plane
   bending is in X-Y too.
@@ -233,14 +232,6 @@ the `_print` files.
 - **`middle_canonical_edf_intake.stl`** (PA CF, confidence V): build Z = STL Z
   (X->X Y->Y Z->Z); 226 × 165 × 73 mm on the SLS 380. Critical: intake duct,
   light. R-BEAM.
-- **`middle_rear_splice_collar.stl`** (PA CF, confidence H): build Z = STL Z
-  (X->X Y->Y Z->Z); 114 × 18 × 119 mm on the SLS 380. Critical: splice moment ->
-  Y tension at crown/keel. R-BEAM: same frame as hull.
-- **`rear_shell24_2mm_repaired.stl`** (PA CF, confidence H): build Z = STL Z
-  (X->X Y->Y Z->Z); 141 × 180 × 158 mm on the SLS 380. Critical: fuselage
-  vertical bending -> longitudinal (Y) skin stress. R-BEAM: Y and X in plane,
-  hull vertical -> Z; ring frames and webs stand vertical so their in-plane
-  bending is in X-Y too.
 - **`dorsal_antenna_fin.stl`** (PA CF, confidence M): build Z = STL Y (X->X Z->Y
   Y->Z); 20 × 35 × 4 mm on the SLS 380. Critical: fin root bending (side gust).
   R-PLATE: normal is Y (4 mm).
@@ -377,3 +368,30 @@ the `_print` files.
 - The tallest part in its strength orientation is the middle shell, at
   6.49 in (164.8 mm), well under the 18 in build height. Several shells can
   share one build height-wise.
+
+## 6. Hull seams against canon (QMx, Henning)
+
+Checked 2026-11-01 against the QMx blueprints [REF-CAD-003] (Sheet 1 port
+profile, Sheet 5 ventral plan), which are the most authoritative reference,
+and the Henning top-view render [REF-CAD-002], which ranks below QMx.
+
+- **Forward seam (head/cargo, Y 226–242):** **corrected.** The published head
+  ring is X ±64.7 mm and the cargo ring X ±61.6 mm. The first merge extruded
+  each ring straight to a meet plane, which left a 3.1 mm-per-side waist step
+  and a 5.2 mm dorsal step at Y ≈ 234. Canon shows the bridge neck flowing
+  into the cargo-hold section with no waist, so the seam is now a ruled loft.
+  Width runs 129.4 → 123.3 mm and the dorsal line 234.5 → 229.3 mm,
+  monotonic. The twin-tray gate is unchanged except the trunk channel
+  (8.8 → 8.5 mm³).
+- **Aft seam (middle/rear, Y 501–530.5):** **corrected.** The sections
+  mismatch by about 4 × 3 mm, and the rear carried a dorsal residue of the
+  old collar land: skin 2.35–3.07 mm thick with two loose slivers at
+  X ±3–7 mm, Z 232–237 mm. Canon shows the neck flaring smoothly into the
+  engine-bay bulb with no lip or dorsal feature there, so both are rebuilt as
+  a loft of plain 2 mm skin. Width runs 126 → 140 mm and the dorsal line
+  225.7 → 238 mm, monotonic. The average loft wall is 2.09 mm.
+- **Cargo/middle joint (Y ≈ 436):** **canonical, kept.** The middle section
+  starts about 5–7 mm per side wider than the cargo section ends. That's the
+  raised ring directly aft of the cargo-hold hump in the Henning top view
+  (the middle section's horseshoe ring), so the step stays. The joint
+  remains the collar `cargo_middle_splice_collar`.

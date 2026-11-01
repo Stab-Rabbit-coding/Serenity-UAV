@@ -577,15 +577,15 @@
   "confidence": "H"
  },
  {
-  "part": "fuselage/middle_shell24_2mm_repaired.stl",
+  "part": "fuselage/middle_rear_shell24_2mm_merged.stl",
   "material": "PA CF",
   "build_z_stl_axis": "Z",
   "mapping": "X->X Y->Y Z->Z",
   "machine": "SLS 380",
   "machine_xyz_mm": [
    176.9,
-   71.3,
-   164.8
+   253.3,
+   162.5
   ],
   "fits": true,
   "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
@@ -623,38 +623,6 @@
   "critical_load": "intake duct, light",
   "rule": "R-BEAM",
   "confidence": "V"
- },
- {
-  "part": "fuselage/middle_rear_splice_collar.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   113.8,
-   18.0,
-   118.8
-  ],
-  "fits": true,
-  "critical_load": "splice moment -> Y tension at crown/keel",
-  "rule": "R-BEAM: same frame as hull",
-  "confidence": "H"
- },
- {
-  "part": "fuselage/rear_shell24_2mm_repaired.stl",
-  "material": "PA CF",
-  "build_z_stl_axis": "Z",
-  "mapping": "X->X Y->Y Z->Z",
-  "machine": "SLS 380",
-  "machine_xyz_mm": [
-   140.6,
-   180.0,
-   157.8
-  ],
-  "fits": true,
-  "critical_load": "fuselage vertical bending -> longitudinal (Y) skin stress",
-  "rule": "R-BEAM: Y and X in plane, hull vertical -> Z; ring frames and webs stand vertical so their in-plane bending is in X-Y too",
-  "confidence": "H"
  },
  {
   "part": "fuselage/dorsal_antenna_fin.stl",
