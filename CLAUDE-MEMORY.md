@@ -4628,5 +4628,14 @@ Related: [[project_pe_skills_cc_by_nd]].
 
 ## project_sls_migration_3dsystems
 
+Airframe moved FDM CF-PETG -> SLS DuraForm PA CF (REF-MAT-015) / PA11 (REF-MAT-016) on branch `feat/sls-migration` (`.worktrees/sls-migration`), 2026-11-01. DuraForm refs were renumbered 011-013 -> 015-017 (main had an ID collision with Rock West/NCAMP).
+
+- 3D Systems machines: SLS 380 15x13x18 in, sPro 140 22x22x18, sPro 230 22x22x30.
+- **Owner decision:** final build orientation + machine are agreed WITH 3D Systems. Repo orientations (`tools/sls_print_orientation.py`) are design-intent requests only.
+- Design guide = REF-MFG-001 (`airframe/datasheets/3D-Systems_SLS_Design_Guide_en_final.pdf`). Cite PRINTED page numbers; verify each page against the PDF (I mis-cited p.3/pp.14-15 once).
+- Single sources: `tools/sls_materials.py` (0.5 PA CF Z knockdown ASSUMED), `tools/sls_dfm_audit.py`, `tools/sls_print_orientation.py` (also writes docs/SLS_PRINT_ORIENTATION.md §4).
+
+**Why:** PA CF publishes XY data only; orientation decides which allowable governs.
+**How to apply:** don't treat repo orientations as release instructions; when 3D Systems answers, record their orientation in ORIENT and re-run sizing for parts whose critical stress lands across layers. See [[feedback_material_preference_order]].
 
 ---
