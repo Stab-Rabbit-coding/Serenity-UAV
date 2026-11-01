@@ -51,7 +51,7 @@
     - [ ] `build_guide_18_first_flight.svg`'s Part 107/VLOS warning callouts (lines ~59–60)
     need citations but their fixed-width boxes are already near-full; requires either a
     layout change or rendering verification (see `/verify` skill) before editing text length.
-    - [ ] Seven additional SVGs (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
+    - [x] **Resolved 2026-10-31** — all cards regenerated from the Rev T+ assembly (`tools/gen_build_guide_cards.py`); old cards archived to `archives/graphical-build-guide-pre-revt/`. Seven additional SVGs (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
     `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
     `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) are
     built entirely or partly around the **archived** Pilot/TACCO hardware instead of
@@ -61,7 +61,7 @@
     **Superseded by, and folded into, the "Rebuild `graphical-build-guide/`..." item in
     §1.5 Documentation** — that item replaces these cards' art wholesale rather than
     patching the hardware depiction in place.
-    - [ ] The remaining ~30 non-priority SVGs were not individually swept for citations in
+    - [x] **Superseded 2026-10-31** — the swept cards are archived; every regenerated card carries a SOURCE line. The remaining ~30 non-priority SVGs were not individually swept for citations in
     this pass (only spot-checked); a full sweep with rendering verification is still open.
     **Partial progress 2026-06-29:** `build_guide_17_ground_test.svg` line 45 updated —
     appended `[REF-FCC-003]` to the "49MHz Part 15 §15.235 ground transmitter" text (text
@@ -825,7 +825,7 @@ meaningfully higher, and that bears on the aircraft's actual hover margin.
 
 - [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev S 24-inch specifications
     (hull 609.6 mm, 50mm EDFs, v2·v2·v2·v2 node placement, Rev S power system, cargo system).
-- [ ] **Rebuild `graphical-build-guide/` (38 SVGs) from Blender/FreeCAD-derived platform
+- [x] **DONE 2026-10-31 for the 27 cards + `build_plan` + `components_overview`** (`tools/gen_build_guide_cards.py`, `airframe/blender-scripts/build_guide_card_renders.py`); the `overview_*`/`hull_*` silhouettes remain under graphical-build-guide WBS 1.5.6. **Rebuild `graphical-build-guide/` (38 SVGs) from Blender/FreeCAD-derived platform
     graphics, replacing the pre-Rev-N hand-drawn line art.** Two stale-geometry problems,
     not one:
     - The 26 numbered `build_guide_XX_*.svg` step cards (antenna placement, node install,

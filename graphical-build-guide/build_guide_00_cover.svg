@@ -1,62 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- License: CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0). © 2024–2026 Steve Griffing (Stab-Rabbit-coding), Serenity UAV Project. -->
-<!-- Serenity-Class Tiltrotor UAV — Build Guide — Cover -->
-<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
-<!-- Hull: misubisu CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
-<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
-<defs>
-  <style>
-    @import url('https://fonts.cdnfonts.com/css/opendyslexic');
-    @media screen {
-      text, tspan, .label, .note, .dim {
-        font-family: 'OpenDyslexic','OpenDyslexicMono',sans-serif !important;
-      }
-    }
-    @media print {
-      svg { background: #ffffff !important; }
-      text, tspan { fill: #111111 !important; font-family: 'OpenDyslexic',sans-serif !important; }
-      rect[fill^="rgba"], rect[fill^="#0"] { fill: #f5f5f5 !important; }
-    }
-  </style>
-</defs>
-<rect width="1200" height="900" fill="#006db7"/>
-<polygon points="0,0 400,0 0,300" fill="#ff7518" opacity="0.7"/>
-<polygon points="1200,900 800,900 1200,620" fill="#ff7518" opacity="0.5"/>
-<rect x="60" y="80" width="1080" height="240" rx="12" fill="rgba(0,0,0,0.35)"/>
-<text x="600" y="150" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="38" fill="#ffffff" letter-spacing="3">SERENITY-CLASS TILTROTOR UAV</text>
-<text x="600" y="196" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#f5c518">ILLUSTRATED BUILD GUIDE</text>
-<text x="600" y="236" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="14" fill="#c8dff0">Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP</text>
-<text x="600" y="258" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#c8dff0">© 2026  ·  CC BY 4.0  ·  creativecommons.org/licenses/by/4.0</text>
-<text x="600" y="295" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="rgba(200,223,240,0.95)">Hull: misubisu CC BY 4.0  ·  Nozzle: BamJr CC BY 4.0  ·  Visual: Firefly/Serenity © Joss Whedon / Universal — Fan engineering work</text>
-<polygon points="600,580 611,571 629,562 644,562 659,559 669,559 682,560 694,562 709,566 725,571 738,568 751,566 781,569 781,591 751,594 738,592 725,589 709,594 694,598 682,600 669,601 659,601 644,598 629,598 611,589 600,580" fill="rgba(100,180,255,0.25)" stroke="#c8dff0" stroke-width="2.5"/>
-<line x1="663" y1="555" x2="679" y2="412" stroke="#c8dff0" stroke-width="2.5"/>
-<ellipse cx="677" cy="412" rx="18" ry="7" fill="rgba(255,150,80,0.3)" stroke="#ff7518" stroke-width="2.5"/>
-<circle cx="668" cy="412" r="7" fill="#ff6060" opacity="0.9"/>
-<line x1="663" y1="605" x2="679" y2="748" stroke="#c8dff0" stroke-width="2.5"/>
-<ellipse cx="677" cy="748" rx="18" ry="7" fill="rgba(255,150,80,0.3)" stroke="#ff7518" stroke-width="2.5"/>
-<circle cx="668" cy="748" r="7" fill="#60ff60" opacity="0.9"/>
-<circle cx="749" cy="580" r="10" fill="rgba(255,230,80,0.25)" stroke="#f5c518" stroke-width="2"/>
-<rect x="80" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
-<text x="165" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">HULL</text>
-<text x="165" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">609.6mm (24.00")</text>
-<rect x="265" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
-<text x="350" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">NACELLE TIP-TIP</text>
-<text x="350" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">~486mm (19.1")</text>
-<rect x="450" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
-<text x="535" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">TOTAL THRUST</text>
-<text x="535" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">~5,322g</text>
-<rect x="635" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
-<text x="720" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">HOVER T/W</text>
-<text x="720" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">1.50:1</text>
-<rect x="820" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
-<text x="905" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">CRUISE</text>
-<text x="905" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">35–49 kts</text>
-<rect x="1005" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
-<text x="1090" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">STEPS</text>
-<text x="1090" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">26</text>
-<rect x="1070" y="440" width="110" height="50" rx="8" fill="#ff7518"/>
-<text x="1125" y="460" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#ffffff">BUILD STEPS</text>
-<text x="1125" y="482" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">26</text>
-<text x="600" y="884" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="rgba(200,223,240,0.90)">LEGO-style build guide — all dimensions in mm (inches in parentheses)</text>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1200 900" width="1200" height="900" font-family="DejaVu Sans, Helvetica, Arial, sans-serif">
+<title>Serenity UAV build guide 00 - SERENITY-CLASS TILTROTOR UAV</title>
+<metadata>SPDX-License-Identifier: CC-BY-SA-4.0. Generated by tools/gen_build_guide_cards.py; edit the CARDS table, not this file.</metadata>
+<rect width="1200" height="900" fill="#f7f5f0"/>
+<rect width="1200" height="96" fill="#1f2a36"/>
+<text x="28" y="30" font-size="13" fill="#9fb3c8" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV · BUILD GUIDE · REV T+</text>
+<text x="28" y="64" font-size="27" font-weight="bold" fill="#ffffff">SERENITY-CLASS TILTROTOR UAV</text>
+<text x="28" y="86" font-size="14" fill="#d6dee6">Illustrated build guide - Rev T+ (24 in hull)</text>
+<rect x="20" y="110" width="760" height="450" rx="6" fill="#ffffff" stroke="#c9c4b8"/>
+<image x="30" y="116" width="740" height="410" preserveAspectRatio="xMidYMid meet" xlink:href="card-renders/card00.png" href="card-renders/card00.png"/>
+<rect x="32" y="534" width="14" height="14" fill="#ff5c00"/><text x="52" y="546" font-size="12" fill="#444">this step</text><rect x="128" y="534" width="14" height="14" fill="#dbdbd9" stroke="#999"/><text x="148" y="546" font-size="12" fill="#444">already built / context</text>
+<rect x="796" y="110" width="384" height="450" rx="6" fill="#ffffff" stroke="#c9c4b8"/>
+<text x="812" y="136" font-size="15" font-weight="bold" fill="#1f2a36">AT A GLANCE</text>
+<text x="812" y="162" font-size="13" fill="#222">Hull length 24.00 in (609.6 mm)</text>
+<text x="812" y="188" font-size="13" fill="#222">2 tilting tandem-EDF nacelles (64 mm pods)</text>
+<text x="812" y="214" font-size="13" fill="#222">Worm-drive tilt, -5 to 140 deg stops</text>
+<text x="812" y="240" font-size="13" fill="#222">Servo-scheduled shingled nozzles</text>
+<text x="812" y="266" font-size="13" fill="#222">3.0 in (76 mm) R6 landing gear</text>
+<text x="812" y="292" font-size="13" fill="#222">8 avionics nodes + Observer, FE, Commo</text>
+<text x="28" y="592" font-size="15" font-weight="bold" fill="#1f2a36">SEQUENCE</text>
+<circle cx="40" cy="613" r="11" fill="#e8892a"/><text x="40" y="618" font-size="12" font-weight="bold" fill="#1f2a36" text-anchor="middle">1</text>
+<text x="60" y="618" font-size="13" fill="#222">Cards 01-05: print and cut every part before the first epoxy joint.</text>
+<circle cx="40" cy="635" r="11" fill="#e8892a"/><text x="40" y="640" font-size="12" font-weight="bold" fill="#1f2a36" text-anchor="middle">2</text>
+<text x="60" y="640" font-size="13" fill="#222">Cards 06-16: structure, gear, cargo, tilt, nacelles, power, void formers, foam.</text>
+<circle cx="40" cy="657" r="11" fill="#e8892a"/><text x="40" y="662" font-size="12" font-weight="bold" fill="#1f2a36" text-anchor="middle">3</text>
+<text x="60" y="662" font-size="13" fill="#222">Cards 17-22: avionics, buses, security, lights, antennas, sensors.</text>
+<circle cx="40" cy="679" r="11" fill="#e8892a"/><text x="40" y="684" font-size="12" font-weight="bold" fill="#1f2a36" text-anchor="middle">4</text>
+<text x="60" y="684" font-size="13" fill="#222">Cards 23-26: software, calibration, test and first flight, markings.</text>
+<rect x="20" y="760" width="1160" height="52" rx="5" fill="#ffffff" stroke="#2b5c8a" stroke-width="2"/>
+<text x="32" y="777" font-size="12" font-weight="bold" fill="#2b5c8a">NOTE</text>
+<text x="110" y="777" font-size="12" fill="#222">Performance figures (AUW, thrust, T/W) are provisional until the bottom-up AUW ledger closes: read docs/WBS.md 0.10.1, not this</text>
+<text x="110" y="792" font-size="12" fill="#222">card.</text>
+<line x1="20" y1="848" x2="1180" y2="848" stroke="#c9c4b8"/>
+<text x="28" y="862" font-size="11" fill="#555">SOURCE: graphical-build-guide/REVN_BUILD_GUIDE_24IN.md (Rev T+ Configuration)</text>
+<text x="28" y="877" font-size="10" fill="#777">Hull: misubisu CC BY-SA 4.0 · Iris-nozzle concept: BamJr CC BY 4.0 · Fan work inspired by Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal — not licensed</text>
+<text x="28" y="891" font-size="10" fill="#777">© 2026 Steve Griffing (Stab-Rabbit-coding) · CC BY-SA 4.0 · card art: Claude (Opus 5.5) from the master assembly</text>
 </svg>

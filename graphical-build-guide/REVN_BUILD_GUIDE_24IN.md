@@ -12,20 +12,23 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 @media print{body{background:#fff!important;color:#111!important}a{color:#003399!important}}
 </style>
 
-# Serenity-Class Tiltrotor UAV — Build Guide Rev P baseline (24-inch)
+# Serenity-Class Tiltrotor UAV — Build Guide Rev T+ (24-inch)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Year:** 2026 | **Status:** Public release — Rev S baseline (2026-07-04, integrates all Rev
-R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
+**Year:** 2026 | **Status:** Rev T+ refresh (2026-10-31). Phases 0–3 now describe the Rev T+
+airframe in `airframe/FreeCAD-scripts/serenity_assembly.py`. No phase has been built or bench
+tested; steps marked **DRAFT — not bench-verified** have not been proven.
 
-> **Rev P note:** This guide covers the Rev P baseline which adds a complete cargo bay system
-> to the Rev O CG-pivot tiltrotor. Rev P new items: Rev S cargo section shell (clamshell door
-> cutout + hinge-pin blocks + SG90 servo pads), port/stbd CF-PETG clamshell doors, 2× SG90
-> cargo servos via DRV8833 H-bridge, STS3215 winch + Dyneema SK75 spool, auto-latch cradle, GPS
-> retention ring, FPV bezel, 3M foam gasket door seal. All other subsystems identical to Rev O.
-> See `serenity-rev-p.jsx` for the complete Rev P specification and `bom_revP.json`/`bom_revP.csv`
-> for the full Rev P bill of materials.
+> **Rev T+ note (2026-10-31):** This guide used to describe the Rev P/Rev S baseline. Phases 0–3
+> now follow the Rev T+ airframe. In Rev T+ the wing spar is a fixed, bonded CF tube (Rev T1). The
+> nacelle tilts on a trunnion (Rev T4) through a worm drive with a pin brake (Rev T5e). Each
+> nozzle is driven by its own servo (2026-09-28). The landing gear is the 3.0 in R6 flight article
+> with conforming bays and the A1b balanced couple. Every figure comes from the regenerated master
+> assembly and the renders in [Current Assembly Views](#current-assembly-views). The Rev T BOM
+> (`current-specification/bom_revT.csv`) still lags parts of this design; see
+> `current-specification/README.md` "Not yet in the Rev T BOM." Phases 4–11 have not been
+> re-audited for Rev T+ (`graphical-build-guide/WBS.md` task 1.5.6).
 >
 > Fan engineering work inspired by the Firefly-class transport ship *Serenity*  
 > from *Firefly* (Fox, 2002) and *Serenity* (Universal, 2005).  
@@ -46,32 +49,52 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
 ---
 
-## End-State Specifications (Rev N)
+## Rev T+ Configuration
 
-| Parameter | Value |
-|-----------|-------|
-| Hull length | 24.00 in (609.6 mm) |
-| Beam (nacelle tip-to-tip) | ~19.1 in (~486 mm) |
-| Hull material | PETG (0.098 in / 2.5 mm skin, 2 lb/ft³ closed-cell foam fill) |
-| Nacelle EDF | XFly Galaxy X5 50mm 12-blade 6S 3200KV — **2.73 lbf (1,240 gf) thrust each** (xfly-model.eu) |
-| Propulsion (Phases 5–10) | 2× (2× 50mm EDF @ 6S tandem) nacelles — 1,240 gf × 2 × 0.90 stator efficiency × 2 nacelles = **9.84 lbf (4,464 gf)** |
-| Propulsion (Phase 11 full) | As above + 1× 55mm EDF @ 6S fuselage rear — **~2.81 lbf (1,275 gf) net forward thrust** (cruise only; not summed into hover) |
-| Counter-rotation | Port nacelle EDFs: CW from intake | Starboard: CCW — zero net torque reaction |
-| Inter-stage stators | 11-fin twisted stator, integrated into each nacelle print (CF-PETG) |
-| Nacelle tilt | 0° (cruise) → 90° (hover) → 120° (backing); hard stops −5° / 140° |
-| Tilt actuation | 1× digital servo per nacelle (≥347 oz·in / 25 kg·cm @ 6V), fuselage-mounted |
-| Iris nozzles (nacelles) | 2× nacelle, gear-linked to tilt pivot — no dedicated servo |
-| Rear nozzle | 1× **fixed canonical elliptical** tail nozzle (2.06 × 1.76 in / 52.3 × 44.7 mm) — no iris, no servo — **Phase 11 only** |
-| Nozzle closed | 0° nacelle tilt → petals form hull-matched engine cone (Serenity skin) |
-| Nozzle open | 90° nacelle tilt → petals hinge out, LED-backlit translucent-blue inner faces |
-| Rear EDF | 55mm @ 6S (~1,500 gf fan), exhaust straight aft through canonical nozzle; feeds **4 RCS bleed-air jets** (~15% flow, pitch/yaw); intake via reduced-area neck scoops at ~12.2 in (~310 mm) — **DEFERRED Phase 11** |
-| AUW (Phases 5–10, no aft EDF) | **6.10 lbm (2,768 g)** — aft EDF system omitted (~0.79 lbm / ~360 g deferred): 55mm EDF ~95g + 50A ESC ~35g + intake frame ~20g + plenum+RCS manifold ~50g + canonical nozzle ~30g + 4× RCS jets ~32g + 4× RCS valves ~36g + mount+thrust tube ~45g + wiring ~15g |
-| Nacelle-only T/W (Phases 5–10) | **~1.61** — 9.84 lbf / 6.10 lbm — **full VTOL hover capable** without aft EDF |
-| AUW (Phase 11 full system) | **6.90 lbm (3,130 g)** — with 55mm rear EDF + RCS hardware installed |
-| Hover T/W (Phase 11) | **~1.43** — 9.84 lbf / 6.90 lbm; rear EDF is forward-thrust only (cruise/range), not counted in hover. Keep hover payload light to stay ≥1.5. |
-| Avionics | 8× PocketBeagle 2 Industrial (AM6254): FC1–FC4 (Cape-A) + CN1–CN4 (Cape-B) |
-| Cargo | 4.00 × 3.00 × 3.00 in (101.6 × 76.2 × 76.2 mm) bay, clamshell doors, STS3215 winch |
-| Build estimate | ~100–120 hours across all phases |
+Performance figures (AUW, thrust, T/W) are provisional until the bottom-up AUW ledger
+recompute closes, so this guide does not restate them. Read them in `docs/WBS.md` §0.10.1 and
+`current-specification/auw_ledger.json`.
+
+| Subsystem | Rev T+ configuration | Authority |
+|-----------|----------------------|-----------|
+| Hull | 24.00 in (609.6 mm) printed shell in four sections: head, cargo, middle (horseshoe ring + inner neck), rear. Joined by three internal splice collars. Foam-filled. | `airframe/README.md` |
+| Datum | Aircraft datum R2: nose tip at Y 0, centerline at X 0, 3.0 in gear ground plane at Z 0 | `tools/hull_datums.py` |
+| Wing | S1223-derived section (t17.7 root / t26.7 tip) on a **fixed, bonded** 20 mm CF spar (`SPAR-CF-20X16`). The root moment goes to the hull through a bonded root flange (`PRINT-WING-ROOT-FLANGE`). | Rev T1 / T1c |
+| Nacelle | Tandem-EDF pod on a trunnion with 2 × 6704ZZ bearings (**open owner decision:** the pair runs at 89 % of C0 under ultimate load, `docs/NACELLE_64MM_VERIFICATION.md` §5b). The master assembly carries the **64 mm** pod. The procurement BOM keeps the 50 mm EDF rows until the NAC-64 gates close. | `docs/NACELLE_64MM_VERIFICATION.md` |
+| Tilt drive | Per side: Pololu 20D 25:1 gearmotor driving a six-start worm and 40T wheel in the cargo bay, with a solenoid pin brake. Drives a 4 mm shaft to a 14T pinion on the trunnion's 50T ring gear. Hard stops at −5° and 140° (0° = cruise, 90° = hover); commanded range −5° to 135°. | `docs/TILT_ACTUATOR_SELECTION.md` |
+| Tilt sensing | AKM AK7455 off-axis encoder per nacelle, published on the bus | `docs/TILT_ENCODER_WIRING_EMI_SPEC.md` |
+| Nozzle | Rev T3 shingled 8-flap nozzle (4 master + 4 seal flaps). One sub-micro servo per nacelle, scheduled on measured tilt: 75 % of bore at 0°, 105 % from 90° to 140°. A spring returns it to 105 % on any fault. | `docs/NOZZLE_DRIVE_TRADE.md` (2026-09-28) |
+| Landing gear | 3.0 in (76 mm) R6 leg frames with the A1b balanced-couple absorber, in four conforming bays (port/stbd distinct mirror prints) | `docs/LANDING_GEAR_ANALYSIS.md` |
+| Cargo | Clamshell doors with one bell-crank latch; SG90 door/release servos on their own door gateway; SPT5425LV + LibreServo winch | `docs/CARGO_WINCH_SPECIFICATION.md` |
+| Avionics | 8-node baseline (4 Pilot + 4 TACCO) plus Observer, Flight Engineer, and Commo | `avionics/AGENTS.md` |
+
+### Current Assembly Views
+
+Rendered 2026-10-31 by `airframe/blender-scripts/serenity_render_views.py` from every placed
+mesh of the master assembly (`tools/export_assembly_meshes.py`). The default attitude shows the
+**port nacelle at cruise (0°)** and the **starboard nacelle at hover (90°)**. The dorsal antenna
+fin is left out: its assembly placement is still a VERIFY placeholder at the datum origin.
+
+| | |
+|---|---|
+| ![Port-bow-dorsal isometric](pngs/07_iso_port_bow_dorsal.png) | ![Starboard-stern-dorsal isometric](pngs/10_iso_stbd_stern_dorsal.png) |
+| Port bow, dorsal | Starboard stern, dorsal |
+| ![Port side](pngs/01_port.png) | ![Bow](pngs/05_bow.png) |
+| Port side | Bow |
+| ![Ventral](pngs/04_bottom.png) | ![Port-bow-ventral isometric](pngs/11_iso_port_bow_ventral.png) |
+| Ventral (gear, bays, doors) | Port bow, ventral |
+| ![Landing gear close-up](pngs/16_closeup_gear.png) | ![Port nacelle close-up](pngs/17_closeup_nacelle.png) |
+| 3.0 in gear and conforming bays | Port nacelle, trunnion, tilt pinion |
+
+All 17 views are in `pngs/`. To regenerate after any STL change:
+
+```bash
+# 1. Export the placed meshes of the master assembly (FreeCAD 1.0, headless)
+xvfb-run -a freecadcmd -c "import sys; sys.argv=['x','--','/tmp/asm']; \
+    exec(open('tools/export_assembly_meshes.py').read())"
+# 2. Render the 17 views into graphical-build-guide/pngs/
+blender --background --python airframe/blender-scripts/serenity_render_views.py -- /tmp/asm
+```
 
 ---
 
@@ -86,9 +109,10 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 3. **The foam pour is the point of no return.** Do a full dry-fit with all wiring and components before mixing.
 4. **Do NOT foam the nacelle interior.** Nacelles are CF-PETG structural shells — foam in the bore traps EDF heat and ruins the press-fit.
 5. **Verify EDF rotation direction before nacelle installation.** Port EDFs shall rotate CW from the intake end; starboard CCW. Swap any two motor leads to reverse if wrong. Once nacelle is sealed and fiberglassed, this is a full disassembly.
-6. **Gear-mesh the nozzle linkage before bonding the tilt bracket.** Check nozzle opens smoothly through the full 0°–90° sweep before epoxying the sector gear.
+6. **Bond the wing-root flanges, and keep the spar passage clear, before the foam pour.** The flange carries the root moment through a bond to the inner sidewall, and foam seals it in. The spar is **not** bonded into the hull. It bonds into the wing, and the wing + spar assembly clamps into the fuselage so the joint stays releasable (`docs/WING_ATTACH_INTERFACE.md` §3.3–3.4). Foam in the spar passage makes the wing unremovable.
 7. **FAA registration on airframe before first untethered flight.** Replace placeholder with your issued number.
 8. **TPM 2.0 provisioning is non-reversible.** Provision all 8 nodes before first flight.
+9. **Prove the nozzle fail-safe before closing the nacelle covers.** With the nozzle servo unpowered, the torsion spring shall drive the unison ring to the hard 105 % stop from any position.
 
 ---
 
@@ -98,7 +122,7 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 |-------|------|-----------|-----------|
 | 0 | Print All Parts + CF Cuts | All parts ready | ~$75 |
 | 1 | Hull Structure + Provisions | Hull sealed, all conduits installed, foam-ready | ~$90 |
-| 2 | Nacelle Assembly | Both nacelles complete with EDFs, stators, nozzle linkage | ~$190 |
+| 2 | Nacelle Assembly | Both nacelles complete with EDFs, stators, trunnion, servo-driven nozzle | ~$190 |
 | 3 | Tilt Mechanism | Nacelles mount, pivot, and tilt on fuselage | ~$80 |
 | 4 | Hull Foam Pour + Close-up | Structural foam cured, all access panels fitted | ~$30 |
 | 5 | Minimum Viable Flyer (4 nodes) | ★ **FIRST FLIGHT** — nacelle EDFs only; forward flight / partial hover | ~$640 |
@@ -132,51 +156,56 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
 ### Print Schedule
 
-| STL | Material | Layer | Infill | Qty | Notes |
-|-----|----------|-------|--------|-----|-------|
-| `head_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Nose-down orientation |
-| `middle_canonical_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Canonical belly — NO belly scoop. **Rev R1 canonical source is the Blender pipeline** (`middle_shell24_2mm_repaired.stl`, see Blender Script Reference below), not the legacy `middle_canonical_shell24.scad`. |
-| `cargo_sect_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
-| `rear_neck_intake_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Hull neck section with reduced-area scoop windows (sized for 55mm EDF). Generate from `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`. Cover the windows with removable 3mm PETG blanks (silicone-sealed) until Phase 11. |
-| `s_wings_both_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
-| `s_eng_left_stator_shell24.stl` | **CF-PETG** | 0.15 mm | 25% gyroid, 4 walls | 1 | Port nacelle — run `blender_nacelle_integrated_v1.py` first to generate |
-| `s_eng_right_stator_shell24.stl` | **CF-PETG** | 0.15 mm | 25% gyroid, 4 walls | 1 | Starboard nacelle |
-| `s_eng_piv_outer_scaled24.stl` | **CF-PETG** | 0.15 mm | 40%, 4 walls | 2 | Pivot housing; verify 4mm rod press-fit |
-| `s_eng_piv_pins_scaled24.stl` | **CF-PETG** | 0.15 mm | 40% solid, 4 walls | 2 | |
-| `s_eng_pistons_scaled24.stl` | PETG | 0.20 mm | 20% gyroid | 2 | Decorative fairings |
-| `s_pivot_arm_a_scaled24.stl` | **CF-PETG** | 0.15 mm | 40%, 4 walls | 2 | Carries tilt servo pushrod |
-| `nacelle_nozzle_petal.stl` | PETG (body) + translucent-blue PETG (inner face) | 0.20 mm | 20% gyroid | 16 | 8 per nacelle; print inner face swap if dual-material unavailable |
-| `nacelle_nozzle_ring.stl` | **CF-PETG** | 0.15 mm | 40% | 2 | Base ring; seals to nacelle nozzle exit face |
-| `rear_nozzle_canonical.stl` | **CF-PETG** | 0.15 mm | 30%, 4 walls | 1 | **DEFERRED — Phase 11.** Fixed canonical elliptical tail nozzle (2.06×1.76 in). Requires regeneration for 55mm/canonical geometry (supersedes iris rear_nozzle_frame/petal). |
-| `rcs_thruster_nozzle.stl` | **CF-PETG** | 0.15 mm | 40%, 4 walls | 4 | **DEFERRED — Phase 11.** RCS bleed-air jet nozzle. Requires generation. |
-| `rcs_distribution_manifold.stl` | PETG | 0.20 mm | 30% | 1 | **DEFERRED — Phase 11.** 4-way RCS bleed manifold off the EDF plenum. Requires generation. |
-| `feet_x_4_scaled24.stl` | **TPU 95A** | 0.25 mm | 40% | 1 | Direct-drive extruder required |
-| `legs_scaled24.stl` | **CF-PETG** | 0.15 mm | 30% | 1 | |
-| Tilt bracket w/ sector gear | **CF-PETG** | 0.12 mm | 40%, 4 walls | 2 | 0.12mm layer for M0.5 tooth accuracy |
-| Drive pinion (R=6mm, M0.5) | PETG or resin | 0.12 mm | 40% | 4 | 2 per nacelle (one either end of bevel shaft); resin gives best tooth finish |
-| Bevel gear pair (1:1, M0.5) | PETG or resin | 0.12 mm | 40% | 2 sets | 4 gears total; or source machined |
-| Nozzle inner ring (rack R=28mm) | PETG | 0.12 mm | 40%, 3 walls | 2 | Print vertically for tooth accuracy |
-| Access panel frames (A–F) + lids | PETG | 0.20 mm | 100% | 1 set | 6 frames + 6 lids; 2mm wall |
+The Rev T+ printed parts are the ones the master assembly places
+(`airframe/FreeCAD-scripts/serenity_assembly.py`), plus print-only parts that never get a
+flight position (void formers, nozzle flaps, ESC covers). Slicer settings per part are in
+`current-specification/bom_revT.csv` (Notes column) and
+`airframe/gcode/davinci-jr-proto/cura/slice_all_batches_cura.py`. **Print the
+`*_print.stl` sibling** wherever one exists; it is the same part re-oriented for the bed.
 
-### CF Cuts
+| Group | STL (under `airframe/stls/`) | Qty | BOM ref |
+|-------|------------------------------|-----|---------|
+| Hull | `fuselage/head_shell24_2mm_repaired.stl`, `fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl`, `fuselage/middle_shell24_2mm_repaired.stl`, `fuselage/rear_shell24_2mm_repaired.stl` | 1 each | `PRINT-HEAD-SHELL`, `PRINT-CARGO-SECT`, `PRINT-MIDDLE-CANONICAL`, `PRINT-REAR-NECK-INTAKE` |
+| Splice collars | `fuselage/head_cargo_splice_collar.stl`, `fuselage/cargo_middle_splice_collar.stl`, `fuselage/middle_rear_splice_collar.stl` | 1 each | `PRINT-*-COLLAR` |
+| Wing | `wings/wing_port_s1223_revo.stl`, `wings/wing_stbd_s1223_revo.stl` | 1 each | `PRINT-WINGS-S1223` |
+| Wing root | `fuselage/wing_root_flange_port.stl`, `fuselage/wing_root_flange_stbd.stl` (CF-PETG, essentially solid at 5 mm) | 1 each | `PRINT-WING-ROOT-FLANGE` |
+| Nacelle | `nacelles/nacelle_port_64mm.stl`, `nacelles/nacelle_stbd_64mm.stl` (master-assembly pods; see the 64 mm note in the configuration table) | 1 each | `PRINT-NACELLE-PORT/STBD` |
+| Trunnion | `nacelles/nacelle_trunnion_64mm_port.stl`, `nacelles/nacelle_trunnion_64mm_stbd.stl` | 1 each | `PRINT-NACELLE-TRUNNION` |
+| Nozzle | `nacelles/nozzles/nacelle_nozzle_flap.stl` (master) + `nacelle_nozzle_flap_seal.stl` (seal), `nacelle_nozzle_throat.stl`, `nacelle_nozzle_ring.stl` | 4 + 4 per nacelle; 1 each per nacelle | `PRINT-NACELLE-FLAP-*`, `-THROAT`, `-RING` |
+| ESC bay covers | `nacelles/esc/nacelle_esc_cover_{port,stbd}_{a,b}.stl`, four distinct parts | 1 each | `PRINT-NACELLE-ESC-COVER` |
+| Tilt drive (cargo) | `fuselage/cargo/tilt_actuator_bracket_{port,stbd}.stl`, `tilt_actuator_worm.stl` ×2, `tilt_actuator_wheel.stl` ×2, `tilt_brake_guide.stl` + `tilt_brake_guide_stbd.stl` (stbd is a **mirrored** print, not a copy) | as listed | `PRINT-TILT-*` |
+| Landing gear | `fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl` (aft) and `lg_r6_3_0in_leg_frame_fore.stl` (fore); `lg_r6_common_foot.stl` ×4; bays `lg_r6_3_0in_bay_{fore,aft}-{port,stbd}_print.stl`, four distinct mirror parts | as listed | `PRINT-LG-*` |
+| Cargo | `fuselage/cargo/cargo_door_{port,stbd}.stl`, `fuselage/cargo/cargo_hinge_retention.stl`, `fuselage/cargo/door_latch_bracket_{port,stbd}.stl`, `fuselage/cargo/door_latch_crank_{port,stbd}.stl`, `fuselage/cargo/door_horn.stl` ×2, `fuselage/cargo/gateway_door_tray.stl`, `fuselage/cargo/cargo_door_servo_bracket.stl`, `fuselage/cargo/cargo_release_servo_bracket.stl`, `fuselage/cargo/cargo_fpv_bezel.stl`, `fuselage/cargo/cargo_gps_retention_ring.stl`, `fuselage/cargo/battery_cradle.stl`, `fuselage/cargo/chin_node_shelf.stl` | as listed | `PRINT-CARGO-*`, `PRINT-DOOR-*`, `PRINT-GW-DOOR-TRAY`, `PRINT-BATT-CRADLE`, `PRINT-CHIN-SHELF` |
+| Void formers | `fuselage/cargo/void_former_cargo_{collar_rim,batt_chimney,harness_trunk_port,harness_trunk_stbd,node_bay}.stl` | 1 each | `PRINT-VOID-FORMER-CARGO` |
+| Deferred (Phase 11) | Rear canonical nozzle, RCS nozzles, RCS manifold: see `deferred/AGENTS.md` | — | — |
+
+> **NOTE:** The winch has no hull-frame STLs yet (WBS LEDGER-GAPS), so it is not in the
+> master assembly or the renders. Print its parts from the `PRINT-CARGO-WINCH-*` rows.
+> Retired parts are **not** printed: the Thingiverse feet/legs, the MF104ZZ pivot housing and
+> pins, the sector-gear tilt bracket, the bevel/crown nozzle gear train, the N20 winch mount and
+> spool, and the DRV8833 tray (`ARCHIVE_INDEX.md`).
+
+### CF Cuts and Machined Parts
 
 | Part | Material | Dimension | Notes |
 |------|----------|-----------|-------|
-| Keel | CF flat bar 6×3mm, 2 lap-spliced segments | Cargo 8.0 in (203 mm) + Rear 7.1 in (181 mm); spans hull Y −71..+384 mm (17.9 in / 455 mm) — head and middle sections are keelless (docs/structural_analysis.md §4.1–§4.2) | Bar oriented 3mm lateral (X) × 6mm vertical (Z), strong axis vertical; 100 mm (3.9 in) lap-splice overlap centered at the middle/rear joint (hull Y ≈ +203 mm); ring-notch positions at hull Y = +30 mm and +290 mm (replaces stale 91/165/251/320/388 mm nose-station marks) |
-| Wing spars | CF tube 12mm OD / 1.5mm wall | 2× 14.96 in (380 mm) | Sand spar ends to fit wing-root spar pockets |
-| Pivot rods | CF solid rod 4mm OD | 2× cut to length per pivot housing drawing | Deburr ends; press-fit into MF104ZZ bearings |
-| Ring frames | CF plate 2mm | 2 profiles: hull Y = +30 mm (cargo) and +290 mm (rear) — down from 5 pre-Rev N stations; see airframe/diagrams/ring_frames/*.dxf | Fit to keel slot-notches; cargo profile is PROVISIONAL pending cargo-mesh fix (TODO §1.1.1) |
+| Keel | CF flat bar 6×3 mm, 2 lap-spliced segments | See Phase 1 step 1 | Bar oriented 3 mm lateral (X) × 6 mm vertical (Z) |
+| Wing spars | Roll-wrapped CF tube 20 mm OD × 16.3 mm ID (`SPAR-CF-20X16`) | 2, cut per `docs/TILT_SPAR_ANALYSIS.md` | **Fixed, bonded wing member**, not a rotating shaft (Rev T1) |
+| Tilt drive shafts | Steel tube 4 mm OD × 0.5 mm wall (`SHAFT-TILT-4MM`) | 2 × ~250 mm (9.8 in) | Fuselage worm wheel to the trunnion pinion; runs in bronze bushings (`BUSH-TILT-4MM`) |
+| Tilt pinions, 14T | **Brass or steel, machined, NOT printed** (`airframe/openscad/wings/wing_tilt_pinion.scad`; geometry in `wings/wing_tilt_pinion_{port,stbd}.stl`) | 1 per side | A printed pinion falls short of the ≥ 76 MPa allowable (`docs/NACELLE_64MM_VERIFICATION.md` §5c). **No BOM row yet.** |
+| A1b backbone cheeks | CF quasi-isotropic plate 1/8 in (3.2 mm) (`LG-A1B-CF-CHEEK`) | 8, waterjet | 2 per leg |
+| Ring frames | CF plate 2 mm | 2 profiles | See `airframe/diagrams/ring_frames/*.dxf` |
 
 > ⚠ **CF dust hazard.** Wear N95 mask + safety glasses. Cut outdoors or with dust extraction.
 
 ### Phase 0 Checks
 
-- [ ] Nacelle bore caliper check: 2.165–2.205 in (55.0–56.0 mm) ID at Z=10 mm and Z=80 mm
-- [ ] Stator fins visible inside nacelle bore at Z≈63 mm (between the two EDF seats)
-- [ ] Hub bore clear at stator: 16 mm ID minimum (for EDF motor leads)
-- [ ] Tilt bracket gear dry-mesh: sector ↔ pinion backlash 0.1–0.2 mm
-- [ ] Nozzle ring fits flush on nacelle exit face; petals hinge freely on 3mm pins
-- [ ] 4mm CF pivot rod slides through pivot housing with MF104ZZ bearings seated
+- [ ] Every STL in the print schedule sliced from the current `main` checkout (not from a stale branch)
+- [ ] Port and starboard mirror parts (gear bays, brake guide, ESC covers) are the correct hand
+- [ ] Trunnion bearing seats accept 6704ZZ with the specified fit
+- [ ] Nozzle master and seal flaps lap without interference on the ring (dry fit, 8 flaps)
+- [ ] Worm turns the 40T wheel freely by hand on the bracket; brake pin enters a collar slot
+- [ ] Wing-root flange back face matches the inner cargo sidewall (dry fit, no rocking)
 - [ ] All access panel lids flush ±0.2 mm in frames
 
 ---
@@ -205,7 +234,7 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 | PETG wire post (49MHz fwd + aft) | 2× | Print from s_rcrs49_wire_post.scad: forward post (~120mm from nose, dorsal) + aft post (top of rear nozzle cone). Both ~10mm tall insulated hooks |
 | 0.3mm stainless steel wire or 22AWG enamelled Cu | ~500mm | 49MHz (Part 15 §15.235) top wire |
 | Ceramic bead insulator (3mm ID) | 1× | Aft end of 49MHz wire (insulated/open) |
-| Wing spar pocket inserts | 4× | CF spar sleeve inserts bonded into fuselage side walls at wing root |
+| Wing-root flanges (printed) | 2× | `PRINT-WING-ROOT-FLANGE`; bond with West System 105/206 |
 
 ### Installation Sequence
 
@@ -238,9 +267,17 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
 - Inter-cape standoffs (20mm): Pilot (55×35mm) hole pattern above TACCO
 - Verify 44mm total stack height clears bay void former
 
-**5. Bond wing spar pocket inserts** at wing root stations, both sides. Spar shall slide freely in/out for nacelle assembly access.
+**5. Bond the wing-root flanges** (port and starboard) to the inner cargo sidewall with West
+System 105/206, following the adhesive maker's cure schedule. Then **dry-fit** the fixed 20 mm CF
+spar through the flange and hull with **no adhesive**. Withdraw it, and cap the spar passage
+against foam. Bond the spar into the wing root as a separate wing + spar sub-assembly
+(`docs/WING_ATTACH_INTERFACE.md` §3.3–3.4). **DRAFT — not bench-verified.** The spar clamp at the
+wall (WA-R3 split collar) is not yet a part (fuselage-mid WBS WA-R17). Hold final wing fit until it is.
 
-**6. Bond tilt servo mount brackets** into fuselage interior at wing root bays (one bracket per nacelle tilt servo). Servo arm shall clear all wiring conduits.
+**6. Mount the tilt-drive brackets** (`tilt_actuator_bracket_port/stbd`) in the cargo bay on
+their three shell feet. Fit each worm, wheel, and brake guide, and use the mirrored brake guide
+on the starboard side. Then install the four conforming landing-gear bays in their sponson
+rebates (port and starboard are distinct mirror prints). **DRAFT — not bench-verified.**
 
 **7. Install M3 heat-set inserts ×4** at belly cargo hard-point locations.
 
@@ -301,24 +338,20 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
 
 ## Phase 2 — Nacelle Assembly
 
-**Goal:** Both nacelles fully assembled — EDFs installed, stators integral, nozzle iris fitted, gear linkage dry-meshed and verified.
+**Goal:** Both nacelles fully assembled: EDFs installed, stators integral, trunnion seated,
+shingled nozzle fitted, nozzle servo installed and its spring fail-safe proven.
 
 ### Materials Needed — Phase 2
 
 | Item | Qty | Notes |
 |------|-----|-------|
-| 50mm EDF @ 6S | 4 | 2 per nacelle |
-| 40A 6S ESC (BDSHOT) | 4 | 1 per EDF |
-| 3mm × 5mm SS hinge pins | 16 | 8 per nacelle nozzle |
-| 0.8mm piano wire | ~600mm | Link rings for nozzle petals |
-| M0.5 bevel gear pair (1:1) | 2 sets | One per nacelle |
-| M0.5 drive pinion R=6mm | 4 | 2 per nacelle (one each end of bevel shaft) |
-| Longitudinal nozzle shaft (steel 2mm OD) | 2× ~60mm | Links bevel output to crown pinion in nacelle |
-| M0.5 crown pinion R=6mm | 2 | One per nacelle, drives nozzle inner ring |
-| WS2812B LED ring (nozzle size) | 2 | One per nacelle duct exit |
+| Tandem EDF stages | 4 | 2 per nacelle. The BOM row is still 50 mm (`EDF-50-6S`); the 64 mm unit enters after the NAC-64 gates |
+| ESC | 4 | 1 per EDF, in the hinged nacelle ESC bays behind the four covers. ESC rating is held pending the NAC-64 power gate |
+| 6704ZZ bearing | 4 | 2 per trunnion |
+| Nozzle servo, sub-micro | 2 | 1 per nacelle, inside the pod forward of the unison ring (`docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`) |
+| Nozzle return torsion spring | 2 | Drives the ring to the 105 % stop whenever the servo stops pulling |
 | Structural epoxy (slow cure) | — | EDF casing bonding |
-| 3-wire servo extension 150mm | 4 | ESC signal leads |
-| Wire sleeve 8mm | ~500mm | Bundle ESC + motor leads in hub bore |
+| Wire sleeve 8 mm | ~500 mm | Bundle ESC + motor leads |
 
 ### 2A — EDF Installation
 
@@ -327,157 +360,137 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
 > **WARNING:** The EDF spins at high speed on bench power. Keep hands, tools, and loose
 > clothing clear of the duct during the rotation-direction test.
 
+Stations below are pod Z, measured aft from the nacelle nose, from
+`airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad`. The pod uses **stator-as-mount**:
+each stage's motor bolts to the integral stator, so there are no separate spider sleeves. Motor
+and rotor stations are **VERIFY** until NAC-64-FIT-02 measures a physical QF2822 and rotor.
+**DRAFT — not bench-verified.**
+
+| Station | Pod Z |
+|---------|-------|
+| Stage 1 (fore) rotor + motor | 1.20–4.06 in (30.5–103.2 mm) |
+| Stage 1 stator / motor mount | 1.66–4.06 in (42.2–103.2 mm) |
+| Interstage running gap | 0.04 in (1.0 mm) |
+| Stage 2 (aft) rotor + motor | 4.10–6.96 in (104.2–176.9 mm) |
+| Bulkheads (10 AWG disconnect bay between them, at Z 57.6) | 1.78 in (45.2 mm) and 2.76 in (70.1 mm) |
+| ESC bays (hinged, behind the covers) | from 3.40 in (86.35 mm) aft |
+
 1. **Test EDF rotation direction before installation.** Connect to bench ESC + power supply (safe prop/duct test only).
    - Port EDF shall spin **CW viewed from intake** (fore end).
    - Starboard EDF shall spin **CCW viewed from intake**.
    - To reverse: swap any two motor phase wires at the ESC.
 
-2. **Install EDF2 (downstream — aft EDF):**
-   - Feed motor leads through hub bore (16mm ID) from aft end.
-   - Slide EDF2 into nacelle from aft (nozzle) end, Z=0.
-   - Seat EDF2 casing at Z=5mm shoulder. Casing OD should be snug in bore.
-   - Apply 3 small dabs of slow-cure structural epoxy around EDF2 casing at the Z=50mm stator shoulder. Do not foul fin channels.
-   - Route ESC1/ESC2 signal wire through hub bore alongside motor leads.
+2. **Mount each stage's motor on its stator** (4 × M3 on Ø16.00 mm, VERIFY). Fit stage 2 first,
+   from the aft (nozzle) end, then stage 1 from the intake end. Hold the 1.0 mm running gap at the
+   interstage, and keep rotor-to-bore clearance even all around.
+3. **Route the motor phase leads** forward along the stator vanes to that stage's ESC bay. Keep
+   them clear of the trunnion cavity and the disconnect bay.
+4. **Spin-check both stages by hand**: no rub at the bore or the interstage.
 
-3. **Route EDF2 leads through hub bore** and bring them out the fore (intake) end alongside stator fins. Bundle with wire sleeve.
+5. **Power routing, PDB to ESC.** The ESCs live **in the nacelle**, on hinges in the two ESC bays
+   behind the four covers (Rev T4c). They are not in the fuselage. Each ESC's feed is one 10 AWG
+   silicone branch from the Flight Engineer PDB `J_ESCn` connector (fused per ESC by
+   `FUSE-ESC-40A`; `avionics/kicad/FlightEngineer/FlightEngineer.md`, 10 AWG branch, 300 mm
+   [11.8 in] max). The trace:
 
-4. **Install EDF1 (upstream — fore EDF):**
-   - Feed EDF1 leads through from fore end.
-   - Slide EDF1 in from fore end, seat at Z=76mm.
-   - Verify stator fins are visible and clear in Z=53–73mm gap between EDFs.
-   - Apply 3 dabs epoxy at EDF1 casing at Z=76mm shoulder.
+   | Leg | Path | Authority |
+   |-----|------|-----------|
+   | 1 | PDB `J_ESCn` in the fuselage → wing root | `FlightEngineer.md` |
+   | 2 | Through the bore of the **fixed** 20 mm CF spar. All four 10 AWG feeds per side ride the bore; it is sized at 16.3 mm ID so the bundle (13.28 mm circumscribed) twists freely through the tilt sweep instead of flexing across an arc | `airframe/wings-nacelles/WBS.md` SPAR-20-1/-2 |
+   | 3 | Spar bore → nacelle **10 AWG disconnect bay** (pod Z 57.6 mm, between the Z 45.2/70.1 bulkheads). The nacelle is the cover; there is no hatch | `docs/NACELLE_64MM_VERIFICATION.md` §5; WA-R10 |
+   | 4 | Disconnect bay → each ESC in its hinged bay, strain-relieved | **OPEN, WA-R10: route not yet drawn**; conductor OD still unrecorded (`docs/WING_ATTACH_INTERFACE.md` OI-1) |
 
-5. **Install ESC pair** against hub bore inner wall or in fuselage (route leads through spar conduit to fuselage bay). ESC heat shall not be trapped inside nacelle bore — route ESCs to fuselage bay via spar conduit.
+   > **CAUTION:** Leg 4 has no drawn route. Before you cut leads, measure the actual run from the
+   > PDB through the spar to each ESC and confirm it is within the 300 mm (11.8 in) branch
+   > limit, and that nothing chafes at the trunnion through the full −5° to 140° travel.
 
 6. **Cure 2h minimum** before proceeding.
 
-### 2B — Nozzle Iris Assembly
+### 2B — Shingled Nozzle Assembly (Rev T3) — DRAFT, not bench-verified
 
-For each nacelle nozzle:
+1. **Press the throat** (`nacelle_nozzle_throat.stl`) onto the nacelle exit and confirm it seats flush.
+2. **Fit the unison ring** (`nacelle_nozzle_ring.stl`) over the throat housing.
+3. **Hang the 8 flaps** by alternating **master** and **seal** flaps. Each seal flap laps 0.2 mm
+   outboard of its neighbors, so the band closes without interpenetration.
+4. **Dry test by hand:** rotate the ring through its full stroke. The exit shall open smoothly from
+   75 % to 105 % of bore with no flap binding.
 
-1. **Press nacelle_nozzle_ring.stl** onto the nacelle aft (nozzle) exit face (Z=0). Confirm flush seating.
+### 2C — Nozzle Servo Drive (owner decision 2026-09-28) — DRAFT, not bench-verified
 
-2. **Install nozzle inner ring** (rack, R=28mm) inside the base ring — this is the driven element.
+The nozzle is **not** geared to the tilt pivot; that passive drive is retired. One sub-micro servo
+per nacelle pulls the unison ring toward 75 % through a pull-only slotted link. A torsion spring
+returns the ring to a hard 105 % stop. The gateway that reads the AK7455 schedules the servo on
+measured tilt angle (`docs/NOZZLE_DRIVE_TRADE.md`).
 
-3. **Bend piano wire link ring** (0.8mm wire): one closed ring that passes through all 8 petal link holes and loops around the inner ring posts. The ring translates radial rotation of the inner ring into petal rotation.
+1. Mount the servo in the pod annulus forward of the unison ring.
+2. Fit the slotted pull link. The slot shall be at least as long as the full ring stroke.
+3. Fit the torsion spring and the hard 105 % stop.
+4. **Fail-safe check:** with the servo unpowered, move the ring to 75 % by hand and release it.
+   The spring shall return the ring to the 105 % stop every time.
+5. Route the servo lead to the nacelle harness port.
 
-4. **Install 8 petals** on 3mm hinge pins. Hinge pins press into base ring lugs. Each petal sits on one hinge pin; the piano wire link passes through the petal's bottom lug.
-
-5. **Dry-test:** manually rotate the inner ring through its travel. Petals should open smoothly from closed (hull-matched position) to ~75° open. Check for binding.
-
-6. **Install WS2812B LED ring** at duct exit lip inside the base ring. Three-wire lead routes through hub bore to fuselage LED driver (Cape-B).
-
-### 2C — Gear Linkage Installation
-
-The nozzle iris is driven passively from the tilt pivot — no dedicated servo.
-
-**Gear train (per nacelle):**
-
-```text
-Tilt pivot rotation
-    ↓
-Sector gear (R=22mm, fixed to tilt bracket — does NOT rotate with nacelle)
-    ↓ meshes with ↓
-Drive pinion (R=6mm, mounted on nacelle outer shell — rotates with nacelle body)
-    Ratio: 22/6 ≈ 3.67:1 → 90° nacelle = 330° pinion rotation
-    ↓ via ↓
-1:1 Bevel gear pair (90° axis redirect — converts nacelle-axis rotation to longitudinal shaft)
-    ↓ via ↓
-Longitudinal shaft (2mm steel rod, ~60mm, runs forward inside nacelle wall)
-    ↓ meshes with ↓
-Crown pinion (R=6mm) → Nozzle inner ring rack (R=28mm)
-    Final ratio: (6/28) × 330° ≈ 70.7° ring rotation for full 90° nacelle sweep
-```
-
-**Assembly steps:**
-
-1. Mount sector gear to tilt bracket (fixed — does not move with nacelle).
-2. Mount drive pinion on nacelle outer shell at pivot axis. Verify mesh with sector gear; set backlash 0.1–0.2mm.
-3. Install bevel gear pair in nacelle body. Input shaft = nacelle-body-axis; output = longitudinal shaft toward nozzle.
-4. Thread longitudinal 2mm steel shaft through nacelle wall channel toward nozzle end.
-5. Mount crown pinion on longitudinal shaft at nozzle end. Verify mesh with nozzle inner ring rack; set backlash 0.1–0.2mm.
-6. **Sweep test:** manually rotate nacelle from 0° to 90°. Nozzle inner ring should rotate ~71°; petals should open from fully closed to fully open.
-7. Verify nozzle inner ring hard stop prevents over-drive at nacelle angles 90°–120°.
-8. Confirm petal closed position matches nacelle hull profile at 0°.
+> **CAUTION:** Never test the nozzle schedule with the EDFs spinning until the gateway's fault
+> logic (105 % command, then load-switch trip) has been verified on the bench.
 
 ### 2D — Nacelle Final Check
 
-- [ ] EDF1 and EDF2 both bonded and leads routed
+- [ ] Both EDF stages bonded and leads routed to the ESC bays
 - [ ] Port nacelle EDF rotation: CW from intake
 - [ ] Starboard nacelle EDF rotation: CCW from intake
-- [ ] Stator fins visible in Z=53–73mm gap (clear of both EDF casings)
-- [ ] Nozzle iris opens/closes smoothly through full nacelle sweep
-- [ ] Petal closed position: hull-match profile flush at 0°
-- [ ] Petal open position: all 8 petals visible and even at 90°
-- [ ] LED ring installed and wired
+- [ ] Trunnion turns freely on both 6704ZZ bearings
+- [ ] Nozzle opens and closes smoothly between 75 % and 105 %; flaps lap evenly
+- [ ] Spring returns the unpowered nozzle to the 105 % stop
+- [ ] All four ESC covers seat flush
 
 ---
 
 ## Phase 3 — Tilt Mechanism
 
-**Goal:** Both nacelles mounted on fuselage, pivot freely on bearings, tilt driven by fuselage-mounted servos with correct hard stops.
+**Goal:** Both nacelles on their trunnions, turning on the fixed spar, driven through the
+cargo-bay worm drive. Pin brakes engage, and both sides track to the encoder.
+
+**DRAFT — not bench-verified.** Sources: `docs/TILT_ACTUATOR_SELECTION.md`,
+`docs/TILT_DRIVE_CONTROL_SPEC.md`, `docs/TILT_SPAR_ANALYSIS.md`.
 
 ### Materials Needed — Phase 3
 
-| Item | Qty | Notes |
-|------|-----|-------|
-| Nacelle tilt servo ≥25 kg·cm @ 6V, metal gear, digital | 2 | e.g. DS3218MG class or equivalent |
-| MF104ZZ flanged bearing 4×10×4mm | 4 | 2 per nacelle pivot (one each end of pivot rod) |
-| 4mm OD CF solid rod | 2 | Cut to length per pivot housing drawing |
-| Servo pushrod (steel 2mm, Z-bend ends) | 2 | Tilt servo arm → pivot arm |
-| Clevis links M2 | 4 | Pushrod-to-servo-arm + pushrod-to-pivot-arm |
-| Hard stop blocks (CF-PETG) | 4 | Two per nacelle: −5° stop + 140° stop |
+| Item | Qty | BOM ref |
+|------|-----|---------|
+| Pololu 20D 25:1 CB 6 V gearmotor | 2 | `GM-TILT-20D` |
+| Tilt controller (Open-Secure-ESC brushed build) | 2 | `OSESC-TILT-TC` |
+| Pull solenoid, brake | 2 | `SOL-TILT-BRAKE` |
+| 3 A mini blade fuse (one per tilt path) | 2 | `FUSE-TILT-3A` |
+| 4 mm steel tilt shaft | 2 | `SHAFT-TILT-4MM` |
+| Flanged bronze bushing 4 × 8 × 5 mm | 4 | `BUSH-TILT-4MM` |
+| AK7455 tilt-encoder PCB | 2 | `SKIPPER-TILT-ENC-PCB` |
 
 ### Installation
 
-1. **Press MF104ZZ bearings** into pivot housing bores (both ends). Bearings are 10mm OD, press-fit into pivot housing.
+1. **Seat the trunnion** (with its 6704ZZ pair) on the fixed CF spar at the wing tip.
+   Check the nacelle rotates freely with no perceptible axial play.
+2. **Run the 4 mm tilt shaft** from the cargo-bay worm wheel out through its bushings to the
+   wing tilt pinion (14T), and mesh the pinion with the trunnion's 50T ring gear.
+3. **Mount the gearmotor** on the worm and wire it through its own fused feed to the tilt
+   controller. Fit the brake solenoid on its guide.
+4. **Fit the AK7455 encoder** at the trunnion ring magnet and route its harness per
+   `docs/TILT_ENCODER_WIRING_EMI_SPEC.md`.
+5. **Brake check:** with the motor unpowered, the brake pin shall lock the worm collar, and the
+   nacelle shall not back-drive under hand load. The train is **not** self-locking, so the brake
+   is what holds attitude.
+6. **Sweep and calibrate:** fit the hard stops at −5° and 140°, then command −5° → 90° → 135° and
+   back. Set the controller's soft limits to −5° and 135°, inside the mechanical travel, and record the encoder zero at 0° (cruise).
 
-2. **Insert 4mm CF pivot rod** through the wing spar pocket and through the pivot housing bearings. The pivot rod is fixed to the fuselage; the nacelle rotates around it on the bearings.
-
-3. **Slide nacelle pivot housing** onto pivot rod. Verify nacelle rotates freely with <0.5 mm axial play. Add thrust washer (stainless 4×8×0.5mm) if axial play exceeds 1mm.
-
-4. **Install tilt servo** in fuselage servo mount bracket at wing root bay. Servo arm shall be accessible through access panel B or D.
-
-   > **⚠ ANTI-REWORK — FOAM POUR SEQUENCE:**
-   > The wing spar (CF-TUBE-12MM, 12 mm OD) shall be inserted through both
-   > `spar_bearing_block` annular bosses before the foam pour (Phase 4).
-   > Once foam cures, the spar bore is permanently encapsulated and cannot be
-   > accessed for spar insertion or retorquing.
-   >
-   > **Do this before Phase 4 foam pour:**
-   > 1. Insert CF spar through the stbd spar bearing boss (Z=2 mm face), across
-   >    the gondola interior, and through the port spar bearing boss (Z=161 mm face).
-   > 2. Verify spar slides freely with ≤ 0.15 mm radial clearance (12.3 mm bore).
-   > 3. Seat spar flush with exterior Z wall at both ends (zero protrusion).
-   > 4. Tighten the M3 grub screw (DIN 913 M3×4) in each bearing boss from
-   >    the +Y face to clamp the spar against Z-axis walking.  Torque: 0.5 N·m.
-   > 5. Confirm both grub screws are tightened and spar cannot slide axially.
-   >
-   > Failure to complete these steps before foam pour requires drilling out the
-   > foam from both bearing bores — a multi-hour rework that risks cracking
-   > the 4.85 mm bearing-block annulus.
-   > Ref: cargo_sect_shell24.scad spar_bearing_block(); PHASED_BUILD_GUIDE Phase 4.
-
-5. **Connect pushrod** from servo arm to pivot arm (`s_pivot_arm_a_scaled24.stl`). Adjust pushrod length so that:
-   - Servo 0° = nacelle 0° (horizontal / cruise)
-   - Servo ~125° = nacelle 90° (hover / vertical)
-   - Servo ~170° = nacelle 120° (backing)
-
-6. **Install hard stop blocks.** Bond −5° stop and 140° stop blocks to fuselage / pivot housing. Verify servo stalls against stop at travel limits rather than stripping — set servo travel limits in FC firmware.
-
-7. **Servo calibration (both nacelles):**
-   - Set FC output channel travel ±100% = nacelle 0°–90° for normal flight.
-   - Enable software travel limits at −5° and 140°.
-   - Verify both nacelles reach 90° simultaneously on throttle-up command.
+> **CAUTION:** The worm train is not self-locking. Never leave a nacelle unbraked and unpowered
+> with a load on it. It will back-drive.
 
 ### Phase 3 Checks
 
-- [ ] Both nacelles rotate freely on bearings — no grinding, no wobble
+- [ ] Both nacelles rotate freely on their trunnions with no grinding or wobble
+- [ ] Pin brake holds each nacelle against hand load with the motor unpowered
 - [ ] Hard stops engage at −5° and 140° on both nacelles
-- [ ] Nacelle nozzle opens/closes correctly across 0°–90° sweep (from Phase 2 gear linkage)
-- [ ] Sector gear does NOT rotate with nacelle — fixed to bracket
-- [ ] Servo arm midpoint approximately corresponds to 60° nacelle (nominal hover approach)
-- [ ] Both nacelles synchronise to within 2° at 0° and 90° positions
+- [ ] Encoder reads 0° at cruise and tracks through the commanded −5° to 135° range
+- [ ] Both nacelles synchronize to within 2° at 0° and 90°
+- [ ] Nozzle schedule follows measured tilt (75 % at 0°, 105 % from 90° to 140°)
 
 ---
 
@@ -533,7 +546,7 @@ Install **CN1 + FC1** in Shepherd's room / Bay A (nose), **CN2 + FC2** in Inara'
 3. Plug 72-pin expansion connector between PB2-I and Cape.
 4. Connect CAN FD, RS-485, 1553, ETH chain connectors per bus harness.
 5. Connect ESC DSHOT signal leads to Pilot PRU-ICSS header.
-6. Connect servo signal leads (2× tilt servos; 4× RCS valve servos are Phase 11) to Pilot servo rail.
+6. Connect the two tilt controllers (`OSESC-TILT-TC`, DRV8874-Q1 brushed drive) to the bus, each with its gearmotor and brake solenoid on its own `FUSE-TILT-3A` feed. Connect the two nozzle servos to their gateway. The 4 RCS valve servos are Phase 11.
 7. Connect GPS patch antenna coax to Pilot GPS header. Mount GPS patch antenna on hull dorsal surface at nearest bay location.
 
 ### ESC Assignment — Cross-Nacelle Redundancy
@@ -544,10 +557,10 @@ hover rather than losing one nacelle entirely.
 
 | ESC | EDF | Nacelle | Position | Controlled by |
 | --- | --- | ------- | -------- | ------------- |
-| ESC1 | EDF1 (upstream / fore) | Port | Z=76..126mm | **FC1** |
-| ESC2 | EDF2 (downstream / aft) | Port | Z=5..50mm | **FC2** |
-| ESC3 | EDF1 (upstream / fore) | Starboard | Z=76..126mm | **FC1** |
-| ESC4 | EDF2 (downstream / aft) | Starboard | Z=5..50mm | **FC2** |
+| ESC1 | Stage 1 (fore) | Port | pod Z 30.5–103.2 mm | **FC1** |
+| ESC2 | Stage 2 (aft) | Port | pod Z 104.2–176.9 mm | **FC2** |
+| ESC3 | Stage 1 (fore) | Starboard | pod Z 30.5–103.2 mm | **FC1** |
+| ESC4 | Stage 2 (aft) | Starboard | pod Z 104.2–176.9 mm | **FC2** |
 | ESC5 | 55mm rear EDF | Fuselage | — | **DEFERRED — Phase 11** |
 
 > **Failure mode (nacelles only):** FC1 loss → FC2 holds ESC2 (port aft) + ESC4 (stbd aft).
@@ -563,10 +576,9 @@ hover rather than losing one nacelle entirely.
 | ESC2 DSHOT (port EDF2) | Pilot FC2 PRU Ch.0 | ESC2 | Conduit Inara's shuttle (Bay B) → port wing root |
 | ESC4 DSHOT (stbd EDF2) | Pilot FC2 PRU Ch.1 | ESC4 | Conduit Inara's shuttle (Bay B) → stbd wing root |
 | ESC5 / rear EDF | — | — | **DEFERRED — Phase 11** (PRU Ch.2 reserved) |
-| Nacelle tilt servo 1 (port) | Pilot FC1 servo rail | Servo-tilt-port | SERVO-PWR conduit |
-| Nacelle tilt servo 2 (stbd) | Pilot FC2 servo rail | Servo-tilt-stbd | SERVO-PWR conduit |
+| Nacelle tilt drive (port) | Tilt controller, bus-networked | 20D gearmotor + brake solenoid | Fused tilt feed `F_TILT_P` |
+| Nacelle tilt drive (stbd) | Tilt controller, bus-networked | 20D gearmotor + brake solenoid | Fused tilt feed `F_TILT_S` |
 | 4× RCS valve servos | — | — | **DEFERRED — Phase 11** |
-| LED strips | TACCO CN1 GPIO | WS2812B ×3 | LED wiring harness |
 | CAN FD bus | CN1→FC1→CN2→FC2 | Ring (open at FC2 end) | CAN conduit, 120Ω term at CN1 |
 
 ### Firmware Flash
@@ -579,8 +591,8 @@ hover rather than losing one nacelle entirely.
 ### Pre-Flight Checklist
 
 - [ ] All 4 nacelle EDFs spin-tested on bench with correct rotation direction
-- [ ] Both tilt servos actuate smoothly through full 0°–120° range
-- [ ] Nacelle nozzles open at 90° tilt, closed at 0° (verify via gear linkage)
+- [ ] Both tilt drives move smoothly through the commanded −5° to 135° range; pin brakes hold with motors unpowered
+- [ ] Nozzles follow the measured-tilt schedule (75 % at 0°, 105 % from 90° to 140°); unpowered spring return reaches 105 %
 - [ ] CAN FD bus: all 4 active nodes heartbeat visible in MAVLink
 - [ ] GPS lock achieved on all 4 FC nodes (CN1/CN2 may relay for minimum flight)
 - [ ] FAA registration applied
@@ -598,7 +610,7 @@ hover rather than losing one nacelle entirely.
 1. Secure tether lines to belly hard points. 11.0 lbm (5 kg) breaking strength minimum, 9.8 ft (3 m) length.
 2. Bring up on throttle to 30% with nacelles at 90° (hover position) — verify all 4 EDF sounds and lift response.
 3. Increase to 60% — verify stable hover and altitude-hold authority on tether.
-4. Verify nacelle nozzle opens correctly at 90° tilt (gear linkage — no dedicated servo).
+4. Verify each nacelle nozzle reaches 105 % at 90° tilt on its servo schedule.
 5. **Only after 3 successful tethered hover passes:** proceed to free hover at 1 m AGL.
 6. Free hover: altitude hold ±0.3 m for 30 s; yaw response; then nacelle transition forward flight circuit.
 
@@ -608,7 +620,7 @@ hover rather than losing one nacelle entirely.
 
 **Goal:** All 8 nodes installed, full ring redundancy, obstacle avoidance operational.
 
-Install **CN3 + FC3** in River's room / Bay C (dorsal aft), **CN4 + FC4** in Simon's medbay / Bay D (aft service). Same procedure as Phase 6 for each bay.
+Install **CN3 + FC3** in River's room / Bay C (dorsal aft), **CN4 + FC4** in Simon's medbay / Bay D (aft service). Same procedure as Phase 5 for each bay.
 
 Connect remaining CAN FD / RS-485 / 1553 / ETH ring segments (CN3→FC3→CN4→FC4). Terminate CAN FD bus at FC4 (120Ω).
 
@@ -646,12 +658,11 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 
 | Component | Spec | Analysis |
 |-----------|------|----------|
-| Wing spar | CF tube 12mm OD / 1.5mm wall | Bending stress at full nacelle torque (~0.13 Nm) ≈ 18 MPa — allowable CF ≥600 MPa |
+| Wing spar | Fixed, bonded CF tube 20 mm OD × 16.3 mm ID (`SPAR-CF-20X16`, Rev T1) | `docs/TILT_SPAR_ANALYSIS.md` §3.6; root joint splits shear (socket) and moment (bonded root flange), `docs/structural_analysis.md` §7.3 |
 | Keel | CF flat bar 6×3mm | Carries fuselage bending; adequate for 24-inch hull at <5g maneuver |
-| Pivot rod | 4mm OD solid CF | Shear stress at 0.749 lbm (340 g) nacelle weight ≈ 27 MPa — allowable CF ≥300 MPa shear |
-| Pivot bearings | MF104ZZ 4×10×4mm × 2 per nacelle | Static capacity 110 lbf (490 N) >> 0.74 lbf (3.3 N) nacelle weight — fine |
+| Tilt bearings | 2 × 6704ZZ per trunnion, concentric with the spar | 653 N (147 lbf) per bearing = 89 % of C0 under ultimate load: **open owner decision** (`docs/NACELLE_64MM_VERIFICATION.md` §5b) |
 | Foam fill | 2 lb/ft³ closed-cell PU | Provides hull rigidity, crash absorption; adds ~0.397 lbm (~180 g) to total AUW |
-| Tilt servo | ≥347 oz·in (25 kg·cm) digital metal gear | Static torque req. ~189 oz·in (~13.6 kg·cm) × 2 safety factor = 374 oz·in (27 kg·cm) min; 347 oz·in (25 kg·cm) rating marginal — prefer 416+ oz·in (30+ kg·cm) |
+| Tilt drive | Pololu 20D 25:1 + six-start worm / 40T wheel + 14T/50T trunnion stage, solenoid pin brake | Train is **not** self-locking; the brake holds attitude. Sizing: `docs/TILT_ACTUATOR_SELECTION.md`, `docs/NACELLE_64MM_VERIFICATION.md` §5b |
 | Nacelle shell | CF-PETG 25% gyroid, 4 walls | Adequate for EDF thrust loads and nacelle-tilt reaction forces |
 
 ---
@@ -770,7 +781,6 @@ geometry shall be regenerated for the 55mm fan, the canonical nozzle, and the RC
 | 55mm 6S EDF (~1,500 gf) | 1× | ~$35–55 |
 | 50A 6S BLHeli32 ESC | 1× | ~$18–28 |
 | SG90-class proportional valve servo (RCS) | 4× | ~$12 |
-| WS2812B LED ring (55mm duct) | 1× | ~$3 |
 
 ### 11B — Intake Frame and Plenum (regenerate for 55mm + RCS)
 
@@ -800,7 +810,6 @@ geometry shall be regenerated for the 55mm fan, the canonical nozzle, and the RC
 4. Bond the RCS manifold to the 4 plenum bleed taps; route bleed ducts to the 4 RCS jet stations.
 5. Install 4× SG90-class proportional valves on their brackets; link each to its bleed duct.
 6. Calibrate RCS valves: 0% = closed, 100% = full bleed jet. Map 2 jets to pitch, 2 to yaw.
-7. Install WS2812B LED ring at the canonical nozzle exit lip.
 
 ### 11E — 49MHz Antenna Upgrade
 
@@ -832,6 +841,6 @@ geometry shall be regenerated for the 55mm fan, the canonical nozzle, and the RC
 
 ---
 
-*Rev N — first documented 24-inch Serenity-class build — May 2026*  
+*Rev T+ refresh 2026-10-31 (first 24-inch build documented as Rev N, May 2026)*  
 *Supersedes Rev M (18-inch, 80mm EDF, AM6254 upgrade)*  
 *Phase 11 (Aft EDF) deferred per root AGENTS.md — 2026-06-07*

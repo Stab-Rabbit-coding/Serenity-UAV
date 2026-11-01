@@ -1148,7 +1148,7 @@ def gen_skipper_far_gasket():
 # References:
 #   [2] CLAUDE.md — Hull-Frame Coordinate Standard Rev R1, shell extents
 #   [4] docs/PHASED_BUILD_GUIDE.md — avionics bay dimensioning
-#   [5] docs/REVN_BUILD_GUIDE_24IN.md — wiring run routing notes
+#   [5] archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md — wiring run routing notes
 
 
 def gen_foam_head():

@@ -603,6 +603,16 @@ def assemble():
     )
     place_mesh(gear, PL_IDENTITY)
 
+    # 2026-10-31 refresh: the four CONFORMING 3.0 in gear bays (BHD-02,
+    # tools/generate_lg_bays.py) are separate printed parts written in hull
+    # frame (identity) and were never imported.  Port and starboard are
+    # distinct MIRROR prints.  The *_print.stl siblings are the same parts
+    # re-oriented for the bed, and lg_a1b_housing_*.stl is a CUTTING envelope
+    # for merge_cargo_interior.py, not a part -- neither is placed here.
+    for corner in ("fore-port", "fore-stbd", "aft-port", "aft-stbd"):
+        add_mesh(doc, _stl(f"fuselage/landing-gear/lg_r6_3_0in_bay_{corner}.stl"),
+                 "LG_Bay_" + corner.replace("-", "_").title())
+
     # -------------------------------------------------------------------
     # CARGO BAY SUB-ASSEMBLY
     # R1 coordinate audit (2026-06-11):
@@ -758,6 +768,13 @@ def assemble():
 
     stbd_wing = add_mesh(doc, _stl("wings/wing_stbd_s1223_revo.stl"), "Wing_Stbd")
     place_mesh(stbd_wing, PL_IDENTITY)
+
+    # 2026-10-31 refresh: Rev T1c bonded wing-root moment flanges (WA-R1b,
+    # generate_wing_root_flange.py; BOM PRINT-WING-ROOT-FLANGE).  Baked to the
+    # aircraft frame (R2 header marker), identity placement; never imported.
+    for side in ("port", "stbd"):
+        add_mesh(doc, _stl(f"fuselage/wing_root_flange_{side}.stl"),
+                 f"Wing_Root_Flange_{side.title()}")
 
     # -------------------------------------------------------------------
     # NACELLE TILT BRACKETS (INTEGRATED INTO WINGS)
