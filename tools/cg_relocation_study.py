@@ -421,9 +421,9 @@ def main():
             print(f"  {label:42s} {m:6.1f} g  stays at Y {y0:.1f} (no clear forward placement)")
         else:
             xc, zc, d3 = where
+            note = NOTES.get(label.split(' #')[0], '')
             print(f"  {label:42s} {m:6.1f} g  Y {y0:.1f} -> {y1:.1f} at X {xc:+.1f} Z {zc:.1f} "
-                  f"box {tuple(round(v, 1) for v in d3)}  gain {gain:,.0f} g.mm  [{NOTES.get(
-                      label.split(' #')[0], '')}]")
+                  f"box {tuple(round(v, 1) for v in d3)}  gain {gain:,.0f} g.mm  [{note}]")
     res = cgs(pieces)
     show("AFTER FINE RELOCATION", res)
     alt_y = HEAD_CELL_Y0 + hlf.CELL_L + hlf.SLED_LIP + 4.0 + hlf.CELL_L / 2
