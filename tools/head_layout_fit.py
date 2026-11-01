@@ -186,7 +186,10 @@ SH_Y0 = 48.0
 # ---------------------------------------------------------------------------
 BAYA_MODE = "fwd"  # published; "side" = read-only historical reference
 CN1F_Y0, CN1F_Z0 = 62.0, 206.0
-FC1F_Y0, FC1F_Z0 = 100.0, 229.0
+# FC1 moved 12 mm forward and 1.5 mm up (2026-11-01, U3): forward so it sits
+# under the canonical bridge-roof hatch (HATCH_*; Observer clear from Y 88),
+# up so the removable FC1 shelf floor (Z 228.5..230.5) fits over CN1 (top 228).
+FC1F_Y0, FC1F_Z0 = 88.0, 230.5
 # Pitot hose turn (both modes): from the hose keep-out's aft end straight up
 # (+Z) to the Observer underside, where the airspeed sensor (WBS §1.10 U5,
 # unselected) takes the hose.  Hose end (-3.6, 50.5, 223.9) and the board
@@ -200,6 +203,16 @@ PORT_CH_Y0, PORT_CH_Y1 = 160.0, 300.0
 # (forward of the tray stop plate), crossover floor Z 197.
 DROP_Y0, DROP_Z0 = 148.0, 197.0
 BUNDLE_NEAR_MAX = 25.0  # mm^3 inside the gap allowed for a harness bundle
+# Access hatch (owner 2026-11-01: joints on canonical lines).  QMx Sheet Six
+# [REF-CAD-003] places the avionics bay forward of the pilot's station with an
+# escape hatch in the bridge roof; Henning's renders [REF-CAD-002] show that
+# roof as a riveted panel between the window-aft frame and a transverse frame.
+# On the merged hull those seams are at Y 60 and Y 137 (top-down slope map,
+# 2026-11-01); the panel is X +-27, inside the outer spike rows.  Seam stations
+# require verification against a full-resolution QMx Sheet Six.
+HATCH_X, HATCH_Y0, HATCH_Y1 = 27.0, 60.0, 137.0
+HATCH_CUT_Z0 = 248.0  # cut box floor: below the roof skin, above every internal part
+HATCH_FLANGE_W = 6.0  # landing flange width inboard of the cut edge
 MERGED = os.path.join(REPO, "airframe", "stls", "fuselage", "head_cargo_shell24_2mm_merged.stl")
 # TACCO coax: three MMCX leads (TACCO.md, vertical MMCX jacks) leave CN1's
 # connector edge beside the bus bundle; 1.37 mm micro-coax, 3 abreast + bend.
@@ -559,6 +572,21 @@ def _bay_a_fwd(L):
                   PORT_CH_Z1),
         mates=("trunk: port link",), gap=1.0, bundle=True,
         note="head part (the twin tool gates it to Y 300)")
+    # Generated mounts and hatch (tools/gen_bay_a_fwd_mounts.py, U3), gated
+    # here once they exist.  Drawer and flange are bonded (skin seat).
+    mounts = (
+        ("Bay A CN1 drawer", "bay_a_cn1_drawer.stl", True,
+         ("Bay A node CN1 (fwd, flat)", "Bay A CN1 gate", "Bay A FC1 shelf")),
+        ("Bay A CN1 gate", "bay_a_cn1_gate.stl", False,
+         ("Bay A CN1 drawer", "Bay A CN1 cable zone")),
+        ("Bay A FC1 shelf", "bay_a_fc1_shelf.stl", False,
+         ("Bay A CN1 drawer", "Bay A node FC1 (raised, flat)")),
+        ("Bay A hatch flange", "bay_a_hatch_flange.stl", True, ()),
+    )
+    for name, stl, bonded, mates in mounts:
+        path = os.path.join(REPO, "airframe", "stls", "fuselage", "head", stl)
+        if os.path.exists(path):
+            L[name] = dict(solid=trimesh.load(path), skin_seat=bonded, mates=mates, gap=1.0)
     # Observer aft edge -> down in front of FC1 to the top of CN1 (CN1's
     # forward cables reach it there; the ring continues through CN1's zone).
     ae = observer_aft_end()
@@ -802,7 +830,7 @@ def _single_cell_band(head_m):
 SCAD_KEYS = ("OBS_Y0", "OBS_L", "OBS_W_FWD", "OBS_W_AFT", "OBS_BOARD_Z0", "OBS_STANDOFF_D",
              "CN1F_Y0", "CN1F_Z0", "FC1F_Y0", "FC1F_Z0", "PORT_CH_X0", "PORT_CH_X1",
              "PORT_CH_Z0", "PORT_CH_Z1", "PORT_CH_Y0", "PORT_CH_Y1", "DROP_Y0",
-             "DROP_Z0", "PITOT_TURN_Z1")
+             "DROP_Z0", "PITOT_TURN_Z1", "HATCH_X", "HATCH_Y0", "HATCH_Y1")
 
 
 def write_params():

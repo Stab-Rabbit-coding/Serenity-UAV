@@ -2708,6 +2708,46 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/head/bay_a_cn1_drawer.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head/bay_a_cn1_gate.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head/bay_a_fc1_shelf.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head/bay_a_hatch_cover.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head/bay_a_hatch_flange.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/head/bow_sensor_bay_insert.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Bow_Sensor_Bay_Insert",
       "tags": [
@@ -2767,6 +2807,14 @@
     },
     "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 head+cargo merged (merge_head_cargo_shell.py)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head_cargo_shell24_2mm_merged_hatch.stl": {
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -19443,6 +19491,13 @@
       ],
       "archived": false
     },
+    "tools/gen_bay_a_fwd_mounts.py": {
+      "description": "gen_bay_a_fwd_mounts.py -- Bay A forward node mounts and the canonical",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/gen_build_guide_cards.py": {
       "description": "ruff: noqa: C408, ISC004 -- dict() keeps the CARDS table readable as keyword",
       "tags": [
@@ -20024,6 +20079,13 @@
     },
     "tools/tail_strike_requirement.py": {
       "description": "tail_strike_requirement.py -- 4 ft drop tail strike on the aft skids, and the",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_bay_a_fwd_mounts.py": {
+      "description": "test_bay_a_fwd_mounts.py -- Bay A forward mounts and hatch (plan",
       "tags": [
         "build-tooling"
       ],
@@ -21593,6 +21655,11 @@
       "airframe/stls/fuselage/dorsal_antenna_fin.stl",
       "airframe/stls/fuselage/generate_conforming_collars.py",
       "airframe/stls/fuselage/generate_wing_root_flange.py",
+      "airframe/stls/fuselage/head/bay_a_cn1_drawer.stl",
+      "airframe/stls/fuselage/head/bay_a_cn1_gate.stl",
+      "airframe/stls/fuselage/head/bay_a_fc1_shelf.stl",
+      "airframe/stls/fuselage/head/bay_a_hatch_cover.stl",
+      "airframe/stls/fuselage/head/bay_a_hatch_flange.stl",
       "airframe/stls/fuselage/head/bow_sensor_bay_insert.stl",
       "airframe/stls/fuselage/head/head_cell_catch.stl",
       "airframe/stls/fuselage/head/head_cell_rail.stl",
@@ -21601,6 +21668,7 @@
       "airframe/stls/fuselage/head/twin_pack_sled.stl",
       "airframe/stls/fuselage/head/twin_pack_tray.stl",
       "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl",
+      "airframe/stls/fuselage/head_cargo_shell24_2mm_merged_hatch.stl",
       "airframe/stls/fuselage/head_cargo_splice_collar.stl",
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
@@ -21923,6 +21991,11 @@
       "airframe/stls/fuselage/cargo/void_former_cargo_node_bay.stl",
       "airframe/stls/fuselage/cargo_middle_splice_collar.stl",
       "airframe/stls/fuselage/dorsal_antenna_fin.stl",
+      "airframe/stls/fuselage/head/bay_a_cn1_drawer.stl",
+      "airframe/stls/fuselage/head/bay_a_cn1_gate.stl",
+      "airframe/stls/fuselage/head/bay_a_fc1_shelf.stl",
+      "airframe/stls/fuselage/head/bay_a_hatch_cover.stl",
+      "airframe/stls/fuselage/head/bay_a_hatch_flange.stl",
       "airframe/stls/fuselage/head/bow_sensor_bay_insert.stl",
       "airframe/stls/fuselage/head/head_cell_catch.stl",
       "airframe/stls/fuselage/head/head_cell_rail.stl",
@@ -21931,6 +22004,7 @@
       "airframe/stls/fuselage/head/twin_pack_sled.stl",
       "airframe/stls/fuselage/head/twin_pack_tray.stl",
       "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl",
+      "airframe/stls/fuselage/head_cargo_shell24_2mm_merged_hatch.stl",
       "airframe/stls/fuselage/head_cargo_splice_collar.stl",
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
@@ -25250,6 +25324,7 @@
       "tools/export_landing_gear_stls.py",
       "tools/flight_envelope_endurance.py",
       "tools/frame_inventory.py",
+      "tools/gen_bay_a_fwd_mounts.py",
       "tools/gen_build_guide_cards.py",
       "tools/gen_cargo_void_formers.py",
       "tools/gen_head_cell_rail.py",
@@ -25326,6 +25401,7 @@
       "tools/spar_bundle_fit.py",
       "tools/stitch_vias.py",
       "tools/tail_strike_requirement.py",
+      "tools/tests/test_bay_a_fwd_mounts.py",
       "tools/tests/test_bay_a_fwd_routes.py",
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_nacelle_axial_fit.py",
