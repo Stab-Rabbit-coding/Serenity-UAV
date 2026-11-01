@@ -169,7 +169,7 @@ the EMI-hardened Flight Engineer power distribution board.
 </tr>
 <tr>
 <td width="50%" valign="top">
-<img src="graphical-build-guide/build_guide_09_avionics.svg" width="100%" alt="Avionics — 8-node PACE failover architecture"><br><br>
+<img src="graphical-build-guide/build_guide_17_avionics_nodes.svg" width="100%" alt="Avionics nodes — Rev T+ build guide card 17"><br><br>
 
 **Avionics**
 
