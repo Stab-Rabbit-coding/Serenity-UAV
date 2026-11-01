@@ -19,7 +19,9 @@ Rules checked (all from the 3D Systems SLS Design Guide, June 2019 [REF-MFG-001]
   R2 Minimum wall -- 1.0 mm.  The guide gives >1 mm for sealed tank walls
      (p. 15) and >1 mm for tag sticks (p. 14); used here as the general floor.
      Measured by inward ray-casting from sampled surface points
-     (Moller-Trumbore, numpy; no rtree/embree on this system).
+     (Moller-Trumbore: T. Moller & B. Trumbore, "Fast, Minimum Storage
+     Ray/Triangle Intersection", J. Graphics Tools 2(1), 1997; numpy, since
+     rtree/embree are not installed on this system).
   R3 Trapped powder -- every enclosed void (a closed inner shell) needs an
      escape path.  The guide's blind-boss fix is a >2 mm hole at the base
      (p. 6); duct/axle cavities need 2 mm+ clearance and air ports (p. 3).

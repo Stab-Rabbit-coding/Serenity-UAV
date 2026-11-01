@@ -17061,6 +17061,13 @@
       ],
       "archived": false
     },
+    "docs/sls-study/sls_dfm_audit.json": {
+      "description": "JSON data (94 entries)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/sls-study/wing-polars/S1223.dat": {
       "description": "S1223",
       "tags": [
@@ -20649,6 +20656,7 @@
       "docs/references/vimdrones_esc_s50_wiring.png",
       "docs/sls-study/hull_build_volume_fit.png",
       "docs/sls-study/hull_build_volume_fit.scad",
+      "docs/sls-study/sls_dfm_audit.json",
       "docs/sls-study/wing-polars/S1223.dat",
       "docs/sls-study/wing-polars/S1223_Re100000_N5_nf.csv",
       "docs/sls-study/wing-polars/S1223_Re100000_N5_xfoil.csv",
