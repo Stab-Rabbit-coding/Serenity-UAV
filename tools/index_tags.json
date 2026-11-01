@@ -14699,6 +14699,13 @@
       ],
       "archived": false
     },
+    "docs/BAY_A_FWD_LAYOUT.md": {
+      "description": "Bay A Forward \u2014 Layout, Mounts, Routes, and Access",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/BAY_A_FWD_THERMAL.md": {
       "description": "Bay A Forward \u2014 Thermal Budget and Controls",
       "tags": [
@@ -20419,6 +20426,7 @@
       "docs/BATTERY_MOUNT.md",
       "docs/BATTERY_SPLIT_OPTIONS.md",
       "docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md",
+      "docs/BAY_A_FWD_LAYOUT.md",
       "docs/BAY_A_FWD_THERMAL.md",
       "docs/BHD02_OPTION_STUDY.md",
       "docs/CARGO_BULKHEAD_FIT_CHECK.md",
