@@ -373,6 +373,13 @@ This section covers the comprehensive rebuild of the graphical build guide's SVG
 - [ ] **Phase A (10/10): Rebuild `overview_close_up_rear.svg`** — Generate close-up silhouette of aft engine-room and tandem EDF bays.
 - [ ] **Phase B (1/2): Rebuild `build_plan.svg`** — Update master construction sequence flow chart to map 26 steps and milestones.
 - [ ] **Phase B (2/2): Rebuild `components_overview.svg`** — Update exploded physical component map with 45 CAD-derived BOM parts.
+- [x] **Rev T+ refresh (2026-10-31): assembly + renders + text Phases 0–3** — `serenity_assembly.py` gained the four conforming LG bays and the two wing-root flanges (45 placed objects). `serenity_render_views.py` now renders the exported master assembly instead of its own stale Rev R1 list (R2 camera targets). The 17 `pngs/` were regenerated. `REVN_BUILD_GUIDE_24IN.md` Phases 0–3, configuration table, and Phase 5 tilt/nozzle rows were rewritten and doc-reviewed (coherence + feasibility). The `docs/` stub copy was archived.
+- [ ] **Re-audit `REVN_BUILD_GUIDE_24IN.md` Phases 4–11 for Rev T+** — node counts and names, ESC rating, TPM vs. OPTIGA secure elements in Phase 8, the CG target vs. thrust-line Y 326.7, and the Rev N thrust/T/W figures.
+- [ ] **Sync the tilt range to the owner's 2026-10-31 ruling** — hard stops −5°/140°, commanded −5° to 135°. `docs/TILT_ACTUATOR_SELECTION.md` and `docs/NOZZLE_DRIVE_TRADE.md` still state 145°; extend the 64 mm in-context clearance sweep (`docs/NACELLE_64MM_VERIFICATION.md` §5c) to cover 140°.
+- [ ] **Owner decision: 6704ZZ trunnion pair at 89 % C0 under ultimate load** (`docs/NACELLE_64MM_VERIFICATION.md` §5b) — the guide flags it open.
+- [ ] **Add a BOM row for the machined 14T tilt pinion** (brass/steel, `wing_tilt_pinion.scad`) and update `PRINT-NACELLE-TRUNNION` to the `_64mm` STLs.
+- [ ] **Place the remaining unplaced parts in the master assembly** — dorsal antenna fin (still at the datum origin), winch (no hull-frame STLs), 64 mm stator/spider sleeves, nozzle, EDF rotors/motors, ESCs (the assembly's COVERAGE GAP list).
+- [ ] **Draw the 10 AWG ESC route, disconnect bay → ESC (WA-R10)**, then replace the guide's Phase 2A leg-4 CAUTION with the procedure.
 - [ ] **Phase C (01/10): Rebuild `build_guide_01_parts.svg`** — Physical inventory and STL check card with 24" hull-frame components.
 - [ ] **Phase C (02/10): Rebuild `build_guide_02_keel.svg`** — Carbon fiber keel prep showing datum marks at 91, 165, 251, 320, and 388mm.
 - [ ] **Phase C (03/10): Rebuild `build_guide_03_hull_prep.svg`** — Hull section alignment card (head, cargo, middle, rear).

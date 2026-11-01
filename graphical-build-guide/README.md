@@ -2,7 +2,7 @@
 
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)  
-**Last updated:** 2026-10-07
+**Last updated:** 2026-10-31
 
 > Step-by-step visual assembly guide for Serenity UAV, organized by build phase (0–10).
 > SVG diagrams, checklists, and mechanical callouts for each major assembly milestone from
@@ -18,6 +18,14 @@ the servo-driven nacelle nozzle (the passive gear drive was retired 2026-09-28),
 nacelle redesign, TACCO at 60 × 35 mm on male TSM-DV-LC rails, MIL-STD-1553C (HI-6138), mLRS
 on a bare STM32WLE5JC, and the standalone Commo node. The rebuild is task 1.5.6 in `WBS.md`.
 Per-card status is under "File Status and Maintenance" below.
+
+**Rev T+ refresh (2026-10-31):** `REVN_BUILD_GUIDE_24IN.md` Phases 0–3, its configuration table,
+and the Phase 5 tilt/nozzle rows now describe the Rev T+ airframe. Phases 4–11 still await
+re-audit. The 17 `pngs/` stills were regenerated from the master assembly
+(`airframe/FreeCAD-scripts/serenity_assembly.py` → `tools/export_assembly_meshes.py` →
+`airframe/blender-scripts/serenity_render_views.py`). They show the 64 mm pods, the trunnion,
+the cargo worm drive, and the 3.0 in R6 gear with conforming bays. The SVG cards are still
+pre-Rev-T art (task 1.5.6).
 
 ## Guide Organization
 
@@ -169,7 +177,7 @@ currently covers the four `hull_*.svg` outlines; the numbered build-guide cards 
 | File | Relationship |
 |------|--------------|
 | `docs/PHASED_BUILD_GUIDE.md` | Text-based phase descriptions; cross-references to SVG diagrams |
-| `docs/REVN_BUILD_GUIDE_24IN.md` | Detailed procedural steps, torque specs, fastener lists, dimensions |
+| `REVN_BUILD_GUIDE_24IN.md` (this folder) | Detailed procedural steps, torque specs, fastener lists, dimensions. The old `docs/` stub copy was archived 2026-10-31 to `archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md` |
 | `airframe/WBS.md` | CAD generation status for each STL / diagram source |
 | `WBS.md` (root) | Phase 0–10 task breakdowns (integrated with SVG milestone names) |
 | `graphical-build-guide/WBS.md` | Detailed work on diagram generation, rebuild pipeline, archive management |

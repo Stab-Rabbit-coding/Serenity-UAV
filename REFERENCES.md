@@ -321,7 +321,7 @@ When a standard has multiple applicable clauses, list them all:
 | §48.205(a) | Display of unique identifier | Registration number on exterior |
 | §48.205(b)(1) | Legibility of identifier | Minimum 3-inch (76 mm) characters clearly visible |
 
-**Used in:** `docs/REVN_BUILD_GUIDE_24IN.md`, `graphical-build-guide/decal_sheet.svg`,
+**Used in:** `archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md`, `graphical-build-guide/decal_sheet.svg`,
 `README.md`, `TODO.md`, `AGENTS.md`, `avionics/firmware/common/include/ax25_types.h`
 
 ---
@@ -346,7 +346,7 @@ When a standard has multiple applicable clauses, list them all:
 | §107.51(c) | Minimum visibility | ≥ 3 statute miles from pilot's control station |
 | §107.51(d) | Minimum distance from clouds | 500 ft below, 2,000 ft horizontal |
 
-**Used in:** `docs/REVN_BUILD_GUIDE_24IN.md`, `graphical-build-guide/build_guide_18_first_flight.svg`,
+**Used in:** `archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md`, `graphical-build-guide/build_guide_18_first_flight.svg`,
 `README.md`, `TODO.md`, `AGENTS.md`, `airframe/openscad/fuselage/bow_sensor_pod.scad`
 
 ---
@@ -369,7 +369,7 @@ When a standard has multiple applicable clauses, list them all:
 **Applied to:** Navigation light subsystem — 6× WS2812C-2020 RGB LEDs (port red, starboard green,
 aft white); controlled by FC4 node (Simon's medbay, Bay D).
 
-**Used in:** `graphical-build-guide/build_guide_13_nav_lights.svg`, `docs/REVN_BUILD_GUIDE_24IN.md`,
+**Used in:** `graphical-build-guide/build_guide_13_nav_lights.svg`, `archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md`,
 `README.md`, `TODO.md`, `AGENTS.md`
 
 ---
@@ -1265,7 +1265,7 @@ Standards §DRC Workflow.
 | Chapter 3, §3.1.9 | Lights to be displayed by unmanned aircraft | Port red, starboard green, aft white position lights |
 
 **Used in:** `graphical-build-guide/build_guide_13_nav_lights.svg`,
-`graphical-build-guide/decal_sheet.svg`, `AGENTS.md`, `docs/REVN_BUILD_GUIDE_24IN.md`
+`graphical-build-guide/decal_sheet.svg`, `AGENTS.md`, `archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md`
 
 ---
 
@@ -3448,7 +3448,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 transceivers on Pilot (Cape-A-2) and XO (Cape-B-2); 120 Ω termination resistors at CN1
 (Shepherd's Room / Bay A) and FC4 (Simon's Medbay / Bay D).
 
-**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `docs/REVN_BUILD_GUIDE_24IN.md`,
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md`,
 `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`,
 `avionics/firmware/dts/Pilot/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
 `avionics/firmware/dts/TACCO/k3-am6254-pocketbeagle2-serenity-TACCO2.dts`,

@@ -1,31 +1,40 @@
 #!/usr/bin/env python3
 """
-serenity_render_views.py — Rev R1 (2026-06-15)
+serenity_render_views.py — Rev T+ (2026-10-31; was Rev R1 2026-06-15)
 
 Multi-view render suite for the Serenity UAV 24" assembly.
 
-Imports all baked hull-frame STLs and renders 17 PNG images:
+Renders every placed mesh of the FreeCAD master assembly
+(airframe/FreeCAD-scripts/serenity_assembly.py, exported by
+tools/export_assembly_meshes.py) as 17 PNG images:
   6  principal-aspect overviews  (port, stbd, top, bottom, bow, stern)
   8  diagonal iso overviews      (all 8 corners of the bounding box)
   3  close-up shots              (nose/bow, landing gear, port nacelle)
 
-Output: graphical-build-guide/pngs/  (1920×1080 PNG, CYCLES renderer)
+Output: graphical-build-guide/pngs/  (1280x720 PNG, CYCLES renderer)
 
-Hull-frame coordinate system (CLAUDE.md Rev R1):
+Aircraft datum R2 (tools/hull_datums.py; plan 2026-10-19-001):
   X  positive port  (left)   — matches Blender world X
-  Y  positive aft   (back)   — matches Blender world Y  (nose at Y ≈ −306)
-  Z  positive dorsal (up)    — matches Blender world Z
+  Y  positive aft   (back)   — matches Blender world Y  (nose tip at Y 0)
+  Z  positive dorsal (up)    — matches Blender world Z  (3.0 in gear ground at Z 0)
+The assembly's default attitude is port nacelle at cruise (0 deg), starboard
+at hover (90 deg) -- serenity_assembly.py NACELLE_TILT_* -- so one image set
+shows both attitudes.
 
-Run with:
-  blender --background --python serenity_render_views.py
+Run with (MESH_DIR from tools/export_assembly_meshes.py):
+  blender --background --python serenity_render_views.py -- MESH_DIR
 
+Rev T+ refresh by Claude (Claude Opus 5.5, Anthropic) under the direction of
+Stab-Rabbit-coding, 2026-10-31, per AGENTS.md AI attribution.
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
+import json
 import logging
 import math
 import os
+import sys
 
 import bpy
 from mathutils import Euler, Vector
@@ -37,32 +46,41 @@ logging.basicConfig(level=logging.INFO)
 # Paths
 # ---------------------------------------------------------------------------
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-STLS = os.path.join(REPO, "airframe", "stls")
 OUT = os.path.join(REPO, "graphical-build-guide", "pngs")
 os.makedirs(OUT, exist_ok=True)
 
 print(f"[render] repo  = {REPO}")
-print(f"[render] stls  = {STLS}")
 print(f"[render] out   = {OUT}")
 
 # ---------------------------------------------------------------------------
-# Assembly centre, aircraft datum R2 (R1 extents + R1_TO_R2, plan 2026-10-19-001)
-#   X: −258.3 (stbd nacelle tip) to +255.9 (port nacelle tip)  → Cx ≈ −1
-#   Y:    0.0 (nose tip)          to +690.0 (stern tip)         → Cy ≈ +345
-#   Z:   80.0 (cargo belly)       to +281.5 (head dorsal crown)  → Cz ≈ +181
+# Assembly centre, aircraft datum R2 -- measured 2026-10-31 from the exported
+# Rev T+ assembly (tools/export_assembly_meshes.py, 45 placed meshes):
+#   X: -276 (stbd nacelle) to +276 (port nacelle)   -> Cx 0
+#   Y:    0 (nose tip)     to +690 (stern tip)      -> Cy 345
+#   Z:    0 (3.0 in gear ground plane) to +282 (head crown) -> Cz 141
 # All values in mm (= Blender scene units here).
 # ---------------------------------------------------------------------------
-CX, CY, CZ = -1.15, 344.7, 160.0  # ship geometric centre, aircraft datum R2 (R1 -171, 39, 80)
-
-SHIP_HALF_W = 257.0  # half-width  (mm) — nacelle tip to nacelle tip
-SHIP_HALF_L = 345.0  # half-length (mm) — nose to stern from Cy
-SHIP_HALF_H = 101.0  # half-height (mm) — belly to crown from Cz
-
+CX, CY, CZ = 0.0, 345.0, 141.0
+SHIP_HALF_W = 276.0  # half-width  (mm) -- nacelle outer face to outer face
+SHIP_HALF_L = 345.0  # half-length (mm) -- nose to stern from Cy
+SHIP_HALF_H = 141.0  # half-height (mm) -- ground plane to crown from Cz
 TARGET = (CX, CY, CZ)  # look-at point for all cameras
 
 # ---------------------------------------------------------------------------
-# STL component catalogue
-#   (path_relative_to_STLS, object_name, material_key)
+# Part source — the FreeCAD master assembly, never a list kept here.
+#
+# 2026-10-31 (Rev T+ refresh): the Rev R1 COMPONENTS / PHCOMPONENTS lists that
+# lived here had drifted from the airframe (50 mm Rev S pods, 40 A ESCs and
+# 50 mm EDF placeholders at R1 offsets, no gear, no tilt drive).  Following the
+# "airframe rules, local informs" rule (owner 2026-10-03), this script now
+# renders exactly what airframe/FreeCAD-scripts/serenity_assembly.py places.
+# Export the placed meshes first, then pass that directory:
+#
+#   xvfb-run -a freecadcmd -c "import sys; sys.argv=['x','--','OUT']; \
+#       exec(open('tools/export_assembly_meshes.py').read())"
+#   blender --background --python serenity_render_views.py -- OUT
+#
+# Each manifest entry is already in the aircraft frame (identity import).
 # ---------------------------------------------------------------------------
 FUSELAGE_COLOR = (0.72, 0.60, 0.44, 1.0)  # warm sandy tan
 NACELLE_COLOR = (0.55, 0.46, 0.34, 1.0)  # slightly darker tan
@@ -72,158 +90,30 @@ PROP_COLOR = (0.18, 0.16, 0.14, 1.0)  # near-black for propulsion units
 SERVO_COLOR = (0.35, 0.30, 0.20, 1.0)  # dark tan for servos
 BATT_COLOR = (0.20, 0.30, 0.18, 1.0)  # dark green for battery pack
 
-# All STL components — tuple of (relative_path, obj_name, color_rgba).
-# BAKED components (hull-frame, identity placement):
-#   head, cargo, middle, rear, nacelles, wings — exact positions verified in FreeCAD.
-# PLACEHOLDER components (part-local / approximate, identity placement per assembly script):
-#   landing gear, pylon, tip caps, antenna fin — included for visual completeness.
-COMPONENTS = [
-    # --- Baked hull-frame (exact) ---
-    ("fuselage/head_shell24_2mm_repaired.stl", "Head", FUSELAGE_COLOR),
-    ("fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl", "Cargo", FUSELAGE_COLOR),
-    ("fuselage/middle_shell24_2mm_repaired.stl", "Middle", FUSELAGE_COLOR),
-    ("fuselage/rear_shell24_2mm_repaired.stl", "Rear", FUSELAGE_COLOR),
-    ("nacelles/nacelle_port_revs.stl", "Nacelle_Port", NACELLE_COLOR),
-    ("nacelles/nacelle_stbd_revs.stl", "Nacelle_Stbd", NACELLE_COLOR),
-    ("wings/wing_port_s1223_revo.stl", "Wing_Port", WING_COLOR),
-    ("wings/wing_stbd_s1223_revo.stl", "Wing_Stbd", WING_COLOR),
-    # Landing gear: pre-R1.4 single-leg render `landing_legs_hull_r1.stl`
-    # ARCHIVED 2026-07-12 — orphaned by the Rev R1.4 corner V-brace
-    # redesign, itself since superseded by the Rev R5 vertical-post +
-    # wire-brace design (`wire_brace_leg.scad`); no hull-frame-positioned,
-    # multi-corner Rev R5 render exists yet to replace it. See
-    # ARCHIVE_INDEX.md.
-    # Pylon (wing-to-nacelle tilt pivot): placement unverified in FreeCAD.
-    ("wings/wing_nacelle_pylon_revo.stl", "Pylon", DETAIL_COLOR),
-    # Nacelle tip caps ARCHIVED 2026-06-22 (legacy part, no longer needed) —
-    # STLs moved to airframe/archive/stls/nacelles/; see ARCHIVE_INDEX.md.
-    # Dorsal antenna fin (fuselage top)
-    ("fuselage/dorsal_antenna_fin.stl", "Dorsal_Fin", DETAIL_COLOR),
-    # Nacelle internal printed sub-components (part-local Z = duct axis; loaded
-    # at identity — approximate visual position only, not hull-frame verified)
-    ("nacelles/edf_stator_sleeve.stl", "Stator_Sleeve", DETAIL_COLOR),
-    ("nacelles/edf_aft_spider_sleeve.stl", "Spider_Sleeve", DETAIL_COLOR),
-    # nacelle_nozzle_closed_asm.stl (old Rev R1 axial-hinge nozzle) archived
-    # 2026-07-20; use the current Rev T3 iris assembly. The bare
-    # nacelle_nozzle_iris.stl (2026-07-19, pre-dates the Rev T3 shingle fix,
-    # 2026-08-09) was itself archived 2026-08-25 -- see ARCHIVE_INDEX.md.
-    # Rev T3 split the combined render into two named-endpoint STLs (open/
-    # closed petals, see airframe/wings-nacelles/WBS.md SS1.1.3.1); this
-    # static overview render has no tilt concept, so it uses the closed
-    # (cruise, 0 deg) endpoint, matching FreeCAD's own untilted default.
-    ("nacelles/nozzles/nacelle_nozzle_iris-closed.stl", "Nozzle_Asm", DETAIL_COLOR),
-    # Cargo bay doors (printed; positioned in cargo-section local frame)
-    ("fuselage/cargo/cargo_door_port.stl", "Cargo_Door_Port", FUSELAGE_COLOR),
-    ("fuselage/cargo/cargo_door_stbd.stl", "Cargo_Door_Stbd", FUSELAGE_COLOR),
+
+# Label prefix -> colour (first match wins).
+COLOR_RULES = [
+    (("Nacelle_Port", "Nacelle_Stbd"), NACELLE_COLOR),
+    (("Wing_Port", "Wing_Stbd"), WING_COLOR),
+    (("Head_Shell", "Cargo_Shell", "Middle_Shell", "Rear_Shell", "Cargo_Door"), FUSELAGE_COLOR),
+    (("Landing_Gear", "Tilt_Worm", "Tilt_Wheel", "Wing_Port_Tilt", "Wing_Stbd_Tilt"), PROP_COLOR),
+    (("Battery",), BATT_COLOR),
+    (("Tilt_", "Cargo_Door_Servo", "Cargo_Release_Servo"), SERVO_COLOR),
 ]
 
-# ---------------------------------------------------------------------------
-# Placeholder components — non-printable hardware, with hull-frame offsets
-# and optional part-local rotations so they align with the baked assembly.
-#
-# Nacelle bake transform (tools/bake_hull_frame.py, Rev R1):
-#   Quaternion (_SQ2, 0, 0, -_SQ2) = R_x(90°): scad_z → hull_y, scad_y → -hull_z
-#   Port  bake translation: (47, -64, 63)  mm
-#   Stbd  bake translation: (-385, -70, 65) mm
-#
-# EDF SCAD axial midpoints (tandem pair, total duct ≈ 172 mm):
-#   Fore EDF centre: scad_z ≈ 43 → hull_y = 43 - 64 = -21  (port); -27 (stbd)
-#   Aft  EDF centre: scad_z ≈ 129 → hull_y = 129 - 64 = +65 (port); +59 (stbd)
-#
-# Tuple: (abs_path, obj_name, color_rgba, offset_xyz_mm, rotation_euler_rad | None)
-# ---------------------------------------------------------------------------
-_PH = os.path.join(REPO, "airframe", "placeholders")
-_NAC_ROT = (math.radians(90), 0.0, 0.0)  # rotate part-local Z onto hull Y
-
-PHCOMPONENTS = [
-    # --- Port nacelle propulsion (hull X ≈ 47, Z ≈ 63) ---
-    (
-        os.path.join(_PH, "propulsion", "EDF_50mm_6S.stl"),
-        "EDF_Port_Fore",
-        PROP_COLOR,
-        (47, -21, 63),
-        _NAC_ROT,
-    ),
-    (
-        os.path.join(_PH, "propulsion", "EDF_50mm_6S.stl"),
-        "EDF_Port_Aft",
-        PROP_COLOR,
-        (47, 65, 63),
-        _NAC_ROT,
-    ),
-    # --- Stbd nacelle propulsion (hull X ≈ -385, Z ≈ 65) ---
-    (
-        os.path.join(_PH, "propulsion", "EDF_50mm_6S.stl"),
-        "EDF_Stbd_Fore",
-        PROP_COLOR,
-        (-385, -27, 65),
-        _NAC_ROT,
-    ),
-    (
-        os.path.join(_PH, "propulsion", "EDF_50mm_6S.stl"),
-        "EDF_Stbd_Aft",
-        PROP_COLOR,
-        (-385, 59, 65),
-        _NAC_ROT,
-    ),
-    # --- ESC units (one per EDF, approximate — mounted on nacelle wall) ---
-    (
-        os.path.join(_PH, "propulsion", "ESC_40A_6S_BLHeli32.stl"),
-        "ESC_Port_Fore",
-        PROP_COLOR,
-        (70, -21, 90),
-        _NAC_ROT,
-    ),
-    (
-        os.path.join(_PH, "propulsion", "ESC_40A_6S_BLHeli32.stl"),
-        "ESC_Port_Aft",
-        PROP_COLOR,
-        (70, 65, 90),
-        _NAC_ROT,
-    ),
-    (
-        os.path.join(_PH, "propulsion", "ESC_40A_6S_BLHeli32.stl"),
-        "ESC_Stbd_Fore",
-        PROP_COLOR,
-        (-368, -27, 90),
-        _NAC_ROT,
-    ),
-    (
-        os.path.join(_PH, "propulsion", "ESC_40A_6S_BLHeli32.stl"),
-        "ESC_Stbd_Aft",
-        PROP_COLOR,
-        (-368, 59, 90),
-        _NAC_ROT,
-    ),
-    # --- Tilt servos — one per nacelle, at pylon pivot (approximate) ---
-    (
-        os.path.join(_PH, "servos", "DS3218MG_25kgcm.stl"),
-        "Servo_Port_Tilt",
-        SERVO_COLOR,
-        (80, 22, 63),
-        None,
-    ),
-    (
-        os.path.join(_PH, "servos", "DS3218MG_25kgcm.stl"),
-        "Servo_Stbd_Tilt",
-        SERVO_COLOR,
-        (-375, 16, 65),
-        None,
-    ),
-    # --- Main battery (cargo bay, approximate longitudinal centre) ---
-    (
-        os.path.join(_PH, "power", "LiPo_6S_4000mAh_138x44x36mm.stl"),
-        "Battery_Main",
-        BATT_COLOR,
-        (CX, 20, 40),
-        None,
-    ),
-]
+# Placed with a VERIFY-tier identity placement at the datum origin, i.e. NOT
+# yet in its flight position -- rendering it would show it under the nose.
+UNPLACED = {"Dorsal_Antenna_Fin"}
 
 
-# ---------------------------------------------------------------------------
-# Renderer setup
-# ---------------------------------------------------------------------------
+def color_for(label: str) -> tuple:
+    """Return the render colour for an assembly label."""
+    for prefixes, color in COLOR_RULES:
+        if label.startswith(prefixes):
+            return color
+    return DETAIL_COLOR
+
+
 def setup_renderer(res: tuple = (1280, 720)) -> None:
     """
     Configure EEVEE-NEXT for fast headless rendering.
@@ -489,19 +379,19 @@ ISO_CAMERAS = [
     ("14_iso_stbd_stern_ventral", (CX - _s, CY + _s, CZ - _z_dn), TARGET, 70),
 ]
 
-# Close-up targets (hull frame, mm)
-# Nose tip area: head section Y ≈ -305, X ≈ CX, Z ≈ 130 (mid-height of head)
-NOSE_TGT = (CX, -280, 130)
-# Port nacelle centre (baked extents): X ≈ 45, Y ≈ 22, Z ≈ 63
-NACELLE_TGT = (45, 22, 63)
-# Landing gear: under rear section, stern belly
-GEAR_TGT = (CX, 290, 20)
+# Close-up targets (aircraft datum R2, mm; from the exported assembly bounds)
+# Nose: head shell Y 0..233, Z 141..282.
+NOSE_TGT = (CX, 40, 210)
+# Port nacelle (cruise attitude): X 181..276, Y 217..411, Z 97..196.
+NACELLE_TGT = (228, 314, 146)
+# 3.0 in landing gear + conforming bays: Y 239..466, Z 0..162.
+GEAR_TGT = (CX, 352, 70)
 
 CLOSEUP_CAMERAS = [
     # (filename,       camera_pos,                           target,       lens)
-    ("15_closeup_nose", (CX - 150, -700, 170), NOSE_TGT, 50),
-    ("16_closeup_gear", (CX + 350, 280, -200), GEAR_TGT, 60),
-    ("17_closeup_nacelle", (CX + 350, -180, 230), NACELLE_TGT, 60),
+    ("15_closeup_nose", (CX - 150, -420, 260), NOSE_TGT, 50),
+    ("16_closeup_gear", (CX + 520, 250, -60), GEAR_TGT, 50),
+    ("17_closeup_nacelle", (CX + 650, 120, 330), NACELLE_TGT, 60),
 ]
 
 
@@ -514,16 +404,17 @@ def main() -> None:
     clear_scene()
     setup_renderer(res=(1280, 720))  # 720p preview; increase for finals
 
-    # Import all airframe STL components (baked hull-frame and part-local)
-    for rel_path, name, color in COMPONENTS:
-        full_path = os.path.join(STLS, rel_path)
-        mat = get_material(color)
-        import_stl(full_path, name, mat)
-
-    # Import placeholder hardware with hull-frame offsets and orientations
-    for full_path, name, color, offset, rotation in PHCOMPONENTS:
-        mat = get_material(color)
-        import_stl(full_path, name, mat, offset=offset, rotation=rotation)
+    # Import every placed mesh of the master assembly (already in R2 frame).
+    args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+    if not args:
+        raise SystemExit("usage: blender --background --python serenity_render_views.py -- MESH_DIR")
+    with open(os.path.join(args[0], "manifest.json"), encoding="utf-8") as fh:
+        manifest = json.load(fh)
+    for label, entry in sorted(manifest.items()):
+        if label in UNPLACED:
+            print(f"[render] SKIP (unplaced, VERIFY): {label}")
+            continue
+        import_stl(entry["file"], label, get_material(color_for(label)))
 
     print("[render] All STLs imported — setting up lighting")
     setup_lighting()

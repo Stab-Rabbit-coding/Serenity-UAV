@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-27",
+  "generated": "2026-10-31",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -283,7 +283,7 @@
       "archived": false
     },
     "airframe/FreeCAD-scripts/serenity_assembly.py": {
-      "description": "Python script",
+      "description": "serenity_assembly.py \u2014 Serenity UAV full-airframe FreeCAD assembly.",
       "tags": [
         "cad-mesh",
         "security",
@@ -761,7 +761,7 @@
       "archived": false
     },
     "airframe/blender-scripts/serenity_render_views.py": {
-      "description": "serenity_render_views.py \u2014 Rev R1 (2026-06-15)",
+      "description": "serenity_render_views.py \u2014 Rev T+ (2026-10-31; was Rev R1 2026-06-15)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -6378,6 +6378,16 @@
       "tags": [
         "archive",
         "documentation"
+      ],
+      "archived": true
+    },
+    "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md": {
+      "description": "Serenity UAV \u2014 24-Inch Build Guide (Rev S Baseline)",
+      "tags": [
+        "archive",
+        "documentation",
+        "emi-hardening",
+        "redundancy-failover"
       ],
       "archived": true
     },
@@ -14465,15 +14475,6 @@
       ],
       "archived": false
     },
-    "docs/REVN_BUILD_GUIDE_24IN.md": {
-      "description": "Serenity UAV \u2014 24-Inch Build Guide (Rev S Baseline)",
-      "tags": [
-        "documentation",
-        "emi-hardening",
-        "redundancy-failover"
-      ],
-      "archived": false
-    },
     "docs/TILT_ACTUATOR_OPTIONS.md": {
       "description": "Nacelle-Tilt Actuator Options \u2014 Rev T5 trade (GENERATED)",
       "tags": [
@@ -17000,10 +17001,11 @@
       "archived": false
     },
     "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md": {
-      "description": "Serenity-Class Tiltrotor UAV \u2014 Build Guide Rev P baseline (24-inch)",
+      "description": "Serenity-Class Tiltrotor UAV \u2014 Build Guide Rev T+ (24-inch)",
       "tags": [
         "build-guide",
         "documentation",
+        "emi-hardening",
         "security"
       ],
       "archived": false
@@ -19059,6 +19061,7 @@
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
       "archives/docs-superseded/PYLON_INTEGRATION_2026-07-18.md",
       "archives/docs-superseded/README.md",
+      "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md",
       "archives/root-readme-deep-dive-2026-08-03/README.md",
@@ -19161,7 +19164,6 @@
       "docs/POWER_DISTRIBUTION.md",
       "docs/PROTO_PRINT_DAVINCI_JR.md",
       "docs/README.md",
-      "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
       "docs/TILT_ACTUATOR_SELECTION.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
@@ -19494,6 +19496,7 @@
       "archives/avionics-archives/kicad-archives/archive/gen_cape_b2.py",
       "archives/avionics-archives/kicad-archives/archive/gen_cape_b2_pcb.py",
       "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
+      "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
       "archives/docs-superseded/serenity-rev-q.jsx",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity-rev-q.jsx",
@@ -19537,7 +19540,6 @@
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
-      "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
       "docs/TILT_ENCODER_WIRING_EMI_SPEC.md",
       "docs/TILT_SPAR_ANALYSIS.md",
@@ -19558,6 +19560,7 @@
       "docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
+      "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
       "tools/bom_edit_weight_pass_13lbm.py",
@@ -19575,6 +19578,7 @@
       "airframe/openscad/fuselage/head_shell24.scad",
       "airframe/openscad/fuselage/middle_canonical_shell24.scad",
       "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
+      "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "avionics/AGENTS.md",
       "avionics/README.md",
@@ -19608,7 +19612,6 @@
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
-      "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
@@ -21884,6 +21887,7 @@
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
       "archives/docs-superseded/PYLON_INTEGRATION_2026-07-18.md",
       "archives/docs-superseded/README.md",
+      "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/bom_revQ.csv",
       "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md",
