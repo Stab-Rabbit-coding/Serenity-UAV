@@ -15,7 +15,7 @@ integrated hinges, in the same print as the cargo section?
 alignment, in two other ways:
 
 1. **Same build:** order the doors in the same 3D Systems build as the
-   one-piece hull, nested in their installed position or near it. They then
+   forward hull section, nested in their installed position or near it. They then
    share a powder lot and a shrink history.
 2. **Line-ream the hinge at assembly:** print the knuckle bores undersize.
    With the door clamped closed, ream the shell-side and door-side knuckles
@@ -50,20 +50,20 @@ Numbers are from the committed STLs, at PA CF 1.11 g/cm³ [REF-MAT-015].
   (4.0 cc, 4.4 g) are already merged into the cargo shell. Integration
   would delete only the two CF rods (about 1.2 g each, at 1.6 g/cm³
   **ASSUMED**) and the grub screws. That's about 3.5 g per aircraft.
-- **Repair: strongly against integration.** The doors sit on the belly and
-  swing down toward the ground during hover payload operations; they are the
-  most exposed printed parts. Separate, a door costs 13.4–14.8 g and a pin
-  pull to replace. Integrated, a cracked door or knuckle scraps the whole
-  one-piece head+cargo hull: 457 cc, 507 g in PA CF (commit `d92c4f14`). That
-  hull is the largest part on the aircraft, needs the sPro 140, and carries
-  the merged interior and the twin battery tray seat.
+- **Repair: strongly against integration.** The doors sit on the belly and swing
+  down toward the ground during hover payload operations; they are the most
+  exposed printed parts. Separate, a door costs 13.4–14.8 g and a pin pull to
+  replace. Integrated, a cracked door or knuckle scraps the whole forward hull
+  section (head+cargo in one piece): 457 cc, 507 g in PA CF (commit `d92c4f14`).
+  It's the largest part on the aircraft, needs the sPro 140, and carries the
+  merged interior and the twin battery tray seat.
 - **Print risk: against integration.** A fused hinge is found only at
   breakout and scraps the whole shell. The guide warns that SLS "is very
   sensitive to process variation" (p. 16). The port door also laps 6 mm over
   the starboard door at the centerline (port X −6.0 to 50.5 mm). Printed
   closed, that lap would trap powder in a sub-millimeter gap, so the doors
   would have to be printed open. Opened 90°, each door hangs about 56 mm
-  below the belly, adding that height to a hull that already needs the
+  below the belly, adding that height to a section that already needs the
   sPro 140.
 - **Powder removal: against integration.** A captive pin at the guide's
   0.3 mm clearance, over 4 × 12 mm knuckles, needs the axle treatment on

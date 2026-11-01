@@ -52,11 +52,12 @@ load.
 ## 2. Envelope (R1)
 
 Every current printed part fits the SLS 380 in at least one axis-aligned
-orientation. The longest part is the one-piece hull,
-`head_cargo_shell24_2mm_merged.stl` (194 × 435 × 202 mm, commit `d92c4f14`).
-It fits the SLS 380 only standing on end, and the sPro 140 lying down, which
-is its strength orientation (`docs/SLS_PRINT_ORIENTATION.md`). Retired parts
-are excluded from both tools (`tools/sls_retired_parts.py`).
+orientation. The longest part is the forward hull section (head+cargo in one
+piece; the hull is two sections joined at the cargo/middle collar),
+`head_cargo_shell24_2mm_merged.stl` (194 × 435 × 202 mm, commit `d92c4f14`). It
+fits the SLS 380 only standing on end, and the sPro 140 lying down, which is its
+strength orientation (`docs/SLS_PRINT_ORIENTATION.md`). Retired parts are
+excluded from both tools (`tools/sls_retired_parts.py`).
 
 ## 3. Defects found and fixed
 

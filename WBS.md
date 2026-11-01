@@ -267,7 +267,8 @@ see docs/WBS.md §0.10.2.)*
 - [x] Build orientation for every current printed part (79), critical stress in the build plane, SLS 380 fit — `docs/SLS_PRINT_ORIENTATION.md`, `tools/sls_print_orientation.py` (2026-11-01)
 - [x] Decision (owner 2026-11-01): final build orientation and machine are set with 3D Systems; repo orientations are the design-intent request (`docs/SLS_PRINT_ORIENTATION.md` §0)
 - [ ] Owner + 3D Systems: agree orientation and machine per part (SLS 380 / sPro 140 / sPro 230); record in `tools/sls_print_orientation.py`
-- [ ] Owner + 3D Systems: one-piece head+cargo hull on the sPro 140 (lying down; strength orientation) vs SLS 380 on end
+- [ ] Owner + 3D Systems: forward hull section (head+cargo, one piece) on the sPro 140 (lying down; strength orientation) vs SLS 380 on end
+- [ ] Generate the one-piece AFT hull section (middle+rear, plan 2026-10-31-003 baseline) as `merge_head_cargo_shell.py` did forward; then retire `middle_rear_splice_collar` + separate middle/rear shells in `tools/sls_retired_parts.py` and re-run both SLS tools
 - [x] Design review against the 3D Systems SLS Design Guide [REF-MFG-001] — `docs/SLS_MIGRATION.md` §7; citations corrected to pp. 4/15
 - [x] Tilt-brake pin bore clearance 0.15 → 0.3 mm per side [REF-MFG-001 pp. 7, 12]; guides re-rendered
 - [x] ~~Belly panel aft hole slot~~ — reverted 2026-11-01: belly panel is retired (BOM qty 0)
@@ -275,7 +276,7 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Ask 3D Systems: bead-blast reach into blind heat-set boss holes, or add >2 mm vents [REF-MFG-001 p. 6]
 - [ ] ESC cover rebate fit 0.25 → 0.3 mm per side at the next 64 mm nacelle re-export
 - [x] ~~Battery-cradle hanger slotting~~ — moot: cradle retired by the one-piece hull (`d92c4f14`)
-- [ ] Update BOM (`bom_revT.csv` + `.json`) and `tools/auw_ledger.py` for `d92c4f14`: drop separate head/cargo shells, head-cargo collar, cradle, head-cell rail/sled/catch; add merged hull + twin pack tray/sleds/gate
+- [ ] Update BOM (`bom_revT.csv` + `.json`) and `tools/auw_ledger.py` for `d92c4f14`: drop separate head/cargo shells, head-cargo collar, cradle, head-cell rail/sled/catch; add merged forward section + twin pack tray/sleds/gate (cargo/middle collar stays)
 - [ ] Run the twin pack gate/catch statics on PA CF (`docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md` open items)
 - [x] Trade: cargo doors print-in-place with the cargo shell vs separate — recommend SEPARATE (`docs/CARGO_DOOR_INTEGRATED_HINGE_TRADE.md`); owner to accept
 - [ ] Cargo door knuckles: print bores undersize, line-ream shell + door knuckles together at assembly (0.15 mm/side as-sintered is below [REF-MFG-001 p. 12]); update `generate_cargo_doors.py` + `generate_cargo_hinge_retention.py`

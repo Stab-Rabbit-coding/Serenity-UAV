@@ -13,7 +13,8 @@ AI note: Written by Claude Opus 5.5 (Anthropic) under the author's direction,
 License: MIT -- see LICENSES/MIT (SPDX-License-Identifier: MIT)
 """
 
-_MERGE = ("one-piece head+cargo hull, commit d92c4f14 (2026-10-31), "
+_MERGE = ("one-piece head+cargo FORWARD hull section (hull = 2 sections joined at "
+          "the cargo/middle collar), commit d92c4f14 (2026-10-31), "
           "docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md 'The merge'")
 _HEAD_CELL = ("single head cell replaced by the twin flat pack tray, commit d92c4f14, "
               "docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md 'Printed parts'")

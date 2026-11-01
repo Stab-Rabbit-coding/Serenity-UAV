@@ -80,14 +80,24 @@ Confidence levels:
 SLS 380 in their strength orientation. One, the hull, needs the sPro 140, and
 none conflicts.
 
-**The hull is the one-piece head+cargo section,
-`head_cargo_shell24_2mm_merged.stl`** (commit `d92c4f14`, 2026-10-31). The
-splice collar and cradle were removed so the twin battery packs fit flat in
-the head. It's 17.1 in (434.7 mm) long. On the SLS 380 it fits only standing
-on end, which would put fuselage bending straight across the layers. On the
-sPro 140 it lies down with Y in the build plane, so **request the sPro 140
-for the hull** (§0). Going back to separate head and cargo shells isn't an
-option, because that undoes the battery relocation.
+**The hull is two sections joined at the cargo/middle collar**
+(`docs/SLS_27IN_TWO_SECTION_TRIM_STUDY.md` §4):
+
+- **Forward section:** head+cargo, merged in one piece,
+  `head_cargo_shell24_2mm_merged.stl` (commit `d92c4f14`, 2026-10-31). It's
+  17.1 in (434.7 mm) long. On the SLS 380 it fits only standing on end, which
+  would put fuselage bending straight across the layers. On the sPro 140 it
+  lies down with Y in the build plane, so **request the sPro 140 for the
+  forward section** (§0). Separate head and cargo shells aren't an option,
+  because the twin battery tray needs the merged section.
+- **Joint:** `cargo_middle_splice_collar.stl`, which stays a separate part.
+- **Aft section:** middle+rear in one piece is the planned baseline (plan
+  2026-10-31-003, `docs/MASS_AUDIT_MIDDLE_REAR_SECTIONS.md` §4), but **the
+  merged STL hasn't been generated yet**. Until it is, the middle shell, the
+  rear shell and `middle_rear_splice_collar` are oriented here as they
+  stand. Joined, the aft section is about 250 × 177 × 165 mm, so it fits the
+  SLS 380 lying down with Y in-plane (a footprint estimate, not yet
+  measured).
 
 Parts still on disk but retired are excluded and listed in
 `tools/sls_retired_parts.py`, with the decision that retired each one: the
