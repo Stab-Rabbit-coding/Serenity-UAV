@@ -174,17 +174,20 @@ module torus(loop_r, tube_r, ang = 360) {
 color([0.82, 0.72, 0.55, 0.30])                          // translucent tan
 intersection() {
     import("../stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl", convexity = 6);
-    translate([54.85, 290.7, 98]) cube([80, 120, 90]);   // port root region only (R1 [-115, -15, 18])
+    translate([54.85, SPAR_Y - 36.0, 98]) cube([80, 120, 90]);   // port root region only (R1 [-115, -15, 18])
 }
 
 // ── Cargo spar-drive ACCESSORIES (port), each a distinct colour ──────────────
 //   PORT args: spar_y=15, spar_z=66, x_root=-81, inb=-1, tenon_y=57.5,
 //   tenon_z=58, cable_y=55, wall_x=-86  (matches cargo_spar_drive.scad PORT[]).
 // R2 arguments; R1 were (15, 66, -81, -1, 57.5, 58), wall_x -86, cable_y 5.
-color([0.90, 0.55, 0.25, 0.85]) wing_root_receiver(320.7, 146, 88.85, -1, 363.2, 138); // orange
-color([0.95, 0.80, 0.20])       root_bearing_seat(320.7, 146, 88.85, -1);             // gold boss
-color([0.65, 0.35, 0.80, 0.9])  servo_mount(320.7, 146, 88.85, -1, 83.85);            // purple
-color([0.20, 0.70, 0.75])       cableway_ends(310.7, 146, -1, 83.85);                 // teal tubes
+// 2026-10-31: Y stations made SPAR_Y-relative (were 320.7 / 363.2 / 310.7, i.e.
+// SPAR_Y - 6.0 / + 36.5 / - 16.0 at the pre-shift 326.7) so this legacy overlay
+// follows the 0.5 in aft wing-root shift instead of staying at the old holes.
+color([0.90, 0.55, 0.25, 0.85]) wing_root_receiver(SPAR_Y - 6.0, 146, 88.85, -1, SPAR_Y + 36.5, 138); // orange
+color([0.95, 0.80, 0.20])       root_bearing_seat(SPAR_Y - 6.0, 146, 88.85, -1);             // gold boss
+color([0.65, 0.35, 0.80, 0.9])  servo_mount(SPAR_Y - 6.0, 146, 88.85, -1, 83.85);            // purple
+color([0.20, 0.70, 0.75])       cableway_ends(SPAR_Y - 16.0, 146, -1, 83.85);                 // teal tubes
 
 // =============================================================================
 // 2) PORT WING (baked hull-frame STL)
@@ -336,7 +339,7 @@ CW_GROMMET = [179.85, 313.7, 146];  // nacelle harness grommet, fwd of the pivot
 // service-loop slack coil (Ø14 loop of Ø4 harness), axis ≈ spar so nacelle tilt
 // winds/unwinds it — teal
 color([0.20, 0.62, 0.68])
-    translate([175.85, 307.7, 146]) rotate([0, 90, 0]) torus(7, 2, 300);  // R1 [6, 2, 66]
+    translate([175.85, SPAR_Y - 19.0, 146]) rotate([0, 90, 0]) torus(7, 2, 300);  // R1 [6, 2, 66]
 // nacelle harness grommet — cable pass-through boss on the inboard face — teal
 color([0.15, 0.52, 0.58])
     translate(CW_GROMMET) rotate([0, 90, 0])

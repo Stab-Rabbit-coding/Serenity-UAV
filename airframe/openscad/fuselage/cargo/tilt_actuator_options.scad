@@ -57,7 +57,7 @@ module ring_section(entry) {
 
 module context() {
     color("gray", 0.25) for (e = CARGO_SECTIONS) ring_section(e);
-    // drive shaft + root flange keep-out (WA-R1b: Y 296.7..356.7, Z 107..187, 5 mm; R2)
+    // drive shaft + root flange keep-out (WA-R1b: SHAFT_Y -30..+30 = Y 335.0..395.0 after the 2026-10-31 shift, Z 107..187, 5 mm; R2)
     color("black") for (s = [1, -1])
         translate([X_CL + s * (X_CL - 83.52) * -1 + 0, 0, 0]) {}
     color("dimgray") translate([83.52, SHAFT_Y, SHAFT_Z]) rotate([0, -90, 0]) cylinder(d = 4, h = 40);

@@ -353,11 +353,18 @@ DUCT_CUT = (-31.15, 32.85, 285.70, 412.70, 88.0, 128.0)  # x0..z1, R2; R1 (-201,
 
 # Clamshell belly aperture — between the two door hinge lines (stbd −222.5,
 # port −117.6), bay Y +2..+108, Z −3..+9 removes only the belly skin.
-APERTURE = (-52.65, 52.25, 307.70, 413.70, 77.0, 89.0)  # R2; R1 (-222.5,-117.6,2,108,-3,9)
+# 2026-10-31: Y span from the datum master (doors moved 3.0 mm forward, was
+# 307.70..413.70); X/Z unchanged.
+APERTURE = (-52.65, 52.25, hd.CARGO_BAY_Y_FWD, hd.CARGO_BAY_Y_AFT, 77.0, 89.0)  # R2; R1 (-222.5,-117.6,2,108,-3,9) before the shift
 
 # Wing subsystem — RE-DERIVED chordwise stations (AIRCRAFT DATUM R2).
-WING_LE_ROOT_Y = 298.70  # R1 -7.0
-WING_ROOT_CHORD = 129.0
+# 2026-10-31: read from the datum master (tools/hull_datums.py), which moved the
+# root 0.5 in (12.7 mm) aft, 298.70 -> 311.40 (plan 2026-10-31-001 R5).  Every
+# wing-root feature below -- socket, flange, mortise, harness ports, shaft
+# bushing -- is LE-relative, so the regenerated shell opens the new holes and
+# (because it rebuilds from the clean Blender source) carries no old ones.
+WING_LE_ROOT_Y = hd.WING_LE_ROOT_Y  # 311.40 (R1 -7.0 + 12.7)
+WING_ROOT_CHORD = hd.WING_ROOT_CHORD
 
 # REV T1 (2026-08-29): spar station 45.15 -> 28.00 mm aft of LE, and the spar
 # itself changes KIND.  Through Rev S1b it was an 8 mm rotating drive shaft that
@@ -370,7 +377,7 @@ WING_ROOT_CHORD = 129.0
 # Keep WING_SPAR_STATION in step with SPAR_BORE_STATION in
 # airframe/openscad/wings/wings_s1223_revo.scad -- they are the same physical
 # tube and there is no other link between the two files.
-WING_SPAR_STATION = 28.00                              # [mm] aft of the LE
+WING_SPAR_STATION = hd.WING_SPAR_STATION               # [mm] aft of the LE (28.00)
 WING_SPAR_Y = WING_LE_ROOT_Y + WING_SPAR_STATION       # = +21.00
 WING_MORT_Y = WING_LE_ROOT_Y + 0.50 * WING_ROOT_CHORD  # = +57.5
 
@@ -514,7 +521,7 @@ WING_SPAR_BOSS_OD = 30.1
 # wing-root penetrations are derived one way.
 WING_NAV_STATION = 8.0
 WING_ENC_STATION = 44.5
-WING_SHAFT_STATION = 53.6
+WING_SHAFT_STATION = hd.WING_SHAFT_STATION  # 53.6
 
 WING_NAV_MIDLINE = _wing_midline_mm(WING_NAV_STATION / WING_ROOT_CHORD)
 WING_ENC_MIDLINE = _wing_midline_mm(WING_ENC_STATION / WING_ROOT_CHORD)

@@ -47,6 +47,7 @@ import trimesh
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import cg_relocation_study as c  # noqa: E402
+import hull_datums as hd  # noqa: E402  (PENDING_PIVOT_SHIFT)
 
 h, clf = c.hlf, c.clf
 
@@ -193,7 +194,7 @@ def main():
         off = (base + 2 * CELL_G * y_twin + extra_m * extra_y) / M - P
         end = cap / 4400 * (M / M0) ** -1.5 - 1
         print(f"  {label:48s} AUW {M:5.0f} g ({M / 453.592:5.2f} lbm)  CG {off:+5.1f} mm; "
-              f"with 0.5 in pivot {off - 12.7 * (1 - f * M0 / M):+5.1f} mm; "
+              f"with 0.5 in pivot {off - hd.PENDING_PIVOT_SHIFT * (1 - f * M0 / M):+5.1f} mm; "
               f"T/W {8540 / M:.2f}; endurance {end * 100:+.0f} %")
     print(f"\nRESULT: {'PASS' if not fails else f'FAIL ({fails})'}")
     return 1 if fails else 0

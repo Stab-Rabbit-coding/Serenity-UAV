@@ -2736,6 +2736,14 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 head+cargo merged (merge_head_cargo_shell.py)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/head_cargo_splice_collar.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 head_cargo_splice_collar",
       "tags": [
@@ -3270,7 +3278,7 @@
       "archived": false
     },
     "airframe/stls/wings/wing_port_s1223_revo.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_port_s1223_revo",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Wing_Port 2026-06-11",
       "tags": [
         "cad-mesh",
         "structural"
@@ -3278,7 +3286,7 @@
       "archived": false
     },
     "airframe/stls/wings/wing_stbd_s1223_revo.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_stbd_s1223_revo",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Wing_Stbd 2026-06-11",
       "tags": [
         "cad-mesh",
         "structural"
@@ -20719,6 +20727,7 @@
       "airframe/stls/fuselage/head/twin_pack_gate.stl",
       "airframe/stls/fuselage/head/twin_pack_sled.stl",
       "airframe/stls/fuselage/head/twin_pack_tray.stl",
+      "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl",
       "airframe/stls/fuselage/head_cargo_splice_collar.stl",
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
@@ -21044,6 +21053,7 @@
       "airframe/stls/fuselage/head/twin_pack_gate.stl",
       "airframe/stls/fuselage/head/twin_pack_sled.stl",
       "airframe/stls/fuselage/head/twin_pack_tray.stl",
+      "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl",
       "airframe/stls/fuselage/head_cargo_splice_collar.stl",
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",

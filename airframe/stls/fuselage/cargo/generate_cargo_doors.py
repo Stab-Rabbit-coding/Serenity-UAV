@@ -12,7 +12,7 @@
 #
 #     Coordinate conventions used throughout:
 #       X = lateral (port = +X, stbd = -X); aircraft CL at X = 0 (hd.X_CL)
-#       Y = longitudinal fore-aft (+Y = aft); bay spans Y ≈ 307.7 to 413.7 mm
+#       Y = longitudinal fore-aft (+Y = aft); bay spans Y ≈ 304.7 to 410.7 mm (hull_datums.CARGO_BAY_*)
 #       Z = dorsal-ventral (+Z = up); belly at Z ≈ BELLY_Z (80)
 #
 #     Hinge lines run along Y at the OUTBOARD flank/belly edge of each door —
@@ -117,10 +117,13 @@ X_CL = hd.X_CL  # aircraft centreline (single source: tools/hull_datums.py)
 
 # Cargo bay opening: longitudinal span centred between leg attach points.
 # Landing-gear HULL_ATTACH_POS Y rows: 25 mm and 100 mm.  Bay spans Y=2..108.
-Y_BAY_LEN = 106.0  # mm — longitudinal door span
-Y_BAY_CEN = 360.7  # mm — Y centre of bay opening (R1 55.0)
-Y_BAY_FWD = Y_BAY_CEN - Y_BAY_LEN / 2.0  # = 307.7 mm
-Y_BAY_AFT = Y_BAY_CEN + Y_BAY_LEN / 2.0  # = 413.7 mm
+# 2026-10-31: the span is the datum master's (tools/hull_datums.py
+# CARGO_BAY_*), moved 3.0 mm FORWARD with the 0.5 in aft wing-root shift so
+# the hoist line clears the tilt worm (was centred at 360.7, R1 55.0).
+Y_BAY_LEN = hd.CARGO_BAY_LEN  # mm — longitudinal door span (106.0)
+Y_BAY_CEN = hd.CARGO_BAY_Y_FWD + Y_BAY_LEN / 2.0  # = 357.7 mm
+Y_BAY_FWD = Y_BAY_CEN - Y_BAY_LEN / 2.0  # = 304.7 mm
+Y_BAY_AFT = Y_BAY_CEN + Y_BAY_LEN / 2.0  # = 410.7 mm
 
 # Fall-back exterior belly Z (used when interpolator misses a point)
 Z_BELLY_FALLBACK = hd.BELLY_Z + 0.5  # mm

@@ -76,8 +76,6 @@ STBD_DX = 2.0 * (X_CL - clf.WORM_X)   # -89.2: worm/wheel/guide translate, not m
 SPAR_Y, SPAR_Z, SPAR_D = hd.SPAR_Y, hd.SPAR_Z, 20.0
 SHAFT_Y, SHAFT_Z, SHAFT_D = clf.SHAFT_Y, clf.SHAFT_Z, 4.0
 BUNDLE_D = 16.3            # spar ID = 4 x 10 AWG bundle (SPAR_WIRE_BORE_D)
-ENC_Y, ENC_Z, ENC_D = 343.20, 148.689, 6.5  # R1 37.5/68.689
-NAV_Y, NAV_Z, NAV_D = 306.70, 141.974, 3.2  # R1 1.0/61.974
 # Port stations from the merge (single source, rule R3); starboard is their
 # MIRROR because the cargo is rebuilt as the mirror of its port half
 # (merge_cargo_interior.SYMMETRIC_FROM_PORT).  These were typed copies whose
@@ -85,6 +83,12 @@ NAV_Y, NAV_Z, NAV_D = 306.70, 141.974, 3.2  # R1 1.0/61.974
 # asymmetric starboard skin: a 1.70 mm harness DESYNC.
 sys.path.insert(0, os.path.join(REPO, "airframe", "blender-scripts"))
 import merge_cargo_interior as mci  # noqa: E402
+
+# 2026-10-31: harness exits read from the merge (were typed 343.20 / 306.70,
+# which froze them at the pre-shift station when the wing root moved 12.7 mm
+# aft -- the gate then reported the OLD nav exit fouling the fore LG bay).
+ENC_Y, ENC_Z, ENC_D = mci.WING_ENC_Y, mci.WING_ENC_Z, 6.5  # 355.90 / 148.689
+NAV_Y, NAV_Z, NAV_D = mci.WING_NAV_Y, mci.WING_NAV_Z, 3.2  # 319.40 / 141.974
 
 
 def _mirrored(port_x):

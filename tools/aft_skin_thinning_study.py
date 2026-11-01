@@ -42,6 +42,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import sls_scale_trim_study as s
+import hull_datums as hd  # noqa: E402  (PENDING_PIVOT_SHIFT)
 
 G = 9.80665
 N_CRASH = 79.4           # plan 001 R7 design load factor
@@ -170,7 +171,7 @@ def cg_effect(sb, label):
     yc = sum(e[2] * e[3] for e in es) / w
     f = _nac_frac(es)
     print(f"     {label}: AUW {w:.0f} g, offset {yc - s.PIVOT:+.1f} mm; "
-          f"with the single pivot 0.5 in aft {yc - s.PIVOT - 12.7 * (1 - f):+.1f} mm")
+          f"with the single pivot 0.5 in aft {yc - s.PIVOT - hd.PENDING_PIVOT_SHIFT * (1 - f):+.1f} mm")
 
 
 def _nac_frac(es):

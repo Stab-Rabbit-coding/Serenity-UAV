@@ -123,7 +123,10 @@ def dilate(tm, d):
 # merge_cargo_interior.py imports this module.
 # ---------------------------------------------------------------------------
 # Drive shaft (WING_SHAFT_Y / WING_SHAFT_Z in merge_cargo_interior.py)
-SHAFT_Y, SHAFT_Z = 352.30, 149.09  # R1 (46.60, 69.09)
+# 2026-10-31: SHAFT_Y is the datum master's (hull_datums.SHAFT_Y = wing root LE
+# + 53.6), 352.30 -> 365.00 with the 0.5 in aft pivot shift (plan
+# 2026-10-31-001 R5).  SHAFT_Z is unchanged (the shift is pure Y).
+SHAFT_Y, SHAFT_Z = hd.SHAFT_Y, 149.09  # 365.00 (R1 46.60 + 12.7, 69.09)
 # Worm stage -- Rev T5e (2026-09-16), supersedes the Rev T5b/T5c/T5d numbers.
 # m1 40T wheel on the drive shaft driven by a SIX-start O26 worm on a Pololu
 # 20D 25:1 CB 6 V gearmotor (#3712, REF-ACT-001): 6.667:1 here, 23.8:1 overall
@@ -193,6 +196,49 @@ BRAKE_SOL_X = WORM_X - 1.5  # -126.75
 SENSOR_PCB_T = 3.0  # AEAT-8800 carrier (part of the brake guide block face)
 # 62.1: 1 mm gap + 5 mm guide block (pin, sensor), then the coil to 86.1
 BRAKE_SOL_Y0 = BRAKE_Y + BRAKE_COLLAR_L / 2 + 3.0 + SENSOR_PCB_T
+# WORM SWING (2026-10-31, owner decision on the 0.5 in aft pivot shift).
+# The worm stage above is authored UNSWUNG: worm axis along hull Y, directly
+# above the shaft at C 33.  With the shaft at Y 365.0 that worm spans Y
+# 360..370 and its inboard tip (X 30.6) reaches the twin hoist lines
+# (X +/-30.9, Y ~359.5) -- nothing translates out of the way: the shaft is
+# pinned 25.6 mm aft of the spar by the 14T/50T tip-stage centre distance,
+# the worm must stay centred on its wheel, the lines are pinned by the
+# payload box in the fixed door aperture, and the sidewall is no wider here
+# (section-probed 2026-10-31: inner skin X ~86 at both Y 352.3 and 365.0).
+# So the whole worm group -- worm, gearmotor, brake collar, solenoid and the
+# bracket features that carry them -- is ROTATED about the shaft axis by
+# WORM_SWING_DEG, top toward the bow.  A worm/wheel mesh is indifferent to
+# where on the wheel's circumference the worm sits, and a rotation about the
+# shaft preserves every part's distance to the shaft axis, so the 2.0 mm
+# motor-to-wheel-tip gap (T5d-1) and the C 33 mesh are unchanged by
+# construction.  Positive = the worm's top moves forward (-Y).  The angle is
+# the smallest that clears the hoist lines by GAP_MM (sweep in --swing-sweep).
+# Owner review of the drawn options (2026-10-31): forward swing drives the
+# gearmotor into the payload box and port chin node; aft swing drives the
+# brake solenoid into aft node N2.  Moving the DOORS 3.0 mm forward clears the
+# hoist line instead, so the stage stays UNSWUNG.  The parameter is kept, at
+# 0, so the trade can be re-run (scratch sweeps are not committed).
+WORM_SWING_DEG = 0.0
+
+
+def swing_yz(y, z, deg=None):
+    """Rotate hull point (y, z) about the shaft axis by the worm swing."""
+    a = np.radians(WORM_SWING_DEG if deg is None else deg)
+    dy, dz = y - SHAFT_Y, z - SHAFT_Z
+    return (SHAFT_Y + dy * np.cos(a) - dz * np.sin(a),
+            SHAFT_Z + dy * np.sin(a) + dz * np.cos(a))
+
+
+def swing_tm(tm, deg=None):
+    """Rotate a mesh about the shaft axis (hull X through SHAFT_Y/SHAFT_Z)."""
+    a = np.radians(WORM_SWING_DEG if deg is None else deg)
+    m = tm.copy()
+    m.apply_transform(trimesh.transformations.rotation_matrix(a, [1, 0, 0], [0, SHAFT_Y, SHAFT_Z]))
+    return m
+
+
+# Swung centre of the worm (for reports and the bracket SCAD)
+WORM_SW_Y, WORM_SW_Z = swing_yz(WORM_YC, WORM_Z)
 # Tilt CONTROLLER board (Open-Secure-ESC build 6s/10A/BRUSHED_CAN_485_isolation,
 # REF-ESC-001; the build carries this 36.5 x 42.9 envelope and the 4 mm
 # component-side height as hard host constraints; card-edge rails on the
@@ -269,7 +315,14 @@ CRADLE_XC = BATT_XC
 NODE_L, NODE_H, NODE_T = 58.0, 37.0, 22.0  # pouch-inclusive: board length, board height, stack
 NODE_CABLE = 10.0  # connector-edge clearance
 # chin floor nodes: X = board height (37), Y = board length (58), Z = stack (22)
-N_CHIN_Y0, N_CHIN_Y1 = 247.70, 305.70  # R1 (-58, 0)
+# 2026-10-31: the pair moves 3.6 mm FORWARD (247.70/305.70 -> 244.10/302.10)
+# so the chin shelf's 1.6 mm aft lip behind it keeps the 2.0 mm static gap to
+# the payload box, whose
+# forward face came forward 4.7 mm to Y 305.7 with the doors (CARGO_BAY_Y_FWD)
+# and the hoist line.  Forward of it, the head/cargo collar ring that used to
+# bound it (Y 244.2..252.2) no longer exists: the sections are fused
+# (tools/merge_head_cargo_shell.py, 2026-10-31).
+N_CHIN_Y0, N_CHIN_Y1 = 244.10, 302.10  # R1 (-58, 0) - 3.6
 N_CHIN_Z1 = BATT_Z0 - 2.0  # 88.0: 2 mm static gap under the battery
 N_CHIN_Z0 = N_CHIN_Z1 - NODE_T  # 66.0
 N_CHIN_X_IN = X_CL + NODE_CABLE / 2  # port node inner face (-164.85); stbd mirrored
@@ -293,7 +346,10 @@ SHELF_T = 2.4
 SHELF_Z0 = N_CHIN_Z0 - SHELF_T  # 63.6
 # plate: clear of the head/cargo splice collar ring (Y -61.5..-53.5) and the
 # payload (4.7); the pouches overhang it 6 mm forward
-SHELF_Y0, SHELF_Y1 = 253.70, 307.30  # R1 (-52, 1.6)
+# 2026-10-31: aft end 307.30 -> 303.70 = N_CHIN_Y1 + the 1.6 mm aft lip, as
+# before (box forward face now Y 305.7: 2.0 mm gap).  Bosses unchanged; the
+# nodes now overhang the plate 9.6 mm forward.
+SHELF_Y0, SHELF_Y1 = 253.70, 303.70  # R1 (-52, 1.6 - 3.6)
 SHELF_SILL_Y1 = 260.70  # R1 -45.0; forward of this the plate lies on the floor
 SHELF_BOSS = (
     (X_CL - 30.0, 256.70),
@@ -312,7 +368,9 @@ SHELF_BOSS = (
 # aperture (Y 2..108) from the tray's top edge: a hoist monitor, no belly
 # window.  Four M2.5 belly bosses (floor Z ~1-2 there).
 OBSERVER_L, OBSERVER_W, OBSERVER_T = 76.8, 70.8, 20.0
-OBSERVER_Y0 = 414.20  # R1 108.5
+# 2026-10-31 (owner): Observer as far FORWARD as possible -- its tray face
+# follows the payload box's aft face at OBSERVER_GAP (was fixed at 414.20).
+OBSERVER_GAP = 2.2      # tray face to the box's aft face (unchanged figure)
 OBSERVER_Z0 = 94.20  # R1 14.2
 OBSERVER_PLACED = True
 OBSERVER_BOSS = (
@@ -335,7 +393,21 @@ TRAYS_IN_CARGO = False
 PAYLOAD = (76.2, 101.6, 76.2)  # X, Y, Z
 # The box is a hoisted soft load, not a moving machine part: its lateral
 # margin to the wheels is 3.0 mm and its Y margin in the aperture 2.2 mm.
-HOIST_Y = 361.20  # R1 55.5; box R1 Y 4.7..106.3 in the 2..108 aperture
+# 2026-10-31 (owner): the lift line shall be as close to the thrust line
+# (hd.SPAR_Y 339.4) as possible, slightly forward if not exactly on it, with
+# the DOORS UNCHANGED.  The box hangs with its CG under the lines and must
+# pass the fixed clamshell aperture (merge_cargo_interior.APERTURE, Y
+# 307.70..413.70), so the most-forward line is the aperture's forward edge +
+# HOIST_FWD_MARGIN + half the box.  With the doors also moved 3.0 mm
+# FORWARD (owner, 2026-10-31; hull_datums.CARGO_BAY_Y_FWD 307.70 -> 304.70)
+# that is Y 356.5: 17.1 mm AFT of the thrust line, the closest the fixed-size
+# bay allows, and 3.0 mm forward of the unswung worm's forward face (X-band
+# overlap, so this is the moving-part budget exactly).  (Was 361.20, centred
+# in the aperture with 2.2 mm each end.)
+APERTURE_Y0 = hd.CARGO_BAY_Y_FWD  # 304.70 = merge_cargo_interior.APERTURE[2]
+HOIST_FWD_MARGIN = 1.0  # box forward face to the aperture's forward edge
+HOIST_Y = APERTURE_Y0 + HOIST_FWD_MARGIN + PAYLOAD[1] / 2  # 356.50
+OBSERVER_Y0 = HOIST_Y + PAYLOAD[1] / 2 + OBSERVER_GAP  # 409.50 (was 414.20)
 LINE_R = 0.5  # 1 mm Dyneema
 HOIST_DX = BATT_W / 2 + CRADLE_T + GAP_MM + LINE_R  # 30.9 from the battery centre
 HOIST_XS = (BATT_XC - HOIST_DX, BATT_XC + HOIST_DX)
@@ -412,14 +484,14 @@ def layout_t5():
     )
     L["worm"] = dict(
         mirror=True,
-        solid=cyl(
+        solid=swing_tm(cyl(
             "y",
             WORM_X,
             WORM_Z,
             WORM_YC - WORM_LEN / 2,
             WORM_YC + WORM_LEN / 2,
             WORM_PD / 2 + GEAR_MODULE,
-        ),
+        )),
         mates=("worm wheel", "worm wheel (stbd)"),
     )
     # motor body FORWARD of the worm: face plate at MOTOR_FACE_Y, body toward -Y
@@ -427,7 +499,7 @@ def layout_t5():
     # both are bracket-located, so 2 mm is accepted in place of GAP_MM
     L["motor"] = dict(
         mirror=True,
-        solid=cyl("y", WORM_X, WORM_Z, MOTOR_FACE_Y - MOTOR_L, MOTOR_FACE_Y, MOTOR_D / 2),
+        solid=swing_tm(cyl("y", WORM_X, WORM_Z, MOTOR_FACE_Y - MOTOR_L, MOTOR_FACE_Y, MOTOR_D / 2)),
     )
     L["tilt controller board"] = dict(
         mirror=True,
@@ -438,21 +510,21 @@ def layout_t5():
     )
     L["brake collar"] = dict(
         mirror=True,
-        solid=cyl(
+        solid=swing_tm(cyl(
             "y",
             WORM_X,
             WORM_Z,
             BRAKE_Y - BRAKE_COLLAR_L / 2,
             BRAKE_Y + BRAKE_COLLAR_L / 2,
             BRAKE_COLLAR_D / 2,
-        ),
+        )),
         mates=("worm", "worm (stbd)"),
     )
     L["brake solenoid"] = dict(
         mirror=True,
-        solid=cyl(
+        solid=swing_tm(cyl(
             "y", BRAKE_SOL_X, WORM_Z, BRAKE_SOL_Y0, BRAKE_SOL_Y0 + BRAKE_SOL_L, BRAKE_SOL_D / 2
-        ),
+        )),
         mates=("brake collar", "brake collar (stbd)"),
     )
     # feet reach OUTBOARD to the skin: (Y, Z) stations, X from the foot face
@@ -759,16 +831,28 @@ def layout_t5():
 # board, foot 2 low at (Y 64, Z 77) -- 2 mm above the harness bores (Z <= 69),
 # fusing into the mortise block (Z <= 72.9, boss on boss), 2.6 mm forward of
 # the aft LG bay's bolt3 bores (Y >= 72.6) and 2 mm under the board (Z 85).
-BRACKET_FEET = (
+BRACKET_FEET_UNSWUNG = (
     (SHAFT_Y - 36.0, WORM_Z + 22.0),
     (SHAFT_Y - 6.6, WORM_Z + 22.0),
-    (SHAFT_Y + 17.4, SHAFT_Z + 7.91),
+    # 2026-10-31: foot 2 was SHAFT_Y + 17.4 (Y 369.7 at the old shaft).  The
+    # 12.7 mm aft shift would put it at 382.4, onto the aft LG bay's bolt3
+    # bores (Y >= 378.3, which do not move), so it goes back to its old hull Y
+    # (shaft + 4.7) -- still 2.6 mm forward of those bores -- and up 1.5 mm so
+    # its underside (Z 152.5) clears the O4.4 shaft bore (top Z 151.3) by
+    # 1.2 mm while still fusing into the mortise block (top Z ~152.9), which
+    # the mortise move (now Y 369.5..382.3) brings directly under it.
+    (SHAFT_Y + 4.7, SHAFT_Z + 9.41),
 )
+# 2026-10-31: the feet ride the swung bracket (rigid with the worm group).
+BRACKET_FEET = tuple(tuple(round(float(v), 2) for v in swing_yz(fy, fz))
+                     for fy, fz in BRACKET_FEET_UNSWUNG)
 # Feet of the LAST PUBLISHED shell, subtracted in shell_after_merge so the
 # check does not see bosses a re-layout moves.  Update when re-merging
 # (Rev T5e shell published 2026-09-16 with BRACKET_FEET above; the Rev T5d
 # feet were (10.6, 123.09), (68.6, 123.09), (62.0, 86.0) at X -119.75).
-PUBLISHED_FEET = BRACKET_FEET
+# 2026-10-31: the shell on disk was merged with the PRE-shift, unswung feet;
+# set back to BRACKET_FEET once the 2026-10-31 re-merge is published.
+PUBLISHED_FEET = ((316.30, 204.09), (345.70, 204.09), (369.70, 157.00))
 PUBLISHED_FOOT_X = GEAR_X_OUT + 4.0
 
 

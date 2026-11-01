@@ -133,7 +133,8 @@ TILT_PART_ST = {
     "OSESC-TILT-TC": (_TCB, "cargo_layout_fit tilt controller board centre"),
 }
 SPAR_ST = ((X_CL, hd.SPAR_Y, hd.SPAR_Z), "wing spar station, both sides (sym)")
-DOOR_ST = ((X_CL, 360.7, 88.0), "clamshell door aperture Y 2..108")
+DOOR_ST = ((X_CL, (hd.CARGO_BAY_Y_FWD + hd.CARGO_BAY_Y_AFT) / 2, 88.0),
+           "clamshell door aperture (hull_datums.CARGO_BAY_*)")
 GW_DOOR_ST = ((X_CL, 305.7, 90.0), "ESTIMATE: fwd belly slab (CARGO_DOOR_GATEWAY_SPEC)")
 WIRE_ST = ((X_CL, 395.7, 160.0), "ESTIMATE: battery (Y 13) -> FE (Y 162) -> nacelles")
 KEEL_ST = ((X_CL, 345.7, 82.0), "ESTIMATE: keel bar mid-length")

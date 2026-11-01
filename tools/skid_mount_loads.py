@@ -38,6 +38,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import skid_failure_mode_study as sf
+import hull_datums as hd  # noqa: E402  (tilt pivot = SPAR_Y)
 
 LBF = 4.44822
 Y_ROOT = 506.0          # skid roots leave the ring legs [MESH]
@@ -207,7 +208,7 @@ def size_elastic_design(y_pad=Y_PAD, crash_frac=0.95, b=6.0):
     print(f"  1.5 ft landing: peak {r15['f_skid_peak'] / 2 / LBF:.0f} lbf, max stress {s15 * mpa2psi:.0f} psi vs "
           f"{S_RIB / 1.5 * mpa2psi:.0f} psi allowable -> {'elastic, no damage' if s15 <= S_RIB / 1.5 else 'OVER'}")
     print(f"  pair total +{tot * g2oz:.2f} oz ({tot:.0f} g) at Y ~{y_pad:.0f} -> hover CG "
-          f"+{tot * (y_pad - 326.7) / (m * 1000) * mm2in:.3f} in aft")
+          f"+{tot * (y_pad - hd.SPAR_Y) / (m * 1000) * mm2in:.3f} in aft")
 
 
 if __name__ == "__main__":

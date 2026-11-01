@@ -35,6 +35,8 @@ import sys
 
 import numpy as np
 import trimesh
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import hull_datums as hd  # noqa: E402  (tilt pivot = SPAR_Y)
 from shapely.geometry import MultiPolygon
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -43,7 +45,7 @@ STL = os.path.join(HERE, "..", "airframe", "stls", "fuselage")
 RHO = {"CF-PETG bulk 1.05": 1.05e-3, "CF-PETG solid 1.28": 1.28e-3,
        "PA CF SLS 1.11": 1.11e-3}          # g/mm^3
 RHO_LEDGER = 1.05e-3
-PIVOT_Y, PIVOT_Z = 326.7, 146.9
+PIVOT_Y, PIVOT_Z = hd.SPAR_Y, 146.9  # 339.4 since the 2026-10-31 shift (was typed 326.7)
 BAND = 10.0                                # mm, station band width
 
 PARTS = {

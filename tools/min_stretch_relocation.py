@@ -54,9 +54,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import auw_ledger as al  # noqa: E402
 import cg_relocation_study as c  # noqa: E402
+import hull_datums as hd  # noqa: E402  (PENDING_PIVOT_SHIFT)
 
 ZC = 160.0  # ASSUMED scale centre in Z (fuselage centreline height, datum R2)
-PIVOT_SHIFT = 12.7  # 0.5 in single pivot shift (plan R7)
+PIVOT_SHIFT = hd.PENDING_PIVOT_SHIFT  # 0.5 in shift: 12.7 when planned, 0.0 now it is in the geometry (2026-10-31)
 SIMON_NONFO_G = 58.0  # one TACCO 40 g + one PB2-I 13 g + half the pouches 5 g
 SKID_G, SKID_Y = 17.0, 620.0
 KS = (1.0, 25.0 / 24, 26.0 / 24, 27.0 / 24)
