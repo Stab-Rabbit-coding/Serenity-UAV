@@ -19260,6 +19260,13 @@
       ],
       "archived": false
     },
+    "tools/assembly_integrity_check.py": {
+      "description": "assembly_integrity_check.py -- find rogue openings in the assembled hull",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/auw_ledger.py": {
       "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
       "tags": [
@@ -19378,6 +19385,21 @@
     },
     "tools/cargo_layout_fit.py": {
       "description": "Python script",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/cargo_observer_sensor_fit.py": {
+      "description": "cargo_observer_sensor_fit.py -- place the cargo Observer's remote sensor",
+      "tags": [
+        "build-tooling",
+        "sensors-vision"
+      ],
+      "archived": false
+    },
+    "tools/cfd_internal_air_domain.py": {
+      "description": "cfd_internal_air_domain.py -- voxel air domain of the fuselage interior for",
       "tags": [
         "build-tooling"
       ],
@@ -19921,6 +19943,13 @@
       "tags": [
         "build-tooling",
         "propulsion"
+      ],
+      "archived": false
+    },
+    "tools/node_thermal_forced_air.py": {
+      "description": "node_thermal_forced_air.py -- forced-air thermal budget for every CN/FC",
+      "tags": [
+        "build-tooling"
       ],
       "archived": false
     },
@@ -22625,7 +22654,8 @@
       "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x",
       "avionics/kicad/add_sensors_sbus.py",
       "docs/OBSERVER_LASER_ANALYSIS.md",
-      "graphical-build-guide/build_guide_22_obstacle_sensors.svg"
+      "graphical-build-guide/build_guide_22_obstacle_sensors.svg",
+      "tools/cargo_observer_sensor_fit.py"
     ],
     "bom": [
       "airframe/diagrams/ring_frames/ring_cargo_Y30_inner.csv",
@@ -25321,6 +25351,7 @@
       "tools/aft_section_mass_audit.py",
       "tools/aft_skin_thinning_study.py",
       "tools/airframe_interface_census.py",
+      "tools/assembly_integrity_check.py",
       "tools/auw_ledger.py",
       "tools/bake_hull_frame.py",
       "tools/bay_a_thermal_budget.py",
@@ -25337,6 +25368,8 @@
       "tools/cargo_bay_envelope.py",
       "tools/cargo_bulkhead_context.py",
       "tools/cargo_layout_fit.py",
+      "tools/cargo_observer_sensor_fit.py",
+      "tools/cfd_internal_air_domain.py",
       "tools/cg_mass_reduction_study.py",
       "tools/cg_relocation_study.py",
       "tools/check_datum_drift.py",
@@ -25408,6 +25441,7 @@
       "tools/nacelle_mass_cg_64.py",
       "tools/nacelle_tilt_dynamics.py",
       "tools/nacelle_trunnion_fit.py",
+      "tools/node_thermal_forced_air.py",
       "tools/nozzle_linkage_check.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",

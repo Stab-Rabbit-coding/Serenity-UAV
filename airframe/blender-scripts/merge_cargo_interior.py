@@ -861,10 +861,25 @@ LG_PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
 LG_CORNERS = [
     # R2; R1 hips (-114.90/-224.90, -16.00, 38) and (-92.24/-247.56, 99.96, 38)
     ("fore-port", 54.95, 289.70, 118.0, -22.4, "fore"),
-    ("fore-stbd", -55.05, 289.70, 118.0, -157.6, "fore"),
     ("aft-port", 77.61, 405.66, 118.0, 28.0, "aft"),
-    ("aft-stbd", -77.71, 405.66, 118.0, 152.0, "aft"),
 ]
+# 2026-11-01: starboard rows DERIVED as the exact mirror of port about X_CL
+# (x -> 2 X_CL - x, az -> 180 - az).  They were typed -55.05 / -77.71: the R1
+# rows mirrored about the old -169.9 centreline, 0.1 mm off a true mirror.
+# Against the SYMMETRIC_FROM_PORT shell that 0.1 mm left the starboard bay
+# seats, rebates and A1B housings NEAR-coincident with the skin, which the
+# float32 STL round trip welds into ~7,000 non-manifold edges -- the root of
+# WBS MERGE-FINALIZE-NM (defects were starboard-only; port was clean).
+def _mirror_corner(row):
+    """Starboard twin of a port corner row: X mirrored, azimuth 180 - az
+    (wrapped to [-180, 180)), Y/Z unchanged."""
+    label, hx, hy, hz, az, st = row
+    return (label.replace("port", "stbd"), hd.mirror_x(hx), hy, hz,
+            round((180.0 - az + 180.0) % 360.0 - 180.0, 6), st)
+
+
+LG_CORNERS = [LG_CORNERS[0], _mirror_corner(LG_CORNERS[0]),
+              LG_CORNERS[1], _mirror_corner(LG_CORNERS[1])]
 
 # Retained as an informational clearance check.
 LEG_ZONES = [
