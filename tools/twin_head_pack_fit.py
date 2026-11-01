@@ -69,6 +69,12 @@ TRUNK_X0, TRUNK_X1, TRUNK_Z0, TRUNK_Z1 = 38.5, 48.5, 193.0, 201.0
 # ramp at the tray's aft edge.  Payload is out during loading (as today).
 CORRIDOR_ZC = 189.5
 GAP = 1.0
+# Bay A option "fwd" (head_layout_fit --bay-a fwd, owner 2026-11-01): with the
+# side-by-side Bay A gone the tray runs forward to Y 163, where the skin binds
+# at Zc 191 (real-mesh probe 2026-11-01).  Option only: the published tray
+# (and twin_pack_tray_params.scad) stay at TRAY_Y0 until the owner adopts it.
+FWD_TRAY_Y0 = 163.0
+FWD_TRUNKS = ("trunk: CN1 run", "trunk: Observer to CN1")
 SEAT_MAX = 100.0  # mm^3 skin overlap accepted as a bonded seat per rail part
 CELL_G = h.CELL_G
 MERGED = os.path.join(c.REPO, "airframe", "stls", "fuselage",
@@ -91,7 +97,11 @@ def obstacles():
             obs["cargo: " + k + " (stbd)"] = c.to_man(clf.mirror_x(e["solid"]))
     HL, _ = h.layout()
     for k, e in HL.items():
-        if k.startswith(("head cell", "sled", "rail", "catch", "trunk")):
+        if k.startswith(("head cell", "sled", "rail", "catch")):
+            continue
+        # the single-cell centreline trunk is retired (port side channel); in the
+        # Bay A "fwd" option the CN1 run and Observer drop stay and must clear the tray
+        if k.startswith("trunk") and not (h.BAYA_MODE == "fwd" and k in FWD_TRUNKS):
             continue
         obs["head: " + k] = c.to_man(e["solid"])
         if e.get("mirror"):
@@ -144,7 +154,16 @@ def write_params():
 
 
 def main():
-    write_params()
+    global TRAY_Y0, TRAY_Y1
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--bay-a", choices=("side", "fwd"), default="side",
+                    help="fwd: Bay A CN1-forward option, tray at FWD_TRAY_Y0 (no SCAD write)")
+    h.BAYA_MODE = ap.parse_args().bay_a
+    if h.BAYA_MODE == "fwd":
+        TRAY_Y0, TRAY_Y1 = FWD_TRAY_Y0, FWD_TRAY_Y0 + (TRAY_Y1 - TRAY_Y0)
+    else:
+        write_params()
     shell, obs = obstacles()
     statics, rail = checks()
     fails = 0

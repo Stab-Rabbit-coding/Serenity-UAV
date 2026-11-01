@@ -172,6 +172,28 @@ SH_X0, SH_X1, SH_Z0, SH_Z1 = 24.0, 30.0, 222.0, 230.0
 SH_Y0 = 48.0
 
 # ---------------------------------------------------------------------------
+# Bay A option "fwd" (owner, 2026-11-01; plan 2026-10-31-003 option): the CN1
+# (TACCO) pouch lies FLAT on the centreline partly under the nose Observer,
+# and the FC1 (Pilot) pouch lies flat above CN1's aft end and the battery
+# rail ceiling.  Clearing the side-by-side Bay A lets the twin pack tray run
+# forward from Y 172 to Y 163 (the skin, not equipment, then binds at Zc 191).
+# Real-mesh probes 2026-11-01 against the merged head+cargo hull, 1 mm gap:
+#   * CN1 forward-most at Y 62 for Z0 206 (lower: bay insert and chin taper;
+#     higher: the Observer underside);
+#   * FC1 only fits flat, Y 100..158 at Z0 229 (on edge: no fit).
+# CG (ledger estimate): CN1 58 g x 38 mm fwd = +0.35 mm; twin tray 642 g x 9 mm
+# = +0.93 mm; about 1.3 mm forward in all.  Select with --bay-a fwd.
+# ---------------------------------------------------------------------------
+BAYA_MODE = "side"  # "side" (baseline, on edge side by side) or "fwd"
+CN1F_Y0, CN1F_Z0 = 62.0, 206.0
+FC1F_Y0, FC1F_Z0 = 100.0, 229.0
+# Pitot hose turn (both modes): from the hose keep-out's aft end straight up
+# (+Z) to the Observer underside, where the airspeed sensor (WBS §1.10 U5,
+# unselected) takes the hose.  Hose end (-3.6, 50.5, 223.9) and the board
+# underside above it (Z 236.8) located by ray cast 2026-11-01.
+PITOT_TURN_Z1 = 237.0
+
+# ---------------------------------------------------------------------------
 # Head cell, sled, rail, stop, catch (plan 001 R4-R8, KTD5-KTD7).
 # Cell: Tattu R-Line 6S 2200 95C, 116 x 34 x 38.5 mm, on its side (38.5 lateral).
 # ORIGIN: PRC-domiciled maker (Tattu), retained by owner decision 2026-10-26,
@@ -382,6 +404,15 @@ def layout():
     hose.apply_transform(trimesh.geometry.align_vectors([0, 0, 1.0], ax))
     hose.apply_translation(PITOT_NIPPLE + ax * (PITOT_HOSE_L / 2 + PITOT_BARB_TIP))
     L["pitot hose"] = dict(solid=hose, gap=1.0, mates=("Observer board",))
+    hend = PITOT_NIPPLE + ax * (PITOT_HOSE_L + PITOT_BARB_TIP)
+    L["pitot hose turn"] = dict(
+        solid=cyl("z", hend[0], hend[1], hend[2] - PITOT_HOSE_D / 2, PITOT_TURN_Z1,
+                  PITOT_HOSE_D / 2),
+        gap=1.0, mates=("pitot hose", "Observer board"),
+        note="hose up to the airspeed sensor on the Observer underside")
+    if BAYA_MODE == "fwd":
+        _bay_a_fwd(L)
+        return L, {}
     # --- Bay A nodes (on edge, port, mirrored stbd) ------------------------
     L["Bay A node CN1 (port)"] = dict(
         solid=box(X_CL + BAYA_X_IN, X_CL + BAYA_X_IN + clf.NODE_T, BAYA_Y0,
@@ -442,6 +473,51 @@ def layout():
         gap=1.0,
     )
     return L, {}
+
+
+def _bay_a_fwd(L):
+    """Bay A option "fwd": both pouches flat (37 beam x 58 long x 22 tall),
+    connector edge aft.  The head cell, rail, sled and catch stay as in the
+    baseline so this gate proves the option against today's single-cell rail
+    as well; tools/twin_head_pack_fit.py --bay-a fwd proves it against the
+    twin tray at Y 163."""
+    nh, nl, nt, cz = clf.NODE_H / 2, clf.NODE_L, clf.NODE_T, clf.NODE_CABLE
+    hw = TRUNK_W / 2
+    L["Bay A node CN1 (fwd, flat)"] = dict(
+        solid=box(-nh, nh, CN1F_Y0, CN1F_Y0 + nl, CN1F_Z0, CN1F_Z0 + nt), gap=1.0,
+        note="partly under the Observer (TACCO + PB2-I)")
+    L["Bay A CN1 cable zone"] = dict(
+        solid=box(-nh, nh, CN1F_Y0 + nl, CN1F_Y0 + nl + cz, CN1F_Z0, CN1F_Z0 + nt),
+        mates=("Bay A node CN1 (fwd, flat)", "trunk: CN1 run"), gap=1.0)
+    L["Bay A node FC1 (raised, flat)"] = dict(
+        solid=box(-nh, nh, FC1F_Y0, FC1F_Y0 + nl, FC1F_Z0, FC1F_Z0 + nt), gap=1.0,
+        note="over CN1's aft end and the rail ceiling (Pilot + PB2-I)")
+    # CN1 cables run aft under FC1, above Z 215 so they also clear the twin
+    # tray's rail ceiling (Z 213.9) aft of Y 159, into FC1's cable zone.
+    tz0 = 216.0
+    L["trunk: CN1 run"] = dict(
+        solid=box(-hw, hw, CN1F_Y0 + nl + cz - 2.0, FC1F_Y0 + nl + 2.0, tz0, FC1F_Z0 - 2.0),
+        mates=("Bay A CN1 cable zone", "Bay A FC1 cable zone"), gap=1.0)
+    L["Bay A FC1 cable zone"] = dict(
+        # drops to the CN1 run and the aft trunk; top 6 mm short where the dome closes in
+        solid=box(-nh, nh, FC1F_Y0 + nl, FC1F_Y0 + nl + cz, tz0, FC1F_Z0 + nt - 6.0),
+        mates=("Bay A node FC1 (raised, flat)", "trunk: CN1 run", "trunk: over catch",
+               "trunk: aft run"), gap=1.0)
+    y_step = STOP_Y + 6.0
+    tz_low = BAND_Z1 + RAIL_T + GAP_MM
+    tz_high = BAND_ZC - 4.0 + 34.0 + 1.0  # gen_head_cell_rail LEAF top + 1 mm
+    L["trunk: over catch"] = dict(
+        solid=box(-hw, hw, FC1F_Y0 + nl + cz - 2.0, y_step + 2.0, tz_high, tz_high + TRUNK_H),
+        mates=("Bay A FC1 cable zone", "trunk: aft run"), gap=1.0)
+    L["trunk: aft run"] = dict(
+        solid=box(-hw, hw, y_step - 2.0, RAIL_HEAD_Y1 + 2.0, tz_low, tz_low + TRUNK_H),
+        mates=("trunk: over catch", "Bay A FC1 cable zone"), gap=1.0)
+    # Observer aft edge -> down in front of FC1 to the top of CN1 (CN1's
+    # forward cables reach it there; the ring continues through CN1's zone).
+    ae = observer_aft_end()
+    L["trunk: Observer to CN1"] = dict(
+        solid=box(-hw, hw, ae[1] - 6.0, FC1F_Y0 - 2.0, CN1F_Z0 + nt + 1.0, ae[2] - 4.0),
+        mates=("Observer board", "Bay A node CN1 (fwd, flat)"), gap=1.0)
 
 
 def _part(name):
@@ -646,7 +722,13 @@ def write_params():
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--write-scad", action="store_true")
+    ap.add_argument("--bay-a", choices=("side", "fwd"), default="side",
+                    help="Bay A layout: baseline side-by-side, or the CN1-forward option")
     a = ap.parse_args()
+    global BAYA_MODE
+    BAYA_MODE = a.bay_a
+    if a.write_scad and BAYA_MODE != "side":
+        ap.error("--write-scad publishes the baseline; the fwd Bay A is an option only")
     return 0 if report(a.write_scad) else 1
 
 
