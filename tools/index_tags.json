@@ -15962,6 +15962,13 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md": {
+      "description": "Bay A Forward Adoption - Plan",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -20493,6 +20500,7 @@
       "docs/plans/2026-10-31-001-feat-one-piece-aft-sls-hull-plan.md",
       "docs/plans/2026-10-31-002-feat-aft-gear-tail-co-strike-plan.md",
       "docs/plans/2026-10-31-003-feat-forward-trim-room-relocation-plan.md",
+      "docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
