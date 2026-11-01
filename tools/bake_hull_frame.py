@@ -157,16 +157,22 @@ COMPONENTS = {
     #      disagrees by 1.8 mm, but that bake is itself known-stale pending the
     #      Rev T CG re-bake (wings-nacelles WBS SS1.1.3), so it is not used here.
     #   Z: unchanged -- both wings already shared 57.9998840.
+    # 2026-10-31: Py is the wing-root datum (hull_datums.WING_LE_ROOT_Y,
+    # 298.70 -> 311.40, the 0.5 in aft pivot shift, plan 2026-10-31-001 R5);
+    # the 0.0000140 is the bake's original sub-micron residual, kept so the
+    # re-bake differs from the published mesh by exactly +12.7 mm in Y.
     "Wing_Port": (
         "wings/wing_port_s1223_revo.stl",
-        (88.8501620, 298.7000140, 137.9998840, 0.0, 0.0, 0.0, 1.0),  # R2
+        (88.8501620, hd.WING_LE_ROOT_Y + 0.0000140, 137.9998840, 0.0, 0.0, 0.0, 1.0),  # R2
     ),
     "Wing_Stbd": (
         "wings/wing_stbd_s1223_revo.stl",
         # 2026-10-19: DERIVED as the mirror of Wing_Port about hd.X_CL (was
         # -257.4822, mirrored about a measured -169.241 that disagreed with the
         # centreline every other generator used).
-        (hd.mirror_x(88.8501620), 298.7000140, 137.9998840, 0.0, 0.0, 0.0, 1.0),  # R2
+        # R2
+        (hd.mirror_x(88.8501620), hd.WING_LE_ROOT_Y + 0.0000140, 137.9998840,
+         0.0, 0.0, 0.0, 1.0),
     ),
     # Nacelles: 270 deg about +X = cruise / forward-flight attitude.
     # This is the canonical stored attitude; hover tilt is applied
@@ -416,6 +422,31 @@ def bake_component(name, check_only=False):
     return "baked"
 
 
+def retranslate_y(name, dy):
+    """Move an ALREADY-BAKED rigid part by dy in hull Y (marker required).
+
+    For parts whose bake is a rigid placement and whose SOURCE may not be
+    re-rendered right now: the 64 mm nacelle group (pods, trunnions, tilt
+    pinions) is on owner HOLD NAC-64-REBAKE -- a re-render would pull in the
+    unapplied x1.06 enlargement -- yet its placement follows hd.SPAR_Y, which
+    the 2026-10-31 0.5 in wing-root shift moved +12.7 mm.  A pure Y
+    translation of a rigidly placed mesh is exact; it is NOT a second bake (the
+    placement transform is not re-applied), so the "never re-bake a baked
+    mesh" rule is not broken.  Everything that CAN be rebuilt from source
+    (wings, hull shells) is.
+    """
+    rel_path, _ = COMPONENTS[name]
+    path = os.path.join(STL_DIR, rel_path)
+    if not is_baked(path):
+        raise RuntimeError(f"{name}: not baked; bake it instead of translating")
+    tris = read_stl(path)
+    tris[..., 1] += dy
+    with open(path, "rb") as fh:
+        header = fh.read(80).rstrip(b"\0")
+    write_stl_binary(path, tris, header)
+    print(f"[MOVE Y ] {name}: {dy:+.3f} mm -> {bbox_str(tris)}")
+
+
 def main():
     """CLI entry point — bake all or selected components."""
     parser = argparse.ArgumentParser(
@@ -432,7 +463,17 @@ def main():
         action="store_true",
         help="report baked/pending state only; write nothing",
     )
+    parser.add_argument(
+        "--retranslate-y",
+        type=float,
+        metavar="DY",
+        help="move already-baked rigid parts by DY mm in hull Y (see retranslate_y)",
+    )
     args = parser.parse_args()
+    if args.retranslate_y is not None:
+        for name in args.components:
+            retranslate_y(name, args.retranslate_y)
+        return
 
     names = args.components or list(COMPONENTS)
     for name in names:

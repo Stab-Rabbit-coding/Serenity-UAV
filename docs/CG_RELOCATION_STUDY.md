@@ -110,7 +110,82 @@ The harness (WIRE-6AWG/10AWG, 140 g at Y 395.7) is an estimate from the single-p
 - **Nose ballast** at Y 15 to close it: **326 g (0.72 lbm)**. This is not recommended: T/W falls from 1.37 to about 1.30 with the routed harness.
 - **Pivot move.** The nacelles (1,853 g, 4.08 lbm, ledger) move with the pivot, so the CG offset closes by Δ(1 − f), where f ≈ 0.31 is the nacelle mass fraction. Closing 16.3 mm therefore takes **Δ ≈ 23 mm (0.91 in) aft** (f 0.30 with the routed harness). This is an upper bound: including the wing panels in f lowers it. It reworks the spar carry-through, the cargo tilt actuators and the wing-root flanges.
 
-## 5. Next relocation passes
+## 5. Aft mass reduction (owner: "cut weight aft first", 2026-10-27)
+
+Tool: `tools/cg_mass_reduction_study.py`. Baseline: rail lever (adopted, commit 3252b5a2) with the routed harness, hover +16.3 mm, 101,694 g·mm.
+
+### 5.1 Wiring BOM reconciliation (proposed rows; the BOM files are not edited)
+
+The BOM rows were written for the single 4000 mAh pack:
+
+- WIRE-6AWG: 60 g, "200 mm each red/black".
+- WIRE-10AWG: 80 g, "1 m each red/black".
+
+Problems found:
+
+- **The 10 AWG row is below its own physical minimum.** 2 m of bare 10 AWG copper weighs 94 g.
+- **Runs the BOM omits:**
+  - the head cell's long lead (about 0.45 m of pair);
+  - the second cell's lead;
+  - six of the eight ESC feeder conductors (four ESCs, one pair each);
+  - the third-cell (J_BATT3) lead.
+
+| Proposed row | Run | Length | Mass |
+| --- | --- | --- | --- |
+| WIRE-6AWG | head cell → FE (2 × 224 mm) + cell 2 → FE (2 × 83 mm) | 0.61 m | **98 g (3.5 oz)** |
+| WIRE-10AWG | FE → four ESCs, 8 × 402 mm (along the centreline, then the spar to the pivots at X ±230.4) | 3.22 m | **203 g (7.2 oz)** |
+| WIRE-6AWG-T3 (new) | third cell (payload bay) → FE J_BATT3, 2 × 130 mm | 0.26 m | **42 g (1.5 oz)**, extended configuration only |
+
+Bases for these figures:
+
+- 6 AWG at 160 g/m and 10 AWG at 63 g/m.
+- **REQUIRES VERIFICATION:** the ASTM B258 diameter relation and copper at 8.89 g/cm³, both not yet catalogued.
+- **ASSUMED:** +35 % insulation and 10 % routing slack.
+- The route lengths come from the rail-lever stations with the FE at its ledger station. They change with the FE study.
+
+### 5.2 Ranked cuts aft of the pivot (by moment saved)
+
+| Rank | Cut | Mass | Moment | Basis | Counted |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Rear shell wall 2.0 → 1.2 mm | −92.6 g (3.27 oz) | −24,070 g·mm | MEASURED 231.5 g, linear in wall (ASSUMED); skin deflection 0.250 mm vs 0.5 mm limit | alternative to rank 2 |
+| 2 | **Rear shell wall 2.0 → 1.6 mm** | −46.3 g (1.63 oz) | −12,035 g·mm | as rank 1; deflection 0.105 mm | **yes** |
+| 3 | Cargo Observer → remote camera head off the nose Observer | −55.0 g | −5,362 g·mm | 60 g ESTIMATE, head 5 g ASSUMED | no: functional change, owner decision |
+| 4 | **Ferrites at their node sites** (ledger correction) | 0 g | −2,924 g·mm | 80 g BOM, now split equally over the four node sites | **yes** (bookkeeping) |
+| 5 | **Middle shell skin panels 2.0 → 1.6 mm** | −18.3 g (0.65 oz) | −2,682 g·mm | MEASURED 183.1 g, 50 % panel area ASSUMED | **yes** |
+| 6 | FE can 0.5 → 0.3 mm 6061 | −12.7 g | −1,794 g·mm | `can_mass()` 31.8 g | no: FE under study |
+| 7 | FE entry plate brass → 6061-T6 | −13.7 g | −1,681 g·mm | plate 25 g ASSUMED, 80 % brass ASSUMED [REF-MAT-007, REF-MAT-009] | no: FE under study |
+
+Notes on the table:
+
+- **Skin deflection** scales as t⁻³ from the 2.0 mm skin's 0.054 mm at 28 m/s (2026-05-26 analysis, recorded in the `head_shell24.scad` header).
+- **Rear and middle shells** keep 2.0 mm at the skid-rod channels, the ring pocket, the collar lands, the horseshoe legs and the hatch frame.
+- **The 1.2 mm rear wall** means three perimeters, a handling and impact risk; print a trial first.
+- **FE can options:** a printed shell plus 0.1 mm foil saves nothing (about 30 g). The 0.3 mm can halves low-frequency magnetic absorption again, so the FE-CAN-05 EMC pass must accept it.
+- **Ferrites:** their quantity basis, "4 per cage", is obsolete now that the cages are foil pouches; the count is left for the EMC pass.
+- **The ledger's FE-can label is stale:** it reads "1.0 mm", but `can_mass()` uses 0.5 mm.
+
+**Not proposed:**
+
+- **Harness gauge.** REFERENCES.md catalogues no ampacity source, and each 10 AWG feeder carries one ESC, 57.0 A at the QF2822 rated point [REF-EDF-003]. A smaller gauge cannot be justified on cited data, and 10 AWG at 57 A should itself be checked once an ampacity source (for example SAE AS50881) is catalogued.
+- **Landing-gear aft items** (LG-LOADPATH is open).
+- **Node boards, pouches and bond straps** (EMC).
+- **CF ring, thwart and collars** (structural).
+
+### 5.3 Cumulative
+
+| Step | Hover offset | AUW |
+| --- | --- | --- |
+| Baseline | +16.3 mm | 6,232 g (13.74 lbm) |
+| + rear shell 1.6 mm | +14.49 mm | 6,186 g |
+| + ferrite ledger correction | +14.02 mm | 6,186 g |
+| **+ middle shell panels 1.6 mm** | **+13.63 mm** | **6,167 g (13.60 lbm)** |
+| (rear 1.2 mm instead of 1.6 mm) | (+11.77 mm) | |
+| (+ cargo Observer remote head) | (+12.87 mm) | |
+| (+ FE can and plate, under study) | (about +13.1 mm) | |
+
+**Residual after the counted cuts: 84,052 g·mm.** Closing it would take 270 g (0.60 lbm) of nose ballast at Y 15, or a pivot move of about 19.5 mm aft. Cutting weight aft alone does not reach the thrust line; the best case with every option taken is about +10.4 mm.
+
+## 6. Next relocation passes
 
 1. A finer search (lateral, rotated, split pairs) for the FE and the aft nodes.
 2. Put the nose Observer's real mass in the ledger once the board is populated.

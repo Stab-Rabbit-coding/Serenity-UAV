@@ -58,7 +58,8 @@ import hull_datums as hd  # noqa: E402
 import middle_layout_fit as mlf  # noqa: E402
 from cargo_layout_fit import box, to_man  # noqa: E402
 
-PIVOT_Y = hd.SPAR_Y  # 326.7, hover thrust line = nacelle tilt axis
+# 339.4 since the 2026-10-31 0.5 in shift (was 326.7); hover thrust line = tilt axis
+PIVOT_Y = hd.SPAR_Y
 CELL_G = hlf.CELL_G  # 321 g, Tattu R-Line 6S 2200 (ORIGIN flag per plan 001 KTD4)
 THIRD_CELL_G = 240.0  # Tattu R-Line v6.0 6S 1600 (plan 001 R9)
 STATIC_GAP = 2.0  # static to static (cargo_layout_fit convention)
@@ -420,9 +421,9 @@ def main():
             print(f"  {label:42s} {m:6.1f} g  stays at Y {y0:.1f} (no clear forward placement)")
         else:
             xc, zc, d3 = where
+            note = NOTES.get(label.split(' #')[0], '')
             print(f"  {label:42s} {m:6.1f} g  Y {y0:.1f} -> {y1:.1f} at X {xc:+.1f} Z {zc:.1f} "
-                  f"box {tuple(round(v, 1) for v in d3)}  gain {gain:,.0f} g.mm  [{NOTES.get(
-                      label.split(' #')[0], '')}]")
+                  f"box {tuple(round(v, 1) for v in d3)}  gain {gain:,.0f} g.mm  [{note}]")
     res = cgs(pieces)
     show("AFTER FINE RELOCATION", res)
     alt_y = HEAD_CELL_Y0 + hlf.CELL_L + hlf.SLED_LIP + 4.0 + hlf.CELL_L / 2

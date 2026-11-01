@@ -65,7 +65,9 @@ def main():
     es = entries()
     w, y0 = cg(es)
     off0 = y0 - PIVOT
-    print(f"baseline hover: AUW {w:.0f} g ({w / 453.592:.2f} lbm), CG Y {y0:.1f}, offset {off0:+.1f} mm")
+    print(
+        f"baseline hover: AUW {w:.0f} g ({w / 453.592:.2f} lbm), CG Y {y0:.1f}, offset {off0:+.1f} "
+        "mm")
     by = {}
     for _n, k, m, _y in es:
         by[k] = by.get(k, 0) + m
@@ -79,7 +81,8 @@ def main():
         d = d_in * IN
         _m, y = cg(es, lambda e: d if e[1] == "NACELLE" else 0.0)
         print(f"  d = {d_in:.2f} in ({d:.1f} mm): offset {y - (PIVOT + d):+.1f} mm")
-    print(f"  pivot shift to zero the offset: {off0 / (1 - f):.1f} mm ({off0 / (1 - f) / IN:.2f} in)")
+    print(
+        f"  pivot shift to zero the offset: {off0 / (1 - f):.1f} mm ({off0 / (1 - f) / IN:.2f} in)")
 
     print("\n(B) uniform scale k about the pivot (every station scales; offset x k)")
     for k, label in ((1.125, "27 in"), (1.25, "30 in")):
@@ -107,10 +110,13 @@ def main():
     n = 79.4  # plan 001 R7 design load factor (landing-gear peak hull deceleration, 4 ft drop)
     v = ma / 1000 * n * 9.80665
     mom = v * (ya - yj) / 1000
-    print(f"  aft mass {ma:.0f} g ({ma / 453.592:.2f} lbm), centroid Y {ya:.1f}, arm {ya - yj:.1f} mm")
+    print(
+        f"  aft mass {ma:.0f} g ({ma / 453.592:.2f} lbm), centroid Y {ya:.1f}, arm {ya - yj:.1f} "
+        "mm")
     print(f"  at {n} g, load normal to the hull axis: shear V = {v:.0f} N ({v / 4.448:.0f} lbf), "
           f"bending M = {mom:.1f} N.m ({mom * 8.851:.0f} lbf.in)")
-    print("  (assumes the aft mass is rigid and the whole load reacts at the joint; allowables not sourced)")
+    print("  (assumes the aft mass is rigid and the whole load reacts at the joint; allowables not "
+          "sourced)")
 
     print("\n(F) UNIFORM fuselage scale k about the nose (owner direction 2026-10-31)")
     print("    hull shells/collars mass x k^2 (2 mm wall kept); every fuselage item's station x k;")
@@ -141,13 +147,15 @@ def main():
         for lab, ratio in (("PA CF @1.28", 1.11 / 1.28), ("PA CF @1.05", 1.11 / 1.05)):
             dpa = m_hull * (k * k * ratio - 1)
             endu = ((6232 + dpa) / 6232) ** -1.5 - 1
-            print(f"     {lab}: hull {dpa:+.0f} g vs today's CF-PETG hull; endurance {100 * endu:+.1f}%")
+            print(f"     {lab}: hull {dpa:+.0f} g vs today's CF-PETG hull; endurance "
+                  f"{100 * endu:+.1f}%")
         am = [e for e in es if e[3] > 436.0]
         ma = sum(e[2] * (k * k if e in hull else 1) for e in am)
         ya = sum(e[2] * (k * k if e in hull else 1) * e[3] * k for e in am) / ma
         v = ma / 1000 * 79.4 * 9.80665
         print(f"     J2 at Y {436 * k:.0f}: aft mass {ma:.0f} g, arm {ya - 436 * k:.0f} mm, "
-              f"V {v:.0f} N, M {v * (ya - 436 * k) / 1000:.1f} N.m (ultimate x3: {3 * v * (ya - 436 * k) / 1000:.0f} N.m)")
+              f"V {v:.0f} N, M {v * (ya - 436 * k) / 1000:.1f} N.m (ultimate x3: "
+              f"{3 * v * (ya - 436 * k) / 1000:.0f} N.m)")
 
     print("\n(D) trim authority = m * travel / AUW  (mm of CG per item)")
     for name, m in (("one 321 g cell", c.CELL_G), ("both cells", 2 * c.CELL_G),

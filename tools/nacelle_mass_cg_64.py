@@ -31,7 +31,7 @@ Usage:
 --pod-stl is the rendered 64 mm pod (nacelle-local frame, not hull-baked).
 Exit 0 = rolled up and the 3.0 in gear clears in hover.
 
-References (REFERENCES.md): [REF-EDF-003] QF2822 motor mass 135 g.
+References (REFERENCES.md): [REF-EDF-003] QF2822-2300KV motor mass 140 g (2400KV: 135 g).
 
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CEH (GitHub Stab-Rabbit-coding) —
 owner direction to recompute CG and re-site the pivot trunnion (2026-10-03).
@@ -102,6 +102,10 @@ ON_AXIS_64 = [
 ]
 
 
+# Flight-article motor, owner 2026-10-28: QF2822-2300KV, 140 g [REF-EDF-003 2nd sheet].
+MOTOR_G = 140.0
+
+
 def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
     """Every off-axis row of the 64 mm rotating assembly."""
     mesh = base.trimesh.load_mesh(pod_stl, force="mesh")
@@ -119,10 +123,10 @@ def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
     return [
         ("Pod shell, 64 mm (MEASURED)", pod[0], pod[1], str(pod_stl)),
         ("Stage-2 cartridge (sleeve + stator + plate)", aft[0], aft[1], aft[2]),
-        ("QF2822 motor 1", 135.0, mid(MOTOR1),
-         "SHEET 135 g [REF-EDF-003]; CG at body midpoint, ASSUMED uniform"),
-        ("QF2822 motor 2", 135.0, mid(MOTOR2),
-         "SHEET 135 g [REF-EDF-003]; CG at body midpoint, ASSUMED uniform"),
+        ("QF2822-2300KV motor 1", MOTOR_G, mid(MOTOR1),
+         "SHEET 140 g (2300KV sheet) [REF-EDF-003]; CG at body midpoint, ASSUMED uniform"),
+        ("QF2822-2300KV motor 2", MOTOR_G, mid(MOTOR2),
+         "SHEET 140 g (2300KV sheet) [REF-EDF-003]; CG at body midpoint, ASSUMED uniform"),
         ("Rotor 1 (12-blade + spinner)", 20.0, mid(ROTOR1),
          "ASSUMED 20 g +/-10 g — QX publishes no rotor mass; WEIGH (FIT-02)"),
         ("Rotor 2 (12-blade + spinner)", 20.0, mid(ROTOR2),

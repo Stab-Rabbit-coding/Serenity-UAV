@@ -54,7 +54,8 @@ def sections():
     t_tip = scad_scalar(src, "THICKNESS_SCALE_TIP")
     c_root, c_tip = scad_scalar(src, "WING_CHORD_ROOT"), scad_scalar(src, "WING_CHORD_TIP")
     out = {}
-    for name, sc, chord in (("S1223", 1.0, c_root), (f"root_t{sc_pct(1.0, up, lo, t_root)}", t_root, c_root),
+    for name, sc, chord in (("S1223", 1.0, c_root),
+                            (f"root_t{sc_pct(1.0, up, lo, t_root)}", t_root, c_root),
                             (f"tip_t{sc_pct(1.0, up, lo, t_tip)}", t_tip, c_tip)):
         x, yu, yl = variant(up, lo, sc, "thickness")
         out[name] = dict(x=x, yu=yu, yl=yl, scale=sc, chord=chord,
@@ -80,11 +81,13 @@ def xfoil_polar(dat, re, ncrit=9.0, trip=None, a0=-4.0, a1=22.0, da=0.25):
         if trip is not None:
             cmds += [f"XTR {trip} {trip}"]
         cmds += ["", "ITER 800", "PACC", pol, "", "ALFA 0", f"ASEQ 0 {a1} {da}",
-                 "INIT", "ALFA 0", f"ASEQ 0 {a0} {da}", "INIT", f"ALFA {a1 - 6}", f"ASEQ {a1 - 6} 0 {-da}",
+                 "INIT", "ALFA 0", f"ASEQ 0 {a0} {da}", "INIT", f"ALFA {a1 - 6}", f"ASEQ {a1 - 6} "
+                                                                                  f"0 {-da}",
                  "PACC", "", "QUIT"]
         try:
             subprocess.run(["xvfb-run", "-a", "xfoil"], input="\n".join(cmds) + "\n", text=True,
-                           capture_output=True, timeout=240, cwd=td)  # XFOIL drops *.bl dumps in cwd
+                           # XFOIL drops *.bl dumps in cwd
+                           capture_output=True, timeout=240, cwd=td)
         except subprocess.TimeoutExpired:
             pass
         rows = []
@@ -129,9 +132,12 @@ def summarize(p):
                cl_a0=float(np.interp(0.0, a, cl)), conf=np.nan, a_req=np.nan, cd_req=np.nan)
     if cl[i] >= CL_REQ:
         j = int(np.argmax(pcl >= CL_REQ))
-        out["a_req"] = float(np.interp(CL_REQ, pcl[max(j - 1, 0): j + 1], pa[max(j - 1, 0): j + 1])) if j else float(pa[0])
-        out["cd_req"] = float(np.interp(CL_REQ, pcl[max(j - 1, 0): j + 1], pcd[max(j - 1, 0): j + 1])) if j else float(pcd[0])
-    if p.shape[1] >= 5 and p[:, 4].max() <= 1.0 and p[:, 4].min() >= 0.0 and np.allclose(p[:, 4], np.round(p[:, 4], 6)):
+        out["a_req"] = float(np.interp(CL_REQ, pcl[max(j - 1, 0): j + 1],
+                             pa[max(j - 1, 0): j + 1])) if j else float(pa[0])
+        out["cd_req"] = float(np.interp(CL_REQ, pcl[max(j - 1, 0): j + 1],
+                              pcd[max(j - 1, 0): j + 1])) if j else float(pcd[0])
+    if (p.shape[1] >= 5 and p[:, 4].max() <= 1.0 and p[:, 4].min() >= 0.0
+            and np.allclose(p[:, 4], np.round(p[:, 4], 6))):
         out["conf"] = float(np.mean(p[: i + 1, 4])) if p.shape[1] == 5 else np.nan
     return out
 
@@ -167,19 +173,25 @@ def span_sweep(out):
                         den += w * cl
                     if alpha == 4.0:
                         sm = summarize(neuralfoil_polar(sec, re, nc))
-                        rows.append([nc, round(eta, 3), round(c, 1), round(100 * (yu - yl).max(), 1), lab,
+                        rows.append([nc, round(eta, 3), round(c, 1),
+                                     round(100 * (yu - yl).max(), 1), lab,
                                      round(re), sm["clmax"], sm["cl_a0"], cl, sm["ldmax"]])
             res[(nc, alpha)] = num / den
     with open(os.path.join(out, "span_sweep.csv"), "w", newline="") as fh:
         w = csv.writer(fh)
-        w.writerow(["ncrit", "eta", "chord_mm", "tc_pct", "section", "Re", "CLmax", "CL_a0", "CL_a4", "LDmax"])
+        w.writerow(["ncrit", "eta", "chord_mm", "tc_pct", "section",
+                   "Re", "CLmax", "CL_a0", "CL_a4", "LDmax"])
         w.writerows(rows)
     print("\nspan sweep (NeuralFoil), built vs true-S1223 sections, same chords")
-    print(f"{'ncrit':>5s} {'eta':>5s} {'c mm':>6s} {'t/c%':>5s} {'sect':>6s} {'Re':>7s} {'CLmax':>6s} {'CL@0':>6s} {'CL@4':>6s} {'L/Dmax':>7s}")
+    print(f"{'ncrit':>5s} {'eta':>5s} {'c mm':>6s} {'t/c%':>5s} {'sect':>6s} {'Re':>7s} "
+          f"{'CLmax':>6s} {'CL@0':>6s} {'CL@4':>6s} {'L/Dmax':>7s}")
     for r in rows:
-        print(f"{r[0]:5.0f} {r[1]:5.2f} {r[2]:6.1f} {r[3]:5.1f} {r[4]:>6s} {r[5]:7d} {r[6]:6.2f} {r[7]:6.2f} {r[8]:6.2f} {r[9]:7.1f}")
+        print(f"{r[0]:5.0f} {r[1]:5.2f} {r[2]:6.1f} {r[3]:5.1f} {r[4]:>6s} {r[5]:7d} {r[6]:6.2f} "
+              f"{r[7]:6.2f} {r[8]:6.2f} {r[9]:7.1f}")
     for (nc, al), v in res.items():
-        print(f"strip-theory 2-D lift of built wing / true-S1223 wing: ncrit {nc:.0f}, alpha {al:.0f} deg: {v:.2f}")
+        print(
+            f"strip-theory 2-D lift of built wing / true-S1223 wing: ncrit {nc:.0f}, alpha "
+            f"{al:.0f} deg: {v:.2f}")
 
 
 def main():
@@ -194,7 +206,8 @@ def main():
     secs = sections()
     print(f"V = 40 kt = {V40KT:.2f} m/s, nu = {NU:.3e}")
     cases = [("clean N9", 9.0, None), ("N5", 5.0, None), ("trip 5%c", 9.0, 0.05)]
-    hdr = (f"{'section':14s} {'Re':>8s} {'case':10s} {'tool':6s} {'CLmax':>6s} {'a@max':>6s} {'(L/D)max':>9s} "
+    hdr = (f"{'section':14s} {'Re':>8s} {'case':10s} {'tool':6s} {'CLmax':>6s} {'a@max':>6s} "
+           f"{'(L/D)max':>9s} "
            f"{'a@1.54':>7s} {'CD@1.54':>8s} {'CL@0':>6s} {'conf':>5s}")
     print(hdr)
     rows_out = []
@@ -212,17 +225,22 @@ def main():
                             continue
                         p = neuralfoil_polar(s, re, nc)
                     sm = summarize(p)
-                    print(f"{name:14s} {re:8.0f} {cname:10s} {tool:6s} {sm['clmax']:6.2f} {sm['a_clmax']:6.1f} "
-                          f"{sm['ldmax']:9.1f} {sm['a_req']:7.1f} {sm['cd_req']:8.4f} {sm['cl_a0']:6.2f} {sm['conf']:5.2f}")
+                    print(f"{name:14s} {re:8.0f} {cname:10s} {tool:6s} {sm['clmax']:6.2f} "
+                          f"{sm['a_clmax']:6.1f} "
+                          f"{sm['ldmax']:9.1f} {sm['a_req']:7.1f} {sm['cd_req']:8.4f} "
+                          f"{sm['cl_a0']:6.2f} {sm['conf']:5.2f}")
                     rows_out.append([name, re, cname, tool, sm["clmax"], sm["a_clmax"], sm["ldmax"],
                                      sm["a_req"], sm["cd_req"], sm["cl_a0"], sm["conf"]])
                     if len(p):
-                        np.savetxt(os.path.join(args.out, f"{name}_Re{re:.0f}_{cname.replace(' ', '')}_{tool}.csv"),
+                        csv_name = f"{name}_Re{re:.0f}_{cname.replace(' ', '')}_{tool}.csv"
+                        np.savetxt(os.path.join(args.out, csv_name),
                                    p, delimiter=",", fmt="%.5f",
-                                   header="alpha,CL,CD,CM,x1,x2,x3 (xfoil) | alpha,CL,CD,CM,confidence (nf)")
+                                   header="alpha,CL,CD,CM,x1,x2,x3 (xfoil) | "
+                                          "alpha,CL,CD,CM,confidence (nf)")
     with open(os.path.join(args.out, "summary.csv"), "w", newline="") as fh:
         w = csv.writer(fh)
-        w.writerow(["section", "Re", "case", "tool", "CLmax", "alpha_at_CLmax", "LDmax", "alpha_at_CLreq", "CD_at_CLreq", "CL_at_0", "nf_confidence"])
+        w.writerow(["section", "Re", "case", "tool", "CLmax", "alpha_at_CLmax", "LDmax",
+                   "alpha_at_CLreq", "CD_at_CLreq", "CL_at_0", "nf_confidence"])
         w.writerows(rows_out)
     print(f"wrote {args.out}")
 
