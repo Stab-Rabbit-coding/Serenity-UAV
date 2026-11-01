@@ -276,6 +276,9 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Ask 3D Systems: bead-blast reach into blind heat-set boss holes, or add >2 mm vents [REF-MFG-001 p. 6]
 - [ ] ESC cover rebate fit 0.25 → 0.3 mm per side at the next 64 mm nacelle re-export
 - [ ] Owner: battery-cradle hanger slotting (p. 13) vs fixed holes carrying the fore/aft crash load
+- [x] Trade: cargo doors print-in-place with the cargo shell vs separate — recommend SEPARATE (`docs/CARGO_DOOR_INTEGRATED_HINGE_TRADE.md`); owner to accept
+- [ ] Cargo door knuckles: print bores undersize, line-ream shell + door knuckles together at assembly (0.15 mm/side as-sintered is below [REF-MFG-001 p. 12]); update `generate_cargo_doors.py` + `generate_cargo_hinge_retention.py`
+- [ ] Order cargo doors in the same 3D Systems build as the cargo shell (shared powder lot / shrink)
 - [ ] Verify the 15 confidence-V orientations (frame / load path) before the build is released
 - [ ] Ask 3D Systems for DuraForm PA CF X/Y/Z (recoater-direction) properties — requires verification
 - [ ] Owner: confirm FDM-only features to strip (4×0.6 mm perimeter wall sizing, brims, support-avoid chamfers) per part family

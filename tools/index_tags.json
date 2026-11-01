@@ -14680,6 +14680,13 @@
       ],
       "archived": false
     },
+    "docs/CARGO_DOOR_INTEGRATED_HINGE_TRADE.md": {
+      "description": "Cargo Doors \u2014 Integrated (Print-in-Place) Hinge vs Separate Doors, SLS",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/CARGO_DOOR_LATCH_SPEC.md": {
       "description": "Cargo Clamshell Door \u2014 Cross-Link + Positive Mechanical Latch, Rev A (2026-09-21)",
       "tags": [
@@ -20380,6 +20387,7 @@
       "docs/BHD02_OPTION_STUDY.md",
       "docs/CARGO_BULKHEAD_FIT_CHECK.md",
       "docs/CARGO_DOOR_GATEWAY_SPEC.md",
+      "docs/CARGO_DOOR_INTEGRATED_HINGE_TRADE.md",
       "docs/CARGO_DOOR_LATCH_SPEC.md",
       "docs/CARGO_SECTION_LAYOUT.md",
       "docs/CARGO_WINCH_SPECIFICATION.md",
