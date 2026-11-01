@@ -14319,6 +14319,14 @@
       ],
       "archived": false
     },
+    "docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md": {
+      "description": "Battery Options for Forward Trim and Endurance (live ballast, plan 003 R10)",
+      "tags": [
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
     "docs/BHD02_OPTION_STUDY.md": {
       "description": "BHD-02 Option Study \u2014 Landing-Gear Bays vs Wing Root",
       "tags": [
@@ -19421,6 +19429,7 @@
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/BATTERY_MOUNT.md",
       "docs/BATTERY_SPLIT_OPTIONS.md",
+      "docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md",
       "docs/BHD02_OPTION_STUDY.md",
       "docs/CARGO_BULKHEAD_FIT_CHECK.md",
       "docs/CARGO_DOOR_GATEWAY_SPEC.md",
@@ -21670,6 +21679,7 @@
       "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "docs/BATTERY_MOUNT.md",
       "docs/BATTERY_SPLIT_OPTIONS.md",
+      "docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md",
       "docs/POWER_DISTRIBUTION.md",
       "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",
       "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md",
