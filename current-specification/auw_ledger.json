@@ -1,37 +1,37 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 65312755.71531494,
-   "T_W": 1.3817788420522563,
+   "I_pitch_gmm2": 65030787.60115504,
+   "T_W": 1.3917805556617056,
    "cg": [
-    -0.06817725194196675,
-    350.2299765795821,
-    156.80247141576018
+    0.5880524920809412,
+    350.2657657098211,
+    156.81758292118516
    ],
-   "k_pitch_mm": 102.79910603609748,
-   "mass_g": 6180.439112322892
+   "k_pitch_mm": 102.94753541075751,
+   "mass_g": 6136.02479590596
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 65688903.20113763,
-   "T_W": 1.3599940770571277,
+   "I_pitch_gmm2": 65407037.7286996,
+   "T_W": 1.3696818023253945,
    "cg": [
-    -0.06710238716160616,
-    349.7328831886688,
-    157.3100892575487
+    0.5787153685535033,
+    349.7645630831172,
+    157.32857676565146
    ],
-   "k_pitch_mm": 102.27878927514026,
-   "mass_g": 6279.439112322892
+   "k_pitch_mm": 102.42197539890937,
+   "mass_g": 6235.02479590596
   },
   "hover_4000": {
-   "I_pitch_gmm2": 65470710.000898,
-   "T_W": 1.4109547656018278,
+   "I_pitch_gmm2": 65188711.46061994,
+   "T_W": 1.4213848998824423,
    "cg": [
-    -0.06961679800385635,
-    349.3031958994473,
-    158.3671567821242
+    0.6005608636949917,
+    349.3328952975649,
+    158.39415627173324
    ],
-   "k_pitch_mm": 104.00426169158635,
-   "mass_g": 6052.639112322891
+   "k_pitch_mm": 104.16291178345716,
+   "mass_g": 6008.22479590596
   }
  },
  "rows_hover": [
@@ -349,48 +349,48 @@
   },
   {
    "cg": [
-    60.6,
-    287.9,
-    129.6
+    57.8,
+    289.0,
+    127.1
    ],
    "kind": "PRINT",
-   "mass_g": 22.15,
+   "mass_g": 15.42,
    "name": "lg_r6_3_0in_bay_fore-port",
    "ref": "PRINT-LG-BAY-PLATE",
    "source": "MEASURED mesh (hull frame)"
   },
   {
    "cg": [
-    -59.9,
-    287.9,
-    129.5
+    -57.8,
+    289.0,
+    127.1
    ],
    "kind": "PRINT",
-   "mass_g": 22.34,
+   "mass_g": -15.42,
    "name": "lg_r6_3_0in_bay_fore-stbd",
    "ref": "PRINT-LG-BAY-PLATE",
    "source": "MEASURED mesh (hull frame)"
   },
   {
    "cg": [
-    69.2,
-    401.7,
-    127.6
+    73.5,
+    403.9,
+    128.2
    ],
    "kind": "PRINT",
-   "mass_g": 27.54,
+   "mass_g": 15.32,
    "name": "lg_r6_3_0in_bay_aft-port",
    "ref": "PRINT-LG-BAY-PLATE",
    "source": "MEASURED mesh (hull frame)"
   },
   {
    "cg": [
-    -69.3,
-    401.7,
-    127.7
+    -73.5,
+    403.9,
+    128.2
    ],
    "kind": "PRINT",
-   "mass_g": 27.47,
+   "mass_g": -15.32,
    "name": "lg_r6_3_0in_bay_aft-stbd",
    "ref": "PRINT-LG-BAY-PLATE",
    "source": "MEASURED mesh (hull frame)"
@@ -402,7 +402,7 @@
     80.0
    ],
    "kind": "PRINT",
-   "mass_g": 80.98,
+   "mass_g": 83.36,
    "name": "lg_r6_3_0in_leg_frame",
    "ref": "PRINT-LG-LEG-FRAME-3.0IN",
    "source": "MEASURED mass; station ESTIMATE: fore legs, midway hip Y -16 -> foot Y -46.5"
@@ -414,7 +414,7 @@
     80.0
    ],
    "kind": "PRINT",
-   "mass_g": 80.98,
+   "mass_g": 83.36,
    "name": "lg_r6_3_0in_leg_frame",
    "ref": "PRINT-LG-LEG-FRAME-3.0IN",
    "source": "MEASURED mass; station ESTIMATE: aft legs, midway hip Y 100 -> foot Y 135"
@@ -505,12 +505,12 @@
   },
   {
    "cg": [
-    52.0,
-    347.2,
+    49.5,
+    350.2,
     96.4
    ],
    "kind": "PRINT",
-   "mass_g": 2.33,
+   "mass_g": 2.53,
    "name": "door_latch_bracket_port",
    "ref": "PRINT-DOOR-LATCH-BRACKET",
    "source": "MEASURED mesh (hull frame)"
@@ -529,8 +529,8 @@
   },
   {
    "cg": [
-    48.8,
-    346.0,
+    47.4,
+    347.9,
     102.7
    ],
    "kind": "PRINT",
@@ -1171,8 +1171,8 @@
    ],
    "kind": "BOM",
    "mass_g": 3.0,
-   "name": "HX711-LC",
-   "ref": "HX711-LC",
+   "name": "LC-ADC",
+   "ref": "LC-ADC",
    "source": "BOM Unit_Mass_g; cargo_layout_fit HOIST_Y / SPOOL_Z0"
   },
   {
@@ -1422,7 +1422,7 @@
     110.0
    ],
    "kind": "BOM",
-   "mass_g": 20.48,
+   "mass_g": 19.2,
    "name": "LG-SPRING-WIRE",
    "ref": "LG-SPRING-WIRE",
    "source": "BOM Unit_Mass_g; gear bays, 4 corners (sym)"
@@ -1434,9 +1434,57 @@
     110.0
    ],
    "kind": "BOM",
-   "mass_g": 70.2,
-   "name": "LG-DUCTILE-WIRE",
-   "ref": "LG-DUCTILE-WIRE",
+   "mass_g": 19.2,
+   "name": "LG-A1B-FUSE",
+   "ref": "LG-A1B-FUSE",
+   "source": "BOM Unit_Mass_g; gear bays, 4 corners (sym)"
+  },
+  {
+   "cg": [
+    0.0,
+    355.7,
+    110.0
+   ],
+   "kind": "BOM",
+   "mass_g": 12.0,
+   "name": "LG-A1B-SLEEVE",
+   "ref": "LG-A1B-SLEEVE",
+   "source": "BOM Unit_Mass_g; gear bays, 4 corners (sym)"
+  },
+  {
+   "cg": [
+    0.0,
+    355.7,
+    110.0
+   ],
+   "kind": "BOM",
+   "mass_g": 16.4,
+   "name": "LG-A1B-CAGE",
+   "ref": "LG-A1B-CAGE",
+   "source": "BOM Unit_Mass_g; gear bays, 4 corners (sym)"
+  },
+  {
+   "cg": [
+    0.0,
+    355.7,
+    110.0
+   ],
+   "kind": "BOM",
+   "mass_g": 12.8,
+   "name": "LG-A1B-PIN",
+   "ref": "LG-A1B-PIN",
+   "source": "BOM Unit_Mass_g; gear bays, 4 corners (sym)"
+  },
+  {
+   "cg": [
+    0.0,
+    355.7,
+    110.0
+   ],
+   "kind": "BOM",
+   "mass_g": 61.2,
+   "name": "LG-A1B-CF-CHEEK",
+   "ref": "LG-A1B-CF-CHEEK",
    "source": "BOM Unit_Mass_g; gear bays, 4 corners (sym)"
   },
   {
@@ -2029,10 +2077,10 @@
   }
  ],
  "subtotals_hover_g": {
-  "BOM": 2341.584,
+  "BOM": 2391.704,
   "GAP": 218.8114,
   "NACELLE": 1852.7585168971268,
-  "PRINT": 1639.4851954257651
+  "PRINT": 1544.9508790088332
  },
  "thrust_gf": 8540.0,
  "unclassified": []

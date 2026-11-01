@@ -103,7 +103,7 @@ changelog).
 
 - **EDFs:** 4× XFly Galaxy X5 50 mm (6S, 3200 KV, 12-blade rotor, 11-fin stator)
 - **Servos:**
-  - 2× SPT5425LV + LibreServo v2 (nacelle tilt, was DS3218MG)
+  - Nacelle tilt: **superseded** by the 2× Pololu 20D 25:1 worm drive with pin brake (Rev T5e, `GM-TILT-20D`); the SPT5425LV tilt servos are retired
   - 1× SPT5425LV + LibreServo v2 (winch motor, continuous rotation + encoder feedback, was STS3215)
   - SG90 + OpenServoCore (door actuator, payload release)
 

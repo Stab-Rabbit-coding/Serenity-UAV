@@ -698,6 +698,58 @@ def main() -> None:
               f"bay boss bearing {70*a_bear:.0f} N vs wire P {p_ref:.0f} N "
               f"-> margin {70*a_bear/p_ref:.2f}x; static stance "
               f"{p_stance:.1f} N/wire; lateral +/-15deg {f_lat:.0f} N/leg")
+    print("  SUPERSEDED (docs/LG_BELLCRANK_LOAD_PATH_STUDY.md SS1, SS7): the two lines"
+          " above check the pin against F_leg alone and use an uncited 70 MPa boss"
+          " allowable; the R6 same-side pair actually puts ~2P through the pin."
+          " Option A1b below replaces them.")
+    a1b_sizing(u_ref, settle_max, u_spring_leg, f_leg_el, r_h_design)
+
+
+# ---------------------------------------------------------------------------
+# Option A1b balanced couple (owner 2026-10-27; plan
+# docs/plans/2026-10-27-001-feat-lg-option-a-balanced-couple-plan.md).
+# Each row is two IDENTICAL members either side of the hip pin at crank
+# radius A1B_CRANK_R; one member reaches its anchor through a reversing
+# sleeve/cage, so the pair forms a pure couple and the pin carries only the
+# foot force.  Ductile row: 6061-T6 axial tension fuses [REF-MAT-007]
+# (tools/lg_fuse_material.py, owner decision 2026-10-26).  Spring row: the
+# existing A228 bowed-wire model re-solved at the new crank radius.
+# Member and pin sizing helpers are shared with tools/lg_couple_options.py so
+# the trade study and the sizing pass cannot drift apart.
+# ---------------------------------------------------------------------------
+A1B_CRANK_R = 10.0             # mm (study SS4.3)
+A1B_FLEX_DEG = 22.0            # hip rotation over the crash settle (leg SCAD)
+
+
+def a1b_sizing(u_crash_leg: float, settle_mm: float, u_spring_leg: float,
+               f_leg_el: float, r_h: float) -> None:
+    """Print the A1b member, pin and spreader sizing at the adopted schedule."""
+    import lg_couple_options as lco       # local import: avoids a cycle at load
+    r = A1B_CRANK_R
+    f_crash = u_crash_leg * 1000.0 / settle_mm              # N, ductile plateau at the foot
+    p_fuse = f_crash * r_h / (2.0 * r)                      # N per member (couple)
+    stroke = r * math.radians(A1B_FLEX_DEG)                 # mm per member
+    d_f, g_f, m_f = lco.tension_fuse(p_fuse, stroke)
+    # Spring row: same elastic energy and onset force as the R6 schedule,
+    # now at r = 10 -> lower member force, longer member stroke.
+    p_spring = f_leg_el * r_h / (2.0 * r)
+    d_s = (16.0 * p_spring * H0 / (SIGMA_WORK_SPRING * math.pi)) ** (1 / 3.0)
+    stroke_s = (u_spring_leg / 2.0) * 1000.0 / p_spring
+    b_s = solve_bow_span(stroke_s, STROKE_RESERVE_SPRING)
+    l_s = b_s + 2.0 * (SEAT_SPRING + END_RUN_IN)
+    pin_d, liner_t, m_pin, m_brg = lco.pin_part(1.25 * f_crash)
+    spr_d, m_spr, _ = lco.spreader(p_fuse)
+    print(f"\n--- Option A1b balanced couple, crank r {r:.0f} mm " + "-" * 30)
+    print(f"  crash foot force {f_crash:.0f} N ({f_crash / 4.44822:.0f} lbf); "
+          f"hip moment {f_crash * r_h / 1000:.1f} N*m carried as a couple")
+    print(f"  DUCTILE row: 2 x 6061-T6 tension fuse d {d_f:.2f} mm, gauge {g_f:.1f} mm, "
+          f"plateau {p_fuse:.0f} N, stroke {stroke:.2f} mm, {m_f:.1f} g each [REF-MAT-007]")
+    print(f"  SPRING row:  2 x A228 bowed wire d {d_s:.2f} mm, span {b_s:.1f} mm, "
+          f"length {l_s:.1f} mm, P {p_spring:.0f} N, stroke {stroke_s:.2f} mm")
+    print(f"  hip pin: 6061-T6 d {pin_d} mm, carries F only -> shear margin {m_pin:.2f}, "
+          f"ear-liner bearing ({liner_t} mm x 2) margin {m_brg:.2f}")
+    print(f"  anchor spreader on CF-PETG: d {spr_d:.0f} mm, flat-bearing margin {m_spr:.2f}"
+          f" [REF-MAT-001]; backbone plate per plan (REF-MAT-011 / -013)")
 
 
 if __name__ == "__main__":
