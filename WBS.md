@@ -248,6 +248,26 @@ see docs/WBS.md §0.10.2.)*
 - [x] ~~Size the PA11 skid root as a plastic hinge~~ — superseded 2026-10-31 by the PA12-CF elastic U-frame (owner); see `docs/SKID_FAILURE_MODE_STUDY.md` §8–10
 - [ ] Skid bench acceptance: tip stiffness ≥ 1,207 lbf/in per skid (SKID study §10.1)
 - [ ] Add I_roll to `tools/auw_ledger.py`; re-run the single-skid strike (§10.2); owner: roll-attitude limit or accepted fracture
+
+---
+
+### 0.13 — Airframe FDM CF-PETG → SLS Migration, bow to stern (2026-11-01)
+
+→ detail: `docs/SLS_MIGRATION.md`, `tools/sls_dfm_audit.py`, `tools/sls_materials.py`, [REF-MFG-001]
+
+- [x] Single SLS material source `tools/sls_materials.py` (PA CF / PA11 / PA12, Z knockdown)
+- [x] Whole-aircraft SLS DFM audit `tools/sls_dfm_audit.py` (SLS 380 envelope, 1 mm wall, trapped powder, mesh)
+- [x] Fixed nozzle: sealed 14 cc housing void opened with 3 × Ø3 mm powder-escape holes
+- [x] Stbd gear-bay STLs (4) were inside-out (double winding flip in `generate_lg_bays.py`); fixed at source + files
+- [x] Head-cell rail statics re-pointed to PA CF design values — PASS (min margin 1.70)
+- [x] Gear bellcrank bearing re-pointed to PA CF — spreader discs grow 13→14 mm (A) and 17→18 mm (B)
+- [ ] Locate an official 3dsystems.com URL for the SLS Design Guide [REF-MFG-001]
+- [ ] Feather-edge review, part by part (thicken, truncate or accept) — list in `docs/SLS_MIGRATION.md` §4
+- [ ] Re-point the remaining CF-PETG margin tools (list in `docs/SLS_MIGRATION.md` §5)
+- [ ] Owner: assign build orientation per structural part (removes the 0.5 Z knockdown where load is in-plane)
+- [ ] Owner: confirm FDM-only features to strip (4×0.6 mm perimeter wall sizing, brims, support-avoid chamfers) per part family
+- [ ] Re-export the 64 mm nacelles and wing-root flanges watertight (audit R4)
+- [ ] Re-run `tools/sls_auw_reconcile.py` after the above and update the AUW ledger
 - [ ] Lever rib over the CF frame (Y 572–620) + forward 2×M3 tie; CF plate bearing coupon (§10.3)
 - [ ] Skid-tip-to-hull measure-and-shim step at assembly, or owner accepts a 0.45 mm worst-case hull margin (§10.5)
 

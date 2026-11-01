@@ -793,6 +793,13 @@
       ],
       "archived": false
     },
+    "airframe/datasheets/3D-Systems_SLS_Design_Guide_en_final.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/datasheets/RW-PS-070-Stock-Plate-Panel-Angle-Tolerance-Sheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -14901,6 +14908,13 @@
       ],
       "archived": false
     },
+    "docs/SLS_MIGRATION.md": {
+      "description": "Serenity UAV \u2014 Airframe Migration from FDM CF-PETG to SLS (PA CF / PA11)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md": {
       "description": "Serenity UAV \u2014 SLS PA12 / PA12-CF, 30 in Hull, Single-Piece Print Evaluation",
       "tags": [
@@ -19987,8 +20001,22 @@
       ],
       "archived": false
     },
+    "tools/sls_dfm_audit.py": {
+      "description": "sls_dfm_audit.py -- bow-to-stern SLS design-for-manufacture audit of every",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/sls_material_screen.py": {
       "description": "sls_material_screen.py -- screen the 3D Systems SLS nylons against the repo's",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/sls_materials.py": {
+      "description": "sls_materials.py -- single source of SLS material properties for every",
       "tags": [
         "build-tooling"
       ],
@@ -20354,6 +20382,7 @@
       "docs/SLS_27IN_UNIFORM_SCALE_ADDENDUM.md",
       "docs/SLS_EMI_AND_WINGS_NOTE.md",
       "docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md",
+      "docs/SLS_MIGRATION.md",
       "docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md",
       "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
@@ -21348,6 +21377,7 @@
       "airframe/blender-scripts/repair_shells_for_scad.py",
       "airframe/blender-scripts/serenity_render_views.py",
       "airframe/blender-scripts/verify_shells.py",
+      "airframe/datasheets/3D-Systems_SLS_Design_Guide_en_final.pdf",
       "airframe/datasheets/RW-PS-070-Stock-Plate-Panel-Angle-Tolerance-Sheet.pdf",
       "airframe/datasheets/Rhino-1411-4111-Infusion-Resin-TDS.pdf",
       "airframe/datasheets/T700GDataSheet.pdf",
@@ -25306,7 +25336,9 @@
       "tools/skid_mount_loads.py",
       "tools/skid_open_items.py",
       "tools/sls_auw_reconcile.py",
+      "tools/sls_dfm_audit.py",
       "tools/sls_material_screen.py",
+      "tools/sls_materials.py",
       "tools/sls_scale_trim_study.py",
       "tools/spar_bundle_fit.py",
       "tools/stitch_vias.py",

@@ -308,7 +308,15 @@ def mirror_stbd_from_port(corners: dict[str, list[float]]) -> None:
             dst = os.path.join(OUT, f"lg_r6_3_0in_bay_{st}-stbd{suffix}")
             m = trimesh.load(src, process=False)
             m.apply_transform(mx)
-            m.invert()
+            # trimesh >= 4 already re-winds faces when a transform has a
+            # negative determinant, so an unconditional invert() here turned
+            # the stbd bays inside-out (negative volume; found by
+            # tools/sls_dfm_audit.py R3/R4, 2026-11-01).  Invert only if the
+            # mirrored mesh actually came out inside-out.
+            if m.volume < 0:
+                m.invert()
+            if m.volume <= 0:
+                raise RuntimeError(f"{dst}: mirrored mesh has non-positive volume")
             if not mesh_passes_stl_gate(m):
                 raise RuntimeError(f"{dst}: mirrored mesh fails tools/validate_stls.py")
             m.export(dst)

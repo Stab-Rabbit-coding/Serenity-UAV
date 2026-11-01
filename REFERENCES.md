@@ -2009,6 +2009,20 @@ which prints that caveat on every run.
 
 ---
 
+### REF-MFG-001: 3D Systems — SLS Design Guide: Application and Design Tips (June 2019)
+
+| Field | Value |
+| --- | --- |
+| **Issuing body** | 3D Systems, Inc. |
+| **Date** | June 2019 (PDF created 2019-06-01, modified 2019-08-21) |
+| **Source** | Owner-supplied PDF, committed as `airframe/datasheets/3D-Systems_SLS_Design_Guide_en_final.pdf` (19 pp.), read 2026-11-01. Official 3dsystems.com URL not yet located — **requires verification**. |
+| **Section applied** | p. 3 Axles: 0.3 mm running clearance, 2 mm+ away from rails for powder removal; p. 6 Blind Bosses: >2 mm escape hole at the base; pp. 7, 12: 0.3 mm general / 0.2 mm minimum clearance; pp. 14–15: walls >1 mm (tag sticks, sealed tanks), escape/pull-rod >2 mm; p. 17: ProX SLS 6100 / sPro 60 HD-HS build envelope 15 × 13 × 18 in (381 × 330 × 460 mm). The owner states (2026-11-01) that 3D Systems will build Serenity on an **SLS 380**, 15 × 13 × 18 in; the audit uses 381.0 × 330.2 × 457.2 mm. |
+
+**Used in:** `tools/sls_dfm_audit.py`, `airframe/openscad/nacelles/nacelle_nozzle_fixed.scad`,
+`docs/SLS_MIGRATION.md`
+
+---
+
 ## Part XI — FDA / CDRH Laser Product Regulations
 
 ### REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products
