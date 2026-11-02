@@ -27,6 +27,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-FAA-001: 14 CFR Part 48 — Registration and Marking Requirements for Small Unmanned Aircraft Systems](#ref-faa-001-14-cfr-part-48--registration-and-marking-requirements-for-small-unmanned-aircraft-systems)
     - [REF-FAA-002: 14 CFR Part 107 — Small Unmanned Aircraft Systems](#ref-faa-002-14-cfr-part-107--small-unmanned-aircraft-systems)
     - [REF-FAA-003: 14 CFR §91.209 — Aircraft Lights](#ref-faa-003-14-cfr-91209--aircraft-lights)
+    - [REF-FAA-005: FAA AC 43.13-1B — Aircraft Inspection and Repair](#ref-faa-005-faa-ac-4313-1b--acceptable-methods-techniques-and-practices--aircraft-inspection-and-repair)
 - [Part II — United States Federal Communications Commission Regulations](#part-ii--united-states-federal-communications-commission-regulations)
     - [REF-FCC-001: 47 CFR §15.247 — Operation within the bands 902–928 MHz, 2400–2483.5 MHz, and 5725–5850 MHz](#ref-fcc-001-47-cfr-15247--operation-within-the-bands-902928-mhz-240024835-mhz-and-57255850-mhz)
     - [REF-FCC-002: 47 CFR Part 15 Subpart E — Unlicensed National Information Infrastructure Devices (UNII)](#ref-fcc-002-47-cfr-part-15-subpart-e--unlicensed-national-information-infrastructure-devices-unii)
@@ -45,8 +46,11 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-LAW-003: 15 U.S.C. §4651(7) "foreign country of concern" and 10 U.S.C. §4872 "covered nation"](#ref-law-003-15-usc-46517-foreign-country-of-concern-and-10-usc-4872-covered-nation)
     - [REF-MIL-002: MIL-STD-461G — Requirements for the Control of Electromagnetic Interference Characteristics of Subsystems and Equipment](#ref-mil-002-mil-std-461g--requirements-for-the-control-of-electromagnetic-interference-characteristics-of-subsystems-and-equipment)
     - [REF-NASA-001: NASA-STD-8739.4A — Workmanship Standard for Crimping, Interconnecting Cables, Harnesses, and Wiring](#ref-nasa-001-nasa-std-87394a--workmanship-standard-for-crimping-interconnecting-cables-harnesses-and-wiring)
+    - [REF-NASA-004: NASA-STD-5020B — Threaded Fastening Systems in Spaceflight Hardware](#ref-nasa-004-nasa-std-5020b--requirements-for-threaded-fastening-systems-in-spaceflight-hardware)
 - [Part V — International Standards (ISO, IEC)](#part-v--international-standards-iso-iec)
     - [REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling](#ref-iso-001-iso-11898-12015--road-vehicles--controller-area-network-can--part-1-data-link-layer-and-physical-signalling)
+    - [REF-STD-BOLT-001: ISO 898-1 — Bolts, screws and studs](#ref-std-bolt-001-iso-898-1--fasteners--mechanical-properties-of-carbon-steel-and-alloy-steel--part-1-bolts-screws-and-studs)
+    - [REF-STD-BOLT-002: VDI 2230 Part 1 — Highly stressed bolted joints](#ref-std-bolt-002-vdi-2230-part-1--systematic-calculation-of-highly-stressed-bolted-joints--joints-with-one-cylindrical-bolt)
     - [REF-IEC-001: IEC 62368-1 Ed. 3.0 — Audio/Video, Information and Communication Technology Equipment — Part 1: Safety Requirements](#ref-iec-001-iec-62368-1-ed-30--audiovideo-information-and-communication-technology-equipment--part-1-safety-requirements)
     - [REF-IEC-002: IEC 60825-1:2014+AMD1:2021 — Safety of Laser Products — Part 1: Equipment Classification and Requirements](#ref-iec-002-iec-60825-12014amd12021--safety-of-laser-products--part-1-equipment-classification-and-requirements)
     - [REF-IEC-003: IEC 61000-4-2:2008 — Electromagnetic Compatibility (EMC) — Testing and Measurement Techniques — Electrostatic Discharge (ESD) Immunity Test](#ref-iec-003-iec-61000-4-22008--electromagnetic-compatibility-emc--testing-and-measurement-techniques--electrostatic-discharge-esd-immunity-test)
@@ -432,6 +436,19 @@ regulatory quotation. Do not cite +3.8/−1.52 to current Part 23.
 
 **Used in:** `docs/structural_analysis.md` §2, §3;
 `docs/WING_ATTACH_INTERFACE.md` §2.1; `tools/wing_spar_carrythrough.py`
+
+### REF-FAA-005: FAA AC 43.13-1B — Acceptable Methods, Techniques, and Practices — Aircraft Inspection and Repair
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | FAA, U.S. Dept. of Transportation (AFS-300) |
+| **Designation** | Advisory Circular 43.13-1B, issued 1998-09-08, with Change 1 (2004-09-27). Companion: AC 43.13-2B (alterations). |
+| **Official URL** | <https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentid/99861> (FAA AC library page; carries the PDF "including Change 1") |
+| **URL status** | Page returned by search 2026-11-02; direct fetch returned HTTP 403 — **requires verification** |
+| **Sections applied** | **Pending — requires verification.** Intended use: general practice for hardware and bolt/nut tightening/torque guidance for the build-guide torque specs. Chapter and paragraph numbers are not yet confirmed against the PDF. |
+| **Scope caution** | Covers non-pressurized areas of civil aircraft and acceptable *repair* practice absent manufacturer data. Guidance, not regulation; the Serenity UAV is not type-certificated. A citable best-practice source, not a compliance basis. |
+
+**Used in:** `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md` (planned: `tools/joint_torque.py`, `current-specification/safety_factors.json`)
 
 ## Part II — United States Federal Communications Commission Regulations
 
@@ -880,6 +897,19 @@ MIL-STD-461G qualification testing is deferred pending airframe integration.
 
 **Used in:** `tools/skid_failure_mode_study.py`, `docs/SKID_FAILURE_MODE_STUDY.md` §2
 
+### REF-NASA-004: NASA-STD-5020B — Requirements for Threaded Fastening Systems in Spaceflight Hardware
+
+| Field | Value |
+|---|---|
+| **Publisher** | NASA Technical Standards System |
+| **Designation** | NASA-STD-5020B, Change 0, document date 2021-08-06, revalidated 2026-01-05; status ACTIVE (supersedes 5020 and 5020A) |
+| **Official URL** | <https://standards.nasa.gov/standard/nasa/nasa-std-5020> |
+| **URL status** | Validated 2026-11-02 (page fetched; PDF listed as "NASA-STD-5020B Revalidated 1-5-2026.pdf") |
+| **Sections applied** | **Pending — requires verification.** Intended use: preload, separation/slip and factor-of-safety methodology; requirements are numbered "TFSR" statements. No TFSR number is cited until read. |
+| **Scope caution** | Written for spaceflight hardware; may not apply to ground support equipment (NASA-STD-5005). Cite as an adopted methodology with this limitation stated, as for REF-NASA-001's scope. |
+
+**Used in:** `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md`
+
 ---
 
 ## Part V — International Standards (ISO, IEC)
@@ -1104,6 +1134,32 @@ REF-SENSOR-053 / REF-SENSOR-054) and XO (PRTR5V0U2X).
 | **Official URL (purchase)** | <https://webstore.iec.ch/publication/22284> — CISPR standards are not freely published |
 | **URL status** | validated 2026-09-27 (webstore listing page only; full text is paywalled) |
 | **Status** | **Design-margin reference only, not a compliance target.** Serenity's applicable emissions limits are the FCC Part 15 entries above (REF-FCC-001/002/003/005); CISPR 32 is consulted informally for EMC design-margin guidance during layout, per `docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md` U1. |
+
+### REF-STD-BOLT-001: ISO 898-1 — Fasteners — Mechanical properties of carbon steel and alloy steel — Part 1: Bolts, screws and studs
+
+| Field | Value |
+|---|---|
+| **Publisher** | International Organization for Standardization (ISO) |
+| **Designation** | ISO 898-1:2013 (with Cor 1:2013); a new edition is in development |
+| **Official URL** | <https://www.iso.org/standard/60610.html> (ISO catalogue page); national-body listing: <https://scc-ccn.ca/standardsdb/standards/8154526> |
+| **URL status** | Catalogue number taken from search results 2026-11-02; the ISO page returned HTTP 403 to fetch — **requires verification**. Full text is paywalled. |
+| **Sections applied** | **Pending — requires verification.** Intended use: property classes (proof load, tensile strength) for steel fasteners. It covers carbon/alloy steel only — not stainless (ISO 3506) or brass. |
+
+**Used in:** `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md`
+
+---
+
+### REF-STD-BOLT-002: VDI 2230 Part 1 — Systematic calculation of highly stressed bolted joints — Joints with one cylindrical bolt
+
+| Field | Value |
+|---|---|
+| **Publisher** | VDI-Gesellschaft Produkt- und Prozessgestaltung (VDI); distributed by Beuth / DIN Media |
+| **Designation** | VDI 2230 Blatt 1 (Part 1), November 2015 (DIN lists a corrected edition) |
+| **Official URL** | <https://vdi.de/en/home/vdi-standards/details/vdi-2230-blatt-1-systematic-calculation-of-highly-stressed-bolted-joints-joints-with-one-cylindrical-bolt> |
+| **URL status** | Validated 2026-11-02 (page fetched; title and 2015-11 issue date confirmed; no status statement shown). Purchase only (about 319 EUR); no free copy found. |
+| **Sections applied** | **Pending — requires verification.** Intended use: independent cross-check for preload, load factor and embedding/relaxation. Its metal-joint assumptions extend to polymer members only with a stated penalty; test data take precedence. |
+
+**Used in:** `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md`
 
 ---
 
@@ -3858,6 +3914,10 @@ Add verified section numbers to the relevant files and update this table.
 
 | Citation | File | Issue | Action Required |
 |---|---|---|---|
+| REF-FAA-005 (AC 43.13-1B) chapter/paragraph for hardware torque | `REFERENCES.md` REF-FAA-005 | Page not fetchable (403); sections pending | Read the PDF; record chapter, table and paragraph |
+| REF-NASA-004 (NASA-STD-5020B) TFSR numbers for preload / separation / factor of safety | `REFERENCES.md` REF-NASA-004 | Sections pending | Read the PDF; record the TFSR statements applied |
+| REF-STD-BOLT-001 (ISO 898-1:2013) property-class tables and URL | `REFERENCES.md` REF-STD-BOLT-001 | URL unverified (403); paywalled | Obtain the standard; record clause and table |
+| REF-STD-BOLT-002 (VDI 2230-1:2015) clauses for preload, load factor, embedding | `REFERENCES.md` REF-STD-BOLT-002 | Sections pending; paywalled | Obtain the guideline; record clauses |
 | [REF-STR-002] Brazier 1927 DOI/pages; ring-crush formula case in [REF-STR-001] | `tools/skid_failure_mode_study.py`, `docs/SKID_FAILURE_MODE_STUDY.md` | **Open (2026-10-31).** Applied from established practice; not fetched. | Fetch the paper and the Roark case; record them (WBS §0.12). |
 | [REF-NASA-002] §, [REF-NASA-003] §, [REF-STR-001] case; 3DS-30108A official URL | `tools/aft_skin_thinning_study.py`, `docs/AFT_SKIN_THINNING_STUDY.md` | **Open (2026-10-31).** Formulas applied from established practice; section and case numbers not confirmed against the documents. The datasheet is an owner-supplied PDF. | Read the NTRS PDFs and a Roark copy, record the sections, validate the 3D Systems URL (WBS §0.12). |
 | STM32WLE5JC RF matching / harmonic-filter values (ST AN5457) | `avionics/kicad/TACCO/scripts/gen_tacco_sch.py` (`L-MLRS-PA`, `C-MLRS-TX0..2`, `L-MLRS-TX1/2`, `C-MLRS-RXP/RXN`, `L-MLRS-RX1/2`, `C-MLRS-RX1`, `C-MLRS-VRPA`) | **Open (2026-09-29).** Topology follows DS13105 Figures 2–4; the 915 MHz element values come from ST AN5457, which could not be fetched from the build environment. Values are tagged `VERIFY AN5457`. | Obtain AN5457, populate the values, add it as a REF-ID, bench-tune (VSWR/harmonics) before flight. |

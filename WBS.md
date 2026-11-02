@@ -254,6 +254,16 @@ as-drafted record are in docs/WBS.md §0.10.3; the manual is
 
 ---
 
+### 0.13 — Joint-Torque Standards Section Verification (2026-11-02)
+
+→ detail: `REFERENCES.md` REF-FAA-005, REF-NASA-004, REF-STD-BOLT-001, REF-STD-BOLT-002; plan `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md`
+
+- [ ] Verify AC 43.13-1B [REF-FAA-005] torque chapter/paragraph against the FAA PDF
+- [ ] Verify NASA-STD-5020B [REF-NASA-004] TFSR numbers for preload and safety factor
+- [ ] Obtain ISO 898-1:2013 [REF-STD-BOLT-001]; record property-class clauses and URL
+- [ ] Obtain VDI 2230-1:2015 [REF-STD-BOLT-002]; record preload/embedding clauses
+- [ ] Send 3D-printing provider the Z-axis tensile and insert pull-out data request (owner)
+
 ### 0.12 — Aft-Section SLS Sizing References (2026-10-31)
 
 → detail: `docs/AFT_SKIN_THINNING_STUDY.md`, `REFERENCES.md` Open Standards Verification Items

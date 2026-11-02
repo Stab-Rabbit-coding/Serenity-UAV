@@ -227,7 +227,6 @@
       "description": "Serenity UAV \u2014 TODO (Open Work Only)",
       "tags": [
         "documentation",
-        "emi-hardening",
         "project-tracking",
         "security"
       ],
@@ -21101,7 +21100,6 @@
     "emi-hardening": [
       "AGENTS.md",
       "README.md",
-      "TODO.md",
       "WBS.md",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
       "airframe/README.md",
