@@ -220,6 +220,12 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Wire gen_todo_from_wbs.py --check into pre-commit/CI beside the index check
 - [ ] Rewrite docs/AVIONICS_PB2_REDESIGN.md as a Rev T overview, then archive Rev Q/R
 
+#### 0.10.3 Operators' Manual
+
+-> detail docs/WBS.md 
+
+- [ ] Draft Operator's Manual based on [REF-MIL-003] and in accordance with [REF-FAA-001] and [REF-FAA-002]
+
 ### 0.11 — Upstream KiCad Defect: `sch erc` SIGSEGV on unresolvable `lib_id`
 
 → detail: `avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md`

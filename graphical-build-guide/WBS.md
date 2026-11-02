@@ -388,17 +388,17 @@ This section covers the comprehensive rebuild of the graphical build guide's SVG
 - [ ] **Phase C (05/10): Rebuild `build_guide_05_ring_frames.svg`** — Ring frame placement and 5 station notches.
 - [ ] **Phase C (06/10): Rebuild `build_guide_06_access_panels.svg`** — Access panel frame installation card for all 6 panels.
 - [ ] **Phase C (07/10): Rebuild `build_guide_07_standoffs.svg`** — Avionics bay standoff positioning with correct M2.5 standoff locations.
-- [ ] **Phase C (08/10): Rebuild `build_guide_08_wing_spar.svg`** — Wing spar sleeve mounting.
-- [ ] **Phase C (09/10): Rebuild `build_guide_09_avionics.svg`** — **STALE geometry Pilot/B fix:** Replace archived Cape-A-1/TACCO line art with active Rev R1Pilot and TACCO (XO) baseline layout. Ensure standards citations (`[REF-ID]`) survive.
+- [ ] **Phase C (08/10): Rebuild `build_guide_08_wing_spar.svg`** — Wing spar sleeve mounting. Render the spars and show close-ups of the joints to make assembly clear.
+- [ ] **Phase C (09/10): Rebuild `build_guide_09_avionics.svg`** — **STALE geometry Pilot/B fix:** Replace archived Cape-A-1/TACCO line art with active Rev R1Pilot and TACCO (XO) baseline layout.  render the step files from kicad for each pcb. Ensure standards citations (`[REF-ID]`) survive.
 - [ ] **Phase C (10/10): Rebuild `build_guide_10_servos.svg`** — Nacelle tilt servo bracket and sector gear assembly.
-- [ ] **Phase D (01/10): Rebuild `build_guide_11_inter_board.svg`** — **STALE Pilot/B fix:** Replace archived Pilot/TACCO wiring schematic with activePilot, TACCO (XO), Commo (XCVR-49MHZ-2), Flight Engineer, and Observer inter-board CAN FD, RS-485, and Ethernet wiring.
+- [ ] **Phase D (01/10): Rebuild `build_guide_11_inter_board.svg`** — **STALE Pilot/B fix:** Replace archived Pilot/TACCO wiring schematic with activePilot, TACCO (XO), Commo (XCVR-49MHZ-2), Flight Engineer, and Observer inter-board CAN FD, RS-485, and Ethernet wiring.  use multiple colors to distinguish wires.  
 - [ ] **Phase D (02/10): Rebuild `build_guide_12_security_hw.svg`** — **STALE Pilot/B fix:** Update with activePilot and TACCO (XO) crypto-elements (TPM 2.0 enrollment, key generation, and operator certificates).
 - [ ] **Phase D (03/10): Rebuild `build_guide_13_antennas.svg`** — Antenna SMA bulkheads and coax wire routing.
 - [ ] **Phase D (04/10): Rebuild `build_guide_14_49mhz_post.svg`** — 49 MHz forward and temporary aft posts (temporary post at station ~580mm).
 - [ ] **Phase D (05/10): Rebuild `build_guide_15_49mhz_wire.svg`** — 49 MHz wire tensioning and grounding with keel counterpoise.
 - [ ] **Phase D (06/10): Rebuild `build_guide_16_tof_frames.svg`** — 12× VL53L5CX time-of-flight sensor frame mounting.
-- [ ] **Phase D (07/10): Rebuild `build_guide_17_conduits.svg`** — PTFE wiring conduit threading.
-- [ ] **Phase D (08/10): Rebuild `build_guide_18_void_formers.svg`** — EPS void former dry-fitting and pull string verification.
+- [ ] **Phase D (07/10): Rebuild `build_guide_17_conduits.svg`** — PTFE wiring conduit threading.  add a step to show how the wires will be threaded through the conduit after foam injection.- [  **Phase D (07/11): Add conduit wire-threading procedure** — Post-foam injection wire routing and pull-string extraction.
+- [ ] **Phase D (08/10): Rebuild `build_guide_18_void_formers.svg`** — EPS void former dry-fitting and pull string verification.  
 - [ ] **Phase D (09/10): Rebuild `build_guide_19_foam_pour.svg`** — PU foam zone-controlled injection (3 shots aft->fwd, <=60 mL per batch).
 - [ ] **Phase D (10/10): Rebuild `build_guide_20_node_placement.svg`** — **STALE Pilot/B fix:** Update 8-node arch placement showing all 8 nodes carrying activePilot and TACCO (XO) with uniform 5 kV galvanic isolation. Depict Commo transceivers only in River's Room and Simon's Medbay nodes (per `REF-FCC-003`).
 - [ ] **Phase E (1/6): Rebuild `build_guide_21_node_install.svg`** — **STALE Pilot/B fix:** Rebuild flight control node mounting card showingPilot and TACCO (XO) physical mounting, CAN FD terminal access, and isolated port wiring.
