@@ -46,14 +46,21 @@ class AllowablesTest(unittest.TestCase):
 
     def test_fos_default_and_override_rule(self) -> None:
         # Happy path: 1.5 default. Integration: only a VERIFIED, larger override raises it.
-        # Default 1.5 x NASA fitting factor 1.15 = 1.725; exempt joints stay at 1.5.
-        self.assertEqual(al.fastener_fos(self.sf), 1.725)
-        self.assertEqual(al.fastener_fos(self.sf, fitting_exempt=True), 1.5)
+        # The owner's 1.5 stands; the NASA fitting factor is not stacked on it.
+        self.assertEqual(al.fastener_fos(self.sf), 1.5)
         sf = copy.deepcopy(self.sf)
         sf["overrides"] = [{"ref": "REF-X", "value": 2.0, "verified": False}]
-        self.assertEqual(al.fastener_fos(sf), 1.725)
+        self.assertEqual(al.fastener_fos(sf), 1.5)
         sf["overrides"][0]["verified"] = True
         self.assertEqual(al.fastener_fos(sf), 2.0)
+
+
+    def test_nasa_equivalent_is_independent_of_the_owner_factor(self) -> None:
+        # Independent comparison: NASA total = its own program factor x 1.15, whatever 1.5 is.
+        self.assertEqual(al.nasa_equivalent_fos(1.4, self.sf), 1.61)
+        sf = copy.deepcopy(self.sf)
+        sf["fastener_default"] = 2.0
+        self.assertEqual(al.nasa_equivalent_fos(1.4, sf), 1.61)
 
 
 if __name__ == "__main__":

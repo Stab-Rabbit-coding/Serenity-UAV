@@ -82,9 +82,10 @@ whose load or allowable is unknown is marked "requires verification" and blocks 
   follows the project rule "name the failure mode" (mechanical-engineering skill).
 - **KTD2a — Factor of safety is 1.5 for fasteners** (owner, 2026-11-02), unless an FAA or ASME regulation, standard or
   other citable best practice is more conservative, in which case the larger value governs. Reading the supplied sources
-  (2026-11-02): AC 43.13-1B states no fastener factor; **NASA-STD-5020B §4.2.2 (TFSR 3) calls for a fitting factor of at least
-  1.15 as a multiplier**, so the effective factor is 1.5 × 1.15 = 1.725 unless a joint is tested, FEA-correlated, or redundant and
-  ductile (then 1.5). Owner to confirm applying it by default. Also adopted from NASA: slip friction coefficient ≤ 0.10 for
+  (2026-11-02): AC 43.13-1B states no fastener factor. NASA-STD-5020B §4.2.2 (TFSR 3) gives a fitting factor of at least 1.15, but
+  it multiplies NASA's own program-levied factor (NASA-STD-5001, not yet in hand), not the owner's, so it is **not** stacked on 1.5;
+  the independent NASA figure (program factor × 1.15) is compared against 1.5 once 5001's factor is verified. Adopted from NASA
+  independently of the factor: slip friction coefficient ≤ 0.10 for
   nonmetallic surfaces (TFSR 14), preload scatter 25 % lubricated / 35 % non-lubricated for torque control (Table 3), and torque
   instruments to ASME B107.300-2010 (TFSR 30). Remaining candidates: REF-STD-BOLT-002. Data:
   `current-specification/safety_factors.json`; selector: `tools/allowables.py fastener_fos()`.

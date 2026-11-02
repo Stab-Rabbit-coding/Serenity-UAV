@@ -78,9 +78,10 @@ def select(db: dict, candidates: list[str], prop: str) -> tuple[str, dict]:
 def fastener_fos(sf: dict | None = None, fitting_exempt: bool = False) -> float:
     """Effective factor of safety for a fastened joint.
 
-    1.5 (owner default) multiplied by the NASA-STD-5020B s4.2.2 fitting factor (1.15) unless the joint
-    is exempt (tested, correlated FEA, or redundant and ductile) or the owner has switched the
-    factor off; the larger of that and any VERIFIED override governs.
+    1.5 (owner default) unless a VERIFIED, independently derived override is larger.  The NASA
+    fitting factor is deliberately NOT stacked on the owner's factor: it multiplies NASA's own
+    program-levied factor, so it can only be compared as ``nasa_equivalent_fos`` (below).  It is
+    applied here only if the owner sets ``fitting_factor.apply_by_default``.
     """
     sf = sf or json.loads(SF.read_text())
     best = float(sf["fastener_default"])
@@ -91,6 +92,16 @@ def fastener_fos(sf: dict | None = None, fitting_exempt: bool = False) -> float:
         if o.get("verified") and float(o["value"]) > best:
             best = float(o["value"])
     return round(best, 4)
+
+
+def nasa_equivalent_fos(fs_program: float, sf: dict | None = None) -> float:
+    """NASA-STD-5020B's independent total: its program-levied factor times the fitting factor.
+
+    Compare the result against ``fastener_default``; it is an override only when larger AND
+    ``fs_program`` comes from a verified source (NASA-STD-5001 is not yet catalogued).
+    """
+    sf = sf or json.loads(SF.read_text())
+    return round(fs_program * float(sf["fitting_factor"]["value"]), 4)
 
 
 def validate(db: dict, sf: dict) -> list[str]:

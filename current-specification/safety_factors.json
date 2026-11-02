@@ -9,6 +9,10 @@
   "override_rule": "An override needs a REF-ID whose section/paragraph is VERIFIED (not 'requires verification') and a value greater than the default; the tool uses the larger of the default and any applicable override.",
   "candidates_pending_verification": [
     {
+      "ref": "NASA-STD-5001 (not yet catalogued)",
+      "why": "Structural Design and Test Factors of Safety for Spaceflight Hardware: the program factor NASA-STD-5020B multiplies; needed to compare NASA's total against 1.5 independently"
+    },
+    {
       "ref": "REF-STD-BOLT-002",
       "why": "VDI 2230 safety factors against yield/slip/separation"
     },
@@ -33,9 +37,10 @@
       "load paths from correlated detailed FEA",
       "redundant load paths (multiple fasteners) with enough ductility to redistribute"
     ],
-    "status": "owner decision pending: apply by default (effective 1.725 = 1.5 x 1.15) or accept per-joint exemptions",
-    "apply_by_default": true,
-    "note": "Guidance wording is 'should ... at least 1.15'; TFSR 3 itself requires that a fitting factor be used."
+    "status": "NOT applied. Not independent of the owner's 1.5: NASA's fitting factor multiplies NASA's own program-levied factor of safety (NASA-STD-5001, named in TFSR 2 and not yet in hand), not the owner's factor. The independent NASA figure is FS_program x 1.15; compare that product against 1.5 once the NASA-STD-5001 factor is obtained and verified. Until then no NASA-derived override exists.",
+    "apply_by_default": false,
+    "note": "TFSR 3 requires that a fitting factor be used and states 'at least 1.15' as guidance; the base factor it multiplies is program-specified.",
+    "independent_comparison": "nasa_equivalent_fos = FS_program(NASA-STD-5001, to be verified) x fitting_factor; override applies only if nasa_equivalent_fos > fastener_default"
   },
   "separation_factor": {
     "source": {
@@ -70,7 +75,7 @@
     },
     {
       "ref": "REF-NASA-004",
-      "finding": "fitting factor 1.15 (see fitting_factor); separation factor logic (see separation_factor)"
+      "finding": "gives a fitting factor (1.15) on top of a program-levied factor it does not itself set; independent comparison needs NASA-STD-5001 (pending)"
     }
   ]
 }
