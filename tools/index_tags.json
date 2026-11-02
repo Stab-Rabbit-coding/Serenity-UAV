@@ -16234,6 +16234,13 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-11-01-001-canonical-gear-box/tools/extract.py": {
+      "description": "Python script",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/plans/2026-11-01-001-canonical-gear-box/tools/flush_check.py": {
       "description": "Python script",
       "tags": [
@@ -16242,6 +16249,13 @@
       "archived": false
     },
     "docs/plans/2026-11-01-001-canonical-gear-box/tools/fore_cheek_sweep.py": {
+      "description": "Python script",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/tools/grown_fit.py": {
       "description": "Python script",
       "tags": [
         "documentation"
@@ -20983,8 +20997,10 @@
       "docs/plans/2026-11-01-001-canonical-gear-box/merged_ventral.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/bay_out.py",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/corner_sweep.py",
+      "docs/plans/2026-11-01-001-canonical-gear-box/tools/extract.py",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/flush_check.py",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/fore_cheek_sweep.py",
+      "docs/plans/2026-11-01-001-canonical-gear-box/tools/grown_fit.py",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/hsg_keep.py",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/keep_break.py",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/pouch_loc.py",

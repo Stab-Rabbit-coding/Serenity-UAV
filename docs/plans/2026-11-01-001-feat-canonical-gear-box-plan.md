@@ -326,3 +326,22 @@ allowable is 27.5 MPa (CF-PETG yield/2).  Out-of-plane thigh bending at
 
 Both are before combining with the in-plane crash bending.
 `landing_gear_r6_sizing.py` has no out-of-plane thigh check at all.
+
+## Review — "grown" thigh against the current aircraft (2026-11-02)
+
+**Verdict: not ready.**  The grown thigh neither fits the box nor closes the side load.
+
+| # | Finding |
+|---|---|
+| 1 | Grown (2 × Ø17 mm @ 22) spans 39 mm in the swing plane, more than `SLOT_SWING` 34.  Swept 0–26° vs the fused hull it clashes 428.9 mm³ (fore-port) and 215.2 mm³ (aft-port); baseline is 29.8 / 0.0 (`tools/grown_fit.py`). |
+| 2 | The sizing gate has no combined in-plane + out-of-plane thigh check.  At 27.5 MPa, grown's combined bending (crash 25.1 + lateral 308 N) is: fore −65° 47.9 MPa (0.57×), aft +28° 36.9 MPa (0.75×), fore at the old −22.4° 34.7 MPa (0.79×).  The gap predates the −65° change. |
+| 3 | The allowable is CF-PETG.  The legs are now SLS PA12-CF (PA 602-CF: 85 MPa XY only).  Even at 42.5 MPa, fore −65° grown is 0.89×. |
+| 4 | The baseline fore leg grazes the hull by 29.8 mm³ in stroke: the protected bay seats at the old orientation override the leg-path cut.  This clears when the bays are regenerated. |
+| 5 | Mass is negligible: +44 g total, CG about +0.1 mm aft. |
+
+Not assessed: the torsion share (M·sin 48.2°) and fatigue.
+
+**Owner decisions:**
+- Re-baseline the leg allowable to SLS PA12-CF (cited value or coupon).
+- Add the combined check and size the thigh to it, widening the slot and pillar to match.
+- Optionally ease the fore azimuth.  The CF flush study found nothing flush above about −55°.
