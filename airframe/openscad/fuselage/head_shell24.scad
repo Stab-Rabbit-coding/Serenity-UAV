@@ -54,14 +54,14 @@ module head_contents() {
     bay_insert();
     sensor_pods();
     observer_board();
-    // Bay A pouches (CN1 port, FC1 stbd), on edge
-    for (s = [1, -1])
-        translate([s > 0 ? 1 : -23, BAYA_Y0, BAYA_Z0]) cube([22, 58, 37]);
-    // head cell on its sled + generated rail parts
-    translate([-CELL_W / 2, CELL_Y0, BAND_ZC - CELL_H / 2]) cube([CELL_W, CELL_L, CELL_H]);
-    import("../../stls/fuselage/head/head_cell_rail.stl");
-    import("../../stls/fuselage/head/head_cell_sled.stl");
-    import("../../stls/fuselage/head/head_cell_catch.stl");
+    // Bay A forward (2026-11-01, plan 2026-11-01-001): both pouches FLAT on
+    // the centreline -- CN1 (TACCO + PB2-I) partly under the Observer, FC1
+    // (Pilot + PB2-I) raised over CN1's aft end and the twin tray rail.
+    translate([-NODE_H / 2, CN1F_Y0, CN1F_Z0]) cube([NODE_H, NODE_L, NODE_T]);
+    translate([-NODE_H / 2, FC1F_Y0, FC1F_Z0]) cube([NODE_H, NODE_L, NODE_T]);
+    // twin pack tray (tools/twin_head_pack_fit.py; replaces the single head
+    // cell, rail, sled and catch)
+    import("../../stls/fuselage/head/twin_pack_tray.stl");
 }
 
 if (SHOW_SHELL) %head_shell_published();

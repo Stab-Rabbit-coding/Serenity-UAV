@@ -45,7 +45,9 @@ def corners(path: Path = SCAD) -> dict[str, list[float]]:
     fore, aft = _row(txt, "LG_FORE_PORT"), _row(txt, "LG_AFT_PORT")
 
     def mirror(c: list[float]) -> list[float]:
-        return [2.0 * hd.X_CL - c[0], c[1], c[2], 180.0 - c[3], -c[4]]
+        # azimuth wrapped to [-180, 180), as merge_cargo_interior._mirror_corner
+        az = round((180.0 - c[3] + 180.0) % 360.0 - 180.0, 6)
+        return [2.0 * hd.X_CL - c[0], c[1], c[2], az, -c[4]]
 
     rows = [fore, mirror(fore), aft, mirror(aft)]
     if any(len(r) != 5 for r in rows):

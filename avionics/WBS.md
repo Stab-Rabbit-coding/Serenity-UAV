@@ -1070,6 +1070,25 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
     not a numeric DRC fix to chase. ★
 - [ ] **U9** — REFERENCES.md, WBS/TODO and `avionics/AGENTS.md` closeout for U1–U8.
 
+### §1.10a — Bay A forward avionics items (2026-11-01)
+
+Spec `docs/BAY_A_FWD_LAYOUT.md`; thermal `docs/BAY_A_FWD_THERMAL.md`.
+
+- [ ] **BAYA-FWD-T1** — ★ BLOCKER (owner decision): no thermal tier sustains CN1's 8.3 W
+    all-radio peak; the fan tier caps it at 5.49 W (PROVISIONAL). Choose a TACCO TX
+    duty / thermal-throttle cap, or a better heat path.
+- [ ] **BAYA-FWD-T2** — Confirm the design ambient (104 °F / 40 °C ASSUMED).
+- [ ] **BAYA-FWD-T3** — Cite or bench-measure the thermal inputs (pouch conductance, PA12-CF
+    k, gap pad, film coefficients); re-run `tools/bay_a_thermal_budget.py`.
+- [ ] **BAYA-FWD-T4** — Vent-slot and fan geometry, gated in `head_layout_fit.py`
+    (after T1).
+- [ ] **BAYA-FWD-B1** — Cite the CAN-FD and RS-485 stub limits from the fitted
+    transceivers' datasheets into `STUB_LIMIT_MM` (check is PROVISIONAL until then).
+- [ ] **BAYA-FWD-B2** — Airspeed sensor footprint at the pitot hose turn (X −3.6, Y 50.5,
+    Observer underside Z 236.8); ties to §1.10 U5.
+- [ ] **BAYA-FWD-B3** — Re-check ring / CAN-FD bus length budgets with the routed
+    Bay A lengths (`head_layout_fit.py` route report).
+
 ## §1.8 — Names
 
 *(root `WBS.md` §1.8)*

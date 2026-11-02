@@ -858,24 +858,28 @@ LG_PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
 # FORE station moved 2026-10-10 (BHD-02, owner "hybrid", docs/BHD02_OPTION_STUDY.md
 # SS10-11) from Y -1.28 / X -103.87, -235.93 to Y -16.  MUST match canonical_leg_r6_3_0in.scad CORNERS (gated by
 # tools/landing_gear_bay_function.py corner_sync()).
-def _mirror_corner(row, label):
-    """Starboard twin of a port corner row about the centreline X = hd.X_CL."""
-    _lab, hx, hy, hz, az, station = row
-    return (label, 2.0 * hd.X_CL - hx, hy, hz, 180.0 - az, station)
-
-
-# 2026-11-01 (owner: "make it symmetric across the centerline"): starboard rows
-# are DERIVED from port about hd.X_CL.  They were typed as -55.05 / -77.71, a
-# mirror about the old R1 centreline, 0.1 mm off a true mirror.
-_LG_FORE_PORT = ("fore-port", 54.95, 289.70, 118.0, -22.4, "fore")
-_LG_AFT_PORT = ("aft-port", 77.61, 405.66, 118.0, 28.0, "aft")
 LG_CORNERS = [
     # R2; R1 hips (-114.90/-224.90, -16.00, 38) and (-92.24/-247.56, 99.96, 38)
-    _LG_FORE_PORT,
-    _mirror_corner(_LG_FORE_PORT, "fore-stbd"),
-    _LG_AFT_PORT,
-    _mirror_corner(_LG_AFT_PORT, "aft-stbd"),
+    ("fore-port", 54.95, 289.70, 118.0, -22.4, "fore"),
+    ("aft-port", 77.61, 405.66, 118.0, 28.0, "aft"),
 ]
+# 2026-11-01: starboard rows DERIVED as the exact mirror of port about X_CL
+# (x -> 2 X_CL - x, az -> 180 - az).  They were typed -55.05 / -77.71: the R1
+# rows mirrored about the old -169.9 centreline, 0.1 mm off a true mirror.
+# Against the SYMMETRIC_FROM_PORT shell that 0.1 mm left the starboard bay
+# seats, rebates and A1B housings NEAR-coincident with the skin, which the
+# float32 STL round trip welds into ~7,000 non-manifold edges -- the root of
+# WBS MERGE-FINALIZE-NM (defects were starboard-only; port was clean).
+def _mirror_corner(row):
+    """Starboard twin of a port corner row: X mirrored, azimuth 180 - az
+    (wrapped to [-180, 180)), Y/Z unchanged."""
+    label, hx, hy, hz, az, st = row
+    return (label.replace("port", "stbd"), hd.mirror_x(hx), hy, hz,
+            round((180.0 - az + 180.0) % 360.0 - 180.0, 6), st)
+
+
+LG_CORNERS = [LG_CORNERS[0], _mirror_corner(LG_CORNERS[0]),
+              LG_CORNERS[1], _mirror_corner(LG_CORNERS[1])]
 
 # Retained as an informational clearance check.
 LEG_ZONES = [
@@ -997,6 +1001,12 @@ def wing_keepout_positives(envelope_tm=None):
 T5_FOOT = 12.0            # bracket foot boss section, mm (= bracket FOOT_PAD)
 T5_FOOT_X_PORT = clf.GEAR_X_OUT + 5.0          # boss inboard face = bracket web face (-117.75, Rev T5e)
 T5_HANGER = 10.0          # cradle hanger boss section
+# 2026-11-01: the cargo battery cradle is RETIRED -- both packs ride the twin
+# pack tray in the head (tools/twin_head_pack_fit.py, plan 003 R10).  Its four
+# roof hangers + M3 pilots are no longer built; the published shell had open
+# roof holes at their stations (Y 255.7 / 385.7, X +-18), found by
+# tools/assembly_integrity_check.py.
+CARGO_CRADLE = False
 T5_PEDESTAL = 10.0        # winch pedestal boss section (Phase 7 reserve)
 T5_M3_D = 4.1             # heat-set pilot (RX-M3x5.7) -- same as BOSS_BORE_D
 T5_M25_D = 3.5            # heat-set pilot (RX-M2.5) for the Observer tray bosses
@@ -1864,9 +1874,10 @@ def build_negatives(shell_tm, envelope_tm=None):
     # --- Rev T5 ---------------------------------------------------------------
     cutters.extend(t5_bracket_feet_bores())
     notes.append("T5 tilt-bracket foot M3 pilots (6)")
-    _p, n = t5_cradle_hangers()
-    cutters.extend(n)
-    notes.append("T5 battery-cradle hanger M3 pilots (4)")
+    if CARGO_CRADLE:
+        _p, n = t5_cradle_hangers()
+        cutters.extend(n)
+        notes.append("T5 battery-cradle hanger M3 pilots (4)")
     _p, n = t5_winch_pedestals()
     cutters.extend(n)
     notes.append("T5 winch pedestal M3 pilots (2, Phase 7 reserve)")
@@ -1941,9 +1952,10 @@ def build_positives(shell_tm, envelope_tm=None):
     notes.append(lg_note)
 
     # --- Rev T5 ---------------------------------------------------------------
-    p, _n = t5_cradle_hangers()
-    feats.extend(p)
-    notes.append("T5 battery-cradle roof hangers (4)")
+    if CARGO_CRADLE:
+        p, _n = t5_cradle_hangers()
+        feats.extend(p)
+        notes.append("T5 battery-cradle roof hangers (4)")
     p, _n = t5_winch_pedestals()
     feats.extend(p)
     notes.append("T5 winch pedestal columns (2, Phase 7 reserve)")
@@ -2224,6 +2236,73 @@ def finalize_watertight(mesh):
     return mesh
 
 
+ENFORCED_APERTURES = ("cargo_aft",)
+SLIT_MAX_EDGES = 400  # largest boundary loop treated as a float32 round-trip slit
+
+
+def fill_roundtrip_slits(m):
+    """Close the small boundary loops the float32 round-trip leaves where the
+    starboard gear-bay seats run near-coincident with the skin (WBS
+    MERGE-FINALIZE-NM; 2026-11-01 rebuild left two: a 62 mm slit at the
+    aft-stbd seat and a 20 mm loop at the fore-stbd seat).  Only loops of at
+    most SLIT_MAX_EDGES edges are filled (MeshFix fill_small_boundaries); a
+    larger loop is a real aperture and is left for ensure_open/verify to
+    report.  No-op on a watertight mesh."""
+    if m.is_watertight:
+        return m
+    import pymeshfix
+    tin = pymeshfix.PyTMesh()
+    tin.load_array(np.asarray(m.vertices, float), np.asarray(m.faces, np.int32))
+    n = tin.fill_small_boundaries(nbe=SLIT_MAX_EDGES, refine=True)
+    v, f = tin.return_arrays()
+    out = trimesh.Trimesh(v, f, process=True)
+    print(f"  fill_roundtrip_slits: filled {n} small boundary loop(s); "
+          f"watertight={out.is_watertight}")
+    return out
+
+
+def _reopen_with_cleanup(m, aperture, exc):
+    """Fallback when omf.ensure_open's plug cut leaves a second body and a
+    single non-manifold edge (2026-11-01 rebuild): the same plug cut, keep the
+    largest body, refill of the faces on non-manifold edges, then the SAME acceptance as ensure_open --
+    watertight, one body, no boundary or non-manifold edges, face open.  Any
+    miss re-raises the original error."""
+    import pymeshfix
+    ap = omf.APERTURES[aperture]
+    opened, new_face = omf.open_plug(m, ap["face_y"], ap["keep_sign"], ap["clean_y"])
+    if opened is None:
+        raise exc
+    opened.merge_vertices()
+    opened = max(opened.split(only_watertight=False), key=lambda b: len(b.faces))
+    # local fix (a global MeshFix repair of the 1.1M-face shell ran out of
+    # memory): drop only the faces on non-manifold edges, then refill those
+    # small holes with the same targeted loop filler as the round-trip slits
+    e, cnt = np.unique(np.sort(opened.edges, axis=1), axis=0, return_counts=True)
+    bad = {tuple(r) for r in e[cnt > 2]}
+    fe = np.sort(np.stack([opened.faces[:, [0, 1]], opened.faces[:, [1, 2]],
+                           opened.faces[:, [2, 0]]], axis=1), axis=2)
+    drop = np.array([any(tuple(x) in bad for x in tri) for tri in fe])
+    opened.update_faces(~drop)
+    opened.remove_unreferenced_vertices()
+    tin = pymeshfix.PyTMesh()
+    tin.load_array(np.asarray(opened.vertices, float), np.asarray(opened.faces, np.int32))
+    tin.fill_small_boundaries(nbe=SLIT_MAX_EDGES, refine=True)
+    v, f = tin.return_arrays()
+    fixed = trimesh.Trimesh(v, f, process=True)
+    ec = np.bincount(fixed.edges_unique_inverse, minlength=len(fixed.edges_unique))
+    bnd, nm = int((ec == 1).sum()), int((ec > 2).sum())
+    bodies = len(fixed.split(only_watertight=False))
+    cav = omf.inner_cavity(fixed, ap["clean_y"])
+    pts = omf._sample_points_in_poly(cav.buffer(omf.PLUG_GROW)) if cav is not None else None
+    capped = omf.is_capped(fixed, new_face, ap["keep_sign"], omf.DEFAULT_PROBE, pts)
+    if not (fixed.is_watertight and bnd == 0 and nm == 0 and bodies == 1 and not capped):
+        raise RuntimeError(f"{aperture}: fallback reopen failed (watertight="
+                           f"{fixed.is_watertight} bodies={bodies} boundary={bnd} "
+                           f"nonman={nm} capped={capped})") from exc
+    return fixed, True, (f"{aperture}: reopened via fallback (plug + largest body + "
+                         f"local non-manifold refill); faces {len(fixed.faces):,}")
+
+
 def repair_exported(out_path):
     """Reload the exported cargo STL, weld+clean it to a watertight single body,
     and re-stamp the HULL-FRAME marker.  Runs WITHOUT Blender, so it serves both
@@ -2235,6 +2314,7 @@ def repair_exported(out_path):
     m.merge_vertices()
     print(f"  reloaded+welded: watertight={m.is_watertight} faces={len(m.faces):,}")
     m = finalize_watertight(m)
+    m = fill_roundtrip_slits(m)
 
     # Allowlist enforcement (2026-09-05): finalize_watertight()'s fill_holes()
     # fallback cannot tell the cargo_fwd/cargo_aft mating apertures apart from
@@ -2243,8 +2323,17 @@ def repair_exported(out_path):
     # as the LAST step before this function's own write — see
     # tools/open_mating_faces.py for why this must be enforced here rather
     # than trusted to survive the repair pass above.
-    for aperture in ("cargo_fwd", "cargo_aft"):
-        m, changed, note = omf.ensure_open(m, aperture)
+    # 2026-11-01: cargo_fwd is NOT enforced any more -- the head/cargo joint is
+    # rebuilt from the source operands by tools/merge_head_cargo_shell.py (the
+    # one-piece head+cargo print; the head/cargo collar is retired), so the
+    # cargo shell's forward face never reaches a printed part.  Its plug
+    # reopen also leaves 1 non-manifold edge on the rebuilt shell.  cargo_aft
+    # still mates to the cargo/middle collar and stays enforced.
+    for aperture in ENFORCED_APERTURES:
+        try:
+            m, changed, note = omf.ensure_open(m, aperture)
+        except RuntimeError as exc:
+            m, changed, note = _reopen_with_cleanup(m, aperture, exc)
         print(f"  {note}")
         if changed:
             m.merge_vertices()

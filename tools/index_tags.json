@@ -2729,6 +2729,46 @@
       ],
       "archived": false
     },
+    "airframe/stls/fuselage/head/bay_a_cn1_drawer.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head/bay_a_cn1_gate.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head/bay_a_fc1_shelf.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head/bay_a_hatch_cover.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head/bay_a_hatch_flange.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/fuselage/head/bow_sensor_bay_insert.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Bow_Sensor_Bay_Insert",
       "tags": [
@@ -2788,6 +2828,14 @@
     },
     "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 head+cargo merged (merge_head_cargo_shell.py)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/fuselage/head_cargo_shell24_2mm_merged_hatch.stl": {
+      "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -14680,6 +14728,20 @@
       ],
       "archived": false
     },
+    "docs/BAY_A_FWD_LAYOUT.md": {
+      "description": "Bay A Forward \u2014 Layout, Mounts, Routes, and Access",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/BAY_A_FWD_THERMAL.md": {
+      "description": "Bay A Forward \u2014 Thermal Budget and Controls",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/BHD02_OPTION_STUDY.md": {
       "description": "BHD-02 Option Study \u2014 Landing-Gear Bays vs Wing Root",
       "tags": [
@@ -16077,6 +16139,13 @@
     },
     "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_side_penetrations_clear.png": {
       "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md": {
+      "description": "Bay A Forward Adoption - Plan",
       "tags": [
         "documentation"
       ],
@@ -19332,6 +19401,13 @@
       ],
       "archived": false
     },
+    "tools/assembly_integrity_check.py": {
+      "description": "assembly_integrity_check.py -- find rogue openings in the assembled hull",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/auw_ledger.py": {
       "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
       "tags": [
@@ -19341,6 +19417,13 @@
     },
     "tools/bake_hull_frame.py": {
       "description": "bake_hull_frame.py \u2014 bake validated FreeCAD placements into STL files.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/bay_a_thermal_budget.py": {
+      "description": "bay_a_thermal_budget.py -- lumped thermal budget for the enclosed Bay A",
       "tags": [
         "build-tooling"
       ],
@@ -19443,6 +19526,21 @@
     },
     "tools/cargo_layout_fit.py": {
       "description": "Python script",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/cargo_observer_sensor_fit.py": {
+      "description": "cargo_observer_sensor_fit.py -- place the cargo Observer's remote sensor",
+      "tags": [
+        "build-tooling",
+        "sensors-vision"
+      ],
+      "archived": false
+    },
+    "tools/cfd_internal_air_domain.py": {
+      "description": "cfd_internal_air_domain.py -- voxel air domain of the fuselage interior for",
       "tags": [
         "build-tooling"
       ],
@@ -19584,6 +19682,13 @@
       ],
       "archived": false
     },
+    "tools/gen_bay_a_fwd_mounts.py": {
+      "description": "gen_bay_a_fwd_mounts.py -- Bay A forward node mounts and the canonical",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/gen_build_guide_cards.py": {
       "description": "ruff: noqa: C408, ISC004 -- dict() keeps the CARDS table readable as keyword",
       "tags": [
@@ -19631,7 +19736,7 @@
       "archived": false
     },
     "tools/head_layout_fit.py": {
-      "description": "head_layout_fit.py -- single source of head-section equipment stations, and",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
@@ -19996,6 +20101,13 @@
       ],
       "archived": false
     },
+    "tools/node_thermal_forced_air.py": {
+      "description": "node_thermal_forced_air.py -- forced-air thermal budget for every CN/FC",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nozzle_linkage_check.py": {
       "description": "Python script",
       "tags": [
@@ -20200,6 +20312,27 @@
     },
     "tools/tail_strike_requirement.py": {
       "description": "tail_strike_requirement.py -- 4 ft drop tail strike on the aft skids, and the",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_bay_a_fwd_mounts.py": {
+      "description": "test_bay_a_fwd_mounts.py -- Bay A forward mounts and hatch (plan",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_bay_a_fwd_routes.py": {
+      "description": "test_bay_a_fwd_routes.py -- Bay A forward harness route table (plan",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_bay_a_thermal_budget.py": {
+      "description": "test_bay_a_thermal_budget.py -- lumped thermal network for the Bay A",
       "tags": [
         "build-tooling"
       ],
@@ -20505,6 +20638,8 @@
       "docs/BATTERY_MOUNT.md",
       "docs/BATTERY_SPLIT_OPTIONS.md",
       "docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md",
+      "docs/BAY_A_FWD_LAYOUT.md",
+      "docs/BAY_A_FWD_THERMAL.md",
       "docs/BHD02_OPTION_STUDY.md",
       "docs/CARGO_BULKHEAD_FIT_CHECK.md",
       "docs/CARGO_DOOR_GATEWAY_SPEC.md",
@@ -20689,6 +20824,7 @@
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_quarter_wing.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_quarter_wing_cf.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_side_penetrations_clear.png",
+      "docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md",
       "docs/plans/2026-11-01-001-feat-canonical-gear-box-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -21778,6 +21914,11 @@
       "airframe/stls/fuselage/dorsal_antenna_fin.stl",
       "airframe/stls/fuselage/generate_conforming_collars.py",
       "airframe/stls/fuselage/generate_wing_root_flange.py",
+      "airframe/stls/fuselage/head/bay_a_cn1_drawer.stl",
+      "airframe/stls/fuselage/head/bay_a_cn1_gate.stl",
+      "airframe/stls/fuselage/head/bay_a_fc1_shelf.stl",
+      "airframe/stls/fuselage/head/bay_a_hatch_cover.stl",
+      "airframe/stls/fuselage/head/bay_a_hatch_flange.stl",
       "airframe/stls/fuselage/head/bow_sensor_bay_insert.stl",
       "airframe/stls/fuselage/head/head_cell_catch.stl",
       "airframe/stls/fuselage/head/head_cell_rail.stl",
@@ -21786,6 +21927,7 @@
       "airframe/stls/fuselage/head/twin_pack_sled.stl",
       "airframe/stls/fuselage/head/twin_pack_tray.stl",
       "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl",
+      "airframe/stls/fuselage/head_cargo_shell24_2mm_merged_hatch.stl",
       "airframe/stls/fuselage/head_cargo_splice_collar.stl",
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
@@ -22111,6 +22253,11 @@
       "airframe/stls/fuselage/cargo/void_former_cargo_node_bay.stl",
       "airframe/stls/fuselage/cargo_middle_splice_collar.stl",
       "airframe/stls/fuselage/dorsal_antenna_fin.stl",
+      "airframe/stls/fuselage/head/bay_a_cn1_drawer.stl",
+      "airframe/stls/fuselage/head/bay_a_cn1_gate.stl",
+      "airframe/stls/fuselage/head/bay_a_fc1_shelf.stl",
+      "airframe/stls/fuselage/head/bay_a_hatch_cover.stl",
+      "airframe/stls/fuselage/head/bay_a_hatch_flange.stl",
       "airframe/stls/fuselage/head/bow_sensor_bay_insert.stl",
       "airframe/stls/fuselage/head/head_cell_catch.stl",
       "airframe/stls/fuselage/head/head_cell_rail.stl",
@@ -22119,6 +22266,7 @@
       "airframe/stls/fuselage/head/twin_pack_sled.stl",
       "airframe/stls/fuselage/head/twin_pack_tray.stl",
       "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl",
+      "airframe/stls/fuselage/head_cargo_shell24_2mm_merged_hatch.stl",
       "airframe/stls/fuselage/head_cargo_splice_collar.stl",
       "airframe/stls/fuselage/head_shell24.stl",
       "airframe/stls/fuselage/head_shell24_2mm_repaired.stl",
@@ -22710,7 +22858,8 @@
       "avionics/kicad/Observer/kicads/Jayne.kicad_sch.pre-g351x",
       "avionics/kicad/add_sensors_sbus.py",
       "docs/OBSERVER_LASER_ANALYSIS.md",
-      "graphical-build-guide/build_guide_22_obstacle_sensors.svg"
+      "graphical-build-guide/build_guide_22_obstacle_sensors.svg",
+      "tools/cargo_observer_sensor_fit.py"
     ],
     "bom": [
       "airframe/diagrams/ring_frames/ring_cargo_Y30_inner.csv",
@@ -25406,8 +25555,10 @@
       "tools/aft_section_mass_audit.py",
       "tools/aft_skin_thinning_study.py",
       "tools/airframe_interface_census.py",
+      "tools/assembly_integrity_check.py",
       "tools/auw_ledger.py",
       "tools/bake_hull_frame.py",
+      "tools/bay_a_thermal_budget.py",
       "tools/bhd02_option_study.py",
       "tools/bhd10_aft_strip_options.py",
       "tools/bom_edit_door_gateway.py",
@@ -25421,6 +25572,8 @@
       "tools/cargo_bay_envelope.py",
       "tools/cargo_bulkhead_context.py",
       "tools/cargo_layout_fit.py",
+      "tools/cargo_observer_sensor_fit.py",
+      "tools/cfd_internal_air_domain.py",
       "tools/cg_mass_reduction_study.py",
       "tools/cg_relocation_study.py",
       "tools/check_datum_drift.py",
@@ -25440,6 +25593,7 @@
       "tools/flight_envelope_endurance.py",
       "tools/frame_inventory.py",
       "tools/gear_box_concept_fit.py",
+      "tools/gen_bay_a_fwd_mounts.py",
       "tools/gen_build_guide_cards.py",
       "tools/gen_cargo_void_formers.py",
       "tools/gen_head_cell_rail.py",
@@ -25493,6 +25647,7 @@
       "tools/nacelle_mass_cg_64.py",
       "tools/nacelle_tilt_dynamics.py",
       "tools/nacelle_trunnion_fit.py",
+      "tools/node_thermal_forced_air.py",
       "tools/nozzle_linkage_check.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
@@ -25521,6 +25676,9 @@
       "tools/spar_bundle_fit.py",
       "tools/stitch_vias.py",
       "tools/tail_strike_requirement.py",
+      "tools/tests/test_bay_a_fwd_mounts.py",
+      "tools/tests/test_bay_a_fwd_routes.py",
+      "tools/tests/test_bay_a_thermal_budget.py",
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",

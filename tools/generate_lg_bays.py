@@ -202,8 +202,15 @@ def build_corner(label: str, c: list[float], env: Manifold, keep: Manifold,
                 break
             dv += step
             if abs(dv) > BOLT_SLIDE_MAX:
-                raise RuntimeError(f"{label}: bolt ({u0:+.1f},{v0:+.1f}) finds no seat "
-                                   f"within {BOLT_SLIDE_MAX} mm")
+                k0 = bolt_cyl(org, ex, ey, ez, u0, v0, BOLT_KEEP_D)
+                c0 = np.asarray(org) + u0 * np.asarray(ex) + v0 * np.asarray(ey)
+                raise RuntimeError(
+                    f"{label}: bolt ({u0:+.1f},{v0:+.1f}) at R2 ({c0[0]:.1f}, {c0[1]:.1f}, "
+                    f"{c0[2]:.1f}) finds no seat within {BOLT_SLIDE_MAX} mm; at nominal: "
+                    f"keep-out clash {(k0 ^ keep).volume():.2f} (<= 0.05), hardware vs "
+                    f"removable {((k0 ^ hw_layer) ^ removable).volume():.2f} (<= 0.05), "
+                    f"flange {(k0 ^ flange).volume():.2f} (>= {BOLT_MIN_FLANGE}), "
+                    f"collar {(k0 ^ collar).volume():.2f} (>= {BOLT_MIN_COLLAR})")
         bolts.append((round(float(u), 2), round(float(v), 2)))
         if dv:
             moved.append(dict(nominal=(u0, v0), to=bolts[-1], slid_mm=abs(dv)))
