@@ -16724,6 +16724,30 @@
       ],
       "archived": false
     },
+    "docs/references/qmx-bp-exports/QMx-BPrefpack-16.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/QMx-BPrefpack-23.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/QMx-BPrefpack-30.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
     "docs/references/qmx-bp-exports/qmx-bp-00.jpg": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -16997,6 +17021,14 @@
       "archived": false
     },
     "docs/references/qmx-bp-exports/qmx-bp-32.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bprefpack-03.jpg": {
       "description": "Rendered image / reference photo",
       "tags": [
         "documentation",
@@ -21064,6 +21096,9 @@
       "docs/references/nick-henning/top-view-with-wireframe-henning.jpg",
       "docs/references/open-source-hardware-checklist.pdf",
       "docs/references/pocketbeagle2 revA_241205.brd",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-16.jpg",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-23.jpg",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-30.jpg",
       "docs/references/qmx-bp-exports/qmx-bp-00.jpg",
       "docs/references/qmx-bp-exports/qmx-bp-01.jpg",
       "docs/references/qmx-bp-exports/qmx-bp-02.jpg",
@@ -21099,6 +21134,7 @@
       "docs/references/qmx-bp-exports/qmx-bp-30.jpg",
       "docs/references/qmx-bp-exports/qmx-bp-31.jpg",
       "docs/references/qmx-bp-exports/qmx-bp-32.jpg",
+      "docs/references/qmx-bp-exports/qmx-bprefpack-03.jpg",
       "docs/references/qx-motor 64mm edf/64_2822-2300KV_00.png",
       "docs/references/qx-motor 64mm edf/7-2.jpg",
       "docs/references/qx-motor 64mm edf/8-4.jpg",
@@ -21720,6 +21756,9 @@
       "docs/references/nick-henning/top-view-with-wireframe-henning.jpg",
       "docs/references/open-source-hardware-checklist.pdf",
       "docs/references/pocketbeagle2 revA_241205.brd",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-16.jpg",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-23.jpg",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-30.jpg",
       "docs/references/qmx-bp-exports/qmx-bp-00.jpg",
       "docs/references/qmx-bp-exports/qmx-bp-01.jpg",
       "docs/references/qmx-bp-exports/qmx-bp-02.jpg",
@@ -21755,6 +21794,7 @@
       "docs/references/qmx-bp-exports/qmx-bp-30.jpg",
       "docs/references/qmx-bp-exports/qmx-bp-31.jpg",
       "docs/references/qmx-bp-exports/qmx-bp-32.jpg",
+      "docs/references/qmx-bp-exports/qmx-bprefpack-03.jpg",
       "docs/references/qx-motor 64mm edf/64_2822-2300KV_00.png",
       "docs/references/qx-motor 64mm edf/7-2.jpg",
       "docs/references/qx-motor 64mm edf/8-4.jpg",
