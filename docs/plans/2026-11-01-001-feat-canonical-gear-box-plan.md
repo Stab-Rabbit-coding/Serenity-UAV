@@ -155,3 +155,36 @@ that lands, or rebase onto it.
 3. **D3 — box as hull vs. separate part.**  The box can be merged into the
    one-piece SLS forward hull (fewer joints, mass to be measured) or printed
    as a bolt-on per side (serviceable, adds a seam).
+
+## Fore CF plates flush — packaging study (2026-11-01)
+
+Owner: "Reshape the cf plates to be flush.  For the parts of the hull that
+can't exactly be canon, try to match the character of the ship."  The
+"character" requirement is now in root `AGENTS.md` ("Airframe geometry").
+
+**Forward fairing (added).**  Ahead of the door aperture, the box's inboard
+edge comes in to X 36 (`BOX_X_IN_FWD`, Y 262–302), and its 45° top runs on
+into the upper skin.  The open notch behind the bridge neck becomes a
+faceted cheek block in the gear box's own chamfered vocabulary.  It is
+clear of the wing, the flange and every penetration.
+
+**Strut sweep, fore-port.**  Reach 55 mm is fixed by the fuse gauge.  The
+hip mask is r 18 mm, as the census masks the open well.  Scripts:
+`2026-11-01-001-canonical-gear-box/tools/`.
+
+| Strut az | Proud of OML (mm³) | Wall (mm³) | Keep-outs hit (mm³) |
+|---|---|---|---|
+| 65 (current) | 6,826 | 569 | none |
+| 80 | 2,674 | 985 | none |
+| 95 | 257 | 56 | TACCO CN2 port 1,370; chin shelf 98 |
+| 110 | 164 | 101 | TACCO CN2 2,487; chin shelf 256; payload 295 |
+| 125 | 32 | 69 | TACCO CN2 3,719; chin shelf 401; payload 2,471 |
+
+No reach from 25 to 55 mm passes at any azimuth from −40° to 200°.  The
+only flush direction, up and inboard (95–110°), is occupied by the TACCO
+CN2 port chin pouch.  **Owner decision D4** (see the session report)
+chooses among:
+
+- moving the pouch;
+- a shorter fuse;
+- a faceted housing ahead of the wing LE.

@@ -79,20 +79,40 @@ SLOT_FLARE_L   = 70.0;    // mm down the thigh over which the flare runs
 function unit(v) = v / norm(v);
 THIGH_ANG = atan2(-KNEE_L[2], KNEE_L[0]);   // 48.2 deg below local +x
 
-module section(xs) {
-    // xs scales the section outboard of BOX_X_IN (end tapers)
+module section(xs, xin = BOX_X_IN) {
+    // xs scales the section outboard of BOX_X_IN (end tapers); xin is the
+    // inboard edge (BOX_X_IN where the doors are, BOX_X_IN_FWD ahead of them)
     function sx(x) = BOX_X_IN + (x - BOX_X_IN) * xs;
-    polygon([[BOX_X_IN, BOX_Z_BOT], [sx(BOX_X_CHINE_B), BOX_Z_BOT],
+    polygon([[xin, BOX_Z_BOT], [sx(BOX_X_CHINE_B), BOX_Z_BOT],
              [sx(BOX_X_FACE_B), BOX_Z_CHINE], [sx(BOX_X_FACE_T), BOX_Z_TOP],
-             [BOX_X_IN, BOX_Z_TOP + (sx(BOX_X_FACE_T) - BOX_X_IN) * tan(TOP_SLOPE)]]);
+             [xin, BOX_Z_TOP + (sx(BOX_X_FACE_T) - xin) * tan(TOP_SLOPE)]]);
 }
 
-module slab(y, xs, zlift = 0) {
+module slab(y, xs, zlift = 0, xin = BOX_X_IN) {
     // a 0.01 mm slab of the section at station y; zlift raises the bottom
     translate([0, y, 0]) rotate([90, 0, 0])
         linear_extrude(0.01, center = true)
-            intersection() { section(xs);
+            intersection() { section(xs, xin);
                              translate([0, BOX_Z_BOT + zlift]) square([200, 200]); }
+}
+
+// Forward fairing (2026-11-01, owner: CF plates FLUSH; where canon cannot be
+// exact, match the ship's character).  The fore hip sits at the box's
+// inboard edge, in the concave notch behind the bridge neck (hull open
+// between Z ~100 and ~150 at Y 280-300, X 41-56).  No strut azimuth packages
+// the 55 mm A1B members there flush (sweep 2026-11-01, plan U3).  Ahead of
+// the door aperture (Y 304.7) the box no longer has to clear the doors, so
+// its inboard edge comes in to BOX_X_IN_FWD and its 45 deg top runs on into
+// the upper hull skin -- the notch becomes a faceted cheek block, the same
+// chamfered vocabulary as the Henning gear box, instead of an open pocket.
+BOX_X_IN_FWD = 36.0;      // mm, meets the lower-flank wall (X 36-54 at Y 280-300)
+Y_FAIR_AFT   = 302.0;     // mm, 2.7 mm ahead of the door aperture (304.7)
+
+module fore_fairing() {
+    hull() {
+        slab(Y_FWD_TIP, 0.55, 18, BOX_X_IN_FWD);
+        slab(Y_FAIR_AFT, 1.0, 0, BOX_X_IN_FWD);
+    }
 }
 
 module box_envelope() {
@@ -160,6 +180,7 @@ module gear_box_port() {
     difference() {
         union() {
             box_envelope();
+            fore_fairing();
             pillar(FORE);
             pillar(AFT);
         }
