@@ -64,3 +64,7 @@ avionics/datasheets/ti/spruiv7c.pdf
 
 # Pilot placement/routing trial runs (refloorplan_keep_copper.sh <in> <workdir>), 2026-10-19
 /avionics/kicad/Pilot/work/
+
+# Fused forward hull exceeds GitHub 100 MB; committed as .stl.tar.gz (owner 2026-11-02).
+# Regenerate: tools/merge_head_cargo_shell.py, or unpack the tarball.
+airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl

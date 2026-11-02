@@ -164,6 +164,14 @@ def main():
         fl = man(trimesh.load(os.path.join(FSTL, f"wing_root_flange_{side}.stl")))
         part = part + fl
         print(f"wing-root flange {side} fused: {fl.volume() / 1e3:.2f} cm3")
+    # Canonical landing-gear box FUSED as skin (owner 2026-11-01, plan
+    # 2026-11-01-001 U3): box walls only outside the old hull, the old flank
+    # skin inside the box opened so the cavity drains, the new fore swing
+    # plane cleared; flanges and wing-root penetrations protected.
+    import gear_box_hull_merge as gbm  # noqa: PLC0415
+    part, rep = gbm.fuse(part)
+    print("gear box fused: " + ", ".join(
+        f"{k} {v:.2f}" if isinstance(v, float) else f"{k} {v}" for k, v in rep.items()))
     tm = seam.tm_of(part)   # no merge_vertices(): welding the loft caps folded 6 edges (2026-11-01 merge)
     bodies = tm.split(only_watertight=False)
     big = [b for b in bodies if len(b.faces) > 200]
@@ -196,6 +204,14 @@ def main():
     tm = seam.weld_clean(seam.separate_f32_collisions(tm))
     hdr = (bk.MARKER + b" head+cargo merged (merge_head_cargo_shell.py)").ljust(80, b" ")[:80]
     bk.write_stl_binary(OUT, np.asarray(tm.triangles), hdr)
+    # Owner 2026-11-02: the fused hull (115 MB with the gear box) exceeds
+    # GitHub's 100 MB file limit, so the repo carries it as a gzip tarball
+    # (~51 MB); the raw .stl is gitignored.  Unpack with:
+    #     tar -xzf airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl.tar.gz \
+    #         -C airframe/stls/fuselage
+    import tarfile  # noqa: PLC0415
+    with tarfile.open(OUT + ".tar.gz", "w:gz") as tz:
+        tz.add(OUT, arcname=os.path.basename(OUT))
     back = trimesh.load(OUT)
     _, cnt = np.unique(np.sort(back.edges, axis=1), axis=0, return_counts=True)
     ok = back.is_watertight and (cnt != 2).sum() == 0

@@ -31,7 +31,12 @@
 // Stab-Rabbit-coding, per AGENTS.md AI attribution.
 // License: CERN-OHL-P-2.0 (hardware source) -- see repo LICENSE files.
 
-PART = "both";          // "port" | "stbd" | "both"
+PART = "both";          // "port" | "stbd" | "both" | "envelope_port"
+// INSET > 0 builds the INNER solid of the same box (every face moved in by
+// INSET, slots and panel recesses grown by INSET so they keep their walls):
+// box skin = (PART "port", INSET 0) - (PART "port", INSET = WALL).  Set with
+// -D INSET=2 by tools/gear_box_hull_merge.py (2 mm = the hull skin).
+INSET = 0;
 include <../hull_datums.scad>   // X_CL etc. (GENERATED from tools/hull_datums.py)
 
 // [hip_x, hip_y, hip_z, swing_azimuth_deg] -- port rows, R2
@@ -83,7 +88,7 @@ module section(xs, xin = BOX_X_IN, slope = TOP_SLOPE) {
     // xs scales the section outboard of BOX_X_IN (end tapers); xin is the
     // inboard edge (BOX_X_IN where the doors are, BOX_X_IN_FWD ahead of them)
     function sx(x) = BOX_X_IN + (x - BOX_X_IN) * xs;
-    polygon([[xin, BOX_Z_BOT], [sx(BOX_X_CHINE_B), BOX_Z_BOT],
+    offset(delta = -INSET) polygon([[xin, BOX_Z_BOT], [sx(BOX_X_CHINE_B), BOX_Z_BOT],
              [sx(BOX_X_FACE_B), BOX_Z_CHINE], [sx(BOX_X_FACE_T), BOX_Z_TOP],
              [xin, BOX_Z_TOP + (sx(BOX_X_FACE_T) - xin) * tan(slope)]]);
 }
@@ -149,15 +154,15 @@ module pillar(c) {
     // is a proud band on the box faces and its mouth lands ON the box (canon:
     // the thigh emerges from the support where it meets the hull -- no gap).
     intersection() {
-        minkowski() { box_envelope(); cube(2 * PIL_PROUD, center = true); }
+        minkowski() { box_envelope(); cube(2 * max(PIL_PROUD - INSET, 0.01), center = true); }
         pillar_raw(c);
     }
 }
 
 module pillar_raw(c) {
     at_corner(c) rotate([0, THIGH_ANG, 0])
-        translate([-PIL_UP, -PIL_W_PIN / 2, -PIL_W_SWING / 2])
-            cube([PIL_UP + PIL_DOWN, PIL_W_PIN, PIL_W_SWING]);
+        translate([-PIL_UP, -PIL_W_PIN / 2 + INSET, -PIL_W_SWING / 2 + INSET])
+            cube([PIL_UP + PIL_DOWN, PIL_W_PIN - 2 * INSET, PIL_W_SWING - 2 * INSET]);
 }
 
 // Fore leg-support housing (2026-11-01).  With the fore swing azimuth at -65
@@ -173,7 +178,7 @@ A1B_REACH_C   = 55.0;     // = A1B_REACH
 A1B_CRANK_C   = 10.0;     // = A1B_CRANK_R
 A1B_BOSS_R    = (4.0 + 10) / 2;   // = (A1B_PIN_D + 10) / 2
 A1B_CHEEK_OUT = 14 / 2 + 0.5 + 3.18;  // outer face of a cheek = CHEEK_Y + PLATE_T/2
-HSG_CLR       = 2.0;      // mm, housing wall clearance to the plate
+HSG_CLR       = 3.0;      // mm, housing OUTER face to the plate: 2 mm wall + 1 mm clearance
 
 function azv2(a) = [cos(a), sin(a)];
 
@@ -181,14 +186,14 @@ function azv2(a) = [cos(a), sin(a)];
 // housing still contains the plate: chamfered corners, the gear box's own
 // vocabulary -- a round-topped housing read as foreign to the ship.
 module hsg_facet() {
-    rotate(22.5) circle(r = (A1B_BOSS_R + HSG_CLR) / cos(22.5), $fn = 8);
+    rotate(22.5) circle(r = (A1B_BOSS_R + HSG_CLR - INSET) / cos(22.5), $fn = 8);
 }
 
 module strut_housing(c, saz) {
     u = azv2(saz); n = azv2(saz - 90);
     at_corner(c)
         rotate([90, 0, 0])
-            linear_extrude(2 * (A1B_CHEEK_OUT + HSG_CLR), center = true)
+            linear_extrude(2 * (A1B_CHEEK_OUT + HSG_CLR - INSET), center = true)
                 hull() {
                     hsg_facet();
                     for (sg = [-1, 1])
@@ -209,19 +214,19 @@ module slot_trapezoid() {
     // slot section along the thigh: SLOT_PIN wide at the hip, flaring to
     // SLOT_PIN_MOUTH at SLOT_FLARE_L, then straight out past the box
     hull() {
-        translate([-12, -SLOT_PIN / 2, -SLOT_SWING / 2])
-            cube([0.01, SLOT_PIN, SLOT_SWING]);
-        translate([SLOT_FLARE_L, -SLOT_PIN_MOUTH / 2, -SLOT_SWING / 2])
-            cube([90, SLOT_PIN_MOUTH, SLOT_SWING]);
+        translate([-12 - INSET, -SLOT_PIN / 2 - INSET, -SLOT_SWING / 2 - INSET])
+            cube([0.01, SLOT_PIN + 2 * INSET, SLOT_SWING + 2 * INSET]);
+        translate([SLOT_FLARE_L, -SLOT_PIN_MOUTH / 2 - INSET, -SLOT_SWING / 2 - INSET])
+            cube([90, SLOT_PIN_MOUTH + 2 * INSET, SLOT_SWING + 2 * INSET]);
     }
 }
 
 module recess_panel(y0, y1) {
     // shallow canonical panel recess in the outboard face
-    translate([BOX_X_FACE_T - 1.2, y0, BOX_Z_CHINE + 4])
+    translate([BOX_X_FACE_T - 1.2 - INSET, y0 - INSET, BOX_Z_CHINE + 4 - INSET])
         multmatrix([[1, 0, -(BOX_X_FACE_T - BOX_X_FACE_B) / (BOX_Z_TOP - BOX_Z_CHINE), 0],
                     [0, 1, 0, 0], [0, 0, 1, 0]])
-            cube([6, y1 - y0, BOX_Z_TOP - BOX_Z_CHINE - 10]);
+            cube([6, y1 - y0 + 2 * INSET, BOX_Z_TOP - BOX_Z_CHINE - 10 + 2 * INSET]);
 }
 
 module gear_box_port() {
@@ -238,7 +243,7 @@ module gear_box_port() {
         recess_panel(318, 352);     // between the bays, canonical inspection panel
         recess_panel(356, 388);
         // keep everything above the belly plane
-        translate([-500, 0, BOX_Z_BOT - 100]) cube([1000, 1000, 100]);
+        translate([-500, 0, BOX_Z_BOT + INSET - 100]) cube([1000, 1000, 100]);
     }
 }
 
@@ -249,5 +254,8 @@ module mirror_cl() {
 // "envelope_port": the outer mold line only (no slots / panel recesses) --
 // the reference a part must sit inside to be FLUSH (plan U3 flush check).
 if (PART == "envelope_port") union() { box_envelope(); fore_fairing(); strut_housing(FORE, FORE_STRUT_AZ); pillar(FORE); pillar(AFT); }
+// "slots_port": the two swept leg paths alone -- the hull merge clears them
+// through any OLD hull material the new swing planes cross.
+if (PART == "slots_port") { swing_slot(FORE); swing_slot(AFT); }
 if (PART == "port" || PART == "both") gear_box_port();
 if (PART == "stbd" || PART == "both") mirror_cl() gear_box_port();

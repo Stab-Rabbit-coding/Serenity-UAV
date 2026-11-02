@@ -76,37 +76,57 @@ def shifted(m: Manifold, offsets) -> Manifold:
     return Manifold.batch_boolean([m.translate(o) for o in offsets], 0)  # 0 = union
 
 
-def main(out_dir: str) -> int:
-    os.makedirs(out_dir, exist_ok=True)
-    raw = os.path.join(out_dir, "gear_box_port_raw.stl")
-    subprocess.run(["openscad", "-D", 'PART="port"', "-o", raw, SCAD],
-                   check=True, capture_output=True)
-    box = to_man(trimesh.load(raw))
+def grow_offsets(c: float):
+    """27 translations (+/-c, 0 per axis): a cheap dilation by ~c of a solid."""
+    return [(dx, dy, dz) for dx in (-c, 0, c) for dy in (-c, 0, c) for dz in (-c, 0, c)]
+
+
+def render_box(out_dir: str, inset: float = 0.0, part: str = "port") -> Manifold:
+    """Render the concept SCAD (port, hull frame R2) as a Manifold."""
+    raw = os.path.join(out_dir, f"gear_box_{part}_inset{inset:g}_raw.stl")
+    subprocess.run(["openscad", "-D", f'PART="{part}"', "-D", f"INSET={inset}",
+                    "-o", raw, SCAD], check=True, capture_output=True)
+    return to_man(trimesh.load(raw))
+
+
+def port_keepouts():
+    """The hull merge's own wing-root penetrations, port side (stbd = mirror)."""
+    return [(lab, to_man(tm)) for lab, tm in mci.wing_keepout_negatives() if "stbd" not in lab]
+
+
+def trim(box: Manifold, extra: float = 0.0, verbose: bool = False) -> Manifold:
+    """Remove the wing shadow, root flange and penetrations from `box`.
+
+    `extra` is added to every clearance: 0 for the OUTER solid; the wall
+    thickness for the INNER solid, so the trimmed skin keeps its wall
+    against every cut face (tools/gear_box_hull_merge.py).
+    """
     wing = to_man(trimesh.load(WING))
     flange = to_man(trimesh.load(FLANGE))
-
-    print(f"box (raw)            {box.volume():10.0f} mm3")
-    print(f"box x wing overlap   {(box ^ wing).volume():10.0f} mm3  (pre-trim)")
-    print(f"box x flange overlap {(box ^ flange).volume():10.0f} mm3  (pre-trim)")
-
+    keeps = port_keepouts()
+    if verbose:
+        print(f"box (raw)            {box.volume():10.0f} mm3")
+        print(f"box x wing overlap   {(box ^ wing).volume():10.0f} mm3  (pre-trim)")
+        print(f"box x flange overlap {(box ^ flange).volume():10.0f} mm3  (pre-trim)")
+        for lab, km in keeps:
+            v = (box ^ km).volume()
+            if v > 0.01:
+                print(f"box x {lab:24s} {v:8.1f} mm3  (pre-trim)")
     n = int(RISE / STEP) + 1
-    shadow = shifted(wing, [(0.0, 0.0, -WING_CLR + k * STEP) for k in range(n)])
-    c = FLANGE_CLR
-    flange_k = shifted(flange, [(dx, dy, dz) for dx in (-c, 0, c)
-                                for dy in (-c, 0, c) for dz in (-c, 0, c)])
-    keeps = [(lab, to_man(tm)) for lab, tm in mci.wing_keepout_negatives()
-             if "stbd" not in lab]                      # port box; stbd = mirror
-    k = KEEP_CLR
-    grow = [(dx, dy, dz) for dx in (-k, 0, k) for dy in (-k, 0, k) for dz in (-k, 0, k)]
-    for lab, km in keeps:
-        v = (box ^ km).volume()
-        if v > 0.01:
-            print(f"box x {lab:24s} {v:8.1f} mm3  (pre-trim)")
-    keep_k = Manifold.batch_boolean([shifted(km, grow) for _l, km in keeps], 0)
+    shadow = shifted(wing, [(0.0, 0.0, -(WING_CLR + extra) + k * STEP) for k in range(n)])
+    flange_k = shifted(flange, grow_offsets(FLANGE_CLR + extra))
+    keep_k = Manifold.batch_boolean([shifted(km, grow_offsets(KEEP_CLR + extra))
+                                     for _l, km in keeps], 0)
     cut = box - shadow - flange_k - keep_k
-
     # drop boolean residue, as generate_lg_bays.py SLIVER_MM3
-    cut = Manifold.batch_boolean([b for b in cut.decompose() if b.volume() >= 1.0], 0)
+    return Manifold.batch_boolean([b for b in cut.decompose() if b.volume() >= 1.0], 0)
+
+
+def main(out_dir: str) -> int:
+    os.makedirs(out_dir, exist_ok=True)
+    cut = trim(render_box(out_dir), verbose=True)
+    wing = to_man(trimesh.load(WING))
+    keeps = port_keepouts()
     bodies = sorted((b.volume() for b in cut.decompose()), reverse=True)
     print(f"box (trimmed)        {cut.volume():10.0f} mm3, bodies {[round(v, 1) for v in bodies]}")
     print(f"trimmed x wing       {(cut ^ wing).volume():10.4f} mm3  (shall be 0)")

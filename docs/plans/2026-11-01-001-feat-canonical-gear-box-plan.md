@@ -272,3 +272,57 @@ it treats the payload as removable.  A CF plate is not removable, so this
 needs its own fix (aft strut azimuth or cheek outline).
 
 Renders: `2026-11-01-001-canonical-gear-box/fore65_port_{bow,quarter,side}.png`.
+
+## U3 — box merged into the one-piece forward hull (2026-11-02)
+
+`tools/gear_box_hull_merge.py`, called by `tools/merge_head_cargo_shell.py`
+after the flanges fuse.  The box goes in as 2 mm skin:
+
+- **New skin:** (Bo − Bi) − O − gear.  Walls exist only outside the old
+  hull, and they clear the real moving gear.
+- **Opening:** ((Bi ∩ O) − I) − protect.  The old flank skin inside the box
+  is opened so the cavity drains SLS powder into the hold.
+- **Leg path:** (slots ∩ O) − protect.
+- **Protect set:** the wing-root flanges, every wing-root penetration, and
+  each bolted bay's seat (footprint + 6 mm).  The bays carry the hip pins.
+
+**Result:**
+
+| Item | Value |
+|---|---|
+| Watertight | yes, 0 bad edges, one body |
+| `assembly_integrity_check.py` | PASS: spar bore and flanges on datum, 0 openings |
+| Net mass | +105.0 cm³ (≈ 116 g / 0.26 lbm PA12-CF): new skin 111.0 cm³, old skin opened 4.6 cm³, leg path 0.26 cm³ |
+| Box-added overlap with the gear | 0.0 mm³ |
+
+The 254 bodies the weld dropped were all ≤ 0.5 mm³ (boolean residue,
+checked).  The first build left 3,354 mm³ of skin in the gear.  The
+"leg (thigh+shin+foot)" feature omits the hip hub, lug and crank horns, so
+the exported `hull_legs` is now part of the gear keep-out.
+
+**Blocker — bolted bays (next).**  Printed bays outside hull ∪ box, mm³:
+
+| Bay | Outside | Into wing | Note |
+|---|---|---|---|
+| fore-port | 843 | 0 | still at the OLD −22.4° orientation |
+| fore-stbd | 1,481 | 0 | still at the OLD −22.4° orientation |
+| aft-port | 313 | 177 | wing clash is LG-AFT-BOLT-01 (wing shift) |
+| aft-stbd | 627 | 177 | wing clash is LG-AFT-BOLT-01 (wing shift) |
+
+The aft-stbd upper corner stands to Z 158, above the box and the wing
+underside (owner, pq_wing.png).  Fix: regenerate with
+`generate_lg_bays.py`, with the box as a keep-in and the fore pair at −65.
+The `hull_legs` render also carries the generic SCAD `bay()` plate, which
+is untrimmed and shows the same protrusion.
+
+**Side load (review item).**  The sizing tool's printed-leg bending
+allowable is 27.5 MPa (CF-PETG yield/2).  Out-of-plane thigh bending at
+308 N/leg, fore −65°, against that allowable:
+
+| Thigh | Bending | Margin |
+|---|---|---|
+| Baseline 2 × Ø14 | ≈ 61 MPa | 0.45× |
+| "Grown" 2 × Ø17 | ≈ 34 MPa | 0.81× |
+
+Both are before combining with the in-plane crash bending.
+`landing_gear_r6_sizing.py` has no out-of-plane thigh check at all.

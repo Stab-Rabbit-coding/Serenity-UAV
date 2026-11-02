@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-01",
+  "generated": "2026-11-02",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -2826,10 +2826,9 @@
       ],
       "archived": false
     },
-    "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 head+cargo merged (merge_head_cargo_shell.py)",
+    "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl.tar.gz": {
+      "description": "q_ \u01e8\u0010Gv\u07a6\u001aZxrx[\u0000e\u0016\u0019\"x\u0019\u0649&fVZ\u001bY~*\u0019:5<\u99a5 ;\u0013\u0014|e",
       "tags": [
-        "cad-mesh",
         "structural"
       ],
       "archived": false
@@ -16193,6 +16192,41 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-11-01-001-canonical-gear-box/merged_bow.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/merged_port.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/merged_port_bow.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/merged_ventral.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/tools/bay_out.py": {
+      "description": "Python script",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/plans/2026-11-01-001-canonical-gear-box/tools/corner_sweep.py": {
       "description": "payload hold: members may not cross into the hoist path either",
       "tags": [
@@ -19780,6 +19814,13 @@
       ],
       "archived": false
     },
+    "tools/gear_box_hull_merge.py": {
+      "description": "Fuse the canonical landing-gear box into the one-piece forward hull as SKIN.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/gen_bay_a_fwd_mounts.py": {
       "description": "gen_bay_a_fwd_mounts.py -- Bay A forward node mounts and the canonical",
       "tags": [
@@ -20929,6 +20970,11 @@
       "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_bow.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_quarter.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_side.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/merged_bow.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/merged_port.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/merged_port_bow.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/merged_ventral.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/tools/bay_out.py",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/corner_sweep.py",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/flush_check.py",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/fore_cheek_sweep.py",
@@ -22038,7 +22084,7 @@
       "airframe/stls/fuselage/head/twin_pack_gate.stl",
       "airframe/stls/fuselage/head/twin_pack_sled.stl",
       "airframe/stls/fuselage/head/twin_pack_tray.stl",
-      "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl",
+      "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl.tar.gz",
       "airframe/stls/fuselage/head_cargo_shell24_2mm_merged_hatch.stl",
       "airframe/stls/fuselage/head_cargo_splice_collar.stl",
       "airframe/stls/fuselage/head_shell24.stl",
@@ -22377,7 +22423,6 @@
       "airframe/stls/fuselage/head/twin_pack_gate.stl",
       "airframe/stls/fuselage/head/twin_pack_sled.stl",
       "airframe/stls/fuselage/head/twin_pack_tray.stl",
-      "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl",
       "airframe/stls/fuselage/head_cargo_shell24_2mm_merged_hatch.stl",
       "airframe/stls/fuselage/head_cargo_splice_collar.stl",
       "airframe/stls/fuselage/head_shell24.stl",
@@ -25705,6 +25750,7 @@
       "tools/flight_envelope_endurance.py",
       "tools/frame_inventory.py",
       "tools/gear_box_concept_fit.py",
+      "tools/gear_box_hull_merge.py",
       "tools/gen_bay_a_fwd_mounts.py",
       "tools/gen_build_guide_cards.py",
       "tools/gen_cargo_void_formers.py",
