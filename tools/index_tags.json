@@ -15198,6 +15198,14 @@
       ],
       "archived": false
     },
+    "docs/handoffs/2026-11-02-nacelle-exterior-canon.md": {
+      "description": "Handoff: nacelle exterior canon rule (2026-11-02)",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html": {
       "description": "HTML document",
       "tags": [
@@ -17485,6 +17493,13 @@
     },
     "docs/solutions/design-patterns/envelope-gates-pass-while-real-parts-clash.md": {
       "description": "Context",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/design-patterns/fair-a-forced-exterior-deviation-into-the-measured-canonical-skin.md": {
+      "description": "Fair a forced exterior deviation into the measured canonical skin, per azimuth, with G1 at the earliest feasi\u2026",
       "tags": [
         "documentation"
       ],
@@ -20547,6 +20562,7 @@
       "docs/handoffs/2026-10-20-aircraft-datum-r2-migration.md",
       "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",
       "docs/handoffs/2026-10-27-head-section-layout.md",
+      "docs/handoffs/2026-11-02-nacelle-exterior-canon.md",
       "docs/ideation/2026-09-19-pilot-cape-four-bus-area-ideation.html",
       "docs/ideation/2026-10-10-pilot-placement-routability-ideation.html",
       "docs/ideation/2026-10-31-aft-cg-single-pivot-options-ideation.md",
@@ -20832,6 +20848,7 @@
       "docs/solutions/design-patterns/cut-the-local-solid-with-a-true-offset-and-gate-the-joint.md",
       "docs/solutions/design-patterns/decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md",
       "docs/solutions/design-patterns/envelope-gates-pass-while-real-parts-clash.md",
+      "docs/solutions/design-patterns/fair-a-forced-exterior-deviation-into-the-measured-canonical-skin.md",
       "docs/solutions/design-patterns/gate-a-part-invariant-at-every-selector-value-it-is-published-at.md",
       "docs/solutions/design-patterns/one-module-is-the-single-source-of-layout-stations.md",
       "docs/solutions/design-patterns/passive-mechanism-check-frames-before-dimensions.md",
@@ -22572,6 +22589,7 @@
       "docs/FIXED_NOZZLE_FALLBACK.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
+      "docs/handoffs/2026-11-02-nacelle-exterior-canon.md",
       "docs/images/nacelle_64mm_nozzle_servo_option1.png",
       "docs/images/nacelle_64mm_nozzle_servo_option2.png",
       "docs/images/nacelle_64mm_nozzle_servo_option3.png",
