@@ -1,6 +1,6 @@
 # Canonical landing-gear box (cargo-flank rebuild) — plan
 
-Status: **U1 done (concept); U2–U7 open.**  Started 2026-11-01.
+Status: **U1 done; U2 done; D1–D3 decided; U3 next.**  Started 2026-11-01.
 Branch: `feat/canonical-gear-box` (off `feat/sls-migration` 57437edd).
 
 ## Problem
@@ -66,7 +66,85 @@ and the hull.  The bays read as boxes added onto a different design
   add `REF-CAD-HENNING` usage to `REFERENCES.md`.  Regenerate WBS/TODO with
   `tools/gen_todo_from_wbs.py`.
 
-## Open owner decisions
+## Owner decisions (2026-11-01)
+
+- **D1 — size:** approved as drawn.
+- **D2 — opening:** trapezoidal, as canon, and left as an OPEN slot.  The slot
+  flares along the pin axis from 22 mm at the hip to 34 mm at 70 mm down the
+  thigh (`SLOT_PIN_MOUTH`).
+- **D3 — construction:** merged into the one-piece SLS forward hull.
+- **Symmetry:** exact about the centreline.  Done in U2.
+- **Structure:** if the CF insert plates don't fit by shape or by insertion,
+  use PA12-CF with ribbing or lattice.  Manage weight and balance throughout.
+
+## Findings (2026-11-01)
+
+**U2 (done).** The starboard corner rows were literals mirrored about the
+old R1 centreline, 0.1 mm off a true mirror.  They are now derived from the
+port rows about `X_CL`:
+
+- In the SCAD: `LG_FORE_PORT` / `LG_AFT_PORT` + `lg_mirror_row()`.
+- In `merge_cargo_interior.py`: `_mirror_corner()`.
+- `tools/lg_corners.py` is now the one parser, and
+  `landing_gear_bay_function.parse_corners()` delegates to it.
+
+`canonical_leg_r6_1_5in.scad` (retired bench gear) still carries -77.71.
+
+**A1B CF backbone vs. the new box.**  `tools/lg_a1b_census.py` FAILS before
+and after this branch:
+
+| Corner | Hull clash (mm³) | Keep-out clash (mm³) |
+|---|---|---|
+| Fore cheeks | 252 | 0 |
+| Fore members | 85–132 | 0 |
+| Aft cheeks | 0 | 16.5 |
+
+The fore cheeks rise to Z 179 and pierce the flank skin above the box.  So
+the plates do not work in their current shape or position.
+
+PA12-CF cannot replace them for the couple.  PA 602-CF publishes only XY
+values: 85 MPa tensile, 7,900 MPa modulus, 1.10 g/cm³, and no Z or bearing
+allowable (`airframe/datasheets/PA-602-CF-Data-Sheet-2021.pdf`).  The
+anchor pin carries 4,593 N × 1.25 on Ø4 mm.  That needs ≥ 17 mm of bearing
+wall at the full XY strength and ≥ 30 mm with any orientation knockdown.
+This is the same verdict the CF-PETG option got (plan 2026-10-27-001).
+
+**Recommended structure (U3/U6):**
+
+- The couple stays in the CF (TC1225, 3.29 mm) / 6061-T6 backbone.
+- The cheeks are re-shaped and re-sited to sit inside the pillar, which is
+  canon's "rectangular housing on the hull flank" (plan 2026-10-27-001
+  line 90).
+- They slide up the pillar from its open mouth into printed guide slots.
+  That is the insertion path a one-piece hull allows.
+- The fore station (Y 290) is ahead of the wing LE (Y 311.4), so the fore
+  pillar may rise above the box top to house the cheek.
+- The PA12-CF pillar walls carry only the net foot load: 1,148 N crash ×
+  1.25 through the hip pin, two walls, Ø8 mm 6061 spreaders.  That needs
+  about 2.1 mm of wall at 0.5 × 85 MPa.  Use 4 mm walls plus ribs.
+- The allowable is uncited for PA12-CF bearing, so it **requires
+  verification** (coupon, as LG-11).
+
+**Weight and balance (first pass, both sides, concept envelope):**
+
+| Item | Value |
+|---|---|
+| Exposed box skin | 76,100 mm² |
+| Skin mass, 1.5 / 2.0 mm SLS | 82 / 109 g |
+| Plus 30 % ribs | 106 / 142 g |
+| Replaced Rev R6 bays (4, solid) | 64 g |
+| Net change | +42 to +78 g, before cutting away the hull skin buried inside the box |
+| Box centroid | Y 353.1, 26 mm aft of the thrust line Y 326.7 |
+| CG effect | ≈ +0.3 mm aft at 14.19 lbm AUW |
+
+U6 shall replace this with the ledger (`--write`).
+
+**Coordination hazard.**  Another session has uncommitted edits to
+`merge_cargo_interior.py` on `claude/3d-print-material-scaling-66d85n`
+(head+cargo shell regen held).  U3 edits the same file.  Sequence U3 after
+that lands, or rebase onto it.
+
+## Open owner decisions (superseded — see above)
 
 1. **D1 — box depth.**  The concept puts the outboard face 3–7 mm proud of
    the flank, plus a 3 mm proud band on each pillar.  Is that more or less

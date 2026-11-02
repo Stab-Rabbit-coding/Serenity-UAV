@@ -61,7 +61,14 @@ PIL_W_PIN   = 30.0;       // along the hip pin
 PIL_UP      = 30.0;       // run up/inboard of the hip (buried in the box)
 PIL_DOWN    = 90.0;       // run down the thigh from the hip (clipped to the box)
 SLOT_SWING  = 34.0;       // thigh cluster clearance (2 x O14 @ 18 + 2 mm)
-SLOT_PIN    = 22.0;       // lug 14 + 2 x 4 mm
+SLOT_PIN    = 22.0;       // lug 14 + 2 x 4 mm, at the hip (narrow end)
+// Owner 2026-11-01: the bay opening is TRAPEZOIDAL, as canon, and stays an
+// OPEN slot.  It flares along the pin axis from SLOT_PIN at the hip to
+// SLOT_PIN_MOUTH where the thigh leaves the box, so on the box face it reads as
+// a trapezoid wide at the bottom (Henning close-gear: the leg recesses widen
+// toward the chine).  34 = the Rev R6 aperture head width (BAY_APER_W_TOP).
+SLOT_PIN_MOUTH = 34.0;
+SLOT_FLARE_L   = 70.0;    // mm down the thigh over which the flare runs
 
 function unit(v) = v / norm(v);
 THIGH_ANG = atan2(-KNEE_L[2], KNEE_L[0]);   // 48.2 deg below local +x
@@ -121,9 +128,18 @@ module swing_slot(c) {
     at_corner(c)
         for (f = [0 : FLEX_MAX / 4 : FLEX_MAX - 0.01])
             hull() for (g = [f, f + FLEX_MAX / 4])
-                rotate([0, THIGH_ANG - g, 0])
-                    translate([-12, -SLOT_PIN / 2, -SLOT_SWING / 2])
-                        cube([160, SLOT_PIN, SLOT_SWING]);
+                rotate([0, THIGH_ANG - g, 0]) slot_trapezoid();
+}
+
+module slot_trapezoid() {
+    // slot section along the thigh: SLOT_PIN wide at the hip, flaring to
+    // SLOT_PIN_MOUTH at SLOT_FLARE_L, then straight out past the box
+    hull() {
+        translate([-12, -SLOT_PIN / 2, -SLOT_SWING / 2])
+            cube([0.01, SLOT_PIN, SLOT_SWING]);
+        translate([SLOT_FLARE_L, -SLOT_PIN_MOUTH / 2, -SLOT_SWING / 2])
+            cube([90, SLOT_PIN_MOUTH, SLOT_SWING]);
+    }
 }
 
 module recess_panel(y0, y1) {
