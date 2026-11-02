@@ -353,5 +353,5 @@ Full combined analysis: `docs/LG_SIDE_HIT_FAILURE_MODES.md` (`tools/lg_side_hit_
 - The fore thigh is the weak link in a side hit.  At crash energy it breaks at bank ≥ 10.4° (the aft thigh at ≥ 21.8°).
 - It breaks in every gear + nacelle co-strike at crash energy, at all four tilts.
 - In a 1.5 ft co-strike it is at 0.79–1.01 × UTS.
-- The nacelle takes 1–6.5 kN in a co-strike, with no structural check of that path yet.
+- A nacelle strike is a crash (owner).  The nacelle takes 1–6.5 kN, with no structural check of that path yet.  The study predicts what to repair after such a crash.
 - The gear is unchanged (owner).

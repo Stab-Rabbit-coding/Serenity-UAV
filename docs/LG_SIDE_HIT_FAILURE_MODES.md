@@ -1,6 +1,8 @@
 # Landing Gear Side-Hit Failure Modes
 
-**Status:** analysis of the gear **as built** on PR #276 (fore swing −65°, aft +28°, baseline thigh).  The owner is not changing the gear now (2026-11-02).  This document answers **how and when to expect a failure.**
+**Status:** analysis of the gear **as built** on PR #276 (fore swing −65°, aft +28°, baseline thigh).  The owner is not changing the gear now (2026-11-02).  This document answers **how and when to expect a failure**, and so what will likely need repair or replacement after one.
+
+**Scope (owner 2026-11-02):** any nacelle ground strike is a **crash**, not normal operations.  The co-strike cases predict the damage to expect after such a crash; they are not an operating envelope or a technique to use intentionally.
 **Tool:** `tools/lg_side_hit_study.py` (reproducible; all numbers below come from one run).
 **AI note:** analysis by Claude Opus 5.5 (Anthropic) under the direction of Stab-Rabbit-coding.  No independent review agents were dispatched.
 
@@ -14,7 +16,7 @@
 | **One-pair (side) landing, crash energy** | **Fore thigh breaks out-of-plane** (side bending + torsion at the thigh root) | Bank ≥ **10.4°** (fore leg); the aft leg follows at ≥ **21.8°**. |
 | One-pair landing, ordinary 1.5 ft | Fore thigh reaches UTS only at bank ≥ **35.0°**, which is practically only in a nacelle co-strike. | Aft thigh does not reach UTS at any bank. |
 | **Gear + nacelle co-strike, crash** | **Fore thigh breaks** (1.54–1.96 × UTS).  The nacelle takes 1.3–6.5 kN. | Every tilt (0/45/90/135°). |
-| Gear + nacelle co-strike, ordinary 1.5 ft | **Fore thigh at or near break** (0.79–1.01 × UTS; breaks at tilt 0°).  The nacelle takes 0.9–4.1 kN. | Every tilt; worst at 0° (cruise attitude). |
+| Gear + nacelle co-strike, low energy (1.5 ft sink) — still a crash | **Fore thigh at or near break** (0.79–1.01 × UTS; breaks at tilt 0°).  The nacelle takes 0.9–4.1 kN. | Every tilt; worst at 0° (cruise attitude). |
 
 **The weak link in a side hit is the fore thigh.**  Its −65° swing plane faces the lateral load almost edge-on: 91 % of a side load acts out of plane, against 47 % on the aft leg.  The leg force is capped by the fuse plateau, so the failure is set by **bank angle, not drop height**: once the fuse is on its plateau, a harder drop does not raise the thigh stress; a larger bank does.  The hip pin (4,241 N double shear) never governs.  The intended failure order holds: leg first, then mount, then hull.
 
@@ -79,12 +81,14 @@ Nacelle contact stiffness is unknown, so it is swept over 100, 300 and 1,000 N/m
 
 A stiffer nacelle takes a larger share and a higher peak.  The worst nacelle load is at **45° tilt** (transition attitude).  The worst leg case is **0° tilt**, at the largest bank.
 
-## 4. What fails, in order, in a banked hard landing
+## 4. What fails, in order, in a banked hard landing (repair expectations)
 
 1. **Spring row yields and the ductile fuses fire** at the plateau, by design.  The leg force is now capped at 1,218 N.
 2. **Fore thigh root fails** if the bank exceeds about 10° (crash energy).  Failure is out-of-plane bending plus torsion at the thigh root, the hub end of the twin cylinders.
 3. **Aft thigh root** fails beyond about 22° bank.
-4. **Nacelle strike** happens beyond about 24–36° bank, depending on tilt.  It puts 1–6.5 kN through the nacelle shell, trunnion and tilt spar.  **That load path has no strength check yet** (see §6).
+4. **Nacelle strike (crash)** happens beyond about 24–36° bank, depending on tilt.  It puts 1–6.5 kN through the nacelle shell, trunnion and tilt spar.  **That load path has no strength check yet** (see §6), so which of those parts is damaged is not yet predicted.
+
+**Expect after a banked crash:** replace the corner cartridge(s) whose fuses fired.  Replace the fore thigh(s) if the bank exceeded about 10°.  After any nacelle strike, inspect and likely replace the nacelle shell, nozzle flaps, trunnion and tilt-spar joint on that side.
 
 The hip pins (4,241 N) and the hull keep their margin throughout.
 
@@ -104,6 +108,6 @@ The hip pins (4,241 N) and the hull keep their margin throughout.
 
 ## 6. Open items this exposes
 
-- **Nacelle / trunnion / tilt-spar strength under a 1–6.5 kN ground strike: not checked.**  Needed before any banked-landing acceptance.  Testing the nacelle contact stiffness would pin the 100–1,000 N/mm sweep.
+- **Nacelle / trunnion / tilt-spar strength under a 1–6.5 kN ground strike: not checked.**  Needed to predict which of those parts a nacelle-strike crash damages (repair planning).  It is not an operating case.  Testing the nacelle contact stiffness would pin the 100–1,000 N/mm sweep.
 - **PA12-CF strength through the layers (Z) and in impact.**  Needed to turn "UTS (XY)" into a real failure prediction.  Question for 3D Systems is in the plan.
 - The `LANDING_GEAR_ANALYSIS.md` lateral case (163 N) is stale; the sizing tool now gives 308 N.  The sizing gate still lacks this combined check (see the PR #276 review).
