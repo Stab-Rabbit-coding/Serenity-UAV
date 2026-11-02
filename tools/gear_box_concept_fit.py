@@ -44,11 +44,20 @@ REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, os.path.join(REPO, "tools"))
 import hull_datums as hd  # noqa: E402
 
+sys.path.insert(0, os.path.join(REPO, "airframe", "blender-scripts"))
+import merge_cargo_interior as mci  # noqa: E402
+
 SCAD = os.path.join(REPO, "airframe/openscad/fuselage/gear_box_canonical_concept.scad")
 WING = os.path.join(REPO, "airframe/stls/wings/wing_port_s1223_revo.stl")
 FLANGE = os.path.join(REPO, "airframe/stls/fuselage/wing_root_flange_port.stl")
 WING_CLR = 1.5     # mm, box top below the wing underside (assembly + paint)
 FLANGE_CLR = 1.0   # mm, all round the bonded root flange
+# Owner 2026-11-01: "make sure that your box clears those spar and cable
+# holes".  The SAME set the hull merge cuts and the Rev R6 bays honour
+# (merge_cargo_interior.wing_keepout_negatives(): spar socket O20.4 + 10 AWG
+# bundle exit O16.3, nav O4.2 / encoder O7.5 / tilt-shaft O4.4 entries, shaft
+# bushing seat, wing mortise) -- one definition, never re-typed here.
+KEEP_CLR = 1.0     # mm, all round each wing-root penetration
 STEP = 1.0         # mm between swept wing copies (< thinnest wing section: the TE)
 RISE = 80.0        # mm the wing shadow extends upward
 
@@ -85,13 +94,24 @@ def main(out_dir: str) -> int:
     c = FLANGE_CLR
     flange_k = shifted(flange, [(dx, dy, dz) for dx in (-c, 0, c)
                                 for dy in (-c, 0, c) for dz in (-c, 0, c)])
-    cut = box - shadow - flange_k
+    keeps = [(lab, to_man(tm)) for lab, tm in mci.wing_keepout_negatives()
+             if "stbd" not in lab]                      # port box; stbd = mirror
+    k = KEEP_CLR
+    grow = [(dx, dy, dz) for dx in (-k, 0, k) for dy in (-k, 0, k) for dz in (-k, 0, k)]
+    for lab, km in keeps:
+        v = (box ^ km).volume()
+        if v > 0.01:
+            print(f"box x {lab:24s} {v:8.1f} mm3  (pre-trim)")
+    keep_k = Manifold.batch_boolean([shifted(km, grow) for _l, km in keeps], 0)
+    cut = box - shadow - flange_k - keep_k
 
     # drop boolean residue, as generate_lg_bays.py SLIVER_MM3
     cut = Manifold.batch_boolean([b for b in cut.decompose() if b.volume() >= 1.0], 0)
     bodies = sorted((b.volume() for b in cut.decompose()), reverse=True)
     print(f"box (trimmed)        {cut.volume():10.0f} mm3, bodies {[round(v, 1) for v in bodies]}")
     print(f"trimmed x wing       {(cut ^ wing).volume():10.4f} mm3  (shall be 0)")
+    worst = max((cut ^ km).volume() for _l, km in keeps)
+    print(f"trimmed x penetrations (worst) {worst:.4f} mm3  (shall be 0)")
     out = from_man(cut)
     path = os.path.join(out_dir, "gear_box_port_fit.stl")
     out.export(path)
