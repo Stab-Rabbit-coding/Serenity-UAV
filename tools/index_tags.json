@@ -14363,6 +14363,13 @@
       ],
       "archived": false
     },
+    "current-specification/joint_register.json": {
+      "description": "JSON data (4 top-level keys)",
+      "tags": [
+        "specification"
+      ],
+      "archived": false
+    },
     "current-specification/serenity-rev-s.jsx": {
       "description": "React/JSX specification component",
       "tags": [
@@ -19665,6 +19672,13 @@
       ],
       "archived": false
     },
+    "tools/check_joint_register.py": {
+      "description": "Commit/CI gate: the joint register is structurally valid and covers the BOM.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/check_tacco_envelope_sync.py": {
       "description": "check_tacco_envelope_sync.py \u2014 keep every airframe TACCO mount in step with the board size.",
       "tags": [
@@ -19835,6 +19849,13 @@
     },
     "tools/import-specctra-ses.py": {
       "description": "Companion to export-specctra-dsn.py: import a freerouting-produced",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/joint_register.py": {
+      "description": "Joint register loader and checker for the build-guide torque method.",
       "tags": [
         "build-tooling"
       ],
@@ -20368,6 +20389,13 @@
     },
     "tools/tests/test_esc80_cooptimize.py": {
       "description": "Tests for tools/esc80_cooptimize.py (WBS NAC-64-ESC-80A).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_joint_register.py": {
+      "description": "Tests for tools/joint_register.py (plan 2026-11-02-001 U1).",
       "tags": [
         "build-tooling"
       ],
@@ -21499,6 +21527,7 @@
       "current-specification/bom_revT.csv",
       "current-specification/bom_revT.json",
       "current-specification/flight_limits.json",
+      "current-specification/joint_register.json",
       "current-specification/serenity-rev-s.jsx",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -25650,6 +25679,7 @@
       "tools/cg_mass_reduction_study.py",
       "tools/cg_relocation_study.py",
       "tools/check_datum_drift.py",
+      "tools/check_joint_register.py",
       "tools/check_tacco_envelope_sync.py",
       "tools/compact_bom_entries.py",
       "tools/datum_r2_stl_list.txt",
@@ -25674,6 +25704,7 @@
       "tools/head_layout_fit.py",
       "tools/hull_datums.py",
       "tools/import-specctra-ses.py",
+      "tools/joint_register.py",
       "tools/kicad_add_part.py",
       "tools/kicad_prune_stale.py",
       "tools/kicad_relink.py",
@@ -25743,6 +25774,7 @@
       "tools/sync_operators_manual.py",
       "tools/tail_strike_requirement.py",
       "tools/tests/test_esc80_cooptimize.py",
+      "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nozzle_servo_linkage.py",

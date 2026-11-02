@@ -28,6 +28,9 @@ python3 "$TOPDIR/tools/check_tacco_envelope_sync.py" || exit 1
 # Aircraft datum R2 drift gate (plan 2026-10-19-001 U3: datums imported, never re-typed)
 python3 "$TOPDIR/tools/check_datum_drift.py" || exit 1
 
+# Joint register covers the BOM fasteners (plan 2026-11-02-001 U1)
+python3 "$TOPDIR/tools/check_joint_register.py" || exit 1
+
 # Update indexes
 python3 "$TOPDIR/tools/precommit_index.py" || exit 1
 
