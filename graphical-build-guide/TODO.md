@@ -121,6 +121,7 @@
 ### 1.5.6 Rebuild Graphical Build Guide
 → full detail: `WBS.md` §1.5.6
 
+- [ ] BG-PLAN-2 — Place the board STEP models in the card renders
 - [ ] BG-SEQ-1 — Per-step assembly spec
 - [ ] BG-SEQ-2 — Torque table with citations
 - [ ] BG-SEQ-3 — Wire-before-or-after ordering analysis

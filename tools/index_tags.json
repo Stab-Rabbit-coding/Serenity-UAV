@@ -10755,6 +10755,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Bus-Gateway/step/CAN-PERIPH-GW-1.step": {
+      "description": "3D STEP model",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md": {
       "description": "Commo Rev T \u2014 Phase 1 Part Selection, Power Budget, and RF-Chain Audit",
       "tags": [
@@ -11261,6 +11269,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Commo/step/Commo.step": {
+      "description": "3D STEP model",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pcb": {
       "description": "KiCad PCB layout",
       "tags": [
@@ -11682,6 +11698,14 @@
     },
     "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py": {
       "description": "Flight Engineer PCB Rev S1: remove the 6 V servo BEC, add the 5 V servo BEC.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/step/FlightEngineer.step": {
+      "description": "3D STEP model",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -12161,6 +12185,14 @@
     },
     "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py": {
       "description": "mod_jayne_trapezoid.py -- redraw Observer.kicad_pcb Edge.Cuts as the nose-carrier",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Observer/step/Observer.step": {
+      "description": "3D STEP model",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -12786,6 +12818,14 @@
     },
     "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py": {
       "description": "silk_refs_to_fab_pilot.py \u2014 Move footprint reference designators from silkscreen to Fab.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/step/Pilot.step": {
+      "description": "3D STEP model",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -13464,6 +13504,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/TACCO/step/TACCO.step": {
+      "description": "3D STEP model",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/TODO-1.2b-CHECKLIST.md": {
       "description": "Todo 1.2b Completion Checklist \u2014 Expedited Workflow",
       "tags": [
@@ -14076,6 +14124,14 @@
         "avionics-hardware",
         "pcb-design",
         "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/step_export_report.json": {
+      "description": "JSON data (2 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
       ],
       "archived": false
     },
@@ -19794,6 +19850,13 @@
       ],
       "archived": false
     },
+    "tools/export_pcb_step.py": {
+      "description": "Export a STEP model of every KiCad board for the build-guide renders.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/flight_envelope_endurance.py": {
       "description": "Flight-envelope and hover-endurance recompute for the split-battery aircraft.",
       "tags": [
@@ -20417,6 +20480,13 @@
     },
     "tools/tests/test_esc80_cooptimize.py": {
       "description": "Tests for tools/esc80_cooptimize.py (WBS NAC-64-ESC-80A).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_export_pcb_step.py": {
+      "description": "Tests for tools/export_pcb_step.py (plan 2026-11-02-001 U12).",
       "tags": [
         "build-tooling"
       ],
@@ -24162,6 +24232,7 @@
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
+      "avionics/kicad/Bus-Gateway/step/CAN-PERIPH-GW-1.step",
       "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
       "avionics/kicad/Commo/COMMO_REVT_RF_DESIGN.md",
       "avionics/kicad/Commo/Commo.md",
@@ -24222,6 +24293,7 @@
       "avionics/kicad/Commo/scripts/mod_commo_pcb.py",
       "avionics/kicad/Commo/scripts/route_commo_rssi.py",
       "avionics/kicad/Commo/scripts/swap_lora_for_sik.py",
+      "avionics/kicad/Commo/step/Commo.step",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pcb",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_prl",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pro",
@@ -24273,6 +24345,7 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
+      "avionics/kicad/FlightEngineer/step/FlightEngineer.step",
       "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
@@ -24329,6 +24402,7 @@
       "avionics/kicad/Observer/scripts/mod_observer_ds_pcb.py",
       "avionics/kicad/Observer/scripts/mod_observer_som_place.py",
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
+      "avionics/kicad/Observer/step/Observer.step",
       "avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md",
       "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
@@ -24403,6 +24477,7 @@
       "avionics/kicad/Pilot/scripts/route_loop_pilot.sh",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py",
+      "avionics/kicad/Pilot/step/Pilot.step",
       "avionics/kicad/README.md",
       "avionics/kicad/Serenity-Custom.3dshapes/ISOW1044BDFMR.step",
       "avionics/kicad/Serenity-Custom.3dshapes/KSZ9477STXI.step",
@@ -24486,6 +24561,7 @@
       "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
+      "avionics/kicad/TACCO/step/TACCO.step",
       "avionics/kicad/TODO-1.2b-CHECKLIST.md",
       "avionics/kicad/TODO-1.2b-KICAD-READY.md",
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
@@ -24561,6 +24637,7 @@
       "avionics/kicad/replace_footprints.py",
       "avionics/kicad/retarget_mspm0g351x_slb9672.py",
       "avionics/kicad/retarget_pcb_footprints.py",
+      "avionics/kicad/step_export_report.json",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
       "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
       "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
@@ -24959,6 +25036,7 @@
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
+      "avionics/kicad/Bus-Gateway/step/CAN-PERIPH-GW-1.step",
       "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
       "avionics/kicad/Commo/COMMO_REVT_RF_DESIGN.md",
       "avionics/kicad/Commo/Commo.md",
@@ -25019,6 +25097,7 @@
       "avionics/kicad/Commo/scripts/mod_commo_pcb.py",
       "avionics/kicad/Commo/scripts/route_commo_rssi.py",
       "avionics/kicad/Commo/scripts/swap_lora_for_sik.py",
+      "avionics/kicad/Commo/step/Commo.step",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pcb",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_prl",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pro",
@@ -25070,6 +25149,7 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
+      "avionics/kicad/FlightEngineer/step/FlightEngineer.step",
       "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
@@ -25126,6 +25206,7 @@
       "avionics/kicad/Observer/scripts/mod_observer_ds_pcb.py",
       "avionics/kicad/Observer/scripts/mod_observer_som_place.py",
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
+      "avionics/kicad/Observer/step/Observer.step",
       "avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md",
       "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
@@ -25200,6 +25281,7 @@
       "avionics/kicad/Pilot/scripts/route_loop_pilot.sh",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py",
+      "avionics/kicad/Pilot/step/Pilot.step",
       "avionics/kicad/README.md",
       "avionics/kicad/Serenity-Custom.3dshapes/ISOW1044BDFMR.step",
       "avionics/kicad/Serenity-Custom.3dshapes/KSZ9477STXI.step",
@@ -25283,6 +25365,7 @@
       "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
+      "avionics/kicad/TACCO/step/TACCO.step",
       "avionics/kicad/TODO-1.2b-CHECKLIST.md",
       "avionics/kicad/TODO-1.2b-KICAD-READY.md",
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
@@ -25358,6 +25441,7 @@
       "avionics/kicad/replace_footprints.py",
       "avionics/kicad/retarget_mspm0g351x_slb9672.py",
       "avionics/kicad/retarget_pcb_footprints.py",
+      "avionics/kicad/step_export_report.json",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
       "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
       "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
@@ -25724,6 +25808,7 @@
       "tools/export-specctra-dsn.py",
       "tools/export_assembly_meshes.py",
       "tools/export_landing_gear_stls.py",
+      "tools/export_pcb_step.py",
       "tools/flight_envelope_endurance.py",
       "tools/frame_inventory.py",
       "tools/gen_build_guide_cards.py",
@@ -25806,6 +25891,7 @@
       "tools/tail_strike_requirement.py",
       "tools/tests/test_allowables.py",
       "tools/tests/test_esc80_cooptimize.py",
+      "tools/tests/test_export_pcb_step.py",
       "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",

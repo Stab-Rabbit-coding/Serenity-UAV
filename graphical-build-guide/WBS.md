@@ -362,6 +362,11 @@ This section covers the comprehensive rebuild of the graphical build guide's SVG
 The hull is two permanently collar-bonded sections — head+cargo merged, middle+rear merged — so the
 guide, not the operator's manual, carries how it was built.)*
 
+- [ ] **BG-PLAN-2 — Place the board STEP models in the card renders.** `tools/export_pcb_step.py` now writes
+  `avionics/kicad/<Board>/step/*.step` (6 boards verified 2026-11-02; 55 x 35 mm TACCO/Pilot with 125-134 component
+  solids). Remaining: convert/import in `tools/export_assembly_meshes.py`, place each board per the cape stack and node
+  saddle/shelf data, render in `airframe/blender-scripts/build_guide_card_renders.py`; fill the 66 missing 3D models
+  listed in `avionics/kicad/step_export_report.json` (connectors, antennas, inductors).
 - [ ] **BG-SEQ-1 — Per-step assembly spec.** Every step names the part ID, the side (port/starboard), the install
   order relative to its neighbors (what shall be done before and after), each wire (gauge, color, length, route,
   connector), each fastener (size, count, thread-locker/adhesive), and the tightening torque with its source.
