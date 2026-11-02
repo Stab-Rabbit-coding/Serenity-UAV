@@ -121,8 +121,8 @@ band.
 
 | Item | Where |
 | --- | --- |
-| Pack band | 69.5 W × 41.0 H, Zc 191, Y 172–292. Both packs lie flat; the lanes are at X ±17.4. |
-| Tray | Ceiling, walls bonded to the skin (seat ≤ 52 mm³), full floor, and a forward stop at Y 168–172. |
+| Pack band | 69.5 W × 41.0 H, Zc 191, Y 163–283 (Bay A forward, 2026-11-01; was Y 172–292). Both packs lie flat; the lanes are at X ±17.4. |
+| Tray | Ceiling, walls bonded to the skin (seat ≤ 52 mm³), full floor, and a forward stop at Y 159–163 (was Y 168–172). |
 | Loading | Each pack is lifted in on its own sled through the open clamshell doors, with the payload out. It slides forward on the centreline corridor (\|X\| ≤ 17.75, Y 292–400, Zc 189.5), climbs a 1.5 mm ramp, then steps sideways into its lane. |
 | Retention | A hinged aft gate. It has a pocket for each sled tail tab, which holds each pack fore/aft and laterally. |
 | Nose avionics trunk | Rerouted to a port side channel at X 38.5–48.5, Z 193–201. |

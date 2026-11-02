@@ -3633,6 +3633,22 @@ single `docs/references/nick-henning/` folder alongside the other canonical refe
 - `nick-henning-uvdisplay-engine.jpg`, `nick-henning-uvdisplay-gear.jpg`, `nick-henning-uvdisplay-wing.jpg` — UV-display renders
 - `Re: Contact got a new submission - Nick Henning <nickhenning3d@gmail.com> - 2026-07-06 1421.txt` — raw permission-grant email export (retains full mail-transport headers — flagged to the user, not scrubbed)
 
+**Applied 2026-11-01:** `top-view-with-wireframe-henning.jpg` and
+`port-bow-upper-bridge-with-wireframe-henning.jpg` — riveted bridge-roof panel between the
+window-aft frame and a transverse frame, used to bound the Bay A forward access hatch
+(`tools/head_layout_fit.py` HATCH_*, `tools/gen_bay_a_fwd_mounts.py`, `docs/BAY_A_FWD_LAYOUT.md`
+§4). Seam stations require verification (see REF-CAD-003).
+
+**Applied 2026-11-01 (nacelle exterior canon rule):** `nick-henning-uvdisplay-engine.jpg`,
+`nick-henning-final-front-combine.jpg` and `nick-henning-final-backside-combine.jpg` — the
+canonical engine cowl rolls continuously from the round intake lip into the bulbous forward
+shell (no cylindrical collar), and the exhaust is a can of shingled axial petals. Used to
+replace the 64 mm pod's held-cylinder lip ring with a cowl faired into the measured canonical
+skin (`airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad` circular_intake_fairing(),
+`tools/nacelle_cowl_fair.py`, `tools/nacelle_intake_cfd.py` variants lipE_cowl_*) and to check
+the 64 mm iris nozzle (`airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad`);
+`airframe/AGENTS.md` "Geometry Integrity".
+
 ### REF-CAD-003: QMx — The Official Serenity Blueprints Reference Pack (2007)
 
 | Field | Value |
@@ -3651,6 +3667,16 @@ visual/dimensional accuracy check only.
 **Used in:** canonical-accuracy reference for `airframe/` hull/exterior work (see
 `airframe/AGENTS.md` "Canonical Accuracy References"); cross-referenced by REF-CAD-002 and
 REF-CAD-004 and by `current-specification/LICENSE_AND_ATTRIBUTION.md`.
+
+**Sheet Six (Forward Cross-Section) applied 2026-11-01:** avionics bay forward of the pilot's
+station and the bridge-roof escape hatch set the Bay A forward access hatch (Y 60–137, X ±27):
+`tools/head_layout_fit.py` (HATCH_*), `tools/gen_bay_a_fwd_mounts.py`,
+`docs/BAY_A_FWD_LAYOUT.md` §4. **Seam stations require verification** against a full-resolution
+Sheet Six (the repository copy is a low-resolution tablet extract).
+
+**Sheets 3/4 applied 2026-11-01 (nacelle exterior canon rule):** engine side/plan proportion
+checked for the 64 mm intake cowl fairing — `airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad`
+circular_intake_fairing(), `tools/nacelle_cowl_fair.py`, `airframe/AGENTS.md` "Geometry Integrity".
 
 ### REF-CAD-004: misubisu — "Serenity Firefly with landing gear and swivel engines" (Thingiverse Thing 7330462)
 

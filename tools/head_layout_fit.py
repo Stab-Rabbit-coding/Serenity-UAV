@@ -172,6 +172,74 @@ SH_X0, SH_X1, SH_Z0, SH_Z1 = 24.0, 30.0, 222.0, 230.0
 SH_Y0 = 48.0
 
 # ---------------------------------------------------------------------------
+# Bay A option "fwd" (owner, 2026-11-01; plan 2026-10-31-003 option): the CN1
+# (TACCO) pouch lies FLAT on the centreline partly under the nose Observer,
+# and the FC1 (Pilot) pouch lies flat above CN1's aft end and the battery
+# rail ceiling.  Clearing the side-by-side Bay A lets the twin pack tray run
+# forward from Y 172 to Y 163 (the skin, not equipment, then binds at Zc 191).
+# Real-mesh probes 2026-11-01 against the merged head+cargo hull, 1 mm gap:
+#   * CN1 forward-most at Y 62 for Z0 206 (lower: bay insert and chin taper;
+#     higher: the Observer underside);
+#   * FC1 only fits flat, Y 100..158 at Z0 229 (on edge: no fit).
+# CG (ledger estimate): CN1 58 g x 38 mm fwd = +0.35 mm; twin tray 642 g x 9 mm
+# = +0.93 mm; about 1.3 mm forward in all.  Select with --bay-a fwd.
+# ---------------------------------------------------------------------------
+BAYA_MODE = "fwd"  # published; "side" = read-only historical reference
+CN1F_Y0, CN1F_Z0 = 62.0, 206.0
+# FC1 moved 12 mm forward and 1.5 mm up (2026-11-01, U3): forward so it sits
+# under the canonical bridge-roof hatch (HATCH_*; Observer clear from Y 88),
+# up so the removable FC1 shelf floor (Z 228.5..230.5) fits over CN1 (top 228).
+FC1F_Y0, FC1F_Z0 = 88.0, 230.5
+# Pitot hose turn (both modes): from the hose keep-out's aft end straight up
+# (+Z) to the Observer underside, where the airspeed sensor (WBS §1.10 U5,
+# unselected) takes the hose.  Hose end (-3.6, 50.5, 223.9) and the board
+# underside above it (Z 236.8) located by ray cast 2026-11-01.
+PITOT_TURN_Z1 = 237.0
+# Port side trunk channel (single source; tools/twin_head_pack_fit.py imports
+# it): outboard of the twin tray's port rail wall, Y 160..300.
+PORT_CH_X0, PORT_CH_X1, PORT_CH_Z0, PORT_CH_Z1 = 38.5, 48.5, 193.0, 201.0
+PORT_CH_Y0, PORT_CH_Y1 = 160.0, 300.0
+# Drop from the CN1 run to the port channel: riser + crossover at Y 148..158
+# (forward of the tray stop plate), crossover floor Z 197.
+DROP_Y0, DROP_Z0 = 148.0, 197.0
+BUNDLE_NEAR_MAX = 25.0  # mm^3 inside the gap allowed for a harness bundle
+# Access hatch (owner 2026-11-01: joints on canonical lines).  QMx Sheet Six
+# [REF-CAD-003] places the avionics bay forward of the pilot's station with an
+# escape hatch in the bridge roof; Henning's renders [REF-CAD-002] show that
+# roof as a riveted panel between the window-aft frame and a transverse frame.
+# On the merged hull those seams are at Y 60 and Y 137 (top-down slope map,
+# 2026-11-01); the panel is X +-27, inside the outer spike rows.  Seam stations
+# require verification against a full-resolution QMx Sheet Six.
+HATCH_X, HATCH_Y0, HATCH_Y1 = 27.0, 60.0, 137.0
+HATCH_CUT_Z0 = 248.0  # cut box floor: below the roof skin, above every internal part
+HATCH_FLANGE_W = 6.0  # landing flange width inboard of the cut edge
+MERGED = os.path.join(REPO, "airframe", "stls", "fuselage", "head_cargo_shell24_2mm_merged.stl")
+# TACCO coax: three MMCX leads (TACCO.md, vertical MMCX jacks) leave CN1's
+# connector edge beside the bus bundle; 1.37 mm micro-coax, 3 abreast + bend.
+# Antenna stations are not placed yet (plan 003 deferred); the leads run with
+# the trunk to the port channel and are cut to length at antenna placement.
+COAX_W = 6.0
+# Harness route table (KTD3).  name -> (envelopes in path order, contents).
+# Lengths are centreline polyline lengths through the envelopes (route_lengths).
+ROUTES = {
+    "Observer -> CN1 (ring, CAN-FD, 5 V)": (
+        ("trunk: Observer to CN1",), "Ethernet ring, CAN-FD, Observer 5 V"),
+    "CN1 -> FC1 (ring, CAN-FD, RS-485, 5 V, coax)": (
+        ("Bay A CN1 cable zone", "trunk: CN1 run", "Bay A FC1 cable zone"),
+        "Ethernet ring, CAN-FD, RS-485, node 5 V, 3 x TACCO MMCX coax"),
+    "CN1 run -> port channel -> aft": (
+        ("trunk: CN1 run", "trunk: riser", "trunk: crossover", "trunk: port link",
+         "trunk: port channel"),
+        "Ethernet ring, CAN-FD, RS-485, 5 V feed, TACCO coax"),
+    "pitot hose -> Observer airspeed sensor": (
+        ("pitot hose", "pitot hose turn"), "7 mm ID pitot hose"),
+}
+# Stub limits for the CN1 bus-start node (R4).  None = not yet cited from the
+# fitted transceiver datasheets; the check then reports PROVISIONAL, never PASS.
+STUB_LIMIT_MM = {"CAN-FD": None, "RS-485": None}
+CN1_HARNESS_STUB_MM = 0.0  # daisy chain through the pouch connectors (bus start)
+
+# ---------------------------------------------------------------------------
 # Head cell, sled, rail, stop, catch (plan 001 R4-R8, KTD5-KTD7).
 # Cell: Tattu R-Line 6S 2200 95C, 116 x 34 x 38.5 mm, on its side (38.5 lateral).
 # ORIGIN: PRC-domiciled maker (Tattu), retained by owner decision 2026-10-26,
@@ -382,6 +450,15 @@ def layout():
     hose.apply_transform(trimesh.geometry.align_vectors([0, 0, 1.0], ax))
     hose.apply_translation(PITOT_NIPPLE + ax * (PITOT_HOSE_L / 2 + PITOT_BARB_TIP))
     L["pitot hose"] = dict(solid=hose, gap=1.0, mates=("Observer board",))
+    hend = PITOT_NIPPLE + ax * (PITOT_HOSE_L + PITOT_BARB_TIP)
+    L["pitot hose turn"] = dict(
+        solid=cyl("z", hend[0], hend[1], hend[2] - PITOT_HOSE_D / 2, PITOT_TURN_Z1,
+                  PITOT_HOSE_D / 2),
+        gap=1.0, mates=("pitot hose", "Observer board"),
+        note="hose up to the airspeed sensor on the Observer underside")
+    if BAYA_MODE == "fwd":
+        _bay_a_fwd(L)
+        return L, {}
     # --- Bay A nodes (on edge, port, mirrored stbd) ------------------------
     L["Bay A node CN1 (port)"] = dict(
         solid=box(X_CL + BAYA_X_IN, X_CL + BAYA_X_IN + clf.NODE_T, BAYA_Y0,
@@ -442,6 +519,128 @@ def layout():
         gap=1.0,
     )
     return L, {}
+
+
+MISSING_MOUNTS: list = []
+
+
+def _bay_a_fwd(L):
+    """Bay A forward (the published layout since 2026-11-01, plan
+    2026-11-01-001): both pouches flat (37 beam x 58 long x 22 tall),
+    connector edge aft.  The battery is the twin pack tray, which only
+    tools/twin_head_pack_fit.py gates (it needs the merged head+cargo hull);
+    this gate carries no single-cell rail, sled, catch or sliding band.  Every
+    harness envelope is listed in ROUTES (single source, KTD3)."""
+    nh, nl, nt, cz = clf.NODE_H / 2, clf.NODE_L, clf.NODE_T, clf.NODE_CABLE
+    hw = TRUNK_W / 2
+    L["Bay A node CN1 (fwd, flat)"] = dict(
+        solid=box(-nh, nh, CN1F_Y0, CN1F_Y0 + nl, CN1F_Z0, CN1F_Z0 + nt), gap=1.0,
+        note="partly under the Observer (TACCO + PB2-I)")
+    L["Bay A CN1 cable zone"] = dict(
+        solid=box(-nh, nh, CN1F_Y0 + nl, CN1F_Y0 + nl + cz, CN1F_Z0, CN1F_Z0 + nt),
+        mates=("Bay A node CN1 (fwd, flat)", "trunk: CN1 run"), gap=1.0)
+    L["Bay A node FC1 (raised, flat)"] = dict(
+        solid=box(-nh, nh, FC1F_Y0, FC1F_Y0 + nl, FC1F_Z0, FC1F_Z0 + nt), gap=1.0,
+        note="over CN1's aft end and the rail ceiling (Pilot + PB2-I)")
+    # CN1 cables run aft under FC1, above Z 215 so they also clear the twin
+    # tray's rail ceiling (Z 213.9) aft of Y 159, into FC1's cable zone.
+    tz0 = 216.0
+    cw = (TRUNK_W + COAX_W) / 2  # ring/CAN/RS-485/5 V bundle + TACCO coax side by side
+    L["trunk: CN1 run"] = dict(
+        solid=box(-cw, cw, CN1F_Y0 + nl + cz - 2.0, FC1F_Y0 + nl + 2.0, tz0, FC1F_Z0 - 2.0),
+        mates=("Bay A CN1 cable zone", "Bay A FC1 cable zone", "trunk: riser"), gap=1.0)
+    L["Bay A FC1 cable zone"] = dict(
+        # drops to the CN1 run and the aft trunk; top 6 mm short where the dome closes in
+        solid=box(-nh, nh, FC1F_Y0 + nl, FC1F_Y0 + nl + cz, tz0, FC1F_Z0 + nt - 6.0),
+        mates=("Bay A node FC1 (raised, flat)", "trunk: CN1 run", "trunk: riser"),
+        gap=1.0)
+    # Drop to the port channel (2026-11-01, probed on the merged hull).  The
+    # twin tray's port rail wall sits against the skin above Z 205 and the
+    # roof falls to Z 216 by Y 280, so nothing passes over or beside the tray.
+    # The bundle leaves the CN1 run at its aft end, FORWARD of the tray stop
+    # plate (Y 159): riser down at the centreline, crossover outboard under
+    # the Bay A pouches, short link aft into the port channel's forward end.
+    ry0, ry1 = DROP_Y0, DROP_Y0 + 10.0
+    L["trunk: riser"] = dict(
+        solid=box(-hw - 2.0, hw + 2.0, ry0, ry1, DROP_Z0, tz0 + TRUNK_H),
+        mates=("trunk: CN1 run", "Bay A FC1 cable zone", "trunk: crossover"), gap=1.0)
+    L["trunk: crossover"] = dict(
+        solid=box(hw, PORT_CH_X1, ry0, ry1, DROP_Z0, DROP_Z0 + TRUNK_H),
+        mates=("trunk: riser", "trunk: port link"), gap=1.0, bundle=True)
+    L["trunk: port link"] = dict(
+        solid=box(PORT_CH_X0, PORT_CH_X1, ry1 - 2.0, PORT_CH_Y0 + 2.0, PORT_CH_Z0,
+                  DROP_Z0 + TRUNK_H),
+        mates=("trunk: crossover", "trunk: port channel"), gap=1.0, bundle=True)
+    L["trunk: port channel"] = dict(
+        solid=box(PORT_CH_X0, PORT_CH_X1, PORT_CH_Y0, RAIL_HEAD_Y1 + 2.0, PORT_CH_Z0,
+                  PORT_CH_Z1),
+        mates=("trunk: port link",), gap=1.0, bundle=True,
+        note="head part (the twin tool gates it to Y 300)")
+    # Generated mounts and hatch (tools/gen_bay_a_fwd_mounts.py, U3), gated
+    # here once they exist.  Drawer and flange are bonded (skin seat).
+    mounts = (
+        ("Bay A CN1 drawer", "bay_a_cn1_drawer.stl", True,
+         ("Bay A node CN1 (fwd, flat)", "Bay A CN1 gate", "Bay A FC1 shelf")),
+        ("Bay A CN1 gate", "bay_a_cn1_gate.stl", False,
+         ("Bay A CN1 drawer", "Bay A CN1 cable zone")),
+        ("Bay A FC1 shelf", "bay_a_fc1_shelf.stl", False,
+         ("Bay A CN1 drawer", "Bay A node FC1 (raised, flat)")),
+        ("Bay A hatch flange", "bay_a_hatch_flange.stl", True, ()),
+    )
+    for name, stl, bonded, mates in mounts:
+        path = os.path.join(REPO, "airframe", "stls", "fuselage", "head", stl)
+        if os.path.exists(path):
+            L[name] = dict(solid=trimesh.load(path), skin_seat=bonded, mates=mates, gap=1.0)
+        else:
+            MISSING_MOUNTS.append(stl)  # report() FAILS on these (never silently ungated)
+    # Observer aft edge -> down in front of FC1 to the top of CN1 (CN1's
+    # forward cables reach it there; the ring continues through CN1's zone).
+    ae = observer_aft_end()
+    L["trunk: Observer to CN1"] = dict(
+        solid=box(-hw, hw, ae[1] - 6.0, FC1F_Y0 - 2.0, CN1F_Z0 + nt + 1.0, ae[2] - 4.0),
+        mates=("Observer board", "Bay A node CN1 (fwd, flat)"), gap=1.0)
+
+
+def _polyline_mm(solids, names):
+    """Conservative run length: the sum of each envelope's longest extent
+    (a cable walks the full length of every envelope it passes through)."""
+    return float(sum(np.ptp(solids[n].bounds, axis=0).max() for n in names))
+
+
+def route_lengths(solids):
+    """name -> (length mm, contents); raises KeyError on an unknown envelope."""
+    out = {}
+    for name, (chain, contents) in ROUTES.items():
+        missing = [n for n in chain if n not in solids]
+        if missing:
+            raise KeyError(f"route {name!r}: unknown envelope(s) {missing}")
+        out[name] = (_polyline_mm(solids, chain), contents)
+    return out
+
+
+def stub_status(length_mm, limit_mm):
+    """R4: PASS / FAIL against a cited limit, PROVISIONAL when uncited."""
+    if limit_mm is None:
+        return "PROVISIONAL (limit not cited)"
+    return "PASS" if length_mm <= limit_mm else "FAIL"
+
+
+def route_report(solids):
+    """Print the route table; return (n_fail, n_provisional) for RESULT."""
+    print("\nharness routes (centreline lengths, KTD3):")
+    for name, (mm, what) in route_lengths(solids).items():
+        print(f"  {name:46s} {mm:6.0f} mm ({mm / 25.4:4.1f} in)  {what}")
+    # CN1 is the bus START (120 ohm on board); the bus daisy-chains through the
+    # pouch connectors, so the HARNESS adds no stub at CN1.  The on-board stub
+    # (connector -> transceiver) is a board-layout quantity not measured here.
+    n_fail = n_prov = 0
+    for bus, lim in STUB_LIMIT_MM.items():
+        st = stub_status(CN1_HARNESS_STUB_MM, lim)
+        n_fail += st == "FAIL"
+        n_prov += st.startswith("PROVISIONAL")
+        print(f"  CN1 {bus} harness stub {CN1_HARNESS_STUB_MM:.0f} mm (daisy chain, bus start; "
+              f"on-board stub not measured): {st}")
+    return n_fail, n_prov
 
 
 def _part(name):
@@ -526,8 +725,14 @@ def band_check(head_m):
 
 
 def report(write_scad=False):
-    head_tm = trimesh.load(HEAD)
-    head_m = to_man(head_tm) + to_man(trimesh.load(COLLAR)) - to_man(bay_cutter())
+    if BAYA_MODE == "fwd":
+        # one-piece head+cargo hull (tools/merge_head_cargo_shell.py); the
+        # splice collar is retired with it
+        hull_path = MERGED
+        head_m = to_man(trimesh.load(MERGED)) - to_man(bay_cutter())
+    else:
+        hull_path = HEAD
+        head_m = to_man(trimesh.load(HEAD)) + to_man(trimesh.load(COLLAR)) - to_man(bay_cutter())
     L, parts = layout()
     solids = {}
     for name, e in list(L.items()):
@@ -537,7 +742,8 @@ def report(write_scad=False):
             solids[twin] = mirror_x(e["solid"])
             L[twin] = dict(e, solid=solids[twin])
             L[twin].pop("mirror")
-    print(f"head {os.path.relpath(HEAD, REPO)} + collar; aircraft datum R2")
+    print(f"hull {os.path.relpath(hull_path, REPO)}"
+          f"{'' if BAYA_MODE == 'fwd' else ' + collar'}; aircraft datum R2; Bay A {BAYA_MODE}")
     print(f"{'envelope':26s} {'hit mm3':>9s} {'<gap mm3':>9s}  note")
     fails = 0
     for name, tm in solids.items():
@@ -557,6 +763,12 @@ def report(write_scad=False):
             # means the body no longer fits its pocket
             bad = hit > 5.0
             note = "fills its (already cut) pocket"
+        elif e.get("bundle"):
+            # flexible harness bundle: no hard hit; may lie against the skin
+            # inside its gap up to BUNDLE_NEAR_MAX (same facet allowance as the
+            # twin tool's port channel)
+            bad = hit > 1.0 or near > BUNDLE_NEAR_MAX
+            note = note or "harness bundle (may lie on the skin)"
         else:
             bad = hit > 1.0 or near > 1.0
         if bad:
@@ -589,6 +801,32 @@ def report(write_scad=False):
         los_bad += (vs > 0.5) + (vt > 0.5 and "pitot line" not in REGISTERED)
         print(f"  {k:8s} cone x shell {vs:8.1f} mm3  x pitot {vt:6.1f} mm3"
               f"  {'BLOCKED' if vs > 0.5 else 'clear'}")
+    band_bad = 0
+    if BAYA_MODE == "fwd":
+        print("\nbattery: twin pack tray -- gated by tools/twin_head_pack_fit.py "
+              "(merged hull); no single-cell band here")
+        route_fail, route_prov = route_report(solids)
+        for stl in MISSING_MOUNTS:
+            print(f"  FAIL mount STL missing (run tools/gen_bay_a_fwd_mounts.py): {stl}")
+        band_bad = route_fail + len(MISSING_MOUNTS)
+    else:
+        route_prov = 0
+        band_bad = _single_cell_band(head_m)
+    ok = not (fails or over or los_bad or band_bad)
+    tag = "PASS (PROVISIONAL: stub limits not cited)" if ok and route_prov else (
+        "PASS" if ok else "FAIL")
+    print(f"\nRESULT: {tag} ({fails} shell, {over} pair, "
+          f"{los_bad} line-of-sight, {band_bad} band/route/mount)")
+    if write_scad:
+        if ok:
+            write_params()
+        else:
+            print("not writing head_layout_params.scad: gate FAILED")
+    return ok
+
+
+def _single_cell_band(head_m):
+    """Reference (side) mode only: the retired single head cell's band."""
     print(f"\nsliding band X+-{BAND_W / 2:.2f} Z{BAND_Z0:.2f}..{BAND_Z1:.2f}"
           f" Y{STOP_Y:.1f}..{BAND_Y1:.1f}:")
     band_bad = 0
@@ -600,20 +838,17 @@ def report(write_scad=False):
         print("  clear of the head shell, collar, cargo shell and every cargo envelope")
     print(f"\nhead cell Y{CELL_Y0:.1f}..{CELL_Y1:.1f} (stop Y{STOP_Y:.1f}); second cell in the"
           f" cargo band Y{BAND_Y1 - CELL_L:.1f}..{BAND_Y1:.1f} (owner 2026-10-27, rail lever)")
-    ok = not (fails or over or los_bad or band_bad)
-    print(f"\nRESULT: {'PASS' if ok else 'FAIL'} ({fails} shell, {over} pair, "
-          f"{los_bad} line-of-sight, {band_bad} band)")
-    if write_scad:
-        write_params()
-    return ok
+    return band_bad
 
 
-SCAD_KEYS = ("BAND_W", "BAND_H", "BAND_ZC", "BAND_Z0", "BAND_Z1", "STOP_Y", "SLED_FLOOR_T",
-             "SLED_LIP", "CELL_L", "CELL_W", "CELL_H", "CELL_Y0", "CELL_Y1", "RAIL_T",
-             "RAIL_LIP", "RAIL_Y0", "RAIL_HEAD_Y1", "CATCH_L", "CATCH_W", "CATCH_T",
-             "CATCH_TOOTH_H", "SADDLE_T", "BAND_Y1",
-             "OBS_Y0", "OBS_L", "BAYA_Y0", "BAYA_Z0", "BAYA_X_IN", "OBS_W_FWD", "OBS_W_AFT",
-             "OBS_BOARD_Z0", "OBS_STANDOFF_D")
+# Published keys (Bay A forward, 2026-11-01).  The single-cell rail, stop,
+# sled, catch and band keys are retired: the twin tray is the only battery
+# source (twin_pack_tray_params.scad, KTD6).  gen_head_cell_rail.py still
+# imports those Python constants for the archived single-cell parts.
+SCAD_KEYS = ("OBS_Y0", "OBS_L", "OBS_W_FWD", "OBS_W_AFT", "OBS_BOARD_Z0", "OBS_STANDOFF_D",
+             "CN1F_Y0", "CN1F_Z0", "FC1F_Y0", "FC1F_Z0", "PORT_CH_X0", "PORT_CH_X1",
+             "PORT_CH_Z0", "PORT_CH_Z1", "PORT_CH_Y0", "PORT_CH_Y1", "DROP_Y0",
+             "DROP_Z0", "PITOT_TURN_Z1", "HATCH_X", "HATCH_Y0", "HATCH_Y1")
 
 
 def write_params():
@@ -622,7 +857,8 @@ def write_params():
              "// Do not edit: change tools/head_layout_fit.py and regenerate.",
              "// Aircraft datum R2 (mm); X = +port, Y = +aft, Z = +dorsal."]
     lines += [f"{k} = {float(g[k]):.4f};" for k in SCAD_KEYS]
-    lines.append("SADDLE_Y = [" + ", ".join(f"{y:.4f}" for y in SADDLE_Y) + "];")
+    lines += [f"NODE_{k} = {float(getattr(clf, 'NODE_' + k)):.4f};"
+              for k in ("L", "H", "T", "CABLE")]
     lines.append("OBS_HOLES = [" + ", ".join(f"[{a:.2f}, {b:.2f}]" for a, b in OBS_HOLES) + "];")
     # nose sensor bay (Rev H2)
     vec = lambda v: "[" + ", ".join(f"{c:.6f}" for c in v) + "]"  # noqa: E731
@@ -646,7 +882,13 @@ def write_params():
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--write-scad", action="store_true")
+    ap.add_argument("--bay-a", choices=("fwd", "side"), default="fwd",
+                    help="Bay A layout: fwd (published) or side (read-only reference)")
     a = ap.parse_args()
+    global BAYA_MODE
+    BAYA_MODE = a.bay_a
+    if a.write_scad and BAYA_MODE != "fwd":
+        ap.error("--bay-a side is a read-only reference; --write-scad publishes fwd only")
     return 0 if report(a.write_scad) else 1
 
 

@@ -181,3 +181,67 @@ pouches that do fit at 26–27 in land on the centreline in the head. That viola
 of `tools/cg_relocation_study.py`, so they read about 6 mm aft of that study. Only the
 fit / no-fit result is the finding here. The scale is a geometric stand-in for rebuilding
 the hull from the owner's sources.
+
+## Option: Bay A forward (2026-11-01)
+
+Owner proposal (2026-11-01): move the Shepherd stack's TACCO node forward under
+the nose
+Observer and raise the Pilot node, so the twin pack tray can slide forward under
+them.
+
+**Layout.** Both pouches lie flat (37 mm beam × 58 mm long × 22 mm tall),
+connector edge
+aft.
+
+- **CN1 (TACCO cape + PB2-I).** On the centreline at Y 62–120, Z 206–228. About
+  24 mm of its 58 mm length lies under the Observer board (Y 27–86). It cannot
+  go further forward: lower, the bay insert and the chin taper stop it; higher,
+  the Observer underside does.
+- **FC1 (Pilot cape + PB2-I).** On the centreline at Y 100–158, Z 229–251, over
+  CN1's aft end and the rail ceiling. It does not fit on edge.
+- **Harness.** The Observer-to-CN1 drop sits forward of FC1. The CN1 run goes
+  aft under FC1 at Z 216–227. The FC1 cable zone is at Y 158–168.
+- **Pitot.** The hose turns straight up from its keep-out end (−3.6, 50.5,
+  223.9) to the Observer underside (Z 236.8), where the airspeed sensor (WBS
+  §1.10 U5, unselected) takes it. CN1 clears the turn by 7 mm. The turn is now
+  an envelope in both Bay A modes.
+- **Twin tray.** The tray's forward end moves from Y 172 to Y 163. The skin then
+  binds at tray centre Zc 191; no other tray height passes.
+
+**Gates (real meshes, 2026-11-01).**
+
+- `tools/head_layout_fit.py --bay-a fwd`: PASS. The baseline (`side`) also still
+  passes.
+- `tools/twin_head_pack_fit.py --bay-a fwd`: PASS. The pack band's skin overlap
+  is 20.3 mm³, against the 25 mm³ facet allowance; this is marginal. Neither run
+  writes SCAD. The published tray stays at Y 172 until the owner adopts the
+  option.
+
+**CG.**
+
+| Item | Move | CG shift |
+| --- | --- | ---: |
+| Twin tray, option F (tool) | 9 mm fwd | +11.3 → +10.4 mm |
+| Twin tray + 6S 1600, option A (tool) | 9 mm fwd | +10.6 → +9.4 mm |
+| CN1, 58 g (ledger [CALC]) | 38 mm fwd (Y 129 → 91) | about −0.35 mm |
+| FC1 | raised only | about 0 |
+
+The total is about 1.3–1.6 mm forward. This is useful but well short of the trim
+room R8
+asks for. The third-pack room aft of the tray grows from 108.2 to 117.2 mm. A
+second
+116 mm 2200 needs 120 mm, so it is still 2.8 mm short.
+
+**R4.** CN1 and FC1 are the same (Shepherd) stack, so forward/aft/port/starboard
+separation between stacks is unchanged.
+
+**Open items.**
+
+- The FC1 cable zone has to reach the twin tray's port side trunk channel (X
+  38.5–48.5, Z 193–201). That drop is not modelled yet.
+- Bus termination: CN1 is the bus-start node with 120 Ω termination. Its stub
+  length changes, so recheck it.
+- Airspeed sensor selection, and its footprint under the Observer at the hose
+  turn.
+- Pouch retention, and service access to CN1 under the Observer.
+- Thermal: CN1 is now enclosed between the Observer and FC1.

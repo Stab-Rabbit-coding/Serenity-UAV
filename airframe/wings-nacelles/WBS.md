@@ -2412,6 +2412,36 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         wall-pressure taps on a printed lip + duct section with a QX rotor,
         against the CFD trend (plan U12). Also run a cruise-condition CFD case
         (spillage drag of the 42.5 mm ring).
+    - [ ] **NAC-64-CANON-01 — exterior canon rule applied to the nacelle
+        (owner 2026-11-01, `airframe/AGENTS.md` "Geometry Integrity").**
+        - [x] **NAC-64-CANON-01.a — intake cowl faired into the canonical skin
+            (Claude Opus 5.5, 2026-11-01).** The held-cylinder lip ring (r 1.77 in
+            (45.05 mm) to Z 0.92 in (23.3 mm)) is replaced by a per-azimuth loft:
+            CFD lipE nose, then a monotone Hermite meeting the measured skin with
+            G1 continuity at Z 1.10-1.77 in (28-45 mm) (`tools/nacelle_cowl_fair.py`
+            -> `nacelle_cowl_fair_table.scad`). Canon reference: Henning engine
+            renders [REF-CAD-002], QMx Sheets 3/4 [REF-CAD-003]. Hover CFD
+            (`tools/nacelle_intake_cfd.py` lipE_cowl_*): equal to lipE, no
+            reversed flow; the old r 45.05 ring was 2 points better at r/R 0.95
+            (2.1 % vs 4.2 %) — traded for canon. Pod shell mass -0.7 g
+            (389.4 -> 388.7 g, PA CF), CG +0.09 mm.
+        - [ ] **NAC-64-CANON-01.b — re-bake the published pod STLs**
+            (`nacelle_{stbd,port}_64mm.stl`, `tools/prep_nacelle_64_bake.py` ->
+            `tools/bake_hull_frame.py`) from the new source. Held with
+            NAC-64-PIVOT-RC: the mass tool reports PIVOT_Z residual +9.1 mm at
+            HEAD as well (pre-existing), so bake once after the pivot converges.
+        - [ ] **NAC-64-CANON-01.c — nozzle canon check.** The 64 mm iris (8
+            shingled flaps in a housing ring) matches the canonical shingled
+            exhaust can [REF-CAD-002 final-backside]; the canon notched petal
+            trailing edge is NOT modelled — evaluate only with the 75-105 %
+            area schedule held (`airframe/AGENTS.md` "Nacelle Nozzle Drive").
+        - [ ] **NAC-64-CANON-01.d — SLS powder escape for the lip-ring cavity**
+            (4 x 0.12 in (3 mm) vents, ~0.6 in (15 mm) long): meets the >0.08 in
+            (2 mm) hole rule of the 3D Systems SLS Design Guide (June 2019,
+            p. 6) but the guide warns confined cake packs dense — confirm with
+            3D Systems (`docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` §6 item 4).
+            Material stays DuraForm PA CF (HDT 351 °F (177 °C) at 1.82 MPa; PA11/
+            PA12 soften at 136/184 °F (58/84 °C) near the motors and ESCs).
     - [ ] **NAC-64-TILT-01 — tilt-axis inertia and trunnion loads (owner
         2026-10-03: "recalculate the moments of inertia for the larger nacelles
         ... the trunnion, bearings, gears, driveshaft and tilt servos will have
