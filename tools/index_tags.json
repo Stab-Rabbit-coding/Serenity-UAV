@@ -793,6 +793,20 @@
       ],
       "archived": false
     },
+    "airframe/datasheets/3D-Systems_SLS_Design_Guide_en_final.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/datasheets/PA-602-CF-Data-Sheet-2021.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/datasheets/RW-PS-070-Stock-Plate-Panel-Angle-Tolerance-Sheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -21348,6 +21362,8 @@
       "airframe/blender-scripts/repair_shells_for_scad.py",
       "airframe/blender-scripts/serenity_render_views.py",
       "airframe/blender-scripts/verify_shells.py",
+      "airframe/datasheets/3D-Systems_SLS_Design_Guide_en_final.pdf",
+      "airframe/datasheets/PA-602-CF-Data-Sheet-2021.pdf",
       "airframe/datasheets/RW-PS-070-Stock-Plate-Panel-Angle-Tolerance-Sheet.pdf",
       "airframe/datasheets/Rhino-1411-4111-Infusion-Resin-TDS.pdf",
       "airframe/datasheets/T700GDataSheet.pdf",
