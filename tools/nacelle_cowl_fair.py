@@ -29,7 +29,8 @@ OUTPUT
 ------
 airframe/openscad/nacelles/nacelle_cowl_fair_table.scad (GENERATED — do not
 hand-edit): for each shell (port / starboard source mesh) a list of
-[azimuth_deg, z_junction_mm, r_skin_mm, dr_dz] at each azimuth's junction, in the 64 mm pod-local frame
+[azimuth_deg, z_junction_mm, r_skin_mm, dr_dz] at each azimuth's junction, in
+the 64 mm pod-local frame
 (shell scaled by P64_K radially and P64_A axially, bore on the Z axis — the
 same transform as nacelle_pod_50mm_tandem.scad nacelle_shell_imported()).
 
@@ -51,8 +52,8 @@ import numpy as np
 import trimesh
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-import nacelle_64_scale  # single source
-import nacelle_hollow_profile as nhp  # shell file/placement single source
+import nacelle_64_scale  # noqa: E402  single source
+import nacelle_hollow_profile as nhp  # noqa: E402  shell file/placement
 
 P64_K = nacelle_64_scale.get("P64_K")
 P64_A = nacelle_64_scale.get("P64_A")
@@ -66,13 +67,13 @@ OUT = ROOT / "airframe" / "openscad" / "nacelles" / "nacelle_cowl_fair_table.sca
 SHELLS = nhp.SHELLS
 BORE_CY = nhp.BORE_CY
 
-COWL_ZJ = 50.0      # [mm] upper bound of the junction search (pod-local Z),
-                    #      the dome's crest region; the junctions actually
-                    #      chosen are printed on each run (2026-11-01: Z 28-45).
+# Upper bound of the junction search (pod-local Z): the dome's crest region.
+# The junctions actually chosen are printed on each run (2026-11-01: Z 28-45).
+COWL_ZJ = 50.0      # [mm]
 COWL_Z_LO = 28.0    # [mm] earliest junction (lip shoulder hand-off room)
 DZ_SLOPE = 2.0      # [mm] central-difference half-step for dr/dz
 LIP_SHOULDER_R = 42.5   # [mm] = P64_FORE_R (CFD lipE), pod SCAD
-LIP_SHOULDER_Z = 1.5625 # [mm] = P64_FORE_A, pod SCAD
+LIP_SHOULDER_Z = 1.5625  # [mm] = P64_FORE_A, pod SCAD
 COWL_SINK = 0.3         # [mm] = P64_COWL_SINK, pod SCAD
 N_AZ = 72           # 5 deg azimuth resolution
 
