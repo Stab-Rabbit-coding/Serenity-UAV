@@ -46,10 +46,12 @@ class AllowablesTest(unittest.TestCase):
 
     def test_fos_default_and_override_rule(self) -> None:
         # Happy path: 1.5 default. Integration: only a VERIFIED, larger override raises it.
-        self.assertEqual(al.fastener_fos(self.sf), 1.5)
+        # Default 1.5 x NASA fitting factor 1.15 = 1.725; exempt joints stay at 1.5.
+        self.assertEqual(al.fastener_fos(self.sf), 1.725)
+        self.assertEqual(al.fastener_fos(self.sf, fitting_exempt=True), 1.5)
         sf = copy.deepcopy(self.sf)
         sf["overrides"] = [{"ref": "REF-X", "value": 2.0, "verified": False}]
-        self.assertEqual(al.fastener_fos(sf), 1.5)
+        self.assertEqual(al.fastener_fos(sf), 1.725)
         sf["overrides"][0]["verified"] = True
         self.assertEqual(al.fastener_fos(sf), 2.0)
 

@@ -75,14 +75,22 @@ def select(db: dict, candidates: list[str], prop: str) -> tuple[str, dict]:
     raise Unknown("no candidate has a cited value: " + "; ".join(unknown))
 
 
-def fastener_fos(sf: dict | None = None) -> float:
-    """1.5 by default; larger of default and any VERIFIED override."""
+def fastener_fos(sf: dict | None = None, fitting_exempt: bool = False) -> float:
+    """Effective factor of safety for a fastened joint.
+
+    1.5 (owner default) multiplied by the NASA-STD-5020B s4.2.2 fitting factor (1.15) unless the joint
+    is exempt (tested, correlated FEA, or redundant and ductile) or the owner has switched the
+    factor off; the larger of that and any VERIFIED override governs.
+    """
     sf = sf or json.loads(SF.read_text())
     best = float(sf["fastener_default"])
+    ff = sf.get("fitting_factor", {})
+    if ff.get("apply_by_default") and not fitting_exempt:
+        best *= float(ff["value"])
     for o in sf.get("overrides", []):
         if o.get("verified") and float(o["value"]) > best:
             best = float(o["value"])
-    return best
+    return round(best, 4)
 
 
 def validate(db: dict, sf: dict) -> list[str]:
