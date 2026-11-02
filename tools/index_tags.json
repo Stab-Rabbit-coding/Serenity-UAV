@@ -16151,6 +16151,27 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-11-01-001-canonical-gear-box/fore65_full_bow.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/fore65_full_port.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/fore65_full_ventral.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_bow.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -20902,6 +20923,9 @@
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_quarter_wing.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_quarter_wing_cf.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_side_penetrations_clear.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/fore65_full_bow.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/fore65_full_port.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/fore65_full_ventral.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_bow.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_quarter.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_side.png",

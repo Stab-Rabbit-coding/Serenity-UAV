@@ -247,10 +247,15 @@ These feed LG-29, the formal tip-over re-derivation.
 
 At −65° the printed thigh (2 × Ø14 mm, S 539 mm³) has a factor of 1.4 on
 PA 602-CF's 85 MPa XY tensile strength.  There is no Z, impact or fatigue
-allowable.  Candidate fix: the SCAD's existing `THIGH_VARIANT = "cf_core"`
-(Ø6 mm CF rod bonded through each cylinder plus steel cross-pin).  That is
-an owner decision (procured parts, mass); the CF rod allowable must be
-cited.
+allowable.  `cf_core` is NOT a candidate: the 2026-10-19 thigh-variant study
+(`docs/plans/2026-10-19-001-baseline-r1/lg_thigh_variants.py.txt`) rejected
+it.  The rod net section at the cross-pin failed (0.25×), and so did
+cross-pin bearing in the lug (0.77×).  Owner 2026-11-01: hold.
+
+The variant that survived that study is "grown" (printed 17/22 mm, worst
+margin 1.09×, +11.1 g/leg).  Its out-of-plane section is S ≈ 965 mm³, which
+roughly halves the bending, to ≈ 34 MPa.  It is a candidate to evaluate,
+not adopted.
 
 **Gates run at −65 / strut 80:**
 
