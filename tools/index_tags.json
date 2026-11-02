@@ -16109,6 +16109,13 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_bow_fore_fairing.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_bow_wing_cf.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -20833,6 +20840,7 @@
       "docs/plans/2026-11-01-001-canonical-gear-box/concept_quarter_trapezoid.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/concept_quarter_with_wing.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/concept_side.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_bow_fore_fairing.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_bow_wing_cf.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_quarter_box.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_quarter_wing.png",
