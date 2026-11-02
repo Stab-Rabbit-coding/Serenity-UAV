@@ -394,6 +394,12 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] BAYA-FWD-09 Assembly/build guide: hatch hull + new parts
 - [ ] BAYA-FWD-10 Hatch seal + cover PGND bond decision
 - [ ] BAYA-FWD-11 Place TACCO antennas; cut MMCX coax to length
+- [x] HULL-LEAK-01..03 Spar stale/roof holes/head crack sealed (rebuild)
+- [x] HULL-FUSE-01 Wing-root flanges fused into head+cargo print
+- [ ] HULL-LEAK-04 Cargo door hinge-edge seam seal
+- [ ] LG-AFT-BOLT-01 Aft-port gear bolt driver access vs wing
+- [ ] HULL-FUSE-02 Fuse other bonded mounts into one-piece print
+- [ ] COOL-01 Rear-fan cooling: CFD, inlets, tail exhaust, CG
 #### 1.1.2 — Wings
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
 

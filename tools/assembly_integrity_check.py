@@ -58,6 +58,8 @@ ENCLOSURE = (
     ("cargo/middle collar", os.path.join(FS, "cargo_middle_splice_collar.stl")),
     ("cargo door port", os.path.join(FS, "cargo", "cargo_door_port.stl")),
     ("cargo door stbd", os.path.join(FS, "cargo", "cargo_door_stbd.stl")),
+    # the wing-root flanges are FUSED into the merged hull (2026-11-01); their
+    # generated STLs are still loaded for the S1 datum check
     ("wing-root flange port", os.path.join(FS, "wing_root_flange_port.stl")),
     ("wing-root flange stbd", os.path.join(FS, "wing_root_flange_stbd.stl")),
     ("wing port", os.path.join(REPO, "airframe", "stls", "wings", "wing_port_s1223_revo.stl")),
@@ -76,13 +78,6 @@ def load_enclosure():
     return parts, trimesh.util.concatenate([m for _, m in parts])
 
 
-def _hull_z_range(scene, y):
-    """Interior Z span at the centreline for station y (first skin up/down from
-    a point between the extreme skins)."""
-    lo, hi = scene.bounds[0][2], scene.bounds[1][2]
-    return lo, hi
-
-
 def escape_map(scene, direction, pitch):
     """Escape mask over (Y, Z) for +-X rays, or (Y, X) for +-Z rays, cast from
     the centreline plane inside the hull."""
@@ -92,10 +87,23 @@ def escape_map(scene, direction, pitch):
         vs = np.arange(scene.bounds[0][2], scene.bounds[1][2], pitch)
         Y, V = np.meshgrid(ys, vs)
         o = np.c_[np.full(Y.size, hd.X_CL), Y.ravel(), V.ravel()]
-    else:  # vertical: grid Y x X, start at the interior mid-height
+    else:  # vertical: grid Y x X, start midway between the column's lowest
+        # and highest skin (a fixed start height fell OUTSIDE the hull in the
+        # nose and tail cone and reported false escapes)
         vs = np.arange(-60.0, 60.0 + 1e-6, pitch)
         Y, V = np.meshgrid(ys, vs)
-        o = np.c_[V.ravel(), Y.ravel(), np.full(Y.size, 175.0)]
+        n = Y.size
+        lo = np.c_[V.ravel(), Y.ravel(), np.full(n, -100.0)]
+        hi = np.c_[V.ravel(), Y.ravel(), np.full(n, 500.0)]
+        zlo, zhi = np.full(n, np.nan), np.full(n, np.nan)
+        loc, ir, _ = scene.ray.intersects_location(lo, np.tile([0, 0, 1.0], (n, 1)),
+                                                   multiple_hits=False)
+        zlo[ir] = loc[:, 2]
+        loc, ir, _ = scene.ray.intersects_location(hi, np.tile([0, 0, -1.0], (n, 1)),
+                                                   multiple_hits=False)
+        zhi[ir] = loc[:, 2]
+        zmid = np.where(np.isfinite(zlo) & np.isfinite(zhi), 0.5 * (zlo + zhi), np.nan)
+        o = np.c_[V.ravel(), Y.ravel(), np.nan_to_num(zmid, nan=-1e4)]
     hit = scene.ray.intersects_any(o, np.tile(d, (len(o), 1)))
     # a point is only meaningful if it is INSIDE the enclosure: the opposite
     # ray must hit something too (otherwise the start point is outside)
@@ -142,12 +150,12 @@ def spar_checks(parts, pitch):
         findings.append(("hull spar bore", "NOT FOUND near the datum spar", None))
     else:
         dy, dz = best[0] - hd.SPAR_Y, best[1] - hd.SPAR_Z
+        dia = 2 * np.sqrt(best[2] / np.pi)
         findings.append(("hull spar bore (port side window)",
-                         f"centre Y {best[0]:.1f} Z {best[1]:.1f} (O{2 * np.sqrt(best[2] / np.pi):.1f})",
-                         (dy, dz)))
+                         f"centre Y {best[0]:.1f} Z {best[1]:.1f} (O{dia:.1f})", (dy, dz)))
     for side in ("port", "stbd"):
         b = byname[f"wing-root flange {side}"].bounds
-        yc, zc = (b[0][1] + b[1][1]) / 2, None
+        yc = (b[0][1] + b[1][1]) / 2
         findings.append((f"wing-root flange {side}", f"Y centre {yc:.1f}", (yc - hd.SPAR_Y, 0.0)))
     w = byname["wing port"]
     findings.append(("wing port root LE", f"Y {w.bounds[0][1]:.1f} (datum WING_LE_ROOT_Y "

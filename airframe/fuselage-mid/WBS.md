@@ -1224,6 +1224,30 @@ Plan `docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md`; spec
 - [ ] **BAYA-FWD-10** — Hatch seal (rain/dust) and cover-to-PGND bond decision.
 - [ ] **BAYA-FWD-11** — Place the TACCO antennas and cut the 3 MMCX coax leads to length
     (plan 003 deferred antenna placement).
+- [x] **HULL-LEAK-01** — Spar bore + mortise were stale at Y 326.7 after the 0.5 in aft
+    wing-root shift (SPAR_Y 339.4): cargo shell, merged hull and wing-root flanges
+    regenerated from source; flanges now centred on SPAR_Y (FOS 20.7). Found by the
+    cooling-air CFD leak check (`tools/assembly_integrity_check.py`).
+- [x] **HULL-LEAK-02** — Four roof holes (Y 255.7 / 385.7, X ±18): the retired cargo
+    cradle's boss subtraction ran above the roof. Cradle hangers retired at source
+    (`merge_cargo_interior.CARGO_CRADLE = False`); subtraction removed.
+- [x] **HULL-LEAK-03** — Head roof centreline crack (X 0, Y 99–104.5) bridged in the
+    one-piece merge.
+- [x] **HULL-FUSE-01** — Wing-root flanges fused into the one-piece head+cargo print
+    (separate only for mesh-processing reasons; bond line removed).
+- [ ] **HULL-LEAK-04** — Cargo door hinge-edge seam (X ±47–52, Y 317–378): specify the
+    door seal/gasket (cooling stream is suction; any opening becomes an inlet).
+- [ ] **LG-AFT-BOLT-01** — Aft-port gear bay upper-fwd bolt (R2 47.2, 417.8, 134.4):
+    driver-access keep-out clashes the port wing (979 mm³) after the wing shift; no
+    seat within 30 mm. Aft bays NOT regenerated (last valid STLs kept). Re-site the
+    bolt or the driver access.
+- [ ] **HULL-FUSE-02** — Assess fusing the other bonded mounts into the one-piece print
+    (gear bays, A1b housings, chin node shelf, Bay A drawer + hatch flange, twin tray
+    rails); keep removable / different-material parts separate.
+- [ ] **COOL-01** — Rear-fan cooling stream (Delta ASB02505SHA-AY6B): finish the
+    OpenFOAM case (`tools/cfd_internal_air_domain.py` voxel domain + fanPressure),
+    feed velocities to `tools/node_thermal_forced_air.py`, draw bow inlets + Phase 11
+    tail exhaust on QMx/Henning lines, add fan/duct/brass mass to the CG roll-up.
 
 ###### 1.1.1.4.1 *Anti-Collision Tail Light*
 
