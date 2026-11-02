@@ -44,6 +44,12 @@ FLEX_MAX = 26;            // deg, gear stroke swept by the bay check
 // --- box section (X, Z) at the full-depth stations --------------------------
 BOX_Z_BOT   = 80.0;       // belly plane
 BOX_Z_TOP   = 133.0;      // wing-root underside (wing is the canonical top plate)
+// Owner 2026-11-01: no shelf in front of the wing root -- the box top is a
+// face sloping up-inboard from the outboard face edge at TOP_SLOPE, so it
+// runs INTO the hull skin (a clean skin joint) wherever the wing is not
+// above it.  Under the wing the top is then trimmed to the wing's own
+// underside contour by tools/gear_box_concept_fit.py.
+TOP_SLOPE   = 45;         // deg above horizontal
 BOX_X_IN    = 56.0;       // inboard edge -- outboard of the door aperture (X 52.25)
 BOX_X_FACE_T = 96.0;      // outboard face, top
 BOX_X_FACE_B = 92.0;      // outboard face, bottom (face leans in, as canon)
@@ -78,7 +84,7 @@ module section(xs) {
     function sx(x) = BOX_X_IN + (x - BOX_X_IN) * xs;
     polygon([[BOX_X_IN, BOX_Z_BOT], [sx(BOX_X_CHINE_B), BOX_Z_BOT],
              [sx(BOX_X_FACE_B), BOX_Z_CHINE], [sx(BOX_X_FACE_T), BOX_Z_TOP],
-             [BOX_X_IN, BOX_Z_TOP]]);
+             [BOX_X_IN, BOX_Z_TOP + (sx(BOX_X_FACE_T) - BOX_X_IN) * tan(TOP_SLOPE)]]);
 }
 
 module slab(y, xs, zlift = 0) {
