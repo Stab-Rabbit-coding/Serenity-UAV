@@ -50,8 +50,9 @@
 //             highlight (Z 0, r 40.0) to the 64 mm throat at Z 16.0.
 //             Contraction ratio (40/32)^2 = 1.56.  Nose radius F^2/a = 4.0 mm.
 //   external  ellipse P64_FORE_A x P64_FORE_B = 1.56 x 2.5 mm with the SAME
-//             4.0 mm nose radius, to the ring radius 42.5 mm, held to Z 22,
-//             then faired down inside the canonical shell by Z 40.
+//             4.0 mm nose radius, to the shoulder radius 42.5 mm (1.67 in),
+//             then (2026-11-01) faired per azimuth into the canonical skin
+//             with G1 continuity, Z 28-45 (circular_intake_fairing()).
 //   Both branches have a RADIAL tangent and equal curvature at the highlight:
 //   the leading edge is a true round nose (no corner, no cusp, no knife edge).
 //   SELECTED BY CFD (tools/nacelle_intake_cfd.py, real external forebody,
@@ -61,7 +62,7 @@
 //   outer 10 % of radius; a knife-edged outside separated; contraction ratio
 //   1.27-1.45 left tip separation.  A straight 64 mm duct runs from Z 16 to
 //   the rotor at Z 30.5, so the rotor runs in a constant bore (no tip-gap
-//   growth).  The lip ring is hollowed behind a 6 mm solid nose and vented
+//   growth).  The cowl is hollowed behind a 6 mm solid nose and vented
 //   into the pod cavity (lip_ring_cavity()).
 
 // AXIAL STACK (nacelle-local Z, mm; QF2822 drawing 8-4.jpg, VERIFY)
@@ -120,23 +121,23 @@ P64_LIP_A       = 16.0;   // [mm] internal ellipse, axial semi-axis (2:1)
 P64_LIP_F       =  8.0;   // [mm] internal ellipse, radial semi-axis (flare)
                           //      CFD lip sweep winner "lipE" (header)
 P64_HL_R        = P64_BORE_R + P64_LIP_F;   // = 40.0 mm highlight radius
-P64_FORE_R      = 42.5 * P64_SCALE;   // [mm] lip ring outer radius (45.05 at x1.06) = the scaled skin's
-                          //      LARGEST radius at its first measured station
-                          //      (Z 24.1: 40.5-42.7 mm); ahead of Z 24 the
-                          //      canonical dome is narrower, so the ring is the
-                          //      exterior there (recorded deviation).
-P64_FORE_B      = P64_FORE_R - P64_HL_R;    // = 5.05 mm external semi-axis (2.5 before x1.06)
+P64_FORE_R      = 42.5;   // [mm] lip SHOULDER radius = CFD lipE exactly
+                          //      (tools/nacelle_intake_cfd.py).  2026-11-01:
+                          //      no longer scaled x1.06 and no longer HELD as a
+                          //      cylinder — aft of the shoulder the cowl is lofted
+                          //      per azimuth into the measured canonical skin
+                          //      (cowl_fair_loft(), nacelle_cowl_fair_table.scad).
+P64_FORE_B      = P64_FORE_R - P64_HL_R;    // = 2.5 mm external semi-axis
 // External semi-axis chosen so the external nose curvature radius B^2/A equals
 // the internal one F^2/a (= 4.0 mm): a TRUE round nose.  A knife-edged
 // outside (B^2/A = 0.18 mm, first cut) separated in the hover CFD.
 P64_FORE_A      = P64_FORE_B * P64_FORE_B / (P64_LIP_F * P64_LIP_F / P64_LIP_A);
-                          // = 6.38 mm (1.5625 before x1.06)
-P64_RING_HOLD   = 22.0 * P64_SCALE;   // [mm] ring holds P64_FORE_R to here, then buries
-P64_FAIR_END    = 40.0 * P64_SCALE;   // [mm] Z by which the fairing is buried in the skin
-// 2026-10-05 x1.06: the ring radius and its hold/bury stations follow the
-// shell; the INTERNAL lip (P64_LIP_A/F, highlight r 40, 64 mm throat) does not.
-// P64_FORE_A below keeps the external nose radius equal to the internal 4.0 mm
-// (true round nose, CFD lipE), so the external ellipse lengthens with B.
+                          // = 1.5625 mm
+P64_RING_HOLD   = 22.0 * P64_SCALE;   // [mm] aft limit of the lip-ring cavity
+                                      //      (+ wall); the cowl is >= r 42.5 there
+P64_COWL_SINK   = 0.3;    // [mm] cowl ends this far INSIDE the skin at its junction so
+                          //      the skin, not the loft, is the surface aft of it
+                          //      (no coincident faces)
 P64_RING_WALL   =  2.5;   // [mm] lip-ring skin (AGENTS.md §7 2.0 min; 2.5 matches
                           //      the pod's measured skin)
 P64_RING_CAV_Z0 =  6.0;   // [mm] solid nose ahead of the ring cavity
@@ -311,32 +312,57 @@ module inlet_bellmouth() {
             [[0, P64_LIP_A]]));
 }
 
-// ADDITIVE — the lip ring (replaces the circular intake fairing).
-// Bounded in front by ONE smooth curve: the internal branch runs up to the
-// highlight and the external branch continues from it with the same radial
-// tangent and curvature.  Its inner side sits 0.05 mm inside the lip contour
-// so the subtractive cut, not this solid, defines the flow surface (no
-// coincident faces).  The ring holds P64_FORE_R to P64_RING_HOLD, then
-// smooth-steps down inside the skin by P64_FAIR_END and buries in the duct wall.
+// ADDITIVE — the intake cowl (replaces the circular intake fairing).
+// CANON RULE (airframe/AGENTS.md "Geometry Integrity", 2026-11-01): the
+// 2026-10-03..05 ring HELD a cylinder r 45.05 to Z 23.3 and then dropped inside
+// the skin — a plain can proud of the canonical dome with a groove behind it,
+// which the canonical engine never shows [REF-CAD-002 Henning engine model;
+// REF-CAD-003 Sheets 3/4]: there the cowl rolls continuously from the intake
+// lip into the bulbous forward shell.  Now, on every 5 deg azimuth:
+//   Z 0 .. P64_FORE_A   the CFD lipE external ellipse (unchanged nose, r 40->42.5)
+//   .. Z junction       a monotone cubic Hermite from the shoulder (r 42.5,
+//                       slope 0) to the MEASURED skin radius and slope at that
+//                       azimuth's junction = the earliest G1-feasible station
+//                       on Z 28..50 (or the skin's crest)
+//                       (tools/nacelle_cowl_fair.py), sunk P64_COWL_SINK
+// so the cowl takes the canonical dome's own asymmetry and meets it with
+// G1 continuity.  Inner side: 0.05 mm inside the lip contour (the subtractive
+// cut defines the flow surface), then buried in the duct wall at r 31.5.
+include <nacelle_cowl_fair_table.scad>
+COWL_TABLE = NACELLE_SIDE > 0 ? COWL_SKIN_PORT : COWL_SKIN_STBD;
+COWL_NH = 24;    // Hermite stations
+// Mirrored in tools/nacelle_intake_cfd.py r_ext() — change both together.
+function cowl_herm(z, zj, r1, m1) =
+    let(L = zj - P64_FORE_A, rise = r1 - P64_FORE_R,
+        m = min(m1, 3 * rise / L) * L,          // Fritsch-Carlson monotone clamp
+        t = (z - P64_FORE_A) / L)
+    P64_FORE_R * (2*t*t*t - 3*t*t + 1) + r1 * (-2*t*t*t + 3*t*t)
+        + m * (t*t*t - t*t);
+function cowl_profile(row) =
+    let(zj = row[1], r1 = row[2] - P64_COWL_SINK, m1 = max(0, row[3]))
+    concat(
+        [ for (i = [LIP_N : -1 : 0]) let(z = P64_LIP_A * i / LIP_N)
+              [lip_r_in(z) - 0.05, z] ],                       // throat -> HL
+        [ for (i = [1 : LIP_N]) let(z = P64_FORE_A * i / LIP_N)
+              [lip_r_out(z), z] ],                             // lipE nose
+        [ for (i = [1 : COWL_NH]) let(
+              z = P64_FORE_A + (zj - P64_FORE_A) * i / COWL_NH)
+              [cowl_herm(z, zj, r1, m1), z] ],                 // fair to skin
+        [[P64_BORE_R + P64_WALL - 0.5, zj],                    // bury in duct wall
+         [P64_BORE_R - 0.5, zj], [P64_BORE_R - 0.5, P64_LIP_A]]);
 module circular_intake_fairing() {
-    r_end  = P64_BORE_R + 0.5;    // = 32.5, inside the 34.5 duct wall
-    n_fall = 24;
-    rotate_extrude(angle = 360, convexity = 4)
-        polygon(concat(
-            // internal branch, throat -> highlight (0.05 mm proud of the cut)
-            [ for (i = [LIP_N : -1 : 0]) let(z = P64_LIP_A * i / LIP_N)
-                  [lip_r_in(z) - 0.05, z] ],
-            // external branch, highlight -> ring radius
-            [ for (i = [1 : LIP_N]) let(z = P64_FORE_A * i / LIP_N)
-                  [lip_r_out(z), z] ],
-            // hold the ring radius, then smooth-step into the duct wall
-            [[P64_FORE_R, P64_RING_HOLD]],
-            [ for (i = [1 : n_fall]) let(
-                  f = i / n_fall, s = f * f * (3 - 2 * f),
-                  z = P64_RING_HOLD + (P64_FAIR_END - P64_RING_HOLD) * f)
-                  [P64_FORE_R + (r_end - P64_FORE_R) * s, z] ],
-            // back along the duct side to the throat
-            [[P64_BORE_R - 0.5, P64_FAIR_END], [P64_BORE_R - 0.5, P64_LIP_A]]));
+    n_az = len(COWL_TABLE);
+    np = len(cowl_profile(COWL_TABLE[0]));
+    pts = [ for (k = [0 : n_az - 1]) let(a = COWL_TABLE[k][0])
+                for (q = cowl_profile(COWL_TABLE[k]))
+                    [q[0] * cos(a), q[0] * sin(a), q[1]] ];
+    // Triangles, not quads: adjacent azimuths have different junction
+    // stations, so a quad would be non-planar.
+    faces = [ for (k = [0 : n_az - 1]) for (j = [0 : np - 1])
+                let(k1 = (k + 1) % n_az, j1 = (j + 1) % np)
+                for (t = [[k * np + j, k * np + j1, k1 * np + j1],
+                          [k * np + j, k1 * np + j1, k1 * np + j]]) t ];
+    polyhedron(points = pts, faces = faces, convexity = 6);
 }
 
 // SUBTRACTIVE (Zone B, via the 50 mm pod's extra_zone_b_cuts() hook) — the
@@ -481,8 +507,11 @@ assert(NACELLE_FACE_X_PYLON - EDF_BORE_R - WALL_T >= 6.5,
 assert(abs(PIVOT_Z - ESC_DISC_Z) > TRUNNION_CAV_D / 2 + ESC_DISC_H / 2,
        "10 AWG disconnect bay overlaps the trunnion ring-gear cavity");
 assert(abs(lip_r_out(P64_FORE_A) - P64_FORE_R) < 1e-6
-       && P64_FORE_R <= 42.7 * P64_SCALE && P64_RING_HOLD < P64_FAIR_END,   // first-station max scales with the shell
-       "lip ring must not exceed the skin's largest first-station radius");
+       && min([ for (row = COWL_TABLE) row[2] ]) >= P64_FORE_R + 1.0,
+       "cowl junction skin is under the lip shoulder + 1 mm — regenerate with a larger COWL_ZJ (tools/nacelle_cowl_fair.py)");
+assert(COWL_GEN_SHOULDER_R == P64_FORE_R && abs(COWL_GEN_SHOULDER_Z - P64_FORE_A) < 1e-9
+       && COWL_GEN_SINK == P64_COWL_SINK,
+       "nacelle_cowl_fair_table.scad is stale vs the lip — rerun tools/nacelle_cowl_fair.py");
 assert(abs(P64_FORE_B * P64_FORE_B / P64_FORE_A
            - P64_LIP_F * P64_LIP_F / P64_LIP_A) < 1e-9,
        "external and internal nose radii differ — the nose is not a true round");
