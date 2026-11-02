@@ -14317,6 +14317,13 @@
       ],
       "archived": false
     },
+    "current-specification/allowables.json": {
+      "description": "JSON data (4 top-level keys)",
+      "tags": [
+        "specification"
+      ],
+      "archived": false
+    },
     "current-specification/auw_ledger.json": {
       "description": "JSON data (5 top-level keys)",
       "tags": [
@@ -14365,6 +14372,13 @@
     },
     "current-specification/joint_register.json": {
       "description": "JSON data (4 top-level keys)",
+      "tags": [
+        "specification"
+      ],
+      "archived": false
+    },
+    "current-specification/safety_factors.json": {
+      "description": "JSON data (5 top-level keys)",
       "tags": [
         "specification"
       ],
@@ -19535,6 +19549,13 @@
       ],
       "archived": false
     },
+    "tools/allowables.py": {
+      "description": "Cited-allowables database and selector for the joint-torque method.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/auw_ledger.py": {
       "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
       "tags": [
@@ -20382,6 +20403,13 @@
     },
     "tools/tail_strike_requirement.py": {
       "description": "tail_strike_requirement.py -- 4 ft drop tail strike on the aft skids, and the",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_allowables.py": {
+      "description": "Tests for tools/allowables.py (plan 2026-11-02-001 U3).",
       "tags": [
         "build-tooling"
       ],
@@ -21521,6 +21549,7 @@
       "current-specification/README.md",
       "current-specification/SPEC_TEMPLATE.md",
       "current-specification/TODO.md",
+      "current-specification/allowables.json",
       "current-specification/auw_ledger.json",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
@@ -21528,6 +21557,7 @@
       "current-specification/bom_revT.json",
       "current-specification/flight_limits.json",
       "current-specification/joint_register.json",
+      "current-specification/safety_factors.json",
       "current-specification/serenity-rev-s.jsx",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -25661,6 +25691,7 @@
       "tools/aft_section_mass_audit.py",
       "tools/aft_skin_thinning_study.py",
       "tools/airframe_interface_census.py",
+      "tools/allowables.py",
       "tools/auw_ledger.py",
       "tools/bake_hull_frame.py",
       "tools/bhd02_option_study.py",
@@ -25773,6 +25804,7 @@
       "tools/stitch_vias.py",
       "tools/sync_operators_manual.py",
       "tools/tail_strike_requirement.py",
+      "tools/tests/test_allowables.py",
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle_axial_fit.py",

@@ -80,6 +80,10 @@ whose load or allowable is unknown is marked "requires verification" and blocks 
   pull-out, printed-material bearing (crush under head/washer), and creep-limited clamp load; the torque window
   is bounded below by the preload needed to prevent separation/slip under the local load with scatter. This
   follows the project rule "name the failure mode" (mechanical-engineering skill).
+- **KTD2a — Factor of safety is 1.5 for fasteners** (owner, 2026-11-02), unless an FAA or ASME regulation, standard or
+  other citable best practice is more conservative, in which case the larger value governs. Overrides need a REF-ID with a
+  verified section; none is verified yet (candidates: REF-FAA-005, REF-NASA-004, REF-STD-BOLT-002). Data:
+  `current-specification/safety_factors.json`; selector: `tools/allowables.py fastener_fos()`.
 - **KTD3 — Material preference order governs allowable selection.** Printable composite, then laid-up CF/Kevlar,
   then aluminum, brass, spring steel, stainless; the first material with a *cited* allowable wins (owner
   rule 2026-10-26). A PA12-CF Z-axis allowable is open (3D Systems query), so those joints stay "requires

@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "purpose": "Factors of safety for fastened joints (plan 2026-11-02-001).",
+    "decision": "Owner 2026-11-02: use 1.5 for fasteners unless an FAA or ASME regulation, standard, or other citable best practice is more conservative.",
+    "license": "CC-BY-SA-4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)"
+  },
+  "fastener_default": 1.5,
+  "overrides": [],
+  "override_rule": "An override needs a REF-ID whose section/paragraph is VERIFIED (not 'requires verification') and a value greater than the default; the tool uses the larger of the default and any applicable override.",
+  "candidates_pending_verification": [
+    {
+      "ref": "REF-FAA-005",
+      "why": "AC 43.13-1B hardware/torque practice"
+    },
+    {
+      "ref": "REF-NASA-004",
+      "why": "NASA-STD-5020B threaded-fastener safety-factor requirements (TFSR)"
+    },
+    {
+      "ref": "REF-STD-BOLT-002",
+      "why": "VDI 2230 safety factors against yield/slip/separation"
+    },
+    {
+      "ref": "ASME (not yet catalogued)",
+      "why": "search for an ASME bolted-joint or fastener-torque practice; PCC-1 is pressure-flange specific and likely not applicable"
+    }
+  ]
+}
