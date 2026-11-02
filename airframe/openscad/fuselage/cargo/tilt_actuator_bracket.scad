@@ -52,7 +52,7 @@
 // KINEMATICS (docs/TILT_DRIVE_CONTROL_SPEC.md SS1.1):
 //   gearmotor --[worm 6-start / wheel 40T, m1, C 33.0, 6.667:1]--> drive shaft
 //   drive shaft --[tip pinion 14T -> ring 50T, m0.8, i 3.571]--> nacelle
-//   Total 23.8:1.  145 deg of nacelle = 9.6 gearmotor-output revolutions
+//   Total 23.8:1.  140 deg of nacelle (-5..+135) = 9.3 gearmotor-output revolutions
 //   = 1.0 s at the 570 rpm no-load figure (Pololu 20D 25:1 CB 6 V,
 //   REF-ACT-001); 144 deg/s at the nacelle, 111 deg/s at max efficiency.
 //   Sense: a worm/wheel mesh reverses like an external spur pair, so the

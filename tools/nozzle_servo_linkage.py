@@ -8,14 +8,14 @@ Governing documents
 * Plan: ``docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md``,
   unit U2 (KTD2 servo, KTD3 spring-opens / pull-only link, KTD4 schedule).
 * Requirement: ``airframe/AGENTS.md`` "Nacelle Nozzle Drive" — exit 75 % of
-  bore radius at 0 deg tilt, 105 % from 90 deg to the 145 deg tilt limit, and
+  bore radius at 0 deg tilt, 105 % from 90 deg to the 135 deg tilt limit, and
   fail to 105 %.
 
 What it computes
 ================
 1. **Schedule.** Tilt -> target exit radius -> unison-ring angle psi.  The
    target radius is LINEAR in tilt from 18.75 mm (0 deg) to 26.25 mm (90 deg)
-   and is held flat from 90 to 145 deg.  Invalid tilt (NaN / None) returns the
+   and is held flat from 90 to 135 deg.  Invalid tilt (NaN / None) returns the
    fail-safe open command.  Linear-in-radius is a design choice recorded here;
    the requirement fixes only the endpoints.
 2. **Cam kinematics.**  psi -> follower-pin radius (linear spiral, exactly as
@@ -101,7 +101,7 @@ TAB_X = ((PIN_R_REF_CLOSED - R_HINGE) + TAB_Z * _sc) / _cc
 
 # ── Tilt schedule (airframe/AGENTS.md "Nacelle Nozzle Drive") ──────────────
 TILT_OPEN_DEG = 90.0           # [deg] 105 % reached here, held to the limit
-TILT_LIMIT_DEG = 145.0         # [deg] tilt-drive sweep limit (wings_s1223_revo.scad)
+TILT_LIMIT_DEG = 135.0         # [deg] upper tilt limit, -5..+135 (owner 2026-11-02; flight_limits.json)
 
 # ── Servo arm (plan KTD3, open-cup pushrod) ─────────────────────────────────
 SERVO_SWEEP_DEG = 90.0         # [deg] assumed 1000-2000 us travel (U8 measures)
@@ -244,7 +244,7 @@ def pulse_for_servo_angle(alpha_deg: float, sweep_deg: float = SERVO_SWEEP_DEG) 
 
 
 def build_table(step_deg: float = 5.0) -> list[dict]:
-    """Tilt -> exit % -> ring psi -> servo angle -> pulse, 0 to 145 deg."""
+    """Tilt -> exit % -> ring psi -> servo angle -> pulse, 0 to 135 deg."""
     rows = []
     n = round(TILT_LIMIT_DEG / step_deg)
     for i in range(n + 1):

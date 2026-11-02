@@ -121,6 +121,8 @@ jobs:
         run: python3 tools/check_tacco_envelope_sync.py
       - name: Verify no aircraft-datum drift (plan 2026-10-19-001 U3)
         run: python3 tools/check_datum_drift.py
+      - name: Verify the Operator's Manual is in sync with the flight limits (WBS 0.10.3)
+        run: python3 tools/sync_operators_manual.py --check
       - name: Verify PROJECT_INDEX.md / ARCHIVE_INDEX.md / index_tags.json are in sync
         run: |
           if python3 tools/precommit_index.py --check; then

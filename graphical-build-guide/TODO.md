@@ -80,7 +80,7 @@
 - [ ] Thread 2mm steel longitudinal shaft through nacelle wall channel…
 - [ ] Mount crown pinion on shaft at nozzle end; mesh with Idler-In on the…
 - [ ] Mount idler gear on its bracket to the nozzle outer housing
-- [ ] Full sweep test (Rev R1, 2026-06-22): rotate nacelle -5°→140°
+- [ ] Full sweep test (Rev R1, 2026-06-22): rotate nacelle -5°→135°
 - [ ] Confirm petal closed position matches nacelle hull profile at 0°.
 - [ ] Port nacelle EDF rotation: CW from intake; stbd: CCW from intake
 - [ ] Stator fins visible and clear in Z=53–73mm gap on each nacelle
@@ -121,6 +121,13 @@
 ### 1.5.6 Rebuild Graphical Build Guide
 → full detail: `WBS.md` §1.5.6
 
+- [ ] BG-SEQ-1 — Per-step assembly spec
+- [ ] BG-SEQ-2 — Torque table with citations
+- [ ] BG-SEQ-3 — Wire-before-or-after ordering analysis
+- [ ] BG-SEQ-4 — Navigation lights worked example
+- [ ] BG-SEQ-5 — Two-section hull sequence
+- [ ] BG-PLAN-1 — Execute `docs/plans/2026-11-02-001-feat-build-guide-joint…
+- [ ] BG-SEQ-6 — Connector and harness steps
 - [ ] Pipeline: Update silhouette pipeline (`gen_hull_outlines.py`)
 - [ ] Pipeline: Update outline mapping (`update_overview_paths.py`)
 - [ ] Pipeline: Coordinate alignment check — Verify outline-derivation…

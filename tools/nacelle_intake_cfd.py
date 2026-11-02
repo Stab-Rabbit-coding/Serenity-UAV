@@ -21,7 +21,7 @@ MODEL — and its limits, stated so they are not forgotten
     incompressible simpleFoam, k-omega SST with wall functions.
   * The fan is NOT modelled.  Its suction is imposed as a uniform axial outlet
     velocity 80 mm downstream of the intake face, at the hover bore velocity
-    from momentum theory for the QX 2400 KV 6S table thrust (REF-EDF-003):
+    from momentum theory for the QX 2300 KV 24 V table thrust (2400 KV row superseded 2026-11-02) (REF-EDF-003):
     T = 20.9 N per fan, A = pi (0.032 m)^2, V = sqrt(T / (rho A)) = 72.8 m/s
     (142 kt).  Swirl, blade blockage and tip leakage are absent; the result
     is the INLET flow the rotor would ingest, not installed thrust.
@@ -79,7 +79,7 @@ TIP_GROWTH = 0.0001              # 0.1 mm allowed extra tip gap (in-bell rule)
 
 # ── Hover operating point (momentum theory, propulsion.md §1) ───────────────
 RHO = 1.225                      # kg/m^3 ISA sea level
-THRUST_N = 20.9                  # N per fan, QX 2400 KV 6S table [REF-EDF-003]
+THRUST_N = 23.24                 # N per fan, QX QF2822-2300KV, 24 V, 2370 gf [REF-EDF-003]; was 20.9 (2400 KV) — stored CFD results predate this and need a rerun
 NU = 1.5e-5                      # m^2/s air
 V_BORE = math.sqrt(THRUST_N / (RHO * math.pi * R_BORE ** 2))   # = 72.8 m/s
 

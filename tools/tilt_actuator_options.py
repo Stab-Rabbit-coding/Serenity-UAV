@@ -238,8 +238,9 @@ def analyse(o):
     w_max = math.radians(r["rate_nl"])
     r["alpha"] = w_max / TAU_M  # rad/s^2, motor-limited
     r["T_inertia_nac"] = I_NAC * r["alpha"]  # N.m to accelerate the nacelle
-    for ang in (5.0, 15.0, 90.0, 145.0):
+    for ang in (5.0, 15.0, 90.0, 140.0):
         r[f"t_{int(ang)}"] = math.radians(ang) / w_max + TAU_M
+    r["t_sweep"] = r["t_140"]  # full -5 -> +135 deg sweep = 140 deg of travel
     # small-signal bandwidth proxy: a +/-5 deg sinusoid is rate-limited above
     # f = rate / (2*pi*A)
     r["f_5deg"] = r["rate_nl"] / (2 * math.pi * 5.0)
@@ -318,8 +319,8 @@ def table(res):
             f"nacelle inertia costs {r['T_inertia_nac']:.3f} N.m",
         ),
         (
-            "Time +/-5 deg / +/-15 deg / 90 deg / 145 deg",
-            lambda r: f"{r['t_5']:.2f} / {r['t_15']:.2f} / {r['t_90']:.2f} / {r['t_145']:.2f} s",
+            "Time +/-5 deg / +/-15 deg / 90 deg / 140 deg",
+            lambda r: f"{r['t_5']:.2f} / {r['t_15']:.2f} / {r['t_90']:.2f} / {r['t_sweep']:.2f} s",
         ),
         (
             "Rate-limit bandwidth, +/-2 deg / +/-5 deg",
@@ -383,9 +384,9 @@ def domains(res):
         lambda r: f"{r['t_90']:.1f} s",
     )
     row(
-        "Full sweep -5 -> 140 deg",
+        "Full sweep -5 -> 135 deg (140 deg span)",
         "no requirement recorded (TILT-CTL-05)",
-        lambda r: f"{r['t_145']:.1f} s",
+        lambda r: f"{r['t_sweep']:.1f} s",
     )
     row(
         "Cruise hold, powered",
@@ -449,7 +450,7 @@ def write_scad(res, path):
             "OPT_MASS_PAIR  = [0, %s];\n" % ", ".join(f"{r['mass_pair']:.0f}" for r in res.values())
         )
         fh.write(
-            "OPT_T145       = [0, %s];\n" % ", ".join(f"{r['t_145']:.2f}" for r in res.values())
+            "OPT_TSWEEP     = [0, %s];\n" % ", ".join(f"{r['t_sweep']:.2f}" for r in res.values())
         )
         fh.write("OPT_T5         = [0, %s];\n" % ", ".join(f"{r['t_5']:.2f}" for r in res.values()))
         fh.write(

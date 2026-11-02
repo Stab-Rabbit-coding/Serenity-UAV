@@ -131,7 +131,7 @@
 
 - [ ] Motor spin test (5% throttle 2s): all 5 motors spin in correct directions.
 
-- [ ] Tilt servo calibration: 0° = nacelle vertical ±0.5°, 90° = horizontal ±0.5°.
+- [ ] Tilt servo calibration: 0° = nacelle horizontal (cruise) ±0.5°, 90° = vertical (hover) ±0.5°; range −5° to +135°.
 
 - [ ] Rear nozzle servo endpoints verified.
 

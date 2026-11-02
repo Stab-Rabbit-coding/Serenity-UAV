@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-10-31
+**Last updated:** 2026-11-02
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -84,6 +84,17 @@
 - [ ] Renumber wings-nacelles WBS §1.1.4/§1.1.5 (collide with root…
 - [ ] Wire gen_todo_from_wbs.py --check into pre-commit/CI beside the…
 - [ ] Rewrite docs/AVIONICS_PB2_REDESIGN.md as a Rev T overview, then…
+
+#### 0.10.3 Operator's Manual
+→ detail: docs/WBS.md §0.10.3
+
+- [ ] Owner (PE) review of Operator's Manual v0.1
+- [ ] Cite QMx sheets 11/12 + Firefly plate as fan art in REFERENCES.md
+- [ ] Fill Operator's Manual flight-test values from Phase 5/9 data (OM-5)
+- [ ] Reconcile manual with first-flight gates D1-D5 and blockers (OM-6)
+- [ ] Render Operator's Manual to PDF (no pandoc/weasyprint on this system)
+- [ ] Add Operator's Manual to REFERENCES.md "Used in" and PROJECT_INDEX
+- [ ] Catalogue extra Part 107 sections the manual needs (cert, preflight…
 
 ### 0.11 — Upstream KiCad Defect: `sch erc` SIGSEGV on unresolvable `lib_id`
 → detail: `avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md`
@@ -307,6 +318,7 @@
 - [ ] Pilot routing + Gerbers (120/120 placed, DRC 0)
 - [ ] Flight Engineer PCB: last DRC items, route, Gerbers
 - [ ] Observer PCB resync to the ISOW1412/Section H schematic
+- [ ] ★ OBSERVER-EDGE-DRC — 9 hard copper-to-edge clearance violations…
 - [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
 - [ ] Generate Commo gerbers
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
@@ -338,7 +350,7 @@
 → detail: `docs/WBS.md` §1.5
 
 - [ ] Update PHASED_BUILD_GUIDE.md
-- [ ] 1.5.6 Rebuild Graphical Buiild Guide
+- [ ] 1.5.6 Rebuild Graphical Buiild Guide — incl
 - [ ] Sync bom_revO.json ↔ bom_revO.csv
 - [ ] Rewrite build-guide Phase 2/3 steps for the Rev T mechanism (after D2)
 
@@ -497,7 +509,7 @@
 - [ ] Install the 49 MHz (Part 15 §15.235) daemon on CN1 and CN2 (sel…
 - [ ] ESC calibration (full throttle power-on → drop to zero).
 - [ ] Motor spin test (5% throttle 2s): all 5 motors spin in correct…
-- [ ] Tilt servo calibration: 0° = nacelle vertical ±0.5°, 90° = hori…
+- [ ] Tilt servo calibration: 0° = nacelle horizontal ±0.5°, 90° = vertical…
 - [ ] Rear nozzle servo endpoints verified.
 - [ ] 190mm from nose
 - [ ] GPS lock: HDOP ≤1.5 on both FC nodes; positions agree within 2m.
@@ -810,9 +822,6 @@
 → detail: `docs/WBS.md` §6.1
 
 - [ ] Delete stale feature branches
-
-### 6.2 — Observer PCB
-- [ ] ★ OBSERVER-EDGE-DRC: fix 9 copper-edge violations (KiCad CI)
 
 ---
 

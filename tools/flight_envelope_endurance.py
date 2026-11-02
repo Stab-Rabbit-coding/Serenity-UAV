@@ -27,8 +27,13 @@ License: MIT (SPDX-License-Identifier: MIT) -- see tools/LICENSE.
 
 from __future__ import annotations
 
+import json
 import math
 import sys
+from pathlib import Path
+
+_LIM = json.loads((Path(__file__).resolve().parents[1] / "current-specification"
+                         / "flight_limits.json").read_text())
 
 G0 = 9.80665              # m/s^2, standard gravity
 RHO0 = 1.225              # kg/m^3, ISA sea level
@@ -42,9 +47,11 @@ CELL3_G = 240.0           # Tattu 6S 1600 160C (BATTERY_SPLIT_OPTIONS S3)
 AUW_S1_CELL3_G = 6336.0   # S1 + third cell, no payload (BATTERY_SPLIT_OPTIONS S4)
 
 # ---- Thrust (tools/auw_ledger.py THRUST_PER_FAN_GF, [REF-EDF-003])
-FAN_T_GF = 2135.0         # QF2822-2400KV @ 22.2 V, manual sheet row
-FAN_I_A = 57.0            # same row
-FAN_P_W = 1265.4          # same row (= 57.0 A x 22.2 V: electrical input)
+# QF2822-2300KV @ 24 V, 100 % throttle: 2370 gf, 57.0 A, 1368 W [REF-EDF-003 second
+# sheet; owner 2026-11-02].  Read from current-specification/flight_limits.json.
+FAN_T_GF = _LIM["fan"]["thrust_gf"]
+FAN_I_A = _LIM["fan"]["current_a"]
+FAN_P_W = _LIM["fan"]["power_w"]      # = 57.0 A x 24 V: electrical input
 N_FANS = 4
 
 # ---- Battery
@@ -196,7 +203,7 @@ def main():
             lreq = w_n - t_total / 1000 * G0 * math.sin(math.radians(deg))
             v = math.sqrt(2 * lreq / (RHO0 * S_WING * CL_MAX)) if lreq > 0 else 0.0
             print(f"    V_min @ {deg:>4d} deg: {v * KT_PER_MS:6.1f} kt ({v:5.1f} m/s)")
-        for deg in (120, 140, 145):
+        for deg in (120, 130, int(_LIM["tilt"]["max_deg"])):
             print(f"    vertical thrust / W @ {deg} deg: "
                   f"{tw * math.sin(math.radians(deg)):.3f}")
 

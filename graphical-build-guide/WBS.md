@@ -261,7 +261,7 @@
 - [ ] Mount idler gear on its bracket to the nozzle outer housing; mesh
     Idler-Out with the full-circle nozzle ring gear; set backlash 0.1–0.2mm.
 
-- [ ] **Full sweep test (Rev R1, 2026-06-22):** rotate nacelle -5°→140°;
+- [ ] **Full sweep test (Rev R1, 2026-06-22):** rotate nacelle -5°→135°;
     verify nozzle ring gear rotates from ≈-1.33° to ≈38.45° (≈23.86° at the
     90° hover reference point), and petals swing from ≈18.76 mm to
     ≈34.42 mm tip radius (75%→105% of the 50 mm bore at the 0°/90°
@@ -357,6 +357,29 @@ documentation item this expands)*
 This section covers the comprehensive rebuild of the graphical build guide's SVG assets and pipeline, transitioning from pre-Rev-N hand-drawn line art to 24-inch Rev R1 Blender and FreeCAD assembly-derived silhouettes. This process resolves the two major stale-geometry issues: hand-drawn line art of archived hardware (Cape-A-1/TACCO) on 7 critical cards, and a partial silhouette pipeline referencing 18-inch pre-Rev-N models.
 
 ### 1.5.6 Rebuild Graphical Build Guide
+
+*(Owner direction 2026-11-02: all construction detail belongs here, not in `docs/OPERATORS_MANUAL.md`.
+The hull is two permanently collar-bonded sections — head+cargo merged, middle+rear merged — so the
+guide, not the operator's manual, carries how it was built.)*
+
+- [ ] **BG-SEQ-1 — Per-step assembly spec.** Every step names the part ID, the side (port/starboard), the install
+  order relative to its neighbors (what shall be done before and after), each wire (gauge, color, length, route,
+  connector), each fastener (size, count, thread-locker/adhesive), and the tightening torque with its source.
+- [ ] **BG-SEQ-2 — Torque table with citations.** Every torque value shall come from a cited fastener, insert or
+  material source in `REFERENCES.md`; a value with no source is marked "requires verification" and is never invented.
+- [ ] **BG-SEQ-3 — Wire-before-or-after ordering analysis.** For each wired part, decide whether its wire is installed
+  before or after the mating structure is attached (e.g., a navigation-light lead before or after the wing is
+  bonded) from the real access and bend-radius clearances, and state the decision in the step.
+- [ ] **BG-SEQ-4 — Navigation lights worked example.** Red on the port side, green on the starboard side, white aft
+  [REF-FAA-003]; verify the side, the wire route and the order against the CAD before the card is released.
+- [ ] **BG-SEQ-5 — Two-section hull sequence.** Rewrite the hull steps for the head+cargo and middle+rear merged
+  sections and the one permanent collar bond (cure, clamp and alignment detail); remove four-section language
+  from the guide and cards.
+- [ ] **BG-PLAN-1 — Execute `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md`** (torque
+  register/calculator/cross-check, sequence optimizer, KiCad board STEP renders); first slice = wing root, one gear bay,
+  nacelle trunnion, one avionics tray.
+- [ ] **BG-SEQ-6 — Connector and harness steps.** Each connector gets its mating part, keying/orientation, crimp or
+  solder method and retention; each harness gets a routing and strain-relief step.
 
 - [ ] **Pipeline: Update silhouette pipeline (`gen_hull_outlines.py`)** — Refactor to source outlines from canonical 24" Rev R1 baked hull-frame STLs in `airframe/stls/` instead of pre-Rev-N 18" geometry.
 - [ ] **Pipeline: Update outline mapping (`update_overview_paths.py`)** — Automate 2D path extraction and injection into 10 overview/silhouette SVG files.

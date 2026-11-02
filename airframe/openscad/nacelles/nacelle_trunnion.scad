@@ -372,7 +372,7 @@ if (TRUNNION_AUTORENDER) nacelle_trunnion();
 //   2. Ø33.9 register: must slip into the nacelle collar Ø34.0 bore.
 //   3. Flange face flat within 0.1 mm; it is the moment path.
 //   4. Ring-gear span over 3 teeth vs. the wing pinion — roll the pair by hand
-//      through the full 145° before bonding; no tight spot.
+//      through the full 140° before bonding; no tight spot.
 //   5. Ring-magnet seat Ø41.4 × 2.5 deep; magnet must sit FLUSH or 0–0.1 mm
 //      proud of nothing — a recessed magnet grows HALL_AIR_GAP and the AK7455
 //      off-axis flux window (10–70 mT) is gap-sensitive.

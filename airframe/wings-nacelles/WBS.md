@@ -823,11 +823,11 @@
   drive below. Analysis by Claude (Claude Opus 5.5, Anthropic) under the author's direction.
     - [x] **Decision recorded and passive drive retired (plan U1)** — trade-doc amendment,
         `airframe/AGENTS.md` requirement reworded ("scheduled on measured nacelle tilt",
-        105 % from 90° to 145°, fail to 105 %), sync-gear/pushrod SCADs + gear-compare WIP
+        105 % from 90° to 135°, fail to 105 %), sync-gear/pushrod SCADs + gear-compare WIP
         archived, Makefile targets and overlay §6 retired.
     - [ ] **[OPEN — IMPLEMENT] Servo linkage + schedule tool (plan U2)** —
         `tools/nozzle_servo_linkage.py`: ring angle vs servo angle, spring/servo margins, and a
-        tilt→ring→PWM table held flat from 90° to 145°.
+        tilt→ring→PWM table held flat from 90° to 135°.
     - [ ] **[OPEN — IMPLEMENT] Ring stops, spring seat, full-stroke slotted pull ear (plan U3)**
         in `nacelle_nozzle_iris.scad`.
     - [ ] **[OPEN — IMPLEMENT] Servo mount, pod pocket, flush cover + fit check (plan U4)** —
@@ -2351,6 +2351,21 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             +1.10 mm; one in pod / one off +1.09 mm; both off-pod +0.23 mm; a
             hypothetical ESC at Z 90 would balance the servo (−0.06 mm), but there
             is no room for it.
+        - [ ] **NAC-64-EDF-2300KV — owner correction 2026-11-02 (supersedes the 2400 KV
+            / 2135 gf basis recorded below and the 70 A decision).** The flight EDF is the
+            QX QF2822-**2300KV**: 83.60 ozf (2,370 gf), 24 VDC, 57.0 A, 1,368 W, **80 A ESCs**
+            [REF-EDF-003 second sheet]; nacelle tilt is **−5° to +135°** (0° horizontal),
+            a 140° span. Machine-readable in `current-specification/flight_limits.json`.
+            Sources already corrected: `docs/flight_envelope.md`, `tools/flight_envelope_endurance.py`,
+            `tools/nozzle_servo_linkage.py`, `tools/tilt_actuator_options.py`, tilt-span text
+            in the drive/spar docs. **Still to recompute (not done by the correction pass):**
+            (a) `edf_motor_mount_64mm.scad` vane swirl/torque (was 1265.4 W, 37.6 N tandem);
+            (b) `docs/NACELLE_64MM_VERIFICATION.md` §2 inlet hand checks and the stored
+            `nacelle_intake_cfd.py` results (thrust input now 23.24 N); (c) ESC bays and the
+            Open-Secure-ESC design (`tools/esc70_design.json`, `nacelle_64_scale.scad`) are
+            sized for **70 A** — an 80 A ESC may not fit at scale 1.06 (owner decision);
+            (d) PWR-CONN-01 / fuse sizing against 57.0 A per fan; (e) the 2135 gf record below
+            is historical.
         - [ ] **NAC-64-ESC-80A.m — 70 A is sufficient (2026-10-05, Claude Opus
             5.5; owner requirement 2135 gf per fan).** REF-EDF-003 2400 KV row: 22.2
             V, 57.0 A, 1265.4 W, 2135 g. Static fan laws (T ∝ n², P ∝ n³; aero
@@ -2537,7 +2552,7 @@ deciding finding is kinematic, not preference:
 | C — concentric torque sleeve over the spar | no | **severe**: tip t/c 24.8 → 31.3 % | rejected on airfoil |
 | D — shaft to tip + belt final stage | no | none | fallback if spur backlash bites |
 
-Also decided: the drive is bound by **travel, not torque**. 145° from a 180°
+Also decided: the drive is bound by **travel, not torque**. 140° (was 145°, corrected 2026-11-02) from a 180°
 servo needs a 1.24× step-**up**, so the shaft carries only 0.143 N·m against the
 DS3225's 2.402 N·m — the servo is ~17× oversized (see SPAR-25-6).
 

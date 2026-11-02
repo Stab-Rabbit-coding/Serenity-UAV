@@ -18,7 +18,7 @@ listings (§4). Arithmetic is screening only.
   AUW 6,232 g, CG +16.3 mm aft of the thrust line (Y 326.7).
 - **Hover current:** about 150 A (WBS PWR-CONN-01), scaled with AUW^1.5. Parallel packs
   share current roughly in proportion to capacity.
-- **Endurance:** capacity × AUW^-1.5, relative to S1. Thrust is 8,540 gf.
+- **Endurance:** capacity × AUW^-1.5, relative to S1. Thrust is 9,480 gf (4 × 2,370 gf, 2026-11-02 correction).
 - **"+pivot":** the offset after the single 0.5 in pivot shift (plan R7).
 - **Head fit:** the head cavity is about 100–120 mm wide × 90 mm tall over Y 110–232
   (`docs/BATTERY_SPLIT_OPTIONS.md` §2). A harness channel must stay clear. **No option

@@ -1828,7 +1828,7 @@ and Claude Opus 5.5 read and translated it.
   smaller than the QF2822 can (Ø27.8). VERIFY on a physical rotor (WBS NAC-64-FIT-02).
 - **Not published there:** the fan-only (no-motor) mass, and any rotor mass. The page's photos
   and text carry none.
-- **Caveat:** the 2300 KV row is a different winding from the 2400 KV sheet the design uses. The
+- **Correction (owner, 2026-11-02):** the QF2822-**2300KV** is the flight article — 83.60 ozf (2,370 gf) at 24 VDC / 57.0 A / 1,368 W, with 80 A ESCs. The 2400 KV 22.2 V row (2,135 gf, 1,265.4 W) is **superseded** and shall not be used for thrust, power or torque figures. Historical caveat follows: the 2300 KV row is a different winding from the 2400 KV sheet the design formerly used. The
   mechanical outline is common to the series.
 
 **Where it is applied:** `tools/nacelle_axial_fit.py`, `tools/tests/test_nacelle_axial_fit.py`,
@@ -2530,11 +2530,11 @@ Per-application operating mode differs even though the hardware is now identical
 | Application | Qty | Mode | Range |
 |---|---|---|---|
 | Cargo winch | 1 | Continuous rotation, gateway closes position on the AK7455 spool encoder (REF-SENSOR-008) | Multi-turn, unbounded by the servo itself |
-| Nacelle tilt | 2 | **CORRECTED Rev S1g (2026-08-30):** continuous rotation, Pilot closes position on the AK7455 nacelle encoder (REF-SENSOR-008) — the same pattern as the winch above | **Multi-turn** (1.438 rev of actuator per 145° of nacelle), unbounded by the servo itself. Soft-limited to −5°…140° *at the nacelle*, backstopped by CF-PETG hard stops in the external gear train |
+| Nacelle tilt | 2 | **CORRECTED Rev S1g (2026-08-30):** continuous rotation, Pilot closes position on the AK7455 nacelle encoder (REF-SENSOR-008) — the same pattern as the winch above | **Multi-turn** (1.389 rev of actuator per 140° of nacelle), unbounded by the servo itself. Soft-limited to −5°…+135° *at the nacelle* (owner 2026-11-02; was −5°…140°), backstopped by CF-PETG hard stops in the external gear train |
 
 > **The row above changed at Rev S1g and the change is structural, not editorial.**
 > The tilt stage became a REDUCTION (tip 14T/50T, `i` = 3.571), so the drive shaft must
-> turn **1.438 revolutions** over the 145° sweep and no limited-rotation servo can drive
+> turn **1.389 revolutions** over the 140° sweep and no limited-rotation servo can drive
 > it at any horn radius. Removing the rotation pin is therefore **required** on the tilt
 > servos now, not merely convenient — and the AK7455 became **load-bearing for control**
 > rather than telemetry, because a multi-turn drive without absolute feedback does not
