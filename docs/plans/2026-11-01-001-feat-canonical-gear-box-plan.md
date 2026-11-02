@@ -188,3 +188,82 @@ chooses among:
 - moving the pouch;
 - a shorter fuse;
 - a faceted housing ahead of the wing LE.
+
+## D4 resolved — fore legs toward the bow (owner 2026-11-01)
+
+The owner chose to rotate the fore feet toward the bow, which narrows the
+stance.  Changes:
+
+- Fore swing azimuth is now −65° (was −22.4°).  Starboard is still derived
+  (−115° wrapped).
+- Fore A1B strut azimuth is now 80° (was 65°).
+- Changed in the leg SCAD, `merge_cargo_interior.py`, and the
+  packaging-tool parity table.
+- `landing_gear_r6_sizing.Y_FOOT_FORE` is now derived from the corner
+  source: 217.2, was a typed 259.2.
+
+**Why 80°.**  The cheeks plus members were rendered for corner −60 to −75 ×
+strut 80 to 100 (`tools/fore_cheek_sweep.py`).  At −65 only strut 80 has
+zero contact with the raw TACCO CN2 pouch (which has no clearance built in)
+and the chin shelf.  Strut 85 touches the pouch by 45 mm³ and strut 90 by
+219 mm³.  The 90° overlap lies on the inboard cheek's hip-to-anchor load
+line, so notching the plate is not acceptable.
+
+**Flush.**  The plates sit 0 mm³ proud of the box OML, which is now
+exported as `PART="envelope_port"`.  The slot interior is not counted as
+proud, because the crank end lives in the open slot by design.  To get
+there:
+
+- The fore fairing is slimmed to `FAIR_XS` 0.70 (face at X ≈ 84; the hull
+  is X 41–74 there) with a 45° top.  A 64° top made it read as a tower.
+- The plate tops are housed by a slim faceted fore leg-support housing:
+  `strut_housing()`, the cheek outline grown 2 mm, octagonal so it stays
+  chamfered.  Henning's leg supports are slim pillars rising to the deck;
+  a round-topped housing read as foreign to the ship.
+- The housing adds 8,890 mm³ of new skin volume outside the old hull.  Its
+  overlap with the pouch and chin shelf is entirely inside the existing
+  cavity (0.0 mm³ outside), so it never becomes a wall.
+
+**Stance** (heaviest ledger case: 6,253 g, CG Y 353.9, Z 157.3):
+
+| Item | Before | After |
+|---|---|---|
+| Fore track | 258 mm | 178 mm |
+| Wheelbase | 184 mm | 226 mm |
+| Side tip angle | 41.2° | 37.4° |
+| Nose-over tip angle | 31.0° | 41.0° |
+| Tail-back tip angle (limiting) | 29.6° | 29.6° (unchanged) |
+
+These feed LG-29, the formal tip-over re-derivation.
+
+**Side load — OPEN, gates first flight.**  Sizing reports 308 N/leg in the
+±15° lateral case.  `LANDING_GEAR_ANALYSIS.md` §4 still shows 163 N
+(stale).  At −65 the out-of-swing-plane fraction is 0.906 (was 0.381):
+
+| Item | At −22.4° | At −65° |
+|---|---|---|
+| Fore thigh out-of-plane bending | ≈ 26 MPa | ≈ 61 MPa |
+| Clevis ear couple | — | ≈ 1.8 kN/ear |
+
+At −65° the printed thigh (2 × Ø14 mm, S 539 mm³) has a factor of 1.4 on
+PA 602-CF's 85 MPa XY tensile strength.  There is no Z, impact or fatigue
+allowable.  Candidate fix: the SCAD's existing `THIGH_VARIANT = "cf_core"`
+(Ø6 mm CF rod bonded through each cylinder plus steel cross-pin).  That is
+an owner decision (procured parts, mass); the CF rod allowable must be
+cited.
+
+**Gates run at −65 / strut 80:**
+
+| Gate | Result |
+|---|---|
+| `landing_gear_ground_clearance.py` | PASS |
+| `export_landing_gear_stls.py` | 3.0 in STLs regenerated.  Pre-existing "bay differs between variants": `lg_r6_common_bay.stl` is unchanged since f3b99128; the retired 1.5 in never got A1B. |
+| `lg_a1b_census.py` | FAIL, expected until U3.  It measures against the published shell, whose old flank wall the box replaces.  Fore: 390 mm³ members / 311 mm³ backbone.  It needs a box-aware hull reference once U3 lands. |
+| `landing_gear_wing_clearance.py` | CRASHES on its own: 6 seat collars for 4 corners (IndexError).  Same on `claude/3d-print-material-scaling-66d85n`, so it came in with that branch.  The box retires that bay hardware. |
+
+**Pre-existing, found here.**  The AFT cheeks reach X 18.9 and overlap the
+payload hoist keep-out by 2,312 mm³.  The census never counted it because
+it treats the payload as removable.  A CF plate is not removable, so this
+needs its own fix (aft strut azimuth or cheek outline).
+
+Renders: `2026-11-01-001-canonical-gear-box/fore65_port_{bow,quarter,side}.png`.

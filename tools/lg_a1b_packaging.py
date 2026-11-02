@@ -51,7 +51,7 @@ CRANK_R = 10.0        # mm, Option A crank radius (study SS4.3)
 ROW_Y = 3.5           # mm, ductile row at -y, spring row at +y (SCAD A1B_ROW_Y)
 MEMBER_D = 10.0       # mm, OD 8 sleeve + 1 mm clearance each side
 ANCHOR_D, ANCHOR_L = 16.0, 10.0   # mm, anchor boss (spreader O15 + wall)
-STRUT_AZ = {"aft": 154.0, "fore": 65.0}   # deg per station (SCAD A1B_STRUT_AZ)
+STRUT_AZ = {"aft": 154.0, "fore": 80.0}   # deg per station (SCAD A1B_STRUT_AZ)
 REACH = 55.0          # mm, crank point -> anchor; aft sweep optimum 2026-10-27
 CLASH_MM3 = 1.0
 

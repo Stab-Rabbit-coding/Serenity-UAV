@@ -35,7 +35,7 @@ PART = "both";          // "port" | "stbd" | "both"
 include <../hull_datums.scad>   // X_CL etc. (GENERATED from tools/hull_datums.py)
 
 // [hip_x, hip_y, hip_z, swing_azimuth_deg] -- port rows, R2
-FORE = [54.95, 289.70, 118.0, -22.4];
+FORE = [54.95, 289.70, 118.0, -65.0];   // 2026-11-01, was -22.4
 AFT  = [77.61, 405.66, 118.0,  28.0];
 
 KNEE_L   = [59, 0, -66];  // leg-local knee centre (canonical_leg_r6_3_0in KNEE)
@@ -79,20 +79,20 @@ SLOT_FLARE_L   = 70.0;    // mm down the thigh over which the flare runs
 function unit(v) = v / norm(v);
 THIGH_ANG = atan2(-KNEE_L[2], KNEE_L[0]);   // 48.2 deg below local +x
 
-module section(xs, xin = BOX_X_IN) {
+module section(xs, xin = BOX_X_IN, slope = TOP_SLOPE) {
     // xs scales the section outboard of BOX_X_IN (end tapers); xin is the
     // inboard edge (BOX_X_IN where the doors are, BOX_X_IN_FWD ahead of them)
     function sx(x) = BOX_X_IN + (x - BOX_X_IN) * xs;
     polygon([[xin, BOX_Z_BOT], [sx(BOX_X_CHINE_B), BOX_Z_BOT],
              [sx(BOX_X_FACE_B), BOX_Z_CHINE], [sx(BOX_X_FACE_T), BOX_Z_TOP],
-             [xin, BOX_Z_TOP + (sx(BOX_X_FACE_T) - xin) * tan(TOP_SLOPE)]]);
+             [xin, BOX_Z_TOP + (sx(BOX_X_FACE_T) - xin) * tan(slope)]]);
 }
 
-module slab(y, xs, zlift = 0, xin = BOX_X_IN) {
+module slab(y, xs, zlift = 0, xin = BOX_X_IN, slope = TOP_SLOPE) {
     // a 0.01 mm slab of the section at station y; zlift raises the bottom
     translate([0, y, 0]) rotate([90, 0, 0])
         linear_extrude(0.01, center = true)
-            intersection() { section(xs, xin);
+            intersection() { section(xs, xin, slope);
                              translate([0, BOX_Z_BOT + zlift]) square([200, 200]); }
 }
 
@@ -108,10 +108,22 @@ module slab(y, xs, zlift = 0, xin = BOX_X_IN) {
 BOX_X_IN_FWD = 36.0;      // mm, meets the lower-flank wall (X 36-54 at Y 280-300)
 Y_FAIR_AFT   = 302.0;     // mm, 2.7 mm ahead of the door aperture (304.7)
 
+// With the fore swing azimuth at -65 the CF cheeks stand nearly vertical and
+// their tops reach Y ~265 at Z ~178, ahead of the box's full section, so the
+// fairing's full section starts at Y_FAIR_FULL with its own sloped toe ahead.
+Y_FAIR_TOE  = 256.0;      // mm
+Y_FAIR_FULL = 268.0;      // mm
+// The cheek tops stand ~60 mm above the hip (Z ~178); a 45 deg top only reaches
+// Z ~159 there, so the fairing's top facet is steeper.  Still one sloped
+// facet running into the upper skin, as the main box top.
+FAIR_TOP_SLOPE = TOP_SLOPE;   // deg (64 read as a tower ahead of the wing; reverted)
+FAIR_XS = 0.70;           // outboard scale: face at X ~84 -- the hull is X 41-74 here
+
 module fore_fairing() {
     hull() {
-        slab(Y_FWD_TIP, 0.55, 18, BOX_X_IN_FWD);
-        slab(Y_FAIR_AFT, 1.0, 0, BOX_X_IN_FWD);
+        slab(Y_FAIR_TOE, 0.55, 18, BOX_X_IN_FWD, FAIR_TOP_SLOPE);
+        slab(Y_FAIR_FULL, FAIR_XS, 0, BOX_X_IN_FWD, FAIR_TOP_SLOPE);
+        slab(Y_FAIR_AFT, FAIR_XS, 0, BOX_X_IN_FWD, FAIR_TOP_SLOPE);
     }
 }
 
@@ -148,6 +160,42 @@ module pillar_raw(c) {
             cube([PIL_UP + PIL_DOWN, PIL_W_PIN, PIL_W_SWING]);
 }
 
+// Fore leg-support housing (2026-11-01).  With the fore swing azimuth at -65
+// the A1B CF cheeks stand at strut az FORE_STRUT_AZ (80: zero contact with the
+// TACCO CN2 chin pouch, whose keep-out is the raw pouch).  Their tops sit
+// outside the slim fore fairing, so the fore leg gets what Henning's leg
+// supports are: a slim faceted pillar rising from the box toward the deck,
+// here the cheek outline grown HSG_CLR all round -- nothing wider.
+// Cheek geometry from canonical_leg_r6_3_0in.scad a1b_backbone():
+// hull of O(A1B_PIN_D + 10) bosses at the hip and at a1b_anchor(+/-1).
+FORE_STRUT_AZ = 80;       // deg, = A1B_STRUT_AZ fore
+A1B_REACH_C   = 55.0;     // = A1B_REACH
+A1B_CRANK_C   = 10.0;     // = A1B_CRANK_R
+A1B_BOSS_R    = (4.0 + 10) / 2;   // = (A1B_PIN_D + 10) / 2
+A1B_CHEEK_OUT = 14 / 2 + 0.5 + 3.18;  // outer face of a cheek = CHEEK_Y + PLATE_T/2
+HSG_CLR       = 2.0;      // mm, housing wall clearance to the plate
+
+function azv2(a) = [cos(a), sin(a)];
+
+// Octagon CIRCUMSCRIBING the grown boss (r / cos 22.5), so the faceted
+// housing still contains the plate: chamfered corners, the gear box's own
+// vocabulary -- a round-topped housing read as foreign to the ship.
+module hsg_facet() {
+    rotate(22.5) circle(r = (A1B_BOSS_R + HSG_CLR) / cos(22.5), $fn = 8);
+}
+
+module strut_housing(c, saz) {
+    u = azv2(saz); n = azv2(saz - 90);
+    at_corner(c)
+        rotate([90, 0, 0])
+            linear_extrude(2 * (A1B_CHEEK_OUT + HSG_CLR), center = true)
+                hull() {
+                    hsg_facet();
+                    for (sg = [-1, 1])
+                        translate(sg * A1B_CRANK_C * n + A1B_REACH_C * u) hsg_facet();
+                }
+}
+
 module swing_slot(c) {
     // thigh envelope swept 0..FLEX_MAX about the hip pin (flex splays the
     // knee outboard/up: a1b_rot in canonical_leg_r6_3_0in.scad)
@@ -181,6 +229,7 @@ module gear_box_port() {
         union() {
             box_envelope();
             fore_fairing();
+            strut_housing(FORE, FORE_STRUT_AZ);
             pillar(FORE);
             pillar(AFT);
         }
@@ -197,5 +246,8 @@ module mirror_cl() {
     translate([X_CL, 0, 0]) mirror([1, 0, 0]) translate([-X_CL, 0, 0]) children();
 }
 
+// "envelope_port": the outer mold line only (no slots / panel recesses) --
+// the reference a part must sit inside to be FLUSH (plan U3 flush check).
+if (PART == "envelope_port") union() { box_envelope(); fore_fairing(); strut_housing(FORE, FORE_STRUT_AZ); pillar(FORE); pillar(AFT); }
 if (PART == "port" || PART == "both") gear_box_port();
 if (PART == "stbd" || PART == "both") mirror_cl() gear_box_port();

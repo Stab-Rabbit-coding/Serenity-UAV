@@ -16151,8 +16151,64 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_bow.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_quarter.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_side.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/tools/corner_sweep.py": {
+      "description": "payload hold: members may not cross into the hoist path either",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/tools/flush_check.py": {
+      "description": "Python script",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/tools/fore_cheek_sweep.py": {
+      "description": "Python script",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/tools/hsg_keep.py": {
+      "description": "Python script",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/plans/2026-11-01-001-canonical-gear-box/tools/keep_break.py": {
       "description": "payload hold: members may not cross into the hoist path either",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-01-001-canonical-gear-box/tools/pouch_loc.py": {
+      "description": "Python script",
       "tags": [
         "documentation"
       ],
@@ -20846,7 +20902,15 @@
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_quarter_wing.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_quarter_wing_cf.png",
       "docs/plans/2026-11-01-001-canonical-gear-box/fit_port_side_penetrations_clear.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_bow.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_quarter.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/fore65_port_side.png",
+      "docs/plans/2026-11-01-001-canonical-gear-box/tools/corner_sweep.py",
+      "docs/plans/2026-11-01-001-canonical-gear-box/tools/flush_check.py",
+      "docs/plans/2026-11-01-001-canonical-gear-box/tools/fore_cheek_sweep.py",
+      "docs/plans/2026-11-01-001-canonical-gear-box/tools/hsg_keep.py",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/keep_break.py",
+      "docs/plans/2026-11-01-001-canonical-gear-box/tools/pouch_loc.py",
       "docs/plans/2026-11-01-001-canonical-gear-box/tools/reach_sweep.py",
       "docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md",
       "docs/plans/2026-11-01-001-feat-canonical-gear-box-plan.md",
