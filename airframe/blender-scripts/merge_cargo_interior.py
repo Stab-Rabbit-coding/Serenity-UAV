@@ -858,12 +858,23 @@ LG_PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
 # FORE station moved 2026-10-10 (BHD-02, owner "hybrid", docs/BHD02_OPTION_STUDY.md
 # SS10-11) from Y -1.28 / X -103.87, -235.93 to Y -16.  MUST match canonical_leg_r6_3_0in.scad CORNERS (gated by
 # tools/landing_gear_bay_function.py corner_sync()).
+def _mirror_corner(row, label):
+    """Starboard twin of a port corner row about the centreline X = hd.X_CL."""
+    _lab, hx, hy, hz, az, station = row
+    return (label, 2.0 * hd.X_CL - hx, hy, hz, 180.0 - az, station)
+
+
+# 2026-11-01 (owner: "make it symmetric across the centerline"): starboard rows
+# are DERIVED from port about hd.X_CL.  They were typed as -55.05 / -77.71, a
+# mirror about the old R1 centreline, 0.1 mm off a true mirror.
+_LG_FORE_PORT = ("fore-port", 54.95, 289.70, 118.0, -22.4, "fore")
+_LG_AFT_PORT = ("aft-port", 77.61, 405.66, 118.0, 28.0, "aft")
 LG_CORNERS = [
     # R2; R1 hips (-114.90/-224.90, -16.00, 38) and (-92.24/-247.56, 99.96, 38)
-    ("fore-port", 54.95, 289.70, 118.0, -22.4, "fore"),
-    ("fore-stbd", -55.05, 289.70, 118.0, -157.6, "fore"),
-    ("aft-port", 77.61, 405.66, 118.0, 28.0, "aft"),
-    ("aft-stbd", -77.71, 405.66, 118.0, 152.0, "aft"),
+    _LG_FORE_PORT,
+    _mirror_corner(_LG_FORE_PORT, "fore-stbd"),
+    _LG_AFT_PORT,
+    _mirror_corner(_LG_AFT_PORT, "aft-stbd"),
 ]
 
 # Retained as an informational clearance check.

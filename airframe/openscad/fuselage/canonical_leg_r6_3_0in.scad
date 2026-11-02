@@ -1379,6 +1379,9 @@ module leg_assembly(flex = 0, h_duct = H_NOM, h_spring = H_NOM) {
 //   them at Y -46.5, 129 mm off the centreline (were -31.8 / 140).
 // ---------------------------------------------------------------------------
 include <../hull_datums.scad>   // X_CL etc. -- never re-typed
+LG_FORE_PORT = [ 54.95, 289.70, 118, -22.4, 1 ];   // fore-port (R2)
+LG_AFT_PORT  = [ 77.61, 405.66, 118,  28.0, 1 ];   // aft-port  (R2)
+function lg_mirror_row(c) = [2 * X_CL - c[0], c[1], c[2], 180 - c[3], -c[4]];
 CORNERS = [
     // [hip_x, hip_y, hip_z, swing_azimuth_deg, hand] -- hand +1 = port part,
     // -1 = starboard part, the MIRROR image of port (owner 2026-10-10,
@@ -1399,10 +1402,14 @@ CORNERS = [
     // R2 = R1 + (169.85, 305.70, 80.00).  R1 rows: (-114.90/-224.90, -16.00, 38),
     // (-92.24/-247.56, 99.96, 38) -- mirrored about the old -169.9, so the R2
     // starboard rows sit 0.1 mm off a true mirror; the rebuild derives them.
-    [  54.95, 289.70, 118,  -22.4,  1 ],   // fore-port
-    [ -55.05, 289.70, 118, -157.6, -1 ],   // fore-stbd  (mirror of fore-port)
-    [  77.61, 405.66, 118,   28.0,  1 ],   // aft-port
-    [ -77.71, 405.66, 118,  152.0, -1 ],   // aft-stbd   (mirror of aft-port)
+    // 2026-11-01 (owner: "make it symmetric across the centerline"):
+    // starboard rows are now DERIVED from the port rows about X_CL, so they
+    // are an exact mirror (they were 0.1 mm off -- mirrored about the old
+    // R1 centreline).
+    LG_FORE_PORT,
+    lg_mirror_row(LG_FORE_PORT),           // fore-stbd
+    LG_AFT_PORT,
+    lg_mirror_row(LG_AFT_PORT),            // aft-stbd
 ];
 
 // All 4 corners, gear only (no ground/ghost slabs) -- consumed by
