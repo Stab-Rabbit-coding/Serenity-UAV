@@ -14855,6 +14855,13 @@
       ],
       "archived": false
     },
+    "docs/LG_SIDE_HIT_FAILURE_MODES.md": {
+      "description": "Landing Gear Side-Hit Failure Modes",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/LICENSE": {
       "description": "Serenity UAV \u2014 docs \u2014 License",
       "tags": [
@@ -20088,6 +20095,14 @@
       ],
       "archived": false
     },
+    "tools/lg_side_hit_study.py": {
+      "description": "Landing-gear side-hit failure modes: one-pair landings and gear + nacelle co-strikes.",
+      "tags": [
+        "build-tooling",
+        "security"
+      ],
+      "archived": false
+    },
     "tools/lg_thigh_variants.py": {
       "description": "Serenity UAV -- landing-gear thigh: grown printed section vs anchored CF-rod core.",
       "tags": [
@@ -20822,6 +20837,7 @@
       "docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md",
       "docs/LANDING_GEAR_ANALYSIS.md",
       "docs/LG_BELLCRANK_LOAD_PATH_STUDY.md",
+      "docs/LG_SIDE_HIT_FAILURE_MODES.md",
       "docs/LICENSE",
       "docs/MANIFEST.json",
       "docs/MASS_AUDIT_CARGO_WING_ROOT.md",
@@ -21588,6 +21604,7 @@
       "tools/landing_gear_bay_function.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/lg_bellcrank_fbd.py",
+      "tools/lg_side_hit_study.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
       "tools/open_mating_faces.py",
@@ -25814,6 +25831,7 @@
       "tools/lg_corners.py",
       "tools/lg_couple_options.py",
       "tools/lg_fuse_material.py",
+      "tools/lg_side_hit_study.py",
       "tools/lg_thigh_variants.py",
       "tools/lg_wire_layout_study.py",
       "tools/merge_head_cargo_shell.py",

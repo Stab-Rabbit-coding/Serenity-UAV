@@ -345,3 +345,13 @@ Not assessed: the torsion share (M·sin 48.2°) and fatigue.
 - Re-baseline the leg allowable to SLS PA12-CF (cited value or coupon).
 - Add the combined check and size the thigh to it, widening the slot and pillar to match.
 - Optionally ease the fore azimuth.  The CF flush study found nothing flush above about −55°.
+
+## Side-hit failure modes (2026-11-02)
+
+Full combined analysis: `docs/LG_SIDE_HIT_FAILURE_MODES.md` (`tools/lg_side_hit_study.py`).  Summary:
+
+- The fore thigh is the weak link in a side hit.  At crash energy it breaks at bank ≥ 10.4° (the aft thigh at ≥ 21.8°).
+- It breaks in every gear + nacelle co-strike at crash energy, at all four tilts.
+- In a 1.5 ft co-strike it is at 0.79–1.01 × UTS.
+- The nacelle takes 1–6.5 kN in a co-strike, with no structural check of that path yet.
+- The gear is unchanged (owner).
