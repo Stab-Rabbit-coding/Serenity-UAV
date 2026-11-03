@@ -113,7 +113,7 @@ CARDS = [
         parts=[
             ("1", "Printer, PEI spring-steel bed", ""),
             ("1", "Hardened-steel nozzle 0.4 mm", "CF-PETG abrades brass"),
-            ("", "PETG, CF-PETG, TPU 95A", "per bom_revT.csv"),
+            ("", "PETG, CF-PETG, TPU 95A", "per bom_revU.csv"),
             ("1", "Filament dryer", ""),
         ],
         steps=[

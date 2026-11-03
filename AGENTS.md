@@ -27,7 +27,7 @@ Non-negotiable, project-wide requirements:
 **Propulsion:** every thrust, mass, and dimension figure for an EDF, ESC, motor, or any other
 component is a descriptive measurement and shall not be recorded in this file. Each such figure
 shall come from the manufacturer's datasheet or from a user-verified measurement, and shall carry
-a citation to that source. Take values for calculations from `current-specification/bom_revT.json`
+a citation to that source. Take values for calculations from `current-specification/bom_revU.json`
 and `airframe/README.md`; flag any value that lacks a datasheet or user-verified source in the
 owning `WBS.md` instead of propagating it. Each nacelle carries two EDFs in series. The Phase 11
 fuselage EDF (optional, deferred) feeds the **fixed** canonical elliptical tail nozzle — **never**

@@ -1,7 +1,7 @@
 # Serenity UAV — Build Tools & Validation Scripts
 
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)  
+**Current design revision:** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for changelog)  
 **Last updated:** 2026-10-07
 
 > Python and shell scripts for design validation, mesh integrity checking, KiCad PCB/ERC/DRC
@@ -322,14 +322,14 @@ clang-format -i avionics/firmware/cn/src/*.c
 
 ```bash
 # Edit the JSON source
-nano current-specification/bom_revT.json
+nano current-specification/bom_revU.json
 
 # Sync to CSV -- no automated sync script exists yet (tools/update_bom.py is
-# not implemented); edit current-specification/bom_revT.csv by hand to match,
+# not implemented); edit current-specification/bom_revU.csv by hand to match,
 # field-for-field, until one is written.
 
 # Commit both
-git add current-specification/bom_revT.*
+git add current-specification/bom_revU.*
 git commit -m "Update BOM: [change reason]"
 ```
 

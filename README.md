@@ -10,7 +10,7 @@
 [![CAD: FreeCAD | OpenSCAD | Blender](https://img.shields.io/badge/CAD-FreeCAD%20%7C%20OpenSCAD%20%7C%20Blender-fe7d37)](airframe/README.md)
 [![PCB: KiCad 9](https://img.shields.io/badge/PCB-KiCad%209-1BA94C)](avionics/README.md)
 [![Firmware: C | Python](https://img.shields.io/badge/firmware-C%20%7C%20Python-2f81f7)](avionics/firmware/)
-[![Status: Rev T — Phase 5 build](https://img.shields.io/badge/status-Rev%20T%20%E2%80%94%20Phase%205%20build-dfb317)](TODO.md)
+[![Status: Rev U — Phase 5 build](https://img.shields.io/badge/status-Rev%20U%20%E2%80%94%20Phase%205%20build-dfb317)](TODO.md)
 
 *"Can't stop the signal, and can't take the sky from me."*
 
@@ -94,22 +94,22 @@ stale 2,768 g AUW) and remain provisional until the bottom-up AUW ledger recompu
 </tr>
 </table>
 
-## Project Status (2026-10-07)
+## Project Status (2026-11-03)
 
-**Rev T, design and PCB layout. Nothing is fabricated or assembled; the physical build has not
+**Rev U, design and PCB layout. Nothing is fabricated or assembled; the physical build has not
 started.** The path to first flight is in `docs/FIRST_FLIGHT_READINESS.md`; open work is in
 [`TODO.md`](TODO.md), generated from the full record in [`WBS.md`](WBS.md).
 
 | Area | State |
 |------|-------|
-| Airframe | SCAD shells at Rev S baseline, carried into Rev T; STL re-exports pending after the TACCO 60 × 35 mm change; cargo-shell mesh defect open |
+| Airframe | SCAD shells at Rev S baseline, carried into Rev U; STL re-exports pending after the TACCO 60 × 35 mm change; cargo-shell mesh defect open |
 | Nacelles | 50 mm Rev S4c is current; 64 mm tandem-EDF redesign (NAC-64-SERVO-01) with a servo-driven nozzle is designed and fit-closed, with pivot, CFD, mass, and bench gates open |
 | Avionics PCBs | Pilot and TACCO placed with ERC 0 / DRC 0 before routing, on corrected 4.80 mm PB2 rails; routing and Gerbers open. Flight Engineer, Observer, and Commo Rev T need further PCB work |
 | Buses | Fleet MIL-STD-1553C via the Holt HI-6138 on every Pilot and TACCO (2026-09-28) |
 | Comms | mLRS on a bare STM32WLE5JC; Wi-Fi USB module selection is a fab blocker; Commo becomes one standalone node (Rev T, 2026-09-29) |
 | Firmware | `serenity-cn` Phase 6 done; `serenity-fc` Phase 6 stub; Phase 7 open |
 | Ground station | Skipper in design; ground-side radio loadout decision open |
-| BOM | `bom_revT` published 2026-09-28; avionics rows lag the 2026-10 PCB changes |
+| BOM | `bom_revU` published 2026-11-03 (carry-forward of `bom_revT`, 2026-09-28); avionics rows lag the 2026-10 PCB changes |
 | Build guide | Hand-drawn pre-Rev-T art; rebuild open (task 1.5.6) |
 
 ## Subsystems
@@ -242,7 +242,7 @@ Handling write-ups) is preserved verbatim, for historical reference, in
 ## References
 
 - Design conversation: [claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666](https://claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666)
-- Latest design revision BOM: `current-specification/bom_revT.json` (Rev T, 2026-09-28)
+- Latest design revision BOM: `current-specification/bom_revU.json` (Rev U, 2026-11-03)
 
 ---
 
@@ -263,7 +263,7 @@ Licensed by Steve Griffing, PE(CSE), CISSP-ISSEP, CPP, according to what each fi
 
 See `docs/attribution_and_licensing.md` for the full policy, the per-subsystem `LICENSE`
 federation map, and the CERN-OHL-W "Available Component" treatment of upstream
-canonical-reference geometry. Revision T, September 2026.
+canonical-reference geometry. Revision U, November 2026.
 
 ## Attribution
 
