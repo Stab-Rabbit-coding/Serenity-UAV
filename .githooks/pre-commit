@@ -15,9 +15,10 @@ python3 "$TOPDIR/tools/precommit_kicad_load.py" || exit 1
 # Sanitization and delinting
 python3 "$TOPDIR/tools/precommit_sanitize.py" || exit 1
 
+# (Both new gates are skipped in a worktree/branch that does not carry the tool, because core.hooksPath is shared.)
 # Operator's Manual sync (WBS 0.10.3 OM-5): poll the flight-envelope/limit sources, refuse the
 # commit if they disagree, regenerate the manual's AUTO/V regions + stamp, and stage the manual.
-python3 "$TOPDIR/tools/sync_operators_manual.py" --stage || exit 1
+[ -f "$TOPDIR/tools/sync_operators_manual.py" ] && { python3 "$TOPDIR/tools/sync_operators_manual.py" --stage || exit 1; }
 
 # Doc wording (REF-MIL-003 CNAF M-3710.7 SS1.5/1.6 callout/verb conventions)
 python3 "$TOPDIR/tools/precommit_doc_wording.py" || exit 1
@@ -29,7 +30,7 @@ python3 "$TOPDIR/tools/check_tacco_envelope_sync.py" || exit 1
 python3 "$TOPDIR/tools/check_datum_drift.py" || exit 1
 
 # Joint register covers the BOM fasteners (plan 2026-11-02-001 U1)
-python3 "$TOPDIR/tools/check_joint_register.py" || exit 1
+[ -f "$TOPDIR/tools/check_joint_register.py" ] && { python3 "$TOPDIR/tools/check_joint_register.py" || exit 1; }
 
 # Update indexes
 python3 "$TOPDIR/tools/precommit_index.py" || exit 1
