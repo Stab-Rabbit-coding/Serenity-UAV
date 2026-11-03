@@ -110,7 +110,12 @@ DROPS_FT = [6.0, 4.0]     # candidate full-AUW drop-test heights
 # FORE feet moved 2026-10-10 (BHD-02 fore-station move, hip Y -1.28 -> -16):
 # foot Y = hip Y + R_H sin(az) = -16 + 80 sin(-22.4 deg) = -46.5 (was the
 # canonical -35; the as-built hip gave -31.8).  Aft feet stay on QMx.
-Y_FOOT_FORE = 259.2   # aircraft datum R2 (R1 -46.5)
+# 2026-11-01: DERIVED from the corner source (fore swing az -22.4 -> -65,
+# feet toward the bow): hip Y + R_H sin(az) = 289.70 + 80 sin(-65) = 217.2.
+import math as _m  # noqa: E402
+import lg_corners as _lgc  # noqa: E402
+_FP = _lgc.corners()["fore-port"]
+Y_FOOT_FORE = _FP[1] + 80.0 * _m.sin(_m.radians(_FP[3]))   # R2; was typed 259.2
 Y_FOOT_AFT = 440.7    # R1 135.0
 WHEELBASE = Y_FOOT_AFT - Y_FOOT_FORE
 

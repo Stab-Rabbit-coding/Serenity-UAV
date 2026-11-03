@@ -61,6 +61,7 @@ REPO = os.path.abspath(os.path.join(HERE, ".."))
 sys.path.insert(0, HERE)
 import bake_hull_frame as bk  # noqa: E402
 import cargo_layout_fit as clf  # noqa: E402
+import merge_middle_rear_shell as seam  # noqa: E402  shared blended-loft seam
 
 OPS = os.path.join(REPO, "airframe", "blender-scripts", "files-hollowed-24in", "operands")
 FSTL = os.path.join(REPO, "airframe", "stls", "fuselage")
@@ -127,18 +128,24 @@ def main():
     mid = 0.5 * (hy1 + cy0)
     print(f"published head ends Y {hy1:.2f}, cargo starts Y {cy0:.2f}: seam gap "
           f"{cy0 - hy1:.2f} mm, meet plane Y {mid:.2f}")
-    rh, nh = ring(head, HEAD_RING_Y, HEAD_CUT_Y - 0.5, mid + OVERLAP)
-    rc, nc = ring(cargo, CARGO_RING_Y, mid - OVERLAP, CARGO_CUT_Y + 0.5)
-    print(f"head ring (Y {HEAD_RING_Y}): {nh} polygon(s); cargo ring (Y {CARGO_RING_Y}): "
-          f"{nc} polygon(s); seam zone Y {HEAD_CUT_Y}..{CARGO_CUT_Y} rebuilt as plain skin")
+    # Blended seam (2026-11-01): the published head ring at Y 226 is X +/-64.7
+    # and the cargo ring at Y 242 is X +/-61.6.  Extruding each straight to
+    # the meet plane left a 3.1 mm/side waist step and a 5.2 mm dorsal step
+    # at Y ~234.  Canon: the QMx blueprints (REF-CAD-003, Sheet 1 port profile,
+    # Sheet 5 ventral plan) and the Henning top view (REF-CAD-002) show the
+    # bridge neck flowing into the cargo-hold section with no waist, so the
+    # zone is now a ruled loft from the head ring to the cargo ring
+    # (merge_middle_rear_shell.seam_loft, one tube).
+    lofts = seam.seam_loft(head, HEAD_RING_Y, cargo, CARGO_RING_Y, 1)
+    print(f"seam zone Y {HEAD_RING_Y}..{CARGO_RING_Y} rebuilt as a blended loft")
     # 2026-11-01: the cargo shell no longer builds the retired cradle hangers
     # (merge_cargo_interior.CARGO_CRADLE = False).  The boxes this script used
     # to subtract for them ran to Z 250, ABOVE the roof skin, and punched four
     # roof holes (Y 255.7 / 385.7, X +-18; found by
     # tools/assembly_integrity_check.py) -- removed.
     cm = man(cargo)
-    part = ((man(head) ^ slab(-BIG, HEAD_CUT_Y)) + rh + rc
-            + (cm ^ slab(CARGO_CUT_Y, BIG)))
+    part = ((man(head) ^ slab(-BIG, HEAD_RING_Y + seam.OVERLAP)) + lofts
+            + (cm ^ slab(CARGO_RING_Y - seam.OVERLAP, BIG)))
     # Head roof centreline crack (published head, X 0..0.5, Y 99..104.5; found
     # by tools/assembly_integrity_check.py): bridge it with the skin copied
     # 1 mm either side of the centreline, clipped to the slit's box.
@@ -157,8 +164,16 @@ def main():
         fl = man(trimesh.load(os.path.join(FSTL, f"wing_root_flange_{side}.stl")))
         part = part + fl
         print(f"wing-root flange {side} fused: {fl.volume() / 1e3:.2f} cm3")
-    tm = tm_of(part)
-    tm.merge_vertices()
+    # Canonical landing-gear box FUSED as skin (owner 2026-11-01, plan
+    # 2026-11-01-001 U3): box walls only outside the old hull, the old flank
+    # skin inside the box opened so the cavity drains, the new fore swing
+    # plane cleared; flanges and wing-root penetrations protected.
+    import gear_box_hull_merge as gbm  # noqa: PLC0415
+    part, rep = gbm.fuse(part)
+    print("gear box fused: " + ", ".join(
+        f"{k} {v:.2f}" if isinstance(v, float) else f"{k} {v}" for k, v in rep.items()))
+    # no merge_vertices(): welding the loft caps folded 6 edges (2026-11-01 merge)
+    tm = seam.tm_of(part)
     bodies = tm.split(only_watertight=False)
     big = [b for b in bodies if len(b.faces) > 200]
     # drop the zero-area 2-face slivers manifold3d leaves at coplanar seams
@@ -187,10 +202,23 @@ def main():
             print(f"  seam slice Y {y:.1f}: {len(g)} piece(s) -- skin gap")
     print(f"seam skin continuity Y {HEAD_CUT_Y - 1:.1f}..{CARGO_CUT_Y + 1:.1f}: "
           f"{'one closed ring at every 0.5 mm slice' if not bad else f'{bad} slice(s) open'}")
+    tm = seam.weld_clean(seam.separate_f32_collisions(tm))
     hdr = (bk.MARKER + b" head+cargo merged (merge_head_cargo_shell.py)").ljust(80, b" ")[:80]
     bk.write_stl_binary(OUT, np.asarray(tm.triangles), hdr)
-    print(f"wrote {os.path.relpath(OUT, REPO)}")
-    return 0 if tm.is_watertight and len(big) == 1 and not bad else 2
+    # Owner 2026-11-02: the fused hull (115 MB with the gear box) exceeds
+    # GitHub's 100 MB file limit, so the repo carries it as a gzip tarball
+    # (~51 MB); the raw .stl is gitignored.  Unpack with:
+    #     tar -xzf airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl.tar.gz \
+    #         -C airframe/stls/fuselage
+    import tarfile  # noqa: PLC0415
+    with tarfile.open(OUT + ".tar.gz", "w:gz") as tz:
+        tz.add(OUT, arcname=os.path.basename(OUT))
+    back = trimesh.load(OUT)
+    _, cnt = np.unique(np.sort(back.edges, axis=1), axis=0, return_counts=True)
+    ok = back.is_watertight and (cnt != 2).sum() == 0
+    print(f"wrote {os.path.relpath(OUT, REPO)}; re-read: watertight {back.is_watertight}, "
+          f"edges not shared by exactly 2 faces {(cnt != 2).sum()}")
+    return 0 if ok and len(big) == 1 and not bad else 2
 
 
 if __name__ == "__main__":

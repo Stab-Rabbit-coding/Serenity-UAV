@@ -91,7 +91,12 @@ SETTLE_CRASH = 30.7           # mm, ductile settle budget the schedule is solved
 M_LEG_BREAK = 197.3e3         # N*mm, grown-thigh breaking moment (lg_thigh_variants)
 HIER = 1.25                   # owner failure-hierarchy factor
 
-SIG_PETG = 47.0               # MPa  [REF-MAT-001] bulk compression, low end
+# Printed-bay bearing allowable: SLS DuraForm PA CF [REF-MAT-015], compressive
+# ASSUMED = tensile ultimate, Z knockdown applied (tools/sls_materials.py).
+# Was CF-PETG 47 MPa [REF-MAT-001] before the 2026-11-01 FDM -> SLS migration.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sls_materials import PA_CF, design  # noqa: E402
+SIG_PETG = design(PA_CF, "compressive_mpa")  # name kept for diff clarity; now PA CF
 SU_A2_50, SU_A2_70 = 500.0, 700.0   # MPa  [REF-MAT-005]
 SHEAR_RATIO = 0.6             # design judgment, requires verification
 SY_304 = 205.0                # MPa  [REF-MAT-006]
@@ -166,7 +171,7 @@ SY_6061, SS_6061 = 276.0, 207.0     # MPa yield, ult. shear  [REF-MAT-007]
 RHO_6061 = 2.70e-3                  # g/mm^3                 [REF-MAT-007]
 SU_A228 = 1586.0                    # MPa, A228 min tensile 230 ksi, 0.250 in row [REF-MAT-008]
 SKIPPED = {
-    "CF-PETG (printed)": "no cited shear or pin-bearing allowable; flat contact only (47 MPa)",
+    "PA CF (printed, SLS)": "no cited shear or pin-bearing allowable; flat contact only (47 MPa)",
     "CF / Kevlar / glass plate": "no cited bearing, shear or through-thickness allowable "
                                  "(LG-11 coupons would make it eligible)",
     "brass": "no verified allowable obtained (requires a cited source)",
@@ -203,7 +208,7 @@ def analyse(key, cs):
     if key == "C0":
         rows.append(("hip pin, double shear", "M3 A2, class-50 basis", dem_pin,
                      2 * SHEAR_RATIO * SU_A2_50 * disk_area(3.0)))
-        rows.append(("clevis ears, pin bearing (printed)", "2 x 3 mm CF-PETG", dem_pin,
+        rows.append(("clevis ears, pin bearing (printed)", "2 x 3 mm PA CF", dem_pin,
                      2 * EAR_T * PIN_BORE * SIG_PETG))
         rows.append(("wire socket floor, end thrust (printed)",
                      f"blind bore dia {d_duct + SOCK_CLR:.2f}", dem_s,
@@ -227,7 +232,7 @@ def analyse(key, cs):
         rows.append(("slug on 6061 spreader, bearing, MPa", f"dia {SLUG_D:.0f} on 6061",
                      dem_s / disk_area(SLUG_D), SY_6061))
         d_c = math.ceil(math.sqrt(dem_s / SIG_PETG * 4 / math.pi))
-        rows.append(("spreader on CF-PETG, flat bearing", f"6061 disc dia {d_c} x {SPREAD_T}",
+        rows.append(("spreader on PA CF, flat bearing", f"6061 disc dia {d_c} x {SPREAD_T}",
                      dem_s, disk_area(d_c) * SIG_PETG))
         n_seats = 4                                # 2 ductile + 2 spring per leg
         mass_add += n_seats * (disk_area(d_c) * SPREAD_T * RHO_6061

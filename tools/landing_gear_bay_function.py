@@ -48,6 +48,7 @@ from __future__ import annotations
 import argparse
 import concurrent.futures as cf
 import hashlib
+from pathlib import Path
 import json
 import os
 import subprocess  # nosec B404 -- fixed argv to the local openscad binary
@@ -147,18 +148,13 @@ def sha(path: str) -> str:
 
 
 def parse_corners(path: str) -> dict[str, list[float]]:
-    """Read CORNERS out of the SCAD so placement cannot drift from hull_legs()."""
-    txt = open(path, encoding="utf-8").read()
-    blk = txt[txt.index("CORNERS = ["):]
-    blk = blk[:blk.index("\n];")]          # the closing line, not a "];" in a comment
-    rows = []
-    for line in blk.splitlines()[1:]:
-        line = line.split("//")[0].strip()
-        if line.startswith("["):
-            rows.append([float(v) for v in line.strip("[],").split(",")])
-    if len(rows) != 4 or any(len(r) not in (4, 5) for r in rows):
-        raise RuntimeError(f"expected 4 CORNERS rows of 4-5 values, parsed {rows}")
-    return dict(zip(CORNER_NAMES, rows, strict=True))
+    """CORNERS from the SCAD so placement cannot drift from hull_legs().
+
+    Delegates to lg_corners.corners(), the one parser (port rows typed,
+    starboard derived about X_CL -- 2026-11-01).
+    """
+    import lg_corners  # noqa: PLC0415
+    return dict(zip(CORNER_NAMES, lg_corners.corners(Path(path)).values(), strict=True))
 
 
 def render(scad: str, station: str, name: str, expr: str,

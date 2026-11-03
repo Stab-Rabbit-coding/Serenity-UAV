@@ -2024,13 +2024,13 @@ which prints that caveat on every run.
 
 ---
 
-### REF-MAT-011: 3D Systems — DuraForm PA CF datasheet (SLS), document 3DS-30108A
+### REF-MAT-015: 3D Systems — DuraForm PA CF datasheet (SLS), document 3DS-30108A
 
 | Field | Value |
 | --- | --- |
 | **Issuing body** | 3D Systems, Inc. |
 | **Date** | 2023-10-31 |
-| **Source** | Owner-supplied PDF (`3d-systems-duraform-pa-cf-datasheet-us-en-2023-10-31-a_web65.pdf`), read 2026-10-31. Official URL not yet validated. |
+| **Source** | <https://www.3dsystems.com/sites/default/files/2023-11/3d-systems-duraform-pa-cf-datasheet-us-en-2023-10-31-a_web65.pdf> (owner-supplied 2026-11-01; HTTP 200 `application/pdf` from 3dsystems.com, validated 2026-11-01). Renumbered from REF-MAT-011 (ID collided with Rock West CF plate). |
 | **Values applied** | Density 1.11 g/cm³ (ASTM D792); tensile ultimate 84 MPa, tensile modulus 8,500 MPa, elongation 3.8 % (ASTM D638 Type I); flexural modulus 7,000 MPa (ASTM D790); HDT 177 °C at 1.82 MPa (ASTM D648). No orientation (Z) data and no electrical rows. |
 
 **Used in:** `tools/aft_section_mass_audit.py`, `tools/aft_skin_thinning_study.py`,
@@ -2039,13 +2039,13 @@ which prints that caveat on every run.
 
 ---
 
-### REF-MAT-012: 3D Systems — DuraForm PA11 Black datasheet (SLS)
+### REF-MAT-016: 3D Systems — DuraForm PA11 Black datasheet (SLS)
 
 | Field | Value |
 | --- | --- |
 | **Issuing body** | 3D Systems, Inc. |
 | **Date** | 2025-03-04 |
-| **Source** | Owner-supplied PDF (`3d-systems-duraform-pa11-black-datasheet-us-a4-2025-03-04-web.pdf`), read 2026-10-31. Official URL not yet validated. |
+| **Source** | <https://www.3dsystems.com/sites/default/files/2025-04/3d-systems-duraform-pa11-black-datasheet-us-a4-2025-03-04-web.pdf> (owner-supplied 2026-11-01; HTTP 200 `application/pdf` from 3dsystems.com, validated 2026-11-01). Renumbered from REF-MAT-012 (ID collided with NCAMP NCP-RP-2010-056). |
 | **Values applied** | Density 1.03 g/cm³ (ASTM D792); tensile 51 MPa ultimate and yield, modulus 1,900 MPa, elongation at break 52.6 % (ASTM D638 Type IV); flexural modulus 1,500 MPa (ASTM D790); notched Izod 42 J/m (ASTM D256). The datasheet states near-isotropic XYZ performance. |
 
 **Used in:** `tools/tail_strike_requirement.py`, `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md`,
@@ -2053,17 +2053,35 @@ which prints that caveat on every run.
 
 ---
 
-### REF-MAT-013: 3D Systems — DuraForm PA12 Black datasheet (SLS)
+### REF-MAT-017: 3D Systems — DuraForm PA12 Black datasheet (SLS)
 
 | Field | Value |
 | --- | --- |
 | **Issuing body** | 3D Systems, Inc. |
 | **Date** | 2025-04-03 |
-| **Source** | Owner-supplied PDF (`3d-systems-duraform-pa12-black-datasheet-us-en-2025-04-03-web.pdf`), read 2026-10-31. Official URL not yet validated. |
+| **Source** | Owner-supplied PDF (`3d-systems-duraform-pa12-black-datasheet-us-en-2025-04-03-web.pdf`), read 2026-10-31. Official URL not yet validated — **requires verification**. Renumbered from REF-MAT-013 (ID collided with NCAMP NCP-RP-2025-008). |
 | **Values applied** | Density 1.00 g/cm³; tensile 45 MPa, modulus 1,800 MPa, elongation 13.7 % (ASTM D638 Type IV, headline column); flexural modulus 1,500 MPa; notched Izod 35 J/m. **Note:** the headline values match the sheet's ZY column. The XY column reads 1,600 MPa and 6.2 % (`docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` §2.1). |
 
 **Used in:** `tools/tail_strike_requirement.py`, `docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md`,
 `docs/AFT_SKIN_THINNING_STUDY.md` §5
+
+---
+
+### REF-MFG-001: 3D Systems — SLS Design Guide: Application and Design Tips (June 2019)
+
+| Field | Value |
+| --- | --- |
+| **Issuing body** | 3D Systems, Inc. |
+| **Date** | June 2019 (PDF created 2019-06-01, modified 2019-08-21) |
+| **Source** | Owner-supplied PDF, committed as `airframe/datasheets/3D-Systems_SLS_Design_Guide_en_final.pdf` (19 pp.), read page by page 2026-11-01. Official 3dsystems.com URL not yet located — **requires verification**. |
+| **Section applied** | Printed page numbers, checked against the PDF. p. 4 Axles: 0.3 mm running clearance, 2 mm+ and air ports for powder removal; p. 4 Baffles: generous fillets on duct baffles; p. 6 Blind Bosses: >2 mm hole at the base; p. 7 and p. 12: at least 0.3 mm clearance, 0.2 mm minimum; p. 13 Living Hinges: avoid, and for build orientation "avoid stair steps coinciding with the tensile surface"; p. 13 Design for Mounting: elongate one hole at least 5 mm per 100 mm on long sections; p. 15: "keep all features above 1mm thickness", tank walls >1 mm; p. 16 Threads; p. 17 build envelopes: ProX SLS 6100 / sPro 60 HD-HS 15 × 13 × 18 in, sPro 140 22 × 22 × 18 in, sPro 230 22 × 22 × 30 in. The owner states (2026-11-01) that 3D Systems has an SLS 380 (15 × 13 × 18 in), sPro 140 and sPro 230 available; final orientation and machine are agreed with 3D Systems. |
+| **Limitation** | General SLS-nylon guidance from 2019. It predates DuraForm PA CF (2023) and gives no material allowables. |
+
+**Used in:** `tools/sls_dfm_audit.py`, `tools/sls_print_orientation.py`,
+`airframe/openscad/nacelles/nacelle_nozzle_fixed.scad`,
+`airframe/openscad/fuselage/cargo/tilt_brake.scad`,
+`airframe/openscad/fuselage/belly_panel.scad`, `docs/SLS_MIGRATION.md`,
+`docs/SLS_PRINT_ORIENTATION.md`
 
 ---
 
@@ -3678,7 +3696,7 @@ tilt range.
 | **License / Permission** | Public-space reference imagery; direct permission granted by email from Nick Henning (`nickhenning3d@gmail.com`) on 2026-07-06 (email export archived at `docs/references/nick-henning/`). Used only as design reference imagery and attribution is recorded here to satisfy CC BY-style attribution requirements. |
 | **Note** | Used as high-fidelity visual reference for wing surface detail, landing gear arrangement, and UV-display styling. Per Nick Henning's email, this model was a school project **derived from the show/movie renders** — so it sits **below** the QMx blueprints (REF-CAD-003) in the canonical-accuracy ranking but carries **more mechanical/surface detail**; use it where the blueprints are ambiguous. The repository stores only derivative reference imagery; no original CAD model or proprietary 3D geometry from the author is redistributed. |
 
-**Applied to:** wing and landing gear detail reference in the Serenity UAV hull design, including landing gear canopy/brace styling and wing surface treatment; canonical-accuracy cross-check for exterior detail.
+**Applied to:** wing and landing gear detail reference in the Serenity UAV hull design, including landing gear canopy/brace styling and wing surface treatment; canonical-accuracy cross-check for exterior detail. 2026-11-01: top view (`top-view-with-wireframe-henning.jpg`) used to confirm the raised ring aft of the cargo hold (cargo/middle step kept) and the waist-free head/cargo transition (`tools/merge_head_cargo_shell.py`, `tools/merge_middle_rear_shell.py`, `docs/SLS_PRINT_ORIENTATION.md` §6).
 
 **Consolidated 2026-07-20:** all Nick Henning material was moved from `airframe/diagrams/` into a
 single `docs/references/nick-henning/` folder alongside the other canonical references.
@@ -3722,7 +3740,7 @@ the 64 mm iris nozzle (`airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad
 layout (head/cargo/middle/rear), and canonical feature placement. No QMx geometry is copied; it is a
 visual/dimensional accuracy check only.
 
-**Used in:** canonical-accuracy reference for `airframe/` hull/exterior work (see
+**Used in:** `tools/merge_head_cargo_shell.py` and `tools/merge_middle_rear_shell.py` (Sheet 1 port profile, Sheet 5 ventral plan: seam blends, 2026-11-01), `docs/SLS_PRINT_ORIENTATION.md` §6; canonical-accuracy reference for `airframe/` hull/exterior work (see
 `airframe/AGENTS.md` "Canonical Accuracy References"); cross-referenced by REF-CAD-002 and
 REF-CAD-004 and by `current-specification/LICENSE_AND_ATTRIBUTION.md`.
 

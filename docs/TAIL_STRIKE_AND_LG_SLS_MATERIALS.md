@@ -97,9 +97,9 @@ margin by 1.16; at the SLS 14.19 lbm, by 1.09.**
 | Material | Leg frame (3.0 in) | Thigh, 6 mm bore | Thigh, solid | Bay boss bearing | Bay bolt FOS (target 4.0) | Stiffness vs CF-PETG | Elongation |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | CF-PETG FDM [REF-MAT-002] | 52.0 g | 0.58× | 0.66× | 0.82× | 2.86 | 1.00× | 2.1% |
-| **PA12-CF (PA CF) [REF-MAT-011]** | **45.1 g** | 0.88× | **1.01×** | **1.26×** | **4.37** | 1.05× | 3.8% |
-| PA12 Black [REF-MAT-013] | 40.6 g | 0.47× | 0.54× | 0.67× | 2.34 | 0.22× | 13.7% |
-| PA11 Black [REF-MAT-012] | 41.9 g | 0.53× | 0.62× | 0.76× | 2.65 | 0.22× | 52.6% |
+| **PA12-CF (PA CF) [REF-MAT-015]** | **45.1 g** | 0.88× | **1.01×** | **1.26×** | **4.37** | 1.05× | 3.8% |
+| PA12 Black [REF-MAT-017] | 40.6 g | 0.47× | 0.54× | 0.67× | 2.34 | 0.22× | 13.7% |
+| PA11 Black [REF-MAT-016] | 41.9 g | 0.53× | 0.62× | 0.76× | 2.65 | 0.22× | 52.6% |
 
 **What makes sense for each section**
 
@@ -122,7 +122,7 @@ wires, the pins and the CF backbone are unchanged.
   SLS is now the process (owner, 2026-10-31): interim 14.19 lbm.
 - PA CF and PA11 bearing allowables and build-axis data: coupons or the vendor
   (WBS §0.12).
-- PA11 and PA12 Black datasheets are cataloged as REF-MAT-012 and REF-MAT-013; their official URLs still need validating.
+- PA11 and PA12 Black datasheets are cataloged as REF-MAT-016 and REF-MAT-017; their official URLs still need validating.
 
 ## 5. Co-strike design case (owner, 2026-10-31; plan 2026-10-31-002)
 
@@ -149,7 +149,7 @@ member** *(Superseded 2026-10-31, owner decision: the skid and cross member U-fr
 | **CS-1** | Skid-pair plateau force **1,250–1,500 N (281–337 lbf)**, so **625–750 N (141–169 lbf) per skid**, held over the stroke. *(Corrected by review 2026-10-31: 1,000 N fails CS-2.)* |
 | **CS-2** | Skid stroke **≤ 5.5 mm**: the 6.5 mm hull clearance at skid contact, less a **1 mm** margin [margin ASSUMED, owner to confirm]. 1,250 N gives 5.2 mm; 1,000 N gives 6.1 mm and fails. |
 | **CS-3** | The skid tips stay the first aft contact (TS-1), with the tip at Y about 690 and X about ±37. |
-| **CS-4** | Each skid absorbs **3.3–3.4 J (2.4–2.5 ft·lbf)**. In PA11 this has to come from yielding [REF-MAT-012]. The plateau model is an assumption until a coupon or skid drop test confirms it. |
+| **CS-4** | Each skid absorbs **3.3–3.4 J (2.4–2.5 ft·lbf)**. In PA11 this has to come from yielding [REF-MAT-016]. The plateau model is an assumption until a coupon or skid drop test confirms it. |
 | **CS-5** | Acceptance: `co_strike_mesh_check()` passes on the rebuilt STL at the chosen stroke plus the 1 mm margin. It identifies the skid tubes from their own cross-section loops and checks the middle and rear shells. Today it passes at 5.2 mm and fails at 6.1 mm. |
 | **CS-7 (elastic, supersedes the CS-1/CS-2 plateau figures for the PA12-CF design)** | PA12-CF U-frame, pad strut at Y 620, stiffness **1,244 lbf/in (218 N/mm) per skid**. 4 ft co-strike: stroke ≤ 0.217 in (5.5 mm), today 0.213 in; peak 266 lbf (1,181 N) per skid at ≤ 0.95 × ultimate (sacrificial allowed). 1.5 ft landing: elastic at ultimate ÷ 1.5. Sizing: `docs/SKID_FAILURE_MODE_STUDY.md` §9. **Open-item flags (§10):** stroke at worst-case stiffness, single-skid strike (**CAUTION** recorded for a rolled landing), the frame joint concept, and the tolerance margin (**NOTE** in the build guide: measure and shim the skid tip height). |
 | **CS-6** | **The skid section shall carry CS-1.** Estimate: a Ø20 × 2 mm tube cantilevered about 205 mm from the ring collapses at about **165 N** in PA11 (51 MPa plastic moment) and breaks at about **190 N** in PA12-CF. That is roughly a quarter of the 625–750 N needed [CALC; the cantilever length is ASSUMED from the mesh stations]. The rebuild needs a larger or thicker tube, a strut to the hull, or a shorter cantilever, within the fixed outer shape. |

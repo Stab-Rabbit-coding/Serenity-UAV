@@ -17,7 +17,7 @@ Method (no new geometry):
   * FDM is shown at two densities: the ledger's 1.05 (bulk, with infill) and solid
     1.28 (REF-MAT-002), because thin 2 mm walls print as perimeters only
     (docs/MASS_AUDIT_CARGO_WING_ROOT.md section 1).  Weighing one shell decides it.
-  * SLS: each part gets its assigned material density [REF-MAT-011..013].
+  * SLS: each part gets its assigned material density [REF-MAT-015..017].
     PA CF 1.11 by default; PA11 1.03 for the gear feet (impact, plan 002 KTD3).
   * Mass items that are not printed (BOM, NACELLE hardware, GAP) are unchanged.
 
