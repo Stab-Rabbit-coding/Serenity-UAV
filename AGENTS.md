@@ -190,7 +190,10 @@ replaced and tracked in the owning WBS.
 
 Serenity's hull is complex — bounding-box/centroid math is inadequate for part placement, and
 the canonical outer mold line must stay intact: interior modifications blend into it and never
-alter the exterior unless structurally required. When uncertain, request manual FreeCAD
+alter the exterior unless structurally required. Deviations from the canonical exterior hull
+shall be minimized. In addition, every deviation from canon shall maintain the style and
+character of the Serenity spaceship and shall not introduce elements that are incongruent or
+inconsistent with it (owner directive 2026-11-01). When uncertain, request manual FreeCAD
 placement from the user. `airframe/AGENTS.md` ("Canonical Geometry and Coordinate System",
 "Geometry Reference Points", "Geometry Integrity — Keep Skin True to Canon") and
 `airframe/HULL_FRAME_REFERENCE.md` ("Canonical Accuracy References" plus the validated extents

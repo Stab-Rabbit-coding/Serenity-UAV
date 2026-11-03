@@ -983,7 +983,7 @@ configuration with every printed part in SLS, hull and both nacelles
 **Structure margins at 14.19 lbm.** Allowable = ultimate / 2 (§4.6 convention). PA12-CF
 bearing is scaled by the CF-PETG ratio [ASSUMED].
 
-| Check | CF-PETG FDM | **PA12-CF (DuraForm PA CF) [REF-MAT-011]** |
+| Check | CF-PETG FDM | **PA12-CF (DuraForm PA CF) [REF-MAT-015]** |
 | --- | ---: | ---: |
 | Thigh, 6 mm bore | 0.53× | 0.81× |
 | Thigh, solid | 0.61× | **0.93×**: cylinders Ø14 → **Ø14.35 mm** for 1.00× |

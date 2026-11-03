@@ -524,7 +524,9 @@ A1B_CRANK_R   = 10.0;       // mm, crank radius (study SS4.3)
 // published merged hull (2026-10-27): aft inboard 154 deg (clear
 // of the wing root and tilt bracket); fore outboard 65 deg into the canonical
 // flank housing (owner 2026-10-27).
-A1B_STRUT_AZ  = (BAY_STATION == "aft") ? 154 : 65;
+// 2026-11-01: fore 65 -> 80 (near-vertical, FLUSH in the gear box) with the
+// fore swing azimuth at -65 -- the outboard "flank housing" was never built.
+A1B_STRUT_AZ  = (BAY_STATION == "aft") ? 154 : 80;
 A1B_REACH     = 55.0;       // mm, crank pin -> anchor pin (fuse 33.9 gauge + ends)
 A1B_ROW_Y     = 3.5;        // mm, ductile row at -y, spring row at +y (inside LUG_W)
 A1B_PIN_D     = 4.0;        // mm, 6061-T6 crank / anchor / hip pins [REF-MAT-007]
@@ -1379,6 +1381,17 @@ module leg_assembly(flex = 0, h_duct = H_NOM, h_spring = H_NOM) {
 //   them at Y -46.5, 129 mm off the centreline (were -31.8 / 140).
 // ---------------------------------------------------------------------------
 include <../hull_datums.scad>   // X_CL etc. -- never re-typed
+// Fore swing azimuth -22.4 -> -65 (owner 2026-11-01): the fore feet rotate
+// toward the bow, narrowing the fore track 258 -> 178 mm, so the A1B CF
+// backbone packages FLUSH (plates near-vertical, strut az 80) clear of the
+// TACCO CN2 chin pouch and chin shelf (sweep: keep-outs 398 -> 6 mm^3), and
+// the leg reads in the side plane as in the Henning close-gear render.
+// Static tip angles (heaviest ledger case): side 41.2 -> 37.4 deg, nose-over
+// 31.0 -> 41.0 deg, tail-back 29.6 (limiting, unchanged).  See plan
+// docs/plans/2026-11-01-001-feat-canonical-gear-box-plan.md.
+LG_FORE_PORT = [ 54.95, 289.70, 118, -65.0, 1 ];   // fore-port (R2)
+LG_AFT_PORT  = [ 77.61, 405.66, 118,  28.0, 1 ];   // aft-port  (R2)
+function lg_mirror_row(c) = [2 * X_CL - c[0], c[1], c[2], 180 - c[3], -c[4]];
 CORNERS = [
     // [hip_x, hip_y, hip_z, swing_azimuth_deg, hand] -- hand +1 = port part,
     // -1 = starboard part, the MIRROR image of port (owner 2026-10-10,
@@ -1399,10 +1412,14 @@ CORNERS = [
     // R2 = R1 + (169.85, 305.70, 80.00).  R1 rows: (-114.90/-224.90, -16.00, 38),
     // (-92.24/-247.56, 99.96, 38) -- mirrored about the old -169.9, so the R2
     // starboard rows sit 0.1 mm off a true mirror; the rebuild derives them.
-    [  54.95, 289.70, 118,  -22.4,  1 ],   // fore-port
-    [ -54.95, 289.70, 118, -157.6, -1 ],   // fore-stbd = exact mirror of fore-port about X_CL 0 (2026-11-01; was -55.05)
-    [  77.61, 405.66, 118,   28.0,  1 ],   // aft-port
-    [ -77.61, 405.66, 118,  152.0, -1 ],   // aft-stbd = exact mirror of aft-port about X_CL 0 (2026-11-01; was -77.71)
+    // 2026-11-01 (owner: "make it symmetric across the centerline"):
+    // starboard rows are now DERIVED from the port rows about X_CL, so they
+    // are an exact mirror (they were 0.1 mm off -- mirrored about the old
+    // R1 centreline).
+    LG_FORE_PORT,
+    lg_mirror_row(LG_FORE_PORT),           // fore-stbd
+    LG_AFT_PORT,
+    lg_mirror_row(LG_AFT_PORT),            // aft-stbd
 ];
 
 // All 4 corners, gear only (no ground/ghost slabs) -- consumed by

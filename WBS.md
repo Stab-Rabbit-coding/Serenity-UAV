@@ -271,13 +271,58 @@ as-drafted record are in docs/WBS.md §0.10.3; the manual is
 - [ ] Confirm the NASA SP-8007 [REF-NASA-002] bending-knockdown section against the NTRS PDF
 - [ ] Confirm the Isogrid Design Handbook [REF-NASA-003] smear against §4.2 of the NTRS PDF
 - [ ] Confirm the Roark [REF-STR-001] edition, table and case for the circular-plate patch load and the cantilever frequency
-- [ ] Validate an official 3D Systems URL for DuraForm PA CF 3DS-30108A [REF-MAT-011]
+- [x] Validate an official 3D Systems URL for DuraForm PA CF 3DS-30108A [REF-MAT-015] — validated 2026-11-01 (PA11 Black [REF-MAT-016] also validated)
+- [ ] Validate an official 3D Systems URL for DuraForm PA12 Black [REF-MAT-017]
 - [ ] Obtain PA CF build-axis (Z) tensile and flexural data (coupon or vendor), replacing the 0.5 knockdown
 - [ ] Owner sets the handling design load (now 20 lbf on a 5 mm radius patch, ASSUMED)
 - [ ] Verify Brazier 1927 [REF-STR-002] DOI/pages and the Roark ring-crush case [REF-STR-001] used in `docs/SKID_FAILURE_MODE_STUDY.md`
 - [x] ~~Size the PA11 skid root as a plastic hinge~~ — superseded 2026-10-31 by the PA12-CF elastic U-frame (owner); see `docs/SKID_FAILURE_MODE_STUDY.md` §8–10
 - [ ] Skid bench acceptance: tip stiffness ≥ 1,207 lbf/in per skid (SKID study §10.1)
 - [ ] Add I_roll to `tools/auw_ledger.py`; re-run the single-skid strike (§10.2); owner: roll-attitude limit or accepted fracture
+
+---
+
+### 0.13 — Airframe FDM CF-PETG → SLS Migration, bow to stern (2026-11-01)
+
+→ detail: `docs/SLS_MIGRATION.md`, `tools/sls_dfm_audit.py`, `tools/sls_materials.py`, [REF-MFG-001]
+
+- [x] Single SLS material source `tools/sls_materials.py` (PA CF / PA11 / PA12, Z knockdown)
+- [x] Whole-aircraft SLS DFM audit `tools/sls_dfm_audit.py` (SLS 380 envelope, 1 mm wall, trapped powder, mesh)
+- [x] Fixed nozzle: sealed 14 cc housing void opened with 3 × Ø3 mm powder-escape holes
+- [x] Stbd gear-bay STLs (4) were inside-out (double winding flip in `generate_lg_bays.py`); fixed at source + files
+- [x] Head-cell rail statics re-pointed to PA CF design values — PASS (min margin 1.70); part since retired, result historical
+- [x] Gear bellcrank bearing re-pointed to PA CF — spreader discs grow 13→14 mm (A) and 17→18 mm (B)
+- [ ] Locate an official 3dsystems.com URL for the SLS Design Guide [REF-MFG-001]
+- [ ] Feather-edge review, part by part (thicken, truncate or accept) — list in `docs/SLS_MIGRATION.md` §4
+- [ ] Re-point the remaining CF-PETG margin tools (list in `docs/SLS_MIGRATION.md` §5)
+- [x] Build orientation for every current printed part (79), critical stress in the build plane, SLS 380 fit — `docs/SLS_PRINT_ORIENTATION.md`, `tools/sls_print_orientation.py` (2026-11-01)
+- [x] Decision (owner 2026-11-01): final build orientation and machine are set with 3D Systems; repo orientations are the design-intent request (`docs/SLS_PRINT_ORIENTATION.md` §0)
+- [ ] Owner + 3D Systems: agree orientation and machine per part (SLS 380 / sPro 140 / sPro 230); record in `tools/sls_print_orientation.py`
+- [ ] Owner + 3D Systems: forward hull section (head+cargo, one piece) on the sPro 140 (lying down; strength orientation) vs SLS 380 on end
+- [x] One-piece AFT hull section `middle_rear_shell24_2mm_merged.stl` (`tools/merge_middle_rear_shell.py`, blended loft Y 501–530.5); middle/rear collar retired (2026-11-01)
+- [x] Hull seams vs QMx/Henning canon: forward seam waist step removed (loft), aft dorsal collar residue removed, cargo/middle ring step confirmed canonical — `docs/SLS_PRINT_ORIENTATION.md` §6
+- [ ] Re-run the aft-dependent tools on the merged aft section (`aft_section_mass_audit.py`, `tail_strike_requirement.py`, AUW ledger) — they still read the separate middle/rear shells
+- [x] Assembly + build guide refreshed for the 2-section SLS hull and twin pack tray (serenity_assembly.py, gen_build_guide_cards.py, REVN_BUILD_GUIDE_24IN.md Phase 0/1); card renders now EMBEDDED in the SVGs (linked PNGs showed blank in viewers) (2026-11-01)
+- [ ] Re-home the two cargo node saddles (`PRINT-NODE-SADDLE`): they bolted to the retired battery cradle's aft wall; mount is OPEN
+- [ ] Retire / regenerate void formers `void_former_cargo_{collar_rim,batt_chimney}` (their collar and cradle are retired); fix BOM `PRINT-VOID-FORMER-CARGO` qty 5 → 3
+- [ ] Add BOM rows for the merged forward/aft hull sections and the twin pack tray/sleds/gate (guide Print Schedule shows "BOM rows pending")
+- [x] Design review against the 3D Systems SLS Design Guide [REF-MFG-001] — `docs/SLS_MIGRATION.md` §7; citations corrected to pp. 4/15
+- [x] Tilt-brake pin bore clearance 0.15 → 0.3 mm per side [REF-MFG-001 pp. 7, 12]; guides re-rendered
+- [x] ~~Belly panel aft hole slot~~ — reverted 2026-11-01: belly panel is retired (BOM qty 0)
+- [ ] Stator-vane and spider-arm root fillets [REF-MFG-001 p. 4], sized with a flow/thrust check
+- [ ] Ask 3D Systems: bead-blast reach into blind heat-set boss holes, or add >2 mm vents [REF-MFG-001 p. 6]
+- [ ] ESC cover rebate fit 0.25 → 0.3 mm per side at the next 64 mm nacelle re-export
+- [x] ~~Battery-cradle hanger slotting~~ — moot: cradle retired by the one-piece hull (`d92c4f14`)
+- [ ] Update BOM (`bom_revT.csv` + `.json`) and `tools/auw_ledger.py` for `d92c4f14`: drop separate head/cargo shells, head-cargo collar, cradle, head-cell rail/sled/catch; add merged forward + aft sections + twin pack tray/sleds/gate; drop middle/rear collar + separate middle/rear shells (cargo/middle collar stays)
+- [ ] Run the twin pack gate/catch statics on PA CF (`docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md` open items)
+- [x] Trade: cargo doors print-in-place with the cargo shell vs separate — recommend SEPARATE (`docs/CARGO_DOOR_INTEGRATED_HINGE_TRADE.md`); owner to accept
+- [ ] Cargo door knuckles: print bores undersize, line-ream shell + door knuckles together at assembly (0.15 mm/side as-sintered is below [REF-MFG-001 p. 12]); update `generate_cargo_doors.py` + `generate_cargo_hinge_retention.py`
+- [ ] Order cargo doors in the same 3D Systems build as the cargo shell (shared powder lot / shrink)
+- [ ] Verify the 15 confidence-V orientations (frame / load path) before the build is released
+- [ ] Ask 3D Systems for DuraForm PA CF X/Y/Z (recoater-direction) properties — requires verification
+- [ ] Owner: confirm FDM-only features to strip (4×0.6 mm perimeter wall sizing, brims, support-avoid chamfers) per part family
+- [ ] Re-export the 64 mm nacelles and wing-root flanges watertight (audit R4)
+- [ ] Re-run `tools/sls_auw_reconcile.py` after the above and update the AUW ledger
 - [ ] Lever rib over the CF frame (Y 572–620) + forward 2×M3 tie; CF plate bearing coupon (§10.3)
 - [ ] Skid-tip-to-hull measure-and-shim step at assembly, or owner accepts a 0.45 mm worst-case hull margin (§10.5)
 
