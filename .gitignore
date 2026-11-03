@@ -33,6 +33,7 @@ ENV/
 # FreeCAD large binary outputs (exceed GitHub 100 MB limit — use LFS if needed)
 *.FCBak
 *.FCStd
+*.FCStd.bak
 
 # VS Code Local History plugin (handled as submodule — do not commit raw files)
 avionics/kicad/.history/
