@@ -335,14 +335,6 @@
       ],
       "archived": false
     },
-    "airframe/Serenity-Assembled.FCStd.bak": {
-      "description": "PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000Ej\\=-}5",
-      "tags": [
-        "cad-mesh",
-        "structural"
-      ],
-      "archived": false
-    },
     "airframe/TODO.md": {
       "description": "Serenity UAV \u2014 Airframe (Hull-Frame Standard + Placeholders) TODO (Open Work Only)",
       "tags": [
@@ -22532,7 +22524,6 @@
       "airframe/LICENSE",
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
-      "airframe/Serenity-Assembled.FCStd.bak",
       "airframe/TODO.md",
       "airframe/WBS.md",
       "airframe/blender-scripts/add_structural_features.py",
@@ -22914,7 +22905,6 @@
       "airframe/FreeCAD-scripts/make_flat_pattern.py",
       "airframe/FreeCAD-scripts/serenity_assembly.py",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
-      "airframe/Serenity-Assembled.FCStd.bak",
       "airframe/blender-scripts/add_structural_features.py",
       "airframe/blender-scripts/blender_edf_bore_and_petals.py",
       "airframe/blender-scripts/blender_hollow_shells.py",
