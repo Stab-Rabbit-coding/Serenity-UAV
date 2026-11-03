@@ -87,3 +87,11 @@ corner, so the fore and aft bays differ, and each starboard bay is the
 **mirror image** of its port twin about the ship centreline, not a rotated
 copy. Any property claimed for "the bay" (one body, clearance, fit) has to be
 shown at every corner, because the conforming back face alone can change it.
+
+## Gear Box
+
+The canonical (Henning) faceted block on each lower cargo flank, under the wing root, that houses the landing-gear hips. Each thigh leaves the box through a square leg-support pillar with an open trapezoidal swing slot. It is fused into the one-piece forward hull as skin, not as a separate part: its walls stand only outside the old hull, and its interior opens into the cargo hold. The bolted gear bays (see Bay Station) sit inside it as internal structure. It is styling plus enclosure, not the primary load path.
+
+## Corner Cartridge
+
+The field-replaceable unit for one landing-gear corner: leg, hip pin, CF backbone, tension fuses and mounting frame, removed and installed as one assembly through a removable canonical hatch in the Gear Box. A broken corner is swapped in the field and repaired at the bench. Port and starboard cartridges are exact mirrors; fore and aft cartridges differ.

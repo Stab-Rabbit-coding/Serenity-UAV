@@ -9,7 +9,7 @@ still unknown.
 The register lives in current-specification/joint_register.json.  This tool:
 
   * validates its structure (unique IDs, joint classes, threaded joints name a fastener size);
-  * checks every joint's BOM references exist in current-specification/bom_revT.json;
+  * checks every joint's BOM references exist in current-specification/bom_revU.json;
   * checks coverage: every BOM row in the register's scope (hardware-class categories plus the
     explicit extra refs) is in a joint or in the exempt list with a reason, and no exempt row is
     also claimed by a joint;
@@ -38,7 +38,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTER = ROOT / "current-specification" / "joint_register.json"
-BOM = ROOT / "current-specification" / "bom_revT.json"
+BOM = ROOT / "current-specification" / "bom_revU.json"
 CARD_DIR = ROOT / "graphical-build-guide"
 
 JOINT_CLASSES = {"threaded", "pinned", "pressed", "bonded", "clamped"}
@@ -86,7 +86,7 @@ def validate(reg: dict, bom: dict[str, dict]) -> list[str]:
             errs.append(f"{jid}: threaded joint names no fastener size")
         for ref in j.get("bom_refs", []):
             if ref not in bom:
-                errs.append(f"{jid}: BOM ref '{ref}' not in bom_revT.json")
+                errs.append(f"{jid}: BOM ref '{ref}' not in bom_revU.json")
             elif ref in reg["exempt"]:
                 errs.append(f"{jid}: BOM ref '{ref}' is both in a joint and exempt")
             else:
@@ -98,7 +98,7 @@ def validate(reg: dict, bom: dict[str, dict]) -> list[str]:
             errs.append(f"BOM ref '{ref}' ({bom[ref]['Category']}) is in no joint and not exempt")
     for ref, why in reg["exempt"].items():
         if ref not in bom:
-            errs.append(f"exempt ref '{ref}' not in bom_revT.json (stale exemption: {why})")
+            errs.append(f"exempt ref '{ref}' not in bom_revU.json (stale exemption: {why})")
         if not why:
             errs.append(f"exempt ref '{ref}' has no reason")
     return errs

@@ -64,11 +64,14 @@ TONGUE_FWD = 9.4  # projection forward of the stop face (blade 5 + gap + 4 mm ri
 BLADE_Y = 5.0  # blade length (Y) in shear
 STOP_T = 4.0
 
-# Cited allowables (20 % CF-PETG)
-FLEX_STRENGTH = 77.0  # MPa, ASTM D790 [REF-MAT-002]
-FLEX_MODULUS = 6670.0  # MPa [REF-MAT-002]
-TENSILE = 39.23  # MPa, ASTM D638 [REF-MAT-001]
-COMPRESSIVE = 47.0  # MPa, low end of the D695 range [REF-MAT-001]
+# Cited allowables -- SLS DuraForm PA CF [REF-MAT-015], orientation-agnostic
+# design values (Z knockdown applied, tools/sls_materials.py).  Was 20 % CF-PETG
+# [REF-MAT-001/-002] before the 2026-11-01 FDM -> SLS migration.
+from sls_materials import PA_CF, design  # noqa: E402
+FLEX_STRENGTH = design(PA_CF, "flex_strength_mpa")  # 70 MPa
+FLEX_MODULUS = design(PA_CF, "flex_mod_mpa")  # 3500 MPa
+TENSILE = design(PA_CF, "tensile_ult_mpa")  # 42 MPa
+COMPRESSIVE = design(PA_CF, "compressive_mpa")  # 42 MPa, ASSUMED = tensile
 SHEAR_EST = 0.577 * TENSILE  # distortion-energy estimate, order of magnitude only
 BOND = 5.0  # MPa, repo bond-limited CF-PETG figure (docs/structural_analysis.md §7.3)
 SLED_G = 20.0  # estimate, refine from the rendered sled volume
@@ -89,27 +92,27 @@ def statics():
     # a/b ~ 1.1 is REQUIRES VERIFICATION against a cited plate table (TODO §0.x)
     a, b = h.BAND_W, h.BAND_H
     q = ult / (a * b)
-    row("stop plate bending (fwd)", 0.29 * q * b * b / STOP_T ** 2, FLEX_STRENGTH, "REF-MAT-002")
-    row("stop bearing (fwd)", ult / (a * b), COMPRESSIVE, "REF-MAT-001")
+    row("stop plate bending (fwd)", 0.29 * q * b * b / STOP_T ** 2, FLEX_STRENGTH, "REF-MAT-015")
+    row("stop bearing (fwd)", ult / (a * b), COMPRESSIVE, "REF-MAT-015")
     # fwd load into the webs as shear, then the flange bond
     web_len = WEB_Y1 - h.RAIL_Y0
-    row("web shear (fwd/aft)", ult / (2 * web_len * h.RAIL_T), SHEAR_EST, "REF-MAT-001 est")
+    row("web shear (fwd/aft)", ult / (2 * web_len * h.RAIL_T), SHEAR_EST, "REF-MAT-015 est")
     row("flange bond (any dir)", ult / (2 * web_len * FLANGE_W), BOND, "structural_analysis §7.3")
     # up: ceiling plate strip spanning the band
     p = ult / (h.CELL_L * h.BAND_W)
     row("ceiling bending (up)", 6 * (p * h.BAND_W ** 2 / 8) / h.RAIL_T ** 2, FLEX_STRENGTH,
-        "REF-MAT-002")
+        "REF-MAT-015")
     # down: lips as cantilevers, load at 2 mm arm, both lips over the cell length
     w = ult / (2 * h.CELL_L)
-    row("lip bending (down)", 6 * (w * 2.0) / h.RAIL_T ** 2, FLEX_STRENGTH, "REF-MAT-002")
+    row("lip bending (down)", 6 * (w * 2.0) / h.RAIL_T ** 2, FLEX_STRENGTH, "REF-MAT-015")
     # aft: groove face bears on the blade, blade bears on the stop face; the
     # ridge forward of the groove shears off along the groove floor
-    row("blade shear (aft)", ult / (TONGUE_W * BLADE_Y), SHEAR_EST, "REF-MAT-001 est")
-    row("groove-face bearing (aft)", ult / (TONGUE_W * GROOVE_D), COMPRESSIVE, "REF-MAT-001")
+    row("blade shear (aft)", ult / (TONGUE_W * BLADE_Y), SHEAR_EST, "REF-MAT-015 est")
+    row("groove-face bearing (aft)", ult / (TONGUE_W * GROOVE_D), COMPRESSIVE, "REF-MAT-015")
     row("ridge shear-out (aft)", ult / (TONGUE_W * (TONGUE_FWD - BLADE_Y - 0.4)), SHEAR_EST,
-        "REF-MAT-001 est")
+        "REF-MAT-015 est")
     row("tongue section tension (aft)", ult / (TONGUE_W * (TONGUE_T - GROOVE_D)), TENSILE,
-        "REF-MAT-001")
+        "REF-MAT-015")
     # catch leaf at release (not a crash case): strain/stress and pull force
     sig = 3 * FLEX_MODULUS * LEAF_T * LEAF_DEFLECT / (2 * LEAF_L ** 2)
     i_leaf = LEAF_W * LEAF_T ** 3 / 12

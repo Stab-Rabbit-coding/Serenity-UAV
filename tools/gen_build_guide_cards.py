@@ -25,7 +25,10 @@ Pipeline (run from the repo root):
 
 Writes graphical-build-guide/build_guide_NN_<slug>.svg (27 cards),
 build_plan.svg and components_overview.svg.  Renders are linked, not
-embedded, so the SVGs stay small and diff cleanly.
+EMBEDDED as base64 JPEG data URIs (render_href(), 2026-11-01).  Linked
+renders showed as blank frames in GitHub, the VS Code preview and other
+viewers, which refuse to load an external file referenced from inside an
+SVG.  The PNGs in card-renders/ stay the render masters.
 
 Units: US customary primary, metric in parentheses (AGENTS.md).  Coordinates
 are aircraft datum R2 (tools/hull_datums.py).
@@ -51,13 +54,9 @@ N_CARDS = 27
 
 # Parts every interior view hides so the internals can be seen.
 SHELLS = [
-    "Head_Shell",
-    "Cargo_Shell",
-    "Middle_Shell",
-    "Rear_Shell",
-    "Head_Cargo_Splice",
-    "Cargo_Middle_Splice",
-    "Middle_Rear_Splice",
+    "Hull_Forward",          # head+cargo, one SLS piece (2026-10-31)
+    "Hull_Aft",              # middle+rear, one SLS piece (2026-11-01)
+    "Cargo_Middle_Splice",   # the one remaining hull joint
     "Cargo_Door",
     "Cargo_Hinge",
 ]
@@ -68,6 +67,22 @@ PENDING = (
     "(graphical-build-guide/WBS.md 1.5.6). This card shows the Rev T+ "
     "architecture only; follow the authority documents named below."
 )
+
+
+def render_href(png_name, quality=85):
+    """Data URI of a card render, re-encoded as JPEG to keep the SVG small.
+    Embedded, not linked, so every SVG viewer shows the image."""
+    import base64
+    import io
+
+    from PIL import Image
+
+    path = os.path.join(GUIDE, "card-renders", png_name)
+    with Image.open(path) as im:
+        buf = io.BytesIO()
+        im.convert("RGB").save(buf, "JPEG", quality=quality, optimize=True)
+    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode("ascii")
+
 
 # ---------------------------------------------------------------------------
 # Card table.  view: highlight prefixes, hide prefixes, camera direction,
@@ -107,62 +122,67 @@ CARDS = [
     dict(
         slug="print_prep",
         phase="PHASE 0 - PRINT",
-        title="PRINT PREPARATION",
-        sub="Dry filament, hardened nozzle, calibrate",
+        title="ORDER THE SLS PARTS",
+        sub="3D Systems: DuraForm PA CF and PA11",
         view=dict(highlight=[], dir=(0.0, 0.0, 1.0), margin=1.05),
         parts=[
-            ("1", "Printer, PEI spring-steel bed", ""),
-            ("1", "Hardened-steel nozzle 0.4 mm", "CF-PETG abrades brass"),
-            ("", "PETG, CF-PETG, TPU 95A", "per bom_revT.csv"),
-            ("1", "Filament dryer", ""),
+            ("", "DuraForm PA CF (PA12-CF): structure, shells, gears", "REF-MAT-015"),
+            ("", "DuraForm PA11 Black: gear feet (impact)", "REF-MAT-016"),
+            ("", "SLS 380 15 x 13 x 18 in; sPro 140 22 x 22 x 18 in", "REF-MFG-001 p. 17"),
+            ("", "per-part material + orientation list", "SLS_PRINT_ORIENTATION.md"),
         ],
         steps=[
-            "Dry ALL filament 6 h at 149 F (65 C) before printing.",
-            "Install the hardened-steel nozzle; re-level the bed after the change.",
-            "PETG 446 F (230 C) / bed 158 F (70 C).",
-            "CF-PETG 464-473 F (240-245 C) / bed 176 F (80 C).",
-            "TPU 95A 428 F (220 C) / bed 122 F (50 C), direct drive only.",
-            "Slice from the current main checkout; "
-            "print each *_print.stl sibling where one exists.",
+            "Export every current part listed in docs/SLS_PRINT_ORIENTATION.md 4.",
+            "Send each STL with its material and requested build orientation.",
+            "Agree the final orientation and machine for each part with 3D Systems.",
+            "Order the forward hull section on the sPro 140 (lies flat there).",
+            "Order the cargo doors in the same build as the forward hull section.",
+            "On delivery: bead-blast check every blind hole; line-ream the door knuckles.",
         ],
-        warn=[("CAUTION", "CF-PETG destroys brass nozzles within one spool. Use hardened steel.")],
-        source="REVN_BUILD_GUIDE_24IN.md Phase 0 Printer Setup",
+        warn=[
+            (
+                "NOTE",
+                "The repo orientations are a design-intent request, not a release "
+                "instruction (owner decision 2026-11-01).",
+            ),
+            (
+                "CAUTION",
+                "Do not print structural parts in FDM CF-PETG. The sizing now uses "
+                "PA CF allowables (tools/sls_materials.py).",
+            ),
+        ],
+        source="docs/SLS_MIGRATION.md; docs/SLS_PRINT_ORIENTATION.md; REF-MFG-001",
     ),
     dict(
         slug="print_hull",
         phase="PHASE 0 - PRINT",
-        title="PRINT HULL SECTIONS + SPLICE COLLARS",
-        sub="Four shells, three internal collars",
+        title="HULL: TWO SLS SECTIONS + ONE COLLAR",
+        sub="Forward (head+cargo), aft (middle+rear), cargo/middle collar",
         view=dict(
-            highlight=[
-                "Head_Shell",
-                "Cargo_Shell",
-                "Middle_Shell",
-                "Rear_Shell",
-                "Head_Cargo_Splice",
-                "Cargo_Middle_Splice",
-                "Middle_Rear_Splice",
-            ],
+            highlight=["Hull_Forward", "Hull_Aft", "Cargo_Middle_Splice"],
             hide=UNPLACED,
             dir=(1.0, -0.6, 0.45),
             margin=1.05,
         ),
         parts=[
-            ("1", "head_shell24_2mm_repaired.stl", "PRINT-HEAD-SHELL"),
-            ("1", "cargo_sect_shell24_2mm_repaired.stl", "PRINT-CARGO-SECT"),
-            ("1", "middle_shell24_2mm_repaired.stl", "PRINT-MIDDLE-CANONICAL"),
-            ("1", "rear_shell24_2mm_repaired.stl", "PRINT-REAR-NECK-INTAKE"),
-            ("3", "splice collars (head/cargo, cargo/middle, middle/rear)", "PRINT-*-COLLAR"),
+            ("1", "head_cargo_shell24_2mm_merged.stl (sPro 140)", "forward section"),
+            ("1", "middle_rear_shell24_2mm_merged.stl (SLS 380)", "aft section"),
+            ("1", "cargo_middle_splice_collar.stl", "PRINT-CARGO-MIDDLE-COLLAR"),
         ],
         steps=[
-            "Print the four shells from airframe/stls/fuselage/ (cargo shell under "
-            "fuselage/cargo/).",
-            "Print the three internal splice collars. Their mating faces are OPEN by design.",
-            "Dry-fit each collar into both neighboring shells before any bond.",
-            "Mark port and starboard on each shell interior.",
+            "Order both sections in DuraForm PA CF, lying flat (Y in the build plane).",
+            "Order the cargo/middle collar. Its mating faces are OPEN by design.",
+            "Dry-fit the collar into both sections before any bond.",
+            "Mark port and starboard on each section interior.",
         ],
-        warn=[("NOTE", "Slicer settings per part are in the Notes column of bom_revT.csv.")],
-        source="REVN_BUILD_GUIDE_24IN.md Phase 0 Print Schedule; bom_revT.csv",
+        warn=[
+            (
+                "NOTE",
+                "The head/cargo and middle/rear seams are printed, blended skin, "
+                "checked against the QMx blueprints (SLS_PRINT_ORIENTATION.md 6).",
+            )
+        ],
+        source="docs/SLS_PRINT_ORIENTATION.md 3 and 6; tools/merge_*_shell.py",
     ),
     dict(
         slug="print_nacelle",
@@ -183,7 +203,7 @@ CARDS = [
             ("4", "ESC covers {port,stbd}_{a,b}, all distinct", "PRINT-NACELLE-ESC-COVER"),
         ],
         steps=[
-            "Print both pods in CF-PETG; they are mirror parts, not copies.",
+            "Order both pods in PA CF; they are mirror parts, not copies.",
             "Print the trunnions; check that each 6704ZZ seat accepts its bearing.",
             "Print 4 master + 4 seal flaps per nacelle; dry-lap all 8 on the ring.",
             "Print the four ESC covers; each fits one bay only.",
@@ -205,7 +225,7 @@ CARDS = [
         view=dict(
             highlight=[
                 "Tilt_",
-                "Battery_Cradle",
+                "Twin_Pack",
                 "Chin_Node_Shelf",
                 "Gateway_Door_Tray",
                 "Door_Latch",
@@ -225,14 +245,16 @@ CARDS = [
             ("2", "tilt_brake_guide + _stbd (MIRRORED print)", "PRINT-TILT-BRAKE-GUIDE"),
             ("4", "lg_r6_3_0in_bay_*_print.stl, 4 distinct", "PRINT-LG-*"),
             ("4", "leg frames (fore/aft) + 4 feet", "PRINT-LG-LEG-FRAME-3.0IN"),
-            ("", "doors, latch, servo brackets, tray, cradle, shelf", "PRINT-CARGO-*"),
+            ("", "doors, latch, servo brackets, door tray, shelf", "PRINT-CARGO-*"),
+            ("1+2+1", "twin pack tray, 2 sleds, gate (head)", "twin_pack_tray.scad"),
         ],
         steps=[
             "Print the tilt brackets, worms, and wheels; the worm turns the wheel freely by hand.",
             "Print the starboard brake guide from its own STL; it is a mirror, not a copy.",
             "Print the four gear bays from the *_print.stl files; label each corner.",
             "Print the cargo doors, latch brackets and cranks, door horns, and servo brackets.",
-            "Print the battery cradle, chin node shelf, GPS ring, FPV bezel, and door tray.",
+            "Print the twin pack tray, sleds and gate, chin node shelf, GPS ring, FPV bezel, "
+            "and door tray.",
         ],
         warn=[
             (
@@ -285,35 +307,36 @@ CARDS = [
     dict(
         slug="hull_join",
         phase="PHASE 1 - HULL",
-        title="JOIN THE HULL: COLLARS, KEEL, RING FRAMES",
-        sub="Splice collars bridge the four sections",
+        title="JOIN THE HULL: ONE COLLAR, KEEL, RING FRAMES",
+        sub="The cargo/middle collar joins the two sections",
         view=dict(
-            highlight=["Head_Cargo_Splice", "Cargo_Middle_Splice", "Middle_Rear_Splice"],
-            hide=UNPLACED + ["Head_Shell", "Middle_Shell", "Rear_Shell", "Cargo_Door"],
-            dir=(1.0, -0.4, 0.5),
-            margin=1.15,
+            highlight=["Cargo_Middle_Splice"],
+            hide=UNPLACED + ["Hull_Aft", "Cargo_Door"],
+            # one collar, not three: widen the frame so the joint reads in
+            # context (forward section shown, aft section hidden)
+            dir=(1.0, 0.35, 0.45),
+            margin=3.2,
         ),
         parts=[
-            ("3", "splice collars", "PRINT-*-COLLAR"),
+            ("1", "cargo/middle splice collar", "PRINT-CARGO-MIDDLE-COLLAR"),
             ("1", "West System 105/206 epoxy kit", ""),
             ("2", "CF keel segments (card 05)", ""),
             ("2", "CF ring frames", "airframe/diagrams/ring_frames/"),
         ],
         steps=[
-            "Bond the keel segments into the cargo and rear sections only (head and middle are "
-            "keelless).",
-            "Lap-splice the two keel segments 3.9 in (100 mm) at the middle/rear joint.",
+            "Bond the keel segments into the forward (cargo) and aft (rear) keel runs.",
             "Bond the two ring frames into their keel notches.",
-            "Bond each splice collar into both neighboring shells; clamp and cure.",
+            "Bond the collar into both sections; clamp and cure.",
         ],
         warn=[
             (
                 "NOTE",
-                "Keel and frame stations in the guide are still in the R1 datum; "
-                "re-derive them in R2 before cutting notches (WBS 1.5.6 re-audit).",
+                "Keel splice and frame stations are still in the R1 datum and "
+                "predate the one-piece aft section; re-derive them in R2 before "
+                "cutting notches (WBS 1.5.6 re-audit).",
             )
         ],
-        source="REVN_BUILD_GUIDE_24IN.md Phase 1 steps 1-2; docs/structural_analysis.md 4.1-4.2",
+        source="docs/SLS_PRINT_ORIENTATION.md 3; docs/structural_analysis.md 4.1-4.2, 7.4",
     ),
     dict(
         slug="wing_root",
@@ -324,10 +347,9 @@ CARDS = [
             highlight=["Wing_Root_Flange"],
             hide=UNPLACED
             + [
-                "Cargo_Shell",
+                "Hull_Forward",
                 "Cargo_Door",
                 "Cargo_Hinge",
-                "Head_Cargo_Splice",
                 "Cargo_Middle_Splice",
             ],
             dir=(1.0, -0.7, 0.5),
@@ -387,7 +409,7 @@ CARDS = [
                 "analysis closes (docs/LANDING_GEAR_ANALYSIS.md).",
             )
         ],
-        source="docs/LANDING_GEAR_ANALYSIS.md; tools/generate_lg_bays.py; bom_revT.csv LG-*",
+        source="docs/LANDING_GEAR_ANALYSIS.md; tools/generate_lg_bays.py; bom_revU.csv LG-*",
     ),
     dict(
         slug="cargo_doors",
@@ -430,7 +452,7 @@ CARDS = [
                 "not driven from a local H-bridge.",
             )
         ],
-        source="bom_revT.csv PRINT-DOOR-*, PRINT-GW-DOOR-TRAY; docs/CARGO_WINCH_SPECIFICATION.md",
+        source="bom_revU.csv PRINT-DOOR-*, PRINT-GW-DOOR-TRAY; docs/CARGO_WINCH_SPECIFICATION.md",
     ),
     dict(
         slug="tilt_drive",
@@ -582,7 +604,7 @@ CARDS = [
         title="POWER: PDB TO NACELLE ESCs",
         sub="10 AWG through the fixed spar to the disconnect bay",
         view=dict(
-            highlight=["Battery_Cradle", "Wing_Root_Flange", "Nacelle_Port", "Nacelle_Stbd"],
+            highlight=["Twin_Pack", "Wing_Root_Flange", "Nacelle_Port", "Nacelle_Stbd"],
             hide=UNPLACED + SHELLS + ["Nacelle_Port_Trunnion", "Nacelle_Stbd_Trunnion"],
             dir=(0.0, -0.35, 1.0),
             margin=1.08,
@@ -617,16 +639,15 @@ CARDS = [
         title="VOID FORMERS AND CONDUITS",
         sub="Everything that must stay hollow goes in before the pour",
         view=dict(
-            highlight=["Battery_Cradle", "Chin_Node_Shelf", "Wing_Root_Flange"],
-            hide=UNPLACED + ["Head_Shell", "Middle_Shell", "Rear_Shell", "Cargo_Door"],
+            highlight=["Twin_Pack", "Chin_Node_Shelf", "Wing_Root_Flange"],
+            hide=UNPLACED + ["Hull_Aft", "Cargo_Door"],
             dir=(1.0, -0.9, 0.8),
             margin=1.3,
         ),
         parts=[
             (
-                "5",
-                "void_former_cargo_{collar_rim, batt_chimney, harness_trunk_port, "
-                "harness_trunk_stbd, node_bay}",
+                "3",
+                "void_former_cargo_{harness_trunk_port, harness_trunk_stbd, node_bay}",
                 "PRINT-VOID-FORMER-CARGO",
             ),
             ("", "release wax, 2 coats", ""),
@@ -634,7 +655,7 @@ CARDS = [
         ],
         steps=[
             "Wax every former twice.",
-            "Seat the five cargo void formers; check that none rocks against the shell wall.",
+            "Seat the three cargo void formers; check that none rocks against the shell wall.",
             "Cap the spar passages (card 07) and keep the gear-bay pockets clear.",
             "Run every conduit with a pull string accessible at both ends.",
             "Full dry fit with all wiring before mixing any foam.",
@@ -644,9 +665,14 @@ CARDS = [
                 "CAUTION",
                 "The foam pour is the point of no return. Anything left out now "
                 "cannot be added later.",
-            )
+            ),
+            (
+                "NOTE",
+                "The collar_rim and batt_chimney formers are obsolete: their collar "
+                "and battery cradle were retired with the one-piece forward section.",
+            ),
         ],
-        source="bom_revT.csv PRINT-VOID-FORMER-CARGO; REVN_BUILD_GUIDE_24IN.md Anti-Rework Rules",
+        source="bom_revU.csv PRINT-VOID-FORMER-CARGO; REVN_BUILD_GUIDE_24IN.md Anti-Rework Rules",
     ),
     dict(
         slug="foam_pour",
@@ -654,7 +680,7 @@ CARDS = [
         title="FOAM POUR AND CLOSE-UP",
         sub="2 lb/ft3 closed-cell PU, fore to aft",
         view=dict(
-            highlight=["Head_Shell", "Cargo_Shell", "Middle_Shell", "Rear_Shell"],
+            highlight=["Hull_Forward", "Hull_Aft"],
             hide=UNPLACED,
             dir=(1.0, -0.2, 0.25),
             margin=1.05,
@@ -684,7 +710,7 @@ CARDS = [
         title="AVIONICS NODES",
         sub="PocketBeagle 2 Industrial + Pilot / TACCO capes",
         view=dict(
-            highlight=["Chin_Node_Shelf", "Battery_Cradle", "Gateway_Door_Tray"],
+            highlight=["Chin_Node_Shelf", "Twin_Pack", "Gateway_Door_Tray"],
             hide=UNPLACED + SHELLS,
             dir=(1.0, -1.0, 0.9),
             margin=1.3,
@@ -693,7 +719,8 @@ CARDS = [
             ("8", "PocketBeagle 2 Industrial", ""),
             ("4+4", "Pilot capes + TACCO capes", "avionics/kicad/"),
             ("1", "chin node shelf (CN2/CN3 pouches)", "PRINT-CHIN-SHELF"),
-            ("2", "node saddles, bolt to the battery cradle", "PRINT-NODE-SADDLE"),
+            ("2", "cargo node saddles: MOUNT OPEN (cradle retired)", "PRINT-NODE-SADDLE"),
+            ("1", "Simon saddle (CN4/FC4), aft-section neck", "simon_node_saddle.scad"),
             ("1+1+1", "Observer, Flight Engineer, Commo", ""),
         ],
         steps=[
@@ -706,9 +733,14 @@ CARDS = [
                 "NOTE",
                 "Board names: Pilot, TACCO, Observer, Flight Engineer, Commo "
                 "(2026-08-01 call-sign rename).",
-            )
+            ),
+            (
+                "CAUTION",
+                "The two cargo node saddles bolted to the battery cradle, which is "
+                "retired. Do not install them until a new mount is designed (WBS 0.13).",
+            ),
         ],
-        source="AGENTS.md 1 (avionics architecture); bom_revT.csv; tools/cargo_layout_fit.py",
+        source="AGENTS.md 1 (avionics architecture); bom_revU.csv; tools/cargo_layout_fit.py",
     ),
     dict(
         slug="bus_wiring",
@@ -716,7 +748,7 @@ CARDS = [
         title="INTER-NODE BUSES",
         sub="CAN FD, MIL-STD-1553C, RS-485, Ethernet",
         view=dict(
-            highlight=["Chin_Node_Shelf", "Battery_Cradle", "Gateway_Door_Tray", "Tilt_Bracket"],
+            highlight=["Chin_Node_Shelf", "Twin_Pack", "Gateway_Door_Tray", "Tilt_Bracket"],
             hide=UNPLACED + SHELLS,
             dir=(0.0, -0.3, 1.0),
             margin=1.4,
@@ -742,7 +774,7 @@ CARDS = [
         title="SECURITY HARDWARE",
         sub="TPM on every SBC cape, secure elements on non-SBC nodes",
         view=dict(
-            highlight=["Chin_Node_Shelf", "Battery_Cradle", "Gateway_Door_Tray"],
+            highlight=["Chin_Node_Shelf", "Twin_Pack", "Gateway_Door_Tray"],
             hide=UNPLACED + SHELLS,
             dir=(1.0, -0.6, 0.8),
             margin=1.4,
@@ -831,7 +863,7 @@ CARDS = [
         title="OBSTACLE SENSING",
         sub="12 x VL53L5CX ToF + 2 lasers, Observer board",
         view=dict(
-            highlight=["Head_Shell", "Cargo_FPV"], hide=UNPLACED, dir=(0.7, -1.0, 0.5), margin=1.2
+            highlight=["Hull_Forward", "Cargo_FPV"], hide=UNPLACED, dir=(0.7, -1.0, 0.5), margin=1.2
         ),
         parts=[
             ("12", "VL53L5CX ToF sensors", "current-specification/README.md"),
@@ -858,7 +890,7 @@ CARDS = [
         title="SOFTWARE AND FIRMWARE",
         sub="SBC images, cape firmware, controller firmware",
         view=dict(
-            highlight=["Chin_Node_Shelf", "Battery_Cradle"],
+            highlight=["Chin_Node_Shelf", "Twin_Pack"],
             hide=UNPLACED + SHELLS,
             dir=(1.0, -0.8, 0.9),
             margin=1.4,
@@ -939,7 +971,7 @@ CARDS = [
         title="MARKINGS AND DECALS",
         sub="FAA registration marking first, show decals second",
         view=dict(
-            highlight=["Head_Shell", "Cargo_Shell", "Middle_Shell", "Rear_Shell"],
+            highlight=["Hull_Forward", "Hull_Aft"],
             hide=UNPLACED,
             dir=(0.0, 0.0, 1.0),
             margin=1.05,
@@ -1035,7 +1067,7 @@ def card_svg(i, card):
     o += [
         '<rect x="20" y="110" width="760" height="450" rx="6" fill="#ffffff" stroke="#c9c4b8"/>',
         f'<image x="30" y="116" width="740" height="410" preserveAspectRatio="xMidYMid meet" '
-        f'xlink:href="card-renders/card{i:02d}.png" href="card-renders/card{i:02d}.png"/>',
+        f'xlink:href="{render_href(f"card{i:02d}.png")}"/>',
         '<rect x="32" y="534" width="14" height="14" fill="#ff5c00"/>'
         '<text x="52" y="546" font-size="12" fill="#444">this step</text>'
         '<rect x="128" y="534" width="14" height="14" fill="#dbdbd9" stroke="#999"/>'
@@ -1215,8 +1247,8 @@ def components_svg():
         '<text x="28" y="70" font-size="13" fill="#d6dee6">Rendered from the FreeCAD master '
         'assembly; '
         "port nacelle at cruise, starboard at hover.</text>",
-        '<image x="20" y="96" width="700" height="408" xlink:href="card-renders/components.png" '
-        'href="card-renders/components.png" preserveAspectRatio="xMidYMid meet"/>',
+        '<image x="20" y="96" width="700" height="408" '
+        f'xlink:href="{render_href("components.png")}" preserveAspectRatio="xMidYMid meet"/>',
     ]
     y = 112
     for name, text in SUBSYSTEMS:

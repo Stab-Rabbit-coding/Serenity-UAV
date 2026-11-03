@@ -28,7 +28,7 @@ Method (closed-form, per station; no FEA):
      ring (Y ~485) instead of the as-built root, with the as-built tube section
      extended forward [ASSUMED -- no separate geometry exists yet].
 
-Materials [REF-MAT-002, REF-MAT-011..013]: allowables at face value, no knockdowns;
+Materials [REF-MAT-002, REF-MAT-015..017]: allowables at face value, no knockdowns;
 PA12 Black is shown with its XY elongation (6.2 %) as well, because it is marginal
 for a plastic hinge.
 
@@ -60,9 +60,9 @@ Y_MERGE = 515.0
 # name, strength MPa, flexural E MPa, elongation %, ductile (plastic hinge)?
 MATS = [
     ("CF-PETG FDM 20% (REF-MAT-002)", 77.0, 6670.0, 2.1, False),
-    ("PA12-CF / DuraForm PA CF (REF-MAT-011)", 84.0, 7000.0, 3.8, False),
-    ("PA12 Black (REF-MAT-013)", 45.0, 1500.0, 13.7, True),
-    ("PA11 Black (REF-MAT-012)", 51.0, 1500.0, 52.6, True),
+    ("PA12-CF / DuraForm PA CF (REF-MAT-015)", 84.0, 7000.0, 3.8, False),
+    ("PA12 Black (REF-MAT-017)", 45.0, 1500.0, 13.7, True),
+    ("PA11 Black (REF-MAT-016)", 51.0, 1500.0, 52.6, True),
 ]
 
 

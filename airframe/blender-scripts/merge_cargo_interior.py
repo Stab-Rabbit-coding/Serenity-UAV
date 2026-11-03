@@ -860,7 +860,7 @@ LG_PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
 # tools/landing_gear_bay_function.py corner_sync()).
 LG_CORNERS = [
     # R2; R1 hips (-114.90/-224.90, -16.00, 38) and (-92.24/-247.56, 99.96, 38)
-    ("fore-port", 54.95, 289.70, 118.0, -22.4, "fore"),
+    ("fore-port", 54.95, 289.70, 118.0, -65.0, "fore"),   # 2026-11-01 was -22.4 (fore feet toward the bow)
     ("aft-port", 77.61, 405.66, 118.0, 28.0, "aft"),
 ]
 # 2026-11-01: starboard rows DERIVED as the exact mirror of port about X_CL

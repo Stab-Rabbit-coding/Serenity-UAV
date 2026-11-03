@@ -1,7 +1,7 @@
 # Serenity UAV — Build Tools & Validation Scripts
 
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)  
+**Current design revision:** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for changelog)  
 **Last updated:** 2026-10-07
 
 > Python and shell scripts for design validation, mesh integrity checking, KiCad PCB/ERC/DRC
@@ -218,7 +218,7 @@ Located in subsystem directories:
 
 ### Other Maintenance Scripts
 
-- **`compact_bom_entries.py`**, **`bom_edit_*.py`** — re-compact and edit BOM JSON entries
+- **`compact_bom_entries.py`** — re-compact and edit BOM JSON entries (the one-shot `bom_edit_*.py` scripts are archived in `archives/rev-T-and-earlier/tools/`)
 - **Nacelle 64 mm tools** — `nacelle_64_scale.py`, `nacelle_mass_cg_64.py`,
   `nozzle_servo_linkage_64.py`, `dorsal_shroud_resize_64.py`, `esc80_cooptimize.py`,
   `prep_nacelle_64_bake.py` (fit, mass/CG, nozzle servo linkage, and ESC bay co-optimization
@@ -236,7 +236,7 @@ Located in subsystem directories:
 
 - **`REFERENCES.md`** — Master catalog of all standards, regulatory citations, supplier links,
   and datasheets
-- **`bom_revS.json`**, **`bom_revS.csv`** — Bill of materials with cross-references to
+- **`bom_revU.json`**, **`bom_revU.csv`** (Rev S/T snapshots: `archives/rev-T-and-earlier/current-specification/`) — Bill of materials with cross-references to
   datasheets and supplier pages
 
 ## Development Setup
@@ -322,14 +322,14 @@ clang-format -i avionics/firmware/cn/src/*.c
 
 ```bash
 # Edit the JSON source
-nano current-specification/bom_revT.json
+nano current-specification/bom_revU.json
 
 # Sync to CSV -- no automated sync script exists yet (tools/update_bom.py is
-# not implemented); edit current-specification/bom_revT.csv by hand to match,
+# not implemented); edit current-specification/bom_revU.csv by hand to match,
 # field-for-field, until one is written.
 
 # Commit both
-git add current-specification/bom_revT.*
+git add current-specification/bom_revU.*
 git commit -m "Update BOM: [change reason]"
 ```
 
