@@ -125,8 +125,13 @@ def leg_keepout() -> Manifold:
     # 7-point dilation (centre + +/-X/Y/Z), not fit.grow_offsets' 27: the
     # 27-copy union of the swept gear put ~450k faces into the hull and took
     # the published STL past GitHub's 100 MB file limit (115 MB, 2026-11-02).
-    c = LEG_CLR
-    seven = [(0.0, 0.0, 0.0), (c, 0, 0), (-c, 0, 0), (0, c, 0), (0, -c, 0), (0, 0, c), (0, 0, -c)]
+    clr = LEG_CLR
+    seven = [
+        (0.0, 0.0, 0.0),
+        (clr, 0, 0), (-clr, 0, 0),
+        (0, clr, 0), (0, -clr, 0),
+        (0, 0, clr), (0, 0, -clr),
+    ]
     return fit.shifted(gear, seven)
 
 
