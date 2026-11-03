@@ -161,8 +161,8 @@ CARDS = [
             "Dry-fit each collar into both neighboring shells before any bond.",
             "Mark port and starboard on each shell interior.",
         ],
-        warn=[("NOTE", "Slicer settings per part are in the Notes column of bom_revT.csv.")],
-        source="REVN_BUILD_GUIDE_24IN.md Phase 0 Print Schedule; bom_revT.csv",
+        warn=[("NOTE", "Slicer settings per part are in the Notes column of bom_revU.csv.")],
+        source="REVN_BUILD_GUIDE_24IN.md Phase 0 Print Schedule; bom_revU.csv",
     ),
     dict(
         slug="print_nacelle",
@@ -387,7 +387,7 @@ CARDS = [
                 "analysis closes (docs/LANDING_GEAR_ANALYSIS.md).",
             )
         ],
-        source="docs/LANDING_GEAR_ANALYSIS.md; tools/generate_lg_bays.py; bom_revT.csv LG-*",
+        source="docs/LANDING_GEAR_ANALYSIS.md; tools/generate_lg_bays.py; bom_revU.csv LG-*",
     ),
     dict(
         slug="cargo_doors",
@@ -430,7 +430,7 @@ CARDS = [
                 "not driven from a local H-bridge.",
             )
         ],
-        source="bom_revT.csv PRINT-DOOR-*, PRINT-GW-DOOR-TRAY; docs/CARGO_WINCH_SPECIFICATION.md",
+        source="bom_revU.csv PRINT-DOOR-*, PRINT-GW-DOOR-TRAY; docs/CARGO_WINCH_SPECIFICATION.md",
     ),
     dict(
         slug="tilt_drive",
@@ -646,7 +646,7 @@ CARDS = [
                 "cannot be added later.",
             )
         ],
-        source="bom_revT.csv PRINT-VOID-FORMER-CARGO; REVN_BUILD_GUIDE_24IN.md Anti-Rework Rules",
+        source="bom_revU.csv PRINT-VOID-FORMER-CARGO; REVN_BUILD_GUIDE_24IN.md Anti-Rework Rules",
     ),
     dict(
         slug="foam_pour",
@@ -708,7 +708,7 @@ CARDS = [
                 "(2026-08-01 call-sign rename).",
             )
         ],
-        source="AGENTS.md 1 (avionics architecture); bom_revT.csv; tools/cargo_layout_fit.py",
+        source="AGENTS.md 1 (avionics architecture); bom_revU.csv; tools/cargo_layout_fit.py",
     ),
     dict(
         slug="bus_wiring",

@@ -47,7 +47,7 @@
 - **[NOZZLE_DRIVE_TRADE.md](./NOZZLE_DRIVE_TRADE.md)** — nacelle nozzle drive trade and the
   2026-09-28 servo-drive decision
 - **[NACELLE_64MM_VERIFICATION.md](./NACELLE_64MM_VERIFICATION.md)**,
-  **[HULL_SCALE_36IN_EDF64MM_EVALUATION.md](./HULL_SCALE_36IN_EDF64MM_EVALUATION.md)** — 64 mm EDF
+  **[HULL_SCALE_36IN_EDF64MM_EVALUATION.md](../archives/rev-T-and-earlier/docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md)** — 64 mm EDF
   nacelle verification and the hull-scale evaluation
 - **[LANDING_GEAR_ANALYSIS.md](./LANDING_GEAR_ANALYSIS.md)** — wire schedule, drop-height
   testing, fail-safe design

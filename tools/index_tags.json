@@ -353,14 +353,6 @@
       ],
       "archived": false
     },
-    "airframe/VERIFY_PLACEMENT_CHECKLIST.md": {
-      "description": "VERIFY Parts Placement Checklist \u2014 Rev R1 (Hull Frame)",
-      "tags": [
-        "documentation",
-        "structural"
-      ],
-      "archived": false
-    },
     "airframe/WBS.md": {
       "description": "Serenity UAV \u2014 Airframe (Hull-Frame Standard + Placeholders) Work Breakdown Structure (Detail)",
       "tags": [
@@ -6853,6 +6845,202 @@
       ],
       "archived": true
     },
+    "archives/rev-T-and-earlier/airframe/VERIFY_PLACEMENT_CHECKLIST.md": {
+      "description": "VERIFY Parts Placement Checklist \u2014 Rev R1 (Hull Frame)",
+      "tags": [
+        "archive",
+        "documentation"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/avionics/TODO-1-9-COMPLETION-STATUS.md": {
+      "description": "Task 1.9 \u2014 Avionics Workload Balancing: Completion Status",
+      "tags": [
+        "archive",
+        "documentation",
+        "emi-hardening",
+        "project-tracking",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-CHECKLIST.md": {
+      "description": "Todo 1.2b Completion Checklist \u2014 Expedited Workflow",
+      "tags": [
+        "archive",
+        "documentation",
+        "pcb-design",
+        "project-tracking"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-KICAD-READY.md": {
+      "description": "Todo 1.2b \u2014 Ready for KiCad Execution",
+      "tags": [
+        "archive",
+        "documentation",
+        "pcb-design",
+        "project-tracking"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-STATUS-REPORT.md": {
+      "description": "Todo Item 1.2b \u2014 PCB Redesigns Status Report",
+      "tags": [
+        "archive",
+        "documentation",
+        "pcb-design",
+        "project-tracking",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/current-specification/bom_revS.csv": {
+      "description": "Bill of materials, CSV (205 items)",
+      "tags": [
+        "archive",
+        "bom"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/current-specification/bom_revS.json": {
+      "description": "Bill of materials, JSON (205 items)",
+      "tags": [
+        "archive",
+        "bom"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/current-specification/bom_revT.csv": {
+      "description": "Bill of materials, CSV (217 items)",
+      "tags": [
+        "archive",
+        "bom"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/current-specification/bom_revT.json": {
+      "description": "Bill of materials, JSON (217 items)",
+      "tags": [
+        "archive",
+        "bom"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/current-specification/serenity-rev-s.jsx": {
+      "description": "React/JSX specification component",
+      "tags": [
+        "archive",
+        "emi-hardening",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md": {
+      "description": "Serenity UAV \u2014 36in Hull / 64mm EDF Scale-Up Evaluation",
+      "tags": [
+        "archive",
+        "documentation"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md": {
+      "description": "Serenity UAV \u2014 SLS PA12 / PA12-CF, 30 in Hull, Single-Piece Print Evaluation",
+      "tags": [
+        "archive",
+        "documentation"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/docs/bom_revR.json": {
+      "description": "Bill of materials, JSON (0 items)",
+      "tags": [
+        "archive",
+        "bom"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md": {
+      "description": "SLS Material, 30 in Scale and Single-Piece Hull \u2014 Brainstorm",
+      "tags": [
+        "archive",
+        "documentation",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md": {
+      "description": "fix: Nacelle nav-wire/spar reconciliation + AK7455 wing-side finish",
+      "tags": [
+        "archive",
+        "documentation",
+        "emi-hardening",
+        "propulsion"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/graphical-build-guide/TODO-old.md": {
+      "description": "Serenity UAV \u2014 Phased Physical Build (Graphical Build Guide) Work Breakdown Structure",
+      "tags": [
+        "archive",
+        "documentation",
+        "project-tracking",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/tools/bom_edit_door_gateway.py": {
+      "description": "Wire the cargo-door servo gateway into the BOM (docs/CARGO_DOOR_GATEWAY_SPEC.md).",
+      "tags": [
+        "archive",
+        "bom",
+        "security"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/tools/bom_edit_door_latch.py": {
+      "description": "Add the cargo-door positive-latch mechanism to the BOM (docs/CARGO_DOOR_LATCH_SPEC.md).",
+      "tags": [
+        "archive",
+        "bom"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/tools/bom_edit_door_rework.py": {
+      "description": "DOOR-REWORK BOM edit: lapped cargo doors, ONE latch, crank split from bracket.",
+      "tags": [
+        "archive",
+        "bom"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/tools/bom_edit_lg_a1b.py": {
+      "description": "LG-LOADPATH-A1B BOM edit: balanced-couple gear (owner 2026-10-27).",
+      "tags": [
+        "archive",
+        "bom"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/tools/bom_edit_tilt_controller.py": {
+      "description": "Swap the tilt-controller BOM row: retire LS-TILT-TC, add OSESC-TILT-TC.",
+      "tags": [
+        "archive",
+        "bom"
+      ],
+      "archived": true
+    },
+    "archives/rev-T-and-earlier/tools/bom_edit_weight_pass_13lbm.py": {
+      "description": "Apply the 2026-10-19 weight pass (13.0 lbm target) to the Rev T BOM.",
+      "tags": [
+        "archive",
+        "bom",
+        "emi-hardening"
+      ],
+      "archived": true
+    },
     "archives/root-readme-deep-dive-2026-08-03/README.md": {
       "description": "Root README Deep-Dive Sections \u2014 Archived 2026-08-03",
       "tags": [
@@ -8109,18 +8297,6 @@
         "avionics-hardware",
         "documentation",
         "emi-hardening",
-        "redundancy-failover",
-        "security"
-      ],
-      "archived": false
-    },
-    "avionics/TODO-1-9-COMPLETION-STATUS.md": {
-      "description": "Task 1.9 \u2014 Avionics Workload Balancing: Completion Status",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "emi-hardening",
-        "project-tracking",
         "redundancy-failover",
         "security"
       ],
@@ -13568,37 +13744,6 @@
       ],
       "archived": false
     },
-    "avionics/kicad/TODO-1.2b-CHECKLIST.md": {
-      "description": "Todo 1.2b Completion Checklist \u2014 Expedited Workflow",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "pcb-design",
-        "project-tracking"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/TODO-1.2b-KICAD-READY.md": {
-      "description": "Todo 1.2b \u2014 Ready for KiCad Execution",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "pcb-design",
-        "project-tracking"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/TODO-1.2b-STATUS-REPORT.md": {
-      "description": "Todo Item 1.2b \u2014 PCB Redesigns Status Report",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "pcb-design",
-        "project-tracking",
-        "security"
-      ],
-      "archived": false
-    },
     "avionics/kicad/add_eth_phy.py": {
       "description": "Y-positions on PB2-P2 connector (X=67.54) for RMII0 signals to restore.",
       "tags": [
@@ -14443,38 +14588,6 @@
       ],
       "archived": false
     },
-    "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (205 items)",
-      "tags": [
-        "bom",
-        "specification"
-      ],
-      "archived": false
-    },
-    "current-specification/bom_revS.json": {
-      "description": "Bill of materials, JSON (205 items)",
-      "tags": [
-        "bom",
-        "specification"
-      ],
-      "archived": false
-    },
-    "current-specification/bom_revT.csv": {
-      "description": "Bill of materials, CSV (217 items)",
-      "tags": [
-        "bom",
-        "specification"
-      ],
-      "archived": false
-    },
-    "current-specification/bom_revT.json": {
-      "description": "Bill of materials, JSON (217 items)",
-      "tags": [
-        "bom",
-        "specification"
-      ],
-      "archived": false
-    },
     "current-specification/bom_revU.csv": {
       "description": "Bill of materials, CSV (217 items)",
       "tags": [
@@ -14508,15 +14621,6 @@
     "current-specification/safety_factors.json": {
       "description": "JSON data (10 top-level keys)",
       "tags": [
-        "specification"
-      ],
-      "archived": false
-    },
-    "current-specification/serenity-rev-s.jsx": {
-      "description": "React/JSX specification component",
-      "tags": [
-        "emi-hardening",
-        "security",
         "specification"
       ],
       "archived": false
@@ -14919,13 +15023,6 @@
       ],
       "archived": false
     },
-    "docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md": {
-      "description": "Serenity UAV \u2014 36in Hull / 64mm EDF Scale-Up Evaluation",
-      "tags": [
-        "documentation"
-      ],
-      "archived": false
-    },
     "docs/LANDING_GEAR_ANALYSIS.md": {
       "description": "Serenity UAV \u2014 Landing Gear Structural Analysis",
       "tags": [
@@ -15092,13 +15189,6 @@
       ],
       "archived": false
     },
-    "docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md": {
-      "description": "Serenity UAV \u2014 SLS PA12 / PA12-CF, 30 in Hull, Single-Piece Print Evaluation",
-      "tags": [
-        "documentation"
-      ],
-      "archived": false
-    },
     "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md": {
       "description": "Tail Strike on the Aft Skids (4 ft Drop) and Landing-Gear Materials in SLS",
       "tags": [
@@ -15209,14 +15299,6 @@
       ],
       "archived": false
     },
-    "docs/bom_revR.json": {
-      "description": "Bill of materials, JSON (0 items)",
-      "tags": [
-        "bom",
-        "documentation"
-      ],
-      "archived": false
-    },
     "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md": {
       "description": "Commo 49 MHz Single-Chip Transceiver Search",
       "tags": [
@@ -15231,14 +15313,6 @@
         "documentation",
         "emi-hardening",
         "redundancy-failover",
-        "security"
-      ],
-      "archived": false
-    },
-    "docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md": {
-      "description": "SLS Material, 30 in Scale and Single-Piece Hull \u2014 Brainstorm",
-      "tags": [
-        "documentation",
         "security"
       ],
       "archived": false
@@ -15813,15 +15887,6 @@
     },
     "docs/plans/2026-08-27-nacelle-wiring-plan.md": {
       "description": "nacelle wiring",
-      "tags": [
-        "documentation",
-        "emi-hardening",
-        "propulsion"
-      ],
-      "archived": false
-    },
-    "docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md": {
-      "description": "fix: Nacelle nav-wire/spar reconciliation + AK7455 wing-side finish",
       "tags": [
         "documentation",
         "emi-hardening",
@@ -18401,17 +18466,6 @@
       ],
       "archived": false
     },
-    "graphical-build-guide/TODO-old.md": {
-      "description": "Serenity UAV \u2014 Phased Physical Build (Graphical Build Guide) Work Breakdown Structure",
-      "tags": [
-        "build-guide",
-        "documentation",
-        "project-tracking",
-        "redundancy-failover",
-        "security"
-      ],
-      "archived": false
-    },
     "graphical-build-guide/TODO.md": {
       "description": "Serenity UAV \u2014 Phased Physical Build \u2014 Fabrication (Phases 0-4) TODO (Open Work Only)",
       "tags": [
@@ -19810,56 +19864,6 @@
       ],
       "archived": false
     },
-    "tools/bom_edit_door_gateway.py": {
-      "description": "Wire the cargo-door servo gateway into the BOM (docs/CARGO_DOOR_GATEWAY_SPEC.md).",
-      "tags": [
-        "bom",
-        "build-tooling",
-        "security"
-      ],
-      "archived": false
-    },
-    "tools/bom_edit_door_latch.py": {
-      "description": "Add the cargo-door positive-latch mechanism to the BOM (docs/CARGO_DOOR_LATCH_SPEC.md).",
-      "tags": [
-        "bom",
-        "build-tooling"
-      ],
-      "archived": false
-    },
-    "tools/bom_edit_door_rework.py": {
-      "description": "DOOR-REWORK BOM edit: lapped cargo doors, ONE latch, crank split from bracket.",
-      "tags": [
-        "bom",
-        "build-tooling"
-      ],
-      "archived": false
-    },
-    "tools/bom_edit_lg_a1b.py": {
-      "description": "LG-LOADPATH-A1B BOM edit: balanced-couple gear (owner 2026-10-27).",
-      "tags": [
-        "bom",
-        "build-tooling"
-      ],
-      "archived": false
-    },
-    "tools/bom_edit_tilt_controller.py": {
-      "description": "Swap the tilt-controller BOM row: retire LS-TILT-TC, add OSESC-TILT-TC.",
-      "tags": [
-        "bom",
-        "build-tooling"
-      ],
-      "archived": false
-    },
-    "tools/bom_edit_weight_pass_13lbm.py": {
-      "description": "Apply the 2026-10-19 weight pass (13.0 lbm target) to the Rev T BOM.",
-      "tags": [
-        "bom",
-        "build-tooling",
-        "emi-hardening"
-      ],
-      "archived": false
-    },
     "tools/build_head_shell.py": {
       "description": "build_head_shell.py \u2014 apply head-shell features (bosses + aperture cuts) to",
       "tags": [
@@ -20919,7 +20923,6 @@
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/TODO.md",
-      "airframe/VERIFY_PLACEMENT_CHECKLIST.md",
       "airframe/WBS.md",
       "airframe/fuselage-covers/TODO.md",
       "airframe/fuselage-covers/WBS.md",
@@ -20950,6 +20953,16 @@
       "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md",
+      "archives/rev-T-and-earlier/airframe/VERIFY_PLACEMENT_CHECKLIST.md",
+      "archives/rev-T-and-earlier/avionics/TODO-1-9-COMPLETION-STATUS.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-CHECKLIST.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-KICAD-READY.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
+      "archives/rev-T-and-earlier/docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md",
+      "archives/rev-T-and-earlier/docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md",
+      "archives/rev-T-and-earlier/docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md",
+      "archives/rev-T-and-earlier/docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md",
+      "archives/rev-T-and-earlier/graphical-build-guide/TODO-old.md",
       "archives/root-readme-deep-dive-2026-08-03/README.md",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity/README.md",
@@ -20960,7 +20973,6 @@
       "archives/stale-20260601/files-revF/serenity-drone-revF/docs/LICENSE_AND_ATTRIBUTION.md",
       "avionics/AGENTS.md",
       "avionics/README.md",
-      "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
       "avionics/emi-hardening/TODO.md",
@@ -21005,9 +21017,6 @@
       "avionics/kicad/README.md",
       "avionics/kicad/TACCO/TACCO.md",
       "avionics/kicad/TACCO/reports/HDD.md",
-      "avionics/kicad/TODO-1.2b-CHECKLIST.md",
-      "avionics/kicad/TODO-1.2b-KICAD-READY.md",
-      "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
       "avionics/rev-s1/TODO.md",
       "avionics/rev-s1/WBS.md",
       "current-specification/AGENTS.md",
@@ -21040,7 +21049,6 @@
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
       "docs/FIXED_NOZZLE_FALLBACK.md",
-      "docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md",
       "docs/LANDING_GEAR_ANALYSIS.md",
       "docs/LG_BELLCRANK_LOAD_PATH_STUDY.md",
       "docs/LICENSE",
@@ -21062,7 +21070,6 @@
       "docs/SLS_27IN_UNIFORM_SCALE_ADDENDUM.md",
       "docs/SLS_EMI_AND_WINGS_NOTE.md",
       "docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md",
-      "docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md",
       "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
       "docs/TILT_ACTUATOR_SELECTION.md",
@@ -21077,10 +21084,8 @@
       "docs/WING_ATTACH_INTERFACE.md",
       "docs/WING_SECTION_POLAR_COMPARISON.md",
       "docs/attribution_and_licensing.md",
-      "docs/bom_revR.json",
       "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
-      "docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md",
       "docs/conversation histories/2026-10-17-103355-this-session-is-being-continued-from-a-previous-c.txt",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
@@ -21159,7 +21164,6 @@
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md",
       "docs/plans/2026-08-27-nacelle-wiring-plan.md",
-      "docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md",
       "docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md",
       "docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
       "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
@@ -21452,7 +21456,6 @@
       "graphical-build-guide/BUILD_GUIDE_TEMPLATE.md",
       "graphical-build-guide/README.md",
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
-      "graphical-build-guide/TODO-old.md",
       "graphical-build-guide/TODO.md",
       "graphical-build-guide/WBS.md",
       "graphical-build-guide/flight-phases/TODO.md",
@@ -21493,12 +21496,15 @@
       "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
       "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
       "archives/docs-superseded/serenity-rev-q.jsx",
+      "archives/rev-T-and-earlier/avionics/TODO-1-9-COMPLETION-STATUS.md",
+      "archives/rev-T-and-earlier/current-specification/serenity-rev-s.jsx",
+      "archives/rev-T-and-earlier/docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md",
+      "archives/rev-T-and-earlier/tools/bom_edit_weight_pass_13lbm.py",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity-rev-q.jsx",
       "archives/serenity-rev-r.jsx",
       "avionics/AGENTS.md",
       "avionics/README.md",
-      "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
       "avionics/emi-hardening/TODO.md",
@@ -21527,7 +21533,6 @@
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/fix_xcvr_labels.py",
       "avionics/rev-s1/WBS.md",
-      "current-specification/serenity-rev-s.jsx",
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/BATTERY_MOUNT.md",
       "docs/ETHERNET_PHY_TRADE.md",
@@ -21547,7 +21552,6 @@
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/plans/2026-08-27-nacelle-wiring-plan.md",
-      "docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md",
       "docs/plans/2026-08-29-003-feat-unified-20mm-spar-trunnion-belt-drive-plan.md",
       "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
       "docs/plans/2026-09-17-001-feat-tilt-controller-open-secure-esc-build-plan.md",
@@ -21560,7 +21564,6 @@
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
-      "tools/bom_edit_weight_pass_13lbm.py",
       "tools/gen_todo_from_wbs.py",
       "tools/nacelle_mass_cg.py",
       "tools/precommit_index.py",
@@ -21575,10 +21578,11 @@
       "airframe/openscad/fuselage/middle_canonical_shell24.scad",
       "archives/docs-superseded/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
       "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
+      "archives/rev-T-and-earlier/avionics/TODO-1-9-COMPLETION-STATUS.md",
+      "archives/rev-T-and-earlier/graphical-build-guide/TODO-old.md",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "avionics/AGENTS.md",
       "avionics/README.md",
-      "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/emi-hardening/WBS.md",
       "avionics/firmware/AK7455_CALIBRATION_SPECIFICATION.md",
       "avionics/firmware/WBS.md",
@@ -21621,7 +21625,6 @@
       "gcs/WBS.md",
       "gcs/skipper/hardware/docs/skipper_antenna_spec.md",
       "graphical-build-guide/README.md",
-      "graphical-build-guide/TODO-old.md",
       "graphical-build-guide/WBS.md",
       "graphical-build-guide/flight-phases/TODO.md",
       "graphical-build-guide/flight-phases/WBS.md",
@@ -21662,6 +21665,12 @@
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/serenity-rev-q.jsx",
       "archives/graphical-build-guide-pre-revt/build_guide_12_security_hw.svg",
+      "archives/rev-T-and-earlier/avionics/TODO-1-9-COMPLETION-STATUS.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
+      "archives/rev-T-and-earlier/current-specification/serenity-rev-s.jsx",
+      "archives/rev-T-and-earlier/docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md",
+      "archives/rev-T-and-earlier/graphical-build-guide/TODO-old.md",
+      "archives/rev-T-and-earlier/tools/bom_edit_door_gateway.py",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity-esc-telem-revH1.jsx",
       "archives/serenity-rev-f-.jsx",
@@ -21674,7 +21683,6 @@
       "archives/stale-20260601/pico2-hat.jsx",
       "avionics/AGENTS.md",
       "avionics/README.md",
-      "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
       "avionics/datasheets/st/an5156-introduction-to-security-for-stm32-mcus-stmicroelectronics.zip",
@@ -21754,7 +21762,6 @@
       "avionics/kicad/README.md",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
-      "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
       "avionics/kicad/replace_footprints.py",
       "avionics/kicad/retarget_mspm0g351x_slb9672.py",
       "avionics/kicad/retarget_pcb_footprints.py",
@@ -21762,7 +21769,6 @@
       "avionics/rev-s1/WBS.md",
       "current-specification/LICENSE_AND_ATTRIBUTION.md",
       "current-specification/README.md",
-      "current-specification/serenity-rev-s.jsx",
       "docs/AGENTS.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/CARGO_DOOR_GATEWAY_SPEC.md",
@@ -21777,7 +21783,6 @@
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
-      "docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md",
       "docs/plans/2026-08-25-001-finish-avionics-plan.md",
       "docs/plans/2026-08-25-003-feat-emi-rf-design-test-plan-plan.md",
       "docs/plans/2026-09-15-001-first-flight-readiness-plan.md",
@@ -21805,14 +21810,12 @@
       "graphical-build-guide/BUILD_GUIDE_TEMPLATE.md",
       "graphical-build-guide/README.md",
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
-      "graphical-build-guide/TODO-old.md",
       "graphical-build-guide/TODO.md",
       "graphical-build-guide/build_guide_19_security_hw.svg",
       "graphical-build-guide/flight-phases/TODO.md",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
       "tools/add_landing_gear_bosses.py",
-      "tools/bom_edit_door_gateway.py",
       "tools/build_landing_gear_views.py",
       "tools/cargo_bulkhead_context.py",
       "tools/gen_build_guide_cards.py",
@@ -21859,16 +21862,11 @@
       "current-specification/TODO.md",
       "current-specification/allowables.json",
       "current-specification/auw_ledger.json",
-      "current-specification/bom_revS.csv",
-      "current-specification/bom_revS.json",
-      "current-specification/bom_revT.csv",
-      "current-specification/bom_revT.json",
       "current-specification/bom_revU.csv",
       "current-specification/bom_revU.json",
       "current-specification/flight_limits.json",
       "current-specification/joint_register.json",
       "current-specification/safety_factors.json",
-      "current-specification/serenity-rev-s.jsx",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/AC_43.13-1B_w-chg1.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -22053,7 +22051,11 @@
       "airframe/wings-nacelles/TODO.md",
       "airframe/wings-nacelles/WBS.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
-      "avionics/TODO-1-9-COMPLETION-STATUS.md",
+      "archives/rev-T-and-earlier/avionics/TODO-1-9-COMPLETION-STATUS.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-CHECKLIST.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-KICAD-READY.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
+      "archives/rev-T-and-earlier/graphical-build-guide/TODO-old.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
       "avionics/emi-hardening/TODO.md",
@@ -22062,9 +22064,6 @@
       "avionics/firmware/WBS.md",
       "avionics/kicad/Observer/observer/TODO.md",
       "avionics/kicad/Observer/observer/WBS.md",
-      "avionics/kicad/TODO-1.2b-CHECKLIST.md",
-      "avionics/kicad/TODO-1.2b-KICAD-READY.md",
-      "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
       "avionics/rev-s1/TODO.md",
       "avionics/rev-s1/WBS.md",
       "current-specification/TODO.md",
@@ -22075,7 +22074,6 @@
       "docs/WBS_FEDERATION.md",
       "gcs/TODO.md",
       "gcs/WBS.md",
-      "graphical-build-guide/TODO-old.md",
       "graphical-build-guide/TODO.md",
       "graphical-build-guide/WBS.md",
       "graphical-build-guide/flight-phases/TODO.md",
@@ -22097,7 +22095,6 @@
       "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/Serenity-Assembled.FCStd.bak",
       "airframe/TODO.md",
-      "airframe/VERIFY_PLACEMENT_CHECKLIST.md",
       "airframe/WBS.md",
       "airframe/blender-scripts/add_structural_features.py",
       "airframe/blender-scripts/blender_edf_bore_and_petals.py",
@@ -23157,6 +23154,7 @@
       "archives/graphical-build-guide-pre-revt/build_guide_08_nozzle_gear.svg",
       "archives/nacelle-nozzle-gear.jsx",
       "archives/nacelles.jst",
+      "archives/rev-T-and-earlier/docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md",
       "archives/stale-20260601/files-revF/nacelle_pod_70mm.stl",
       "archives/stale-20260601/files-revF/serenity-drone-revF/stl/nacelle_pod_70mm.stl",
       "archives/stale-20260601/files-revF/serenity-drone-revF/stl/nacelle_tip_cap_port.stl",
@@ -23226,7 +23224,6 @@
       "docs/img/transparent-nacelle.png",
       "docs/plans/2026-08-26-001-nacelle-esc-intake-integration-plan.md",
       "docs/plans/2026-08-27-nacelle-wiring-plan.md",
-      "docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md",
       "docs/plans/2026-08-29-002-nacelle-esc-power-routing-plan.md",
       "docs/plans/2026-08-29-004-feat-nacelle-trunnion-pivot-tilt-drive-plan.md",
       "docs/plans/2026-08-29-005-nacelle-mould-line-conformance-plan.md",
@@ -23341,6 +23338,17 @@
       "archives/bom_revQ.json",
       "archives/bom_revR.csv",
       "archives/docs-superseded/bom_revQ.csv",
+      "archives/rev-T-and-earlier/current-specification/bom_revS.csv",
+      "archives/rev-T-and-earlier/current-specification/bom_revS.json",
+      "archives/rev-T-and-earlier/current-specification/bom_revT.csv",
+      "archives/rev-T-and-earlier/current-specification/bom_revT.json",
+      "archives/rev-T-and-earlier/docs/bom_revR.json",
+      "archives/rev-T-and-earlier/tools/bom_edit_door_gateway.py",
+      "archives/rev-T-and-earlier/tools/bom_edit_door_latch.py",
+      "archives/rev-T-and-earlier/tools/bom_edit_door_rework.py",
+      "archives/rev-T-and-earlier/tools/bom_edit_lg_a1b.py",
+      "archives/rev-T-and-earlier/tools/bom_edit_tilt_controller.py",
+      "archives/rev-T-and-earlier/tools/bom_edit_weight_pass_13lbm.py",
       "avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx",
       "avionics/datasheets/asix/AX88772E_AX88772D_DEMO_BORAD_BOM_20251128.zip",
       "avionics/kicad/Observer/Observer_som_pinmap.csv",
@@ -23352,13 +23360,8 @@
       "avionics/kicad/symbols/SLB9672XU2_0_pinmap.csv",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
       "code-scanning-files-extracted.csv",
-      "current-specification/bom_revS.csv",
-      "current-specification/bom_revS.json",
-      "current-specification/bom_revT.csv",
-      "current-specification/bom_revT.json",
       "current-specification/bom_revU.csv",
       "current-specification/bom_revU.json",
-      "docs/bom_revR.json",
       "docs/sls-study/wing-polars/S1223_Re100000_N5_nf.csv",
       "docs/sls-study/wing-polars/S1223_Re100000_N5_xfoil.csv",
       "docs/sls-study/wing-polars/S1223_Re100000_cleanN9_nf.csv",
@@ -23392,12 +23395,6 @@
       "docs/sls-study/wing-polars/tip_t26.7_Re131000_cleanN9_xfoil.csv",
       "docs/sls-study/wing-polars/tip_t26.7_Re131000_trip5%c_xfoil.csv",
       "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md",
-      "tools/bom_edit_door_gateway.py",
-      "tools/bom_edit_door_latch.py",
-      "tools/bom_edit_door_rework.py",
-      "tools/bom_edit_lg_a1b.py",
-      "tools/bom_edit_tilt_controller.py",
-      "tools/bom_edit_weight_pass_13lbm.py",
       "tools/compact_bom_entries.py"
     ],
     "landing-gear": [
@@ -24069,6 +24066,28 @@
       "archives/more-files.zip",
       "archives/nacelle-nozzle-gear.jsx",
       "archives/nacelles.jst",
+      "archives/rev-T-and-earlier/airframe/VERIFY_PLACEMENT_CHECKLIST.md",
+      "archives/rev-T-and-earlier/avionics/TODO-1-9-COMPLETION-STATUS.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-CHECKLIST.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-KICAD-READY.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
+      "archives/rev-T-and-earlier/current-specification/bom_revS.csv",
+      "archives/rev-T-and-earlier/current-specification/bom_revS.json",
+      "archives/rev-T-and-earlier/current-specification/bom_revT.csv",
+      "archives/rev-T-and-earlier/current-specification/bom_revT.json",
+      "archives/rev-T-and-earlier/current-specification/serenity-rev-s.jsx",
+      "archives/rev-T-and-earlier/docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md",
+      "archives/rev-T-and-earlier/docs/SLS_PA12_30IN_SINGLE_PIECE_EVALUATION.md",
+      "archives/rev-T-and-earlier/docs/bom_revR.json",
+      "archives/rev-T-and-earlier/docs/brainstorms/2026-10-31-sls-30in-trim-and-joints-requirements.md",
+      "archives/rev-T-and-earlier/docs/plans/2026-08-29-001-nacelle-nav-wire-hall-reconciliation-plan.md",
+      "archives/rev-T-and-earlier/graphical-build-guide/TODO-old.md",
+      "archives/rev-T-and-earlier/tools/bom_edit_door_gateway.py",
+      "archives/rev-T-and-earlier/tools/bom_edit_door_latch.py",
+      "archives/rev-T-and-earlier/tools/bom_edit_door_rework.py",
+      "archives/rev-T-and-earlier/tools/bom_edit_lg_a1b.py",
+      "archives/rev-T-and-earlier/tools/bom_edit_tilt_controller.py",
+      "archives/rev-T-and-earlier/tools/bom_edit_weight_pass_13lbm.py",
       "archives/root-readme-deep-dive-2026-08-03/README.md",
       "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/sensorhat_mounting_tray.stl",
@@ -24445,6 +24464,9 @@
       "archives/avionics-archives/kicad-archives/archive/gen_cape_a2_pcb.py",
       "archives/avionics-archives/kicad-archives/archive/gen_cape_b2.py",
       "archives/avionics-archives/kicad-archives/archive/gen_cape_b2_pcb.py",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-CHECKLIST.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-KICAD-READY.md",
+      "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
       "archives/stale-20260601/files-revF/CM4-CARRIER-1.kicad_pcb",
       "archives/stale-20260601/files-revF/COMMS-HAT-1.kicad_pcb",
       "archives/stale-20260601/files-revF/TRIHAT-1.kicad_pcb",
@@ -24828,9 +24850,6 @@
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
       "avionics/kicad/TACCO/step/TACCO.step",
-      "avionics/kicad/TODO-1.2b-CHECKLIST.md",
-      "avionics/kicad/TODO-1.2b-KICAD-READY.md",
-      "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
       "avionics/kicad/add_eth_phy.py",
       "avionics/kicad/add_sensors_sbus.py",
       "avionics/kicad/align_pb2_ti_names.py",
@@ -24949,7 +24968,6 @@
       "avionics/AGENTS.md",
       "avionics/LICENSE",
       "avionics/README.md",
-      "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
       "avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx",
@@ -25632,9 +25650,6 @@
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
       "avionics/kicad/TACCO/step/TACCO.step",
-      "avionics/kicad/TODO-1.2b-CHECKLIST.md",
-      "avionics/kicad/TODO-1.2b-KICAD-READY.md",
-      "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
       "avionics/kicad/add_eth_phy.py",
       "avionics/kicad/add_sensors_sbus.py",
       "avionics/kicad/align_pb2_ti_names.py",
@@ -25854,7 +25869,6 @@
       "graphical-build-guide/LICENSE",
       "graphical-build-guide/README.md",
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
-      "graphical-build-guide/TODO-old.md",
       "graphical-build-guide/TODO.md",
       "graphical-build-guide/WBS.md",
       "graphical-build-guide/build_guide_00_cover.svg",
@@ -26048,12 +26062,6 @@
       "tools/bay_a_thermal_budget.py",
       "tools/bhd02_option_study.py",
       "tools/bhd10_aft_strip_options.py",
-      "tools/bom_edit_door_gateway.py",
-      "tools/bom_edit_door_latch.py",
-      "tools/bom_edit_door_rework.py",
-      "tools/bom_edit_lg_a1b.py",
-      "tools/bom_edit_tilt_controller.py",
-      "tools/bom_edit_weight_pass_13lbm.py",
       "tools/build_head_shell.py",
       "tools/build_landing_gear_views.py",
       "tools/cargo_bay_envelope.py",

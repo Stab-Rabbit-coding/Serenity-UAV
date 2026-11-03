@@ -14,7 +14,7 @@ row with a mass, a hull-frame station and the source of both:
   that airframe/FreeCAD-scripts/serenity_assembly.py uses (pivot = nacelle CG
   by construction), with the tilt-axis inertia of
   docs/NACELLE_64MM_VERIFICATION.md SS5b.
-* Every other row is a BOM row of current-specification/bom_revT.csv with its
+* Every other row is a BOM row of current-specification/bom_revU.csv with its
   installed quantity and a station read from the layout tools
   (tools/cargo_layout_fit.py, tools/middle_layout_fit.py) where one exists.
 
@@ -66,7 +66,7 @@ import cargo_layout_fit as clf  # noqa: E402  (sibling tool, path set above)
 import middle_layout_fit as mlf  # noqa: E402
 import nacelle_mass_cg_64 as nac64  # noqa: E402
 
-BOM = REPO / "current-specification" / "bom_revT.csv"
+BOM = REPO / "current-specification" / "bom_revU.csv"
 OUT_JSON = REPO / "current-specification" / "auw_ledger.json"
 STL = REPO / "airframe" / "stls"
 

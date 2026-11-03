@@ -45,7 +45,7 @@ changelog).
 |------|--------|---------|----------|
 | `bom_revU.json` | JSON | **Canonical** structured BOM (Rev U, 2026-11-03): part numbering, supplier links, mass, cost | All components (procured + printed + machined) |
 | `bom_revU.csv` | CSV | Flat-file BOM for spreadsheet import; the Rev U mirror of the JSON |
-| `bom_revT.json`, `bom_revT.csv` | JSON, CSV | Rev T checkpoint snapshot (2026-09-28), retained for traceability | Superseded by Rev U | Build-tracking sheets, inventory management |
+| `archives/rev-T-and-earlier/current-specification/bom_rev{S,T}.{json,csv}` | JSON, CSV | Rev S and Rev T checkpoint snapshots, frozen | Superseded by Rev U; see `archives/rev-T-and-earlier/README.md` | Build-tracking sheets, inventory management |
 | `bom_revS.json`, `bom_revS.csv` | JSON, CSV | Rev S checkpoint snapshot (2026-07-04), retained for traceability | Superseded by Rev T |
 | `serenity-rev-s.jsx` | JSX (React) | Interactive BOM viewer and system schematic (Rev S content; see status above) | Same part list, visual links to subsystems |
 | `SPEC_TEMPLATE.md`, `LICENSE_AND_ATTRIBUTION.md` | Markdown | Specification template; creative-universe attribution and fan-engineering terms | — |
@@ -203,12 +203,12 @@ Every part in the BOM has a cross-reference to:
 ### For Design Changes
 
 1. Update the affected row in `bom_revU.json` (mass, dimensions, supplier link) and mirror it in `bom_revU.csv`
-2. Use `tools/compact_bom_entries.py` or the `tools/bom_edit_*.py` helpers for scripted edits (there is no `tools/update_bom.py`)
+2. Use `tools/compact_bom_entries.py` or a purpose-written one-shot script for scripted edits (the Rev S/T `bom_edit_*.py` helpers are archived in `archives/rev-T-and-earlier/tools/`) (there is no `tools/update_bom.py`)
 3. Update the revision marker (`date` field) and commit with a message referencing the design change
 
 ## Tools
 
-- **`tools/compact_bom_entries.py`, `tools/bom_edit_*.py`** — scripted BOM edit helpers
+- **`tools/compact_bom_entries.py`** — scripted BOM edit helper (the one-shot `bom_edit_*.py` scripts are archived in `archives/rev-T-and-earlier/tools/`)
 - **`serenity-rev-s.jsx`** — React component to render the interactive BOM viewer (Rev S content)
 - **`REFERENCES.md`** — Catalog of all supplier links, datasheets, and regulatory citations
 

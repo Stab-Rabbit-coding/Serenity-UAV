@@ -218,7 +218,7 @@ Located in subsystem directories:
 
 ### Other Maintenance Scripts
 
-- **`compact_bom_entries.py`**, **`bom_edit_*.py`** — re-compact and edit BOM JSON entries
+- **`compact_bom_entries.py`** — re-compact and edit BOM JSON entries (the one-shot `bom_edit_*.py` scripts are archived in `archives/rev-T-and-earlier/tools/`)
 - **Nacelle 64 mm tools** — `nacelle_64_scale.py`, `nacelle_mass_cg_64.py`,
   `nozzle_servo_linkage_64.py`, `dorsal_shroud_resize_64.py`, `esc80_cooptimize.py`,
   `prep_nacelle_64_bake.py` (fit, mass/CG, nozzle servo linkage, and ESC bay co-optimization
@@ -236,7 +236,7 @@ Located in subsystem directories:
 
 - **`REFERENCES.md`** — Master catalog of all standards, regulatory citations, supplier links,
   and datasheets
-- **`bom_revS.json`**, **`bom_revS.csv`** — Bill of materials with cross-references to
+- **`bom_revU.json`**, **`bom_revU.csv`** (Rev S/T snapshots: `archives/rev-T-and-earlier/current-specification/`) — Bill of materials with cross-references to
   datasheets and supplier pages
 
 ## Development Setup
