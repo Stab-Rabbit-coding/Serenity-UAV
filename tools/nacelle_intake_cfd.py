@@ -57,13 +57,13 @@ License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
 from __future__ import annotations
 
 import argparse
-from typing import Any
 import math
 import shutil
 import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 # OpenFOAM environment script (same install wing_cfd_openfoam.py uses).
 FOAM_BASHRC = "/usr/share/openfoam/etc/bashrc"
@@ -105,6 +105,10 @@ class Bell:
     # conservative flanged lip face; set = the real slim nacelle exterior,
     # an elliptical forebody then a cylinder, with open far field around it.
     fore: tuple[float, float] | None = None
+    # Cowl fairing aft of the lip shoulder (2026-11-01 canon rule): monotone
+    # cubic Hermite from (fore A, fore R, slope 0) to (z_j, r_j, slope_j), m,
+    # then hold r_j.  None = hold the shoulder radius (cylinder), as before.
+    fair: tuple[float, float, float] | None = None
 
 
 # Variants compared.  The first two are the pod as drawn (sharp lip); the
@@ -154,6 +158,18 @@ VARIANTS = (
     # 4.0 mm round nose: A = B^2 / (F^2 / a) = 5.05^2 / 4.0 = 6.38 mm.
     Bell("lipE_x1p06_f8p0_b5p05", "ellipse", 0.016, 0.0080, 0.0305,
          (0.0063756, 0.04505)),
+    # 2026-11-01 canon rule (airframe/AGENTS.md "Geometry Integrity"): lipE
+    # nose restored (shoulder r 42.5), then the cowl FAIRS into the measured
+    # canonical skin (tools/nacelle_cowl_fair.py) instead of holding a
+    # cylinder.  The section is not axisymmetric, so the two bounding
+    # azimuths (by mean fairing gradient) are screened: gentlest (stbd az 310:
+    # r 44.835 at Z 44, slope 0.133) and steepest (stbd az 115: r 47.617 at
+    # Z 28, slope 0.360).  r_j here is the skin radius; the SCAD loft ends
+    # P64_COWL_SINK (0.3 mm) inside it, which the screen ignores.
+    Bell("lipE_cowl_az310", "ellipse", 0.016, 0.0080, 0.0305,
+         (0.0015625, 0.0425), fair=(0.044, 0.044835, 0.1334)),
+    Bell("lipE_cowl_az115", "ellipse", 0.016, 0.0080, 0.0305,
+         (0.0015625, 0.0425), fair=(0.028, 0.047617, 0.3602)),
 )
 # Variants run by --only (default: all).
 
@@ -230,7 +246,7 @@ def block_mesh(bell: Bell, fine: bool) -> str:
                "b2": (bell_l, R_BORE), "b3": (X_OUT, R_BORE),
                "c0": (X_UP, R_FAR), "c1": (0, R_FAR)}
     if bell.fore is not None:
-        nodes2d["e1"] = (X_OUT, bell.fore[1])
+        nodes2d["e1"] = (X_OUT, bell.fair[1] if bell.fair else bell.fore[1])
         nodes2d["f1"] = (X_OUT, R_FAR)
     verts: list[str] = []
     vid: dict[tuple[str, int], int] = {}
@@ -287,12 +303,25 @@ def block_mesh(bell: Bell, fine: bool) -> str:
         fb = fr - r_lip
 
         def r_ext(x: float) -> float:
+            if x >= fa and bell.fair is not None:
+                zj, rj, mj = bell.fair
+                if x >= zj:
+                    return rj
+                L = zj - fa
+                # Same monotone Hermite as nacelle_pod_64mm_tandem.scad cowl_herm()
+                m = min(mj, 3 * (rj - fr) / L) * L
+                t = (x - fa) / L
+                return (fr * (2 * t**3 - 3 * t**2 + 1)
+                        + rj * (-2 * t**3 + 3 * t**2) + m * (t**3 - t**2))
             if x >= fa:
                 return fr
             u = 1.0 - x / fa
             return r_lip + fb * math.sqrt(max(0.0, 1.0 - u * u))
+        # Fine stations only where a fairing curves aft of the lip; the
+        # original variants keep their validated 8-station mesh.
+        n_down = 40 if bell.fair is not None else 8
         xs = [fa * (i / pts) ** 2 for i in range(1, pts + 1)] + [
-            fa + (X_OUT - fa) * i / 8 for i in range(1, 8)]
+            fa + (X_OUT - fa) * i / n_down for i in range(1, n_down)]
         for side in (-1, 1):
             inner = " ".join(f"({x:.9f} {r_ext(x) * c:.12f} "
                              f"{side * r_ext(x) * s:.12f})" for x in xs)

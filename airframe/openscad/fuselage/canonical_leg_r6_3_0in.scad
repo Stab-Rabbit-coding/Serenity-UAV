@@ -1400,9 +1400,9 @@ CORNERS = [
     // (-92.24/-247.56, 99.96, 38) -- mirrored about the old -169.9, so the R2
     // starboard rows sit 0.1 mm off a true mirror; the rebuild derives them.
     [  54.95, 289.70, 118,  -22.4,  1 ],   // fore-port
-    [ -55.05, 289.70, 118, -157.6, -1 ],   // fore-stbd  (mirror of fore-port)
+    [ -54.95, 289.70, 118, -157.6, -1 ],   // fore-stbd = exact mirror of fore-port about X_CL 0 (2026-11-01; was -55.05)
     [  77.61, 405.66, 118,   28.0,  1 ],   // aft-port
-    [ -77.71, 405.66, 118,  152.0, -1 ],   // aft-stbd   (mirror of aft-port)
+    [ -77.61, 405.66, 118,  152.0, -1 ],   // aft-stbd = exact mirror of aft-port about X_CL 0 (2026-11-01; was -77.71)
 ];
 
 // All 4 corners, gear only (no ground/ghost slabs) -- consumed by

@@ -39,6 +39,8 @@ The CG spread across the three configurations is **0.7 mm (0.03 in)**. Payload a
 
 ### 3.1 Rail lever (the move that works)
 
+> **Superseded 2026-11-01 (layout only):** Bay A is now the Bay A forward layout — both pouches flat on the centreline, CN1 under the Observer, FC1 above it, twin tray at Y 163 (`docs/BAY_A_FWD_LAYOUT.md`). The rail-lever text below is kept as the study record.
+
 Two Bay A pouches (CN1 + FC1, 58 × 37 × 22 mm), standing on edge either side of the centreline on top of the rail ceiling:
 
 - **Position:** Y 100–158, Z 208.65–245.65.

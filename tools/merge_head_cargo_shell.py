@@ -67,6 +67,7 @@ FSTL = os.path.join(REPO, "airframe", "stls", "fuselage")
 HEAD_PUB = os.path.join(FSTL, "head_shell24_2mm_repaired.stl")
 CARGO_PUB = os.path.join(FSTL, "cargo", "cargo_sect_shell24_2mm_repaired.stl")
 OUT = os.path.join(FSTL, "head_cargo_shell24_2mm_merged.stl")
+ROOF_SLIT_BOX = (-1.5, 1.5, 98.0, 106.0, 230.0, 300.0)  # X0, X1, Y0, Y1, Z0, Z1
 # Seam zone: the old collar LANDS (head Y 229-232.75 thickened inward to
 # 1,925 mm2 of section vs 811 clean; cargo Y 236.2-239 fragmented, 239-241
 # thickened) are obsolete with the collar gone and intrude on the twin tray.
@@ -130,19 +131,32 @@ def main():
     rc, nc = ring(cargo, CARGO_RING_Y, mid - OVERLAP, CARGO_CUT_Y + 0.5)
     print(f"head ring (Y {HEAD_RING_Y}): {nh} polygon(s); cargo ring (Y {CARGO_RING_Y}): "
           f"{nc} polygon(s); seam zone Y {HEAD_CUT_Y}..{CARGO_CUT_Y} rebuilt as plain skin")
-    # the cargo battery cradle is RETIRED by the twin tray (plan 003 R10):
-    # its four roof hanger bosses are removed -- the same boxes
-    # cargo_layout_fit.shell_after_merge() takes them out with
+    # 2026-11-01: the cargo shell no longer builds the retired cradle hangers
+    # (merge_cargo_interior.CARGO_CRADLE = False).  The boxes this script used
+    # to subtract for them ran to Z 250, ABOVE the roof skin, and punched four
+    # roof holes (Y 255.7 / 385.7, X +-18; found by
+    # tools/assembly_integrity_check.py) -- removed.
     cm = man(cargo)
-    for dx in (-clf.CRADLE_BOSS_DX, clf.CRADLE_BOSS_DX):
-        for by in (clf.CRADLE_FWD_BOSS_Y, clf.CRADLE_AFT_BOSS_Y):
-            x = clf.CRADLE_XC + dx
-            cm = cm - man(clf.box(x - 5.5, x + 5.5, by - 5.5, by + 5.5,
-                                  clf.CRADLE_TOP_Z - 0.5, 250.0))
-    print(f"cargo: 4 cradle hanger bosses removed, "
-          f"{(man(cargo).volume() - cm.volume()) / 1e3:.2f} cm3")
     part = ((man(head) ^ slab(-BIG, HEAD_CUT_Y)) + rh + rc
             + (cm ^ slab(CARGO_CUT_Y, BIG)))
+    # Head roof centreline crack (published head, X 0..0.5, Y 99..104.5; found
+    # by tools/assembly_integrity_check.py): bridge it with the skin copied
+    # 1 mm either side of the centreline, clipped to the slit's box.
+    hm = man(head)
+    bridge = ((hm.translate((1.0, 0.0, 0.0)) + hm.translate((-1.0, 0.0, 0.0)))
+              ^ man(clf.box(*ROOF_SLIT_BOX)))
+    part = part + bridge
+    print(f"head roof crack bridged: {bridge.volume():.2f} mm3")
+    # Wing-root flanges FUSED into the one-piece print (owner 2026-11-01): the
+    # flange was a separate bonded part only for mesh-processing reasons (its
+    # docstring: a wall that moves 34 mm across the footprint, knife edges, a
+    # whole-shell boolean that did not resolve).  The generator now builds a
+    # conforming, locally cropped plate; on the one-piece SLS hull fusing it
+    # removes the bond line that limited it.  Flanges sit on SPAR_Y.
+    for side in ("port", "stbd"):
+        fl = man(trimesh.load(os.path.join(FSTL, f"wing_root_flange_{side}.stl")))
+        part = part + fl
+        print(f"wing-root flange {side} fused: {fl.volume() / 1e3:.2f} cm3")
     tm = tm_of(part)
     tm.merge_vertices()
     bodies = tm.split(only_watertight=False)

@@ -133,6 +133,13 @@ PCB and avionics footprint placement is governed by root `AGENTS.md` §5 and
 - **Retain the outer mold line** of Serenity's canonical hull to the greatest extent possible
 - **Interior modifications** (bore carving, sleeve insertion, boss protrusions) must blend into the canonical exterior hull
 - **Do not alter the outer mold line unless structurally required**
+- **Deviations from the canonical exterior hull shall be minimized, and every deviation shall
+  maintain the style and character of the Serenity spaceship and not introduce incongruent or
+  inconsistent elements** (owner, 2026-11-01). This applies to the fuselage, wings, and
+  nacelles alike. Check every exterior deviation against the Henning model and QMx blueprint
+  pack (`docs/references/`, REF-CAD-002/003); where function forces a departure (e.g., the
+  64 mm intake), fair it into the measured canonical skin rather than adding a foreign shape
+  (worked example: `tools/nacelle_cowl_fair.py`).
 - Because Serenity's geometry is complex, **bounding boxes and centroid calculations are inadequate** for positioning and orienting parts — use the validated extents in `airframe/HULL_FRAME_REFERENCE.md`
 - If there is uncertainty about placement, request manual placement in FreeCAD by the user
 
