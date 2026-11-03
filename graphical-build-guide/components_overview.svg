@@ -16,7 +16,7 @@
 <text x="740" y="250" font-size="12" fill="#222">64 mm tandem-EDF pod on a 2 x 6704ZZ trunnion</text>
 <text x="740" y="277" font-size="14" font-weight="bold" fill="#e8892a">Tilt</text>
 <text x="740" y="295" font-size="12" fill="#222">20D 25:1 + six-start worm, pin brake, 14T/50T;</text>
-<text x="740" y="310" font-size="12" fill="#222">stops -5/140 deg</text>
+<text x="740" y="310" font-size="12" fill="#222">stops -5/135 deg</text>
 <text x="740" y="337" font-size="14" font-weight="bold" fill="#e8892a">Nozzle</text>
 <text x="740" y="355" font-size="12" fill="#222">Rev T3 shingled 8-flap; servo on measured tilt;</text>
 <text x="740" y="370" font-size="12" fill="#222">spring to 105 %</text>

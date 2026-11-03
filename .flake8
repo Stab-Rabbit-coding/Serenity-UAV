@@ -7,3 +7,6 @@ exclude =
     build,
     dist,
 max-line-length = 100
+per-file-ignores =
+    # Generated Markdown table rows are long by nature; black's slice spacing trips E203.
+    tools/sync_operators_manual.py: E501,E203

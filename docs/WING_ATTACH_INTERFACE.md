@@ -263,7 +263,7 @@ the tilt drive shaft, and the fixed encoder.
 graph LR
   W["wing tip face<br/>register pad, X 14..58.6"] --> ST["spar stub<br/>15 mm proud - DUCT BOUNDED"]
   ST --> BR["trunnion bearing pair<br/>IN THE NACELLE, ring plane X 28"]
-  BR --> NR["nacelle rotates<br/>-5 .. +140 deg"]
+  BR --> NR["nacelle rotates<br/>-5 .. +135 deg"]
   SH["tilt drive shaft<br/>station 53.6, bushed in the pad"] --> PN["pinion 14T PD 11.2"]
   PN -->|"spur REDUCTION i=3.571<br/>C = 25.6"| RG["tilt ring gear 50T PD 40.0<br/>on the trunnion"]
   RG --> NR
@@ -429,7 +429,7 @@ continuous-rotation gearmotor or a stepper, closed on the AK7455's absolute
 nacelle angle rather than on the actuator's own travel. That:
 
 - **retires the 180°-vs-270° question**, which was blocking;
-- removes the 145°-of-travel constraint plan 004 KTD5 identified as the
+- removes the 140°-of-travel constraint plan 004 KTD5 identified as the
   *binding* one (torque never was — the reduction delivers 3.571× whatever the
   actuator gives, against a 0.177 N·m grounded requirement);
 - makes the AK7455 **load-bearing for control**, not just telemetry: without
@@ -479,7 +479,7 @@ rate, and the surplus is real: 2.402 N·m of actuator stall against 0.050 N·m a
 the shaft, a 48× margin. It is rejected because it pulls the *actuator* back
 below one revolution (500° of shaft ÷ 1.923 = 260°), which re-opens the
 180-vs-270 limited-rotation question §4.3b exists to close. 1:1 keeps the
-actuator at 1.438 rev over the full 145° sweep.
+actuator at 1.389 rev over the full 140° sweep.
 
 **The gear plane is forced by the tenon, and this is the costly one.** Two
 solids share the shaft's X band at the wall:
@@ -504,7 +504,7 @@ volume rather than floor footprint. It is tracked at
 `airframe/fuselage-mid/WBS.md` WA-R15.
 
 **Sense.** Two external meshes, two reversals: actuator-positive is
-nacelle-positive. Total reduction 3.571; actuator travel 1.438 rev over 145°.
+nacelle-positive. Total reduction 3.571; actuator travel 1.389 rev over 140°.
 The control-side consequences — cascade structure, sensor roles, fail states —
 are specified in [`docs/TILT_DRIVE_CONTROL_SPEC.md`](TILT_DRIVE_CONTROL_SPEC.md).
 

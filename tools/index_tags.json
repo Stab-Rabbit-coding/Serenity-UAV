@@ -12,7 +12,7 @@
       "archived": false
     },
     ".flake8": {
-      "description": "[flake8]",
+      "description": "Generated Markdown table rows are long by nature; black's slice spacing trips E203.",
       "tags": [],
       "archived": false
     },
@@ -227,9 +227,7 @@
       "description": "Serenity UAV \u2014 TODO (Open Work Only)",
       "tags": [
         "documentation",
-        "emi-hardening",
-        "project-tracking",
-        "security"
+        "project-tracking"
       ],
       "archived": false
     },
@@ -10813,6 +10811,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Bus-Gateway/step/CAN-PERIPH-GW-1.step": {
+      "description": "3D STEP model",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md": {
       "description": "Commo Rev T \u2014 Phase 1 Part Selection, Power Budget, and RF-Chain Audit",
       "tags": [
@@ -11319,6 +11325,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/Commo/step/Commo.step": {
+      "description": "3D STEP model",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pcb": {
       "description": "KiCad PCB layout",
       "tags": [
@@ -11740,6 +11754,14 @@
     },
     "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py": {
       "description": "Flight Engineer PCB Rev S1: remove the 6 V servo BEC, add the 5 V servo BEC.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/step/FlightEngineer.step": {
+      "description": "3D STEP model",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -12219,6 +12241,14 @@
     },
     "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py": {
       "description": "mod_jayne_trapezoid.py -- redraw Observer.kicad_pcb Edge.Cuts as the nose-carrier",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Observer/step/Observer.step": {
+      "description": "3D STEP model",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -12844,6 +12874,14 @@
     },
     "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py": {
       "description": "silk_refs_to_fab_pilot.py \u2014 Move footprint reference designators from silkscreen to Fab.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Pilot/step/Pilot.step": {
+      "description": "3D STEP model",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -13522,6 +13560,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/TACCO/step/TACCO.step": {
+      "description": "3D STEP model",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/TODO-1.2b-CHECKLIST.md": {
       "description": "Todo 1.2b Completion Checklist \u2014 Expedited Workflow",
       "tags": [
@@ -14137,6 +14183,14 @@
       ],
       "archived": false
     },
+    "avionics/kicad/step_export_report.json": {
+      "description": "JSON data (2 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv": {
       "description": "Tabular data (CSV)",
       "tags": [
@@ -14375,6 +14429,13 @@
       ],
       "archived": false
     },
+    "current-specification/allowables.json": {
+      "description": "JSON data (4 top-level keys)",
+      "tags": [
+        "specification"
+      ],
+      "archived": false
+    },
     "current-specification/auw_ledger.json": {
       "description": "JSON data (5 top-level keys)",
       "tags": [
@@ -14410,6 +14471,27 @@
       "description": "Bill of materials, JSON (217 items)",
       "tags": [
         "bom",
+        "specification"
+      ],
+      "archived": false
+    },
+    "current-specification/flight_limits.json": {
+      "description": "JSON data (6 top-level keys)",
+      "tags": [
+        "specification"
+      ],
+      "archived": false
+    },
+    "current-specification/joint_register.json": {
+      "description": "JSON data (4 top-level keys)",
+      "tags": [
+        "specification"
+      ],
+      "archived": false
+    },
+    "current-specification/safety_factors.json": {
+      "description": "JSON data (10 top-level keys)",
+      "tags": [
         "specification"
       ],
       "archived": false
@@ -14906,6 +14988,14 @@
       ],
       "archived": false
     },
+    "docs/OPERATORS_MANUAL.md": {
+      "description": "SERENITY UAV",
+      "tags": [
+        "documentation",
+        "redundancy-failover"
+      ],
+      "archived": false
+    },
     "docs/OSHW_CERTIFICATION.md": {
       "description": "Serenity UAV \u2014 Open Source Hardware Certification Readiness",
       "tags": [
@@ -15243,6 +15333,13 @@
       ],
       "archived": false
     },
+    "docs/images/EngineerByFF.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/images/bhd02/A_flange_cut_port.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -15482,6 +15579,20 @@
       "tags": [
         "documentation",
         "propulsion"
+      ],
+      "archived": false
+    },
+    "docs/images/operators-manual/asc_data_plate_crop.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/images/operators-manual/serenity_final_insignia_crop.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
       ],
       "archived": false
     },
@@ -16062,7 +16173,23 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md": {
+      "description": "feat: Sourced joint torque specs and optimized install sequence for the graphical build guide",
+      "tags": [
+        "documentation",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/AC_43.13-1B_w-chg1.pdf": {
       "description": "PDF document",
       "tags": [
         "documentation",
@@ -16473,6 +16600,14 @@
       ],
       "archived": false
     },
+    "docs/references/NASA-STD-5020B Revalidated 1-5-2026.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
     "docs/references/POCKETBEAGLE2 V10_241220.DSN": {
       "description": "Specctra design file (autorouter input)",
       "tags": [
@@ -16668,6 +16803,318 @@
     },
     "docs/references/pocketbeagle2 revA_241205.brd": {
       "description": "PCB board file (legacy Eagle/KiCad format)",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/QMx-BPrefpack-16.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/QMx-BPrefpack-23.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/QMx-BPrefpack-30.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-00.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-01.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-02.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-03.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-04.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-05.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-06.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-07.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-08.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-09.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-0a.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-10.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-11.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-12.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-13.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-14.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-15.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-16.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-17.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-18.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-19.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-20.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-21.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-22.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-23.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-24.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-25.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-26.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-27.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-28.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-29.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-3.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-30.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-31.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bp-32.jpg": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
+    "docs/references/qmx-bp-exports/qmx-bprefpack-03.jpg": {
+      "description": "Rendered image / reference photo",
       "tags": [
         "documentation",
         "specification"
@@ -19298,6 +19745,13 @@
       ],
       "archived": false
     },
+    "tools/allowables.py": {
+      "description": "Cited-allowables database and selector for the joint-torque method.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/assembly_integrity_check.py": {
       "description": "assembly_integrity_check.py -- find rogue openings in the assembled hull",
       "tags": [
@@ -19464,6 +19918,13 @@
       ],
       "archived": false
     },
+    "tools/check_joint_register.py": {
+      "description": "Commit/CI gate: the joint register is structurally valid and covers the BOM.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/check_tacco_envelope_sync.py": {
       "description": "check_tacco_envelope_sync.py \u2014 keep every airframe TACCO mount in step with the board size.",
       "tags": [
@@ -19558,6 +20019,13 @@
       ],
       "archived": false
     },
+    "tools/export_pcb_step.py": {
+      "description": "Export a STEP model of every KiCad board for the build-guide renders.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/flight_envelope_endurance.py": {
       "description": "Flight-envelope and hover-endurance recompute for the split-battery aircraft.",
       "tags": [
@@ -19641,6 +20109,13 @@
     },
     "tools/import-specctra-ses.py": {
       "description": "Companion to export-specctra-dsn.py: import a freerouting-produced",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/joint_register.py": {
+      "description": "Joint register loader and checker for the build-guide torque method.",
       "tags": [
         "build-tooling"
       ],
@@ -20173,8 +20648,22 @@
       ],
       "archived": false
     },
+    "tools/sync_operators_manual.py": {
+      "description": "Keep docs/OPERATORS_MANUAL.md in step with the flight envelope and other limits.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tail_strike_requirement.py": {
       "description": "tail_strike_requirement.py -- 4 ft drop tail strike on the aft skids, and the",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_allowables.py": {
+      "description": "Tests for tools/allowables.py (plan 2026-11-02-001 U3).",
       "tags": [
         "build-tooling"
       ],
@@ -20208,6 +20697,20 @@
       ],
       "archived": false
     },
+    "tools/tests/test_export_pcb_step.py": {
+      "description": "Tests for tools/export_pcb_step.py (plan 2026-11-02-001 U12).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_joint_register.py": {
+      "description": "Tests for tools/joint_register.py (plan 2026-11-02-001 U1).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_nacelle_axial_fit.py": {
       "description": "Tests for tools/nacelle_axial_fit.py (plan 2026-09-28-001 U9).",
       "tags": [
@@ -20230,6 +20733,13 @@
       "tags": [
         "build-tooling",
         "propulsion"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_sync_operators_manual.py": {
+      "description": "Tests for tools/sync_operators_manual.py (WBS 0.10.3, OM-5).",
+      "tags": [
+        "build-tooling"
       ],
       "archived": false
     },
@@ -20525,6 +21035,7 @@
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/OBSERVER_LASER_ANALYSIS.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
+      "docs/OPERATORS_MANUAL.md",
       "docs/OSHW_CERTIFICATION.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/POWER_DISTRIBUTION.md",
@@ -20568,6 +21079,7 @@
       "docs/ideation/2026-10-31-aft-cg-single-pivot-options-ideation.md",
       "docs/ideation/2026-10-31-forward-trim-relocation-ideation.md",
       "docs/ideation/7-2.webp",
+      "docs/images/EngineerByFF.png",
       "docs/images/bhd02/A_flange_cut_port.png",
       "docs/images/bhd02/B1_rejected_thigh_strike.png",
       "docs/images/bhd02/B2_aft_port_wing_relief.png",
@@ -20601,6 +21113,8 @@
       "docs/images/nacelle_64mm_tilt_joint_optionA.png",
       "docs/images/nacelle_64mm_tilt_joint_optionA_cutaway.png",
       "docs/images/nacelle_64mm_tip_gear_variants.png",
+      "docs/images/operators-manual/asc_data_plate_crop.png",
+      "docs/images/operators-manual/serenity_final_insignia_crop.png",
       "docs/img/20260923_065833.jpg",
       "docs/img/20260923_065848.jpg",
       "docs/img/20260923_065933.jpg",
@@ -20676,7 +21190,9 @@
       "docs/plans/2026-10-31-002-feat-aft-gear-tail-co-strike-plan.md",
       "docs/plans/2026-10-31-003-feat-forward-trim-room-relocation-plan.md",
       "docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md",
+      "docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
+      "docs/references/AC_43.13-1B_w-chg1.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
@@ -20722,6 +21238,7 @@
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-64mm-edf-glider-nacelle-for-swift-2100.webp",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-edf-glider-nacelle-for-swift-2100-827-50mm.webp",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-model-logo-16966716258.jpg",
+      "docs/references/NASA-STD-5020B Revalidated 1-5-2026.pdf",
       "docs/references/POCKETBEAGLE2 V10_241220.DSN",
       "docs/references/PocketBeagle.step",
       "docs/references/ST3215 memory register map-EN.xls",
@@ -20747,6 +21264,45 @@
       "docs/references/nick-henning/top-view-with-wireframe-henning.jpg",
       "docs/references/open-source-hardware-checklist.pdf",
       "docs/references/pocketbeagle2 revA_241205.brd",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-16.jpg",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-23.jpg",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-30.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-00.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-01.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-02.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-03.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-04.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-05.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-06.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-07.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-08.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-09.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-0a.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-10.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-11.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-12.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-13.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-14.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-15.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-16.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-17.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-18.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-19.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-20.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-21.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-22.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-23.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-24.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-25.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-26.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-27.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-28.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-29.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-3.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-30.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-31.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-32.jpg",
+      "docs/references/qmx-bp-exports/qmx-bprefpack-03.jpg",
       "docs/references/qx-motor 64mm edf/64_2822-2300KV_00.png",
       "docs/references/qx-motor 64mm edf/7-2.jpg",
       "docs/references/qx-motor 64mm edf/8-4.jpg",
@@ -20893,7 +21449,6 @@
     "emi-hardening": [
       "AGENTS.md",
       "README.md",
-      "TODO.md",
       "WBS.md",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
       "airframe/README.md",
@@ -21035,6 +21590,7 @@
       "docs/CARGO_DOOR_GATEWAY_SPEC.md",
       "docs/CARGO_DOOR_LATCH_SPEC.md",
       "docs/ETHERNET_PHY_TRADE.md",
+      "docs/OPERATORS_MANUAL.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
@@ -21062,7 +21618,6 @@
       "README.md",
       "REFERENCES.md",
       "SECURITY.md",
-      "TODO.md",
       "airframe/FreeCAD-scripts/serenity_assembly.py",
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
@@ -21215,6 +21770,7 @@
       "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
       "docs/plans/2026-10-19-001-aircraft-datum-migration-plan.md",
       "docs/plans/2026-10-19-001-baseline-r1/landing_gear_bay_pad_fit.py.txt",
+      "docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md",
       "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
@@ -21285,13 +21841,18 @@
       "current-specification/README.md",
       "current-specification/SPEC_TEMPLATE.md",
       "current-specification/TODO.md",
+      "current-specification/allowables.json",
       "current-specification/auw_ledger.json",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
       "current-specification/bom_revT.csv",
       "current-specification/bom_revT.json",
+      "current-specification/flight_limits.json",
+      "current-specification/joint_register.json",
+      "current-specification/safety_factors.json",
       "current-specification/serenity-rev-s.jsx",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
+      "docs/references/AC_43.13-1B_w-chg1.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
       "docs/references/CERN_OHL_rationale.pdf",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
@@ -21337,6 +21898,7 @@
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-64mm-edf-glider-nacelle-for-swift-2100.webp",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-edf-glider-nacelle-for-swift-2100-827-50mm.webp",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/xfly-model-logo-16966716258.jpg",
+      "docs/references/NASA-STD-5020B Revalidated 1-5-2026.pdf",
       "docs/references/POCKETBEAGLE2 V10_241220.DSN",
       "docs/references/PocketBeagle.step",
       "docs/references/ST3215 memory register map-EN.xls",
@@ -21362,6 +21924,45 @@
       "docs/references/nick-henning/top-view-with-wireframe-henning.jpg",
       "docs/references/open-source-hardware-checklist.pdf",
       "docs/references/pocketbeagle2 revA_241205.brd",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-16.jpg",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-23.jpg",
+      "docs/references/qmx-bp-exports/QMx-BPrefpack-30.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-00.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-01.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-02.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-03.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-04.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-05.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-06.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-07.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-08.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-09.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-0a.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-10.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-11.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-12.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-13.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-14.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-15.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-16.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-17.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-18.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-19.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-20.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-21.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-22.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-23.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-24.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-25.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-26.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-27.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-28.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-29.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-3.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-30.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-31.jpg",
+      "docs/references/qmx-bp-exports/qmx-bp-32.jpg",
+      "docs/references/qmx-bp-exports/qmx-bprefpack-03.jpg",
       "docs/references/qx-motor 64mm edf/64_2822-2300KV_00.png",
       "docs/references/qx-motor 64mm edf/7-2.jpg",
       "docs/references/qx-motor 64mm edf/8-4.jpg",
@@ -23877,6 +24478,7 @@
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
+      "avionics/kicad/Bus-Gateway/step/CAN-PERIPH-GW-1.step",
       "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
       "avionics/kicad/Commo/COMMO_REVT_RF_DESIGN.md",
       "avionics/kicad/Commo/Commo.md",
@@ -23937,6 +24539,7 @@
       "avionics/kicad/Commo/scripts/mod_commo_pcb.py",
       "avionics/kicad/Commo/scripts/route_commo_rssi.py",
       "avionics/kicad/Commo/scripts/swap_lora_for_sik.py",
+      "avionics/kicad/Commo/step/Commo.step",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pcb",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_prl",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pro",
@@ -23988,6 +24591,7 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
+      "avionics/kicad/FlightEngineer/step/FlightEngineer.step",
       "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
@@ -24044,6 +24648,7 @@
       "avionics/kicad/Observer/scripts/mod_observer_ds_pcb.py",
       "avionics/kicad/Observer/scripts/mod_observer_som_place.py",
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
+      "avionics/kicad/Observer/step/Observer.step",
       "avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md",
       "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
@@ -24118,6 +24723,7 @@
       "avionics/kicad/Pilot/scripts/route_loop_pilot.sh",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py",
+      "avionics/kicad/Pilot/step/Pilot.step",
       "avionics/kicad/README.md",
       "avionics/kicad/Serenity-Custom.3dshapes/ISOW1044BDFMR.step",
       "avionics/kicad/Serenity-Custom.3dshapes/KSZ9477STXI.step",
@@ -24201,6 +24807,7 @@
       "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
+      "avionics/kicad/TACCO/step/TACCO.step",
       "avionics/kicad/TODO-1.2b-CHECKLIST.md",
       "avionics/kicad/TODO-1.2b-KICAD-READY.md",
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
@@ -24276,6 +24883,7 @@
       "avionics/kicad/replace_footprints.py",
       "avionics/kicad/retarget_mspm0g351x_slb9672.py",
       "avionics/kicad/retarget_pcb_footprints.py",
+      "avionics/kicad/step_export_report.json",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
       "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
       "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
@@ -24674,6 +25282,7 @@
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/Bus-Gateway/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Bus-Gateway/scripts/route_can_periph_gw_pcb.py",
+      "avionics/kicad/Bus-Gateway/step/CAN-PERIPH-GW-1.step",
       "avionics/kicad/Commo/COMMO_REVT_PHASE1_PARTS.md",
       "avionics/kicad/Commo/COMMO_REVT_RF_DESIGN.md",
       "avionics/kicad/Commo/Commo.md",
@@ -24734,6 +25343,7 @@
       "avionics/kicad/Commo/scripts/mod_commo_pcb.py",
       "avionics/kicad/Commo/scripts/route_commo_rssi.py",
       "avionics/kicad/Commo/scripts/swap_lora_for_sik.py",
+      "avionics/kicad/Commo/step/Commo.step",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pcb",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_prl",
       "avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pro",
@@ -24785,6 +25395,7 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
+      "avionics/kicad/FlightEngineer/step/FlightEngineer.step",
       "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
@@ -24841,6 +25452,7 @@
       "avionics/kicad/Observer/scripts/mod_observer_ds_pcb.py",
       "avionics/kicad/Observer/scripts/mod_observer_som_place.py",
       "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
+      "avionics/kicad/Observer/step/Observer.step",
       "avionics/kicad/PB2I_AM625_HEADER_CAPABILITIES.md",
       "avionics/kicad/PB2_HEADER_PINMAP.md",
       "avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md",
@@ -24915,6 +25527,7 @@
       "avionics/kicad/Pilot/scripts/route_loop_pilot.sh",
       "avionics/kicad/Pilot/scripts/route_pilot.sh",
       "avionics/kicad/Pilot/scripts/silk_refs_to_fab_pilot.py",
+      "avionics/kicad/Pilot/step/Pilot.step",
       "avionics/kicad/README.md",
       "avionics/kicad/Serenity-Custom.3dshapes/ISOW1044BDFMR.step",
       "avionics/kicad/Serenity-Custom.3dshapes/KSZ9477STXI.step",
@@ -24998,6 +25611,7 @@
       "avionics/kicad/TACCO/scripts/gen_tacco_footprints.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_pcb.py",
       "avionics/kicad/TACCO/scripts/gen_tacco_sch.py",
+      "avionics/kicad/TACCO/step/TACCO.step",
       "avionics/kicad/TODO-1.2b-CHECKLIST.md",
       "avionics/kicad/TODO-1.2b-KICAD-READY.md",
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
@@ -25073,6 +25687,7 @@
       "avionics/kicad/replace_footprints.py",
       "avionics/kicad/retarget_mspm0g351x_slb9672.py",
       "avionics/kicad/retarget_pcb_footprints.py",
+      "avionics/kicad/step_export_report.json",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
       "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
       "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
@@ -25406,6 +26021,7 @@
       "tools/aft_section_mass_audit.py",
       "tools/aft_skin_thinning_study.py",
       "tools/airframe_interface_census.py",
+      "tools/allowables.py",
       "tools/assembly_integrity_check.py",
       "tools/auw_ledger.py",
       "tools/bake_hull_frame.py",
@@ -25428,6 +26044,7 @@
       "tools/cg_mass_reduction_study.py",
       "tools/cg_relocation_study.py",
       "tools/check_datum_drift.py",
+      "tools/check_joint_register.py",
       "tools/check_tacco_envelope_sync.py",
       "tools/compact_bom_entries.py",
       "tools/datum_r2_stl_list.txt",
@@ -25441,6 +26058,7 @@
       "tools/export-specctra-dsn.py",
       "tools/export_assembly_meshes.py",
       "tools/export_landing_gear_stls.py",
+      "tools/export_pcb_step.py",
       "tools/flight_envelope_endurance.py",
       "tools/frame_inventory.py",
       "tools/gen_bay_a_fwd_mounts.py",
@@ -25453,6 +26071,7 @@
       "tools/head_layout_fit.py",
       "tools/hull_datums.py",
       "tools/import-specctra-ses.py",
+      "tools/joint_register.py",
       "tools/kicad_add_part.py",
       "tools/kicad_prune_stale.py",
       "tools/kicad_relink.py",
@@ -25521,14 +26140,19 @@
       "tools/sls_scale_trim_study.py",
       "tools/spar_bundle_fit.py",
       "tools/stitch_vias.py",
+      "tools/sync_operators_manual.py",
       "tools/tail_strike_requirement.py",
+      "tools/tests/test_allowables.py",
       "tools/tests/test_bay_a_fwd_mounts.py",
       "tools/tests/test_bay_a_fwd_routes.py",
       "tools/tests/test_bay_a_thermal_budget.py",
       "tools/tests/test_esc80_cooptimize.py",
+      "tools/tests/test_export_pcb_step.py",
+      "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle_axial_fit.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nozzle_servo_linkage.py",
+      "tools/tests/test_sync_operators_manual.py",
       "tools/tests/test_tail_strike_requirement.py",
       "tools/tilt_actuator_options.py",
       "tools/try-via-again.py",

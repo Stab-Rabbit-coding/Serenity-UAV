@@ -51,7 +51,7 @@ comes from the drawing; NAC-64-FIT-02 measures a physical motor and rotor.
 
 **Inputs:**
 
-- Thrust T = 4.70 lbf (20.9 N) per fan [REF-EDF-003, QF2822-2400 KV, 22.2 V row].
+- Thrust T = 5.23 lbf (23.2 N; 83.60 ozf, 2,370 gf) per fan [REF-EDF-003, QF2822-2300KV, 24 V row; owner correction 2026-11-02]. **Figures in this section derived from the former 20.9 N (2400 KV) are not yet recomputed** (WBS NAC-64-EDF-2300KV); bore velocity at 23.2 N is about 77 m/s (149 kt), M 0.22.
 - Air density ρ = 1.225 kg/m³ (ISA sea level), ASSUMED.
 - Disc area A = π (0.032 m)² = 32.2 cm².
 

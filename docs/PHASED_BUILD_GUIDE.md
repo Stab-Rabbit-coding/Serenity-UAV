@@ -620,7 +620,7 @@ apt install mavlink-router
 - Arm sequence per BLHeli32 (full throttle power-on → drop to zero)
 - Verify all 3 ESCs calibrated and armed
 
-- Step 39: Calibrate nacelle tilt servos: command 0° → verify nacelle vertical ±0.5°; command 90° → verify horizontal ±0.5°. Adjust servo horn if needed.
+- Step 39: Calibrate nacelle tilt servos: command 0° → verify nacelle horizontal (cruise) ±0.5°; command 90° → verify vertical (hover) ±0.5°. Range is −5° to +135°. Adjust servo horn if needed.
 
 - Step 40: Calibrate fuselage nozzle servo endpoints:
 - 1.0ms PWM → nozzle open (42mm exit) — lock clevis

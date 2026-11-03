@@ -42,7 +42,7 @@
 //   Euler turbomachinery relation Q = mdot · r · V_theta for axial inflow, with
 //   mdot = sqrt(T rho A) = 0.385 kg/s (tandem 37.6 N, the tilt tool's thrust
 //   row), annulus axial velocity 120.4 m/s (hub r 13.9 .. tip 32.0), shaft
-//   torque 0.227 N·m from 1265.4 W (REF-EDF-003 2400 KV row) x 0.85 motor
+//   torque 0.227 N·m from 1265.4 W (REF-EDF-003 2400 KV row — SUPERSEDED 2026-11-02 by the 2300 KV row, 1368 W / 2370 gf at 24 V; vane swirl/torque below NOT yet recomputed, WBS NAC-64-EDF-2300KV) x 0.85 motor
 //   efficiency ASSUMED at 45 288 rpm (the tilt tool's 0.85 x KV x V rule,
 //   ASSUMED): V_theta = 25.7 m/s at r_m = 22.95 mm -> 12.0 deg swirl at r_m.
 //   Free vortex (V_theta ∝ 1/r): 18.2 deg at the hub, 8.7 deg at the tip.  The

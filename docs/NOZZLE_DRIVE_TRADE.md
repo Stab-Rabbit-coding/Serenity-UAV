@@ -282,7 +282,7 @@ encoder:
 | Tilt | Nozzle exit |
 |---|---|
 | 0° | 75 % of bore |
-| 90° to 145° | 105 % of bore, held flat |
+| 90° to 135° | 105 % of bore, held flat |
 
 The servo pulls the ring toward 75 % through a pull-only slotted link. The slot is at least as
 long as the full stroke. A torsion spring drives the ring to a hard 105 % stop whenever the servo
@@ -310,15 +310,15 @@ variant (share the AK7455's lane, or a dedicated board) is open there as D-NZ-1.
 2. **The pinion collides with the tilt-drive shaft.** The drawn pinion axis sits 26.4 mm aft of
    the pivot. At 0° tilt that is 0.8 mm from the Rev T1 tilt-drive shaft centre (25.6 mm aft of the
    spar).
-3. **Over-travel past 90°.** The tilt drive sweeps 145°. The solved 1:1 linkage
+3. **Over-travel past 90°.** The tilt drive sweeps 140° (−5° to +135°). The solved 1:1 linkage
    (`tools/nozzle_linkage_check.py` default geometry) keeps driving the unison ring past its
    23.75° stroke:
 
-   | Tilt | 0° | 30° | 60° | 90° | 105° | 120° | 135° | 145° |
-   |---|---|---|---|---|---|---|---|---|
-   | Ring ψ | −0.36° | −5.48° | −14.05° | −24.18° | −29.42° | −34.51° | −39.22° | −42.01° |
+   | Tilt | 0° | 30° | 60° | 90° | 105° | 120° | 135° |
+   |---|---|---|---|---|---|---|---|
+   | Ring ψ | −0.36° | −5.48° | −14.05° | −24.18° | −29.42° | −34.51° | −39.22° |
 
-   At 145° that is 177 % of the stroke. That violates "105 % at ≥ 90°" and would jam or back-drive
+   At the 135° limit that is 165 % of the stroke. That violates "105 % at ≥ 90°" and would jam or back-drive
    the flaps. Any continuous mechanical 1:1 drive has this defect, and it needs a dwell (cam) or a
    spring cartridge to fix.
 

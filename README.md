@@ -74,13 +74,13 @@ Throughout the mission, the aircraft shall also:
 | Length | 24.0 in (609 mm) |
 | Wingspan | 19.1 in (486 mm) |
 | Height | 7.93 in (201.5 mm) |
-| AUW — Phases 5–10 (nacelles only) | ~8.62 lbm (3,911 g) |
-| AUW — Phase 11 (full system) | ~9.42 lbm (4,273 g) |
+| AUW — two cells + 8 oz payload (Rev T-SB) | 13.93 lbm (6,318 g), provisional (`docs/flight_envelope.md`) |
+| AUW — Phase 11 (full system) | not re-derived since the 64 mm / split-battery redesign |
 | Payload capacity (minimum) | 8.0 oz (226 g) in a 4″ × 3″ × 3″ bay |
-| Thrust — nacelles only (hover) | 9.84 lbf (4,464 g) |
+| Thrust — nacelles only | 20.90 lbf (9,480 g) = 4 × 83.60 ozf (2,370 gf), QF2822-2300KV at 24 V, 80 A ESCs |
 | Thrust — Phase 11 rear EDF (cruise) | ~2.81 lbf (1,275 g) net after RCS bleed |
-| T/W — nacelles only (hover) | ≈ 1.14 (VTOL hover capable; margin corrected 2026-08-22, see TODO.md §0.10.1) |
-| T/W — Phase 11 (hover, nacelles only) | ≈ 1.04 (rear EDF adds mass but is forward-thrust only) |
+| T/W — nacelles only (hover) | ≈ 1.50 with payload (design floor 1.2; provisional pending mass truth) |
+| T/W — Phase 11 (hover, nacelles only) | not re-derived |
 | Compute | 8× PocketBeagle 2 Industrial (AM6254), PACE failover |
 | Onboard buses | CAN FD, MIL-STD-1553C, RS-485, Ethernet RSTP ring |
 | External comms | Five C2 links: Wi-Fi 5 GHz, Zigbee 2.4 GHz, mLRS, SiK/MAVLink 915 MHz, 49 MHz AX.25 |
@@ -148,7 +148,7 @@ deliberately progressive, field-replaceable failure mode rated for a 6 ft full-A
 **Nacelles**
 
 Two tilting pods each carry a tandem 50 mm EDF pair behind an 11-fin stator, with a variable-area
-nozzle scheduled on measured tilt (0°–145° pivot) and driven by one sub-micro servo per pod. Rev S4c
+nozzle scheduled on measured tilt (−5° to +135° pivot; 0° = horizontal) and driven by one sub-micro servo per pod. Rev S4c
 hollowed the pods (−179 g/pair) and added hinged ESC bays with flush access covers on a 4×90° motor
 pattern; a 64 mm tandem-EDF redesign is in progress.
 

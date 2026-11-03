@@ -151,6 +151,19 @@ move its content into the owning `WBS.md`, then regenerate. Wiring `--check` int
 `.githooks/pre-commit` / CI beside `precommit_index.py --check` is tracked in root `WBS.md`
 §0.10.2.
 
+## Operator's Manual Sync
+
+`tools/sync_operators_manual.py` keeps `docs/OPERATORS_MANUAL.md` current (WBS §0.10.3, OM-9). It
+runs in `.githooks/pre-commit` (rewrites and stages the manual) and in CI (`--check`).
+
+- **Single source:** `current-specification/flight_limits.json` (tilt range, EDF thrust/current/ESC,
+  regulatory and failsafe thresholds). Edit there first.
+- **Poll:** hashes the watched sources and reports which changed since the last sync.
+- **Verify:** refuses the commit if the tools/docs that restate a limit disagree with the JSON.
+- **Render:** recomputes T/W, θ_hover, V_min, density altitude, hover current/endurance and rewrites
+  every `<!-- AUTO:name -->` block and `<!--V:key-->` value; prose outside markers is untouched.
+- **Run:** `/usr/bin/python3 tools/sync_operators_manual.py [--check|--stage]`
+
 ## Output Locations
 
 | Output Type | Directory | Format |

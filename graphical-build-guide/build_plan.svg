@@ -27,7 +27,7 @@
 <rect x="28" y="278" width="92" height="50" rx="6" fill="#e8892a"/>
 <text x="74" y="310" font-size="18" font-weight="bold" fill="#1f2a36" text-anchor="middle">3</text>
 <text x="136" y="300" font-size="15" font-weight="bold" fill="#1f2a36">Tilt mechanism</text>
-<text x="136" y="319" font-size="12" fill="#444">Worm drive, brake, trunnion, -5/140 deg stops</text>
+<text x="136" y="319" font-size="12" fill="#444">Worm drive, brake, trunnion, -5/135 deg stops</text>
 <text x="1156" y="310" font-size="13" fill="#7a6f5c" text-anchor="end">cards 10-11</text>
 <rect x="28" y="336" width="1144" height="50" rx="6" fill="#fff" stroke="#c9c4b8"/>
 <rect x="28" y="336" width="92" height="50" rx="6" fill="#e8892a"/>
