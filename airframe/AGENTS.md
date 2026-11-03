@@ -166,7 +166,7 @@ directly:
 ## Nacelle Nozzle Drive
 
 Each nacelle nozzle is variable-diameter and **scheduled on measured nacelle tilt**, sized 75% of
-bore at 0° (forward) to 105% of bore at every tilt from 90° to the 145° limit (vertical/backing),
+bore at 0° (forward) to 105% of bore at every tilt from 90° to the 135° limit (vertical/backing),
 and shall fail to 105% on loss of servo power, command, or tilt-angle validity — a fixed
 functional requirement. Decision (owner, 2026-09-28, servo drive): one sub-micro servo per nacelle
 inside the pod, commanded from the tilt angle by its bus gateway, pulling the unison ring through a

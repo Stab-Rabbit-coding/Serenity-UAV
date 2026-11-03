@@ -142,7 +142,7 @@ module option(opt) {
 module label(opt) {
     lines = [
         str("OPTION ", opt, ": ", OPT_NAME[opt]),
-        str("nacelle rate ", OPT_RATE_NL[opt], " deg/s (no-load)   5 deg in ", OPT_T5[opt], " s   145 deg in ", OPT_T145[opt], " s"),
+        str("nacelle rate ", OPT_RATE_NL[opt], " deg/s (no-load)   5 deg in ", OPT_T5[opt], " s   140 deg in ", OPT_TSWEEP[opt], " s"),
         str("torque limit at nacelle ", OPT_T_NAC[opt], " N.m   unpowered hold: ", OPT_LOCK[opt] ? "YES (self-locking)" : "brake required"),
         str("mass, both sides incl. shell delta: ", OPT_MASS_PAIR[opt], " g   (see docs/TILT_ACTUATOR_OPTIONS.md)")
     ];

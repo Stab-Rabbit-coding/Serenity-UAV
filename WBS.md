@@ -28,7 +28,7 @@
 | Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S baseline, carried forward unchanged into Rev T; STLs pending regeneration where noted |
 | Wings | Fixed CF spar (20x16.3mm tube, 35% root chord), S1223-derived section, gear-linked nacelle tilt drive | Rev S1g: spar bonded wing member (not rotating shaft), root joint splits shear(socket)/moment(80x60 flange); 14T/50T reduction drive; SPAR-20-2 station 45.15→28.0mm |
 | Nacelles | Radially enlarged, QMx-proportioned shell around 2x64mm tandem EDFs, interstage stator, servo variable nozzle; axial length held | Current geometry remains 50mm Rev S4c/S4d; NAC-64-SERVO-01 active: servo nozzle drive designed and fit-closed 2026-10-04, uniform x1.06 enlargement wired through a single source 2026-10-05 (pivot, CFD, mass/CG and bench gates open) |
-| Nacelle EDFs | 2x QX-Motor 64mm EDF per nacelle, candidate QF2822-2400KV 6S; nominal 64mm thrust tube; QX 4xM3/16mm spider mounts | Existing 50mm XFly configuration remains current until 64mm fit, power, mass and thrust verification passes |
+| Nacelle EDFs | 2x QX-Motor 64mm EDF per nacelle, QF2822-2300KV (83.60 ozf / 2,370 gf at 24 V, 57.0 A; 80 A ESC, owner 2026-11-02); nominal 64mm thrust tube; QX 4xM3/16mm spider mounts | Existing 50mm XFly configuration remains current until 64mm fit, power, mass and thrust verification passes |
 | Landing gear | Sponson-mounted bays, canonical 1.5in leg (extended 3.0in variant retained) | Rev T (component design generation "R6" retained as its own permanent name): sponson wells CLOSED, leg length derived from nozzle clearance not belly height |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
 | Cargo bay | Clamshell doors + SG90 servos (OpenServoCore) + DRV8833 + SPT5425LV/LibreServo v2 winch + Dyneema + auto-latch + GPS ring + FPV bezel | N20 winch train retired Rev S; STS3215 winch servo superseded 2026-08-02 by SPT5425LV+LibreServo v2 (envelope gate resolved, 6 winch STLs still unimplemented — see WBS §1.1.1.2.1); other cargo STLs generated; gondola shell open |
@@ -129,7 +129,7 @@
 - [ ] TILT-CTL-09 — brake-release authorization + asymmetric MAC fail policy (spec §5.5; controller firmware)
 - [ ] TILT-CTL-02a — trip response executor and its independence from the loop MCU (controller `TRIP_IN`)
 - [ ] ENC-DAUGHTER — AEAT-8800-Q24 sensor daughter for the brake-guide pocket + 6-pin lead (spec §4 / §7)
-- [x] ★ WA-R18 — CLOSED 2026-10-19: mass/CG re-derived bottom-up (`tools/auw_ledger.py`): AUW 14.25 lbm (6,466 g) hover / 14.75 lbm (6,692 g) heaviest, CG Y +39.2, hover T/W 1.32 (1.28 heaviest) at 4 × 2135 gf
+- [x] ★ WA-R18 — CLOSED 2026-10-19: mass/CG re-derived bottom-up (`tools/auw_ledger.py`): AUW 14.25 lbm (6,466 g) hover / 14.75 lbm (6,692 g) heaviest, CG Y +39.2, hover T/W 1.32 (1.28 heaviest) at 4 × 2135 gf *(superseded 2026-11-02: thrust is 4 × 2,370 gf, QF2822-2300KV; current T/W is in `current-specification/auw_ledger.json`)*
 - [x] ★ A0 — CLOSED 2026-10-19: one AUW/CG/pitch-inertia ledger, `tools/auw_ledger.py` → `current-specification/auw_ledger.json`; every airborne BOM row classified (installed / in nacelle roll-up / excluded with reason) or the run fails
 - [ ] ★ MA-1 — printed masses are now MEASURED in the ledger; BOM `Unit_Mass_g` rows themselves still stale; add the CI check (`auw_ledger.py --check`)
 - [ ] ★ CG-SIZING — gear sizing used Y_CG 111.5 (nacelle-LOCAL pivot) and AUW 3.13 kg; now ledger-fed: fore leg 26 % static, thigh margin 0.51× at 4 ft → gear redesign (`airframe/landing-gear/WBS.md` LG-REMASS)
@@ -220,6 +220,27 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Wire gen_todo_from_wbs.py --check into pre-commit/CI beside the index check
 - [ ] Rewrite docs/AVIONICS_PB2_REDESIGN.md as a Rev T overview, then archive Rev Q/R
 
+#### 0.10.3 Operator's Manual
+→ detail: docs/WBS.md §0.10.3
+
+*(Requirement opened 2026-11-02: no user's manual existed. Requirements OM-1..OM-8 and the
+as-drafted record are in docs/WBS.md §0.10.3; the manual is
+`docs/OPERATORS_MANUAL.md`, status DRAFT — pre-first-flight.)*
+
+- [x] Draft Operator's Manual based on [REF-MIL-003] and in accordance with [REF-FAA-001]
+    and [REF-FAA-002]. *(draft v0.1 written 2026-11-02, Claude Sonnet 5.5 under owner
+    direction; docs/OPERATORS_MANUAL.md. Closed as a draft only — the items below gate
+    release.)*
+- [x] Auto-sync script in the commit chain (tools/sync_operators_manual.py, OM-9)
+    *(done 2026-11-02: pre-commit + CI --check; single source flight_limits.json)*
+- [ ] Owner (PE) review of Operator's Manual v0.1 — limits, WARNINGs, emergency procedures
+- [ ] Cite QMx sheets 11/12 + Firefly plate as fan art in REFERENCES.md
+- [ ] Fill Operator's Manual flight-test values from Phase 5/9 data (OM-5)
+- [ ] Reconcile manual with first-flight gates D1-D5 and blockers (OM-6)
+- [ ] Render Operator's Manual to PDF (no pandoc/weasyprint on this system)
+- [ ] Add Operator's Manual to REFERENCES.md "Used in" and PROJECT_INDEX
+- [ ] Catalogue extra Part 107 sections the manual needs (cert, preflight, reports)
+
 ### 0.11 — Upstream KiCad Defect: `sch erc` SIGSEGV on unresolvable `lib_id`
 
 → detail: `avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md`
@@ -232,6 +253,16 @@ see docs/WBS.md §0.10.2.)*
 - [ ] File at gitlab.com/kicad/code/kicad/-/issues, attach repro zip
 
 ---
+
+### 0.13 — Joint-Torque Standards Section Verification (2026-11-02)
+
+→ detail: `REFERENCES.md` REF-FAA-005, REF-NASA-004, REF-STD-BOLT-001, REF-STD-BOLT-002; plan `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md`
+
+- [ ] Verify AC 43.13-1B [REF-FAA-005] torque chapter/paragraph against the FAA PDF
+- [ ] Verify NASA-STD-5020B [REF-NASA-004] TFSR numbers for preload and safety factor
+- [ ] Obtain ISO 898-1:2013 [REF-STD-BOLT-001]; record property-class clauses and URL
+- [ ] Obtain VDI 2230-1:2015 [REF-STD-BOLT-002]; record preload/embedding clauses
+- [ ] Send 3D-printing provider the Z-axis tensile and insert pull-out data request (owner)
 
 ### 0.12 — Aft-Section SLS Sizing References (2026-10-31)
 
@@ -754,7 +785,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [x] 1.5.4 Pilot: add missing field connectors
 - [x] 1.5.5 XO: add missing field connectors
 - [ ] Update PHASED_BUILD_GUIDE.md
-- [ ] 1.5.6 Rebuild Graphical Buiild Guide
+- [ ] 1.5.6 Rebuild Graphical Buiild Guide — incl. BG-SEQ-1..6 per-step install order, wiring and torque (graphical-build-guide/WBS.md)
 - [ ] Sync bom_revO.json ↔ bom_revO.csv
 - [ ] Rewrite build-guide Phase 2/3 steps for the Rev T mechanism (after D2)
 - [x] Create bom_revQ.json + bom_revQ.csv
@@ -969,7 +1000,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Install the 49 MHz (Part 15 §15.235) daemon on CN1 and CN2 (sel…
 - [ ] ESC calibration (full throttle power-on → drop to zero).
 - [ ] Motor spin test (5% throttle 2s): all 5 motors spin in correct…
-- [ ] Tilt servo calibration: 0° = nacelle vertical ±0.5°, 90° = hori…
+- [ ] Tilt servo calibration: 0° = nacelle horizontal ±0.5°, 90° = vertical…
 - [ ] Rear nozzle servo endpoints verified.
 - [ ] 190mm from nose
 - [ ] GPS lock: HDOP ≤1.5 on both FC nodes; positions agree within 2m.

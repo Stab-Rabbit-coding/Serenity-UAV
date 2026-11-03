@@ -1,0 +1,963 @@
+{
+  "_meta": {
+    "purpose": "Authoritative joint register for the build-guide torque method (plan 2026-11-02-001 U1). Fields marked unknown are open data needs and block torque release for that joint.",
+    "seeded": "2026-11-02 from current-specification/bom_revT.json by Claude Sonnet 5.5; owner review required",
+    "license": "CC-BY-SA-4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)"
+  },
+  "scope": {
+    "categories": [
+      "Hardware",
+      "Fastener",
+      "Electrical Hardware",
+      "Structural Hardware",
+      "Bearing"
+    ],
+    "extra_refs": [
+      "FAR-BOND-STRAP",
+      "PRINT-TILT-BRACKET",
+      "PRINT-TILT-BRAKE-GUIDE",
+      "PRINT-BATT-CRADLE",
+      "PRINT-NODE-SADDLE",
+      "PRINT-CHIN-SHELF",
+      "PRINT-GW-DOOR-TRAY"
+    ]
+  },
+  "exempt": {
+    "SPRING-PAWL": "spring, captured by J-WINCH-PAWL-PIVOT (not a fastener)",
+    "FET-AO3400": "electronic part",
+    "DIODE-SS34": "electronic part",
+    "WIRE-28AWG-NAC": "wire (harness register, U8)",
+    "LG-SAFETY-CORD": "cord retention, not a torqued joint (verify tie method)",
+    "SHAFT-CF-3MM": "shaft stock",
+    "PTFE-SLEEVE-4MM": "sleeve stock",
+    "BATT-FOAM-SILICONE": "foam pad",
+    "MESH-VENT-SS": "mesh vent cover (bonded)",
+    "SEAL-EPDM-2MM": "seal tape",
+    "MESH-FOD-NOSEEUM": "mesh screen (bonded)",
+    "LG-SPRING-WIRE": "spring element; joint ends covered by J-LG-A1B-PINS",
+    "LG-DUCTILE-WIRE": "energy-absorbing wire; ends covered by J-LG-A1B-PINS",
+    "SPAR-TILT-4130": "retired rotating spar (Rev S1g)",
+    "BRG-MF128ZZ": "superseded Rev T1",
+    "BRG-MR63ZZ": "bearing, joint not yet identified (TODO)",
+    "HALL-RING-MAG": "magnet bonded to hub (adhesive joint, separate method)"
+  },
+  "joints": [
+    {
+      "id": "J-WING-ROOT-INSERT",
+      "name": "Wing attachment bolts into heat-set inserts",
+      "subsystem": "wings",
+      "bom_refs": [
+        "INSERT-M3-WING"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "M3 bolt",
+          "size": "M3",
+          "count": 8,
+          "material": "unknown"
+        },
+        {
+          "type": "brass heat-set insert",
+          "size": "M3xL5 OD4.2",
+          "count": 8,
+          "material": "brass"
+        }
+      ],
+      "members": [
+        {
+          "part": "wing root pylon",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        },
+        {
+          "part": "hull wing-root flange",
+          "material": "CF-PETG",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque + locker",
+      "load_case": null,
+      "unknown_fields": [
+        "bolt type/grade",
+        "pylon material",
+        "print orientation",
+        "load case"
+      ],
+      "notes": "Bolt grade/length not in BOM; wing root joint load in docs/WING_ATTACH_INTERFACE.md."
+    },
+    {
+      "id": "J-SECTOR-INSERT",
+      "name": "M2.5 inserts, sector-gear mount (legacy?)",
+      "subsystem": "tilt",
+      "bom_refs": [
+        "INSERT-M25-BRASS"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "brass heat-set insert",
+          "size": "M2.5xL5 OD3.5",
+          "count": 8,
+          "material": "brass"
+        }
+      ],
+      "members": [
+        {
+          "part": "tilt gear mount",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque",
+      "load_case": null,
+      "unknown_fields": [
+        "still used?",
+        "mating part",
+        "load case"
+      ],
+      "notes": "BOM says sector gear mount; Rev T deleted the sector gear. Confirm whether these inserts are still used."
+    },
+    {
+      "id": "J-NAC-ESC-COVER",
+      "name": "ESC bay access covers",
+      "subsystem": "nacelle",
+      "bom_refs": [
+        "SCREW-M3-BUTTON-8"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "button-head screw",
+          "size": "M3x8",
+          "count": 24,
+          "material": "stainless"
+        }
+      ],
+      "members": [
+        {
+          "part": "nacelle ESC cover",
+          "material": "CF-PETG?",
+          "process": "unknown",
+          "orientation": "unknown"
+        },
+        {
+          "part": "nacelle pod",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque",
+      "load_case": null,
+      "unknown_fields": [
+        "insert vs tapped",
+        "orientation",
+        "load case"
+      ],
+      "notes": "4 distinct flush covers (project memory). Insert or tapped? Unknown."
+    },
+    {
+      "id": "J-NAC-ESC-DISCONNECT",
+      "name": "10 AWG ring-terminal disconnect studs",
+      "subsystem": "nacelle",
+      "bom_refs": [
+        "STUD-M3-BRASS"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "brass stud + nut",
+          "size": "M3",
+          "count": 8,
+          "material": "brass"
+        },
+        {
+          "type": "brass heat-set insert",
+          "size": "M3",
+          "count": 8,
+          "material": "brass"
+        }
+      ],
+      "members": [
+        {
+          "part": "nacelle bay",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque (electrical + mechanical)",
+      "load_case": null,
+      "unknown_fields": [
+        "contact torque",
+        "load case"
+      ],
+      "notes": "Electrical joint: contact resistance sets minimum torque as well as mechanical limits."
+    },
+    {
+      "id": "J-NAC-TRUNNION-BRG",
+      "name": "Tilt trunnion bearings (pressed)",
+      "subsystem": "nacelle",
+      "bom_refs": [
+        "BRG-6704ZZ"
+      ],
+      "joint_class": "pressed",
+      "fasteners": [
+        {
+          "type": "6704ZZ bearing",
+          "size": "20x27x4",
+          "count": 4,
+          "material": "steel"
+        }
+      ],
+      "members": [
+        {
+          "part": "nacelle trunnion",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        },
+        {
+          "part": "wing pylon",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "press fit + retainer",
+      "load_case": null,
+      "unknown_fields": [
+        "fit class",
+        "retention",
+        "load case"
+      ],
+      "notes": "Pressed/bonded joint: no torque; fit and retention to be specified."
+    },
+    {
+      "id": "J-NAC-POD-PIVOT-BRG",
+      "name": "Pivot bearings MF104ZZ (legacy?)",
+      "subsystem": "nacelle",
+      "bom_refs": [
+        "BRG-MF104ZZ",
+        "CF-ROD-4MM",
+        "SPAR-TILT-CF4"
+      ],
+      "joint_class": "pressed",
+      "fasteners": [
+        {
+          "type": "MF104ZZ bearing",
+          "size": "4x10x4",
+          "count": 4,
+          "material": "steel"
+        }
+      ],
+      "members": [
+        {
+          "part": "nacelle pod",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "press fit",
+      "load_case": null,
+      "unknown_fields": [
+        "still used?"
+      ],
+      "notes": "MF104ZZ replaced by 6704ZZ per project memory (Rev T); confirm retirement."
+    },
+    {
+      "id": "J-WING-SPAR-BRG",
+      "name": "Spar-root bearing F688ZZ",
+      "subsystem": "wings",
+      "bom_refs": [
+        "BRG-F688ZZ",
+        "SPAR-CF-20X16"
+      ],
+      "joint_class": "pressed",
+      "fasteners": [
+        {
+          "type": "F688ZZ bearing",
+          "size": "8x16x5",
+          "count": 2,
+          "material": "steel"
+        }
+      ],
+      "members": [
+        {
+          "part": "wing root",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "press fit",
+      "load_case": null,
+      "unknown_fields": [
+        "still used?"
+      ],
+      "notes": "Rev T1 made the spar a fixed bonded member; confirm the bearing is still in the design."
+    },
+    {
+      "id": "J-TILT-SHAFT-BUSH",
+      "name": "Tilt drive shaft bushings",
+      "subsystem": "tilt",
+      "bom_refs": [
+        "BUSH-TILT-4MM",
+        "SHAFT-TILT-4MM"
+      ],
+      "joint_class": "pressed",
+      "fasteners": [
+        {
+          "type": "flanged bronze bushing",
+          "size": "4x8x5",
+          "count": 4,
+          "material": "bronze"
+        }
+      ],
+      "members": [
+        {
+          "part": "hull/pylon",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "press fit",
+      "load_case": null,
+      "unknown_fields": [
+        "fit class"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "J-NOZ-FLAP-HINGE",
+      "name": "Nozzle flap tangential hinge pins",
+      "subsystem": "nacelle",
+      "bom_refs": [
+        "PIN-3X18"
+      ],
+      "joint_class": "pinned",
+      "fasteners": [
+        {
+          "type": "dowel pin",
+          "size": "O3x18",
+          "count": 16,
+          "material": "stainless"
+        }
+      ],
+      "members": [
+        {
+          "part": "nozzle flap",
+          "material": "PETG?",
+          "process": "unknown",
+          "orientation": "unknown"
+        },
+        {
+          "part": "nozzle ring",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "pin (no torque)",
+      "load_case": null,
+      "unknown_fields": [
+        "retention method",
+        "fit"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "J-NOZ-FLAP-CAM",
+      "name": "Nozzle flap cam followers",
+      "subsystem": "nacelle",
+      "bom_refs": [
+        "PIN-2X4"
+      ],
+      "joint_class": "pinned",
+      "fasteners": [
+        {
+          "type": "dowel pin",
+          "size": "O2x4",
+          "count": 16,
+          "material": "stainless"
+        }
+      ],
+      "members": [
+        {
+          "part": "nozzle flap",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "pin (no torque)",
+      "load_case": null,
+      "unknown_fields": [
+        "retention method"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "J-NOZ-PUSHROD",
+      "name": "Nozzle pushrod ball links and studs",
+      "subsystem": "nacelle",
+      "bom_refs": [
+        "PUSHROD-BALL-M3",
+        "BALLSTUD-M3"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "M3 ball stud",
+          "size": "M3",
+          "count": 4,
+          "material": "unknown"
+        },
+        {
+          "type": "M3 ball-link pushrod",
+          "size": "M3",
+          "count": 2,
+          "material": "unknown"
+        }
+      ],
+      "members": [
+        {
+          "part": "pushrod crank",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        },
+        {
+          "part": "ring lever",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque + locker",
+      "load_case": null,
+      "unknown_fields": [
+        "stud thread engagement",
+        "crank material orientation",
+        "load case"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "J-HALL-SENSOR",
+      "name": "Hall sensor PCB and hub fasteners",
+      "subsystem": "tilt",
+      "bom_refs": [
+        "HALL-SCR-M2-BRASS"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "pan-head screw",
+          "size": "M2x6",
+          "count": 8,
+          "material": "brass"
+        }
+      ],
+      "members": [
+        {
+          "part": "Hall PCB",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        },
+        {
+          "part": "hub",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque (low)",
+      "load_case": null,
+      "unknown_fields": [
+        "tapped vs insert",
+        "load case"
+      ],
+      "notes": "Non-ferrous by design (magnet proximity). Brass screws have low strength: window is narrow."
+    },
+    {
+      "id": "J-TILT-BRAKE-GUIDE",
+      "name": "Tilt pin-brake guide on bracket web",
+      "subsystem": "tilt",
+      "bom_refs": [
+        "PRINT-TILT-BRAKE-GUIDE",
+        "PIN-2X22"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "M2.5 screw",
+          "size": "M2.5",
+          "count": 2,
+          "material": "unknown"
+        }
+      ],
+      "members": [
+        {
+          "part": "tilt brake guide",
+          "material": "CF-PETG",
+          "process": "FDM",
+          "orientation": "unknown"
+        },
+        {
+          "part": "tilt actuator bracket",
+          "material": "CF-PETG",
+          "process": "FDM",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque",
+      "load_case": null,
+      "unknown_fields": [
+        "screw length/grade",
+        "nut vs insert",
+        "orientation",
+        "load case"
+      ],
+      "notes": "2 x M2.5 through the bracket web (Z +/-11); brake pin O2x22 hardened steel is a sliding pin, not a fastener."
+    },
+    {
+      "id": "J-TILT-BRACKET-MOUNT",
+      "name": "Tilt actuator bracket feet to hull",
+      "subsystem": "tilt",
+      "bom_refs": [
+        "PRINT-TILT-BRACKET"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "screw",
+          "size": "M3?",
+          "count": 3,
+          "material": "unknown"
+        }
+      ],
+      "members": [
+        {
+          "part": "tilt actuator bracket",
+          "material": "CF-PETG",
+          "process": "FDM",
+          "orientation": "unknown"
+        },
+        {
+          "part": "hull",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque",
+      "load_case": null,
+      "unknown_fields": [
+        "fastener size",
+        "hull material/boss",
+        "load case"
+      ],
+      "notes": "3 feet to hull (BOM note). Size not stated."
+    },
+    {
+      "id": "J-WINCH-PEDESTAL",
+      "name": "Winch pedestal through-bolts and backing plates",
+      "subsystem": "cargo",
+      "bom_refs": [
+        "PLATE-PEDESTAL"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "through-bolt",
+          "size": "M?",
+          "count": "unknown",
+          "material": "unknown"
+        }
+      ],
+      "members": [
+        {
+          "part": "winch pedestal",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        },
+        {
+          "part": "aluminum backing plate",
+          "material": "aluminum 1mm?",
+          "process": "sheet",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque",
+      "load_case": null,
+      "unknown_fields": [
+        "bolt size/count",
+        "pedestal material",
+        "load case"
+      ],
+      "notes": "Primary load path for the winch (8.0 N shed); governed by docs/CARGO_WINCH_SPECIFICATION.md."
+    },
+    {
+      "id": "J-WINCH-PAWL-PIVOT",
+      "name": "Winch pawl pivot dowel",
+      "subsystem": "cargo",
+      "bom_refs": [
+        "DOWEL-M2-10"
+      ],
+      "joint_class": "pinned",
+      "fasteners": [
+        {
+          "type": "A2 dowel",
+          "size": "M2x10",
+          "count": 1,
+          "material": "stainless"
+        }
+      ],
+      "members": [
+        {
+          "part": "pawl",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "pin",
+      "load_case": null,
+      "unknown_fields": [
+        "retention"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "J-WINCH-AXLE",
+      "name": "Winch axle circlips and spool axle",
+      "subsystem": "cargo",
+      "bom_refs": [
+        "CLIP-EXT-4MM",
+        "SHAFT-SS-4MM",
+        "BRG-MR84ZZ",
+        "SLEEVE-HUB-STEEL",
+        "KEEPER-WINCH"
+      ],
+      "joint_class": "pinned",
+      "fasteners": [
+        {
+          "type": "external circlip",
+          "size": "4mm",
+          "count": 2,
+          "material": "steel"
+        }
+      ],
+      "members": [
+        {
+          "part": "winch spool",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "circlip (no torque)",
+      "load_case": null,
+      "unknown_fields": [
+        "fit"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "J-LG-A1B-PINS",
+      "name": "Landing-gear A1B pins and retaining clips",
+      "subsystem": "landing-gear",
+      "bom_refs": [
+        "LG-A1B-PIN",
+        "LG-A1B-FUSE",
+        "LG-A1B-SLEEVE",
+        "LG-A1B-CAGE",
+        "LG-A1B-CF-CHEEK",
+        "LG-HARDWARE-MISC"
+      ],
+      "joint_class": "pinned",
+      "fasteners": [
+        {
+          "type": "6061-T6 pin",
+          "size": "O4",
+          "count": 20,
+          "material": "6061-T6"
+        }
+      ],
+      "members": [
+        {
+          "part": "gear leg cheeks",
+          "material": "CF quasi-iso",
+          "process": "waterjet",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "pin + clip",
+      "load_case": null,
+      "unknown_fields": [
+        "BOM hardware itemization",
+        "load case"
+      ],
+      "notes": "Bellcrank load path is a recorded build blocker (docs/LG_BELLCRANK_LOAD_PATH_STUDY.md)."
+    },
+    {
+      "id": "J-DOOR-LATCH-PIVOT",
+      "name": "Door-latch bell-crank pivot pins",
+      "subsystem": "cargo",
+      "bom_refs": [
+        "PIN-3X10"
+      ],
+      "joint_class": "pinned",
+      "fasteners": [
+        {
+          "type": "SS dowel",
+          "size": "3x10",
+          "count": 2,
+          "material": "stainless"
+        }
+      ],
+      "members": [
+        {
+          "part": "door latch bracket",
+          "material": "CF-PETG",
+          "process": "FDM",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "pin",
+      "load_case": null,
+      "unknown_fields": [
+        "retention"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "J-BATT-CRADLE",
+      "name": "Battery cradle to shell hangers",
+      "subsystem": "cargo",
+      "bom_refs": [
+        "PRINT-BATT-CRADLE",
+        "BATT-STRAP-CAM"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "M3 screw",
+          "size": "M3",
+          "count": 4,
+          "material": "unknown"
+        }
+      ],
+      "members": [
+        {
+          "part": "battery cradle",
+          "material": "CF-PETG",
+          "process": "FDM",
+          "orientation": "unknown"
+        },
+        {
+          "part": "cargo shell hanger",
+          "material": "CF-PETG?",
+          "process": "SLS?",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque",
+      "load_case": null,
+      "unknown_fields": [
+        "screw length",
+        "insert vs tapped",
+        "orientation",
+        "load case"
+      ],
+      "notes": "4 x M3 to shell hangers."
+    },
+    {
+      "id": "J-NODE-SADDLE",
+      "name": "Avionics node saddle to cradle aft wall",
+      "subsystem": "avionics",
+      "bom_refs": [
+        "PRINT-NODE-SADDLE"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "M3 screw",
+          "size": "M3",
+          "count": 4,
+          "material": "unknown"
+        }
+      ],
+      "members": [
+        {
+          "part": "node saddle",
+          "material": "CF-PETG?",
+          "process": "FDM",
+          "orientation": "unknown"
+        },
+        {
+          "part": "battery cradle",
+          "material": "CF-PETG",
+          "process": "FDM",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque",
+      "load_case": null,
+      "unknown_fields": [
+        "insert vs tapped",
+        "load case"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "J-CHIN-SHELF",
+      "name": "Chin node shelf to floor bosses",
+      "subsystem": "avionics",
+      "bom_refs": [
+        "PRINT-CHIN-SHELF"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "M3 screw",
+          "size": "M3",
+          "count": 4,
+          "material": "unknown"
+        }
+      ],
+      "members": [
+        {
+          "part": "chin shelf",
+          "material": "CF-PETG",
+          "process": "FDM",
+          "orientation": "unknown"
+        },
+        {
+          "part": "floor bosses",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque",
+      "load_case": null,
+      "unknown_fields": [
+        "insert vs tapped",
+        "load case"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "J-GW-DOOR-TRAY",
+      "name": "Door-servo gateway tray to belly slab",
+      "subsystem": "avionics",
+      "bom_refs": [
+        "PRINT-GW-DOOR-TRAY"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "M3 screw",
+          "size": "M3",
+          "count": 4,
+          "material": "unknown"
+        }
+      ],
+      "members": [
+        {
+          "part": "gateway tray",
+          "material": "CF-PETG",
+          "process": "FDM",
+          "orientation": "unknown"
+        },
+        {
+          "part": "belly-slab bosses",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque",
+      "load_case": null,
+      "unknown_fields": [
+        "insert vs tapped",
+        "load case"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "J-BELLY-PANEL",
+      "name": "Belly access panel fasteners",
+      "subsystem": "cargo",
+      "bom_refs": [
+        "SCREW-M3-8-BTN"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "button-head screw",
+          "size": "M3x8",
+          "count": 0,
+          "material": "stainless"
+        }
+      ],
+      "members": [
+        {
+          "part": "belly panel",
+          "material": "PETG",
+          "process": "FDM",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque",
+      "load_case": null,
+      "unknown_fields": [
+        "count",
+        "insert vs tapped"
+      ],
+      "notes": "BOM qty 0: panel hardware not currently counted."
+    },
+    {
+      "id": "J-EMC-BOND",
+      "name": "EMC cage bonding strap lugs",
+      "subsystem": "avionics",
+      "bom_refs": [
+        "FAR-BOND-STRAP"
+      ],
+      "joint_class": "threaded",
+      "fasteners": [
+        {
+          "type": "M3 lug screw",
+          "size": "M3",
+          "count": 4,
+          "material": "unknown"
+        }
+      ],
+      "members": [
+        {
+          "part": "cage chassis",
+          "material": "unknown",
+          "process": "unknown",
+          "orientation": "unknown"
+        }
+      ],
+      "retention": "torque (electrical)",
+      "load_case": null,
+      "unknown_fields": [
+        "screw/insert",
+        "bond resistance spec"
+      ],
+      "notes": "Bond resistance requirement sets minimum torque."
+    }
+  ]
+}

@@ -48,17 +48,17 @@ only single-pack 4000 mAh route for the cargo band.
 
 Hover current about 150 A (WBS PWR-CONN-01). Packs in parallel share current
 roughly in proportion to capacity, so the demand is 150 A divided by the total
-capacity. Thrust 8,540 gf; T/W floor 1.2 (WA-R18). CG is given relative to the
+capacity. Thrust 9,480 gf (4 × 2,370 gf, QF2822-2300KV; Rev T-SB2 2026-11-02); T/W floor 1.2 (WA-R18). CG is given relative to the
 hover thrust line (tilt axis, Y +326.7).
 
 | Configuration | AUW | CG vs thrust line | T/W | Capacity | C demand |
 | --- | --- | --- | --- | --- | --- |
-| Baseline 1 × Admiral 6S 4000 (does not fit) | 6,053 g (13.34 lbm) | +22.6 mm | 1.41 | 4,000 mAh | 37.5C |
+| Baseline 1 × Admiral 6S 4000 (does not fit) | 6,053 g (13.34 lbm) | +22.6 mm | 1.57 | 4,000 mAh | 37.5C |
 | **S1: 2 × Tattu 6S 2200 95C, cargo + head, parallel** | **6,091 g (13.43 lbm)** | **+14.3 mm** | 1.40 | 4,400 mAh | 34.1C (95C rated) |
-| S2: 2 × PyroDrone 6S 2200 75C, cargo + head | 6,179 g (13.62 lbm) | +13.0 mm | 1.38 | 4,400 mAh | 34.1C (75C) |
-| **S1 + ad hoc third pack (Tattu 6S 1600 160C) in the payload box** | 6,336 g (13.97 lbm) | +15.0 mm | 1.35 | 6,000 mAh | 25.0C |
-| S1 + third pack + 226 g mission payload | 6,562 g (14.47 lbm) | +15.7 mm | 1.30 | 6,000 mAh | 25.0C |
-| L: one slim 6S 4000 in cargo (Turnigy, unverified) | 5,886 g (12.98 lbm) | +23.5 mm | 1.45 | 4,000 mAh | 37.5C |
+| S2: 2 × PyroDrone 6S 2200 75C, cargo + head | 6,179 g (13.62 lbm) | +13.0 mm | 1.53 | 4,400 mAh | 34.1C (75C) |
+| **S1 + ad hoc third pack (Tattu 6S 1600 160C) in the payload box** | 6,336 g (13.97 lbm) | +15.0 mm | 1.50 | 6,000 mAh | 25.0C |
+| S1 + third pack + 226 g mission payload | 6,562 g (14.47 lbm) | +15.7 mm | 1.44 | 6,000 mAh | 25.0C |
+| L: one slim 6S 4000 in cargo (Turnigy, unverified) | 5,886 g (12.98 lbm) | +23.5 mm | 1.61 | 4,000 mAh | 37.5C |
 
 Masses include an estimated 20–25 g of extra 10 AWG lead for the head pack.
 Rough hover endurance scales as capacity × AUW^-1.5. On that basis S1 is about

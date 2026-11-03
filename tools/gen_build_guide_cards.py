@@ -99,7 +99,7 @@ CARDS = [
         parts=[
             ("", "Hull length 24.00 in (609.6 mm)", ""),
             ("", "2 tilting tandem-EDF nacelles (64 mm pods)", ""),
-            ("", "Worm-drive tilt, -5 to 140 deg stops", ""),
+            ("", "Worm-drive tilt, -5 to 135 deg stops", ""),
             ("", "Servo-scheduled shingled nozzles", ""),
             ("", "3.0 in (76 mm) R6 landing gear", ""),
             ("", "8 avionics nodes + Observer, FE, Commo", ""),
@@ -1154,7 +1154,7 @@ PHASES = [  # build_plan rows, from REVN_BUILD_GUIDE_24IN.md Phase Overview
     ("0", "Print all parts + CF cuts", "01-05", "All parts printed, cut, machined"),
     ("1", "Hull structure + provisions", "06-09", "Hull joined, wing root, gear, cargo doors"),
     ("2", "Nacelle assembly", "12-14", "EDFs, servo nozzle, ESC power route"),
-    ("3", "Tilt mechanism", "10-11", "Worm drive, brake, trunnion, -5/140 deg stops"),
+    ("3", "Tilt mechanism", "10-11", "Worm drive, brake, trunnion, -5/135 deg stops"),
     ("4", "Foam pour + close-up", "15-16", "Void formers, foam, lids"),
     (
         "5",
@@ -1220,7 +1220,7 @@ SUBSYSTEMS = [  # components_overview, from the guide's Rev T+ Configuration tab
     ("Hull", "4 printed sections + 3 splice collars, foam-filled, 24.00 in (609.6 mm)"),
     ("Wing", "S1223-derived; FIXED bonded 20 mm CF spar; bonded root flanges"),
     ("Nacelle", "64 mm tandem-EDF pod on a 2 x 6704ZZ trunnion"),
-    ("Tilt", "20D 25:1 + six-start worm, pin brake, 14T/50T; stops -5/140 deg"),
+    ("Tilt", "20D 25:1 + six-start worm, pin brake, 14T/50T; stops -5/135 deg"),
     ("Nozzle", "Rev T3 shingled 8-flap; servo on measured tilt; spring to 105 %"),
     ("Gear", "3.0 in (76 mm) R6 legs, A1b couple, 4 conforming bays"),
     ("Cargo", "Lapped clamshell doors, bell-crank latch, door gateway, winch"),

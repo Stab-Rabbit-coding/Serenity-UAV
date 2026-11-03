@@ -34,7 +34,7 @@ Trade record: `docs/TILT_ACTUATOR_OPTIONS.md` (generated) and
 | | Opt 1 single-start worm | Opt 2 four-start / 25D (2026-09-15 pick) | Opt 3 spur + DS3225 | **Opt 4 six-start / 20D (built)** |
 |---|---|---|---|---|
 | Nacelle rate, no-load / max-eff | 24 / 18 °/s | 168 / 136 °/s | 129 / 103 °/s | **144 / 111 °/s** |
-| ±5° move / full 145° sweep | 0.24 s / 6.1 s | 0.06 s / 0.89 s | 0.07 s / 1.15 s | **0.06 s / 1.04 s** |
+| ±5° move / full 140° sweep | 0.24 s / 5.9 s | 0.06 s / 0.86 s | 0.07 s / 1.11 s | **0.06 s / 1.00 s** |
 | Rate-limit bandwidth at ±5° | 0.8 Hz | 5.3 Hz | 4.1 Hz | **4.6 Hz** |
 | Torque limit at the nacelle | 1.83 N·m (tooth) | 1.83 N·m (tooth) | 1.34 N·m (tooth) | **1.81 N·m (motor stall ≈ tooth)** |
 | Unpowered hold | geometry | brake (BRK-1..3) | brake | **brake (BRK-1..3)** |

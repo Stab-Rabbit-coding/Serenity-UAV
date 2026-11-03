@@ -1,5 +1,8 @@
 # Serenity UAV — 36in Hull / 64mm EDF Scale-Up Evaluation
 
+> **Superseded inputs (2026-11-02).** This evaluation used the QF2822-2400KV at 22.2 V (2,135 gf, 1,265.4 W). The flight article is the QF2822-**2300KV** at 24 V (83.60 ozf / 2,370 gf, 57.0 A, 1,368 W) on 80 A ESCs [REF-EDF-003]. Its thrust, T/W and power figures are historical and have not been recomputed.
+
+
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Analysis and drafting:** Claude (Claude Sonnet 5, Anthropic) under the author's
 direction, per `AGENTS.md` §3 "Attribution and Licensing"

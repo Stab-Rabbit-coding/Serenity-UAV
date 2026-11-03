@@ -58,7 +58,7 @@ What the 36 in study got stale:
 | Structure baseline | 2,591 g (backed out) | printed items 1,583 g in the current roll-up |
 | Thrust stacking | 90% | none applied (`flight_envelope.md`); if a loss exists, T/W is optimistic |
 | T/W, current aircraft | 0.98–1.01 | 1.35 (envelope), 1.37 (CG study) |
-| Propulsion | 64 mm EDFs assumed | 64 mm EDFs in the ledger now (8,540 gf) |
+| Propulsion | 64 mm EDFs assumed | 64 mm EDFs in the ledger now (9,480 gf) |
 
 **Correction to my earlier documents.** I called the 0.98–1.01 vs 1.36–1.41 difference an open
 conflict. It is not: the lower number is the stale one. Both earlier documents now carry a

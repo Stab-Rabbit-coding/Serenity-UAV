@@ -14,7 +14,7 @@
 <text x="812" y="136" font-size="15" font-weight="bold" fill="#1f2a36">AT A GLANCE</text>
 <text x="812" y="162" font-size="13" fill="#222">Hull length 24.00 in (609.6 mm)</text>
 <text x="812" y="188" font-size="13" fill="#222">2 tilting tandem-EDF nacelles (64 mm pods)</text>
-<text x="812" y="214" font-size="13" fill="#222">Worm-drive tilt, -5 to 140 deg stops</text>
+<text x="812" y="214" font-size="13" fill="#222">Worm-drive tilt, -5 to 135 deg stops</text>
 <text x="812" y="240" font-size="13" fill="#222">Servo-scheduled shingled nozzles</text>
 <text x="812" y="266" font-size="13" fill="#222">3.0 in (76 mm) R6 landing gear</text>
 <text x="812" y="292" font-size="13" fill="#222">8 avionics nodes + Observer, FE, Commo</text>

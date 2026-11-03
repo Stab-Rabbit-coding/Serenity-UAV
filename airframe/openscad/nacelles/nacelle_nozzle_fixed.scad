@@ -30,7 +30,7 @@
 //
 //   Rationale, all from the T/W recovery plan §6.1:
 //     - hover is the T/W-critical case, and the iris was already scheduled
-//       to hold its open position from 90 deg to 145 deg tilt and to fail
+//       to hold its open position from 90 deg to 135 deg tilt and to fail
 //       open, so hover flow is unchanged by fixing the nozzle open;
 //     - deletes 8 flaps, unison ring, 32 pins and the servo drive:
 //       ≈ −85 g (0.19 lbm) per aircraft against the V1 servo iris;

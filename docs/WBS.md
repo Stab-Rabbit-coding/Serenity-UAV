@@ -24,7 +24,7 @@
 | §0.7 | 0.7 — CI Lint Scope and Repo-Wide Lint Debt | 0 | — |
 | §0.8 | 0.8 — Tilt-Spar Material Allowables + Hall Encoder | 4 | — |
 | §0.9 | 0.9 — Licensing Updates | 1 | — |
-| §0.10 | 0.10 — Update and Correct Documentation Touching Every Non-Archived File | 8 | — |
+| §0.10 | 0.10 — Update and Correct Documentation Touching Every Non-Archived File | 15 | — |
 | §1.5 | 1.5 — Documentation | 4 | — |
 | §1.6 | 1.6 — Rev Q: Repo-Wide Architecture Propagation | 0 | — |
 | §1.7 | 1.7 — Rev R: Component Rev Sync + s_ Prefix Removal | 0 | — |
@@ -35,7 +35,7 @@
 | §6.2 | 6.2 — STL Mesh Repair | 0 | — |
 | §6.3 | 6.3 — Rev S Checkpoint | 0 | — |
 | §6.4 | 6.4 — Rev T Checkpoint | 0 | — |
-| | **Total open (this subsystem)** | **31** | |
+| | **Total open (this subsystem)** | **38** | |
 
 ---
 
@@ -817,6 +817,80 @@ unstarted mega-task. The single item most worth the maintainer's direct attentio
 uncertainty flagged twice above (§0.10.1 item 1, §0.10.2 item 3) — the corrected 3,911g figure
 is solid at the row level but a category-level check suggests the true number could be
 meaningfully higher, and that bears on the aircraft's actual hover margin.
+
+
+### §0.10.3 Operator's Manual
+
+*(root `WBS.md` §0.10.3; opened 2026-11-02 by the owner — "there isn't a user's manual yet.")*
+
+**Requirement.** The project shall have an operator's manual for the Serenity UAV, written in
+the organization and wording style of a Navy NATOPS flight manual [REF-MIL-003 §1.5, §1.6],
+in accordance with the FAA small-UAS rules [REF-FAA-001, REF-FAA-002], and carrying the
+Allied Spacecraft Corporation and Firefly Coach Works / Firefly Ship Works branding drawn
+from the QMx *Serenity* blueprint reference pack (`docs/references/qmx-bp-exports/`, sheets 11
+and 12; `docs/images/EngineerByFF.png`).
+
+**Derived requirements** (each is a testable statement; "shall" per [REF-MIL-003 §1.6]):
+
+| ID | Requirement | Verified by |
+| --- | --- | --- |
+| OM-1 | Callouts shall use WARNING / CAUTION / NOTE with the severity meanings of [REF-MIL-003 §1.5]; a WARNING shall never be written as a CAUTION, nor a CAUTION as a NOTE. Requirement verbs shall follow [REF-MIL-003 §1.6]. | `tools/precommit_doc_wording.py` + owner read |
+| OM-2 | Every regulatory statement shall cite a `REFERENCES.md` REF-ID and a section already catalogued there; the manual shall add no new section number it cannot verify. | grep of `[REF-…]` cites against `REFERENCES.md` |
+| OM-3 | Every operating limit, threshold or procedure value shall trace to a repo source (`docs/flight_envelope.md`, `docs/failsafe_thresholds.md`, `docs/POWER_DISTRIBUTION.md`, `docs/CARGO_WINCH_SPECIFICATION.md`, the Phase 5 flight-phase WBS). Where no source exists the manual shall say "not established" — never an invented figure. | Per-value source column |
+| OM-4 | The manual shall state its release status on the title page and in each chapter that depends on an open gate. It shall not be released for flight while `docs/FIRST_FLIGHT_READINESS.md` blockers remain. | Title page + §0.10.3 tracking items |
+| OM-5 | Values that exist only as design estimates (crosswind, transition floor, CL_max-dependent speeds, thermal margins) shall be replaced by Phase 5/9 flight-test data as it is produced. | Revision history |
+| OM-6 | The manual shall cover, at minimum: aircraft and systems description; limitations; indoctrination and currency; mission planning; normal procedures (preflight → postflight); flight characteristics; emergency procedures; communications; cargo operations; maintenance-for-operators; performance data. | Table of contents |
+| OM-7 | Branding shall use only the extracted blueprint-sheet artwork already in the repo, shall be cited and acknowledged as fan art with its own copyright notice, and shall not be described as licensed under CC BY-SA (see the licensing note below). | Title-page notice |
+| OM-9 | Flight-envelope and limit figures in the manual shall be generated, not typed: `tools/sync_operators_manual.py` runs in the pre-commit chain and in CI (`--check`), polls the source documents, refuses a commit when `current-specification/flight_limits.json` disagrees with the tools/docs that restate it, and rewrites the manual's AUTO/V regions and sync stamp on every commit (owner, 2026-11-02). | `tools/tests/test_sync_operators_manual.py`; `.githooks/pre-commit`; `.github/workflows/ci.yml` |
+| OM-10 | The manual shall describe the aircraft as the operator receives it and shall omit construction detail (hull sections, collar bonds, internal fastening, wire routing). The hull is two permanently collar-bonded sections and is never disassembled after construction; that detail lives in the graphical build guide (`graphical-build-guide/WBS.md` BG-SEQ-1..6). | Manual read; grep for section/joint language |
+| OM-8 | The manual shall pass the repo's markdownlint configuration and the wording check, and the documents it cites shall be listed in `REFERENCES.md` "Used in". | CI / pre-commit |
+
+**Owner corrections 2026-11-02 and single source.** Zero tilt datum is horizontal; nacelle tilt is −5° to +135° (a 140° span); the EDF is the QF2822-2300KV, 83.60 ozf (2,370 gf) at 24 VDC / 57.0 A, with 80 A ESCs. These live in `current-specification/flight_limits.json`; `docs/flight_envelope.md`, `tools/flight_envelope_endurance.py`, `tools/nozzle_servo_linkage.py`, `tools/tilt_actuator_options.py`, the tilt-drive/spar/nozzle docs, README and the manual were corrected to match. Recomputes that need design work (vane swirl/torque, inlet CFD, ESC bay fit for 80 A vs the 70 A design, PWR-CONN-01) are tracked in `airframe/wings-nacelles/WBS.md` NAC-64-EDF-2300KV and were **not** redone here.
+
+**NATOPS conformance note.** `REFERENCES.md` REF-MIL-003 records that only the §1.5 callout
+definitions and §1.6 requirement verbs are adopted from CNAF M-3710.7; the project claims no
+compliance with the manual as a whole. This manual follows the same line: its *part/chapter
+organization* is patterned on the NATOPS Flight Manual layout (aircraft → indoctrination →
+normal procedures → flight characteristics → emergency procedures → communications →
+performance) as a presentation choice, not a conformance claim, and no NATOPS section number
+beyond §1.5 and §1.6 is cited.
+
+**Licensing note (owner decision, 2026-11-02).** The blueprint sheets and the Firefly Coach Works
+plate artwork are QMx / Fox / Universal property. They are published as fan art, cited and
+acknowledged where used, and carry their own copyright notices. Their inclusion in an otherwise
+CC BY-SA 4.0 document does not remove their prior copyright and does not bring the rest of the
+document under it. The manual therefore (a) keeps the artwork in `docs/references/` and
+`docs/images/` unmodified except for cropping, (b) states the fan-art status and owners'
+copyrights on the title page and in Appendix A.3, and (c) tracks a per-item citation in
+`REFERENCES.md` as an open item. Root `AGENTS.md` §3 "third-party material keeps its own
+licence" governs.
+
+**As drafted (2026-11-02).** `docs/OPERATORS_MANUAL.md`, v0.1 DRAFT, written by Claude Sonnet
+5.5 (Anthropic) under the owner's direction from the sources named in OM-3. Content gaps the
+draft deliberately leaves visible rather than papering over:
+
+- No crosswind limit, no verified transition floor, no verified stall speed (CL_max unknown
+  for the built wing section) — `docs/flight_envelope.md` banner.
+- No 64 mm EDF RPM redline — `docs/flight_envelope.md` §2.2.
+- Wi-Fi/Zigbee link-loss timers unassigned — `docs/failsafe_thresholds.md` §2.2.
+- The ESC thermal threshold in `governor_config.h` (100 °C) disagrees with the failsafe
+  document (95 °C) — `docs/failsafe_thresholds.md` §4.
+- AUW/T-W are provisional pending mass truth (`docs/FIRST_FLIGHT_READINESS.md` blocker 1).
+- Landing gear is not flight-cleared; nozzle drive, tilt actuator and flight-controller
+  firmware are open first-flight blockers (same document, blockers 2–4, 8).
+- `docs/POWER_DISTRIBUTION.md` §8.3 still quotes a stale T/W of 1.61; the manual uses
+  `docs/flight_envelope.md` and flags the conflict.
+
+Open items (mirrored to root `TODO.md` §0.10.3 by `tools/gen_todo_from_wbs.py`):
+
+- [x] Auto-sync script in the commit chain (`tools/sync_operators_manual.py`, OM-9) — done 2026-11-02
+- [ ] Owner (PE) review of v0.1 — limits, WARNINGs, emergency procedures
+- [ ] Add per-item fan-art citations (QMx sheets 11/12, Firefly plate) to `REFERENCES.md`
+- [ ] Fill flight-test values from Phase 5/9 data (OM-5)
+- [ ] Reconcile with first-flight gates D1–D5 and blockers (OM-6)
+- [ ] Render to PDF (no pandoc/weasyprint on this system)
+- [ ] Add to `REFERENCES.md` "Used in" and `PROJECT_INDEX.md`
+- [ ] Catalogue the extra Part 107 sections the manual needs (certificate, preflight, reports) in `REFERENCES.md`, verified against eCFR
 
 
 ## §1.5 — Documentation

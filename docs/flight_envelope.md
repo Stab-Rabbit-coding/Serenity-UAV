@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Revision:** Rev T-SB (2026-10-26) — numbers recomputed for the split-battery aircraft by Claude (Claude Opus 5.5, Anthropic) under the direction of Stab-Rabbit-coding, per `AGENTS.md` §3. Rev S text by the author above; recompute tool `tools/flight_envelope_endurance.py`.
+**Revision:** Rev T-SB2 (2026-11-02) — owner corrections: zero tilt datum is horizontal, tilt range −5° to +135°, EDF is the QX QF2822-2300KV (83.60 ozf / 2,370 gf at 24 V, 57.0 A) on 80 A ESCs; every thrust-dependent figure below was recomputed from `current-specification/flight_limits.json`. Rev T-SB (2026-10-26) — numbers recomputed for the split-battery aircraft by Claude (Claude Opus 5.5, Anthropic) under the direction of Stab-Rabbit-coding, per `AGENTS.md` §3. Rev S text by the author above; recompute tool `tools/flight_envelope_endurance.py`.
 
 Resolves `TODO.md` Phase 0 pre-print documentation gate item "Flight Envelope
 Document." All measurements are imperial-primary with metric in parentheses
@@ -22,12 +22,12 @@ no payload.
 | AUW, two cells + payload (governing) | 13.93 lbm (6,318 g) → 62.0 N weight | `docs/BATTERY_SPLIT_OPTIONS.md` §4 S1 (6,091 g) + 226.8 g payload (`README.md`) |
 | AUW, two cells, no payload | 13.43 lbm (6,091 g) → 59.7 N | `docs/BATTERY_SPLIT_OPTIONS.md` §4 S1, built on `current-specification/auw_ledger.json` |
 | AUW, three cells, no payload | 13.97 lbm (6,336 g) → 62.1 N | `docs/BATTERY_SPLIT_OPTIONS.md` §4 |
-| Nacelle count / layout | 2 (port + starboard), each 2× 64 mm QX QF2822-2400KV EDF in tandem, co-rotating | `tools/auw_ledger.py`; `docs/NACELLE_64MM_VERIFICATION.md` |
-| Rated thrust per fan | 4.71 lbf (2,135 gf, 20.9 N) at 57.0 A, 1,265.4 W, 22.2 V | [REF-EDF-003] manual sheet, QF2822-2400KV row |
-| Total nacelle thrust | 18.83 lbf (8,540 gf) → 83.7 N | `tools/auw_ledger.py` (4 × 2,135 gf). **No tandem stacking loss is applied** (the Rev S doc used 90 %); if one exists, every T/W below is optimistic by it |
-| T/W, two cells + payload | **1.35** | computed (8,540 / 6,318) |
-| T/W, two cells, no payload | 1.40 | computed |
-| Nacelle tilt range | −5° to 145°; 0° = cruise (horizontal), 90° = hover | `README.md` "Nacelles" |
+| Nacelle count / layout | 2 (port + starboard), each 2× 64 mm QX QF2822-2300KV EDF in tandem, co-rotating | `tools/auw_ledger.py`; `docs/NACELLE_64MM_VERIFICATION.md` |
+| Rated thrust per fan | 5.23 lbf (83.60 ozf, 2,370 gf, 23.2 N) at 57.0 A, 1,368 W, 24 V, 100 % throttle; 80 A ESC | [REF-EDF-003] second sheet, QF2822-2300KV; owner 2026-11-02 |
+| Total nacelle thrust | 20.90 lbf (9,480 gf) → 93.0 N | `tools/auw_ledger.py` (4 × 2,370 gf). **No tandem stacking loss is applied** (the Rev S doc used 90 %); if one exists, every T/W below is optimistic by it |
+| T/W, two cells + payload | **1.50** | computed (9,480 / 6,318) |
+| T/W, two cells, no payload | 1.56 | computed |
+| Nacelle tilt range | −5° to +135°; **0° = horizontal (cruise)**, 90° = hover | owner 2026-11-02; `current-specification/flight_limits.json` |
 | Wing area (both wings) | 19,025 mm² (0.019025 m², 0.2048 ft²) — planform unchanged | `airframe/openscad/wings/wings_s1223_revo.scad` |
 | Airfoil | **S1223/t17.7 (root) / S1223/t26.7 (tip)** — S1223 camber line, thickness envelope scaled ×1.46 / ×2.20. **NOT an S1223.** | `wings_s1223_revo.scad`; `docs/WING_ATTACH_INTERFACE.md` §4A |
 | CL_max | **UNKNOWN for the built section** — see the banner below; 2.0 (true-S1223) is used only so the numbers stay reproducible | Selig & Guglielmo, for the *unmodified* S1223 |
@@ -81,24 +81,24 @@ V_min(θ)      = 0  (thrust alone supports weight — no minimum airspeed)   oth
 **Critical tilt angle** — above which nacelle thrust alone supports weight
 with zero forward airspeed (θ_hover, solving sin(θ) = W/T):
 
-- Two cells + payload: **θ_hover ≈ 47.7°**
-- Two cells, no payload: θ_hover ≈ 45.5°
+- Two cells + payload: **θ_hover ≈ 41.8°**
+- Two cells, no payload: θ_hover ≈ 40.0°
 
 ### V_min table
 
 | Tilt θ | V_min, two cells + payload | V_min, two cells, no payload | Note |
 | --- | --- | --- | --- |
-| −5° (hard stop) | 106.0 kt (54.5 m/s) | 104.2 kt (53.6 m/s) | Above V_NE (87 kt) |
+| −5° (hard stop) | 106.6 kt (54.8 m/s) | 104.9 kt (54.0 m/s) | Above V_NE (87 kt) |
 | 0° (cruise) | 100.2 kt (51.6 m/s) | 98.4 kt (50.6 m/s) | Wings alone carry the weight; **above V_NE** |
-| 10° | 87.7 kt (45.1 m/s) | 85.6 kt (44.0 m/s) | At V_NE |
-| 20° | 73.5 kt (37.8 m/s) | 71.0 kt (36.5 m/s) | |
-| 30° | 57.1 kt (29.4 m/s) | 53.8 kt (27.7 m/s) | |
-| 40° | 36.3 kt (18.7 m/s) | 30.9 kt (15.9 m/s) | |
-| 47.7° / 45.5° (θ_hover) | 0 kt | 0 kt | Thrust alone equals weight |
+| 10° | 86.2 kt (44.3 m/s) | 84.1 kt (43.2 m/s) | Just below V_NE |
+| 20° | 69.9 kt (36.0 m/s) | 67.3 kt (34.6 m/s) | |
+| 30° | 50.1 kt (25.8 m/s) | 46.3 kt (23.8 m/s) | |
+| 40° | 18.9 kt (9.7 m/s) | 0 kt (thrust-borne) | |
+| 41.8° / 40.0° (θ_hover) | 0 kt | 0 kt | Thrust alone equals weight |
 | 60°–90° | 0 kt | 0 kt | Fully thrust-borne |
-| 120° (backing thrust) | 0 kt (vertical T/W 1.17) | 0 kt (1.21) | |
-| 140° | **vertical T/W 0.87 — cannot hold altitude** | 0.90 | Transient only |
-| 145° (hard stop) | **0.78** | 0.80 | Transient only |
+| 120° (backing thrust) | 0 kt (vertical T/W 1.30) | 0 kt (1.35) | |
+| 130° | 0 kt (vertical T/W 1.15) | 0 kt (1.19) | |
+| 135° (hard stop) | 0 kt (vertical T/W 1.06) | 0 kt (1.10) | Margin over weight is thin; hold only briefly |
 
 **Important caveat on CL_max — strengthened at Rev S1e.** The 2.0 figure is
 wind-tunnel data at Re ≈ 100,000 for the **unmodified** S1223. This airframe's
@@ -121,7 +121,7 @@ planform cannot sustain level flight at 40 kt on wing lift alone. This is
 expected and consistent with the design intent: Serenity UAV is a
 hover-centric VTOL platform (root `AGENTS.md` design mission profile) where
 wings are a lift *assist* during transition, not the primary lift source.
-Sustained forward flight below θ_hover ≈ 48° therefore requires either
+Sustained forward flight below θ_hover ≈ 42° therefore requires either
 airspeed at or above the table value for that angle, or a higher tilt angle.
 
 ---
@@ -213,13 +213,13 @@ curve).
 
 ```text
 T/W(σ) ≈ T/W(sea level) × σ            where σ = ρ/ρ0 (density ratio)
-T/W = 1.0 (bare hover floor) when σ = 1/1.35 = 0.740
+T/W = 1.0 (bare hover floor) when σ = 1/1.50 = 0.666
 ```
 
-Standard atmosphere reaches σ ≈ 0.740 at approximately **9,900 ft density
-altitude** (two cells + payload; 11,100 ft without payload). Against the
-WA-R18 T/W floor of 1.2 the margin is smaller: σ = 1.2/1.35 = 0.888, about
-**4,000 ft density altitude** (ISA troposphere, `isa_sigma_alt_ft` in the tool), which a hot day at a moderate-elevation site
+Standard atmosphere reaches σ ≈ 0.666 at approximately **13,200 ft density
+altitude** (two cells + payload; 14,400 ft without payload). Against the
+WA-R18 T/W floor of 1.2 the margin is smaller: σ = 1.2/1.50 = 0.799, about
+**7,400 ft density altitude** (ISA troposphere, `isa_sigma_alt_ft` in the tool), which a hot day at a moderate-elevation site
 can reach. This is a linear
 first-order estimate; it does not model EDF/ESC behavior at reduced air
 density in detail (motor cooling, ESC thermal derating at altitude are not
@@ -250,7 +250,7 @@ banking to vector part of the nacelle thrust laterally, at the cost of
 vertical thrust margin:
 
 ```text
-T·cos(φ) ≥ W  →  φ_max = arccos(W/T) = arccos(1/1.35) ≈ 42.3°   (two cells + payload)
+T·cos(φ) ≥ W  →  φ_max = arccos(W/T) = arccos(1/1.50) ≈ 48.2°   (two cells + payload)
 ```
 
 This is the maximum bank angle available while still supporting weight
@@ -272,7 +272,7 @@ section once flown. Until then:
 | 0° | Pending flight test (fixed-wing-like weathervaning expected to dominate; not computed here) |
 | 30° | Pending flight test |
 | 60° | Pending flight test |
-| 90° | Engineering bound: φ_max ≈ 42.3° available bank authority (§4.1); design acceptance target ≥ 10 kt (Phase 9 WBS) |
+| 90° | Engineering bound: φ_max ≈ 48.2° available bank authority (§4.1); design acceptance target ≥ 10 kt (Phase 9 WBS) |
 
 This table is to be filled in with real values during Phase 9 and this
 document updated at that time — do not treat the blanks as "TBD forever";
@@ -306,11 +306,11 @@ duration is an **ASSUMED** design figure, listed so the owner can replace it.
 
 ### 6.1 Hover power and current
 
-Only one fan operating point is cited: 2,135 gf at 1,265.4 W [REF-EDF-003].
+Only one fan operating point is cited: 2,370 gf at 1,368 W (24 V, 57.0 A) [REF-EDF-003].
 Momentum theory gives P ∝ T^1.5 for a fixed disc at constant figure of merit, so
 
 ```text
-P_fan(T) = 1,265.4 W × (T / 2,135 gf)^1.5        ASSUMED: FM and motor/ESC efficiency
+P_fan(T) = 1,368 W × (T / 2,370 gf)^1.5          ASSUMED: FM and motor/ESC efficiency
                                                    unchanged at part throttle
                                                    (direction uncertain, est. ±15 %)
 I_hover  = 4 × P_fan / V_load + 3.9 A avionics    (FlightEngineer.md "Power Budget")
@@ -328,12 +328,12 @@ governs** until bench discharge and a tandem-pair thrust-stand test replace it.
 
 | Case | Hover current, NOMINAL / **PLANNING** | C rate (PLANNING) | Hover endurance, NOMINAL / **PLANNING** |
 | --- | --- | --- | --- |
-| Two cells + payload | 149 A / **181 A** | 41C | 85 s / **61 s (1.0 min)** |
-| Two cells, no payload | 141 A / 172 A | 39C | 90 s / 65 s |
-| Three cells, no payload, all retained | 150 A / 182 A | 30C | 116 s / **83 s (1.4 min)** |
-| Three cells, third drained first then jettisoned (plan 002 R13) | 150 → 141 A (NOMINAL) | **94C (NOMINAL) / 114C (PLANNING) on the 1.6 Ah cell while it runs alone** | 120 s (NOMINAL); the usable fraction at 94–114C is unverified and lower than 0.80, so treat about 110 s as the NOMINAL ceiling |
+| Two cells + payload | 138 A / **168 A** | 38C | 92 s / **66 s (1.1 min)** |
+| Two cells, no payload | 131 A / 159 A | 36C | 97 s / 70 s |
+| Three cells, no payload, all retained | 139 A / 168 A | 28C | 125 s / **90 s (1.5 min)** |
+| Three cells, third drained first then jettisoned (plan 002 R13) | 139 → 131 A (NOMINAL) | **87C (NOMINAL) / 105C (PLANNING) on the 1.6 Ah cell while it runs alone** | 130 s (NOMINAL); the usable fraction at 87–105C is unverified and lower than 0.80, so treat about 120 s as the NOMINAL ceiling |
 
-The NOMINAL 149 A figure confirms the WBS PWR-CONN-01 value (≈ 150 A); the PLANNING 181 A governs connector and fuse sizing (plan 002 U1, U4) and supersedes the
+The NOMINAL 138 A figure is below the WBS PWR-CONN-01 value (≈ 150 A, set from the former 22.2 V fan row); the PLANNING 168 A governs connector and fuse sizing (plan 002 U1, U4) and supersedes the
 76 A in `avionics/kicad/FlightEngineer/FlightEngineer.md`, which was computed for
 50 mm fans at a 2,768 g AUW.
 
@@ -361,13 +361,13 @@ target is 318 s (5.3 min) airborne, two cells, payload aboard.**
 > **WARNING**
 >
 > The aircraft as specified does **not** meet the derived target. Two cells
-> with the payload give about **61 s** of hover to the RTL trigger on the
-> PLANNING case (85 s NOMINAL), **19 % of the 318 s target** (27 % NOMINAL).
+> with the payload give about **66 s** of hover to the RTL trigger on the
+> PLANNING case (92 s NOMINAL), **21 % of the 318 s target** (29 % NOMINAL).
 > Adding capacity does not close the gap: each Ah adds about 146 g (Tattu
 > 6S 2200, 321 g / 2.2 Ah, `docs/BATTERY_SPLIT_OPTIONS.md` §3), and hover power
 > rises with weight to the 1.5 power. With the mass coupled in, **no pack size
-> meets 318 s before T/W falls below the 1.2 control floor** (best: 67 s at
-> 4.9 Ah PLANNING; 160 s at 9.8 Ah NOMINAL). Total hover current would have to
+> meets 318 s before T/W falls below the 1.2 control floor** (best: 124 s at
+> 9.8 Ah PLANNING; 229 s at 15.2 Ah NOMINAL). Total hover current would have to
 > fall to about 40 A (about 36 A for propulsion, a quarter of the computed
 > value), which is not reachable at this fan disc loading. Do not plan a full
 > mission profile flight on this configuration. Size first-flight hover test
@@ -391,15 +391,15 @@ target is 318 s (5.3 min) airborne, two cells, payload aboard.**
 
 | Parameter | Value | Status |
 | --- | --- | --- |
-| T/W, two cells + payload | 1.35 (no stacking loss applied) | Computed from design data |
+| T/W, two cells + payload | 1.50 (no stacking loss applied) | Computed from design data |
 | V_min at 0° (cruise) | 100.2 kt — above V_NE | Computed; CL_max unverified |
-| V_min at θ_hover ≈ 47.7° and above | 0 kt (thrust-borne) | Computed from design data |
+| V_min at θ_hover ≈ 41.8° and above | 0 kt (thrust-borne) | Computed from design data |
 | V_NE (never-exceed) | 87 kt | Regulatory ceiling (§107.51(a)); actual top speed pending flight test (Phase 9) |
 | AGL ceiling | 400 ft | Regulatory (§107.51(b)) |
-| Density altitude at T/W = 1.0 / 1.2 | ≈ 9,900 ft / ≈ 4,000 ft | Computed, first-order estimate |
-| Hover current, two cells + payload | 181 A PLANNING (149 A NOMINAL) | Computed, assumptions in §6.1 |
-| Hover endurance, two cells + payload | 61 s PLANNING (85 s NOMINAL) | Computed |
-| Max hover endurance, three cells, no payload | 83 s PLANNING retained; about 110 s NOMINAL with the third cell jettisoned | Computed |
+| Density altitude at T/W = 1.0 / 1.2 | ≈ 13,200 ft / ≈ 7,400 ft | Computed, first-order estimate |
+| Hover current, two cells + payload | 168 A PLANNING (138 A NOMINAL) | Computed, assumptions in §6.1 |
+| Hover endurance, two cells + payload | 66 s PLANNING (92 s NOMINAL) | Computed |
+| Max hover endurance, three cells, no payload | 90 s PLANNING retained; about 120 s NOMINAL with the third cell jettisoned | Computed |
 | Derived mission endurance target | 318 s (5.3 min) airborne | **Not met, and not reachable by capacity alone** (§6.2 WARNING); durations ASSUMED |
 | V_struct (spar, ROM) | ≈ 1,580 kt | Not binding |
 | Max demonstrated crosswind | Pending flight test | Phase 9 WBS acceptance target ≥ 10 kt (hover) |

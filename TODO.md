@@ -85,6 +85,17 @@
 - [ ] Wire gen_todo_from_wbs.py --check into pre-commit/CI beside the…
 - [ ] Rewrite docs/AVIONICS_PB2_REDESIGN.md as a Rev T overview, then…
 
+#### 0.10.3 Operator's Manual
+→ detail: docs/WBS.md §0.10.3
+
+- [ ] Owner (PE) review of Operator's Manual v0.1
+- [ ] Cite QMx sheets 11/12 + Firefly plate as fan art in REFERENCES.md
+- [ ] Fill Operator's Manual flight-test values from Phase 5/9 data (OM-5)
+- [ ] Reconcile manual with first-flight gates D1-D5 and blockers (OM-6)
+- [ ] Render Operator's Manual to PDF (no pandoc/weasyprint on this system)
+- [ ] Add Operator's Manual to REFERENCES.md "Used in" and PROJECT_INDEX
+- [ ] Catalogue extra Part 107 sections the manual needs (cert, preflight…
+
 ### 0.11 — Upstream KiCad Defect: `sch erc` SIGSEGV on unresolvable `lib_id`
 → detail: `avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md`
 
@@ -93,6 +104,15 @@
 - [ ] Re-test on newest reachable KiCad — if already fixed, do NOT file
 - [ ] Search KiCad GitLab for a duplicate before filing
 - [ ] File at gitlab.com/kicad/code/kicad/-/issues, attach repro zip
+
+### 0.13 — Joint-Torque Standards Section Verification (2026-11-02)
+→ detail: `REFERENCES.md` REF-FAA-005, REF-NASA-004, REF-STD-BOLT-001, REF-STD-BOLT-002; plan `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md`
+
+- [ ] Verify AC 43.13-1B [REF-FAA-005] torque chapter/paragraph against…
+- [ ] Verify NASA-STD-5020B [REF-NASA-004] TFSR numbers for preload and…
+- [ ] Obtain ISO 898-1:2013 [REF-STD-BOLT-001]; record property-class…
+- [ ] Obtain VDI 2230-1:2015 [REF-STD-BOLT-002]; record preload/embedding…
+- [ ] Send 3D-printing provider the Z-axis tensile and insert pull-out…
 
 ### 0.12 — Aft-Section SLS Sizing References (2026-10-31)
 → detail: `docs/AFT_SKIN_THINNING_STUDY.md`, `REFERENCES.md` Open Standards Verification Items
@@ -375,7 +395,7 @@
 → detail: `docs/WBS.md` §1.5
 
 - [ ] Update PHASED_BUILD_GUIDE.md
-- [ ] 1.5.6 Rebuild Graphical Buiild Guide
+- [ ] 1.5.6 Rebuild Graphical Buiild Guide — incl
 - [ ] Sync bom_revO.json ↔ bom_revO.csv
 - [ ] Rewrite build-guide Phase 2/3 steps for the Rev T mechanism (after D2)
 
@@ -541,7 +561,7 @@
 - [ ] Install the 49 MHz (Part 15 §15.235) daemon on CN1 and CN2 (sel…
 - [ ] ESC calibration (full throttle power-on → drop to zero).
 - [ ] Motor spin test (5% throttle 2s): all 5 motors spin in correct…
-- [ ] Tilt servo calibration: 0° = nacelle vertical ±0.5°, 90° = hori…
+- [ ] Tilt servo calibration: 0° = nacelle horizontal ±0.5°, 90° = vertical…
 - [ ] Rear nozzle servo endpoints verified.
 - [ ] 190mm from nose
 - [ ] GPS lock: HDOP ≤1.5 on both FC nodes; positions agree within 2m.

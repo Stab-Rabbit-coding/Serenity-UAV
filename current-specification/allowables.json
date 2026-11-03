@@ -1,0 +1,362 @@
+{
+  "_meta": {
+    "purpose": "Cited material and fastener allowables for the joint-torque method (plan 2026-11-02-001 U3). A value without a source is not allowed; a missing value says what would establish it.",
+    "rule": "Selection follows the material preference order below; the first material with a CITED allowable for the property wins (owner rule 2026-10-26).",
+    "license": "CC-BY-SA-4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)"
+  },
+  "preference_order": [
+    "printable composite",
+    "laid-up CF/Kevlar/glass",
+    "aluminum",
+    "brass",
+    "spring steel",
+    "stainless"
+  ],
+  "materials": {
+    "PETG-CF20": {
+      "label": "CF-PETG, 20 % short carbon fiber (FDM)",
+      "category": "printable composite",
+      "props": {
+        "tensile_strength": {
+          "value": 39.23,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-001",
+            "location": "Conclusions s4"
+          },
+          "basis": "published coupon mean, ASTM D638",
+          "orientation": "in-plane (raster not specified)",
+          "notes": "CF reduced tensile strength vs PETG (pull-out); not a design minimum"
+        },
+        "flexural_strength": {
+          "value": 77,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-002",
+            "location": "Table 4"
+          },
+          "basis": "published coupon, ASTM D790 3-point",
+          "orientation": "+/-45 deg raster",
+          "notes": "20 % CF row"
+        },
+        "flexural_modulus": {
+          "value": 6.67,
+          "unit": "GPa",
+          "source": {
+            "ref": "REF-MAT-002",
+            "location": "Table 4"
+          },
+          "basis": "published coupon, ASTM D790",
+          "orientation": "+/-45 deg raster",
+          "notes": ""
+        },
+        "bearing_strength": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "ASTM D953 pin-bearing coupon on the actual filament/orientation (open: CF-PETG bearing allowable, REFERENCES.md verification table)"
+        },
+        "interlayer_tensile_z": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "Z-axis tensile coupon (ASTM D638 Type I printed upright) on the actual filament"
+        },
+        "insert_pullout": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "heat-set insert pull-out and torque-out coupon in this material"
+        },
+        "creep_clamp_retention": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "clamp-load relaxation coupon over the retorque interval"
+        }
+      }
+    },
+    "PETG": {
+      "label": "PETG, unreinforced (FDM)",
+      "category": "printable composite",
+      "props": {
+        "tensile_strength": {
+          "value": 48.41,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-001",
+            "location": "Conclusions s4"
+          },
+          "basis": "published coupon mean, ASTM D638",
+          "orientation": "in-plane",
+          "notes": ""
+        },
+        "flexural_strength": {
+          "value": 54,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-002",
+            "location": "Table 4"
+          },
+          "basis": "published coupon, ASTM D790",
+          "orientation": "+/-45 deg raster",
+          "notes": ""
+        },
+        "flexural_modulus": {
+          "value": 2.76,
+          "unit": "GPa",
+          "source": {
+            "ref": "REF-MAT-002",
+            "location": "Table 4"
+          },
+          "basis": "published coupon, ASTM D790",
+          "orientation": "+/-45 deg raster",
+          "notes": ""
+        },
+        "bearing_strength": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "pin-bearing coupon"
+        },
+        "interlayer_tensile_z": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "Z tensile coupon"
+        },
+        "insert_pullout": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "insert pull-out coupon"
+        },
+        "creep_clamp_retention": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "clamp relaxation coupon"
+        }
+      }
+    },
+    "SLS-PA-CF": {
+      "label": "3D Systems DuraForm PA CF (SLS)",
+      "category": "printable composite",
+      "props": {
+        "tensile_strength": {
+          "value": 84,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-011 (3D Systems DuraForm PA CF 3DS-30108A)",
+            "location": "datasheet tensile ultimate"
+          },
+          "basis": "vendor datasheet, ASTM D638 Type I",
+          "orientation": "XY (datasheet gives no Z)",
+          "notes": "ID collision: REFERENCES.md uses REF-MAT-011 twice (Rock West plate and this datasheet); cite by name"
+        },
+        "tensile_modulus": {
+          "value": 8500,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-011 (3D Systems DuraForm PA CF 3DS-30108A)",
+            "location": "datasheet"
+          },
+          "basis": "vendor datasheet",
+          "orientation": "XY",
+          "notes": ""
+        },
+        "interlayer_tensile_z": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "Z-axis tensile data from the 3D Systems service bureau (owner emailing the provider 2026-11-02)"
+        },
+        "insert_pullout": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "insert pull-out/torque-out data from the provider or coupons (owner emailing the provider 2026-11-02)"
+        },
+        "bearing_strength": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "pin-bearing coupon"
+        },
+        "creep_clamp_retention": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "clamp relaxation coupon"
+        }
+      }
+    },
+    "SLS-PA12": {
+      "label": "3D Systems DuraForm PA12 Black (SLS)",
+      "category": "printable composite",
+      "props": {
+        "tensile_strength": {
+          "value": 45,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-013 (3D Systems DuraForm PA12 Black)",
+            "location": "headline column (ZY)"
+          },
+          "basis": "vendor datasheet, ASTM D638 Type IV",
+          "orientation": "ZY column; XY modulus differs",
+          "notes": "ID collision with REF-MAT-013 (NCAMP tape); cite by name"
+        },
+        "interlayer_tensile_z": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "Z-axis data from the provider"
+        },
+        "insert_pullout": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "insert pull-out data"
+        },
+        "bearing_strength": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "pin-bearing coupon"
+        },
+        "creep_clamp_retention": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "clamp relaxation coupon"
+        }
+      }
+    },
+    "SLS-PA11": {
+      "label": "3D Systems DuraForm PA11 Black (SLS)",
+      "category": "printable composite",
+      "props": {
+        "tensile_strength": {
+          "value": 51,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-012 (3D Systems DuraForm PA11 Black)",
+            "location": "datasheet ultimate and yield"
+          },
+          "basis": "vendor datasheet, ASTM D638 Type IV",
+          "orientation": "near-isotropic per datasheet",
+          "notes": "ID collision with REF-MAT-012 (NCAMP); cite by name"
+        },
+        "interlayer_tensile_z": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "datasheet claims near-isotropic; confirm with provider data"
+        },
+        "insert_pullout": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "insert pull-out data"
+        },
+        "bearing_strength": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "pin-bearing coupon"
+        },
+        "creep_clamp_retention": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "clamp relaxation coupon"
+        }
+      }
+    },
+    "AL-6061-T6": {
+      "label": "Aluminum 6061-T6",
+      "category": "aluminum",
+      "props": {
+        "tensile_strength": {
+          "value": 310,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-007",
+            "location": "properties table"
+          },
+          "basis": "vendor datasheet (Protolabs)",
+          "orientation": "",
+          "notes": ""
+        },
+        "yield_strength": {
+          "value": 276,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-007",
+            "location": "properties table"
+          },
+          "basis": "vendor datasheet (Protolabs)",
+          "orientation": "",
+          "notes": "Used as the bearing limit by repo convention (judgment, not a published bearing value)"
+        },
+        "shear_strength": {
+          "value": 207,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-007",
+            "location": "properties table"
+          },
+          "basis": "vendor datasheet (Protolabs)",
+          "orientation": "",
+          "notes": ""
+        }
+      }
+    },
+    "BRASS-C26000": {
+      "label": "Brass C26000 (inserts, studs)",
+      "category": "brass",
+      "props": {
+        "yield_strength_h02": {
+          "value": "350-420",
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-009",
+            "location": "mechanical properties table"
+          },
+          "basis": "vendor range, not ASTM B134 minimum",
+          "orientation": "H02 temper",
+          "notes": "Insert body strength is not the limiting mode; pull-out in the polymer is"
+        },
+        "insert_thread_strength": {
+          "value": null,
+          "status": "requires_verification",
+          "would_establish": "insert manufacturer's thread/torque rating for the exact M2.5/M3 part"
+        }
+      }
+    },
+    "SS-A2-70": {
+      "label": "Stainless A2-70 fasteners (ISO 3506-1)",
+      "category": "stainless",
+      "props": {
+        "tensile_strength": {
+          "value": 700,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-005",
+            "location": "p. 2 table, property class 70"
+          },
+          "basis": "distributor table of ISO 3506-1:2020",
+          "orientation": "",
+          "notes": ""
+        },
+        "proof_stress_0.2": {
+          "value": 450,
+          "unit": "MPa",
+          "source": {
+            "ref": "REF-MAT-005",
+            "location": "p. 2 table, property class 70"
+          },
+          "basis": "distributor table of ISO 3506-1:2020",
+          "orientation": "",
+          "notes": ""
+        },
+        "stress_area_M3": {
+          "value": 5.03,
+          "unit": "mm2",
+          "source": {
+            "ref": "REF-MAT-005",
+            "location": "Metric Thread Stress Areas"
+          },
+          "basis": "distributor table",
+          "orientation": "",
+          "notes": ""
+        }
+      }
+    }
+  },
+  "nut_factor_K": {
+    "value": null,
+    "status": "requires_verification",
+    "would_establish": "nut factor K ranges by finish/lubrication (Shigley ch. 8 table; fastener supplier data); verify against REF-STD-GEAR-002 chapter before use"
+  }
+}

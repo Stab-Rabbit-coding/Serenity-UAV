@@ -45,7 +45,7 @@ test that produces the model.
 
 | Term | Value |
 |---|---|
-| **Controlled variable (CV)** | Nacelle tilt angle `θ_n`, −5° (cruise) … +140° (hover), 145° of sweep |
+| **Controlled variable (CV)** | Nacelle tilt angle `θ_n`, −5° (cruise, 0° = horizontal) … +135° (backing thrust), 140° of sweep |
 | **Manipulated variable (MV)** | Actuator shaft position command, on the RS-485 fleet bus |
 | **Measured variable (MV_meas)** | `θ_n`, absolute, from the AK7455 on the wingtip pad reading the trunnion ring magnet (REF-SENSOR-008) |
 | **Inner measured variable** | Worm-shaft angle, single-turn absolute, from the tilt controller's remote AEAT-8800-Q24 in the brake guide (turns accumulated in firmware; REF-ESC-001) |
@@ -63,8 +63,8 @@ gearmotor   --[six-start worm O26 / wheel 40T, m 1, C 33.0, 6.667:1]-->  drive s
 drive shaft --[tip pinion 14T -> ring 50T, m 0.8, C 25.60, i 3.571]-->  nacelle
 ```
 
-* Total reduction gearmotor output → nacelle: **23.8**; 145° of nacelle =
-  9.6 gearmotor-output revolutions. Rate: 570 rpm no-load (Pololu 20D 25:1 CB
+* Total reduction gearmotor output → nacelle: **23.8**; 140° of nacelle =
+  9.3 gearmotor-output revolutions. Rate: 570 rpm no-load (Pololu 20D 25:1 CB
   6 V, REF-ACT-001) → **144 °/s** at the nacelle; 440 rpm at max efficiency →
   111 °/s. The inner-loop sensor is the AEAT-8800 on the worm shaft (one turn =
   54° of drive shaft = 15.1° of nacelle); firmware counts worm turns and the
@@ -81,7 +81,7 @@ drive shaft --[tip pinion 14T -> ring 50T, m 0.8, C 25.60, i 3.571]--> nacelle
 ```
 
 * Total reduction actuator → nacelle: **3.571**.
-* Actuator travel over the full sweep: `145° × 3.571 = 517.8°` = **1.438 rev**.
+* Actuator travel over the full sweep: `140° × 3.571 = 500.0°` = **1.389 rev**.
   The actuator is multi-turn. This is what WA-R15 requires and what makes the
   AK7455 non-optional.
 * **Sense is preserved, not reversed.** Both stages are external meshes and each

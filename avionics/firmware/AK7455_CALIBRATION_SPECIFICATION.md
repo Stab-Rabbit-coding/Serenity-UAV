@@ -10,7 +10,7 @@
 
 ## 1. Overview
 
-Each nacelle carries a CAN-PERIPH-GW-1 trust-module gateway (TI MSPM0G3507 + Infineon SLB9672 TPM) that reads the AK7455 magnetic angle encoder mounted at the wing/nacelle joint. The encoder measures nacelle tilt angle (−5° to 90°), independent of tilt-spar torsional wind-up.
+Each nacelle carries a CAN-PERIPH-GW-1 trust-module gateway (TI MSPM0G3507 + Infineon SLB9672 TPM) that reads the AK7455 magnetic angle encoder mounted at the wing/nacelle joint. The encoder measures nacelle tilt angle (−5° to +135°), independent of tilt-spar torsional wind-up.
 
 The encoder's output compensates for residual ferrous-spar field distortion that may shift the zero point or introduce non-linearity over the sweep range. This specification defines the zero-calibration procedure and servo-feedback integration.
 
@@ -25,7 +25,7 @@ The encoder's output compensates for residual ferrous-spar field distortion that
 - **Data Link:** CAN-PERIPH-GW-1 gateway reads AK7455 via SPI; publishes angle on isolated CAN-FD and RS-485
 
 ### 2.2 Tilt Range and Physical Constraints
-- **Commanded Range:** −5° (backing/vertical) to 90° (horizontal/forward cruise)
+- **Commanded Range:** −5° to +135° (0° = horizontal/cruise, 90° = vertical/hover, to 135° backing thrust)
 - **Hard Stops:** CF-PETG stops at −5° and 140° (servo stall protection)
 - **Feedback Purpose:** Close the tilt-servo loop on **true nacelle angle** (compensates for spar wind-up)
 
@@ -56,13 +56,13 @@ The encoder's output compensates for residual ferrous-spar field distortion that
    - Record AK7455 raw angle reading (SPI register 0x03, resolution 0.00549°/LSB)
    - **Assign: `RAW_ANGLE_0DEG`** — the raw reading at true 0°
 
-2. **Sweep tilt over full range (−5° to 90°):**
+2. **Sweep tilt over full range (−5° to +135°):**
    - Manually tilt nacelle in 5° increments (using hand over appropriate range)
    - At each 5° step:
      - Verify position with angle gauge or reference mark
      - Sample AK7455 raw angle (average 10 reads to reduce noise)
      - Record: `{nominal_tilt_degrees, raw_angle_counts}`
-   - Generate calibration table: `AK7455_CAL_TABLE[20]` (−5, 0, 5, 10, ..., 90°)
+   - Generate calibration table: `AK7455_CAL_TABLE[29]` (−5, 0, 5, 10, ..., 135°)
 
 3. **Fit calibration curve:**
    - Verify monotonicity: `CAL_TABLE[i] < CAL_TABLE[i+1]` for all i
@@ -84,9 +84,9 @@ The encoder's output compensates for residual ferrous-spar field distortion that
 struct AK7455_Calibration {
     int16_t raw_at_0deg;          // RAW_ANGLE_0DEG from procedure above
     struct {
-        int16_t tilt_deg_x100;    // Nominal angle in 0.01° units (−500 to 9000)
+        int16_t tilt_deg_x100;    // Nominal angle in 0.01° units (−500 to 13500)
         int16_t raw_angle_counts;  // Raw AK7455 reading at this angle
-    } cal_table[20];              // −5° to 90° in 5° steps
+    } cal_table[29];              // −5° to +135° in 5° steps
     uint16_t crc16;               // CRC-16-CCITT for integrity
 };
 
@@ -95,7 +95,7 @@ int16_t ak7455_calibrated_angle(uint16_t raw_counts) {
     // Convert raw AK7455 reading to calibrated tilt angle (0.01° resolution)
     // Using stored calibration table + interpolation
     // Returns: tilt angle in units of 0.01° (e.g., 2750 = 27.50°)
-    // Range: −500 to 9000
+    // Range: −500 to 13500
 }
 
 // Monotonicity check
@@ -137,7 +137,7 @@ bool ak7455_validate_calibration(const struct AK7455_Calibration *cal) {
 
 | Byte(s) | Field | Type | Range | Unit |
 |---------|-------|------|-------|------|
-| 0–1     | `TILT_ANGLE_MEAS` | int16_t | −500 to 9000 | 0.01° |
+| 0–1     | `TILT_ANGLE_MEAS` | int16_t | −500 to 13500 | 0.01° |
 | 2–3     | `TILT_RATE` | int16_t | −3600 to 3600 | 1.0°/s |
 | 4       | `FLAGS` | uint8_t | — | bit 0: valid, bit 1: OOB |
 | 5–6     | `RAW_COUNTS` | uint16_t | 0 to 4096 | LSBs |
@@ -154,7 +154,7 @@ bool ak7455_validate_calibration(const struct AK7455_Calibration *cal) {
 ```c
 // River's primary servo controller
 bool servo_update_with_feedback(
-    int16_t commanded_angle_x100,  // 0.01° units, −500 to 9000
+    int16_t commanded_angle_x100,  // 0.01° units, −500 to 13500
     int16_t measured_angle_x100,   // From CAN-PERIPH-GW-1
     uint16_t feedback_timeout_ms   // e.g., 500 ms
 ) {

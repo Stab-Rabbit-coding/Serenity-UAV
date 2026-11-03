@@ -43,6 +43,17 @@
 
 - [ ] Rewrite `docs/AVIONICS_PB2_REDESIGN.md` as a Rev T architecture…
 
+### §0.10.3 Operator's Manual
+→ full detail: `WBS.md` §0.10.3
+
+- [ ] Owner (PE) review of v0.1 — limits, WARNINGs, emergency procedures
+- [ ] Add per-item fan-art citations (QMx sheets 11/12, Firefly plate) to…
+- [ ] Fill flight-test values from Phase 5/9 data (OM-5)
+- [ ] Reconcile with first-flight gates D1–D5 and blockers (OM-6)
+- [ ] Render to PDF (no pandoc/weasyprint on this system)
+- [ ] Add to `REFERENCES.md` "Used in" and `PROJECT_INDEX.md`
+- [ ] Catalogue the extra Part 107 sections the manual needs (certificate…
+
 ## §1.5 — Documentation
 → full detail: `WBS.md` §1.5
 
