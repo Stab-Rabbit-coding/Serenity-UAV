@@ -409,7 +409,7 @@ CARDS = [
                 "analysis closes (docs/LANDING_GEAR_ANALYSIS.md).",
             )
         ],
-        source="docs/LANDING_GEAR_ANALYSIS.md; tools/generate_lg_bays.py; bom_revT.csv LG-*",
+        source="docs/LANDING_GEAR_ANALYSIS.md; tools/generate_lg_bays.py; bom_revU.csv LG-*",
     ),
     dict(
         slug="cargo_doors",
@@ -452,7 +452,7 @@ CARDS = [
                 "not driven from a local H-bridge.",
             )
         ],
-        source="bom_revT.csv PRINT-DOOR-*, PRINT-GW-DOOR-TRAY; docs/CARGO_WINCH_SPECIFICATION.md",
+        source="bom_revU.csv PRINT-DOOR-*, PRINT-GW-DOOR-TRAY; docs/CARGO_WINCH_SPECIFICATION.md",
     ),
     dict(
         slug="tilt_drive",
@@ -672,7 +672,7 @@ CARDS = [
                 "and battery cradle were retired with the one-piece forward section.",
             ),
         ],
-        source="bom_revT.csv PRINT-VOID-FORMER-CARGO; REVN_BUILD_GUIDE_24IN.md Anti-Rework Rules",
+        source="bom_revU.csv PRINT-VOID-FORMER-CARGO; REVN_BUILD_GUIDE_24IN.md Anti-Rework Rules",
     ),
     dict(
         slug="foam_pour",
@@ -740,7 +740,7 @@ CARDS = [
                 "retired. Do not install them until a new mount is designed (WBS 0.13).",
             ),
         ],
-        source="AGENTS.md 1 (avionics architecture); bom_revT.csv; tools/cargo_layout_fit.py",
+        source="AGENTS.md 1 (avionics architecture); bom_revU.csv; tools/cargo_layout_fit.py",
     ),
     dict(
         slug="bus_wiring",

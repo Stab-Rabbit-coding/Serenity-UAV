@@ -26,7 +26,7 @@ tested; steps marked **DRAFT — not bench-verified** have not been proven.
 > nozzle is driven by its own servo (2026-09-28). The landing gear is the 3.0 in R6 flight article
 > with conforming bays and the A1b balanced couple. Every figure comes from the regenerated master
 > assembly and the renders in [Current Assembly Views](#current-assembly-views). The Rev T BOM
-> (`current-specification/bom_revT.csv`) still lags parts of this design; see
+> (`current-specification/bom_revU.csv`) still lags parts of this design; see
 > `current-specification/README.md` "Not yet in the Rev T BOM." Phases 4–11 have not been
 > re-audited for Rev T+ (`graphical-build-guide/WBS.md` task 1.5.6).
 >
@@ -165,16 +165,16 @@ All airframe parts are SLS, ordered from 3D Systems. No part is printed in FDM C
 
 ### Print Schedule
 
-The Rev T+ printed parts are the ones the master assembly places
+The Rev U printed parts are the ones the master assembly places
 (`airframe/FreeCAD-scripts/serenity_assembly.py`), plus parts that never get a flight
 position (void formers, nozzle flaps, ESC covers). **Order the `*_print.stl` sibling**
 wherever one exists; it is the same part in its leg-local frame.
 
 | Group | STL (under `airframe/stls/`) | Qty | BOM ref |
 |-------|------------------------------|-----|---------|
-| Hull | `fuselage/head_cargo_shell24_2mm_merged.stl` (forward), `fuselage/middle_rear_shell24_2mm_merged.stl` (aft) | 1 each | BOM rows pending (WBS 0.13) |
+| Hull | `fuselage/head_cargo_shell24_2mm_merged.stl` (forward), `fuselage/middle_rear_shell24_2mm_merged.stl` (aft) | 1 each | `PRINT-HEAD-CARGO-ONEPIECE`, `PRINT-MIDDLE-REAR-ONEPIECE` |
 | Splice collar | `fuselage/cargo_middle_splice_collar.stl` | 1 | `PRINT-CARGO-MIDDLE-COLLAR` |
-| Main battery | `fuselage/head/twin_pack_tray.stl`, `twin_pack_sled.stl` ×2, `twin_pack_gate.stl` | as listed | BOM rows pending (WBS 0.13) |
+| Main battery | `fuselage/head/twin_pack_tray.stl`, `twin_pack_sled.stl` ×2, `twin_pack_gate.stl` | as listed | `PRINT-TWIN-PACK-TRAY`, `-SLED`, `-GATE` |
 | Wing | `wings/wing_port_s1223_revo.stl`, `wings/wing_stbd_s1223_revo.stl` | 1 each | `PRINT-WINGS-S1223` |
 | Wing root | `fuselage/wing_root_flange_port.stl`, `fuselage/wing_root_flange_stbd.stl` (PA CF, essentially solid at 5 mm) | 1 each | `PRINT-WING-ROOT-FLANGE` |
 | Nacelle | `nacelles/nacelle_port_64mm.stl`, `nacelles/nacelle_stbd_64mm.stl` (master-assembly pods; see the 64 mm note in the configuration table) | 1 each | `PRINT-NACELLE-PORT/STBD` |

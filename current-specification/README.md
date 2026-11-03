@@ -1,26 +1,27 @@
-# Serenity UAV — Current Specification (Rev T BOM Baseline)
+# Serenity UAV — Current Specification (Rev U BOM Baseline)
 
 **License:** By output — CERN-OHL-W 2.0 (hardware and hardware-producing code) / MIT (software/firmware code) / CC BY-SA 4.0 (documents, BOM).
 See `docs/attribution_and_licensing.md`.  
-**Current design revision (project-wide):** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for
+**Current design revision (project-wide):** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for
 changelog).  
-**Last updated:** 2026-10-07
+**Last updated:** 2026-11-03
 
 > Bill of Materials, component specifications, and system-level design parameters for
-> Serenity UAV in JSON and CSV formats. **`bom_revT.json` / `bom_revT.csv` (2026-09-28) are the
-> authoritative baseline for Phase 5 assembly and beyond.** The Rev S files are retained as the
-> Rev S checkpoint snapshot.
+> Serenity UAV in JSON and CSV formats. **`bom_revU.json` / `bom_revU.csv` (2026-11-03) are the
+> authoritative baseline for Phase 5 assembly and beyond.** The Rev U BOM carries the Rev T BOM forward with one change set: head+cargo is now one SLS
+> part (`PRINT-HEAD-CARGO-ONEPIECE`, with the fused gear box) and middle+rear is now one SLS part (`PRINT-MIDDLE-REAR-ONEPIECE`); the old head, cargo,
+> middle, rear, both merged-joint collar, and battery cradle rows are retired at Qty 0, and the twin pack tray, sleds, and gate are added. The Rev T files (2026-09-28) and Rev S files are retained as checkpoint snapshots.
 
-## Current Status (2026-10-07)
+## Current Status (2026-11-03)
 
-- **Rev T BOM:** 211 rows. It folds in the tilt actuator (Pololu 20D 25:1, six-start worm, pin
+- **Rev U BOM:** 222 items: the 217 carried forward from Rev T plus five new printed-part rows (two hull sections, tray, sled, gate). SLS PA CF re-pricing of printed-part masses (1.05 → 1.11 g/cc, `tools/sls_auw_reconcile.py`) is **not** applied; the ledger still prices every printed part at 1.05 g/cc, and its battery model still uses the pre-twin-pack pack position. It folds in the tilt actuator (Pololu 20D 25:1, six-start worm, pin
   brake), the 3.0 in (76 mm) landing-gear flight article, the cargo chin node shelf and void
   former, measured-mass corrections from `docs/MASS_AUDIT_CARGO_WING_ROOT.md`, and the spider
   sleeve motor mount on the measured 90° pattern.
-- **Not yet in the Rev T BOM** (the data lags the design; each is an open item, not a decision
+- **Not yet in the Rev U BOM** (the data lags the design; each is an open item, not a decision
   to defer):
   - **TACCO is 60 × 35 mm** since 2026-10-06; the BOM row still reads 55 × 35 mm.
-  - **Commo is one standalone node** under Rev T (approved 2026-09-29); the BOM still carries
+  - **Commo is one standalone node** under Rev T/U (approved 2026-09-29); the BOM still carries
     two Rev S sub-module rows. Per `avionics/AGENTS.md`, its mass comes from the PCB roll-up,
     not a hand entry.
   - **PCB masses:** Pilot and TACCO are still placeholder masses until routing closes.
@@ -32,18 +33,19 @@ changelog).
   (for example `0`) from unquoted commas in CSV notes; the CSV is the cleaner source until the
   JSON is rebuilt.
 - **Interactive viewer:** `serenity-rev-s.jsx` still describes Rev S (STS3215 winch, XO naming);
-  it has not been regenerated for Rev T.
+  it has not been regenerated for Rev T or Rev U.
 
 > **Note:** "Rev S" appears in the BOM Structure, Quantity Tracking, and Usage sections below
-> where those sections describe the file format or workflow; the Rev T files use the same
+> where those sections describe the file format or workflow; the Rev T and Rev U files use the same
 > schema and workflow.
 
 ## Files
 
 | File | Format | Purpose | Coverage |
 |------|--------|---------|----------|
-| `bom_revT.json` | JSON | **Canonical** structured BOM (Rev T, 2026-09-28): part numbering, supplier links, mass, cost | All components (procured + printed + machined) |
-| `bom_revT.csv` | CSV | Flat-file BOM for spreadsheet import; the Rev T mirror of the JSON | Build-tracking sheets, inventory management |
+| `bom_revU.json` | JSON | **Canonical** structured BOM (Rev U, 2026-11-03): part numbering, supplier links, mass, cost | All components (procured + printed + machined) |
+| `bom_revU.csv` | CSV | Flat-file BOM for spreadsheet import; the Rev U mirror of the JSON |
+| `archives/rev-T-and-earlier/current-specification/bom_rev{S,T}.{json,csv}` | JSON, CSV | Rev S and Rev T checkpoint snapshots, frozen | Superseded by Rev U; see `archives/rev-T-and-earlier/README.md` | Build-tracking sheets, inventory management |
 | `bom_revS.json`, `bom_revS.csv` | JSON, CSV | Rev S checkpoint snapshot (2026-07-04), retained for traceability | Superseded by Rev T |
 | `serenity-rev-s.jsx` | JSX (React) | Interactive BOM viewer and system schematic (Rev S content; see status above) | Same part list, visual links to subsystems |
 | `SPEC_TEMPLATE.md`, `LICENSE_AND_ATTRIBUTION.md` | Markdown | Specification template; creative-universe attribution and fan-engineering terms | — |
@@ -157,7 +159,8 @@ changelog).
 
 ## Revision History
 
-- **Rev T BOM** (2026-09-28): `bom_revT.json` / `.csv` published (see Current Status above).
+- **Rev U BOM** (2026-11-03): `bom_revU.json` / `.csv` published as a carry-forward of Rev T (see Current Status above).
+- **Rev T BOM** (2026-09-28): `bom_revT.json` / `.csv` published.
 - **Rev T** (2026-09-06): Wings Rev S1g (fixed CF spar, geared tilt drive) and nacelles Rev
   S4c (hollowed pods, hinged ESC bays, 4x90° motor pattern) integrated; avionics/BOM carried
   forward from Rev S **unrecomputed** — see the BOM-currency note at the top of this file.
@@ -183,7 +186,7 @@ Every part in the BOM has a cross-reference to:
 
 ### For Bill of Materials
 
-1. Export `bom_revT.csv` to spreadsheet (LibreOffice Calc, Excel, Google Sheets)
+1. Export `bom_revU.csv` to spreadsheet (LibreOffice Calc, Excel, Google Sheets)
 2. Add columns for:
    - Order date, delivery date, received qty, unit cost verified
    - Bin location (for inventory tracking)
@@ -192,20 +195,20 @@ Every part in the BOM has a cross-reference to:
 
 ### For Assembly / Build Guide
 
-1. Use `bom_revT.json` as the source of truth for mass budget, CG, and part naming
+1. Use `bom_revU.json` as the source of truth for mass budget, CG, and part naming
 2. Build-guide phase checkpoints reference part ID (e.g., "Install SYS-001 (head shell) using
    structural epoxy per Phase 1 procedures")
 3. Every assembly step links back to a specific part or assembly in the BOM
 
 ### For Design Changes
 
-1. Update the affected row in `bom_revT.json` (mass, dimensions, supplier link) and mirror it in `bom_revT.csv`
-2. Use `tools/compact_bom_entries.py` or the `tools/bom_edit_*.py` helpers for scripted edits (there is no `tools/update_bom.py`)
+1. Update the affected row in `bom_revU.json` (mass, dimensions, supplier link) and mirror it in `bom_revU.csv`
+2. Use `tools/compact_bom_entries.py` or a purpose-written one-shot script for scripted edits (the Rev S/T `bom_edit_*.py` helpers are archived in `archives/rev-T-and-earlier/tools/`) (there is no `tools/update_bom.py`)
 3. Update the revision marker (`date` field) and commit with a message referencing the design change
 
 ## Tools
 
-- **`tools/compact_bom_entries.py`, `tools/bom_edit_*.py`** — scripted BOM edit helpers
+- **`tools/compact_bom_entries.py`** — scripted BOM edit helper (the one-shot `bom_edit_*.py` scripts are archived in `archives/rev-T-and-earlier/tools/`)
 - **`serenity-rev-s.jsx`** — React component to render the interactive BOM viewer (Rev S content)
 - **`REFERENCES.md`** — Catalog of all supplier links, datasheets, and regulatory citations
 

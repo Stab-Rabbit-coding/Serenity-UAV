@@ -1,99 +1,99 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 63963076.138266385,
-   "T_W": 1.5403573247300024,
+   "I_pitch_gmm2": 66064337.44093657,
+   "T_W": 1.4856799769512112,
    "cg": [
-    0.5782154269979078,
-    354.4576867295071,
-    156.79601168675248
+    -0.08920497915142425,
+    351.76943553959177,
+    155.8812400665538
    ],
-   "k_pitch_mm": 101.94624671660812,
-   "mass_g": 6154.416152538943
+   "k_pitch_mm": 101.7517783703782,
+   "mass_g": 6380.916581681384
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 64366967.913116574,
-   "T_W": 1.5159713936759247,
+   "I_pitch_gmm2": 66456143.90086639,
+   "T_W": 1.4629817962162972,
    "cg": [
-    0.5690614980290911,
-    353.89159438895746,
-    157.30584419513545
+    -0.08784210775876514,
+    351.2642015482045,
+    156.38722763477037
    ],
-   "k_pitch_mm": 101.45486101836306,
-   "mass_g": 6253.416152538943
+   "k_pitch_mm": 101.27047835502255,
+   "mass_g": 6479.916581681384
   },
   "hover_4000": {
-   "I_pitch_gmm2": 64178141.22016011,
-   "T_W": 1.573022034264815,
+   "I_pitch_gmm2": 66274702.31729067,
+   "T_W": 1.5160440199966572,
    "cg": [
-    0.5904770228420702,
-    353.7934321072373,
-    158.3673163880777
+    -0.09102813344362946,
+    351.0742995891804,
+    157.3769330315474
    ],
-   "k_pitch_mm": 103.19455952600876,
-   "mass_g": 6026.6161525389425
+   "k_pitch_mm": 102.94982910516875,
+   "mass_g": 6253.116581681384
   }
  },
  "rows_hover": [
   {
    "cg": [
-    -3.4,
-    130.4,
-    212.0
+    -1.0,
+    280.1,
+    167.3
    ],
    "kind": "PRINT",
-   "mass_g": 175.97,
-   "name": "head_shell24_2mm_repaired",
-   "ref": "PRINT-HEAD-SHELL",
+   "mass_g": 617.97,
+   "name": "head_cargo_shell24_2mm_merged",
+   "ref": "PRINT-HEAD-CARGO-ONEPIECE",
    "source": "MEASURED mesh (hull frame)"
   },
   {
    "cg": [
-    0.3,
-    343.0,
-    164.9
+    -0.1,
+    537.0,
+    158.8
    ],
    "kind": "PRINT",
-   "mass_g": 309.95,
-   "name": "cargo_sect_shell24_2mm_repaired",
-   "ref": "PRINT-CARGO-SECT",
+   "mass_g": 408.15,
+   "name": "middle_rear_shell24_2mm_merged",
+   "ref": "PRINT-MIDDLE-REAR-ONEPIECE",
    "source": "MEASURED mesh (hull frame)"
   },
   {
    "cg": [
-    -0.2,
-    473.2,
-    159.3
+    0.0,
+    212.2,
+    191.1
    ],
    "kind": "PRINT",
-   "mass_g": 183.11,
-   "name": "middle_shell24_2mm_repaired",
-   "ref": "PRINT-MIDDLE-CANONICAL",
+   "mass_g": 83.69,
+   "name": "twin_pack_tray",
+   "ref": "PRINT-TWIN-PACK-TRAY",
    "source": "MEASURED mesh (hull frame)"
   },
   {
    "cg": [
-    -0.0,
-    586.7,
-    155.1
+    0.0,
+    223.0,
+    172.0
    ],
    "kind": "PRINT",
-   "mass_g": 231.48,
-   "name": "rear_shell24_2mm_repaired",
-   "ref": "PRINT-REAR-NECK-INTAKE",
-   "source": "MEASURED mesh (hull frame)"
+   "mass_g": 11.1,
+   "name": "twin_pack_sled",
+   "ref": "PRINT-TWIN-PACK-SLED",
+   "source": "MEASURED mass; station ESTIMATE: two sleds in the tray lanes, Y 163-283 (BATTERY_TRIM_ENDURANCE_OPTIONS 6)"
   },
   {
    "cg": [
-    0.1,
-    235.3,
-    186.7
+    0.0,
+    285.0,
+    190.0
    ],
    "kind": "PRINT",
-   "mass_g": 11.52,
-   "name": "head_cargo_splice_collar",
-   "ref": "PRINT-HEAD-CARGO-COLLAR",
-   "source": "MEASURED mesh (hull frame)"
+   "mass_g": 3.15,
+   "name": "twin_pack_gate",
+   "ref": "PRINT-TWIN-PACK-GATE",
+   "source": "MEASURED mass; station ESTIMATE: hinged aft gate at the aft end of the pack band"
   },
   {
    "cg": [
@@ -105,18 +105,6 @@
    "mass_g": 15.8,
    "name": "cargo_middle_splice_collar",
    "ref": "PRINT-CARGO-MIDDLE-COLLAR",
-   "source": "MEASURED mesh (hull frame)"
-  },
-  {
-   "cg": [
-    -0.2,
-    509.0,
-    160.3
-   ],
-   "kind": "PRINT",
-   "mass_g": 14.43,
-   "name": "middle_rear_splice_collar",
-   "ref": "PRINT-MIDDLE-REAR-COLLAR",
    "source": "MEASURED mesh (hull frame)"
   },
   {
@@ -145,24 +133,24 @@
   },
   {
    "cg": [
-    80.5,
-    331.5,
-    149.4
+    81.3,
+    339.8,
+    147.1
    ],
    "kind": "PRINT",
-   "mass_g": 18.64,
+   "mass_g": 22.0,
    "name": "wing_root_flange_port",
    "ref": "PRINT-WING-ROOT-FLANGE",
    "source": "MEASURED mesh (hull frame)"
   },
   {
    "cg": [
-    -80.4,
-    331.5,
-    149.3
+    -81.3,
+    339.8,
+    147.1
    ],
    "kind": "PRINT",
-   "mass_g": 18.7,
+   "mass_g": 22.0,
    "name": "wing_root_flange_stbd",
    "ref": "PRINT-WING-ROOT-FLANGE",
    "source": "MEASURED mesh (hull frame)"
@@ -325,18 +313,6 @@
   },
   {
    "cg": [
-    -0.0,
-    316.1,
-    199.7
-   ],
-   "kind": "PRINT",
-   "mass_g": 39.24,
-   "name": "battery_cradle",
-   "ref": "PRINT-BATT-CRADLE",
-   "source": "MEASURED mesh (hull frame)"
-  },
-  {
-   "cg": [
     0.0,
     282.0,
     145.2
@@ -366,7 +342,7 @@
     127.1
    ],
    "kind": "PRINT",
-   "mass_g": -15.42,
+   "mass_g": 15.42,
    "name": "lg_r6_3_0in_bay_fore-stbd",
    "ref": "PRINT-LG-BAY-PLATE",
    "source": "MEASURED mesh (hull frame)"
@@ -390,7 +366,7 @@
     128.2
    ],
    "kind": "PRINT",
-   "mass_g": -15.32,
+   "mass_g": 15.32,
    "name": "lg_r6_3_0in_bay_aft-stbd",
    "ref": "PRINT-LG-BAY-PLATE",
    "source": "MEASURED mesh (hull frame)"
@@ -2080,7 +2056,7 @@
   "BOM": 2391.704,
   "GAP": 218.8114,
   "NACELLE": 1872.7585548798727,
-  "PRINT": 1543.3421976590705
+  "PRINT": 1769.8426268015107
  },
  "thrust_gf": 9480.0,
  "unclassified": []

@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Last updated:** 2026-10-07  
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Current design revision:** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 > **This is the full historical record — every task ever defined, done or open,**
 > for clear project-progression tracking. It is a compact *index* (one line per
@@ -1402,6 +1402,9 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 
 ### 6.4 — Rev T Checkpoint (2026-09-06)
 → detail: `docs/WBS.md` §6.4
+
+### 6.5 — Rev U Checkpoint (2026-11-03)
+→ detail: `docs/WBS.md` §6.5
 
 ---
 

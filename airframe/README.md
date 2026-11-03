@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Subsystem
 
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
+**Current design revision:** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for changelog)
 **Last updated:** 2026-10-07
 
 > Structural design, 3D CAD, STL generation, and fabrication guidance for the Serenity UAV
@@ -74,7 +74,7 @@ See `HULL_FRAME_REFERENCE.md` for the validated component placement extents tabl
 
 | Component | Mass (g) | Mass (oz) | Notes |
 |-----------|----------|-----------|-------|
-| Fuselage (printed) | ~630 | 22.2 | 4 shells (head 83g + cargo 165g + middle 135g + rear 200g = 583g) + 3 joint splice collars (47g); bom_revS.json PRINT-HEAD-SHELL/PRINT-CARGO-SECT/PRINT-MIDDLE-CANONICAL/PRINT-REAR-NECK-INTAKE/PRINT-*-COLLAR |
+| Fuselage (printed) | ~1,043 | 36.8 | Rev U, at the ledger's 1.05 g/cc: forward head+cargo one-piece 618g (includes the fused gear box) + aft middle+rear one-piece 408g + cargo/middle splice collar 17g; `bom_revU` PRINT-HEAD-CARGO-ONEPIECE/PRINT-MIDDLE-REAR-ONEPIECE/PRINT-CARGO-MIDDLE-COLLAR. SLS PA CF is 1.11 g/cc (about +5%). The aft part misses the 333g plan target (408g). |
 | Wings | ~180 | 6.3 | Span 486 mm, spar + skin, no cargo nacelles |
 | Nacelle assembly (2× complete: EDFs + shells + pivot + iris) | ~625 | 22.0 | Includes 4× XFly Galaxy X5 (70g mass each), shells, hubs, pivot, iris mechanism |
 | Tilt mechanism (servos, linkage, frame) | ~200 | 7.1 | 2× SPT5425LV (converted with LibreServo v2, ≥25 kg·cm @ 6V), rods, brackets |
