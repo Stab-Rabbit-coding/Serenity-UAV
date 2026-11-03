@@ -247,8 +247,8 @@ def main():
     tm = weld_clean(tm)
     hdr = (bk.MARKER + b" middle+rear merged (merge_middle_rear_shell.py)").ljust(80, b" ")[:80]
     bk.write_stl_binary(OUT, np.asarray(tm.triangles), hdr)
-    # Owner 2026-11-02: at 104 MB this STL sits within 1 % of GitHub's 100 MiB file limit, so the repo
-    # carries it as a gzip tarball (~39 MB); the raw .stl is gitignored.  Unpack with:
+    # Owner 2026-11-02: at 104 MB this STL sits within 1 % of GitHub's 100 MiB file limit, so
+    # the repo carries it as a gzip tarball (~39 MB); the raw .stl is gitignored.  Unpack with:
     #     tar -xzf airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl.tar.gz \
     #         -C airframe/stls/fuselage
     import tarfile  # noqa: PLC0415
