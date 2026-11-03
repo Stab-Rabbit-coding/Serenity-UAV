@@ -153,11 +153,11 @@ def fuse(part: Manifold, work: str | None = None) -> tuple[Manifold, dict]:
     """hull' = hull - opening - leg path + new skin.  Returns (hull', report)."""
     work = work or tempfile.mkdtemp(prefix="gear_box_")
     op = operands(work)
-    O = placed("cargo_sect_shell24_2mm_repaired__outer.stl", "Cargo_Shell")
-    I = placed("cargo_sect_shell24_2mm_repaired__inner.stl", "Cargo_Shell")
-    skin = (op["bo"] - op["bi"]) - O - leg_keepout()
-    opening = ((op["bi"] ^ O) - I) - op["protect"]
-    legpath = (op["slots"] ^ O) - op["protect"]
+    outer_m = placed("cargo_sect_shell24_2mm_repaired__outer.stl", "Cargo_Shell")
+    inner_m = placed("cargo_sect_shell24_2mm_repaired__inner.stl", "Cargo_Shell")
+    skin = (op["bo"] - op["bi"]) - outer_m - leg_keepout()
+    opening = ((op["bi"] ^ outer_m) - inner_m) - op["protect"]
+    legpath = (op["slots"] ^ outer_m) - op["protect"]
     before = part.volume()
     removed = (part ^ (opening + legpath)).volume()
     out = (part - opening - legpath) + skin

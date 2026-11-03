@@ -12,7 +12,7 @@
       "archived": false
     },
     ".flake8": {
-      "description": "[flake8]",
+      "description": "Plan-folder analysis scripts: sys.path is set before imports and lines carry data tables.",
       "tags": [],
       "archived": false
     },

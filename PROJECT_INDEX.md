@@ -3252,7 +3252,7 @@ test_tail_strike_requirement.py — Tests for the co-strike and slap-down models
 ```text
 .clang-format — clang-format configuration for the Serenity UAV firmware sources.
 .editorconfig — root = true
-.flake8 — [flake8]
+.flake8 — Plan-folder analysis scripts: sys.path is set before imports and lines carry data tables.
 .gitignore — 3DBenchy - The jolly 3D printing torture-test by CreativeTools.se - 763622 - part 1 of 2.zip
 .jscpd.json — JSON data (3 top-level keys)
 .liveui.json — JSON data (5 top-level keys)

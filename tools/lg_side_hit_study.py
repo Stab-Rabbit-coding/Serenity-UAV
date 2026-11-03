@@ -205,9 +205,11 @@ def main(argv):
           f"k_roll {kr * 1000:.0f} mm (estimate)")
     print(f"F_leg: ordinary (spring limit) {fg['ordinary']:.0f} N, crash (ductile plateau) "
           f"{fg['crash']:.0f} N")
-    print("feet: " + ", ".join(f"{n} {np.round(p, 1).tolist()} az {az}" for n, (p, az) in ft.items()))
+    print("feet: " + ", ".join(
+        f"{n} {np.round(p, 1).tolist()} az {az}" for n, (p, az) in ft.items()))
 
-    print("\n== Critical bank (thigh root, per leg; force-limited, so independent of drop height) ==")
+    print("\n== Critical bank (thigh root, per leg; force-limited, "
+          "so independent of drop height) ==")
     for case in ("ordinary", "crash"):
         for n, (_p, az) in ft.items():
             pc_u = phi_crit(fg[case], az, UTS)

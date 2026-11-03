@@ -172,7 +172,8 @@ def main():
     part, rep = gbm.fuse(part)
     print("gear box fused: " + ", ".join(
         f"{k} {v:.2f}" if isinstance(v, float) else f"{k} {v}" for k, v in rep.items()))
-    tm = seam.tm_of(part)   # no merge_vertices(): welding the loft caps folded 6 edges (2026-11-01 merge)
+    # no merge_vertices(): welding the loft caps folded 6 edges (2026-11-01 merge)
+    tm = seam.tm_of(part)
     bodies = tm.split(only_watertight=False)
     big = [b for b in bodies if len(b.faces) > 200]
     # drop the zero-area 2-face slivers manifold3d leaves at coplanar seams

@@ -7,3 +7,6 @@ exclude =
     build,
     dist,
 max-line-length = 100
+per-file-ignores =
+    # Plan-folder analysis scripts: sys.path is set before imports and lines carry data tables.
+    docs/plans/*/tools/*.py: E227,E401,E402,E501,E741,F401
