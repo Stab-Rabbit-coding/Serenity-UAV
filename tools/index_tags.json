@@ -12,7 +12,7 @@
       "archived": false
     },
     ".flake8": {
-      "description": "[flake8]",
+      "description": "Generated Markdown table rows are long by nature; black's slice spacing trips E203.",
       "tags": [],
       "archived": false
     },

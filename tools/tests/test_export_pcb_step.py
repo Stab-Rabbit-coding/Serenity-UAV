@@ -3,6 +3,7 @@
 Author: Claude Sonnet 5.5 (Anthropic) for S. Griffing, 2026-11-02.
 License: MIT (SPDX-License-Identifier: MIT)
 """
+
 import shutil
 import sys
 import tempfile
@@ -26,7 +27,9 @@ class ExportPcbStepTest(unittest.TestCase):
         d = Path(tempfile.mkdtemp())
         try:
             pcb = d / "x.kicad_pcb"
-            pcb.write_text('(kicad_pcb (version 20250101) (generator "pcbnew") (generator_version "10.0")\n)')
+            pcb.write_text(
+                '(kicad_pcb (version 20250101) (generator "pcbnew") (generator_version "10.0")\n)'
+            )
             self.assertIn("10.0", ex.check_version(pcb, (9, 0)))
             self.assertIsNone(ex.check_version(pcb, (10, 0)))
         finally:

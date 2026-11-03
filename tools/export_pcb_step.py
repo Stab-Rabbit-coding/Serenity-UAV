@@ -46,8 +46,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 KICAD_DIR = ROOT / "avionics" / "kicad"
 REPORT = KICAD_DIR / "step_export_report.json"
-MISSING_MODEL = re.compile(r"(could not add 3d model|cannot add 3d model|can't find.*model|"
-                           r"3d model.*not found|file not found)", re.I)
+MISSING_MODEL = re.compile(
+    r"(could not add 3d model|cannot add 3d model|can't find.*model|"
+    r"3d model.*not found|file not found)",
+    re.I,
+)
 
 
 def parse_version(text: str) -> tuple[int, int]:
@@ -64,7 +67,9 @@ def board_generator_version(pcb: Path) -> tuple[int, int]:
 
 
 def cli_version() -> tuple[int, int]:
-    out = subprocess.run(["kicad-cli", "version"], capture_output=True, text=True, check=True).stdout
+    out = subprocess.run(
+        ["kicad-cli", "version"], capture_output=True, text=True, check=True
+    ).stdout
     return parse_version(out)
 
 
@@ -79,16 +84,23 @@ def check_version(pcb: Path, cli: tuple[int, int]) -> str | None:
     """Error text when the board file is newer than kicad-cli, else None."""
     gen = board_generator_version(pcb)
     if gen > cli:
-        return (f"{pcb.name} was saved by KiCad {gen[0]}.{gen[1]} but kicad-cli is {cli[0]}.{cli[1]}; "
-                "use a kicad-cli at least as new as the file")
+        return (
+            f"{pcb.name} was saved by KiCad {gen[0]}.{gen[1]} but kicad-cli is {cli[0]}.{cli[1]}; "
+            "use a kicad-cli at least as new as the file"
+        )
     return None
 
 
 def export(pcb: Path, cli: tuple[int, int]) -> dict:
     out_dir = pcb.parent.parent / "step"
     out = out_dir / (pcb.stem + ".step")
-    rec: dict = {"board": pcb.parent.parent.name, "pcb": str(pcb.relative_to(ROOT)),
-                 "step": str(out.relative_to(ROOT)), "status": "ok", "missing_models": []}
+    rec: dict = {
+        "board": pcb.parent.parent.name,
+        "pcb": str(pcb.relative_to(ROOT)),
+        "step": str(out.relative_to(ROOT)),
+        "status": "ok",
+        "missing_models": [],
+    }
     err = check_version(pcb, cli)
     if err:
         rec.update(status="refused", error=err)
@@ -96,11 +108,27 @@ def export(pcb: Path, cli: tuple[int, int]) -> dict:
     out_dir.mkdir(exist_ok=True)
     t0 = time.time()
     proc = subprocess.run(
-        ["kicad-cli", "pcb", "export", "step", "--force", "--subst-models", "--no-dnp",
-         "--output", str(out), str(pcb)], capture_output=True, text=True, timeout=600)
+        [
+            "kicad-cli",
+            "pcb",
+            "export",
+            "step",
+            "--force",
+            "--subst-models",
+            "--no-dnp",
+            "--output",
+            str(out),
+            str(pcb),
+        ],
+        capture_output=True,
+        text=True,
+        timeout=600,
+    )
     rec["seconds"] = round(time.time() - t0, 1)
     log = proc.stdout + proc.stderr
-    rec["missing_models"] = sorted({ln.strip() for ln in log.splitlines() if MISSING_MODEL.search(ln)})
+    rec["missing_models"] = sorted(
+        {ln.strip() for ln in log.splitlines() if MISSING_MODEL.search(ln)}
+    )
     if proc.returncode != 0 or not out.exists() or out.stat().st_size == 0:
         rec.update(status="failed", error=(log.strip().splitlines() or ["no output"])[-1])
     else:
@@ -110,7 +138,9 @@ def export(pcb: Path, cli: tuple[int, int]) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("boards", nargs="*", help="board directory names under avionics/kicad (default: all)")
+    ap.add_argument(
+        "boards", nargs="*", help="board directory names under avionics/kicad (default: all)"
+    )
     ap.add_argument("--list", action="store_true", help="list boards and exit")
     args = ap.parse_args()
     found = boards(args.boards or None)
@@ -127,9 +157,14 @@ def main() -> int:
         r = export(p, cli)
         results.append(r)
         extra = f", {len(r['missing_models'])} missing 3D models" if r["missing_models"] else ""
-        print(f"{r['status']:8s} {r['board']:16s} {r.get('bytes', 0) / 1e6:6.1f} MB  {r.get('seconds', 0):5.1f} s{extra}"
-              + (f"  [{r.get('error')}]" if r["status"] != "ok" else ""))
-    REPORT.write_text(json.dumps({"kicad_cli": f"{cli[0]}.{cli[1]}", "boards": results}, indent=2) + "\n")
+        print(
+            f"{r['status']:8s} {r['board']:16s} {r.get('bytes', 0) / 1e6:6.1f} MB  "
+            f"{r.get('seconds', 0):5.1f} s{extra}"
+            + (f"  [{r.get('error')}]" if r["status"] != "ok" else "")
+        )
+    REPORT.write_text(
+        json.dumps({"kicad_cli": f"{cli[0]}.{cli[1]}", "boards": results}, indent=2) + "\n"
+    )
     return 0 if all(r["status"] == "ok" for r in results) else 1
 
 

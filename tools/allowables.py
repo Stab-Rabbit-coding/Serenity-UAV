@@ -54,7 +54,9 @@ def get(db: dict, material: str, prop: str) -> dict:
     except KeyError as exc:
         raise Unknown(f"{material}.{prop}: not in the database") from exc
     if rec.get("value") is None:
-        raise Unknown(f"{material}.{prop}: requires verification -- {rec.get('would_establish', '?')}")
+        raise Unknown(
+            f"{material}.{prop}: requires verification -- {rec.get('would_establish', '?')}"
+        )
     return rec
 
 

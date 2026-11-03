@@ -3,6 +3,7 @@
 Author: Claude Sonnet 5.5 (Anthropic) for S. Griffing, 2026-11-02.
 License: MIT (SPDX-License-Identifier: MIT)
 """
+
 import copy
 import json
 import sys
@@ -53,7 +54,6 @@ class AllowablesTest(unittest.TestCase):
         self.assertEqual(al.fastener_fos(sf), 1.5)
         sf["overrides"][0]["verified"] = True
         self.assertEqual(al.fastener_fos(sf), 2.0)
-
 
     def test_nasa_equivalent_is_independent_of_the_owner_factor(self) -> None:
         # Independent comparison: NASA total = its own program factor x 1.15, whatever 1.5 is.

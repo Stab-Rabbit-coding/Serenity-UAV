@@ -32,8 +32,8 @@ import math
 import sys
 from pathlib import Path
 
-_LIM = json.loads((Path(__file__).resolve().parents[1] / "current-specification"
-                         / "flight_limits.json").read_text())
+_LIMITS_FILE = Path(__file__).resolve().parents[1] / "current-specification" / "flight_limits.json"
+_LIM = json.loads(_LIMITS_FILE.read_text())
 
 G0 = 9.80665              # m/s^2, standard gravity
 RHO0 = 1.225              # kg/m^3, ISA sea level

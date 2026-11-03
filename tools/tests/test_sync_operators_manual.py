@@ -3,6 +3,7 @@
 Author: Claude Sonnet 5.5 (Anthropic) for S. Griffing, 2026-11-02.
 License: MIT (SPDX-License-Identifier: MIT)
 """
+
 import json
 import sys
 import unittest
@@ -42,7 +43,9 @@ class SyncOperatorsManualTest(unittest.TestCase):
 
     def test_unknown_marker_is_reported(self) -> None:
         # Error path: a typo'd inline key must not be silently dropped.
-        _, problems = som.render("x <!--V:no_such_key-->1<!--/V-->", self.vals, som.blocks(self.vals))
+        _, problems = som.render(
+            "x <!--V:no_such_key-->1<!--/V-->", self.vals, som.blocks(self.vals)
+        )
         self.assertEqual(len(problems), 1)
 
     def test_sources_agree(self) -> None:

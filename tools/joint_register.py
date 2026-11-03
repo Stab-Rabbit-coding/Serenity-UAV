@@ -42,8 +42,17 @@ BOM = ROOT / "current-specification" / "bom_revT.json"
 CARD_DIR = ROOT / "graphical-build-guide"
 
 JOINT_CLASSES = {"threaded", "pinned", "pressed", "bonded", "clamped"}
-REQUIRED = ("id", "name", "subsystem", "bom_refs", "joint_class", "fasteners", "members",
-            "retention", "unknown_fields")
+REQUIRED = (
+    "id",
+    "name",
+    "subsystem",
+    "bom_refs",
+    "joint_class",
+    "fasteners",
+    "members",
+    "retention",
+    "unknown_fields",
+)
 FASTENER_WORDS = re.compile(r"\bM[1-6](\.5)?\b|screw|bolt|insert|torque", re.I)
 
 
@@ -68,8 +77,12 @@ def validate(reg: dict, bom: dict[str, dict]) -> list[str]:
             errs.append(f"{jid}: duplicate joint ID")
         ids.add(jid)
         if j.get("joint_class") not in JOINT_CLASSES:
-            errs.append(f"{jid}: joint_class '{j.get('joint_class')}' not in {sorted(JOINT_CLASSES)}")
-        if j.get("joint_class") == "threaded" and not any(f.get("size") for f in j.get("fasteners", [])):
+            errs.append(
+                f"{jid}: joint_class '{j.get('joint_class')}' not in {sorted(JOINT_CLASSES)}"
+            )
+        if j.get("joint_class") == "threaded" and not any(
+            f.get("size") for f in j.get("fasteners", [])
+        ):
             errs.append(f"{jid}: threaded joint names no fastener size")
         for ref in j.get("bom_refs", []):
             if ref not in bom:
@@ -124,7 +137,10 @@ def main() -> int:
         for j in bl:
             print(f"  {j['id']:24s} needs: {', '.join(j['unknown_fields'])}")
         cards = card_advisory()
-        print(f"advisory: {len(cards)} cards mention fasteners and do not yet cite joint IDs (BG-SEQ-1)")
+        print(
+            f"advisory: {len(cards)} cards mention fasteners and do not yet cite "
+            "joint IDs (BG-SEQ-1)"
+        )
     return 1 if errs else 0
 
 

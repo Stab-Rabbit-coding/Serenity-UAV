@@ -101,7 +101,8 @@ TAB_X = ((PIN_R_REF_CLOSED - R_HINGE) + TAB_Z * _sc) / _cc
 
 # ── Tilt schedule (airframe/AGENTS.md "Nacelle Nozzle Drive") ──────────────
 TILT_OPEN_DEG = 90.0           # [deg] 105 % reached here, held to the limit
-TILT_LIMIT_DEG = 135.0         # [deg] upper tilt limit, -5..+135 (owner 2026-11-02; flight_limits.json)
+# [deg] upper tilt limit, -5..+135 (owner 2026-11-02; flight_limits.json)
+TILT_LIMIT_DEG = 135.0
 
 # ── Servo arm (plan KTD3, open-cup pushrod) ─────────────────────────────────
 SERVO_SWEEP_DEG = 90.0         # [deg] assumed 1000-2000 us travel (U8 measures)

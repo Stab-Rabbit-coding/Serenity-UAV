@@ -3,6 +3,7 @@
 Author: Claude Sonnet 5.5 (Anthropic) for S. Griffing, 2026-11-02.
 License: MIT (SPDX-License-Identifier: MIT)
 """
+
 import copy
 import sys
 import unittest

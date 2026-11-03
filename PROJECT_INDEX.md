@@ -3295,7 +3295,7 @@ test_tail_strike_requirement.py — Tests for the co-strike and slap-down models
 ```text
 .clang-format — clang-format configuration for the Serenity UAV firmware sources.
 .editorconfig — root = true
-.flake8 — [flake8]
+.flake8 — Generated Markdown table rows are long by nature; black's slice spacing trips E203.
 .gitignore — 3DBenchy - The jolly 3D printing torture-test by CreativeTools.se - 763622 - part 1 of 2.zip
 .jscpd.json — JSON data (3 top-level keys)
 .liveui.json — JSON data (5 top-level keys)
