@@ -3149,10 +3149,9 @@
       ],
       "archived": false
     },
-    "airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 middle+rear merged (merge_middle_rear_shell.py)",
+    "airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl.tar.gz": {
+      "description": "]|n",
       "tags": [
-        "cad-mesh",
         "structural"
       ],
       "archived": false
@@ -22832,7 +22831,7 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_common_spring_wire_nominal.stl",
       "airframe/stls/fuselage/middle_canonical_edf_intake.stl",
       "airframe/stls/fuselage/middle_canonical_shell24.stl",
-      "airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl",
+      "airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl.tar.gz",
       "airframe/stls/fuselage/middle_rear_splice_collar.stl",
       "airframe/stls/fuselage/middle_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/rear_shell24_2mm_repaired.stl",
@@ -23171,7 +23170,6 @@
       "airframe/stls/fuselage/landing-gear/lg_r6_common_spring_wire_nominal.stl",
       "airframe/stls/fuselage/middle_canonical_edf_intake.stl",
       "airframe/stls/fuselage/middle_canonical_shell24.stl",
-      "airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl",
       "airframe/stls/fuselage/middle_rear_splice_collar.stl",
       "airframe/stls/fuselage/middle_shell24_2mm_repaired.stl",
       "airframe/stls/fuselage/rear_shell24_2mm_repaired.stl",
