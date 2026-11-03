@@ -1,4 +1,5 @@
-# mypy: ignore-errors  (exploratory plan-folder analysis script)
+# mypy: ignore-errors
+# (exploratory plan-folder analysis script)
 import sys, trimesh
 
 sys.path.insert(0, "tools")

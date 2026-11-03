@@ -2487,16 +2487,16 @@ merged_ventral.png — Rendered image / reference photo [documentation]
 ## docs/plans/2026-11-01-001-canonical-gear-box/tools/
 
 ```text
-bay_out.py — mypy: ignore-errors (exploratory plan-folder analysis script) [documentation]
-corner_sweep.py — mypy: ignore-errors (exploratory plan-folder analysis script) [documentation]
-extract.py — mypy: ignore-errors (exploratory plan-folder analysis script) [documentation]
-flush_check.py — mypy: ignore-errors (exploratory plan-folder analysis script) [documentation]
-fore_cheek_sweep.py — mypy: ignore-errors (exploratory plan-folder analysis script) [documentation]
-grown_fit.py — mypy: ignore-errors (exploratory plan-folder analysis script) [documentation]
-hsg_keep.py — mypy: ignore-errors (exploratory plan-folder analysis script) [documentation]
-keep_break.py — mypy: ignore-errors (exploratory plan-folder analysis script) [documentation]
-pouch_loc.py — mypy: ignore-errors (exploratory plan-folder analysis script) [documentation]
-reach_sweep.py — mypy: ignore-errors (exploratory plan-folder analysis script) [documentation]
+bay_out.py — mypy: ignore-errors [documentation]
+corner_sweep.py — mypy: ignore-errors [documentation]
+extract.py — mypy: ignore-errors [documentation]
+flush_check.py — mypy: ignore-errors [documentation]
+fore_cheek_sweep.py — mypy: ignore-errors [documentation]
+grown_fit.py — mypy: ignore-errors [documentation]
+hsg_keep.py — mypy: ignore-errors [documentation]
+keep_break.py — mypy: ignore-errors [documentation]
+pouch_loc.py — mypy: ignore-errors [documentation]
+reach_sweep.py — mypy: ignore-errors [documentation]
 ```
 
 ## docs/references/
