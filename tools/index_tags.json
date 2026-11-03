@@ -14619,7 +14619,7 @@
       "archived": false
     },
     "current-specification/bom_revU.csv": {
-      "description": "Bill of materials, CSV (219 items)",
+      "description": "Bill of materials, CSV (222 items)",
       "tags": [
         "bom",
         "specification"
@@ -14627,7 +14627,7 @@
       "archived": false
     },
     "current-specification/bom_revU.json": {
-      "description": "Bill of materials, JSON (219 items)",
+      "description": "Bill of materials, JSON (222 items)",
       "tags": [
         "bom",
         "specification"

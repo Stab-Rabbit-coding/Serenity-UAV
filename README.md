@@ -25,8 +25,7 @@ spar and Rev S4c nacelle geometry; re-render pending (see `TODO.md` §0.10).*
 
 Serenity UAV is a fully functional electric ducted fan (EDF) tilt-rotor aircraft engineered as an
 actual physical build of the Firefly-class transport *Serenity* (Joss Whedon, 2002) — every
-component here is fabricated or procured, not conceptual. A two-part SLS-printed hull (one-piece head+cargo,
-middle and rear; the middle+rear merge is planned) carries two tilting EDF nacelles, a belly cargo bay with powered winch and clamshell doors,
+component here is fabricated or procured, not conceptual. A two-part SLS-printed hull (one-piece forward head+cargo section and one-piece aft middle+rear section) carries two tilting EDF nacelles, a belly cargo bay with powered winch and clamshell doors,
 and an 8-node cooperative avionics architecture with PACE (Primary/Alternate/Contingency/Emergency)
 failover across every flight-critical function.
 
@@ -121,7 +120,7 @@ started.** The path to first flight is in `docs/FIRST_FLIGHT_READINESS.md`; open
 
 **Airframe**
 
-SLS-printed (DuraForm PA CF) hull with high-lift wings: head and cargo are one part, and middle and rear are being merged into one (planned; the four-section middle and rear geometry is current until then), hollow-walled
+SLS-printed (DuraForm PA CF) hull with high-lift wings: in two sections (forward head+cargo and aft middle+rear), hollow-walled
 and foam-filled to the canonical Firefly outer mold line. Rev S1g gave the wing a fixed,
 bonded 20×16.3 mm carbon-fiber spar as its primary bending member, replacing the earlier
 rotating-shaft design.

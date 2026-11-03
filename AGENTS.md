@@ -267,10 +267,10 @@ language states what is required regardless of actor.
   `docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` and `tools/sls_auw_reconcile.py`. Ledger masses
   still price every printed part at 1.05 g/cc; SLS PA CF is 1.11 g/cc (about +86 g hull,
   +49 g nacelles), so SLS re-pricing is an open item in `docs/WBS.md` §6.5.
-- **Hull sections (Rev U):** head and cargo are **one** printed part
-  (`PRINT-HEAD-CARGO-ONEPIECE`, built). Middle and rear are decided to be **one** printed part
-  (`PRINT-MIDDLE-REAR-ONEPIECE`, plan 2026-10-31-001; **planned, not yet designed**), so the
-  four-section middle/rear geometry remains the buildable part until that mesh exists.
+- **Hull sections (Rev U):** the hull is **two** SLS parts at 24 in. The forward part (head+cargo,
+  with the canonical gear box fused in as skin) is `PRINT-HEAD-CARGO-ONEPIECE`; the aft part
+  (middle+rear) is `PRINT-MIDDLE-REAR-ONEPIECE`. Both are built and ship as gzip tarballs (over
+  GitHub's 100 MB limit). One internal cargo/middle splice collar joins them.
 - **FDM CF-PETG** — 0.15 mm layer height, ≥4 perimeters, ≥40% infill load-bearing /
   25% non-structural — remains the specification for FDM prints: prototype prints and any
   part not yet moved to SLS. Replace any stray "PETG" reference with CF-PETG when found;

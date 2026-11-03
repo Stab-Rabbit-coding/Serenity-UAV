@@ -1,75 +1,99 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 63044452.718442604,
-   "T_W": 1.5320930018435748,
+   "I_pitch_gmm2": 66064337.44093657,
+   "T_W": 1.4856799769512112,
    "cg": [
-    0.2764595852438997,
-    354.78836052113667,
-    156.27639345638693
+    -0.08920497915142425,
+    351.76943553959177,
+    155.8812400665538
    ],
-   "k_pitch_mm": 100.9396594699094,
-   "mass_g": 6187.613929828458
+   "k_pitch_mm": 101.7517783703782,
+   "mass_g": 6380.916581681384
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 63453966.044198364,
-   "T_W": 1.507965990247898,
+   "I_pitch_gmm2": 66456143.90086639,
+   "T_W": 1.4629817962162972,
    "cg": [
-    0.27210596988837665,
-    354.22005018245966,
-    156.79171650373462
+    -0.08784210775876514,
+    351.2642015482045,
+    156.38722763477037
    ],
-   "k_pitch_mm": 100.46643473590515,
-   "mass_g": 6286.613929828458
+   "k_pitch_mm": 101.27047835502255,
+   "mass_g": 6479.916581681384
   },
   "hover_4000": {
-   "I_pitch_gmm2": 63272316.48271945,
-   "T_W": 1.564404470133353,
+   "I_pitch_gmm2": 66274702.31729067,
+   "T_W": 1.5160440199966572,
    "cg": [
-    0.28229005056895806,
-    354.13471874743436,
-    157.82813137979747
+    -0.09102813344362946,
+    351.0742995891804,
+    157.3769330315474
    ],
-   "k_pitch_mm": 102.18266444771768,
-   "mass_g": 6059.813929828458
+   "k_pitch_mm": 102.94982910516875,
+   "mass_g": 6253.116581681384
   }
  },
  "rows_hover": [
   {
    "cg": [
-    -1.2,
-    272.3,
-    177.9
+    -1.0,
+    280.1,
+    167.3
    ],
    "kind": "PRINT",
-   "mass_g": 493.14,
-   "name": "head_cargo_shell24_2mm_merged_hatch",
+   "mass_g": 617.97,
+   "name": "head_cargo_shell24_2mm_merged",
    "ref": "PRINT-HEAD-CARGO-ONEPIECE",
    "source": "MEASURED mesh (hull frame)"
   },
   {
    "cg": [
-    -0.2,
-    473.2,
-    159.3
+    -0.1,
+    537.0,
+    158.8
    ],
    "kind": "PRINT",
-   "mass_g": 183.11,
-   "name": "middle_shell24_2mm_repaired",
-   "ref": "PRINT-MIDDLE-CANONICAL",
+   "mass_g": 408.15,
+   "name": "middle_rear_shell24_2mm_merged",
+   "ref": "PRINT-MIDDLE-REAR-ONEPIECE",
    "source": "MEASURED mesh (hull frame)"
   },
   {
    "cg": [
-    -0.0,
-    586.7,
-    155.1
+    0.0,
+    212.2,
+    191.1
    ],
    "kind": "PRINT",
-   "mass_g": 231.48,
-   "name": "rear_shell24_2mm_repaired",
-   "ref": "PRINT-REAR-NECK-INTAKE",
+   "mass_g": 83.69,
+   "name": "twin_pack_tray",
+   "ref": "PRINT-TWIN-PACK-TRAY",
    "source": "MEASURED mesh (hull frame)"
+  },
+  {
+   "cg": [
+    0.0,
+    223.0,
+    172.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 11.1,
+   "name": "twin_pack_sled",
+   "ref": "PRINT-TWIN-PACK-SLED",
+   "source": "MEASURED mass; station ESTIMATE: two sleds in the tray lanes, Y 163-283 (BATTERY_TRIM_ENDURANCE_OPTIONS 6)"
+  },
+  {
+   "cg": [
+    0.0,
+    285.0,
+    190.0
+   ],
+   "kind": "PRINT",
+   "mass_g": 3.15,
+   "name": "twin_pack_gate",
+   "ref": "PRINT-TWIN-PACK-GATE",
+   "source": "MEASURED mass; station ESTIMATE: hinged aft gate at the aft end of the pack band"
   },
   {
    "cg": [
@@ -81,18 +105,6 @@
    "mass_g": 15.8,
    "name": "cargo_middle_splice_collar",
    "ref": "PRINT-CARGO-MIDDLE-COLLAR",
-   "source": "MEASURED mesh (hull frame)"
-  },
-  {
-   "cg": [
-    -0.2,
-    509.0,
-    160.3
-   ],
-   "kind": "PRINT",
-   "mass_g": 14.43,
-   "name": "middle_rear_splice_collar",
-   "ref": "PRINT-MIDDLE-REAR-COLLAR",
    "source": "MEASURED mesh (hull frame)"
   },
   {
@@ -301,18 +313,6 @@
   },
   {
    "cg": [
-    -0.0,
-    316.1,
-    199.7
-   ],
-   "kind": "PRINT",
-   "mass_g": 39.24,
-   "name": "battery_cradle",
-   "ref": "PRINT-BATT-CRADLE",
-   "source": "MEASURED mesh (hull frame)"
-  },
-  {
-   "cg": [
     0.0,
     282.0,
     145.2
@@ -366,7 +366,7 @@
     128.2
    ],
    "kind": "PRINT",
-   "mass_g": -15.32,
+   "mass_g": 15.32,
    "name": "lg_r6_3_0in_bay_aft-stbd",
    "ref": "PRINT-LG-BAY-PLATE",
    "source": "MEASURED mesh (hull frame)"
@@ -2056,7 +2056,7 @@
   "BOM": 2391.704,
   "GAP": 218.8114,
   "NACELLE": 1872.7585548798727,
-  "PRINT": 1576.5399749485846
+  "PRINT": 1769.8426268015107
  },
  "thrust_gf": 9480.0,
  "unclassified": []

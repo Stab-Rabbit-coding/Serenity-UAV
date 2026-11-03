@@ -1126,17 +1126,21 @@ requested before treating this list as the signed checkpoint scope):
   with BOM coverage gate; cited allowables database and 1.5 fastener factor of safety.
 
 **SLS and hull-section verification (2026-11-03).** The 2026-11-01 "shift to sls printing" commit
-added only two datasheets; the baseline documents (README, AGENTS §7, REVN build guide, BOM) still
-described a four-section FDM CF-PETG hull. Rev U now records, with status:
+added only two datasheets; the baseline documents on `main` (README, AGENTS §7, REVN build guide,
+BOM) still described a four-section FDM CF-PETG hull. PR 276 (`feat/canonical-gear-box`) carries the
+actual SLS migration and both merged hull sections, and is merged into the Rev U branch. Rev U records,
+with status:
 
 | Item | Status in Rev U |
 |---|---|
 | SLS DuraForm PA CF hull and nacelle printed parts; PA11 at gear feet | Decided (owner, 2026-10-31); recorded in `AGENTS.md` §7 and the BOM. Vendor not selected; no quote or coupon data. |
-| Head + cargo as one part | Built (`head_cargo_shell24_2mm_merged_hatch.stl`, watertight). BOM `PRINT-HEAD-CARGO-ONEPIECE`; `PRINT-HEAD-SHELL`, `PRINT-CARGO-SECT`, `PRINT-HEAD-CARGO-COLLAR` retired at Qty 0. AUW ledger regenerated: hover 13.40 → 13.36 lbm, hover CG offset +13.8 → +14.7 mm. |
-| Middle + rear as one part | Decided, **not designed** (plan 2026-10-31-001 is requirements-only; gates G1–G3 open). BOM `PRINT-MIDDLE-REAR-ONEPIECE` is a Qty 0 placeholder; the four-section middle and rear remain the buildable parts. |
-| Hull scale 24 in vs up to 27 in | **Unresolved:** plan 2026-10-31-001 R6 fixes proportions at 24 in; plan 2026-10-31-003 allows a uniform scale up to 27 in. Rev U stays at 24 in. |
+| Head + cargo as one part | Built (`head_cargo_shell24_2mm_merged.stl`, watertight, 618 g at 1.05 g/cc, with the canonical gear box fused in). BOM `PRINT-HEAD-CARGO-ONEPIECE`; `PRINT-HEAD-SHELL`, `PRINT-CARGO-SECT`, `PRINT-HEAD-CARGO-COLLAR`, `PRINT-BATT-CRADLE` retired at Qty 0. |
+| Middle + rear as one part | Built (`middle_rear_shell24_2mm_merged.stl`, watertight, 408 g at 1.05 g/cc; blended loft Y 501–530.5). BOM `PRINT-MIDDLE-REAR-ONEPIECE`; middle, rear, and middle/rear collar rows retired at Qty 0. **Misses the 333 g plan target**; gates G1–G3 open. |
+| Twin pack tray, sleds, gate | In the BOM (`PRINT-TWIN-PACK-*`, 83.7 + 2 × 5.6 + 3.2 g). The ledger's battery pack model still uses the pre-twin-pack position, so CG and AUW are provisional. |
+| Hull scale 24 in vs up to 27 in | Rev U is 24 in: both built hull sections are 24 in (`*_shell24_*`) and the build guide is the 24 in guide. The 27 in uniform scale (plan 2026-10-31-003) is not in the baseline. Inferred from the PR 276 geometry, not an explicit owner statement. |
 | Ring + skids as a separate PA11 crash member (Option B) | Owner preference recorded; not yet a separate part. |
-| SLS mass re-pricing (1.05 → 1.11 g/cc, about +135 g hull and nacelles) | Not applied to the ledger; see `tools/sls_auw_reconcile.py`. |
+| SLS mass re-pricing (1.05 → 1.11 g/cc, about +135 g hull and nacelles) | Not applied to the ledger (also an open item in WBS 0.13); see `tools/sls_auw_reconcile.py` and `tools/sls_materials.py`. |
+| Ledger after PR 276 | Hover AUW 13.79 lbm (6,253 g), hover CG offset +11.7 mm, T/W 1.52 (was 13.40 lbm / +13.8 mm on `main`). The +193 g is the gear box and tray, less the retired cradle and old shells; it includes +31 g from the stbd aft gear bay, which was an inside-out mesh counted negative until PR 276 fixed it. |
 
 **Archive pass (2026-11-03).** Frozen at Rev T and earlier under `archives/rev-T-and-earlier/`
 (see its `README.md`): `bom_revS.*`, `bom_revT.*`, `serenity-rev-s.jsx`, `docs/bom_revR.json`, the

@@ -53,6 +53,7 @@ import json
 import math
 import os
 import sys
+import tarfile
 from pathlib import Path
 from typing import Any
 
@@ -148,13 +149,18 @@ NAV_POST_A = ((X_CL, 685.7, 240.0), "ESTIMATE: aft post, rear nozzle top")
 #   ("mirror",) hull-frame port STL, starboard = mirror about X_CL
 # ---------------------------------------------------------------------------
 PRINTED = [
-    # Rev U: head+cargo is one SLS part (retired: PRINT-HEAD-SHELL, PRINT-CARGO-SECT,
-    # PRINT-HEAD-CARGO-COLLAR -- Qty 0 in bom_revU).
-    ("PRINT-HEAD-CARGO-ONEPIECE", "fuselage/head_cargo_shell24_2mm_merged_hatch.stl", 1, "hull"),
-    ("PRINT-MIDDLE-CANONICAL", "fuselage/middle_shell24_2mm_repaired.stl", 1, "hull"),
-    ("PRINT-REAR-NECK-INTAKE", "fuselage/rear_shell24_2mm_repaired.stl", 1, "hull"),
+    # Rev U: the hull is two SLS parts, forward (head+cargo) and aft (middle+rear). Retired at
+    # Qty 0 in bom_revU: PRINT-HEAD-SHELL, PRINT-CARGO-SECT, PRINT-HEAD-CARGO-COLLAR,
+    # PRINT-MIDDLE-CANONICAL, PRINT-REAR-NECK-INTAKE, PRINT-MIDDLE-REAR-COLLAR, PRINT-BATT-CRADLE.
+    ("PRINT-HEAD-CARGO-ONEPIECE", "fuselage/head_cargo_shell24_2mm_merged.stl", 1, "hull"),
+    ("PRINT-MIDDLE-REAR-ONEPIECE", "fuselage/middle_rear_shell24_2mm_merged.stl", 1, "hull"),
+    ("PRINT-TWIN-PACK-TRAY", "fuselage/head/twin_pack_tray.stl", 1, "hull"),
+    ("PRINT-TWIN-PACK-SLED", "fuselage/head/twin_pack_sled.stl", 2,
+     ("st", (X_CL, 223.0, 172.0),
+      "ESTIMATE: two sleds in the tray lanes, Y 163-283 (BATTERY_TRIM_ENDURANCE_OPTIONS 6)")),
+    ("PRINT-TWIN-PACK-GATE", "fuselage/head/twin_pack_gate.stl", 1,
+     ("st", (X_CL, 285.0, 190.0), "ESTIMATE: hinged aft gate at the aft end of the pack band")),
     ("PRINT-CARGO-MIDDLE-COLLAR", "fuselage/cargo_middle_splice_collar.stl", 1, "hull"),
-    ("PRINT-MIDDLE-REAR-COLLAR", "fuselage/middle_rear_splice_collar.stl", 1, "hull"),
     ("PRINT-WINGS-S1223", "wings/wing_port_s1223_revo.stl", 1, "hull"),
     ("PRINT-WINGS-S1223", "wings/wing_stbd_s1223_revo.stl", 1, "hull"),
     ("PRINT-WING-ROOT-FLANGE", "fuselage/wing_root_flange_port.stl", 1, "hull"),
@@ -172,7 +178,6 @@ PRINTED = [
     ("PRINT-TILT-BRAKE-GUIDE", "fuselage/cargo/tilt_brake_guide_stbd.stl", 1, "hull"),
     ("(wing tilt pinion)", "wings/wing_tilt_pinion_port.stl", 1, "hull"),
     ("(wing tilt pinion)", "wings/wing_tilt_pinion_stbd.stl", 1, "hull"),
-    ("PRINT-BATT-CRADLE", "fuselage/cargo/battery_cradle.stl", 1, "hull"),
     ("PRINT-CHIN-SHELF", "fuselage/cargo/chin_node_shelf.stl", 1, "hull"),
     # The INSTALLED (baked, aircraft-frame) bay meshes, not the *_print.stl bed
     # copies: those are part-local, so measuring them "hull" put all four bays at
@@ -391,6 +396,14 @@ AIRBORNE_SKIP_CATEGORIES = {"GCS", "Filament"}
 
 def load(rel: str) -> trimesh.Trimesh:
     path = STL / rel
+    tarball = Path(str(path) + ".tar.gz")
+    if not path.exists() and tarball.exists():
+        # Hull STLs over GitHub's 100 MB limit ship as gzip tarballs; read in memory.
+        with tarfile.open(tarball) as tz:
+            member = tz.extractfile(path.name)
+            if member is None:
+                sys.exit(f"[auw_ledger] {tarball} has no member {path.name}")
+            return trimesh.load_mesh(member, file_type="stl", force="mesh", process=True)
     if not path.exists():
         sys.exit(f"[auw_ledger] missing STL {path}")
     return trimesh.load_mesh(path, force="mesh", process=True)

@@ -9,12 +9,12 @@ changelog).
 > Bill of Materials, component specifications, and system-level design parameters for
 > Serenity UAV in JSON and CSV formats. **`bom_revU.json` / `bom_revU.csv` (2026-11-03) are the
 > authoritative baseline for Phase 5 assembly and beyond.** The Rev U BOM carries the Rev T BOM forward with one change set: head+cargo is now one SLS
-> part (`PRINT-HEAD-CARGO-ONEPIECE`; the head shell, cargo section, and head/cargo collar rows are retired
-> at Qty 0), and the planned one-piece middle+rear part is added at Qty 0 (`PRINT-MIDDLE-REAR-ONEPIECE`). The Rev T files (2026-09-28) and Rev S files are retained as checkpoint snapshots.
+> part (`PRINT-HEAD-CARGO-ONEPIECE`, with the fused gear box) and middle+rear is now one SLS part (`PRINT-MIDDLE-REAR-ONEPIECE`); the old head, cargo,
+> middle, rear, both merged-joint collar, and battery cradle rows are retired at Qty 0, and the twin pack tray, sleds, and gate are added. The Rev T files (2026-09-28) and Rev S files are retained as checkpoint snapshots.
 
 ## Current Status (2026-11-03)
 
-- **Rev U BOM:** 219 items: the 217 carried forward from Rev T plus the two section rows above. SLS PA CF re-pricing of printed-part masses (1.05 → 1.11 g/cc, `tools/sls_auw_reconcile.py`) is **not** applied; the ledger still prices every printed part at 1.05 g/cc. It folds in the tilt actuator (Pololu 20D 25:1, six-start worm, pin
+- **Rev U BOM:** 222 items: the 217 carried forward from Rev T plus five new printed-part rows (two hull sections, tray, sled, gate). SLS PA CF re-pricing of printed-part masses (1.05 → 1.11 g/cc, `tools/sls_auw_reconcile.py`) is **not** applied; the ledger still prices every printed part at 1.05 g/cc, and its battery model still uses the pre-twin-pack pack position. It folds in the tilt actuator (Pololu 20D 25:1, six-start worm, pin
   brake), the 3.0 in (76 mm) landing-gear flight article, the cargo chin node shelf and void
   former, measured-mass corrections from `docs/MASS_AUDIT_CARGO_WING_ROOT.md`, and the spider
   sleeve motor mount on the measured 90° pattern.
