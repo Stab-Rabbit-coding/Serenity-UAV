@@ -20234,6 +20234,13 @@
       ],
       "archived": false
     },
+    "tools/check_hull_tarballs.py": {
+      "description": "Commit/CI gate: hull STLs ship as gzip tarballs and the inflated STLs stay ignored.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/check_joint_register.py": {
       "description": "Commit/CI gate: the joint register is structurally valid and covers the BOM.",
       "tags": [
@@ -21058,6 +21065,13 @@
     },
     "tools/tests/test_bay_a_thermal_budget.py": {
       "description": "test_bay_a_thermal_budget.py -- lumped thermal network for the Bay A",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_check_hull_tarballs.py": {
+      "description": "Tests for tools/check_hull_tarballs.py.",
       "tags": [
         "build-tooling"
       ],
@@ -26464,6 +26478,7 @@
       "tools/cg_mass_reduction_study.py",
       "tools/cg_relocation_study.py",
       "tools/check_datum_drift.py",
+      "tools/check_hull_tarballs.py",
       "tools/check_joint_register.py",
       "tools/check_tacco_envelope_sync.py",
       "tools/compact_bom_entries.py",
@@ -26574,6 +26589,7 @@
       "tools/tests/test_bay_a_fwd_mounts.py",
       "tools/tests/test_bay_a_fwd_routes.py",
       "tools/tests/test_bay_a_thermal_budget.py",
+      "tools/tests/test_check_hull_tarballs.py",
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_export_pcb_step.py",
       "tools/tests/test_joint_register.py",
