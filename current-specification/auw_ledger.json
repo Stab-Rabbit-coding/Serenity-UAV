@@ -1,62 +1,50 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 63963076.138266385,
-   "T_W": 1.5403573247300024,
+   "I_pitch_gmm2": 63044452.718442604,
+   "T_W": 1.5320930018435748,
    "cg": [
-    0.5782154269979078,
-    354.4576867295071,
-    156.79601168675248
+    0.2764595852438997,
+    354.78836052113667,
+    156.27639345638693
    ],
-   "k_pitch_mm": 101.94624671660812,
-   "mass_g": 6154.416152538943
+   "k_pitch_mm": 100.9396594699094,
+   "mass_g": 6187.613929828458
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 64366967.913116574,
-   "T_W": 1.5159713936759247,
+   "I_pitch_gmm2": 63453966.044198364,
+   "T_W": 1.507965990247898,
    "cg": [
-    0.5690614980290911,
-    353.89159438895746,
-    157.30584419513545
+    0.27210596988837665,
+    354.22005018245966,
+    156.79171650373462
    ],
-   "k_pitch_mm": 101.45486101836306,
-   "mass_g": 6253.416152538943
+   "k_pitch_mm": 100.46643473590515,
+   "mass_g": 6286.613929828458
   },
   "hover_4000": {
-   "I_pitch_gmm2": 64178141.22016011,
-   "T_W": 1.573022034264815,
+   "I_pitch_gmm2": 63272316.48271945,
+   "T_W": 1.564404470133353,
    "cg": [
-    0.5904770228420702,
-    353.7934321072373,
-    158.3673163880777
+    0.28229005056895806,
+    354.13471874743436,
+    157.82813137979747
    ],
-   "k_pitch_mm": 103.19455952600876,
-   "mass_g": 6026.6161525389425
+   "k_pitch_mm": 102.18266444771768,
+   "mass_g": 6059.813929828458
   }
  },
  "rows_hover": [
   {
    "cg": [
-    -3.4,
-    130.4,
-    212.0
+    -1.2,
+    272.3,
+    177.9
    ],
    "kind": "PRINT",
-   "mass_g": 175.97,
-   "name": "head_shell24_2mm_repaired",
-   "ref": "PRINT-HEAD-SHELL",
-   "source": "MEASURED mesh (hull frame)"
-  },
-  {
-   "cg": [
-    0.3,
-    343.0,
-    164.9
-   ],
-   "kind": "PRINT",
-   "mass_g": 309.95,
-   "name": "cargo_sect_shell24_2mm_repaired",
-   "ref": "PRINT-CARGO-SECT",
+   "mass_g": 493.14,
+   "name": "head_cargo_shell24_2mm_merged_hatch",
+   "ref": "PRINT-HEAD-CARGO-ONEPIECE",
    "source": "MEASURED mesh (hull frame)"
   },
   {
@@ -81,18 +69,6 @@
    "mass_g": 231.48,
    "name": "rear_shell24_2mm_repaired",
    "ref": "PRINT-REAR-NECK-INTAKE",
-   "source": "MEASURED mesh (hull frame)"
-  },
-  {
-   "cg": [
-    0.1,
-    235.3,
-    186.7
-   ],
-   "kind": "PRINT",
-   "mass_g": 11.52,
-   "name": "head_cargo_splice_collar",
-   "ref": "PRINT-HEAD-CARGO-COLLAR",
    "source": "MEASURED mesh (hull frame)"
   },
   {
@@ -145,24 +121,24 @@
   },
   {
    "cg": [
-    80.5,
-    331.5,
-    149.4
+    81.3,
+    339.8,
+    147.1
    ],
    "kind": "PRINT",
-   "mass_g": 18.64,
+   "mass_g": 22.0,
    "name": "wing_root_flange_port",
    "ref": "PRINT-WING-ROOT-FLANGE",
    "source": "MEASURED mesh (hull frame)"
   },
   {
    "cg": [
-    -80.4,
-    331.5,
-    149.3
+    -81.3,
+    339.8,
+    147.1
    ],
    "kind": "PRINT",
-   "mass_g": 18.7,
+   "mass_g": 22.0,
    "name": "wing_root_flange_stbd",
    "ref": "PRINT-WING-ROOT-FLANGE",
    "source": "MEASURED mesh (hull frame)"
@@ -366,7 +342,7 @@
     127.1
    ],
    "kind": "PRINT",
-   "mass_g": -15.42,
+   "mass_g": 15.42,
    "name": "lg_r6_3_0in_bay_fore-stbd",
    "ref": "PRINT-LG-BAY-PLATE",
    "source": "MEASURED mesh (hull frame)"
@@ -2080,7 +2056,7 @@
   "BOM": 2391.704,
   "GAP": 218.8114,
   "NACELLE": 1872.7585548798727,
-  "PRINT": 1543.3421976590705
+  "PRINT": 1576.5399749485846
  },
  "thrust_gf": 9480.0,
  "unclassified": []

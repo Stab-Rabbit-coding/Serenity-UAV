@@ -148,11 +148,11 @@ NAV_POST_A = ((X_CL, 685.7, 240.0), "ESTIMATE: aft post, rear nozzle top")
 #   ("mirror",) hull-frame port STL, starboard = mirror about X_CL
 # ---------------------------------------------------------------------------
 PRINTED = [
-    ("PRINT-HEAD-SHELL", "fuselage/head_shell24_2mm_repaired.stl", 1, "hull"),
-    ("PRINT-CARGO-SECT", "fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl", 1, "hull"),
+    # Rev U: head+cargo is one SLS part (retired: PRINT-HEAD-SHELL, PRINT-CARGO-SECT,
+    # PRINT-HEAD-CARGO-COLLAR -- Qty 0 in bom_revU).
+    ("PRINT-HEAD-CARGO-ONEPIECE", "fuselage/head_cargo_shell24_2mm_merged_hatch.stl", 1, "hull"),
     ("PRINT-MIDDLE-CANONICAL", "fuselage/middle_shell24_2mm_repaired.stl", 1, "hull"),
     ("PRINT-REAR-NECK-INTAKE", "fuselage/rear_shell24_2mm_repaired.stl", 1, "hull"),
-    ("PRINT-HEAD-CARGO-COLLAR", "fuselage/head_cargo_splice_collar.stl", 1, "hull"),
     ("PRINT-CARGO-MIDDLE-COLLAR", "fuselage/cargo_middle_splice_collar.stl", 1, "hull"),
     ("PRINT-MIDDLE-REAR-COLLAR", "fuselage/middle_rear_splice_collar.stl", 1, "hull"),
     ("PRINT-WINGS-S1223", "wings/wing_port_s1223_revo.stl", 1, "hull"),

@@ -1095,8 +1095,8 @@ EDF (`deferred/AGENTS.md`).
 
 **2026-11-03.** Comprehensive checkpoint per root `AGENTS.md` §8: every component is current,
 integrated, tested, and documented as of this letter — components not listed below carry
-forward from Rev T unchanged. Rev U is a documentation and versioning checkpoint: it pins the
-project-wide letter and republishes the BOM; it changes no geometry, firmware, or PCB data.
+forward from Rev T unchanged. Rev U pins the project-wide letter, republishes the BOM, and records the SLS print process and the
+hull-section mergers in the baseline. It changes no geometry, firmware, or PCB data.
 
 **Numbering:** work done between the Rev T pin (2026-09-06) and this pin continued the Rev T
 numbered sequence (T1, T2, …, per `AGENTS.md` §8) and is superseded by this checkpoint. Numbered
@@ -1109,9 +1109,8 @@ letter pointer moved. Historical records are untouched: git history, `CLAUDE-MEM
 **Versioning applied at this pin:** the "Current design revision" line of every subsystem
 README/WBS/TODO; the root `README.md` status badge, status table, and BOM pointer; the
 `AGENTS.md` BOM source-of-truth pointer; `tools/README.md` and `tools/gen_build_guide_cards.py`
-BOM pointers; and `current-specification/bom_revU.json` / `.csv`, a row-for-row carry-forward of
-`bom_revT` (identical items; revision, date, and description changed). The known BOM lag items
-are recorded in `current-specification/README.md` and remain open.
+BOM pointers; and `current-specification/bom_revU.json` / `.csv`, a carry-forward of `bom_revT` plus the section
+changes below. The known BOM lag items are recorded in `current-specification/README.md` and remain open.
 
 Work carried into Rev U since the Rev T pin (summarised from the commit record; owner review
 requested before treating this list as the signed checkpoint scope):
@@ -1125,6 +1124,28 @@ requested before treating this list as the signed checkpoint scope):
 - **Landing gear** — A1B balanced-couple load path, co-strike skid specification, 13.0 lbm weight pass.
 - **Build guide and verification** — Rev T+ assembly refresh and regenerated cards; joint register
   with BOM coverage gate; cited allowables database and 1.5 fastener factor of safety.
+
+**SLS and hull-section verification (2026-11-03).** The 2026-11-01 "shift to sls printing" commit
+added only two datasheets; the baseline documents (README, AGENTS §7, REVN build guide, BOM) still
+described a four-section FDM CF-PETG hull. Rev U now records, with status:
+
+| Item | Status in Rev U |
+|---|---|
+| SLS DuraForm PA CF hull and nacelle printed parts; PA11 at gear feet | Decided (owner, 2026-10-31); recorded in `AGENTS.md` §7 and the BOM. Vendor not selected; no quote or coupon data. |
+| Head + cargo as one part | Built (`head_cargo_shell24_2mm_merged_hatch.stl`, watertight). BOM `PRINT-HEAD-CARGO-ONEPIECE`; `PRINT-HEAD-SHELL`, `PRINT-CARGO-SECT`, `PRINT-HEAD-CARGO-COLLAR` retired at Qty 0. AUW ledger regenerated: hover 13.40 → 13.36 lbm, hover CG offset +13.8 → +14.7 mm. |
+| Middle + rear as one part | Decided, **not designed** (plan 2026-10-31-001 is requirements-only; gates G1–G3 open). BOM `PRINT-MIDDLE-REAR-ONEPIECE` is a Qty 0 placeholder; the four-section middle and rear remain the buildable parts. |
+| Hull scale 24 in vs up to 27 in | **Unresolved:** plan 2026-10-31-001 R6 fixes proportions at 24 in; plan 2026-10-31-003 allows a uniform scale up to 27 in. Rev U stays at 24 in. |
+| Ring + skids as a separate PA11 crash member (Option B) | Owner preference recorded; not yet a separate part. |
+| SLS mass re-pricing (1.05 → 1.11 g/cc, about +135 g hull and nacelles) | Not applied to the ledger; see `tools/sls_auw_reconcile.py`. |
+
+**Archive pass (2026-11-03).** Frozen at Rev T and earlier under `archives/rev-T-and-earlier/`
+(see its `README.md`): `bom_revS.*`, `bom_revT.*`, `serenity-rev-s.jsx`, `docs/bom_revR.json`, the
+one-shot `tools/bom_edit_*.py` scripts, dated status snapshots, stale 30 in / 36 in studies, and one
+superseded plan. Not archived, with the reason: the 50 mm nacelle sources
+(`nacelle_pod_64mm_tandem.scad` and `nacelle_nozzle_iris_64mm.scad` `include` the 50 mm files, and
+about 26 tools read the 50 mm STLs); `docs/structural_analysis.md`, `docs/TILT_SPAR_ANALYSIS.md`,
+`docs/AVIONICS_PB2_REDESIGN.md`, and `avionics/rev-s1/WBS.md` (read by live tools); and the
+remaining `docs/plans/` files (no completion status to judge by).
 
 Not yet part of a Rev U checkpoint (tracked open in their own WBS/TODO): avionics PCB routing and
 Gerbers, firmware Phase 7, STL re-exports after the TACCO change, cargo-shell mesh defect, cargo

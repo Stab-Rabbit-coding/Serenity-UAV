@@ -26,7 +26,7 @@ tested; steps marked **DRAFT — not bench-verified** have not been proven.
 > nozzle is driven by its own servo (2026-09-28). The landing gear is the 3.0 in R6 flight article
 > with conforming bays and the A1b balanced couple. Every figure comes from the regenerated master
 > assembly and the renders in [Current Assembly Views](#current-assembly-views). The Rev T BOM
-> (`current-specification/bom_revT.csv`) still lags parts of this design; see
+> (`current-specification/bom_revU.csv`) still lags parts of this design; see
 > `current-specification/README.md` "Not yet in the Rev T BOM." Phases 4–11 have not been
 > re-audited for Rev T+ (`graphical-build-guide/WBS.md` task 1.5.6).
 >
@@ -57,7 +57,7 @@ recompute closes, so this guide does not restate them. Read them in `docs/WBS.md
 
 | Subsystem | Rev T+ configuration | Authority |
 |-----------|----------------------|-----------|
-| Hull | 24.00 in (609.6 mm) printed shell in four sections: head, cargo, middle (horseshoe ring + inner neck), rear. Joined by three internal splice collars. Foam-filled. | `airframe/README.md` |
+| Hull | 24.00 in (609.6 mm) SLS-printed (DuraForm PA CF) shell. **Head+cargo is one part** (`PRINT-HEAD-CARGO-ONEPIECE`); middle (horseshoe ring + inner neck) and rear are still two parts joined by one internal splice collar until the planned one-piece middle+rear part exists (`PRINT-MIDDLE-REAR-ONEPIECE`, Qty 0). The cargo/middle joint keeps its splice collar. Foam-filled. | `airframe/README.md` |
 | Datum | Aircraft datum R2: nose tip at Y 0, centerline at X 0, 3.0 in gear ground plane at Z 0 | `tools/hull_datums.py` |
 | Wing | S1223-derived section (t17.7 root / t26.7 tip) on a **fixed, bonded** 20 mm CF spar (`SPAR-CF-20X16`). The root moment goes to the hull through a bonded root flange (`PRINT-WING-ROOT-FLANGE`). | Rev T1 / T1c |
 | Nacelle | Tandem-EDF pod on a trunnion with 2 × 6704ZZ bearings (**open owner decision:** the pair runs at 89 % of C0 under ultimate load, `docs/NACELLE_64MM_VERIFICATION.md` §5b). The master assembly carries the **64 mm** pod. The procurement BOM keeps the 50 mm EDF rows until the NAC-64 gates close. | `docs/NACELLE_64MM_VERIFICATION.md` |
@@ -156,17 +156,17 @@ blender --background --python airframe/blender-scripts/serenity_render_views.py 
 
 ### Print Schedule
 
-The Rev T+ printed parts are the ones the master assembly places
+The Rev U printed parts are the ones the master assembly places
 (`airframe/FreeCAD-scripts/serenity_assembly.py`), plus print-only parts that never get a
 flight position (void formers, nozzle flaps, ESC covers). Slicer settings per part are in
-`current-specification/bom_revT.csv` (Notes column) and
+`current-specification/bom_revU.csv` (Notes column) and
 `airframe/gcode/davinci-jr-proto/cura/slice_all_batches_cura.py`. **Print the
 `*_print.stl` sibling** wherever one exists; it is the same part re-oriented for the bed.
 
 | Group | STL (under `airframe/stls/`) | Qty | BOM ref |
 |-------|------------------------------|-----|---------|
-| Hull | `fuselage/head_shell24_2mm_repaired.stl`, `fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl`, `fuselage/middle_shell24_2mm_repaired.stl`, `fuselage/rear_shell24_2mm_repaired.stl` | 1 each | `PRINT-HEAD-SHELL`, `PRINT-CARGO-SECT`, `PRINT-MIDDLE-CANONICAL`, `PRINT-REAR-NECK-INTAKE` |
-| Splice collars | `fuselage/head_cargo_splice_collar.stl`, `fuselage/cargo_middle_splice_collar.stl`, `fuselage/middle_rear_splice_collar.stl` | 1 each | `PRINT-*-COLLAR` |
+| Hull | `fuselage/head_cargo_shell24_2mm_merged_hatch.stl` (one-piece head+cargo, SLS), `fuselage/middle_shell24_2mm_repaired.stl`, `fuselage/rear_shell24_2mm_repaired.stl` (middle+rear one-piece is planned, not yet designed) | 1 each | `PRINT-HEAD-CARGO-ONEPIECE`, `PRINT-MIDDLE-CANONICAL`, `PRINT-REAR-NECK-INTAKE` |
+| Splice collars | `fuselage/cargo_middle_splice_collar.stl`, `fuselage/middle_rear_splice_collar.stl` (the head/cargo collar is retired; the middle/rear collar goes away with the planned one-piece middle+rear) | 1 each | `PRINT-CARGO-MIDDLE-COLLAR`, `PRINT-MIDDLE-REAR-COLLAR` |
 | Wing | `wings/wing_port_s1223_revo.stl`, `wings/wing_stbd_s1223_revo.stl` | 1 each | `PRINT-WINGS-S1223` |
 | Wing root | `fuselage/wing_root_flange_port.stl`, `fuselage/wing_root_flange_stbd.stl` (CF-PETG, essentially solid at 5 mm) | 1 each | `PRINT-WING-ROOT-FLANGE` |
 | Nacelle | `nacelles/nacelle_port_64mm.stl`, `nacelles/nacelle_stbd_64mm.stl` (master-assembly pods; see the 64 mm note in the configuration table) | 1 each | `PRINT-NACELLE-PORT/STBD` |

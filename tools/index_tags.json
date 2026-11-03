@@ -6845,6 +6845,14 @@
       ],
       "archived": true
     },
+    "archives/rev-T-and-earlier/README.md": {
+      "description": "Archive \u2014 Rev T and earlier (frozen at the Rev U checkpoint, 2026-11-03)",
+      "tags": [
+        "archive",
+        "documentation"
+      ],
+      "archived": true
+    },
     "archives/rev-T-and-earlier/airframe/VERIFY_PLACEMENT_CHECKLIST.md": {
       "description": "VERIFY Parts Placement Checklist \u2014 Rev R1 (Hull Frame)",
       "tags": [
@@ -14589,7 +14597,7 @@
       "archived": false
     },
     "current-specification/bom_revU.csv": {
-      "description": "Bill of materials, CSV (217 items)",
+      "description": "Bill of materials, CSV (219 items)",
       "tags": [
         "bom",
         "specification"
@@ -14597,7 +14605,7 @@
       "archived": false
     },
     "current-specification/bom_revU.json": {
-      "description": "Bill of materials, JSON (217 items)",
+      "description": "Bill of materials, JSON (219 items)",
       "tags": [
         "bom",
         "specification"
@@ -20953,6 +20961,7 @@
       "archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md",
       "archives/docs-superseded/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "archives/docs-superseded/docs-README-revM-tail-2026-10-07.md",
+      "archives/rev-T-and-earlier/README.md",
       "archives/rev-T-and-earlier/airframe/VERIFY_PLACEMENT_CHECKLIST.md",
       "archives/rev-T-and-earlier/avionics/TODO-1-9-COMPLETION-STATUS.md",
       "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-CHECKLIST.md",
@@ -24066,6 +24075,7 @@
       "archives/more-files.zip",
       "archives/nacelle-nozzle-gear.jsx",
       "archives/nacelles.jst",
+      "archives/rev-T-and-earlier/README.md",
       "archives/rev-T-and-earlier/airframe/VERIFY_PLACEMENT_CHECKLIST.md",
       "archives/rev-T-and-earlier/avionics/TODO-1-9-COMPLETION-STATUS.md",
       "archives/rev-T-and-earlier/avionics/kicad/TODO-1.2b-CHECKLIST.md",
