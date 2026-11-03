@@ -151,16 +151,16 @@ def compute(lim: dict, E) -> dict[str, str]:
     v["tw_floor"] = f"{twf:.1f}"
     v["da_floor"] = _f(_round(E.isa_sigma_alt_ft(twf / tw_pl), 100))
 
-    for name, k in E.CASES.items():
+    for name, case in E.CASES.items():
         for tag, m, cap in (
             ("pl", cases["pl"], E.CAP_PAIR_AH),
             ("np", cases["np"], E.CAP_PAIR_AH),
             ("3c", cases["3c"], 6.0),
         ):
-            cur = E.hover_current(m, k["v_load"], k["stack"])
+            cur = E.hover_current(m, case["v_load"], case["stack"])
             v[f"i_{name}_{tag}"] = f"{cur:.0f}"
             v[f"c_{name}_{tag}"] = f"{cur / cap:.0f}"
-            v[f"t_{name}_{tag}"] = f"{E.endurance_s(m, cap, k):.0f}"
+            v[f"t_{name}_{tag}"] = f"{E.endurance_s(m, cap, case):.0f}"
     air = sum(a for _, a, _, _ in E.MISSION)
     target = int(air * 1.30)
     v["target_s"] = str(target)
