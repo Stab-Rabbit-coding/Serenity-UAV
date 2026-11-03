@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02",
+  "generated": "2026-11-03",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -14403,7 +14403,7 @@
       "archived": false
     },
     "current-specification/README.md": {
-      "description": "Serenity UAV \u2014 Current Specification (Rev T BOM Baseline)",
+      "description": "Serenity UAV \u2014 Current Specification (Rev U BOM Baseline)",
       "tags": [
         "documentation",
         "redundancy-failover",
@@ -14468,6 +14468,22 @@
       "archived": false
     },
     "current-specification/bom_revT.json": {
+      "description": "Bill of materials, JSON (217 items)",
+      "tags": [
+        "bom",
+        "specification"
+      ],
+      "archived": false
+    },
+    "current-specification/bom_revU.csv": {
+      "description": "Bill of materials, CSV (217 items)",
+      "tags": [
+        "bom",
+        "specification"
+      ],
+      "archived": false
+    },
+    "current-specification/bom_revU.json": {
       "description": "Bill of materials, JSON (217 items)",
       "tags": [
         "bom",
@@ -21847,6 +21863,8 @@
       "current-specification/bom_revS.json",
       "current-specification/bom_revT.csv",
       "current-specification/bom_revT.json",
+      "current-specification/bom_revU.csv",
+      "current-specification/bom_revU.json",
       "current-specification/flight_limits.json",
       "current-specification/joint_register.json",
       "current-specification/safety_factors.json",
@@ -23338,6 +23356,8 @@
       "current-specification/bom_revS.json",
       "current-specification/bom_revT.csv",
       "current-specification/bom_revT.json",
+      "current-specification/bom_revU.csv",
+      "current-specification/bom_revU.json",
       "docs/bom_revR.json",
       "docs/sls-study/wing-polars/S1223_Re100000_N5_nf.csv",
       "docs/sls-study/wing-polars/S1223_Re100000_N5_xfoil.csv",
