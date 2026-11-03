@@ -69,7 +69,14 @@ EPS = 0.01;
 SLOTS       = 12;
 PIN_D       = 2.0;
 PIN_L       = 22.0;
-PIN_CLR     = 0.15;
+PIN_CLR     = 0.3;            // [mm] per side, pin in the printed guide bore.
+                              //   Was 0.15 (FDM).  SLS: 0.2 mm is the minimum
+                              //   and 0.3 mm the general clearance between
+                              //   SLS faces [REF-MFG-001 pp. 7, 12]; a bound
+                              //   pin is a fail-to-release/engage brake, so
+                              //   0.3 (2026-11-01 SLS migration).  Worm-side
+                              //   angular play this adds is divided by the
+                              //   worm reduction at the nacelle.
 PIN_R       = 5.5;            // pin radius from the worm axis (slot pitch circle)
 PIN_TRAVEL  = 3.0;
 SLOT_DEPTH  = 2.5;

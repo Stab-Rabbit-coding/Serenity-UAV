@@ -20,6 +20,10 @@ python3 "$TOPDIR/tools/precommit_sanitize.py" || exit 1
 # commit if they disagree, regenerate the manual's AUTO/V regions + stamp, and stage the manual.
 [ -f "$TOPDIR/tools/sync_operators_manual.py" ] && { python3 "$TOPDIR/tools/sync_operators_manual.py" --stage || exit 1; }
 
+# Hull STLs ship as gzip tarballs; repackage a regenerated hull, keep the inflated STLs ignored/untracked
+# and refuse any staged blob near GitHub's 100 MiB limit (skipped where the tool is absent: shared hooksPath).
+[ -f "$TOPDIR/tools/check_hull_tarballs.py" ] && { python3 "$TOPDIR/tools/check_hull_tarballs.py" || exit 1; }
+
 # Doc wording (REF-MIL-003 CNAF M-3710.7 SS1.5/1.6 callout/verb conventions)
 python3 "$TOPDIR/tools/precommit_doc_wording.py" || exit 1
 

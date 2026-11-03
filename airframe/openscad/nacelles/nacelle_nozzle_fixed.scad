@@ -97,11 +97,12 @@
 //   CG local Z 15.34 → nacelle Z 181.6.
 //
 // ── Material / print ──────────────────────────────────────────────────────
-//   20 % CF-PETG (REF-MAT-002), hardened nozzle.  Lip DOWN on the bed,
-//   0.15 mm layers, 4 perimeters, 100 % infill (thin walls are all
-//   perimeter anyway — MASS_AUDIT §1 RHO_PRINT note).  Exhaust is EDF
-//   bypass air only (no combustion), so CF-PETG's thermal limit is not
-//   engaged; ESC heat stays in the forward bays.
+//   SLS DuraForm PA CF [REF-MAT-015] (2026-11-01; was 20 % CF-PETG
+//   REF-MAT-002 FDM).  No supports in SLS; orient lip down so the axis is Z
+//   and the round bore is not stair-stepped.  Walls 2.0-2.5 mm exceed the
+//   1 mm SLS floor [REF-MFG-001]; kept for stiffness, not printability.
+//   Exhaust is EDF bypass air only (no combustion); PA CF HDT 177 C at
+//   1.82 MPa.  ESC heat stays in the forward bays.
 //
 // ── Fits (mate, target, clearance) ───────────────────────────────────────
 //   Bonding lip ID 55.0  | nacelle duct tube OD 55.0 | epoxy bond, as iris
@@ -140,6 +141,17 @@ SKIN_T       =  2.0;            // [mm] outer skin thickness (iris housing)
 WEB_T        =  2.0;            // [mm] aft closing web of the housing void
 RIB_N        =  3;              // [count] radial stiffening ribs in the void
 RIB_W        =  2.0;            // [mm] rib tangential thickness
+// SLS powder escape (2026-11-01 FDM -> SLS migration).  The sealed void
+// printed fine in FDM but in SLS it fills with unsintered powder that can
+// never be removed (~14 cc).  Blind cavities need a >2 mm hole for powder /
+// bead-blast exit [REF-MFG-001 p. 6].  Holes run axially through the aft web
+// at the radius midway in the void top (27.51..32.1) and exit on the exposed
+// housing aft face (r 27.5..33.5 at Z 15), between the ribs (ribs at
+// 30/150/270 deg, holes at 90/210/330 deg).  Leave open: the void then
+// vents to the exhaust side, which is harmless for a non-pressurised shell.
+ESCAPE_N     =  3;              // [count] powder escape holes
+ESCAPE_D     =  3.0;            // [mm] hole diameter (> 2.0 rule, 1 mm margin)
+ESCAPE_R     = 30.0;            // [mm] hole centre radius
 RIB_EMBED    =  0.5;            // [mm] rib overlap INTO the liner — keeps
                                 //   rib faces off the void surfaces, so the
                                 //   CGAL union has no coincident faces
@@ -189,6 +201,7 @@ module nozzle_profile() {
 }
 
 module nacelle_nozzle_fixed() {
+  difference() {
     union() {
         rotate_extrude() nozzle_profile();
         // Radial ribs bridging liner to skin through the void, drawn as an
@@ -215,6 +228,12 @@ module nacelle_nozzle_fixed() {
                             [HOUSING_OUTER_R - SKIN_T + 0.4,        0.5]
                         ]);
     }
+    // SLS powder escape holes, void top -> housing aft face
+    for (i = [0 : ESCAPE_N - 1])
+        rotate([0, 0, i * 360 / ESCAPE_N + 90])
+            translate([ESCAPE_R, 0, VOID_TOP - 1])
+                cylinder(d = ESCAPE_D, h = THROAT_LEN - VOID_TOP + 2, $fn = 32);
+  }
 }
 
 nacelle_nozzle_fixed();

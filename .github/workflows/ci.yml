@@ -123,6 +123,8 @@ jobs:
         run: python3 tools/check_datum_drift.py
       - name: Verify the joint register covers the BOM fasteners (plan 2026-11-02-001 U1)
         run: python3 tools/check_joint_register.py
+      - name: Verify hull STLs ship as tarballs and inflated STLs stay ignored
+        run: python3 tools/check_hull_tarballs.py --check
       - name: Verify the Operator's Manual is in sync with the flight limits (WBS 0.10.3)
         run: python3 tools/sync_operators_manual.py --check
       - name: Verify PROJECT_INDEX.md / ARCHIVE_INDEX.md / index_tags.json are in sync

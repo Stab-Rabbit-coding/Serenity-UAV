@@ -71,7 +71,7 @@ A first two-contact plateau simulation, at the hull-only FDM-solid mass (14.68 l
 - **R5.** The gear wires (ductile and spring) shall be re-sized as a function of AUW. The
   interim value is **14.19 lbm** (SLS on the hull and both nacelles; first written as 14.09,
   which omitted the nacelles); the final value is the as-weighed AUW (LG-15).
-- **R6.** The skids and cross member shall be **PA12-CF** [REF-MAT-011], an elastic
+- **R6.** The skids and cross member shall be **PA12-CF** [REF-MAT-015], an elastic
   leaf-spring U-frame printed as a separate ring and skid member (Option B). A ventral
   strut pad at Y 620 shall tie the cross member to a hull hard point. *(Superseded 2026-10-31, owner decision: the skid and cross member U-frame is **PA12-CF** (DuraForm PA CF), designed elastic, with a ventral strut at Y 620. PA11 was too flexible to absorb the co-strike inside the stroke. See `docs/SKID_FAILURE_MODE_STUDY.md` §5–8.)*
 - **R7.** No change to the pivot station, and no proportion change. Geometry is rebuilt
