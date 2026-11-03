@@ -63,9 +63,10 @@ def tar_member_sha256(tar_path: Path, member: str) -> str | None:
         if names != [member]:
             return None
         h = hashlib.sha256()
-        f = tz.extractfile(member)
-        assert f is not None
-        for chunk in iter(lambda: f.read(1 << 20), b""):
+        fobj = tz.extractfile(member)
+        if fobj is None:
+            return None
+        for chunk in iter(lambda: fobj.read(1 << 20), b""):
             h.update(chunk)
         return h.hexdigest()
 
@@ -111,7 +112,7 @@ def check_piece(root: Path, stem: str, fix: bool) -> tuple[list[str], list[str]]
 def staged_blob_errors(root: Path) -> list[str]:
     errs = []
     out = git(root, "ls-files", "--stage", "-z").stdout
-    for ent in filter(None, out.split("\0")):
+    for ent in [x for x in out.split("\0") if x]:
         meta, _, path = ent.partition("\t")
         sha = meta.split()[1]
         size = int(git(root, "cat-file", "-s", sha).stdout.strip() or 0)
@@ -126,13 +127,13 @@ def main() -> int:
     args = ap.parse_args()
     errs: list[str] = []
     for stem in HULL_PIECES:
-        e, notes = check_piece(ROOT, stem, fix=not args.check)
-        errs += e
+        piece_errs, notes = check_piece(ROOT, stem, fix=not args.check)
+        errs += piece_errs
         for n in notes:
             print(f"check_hull_tarballs: {n}")
     errs += staged_blob_errors(ROOT)
-    for e in errs:
-        print(f"check_hull_tarballs: ERROR: {e}", file=sys.stderr)
+    for msg in errs:
+        print(f"check_hull_tarballs: ERROR: {msg}", file=sys.stderr)
     if not errs:
         print("check_hull_tarballs: hull tarballs current, inflated STLs ignored")
     return 1 if errs else 0
