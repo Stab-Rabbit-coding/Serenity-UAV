@@ -66,7 +66,7 @@ def tar_member_sha256(tar_path: Path, member: str) -> str | None:
         fobj = tz.extractfile(member)
         if fobj is None:
             return None
-        for chunk in iter(lambda: fobj.read(1 << 20), b""):
+        while chunk := fobj.read(1 << 20):
             h.update(chunk)
         return h.hexdigest()
 
