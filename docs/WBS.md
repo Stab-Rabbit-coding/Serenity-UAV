@@ -1183,6 +1183,13 @@ tools), and the remaining `docs/plans/` files (no completion status to judge by)
   (their 248,000 mm³ against 367,000 mm³ from the current source); and the pivot is not converged
   (residual +9.6 mm, unchanged by this work).
 
+**Cargo winch and cargo-bay components (2026-11-07).** The Rev C1 winch cannot be built as specified:
+its stack does not fit the one-piece hull at the layout reservation, and no hull-clear placement near the
+payload line also clears the tilt-actuator hardware (`docs/CARGO_WINCH_SPECIFICATION.md` §3.11; owner
+decision needed). The six winch printed parts therefore have no meshes. Other cargo-bay checks:
+`assembly_integrity_check.py` PASS (hull enclosed, 0 openings); `twin_head_pack_fit.py` PASS;
+`cargo_layout_fit.py` FAIL, identical on `main` and stale (old shell, retired cradle).
+
 **Archive compaction (2026-11-07).** All of `archives/` is now 13 deterministic tarballs (118 MB, was
 290 MB in the working tree): one per former subfolder, plus `loose-zips` and `loose-files`. All 590
 files were extracted and compared byte for byte before the originals were removed. `archives/MANIFEST.md`
