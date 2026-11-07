@@ -1143,14 +1143,22 @@ with status:
 | Ledger, SLS basis | Hover AUW 14.12 lbm (6,405 g), hover CG offset +11.8 mm, T/W 1.48; cargo 2,800 g payload 14.40 lbm; heaviest 4,000 payload 14.62 lbm. On the old FDM 1.05 basis the same aircraft is 13.80 lbm. Density added +99 g to the printed hull parts and +49 g to the nacelles (`tools/sls_auw_reconcile.py`). Provisional until the twin-pack battery model lands. |
 | BOM vs mesh | 14 printed BOM rows differ from the measured mesh mass for non-density reasons (e.g. `PRINT-WINGS-S1223` BOM 131 g vs mesh 101 g); not changed by the density pass. |
 
-**Archive pass (2026-11-03).** Frozen at Rev T and earlier under `archives/rev-T-and-earlier/`
-(see its `README.md`): `bom_revS.*`, `bom_revT.*`, `serenity-rev-s.jsx`, `docs/bom_revR.json`, the
+**Archive pass (2026-11-03).** Frozen at Rev T and earlier in `archives/rev-T-and-earlier.tar.gz`
+(see `archives/README.md` and `archives/MANIFEST.md`): `bom_revS.*`, `bom_revT.*`, `serenity-rev-s.jsx`, `docs/bom_revR.json`, the
 one-shot `tools/bom_edit_*.py` scripts, dated status snapshots, stale 30 in / 36 in studies, and one
 superseded plan. Not archived, with the reason: the 50 mm nacelle sources
 (`nacelle_pod_64mm_tandem.scad` and `nacelle_nozzle_iris_64mm.scad` `include` the 50 mm files, and
 about 26 tools read the 50 mm STLs); `docs/structural_analysis.md`, `docs/TILT_SPAR_ANALYSIS.md`,
 `docs/AVIONICS_PB2_REDESIGN.md`, and `avionics/rev-s1/WBS.md` (read by live tools); and the
 remaining `docs/plans/` files (no completion status to judge by).
+
+**Archive compaction (2026-11-07).** All of `archives/` is now 13 deterministic tarballs (118 MB, was
+290 MB in the working tree): one per former subfolder, plus `loose-zips` and `loose-files`. All 590
+files were extracted and compared byte for byte before the originals were removed. `archives/MANIFEST.md`
+lists every tarball, its SHA-256, and every file in it; `archives/README.md` gives the unpack command and the
+rule for adding to the archive. Git history still holds the old blobs, so the repository's `.git` size does not shrink
+without a history rewrite. Dependabot's `archives/serenity` lockfile alerts end because that folder is no longer
+unpacked.
 
 Not yet part of a Rev U checkpoint (tracked open in their own WBS/TODO): avionics PCB routing and
 Gerbers, firmware Phase 7, STL re-exports after the TACCO change, cargo-shell mesh defect, cargo

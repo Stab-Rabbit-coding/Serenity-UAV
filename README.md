@@ -234,7 +234,7 @@ above are the current design baseline. Full engineering detail for each subsyste
 subsystem's own README/doc — see the link on each card in [Subsystems](#subsystems) above. The
 narrative that used to live directly in this file (full Airframe/Powerplant/Avionics/Cargo
 Handling write-ups) is preserved verbatim, for historical reference, in
-[`archives/root-readme-deep-dive-2026-08-03/`](archives/root-readme-deep-dive-2026-08-03/).
+[`archives/root-readme-deep-dive-2026-08-03.tar.gz`](archives/MANIFEST.md) (unpack per [`archives/README.md`](archives/README.md)).
 
 ---
 
