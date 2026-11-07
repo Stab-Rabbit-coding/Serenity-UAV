@@ -49,6 +49,16 @@ wall (0.095 in³ (1,562 mm³)). When a source states something about another par
 derive one from the other (`Z_AFT = P64_Z_NOZ - NZ_SPIGOT_L`). Then the assembly check, not the comment,
 is the proof.
 
+## And the reverse: a new check that contradicts a recorded one may be the one that is wrong
+
+The first assembly check also reported 0.137 in³ (2,237 mm³) of pod in the pinion sweep. The WBS already
+held a clear sweep ("+theta sign corrected") and a pre-relief 474–1127 mm³ pattern, and the new numbers
+matched the *pre-relief, wrong-sign* pattern. That was the clue: the tool tilted the exhaust up, not down.
+Before recording a regression against an earlier recorded pass, reproduce the earlier tool's
+convention (tilt sign, frame, datum) and check the new tool against one number the record already
+holds. A unit test that fixes the convention (`test_tilt_fixes_pivot_and_points_exhaust_down_in_hover`)
+now stands guard.
+
 ## Cost of skipping it
 
 A sprint plan built on "route exists" would have scheduled harness drawing before the geometry had any place

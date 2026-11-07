@@ -10195,7 +10195,8 @@
       "description": "64 mm Nacelle \u2014 Verification Record (2026-10-03)",
       "tags": [
         "documentation",
-        "propulsion"
+        "propulsion",
+        "security"
       ],
       "archived": false
     },
@@ -13592,7 +13593,8 @@
     "docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md": {
       "description": "A recorded route or clearance goes stale when its part changes",
       "tags": [
-        "documentation"
+        "documentation",
+        "security"
       ],
       "archived": false
     },
@@ -15865,7 +15867,8 @@
     "tools/nacelle64_assembly_check.py": {
       "description": "nacelle64_assembly_check.py -- assemble the 64 mm nacelle and check fit, tilt sweep and cable.",
       "tags": [
-        "build-tooling"
+        "build-tooling",
+        "security"
       ],
       "archived": false
     },
@@ -17282,6 +17285,7 @@
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/CARGO_DOOR_GATEWAY_SPEC.md",
       "docs/CARGO_DOOR_LATCH_SPEC.md",
+      "docs/NACELLE_64MM_VERIFICATION.md",
       "docs/OBSERVER_LASER_ANALYSIS.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/OSHW_CERTIFICATION.md",
@@ -17306,6 +17310,7 @@
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
+      "docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
       "gcs/SKIPPER_SPEC.md",
@@ -17335,6 +17340,7 @@
       "tools/landing_gear_bay_pad_fit.py",
       "tools/lg_bellcrank_fbd.py",
       "tools/lg_side_hit_study.py",
+      "tools/nacelle64_assembly_check.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
       "tools/open_mating_faces.py",

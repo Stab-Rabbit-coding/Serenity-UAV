@@ -194,6 +194,14 @@ def to_trimesh(mn: m.Manifold) -> trimesh.Trimesh:
                            :, :3], np.asarray(mm.tri_verts), process=False)
 
 
+def tilt_matrix(deg: float) -> np.ndarray:
+    """Tilting group at tilt `deg`: 0 = duct axis (+Z, exhaust) aft/horizontal, +90 = hover with the
+    exhaust pointing DOWN (hull -Z, local +Y).  rot_x(+) lifts +Z toward -Y, so tilt is rot_x(-deg);
+    the 2026-11-07 first version used rot_x(+deg) and swept the wrong way (WBS NAC-64-GEOM-04 had
+    already recorded the '+theta sign corrected')."""
+    return rot_x(-deg)
+
+
 def rot_x(deg: float, z: float = PIVOT_Z) -> np.ndarray:
     c, s = np.cos(np.radians(deg)), np.sin(np.radians(deg))
     t1 = np.eye(4)
@@ -251,7 +259,7 @@ def overlap_matrix(man: dict[str, m.Manifold]) -> list[tuple[str, str, float]]:
 def sweep(man: dict[str, m.Manifold], angles) -> list[dict]:
     rows = []
     for ang in angles:
-        r = rot_x(ang)
+        r = tilt_matrix(ang)
         tilt = {k: man[k].transform(np.asarray(r[:3, :4], dtype=float)) for k in TILTING}
         row = {"deg": float(ang)}
         for a in TILTING:
@@ -379,7 +387,7 @@ def pinion_pocket(man: dict[str, m.Manifold], step: float = 1.0) -> tuple[float,
     swept = None
     for ang in np.arange(TILT_MIN, TILT_MAX + 0.01, step):
         # pod-frame position of the pinion at tilt ang = rotate by -ang about the tilt axis
-        r = rot_x(-ang)
+        r = tilt_matrix(-ang)       # the wing-fixed pinion as seen from the pod
         pos = man["pinion"].transform(np.asarray(r[:3, :4], dtype=float))
         swept = pos if swept is None else swept + pos
     return float((swept ^ man["pod"]).volume()), swept

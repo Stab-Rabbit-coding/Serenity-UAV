@@ -553,7 +553,8 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] EDF-DATA-01 — datasheet or measured source for every EDF figure
 - [ ] NAC-64-SERVO-01 — radial 64 mm tandem-EDF nacelle + servo nozzle
 - [x] NAC-64-ASM-01 — spigot vs cartridge: cartridge 3 mm short (OD-1)
-- [ ] NAC-64-ASM-02..04 — pinion sweep, bay floor, coverage
+- [x] NAC-64-ASM-02 — pinion sweep finding RETRACTED (sign error)
+- [ ] NAC-64-ASM-03..04 — bay floor, coverage
 - [ ] SPAR-20-AERO — The re-lofted section is no longer S1223 (root 12.1 →…
 - [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
 - [ ] SPAR-20-ALLOW — No verified CF tube flexural allowable exists in…

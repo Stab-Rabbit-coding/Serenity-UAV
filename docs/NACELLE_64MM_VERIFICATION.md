@@ -229,14 +229,20 @@ is 0 on both sides (`tools/nacelle64_od1_figure.py`).
 
 ![OD-1: spigot vs cartridge before, option A, option B](figures/nacelle64_od1_spigot_cartridge.png)
 
-**Tilt sweep −5…+135° (5° steps), tilting group vs wing, spar and pinion.** Pod, cartridge, nozzle and
-trunnion never touch the wing or the spar (wing gap ≥ 0.177 in (4.5 mm) at 0°). The trunnion ring against
+**Tilt sweep −5…+135° (5° steps), tilting group vs wing, spar and pinion.** Tilt is positive with the
+exhaust swinging DOWN to the hover attitude (hull −Z). Pod, cartridge, nozzle and trunnion never touch the
+wing or the spar (wing gap ≥ 0.177 in (4.5 mm) at 0°). The trunnion ring against
 the fixed pinion shows ≤ 0.0016 in³ (26 mm³) overlap, which is tooth phase (the pinion is a rigid mesh here,
-in service it turns 50/14 times the tilt), not a clash. **Finding 2:** the pod wall intrudes into the
-volume the pinion sweeps relative to the pod. The pod has an annular channel for the pinion, but two blocks
-of pod material sit in it (right panel above): **0.137 in³ (2,237 mm³)** inside the swept volume, first
-contact at ≈ 15° tilt, worst 0.042 in³ (684 mm³) at 135° (0.039 in³ (645 mm³) at 130°). The channel needs
-those two blocks relieved before the pod can tilt through its range.
+in service it turns 50/14 times the tilt), not a clash. The pod material inside the volume the pinion sweeps
+relative to the pod is **0 in³ (0 mm³)** on both pods: the pod's annular relief channel (`tilt_drive_relief`,
+part-frame arc −6°…+151°) contains the whole sweep (right panel above).
+
+**Correction, 2026-11-07.** The first version of this section reported a *Finding 2*, 0.137 in³ (2,237 mm³) of
+pod material in the pinion sweep with first contact near 15° tilt. That was a sign error in my sweep: the
+tool tilted the exhaust up instead of down, so the pinion orbited the wrong side of the pod. NAC-64-GEOM-04 and
+the T6 relief work had already recorded "+theta sign corrected" and a clear sweep, and the wrong-sign numbers
+reproduced the pre-relief 474–1127 mm³ pattern in the WBS. The tool now has `tilt_matrix()` (hover = exhaust
+down) with a unit test. NAC-64-ASM-02 is retracted.
 
 **Cable allowance. Finding 3: the 4 × 10 AWG bundle (0.523 in (13.28 mm) circumscribed, 0.582 in (14.78 mm)
 with the 0.059 in (1.5 mm) twist clearance) cannot leave the spar bore in this pod.** The bore mouth (spar

@@ -2255,19 +2255,32 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         *Finding as recorded:* The throat's 0.12 in (3 mm) spigot (r 1.26–1.48 in (32–37.5 mm),
         z −0.12..0 in (−3..0 mm)) occupies the same annulus as the aft 0.12 in (3 mm) of the cartridge, which ended at Z 7.84 in (199.1 mm) = P64_Z_NOZ.
         Both sides. The exit (static overlap cartridge x nozzle_throat = 0 in³ (0 mm³)) is met.
-    - [ ] **NAC-64-ASM-02 — pod material in the wing-pinion sweep: 0.137 in³ (2,237 mm³)
-        (found 2026-11-07).** In the pod frame the wing-fixed 14T pinion orbits the
-        tilt axis at r 1.01 in (25.7 mm); the pod has the annular channel but two blocks of pod
-        material sit in it (section at X 1.77 in (45 mm), docs/figures/nacelle64_sections.png).
-        First contact ~15° tilt, worst 0.042 in³ (684 mm³) at 135°. Supersedes the
-        NAC-64-GEOM-04 "pinion vs pod 0 in³ (0 mm³)" sweep, which ran on the pre-x1.06,
-        pre-hollowing pod. Exit: `pinion_pocket_mm3` = 0 in³ (0 mm³) on both pod renders.
+    - [x] **NAC-64-ASM-02 — RETRACTED 2026-11-07 (my sign error, Claude Opus 5.5).** The
+        first assembly check reported 0.137 in³ (2,237 mm³) of pod material in the wing-pinion
+        sweep, first contact at ~15° tilt. The tool tilted the exhaust up instead of down, so the
+        pinion swept the wrong side of the pod. With hover = exhaust down (`tilt_matrix`), the
+        pod material inside the pinion sweep is 0 in³ (0 mm³) on both pods, tilt −5…135°, and the
+        pod's `tilt_drive_relief()` channel contains the whole sweep, as NAC-64-GEOM-04 / T6
+        recorded ("+theta sign corrected"). Trunnion-ring vs rigid pinion overlap ≤ 0.0016 in³
+        (26 mm³) at any angle is tooth phase, not a clash. Lesson:
+        `docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md`.
     - [ ] **NAC-64-ASM-03 — ESC disconnect bay has no floor and is skinned over
         (found 2026-11-07).** The 1.18 × 0.55 × 0.24 in (30 × 14 × 6 mm) pocket is cut
         (0.0015 in³ (24 mm³) left in it), but the 0.12 in (3.1 mm) behind its floor plane is empty (0.0009 in³ (15 mm³)), so the four M3 stud
         inserts have nothing to seat in, and ~0.042 in³ (690 mm³) of 0.04 in (1 mm) skin covers the
         pocket mouth on the pylon face. The hollowing removed what the bay module
         assumed. Exit: stud bosses present; mouth open; re-run the tool.
+        *Design arithmetic found 2026-11-07 (not yet fixed):* the pocket floor is at X 1.48 in
+        (37.6 mm) (face 1.72 in (43.6 mm) less the 0.24 in (6.0 mm) depth); the duct wall outer
+        radius is 1.36 in (34.5 mm), so a restored floor slab is 0.12 in (3.1 mm) thick. The studs'
+        insert bores run from the floor toward the duct, `M3_INSERT_L` 0.24 in (6.0 mm), which ends
+        at X 1.24 in (31.6 mm), 0.02 in (0.4 mm) inside the Ø2.52 in (Ø64 mm) flow bore (r 1.26 in
+        (32 mm)). A floor alone is therefore not enough; the insert needs a shorter spec (BOM
+        `STUD-M3-BRASS`; a 0.16 in (4.0 mm) insert fits the 0.22 in (5.6 mm) of floor + wall with margin)
+        or a thicker boss. The pylon skin also lies at X 1.73–1.87 in (44–47.5 mm) over the pocket,
+        beyond the 1.72 in (43.6 mm) face the pocket cut was sized to, so the mouth needs an
+        outward extension through the skin. Both belong with the WA-R10 route (S2) because the
+        route ends at this pocket; owner/design choice on the insert spec first.
     - [ ] **NAC-64-ASM-04 — assembly-check coverage gaps.** Not yet in
         `tools/nacelle64_assembly_check.py`: nozzle flaps and servo linkage
         (published placement needed), rotors, ESC boards and covers (unpublished,

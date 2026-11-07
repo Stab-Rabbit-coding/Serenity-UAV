@@ -1194,7 +1194,8 @@ decision needed). The six winch printed parts therefore have no meshes. Other ca
 assembles the live pod, cartridge, nozzle, trunnion, motor cans, spar, wing and wing pinion in the
 nacelle-local frame, on both pod renders (`docs/NACELLE_64MM_VERIFICATION.md` §5d). Results: the static fit
 is clear except the nozzle throat spigot vs the stage-2 cartridge, 0.095 in³ (1,562 mm³) (NAC-64-ASM-01). The pod
-has 0.137 in³ (2,237 mm³) inside the wing-pinion sweep, first contact at about 15° (NAC-64-ASM-02). No route exists for the
+is clear of the wing-pinion sweep over −5…135° tilt on both sides (a first reading of 0.137 in³ (2,237 mm³) was a
+sign error in the tool and is retracted, NAC-64-ASM-02). No route exists for the
 4 × 10 AWG bundle from the spar-bore mouth, and the disconnect bay has no floor and is skinned over
 (NAC-64-ASM-03; WA-R10 "route exists" superseded). Coverage gaps are NAC-64-ASM-04.
 

@@ -14,13 +14,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import nacelle64_assembly_check as a  # noqa: E402
 
 
-def test_rot_x_fixes_pivot_and_lifts_duct_axis():
-    r = a.rot_x(90.0)
+def test_tilt_fixes_pivot_and_points_exhaust_down_in_hover():
+    r = a.tilt_matrix(90.0)
     pivot = np.array([0.0, 0.0, a.PIVOT_Z, 1.0])
     assert np.allclose(r @ pivot, pivot)
-    # 0 deg: duct axis +Z points aft; +90 deg: it points up, i.e. local -Y
+    # 0 deg: duct axis +Z points aft; +90 deg (hover): exhaust points down = hull -Z = local +Y
     tip = np.array([0.0, 0.0, a.PIVOT_Z + 10.0, 1.0])
-    assert np.allclose((r @ tip)[:3], [0.0, -10.0, a.PIVOT_Z], atol=1e-9)
+    assert np.allclose((r @ tip)[:3], [0.0, 10.0, a.PIVOT_Z], atol=1e-9)
 
 
 def test_stack_datums():
