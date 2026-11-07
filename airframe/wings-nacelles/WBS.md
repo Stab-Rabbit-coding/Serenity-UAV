@@ -2241,31 +2241,30 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     - [ ] **NAC-64-GEOM-05 — gates on the 64 mm pod.** Port `nacelle_trunnion_fit.py`,
         `nacelle_esc_bay_fit.py` and `nacelle_mass_cg.py` (PIVOT_Z, plan U5) to
         read the 64 mm wrapper; PIVOT_Z 107.5 is carried unchanged until then.
-    - [x] **NAC-64-ASM-01 — CLOSED 2026-11-07 (owner OD-1: option A, cartridge 3 mm
+    - [x] **NAC-64-ASM-01 — CLOSED 2026-11-07 (owner OD-1: option A, cartridge 0.12 in (3 mm)
         shorter; implemented by Claude Opus 5.5).** `edf_motor_mount_64mm.scad` Z_AFT =
-        P64_Z_NOZ − NZ_SPIGOT_L (3.0), aft face Z 7.72 in (196.1 mm), which is what
+        P64_Z_NOZ − NZ_SPIGOT_L (0.12 in (3 mm)), aft face Z 7.72 in (196.1 mm), which is what
         `nacelle_nozzle_iris_64mm.scad` already assumed ("the stage-2 cartridge ends 3 mm
         short for it"); the cartridge SCAD had never followed. Both STLs re-rendered:
-        3.64 in (92.43 mm) long, watertight, 3.58 in³ (58,668 mm³), 65.1 g (was 66.9 g);
+        3.64 in (92.43 mm) long, watertight, 3.58 in³ (58,668 mm³), 0.144 lbm (65.1 g), was 0.147 lbm (66.9 g);
         the retention inserts move with the aft face, the throat spigot bears on it.
-        Re-check: cartridge x nozzle_throat 0 mm³ on both pod renders. Ledger hover AUW
-        14.12 lbm (6,403 g, was 6,405); nacelle CG 4.69 in (119.15 mm), pivot residual
+        Re-check: cartridge x nozzle_throat 0 in³ (0 mm³) on both pod renders. Ledger hover AUW
+        14.12 lbm (6,403 g, was 6,405 g); nacelle CG 4.69 in (119.15 mm), pivot residual
         +0.372 in (+9.45 mm, was +9.58; NAC-64-PIVOT-RC open). BOM synced. Figure:
         `docs/figures/nacelle64_od1_spigot_cartridge.png`.
-        *Finding as recorded:* The throat's 0.12 in (3 mm) spigot (r 1.26–1.48 in (32–37.5 mm), z −0.12..0 in (−3..0 mm)) occupies the same
-        annulus as the aft 0.12 in (3 mm) of the cartridge, which ends at Z 7.84 in (199.1 mm) = P64_Z_NOZ.
-        Both sides. Owner decision: shorten the cartridge 0.12 in (3 mm), or drop the spigot.
-        Exit: static overlap cartridge x nozzle_throat = 0 in³ (0 mm³) in the tool.
+        *Finding as recorded:* The throat's 0.12 in (3 mm) spigot (r 1.26–1.48 in (32–37.5 mm),
+        z −0.12..0 in (−3..0 mm)) occupies the same annulus as the aft 0.12 in (3 mm) of the cartridge, which ended at Z 7.84 in (199.1 mm) = P64_Z_NOZ.
+        Both sides. The exit (static overlap cartridge x nozzle_throat = 0 in³ (0 mm³)) is met.
     - [ ] **NAC-64-ASM-02 — pod material in the wing-pinion sweep: 0.137 in³ (2,237 mm³)
         (found 2026-11-07).** In the pod frame the wing-fixed 14T pinion orbits the
         tilt axis at r 1.01 in (25.7 mm); the pod has the annular channel but two blocks of pod
         material sit in it (section at X 1.77 in (45 mm), docs/figures/nacelle64_sections.png).
-        First contact ~15° tilt, worst 0.042 in³ (684 mm³) at 135 deg. Supersedes the
-        NAC-64-GEOM-04 "pinion vs pod 0 mm3" sweep, which ran on the pre-x1.06,
-        pre-hollowing pod. Exit: `pinion_pocket_mm3` = 0 on both pod renders.
+        First contact ~15° tilt, worst 0.042 in³ (684 mm³) at 135°. Supersedes the
+        NAC-64-GEOM-04 "pinion vs pod 0 in³ (0 mm³)" sweep, which ran on the pre-x1.06,
+        pre-hollowing pod. Exit: `pinion_pocket_mm3` = 0 in³ (0 mm³) on both pod renders.
     - [ ] **NAC-64-ASM-03 — ESC disconnect bay has no floor and is skinned over
-        (found 2026-11-07).** The 1.18 × 0.55 × 0.24 in (30 × 14 × 6 mm) pocket is cut (0.0015 in³ (24 mm³) left in it),
-        but the 0.12 in (3.1 mm) behind its floor plane is empty (0.0009 in³ (15 mm³)), so the 4 M3 stud
+        (found 2026-11-07).** The 1.18 × 0.55 × 0.24 in (30 × 14 × 6 mm) pocket is cut
+        (0.0015 in³ (24 mm³) left in it), but the 0.12 in (3.1 mm) behind its floor plane is empty (0.0009 in³ (15 mm³)), so the four M3 stud
         inserts have nothing to seat in, and ~0.042 in³ (690 mm³) of 0.04 in (1 mm) skin covers the
         pocket mouth on the pylon face. The hollowing removed what the bay module
         assumed. Exit: stud bosses present; mouth open; re-run the tool.
@@ -2273,7 +2272,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         `tools/nacelle64_assembly_check.py`: nozzle flaps and servo linkage
         (published placement needed), rotors, ESC boards and covers (unpublished,
         NAC-64-GEOM-03), 2 x 6804-ZZ bearings, hull and ground clearance, phase
-        and nav leads. Port pod differs from the X-mirror of stbd by 2.28 in³ (37.4 cm³)
+        and nav leads. Port pod differs from the X-mirror of stbd by 2.28 in³ (37,397 mm³)
         (10 %), so every check runs on both renders.
     - [ ] **NAC-64-SVC-01 — install/remove path (owner requirement 2026-10-03:
         motors, rotors, ESCs and harnesses must be installable and removable).**

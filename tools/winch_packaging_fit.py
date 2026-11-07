@@ -71,6 +71,19 @@ ELEMENTS = [
 ]
 
 
+def inch(mm: float) -> str:
+    """Length, imperial first (AGENTS.md section 5)."""
+    return f"{mm / 25.4:.2f} in ({mm:.1f} mm)"
+
+
+def sq_in(mm2: float) -> str:
+    return f"{mm2 / 25.4 ** 2:.2f} in2 ({mm2:.0f} mm2)"
+
+
+def cu_in(mm3: float) -> str:
+    return f"{mm3 / 25.4 ** 3:.3f} in3 ({mm3:,.0f} mm3)"
+
+
 def load_hull() -> trimesh.Trimesh:
     with tarfile.open(HULL_TAR) as tz:
         member = tz.extractfile("head_cargo_shell24_2mm_merged.stl")
@@ -168,10 +181,11 @@ def line_offset(ox: float) -> float:
 def report(walls, ox, oy, oz) -> bool:
     w = interference(walls, ox, oy, oz)
     bad = {k: v for k, v in w.items() if v > 0.5}
-    print(f"spool centre X {ox:+.1f}  Y {oy:.1f}  Z {oz:.1f}   hoist line offset from the "
-          f"payload centre: {line_offset(ox):.1f} mm")
+    print(f"spool centre X {ox / 25.4:+.2f}  Y {oy / 25.4:.2f}  Z {oz / 25.4:.2f} in "
+          f"(X {ox:+.1f}  Y {oy:.1f}  Z {oz:.1f} mm)   hoist line offset from the "
+          f"payload centre: {inch(line_offset(ox))}")
     for k, v in w.items():
-        verdict = f"CLASH {v:.0f} mm2" if v > 0.5 else f"clear (>= {CLEARANCE_MM:.1f} mm)"
+        verdict = f"CLASH {sq_in(v)}" if v > 0.5 else f"clear (>= {inch(CLEARANCE_MM)})"
         print(f"   {k:16s} {verdict}")
     return not bad
 
@@ -196,11 +210,13 @@ def main(argv: list[str] | None = None) -> int:
                     best.append((abs(ox - 0.0), ox, oy, oz))
     best.sort()
     if not best:
-        print("   NO placement in X -60..40, Y 330..390, Z 190..230 clears the hull.")
+        print("   NO placement in X -2.36..1.57, Y 12.99..15.35, Z 7.48..9.06 in "
+              "(X -60..40, Y 330..390, Z 190..230 mm) clears the hull.")
     else:
         print(f"   {len(best)} clear placements; nearest the payload centre line:")
         for d, ox, oy, oz in best[:6]:
-            print(f"     X {ox:+6.1f}  Y {oy:6.1f}  Z {oz:6.1f}   line offset {d:.1f} mm")
+            print(f"     X {ox / 25.4:+6.2f}  Y {oy / 25.4:6.2f}  Z {oz / 25.4:6.2f} in   "
+                  f"line offset {inch(d)}")
         print("\n3) The nearest hull-clear placements against every other cargo-bay item")
         rank = sorted(best, key=lambda t: np.hypot(t[1], t[2] - HOIST_Y))[:30]
         scored = []
@@ -211,11 +227,11 @@ def main(argv: list[str] | None = None) -> int:
         free = [t for t in scored if t[0] == 0]
         print(f"   {len(free)} of {len(scored)} tested placements also clear all other equipment")
         for tot, off, ox, oy, oz, hits in scored[:6]:
-            tag = "CLEAR" if tot == 0 else f"{tot:.0f} mm3 overlap"
-            print(f"     X {ox:+6.1f}  Y {oy:6.1f}  Z {oz:6.1f}   {off:5.1f} mm from the payload "
-                  f"centre   {tag}")
+            tag = "CLEAR" if tot == 0 else f"{cu_in(tot)} overlap"
+            print(f"     X {ox / 25.4:+6.2f}  Y {oy / 25.4:6.2f}  Z {oz / 25.4:6.2f} in   "
+                  f"{inch(off)} from the payload centre   {tag}")
             for k, v in list(hits.items())[:3]:
-                print(f"         {k}: {v} mm3")
+                print(f"         {k}: {cu_in(v)}")
     return 0 if (ok0 or best) else 1
 
 

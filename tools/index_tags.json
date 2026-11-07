@@ -15869,6 +15869,13 @@
       ],
       "archived": false
     },
+    "tools/nacelle64_od1_figure.py": {
+      "description": "nacelle64_od1_figure.py -- picture of the OD-1 decision: nozzle spigot vs stage-2 cartridge.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nacelle_64_proportion_trade.py": {
       "description": "nacelle_64_proportion_trade.py \u2014 multi-objective sweep of the 64 mm nacelle's",
       "tags": [
@@ -20395,6 +20402,7 @@
       "tools/min_stretch_relocation.py",
       "tools/mirror_claude_memory.py",
       "tools/nacelle64_assembly_check.py",
+      "tools/nacelle64_od1_figure.py",
       "tools/nacelle_64_proportion_trade.py",
       "tools/nacelle_64_scale.py",
       "tools/nacelle_cowl_fair.py",

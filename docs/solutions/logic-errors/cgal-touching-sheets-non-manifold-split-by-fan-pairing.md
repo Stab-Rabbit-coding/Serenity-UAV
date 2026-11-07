@@ -22,7 +22,7 @@ root_cause: "two sheets of the hollowed pod touch along 63 edges, so each such e
 
 ## Context
 
-The live 64 mm pod render (367,237 mm³, 124,864 faces) has no open edges, but 63 of its edges carry four
+The live 64 mm pod render (22.41 in³ (367,237 mm³), 124,864 faces) has no open edges, but 63 of its edges carry four
 faces. The hollowing leaves the cavity wall and the outer skin touching along a line. manifold3d rejects the
 mesh (`NotManifold`, volume 0), so every boolean against it returns zero. This is the same silent-zero trap
 as the unmerged-STL case in the related solution. Here, though, `merge_vertices()` is already done, and that
@@ -30,7 +30,7 @@ is exactly what produces the shared edge.
 
 ## What did not work
 
-- **pymeshfix `clean_from_arrays`** made the mesh watertight, but at **765,291 mm³**, double the real
+- **pymeshfix `clean_from_arrays`** made the mesh watertight, but at **46.70 in³ (765,291 mm³)**, double the real
   volume. It closed the cavities. Any clearance result from that mesh is wrong.
 - **Splitting each bad vertex into face fans** using only the 2-face edges opened 260 new holes. The two
   faces that belong to the same sheet across the bad edge were put in different fans.
@@ -40,7 +40,7 @@ is exactly what produces the shared edge.
 For every edge with more than two faces, sort its faces by the angle of their opposite vertex around the
 edge. Then pair neighbours whose directions are opposite (one traverses a→b, the other b→a). Each pair is
 one sheet. Run the per-vertex fan union-find with those pairs added as links, and give each fan its own copy
-of the vertex. Result: 0 open edges, manifold3d `NoError`, 367,225 mm³. That is within 0.003 % of the
+of the vertex. Result: 0 open edges, manifold3d `NoError`, 22.41 in³ (367,225 mm³). That is within 0.003 % of the
 input, and the difference is float32.
 
 ## Prevention

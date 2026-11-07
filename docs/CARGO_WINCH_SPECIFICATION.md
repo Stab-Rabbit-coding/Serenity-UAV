@@ -610,22 +610,25 @@ spool has a path to free air. Every fix above is doors-open-independent.
 
 ### 3.11 Packaging in the one-piece forward hull (2026-11-07) — the stack does not fit as specified
 
-`tools/winch_packaging_fit.py` places this section's stack (spool Ø20 core / Ø26 flanges, Ø30 ratchet
-ring, dog coupler, port pedestal, the 40.5 × 20 × 40.5 mm SPT5425LV envelope with its spline along X, the
-starboard pedestal and the catch solenoid) in the fused forward hull, slice by slice every 2 mm of Y.
+`tools/winch_packaging_fit.py` places this section's stack (spool Ø0.79 in (Ø20 mm) core / Ø1.02 in (Ø26 mm) flanges, Ø1.18 in (Ø30 mm) ratchet
+ring, dog coupler, port pedestal, the 1.59 × 0.79 × 1.59 in (40.5 × 20 × 40.5 mm) SPT5425LV envelope with its
+spline along X, the starboard pedestal and the catch solenoid) in the fused forward hull, slice by slice every
+0.08 in (2 mm) of Y.
 Its findings, with the assumed items flagged (servo shaft offset along its length, solenoid placement,
 pedestal heights are **ASSUMED**):
 
-1. **At the layout reservation** (spool on the payload centre line, X 0, Y 356.5, axle Z 221.4) the servo
-   clashes with the hull wall by 241 mm², and both pedestals (14 and 43 mm²) and the solenoid (22 mm²) also
-   clash. The servo's 40.5 mm length along the axle runs out to X +65, but at servo-top height (Z 231) the
-   bay is only ±37 mm wide; it is 122.6 mm wide at the axle height itself.
-2. **Against the hull alone**, 523 placements in X −60…40, Y 330…390, Z 190…230 are clear. The nearest to
-   the payload centre line are 5 mm off in X but at Y 380–390 and Z 190–192, which puts the line 24–34 mm aft
-   of the payload centre.
+1. **At the layout reservation** (spool on the payload centre line, X 0, Y 14.04 in (356.5 mm), axle Z 8.72 in (221.4 mm)) the servo
+   clashes with the hull wall by 0.37 in² (241 mm²) of section, and both pedestals (0.022 and 0.067 in²
+   (14 and 43 mm²)) and the solenoid (0.034 in² (22 mm²)) also clash. The servo's 1.59 in (40.5 mm) length
+   along the axle runs out to X +2.56 in (+65 mm), but at servo-top height (Z 9.09 in (231 mm)) the bay is
+   only ±1.46 in (±37 mm) wide; it is 4.83 in (122.6 mm) wide at the axle height itself.
+2. **Against the hull alone**, 523 placements in X −2.36…1.57 in (−60…40 mm), Y 12.99…15.35 in (330…390 mm), Z 7.48…9.06 in
+   (190…230 mm) are clear. The nearest to the payload centre line are 0.20 in (5 mm) off in X but at Y
+   14.96–15.35 in (380–390 mm) and Z 7.48–7.56 in (190–192 mm), which puts the line 0.94–1.34 in (24–34 mm)
+   aft of the payload centre.
 3. **Against the other cargo-bay equipment** (layout tool solids, retired battery and cradle excluded), none
    of the 30 hull-clear placements nearest the payload centre line is also clear. The servo hits the
-   tilt-actuator worm, motor and brake collar (up to 5,800 mm³ at the closest).
+   tilt-actuator worm, motor and brake collar (up to 0.354 in³ (5,800 mm³) at the closest).
 4. **The layout reservation itself is stale.** `tools/cargo_layout_fit.py` still checks the old separate
    cargo shell and models the retired battery cradle; its FAIL (5 envelopes, 8 pair overlaps) is identical
    on `main` before this change. Its twin-line bridle (decision D-T5-2) was chosen because the battery

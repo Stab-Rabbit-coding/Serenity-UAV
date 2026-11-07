@@ -22,6 +22,8 @@ every part procured and built, and the flight phases flown. The open items in th
 are the work list. This plan puts them in order, groups them into sprints that each fit one
 5-hour token-capped session, and gives each sprint numbers that say whether it finished.
 
+**Units.** Inches first, millimetres in parentheses (`AGENTS.md` §5). Product designations such as "64 mm nacelle" and "50 mm" are names (the 2.52 in (64 mm) duct), not measurements, and are kept as the repo writes them.
+
 **Mode.** Governed (`AGENTS.md` + the `WBS.md`/`TODO.md` federation, `docs/WBS_FEDERATION.md`). This
 plan creates no second task list. Every item it names lives in an owning `WBS.md`. A sprint closes
 items there first, then regenerates `TODO.md` with `tools/gen_todo_from_wbs.py`, as `AGENTS.md` §10
@@ -79,8 +81,8 @@ Other baselines that sprints are measured against:
 | CI | no failed check suite on 92dbfb45 (PR #281) | GitHub Actions `ci.yml` |
 | BOM printed rows with no mesh | 11 (winch ×6, node saddle, Hall hub, void formers, neck intake frame, 64 mm ESC covers) | `python3 tools/check_bom_mesh_sync.py` |
 | 64 mm nacelle required parts unpublished | 4 (ESC covers) | `python3 tools/check_nacelle_deps.py` |
-| Nacelle assembly clashes | spigot 0.095 in³ (1,562 mm³); pinion sweep 0.137 in³ (2,237 mm³); cable route none | `tools/nacelle64_assembly_check.py` |
-| Pivot residual | +0.38 in (9.6 mm), not converged | `tools/nacelle_mass_cg_64.py` |
+| Nacelle assembly clashes | spigot 0.095 in³ (1,562 mm³), **0 after OD-1**; pinion sweep 0.137 in³ (2,237 mm³); cable route none | `tools/nacelle64_assembly_check.py` |
+| Pivot residual | +0.372 in (+9.45 mm) after OD-1, not converged | `tools/nacelle_mass_cg_64.py` |
 | Winch packaging | FAIL (no placement clears hull + layout) | `tools/winch_packaging_fit.py` |
 | Cargo layout | FAIL, stale tool (old shell) | `tools/cargo_layout_fit.py` |
 
@@ -171,7 +173,7 @@ true at close-out. **−n** = minimum number of items closed in the sprint (`clo
 interference on both pod renders. Needs OD-1.
 - NAC-64-ASM-01 (spigot/cartridge), NAC-64-ASM-02 (relieve the two blocks in the pinion channel),
   NAC-64-ASM-03 (restore the bay floor + stud bosses, open the pocket mouth).
-- Exit: `nacelle64_assembly_check.py` on both renders: static overlaps only rib contact (≤ 0.001 in³ (15 mm³)),
+- Exit: `nacelle64_assembly_check.py` on both renders: static overlaps only rib contact (≤ 0.0009 in³ (15 mm³)),
   `pinion_pocket_mm3` = 0, sweep pod|pinion = 0 at every 5° step; `check_nacelle_deps.py` PASS. −3.
 - Est. 1 / 1 / 2 (each pod render 11 min; render both in parallel in the background).
 
@@ -202,7 +204,7 @@ the spar bore to the disconnect bay.
 - Servo linkage + schedule tool (U2), ring stops/spring seat/slotted pull (U3), servo mount + pod
   pocket + flush cover (U4), BOM + REFERENCES (U7), NAC-MOULD-01, Makefile follow-up,
   `serenity_assembly.py` deleted-part placements, ASM-04 coverage (flaps, linkage, bearings).
-- Exit: assembly check covers flaps and linkage across the full nozzle stroke and −5…135° with 0 mm³;
+- Exit: assembly check covers flaps and linkage across the full nozzle stroke and −5…135° with 0 in³ (0 mm³);
   `serenity_assembly.py` reports no COVERAGE GAP for the 64 mm nacelle. −7.
 - Est. 1 / 2 / 3.
 
@@ -222,13 +224,13 @@ the spar bore to the disconnect bay.
 
 **S8 — Cargo doors.** U1 re-fit, DOOR-LATCH-1..6, DOOR-SEAM-1, SERVO-PLACE, SG90 bell-crank boss,
 HULL-LEAK-04, PRINT-GW-DOOR-TRAY hardware.
-- Exit: door pair assembles in the hull with 0 mm³ clash through its full swing (re-run the door
+- Exit: door pair assembles in the hull with 0 in³ (0 mm³) clash through its full swing (re-run the door
   check); latch spec items each closed with a mesh feature or a recorded reason. −8.
 - Est. 1 / 1 / 2.
 
 **S9 — Bay A forward and cargo-bay furniture.** BAYA-FWD-05..11, NODE-SADDLE, OBS-CARGO, HARN-CLIP/BHD,
 GPS-ANT, TC-BOARD, ENC-DAUGHTER, 20D VERIFY.
-- Exit: each part placed in the hull frame with 0 mm³ clash in `assembly_integrity_check.py`; BOM NOT
+- Exit: each part placed in the hull frame with 0 in³ (0 mm³) clash in `assembly_integrity_check.py`; BOM NOT
   COVERED −1 (node saddle). −12.
 - Est. 1 / 2 / 2.
 
@@ -314,7 +316,7 @@ Each item lands with host-side unit tests; bench verification becomes a P item.
 ### Theme B — Build guide (`graphical-build-guide/*`)
 
 - **S29 — Reconcile Phases 0–4 to Rev U.** Close or supersede (with reason) every step written for the
-  FDM/four-section hull or the 50 mm nacelle (e.g. "nacelle bore caliper 55.0–56.0 mm", "4 mm CF pivot
+  FDM/four-section hull or the 50 mm nacelle (quoting the old text, e.g. "nacelle bore caliper 55.0–56.0 mm", "4 mm CF pivot
   rod … MF104ZZ", the bevel/crown-pinion nozzle train). Rewrite them for SLS one-piece hulls, the 64 mm
   nacelle, trunnion + servo nozzle. BG-SEQ-1..6, BG-PLAN-1/2. Exit: no open step names a retired part
   (grep the retired list = 0 hits). −30 (supersessions). Est. 1/2/3.

@@ -9,7 +9,8 @@ uses; the starboard hull parts map into it by
 The port nacelle is the X-mirror of the starboard one.
 
 Checks:
-  static   pairwise overlap volume of every part pair at tilt 0 (mm^3, manifold3d booleans)
+  static   pairwise overlap volume of every part pair at tilt 0 (in^3, mm^3 in brackets;
+           manifold3d booleans)
   sweep    the tilting group (pod, cartridge, nozzle, trunnion) against the fixed group (spar, wing,
            wing-tip pinion) over TILT_MIN..TILT_MAX; ring-gear-vs-pinion contact is
            tooth phase (a meshing pair overlaps at the pitch circle by design)
@@ -60,6 +61,19 @@ SPAR_OD, SPAR_ID = 20.0, 16.3
 DISC_Z = 51.0 * ns.get("P64_A")                  # ESC disconnect bay centre Z
 DISC_W, DISC_H, DISC_D = 30.0, 14.0, 6.0
 FACE_X = 34.0 * ns.get("P64_K")                  # pylon face |X| (43.6)
+
+
+MM_IN = 25.4
+
+
+def inch(mm: float) -> str:
+    """Length, imperial first (AGENTS.md section 5): 0.039 in (1.00 mm)."""
+    return f"{mm / MM_IN:.3f} in ({mm:.2f} mm)"
+
+
+def cu_in(mm3: float) -> str:
+    """Volume, imperial first: 0.095 in3 (1,562 mm3)."""
+    return f"{mm3 / MM_IN ** 3:.4f} in3 ({mm3:,.0f} mm3)"
 
 
 def to_man(t: trimesh.Trimesh) -> m.Manifold:
@@ -385,25 +399,31 @@ def figures(man: dict[str, m.Manifold], swept: m.Manifold, outdir: Path) -> list
     to_xz = np.array([[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0]], float)     # slice plane Y = const
     to_yz = np.array([[0, 1, 0, 0], [0, 0, 1, 0], [1, 0, 0, 0]], float)     # slice plane X = const
     paths = []
+    k_in = 1.0 / MM_IN             # plotted in inches; mm scales on the top and right edges
     fig, ax = plt.subplots(1, 3, figsize=(21, 9))
     for k, c in cols.items():
         for poly in man[k].transform(to_xz).slice(0.0).to_polygons():
             for a_ in ax[:2]:
-                a_.plot(poly[:, 0], poly[:, 1], c, lw=0.8)
-    ax[0].set(xlim=(-50, 62), ylim=(0, 215),
+                a_.plot(poly[:, 0] * k_in, poly[:, 1] * k_in, c, lw=0.8)
+    ax[0].set(xlim=(-50 * k_in, 62 * k_in), ylim=(0, 215 * k_in),
               title="Y = 0 section (X + = pylon/wing side, Z along duct)")
-    ax[1].set(xlim=(22, 62), ylim=(40, 140),
+    ax[1].set(xlim=(22 * k_in, 62 * k_in), ylim=(40 * k_in, 140 * k_in),
               title="Spar-bore mouth and ESC disconnect bay (Y = 0)")
+    x_in = 45.0 * k_in
     for poly in swept.transform(to_yz).slice(45.0).to_polygons():
-        ax[2].fill(poly[:, 0], poly[:, 1], color="m", alpha=0.35, lw=0)
+        ax[2].fill(poly[:, 0] * k_in, poly[:, 1] * k_in, color="m", alpha=0.35, lw=0)
     for poly in man["pod"].transform(to_yz).slice(45.0).to_polygons():
-        ax[2].plot(poly[:, 0], poly[:, 1], "k", lw=0.8)
-    ax[2].plot(0, PIVOT_Z, "r+", ms=14)
-    ax[2].set(xlim=(-55, 55), ylim=(40, 180),
-              title="X = 45 section: pod wall (black) vs pinion sweep (magenta)")
+        ax[2].plot(poly[:, 0] * k_in, poly[:, 1] * k_in, "k", lw=0.8)
+    ax[2].plot(0, PIVOT_Z * k_in, "r+", ms=14)
+    ax[2].set(xlim=(-55 * k_in, 55 * k_in), ylim=(40 * k_in, 180 * k_in),
+              title=f"X = {x_in:.2f} in (45 mm): pod wall (black) vs pinion sweep (magenta)")
     for a_ in ax:
         a_.set_aspect("equal")
         a_.grid(alpha=0.3)
+        a_.set_xlabel("in (mm on the top edge)")
+        a_.set_ylabel("in (mm on the right edge)")
+        a_.secondary_xaxis("top", functions=(lambda v: v * MM_IN, lambda v: v / MM_IN))
+        a_.secondary_yaxis("right", functions=(lambda v: v * MM_IN, lambda v: v / MM_IN))
     f = outdir / "nacelle64_sections.png"
     fig.savefig(f, dpi=75, bbox_inches="tight")
     plt.close(fig)
@@ -423,17 +443,17 @@ def main(argv: list[str] | None = None) -> int:
 
     parts = load_parts(args.pod, args.trunnion)
     man = {k: to_man(v) for k, v in parts.items()}
-    print("part status/volume (mm3):")
+    print("part status/volume, imperial first:")
     for k, v in man.items():
-        print(f"  {k:14s} {v.status().name:10s} {v.volume():12.0f}")
+        print(f"  {k:14s} {v.status().name:10s} {cu_in(v.volume())}")
     res: dict = {"static": [], "sweep": []}
     if args.stage in ("static", "all"):
-        print("\nstatic overlap at tilt 0 (mm3 > 1):")
+        print("\nstatic overlap at tilt 0 (> 0.00006 in3 (1 mm3)):")
         for a, b, v in overlap_matrix(man):
             if v > 1.0:
-                print(f"  {a:14s} x {b:14s} {v:10.1f}")
+                print(f"  {a:14s} x {b:14s} {cu_in(v)}")
                 res["static"].append([a, b, round(v, 1)])
-        print("\nnearest approach of non-overlapping pairs within 6 mm (mm):")
+        print("\nnearest approach of non-overlapping pairs within 0.236 in (6 mm):")
         res["gap"] = []
         names = list(man)
         for i, a in enumerate(names):
@@ -442,35 +462,41 @@ def main(argv: list[str] | None = None) -> int:
                     continue
                 g = float(man[a].min_gap(man[b], 6.0))
                 if g < 6.0:
-                    print(f"  {a:14s} to {b:14s} {g:7.2f}")
+                    print(f"  {a:14s} to {b:14s} {inch(g)}")
                     res["gap"].append([a, b, round(g, 2)])
     if args.stage in ("sweep", "all"):
         angles = np.arange(TILT_MIN, TILT_MAX + 0.1, args.step)
-        print("\ntilt sweep, moving group vs fixed group (mm3 > 1):")
+        print("\ntilt sweep, moving group vs fixed group (> 0.00006 in3 (1 mm3)):")
         res["sweep"] = sweep(man, angles)
         for row in res["sweep"]:
             hits = {k: v for k, v in row.items() if k != "deg"}
-            line = ", ".join(f"{k}={v}" for k, v in hits.items()) or "clear"
+            line = ", ".join(f"{k}={cu_in(v)}" for k, v in hits.items()) or "clear"
             print(f"  {row['deg']:6.1f} deg  " + line)
     if args.stage in ("sweep", "all"):
         vol, swept = pinion_pocket(man)
         res["pinion_pocket_mm3"] = round(vol, 1)
         print(f"\npod material inside the volume the wing pinion sweeps over "
-              f"{TILT_MIN:+.0f}..{TILT_MAX:+.0f} deg: {vol:.0f} mm3 "
-              f"(pinion {man['pinion'].volume():.0f} mm3)")
+              f"{TILT_MIN:+.0f}..{TILT_MAX:+.0f} deg: {cu_in(vol)} "
+              f"(pinion {cu_in(man['pinion'].volume())})")
         if args.figs:
             for f in figures(man, swept, args.figs):
                 print("figure:", f)
     if args.stage in ("cable", "all"):
-        print("\ncable route (bundle %.2f mm + %.1f mm radial):" % (BUNDLE_D, CLEARANCE))
+        print(f"\ncable route (bundle {inch(BUNDLE_D)} + {inch(CLEARANCE)} radial):")
         res["cable"] = cable_route(man)
         for label, r in res["cable"].items():
             if label == "pitch":
                 continue
-            print(f"  [{label}] start clr {r['start_clearance']}  end clr {r['end_clearance']}  "
-                  f"max connecting bundle radius {r['max_bundle_radius_that_connects']}")
+            print(f"  [{label}] mouth axial free {inch(r['mouth_axial_free_mm'])}  "
+                  f"start clr {inch(r['start_clearance'])}  end clr {inch(r['end_clearance'])}  "
+                  f"max connecting bundle radius {inch(r['max_bundle_radius_that_connects'])}")
             for q in r["routes"]:
-                print("     ", {k: v for k, v in q.items() if k != "path"})
+                req = f"bundle radius {inch(q['r_req'])}"
+                if q["found"]:
+                    print(f"      {req}: route {inch(q['length_mm'])} long, "
+                          f"min clearance {inch(q['min_clearance'])}")
+                else:
+                    print(f"      {req}: NO ROUTE ({q['why']})")
     if args.json:
         args.json.write_text(json.dumps(res, indent=1) + "\n", encoding="utf-8")
     return 0
