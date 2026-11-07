@@ -1,0 +1,37 @@
+"""Unit tests for tools/nacelle64_assembly_check.py (geometry helpers; no meshes needed)."""
+
+import sys
+from pathlib import Path
+
+import numpy as np
+import trimesh
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+import nacelle64_assembly_check as a  # noqa: E402
+
+
+def test_rot_x_fixes_pivot_and_lifts_duct_axis():
+    r = a.rot_x(90.0)
+    pivot = np.array([0.0, 0.0, a.PIVOT_Z, 1.0])
+    assert np.allclose(r @ pivot, pivot)
+    # 0 deg: duct axis +Z points aft; +90 deg: it points up, i.e. local -Y
+    tip = np.array([0.0, 0.0, a.PIVOT_Z + 10.0, 1.0])
+    assert np.allclose((r @ tip)[:3], [0.0, -10.0, a.PIVOT_Z], atol=1e-9)
+
+
+def test_stack_datums():
+    assert abs(a.SEAT - 56.31) < 0.01        # 41.7 + 9.61 + 7.0 - 2.0
+    assert abs(a.TRUNNION_X0 - 37.81) < 0.01
+
+
+def test_fix_nonmanifold_splits_edge_touching_cubes():
+    c1 = trimesh.creation.box(extents=(1, 1, 1))
+    c1.apply_translation((0.5, 0.5, 0.5))
+    c2 = c1.copy()
+    c2.apply_translation((1.0, 1.0, 0.0))          # touches c1 along one edge only
+    both = trimesh.util.concatenate([c1, c2])
+    both.merge_vertices()
+    fixed = a.fix_nonmanifold(both)
+    mn = a.to_man(fixed)
+    assert mn.status().name == "NoError"
+    assert abs(mn.volume() - 2.0) < 1e-6

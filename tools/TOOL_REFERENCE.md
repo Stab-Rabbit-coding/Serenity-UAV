@@ -173,6 +173,7 @@ Three stdlib-only checks run in CI beside the index and joint-register gates:
   `tools/sls_materials.py`), as priced in `current-specification/auw_ledger.json`. `--write`
   re-syncs `bom_revU.csv/.json` after the ledger is regenerated. Printed rows with no ledger mesh are
   listed as NOT COVERED, never passed silently.
+- **`tools/nacelle64_assembly_check.py`** — assembles the 64 mm nacelle (pod, stage-2 cartridge, nozzle, trunnion, motor cans, spar stub, wing, wing pinion) in the nacelle-local frame; exact boolean overlap and clearance at 0 deg, a -5..+135 deg tilt sweep, the pinion-sweep pocket, and a voxel clearance search for the 4 x 10 AWG bundle from the spar-bore mouth to the ESC disconnect bay. Needs freshly rendered pod and trunnion STLs (`--pod`, `--trunnion`; the published pod is stale). Results: `docs/NACELLE_64MM_VERIFICATION.md` §5d. Exit 0 always (a report, not a gate).
 - **`tools/check_nacelle_deps.py`** — the 64 mm nacelle's OpenSCAD closure (17 files) and `import()`s
   all exist and none is a 50 mm design or an archived file; required printed parts with no published STL
   are listed (`--strict-parts` makes them fail).

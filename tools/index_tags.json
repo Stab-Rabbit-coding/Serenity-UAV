@@ -10487,6 +10487,13 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_sections.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/flight_envelope.md": {
       "description": "Serenity UAV \u2014 Flight Envelope Document",
       "tags": [
@@ -15811,6 +15818,13 @@
       ],
       "archived": false
     },
+    "tools/nacelle64_assembly_check.py": {
+      "description": "nacelle64_assembly_check.py -- assemble the 64 mm nacelle and check fit, tilt sweep and cable.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nacelle_64_proportion_trade.py": {
       "description": "nacelle_64_proportion_trade.py \u2014 multi-objective sweep of the 64 mm nacelle's",
       "tags": [
@@ -16198,6 +16212,13 @@
       ],
       "archived": false
     },
+    "tools/tests/test_nacelle64_assembly_check.py": {
+      "description": "Unit tests for tools/nacelle64_assembly_check.py (geometry helpers; no meshes needed).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_nacelle_esc_service.py": {
       "description": "Python script",
       "tags": [
@@ -16527,6 +16548,7 @@
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
       "docs/figures/battery_bay_twin_tray.png",
+      "docs/figures/nacelle64_sections.png",
       "docs/flight_envelope.md",
       "docs/handoffs/2026-10-20-aircraft-datum-r2-migration.md",
       "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",
@@ -20302,6 +20324,7 @@
       "tools/migrate_stl_r2.py",
       "tools/min_stretch_relocation.py",
       "tools/mirror_claude_memory.py",
+      "tools/nacelle64_assembly_check.py",
       "tools/nacelle_64_proportion_trade.py",
       "tools/nacelle_64_scale.py",
       "tools/nacelle_cowl_fair.py",
@@ -20353,6 +20376,7 @@
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_export_pcb_step.py",
       "tools/tests/test_joint_register.py",
+      "tools/tests/test_nacelle64_assembly_check.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tests/test_sync_operators_manual.py",
