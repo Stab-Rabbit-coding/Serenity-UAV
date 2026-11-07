@@ -7,7 +7,7 @@ so recording a new finding (AGENTS.md requires it the same day) never counts aga
 
 The file list and the open-item rule are the federation's own: tools/gen_todo_from_wbs.py
 PAIRS and extract_open_items() (an open item = an unchecked box not inside another open
-box; the TODO.md line count).  A closed item is a checked box not inside an open box.  The
+box; the TODO.md line count).  A closed item is any checked box, at any depth.  The
 root WBS.md is an index that repeats many subsystem lines AND owns project-wide items
 (0.x, 5.x, 6.x), so it is reported on its own row and never added to the subsystem total.
 
@@ -36,29 +36,24 @@ from gen_todo_from_wbs import PAIRS, extract_open_items  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 ROOT_WBS = "WBS.md"
-HEADING = re.compile(r"^#{1,6}\s")
 BOX = re.compile(r"^(\s*)- \[( |x|X)\]")
 SNAPSHOT_KEYS = ("date", "files", "total_open", "total_closed", "root")
+#: Counting rule stamped into every snapshot; a baseline made under another rule is refused.
+RULE = "open:top-level(gen_todo); closed:any-depth"
 
 
 def count_closed(text: str) -> int:
-    """Checked boxes not enclosed by an open box (same nesting rule as the open count)."""
-    stack: list[tuple[int, bool]] = []
+    """Every checked box, at any nesting depth.
+
+    Open items follow the TODO.md rule (top level only), but a closure is work done wherever it
+    sits: many WBS entries (e.g. NAC-64-ASM-01) are sub-items of a still-open parent, and the
+    top-level rule would hide their closure from the sprint measure.
+    """
     n = 0
     for raw in text.splitlines():
-        if HEADING.match(raw):
-            stack = []
-            continue
         box = BOX.match(raw)
-        if not box:
-            continue
-        indent = len(box.group(1).expandtabs(4))
-        is_open = box.group(2) == " "
-        while stack and stack[-1][0] >= indent:
-            stack.pop()
-        if not is_open and not any(o for _, o in stack):
+        if box and box.group(2) != " ":
             n += 1
-        stack.append((indent, is_open))
     return n
 
 
@@ -74,7 +69,7 @@ def snapshot(repo: Path = ROOT, pairs: tuple[str, ...] = PAIRS) -> dict:
         text = p.read_text(encoding="utf-8") if p.exists() else ""
         files[rel] = count_file(text, root=(rel == ROOT_WBS))
     root = files.pop(ROOT_WBS, {"open": 0, "closed": 0})
-    return {"date": date.today().isoformat(), "files": files, "root": root,
+    return {"date": date.today().isoformat(), "rule": RULE, "files": files, "root": root,
             "total_open": sum(v["open"] for v in files.values()),
             "total_closed": sum(v["closed"] for v in files.values())}
 
@@ -115,6 +110,9 @@ def load_baseline(path: Path) -> dict:
     missing = [k for k in SNAPSHOT_KEYS if k not in data]
     if missing:
         raise ValueError(f"{path} is not a wbs_burndown snapshot (missing {', '.join(missing)})")
+    if data.get("rule") != RULE:
+        raise ValueError(f"{path} was counted under rule {data.get('rule')!r}, not {RULE!r}; "
+                         "regenerate the baseline from its commit")
     return data
 
 

@@ -216,7 +216,9 @@ pinion lines up axially with the trunnion ring gear (both start at X 39.81).  **
 throat spigot (Ø64 bore, r 32–37.5, 3 mm long, z −3…0) lands on the same annulus as the aft 3 mm of the stage-2
 cartridge, which ends at Z 199.1 = the nozzle ring station: **1562 mm³ of interference** on both sides.
 The spigot was drawn to enter the pod sleeve; the cartridge now occupies that sleeve.  Fix by shortening
-the cartridge 3 mm or dropping the spigot (owner decision; neither part was changed here).
+the cartridge 3 mm or dropping the spigot. **Resolved 2026-11-07 (owner OD-1, option A):** the cartridge now ends at
+Z 196.1 (`edf_motor_mount_64mm.scad` Z_AFT = P64_Z_NOZ − 3), as the nozzle source already assumed; the overlap is 0 on
+both sides (`figures/nacelle64_od1_spigot_cartridge.png`).
 
 **Tilt sweep −5…+135° (5° steps), tilting group vs wing, spar and pinion.**  Pod, cartridge, nozzle and
 trunnion never touch the wing or the spar (wing gap ≥ 4.5 mm at 0°).  The trunnion ring against the fixed

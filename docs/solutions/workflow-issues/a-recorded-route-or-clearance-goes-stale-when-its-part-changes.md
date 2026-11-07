@@ -41,6 +41,14 @@ source. When the live render was assembled (2026-11-07):
 3. When the measurement disagrees, add a dated note to every entry that carries the old claim and close the
    duplicates. Do not quietly fix one of them.
 
+## Same failure, other direction: a mating part's comment promises a change its partner never got
+
+OD-1 (2026-11-07). `nacelle_nozzle_iris_64mm.scad` said "the stage-2 cartridge ends 3 mm short for it".
+`edf_motor_mount_64mm.scad` still ended at `P64_Z_NOZ`, so the throat spigot sat inside the cartridge
+wall (1,562 mm³). When a source states something about another part, grep that part for it, or better,
+derive one from the other (`Z_AFT = P64_Z_NOZ - NZ_SPIGOT_L`). Then the assembly check, not the comment,
+is the proof.
+
 ## Cost of skipping it
 
 A sprint plan built on "route exists" would have scheduled harness drawing before the geometry had any place

@@ -26,8 +26,10 @@ pays agents to hold findings back.
 
 ## Convention
 
-- Count **closures** (`closed+`: checked boxes not inside an open box, the same nesting rule as
-  `gen_todo_from_wbs.extract_open_items`). Report `d_open` next to it, and list new findings in the PR.
+- Count **closures** (`closed+`: every checked box, at any depth). Open items follow the TODO.md
+  rule (top level only). Closures must not, though: many real entries, e.g. NAC-64-ASM-01, are
+  sub-items of a still-open parent. The first version applied the open rule to closures as well, and
+  the OD-1 closure measured +0. Report `d_open` next to `closed+`, and list new findings in the PR.
 - Reuse the federation's own file list (`gen_todo_from_wbs.PAIRS`) and open-item rule. A second glob
   drifts. The first version counted `tools/TODO.md` and `current-specification/TODO.md`, which are not
   WBS-generated.

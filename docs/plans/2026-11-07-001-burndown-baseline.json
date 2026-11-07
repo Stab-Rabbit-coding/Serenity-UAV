@@ -1,5 +1,6 @@
 {
  "date": "2026-11-07",
+ "rule": "open:top-level(gen_todo); closed:any-depth",
  "files": {
   "docs/WBS.md": {
    "open": 31,
@@ -11,7 +12,7 @@
   },
   "airframe/fuselage-joints/WBS.md": {
    "open": 12,
-   "closed": 29
+   "closed": 31
   },
   "airframe/fuselage-covers/WBS.md": {
    "open": 0,
@@ -19,23 +20,23 @@
   },
   "airframe/fuselage-mid/WBS.md": {
    "open": 80,
-   "closed": 64
+   "closed": 78
   },
   "airframe/wings-nacelles/WBS.md": {
    "open": 32,
-   "closed": 107
+   "closed": 123
   },
   "airframe/landing-gear/WBS.md": {
    "open": 21,
-   "closed": 28
+   "closed": 31
   },
   "avionics/WBS.md": {
    "open": 85,
-   "closed": 109
+   "closed": 144
   },
   "avionics/rev-s1/WBS.md": {
    "open": 3,
-   "closed": 5
+   "closed": 23
   },
   "avionics/emi-hardening/WBS.md": {
    "open": 26,
@@ -47,7 +48,7 @@
   },
   "avionics/firmware/WBS.md": {
    "open": 20,
-   "closed": 8
+   "closed": 9
   },
   "graphical-build-guide/WBS.md": {
    "open": 141,
@@ -68,8 +69,9 @@
  },
  "root": {
   "open": 658,
-  "closed": 305
+  "closed": 312
  },
  "total_open": 712,
- "total_closed": 467
+ "total_closed": 556,
+ "commit": "a7bdbc95 (end of S0)"
 }

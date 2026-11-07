@@ -1198,6 +1198,10 @@ has 0.137 in³ (2,237 mm³) inside the wing-pinion sweep, first contact at about
 4 × 10 AWG bundle from the spar-bore mouth, and the disconnect bay has no floor and is skinned over
 (NAC-64-ASM-03; WA-R10 "route exists" superseded). Coverage gaps are NAC-64-ASM-04.
 
+**OD-1 closed (2026-11-07, owner: option A).** The stage-2 cartridge now ends 0.12 in (3 mm) short of the nozzle station
+(`edf_motor_mount_64mm.scad` Z_AFT = P64_Z_NOZ − 3), as the nozzle source already assumed; spigot overlap 0 on both
+sides; cartridge 65.1 g (was 66.9 g); hover AUW 14.12 lbm (6,403 g); pivot residual +0.372 in (+9.45 mm).
+
 **Execution plan to completion (2026-11-07).** `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`
 puts the 712 open subsystem items (baseline `docs/plans/2026-11-07-001-burndown-baseline.json`,
 counted by `tools/wbs_burndown.py`) in order. It defines completion as levels L1–L5 and plans 34 sprints

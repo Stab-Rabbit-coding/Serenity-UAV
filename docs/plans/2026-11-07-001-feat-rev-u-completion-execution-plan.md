@@ -69,7 +69,7 @@ apply: the owner reviews this file ("requirements done" → "approved") before S
 | `graphical-build-guide/TODO.md` | 141 | 56 SVG/sequence items (A), 85 build steps (P) |
 | `graphical-build-guide/flight-phases/TODO.md` | 139 | flight tests (P) |
 | `deferred/TODO.md` | 43 | out of scope |
-| **Total (subsystem files)** | **712** open, 467 closed | root `WBS.md` (658 open) indexes many of these and also owns project-wide items (§0.x, §5, §6); reported on its own row |
+| **Total (subsystem files)** | **712** open, 556 closed (any depth; baseline at a7bdbc95) | root `WBS.md` (658 open) indexes many of these and also owns project-wide items (§0.x, §5, §6); reported on its own row |
 
 Other baselines that sprints are measured against:
 
@@ -137,7 +137,7 @@ the equivalent below. The artefacts are the same ones the `ce-*` workflow writes
 
 | ID | Decision | Item | Needed before |
 |---|---|---|---|
-| OD-1 | Nozzle spigot vs cartridge: shorten cartridge 0.12 in (3 mm) or drop the spigot | NAC-64-ASM-01 | S1 |
+| OD-1 | Nozzle spigot vs cartridge: shorten cartridge 0.12 in (3 mm) or drop the spigot — **DECIDED 2026-11-07: option A; implemented, NAC-64-ASM-01 closed** | NAC-64-ASM-01 | S1 |
 | OD-2 | Winch layout: (a) aft/low spool + bridle, (b) right-angle/belt servo, (c) move tilt hardware, (d) two spools | WINCH-PKG-01 | S7 |
 | OD-3 | ESC part and rating (70 A vs 80 A) | NAC-64-ESC-80A | S4 |
 | OD-4 | Release the NAC-64-REBAKE hold | NAC-64-REBAKE | S3 |

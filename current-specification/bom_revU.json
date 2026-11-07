@@ -2907,13 +2907,13 @@
       "Description": "edf_motor_mount_64mm_stage2_{port,stbd}.stl — stage-2 motor-mount cartridge, removable aft",
       "Category": "Printed Part",
       "Qty": "2",
-      "Unit_Mass_g": "66.9",
-      "Total_Mass_g": "133.8",
+      "Unit_Mass_g": "65.1",
+      "Total_Mass_g": "130.2",
       "Supplier": "SLS service bureau (vendor not yet selected)",
       "Supplier_PN_or_Search": "SLS DuraForm PA CF [3DS-30108A] (REF-MAT-015)",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev U NEW. Handed by PYLON_SIDE (lead-vane azimuth). Regenerated 2026-11-07: the earlier starboard STL predated the x1.06 enlargement of 2026-10-05 (60.9 g stale vs 66.9 g). Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 0 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
+      "Notes": "Rev U NEW. Handed by PYLON_SIDE (lead-vane azimuth). Regenerated 2026-11-07: the earlier starboard STL predated the x1.06 enlargement of 2026-10-05 (60.9 g stale vs 66.9 g). Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 66.9 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-NAC64-TRUNNION",
