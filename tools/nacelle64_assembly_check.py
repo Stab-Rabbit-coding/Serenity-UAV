@@ -5,20 +5,20 @@ Everything is built in the NACELLE-LOCAL frame (duct axis +Z, intake at Z=0, til
 through (Y=0, Z=PIVOT_Z), pylon face at +X).  That frame is the one nacelle_tilt_joint_context.scad
 uses; the starboard hull parts map into it by
     x_l = x_h + (176.55 + SEAT)      y_l = -(z_h - SPAR_Z)      z_l = (y_h - SPAR_Y) + PIVOT_Z
-(hull frame R2, X +port, Y +aft, Z up; SPAR_Y/SPAR_Z from tools/hull_datums.py).  The port nacelle is
-the X-mirror of the starboard one; the tool also compares the real port files to that mirror.
+(hull frame R2, X +port, Y +aft, Z up; SPAR_Y/SPAR_Z from tools/hull_datums.py).
+The port nacelle is the X-mirror of the starboard one.
 
 Checks:
   static   pairwise overlap volume of every part pair at tilt 0 (mm^3, manifold3d booleans)
   sweep    the tilting group (pod, cartridge, nozzle, trunnion) against the fixed group (spar, wing,
-           wing-tip pinion) over TILT_MIN..TILT_MAX, with the mesh-ring-gear-vs-pinion contact reported
-           separately because a meshing gear pair overlaps by design at the pitch circle only
-  cable    a voxel clearance search: can a bundle of BUNDLE_D (+ CLEARANCE) travel from the spar-bore
-           exit to the ESC disconnect bay, and how long is that path against the roll-up allowance
+           wing-tip pinion) over TILT_MIN..TILT_MAX; ring-gear-vs-pinion contact is
+           tooth phase (a meshing pair overlaps at the pitch circle by design)
+  cable    a voxel clearance search: can a bundle of BUNDLE_D (+ CLEARANCE) travel from the
+           spar-bore exit to the ESC disconnect bay, and how long is that path
 
-Inputs: meshes under airframe/stls (published), the freshly rendered pod (--pod, default side) and the
-trunnion rendered from SCAD (--trunnion).  Both are renders of the live flattened SCAD; the published
-pod STL is stale (NAC-64-REBAKE).
+Inputs: meshes under airframe/stls (published), the freshly rendered pod (--pod,
+default side) and the trunnion rendered from SCAD (--trunnion).  Both are renders of the live
+flattened SCAD; the published pod STL is stale (NAC-64-REBAKE).
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (Anthropic) under the author's direction, 2026-11-07.
@@ -53,7 +53,8 @@ WING_TIP_HULL_X = 176.55                         # |X| of the wing tip pad face 
 CART_Z0 = 103.7                                  # stage-2 cartridge seats on the pod bore step
 NOZ_Z0 = ns.get("P64_Z_NOZ")                     # nozzle ring pocket station (199.13)
 TILT_MIN, TILT_MAX = -5.0, 135.0                 # deg, 0 = duct axis horizontal (aft)
-BUNDLE_D = 13.28                                 # 4 x 10 AWG circumscribed (WING_ATTACH_INTERFACE 2.3)
+# 4 x 10 AWG circumscribed (WING_ATTACH_INTERFACE 2.3)
+BUNDLE_D = 13.28
 CLEARANCE = 1.5                                  # radial, so the bundle can twist
 SPAR_OD, SPAR_ID = 20.0, 16.3
 DISC_Z = 51.0 * ns.get("P64_A")                  # ESC disconnect bay centre Z
@@ -97,7 +98,8 @@ def fix_nonmanifold(x: trimesh.Trimesh) -> trimesh.Trimesh:
         info.sort()
         n = len(info)
         for off in (0, 1):
-            if all(info[(off + 2 * k) % n][2] != info[(off + 2 * k + 1) % n][2] for k in range(n // 2)):
+            if all(info[(off + 2 * k) % n][2] != info[(off + 2 * k + 1) % n][2]
+                   for k in range(n // 2)):
                 for k in range(n // 2):
                     p, q = info[(off + 2 * k) % n][1], info[(off + 2 * k + 1) % n][1]
                     link[p].add(q)
@@ -167,13 +169,15 @@ def tube(x0: float, length: float, od: float, idia: float, z: float = PIVOT_Z) -
     if idia > 0:
         inner = trimesh.creation.cylinder(radius=idia / 2, height=length + 2, sections=96)
         outer = to_trimesh(to_man(outer) - to_man(inner))
-    outer = xform(outer, mat4([[0, 0, 1, x0 + length / 2], [0, 1, 0, 0], [-1, 0, 0, z], [0, 0, 0, 1]]))
+    outer = xform(outer, mat4([[0, 0, 1, x0 + length / 2],
+                  [0, 1, 0, 0], [-1, 0, 0, z], [0, 0, 0, 1]]))
     return outer
 
 
 def to_trimesh(mn: m.Manifold) -> trimesh.Trimesh:
     mm = mn.to_mesh()
-    return trimesh.Trimesh(np.asarray(mm.vert_properties)[:, :3], np.asarray(mm.tri_verts), process=False)
+    return trimesh.Trimesh(np.asarray(mm.vert_properties)[
+                           :, :3], np.asarray(mm.tri_verts), process=False)
 
 
 def rot_x(deg: float, z: float = PIVOT_Z) -> np.ndarray:
@@ -186,16 +190,19 @@ def rot_x(deg: float, z: float = PIVOT_Z) -> np.ndarray:
     return t2 @ r @ t1
 
 
-def load_parts(pod_path: Path, trunnion_path: Path, side: str = "stbd") -> dict[str, trimesh.Trimesh]:
+def load_parts(pod_path: Path, trunnion_path: Path,
+               side: str = "stbd") -> dict[str, trimesh.Trimesh]:
     """Parts in local frame for the starboard-geometry nacelle (pylon +X)."""
     h2l = hull_to_local("stbd")
     parts: dict[str, trimesh.Trimesh] = {}
     parts["pod"] = fix_nonmanifold(trimesh.load(pod_path, force="mesh"))
     cart = trimesh.load(STL / "nacelles/edf_motor_mount_64mm_stage2_stbd.stl", force="mesh")
-    parts["cartridge"] = xform(cart, mat4([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, CART_Z0], [0, 0, 0, 1]]))
+    parts["cartridge"] = xform(cart, mat4(
+        [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, CART_Z0], [0, 0, 0, 1]]))
     for nm in ("throat", "ring"):
         t = trimesh.load(STL / f"nacelles/nozzles/nacelle_nozzle_{nm}_64mm_stbd.stl", force="mesh")
-        parts[f"nozzle_{nm}"] = xform(t, mat4([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, NOZ_Z0], [0, 0, 0, 1]]))
+        parts[f"nozzle_{nm}"] = xform(
+            t, mat4([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, NOZ_Z0], [0, 0, 0, 1]]))
     tr = trimesh.load(trunnion_path, force="mesh")
     parts["trunnion"] = xform(tr, mat4([[0, 0, 1, TRUNNION_X0], [0, -1, 0, 0], [1, 0, 0, PIVOT_Z],
                                         [0, 0, 0, 1]]))
@@ -203,7 +210,8 @@ def load_parts(pod_path: Path, trunnion_path: Path, side: str = "stbd") -> dict[
     # 3 mm thick; REF-EDF-003 dimensions, all VERIFY on a physical unit)
     for nm, zf in (("motor1", 42.2), ("motor2", 115.9)):
         can = trimesh.creation.cylinder(radius=13.9, height=58.0, sections=64)
-        parts[nm] = xform(can, mat4([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, zf + 3.0 + 29.0], [0, 0, 0, 1]]))
+        parts[nm] = xform(can, mat4([[1, 0, 0, 0], [0, 1, 0, 0], [
+                          0, 0, 1, zf + 3.0 + 29.0], [0, 0, 0, 1]]))
     parts["spar"] = tube(TRUNNION_X0, 130.0, SPAR_OD, SPAR_ID)
     wing = trimesh.load(STL / "wings/wing_stbd_s1223_revo.stl", force="mesh")
     parts["wing"] = xform(wing, h2l)
@@ -257,7 +265,8 @@ def raster(man: m.Manifold, grid: dict, fill_holes: bool = False) -> np.ndarray:
         if not polys:
             continue
         img = np.zeros((ny, nx), dtype=bool)          # PIL is (row=y, col=x)
-        if fill_holes:      # envelope: convex hull of the slice (the shell skin is not a closed ring)
+        # envelope: convex hull of the slice (the shell skin is not a closed ring)
+        if fill_holes:
             from scipy.spatial import ConvexHull  # noqa: PLC0415
 
             allp = np.vstack(polys)
@@ -292,7 +301,8 @@ def cable_route(man: dict[str, m.Manifold], pitch: float = 0.75) -> dict:
     zs = z0 + (np.arange(shape[2]) + 0.5) * pitch
     X, Y, Z = np.meshgrid(xs, ys, zs, indexing="ij")
     # allowed region: the pod's outer envelope (outer rings of its slices), the gap slab between the
-    # pylon face and the wing tip pad, and nothing else; the Ø64 flow bore is air but not a cable route
+    # pylon face and the wing tip pad, and nothing else; the Ø64 flow bore is
+    # air but not a cable route
     env = raster(man["pod"], grid, fill_holes=True)
     gap = (X >= FACE_X - 0.01) & (X <= SEAT) & (np.abs(Y) < 45.0) & (Z > 30.0) & (Z < 140.0)
     bore = np.hypot(X, Y) < 32.0
@@ -302,9 +312,10 @@ def cable_route(man: dict[str, m.Manifold], pitch: float = 0.75) -> dict:
         free = allowed & ~solid
         clr = ndimage.distance_transform_edt(free) * pitch
         # start: bore mouth, on the spar axis just inside the tube; end: bay centre
-        si = (int((TRUNNION_X0 + 0.5 - x0) / pitch), int((0.0 - y0) / pitch), int((PIVOT_Z - z0) / pitch))
+        si = (int((TRUNNION_X0 + 0.5 - x0) / pitch),
+              int((0.0 - y0) / pitch), int((PIVOT_Z - z0) / pitch))
         ei = (int((FACE_X + 0.5 - x0) / pitch), int((0.0 - y0) / pitch), int((DISC_Z - z0) / pitch))
-        ax_free = 0.0                       # free axial depth beyond the bore mouth, on the spar axis
+        ax_free = 0.0                       # free axial depth beyond the bore mouth
         while ax_free < 10.0 and not solid[int((TRUNNION_X0 - ax_free - 0.1 - x0) / pitch),
                                            int((0.0 - y0) / pitch), int((PIVOT_Z - z0) / pitch)]:
             ax_free += pitch
@@ -349,7 +360,7 @@ def pinion_pocket(man: dict[str, m.Manifold], step: float = 1.0) -> tuple[float,
     """Volume of pod material inside the volume the fixed wing pinion sweeps relative to the pod.
 
     In the pod frame the pinion orbits the tilt axis by -theta; the pod needs a pocket for the union
-    of those positions over TILT_MIN..TILT_MAX.  (The ring-gear teeth themselves are a mesh, not a clash.)
+    of those positions over TILT_MIN..TILT_MAX.  (Ring-gear teeth are a mesh, not a clash.)
     """
     swept = None
     for ang in np.arange(TILT_MIN, TILT_MAX + 0.01, step):
@@ -368,7 +379,8 @@ def figures(man: dict[str, m.Manifold], swept: m.Manifold, outdir: Path) -> list
 
     outdir.mkdir(parents=True, exist_ok=True)
     cols = {"pod": "k", "cartridge": "tab:blue", "trunnion": "tab:red", "spar": "tab:green",
-            "pinion": "m", "wing": "tab:cyan", "nozzle_throat": "tab:orange", "nozzle_ring": "tab:brown",
+            "pinion": "m", "wing": "tab:cyan", "nozzle_throat": "tab:orange",
+            "nozzle_ring": "tab:brown",
             "motor1": "0.5", "motor2": "0.5"}
     to_xz = np.array([[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0]], float)     # slice plane Y = const
     to_yz = np.array([[0, 1, 0, 0], [0, 0, 1, 0], [1, 0, 0, 0]], float)     # slice plane X = const
@@ -378,7 +390,8 @@ def figures(man: dict[str, m.Manifold], swept: m.Manifold, outdir: Path) -> list
         for poly in man[k].transform(to_xz).slice(0.0).to_polygons():
             for a_ in ax[:2]:
                 a_.plot(poly[:, 0], poly[:, 1], c, lw=0.8)
-    ax[0].set(xlim=(-50, 62), ylim=(0, 215), title="Y = 0 section (X + = pylon/wing side, Z along duct)")
+    ax[0].set(xlim=(-50, 62), ylim=(0, 215),
+              title="Y = 0 section (X + = pylon/wing side, Z along duct)")
     ax[1].set(xlim=(22, 62), ylim=(40, 140),
               title="Spar-bore mouth and ESC disconnect bay (Y = 0)")
     for poly in swept.transform(to_yz).slice(45.0).to_polygons():
@@ -387,7 +400,7 @@ def figures(man: dict[str, m.Manifold], swept: m.Manifold, outdir: Path) -> list
         ax[2].plot(poly[:, 0], poly[:, 1], "k", lw=0.8)
     ax[2].plot(0, PIVOT_Z, "r+", ms=14)
     ax[2].set(xlim=(-55, 55), ylim=(40, 180),
-              title="X = 45 section: pod wall (black) vs the region the wing pinion sweeps (magenta)")
+              title="X = 45 section: pod wall (black) vs pinion sweep (magenta)")
     for a_ in ax:
         a_.set_aspect("equal")
         a_.grid(alpha=0.3)
@@ -437,7 +450,8 @@ def main(argv: list[str] | None = None) -> int:
         res["sweep"] = sweep(man, angles)
         for row in res["sweep"]:
             hits = {k: v for k, v in row.items() if k != "deg"}
-            print(f"  {row['deg']:6.1f} deg  " + (", ".join(f"{k}={v}" for k, v in hits.items()) or "clear"))
+            line = ", ".join(f"{k}={v}" for k, v in hits.items()) or "clear"
+            print(f"  {row['deg']:6.1f} deg  " + line)
     if args.stage in ("sweep", "all"):
         vol, swept = pinion_pocket(man)
         res["pinion_pocket_mm3"] = round(vol, 1)
