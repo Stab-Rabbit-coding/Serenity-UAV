@@ -12,23 +12,23 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 @media print{body{background:#fff!important;color:#111!important}a{color:#003399!important}}
 </style>
 
-# Serenity-Class Tiltrotor UAV — Build Guide Rev T+ (24-inch)
+# Serenity-Class Tiltrotor UAV — Build Guide Rev U (24-inch)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Year:** 2026 | **Status:** Rev T+ refresh (2026-10-31). Phases 0–3 now describe the Rev T+
+**Year:** 2026 | **Status:** Rev U refresh (2026-10-31). Phases 0–3 now describe the Rev U
 airframe in `airframe/FreeCAD-scripts/serenity_assembly.py`. No phase has been built or bench
 tested; steps marked **DRAFT — not bench-verified** have not been proven.
 
-> **Rev T+ note (2026-10-31):** This guide used to describe the Rev P/Rev S baseline. Phases 0–3
-> now follow the Rev T+ airframe. In Rev T+ the wing spar is a fixed, bonded CF tube (Rev T1). The
+> **Rev U note (2026-10-31):** This guide used to describe the Rev P/Rev S baseline. Phases 0–3
+> now follow the Rev U airframe. In Rev U the wing spar is a fixed, bonded CF tube (Rev T1). The
 > nacelle tilts on a trunnion (Rev T4) through a worm drive with a pin brake (Rev T5e). Each
 > nozzle is driven by its own servo (2026-09-28). The landing gear is the 3.0 in R6 flight article
 > with conforming bays and the A1b balanced couple. Every figure comes from the regenerated master
 > assembly and the renders in [Current Assembly Views](#current-assembly-views). The Rev T BOM
 > (`current-specification/bom_revU.csv`) still lags parts of this design; see
 > `current-specification/README.md` "Not yet in the Rev T BOM." Phases 4–11 have not been
-> re-audited for Rev T+ (`graphical-build-guide/WBS.md` task 1.5.6).
+> re-audited for Rev U (`graphical-build-guide/WBS.md` task 1.5.6).
 >
 > Fan engineering work inspired by the Firefly-class transport ship *Serenity*  
 > from *Firefly* (Fox, 2002) and *Serenity* (Universal, 2005).  
@@ -49,13 +49,13 @@ tested; steps marked **DRAFT — not bench-verified** have not been proven.
 
 ---
 
-## Rev T+ Configuration
+## Rev U Configuration
 
 Performance figures (AUW, thrust, T/W) are provisional until the bottom-up AUW ledger
 recompute closes, so this guide does not restate them. Read them in `docs/WBS.md` §0.10.1 and
 `current-specification/auw_ledger.json`.
 
-| Subsystem | Rev T+ configuration | Authority |
+| Subsystem | Rev U configuration | Authority |
 |-----------|----------------------|-----------|
 | Hull | 24.00 in (609.6 mm) SLS DuraForm PA CF shell in **two sections**: forward (head+cargo) and aft (middle horseshoe ring + inner neck + rear), joined by one internal cargo/middle splice collar. Foam-filled. | `docs/SLS_PRINT_ORIENTATION.md` §3, §6 |
 | Datum | Aircraft datum R2: nose tip at Y 0, centerline at X 0, 3.0 in gear ground plane at Z 0 | `tools/hull_datums.py` |
@@ -880,6 +880,6 @@ geometry shall be regenerated for the 55mm fan, the canonical nozzle, and the RC
 
 ---
 
-*Rev T+ refresh 2026-10-31 (first 24-inch build documented as Rev N, May 2026)*  
+*Rev U refresh 2026-10-31 (first 24-inch build documented as Rev N, May 2026)*  
 *Supersedes Rev M (18-inch, 80mm EDF, AM6254 upgrade)*  
 *Phase 11 (Aft EDF) deferred per root AGENTS.md — 2026-06-07*

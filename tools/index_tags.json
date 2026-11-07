@@ -13861,7 +13861,7 @@
       "archived": false
     },
     "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md": {
-      "description": "Serenity-Class Tiltrotor UAV \u2014 Build Guide Rev T+ (24-inch)",
+      "description": "Serenity-Class Tiltrotor UAV \u2014 Build Guide Rev U (24-inch)",
       "tags": [
         "build-guide",
         "documentation",
@@ -16283,6 +16283,13 @@
     },
     "tools/via-stitcher2.py": {
       "description": "KiCad 9 \u2013 perimeter stitching via generator (IPC API)",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/winch_packaging_fit.py": {
+      "description": "winch_packaging_fit.py -- does the Rev C1 cargo winch fit the one-piece forward hull?",
       "tags": [
         "build-tooling"
       ],
@@ -20358,6 +20365,7 @@
       "tools/verify_bow_pod.py",
       "tools/via-stitcher.py",
       "tools/via-stitcher2.py",
+      "tools/winch_packaging_fit.py",
       "tools/wing_airfoil_integrity.py",
       "tools/wing_airfoil_variants.py",
       "tools/wing_cfd_openfoam.py",

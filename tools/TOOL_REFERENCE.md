@@ -164,6 +164,24 @@ runs in `.githooks/pre-commit` (rewrites and stages the manual) and in CI (`--ch
   every `<!-- AUTO:name -->` block and `<!--V:key-->` value; prose outside markers is untouched.
 - **Run:** `/usr/bin/python3 tools/sync_operators_manual.py [--check|--stage]`
 
+## Rev U Consistency Gates
+
+Three stdlib-only checks run in CI beside the index and joint-register gates:
+
+- **`tools/check_bom_mesh_sync.py`** — the BOM is the procurement output, so a printed part's
+  `Unit_Mass_g` must equal its mesh mass (STL volume × the SLS datasheet density from
+  `tools/sls_materials.py`), as priced in `current-specification/auw_ledger.json`. `--write`
+  re-syncs `bom_revU.csv/.json` after the ledger is regenerated. Printed rows with no ledger mesh are
+  listed as NOT COVERED, never passed silently.
+- **`tools/check_nacelle_deps.py`** — the 64 mm nacelle's OpenSCAD closure (17 files) and `import()`s
+  all exist and none is a 50 mm design or an archived file; required printed parts with no published STL
+  are listed (`--strict-parts` makes them fail).
+- **`tools/check_joint_register.py`** — every fastener-class BOM row is in a joint or exempted.
+
+Supporting tools: `tools/scad_flatten.py` (applies OpenSCAD's last-assignment override rules once, how
+the 64 mm sources were made independent of the 50 mm base) and `tools/winch_packaging_fit.py` (tests
+whether the Rev C1 winch stack fits the one-piece forward hull; needs the hull and `shapely`).
+
 ## Output Locations
 
 | Output Type | Directory | Format |
