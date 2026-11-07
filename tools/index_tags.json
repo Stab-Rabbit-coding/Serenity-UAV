@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-03",
+  "generated": "2026-11-07",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -20986,7 +20986,7 @@
       "archived": false
     },
     "tools/sls_auw_reconcile.py": {
-      "description": "sls_auw_reconcile.py -- part-by-part reconciliation of the aircraft AUW from FDM",
+      "description": "sls_auw_reconcile.py -- part-by-part reconciliation of the aircraft AUW between SLS",
       "tags": [
         "build-tooling"
       ],

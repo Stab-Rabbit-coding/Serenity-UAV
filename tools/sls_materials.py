@@ -54,6 +54,25 @@ PA12 = {
 for _m in (PA_CF, PA11, PA12):
     _m["compressive_mpa"] = _m["tensile_ult_mpa"]  # ASSUMED, see docstring
 
+#: Legacy FDM CF-PETG bulk print density, g/mm^3.  Kept ONLY to convert masses that
+#: were written down on the old FDM basis (tools/auw_ledger.py priced every printed
+#: part at this value until Rev U).  Never price a Rev U SLS part with it.
+RHO_FDM_BULK_G_MM3 = 1.05e-3
+
+
+def rho_g_mm3(mat):
+    """Datasheet solid density of an SLS material, g/mm^3 (ASTM D792)."""
+    return mat["rho_g_cc"] * 1e-3
+
+
+def sls_from_fdm_mass(mass_g, mat=None):
+    """Convert a mass written on the FDM 1.05 g/cc basis to the same volume in SLS.
+
+    Defaults to PA CF.  Volume is the same STL either way; only the density changes.
+    """
+    return mass_g * rho_g_mm3(mat or PA_CF) / RHO_FDM_BULK_G_MM3
+
+
 Z_KNOCKDOWN_PA_CF = 0.5  # ASSUMED until Z coupons / vendor data (WBS)
 _KNOCKED = ("tensile_ult_mpa", "tensile_mod_mpa", "flex_strength_mpa",
             "flex_mod_mpa", "compressive_mpa")

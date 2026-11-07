@@ -51,6 +51,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import nacelle_mass_cg as base  # noqa: E402 sibling tool; path set above
 
 import nacelle_64_scale  # noqa: E402  single-source shell scale (x1.06 on 2026-10-05)
+import sls_materials as sls  # noqa: E402  datasheet densities; converts FDM-basis constants
 K = nacelle_64_scale.get("P64_K")    # radial scale
 A = nacelle_64_scale.get("P64_A")    # axial scale
 ROTOR_Z = 30.5           # rotor-1 hub face, behind the elliptical lip + duct
@@ -95,8 +96,8 @@ def scaled_sleeve(rel: str, z0_50: float, l_50: float,
 # 2 x 6704-ZZ (9.8 g) -> 2 x 6804-ZZ, 18 g each [REF-BRG-002]; the trunnion is
 # nacelle_trunnion_64mm.stl measured (9.1 g at RHO_PRINT, 2026-10-03).
 ON_AXIS_64 = [
-    ("Trunnion 64 mm (printed, measured)", 9.1,
-     "nacelle_trunnion_64mm.scad render, 2026-10-03"),
+    ("Trunnion 64 mm (printed, measured)", sls.sls_from_fdm_mass(9.1),
+     "nacelle_trunnion_64mm.scad render, 2026-10-03: 9.1 g at FDM 1.05 g/cc, x PA CF 1.11/1.05"),
     ("2 x 6804-ZZ trunnion bearing", 2 * 18.0, "JTEKT 6804-ZZ [REF-BRG-002]"),
     *[r for r in base.ON_AXIS if not r[0].startswith(("Trunnion", "2 x 6704"))],
 ]
@@ -137,13 +138,15 @@ def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
         ("ESC B (70 A, aft motor, 2 bays)", 52.7, 136.4,
          ("ESTIMATE: tools/esc80_cooptimize.py on tools/esc70_design.json; "
           "centre from the bay fit")),
-        ("4 x ESC access cover", 2 * 4 * 6.99 / 2 * K, 0.5 * (125.4 + 136.4),
-         "SCALED est.: 50 mm covers measured x K, two per ESC (four bays)"),
-        ("Nozzle throat + housing", 21.4 * K, NOZ_Z + 8.55,
-         "SCALED est.: 50 mm iris x K (thin shell); U11 re-sizes"),
-        ("Unison ring", 6.7 * K, NOZ_Z + 3.65, "SCALED est.: x K; U11 re-sizes"),
-        ("8 x nozzle flap (40 mm)", 21.1 * K, NOZ_Z + 31.95,
-         "SCALED est.: flap width x K, length unchanged; U11"),
+        ("4 x ESC access cover", sls.sls_from_fdm_mass(2 * 4 * 6.99 / 2 * K),
+         0.5 * (125.4 + 136.4),
+         "SCALED est.: 50 mm covers measured x K, two per ESC (four bays); x PA CF/FDM"),
+        ("Nozzle throat + housing", sls.sls_from_fdm_mass(21.4 * K), NOZ_Z + 8.55,
+         "SCALED est.: 50 mm iris x K (thin shell), x PA CF/FDM; U11 re-sizes"),
+        ("Unison ring", sls.sls_from_fdm_mass(6.7 * K), NOZ_Z + 3.65,
+         "SCALED est.: x K, x PA CF/FDM; U11 re-sizes"),
+        ("8 x nozzle flap (40 mm)", sls.sls_from_fdm_mass(21.1 * K), NOZ_Z + 31.95,
+         "SCALED est.: flap width x K, length unchanged, x PA CF/FDM; U11"),
         ("Nozzle servo drive (KST X06 + bellcrank)", 6.0 + 1.0 + 1.0 + 1.5,
          0.5 * (NOZ_Z - 43.86 + NOZ_Z - 8.86),
          ("KST X06 6 g [REF-ACT-005] + link 1 + spring 1 + bellcrank/pins 1.5 g "

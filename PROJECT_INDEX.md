@@ -6,7 +6,7 @@
      look, change the generator (tools/precommit_index.py), not this
      file. Machine-readable form: tools/index_tags.json -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last generated: 2026-11-03 -->
+<!-- Last generated: 2026-11-07 -->
 
 ## Tag Index
 
@@ -3284,7 +3284,7 @@ shift_baked_stl.py — Translate an already hull-frame-baked binary STL along hu
 skid_failure_mode_study.py — skid_failure_mode_study.py -- how does a rear skid fail, and in which material? [build-tooling]
 skid_mount_loads.py — skid_mount_loads.py -- forces and moments at the ring / skid / hull mount points, [build-tooling]
 skid_open_items.py — skid_open_items.py -- the five open items of the elastic PA12-CF skid design [build-tooling]
-sls_auw_reconcile.py — sls_auw_reconcile.py -- part-by-part reconciliation of the aircraft AUW from FDM [build-tooling]
+sls_auw_reconcile.py — sls_auw_reconcile.py -- part-by-part reconciliation of the aircraft AUW between SLS [build-tooling]
 sls_dfm_audit.py — sls_dfm_audit.py -- bow-to-stern SLS design-for-manufacture audit of every [build-tooling]
 sls_material_screen.py — sls_material_screen.py -- screen the 3D Systems SLS nylons against the repo's [build-tooling]
 sls_materials.py — sls_materials.py -- single source of SLS material properties for every [build-tooling]

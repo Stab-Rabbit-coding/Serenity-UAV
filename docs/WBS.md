@@ -1134,13 +1134,14 @@ with status:
 | Item | Status in Rev U |
 |---|---|
 | SLS DuraForm PA CF hull and nacelle printed parts; PA11 at gear feet | Decided (owner, 2026-10-31); recorded in `AGENTS.md` §7 and the BOM. Vendor not selected; no quote or coupon data. |
-| Head + cargo as one part | Built (`head_cargo_shell24_2mm_merged.stl`, watertight, 618 g at 1.05 g/cc, with the canonical gear box fused in). BOM `PRINT-HEAD-CARGO-ONEPIECE`; `PRINT-HEAD-SHELL`, `PRINT-CARGO-SECT`, `PRINT-HEAD-CARGO-COLLAR`, `PRINT-BATT-CRADLE` retired at Qty 0. |
-| Middle + rear as one part | Built (`middle_rear_shell24_2mm_merged.stl`, watertight, 408 g at 1.05 g/cc; blended loft Y 501–530.5). BOM `PRINT-MIDDLE-REAR-ONEPIECE`; middle, rear, and middle/rear collar rows retired at Qty 0. **Misses the 333 g plan target**; gates G1–G3 open. |
-| Twin pack tray, sleds, gate | In the BOM (`PRINT-TWIN-PACK-*`, 83.7 + 2 × 5.6 + 3.2 g). The ledger's battery pack model still uses the pre-twin-pack position, so CG and AUW are provisional. |
+| Head + cargo as one part | Built (`head_cargo_shell24_2mm_merged.stl`, watertight, 653 g at the PA CF datasheet density 1.11 g/cc, with the canonical gear box fused in). BOM `PRINT-HEAD-CARGO-ONEPIECE`; `PRINT-HEAD-SHELL`, `PRINT-CARGO-SECT`, `PRINT-HEAD-CARGO-COLLAR`, `PRINT-BATT-CRADLE` retired at Qty 0. |
+| Middle + rear as one part | Built (`middle_rear_shell24_2mm_merged.stl`, watertight, 431 g at 1.11 g/cc; blended loft Y 501–530.5). BOM `PRINT-MIDDLE-REAR-ONEPIECE`; middle, rear, and middle/rear collar rows retired at Qty 0. **Misses the 333 g plan target** (set on the FDM basis); gates G1–G3 open. |
+| Twin pack tray, sleds, gate | In the BOM (`PRINT-TWIN-PACK-*`, 88.5 + 2 × 5.9 + 3.3 g). The ledger's battery pack model still uses the pre-twin-pack position, so CG and AUW are provisional. |
 | Hull scale 24 in vs up to 27 in | Rev U is 24 in: both built hull sections are 24 in (`*_shell24_*`) and the build guide is the 24 in guide. The 27 in uniform scale (plan 2026-10-31-003) is not in the baseline. Inferred from the PR 276 geometry, not an explicit owner statement. |
 | Ring + skids as a separate PA11 crash member (Option B) | Owner preference recorded; not yet a separate part. |
-| SLS mass re-pricing (1.05 → 1.11 g/cc, about +135 g hull and nacelles) | Not applied to the ledger (also an open item in WBS 0.13); see `tools/sls_auw_reconcile.py` and `tools/sls_materials.py`. |
-| Ledger after PR 276 | Hover AUW 13.79 lbm (6,253 g), hover CG offset +11.7 mm, T/W 1.52 (was 13.40 lbm / +13.8 mm on `main`). The +193 g is the gear box and tray, less the retired cradle and old shells; it includes +31 g from the stbd aft gear bay, which was an inside-out mesh counted negative until PR 276 fixed it. |
+| SLS density basis | **Applied 2026-11-07.** Datasheet solid densities verified against the 3D Systems sheets: PA CF 1.11 g/cm³ (3DS-30108A, 10-23), PA11 1.03 g/cm³ (3DS-30109A, 02-25), PA12 1.00 g/cm³ (3DS-30112A, 02-25), all ASTM D792. The ledger and the 64 mm nacelle roll-up read them from `tools/sls_materials.py`; the old FDM 1.05 g/cc survives only as the conversion constant. |
+| Ledger, SLS basis | Hover AUW 14.12 lbm (6,405 g), hover CG offset +11.8 mm, T/W 1.48; cargo 2,800 g payload 14.40 lbm; heaviest 4,000 payload 14.62 lbm. On the old FDM 1.05 basis the same aircraft is 13.80 lbm. Density added +99 g to the printed hull parts and +49 g to the nacelles (`tools/sls_auw_reconcile.py`). Provisional until the twin-pack battery model lands. |
+| BOM vs mesh | 14 printed BOM rows differ from the measured mesh mass for non-density reasons (e.g. `PRINT-WINGS-S1223` BOM 131 g vs mesh 101 g); not changed by the density pass. |
 
 **Archive pass (2026-11-03).** Frozen at Rev T and earlier under `archives/rev-T-and-earlier/`
 (see its `README.md`): `bom_revS.*`, `bom_revT.*`, `serenity-rev-s.jsx`, `docs/bom_revR.json`, the

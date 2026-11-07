@@ -5,8 +5,10 @@ This is the single mass ledger the first-flight plan asks for (plan
 2026-09-15-001 unit A0; root WBS MA-1 / MA-7).  Every installed item is one
 row with a mass, a hull-frame station and the source of both:
 
-* PRINTED parts are MEASURED: STL volume x RHO_PRINT (1.05e-3 g/mm^3, the
-  audited as-printed bulk density of docs/MASS_AUDIT_CARGO_WING_ROOT.md SS1).
+* PRINTED parts are MEASURED: STL volume x the datasheet solid density of the
+  part's SLS material (tools/sls_materials.py: DuraForm PA CF 1.11 g/cc, PA11 1.03
+  g/cc, ASTM D792; REF-MAT-015/016).  Until Rev U this was the FDM CF-PETG bulk
+  density 1.05 g/cc; the SLS part is the same STL printed fully dense.
   Hull-frame (baked/generated) STLs give their own CG and inertia tensor;
   part-local STLs give mass only and take an ESTIMATED station.
 * The two NACELLE rotating assemblies come from tools/nacelle_mass_cg_64.py
@@ -64,6 +66,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
 sys.path.insert(0, str(HERE))
 import cargo_layout_fit as clf  # noqa: E402  (sibling tool, path set above)
+import sls_materials as sls  # noqa: E402  datasheet densities (single source)
 import middle_layout_fit as mlf  # noqa: E402
 import nacelle_mass_cg_64 as nac64  # noqa: E402
 
@@ -71,7 +74,16 @@ BOM = REPO / "current-specification" / "bom_revU.csv"
 OUT_JSON = REPO / "current-specification" / "auw_ledger.json"
 STL = REPO / "airframe" / "stls"
 
-RHO_PRINT = 1.05e-3       # g/mm^3, MASS_AUDIT SS1 (bulk, 4 perimeters + >=40 %)
+# Printed parts are SLS (Rev U).  PA11 at the impact parts, PA CF everywhere else
+# (owner decisions 2026-10-31, tools/sls_materials.py assignment rule).
+SLS_PA11_STEMS = {"lg_r6_common_foot"}
+
+
+def sls_material(stem: str) -> dict:
+    """SLS material for a printed STL (by file stem)."""
+    return sls.PA11 if stem in SLS_PA11_STEMS else sls.PA_CF
+
+
 LBM_PER_G = 1.0 / 453.592
 X_CL = clf.X_CL
 
@@ -440,18 +452,20 @@ def printed_items() -> list[Item]:
     items = []
     for ref, rel, qty, place in PRINTED:
         mesh = load(rel)
-        m1 = float(mesh.volume) * RHO_PRINT
+        mat = sls_material(Path(rel).stem)
+        rho = sls.rho_g_mm3(mat)
+        m1 = float(mesh.volume) * rho
         if place == "hull" or (isinstance(place, tuple) and place[0] == "dx"):
             cg = np.array(mesh.center_mass, float)
-            inertia = np.array(mesh.moment_inertia, float) * RHO_PRINT
-            src = "MEASURED mesh (hull frame)"
+            inertia = np.array(mesh.moment_inertia, float) * rho
+            src = f"MEASURED mesh x {mat['name']} {mat['rho_g_cc']} g/cc (hull frame)"
             if isinstance(place, tuple):
                 cg = cg + np.array([place[1], 0.0, 0.0])
                 src = f"MEASURED mesh, starboard copy translated dX {place[1]} " \
                       "(serenity_assembly.py T5_STBD_DX)"
         else:
             cg, inertia, src = np.array(place[1], float), None, \
-                f"MEASURED mass; station {place[2]}"
+                f"MEASURED mesh x {mat['name']} {mat['rho_g_cc']} g/cc; station {place[2]}"
         items.append(Item(Path(rel).stem, ref, m1 * qty, cg, None if inertia is None
                           else inertia * qty, src, "PRINT"))
     return items
@@ -479,6 +493,10 @@ def station_items(bom: dict[str, dict]) -> list[Item]:
             continue
         unit = MASS_OVERRIDE.get(ref, (float(row["Unit_Mass_g"] or 0), ""))[0]
         msrc = MASS_OVERRIDE.get(ref, (0, "BOM Unit_Mass_g"))[1]
+        if row["Category"] == "Printed Part" and ref not in MASS_OVERRIDE:
+            # No STL prices this part; its BOM mass is on the FDM 1.05 g/cc basis.
+            unit = sls.sls_from_fdm_mass(unit)
+            msrc = "BOM Unit_Mass_g (FDM basis) x PA CF 1.11/1.05"
         if st == "pivot":
             for side, p in PIVOT.items():
                 items.append(Item(f"{ref} ({side})", ref, unit * qty / 2, p, None,

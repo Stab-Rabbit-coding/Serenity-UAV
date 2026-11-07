@@ -264,9 +264,11 @@ language states what is required regardless of actor.
 - **Print process and material (Rev U, owner decisions 2026-10-31):** the flight-article hull
   and nacelle printed parts are **SLS DuraForm PA CF** [3DS-30108A], printed by a service
   bureau (vendor not yet selected). PA11 goes at impact points (gear feet). See
-  `docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` and `tools/sls_auw_reconcile.py`. Ledger masses
-  still price every printed part at 1.05 g/cc; SLS PA CF is 1.11 g/cc (about +86 g hull,
-  +49 g nacelles), so SLS re-pricing is an open item in `docs/WBS.md` §6.5.
+  `docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` and `tools/sls_auw_reconcile.py`. **Mass
+  basis (Rev U):** printed parts are priced at the 3D Systems datasheet solid density,
+  from the single source `tools/sls_materials.py` (PA CF 1.11 g/cc, PA11 1.03 g/cc,
+  ASTM D792; verified against the sheets 2026-11-07). Never price an SLS part with the old FDM
+  1.05 g/cc; convert any mass written on that basis with `sls_materials.sls_from_fdm_mass`.
 - **Hull sections (Rev U):** the hull is **two** SLS parts at 24 in. The forward part (head+cargo,
   with the canonical gear box fused in as skin) is `PRINT-HEAD-CARGO-ONEPIECE`; the aft part
   (middle+rear) is `PRINT-MIDDLE-REAR-ONEPIECE`. Both are built and ship as gzip tarballs (over

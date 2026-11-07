@@ -74,7 +74,7 @@ See `HULL_FRAME_REFERENCE.md` for the validated component placement extents tabl
 
 | Component | Mass (g) | Mass (oz) | Notes |
 |-----------|----------|-----------|-------|
-| Fuselage (printed) | ~1,043 | 36.8 | Rev U, at the ledger's 1.05 g/cc: forward head+cargo one-piece 618g (includes the fused gear box) + aft middle+rear one-piece 408g + cargo/middle splice collar 17g; `bom_revU` PRINT-HEAD-CARGO-ONEPIECE/PRINT-MIDDLE-REAR-ONEPIECE/PRINT-CARGO-MIDDLE-COLLAR. SLS PA CF is 1.11 g/cc (about +5%). The aft part misses the 333g plan target (408g). |
+| Fuselage (printed) | ~1,101 | 38.8 | Rev U, at the SLS PA CF datasheet density 1.11 g/cc: forward head+cargo one-piece 653g (includes the fused gear box) + aft middle+rear one-piece 431g + cargo/middle splice collar 17g; `bom_revU` PRINT-HEAD-CARGO-ONEPIECE/PRINT-MIDDLE-REAR-ONEPIECE/PRINT-CARGO-MIDDLE-COLLAR. The aft part misses the 333g plan target (that target was set on the FDM basis; 431g at 1.11 g/cc). |
 | Wings | ~180 | 6.3 | Span 486 mm, spar + skin, no cargo nacelles |
 | Nacelle assembly (2× complete: EDFs + shells + pivot + iris) | ~625 | 22.0 | Includes 4× XFly Galaxy X5 (70g mass each), shells, hubs, pivot, iris mechanism |
 | Tilt mechanism (servos, linkage, frame) | ~200 | 7.1 | 2× SPT5425LV (converted with LibreServo v2, ≥25 kg·cm @ 6V), rods, brackets |
