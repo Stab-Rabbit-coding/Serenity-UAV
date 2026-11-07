@@ -134,7 +134,9 @@ def others_overlap(ox: float, oy: float, oz: float) -> dict[str, float]:
 
     if not hasattr(others_overlap, "L"):
         others_overlap.L = clf.layout_t5()  # type: ignore[attr-defined]
-    skip = ("winch", "hoist", "ramp fairing")
+    # The layout tool still models the retired battery cradle and the cargo battery (the pack
+    # moved to the head twin tray at Rev U); counting them would charge the winch for a gap.
+    skip = ("winch", "hoist", "ramp fairing", "battery", "cradle")
     hits: dict[str, float] = {}
     for name, x0, x1, y0, y1, z0, z1, kind in _solids(ox, oy, oz):
         mine = clf.to_man(clf.cyl("x", y0, z0, x0, x1, y1) if kind == "cyl"
