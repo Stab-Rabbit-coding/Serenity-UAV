@@ -107,8 +107,46 @@ ON_AXIS_64 = [
 MOTOR_G = 140.0
 
 
+def nozzle_masses() -> dict[str, float]:
+    """Per-nacelle nozzle part masses, g, measured from the published 64 mm STLs."""
+    d = base.REPO / "airframe/stls/nacelles/nozzles"
+    names = {"throat": "nacelle_nozzle_throat_64mm_stbd.stl",
+             "ring": "nacelle_nozzle_ring_64mm_stbd.stl",
+             "flap": "nacelle_nozzle_flap_64mm.stl",
+             "flap_seal": "nacelle_nozzle_flap_seal_64mm.stl"}
+    return {k: float(base.trimesh.load_mesh(d / v, force="mesh").volume * base.RHO_PRINT)
+            for k, v in names.items()}
+
+
+def printed_by_ref() -> dict[str, float]:
+    """Unit mass in g of every 64 mm nacelle printed part that has a mesh, keyed by BOM ref.
+
+    Priced from the published STLs at the SLS datasheet density.  The BOM
+    (current-specification/bom_revU.*) must equal these; tools/check_bom_mesh_sync.py gates it.
+    The ESC bay covers are not here: they have no 64 mm mesh yet.
+    """
+    n = base.REPO / "airframe/stls/nacelles"
+
+    def g(rel: str) -> float:
+        return float(base.trimesh.load_mesh(n / rel, force="mesh").volume * base.RHO_PRINT)
+
+    noz = nozzle_masses()
+    return {
+        "PRINT-NAC64-POD": 0.5 * (g("nacelle_port_64mm.stl") + g("nacelle_stbd_64mm.stl")),
+        "PRINT-NAC64-CARTRIDGE": 0.5 * (g("edf_motor_mount_64mm_stage2_port.stl")
+                                        + g("edf_motor_mount_64mm_stage2_stbd.stl")),
+        "PRINT-NAC64-TRUNNION": 0.5 * (g("nacelle_trunnion_64mm_port.stl")
+                                       + g("nacelle_trunnion_64mm_stbd.stl")),
+        "PRINT-NOZ64-THROAT": noz["throat"],
+        "PRINT-NOZ64-RING": noz["ring"],
+        "PRINT-NOZ64-FLAP": noz["flap"],
+        "PRINT-NOZ64-FLAP-SEAL": noz["flap_seal"],
+    }
+
+
 def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
     """Every off-axis row of the 64 mm rotating assembly."""
+    noz = nozzle_masses()
     mesh = base.trimesh.load_mesh(pod_stl, force="mesh")
     pod = (float(mesh.volume * base.RHO_PRINT), float(mesh.center_mass[2]))
     # NAC-64-GEOM-01 drawn 2026-10-03 (edf_motor_mount_64mm.scad): MEASURE
@@ -141,12 +179,12 @@ def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
         ("4 x ESC access cover", sls.sls_from_fdm_mass(2 * 4 * 6.99 / 2 * K),
          0.5 * (125.4 + 136.4),
          "SCALED est.: 50 mm covers measured x K, two per ESC (four bays); x PA CF/FDM"),
-        ("Nozzle throat + housing", sls.sls_from_fdm_mass(21.4 * K), NOZ_Z + 8.55,
-         "SCALED est.: 50 mm iris x K (thin shell), x PA CF/FDM; U11 re-sizes"),
-        ("Unison ring", sls.sls_from_fdm_mass(6.7 * K), NOZ_Z + 3.65,
-         "SCALED est.: x K, x PA CF/FDM; U11 re-sizes"),
-        ("8 x nozzle flap (40 mm)", sls.sls_from_fdm_mass(21.1 * K), NOZ_Z + 31.95,
-         "SCALED est.: flap width x K, length unchanged, x PA CF/FDM; U11"),
+        ("Nozzle throat + housing", noz["throat"], NOZ_Z + 8.55,
+         "MEASURED nacelle_nozzle_throat_64mm_stbd.stl (Rev U); station from the iris frame"),
+        ("Unison ring", noz["ring"], NOZ_Z + 3.65,
+         "MEASURED nacelle_nozzle_ring_64mm_stbd.stl (Rev U)"),
+        ("8 x nozzle flap (40 mm)", 4 * noz["flap"] + 4 * noz["flap_seal"], NOZ_Z + 31.95,
+         "MEASURED 4 x nacelle_nozzle_flap_64mm.stl + 4 x ..._flap_seal_64mm.stl (Rev U)"),
         ("Nozzle servo drive (KST X06 + bellcrank)", 6.0 + 1.0 + 1.0 + 1.5,
          0.5 * (NOZ_Z - 43.86 + NOZ_Z - 8.86),
          ("KST X06 6 g [REF-ACT-005] + link 1 + spring 1 + bellcrank/pins 1.5 g "

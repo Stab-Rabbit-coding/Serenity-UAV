@@ -323,17 +323,22 @@ INSTALLED["FOAM-PU-2LB"] = (1, ((X_CL, 305.7, 180.0), "ESTIMATE: chin/head/flank
 
 # Counted inside tools/nacelle_mass_cg_64.py's rotating assembly.
 NACELLE = {
-    "EDF-50-6S": "64 mm QF2822 motors + rotors are in the nacelle roll-up",
-    "ESC-40A-6S": "70 A ESCs are in the nacelle roll-up",
-    "PRINT-NACELLE-PORT": "64 mm pod shell measured in the nacelle roll-up",
-    "PRINT-NACELLE-STBD": "64 mm pod shell measured in the nacelle roll-up",
-    "PRINT-NACELLE-FLAP-MASTER": "nozzle flaps (scaled) in the nacelle roll-up",
-    "PRINT-NACELLE-FLAP-SEAL": "nozzle flaps (scaled) in the nacelle roll-up",
-    "PRINT-NACELLE-THROAT": "throat + housing in the nacelle roll-up",
-    "PRINT-NACELLE-RING": "unison ring in the nacelle roll-up",
-    "PRINT-NACELLE-ESC-COVER": "4 x ESC covers in the nacelle roll-up",
-    "PRINT-NACELLE-TRUNNION": "64 mm trunnion (measured) in the nacelle roll-up",
-    "BRG-6704ZZ": "2 x 6804-ZZ per nacelle in the nacelle roll-up",
+    # Rev U: the 64 mm nacelle.  Printed parts are priced from the published STLs by the
+    # roll-up (nacelle_mass_cg_64.printed_by_ref) and synced to the BOM by check_bom_mesh_sync.
+    "PRINT-NAC64-POD": "64 mm pod shell measured in the nacelle roll-up",
+    "PRINT-NAC64-CARTRIDGE": "stage-2 cartridge measured in the nacelle roll-up",
+    "PRINT-NAC64-TRUNNION": "64 mm trunnion (measured) in the nacelle roll-up",
+    "PRINT-NOZ64-THROAT": "throat + housing measured in the nacelle roll-up",
+    "PRINT-NOZ64-RING": "unison ring measured in the nacelle roll-up",
+    "PRINT-NOZ64-FLAP": "4 master flaps per nozzle, measured in the nacelle roll-up",
+    "PRINT-NOZ64-FLAP-SEAL": "4 seal flaps per nozzle, measured in the nacelle roll-up",
+    "PRINT-NAC64-ESC-COVER": "4 x ESC covers (scaled estimate, no mesh yet) in the nacelle roll-up",
+    "MOTOR-QF2822-2300KV": "motors are in the nacelle roll-up (140 g, REF-EDF-003)",
+    "ROTOR-QX64-12B": "rotors are in the nacelle roll-up (20 g ASSUMED, weigh)",
+    "OSESC-NAC": "ESCs are in the nacelle roll-up (52.7 g estimate)",
+    "SERVO-KST-X06": "nozzle servo drive is in the nacelle roll-up",
+    "HW-NOZ64-LINKAGE": "link, spring and bellcrank are in the nacelle roll-up",
+    "BRG-6804ZZ": "2 x 6804-ZZ per nacelle in the nacelle roll-up",
     "WIRE-16AWG": "phase leads (14 AWG) in the nacelle roll-up",
     "WIRE-28AWG-NAC": "nav 3-core in the nacelle roll-up",
     "HALL-RING-MAG": "ring magnet on the tilt axis in the nacelle roll-up",
@@ -580,6 +585,8 @@ def build() -> dict:
     for it in configs["hover_4000"]:
         by_kind[it.kind] = by_kind.get(it.kind, 0.0) + it.m
     result["subtotals_hover_g"] = by_kind
+    result["nacelle_printed_unit_g"] = {k: round(v, 2)
+                                        for k, v in nac64.printed_by_ref().items()}
     result["rows_hover"] = [
         {"name": i.name, "ref": i.ref, "kind": i.kind, "mass_g": round(i.m, 2),
          "cg": [round(c, 1) for c in i.cg], "source": i.src}

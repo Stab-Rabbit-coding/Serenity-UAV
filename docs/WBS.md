@@ -1146,11 +1146,42 @@ with status:
 **Archive pass (2026-11-03).** Frozen at Rev T and earlier in `archives/rev-T-and-earlier.tar.gz`
 (see `archives/README.md` and `archives/MANIFEST.md`): `bom_revS.*`, `bom_revT.*`, `serenity-rev-s.jsx`, `docs/bom_revR.json`, the
 one-shot `tools/bom_edit_*.py` scripts, dated status snapshots, stale 30 in / 36 in studies, and one
-superseded plan. Not archived, with the reason: the 50 mm nacelle sources
-(`nacelle_pod_64mm_tandem.scad` and `nacelle_nozzle_iris_64mm.scad` `include` the 50 mm files, and
-about 26 tools read the 50 mm STLs); `docs/structural_analysis.md`, `docs/TILT_SPAR_ANALYSIS.md`,
-`docs/AVIONICS_PB2_REDESIGN.md`, and `avionics/rev-s1/WBS.md` (read by live tools); and the
-remaining `docs/plans/` files (no completion status to judge by).
+superseded plan. Not archived, with the reason: `docs/structural_analysis.md`,
+`docs/TILT_SPAR_ANALYSIS.md`, `docs/AVIONICS_PB2_REDESIGN.md`, and `avionics/rev-s1/WBS.md` (read by live
+tools), and the remaining `docs/plans/` files (no completion status to judge by).
+
+**Rev T freeze, Rev U relabel, and the 64 mm nacelle (2026-11-07).**
+
+- *Frozen Rev T.* `archives/rev-T-frozen.tar.gz` (168 files) holds the pre-change copy of every live
+  file that mentioned Rev T plus the whole 50 mm nacelle. It was built from the committed blobs and
+  verified byte for byte. Live files continue as Rev U.
+- *Relabel.* Sixteen live component declarations now read "Rev U (2026-11-07; carried forward from
+  Rev T…)". Prose history is left as written. Parts retired but not archived (the battery cradle and
+  the tilt-actuator trade view) keep the label they held, per `AGENTS.md` §8, and board design
+  generations (a PCB's own "Rev T") are not renamed. The build-guide card SVGs still read "Rev T+" until
+  the cards are next regenerated.
+- *64 mm independence.* `nacelle_pod_64mm_tandem.scad`, `nacelle_nozzle_iris_64mm.scad` and
+  `nacelle_trunnion_64mm.scad` are flattened with `tools/scad_flatten.py` (OpenSCAD's last-assignment
+  rules applied once) and no longer include any 50 mm source. Iris and trunnion renders are identical to
+  the originals (symmetric difference 0.0000 mm³). The pod matches in volume, bounds and face count, and in
+  124,862 of 124,866 triangles; the other 4 are one flat patch triangulated differently.
+- *50 mm archived:* pod, iris, trunnion, fixed nozzle, sleeves, servo bracket, housing profile and two
+  cache-export SCADs; their STLs (pods, sleeves, trunnion, nozzles, ESC covers); three tools
+  (`nozzle_linkage_check`, `nacelle_trunnion_fit`, `nacelle_housing_profile`) and the axial-fit study with
+  its test. The canonical engine shells `eng_*_shell24_50mm_repaired.stl` stay: they are the canon mesh the
+  64 mm pod is scaled from, not a 50 mm design.
+- *Dependency audit.* `tools/check_nacelle_deps.py` (in CI) walks the 64 mm SCAD closure (17 files) and
+  fails on a missing, archived or 50 mm file. It found and this change fixed: the 64 mm nozzle parts
+  were never published (six STLs added: throat and ring per side, flap, flap seal); the port stage-2
+  cartridge did not exist and the starboard one was stale (it predated the ×1.06 enlargement; 60.9 g
+  vs 66.9 g), so both were regenerated; the BOM carried no 64 mm propulsion hardware (motors, rotors,
+  ESCs, nozzle servos, 6804 bearings), now added.
+- *Still open for the 64 mm nacelle:* the four ESC bay covers have no 64 mm mesh (blocked on the ESC
+  part and rating, WBS NAC-64-ESC-80A); the ESC current rating (70 A in the roll-up, 80 A recommended by
+  the motor sheet); prices for the purchased parts are not recorded (rows carry 0.00); rotor mass is
+  assumed (20 g); the published pod STLs predate the intake-cowl change and need the pending re-bake
+  (their 248,000 mm³ against 367,000 mm³ from the current source); and the pivot is not converged
+  (residual +9.6 mm, unchanged by this work).
 
 **Archive compaction (2026-11-07).** All of `archives/` is now 13 deterministic tarballs (118 MB, was
 290 MB in the working tree): one per former subfolder, plus `loose-zips` and `loose-files`. All 590

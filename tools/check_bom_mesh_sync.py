@@ -52,13 +52,21 @@ def fmt(v: float) -> str:
 
 
 def mesh_masses() -> dict[str, float]:
-    """ref -> total mesh mass in g, from the ledger's PRINT rows."""
+    """ref -> mesh mass in g.
+
+    Hull-side PRINT rows are TOTALS over every STL of the ref (positive values; divide by the
+    BOM Qty).  The 64 mm nacelle's printed parts are UNIT masses (stored negated) from the
+    ledger's `nacelle_printed_unit_g`, because the nacelle roll-up prices one nacelle.
+    """
     led = json.loads(LEDGER.read_text(encoding="utf-8"))
     tot: dict[str, float] = collections.defaultdict(float)
     for r in led["rows_hover"]:
         if r["kind"] == "PRINT":
             tot[r["ref"]] += r["mass_g"]
-    return dict(tot)
+    out = dict(tot)
+    for ref, unit in led.get("nacelle_printed_unit_g", {}).items():
+        out[ref] = -unit
+    return out
 
 
 def target(row: dict, mesh: dict[str, float]) -> float | None:
@@ -66,7 +74,9 @@ def target(row: dict, mesh: dict[str, float]) -> float | None:
     if row["Category"] != "Printed Part" or float(row["Qty"] or 0) <= 0:
         return None
     ref = row["Ref"]
-    return round(mesh[ref] / float(row["Qty"]), 1) if ref in mesh else None
+    if ref not in mesh:
+        return None
+    return round(-mesh[ref], 1) if mesh[ref] < 0 else round(mesh[ref] / float(row["Qty"]), 1)
 
 
 def drift(rows: list[dict], mesh: dict[str, float]) -> list[tuple[str, float, float]]:

@@ -10,7 +10,7 @@
 //     in the slicer (see PRINT ORIENTATION below), not here.
 // ===========================================================================
 // ============================================================
-// tilt_actuator_bracket.scad -- Rev T5e (2026-09-16; Rev T5 2026-09-15 base)
+// tilt_actuator_bracket.scad -- Rev U (2026-11-07; carried forward from Rev T5e, 2026-09-16; Rev T5 2026-09-15 base)
 // Nacelle-tilt actuator: worm-drive bracket, worm and worm wheel for the
 // cargo-section fuselage stage.
 //

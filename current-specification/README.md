@@ -25,8 +25,9 @@ changelog).
     two Rev S sub-module rows. Per `avionics/AGENTS.md`, its mass comes from the PCB roll-up,
     not a hand entry.
   - **PCB masses:** Pilot and TACCO are still placeholder masses until routing closes.
-  - **64 mm nacelle:** the 50 mm EDF rows are current. The 64 mm tandem-EDF rows enter after
-    the NAC-64 fit, power, and mass gates close (`airframe/wings-nacelles/WBS.md`).
+  - **64 mm nacelle:** its rows are in the Rev U BOM and the 50 mm rows are retired at Qty 0. Open:
+    the ESC current rating and part (`OSESC-NAC`, WBS NAC-64-ESC-80A), the unpublished ESC bay covers
+    (`PRINT-NAC64-ESC-COVER`, no mesh), prices for the purchased parts, and the stale published pod STLs.
   - **AUW and T/W:** the 3,911 g figure and the 1.14 hover T/W are provisional pending the
     bottom-up AUW ledger recompute (`docs/WBS.md` §0.10.1).
 - **Known data defect:** a few rows in the JSON files have parse-shifted `Category` values
@@ -103,7 +104,7 @@ changelog).
 
 ### Propulsion
 
-- **EDFs:** 4× XFly Galaxy X5 50 mm (6S, 3200 KV, 12-blade rotor, 11-fin stator)
+- **EDFs:** 4× QX-Motor QF2822-2300KV with 12-blade 64 mm rotors (Rev U; the 50 mm XFly Galaxy X5 is retired)
 - **Servos:**
   - Nacelle tilt: **superseded** by the 2× Pololu 20D 25:1 worm drive with pin brake (Rev T5e, `GM-TILT-20D`); the SPT5425LV tilt servos are retired
   - 1× SPT5425LV + LibreServo v2 (winch motor, continuous rotation + encoder feedback, was STS3215)

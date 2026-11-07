@@ -19,8 +19,8 @@
   (`tools/middle_layout_fit.py` Rev T6a). The printable STLs (`chin_node_shelf`,
   `simon_node_saddle`, `void_former_cargo_node_bay`, `head_shell24`) still need re-export
   (item TACCO-60); `tools/check_tacco_envelope_sync.py` reports them as pending.
-- **Nacelles:** the 50 mm Rev S4c/S4d geometry is current. The 64 mm tandem-EDF nacelle
-  (NAC-64-SERVO-01) is the active design: a servo-driven variable nozzle was designed and
+- **Nacelles:** the 64 mm tandem-EDF nacelle (NAC-64-SERVO-01) is the Rev U nacelle; the 50 mm
+  geometry (Rev S4c/S4d) is archived in `archives/rev-T-frozen.tar.gz`. It is the active design: a servo-driven variable nozzle was designed and
   fit-closed 2026-10-04, and a uniform ×1.06 enlargement through a single source was wired
   2026-10-05. Pivot, CFD, mass/CG, and bench gates are open, so the 50 mm figures below stay the
   baseline until the 64 mm thrust, power, and mass verification passes.
@@ -68,7 +68,7 @@ See `HULL_FRAME_REFERENCE.md` for the validated component placement extents tabl
 | **Middle / Neck** | Avionics + power + fuel (battery) | ~230 mm | Horseshoe ring frame; Flight Engineer PDB mount; battery bay; 4× avionics bays (A–D); foam fill; keel rod |
 | **Rear** | Tail cone + tail boom | ~140 mm | Optional Phase 11 aft-EDF intake; twin rear-nozzle pods; landing-gear hard points |
 | **Wings** | Port + stbd lift surfaces | 486 mm span (19.1 in) | Fixed, bonded 20 mm CF spar (Rev T1); bonded root moment flanges; wing + spar clamps into the fuselage (releasable) |
-| **Nacelles** | Two tilting propulsion pods | ~200 mm each | 50 mm tandem EDF pair (X-Fly Galaxy X5, 12-blade, 3200 kV; 64 mm redesign in progress); servo-driven variable nozzle; trunnion on 2 × 6704ZZ, concentric with the fixed spar, driven by the cargo-bay worm drive (Rev T4/T5e) |
+| **Nacelles** | Two tilting propulsion pods | ~200 mm each | 64 mm tandem EDF pair (QX-Motor QF2822-2300KV, 12-blade); servo-driven variable nozzle; trunnion on 2 × 6804ZZ, concentric with the fixed spar, driven by the cargo-bay worm drive |
 
 ## Mass Budget (Phase 5–10, Nacelles Only)
 
@@ -144,8 +144,9 @@ All generated STLs go to `stls/` subdirectories by section:
 - `stls/fuselage/cargo/` — cargo doors, hinges, latches, winch parts, FPV bezel, chin node shelf,
   tilt-actuator parts
 - `stls/fuselage/landing-gear/` — landing-gear parts
-- `stls/nacelles/` — 50 mm and 64 mm nacelle shells, trunnions, EDF sleeves and mounts,
-  servo bracket; `esc/` and `nozzles/` subfolders
+- `stls/nacelles/` — 64 mm nacelle pods, trunnions, stage-2 cartridges, and the canonical engine
+  shell meshes (`eng_*_shell24_50mm_repaired.stl`, the canon reference the 64 mm pod is scaled from;
+  not a 50 mm design); `nozzles/` holds the 64 mm iris parts
 - `stls/wings/` — `wing_{port,stbd}_s1223_revo.stl`, tilt pinions
 
 **Mesh validation:** All STLs are validated for watertightness, manifold topology, and correct

@@ -15,6 +15,7 @@ files are frozen history: do not edit them.
 
 | Tarball | Contents |
 |---|---|
+| `rev-T-frozen.tar.gz` | **The frozen Rev T.** Pre-change copies of every file that mentioned Rev T (T1-T6) plus the whole 50 mm nacelle (SCAD, STLs, tools). Rev U live files carry "carried forward from Rev T..." labels; this is the original. Unpack into an empty directory (paths are under `rev-T-frozen/`). |
 | `rev-T-and-earlier.tar.gz` | Frozen at the Rev U checkpoint (2026-11-03): Rev S/T BOMs, the Rev S viewer, one-shot BOM edit scripts, dated status snapshots, stale studies. Its own `rev-T-and-earlier/README.md` explains each file. |
 | `airframe-archives.tar.gz`, `avionics-archives.tar.gz`, `stl.tar.gz`, `18in-scale-scad.tar.gz` | Retired airframe, avionics, and STL material from earlier revisions. |
 | `graphical-build-guide-pre-revt.tar.gz`, `docs-superseded.tar.gz`, `stale-20260601.tar.gz`, `chat.tar.gz`, `serenity.tar.gz`, `root-readme-deep-dive-2026-08-03.tar.gz` | Superseded guides and documents, and saved working material. |
