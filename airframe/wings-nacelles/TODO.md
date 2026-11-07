@@ -50,7 +50,6 @@
 - [ ] [OPEN — NEW, and it is a safety item] The bay is now an unfiltered…
 - [ ] [OPEN — the flow, not the geometry] Bay velocity is not verified
 - [ ] 50 A sustained is not survivable on any path evaluated
-- [ ] [OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn
 - [ ] Window structural allowance
 
 ##### 1.1.3.6 *Tilt-Angle Feedback — Hall Sensor at the Wing/Nacelle Joint*

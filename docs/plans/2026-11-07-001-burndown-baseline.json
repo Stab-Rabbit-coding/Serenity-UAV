@@ -1,0 +1,75 @@
+{
+ "date": "2026-11-07",
+ "files": {
+  "docs/WBS.md": {
+   "open": 31,
+   "closed": 15
+  },
+  "airframe/WBS.md": {
+   "open": 10,
+   "closed": 21
+  },
+  "airframe/fuselage-joints/WBS.md": {
+   "open": 12,
+   "closed": 29
+  },
+  "airframe/fuselage-covers/WBS.md": {
+   "open": 0,
+   "closed": 9
+  },
+  "airframe/fuselage-mid/WBS.md": {
+   "open": 80,
+   "closed": 64
+  },
+  "airframe/wings-nacelles/WBS.md": {
+   "open": 32,
+   "closed": 107
+  },
+  "airframe/landing-gear/WBS.md": {
+   "open": 21,
+   "closed": 28
+  },
+  "avionics/WBS.md": {
+   "open": 85,
+   "closed": 109
+  },
+  "avionics/rev-s1/WBS.md": {
+   "open": 3,
+   "closed": 5
+  },
+  "avionics/emi-hardening/WBS.md": {
+   "open": 26,
+   "closed": 24
+  },
+  "avionics/kicad/Observer/observer/WBS.md": {
+   "open": 34,
+   "closed": 20
+  },
+  "avionics/firmware/WBS.md": {
+   "open": 20,
+   "closed": 8
+  },
+  "graphical-build-guide/WBS.md": {
+   "open": 141,
+   "closed": 22
+  },
+  "graphical-build-guide/flight-phases/WBS.md": {
+   "open": 139,
+   "closed": 0
+  },
+  "gcs/WBS.md": {
+   "open": 35,
+   "closed": 0
+  },
+  "deferred/WBS.md": {
+   "open": 43,
+   "closed": 6
+  }
+ },
+ "root": {
+  "open": 658,
+  "closed": 305
+ },
+ "total_open": 712,
+ "total_closed": 467
+}

@@ -1426,7 +1426,13 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     → 13.5).
 
 - [ ] **[OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not
-    built.** W0 has landed, so the 5–17 mm annulus plan 003 assumed now exists
+    built.** **2026-11-07 (measured, NAC-64-ASM-03, Claude Opus 5.5): on the live
+    x1.06 hollowed pod the route does NOT exist.** The spar-bore mouth (X 1.489 in (37.81 mm))
+    is ~0.04 in (1 mm) from the cartridge/duct wall; the largest free sphere on the mouth
+    is 0.06 in (1.5 mm) radius vs 0.26 in (6.64 mm) for the bundle (0.32 in (8.14 mm)
+    with the 0.06 in (1.5 mm) twist clearance); no connected free path of any width reaches the bay
+    (`tools/nacelle64_assembly_check.py --stage cable`). "Unblocked" below is
+    superseded. W0 has landed, so the 5–17 mm annulus plan 003 assumed now exists
     and the bundle has somewhere to run. What remains is the routing itself: a
     path out of the trunnion keep-out into the cavity, and the harness lengths to
     go with it. The bay, the studs and the EMI partition are already built.
@@ -1733,7 +1739,9 @@ analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
     conduction figures), and `RDS(on)` roughly doubles by 125 °C — a feedback the
     steady-state model does not carry. **Establish the real sustained current
     before treating 45 A as headroom.**
-- [ ] **[OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn.**
+- [x] **[CLOSED 2026-11-07 — duplicate, superseded by measurement] The 4 × 10 AWG route now EXISTS but is not drawn.** No route exists from the
+    spar-bore mouth; the open requirement is the WA-R10 entry in §1.1.3.7 (with NAC-64-ASM-03), which
+    carries the work. Kept closed here so WA-R10 is counted once.
     Hollowing gave the bundle its annulus and the bays merge into it by design,
     so the blocker recorded at Rev S4 is lifted. What remains is to route and
     strain-relieve it from the disconnect bay to each ESC, which needs the
@@ -2233,6 +2241,31 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     - [ ] **NAC-64-GEOM-05 — gates on the 64 mm pod.** Port `nacelle_trunnion_fit.py`,
         `nacelle_esc_bay_fit.py` and `nacelle_mass_cg.py` (PIVOT_Z, plan U5) to
         read the 64 mm wrapper; PIVOT_Z 107.5 is carried unchanged until then.
+    - [ ] **NAC-64-ASM-01 — nozzle throat spigot vs stage-2 cartridge: 0.095 in³ (1,562 mm³)
+        interference (found 2026-11-07, `tools/nacelle64_assembly_check.py`, Claude
+        Opus 5.5).** The throat's 0.12 in (3 mm) spigot (r 1.26–1.48 in (32–37.5 mm), z −0.12..0 in (−3..0 mm)) occupies the same
+        annulus as the aft 0.12 in (3 mm) of the cartridge, which ends at Z 7.84 in (199.1 mm) = P64_Z_NOZ.
+        Both sides. Owner decision: shorten the cartridge 0.12 in (3 mm), or drop the spigot.
+        Exit: static overlap cartridge x nozzle_throat = 0 in³ (0 mm³) in the tool.
+    - [ ] **NAC-64-ASM-02 — pod material in the wing-pinion sweep: 0.137 in³ (2,237 mm³)
+        (found 2026-11-07).** In the pod frame the wing-fixed 14T pinion orbits the
+        tilt axis at r 1.01 in (25.7 mm); the pod has the annular channel but two blocks of pod
+        material sit in it (section at X 1.77 in (45 mm), docs/figures/nacelle64_sections.png).
+        First contact ~15° tilt, worst 0.042 in³ (684 mm³) at 135 deg. Supersedes the
+        NAC-64-GEOM-04 "pinion vs pod 0 mm3" sweep, which ran on the pre-x1.06,
+        pre-hollowing pod. Exit: `pinion_pocket_mm3` = 0 on both pod renders.
+    - [ ] **NAC-64-ASM-03 — ESC disconnect bay has no floor and is skinned over
+        (found 2026-11-07).** The 1.18 × 0.55 × 0.24 in (30 × 14 × 6 mm) pocket is cut (0.0015 in³ (24 mm³) left in it),
+        but the 0.12 in (3.1 mm) behind its floor plane is empty (0.0009 in³ (15 mm³)), so the 4 M3 stud
+        inserts have nothing to seat in, and ~0.042 in³ (690 mm³) of 0.04 in (1 mm) skin covers the
+        pocket mouth on the pylon face. The hollowing removed what the bay module
+        assumed. Exit: stud bosses present; mouth open; re-run the tool.
+    - [ ] **NAC-64-ASM-04 — assembly-check coverage gaps.** Not yet in
+        `tools/nacelle64_assembly_check.py`: nozzle flaps and servo linkage
+        (published placement needed), rotors, ESC boards and covers (unpublished,
+        NAC-64-GEOM-03), 2 x 6804-ZZ bearings, hull and ground clearance, phase
+        and nav leads. Port pod differs from the X-mirror of stbd by 2.28 in³ (37.4 cm³)
+        (10 %), so every check runs on both renders.
     - [ ] **NAC-64-SVC-01 — install/remove path (owner requirement 2026-10-03:
         motors, rotors, ESCs and harnesses must be installable and removable).**
         Adopted path, analysed by Claude Opus 5.5: rotor 1 services through the

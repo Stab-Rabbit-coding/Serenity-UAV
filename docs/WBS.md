@@ -1190,6 +1190,20 @@ decision needed). The six winch printed parts therefore have no meshes. Other ca
 `assembly_integrity_check.py` PASS (hull enclosed, 0 openings); `twin_head_pack_fit.py` PASS;
 `cargo_layout_fit.py` FAIL, identical on `main` and stale (old shell, retired cradle).
 
+**64 mm nacelle assembly, tilt sweep and cable check (2026-11-07).** `tools/nacelle64_assembly_check.py`
+assembles the live pod, cartridge, nozzle, trunnion, motor cans, spar, wing and wing pinion in the
+nacelle-local frame, on both pod renders (`docs/NACELLE_64MM_VERIFICATION.md` §5d). Results: the static fit
+is clear except the nozzle throat spigot vs the stage-2 cartridge, 0.095 in³ (1,562 mm³) (NAC-64-ASM-01). The pod
+has 0.137 in³ (2,237 mm³) inside the wing-pinion sweep, first contact at about 15° (NAC-64-ASM-02). No route exists for the
+4 × 10 AWG bundle from the spar-bore mouth, and the disconnect bay has no floor and is skinned over
+(NAC-64-ASM-03; WA-R10 "route exists" superseded). Coverage gaps are NAC-64-ASM-04.
+
+**Execution plan to completion (2026-11-07).** `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`
+puts the 712 open subsystem items (baseline `docs/plans/2026-11-07-001-burndown-baseline.json`,
+counted by `tools/wbs_burndown.py`) in order. It defines completion as levels L1–L5 and plans 34 sprints
+sized to one 5-hour session, each with numeric exit criteria and a close-out ritual. A queue of 16 owner
+decisions gates the sprints. Owner review is required before S1.
+
 **Archive compaction (2026-11-07).** All of `archives/` is now 13 deterministic tarballs (118 MB, was
 290 MB in the working tree): one per former subfolder, plus `loose-zips` and `loose-files`. All 590
 files were extracted and compared byte for byte before the originals were removed. `archives/MANIFEST.md`

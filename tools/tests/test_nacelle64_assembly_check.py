@@ -1,4 +1,8 @@
-"""Unit tests for tools/nacelle64_assembly_check.py (geometry helpers; no meshes needed)."""
+"""Unit tests for tools/nacelle64_assembly_check.py (geometry helpers; no meshes needed).
+
+Author: Claude Opus 5.5 (Anthropic) for S. Griffing, 2026-11-07.
+License: MIT — see LICENSES/MIT (SPDX-License-Identifier: MIT)
+"""
 
 import sys
 from pathlib import Path
