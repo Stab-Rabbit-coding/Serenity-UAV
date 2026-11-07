@@ -14,7 +14,7 @@ changelog).
 
 ## Current Status (2026-11-03)
 
-- **Rev U BOM:** 222 items: the 217 carried forward from Rev T plus five new printed-part rows (two hull sections, tray, sled, gate). Printed-part masses are on the SLS datasheet basis (PA CF 1.11 g/cc, PA11 1.03 g/cc; `tools/sls_materials.py`): rows were converted by the density ratio only (old × 1.11/1.05), except the rows authored from meshes this release. 14 rows still differ from the measured mesh mass for non-density reasons (largest: `PRINT-WINGS-S1223`, `PRINT-LG-BAY-PLATE`, `PRINT-LG-LEG-FRAME-3.0IN`); the ledger prices those from the mesh. The ledger's battery model still uses the pre-twin-pack pack position. It folds in the tilt actuator (Pololu 20D 25:1, six-start worm, pin
+- **Rev U BOM:** 222 items: the 217 carried forward from Rev T plus five new printed-part rows (two hull sections, tray, sled, gate). Printed-part masses are on the SLS datasheet basis (PA CF 1.11 g/cc, PA11 1.03 g/cc; `tools/sls_materials.py`): every printed row the ledger prices from a mesh is synced to that mesh (`tools/check_bom_mesh_sync.py`, gated in CI). 22 printed rows have no ledger mesh and are listed by that check as NOT COVERED: legacy 50 mm nacelle and Rev T nozzle parts, cargo winch parts, PLA foam-pour tooling, and the node saddle. The ledger's battery model still uses the pre-twin-pack pack position. It folds in the tilt actuator (Pololu 20D 25:1, six-start worm, pin
   brake), the 3.0 in (76 mm) landing-gear flight article, the cargo chin node shelf and void
   former, measured-mass corrections from `docs/MASS_AUDIT_CARGO_WING_ROOT.md`, and the spider
   sleeve motor mount on the measured 90° pattern.

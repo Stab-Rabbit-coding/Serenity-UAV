@@ -15521,6 +15521,14 @@
       ],
       "archived": false
     },
+    "tools/check_bom_mesh_sync.py": {
+      "description": "check_bom_mesh_sync.py -- the BOM printed-part mass IS the mesh mass.",
+      "tags": [
+        "bom",
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/check_datum_drift.py": {
       "description": "Fail on aircraft-datum drift (plan 2026-10-19-001, rules R1-R4).",
       "tags": [
@@ -18717,6 +18725,7 @@
       "docs/sls-study/wing-polars/tip_t26.7_Re131000_cleanN9_xfoil.csv",
       "docs/sls-study/wing-polars/tip_t26.7_Re131000_trip5%c_xfoil.csv",
       "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md",
+      "tools/check_bom_mesh_sync.py",
       "tools/compact_bom_entries.py"
     ],
     "landing-gear": [
@@ -20501,6 +20510,7 @@
       "tools/cfd_internal_air_domain.py",
       "tools/cg_mass_reduction_study.py",
       "tools/cg_relocation_study.py",
+      "tools/check_bom_mesh_sync.py",
       "tools/check_datum_drift.py",
       "tools/check_hull_tarballs.py",
       "tools/check_joint_register.py",

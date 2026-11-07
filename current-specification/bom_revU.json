@@ -970,13 +970,13 @@
       "Description": "cargo_middle_splice_collar.stl — Internal cargo/middle joint splice collar (Rev R1)",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "18",
-      "Total_Mass_g": "18",
+      "Unit_Mass_g": "16.7",
+      "Total_Mass_g": "16.7",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG + hardened nozzle — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "0.15mm / 100% infill / 4 walls (thin 2mm ring). PRINT FROM airframe/stls/fuselage/cargo_middle_splice_collar.stl (hull-frame, spans cargo/middle joint Y +123.1..+139.1mm; ~17.0g; watertight, 1 body). GENERATOR airframe/stls/fuselage/generate_cargo_middle_splice_collar.py. FUNCTION: secures cargo to middle — converts the peel-prone thin-shell butt joint into a SHEAR-loaded bonded double-lap with full-perimeter 2-wall contact annulus + anti-ovalisation ring, satisfying the CLAUDE.md joint standard. Profile taken from the MIDDLE inner wall at Y=+137mm (narrower/cleaner shell at this joint); fit-verified OK against middle over Y 133-139mm. Cargo-side fit checked only against the nearest clean cargo station (Y=+122mm) — the true cargo-side bonding span overlaps the documented cargo MESH-01 defect band; re-verify once that mesh defect is resolved. Joint is NOT strength-limited (real section modulus S_x=31984mm^3 from digitized middle profile; worst-case 9g crash ultimate load 20260 N*mm gives peak fibre stress 0.63MPa, well below the ~5MPa CF-PETG/epoxy allowable); collar sized by handling/printability. BOND with West System 105/206 thickened with 406 colloidal silica; cure 24h before foam-fill. The 3 boss dowel pins (BOSS_PIN_BORES joint2) are retained for assembly registration only. See docs/structural_analysis.md section 7.4, task-list item 1.1.1.0b. Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 17 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "0.15mm / 100% infill / 4 walls (thin 2mm ring). PRINT FROM airframe/stls/fuselage/cargo_middle_splice_collar.stl (hull-frame, spans cargo/middle joint Y +123.1..+139.1mm; ~17.0g; watertight, 1 body). GENERATOR airframe/stls/fuselage/generate_cargo_middle_splice_collar.py. FUNCTION: secures cargo to middle — converts the peel-prone thin-shell butt joint into a SHEAR-loaded bonded double-lap with full-perimeter 2-wall contact annulus + anti-ovalisation ring, satisfying the CLAUDE.md joint standard. Profile taken from the MIDDLE inner wall at Y=+137mm (narrower/cleaner shell at this joint); fit-verified OK against middle over Y 133-139mm. Cargo-side fit checked only against the nearest clean cargo station (Y=+122mm) — the true cargo-side bonding span overlaps the documented cargo MESH-01 defect band; re-verify once that mesh defect is resolved. Joint is NOT strength-limited (real section modulus S_x=31984mm^3 from digitized middle profile; worst-case 9g crash ultimate load 20260 N*mm gives peak fibre stress 0.63MPa, well below the ~5MPa CF-PETG/epoxy allowable); collar sized by handling/printability. BOND with West System 105/206 thickened with 406 colloidal silica; cure 24h before foam-fill. The 3 boss dowel pins (BOSS_PIN_BORES joint2) are retained for assembly registration only. See docs/structural_analysis.md section 7.4, task-list item 1.1.1.0b. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 18 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-MIDDLE-REAR-COLLAR",
@@ -1061,13 +1061,13 @@
       "Description": "wing_port/stbd_s1223_revo.stl — Wing pair; section S1223/t17.7 (root) / S1223/t26.7 (tip) — Rev T1",
       "Category": "Printed Part",
       "Qty": "2",
-      "Unit_Mass_g": "131.1",
-      "Total_Mass_g": "262.2",
+      "Unit_Mass_g": "101",
+      "Total_Mass_g": "202",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG (20% CF) — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev T1 (2026-08-29): 0.15mm / 40% gyroid / 4 walls. THE SECTION IS NOT AN S1223 — it is the S1223 CAMBER LINE with the thickness envelope scaled x1.46 (root) and x2.20 (tip) to swallow the D20.4 fixed CF spar. Re-derived from the tabulated UIUC coordinates (REF-CAD-006): max t/c 17.72%/26.71% at 19.8% chord; max camber 8.67% at 49.0% chord (UNSCALED — identical to baseline); LE radius 0.0533c/0.1211c. The Rev O note this replaces (t/c=12.14% max camber=8.65%; CL=1.55 at 3deg AoA) describes the TRUE S1223 and DOES NOT apply to this part: CL_max, L/D and the cruise-lift figure are all UNVERIFIED for the built section pending XFOIL/RANS at Re 1.3-1.8e5. Mass 118->124 g/side from the thicker skins. SCAD: airframe/openscad/wings/wings_s1223_revo.scad; spec: docs/WING_ATTACH_INTERFACE.md S4A Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 124 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev T1 (2026-08-29): 0.15mm / 40% gyroid / 4 walls. THE SECTION IS NOT AN S1223 — it is the S1223 CAMBER LINE with the thickness envelope scaled x1.46 (root) and x2.20 (tip) to swallow the D20.4 fixed CF spar. Re-derived from the tabulated UIUC coordinates (REF-CAD-006): max t/c 17.72%/26.71% at 19.8% chord; max camber 8.67% at 49.0% chord (UNSCALED — identical to baseline); LE radius 0.0533c/0.1211c. The Rev O note this replaces (t/c=12.14% max camber=8.65%; CL=1.55 at 3deg AoA) describes the TRUE S1223 and DOES NOT apply to this part: CL_max, L/D and the cruise-lift figure are all UNVERIFIED for the built section pending XFOIL/RANS at Re 1.3-1.8e5. Mass 118->124 g/side from the thicker skins. SCAD: airframe/openscad/wings/wings_s1223_revo.scad; spec: docs/WING_ATTACH_INTERFACE.md S4A Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 131.1 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-NACELLE-PORT",
@@ -1386,13 +1386,13 @@
       "Description": "lg_r6_3_0in_leg_frame.stl — Landing gear leg frame, 3.0in (80mm) travel — THE FLIGHT ARTICLE",
       "Category": "Printed Part",
       "Qty": "4",
-      "Unit_Mass_g": "55.8",
-      "Total_Mass_g": "223.2",
+      "Unit_Mass_g": "44.1",
+      "Total_Mass_g": "176.4",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG, 100% infill, 0.15mm — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev T5g. Adopted 2026-09-06 (docs/LANDING_GEAR_ANALYSIS.md section 4.8, airframe/landing-gear/WBS.md:70) as THE FLIGHT ARTICLE -- clears the nozzle belly by the margin the 1.5in leg (retired to bench/ground-handling use, see PRINT-LG-LEG-FRAME-1.5IN below) does not. One per corner, 4 corners. Mass from docs/LANDING_GEAR_ANALYSIS.md section 11.1 (line 757). LG-18 mass-reduction pass (target <=350g system) is still open. Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 52.8 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev T5g. Adopted 2026-09-06 (docs/LANDING_GEAR_ANALYSIS.md section 4.8, airframe/landing-gear/WBS.md:70) as THE FLIGHT ARTICLE -- clears the nozzle belly by the margin the 1.5in leg (retired to bench/ground-handling use, see PRINT-LG-LEG-FRAME-1.5IN below) does not. One per corner, 4 corners. Mass from docs/LANDING_GEAR_ANALYSIS.md section 11.1 (line 757). LG-18 mass-reduction pass (target <=350g system) is still open. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 55.8 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-LG-LEG-FRAME-1.5IN",
@@ -1412,26 +1412,26 @@
       "Description": "lg_r6_common_bay.stl — Landing gear bay mounting plate (shared 1.5in/3.0in variants)",
       "Category": "Printed Part",
       "Qty": "4",
-      "Unit_Mass_g": "33.9",
-      "Total_Mass_g": "135.6",
+      "Unit_Mass_g": "16.2",
+      "Total_Mass_g": "64.8",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev T5g. One per corner, 4 corners; mounts on the sponson 25° panel per LG sponson-wells finding, not the cargo flank. Mass from docs/LANDING_GEAR_ANALYSIS.md section 11.4 (line 780). Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 32.1 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev T5g. One per corner, 4 corners; mounts on the sponson 25° panel per LG sponson-wells finding, not the cargo flank. Mass from docs/LANDING_GEAR_ANALYSIS.md section 11.4 (line 780). Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 33.9 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-LG-FOOT",
       "Description": "lg_r6_common_foot.stl — Landing gear foot (shared 1.5in/3.0in variants)",
       "Category": "Printed Part",
       "Qty": "4",
-      "Unit_Mass_g": "9.4",
-      "Total_Mass_g": "37.6",
+      "Unit_Mass_g": "7.5",
+      "Total_Mass_g": "30",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "TPU 95A — see FIL-TPU-95A",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev T5g. One per corner, 4 corners; flexible shock absorber, TPU 95A. Mass from docs/LANDING_GEAR_ANALYSIS.md section 11.5 (line 787). Replaces the archived PRINT-FEET (s_feet_x_4_scaled24.stl). Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 9.6 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev T5g. One per corner, 4 corners; flexible shock absorber, TPU 95A. Mass from docs/LANDING_GEAR_ANALYSIS.md section 11.5 (line 787). Replaces the archived PRINT-FEET (s_feet_x_4_scaled24.stl). Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 9.4 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "LG-SPRING-WIRE",
@@ -1659,26 +1659,26 @@
       "Description": "cargo_door_port.stl — Port clamshell cargo door, CF-PETG",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "15.5",
-      "Total_Mass_g": "15.5",
+      "Unit_Mass_g": "14.8",
+      "Total_Mass_g": "14.8",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG + hardened nozzle — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev P new (PR #22 2026-06-01); bilinear interp from belly faces; 8-barrel piano hinge tab; 3mm CF rod bore 3.15mm; 2x2mm foam gasket channel on inner mating flange; 0.15mm / 40% gyroid / 4 walls [Rev T MASS_AUDIT correction (docs/MASS_AUDIT_CARGO_WING_ROOT.md section 5, measured 2026-08-30): BOM mass 45 g/ea -> measured 14.7 g/ea from the published STL.] Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 14.7 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev P new (PR #22 2026-06-01); bilinear interp from belly faces; 8-barrel piano hinge tab; 3mm CF rod bore 3.15mm; 2x2mm foam gasket channel on inner mating flange; 0.15mm / 40% gyroid / 4 walls [Rev T MASS_AUDIT correction (docs/MASS_AUDIT_CARGO_WING_ROOT.md section 5, measured 2026-08-30): BOM mass 45 g/ea -> measured 14.7 g/ea from the published STL.] Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 15.5 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-CARGO-DOOR-STBD",
       "Description": "cargo_door_stbd.stl — Starboard clamshell cargo door, CF-PETG",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "15.6",
-      "Total_Mass_g": "15.6",
+      "Unit_Mass_g": "13.4",
+      "Total_Mass_g": "13.4",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG + hardened nozzle — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev P new (PR #22 2026-06-01); mirror of cargo_door_port.stl; print with supports on hinge tab; 0.15mm / 40% gyroid / 4 walls [Rev T MASS_AUDIT correction (docs/MASS_AUDIT_CARGO_WING_ROOT.md section 5, measured 2026-08-30): BOM mass 45 g/ea -> measured 14.8 g/ea from the published STL.] Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 14.8 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev P new (PR #22 2026-06-01); mirror of cargo_door_port.stl; print with supports on hinge tab; 0.15mm / 40% gyroid / 4 walls [Rev T MASS_AUDIT correction (docs/MASS_AUDIT_CARGO_WING_ROOT.md section 5, measured 2026-08-30): BOM mass 45 g/ea -> measured 14.8 g/ea from the published STL.] Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 15.6 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-CARGO-WINCH-PEDESTAL-PORT",
@@ -1763,26 +1763,26 @@
       "Description": "cargo_door_servo_bracket.stl — Port door SG90 servo bracket, CF-PETG",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "10.6",
-      "Total_Mass_g": "10.6",
+      "Unit_Mass_g": "5.3",
+      "Total_Mass_g": "5.3",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG + hardened nozzle — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev P new (PR #21 2026-05-30); SG90 pocket + 2x M2 screws; 1mm music wire pushrod slot; 0.15mm / 40% gyroid / 4 walls Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 10 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev P new (PR #21 2026-05-30); SG90 pocket + 2x M2 screws; 1mm music wire pushrod slot; 0.15mm / 40% gyroid / 4 walls Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 10.6 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-CARGO-RELEASE-BKT",
       "Description": "cargo_release_servo_bracket.stl — Release SG90 servo bracket, CF-PETG",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "10.6",
-      "Total_Mass_g": "10.6",
+      "Unit_Mass_g": "5.3",
+      "Total_Mass_g": "5.3",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG + hardened nozzle — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev P new (PR #21 2026-05-30); mirrors door servo bracket; drives cradle pull-wire release; 2mm PTFE guide tube for wire; 0.15mm / 40% gyroid / 4 walls Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 10 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev P new (PR #21 2026-05-30); mirrors door servo bracket; drives cradle pull-wire release; 2mm PTFE guide tube for wire; 0.15mm / 40% gyroid / 4 walls Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 10.6 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-DRV8833-TRAY",
@@ -1815,26 +1815,26 @@
       "Description": "cargo_gps_retention_ring.stl — GPS patch antenna retention ring, PETG",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "5.3",
-      "Total_Mass_g": "5.3",
+      "Unit_Mass_g": "2.7",
+      "Total_Mass_g": "2.7",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev P new (PR #21 2026-05-30); 25mm dia opening; 3mm lip catches GPS PCB edge; bonds to door inner face; 0.20mm / 20% gyroid Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 5 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev P new (PR #21 2026-05-30); 25mm dia opening; 3mm lip catches GPS PCB edge; bonds to door inner face; 0.20mm / 20% gyroid Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 5.3 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-FPV-BEZEL",
       "Description": "cargo_fpv_bezel.stl — FPV camera bezel, PETG, forward cargo bulkhead",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "8.5",
-      "Total_Mass_g": "8.5",
+      "Unit_Mass_g": "1.9",
+      "Total_Mass_g": "1.9",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev P new (PR #21 2026-05-30); 28mm FOV cutout for M12 FPV module; 4x M2 mounting screws; camera points down at payload; cable to TACCO MIPI/USB; 0.20mm / 20% gyroid Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 8 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev P new (PR #21 2026-05-30); 28mm FOV cutout for M12 FPV module; 4x M2 mounting screws; camera points down at payload; cable to TACCO MIPI/USB; 0.20mm / 20% gyroid Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 8.5 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-BATT-TRAY",
@@ -1867,13 +1867,13 @@
       "Description": "dorsal_antenna_fin.stl — Dorsal antenna support fin, PETG",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "4.2",
-      "Total_Mass_g": "4.2",
+      "Unit_Mass_g": "3.1",
+      "Total_Mass_g": "3.1",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "ADDED TO BOM 2026-08-25: this part existed as a published STL (imported by airframe/FreeCAD-scripts/serenity_assembly.py as Dorsal_Antenna_Fin) and was already repaired for mesh defects this session (4 degenerate zero-area fragments removed, winding corrected, 3 real bodies unioned into 1 -- see WBS.md), but had no BOM row at all until now -- found during the 2026-08-25 owner-directed airframe-wide PETG-to-CF-PETG material sweep. Mass estimated from the published mesh's solid volume (2800 mm^3 x 1.27 g/cm^3 PETG = 3.56 g), rounded up for typical wall/infill printing; not yet bench-weighed. KEPT PLAIN PETG (excluded from the CF-PETG conversion) 2026-08-25: this is a dorsal ANTENNA support structure -- carbon fiber is electrically conductive and converting an antenna's own supporting fin to CF-PETG risks detuning or blocking whichever antenna it carries. Function/which antenna this fin actually serves is not documented elsewhere in this repo as of this writing -- VERIFY before finalizing print settings. Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 4 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "ADDED TO BOM 2026-08-25: this part existed as a published STL (imported by airframe/FreeCAD-scripts/serenity_assembly.py as Dorsal_Antenna_Fin) and was already repaired for mesh defects this session (4 degenerate zero-area fragments removed, winding corrected, 3 real bodies unioned into 1 -- see WBS.md), but had no BOM row at all until now -- found during the 2026-08-25 owner-directed airframe-wide PETG-to-CF-PETG material sweep. Mass estimated from the published mesh's solid volume (2800 mm^3 x 1.27 g/cm^3 PETG = 3.56 g), rounded up for typical wall/infill printing; not yet bench-weighed. KEPT PLAIN PETG (excluded from the CF-PETG conversion) 2026-08-25: this is a dorsal ANTENNA support structure -- carbon fiber is electrically conductive and converting an antenna's own supporting fin to CF-PETG risks detuning or blocking whichever antenna it carries. Function/which antenna this fin actually serves is not documented elsewhere in this repo as of this writing -- VERIFY before finalizing print settings. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 4.2 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "BATT-STRAP-CAM",
@@ -2530,13 +2530,13 @@
       "Description": "tilt_actuator_bracket_{port,stbd}.stl -- worm-drive actuator bracket, CF-PETG (3 feet to shell bosses, O20 motor cradle, worm slot, controller-board rails on the OUTBOARD face)",
       "Category": "Printed Part",
       "Qty": "2",
-      "Unit_Mass_g": "17.2",
-      "Total_Mass_g": "34.4",
+      "Unit_Mass_g": "18.3",
+      "Total_Mass_g": "36.6",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): web Y 4..97.5, feet (10.6/124.09), (40/124.09), (64/77); board rails outboard of the web at Y 55..97.9 / Z 83..119.5 (T5d-2: the T5b rails ran through the worm); worm/collar slot (T5d-3); face plate flat-bottomed at the motor underside. Exported volume x 1.05 g/cm3. Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): SCAD airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad PART=bracket SIDE=+/-1; mass = STL volume 18,291 mm3 x 1.05 g/cm3 as-printed. 3 x M3 heat-set + M3x8 SHCS per side (into the shell's T5 foot bosses), 2 x M3x6 to the gearmotor face. Print web DOWN, 4 perimeters, 40% gyroid. Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 16.3 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev T5e 2026-09-16 (docs/TILT_ACTUATOR_SELECTION.md Rev T5e, docs/TILT_ACTUATOR_OPTIONS.md Opt 4): web Y 4..97.5, feet (10.6/124.09), (40/124.09), (64/77); board rails outboard of the web at Y 55..97.9 / Z 83..119.5 (T5d-2: the T5b rails ran through the worm); worm/collar slot (T5d-3); face plate flat-bottomed at the motor underside. Exported volume x 1.05 g/cm3. Rev T5b 2026-09-15 (docs/TILT_ACTUATOR_SELECTION.md, D5): SCAD airframe/openscad/fuselage/cargo/tilt_actuator_bracket.scad PART=bracket SIDE=+/-1; mass = STL volume 18,291 mm3 x 1.05 g/cm3 as-printed. 3 x M3 heat-set + M3x8 SHCS per side (into the shell's T5 foot bosses), 2 x M3x6 to the gearmotor face. Print web DOWN, 4 perimeters, 40% gyroid. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 17.2 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-TILT-WORM",
@@ -2686,26 +2686,26 @@
       "Description": "gateway_door_tray.stl -- card-edge tray for the cargo-door servo gateway (CAN-PERIPH-GW-DOOR), CF-PETG, 4 x M3 to belly-slab bosses, keeper + pigtail tie slots",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "5.3",
-      "Total_Mass_g": "5.3",
+      "Unit_Mass_g": "5.2",
+      "Total_Mass_g": "5.2",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev T5f 2026-09-21 (docs/CARGO_DOOR_GATEWAY_SPEC.md section 5; airframe/openscad/fuselage/cargo/gateway_door_tray.scad): 5.4 mm base slab 52.2 x 15.25 mm on four 7 x 7 mm bosses (rear row counterbored under the board, front row exposed), side rails 1.6 mm + 2 mm lips, board drops in from above; exported volume 4 729 mm3 x 1.05 g/cm3. Print slab flat, rails up, 4 perimeters, 30% gyroid. Hardware: 4 x RX-M3x5.7 inserts + 4 x M3x8 SHCS (add to those rows at order); 3 cable ties. Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 5 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev T5f 2026-09-21 (docs/CARGO_DOOR_GATEWAY_SPEC.md section 5; airframe/openscad/fuselage/cargo/gateway_door_tray.scad): 5.4 mm base slab 52.2 x 15.25 mm on four 7 x 7 mm bosses (rear row counterbored under the board, front row exposed), side rails 1.6 mm + 2 mm lips, board drops in from above; exported volume 4 729 mm3 x 1.05 g/cm3. Print slab flat, rails up, 4 perimeters, 30% gyroid. Hardware: 4 x RX-M3x5.7 inserts + 4 x M3x8 SHCS (add to those rows at order); 3 cable ties. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 5.3 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-DOOR-LATCH-BRACKET",
       "Description": "door_latch_bracket_{port,stbd}.stl -- FIXED pivot bracket (pin seat); port carries the latch mortise, stbd is drive-only, CF-PETG",
       "Category": "Printed Part",
       "Qty": "2",
-      "Unit_Mass_g": "1.9",
-      "Total_Mass_g": "3.8",
+      "Unit_Mass_g": "2",
+      "Total_Mass_g": "4",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG (20% CF) -- see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev B 2026-10-26 (docs/CARGO_DOOR_LATCH_SPEC.md section 0a): ONE latch (port) holds both lapped doors; port 2.33 g (mortise), stbd 1.28 g (no mortise), measured from the STLs. The bell-crank is now its own part (PRINT-DOOR-LATCH-CRANK). Bonded to the flank at the 2nd hinge-knuckle station, pivot 2 mm inboard of the hinge line (clear of the payload keep-out). Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 1.8 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "Rev B 2026-10-26 (docs/CARGO_DOOR_LATCH_SPEC.md section 0a): ONE latch (port) holds both lapped doors; port 2.33 g (mortise), stbd 1.28 g (no mortise), measured from the STLs. The bell-crank is now its own part (PRINT-DOOR-LATCH-CRANK). Bonded to the flank at the 2nd hinge-knuckle station, pivot 2 mm inboard of the hinge line (clear of the payload keep-out). Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 1.9 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-DOOR-LATCH-CRANK",
@@ -2803,13 +2803,13 @@
       "Description": "wing_root_flange_port/stbd.stl — bonded wing-root moment flange, 80 (Z) x 60 (Y) x 5 mm conforming plate",
       "Category": "Printed Part",
       "Qty": "2",
-      "Unit_Mass_g": "27.1",
-      "Total_Mass_g": "54.2",
+      "Unit_Mass_g": "23.3",
+      "Total_Mass_g": "46.6",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG (20% CF) + hardened nozzle — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "** MASS CORRECTED 2026-08-30 (weight audit): 12.7 -> 25.6 g each. ** The first figure applied 'solid density x 40% infill' (1.30e-3 x 0.40), which is the wrong model for this part and for most of this BOM: at 5 mm thick with 4 perimeters at 0.6 mm the plate is 4.8 mm of perimeter and 0.2 mm of infill -- it is essentially solid, and infill percentage barely touches it. Use merge_cargo_interior.RHO_PRINT = 1.05e-3 g/mm^3, the repo's own bulk as-printed figure (RHO_SOLID = 1.28e-3 brackets it above). 24,336 mm^3 x 1.05e-3 = 25.6 g. Rev T1c (2026-08-30). 0.15mm / 40% gyroid / 4 walls. GENERATOR airframe/stls/fuselage/generate_wing_root_flange.py -> wing_root_flange_port.stl (24,336 mm^3) and _stbd.stl (24,405 mm^3), both hull-frame, watertight single bodies. FUNCTION: WA-R1b, the MOMENT path of the wing root joint. The cargo bay caps socket depth at 18.67 mm and a socket capacity goes as 1/L^2, so at that depth a socket gives FOS 0.51 on the moment -- unrecoverable by any depth the bay allows. A flange reacts over wall AREA instead: F = 3M/(2h) = 274 N over 1,600 mm^2 = 0.17 MPa, FOS 29.2 against the 5 MPa bond-limited CF-PETG figure (docs/structural_analysis.md SS7.3). The bay requirement forced a BETTER joint, not a compromise. WHY IT IS A SEPARATE PART: measured 2026-08-30 by ray-casting the baked envelope on a 13 x 17 grid (221/221 hits), the sidewall skin moves through 34.3 mm (port) / 37.0 mm (stbd) of hull X across the 80 x 60 footprint -- the wall is not flat there, so a printed slab would be up to 34 mm thick and a plane-bounded one is tangent to the skin inside the footprint (measured: a 0.46 mm non-manifold edge, 4 incident faces, plus a sliver body). Same treatment as the CF thwarts and the splice collars: the shell reserves the volume, the part carries the shape. BOND with West System 105/206 to the inner sidewall; cure 24 h before foam pour. Clamped to the spar at the wall by the WA-R3 split collar (NOT YET A PART -- see fuselage-mid WBS WA-R17). Also carries the BUSH-TILT-4MM seat. Rev U SLS density norm (2026-11-07): Unit_Mass_g re-priced from STL volume x datasheet solid density (DuraForm PA CF 1.11 g/cc, 3DS-30108A [REF-MAT-015]; PA11 1.03 g/cc, 3DS-30109A [REF-MAT-016] for gear feet); was 25.6 g on the FDM 1.05 g/cc basis (converted by the density ratio only). "
+      "Notes": "** MASS CORRECTED 2026-08-30 (weight audit): 12.7 -> 25.6 g each. ** The first figure applied 'solid density x 40% infill' (1.30e-3 x 0.40), which is the wrong model for this part and for most of this BOM: at 5 mm thick with 4 perimeters at 0.6 mm the plate is 4.8 mm of perimeter and 0.2 mm of infill -- it is essentially solid, and infill percentage barely touches it. Use merge_cargo_interior.RHO_PRINT = 1.05e-3 g/mm^3, the repo's own bulk as-printed figure (RHO_SOLID = 1.28e-3 brackets it above). 24,336 mm^3 x 1.05e-3 = 25.6 g. Rev T1c (2026-08-30). 0.15mm / 40% gyroid / 4 walls. GENERATOR airframe/stls/fuselage/generate_wing_root_flange.py -> wing_root_flange_port.stl (24,336 mm^3) and _stbd.stl (24,405 mm^3), both hull-frame, watertight single bodies. FUNCTION: WA-R1b, the MOMENT path of the wing root joint. The cargo bay caps socket depth at 18.67 mm and a socket capacity goes as 1/L^2, so at that depth a socket gives FOS 0.51 on the moment -- unrecoverable by any depth the bay allows. A flange reacts over wall AREA instead: F = 3M/(2h) = 274 N over 1,600 mm^2 = 0.17 MPa, FOS 29.2 against the 5 MPa bond-limited CF-PETG figure (docs/structural_analysis.md SS7.3). The bay requirement forced a BETTER joint, not a compromise. WHY IT IS A SEPARATE PART: measured 2026-08-30 by ray-casting the baked envelope on a 13 x 17 grid (221/221 hits), the sidewall skin moves through 34.3 mm (port) / 37.0 mm (stbd) of hull X across the 80 x 60 footprint -- the wall is not flat there, so a printed slab would be up to 34 mm thick and a plane-bounded one is tangent to the skin inside the footprint (measured: a 0.46 mm non-manifold edge, 4 incident faces, plus a sliver body). Same treatment as the CF thwarts and the splice collars: the shell reserves the volume, the part carries the shape. BOND with West System 105/206 to the inner sidewall; cure 24 h before foam pour. Clamped to the spar at the wall by the WA-R3 split collar (NOT YET A PART -- see fuselage-mid WBS WA-R17). Also carries the BUSH-TILT-4MM seat. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 27.1 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-NACELLE-TRUNNION",

@@ -269,6 +269,9 @@ language states what is required regardless of actor.
   from the single source `tools/sls_materials.py` (PA CF 1.11 g/cc, PA11 1.03 g/cc,
   ASTM D792; verified against the sheets 2026-11-07). Never price an SLS part with the old FDM
   1.05 g/cc; convert any mass written on that basis with `sls_materials.sls_from_fdm_mass`.
+  **The BOM is the procurement output, so every printed part's `Unit_Mass_g` shall equal its mesh
+  mass** (STL volume × the SLS density above). `tools/check_bom_mesh_sync.py` gates this in CI;
+  `--write` re-syncs the BOM after the ledger is regenerated.
 - **Hull sections (Rev U):** the hull is **two** SLS parts at 24 in. The forward part (head+cargo,
   with the canonical gear box fused in as skin) is `PRINT-HEAD-CARGO-ONEPIECE`; the aft part
   (middle+rear) is `PRINT-MIDDLE-REAR-ONEPIECE`. Both are built and ship as gzip tarballs (over

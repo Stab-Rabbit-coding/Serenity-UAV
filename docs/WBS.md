@@ -1141,7 +1141,7 @@ with status:
 | Ring + skids as a separate PA11 crash member (Option B) | Owner preference recorded; not yet a separate part. |
 | SLS density basis | **Applied 2026-11-07.** Datasheet solid densities verified against the 3D Systems sheets: PA CF 1.11 g/cm³ (3DS-30108A, 10-23), PA11 1.03 g/cm³ (3DS-30109A, 02-25), PA12 1.00 g/cm³ (3DS-30112A, 02-25), all ASTM D792. The ledger and the 64 mm nacelle roll-up read them from `tools/sls_materials.py`; the old FDM 1.05 g/cc survives only as the conversion constant. |
 | Ledger, SLS basis | Hover AUW 14.12 lbm (6,405 g), hover CG offset +11.8 mm, T/W 1.48; cargo 2,800 g payload 14.40 lbm; heaviest 4,000 payload 14.62 lbm. On the old FDM 1.05 basis the same aircraft is 13.80 lbm. Density added +99 g to the printed hull parts and +49 g to the nacelles (`tools/sls_auw_reconcile.py`). Provisional until the twin-pack battery model lands. |
-| BOM vs mesh | 14 printed BOM rows differ from the measured mesh mass for non-density reasons (e.g. `PRINT-WINGS-S1223` BOM 131 g vs mesh 101 g); not changed by the density pass. |
+| BOM vs mesh | **Synced 2026-11-07** (owner: the BOM is the procurement output). 16 rows moved to the mesh mass (largest: `PRINT-WINGS-S1223` 131 → 101 g, `PRINT-LG-BAY-PLATE` 34 → 16 g, `PRINT-LG-LEG-FRAME-3.0IN` 56 → 44 g). `tools/check_bom_mesh_sync.py` now fails CI on drift. 22 printed rows with no ledger mesh are reported as NOT COVERED: they need the 50 mm → 64 mm BOM swap, winch meshes, or are tooling. |
 
 **Archive pass (2026-11-03).** Frozen at Rev T and earlier in `archives/rev-T-and-earlier.tar.gz`
 (see `archives/README.md` and `archives/MANIFEST.md`): `bom_revS.*`, `bom_revT.*`, `serenity-rev-s.jsx`, `docs/bom_revR.json`, the
