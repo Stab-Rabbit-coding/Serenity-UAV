@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Revision:** Rev T-SB2 (2026-11-02) — owner corrections: zero tilt datum is horizontal, tilt range −5° to +135°, EDF is the QX QF2822-2300KV (83.60 ozf / 2,370 gf at 24 V, 57.0 A) on 80 A ESCs; every thrust-dependent figure below was recomputed from `current-specification/flight_limits.json`. Rev T-SB (2026-10-26) — numbers recomputed for the split-battery aircraft by Claude (Claude Opus 5.5, Anthropic) under the direction of Stab-Rabbit-coding, per `AGENTS.md` §3. Rev S text by the author above; recompute tool `tools/flight_envelope_endurance.py`.
+**Revision:** Rev U (2026-11-07; carried forward from Rev T-SB2, 2026-11-02) — owner corrections: zero tilt datum is horizontal, tilt range −5° to +135°, EDF is the QX QF2822-2300KV (83.60 ozf / 2,370 gf at 24 V, 57.0 A) on 80 A ESCs; every thrust-dependent figure below was recomputed from `current-specification/flight_limits.json`. Rev T-SB (2026-10-26) — numbers recomputed for the split-battery aircraft by Claude (Claude Opus 5.5, Anthropic) under the direction of Stab-Rabbit-coding, per `AGENTS.md` §3. Rev S text by the author above; recompute tool `tools/flight_envelope_endurance.py`.
 
 Resolves `TODO.md` Phase 0 pre-print documentation gate item "Flight Envelope
 Document." All measurements are imperial-primary with metric in parentheses

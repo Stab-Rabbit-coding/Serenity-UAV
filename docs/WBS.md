@@ -1134,22 +1134,62 @@ with status:
 | Item | Status in Rev U |
 |---|---|
 | SLS DuraForm PA CF hull and nacelle printed parts; PA11 at gear feet | Decided (owner, 2026-10-31); recorded in `AGENTS.md` §7 and the BOM. Vendor not selected; no quote or coupon data. |
-| Head + cargo as one part | Built (`head_cargo_shell24_2mm_merged.stl`, watertight, 618 g at 1.05 g/cc, with the canonical gear box fused in). BOM `PRINT-HEAD-CARGO-ONEPIECE`; `PRINT-HEAD-SHELL`, `PRINT-CARGO-SECT`, `PRINT-HEAD-CARGO-COLLAR`, `PRINT-BATT-CRADLE` retired at Qty 0. |
-| Middle + rear as one part | Built (`middle_rear_shell24_2mm_merged.stl`, watertight, 408 g at 1.05 g/cc; blended loft Y 501–530.5). BOM `PRINT-MIDDLE-REAR-ONEPIECE`; middle, rear, and middle/rear collar rows retired at Qty 0. **Misses the 333 g plan target**; gates G1–G3 open. |
-| Twin pack tray, sleds, gate | In the BOM (`PRINT-TWIN-PACK-*`, 83.7 + 2 × 5.6 + 3.2 g). The ledger's battery pack model still uses the pre-twin-pack position, so CG and AUW are provisional. |
+| Head + cargo as one part | Built (`head_cargo_shell24_2mm_merged.stl`, watertight, 653 g at the PA CF datasheet density 1.11 g/cc, with the canonical gear box fused in). BOM `PRINT-HEAD-CARGO-ONEPIECE`; `PRINT-HEAD-SHELL`, `PRINT-CARGO-SECT`, `PRINT-HEAD-CARGO-COLLAR`, `PRINT-BATT-CRADLE` retired at Qty 0. |
+| Middle + rear as one part | Built (`middle_rear_shell24_2mm_merged.stl`, watertight, 431 g at 1.11 g/cc; blended loft Y 501–530.5). BOM `PRINT-MIDDLE-REAR-ONEPIECE`; middle, rear, and middle/rear collar rows retired at Qty 0. **Misses the 333 g plan target** (set on the FDM basis); gates G1–G3 open. |
+| Twin pack tray, sleds, gate | In the BOM (`PRINT-TWIN-PACK-*`, 88.5 + 2 × 5.9 + 3.3 g). The ledger's battery pack model still uses the pre-twin-pack position, so CG and AUW are provisional. |
 | Hull scale 24 in vs up to 27 in | Rev U is 24 in: both built hull sections are 24 in (`*_shell24_*`) and the build guide is the 24 in guide. The 27 in uniform scale (plan 2026-10-31-003) is not in the baseline. Inferred from the PR 276 geometry, not an explicit owner statement. |
 | Ring + skids as a separate PA11 crash member (Option B) | Owner preference recorded; not yet a separate part. |
-| SLS mass re-pricing (1.05 → 1.11 g/cc, about +135 g hull and nacelles) | Not applied to the ledger (also an open item in WBS 0.13); see `tools/sls_auw_reconcile.py` and `tools/sls_materials.py`. |
-| Ledger after PR 276 | Hover AUW 13.79 lbm (6,253 g), hover CG offset +11.7 mm, T/W 1.52 (was 13.40 lbm / +13.8 mm on `main`). The +193 g is the gear box and tray, less the retired cradle and old shells; it includes +31 g from the stbd aft gear bay, which was an inside-out mesh counted negative until PR 276 fixed it. |
+| SLS density basis | **Applied 2026-11-07.** Datasheet solid densities verified against the 3D Systems sheets: PA CF 1.11 g/cm³ (3DS-30108A, 10-23), PA11 1.03 g/cm³ (3DS-30109A, 02-25), PA12 1.00 g/cm³ (3DS-30112A, 02-25), all ASTM D792. The ledger and the 64 mm nacelle roll-up read them from `tools/sls_materials.py`; the old FDM 1.05 g/cc survives only as the conversion constant. |
+| Ledger, SLS basis | Hover AUW 14.12 lbm (6,405 g), hover CG offset +11.8 mm, T/W 1.48; cargo 2,800 g payload 14.40 lbm; heaviest 4,000 payload 14.62 lbm. On the old FDM 1.05 basis the same aircraft is 13.80 lbm. Density added +99 g to the printed hull parts and +49 g to the nacelles (`tools/sls_auw_reconcile.py`). Provisional until the twin-pack battery model lands. |
+| BOM vs mesh | **Synced 2026-11-07** (owner: the BOM is the procurement output). 16 rows moved to the mesh mass (largest: `PRINT-WINGS-S1223` 131 → 101 g, `PRINT-LG-BAY-PLATE` 34 → 16 g, `PRINT-LG-LEG-FRAME-3.0IN` 56 → 44 g). `tools/check_bom_mesh_sync.py` now fails CI on drift. 22 printed rows with no ledger mesh are reported as NOT COVERED: they need the 50 mm → 64 mm BOM swap, winch meshes, or are tooling. |
 
-**Archive pass (2026-11-03).** Frozen at Rev T and earlier under `archives/rev-T-and-earlier/`
-(see its `README.md`): `bom_revS.*`, `bom_revT.*`, `serenity-rev-s.jsx`, `docs/bom_revR.json`, the
+**Archive pass (2026-11-03).** Frozen at Rev T and earlier in `archives/rev-T-and-earlier.tar.gz`
+(see `archives/README.md` and `archives/MANIFEST.md`): `bom_revS.*`, `bom_revT.*`, `serenity-rev-s.jsx`, `docs/bom_revR.json`, the
 one-shot `tools/bom_edit_*.py` scripts, dated status snapshots, stale 30 in / 36 in studies, and one
-superseded plan. Not archived, with the reason: the 50 mm nacelle sources
-(`nacelle_pod_64mm_tandem.scad` and `nacelle_nozzle_iris_64mm.scad` `include` the 50 mm files, and
-about 26 tools read the 50 mm STLs); `docs/structural_analysis.md`, `docs/TILT_SPAR_ANALYSIS.md`,
-`docs/AVIONICS_PB2_REDESIGN.md`, and `avionics/rev-s1/WBS.md` (read by live tools); and the
-remaining `docs/plans/` files (no completion status to judge by).
+superseded plan. Not archived, with the reason: `docs/structural_analysis.md`,
+`docs/TILT_SPAR_ANALYSIS.md`, `docs/AVIONICS_PB2_REDESIGN.md`, and `avionics/rev-s1/WBS.md` (read by live
+tools), and the remaining `docs/plans/` files (no completion status to judge by).
+
+**Rev T freeze, Rev U relabel, and the 64 mm nacelle (2026-11-07).**
+
+- *Frozen Rev T.* `archives/rev-T-frozen.tar.gz` (168 files) holds the pre-change copy of every live
+  file that mentioned Rev T plus the whole 50 mm nacelle. It was built from the committed blobs and
+  verified byte for byte. Live files continue as Rev U.
+- *Relabel.* Sixteen live component declarations now read "Rev U (2026-11-07; carried forward from
+  Rev T…)". Prose history is left as written. Parts retired but not archived (the battery cradle and
+  the tilt-actuator trade view) keep the label they held, per `AGENTS.md` §8, and board design
+  generations (a PCB's own "Rev T") are not renamed. The build-guide card SVGs still read "Rev T+" until
+  the cards are next regenerated.
+- *64 mm independence.* `nacelle_pod_64mm_tandem.scad`, `nacelle_nozzle_iris_64mm.scad` and
+  `nacelle_trunnion_64mm.scad` are flattened with `tools/scad_flatten.py` (OpenSCAD's last-assignment
+  rules applied once) and no longer include any 50 mm source. Iris and trunnion renders are identical to
+  the originals (symmetric difference 0.0000 mm³). The pod matches in volume, bounds and face count, and in
+  124,862 of 124,866 triangles; the other 4 are one flat patch triangulated differently.
+- *50 mm archived:* pod, iris, trunnion, fixed nozzle, sleeves, servo bracket, housing profile and two
+  cache-export SCADs; their STLs (pods, sleeves, trunnion, nozzles, ESC covers); three tools
+  (`nozzle_linkage_check`, `nacelle_trunnion_fit`, `nacelle_housing_profile`) and the axial-fit study with
+  its test. The canonical engine shells `eng_*_shell24_50mm_repaired.stl` stay: they are the canon mesh the
+  64 mm pod is scaled from, not a 50 mm design.
+- *Dependency audit.* `tools/check_nacelle_deps.py` (in CI) walks the 64 mm SCAD closure (17 files) and
+  fails on a missing, archived or 50 mm file. It found and this change fixed: the 64 mm nozzle parts
+  were never published (six STLs added: throat and ring per side, flap, flap seal); the port stage-2
+  cartridge did not exist and the starboard one was stale (it predated the ×1.06 enlargement; 60.9 g
+  vs 66.9 g), so both were regenerated; the BOM carried no 64 mm propulsion hardware (motors, rotors,
+  ESCs, nozzle servos, 6804 bearings), now added.
+- *Still open for the 64 mm nacelle:* the four ESC bay covers have no 64 mm mesh (blocked on the ESC
+  part and rating, WBS NAC-64-ESC-80A); the ESC current rating (70 A in the roll-up, 80 A recommended by
+  the motor sheet); prices for the purchased parts are not recorded (rows carry 0.00); rotor mass is
+  assumed (20 g); the published pod STLs predate the intake-cowl change and need the pending re-bake
+  (their 248,000 mm³ against 367,000 mm³ from the current source); and the pivot is not converged
+  (residual +9.6 mm, unchanged by this work).
+
+**Archive compaction (2026-11-07).** All of `archives/` is now 13 deterministic tarballs (118 MB, was
+290 MB in the working tree): one per former subfolder, plus `loose-zips` and `loose-files`. All 590
+files were extracted and compared byte for byte before the originals were removed. `archives/MANIFEST.md`
+lists every tarball, its SHA-256, and every file in it; `archives/README.md` gives the unpack command and the
+rule for adding to the archive. Git history still holds the old blobs, so the repository's `.git` size does not shrink
+without a history rewrite. Dependabot's `archives/serenity` lockfile alerts end because that folder is no longer
+unpacked.
 
 Not yet part of a Rev U checkpoint (tracked open in their own WBS/TODO): avionics PCB routing and
 Gerbers, firmware Phase 7, STL re-exports after the TACCO change, cargo-shell mesh defect, cargo

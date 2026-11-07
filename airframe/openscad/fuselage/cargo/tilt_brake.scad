@@ -4,7 +4,7 @@
 //   in hull frame (port side; SIDE = -1 MIRRORS to starboard about X_CL, BHD-05).
 // ===========================================================================
 // ============================================================
-// tilt_brake.scad -- Rev T5e (2026-09-16; Rev T5b 2026-09-15 base)
+// tilt_brake.scad -- Rev U (2026-11-07; carried forward from Rev T5e, 2026-09-16; Rev T5b 2026-09-15 base)
 // Spring-applied, solenoid-released PIN BRAKE for the nacelle-tilt worm
 // shaft.  Satisfies BRK-1..3 (docs/TILT_DRIVE_CONTROL_SPEC.md SS5.2) for the
 // selected Option 2 drive (4-start worm, back-drivable).

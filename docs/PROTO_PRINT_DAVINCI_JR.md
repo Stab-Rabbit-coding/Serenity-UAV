@@ -6,7 +6,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Date:** 2026-09-07 | **Baseline:** Rev T (current-specification/TODO.md, 2026-09-06 hull-frame bake)
+**Date:** 2026-09-07 | **Baseline:** Rev U (carried forward from Rev T, 2026-09-06 hull-frame bake; the nacelle batches in the slicer table are now the 64 mm parts, whose pod bed-fit scale 0.75 is arithmetic only and NOT slice-verified)
 **Supersedes:** the 2026-06-01 Rev P edition of this guide — every part list, bounding box,
 scale factor, and batch below was re-measured directly from the current `airframe/stls/`
 tree (bounding boxes computed 2026-09-07 via `trimesh`) and cross-checked against

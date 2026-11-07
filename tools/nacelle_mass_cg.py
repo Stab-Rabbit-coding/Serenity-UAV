@@ -62,9 +62,13 @@ except ImportError:  # pragma: no cover - environment guard
     raise
 
 REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sls_materials  # noqa: E402  datasheet densities (single source)
 
-#: Calibrated bulk density of a printed CF-PETG part, g/mm^3.
-RHO_PRINT = 1.05e-3
+#: Density of a printed part, g/mm^3.  Rev U: SLS DuraForm PA CF datasheet solid
+#: density, 1.11 g/cc (3DS-30108A, ASTM D792; tools/sls_materials.py).  This was the
+#: calibrated FDM CF-PETG bulk density 1.05 g/cc until Rev U.
+RHO_PRINT = sls_materials.rho_g_mm3(sls_materials.PA_CF)
 #: NdFeB sintered magnet, g/mm^3 (K&J Magnetics material data, N42).
 RHO_NDFEB = 7.5e-3
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-serenity_render_views.py — Rev T+ (2026-10-31; was Rev R1 2026-06-15)
+serenity_render_views.py — Rev U (2026-11-07; carried forward from Rev T+, 2026-10-31; was Rev R1 2026-06-15)
 
 Multi-view render suite for the Serenity UAV 24" assembly.
 

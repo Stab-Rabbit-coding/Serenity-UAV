@@ -39,7 +39,9 @@
     "SPAR-TILT-4130": "retired rotating spar (Rev S1g)",
     "BRG-MF128ZZ": "superseded Rev T1",
     "BRG-MR63ZZ": "bearing, joint not yet identified (TODO)",
-    "HALL-RING-MAG": "magnet bonded to hub (adhesive joint, separate method)"
+    "HALL-RING-MAG": "magnet bonded to hub (adhesive joint, separate method)",
+    "HW-NOZ64-LINKAGE": "nozzle servo linkage lump (link, spring, bellcrank, pins; 3.5 g ASSUMED): its joint is analysed in tools/nozzle_servo_linkage.py and is not yet a register entry (open)",
+    "BRG-6704ZZ": "retired at Rev U (Qty 0): the 64 mm trunnion uses BRG-6804ZZ, registered in J-NAC-TRUNNION-BRG"
   },
   "joints": [
     {
@@ -200,16 +202,16 @@
     },
     {
       "id": "J-NAC-TRUNNION-BRG",
-      "name": "Tilt trunnion bearings (pressed)",
+      "name": "Tilt trunnion bearings (pressed), 2 x 6804-ZZ per nacelle",
       "subsystem": "nacelle",
       "bom_refs": [
-        "BRG-6704ZZ"
+        "BRG-6804ZZ"
       ],
       "joint_class": "pressed",
       "fasteners": [
         {
-          "type": "6704ZZ bearing",
-          "size": "20x27x4",
+          "type": "6804ZZ bearing",
+          "size": "20x32x7",
           "count": 4,
           "material": "steel"
         }
@@ -235,7 +237,7 @@
         "retention",
         "load case"
       ],
-      "notes": "Pressed/bonded joint: no torque; fit and retention to be specified."
+      "notes": "Rev U: 64 mm trunnion, 2 x 6804-ZZ per side (REF-BRG-002; C0r 2.45 kN). Pressed/bonded joint: no torque; fit and retention to be specified. Replaces the 6704ZZ of the 50 mm trunnion."
     },
     {
       "id": "J-NAC-POD-PIVOT-BRG",

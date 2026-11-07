@@ -6,8 +6,8 @@
 **Last updated:** 2026-11-03
 
 > **Rev U baseline:** 24-inch CF-PETG hull, 8-node cooperative avionics (Pilot + TACCO on every
-> PB2-I), fixed CF wing spar (Rev S1g) with a worm-driven tilt actuator, 50 mm tandem EDF nacelles
-> (Rev S4c) with a 64 mm redesign in progress, servo-driven variable nozzles, a cargo bay with
+> PB2-I), fixed CF wing spar (Rev S1g) with a worm-driven tilt actuator, 64 mm tandem EDF nacelles
+> (QX-Motor QF2822; the 50 mm Rev S4c nacelle is archived), servo-driven variable nozzles, a cargo bay with
 > SPT5425LV/LibreServo winch, and a standalone Commo node (Rev T, approved 2026-09-29). The
 > aircraft is in design and PCB layout; nothing is assembled. This file indexes the design
 > documents, analyses, and build guides.
@@ -47,7 +47,7 @@
 - **[NOZZLE_DRIVE_TRADE.md](./NOZZLE_DRIVE_TRADE.md)** — nacelle nozzle drive trade and the
   2026-09-28 servo-drive decision
 - **[NACELLE_64MM_VERIFICATION.md](./NACELLE_64MM_VERIFICATION.md)**,
-  **[HULL_SCALE_36IN_EDF64MM_EVALUATION.md](../archives/rev-T-and-earlier/docs/HULL_SCALE_36IN_EDF64MM_EVALUATION.md)** — 64 mm EDF
+  **HULL_SCALE_36IN_EDF64MM_EVALUATION.md** (archived in [`archives/rev-T-and-earlier.tar.gz`](../archives/MANIFEST.md)) — 64 mm EDF
   nacelle verification and the hull-scale evaluation
 - **[LANDING_GEAR_ANALYSIS.md](./LANDING_GEAR_ANALYSIS.md)** — wire schedule, drop-height
   testing, fail-safe design
@@ -130,7 +130,7 @@
 
 | Rev | Hull | Nacelle EDFs | Avionics | Build status |
 |-----|------|--------------|----------|--------------|
-| U | 24 in (610 mm) | 50 mm X-Fly tandem (Rev S4c); 64 mm redesign in progress | 8-node Pilot + TACCO, Flight Engineer, standalone Commo (Rev T), Observer | Current baseline; design and PCB layout (`WBS.md` §6.5) |
+| U | 24 in (610 mm) | 64 mm QX tandem (50 mm archived) | 8-node Pilot + TACCO, Flight Engineer, standalone Commo (Rev T), Observer | Current baseline; design and PCB layout (`WBS.md` §6.5) |
 | T | 24 in (610 mm) | 50 mm X-Fly tandem (Rev S4c); 64 mm redesign in progress | 8-node Pilot + TACCO, Flight Engineer, standalone Commo (Rev T), Observer | Superseded by Rev U (`WBS.md` §6.4) |
 | S | 24 in | 50 mm X-Fly tandem | 8-node Pilot + TACCO, Flight Engineer, Commo cape, Observer (Rev S1) | Superseded by Rev T (`WBS.md` §6.3) |
 | R1 | 24 in | 50 mm X-Fly tandem | 8-node (pre-S1), hull-frame baking | Design complete (`git log`) |

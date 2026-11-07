@@ -19,8 +19,8 @@
   (`tools/middle_layout_fit.py` Rev T6a). The printable STLs (`chin_node_shelf`,
   `simon_node_saddle`, `void_former_cargo_node_bay`, `head_shell24`) still need re-export
   (item TACCO-60); `tools/check_tacco_envelope_sync.py` reports them as pending.
-- **Nacelles:** the 50 mm Rev S4c/S4d geometry is current. The 64 mm tandem-EDF nacelle
-  (NAC-64-SERVO-01) is the active design: a servo-driven variable nozzle was designed and
+- **Nacelles:** the 64 mm tandem-EDF nacelle (NAC-64-SERVO-01) is the Rev U nacelle; the 50 mm
+  geometry (Rev S4c/S4d) is archived in `archives/rev-T-frozen.tar.gz`. It is the active design: a servo-driven variable nozzle was designed and
   fit-closed 2026-10-04, and a uniform ×1.06 enlargement through a single source was wired
   2026-10-05. Pivot, CFD, mass/CG, and bench gates are open, so the 50 mm figures below stay the
   baseline until the 64 mm thrust, power, and mass verification passes.
@@ -68,13 +68,13 @@ See `HULL_FRAME_REFERENCE.md` for the validated component placement extents tabl
 | **Middle / Neck** | Avionics + power + fuel (battery) | ~230 mm | Horseshoe ring frame; Flight Engineer PDB mount; battery bay; 4× avionics bays (A–D); foam fill; keel rod |
 | **Rear** | Tail cone + tail boom | ~140 mm | Optional Phase 11 aft-EDF intake; twin rear-nozzle pods; landing-gear hard points |
 | **Wings** | Port + stbd lift surfaces | 486 mm span (19.1 in) | Fixed, bonded 20 mm CF spar (Rev T1); bonded root moment flanges; wing + spar clamps into the fuselage (releasable) |
-| **Nacelles** | Two tilting propulsion pods | ~200 mm each | 50 mm tandem EDF pair (X-Fly Galaxy X5, 12-blade, 3200 kV; 64 mm redesign in progress); servo-driven variable nozzle; trunnion on 2 × 6704ZZ, concentric with the fixed spar, driven by the cargo-bay worm drive (Rev T4/T5e) |
+| **Nacelles** | Two tilting propulsion pods | ~200 mm each | 64 mm tandem EDF pair (QX-Motor QF2822-2300KV, 12-blade); servo-driven variable nozzle; trunnion on 2 × 6804ZZ, concentric with the fixed spar, driven by the cargo-bay worm drive |
 
 ## Mass Budget (Phase 5–10, Nacelles Only)
 
 | Component | Mass (g) | Mass (oz) | Notes |
 |-----------|----------|-----------|-------|
-| Fuselage (printed) | ~1,043 | 36.8 | Rev U, at the ledger's 1.05 g/cc: forward head+cargo one-piece 618g (includes the fused gear box) + aft middle+rear one-piece 408g + cargo/middle splice collar 17g; `bom_revU` PRINT-HEAD-CARGO-ONEPIECE/PRINT-MIDDLE-REAR-ONEPIECE/PRINT-CARGO-MIDDLE-COLLAR. SLS PA CF is 1.11 g/cc (about +5%). The aft part misses the 333g plan target (408g). |
+| Fuselage (printed) | ~1,101 | 38.8 | Rev U, at the SLS PA CF datasheet density 1.11 g/cc: forward head+cargo one-piece 653g (includes the fused gear box) + aft middle+rear one-piece 431g + cargo/middle splice collar 17g; `bom_revU` PRINT-HEAD-CARGO-ONEPIECE/PRINT-MIDDLE-REAR-ONEPIECE/PRINT-CARGO-MIDDLE-COLLAR. The aft part misses the 333g plan target (that target was set on the FDM basis; 431g at 1.11 g/cc). |
 | Wings | ~180 | 6.3 | Span 486 mm, spar + skin, no cargo nacelles |
 | Nacelle assembly (2× complete: EDFs + shells + pivot + iris) | ~625 | 22.0 | Includes 4× XFly Galaxy X5 (70g mass each), shells, hubs, pivot, iris mechanism |
 | Tilt mechanism (servos, linkage, frame) | ~200 | 7.1 | 2× SPT5425LV (converted with LibreServo v2, ≥25 kg·cm @ 6V), rods, brackets |
@@ -144,8 +144,9 @@ All generated STLs go to `stls/` subdirectories by section:
 - `stls/fuselage/cargo/` — cargo doors, hinges, latches, winch parts, FPV bezel, chin node shelf,
   tilt-actuator parts
 - `stls/fuselage/landing-gear/` — landing-gear parts
-- `stls/nacelles/` — 50 mm and 64 mm nacelle shells, trunnions, EDF sleeves and mounts,
-  servo bracket; `esc/` and `nozzles/` subfolders
+- `stls/nacelles/` — 64 mm nacelle pods, trunnions, stage-2 cartridges, and the canonical engine
+  shell meshes (`eng_*_shell24_50mm_repaired.stl`, the canon reference the 64 mm pod is scaled from;
+  not a 50 mm design); `nozzles/` holds the 64 mm iris parts
 - `stls/wings/` — `wing_{port,stbd}_s1223_revo.stl`, tilt pinions
 
 **Mesh validation:** All STLs are validated for watertightness, manifold topology, and correct
