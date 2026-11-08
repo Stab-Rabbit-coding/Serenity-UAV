@@ -32,8 +32,7 @@ requires.
 **Product authority.** Owner (Stab-Rabbit-coding). Sprint order is a recommendation. Each owner-decision
 gate (§5) needs the owner's word, and nothing here closes one.
 
-**Status of this plan.** The plan is written down. No sprint after S0 has started. The project-overseer gates
-apply: the owner reviews this file ("requirements done" → "approved") before S1 starts.
+**Status of this plan.** **Approved by the owner 2026-11-08.** S0 and S1 are closed; S2 starts 2026-11-08.
 
 ## 1. Definition of "complete"
 
@@ -136,6 +135,10 @@ the equivalent below. The artefacts are the same ones the `ce-*` workflow writes
 | 5 | burndown | `python3 tools/wbs_burndown.py --baseline docs/plans/2026-11-07-001-burndown-baseline.json` | `closed+` (subsystem total) rises by at least the sprint's target; new findings recorded in the sprint raise `d_open` and are listed in the PR, never held back |
 
 ## 5. Owner-decision queue (gates)
+
+Every decision below is put to the owner as an **Owner Decision Brief** (`docs/DOC_TEMPLATES.md`): statics and
+dynamics, function, structural integrity, mechanism and component interactions, weight and balance, and canonical
+shape, each with a picture and vectors where loads or motion are involved (owner direction 2026-11-08).
 
 | ID | Decision | Item | Needed before |
 |---|---|---|---|
