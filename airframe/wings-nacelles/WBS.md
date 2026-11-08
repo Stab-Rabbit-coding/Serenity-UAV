@@ -1437,8 +1437,9 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     bearings ride on the spar X 1.49–2.04 in (37.8–51.8 mm), so the tube wall cannot be slotted,
     and the mouth is 0.05 in (1.3 mm) from the duct. Crossing the joint is an architecture choice:
     **OD-17**, `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md` (A clock-spring fails on copper strain and
-    the pinion; B enclosed loop needs a flex test; C slip ring does not fit; D joint 0.71 in (18 mm)
-    outboard is recommended if the spacing change is acceptable). W0 has landed, so the 5–17 mm annulus plan 003 assumed now exists
+    the pinion; B enclosed loop needs a flex test; C slip ring does not fit; D joint 0.91 in (23 mm)
+    outboard is recommended if the spacing change is acceptable; first written as 0.71 in (18 mm), which
+    puts the aft wire pair into the duct wall, corrected the same day with the D concept model and renders). W0 has landed, so the 5–17 mm annulus plan 003 assumed now exists
     and the bundle has somewhere to run. What remains is the routing itself: a
     path out of the trunnion keep-out into the cavity, and the harness lengths to
     go with it. The bay, the studs and the EMI partition are already built.

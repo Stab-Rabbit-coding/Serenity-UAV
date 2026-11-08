@@ -10512,6 +10512,20 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_od17_optD_horizontal.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_optD_vertical.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_od1_spigot_cartridge.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -15910,6 +15924,13 @@
       ],
       "archived": false
     },
+    "tools/nacelle64_optD_concept.py": {
+      "description": "nacelle64_optD_concept.py -- OD-17 option D: tilt joint moved outboard, 4 x 10 AWG routed.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nacelle_64_proportion_trade.py": {
       "description": "nacelle_64_proportion_trade.py \u2014 multi-objective sweep of the 64 mm nacelle's",
       "tags": [
@@ -16652,6 +16673,8 @@
       "docs/figures/battery_bay_twin_tray.png",
       "docs/figures/nacelle64_bay_stud_after.png",
       "docs/figures/nacelle64_bay_stud_interaction.png",
+      "docs/figures/nacelle64_od17_optD_horizontal.png",
+      "docs/figures/nacelle64_od17_optD_vertical.png",
       "docs/figures/nacelle64_od1_spigot_cartridge.png",
       "docs/figures/nacelle64_sections.png",
       "docs/figures/nacelle64_war10_options.png",
@@ -20447,6 +20470,7 @@
       "tools/mirror_claude_memory.py",
       "tools/nacelle64_assembly_check.py",
       "tools/nacelle64_od1_figure.py",
+      "tools/nacelle64_optD_concept.py",
       "tools/nacelle_64_proportion_trade.py",
       "tools/nacelle_64_scale.py",
       "tools/nacelle_cowl_fair.py",
