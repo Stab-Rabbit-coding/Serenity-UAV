@@ -10191,6 +10191,16 @@
       ],
       "archived": false
     },
+    "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md": {
+      "description": "Owner Decision Brief OD-17 \u2014 How the 4 \u00d7 10 AWG feed crosses the tilt joint (WA-R10)",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "power",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "docs/NACELLE_64MM_VERIFICATION.md": {
       "description": "64 mm Nacelle \u2014 Verification Record (2026-10-03)",
       "tags": [
@@ -10510,6 +10520,13 @@
       "archived": false
     },
     "docs/figures/nacelle64_sections.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_war10_options.png": {
       "description": "Rendered image / reference photo",
       "tags": [
         "documentation"
@@ -16595,6 +16612,7 @@
       "docs/MANIFEST.json",
       "docs/MASS_AUDIT_CARGO_WING_ROOT.md",
       "docs/MASS_AUDIT_MIDDLE_REAR_SECTIONS.md",
+      "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/OBSERVER_LASER_ANALYSIS.md",
@@ -16636,6 +16654,7 @@
       "docs/figures/nacelle64_bay_stud_interaction.png",
       "docs/figures/nacelle64_od1_spigot_cartridge.png",
       "docs/figures/nacelle64_sections.png",
+      "docs/figures/nacelle64_war10_options.png",
       "docs/flight_envelope.md",
       "docs/handoffs/2026-10-20-aircraft-datum-r2-migration.md",
       "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",
@@ -17102,6 +17121,7 @@
       "docs/BATTERY_MOUNT.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
+      "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
@@ -18409,6 +18429,7 @@
       "deferred/aft-edf/stls/rear_nozzle_petal_hull_7.stl",
       "deferred/aft-edf/stls/rear_shell24_2mm_edf_bored.stl",
       "docs/FIXED_NOZZLE_FALLBACK.md",
+      "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/handoffs/2026-11-02-nacelle-exterior-canon.md",
@@ -18656,6 +18677,7 @@
       "docs/BATTERY_MOUNT.md",
       "docs/BATTERY_SPLIT_OPTIONS.md",
       "docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md",
+      "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md",
       "docs/POWER_DISTRIBUTION.md",
       "docs/figures/battery_bay_twin_tray.png",
       "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",

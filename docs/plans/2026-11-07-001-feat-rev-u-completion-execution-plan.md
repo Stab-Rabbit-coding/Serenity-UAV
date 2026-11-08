@@ -157,6 +157,7 @@ shape, each with a picture and vectors where loads or motion are involved (owner
 | OD-13 | SLS vendor + quotes; source for part prices | BOM, §6.5 | S27 |
 | OD-14 | PE review of the Operator's Manual v0.1 | docs §0.10.3 | S28 |
 | OD-15 | Winch shed threshold vs maneuver envelope | fuselage-mid ★ | S7 |
+| OD-17 | WA-R10 power crossing: A clock-spring / B enclosed loop / C slip ring / D joint 0.71 in (18 mm) outboard — brief `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md` | WA-R10 | S2 |
 | OD-16 | First-flight decisions D1–D4 and D6 (scope, nozzle datum, 3.0 in gear, hover T/W floor, XO board area; D5 decided) — D2 overlaps OD-9, D3 closes OD-5 | `docs/plans/2026-09-15-001-first-flight-readiness-plan.md` | S3 (D4 sets the T/W target), P4 |
 
 ## 6. Agent sprints

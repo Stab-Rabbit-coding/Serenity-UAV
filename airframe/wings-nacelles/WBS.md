@@ -1432,7 +1432,13 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     is 0.06 in (1.5 mm) radius vs 0.26 in (6.64 mm) for the bundle (0.32 in (8.14 mm)
     with the 0.06 in (1.5 mm) twist clearance); no connected free path of any width reaches the bay
     (`tools/nacelle64_assembly_check.py --stage cable`). "Unblocked" below is
-    superseded. W0 has landed, so the 5–17 mm annulus plan 003 assumed now exists
+    superseded.
+    **2026-11-08 (Sprint 2):** there is no path for the wires in the current joint at any size. The
+    bearings ride on the spar X 1.49–2.04 in (37.8–51.8 mm), so the tube wall cannot be slotted,
+    and the mouth is 0.05 in (1.3 mm) from the duct. Crossing the joint is an architecture choice:
+    **OD-17**, `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md` (A clock-spring fails on copper strain and
+    the pinion; B enclosed loop needs a flex test; C slip ring does not fit; D joint 0.71 in (18 mm)
+    outboard is recommended if the spacing change is acceptable). W0 has landed, so the 5–17 mm annulus plan 003 assumed now exists
     and the bundle has somewhere to run. What remains is the routing itself: a
     path out of the trunnion keep-out into the cavity, and the harness lengths to
     go with it. The bay, the studs and the EMI partition are already built.
