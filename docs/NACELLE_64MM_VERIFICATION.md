@@ -252,7 +252,9 @@ no connected free path of any width exists from the mouth to the disconnect bay.
 pocket exists (0.153 in³ (2.5 cm³) cut) but its floor does not: the 0.12 in (3.1 mm) behind the nominal
 floor plane is empty (0.0009 in³ (15 mm³) of material), so the 4 M3 stud inserts have nothing to seat in,
 and a 0.04 in (1 mm) skin (≈ 0.042 in³ (690 mm³) in the 0.19 in (4.9 mm) in front of the pocket mouth)
-covers the pocket on the face side. This confirms the owner note that the route is not solved (WA-R10
+covers the pocket on the face side. **Resolved 2026-11-08 (NAC-64-ASM-03, owner: 0.138 in (3.5 mm) bay insert):** floor
+kept out of the cavity (91 % solid, the rest is the insert bores), mouth cut through the skin (0 in³ (0 mm³) left), insert-to-bore
+wall ≥ 0.091 in (2.31 mm) on both pods (`--stage bay`, `figures/nacelle64_bay_stud_after.png`). This confirms the owner note that the route is not solved (WA-R10
 stays open) and says the hollowing did not solve it. The roll-up's 3.11 in (79 mm) per wire is a mass
 estimate, not a routed length, so there is no routed length to compare it with. The repo cites
 NASA-STD-8739.4A Table 7-1 (minimum 3 × OD, optimum 10 × OD for AWG 10 and smaller): that is 0.65 in

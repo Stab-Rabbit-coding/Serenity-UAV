@@ -82,7 +82,7 @@ Other baselines that sprints are measured against:
 | BOM printed rows with no mesh | 11 (winch ×6, node saddle, Hall hub, void formers, neck intake frame, 64 mm ESC covers) | `python3 tools/check_bom_mesh_sync.py` |
 | 64 mm nacelle required parts unpublished | 4 (ESC covers) | `python3 tools/check_nacelle_deps.py` |
 | Nacelle assembly clashes | spigot 0.095 in³ (1,562 mm³), **0 after OD-1**; pinion sweep **0** (a first 0.137 in³ (2,237 mm³) reading was a sign error, retracted); cable route none | `tools/nacelle64_assembly_check.py` |
-| Pivot residual | +0.372 in (+9.45 mm) after OD-1, not converged | `tools/nacelle_mass_cg_64.py` |
+| Pivot residual | +0.372 in (+9.45 mm) after OD-1; +0.356 in (+9.04 mm) after NAC-64-ASM-03 (2026-11-08); not converged | `tools/nacelle_mass_cg_64.py` |
 | Winch packaging | FAIL (no placement clears hull + layout) | `tools/winch_packaging_fit.py` |
 | Cargo layout | FAIL, stale tool (old shell) | `tools/cargo_layout_fit.py` |
 
@@ -177,9 +177,9 @@ NAC-64-ASM-03 (bay floor, stud insert spec, pocket mouth) moved to S2 because th
   (15 mm³)), `pinion_pocket_mm3` = 0 — **met 2026-11-07**; `check_nacelle_deps.py` PASS. S1 closed with
   −2 (ASM-01 and the retracted ASM-02).
 
-**S2 — Draw the 4 × 10 AWG route (WA-R10) and the disconnect bay (NAC-64-ASM-03).** Goal: the bundle has a
-drawn, clearance-proven path from the spar bore to a disconnect bay that has a floor, seated stud inserts and an
-open mouth.
+**S2 — Draw the 4 × 10 AWG route (WA-R10).** Goal: the bundle has a drawn, clearance-proven path from the spar
+bore to the disconnect bay. (The bay itself, NAC-64-ASM-03, was closed 2026-11-08: floor, 0.138 in (3.5 mm)
+inserts, open mouth.)
 - Open an exit from the bore mouth (trunnion/collar side port or a spar-tip exit slot), route to the
   bay, set harness lengths; SPAR-20-WIREOD (record the measured or datasheet wire OD, cite it).
 - Exit: `--stage cable` finds a route at r 0.32 in (8.14 mm) on both sides; routed length recorded;

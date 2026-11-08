@@ -1203,6 +1203,11 @@ sign error in the tool and is retracted, NAC-64-ASM-02). No route exists for the
 (`edf_motor_mount_64mm.scad` Z_AFT = P64_Z_NOZ − 0.12 in (3 mm)), as the nozzle source already assumed; spigot overlap 0 in³ (0 mm³) on both
 sides; cartridge 0.144 lbm (65.1 g), was 0.147 lbm (66.9 g); hover AUW 14.12 lbm (6,403 g); pivot residual +0.372 in (+9.45 mm).
 
+**NAC-64-ASM-03 closed (2026-11-08, owner: 0.138 in (3.5 mm) bay stud insert).** Bay floor kept out of the cavity, pocket
+mouth cut through the pylon skin, SCAD assert on the 0.079 in (2.0 mm) minimum wall. Both pods re-rendered: floor 91 % solid,
+mouth clear, insert-to-bore wall 0.091 in (2.31 mm) minimum. Pod +0.0055 lbm (+2.5 g); studs now counted at the bay: nacelle
+CG 4.67 in (118.74 mm), pivot residual +0.356 in (+9.04 mm).
+
 **Execution plan to completion (2026-11-07).** `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`
 puts the 712 open subsystem items (baseline `docs/plans/2026-11-07-001-burndown-baseline.json`,
 counted by `tools/wbs_burndown.py`) in order. It defines completion as levels L1–L5 and plans 34 sprints

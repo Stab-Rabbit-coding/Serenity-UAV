@@ -2264,11 +2264,24 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         recorded ("+theta sign corrected"). Trunnion-ring vs rigid pinion overlap ≤ 0.0016 in³
         (26 mm³) at any angle is tooth phase, not a clash. Lesson:
         `docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md`.
-    - [ ] **NAC-64-ASM-03 — ESC disconnect bay has no floor and is skinned over
+    - [x] **NAC-64-ASM-03 — CLOSED 2026-11-08: ESC disconnect bay floor, inserts and mouth
         (found 2026-11-07).** **DECISION 2026-11-08 (owner): bay stud insert 0.138 in (3.5 mm)
         long, bay-specific (`ESC_DISC_INSERT_L`; the shared `M3_INSERT_L` stays 6.0 mm for the
         ESC-cover and collar inserts); restore the floor as a cavity keep-out slab behind the
-        pocket; open the pocket mouth through the pylon skin. Implementation follows.** The 1.18 × 0.55 × 0.24 in (30 × 14 × 6 mm) pocket is cut
+        pocket; open the pocket mouth through the pylon skin.** Implemented (Claude Opus 5.5):
+        `esc_disc_floor_keepout()` in `hollow_cavity()`, pocket cut `ESC_DISC_SKIN_CUT` 0.24 in
+        (6 mm) past the nominal face, SCAD assert on the 0.079 in (2.0 mm) minimum wall. Both pods
+        re-rendered 2026-11-08 (`tools/nacelle64_assembly_check.py --stage bay`): floor 91 % solid
+        (0.063 of 0.069 in³ (1,033 of 1,138 mm³); the rest is the four insert bores), 0 in³ (0 mm³)
+        of material in the pocket mouth, insert-to-bore wall 0.091 in (2.31 mm) inner / 0.154 in
+        (3.92 mm) outer studs, on both sides; static, sweep and pinion checks unchanged (clear).
+        Pod +0.0055 lbm (+2.5 g) stbd, +0.0035 lbm (+1.6 g) port (render vs render). With the studs
+        moved from the pivot to the bay in the roll-up (`STUD-M3-BRASS` now in the NACELLE set of
+        `tools/auw_ledger.py`), nacelle CG 4.69 → 4.67 in (119.15 → 118.74 mm) stbd, pivot residual
+        +0.372 → +0.356 in (+9.45 → +9.04 mm), hover arm +0.016 in (+0.4 mm); the published pod STL
+        (and so the AUW ledger) gets the +2.5 g only at NAC-64-REBAKE (OD-4). BOM `STUD-M3-BRASS`
+        updated. Insert pull-out still unverified (allowables `insert_pullout`). Figure:
+        `docs/figures/nacelle64_bay_stud_after.png`. The 1.18 × 0.55 × 0.24 in (30 × 14 × 6 mm) pocket is cut
         (0.0015 in³ (24 mm³) left in it), but the 0.12 in (3.1 mm) behind its floor plane is empty (0.0009 in³ (15 mm³)), so the four M3 stud
         inserts have nothing to seat in, and ~0.042 in³ (690 mm³) of 0.04 in (1 mm) skin covers the
         pocket mouth on the pylon face. The hollowing removed what the bay module

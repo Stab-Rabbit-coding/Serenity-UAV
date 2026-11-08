@@ -10488,6 +10488,13 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_bay_stud_after.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_bay_stud_interaction.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -16625,6 +16632,7 @@
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
       "docs/figures/battery_bay_twin_tray.png",
+      "docs/figures/nacelle64_bay_stud_after.png",
       "docs/figures/nacelle64_bay_stud_interaction.png",
       "docs/figures/nacelle64_od1_spigot_cartridge.png",
       "docs/figures/nacelle64_sections.png",
