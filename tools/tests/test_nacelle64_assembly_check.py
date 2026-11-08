@@ -39,3 +39,17 @@ def test_fix_nonmanifold_splits_edge_touching_cubes():
     mn = a.to_man(fixed)
     assert mn.status().name == "NoError"
     assert abs(mn.volume() - 2.0) < 1e-6
+
+
+def test_bay_insert_walls_meet_minimum_and_old_insert_did_not():
+    far = a.m.Manifold.cube([1, 1, 1]).translate([500, 500, 500])
+    res = a.bay_check(far)
+    assert res["min_wall_ok"]
+    assert min(res["insert_wall_to_bore_mm"]) >= a.MIN_WALL
+    assert res["floor_material_mm3"] == 0 and res["mouth_material_mm3"] == 0
+    old = a.BAY_INSERT_L
+    try:
+        a.BAY_INSERT_L = 6.0          # the shared M3_INSERT_L used before 2026-11-08
+        assert not a.bay_check(far)["min_wall_ok"]
+    finally:
+        a.BAY_INSERT_L = old

@@ -3153,7 +3153,7 @@ AGENTS.md — Tools and Build Automation — Agent Instructions [build-tooling, 
 airframe_interface_census.py — Exhaustive interface census of the airframe master assembly. [build-tooling]
 allowables.py — Cited-allowables database and selector for the joint-torque method. [build-tooling]
 assembly_integrity_check.py — assembly_integrity_check.py -- find rogue openings in the assembled hull [build-tooling]
-auw_ledger.py — Python script [build-tooling]
+auw_ledger.py — Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W. [build-tooling]
 bake_hull_frame.py — bake_hull_frame.py — bake validated FreeCAD placements into STL files. [build-tooling]
 bay_a_thermal_budget.py — bay_a_thermal_budget.py -- lumped thermal budget for the enclosed Bay A [build-tooling]
 bhd02_option_study.py — BHD-02 option study: geometry and loads for the three owner decisions. [build-tooling]

@@ -61,6 +61,10 @@ SPAR_OD, SPAR_ID = 20.0, 16.3
 DISC_Z = 51.0 * ns.get("P64_A")                  # ESC disconnect bay centre Z
 DISC_W, DISC_H, DISC_D = 30.0, 14.0, 6.0
 FACE_X = 34.0 * ns.get("P64_K")                  # pylon face |X| (43.6)
+BORE_R, DUCT_OUT_R = 32.0, 34.5                  # flow bore and duct-wall outer radius at the bay
+BAY_INSERT_L, STUD_PITCH, STUD_N = 3.5, 7.5, 4   # ESC_DISC_INSERT_L (owner 2026-11-08), pod pitch
+MIN_WALL = 2.0                                   # AGENTS.md section 7 minimum wall
+BAY_FILLET, SKIN_CUT = 3.0, 6.0                  # ESC_DISC_FILLET, ESC_DISC_SKIN_CUT
 
 
 MM_IN = 25.4
@@ -378,6 +382,27 @@ def cable_route(man: dict[str, m.Manifold], pitch: float = 0.75) -> dict:
     return out
 
 
+def bay_check(pod: m.Manifold) -> dict:
+    """NAC-64-ASM-03: does the disconnect bay have a floor, an open mouth, and enough wall
+    between each stud insert and the flow bore?  Pylon +X frame; volumes in mm3 (reported
+    imperial first)."""
+    floor_x = FACE_X - DISC_D
+
+    def box(x0, x1, hy, hz):
+        return m.Manifold.cube([x1 - x0, 2 * hy, 2 * hz]).translate([x0, -hy, DISC_Z - hz])
+
+    fl = box(DUCT_OUT_R + 0.2, floor_x - 0.2, DISC_W / 2, DISC_H / 2)
+    mouth = box(floor_x + 0.2, FACE_X + SKIN_CUT - 0.2, DISC_W / 2 - BAY_FILLET,
+                DISC_H / 2 - BAY_FILLET)
+    walls = [float(np.hypot(floor_x - BAY_INSERT_L, (i - (STUD_N - 1) / 2) * STUD_PITCH) - BORE_R)
+             for i in range(STUD_N)]
+    return {"floor_box_mm3": round(float(fl.volume()), 1),
+            "floor_material_mm3": round(float((pod ^ fl).volume()), 1),
+            "mouth_material_mm3": round(float((pod ^ mouth).volume()), 1),
+            "insert_wall_to_bore_mm": [round(w, 2) for w in walls],
+            "min_wall_ok": min(walls) >= MIN_WALL}
+
+
 def pinion_pocket(man: dict[str, m.Manifold], step: float = 1.0) -> tuple[float, m.Manifold]:
     """Volume of pod material inside the volume the fixed wing pinion sweeps relative to the pod.
 
@@ -446,7 +471,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--step", type=float, default=5.0)
     ap.add_argument("--json", type=Path)
     ap.add_argument("--figs", type=Path, help="write section figures to this directory")
-    ap.add_argument("--stage", choices=("static", "sweep", "cable", "all"), default="all")
+    ap.add_argument("--stage", choices=("static", "sweep", "cable", "bay", "all"), default="all")
     args = ap.parse_args(argv)
 
     parts = load_parts(args.pod, args.trunnion)
@@ -489,6 +514,16 @@ def main(argv: list[str] | None = None) -> int:
         if args.figs:
             for f in figures(man, swept, args.figs):
                 print("figure:", f)
+    if args.stage in ("bay", "all"):
+        bay = bay_check(man["pod"])
+        res["bay"] = bay
+        fill = bay["floor_material_mm3"] / bay["floor_box_mm3"]
+        print(f"\ndisconnect bay: floor {cu_in(bay['floor_material_mm3'])} of "
+              f"{cu_in(bay['floor_box_mm3'])} ({fill:.0%} solid); mouth material "
+              f"{cu_in(bay['mouth_material_mm3'])}")
+        print("  insert wall to the flow bore per stud: "
+              + ", ".join(inch(w) for w in bay["insert_wall_to_bore_mm"])
+              + f"  (min {inch(MIN_WALL)}: {'OK' if bay['min_wall_ok'] else 'BELOW'})")
     if args.stage in ("cable", "all"):
         print(f"\ncable route (bundle {inch(BUNDLE_D)} + {inch(CLEARANCE)} radial):")
         res["cable"] = cable_route(man)

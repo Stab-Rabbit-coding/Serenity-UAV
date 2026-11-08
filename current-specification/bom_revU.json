@@ -2839,16 +2839,16 @@
     },
     {
       "Ref": "STUD-M3-BRASS",
-      "Description": "M3 brass stud + nut + heat-set insert - 10 AWG ring-terminal disconnect, nacelle bay",
+      "Description": "M3 brass stud + nut + heat-set insert (insert L 3.5 mm (0.138 in)) - 10 AWG ring-terminal disconnect, nacelle bay",
       "Category": "Electrical Hardware",
       "Qty": "8",
       "Unit_Mass_g": "1.2",
       "Total_Mass_g": "9.6",
       "Supplier": "McMaster-Carr / Amazon",
-      "Supplier_PN_or_Search": "M3 brass threaded stud + brass hex nut + M3 brass heat-set insert",
+      "Supplier_PN_or_Search": "M3 brass threaded stud + brass hex nut + M3 brass heat-set insert, L 3.5 mm (0.138 in), OD 3.5 mm",
       "Est_Unit_Price_USD": "0.60",
       "Est_Total_Price_USD": "4.80",
-      "Notes": "Rev T4 (2026-08-31). 4 per nacelle on a 7.5 mm pitch in the esc_disconnect_bay pocket (nacelle_pod_50mm_tandem.scad, Z 82, 30 x 14 x 6.0 mm). Ring terminals rather than bullets BECAUSE OF A MEASUREMENT: the inboard flank has at most 7.10 mm of usable depth and only over Z 75-88, so no 10 AWG bullet fits lengthwise anywhere on it (docs/WING_ATTACH_INTERFACE.md S4.4). BRASS, not steel - 21 mm from the AK7455 keep-out. ** WA-R10 IS ONLY PARTLY SATISFIED: ** the bay exists and serves the EDF1 ESC pair, but there is no compliant route for the wing's 4 x 10 AWG bundle from the trunnion to this bay in a SOLID pod. Blocked on hollowing the pod (weight plan W0), which opens a 5-17 mm annulus and settles both at once."
+      "Notes": "Rev U (2026-11-08, NAC-64-ASM-03, owner): insert length 3.5 mm (0.138 in), bay-specific (ESC_DISC_INSERT_L), leaves >= 2.0 mm (0.079 in) to the flow bore at the inner studs; the previous 6.0 mm insert breached it by 0.17 mm. 4 per nacelle on a 7.5 mm pitch in esc_disconnect_bay (nacelle_pod_64mm_tandem.scad, bay centre Z 61.1 mm (2.41 in), 30 x 14 x 6.0 mm). Counted at the bay in the nacelle roll-up. Pull-out not established (allowables insert_pullout requires verification). History: Rev T4 (2026-08-31). 4 per nacelle on a 7.5 mm pitch in the esc_disconnect_bay pocket (nacelle_pod_50mm_tandem.scad, Z 82, 30 x 14 x 6.0 mm). Ring terminals rather than bullets BECAUSE OF A MEASUREMENT: the inboard flank has at most 7.10 mm of usable depth and only over Z 75-88, so no 10 AWG bullet fits lengthwise anywhere on it (docs/WING_ATTACH_INTERFACE.md S4.4). BRASS, not steel - 21 mm from the AK7455 keep-out. ** WA-R10 IS ONLY PARTLY SATISFIED: ** the bay exists and serves the EDF1 ESC pair, but there is no compliant route for the wing's 4 x 10 AWG bundle from the trunnion to this bay in a SOLID pod. Blocked on hollowing the pod (weight plan W0), which opens a 5-17 mm annulus and settles both at once."
     },
     {
       "Ref": "PRINT-NACELLE-ESC-COVER",

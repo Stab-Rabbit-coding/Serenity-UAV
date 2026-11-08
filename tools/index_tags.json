@@ -15294,7 +15294,7 @@
       "archived": false
     },
     "tools/auw_ledger.py": {
-      "description": "Python script",
+      "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
       "tags": [
         "build-tooling"
       ],

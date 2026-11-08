@@ -310,7 +310,6 @@ INSTALLED: dict[str, tuple[int, Any]] = {
     "SHAFT-TILT-4MM": (2, SHAFT_ST),
     "BUSH-TILT-4MM": (4, SHAFT_ST),
     "GEAR-TILT-FUS-38T": (4, SHAFT_ST),
-    "STUD-M3-BRASS": (8, "pivot"),
     "SCREW-M3-BUTTON-8": (24, "pivot"),
     "MESH-FOD-NOSEEUM": (4, "pivot"),
 }
@@ -342,6 +341,7 @@ NACELLE = {
     "WIRE-16AWG": "phase leads (14 AWG) in the nacelle roll-up",
     "WIRE-28AWG-NAC": "nav 3-core in the nacelle roll-up",
     "HALL-RING-MAG": "ring magnet on the tilt axis in the nacelle roll-up",
+    "STUD-M3-BRASS": "4 disconnect-bay studs per nacelle, at the bay, in the nacelle roll-up",
 }
 
 EXCLUDED = {

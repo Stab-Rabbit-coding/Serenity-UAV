@@ -2265,7 +2265,10 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         (26 mm³) at any angle is tooth phase, not a clash. Lesson:
         `docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md`.
     - [ ] **NAC-64-ASM-03 — ESC disconnect bay has no floor and is skinned over
-        (found 2026-11-07).** The 1.18 × 0.55 × 0.24 in (30 × 14 × 6 mm) pocket is cut
+        (found 2026-11-07).** **DECISION 2026-11-08 (owner): bay stud insert 0.138 in (3.5 mm)
+        long, bay-specific (`ESC_DISC_INSERT_L`; the shared `M3_INSERT_L` stays 6.0 mm for the
+        ESC-cover and collar inserts); restore the floor as a cavity keep-out slab behind the
+        pocket; open the pocket mouth through the pylon skin. Implementation follows.** The 1.18 × 0.55 × 0.24 in (30 × 14 × 6 mm) pocket is cut
         (0.0015 in³ (24 mm³) left in it), but the 0.12 in (3.1 mm) behind its floor plane is empty (0.0009 in³ (15 mm³)), so the four M3 stud
         inserts have nothing to seat in, and ~0.042 in³ (690 mm³) of 0.04 in (1 mm) skin covers the
         pocket mouth on the pylon face. The hollowing removed what the bay module

@@ -789,6 +789,14 @@ ESC_DISC_FILLET  =   3.0;  // [mm] corner radius — a square internal corner in
                            //      printed part is where the crack starts
 ESC_STUD_N       =   4;    // [count] M3 brass studs (one per 10 AWG feed)
 ESC_STUD_PITCH   =   7.5;  // [mm] stud spacing across the bay width
+// NAC-64-ASM-03 (owner 2026-11-08): the hollowed 64 mm pod had lost the bay floor, and the
+// shared 6.0 mm insert ran 0.17 mm into the flow bore at the two inner studs.  The bay gets
+// its own insert length and a floor slab kept out of the cavity; the mouth is cut through
+// the pylon skin, which bulges up to 4.2 mm proud of NACELLE_FACE_X_PYLON at this station.
+ESC_DISC_INSERT_L = 3.5;    // [mm] 0.138 in bay stud insert (M3_INSERT_L stays 6.0 elsewhere)
+ESC_DISC_MIN_WALL = 2.0;    // [mm] 0.079 in, AGENTS.md section 7, insert bottom to flow bore
+ESC_DISC_FLOOR_M  = 2.5;    // [mm] floor slab margin around the pocket footprint (Y and Z)
+ESC_DISC_SKIN_CUT = 6.0;    // [mm] pocket cut beyond the nominal face, through the skin
 // NO TROUGH IS BUILT, and that is a finding rather than an omission.  The
 // bundle leaves the SPAR BORE at the trunnion (Z = PIVOT_Z) and would have to
 // reach this bay 29.5 mm forward.  There is no compliant route in a solid pod:
@@ -1791,27 +1799,41 @@ module esc_disconnect_bay(pylon_side = PYLON_SIDE) {
     r      = ESC_DISC_FILLET;
 
     // ── Filleted pocket ────────────────────────────────────────────────────
-    translate([(pylon_side > 0) ? (face_x - ESC_DISC_D) : face_x, 0, ESC_DISC_Z])
+    translate([(pylon_side > 0) ? (face_x - ESC_DISC_D) : (face_x - ESC_DISC_SKIN_CUT),
+               0, ESC_DISC_Z])
         hull()
             for (dy = [-1, 1], dz = [-1, 1])
                 translate([0,
                            dy * (ESC_DISC_W / 2 - r),
                            dz * (ESC_DISC_H / 2 - r)])
                     rotate([0, 90, 0])
-                        cylinder(r = r, h = ESC_DISC_D + 0.5);
+                        cylinder(r = r, h = ESC_DISC_D + ESC_DISC_SKIN_CUT);
 
     // ── 4 × M3 brass stud inserts in the pocket floor ──────────────────────
-    // Bores run OUTBOARD from the floor into the 2.5 mm skin plus the material
-    // behind it; ESC_DISC_AVAIL − ESC_DISC_D = 1.10 mm remains beyond the
-    // insert, so the insert length is capped at that plus the duct wall.
+    // Bores run from the floor toward the duct, through the floor slab
+    // (esc_disc_floor_keepout) into the duct wall.  ESC_DISC_INSERT_L leaves
+    // >= ESC_DISC_MIN_WALL to the flow bore at the inner studs (asserted).
     for (i = [0 : ESC_STUD_N - 1])
         translate([(pylon_side > 0) ? (face_x - ESC_DISC_D)
                                     : (face_x + ESC_DISC_D),
                    (i - (ESC_STUD_N - 1) / 2) * ESC_STUD_PITCH,
                    ESC_DISC_Z])
             rotate([0, pylon_side > 0 ? -90 : 90, 0])
-                cylinder(d = M3_INSERT_D, h = M3_INSERT_L);
+                cylinder(d = M3_INSERT_D, h = ESC_DISC_INSERT_L);
 
+}
+
+// KEEP-OUT for hollow_cavity(): the bay floor slab.  Pod material from the flow bore out to
+// the pocket floor, over the pocket footprint plus ESC_DISC_FLOOR_M, is not hollowed, so the
+// stud inserts have 3.1 mm (0.12 in) of floor + the 2.5 mm duct wall to seat in.  The bore
+// itself is subtracted separately, so this box may start inside it.
+module esc_disc_floor_keepout(pylon_side = PYLON_SIDE) {
+    x0 = EDF_BORE_R - 1;
+    x1 = NACELLE_FACE_X_PYLON - ESC_DISC_D;
+    w  = ESC_DISC_W + 2 * ESC_DISC_FLOOR_M;
+    h  = ESC_DISC_H + 2 * ESC_DISC_FLOOR_M;
+    translate([(pylon_side > 0) ? x0 : -x1, -w / 2, ESC_DISC_Z - h / 2])
+        cube([x1 - x0, w, h]);
 }
 
 
@@ -1993,6 +2015,9 @@ module hollow_cavity() {
         // Keep the ESC board seat solid forward of the bore step — see
         // esc_bay_seat_keepout() for why this is a keep-out and not a plinth.
         esc_bay_seat_keepout();
+
+        // Keep the disconnect-bay floor solid (NAC-64-ASM-03, 2026-11-08).
+        esc_disc_floor_keepout(pylon_side = PYLON_SIDE);
 
         // Keep the vestigial-boss cleanup region solid.  smooth_boss_shave()
         // trims the canonical shell back to a MEASURED contour at this station,
@@ -2203,6 +2228,12 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
            "ESC radial budget over 8.0 mm - the bay then runs out of depth before length; see nacelle_esc_bay.scad");
     assert(ESC_BAY_Z1 - ESC_BAY_Z0 >= 40.0,
            "ESC bay is under 40 mm — below the shortest board considered viable");
+    // NAC-64-ASM-03: every bay stud insert keeps ESC_DISC_MIN_WALL to the flow bore.
+    for (i = [0 : ESC_STUD_N - 1])
+        assert(norm([NACELLE_FACE_X_PYLON - ESC_DISC_D - ESC_DISC_INSERT_L,
+                     (i - (ESC_STUD_N - 1) / 2) * ESC_STUD_PITCH]) - EDF_BORE_R
+               >= ESC_DISC_MIN_WALL,
+               "bay stud insert leaves less than the minimum wall to the flow bore");
     assert(ESC_DISC_D < ESC_DISC_AVAIL,
            "disconnect bay is deeper than the MEASURED inboard-face envelope");
     assert(ESC_DISC_Z - ESC_DISC_H / 2 >= ESC_DISC_Z_LO

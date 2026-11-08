@@ -23,14 +23,14 @@
    "mass_g": 6629.649590082546
   },
   "hover_4000": {
-   "I_pitch_gmm2": 68257410.84839189,
+   "I_pitch_gmm2": 68257410.8483919,
    "T_W": 1.4805907692543163,
    "cg": [
     -0.09400123820831552,
     351.17153174570495,
     157.27247836266562
    ],
-   "k_pitch_mm": 103.249570873603,
+   "k_pitch_mm": 103.24957087360302,
    "mass_g": 6402.849590082546
   }
  },
@@ -567,7 +567,7 @@
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 959.44,
+   "mass_g": 964.24,
    "name": "Nacelle port rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
@@ -579,7 +579,7 @@
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 959.44,
+   "mass_g": 964.24,
    "name": "Nacelle stbd rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
@@ -1839,30 +1839,6 @@
     146.9
    ],
    "kind": "BOM",
-   "mass_g": 4.8,
-   "name": "STUD-M3-BRASS (port)",
-   "ref": "STUD-M3-BRASS",
-   "source": "BOM Unit_Mass_g; at the port nacelle pivot"
-  },
-  {
-   "cg": [
-    -230.4,
-    339.4,
-    146.9
-   ],
-   "kind": "BOM",
-   "mass_g": 4.8,
-   "name": "STUD-M3-BRASS (stbd)",
-   "ref": "STUD-M3-BRASS",
-   "source": "BOM Unit_Mass_g; at the stbd nacelle pivot"
-  },
-  {
-   "cg": [
-    230.4,
-    339.4,
-    146.9
-   ],
-   "kind": "BOM",
    "mass_g": 10.8,
    "name": "SCREW-M3-BUTTON-8 (port)",
    "ref": "SCREW-M3-BUTTON-8",
@@ -2062,9 +2038,9 @@
   }
  ],
  "subtotals_hover_g": {
-  "BOM": 2396.504,
+  "BOM": 2386.9040000000005,
   "GAP": 218.8114,
-  "NACELLE": 1918.876227046352,
+  "NACELLE": 1928.4762270463518,
   "PRINT": 1868.657963036194
  },
  "thrust_gf": 9480.0,

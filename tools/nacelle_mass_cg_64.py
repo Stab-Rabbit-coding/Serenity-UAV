@@ -195,6 +195,9 @@ def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
          0.5 * (PIVOT_Z_SET + DISC_BAY_Z),
          ("SCALED est.: 50 mm row (4 x 0.060 m x 40 g/m, 29.5 mm route) "
           "lengthened by the trunnion-to-bay run; CG midway")),
+        ("4 x M3 brass stud + nut + insert (disconnect bay)", 4 * 1.2, DISC_BAY_Z,
+         ("BOM STUD-M3-BRASS 1.2 g each, 4 per nacelle, at the bay (NAC-64-ASM-03, "
+          "2026-11-08; was counted at the pivot by the AUW ledger)")),
         ("6 x 14 AWG phase leads", phase[1] * 2.08 / 1.31,
          0.5 * (ESC_BAY_CG + 0.5 * (mid(MOTOR1) + mid(MOTOR2))),
          ("SCALED est.: 16 AWG row x copper-area ratio 14/16 AWG for 57 A "
