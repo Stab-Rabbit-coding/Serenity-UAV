@@ -2270,17 +2270,31 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         inserts have nothing to seat in, and ~0.042 in³ (690 mm³) of 0.04 in (1 mm) skin covers the
         pocket mouth on the pylon face. The hollowing removed what the bay module
         assumed. Exit: stud bosses present; mouth open; re-run the tool.
-        *Design arithmetic found 2026-11-07 (not yet fixed):* the pocket floor is at X 1.48 in
-        (37.6 mm) (face 1.72 in (43.6 mm) less the 0.24 in (6.0 mm) depth); the duct wall outer
-        radius is 1.36 in (34.5 mm), so a restored floor slab is 0.12 in (3.1 mm) thick. The studs'
-        insert bores run from the floor toward the duct, `M3_INSERT_L` 0.24 in (6.0 mm), which ends
-        at X 1.24 in (31.6 mm), 0.02 in (0.4 mm) inside the Ø2.52 in (Ø64 mm) flow bore (r 1.26 in
-        (32 mm)). A floor alone is therefore not enough; the insert needs a shorter spec (BOM
-        `STUD-M3-BRASS`; a 0.16 in (4.0 mm) insert fits the 0.22 in (5.6 mm) of floor + wall with margin)
-        or a thicker boss. The pylon skin also lies at X 1.73–1.87 in (44–47.5 mm) over the pocket,
-        beyond the 1.72 in (43.6 mm) face the pocket cut was sized to, so the mouth needs an
-        outward extension through the skin. Both belong with the WA-R10 route (S2) because the
-        route ends at this pocket; owner/design choice on the insert spec first.
+        *Design arithmetic, corrected 2026-11-07 (not yet fixed; figure
+        `docs/figures/nacelle64_bay_stud_interaction.png`).* Pocket floor X 1.48 in (37.6 mm); duct wall
+        outer r 1.36 in (34.5 mm); flow bore r 1.26 in (32 mm); studs at Y ±0.15 and ±0.44 in (±3.75 and
+        ±11.25 mm). A restored floor slab is 0.12 in (3.1 mm) thick at Y = 0, so floor + duct wall is 0.22 in
+        (5.6 mm). Wall left between an insert's bottom and the flow bore, inner / outer studs:
+        6.0 mm (0.236 in, today's `M3_INSERT_L`): −0.007 / +0.061 in (−0.17 / +1.55 mm), so the two inner
+        studs breach the bore; 4.0 mm (0.157 in): 0.072 / 0.135 in (1.82 / 3.44 mm); 3.5 mm (0.138 in):
+        0.091 / 0.154 in (2.31 / 3.92 mm). **The 0.157 in (4.0 mm) insert I first proposed leaves 0.072 in
+        (1.82 mm) at the inner studs, below the 0.079 in (2.0 mm) minimum wall of `AGENTS.md` §7. A 0.138 in
+        (3.5 mm) insert meets it (0.091 in (2.31 mm)).** An earlier line here said "0.4 mm into the bore":
+        that was the Y = 0 value, where no stud sits. Heat-set insert pull-out is not established for any
+        material (`allowables.json` `insert_pullout` = requires_verification), so the margin is geometric
+        only until a coupon is pulled. `M3_INSERT_L` is shared with the ESC-cover and collar inserts and
+        is asserted equal to `ESC_INSERT_L`, so the bay needs its own parameter. The pylon skin over the
+        pocket is partial (windows at Z 2.28–2.48 in (58–63 mm)); about a third of the pocket footprint
+        volume, 0.042 in³ (690 mm³), is still skin. Both belong with the WA-R10 route (S2) because the
+        route ends at this pocket.
+        *Weight and balance of the floor slab and the studs (per nacelle):* the slab is 0.189 in³
+        (3,101 mm³) = 0.0076 lbm (3.44 g) of PA CF at Z 2.41 in (61.1 mm), 1.91 in (48.6 mm) forward of
+        the tilt axis. `STUD-M3-BRASS` (0.011 lbm (4.8 g) per nacelle) is already in the AUW ledger but is
+        placed AT the pivot, not at the bay; the nacelle roll-up has no row for it. Moving it to the bay and
+        adding the slab shifts the nacelle CG forward 0.032 in (0.81 mm) (4.69 → 4.66 in (119.15 → 118.34
+        mm)), pivot residual +0.372 → +0.340 in (+9.45 → +8.64 mm), hover arm +0.032 in (+0.81 mm),
+        nozzle tip 0.032 in (0.81 mm) lower; AUW +0.015 lbm (6.9 g) for both. The insert length itself
+        moves brass by about 0.0002 lbm (0.1 g) per insert.
     - [ ] **NAC-64-ASM-04 — assembly-check coverage gaps.** Not yet in
         `tools/nacelle64_assembly_check.py`: nozzle flaps and servo linkage
         (published placement needed), rotors, ESC boards and covers (unpublished,

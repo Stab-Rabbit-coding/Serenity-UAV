@@ -172,7 +172,7 @@ true at close-out. **−n** = minimum number of items closed in the sprint (`clo
 **S1 — Clear the assembly clashes.** Goal: the 64 mm nacelle assembles and tilts with zero interference on
 both pod renders. Scope after the 2026-11-07 corrections: NAC-64-ASM-01 (spigot/cartridge, **done**, OD-1);
 NAC-64-ASM-02 (pinion sweep, **retracted**: a sign error in the first check, the pod relief is sufficient);
-NAC-64-ASM-03 (bay floor, stud insert spec, pocket mouth) moved to S2 because the route ends at that pocket and the insert depth is a BOM-affecting choice (WBS has the arithmetic).
+NAC-64-ASM-03 (bay floor, stud insert spec, pocket mouth) moved to S2 because the route ends at that pocket and the insert depth is a BOM-affecting choice (WBS has the arithmetic; the 0.157 in (4.0 mm) insert first proposed fails the 0.079 in (2.0 mm) minimum wall, 0.138 in (3.5 mm) passes).
 - Exit: `nacelle64_assembly_check.py` on both renders: static overlaps only rib contact (≤ 0.0009 in³
   (15 mm³)), `pinion_pocket_mm3` = 0 — **met 2026-11-07**; `check_nacelle_deps.py` PASS. S1 closed with
   −2 (ASM-01 and the retracted ASM-02).
