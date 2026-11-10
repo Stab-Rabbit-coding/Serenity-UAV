@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-08",
+  "generated": "2026-11-10",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -10519,6 +10519,13 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_od17_optD_tip_extension.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_od17_optD_vertical.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -16674,6 +16681,7 @@
       "docs/figures/nacelle64_bay_stud_after.png",
       "docs/figures/nacelle64_bay_stud_interaction.png",
       "docs/figures/nacelle64_od17_optD_horizontal.png",
+      "docs/figures/nacelle64_od17_optD_tip_extension.png",
       "docs/figures/nacelle64_od17_optD_vertical.png",
       "docs/figures/nacelle64_od1_spigot_cartridge.png",
       "docs/figures/nacelle64_sections.png",
