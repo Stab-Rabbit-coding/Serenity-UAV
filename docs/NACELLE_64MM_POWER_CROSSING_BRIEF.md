@@ -86,7 +86,37 @@ bend, forward in the annulus, fanning out to its stud; channels are cut through 
 ESC B +, magenta ESC B −; gold studs in the disconnect bay; brown the wing-fixed pinion. The view window
 is about 3.5 in (88 mm) tall.*
 
+## Option D with the airfoil extended to the nacelle (owner question, 2026-11-10)
+
+*Can the wing's airfoil be carried outboard, ahead of and behind the pivot, to the nacelle so the joint
+is not a bare cylinder?* **Partly, and the gap can be kept small at every tilt angle.**
+
+![Option D with a wing-fixed airfoil extension, top and front, 0 and 90 deg](figures/nacelle64_od17_optD_tip_extension.png)
+
+*Tan: the airfoil extension (wing-fixed), modelled by extruding the wing's full-chord tip section from
+X 3.32 in (84.3 mm) down to X 1.93 in (49.0 mm). Dark gray: the rotating collar boss, Ø2.13 in (54 mm),
+that carries the trunnion in option D. Pod translucent.*
+
+| Check | Finding |
+|---|---|
+| **Statics and dynamics** | The tilt axis runs spanwise, so tilting rotates every pod point about it without changing its spanwise X. The extension's outboard face can sit 0.04 in (1 mm) off the pod's inboard face (pod max X 1.89 in (48.0 mm) for r ≥ 1.18 in (30 mm)) and that gap stays 0.04 in at every tilt from −5° to +135°. The extension is wing-fixed and carries only its own air load, cantilevered 1.39 in (35.3 mm) off the tip. |
+| **Function** | The joint is covered except for the collar. The collar is Ø2.13 in (54 mm) against an airfoil that is about 1.0 in (26 mm) thick at the tip, and it spans the front 58 % of the 3.7 in (94 mm) chord. **80 % of the collar's volume, 1.52 of 1.89 in³ (24,935 of 31,031 mm³), stands outside the airfoil**, above and below the forward half of the extension. |
+| **Structural integrity** | The extension has to be bored for the collar (r 1.10 in (28 mm), 0.04 in clearance). That leaves only thin slivers ahead of the collar; most of the extension sits aft of it. |
+| **Mechanism and component interactions** | The wing-fixed pinion reaches r 1.26 in (32.1 mm), outside the collar, so the extension needs a pocket for it as the pod relief does now. The wires stay inside the pod and are unaffected. The disconnect bay (r 1.91 in (48.6 mm)) never passes under the extension at any tilt, because the airfoil is only about ±0.5 in (±13 mm) thick. |
+| **Weight and balance** | Extension 0.42 in³ (6,867 mm³) solid, 0.017 lbm (7.6 g) per side in PA CF before hollowing; wing-fixed, so the nacelle pivot is unaffected. |
+| **Canonical shape** | The gap between wing and nacelle closes to 0.04 in (1 mm) along the chord, but a round hub about twice the airfoil thickness still shows above and below the leading half. Compare it to the canonical wing–nacelle junction (REF-CAD-003) yourself; I have not checked the reference images for this. |
+
+**Ways to fair the collar as well:**
+1. A body of revolution (spinner-like) on the collar. It rotates with the nacelle but looks the same at
+   every tilt, and the wing-fixed extension wraps it with a constant gap. This is the cleanest fit to the
+   constant-gap geometry.
+2. Thicken the wing tip locally into a pylon fairing about 2.3 in (58 mm) thick that blends into the
+   airfoil. This changes the canonical shape more.
+3. Neck the collar down where it passes through the extension. The trunnion's register bore is Ø1.50 in
+   (38.1 mm), so the collar cannot get below about Ø1.6 in (40 mm), still about 1.5 times the airfoil.
+
 ## Recommendation
+
 
 **D**, if the 0.91 in (23 mm) change in the wing–nacelle spacing is acceptable to you against the
 canonical references. It keeps the 28 A conductors inside protected structure, and it takes the tilt as
