@@ -263,6 +263,18 @@ number. If you want to keep the canonical wing, take option 4 with fillets 1 and
 **Conclusion for OD-17:** of the two, the **rounded end plate with fillets** is better: less drag, the
 same or less reversed flow, no added wing mass, and the canonical wing is kept.
 
+## Owner decisions on OD-17 (2026-11-11)
+
+- **Junction: DECIDED. Rounded end plate with fillets** (0.24 in (6 mm) convex rounding, short wall, 0.24 in
+  (6 mm) concave fillet), not the 1.50 in glove. Basis: the junction CFD above (14 % less drag).
+- **Longer tail: OPEN, owner decides 2026-11-12.** Direction given: keep the trailing edge a straight
+  linear taper, and rotate it toward (not all the way to) parallel with the leading edge. Case in
+  progress: tip chord 3.66 in (93 mm) to 4.37 in (111 mm), trailing-edge angle 22.8 deg to 11.9 deg, root
+  chord and leading edge unchanged, fairing following the new line (t/c 0.77-0.60 to 0.52-0.47). Needs the
+  wing re-render with the spar bore dihedral changed 0.057 in (1.46 mm) to 0.025 in (0.63 mm), and a full
+  wing-pod-pinion sweep, before it can be adopted. Planform:
+  `figures/nacelle64_od17_tail_planform.png`.
+
 ## Recommendation
 
 
