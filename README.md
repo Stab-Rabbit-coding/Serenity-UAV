@@ -102,7 +102,7 @@ started.** The path to first flight is in `docs/FIRST_FLIGHT_READINESS.md`; open
 | Area | State |
 |------|-------|
 | Airframe | SCAD shells at Rev S baseline, carried into Rev U; STL re-exports pending after the TACCO 60 × 35 mm change; cargo-shell mesh defect open |
-| Nacelles | 50 mm Rev S4c is current; 64 mm tandem-EDF redesign (NAC-64-SERVO-01) with a servo-driven nozzle is designed and fit-closed, with pivot, CFD, mass, and bench gates open |
+| Nacelles | The 64 mm tandem-EDF nacelle (NAC-64-SERVO-01) with a servo-driven nozzle is the Rev U nacelle; the 50 mm nacelle is archived. Pivot (residual +9.6 mm), CFD, mass, and bench gates are open; the published pod STLs need a re-bake, and the 64 mm ESC bay covers are not yet generated (`tools/check_nacelle_deps.py`) |
 | Avionics PCBs | Pilot and TACCO placed with ERC 0 / DRC 0 before routing, on corrected 4.80 mm PB2 rails; routing and Gerbers open. Flight Engineer, Observer, and Commo Rev T need further PCB work |
 | Buses | Fleet MIL-STD-1553C via the Holt HI-6138 on every Pilot and TACCO (2026-09-28) |
 | Comms | mLRS on a bare STM32WLE5JC; Wi-Fi USB module selection is a fab blocker; Commo becomes one standalone node (Rev T, 2026-09-29) |
@@ -146,10 +146,10 @@ deliberately progressive, field-replaceable failure mode rated for a 6 ft full-A
 
 **Nacelles**
 
-Two tilting pods each carry a tandem 50 mm EDF pair behind an 11-fin stator, with a variable-area
-nozzle scheduled on measured tilt (−5° to +135° pivot; 0° = horizontal) and driven by one sub-micro servo per pod. Rev S4c
-hollowed the pods (−179 g/pair) and added hinged ESC bays with flush access covers on a 4×90° motor
-pattern; a 64 mm tandem-EDF redesign is in progress.
+Two tilting pods each carry a tandem 64 mm EDF pair (QX-Motor QF2822-2300KV, 2,370 gf each), with a
+variable-area nozzle scheduled on measured tilt (−5° to +135° pivot; 0° = horizontal) and driven by one KST X06
+sub-micro servo per pod. The 64 mm pod is a uniform ×1.06 enlargement of the canonical shell with an integral
+stage-1 motor plate and a removable stage-2 cartridge. The earlier 50 mm pods (Rev S4c) are archived.
 
 [Nozzle-Drive Trade Study →](docs/NOZZLE_DRIVE_TRADE.md)
 
@@ -234,7 +234,7 @@ above are the current design baseline. Full engineering detail for each subsyste
 subsystem's own README/doc — see the link on each card in [Subsystems](#subsystems) above. The
 narrative that used to live directly in this file (full Airframe/Powerplant/Avionics/Cargo
 Handling write-ups) is preserved verbatim, for historical reference, in
-[`archives/root-readme-deep-dive-2026-08-03/`](archives/root-readme-deep-dive-2026-08-03/).
+[`archives/root-readme-deep-dive-2026-08-03.tar.gz`](archives/MANIFEST.md) (unpack per [`archives/README.md`](archives/README.md)).
 
 ---
 

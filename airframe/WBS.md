@@ -307,6 +307,39 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     removed; `ARCHIVE_INDEX.md` section "airframe/archive/FreeCAD-scripts/" added.
     The canonical `SerenityAssembly.FCStd` was left in place in `airframe/freecad/assembly/`.
 
+- [ ] **OD-19 — Owner: adopt the SLS minimum-wall rule?** (2026-11-11)
+    The 0.079 in (2.0 mm) `AGENTS.md` §7 wall came from FDM CF-PETG. `docs/SLS_MIN_WALL_THICKNESS.md`
+    (tool `tools/sls_min_wall.py`) re-derives it for DuraForm PA CF in six cases (load-bearing /
+    non-load-bearing x foam-backed / free-standing / lattice-supported), any orientation vs XY fixed.
+    Headlines: non-load-bearing foam-backed 0.051 in (1.3 mm), lattice-supported 0.039 in (1.0 mm,
+    the SLS process floor, REF-MFG-001 p. 15), free-standing 1.0-2.6 mm by span; load-bearing
+    free-standing 0.098 in (2.5 mm) any orientation or 0.077 in (2.0 mm) XY fixed (stiffness parity
+    with the old CF-PETG basis). Foam crush and face wrinkling make 2 lb/ft³ foam a poor stabilizer
+    for load-bearing skins. Recommendation A (adopt, with orientation on the drawing). The §7 text is
+    the owner's to change. Unverified: PA CF Z data, foam datasheet, handling load, textbook cites.
+- [ ] **MS-SLS-PACF — Owner: approve the PA CF material specification** (2026-11-11)
+    `docs/MATSPEC_SLS_PA_CF.md`: brittle design basis (did not yield, 3.8 % elongation), orientation
+    on every drawing, 2.25 factor for load-bearing parts, process record per build, witness coupons,
+    mass check ±3 %, and an ASTM D638/D790/D953 coupon plan in X/Y/Z that replaces the 0.5 assumed
+    Z knockdown. 3D Systems publishes no Z data (3DS-30108A re-read 2026-11-11).
+    **2026-11-11 update:** proxy build-axis factors adopted in `tools/sls_materials.py` from
+    `reports/SLS Z axis strength.md` (ALM PA 603-CF ASTM D638, Protolabs UK ISO 527): Z strength
+    0.44, Z modulus 0.35, Z elongation 0.58; in-plane uncontrolled 0.65 / 0.41. ESTIMATE until
+    production-machine coupons. Knock-on: `lg_bellcrank_fbd.py` PA CF bearing capacity down 12 %
+    (already-failing items still fail; spreader discs +1 mm, +1.5 g per aircraft);
+    `gen_head_cell_rail.py` design values change on its next run.
+- [ ] **SLS-WALL-FLOOR — The 1.0 mm "SLS process floor" was a mis-citation**
+    REF-MFG-001 p. 15's ">1mm" is the wall of a pressure-tight SLS tank, not a minimum wall.
+    `tools/sls_min_wall.py` now uses an interim 1.5 mm floor for the 33 % carbon-filled powder;
+    `tools/sls_dfm_audit.py` (MIN_WALL_MM 1.0) still cites p. 15. Get the bureau's minimum wall for
+    DuraForm PA CF, then fix the audit constant and its citation.
+- [ ] **SLS-WALL-STIFF — 2.0 mm SLS load-bearing skins, unfixed orientation**
+    Finding from OD-19: a 2.0 mm PA CF skin whose print orientation is not fixed has about 37 % of
+    the bending stiffness (E t³, Z modulus factor 0.35 from 33 % CF-PA12 proxy data; 52 % under the
+    old 0.5 assumption) of the 2.0 mm CF-PETG skin the existing hull, collar and pod analyses
+    assumed. Review each load-bearing SLS shell: fix its orientation on the drawing, thicken it
+    toward 2.8 mm, add ribs/lattice, or obtain Z-axis coupon data.
+
 
 ## §1.1.5 — Non-Printable Component Placeholders
 *(root `WBS.md` §1.1.5)*

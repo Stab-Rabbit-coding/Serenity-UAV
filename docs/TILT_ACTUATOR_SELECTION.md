@@ -1,4 +1,4 @@
-# Nacelle-Tilt Actuator Selection — Rev T5e (decision record, D5; Rev T5b 2026-09-15 base)
+# Nacelle-Tilt Actuator Selection — Rev U (carried forward from Rev T5e; decision record, D5; Rev T5b 2026-09-15 base)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI note:** Drafted by Claude (model: Claude Opus 5, Anthropic) under the author's

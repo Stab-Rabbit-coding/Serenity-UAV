@@ -1425,11 +1425,51 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     constant, because this stub has now been mis-bounded three times (32 → 15.0
     → 13.5).
 
-- [ ] **[OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not
-    built.** W0 has landed, so the 5–17 mm annulus plan 003 assumed now exists
+- [x] **[CLOSED 2026-11-11 — WA-R10] The 4 × 10 AWG route is drawn in the pod SCAD
+    and clearance-proven on fresh renders.** *(Sprint 2. The published pod STL is the pre-shift bake
+    until S3 NAC-64-REBAKE; owner confirmation OD-18 pending; see below.)* **2026-11-07 (measured, NAC-64-ASM-03, Claude Opus 5.5): on the live
+    x1.06 hollowed pod the route does NOT exist.** The spar-bore mouth (X 1.489 in (37.81 mm))
+    is ~0.04 in (1 mm) from the cartridge/duct wall; the largest free sphere on the mouth
+    is 0.06 in (1.5 mm) radius vs 0.26 in (6.64 mm) for the bundle (0.32 in (8.14 mm)
+    with the 0.06 in (1.5 mm) twist clearance); no connected free path of any width reaches the bay
+    (`tools/nacelle64_assembly_check.py --stage cable`). "Unblocked" below is
+    superseded.
+    **2026-11-08 (Sprint 2):** there is no path for the wires in the current joint at any size. The
+    bearings ride on the spar X 1.49–2.04 in (37.8–51.8 mm), so the tube wall cannot be slotted,
+    and the mouth is 0.05 in (1.3 mm) from the duct. Crossing the joint is an architecture choice:
+    **OD-17**, `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md` (A clock-spring fails on copper strain and
+    the pinion; B enclosed loop needs a flex test; C slip ring does not fit; D joint 0.91 in (23 mm)
+    outboard is recommended if the spacing change is acceptable; first written as 0.71 in (18 mm), which
+    puts the aft wire pair into the duct wall, corrected the same day with the D concept model and renders). W0 has landed, so the 5–17 mm annulus plan 003 assumed now exists
     and the bundle has somewhere to run. What remains is the routing itself: a
     path out of the trunnion keep-out into the cavity, and the harness lengths to
     go with it. The bay, the studs and the EMI partition are already built.
+    **2026-11-11 (owner, OD-17 DECIDED):** **option D** (joint 0.91 in (23 mm) outboard) with a
+    wing-fixed aft fairing behind the rotating collar, ending in a **rounded end plate with fillets**
+    (0.24 in (6 mm) convex rounding and concave fillet) at the wing junction; trailing edge keeps the
+    **22.8° taper** (the longer-tail trial, 11.9°, gave 19 % less strip drag and was rejected as too small a
+    flight-performance gain). CFD: `tools/od17_junction_cfd/`; brief sections "Junction CFD" and "Longer-tail
+    CFD". Sprint 2 implements this; the route entry stays open until `--stage cable` passes on the moved joint.
+    **2026-11-11 (Sprint 2, built):** `P64_JOINT_SHIFT` 0.91 in (23 mm) in `nacelle_64_scale.scad`, read by
+    the pod, trunnion, assembly check, bake and tilt dynamics. Pod: collar boss to the moved rim, Ø1.68 in
+    (42.6 mm) bend chamber, four wire channels (`od17_wire_channels`). New published part
+    `PRINT-WING-TIP-FAIRING` ×2 (fairing + rounded end plate, `tools/nacelle64_wing_fairing.py`), BOM row,
+    ledger rows, mesh-sync PASS. Results, both pods (port mirrored), `tools/nacelle64_assembly_check.py
+    --stage all`: static only the known 0.0007 in³ (12 mm³) rib contact; sweep −5…+135° only ring-gear/pinion
+    tooth phase, pod material in the pinion sweep 0; wires: tightest point ≥ 0.650 in (16.50 mm) (3 × the
+    assumed 0.217 in (5.5 mm) OD) on all four, wire-to-wire overlap 0, wire to duct wall ≥ 0.088 in
+    (2.24 mm), 0.32 in (8.14 mm) bundle corridor clear through the spar mouth and chamber, wires and fairing
+    vs wing-fixed parts 0 over the sweep. Pod-side run 2.43 in (61.7 mm) forward pair, 2.78 in (70.7 mm) aft
+    pair (wing-side run not drawn). **Defect found and fixed:** the first drawn paths had 0.08–0.14 in
+    (2.1–3.6 mm) kinks, and the smoothed version made forward and aft wires overlap 0.051 in³ (839 mm³) per
+    pair; the aft pair's bend plane is now tilted 12°. **Exit reinterpreted** (plan: one route at 0.32 in
+    (8.14 mm) radius): the decided geometry fans four wires out in a 0.35 in (9 mm) annulus, so the exit is
+    the `wires` stage; the old `cable` stage still reports no single-bundle route. Owner confirmation:
+    OD-18 in the brief. Weight: fairing 0.080 lbm (36.4 g) per side; joint +0.046 lbm (+20.8 g) pod
+    (measured) + 0.009 lbm (+3.9 g) spar (ESTIMATE) per nacelle; hover AUW 6,403 → 6,525 g, T/W 1.48 → 1.45.
+    Not done here: wing-side harness run, WIREOD datasheet, pod re-bake (S3 NAC-64-REBAKE: the published
+    pod STL is still the pre-shift bake). **At the re-bake, delete the `OD-17 joint extension` rows in
+    `tools/auw_ledger.py nacelle_items()`**, or the pod boss is counted twice (+0.046 lbm (+20.8 g) per nacelle).
     *(Superseded reason, kept because it is why the requirement stalled:)* The bay itself is built (Z 82, 30 × 14 × 6.0 mm, 4 × M3 brass studs
     for ring terminals) and sits over the EDF1 ESC wire exit. What does not exist
     is the annulus the wing side assigned the bundle to: **the pod is solid.** The
@@ -1733,7 +1773,9 @@ analysis by Claude (Claude Opus 5, Anthropic) under the author's direction, per
     conduction figures), and `RDS(on)` roughly doubles by 125 °C — a feedback the
     steady-state model does not carry. **Establish the real sustained current
     before treating 45 A as headroom.**
-- [ ] **[OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn.**
+- [x] **[CLOSED 2026-11-07 — duplicate, superseded by measurement] The 4 × 10 AWG route now EXISTS but is not drawn.** No route exists from the
+    spar-bore mouth; the open requirement is the WA-R10 entry in §1.1.3.7 (with NAC-64-ASM-03), which
+    carries the work. Kept closed here so WA-R10 is counted once.
     Hollowing gave the bundle its annulus and the bays merge into it by design,
     so the blocker recorded at Rev S4 is lifted. What remains is to route and
     strain-relieve it from the disconnect bay to each ESC, which needs the
@@ -2233,6 +2275,82 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     - [ ] **NAC-64-GEOM-05 — gates on the 64 mm pod.** Port `nacelle_trunnion_fit.py`,
         `nacelle_esc_bay_fit.py` and `nacelle_mass_cg.py` (PIVOT_Z, plan U5) to
         read the 64 mm wrapper; PIVOT_Z 107.5 is carried unchanged until then.
+    - [x] **NAC-64-ASM-01 — CLOSED 2026-11-07 (owner OD-1: option A, cartridge 0.12 in (3 mm)
+        shorter; implemented by Claude Opus 5.5).** `edf_motor_mount_64mm.scad` Z_AFT =
+        P64_Z_NOZ − NZ_SPIGOT_L (0.12 in (3 mm)), aft face Z 7.72 in (196.1 mm), which is what
+        `nacelle_nozzle_iris_64mm.scad` already assumed ("the stage-2 cartridge ends 3 mm
+        short for it"); the cartridge SCAD had never followed. Both STLs re-rendered:
+        3.64 in (92.43 mm) long, watertight, 3.58 in³ (58,668 mm³), 0.144 lbm (65.1 g), was 0.147 lbm (66.9 g);
+        the retention inserts move with the aft face, the throat spigot bears on it.
+        Re-check: cartridge x nozzle_throat 0 in³ (0 mm³) on both pod renders. Ledger hover AUW
+        14.12 lbm (6,403 g, was 6,405 g); nacelle CG 4.69 in (119.15 mm), pivot residual
+        +0.372 in (+9.45 mm, was +9.58; NAC-64-PIVOT-RC open). BOM synced. Figure:
+        `docs/figures/nacelle64_od1_spigot_cartridge.png`.
+        *Finding as recorded:* The throat's 0.12 in (3 mm) spigot (r 1.26–1.48 in (32–37.5 mm),
+        z −0.12..0 in (−3..0 mm)) occupies the same annulus as the aft 0.12 in (3 mm) of the cartridge, which ended at Z 7.84 in (199.1 mm) = P64_Z_NOZ.
+        Both sides. The exit (static overlap cartridge x nozzle_throat = 0 in³ (0 mm³)) is met.
+    - [x] **NAC-64-ASM-02 — RETRACTED 2026-11-07 (my sign error, Claude Opus 5.5).** The
+        first assembly check reported 0.137 in³ (2,237 mm³) of pod material in the wing-pinion
+        sweep, first contact at ~15° tilt. The tool tilted the exhaust up instead of down, so the
+        pinion swept the wrong side of the pod. With hover = exhaust down (`tilt_matrix`), the
+        pod material inside the pinion sweep is 0 in³ (0 mm³) on both pods, tilt −5…135°, and the
+        pod's `tilt_drive_relief()` channel contains the whole sweep, as NAC-64-GEOM-04 / T6
+        recorded ("+theta sign corrected"). Trunnion-ring vs rigid pinion overlap ≤ 0.0016 in³
+        (26 mm³) at any angle is tooth phase, not a clash. Lesson:
+        `docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md`.
+    - [x] **NAC-64-ASM-03 — CLOSED 2026-11-08: ESC disconnect bay floor, inserts and mouth
+        (found 2026-11-07).** **DECISION 2026-11-08 (owner): bay stud insert 0.138 in (3.5 mm)
+        long, bay-specific (`ESC_DISC_INSERT_L`; the shared `M3_INSERT_L` stays 6.0 mm for the
+        ESC-cover and collar inserts); restore the floor as a cavity keep-out slab behind the
+        pocket; open the pocket mouth through the pylon skin.** Implemented (Claude Opus 5.5):
+        `esc_disc_floor_keepout()` in `hollow_cavity()`, pocket cut `ESC_DISC_SKIN_CUT` 0.24 in
+        (6 mm) past the nominal face, SCAD assert on the 0.079 in (2.0 mm) minimum wall. Both pods
+        re-rendered 2026-11-08 (`tools/nacelle64_assembly_check.py --stage bay`): floor 91 % solid
+        (0.063 of 0.069 in³ (1,033 of 1,138 mm³); the rest is the four insert bores), 0 in³ (0 mm³)
+        of material in the pocket mouth, insert-to-bore wall 0.091 in (2.31 mm) inner / 0.154 in
+        (3.92 mm) outer studs, on both sides; static, sweep and pinion checks unchanged (clear).
+        Pod +0.0055 lbm (+2.5 g) stbd, +0.0035 lbm (+1.6 g) port (render vs render). With the studs
+        moved from the pivot to the bay in the roll-up (`STUD-M3-BRASS` now in the NACELLE set of
+        `tools/auw_ledger.py`), nacelle CG 4.69 → 4.67 in (119.15 → 118.74 mm) stbd, pivot residual
+        +0.372 → +0.356 in (+9.45 → +9.04 mm), hover arm +0.016 in (+0.4 mm); the published pod STL
+        (and so the AUW ledger) gets the +2.5 g only at NAC-64-REBAKE (OD-4). BOM `STUD-M3-BRASS`
+        updated. Insert pull-out still unverified (allowables `insert_pullout`). Figure:
+        `docs/figures/nacelle64_bay_stud_after.png`. The 1.18 × 0.55 × 0.24 in (30 × 14 × 6 mm) pocket is cut
+        (0.0015 in³ (24 mm³) left in it), but the 0.12 in (3.1 mm) behind its floor plane is empty (0.0009 in³ (15 mm³)), so the four M3 stud
+        inserts have nothing to seat in, and ~0.042 in³ (690 mm³) of 0.04 in (1 mm) skin covers the
+        pocket mouth on the pylon face. The hollowing removed what the bay module
+        assumed. Exit: stud bosses present; mouth open; re-run the tool.
+        *Design arithmetic, corrected 2026-11-07 (not yet fixed; figure
+        `docs/figures/nacelle64_bay_stud_interaction.png`).* Pocket floor X 1.48 in (37.6 mm); duct wall
+        outer r 1.36 in (34.5 mm); flow bore r 1.26 in (32 mm); studs at Y ±0.15 and ±0.44 in (±3.75 and
+        ±11.25 mm). A restored floor slab is 0.12 in (3.1 mm) thick at Y = 0, so floor + duct wall is 0.22 in
+        (5.6 mm). Wall left between an insert's bottom and the flow bore, inner / outer studs:
+        6.0 mm (0.236 in, today's `M3_INSERT_L`): −0.007 / +0.061 in (−0.17 / +1.55 mm), so the two inner
+        studs breach the bore; 4.0 mm (0.157 in): 0.072 / 0.135 in (1.82 / 3.44 mm); 3.5 mm (0.138 in):
+        0.091 / 0.154 in (2.31 / 3.92 mm). **The 0.157 in (4.0 mm) insert I first proposed leaves 0.072 in
+        (1.82 mm) at the inner studs, below the 0.079 in (2.0 mm) minimum wall of `AGENTS.md` §7. A 0.138 in
+        (3.5 mm) insert meets it (0.091 in (2.31 mm)).** An earlier line here said "0.4 mm into the bore":
+        that was the Y = 0 value, where no stud sits. Heat-set insert pull-out is not established for any
+        material (`allowables.json` `insert_pullout` = requires_verification), so the margin is geometric
+        only until a coupon is pulled. `M3_INSERT_L` is shared with the ESC-cover and collar inserts and
+        is asserted equal to `ESC_INSERT_L`, so the bay needs its own parameter. The pylon skin over the
+        pocket is partial (windows at Z 2.28–2.48 in (58–63 mm)); about a third of the pocket footprint
+        volume, 0.042 in³ (690 mm³), is still skin. Both belong with the WA-R10 route (S2) because the
+        route ends at this pocket.
+        *Weight and balance of the floor slab and the studs (per nacelle):* the slab is 0.189 in³
+        (3,101 mm³) = 0.0076 lbm (3.44 g) of PA CF at Z 2.41 in (61.1 mm), 1.91 in (48.6 mm) forward of
+        the tilt axis. `STUD-M3-BRASS` (0.011 lbm (4.8 g) per nacelle) is already in the AUW ledger but is
+        placed AT the pivot, not at the bay; the nacelle roll-up has no row for it. Moving it to the bay and
+        adding the slab shifts the nacelle CG forward 0.032 in (0.81 mm) (4.69 → 4.66 in (119.15 → 118.34
+        mm)), pivot residual +0.372 → +0.340 in (+9.45 → +8.64 mm), hover arm +0.032 in (+0.81 mm),
+        nozzle tip 0.032 in (0.81 mm) lower; AUW +0.015 lbm (6.9 g) for both. The insert length itself
+        moves brass by about 0.0002 lbm (0.1 g) per insert.
+    - [ ] **NAC-64-ASM-04 — assembly-check coverage gaps.** Not yet in
+        `tools/nacelle64_assembly_check.py`: nozzle flaps and servo linkage
+        (published placement needed), rotors, ESC boards and covers (unpublished,
+        NAC-64-GEOM-03), 2 x 6804-ZZ bearings, hull and ground clearance, phase
+        and nav leads. Port pod differs from the X-mirror of stbd by 2.28 in³ (37,397 mm³)
+        (10 %), so every check runs on both renders.
     - [ ] **NAC-64-SVC-01 — install/remove path (owner requirement 2026-10-03:
         motors, rotors, ESCs and harnesses must be installable and removable).**
         Adopted path, analysed by Claude Opus 5.5: rotor 1 services through the
@@ -2366,7 +2484,9 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             sized for **70 A** — an 80 A ESC may not fit at scale 1.06 (owner decision);
             (d) PWR-CONN-01 / fuse sizing against 57.0 A per fan; (e) the 2135 gf record below
             is historical.
-        - [ ] **NAC-64-ESC-80A.m — 70 A is sufficient (2026-10-05, Claude Opus
+        - [ ] **NAC-64-ESC-80A.m — SUPERSEDED 2026-11-02 by NAC-64-EDF-2300KV (the 2400 KV basis
+            below was never specified or authorized; 80 A ESCs per the 2300 KV sheet). Historical:
+            70 A is sufficient (2026-10-05, Claude Opus
             5.5; owner requirement 2135 gf per fan).** REF-EDF-003 2400 KV row: 22.2
             V, 57.0 A, 1265.4 W, 2135 g. Static fan laws (T ∝ n², P ∝ n³; aero
             skill propulsion §2): 2135 gf needs the same n and ≈ the same 1265 W
@@ -2554,6 +2674,37 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     stand-in; obtain a real coupon/mill figure before release (TODO §0.8).
 - [ ] **SPAR-20-WIREOD** — `bom_revS.csv` records no OD for `WIRE-10AWG`. The
     whole bore chain scales off the assumed 5.5 mm; measure the procured wire.
+    **2026-11-11 (S2):** still open. The BOM row is a generic marketplace wire with no manufacturer, so
+    no datasheet can be cited for what will be procured. The as-built paths (bend R, channel size, bundle
+    corridor) all scale off 0.217 in (5.5 mm); the checks re-run in seconds if `WIRE_D` changes. Needs the
+    owner's caliper reading of the procured wire, or a named product with a manufacturer datasheet.
+
+- [ ] **NAC-64-FEED-THERM** — Owner decision 2026-11-11 (ESC wire report review,
+    `reports/UAV ESC wire market survey.md` Decision 1): **test the current spar first.** Load-bank the
+    four 10 AWG feed conductors in the spar at 44 A and 38 A sustained with a thermocouple on the spar
+    wall. Pass: wall at or below the procured resin's wet Tg minus 50 deg F (28 deg C). Only on a fail,
+    move to a high-temperature spar (wet Tg at least 352 deg F (178 deg C)) with an in-spar sleeve rated
+    at least 302 deg F (150 deg C). Needs: the procured spar's resin datasheet (wet Tg); a catalogued
+    CMH-17 edition and section for the Tg-margin rule.
+- [ ] **NAC-64-DESIGN-AMPS** — Owner decision 2026-11-11: the sustained per-fan design current is the
+    most heavily loaded fan at 21.0 V including control headroom, about **44 A** (ESTIMATE, 57 A x
+    (21/24)^2), not the 38 A mean hover. Re-derive it from the flight-control allocation and the CG
+    offset when those exist. Short-time case: 57-63 A (63 A on a fresh 25.2 V pack) unless the
+    throttle is capped at 60 A.
+- [ ] **NAC-64-PHASE-TEST** — Owner decision 2026-11-11 (report Decision 3): before enlarging the pod's
+    lead conduit, load-bank three 200 deg C phase leads at about 38 A RMS at 176 deg F (80 deg C) on the
+    real lead length. Test 12 AWG AT121925 and 14 AWG AT141927 (the latter in the existing 0.197 in
+    conduit). If 14 AWG passes, no pod change; otherwise open the conduit and stage-2 slot to about
+    0.28 in (7.0 mm) for AT121925.
+- [ ] **[CAUTION] NAC-64-FUSE-COORD** — Owner decision 2026-11-11 (report Decision 4, option B;
+    CAUTION per `AGENTS.md`: aircraft loss, WARNING only if people are under the hover): the
+    BOM FUSE-ESC-40A is below the 44 A design current and the 57 A peak. Run a coordination study with
+    three curves on one plot: fuse time-current, wire short-time rating, and the ESC limit. **The ESC
+    current limit shall be I-squared-t / fold-back:** up to 60 A for at most 10 s, then fold back to no
+    more than the qualified wire continuous rating. The fuse carries 44 A continuous and 57-63 A for
+    10 s. The 297 MINI family likely tops out at 40 A (unverified), so expect a MIDI-class fuse and
+    holder; check bay space. OD-3 (ESC rating) stays open until the OSESC-NAC passes 44 A sustained at
+    bay temperature.
 
 ---
 
@@ -2627,3 +2778,38 @@ decoupling the tilt axis from the spar axis) **changes SPAR-25-2's trunnion
 geometry** — if decoupled, the trunnion is no longer concentric with the spar
 and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
 
+---
+
+## Findings 2026-11-11 (code review of the OD-17 tools, Claude Opus 5.5)
+
+- [ ] **OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side** for
+    the minimum wall (CFD body had zero wall at the collar bore); drag not re-run (OD-18 item 2).
+- [x] **OD17-FAIR-HOLLOW — Fairing hollow, foam filled (owner 2026-11-11).**
+    Owner direction: not a structural part, so a hollow shell with the minimum skin that holds its shape
+    with a foam core. Built in `tools/nacelle64_wing_fairing.py` (`--skin`, default 2.0 mm): cavity =
+    fairing section shrunk by the skin, kept a skin clear of the collar bore, pinion pocket, outboard face
+    and wing pad face; 2 lb/ft³ closed-cell PU foam (FOAM-PU-2LB, `AGENTS.md` §7); two Ø0.16 in (4 mm)
+    fill/vent holes in the outboard cap, which are also the SLS powder-escape holes (> 2 mm,
+    REF-MFG-001 p. 6). Per side: shell 0.051 lbm (23.3 g) + foam 0.0008 lbm (0.4 g), was 0.080 lbm
+    (36.4 g) solid; hover AUW 6,525 → 6,500 g, T/W 1.45 → 1.46. Ray-cast wall check: the shell body
+    (X 2.08–3.04 in (52.8–77.3 mm)) is 2.0 mm; the thin readings (4 % of samples below 0.95 mm) are all
+    in the end-plate fillet toe, which tapers onto the wing and is bonded. **Skin is open to the owner
+    (OD17-FAIR-SKIN below).**
+- [ ] **OD17-FAIR-SKIN — Owner: fairing skin 2.0 mm (§7) or 1.0 mm (SLS min)?**
+    `AGENTS.md` §7 sets exterior shells at 2.0 mm; the SLS process minimum is 1.0 mm [REF-MFG-001 p. 15].
+    1.0 mm: shell 0.039 lbm (17.5 g) + foam 0.5 g per side, saves 0.026 lbm (11.6 g) per aircraft, needs
+    a §7 waiver; the outer half-thickness at the axis could then drop 1 mm toward the CFD shape
+    (OD17-FAIR-WALL).
+- [ ] **OD17-TOOLS-01 — One fairing module.** The NACA section, TE line,
+    loft and cap code is copied in `nacelle64_optD_aft_fairing.py`, `nacelle64_optD_glove.py`
+    and `od17_junction_cfd/geom.py`, and the copies differ: the TE half-thickness floor is 0.039 in (1.0 mm)
+    in the first two and 0.024 in (0.6 mm) in `geom.py`; the TE line is hard-coded in two and measured from the
+    wing in the third. Move it into `nacelle64_optD_concept.py` (or a new module) taking the wing as input
+    and pick one floor. The CFD end-plate bodies carried the 0.024 in (0.6 mm) edge, 0.016 in (0.4 mm)
+    thinner than the printed part; the effect on the drag comparison is not expected to matter but is not
+    measured. Done when the three tools import one module and the baseline volumes reproduce.
+- [ ] **WBS-BURNDOWN-01 — Count closures by identity, not by count.**
+    `wbs_burndown.py` reports `closed+` as the difference in checked-box counts, so archiving finished
+    sections lowers it and a file added since the baseline counts all its checked boxes as closures.
+    Record each box's item ID (or text) in the snapshot and count IDs newly checked. Done when a test
+    covers an archived section and a newly added file.

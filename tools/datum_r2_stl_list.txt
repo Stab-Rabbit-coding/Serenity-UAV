@@ -9,8 +9,6 @@ airframe/stls/fuselage/middle_shell24_2mm_repaired.stl
 airframe/stls/fuselage/rear_shell24_2mm_repaired.stl
 airframe/stls/nacelles/nacelle_port_64mm.stl
 airframe/stls/nacelles/nacelle_stbd_64mm.stl
-airframe/stls/nacelles/nacelle_port_revs.stl
-airframe/stls/nacelles/nacelle_stbd_revs.stl
 airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl
 airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl
 airframe/stls/wings/wing_port_s1223_revo.stl

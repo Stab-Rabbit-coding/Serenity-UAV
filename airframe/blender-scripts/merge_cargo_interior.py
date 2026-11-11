@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-merge_cargo_interior.py — Rev T5f (2026-09-21; Rev R1 2026-06-30 base)
+merge_cargo_interior.py — Rev U (2026-11-07; carried forward from Rev T5f, 2026-09-21; Rev R1 2026-06-30 base)
 
 Rev T5f (2026-09-21) — four belly-slab bosses for the cargo-door servo
   gateway tray (GW-CARGO-DOOR, docs/CARGO_DOOR_GATEWAY_SPEC.md) at Y -16..-2

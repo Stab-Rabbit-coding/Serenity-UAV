@@ -79,7 +79,14 @@ jobs:
           fetch-depth: 0
       - name: Install kicad-cli
         run: |
-          sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases
+          # add-apt-repository calls api.launchpad.net, which has failed from the runner with
+          # transient DNS/TLS/network errors (PR #281, 2026-11-11).  Retry the install setup with
+          # backoff; the validator below still runs in full and fails on any real ERC/DRC error.
+          for i in 1 2 3 4; do
+            sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases && break
+            [ "$i" = 4 ] && exit 1
+            sleep $((i * 15))
+          done
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends kicad
           kicad-cli --version
@@ -125,6 +132,10 @@ jobs:
         run: python3 tools/check_joint_register.py
       - name: Verify hull STLs ship as tarballs and inflated STLs stay ignored
         run: python3 tools/check_hull_tarballs.py --check
+      - name: Verify the 64 mm nacelle's SCAD closure and imports are live (no 50 mm or archived file)
+        run: python3 tools/check_nacelle_deps.py
+      - name: Verify BOM printed-part masses equal the mesh masses (BOM is the procurement output)
+        run: python3 tools/check_bom_mesh_sync.py
       - name: Verify the Operator's Manual is in sync with the flight limits (WBS 0.10.3)
         run: python3 tools/sync_operators_manual.py --check
       - name: Verify PROJECT_INDEX.md / ARCHIVE_INDEX.md / index_tags.json are in sync

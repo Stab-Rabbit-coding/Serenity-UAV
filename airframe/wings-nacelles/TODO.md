@@ -40,7 +40,6 @@
 ##### 1.1.3.7 *Rev S4 — fixed-spar trunnion, skewer removal, print readiness*
 → full detail: `WBS.md` §1.1.3.7
 
-- [ ] [OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not…
 - [ ] [OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still…
 - [ ] [OPEN — VERIFY] `serenity_assembly.py` still places the deleted parts
 
@@ -50,7 +49,6 @@
 - [ ] [OPEN — NEW, and it is a safety item] The bay is now an unfiltered…
 - [ ] [OPEN — the flow, not the geometry] Bay velocity is not verified
 - [ ] 50 A sustained is not survivable on any path evaluated
-- [ ] [OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn
 - [ ] Window structural allowance
 
 ##### 1.1.3.6 *Tilt-Angle Feedback — Hall Sensor at the Wing/Nacelle Joint*
@@ -71,11 +69,23 @@
 - [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
 - [ ] SPAR-20-ALLOW — No verified CF tube flexural allowable exists in…
 - [ ] SPAR-20-WIREOD — `bom_revS.csv` records no OD for `WIRE-10AWG`
+- [ ] NAC-64-FEED-THERM — Owner decision 2026-11-11 (ESC wire report…
+- [ ] NAC-64-DESIGN-AMPS — Owner decision 2026-11-11
+- [ ] NAC-64-PHASE-TEST — Owner decision 2026-11-11 (report Decision 3)
+- [ ] [CAUTION] NAC-64-FUSE-COORD — Owner decision 2026-11-11 (report…
 
 ## §1.1.5 — Nacelle Trunnion Pivot and Tilt Drive
 → full detail: `WBS.md` §1.1.5
 
 - [ ] SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision (§1.1.3.1…
 - [ ] SPAR-25-6 (U6) — Integration, load check, mass/CG, BOM, and the…
+
+## Findings 2026-11-11 (code review of the OD-17 tools, Claude Opus 5.5)
+→ full detail: `WBS.md` §5.5
+
+- [ ] OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side for the…
+- [ ] OD17-FAIR-SKIN — Owner: fairing skin 2.0 mm (§7) or 1.0 mm (SLS min)?
+- [ ] OD17-TOOLS-01 — One fairing module
+- [ ] WBS-BURNDOWN-01 — Count closures by identity, not by count
 
 ---

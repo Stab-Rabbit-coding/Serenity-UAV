@@ -1776,10 +1776,12 @@ markdownlint: MD013 must exempt tables/code/headings — a SKILL.md frontmatter
 
 ---
 name: project-esc70-nacelle-scale-hold
-description: QF2822-2400KV needs 70 A (not 80) for 2135 gf; both ESCs fit only with uniform nacelle scale 1.06 — HELD until servo linkage done (owner 2026-10-05)
+description: SUPERSEDED 2026-11-02 (specified motor is QF2822-2300KV, 80 A ESC; 2400KV never authorized). Historical: QF2822-2400KV needs 70 A (not 80) for 2135 gf; both ESCs fit only with uniform nacelle scale 1.06 — HELD until servo linkage done (owner 2026-10-05)
 metadata:
   type: project
 ---
+
+**SUPERSEDED (owner, 2026-11-02; restated 2026-11-11):** the specified motor is the QF2822-2300KV (2,370 gf, 24 V, 57.0 A, 80 A ESC). The 2400 KV was never specified or authorized; do not size anything from it. Historical record follows.
 
 2026-10-05: The owner requires 2135 gf per fan. REF-EDF-003 (2400 KV, 22.2 V) gives 57.0 A,
 so the ESCs are **70 A rated with a 70 A firmware current limit**. 80 A only covers an

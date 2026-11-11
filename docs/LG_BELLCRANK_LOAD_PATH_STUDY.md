@@ -22,7 +22,7 @@
 > `LOADPATH = "A1B"`.
 <!-- markdownlint-disable-next-line MD028 -->
 
-> **WARNING**
+> **CAUTION**
 >
 > The Rev R6 landing gear, as drawn and as resized by LG-REMASS, cannot carry
 > its own internal loads. In a 4 ft crash the hip pin, the printed clevis ears

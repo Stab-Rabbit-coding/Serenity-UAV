@@ -6,7 +6,7 @@
 //   into serenity_assembly.py at identity placement.
 // ===========================================================================
 // ============================================================
-// gateway_door_tray.scad -- Rev T5f (2026-09-21)
+// gateway_door_tray.scad -- Rev U (2026-11-07; carried forward from Rev T5f, 2026-09-21)
 // Card-edge tray for the cargo-door servo GATEWAY (GW-CARGO-DOOR: one
 // SKIPPER-CAN-PERIPH-GW-PCB built at N_STACKS=1, 49.0 x 25.5 x 1.6 mm, no
 // mounting holes -- see docs/CARGO_DOOR_GATEWAY_SPEC.md and

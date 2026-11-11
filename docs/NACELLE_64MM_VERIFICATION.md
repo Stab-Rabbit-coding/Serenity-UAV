@@ -195,6 +195,80 @@ released part `wing_tilt_pinion.scad`: brass, because at Lewis Y 0.277 (14T) a
 CF-PETG pinion only reaches FOS 2.86; required allowable ≥ 76 MPa. Learning:
 `docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md`.
 
+## 5d. Assembly, range-of-motion and cable check (Rev U, 2026-11-07) — `tools/nacelle64_assembly_check.py`
+
+Units: inches first, millimetres in parentheses (`AGENTS.md` §5); volumes are in³ (mm³).
+
+The live flattened SCAD pod (rendered fresh, because the published pod STL is stale, NAC-64-REBAKE), the
+published stage-2 cartridge, nozzle throat and ring, the trunnion rendered from SCAD, the QF2822 motor
+cans (Ø1.09 × 2.28 in (Ø27.8 × 58 mm), assumed), the Ø0.79 × 0.64 in (Ø20 × 16.3 mm) CF spar stub, the stbd
+wing mesh and the wing-tip pinion are placed in the nacelle-local frame (the frame
+`nacelle_tilt_joint_context.scad` uses). The hull R2 mapping is
+`x_l = x_h + 8.971 in (227.86 mm)`, `y_l = -(z_h - 5.781 in (146.851 mm))`,
+`z_l = (y_h - 13.362 in (339.4 mm)) + 4.319 in (109.7 mm)`. Booleans are exact (manifold3d). The pod render
+has 63 non-manifold edges (touching sheets) that the tool splits first. The port nacelle was checked as the
+X-mirror of the port-side pod render (`PYLON_SIDE=-1`); both sides give the same results to 0.1 %. The port
+pod is **not** an exact mirror of the stbd pod (10 % symmetric difference by volume: nav light, lead
+routes, swirl hand), so the numbers below were run on both.
+
+![Y=0 section, spar mouth and bay, pinion sweep](figures/nacelle64_sections.png)
+
+**Static fit at 0° tilt.** Pod ↔ cartridge overlap is 0.0007 in³ (12 mm³), rib/pad contact only. Pod,
+cartridge, trunnion, spar, wing tip pad and pinion are otherwise clear: pod–spar 0.039 in (1.0 mm),
+pod–wing 0.177 in (4.5 mm), trunnion–spar 0.012 in (0.30 mm), trunnion–wing pad 0.012 in (0.30 mm),
+spar–wing 0.007 in (0.18 mm), pinion–pod 0.020 in (0.5 mm). The wing-tip pinion lines up axially with the
+trunnion ring gear (both start at X 1.567 in (39.81 mm)).
+
+**Finding 1 (resolved).** The nozzle throat spigot (Ø2.52 in (Ø64 mm) bore, r 1.26–1.48 in (32–37.5 mm),
+0.12 in (3 mm) long) landed on the same annulus as the aft 0.12 in (3 mm) of the stage-2 cartridge, which
+ended at Z 7.84 in (199.1 mm), the nozzle ring station: **0.095 in³ (1,562 mm³) of interference** on both
+sides. The spigot was drawn to enter the pod sleeve; the cartridge occupied that sleeve. **Resolved
+2026-11-07 (owner OD-1, option A):** the cartridge now ends at Z 7.72 in (196.1 mm)
+(`edf_motor_mount_64mm.scad` `Z_AFT = P64_Z_NOZ − 3 mm`), as the nozzle source already assumed; the overlap
+is 0 on both sides (`tools/nacelle64_od1_figure.py`).
+
+![OD-1: spigot vs cartridge before, option A, option B](figures/nacelle64_od1_spigot_cartridge.png)
+
+**Tilt sweep −5…+135° (5° steps), tilting group vs wing, spar and pinion.** Tilt is positive with the
+exhaust swinging DOWN to the hover attitude (hull −Z). Pod, cartridge, nozzle and trunnion never touch the
+wing or the spar (wing gap ≥ 0.177 in (4.5 mm) at 0°). The trunnion ring against
+the fixed pinion shows ≤ 0.0016 in³ (26 mm³) overlap, which is tooth phase (the pinion is a rigid mesh here,
+in service it turns 50/14 times the tilt), not a clash. The pod material inside the volume the pinion sweeps
+relative to the pod is **0 in³ (0 mm³)** on both pods: the pod's annular relief channel (`tilt_drive_relief`,
+part-frame arc −6°…+151°) contains the whole sweep (right panel above).
+
+**Correction, 2026-11-07.** The first version of this section reported a *Finding 2*, 0.137 in³ (2,237 mm³) of
+pod material in the pinion sweep with first contact near 15° tilt. That was a sign error in my sweep: the
+tool tilted the exhaust up instead of down, so the pinion orbited the wrong side of the pod. NAC-64-GEOM-04 and
+the T6 relief work had already recorded "+theta sign corrected" and a clear sweep, and the wrong-sign numbers
+reproduced the pre-relief 474–1127 mm³ pattern in the WBS. The tool now has `tilt_matrix()` (hover = exhaust
+down) with a unit test. NAC-64-ASM-02 is retracted.
+
+**Cable allowance. Finding 3: the 4 × 10 AWG bundle (0.523 in (13.28 mm) circumscribed, 0.582 in (14.78 mm)
+with the 0.059 in (1.5 mm) twist clearance) cannot leave the spar bore in this pod.** The bore mouth (spar
+tip, X 1.489 in (37.81 mm)) is ≈ 0.04 in (1 mm) (one 0.030 in (0.75 mm) voxel) from the cartridge/duct wall,
+the largest free sphere on the mouth has radius 0.059 in (1.5 mm) against the 0.261 in (6.64 mm) needed, and
+no connected free path of any width exists from the mouth to the disconnect bay. **Finding 4:** the bay
+pocket exists (0.153 in³ (2.5 cm³) cut) but its floor does not: the 0.12 in (3.1 mm) behind the nominal
+floor plane is empty (0.0009 in³ (15 mm³) of material), so the 4 M3 stud inserts have nothing to seat in,
+and a 0.04 in (1 mm) skin (≈ 0.042 in³ (690 mm³) in the 0.19 in (4.9 mm) in front of the pocket mouth)
+covers the pocket on the face side. **Resolved 2026-11-08 (NAC-64-ASM-03, owner: 0.138 in (3.5 mm) bay insert):** floor
+kept out of the cavity (91 % solid, the rest is the insert bores), mouth cut through the skin (0 in³ (0 mm³) left), insert-to-bore
+wall ≥ 0.091 in (2.31 mm) on both pods (`--stage bay`, `figures/nacelle64_bay_stud_after.png`). This confirms the owner note that the route is not solved (WA-R10
+stays open) and says the hollowing did not solve it. The roll-up's 3.11 in (79 mm) per wire is a mass
+estimate, not a routed length, so there is no routed length to compare it with. The repo cites
+NASA-STD-8739.4A Table 7-1 (minimum 3 × OD, optimum 10 × OD for AWG 10 and smaller): that is 0.65 in
+(16.5 mm) for one 0.217 in (5.5 mm) wire and 1.57 in (39.8 mm) for the 0.523 in (13.28 mm) bundle. I have not
+checked the standard itself. No twist criterion for 140° of tilt exists in the repo.
+
+**Not covered.** Nozzle flaps and iris linkage (placement not in the published parts), rotor blades, ESC
+boards and bay covers (unpublished), bearings (not modeled), hull and ground clearance, leads. Voxel pitch
+0.030 in (0.75 mm) grows solids by about half a pitch, which is conservative for clearance.
+
+Reproduce: render the pod (`openscad -o pod.stl -D NACELLE_SIDE=-1 -D PYLON_SIDE=-1 nacelle_pod_64mm_tandem.scad`
+or the default for stbd, ≈ 11 min each) and the trunnion (`nacelle_trunnion_64mm.scad`, 10 s), then
+`python3 tools/nacelle64_assembly_check.py --pod pod.stl --trunnion trunnion.stl --figs docs/figures`.
+
 ## 6. Install and removal (owner requirement)
 
 See WBS NAC-64-SVC-01. Rotor 1 now sits in the straight duct behind the lip and services through
