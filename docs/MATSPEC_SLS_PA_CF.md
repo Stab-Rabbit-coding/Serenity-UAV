@@ -1,6 +1,6 @@
 # Material specification MS-SLS-PACF — SLS DuraForm PA CF flight parts
 
-**Revision:** Rev U, 2026-11-11, issue A (interim: no build-axis data). **Status:** proposed; owner
+**Revision:** Rev U, 2026-11-11, issue B (build-axis factors from proxy data; coupons pending). **Status:** proposed; owner
 approval required. **Applies to:** every Serenity UAV part printed in DuraForm PA CF (`AGENTS.md` §7:
 hull sections, nacelle pods, collars, brackets, trays, gears, wing skins, fairings).
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (owner) — drafted by Claude (Anthropic, Claude
@@ -51,10 +51,15 @@ material from another maker, ALM PA 602-CF (23 % carbon-filled PA12, sheet in
    credit for yield.
 2. **Orientation.** Where the drawing fixes the build orientation so that the principal stress lies in
    the build plane, design to the XY typical value. **Where it does not, or where the load path
-   crosses layers, design to 0.5 x the typical value** (`sls_materials.Z_KNOCKDOWN_PA_CF`, ASSUMED).
-   The general SLS figure of about 10-15 % Z loss for unfilled PA12 (`3d-print-design` reference,
-   uncited) does **not** transfer to a 33 % fibre-filled powder, whose fibres lie in the recoated
-   layers. Only coupons settle it.
+   crosses layers, design to 0.44 x the typical strength and 0.35 x the typical modulus**
+   (`sls_materials.Z_STRENGTH_PA_CF`, `Z_MODULUS_PA_CF`). Where the load is in-plane but its
+   direction within the layer is not controlled, use 0.65 x strength and 0.41 x modulus (`Y_*`).
+   Source: the closest published 33 % carbon-fibre PA12 data, ALM PA 603-CF (EOS datasheet,
+   ASTM D638: Z/X 0.44 strength, 0.35 modulus) and Protolabs UK PA12 Carbon Filled Black
+   (ISO 527: 0.53, 0.35); `reports/SLS Z axis strength.md`. ESTIMATE: neither is DuraForm PA CF, the
+   values are means, and no filled-SLS flexural Z data exist (apply the tensile ratios to flexure).
+   Unfilled SLS PA12 loses only about 10 % in Z; carbon fibre aligned in the recoat direction is why
+   this powder loses more than half. Coupons (§8) settle it.
 3. **Factors of safety.** Load-bearing parts: 1.5 basic x 1.5 special = **2.25** on limit load
    (declared judgment after the 14 CFR §23.2265 special-factor model, REF-FAA-002). The special factor
    covers both process variability and the gap between typical and statistically based values.
@@ -69,7 +74,7 @@ material from another maker, ALM PA 602-CF (23 % carbon-filled PA12, sheet in
    Parts that run above 140 °F (60 °C) (nacelle pods near the motors, ESC bays) shall be checked by
    coupon at the service temperature. Moisture: test coupons conditioned per ASTM D618.
 7. **Stiffness.** Use flexural modulus for skins and bending, tensile modulus for struts and members,
-   each x 0.5 when orientation is not fixed.
+   each x 0.35 when orientation is not fixed.
 
 ## 3. Build orientation (mandatory)
 
@@ -98,7 +103,7 @@ material from another maker, ALM PA 602-CF (23 % carbon-filled PA12, sheet in
 | Feature | Rule | Source |
 |---|---|---|
 | Minimum wall | per `docs/SLS_MIN_WALL_THICKNESS.md`; **interim floor 0.059 in (1.5 mm)** for this filled powder | corrected 2026-11-11, see §6 |
-| Load-bearing free-standing wall | 0.098 in (2.5 mm) any orientation; 0.077 in (2.0 mm) XY fixed | stiffness parity with the old CF-PETG basis |
+| Load-bearing free-standing wall | 0.110 in (2.8 mm) any orientation; 0.077 in (2.0 mm) XY fixed | stiffness parity with the old CF-PETG basis |
 | Running clearance | at least 0.012 in (0.3 mm); 0.008 in (0.2 mm) minimum | REF-MFG-001 pp. 7, 12 |
 | Hole diameter | at least 0.059 in (1.5 mm) recommended | `3d-print-design` reference (uncited) |
 | Long sections, mounting | elongate one hole at least 0.2 in per 4 in (5 mm per 100 mm) | REF-MFG-001 p. 13 |
@@ -129,7 +134,7 @@ minimum for this powder. Logged as WBS SLS-WALL-FLOOR.
 6. **First article**: the first build of each flight part shall be proof-loaded to limit load where
    a test fixture exists.
 
-## 8. Coupon test plan (replaces the 0.5 assumption)
+## 8. Coupon test plan (qualifies the §2 proxy factors)
 
 | Test | Standard | Orientations | Count |
 |---|---|---|---|
@@ -147,9 +152,8 @@ catalogue them, with editions, before the plan is issued.
 
 ## 9. Open items
 
-- PA CF build-axis data: none published by 3D Systems (checked 2026-11-11). Get it from the service
-  bureau, from a literature search (open-access hosts are not yet allowed in this environment), or
-  from §8.
+- PA CF build-axis data: none published by 3D Systems (checked 2026-11-11). Proxy factors in §2 from
+  `reports/SLS Z axis strength.md`; production-machine coupons (§8) replace them.
 - Minimum wall for this powder: ask the bureau (SLS-WALL-FLOOR).
 - Foam-core properties for foam-filled parts: no datasheet for FOAM-PU-2LB.
 - Elevated-temperature and fatigue data: none.

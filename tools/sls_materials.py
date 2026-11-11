@@ -10,11 +10,12 @@ Values are the datasheet XY numbers, verbatim (ASTM column):
   PA12   DuraForm PA12 Black (2025-04-03)               [REF-MAT-017]
 
 `design(mat, key)` returns the value to size against when the build
-orientation is NOT fixed: PA CF strengths and moduli are multiplied by
-Z_KNOCKDOWN_PA_CF because 3DS-30108A gives no Z data (fibre-filled SLS is
-weakest across layers).  0.5 is ASSUMED, the same placeholder WBS already
-carries ("Obtain PA CF build-axis (Z) tensile and flexural data ... replacing
-the 0.5 knockdown").  PA11 is used at face value: its sheet states "more
+orientation is NOT fixed: PA CF strengths x Z_STRENGTH_PA_CF (0.44) and moduli x
+Z_MODULUS_PA_CF (0.35), because 3DS-30108A gives no Z data (fibre-filled SLS is
+weakest across layers).  The factors come from the closest published 33 %
+carbon-fibre PA12 data (see the constants below); they replaced the 0.5
+ASSUMED placeholder on 2026-11-11 and remain ESTIMATE until coupons.
+PA11 is used at face value: its sheet states "more
 consistent isotropic performance" [REF-MAT-016].  No compressive or bearing
 value is published for any of the three; COMPRESSIVE is set to the tensile
 ultimate, flagged ASSUMED (polyamides are not weaker in compression than in
@@ -73,16 +74,35 @@ def sls_from_fdm_mass(mass_g, mat=None):
     return mass_g * rho_g_mm3(mat or PA_CF) / RHO_FDM_BULK_G_MM3
 
 
-Z_KNOCKDOWN_PA_CF = 0.5  # ASSUMED until Z coupons / vendor data (WBS)
-_KNOCKED = ("tensile_ult_mpa", "tensile_mod_mpa", "flex_strength_mpa",
-            "flex_mod_mpa", "compressive_mpa")
+# Build-axis (Z) knockdowns for PA CF, replacing the single 0.5 ASSUMED factor (2026-11-11).
+# Source: reports/SLS Z axis strength.md.  The closest published proxy is ALM PA 603-CF (also 33 %
+# carbon-fibre PA12, X values within ~2 % of 3DS-30108A), EOS datasheet page, ASTM D638:
+# Z/X strength 37/85 = 0.44, Z/X modulus 3000/8600 = 0.35; Protolabs UK PA12 Carbon Filled Black
+# (DIN EN ISO 527) corroborates (0.53, 0.35).  ESTIMATE: neither is DuraForm PA CF, the values are
+# means, and no filled-SLS flexural Z data exist, so flexural values take the tensile ratios.
+# Only X/Y/Z coupons on the production machine (docs/MATSPEC_SLS_PA_CF.md section 8) qualify them.
+Z_STRENGTH_PA_CF = 0.44
+Z_MODULUS_PA_CF = 0.35
+Z_ELONGATION_PA_CF = 0.58     # Protolabs UK Z/X 2.2/3.2 (the lower of the two proxies)
+#: In-plane but direction not controlled (Y): strength 0.65, modulus 0.41 (Protolabs UK, the lower).
+Y_STRENGTH_PA_CF = 0.65
+Y_MODULUS_PA_CF = 0.41
+#: Kept for callers that want one number: the strength factor (the old 0.5 overstated Z by ~14 %).
+Z_KNOCKDOWN_PA_CF = Z_STRENGTH_PA_CF
+_STRENGTH_KEYS = ("tensile_ult_mpa", "flex_strength_mpa", "compressive_mpa")
+_MODULUS_KEYS = ("tensile_mod_mpa", "flex_mod_mpa")
 
 
 def design(mat, key):
     """Orientation-agnostic design value (PA CF knocked down for Z)."""
     v = mat[key]
-    if mat is PA_CF and key in _KNOCKED:
-        v *= Z_KNOCKDOWN_PA_CF
+    if mat is PA_CF:
+        if key in _STRENGTH_KEYS:
+            v *= Z_STRENGTH_PA_CF
+        elif key in _MODULUS_KEYS:
+            v *= Z_MODULUS_PA_CF
+        elif key == "elong_break_pct":
+            v *= Z_ELONGATION_PA_CF
     return v
 
 

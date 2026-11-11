@@ -26,8 +26,8 @@ Failure modes checked (each case reports the governing one):
 Inputs and their status (ASSUMED values are declared engineering judgment, not allowables):
   PA CF flexural modulus 7,000 MPa and strength 140 MPa, XY, TYPICAL (3DS-30108A, REF-MAT-015,
   via tools/sls_materials.py).  Typical values are not design allowables.
-  Z knockdown 0.5 when the build orientation is not fixed
-  (ASSUMED, sls_materials.Z_KNOCKDOWN_PA_CF).
+  Z knockdowns when the build orientation is not fixed: strength 0.44, modulus 0.35
+  (ESTIMATE from 33 % CF-PA12 proxy data, sls_materials.Z_STRENGTH_PA_CF / Z_MODULUS_PA_CF).
   Poisson ratio 0.35 (ASSUMED, unfilled-polyamide order of magnitude; no PA CF value published).
   CF-PETG flexural modulus 6,670 MPa (repo MASS_AUDIT_CARGO_WING_ROOT.md section 1, REF-MAT-002).
   Handling load 10 lbf (44.5 N) on a 0.25 in (6.35 mm) radius contact (ASSUMED: a firm thumb press;
@@ -90,8 +90,7 @@ def props(orient: str) -> tuple[float, float]:
     mat: dict[str, Any] = sm.PA_CF
     e, s = float(mat["flex_mod_mpa"]), float(mat["flex_strength_mpa"])
     if orient == "any":
-        k = sm.Z_KNOCKDOWN_PA_CF
-        e, s = e * k, s * k
+        e, s = e * sm.Z_MODULUS_PA_CF, s * sm.Z_STRENGTH_PA_CF
     return e, s
 
 
@@ -177,7 +176,8 @@ def main(argv: list[str] | None = None) -> int:
                  "t_process_mm": T_PROC, "t_stiffness_parity_mm": t_stiff,
                  "wrinkling_stress_mpa": wrink, "cases": {}}
     print(f"PA CF, orientation '{args.orient}': E_flex {e:.0f} MPa, sigma_flex {s:.0f} MPa "
-          f"(typical, REF-MAT-015{'; Z knockdown 0.5 ASSUMED' if args.orient == 'any' else ''})")
+          f"(typical, REF-MAT-015"
+          f"{'; Z factors 0.44 / 0.35 ESTIMATE' if args.orient == 'any' else ''})")
     print(f"process floor {inch(T_PROC)}; stiffness parity with 2.0 mm CF-PETG {inch(t_stiff)}")
     for lb, fos in (("non-load-bearing", FOS_NLB), ("load-bearing", FOS_LB)):
         res: dict = {}

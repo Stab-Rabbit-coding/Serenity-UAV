@@ -322,16 +322,23 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     on every drawing, 2.25 factor for load-bearing parts, process record per build, witness coupons,
     mass check ±3 %, and an ASTM D638/D790/D953 coupon plan in X/Y/Z that replaces the 0.5 assumed
     Z knockdown. 3D Systems publishes no Z data (3DS-30108A re-read 2026-11-11).
+    **2026-11-11 update:** proxy build-axis factors adopted in `tools/sls_materials.py` from
+    `reports/SLS Z axis strength.md` (ALM PA 603-CF ASTM D638, Protolabs UK ISO 527): Z strength
+    0.44, Z modulus 0.35, Z elongation 0.58; in-plane uncontrolled 0.65 / 0.41. ESTIMATE until
+    production-machine coupons. Knock-on: `lg_bellcrank_fbd.py` PA CF bearing capacity down 12 %
+    (already-failing items still fail; spreader discs +1 mm, +1.5 g per aircraft);
+    `gen_head_cell_rail.py` design values change on its next run.
 - [ ] **SLS-WALL-FLOOR — The 1.0 mm "SLS process floor" was a mis-citation**
     REF-MFG-001 p. 15's ">1mm" is the wall of a pressure-tight SLS tank, not a minimum wall.
     `tools/sls_min_wall.py` now uses an interim 1.5 mm floor for the 33 % carbon-filled powder;
     `tools/sls_dfm_audit.py` (MIN_WALL_MM 1.0) still cites p. 15. Get the bureau's minimum wall for
     DuraForm PA CF, then fix the audit constant and its citation.
 - [ ] **SLS-WALL-STIFF — 2.0 mm SLS load-bearing skins, unfixed orientation**
-    Finding from OD-19: a 2.0 mm PA CF skin whose print orientation is not fixed has about 52 % of
-    the bending stiffness (E t³, Z knockdown 0.5 ASSUMED) of the 2.0 mm CF-PETG skin the existing
-    hull, collar and pod analyses assumed. Review each load-bearing SLS shell: fix its orientation
-    on the drawing, thicken it toward 2.5 mm, add ribs/lattice, or obtain Z-axis coupon data.
+    Finding from OD-19: a 2.0 mm PA CF skin whose print orientation is not fixed has about 37 % of
+    the bending stiffness (E t³, Z modulus factor 0.35 from 33 % CF-PA12 proxy data; 52 % under the
+    old 0.5 assumption) of the 2.0 mm CF-PETG skin the existing hull, collar and pod analyses
+    assumed. Review each load-bearing SLS shell: fix its orientation on the drawing, thicken it
+    toward 2.8 mm, add ribs/lattice, or obtain Z-axis coupon data.
 
 
 ## §1.1.5 — Non-Printable Component Placeholders
