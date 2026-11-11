@@ -110,7 +110,7 @@ for x in (X0F, X_TIP):
 # vs wing-fixed parts at rest
 man = {k: a.to_man(v) for k, v in parts.items()}
 pod = man['pod'] + boss
-worst = {}
+worst: dict[str, float] = {}
 for tdeg in np.arange(a.TILT_MIN, a.TILT_MAX + 0.1, 5.0):
     T = np.asarray(a.tilt_matrix(tdeg)[:3, :4], float)
     for k, mn in (('pod+collar', pod), ('trunnion',
