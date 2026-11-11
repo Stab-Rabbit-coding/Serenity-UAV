@@ -2484,7 +2484,9 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             sized for **70 A** — an 80 A ESC may not fit at scale 1.06 (owner decision);
             (d) PWR-CONN-01 / fuse sizing against 57.0 A per fan; (e) the 2135 gf record below
             is historical.
-        - [ ] **NAC-64-ESC-80A.m — 70 A is sufficient (2026-10-05, Claude Opus
+        - [ ] **NAC-64-ESC-80A.m — SUPERSEDED 2026-11-02 by NAC-64-EDF-2300KV (the 2400 KV basis
+            below was never specified or authorized; 80 A ESCs per the 2300 KV sheet). Historical:
+            70 A is sufficient (2026-10-05, Claude Opus
             5.5; owner requirement 2135 gf per fan).** REF-EDF-003 2400 KV row: 22.2
             V, 57.0 A, 1265.4 W, 2135 g. Static fan laws (T ∝ n², P ∝ n³; aero
             skill propulsion §2): 2135 gf needs the same n and ≈ the same 1265 W

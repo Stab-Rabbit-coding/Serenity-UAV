@@ -8,6 +8,7 @@ input traced to those notes.
 - Sustained (VTOL hover, the whole mission): 33 A at 24 V, up to about 38 A at 21.0 V late in the pack.
 - Peak: 57 A at 24 V full throttle; 60 A / 10 s datasheet limit.
 - Phase-lead RMS (ESTIMATE, ideal six-step): about 35 A hover, about 46.5 A full throttle.
+- **Owner correction (2026-11-11):** the QF2822-2300KV is the specified motor (owner correction 2026-11-02, REF-EDF-003). No other variant is specified or authorized; the item below is a procurement check only.
 - Conflict to flag: the QX-Motor product page lists QF2822 KV options 2200/2400/3500/3800/4300 and
   no 2300 KV (verified_phase_lead.md), while the repository holds a QX-Motor-branded 2300 KV
   instruction-manual image linked from qx-motor.co/product/2365/ (REF-EDF-003). The 2300 KV sheet's
