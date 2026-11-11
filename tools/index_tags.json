@@ -10533,6 +10533,20 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_od17_cfd_sections.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_cfd_wall_shear.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_od17_glove_compare.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -16134,6 +16148,34 @@
       ],
       "archived": false
     },
+    "tools/od17_junction_cfd/geom.py": {
+      "description": "od17_junction_cfd/geom.py -- OD-17 fairing-to-wing junction CFD screen. Build the two CFD bodies (1.5 in glov\u2026",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/od17_junction_cfd/mkcase.py": {
+      "description": "od17_junction_cfd/mkcase.py -- OD-17 fairing-to-wing junction CFD screen. Write an OpenFOAM v1912 simpleFoam\u2026",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/od17_junction_cfd/post.py": {
+      "description": "od17_junction_cfd/post.py -- OD-17 fairing-to-wing junction CFD screen. Post-process: averaged drag, reversed\u2026",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/od17_junction_cfd/run.sh": {
+      "description": "!/bin/bash",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/open_mating_faces.py": {
       "description": "Open (and keep open) the six fuselage-section mating-face apertures.",
       "tags": [
@@ -16732,6 +16774,8 @@
       "docs/figures/nacelle64_od17_aft_fairing_horizontal.png",
       "docs/figures/nacelle64_od17_aft_fairing_section.png",
       "docs/figures/nacelle64_od17_aft_fairing_vertical.png",
+      "docs/figures/nacelle64_od17_cfd_sections.png",
+      "docs/figures/nacelle64_od17_cfd_wall_shear.png",
       "docs/figures/nacelle64_od17_glove_compare.png",
       "docs/figures/nacelle64_od17_optD_horizontal.png",
       "docs/figures/nacelle64_od17_optD_tip_extension.png",
@@ -20553,6 +20597,10 @@
       "tools/nozzle_servo_linkage_64.py",
       "tools/observer_board_envelope.py",
       "tools/observer_nose_fit.py",
+      "tools/od17_junction_cfd/geom.py",
+      "tools/od17_junction_cfd/mkcase.py",
+      "tools/od17_junction_cfd/post.py",
+      "tools/od17_junction_cfd/run.sh",
       "tools/open_mating_faces.py",
       "tools/placement_audit.py",
       "tools/plot_battery_bay.py",

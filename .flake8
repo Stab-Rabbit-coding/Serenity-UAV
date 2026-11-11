@@ -12,3 +12,5 @@ per-file-ignores =
     tools/sync_operators_manual.py: E501,E203
     # Plan-folder analysis scripts: sys.path is set before imports and lines carry data tables.
     docs/plans/*/tools/*.py: E227,E401,E402,E501,E741,F401
+    # OD-17 junction CFD scripts: lines carry OpenFOAM dictionary text and vertex tables.
+    tools/od17_junction_cfd/*.py: E402,E501,E702,F541

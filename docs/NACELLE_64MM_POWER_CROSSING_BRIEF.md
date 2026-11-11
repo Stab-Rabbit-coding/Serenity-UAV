@@ -201,7 +201,70 @@ slope.
 but only after a CFD check of the junction, because a 21° flare can itself separate at this Reynolds
 number. If you want to keep the canonical wing, take option 4 with fillets 1 and 2.
 
+## Junction CFD: 1.50 in glove vs rounded end plate with fillets (owner direction, 2026-11-11)
+
+**Setup** (`tools/od17_junction_cfd/`):
+- **Solver:** OpenFOAM v1912 (Ubuntu package), steady incompressible `simpleFoam`, k-ω SST with the
+  Spalding wall function.
+- **Flow:** 40 kt (20.58 m/s) along the chord, ν = 1.46 × 10⁻⁵ m²/s, inlet turbulence 0.5 %; tip
+  Re ≈ 131,000.
+- **Domain:** a spanwise strip from the nacelle flank (X 1.89 in (48 mm)) to near the wing root (X 6.50 in
+  (165 mm)), with slip walls at both ends and far field 1.8 in (45 mm) above and below.
+- **Body:** wing + collar nose + aft fairing + the transition under test.
+  - **Glove:** the 1.50 in (38 mm) smoothstep glove.
+  - **End plate:** the fairing ends in a 0.24 in (6 mm) convex rounding and a short wall, and a
+    0.24 in (6 mm) concave fillet runs around the whole perimeter into the wing. The fillet ahead of the
+    collar is part of that same perimeter fillet.
+- **Mesh:** snappyHexMesh, 1.16 M cells (glove) and 1.23 M cells (end plate), `checkMesh` OK, 3 prism
+  layers; y+ median 5.0 / 4.1, 95th percentile 14.3 / 13.4.
+- **Averaging:** the separated wake keeps the steady solution oscillating, so drag and reversed-flow area
+  are averaged over the saved iterations 1,500–2,000 and their standard deviation is reported.
+- **Post-processing:** forces and wall shear are computed from the near-wall cells (pressure +
+  (ν + ν_t)·∂U/∂n). This OpenFOAM build cannot run function objects.
+
+| | 1.50 in glove | Rounded end plate + fillets |
+|---|---|---|
+| Drag of the strip (wing segment + fairing + junction) | **0.171 lbf (0.759 N)**, sd 0.005 lbf (0.022 N) | **0.146 lbf (0.650 N)**, sd 0.004 lbf (0.016 N) |
+| of which pressure / viscous | 0.166 / 0.005 lbf (0.737 / 0.022 N) | 0.140 / 0.006 lbf (0.624 / 0.026 N) |
+| Drag area C_D·A | 4.53 in² (2,924 mm²) | 3.88 in² (2,506 mm²) |
+| Reversed-flow area, junction strip X 2.95–5.12 in (75–130 mm) | 8.52 in² (5,496 mm²), sd 1.37 in² (886 mm²), of 21.3 in² | 6.86 in² (4,425 mm²), sd 1.35 in² (874 mm²), of 21.8 in² |
+
+![Streamwise wall shear, top and bottom (blue = reversed flow)](figures/nacelle64_od17_cfd_wall_shear.png)
+
+![Velocity sections at X 3.27, 3.74, 4.33 in with flow vectors](figures/nacelle64_od17_cfd_sections.png)
+
+**What it shows.**
+1. **The end plate has 14 % less drag than the glove:** 0.146 vs 0.171 lbf, a difference about 5 times
+   the iteration-to-iteration spread. The glove carries the thick, separating section about 1.5 in
+   further inboard (sections at X 3.74 in (95 mm)). The end plate keeps it to the gap, at the price of a
+   trailing vortex off the end-plate edge (the disturbed region above the wing at X 3.74 in).
+2. **Both lose most of their drag to separation on the fairing's upper aft surface.** That is the dark
+   region in the X 3.27 in (83 mm) sections, and it reaches the trailing edge. With t/c 0.61–0.76
+   (fineness 1.31–1.64) the fairing behaves as a bluff body at this Reynolds number. Pressure drag is
+   96–97 % of the total in both cases. The biggest remaining lever is the fairing itself: a longer tail
+   past the TE line, or a thinner collar, not the junction shape.
+3. **Reversed-flow area** is lower for the end plate, but the difference is about one standard deviation,
+   so on its own it is not decisive.
+4. **The clean wing shows trailing-edge separation in both runs** (26 % of the reference strip is
+   reversed). That is the built tip section, not the junction, and it is the same in both cases.
+
+**Limits (read before relying on the numbers):**
+- One mesh; no grid-convergence study.
+- Fully turbulent RANS. There is no transition model, and at Re ≈ 131,000 the real flow has laminar
+  separation bubbles that this does not capture. Absolute drag is therefore uncertain; the comparison
+  between the two options is the useful result.
+- Steady solver with an oscillating wake, averaged over 6–11 snapshots.
+- Slip walls stand in for the nacelle flank and the fuselage. The rotating collar is modelled as a static
+  solid with no running gaps.
+- Cruise only (0° tilt, 0° incidence, 40 kt); no hover or incidence sweep.
+- The wall-shear map has speckle near the leading edge where the near-wall probe lands in a neighbouring
+  cell; the integrated numbers are not sensitive to it.
+
+**Conclusion for OD-17:** of the two, the **rounded end plate with fillets** is better: less drag, the
+same or less reversed flow, no added wing mass, and the canonical wing is kept.
+
 ## Recommendation
+
 
 
 
