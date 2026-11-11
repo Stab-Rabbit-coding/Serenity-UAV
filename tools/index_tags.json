@@ -13656,6 +13656,13 @@
       ],
       "archived": false
     },
+    "docs/solutions/runtime-errors/autopep8-splits-fstrings-that-only-python312-can-parse.md": {
+      "description": "autopep8 can split f-strings in a way only Python 3.12+ parses",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md": {
       "description": "CuraEngine hangs or crashes on an STL with overlapping faces trimesh reports as watertight",
       "tags": [
@@ -17122,6 +17129,7 @@
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "docs/solutions/logic-errors/mesh-boolean-layout-proofs-silent-zero-volumes-and-shared-profiles.md",
       "docs/solutions/logic-errors/twisted-extrusion-worm-thread-needs-a-transverse-section-from-the-lead.md",
+      "docs/solutions/runtime-errors/autopep8-splits-fstrings-that-only-python312-can-parse.md",
       "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md",
       "docs/solutions/runtime-errors/pcbnew-flip-segfault-before-board-add.md",
       "docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md",
