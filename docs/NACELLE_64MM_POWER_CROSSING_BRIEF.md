@@ -263,6 +263,30 @@ number. If you want to keep the canonical wing, take option 4 with fillets 1 and
 **Conclusion for OD-17:** of the two, the **rounded end plate with fillets** is better: less drag, the
 same or less reversed flow, no added wing mass, and the canonical wing is kept.
 
+## Longer-tail CFD: trailing edge 22.8 deg to 11.9 deg (2026-11-11)
+
+Same solver, mesh settings, averaging and limits as the junction CFD above. Both bodies carry the approved
+rounded end plate with fillets. The longer-tail wing is the real OpenSCAD wing re-rendered with tip chord
+3.66 in (93 mm) to 4.37 in (111 mm), spar-bore dihedral set to 0.025 in (0.63 mm) so the model builds; the
+fairing follows the new trailing-edge line.
+
+| | Current TE (22.8 deg) | Longer tail (11.9 deg) |
+|---|---|---|
+| Drag of the strip | 0.146 lbf (0.650 N), sd 0.004 lbf | **0.118 lbf (0.526 N)**, sd 0.003 lbf |
+| of which pressure / viscous | 0.140 / 0.006 lbf (0.624 / 0.026 N) | 0.111 / 0.007 lbf (0.496 / 0.030 N) |
+| Drag area C_D*A | 3.88 in^2 (2,506 mm^2) | 3.14 in^2 (2,028 mm^2) |
+| Reversed-flow area, junction strip | 6.86 in^2 (4,425 mm^2), sd 1.35 | 6.40 in^2 (4,131 mm^2), sd 0.69 |
+| Cells | 1.23 M | 1.25 M |
+
+Drag falls 19 % (0.028 lbf (0.125 N), about 8 times the iteration spread), with the strip carrying a larger
+wing. Reversed-flow area falls 7 %, within the spread. The clean-wing reference region shows 0.31 reversed
+against 0.26, so the longer tail does not remove trailing-edge separation on the wing itself. Same single
+mesh, fully turbulent, 0 deg, slip-wall limits as above.
+
+![Wall shear, both cases](figures/nacelle64_od17_tail_cfd_wall_shear.png)
+
+![Sections, both cases](figures/nacelle64_od17_tail_cfd_sections.png)
+
 ## Owner decisions on OD-17 (2026-11-11)
 
 - **Junction: DECIDED. Rounded end plate with fillets** (0.24 in (6 mm) convex rounding, short wall, 0.24 in
