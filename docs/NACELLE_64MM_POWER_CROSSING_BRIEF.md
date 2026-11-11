@@ -291,7 +291,8 @@ mesh, fully turbulent, 0 deg, slip-wall limits as above.
 
 - **Junction: DECIDED. Rounded end plate with fillets** (0.24 in (6 mm) convex rounding, short wall, 0.24 in
   (6 mm) concave fillet), not the 1.50 in glove. Basis: the junction CFD above (14 % less drag).
-- **Longer tail: OPEN, owner decides 2026-11-12.** Direction given: keep the trailing edge a straight
+- **Longer tail: DECIDED 2026-11-11, REJECTED. Keep the 22.8 deg trailing-edge taper** (tip chord 3.66 in (93 mm), spar-bore dihedral unchanged). Owner: the improvement is real but not enough to matter for flight performance. CFD basis: 19 % less strip drag, reversed-flow area within the spread. The note below is kept as history.
+- ~~Longer tail: OPEN, owner decides 2026-11-12.~~ Direction given: keep the trailing edge a straight
   linear taper, and rotate it toward (not all the way to) parallel with the leading edge. Case in
   progress: tip chord 3.66 in (93 mm) to 4.37 in (111 mm), trailing-edge angle 22.8 deg to 11.9 deg, root
   chord and leading edge unchanged, fairing following the new line (t/c 0.77-0.60 to 0.52-0.47). Needs the
