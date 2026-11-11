@@ -1,37 +1,37 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 68121908.87919217,
-   "T_W": 1.4249486376546932,
+   "I_pitch_gmm2": 68099732.74862291,
+   "T_W": 1.4304431929095456,
    "cg": [
-    -0.09046857450708978,
-    351.99686306873116,
-    155.64703944748595
+    -0.09081741836596394,
+    351.90075830369494,
+    155.6822364313087
    ],
-   "k_pitch_mm": 101.1902901250666,
-   "mass_g": 6652.871373387201
+   "k_pitch_mm": 101.36869203359582,
+   "mass_g": 6627.316657516137
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 68516839.74002095,
-   "T_W": 1.4040551834808108,
+   "I_pitch_gmm2": 68493799.09421156,
+   "T_W": 1.4093894894774002,
    "cg": [
-    -0.08914206984180485,
-    351.5086444310365,
-    156.13608062023602
+    -0.08948073963434583,
+    351.41209931848454,
+    156.17261753604225
    ],
-   "k_pitch_mm": 100.73643598566996,
-   "mass_g": 6751.871373387201
+   "k_pitch_mm": 100.9106429601593,
+   "mass_g": 6726.316657516137
   },
   "hover_4000": {
-   "I_pitch_gmm2": 68339451.34884077,
-   "T_W": 1.4528576712071855,
+   "I_pitch_gmm2": 68315694.85237712,
+   "T_W": 1.4585699982839784,
    "cg": [
-    -0.09224049134299778,
-    351.33515369380746,
-    157.07580721229726
+    -0.09260316131867233,
+    351.23455752032123,
+    157.11731388512752
    ],
-   "k_pitch_mm": 102.33945754959684,
-   "mass_g": 6525.071373387201
+   "k_pitch_mm": 102.52262430337356,
+   "mass_g": 6499.516657516137
   }
  },
  "nacelle_printed_unit_g": {
@@ -322,24 +322,24 @@
   },
   {
    "cg": [
-    184.6,
-    373.8,
-    146.7
+    182.2,
+    372.1,
+    146.8
    ],
    "kind": "PRINT",
-   "mass_g": 36.41,
+   "mass_g": 23.25,
    "name": "wing_tip_fairing_port",
    "ref": "PRINT-WING-TIP-FAIRING",
    "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc (hull frame)"
   },
   {
    "cg": [
-    -184.6,
-    373.8,
-    146.7
+    -182.2,
+    372.1,
+    146.8
    ],
    "kind": "PRINT",
-   "mass_g": 36.41,
+   "mass_g": 23.25,
    "name": "wing_tip_fairing_stbd",
    "ref": "PRINT-WING-TIP-FAIRING",
    "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc (hull frame)"
@@ -1978,6 +1978,30 @@
   },
   {
    "cg": [
+    188.7,
+    376.9,
+    146.5
+   ],
+   "kind": "GAP",
+   "mass_g": 0.38,
+   "name": "Wing-tip fairing foam core (port)",
+   "ref": "GAP",
+   "source": "fairing cavity x 2 lb/ft3 foam; nacelle64_wing_fairing.py foam centroid"
+  },
+  {
+   "cg": [
+    -188.7,
+    376.9,
+    146.5
+   ],
+   "kind": "GAP",
+   "mass_g": 0.38,
+   "name": "Wing-tip fairing foam core (stbd)",
+   "ref": "GAP",
+   "source": "fairing cavity x 2 lb/ft3 foam; nacelle64_wing_fairing.py foam centroid"
+  },
+  {
+   "cg": [
     0.0,
     45.7,
     200.0
@@ -2087,9 +2111,9 @@
  ],
  "subtotals_hover_g": {
   "BOM": 2386.9040000000005,
-  "GAP": 218.8114,
+  "GAP": 219.5714,
   "NACELLE": 1977.876227046352,
-  "PRINT": 1941.4797463408495
+  "PRINT": 1915.1650304697846
  },
  "thrust_gf": 9480.0,
  "unclassified": []

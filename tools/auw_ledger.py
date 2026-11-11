@@ -395,6 +395,15 @@ CF_PLATE_PARTS = [
 
 # Coverage gaps: installed items with no BOM row.  Stated estimates.
 GAPS = [
+    # OD-17 wing-tip fairing foam core (owner 2026-11-11: hollow, foam filled): cavity 11,804 mm3 x
+    # 2 lb/ft3 (32.04 kg/m3) = 0.38 g per side, centroid from tools/nacelle64_wing_fairing.py
+    # (--skin 2.0).  Poured from the FOAM-PU-2LB kit.
+    ("Wing-tip fairing foam core (port)", 0.38,
+     ((188.7, 376.9, 146.5), "nacelle64_wing_fairing.py foam centroid"),
+     "fairing cavity x 2 lb/ft3 foam"),
+    ("Wing-tip fairing foam core (stbd)", 0.38,
+     ((-188.7, 376.9, 146.5), "nacelle64_wing_fairing.py foam centroid"),
+     "fairing cavity x 2 lb/ft3 foam"),
     ("Node foil pouches x8", 8 * NODE_POUCH_G, "nodes",
      "middle_layout_fit.py M_CN4/M_FC4 convention"),
     ("FE can (1.0 mm 6061) + entry plate + hardware",

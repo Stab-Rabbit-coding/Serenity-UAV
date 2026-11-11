@@ -2755,8 +2755,22 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
 
 - [ ] **OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side** for
     the minimum wall (CFD body had zero wall at the collar bore); drag not re-run (OD-18 item 2).
-- [ ] **OD17-FAIR-HOLLOW — Fairing is printed solid, 0.080 lbm (36.4 g).**
-    Hollow to a 0.079 in (2.0 mm) skin with powder-escape holes; mass falls, CG unchanged.
+- [x] **OD17-FAIR-HOLLOW — Fairing hollow, foam filled (owner 2026-11-11).**
+    Owner direction: not a structural part, so a hollow shell with the minimum skin that holds its shape
+    with a foam core. Built in `tools/nacelle64_wing_fairing.py` (`--skin`, default 2.0 mm): cavity =
+    fairing section shrunk by the skin, kept a skin clear of the collar bore, pinion pocket, outboard face
+    and wing pad face; 2 lb/ft³ closed-cell PU foam (FOAM-PU-2LB, `AGENTS.md` §7); two Ø0.16 in (4 mm)
+    fill/vent holes in the outboard cap, which are also the SLS powder-escape holes (> 2 mm,
+    REF-MFG-001 p. 6). Per side: shell 0.051 lbm (23.3 g) + foam 0.0008 lbm (0.4 g), was 0.080 lbm
+    (36.4 g) solid; hover AUW 6,525 → 6,500 g, T/W 1.45 → 1.46. Ray-cast wall check: the shell body
+    (X 2.08–3.04 in (52.8–77.3 mm)) is 2.0 mm; the thin readings (4 % of samples below 0.95 mm) are all
+    in the end-plate fillet toe, which tapers onto the wing and is bonded. **Skin is open to the owner
+    (OD17-FAIR-SKIN below).**
+- [ ] **OD17-FAIR-SKIN — Owner: fairing skin 2.0 mm (§7) or 1.0 mm (SLS min)?**
+    `AGENTS.md` §7 sets exterior shells at 2.0 mm; the SLS process minimum is 1.0 mm [REF-MFG-001 p. 15].
+    1.0 mm: shell 0.039 lbm (17.5 g) + foam 0.5 g per side, saves 0.026 lbm (11.6 g) per aircraft, needs
+    a §7 waiver; the outer half-thickness at the axis could then drop 1 mm toward the CFD shape
+    (OD17-FAIR-WALL).
 - [ ] **OD17-TOOLS-01 — One fairing module.** The NACA section, TE line,
     loft and cap code is copied in `nacelle64_optD_aft_fairing.py`, `nacelle64_optD_glove.py`
     and `od17_junction_cfd/geom.py`, and the copies differ: the TE half-thickness floor is 0.039 in (1.0 mm)

@@ -80,7 +80,7 @@
 → full detail: `WBS.md` §5.5
 
 - [ ] OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side for the…
-- [ ] OD17-FAIR-HOLLOW — Fairing is printed solid, 0.080 lbm (36.4 g)
+- [ ] OD17-FAIR-SKIN — Owner: fairing skin 2.0 mm (§7) or 1.0 mm (SLS min)?
 - [ ] OD17-TOOLS-01 — One fairing module
 - [ ] WBS-BURNDOWN-01 — Count closures by identity, not by count
 

@@ -74,6 +74,15 @@ FILLET_TOE = 0.94
 SPAN = R1 + WALL_EP + R2
 NS = 90                         # points per half-ring
 RHO = sm.rho_g_mm3(sm.PA_CF)    # g/mm^3
+# Hollow shell, foam filled (owner 2026-11-11: the fairing is not structural; minimum skin that
+# holds its shape with a foam core).  2.0 mm is the AGENTS.md section 7 exterior-shell skin; the
+# SLS process minimum is 1.0 mm [REF-MFG-001 p. 15] and is what --skin 1.0 builds (needs an owner
+# waiver of section 7).  Foam: 2 lb/ft3 (32.04 kg/m3) closed-cell PU, BOM FOAM-PU-2LB (AGENTS.md
+# section 7).  Two fill/vent holes through the outboard cap double as the SLS powder-escape holes
+# (> 2 mm [REF-MFG-001 p. 6]).
+SKIN = 2.0
+RHO_FOAM = 32.04e-6             # g/mm^3, 2 lb/ft3
+HOLE_D = 4.0                    # fill / vent / powder-escape hole, 0.16 in
 YZ = np.array([[0, 1, 0, 0], [0, 0, 1, 0], [1, 0, 0, 0]], float)
 
 
@@ -184,6 +193,55 @@ class Builder:
             [0, 90, 0]).translate([X0F - 2, cy, cz])
         return body - bore - pocket - self.wing
 
+    def section_poly(self, x: float) -> Polygon:
+        z, u, lo = self.outline(x)
+        return Polygon(list(zip(u, z)) + list(zip(lo[::-1], z[::-1]))).buffer(0)
+
+    def cavity(self, skin: float) -> tuple[m.Manifold, list[tuple[float, float]]]:
+        """Foam cavity: the fairing section shrunk by `skin`, kept `skin` clear of the collar bore,
+        the pinion pocket, the outboard face and the wing tip pad face.  The aft-fairing section is
+        convex, so the body between two stations is the convex hull of their two sections.
+        Also returns the (y, z) centres of the two fill/vent holes in the outboard cap."""
+        x_tip = a.SEAT                                 # wing tip pad face
+        xs = np.linspace(X0F + skin, x_tip - skin, 10)
+        secs = []
+        for x in xs:
+            pg = self.section_poly(x).buffer(-skin)
+            secs.append(np.c_[np.full(len(pg.exterior.coords), x), np.asarray(pg.exterior.coords)])
+        inner = None
+        for p0, p1 in zip(secs[:-1], secs[1:]):
+            h = m.Manifold.hull_points(np.vstack([p0, p1]).tolist())
+            inner = h if inner is None else inner + h
+        bore = m.Manifold.cylinder(x_tip - X0F + 4, R_BORE + skin, R_BORE + skin, 160).rotate(
+            [0, 90, 0]).translate([X0F - 2, 0, PZ])
+        pc = self.pinion.bounding_box()
+        cy, cz = 0.5 * (pc[1] + pc[4]), 0.5 * (pc[2] + pc[5])
+        pocket = m.Manifold.cylinder(x_tip - X0F + 4, 7.2 + skin, 7.2 + skin, 48).rotate(
+            [0, 90, 0]).translate([X0F - 2, cy, cz])
+        cav = inner - bore - pocket
+        # hole centres: on the chord line (y = 0), one just aft of the bore, one near the tail,
+        # each where the first cavity section leaves at least a hole radius + 1 mm of foam around it
+        from shapely.geometry import Point  # noqa: PLC0415
+
+        first = self.section_poly(xs[0]).buffer(-skin)
+        z_lo, z_hi = PZ + R_BORE + skin + HOLE_D / 2 + 1.0, first.bounds[3] - HOLE_D / 2 - 1.0
+        cands = [z for z in np.linspace(z_lo, z_hi, 60)
+                 if first.contains(Point(0.0, z).buffer(HOLE_D / 2 + 1.0))
+                 and np.hypot(0.0 - cy, z - cz) > 7.2 + skin + HOLE_D / 2 + 1.0]
+        holes = [(0.0, float(cands[0])), (0.0, float(cands[-1]))] if len(cands) >= 2 else []
+        return cav, holes
+
+    def hollow(self, skin: float) -> tuple[m.Manifold, m.Manifold, list[tuple[float, float]]]:
+        """(shell, foam core, hole centres): the solid part less the cavity, plus the fill holes."""
+        solid = self.part()
+        cav, holes = self.cavity(skin)
+        cav = cav ^ solid                              # never outside the part
+        shell = solid - cav
+        for y, z in holes:
+            shell = shell - m.Manifold.cylinder(skin + 2.0, HOLE_D / 2, HOLE_D / 2, 32).rotate(
+                [0, 90, 0]).translate([X0F - 1.0, y, z])
+        return shell, cav, holes
+
 
 def to_hull(t: trimesh.Trimesh, side: str) -> trimesh.Trimesh:
     """Local (stbd, pylon +X) -> hull R2; the port part is the X mirror of the stbd one."""
@@ -198,6 +256,8 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--write", action="store_true", help="write the two hull-frame STLs")
     ap.add_argument("--json", type=Path)
+    ap.add_argument("--skin", type=float, default=SKIN,
+                    help="shell skin, mm (2.0 = AGENTS.md section 7; 1.0 = SLS process minimum)")
     args = ap.parse_args(argv)
 
     h2l = a.hull_to_local("stbd")
@@ -209,7 +269,10 @@ def main(argv: list[str] | None = None) -> int:
     wing = load("wings/wing_stbd_s1223_revo.stl")
     pin = load("wings/wing_tilt_pinion_stbd.stl")
     bld = Builder(wing, pin)
-    part = bld.part()
+    solid_v = float(bld.part().volume())
+    part, foam, holes = bld.hollow(args.skin)
+    if len(holes) != 2:
+        raise SystemExit("no room for the two fill/vent holes in the outboard cap")
     mesh = a.to_trimesh(part)
     vol = float(part.volume())
     res = {
@@ -220,10 +283,19 @@ def main(argv: list[str] | None = None) -> int:
         "wall_mm": WALL, "bore_radius_mm": R_BORE, "outer_half_thickness_mm": R_OUT,
         "overlap_with_wing_mm3": round(float((part ^ wing).volume()), 2),
         "overlap_with_pinion_mm3": round(float((part ^ pin).volume()), 2),
+        "skin_mm": args.skin, "solid_volume_mm3": round(solid_v, 1),
+        "foam_volume_mm3": round(float(foam.volume()), 1),
+        "foam_mass_g": round(float(foam.volume()) * RHO_FOAM, 2),
+        "foam_centroid_local_mm": [round(float(c), 2) for c in a.to_trimesh(foam).center_mass],
+        "fill_holes_yz_mm": [[round(y, 2), round(z, 2)] for y, z in holes],
     }
     print(f"fairing + end plate: {part.status().name}, watertight {mesh.is_watertight}, "
-          f"{a.cu_in(vol)} = {vol * RHO / 453.592:.3f} lbm ({vol * RHO:.1f} g) solid PA CF "
+          f"{a.cu_in(vol)} = {vol * RHO / 453.592:.3f} lbm ({vol * RHO:.1f} g) PA CF shell "
           f"[REF-MAT-015]; X {a.inch(res['x_range_mm'][0])} to {a.inch(res['x_range_mm'][1])}")
+    print(f"  hollow, skin {a.inch(args.skin)}: shell {a.cu_in(vol)}; foam core "
+          f"{a.cu_in(res['foam_volume_mm3'])} = {res['foam_mass_g'] / 453.592:.4f} lbm "
+          f"({res['foam_mass_g']:.1f} g) at 2 lb/ft3; solid part was {a.cu_in(solid_v)} = "
+          f"{solid_v * RHO:.1f} g; 2 fill/vent holes Dia {a.inch(HOLE_D)} in the outboard cap")
     print(f"  TE line slope {bld.te_k:.4f} (measured on the wing mesh); "
           f"bore {a.inch(R_BORE)} radius, "
           f"outer half-thickness at the axis {a.inch(R_OUT)}; wing overlap "
