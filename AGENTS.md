@@ -266,7 +266,10 @@ language states what is required regardless of actor.
 
 - **Print process and material (Rev U, owner decisions 2026-10-31):** the flight-article hull
   and nacelle printed parts are **SLS DuraForm PA CF** [3DS-30108A], printed by a service
-  bureau (vendor not yet selected). PA11 goes at impact points (gear feet). See
+  bureau (vendor not yet selected). PA11 goes at impact points (gear feet). **Every PA CF flight
+  part shall meet material specification MS-SLS-PACF, `docs/MATSPEC_SLS_PA_CF.md`** (owner-approved
+  2026-11-11: brittle design basis, build orientation on every drawing, process record and witness
+  coupons per build, inspection and acceptance). See
   `docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` and `tools/sls_auw_reconcile.py`. **Mass
   basis (Rev U):** printed parts are priced at the 3D Systems datasheet solid density,
   from the single source `tools/sls_materials.py` (PA CF 1.11 g/cc, PA11 1.03 g/cc,

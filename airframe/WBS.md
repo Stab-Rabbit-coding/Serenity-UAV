@@ -319,7 +319,9 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     with the old CF-PETG basis). Foam crush and face wrinkling make 2 lb/ft³ foam a poor stabilizer
     for load-bearing skins. Recommendation A (adopt, with orientation on the drawing). The §7 text is
     the owner's to change. Unverified: PA CF Z data, foam datasheet, handling load, textbook cites.
-- [ ] **MS-SLS-PACF — Owner: approve the PA CF material specification** (2026-11-11)
+- [x] **MS-SLS-PACF — Owner: approve the PA CF material specification** (2026-11-11) **APPROVED by the
+    owner 2026-11-11 (issue B).** Open follow-ups stay in the spec's §9 (coupon plan, bureau minimum
+    wall SLS-WALL-FLOOR, foam data, elevated-temperature and fatigue data, catalogue the ASTM methods).
     `docs/MATSPEC_SLS_PA_CF.md`: brittle design basis (did not yield, 3.8 % elongation), orientation
     on every drawing, 2.25 factor for load-bearing parts, process record per build, witness coupons,
     mass check ±3 %, and an ASTM D638/D790/D953 coupon plan in X/Y/Z that replaces the 0.5 assumed
