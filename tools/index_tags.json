@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-10",
+  "generated": "2026-11-11",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -10512,6 +10512,27 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_od17_aft_fairing_horizontal.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_aft_fairing_section.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_aft_fairing_vertical.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_od17_optD_horizontal.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -15931,6 +15952,13 @@
       ],
       "archived": false
     },
+    "tools/nacelle64_optD_aft_fairing.py": {
+      "description": "nacelle64_optD_aft_fairing.py -- OD-17 option D: wing-fixed fairing behind the rotating collar.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nacelle64_optD_concept.py": {
       "description": "nacelle64_optD_concept.py -- OD-17 option D: tilt joint moved outboard, 4 x 10 AWG routed.",
       "tags": [
@@ -16680,6 +16708,9 @@
       "docs/figures/battery_bay_twin_tray.png",
       "docs/figures/nacelle64_bay_stud_after.png",
       "docs/figures/nacelle64_bay_stud_interaction.png",
+      "docs/figures/nacelle64_od17_aft_fairing_horizontal.png",
+      "docs/figures/nacelle64_od17_aft_fairing_section.png",
+      "docs/figures/nacelle64_od17_aft_fairing_vertical.png",
       "docs/figures/nacelle64_od17_optD_horizontal.png",
       "docs/figures/nacelle64_od17_optD_tip_extension.png",
       "docs/figures/nacelle64_od17_optD_vertical.png",
@@ -20478,6 +20509,7 @@
       "tools/mirror_claude_memory.py",
       "tools/nacelle64_assembly_check.py",
       "tools/nacelle64_od1_figure.py",
+      "tools/nacelle64_optD_aft_fairing.py",
       "tools/nacelle64_optD_concept.py",
       "tools/nacelle_64_proportion_trade.py",
       "tools/nacelle_64_scale.py",

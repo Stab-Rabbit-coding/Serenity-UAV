@@ -115,7 +115,36 @@ that carries the trunnion in option D. Pod translucent.*
 3. Neck the collar down where it passes through the extension. The trunnion's register bore is Ø1.50 in
    (38.1 mm), so the collar cannot get below about Ø1.6 in (40 mm), still about 1.5 times the airfoil.
 
+## Option D with an aft fairing behind the collar (owner direction, 2026-11-11)
+
+*Fairing behind the collar, trailing edge on the line of the wing's trailing edge, thickened to the
+best shape for airflow.* Built with `tools/nacelle64_optD_aft_fairing.py`.
+
+**Shape.** A NACA 4-digit symmetric section puts its maximum thickness at 30 % of chord. Here the rotating
+collar's widest point falls at 29–30 % of the room between the collar front and the wing TE line, so the
+collar becomes the section's round nose and the fairing is the NACA tail behind it. The fairing's
+half-thickness at the axis equals the collar radius + 0.04 in (1 mm), so it meets the collar tangent with
+no step. Its trailing edge lies on the wing's TE line extended outboard. That line is swept: 6.85 in
+(173.9 mm) at the wing tip, 6.35 in (161.2 mm) next to the nacelle. The TE is truncated at 0.08 in (2 mm),
+the `AGENTS.md` §7 minimum wall.
+
+![Aft fairing sections with cruise airflow](figures/nacelle64_od17_aft_fairing_section.png)
+
+![Aft fairing, nacelle horizontal: top, bottom, front, back](figures/nacelle64_od17_aft_fairing_horizontal.png)
+
+![Aft fairing, nacelle vertical: top, bottom, front, back](figures/nacelle64_od17_aft_fairing_vertical.png)
+
+| Check | Finding |
+|---|---|
+| **Statics and dynamics** | The fairing is wing-fixed, loft-bonded 0.28 in (7 mm) into the wing's full-chord section (0.042 in³ (691 mm³) of overlap). It carries only its own air load over a 1.39 in (35.3 mm) span. Tilting rotates the pod about the spanwise axis, so its 0.04 in (1 mm) face gap cannot close. |
+| **Function (airflow)** | Thickness 2.21 in (56 mm). The section's t/c is 0.61 at the wing tip and 0.76 next to the nacelle, fineness (chord ÷ thickness) 1.64 and 1.31. That is the best NACA-type tail that fits between the collar and the TE line, but it is still a thick, bluff section. Carrying the tail past the TE line to a fineness of about 3 would cut pressure drag further; the TE-line constraint is what limits it. No drag figure is computed here. |
+| **Structural integrity** | Solid it is 1.77 in³ (29,011 mm³). As a 0.08 in (2 mm) SLS skin it can be hollowed; not modelled. There is a pocket for the wing-fixed pinion and a stepped bore that clears the pod's own collar (X ≤ 2.04 in (51.8 mm) within r 1.18 in (30 mm)). |
+| **Mechanism and component interactions** | 0 in³ against the pod, collar, trunnion and cartridge at every 5° from −5° to +135° on the starboard model. Nearest gap to the pod and collar at 0°: 0.038 in (0.96 mm). 0 in³ against the pinion. The wires and the disconnect bay are inside the pod and unaffected. |
+| **Weight and balance** | 0.071 lbm (32.2 g) per side solid in PA CF, wing-fixed, so the nacelle pivot is unaffected. Hollowing would reduce it. |
+| **Canonical shape** | The joint reads as a round hub with a teardrop tail running to the TE line. The fairing is 2.21 in (56 mm) thick against the wing's ~1.0 in (26 mm) at the tip, so there is a thickness step where the fairing meets the wing (front view). A short spanwise glove blending the fairing down to the wing section over 1.5–2 in (38–51 mm) of wing would remove the step; that is a wing change and is not modelled. Owner judgement against REF-CAD-003. |
+
 ## Recommendation
+
 
 
 **D**, if the 0.91 in (23 mm) change in the wing–nacelle spacing is acceptable to you against the
