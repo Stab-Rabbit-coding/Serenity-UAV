@@ -115,17 +115,9 @@ gm.fix_normals()
 glove = a.to_man(gm)
 print('glove status', glove.status().name)
 add = glove - wing
-print(
-    'glove material added to the wing:',
-    a.cu_in(
-        float(
-            add.volume())),
-    f'= {
-        add.volume() *
-        1.11e-3 /
-        453.6:.3f} lbm ({
-        add.volume() *
-        1.11e-3:.1f} g) solid')
+add_v = float(add.volume())
+print('glove material added to the wing:', a.cu_in(add_v),
+      f'= {add_v * 1.11e-3 / 453.6:.3f} lbm ({add_v * 1.11e-3:.1f} g) solid')
 pinion = a.to_man(parts['pinion'])
 print('glove vs pinion', round(float((glove ^ pinion).volume()), 1),
       'mm3; glove vs trunnion/collar at rest',
