@@ -93,7 +93,7 @@ envelope; verify the drawing datums against an assembled installation before acc
 
 ### Provisional Thrust-to-Weight Screen
 
-Using the supplied QF2822-2400KV, 6S table point of 2,135 gf per EDF (4.71 lbf (20.9 N)) and the
+*Superseded (owner, 2026-11-02): the specified motor is the QF2822-2300KV, 2,370 gf at 24 V (REF-EDF-003); the 2400 KV was never specified or authorized. The screen below is historical.* Using the supplied QF2822-2400KV, 6S table point of 2,135 gf per EDF (4.71 lbf (20.9 N)) and the
 existing 90% tandem-stacking assumption gives 16.94 lbf (75.4 N) total nacelle thrust. This is a
 screening estimate, not measured installed thrust; U12 owns bench confirmation. The evaluation's
 assumed complete-EDF mass of 0.397–0.507 lbm (180–230 g) each, 0.093 lbm (42 g) per ESC, and
@@ -921,7 +921,7 @@ schematic/PCB; `current-specification/bom_revS.csv` and `.json`; the nacelle/win
 and harness integration.
 
 **Approach:**
-1. Use the supplied sheet's QF2822-2400KV row as a candidate: 22.2 V, 57.0 A, 1265.4 W and a
+1. *(Superseded 2026-11-02: use the QF2822-2300KV row, 24 V, 57.0 A, 1,368 W, 80 A ESC [REF-EDF-003]; the 2400 KV was never specified or authorized.)* Use the supplied sheet's QF2822-2400KV row as a candidate: 22.2 V, 57.0 A, 1265.4 W and a
   stated 60 A ESC recommendation. Four simultaneous branches imply a 228 A / 5.06 kW screening
   load if those points are valid at aircraft installation conditions. Do not call this a proven
   continuous flight duty point.
