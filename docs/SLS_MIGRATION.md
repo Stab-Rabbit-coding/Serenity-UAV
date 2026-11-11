@@ -8,12 +8,15 @@ Claude Opus 5.5 (Anthropic) under the author's direction.
 **Tools:** `tools/sls_dfm_audit.py` (rules check, every printed STL),
 `tools/sls_materials.py` (single source of SLS allowables)
 
-> [!WARNING]
-> **ENGINEERING REVIEW REQUIRED.** The margins below use datasheet XY values
-> with an ASSUMED 0.5 build-axis knockdown for PA CF. No PA CF Z data,
-> compressive, bearing or fatigue allowable is published. The aircraft shall not
-> fly on these margins until a qualified engineer reviews them and the Z data
-> item in WBS §0.12 is closed.
+> [!CAUTION]
+> **ENGINEERING REVIEW REQUIRED.** The margins below use datasheet XY values.
+> PA CF build-axis factors are now 0.44 (strength) and 0.35 (modulus), replacing
+> the 0.5 ASSUMED knockdown on 2026-11-11 (`tools/sls_materials.py`;
+> `reports/SLS Z axis strength.md`). They are ESTIMATES from 33 % CF-PA12 proxy
+> data, not DuraForm PA CF. Margins written before that change still use 0.5.
+> No PA CF compressive, bearing or fatigue allowable is published. The aircraft
+> shall not fly on these margins until a qualified engineer reviews them and the
+> Z data item in WBS §0.12 is closed by coupon test (`docs/MATSPEC_SLS_PA_CF.md` §8).
 
 ## 1. Basis
 

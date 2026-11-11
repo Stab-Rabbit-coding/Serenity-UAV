@@ -407,16 +407,6 @@ ORIENT = {
         'pod bending about trunnion -> axial (Y) duct stress',
         'R-BEAM: duct axis Y in plane',
         'H'),
-    'nacelles/nacelle_port_revs.stl': (
-        'Z', 'PA CF',
-        'legacy 50 mm pod',
-        'R-BEAM: duct axis Y in plane',
-        'M'),
-    'nacelles/nacelle_stbd_revs.stl': (
-        'Z', 'PA CF',
-        'legacy 50 mm pod',
-        'R-BEAM: duct axis Y in plane',
-        'M'),
     'nacelles/eng_left_shell24_50mm_repaired.stl': (
         'X', 'PA CF',
         'legacy 50 mm pod, duct axis Z in this file',
@@ -437,74 +427,44 @@ ORIENT = {
         '2 x 6804 bearing seat (Ø32 H7) hoop + barrel-to-flange bending',
         'R-RING: bearing axis X -> Z keeps the H7 bore round; flange plate in plane',
         'M'),
-    'nacelles/nacelle_trunnion.stl': (
-        'Z', 'PA CF',
-        'legacy 50 mm disc trunnion',
-        'R-RING',
-        'M'),
-    'nacelles/nacelle_servo_bracket.stl': (
-        'Z', 'PA CF',
-        'servo-ear bending',
-        'R-PLATE',
-        'V'),
     'nacelles/edf_motor_mount_64mm_stage2_stbd.stl': (
         'Z', 'PA CF',
         'motor torque + thrust through stator vanes',
         'R-RING: duct axis Z; vanes radial in plane',
         'M'),
-    'nacelles/edf_stator_sleeve.stl': (
+    'nacelles/edf_motor_mount_64mm_stage2_port.stl': (
         'Z', 'PA CF',
-        'stator vane bending (swirl torque), sleeve hoop',
-        'R-RING',
-        'H'),
-    'nacelles/edf_aft_spider_sleeve.stl': (
-        'Z', 'PA CF',
-        'spider arm bending, sleeve hoop',
-        'R-RING',
-        'H'),
-    'nacelles/esc/nacelle_esc_cover_port_a.stl': (
-        'Y', 'PA CF',
-        'flush cover panel bending',
-        'R-PLATE: normal Y',
+        'motor torque + thrust through stator vanes',
+        'R-RING: duct axis Z; vanes radial in plane',
         'M'),
-    'nacelles/esc/nacelle_esc_cover_port_b.stl': (
-        'Y', 'PA CF',
-        'flush cover panel bending',
-        'R-PLATE: normal Y',
-        'M'),
-    'nacelles/esc/nacelle_esc_cover_stbd_a.stl': (
-        'Y', 'PA CF',
-        'flush cover panel bending',
-        'R-PLATE: normal Y',
-        'M'),
-    'nacelles/esc/nacelle_esc_cover_stbd_b.stl': (
-        'Y', 'PA CF',
-        'flush cover panel bending',
-        'R-PLATE: normal Y',
-        'M'),
-    'nacelles/nozzles/nacelle_nozzle_fixed.stl': (
-        'Z', 'PA CF',
-        'duct hoop + bond-lip shear',
-        'R-RING',
-        'H'),
-    'nacelles/nozzles/nacelle_nozzle_throat.stl': (
+    'nacelles/nozzles/nacelle_nozzle_throat_64mm_port.stl': (
         'Z', 'PA CF',
         'duct hoop',
         'R-RING',
         'H'),
-    'nacelles/nozzles/nacelle_nozzle_ring.stl': (
+    'nacelles/nozzles/nacelle_nozzle_ring_64mm_port.stl': (
         'Z', 'PA CF',
         'unison-ring hoop + tooth bending',
         'R-RING',
         'H'),
-    'nacelles/nozzles/nacelle_nozzle_flap.stl': (
+    'nacelles/nozzles/nacelle_nozzle_throat_64mm_stbd.stl': (
+        'Z', 'PA CF',
+        'duct hoop',
+        'R-RING',
+        'H'),
+    'nacelles/nozzles/nacelle_nozzle_ring_64mm_stbd.stl': (
+        'Z', 'PA CF',
+        'unison-ring hoop + tooth bending',
+        'R-RING',
+        'H'),
+    'nacelles/nozzles/nacelle_nozzle_flap_64mm.stl': (
         'X', 'PA CF',
-        'flap cantilever bending along its 50 mm length (Z)',
+        'flap cantilever bending along its 36 mm length (Z)',
         'R-BEAM: flap length in plane',
         'M'),
-    'nacelles/nozzles/nacelle_nozzle_flap_seal.stl': (
+    'nacelles/nozzles/nacelle_nozzle_flap_seal_64mm.stl': (
         'X', 'PA CF',
-        'flap cantilever bending along its 50 mm length (Z)',
+        'flap cantilever bending along its 36 mm length (Z)',
         'R-BEAM: flap length in plane',
         'M'),
 }

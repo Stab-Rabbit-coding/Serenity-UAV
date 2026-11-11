@@ -9,7 +9,7 @@ Opus 5.5 (Anthropic) under the author's direction.
 from that JSON by the tool. Edit the tool, not this list.
 **WBS:** §0.13
 
-> [!WARNING]
+> [!CAUTION]
 > **ENGINEERING REVIEW REQUIRED.** Parts marked confidence **V** have a frame
 > or load path that the repo sources don't confirm. Those parts shall be
 > checked before the build is released to 3D Systems.
