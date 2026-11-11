@@ -182,3 +182,68 @@ OD is footnoted only as "Outside Diameter (OD)". Because the rows are "Overall h
 - **Plating limits.** The AC confirms tin at 150 °C (302 °F) and silver at 200 °C (392 °F). For nickel it says "beyond 260 °C" (500 °F), qualified by the insulation limit.
 - **NASA bend radii.** "6 x OD (10 x OD Kapton)" is incomplete. For an overall harness of AWG 10 or smaller without coax, Table 7-1 gives minimum 3 x OD and optimum 10 x OD. 6 x OD applies to AWG 8 and larger, or to harnesses containing coax. Table 7-1 is on page 30 of 114 in Change 3, not page 36.
 - **Tinning clause.** The workmanship-site quote ("crimping of… stranded wire that has been solder tinned, is prohibited") matches the Change 1 history-log wording. The current body clause is §7.2.26c, "Solid, tinned wire shall not be used in crimped contacts."
+
+## Addendum: values read from the raster charts (AC 43.13-1B CHG 1, Figs. 11-4a, 11-4b, 11-5, 11-6)
+
+**READ FROM RASTER CHART. These are not quoted text.** The FAA PDF carries these figures as scanned images, so every value below is a measurement I took from the image, not a number printed in the AC.
+
+**Method**
+- I rendered PDF pages 522 to 525 at 200 dpi with `pdftoppm -r 200`. These are printed pages 11-32, 11-33, 11-34 and 11-34a.
+- I calibrated each axis from the pixel centroids of its printed tick labels, or from the dashed gridlines on Figs. 11-5 and 11-6.
+- I found where each curve's stroke crosses the target pixel column or row, using the middle of the stroke and averaging scans taken just either side of any gridline.
+- Figs. 11-4a and 11-4b have log axes. In Fig. 11-4a the current axis spans 902 px per decade and the temperature axis 915 px per decade. In Fig. 11-4b both are about 1000 px per decade.
+- Source: [AC 43.13-1B CHG 1](https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_43.13-1B_w-chg1.pdf).
+
+**Check against the AC's own worked examples.** I ran the same method at the operating points the AC reads in paras 11-68e and 11-69:
+
+| Figure and point | My reading | AC value |
+|---|---|---|
+| Fig. 11-4a, #14 at ΔT 150 °C | about 46 A | 47 A |
+| Fig. 11-4a, #12 at ΔT 140 °C | about 59 A | 61 A |
+| Fig. 11-4a, #12 at ΔT 175 °C | about 66 A | 68 A |
+| Fig. 11-5, 12 wires, 100 % curve | about 0.42 to 0.43 | 0.43 |
+| Fig. 11-5, 35 wires, 20 % curve | about 0.52 | 0.52 |
+
+- My Fig. 11-4a readings run about 2–3 % below the AC's. The likely cause is a few pixels of offset in the label-centroid calibration. The Fig. 11-5 method agrees with the AC to within 0.01.
+
+### Fig. 11-4a (p. 11-32), single copper wire in free air, #10, #12 and #14
+Readings in amps, uncorrected. Estimated uncertainty is ±5 %, and the values are probably 2–3 % low (see the check above).
+
+| ΔT (wire rating minus ambient) | #10 | #12 | #14 |
+|---|---|---|---|
+| 50 °C (90 °F difference) | 49 A (±2.5) | 36 A (±2) | 27 A (±1.5) |
+| 80 °C (144 °F difference) | 61 A (±3) | 46 A (±2.5) | 34 A (±2) |
+| 110 °C (198 °F difference) | 71 A (±3.5) | 53 A (±2.5) | 40 A (±2) |
+
+### Fig. 11-4b (p. 11-33), single copper wire in free air, #8
+Estimated uncertainty is ±5 %. The current-axis labels on this figure are less evenly spaced, so I interpolated between the nearest labels.
+
+| ΔT | #8 |
+|---|---|
+| 50 °C | 72 A (±4) |
+| 80 °C | 92 A (±5) |
+| 110 °C | 107 A (±5) |
+
+### Fig. 11-5 (p. 11-34), bundle derating, 4 wires
+- The 4-wire gridline is the third horizontal line above the 1-wire baseline. All five curves meet at 1.0 at 1 wire.
+- Factor scale: 0.1 of factor = 72.5 px.
+- Readings at 4 wires, each ±0.02:
+  - 100 % loading: **0.68**
+  - 60 % loading: **0.75**
+  - For context, the other curves read 80 %: 0.72, 40 %: 0.80, 20 %: 0.90.
+
+### Fig. 11-6 (p. 11-34a), altitude derating
+- Sea level: **1.00**. The curve starts at 1.00 at zero altitude, and I read 0.997 just above the baseline.
+- 10,000 ft (3,048 m): **0.95 (±0.005)**. My raw reading is 0.948.
+
+### What these readings give for the design (inference, uses the raster readings above)
+The AC method is: free-air current × bundle factor (Fig. 11-5, 4 wires, 100 %) × altitude factor (Fig. 11-6).
+- **#10 ESC feed, 4 wires all loaded, sea level:**
+  - ΔT 50 °C (spar-limited case): 49 × 0.68 × 1.00 ≈ **33 A** per wire. That is at the low end of the 33–38 A sustained target.
+  - ΔT 110 °C (150 °C, 302 °F wire in 40 °C, 104 °F ambient): 71 × 0.68 ≈ **48 A**.
+  - At 10,000 ft, multiply by 0.95.
+- **#8 alternative, same conditions:** ΔT 50 °C gives 72 × 0.68 ≈ **49 A** per wire.
+- **#14 motor phase lead, ΔT 110 °C:** free air is about 40 A. Three leads in a bundle are taken off the 100 % curve at 3 wires, which I did not read. #12 at ΔT 110 °C is about 53 A free air.
+- **Limits of this calculation:**
+  - The AC curves assume free air. Inside a closed carbon-fibre tube, ambient is the tube-interior temperature, and convection is worse than the curves assume.
+  - Para 11-66d(5) recommends confirming by load-bank and chamber test.
