@@ -10347,6 +10347,13 @@
       ],
       "archived": false
     },
+    "docs/SLS_MIN_WALL_THICKNESS.md": {
+      "description": "SLS minimum wall thickness, DuraForm PA CF (replaces the 0.079 in FDM rule)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/SLS_PRINT_ORIENTATION.md": {
       "description": "Serenity UAV \u2014 SLS Print Orientation, Every Part (Design Intent)",
       "tags": [
@@ -16391,6 +16398,13 @@
       ],
       "archived": false
     },
+    "tools/sls_min_wall.py": {
+      "description": "sls_min_wall.py -- minimum wall (skin) thickness for SLS DuraForm PA CF printed parts.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/sls_print_orientation.py": {
       "description": "sls_print_orientation.py -- design-intent build orientation for every",
       "tags": [
@@ -16828,6 +16842,7 @@
       "docs/SLS_EMI_AND_WINGS_NOTE.md",
       "docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md",
       "docs/SLS_MIGRATION.md",
+      "docs/SLS_MIN_WALL_THICKNESS.md",
       "docs/SLS_PRINT_ORIENTATION.md",
       "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
@@ -20713,6 +20728,7 @@
       "tools/sls_dfm_audit.py",
       "tools/sls_material_screen.py",
       "tools/sls_materials.py",
+      "tools/sls_min_wall.py",
       "tools/sls_print_orientation.py",
       "tools/sls_retired_parts.py",
       "tools/sls_scale_trim_study.py",
