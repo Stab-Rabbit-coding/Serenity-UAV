@@ -9,14 +9,14 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 0.65,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.17,
+  "wall_p01_mm": 0.18,
   "wall_p50_mm": 2.5,
-  "frac_below_min": 0.087,
+  "frac_below_min": 0.093,
   "fails": [
    "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_cradle_autolatch.stl",
@@ -28,12 +28,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 76.79,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 2.5,
   "wall_p50_mm": 2.5,
-  "frac_below_min": 0.003,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.0,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_door_port.stl",
@@ -45,12 +45,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 13.33,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.79,
+  "wall_p01_mm": 0.74,
   "wall_p50_mm": 1.98,
-  "frac_below_min": 0.02,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.04,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_door_servo_bracket.stl",
@@ -62,12 +62,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 4.82,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 1.0,
   "wall_p50_mm": 5.0,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_door_stbd.stl",
@@ -79,12 +79,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 12.06,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.78,
-  "wall_p50_mm": 1.98,
-  "frac_below_min": 0.033,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "wall_p01_mm": 0.75,
+  "wall_p50_mm": 1.99,
+  "frac_below_min": 0.027,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_drv8833_tray.stl",
@@ -96,14 +96,14 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 2.47,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 0.9,
   "wall_p50_mm": 2.0,
-  "frac_below_min": 0.09,
+  "frac_below_min": 0.1,
   "fails": [
    "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_fpv_bezel.stl",
@@ -115,12 +115,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 1.74,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 1.15,
   "wall_p50_mm": 2.5,
-  "frac_below_min": 0.005,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.007,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_gps_retention_ring.stl",
@@ -132,12 +132,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 2.4,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.07,
+  "wall_p01_mm": 1.11,
   "wall_p50_mm": 2.5,
-  "frac_below_min": 0.007,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.01,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_hinge_retention.stl",
@@ -149,12 +149,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 3.99,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.14,
+  "wall_p01_mm": 0.18,
   "wall_p50_mm": 9.16,
-  "frac_below_min": 0.045,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.027,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_release_servo_bracket.stl",
@@ -166,12 +166,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 4.82,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 1.0,
   "wall_p50_mm": 5.0,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_vera_faraday.stl",
@@ -183,12 +183,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 23.69,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 1.5,
   "wall_p50_mm": 1.5,
   "frac_below_min": 0.007,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_winch_motor_mount.stl",
@@ -200,12 +200,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 9.37,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 3.0,
   "wall_p50_mm": 9.95,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/cargo_winch_spool.stl",
@@ -217,12 +217,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 7.59,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 2.0,
-  "wall_p50_mm": 8.45,
+  "wall_p50_mm": 8.48,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/chin_node_shelf.stl",
@@ -234,12 +234,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 8.91,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 1.6,
   "wall_p50_mm": 2.4,
-  "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.003,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/door_horn.stl",
@@ -251,12 +251,14 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 0.88,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.45,
+  "wall_p01_mm": 0.46,
   "wall_p50_mm": 6.0,
-  "frac_below_min": 0.037,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.053,
+  "fails": [
+   "R2-thin-wall"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/cargo/door_latch_bracket_port.stl",
@@ -268,12 +270,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 2.41,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.0,
+  "wall_p01_mm": 2.39,
   "wall_p50_mm": 7.0,
-  "frac_below_min": 0.005,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.0,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/door_latch_bracket_stbd.stl",
@@ -285,12 +287,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 1.22,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 1.0,
   "wall_p50_mm": 7.0,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/door_latch_crank_port.stl",
@@ -302,12 +304,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 0.91,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 3.01,
   "wall_p50_mm": 3.5,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/door_latch_crank_stbd.stl",
@@ -319,12 +321,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 0.59,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 3.42,
-  "wall_p50_mm": 4.1,
+  "wall_p50_mm": 4.86,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/gateway_door_tray.stl",
@@ -336,12 +338,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 4.73,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 0.7,
   "wall_p50_mm": 5.4,
-  "frac_below_min": 0.03,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.027,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/tilt_actuator_bracket_port.stl",
@@ -353,12 +355,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 16.5,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.68,
+  "wall_p01_mm": 0.4,
   "wall_p50_mm": 2.0,
-  "frac_below_min": 0.013,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.017,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/tilt_actuator_bracket_stbd.stl",
@@ -370,12 +372,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 16.5,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.29,
+  "wall_p01_mm": 0.37,
   "wall_p50_mm": 2.0,
-  "frac_below_min": 0.02,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.023,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/tilt_actuator_wheel.stl",
@@ -387,12 +389,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 6.58,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.72,
+  "wall_p01_mm": 0.68,
   "wall_p50_mm": 5.0,
-  "frac_below_min": 0.035,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.047,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/cargo/tilt_actuator_worm.stl",
@@ -404,14 +406,14 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 5.67,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.06,
-  "wall_p50_mm": 2.2,
-  "frac_below_min": 0.15,
+  "wall_p01_mm": 0.02,
+  "wall_p50_mm": 2.23,
+  "frac_below_min": 0.11,
   "fails": [
    "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/cargo/tilt_brake_guide.stl",
@@ -423,14 +425,14 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 2.02,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.65,
-  "wall_p50_mm": 2.0,
-  "frac_below_min": 0.052,
+  "wall_p01_mm": 0.52,
+  "wall_p50_mm": 1.99,
+  "frac_below_min": 0.06,
   "fails": [
    "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/cargo/tilt_brake_guide_stbd.stl",
@@ -442,12 +444,14 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 2.02,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 0.66,
-  "wall_p50_mm": 2.01,
-  "frac_below_min": 0.035,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "wall_p50_mm": 1.99,
+  "frac_below_min": 0.07,
+  "fails": [
+   "R2-thin-wall"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/cargo_middle_splice_collar.stl",
@@ -459,12 +463,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 15.05,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 2.0,
   "wall_p50_mm": 2.0,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/dorsal_antenna_fin.stl",
@@ -476,12 +480,101 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 2.8,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 4.0,
   "wall_p50_mm": 4.0,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
+ },
+ {
+  "part": "airframe/stls/fuselage/head/bay_a_cn1_drawer.stl",
+  "extents_mm": [
+   89.7,
+   86.5,
+   25.5
+  ],
+  "watertight": true,
+  "winding_ok": true,
+  "volume_cc": 23.01,
+  "fits_machine": "SLS 380",
+  "enclosed_voids_cc": [],
+  "wall_p01_mm": 1.7,
+  "wall_p50_mm": 2.4,
+  "frac_below_min": 0.007,
+  "fails": []
+ },
+ {
+  "part": "airframe/stls/fuselage/head/bay_a_cn1_gate.stl",
+  "extents_mm": [
+   43.8,
+   2.0,
+   3.0
+  ],
+  "watertight": true,
+  "winding_ok": true,
+  "volume_cc": 0.26,
+  "fits_machine": "SLS 380",
+  "enclosed_voids_cc": [],
+  "wall_p01_mm": 2.0,
+  "wall_p50_mm": 2.0,
+  "frac_below_min": 0.0,
+  "fails": []
+ },
+ {
+  "part": "airframe/stls/fuselage/head/bay_a_fc1_shelf.stl",
+  "extents_mm": [
+   88.9,
+   58.0,
+   2.0
+  ],
+  "watertight": true,
+  "winding_ok": true,
+  "volume_cc": 9.14,
+  "fits_machine": "SLS 380",
+  "enclosed_voids_cc": [],
+  "wall_p01_mm": 2.0,
+  "wall_p50_mm": 2.0,
+  "frac_below_min": 0.0,
+  "fails": []
+ },
+ {
+  "part": "airframe/stls/fuselage/head/bay_a_hatch_cover.stl",
+  "extents_mm": [
+   54.0,
+   83.0,
+   38.6
+  ],
+  "watertight": true,
+  "winding_ok": true,
+  "volume_cc": 12.39,
+  "fits_machine": "SLS 380",
+  "enclosed_voids_cc": [],
+  "wall_p01_mm": 0.17,
+  "wall_p50_mm": 2.0,
+  "frac_below_min": 0.063,
+  "fails": [
+   "R2-thin-wall"
+  ]
+ },
+ {
+  "part": "airframe/stls/fuselage/head/bay_a_hatch_flange.stl",
+  "extents_mm": [
+   66.0,
+   53.0,
+   41.2
+  ],
+  "watertight": true,
+  "winding_ok": true,
+  "volume_cc": 6.28,
+  "fits_machine": "SLS 380",
+  "enclosed_voids_cc": [],
+  "wall_p01_mm": 0.12,
+  "wall_p50_mm": 1.89,
+  "frac_below_min": 0.107,
+  "fails": [
+   "R2-thin-wall"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/head/bow_sensor_bay_insert.stl",
@@ -493,12 +586,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 1.54,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.81,
+  "wall_p01_mm": 0.4,
   "wall_p50_mm": 1.5,
-  "frac_below_min": 0.015,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.027,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/head/twin_pack_gate.stl",
@@ -510,12 +603,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 3.0,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 1.51,
   "wall_p50_mm": 4.0,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/head/twin_pack_sled.stl",
@@ -527,12 +620,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 5.29,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 1.0,
   "wall_p50_mm": 1.0,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/head/twin_pack_tray.stl",
@@ -544,12 +637,29 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 79.7,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 0.9,
   "wall_p50_mm": 2.4,
-  "frac_below_min": 0.02,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.03,
+  "fails": []
+ },
+ {
+  "part": "airframe/stls/fuselage/head_cargo_shell24_2mm_merged_hatch.stl",
+  "extents_mm": [
+   194.3,
+   434.7,
+   188.0
+  ],
+  "watertight": true,
+  "winding_ok": true,
+  "volume_cc": 469.66,
+  "fits_machine": "SLS 380",
+  "enclosed_voids_cc": [],
+  "wall_p01_mm": 0.47,
+  "wall_p50_mm": 2.0,
+  "frac_below_min": 0.027,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/inara_access_cover.stl",
@@ -561,12 +671,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 4.6,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.62,
+  "wall_p01_mm": 0.32,
   "wall_p50_mm": 3.2,
-  "frac_below_min": 0.033,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.037,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-port.stl",
@@ -578,12 +688,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 45.65,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 21.33,
-  "wall_p50_mm": 25.07,
+  "wall_p01_mm": 21.19,
+  "wall_p50_mm": 22.77,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_a1b_housing_fore-stbd.stl",
@@ -595,12 +705,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 45.65,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 19.99,
-  "wall_p50_mm": 24.07,
+  "wall_p01_mm": 19.3,
+  "wall_p50_mm": 22.52,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl",
@@ -612,12 +722,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 31.03,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.9,
-  "wall_p50_mm": 5.58,
-  "frac_below_min": 0.015,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "wall_p01_mm": 0.53,
+  "wall_p50_mm": 5.8,
+  "frac_below_min": 0.02,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port.stl",
@@ -629,15 +739,14 @@
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.08,
-  "wall_p50_mm": 4.44,
-  "frac_below_min": 0.077,
+  "wall_p01_mm": 0.21,
+  "wall_p50_mm": 4.37,
+  "frac_below_min": 0.04,
   "fails": [
-   "R2-thin-wall",
    "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-port_print.stl",
@@ -649,15 +758,15 @@
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 0.1,
   "wall_p50_mm": 4.36,
-  "frac_below_min": 0.07,
+  "frac_below_min": 0.09,
   "fails": [
    "R2-thin-wall",
    "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd.stl",
@@ -669,15 +778,15 @@
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.19,
-  "wall_p50_mm": 4.34,
-  "frac_below_min": 0.06,
+  "wall_p01_mm": 0.16,
+  "wall_p50_mm": 4.45,
+  "frac_below_min": 0.067,
   "fails": [
    "R2-thin-wall",
    "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_aft-stbd_print.stl",
@@ -689,15 +798,14 @@
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.1,
-  "wall_p50_mm": 4.4,
-  "frac_below_min": 0.072,
+  "wall_p01_mm": 0.2,
+  "wall_p50_mm": 4.37,
+  "frac_below_min": 0.04,
   "fails": [
-   "R2-thin-wall",
    "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port.stl",
@@ -709,15 +817,15 @@
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.24,
-  "wall_p50_mm": 4.24,
-  "frac_below_min": 0.065,
+  "wall_p01_mm": 0.13,
+  "wall_p50_mm": 3.97,
+  "frac_below_min": 0.067,
   "fails": [
    "R2-thin-wall",
    "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-port_print.stl",
@@ -729,15 +837,14 @@
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.21,
-  "wall_p50_mm": 4.23,
-  "frac_below_min": 0.06,
+  "wall_p01_mm": 0.27,
+  "wall_p50_mm": 4.06,
+  "frac_below_min": 0.047,
   "fails": [
-   "R2-thin-wall",
    "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd.stl",
@@ -749,14 +856,15 @@
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.35,
-  "wall_p50_mm": 4.31,
-  "frac_below_min": 0.035,
+  "wall_p01_mm": 0.27,
+  "wall_p50_mm": 4.22,
+  "frac_below_min": 0.057,
   "fails": [
+   "R2-thin-wall",
    "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_bay_fore-stbd_print.stl",
@@ -768,15 +876,15 @@
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.08,
-  "wall_p50_mm": 4.12,
-  "frac_below_min": 0.072,
+  "wall_p01_mm": 0.32,
+  "wall_p50_mm": 4.29,
+  "frac_below_min": 0.08,
   "fails": [
    "R2-thin-wall",
    "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl",
@@ -788,12 +896,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 39.7,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.52,
-  "wall_p50_mm": 4.5,
-  "frac_below_min": 0.015,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "wall_p01_mm": 1.45,
+  "wall_p50_mm": 4.49,
+  "frac_below_min": 0.003,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl",
@@ -805,12 +913,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 38.81,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.97,
+  "wall_p01_mm": 0.2,
   "wall_p50_mm": 4.5,
-  "frac_below_min": 0.01,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.037,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_common_bay.stl",
@@ -822,12 +930,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 22.46,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 2.33,
-  "wall_p50_mm": 5.35,
+  "wall_p50_mm": 5.87,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/landing-gear/lg_r6_common_foot.stl",
@@ -839,12 +947,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 7.25,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.79,
-  "wall_p50_mm": 4.52,
-  "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "wall_p01_mm": 2.13,
+  "wall_p50_mm": 6.29,
+  "frac_below_min": 0.003,
+  "fails": []
  },
  {
   "part": "airframe/stls/fuselage/middle_canonical_edf_intake.stl",
@@ -856,14 +964,14 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 236.48,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.33,
+  "wall_p01_mm": 0.49,
   "wall_p50_mm": 3.32,
-  "frac_below_min": 0.083,
+  "frac_below_min": 0.06,
   "fails": [
    "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/middle_canonical_shell24.stl",
@@ -875,14 +983,14 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 238.93,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.52,
+  "wall_p01_mm": 0.21,
   "wall_p50_mm": 3.32,
-  "frac_below_min": 0.055,
+  "frac_below_min": 0.087,
   "fails": [
    "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/river_access_cover.stl",
@@ -894,103 +1002,88 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 4.46,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 0.2,
   "wall_p50_mm": 3.2,
-  "frac_below_min": 0.037,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.06,
+  "fails": [
+   "R2-thin-wall"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/wing_root_flange_port.stl",
   "extents_mm": [
-   26.2,
+   36.7,
    60.0,
    80.0
   ],
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.16,
+  "wall_p01_mm": 0.03,
   "wall_p50_mm": 4.53,
-  "frac_below_min": 0.058,
+  "frac_below_min": 0.097,
   "fails": [
    "R2-thin-wall",
    "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/fuselage/wing_root_flange_stbd.stl",
   "extents_mm": [
-   26.2,
+   36.7,
    60.0,
    80.0
   ],
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.17,
-  "wall_p50_mm": 4.5,
-  "frac_below_min": 0.058,
+  "wall_p01_mm": 0.02,
+  "wall_p50_mm": 4.54,
+  "frac_below_min": 0.1,
   "fails": [
    "R2-thin-wall",
    "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
-  "part": "airframe/stls/nacelles/edf_aft_spider_sleeve.stl",
+  "part": "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_port.stl",
   "extents_mm": [
-   55.0,
-   58.0,
-   43.8
+   69.0,
+   69.0,
+   95.4
   ],
   "watertight": true,
   "winding_ok": true,
-  "volume_cc": 23.53,
+  "volume_cc": 60.29,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.25,
+  "wall_p01_mm": 0.49,
   "wall_p50_mm": 2.5,
-  "frac_below_min": 0.003,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.033,
+  "fails": []
  },
  {
   "part": "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
   "extents_mm": [
    69.0,
-   72.0,
-   84.2
+   69.0,
+   95.4
   ],
   "watertight": true,
   "winding_ok": true,
-  "volume_cc": 54.91,
+  "volume_cc": 60.29,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
   "wall_p01_mm": 0.79,
   "wall_p50_mm": 2.5,
-  "frac_below_min": 0.025,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/nacelles/edf_stator_sleeve.stl",
-  "extents_mm": [
-   55.0,
-   58.0,
-   32.5
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 29.5,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.64,
-  "wall_p50_mm": 2.5,
-  "frac_below_min": 0.02,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.017,
+  "fails": []
  },
  {
   "part": "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
@@ -1002,12 +1095,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 627.18,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 3.42,
-  "wall_p50_mm": 64.47,
+  "wall_p01_mm": 3.39,
+  "wall_p50_mm": 51.16,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
@@ -1019,88 +1112,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 627.06,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 3.93,
-  "wall_p50_mm": 61.24,
+  "wall_p01_mm": 3.27,
+  "wall_p50_mm": 36.29,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/nacelles/esc/nacelle_esc_cover_port_a.stl",
-  "extents_mm": [
-   50.5,
-   24.2,
-   57.5
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 6.65,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.2,
-  "wall_p50_mm": 2.34,
-  "frac_below_min": 0.068,
-  "fails": [
-   "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/nacelles/esc/nacelle_esc_cover_port_b.stl",
-  "extents_mm": [
-   50.5,
-   24.2,
-   57.5
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 6.65,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.14,
-  "wall_p50_mm": 2.32,
-  "frac_below_min": 0.065,
-  "fails": [
-   "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_a.stl",
-  "extents_mm": [
-   50.3,
-   25.3,
-   57.5
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 6.66,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.15,
-  "wall_p50_mm": 2.33,
-  "frac_below_min": 0.062,
-  "fails": [
-   "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/nacelles/esc/nacelle_esc_cover_stbd_b.stl",
-  "extents_mm": [
-   50.3,
-   25.3,
-   57.5
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 6.66,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.17,
-  "wall_p50_mm": 2.32,
-  "frac_below_min": 0.08,
-  "fails": [
-   "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
   "part": "airframe/stls/nacelles/nacelle_port_64mm.stl",
@@ -1112,50 +1129,14 @@
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.13,
-  "wall_p50_mm": 2.61,
-  "frac_below_min": 0.037,
+  "wall_p01_mm": 0.08,
+  "wall_p50_mm": 2.5,
+  "frac_below_min": 0.05,
   "fails": [
    "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/nacelles/nacelle_port_revs.stl",
-  "extents_mm": [
-   76.4,
-   167.3,
-   79.1
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 178.44,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.02,
-  "wall_p50_mm": 3.0,
-  "frac_below_min": 0.075,
-  "fails": [
-   "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/nacelles/nacelle_servo_bracket.stl",
-  "extents_mm": [
-   44.4,
-   22.4,
-   18.0
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 4.52,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.0,
-  "wall_p50_mm": 1.99,
-  "frac_below_min": 0.003,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
   "part": "airframe/stls/nacelles/nacelle_stbd_64mm.stl",
@@ -1167,50 +1148,15 @@
   "watertight": false,
   "winding_ok": true,
   "volume_cc": null,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.05,
-  "wall_p50_mm": 2.51,
-  "frac_below_min": 0.043,
-  "fails": [
-   "R4-mesh"
-  ],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/nacelles/nacelle_stbd_revs.stl",
-  "extents_mm": [
-   76.4,
-   167.3,
-   77.7
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 176.83,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.36,
-  "wall_p50_mm": 3.0,
-  "frac_below_min": 0.04,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/nacelles/nacelle_trunnion.stl",
-  "extents_mm": [
-   50.0,
-   50.0,
-   11.5
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 7.56,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.29,
+  "wall_p01_mm": 0.02,
   "wall_p50_mm": 2.5,
-  "frac_below_min": 0.109,
+  "frac_below_min": 0.06,
   "fails": [
-   "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
+   "R2-thin-wall",
+   "R4-mesh"
+  ]
  },
  {
   "part": "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
@@ -1222,12 +1168,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 8.86,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.96,
+  "wall_p01_mm": 0.84,
   "wall_p50_mm": 3.0,
-  "frac_below_min": 0.01,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.03,
+  "fails": []
  },
  {
   "part": "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl",
@@ -1239,99 +1185,118 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 8.86,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.85,
-  "wall_p50_mm": 2.6,
-  "frac_below_min": 0.025,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "wall_p01_mm": 0.84,
+  "wall_p50_mm": 3.0,
+  "frac_below_min": 0.037,
+  "fails": []
  },
  {
-  "part": "airframe/stls/nacelles/nozzles/nacelle_nozzle_fixed.stl",
+  "part": "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_64mm.stl",
   "extents_mm": [
-   71.2,
-   71.2,
-   48.0
+   11.0,
+   29.2,
+   42.9
   ],
   "watertight": true,
   "winding_ok": true,
-  "volume_cc": 32.11,
+  "volume_cc": 2.9,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.91,
+  "wall_p01_mm": 2.0,
   "wall_p50_mm": 2.5,
   "frac_below_min": 0.0,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "fails": []
  },
  {
-  "part": "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
+  "part": "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal_64mm.stl",
   "extents_mm": [
-   10.5,
-   23.2,
-   50.2
+   9.1,
+   31.4,
+   42.9
   ],
   "watertight": true,
   "winding_ok": true,
-  "volume_cc": 2.64,
+  "volume_cc": 3.11,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.8,
+  "wall_p01_mm": 2.0,
   "wall_p50_mm": 2.5,
-  "frac_below_min": 0.005,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.003,
+  "fails": []
  },
  {
-  "part": "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
+  "part": "airframe/stls/nacelles/nozzles/nacelle_nozzle_ring_64mm_port.stl",
   "extents_mm": [
-   9.2,
-   25.5,
-   50.2
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 2.87,
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.09,
-  "wall_p50_mm": 2.5,
-  "frac_below_min": 0.01,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/nacelles/nozzles/nacelle_nozzle_ring.stl",
-  "extents_mm": [
-   66.4,
-   66.2,
+   80.2,
+   80.2,
    8.0
   ],
   "watertight": true,
   "winding_ok": true,
-  "volume_cc": 6.11,
+  "volume_cc": 7.46,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.2,
+  "wall_p01_mm": 0.34,
   "wall_p50_mm": 4.59,
-  "frac_below_min": 0.147,
+  "frac_below_min": 0.117,
   "fails": [
    "R2-thin-wall"
-  ],
-  "fits_machine": "SLS 380"
+  ]
  },
  {
-  "part": "airframe/stls/nacelles/nozzles/nacelle_nozzle_throat.stl",
+  "part": "airframe/stls/nacelles/nozzles/nacelle_nozzle_ring_64mm_stbd.stl",
   "extents_mm": [
-   71.2,
-   71.2,
+   80.2,
+   80.2,
+   8.0
+  ],
+  "watertight": true,
+  "winding_ok": true,
+  "volume_cc": 7.46,
+  "fits_machine": "SLS 380",
+  "enclosed_voids_cc": [],
+  "wall_p01_mm": 0.42,
+  "wall_p50_mm": 4.59,
+  "frac_below_min": 0.137,
+  "fails": [
+   "R2-thin-wall"
+  ]
+ },
+ {
+  "part": "airframe/stls/nacelles/nozzles/nacelle_nozzle_throat_64mm_port.stl",
+  "extents_mm": [
+   85.2,
+   84.9,
    21.1
   ],
   "watertight": true,
   "winding_ok": true,
-  "volume_cc": 19.42,
+  "volume_cc": 23.68,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.71,
+  "wall_p01_mm": 0.46,
   "wall_p50_mm": 2.5,
-  "frac_below_min": 0.005,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "frac_below_min": 0.037,
+  "fails": []
+ },
+ {
+  "part": "airframe/stls/nacelles/nozzles/nacelle_nozzle_throat_64mm_stbd.stl",
+  "extents_mm": [
+   85.2,
+   84.9,
+   21.1
+  ],
+  "watertight": true,
+  "winding_ok": true,
+  "volume_cc": 23.68,
+  "fits_machine": "SLS 380",
+  "enclosed_voids_cc": [],
+  "wall_p01_mm": 0.48,
+  "wall_p50_mm": 2.92,
+  "frac_below_min": 0.023,
+  "fails": []
  },
  {
   "part": "airframe/stls/wings/wing_port_s1223_revo.stl",
@@ -1343,12 +1308,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 91.02,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.8,
-  "wall_p50_mm": 6.31,
-  "frac_below_min": 0.022,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "wall_p01_mm": 0.66,
+  "wall_p50_mm": 7.08,
+  "frac_below_min": 0.023,
+  "fails": []
  },
  {
   "part": "airframe/stls/wings/wing_stbd_s1223_revo.stl",
@@ -1360,12 +1325,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 91.02,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.61,
-  "wall_p50_mm": 6.31,
-  "frac_below_min": 0.018,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "wall_p01_mm": 0.81,
+  "wall_p50_mm": 6.73,
+  "frac_below_min": 0.017,
+  "fails": []
  },
  {
   "part": "airframe/stls/wings/wing_tilt_pinion_port.stl",
@@ -1377,12 +1342,12 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 0.85,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.39,
-  "wall_p50_mm": 1.77,
-  "frac_below_min": 0.033,
-  "fails": [],
-  "fits_machine": "SLS 380"
+  "wall_p01_mm": 0.41,
+  "wall_p50_mm": 1.33,
+  "frac_below_min": 0.047,
+  "fails": []
  },
  {
   "part": "airframe/stls/wings/wing_tilt_pinion_stbd.stl",
@@ -1394,45 +1359,11 @@
   "watertight": true,
   "winding_ok": true,
   "volume_cc": 0.85,
+  "fits_machine": "SLS 380",
   "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.51,
+  "wall_p01_mm": 0.93,
   "wall_p50_mm": 1.34,
-  "frac_below_min": 0.03,
-  "fails": [],
-  "fits_machine": "SLS 380"
- },
- {
-  "part": "airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl",
-  "extents_mm": [
-   194.3,
-   434.7,
-   201.5
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 457.32,
-  "fits_machine": "SLS 380",
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 0.04,
-  "wall_p50_mm": 2.0,
-  "frac_below_min": 0.048,
-  "fails": []
- },
- {
-  "part": "airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl",
-  "extents_mm": [
-   176.9,
-   253.3,
-   162.5
-  ],
-  "watertight": true,
-  "winding_ok": true,
-  "volume_cc": 388.71,
-  "fits_machine": "SLS 380",
-  "enclosed_voids_cc": [],
-  "wall_p01_mm": 1.11,
-  "wall_p50_mm": 2.01,
-  "frac_below_min": 0.01,
+  "frac_below_min": 0.013,
   "fails": []
  }
 ]

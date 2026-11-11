@@ -10384,6 +10384,13 @@
       ],
       "archived": false
     },
+    "docs/MATSPEC_SLS_PA_CF.md": {
+      "description": "Material specification MS-SLS-PACF \u2014 SLS DuraForm PA CF flight parts",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/NACELLE_64MM_VERIFICATION.md": {
       "description": "64 mm Nacelle \u2014 Verification Record (2026-10-03)",
       "tags": [
@@ -10508,6 +10515,13 @@
     },
     "docs/SLS_MIGRATION.md": {
       "description": "Serenity UAV \u2014 Airframe Migration from FDM CF-PETG to SLS (PA CF / PA11)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/SLS_MIN_WALL_THICKNESS.md": {
+      "description": "SLS minimum wall thickness, DuraForm PA CF (replaces the 0.079 in FDM rule)",
       "tags": [
         "documentation"
       ],
@@ -13245,7 +13259,7 @@
       "archived": false
     },
     "docs/sls-study/sls_dfm_audit.json": {
-      "description": "JSON data (81 entries)",
+      "description": "JSON data (77 entries)",
       "tags": [
         "documentation"
       ],
@@ -16267,7 +16281,7 @@
       "archived": false
     },
     "tools/sls_auw_reconcile.py": {
-      "description": "sls_auw_reconcile.py -- part-by-part reconciliation of the aircraft AUW from FDM",
+      "description": "sls_auw_reconcile.py -- part-by-part reconciliation of the aircraft AUW between SLS",
       "tags": [
         "build-tooling"
       ],
@@ -16289,6 +16303,13 @@
     },
     "tools/sls_materials.py": {
       "description": "sls_materials.py -- single source of SLS material properties for every",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/sls_min_wall.py": {
+      "description": "sls_min_wall.py -- minimum wall (skin) thickness for SLS DuraForm PA CF printed parts.",
       "tags": [
         "build-tooling"
       ],
@@ -16692,6 +16713,7 @@
       "docs/MANIFEST.json",
       "docs/MASS_AUDIT_CARGO_WING_ROOT.md",
       "docs/MASS_AUDIT_MIDDLE_REAR_SECTIONS.md",
+      "docs/MATSPEC_SLS_PA_CF.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/OBSERVER_LASER_ANALYSIS.md",
@@ -16708,6 +16730,7 @@
       "docs/SLS_EMI_AND_WINGS_NOTE.md",
       "docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md",
       "docs/SLS_MIGRATION.md",
+      "docs/SLS_MIN_WALL_THICKNESS.md",
       "docs/SLS_PRINT_ORIENTATION.md",
       "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
@@ -20610,6 +20633,7 @@
       "tools/sls_dfm_audit.py",
       "tools/sls_material_screen.py",
       "tools/sls_materials.py",
+      "tools/sls_min_wall.py",
       "tools/sls_print_orientation.py",
       "tools/sls_retired_parts.py",
       "tools/sls_scale_trim_study.py",
