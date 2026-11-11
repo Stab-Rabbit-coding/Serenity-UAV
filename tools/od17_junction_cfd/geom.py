@@ -3,6 +3,8 @@
 
 Workflow (S = a work directory holding asm/pod_s2_default.stl and asm/trunnion.stl renders):
     python3 geom.py S ; python3 mkcase.py S glove ; python3 mkcase.py S endplate
+    python3 geom.py S WING.stl NAME   # end plate only, on another stbd wing render (hull frame);
+                                      # the fairing follows that wing's own trailing-edge line
     run.sh S/cfd/glove ; run.sh S/cfd/endplate ; python3 post.py S glove endplate
 Results and limits: docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md, "Junction CFD".
 
@@ -23,12 +25,32 @@ import nacelle64_assembly_check as a  # noqa: E402
 import nacelle64_optD_concept as d  # noqa: E402
 S = sys.argv[1]
 PZ = a.PIVOT_Z
-parts, boss = d.build(23.0, f'{S}/asm/pod_s2_default.stl', f'{S}/asm/trunnion.stl')
+SHIFT = 23.0
+parts, boss = d.build(SHIFT, f'{S}/asm/pod_s2_default.stl', f'{S}/asm/trunnion.stl')
+ALT = sys.argv[2] if len(sys.argv) > 2 else None
+if ALT:
+    # a raw OpenSCAD render (wing frame) -> hull frame with the bake's own Wing_Stbd translation
+    import bake_hull_frame as bk  # noqa: E402
+    _alt = trimesh.load(ALT, force='mesh')
+    _alt.apply_translation(bk.COMPONENTS['Wing_Stbd'][1][:3])
+    parts['wing'] = d.shift(a.xform(_alt, a.hull_to_local('stbd')), SHIFT)
 wing = a.to_man(parts['wing'])
 yz = np.array([[0, 1, 0, 0], [0, 0, 1, 0], [1, 0, 0, 0]], float)
 NS = 90
 s = 0.5 * (1 - np.cos(np.linspace(0, np.pi, NS)))
-def z_te(x): return 176.0 + 0.42 * (x - 84.3)
+
+
+def te_at(x):
+    """Trailing-edge Z of the wing section at span station x (largest Z of the slice)."""
+    return max(float(np.max(np.asarray(p)[:, 1])) for p in wing.transform(yz).slice(float(x)).to_polygons())
+
+
+# trailing-edge line measured from the wing itself (baseline: 176.0 + 0.42 (x - 84.3))
+_X1, _X2 = 90.0, 150.0
+TE_K = (te_at(_X2) - te_at(_X1)) / (_X2 - _X1)
+TE_Z1 = te_at(_X1)
+print(f'TE line: slope {TE_K:.4f}, Z {TE_Z1:.2f} at X {_X1}')
+def z_te(x): return TE_Z1 + TE_K * (x - _X1)
 
 
 def naca_half(xc, t): return 5 * t * (0.2969 * np.sqrt(xc) - 0.1260 *
@@ -126,7 +148,8 @@ xe = XA + sv
 fe = [ep_frac(v) for v in sv]
 endp = loft(xs_gap + list(xe[1:]), [0] * 12 + fe[1:], XA, XA + SPAN)
 clip = m.Manifold.cube([165.0 - 40.0, 400, 400]).translate([40.0, -200, -100])
-for name, body in (('glove', glove), ('endplate', endp)):
+bodies = (('endplate_' + sys.argv[3], endp),) if ALT else (('glove', glove), ('endplate', endp))
+for name, body in bodies:
     full = (body + wing) ^ clip
     t = a.to_trimesh(full)
     print(name, 'status', full.status().name, 'volume', a.cu_in(float(full.volume())),

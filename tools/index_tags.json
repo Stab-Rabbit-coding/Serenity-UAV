@@ -10575,6 +10575,13 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_od17_tail_planform.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_od1_spigot_cartridge.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -16780,6 +16787,7 @@
       "docs/figures/nacelle64_od17_optD_horizontal.png",
       "docs/figures/nacelle64_od17_optD_tip_extension.png",
       "docs/figures/nacelle64_od17_optD_vertical.png",
+      "docs/figures/nacelle64_od17_tail_planform.png",
       "docs/figures/nacelle64_od1_spigot_cartridge.png",
       "docs/figures/nacelle64_sections.png",
       "docs/figures/nacelle64_war10_options.png",
