@@ -25,7 +25,7 @@ sides, bend radius ≥ 3 × wire OD at every bend, both WA-R10 entries closed (p
 - `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md` — the brief: options, option D model, fairing, junction CFD, longer-tail CFD, decisions.
 - `tools/nacelle64_optD_concept.py` (wire routing and renders), `nacelle64_optD_aft_fairing.py`, `nacelle64_optD_glove.py`, `tools/od17_junction_cfd/` (OpenFOAM), `tools/nacelle64_assembly_check.py` (stages static, sweep, cable, bay), `tools/wbs_burndown.py`.
 - CFD figures and options in `docs/figures/nacelle64_od17_*`.
-- Baseline `docs/plans/2026-11-07-001-burndown-baseline.json`; at close of this session `wbs_burndown.py` reads 712 open / 559 closed (`closed+` +3 over baseline).
+- Baseline `docs/plans/2026-11-07-001-burndown-baseline.json`; at close of this session `wbs_burndown.py` reads 714 open / 559 closed (`closed+` +3 over baseline; the +2 open are the two findings logged below).
 
 ## What S2 does now (in this order)
 1. Re-render the live pod and trunnion (the scratch renders used so far are not in the repo and the container is gone):
