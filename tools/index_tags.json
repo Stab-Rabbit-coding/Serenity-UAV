@@ -10533,6 +10533,13 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_od17_glove_compare.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_od17_optD_horizontal.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -15966,6 +15973,13 @@
       ],
       "archived": false
     },
+    "tools/nacelle64_optD_glove.py": {
+      "description": "nacelle64_optD_glove.py -- OD-17 option D: spanwise glove blending the aft fairing into the wing.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nacelle_64_proportion_trade.py": {
       "description": "nacelle_64_proportion_trade.py \u2014 multi-objective sweep of the 64 mm nacelle's",
       "tags": [
@@ -16711,6 +16725,7 @@
       "docs/figures/nacelle64_od17_aft_fairing_horizontal.png",
       "docs/figures/nacelle64_od17_aft_fairing_section.png",
       "docs/figures/nacelle64_od17_aft_fairing_vertical.png",
+      "docs/figures/nacelle64_od17_glove_compare.png",
       "docs/figures/nacelle64_od17_optD_horizontal.png",
       "docs/figures/nacelle64_od17_optD_tip_extension.png",
       "docs/figures/nacelle64_od17_optD_vertical.png",
@@ -20511,6 +20526,7 @@
       "tools/nacelle64_od1_figure.py",
       "tools/nacelle64_optD_aft_fairing.py",
       "tools/nacelle64_optD_concept.py",
+      "tools/nacelle64_optD_glove.py",
       "tools/nacelle_64_proportion_trade.py",
       "tools/nacelle_64_scale.py",
       "tools/nacelle_cowl_fair.py",

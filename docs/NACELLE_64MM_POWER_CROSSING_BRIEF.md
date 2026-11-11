@@ -143,7 +143,66 @@ the `AGENTS.md` §7 minimum wall.
 | **Weight and balance** | 0.071 lbm (32.2 g) per side solid in PA CF, wing-fixed, so the nacelle pivot is unaffected. Hollowing would reduce it. |
 | **Canonical shape** | The joint reads as a round hub with a teardrop tail running to the TE line. The fairing is 2.21 in (56 mm) thick against the wing's ~1.0 in (26 mm) at the tip, so there is a thickness step where the fairing meets the wing (front view). A short spanwise glove blending the fairing down to the wing section over 1.5–2 in (38–51 mm) of wing would remove the step; that is a wing change and is not modelled. Owner judgement against REF-CAD-003. |
 
+## Smoothing the fairing-to-wing junction (owner question, 2026-11-11)
+
+**Where the step comes from.** In option D the rotating bearing housing (bearings, ring gear Ø1.64 in
+(41.6 mm), Hall magnet Ø1.62 in (41.2 mm)) has to sit in the gap between the nacelle and the wing. Its
+fairing is 2.21 in (56 mm) thick; the wing's tip section is about 1.0 in (26 mm). At the junction each
+surface steps by up to 0.65 in (16.4 mm). The only fix is a gradual thickness change. The question is how
+much span the change is spread over.
+
+**What "laminar" means here.** At 40 kt the wing tip runs at Re ≈ 131,000
+(`docs/WING_ATTACH_INTERFACE.md`, "What published S1223 data still applies"). In this regime laminar
+separation bubbles dominate. The practical aim is attached flow and no junction vortex; holding a long
+laminar run is not a realistic goal. The built tip section is already about 26.7 % thick, "closer to a
+strut-fairing nose than to a low-Reynolds high-lift section" (same document).
+
+![No glove vs 1.50 in and 3.15 in gloves, top and front](figures/nacelle64_od17_glove_compare.png)
+
+*Copper: a wing-fixed glove that morphs the fairing outline into the wing's own section with a smoothstep
+blend. A smoothstep has zero spanwise slope at both ends, so the glove adds no crease where it starts or
+ends. Built with `tools/nacelle64_optD_glove.py`.*
+
+| | No glove (as drawn) | Glove 1.50 in (38 mm) | Glove 3.15 in (80 mm, all the usable span) |
+|---|---|---|---|
+| Junction | hard step | smooth, tangent at both ends | smooth, tangent at both ends |
+| Peak spanwise surface slope | — (a step) | 38° | 21° |
+| Material added (solid / as a 0.08 in (2 mm) skin, ESTIMATE) | — | 0.147 lbm (66.7 g) / ≈ 0.07 lbm (32 g) | 0.321 lbm (145.5 g) / ≈ 0.125 lbm (57 g) |
+| Clearance to pinion, trunnion, collar | — | 0 in³ contact | 0 in³ contact |
+
+The wing is only 3.77 in (95.7 mm) long from tip to root, and its clean section ends at X 6.5 in
+(165 mm). So 3.15 in (80 mm) is the most span a glove can use, and even that leaves a 21° peak surface
+slope.
+
+**The six checks for the glove.**
+- **Statics and dynamics:** wing-fixed; it adds mass at the wing tip, and its air load passes into the
+  wing spar.
+- **Function:** removes the step. Whether the flow stays attached over a 21–38° spanwise flare at
+  Re ≈ 131,000 is **not established**. That needs a 3-D CFD run of the junction (the repo's OpenFOAM setup,
+  `tools/nacelle_intake_cfd.py`, is the starting point) or a wind-tunnel check.
+- **Structural integrity:** printable as a skin over the wing tip, or as part of the wing print.
+- **Mechanism and component interactions:** inboard of the trunnion flange (X 3.11 in (79.0 mm)), so it
+  meets nothing that tilts; no contact with the pinion.
+- **Weight and balance:** 0.07–0.13 lbm (32–57 g) per side as a skin (ESTIMATE), wing-fixed; the
+  nacelle pivot is unaffected.
+- **Canonical shape:** the wing visibly swells toward the tip (front view). This is a larger departure
+  from REF-CAD-003 than the fairing alone.
+
+**Other ways to soften it, alone or together:**
+1. **A junction fillet** (a concave radius where fairing meets wing). Small and cheap; it rounds the corner
+   and helps the junction (horseshoe) vortex, but it does not remove the thickness change.
+2. **A leading-edge root fillet** ahead of the collar–wing junction. It aims at the same junction vortex.
+3. **A slimmer joint at the wing end.** Neck the rotating housing to about Ø1.8 in (46 mm) around the
+   gear and magnet. That cuts the step by about 20 %; it is a trunnion redesign.
+4. **Accept the step as an end plate,** with rounded edges. It is the lightest option and leaves the wing
+   canonical.
+
+**My recommendation:** the 3.15 in (80 mm) glove plus a junction fillet if smooth flow is the priority,
+but only after a CFD check of the junction, because a 21° flare can itself separate at this Reynolds
+number. If you want to keep the canonical wing, take option 4 with fillets 1 and 2.
+
 ## Recommendation
+
 
 
 
