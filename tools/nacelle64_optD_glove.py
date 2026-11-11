@@ -11,7 +11,7 @@ Usage:  python3 tools/nacelle64_optD_glove.py POD.stl TRUNNION.stl L_MM OUT.stl
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (Anthropic, Claude Opus 5.5) under the author's direction, 2026-11-11.
-License: MIT -- see LICENSES/MIT (SPDX-License-Identifier: MIT)
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 from __future__ import annotations
@@ -21,6 +21,7 @@ import sys
 
 import numpy as np
 import trimesh
+import sls_materials as sm
 from shapely.geometry import LineString, Polygon
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -77,6 +78,7 @@ def wing_outline(x):
     return z, np.array(up), np.array(lo)
 
 
+RHO = sm.rho_g_mm3(sm.PA_CF)                              # g/mm^3, datasheet solid density
 XA = 81.3                                                 # inboard of the trunnion flange (X 79.0)
 XB = XA + L
 za, ua, la = fairing_outline(XA, NECK)
@@ -117,7 +119,7 @@ print('glove status', glove.status().name)
 add = glove - wing
 add_v = float(add.volume())
 print('glove material added to the wing:', a.cu_in(add_v),
-      f'= {add_v * 1.11e-3 / 453.6:.3f} lbm ({add_v * 1.11e-3:.1f} g) solid')
+      f'= {add_v * RHO / 453.6:.3f} lbm ({add_v * RHO:.1f} g) solid')
 pinion = a.to_man(parts['pinion'])
 print('glove vs pinion', round(float((glove ^ pinion).volume()), 1),
       'mm3; glove vs trunnion/collar at rest',

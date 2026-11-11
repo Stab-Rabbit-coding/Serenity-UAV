@@ -71,16 +71,18 @@ for n in names:
     case = f'{S}/cfd/{n}'
     r = pv.OpenFOAMReader(f'{case}/case.foam')
     times = [t for t in r.time_values if t >= 1500]
+    if not times:
+        sys.exit(f'{n}: no saved time at or after iteration 1500 (latest {max(r.time_values)}); run longer')
     snaps = []
     for t in times:
         r.set_active_time_value(t)
         mb = r.read()
-        snaps.append((t, evaluate(mb), mb))
-    D = np.array([e['drag'] for _, e, _ in snaps])
-    R = np.array([e['rev'] for _, e, _ in snaps])
-    last_t, e, mb = snaps[-1]
+        snaps.append((t, evaluate(mb)))
+    D = np.array([e['drag'] for _, e in snaps])
+    R = np.array([e['rev'] for _, e in snaps])
+    last_t, e = snaps[-1]      # mb (the last mesh read) is kept; earlier ones are dropped as we go
     out[n] = dict(times=(min(times), max(times), len(times)), drag_N=D.mean(), drag_sd=D.std(), drag_lbf=D.mean() / 4.448,
-                  CDA_mm2=D.mean() / Q * 1e6, Fp=np.mean([x['Fp'] for _, x, _ in snaps]), Fv=np.mean([x['Fv'] for _, x, _ in snaps]),
+                  CDA_mm2=D.mean() / Q * 1e6, Fp=np.mean([x['Fp'] for _, x in snaps]), Fv=np.mean([x['Fv'] for _, x in snaps]),
                   rev_area_mm2=R.mean(), rev_sd=R.std(), junction_area_mm2=e['jarea'], ref_frac_reversed=e['ref'],
                   yplus=(round(float(np.median(e['yp'])), 1), round(
                       float(np.percentile(e['yp'], 95)), 1)),

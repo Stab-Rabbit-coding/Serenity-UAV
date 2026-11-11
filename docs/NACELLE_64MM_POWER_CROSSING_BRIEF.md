@@ -257,6 +257,8 @@ number. If you want to keep the canonical wing, take option 4 with fillets 1 and
 - Slip walls stand in for the nacelle flank and the fuselage. The rotating collar is modelled as a static
   solid with no running gaps.
 - Cruise only (0° tilt, 0° incidence, 40 kt); no hover or incidence sweep.
+- The CFD fairing's trailing-edge half-thickness floor was 0.024 in (0.6 mm); the printed fairing's is
+  0.039 in (1.0 mm). Logged as OD17-TOOLS-01; not expected to change the A-versus-B comparison.
 - The wall-shear map has speckle near the leading edge where the near-wall probe lands in a neighbouring
   cell; the integrated numbers are not sensitive to it.
 

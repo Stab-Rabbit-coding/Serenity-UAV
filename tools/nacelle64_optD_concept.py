@@ -15,7 +15,7 @@ Usage:  python3 tools/nacelle64_optD_concept.py --pod POD.stl --trunnion TRUNNIO
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (Anthropic, Claude Opus 5.5) under the author's direction, 2026-11-08.
-License: MIT -- see LICENSES/MIT (SPDX-License-Identifier: MIT)
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
 from __future__ import annotations

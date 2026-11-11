@@ -77,4 +77,10 @@
 - [ ] SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision (§1.1.3.1…
 - [ ] SPAR-25-6 (U6) — Integration, load check, mass/CG, BOM, and the…
 
+## Findings 2026-11-11 (code review of the OD-17 tools, Claude Opus 5.5)
+→ full detail: `WBS.md` §5.5
+
+- [ ] OD17-TOOLS-01 — One fairing module
+- [ ] WBS-BURNDOWN-01 — Count closures by identity, not by count
+
 ---

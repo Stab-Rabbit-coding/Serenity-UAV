@@ -10,7 +10,7 @@ Results and limits: docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md, "Junction CFD".
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (Anthropic, Claude Opus 5.5) under the author's direction, 2026-11-11.
-License: MIT -- see LICENSES/MIT (SPDX-License-Identifier: MIT)
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 import os
 import sys
@@ -24,6 +24,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 import nacelle64_assembly_check as a  # noqa: E402
 import nacelle64_optD_concept as d  # noqa: E402
 S = sys.argv[1]
+if len(sys.argv) > 2 and len(sys.argv) < 4:
+    sys.exit('usage: geom.py S [WING.stl NAME]')
 PZ = a.PIVOT_Z
 SHIFT = 23.0
 parts, boss = d.build(SHIFT, f'{S}/asm/pod_s2_default.stl', f'{S}/asm/trunnion.stl')
@@ -42,7 +44,10 @@ s = 0.5 * (1 - np.cos(np.linspace(0, np.pi, NS)))
 
 def te_at(x):
     """Trailing-edge Z of the wing section at span station x (largest Z of the slice)."""
-    return max(float(np.max(np.asarray(p)[:, 1])) for p in wing.transform(yz).slice(float(x)).to_polygons())
+    polys = wing.transform(yz).slice(float(x)).to_polygons()
+    if not polys:
+        sys.exit(f'wing has no section at X {x} mm (wrong wing file or frame?)')
+    return max(float(np.max(np.asarray(p)[:, 1])) for p in polys)
 
 
 # trailing-edge line measured from the wing itself (baseline: 176.0 + 0.42 (x - 84.3))
@@ -78,7 +83,8 @@ def wing_outline(x):
     z = zmin + 0.2 + s * (zmax - zmin - 0.4)
     up, lo = [], []
     for zz in z:
-        b = g.intersection(LineString([(-60, zz), (60, zz)])).bounds
+        seg = g.intersection(LineString([(-60, zz), (60, zz)]))
+        b = seg.bounds if not seg.is_empty else (0.0, 0.0, 0.0, 0.0)   # sliver/gap: collapse to the midline
         up.append(b[0])
         lo.append(b[2])
     return z, np.array(up), np.array(lo)
@@ -130,15 +136,15 @@ SPAN = R1 + 1.0 + R2
 
 
 def ep_frac(sv):
+    """Offset fraction (0 = fairing outline, 1 = wing) at distance sv along the plate:
+    convex R1 arc, a 1 mm near-vertical wall, then a concave R2 fillet arc ending tangent to the wing."""
     if sv <= R1:
         dlt = R1 - np.sqrt(max(R1 ** 2 - sv ** 2, 0.0))
     elif sv <= R1 + 1.0:
         dlt = R1 + (DMAX - R1 - R2) * (sv - R1) / 1.0
     else:
         q = sv - R1 - 1.0
-        dlt = DMAX - R2 + np.sqrt(max(R2 ** 2 - (R2 - q) ** 2, 0.0)) if q < R2 else DMAX
-        dlt = DMAX - (R2 - np.sqrt(max(R2 ** 2 - q ** 2, 0.0))) if False else DMAX - R2 + (R2 -
-                                                                                           np.sqrt(max(R2 ** 2 - q ** 2, 0.0))) * 0 + (np.sqrt(max(0.0, R2 ** 2 - (R2 - q) ** 2)))
+        dlt = DMAX - R2 + np.sqrt(max(R2 ** 2 - (R2 - q) ** 2, 0.0))
     return min(dlt / DMAX, 1.0)
 
 

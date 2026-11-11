@@ -14,19 +14,21 @@ Usage:  python3 tools/nacelle64_optD_aft_fairing.py POD.stl TRUNNION.stl OUT_FAI
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (Anthropic, Claude Opus 5.5) under the author's direction, 2026-11-11.
-License: MIT -- see LICENSES/MIT (SPDX-License-Identifier: MIT)
+License: CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 import nacelle64_optD_concept as d
 import nacelle64_assembly_check as a
 import sys
 import numpy as np
 import trimesh
+import sls_materials as sm
 import manifold3d as m
 sys.path.insert(0, __import__('os').path.dirname(__import__('os').path.abspath(__file__)))
 POD, TRN, OUT = sys.argv[1:4]
 SH = 23.0
 PZ = a.PIVOT_Z
 R_COL, CLR = 27.0, 1.0
+RHO = sm.rho_g_mm3(sm.PA_CF)                  # g/mm^3, datasheet solid density (single source)
 X0F = 49.0                                    # 0.04 in (1 mm) off the pod's inboard face
 parts, boss = d.build(SH, POD, TRN)
 X_TIP = float(parts['wing'].bounds[0, 0])     # 79.3
@@ -66,8 +68,17 @@ rings = []
 for x in xs:
     sec, c, t, zend = section(x)
     rings.append(np.c_[np.full(len(sec), x), sec])
-N = min(len(r) for r in rings)
-rings = [r[np.linspace(0, len(r) - 1, N).astype(int)] for r in rings]
+# each ring is [top half, bottom half]; resample the halves separately so ring index j means the
+# same chord fraction at every station
+NH = min(len(r) // 2 for r in rings)
+
+
+def _half(h):
+    return h[np.linspace(0, len(h) - 1, NH).round().astype(int)]
+
+
+rings = [np.vstack([_half(r[:len(r) // 2]), _half(r[len(r) // 2:])]) for r in rings]
+N = len(rings[0])
 V = np.vstack(rings)
 F = []
 for i in range(len(rings) - 1):
@@ -75,18 +86,14 @@ for i in range(len(rings) - 1):
         a0, a1 = i * N + j, i * N + (j + 1) % N
         b0, b1 = (i + 1) * N + j, (i + 1) * N + (j + 1) % N
         F += [[a0, b0, b1], [a0, b1, a1]]
-mesh = trimesh.Trimesh(V, F, process=True)
-# caps
+# caps: index them against V before the mesh is built (process=True renumbers vertices)
 for i, rev in ((0, True), (len(rings) - 1, False)):
-    ring = rings[i]
-    ctr = ring.mean(axis=0)
-    cid = len(mesh.vertices)
-    verts = np.vstack([mesh.vertices, ctr])
-    faces = list(mesh.faces)
+    cid = len(V)
+    V = np.vstack([V, rings[i].mean(axis=0)])
     for j in range(N):
         p, q = i * N + j, i * N + (j + 1) % N
-        faces.append([cid, q, p] if rev else [cid, p, q])
-    mesh = trimesh.Trimesh(verts, faces, process=True)
+        F.append([cid, q, p] if rev else [cid, p, q])
+mesh = trimesh.Trimesh(V, F, process=True)
 mesh.fix_normals()
 fair = a.to_man(mesh)
 print('loft status', fair.status().name, 'volume', a.cu_in(float(fair.volume())))
@@ -100,7 +107,7 @@ step = m.Manifold.cylinder(52.8 + 1.0 - (X0F - 2), 31.0, 31.0,
                            160).rotate([0, 90, 0]).translate([X0F - 2, 0, PZ])
 fair = fair - bore - pocket - step   # clears the pod's own collar (X <= 51.8 mm within r 30 mm)
 print('fairing (solid) after the collar bore and pinion pocket:', a.cu_in(float(fair.volume())),
-      f'= {fair.volume() * 1.11e-3 / 453.6:.3f} lbm ({fair.volume() * 1.11e-3:.1f} g) PA CF solid')
+      f'= {fair.volume() * RHO / 453.6:.3f} lbm ({fair.volume() * RHO:.1f} g) PA CF solid')
 for x in (X0F, X_TIP):
     sec, c, t, zend = section(x)
     print(f'  at X {a.inch(x)}: full section chord {a.inch(c)}, t/c {t:.2f}, '

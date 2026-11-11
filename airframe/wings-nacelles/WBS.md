@@ -1443,6 +1443,12 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     and the bundle has somewhere to run. What remains is the routing itself: a
     path out of the trunnion keep-out into the cavity, and the harness lengths to
     go with it. The bay, the studs and the EMI partition are already built.
+    **2026-11-11 (owner, OD-17 DECIDED):** **option D** (joint 0.91 in (23 mm) outboard) with a
+    wing-fixed aft fairing behind the rotating collar, ending in a **rounded end plate with fillets**
+    (0.24 in (6 mm) convex rounding and concave fillet) at the wing junction; trailing edge keeps the
+    **22.8° taper** (the longer-tail trial, 11.9°, gave 19 % less strip drag and was rejected as too small a
+    flight-performance gain). CFD: `tools/od17_junction_cfd/`; brief sections "Junction CFD" and "Longer-tail
+    CFD". Sprint 2 implements this; the route entry stays open until `--stage cable` passes on the moved joint.
     *(Superseded reason, kept because it is why the requirement stalled:)* The bay itself is built (Z 82, 30 × 14 × 6.0 mm, 4 × M3 brass studs
     for ring terminals) and sits over the EDF1 ESC wire exit. What does not exist
     is the annulus the wing side assigned the bundle to: **the pod is solid.** The
@@ -2718,3 +2724,20 @@ decoupling the tilt axis from the spar axis) **changes SPAR-25-2's trunnion
 geometry** — if decoupled, the trunnion is no longer concentric with the spar
 and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
 
+---
+
+## Findings 2026-11-11 (code review of the OD-17 tools, Claude Opus 5.5)
+
+- [ ] **OD17-TOOLS-01 — One fairing module.** The NACA section, TE line,
+    loft and cap code is copied in `nacelle64_optD_aft_fairing.py`, `nacelle64_optD_glove.py`
+    and `od17_junction_cfd/geom.py`, and the copies differ: the TE half-thickness floor is 0.039 in (1.0 mm)
+    in the first two and 0.024 in (0.6 mm) in `geom.py`; the TE line is hard-coded in two and measured from the
+    wing in the third. Move it into `nacelle64_optD_concept.py` (or a new module) taking the wing as input
+    and pick one floor. The CFD end-plate bodies carried the 0.024 in (0.6 mm) edge, 0.016 in (0.4 mm)
+    thinner than the printed part; the effect on the drag comparison is not expected to matter but is not
+    measured. Done when the three tools import one module and the baseline volumes reproduce.
+- [ ] **WBS-BURNDOWN-01 — Count closures by identity, not by count.**
+    `wbs_burndown.py` reports `closed+` as the difference in checked-box counts, so archiving finished
+    sections lowers it and a file added since the baseline counts all its checked boxes as closures.
+    Record each box's item ID (or text) in the snapshot and count IDs newly checked. Done when a test
+    covers an archived section and a newly added file.
